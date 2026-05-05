@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lineare Funktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+/* In Widget-Body (zwei-spalten): Container darf voll genutzt werden */
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.aw { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; overflow:hidden; box-shadow:var(--s); margin:12px 0; }
+.aw-head { background:var(--orange-hell); border-bottom:1px solid var(--orange-rand); padding:11px 17px; display:flex; align-items:center; gap:10px; }
+.aw-nr { background:var(--orange); color:#fff; border-radius:50%; width:27px; height:27px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:0.72rem; font-weight:700; flex-shrink:0; }
+.aw-titel { font-family:var(--serif); font-size:0.93rem; font-weight:700; color:var(--tinte); }
+.aw-body { padding:15px 17px; }
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:170px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.btn-loes { background:var(--tinte-2); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+.punkt-info { display:flex; gap:12px; flex-wrap:wrap; margin:10px 0; }
+.pk { background:var(--papier-2); border-radius:7px; padding:7px 13px; font-family:var(--mono); font-size:0.8rem; border:1px solid var(--linie); display:flex; align-items:center; gap:7px; }
+.pk-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.btn-check { background:var(--gruen); color:#fff; border:none; border-radius:8px; padding:8px 18px; font-family:var(--sans); font-size:0.85rem; font-weight:700; cursor:pointer; }
+.btn-check:hover { background:#175c30; }
+
+/* ── Links ── */
+.links-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+@media(max-width:520px){ .links-grid { grid-template-columns:1fr; } }
+.lk { display:flex; align-items:center; gap:11px; background:var(--weiss); border:1px solid var(--linie); border-radius:9px; padding:11px 13px; text-decoration:none; color:inherit; box-shadow:var(--s); transition:border-color 0.15s; }
+.lk:hover { border-color:var(--rot-rand); text-decoration:none; }
+.lk.aufg:hover { border-color:var(--orange-rand); }
+.lk .lk-ic { font-size:1.4rem; flex-shrink:0; }
+.lk .lk-t { font-weight:700; font-size:0.83rem; color:var(--tinte); }
+.lk .lk-s { font-size:0.7rem; color:var(--tinte-2); margin-top:1px; }
+
+/* ── Downloads ── */
+.dl-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:10px; margin-top:12px; }
+.dl { display:flex; align-items:center; gap:11px; background:var(--weiss); border:1px solid var(--linie); border-left:4px solid var(--blau); border-radius:9px; padding:11px 13px; text-decoration:none; color:inherit; box-shadow:var(--s); transition:border-color 0.15s, transform 0.15s; }
+.dl:hover { border-color:var(--blau-rand); border-left-color:var(--blau); transform:translateY(-1px); text-decoration:none; }
+.dl .dl-ic { font-size:1.5rem; flex-shrink:0; }
+.dl .dl-t { font-weight:700; font-size:0.83rem; color:var(--tinte); }
+.dl .dl-s { font-size:0.7rem; color:var(--tinte-2); margin-top:1px; }
+.dl .dl-fmt { font-family:var(--mono); font-size:0.62rem; font-weight:700; color:var(--blau); margin-top:2px; }
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ TITEL ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Grundlagenfach · Lerngebiet 3 · Funktionen · 50 Lektionen</div>
+  <h1 class="pt-h1">3.2 Lineare Funktionen</h1>
+</div>
+
+<!-- RLP-Kompetenzen -->
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.2</div>
+  <ul>
+    <li>den Graphen einer linearen Funktion als Gerade darstellen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Steigung \(m\) und Achsenabschnitt \(b\) geometrisch interpretieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die Funktionsgleichung einer Geraden aufstellen <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+</div>
+
+
+<!-- ══ 1. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — eine Kostenfunktion</h2>
+
+<p>Du kaufst Kartoffeln: Das <strong>Gebinde kostet 5 CHF</strong> (Fixkosten), jedes weitere <strong>Kilogramm 2 CHF</strong>. Die Kostenfunktion lautet:</p>
+
+\[ K(x) = 2 \cdot x + 5 \]
+
+<p>Wähle mit dem Regler eine Menge \(x\) — die zugehörige Tabellenzeile und der Punkt im Graphen werden sofort hervorgehoben.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>🥔 Kartoffeln kaufen — \(K(x) = 2 \cdot x + 5\)</h3>
+    <p>Gebinde 5 CHF · Kilopreis 2 CHF/kg · Menge 0–14 kg</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>Menge \(x\) [kg]</label>
+      <input type="range" id="ks-x" min="0" max="14" step="2" value="4">
+      <span class="sl-val"><span id="ks-xv">4</span> kg</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktion und Auswertung</div>
+      <div class="fl-eq">K(x) = 2·x + 5</div>
+      <div class="fl-eq fl-eval" id="ks-eq" style="font-size:0.95rem;color:var(--blau);margin-top:4px">K(4) = 2·4 + 5 = 13.00 CHF</div>
+    </div>
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Wertetabelle</div>
+        <table class="ftb-tabelle" id="ks-table">
+          <thead><tr><th>\(x\) [kg]</th><th>Rechnung</th><th>\(K(x)\) [CHF]</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Graph</div>
+        <div class="cv-wrap"><canvas id="ks-canvas" height="180"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Alle drei Darstellungen zeigen dieselbe Funktion — aus verschiedenen Blickwinkeln:</p>
+  <ul style="margin-top:6px">
+    <li>Die <strong>Steigung \(m=2\)</strong> entspricht dem Kilopreis: pro kg steigen die Kosten um 2 CHF</li>
+    <li>Der <strong>Achsenabschnitt \(b=5\)</strong> sind die Fixkosten: auch ohne Kartoffeln kostet das Gebinde 5 CHF</li>
+  </ul>
+</div>
+
+
+<!-- ══ 2. DEFINITION ══ -->
+<h2 id="definition">Definition und Parameter</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Lineare Funktion</div>
+  \[ f(x) = m \cdot x + b, \qquad m,\, b \in \mathbb{R} \]
+  <p>Notation: \(f : \mathbb{R} \longrightarrow \mathbb{R},\quad x \longmapsto mx + b\)</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Die zwei Parameter</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Symbol</th><th>Name</th><th>Geometrische Bedeutung</th></tr></thead>
+    <tbody>
+      <tr><td class="td-x">\(m\)</td><td>Steigung</td><td style="text-align:left;font-family:var(--sans)">Zunahme von \(y\) pro \(\Delta x=1\); bestimmt die Neigung</td></tr>
+      <tr><td class="td-y">\(b\)</td><td>y-Achsenabschnitt</td><td style="text-align:left;font-family:var(--sans)">Schnittpunkt mit der \(y\)-Achse: \(f(0)=b\)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ══ 3. DIE DREI DARSTELLUNGEN (interaktiv) ══ -->
+<h2 id="darstellungen">Die drei Darstellungen</h2>
+
+<p>Verändere \(m\), \(b\) und \(x\) — Gleichung, Tabelle und Graph aktualisieren sich gleichzeitig.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Interaktive Darstellungen</h3>
+    <p>\(f(x) = mx + b\) · alle drei Darstellungsformen verknüpft</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row"><label>Steigung \(m\)</label><input type="range" id="dr-m" min="-5" max="5" step="1" value="2"><span class="sl-val" id="dr-mv">2</span></div>
+    <div class="sl-row"><label>Achsenabschnitt \(b\)</label><input type="range" id="dr-b" min="-5" max="5" step="1" value="-3"><span class="sl-val" id="dr-bv">−3</span></div>
+    <div class="sl-row"><label>Eingabewert \(x\)</label><input type="range" id="dr-x" min="-5" max="5" step="1" value="2"><span class="sl-val" id="dr-xv">2</span></div>
+
+    <div class="formel-live">
+      <div class="fl-label">① Funktionsgleichung</div>
+      <div class="fl-eq" id="dr-eq">f(x) = 2·x − 3</div>
+      <div class="fl-eq fl-eval" id="dr-eval" style="font-size:0.95rem;color:var(--blau);margin-top:4px">f(2) = 2·2 − 3 = 1</div>
+    </div>
+
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">② Wertetabelle</div>
+        <table class="ftb-tabelle" id="dr-table">
+          <thead><tr><th>\(x\)</th><th>\(y=f(x)\)</th><th>Punkt</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">③ Graph</div>
+        <div class="cv-wrap"><canvas id="dr-canvas" height="220"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 4. STEIGUNG ══ -->
+<h2 id="steigung">Steigung, Achsenabschnitt, Nullstelle</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Steigung \(m\)</div>
+  \[ m = \frac{\Delta y}{\Delta x} = \frac{y_2-y_1}{x_2-x_1} \]
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Nullstelle</div>
+  \[ 0 = mx_0+b \quad\Longrightarrow\quad x_0 = -\frac{b}{m} \quad(m\neq 0) \]
+</div>
+
+
+<!-- ══ 5. TYPEN + VISUALISIERUNG ══ -->
+<h2 id="typen">Typen linearer Funktionen</h2>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Typ</th><th>Gleichung</th><th>Bedingung</th><th>Graph</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Allgemeine lineare Fkt.</td><td>\(f(x)=mx+b\)</td><td>\(m\neq 0\)</td><td style="font-family:var(--sans)">schiefe Gerade</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Proportionale Funktion</td><td>\(f(x)=mx\)</td><td>\(b=0\)</td><td style="font-family:var(--sans)">Gerade durch Ursprung</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Identität</td><td>\(f(x)=x\)</td><td>\(m=1, b=0\)</td><td style="font-family:var(--sans)">45°-Gerade</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Konstante Funktion</td><td>\(f(x)=b\)</td><td>\(m=0\)</td><td style="font-family:var(--sans)">waagerechte Gerade</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Senkrechte Gerade</td><td>\(x=c\)</td><td>kein \(m\)</td><td style="font-family:var(--sans)">senkrechte Gerade (keine Funktion!)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Parallele und senkrechte Geraden</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Beziehung</th><th>Bedingung</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left">Zwei parallele Geraden</td><td>\(m_1 = m_2,\; b_1\neq b_2\)</td><td style="font-family:var(--mono)">\(y=2 \cdot x+1\) ∥ \(y=2 \cdot x-3\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Zwei senkrechte Geraden</td><td>\(m_1 \cdot m_2 = -1\)</td><td style="font-family:var(--mono)">\(y=2 \cdot x+1\) ⊥ \(y=-\tfrac{1}{2} \cdot x+3\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Zwei identische Geraden</td><td>\(m_1=m_2,\; b_1=b_2\)</td><td style="font-family:var(--mono)">dieselbe Gerade</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p style="margin-top:14px;margin-bottom:8px">Klicke auf einen Fall — nur dieser wird angezeigt:</p>
+
+<div class="typ-btns" id="typ-btns"></div>
+<div class="cv-wrap"><canvas id="typ-canvas" height="220"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="typ-desc"></div>
+
+
+<!-- ══ 6. GLEICHUNG AUFSTELLEN ══ -->
+<h2 id="gleichung-aufstellen">Funktionsgleichung aufstellen</h2>
+
+<div class="block block-beweis">
+  <div class="block-titel">🔷 Aus zwei Punkten</div>
+  <p>Gegeben: \(P_1(x_1\mid y_1)\) und \(P_2(x_2\mid y_2)\)</p>
+  \[ m = \frac{y_2-y_1}{x_2-x_1} \qquad b = y_1 - m\cdot x_1 \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel</div>
+  <p>\(P_1(1\mid 2)\), \(P_2(3\mid 8)\)</p>
+  \[ m = \frac{8-2}{3-1}=3 \qquad b=2-3\cdot 1=-1 \qquad \Rightarrow\; f(x)=3 \cdot x-1 \]
+</div>
+
+<div class="merksatz">
+  Durch zwei Punkte geht genau eine Gerade — zwei Punkte genügen, um \(m\) und \(b\) eindeutig zu bestimmen.
+</div>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="aw">
+  <div class="aw-head"><div class="aw-nr">A1</div><div class="aw-titel">Funktionsgleichung aus dem Graphen ablesen</div></div>
+  <div class="aw-body">
+    <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Gerade, lies \(m\) und \(b\) ab, gib die Gleichung ein.</p>
+    <div class="graf-btn-row" id="a1-btns"></div>
+    <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+    <div class="eingabe-row">
+      <label style="font-family:var(--mono);font-size:0.85rem">f(x) =</label>
+      <input type="text" id="a1-inp" placeholder="z.B. 2·x+1">
+      <button class="btn-pruef" onclick="checkA1()">Prüfen</button>
+      <button class="btn-loes" onclick="showA1Sol()">Lösung</button>
+    </div>
+    <div class="cr" id="a1-cr"></div>
+  </div>
+</div>
+
+<!-- A2 -->
+<div class="aw">
+  <div class="aw-head"><div class="aw-nr">A2</div><div class="aw-titel">Graphen zeichnen — ziehe P1 und P2 auf die Gerade</div></div>
+  <div class="aw-body">
+    <div class="graf-btn-row" id="a2-btns"></div>
+    <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a2-canvas" height="240" style="cursor:crosshair"></canvas></div>
+    <div class="punkt-info">
+      <div class="pk"><div class="pk-dot" style="background:#e07820"></div><span style="color:var(--tinte-2);font-size:0.72rem">P1:</span><span id="a2-p1c" style="font-weight:700">(?,?)</span></div>
+      <div class="pk"><div class="pk-dot" style="background:#1a4f8a"></div><span style="color:var(--tinte-2);font-size:0.72rem">P2:</span><span id="a2-p2c" style="font-weight:700">(?,?)</span></div>
+    </div>
+    <button class="btn-check" onclick="checkA2()">✓ Überprüfen</button>
+    <div class="cr" id="a2-cr"></div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="aw">
+  <div class="aw-head"><div class="aw-nr">A3</div><div class="aw-titel">Analytisch — Funktionsgleichung bestimmen</div></div>
+  <div class="aw-body">
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 a) Aus Steigung und y-Achsenabschnitt</div>
+      <p>\(m=3\), \(b=-4\). Wie lautet \(f(x)\)?</p>
+      <div class="eingabe-row"><input type="text" id="a3a" placeholder="f(x) = ..."><button class="btn-pruef" onclick="chk('a3a','3x-4','3·x − 4')">Prüfen</button></div>
+      <div class="cr" id="a3a-cr"></div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 b) Aus Steigung und einem Punkt</div>
+      <p>\(m=-2\), \(P(3\mid 1)\). Wie lautet \(f(x)\)?</p>
+      <div class="eingabe-row"><input type="text" id="a3b" placeholder="f(x) = ..."><button class="btn-pruef" onclick="chk('a3b','-2x+7','-2·x + 7')">Prüfen</button></div>
+      <div class="cr" id="a3b-cr"></div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 c) Aus y-Achsenabschnitt und einem Punkt</div>
+      <p>\(b=2\), \(P(4\mid 10)\). Wie lautet \(f(x)\)?</p>
+      <div class="eingabe-row"><input type="text" id="a3c" placeholder="f(x) = ..."><button class="btn-pruef" onclick="chk('a3c','2x+2','2·x + 2')">Prüfen</button></div>
+      <div class="cr" id="a3c-cr"></div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 d) Aus zwei Punkten</div>
+      <p>\(A(-1\mid 5)\) und \(B(3\mid -3)\). Wie lautet \(f(x)\)?</p>
+      <div class="eingabe-row"><input type="text" id="a3d" placeholder="f(x) = ..."><button class="btn-pruef" onclick="chk('a3d','-2x+3','-2·x + 3')">Prüfen</button></div>
+      <div class="cr" id="a3d-cr"></div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 e) Parallele Gerade</div>
+      <p>Gesucht: eine Gerade <strong>parallel</strong> zu \(g(x)=3 \cdot x-1\), die durch \(P(0\mid 4)\) geht.</p>
+      <div class="eingabe-row"><input type="text" id="a3e" placeholder="f(x) = ..."><button class="btn-pruef" onclick="chk('a3e','3x+4','3·x + 4')">Prüfen</button></div>
+      <div class="cr" id="a3e-cr"></div>
+    </div>
+
+    <div class="block block-aufg">
+      <div class="block-titel">🟠 f) Senkrechte Gerade</div>
+      <p>Gesucht: eine Gerade <strong>senkrecht</strong> zu \(h(x)=2 \cdot x+1\), die durch \(Q(4\mid 3)\) geht.</p>
+      <div class="eingabe-row"><input type="text" id="a3f" placeholder="f(x) = ..."><button class="btn-pruef" onclick="chk('a3f','-0.5x+5','-0.5·x + 5')">Prüfen</button></div>
+      <div class="cr" id="a3f-cr"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- A4–A6 Anwendung -->
+<div class="aw">
+  <div class="aw-head"><div class="aw-nr">A4–A6</div><div class="aw-titel">Anwendungsaufgaben</div></div>
+  <div class="aw-body">
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 A4 — Handyvertrag</div>
+      <p>Grundgebühr <strong>15 CHF/Monat</strong>, dazu <strong>0.08 CHF/Minute</strong>. Stelle \(K(t)\) auf. Bei welcher Minutenzahl kostet es 25 CHF?</p>
+      <button class="loesung-toggle" onclick="toggleL('l4')">▶ Lösung</button>
+      <div class="loesung-body" id="l4">
+        <div class="block block-bsp" style="margin:6px 0 0">
+          <div class="block-titel">🟢 Lösung</div>
+          \[ K(t)=0.08 \cdot t+15 \qquad 25=0.08 \cdot t+15 \;\Rightarrow\; t=125\;\text{min} \]
+        </div>
+      </div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 A5 — Mietauto</div>
+      <p>Firma A: <strong>40 CHF + 0.25 CHF/km</strong>. Firma B: <strong>70 CHF pauschal</strong>. Ab wie vielen km ist Firma B günstiger?</p>
+      <button class="loesung-toggle" onclick="toggleL('l5')">▶ Lösung</button>
+      <div class="loesung-body" id="l5">
+        <div class="block block-bsp" style="margin:6px 0 0">
+          <div class="block-titel">🟢 Lösung</div>
+          \[ 0.25 \cdot x+40=70 \;\Rightarrow\; x=120\;\text{km} \]
+        </div>
+      </div>
+    </div>
+
+    <div class="block block-aufg">
+      <div class="block-titel">🟠 A6 — Temperatur</div>
+      <p>\(0°C=32°F\), \(100°C=212°F\). Stelle \(F(C)\) auf. Was ist \(37°C\) in Fahrenheit?</p>
+      <button class="loesung-toggle" onclick="toggleL('l6')">▶ Lösung</button>
+      <div class="loesung-body" id="l6">
+        <div class="block block-bsp" style="margin:6px 0 0">
+          <div class="block-titel">🟢 Lösung</div>
+          \[ F(C)=1.8 \cdot C+32 \qquad F(37)=1.8\cdot 37+32=98.6°F \]
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Grösse</th><th>Formel</th><th>Bedeutung</th></tr></thead>
+  <tbody>
+    <tr><td class="td-x">\(m\)</td><td>\(\displaystyle m = \frac{\Delta y}{\Delta x}\)</td><td style="font-family:var(--sans);text-align:left">Steigung der Geraden</td></tr>
+    <tr><td class="td-y">\(b\)</td><td>\(b = f(0)\)</td><td style="font-family:var(--sans);text-align:left">y-Achsenabschnitt: Schnittpunkt mit y-Achse</td></tr>
+    <tr><td class="td-pt">\(x_0\)</td><td>\(\displaystyle x_0 = -\frac{b}{m}\)</td><td style="font-family:var(--sans);text-align:left">Nullstelle: Schnittpunkt mit x-Achse</td></tr>
+    <tr><td style="font-family:var(--mono)">\(\parallel\)</td><td>\(m_1 = m_2,\; b_1 \neq b_2\)</td><td style="font-family:var(--sans);text-align:left">Zwei Geraden sind parallel</td></tr>
+    <tr><td style="font-family:var(--mono)">\(\perp\)</td><td>\(m_1 \cdot m_2 = -1\)</td><td style="font-family:var(--sans);text-align:left">Zwei Geraden sind senkrecht</td></tr>
+  </tbody>
+</table>
+
+<div class="merksatz">
+  Der Graph einer linearen Funktion \(f(x) = mx + b\) ist stets eine <strong>Gerade</strong>.
+  Zwei Punkte genügen, um sie vollständig zu bestimmen.
+</div>
+
+
+<!-- ══ 9. DOWNLOADS ══ -->
+<h2 id="downloads">Downloads</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen.</p>
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g3-2-lineare-funktionen/handout.pdf" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">PDF</div></div></a>
+  <a href="../downloads/grundlagen/g3-2-lineare-funktionen/aufgabenserie.pdf" class="dl"><span class="dl-ic">📝</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Übungsaufgaben mit Lösungen</div><div class="dl-fmt">PDF</div></div></a>
+  <a href="../downloads/grundlagen/g3-2-lineare-funktionen/teste-dich-selbst.pdf" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Selbsttest zur Überprüfung</div><div class="dl-fmt">PDF</div></div></a>
+  <a href="../downloads/grundlagen/g3-2-lineare-funktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+  <a href="../downloads/grundlagen/g3-2-lineare-funktionen/formelauszug.pdf" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">PDF</div></div></a>
+</div>
+
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div style="font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lU6F9lF8CBWHnrhfak852OT" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Lineare Funktionen — Playlist</div><div class="lk-s">MathemaTrick · 17 Videos · Grundlagen bis Anwendungen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLydZ2Hrp_gPSksm56RzTQFhf_lOqwEjX7" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Lineare Funktionen — Playlist</div><div class="lk-s">Lehrerschmidt · Best-of Sammlung</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHgTV0cdQhkHn1gLJuzp9RD0" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Lineare Funktionen y=mx+n — Playlist</div><div class="lk-s">Mathe by Daniel Jung · vollständige Playlist</div></div></a>
+</div>
+<div style="font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin:14px 0 8px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g2/g21/aufg_g21.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Lineare Funktion</div><div class="lk-s">Aufgaben mit Lösungen, Geradengleichungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/1327/lineare-funktionen-geraden" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Lineare Funktionen</div><div class="lk-s">Interaktive Aufgaben mit Schritt-für-Schritt-Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/55231/aufgaben-zu-linearen-funktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben Geradengleichungen</div><div class="lk-s">Aus 2 Punkten, Steigung+Punkt, gemischt</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Grundlagen · 3.2 Lineare Funktionen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script>
+buildNav({
+  bereich:'grundlagen', id:'g3-2',
+  kapitelNr:'3.2', kapitelTitel:'Lineare Funktionen',
+  prev:{nr:'3.1',titel:'Grundlagen',url:'g3-1-grundlagen.html'},
+  next:{nr:'3.3',titel:'Quadratische Funktionen',url:'g3-3-quadratische-funktionen.html'}
+});
+
+/* ══ EINSTIEG (Kostenfunktion) ══ */
+const KS={m:2,b:5,xs:[0,2,4,6,8,10,12,14]};
+function updateKS(){
+  const x=parseInt(document.getElementById('ks-x').value);
+  document.getElementById('ks-xv').textContent=x;
+  const y=KS.m*x+KS.b;
+  document.getElementById('ks-eq').textContent=`K(${x}) = 2·${x} + 5 = ${y.toFixed(2)} CHF`;
+  // Table
+  const tbody=document.querySelector('#ks-table tbody');
+  tbody.innerHTML=KS.xs.map(xi=>{
+    const yi=KS.m*xi+KS.b;
+    const act=xi===x;
+    return `<tr class="${act?'aktiv-zeile':''}"><td class="td-x">${xi}</td><td class="td-calc">${KS.m}·${xi}+${KS.b}</td><td class="td-y">${yi.toFixed(2)}</td></tr>`;
+  }).join('');
+  // Graph
+  const {ctx,W,H}=initCanvas('ks-canvas',180);
+  const xMin=0,xMax=15,yMin=0,yMax=35;
+  const {cx,cy}=drawGrid(ctx,W,H,xMin,xMax,yMin,yMax);
+  // Achsenbeschriftung der Anwendung mit Einheit überschreiben (vom drawGrid kommt nur x, y)
+  // Erst alten generischen Pfeil-Label-Bereich abdecken (wir malen einfach unsere drüber)
+  ctx.fillStyle='#fff';
+  ctx.fillRect(W-30, cy(0)-22, 30, 18);   // alter "x"-Bereich rechts oben am Pfeil
+  ctx.fillRect(cx(0)+4, 0, 22, 18);       // alter "y"-Bereich links oben am Pfeil
+  // Neue Labels mit Einheit
+  ctx.fillStyle='#374151'; ctx.font='bold 11px monospace';
+  ctx.textAlign='right'; ctx.fillText('x [kg]', W-2, cy(0)-7);
+  ctx.textAlign='left';  ctx.fillText('K [CHF]', cx(0)+5, 11);
+  // x-axis number labels override (Zahlen alle 2 kg)
+  ctx.font='10px monospace'; ctx.fillStyle='#9ca3af'; ctx.textAlign='center';
+  for(let gx=0;gx<=14;gx+=2) ctx.fillText(gx,cx(gx),cy(0)+13);
+  ctx.textAlign='right';
+  for(let gy=0;gy<=30;gy+=5) ctx.fillText(gy,cx(0)-4,cy(gy)+4);
+  // Line
+  drawLine(ctx,cx,cy,KS.m,KS.b,xMin,xMax,'#1a4f8a',2.5);
+  // All dots faint
+  KS.xs.forEach(xi=>{ const yi=KS.m*xi+KS.b; drawDot(ctx,cx,cy,xi,yi,'#b8c4d4',4); });
+  // Active dot
+  drawDot(ctx,cx,cy,x,y,'#1a4f8a',7);
+  ctx.fillStyle='#1a4f8a'; ctx.font='bold 11px monospace';
+  const lx=x>11?cx(x)-60:cx(x)+8;
+  ctx.textAlign='left'; ctx.fillText(`(${x}|${y})`,lx,cy(y)-8);
+  // Dashed lines
+  ctx.strokeStyle='#1a4f8a55'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(0),cy(y)); ctx.stroke();
+  ctx.setLineDash([]);
+}
+document.getElementById('ks-x').addEventListener('input',updateKS);
+
+/* ══ DREI DARSTELLUNGEN ══ */
+function updateDR(){
+  const m=parseInt(document.getElementById('dr-m').value);
+  const b=parseInt(document.getElementById('dr-b').value);
+  const x=parseInt(document.getElementById('dr-x').value);
+  const y=m*x+b;
+  document.getElementById('dr-mv').textContent=m;
+  document.getElementById('dr-bv').textContent=b;
+  document.getElementById('dr-xv').textContent=x;
+  // Gleichung (allgemeine Form)
+  const bStr=b===0?'':(b>0?` + ${b}`:` − ${Math.abs(b)}`);
+  const mStr=m===0?'':(m===1?'x':(m===-1?'-x':`${m}·x`));
+  document.getElementById('dr-eq').textContent=`f(x) = ${mStr||'0'}${bStr}`;
+  // Auswertung (konkrete Zeile mit eingesetztem x)
+  // Konvention: negative Zahlen in Klammern setzen, wenn sie als Faktor stehen
+  const xDisp = x<0 ? `(${x})` : `${x}`;
+  let mxTerm;
+  if(m===0) mxTerm = '0';
+  else if(m===1) mxTerm = xDisp;
+  else if(m===-1) mxTerm = x<0 ? `-${xDisp}` : `-${x}`;
+  else mxTerm = `${m}·${xDisp}`;
+  const evalStr = m===0 ? `${b}` : `${mxTerm}${bStr}`;
+  document.getElementById('dr-eval').textContent = `f(${x}) = ${evalStr} = ${y}`;
+  // Tabelle
+  const xs=[-3,-2,-1,0,1,2,3];
+  const tbody=document.querySelector('#dr-table tbody');
+  tbody.innerHTML=xs.map(xi=>{
+    const yi=m*xi+b;
+    const act=xi===x;
+    return `<tr class="${act?'aktiv-zeile':''}"><td class="td-x">${xi}</td><td class="td-y">${yi}</td><td class="td-pt">(${xi}|${yi})</td></tr>`;
+  }).join('');
+  // Graph
+  const {ctx,W,H}=initCanvas('dr-canvas',220,true);
+  const rng=7;
+  const {cx,cy}=drawGrid(ctx,W,H,-rng,rng,-rng,rng);
+  if(m!==0||b!==0) drawLine(ctx,cx,cy,m,b,-rng,rng,'#1a4f8a',2.5);
+  else { ctx.strokeStyle='#1a4f8a'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(0,cy(b)); ctx.lineTo(W,cy(b)); ctx.stroke(); }
+  // b dot
+  if(Math.abs(b)<=rng){ drawDot(ctx,cx,cy,0,b,'#9b1c1c',5); }
+  // x dot
+  if(Math.abs(x)<=rng&&Math.abs(y)<=rng){
+    drawDot(ctx,cx,cy,x,y,'#1a4f8a',7);
+    ctx.strokeStyle='#1a4f8a44'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(0),cy(y)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#1a4f8a'; ctx.font='bold 11px monospace'; ctx.textAlign='left';
+    ctx.fillText(`(${x}|${y})`,cx(x)+7,cy(y)-7);
+  }
+}
+['dr-m','dr-b','dr-x'].forEach(id=>document.getElementById(id).addEventListener('input',updateDR));
+
+/* ══ TYPEN-VISUALISIERUNG ══ */
+const typen=[
+  {label:'Allgemein',   desc:'f(x) = 2·x − 1  ·  allgemeine lineare Funktion: m ≠ 0  ·  schiefe Gerade', m:2, b:-1, vert:false, color:'#1a4f8a', lines:null},
+  {label:'Proportional',desc:'f(x) = 1.5·x  ·  proportionale Funktion: b = 0  ·  Gerade durch Ursprung', m:1.5,b:0, vert:false, color:'#1f6b3a', lines:null},
+  {label:'Identität',     desc:'f(x) = x  ·  Identität: m = 1, b = 0  ·  45°-Gerade durch Ursprung', m:1, b:0, vert:false, color:'#5b2d8e', lines:null},
+  {label:'Konstant',      desc:'f(x) = 2  ·  Konstante Funktion: m = 0  ·  waagerechte Gerade', m:0, b:2, vert:false, color:'#b85c00', lines:null},
+  {label:'Senkrecht x=c', desc:'x = 3  ·  Senkrechte Gerade: kein Steigungswinkel definierbar  ·  ⚠ Keine Funktion!', m:0, b:3, vert:true, color:'#9b1c1c', lines:null},
+  {label:'Parallel',      desc:'Zwei parallele Geraden: m₁ = m₂ = 2, aber b₁ ≠ b₂  ·  kein Schnittpunkt', m:null, b:null, vert:false, color:'#1a4f8a',
+    lines:[{m:2,b:2,col:'#1a4f8a'},{m:2,b:-2,col:'#3b82f6'}]},
+  {label:'Senkrecht ⊥',   desc:'Zwei senkrechte Geraden: m₁ · m₂ = 2 · (−0.5) = −1', m:null, b:null, vert:false, color:'#1f6b3a',
+    lines:[{m:2,b:0,col:'#1f6b3a'},{m:-0.5,b:1,col:'#52a872'}]},
+  {label:'Identisch',     desc:'Zwei identische Geraden: m₁ = m₂ und b₁ = b₂  ·  dieselbe Gerade', m:null, b:null, vert:false, color:'#b85c00',
+    lines:[{m:1.5,b:1,col:'#b85c00'},{m:1.5,b:1,col:'#e08030',dash:true}]},
+];
+let typActive=0;
+function buildTypBtns(){
+  document.getElementById('typ-btns').innerHTML=typen.map((t,i)=>
+    `<button class="typ-btn${i===0?' aktiv':''}" onclick="setTyp(${i})">${t.label}</button>`
+  ).join('');
+}
+function setTyp(i){
+  typActive=i;
+  document.querySelectorAll('.typ-btn').forEach((b,j)=>b.classList.toggle('aktiv',j===i));
+  drawTyp();
+}
+function drawTyp(){
+  const {ctx,W,H}=initCanvas('typ-canvas',220,true);
+  const rng=6;
+  const {cx,cy}=drawGrid(ctx,W,H,-rng,rng,-rng,rng);
+  const t=typen[typActive];
+  if(t.lines){
+    // Multi-line case
+    t.lines.forEach(l=>{
+      ctx.strokeStyle=l.col; ctx.lineWidth=2.5;
+      if(l.dash) ctx.setLineDash([8,5]); else ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(cx(-rng),cy(l.m*-rng+l.b)); ctx.lineTo(cx(rng),cy(l.m*rng+l.b)); ctx.stroke();
+      ctx.setLineDash([]);
+    });
+  } else if(t.vert){
+    ctx.strokeStyle=t.color; ctx.lineWidth=3; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(cx(t.b),0); ctx.lineTo(cx(t.b),H); ctx.stroke();
+    // Warning label
+    ctx.fillStyle=t.color; ctx.font='bold 11px sans-serif'; ctx.textAlign='left';
+    ctx.fillText('⚠ Keine Funktion!', cx(t.b)+8, H/2);
+  } else {
+    drawLine(ctx,cx,cy,t.m,t.b,-rng,rng,t.color,3);
+  }
+  document.getElementById('typ-desc').textContent=t.desc;
+}
+
+/* ══ A1: Gleichung aus Graph ══ */
+const a1G=[
+  {label:'Gerade 1',m:2,b:-1,col:'#1a4f8a'},
+  {label:'Gerade 2',m:-1,b:3,col:'#9b1c1c'},
+  {label:'Gerade 3',m:0.5,b:2,col:'#1f6b3a'},
+  {label:'Gerade 4',m:3,b:-4,col:'#5b2d8e'},
+];
+let a1Act=0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML=a1G.map((g,i)=>
+    `<button class="graf-btn${i===0?' aktiv':''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act=i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b,j)=>b.classList.toggle('aktiv',j===i));
+  document.getElementById('a1-inp').value='';
+  document.getElementById('a1-cr').style.display='none';
+  drawA1();
+}
+function drawA1(){
+  const {ctx,W,H}=initCanvas('a1-canvas',220,true);
+  const {cx,cy}=drawGrid(ctx,W,H,-6,6,-6,6);
+  const g=a1G[a1Act];
+  drawLine(ctx,cx,cy,g.m,g.b,-5,6,g.col,2.5);
+  drawDot(ctx,cx,cy,0,g.b,g.col,5);
+}
+/* parseL wird von mathlib.js bereitgestellt */
+function checkA1(){
+  const g=a1G[a1Act];
+  const p=parseL(document.getElementById('a1-inp').value);
+  const r=document.getElementById('a1-cr'); r.style.display='block';
+  if(!p){r.className='cr err';r.textContent='Format nicht erkannt. Beispiel: 2·x-1';return;}
+  if(Math.abs(p.m-g.m)<0.01&&Math.abs(p.b-g.b)<0.01){r.className='cr ok';r.textContent=`✓ Richtig! f(x) = ${fmtMx(g.m)} ${fmtS(g.b)}`;}
+  else{r.className='cr err';r.textContent='✗ Nicht ganz. Lies m und b nochmals ab.';}
+}
+function showA1Sol(){
+  const g=a1G[a1Act];
+  const r=document.getElementById('a1-cr'); r.style.display='block';
+  r.className='cr ok'; r.textContent=`Lösung: f(x) = ${fmtMx(g.m)} ${fmtS(g.b)}`;
+}
+
+/* ══ A2: Graph zeichnen ══ */
+const a2G=[
+  {label:'f(x) = x+1',m:1,b:1},{label:'f(x) = -2·x+4',m:-2,b:4},
+  {label:'f(x) = 0.5·x-2',m:0.5,b:-2},{label:'f(x) = 3·x',m:3,b:0},
+];
+let a2Act=0, a2Drag=null;
+const a2Pts=[{x:-2,y:0},{x:2,y:0}];
+let a2S={W:600,H:300};
+function buildA2(){
+  document.getElementById('a2-btns').innerHTML=a2G.map((g,i)=>
+    `<button class="graf-btn${i===0?' aktiv':''}" onclick="setA2(${i})">${g.label}</button>`
+  ).join('');
+}
+function setA2(i){
+  a2Act=i;
+  document.querySelectorAll('#a2-btns .graf-btn').forEach((b,j)=>b.classList.toggle('aktiv',j===i));
+  a2Pts[0]={x:-2,y:0}; a2Pts[1]={x:2,y:0};
+  document.getElementById('a2-cr').style.display='none';
+  drawA2();
+}
+function a2CX(x){return(x+6)/12*a2S.W;}
+function a2CY(y){return a2S.H-(y+6)/12*a2S.H;}
+function a2IX(px){return Math.round(px/a2S.W*12-6);}
+function a2IY(py){return Math.round((a2S.H-py)/a2S.H*12-6);}
+function drawA2(){
+  const {ctx,W,H}=initCanvas('a2-canvas',240,true);
+  a2S={W,H};
+  const {cx,cy}=drawGrid(ctx,W,H,-6,6,-6,6);
+  // user line
+  const p1=a2Pts[0],p2=a2Pts[1];
+  if(p1.x!==p2.x){
+    const um=(p1.y-p2.y)/(p1.x-p2.x), ub=p1.y-um*p1.x;
+    ctx.strokeStyle='rgba(180,120,30,0.55)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(cx(-5),cy(um*-5+ub)); ctx.lineTo(cx(6),cy(um*6+ub)); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  // dots
+  const cols=['#e07820','#1a4f8a'];
+  a2Pts.forEach((p,i)=>{
+    ctx.fillStyle=cols[i]; ctx.strokeStyle='#fff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(a2CX(p.x),a2CY(p.y),9,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#fff'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(i===0?'P1':'P2',a2CX(p.x),a2CY(p.y)+4);
+  });
+  document.getElementById('a2-p1c').textContent=`(${a2Pts[0].x}|${a2Pts[0].y})`;
+  document.getElementById('a2-p2c').textContent=`(${a2Pts[1].x}|${a2Pts[1].y})`;
+}
+function a2Pos(e,c){
+  const r=c.getBoundingClientRect(),sc=c.width/(window.devicePixelRatio||1)/r.width;
+  return{px:(e.clientX-r.left)*sc,py:(e.clientY-r.top)*sc};
+}
+function initA2(){
+  const c=document.getElementById('a2-canvas');
+  c.addEventListener('mousedown',e=>{
+    const {px,py}=a2Pos(e,c);
+    a2Pts.forEach((p,i)=>{ if(Math.hypot(px-a2CX(p.x),py-a2CY(p.y))<16) a2Drag=i; });
+  });
+  c.addEventListener('mousemove',e=>{
+    if(a2Drag===null) return;
+    const {px,py}=a2Pos(e,c);
+    a2Pts[a2Drag]={x:a2IX(px),y:a2IY(py)}; drawA2();
+  });
+  c.addEventListener('mouseup',()=>a2Drag=null);
+  c.addEventListener('mouseleave',()=>a2Drag=null);
+  c.addEventListener('touchstart',e=>{e.preventDefault();
+    const t=e.touches[0],{px,py}=a2Pos(t,c);
+    a2Pts.forEach((p,i)=>{if(Math.hypot(px-a2CX(p.x),py-a2CY(p.y))<20)a2Drag=i;});
+  },{passive:false});
+  c.addEventListener('touchmove',e=>{e.preventDefault();
+    if(a2Drag===null)return;
+    const t=e.touches[0],{px,py}=a2Pos(t,c);
+    a2Pts[a2Drag]={x:a2IX(px),y:a2IY(py)};drawA2();
+  },{passive:false});
+  c.addEventListener('touchend',()=>a2Drag=null);
+}
+function checkA2(){
+  const g=a2G[a2Act];
+  const on=p=>Math.abs(g.m*p.x+g.b-p.y)<0.6;
+  const r=document.getElementById('a2-cr'); r.style.display='block';
+  if(on(a2Pts[0])&&on(a2Pts[1])&&a2Pts[0].x!==a2Pts[1].x){
+    r.className='cr ok'; r.textContent='✓ Beide Punkte liegen auf der Geraden!';
+  } else {
+    const bad=a2Pts.filter(p=>!on(p));
+    r.className='cr err';
+    r.textContent=`✗ ${bad.length===2?'Beide Punkte liegen':'Ein Punkt liegt'} nicht auf der Geraden. Für x=${a2Pts[0].x} gilt y=${fmt(g.m*a2Pts[0].x+g.b)}.`;
+  }
+}
+
+/* ══ A3: Analytische Aufgaben ══ */
+function chk(id,correct,display){
+  const p=parseL(document.getElementById(id).value);
+  const exp=parseL(correct.replace(/\s/g,''));
+  const r=document.getElementById(id+'-cr'); r.style.display='block';
+  if(p&&exp&&Math.abs(p.m-exp.m)<0.01&&Math.abs(p.b-exp.b)<0.01){
+    r.className='cr ok'; r.textContent=`✓ Richtig! f(x) = ${display}`;
+  } else {
+    r.className='cr err'; r.textContent='✗ Nicht korrekt. Überprüfe deine Rechnung.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded',()=>{
+  updateKS();
+  updateDR();
+  buildTypBtns(); drawTyp();
+  buildA1(); drawA1();
+  buildA2(); initA2(); drawA2();
+});
+window.addEventListener('resize',()=>{
+  updateKS(); updateDR(); drawTyp(); drawA1(); drawA2();
+});
+</script>
+</body>
+</html>
