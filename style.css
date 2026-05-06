@@ -425,3 +425,90 @@ canvas { display: block; width: 100%; }
   .breadcrumb-bar { padding: 8px 14px; }
   .page-wrap { padding: 20px 14px 60px; }
 }
+
+/* ── ZUSATZMATERIAL & EXTERNE RESSOURCEN ──────────────────────
+   Gilt für alle Themenseiten. Die zwei Sektionen am Seitenende
+   ("Zusatzmaterial" + "Externe Videos & Aufgabensammlungen")
+   nutzen diese Klassen. Themenseiten dürfen sie NICHT neu
+   definieren — Konsistenz ist Pflicht.
+   ───────────────────────────────────────────────────────────── */
+
+/* Download-Kacheln (Druckseiten, Anki-Deck) */
+.dl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.dl {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--weiss);
+  border: 1px solid var(--linie);
+  border-left: 4px solid var(--blau);
+  border-radius: 9px;
+  padding: 11px 13px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--s);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.dl:hover {
+  border-color: var(--blau-rand);
+  border-left-color: var(--blau);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.dl .dl-ic { font-size: 1.5rem; flex-shrink: 0; }
+.dl .dl-t  { font-weight: 700; font-size: 0.83rem; color: var(--tinte); }
+.dl .dl-s  { font-size: 0.7rem; color: var(--tinte-2); margin-top: 1px; }
+.dl .dl-fmt {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--blau);
+  margin-top: 2px;
+}
+
+/* Externe Links (Erklärvideos, Aufgabensammlungen) */
+.links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+@media (max-width: 520px) {
+  .links-grid { grid-template-columns: 1fr; }
+}
+.lk {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--weiss);
+  border: 1px solid var(--linie);
+  border-radius: 9px;
+  padding: 11px 13px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--s);
+  transition: border-color 0.15s;
+}
+.lk:hover         { border-color: var(--rot-rand);    text-decoration: none; }
+.lk.aufg:hover    { border-color: var(--orange-rand); }
+.lk .lk-ic { font-size: 1.4rem; flex-shrink: 0; }
+.lk .lk-t  { font-weight: 700; font-size: 0.83rem; color: var(--tinte); }
+.lk .lk-s  { font-size: 0.7rem; color: var(--tinte-2); margin-top: 1px; }
+
+/* Subtitel innerhalb der Ressourcen-Sektion (z.B. "🎬 ERKLÄRVIDEOS") */
+.ressourcen-subtitel {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--tinte-2);
+  margin-bottom: 8px;
+}
+.ressourcen-subtitel + .links-grid { margin-top: 8px; }
+.links-grid + .ressourcen-subtitel { margin-top: 14px; }

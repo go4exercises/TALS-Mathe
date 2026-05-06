@@ -1,30 +1,33 @@
 # Downloads
 
-Hier liegen die Materialien zum Herunterladen, sortiert nach Bereich und Thema.
+Hier liegen die Materialien zum Herunterladen oder Drucken, sortiert nach Bereich und Thema.
 
 ## Standard-Dateien pro Thema
 
-Jeder Themen-Unterordner enthält fünf Dateien:
+Jeder Themen-Unterordner enthält fünf Dateien. Vier davon sind **HTML-Druckseiten** mit eingebautem Druck-Stylesheet (`print.css`); sie öffnen sich im Browser, lassen sich direkt ausdrucken oder als PDF speichern. Das Anki-Deck ist ein Download.
 
 | Datei | Format | Inhalt |
 |---|---|---|
-| `handout.pdf` | PDF | Theorie-Zusammenfassung zum Mitnehmen |
-| `aufgabenserie.pdf` | PDF | Übungsaufgaben mit Lösungen |
-| `teste-dich-selbst.pdf` | PDF | Selbsttest zur Selbstüberprüfung |
+| `handout.html` | HTML-Druckseite | Theorie-Zusammenfassung zum Mitnehmen |
+| `formelauszug.html` | HTML-Druckseite | Kompakte Formelübersicht (nicht zu verwechseln mit Promath/SBFI) |
+| `teste-dich-selbst.html` | HTML-Druckseite | Selbsttest mit Grundlagenaufgaben und Lösungen |
+| `aufgabenserie.html` | HTML-Druckseite | Anwendungsaufgaben mit Diagrammen und Musterlösungen |
 | `ankideck.apkg` | Anki | Karteikarten für Spaced Repetition |
-| `formelauszug.pdf` | PDF | Alle Formeln auf einer Seite |
 
 ## Struktur
 
 ```
 downloads/
+├── print.css                                ← gemeinsames Druck-Stylesheet (A4)
+├── diagram.js                               ← SVG-Helper für Achsenkreuze
 ├── grundlagen/
 │   ├── g3-2-lineare-funktionen/
-│   │   ├── handout.pdf
-│   │   ├── aufgabenserie.pdf
-│   │   ├── teste-dich-selbst.pdf
+│   │   ├── handout.html
+│   │   ├── formelauszug.html
+│   │   ├── teste-dich-selbst.html
+│   │   ├── aufgabenserie.html
 │   │   ├── ankideck.apkg
-│   │   └── formelauszug.pdf
+│   │   └── README.md
 │   └── …
 └── schwerpunkt/
     └── …
@@ -32,4 +35,4 @@ downloads/
 
 ## Hinweis
 
-Solange ein Thema noch nicht „verfügbar" ist, sind diese Dateien Platzhalter oder fehlen — die Links auf der entsprechenden Themenseite führen dann zu 404. Sobald das Thema fertiggestellt ist, werden die Materialien hier hinterlegt.
+Solange ein Thema noch nicht „verfügbar" ist, gibt es im entsprechenden Themen-Ordner keine Materialien. Die Themenseite zeigt in diesem Fall nur den Hinweis „Wird ergänzt." statt einer Download-Kachel-Galerie — es entstehen also keine 404-Links.

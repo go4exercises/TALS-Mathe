@@ -1,6 +1,6 @@
 # TALS-Mathematik · Styleguide
 
-**Version 1.0 · Stand: Mai 2026**
+**Version 1.1 · Stand: Mai 2026**
 
 Dieser Styleguide ist die verbindliche Referenz für alle Themenseiten des Lehrmittels „TALS-Mathematik". Er sichert Konsistenz in Notation, Aufbau, Sprache und visuellem Design — kapitelübergreifend und chatübergreifend.
 
@@ -129,7 +129,12 @@ Jede Themenseite folgt diesem Schema in genau dieser Reihenfolge:
       • A3: Rechnen (mehrere Teilaufgaben)
       • A4–A6: Anwendung in Realsituation
 8. Zusammenfassung        — kompakte Tabelle, Merksatz
-9. Downloads              — Handout, Aufgabenserie, TesteDichSelbst, Ankideck, Formelauszug
+9. Zusatzmaterial         — fünf Einträge in fester Reihenfolge:
+      • Handout (HTML-Druckseite, neuer Tab) — Theorie ohne Beispiele und ohne Aufgaben
+      • Formelauszug (HTML-Druckseite, neuer Tab) — kompakte Formelsammlung, FTB-konform
+      • Anki-Deck (Download `.apkg`)
+      • Teste dich selbst (HTML-Druckseite, neuer Tab) — Grundlagenaufgaben mit Lösungen
+      • Aufgabenserie (HTML-Druckseite, neuer Tab) — Anwendungsaufgaben mit Lösungen
 10. Externe Ressourcen    — Videos, Aufgabensammlungen
 ```
 
@@ -138,7 +143,11 @@ Das Schema ist **didaktisch begründet**:
 - Drei Darstellungen früh verknüpfen — das verhindert das „Symbol-Schubsen" ohne Verständnis.
 - Spezialfälle sichtbar machen, bevor sie in Aufgaben auftauchen.
 - Aufgabentypen steigern Selbstständigkeit.
-- Downloads kommen **vor** den externen Links — denn das eigene Material ist primär.
+- Zusatzmaterial kommt **vor** den externen Links — denn das eigene Material ist primär.
+
+**Trennung Handout ↔ Aufgaben:** Das Handout enthält nur Theorie (Definitionen, Sätze, Tabellen, Übersichts-SVGs wie eine Geradenschar). **Beispiele** stehen in der Themenseite und in „Teste dich selbst", **Aufgaben** in „Teste dich selbst" (rein-mathematisch) und in der „Aufgabenserie" (Anwendungen). So bleibt das Handout als knapper Theorie-Auszug zum Mitnehmen brauchbar.
+
+**Druckseiten-Anforderungen:** Jede HTML-Druckseite hat oben einen sticky „Seite drucken"-Knopf (`window.print()`) und einen Rück-Link zur Themenseite. Druck-CSS (`@page A4 portrait`, 14 mm Rand, `@media print`) sorgt für saubere Ausnutzung und gute Seitenwechsel. Druckseiten öffnen von der Themenseite immer in einem neuen Tab (`target="_blank" rel="noopener"`).
 
 ---
 
@@ -167,6 +176,55 @@ Die Farben sind kapitelübergreifend identisch — das schafft ein konsistentes 
 - **Sans** (`Source Sans 3`): Fliesstext
 - **Mono** (`JetBrains Mono`): Code, Formeln in Live-Anzeigen, Slider-Werte, Chip-Labels
 
+### 5.4 Zusatzmaterial- und Ressourcen-Sektion (zentrale Klassen)
+
+Die zwei Schluss-Sektionen jeder Themenseite (Schritt 9 und 10 im Master-Schema) verwenden ausschliesslich Klassen, die zentral in `style.css` definiert sind. **Lokale Style-Definitionen dieser Klassen sind verboten** — Konsistenz über alle Themen ist Pflicht und das Erscheinungsbild muss exakt mit der Referenz übereinstimmen.
+
+**Klassen-Übersicht:**
+
+| Klasse | Verwendung |
+|---|---|
+| `.dl-grid` | Container für die 5 Download-Kacheln (Auto-Wrap-Grid, min. 200 px) |
+| `.dl` | Einzelne Download-Kachel — weisser Hintergrund, blauer Linksbalken, Hover-Lift |
+| `.dl-ic`, `.dl-t`, `.dl-s`, `.dl-fmt` | Icon, Titel, Untertitel, Format-Label (z.B. „Druckseite", „APKG") |
+| `.links-grid` | Container für externe Link-Kacheln (zweispaltig, einspaltig <520 px) |
+| `.lk` | Externe Link-Kachel — ohne blauen Linksbalken, roter Hover-Rand |
+| `.lk.aufg` | Variante für Aufgabensammlungen — oranger Hover-Rand statt rot |
+| `.lk-ic`, `.lk-t`, `.lk-s` | Icon, Titel, Untertitel |
+| `.ressourcen-subtitel` | Mono-Caps-Label für Untergruppen wie „🎬 ERKLÄRVIDEOS" |
+
+**Markup-Vorgaben:**
+
+```html
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/<bereich>/<datei-id>/handout.html" target="_blank" rel="noopener" class="dl">
+    <span class="dl-ic">📄</span>
+    <div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div>
+  </a>
+  <!-- weitere Kacheln in fester Reihenfolge: Formelauszug, Anki-Deck, Teste dich selbst, Aufgabenserie -->
+</div>
+
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos</div>
+<div class="links-grid">
+  <a href="https://..." target="_blank" rel="noopener" class="lk">
+    <span class="lk-ic">▶️</span>
+    <div><div class="lk-t">Titel</div><div class="lk-s">Kanal · Hinweis</div></div>
+  </a>
+</div>
+<div class="ressourcen-subtitel">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://..." target="_blank" rel="noopener" class="lk aufg">
+    <span class="lk-ic">📝</span>
+    <div><div class="lk-t">Quelle — Thema</div><div class="lk-s">Beschreibung</div></div>
+  </a>
+</div>
+```
+
+**Reihenfolge der Download-Kacheln** (verbindlich, damit das visuelle Layout zwischen den Themenseiten austauschbar bleibt): Handout · Formelauszug · Anki-Deck · Teste dich selbst · Aufgabenserie. Die Druckseiten-Kacheln haben das Format-Label „Druckseite", das Anki-Deck „APKG".
+
 ---
 
 ## 6. Datei-Naming und Struktur
@@ -176,34 +234,54 @@ TALS-Mathe/
 ├── index.html                              ← Übersichtsseite
 ├── style.css                               ← gemeinsames Stylesheet
 ├── nav.js                                  ← Navigation (sticky header + breadcrumb + ToC)
+├── mathlib.js                              ← Canvas-Helper, Formatter, Parser, Lösungs-Toggle
 ├── README.md
 ├── STYLEGUIDE.md                           ← diese Datei
-├── TEMPLATE.html                           ← Vorlage für neue Themen
-├── grundlagen/
-│   ├── g1-arithmetik-algebra.html
-│   ├── g2-gleichungen.html
-│   ├── g3-1-funktionen-grundlagen.html
+├── TEMPLATE.html                           ← Vorlage für neue Themen (nutzt ../-Pfade)
+├── grundlagen/                             ← 18 Themenseiten
+│   ├── g1-1-grundlagen.html
+│   ├── g1-2-zahlen-grundoperationen.html
+│   ├── g1-3-algebraische-terme.html
+│   ├── g1-4-zehnerpotenzen-quadratwurzeln.html
+│   ├── g2-1-grundlagen.html
+│   ├── g2-2-lineare-quadratische-gleichungen.html
+│   ├── g2-3-lineare-gleichungssysteme.html
+│   ├── g3-1-grundlagen.html
 │   ├── g3-2-lineare-funktionen.html        ← Referenz-Implementierung
 │   ├── g3-3-quadratische-funktionen.html
-│   ├── g3-4-…
-│   ├── g4-datenanalyse.html
-│   └── g5-geometrie.html
-├── schwerpunkt/
-│   ├── s1-arithmetik.html
-│   ├── s2-gleichungen.html
-│   ├── s3-1-funktionen-grundlagen.html
-│   ├── s3-2-polynome.html
-│   ├── …
-│   └── s4-geometrie.html
+│   ├── g4-1-grundlagen.html
+│   ├── g4-2-diagramme.html
+│   ├── g4-3-masszahlen.html
+│   ├── g5-1-grundlagen.html
+│   ├── g5-2-planimetrie.html
+│   ├── g5-3-trigonometrische-berechnungen.html
+│   ├── g5-4-einheitskreis.html
+│   └── g5-5-trigonometrische-gleichungen.html
+├── schwerpunkt/                            ← 13 Themenseiten
+│   ├── s1-1-grundlagen.html
+│   ├── s1-2-potenzen.html
+│   ├── s1-3-logarithmen.html
+│   ├── s2-1-grundlagen.html
+│   ├── s2-2-gleichungstypen.html
+│   ├── s3-1-grundlagen.html
+│   ├── s3-2-potenz-wurzelfunktionen.html
+│   ├── s3-3-polynomfunktionen.html
+│   ├── s3-4-exponential-logarithmusfunktionen.html
+│   ├── s3-5-trigonometrische-funktionen.html
+│   ├── s4-1-grundlagen.html
+│   ├── s4-2-stereometrie.html
+│   └── s4-3-vektorgeometrie.html
 └── downloads/
     ├── README.md
+    ├── print.css                              ← gemeinsames Druck-Stylesheet (A4)
+    ├── diagram.js                             ← SVG-Helper für Achsenkreuze in Druckseiten
     ├── grundlagen/
     │   ├── g3-2-lineare-funktionen/
-    │   │   ├── handout.pdf
-    │   │   ├── aufgabenserie.pdf
-    │   │   ├── teste-dich-selbst.pdf
-    │   │   ├── ankideck.apkg
-    │   │   └── formelauszug.pdf
+    │   │   ├── handout.html                   ← Druckseite (Theorie, ohne Beispiele/Aufgaben)
+    │   │   ├── formelauszug.html              ← Druckseite (kompakte Formelübersicht)
+    │   │   ├── ankideck.apkg                  ← Anki-Karteikarten (Download)
+    │   │   ├── teste-dich-selbst.html         ← Druckseite (Grundlagenaufgaben + Lösungen)
+    │   │   └── aufgabenserie.html             ← Druckseite (Anwendungsaufgaben + Lösungen)
     │   └── …
     └── schwerpunkt/
         └── …
@@ -213,6 +291,7 @@ TALS-Mathe/
 - Bereichs-Präfix: `g` für Grundlagen, `s` für Schwerpunkt
 - Lerngebiet-Nummer: `g3-2` = Grundlagen, Lerngebiet 3 (Funktionen), Thema 2 (Lineare)
 - Dateinamen kleingeschrieben, mit Bindestrichen, ohne Umlaute (`-funktionen.html`, nicht `_Funktionen.html`)
+- **Druckseiten-Dateinamen** sind über alle Themen hinweg identisch: `handout.html`, `formelauszug.html`, `teste-dich-selbst.html`, `aufgabenserie.html` (plus `ankideck.apkg`). Das erleichtert Verlinkung, Kopiervorlagen und Suche.
 
 ---
 
@@ -254,11 +333,20 @@ Bevor eine Themenseite live geht, prüfe:
 - [ ] Mathematik: Achsenbeschriftung `x` und `y` ohne Einheit
 
 **Struktur & Konventionen**
-- [ ] Downloads-Sektion vor externen Ressourcen
-- [ ] Alle 5 Standard-Downloads verlinkt
+- [ ] Zusatzmaterial-Sektion vor externen Ressourcen
+- [ ] Alle 5 Einträge in fester Reihenfolge: Handout · Formelauszug · Anki-Deck · Teste dich selbst · Aufgabenserie
+- [ ] Druckseiten öffnen in neuem Tab (`target="_blank" rel="noopener"`)
+- [ ] Anki-Deck als Download verlinkt (`.apkg`), die anderen vier als HTML-Druckseiten
 - [ ] Footer korrekt: „Grundlagen <Thema>" oder „Schwerpunkt <Thema>"
 - [ ] `nav.js` korrekt eingebunden mit prev/next
 - [ ] ToC funktioniert (alle h2 haben `id`)
+
+**Druckseiten (`downloads/.../*.html`)**
+- [ ] Handout enthält ausschliesslich Theorie — keine Beispiele, keine Aufgaben
+- [ ] „Seite drucken"-Knopf oben (sticky), Rück-Link zur Themenseite
+- [ ] `print.css` und (falls Diagramme) `diagram.js` eingebunden
+- [ ] Saubere A4-Seitenwechsel (`page-break-inside: avoid` für Aufgaben/Lösungs-Blöcke)
+- [ ] Diagramme: reine Mathematik 1:1, Anwendungen mit Achsenbeschriftung und Einheit
 
 **Technisch**
 - [ ] MathJax lädt

@@ -8,7 +8,7 @@
   2. Benenne sie nach Schema (z.B. g3-3-quadratische-funktionen.html)
   3. Suche & ersetze alle PLATZHALTER ⟪…⟫
   4. Folge dem didaktischen Schema: 1 Einstieg → 2 Definition → 3 Darstellungen
-     → 4 Theorie → 5 Aufgaben → 6 Zusammenfassung → 7 Downloads → 8 Ressourcen
+     → 4 Theorie → 5 Aufgaben → 6 Zusammenfassung → 7 Zusatzmaterial → 8 Externe Ressourcen
   5. Beachte STYLEGUIDE.md — insbesondere Notation und Achsenskalierung
 ═══════════════════════════════════════════════════════════════════
 -->
@@ -41,6 +41,30 @@ MathJax = {
 </style>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     TEMPLATE-HINWEIS (nur sichtbar, wenn ../style.css nicht geladen wurde,
+     d.h. wenn die Datei direkt aus dem Repo-Root geöffnet wird)
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="template-hinweis" style="
+     position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+     background: #fff4d6; border-bottom: 2px solid #b85a00;
+     padding: 14px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+     font-size: 14px; color: #1a1a1a; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+  <strong>📋 TEMPLATE.html — Vorlage zum Kopieren</strong><br>
+  Diese Datei ist die Vorlage für neue Themenseiten und nicht als eigenständige Seite gedacht.
+  Die relativen Pfade <code>../style.css</code>, <code>../nav.js</code>, <code>../mathlib.js</code>
+  funktionieren erst, wenn die Datei in einen Unterordner (<code>grundlagen/</code> oder
+  <code>schwerpunkt/</code>) kopiert wurde. Siehe Anleitung im HTML-Kopfkommentar.
+</div>
+<script>
+  // Wenn ../style.css geladen wurde (also Datei in Unterordner liegt), Banner ausblenden.
+  // Test: --blau Custom Property ist im echten Stylesheet definiert.
+  window.addEventListener('load', () => {
+    const probe = getComputedStyle(document.documentElement).getPropertyValue('--blau').trim();
+    if (probe) document.getElementById('template-hinweis').style.display = 'none';
+  });
+</script>
 <div id="nav-root"></div>
 <div class="page-wrap">
 <main class="content">
@@ -226,46 +250,64 @@ MathJax = {
 
 
 <!-- ══════════════════════════════════════════════════════════════
-     9. DOWNLOADS — VOR den externen Ressourcen
-     Pfad: ../downloads/<bereich>/<datei-id>/<datei>.pdf|apkg
+     9. ZUSATZMATERIAL — VOR den externen Ressourcen
+     Pfade: ../downloads/<bereich>/<datei-id>/<datei>.html|apkg
+     Reihenfolge der Kacheln: Handout · Formelauszug · Anki-Deck ·
+     Teste dich selbst · Aufgabenserie. Druckseiten öffnen mit
+     target="_blank" in neuem Tab; das Anki-Deck wird heruntergeladen.
+     Klassen .dl, .dl-grid sind zentral in ../style.css definiert
+     und dürfen lokal NICHT überschrieben werden.
 ═══════════════════════════════════════════════════════════════════ -->
-<h2 id="downloads">Downloads</h2>
-<p>Materialien zum Mitnehmen, Üben und Wiederholen.</p>
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
 <div class="dl-grid">
-  <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/handout.pdf" class="dl">
+  <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/handout.html" target="_blank" rel="noopener" class="dl">
     <span class="dl-ic">📄</span>
-    <div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">PDF</div></div>
+    <div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div>
   </a>
-  <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/aufgabenserie.pdf" class="dl">
-    <span class="dl-ic">📝</span>
-    <div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Übungsaufgaben mit Lösungen</div><div class="dl-fmt">PDF</div></div>
-  </a>
-  <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/teste-dich-selbst.pdf" class="dl">
-    <span class="dl-ic">✅</span>
-    <div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Selbsttest zur Überprüfung</div><div class="dl-fmt">PDF</div></div>
+  <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/formelauszug.html" target="_blank" rel="noopener" class="dl">
+    <span class="dl-ic">📐</span>
+    <div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div>
   </a>
   <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/ankideck.apkg" class="dl">
     <span class="dl-ic">🃏</span>
     <div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div>
   </a>
-  <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/formelauszug.pdf" class="dl">
-    <span class="dl-ic">📐</span>
-    <div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">PDF</div></div>
+  <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl">
+    <span class="dl-ic">✅</span>
+    <div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div>
+  </a>
+  <a href="../downloads/⟪bereich⟫/⟪datei-id⟫/aufgabenserie.html" target="_blank" rel="noopener" class="dl">
+    <span class="dl-ic">🧩</span>
+    <div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div>
   </a>
 </div>
 
 
 <!-- ══════════════════════════════════════════════════════════════
      10. EXTERNE RESSOURCEN
+     Klassen .lk, .links-grid, .ressourcen-subtitel sind zentral in
+     ../style.css definiert. Subtitel mit Klasse, NICHT inline-Stil.
+     Verifiziere alle externen Links vor dem Veröffentlichen.
 ═══════════════════════════════════════════════════════════════════ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<div style="font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">🎬 Erklärvideos</div>
+<div class="ressourcen-subtitel">🎬 Erklärvideos</div>
 <div class="links-grid">
-  <!-- Playlist-Karten -->
+  <!-- Beispiel-Karte (Erklärvideo / Playlist):
+  <a href="https://www.youtube.com/playlist?list=⟪PLAYLIST-ID⟫" target="_blank" rel="noopener" class="lk">
+    <span class="lk-ic">▶️</span>
+    <div><div class="lk-t">⟪Titel⟫</div><div class="lk-s">⟪Kanal · Hinweis⟫</div></div>
+  </a>
+  -->
 </div>
-<div style="font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin:14px 0 8px">📝 Aufgabensammlungen</div>
+<div class="ressourcen-subtitel">📝 Aufgabensammlungen</div>
 <div class="links-grid">
-  <!-- Aufgabenseiten-Karten -->
+  <!-- Beispiel-Karte (Aufgabenseite):
+  <a href="https://⟪url⟫" target="_blank" rel="noopener" class="lk aufg">
+    <span class="lk-ic">📝</span>
+    <div><div class="lk-t">⟪Quelle — Thema⟫</div><div class="lk-s">⟪Beschreibung⟫</div></div>
+  </a>
+  -->
 </div>
 
 

@@ -46,9 +46,9 @@ Das Projekt entsteht schrittweise. Fertige Teilgebiete sind sofort verfügbar; w
 | 2.1 | Grundlagen | 🔜 geplant |
 | 2.2 | Lineare und quadratische Gleichungen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
 | 2.3 | Lineare Gleichungssysteme  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 3.1 | Grundlagen | 🔜 geplant |
+| 3.1 | Grundlagen | ✅ verfügbar |
 | 3.2 | Lineare Funktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
-| 3.3 | Quadratische Funktionen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
+| 3.3 | Quadratische Funktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
 | 4.1 | Grundlagen | 🔜 geplant |
 | 4.2 | Diagramme | 🔜 geplant |
 | 4.3 | Masszahlen | 🔜 geplant |
@@ -131,7 +131,7 @@ Beispiele: `g3-2-lineare-funktionen.html`, `s4-3-vektorgeometrie.html`
 Kein Build-Schritt nötig. Repository klonen oder als ZIP herunterladen, dann `index.html` im Browser öffnen.
 
 ```bash
-git clone https://github.com/DEINNAME/tals-mathe.git
+git clone https://github.com/go4exercises/tals-mathe.git
 cd tals-mathe
 # index.html im Browser öffnen
 ```
@@ -140,7 +140,7 @@ cd tals-mathe
 
 ## Online ansehen
 
-👉 **[DEINNAME.github.io/tals-mathe](https://DEINNAME.github.io/tals-mathe)**
+👉 **[go4exercises.github.io/tals-mathe](https://go4exercises.github.io/tals-mathe)**
 
 *(URL nach dem Hochladen hier eintragen)*
 

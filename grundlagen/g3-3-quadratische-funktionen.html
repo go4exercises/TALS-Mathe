@@ -19,7 +19,90 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:120px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:10px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.05rem; font-style:italic; color:var(--tinte); font-weight:700; }
+.formel-live .fl-eq .acc { color:var(--blau); }
+
+/* Drei-Boxen Grid für Formen-Umformung */
+.formen-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:8px; }
+@media(max-width:700px){ .formen-grid { grid-template-columns:1fr; } }
+.formen-box { background:var(--weiss); border:1.5px solid var(--linie); border-radius:9px; padding:10px 12px; }
+.formen-box.aktiv { border-color:var(--blau); background:var(--blau-hell); }
+.formen-box .fb-label { font-family:var(--mono); font-size:0.58rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:4px; }
+.formen-box.aktiv .fb-label { color:var(--blau); }
+.formen-box .fb-eq { font-family:var(--mono); font-size:0.86rem; font-weight:700; color:var(--tinte); word-break:break-word; }
+.formen-box.aktiv .fb-eq { color:var(--blau); }
+.formen-box .fb-info { font-family:var(--sans); font-size:0.72rem; color:var(--tinte-2); margin-top:5px; line-height:1.4; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Diskriminanten-Buttons (rot/grün/violett) ── */
+.disk-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.disk-btn.aktiv-pos { border-color:var(--gruen); background:var(--gruen); color:#fff; }
+.disk-btn.aktiv-null { border-color:var(--orange); background:var(--orange); color:#fff; }
+.disk-btn.aktiv-neg { border-color:var(--rot); background:var(--rot); color:#fff; }
+
+/* ── Aufgaben ── */
+.aw { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; overflow:hidden; box-shadow:var(--s); margin:12px 0; }
+.aw-head { background:var(--orange-hell); border-bottom:1px solid var(--orange-rand); padding:11px 17px; display:flex; align-items:center; gap:10px; }
+.aw-nr { background:var(--orange); color:#fff; border-radius:50%; width:27px; height:27px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:0.72rem; font-weight:700; flex-shrink:0; }
+.aw-titel { font-family:var(--serif); font-size:0.93rem; font-weight:700; color:var(--tinte); }
+.aw-body { padding:15px 17px; }
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:200px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.btn-loes { background:var(--tinte-2); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* ── Anwendungstabelle (Übersicht der 6 Anwendungen) ── */
+.anw-tabelle { font-size:0.84rem; }
+.anw-tabelle thead th { white-space:normal; line-height:1.3; }
+.anw-tabelle tbody td { text-align:left; font-family:var(--sans); vertical-align:top; line-height:1.45; }
+.anw-tabelle tbody td.tab-form { font-family:var(--mono); font-weight:700; color:var(--blau); white-space:nowrap; text-align:center; vertical-align:middle; }
+.anw-tabelle tbody td.tab-anw { font-weight:600; color:var(--tinte); width:32%; }
+.anw-tabelle tbody td.tab-vorgehen { color:var(--tinte-2); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -27,7 +110,7 @@ MathJax = {
 <div class="page-wrap">
 <main class="content">
 
-<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<!-- ══ TITEL ══ -->
 <div class="page-titel">
   <div class="pt-bereich">Grundlagenfach · Lerngebiet 3 · Funktionen · 50 Lektionen</div>
   <h1 class="pt-h1">3.3 Quadratische Funktionen</h1>
@@ -45,57 +128,530 @@ MathJax = {
 </div>
 
 
-<!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<!-- ══ 1. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — der schiefe Wurf</h2>
 
+<p>Du wirfst einen Ball schräg in die Luft. Aus <strong>Wurfhöhe 1 m</strong>, mit einer Anfangsgeschwindigkeit, die ihn auf eine maximale <strong>Höhe von 5 m</strong> bei einer waagerechten Distanz von 4 m bringt. Die Flugbahn ist eine <strong>Parabel</strong> — und sie wird durch eine quadratische Funktion beschrieben:</p>
 
-<!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+\[ h(x) = -0.25 \cdot (x - 4)^2 + 5 \]
 
+<p>Wähle mit dem Regler eine waagerechte Distanz \(x\) — die zugehörige Tabellenzeile und der Punkt im Graphen werden sofort hervorgehoben.</p>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<div class="widget">
+  <div class="widget-header">
+    <h3>🎾 Wurfparabel — \(h(x) = -0.25 \cdot (x - 4)^2 + 5\)</h3>
+    <p>Wurfhöhe 1 m · Scheitelpunkt \(S(4 \mid 5)\) · Aufschlagpunkt bei \(x \approx 8.47\) m</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>Distanz \(x\) [m]</label>
+      <input type="range" id="ws-x" min="0" max="9" step="1" value="2">
+      <span class="sl-val"><span id="ws-xv">2</span> m</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktion und Auswertung</div>
+      <div class="fl-eq">h(x) = −0.25·(x − 4)² + 5</div>
+      <div class="fl-eq fl-eval" id="ws-eq" style="font-size:0.92rem;color:var(--blau);margin-top:4px"></div>
+    </div>
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Wertetabelle</div>
+        <table class="ftb-tabelle" id="ws-table">
+          <thead><tr><th>\(x\) [m]</th><th>Rechnung</th><th>\(h(x)\) [m]</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Graph</div>
+        <div class="cv-wrap"><canvas id="ws-canvas" height="200"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
-
-
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
-
-
-<!-- ══ 7. AUFGABEN ══ -->
-<h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
-
-
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
-<h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
-
-
-<!-- ══ 9. DOWNLOADS ══ -->
-<h2 id="downloads">Downloads</h2>
-<p>Materialien zum Mitnehmen, Üben und Wiederholen.</p>
-<div class="dl-grid">
-  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/handout.pdf" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">PDF</div></div></a>
-  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/aufgabenserie.pdf" class="dl"><span class="dl-ic">📝</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Übungsaufgaben mit Lösungen</div><div class="dl-fmt">PDF</div></div></a>
-  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/teste-dich-selbst.pdf" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Selbsttest zur Überprüfung</div><div class="dl-fmt">PDF</div></div></a>
-  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
-  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/formelauszug.pdf" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">PDF</div></div></a>
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Alle drei Darstellungen zeigen dieselbe Funktion — aus verschiedenen Blickwinkeln:</p>
+  <ul style="margin-top:6px">
+    <li>Der <strong>Scheitelpunkt \(S(4\mid 5)\)</strong> ist die höchste Stelle der Wurfbahn — bei 4 m Distanz erreicht der Ball seine maximale Höhe von 5 m</li>
+    <li>Der <strong>Streckungsfaktor \(a=-0.25\)</strong> ist negativ: die Parabel ist nach unten geöffnet (so kommt der Ball wieder runter)</li>
+    <li>Bei \(x=0\) ist \(h(0) = 1\) — die Wurfhöhe</li>
+  </ul>
 </div>
 
 
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
+<!-- ══ 2. DEFINITION ══ -->
+<h2 id="definition">Definition und Parameter</h2>
 
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Quadratische Funktion</div>
+  \[ f(x) = a \cdot x^2 + b \cdot x + c, \qquad a, b, c \in \mathbb{R},\; a \neq 0 \]
+  <p>Notation: \(f : \mathbb{R} \longrightarrow \mathbb{R},\quad x \longmapsto a x^2 + b x + c\)</p>
+  <p>Der Graph einer quadratischen Funktion ist stets eine <strong>Parabel</strong>.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Die drei Darstellungsformen</div>
+  <p>Jede quadratische Funktion lässt sich in <strong>drei äquivalenten Formen</strong> schreiben — jede macht eine andere geometrische Eigenschaft direkt sichtbar:</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Form</th><th>Gleichung</th><th>Direkt ablesbar</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left;font-weight:700;color:var(--blau)">Allgemeine Form<br><span style="font-weight:400;color:var(--tinte-2);font-size:0.78rem">(Polynomform, Grundform)</span></td>
+          <td>\(f(x) = ax^2 + bx + c\)</td>
+          <td style="font-family:var(--sans);text-align:left">\(y\)-Achsenabschnitt: \(f(0) = c\)<br>Öffnung: Vorzeichen von \(a\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left;font-weight:700;color:var(--gruen)">Scheitelform</td>
+          <td>\(f(x) = a(x - u)^2 + v\)</td>
+          <td style="font-family:var(--sans);text-align:left">Scheitelpunkt: \(S(u \mid v)\)<br>Streckung und Öffnung: \(a\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left;font-weight:700;color:var(--orange)">Linearfaktorform<br><span style="font-weight:400;color:var(--tinte-2);font-size:0.78rem">(Produktform)</span></td>
+          <td>\(f(x) = a(x - x_1)(x - x_2)\)</td>
+          <td style="font-family:var(--sans);text-align:left">Nullstellen: \(x_1\) und \(x_2\)<br>(nur falls reelle Nullstellen existieren)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+<!-- ══ 3. DIE DREI DARSTELLUNGEN (interaktiv mit Scheitelform) ══ -->
+<h2 id="darstellungen">Die drei Darstellungen</h2>
+
+<p>Verändere die Parameter \(a\), \(u\), \(v\) — die Scheitelform wird sofort in <strong>allgemeine Form</strong>, in die Berechnung der <strong>Nullstellen</strong> und in die <strong>Linearfaktorform</strong> umgerechnet. Im Graph werden Scheitelpunkt \(S(u \mid v)\), \(y\)-Achsenabschnitt und Nullstellen markiert.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Interaktive Darstellungen</h3>
+    <p>\(f(x) = a \cdot (x - u)^2 + v\) · alle drei Darstellungsformen verknüpft</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row"><label>Streckungsfaktor \(a\)</label><input type="range" id="dr-a" min="-2" max="2" step="0.25" value="0.5"><span class="sl-val" id="dr-av">0.5</span></div>
+    <div class="sl-row"><label>Scheitel-x  \(u\)</label><input type="range" id="dr-u" min="-5" max="5" step="0.5" value="1"><span class="sl-val" id="dr-uv">1</span></div>
+    <div class="sl-row"><label>Scheitel-y  \(v\)</label><input type="range" id="dr-v" min="-5" max="5" step="0.5" value="-2"><span class="sl-val" id="dr-vv">−2</span></div>
+
+    <div class="formen-grid">
+      <div class="formen-box aktiv" id="form-scheitel">
+        <div class="fb-label">① Scheitelform</div>
+        <div class="fb-eq" id="dr-scheitel">f(x) = 0.5·(x − 1)² − 2</div>
+        <div class="fb-info">Scheitelpunkt: <strong id="dr-S">S(1 | −2)</strong><br>Öffnung: <span id="dr-oeff">nach oben</span></div>
+      </div>
+      <div class="formen-box" id="form-allgemein">
+        <div class="fb-label">② Allgemeine Form</div>
+        <div class="fb-eq" id="dr-allg">f(x) = 0.5·x² − x − 1.5</div>
+        <div class="fb-info">y-Achsenabschnitt: <strong id="dr-c">c = −1.5</strong></div>
+      </div>
+      <div class="formen-box" id="form-linfak">
+        <div class="fb-label">③ Linearfaktorform</div>
+        <div class="fb-eq" id="dr-linfak">f(x) = 0.5·(x − 3)(x + 1)</div>
+        <div class="fb-info" id="dr-nst-info">Nullstellen: <strong id="dr-nst">x₁ = −1, x₂ = 3</strong></div>
+      </div>
+    </div>
+
+    <div class="formel-live" style="margin-top:14px">
+      <div class="fl-label">Berechnung der Nullstellen aus der allgemeinen Form</div>
+      <div class="fl-eq" id="dr-nst-rechnung" style="font-size:0.88rem;line-height:1.6"></div>
+    </div>
+
+    <div style="margin-top:14px">
+      <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Graph</div>
+      <div class="cv-wrap" style="max-width:500px"><canvas id="dr-canvas" height="280"></canvas></div>
+    </div>
+
+    <div style="margin-top:10px;font-size:0.78rem;color:var(--tinte-2);text-align:center">
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#1a4f8a;vertical-align:middle"></span>
+      Scheitelpunkt &nbsp;·&nbsp;
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#b85c00;vertical-align:middle"></span>
+      Nullstellen &nbsp;·&nbsp;
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#1f6b3a;vertical-align:middle"></span>
+      y-Achsenabschnitt
+    </div>
+  </div>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Hinweis zur Linearfaktorform</div>
+  <p>Die Linearfaktorform existiert nur, wenn die Parabel die \(x\)-Achse schneidet — also bei <strong>zwei oder einer reellen Nullstelle</strong>. Hat die Parabel keine reellen Nullstellen, gibt es keine Linearfaktorform über den reellen Zahlen.</p>
+</div>
+
+
+<!-- ══ 4. DISKRIMINANTE ══ -->
+<h2 id="diskriminante">Die Diskriminante — wie viele Nullstellen?</h2>
+
+<p>Aus der allgemeinen Form \(f(x) = ax^2 + bx + c\) bekommt man die Nullstellen mit der <strong>Mitternachtsformel</strong>:</p>
+
+\[ x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \]
+
+<p>Der Ausdruck unter der Wurzel heisst <strong>Diskriminante</strong>:</p>
+
+\[ D = b^2 - 4ac \]
+
+<p>Ihr Vorzeichen entscheidet über die Anzahl reeller Nullstellen — und damit über die Lage der Parabel relativ zur \(x\)-Achse.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>📐 Diskriminante visualisieren</h3>
+    <p>Klicke auf einen Fall — die Parabel und die Rechnung passen sich an</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns">
+      <button class="disk-btn aktiv-pos" id="disk-btn-pos" onclick="setDisk('pos')">D &gt; 0 (zwei Nullstellen)</button>
+      <button class="disk-btn" id="disk-btn-null" onclick="setDisk('null')">D = 0 (eine Nullstelle)</button>
+      <button class="disk-btn" id="disk-btn-neg" onclick="setDisk('neg')">D &lt; 0 (keine Nullstelle)</button>
+    </div>
+
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Graph</div>
+        <div class="cv-wrap"><canvas id="disk-canvas" height="240"></canvas></div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Rechnung</div>
+        <div id="disk-rechnung" style="font-family:var(--mono);font-size:0.88rem;line-height:1.7;background:var(--papier-2);border:1px solid var(--linie);border-radius:9px;padding:14px 18px;color:var(--tinte)"></div>
+      </div>
+    </div>
+
+    <div id="disk-fazit" style="margin-top:14px;padding:12px 16px;border-radius:9px;font-size:0.9rem;text-align:center"></div>
+  </div>
+</div>
+
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead><tr><th>Diskriminante</th><th>Anzahl Nullstellen</th><th>Geometrische Lage</th><th>Linearfaktorform</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--mono);color:var(--gruen);font-weight:700">\(D &gt; 0\)</td>
+        <td>zwei verschiedene Nullstellen \(x_1, x_2\)</td>
+        <td style="font-family:var(--sans);text-align:left">Parabel schneidet \(x\)-Achse in zwei Punkten</td>
+        <td style="font-family:var(--mono);text-align:left">\(a(x-x_1)(x-x_2)\)</td></tr>
+    <tr><td style="font-family:var(--mono);color:var(--orange);font-weight:700">\(D = 0\)</td>
+        <td>eine doppelte Nullstelle \(x_1\)</td>
+        <td style="font-family:var(--sans);text-align:left">Parabel berührt \(x\)-Achse (Scheitel auf der Achse)</td>
+        <td style="font-family:var(--mono);text-align:left">\(a(x-x_1)^2\)</td></tr>
+    <tr><td style="font-family:var(--mono);color:var(--rot);font-weight:700">\(D &lt; 0\)</td>
+        <td>keine reelle Nullstelle</td>
+        <td style="font-family:var(--sans);text-align:left">Parabel berührt \(x\)-Achse nicht</td>
+        <td style="font-family:var(--sans);text-align:left">existiert nicht in \(\mathbb{R}\)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 5. ANWENDUNGEN DER DREI FORMEN — Übersichtstabelle ══ -->
+<h2 id="anwendungen">Anwendungen der drei Formen</h2>
+
+<p>Jede der drei Darstellungsformen hat zwei typische Einsätze: einmal zum <em>Zeichnen</em> (geometrisches Verständnis) und einmal zum <em>Aufstellen</em> der Funktionsgleichung aus gegebenen Bedingungen. Diese Tabelle ist das Werkzeug für Aufgaben.</p>
+
+<table class="ftb-tabelle anw-tabelle">
+  <thead>
+    <tr>
+      <th style="width:13%">Form</th>
+      <th style="width:30%">Anwendung</th>
+      <th>Vorgehen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="tab-form" rowspan="2">Allgemeine<br>Form<br>\(ax^2{+}bx{+}c\)</td>
+      <td class="tab-anw">① Nullstellen / Achsen­schnittpunkte bestimmen</td>
+      <td class="tab-vorgehen">Setze \(0 = ax^2 + bx + c\) und löse mit der Mitternachtsformel \(x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}\). Die Achsenschnittpunkte sind \(S_{x_1}(x_1 \mid 0)\), \(S_{x_2}(x_2 \mid 0)\) und \(S_y(0 \mid c)\).</td>
+    </tr>
+    <tr>
+      <td class="tab-anw">② Parabelgleichung aus 3 beliebigen Punkten bestimmen</td>
+      <td class="tab-vorgehen">Setze die \(x\)- und \(y\)-Koordinaten der drei Punkte einzeln in \(y = ax^2 + bx + c\) ein. Es entsteht ein Gleichungssystem mit 3 Gleichungen und 3 Unbekannten \(a, b, c\) — lösen (z.B. mit dem Taschenrechner).</td>
+    </tr>
+    <tr>
+      <td class="tab-form" rowspan="2">Scheitel-<br>form<br>\(a(x{-}u)^2{+}v\)</td>
+      <td class="tab-anw">③ Parabel zeichnen / Transformation</td>
+      <td class="tab-vorgehen">Ausgehend von der Normalparabel \(y = x^2\) verschieben in den Scheitelpunkt \(S(u \mid v)\) und mit \(a\) strecken (\(|a| &gt; 1\)) bzw. stauchen (\(|a| &lt; 1\)). Bei \(a &lt; 0\) zusätzlich an der waagerechten Achse spiegeln.</td>
+    </tr>
+    <tr>
+      <td class="tab-anw">④ Parabelgleichung aus dem Scheitelpunkt und einem beliebigen Punkt bestimmen</td>
+      <td class="tab-vorgehen">Setze \(u\) und \(v\) (Scheitelpunkt) sowie die Koordinaten des zweiten Punktes in \(y = a(x-u)^2 + v\) ein und löse die entstehende Gleichung nach \(a\) auf.</td>
+    </tr>
+    <tr>
+      <td class="tab-form" rowspan="2">Linear-<br>faktorform<br>\(a(x{-}x_1)(x{-}x_2)\)</td>
+      <td class="tab-anw">⑤ Parabel aus den Nullstellen zeichnen</td>
+      <td class="tab-vorgehen">Trage \(x_1\) und \(x_2\) auf der \(x\)-Achse ein. Die Symmetrieachse ist die Mittelsenkrechte zwischen ihnen: \(x_S = \frac{x_1 + x_2}{2}\). Mit \(y_S = f(x_S)\) den Scheitelpunkt einzeichnen — Parabel zeichnen.</td>
+    </tr>
+    <tr>
+      <td class="tab-anw">⑥ Parabelgleichung aus den Nullstellen und einem beliebigen Punkt bestimmen</td>
+      <td class="tab-vorgehen">Setze \(x_1\), \(x_2\) und die Koordinaten des gegebenen Punktes \(P(x \mid y)\) in \(y = a(x-x_1)(x-x_2)\) ein und löse die Gleichung nach \(a\) auf.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Umwandeln zwischen den Formen</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Von</th><th>Nach</th><th>Vorgehen</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left">Allgemeine Form</td>
+          <td style="font-family:var(--sans);text-align:left">Scheitelform</td>
+          <td style="font-family:var(--sans);text-align:left">\(u = -\dfrac{b}{2a}\), \(\;v = c - \dfrac{b^2}{4a} = \dfrac{4ac - b^2}{4a}\), \(a\) übernehmen</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Scheitelform</td>
+          <td style="font-family:var(--sans);text-align:left">Allgemeine Form</td>
+          <td style="font-family:var(--sans);text-align:left">Klammer ausmultiplizieren</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Allgemeine Form</td>
+          <td style="font-family:var(--sans);text-align:left">Linearfaktorform</td>
+          <td style="font-family:var(--sans);text-align:left">Nullstellen \(x_{1,2} = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}\) berechnen, \(a\) übernehmen</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Linearfaktorform</td>
+          <td style="font-family:var(--sans);text-align:left">Allgemeine Form</td>
+          <td style="font-family:var(--sans);text-align:left">Klammern ausmultiplizieren</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ══ 6. SPEZIALFÄLLE / TYPEN ══ -->
+<h2 id="typen">Typen quadratischer Funktionen</h2>
+
+<p>Klicke auf einen Fall — nur dieser wird angezeigt:</p>
+
+<div class="typ-btns" id="typ-btns"></div>
+<div class="cv-wrap"><canvas id="typ-canvas" height="240"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="typ-desc"></div>
+
+
+<!-- ══ 7. AUFSTELLEN ══ -->
+<h2 id="aufstellen">Funktionsgleichung aufstellen — Beispiele</h2>
+
+<div class="block block-beweis">
+  <div class="block-titel">🔷 Aus dem Scheitelpunkt und einem Punkt</div>
+  <p>Gegeben: Scheitelpunkt \(S(2 \mid -3)\), Punkt \(P(0 \mid 1)\).</p>
+  \[ 1 = a \cdot (0 - 2)^2 + (-3) \;\Longleftrightarrow\; 1 = 4a - 3 \;\Longleftrightarrow\; a = 1 \]
+  \[ \Rightarrow\; f(x) = 1 \cdot (x - 2)^2 - 3 = x^2 - 4x + 1 \]
+</div>
+
+<div class="block block-beweis" style="margin-top:10px">
+  <div class="block-titel">🔷 Aus den Nullstellen und einem Punkt</div>
+  <p>Gegeben: Nullstellen \(x_1 = -1\), \(x_2 = 3\), Punkt \(P(1 \mid -8)\).</p>
+  \[ -8 = a \cdot (1 - (-1)) \cdot (1 - 3) = a \cdot 2 \cdot (-2) = -4a \;\Longrightarrow\; a = 2 \]
+  \[ \Rightarrow\; f(x) = 2(x + 1)(x - 3) = 2x^2 - 4x - 6 \]
+</div>
+
+<div class="block block-beweis" style="margin-top:10px">
+  <div class="block-titel">🔷 Aus drei beliebigen Punkten</div>
+  <p>Gegeben: \(P_1(-1 \mid 6)\), \(P_2(0 \mid 1)\), \(P_3(2 \mid 3)\). Setze in \(y = ax^2 + bx + c\) ein:</p>
+  \[ \begin{cases} a - b + c = 6 \\ c = 1 \\ 4a + 2b + c = 3 \end{cases} \;\Rightarrow\; a = 2,\; b = -3,\; c = 1 \;\Rightarrow\; f(x) = 2x^2 - 3x + 1 \]
+</div>
+
+
+<!-- ══ 8. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 — Form erkennen -->
+<div class="aw">
+  <div class="aw-head"><div class="aw-nr">A1</div><div class="aw-titel">Darstellungsform erkennen — was lässt sich direkt ablesen?</div></div>
+  <div class="aw-body">
+    <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Funktion aus und gib an, was sich <strong>direkt</strong> aus der gegebenen Form ablesen lässt.</p>
+    <div class="graf-btn-row" id="a1-btns"></div>
+    <div class="formel-live" id="a1-display" style="margin-bottom:10px"></div>
+    <div id="a1-frage" style="margin-bottom:10px;font-weight:600"></div>
+    <div class="eingabe-row">
+      <input type="text" id="a1-inp" placeholder="z.B. S(2|-3) oder x1=...,x2=... oder c=...">
+      <button class="btn-pruef" onclick="checkA1()">Prüfen</button>
+      <button class="btn-loes" onclick="showA1Sol()">Lösung</button>
+    </div>
+    <div class="cr" id="a1-cr"></div>
+  </div>
+</div>
+
+<!-- A2 — Graph aus Scheitelform zeichnen (Punkte ziehen) -->
+<div class="aw">
+  <div class="aw-head"><div class="aw-nr">A2</div><div class="aw-titel">Scheitelpunkt setzen — verschiebe S an die richtige Stelle</div></div>
+  <div class="aw-body">
+    <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Klicke (oder ziehe) den Scheitelpunkt im Graphen auf die richtige Position für die angegebene Funktion.</p>
+    <div class="graf-btn-row" id="a2-btns"></div>
+    <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a2-canvas" height="280" style="cursor:crosshair"></canvas></div>
+    <div style="font-family:var(--mono);font-size:0.85rem;margin:8px 0">Aktuelle Position: <strong id="a2-pos">S(0 | 0)</strong></div>
+    <button class="btn-pruef" onclick="checkA2()">✓ Überprüfen</button>
+    <div class="cr" id="a2-cr"></div>
+  </div>
+</div>
+
+<!-- A3 — Rechnen / Umwandeln und Aufstellen -->
+<div class="aw">
+  <div class="aw-head"><div class="aw-nr">A3</div><div class="aw-titel">Analytisch — Umwandeln und Aufstellen</div></div>
+  <div class="aw-body">
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 a) Allgemeine Form → Scheitelpunkt</div>
+      <p>\(f(x) = x^2 - 6x + 5\). Wie lautet der Scheitelpunkt \(S(u \mid v)\)?</p>
+      <div class="eingabe-row"><input type="text" id="a3a" placeholder="S(... | ...)">
+        <button class="btn-pruef" onclick="chkScheitel('a3a',3,-4)">Prüfen</button>
+        <button class="btn-loes" onclick="showSol('a3a','S(3 | −4) — denn u = −b/(2a) = 6/2 = 3, v = f(3) = 9 − 18 + 5 = −4')">Lösung</button>
+      </div>
+      <div class="cr" id="a3a-cr"></div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 b) Allgemeine Form → Nullstellen</div>
+      <p>\(f(x) = x^2 - 5x + 6\). Bestimme die Nullstellen.</p>
+      <div class="eingabe-row"><input type="text" id="a3b" placeholder="x1=..., x2=...">
+        <button class="btn-pruef" onclick="chkNullstellen('a3b',2,3)">Prüfen</button>
+        <button class="btn-loes" onclick="showSol('a3b','x₁ = 2, x₂ = 3 — Mitternachtsformel: x = (5 ± √(25−24))/2 = (5 ± 1)/2')">Lösung</button>
+      </div>
+      <div class="cr" id="a3b-cr"></div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 c) Aus Scheitel und Punkt</div>
+      <p>Scheitelpunkt \(S(-1 \mid 4)\), Punkt \(P(1 \mid 0)\). Bestimme \(a\). Antwort als Zahl.</p>
+      <div class="eingabe-row"><input type="text" id="a3c" placeholder="a = ...">
+        <button class="btn-pruef" onclick="chkZahl('a3c',-1)">Prüfen</button>
+        <button class="btn-loes" onclick="showSol('a3c','a = −1 — denn 0 = a·(1−(−1))² + 4 = 4a + 4 ⇒ a = −1')">Lösung</button>
+      </div>
+      <div class="cr" id="a3c-cr"></div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 d) Aus zwei Nullstellen und Punkt</div>
+      <p>Nullstellen \(x_1 = -2\), \(x_2 = 4\), Punkt \(P(0 \mid -8)\). Bestimme \(a\).</p>
+      <div class="eingabe-row"><input type="text" id="a3d" placeholder="a = ...">
+        <button class="btn-pruef" onclick="chkZahl('a3d',1)">Prüfen</button>
+        <button class="btn-loes" onclick="showSol('a3d','a = 1 — denn −8 = a·(0−(−2))·(0−4) = a·2·(−4) = −8a ⇒ a = 1')">Lösung</button>
+      </div>
+      <div class="cr" id="a3d-cr"></div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 e) Diskriminante prüfen</div>
+      <p>Wie viele Nullstellen hat \(f(x) = 2x^2 + 3x + 5\)?</p>
+      <div class="eingabe-row"><input type="text" id="a3e" placeholder="z.B. zwei / eine / keine">
+        <button class="btn-pruef" onclick="chkText('a3e',['keine','0'])">Prüfen</button>
+        <button class="btn-loes" onclick="showSol('a3e','keine — D = 9 − 4·2·5 = 9 − 40 = −31 < 0')">Lösung</button>
+      </div>
+      <div class="cr" id="a3e-cr"></div>
+    </div>
+
+    <div class="block block-aufg">
+      <div class="block-titel">🟠 f) Scheitelform → Allgemeine Form</div>
+      <p>\(f(x) = 2(x - 3)^2 - 5\). Schreibe in der Form \(ax^2 + bx + c\). Antwort als z.B. <code>2x²-12x+13</code>.</p>
+      <div class="eingabe-row"><input type="text" id="a3f" placeholder="2x²-12x+13">
+        <button class="btn-pruef" onclick="chkPoly('a3f',2,-12,13)">Prüfen</button>
+        <button class="btn-loes" onclick="showSol('a3f','f(x) = 2x² − 12x + 13 — denn 2(x−3)² = 2(x² − 6x + 9) = 2x² − 12x + 18, dann −5: 2x² − 12x + 13')">Lösung</button>
+      </div>
+      <div class="cr" id="a3f-cr"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- A4–A6 Anwendung -->
+<div class="aw">
+  <div class="aw-head"><div class="aw-nr">A4–A6</div><div class="aw-titel">Anwendungsaufgaben</div></div>
+  <div class="aw-body">
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 A4 — Wurfparabel</div>
+      <p>Ein Stein wird aus 2 m Höhe geworfen und erreicht eine maximale Höhe von 6 m bei 5 m Distanz. Stelle die Wurfparabel \(h(x)\) in Scheitelform auf. Wie weit fliegt der Stein, bevor er auf den Boden fällt?</p>
+      <button class="loesung-toggle" onclick="toggleL('l4')">▶ Lösung</button>
+      <div class="loesung-body" id="l4">
+        <div class="block block-bsp" style="margin:6px 0 0">
+          <div class="block-titel">🟢 Lösung</div>
+          <p>Scheitel \(S(5 \mid 6)\), Punkt \(P(0 \mid 2)\):</p>
+          \[ 2 = a(0-5)^2 + 6 \;\Rightarrow\; -4 = 25a \;\Rightarrow\; a = -0.16 \]
+          \[ h(x) = -0.16(x - 5)^2 + 6 \]
+          <p>Aufschlag bei \(h(x) = 0\):</p>
+          \[ 0.16(x-5)^2 = 6 \;\Rightarrow\; (x-5)^2 = 37.5 \;\Rightarrow\; x = 5 \pm \sqrt{37.5} \]
+          <p>Zwei rechnerische Lösungen: \(x_1 \approx 5 + 6.12 = 11.12\;\text{m}\) und
+          \(x_2 \approx 5 - 6.12 = -1.12\;\text{m}\). Die <strong>zweite Lösung liegt links vom
+          Abwurfpunkt und ist physikalisch nicht relevant</strong> (negative Wurfweite). Antwort:
+          der Stein fliegt rund \(11.12\;\text{m}\) weit.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block block-aufg" style="margin-bottom:10px">
+      <div class="block-titel">🟠 A5 — Maximaler Umsatz (Extremwertaufgabe)</div>
+      <p>Ein Verein verkauft T-Shirts. Bei einem Preis von 20 CHF werden 100 Stück verkauft; pro CHF Preiserhöhung sinkt der Verkauf um <strong>4 Stück</strong>. Bei welchem Preis wird der Umsatz maximal?</p>
+      <button class="loesung-toggle" onclick="toggleL('l5')">▶ Lösung</button>
+      <div class="loesung-body" id="l5">
+        <div class="block block-bsp" style="margin:6px 0 0">
+          <div class="block-titel">🟢 Lösung</div>
+          <p>Sei \(x\) die Anzahl CHF Preiserhöhung. Preis: \(20+x\); Stückzahl: \(100-4x\).</p>
+          \[ U(x) = (20+x)(100-4x) = 2000 + 100x - 80x - 4x^2 = -4x^2 + 20x + 2000 \]
+          <p>Maximum am Scheitelpunkt:</p>
+          \[ x_{\max} = -\frac{b}{2a} = -\frac{20}{2 \cdot (-4)} = 2.5 \]
+          \[ \text{Preis} = 20 + 2.5 = 22.50\;\text{CHF}, \qquad U_{\max} = U(2.5) = 2025\;\text{CHF} \]
+        </div>
+      </div>
+    </div>
+
+    <div class="block block-aufg">
+      <div class="block-titel">🟠 A6 — Brücke</div>
+      <p>Ein parabelförmiger Brückenbogen ist 20 m breit und in der Mitte 5 m hoch. Stelle die Funktionsgleichung auf (Ursprung links am Bogenfuss). Welche Höhe hat der Bogen 3 m vom linken Fuss entfernt?</p>
+      <button class="loesung-toggle" onclick="toggleL('l6')">▶ Lösung</button>
+      <div class="loesung-body" id="l6">
+        <div class="block block-bsp" style="margin:6px 0 0">
+          <div class="block-titel">🟢 Lösung</div>
+          <p>Nullstellen bei \(x_1 = 0\) und \(x_2 = 20\), Scheitelpunkt bei \(x = 10\) mit Höhe 5 m. Linearfaktorform:</p>
+          \[ h(x) = a \cdot x \cdot (x - 20) \]
+          <p>Punkt \(S(10 \mid 5)\) einsetzen:</p>
+          \[ 5 = a \cdot 10 \cdot (-10) = -100a \;\Rightarrow\; a = -0.05 \]
+          \[ h(x) = -0.05 \cdot x \cdot (x - 20) = -0.05 x^2 + x \]
+          \[ h(3) = -0.05 \cdot 9 + 3 = -0.45 + 3 = 2.55\;\text{m} \]
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ 9. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Grösse</th><th>Formel</th><th>Bedeutung</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--mono)">\(f\)</td>
+        <td>\(f(x) = ax^2 + bx + c\)</td>
+        <td style="font-family:var(--sans);text-align:left">Allgemeine Form (Polynomform), \(a \neq 0\)</td></tr>
+    <tr><td style="font-family:var(--mono)">\(S\)</td>
+        <td>\(S\!\left(-\dfrac{b}{2a}\;\Big|\;c - \dfrac{b^2}{4a}\right)\)</td>
+        <td style="font-family:var(--sans);text-align:left">Scheitelpunkt; Scheitelform: \(f(x)=a(x-u)^2+v\) mit \(S(u\mid v)\)</td></tr>
+    <tr><td style="font-family:var(--mono)">\(x_{1,2}\)</td>
+        <td>\(x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}\)</td>
+        <td style="font-family:var(--sans);text-align:left">Mitternachtsformel — liefert die Nullstellen</td></tr>
+    <tr><td style="font-family:var(--mono)">\(D\)</td>
+        <td>\(D = b^2 - 4ac\)</td>
+        <td style="font-family:var(--sans);text-align:left">Diskriminante: \(D &gt; 0\): zwei NS; \(D = 0\): eine; \(D &lt; 0\): keine</td></tr>
+    <tr><td style="font-family:var(--mono)">\(c\)</td>
+        <td>\(c = f(0)\)</td>
+        <td style="font-family:var(--sans);text-align:left">y-Achsenabschnitt: \(S_y(0 \mid c)\)</td></tr>
+    <tr><td style="font-family:var(--mono)">\(a\)</td>
+        <td>—</td>
+        <td style="font-family:var(--sans);text-align:left">\(a &gt; 0\): nach oben offen; \(a &lt; 0\): nach unten offen; \(|a|\) bestimmt Streckung</td></tr>
+  </tbody>
+</table>
+
+<div class="merksatz">
+  Der Graph einer quadratischen Funktion \(f(x) = ax^2 + bx + c\) ist stets eine <strong>Parabel</strong>.
+  Drei Punkte (oder Scheitelpunkt + ein Punkt, oder beide Nullstellen + ein Punkt) genügen, um sie eindeutig zu bestimmen.
+</div>
+
+
+<!-- ══ 10. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+</div>
+
+
+<!-- ══ 11. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lVDfsit7iy1j6Nmx3znS5bV" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über Parabeln — Playlist</div><div class="lk-s">MathemaTrick · Quadratische Funktionen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzl5hAVeVOwWassi_01eoBMO" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Parabeln — quadratische Gleichungen</div><div class="lk-s">Lehrerschmidt · komplette Übersicht</div></div></a>
+  <a href="https://www.youtube.com/watch?v=pauiBVzELTc" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Parabeln, Quadratische Funktionen — Übersicht</div><div class="lk-s">Mathe by Daniel Jung · Grundlagen</div></div></a>
+</div>
+<div class="ressourcen-subtitel">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g2/g22/aufg_g22.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Funktion 2. Grades</div><div class="lk-s">Scheitel, Parameter, Schnitt, Extremalwerte</div></div></a>
+  <a href="https://de.serlo.org/mathe/1348/quadratische-funktionen-parabeln" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Quadratische Funktionen</div><div class="lk-s">Theorie + interaktive Aufgaben</div></div></a>
+  <a href="https://de.serlo.org/mathe/1412/gemischte-aufgaben-zu-quadratischen-funktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Gemischte Aufgaben</div><div class="lk-s">Nullstellen, Schnittpunkte, Scheitel</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -103,7 +659,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen · 3.3 Quadratische Funktionen</p>
+  <p>Grundlagen Quadratische Funktionen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -114,6 +670,612 @@ buildNav({
   kapitelNr:'3.3', kapitelTitel:'Quadratische Funktionen',
   prev:{nr:'3.2',titel:'Lineare Funktionen',url:'g3-2-lineare-funktionen.html'},
   next:{nr:'4.1',titel:'Grundlagen',url:'g4-1-grundlagen.html'}
+});
+
+/* ══════════════════════════════════════════════════════════
+   HELFER: Quadratische Funktionen
+   ══════════════════════════════════════════════════════════ */
+function fmtNum(n){
+  if(Math.abs(n)<1e-9) return '0';
+  if(Math.abs(n - Math.round(n)) < 1e-9) return Math.round(n).toString();
+  return parseFloat(n.toFixed(2)).toString();
+}
+function fmtSign(n){ return n>=0 ? `+ ${fmtNum(n)}` : `− ${fmtNum(Math.abs(n))}`; }
+function fmtSignNoSpace(n){ return n>=0 ? `+${fmtNum(n)}` : `−${fmtNum(Math.abs(n))}`; }
+
+// Mitternachtsformel — liefert {n: 0/1/2, x1, x2}
+function nullstellen(a,b,c){
+  const D = b*b - 4*a*c;
+  if(D < -1e-9) return {n:0, D};
+  if(Math.abs(D) < 1e-9) return {n:1, x1: -b/(2*a), D:0};
+  const sq = Math.sqrt(D);
+  return {n:2, x1: (-b - sq)/(2*a), x2: (-b + sq)/(2*a), D};
+}
+
+function drawParabel(ctx, cx, cy, a, b, c, xMin, xMax, color, lw){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  ctx.beginPath();
+  const N = 200;
+  let started = false;
+  for(let i=0; i<=N; i++){
+    const x = xMin + (xMax - xMin) * i/N;
+    const y = a*x*x + b*x + c;
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+  }
+  ctx.stroke();
+}
+
+/* ══ EINSTIEG: Wurfparabel ══ */
+const WS = { a:-0.25, u:4, v:5, xs:[0,1,2,3,4,5,6,7,8] };
+function wsY(x){ return WS.a*(x-WS.u)*(x-WS.u) + WS.v; }
+function updateWS(){
+  const x = parseInt(document.getElementById('ws-x').value);
+  document.getElementById('ws-xv').textContent = x;
+  const y = wsY(x);
+  document.getElementById('ws-eq').textContent = `h(${x}) = −0.25·(${x} − 4)² + 5 = ${fmtNum(y)} m`;
+  // Tabelle
+  const tbody = document.querySelector('#ws-table tbody');
+  tbody.innerHTML = WS.xs.map(xi=>{
+    const yi = wsY(xi);
+    const act = xi===x;
+    return `<tr class="${act?'aktiv-zeile':''}"><td class="td-x">${xi}</td><td class="td-calc">−0.25·(${xi}−4)² + 5</td><td class="td-y">${fmtNum(yi)}</td></tr>`;
+  }).join('');
+  // Graph (Anwendung — nicht 1:1)
+  const {ctx, W, H} = initCanvas('ws-canvas', 200);
+  const xMin=0, xMax=10, yMin=0, yMax=6;
+  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+  // Achsenbeschriftung mit Einheit überschreiben
+  ctx.fillStyle='#fff';
+  ctx.fillRect(W-30, cy(0)-22, 30, 18);
+  ctx.fillRect(cx(0)+4, 0, 22, 18);
+  ctx.fillStyle='#374151'; ctx.font='bold 11px monospace';
+  ctx.textAlign='right'; ctx.fillText('x [m]', W-2, cy(0)-7);
+  ctx.textAlign='left';  ctx.fillText('h [m]', cx(0)+5, 11);
+  // Zahlen-Labels
+  ctx.font='10px monospace'; ctx.fillStyle='#9ca3af'; ctx.textAlign='center';
+  for(let gx=1; gx<=9; gx++) ctx.fillText(gx, cx(gx), cy(0)+13);
+  ctx.textAlign='right';
+  for(let gy=1; gy<=5; gy++) ctx.fillText(gy, cx(0)-4, cy(gy)+4);
+  // Parabel
+  drawParabel(ctx, cx, cy, WS.a, -2*WS.a*WS.u, WS.a*WS.u*WS.u+WS.v, 0, 9, '#1a4f8a', 2.5);
+  // Alle Stützpunkte schwach
+  WS.xs.forEach(xi=>{ const yi = wsY(xi); if(yi>=0) drawDot(ctx,cx,cy,xi,yi,'#b8c4d4',4); });
+  // Aktiver Punkt
+  if(y >= 0){
+    drawDot(ctx, cx, cy, x, y, '#1a4f8a', 7);
+    ctx.fillStyle='#1a4f8a'; ctx.font='bold 11px monospace';
+    const lx = x>7 ? cx(x)-70 : cx(x)+8;
+    ctx.textAlign='left'; ctx.fillText(`(${x} | ${fmtNum(y)})`, lx, cy(y)-8);
+    // gestrichelte Linien
+    ctx.strokeStyle='#1a4f8a55'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(0),cy(y)); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  // Scheitelpunkt markieren
+  drawDot(ctx, cx, cy, WS.u, WS.v, '#9b1c1c', 5);
+  ctx.fillStyle='#9b1c1c'; ctx.font='bold 11px monospace'; ctx.textAlign='left';
+  ctx.fillText(`S(${WS.u} | ${WS.v})`, cx(WS.u)+8, cy(WS.v)-8);
+}
+document.getElementById('ws-x').addEventListener('input', updateWS);
+
+/* ══════════════════════════════════════════════════════════
+   DREI DARSTELLUNGEN — Scheitelform mit Schiebereglern a, u, v
+   ══════════════════════════════════════════════════════════ */
+function fmtKlammer(c){
+  // Format (x − u) — bei u<0: (x + |u|), bei u=0: (x), bei u>0: (x − u)
+  if(Math.abs(c)<1e-9) return 'x';
+  if(c>0) return `x − ${fmtNum(c)}`;
+  return `x + ${fmtNum(-c)}`;
+}
+
+function updateDR(){
+  const a = parseFloat(document.getElementById('dr-a').value);
+  const u = parseFloat(document.getElementById('dr-u').value);
+  const v = parseFloat(document.getElementById('dr-v').value);
+  document.getElementById('dr-av').textContent = fmtNum(a);
+  document.getElementById('dr-uv').textContent = fmtNum(u);
+  document.getElementById('dr-vv').textContent = fmtNum(v);
+
+  // Falls a=0 — keine quadratische Funktion
+  if(Math.abs(a) < 1e-9){
+    document.getElementById('dr-scheitel').textContent = `f(x) = 0  (kein quadratischer Term — a ≠ 0 erforderlich)`;
+    document.getElementById('dr-S').textContent = '—';
+    document.getElementById('dr-oeff').textContent = 'keine Parabel';
+    document.getElementById('dr-allg').textContent = `f(x) = ${fmtNum(v)}`;
+    document.getElementById('dr-c').textContent = `c = ${fmtNum(v)}`;
+    document.getElementById('dr-linfak').textContent = 'nicht definiert';
+    document.getElementById('dr-nst').textContent = '—';
+    document.getElementById('dr-nst-rechnung').textContent = 'a = 0 ⇒ keine quadratische Funktion';
+    drawDR(); return;
+  }
+
+  /* ── Scheitelform ── */
+  const aStr = a===1 ? '' : a===-1 ? '−' : `${fmtNum(a)}·`;
+  const uPart = Math.abs(u) < 1e-9 ? 'x²' : `(${fmtKlammer(u)})²`;
+  const vPart = Math.abs(v) < 1e-9 ? '' : (v > 0 ? ` + ${fmtNum(v)}` : ` − ${fmtNum(-v)}`);
+  document.getElementById('dr-scheitel').textContent = `f(x) = ${aStr}${uPart}${vPart}`;
+  document.getElementById('dr-S').textContent = `S(${fmtNum(u)} | ${fmtNum(v)})`;
+  document.getElementById('dr-oeff').textContent = a>0 ? 'nach oben (a > 0)' : 'nach unten (a < 0)';
+
+  /* ── Allgemeine Form: f(x) = a·x² − 2au·x + (au² + v) ── */
+  const A = a, B = -2*a*u, C = a*u*u + v;
+  const aPolyStr = A===1 ? '' : A===-1 ? '−' : `${fmtNum(A)}·`;
+  let bStr = '';
+  if(Math.abs(B) > 1e-9){
+    const sign = B>0 ? '+' : '−';
+    const absB = Math.abs(B);
+    const bCoef = absB===1 ? '' : `${fmtNum(absB)}·`;
+    bStr = ` ${sign} ${bCoef}x`;
+  }
+  let cStr = '';
+  if(Math.abs(C) > 1e-9) cStr = C>0 ? ` + ${fmtNum(C)}` : ` − ${fmtNum(-C)}`;
+  document.getElementById('dr-allg').textContent = `f(x) = ${aPolyStr}x²${bStr}${cStr}`;
+  document.getElementById('dr-c').textContent = `c = ${fmtNum(C)}`;
+
+  /* ── Linearfaktorform / Nullstellen ── */
+  const ns = nullstellen(A, B, C);
+  const D = ns.D;
+  let nstText = '', nstRechnung = '';
+  if(ns.n === 2){
+    const x1 = ns.x1, x2 = ns.x2;
+    const aLF = A===1 ? '' : A===-1 ? '−' : `${fmtNum(A)}·`;
+    const f1 = fmtKlammer(x1), f2 = fmtKlammer(x2);
+    document.getElementById('dr-linfak').textContent = `f(x) = ${aLF}(${f1})(${f2})`;
+    nstText = `x₁ = ${fmtNum(x1)}, x₂ = ${fmtNum(x2)}`;
+    document.getElementById('dr-nst').textContent = nstText;
+    nstRechnung = `D = b² − 4ac = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = ${fmtNum(D)} > 0  →  zwei Nullstellen<br>x = (${fmtNum(-B)} ± √${fmtNum(D)}) / ${fmtNum(2*A)}  ⇒  x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}`;
+  } else if(ns.n === 1){
+    const x1 = ns.x1;
+    const aLF = A===1 ? '' : A===-1 ? '−' : `${fmtNum(A)}·`;
+    document.getElementById('dr-linfak').textContent = `f(x) = ${aLF}(${fmtKlammer(x1)})²`;
+    nstText = `x₁ = x₂ = ${fmtNum(x1)} (doppelt)`;
+    document.getElementById('dr-nst').textContent = nstText;
+    nstRechnung = `D = b² − 4ac = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = 0  →  eine doppelte Nullstelle<br>x = ${fmtNum(-B)} / ${fmtNum(2*A)} = ${fmtNum(x1)}`;
+  } else {
+    document.getElementById('dr-linfak').textContent = `nicht definiert über ℝ`;
+    document.getElementById('dr-nst').textContent = 'keine reellen Nullstellen';
+    nstRechnung = `D = b² − 4ac = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = ${fmtNum(D)} < 0  →  keine reelle Nullstelle`;
+  }
+  document.getElementById('dr-nst-rechnung').innerHTML = nstRechnung;
+
+  drawDR();
+}
+
+function drawDR(){
+  const a = parseFloat(document.getElementById('dr-a').value);
+  const u = parseFloat(document.getElementById('dr-u').value);
+  const v = parseFloat(document.getElementById('dr-v').value);
+  const A = a, B = -2*a*u, C = a*u*u + v;
+  const {ctx, W, H} = initCanvas('dr-canvas', 280, true);
+  const rng = 8;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  if(Math.abs(a) > 1e-9) drawParabel(ctx, cx, cy, A, B, C, -rng, rng, '#1a4f8a', 2.8);
+  // Scheitelpunkt (blau)
+  if(Math.abs(u)<=rng && Math.abs(v)<=rng){
+    drawDot(ctx, cx, cy, u, v, '#1a4f8a', 7);
+    ctx.fillStyle='#1a4f8a'; ctx.font='bold 11px monospace'; ctx.textAlign='left';
+    ctx.fillText(`S(${fmtNum(u)} | ${fmtNum(v)})`, cx(u)+8, cy(v)-8);
+  }
+  // y-Achsenabschnitt (grün)
+  if(Math.abs(C)<=rng){
+    drawDot(ctx, cx, cy, 0, C, '#1f6b3a', 6);
+    ctx.fillStyle='#1f6b3a'; ctx.font='bold 11px monospace'; ctx.textAlign='left';
+    ctx.fillText(`(0 | ${fmtNum(C)})`, cx(0)+8, cy(C)+13);
+  }
+  // Nullstellen (orange)
+  if(Math.abs(a) > 1e-9){
+    const ns = nullstellen(A, B, C);
+    const drawN = (xn) => {
+      if(Math.abs(xn) > rng) return;
+      drawDot(ctx, cx, cy, xn, 0, '#b85c00', 6);
+      ctx.fillStyle='#b85c00'; ctx.font='bold 11px monospace'; ctx.textAlign='center';
+      ctx.fillText(fmtNum(xn), cx(xn), cy(0)+24);
+    };
+    if(ns.n === 2){ drawN(ns.x1); drawN(ns.x2); }
+    else if(ns.n === 1){ drawN(ns.x1); }
+  }
+}
+
+['dr-a','dr-u','dr-v'].forEach(id=>document.getElementById(id).addEventListener('input', updateDR));
+
+/* ══════════════════════════════════════════════════════════
+   DISKRIMINANTE — Visualisierung
+   ══════════════════════════════════════════════════════════ */
+const diskFalle = {
+  pos:  {a:1, b:-2, c:-3, label:'D > 0',   farbe:'#1f6b3a', name:'pos'},   // x²-2x-3 = (x-3)(x+1)
+  null: {a:1, b:-4, c: 4, label:'D = 0',   farbe:'#b85c00', name:'null'},  // x²-4x+4 = (x-2)²
+  neg:  {a:1, b: 0, c: 3, label:'D < 0',   farbe:'#9b1c1c', name:'neg'}    // x²+3
+};
+let diskAktiv = 'pos';
+
+function setDisk(key){
+  diskAktiv = key;
+  ['pos','null','neg'].forEach(k=>{
+    const btn = document.getElementById('disk-btn-'+k);
+    btn.classList.remove('aktiv-pos','aktiv-null','aktiv-neg');
+    if(k === key){
+      if(k==='pos')  btn.classList.add('aktiv-pos');
+      if(k==='null') btn.classList.add('aktiv-null');
+      if(k==='neg')  btn.classList.add('aktiv-neg');
+    }
+  });
+  updateDisk();
+}
+
+function updateDisk(){
+  const f = diskFalle[diskAktiv];
+  const {a,b,c} = f;
+  const D = b*b - 4*a*c;
+  // Rechnung
+  const aPart = a===1?'':`${fmtNum(a)}·`;
+  let bPart = '';
+  if(Math.abs(b) > 1e-9){
+    bPart = b>0 ? ` + ${fmtNum(b)}·x` : ` − ${fmtNum(-b)}·x`;
+  }
+  const cPart = c>=0 ? ` + ${fmtNum(c)}` : ` − ${fmtNum(-c)}`;
+  let html = `<strong>f(x) = ${aPart}x²${bPart}${cPart}</strong><br><br>`;
+  html += `D = b² − 4ac<br>`;
+  html += `D = (${fmtNum(b)})² − 4·${fmtNum(a)}·${fmtNum(c)}<br>`;
+  html += `D = ${fmtNum(b*b)} − ${fmtNum(4*a*c)}<br>`;
+  html += `<strong>D = ${fmtNum(D)}</strong><br><br>`;
+  if(D > 1e-9){
+    const sq = Math.sqrt(D);
+    const x1 = (-b - sq)/(2*a), x2 = (-b + sq)/(2*a);
+    html += `<span style="color:var(--gruen)"><strong>D > 0</strong></span> → zwei Nullstellen<br>`;
+    html += `x = (${fmtNum(-b)} ± √${fmtNum(D)}) / ${fmtNum(2*a)}<br>`;
+    html += `<strong>x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}</strong>`;
+  } else if(Math.abs(D) < 1e-9){
+    const x1 = -b/(2*a);
+    html += `<span style="color:var(--orange)"><strong>D = 0</strong></span> → eine doppelte Nullstelle<br>`;
+    html += `<strong>x₁ = x₂ = ${fmtNum(x1)}</strong>`;
+  } else {
+    html += `<span style="color:var(--rot)"><strong>D < 0</strong></span> → keine reelle Nullstelle<br>`;
+    html += `(√ aus negativer Zahl ist in ℝ nicht definiert)`;
+  }
+  document.getElementById('disk-rechnung').innerHTML = html;
+
+  // Fazit-Box
+  const fazitEl = document.getElementById('disk-fazit');
+  if(D > 1e-9){
+    fazitEl.style.background = 'var(--gruen-hell)';
+    fazitEl.style.color = 'var(--gruen)';
+    fazitEl.style.border = '1px solid var(--gruen-rand)';
+    fazitEl.innerHTML = '<strong>Die Parabel schneidet die x-Achse in zwei Punkten.</strong>';
+  } else if(Math.abs(D) < 1e-9){
+    fazitEl.style.background = 'var(--orange-hell)';
+    fazitEl.style.color = 'var(--orange)';
+    fazitEl.style.border = '1px solid var(--orange-rand)';
+    fazitEl.innerHTML = '<strong>Die Parabel berührt die x-Achse genau einmal — der Scheitelpunkt liegt auf der x-Achse.</strong>';
+  } else {
+    fazitEl.style.background = 'var(--rot-hell)';
+    fazitEl.style.color = 'var(--rot)';
+    fazitEl.style.border = '1px solid var(--rot-rand)';
+    fazitEl.innerHTML = '<strong>Die Parabel berührt die x-Achse nicht — sie liegt vollständig oberhalb (oder unterhalb).</strong>';
+  }
+
+  // Graph
+  const {ctx, W, H} = initCanvas('disk-canvas', 240, true);
+  const rng = 6;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  drawParabel(ctx, cx, cy, a, b, c, -rng, rng, f.farbe, 2.8);
+  // Scheitelpunkt
+  const us = -b/(2*a), vs = c - b*b/(4*a);
+  if(Math.abs(us)<=rng && Math.abs(vs)<=rng){
+    drawDot(ctx, cx, cy, us, vs, f.farbe, 6);
+  }
+  // Nullstellen
+  if(D > 1e-9){
+    const sq = Math.sqrt(D);
+    [(-b-sq)/(2*a), (-b+sq)/(2*a)].forEach(xn => {
+      if(Math.abs(xn) <= rng){
+        drawDot(ctx, cx, cy, xn, 0, f.farbe, 7);
+        ctx.fillStyle=f.farbe; ctx.font='bold 11px monospace'; ctx.textAlign='center';
+        ctx.fillText(fmtNum(xn), cx(xn), cy(0)+24);
+      }
+    });
+  } else if(Math.abs(D) < 1e-9){
+    const xn = -b/(2*a);
+    if(Math.abs(xn) <= rng){
+      drawDot(ctx, cx, cy, xn, 0, f.farbe, 7);
+      ctx.fillStyle=f.farbe; ctx.font='bold 11px monospace'; ctx.textAlign='center';
+      ctx.fillText(fmtNum(xn), cx(xn), cy(0)+24);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   TYPEN-VISUALISIERUNG
+   ══════════════════════════════════════════════════════════ */
+const typenQ = [
+  {label:'Normalparabel',   desc:'f(x) = x²  ·  Normalparabel: a=1, Scheitelpunkt im Ursprung', a:1,  b:0,  c:0,  color:'#1a4f8a'},
+  {label:'a > 0 (offen ↑)', desc:'f(x) = 0.5·x² − 2  ·  nach oben geöffnet, gestaucht (|a|<1)', a:0.5, b:0, c:-2, color:'#1f6b3a'},
+  {label:'a < 0 (offen ↓)', desc:'f(x) = −2·x² + 3  ·  nach unten geöffnet, gestreckt (|a|>1)', a:-2,  b:0, c:3, color:'#b85c00'},
+  {label:'gestreckt',       desc:'f(x) = 2·x²  ·  schmaler als Normalparabel (|a|>1)',           a:2,  b:0, c:0, color:'#5b2d8e'},
+  {label:'gestaucht',       desc:'f(x) = 0.25·x²  ·  breiter als Normalparabel (|a|<1)',          a:0.25, b:0, c:0, color:'#9b1c1c'},
+  {label:'verschoben',      desc:'f(x) = (x − 2)² + 1  ·  Scheitel S(2 | 1) — verschoben',       a:1,  b:-4, c:5, color:'#0f766e'},
+  {label:'reine quadratische', desc:'f(x) = x² − 3  ·  b = 0: Symmetrieachse ist y-Achse',       a:1,  b:0, c:-3, color:'#7c3aed'},
+];
+let typActiveQ = 0;
+function buildTypBtnsQ(){
+  document.getElementById('typ-btns').innerHTML = typenQ.map((t,i)=>
+    `<button class="typ-btn${i===0?' aktiv':''}" onclick="setTypQ(${i})">${t.label}</button>`
+  ).join('');
+}
+function setTypQ(i){
+  typActiveQ = i;
+  document.querySelectorAll('#typ-btns .typ-btn').forEach((b,j)=>b.classList.toggle('aktiv', j===i));
+  drawTypQ();
+}
+function drawTypQ(){
+  const {ctx, W, H} = initCanvas('typ-canvas', 240, true);
+  const rng = 5;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  // Normalparabel als hellgraue Vergleichslinie (ausser bei Auswahl 0)
+  if(typActiveQ !== 0){
+    drawParabel(ctx, cx, cy, 1, 0, 0, -rng, rng, '#d8d0c4', 1.5);
+  }
+  const t = typenQ[typActiveQ];
+  drawParabel(ctx, cx, cy, t.a, t.b, t.c, -rng, rng, t.color, 2.8);
+  // Scheitelpunkt
+  const u = -t.b/(2*t.a), v = t.c - t.b*t.b/(4*t.a);
+  if(Math.abs(u)<=rng && Math.abs(v)<=rng){
+    drawDot(ctx, cx, cy, u, v, t.color, 6);
+  }
+  document.getElementById('typ-desc').textContent = t.desc;
+}
+
+/* ══════════════════════════════════════════════════════════
+   AUFGABEN
+   ══════════════════════════════════════════════════════════ */
+
+/* ── A1: Erkennen aus Form ── */
+const a1Items = [
+  { form:'Scheitelform', eq:'f(x) = 0.5·(x − 2)² − 3',
+    frage:'Welcher Punkt ist der Scheitelpunkt S?',
+    type:'scheitel', sol:{u:2, v:-3},
+    text:'S(2 | −3) — direkt aus der Scheitelform ablesbar' },
+  { form:'Linearfaktorform', eq:'f(x) = 2(x + 1)(x − 4)',
+    frage:'Welche Nullstellen hat f? Antwort z.B. "x1=-1, x2=4"',
+    type:'nullstellen', sol:{x1:-1, x2:4},
+    text:'x₁ = −1 und x₂ = 4 — direkt aus den Linearfaktoren ablesbar' },
+  { form:'Allgemeine Form', eq:'f(x) = −x² + 2x + 8',
+    frage:'Welcher y-Achsenabschnitt c?',
+    type:'cwert', sol:{c:8},
+    text:'c = 8 — denn f(0) = 8 (das absolute Glied)' },
+  { form:'Scheitelform', eq:'f(x) = −1·(x + 3)² + 5',
+    frage:'Wie ist die Parabel geöffnet — nach oben oder nach unten?',
+    type:'oeffnung', sol:{open:'unten'},
+    text:'nach unten — denn a = −1 < 0' },
+];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1Items.map((it,i)=>
+    `<button class="graf-btn${i===0?' aktiv':''}" onclick="setA1(${i})">${it.form} ${i+1}</button>`
+  ).join('');
+  setA1(0);
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b,j)=>b.classList.toggle('aktiv', j===i));
+  const it = a1Items[i];
+  document.getElementById('a1-display').innerHTML =
+    `<div class="fl-label">${it.form}</div><div class="fl-eq">${it.eq}</div>`;
+  document.getElementById('a1-frage').textContent = it.frage;
+  document.getElementById('a1-inp').value = '';
+  document.getElementById('a1-cr').style.display = 'none';
+}
+function checkA1(){
+  const it = a1Items[a1Act];
+  const inp = document.getElementById('a1-inp').value.toLowerCase().replace(/\s/g,'').replace(/,/g,'.').replace(/−/g,'-');
+  const r = document.getElementById('a1-cr'); r.style.display='block';
+  let ok = false;
+  if(it.type === 'scheitel'){
+    const m = inp.match(/s?\(?(-?[\d.]+)\|?,?\s*(-?[\d.]+)\)?/);
+    if(m){ ok = Math.abs(+m[1]-it.sol.u)<0.01 && Math.abs(+m[2]-it.sol.v)<0.01; }
+  } else if(it.type === 'nullstellen'){
+    const nums = inp.match(/-?[\d.]+/g) || [];
+    const vals = nums.map(parseFloat).sort((a,b)=>a-b);
+    const target = [it.sol.x1, it.sol.x2].sort((a,b)=>a-b);
+    ok = vals.length>=2 && Math.abs(vals[0]-target[0])<0.01 && Math.abs(vals[1]-target[1])<0.01;
+  } else if(it.type === 'cwert'){
+    const m = inp.match(/-?[\d.]+/);
+    if(m) ok = Math.abs(+m[0] - it.sol.c) < 0.01;
+  } else if(it.type === 'oeffnung'){
+    ok = inp.includes('unten') || inp.includes('runter') || inp.includes('-');
+  }
+  if(ok){ r.className='cr ok'; r.textContent = '✓ Richtig! ' + it.text; }
+  else  { r.className='cr err'; r.textContent = '✗ Nicht ganz. Tipp: schau, was die Form direkt ablesen lässt.'; }
+}
+function showA1Sol(){
+  const r = document.getElementById('a1-cr'); r.style.display='block';
+  r.className='cr ok'; r.textContent = 'Lösung: ' + a1Items[a1Act].text;
+}
+
+/* ── A2: Scheitelpunkt platzieren ── */
+const a2Items = [
+  { eq:'f(x) = (x − 2)² − 3', S:{u:2, v:-3} },
+  { eq:'f(x) = −0.5·(x + 1)² + 2', S:{u:-1, v:2} },
+  { eq:'f(x) = 2·(x − 3)²', S:{u:3, v:0} },
+  { eq:'f(x) = −(x + 2)² − 1', S:{u:-2, v:-1} },
+];
+let a2Act = 0;
+let a2S = {u:0, v:0};
+let a2Drag = false;
+let a2Sz = {W:600, H:300};
+function buildA2(){
+  document.getElementById('a2-btns').innerHTML = a2Items.map((it,i)=>
+    `<button class="graf-btn${i===0?' aktiv':''}" onclick="setA2(${i})">${it.eq}</button>`
+  ).join('');
+  setA2(0);
+}
+function setA2(i){
+  a2Act = i;
+  document.querySelectorAll('#a2-btns .graf-btn').forEach((b,j)=>b.classList.toggle('aktiv', j===i));
+  a2S = {u:0, v:0};
+  document.getElementById('a2-cr').style.display='none';
+  drawA2();
+}
+function a2CX(x){return (x+6)/12*a2Sz.W;}
+function a2CY(y){return a2Sz.H - (y+6)/12*a2Sz.H;}
+function a2IX(px){return Math.round(px/a2Sz.W*12 - 6);}
+function a2IY(py){return Math.round((a2Sz.H - py)/a2Sz.H*12 - 6);}
+function drawA2(){
+  const {ctx, W, H} = initCanvas('a2-canvas', 280, true);
+  a2Sz = {W, H};
+  const {cx, cy} = drawGrid(ctx, W, H, -6, 6, -6, 6);
+  // Bestimme Parabel aus aktuellem Scheitelpunkt — mit a aus der gewählten Funktion abgeleitet
+  // Für Visualisierung verwenden wir den korrekten a-Wert aus der Aufgabe
+  const it = a2Items[a2Act];
+  const aMatch = it.eq.match(/f\(x\)\s*=\s*(-?[\d.]*)\s*[·*]?\s*\(/) || it.eq.match(/f\(x\)\s*=\s*(-)\(/);
+  let aVal = 1;
+  if(aMatch && aMatch[1]){
+    if(aMatch[1] === '-') aVal = -1;
+    else aVal = parseFloat(aMatch[1]);
+  } else if(it.eq.includes('−(') || it.eq.includes('-(')){
+    aVal = -1;
+  }
+  // Parabel aus aktuellem (verschiebbarem) S
+  const A = aVal, B = -2*aVal*a2S.u, C = aVal*a2S.u*a2S.u + a2S.v;
+  drawParabel(ctx, cx, cy, A, B, C, -6, 6, '#1a4f8a55', 2);
+  // Soll-Parabel (transparent grün — als Hilfe?)
+  // Nur Soll-Scheitel anzeigen wenn überprüft wurde — einfacher: nur user-S anzeigen
+  // User-Scheitelpunkt
+  ctx.fillStyle = '#b85c00'; ctx.strokeStyle='#fff'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(cx(a2S.u), cy(a2S.v), 11, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#fff'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('S', cx(a2S.u), cy(a2S.v)+4);
+  document.getElementById('a2-pos').textContent = `S(${a2S.u} | ${a2S.v})`;
+}
+function a2Pos(e, c){
+  const r = c.getBoundingClientRect();
+  const sc = c.width / (window.devicePixelRatio||1) / r.width;
+  return {px:(e.clientX - r.left)*sc, py:(e.clientY - r.top)*sc};
+}
+function initA2(){
+  const c = document.getElementById('a2-canvas');
+  c.addEventListener('mousedown', e=>{
+    const {px,py} = a2Pos(e, c);
+    if(Math.hypot(px-a2CX(a2S.u), py-a2CY(a2S.v)) < 18){ a2Drag = true; }
+    else { a2S = {u:a2IX(px), v:a2IY(py)}; drawA2(); }
+  });
+  c.addEventListener('mousemove', e=>{
+    if(!a2Drag) return;
+    const {px,py} = a2Pos(e, c);
+    a2S = {u:a2IX(px), v:a2IY(py)};
+    drawA2();
+  });
+  c.addEventListener('mouseup', ()=> a2Drag = false);
+  c.addEventListener('mouseleave', ()=> a2Drag = false);
+  c.addEventListener('touchstart', e=>{ e.preventDefault();
+    const t = e.touches[0]; const {px,py} = a2Pos(t, c);
+    if(Math.hypot(px-a2CX(a2S.u), py-a2CY(a2S.v)) < 22){ a2Drag = true; }
+    else { a2S = {u:a2IX(px), v:a2IY(py)}; drawA2(); }
+  }, {passive:false});
+  c.addEventListener('touchmove', e=>{ e.preventDefault();
+    if(!a2Drag) return;
+    const t = e.touches[0]; const {px,py} = a2Pos(t, c);
+    a2S = {u:a2IX(px), v:a2IY(py)};
+    drawA2();
+  }, {passive:false});
+  c.addEventListener('touchend', ()=> a2Drag = false);
+}
+function checkA2(){
+  const it = a2Items[a2Act];
+  const r = document.getElementById('a2-cr'); r.style.display='block';
+  if(a2S.u === it.S.u && a2S.v === it.S.v){
+    r.className='cr ok'; r.textContent = `✓ Richtig — der Scheitelpunkt ist S(${it.S.u} | ${it.S.v}).`;
+  } else {
+    r.className='cr err'; r.textContent = `✗ Noch nicht. Du hast S(${a2S.u} | ${a2S.v}) — richtig wäre S(${it.S.u} | ${it.S.v}).`;
+  }
+}
+
+/* ── A3: Antwort-Prüfer ── */
+function chkScheitel(id, u, v){
+  const inp = document.getElementById(id).value.toLowerCase().replace(/\s/g,'').replace(/,/g,'.').replace(/−/g,'-');
+  const r = document.getElementById(id+'-cr'); r.style.display='block';
+  const m = inp.match(/s?\(?(-?[\d.]+)\|?,?\s*(-?[\d.]+)\)?/);
+  if(m && Math.abs(+m[1]-u)<0.01 && Math.abs(+m[2]-v)<0.01){
+    r.className='cr ok'; r.textContent = `✓ Richtig! S(${u} | ${v})`;
+  } else {
+    r.className='cr err'; r.textContent = '✗ Nicht korrekt. Erinnere: u = −b/(2a), v = f(u).';
+  }
+}
+function chkNullstellen(id, x1, x2){
+  const inp = document.getElementById(id).value.toLowerCase().replace(/,/g,' ').replace(/−/g,'-');
+  const nums = (inp.match(/-?[\d.]+/g) || []).map(parseFloat).sort((a,b)=>a-b);
+  const target = [x1, x2].sort((a,b)=>a-b);
+  const r = document.getElementById(id+'-cr'); r.style.display='block';
+  if(nums.length>=2 && Math.abs(nums[0]-target[0])<0.01 && Math.abs(nums[1]-target[1])<0.01){
+    r.className='cr ok'; r.textContent = `✓ Richtig! x₁ = ${x1}, x₂ = ${x2}`;
+  } else {
+    r.className='cr err'; r.textContent = '✗ Nicht korrekt. Verwende die Mitternachtsformel.';
+  }
+}
+function chkZahl(id, val){
+  const inp = document.getElementById(id).value.replace(/,/g,'.').replace(/−/g,'-');
+  const m = inp.match(/-?[\d.]+/);
+  const r = document.getElementById(id+'-cr'); r.style.display='block';
+  if(m && Math.abs(parseFloat(m[0]) - val) < 0.01){
+    r.className='cr ok'; r.textContent = `✓ Richtig!`;
+  } else {
+    r.className='cr err'; r.textContent = '✗ Nicht korrekt.';
+  }
+}
+function chkText(id, valid){
+  const inp = document.getElementById(id).value.toLowerCase().trim();
+  const r = document.getElementById(id+'-cr'); r.style.display='block';
+  if(valid.some(v => inp.includes(v))){
+    r.className='cr ok'; r.textContent = `✓ Richtig!`;
+  } else {
+    r.className='cr err'; r.textContent = '✗ Nicht korrekt.';
+  }
+}
+function chkPoly(id, a, b, c){
+  // Eingabe: ax² + bx + c (mit den jeweiligen Koeffizienten)
+  let inp = document.getElementById(id).value.toLowerCase()
+    .replace(/\s/g,'').replace(/,/g,'.').replace(/−/g,'-')
+    .replace(/²/g,'^2').replace(/x\^2/g,'X').replace(/·/g,'').replace(/\*/g,'');
+  // Parse: aX + bx + c — extrahiere Koeffizient von X (=x²), x und Konstante
+  // Vereinfacht: regex-based
+  // Aufteilen in Vorzeichen-Terme
+  const terms = inp.replace(/-/g,'+-').split('+').filter(t=>t.length>0);
+  let A=0, B=0, C=0;
+  for(const t of terms){
+    if(t.includes('X')){ // x²-Term
+      const coef = t.replace('X','').replace('+','');
+      A += (coef==='' || coef==='+') ? 1 : (coef==='-' ? -1 : parseFloat(coef));
+    } else if(t.includes('x')){
+      const coef = t.replace('x','').replace('+','');
+      B += (coef==='' || coef==='+') ? 1 : (coef==='-' ? -1 : parseFloat(coef));
+    } else {
+      C += parseFloat(t) || 0;
+    }
+  }
+  const r = document.getElementById(id+'-cr'); r.style.display='block';
+  if(Math.abs(A-a)<0.01 && Math.abs(B-b)<0.01 && Math.abs(C-c)<0.01){
+    r.className='cr ok'; r.textContent = `✓ Richtig! f(x) = ${a}x² ${b>=0?'+':'−'} ${Math.abs(b)}x ${c>=0?'+':'−'} ${Math.abs(c)}`;
+  } else {
+    r.className='cr err'; r.textContent = '✗ Nicht korrekt. Multipliziere die Klammer aus.';
+  }
+}
+function showSol(id, text){
+  const r = document.getElementById(id+'-cr'); r.style.display='block';
+  r.className='cr ok'; r.textContent = 'Lösung: ' + text;
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', ()=>{
+  updateWS();
+  updateDR();
+  setDisk('pos');
+  buildTypBtnsQ(); drawTypQ();
+  buildA1();
+  buildA2(); initA2();
+});
+window.addEventListener('resize', ()=>{
+  updateWS(); drawDR(); updateDisk(); drawTypQ(); drawA2();
 });
 </script>
 </body>

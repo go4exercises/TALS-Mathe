@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anwendungsaufgaben · Grundlagen Funktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  .aufg-rahmen {
+    border: 1pt solid var(--linie);
+    border-radius: 4px;
+    padding: 4mm;
+    margin: 3mm 0;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .aufg-rahmen .aufg-kopf { margin-bottom: 2mm; align-items: baseline; }
+  .schwierig {
+    font-family: var(--mono);
+    font-size: 8pt;
+    color: var(--tinte-2);
+    margin-left: auto;
+    letter-spacing: 0.5px;
+  }
+  .schwierig .punkt { color: var(--orange); font-size: 9pt; }
+  .schwierig .punkt-leer { color: var(--linie); font-size: 9pt; }
+  .bereich-tag {
+    font-family: var(--mono);
+    font-size: 7.5pt;
+    color: var(--blau);
+    background: var(--blau-hell);
+    padding: 0.5mm 2mm;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-left: 3mm;
+  }
+  .lin-mehr { margin-bottom: 2mm; }
+  .lin-mehr .lin { height: 7mm; }
+  .uebersicht {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.2pt;
+    margin: 3mm 0 5mm;
+  }
+  .uebersicht th, .uebersicht td {
+    border: 1px solid var(--linie);
+    padding: 1.4mm 2.5mm;
+    text-align: left;
+  }
+  .uebersicht th {
+    background: var(--papier-2);
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 9pt;
+  }
+  .uebersicht td.nr { text-align: center; font-family: var(--mono); width: 10mm; }
+  .uebersicht td.s  { text-align: center; font-family: var(--mono); width: 18mm; color: var(--orange); letter-spacing: 1px; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script src="../../diagram.js" defer></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g3-1-grundlagen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Anwendungsaufgaben · A4</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · Grundlagen Funktionen</div>
+    <h1>Anwendungen — Funktionen modellieren</h1>
+  </header>
+
+  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Die Aufgaben üben das Modellieren mit Funktionen, das Bestimmen von Definitions- und
+    Wertebereichen, Achsenschnittpunkten und Schnittpunkten zweier Graphen — und zwar in
+    realistischen Situationen aus Technik, Naturwissenschaft und Alltag. Die Musterlösungen
+    folgen am Ende.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead>
+      <tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="nr">1</td>  <td>Hydraulik</td>     <td>Wassertank entleeren</td>           <td class="s">●●●</td></tr>
+      <tr><td class="nr">2</td>  <td>Wärmelehre</td>    <td>Abkühlung im Backofen</td>          <td class="s">●●●</td></tr>
+      <tr><td class="nr">3</td>  <td>Mechanik</td>      <td>Bremsweg-Modell</td>                <td class="s">●●●</td></tr>
+      <tr><td class="nr">4</td>  <td>Telekommunikation</td><td>Handy-Tarif</td>                 <td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td>  <td>Mobilität</td>     <td>Treffpunkt zweier Fahrzeuge</td>    <td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td>  <td>Wirtschaft</td>    <td>Break-Even-Analyse</td>             <td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ════════════════════════════ AUFGABEN ════════════════════════════ -->
+
+  <!-- AUFGABE 1 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">1</span>
+      <span class="aufg-titel">Wassertank entleeren</span>
+      <span class="bereich-tag">Hydraulik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Ein Wassertank fasst 600 L. Über ein Ventil fliessen pro Minute 15 L ab.</p>
+    <p>(a) Stelle die Funktion \(V(t)\) für die Wassermenge in L in Abhängigkeit der Zeit \(t\) in
+    min auf. Welche Form hat sie?</p>
+    <p>(b) Berechne den \(y\)-Achsenabschnitt und die Nullstelle. Was bedeuten diese in der Sachsituation?</p>
+    <p>(c) Bestimme den sachlich sinnvollen Definitions- und Wertebereich.</p>
+    <p>(d) Wie viel Wasser ist nach 25 min noch im Tank?</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 2 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">2</span>
+      <span class="aufg-titel">Abkühlung im Backofen</span>
+      <span class="bereich-tag">Wärmelehre</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Ein Brot wird mit 200 °C aus dem Ofen genommen. Die Raumtemperatur beträgt 20 °C. Während
+    der ersten Minuten kühlt das Brot näherungsweise mit konstant 18 °C pro Minute ab. Die
+    Temperatur \(T\) (in °C) zur Zeit \(t\) (in min) sei näherungsweise:</p>
+    \[ T(t) = 200 - 18 \cdot t \]
+    <p>(a) Welche Temperatur hat das Brot nach 5 min?</p>
+    <p>(b) Berechne, wann das Brot rechnerisch die Raumtemperatur erreicht hätte. Warum ist das Modell
+    nur für kurze Zeit gültig?</p>
+    <p>(c) Bestimme einen sinnvollen Definitions- und Wertebereich, sodass das Modell nicht in den
+    physikalisch unsinnigen Bereich gerät.</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 3 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">3</span>
+      <span class="aufg-titel">Bremsweg-Modell</span>
+      <span class="bereich-tag">Mechanik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Der Bremsweg \(s\) (in m) eines PKW in Abhängigkeit der Geschwindigkeit \(v\) (in km/h) wird
+    durch \(s(v) = \dfrac{v^2}{100}\) angenähert.</p>
+    <p>(a) Ist \(s(v)\) eine Funktion? Begründe.</p>
+    <p>(b) Welcher Definitionsbereich ist mathematisch möglich, welcher sachlich sinnvoll?</p>
+    <p>(c) Welcher \(y\)-Achsenabschnitt liegt vor und was bedeutet er physikalisch?</p>
+    <p>(d) Hat \(s(v)\) Nullstellen? Wie viele und wo?</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 4 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">4</span>
+      <span class="aufg-titel">Handy-Tarif</span>
+      <span class="bereich-tag">Telekommunikation</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Ein Mobilfunkanbieter bietet zwei Tarife an:</p>
+    <ul>
+      <li>Tarif A: Grundgebühr 25 CHF/Monat, dann 0.10 CHF pro Minute.</li>
+      <li>Tarif B: keine Grundgebühr, dann 0.30 CHF pro Minute.</li>
+    </ul>
+    <p>(a) Stelle für jeden Tarif die monatlichen Kosten \(K(x)\) als Funktion der Anzahl Minuten
+    \(x\) auf.</p>
+    <p>(b) Bestimme den \(y\)-Achsenabschnitt jeder Funktion und seine Bedeutung.</p>
+    <p>(c) Berechne den Schnittpunkt der beiden Funktionen. Ab wann lohnt sich Tarif A?</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 5 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">5</span>
+      <span class="aufg-titel">Treffpunkt zweier Fahrzeuge</span>
+      <span class="bereich-tag">Mobilität</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Zwei Fahrzeuge starten zur gleichen Zeit. Fahrzeug A startet bei \(s = 0\) km mit konstant
+    80 km/h. Fahrzeug B startet bei \(s = 120\) km und fährt mit konstant 60 km/h dem Fahrzeug A
+    entgegen.</p>
+    <p>(a) Stelle die Wegfunktionen \(s_A(t)\) und \(s_B(t)\) auf (\(t\) in h, \(s\) in km).</p>
+    <p>(b) Wann und wo treffen sich die beiden Fahrzeuge?</p>
+    <p>(c) Welche \(y\)-Achsenabschnitte haben die Funktionen, und was bedeuten sie?</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 6 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">6</span>
+      <span class="aufg-titel">Break-Even-Analyse</span>
+      <span class="bereich-tag">Wirtschaft</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Ein Kleinbetrieb hat Fixkosten von 8000 CHF pro Monat und variable Kosten von 12 CHF pro
+    produziertem Stück. Der Verkaufspreis pro Stück beträgt 32 CHF.</p>
+    <p>(a) Stelle die Kostenfunktion \(K(x)\) und die Erlösfunktion \(E(x)\) auf (\(x\) = Stück/Monat).</p>
+    <p>(b) Berechne den Schnittpunkt (Break-Even-Punkt). Was bedeutet er ökonomisch?</p>
+    <p>(c) Wie hoch ist der Gewinn, wenn 600 Stück verkauft werden?</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════ LÖSUNGEN ════════════════════════════ -->
+  <div class="neue-seite"></div>
+
+  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 1 — Wassertank entleeren</div>
+    <p>(a) \(V(t) = 600 - 15 \cdot t\) (lineare Funktion).</p>
+    <p>(b) \(V(0) = 600\) — Anfangsfüllmenge. Nullstelle: \(0 = 600 - 15 \cdot t \Longrightarrow t = 40\) min — Tank ist leer.</p>
+    <p>(c) Sachlich: \(D = [0, 40]\) min, \(W = [0, 600]\) L. Mathematisch wäre \(D = \mathbb{R}\),
+    aber für \(t < 0\) und \(t > 40\) ergibt das Modell physikalisch keinen Sinn.</p>
+    <p>(d) \(V(25) = 600 - 15 \cdot 25 = 600 - 375 = 225\) L.</p>
+    <div data-diagram="l1" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 2 — Abkühlung im Backofen</div>
+    <p>(a) \(T(5) = 200 - 18 \cdot 5 = 200 - 90 = 110\) °C.</p>
+    <p>(b) \(T(t) = 20 \Longrightarrow 200 - 18 \cdot t = 20 \Longrightarrow t = 10\) min.
+    Tatsächlich folgt die Abkühlung dem Newtonschen Abkühlungsgesetz exponentiell — die lineare
+    Näherung ist nur für die ersten paar Minuten brauchbar, danach kühlt das Brot zunehmend
+    langsamer.</p>
+    <p>(c) Sinnvoll: \(D = [0, 10]\) min und \(W = [20, 200]\) °C. Für \(t > 10\) würde
+    das Modell Temperaturen unter Raumtemperatur liefern, was physikalisch unmöglich ist.</p>
+    <div data-diagram="l2" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 3 — Bremsweg-Modell</div>
+    <p>(a) Ja — zu jeder Geschwindigkeit \(v\) gehört genau ein Bremsweg \(s\). Vertikaltest erfüllt.</p>
+    <p>(b) Mathematisch: \(D = \mathbb{R}\) (Quadrat ist immer definiert). Sachlich: \(D = [0, v_{\max}]\)
+    mit \(v_{\max}\) je nach Strassentyp (z.B. 120 km/h auf der Autobahn). Negative Geschwindigkeiten
+    machen physikalisch keinen Sinn.</p>
+    <p>(c) \(y\)-Achsenabschnitt: \(s(0) = 0\). Bei \(v = 0\) ist der Bremsweg null — das Fahrzeug
+    steht bereits.</p>
+    <p>(d) Eine Nullstelle bei \(v = 0\) (doppelt). Für \(v \neq 0\) ist \(s > 0\).</p>
+    <div data-diagram="l3" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 4 — Handy-Tarif</div>
+    <p>(a) \(K_A(x) = 0.10 \cdot x + 25\), \(K_B(x) = 0.30 \cdot x\).</p>
+    <p>(b) \(K_A(0) = 25\) CHF: Grundgebühr (auch ohne Gespräche). \(K_B(0) = 0\) CHF: keine Grundgebühr.</p>
+    <p>(c) Schnittpunkt: \(0.10 \cdot x + 25 = 0.30 \cdot x \Longrightarrow 0.20 \cdot x = 25
+    \Longrightarrow x = 125\) min. \(K = 37.50\) CHF.</p>
+    <p><strong>Tarif A lohnt sich ab 125 min Telefonieren pro Monat.</strong> Bei weniger Minuten
+    ist B günstiger.</p>
+    <div data-diagram="l4" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 5 — Treffpunkt zweier Fahrzeuge</div>
+    <p>(a) \(s_A(t) = 80 \cdot t\), &nbsp; \(s_B(t) = 120 - 60 \cdot t\) (Fahrzeug B fährt entgegengesetzt,
+    daher Minuszeichen vor 60).</p>
+    <p>(b) Treffen: \(s_A(t) = s_B(t) \Longrightarrow 80 \cdot t = 120 - 60 \cdot t
+    \Longrightarrow 140 \cdot t = 120 \Longrightarrow t = \dfrac{120}{140} = \dfrac{6}{7} \approx 0.857\) h \(\approx\) 51.4 min.</p>
+    <p>Treffort: \(s_A(\tfrac{6}{7}) = 80 \cdot \tfrac{6}{7} = \tfrac{480}{7} \approx 68.6\) km.</p>
+    <p>(c) \(s_A(0) = 0\): Startposition von A. \(s_B(0) = 120\): Startposition von B.</p>
+    <div data-diagram="l5" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 6 — Break-Even-Analyse</div>
+    <p>(a) \(K(x) = 12 \cdot x + 8000\), &nbsp; \(E(x) = 32 \cdot x\).</p>
+    <p>(b) Schnittpunkt: \(K(x) = E(x) \Longrightarrow 12 \cdot x + 8000 = 32 \cdot x
+    \Longrightarrow 8000 = 20 \cdot x \Longrightarrow x = 400\). \(E(400) = 12\,800\) CHF.</p>
+    <p><strong>Break-Even bei 400 Stk/Monat (Umsatz 12 800 CHF).</strong> Ab 401 Stück erwirtschaftet
+    der Betrieb Gewinn; darunter fährt er Verlust.</p>
+    <p>(c) Gewinn \(G(x) = E(x) - K(x) = 20 \cdot x - 8000\). \(G(600) = 12\,000 - 8000 = 4000\) CHF.</p>
+    <div data-diagram="l6" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <div class="block block-fehler" style="margin-top:5mm">
+    <div class="block-titel">⚠ Häufige Schülerfehler</div>
+    <ul style="margin-top:1mm">
+      <li>Vorzeichen bei abnehmenden Grössen (A1, A2): Pro Zeiteinheit subtrahieren, nicht addieren.</li>
+      <li>Definitionsbereich: bei Anwendungen <em>kleiner</em> als der mathematisch mögliche Bereich.</li>
+      <li>Nullstelle vs. \(y\)-Achsenabschnitt nicht verwechseln: \(y_0 = f(0)\), Nullstelle ist \(f(x) = 0\).</li>
+      <li>Bei A5 nicht vergessen: Fahrzeug B bewegt sich <em>rückwärts</em> Richtung Startpunkt von A.</li>
+      <li>Probe nach Schnittpunktberechnung machen — schützt vor Vorzeichen- und Rechenfehlern.</li>
+    </ul>
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Grundlagen Funktionen</span>
+    <span>Anwendungen</span>
+  </footer>
+
+</div>
+
+<!-- Diagramm-Konfigurationen -->
+<script>
+window.TalsDiagrams = {
+  l1: {
+    xRange: [0, 45], yRange: [0, 700], xTick: 5, yTick: 100,
+    xLabel: 't [min]', yLabel: 'V [L]',
+    width: 460, height: 280,
+    lines: [{ m: -15, b: 600, color: '#1a4f8a', label: 'V = 600 − 15·t' }],
+    markers: [
+      { x: 25, y: 225, label: '(d) 225 L', color: '#b85a00' },
+      { x: 40, y: 0,   label: 'leer',       color: '#a02828' }
+    ]
+  },
+  l2: {
+    xRange: [0, 12], yRange: [0, 220], xTick: 2, yTick: 30,
+    xLabel: 't [min]', yLabel: 'T [°C]',
+    width: 460, height: 280,
+    lines: [{ m: -18, b: 200, color: '#1a4f8a', label: 'T = 200 − 18·t' }],
+    markers: [
+      { x: 5,  y: 110, label: '(a) 110 °C',     color: '#b85a00' },
+      { x: 10, y: 20,  label: 'Raumtemperatur', color: '#a02828' }
+    ]
+  },
+  l3: {
+    xRange: [0, 130], yRange: [0, 180], xTick: 20, yTick: 30,
+    xLabel: 'v [km/h]', yLabel: 's [m]',
+    width: 460, height: 280,
+    curves: [{ fn: v => v*v / 100, xFrom: 0, xTo: 130, color: '#1a4f8a', label: 's(v)' }],
+    markers: [
+      { x: 0,   y: 0,   label: '(c) 0',  color: '#2d6a3e' },
+      { x: 50,  y: 25,  label: '50 → 25', color: '#b85a00' },
+      { x: 100, y: 100, label: '100 → 100', color: '#a02828' }
+    ]
+  },
+  l4: {
+    xRange: [0, 250], yRange: [0, 80], xTick: 50, yTick: 10,
+    xLabel: 'x [min]', yLabel: 'K [CHF]',
+    width: 460, height: 280,
+    lines: [
+      { m: 0.10, b: 25, color: '#1a4f8a', label: 'K_A' },
+      { m: 0.30, b: 0,  color: '#b85a00', label: 'K_B' }
+    ],
+    markers: [{ x: 125, y: 37.5, label: 'BE 125 min', color: '#a02828' }]
+  },
+  l5: {
+    xRange: [0, 1.5], yRange: [0, 140], xTick: 0.25, yTick: 20,
+    xLabel: 't [h]', yLabel: 's [km]',
+    width: 460, height: 280,
+    lines: [
+      { m: 80,  b: 0,   color: '#1a4f8a', label: 's_A' },
+      { m: -60, b: 120, color: '#b85a00', label: 's_B' }
+    ],
+    markers: [{ x: 6/7, y: 480/7, label: 'Treffpunkt', color: '#a02828' }]
+  },
+  l6: {
+    xRange: [0, 700], yRange: [0, 22000], xTick: 100, yTick: 4000,
+    xLabel: 'x [Stk]', yLabel: 'K, E [CHF]',
+    width: 460, height: 290,
+    lines: [
+      { m: 12, b: 8000, color: '#a02828', label: 'K(x)' },
+      { m: 32, b: 0,    color: '#2d6a3e', label: 'E(x)' }
+    ],
+    markers: [
+      { x: 400, y: 12800, label: 'BE',   color: '#1a4f8a' },
+      { x: 600, y: 19200, label: '(c)',  color: '#b85a00' }
+    ]
+  }
+};
+</script>
+
+</body>
+</html>

@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grundlagen — TALS Mathematik</title>
+<title>3.1 Grundlagen — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
-<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<!-- MathJax -->
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
@@ -19,7 +19,147 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+  .slider-box {
+    background: var(--papier-2, #f3eedf);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92rem;
+  }
+  .slider-box label { display: block; margin-bottom: 6px; }
+  .slider-box input[type=range] { width: 100%; max-width: 300px; }
+  .slider-val { font-weight: 700; color: var(--blau, #1a4f8a); }
+
+  .einstieg-grid {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 16px;
+    align-items: center;
+    margin: 12px 0;
+    max-width: 640px;
+  }
+  .einstieg-grid #einstieg-glas {
+    width: 130px;
+    height: 200px;
+    display: block;
+  }
+  .einstieg-grid #einstieg-canvas {
+    width: 100%;
+    height: 200px;
+    display: block;
+  }
+  @media (max-width: 540px) {
+    .einstieg-grid { grid-template-columns: 100px 1fr; gap: 10px; }
+    .einstieg-grid #einstieg-glas { width: 100px; height: 160px; }
+  }
+
+  .vier-darstellungen {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 12px 0;
+  }
+  .vier-darstellungen .repr {
+    background: #fff;
+    border: 1px solid var(--linie, #d8d2c4);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    font-size: 0.86rem;
+  }
+  .vier-darstellungen .repr-titel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--tinte-2, #6b6657);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .vier-darstellungen table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .vier-darstellungen table td {
+    padding: 2px 6px;
+    border: 1px solid var(--linie, #d8d2c4);
+  }
+  @media (max-width: 700px) {
+    .vier-darstellungen { grid-template-columns: 1fr 1fr; }
+  }
+
+  .check-aufg .check-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; flex-wrap: wrap; }
+  .check-aufg input[type="text"] {
+    border: 1px solid var(--linie, #d8d2c4);
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.92rem;
+    width: 130px;
+  }
+  .check-aufg button {
+    background: var(--blau, #1a4f8a); color: #fff;
+    border: none; border-radius: 3px;
+    padding: 4px 12px; cursor: pointer;
+    font-size: 0.86rem;
+  }
+  .check-aufg .feedback { font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; }
+  .check-aufg .feedback.ok { color: var(--gruen, #2d6a3e); }
+  .check-aufg .feedback.fehler { color: var(--rot, #a02828); }
+
+  .funktion-quiz {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .funktion-quiz .fq-karte {
+    background: #fff;
+    border: 1px solid var(--linie, #d8d2c4);
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+  }
+  .funktion-quiz canvas { display: block; margin: 0 auto; }
+  .funktion-quiz .fq-buttons { display: flex; gap: 6px; justify-content: center; margin-top: 8px; }
+  .funktion-quiz .fq-buttons button {
+    border: 1px solid var(--linie, #d8d2c4); background: #fff;
+    padding: 4px 10px; border-radius: 4px; font-size: 0.82rem;
+    cursor: pointer; font-family: 'Source Sans 3', sans-serif;
+  }
+  .funktion-quiz .fq-buttons button.ok      { background: #d4edd9; border-color: var(--gruen, #2d6a3e); }
+  .funktion-quiz .fq-buttons button.fehler  { background: #f0d4d4; border-color: var(--rot, #a02828); }
+  .funktion-quiz .fq-feedback { font-size: 0.8rem; margin-top: 6px; min-height: 1.2em; font-style: italic; color: var(--tinte-2, #6b6657); }
+
+  /* Beispiel-Tabs (für Achsen-/Graph-Schnittpunkte) */
+  .bsp-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 14px 0 0;
+    flex-wrap: wrap;
+  }
+  .bsp-tabs button {
+    background: #fff;
+    border: 1px solid var(--linie, #d8d2c4);
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    padding: 6px 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.86rem;
+    cursor: pointer;
+    color: var(--tinte, #1a1a1a);
+    transition: background .12s;
+  }
+  .bsp-tabs button:hover { background: var(--blau-hell, #e6edf5); }
+  .bsp-tabs button.aktiv {
+    background: var(--blau, #1a4f8a);
+    color: #fff;
+    border-color: var(--blau, #1a4f8a);
+  }
+  .bsp-panel { display: none; }
+  .bsp-panel.aktiv { display: block; }
+  .bsp-panel canvas { width: 100%; height: auto; max-width: 480px; display: block; margin: 8px auto; }
 </style>
 </head>
 <body>
@@ -33,7 +173,6 @@ MathJax = {
   <h1 class="pt-h1">3.1 Grundlagen</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.1</div>
   <ul>
@@ -49,55 +188,526 @@ MathJax = {
 
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg: Wasser im Becher</h2>
+
+<p>Ein Wasserhahn liefert konstant <strong>3 dl pro Sekunde</strong> in einen Becher. Zu jedem
+Zeitpunkt \(t\) (in Sekunden) gehört eindeutig eine Wassermenge \(V\) (in dl) im Becher:</p>
+
+\[ V(t) = 3 \cdot t \]
+
+<p>Stelle den Schieberegler unten ein und beobachte, wie zu jedem \(t\) genau ein \(V\) gehört.
+Genau diese Eindeutigkeit ist das Kernstück des Funktionsbegriffs.</p>
+
+<div class="slider-box">
+  <label>Zeit \(t\) [s]: <span class="slider-val" id="einstieg-t-val">3</span></label>
+  <input type="range" id="einstieg-t" min="0" max="10" step="0.5" value="3">
+  <div style="margin-top:8px">Wassermenge: \(V(\)<span class="slider-val" id="einstieg-t-out">3</span>\() = 3 \cdot \)<span class="slider-val" id="einstieg-t-out2">3</span>\( = \)<span class="slider-val" id="einstieg-v-out">9</span>\(\) dl</div>
+</div>
+
+<div class="einstieg-grid">
+  <canvas id="einstieg-glas" aria-label="Glas mit Füllstand"></canvas>
+  <canvas id="einstieg-canvas"></canvas>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Beobachtung</div>
+  <p>Egal welchen Zeitpunkt \(t\) man wählt: es gibt <em>genau einen</em> Wert \(V(t)\). Niemals
+  zwei verschiedene Wassermengen zur selben Zeit. Das ist der Funktionsbegriff in einem Satz:
+  <strong>Eine Funktion ordnet jedem \(x\) genau ein \(y\) zu.</strong></p>
+</div>
 
 
 <!-- ══ 3. DEFINITION ══ -->
 <h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
 
+<div class="block block-def">
+  <div class="block-titel">📘 Definition · reelle Funktion</div>
+  <p>Eine <strong>reelle Funktion</strong> \(f\) ist eine Zuordnung, die jedem Element \(x\)
+  einer Menge \(D \subseteq \mathbb{R}\) (dem <em>Definitionsbereich</em>) <strong>genau einen</strong>
+  Wert \(y \in W \subseteq \mathbb{R}\) (dem <em>Wertebereich</em>) zuordnet. Schreibweise:</p>
+  \[ f : D \longrightarrow W, \qquad x \longmapsto f(x) \]
+  <p style="font-size:0.92rem;color:var(--tinte-2)">Lies: „\(f\) ist eine Funktion von \(D\) nach \(W\),
+  die jedem \(x\) den Funktionswert \(f(x)\) zuordnet."</p>
+</div>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<p>Die Variable \(x\) heisst <strong>Argument</strong> oder <strong>unabhängige Variable</strong>.
+Der dazugehörige Wert \(y = f(x)\) heisst <strong>Funktionswert</strong> oder
+<strong>abhängige Variable</strong>.</p>
 
+<table class="ftb-tabelle">
+  <thead><tr><th>Begriff</th><th>Symbol</th><th>Bedeutung</th></tr></thead>
+  <tbody>
+    <tr><td>Argument</td>            <td>\(x\)</td>     <td class="li">Eingangswert, unabhängig wählbar aus \(D\)</td></tr>
+    <tr><td>Funktionswert</td>       <td>\(f(x), y\)</td><td class="li">Resultat der Zuordnung, abhängig von \(x\)</td></tr>
+    <tr><td>Definitionsbereich</td>  <td>\(D\)</td>     <td class="li">Menge aller erlaubten \(x\)</td></tr>
+    <tr><td>Wertebereich</td>        <td>\(W\)</td>     <td class="li">Menge aller tatsächlich auftretenden \(y\)</td></tr>
+    <tr><td>Funktionsterm</td>       <td>\(f(x)\)</td>  <td class="li">Rechenvorschrift, z.B. \(2 \cdot x + 1\)</td></tr>
+    <tr><td>Funktionsgleichung</td>  <td>\(y = f(x)\)</td><td class="li">vollständige Schreibweise inkl. Variable</td></tr>
+  </tbody>
+</table>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
-
-
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
-
-
-<!-- ══ 7. AUFGABEN ══ -->
-<h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
-
-
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
-<h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
-
-
-<!-- ══ 9. DOWNLOADS ══ -->
-<h2 id="downloads">Downloads</h2>
-<p>Materialien zum Mitnehmen, Üben und Wiederholen.</p>
-<div class="dl-grid">
-  <a href="../downloads/grundlagen/g3-1-grundlagen/handout.pdf" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">PDF</div></div></a>
-  <a href="../downloads/grundlagen/g3-1-grundlagen/aufgabenserie.pdf" class="dl"><span class="dl-ic">📝</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Übungsaufgaben mit Lösungen</div><div class="dl-fmt">PDF</div></div></a>
-  <a href="../downloads/grundlagen/g3-1-grundlagen/teste-dich-selbst.pdf" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Selbsttest zur Überprüfung</div><div class="dl-fmt">PDF</div></div></a>
-  <a href="../downloads/grundlagen/g3-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
-  <a href="../downloads/grundlagen/g3-1-grundlagen/formelauszug.pdf" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">PDF</div></div></a>
+<div class="block block-bsp">
+  <div class="block-titel">💡 Beispiel</div>
+  <p>Für \(f : \mathbb{R} \longrightarrow \mathbb{R}, \; x \longmapsto 2 \cdot x + 1\) ist:</p>
+  <ul>
+    <li>\(f(0) = 2 \cdot 0 + 1 = 1\)</li>
+    <li>\(f(3) = 2 \cdot 3 + 1 = 7\)</li>
+    <li>\(f(-2) = 2 \cdot (-2) + 1 = -3\)</li>
+  </ul>
+  <p>Das <em>Argument</em> wird in den Funktionsterm eingesetzt; das Ergebnis ist der <em>Funktionswert</em>.</p>
 </div>
 
 
-<!-- ══ 10. RESSOURCEN ══ -->
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Vier Darstellungsformen</h2>
+
+<p>Eine Funktion kann auf vier verschiedene Arten beschrieben werden — jede macht andere Aspekte
+sichtbar. Alle vier <strong>beschreiben dieselbe Funktion</strong>, sofern die Darstellung vollständig
+ist (Term, verbale Vorschrift, Graph) bzw. die Funktion eindeutig festlegt (eine Wertetabelle allein
+genügt das im Allgemeinen <em>nicht</em> — sie zeigt nur einzelne Punkte).</p>
+
+<div class="vier-darstellungen">
+  <div class="repr">
+    <div class="repr-titel">1 · Verbal</div>
+    <div style="text-align:left;font-size:0.84rem">
+      Jeder Sekunde \(t\) wird das Dreifache als Wassermenge \(V\) zugeordnet.
+    </div>
+  </div>
+  <div class="repr">
+    <div class="repr-titel">2 · Wertetabelle</div>
+    <table>
+      <tr><td>\(t\)</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+      <tr><td>\(V\)</td><td>0</td><td>3</td><td>6</td><td>9</td><td>12</td></tr>
+    </table>
+  </div>
+  <div class="repr">
+    <div class="repr-titel">3 · Graph</div>
+    <canvas id="darst-graph" style="width:100%;max-width:170px;height:130px"></canvas>
+  </div>
+  <div class="repr">
+    <div class="repr-titel">4 · Term/Gleichung</div>
+    <div style="padding-top:18px">\(V(t) = 3 \cdot t\)</div>
+    <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">analytische Form</div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Wahl der Darstellung</div>
+  <p><strong>Verbal:</strong> nützlich für Aufgabenstellungen und Modellierung.<br>
+  <strong>Wertetabelle:</strong> liefert konkrete Punkte zum Zeichnen oder Rechnen.<br>
+  <strong>Graph:</strong> zeigt das qualitative Verhalten (Steigung, Schnittpunkte, Extrema) auf einen Blick.<br>
+  <strong>Term:</strong> ist die kompakteste Form und ermöglicht exaktes Rechnen für beliebige \(x\).</p>
+</div>
+
+
+<!-- ══ 5. NOTATIONEN ══ -->
+<h2 id="notationen">Drei Schreibweisen für dieselbe Funktion</h2>
+
+<p>In Lehrmitteln und Aufgaben begegnen drei gleichwertige Schreibweisen. Bei der Berufsmaturität
+muss die Vollform-Schreibweise mit Definitions- und Wertebereich beherrscht werden.</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Form</th><th>Schreibweise</th><th>Bemerkung</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="li">Zuordnungs­vorschrift</td>
+      <td>\(x \longmapsto 2 \cdot x + 1\)</td>
+      <td class="li">betont die Abbildung „\(x\) wird abgebildet auf …"</td>
+    </tr>
+    <tr>
+      <td class="li">Funktionsgleichung</td>
+      <td>\(y = 2 \cdot x + 1\)</td>
+      <td class="li">übliche Form für Schule und Anwendung</td>
+    </tr>
+    <tr>
+      <td class="li">Vollform mit \(D, W\)</td>
+      <td>\(f : \mathbb{R} \longrightarrow \mathbb{R}, \; x \longmapsto 2 \cdot x + 1\)</td>
+      <td class="li">vollständig — inkl. Definitions- und Zielbereich</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 6. DEFINITIONS- UND WERTEBEREICH ══ -->
+<h2 id="bereiche">Definitions- und Wertebereich</h2>
+
+<p>Nicht jede Rechenvorschrift ist für jedes \(x\) sinnvoll. Beispiele für Einschränkungen:</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Funktion</th><th>Einschränkung</th><th>Definitionsbereich</th></tr></thead>
+  <tbody>
+    <tr><td>\(f(x) = 2 \cdot x + 1\)</td>
+        <td class="li">keine</td>
+        <td>\(D = \mathbb{R}\)</td></tr>
+    <tr><td>\(f(x) = \dfrac{1}{x}\)</td>
+        <td class="li">Nenner darf nicht 0 sein</td>
+        <td>\(D = \mathbb{R} \setminus \{0\}\)</td></tr>
+    <tr><td>\(f(x) = \sqrt{x}\)</td>
+        <td class="li">Radikand muss \(\geq 0\) sein</td>
+        <td>\(D = \mathbb{R}_{\geq 0} = [0, \infty)\)</td></tr>
+    <tr><td>\(f(x) = x^2\)</td>
+        <td class="li">keine</td>
+        <td>\(D = \mathbb{R},\; W = \mathbb{R}_{\geq 0}\) (\(y\) nie negativ)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Wichtig — Anwendungsbereich vs. mathematischer Definitionsbereich</div>
+  <p>Bei Anwendungsaufgaben ist \(D\) oft <em>kleiner</em> als der mathematisch mögliche Bereich.
+  Beispiel: \(V(t) = 3 \cdot t\) ist mathematisch für alle \(t \in \mathbb{R}\) definiert — physikalisch
+  ergibt aber nur \(t \geq 0\) Sinn (negative Zeit?). Der Definitionsbereich der Anwendung lautet daher
+  z.B. \(D = [0\,\text{s}, T_{\max}]\), wobei \(T_{\max}\) durch das Becherfassungsvermögen begrenzt ist.</p>
+</div>
+
+
+<!-- ══ 7. FUNKTION ODER NICHT? ══ -->
+<h2 id="funktion-nicht">Funktion oder keine Funktion?</h2>
+
+<p>Der Schlüssel ist die <strong>Eindeutigkeit</strong>: jedes \(x \in D\) hat <em>genau einen</em>
+\(y\)-Wert. Geometrisch lässt sich das mit dem <strong>Vertikaltest</strong> prüfen: schiebt man
+gedanklich eine senkrechte Gerade über den Graphen, darf sie ihn an jeder Stelle <em>höchstens
+einmal</em> schneiden.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Vertikaltest</div>
+  <p>Eine Kurve im Koordinatensystem ist genau dann der Graph einer Funktion, wenn jede zur
+  \(y\)-Achse parallele Gerade die Kurve <strong>höchstens in einem Punkt</strong> schneidet.</p>
+</div>
+
+<p>Die folgenden vier Kurven sollst du als Funktion oder Nicht-Funktion einordnen. Klicke unter
+jedem Bild auf den Knopf, der deine Vermutung trägt.</p>
+
+<div class="funktion-quiz" id="fq">
+  <div class="fq-karte" data-id="A" data-answer="ja">
+    <canvas></canvas>
+    <div class="fq-buttons">
+      <button data-val="ja">Funktion</button>
+      <button data-val="nein">keine</button>
+    </div>
+    <div class="fq-feedback"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;margin-top:4px">A · Gerade</div>
+  </div>
+  <div class="fq-karte" data-id="B" data-answer="ja">
+    <canvas></canvas>
+    <div class="fq-buttons">
+      <button data-val="ja">Funktion</button>
+      <button data-val="nein">keine</button>
+    </div>
+    <div class="fq-feedback"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;margin-top:4px">B · Parabel</div>
+  </div>
+  <div class="fq-karte" data-id="C" data-answer="nein">
+    <canvas></canvas>
+    <div class="fq-buttons">
+      <button data-val="ja">Funktion</button>
+      <button data-val="nein">keine</button>
+    </div>
+    <div class="fq-feedback"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;margin-top:4px">C · Kreis</div>
+  </div>
+  <div class="fq-karte" data-id="D" data-answer="nein">
+    <canvas></canvas>
+    <div class="fq-buttons">
+      <button data-val="ja">Funktion</button>
+      <button data-val="nein">keine</button>
+    </div>
+    <div class="fq-feedback"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;margin-top:4px">D · liegende Parabel</div>
+  </div>
+</div>
+
+
+<!-- ══ 8. SCHNITTPUNKTE MIT ACHSEN ══ -->
+<h2 id="achsenschnitte">Schnittpunkte mit den Koordinatenachsen</h2>
+
+<p>Zwei besondere Punkte interessieren bei jedem Funktionsgraphen: der Schnitt mit der \(y\)-Achse
+und die Schnitte mit der \(x\)-Achse. Wir betrachten zwei Beispiele unterschiedlicher Funktionsart.</p>
+
+<div class="bsp-tabs" id="acht-tabs">
+  <button data-tab="ach-1" class="aktiv">Beispiel 1 · Gerade</button>
+  <button data-tab="ach-2">Beispiel 2 · Parabel</button>
+</div>
+
+<!-- Beispiel 1: Lineare Funktion -->
+<div class="bsp-panel aktiv" id="ach-1">
+  <div class="block block-bsp">
+    <div class="block-titel">💡 Beispiel 1 — \(f(x) = 2 \cdot x - 6\)</div>
+
+    <p><strong>y-Achsenabschnitt</strong> (Schnitt mit \(y\)-Achse, dort gilt \(x = 0\)):</p>
+    \[ y_0 = f(0) = 2 \cdot 0 - 6 = -6 \]
+    <p>Punkt: \((0 \mid -6)\).</p>
+
+    <p><strong>Nullstelle</strong> (Schnitt mit \(x\)-Achse, dort gilt \(y = 0\)):</p>
+    \[ f(x) = 0 \;\Longrightarrow\; 2 \cdot x - 6 = 0 \;\Longrightarrow\; 2 \cdot x = 6 \;\Longrightarrow\; x = 3 \]
+    <p>Punkt: \((3 \mid 0)\).</p>
+  </div>
+  <canvas id="ach1-canvas"></canvas>
+</div>
+
+<!-- Beispiel 2: Quadratische Funktion -->
+<div class="bsp-panel" id="ach-2">
+  <div class="block block-bsp">
+    <div class="block-titel">💡 Beispiel 2 — \(g(x) = x^2 - 4\)</div>
+
+    <p><strong>y-Achsenabschnitt</strong>:</p>
+    \[ y_0 = g(0) = 0^2 - 4 = -4 \]
+    <p>Punkt: \((0 \mid -4)\).</p>
+
+    <p><strong>Nullstellen</strong> — eine Funktion kann mehr als eine haben:</p>
+    \[ g(x) = 0 \;\Longrightarrow\; x^2 - 4 = 0 \;\Longrightarrow\; x^2 = 4 \;\Longrightarrow\; x = \pm 2 \]
+    <p>Zwei Nullstellen: \((-2 \mid 0)\) und \((2 \mid 0)\).</p>
+
+    <p style="font-style:italic;color:var(--tinte-2)">Bemerkung: Eine Funktion hat höchstens
+    <em>einen</em> y-Achsenabschnitt (\(x = 0\) ist eine einzige Stelle), aber sie kann
+    keine, eine oder mehrere Nullstellen haben.</p>
+  </div>
+  <canvas id="ach2-canvas"></canvas>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Methode</div>
+  <ol>
+    <li><strong>y-Achsenabschnitt:</strong> Setze \(x = 0\) in den Funktionsterm ein und berechne \(y_0 = f(0)\).</li>
+    <li><strong>Nullstellen:</strong> Setze \(f(x) = 0\) und löse die entstandene Gleichung nach \(x\) auf.</li>
+    <li>Schreibe die Schnittpunkte als Koordinatenpaare \((0 \mid f(0))\) bzw. \((x_0 \mid 0)\).</li>
+  </ol>
+</div>
+
+
+<!-- ══ 9. SCHNITTPUNKTE ZWEIER GRAPHEN ══ -->
+<h2 id="schnittpunkte">Schnittpunkte zweier Funktionsgraphen</h2>
+
+<p>Zwei Funktionen \(f\) und \(g\) schneiden sich in einem Punkt \(S\), wenn ihre Funktionswerte
+dort übereinstimmen: \(f(x) = g(x)\). Diese Bedingung ist eine <strong>Gleichung</strong> in \(x\)
+und liefert die \(x\)-Koordinate(n) des Schnittpunkts. Die \(y\)-Koordinate ergibt sich durch
+Einsetzen in eine der beiden Funktionen.</p>
+
+<div class="bsp-tabs" id="schn-tabs">
+  <button data-tab="schn-1" class="aktiv">Beispiel 1 · Zwei Geraden</button>
+  <button data-tab="schn-2">Beispiel 2 · Gerade & Parabel</button>
+</div>
+
+<!-- Beispiel 1: Zwei Geraden -->
+<div class="bsp-panel aktiv" id="schn-1">
+  <div class="block block-bsp">
+    <div class="block-titel">💡 Beispiel 1 — zwei Geraden</div>
+    <p>Gegeben: \(f(x) = 2 \cdot x - 4\) und \(g(x) = -x + 5\).</p>
+
+    <p>Gleichsetzen: \(2 \cdot x - 4 = -x + 5\)</p>
+    <p>Auflösen: \(3 \cdot x = 9 \;\Longrightarrow\; x_S = 3\)</p>
+    <p>\(y\)-Koordinate: \(y_S = f(3) = 2 \cdot 3 - 4 = 2\) &nbsp;
+    (Probe mit \(g\): \(g(3) = -3 + 5 = 2\) ✓)</p>
+    <p>Schnittpunkt: \(S(3 \mid 2)\)</p>
+  </div>
+  <canvas id="schn1-canvas"></canvas>
+</div>
+
+<!-- Beispiel 2: Gerade × Parabel -->
+<div class="bsp-panel" id="schn-2">
+  <div class="block block-bsp">
+    <div class="block-titel">💡 Beispiel 2 — Gerade und Parabel</div>
+    <p>Gegeben: \(f(x) = x + 1\) und \(g(x) = x^2 - 1\).</p>
+
+    <p>Gleichsetzen: \(x + 1 = x^2 - 1\)</p>
+    <p>Umstellen: \(x^2 - x - 2 = 0\)</p>
+    <p>Mitternachtsformel oder Faktorisieren:
+    \(x^2 - x - 2 = (x - 2)(x + 1) = 0 \;\Longrightarrow\; x_1 = 2,\; x_2 = -1\)</p>
+    <p>\(y\)-Koordinaten: \(y_1 = f(2) = 3\), &nbsp; \(y_2 = f(-1) = 0\). &nbsp;
+    Probe: \(g(2) = 3\) ✓, \(g(-1) = 0\) ✓.</p>
+    <p>Zwei Schnittpunkte: \(S_1(2 \mid 3)\) und \(S_2(-1 \mid 0)\).</p>
+
+    <p style="font-style:italic;color:var(--tinte-2)">Bemerkung: Beim Schnitt zweier Funktionen
+    unterschiedlichen Grades können mehrere Schnittpunkte auftreten.</p>
+  </div>
+  <canvas id="schn2-canvas"></canvas>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Methode</div>
+  <ol>
+    <li>Funktionsterme gleichsetzen: \(f(x) = g(x)\).</li>
+    <li>Resultierende Gleichung nach \(x\) auflösen → \(x_S\) (es können mehrere Lösungen entstehen).</li>
+    <li>Jedes \(x_S\) in <em>eine</em> der Funktionen einsetzen → \(y_S\).</li>
+    <li>Andere Funktion als Probe verwenden.</li>
+  </ol>
+</div>
+
+
+<!-- ══ 10. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg check-aufg" id="A1">
+  <div class="block-titel">▲ Aufgabe 1 · Funktionswerte berechnen</div>
+  <p>Gegeben: \(f(x) = -3 \cdot x + 5\). Berechne die fehlenden Werte:</p>
+  <div class="check-row">\(f(0) = \) <input id="a1-0" type="text" placeholder="?"> &nbsp;</div>
+  <div class="check-row">\(f(2) = \) <input id="a1-2" type="text" placeholder="?"> &nbsp;</div>
+  <div class="check-row">\(f(-1) = \) <input id="a1-n1" type="text" placeholder="?"> &nbsp;</div>
+  <div class="check-row">\(f(\tfrac{5}{3}) = \) <input id="a1-53" type="text" placeholder="?"> &nbsp;
+    <button onclick="checkA1()">Prüfen</button>
+    <span class="feedback" id="a1-fb"></span>
+  </div>
+  <button class="loesung-toggle" onclick="toggleL('A1L')">▶ Lösung</button>
+  <div class="loesung-body" id="A1L">
+    <p>\(f(0) = -3 \cdot 0 + 5 = 5\), \(f(2) = -3 \cdot 2 + 5 = -1\),<br>
+    \(f(-1) = -3 \cdot (-1) + 5 = 8\), \(f(\tfrac{5}{3}) = -3 \cdot \tfrac{5}{3} + 5 = -5 + 5 = 0\).</p>
+    <p>Beobachtung: \(f(\tfrac{5}{3}) = 0\) — die Stelle \(x = \tfrac{5}{3}\) ist also die Nullstelle.</p>
+  </div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg check-aufg" id="A2">
+  <div class="block-titel">▲ Aufgabe 2 · Definitionsbereich bestimmen</div>
+  <p>Gib den grösstmöglichen reellen Definitionsbereich \(D\) jeder Funktion an.</p>
+  <p>(a) \(f(x) = \dfrac{4}{x - 3}\) &nbsp;&nbsp; (b) \(g(x) = \sqrt{x + 5}\) &nbsp;&nbsp;
+     (c) \(h(x) = \dfrac{1}{\sqrt{x}}\) &nbsp;&nbsp; (d) \(k(x) = x^2 - 7\)</p>
+  <button class="loesung-toggle" onclick="toggleL('A2L')">▶ Lösung</button>
+  <div class="loesung-body" id="A2L">
+    <p>(a) Nenner \(\neq 0\): \(x \neq 3\). \(D = \mathbb{R} \setminus \{3\}\).</p>
+    <p>(b) Radikand \(\geq 0\): \(x + 5 \geq 0 \Longrightarrow x \geq -5\). \(D = [-5, \infty)\).</p>
+    <p>(c) Wurzel-Radikand \(\geq 0\) <em>und</em> Nenner \(\neq 0\): \(x > 0\). \(D = (0, \infty)\).</p>
+    <p>(d) Keine Einschränkung. \(D = \mathbb{R}\).</p>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg" id="A3">
+  <div class="block-titel">▲ Aufgabe 3 · Vertikaltest</div>
+  <p>Welche der folgenden Aussagen sind richtig? Kreuze an.</p>
+  <ul style="line-height:1.8">
+    <li>(a) Jede Gerade in der Ebene ist Graph einer Funktion.</li>
+    <li>(b) Eine senkrechte Gerade \(x = 2\) ist <em>kein</em> Funktionsgraph.</li>
+    <li>(c) Ein Kreis um den Ursprung ist Funktionsgraph (jeder \(x\)-Wert hat einen \(y\)-Wert).</li>
+    <li>(d) Jede Parabel \(y = a \cdot x^2 + b \cdot x + c\) ist Funktionsgraph.</li>
+  </ul>
+  <button class="loesung-toggle" onclick="toggleL('A3L')">▶ Lösung</button>
+  <div class="loesung-body" id="A3L">
+    <p>(a) <strong>Falsch.</strong> Senkrechte Geraden sind keine Funktionen — siehe (b).</p>
+    <p>(b) <strong>Richtig.</strong> Bei \(x = 2\) gibt es unendlich viele \(y\)-Werte, also keine Eindeutigkeit.</p>
+    <p>(c) <strong>Falsch.</strong> Ein Kreis hat zu jedem \(x\) im Innern <em>zwei</em> \(y\)-Werte (oben und unten).
+    Vertikaltest schlägt fehl.</p>
+    <p>(d) <strong>Richtig.</strong> Quadratische Funktionen sind eindeutig.</p>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg check-aufg" id="A4">
+  <div class="block-titel">▲ Aufgabe 4 · Achsenschnittpunkte</div>
+  <p>Gegeben: \(f(x) = -2 \cdot x + 8\). Bestimme:</p>
+  <div class="check-row">y-Achsenabschnitt \(y_0 = \) <input id="a4-y" type="text" placeholder="?"> &nbsp;</div>
+  <div class="check-row">Nullstelle \(x_0 = \) <input id="a4-x" type="text" placeholder="?"> &nbsp;
+    <button onclick="checkA4()">Prüfen</button>
+    <span class="feedback" id="a4-fb"></span>
+  </div>
+  <button class="loesung-toggle" onclick="toggleL('A4L')">▶ Lösung</button>
+  <div class="loesung-body" id="A4L">
+    <p>y-Achsenabschnitt: \(f(0) = -2 \cdot 0 + 8 = 8\). Punkt \((0 \mid 8)\).</p>
+    <p>Nullstelle: \(-2 \cdot x + 8 = 0 \Longrightarrow x = 4\). Punkt \((4 \mid 0)\).</p>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg check-aufg" id="A5">
+  <div class="block-titel">▲ Aufgabe 5 · Schnittpunkt</div>
+  <p>Berechne den Schnittpunkt \(S\) der Funktionsgraphen \(f(x) = x + 2\) und \(g(x) = -2 \cdot x + 8\).</p>
+  <div class="check-row">\(x_S = \) <input id="a5-x" type="text" placeholder="?"> &nbsp;
+    \(y_S = \) <input id="a5-y" type="text" placeholder="?"> &nbsp;
+    <button onclick="checkA5()">Prüfen</button>
+    <span class="feedback" id="a5-fb"></span>
+  </div>
+  <button class="loesung-toggle" onclick="toggleL('A5L')">▶ Lösung</button>
+  <div class="loesung-body" id="A5L">
+    <p>Gleichsetzen: \(x + 2 = -2 \cdot x + 8 \Longrightarrow 3 \cdot x = 6 \Longrightarrow x_S = 2\).</p>
+    <p>\(y_S = f(2) = 2 + 2 = 4\). Probe: \(g(2) = -4 + 8 = 4\) ✓. \(S(2 \mid 4)\).</p>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" id="A6">
+  <div class="block-titel">▲ Aufgabe 6 · Modellierung</div>
+  <p>Ein Tank enthält 200 L Wasser. Pro Minute fliessen 8 L ab.</p>
+  <p>(a) Stelle die Funktion \(V(t)\) (Wassermenge in L, \(t\) in min) auf.<br>
+     (b) Was bedeuten die Achsenschnittpunkte in der Sachsituation?<br>
+     (c) Wie lange ist die Funktion sinnvoll definiert?</p>
+  <button class="loesung-toggle" onclick="toggleL('A6L')">▶ Lösung</button>
+  <div class="loesung-body" id="A6L">
+    <p>(a) \(V(t) = 200 - 8 \cdot t\). Mit \(t\) in min, \(V\) in L.</p>
+    <p>(b) y-Achsenabschnitt \(V(0) = 200\): Anfangsfüllung. Nullstelle \(V(t) = 0 \Longrightarrow t = 25\): nach 25 min ist der Tank leer.</p>
+    <p>(c) Sachlich: \(D = [0\,\text{min}, 25\,\text{min}]\). Mathematisch wäre \(D = \mathbb{R}\),
+    aber für \(t < 0\) und \(t > 25\) macht das Modell physikalisch keinen Sinn (negative Zeit, negative Wassermenge).</p>
+  </div>
+</div>
+
+
+<!-- ══ 11. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Konzept</th><th>Symbol/Schreibweise</th><th>Zentrale Aussage</th></tr></thead>
+  <tbody>
+    <tr><td>Funktion</td>
+        <td>\(f : D \to W,\; x \mapsto f(x)\)</td>
+        <td class="li">jedes \(x\) hat <em>genau ein</em> \(y\)</td></tr>
+    <tr><td>Argument · Wert</td>
+        <td>\(x\) · \(f(x) = y\)</td>
+        <td class="li">unabhängig · abhängig</td></tr>
+    <tr><td>Definitionsbereich</td>
+        <td>\(D\)</td>
+        <td class="li">erlaubte \(x\)-Werte</td></tr>
+    <tr><td>Wertebereich</td>
+        <td>\(W\)</td>
+        <td class="li">tatsächlich auftretende \(y\)</td></tr>
+    <tr><td>Vier Darstellungen</td>
+        <td class="li">verbal · Tabelle · Graph · Term</td>
+        <td class="li">beschreiben dieselbe Funktion, wenn die Darstellung vollständig bzw. eindeutig ist</td></tr>
+    <tr><td>Vertikaltest</td>
+        <td class="li">jede Senkrechte schneidet höchstens einmal</td>
+        <td class="li">geometrisches Funktionskriterium</td></tr>
+    <tr><td>y-Achsenabschnitt</td>
+        <td>\(y_0 = f(0)\)</td>
+        <td class="li">Schnitt mit \(y\)-Achse</td></tr>
+    <tr><td>Nullstelle</td>
+        <td>\(f(x) = 0\)</td>
+        <td class="li">Schnitt mit \(x\)-Achse</td></tr>
+    <tr><td>Schnittpunkt zweier Funktionen</td>
+        <td>\(f(x) = g(x)\)</td>
+        <td class="li">gleichsetzen, dann auflösen</td></tr>
+  </tbody>
+</table>
+
+<div class="merksatz">
+  <strong>Merksatz.</strong> Eine Funktion ordnet jedem Argument <em>genau einen</em> Funktionswert zu.
+  Die Wahl von Definitions- und Wertebereich ist Teil der Funktion — bei Anwendungsaufgaben oft
+  enger als der mathematisch mögliche Bereich.
+</div>
+
+
+<!-- ══ 12. DOWNLOADS ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g3-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g3-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Begriffe auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g3-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+  <a href="../downloads/grundlagen/g3-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g3-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+</div>
+
+
+<!-- ══ 13. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
+<div class="ressourcen-subtitel">🎬 Erklärvideos</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/watch?v=Z4xARW7wLJI" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Funktionsbegriff: Was ist eine Funktion?</div><div class="lk-s">Lehrermarktplatz · eindeutige Zuordnung x ↦ y</div></div></a>
+  <a href="https://www.youtube.com/watch?v=KUpG-11W8Jc" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Funktionen — Übersicht der Funktionstypen</div><div class="lk-s">Mathe by Daniel Jung · Eigenschaften</div></div></a>
+  <a href="https://www.youtube.com/watch?v=r9FeNr2XI2A" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Definitionsbereich, Wertebereich</div><div class="lk-s">Mathe by Daniel Jung · Übersicht</div></div></a>
+</div>
+<div class="ressourcen-subtitel">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g2/g21/funktion.pdf" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Funktionen: Begriffe und Eigenschaften</div><div class="lk-s">PDF mit Übersicht und Beispielen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26409/aufgaben-zur-bestimmung-von-definitionsmengen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Definitionsmengen bestimmen</div><div class="lk-s">Aufgaben mit Schritt-für-Schritt-Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/36045/aufgaben-zum-definitions-und-wertebereich-von-funktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Definitions- &amp; Wertebereich</div><div class="lk-s">Aufgaben mit Lösungen</div></div></a>
+</div>
 
 
 </main>
@@ -106,7 +716,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen · 3.1 Grundlagen</p>
+  <p>Grundlagen Grundlagen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -117,6 +727,454 @@ buildNav({
   kapitelNr:'3.1', kapitelTitel:'Grundlagen',
   prev:{nr:'2.3',titel:'Lineare Gleichungssysteme',url:'g2-3-lineare-gleichungssysteme.html'},
   next:{nr:'3.2',titel:'Lineare Funktionen',url:'g3-2-lineare-funktionen.html'}
+});
+
+/* Einstieg-Slider mit Canvas */
+function einstiegRender() {
+  const t = parseFloat(document.getElementById('einstieg-t').value);
+  const V = 3 * t;
+  document.getElementById('einstieg-t-val').textContent = t;
+  document.getElementById('einstieg-t-out').textContent = t;
+  document.getElementById('einstieg-t-out2').textContent = t;
+  document.getElementById('einstieg-v-out').textContent = V.toFixed(1);
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+  const c = document.getElementById('einstieg-canvas');
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.offsetWidth || 460, H = c.offsetHeight || 200;
+  c.width = W*dpr; c.height = H*dpr;
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  const tMin = 0, tMax = 10, VMin = 0, VMax = 32;
+  const padL = 38, padR = 12, padT = 14, padB = 28;
+  const cx = x => padL + (x - tMin) / (tMax - tMin) * (W - padL - padR);
+  const cy = y => H - padB - (y - VMin) / (VMax - VMin) * (H - padT - padB);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // Gitter
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for (let i = 1; i <= 10; i++) { ctx.beginPath(); ctx.moveTo(cx(i), cy(0)); ctx.lineTo(cx(i), cy(VMax)); ctx.stroke(); }
+  for (let i = 5; i <= 30; i += 5) { ctx.beginPath(); ctx.moveTo(cx(0), cy(i)); ctx.lineTo(cx(tMax), cy(i)); ctx.stroke(); }
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(tMax)+8, cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(0), cy(VMax)-6); ctx.stroke();
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.moveTo(cx(tMax)+8, cy(0)); ctx.lineTo(cx(tMax)+2, cy(0)-4); ctx.lineTo(cx(tMax)+2, cy(0)+4); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(VMax)-6); ctx.lineTo(cx(0)-4, cy(VMax)); ctx.lineTo(cx(0)+4, cy(VMax)); ctx.fill();
+  ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.textAlign = 'right'; ctx.fillText('t [s]', cx(tMax)+8, cy(0)+18);
+  ctx.textAlign = 'left'; ctx.fillText('V [dl]', cx(0)+5, cy(VMax)-2);
+  ctx.font = '11px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
+  ctx.textAlign = 'center';
+  for (let i = 2; i <= 10; i += 2) ctx.fillText(i, cx(i), cy(0)+14);
+  ctx.textAlign = 'right';
+  for (let i = 5; i <= 30; i += 5) ctx.fillText(i, cx(0)-5, cy(i)+4);
+  // Gerade
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(tMax), cy(3*tMax)); ctx.stroke();
+  // Aktueller Punkt
+  ctx.strokeStyle = '#b85a00'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(cx(t), cy(0)); ctx.lineTo(cx(t), cy(V)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(V)); ctx.lineTo(cx(t), cy(V)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#b85a00';
+  ctx.beginPath(); ctx.arc(cx(t), cy(V), 6, 0, 2*Math.PI); ctx.fill();
+  ctx.fillStyle = '#1a1a1a'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('('+t+' | '+V.toFixed(1)+')', cx(t)+8, cy(V)-8);
+}
+document.getElementById('einstieg-t').addEventListener('input', () => { einstiegRender(); glasRender(); });
+
+/* Glas mit dynamischem Fuellstand */
+function glasRender() {
+  const c = document.getElementById('einstieg-glas');
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.offsetWidth || 130, H = c.offsetHeight || 200;
+  c.width = W * dpr; c.height = H * dpr;
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const t = parseFloat(document.getElementById('einstieg-t').value);
+  const V = 3 * t;          // dl
+  const Vmax = 30;          // 30 dl = volles Glas (entspricht t = 10 s)
+  const fill = Math.min(V / Vmax, 1);
+
+  // Glas-Geometrie (leicht konisch, oben offen)
+  const glasMargin = 10;
+  const topY = 14;
+  const botY = H - 18;
+  const topHalfW = (W - 2 * glasMargin) / 2;          // halbe Breite oben
+  const botHalfW = topHalfW * 0.78;                   // halbe Breite unten (konisch)
+  const cxG = W / 2;
+
+  // Wasserfüllung (von unten)
+  const waterTopY = botY - (botY - topY) * fill;
+  // an dieser Höhe interpolierte halbe Breite
+  const ratioFromBot = (botY - waterTopY) / (botY - topY);
+  const waterHalfW = botHalfW + (topHalfW - botHalfW) * ratioFromBot;
+
+  if (fill > 0.001) {
+    // Wasser-Körper (Trapez)
+    ctx.fillStyle = '#7eb6e0';
+    ctx.beginPath();
+    ctx.moveTo(cxG - botHalfW, botY);
+    ctx.lineTo(cxG + botHalfW, botY);
+    ctx.lineTo(cxG + waterHalfW, waterTopY);
+    ctx.lineTo(cxG - waterHalfW, waterTopY);
+    ctx.closePath();
+    ctx.fill();
+    // Wasseroberfläche-Highlight
+    ctx.strokeStyle = '#3d8bbf'; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cxG - waterHalfW, waterTopY);
+    ctx.lineTo(cxG + waterHalfW, waterTopY);
+    ctx.stroke();
+  }
+
+  // Glasrand
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cxG - topHalfW, topY);
+  ctx.lineTo(cxG - botHalfW, botY);
+  ctx.lineTo(cxG + botHalfW, botY);
+  ctx.lineTo(cxG + topHalfW, topY);
+  ctx.stroke();
+  // Glasboden-Ellipse-Andeutung
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.ellipse(cxG, botY, botHalfW, 3, 0, 0, 2 * Math.PI);
+  ctx.stroke();
+
+  // Skalenstriche an der rechten Seite (alle 5 dl)
+  ctx.strokeStyle = '#6b6657'; ctx.lineWidth = 0.8;
+  ctx.fillStyle = '#6b6657'; ctx.font = '9px JetBrains Mono,monospace'; ctx.textAlign = 'left';
+  for (let v = 5; v <= 30; v += 5) {
+    const ratio = v / Vmax;
+    const yMark = botY - (botY - topY) * ratio;
+    const ratioBot = (botY - yMark) / (botY - topY);
+    const xMark = cxG + botHalfW + (topHalfW - botHalfW) * ratioBot;
+    ctx.beginPath(); ctx.moveTo(xMark - 4, yMark); ctx.lineTo(xMark + 1, yMark); ctx.stroke();
+    ctx.fillText(v, xMark + 3, yMark + 3);
+  }
+
+  // Aktuelle Wassermenge als Label oben (falls Platz)
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('V = ' + V.toFixed(1) + ' dl', cxG, H - 4);
+}
+
+/* Mini-Graph für Vier-Darstellungen */
+function darstGraphRender() {
+  const c = document.getElementById('darst-graph');
+  const dpr = window.devicePixelRatio || 1;
+  const Wpx = c.offsetWidth || 170, Hpx = 130;
+  c.width = Wpx*dpr; c.height = Hpx*dpr;
+  c.style.width = Wpx+'px'; c.style.height = Hpx+'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, Wpx, Hpx);
+  const padL = 22, padB = 18, padT = 8, padR = 8;
+  const tMin = 0, tMax = 5, VMin = 0, VMax = 16;
+  const cx = x => padL + (x - tMin) / (tMax - tMin) * (Wpx - padL - padR);
+  const cy = y => Hpx - padB - (y - VMin) / (VMax - VMin) * (Hpx - padT - padB);
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for (let i = 1; i <= 5; i++) { ctx.beginPath(); ctx.moveTo(cx(i), cy(0)); ctx.lineTo(cx(i), cy(VMax)); ctx.stroke(); }
+  for (let i = 4; i <= 16; i += 4) { ctx.beginPath(); ctx.moveTo(cx(0), cy(i)); ctx.lineTo(cx(tMax), cy(i)); ctx.stroke(); }
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(tMax), cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(0), cy(VMax)); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = '9px JetBrains Mono,monospace';
+  ctx.textAlign = 'right'; ctx.fillText('t', cx(tMax), cy(0)+11);
+  ctx.textAlign = 'left'; ctx.fillText('V', cx(0)+3, cy(VMax)+8);
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(5), cy(15)); ctx.stroke();
+  ctx.fillStyle = '#b85a00';
+  for (let i = 0; i <= 4; i++) { ctx.beginPath(); ctx.arc(cx(i), cy(3*i), 2.5, 0, 2*Math.PI); ctx.fill(); }
+}
+
+/* Funktion-Quiz */
+function fqDraw(canvas, kind) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = 160, H = 120;
+  canvas.width = W*dpr; canvas.height = H*dpr;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const padL = 12, padR = 10, padT = 8, padB = 14;
+  const xMin = -3, xMax = 3, yMin = -3, yMax = 3;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => H - padB - (y - yMin) / (yMax - yMin) * (H - padT - padB);
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for (let g = -2; g <= 2; g++) {
+    if (g === 0) continue;
+    ctx.beginPath(); ctx.moveTo(cx(g), cy(yMin)); ctx.lineTo(cx(g), cy(yMax)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx(xMin), cy(g)); ctx.lineTo(cx(xMax), cy(g)); ctx.stroke();
+  }
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(cx(xMin), cy(0)); ctx.lineTo(cx(xMax), cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(yMin)); ctx.lineTo(cx(0), cy(yMax)); ctx.stroke();
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2; ctx.beginPath();
+  if (kind === 'A') {
+    ctx.moveTo(cx(xMin), cy(0.5*xMin + 1));
+    ctx.lineTo(cx(xMax), cy(0.5*xMax + 1));
+    ctx.stroke();
+  } else if (kind === 'B') {
+    let first = true;
+    for (let x = xMin; x <= xMax; x += 0.05) {
+      const y = x*x/2 - 1;
+      if (y < yMin || y > yMax) { first = true; continue; }
+      if (first) { ctx.moveTo(cx(x), cy(y)); first = false; } else ctx.lineTo(cx(x), cy(y));
+    }
+    ctx.stroke();
+  } else if (kind === 'C') {
+    const r = Math.min(cx(2)-cx(0), cy(0)-cy(2));
+    ctx.arc(cx(0), cy(0), r, 0, 2*Math.PI); ctx.stroke();
+  } else if (kind === 'D') {
+    let first = true;
+    for (let y = yMin; y <= yMax; y += 0.05) {
+      const x = y*y/2 - 2;
+      if (x < xMin || x > xMax) { first = true; continue; }
+      if (first) { ctx.moveTo(cx(x), cy(y)); first = false; } else ctx.lineTo(cx(x), cy(y));
+    }
+    ctx.stroke();
+  }
+}
+
+document.querySelectorAll('#fq .fq-karte').forEach(karte => {
+  const canvas = karte.querySelector('canvas');
+  const kind = karte.dataset.id;
+  const richtig = karte.dataset.answer;
+  fqDraw(canvas, kind);
+  karte.querySelectorAll('.fq-buttons button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wahl = btn.dataset.val;
+      const fb = karte.querySelector('.fq-feedback');
+      karte.querySelectorAll('button').forEach(b => b.classList.remove('ok','fehler'));
+      if (wahl === richtig) {
+        btn.classList.add('ok');
+        fb.textContent = '\u2713 Richtig.';
+        fb.style.color = 'var(--gruen, #2d6a3e)';
+      } else {
+        btn.classList.add('fehler');
+        const erkl = {
+          A: 'Eine schiefe Gerade ist immer Funktionsgraph.',
+          B: 'Jede senkrechte Gerade trifft die Parabel hoechstens 1x.',
+          C: 'Bei einem Kreis hat fast jedes x zwei y-Werte.',
+          D: 'Liegende Parabel: bei x=0 zwei y-Werte (\u00B1\u221A2).'
+        }[kind];
+        fb.textContent = '\u2717 Nochmal \u00FCberlegen \u2014 ' + erkl;
+        fb.style.color = 'var(--rot, #a02828)';
+      }
+    });
+  });
+});
+
+/* Schnittpunkt-Beispiel */
+/* Generischer Achsen+Kurven-Plotter
+   cfg = { canvasId, xMin, xMax, yMin, yMax, curves: [{fn, color, label, labelX}], points: [{x,y,label,color}] }
+*/
+function plotChart(cfg) {
+  const c = document.getElementById(cfg.canvasId);
+  if (!c || c.offsetParent === null) return;  // unsichtbar -> später
+  const dpr = window.devicePixelRatio || 1;
+  const Wpx = c.offsetWidth || 460;
+  const Hpx = Math.round(Wpx * 0.72);
+  c.width = Wpx * dpr; c.height = Hpx * dpr;
+  c.style.height = Hpx + 'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  const { xMin, xMax, yMin, yMax } = cfg;
+  const padL = 32, padR = 12, padT = 14, padB = 24;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (Wpx - padL - padR);
+  const cy = y => Hpx - padB - (y - yMin) / (yMax - yMin) * (Hpx - padT - padB);
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, Wpx, Hpx);
+  // Gitter
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for (let g = Math.ceil(xMin); g <= Math.floor(xMax); g++) {
+    if (g === 0) continue;
+    ctx.beginPath(); ctx.moveTo(cx(g), cy(yMin)); ctx.lineTo(cx(g), cy(yMax)); ctx.stroke();
+  }
+  for (let g = Math.ceil(yMin); g <= Math.floor(yMax); g++) {
+    if (g === 0) continue;
+    ctx.beginPath(); ctx.moveTo(cx(xMin), cy(g)); ctx.lineTo(cx(xMax), cy(g)); ctx.stroke();
+  }
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx(xMin), cy(0)); ctx.lineTo(cx(xMax), cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(yMin)); ctx.lineTo(cx(0), cy(yMax)); ctx.stroke();
+  // Tick-Beschriftungen
+  ctx.fillStyle = '#9ca3af'; ctx.font = '10px JetBrains Mono,monospace';
+  ctx.textAlign = 'center';
+  for (let g = Math.ceil(xMin); g <= Math.floor(xMax); g++) { if (g !== 0) ctx.fillText(g, cx(g), cy(0)+12); }
+  ctx.textAlign = 'right';
+  for (let g = Math.ceil(yMin); g <= Math.floor(yMax); g++) { if (g !== 0) ctx.fillText(g, cx(0)-4, cy(g)+3); }
+  // Achsen-Labels
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax)-4, cy(0)-5);
+  ctx.textAlign = 'left'; ctx.fillText('y', cx(0)+5, cy(yMax)+10);
+
+  // Kurven zeichnen
+  (cfg.curves || []).forEach(cv => {
+    ctx.strokeStyle = cv.color; ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    let first = true;
+    const N = 200;
+    const dx = (xMax - xMin) / N;
+    for (let k = 0; k <= N; k++) {
+      const x = xMin + k * dx;
+      const y = cv.fn(x);
+      if (!isFinite(y) || y < yMin - 0.5 || y > yMax + 0.5) { first = true; continue; }
+      if (first) { ctx.moveTo(cx(x), cy(y)); first = false; }
+      else        { ctx.lineTo(cx(x), cy(y)); }
+    }
+    ctx.stroke();
+    if (cv.label) {
+      const lx = (cv.labelX !== undefined) ? cv.labelX : xMax - 0.2;
+      const ly = cv.fn(lx);
+      ctx.fillStyle = cv.color; ctx.font = '10px JetBrains Mono,monospace';
+      ctx.textAlign = 'right';
+      const yPx = (ly >= yMin && ly <= yMax) ? cy(ly) - 6 : cy(yMax) + 14;
+      ctx.fillText(cv.label, cx(lx) - 2, yPx);
+    }
+  });
+
+  // Punkte
+  (cfg.points || []).forEach(p => {
+    ctx.fillStyle = p.color || '#a02828';
+    ctx.beginPath(); ctx.arc(cx(p.x), cy(p.y), 5.5, 0, 2*Math.PI); ctx.fill();
+    if (p.label) {
+      ctx.font = 'bold 11px JetBrains Mono,monospace';
+      ctx.textAlign = (p.labelPos === 'l') ? 'right' : 'left';
+      const dx = (p.labelPos === 'l') ? -8 : 8;
+      const dy = (p.labelPos === 'b') ? 14 : -7;
+      ctx.fillText(p.label, cx(p.x) + dx, cy(p.y) + dy);
+    }
+  });
+}
+
+/* Konfigurationen für die vier Beispiel-Diagramme */
+const PLOTS = {
+  'ach1-canvas': {
+    canvasId: 'ach1-canvas',
+    xMin: -1, xMax: 6, yMin: -8, yMax: 4,
+    curves: [{ fn: x => 2*x - 6, color: '#1a4f8a', label: 'f(x) = 2\u00B7x \u2212 6', labelX: 5 }],
+    points: [
+      { x: 0, y: -6, label: '(0 | \u22126)', color: '#2d6a3e', labelPos: 'l' },
+      { x: 3, y: 0,  label: '(3 | 0)',       color: '#b85a00', labelPos: 'b' }
+    ]
+  },
+  'ach2-canvas': {
+    canvasId: 'ach2-canvas',
+    xMin: -4, xMax: 4, yMin: -6, yMax: 6,
+    curves: [{ fn: x => x*x - 4, color: '#1a4f8a', label: 'g(x) = x\u00B2 \u2212 4', labelX: 3 }],
+    points: [
+      { x: 0,  y: -4, label: '(0 | \u22124)', color: '#2d6a3e', labelPos: 'l' },
+      { x: -2, y: 0,  label: '(\u22122 | 0)', color: '#b85a00', labelPos: 'b' },
+      { x: 2,  y: 0,  label: '(2 | 0)',       color: '#b85a00', labelPos: 'b' }
+    ]
+  },
+  'schn1-canvas': {
+    canvasId: 'schn1-canvas',
+    xMin: -2, xMax: 6, yMin: -5, yMax: 7,
+    curves: [
+      { fn: x => 2*x - 4, color: '#1a4f8a', label: 'f(x) = 2\u00B7x \u2212 4', labelX: 5.5 },
+      { fn: x => -x + 5,  color: '#b85a00', label: 'g(x) = \u2212x + 5',     labelX: -1.5 }
+    ],
+    points: [{ x: 3, y: 2, label: 'S(3 | 2)', color: '#a02828', labelPos: 'r' }]
+  },
+  'schn2-canvas': {
+    canvasId: 'schn2-canvas',
+    xMin: -3, xMax: 4, yMin: -3, yMax: 6,
+    curves: [
+      { fn: x => x + 1,   color: '#1a4f8a', label: 'f(x) = x + 1',    labelX: 3.5 },
+      { fn: x => x*x - 1, color: '#b85a00', label: 'g(x) = x\u00B2 \u2212 1', labelX: -2 }
+    ],
+    points: [
+      { x: 2,  y: 3, label: 'S\u2081(2 | 3)',   color: '#a02828', labelPos: 'r' },
+      { x: -1, y: 0, label: 'S\u2082(\u22121 | 0)', color: '#a02828', labelPos: 'l' }
+    ]
+  }
+};
+
+function renderAllPlots() {
+  Object.keys(PLOTS).forEach(id => plotChart(PLOTS[id]));
+}
+
+/* Tab-Switcher */
+document.querySelectorAll('.bsp-tabs').forEach(tabs => {
+  tabs.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      // Buttons aktualisieren
+      tabs.querySelectorAll('button').forEach(b => b.classList.remove('aktiv'));
+      btn.classList.add('aktiv');
+      // Panels aktualisieren — nur in den nächsten Geschwistern bis zum nächsten h2/Tabs-Container
+      let el = tabs.nextElementSibling;
+      while (el && !el.classList.contains('bsp-tabs') && el.tagName !== 'H2') {
+        if (el.classList.contains('bsp-panel')) {
+          el.classList.toggle('aktiv', el.id === tabId);
+        }
+        el = el.nextElementSibling;
+      }
+      // Plot des nun sichtbaren Panels neu zeichnen (offsetWidth war vorher 0)
+      const cfg = Object.values(PLOTS).find(p => document.getElementById(p.canvasId) &&
+        document.getElementById(tabId) && document.getElementById(tabId).contains(document.getElementById(p.canvasId)));
+      if (cfg) plotChart(cfg);
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+    });
+  });
+});
+
+/* Aufgaben-Pruefungen */
+function close(a, b, eps) { return Math.abs(a - b) < (eps || 0.01); }
+function readNum(id) {
+  const v = document.getElementById(id).value.trim().replace(',', '.').replace(/\u2212/g, '-');
+  if (v === '') return NaN;
+  const f = v.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(-?\d+(?:\.\d+)?)$/);
+  if (f) return parseFloat(f[1]) / parseFloat(f[2]);
+  return parseFloat(v);
+}
+
+function checkA1() {
+  const a = readNum('a1-0'), b = readNum('a1-2'), c = readNum('a1-n1'), d = readNum('a1-53');
+  const okA = close(a, 5), okB = close(b, -1), okC = close(c, 8), okD = close(d, 0, 0.05);
+  const fb = document.getElementById('a1-fb');
+  if (okA && okB && okC && okD) {
+    fb.textContent = '\u2713 Alle vier richtig.'; fb.className = 'feedback ok';
+  } else {
+    const mw = []; if (!okA) mw.push('f(0)'); if (!okB) mw.push('f(2)'); if (!okC) mw.push('f(-1)'); if (!okD) mw.push('f(5/3)');
+    fb.textContent = '\u2717 Nochmal: ' + mw.join(', '); fb.className = 'feedback fehler';
+  }
+}
+
+function checkA4() {
+  const y = readNum('a4-y'), x = readNum('a4-x');
+  const fb = document.getElementById('a4-fb');
+  if (close(y, 8) && close(x, 4)) {
+    fb.textContent = '\u2713 Korrekt.'; fb.className = 'feedback ok';
+  } else {
+    fb.textContent = '\u2717 Tipp: f(0) f\u00FCr y, dann f(x)=0 l\u00F6sen.'; fb.className = 'feedback fehler';
+  }
+}
+
+function checkA5() {
+  const x = readNum('a5-x'), y = readNum('a5-y');
+  const fb = document.getElementById('a5-fb');
+  if (close(x, 2) && close(y, 4)) {
+    fb.textContent = '\u2713 S(2 | 4) \u2014 korrekt.'; fb.className = 'feedback ok';
+  } else {
+    fb.textContent = '\u2717 Gleichsetzen: x + 2 = -2x + 8.'; fb.className = 'feedback fehler';
+  }
+}
+
+window.addEventListener('load', () => {
+  einstiegRender();
+  glasRender();
+  darstGraphRender();
+  renderAllPlots();
+});
+window.addEventListener('resize', () => {
+  einstiegRender();
+  glasRender();
+  darstGraphRender();
+  renderAllPlots();
 });
 </script>
 </body>

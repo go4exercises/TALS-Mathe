@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anwendungsaufgaben · Quadratische Funktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  .aufg-rahmen {
+    border: 1pt solid var(--linie);
+    border-radius: 4px;
+    padding: 4mm;
+    margin: 3mm 0;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .aufg-rahmen .aufg-kopf { margin-bottom: 2mm; align-items: baseline; }
+  .schwierig {
+    font-family: var(--mono);
+    font-size: 8pt;
+    color: var(--tinte-2);
+    margin-left: auto;
+    letter-spacing: 0.5px;
+  }
+  .schwierig .punkt { color: var(--orange); font-size: 9pt; }
+  .schwierig .punkt-leer { color: var(--linie); font-size: 9pt; }
+  .bereich-tag {
+    font-family: var(--mono);
+    font-size: 7.5pt;
+    color: var(--blau);
+    background: var(--blau-hell);
+    padding: 0.5mm 2mm;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-left: 3mm;
+  }
+  .lin-mehr { margin-bottom: 2mm; }
+  .lin-mehr .lin { height: 7mm; }
+  .skizze-wrap {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 4mm;
+    align-items: start;
+    margin: 2mm 0;
+  }
+  .skizze-wrap .skizze {
+    border: 1pt dashed var(--linie);
+    background: var(--papier);
+    border-radius: 3px;
+    padding: 2mm;
+    text-align: center;
+  }
+  .skizze-wrap .skizze-titel {
+    font-family: var(--mono);
+    font-size: 7.5pt;
+    color: var(--tinte-2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5mm;
+  }
+  .uebersicht {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.2pt;
+    margin: 3mm 0 5mm;
+  }
+  .uebersicht th, .uebersicht td {
+    border: 1px solid var(--linie);
+    padding: 1.4mm 2.5mm;
+    text-align: left;
+  }
+  .uebersicht th {
+    background: var(--papier-2);
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 9pt;
+  }
+  .uebersicht td.nr { text-align: center; font-family: var(--mono); width: 10mm; }
+  .uebersicht td.s  { text-align: center; font-family: var(--mono); width: 18mm; color: var(--orange); letter-spacing: 1px; }
+  .inline-skizze svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script src="../../diagram.js" defer></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g3-3-quadratische-funktionen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Anwendungsaufgaben · A4</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · Quadratische Funktionen</div>
+    <h1>Technische Anwendungen</h1>
+  </header>
+
+  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Die Aufgaben stammen aus verschiedenen technischen Bereichen und sind nach zunehmendem
+    Schwierigkeitsgrad geordnet. Pro Aufgabe ist eine Seite mit Skizze und Lösungsfläche
+    reserviert. Die Musterlösungen folgen am Ende des Dokuments.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead>
+      <tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="nr">1</td>  <td>Mechanik</td>          <td>Freier Fall</td>                 <td class="s">●●●</td></tr>
+      <tr><td class="nr">2</td>  <td>Mechanik</td>          <td>Wurfparabel</td>                 <td class="s">●●●</td></tr>
+      <tr><td class="nr">3</td>  <td>Fahrdynamik</td>       <td>Bremsweg</td>                    <td class="s">●●●</td></tr>
+      <tr><td class="nr">4</td>  <td>Bauwesen</td>          <td>Bogenbrücke</td>                 <td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td>  <td>Wirtschaft</td>        <td>Umsatzmaximierung</td>           <td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td>  <td>Wirtschaft</td>        <td>Gewinnoptimum</td>               <td class="s">●●●</td></tr>
+      <tr><td class="nr">7</td>  <td>Geometrie</td>         <td>Maximale Rechteckfläche</td>     <td class="s">●●●</td></tr>
+      <tr><td class="nr">8</td>  <td>Optik / Antenne</td>   <td>Parabolspiegel</td>              <td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ════════════════════════════ AUFGABEN ════════════════════════════ -->
+
+  <!-- AUFGABE 1 — Freier Fall -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">1</span>
+      <span class="aufg-titel">Freier Fall</span>
+      <span class="bereich-tag">Mechanik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div class="skizze-wrap">
+      <div>
+        <p>Aus einer Höhe von \( h_0 = 45\;\text{m} \) wird ein Stein fallengelassen. Mit der
+        Erdbeschleunigung \( g = 9{,}81\;\text{m/s}^2 \) gilt für die Höhe \(h\) (in m) zur
+        Zeit \(t\) (in s):</p>
+        \[ h(t) = h_0 - \tfrac{1}{2} \cdot g \cdot t^2 \]
+        <p>(a) Stelle die konkrete Funktionsgleichung auf.</p>
+        <p>(b) Wann erreicht der Stein den Boden?</p>
+        <p>(c) Welche Höhe hat der Stein nach \( t = 2\;\text{s} \)?</p>
+      </div>
+      <div class="skizze">
+        <div class="skizze-titel">Situationsskizze</div>
+        <div class="inline-skizze">
+          <svg viewBox="0 0 140 110" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mono);font-size:8pt">
+            <line x1="20" y1="10" x2="20" y2="100" stroke="#1a1a1a" stroke-width="0.8"/>
+            <line x1="15" y1="100" x2="125" y2="100" stroke="#1a1a1a" stroke-width="1"/>
+            <text x="130" y="103" font-size="7.5">Boden</text>
+            <line x1="18" y1="15" x2="22" y2="15" stroke="#1a4f8a" stroke-width="1.5"/>
+            <text x="28" y="18" font-size="8" fill="#1a4f8a">h₀ = 45 m</text>
+            <circle cx="40" cy="28" r="3" fill="#b85a00" stroke="#1a1a1a" stroke-width="0.6"/>
+            <polygon points="40,38 37,32 43,32" fill="#b85a00"/>
+            <line x1="40" y1="40" x2="40" y2="78" stroke="#b85a00" stroke-width="0.8" stroke-dasharray="2 2"/>
+            <text x="48" y="60" font-size="8" fill="#b85a00">g</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 2 — Wurfparabel -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">2</span>
+      <span class="aufg-titel">Wurfparabel</span>
+      <span class="bereich-tag">Mechanik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div class="skizze-wrap">
+      <div>
+        <p>Ein Ball wird von einer Klippe waagerecht geworfen. Seine Flugbahn lässt sich modellieren durch</p>
+        \[ h(x) = -0{,}05 \cdot x^2 + 20 \]
+        <p>wobei \(x\) die horizontale Distanz und \(h\) die Höhe (beide in m) bezeichnen.</p>
+        <p>(a) Aus welcher Höhe wurde der Ball geworfen?</p>
+        <p>(b) Wie weit landet der Ball vom Klippenfuss entfernt?</p>
+        <p>(c) Welche Höhe hat der Ball nach 10 m horizontaler Distanz?</p>
+      </div>
+      <div class="skizze">
+        <div class="skizze-titel">Situationsskizze</div>
+        <div class="inline-skizze">
+          <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mono);font-size:8pt">
+            <rect x="10" y="20" width="20" height="70" fill="#d8d2c4" stroke="#1a1a1a" stroke-width="0.7"/>
+            <line x1="10" y1="90" x2="130" y2="90" stroke="#1a1a1a" stroke-width="1"/>
+            <circle cx="32" cy="22" r="2.5" fill="#b85a00"/>
+            <path d="M 32 22 Q 70 22 95 90" stroke="#b85a00" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+            <text x="48" y="18" font-size="8" fill="#1a4f8a">h₀ = 20 m</text>
+            <line x1="32" y1="92" x2="95" y2="92" stroke="#1a1a1a" stroke-width="0.6"/>
+            <text x="63" y="100" text-anchor="middle" font-size="7.5" fill="#1a1a1a">Wurfweite</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 3 — Bremsweg -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">3</span>
+      <span class="aufg-titel">Bremsweg</span>
+      <span class="bereich-tag">Fahrdynamik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div class="skizze-wrap">
+      <div>
+        <p>Der Bremsweg \(s\) (in m) eines PKW in Abhängigkeit der Geschwindigkeit \(v\) (in km/h) wird
+        durch die Faustformel</p>
+        \[ s(v) = \left(\frac{v}{10}\right)^2 \quad = \quad \frac{v^2}{100} \]
+        <p>angenähert.</p>
+        <p>(a) Wie lang ist der Bremsweg bei \( v = 50\;\text{km/h} \) und bei \( v = 100\;\text{km/h} \)?</p>
+        <p>(b) Um welchen Faktor verlängert sich der Bremsweg, wenn die Geschwindigkeit verdoppelt wird?</p>
+        <p>(c) Bei welcher Geschwindigkeit beträgt der Bremsweg 36 m?</p>
+      </div>
+      <div class="skizze">
+        <div class="skizze-titel">Situationsskizze</div>
+        <div class="inline-skizze">
+          <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mono);font-size:8pt">
+            <line x1="10" y1="65" x2="130" y2="65" stroke="#1a1a1a" stroke-width="1"/>
+            <rect x="14" y="50" width="20" height="12" fill="#b85a00" stroke="#1a1a1a" stroke-width="0.6" rx="1.5"/>
+            <circle cx="18" cy="64" r="2" fill="#1a1a1a"/>
+            <circle cx="30" cy="64" r="2" fill="#1a1a1a"/>
+            <text x="24" y="44" text-anchor="middle" font-size="8" fill="#b85a00">v</text>
+            <polygon points="34,56 44,56 44,53 50,57 44,61 44,58 34,58" fill="#b85a00"/>
+            <line x1="38" y1="72" x2="115" y2="72" stroke="#a02828" stroke-width="0.8" stroke-dasharray="3 2"/>
+            <text x="70" y="84" text-anchor="middle" font-size="8" fill="#a02828">s (Bremsweg)</text>
+            <line x1="115" y1="60" x2="115" y2="70" stroke="#a02828" stroke-width="1.2"/>
+            <text x="118" y="58" font-size="8" fill="#a02828">Halt</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 4 — Bogenbrücke -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">4</span>
+      <span class="aufg-titel">Bogenbrücke</span>
+      <span class="bereich-tag">Bauwesen</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div class="skizze-wrap">
+      <div>
+        <p>Eine Bogenbrücke überspannt einen Fluss. Der Bogen lässt sich durch eine Parabel beschreiben.
+        Der Bogen ist 30 m breit (Spannweite) und in der Mitte 6 m hoch.</p>
+        <p>(a) Lege ein Koordinatensystem so, dass die \(x\)-Achse durch die beiden Auflager und der
+        Scheitel auf der \(y\)-Achse liegt. Stelle die Funktionsgleichung in Scheitelform auf.</p>
+        <p>(b) Welche Durchfahrtshöhe hat ein Schiff, das in einem Abstand von 5 m von der Brückenmitte fährt?</p>
+        <p>(c) Bei welchem horizontalen Abstand zur Brückenmitte beträgt die Höhe nur noch 3 m?</p>
+      </div>
+      <div class="skizze">
+        <div class="skizze-titel">Situationsskizze</div>
+        <div class="inline-skizze">
+          <svg viewBox="0 0 140 110" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mono);font-size:8pt">
+            <line x1="15" y1="85" x2="125" y2="85" stroke="#1a1a1a" stroke-width="1"/>
+            <path d="M 25 85 Q 70 15 115 85" stroke="#1a4f8a" stroke-width="1.6" fill="none"/>
+            <line x1="25" y1="83" x2="25" y2="87" stroke="#1a1a1a" stroke-width="1"/>
+            <line x1="115" y1="83" x2="115" y2="87" stroke="#1a1a1a" stroke-width="1"/>
+            <line x1="25" y1="92" x2="115" y2="92" stroke="#1a1a1a" stroke-width="0.6"/>
+            <text x="70" y="100" text-anchor="middle" font-size="8" fill="#1a1a1a">30 m</text>
+            <line x1="70" y1="40" x2="70" y2="85" stroke="#a02828" stroke-width="0.8" stroke-dasharray="2 2"/>
+            <text x="56" y="65" text-anchor="end" font-size="8" fill="#a02828">6 m</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 5 — Umsatzmaximierung -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">5</span>
+      <span class="aufg-titel">Umsatzmaximierung</span>
+      <span class="bereich-tag">Wirtschaft</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div class="skizze-wrap">
+      <div>
+        <p>Eine Marktforschungsstudie eines Herstellers ergibt folgenden Zusammenhang zwischen Preis \(p\)
+        (in CHF) und Absatzmenge \(x\) (in Stk pro Monat):</p>
+        \[ x(p) = 800 - 20 \cdot p \]
+        <p>(a) Stelle die Umsatzfunktion \( U(p) = p \cdot x(p) \) auf.</p>
+        <p>(b) Bei welchem Preis ist der Umsatz maximal? Wie hoch ist der maximale Umsatz?</p>
+        <p>(c) Bei welchen Preisen ist der Umsatz gleich Null? Interpretiere ökonomisch.</p>
+      </div>
+      <div class="skizze">
+        <div class="skizze-titel">Absatzfunktion</div>
+        <div class="inline-skizze">
+          <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mono);font-size:8pt">
+            <line x1="20" y1="85" x2="125" y2="85" stroke="#1a1a1a" stroke-width="0.9"/>
+            <line x1="20" y1="10" x2="20" y2="90" stroke="#1a1a1a" stroke-width="0.9"/>
+            <polygon points="125,85 119,82 119,88" fill="#1a1a1a"/>
+            <polygon points="20,10 17,16 23,16" fill="#1a1a1a"/>
+            <text x="129" y="89" font-size="8" fill="#1a1a1a">p</text>
+            <text x="14" y="14" font-size="8" fill="#1a1a1a">x</text>
+            <line x1="22" y1="20" x2="115" y2="85" stroke="#1a4f8a" stroke-width="1.4"/>
+            <text x="80" y="50" font-size="8" fill="#1a4f8a">x(p)</text>
+            <text x="22" y="98" font-size="7" text-anchor="start">0</text>
+            <text x="115" y="98" font-size="7" text-anchor="middle">40</text>
+            <text x="14" y="22" font-size="7" text-anchor="end">800</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 6 — Gewinnoptimum -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">6</span>
+      <span class="aufg-titel">Gewinnoptimum</span>
+      <span class="bereich-tag">Wirtschaft</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div class="skizze-wrap">
+      <div>
+        <p>Die Gewinnfunktion eines Kleinbetriebs in Abhängigkeit der produzierten Menge \(x\)
+        (in Stk pro Tag) lautet</p>
+        \[ G(x) = -0{,}5 \cdot x^2 + 40 \cdot x - 200 \]
+        <p>(\(G\) in CHF).</p>
+        <p>(a) Bei welcher Produktionsmenge ist der Gewinn maximal? Wie hoch ist der Maximalgewinn?</p>
+        <p>(b) Bei welchen Produktionsmengen erwirtschaftet der Betrieb Gewinn (\(G > 0\))?
+        Bestimme die Gewinnschwelle und die Gewinngrenze.</p>
+        <p>(c) Wie hoch sind die Fixkosten?</p>
+      </div>
+      <div class="skizze">
+        <div class="skizze-titel">Gewinnverlauf</div>
+        <div class="inline-skizze">
+          <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mono);font-size:8pt">
+            <line x1="20" y1="80" x2="130" y2="80" stroke="#1a1a1a" stroke-width="0.9"/>
+            <line x1="20" y1="10" x2="20" y2="95" stroke="#1a1a1a" stroke-width="0.9"/>
+            <polygon points="130,80 124,77 124,83" fill="#1a1a1a"/>
+            <polygon points="20,10 17,16 23,16" fill="#1a1a1a"/>
+            <text x="133" y="83" font-size="8">x</text>
+            <text x="14" y="14" font-size="8">G</text>
+            <path d="M 20 90 Q 75 0 130 90" stroke="#2d6a3e" stroke-width="1.5" fill="none"/>
+            <line x1="75" y1="20" x2="75" y2="80" stroke="#a02828" stroke-width="0.8" stroke-dasharray="2 2"/>
+            <text x="78" y="30" font-size="7" fill="#a02828">G_max</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 7 — Maximale Rechteckfläche -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">7</span>
+      <span class="aufg-titel">Maximale Rechteckfläche</span>
+      <span class="bereich-tag">Geometrie</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div class="skizze-wrap">
+      <div>
+        <p>Ein rechteckiger Garten soll an einer Hauswand mit einem 40 m langen Zaun eingezäunt werden
+        (drei Seiten Zaun, eine Seite Hauswand).</p>
+        <p>(a) Bezeichne mit \(x\) die Breite (senkrecht zur Hauswand). Drücke die Länge und die Fläche
+        \(A(x)\) als Funktion von \(x\) aus.</p>
+        <p>(b) Für welche Breite \(x\) wird die Fläche maximal? Wie gross ist die Maximalfläche?</p>
+      </div>
+      <div class="skizze">
+        <div class="skizze-titel">Situationsskizze</div>
+        <div class="inline-skizze">
+          <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mono);font-size:8pt">
+            <line x1="15" y1="20" x2="125" y2="20" stroke="#1a1a1a" stroke-width="1.6"/>
+            <pattern id="hatch" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="5" stroke="#1a1a1a" stroke-width="0.4"/>
+            </pattern>
+            <rect x="15" y="14" width="110" height="6" fill="url(#hatch)"/>
+            <text x="70" y="11" text-anchor="middle" font-size="7.5" fill="#1a1a1a">Hauswand</text>
+            <line x1="35" y1="20" x2="35" y2="80" stroke="#1a4f8a" stroke-width="1.5"/>
+            <line x1="105" y1="20" x2="105" y2="80" stroke="#1a4f8a" stroke-width="1.5"/>
+            <line x1="35" y1="80" x2="105" y2="80" stroke="#1a4f8a" stroke-width="1.5"/>
+            <text x="22" y="55" font-size="8" fill="#1a4f8a">x</text>
+            <text x="115" y="55" font-size="8" fill="#1a4f8a">x</text>
+            <text x="70" y="92" text-anchor="middle" font-size="8" fill="#1a4f8a">L</text>
+            <text x="70" y="50" text-anchor="middle" font-size="8" fill="#b85a00">A</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- AUFGABE 8 — Parabolspiegel -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">8</span>
+      <span class="aufg-titel">Parabolspiegel</span>
+      <span class="bereich-tag">Optik / Antenne</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div class="skizze-wrap">
+      <div>
+        <p>Eine Parabolantenne hat einen Durchmesser von 1{,}20 m und eine Tiefe von 15 cm in der Mitte.
+        Der Querschnitt durch die Mitte ist parabelförmig.</p>
+        <p>(a) Lege das Koordinatensystem so, dass der Scheitelpunkt der Parabel im Ursprung liegt
+        und die Parabel nach oben offen ist. Stelle die Funktionsgleichung auf.</p>
+        <p>(b) Bestimme die Höhe der Parabel \(h\) bei einem Abstand von 0{,}30 m vom Scheitel.</p>
+        <p>(c) Wie tief müsste die Antenne sein, damit ein 1 m breiter Querschnitt eine Tiefe von
+        20 cm hätte (gleicher Streckungsfaktor \(a\))?</p>
+      </div>
+      <div class="skizze">
+        <div class="skizze-titel">Querschnitt</div>
+        <div class="inline-skizze">
+          <svg viewBox="0 0 140 100" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mono);font-size:8pt">
+            <path d="M 20 25 Q 70 90 120 25" stroke="#1a4f8a" stroke-width="1.6" fill="none"/>
+            <line x1="15" y1="25" x2="125" y2="25" stroke="#1a1a1a" stroke-width="0.5" stroke-dasharray="3 2"/>
+            <line x1="20" y1="22" x2="20" y2="28" stroke="#1a1a1a" stroke-width="1"/>
+            <line x1="120" y1="22" x2="120" y2="28" stroke="#1a1a1a" stroke-width="1"/>
+            <text x="70" y="20" text-anchor="middle" font-size="8">1.20 m</text>
+            <line x1="70" y1="60" x2="70" y2="25" stroke="#a02828" stroke-width="0.8" stroke-dasharray="2 2"/>
+            <text x="74" y="48" font-size="8" fill="#a02828">15 cm</text>
+            <circle cx="70" cy="60" r="1.6" fill="#a02828"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr">
+      <div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════ LÖSUNGEN ════════════════════════════ -->
+  <div class="neue-seite"></div>
+
+  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>
+
+  <!-- LÖSUNG 1 -->
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 1 — Freier Fall</div>
+    <p>(a) Mit \( h_0 = 45 \) und \( g = 9{,}81\;\text{m/s}^2 \):</p>
+    \[ h(t) = 45 - 4{,}905 \cdot t^2 \]
+    <p>(b) Bodenkontakt: \( h(t) = 0 \).</p>
+    \[ 45 = 4{,}905 \cdot t^2 \;\Longrightarrow\; t^2 = \tfrac{45}{4{,}905} \approx 9{,}174 \;\Longrightarrow\; t \approx 3{,}03\;\text{s} \]
+    <p>(c) \( h(2) = 45 - 4{,}905 \cdot 4 = 45 - 19{,}62 = 25{,}38\;\text{m} \).</p>
+    <div data-diagram="l1" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <!-- LÖSUNG 2 -->
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 2 — Wurfparabel</div>
+    <p>(a) Wurfhöhe = \( h(0) = 20\;\text{m} \).</p>
+    <p>(b) Aufschlag: \( h(x) = 0 \).</p>
+    \[ -0{,}05 \cdot x^2 + 20 = 0 \;\Longrightarrow\; x^2 = 400 \;\Longrightarrow\; x = 20\;\text{m} \]
+    <p>(negative Lösung entfällt physikalisch).</p>
+    <p>(c) \( h(10) = -0{,}05 \cdot 100 + 20 = -5 + 20 = 15\;\text{m} \).</p>
+    <div data-diagram="l2" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <!-- LÖSUNG 3 -->
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 3 — Bremsweg</div>
+    <p>(a) \( s(50) = \tfrac{2500}{100} = 25\;\text{m} \), \( s(100) = \tfrac{10\,000}{100} = 100\;\text{m} \).</p>
+    <p>(b) Verdoppelung der Geschwindigkeit \(\Longrightarrow\) Vervierfachung des Bremsweges
+    (\( 100/25 = 4 \)). Quadratischer Zusammenhang!</p>
+    <p>(c) \( 36 = \tfrac{v^2}{100} \;\Longrightarrow\; v^2 = 3600 \;\Longrightarrow\; v = 60\;\text{km/h} \).</p>
+    <div data-diagram="l3" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <!-- LÖSUNG 4 -->
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 4 — Bogenbrücke</div>
+    <p>(a) Scheitel \( S(0 \mid 6) \), nach unten offen, Auflager bei \( x = \pm 15 \).
+    Ansatz Scheitelform: \( h(x) = a \cdot x^2 + 6 \).</p>
+    <p>Punkt \( (15 \mid 0) \) einsetzen: \( 0 = a \cdot 225 + 6 \;\Longrightarrow\; a = -\tfrac{6}{225} = -\tfrac{2}{75} \).</p>
+    \[ h(x) = -\tfrac{2}{75} \cdot x^2 + 6 \]
+    <p>(b) \( h(5) = -\tfrac{2}{75} \cdot 25 + 6 = -\tfrac{2}{3} + 6 = \tfrac{16}{3} \approx 5{,}33\;\text{m} \).</p>
+    <p>(c) \( 3 = -\tfrac{2}{75} \cdot x^2 + 6 \;\Longrightarrow\; x^2 = \tfrac{75 \cdot 3}{2} = 112{,}5 \).</p>
+    <p>\( x \approx \pm 10{,}61\;\text{m} \). Abstand zur Mitte ca. <strong>10{,}6 m</strong>.</p>
+    <div data-diagram="l4" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <!-- LÖSUNG 5 -->
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 5 — Umsatzmaximierung</div>
+    <p>(a) \( U(p) = p \cdot x(p) = p \cdot (800 - 20 \cdot p) = -20 \cdot p^2 + 800 \cdot p \).</p>
+    <p>(b) Scheitel der nach unten offenen Parabel:</p>
+    \[ p^* = -\frac{800}{2 \cdot (-20)} = 20\;\text{CHF} \]
+    \[ U_{\max} = U(20) = -20 \cdot 400 + 800 \cdot 20 = 8000\;\text{CHF} \]
+    <p>(c) \( U(p) = 0 \;\Longleftrightarrow\; p \cdot (800 - 20 \cdot p) = 0 \;\Longrightarrow\; p = 0 \) oder \( p = 40 \).
+    Bei \(p = 0\): kostenlos abgegeben (keine Einnahmen). Bei \(p = 40\): zu teuer, niemand kauft (\(x = 0\)).</p>
+    <div data-diagram="l5" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <!-- LÖSUNG 6 -->
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 6 — Gewinnoptimum</div>
+    <p>(a) Scheitelformel: \( x^* = -\dfrac{40}{2 \cdot (-0{,}5)} = 40 \). \( G(40) = -0{,}5 \cdot 1600 + 40 \cdot 40 - 200 = -800 + 1600 - 200 = 600 \).</p>
+    <p>Maximaler Gewinn: \( G_{\max} = 600\;\text{CHF} \) bei \( x^* = 40 \) Stk/Tag.</p>
+    <p>(b) Nullstellen mit Mitternachtsformel (\(a=-0{,}5\), \(b=40\), \(c=-200\)):</p>
+    \[ x_{1,2} = \frac{-40 \pm \sqrt{1600 - 400}}{-1} = \frac{-40 \pm \sqrt{1200}}{-1} \]
+    <p>\( \sqrt{1200} \approx 34{,}64 \). \( x_1 \approx 5{,}36 \), \( x_2 \approx 74{,}64 \).</p>
+    <p>Gewinn ab ca. <strong>6 Stk/Tag</strong> (Gewinnschwelle), bis ca. <strong>74 Stk/Tag</strong> (Gewinngrenze).</p>
+    <p>(c) Fixkosten = \( -G(0) = -(-200) = 200\;\text{CHF} \) (bei \(x=0\) entsteht ein Verlust gleich den Fixkosten).</p>
+    <div data-diagram="l6" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <!-- LÖSUNG 7 -->
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 7 — Maximale Rechteckfläche</div>
+    <p>(a) Zaun: \( 2 \cdot x + L = 40 \;\Longrightarrow\; L = 40 - 2 \cdot x \).</p>
+    \[ A(x) = x \cdot L = x \cdot (40 - 2 \cdot x) = -2 \cdot x^2 + 40 \cdot x \]
+    <p>Sinnvoller Bereich: \( 0 < x < 20 \).</p>
+    <p>(b) Scheitel: \( x^* = -\dfrac{40}{2 \cdot (-2)} = 10 \).</p>
+    <p>\( A(10) = -2 \cdot 100 + 400 = 200\;\text{m}^2 \), \( L = 40 - 20 = 20\;\text{m} \).</p>
+    <p><strong>Optimum:</strong> Breite 10 m, Länge 20 m, Fläche \( 200\;\text{m}^2 \).</p>
+    <div data-diagram="l7" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <!-- LÖSUNG 8 -->
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 8 — Parabolspiegel</div>
+    <p>(a) Scheitel im Ursprung, nach oben offen \(\Longrightarrow\) Ansatz \( y = a \cdot x^2 \).</p>
+    <p>Randpunkt: bei \( x = 0{,}60\;\text{m} \) (= halber Durchmesser) ist \( y = 0{,}15\;\text{m} \).</p>
+    \[ 0{,}15 = a \cdot 0{,}36 \;\Longrightarrow\; a = \frac{0{,}15}{0{,}36} = \frac{5}{12} \approx 0{,}4167 \]
+    \[ y = \tfrac{5}{12} \cdot x^2 \]
+    <p>(b) \( y(0{,}30) = \tfrac{5}{12} \cdot 0{,}09 = 0{,}0375\;\text{m} = 3{,}75\;\text{cm} \).</p>
+    <p>(c) Mit gleichem \(a = \tfrac{5}{12}\) und Breite 1 m, also Rand bei \( x = 0{,}5\;\text{m} \):</p>
+    \[ y(0{,}5) = \tfrac{5}{12} \cdot 0{,}25 \approx 0{,}1042\;\text{m} \approx 10{,}4\;\text{cm} \]
+    <p>Eine 20 cm tiefe, 1 m breite Antenne hätte einen <strong>anderen</strong> Streckungsfaktor —
+    die Bedingung „gleiches \(a\)" und „20 cm Tiefe bei 1 m Breite" widersprechen sich. Mit \(a = \tfrac{5}{12}\)
+    ergibt sich nur 10{,}4 cm Tiefe. Die geforderten 20 cm wären nur mit \( a = 0{,}8 \) möglich (steilere Schale).</p>
+    <div data-diagram="l8" style="margin:2mm auto;max-width:130mm"></div>
+  </div>
+
+  <!-- Plausibilitäts-Box -->
+  <div class="block block-fehler" style="margin-top:5mm">
+    <div class="block-titel">⚠ Häufige Schülerfehler</div>
+    <ul style="margin-top:1mm">
+      <li>Vorzeichen von \(g\) im freien Fall (A1): \(h\) wird kleiner, also Minuszeichen vor \(\tfrac{1}{2}gt^2\)</li>
+      <li>Negative Lösung der quadratischen Gleichung physikalisch verworfen (A1, A2, A4)</li>
+      <li>Verdopplung der Geschwindigkeit verlängert Bremsweg um Faktor 4 — nicht 2 (A3)</li>
+      <li>Bei Optimierung Zielfunktion immer als quadratische Funktion einer einzigen Variablen schreiben (A5–A7)</li>
+      <li>Bei Definitionsbereich-Einschränkungen aufpassen: in A6 muss \(x \geq 0\) sein, in A7 zusätzlich \(L &gt; 0\) ⇒ \(x &lt; 20\)</li>
+      <li>Fixkosten = Gewinnverlust bei \(x = 0\) (A6c): \(G(0) = -200\;\text{CHF} \Rightarrow K_{\mathrm{fix}} = 200\)</li>
+    </ul>
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Grundlagen Quadratische Funktionen</span>
+    <span>Technische Anwendungen</span>
+  </footer>
+
+</div>
+
+<!-- Diagramm-Konfigurationen -->
+<script>
+window.TalsDiagrams = {
+  // Lösung 1 — Freier Fall: t[s] vs h[m]
+  l1: {
+    xRange: [0, 3.5], yRange: [0, 50], xTick: 0.5, yTick: 10,
+    xLabel: 't [s]', yLabel: 'h [m]',
+    width: 460, height: 280,
+    curves: [{ fn: t => 45 - 4.905 * t * t, xFrom: 0, xTo: Math.sqrt(45/4.905), color: '#1a4f8a', label: 'h(t)' }],
+    markers: [
+      { x: 2,            y: 25.38, label: '(c) 25,4 m', color: '#b85a00' },
+      { x: 3.03, y: 0,    label: '(b) 3,03 s', color: '#a02828' }
+    ]
+  },
+  // Lösung 2 — Wurfparabel: x[m] vs h[m]
+  l2: {
+    xRange: [0, 22], yRange: [0, 22], xTick: 4, yTick: 4,
+    xLabel: 'x [m]', yLabel: 'h [m]',
+    width: 460, height: 290,
+    curves: [{ fn: x => -0.05 * x * x + 20, xFrom: 0, xTo: 20, color: '#1a4f8a', label: 'h(x)' }],
+    markers: [
+      { x: 0,  y: 20, label: 'h₀ = 20',   color: '#2d6a3e' },
+      { x: 10, y: 15, label: '(c) 15 m',  color: '#b85a00' },
+      { x: 20, y: 0,  label: '(b) 20 m',  color: '#a02828' }
+    ]
+  },
+  // Lösung 3 — Bremsweg: v[km/h] vs s[m]
+  l3: {
+    xRange: [0, 130], yRange: [0, 180], xTick: 20, yTick: 30,
+    xLabel: 'v [km/h]', yLabel: 's [m]',
+    width: 460, height: 280,
+    curves: [{ fn: v => v * v / 100, xFrom: 0, xTo: 130, color: '#1a4f8a', label: 's(v)' }],
+    markers: [
+      { x: 50,  y: 25,  label: '50 → 25',   color: '#2d6a3e' },
+      { x: 100, y: 100, label: '100 → 100', color: '#b85a00' },
+      { x: 60,  y: 36,  label: '(c) 60', color: '#a02828' }
+    ]
+  },
+  // Lösung 4 — Bogenbrücke: x[m] vs h[m] — symmetrisch um 0
+  l4: {
+    xRange: [-18, 18], yRange: [0, 8], xTick: 3, yTick: 1,
+    xLabel: 'x [m]', yLabel: 'h [m]',
+    width: 480, height: 250,
+    curves: [{ fn: x => -2/75 * x * x + 6, xFrom: -15, xTo: 15, color: '#1a4f8a', label: 'h(x)' }],
+    markers: [
+      { x: 0,  y: 6,    label: 'S(0 | 6)',     color: '#a02828' },
+      { x: 5,  y: 16/3, label: '(b) 5,33 m',   color: '#b85a00' },
+      { x: 10.61, y: 3, label: '(c) ±10,6 m',  color: '#2d6a3e' }
+    ]
+  },
+  // Lösung 5 — Umsatz: p[CHF] vs U[CHF]
+  l5: {
+    xRange: [0, 45], yRange: [0, 9000], xTick: 5, yTick: 1500,
+    xLabel: 'p [CHF]', yLabel: 'U [CHF]',
+    width: 460, height: 290,
+    curves: [{ fn: p => -20 * p * p + 800 * p, xFrom: 0, xTo: 40, color: '#1a4f8a', label: 'U(p)' }],
+    markers: [
+      { x: 20, y: 8000, label: 'U_max = 8000', color: '#a02828' },
+      { x: 0,  y: 0,    label: '0',            color: '#2d6a3e' },
+      { x: 40, y: 0,    label: '40',           color: '#2d6a3e' }
+    ]
+  },
+  // Lösung 6 — Gewinn: x[Stk] vs G[CHF]
+  l6: {
+    xRange: [0, 85], yRange: [-250, 700], xTick: 10, yTick: 200,
+    xLabel: 'x [Stk]', yLabel: 'G [CHF]',
+    width: 460, height: 290,
+    curves: [{ fn: x => -0.5 * x * x + 40 * x - 200, xFrom: 0, xTo: 80, color: '#2d6a3e', label: 'G(x)' }],
+    markers: [
+      { x: 40, y: 600, label: 'G_max = 600',  color: '#a02828' },
+      { x: 5.36, y: 0, label: 'GS ≈ 5,4',     color: '#1a4f8a' },
+      { x: 74.64, y: 0, label: 'GG ≈ 74,6',   color: '#1a4f8a' },
+      { x: 0,  y: -200, label: 'G(0) = −200', color: '#b85a00' }
+    ]
+  },
+  // Lösung 7 — Rechteck-Fläche: x[m] vs A[m²]
+  l7: {
+    xRange: [0, 21], yRange: [0, 220], xTick: 2, yTick: 25,
+    xLabel: 'x [m]', yLabel: 'A [m²]',
+    width: 460, height: 280,
+    curves: [{ fn: x => -2 * x * x + 40 * x, xFrom: 0, xTo: 20, color: '#1a4f8a', label: 'A(x)' }],
+    markers: [
+      { x: 10, y: 200, label: 'A_max = 200', color: '#a02828' },
+      { x: 0,  y: 0,   label: '0',           color: '#2d6a3e' },
+      { x: 20, y: 0,   label: '20',          color: '#2d6a3e' }
+    ]
+  },
+  // Lösung 8 — Parabolspiegel: x[m] vs y[m]
+  l8: {
+    xRange: [-0.7, 0.7], yRange: [0, 0.2], xTick: 0.1, yTick: 0.05,
+    xLabel: 'x [m]', yLabel: 'y [m]',
+    width: 480, height: 220,
+    curves: [{ fn: x => 5/12 * x * x, xFrom: -0.6, xTo: 0.6, color: '#1a4f8a', label: 'y = (5/12)·x²' }],
+    markers: [
+      { x: 0.6,  y: 0.15,   label: 'Rand 1.20 m', color: '#a02828' },
+      { x: 0.30, y: 0.0375, label: '(b) 3,75 cm', color: '#b85a00' }
+    ]
+  }
+};
+</script>
+
+</body>
+</html>
