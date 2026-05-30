@@ -3,23 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zehnerpotenzen und Quadratwurzeln — TALS Mathematik</title>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>1.4 Zehnerpotenzen und Quadratwurzeln — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
-
-<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
 <script>
 MathJax = {
-  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
-  svg: { fontCache:'global', scale:1.05 },
-  loader: { load:['[tex]/boldsymbol'] },
-  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+  .pot-vis { display: grid; grid-template-columns: 1fr; gap: 4px; margin: 18px 0; max-width: 740px; }
+  .pot-zeile { display: grid; grid-template-columns: 22mm 65mm 1fr; align-items: center; padding: 6px 12px; border-radius: 4px; gap: 12px; font-family: var(--mono); }
+  .pot-zeile.head { background: var(--blau-hell); color: var(--blau); font-weight: 700; font-family: var(--sans); font-size: 10pt; padding: 8px 12px; border-radius: 6px; }
+  .pot-zeile .pot-form { font-family: var(--serif); font-size: 12pt; }
+  .pot-zeile .pot-wert { font-family: var(--mono); font-size: 10.5pt; color: var(--tinte-2); white-space: nowrap; }
+  .pot-zeile .pot-name { font-family: var(--sans); font-size: 9.5pt; color: var(--tinte-2); }
+  .pot-zeile.einer-schritt { background: var(--papier-2); }
+  .pot-zeile.einer-schritt .pot-form, .pot-zeile.einer-schritt .pot-wert { font-size: 10pt; opacity: 0.85; }
+  .wuko-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 18px 0; }
+  .wuko-card { padding: 7px 10px; border: 1px solid var(--linie); border-radius: 6px; background: var(--papier-2); text-align: center; font-family: var(--serif); font-size: 11.5pt; white-space: nowrap; }
+  @media(max-width:780px){ .wuko-grid { grid-template-columns: repeat(3, 1fr); } }
+  /* Wissenschaftliche-Notation-Konverter */
+  .wn-konv { border: 1px solid var(--linie); border-radius: 10px; padding: 18px 22px; background: var(--papier-2); margin: 18px 0; }
+  .wn-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 14px; align-items: center; }
+  @media(max-width:780px){ .wn-row { grid-template-columns: 1fr; } }
+  .wn-input { display: flex; flex-direction: column; gap: 4px; }
+  .wn-input label { font-family: var(--mono); font-size: 9pt; color: var(--tinte-2); text-transform: uppercase; letter-spacing: 1px; }
+  .wn-input input { padding: 8px 10px; font-family: var(--mono); font-size: 11pt; border: 1px solid var(--linie); border-radius: 6px; background: var(--papier); }
+  .wn-output { padding: 14px; background: var(--papier); border: 1px solid var(--linie); border-radius: 6px; }
+  .wn-output .lab { font-family: var(--mono); font-size: 9pt; color: var(--tinte-2); margin-bottom: 4px; }
+  .wn-output .val { font-family: var(--serif); font-size: 14pt; }
+  /* Tabellen */
+  .reg-tab { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 11pt; }
+  .reg-tab th, .reg-tab td { border: 1px solid var(--linie); padding: 9px 12px; text-align: left; vertical-align: middle; }
+  .reg-tab th { background: var(--papier-2); font-family: var(--sans); font-weight: 700; }
+  .reg-tab td.formel { font-family: var(--serif); font-size: 12pt; text-align: center; }
+  /* Potenzgesetze: Name schmal, Regel + Beispiele gleich breit */
+  .pot-gesetze th:nth-child(1), .pot-gesetze td:nth-child(1) { width: 22%; }
+  .pot-gesetze th:nth-child(2), .pot-gesetze td:nth-child(2) { width: 26%; }
+  .pot-gesetze th:nth-child(3), .pot-gesetze td:nth-child(3) { width: 26%; }
+  .pot-gesetze th:nth-child(4), .pot-gesetze td:nth-child(4) { width: 26%; }
+  /* Wurzelgesetze: 6 Spalten — kompaktere Schrift, ausgewogene Breiten */
+  .wurzel-gesetze { font-size: 10pt; }
+  .wurzel-gesetze th, .wurzel-gesetze td { padding: 7px 8px; }
+  .wurzel-gesetze td.formel { font-size: 10.5pt; }
+  .wurzel-gesetze th:nth-child(1), .wurzel-gesetze td:nth-child(1) { width: 18%; }
+  .wurzel-gesetze th:nth-child(2), .wurzel-gesetze td:nth-child(2) { width: 17%; }
+  .wurzel-gesetze th:nth-child(3), .wurzel-gesetze td:nth-child(3) { width: 17%; }
+  .wurzel-gesetze th:nth-child(4), .wurzel-gesetze td:nth-child(4) { width: 12%; }
+  .wurzel-gesetze th:nth-child(5), .wurzel-gesetze td:nth-child(5) { width: 18%; }
+  .wurzel-gesetze th:nth-child(6), .wurzel-gesetze td:nth-child(6) { width: 18%; }
 </style>
 </head>
 <body>
@@ -27,64 +65,762 @@ MathJax = {
 <div class="page-wrap">
 <main class="content">
 
-<!-- ══ 1. TITEL + RLP-HEADER ══ -->
 <div class="page-titel">
   <div class="pt-bereich">Grundlagenfach · Lerngebiet 1 · Arithmetik/Algebra · 45 Lektionen</div>
   <h1 class="pt-h1">1.4 Zehnerpotenzen und Quadratwurzeln</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Sehr grosse oder sehr kleine Grössen, das Quadrat der Schräge eines Dachs, der
+Innenwiderstand eines Bauteils — Naturwissenschaften und Technik leben mit Potenzen und Wurzeln.
+Dieses Kapitel zeigt die Rechenregeln und ihre praktische Anwendung in der wissenschaftlichen
+Notation.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 1.4</div>
   <ul>
-    <li>die Wurzel- und Potenzgesetze verstehen und anwenden <span class="ohm">auch ohne Hilfsmittel</span></li>
-    <li>die Hierarchie der Operationen erkennen und anwenden</li>
+    <li>Wurzel- und Potenzgesetze verstehen und anwenden <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Hierarchie der Operationen erkennen und anwenden</li>
   </ul>
 </div>
 
+<!-- ──────────────────────── 1. EINSTIEG ──────────────────────── -->
+<h2 id="einstieg">Einstieg — Vom Kosmos zum Atom</h2>
 
-<!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<p>Die Erde wiegt etwa \(5\,972\,000\,000\,000\,000\,000\,000\,000\) kg, ein Wassermolekül etwa
+\(0.00000000000000000000000003\) kg. Mit so vielen Nullen lässt sich nicht angenehm rechnen — und
+schon ein Schreibfehler macht die Zahl um Faktor 10 oder 100 falsch.</p>
 
+<p>Die Lösung ist die <strong>wissenschaftliche Notation</strong>:</p>
 
-<!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+\[ 5.972 \cdot 10^{24} \text{ kg} \qquad \text{und} \qquad 3.0 \cdot 10^{-26} \text{ kg.} \]
 
+<p>Beide Zahlen sind nun ablesbar, vergleichbar — und das Verhältnis (wie viele Wassermoleküle wiegen
+zusammen so viel wie die Erde?) lässt sich in einer Zeile ausrechnen. Wer Zehnerpotenzen sicher
+beherrscht, dem stehen Naturwissenschaften und Technik offen.</p>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<div class="block block-def">
+  <div class="block-titel">📘 Zwei eng verwandte Operationen</div>
+  <p>Quadrieren und Wurzelziehen sind <strong>Umkehroperationen</strong>: aus der Seite \(s\) wird
+  die Diagonale \(d = s\sqrt{2}\), aus der Diagonale wird die Seite \(s = d / \sqrt{2}\). Wer das
+  eine kann, muss auch das andere können.</p>
+</div>
 
+<p>Schieb in der Animation den Zoom-Regler von ganz klein bis ganz gross. Jede Stufe entspricht einer Zehnerpotenz — und an jeder Stelle ist ein Alltagsobjekt einsortiert. So bekommt der trockene Exponent ein Bild.</p>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<div class="anim">
+  <div class="anim-titel">Vom Atom zur Galaxie — Zehnerpotenzen als Zoom-Skala</div>
+  <div class="anim-layout">
+    <canvas id="cv-zoom" width="560" height="340"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Zehnerpotenz \(10^{n}\) [m]</span>
+          <span class="wert" id="lbl-zoomN">0</span>
+        </div>
+        <input type="range" id="sld-zoomN" min="-15" max="22" step="1" value="0">
+      </div>
 
+      <div class="legende">
+        <div class="legende-titel">Aktuelle Stufe</div>
+        <div class="legende-zeile"><span class="lab">Objekt</span><span class="val" id="leg-zoomObj">Mensch</span></div>
+        <div class="legende-zeile"><span class="lab">Grösse</span><span class="val" id="leg-zoomGr">1 m</span></div>
+        <div class="legende-zeile"><span class="lab">wiss. Notation</span><span class="val" id="leg-zoomSci">1·10⁰</span></div>
+      </div>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+      <div class="erklaerung" id="erkl-zoom">
+        Die Skala spannt 37 Zehnerpotenzen — von Atomkernen \(10^{-15}\) m bis zu beobachtbaren Galaxien \(10^{22}\) m. Statt unzählige Nullen schreibt man kompakt \(a \cdot 10^n\).
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- ──────────────────────── 2. ZEHNERPOTENZEN ──────────────────────── -->
+<h2 id="zehnerpotenzen">Zehnerpotenzen</h2>
 
-<!-- ══ 7. AUFGABEN ══ -->
+<p>Eine <strong>Zehnerpotenz</strong> ist eine Potenz mit Basis 10:</p>
+
+\[ 10^n \;=\; \underbrace{10 \cdot 10 \cdot \ldots \cdot 10}_{n \text{ Faktoren}} \qquad (n \in \mathbb{N}) \]
+
+<p>Negative Exponenten erweitern den Bereich nach unten:</p>
+
+\[ 10^{-n} \;=\; \dfrac{1}{10^n} \]
+
+<p>Und \(10^0 = 1\) — <em>jede</em> Potenz mit Exponent 0 hat den Wert 1 (so dass die Potenzgesetze
+ohne Sonderfall durchlaufen).</p>
+
+<div class="pot-vis">
+  <div class="pot-zeile head">
+    <div>Form</div><div>Wert</div><div>Bedeutung / Vorsatz</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{15}\)</div>
+    <div class="pot-wert">1&thinsp;000&thinsp;000&thinsp;000&thinsp;000&thinsp;000</div>
+    <div class="pot-name">Billiarde · Peta (P)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{12}\)</div>
+    <div class="pot-wert">1&thinsp;000&thinsp;000&thinsp;000&thinsp;000</div>
+    <div class="pot-name">Billion · Tera (T)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{9}\)</div>
+    <div class="pot-wert">1&thinsp;000&thinsp;000&thinsp;000</div>
+    <div class="pot-name">Milliarde · Giga (G)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{6}\)</div>
+    <div class="pot-wert">1&thinsp;000&thinsp;000</div>
+    <div class="pot-name">Million · Mega (M)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{3}\)</div>
+    <div class="pot-wert">1&thinsp;000</div>
+    <div class="pot-name">Tausend · Kilo (k)</div>
+  </div>
+  <div class="pot-zeile einer-schritt">
+    <div class="pot-form">\(10^{2}\)</div>
+    <div class="pot-wert">100</div>
+    <div class="pot-name">Hundert · Hekto (h)</div>
+  </div>
+  <div class="pot-zeile einer-schritt">
+    <div class="pot-form">\(10^{1}\)</div>
+    <div class="pot-wert">10</div>
+    <div class="pot-name">Zehn · Deka (da)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{0}\)</div>
+    <div class="pot-wert">1</div>
+    <div class="pot-name">Eins</div>
+  </div>
+  <div class="pot-zeile einer-schritt">
+    <div class="pot-form">\(10^{-1}\)</div>
+    <div class="pot-wert">0.1</div>
+    <div class="pot-name">Zehntel · Dezi (d)</div>
+  </div>
+  <div class="pot-zeile einer-schritt">
+    <div class="pot-form">\(10^{-2}\)</div>
+    <div class="pot-wert">0.01</div>
+    <div class="pot-name">Hundertstel · Zenti (c)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{-3}\)</div>
+    <div class="pot-wert">0.001</div>
+    <div class="pot-name">Tausendstel · Milli (m)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{-6}\)</div>
+    <div class="pot-wert">0.000&thinsp;001</div>
+    <div class="pot-name">Millionstel · Mikro (µ)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{-9}\)</div>
+    <div class="pot-wert">0.000&thinsp;000&thinsp;001</div>
+    <div class="pot-name">Milliardstel · Nano (n)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{-12}\)</div>
+    <div class="pot-wert">0.000&thinsp;000&thinsp;000&thinsp;001</div>
+    <div class="pot-name">Billionstel · Piko (p)</div>
+  </div>
+  <div class="pot-zeile">
+    <div class="pot-form">\(10^{-15}\)</div>
+    <div class="pot-wert">0.000&thinsp;000&thinsp;000&thinsp;000&thinsp;001</div>
+    <div class="pot-name">Billiardstel · Femto (f)</div>
+  </div>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Schnellmerker</div>
+  <p>Der Exponent bei \(10^n\) ist die <em>Anzahl Stellen</em>, um die das Komma verschoben wird —
+  bei positivem \(n\) nach rechts (Zahl wird grösser), bei negativem \(n\) nach links (Zahl wird kleiner).</p>
+</div>
+
+<!-- ──────────────────────── 3. WISSENSCHAFTLICHE NOTATION ──────────────────────── -->
+<h2 id="wissenschaftlich">Wissenschaftliche Notation</h2>
+
+<p>In der wissenschaftlichen Notation wird jede Zahl als Produkt einer <em>Mantisse</em> mit einer
+Zehnerpotenz geschrieben:</p>
+
+\[ a \cdot 10^n \qquad \text{mit } 1 \leq |a| < 10 \text{ und } n \in \mathbb{Z}. \]
+
+<p>Die Mantisse \(a\) hat genau eine Ziffer vor dem Dezimalpunkt — diese eindeutige Form heisst auch
+<em>normierte</em> wissenschaftliche Notation.</p>
+
+<table class="reg-tab wn-eng-tab">
+  <thead><tr><th>Zahl</th><th>Wissenschaftlich</th><th>Engineering</th><th>Bedeutung</th></tr></thead>
+  <tbody>
+    <tr><td class="formel">\(46\,000\)</td>      <td class="formel">\(4.6 \cdot 10^4\)</td>      <td class="formel">\(46 \cdot 10^3\)</td>      <td>46 Tausend · 46 k</td></tr>
+    <tr><td class="formel">\(123\,456\)</td>     <td class="formel">\(1.23456 \cdot 10^5\)</td>  <td class="formel">\(123.456 \cdot 10^3\)</td> <td>123 k</td></tr>
+    <tr><td class="formel">\(2\,500\,000\)</td>  <td class="formel">\(2.5 \cdot 10^6\)</td>      <td class="formel">\(2.5 \cdot 10^6\)</td>     <td>2.5 Millionen · 2.5 M</td></tr>
+    <tr><td class="formel">\(47\,000\,000\)</td> <td class="formel">\(4.7 \cdot 10^7\)</td>      <td class="formel">\(47 \cdot 10^6\)</td>      <td>47 M</td></tr>
+    <tr><td class="formel">\(7.5\)</td>          <td class="formel">\(7.5 \cdot 10^0\)</td>      <td class="formel">\(7.5 \cdot 10^0\)</td>     <td>unverändert</td></tr>
+    <tr><td class="formel">\(0.0023\)</td>       <td class="formel">\(2.3 \cdot 10^{-3}\)</td>   <td class="formel">\(2.3 \cdot 10^{-3}\)</td>  <td>2.3 Tausendstel · 2.3 m</td></tr>
+    <tr><td class="formel">\(0.000\,047\)</td>   <td class="formel">\(4.7 \cdot 10^{-5}\)</td>   <td class="formel">\(47 \cdot 10^{-6}\)</td>   <td>47 µ (Mikro)</td></tr>
+    <tr><td class="formel">\(0.000\,000\,82\)</td><td class="formel">\(8.2 \cdot 10^{-7}\)</td>  <td class="formel">\(820 \cdot 10^{-9}\)</td>  <td>820 n (Nano)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Engineering-Notation</div>
+  <p>Die <strong>Engineering-Darstellung</strong> ist eine Variante der wissenschaftlichen Notation,
+  bei der der Exponent immer ein <em>Vielfaches von 3</em> ist:</p>
+  \[ a \cdot 10^n \qquad \text{mit } 1 \leq |a| < 1000 \text{ und } n \in \{\ldots, -6, -3, 0, 3, 6, 9, 12, \ldots\}. \]
+  <p>Die Mantisse darf also bis 999.999… gehen, dafür liegt der Exponent immer auf einer „Vorsatz-Stufe":
+  \(10^3\) (Kilo), \(10^6\) (Mega), \(10^9\) (Giga) usw. — und genauso \(10^{-3}\) (Milli),
+  \(10^{-6}\) (Mikro), \(10^{-9}\) (Nano).</p>
+  <p><strong>Bedeutung in Physik, Technik und Ingenieurwesen:</strong> Engineering-Notation passt nahtlos
+  zu den <em>SI-Einheitenvorsilben</em>. Wer \(47 \cdot 10^{-6}\,\text{F}\) liest, denkt direkt „47
+  Mikrofarad" und schreibt \(47\,\mu\text{F}\). Bei \(4.7 \cdot 10^{-5}\,\text{F}\) ist diese Brücke
+  weniger direkt — man muss den Exponenten erst „auf 10⁻⁶ verschieben". Darum bevorzugen Datenblätter,
+  Schaltpläne und technische Tabellen die Engineering-Form: sie ist die Sprache, in der man
+  Bauteilwerte ausdrückt (z.B. \(2.2\,\text{k}\Omega\), \(820\,\text{nH}\), \(15\,\text{MHz}\)).</p>
+</div>
+
+<h3>Probier selbst</h3>
+
+<div class="wn-konv">
+  <div class="wn-row">
+    <div class="wn-input">
+      <label for="wnzahl">Zahl eingeben</label>
+      <input id="wnzahl" type="text" value="46000" placeholder="z. B. 46000 oder 0.0023">
+    </div>
+    <div class="wn-output">
+      <div class="lab">Wissenschaftliche Notation</div>
+      <div class="val" id="wnaus">4.6 · 10⁴</div>
+    </div>
+    <div class="wn-output">
+      <div class="lab">Engineering-Notation</div>
+      <div class="val" id="wneng">46 · 10³</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const inp = document.getElementById('wnzahl');
+  const out = document.getElementById('wnaus');
+  const eng = document.getElementById('wneng');
+  if (!inp || !out || !eng) return;
+  function superscript(n) {
+    const map = {'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+    return String(n).split('').map(c => map[c] || c).join('');
+  }
+  function update() {
+    const raw = inp.value.replace(/\s+/g, '').replace(/'/g, '').replace(/\u00A0/g, '').replace(/,/g, '.');
+    if (!raw) { out.textContent = '—'; eng.textContent = '—'; return; }
+    const num = parseFloat(raw);
+    if (!isFinite(num) || num === 0) { const v = (num === 0 ? '0' : '—'); out.textContent = v; eng.textContent = v; return; }
+    // Wissenschaftliche Notation
+    const exp = Math.floor(Math.log10(Math.abs(num)));
+    const mantisse = num / Math.pow(10, exp);
+    const m = parseFloat(mantisse.toPrecision(6)).toString();
+    out.textContent = `${m} · 10${superscript(exp)}`;
+    // Engineering-Notation: Exponent auf nächstes Vielfaches von 3 abrunden (gegen −∞)
+    const eExp = Math.floor(exp / 3) * 3;
+    const eMant = num / Math.pow(10, eExp);
+    const em = parseFloat(eMant.toPrecision(6)).toString();
+    eng.textContent = `${em} · 10${superscript(eExp)}`;
+  }
+  inp.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel — Rechnen in wissenschaftlicher Notation</div>
+  <p>Eine Glasfaserlänge: \(2.4 \cdot 10^3\) m wird mit Datendichte \(8 \cdot 10^9\) Bit/m bespielt.
+  Wieviel Daten können gespeichert werden?</p>
+  \[ (2.4 \cdot 10^3) \cdot (8 \cdot 10^9) \;=\; (2.4 \cdot 8) \cdot 10^{3 + 9} \;=\; 19.2 \cdot 10^{12} \;=\; 1.92 \cdot 10^{13} \text{ Bit.} \]
+  <p>Die Mantissen werden multipliziert, die Exponenten addiert. Am Ende normiert man, falls die
+  Mantisse \(\geq 10\) wird — hier verschiebt sich der Exponent um eins.</p>
+</div>
+
+<!-- ──────────────────────── 4. POTENZGESETZE ──────────────────────── -->
+<h2 id="potenzgesetze">Potenzgesetze <a class="quer" href="g1-3-algebraische-terme.html#binomi">↗ 1.3</a></h2>
+
+<p>Die folgenden Regeln gelten für <em>jede</em> Basis \(a, b\) (mit \(a, b \neq 0\) wo Division
+oder negative Exponenten auftreten) und ganzzahlige Exponenten \(n, m\):</p>
+
+<table class="reg-tab pot-gesetze">
+  <thead><tr><th>Name</th><th>Regel</th><th>numerisches Beispiel</th><th>Algebrabeispiel</th></tr></thead>
+  <tbody>
+    <tr><td><strong>P1 — gleiche Basis multiplizieren</strong></td>
+        <td class="formel">\(a^n \cdot a^m = a^{n+m}\)</td>
+        <td class="formel">\(2^3 \cdot 2^4 = 2^7 = 128\)</td>
+        <td class="formel">\(x^2 \cdot x^5 = x^7\)</td></tr>
+    <tr><td><strong>P2 — gleiche Basis dividieren</strong></td>
+        <td class="formel">\(\dfrac{a^n}{a^m} = a^{n-m}\)</td>
+        <td class="formel">\(\dfrac{2^7}{2^3} = 2^4 = 16\)</td>
+        <td class="formel">\(\dfrac{x^5}{x^2} = x^3\)</td></tr>
+    <tr><td><strong>P3 — Potenz einer Potenz</strong></td>
+        <td class="formel">\((a^n)^m = a^{n \cdot m}\)</td>
+        <td class="formel">\((10^3)^2 = 10^6\)</td>
+        <td class="formel">\((x^4)^3 = x^{12}\)</td></tr>
+    <tr><td><strong>P4 — Produkt potenzieren</strong></td>
+        <td class="formel">\((a \cdot b)^n = a^n \cdot b^n\)</td>
+        <td class="formel">\((2 \cdot 3)^4 = 2^4 \cdot 3^4\)</td>
+        <td class="formel">\((xy)^3 = x^3 y^3\)</td></tr>
+    <tr><td><strong>P5 — Quotient potenzieren</strong></td>
+        <td class="formel">\(\left(\dfrac{a}{b}\right)^n = \dfrac{a^n}{b^n}\)</td>
+        <td class="formel">\(\left(\dfrac{3}{4}\right)^2 = \dfrac{9}{16}\)</td>
+        <td class="formel">\(\left(\dfrac{x}{y}\right)^4 = \dfrac{x^4}{y^4}\)</td></tr>
+    <tr><td><strong>P6 — Exponent null</strong></td>
+        <td class="formel">\(a^0 = 1\) (\(a \neq 0\))</td>
+        <td class="formel">\(7^0 = 1\)</td>
+        <td class="formel">\(x^0 = 1\)</td></tr>
+    <tr><td><strong>P7 — negative Exponenten</strong></td>
+        <td class="formel">\(a^{-n} = \dfrac{1}{a^n}\)</td>
+        <td class="formel">\(2^{-3} = \dfrac{1}{8}\)</td>
+        <td class="formel">\(x^{-2} = \dfrac{1}{x^2}\)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — verschiedene Basen</div>
+  <p>Die Regel \(a^n \cdot a^m = a^{n+m}\) gilt <em>nur bei gleicher Basis</em>!</p>
+  <p>\(2^3 \cdot 5^4 \neq 10^7\). Der Wert ist \(8 \cdot 625 = 5\,000\), nicht \(10^7 = 10\,000\,000\).
+  Bei verschiedenen Basen lässt sich nichts vereinfachen — höchstens mit P4 zusammenfassen, wenn die
+  Exponenten gleich sind: \(2^4 \cdot 5^4 = (2 \cdot 5)^4 = 10^4\).</p>
+</div>
+
+<!-- ──────────────────────── 5. QUADRATWURZELN ──────────────────────── -->
+<h2 id="wurzeln">Quadratwurzeln</h2>
+
+<p>Die <strong>Quadratwurzel</strong> aus einer nichtnegativen Zahl \(a\) ist die <em>nichtnegative</em>
+Zahl, deren Quadrat \(a\) ergibt:</p>
+
+\[ \sqrt{a} \;=\; b \quad \Longleftrightarrow \quad b \geq 0 \text{ und } b^2 = a \qquad (a \geq 0). \]
+
+<p>Wichtig: \(\sqrt{a}\) ist <em>per Definition</em> nichtnegativ. Beim Lösen einer Gleichung wie
+\(x^2 = 9\) ergeben sich <em>zwei</em> Lösungen \(x = +3\) und \(x = -3\) — der Funktionswert
+\(\sqrt{9}\) selbst aber ist nur \(+3\).</p>
+
+<div class="wuko-grid">
+  <div class="wuko-card">\(\sqrt{1} = 1\)</div>
+  <div class="wuko-card">\(\sqrt{4} = 2\)</div>
+  <div class="wuko-card">\(\sqrt{9} = 3\)</div>
+  <div class="wuko-card">\(\sqrt{16} = 4\)</div>
+  <div class="wuko-card">\(\sqrt{25} = 5\)</div>
+  <div class="wuko-card">\(\sqrt{36} = 6\)</div>
+  <div class="wuko-card">\(\sqrt{49} = 7\)</div>
+  <div class="wuko-card">\(\sqrt{64} = 8\)</div>
+  <div class="wuko-card">\(\sqrt{81} = 9\)</div>
+  <div class="wuko-card">\(\sqrt{100} = 10\)</div>
+  <div class="wuko-card">\(\sqrt{121} = 11\)</div>
+  <div class="wuko-card">\(\sqrt{144} = 12\)</div>
+  <div class="wuko-card">\(\sqrt{169} = 13\)</div>
+  <div class="wuko-card">\(\sqrt{196} = 14\)</div>
+  <div class="wuko-card">\(\sqrt{225} = 15\)</div>
+  <div class="wuko-card">\(\sqrt{256} = 16\)</div>
+  <div class="wuko-card">\(\sqrt{289} = 17\)</div>
+  <div class="wuko-card">\(\sqrt{324} = 18\)</div>
+</div>
+
+<p style="font-size:9.5pt;color:var(--tinte-2);font-style:italic;margin-top:-6px">Diese Quadratzahlen
+gehören zum Standard-Repertoire — sie helfen beim Kopfrechnen und beim Erkennen binomischer
+Formeln rückwärts.</p>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \(\sqrt{a^2}\) und \(|a|\)</div>
+  <p>\(\sqrt{a^2} = |a|\), <em>nicht</em> einfach \(a\). Beispiel: \(\sqrt{(-3)^2} = \sqrt{9} = 3\),
+  nicht \(-3\). Die Wurzelfunktion wirft das Vorzeichen weg.</p>
+</div>
+
+<h3>Wurzeln aus Nicht-Quadratzahlen <a class="quer" href="g1-2-zahlen-grundoperationen.html">↩ 1.2</a></h3>
+
+<p>Wurzeln aus Zahlen, die keine perfekten Quadrate sind, ergeben <em>irrationale</em> Zahlen — sie
+besitzen unendlich viele Nachkommastellen ohne Periode. Im Sekundarstufen-Unterricht stehen oft drei
+besonders wichtige bei:</p>
+
+\[ \sqrt{2} \approx 1.4142 \qquad \sqrt{3} \approx 1.7321 \qquad \sqrt{5} \approx 2.2361 \qquad \sqrt{7} \approx 2.6458 \qquad \sqrt{10} \approx 3.1623 \]
+
+<p>Solche Wurzeln werden in exakten Rechnungen <em>nicht ausgewertet</em> — man rechnet symbolisch
+weiter und wertet erst am Schluss numerisch aus, falls nötig.</p>
+
+<!-- ──────────────────────── 6. WURZELGESETZE ──────────────────────── -->
+<h2 id="wurzelgesetze">Wurzelgesetze</h2>
+
+<p>Aus den Potenzgesetzen lassen sich die Wurzelgesetze ableiten — denn die Wurzel ist ein Spezialfall
+der Potenz:</p>
+
+\[ \sqrt{a} \;=\; a^{1/2} \qquad\text{allgemein:}\qquad \sqrt[n]{a} \;=\; a^{1/n} \]
+
+<table class="reg-tab wurzel-gesetze">
+  <thead><tr>
+    <th>Name</th>
+    <th>Regel (Wurzelform)</th>
+    <th>als Potenz mit Bruchexponent</th>
+    <th>Voraussetzung</th>
+    <th>numerisches Beispiel</th>
+    <th>Algebrabeispiel</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><strong>W0 — Wurzel als Potenz</strong></td>
+        <td class="formel">\(\sqrt[n]{a} = a^{1/n}\)</td>
+        <td class="formel">\(a^{1/n}\)</td>
+        <td>\(a \geq 0,\, n \in \mathbb{N}^*\)</td>
+        <td class="formel">\(\sqrt{9} = 9^{1/2} = 3\)</td>
+        <td class="formel">\(x \cdot \sqrt{x} = x^1 \cdot x^{1/2} = x^{3/2}\)</td></tr>
+    <tr><td><strong>W1 — Produktwurzel (Wurzeln multiplizieren)</strong></td>
+        <td class="formel">\(\sqrt{a} \cdot \sqrt{b} = \sqrt{a \cdot b}\)</td>
+        <td class="formel">\(a^{1/2} \cdot b^{1/2} = (ab)^{1/2}\)</td>
+        <td>\(a, b \geq 0\)</td>
+        <td class="formel">\(\sqrt{2} \cdot \sqrt{8} = \sqrt{16} = 4\)</td>
+        <td class="formel">\(\sqrt{18x} \cdot \sqrt{2x} = \sqrt{36x^2} = 6x\) (\(x \geq 0\))</td></tr>
+    <tr><td><strong>W2 — Quotientenwurzel</strong></td>
+        <td class="formel">\(\dfrac{\sqrt{a}}{\sqrt{b}} = \sqrt{\dfrac{a}{b}}\)</td>
+        <td class="formel">\(\dfrac{a^{1/2}}{b^{1/2}} = \left(\dfrac{a}{b}\right)^{1/2}\)</td>
+        <td>\(a \geq 0,\, b > 0\)</td>
+        <td class="formel">\(\dfrac{\sqrt{50}}{\sqrt{2}} = \sqrt{25} = 5\)</td>
+        <td class="formel">\(\dfrac{\sqrt{50x^3}}{\sqrt{2x}} = \sqrt{25x^2} = 5x\) (\(x > 0\))</td></tr>
+    <tr><td><strong>W3 — Wurzel einer Wurzel</strong></td>
+        <td class="formel">\(\sqrt{\sqrt{a}} = \sqrt[4]{a}\)</td>
+        <td class="formel">\((a^{1/2})^{1/2} = a^{1/4}\)</td>
+        <td>\(a \geq 0\)</td>
+        <td class="formel">\(\sqrt{\sqrt{16}} = \sqrt{4} = 2\)</td>
+        <td class="formel">\(\sqrt{\sqrt{81x^4}} = \sqrt{9x^2} = 3x\) (\(x \geq 0\))</td></tr>
+    <tr><td><strong>W4 — Produkt unter der Wurzel</strong></td>
+        <td class="formel">\(\sqrt{a \cdot b} = \sqrt{a} \cdot \sqrt{b}\)</td>
+        <td class="formel">\((ab)^{1/2} = a^{1/2} \cdot b^{1/2}\)</td>
+        <td>\(a, b \geq 0\)</td>
+        <td class="formel">\(\sqrt{12} = \sqrt{4 \cdot 3} = 2\sqrt{3}\)</td>
+        <td class="formel">\(\sqrt{72x^2 y} = 6x\sqrt{2y}\) (\(x, y \geq 0\))</td></tr>
+    <tr><td><strong>W5 — Quotient unter der Wurzel</strong></td>
+        <td class="formel">\(\sqrt{\dfrac{a}{b}} = \dfrac{\sqrt{a}}{\sqrt{b}}\)</td>
+        <td class="formel">\(\left(\dfrac{a}{b}\right)^{1/2} = \dfrac{a^{1/2}}{b^{1/2}}\)</td>
+        <td>\(a \geq 0,\, b > 0\)</td>
+        <td class="formel">\(\sqrt{\dfrac{9}{4}} = \dfrac{3}{2}\)</td>
+        <td class="formel">\(\sqrt{\dfrac{12x^2}{3}} = \sqrt{4x^2} = 2x\) (\(x \geq 0\))</td></tr>
+    <tr><td><strong>W6 — Wurzel aus 1</strong></td>
+        <td class="formel">\(\sqrt{1} = 1\)</td>
+        <td class="formel">\(1^{1/2} = 1\)</td>
+        <td>—</td>
+        <td class="formel">\(\sqrt{1} = 1\)</td>
+        <td class="formel">\(\sqrt{1} + (3x)^0 = 1 + 1 = 2\) (\(x \neq 0\))</td></tr>
+    <tr><td><strong>W7 — Wurzel im Nenner / negativer Exponent</strong></td>
+        <td class="formel">\(\dfrac{1}{\sqrt{a}} = \sqrt{\dfrac{1}{a}}\)</td>
+        <td class="formel">\(\dfrac{1}{a^{1/2}} = a^{-1/2}\)</td>
+        <td>\(a > 0\)</td>
+        <td class="formel">\(\dfrac{1}{\sqrt{4}} = \dfrac{1}{2} = 4^{-1/2}\)</td>
+        <td class="formel">\(\dfrac{1}{\sqrt{x}} = \dfrac{\sqrt{x}}{x}\) (\(x > 0\))</td></tr>
+    <tr><td><strong>W8 — Wurzel quadrieren</strong></td>
+        <td class="formel">\((\sqrt{a})^2 = a\)</td>
+        <td class="formel">\((a^{1/2})^2 = a^{1}\)</td>
+        <td>\(a \geq 0\)</td>
+        <td class="formel">\((\sqrt{7})^2 = 7\)</td>
+        <td class="formel">\((\sqrt{x+3})^2 = x + 3\) (\(x \geq -3\))</td></tr>
+    <tr><td><strong>W9 — Quadrat unter der Wurzel</strong></td>
+        <td class="formel">\(\sqrt{a^2} = |a|\)</td>
+        <td class="formel">\((a^2)^{1/2} = |a|\)</td>
+        <td>\(a \in \mathbb{R}\)</td>
+        <td class="formel">\(\sqrt{(-3)^2} = \sqrt{9} = 3\)</td>
+        <td class="formel">\(\sqrt{x^2 - 6x + 9} = \sqrt{(x-3)^2} = |x-3|\)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Achtung — keine Summen-Wurzel!</div>
+  <p>\(\sqrt{a + b} \neq \sqrt{a} + \sqrt{b}\). Probe: \(\sqrt{9 + 16} = \sqrt{25} = 5\), aber
+  \(\sqrt{9} + \sqrt{16} = 3 + 4 = 7\) — nicht dasselbe!</p>
+</div>
+
+<h3>Teilweises Wurzelziehen</h3>
+
+<p>Wurzeln werden so weit wie möglich vereinfacht, indem perfekte Quadrate aus dem Radikanden
+herausgezogen werden:</p>
+
+\[ \sqrt{72} \;=\; \sqrt{36 \cdot 2} \;=\; \sqrt{36} \cdot \sqrt{2} \;=\; 6 \sqrt{2}. \]
+
+<table class="reg-tab">
+  <thead><tr><th>Wurzel</th><th>Zerlegung</th><th>Vereinfacht</th></tr></thead>
+  <tbody>
+    <tr><td class="formel">\(\sqrt{12}\)</td><td class="formel">\(\sqrt{4 \cdot 3}\)</td><td class="formel">\(2\sqrt{3}\)</td></tr>
+    <tr><td class="formel">\(\sqrt{18}\)</td><td class="formel">\(\sqrt{9 \cdot 2}\)</td><td class="formel">\(3\sqrt{2}\)</td></tr>
+    <tr><td class="formel">\(\sqrt{20}\)</td><td class="formel">\(\sqrt{4 \cdot 5}\)</td><td class="formel">\(2\sqrt{5}\)</td></tr>
+    <tr><td class="formel">\(\sqrt{50}\)</td><td class="formel">\(\sqrt{25 \cdot 2}\)</td><td class="formel">\(5\sqrt{2}\)</td></tr>
+    <tr><td class="formel">\(\sqrt{75}\)</td><td class="formel">\(\sqrt{25 \cdot 3}\)</td><td class="formel">\(5\sqrt{3}\)</td></tr>
+    <tr><td class="formel">\(\sqrt{200}\)</td><td class="formel">\(\sqrt{100 \cdot 2}\)</td><td class="formel">\(10\sqrt{2}\)</td></tr>
+    <tr><td class="formel">\(\sqrt{x^3}\) für \(x \geq 0\)</td><td class="formel">\(\sqrt{x^2 \cdot x}\)</td><td class="formel">\(x\sqrt{x}\)</td></tr>
+  </tbody>
+</table>
+
+<h3>Nenner rational machen</h3>
+
+<p>Wurzeln im Nenner werden durch Erweitern entfernt:</p>
+
+\[ \dfrac{1}{\sqrt{2}} \;=\; \dfrac{1 \cdot \sqrt{2}}{\sqrt{2} \cdot \sqrt{2}} \;=\; \dfrac{\sqrt{2}}{2}. \]
+
+<p>Bei Summen mit Wurzel im Nenner hilft die dritte binomische Formel rückwärts:</p>
+
+\[ \dfrac{1}{\sqrt{5} - \sqrt{3}} \;=\; \dfrac{\sqrt{5} + \sqrt{3}}{(\sqrt{5} - \sqrt{3})(\sqrt{5} + \sqrt{3})}
+   \;=\; \dfrac{\sqrt{5} + \sqrt{3}}{5 - 3} \;=\; \dfrac{\sqrt{5} + \sqrt{3}}{2}. \]
+
+<!-- ──────────────────────── 7. HIERARCHIE DER OPERATIONEN ──────────────────────── -->
+<h2 id="hierarchie">Hierarchie — wenn Potenzen, Wurzeln und Operationen aufeinandertreffen <a class="quer" href="g1-1-grundlagen.html#typen">↩ 1.1</a></h2>
+
+<p>Aus Kapitel 1.1 kennst du die Hierarchie der Operationen. Mit Potenzen und Wurzeln wird sie um
+zwei Stufen erweitert:</p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz — Reihenfolge</div>
+  <ol style="margin:0">
+    <li>Klammern</li>
+    <li>Potenzen und Wurzeln (gleichberechtigt — jeweils im Innersten zuerst)</li>
+    <li>Punktrechnungen (Multiplikation, Division)</li>
+    <li>Strichrechnungen (Addition, Subtraktion)</li>
+  </ol>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel — gemischter Term</div>
+  \[ 3 + 2 \cdot \sqrt{16} - (5 - 1)^2 \;=\; 3 + 2 \cdot 4 - 4^2 \;=\; 3 + 8 - 16 \;=\; -5. \]
+  <p>Reihenfolge: erst die Klammer \((5 - 1) = 4\), dann Wurzel und Potenz, dann Multiplikation,
+  zuletzt Addition und Subtraktion.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \(-3^2\) und \((-3)^2\)</div>
+  <p>\(-3^2 = -(3^2) = -9\) (Potenz bindet stärker als das Vorzeichen). <br>
+     \((-3)^2 = 9\) (Klammer schliesst die \(-3\) ein und das Quadrat wirkt auf das Ganze).</p>
+  <p>Diesen Unterschied prüfen Taschenrechner unterschiedlich aus — bewusst Klammern setzen!</p>
+</div>
+
+<!-- ──────────────────────── 8. AUFGABEN ──────────────────────── -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
 
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Wissenschaftliche Notation umrechnen</span></div>
+  <p>Schreibe in normierter wissenschaftlicher Notation \(a \cdot 10^n\) mit \(1 \leq |a| < 10\):</p>
+  <ol class="aufg-liste">
+    <li>\(58\,000\)</li>
+    <li>\(0.0042\)</li>
+    <li>\(0.000\,000\,019\)</li>
+    <li>\(7\,200\,000\,000\)</li>
+  </ol>
+  <p>Und umgekehrt — als Dezimalzahl ausschreiben:</p>
+  <ol class="aufg-liste" start="5">
+    <li>\(3.14 \cdot 10^5\)</li>
+    <li>\(6.5 \cdot 10^{-4}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-4-a1')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-4-a1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(5.8 \cdot 10^4\)</li>
+        <li>\(4.2 \cdot 10^{-3}\)</li>
+        <li>\(1.9 \cdot 10^{-8}\)</li>
+        <li>\(7.2 \cdot 10^9\)</li>
+      </ol>
+      <ol class="aufg-liste" start="5">
+        <li>\(3.14 \cdot 10^5 = 314\,000\)</li>
+        <li>\(6.5 \cdot 10^{-4} = 0.000\,65\)</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Potenzgesetze anwenden</span></div>
+  <p>Vereinfache ohne Hilfsmittel:</p>
+  <ol class="aufg-liste">
+    <li>\(3^4 \cdot 3^2\)</li>
+    <li>\(\dfrac{5^7}{5^4}\)</li>
+    <li>\((2^3)^2\)</li>
+    <li>\(6^{-2}\)</li>
+    <li>\(\dfrac{a^5 \cdot a^{-2}}{a^4}\)</li>
+    <li>\((2 x^3)^4\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-4-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-4-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(3^{4+2} = 3^6 = 729\)</li>
+        <li>\(5^{7-4} = 5^3 = 125\)</li>
+        <li>\(2^{3 \cdot 2} = 2^6 = 64\)</li>
+        <li>\(6^{-2} = 1/36\)</li>
+        <li>\(\dfrac{a^{5 - 2}}{a^4} = \dfrac{a^3}{a^4} = a^{-1} = \dfrac{1}{a}\)</li>
+        <li>\(2^4 \cdot x^{3 \cdot 4} = 16 x^{12}\)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Quadratwurzeln vereinfachen</span></div>
+  <p>Schreibe als \(k \cdot \sqrt{m}\) mit kleinstmöglichem \(m\):</p>
+<ol class="aufg-liste">
+  <li>\(\;\sqrt{18}\)</li>
+  <li>\(\;\sqrt{147}\)</li>
+  <li>\(\;\sqrt{162}\)</li>
+  <li>\(\;\sqrt{45 x^2}\) (mit \(x \geq 0\))</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-4-a3')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-4-a3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\sqrt{9 \cdot 2} = 3\sqrt{2}\)</li>
+        <li>\(\sqrt{49 \cdot 3} = 7\sqrt{3}\)</li>
+        <li>\(\sqrt{81 \cdot 2} = 9\sqrt{2}\)</li>
+        <li>\(\sqrt{9 \cdot 5 \cdot x^2} = 3 x \sqrt{5}\) (mit \(x \geq 0\), sonst \(3|x|\sqrt{5}\))</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Nenner rational machen</span></div>
+  <p>Bring die Wurzel aus dem Nenner:</p>
+<ol class="aufg-liste">
+  <li>\(\;\dfrac{6}{\sqrt{3}}\)</li>
+  <li>\(\;\dfrac{1}{\sqrt{2} + 1}\)</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-4-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-4-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(\dfrac{6}{\sqrt{3}} \cdot \dfrac{\sqrt{3}}{\sqrt{3}} = \dfrac{6 \sqrt{3}}{3} = 2 \sqrt{3}\).</li>
+        <li>Mit \((\sqrt{2} - 1)\) erweitern (3. binomische Formel):
+      \(\dfrac{1 \cdot (\sqrt{2} - 1)}{(\sqrt{2} + 1)(\sqrt{2} - 1)} = \dfrac{\sqrt{2} - 1}{2 - 1} = \sqrt{2} - 1\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Hierarchie der Operationen</span></div>
+  <p>Berechne ohne Hilfsmittel:</p>
+    <ol class="aufg-liste">
+    <li>\(\;5 + 3 \cdot \sqrt{49} - 2^3\)</li>
+    <li>\(\;\sqrt{25 - 9} + 4 \cdot 2^2\)</li>
+    <li>\(\;\sqrt{(-4)^2} + (-2)^3\)</li>
+    <li>\(\;-3^2 + (-3)^2\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-4-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-4-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(5 + 3 \cdot 7 - 8 = 5 + 21 - 8 = 18\).</li>
+        <li>\(\sqrt{16} + 4 \cdot 4 = 4 + 16 = 20\). Beachten: erst \(25 - 9\) unter der Wurzel!</li>
+        <li>\(\sqrt{16} + (-8) = 4 - 8 = -4\).</li>
+        <li>\(-3^2 + (-3)^2 = -9 + 9 = 0\). <em>Vorzeichen-Falle:</em> bei \(-3^2\) bindet die Potenz stärker als das vorangestellte Minus — also erst \(3^2 = 9\), dann das Vorzeichen anwenden: \(-9\). Bei \((-3)^2\) ist die Klammer Teil der Basis: \((-3)\cdot(-3) = +9\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — Schaltzeit eines Mikrocontrollers</span></div>
+  <p>Ein Mikrocontroller schaltet ein digitales Signal in 4 Nanosekunden (\(4 \cdot 10^{-9}\) s) um.
+  Pro Sekunde schaltet er also \(\dfrac{1}{4 \cdot 10^{-9}}\) mal.</p>
+    <ol class="aufg-liste">
+    <li>Wie viele Schaltvorgänge sind das pro Sekunde? Gib die Antwort in
+  wissenschaftlicher Notation und in MHz an (\(1 \text{ MHz} = 10^6\) Schaltungen/s).</li>
+    <li>Wie viele Schaltvorgänge schafft der Controller in 1 Stunde?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-4-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-4-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(\dfrac{1}{4 \cdot 10^{-9}} = \dfrac{1}{4} \cdot \dfrac{1}{10^{-9}} = \dfrac{1}{4} \cdot 10^{9} = 0.25 \cdot 10^9 = 2.5 \cdot 10^8\)
+      Schaltvorgänge pro Sekunde — das sind \(250 \cdot 10^6\) Hz oder <strong>250 MHz</strong>. <em>Zur Vorzeichen-Hierarchie:</em> Das Dividieren durch \(10^{-9}\) ist dasselbe wie Multiplizieren mit \(10^{+9}\) — der Exponent wechselt das Vorzeichen.</li>
+        <li>Pro Stunde: \(2.5 \cdot 10^8 \cdot 3600 = 9 \cdot 10^{11}\) Schaltvorgänge — also <strong>900 Milliarden</strong> (= 0.9 Billionen).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────────────── 9. ZUSAMMENFASSUNG ──────────────────────── -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Wie viele Tropfen passen in den Atlantik? <span class="aufg-vertiefung">Vertiefung</span></span></div>
+    <p>Ein Wassertropfen hat ein Volumen von etwa \(0.05\,\text{mL}\). Der Atlantik enthält rund \(3.1 \cdot 10^{20}\,\text{L}\) Wasser.</p>
+  <ol class="aufg-liste">
+    <li>Wandle den Tropfen-Wert in wissenschaftliche Notation (in Litern) um</li>
+    <li>Berechne, wie viele Tropfen in den Atlantik passen würden</li>
+    <li>Vergleiche mit der Avogadro-Zahl \(6.022 \cdot 10^{23}\): wo liegt das Atlantik-Tropfen-Verhältnis?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-4-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-4-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(0.05\,\text{mL} = 0.05 \cdot 10^{-3}\,\text{L} = 5 \cdot 10^{-5}\,\text{L}\).</li>
+        <li>Anzahl Tropfen = \(\dfrac{3.1 \cdot 10^{20}}{5 \cdot 10^{-5}} = \dfrac{3.1}{5} \cdot 10^{20 - (-5)} = 0.62 \cdot 10^{25} = 6.2 \cdot 10^{24}\) Tropfen.</li>
+        <li>\(6.2 \cdot 10^{24}\) Tropfen entsprechen etwa \(10\)-mal der Avogadro-Zahl — anders ausgedrückt: in einem Mol Wassermolekülen (\(6.022 \cdot 10^{23}\)) stecken etwa so viele Moleküle, wie ein <em>Zehntel</em> der Atlantik-Tropfen-Zahl. Beide Grössenordnungen sind im Alltag unvorstellbar — und genau das macht die wissenschaftliche Notation nützlich.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
 
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Kernpunkte</div>
+  <ul style="margin:0">
+    <li><strong>Zehnerpotenzen</strong> kürzen lange Zahlen ab. Wissenschaftliche Notation:
+        \(a \cdot 10^n\) mit \(1 \leq |a| < 10\).</li>
+    <li><strong>Potenzgesetze</strong> nur bei <em>gleicher Basis</em> anwendbar. Multiplikation
+        addiert, Division subtrahiert die Exponenten; Potenz einer Potenz multipliziert sie.</li>
+    <li><strong>Quadratwurzel</strong> ist die <em>nichtnegative</em> Zahl mit Quadrat \(a\).
+        \(\sqrt{a^2} = |a|\) — das Vorzeichen geht verloren.</li>
+    <li><strong>Wurzelgesetze:</strong> Produkt- und Quotientenwurzel zerlegen, aber:
+        \(\sqrt{a + b} \neq \sqrt{a} + \sqrt{b}\).</li>
+    <li><strong>Hierarchie:</strong> Klammern → Potenzen/Wurzeln → Punktrechnung → Strichrechnung.</li>
+  </ul>
+</div>
 
-<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead><tr><th>Gesetz</th><th>Formel</th><th>Beispiel</th></tr></thead>
+  <tbody>
+    <tr><td>Wissenschaftl. Notation</td><td>\(a \cdot 10^n\), \(1 \leq |a| < 10\)</td><td>\(4.2 \cdot 10^7\)</td></tr>
+    <tr><td>Produkt gleicher Basis</td><td>\(a^m \cdot a^n = a^{m+n}\)</td><td>\(3^4 \cdot 3^2 = 3^6\)</td></tr>
+    <tr><td>Quotient gleicher Basis</td><td>\(a^m : a^n = a^{m-n}\)</td><td>\(5^7 : 5^4 = 5^3\)</td></tr>
+    <tr><td>Potenz einer Potenz</td><td>\((a^m)^n = a^{m \cdot n}\)</td><td>\((2^3)^2 = 2^6\)</td></tr>
+    <tr><td>Negativer Exponent</td><td>\(a^{-n} = \dfrac{1}{a^n}\)</td><td>\(6^{-2} = \dfrac{1}{36}\)</td></tr>
+    <tr><td>Exponent null</td><td>\(a^0 = 1\) (für \(a \neq 0\))</td><td>\(7^0 = 1\)</td></tr>
+    <tr><td>Wurzel als Potenz</td><td>\(\sqrt{a} = a^{1/2}\)</td><td>\(\sqrt{9} = 9^{1/2} = 3\)</td></tr>
+    <tr><td>Produktwurzel</td><td>\(\sqrt{a \cdot b} = \sqrt{a} \cdot \sqrt{b}\)</td><td>\(\sqrt{50} = \sqrt{25}\cdot\sqrt{2} = 5\sqrt{2}\)</td></tr>
+    <tr><td>Quotientenwurzel</td><td>\(\sqrt{a/b} = \sqrt{a}/\sqrt{b}\)</td><td>\(\sqrt{9/16} = 3/4\)</td></tr>
+    <tr><td>Hierarchie</td><td>Klammer ▶ Potenz/Wurzel ▶ Punkt ▶ Strich</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<!-- ──────────────────────── 10. DOWNLOADS ──────────────────────── -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
 
+<p>Zu diesem Thema gehören fünf Standardmaterialien — Theorie zum Mitnehmen, Karteikarten zum
+Auswendiglernen, Aufgabenserien zum Üben:</p>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g1-4-zehnerpotenzen-quadratwurzeln/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-4-zehnerpotenzen-quadratwurzeln/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Potenz- und Wurzelgesetze kompakt</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-4-zehnerpotenzen-quadratwurzeln/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-4-zehnerpotenzen-quadratwurzeln/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-4-zehnerpotenzen-quadratwurzeln/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ──────────────────────── 11. EXTERNE RESSOURCEN ──────────────────────── -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lW8nLkmt32wPfuRjZylkOzq" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über Potenzen — Playlist</div><div class="lk-s">MathemaTrick · 22 Videos · Potenzgesetze und Rechenregeln</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzlbi-rSRqX-4Dm3D1_2s46K" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Potenz- und Wurzelrechnung — Playlist</div><div class="lk-s">Lehrerschmidt · 39 Videos · Zehnerpotenzen, Quadratwurzeln, Wurzelziehen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHiz2awITczKHwCrwj9Z5pY1" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Potenzen, Potenzgesetze — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 36 Videos · Schreibweise, Umformungen, Anwendungen</div></div></a>
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g1/g11/aufg_g11.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Quadratwurzeln (G11)</div><div class="lk-s">Aufgaben mit Lösungen zu Wurzelziehen und Wurzelgesetzen</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g1/g12/aufg_g12.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Potenzen und Wurzeln (G12)</div><div class="lk-s">Vereinfachung, rationale Exponenten, gemischte Aufgaben</div></div></a>
+  <a href="https://de.serlo.org/mathe/23665/aufgaben-zu-den-potenzgesetzen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu den Potenzgesetzen</div><div class="lk-s">Übungen zum Anwenden aller Potenzgesetze · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/111507/aufgaben-zum-rechnen-mit-quadratwurzeln" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Rechnen mit Quadratwurzeln</div><div class="lk-s">Wurzelgesetze, teilweises Wurzelziehen, Vereinfachen · mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -92,11 +828,203 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Zehnerpotenzen und Quadratwurzeln</p>
+  <p>Grundlagenfach 1.4 Zehnerpotenzen und Quadratwurzeln</p>
 </footer>
 
-<script src="../nav.js"></script>
-<script src="../mathlib.js"></script>
+<script>
+/* ════════════════════════════════════════════════════════════════
+ *  EINSTIEG · Zoom-Skala vom Atom zur Galaxie
+ *  37 Zehnerpotenz-Stufen mit Alltagsobjekten als Anker.
+ *  Schieber wählt n, Canvas zeigt links die Skala und rechts ein
+ *  symbolisches Objekt sowie die wissenschaftliche Notation.
+ * ════════════════════════════════════════════════════════════════ */
+const ZOOM_OBJEKTE = [
+  { n: -15, gr: '1 fm',     obj: 'Atomkern',           sym: '⚛︎', desc: 'Der Atomkern eines Wasserstoffs misst etwa \\(1\\cdot 10^{-15}\\) m. So klein, dass selbst Elektronenmikroskope ihn nicht direkt abbilden können.' },
+  { n: -10, gr: '1 Å',      obj: 'Atom',               sym: '○',  desc: 'Ein Atomdurchmesser liegt bei etwa \\(10^{-10}\\) m (1 Ångström). 10 Millionen Atome nebeneinander ergeben 1 mm.' },
+  { n:  -9, gr: '1 nm',     obj: 'DNA-Helix-Dicke',    sym: '⌇',  desc: 'Die DNA-Doppelhelix ist etwa 2 nm dick (\\(2\\cdot 10^{-9}\\) m).' },
+  { n:  -7, gr: '100 nm',   obj: 'Coronavirus',        sym: '●',  desc: 'Ein Coronavirus misst etwa 100 nm (\\(10^{-7}\\) m).' },
+  { n:  -6, gr: '1 μm',     obj: 'Bakterie',           sym: '◖',  desc: 'Bakterien sind typischerweise 1–10 μm (\\(10^{-6}\\) m) gross.' },
+  { n:  -5, gr: '10 μm',    obj: 'menschliche Zelle',  sym: '◯',  desc: 'Eine durchschnittliche Körperzelle hat einen Durchmesser von etwa \\(10^{-5}\\) m.' },
+  { n:  -4, gr: '0.1 mm',   obj: 'feines Haar',        sym: '|',  desc: 'Ein menschliches Haar ist etwa 0.1 mm dick (\\(10^{-4}\\) m).' },
+  { n:  -3, gr: '1 mm',     obj: 'Sandkorn',           sym: '·',  desc: 'Ein Sandkorn misst rund 1 mm (\\(10^{-3}\\) m).' },
+  { n:  -2, gr: '1 cm',     obj: 'Käfer',              sym: '🐞', desc: 'Ein Marienkäfer ist etwa 1 cm (\\(10^{-2}\\) m) gross.' },
+  { n:  -1, gr: '0.1 m',    obj: 'Apfel',              sym: '🍎', desc: 'Ein Apfel hat etwa 10 cm Durchmesser (\\(10^{-1}\\) m).' },
+  { n:   0, gr: '1 m',      obj: 'Mensch',             sym: '🚶', desc: 'Ein Mensch ist im Grössenordnungsbereich \\(10^{0}\\) m = 1 m, genauer 1.5–1.9 m.' },
+  { n:   1, gr: '10 m',     obj: 'Haus',               sym: '🏠', desc: 'Ein Einfamilienhaus misst etwa 10 m (\\(10^{1}\\) m).' },
+  { n:   2, gr: '100 m',    obj: 'Hochhaus',           sym: '🏢', desc: 'Hochhäuser sind 100 m hoch (\\(10^{2}\\) m).' },
+  { n:   3, gr: '1 km',     obj: 'Dorf',               sym: '⌂⌂⌂', desc: 'Eine Ortschaft hat typische Ausdehnung 1 km (\\(10^{3}\\) m).' },
+  { n:   4, gr: '10 km',    obj: 'Stadt',              sym: '🌆', desc: 'Eine Mittelstadt erstreckt sich über etwa 10 km (\\(10^{4}\\) m).' },
+  { n:   5, gr: '100 km',   obj: 'Kanton',             sym: '🗺',  desc: 'Ein Schweizer Kanton hat etwa 100 km Ausdehnung (\\(10^{5}\\) m).' },
+  { n:   6, gr: '1000 km',  obj: 'Land',               sym: '🌍', desc: 'Die Schweiz misst Nord-Süd rund 220 km, ein grosses Land wie Frankreich ca. 1000 km (\\(10^{6}\\) m).' },
+  { n:   7, gr: '10 000 km', obj: 'Erde-Durchmesser',  sym: '🌎', desc: 'Der Erddurchmesser beträgt etwa \\(1.3\\cdot 10^{7}\\) m.' },
+  { n:   8, gr: '100 000 km', obj: 'Erde-Mond-Abstand', sym: '☾',  desc: 'Der Mond ist rund \\(3.8\\cdot 10^{8}\\) m von der Erde entfernt.' },
+  { n:  11, gr: 'Sonne-Erde-Abstand', obj: 'Erdbahn',  sym: '☉',  desc: 'Eine astronomische Einheit (Erde-Sonne) misst \\(1.5\\cdot 10^{11}\\) m.' },
+  { n:  13, gr: 'Sonnensystem-Radius', obj: 'Pluto-Bahn', sym: '♇', desc: 'Die Plutobahn liegt bei etwa \\(6\\cdot 10^{12}\\) m vom Sonnenzentrum.' },
+  { n:  16, gr: 'Lichtjahr',obj: 'nächster Stern',     sym: '✦',  desc: 'Proxima Centauri, der nächste Stern, ist \\(4\\cdot 10^{16}\\) m entfernt (4.2 Lichtjahre).' },
+  { n:  20, gr: 'Galaxie',  obj: 'Milchstrasse',       sym: '✶',  desc: 'Die Milchstrasse hat einen Durchmesser von \\(10^{21}\\) m (100 000 Lichtjahre).' },
+  { n:  22, gr: 'Universum',obj: 'beobachtbar',        sym: '∞',  desc: 'Der Radius des beobachtbaren Universums beträgt rund \\(10^{26}\\) m. Bei \\(10^{22}\\) m sind wir bei lokalen Galaxiehaufen.' },
+];
+
+function zoomEintrag(n) {
+  // suche nächstgelegenen Eintrag
+  let best = ZOOM_OBJEKTE[0];
+  let bestDiff = Math.abs(n - best.n);
+  for (const e of ZOOM_OBJEKTE) {
+    const d = Math.abs(n - e.n);
+    if (d < bestDiff) { best = e; bestDiff = d; }
+  }
+  return best;
+}
+
+function drawZoom() {
+  const sld = document.getElementById('sld-zoomN');
+  if (!sld) return;
+  const n = +sld.value;
+  document.getElementById('lbl-zoomN').textContent = n >= 0 ? `+${n}` : `${n}`;
+
+  const { ctx, W, H } = initCanvas('cv-zoom', 340);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  // Layout: links die Zehnerpotenz-Skala, rechts Visualisierung
+  const skalaX = 80;
+  const minN = -15, maxN = 22;
+
+  // Skala-Achse vertikal
+  const skalaTop = 30;
+  const skalaBot = H - 30;
+  const nY = nv => skalaTop + (maxN - nv) / (maxN - minN) * (skalaBot - skalaTop);
+
+  ctx.strokeStyle = '#5a5040';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(skalaX, skalaTop - 8);
+  ctx.lineTo(skalaX, skalaBot + 8);
+  ctx.stroke();
+  // Pfeil oben (gross) und unten (klein)
+  ctx.beginPath();
+  ctx.moveTo(skalaX, skalaTop - 8);
+  ctx.lineTo(skalaX - 4, skalaTop - 2);
+  ctx.lineTo(skalaX + 4, skalaTop - 2);
+  ctx.closePath();
+  ctx.fill();
+
+  // Skalen-Marken alle 2 Stufen
+  ctx.fillStyle = '#5a5040';
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'right';
+  for (let nv = minN; nv <= maxN; nv++) {
+    const py = nY(nv);
+    const major = (nv % 5 === 0);
+    ctx.strokeStyle = major ? '#5a5040' : '#a89b85';
+    ctx.lineWidth = major ? 1.2 : 0.8;
+    ctx.beginPath();
+    ctx.moveTo(skalaX - (major ? 6 : 3), py);
+    ctx.lineTo(skalaX, py);
+    ctx.stroke();
+    if (major) {
+      ctx.fillText(`10${supExp(nv)}`, skalaX - 10, py + 3);
+    }
+  }
+  // Labels „klein" und „gross"
+  ctx.fillStyle = '#a89b85';
+  ctx.font = 'italic 10px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('gross', skalaX, 18);
+  ctx.fillText('klein', skalaX, H - 14);
+
+  // Aktive Position als Pfeil-Marker
+  const py_aktiv = nY(n);
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath();
+  ctx.moveTo(skalaX + 6, py_aktiv);
+  ctx.lineTo(skalaX + 16, py_aktiv - 7);
+  ctx.lineTo(skalaX + 16, py_aktiv + 7);
+  ctx.closePath();
+  ctx.fill();
+
+  // Anker-Punkte aus ZOOM_OBJEKTE (alle als kleine Punkte)
+  ZOOM_OBJEKTE.forEach(e => {
+    const py = nY(e.n);
+    ctx.fillStyle = (e.n === n) ? '#1a4f8a' : '#d4cab5';
+    ctx.beginPath();
+    ctx.arc(skalaX, py, e.n === n ? 5 : 3, 0, 2 * Math.PI);
+    ctx.fill();
+  });
+
+  // ═══ Rechte Seite: Objekt-Visualisierung ═══
+  const objX = skalaX + 140;
+  const objCx = objX + (W - objX) / 2;
+  const objCy = H / 2;
+
+  // Suche passenden Eintrag (oder den nächstliegenden)
+  const eintrag = zoomEintrag(n);
+
+  // Hintergrund-Kreis als Referenz-Rahmen
+  ctx.strokeStyle = '#a89b85';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  ctx.arc(objCx, objCy, 70, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Symbol/Bezeichnung
+  ctx.fillStyle = '#1c1a17';
+  ctx.font = 'bold 48px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(eintrag.sym, objCx, objCy + 16);
+
+  // Objekt-Bezeichnung darunter
+  ctx.fillStyle = '#1a4f8a';
+  ctx.font = 'bold 14px monospace';
+  ctx.fillText(eintrag.obj, objCx, objCy + 50);
+
+  // Grösse darüber
+  ctx.fillStyle = '#5a5040';
+  ctx.font = '12px monospace';
+  ctx.fillText(`Grösse: ${eintrag.gr}`, objCx, objCy - 75);
+
+  // Wissenschaftliche Notation gross oben
+  ctx.fillStyle = '#3a342a';
+  ctx.font = 'bold 16px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(`1 · 10${supExp(eintrag.n)} m`, objCx, 22);
+
+  // Falls n nicht exakt einem Eintrag entspricht: Hinweis
+  if (eintrag.n !== n) {
+    ctx.fillStyle = '#a89b85';
+    ctx.font = 'italic 10px monospace';
+    ctx.fillText(`(nächster Anker: ${eintrag.n >= 0 ? '+' : ''}${eintrag.n})`, objCx, H - 12);
+  }
+
+  // Live-Anzeigen
+  document.getElementById('leg-zoomObj').textContent = eintrag.obj;
+  document.getElementById('leg-zoomGr').textContent = eintrag.gr;
+  document.getElementById('leg-zoomSci').textContent = `1·10${supExp(n)}`;
+
+  const erklEl = document.getElementById('erkl-zoom');
+  erklEl.innerHTML = eintrag.desc;
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([erklEl]);
+  }
+}
+
+// Unicode-Superskript für Exponenten
+function supExp(n) {
+  const map = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+  return String(n).split('').map(c => map[c] || c).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const sld = document.getElementById('sld-zoomN');
+  if (sld) {
+    sld.addEventListener('input', drawZoom);
+    drawZoom();
+  }
+});
+</script>
+
 <script>
 buildNav({
   bereich:'grundlagen', id:'g1-4',
@@ -105,5 +1033,6 @@ buildNav({
   next:{nr:'2.1',titel:'Grundlagen',url:'g2-1-grundlagen.html'}
 });
 </script>
+
 </body>
 </html>

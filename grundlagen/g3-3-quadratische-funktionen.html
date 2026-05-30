@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quadratische Funktionen — TALS Mathematik</title>
+<title>3.3 Quadratische Funktionen — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
 <!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
 <script>
 MathJax = {
-  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol','bbox','color']} },
   svg: { fontCache:'global', scale:1.05 },
-  loader: { load:['[tex]/boldsymbol'] },
+  loader: { load:['[tex]/boldsymbol','[tex]/bbox','[tex]/color'] },
   options: { skipHtmlTags:['script','noscript','style','textarea'] }
 };
 </script>
@@ -32,6 +32,22 @@ MathJax = {
 .sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
 .sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
 .sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Drei Slider in einer Zeile (kompakt) ── */
+.sl-grid-3 { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; }
+.sl-grid-3 .sl-row { margin-bottom:0; gap:8px; padding:8px 12px; }
+.sl-grid-3 .sl-row label { min-width:0; }
+.sl-grid-3 .sl-val { min-width:38px; }
+@media(max-width:620px){ .sl-grid-3 { grid-template-columns:1fr; } }
+
+/* ── Kompaktes Widget: kleinere Abstände, damit alles auf einen Bildschirm passt ── */
+.widget-kompakt .widget-header { padding:11px 18px 9px; }
+.widget-kompakt .widget-body { padding:14px 18px; }
+.widget-kompakt .formen-grid { margin-top:10px; }
+.widget-kompakt .formel-live { margin:10px 0 0; padding:9px 14px; }
+.widget-kompakt .formen-box { padding:8px 11px; }
+/* Diskriminante in der Live-Rechnung farblich hinterlegen (passend zum Abschnitt unten) */
+.disk-hl { background:#fde9c7; border-radius:3px; padding:1px 4px; font-weight:700; }
 
 /* ── Formula display ── */
 .formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:10px 0; }
@@ -74,11 +90,6 @@ MathJax = {
 .disk-btn.aktiv-neg { border-color:var(--rot); background:var(--rot); color:#fff; }
 
 /* ── Aufgaben ── */
-.aw { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; overflow:hidden; box-shadow:var(--s); margin:12px 0; }
-.aw-head { background:var(--orange-hell); border-bottom:1px solid var(--orange-rand); padding:11px 17px; display:flex; align-items:center; gap:10px; }
-.aw-nr { background:var(--orange); color:#fff; border-radius:50%; width:27px; height:27px; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:0.72rem; font-weight:700; flex-shrink:0; }
-.aw-titel { font-family:var(--serif); font-size:0.93rem; font-weight:700; color:var(--tinte); }
-.aw-body { padding:15px 17px; }
 .graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
 .graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
 .graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
@@ -97,9 +108,54 @@ MathJax = {
 .anw-tabelle { font-size:0.84rem; }
 .anw-tabelle thead th { white-space:normal; line-height:1.3; }
 .anw-tabelle tbody td { text-align:left; font-family:var(--sans); vertical-align:top; line-height:1.45; }
-.anw-tabelle tbody td.tab-form { font-family:var(--mono); font-weight:700; color:var(--blau); white-space:nowrap; text-align:center; vertical-align:middle; }
-.anw-tabelle tbody td.tab-anw { font-weight:600; color:var(--tinte); width:32%; }
+.anw-tabelle tbody td.tab-form { font-family:var(--mono); font-weight:700; color:var(--blau); text-align:center; vertical-align:middle; line-height:1.4; }
+.anw-tabelle tbody td.tab-anw { font-weight:600; color:var(--tinte); width:20%; }
 .anw-tabelle tbody td.tab-vorgehen { color:var(--tinte-2); }
+/* ── Beispiel-Hover (Auftrag: bei Mausüberflug konkretes Beispiel) ── */
+.anw-tabelle tbody tr.bsp-row { cursor:pointer; }
+.anw-tabelle tbody tr.bsp-row:hover td:not(.tab-form),
+.anw-tabelle tbody tr.bsp-row.bsp-aktiv td:not(.tab-form) { background:var(--blau-hell); transition:background 0.12s; }
+/* ── Beispiel-Popup links am Tabellenrand, mit Pfeil zur Vorgehen-Zelle ── */
+.anw-tabelle-wrap { position:relative; }
+.bsp-pop {
+  position:absolute;
+  left:10px;
+  top:var(--bsp-top, 0);
+  width:calc(58% - 20px); max-width:560px; min-width:300px;
+  background:var(--weiss); color:var(--tinte);
+  border:1.5px solid var(--blau); border-radius:10px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.14);
+  padding:14px 16px;
+  font-family:var(--sans); font-size:0.9rem; line-height:1.55;
+  opacity:0; pointer-events:none; transition:opacity 0.15s;
+  z-index:60;
+}
+/* Pfeil nach rechts auf die Vorgehen-Zelle — vertikal über --arrow-top justiert */
+.bsp-pop::after {
+  content:""; position:absolute;
+  top:var(--arrow-top, 50%); transform:translateY(-50%);
+  left:100%;
+  border:8px solid transparent; border-left-color:var(--blau);
+}
+.bsp-pop::before {
+  content:""; position:absolute;
+  top:var(--arrow-top, 50%); transform:translateY(-50%);
+  left:calc(100% - 2px);
+  border:7px solid transparent; border-left-color:var(--weiss);
+  z-index:1;
+}
+.bsp-row:hover .bsp-pop,
+.bsp-row.bsp-aktiv .bsp-pop { opacity:1; pointer-events:auto; }
+.bsp-pop .bsp-kopf { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--blau); margin-bottom:6px; }
+.bsp-pop .bsp-aufgabe { background:var(--papier-2); border:1px solid var(--linie); border-radius:7px; padding:9px 12px; margin-bottom:9px; font-size:0.88rem; }
+.bsp-pop .bsp-loesung { font-size:0.86rem; line-height:1.55; }
+.bsp-pop .bsp-loesung ol { margin:4px 0 0 20px; padding:0; }
+.bsp-pop .bsp-loesung li { margin-bottom:5px; }
+.bsp-pop .bsp-ergebnis { margin-top:9px; padding:8px 12px; background:var(--blau-hell); border-radius:7px; font-weight:700; color:var(--blau); font-size:0.88rem; }
+@media(max-width:900px){
+  .bsp-pop { width:auto; max-width:none; min-width:0; right:10px; }
+  .bsp-pop::after, .bsp-pop::before { display:none; }
+}
 
 /* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
    sind zentral in ../style.css definiert — hier NICHT überschreiben. */
@@ -117,6 +173,8 @@ MathJax = {
 </div>
 
 <!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Eine quadratische Funktion beschreibt jeden Vorgang mit gleichmässig wachsender Änderungsrate — vom geworfenen Ball bis zur Gewinnkurve. Hier lernst du die drei Darstellungsformen <strong>Grund-, Scheitel-, Produktform</strong>, ihre geometrische Bedeutung (Öffnung, Nullstellen, Scheitelpunkt) und löst klassische <strong>Extremwertaufgaben</strong>.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.3</div>
   <ul>
@@ -126,7 +184,6 @@ MathJax = {
     <li>Extremwertaufgaben lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
   </ul>
 </div>
-
 
 <!-- ══ 1. EINSTIEG ══ -->
 <h2 id="einstieg">Einstieg — der schiefe Wurf</h2>
@@ -179,7 +236,6 @@ MathJax = {
   </ul>
 </div>
 
-
 <!-- ══ 2. DEFINITION ══ -->
 <h2 id="definition">Definition und Parameter</h2>
 
@@ -188,6 +244,11 @@ MathJax = {
   \[ f(x) = a \cdot x^2 + b \cdot x + c, \qquad a, b, c \in \mathbb{R},\; a \neq 0 \]
   <p>Notation: \(f : \mathbb{R} \longrightarrow \mathbb{R},\quad x \longmapsto a x^2 + b x + c\)</p>
   <p>Der Graph einer quadratischen Funktion ist stets eine <strong>Parabel</strong>.</p>
+</div>
+
+<div class="block block-tipp" style="margin-top:8px">
+  <div class="block-titel">💡 Definitionsbereich</div>
+  <p>Standardmässig ist \(D = \mathbb{R}\) — eine quadratische Funktion ist für jede reelle Zahl definiert. Bei <em>Anwendungsaufgaben</em> ist \(D\) oft durch den Sachkontext eingeschränkt: bei Wurfweite ist \(x \geq 0\) (und meist \(x \leq x_\text{Auftreff}\)); bei Geometrie-Optimierung ist \(x\) auf den geometrisch sinnvollen Bereich beschränkt (z.B. Rechteckseiten \(> 0\)). Lies in Anwendungen den Definitionsbereich immer aus dem Kontext und gib ihn in der Lösung explizit an — das schliesst auch unsinnige Lösungen automatisch aus.</p>
 </div>
 
 <div class="block block-def" style="margin-top:10px">
@@ -209,22 +270,43 @@ MathJax = {
   </table>
 </div>
 
-
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Hinweis — andere Notationen für den Scheitelpunkt</div>
+  <p>Je nach Lehrmittel oder Werkzeug werden für den Scheitelpunkt unterschiedliche Buchstaben verwendet. Inhaltlich meinen alle dasselbe — wer aus einer anderen Quelle ein Beispiel sieht, sollte die Notation lesen können:</p>
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <thead><tr><th>Schreibweise</th><th>Form</th><th>Woher</th></tr></thead>
+    <tbody>
+      <tr><td>\(u,\, v\)</td>
+          <td>\(f(x) = a(x - u)^2 + v\), \(S(u \mid v)\)</td>
+          <td>in diesem Lehrmittel verwendet</td></tr>
+      <tr><td>\(d,\, e\)</td>
+          <td>\(f(x) = a(x - d)^2 + e\), \(S(d \mid e)\)</td>
+          <td>in anderen Lehrmitteln</td></tr>
+      <tr><td>\(x_s,\, y_s\)</td>
+          <td>\(f(x) = a(x - x_s)^2 + y_s\), \(S(x_s \mid y_s)\)</td>
+          <td>direkter Bezug zum Scheitelpunkt</td></tr>
+      <tr><td>\(h,\, k\)</td>
+          <td>\(f(x) = a(x - h)^2 + k\), \(S(h \mid k)\)</td>
+          <td>z.B. im Taschenrechner TI-30X Pro Mathprint</td></tr>
+    </tbody>
+  </table>
+</div>
 
 <!-- ══ 3. DIE DREI DARSTELLUNGEN (interaktiv mit Scheitelform) ══ -->
 <h2 id="darstellungen">Die drei Darstellungen</h2>
 
 <p>Verändere die Parameter \(a\), \(u\), \(v\) — die Scheitelform wird sofort in <strong>allgemeine Form</strong>, in die Berechnung der <strong>Nullstellen</strong> und in die <strong>Linearfaktorform</strong> umgerechnet. Im Graph werden Scheitelpunkt \(S(u \mid v)\), \(y\)-Achsenabschnitt und Nullstellen markiert.</p>
 
-<div class="widget">
+<div class="widget widget-kompakt">
   <div class="widget-header">
-    <h3>Interaktive Darstellungen</h3>
-    <p>\(f(x) = a \cdot (x - u)^2 + v\) · alle drei Darstellungsformen verknüpft</p>
+    <h3 style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">Interaktive Darstellungen <span style="font-weight:400;font-size:0.8rem;color:var(--tinte-2);font-family:var(--serif)">\(f(x) = a \cdot (x - u)^2 + v\) · alle drei Darstellungsformen verknüpft</span></h3>
   </div>
   <div class="widget-body">
-    <div class="sl-row"><label>Streckungsfaktor \(a\)</label><input type="range" id="dr-a" min="-2" max="2" step="0.25" value="0.5"><span class="sl-val" id="dr-av">0.5</span></div>
-    <div class="sl-row"><label>Scheitel-x  \(u\)</label><input type="range" id="dr-u" min="-5" max="5" step="0.5" value="1"><span class="sl-val" id="dr-uv">1</span></div>
-    <div class="sl-row"><label>Scheitel-y  \(v\)</label><input type="range" id="dr-v" min="-5" max="5" step="0.5" value="-2"><span class="sl-val" id="dr-vv">−2</span></div>
+    <div class="sl-grid-3">
+      <div class="sl-row"><label>\(a\)</label><input type="range" id="dr-a" min="-2" max="2" step="0.25" value="0.5"><span class="sl-val" id="dr-av">0.5</span></div>
+      <div class="sl-row"><label>\(u\)</label><input type="range" id="dr-u" min="-5" max="5" step="0.5" value="1"><span class="sl-val" id="dr-uv">1</span></div>
+      <div class="sl-row"><label>\(v\)</label><input type="range" id="dr-v" min="-5" max="5" step="0.5" value="-2"><span class="sl-val" id="dr-vv">−2</span></div>
+    </div>
 
     <div class="formen-grid">
       <div class="formen-box aktiv" id="form-scheitel">
@@ -244,49 +326,52 @@ MathJax = {
       </div>
     </div>
 
-    <div class="formel-live" style="margin-top:14px">
+    <div class="formel-live" style="margin-top:10px">
       <div class="fl-label">Berechnung der Nullstellen aus der allgemeinen Form</div>
-      <div class="fl-eq" id="dr-nst-rechnung" style="font-size:0.88rem;line-height:1.6"></div>
+      <div class="fl-eq" id="dr-nst-rechnung" style="font-size:0.84rem;line-height:1.5"></div>
     </div>
 
-    <div style="margin-top:14px">
-      <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Graph</div>
-      <div class="cv-wrap" style="max-width:500px"><canvas id="dr-canvas" height="280"></canvas></div>
+    <div style="margin-top:10px">
+      <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:5px">Graph</div>
+      <div class="cv-wrap" style="max-width:440px"><canvas id="dr-canvas" height="260"></canvas></div>
     </div>
 
-    <div style="margin-top:10px;font-size:0.78rem;color:var(--tinte-2);text-align:center">
-      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#1a4f8a;vertical-align:middle"></span>
+    <div style="margin-top:8px;font-size:0.76rem;color:var(--tinte-2);text-align:center">
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--blau);vertical-align:middle"></span>
       Scheitelpunkt &nbsp;·&nbsp;
-      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#b85c00;vertical-align:middle"></span>
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--orange);vertical-align:middle"></span>
       Nullstellen &nbsp;·&nbsp;
-      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#1f6b3a;vertical-align:middle"></span>
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--gruen);vertical-align:middle"></span>
       y-Achsenabschnitt
     </div>
   </div>
 </div>
 
-<div class="block block-bsp" style="margin-top:14px">
-  <div class="block-titel">🟢 Hinweis zur Linearfaktorform</div>
+<div class="block block-tipp" style="margin-top:14px">
+  <div class="block-titel">💡 Hinweis zur Linearfaktorform</div>
   <p>Die Linearfaktorform existiert nur, wenn die Parabel die \(x\)-Achse schneidet — also bei <strong>zwei oder einer reellen Nullstelle</strong>. Hat die Parabel keine reellen Nullstellen, gibt es keine Linearfaktorform über den reellen Zahlen.</p>
 </div>
-
 
 <!-- ══ 4. DISKRIMINANTE ══ -->
 <h2 id="diskriminante">Die Diskriminante — wie viele Nullstellen?</h2>
 
 <p>Aus der allgemeinen Form \(f(x) = ax^2 + bx + c\) bekommt man die Nullstellen mit der <strong>Mitternachtsformel</strong>:</p>
 
-\[ x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \]
+\[ x_{1,2} = \frac{-b \pm \sqrt{\bbox[#fde9c7, 3px]{\,b^2 - 4ac\,}}}{2a} \]
+
+<p style="text-align:center;font-size:0.86rem;color:var(--tinte-2);margin:-4px 0 6px">↑ derselbe Ausdruck ↓</p>
 
 <p>Der Ausdruck unter der Wurzel heisst <strong>Diskriminante</strong>:</p>
 
-\[ D = b^2 - 4ac \]
+\[ D = \bbox[#fde9c7, 3px]{\,b^2 - 4ac\,} \]
+
+<p style="text-align:center;font-size:0.82rem;color:var(--orange);margin:-2px 0 6px;font-weight:600">Der orange hinterlegte Term ist in beiden Formeln gleich — die Diskriminante \(D\) sitzt unter der Wurzel und entscheidet, ob es Nullstellen gibt.</p>
 
 <p>Ihr Vorzeichen entscheidet über die Anzahl reeller Nullstellen — und damit über die Lage der Parabel relativ zur \(x\)-Achse.</p>
 
 <div class="widget">
   <div class="widget-header">
-    <h3>📐 Diskriminante visualisieren</h3>
+    <h3>📐 Diskriminante visualisieren <a class="quer" href="g2-2b-quadratische-gleichungen.html#diskriminante">↩ 2.2b</a></h3>
     <p>Klicke auf einen Fall — die Parabel und die Rechnung passen sich an</p>
   </div>
   <div class="widget-body">
@@ -311,6 +396,13 @@ MathJax = {
   </div>
 </div>
 
+<p style="font-size:0.86rem;color:var(--tinte-2);margin-top:8px;font-style:italic">
+  Die drei Klick-Beispiele zeigen je eine quadratische Funktion mit ihrer Diskriminante:
+  <strong>D > 0</strong>: \(x^2 - 2x - 3\) mit \(D = 16\) (zwei Nullstellen \(x_1=-1,\,x_2=3\)) · 
+  <strong>D = 0</strong>: \(x^2 - 4x + 4\) mit \(D = 0\) (doppelte Nullstelle \(x=2\)) · 
+  <strong>D < 0</strong>: \(x^2 + 3\) mit \(D = -12\) (keine reelle Nullstelle).
+</p>
+
 <table class="ftb-tabelle" style="margin-top:14px">
   <thead><tr><th>Diskriminante</th><th>Anzahl Nullstellen</th><th>Geometrische Lage</th><th>Linearfaktorform</th></tr></thead>
   <tbody>
@@ -329,50 +421,130 @@ MathJax = {
   </tbody>
 </table>
 
+<!-- ══ 5. SPEZIALFÄLLE / TYPEN ══ -->
+<h2 id="typen">Typen quadratischer Funktionen</h2>
 
-<!-- ══ 5. ANWENDUNGEN DER DREI FORMEN — Übersichtstabelle ══ -->
+<p>Klicke auf einen Fall — nur dieser wird angezeigt:</p>
+
+<div class="typ-btns" id="typ-btns"></div>
+<div class="cv-wrap"><canvas id="typ-canvas" height="240"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="typ-desc"></div>
+
+<!-- ══ 6. ANWENDUNGEN DER DREI FORMEN — Übersichtstabelle ══ -->
 <h2 id="anwendungen">Anwendungen der drei Formen</h2>
 
 <p>Jede der drei Darstellungsformen hat zwei typische Einsätze: einmal zum <em>Zeichnen</em> (geometrisches Verständnis) und einmal zum <em>Aufstellen</em> der Funktionsgleichung aus gegebenen Bedingungen. Diese Tabelle ist das Werkzeug für Aufgaben.</p>
 
+<div class="anw-tabelle-wrap">
 <table class="ftb-tabelle anw-tabelle">
   <thead>
     <tr>
-      <th style="width:13%">Form</th>
-      <th style="width:30%">Anwendung</th>
+      <th style="width:11%">Form</th>
+      <th style="width:20%">Anwendung</th>
+      <th style="width:21%">Wann besonders gut</th>
       <th>Vorgehen</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td class="tab-form" rowspan="2">Allgemeine<br>Form<br>\(ax^2{+}bx{+}c\)</td>
+    <tr class="bsp-row" data-bsp="1">
+      <td class="tab-form" rowspan="2">Allgemeine<br>Form<br>\(f(x){=}ax^2{+}bx{+}c\)</td>
       <td class="tab-anw">① Nullstellen / Achsen­schnittpunkte bestimmen</td>
-      <td class="tab-vorgehen">Setze \(0 = ax^2 + bx + c\) und löse mit der Mitternachtsformel \(x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}\). Die Achsenschnittpunkte sind \(S_{x_1}(x_1 \mid 0)\), \(S_{x_2}(x_2 \mid 0)\) und \(S_y(0 \mid c)\).</td>
+      <td class="tab-anw">Wenn die Funktion bereits in Grundform vorliegt und keine bequemen Strukturmerkmale (Scheitelpunkt, Nullstellen) gegeben sind.</td>
+      <td class="tab-vorgehen">Setze \(0 = ax^2 + bx + c\) und löse mit der Mitternachtsformel \(x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}\). Die Achsenschnittpunkte sind \(S_{x_1}(x_1 \mid 0)\), \(S_{x_2}(x_2 \mid 0)\) und \(S_y(0 \mid c)\).<div class="bsp-pop" aria-hidden="true">
+<div class="bsp-kopf">Beispiel ① Nullstellen mit der Mitternachtsformel</div>
+<div class="bsp-aufgabe"><strong>Aufgabe:</strong> Bestimme die Nullstellen und Achsenschnittpunkte von \(f(x) = x^2 - 2x - 3\).</div>
+<div class="bsp-loesung"><strong>Lösungsweg:</strong><ol>
+<li>Ansatz: \(0 = x^2 - 2x - 3\), also \(a = 1,\ b = -2,\ c = -3\).</li>
+<li>Diskriminante: \(D = b^2 - 4ac = (-2)^2 - 4\cdot 1\cdot(-3) = 4 + 12 = 16 > 0\) \(\Rightarrow\) zwei Nullstellen.</li>
+<li>Mitternachtsformel: \(x_{1,2} = \dfrac{-(-2) \pm \sqrt{16}}{2\cdot 1} = \dfrac{2 \pm 4}{2}\).</li>
+<li>\(x_1 = \dfrac{2-4}{2} = -1,\quad x_2 = \dfrac{2+4}{2} = 3\).</li>
+<li>\(y\)-Achsenschnittpunkt: \(S_y(0 \mid c) = (0 \mid -3)\).</li>
+</ol></div>
+<div class="bsp-ergebnis">Achsenschnittpunkte: \(S_{x_1}(-1 \mid 0)\), \(S_{x_2}(3 \mid 0)\), \(S_y(0 \mid -3)\).</div>
+</div></td>
     </tr>
-    <tr>
+    <tr class="bsp-row" data-bsp="2">
       <td class="tab-anw">② Parabelgleichung aus 3 beliebigen Punkten bestimmen</td>
-      <td class="tab-vorgehen">Setze die \(x\)- und \(y\)-Koordinaten der drei Punkte einzeln in \(y = ax^2 + bx + c\) ein. Es entsteht ein Gleichungssystem mit 3 Gleichungen und 3 Unbekannten \(a, b, c\) — lösen (z.B. mit dem Taschenrechner).</td>
+      <td class="tab-anw">Wenn drei Punkte gegeben sind, von denen <em>keiner</em> ausgezeichnet ist (kein Scheitelpunkt, keine Nullstelle).</td>
+      <td class="tab-vorgehen">Setze die \(x\)- und \(y\)-Koordinaten der drei Punkte einzeln in \(y = ax^2 + bx + c\) ein. Es entsteht ein Gleichungssystem mit 3 Gleichungen und 3 Unbekannten \(a, b, c\) — lösen (z.B. mit dem Taschenrechner).<div class="bsp-pop" aria-hidden="true">
+<div class="bsp-kopf">Beispiel ② Parabelgleichung aus 3 Punkten</div>
+<div class="bsp-aufgabe"><strong>Aufgabe:</strong> Eine Parabel geht durch \(P_1(0 \mid 1)\), \(P_2(1 \mid 0)\) und \(P_3(2 \mid 3)\). Bestimme \(f(x) = ax^2 + bx + c\).</div>
+<div class="bsp-loesung"><strong>Lösungsweg:</strong><ol>
+<li>Jeden Punkt in \(y = ax^2 + bx + c\) einsetzen.</li>
+<li>\(P_1:\ c = 1\).</li>
+<li>\(P_2:\ a + b + c = 0 \Rightarrow a + b = -1\).</li>
+<li>\(P_3:\ 4a + 2b + c = 3 \Rightarrow 2a + b = 1\).</li>
+<li>Differenz der letzten zwei: \((2a + b) - (a + b) = 1 - (-1) \Rightarrow a = 2\).</li>
+<li>Einsetzen: \(2 + b = -1 \Rightarrow b = -3\).</li>
+</ol></div>
+<div class="bsp-ergebnis">\(f(x) = 2x^2 - 3x + 1\).</div>
+</div></td>
     </tr>
-    <tr>
-      <td class="tab-form" rowspan="2">Scheitel-<br>form<br>\(a(x{-}u)^2{+}v\)</td>
+    <tr class="bsp-row" data-bsp="3">
+      <td class="tab-form" rowspan="2">Scheitel-<br>form<br>\(f(x){=}a(x{-}u)^2{+}v\)</td>
       <td class="tab-anw">③ Parabel zeichnen / Transformation</td>
-      <td class="tab-vorgehen">Ausgehend von der Normalparabel \(y = x^2\) verschieben in den Scheitelpunkt \(S(u \mid v)\) und mit \(a\) strecken (\(|a| &gt; 1\)) bzw. stauchen (\(|a| &lt; 1\)). Bei \(a &lt; 0\) zusätzlich an der waagerechten Achse spiegeln.</td>
+      <td class="tab-anw">Wenn der Scheitelpunkt gesucht ist oder geometrische Verschiebung/Streckung im Vordergrund steht.</td>
+      <td class="tab-vorgehen">Ausgehend von der Normalparabel \(y = x^2\) verschieben in den Scheitelpunkt \(S(u \mid v)\) und mit \(a\) strecken (\(|a| &gt; 1\)) bzw. stauchen (\(|a| &lt; 1\)). Bei \(a &lt; 0\) zusätzlich an der waagerechten Achse spiegeln.<div class="bsp-pop" aria-hidden="true">
+<div class="bsp-kopf">Beispiel ③ Parabel zeichnen durch Transformation</div>
+<div class="bsp-aufgabe"><strong>Aufgabe:</strong> Zeichne \(f(x) = 2(x - 1)^2 - 3\) ausgehend von der Normalparabel \(y = x^2\).</div>
+<div class="bsp-loesung"><strong>Lösungsweg:</strong><ol>
+<li>Scheitelpunkt ablesen: \(S(1 \mid -3)\).</li>
+<li>Streckung: \(a = 2 > 1\) — enger als die Normalparabel.</li>
+<li>Öffnung: \(a > 0\) — nach oben.</li>
+<li>Hilfspunkte vom Scheitel aus: 1 nach rechts und \(2\cdot 1^2 = 2\) nach oben; 2 nach rechts und \(2\cdot 2^2 = 8\) nach oben (symmetrisch links).</li>
+<li>Punkte: \((0 \mid -1)\), \((2 \mid -1)\), \((-1 \mid 5)\), \((3 \mid 5)\) — Parabel sauber durchzeichnen.</li>
+</ol></div>
+<div class="bsp-ergebnis">Scheitel \(S(1 \mid -3)\), nach oben geöffnet, um Faktor 2 gestreckt.</div>
+</div></td>
     </tr>
-    <tr>
+    <tr class="bsp-row" data-bsp="4">
       <td class="tab-anw">④ Parabelgleichung aus dem Scheitelpunkt und einem beliebigen Punkt bestimmen</td>
-      <td class="tab-vorgehen">Setze \(u\) und \(v\) (Scheitelpunkt) sowie die Koordinaten des zweiten Punktes in \(y = a(x-u)^2 + v\) ein und löse die entstehende Gleichung nach \(a\) auf.</td>
+      <td class="tab-anw">Wenn der Scheitelpunkt explizit gegeben ist (z.B. „höchster Punkt der Wurfbahn bei …").</td>
+      <td class="tab-vorgehen">Setze \(u\) und \(v\) (Scheitelpunkt) sowie die Koordinaten des zweiten Punktes in \(y = a(x-u)^2 + v\) ein und löse die entstehende Gleichung nach \(a\) auf.<div class="bsp-pop" aria-hidden="true">
+<div class="bsp-kopf">Beispiel ④ Gleichung aus Scheitelpunkt und Punkt</div>
+<div class="bsp-aufgabe"><strong>Aufgabe:</strong> Eine Parabel hat den Scheitelpunkt \(S(2 \mid -1)\) und geht durch \(P(4 \mid 3)\). Bestimme \(f(x)\).</div>
+<div class="bsp-loesung"><strong>Lösungsweg:</strong><ol>
+<li>Scheitelform: \(y = a(x - 2)^2 - 1\).</li>
+<li>Punkt \(P(4 \mid 3)\) einsetzen: \(3 = a(4-2)^2 - 1\).</li>
+<li>\(3 = 4a - 1 \Rightarrow 4 = 4a \Rightarrow a = 1\).</li>
+</ol></div>
+<div class="bsp-ergebnis">\(f(x) = (x - 2)^2 - 1\).</div>
+</div></td>
     </tr>
-    <tr>
-      <td class="tab-form" rowspan="2">Linear-<br>faktorform<br>\(a(x{-}x_1)(x{-}x_2)\)</td>
+    <tr class="bsp-row" data-bsp="5">
+      <td class="tab-form" rowspan="2">Linear-<br>faktorform<br>\(f(x){=}a(x{-}x_1)(x{-}x_2)\)</td>
       <td class="tab-anw">⑤ Parabel aus den Nullstellen zeichnen</td>
-      <td class="tab-vorgehen">Trage \(x_1\) und \(x_2\) auf der \(x\)-Achse ein. Die Symmetrieachse ist die Mittelsenkrechte zwischen ihnen: \(x_S = \frac{x_1 + x_2}{2}\). Mit \(y_S = f(x_S)\) den Scheitelpunkt einzeichnen — Parabel zeichnen.</td>
+      <td class="tab-anw">Wenn beide Nullstellen explizit gegeben sind (z.B. „Wurf startet bei \(x=0\) und landet bei \(x=20\)").</td>
+      <td class="tab-vorgehen">Trage \(x_1\) und \(x_2\) auf der \(x\)-Achse ein. Die Symmetrieachse ist die Mittelsenkrechte zwischen ihnen: \(x_S = \frac{x_1 + x_2}{2}\). Mit \(y_S = f(x_S)\) den Scheitelpunkt einzeichnen — Parabel zeichnen.<div class="bsp-pop" aria-hidden="true">
+<div class="bsp-kopf">Beispiel ⑤ Parabel aus den Nullstellen zeichnen</div>
+<div class="bsp-aufgabe"><strong>Aufgabe:</strong> Eine nach oben geöffnete Parabel (\(a = 1\)) hat die Nullstellen \(x_1 = -1\) und \(x_2 = 3\). Zeichne sie.</div>
+<div class="bsp-loesung"><strong>Lösungsweg:</strong><ol>
+<li>Nullstellen eintragen: \((-1 \mid 0)\) und \((3 \mid 0)\).</li>
+<li>Symmetrieachse: \(x_S = \dfrac{-1 + 3}{2} = 1\).</li>
+<li>Linearfaktorform: \(f(x) = (x + 1)(x - 3)\).</li>
+<li>Scheitel-\(y\): \(y_S = f(1) = 2 \cdot (-2) = -4\).</li>
+<li>Scheitel \(S(1 \mid -4)\) eintragen, Parabel durchzeichnen.</li>
+</ol></div>
+<div class="bsp-ergebnis">Scheitel \(S(1 \mid -4)\), Nullstellen bei \(-1\) und \(3\).</div>
+</div></td>
     </tr>
-    <tr>
+    <tr class="bsp-row" data-bsp="6">
       <td class="tab-anw">⑥ Parabelgleichung aus den Nullstellen und einem beliebigen Punkt bestimmen</td>
-      <td class="tab-vorgehen">Setze \(x_1\), \(x_2\) und die Koordinaten des gegebenen Punktes \(P(x \mid y)\) in \(y = a(x-x_1)(x-x_2)\) ein und löse die Gleichung nach \(a\) auf.</td>
+      <td class="tab-anw">Wenn die Nullstellen gegeben sind und ein weiterer Punkt (oft der Scheitel-Höhenwert).</td>
+      <td class="tab-vorgehen">Setze \(x_1\), \(x_2\) und die Koordinaten des gegebenen Punktes \(P(x \mid y)\) in \(y = a(x-x_1)(x-x_2)\) ein und löse die Gleichung nach \(a\) auf.<div class="bsp-pop" aria-hidden="true">
+<div class="bsp-kopf">Beispiel ⑥ Gleichung aus Nullstellen und Punkt</div>
+<div class="bsp-aufgabe"><strong>Aufgabe:</strong> Ein Wurf startet bei \(x_1 = 0\), landet bei \(x_2 = 20\); höchster Punkt \(P(10 \mid 5)\). Bestimme \(f(x)\).</div>
+<div class="bsp-loesung"><strong>Lösungsweg:</strong><ol>
+<li>Linearfaktorform: \(y = a(x - 0)(x - 20) = a\,x(x - 20)\).</li>
+<li>Punkt einsetzen: \(5 = a \cdot 10 \cdot (10 - 20) = -100a\).</li>
+<li>\(a = -\dfrac{5}{100} = -0.05\).</li>
+</ol></div>
+<div class="bsp-ergebnis">\(f(x) = -0.05\,x(x - 20) = -0.05x^2 + x\).</div>
+</div></td>
     </tr>
   </tbody>
 </table>
+</div>
 
 <div class="block block-def" style="margin-top:14px">
   <div class="block-titel">📘 Umwandeln zwischen den Formen</div>
@@ -395,206 +567,254 @@ MathJax = {
   </table>
 </div>
 
-
-<!-- ══ 6. SPEZIALFÄLLE / TYPEN ══ -->
-<h2 id="typen">Typen quadratischer Funktionen</h2>
-
-<p>Klicke auf einen Fall — nur dieser wird angezeigt:</p>
-
-<div class="typ-btns" id="typ-btns"></div>
-<div class="cv-wrap"><canvas id="typ-canvas" height="240"></canvas></div>
-<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="typ-desc"></div>
-
-
 <!-- ══ 7. AUFSTELLEN ══ -->
 <h2 id="aufstellen">Funktionsgleichung aufstellen — Beispiele</h2>
 
-<div class="block block-beweis">
-  <div class="block-titel">🔷 Aus dem Scheitelpunkt und einem Punkt</div>
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel — Aus dem Scheitelpunkt und einem Punkt</div>
   <p>Gegeben: Scheitelpunkt \(S(2 \mid -3)\), Punkt \(P(0 \mid 1)\).</p>
   \[ 1 = a \cdot (0 - 2)^2 + (-3) \;\Longleftrightarrow\; 1 = 4a - 3 \;\Longleftrightarrow\; a = 1 \]
   \[ \Rightarrow\; f(x) = 1 \cdot (x - 2)^2 - 3 = x^2 - 4x + 1 \]
 </div>
 
-<div class="block block-beweis" style="margin-top:10px">
-  <div class="block-titel">🔷 Aus den Nullstellen und einem Punkt</div>
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel — Aus den Nullstellen und einem Punkt</div>
   <p>Gegeben: Nullstellen \(x_1 = -1\), \(x_2 = 3\), Punkt \(P(1 \mid -8)\).</p>
   \[ -8 = a \cdot (1 - (-1)) \cdot (1 - 3) = a \cdot 2 \cdot (-2) = -4a \;\Longrightarrow\; a = 2 \]
   \[ \Rightarrow\; f(x) = 2(x + 1)(x - 3) = 2x^2 - 4x - 6 \]
 </div>
 
-<div class="block block-beweis" style="margin-top:10px">
-  <div class="block-titel">🔷 Aus drei beliebigen Punkten</div>
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel — Aus drei beliebigen Punkten</div>
   <p>Gegeben: \(P_1(-1 \mid 6)\), \(P_2(0 \mid 1)\), \(P_3(2 \mid 3)\). Setze in \(y = ax^2 + bx + c\) ein:</p>
   \[ \begin{cases} a - b + c = 6 \\ c = 1 \\ 4a + 2b + c = 3 \end{cases} \;\Rightarrow\; a = 2,\; b = -3,\; c = 1 \;\Rightarrow\; f(x) = 2x^2 - 3x + 1 \]
 </div>
 
-
 <!-- ══ 8. AUFGABEN ══ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Scheitelform und Grundform direkt vergleichen</div>
+  <p>\(y = (x - 3)^2 + 2\) ist <strong>nicht</strong> dasselbe wie \(y = x^2 - 3\cdot x + 2\). Um von Scheitel- zu Grundform zu kommen, muss die Klammer ausquadriert werden: \((x - 3)^2 = x^2 - 6\cdot x + 9\), also wird daraus \(y = x^2 - 6\cdot x + 11\). Wer die Klammer einfach „auflöst" und das Quadrat vergisst, bekommt eine völlig andere Parabel.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Vorzeichen des Scheitelpunkts</div>
+  <p>In der Scheitelform \(y = a\cdot (x - u)^2 + v\) ist der Scheitelpunkt \(S(u \mid v)\) — das Minuszeichen in der Klammer macht das Vorzeichen von \(u\) im Punkt <em>positiv</em>. Aus \(y = (x + 4)^2 - 1\) wird also \(S(-4 \mid -1)\), nicht \(S(4 \mid -1)\). Achte auf das Vorzeichen <em>in</em> der Klammer und dreh es um, wenn du den Scheitelpunkt abliest.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — welche Darstellungsform zu welcher Aufgabe?</div>
+  <p>Die drei Formen sind nicht gleich gut — die richtige Wahl spart viel Rechenaufwand:</p>
+  <ul style="margin:5px 0 5px 20px">
+    <li><strong>Scheitelpunkt gesucht oder gegeben</strong>: Scheitelform \(a(x-u)^2 + v\) verwenden — \(S(u \mid v)\) ist direkt ablesbar.</li>
+    <li><strong>Nullstellen gesucht oder gegeben</strong>: Linearfaktorform \(a(x-x_1)(x-x_2)\) verwenden — Nullstellen sind direkt ablesbar.</li>
+    <li><strong>y-Achsenabschnitt gesucht oder gegeben</strong>: Grundform \(ax^2 + bx + c\) verwenden — \(c\) ist der y-Achsenabschnitt.</li>
+  </ul>
+  <p>Wer eine Aufgabe von <em>vorne</em> in der falschen Form bearbeitet, muss am Ende erst noch umrechnen — vermeidbarer Mehraufwand.</p>
+</div>
+
 <h2 id="aufgaben">Aufgaben</h2>
 
 <!-- A1 — Form erkennen -->
-<div class="aw">
-  <div class="aw-head"><div class="aw-nr">A1</div><div class="aw-titel">Darstellungsform erkennen — was lässt sich direkt ablesen?</div></div>
-  <div class="aw-body">
-    <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Funktion aus und gib an, was sich <strong>direkt</strong> aus der gegebenen Form ablesen lässt.</p>
-    <div class="graf-btn-row" id="a1-btns"></div>
-    <div class="formel-live" id="a1-display" style="margin-bottom:10px"></div>
-    <div id="a1-frage" style="margin-bottom:10px;font-weight:600"></div>
-    <div class="eingabe-row">
-      <input type="text" id="a1-inp" placeholder="z.B. S(2|-3) oder x1=...,x2=... oder c=...">
-      <button class="btn-pruef" onclick="checkA1()">Prüfen</button>
-      <button class="btn-loes" onclick="showA1Sol()">Lösung</button>
-    </div>
-    <div class="cr" id="a1-cr"></div>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Darstellungsform erkennen — was lässt sich direkt ablesen?</span></div>
+
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Funktion aus und gib an, was sich <strong>direkt</strong> aus der gegebenen Form ablesen lässt.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" id="a1-display" style="margin-bottom:10px"></div>
+  <div id="a1-frage" style="margin-bottom:10px;font-weight:600"></div>
+  <div class="eingabe-row">
+    <input type="text" id="a1-inp" placeholder="z.B. S(2|-3) oder x1=...,x2=... oder c=...">
+    <button class="btn-pruef" onclick="checkA1()">Prüfen</button>
+    <button class="btn-loes" onclick="showA1Sol()">Lösung</button>
   </div>
+  <div class="cr" id="a1-cr"></div>
+
 </div>
 
 <!-- A2 — Graph aus Scheitelform zeichnen (Punkte ziehen) -->
-<div class="aw">
-  <div class="aw-head"><div class="aw-nr">A2</div><div class="aw-titel">Scheitelpunkt setzen — verschiebe S an die richtige Stelle</div></div>
-  <div class="aw-body">
-    <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Klicke (oder ziehe) den Scheitelpunkt im Graphen auf die richtige Position für die angegebene Funktion.</p>
-    <div class="graf-btn-row" id="a2-btns"></div>
-    <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a2-canvas" height="280" style="cursor:crosshair"></canvas></div>
-    <div style="font-family:var(--mono);font-size:0.85rem;margin:8px 0">Aktuelle Position: <strong id="a2-pos">S(0 | 0)</strong></div>
-    <button class="btn-pruef" onclick="checkA2()">✓ Überprüfen</button>
-    <div class="cr" id="a2-cr"></div>
-  </div>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Scheitelpunkt setzen — verschiebe S an die richtige Stelle</span></div>
+
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Klicke (oder ziehe) den Scheitelpunkt im Graphen auf die richtige Position für die angegebene Funktion.</p>
+  <div class="graf-btn-row" id="a2-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a2-canvas" height="280" style="cursor:crosshair"></canvas></div>
+  <div style="font-family:var(--mono);font-size:0.85rem;margin:8px 0">Aktuelle Position: <strong id="a2-pos">S(0 | 0)</strong></div>
+  <button class="btn-pruef" onclick="checkA2()">✓ Überprüfen</button>
+  <div class="cr" id="a2-cr"></div>
+
 </div>
 
 <!-- A3 — Rechnen / Umwandeln und Aufstellen -->
-<div class="aw">
-  <div class="aw-head"><div class="aw-nr">A3</div><div class="aw-titel">Analytisch — Umwandeln und Aufstellen</div></div>
-  <div class="aw-body">
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Analytisch — Umwandeln und Aufstellen</span></div>
 
-    <div class="block block-aufg" style="margin-bottom:10px">
-      <div class="block-titel">🟠 a) Allgemeine Form → Scheitelpunkt</div>
-      <p>\(f(x) = x^2 - 6x + 5\). Wie lautet der Scheitelpunkt \(S(u \mid v)\)?</p>
-      <div class="eingabe-row"><input type="text" id="a3a" placeholder="S(... | ...)">
-        <button class="btn-pruef" onclick="chkScheitel('a3a',3,-4)">Prüfen</button>
-        <button class="btn-loes" onclick="showSol('a3a','S(3 | −4) — denn u = −b/(2a) = 6/2 = 3, v = f(3) = 9 − 18 + 5 = −4')">Lösung</button>
-      </div>
-      <div class="cr" id="a3a-cr"></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Allgemeine Form → Scheitelpunkt</div>
+    <p>\(f(x) = x^2 - 6x + 5\). Wie lautet der Scheitelpunkt \(S(u \mid v)\)?</p>
+    <div class="eingabe-row"><input type="text" id="a3a" placeholder="S(... | ...)">
+      <button class="btn-pruef" onclick="chkScheitel('a3a',3,-4)">Prüfen</button>
+      <button class="btn-loes" onclick="showSol('a3a','S(3 | −4) — denn u = −b/(2a) = 6/2 = 3, v = f(3) = 9 − 18 + 5 = −4')">Lösung</button>
     </div>
+    <div class="cr" id="a3a-cr"></div>
+  </div>
 
-    <div class="block block-aufg" style="margin-bottom:10px">
-      <div class="block-titel">🟠 b) Allgemeine Form → Nullstellen</div>
-      <p>\(f(x) = x^2 - 5x + 6\). Bestimme die Nullstellen.</p>
-      <div class="eingabe-row"><input type="text" id="a3b" placeholder="x1=..., x2=...">
-        <button class="btn-pruef" onclick="chkNullstellen('a3b',2,3)">Prüfen</button>
-        <button class="btn-loes" onclick="showSol('a3b','x₁ = 2, x₂ = 3 — Mitternachtsformel: x = (5 ± √(25−24))/2 = (5 ± 1)/2')">Lösung</button>
-      </div>
-      <div class="cr" id="a3b-cr"></div>
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Allgemeine Form → Nullstellen</div>
+    <p>\(f(x) = x^2 - 5x + 6\). Bestimme die Nullstellen.</p>
+    <div class="eingabe-row"><input type="text" id="a3b" placeholder="x1=..., x2=...">
+      <button class="btn-pruef" onclick="chkNullstellen('a3b',2,3)">Prüfen</button>
+      <button class="btn-loes" onclick="showSol('a3b','x₁ = 2, x₂ = 3 — Mitternachtsformel: x = (5 ± √(25−24))/2 = (5 ± 1)/2')">Lösung</button>
     </div>
+    <div class="cr" id="a3b-cr"></div>
+  </div>
 
-    <div class="block block-aufg" style="margin-bottom:10px">
-      <div class="block-titel">🟠 c) Aus Scheitel und Punkt</div>
-      <p>Scheitelpunkt \(S(-1 \mid 4)\), Punkt \(P(1 \mid 0)\). Bestimme \(a\). Antwort als Zahl.</p>
-      <div class="eingabe-row"><input type="text" id="a3c" placeholder="a = ...">
-        <button class="btn-pruef" onclick="chkZahl('a3c',-1)">Prüfen</button>
-        <button class="btn-loes" onclick="showSol('a3c','a = −1 — denn 0 = a·(1−(−1))² + 4 = 4a + 4 ⇒ a = −1')">Lösung</button>
-      </div>
-      <div class="cr" id="a3c-cr"></div>
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Aus Scheitel und Punkt</div>
+    <p>Scheitelpunkt \(S(-1 \mid 4)\), Punkt \(P(1 \mid 0)\). Bestimme \(a\). Antwort als Zahl.</p>
+    <div class="eingabe-row"><input type="text" id="a3c" placeholder="a = ...">
+      <button class="btn-pruef" onclick="chkZahl('a3c',-1)">Prüfen</button>
+      <button class="btn-loes" onclick="showSol('a3c','a = −1 — denn 0 = a·(1−(−1))² + 4 = 4a + 4 ⇒ a = −1')">Lösung</button>
     </div>
+    <div class="cr" id="a3c-cr"></div>
+  </div>
 
-    <div class="block block-aufg" style="margin-bottom:10px">
-      <div class="block-titel">🟠 d) Aus zwei Nullstellen und Punkt</div>
-      <p>Nullstellen \(x_1 = -2\), \(x_2 = 4\), Punkt \(P(0 \mid -8)\). Bestimme \(a\).</p>
-      <div class="eingabe-row"><input type="text" id="a3d" placeholder="a = ...">
-        <button class="btn-pruef" onclick="chkZahl('a3d',1)">Prüfen</button>
-        <button class="btn-loes" onclick="showSol('a3d','a = 1 — denn −8 = a·(0−(−2))·(0−4) = a·2·(−4) = −8a ⇒ a = 1')">Lösung</button>
-      </div>
-      <div class="cr" id="a3d-cr"></div>
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Aus zwei Nullstellen und Punkt</div>
+    <p>Nullstellen \(x_1 = -2\), \(x_2 = 4\), Punkt \(P(0 \mid -8)\). Bestimme \(a\).</p>
+    <div class="eingabe-row"><input type="text" id="a3d" placeholder="a = ...">
+      <button class="btn-pruef" onclick="chkZahl('a3d',1)">Prüfen</button>
+      <button class="btn-loes" onclick="showSol('a3d','a = 1 — denn −8 = a·(0−(−2))·(0−4) = a·2·(−4) = −8a ⇒ a = 1')">Lösung</button>
     </div>
+    <div class="cr" id="a3d-cr"></div>
+  </div>
 
-    <div class="block block-aufg" style="margin-bottom:10px">
-      <div class="block-titel">🟠 e) Diskriminante prüfen</div>
-      <p>Wie viele Nullstellen hat \(f(x) = 2x^2 + 3x + 5\)?</p>
-      <div class="eingabe-row"><input type="text" id="a3e" placeholder="z.B. zwei / eine / keine">
-        <button class="btn-pruef" onclick="chkText('a3e',['keine','0'])">Prüfen</button>
-        <button class="btn-loes" onclick="showSol('a3e','keine — D = 9 − 4·2·5 = 9 − 40 = −31 < 0')">Lösung</button>
-      </div>
-      <div class="cr" id="a3e-cr"></div>
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 e) Diskriminante prüfen</div>
+    <p>Wie viele Nullstellen hat \(f(x) = 2x^2 + 3x + 5\)?</p>
+    <div class="eingabe-row"><input type="text" id="a3e" placeholder="z.B. zwei / eine / keine">
+      <button class="btn-pruef" onclick="chkText('a3e',['keine','0'])">Prüfen</button>
+      <button class="btn-loes" onclick="showSol('a3e','keine — D = 9 − 4·2·5 = 9 − 40 = −31 < 0')">Lösung</button>
     </div>
+    <div class="cr" id="a3e-cr"></div>
+  </div>
 
-    <div class="block block-aufg">
-      <div class="block-titel">🟠 f) Scheitelform → Allgemeine Form</div>
-      <p>\(f(x) = 2(x - 3)^2 - 5\). Schreibe in der Form \(ax^2 + bx + c\). Antwort als z.B. <code>2x²-12x+13</code>.</p>
-      <div class="eingabe-row"><input type="text" id="a3f" placeholder="2x²-12x+13">
-        <button class="btn-pruef" onclick="chkPoly('a3f',2,-12,13)">Prüfen</button>
-        <button class="btn-loes" onclick="showSol('a3f','f(x) = 2x² − 12x + 13 — denn 2(x−3)² = 2(x² − 6x + 9) = 2x² − 12x + 18, dann −5: 2x² − 12x + 13')">Lösung</button>
-      </div>
-      <div class="cr" id="a3f-cr"></div>
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 f) Scheitelform → Allgemeine Form</div>
+    <p>\(f(x) = 2(x - 3)^2 - 5\). Schreibe in der Form \(ax^2 + bx + c\). Antwort als z.B. <code>2x²-12x+13</code>.</p>
+    <div class="eingabe-row"><input type="text" id="a3f" placeholder="2x²-12x+13">
+      <button class="btn-pruef" onclick="chkPoly('a3f',2,-12,13)">Prüfen</button>
+      <button class="btn-loes" onclick="showSol('a3f','f(x) = 2x² − 12x + 13 — denn 2(x−3)² = 2(x² − 6x + 9) = 2x² − 12x + 18, dann −5: 2x² − 12x + 13')">Lösung</button>
     </div>
+    <div class="cr" id="a3f-cr"></div>
+  </div>
 
+
+</div>
+
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Wurfparabel</span></div>
+  <p>Ein Stein wird aus 2 m Höhe geworfen und erreicht eine maximale Höhe von 6 m bei 5 m Distanz. Stelle die Wurfparabel \(h(x)\) in Scheitelform auf. Wie weit fliegt der Stein, bevor er auf den Boden fällt?</p>
+  <button class="loesung-toggle" onclick="toggleL('l4')">▶ Lösung</button>
+  <div class="loesung-body" id="l4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Scheitel \(S(5 \mid 6)\), Punkt \(P(0 \mid 2)\):</p>
+      \[ 2 = a(0-5)^2 + 6 \;\Rightarrow\; -4 = 25a \;\Rightarrow\; a = -\frac{4}{25} = -0.16 \]
+      \[ h(x) = -\frac{4}{25}(x - 5)^2 + 6 \;=\; -0.16(x - 5)^2 + 6 \]
+      <p>Aufschlag bei \(h(x) = 0\):</p>
+      \[ 0.16(x-5)^2 = 6 \;\Rightarrow\; (x-5)^2 = 37.5 \;\Rightarrow\; x = 5 \pm \sqrt{37.5} \]
+      <p>Zwei rechnerische Lösungen: \(x_1 \approx 5 + 6.12 = 11.12\;\text{m}\) und
+      \(x_2 \approx 5 - 6.12 = -1.12\;\text{m}\). Die <strong>zweite Lösung liegt links vom
+      Abwurfpunkt und ist physikalisch nicht relevant</strong> (negative Wurfweite). Antwort:
+      der Stein fliegt rund \(11.12\;\text{m}\) weit.</p>
+    </div>
   </div>
 </div>
 
-<!-- A4–A6 Anwendung -->
-<div class="aw">
-  <div class="aw-head"><div class="aw-nr">A4–A6</div><div class="aw-titel">Anwendungsaufgaben</div></div>
-  <div class="aw-body">
-
-    <div class="block block-aufg" style="margin-bottom:10px">
-      <div class="block-titel">🟠 A4 — Wurfparabel</div>
-      <p>Ein Stein wird aus 2 m Höhe geworfen und erreicht eine maximale Höhe von 6 m bei 5 m Distanz. Stelle die Wurfparabel \(h(x)\) in Scheitelform auf. Wie weit fliegt der Stein, bevor er auf den Boden fällt?</p>
-      <button class="loesung-toggle" onclick="toggleL('l4')">▶ Lösung</button>
-      <div class="loesung-body" id="l4">
-        <div class="block block-bsp" style="margin:6px 0 0">
-          <div class="block-titel">🟢 Lösung</div>
-          <p>Scheitel \(S(5 \mid 6)\), Punkt \(P(0 \mid 2)\):</p>
-          \[ 2 = a(0-5)^2 + 6 \;\Rightarrow\; -4 = 25a \;\Rightarrow\; a = -0.16 \]
-          \[ h(x) = -0.16(x - 5)^2 + 6 \]
-          <p>Aufschlag bei \(h(x) = 0\):</p>
-          \[ 0.16(x-5)^2 = 6 \;\Rightarrow\; (x-5)^2 = 37.5 \;\Rightarrow\; x = 5 \pm \sqrt{37.5} \]
-          <p>Zwei rechnerische Lösungen: \(x_1 \approx 5 + 6.12 = 11.12\;\text{m}\) und
-          \(x_2 \approx 5 - 6.12 = -1.12\;\text{m}\). Die <strong>zweite Lösung liegt links vom
-          Abwurfpunkt und ist physikalisch nicht relevant</strong> (negative Wurfweite). Antwort:
-          der Stein fliegt rund \(11.12\;\text{m}\) weit.</p>
-        </div>
-      </div>
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Maximaler Umsatz (Extremwertaufgabe)</span></div>
+  <p>Ein Verein verkauft T-Shirts. Bei einem Preis von 20 CHF werden 100 Stück verkauft; pro CHF Preiserhöhung sinkt der Verkauf um <strong>4 Stück</strong>. Bei welchem Preis wird der Umsatz maximal?</p>
+  <button class="loesung-toggle" onclick="toggleL('l5')">▶ Lösung</button>
+  <div class="loesung-body" id="l5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Sei \(x\) die Anzahl CHF Preiserhöhung. Preis: \(20+x\); Stückzahl: \(100-4x\).</p>
+      \[ U(x) = (20+x)(100-4x) = 2000 + 100x - 80x - 4x^2 = -4x^2 + 20x + 2000 \]
+      <p>Maximum am Scheitelpunkt:</p>
+      \[ x_{\max} = -\frac{b}{2a} = -\frac{20}{2 \cdot (-4)} = 2.5 \]
+      \[ \text{Preis} = 20 + 2.5 = 22.50\;\text{CHF}, \qquad U_{\max} = U(2.5) = 2025\;\text{CHF} \]
+      <p>Verkaufte Stückzahl: \(100 - 4 \cdot 2.5 = 90\) Stück. Bei einem Preis von <strong>22.50 CHF</strong>
+      werden also <strong>90 Stück</strong> verkauft, was den maximalen Umsatz von <strong>2025 CHF</strong> ergibt.</p>
     </div>
+  </div>
+</div>
 
-    <div class="block block-aufg" style="margin-bottom:10px">
-      <div class="block-titel">🟠 A5 — Maximaler Umsatz (Extremwertaufgabe)</div>
-      <p>Ein Verein verkauft T-Shirts. Bei einem Preis von 20 CHF werden 100 Stück verkauft; pro CHF Preiserhöhung sinkt der Verkauf um <strong>4 Stück</strong>. Bei welchem Preis wird der Umsatz maximal?</p>
-      <button class="loesung-toggle" onclick="toggleL('l5')">▶ Lösung</button>
-      <div class="loesung-body" id="l5">
-        <div class="block block-bsp" style="margin:6px 0 0">
-          <div class="block-titel">🟢 Lösung</div>
-          <p>Sei \(x\) die Anzahl CHF Preiserhöhung. Preis: \(20+x\); Stückzahl: \(100-4x\).</p>
-          \[ U(x) = (20+x)(100-4x) = 2000 + 100x - 80x - 4x^2 = -4x^2 + 20x + 2000 \]
-          <p>Maximum am Scheitelpunkt:</p>
-          \[ x_{\max} = -\frac{b}{2a} = -\frac{20}{2 \cdot (-4)} = 2.5 \]
-          \[ \text{Preis} = 20 + 2.5 = 22.50\;\text{CHF}, \qquad U_{\max} = U(2.5) = 2025\;\text{CHF} \]
-        </div>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Brücke</span></div>
+  <p>Ein parabelförmiger Brückenbogen ist 20 m breit und in der Mitte 5 m hoch. Stelle die Funktionsgleichung auf (Ursprung links am Bogenfuss). Welche Höhe hat der Bogen 3 m vom linken Fuss entfernt?</p>
+  <button class="loesung-toggle" onclick="toggleL('l6')">▶ Lösung</button>
+  <div class="loesung-body" id="l6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Nullstellen bei \(x_1 = 0\) und \(x_2 = 20\), Scheitelpunkt bei \(x = 10\) mit Höhe 5 m. Linearfaktorform:</p>
+      <div class="block block-tipp" style="margin:6px 0">
+        <div class="block-titel">💡 Warum Linearfaktorform?</div>
+        <p>Die Bogenfüsse liegen auf der x-Achse, also sind \(x = 0\) und \(x = 20\) <em>Nullstellen</em>
+        der gesuchten Funktion. Wenn die Nullstellen direkt gegeben sind, ist die <strong>Linearfaktorform</strong>
+        \(h(x) = a \cdot (x - x_1)(x - x_2)\) die schnellste Darstellung — nur noch \(a\) aus einem
+        zusätzlichen Punkt (hier dem Scheitelpunkt) bestimmen. Mit Scheitel- oder Grundform wäre das
+        deutlich aufwendiger.</p>
       </div>
+      \[ h(x) = a \cdot x \cdot (x - 20) \]
+      <p>Punkt \(S(10 \mid 5)\) einsetzen:</p>
+      \[ 5 = a \cdot 10 \cdot (-10) = -100a \;\Rightarrow\; a = -0.05 \]
+      \[ h(x) = -0.05 \cdot x \cdot (x - 20) = -0.05 x^2 + x \]
+      \[ h(3) = -0.05 \cdot 9 + 3 = -0.45 + 3 = 2.55\;\text{m} \]
     </div>
-
-    <div class="block block-aufg">
-      <div class="block-titel">🟠 A6 — Brücke</div>
-      <p>Ein parabelförmiger Brückenbogen ist 20 m breit und in der Mitte 5 m hoch. Stelle die Funktionsgleichung auf (Ursprung links am Bogenfuss). Welche Höhe hat der Bogen 3 m vom linken Fuss entfernt?</p>
-      <button class="loesung-toggle" onclick="toggleL('l6')">▶ Lösung</button>
-      <div class="loesung-body" id="l6">
-        <div class="block block-bsp" style="margin:6px 0 0">
-          <div class="block-titel">🟢 Lösung</div>
-          <p>Nullstellen bei \(x_1 = 0\) und \(x_2 = 20\), Scheitelpunkt bei \(x = 10\) mit Höhe 5 m. Linearfaktorform:</p>
-          \[ h(x) = a \cdot x \cdot (x - 20) \]
-          <p>Punkt \(S(10 \mid 5)\) einsetzen:</p>
-          \[ 5 = a \cdot 10 \cdot (-10) = -100a \;\Rightarrow\; a = -0.05 \]
-          \[ h(x) = -0.05 \cdot x \cdot (x - 20) = -0.05 x^2 + x \]
-          \[ h(3) = -0.05 \cdot 9 + 3 = -0.45 + 3 = 2.55\;\text{m} \]
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
 
 <!-- ══ 9. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Bogen einer Hängebrücke <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Eine Hängebrücke ist 80 m breit. Der Bogen über der Brücke hat in der Mitte seinen höchsten Punkt, 20 m über der Fahrbahn, und berührt an den beiden Brücken-Enden die Fahrbahn (\(y = 0\)).</p>
+<ol class="aufg-liste">
+  <li>Lege ein Koordinatensystem fest und stelle eine quadratische Funktion auf, die den Bogenverlauf beschreibt (Scheitelform).</li>
+  <li>Welche Höhe hat der Bogen bei \(x = 20\,\text{m}\) (gemessen von der Mitte)?</li>
+  <li>An welchen Positionen liegt der Bogen genau \(15\,\text{m}\) über der Fahrbahn?</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g3-3-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g3-3-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Koordinatensystem: \(x\)-Achse entlang der Fahrbahn, Ursprung in der Mitte. Scheitel \(S(0 \mid 20)\), Nullstellen bei \(x = \pm 40\). Scheitelform: \(y = a \cdot x^2 + 20\). Mit \(y(40) = 0\): \(a \cdot 1600 + 20 = 0 \Rightarrow a = -\tfrac{1}{80}\). Also \(y = -\tfrac{1}{80}x^2 + 20\).</li>
+        <li>Bei \(x = 20\): \(y = -\tfrac{400}{80} + 20 = -5 + 20 = 15\,\text{m}\).</li>
+        <li>\(y = 15\) setzen: \(-\tfrac{1}{80}x^2 + 20 = 15 \Rightarrow \tfrac{1}{80}x^2 = 5 \Rightarrow x^2 = 400 \Rightarrow x = \pm 20\,\text{m}\). An den Stellen \(x = -20\) und \(x = +20\) ist der Bogen 15 m hoch. Symmetrisch zum Scheitel.</li>
+      </ol>
+      <div class="block block-tipp" style="margin:8px 0 0">
+        <div class="block-titel">💡 A6 vs. A7 — verschiedene Wege zum gleichen Ziel</div>
+        <p>A6 und A7 lösen <em>strukturell ähnliche</em> Aufgaben (parabelförmiger Bogen über einer
+        Strecke), aber mit unterschiedlichen Darstellungsformen: A6 nutzt die <strong>Linearfaktorform</strong>,
+        weil die Nullstellen vorgegeben sind; A7 verwendet die <strong>Scheitelform</strong>, weil die
+        Aufgabenstellung die Mitte (= Scheitelpunkt) als Bezugspunkt setzt. Welche Form am schnellsten
+        zum Ziel führt, hängt davon ab, <em>welche Information die Aufgabe gibt</em> — Scheitelpunkt
+        und ein Punkt → Scheitelform; zwei Nullstellen und ein Punkt → Linearfaktorform; drei
+        beliebige Punkte → Grundform mit Gleichungssystem.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Der Graph einer quadratischen Funktion \(f(x) = ax^2 + bx + c\) ist stets eine <strong>Parabel</strong>.
+  Drei Punkte (oder Scheitelpunkt + ein Punkt, oder beide Nullstellen + ein Punkt) genügen, um sie eindeutig zu bestimmen.</p>
+</div>
 
 <table class="ftb-tabelle" style="margin-bottom:14px">
   <thead><tr><th>Grösse</th><th>Formel</th><th>Bedeutung</th></tr></thead>
@@ -620,37 +840,32 @@ MathJax = {
   </tbody>
 </table>
 
-<div class="merksatz">
-  Der Graph einer quadratischen Funktion \(f(x) = ax^2 + bx + c\) ist stets eine <strong>Parabel</strong>.
-  Drei Punkte (oder Scheitelpunkt + ein Punkt, oder beide Nullstellen + ein Punkt) genügen, um sie eindeutig zu bestimmen.
-</div>
-
-
 <!-- ══ 10. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
 <p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
 <div class="dl-grid">
   <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
-  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
   <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g3-3-quadratische-funktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
 </div>
-
 
 <!-- ══ 11. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<div class="ressourcen-subtitel">🎬 Erklärvideos</div>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
 <div class="links-grid">
-  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lVDfsit7iy1j6Nmx3znS5bV" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über Parabeln — Playlist</div><div class="lk-s">MathemaTrick · Quadratische Funktionen</div></div></a>
-  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzl5hAVeVOwWassi_01eoBMO" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Parabeln — quadratische Gleichungen</div><div class="lk-s">Lehrerschmidt · komplette Übersicht</div></div></a>
-  <a href="https://www.youtube.com/watch?v=pauiBVzELTc" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Parabeln, Quadratische Funktionen — Übersicht</div><div class="lk-s">Mathe by Daniel Jung · Grundlagen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lVDfsit7iy1j6Nmx3znS5bV" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über Parabeln — Quadratische Funktionen — Playlist</div><div class="lk-s">MathemaTrick · 42 Videos · Grundlagen bis Anwendungen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzl5hAVeVOwWassi_01eoBMO" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Parabeln — quadratische Gleichungen — Playlist</div><div class="lk-s">Lehrerschmidt · 32 Videos · komplette Übersicht</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLkr4Hf_IwvMts1O-fD_YBbcDiq8bvXHU" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Quadratische Funktionen und Gleichungen — Playlist</div><div class="lk-s">Mathehoch13 · 32 Videos · komplettes Kapitel</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHhRwBDeNqYk1edYRHmx8Qd1" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Quadratische Funktionen, Parabeln — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 48 Videos · alle Aufgabentypen erklärt</div></div></a>
 </div>
-<div class="ressourcen-subtitel">📝 Aufgabensammlungen</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
 <div class="links-grid">
-  <a href="https://www.sos-mathe.ch/g/g2/g22/aufg_g22.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Funktion 2. Grades</div><div class="lk-s">Scheitel, Parameter, Schnitt, Extremalwerte</div></div></a>
-  <a href="https://de.serlo.org/mathe/1348/quadratische-funktionen-parabeln" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Quadratische Funktionen</div><div class="lk-s">Theorie + interaktive Aufgaben</div></div></a>
-  <a href="https://de.serlo.org/mathe/1412/gemischte-aufgaben-zu-quadratischen-funktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Gemischte Aufgaben</div><div class="lk-s">Nullstellen, Schnittpunkte, Scheitel</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g2/g22/aufg_g22.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Funktion 2. Grades</div><div class="lk-s">G22 · Scheitel, Parameter, Schnitt, Extremalwerte</div></div></a>
+  <a href="https://de.serlo.org/mathe/1348/quadratische-funktionen-parabeln" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Quadratische Funktionen / Parabeln</div><div class="lk-s">Theorie + interaktive Aufgaben mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/1412/gemischte-aufgaben-zu-quadratischen-funktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Gemischte Aufgaben</div><div class="lk-s">Nullstellen, Schnittpunkte, Scheitelpunkte</div></div></a>
+  <a href="https://de.serlo.org/mathe/26399/aufgaben-zur-bestimmung-von-nullstellen-bei-quadratischen-funktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Nullstellen bestimmen</div><div class="lk-s">pq-Formel, Mitternachtsformel, Diskriminante · mit Lösungen</div></div></a>
 </div>
 
 </main>
@@ -659,7 +874,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Quadratische Funktionen</p>
+  <p>Grundlagenfach 3.3 Quadratische Funktionen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -669,7 +884,7 @@ buildNav({
   bereich:'grundlagen', id:'g3-3',
   kapitelNr:'3.3', kapitelTitel:'Quadratische Funktionen',
   prev:{nr:'3.2',titel:'Lineare Funktionen',url:'g3-2-lineare-funktionen.html'},
-  next:{nr:'4.1',titel:'Grundlagen',url:'g4-1-grundlagen.html'}
+  next:{nr:'4.0',titel:'Praxisbeispiel BM2-Klasse',url:'g4-0-praxisbeispiel-bm2-klasse.html'}
 });
 
 /* ══════════════════════════════════════════════════════════
@@ -825,18 +1040,18 @@ function updateDR(){
     document.getElementById('dr-linfak').textContent = `f(x) = ${aLF}(${f1})(${f2})`;
     nstText = `x₁ = ${fmtNum(x1)}, x₂ = ${fmtNum(x2)}`;
     document.getElementById('dr-nst').textContent = nstText;
-    nstRechnung = `D = b² − 4ac = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = ${fmtNum(D)} > 0  →  zwei Nullstellen<br>x = (${fmtNum(-B)} ± √${fmtNum(D)}) / ${fmtNum(2*A)}  ⇒  x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = <span class="disk-hl">${fmtNum(D)}</span> > 0  →  zwei Nullstellen<br>x = (${fmtNum(-B)} ± √<span class="disk-hl">${fmtNum(D)}</span>) / ${fmtNum(2*A)}  ⇒  x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}`;
   } else if(ns.n === 1){
     const x1 = ns.x1;
     const aLF = A===1 ? '' : A===-1 ? '−' : `${fmtNum(A)}·`;
     document.getElementById('dr-linfak').textContent = `f(x) = ${aLF}(${fmtKlammer(x1)})²`;
     nstText = `x₁ = x₂ = ${fmtNum(x1)} (doppelt)`;
     document.getElementById('dr-nst').textContent = nstText;
-    nstRechnung = `D = b² − 4ac = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = 0  →  eine doppelte Nullstelle<br>x = ${fmtNum(-B)} / ${fmtNum(2*A)} = ${fmtNum(x1)}`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = <span class="disk-hl">0</span>  →  eine doppelte Nullstelle<br>x = ${fmtNum(-B)} / ${fmtNum(2*A)} = ${fmtNum(x1)}`;
   } else {
     document.getElementById('dr-linfak').textContent = `nicht definiert über ℝ`;
     document.getElementById('dr-nst').textContent = 'keine reellen Nullstellen';
-    nstRechnung = `D = b² − 4ac = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = ${fmtNum(D)} < 0  →  keine reelle Nullstelle`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = <span class="disk-hl">${fmtNum(D)}</span> < 0  →  keine reelle Nullstelle`;
   }
   document.getElementById('dr-nst-rechnung').innerHTML = nstRechnung;
 
@@ -848,7 +1063,7 @@ function drawDR(){
   const u = parseFloat(document.getElementById('dr-u').value);
   const v = parseFloat(document.getElementById('dr-v').value);
   const A = a, B = -2*a*u, C = a*u*u + v;
-  const {ctx, W, H} = initCanvas('dr-canvas', 280, true);
+  const {ctx, W, H} = initCanvas('dr-canvas', 260, true);
   const rng = 8;
   const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
   if(Math.abs(a) > 1e-9) drawParabel(ctx, cx, cy, A, B, C, -rng, rng, '#1a4f8a', 2.8);
@@ -1276,6 +1491,56 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 window.addEventListener('resize', ()=>{
   updateWS(); drawDR(); updateDisk(); drawTypQ(); drawA2();
+});
+
+/* ══ Beispiel-Popups: Hover/Klick + dynamische Vertikal-Position innerhalb der Tabelle ══ */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const wrap = document.querySelector('.anw-tabelle-wrap');
+  if(!wrap) return;
+  const PAD = 8;   // Sicherheitsabstand zum Tabellenrand
+
+  function platziere(tr){
+    const pop = tr.querySelector('.bsp-pop');
+    if(!pop) return;
+    // Messen ohne Sichtbarkeit (display:block, aber transparent)
+    const vorOpa = pop.style.opacity;
+    pop.style.visibility = 'hidden';
+    pop.style.opacity = '0';
+    pop.style.setProperty('--bsp-top', '0px');
+    const popH = pop.offsetHeight;
+    const wrapR = wrap.getBoundingClientRect();
+    const trR = tr.getBoundingClientRect();
+    const wrapH = wrapR.height;
+    const trTop = trR.top - wrapR.top;    // relative zum Wrapper-Oberrand
+    const trH = trR.height;
+    // Bevorzugt: vertikal zentriert auf Zellen-Mitte
+    let top = trTop + trH/2 - popH/2;
+    top = Math.max(PAD, Math.min(top, wrapH - popH - PAD));
+    pop.style.setProperty('--bsp-top', top + 'px');
+    // Pfeil zeigt auf Zellen-Mitte → relative Y im Popup
+    const arrowY = (trTop + trH/2) - top;
+    pop.style.setProperty('--arrow-top', arrowY + 'px');
+    pop.style.visibility = '';
+    pop.style.opacity = vorOpa || '';
+  }
+
+  document.querySelectorAll('tr.bsp-row').forEach(tr=>{
+    tr.setAttribute('tabindex','0');
+    const zeige = ()=>{ platziere(tr); };
+    const aktKlick = ()=>{
+      const war = tr.classList.contains('bsp-aktiv');
+      document.querySelectorAll('tr.bsp-row').forEach(r=>r.classList.remove('bsp-aktiv'));
+      if(!war){ tr.classList.add('bsp-aktiv'); platziere(tr); }
+    };
+    tr.addEventListener('mouseenter', zeige);
+    tr.addEventListener('focusin', zeige);
+    tr.addEventListener('click', aktKlick);
+  });
+
+  window.addEventListener('resize', ()=>{
+    const aktTr = document.querySelector('tr.bsp-row.bsp-aktiv');
+    if(aktTr) platziere(aktTr);
+  });
 });
 </script>
 </body>

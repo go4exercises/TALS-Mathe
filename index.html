@@ -69,6 +69,42 @@
   .sp-kap .karte .k-id { color: var(--lila); }
   .karte .k-tit { font-family: var(--serif); font-size: 0.93rem; font-weight: 600; color: var(--tinte); line-height: 1.25; }
 
+  /* Sub-Split-Gruppe: zwei oder mehr Sub-Karten unter einem RLP-Header (z.B. 2.2 → 2.2a + 2.2b;
+     5.2 → 5.2a–d). Belegt im äusseren Grid mehrere Spalten, damit Sub-Karten gleich breit
+     bleiben wie normale Karten. Inneres Grid skaliert mit Anzahl Sub-Karten. */
+  .ksub { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; box-shadow: var(--s); padding: 9px 11px 11px; display: flex; flex-direction: column; gap: 6px; position: relative; overflow: hidden; }
+  .ksub.span-2 { grid-column: span 2; }
+  .ksub.span-3 { grid-column: span 3; }
+  .ksub.span-4 { grid-column: span 4; }
+  .ksub-hdr { display: flex; align-items: baseline; gap: 7px; padding: 0 2px 5px; border-bottom: 1px dashed var(--linie); }
+  .ksub-hdr .k-id  { font-family: var(--mono); font-size: 0.62rem; font-weight: 700; }
+  .gl-kap .ksub-hdr .k-id { color: var(--blau); }
+  .sp-kap .ksub-hdr .k-id { color: var(--lila); }
+  .ksub-hdr .k-tit { font-family: var(--serif); font-size: 0.84rem; font-weight: 600; color: var(--tinte-2); line-height: 1.25; }
+  .ksub-grid { display: grid; gap: 6px; }
+  .ksub.span-2 .ksub-grid { grid-template-columns: repeat(2, 1fr); }
+  .ksub.span-3 .ksub-grid { grid-template-columns: repeat(3, 1fr); }
+  .ksub.span-4 .ksub-grid { grid-template-columns: repeat(4, 1fr); }
+  .ksub-grid .karte { padding: 8px 10px 8px 13px; box-shadow: none; border: 1px solid var(--linie); }
+  .ksub-grid .karte::before { width: 3px; }
+  .ksub-grid .karte .k-tit { font-size: 0.84rem; }
+
+  /* Schmaler Viewport: Sub-Karten umbrechen in 2 Spalten bzw. 1 Spalte,
+     und der Sub-Container schrumpft auf eine Index-Spalte. */
+  @media (max-width: 900px) {
+    .ksub.span-3, .ksub.span-4 { grid-column: span 2; }
+    .ksub.span-3 .ksub-grid, .ksub.span-4 .ksub-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .ksub.span-2, .ksub.span-3, .ksub.span-4 { grid-column: span 1; }
+    .ksub.span-2 .ksub-grid, .ksub.span-3 .ksub-grid, .ksub.span-4 .ksub-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Geplante Karten: visueller Stub-Hinweis */
+  .karte.geplant { cursor: help; }
+  .karte.geplant .k-tit { color: var(--tinte-2); }
+  .karte.geplant::after { content: 'in Vorbereitung'; position: absolute; right: 8px; top: 7px; font-family: var(--mono); font-size: 0.55rem; color: var(--tinte-2); background: var(--papier-2); padding: 1px 5px; border-radius: 3px; letter-spacing: 0.3px; }
+
   .ds { background: var(--weiss); border: 1px solid var(--linie); border-radius: 10px; padding: 18px 22px; margin-top: 44px; box-shadow: var(--s); }
   .ds-t { font-family: var(--serif); font-size: 0.88rem; font-weight: 700; margin-bottom: 12px; padding-bottom: 9px; border-bottom: 1px solid var(--linie); display: flex; align-items: center; gap: 10px; }
   .ds-t span { font-family: var(--mono); font-size: 0.6rem; background: var(--papier-2); color: var(--tinte-2); padding: 2px 7px; border-radius: 4px; }
@@ -94,13 +130,7 @@
 
 <div class="hero">
   <div class="hero-ew">Berufsmaturität Technik, Architektur, Life Sciences</div>
-  <h1>Mathematik<br><span>1:1 nach RLP 2030</span></h1>
-  <p class="hero-sub">
-    Alle 31 Teilgebiete des Grundlagen- und Schwerpunktfachs — strukturiert nach dem
-    Rahmenlehrplan 2030. Offizielles Hilfsmittel:
-    <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf"
-       target="_blank" rel="noopener" style="color:var(--blau);font-weight:600">Formelsammlung Promath (SBFI)</a>.
-  </p>
+  <h1>Mathematik<br><span>1:1 nach BM RLP 2030</span></h1>
   <div class="chips">
     <span class="chip c-bl">Grundlagenfach · 18 Teilgebiete</span>
     <span class="chip c-li">Schwerpunktfach · 13 Teilgebiete</span>
@@ -112,10 +142,10 @@
 <main class="page">
 
   <div class="stats">
-    <div class="st"><div class="st-dot" style="background:var(--gruen)"></div><span class="st-n">3</span><span>fertig</span></div>
+    <div class="st"><div class="st-dot" style="background:var(--gruen)"></div><span class="st-n">23</span><span>fertig</span></div>
     <div class="st"><div class="st-dot" style="background:var(--orange)"></div><span class="st-n">0</span><span>in Arbeit</span></div>
-    <div class="st"><div class="st-dot" style="background:var(--linie)"></div><span class="st-n">28</span><span>geplant</span></div>
-    <span class="st-hint">▼ Lerngebiet anklicken zum Aufklappen</span>
+    <div class="st"><div class="st-dot" style="background:var(--linie)"></div><span class="st-n">13</span><span>geplant</span></div>
+    <span class="st-hint">31 RLP-Teilgebiete · 36 Themenseiten · ▼ Lerngebiet anklicken zum Aufklappen</span>
   </div>
 
 
@@ -140,22 +170,22 @@
     </div>
     <div class="tc" id="tc-g1">
 
-      <a href="grundlagen/g1-1-grundlagen.html" class="karte geplant">
+      <a href="grundlagen/g1-1-grundlagen.html" class="karte fertig">
         <span class="k-id">1.1</span>
         <span class="k-tit">Grundlagen</span>
       </a>
 
-      <a href="grundlagen/g1-2-zahlen-grundoperationen.html" class="karte geplant">
+      <a href="grundlagen/g1-2-zahlen-grundoperationen.html" class="karte fertig">
         <span class="k-id">1.2</span>
         <span class="k-tit">Zahlen und zugehörige Grundoperationen</span>
       </a>
 
-      <a href="grundlagen/g1-3-algebraische-terme.html" class="karte geplant">
+      <a href="grundlagen/g1-3-algebraische-terme.html" class="karte fertig">
         <span class="k-id">1.3</span>
         <span class="k-tit">Grundoperationen mit algebraischen Termen</span>
       </a>
 
-      <a href="grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html" class="karte geplant">
+      <a href="grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html" class="karte fertig">
         <span class="k-id">1.4</span>
         <span class="k-tit">Zehnerpotenzen und Quadratwurzeln</span>
       </a>
@@ -173,17 +203,29 @@
     </div>
     <div class="tc" id="tc-g2">
 
-      <a href="grundlagen/g2-1-grundlagen.html" class="karte geplant">
+      <a href="grundlagen/g2-1-grundlagen.html" class="karte fertig">
         <span class="k-id">2.1</span>
         <span class="k-tit">Grundlagen</span>
       </a>
 
-      <a href="grundlagen/g2-2-lineare-quadratische-gleichungen.html" class="karte geplant">
-        <span class="k-id">2.2</span>
-        <span class="k-tit">Lineare und quadratische Gleichungen</span>
-      </a>
+      <div class="ksub span-2">
+        <div class="ksub-hdr">
+          <span class="k-id">2.2</span>
+          <span class="k-tit">Lineare und quadratische Gleichungen</span>
+        </div>
+        <div class="ksub-grid">
+          <a href="grundlagen/g2-2a-lineare-gleichungen.html" class="karte fertig">
+            <span class="k-id">2.2a</span>
+            <span class="k-tit">Lineare Gleichungen</span>
+          </a>
+          <a href="grundlagen/g2-2b-quadratische-gleichungen.html" class="karte fertig">
+            <span class="k-id">2.2b</span>
+            <span class="k-tit">Quadratische Gleichungen</span>
+          </a>
+        </div>
+      </div>
 
-      <a href="grundlagen/g2-3-lineare-gleichungssysteme.html" class="karte geplant">
+      <a href="grundlagen/g2-3-lineare-gleichungssysteme.html" class="karte fertig">
         <span class="k-id">2.3</span>
         <span class="k-tit">Lineare Gleichungssysteme</span>
       </a>
@@ -224,22 +266,27 @@
     <div class="kap-hdr" onclick="tog('g4')">
       <span class="k-nr">4</span>
       <span class="k-name">Datenanalyse</span>
-      <span class="k-lek">20 Lektionen · 3 Teilgebiete</span>
+      <span class="k-lek">20 Lektionen · 3 Teilgebiete + Praxisbeispiel</span>
       <span class="k-tog" id="tg-g4">▼</span>
     </div>
     <div class="tc" id="tc-g4">
 
-      <a href="grundlagen/g4-1-grundlagen.html" class="karte geplant">
+      <a href="grundlagen/g4-0-praxisbeispiel-bm2-klasse.html" class="karte fertig">
+        <span class="k-id">4.0</span>
+        <span class="k-tit">Praxisbeispiel BM2-Klasse</span>
+      </a>
+
+      <a href="grundlagen/g4-1-grundlagen.html" class="karte fertig">
         <span class="k-id">4.1</span>
         <span class="k-tit">Grundlagen</span>
       </a>
 
-      <a href="grundlagen/g4-2-diagramme.html" class="karte geplant">
+      <a href="grundlagen/g4-2-diagramme.html" class="karte fertig">
         <span class="k-id">4.2</span>
         <span class="k-tit">Diagramme</span>
       </a>
 
-      <a href="grundlagen/g4-3-masszahlen.html" class="karte geplant">
+      <a href="grundlagen/g4-3-masszahlen.html" class="karte fertig">
         <span class="k-id">4.3</span>
         <span class="k-tit">Masszahlen</span>
       </a>
@@ -257,27 +304,47 @@
     </div>
     <div class="tc" id="tc-g5">
 
-      <a href="grundlagen/g5-1-grundlagen.html" class="karte geplant">
+      <a href="grundlagen/g5-1-grundlagen.html" class="karte fertig">
         <span class="k-id">5.1</span>
         <span class="k-tit">Grundlagen</span>
       </a>
 
-      <a href="grundlagen/g5-2-planimetrie.html" class="karte geplant">
-        <span class="k-id">5.2</span>
-        <span class="k-tit">Planimetrie</span>
-      </a>
+      <div class="ksub span-4">
+        <div class="ksub-hdr">
+          <span class="k-id">5.2</span>
+          <span class="k-tit">Planimetrie</span>
+        </div>
+        <div class="ksub-grid">
+          <a href="grundlagen/g5-2a-dreiecke.html" class="karte fertig">
+            <span class="k-id">5.2a</span>
+            <span class="k-tit">Dreiecke</span>
+          </a>
+          <a href="grundlagen/g5-2b-vierecke.html" class="karte fertig">
+            <span class="k-id">5.2b</span>
+            <span class="k-tit">Vierecke</span>
+          </a>
+          <a href="grundlagen/g5-2c-kreis-und-kreisteile.html" class="karte fertig">
+            <span class="k-id">5.2c</span>
+            <span class="k-tit">Kreis und Kreisteile</span>
+          </a>
+          <a href="grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html" class="karte fertig">
+            <span class="k-id">5.2d</span>
+            <span class="k-tit">Zentrische Streckung und Ähnlichkeit</span>
+          </a>
+        </div>
+      </div>
 
-      <a href="grundlagen/g5-3-trigonometrische-berechnungen.html" class="karte geplant">
+      <a href="grundlagen/g5-3-trigonometrische-berechnungen.html" class="karte fertig">
         <span class="k-id">5.3</span>
         <span class="k-tit">Trigonometrische Berechnungen</span>
       </a>
 
-      <a href="grundlagen/g5-4-einheitskreis.html" class="karte geplant">
+      <a href="grundlagen/g5-4-einheitskreis.html" class="karte fertig">
         <span class="k-id">5.4</span>
         <span class="k-tit">Einheitskreis</span>
       </a>
 
-      <a href="grundlagen/g5-5-trigonometrische-gleichungen.html" class="karte geplant">
+      <a href="grundlagen/g5-5-trigonometrische-gleichungen.html" class="karte fertig">
         <span class="k-id">5.5</span>
         <span class="k-tit">Trigonometrische Gleichungen</span>
       </a>
@@ -431,7 +498,7 @@
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p><a href="https://github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
+  <p><a href="https://github.com/go4exercises/tals-mathe" target="_blank" rel="noopener">GitHub Pages</a></p>
 </footer>
 
 <script src="nav.js"></script>

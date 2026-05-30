@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anwendungsaufgaben · Grundlagen Gleichungen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  .aufg-rahmen {
+    border: 1pt solid var(--linie);
+    border-radius: 4px;
+    padding: 4mm;
+    margin: 3mm 0;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .aufg-rahmen .aufg-kopf { margin-bottom: 2mm; align-items: baseline; }
+  .schwierig {
+    font-family: var(--mono);
+    font-size: 8pt;
+    color: var(--tinte-2);
+    margin-left: auto;
+    letter-spacing: 0.5px;
+  }
+  .schwierig .punkt { color: var(--orange); font-size: 9pt; }
+  .schwierig .punkt-leer { color: var(--linie); font-size: 9pt; }
+  .bereich-tag {
+    font-family: var(--mono);
+    font-size: 7.5pt;
+    color: var(--blau);
+    background: var(--blau-hell);
+    padding: 0.5mm 2mm;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-left: 3mm;
+  }
+  .lin-mehr { margin-bottom: 2mm; }
+  .lin-mehr .lin { height: 7mm; }
+  .uebersicht {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.2pt;
+    margin: 3mm 0 5mm;
+  }
+  .uebersicht th, .uebersicht td {
+    border: 1px solid var(--linie);
+    padding: 1.4mm 2.5mm;
+    text-align: left;
+  }
+  .uebersicht th {
+    background: var(--papier-2);
+    font-family: var(--sans);
+    font-weight: 700;
+  }
+  .uebersicht td.nr { text-align: center; font-family: var(--mono); width: 10mm; }
+  .uebersicht td.s  { text-align: center; font-family: var(--mono); width: 18mm; color: var(--orange); letter-spacing: 1px; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g2-1-grundlagen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Anwendungsaufgaben · A4</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · Grundlagen Gleichungen</div>
+    <h1>Anwendungsaufgaben — Grundlagen Gleichungen</h1>
+    <p class="dk-untertitel">Sechs Anwendungsaufgaben aus Technik, Architektur und Life Sciences — Modellieren mit Gleichungen, Ungleichungen und Gleichungssystemen.</p>
+  </header>
+
+  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Die Aufgaben üben das Modellieren mit Gleichungen, Ungleichungen und Gleichungssystemen — und
+    zwar in realistischen Situationen aus Technik, Architektur und Life Sciences. Bei jeder Aufgabe
+    gehst du nach dem Drei-Schritt-Schema vor (Variable festlegen → Gegebenes sammeln → Gleichung
+    aufstellen) und führst zum Schluss eine Probe durch. Die Musterlösungen folgen am Ende.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead>
+      <tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="nr">1</td>  <td>Bauwesen</td>     <td>Stahlträger zuschneiden</td>     <td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td>  <td>Mechanik</td>     <td>Werkstücke auf Lager</td>        <td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td>  <td>Elektrotechnik</td><td>Widerstandsnetzwerk</td>        <td class="s">●●●</td></tr>
+      <tr><td class="nr">4</td>  <td>Architektur</td>  <td>Treppenhaus dimensionieren</td>  <td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td>  <td>Logistik</td>     <td>Lieferwagen-Zuladung</td>        <td class="s">●○○</td></tr>
+      <tr><td class="nr">6</td>  <td>Life Sciences</td><td>Mischung mit Wirkstoff</td>      <td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ════════════════════════════ AUFGABEN ════════════════════════════ -->
+
+  <!-- AUFGABE 1 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">1</span>
+      <span class="aufg-titel">Stahlträger zuschneiden</span>
+      <span class="bereich-tag">Bauwesen</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Ein Stahlträger der Länge 12.40 m soll in zwei Stücke zerlegt werden. Das längere Stück soll
+    1.60 m länger sein als das kürzere.</p>
+    <p>(a) Welche Variable wählst du? Stelle eine Gleichung auf.</p>
+    <p>(b) Bestimme die beiden Stücklängen und führe die Probe durch.</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- AUFGABE 2 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">2</span>
+      <span class="aufg-titel">Werkstücke auf Lager</span>
+      <span class="bereich-tag">Mechanik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>In einer Werkstatt liegen Werkstücke vom Typ A und vom Typ B auf Lager — insgesamt 240 Stück.
+    Typ A ist doppelt so häufig wie Typ B.</p>
+    <p>(a) Stelle ein Gleichungssystem für die Anzahlen \(a\) (Typ A) und \(b\) (Typ B) auf.</p>
+    <p>(b) Bestimme \(a\) und \(b\).</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- AUFGABE 3 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">3</span>
+      <span class="aufg-titel">Widerstandsnetzwerk</span>
+      <span class="bereich-tag">Elektrotechnik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Drei Widerstände in Reihe ergeben einen Gesamtwiderstand von 90 Ω. Der zweite ist 3 Ω grösser
+    als der erste, der dritte ist 9 Ω grösser als der zweite.</p>
+    <p>(a) Erkläre, weshalb das eine lineare Gleichung in einer Variablen ist.</p>
+    <p>(b) Bestimme die drei Widerstände und führe die Probe durch.</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- AUFGABE 4 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">4</span>
+      <span class="aufg-titel">Treppenhaus dimensionieren</span>
+      <span class="bereich-tag">Architektur</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Eine Treppe überwindet eine Geschosshöhe von 2.88 m. Nach Schweizer Norm <strong>SIA 500 „Hindernisfreie Bauten"</strong> (SN 521 500, mit Bezug auf die BFU-Empfehlungen zur Treppengeometrie) gilt die Schrittmass-
+    Regel \(2 \cdot s + a = 63\) cm, wobei \(s\) die Steigung (Höhe einer Stufe) und \(a\) der Auftritt
+    (Tiefe einer Stufe) in cm ist. Die Anzahl Stufen \(n\) erfüllt \(n \cdot s = 288\).</p>
+    <p>(a) Welcher Auftritt \(a\) ergibt sich, wenn jede Stufe 18 cm hoch ist?</p>
+    <p>(b) Wie viele Stufen sind das, und wie lang wird das Treppenhaus (waagrechte Länge \(= n \cdot a\))?</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- AUFGABE 5 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">5</span>
+      <span class="aufg-titel">Lieferwagen-Zuladung</span>
+      <span class="bereich-tag">Logistik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Ein Lieferwagen hat eine maximale Zuladung von 1200 kg. Er ist mit drei Paletten von je 180 kg
+    beladen. Zusätzlich sollen Pakete à 25 kg geladen werden.</p>
+    <p>(a) Formuliere eine Ungleichung für die Anzahl Pakete \(n\).</p>
+    <p>(b) Wie viele Pakete dürfen höchstens zusätzlich geladen werden?</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- AUFGABE 6 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">6</span>
+      <span class="aufg-titel">Mischung mit Wirkstoff</span>
+      <span class="bereich-tag">Life Sciences</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Im Labor werden zwei Lösungen gemischt: Lösung A enthält 8 % Wirkstoff, Lösung B enthält 20 %.
+    Es sollen 500 mL einer Mischung mit 14 % Wirkstoff entstehen.</p>
+    <p>(a) Bezeichne mit \(x\) die Menge (in mL) von Lösung A. Stelle eine Gleichung auf.</p>
+    <p>(b) Bestimme \(x\) und die Menge \(y\) von Lösung B. Führe die Probe durch.</p>
+    <p style="font-family:var(--mono);font-size:8pt;color:var(--tinte-2);margin-top:2mm">Lösungsweg:</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       MUSTERLÖSUNGEN
+       ════════════════════════════════════════════════════════════════ -->
+  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen);page-break-before:always;break-before:page;margin-top:0">Musterlösungen</h2>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 1 — Stahlträger zuschneiden</div>
+    <p>Sei \(x\) die Länge des kürzeren Stücks (in m). Dann ist \(x + 1.60\) das längere. Gleichung:</p>
+    \[ x + (x + 1.60) = 12.40 \;\Longleftrightarrow\; 2x = 10.80 \;\Longleftrightarrow\; x = 5.40 \]
+    <p>Kurzes Stück: 5.40 m, langes Stück: 7.00 m. Probe: \(5.40 + 7.00 = 12.40\) ✓.</p>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 2 — Werkstücke auf Lager</div>
+    <p>System: \(a + b = 240\) und \(a = 2 \cdot b\). Einsetzen: \(2b + b = 240 \Rightarrow 3b = 240
+    \Rightarrow b = 80\). Damit \(a = 160\). Probe: \(160 + 80 = 240\) und \(160 = 2 \cdot 80\) ✓.</p>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 3 — Widerstandsnetzwerk</div>
+    <p>Sei \(R_1 = x\). Dann \(R_2 = x + 3\) und \(R_3 = (x + 3) + 9 = x + 12\). Gesamtwiderstand
+    \(R_1 + R_2 + R_3 = 90\) Ω:</p>
+    \[ x + (x+3) + (x+12) = 90 \;\Longleftrightarrow\; 3x + 15 = 90 \;\Longleftrightarrow\; x = 25 \]
+    <p>\(R_1 = 25\) Ω, \(R_2 = 28\) Ω, \(R_3 = 37\) Ω. Probe:
+    \(25 + 28 + 37 = 90\) Ω ✓.</p>
+    <p>(a) Es ist eine lineare Gleichung, weil \(x\) nur in der ersten Potenz vorkommt.</p>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 4 — Treppenhaus dimensionieren</div>
+    <p>(a) Schrittmass-Regel: \(2 \cdot 18 + a = 63\), also \(a = 63 - 36 = 27\) cm.</p>
+    <p>(b) \(n \cdot s = 288 \Rightarrow n = 288 / 18 = 16\) Stufen. Waagrechte Länge:
+    \(n \cdot a = 16 \cdot 27 = 432\) cm \(= 4.32\) m. Probe Schrittmass:
+    \(2 \cdot 18 + 27 = 63\) ✓.</p>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 5 — Lieferwagen-Zuladung</div>
+    <p>Bereits geladen: \(3 \cdot 180 = 540\) kg. Ungleichung:</p>
+    \[ 540 + 25 \cdot n \leq 1200 \;\Longleftrightarrow\; 25 \cdot n \leq 660 \;\Longleftrightarrow\; n \leq 26.4 \]
+    <p>Da \(n\) eine ganze Zahl sein muss: höchstens \(n = 26\) Pakete. Kontrolle: \(540 + 26 \cdot 25
+    = 540 + 650 = 1190 \leq 1200\) ✓; bei 27 Paketen wäre \(540 + 675 = 1215 > 1200\).</p>
+  </div>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 6 — Mischung mit Wirkstoff</div>
+    <p>Sei \(x\) die Menge von Lösung A in mL, dann ist \(y = 500 - x\) die Menge von Lösung B.
+    Wirkstoff-Bilanz:</p>
+    \[ 0.08 \cdot x + 0.20 \cdot (500 - x) = 0.14 \cdot 500 \]
+    <p>Auflösen: \(0.08x + 100 - 0.20x = 70 \Rightarrow -0.12x = -30 \Rightarrow x = 250\) mL.
+    Dann \(y = 250\) mL. Probe: \(0.08 \cdot 250 + 0.20 \cdot 250 = 20 + 50 = 70\) g, und
+    \(0.14 \cdot 500 = 70\) g ✓.</p>
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Grundlagen Gleichungen</span>
+    <span>Anwendungsaufgaben</span>
+  </footer>
+
+</div>
+</body>
+</html>

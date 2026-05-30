@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lineare Gleichungssysteme — TALS Mathematik</title>
+<title>2.3 Lineare Gleichungssysteme — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
@@ -19,7 +19,82 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Themen-spezifische Styles. Globale Klassen (.block, .merksatz, .ftb-tabelle, .dl, .lk …) liegen in ../style.css. ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:560px; margin:0 auto; }
+
+/* Methoden-Auswahl Buttons */
+.meth-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.meth-btn { font-family:var(--mono); font-size:0.75rem; font-weight:700; padding:6px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.meth-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.meth-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* Lösungsfall-Anzeige */
+.lf-box { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin:14px 0; }
+.lf-card { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 10px; text-align:center; transition:all 0.2s; cursor:pointer; }
+.lf-card:hover { border-color:var(--blau-rand); }
+.lf-card.aktiv { border-color:var(--blau); background:var(--blau-hell); transform:translateY(-2px); }
+.lf-card .lf-tit { font-family:var(--mono); font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--tinte-2); margin-bottom:6px; }
+.lf-card.aktiv .lf-tit { color:var(--blau); }
+.lf-card .lf-fml { font-family:var(--mono); font-size:0.85rem; color:var(--tinte); font-weight:700; }
+
+/* Aufgaben-Karten */
+.eingabe-row { display:flex; align-items:center; gap:9px; margin:10px 0; flex-wrap:wrap; }
+.eingabe-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.92rem; padding:6px 10px; border:1.5px solid var(--linie); border-radius:6px; width:80px; background:var(--papier-2); color:var(--tinte); }
+.eingabe-row input[type=text]:focus { outline:none; border-color:var(--blau); background:var(--weiss); }
+.eingabe-row.drei input[type=text] { width:64px; }
+.btn-pruef { font-family:var(--sans); font-size:0.78rem; font-weight:600; padding:6px 14px; border-radius:7px; border:none; background:var(--blau); color:#fff; cursor:pointer; }
+.btn-pruef:hover { background:#15406d; }
+
+.cr { font-family:var(--mono); font-size:0.78rem; padding:6px 11px; border-radius:6px; margin-top:8px; display:none; }
+.cr.ok { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); display:block; }
+.cr.err { background:var(--rot-hell); color:var(--rot); border:1px solid var(--rot-rand); display:block; }
+
+/* Umform-Animation Stack — analog zu g2-2a */
+.umform-stack { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:14px 18px; margin:12px 0; min-height:280px; }
+.umform-zeile { display:flex; align-items:center; gap:14px; padding:5px 0; opacity:0; transform:translateY(-6px); transition:opacity 0.35s, transform 0.35s; }
+.umform-zeile.sichtbar { opacity:1; transform:translateY(0); }
+.umform-zeile .uf-glg { font-family:var(--mono); font-size:0.95rem; font-weight:700; color:var(--tinte); flex:1; }
+.umform-op { font-family:var(--mono); font-size:0.75rem; color:var(--blau); background:var(--blau-hell); padding:3px 9px; border-radius:5px; border:1px solid var(--blau-rand); white-space:nowrap; }
+.umform-zeile.kommentar { padding-left:8px; }
+.umform-zeile.kommentar .uf-glg { font-family:var(--sans); font-style:italic; color:var(--tinte-2); font-size:0.83rem; font-weight:400; }
+/* Hervorhebung des namensgebenden Schritts */
+.umform-zeile.kernschritt .uf-glg { background:#fff3a8; padding:4px 8px; border-radius:5px; box-shadow:0 1px 3px rgba(0,0,0,0.05); }
+.umform-zeile.kernschritt .kern-hinweis { font-family:var(--mono); font-size:0.7rem; color:#fff; background:var(--orange); border-radius:5px; padding:4px 9px; font-weight:700; letter-spacing:0.5px; white-space:nowrap; }
+
+.umform-btn { font-family:var(--mono); font-size:0.75rem; padding:6px 14px; border-radius:6px; border:1.5px solid var(--linie); background:var(--weiss); cursor:pointer; color:var(--tinte); margin-right:7px; }
+.umform-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.umform-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* Methoden-Beschreibung */
+.meth-info { background:var(--blau-hell); border:1px solid var(--blau-rand); border-radius:9px; padding:11px 16px; margin-bottom:12px; font-size:0.88rem; color:var(--tinte); }
+.meth-info strong { color:var(--blau); }
+
+/* Layout: zwei Spalten — Schritte links, Graph rechts (responsiv) */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px; }
+@media (max-width:760px) { .zwei-spalten { grid-template-columns:1fr; } }
+
+.hinweis { font-family:var(--sans); font-size:0.8rem; color:var(--tinte-2); font-style:italic; margin:6px 0; }
+
+/* Tabellen-Highlights für die "Drei Darstellungen"-Tabelle */
+.ftb-tabelle tbody tr.aktiv td { background:var(--blau-hell); font-weight:700; color:var(--blau); }
+.ftb-tabelle tbody tr.treff td { background:var(--gruen-hell); font-weight:700; color:var(--gruen); }
 </style>
 </head>
 <body>
@@ -27,64 +102,545 @@ MathJax = {
 <div class="page-wrap">
 <main class="content">
 
-<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<!-- ════════════════════════════════════════════════════════════════
+     1. TITEL + RLP-HEADER
+     ════════════════════════════════════════════════════════════════ -->
 <div class="page-titel">
   <div class="pt-bereich">Grundlagenfach · Lerngebiet 2 · Gleichungen, Ungleichungen und Gleichungssysteme · 35 Lektionen</div>
   <h1 class="pt-h1">2.3 Lineare Gleichungssysteme</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Wenn zwei oder mehr Bedingungen gleichzeitig erfüllt sein sollen, hilft ein <strong>lineares Gleichungssystem</strong>. Hier löst du Systeme mit zwei oder drei Variablen — algebraisch mit Einsetzen, Gleichsetzen, Addieren — und visualisierst die Lösungsmenge bei zwei Variablen als Schnittpunkt zweier Geraden.</p>
+
 <div class="rlp-kompetenzen">
-  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 2.3</div>
+  <div class="rlp-titel">RLP-Kompetenzen (Auszug aus 2.3)</div>
   <ul>
     <li>ein lineares Gleichungssystem mit maximal drei Variablen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
     <li>die Lösungsmenge eines linearen Gleichungssystems mit zwei Variablen grafisch veranschaulichen und interpretieren <span class="ohm">auch ohne Hilfsmittel</span></li>
   </ul>
 </div>
 
+<nav class="ohm" id="ohm-root"></nav>
 
-<!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<!-- ════════════════════════════════════════════════════════════════
+     2. EINSTIEG — Kino-Tickets
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="einstieg">Einstieg — Wie viele Erwachsene und Kinder?</h2>
 
+<p>Eine Schulklasse besucht das Kino. Insgesamt gehen <strong>20 Personen</strong> mit, und sie zahlen
+für die Tickets zusammen <strong>240 CHF</strong>. Ein Erwachsenen-Ticket kostet <strong>15 CHF</strong>,
+ein Kinder-Ticket <strong>9 CHF</strong>. Wie viele Erwachsene und wie viele Kinder sind dabei?</p>
 
-<!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<p>Sei <em>x</em> die Anzahl Erwachsener und <em>y</em> die Anzahl Kinder. Die zwei Bedingungen
+ergeben zwei Gleichungen — und zwar gleichzeitig:</p>
 
+\[ \begin{cases} x + y = 20 & \text{(Personenzahl)} \\ 15 \cdot x + 9 \cdot y = 240 & \text{(Gesamtbetrag)} \end{cases} \]
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<p>Das ist ein <strong>lineares Gleichungssystem</strong> mit zwei Gleichungen und zwei Unbekannten.
+Eine einzelne Gleichung wie \(x + y = 20\) hat unendlich viele Lösungen — z. B. wären 5 Erwachsene und 15 Kinder
+denkbar, ebenso 10 und 10. Erst die zweite Bedingung legt das Paar eindeutig fest.</p>
 
+<div class="widget">
+  <div class="widget-header">
+    <h3>Grafische Lösung — Schnittpunkt zweier Geraden <a class="quer" href="g3-2-lineare-funktionen.html">↗ 3.2</a></h3>
+    <p>Beide Gleichungen sind im Diagramm als Gerade eingezeichnet. Die Lösung des Systems ist genau der Schnittpunkt.</p>
+  </div>
+  <div class="widget-body">
+    <div class="cv-wrap"><canvas id="cv-kino"></canvas></div>
+    <div class="formel-live" style="margin-top:12px">
+      <div class="fl-label">Lösung</div>
+      <div class="fl-eq">x = 10 Erwachsene,&nbsp;&nbsp; y = 10 Kinder</div>
+    </div>
+    <p class="hinweis">In rot die Personenzahl-Gerade, in blau die Geldgerade. Schnittpunkt = Lösung.</p>
+  </div>
+</div>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ════════════════════════════════════════════════════════════════
+     3. DEFINITION
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="definition">Definition — Was ist ein lineares Gleichungssystem?</h2>
 
+<div class="block block-def">
+  <div class="block-titel">📘 Lineares Gleichungssystem (LGS)</div>
+  <p>Ein <strong>lineares Gleichungssystem</strong> besteht aus zwei oder mehr linearen Gleichungen,
+  die gleichzeitig erfüllt werden müssen. Im Grundlagenfach genügen die Bezeichnungen <em>x</em> und
+  <em>y</em> (bei zwei Variablen) bzw. <em>x</em>, <em>y</em> und <em>z</em> (bei drei Variablen).</p>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+  <p>Das allgemeine 2×2-System lautet</p>
+  \[ \begin{cases} a \cdot x + b \cdot y = c \\ d \cdot x + e \cdot y = f \end{cases} \]
+  <p>mit Koeffizienten \(a, b, c, d, e, f \in \mathbb{R}\). Eine <strong>Lösung</strong> ist
+  ein Zahlenpaar \((x \mid y)\), das beide Gleichungen erfüllt.</p>
+</div>
 
+<div class="block block-def">
+  <div class="block-titel">📘 Lösungsmenge \(\mathbb{L}\)</div>
+  <p>Die Lösungsmenge \(\mathbb{L}\) eines LGS enthält <strong>alle</strong> Tupel, die das System erfüllen. Sie kann</p>
+  <ul>
+    <li><strong>genau ein</strong> Tupel enthalten — z. B. \(\mathbb{L} = \{(10 \mid 10)\}\) (eindeutige Lösung)</li>
+    <li><strong>leer</strong> sein — \(\mathbb{L} = \emptyset\) (keine Lösung, das System ist widersprüchlich)</li>
+    <li><strong>unendlich viele</strong> Tupel enthalten — die zwei Gleichungen sind dann äquivalent</li>
+  </ul>
+</div>
 
-<!-- ══ 7. AUFGABEN ══ -->
+<!-- ════════════════════════════════════════════════════════════════
+     4. DREI DARSTELLUNGEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="darstellungen">Drei Darstellungen für ein 2×2-System</h2>
+
+<p>Ein lineares Gleichungssystem mit zwei Variablen lässt sich auf drei Wegen darstellen — algebraisch,
+tabellarisch und grafisch. Alle drei Darstellungen enthalten dieselbe Information, machen aber
+unterschiedliche Aspekte sichtbar.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Drei Darstellungen — \( \begin{cases} 2 \cdot x + y = 7 \\ x - y = -1 \end{cases} \)</h3>
+    <p>Verschiebe den Schieber, um Punkte auf den beiden Geraden zu finden. Der Schnittpunkt der Geraden ist die Lösung des Systems.</p>
+  </div>
+  <div class="widget-body">
+    <div class="zwei-spalten">
+      <div>
+        <div class="sl-row">
+          <label for="sl-three">x =</label>
+          <input id="sl-three" type="range" min="-1" max="5" step="1" value="2">
+          <span class="sl-val" id="sl-three-v">2</span>
+        </div>
+        <table class="ftb-tabelle" id="three-table">
+          <thead><tr><th>x</th><th>y aus G1: 7−2·x</th><th>y aus G2: x+1</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <div class="cv-wrap"><canvas id="cv-three"></canvas></div>
+      </div>
+    </div>
+    <div class="formel-live" style="margin-top:14px">
+      <div class="fl-label">Schnittpunkt</div>
+      <div class="fl-eq">(2 | 3) — beide Geraden treffen sich genau dort.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     5. VIER LÖSUNGSVERFAHREN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="verfahren">Vier Lösungsverfahren</h2>
+
+<p>Es gibt <strong>vier</strong> Wege zur Lösung eines linearen Gleichungssystems: drei
+analytische — Einsetzen, Gleichsetzen, Addition — und das grafische Verfahren.
+Sie führen alle zur selben Lösungsmenge, aber je nach System ist die eine oder die andere
+Methode am bequemsten.</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Verfahren</th><th>Wann besonders gut</th><th>Was wird gemacht</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Grafisch</strong></td><td>Verständnis, schnelle Überschlags-Antwort</td><td>Beide Gleichungen als Gerade zeichnen, Schnittpunkt ablesen.</td></tr>
+    <tr><td><strong>Einsetzen</strong></td><td>Eine Variable steht schon allein (z. B. \(y = 2x+1\))</td><td>Ausdruck in die andere Gleichung einsetzen.</td></tr>
+    <tr><td><strong>Gleichsetzen</strong></td><td>Beide Gleichungen sind nach derselben Variable aufgelöst</td><td>Die zwei Ausdrücke gleichsetzen.</td></tr>
+    <tr><td><strong>Addition</strong></td><td>Eine Variable hat in beiden Gleichungen passende Koeffizienten</td><td>Eine Gleichung passend multiplizieren, dann beide addieren — eine Variable fällt weg.</td></tr>
+  </tbody>
+</table>
+
+<p>Wir zeigen die drei <em>analytischen</em> Verfahren am gleichen Beispielsystem aus dem
+vorhergehenden Abschnitt. Wähle ein Verfahren und klicke dich Schritt für Schritt durch:</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Drei analytische Verfahren am Beispiel \( \begin{cases} 2 \cdot x + y = 7 \\ x - y = -1 \end{cases} \) <a class="quer" href="g2-1-grundlagen.html#aequivalenz">↩ 2.1</a></h3>
+    <p>Klicke „Vor" und beobachte den Lösungsweg. Der namensgebende Schritt ist gelb hervorgehoben. Rechts der Graph mit dem Schnittpunkt.</p>
+  </div>
+  <div class="widget-body">
+    <div class="meth-btns" id="verf-btns">
+      <button class="meth-btn aktiv" data-meth="einsetz">Einsetzen</button>
+      <button class="meth-btn" data-meth="gleichsetz">Gleichsetzen</button>
+      <button class="meth-btn" data-meth="addition">Addition</button>
+    </div>
+    <div class="meth-info" id="verf-info"></div>
+    <div class="zwei-spalten">
+      <div>
+        <div class="umform-stack" id="verf-stack"></div>
+        <div style="margin-top:10px">
+          <button class="umform-btn" id="vf-zurueck">◀ Zurück</button>
+          <button class="umform-btn" id="vf-vor">Vor ▶</button>
+          <button class="umform-btn" id="vf-reset">⟲ Zurücksetzen</button>
+        </div>
+      </div>
+      <div>
+        <div class="cv-wrap"><canvas id="cv-verf"></canvas></div>
+        <p class="hinweis">Beide Geraden bleiben sichtbar. Der Schnittpunkt (2 | 3) ist die Lösung — unabhängig davon, welches Verfahren wir wählen.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     6. LÖSUNGSFÄLLE
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="loesungsfaelle">Drei Lösungsfälle bei 2×2-Systemen <a class="quer" href="g2-2a-lineare-gleichungen.html#spezialfaelle">↩ 2.2a</a></h2>
+
+<p>Beim Lösen eines 2×2-Systems gibt es genau drei mögliche Ergebnisse. Geometrisch sind
+das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
+
+<div class="widget">
+  <div class="widget-body">
+    <div class="lf-box">
+      <div class="lf-card aktiv" data-fall="eindeutig">
+        <div class="lf-tit">Genau eine Lösung</div>
+        <div class="lf-fml">Geraden schneiden sich</div>
+      </div>
+      <div class="lf-card" data-fall="parallel">
+        <div class="lf-tit">Keine Lösung</div>
+        <div class="lf-fml">Geraden parallel</div>
+      </div>
+      <div class="lf-card" data-fall="identisch">
+        <div class="lf-tit">Unendlich viele</div>
+        <div class="lf-fml">Geraden identisch</div>
+      </div>
+    </div>
+    <div class="cv-wrap"><canvas id="cv-lf"></canvas></div>
+    <div class="formel-live" style="margin-top:12px">
+      <div class="fl-label">Beispielsystem · Lösungsmenge</div>
+      <div class="fl-eq" id="lf-info"></div>
+    </div>
+  </div>
+</div>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Lösungsfall</th><th>Was passiert beim Rechnen</th><th>Lösungsmenge</th></tr></thead>
+  <tbody>
+    <tr><td>Eindeutig</td><td>Es kommt eine Gleichung wie \(x = 2\) heraus.</td><td>\(\mathbb{L} = \{(x \mid y)\}\) — ein Tupel</td></tr>
+    <tr><td>Keine Lösung</td><td>Es kommt etwas Falsches heraus, z. B. \(0 = 5\).</td><td>\(\mathbb{L} = \emptyset\)</td></tr>
+    <tr><td>Unendlich viele</td><td>Es kommt etwas immer Wahres heraus, z. B. \(0 = 0\).</td><td>\(\mathbb{L}\) ist eine Gerade</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════
+     7. 3×3-SYSTEME
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="dreidim">3×3-Systeme — drei Variablen, drei Gleichungen</h2>
+
+<p>Bei drei Variablen \(x, y, z\) ist eine einzelne Gleichung der Form \(a \cdot x + b \cdot y + c \cdot z = d\)
+geometrisch eine <strong>Ebene im Raum</strong>. Drei solcher Ebenen schneiden sich im Allgemeinen
+in genau einem Punkt — und dieser Punkt ist die Lösung des 3×3-Systems.</p>
+
+<p>Zur Lösung wenden wir die <strong>gleichen Verfahren</strong> wie beim 2×2-System
+mehrfach an. Eine besonders systematische Variante: Zuerst mit der <em>Additionsmethode</em>
+eine Variable eliminieren, sodass ein 2×2-System bleibt. Dieses lösen wir wieder mit
+Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte Variable.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>3×3 schrittweise lösen — Beispiel</h3>
+    <p>Wir lösen \( \begin{cases} x + y + z = 6 \\ 2 \cdot x - y + z = 3 \\ x + 2 \cdot y - z = 2 \end{cases} \) mit Additions- und Einsetzmethode.</p>
+  </div>
+  <div class="widget-body">
+    <div class="umform-stack" id="dd-stack"></div>
+    <div style="margin-top:10px">
+      <button class="umform-btn" id="dd-zurueck">◀ Zurück</button>
+      <button class="umform-btn" id="dd-vor">Vor ▶</button>
+      <button class="umform-btn" id="dd-reset">⟲ Zurücksetzen</button>
+    </div>
+    <p class="hinweis" style="margin-top:14px">Strategie: Erst Variable <em>z</em> eliminieren, indem wir geschickte Linearkombinationen der Gleichungen bilden. Dann bleibt ein 2×2-System in <em>x</em> und <em>y</em>. Aus dessen Lösung ergibt sich <em>z</em> durch Einsetzen.</p>
+  </div>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Probe</div>
+  <p>Mit \(x = 1, y = 2, z = 3\):
+  \(\;1 + 2 + 3 = 6\) ✓, \(\; 2 \cdot 1 - 2 + 3 = 3\) ✓, \(\; 1 + 2 \cdot 2 - 3 = 2\) ✓.
+  Alle drei Gleichungen sind erfüllt, also \(\mathbb{L} = \{(1 \mid 2 \mid 3)\}\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Lösungsfälle bei 3×3-Systemen</div>
+  <p>Wie bei 2×2-Systemen kann auch ein 3×3-System verschiedene Lösungs-„Geometrien" haben. Geometrisch beschreibt jede Gleichung eine <em>Ebene</em> im Raum; gesucht ist der gemeinsame Schnitt der drei Ebenen:</p>
+  <ul style="margin:6px 0 0 22px">
+    <li><strong>Genau ein Punkt</strong> — die drei Ebenen schneiden sich in einem einzigen Punkt. \(\mathbb{L} = \{(x_0 \mid y_0 \mid z_0)\}\). Beim Eliminieren erhält man am Ende eine eindeutige Aussage wie \(z = 3\).</li>
+    <li><strong>Eine Gerade</strong> (unendlich viele Lösungen, eine Variable frei) — die drei Ebenen schneiden sich in einer gemeinsamen Geraden. Eine Variable ist frei wählbar, die anderen zwei hängen davon ab. Beim Eliminieren wird eine Gleichung trivial (\(0 = 0\)).</li>
+    <li><strong>Eine Ebene</strong> (unendlich viele Lösungen, zwei Variablen frei) — alle drei Gleichungen beschreiben dieselbe Ebene. Sehr selten in Anwendungen; beim Eliminieren werden zwei Gleichungen trivial.</li>
+    <li><strong>Keine Lösung</strong> — die Ebenen haben keinen gemeinsamen Punkt (z.B. zwei parallele Ebenen). \(\mathbb{L} = \emptyset\). Beim Eliminieren entsteht ein Widerspruch wie \(0 = 5\).</li>
+  </ul>
+  <p style="font-size:0.92rem;margin-top:6px"><em>Merkregel:</em> An der Endaussage erkennt man den Fall — \(z = 3\) (eindeutig), \(0 = 0\) (eine Variable frei → Gerade, zwei frei → Ebene), \(0 = 5\) (keine Lösung).</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Beispiel — unterbestimmtes 3×3-System (Gerade als Lösung)</div>
+  <p>Wir lösen mit der Additionsmethode:</p>
+  \[ \begin{cases} x + y + z = 6 & \text{(G1)} \\ x - y \phantom{ + 0z} = 0 & \text{(G2)} \\ 2 \cdot x + z = 6 & \text{(G3)} \end{cases} \]
+  <p><strong>Schritt 1:</strong> Aus G2 folgt \(y = x\). Einsetzen in G1: \(x + x + z = 6\), also \(2x + z = 6\). Das ist aber genau G3 — die dritte Gleichung liefert keine neue Information.</p>
+  <p><strong>Schritt 2:</strong> Aus \(2x + z = 6\) folgt \(z = 6 - 2 \cdot x\). Wir setzen den Parameter \(x = t \in \mathbb{R}\) und erhalten</p>
+  \[ x = t, \qquad y = t, \qquad z = 6 - 2 \cdot t. \]
+  <p>Die Lösungsmenge ist eine ganze <strong>Gerade</strong> im Raum:</p>
+  \[ \mathbb{L} = \{ (t \mid t \mid 6 - 2t) \;|\; t \in \mathbb{R} \}. \]
+  <p>Probe für \(t = 1\): \((1 \mid 1 \mid 4)\) — G1: \(1+1+4=6\) ✓, G2: \(1-1=0\) ✓, G3: \(2+4=6\) ✓. Probe für \(t = 2\): \((2 \mid 2 \mid 2)\) — G1: \(6\) ✓, G2: \(0\) ✓, G3: \(6\) ✓.</p>
+  <p><strong>Geometrische Deutung:</strong> Jede der drei Gleichungen beschreibt eine Ebene im Raum. Hier ist die dritte Ebene die <em>Summe</em> der ersten beiden — sie trägt keine eigene Bedingung bei. Die ersten zwei Ebenen schneiden sich in einer Geraden, und die dritte enthält diese Gerade ebenfalls. Das System ist <strong>unterbestimmt</strong>: drei Gleichungen, aber effektiv nur zwei unabhängige.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     8. AUFGABEN
+     ════════════════════════════════════════════════════════════════ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Variable nur einmal einsetzen</div>
+  <p>Beim Einsetzungs- oder Gleichsetzungsverfahren ermittelt man zuerst eine Variable (z. B. \(x = 4\)). Dann muss man \(x = 4\) in eine der ursprünglichen Gleichungen einsetzen, um \(y\) zu bestimmen — nicht in die <em>umgeformte</em> Gleichung, aus der man \(x\) gewonnen hat (dort kommt nur \(0 = 0\) oder ähnliches heraus). Tipp: Die einfachere der zwei Originalgleichungen für den Rück-Einsetzungs-Schritt wählen.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Sonderfälle übersehen</div>
+  <p>Erscheint nach dem Eliminieren \(0 = 0\), ist das System <strong>unterbestimmt</strong> (unendlich viele Lösungen, die Gleichungen beschreiben dieselbe Gerade). Erscheint \(0 = 5\) oder ein anderer Widerspruch, ist das System <strong>unlösbar</strong> (parallele Geraden ohne Schnittpunkt). Wer das Verfahren stur durchzieht und am Ende „keine Lösung gefunden" als Antwort schreibt, verpasst die geometrische Aussage. Immer fragen: liegt einer der beiden Sonderfälle vor?</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — welches Verfahren bei welchem System?</div>
+  <p>Die vier Verfahren sind nicht gleichwertig — je nach Form des Systems ist eines besonders schnell:</p>
+  <ul style="margin:5px 0 5px 20px">
+    <li><strong>Einsetzung</strong>: eine Gleichung ist bereits nach einer Variable aufgelöst (z.B. \(y = 2x + 3\)).</li>
+    <li><strong>Gleichsetzung</strong>: beide Gleichungen sind nach derselben Variable aufgelöst (häufig bei Funktions-Schnittpunkten).</li>
+    <li><strong>Addition / Subtraktion</strong>: Koeffizienten von \(x\) oder \(y\) sind gleich oder entgegengesetzt (z.B. \(3x + 2y = 7\) und \(3x - 2y = 1\)).</li>
+    <li><strong>Gauss-Verfahren</strong>: bei 3×3-Systemen oder wenn keines der anderen Verfahren offensichtlich passt.</li>
+  </ul>
+  <p>Schau dir das System 5 Sekunden lang an, bevor du losrechnest — die Wahl des Verfahrens entscheidet oft, ob du in 2 oder 8 Zeilen am Ziel bist.</p>
+</div>
+
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
 
+<!-- A1: Grafisch lösen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Lösung grafisch ablesen</span></div>
 
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+  <p>Lies die Lösung des Systems aus dem Graph ab:</p>
+  \[ \begin{cases} y = 2 \cdot x - 1 \\ y = -x + 5 \end{cases} \]
+  <div class="cv-wrap"><canvas id="cv-a1"></canvas></div>
+  <div class="eingabe-row">
+  <label>x =</label>
+  <input id="a1-x" type="text" inputmode="numeric">
+  <label>y =</label>
+  <input id="a1-y" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA1()">Prüfen</button>
+  </div>
+  <div id="a1-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a1-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a1-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Schnittpunkt: \((2 \mid 3)\). Probe: \(2 \cdot 2 - 1 = 3\) ✓ und \(-2 + 5 = 3\) ✓. Also \(\mathbb{L} = \{(2 \mid 3)\}\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A2: Einsetzmethode -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Einsetzmethode anwenden</span></div>
+
+  <p>Löse mit der Einsetzmethode:</p>
+  \[ \begin{cases} y = 4 - x \\ 3 \cdot x + 2 \cdot y = 11 \end{cases} \]
+  <div class="eingabe-row">
+  <label>x =</label>
+  <input id="a2-x" type="text" inputmode="numeric">
+  <label>y =</label>
+  <input id="a2-y" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA2()">Prüfen</button>
+  </div>
+  <div id="a2-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a2-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a2-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(y = 4 - x\) in die zweite Gleichung einsetzen:</p>
+      \[ 3 \cdot x + 2 \cdot (4 - x) = 11 \;\Longrightarrow\; x + 8 = 11 \;\Longrightarrow\; x = 3, \quad y = 1. \]
+      <p>\(\mathbb{L} = \{(3 \mid 1)\}\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A3: Additionsmethode -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Additionsmethode anwenden</span></div>
+
+  <p>Löse mit der Additionsmethode:</p>
+  \[ \begin{cases} 2 \cdot x + 3 \cdot y = 13 \\ 4 \cdot x - 3 \cdot y = 5 \end{cases} \]
+  <div class="eingabe-row">
+  <label>x =</label>
+  <input id="a3-x" type="text" inputmode="numeric">
+  <label>y =</label>
+  <input id="a3-y" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA3()">Prüfen</button>
+  </div>
+  <div id="a3-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a3-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a3-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Beide Gleichungen addieren — die \(y\)-Terme heben sich weg:</p>
+      \[ 6 \cdot x = 18 \;\Longrightarrow\; x = 3. \]
+      <p>Eingesetzt in G1: \(6 + 3 \cdot y = 13 \Rightarrow y = \tfrac{7}{3}\). Also \(\mathbb{L} = \left\{\left(3 \mid \tfrac{7}{3}\right)\right\}\). Du kannst „7/3" oder „2.33" eingeben.</p>
+    </div>
+  </div>
+</div>
+
+<!-- A4: Lösungsfall erkennen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Welcher Lösungsfall liegt vor?</span></div>
+
+  <p>Bestimme die Lösungsmenge:</p>
+  \[ \begin{cases} 2 \cdot x - y = 4 \\ -4 \cdot x + 2 \cdot y = -8 \end{cases} \]
+  <button class="loesung-toggle" onclick="toggleL('a4-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a4-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Multipliziert man die erste Gleichung mit \(-2\), erhält man genau die zweite. Die zwei Gleichungen sind <strong>äquivalent</strong>, ihre Geraden sind identisch.</p>
+      <p>Lösungsmenge: \(\mathbb{L} = \{(x \mid 2 \cdot x - 4) : x \in \mathbb{R}\}\) — eine ganze Gerade.</p>
+    </div>
+  </div>
+</div>
+
+<!-- A5: 3x3-System -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">3×3-System mit Additions- und Einsetzmethode</span></div>
+
+  <p>Löse das System:</p>
+  \[ \begin{cases} x + y + z = 9 \\ 2 \cdot x - y + z = 5 \\ x + y - z = 1 \end{cases} \]
+  <button class="loesung-toggle" onclick="toggleL('a5-tip')">▶ Strategie-Tipp</button>
+  <div class="loesung-body" id="a5-tip">
+    <div class="block block-tipp" style="margin:6px 0 0">
+      <div class="block-titel">💡 Strategie-Tipp</div>
+      <p>Subtrahiere G3 von G1, um \(x\) und \(y\) zugleich zu eliminieren.</p>
+    </div>
+  </div>
+  <div class="eingabe-row drei">
+  <label>x =</label>
+  <input id="a5-x" type="text" inputmode="numeric">
+  <label>y =</label>
+  <input id="a5-y" type="text" inputmode="numeric">
+  <label>z =</label>
+  <input id="a5-z" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA5()">Prüfen</button>
+  </div>
+  <div id="a5-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a5-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a5-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>G1 − G3: \(\;2 \cdot z = 8 \Rightarrow z = 4\).</p>
+      <p>Um \(z\) zu eliminieren, rechnen wir G1 − G2: \(-x + 2 \cdot y = 4\), also \(2 \cdot y - x = 4\).</p>
+      <p>Aus G1 mit \(z = 4\): \(x + y = 5\). Zusammen mit \(2y - x = 4\) addieren: \(3 \cdot y = 9 \Rightarrow y = 3\), und damit \(x = 2\).</p>
+      <p>Probe: G1: \(2+3+4 = 9\) ✓, G2: \(4-3+4 = 5\) ✓, G3: \(2+3-4 = 1\) ✓. Also \(\mathbb{L} = \{(2 \mid 3 \mid 4)\}\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A6: Anwendungsaufgabe -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — Mischungsaufgabe</span></div>
+
+  <p>Aus zwei Lötzinn-Sorten mit 80 % bzw. 30 % Zinngehalt soll eine 200 g schwere Legierung
+  mit 60 % Zinngehalt gemischt werden. Wie viele Gramm der jeweiligen Sorte sind nötig?</p>
+  <p>Stelle ein 2×2-System auf und löse es.</p>
+  <div class="eingabe-row">
+  <label>x [g] =</label>
+  <input id="a6-x" type="text" inputmode="numeric">
+  <label>y [g] =</label>
+  <input id="a6-y" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA6()">Prüfen</button>
+  </div>
+  <div id="a6-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a6-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a6-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Sei \(x\) die Masse der 80 %-Sorte und \(y\) die der 30 %-Sorte:</p>
+      \[ \begin{cases} x + y = 200 \\ 0.80 \cdot x + 0.30 \cdot y = 0.60 \cdot 200 = 120 \end{cases} \]
+      <p>Aus G1: \(y = 200 - x\). Eingesetzt in G2: \(0.8 \cdot x + 0.3 \cdot (200 - x) = 120 \Rightarrow 0.5 \cdot x = 60 \Rightarrow x = 120\).
+      Daraus \(y = 80\). Antwort: \(\mathbb{L} = \{(120 \mid 80)\}\), also <strong>120 g</strong> der 80 %-Sorte und <strong>80 g</strong> der 30 %-Sorte.</p>
+    </div>
+    <div class="block block-tipp" style="margin:6px 0 0">
+      <div class="block-titel">💡 Tipp — die zweite Gleichung: Massenbilanz</div>
+      <p>Bei Mischungsaufgaben braucht es immer <em>zwei</em> Gleichungen — und sie haben verschiedene Rollen:</p>
+      <ul style="margin:5px 0 5px 20px">
+        <li><strong>Mengenbilanz</strong> (G1): die Summe der Teilmengen ergibt die Gesamtmenge. Hier \(x + y = 200\) — wir mischen 200 g zusammen.</li>
+        <li><strong>Stoffbilanz / Massenbilanz</strong> (G2): die Masse des <em>reinen Stoffes</em> (Zinn) bleibt beim Mischen erhalten. Vor dem Mischen: \(0.80 \cdot x\) Gramm Zinn aus Sorte A plus \(0.30 \cdot y\) Gramm Zinn aus Sorte B. Nach dem Mischen: \(0.60 \cdot 200 = 120\) Gramm Zinn in der Legierung. Diese Bilanz ist die zweite Gleichung.</li>
+      </ul>
+      <p>Dieses Schema („Mengenbilanz + Stoffbilanz") funktioniert für Lösungen, Legierungen, Treibstoffmischungen, Anlagestrategien (Geld + Zinsen) — im Kern immer dasselbe System.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     9. ZUSAMMENFASSUNG
+     ════════════════════════════════════════════════════════════════ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Werkstatt-Produktions-Mix <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Eine Schreinerei baut drei Möbel: Hocker (\(x\)), Stuhl (\(y\)) und Tisch (\(z\)). Der Materialverbrauch pro Stück:</p>
+  <ul>
+    <li>Bretter: Hocker 1, Stuhl 2, Tisch 3</li>
+    <li>Schrauben (Schachteln à 10): Hocker 2, Stuhl 1, Tisch 0</li>
+    <li>Leim (Tuben): Hocker 1, Stuhl 1, Tisch 2</li>
+  </ul>
+  <p>Vorrat: 11 Bretter, 7 Schachteln Schrauben, 7 Tuben Leim. Wie viele Hocker, Stühle und Tische müssen gebaut werden, damit alle drei Materialien vollständig verbraucht werden?</p>
+  <button class="loesung-toggle" onclick="toggleL('l-g2-3-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g2-3-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>System:</p>
+      <p>\[\begin{cases} x + 2y + 3z = 11 \\ 2x + y \phantom{ + 0z} = 7 \\ x + y + 2z = 7 \end{cases}\]</p>
+      <p>Aus (II): \(y = 7 - 2x\). In (III) einsetzen: \(x + (7 - 2x) + 2z = 7 \Rightarrow -x + 2z = 0 \Rightarrow x = 2z\). In (I) einsetzen: \(2z + 2(7 - 4z) + 3z = 11 \Rightarrow 2z + 14 - 8z + 3z = 11 \Rightarrow -3z = -3 \Rightarrow z = 1\). Daraus \(x = 2\), \(y = 7 - 4 = 3\).</p>
+      <p><strong>Lösung:</strong> 2 Hocker, 3 Stühle, 1 Tisch. Probe: Bretter \(2 + 6 + 3 = 11\) ✓, Schrauben \(4 + 3 + 0 = 7\) ✓, Leim \(2 + 3 + 2 = 7\) ✓.</p>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
 
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Vier Wege führen zur Lösung — Grafik, Einsetzen, Gleichsetzen, Addition.
+  Welcher Weg am bequemsten ist, hängt vom Aussehen des Systems ab. Zum Schluss immer eine
+  <strong>Probe</strong> in alle Originalgleichungen einsetzen.</p>
+</div>
 
-<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<table class="ftb-tabelle">
+  <thead><tr><th>Begriff / Verfahren</th><th>Kernidee</th><th>Spezialität</th></tr></thead>
+  <tbody>
+    <tr><td>2×2-System</td><td>zwei lineare Gleichungen, zwei Variablen</td><td>geometrisch: zwei Geraden in der Ebene</td></tr>
+    <tr><td>3×3-System</td><td>drei lineare Gleichungen, drei Variablen</td><td>geometrisch: drei Ebenen im Raum</td></tr>
+    <tr><td>Grafisch</td><td>beide Geraden zeichnen, Schnittpunkt ablesen</td><td>nur grobe Genauigkeit, schnelle Übersicht</td></tr>
+    <tr><td>Einsetzen</td><td>eine Variable isolieren, Term in andere Gleichung einsetzen</td><td>ideal, wenn schon eine Variable allein steht</td></tr>
+    <tr><td>Gleichsetzen</td><td>beide Gleichungen nach derselben Variable auflösen, gleichsetzen</td><td>ideal, wenn beide schon nach <em>y</em> aufgelöst sind</td></tr>
+    <tr><td>Addition</td><td>passend multiplizieren, dann beide Gleichungen addieren</td><td>ideal, wenn Koeffizienten direkt passen</td></tr>
+    <tr><td>3 Lösungsfälle</td><td>eine / keine / unendlich viele Lösungen</td><td>erkennbar an Aussagen wie \(x = 2\) / \(0 = 5\) / \(0 = 0\)</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════
+     10. ZUSATZMATERIAL
+     ════════════════════════════════════════════════════════════════ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
 
+<p>Zum Ausdrucken und Mitnehmen — Theorie, Formelsammlung, Karteikarten und Aufgaben mit Lösungen.</p>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Verfahren und Lösungsfälle kompakt</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/zusatz-gauss-cramer.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🔬</span><div><div class="dl-t">Zusatz: Gauss &amp; Cramer</div><div class="dl-s">Gauss-Verfahren und Cramersche Regel — fakultativ, über RLP hinaus</div><div class="dl-fmt">Druckseite · über RLP hinaus</div></div></a>
+  <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     11. EXTERNE RESSOURCEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lW2LRLspaxkT0CgStgZrSws" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Lineare Gleichungssysteme lösen — Playlist</div><div class="lk-s">MathemaTrick · 25 Videos · 2 und 3 Unbekannte, alle Verfahren inkl. Gauss-Algorithmus</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAznhoG1e0j7GxX7eT1aXuuNh" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Lineare Funktion &amp; Lineare Gleichungssysteme — Playlist</div><div class="lk-s">Lehrerschmidt · Gleichsetzen, Einsetzen, Addition, mit Steigerungsstufen</div></div></a>
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g3/g34a/aufg_g34a.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — LGS mit 2 Unbekannten (G34a)</div><div class="lk-s">Textaufgaben (Bruch, Alter, Geometrie) mit ausführlichen Lösungen</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g3/g34b/aufg_g34b.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — LGS mit 3+ Unbekannten (G34b)</div><div class="lk-s">Rechen-Aufgaben und Textaufgaben (Kapital, Leiter, Bergbahn) mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/lineare-gleichungssysteme" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Lineare Gleichungssysteme</div><div class="lk-s">Theorie aller Lösungsverfahren und Aufgaben mit Schritt-für-Schritt-Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -92,7 +648,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Lineare Gleichungssysteme</p>
+  <p>Grundlagenfach 2.3 Lineare Gleichungssysteme</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -101,8 +657,363 @@ MathJax = {
 buildNav({
   bereich:'grundlagen', id:'g2-3',
   kapitelNr:'2.3', kapitelTitel:'Lineare Gleichungssysteme',
-  prev:{nr:'2.2',titel:'Lineare und quadratische Gleichungen',url:'g2-2-lineare-quadratische-gleichungen.html'},
-  next:{nr:'3.1',titel:'Grundlagen',url:'g3-1-grundlagen.html'}
+  prev:{nr:'2.2b',titel:'Quadratische Gleichungen',url:'g2-2b-quadratische-gleichungen.html'},
+  next:{nr:'3.1',titel:'Funktionen — Grundlagen',url:'g3-1-grundlagen.html'}
+});
+</script>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCRIPT — Animationen und Interaktivität
+     mathlib.js liefert: initCanvas, drawGrid, drawLine, drawDot, fmt, fmtS, parseL, toggleL
+     ════════════════════════════════════════════════════════════════ -->
+<script>
+/* ══════════════════════════════════════════════════════════════
+   2. EINSTIEG — Kino-Tickets-Diagramm
+   ══════════════════════════════════════════════════════════════ */
+function drawKino() {
+  // Personenzahl-Gerade: x + y = 20    →   y = 20 - x
+  // Geldgerade:          15x + 9y = 240 →  y = (240 - 15x)/9
+  const {ctx, W, H} = initCanvas('cv-kino', 280);
+  const xMin=0, xMax=22, yMin=0, yMax=28;
+  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+  // Achsenbeschriftung Anwendung mit Einheit überschreiben
+  ctx.fillStyle='#fff';
+  ctx.fillRect(W-32, cy(0)-22, 32, 18);
+  ctx.fillRect(cx(0)+4, 0, 50, 18);
+  ctx.fillStyle='#374151'; ctx.font='bold 11px monospace';
+  ctx.textAlign='right'; ctx.fillText('x [Erw.]', W-2, cy(0)-7);
+  ctx.textAlign='left';  ctx.fillText('y [Kinder]', cx(0)+5, 11);
+  // Geraden (begrenzt auf den jeweils sinnvollen Bereich)
+  drawLine(ctx, cx, cy, -1, 20, 0, 20, '#a0392c', 2.5);            // y = 20 - x
+  drawLine(ctx, cx, cy, -15/9, 240/9, 0, 16, '#1a4f8a', 2.5);      // y = (240-15x)/9
+  // Schnittpunkt (10 | 10)
+  drawDot(ctx, cx, cy, 10, 10, '#0f7a3a', 7);
+  ctx.fillStyle='#0f7a3a'; ctx.font='bold 11px monospace';
+  ctx.textAlign='left'; ctx.fillText('(10 | 10)', cx(10)+9, cy(10)-6);
+  // Linien-Beschriftungen
+  ctx.fillStyle='#a0392c'; ctx.textAlign='left';
+  ctx.fillText('x + y = 20', cx(2)+2, cy(18)-3);
+  ctx.fillStyle='#1a4f8a';
+  ctx.fillText('15x + 9y = 240', cx(12), cy(7)+12);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   4. DREI DARSTELLUNGEN — System 2x+y=7, x-y=-1
+   ══════════════════════════════════════════════════════════════ */
+function updateThree() {
+  const x = parseInt(document.getElementById('sl-three').value);
+  document.getElementById('sl-three-v').textContent = x;
+  // Tabelle
+  const tbody = document.querySelector('#three-table tbody');
+  const xs = [-1, 0, 1, 2, 3, 4, 5];
+  tbody.innerHTML = xs.map(xi => {
+    const y1 = 7 - 2*xi;
+    const y2 = xi + 1;
+    const isAct = xi === x;
+    const isHit = xi === 2;
+    let cls = '';
+    if (isHit && isAct) cls = 'treff';
+    else if (isAct) cls = 'aktiv';
+    return `<tr class="${cls}"><td>${xi}</td><td>${y1}</td><td>${y2}</td></tr>`;
+  }).join('');
+  // Graph (1:1 für reine Mathematik)
+  const {ctx, W, H} = initCanvas('cv-three', 280, true);
+  const {cx, cy} = drawGrid(ctx, W, H, -2, 6, -3, 8);
+  drawLine(ctx, cx, cy, -2, 7, -2, 6, '#a0392c', 2.5);   // y = 7 - 2x
+  drawLine(ctx, cx, cy,  1, 1, -2, 6, '#1a4f8a', 2.5);   // y = x + 1
+  // Slider-Punkte auf den beiden Geraden
+  drawDot(ctx, cx, cy, x, 7-2*x, '#a0392c', 5);
+  drawDot(ctx, cx, cy, x, x+1,   '#1a4f8a', 5);
+  // Schnittpunkt (2|3)
+  drawDot(ctx, cx, cy, 2, 3, '#0f7a3a', 7);
+  ctx.fillStyle='#0f7a3a'; ctx.font='bold 11px monospace';
+  ctx.textAlign='left'; ctx.fillText('(2 | 3)', cx(2)+9, cy(3)-6);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   5. DREI ANALYTISCHE VERFAHREN — gemeinsames Beispielsystem
+   ══════════════════════════════════════════════════════════════ */
+const VERF_INFO = {
+  einsetz:    '<strong>Einsetzmethode:</strong> Eine Gleichung nach einer Variable auflösen, den entstandenen Ausdruck in die andere Gleichung einsetzen.',
+  gleichsetz: '<strong>Gleichsetzmethode:</strong> Beide Gleichungen nach derselben Variable auflösen, dann die zwei rechten Seiten gleichsetzen.',
+  addition:   '<strong>Additionsmethode:</strong> Eine Gleichung passend multiplizieren, sodass eine Variable beim Addieren beider Gleichungen wegfällt.'
+};
+// Format pro Zeile:
+//   ['glg', text, op]      — normale Umform-Zeile
+//   ['kommentar', text]    — italic, ohne Op-Pille
+//   ['kern', text, label]  — der namensgebende Schritt — gelb hervorgehoben
+const VERF_STEPS = {
+  einsetz: [
+    ['kommentar', 'Ausgangslage — beide Gleichungen sichtbar:'],
+    ['glg', 'G1:  2·x + y = 7', ''],
+    ['glg', 'G2:  x − y = −1', ''],
+    ['kommentar', 'Schritt 1: G2 nach y auflösen.'],
+    ['glg', 'G2:  y = x + 1', '+ y, + 1'],
+    ['kommentar', 'Schritt 2: Diesen Ausdruck für y in G1 einsetzen — namensgebender Schritt.'],
+    ['kern', '2·x + (x + 1) = 7', 'EINSETZEN'],
+    ['glg', '3·x + 1 = 7', 'zusammenfassen'],
+    ['glg', '3·x = 6', '− 1'],
+    ['glg', 'x = 2', ': 3'],
+    ['kommentar', 'Schritt 3: x = 2 in y = x + 1 einsetzen.'],
+    ['glg', 'y = 2 + 1 = 3', ''],
+    ['kommentar', 'Lösung: 𝕃 = { (2 | 3) }']
+  ],
+  gleichsetz: [
+    ['kommentar', 'Ausgangslage — beide Gleichungen sichtbar:'],
+    ['glg', 'G1:  2·x + y = 7', ''],
+    ['glg', 'G2:  x − y = −1', ''],
+    ['kommentar', 'Schritt 1: Beide Gleichungen nach y auflösen.'],
+    ['glg', 'G1:  y = 7 − 2·x', '− 2·x'],
+    ['glg', 'G2:  y = x + 1', '+ y, + 1'],
+    ['kommentar', 'Schritt 2: Die zwei rechten Seiten gleichsetzen — namensgebender Schritt.'],
+    ['kern', '7 − 2·x = x + 1', 'GLEICHSETZEN'],
+    ['glg', '6 = 3·x', '+ 2·x, − 1'],
+    ['glg', 'x = 2', ': 3'],
+    ['kommentar', 'Schritt 3: x = 2 in eine der nach y aufgelösten Gleichungen einsetzen.'],
+    ['glg', 'y = 2 + 1 = 3', ''],
+    ['kommentar', 'Lösung: 𝕃 = { (2 | 3) }']
+  ],
+  addition: [
+    ['kommentar', 'Ausgangslage — beide Gleichungen sichtbar:'],
+    ['glg', 'G1:  2·x + y = 7', ''],
+    ['glg', 'G2:  x − y = −1', ''],
+    ['kommentar', 'Schritt 1: Die Koeffizienten von y sind +1 und −1 — sie heben sich beim Addieren direkt weg.'],
+    ['kommentar', 'Schritt 2: G1 und G2 zeilenweise addieren — namensgebender Schritt.'],
+    ['kern', '(2·x + y) + (x − y) = 7 + (−1)', 'ADDITION'],
+    ['glg', '3·x = 6', 'zusammenfassen'],
+    ['glg', 'x = 2', ': 3'],
+    ['kommentar', 'Schritt 3: x = 2 in G1 einsetzen, um y zu finden.'],
+    ['glg', '2·2 + y = 7', ''],
+    ['glg', 'y = 3', '− 4'],
+    ['kommentar', 'Lösung: 𝕃 = { (2 | 3) }']
+  ]
+};
+let verfAktiv = 'einsetz';
+let verfSchritt = 0;
+function rendVerf() {
+  document.getElementById('verf-info').innerHTML = VERF_INFO[verfAktiv];
+  const stack = document.getElementById('verf-stack');
+  const steps = VERF_STEPS[verfAktiv];
+  let html = '';
+  for (let i = 0; i < steps.length; i++) {
+    const visible = i <= verfSchritt;
+    const cls = visible ? 'sichtbar' : '';
+    const [type, ...rest] = steps[i];
+    if (type === 'kommentar') {
+      html += `<div class="umform-zeile kommentar ${cls}"><div class="uf-glg">${rest[0]}</div></div>`;
+    } else if (type === 'kern') {
+      html += `<div class="umform-zeile kernschritt ${cls}"><div class="uf-glg">${rest[0]}</div>${rest[1] ? `<span class="kern-hinweis">${rest[1]}</span>` : ''}</div>`;
+    } else {
+      html += `<div class="umform-zeile ${cls}"><div class="uf-glg">${rest[0]}</div>${rest[1] ? `<span class="umform-op">${rest[1]}</span>` : ''}</div>`;
+    }
+  }
+  stack.innerHTML = html;
+  document.getElementById('vf-zurueck').disabled = verfSchritt === 0;
+  document.getElementById('vf-vor').disabled = verfSchritt >= steps.length - 1;
+  drawVerf();
+}
+function drawVerf() {
+  const {ctx, W, H} = initCanvas('cv-verf', 280, true);
+  const {cx, cy} = drawGrid(ctx, W, H, -2, 6, -3, 8);
+  drawLine(ctx, cx, cy, -2, 7, -2, 6, '#a0392c', 2.5);
+  drawLine(ctx, cx, cy,  1, 1, -2, 6, '#1a4f8a', 2.5);
+  drawDot(ctx, cx, cy, 2, 3, '#0f7a3a', 7);
+  ctx.fillStyle='#0f7a3a'; ctx.font='bold 11px monospace';
+  ctx.textAlign='left'; ctx.fillText('(2 | 3)', cx(2)+9, cy(3)-6);
+  // Geradenlabels
+  ctx.fillStyle='#a0392c'; ctx.textAlign='left';
+  ctx.fillText('2x + y = 7', cx(-1.5), cy(9.4));
+  ctx.fillStyle='#1a4f8a';
+  ctx.fillText('x − y = −1', cx(3.6), cy(5.2));
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6. LÖSUNGSFÄLLE
+   ══════════════════════════════════════════════════════════════ */
+let lfAktiv = 'eindeutig';
+const LF_INFO = {
+  eindeutig: '\\(\\mathbb{L} = \\{(1 \\mid 2)\\}\\) — die zwei Geraden schneiden sich genau einmal.',
+  parallel:  '\\(\\mathbb{L} = \\emptyset\\) — die zwei Geraden sind parallel und treffen sich nie.',
+  identisch: '\\(\\mathbb{L} = \\{(x \\mid 2x - 1) : x \\in \\mathbb{R}\\}\\) — alle Punkte einer Geraden sind Lösung.'
+};
+function drawLf() {
+  const {ctx, W, H} = initCanvas('cv-lf', 240, true);
+  const {cx, cy} = drawGrid(ctx, W, H, -4, 4, -4, 4);
+  if (lfAktiv === 'eindeutig') {
+    drawLine(ctx, cx, cy, 1, 1, -4, 4, '#a0392c', 2.5);   // y = x + 1
+    drawLine(ctx, cx, cy, -1, 3, -4, 4, '#1a4f8a', 2.5);  // y = -x + 3
+    drawDot(ctx, cx, cy, 1, 2, '#0f7a3a', 7);
+    ctx.fillStyle='#0f7a3a'; ctx.font='bold 11px monospace';
+    ctx.textAlign='left'; ctx.fillText('(1 | 2)', cx(1)+9, cy(2)-6);
+  } else if (lfAktiv === 'parallel') {
+    drawLine(ctx, cx, cy, 2, -1, -4, 4, '#a0392c', 2.5);  // y = 2x - 1
+    drawLine(ctx, cx, cy, 2, 2, -4, 4, '#1a4f8a', 2.5);   // y = 2x + 2
+  } else {
+    // identisch — beide gleich, gestaffelt für Sichtbarkeit
+    drawLine(ctx, cx, cy, 2, -1, -4, 4, '#a0392c', 5);
+    drawLine(ctx, cx, cy, 2, -1, -4, 4, '#1a4f8a', 2);
+  }
+}
+function setLf(f) {
+  lfAktiv = f;
+  document.querySelectorAll('.lf-card').forEach(c => c.classList.toggle('aktiv', c.dataset.fall === f));
+  document.getElementById('lf-info').innerHTML = LF_INFO[f];
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([document.getElementById('lf-info')]);
+  }
+  drawLf();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. 3×3-SYSTEM SCHRITTWEISE — Additions- und Einsetzmethode
+   System: x + y + z = 6,  2x − y + z = 3,  x + 2y − z = 2  →  (1, 2, 3)
+   ══════════════════════════════════════════════════════════════ */
+const DD_STEPS = [
+  ['kommentar', 'Ausgangslage — drei Gleichungen, drei Unbekannte:'],
+  ['glg', 'G1:  x + y + z = 6', ''],
+  ['glg', 'G2:  2·x − y + z = 3', ''],
+  ['glg', 'G3:  x + 2·y − z = 2', ''],
+  ['kommentar', 'Schritt 1: Wir eliminieren z. Addition von G1 und G3 lässt z verschwinden — Additionsmethode.'],
+  ['kern', 'G1 + G3:   2·x + 3·y = 8       →   (G4)', 'ADDITION'],
+  ['kommentar', 'Schritt 2: Auch G2 + G3 lässt z verschwinden.'],
+  ['kern', 'G2 + G3:   3·x + y = 5         →   (G5)', 'ADDITION'],
+  ['kommentar', 'Schritt 3: Jetzt haben wir ein 2×2-System in x und y. Wir lösen es ebenfalls mit der Additionsmethode — multipliziere G5 mit −3:'],
+  ['glg', '−3·G5:  −9·x − 3·y = −15', '· (−3)'],
+  ['kern', 'G4 + (−3·G5):  −7·x = −7   →   x = 1', 'ADDITION'],
+  ['kommentar', 'Schritt 4: x = 1 in G5 einsetzen — Einsetzmethode.'],
+  ['kern', '3·1 + y = 5   →   y = 2', 'EINSETZEN'],
+  ['kommentar', 'Schritt 5: x = 1, y = 2 in G1 einsetzen.'],
+  ['kern', '1 + 2 + z = 6   →   z = 3', 'EINSETZEN'],
+  ['kommentar', 'Lösung: 𝕃 = { (1 | 2 | 3) }']
+];
+let ddSchritt = 0;
+function rendDd() {
+  const stack = document.getElementById('dd-stack');
+  let html = '';
+  for (let i = 0; i < DD_STEPS.length; i++) {
+    const visible = i <= ddSchritt;
+    const cls = visible ? 'sichtbar' : '';
+    const [type, ...rest] = DD_STEPS[i];
+    if (type === 'kommentar') {
+      html += `<div class="umform-zeile kommentar ${cls}"><div class="uf-glg">${rest[0]}</div></div>`;
+    } else if (type === 'kern') {
+      html += `<div class="umform-zeile kernschritt ${cls}"><div class="uf-glg">${rest[0]}</div>${rest[1] ? `<span class="kern-hinweis">${rest[1]}</span>` : ''}</div>`;
+    } else {
+      html += `<div class="umform-zeile ${cls}"><div class="uf-glg">${rest[0]}</div>${rest[1] ? `<span class="umform-op">${rest[1]}</span>` : ''}</div>`;
+    }
+  }
+  stack.innerHTML = html;
+  document.getElementById('dd-zurueck').disabled = ddSchritt === 0;
+  document.getElementById('dd-vor').disabled = ddSchritt >= DD_STEPS.length - 1;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AUFGABEN — A1: Graph für y = 2x − 1 und y = -x + 5
+   ══════════════════════════════════════════════════════════════ */
+function drawA1() {
+  const {ctx, W, H} = initCanvas('cv-a1', 240, true);
+  const {cx, cy} = drawGrid(ctx, W, H, -3, 6, -4, 6);
+  drawLine(ctx, cx, cy,  2, -1, -3, 6, '#a0392c', 2.5);  // y = 2x - 1
+  drawLine(ctx, cx, cy, -1,  5, -3, 6, '#1a4f8a', 2.5);  // y = -x + 5
+  drawDot(ctx, cx, cy, 2, 3, '#0f7a3a', 7);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ZAHLEN-PARSER (akzeptiert Brüche wie 7/3 und Dezimalzahlen)
+   ══════════════════════════════════════════════════════════════ */
+function parseNum(s) {
+  if (!s) return null;
+  s = s.trim().replace(',', '.').replace(/−/g, '-');
+  if (s.includes('/')) {
+    const [a, b] = s.split('/');
+    const an = parseFloat(a), bn = parseFloat(b);
+    if (isFinite(an) && isFinite(bn) && bn !== 0) return an / bn;
+    return null;
+  }
+  const n = parseFloat(s);
+  return isFinite(n) ? n : null;
+}
+function aboutEqual(a, b, eps) { return Math.abs(a - b) < (eps || 1e-2); }
+function pruefAW(idA, idB, gut, idCr) {
+  const a = parseNum(document.getElementById(idA).value);
+  const b = parseNum(document.getElementById(idB).value);
+  const cr = document.getElementById(idCr);
+  if (a === null || b === null) {
+    cr.textContent = 'Bitte beide Werte eingeben — Brüche wie 7/3 sind erlaubt.';
+    cr.className = 'cr err';
+    return;
+  }
+  if (aboutEqual(a, gut[0]) && aboutEqual(b, gut[1])) {
+    cr.textContent = '✓ Richtig — gut gemacht!';
+    cr.className = 'cr ok';
+  } else {
+    cr.textContent = '✗ Stimmt noch nicht — versuche es nochmal oder schaue die Lösung an.';
+    cr.className = 'cr err';
+  }
+}
+function pruefAW3(idA, idB, idC, gut, idCr) {
+  const a = parseNum(document.getElementById(idA).value);
+  const b = parseNum(document.getElementById(idB).value);
+  const c = parseNum(document.getElementById(idC).value);
+  const cr = document.getElementById(idCr);
+  if (a === null || b === null || c === null) {
+    cr.textContent = 'Bitte alle drei Werte eingeben.';
+    cr.className = 'cr err';
+    return;
+  }
+  if (aboutEqual(a, gut[0]) && aboutEqual(b, gut[1]) && aboutEqual(c, gut[2])) {
+    cr.textContent = '✓ Richtig — gut gemacht!';
+    cr.className = 'cr ok';
+  } else {
+    cr.textContent = '✗ Stimmt noch nicht — versuche es nochmal oder schaue die Lösung an.';
+    cr.className = 'cr err';
+  }
+}
+function pruefA1() { pruefAW('a1-x','a1-y',[2,3],'a1-cr'); }
+function pruefA2() { pruefAW('a2-x','a2-y',[3,1],'a2-cr'); }
+function pruefA3() { pruefAW('a3-x','a3-y',[3,7/3],'a3-cr'); }
+function pruefA5() { pruefAW3('a5-x','a5-y','a5-z',[2,3,4],'a5-cr'); }
+function pruefA6() { pruefAW('a6-x','a6-y',[120,80],'a6-cr'); }
+
+/* ══════════════════════════════════════════════════════════════
+   INITIALISIERUNG nach DOM-Ready
+   ══════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Einstieg
+  drawKino();
+  // Drei Darstellungen
+  document.getElementById('sl-three').addEventListener('input', updateThree);
+  updateThree();
+  // Drei Verfahren
+  document.querySelectorAll('#verf-btns .meth-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      verfAktiv = b.dataset.meth; verfSchritt = 0;
+      document.querySelectorAll('#verf-btns .meth-btn').forEach(x => x.classList.toggle('aktiv', x === b));
+      rendVerf();
+    });
+  });
+  document.getElementById('vf-vor').addEventListener('click', () => {
+    if (verfSchritt < VERF_STEPS[verfAktiv].length - 1) { verfSchritt++; rendVerf(); }
+  });
+  document.getElementById('vf-zurueck').addEventListener('click', () => {
+    if (verfSchritt > 0) { verfSchritt--; rendVerf(); }
+  });
+  document.getElementById('vf-reset').addEventListener('click', () => { verfSchritt = 0; rendVerf(); });
+  rendVerf();
+  // Lösungsfälle
+  document.querySelectorAll('.lf-card').forEach(c => c.addEventListener('click', () => setLf(c.dataset.fall)));
+  setLf('eindeutig');
+  // 3×3
+  document.getElementById('dd-vor').addEventListener('click', () => {
+    if (ddSchritt < DD_STEPS.length - 1) { ddSchritt++; rendDd(); }
+  });
+  document.getElementById('dd-zurueck').addEventListener('click', () => {
+    if (ddSchritt > 0) { ddSchritt--; rendDd(); }
+  });
+  document.getElementById('dd-reset').addEventListener('click', () => { ddSchritt = 0; rendDd(); });
+  rendDd();
+  // Aufgabe 1 Graph
+  drawA1();
 });
 </script>
 </body>

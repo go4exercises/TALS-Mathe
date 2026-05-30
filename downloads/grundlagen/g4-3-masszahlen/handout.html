@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handout · Masszahlen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g4-3-masszahlen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Handout · A4 · Bereit zum Drucken</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · 4.3 Masszahlen</div>
+    <h1>Handout — Theorie</h1>
+  </header>
+
+  <h2>1. Lagemasse — wo liegt die Mitte?</h2>
+
+  <div class="block block-def">
+    <div class="block-titel">📘 Definitionen</div>
+    <ul style="margin:2mm 0 0 6mm">
+      <li><strong>Mittelwert</strong> \(\bar{x}\) = Summe aller Werte geteilt durch ihre Anzahl: \[\bar{x} = \dfrac{1}{n}\sum_{i=1}^{n} x_i\]</li>
+      <li><strong>Median</strong> \(\tilde{x}\) = mittlerer Wert der <em>sortierten</em> Liste. Bei geradem n: Mittelwert der beiden mittleren Werte.</li>
+      <li><strong>Modus</strong> \(\hat{x}\) = häufigster Wert. Funktioniert auch für kategoriale Daten. Treten mehrere Werte mit gleicher Maximalhäufigkeit auf, spricht man von <em>mehrmodalen</em> bzw. <em>multimodalen</em> Verteilungen (bei genau zwei: <em>bimodal</em>).</li>
+    </ul>
+  </div>
+
+  <h3>Wann welches Lagemass?</h3>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Situation</th><th>besser geeignet</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Symmetrische Verteilung, keine Ausreisser</td><td>Mittelwert</td></tr>
+      <tr><td class="li">Schiefe Verteilung oder Ausreisser</td><td>Median</td></tr>
+      <tr><td class="li">Kategoriale Daten</td><td>Modus</td></tr>
+      <tr><td class="li">Vergleich zweier Stichproben</td><td>Median (robust)</td></tr>
+    </tbody>
+  </table>
+
+
+  <h2>2. Streumasse — wie breit verteilt?</h2>
+
+  <div class="block block-def">
+    <div class="block-titel">📘 Definitionen</div>
+    <ul style="margin:2mm 0 0 6mm">
+      <li><strong>Standardabweichung</strong> \(s\) = mittlere Abweichung vom Mittelwert: \[s = \sqrt{\dfrac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2}\] (Quadratwurzel der <em>Varianz</em> \(s^2\)).</li>
+      <li><strong>Quartile</strong> \(Q_1\), \(Q_2 = \tilde{x}\), \(Q_3\) teilen die sortierte Liste in vier gleich grosse Teile.</li>
+      <li><strong>Quartilsdifferenz</strong> \(\text{QD} = Q_3 - Q_1\) — Breite der mittleren 50 % der Daten (= Boxbreite im Boxplot).</li>
+    </ul>
+  </div>
+
+  <div class="block block-tipp">
+    <div class="block-titel">💡 Warum n − 1 (statt n) bei der Standardabweichung?</div>
+    <p>Bei einer <em>Stichprobe</em> liefert die Division durch \(n-1\) eine bessere Schätzung der wahren Streuung in der Grundgesamtheit. Das ist die in Tabellenkalkulationen übliche Konvention (Funktion <code>STABW.S</code> bzw. <code>STDEV.S</code>).</p>
+  </div>
+
+
+  <h2>3. Tabellenkalkulation</h2>
+
+  <table class="ftb-tabelle">
+    <thead><tr><th>Masszahl</th><th>Excel/Calc deutsch</th><th>Englisch</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Mittelwert</td><td>=MITTELWERT(A1:A100)</td><td>=AVERAGE(...)</td></tr>
+      <tr><td class="li">Median</td><td>=MEDIAN(A1:A100)</td><td>=MEDIAN(...)</td></tr>
+      <tr><td class="li">Modus</td><td>=MODUS.EINF(A1:A100)</td><td>=MODE(...)</td></tr>
+      <tr><td class="li">Standardabweichung</td><td>=STABW.S(A1:A100)</td><td>=STDEV.S(...)</td></tr>
+      <tr><td class="li">Q1</td><td>=QUARTILE.INKL(...;1)</td><td>=QUARTILE.INC(...;1)</td></tr>
+      <tr><td class="li">Q3</td><td>=QUARTILE.INKL(...;3)</td><td>=QUARTILE.INC(...;3)</td></tr>
+    </tbody>
+  </table>
+
+
+  <h2>4. Robustheit — Mittelwert oder Median?</h2>
+
+  <div class="block block-def">
+    <div class="block-titel">📘 Robustheit</div>
+    <p>Eine Kennzahl heisst <strong>robust</strong>, wenn sie durch einzelne Extremwerte (Ausreisser) <em>kaum verändert</em> wird.</p>
+    <ul style="margin:2mm 0 0 6mm">
+      <li><strong>Median</strong> — robust. Verschieben einzelner Werte ändert die Mitte der sortierten Liste kaum.</li>
+      <li><strong>Mittelwert</strong> — nicht robust. Jeder Wert geht mit voller Stärke in die Summe ein.</li>
+    </ul>
+  </div>
+
+  <div class="block block-tipp">
+    <div class="block-titel">💡 Faustregel zur Lagemass-Wahl</div>
+    <p>Mittelwert und Median <em>nahe beieinander</em> → Verteilung ist annähernd symmetrisch, beide funktionieren. <em>Weit auseinander</em> → schief oder mit Ausreissern, Median bevorzugen.</p>
+  </div>
+
+
+  <h2>5. Zusammenhang mit dem Boxplot (Kapitel 4.2)</h2>
+
+  <p>Die fünf Zahlen jedes Boxplots sind genau die Masszahlen aus diesem Kapitel:</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Element</th><th>Wert</th></tr></thead>
+    <tbody>
+      <tr><td class="li">linker Whisker</td><td>Minimum</td></tr>
+      <tr><td class="li">Box-links</td><td>\(Q_1\)</td></tr>
+      <tr><td class="li">Mittellinie</td><td>Median \(\tilde{x}\)</td></tr>
+      <tr><td class="li">Box-rechts</td><td>\(Q_3\)</td></tr>
+      <tr><td class="li">rechter Whisker</td><td>Maximum</td></tr>
+      <tr><td class="li">Boxbreite</td><td>QD = \(Q_3 - Q_1\)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="block block-tipp">
+    <div class="block-titel">💡 Whisker — zwei verbreitete Konventionen</div>
+    <p>In diesem Lehrmittel reichen die Whisker bis zum tatsächlichen Minimum bzw. Maximum.
+    In Excel, R, Matplotlib und vielen Statistik-Programmen werden die Whisker dagegen oft
+    nur bis zu den <em>Datenpunkten innerhalb 1.5·QD</em> ab Box-Rand gezogen
+    (Tukey-Konvention); alles darüber heisst <strong>Ausreisser</strong> und wird einzeln
+    als Punkt eingezeichnet. Beide Konventionen sind gebräuchlich — beim Vergleichen
+    von Boxplots immer prüfen, welche verwendet wurde.</p>
+  </div>
+
+  <div class="merksatz">
+    <strong>🎯 Merksatz:</strong> Eine Stichprobe ist erst dann beschrieben, wenn man <em>beide</em> Aspekte angibt: <strong>Lage</strong> (Mitte) und <strong>Streuung</strong> (Breite). Mittelwert und Standardabweichung gehen zusammen — Median und Quartilsdifferenz gehen zusammen. Die Paare nicht mischen.
+  </div>
+
+  <div class="block block-fehler">
+    <div class="block-titel">⚠ Häufige Fehlerquellen</div>
+    <ul style="margin:2mm 0 0 6mm">
+      <li><strong>n vs. n − 1 in der Standardabweichung</strong> — STABW.S nutzt n − 1 (Stichprobe, Standard), STABW.N nutzt n (Grundgesamtheit). Im Zweifel: STABW.S.</li>
+      <li><strong>Median ohne Sortierung</strong> — der Median ist der mittlere Wert der <em>sortierten</em> Liste. Vergessenes Sortieren liefert einen Zufallswert.</li>
+      <li><strong>Quartile Tukey vs. Excel</strong> — die Handrechnungsmethode (Median der Hälften) und Excels <code>QUARTILE.INKL</code> (lineare Interpolation) können unterschiedliche Werte liefern, besonders bei kleinen Stichproben.</li>
+      <li><strong>Mittelwert von kategorialen Daten</strong> — bei Postleitzahlen, Sprachgruppen oder Lieblings-Streamingdiensten ist der Mittelwert sinnlos. Modus verwenden.</li>
+      <li><strong>Standardabweichung = 0</strong> bedeutet alle Werte sind identisch — das passiert in echten Stichproben praktisch nie. Wer \(s = 0\) errechnet, hat meist einen Eingabe- oder Formel-Fehler.</li>
+    </ul>
+  </div>
+
+
+</div>
+
+</body>
+</html>

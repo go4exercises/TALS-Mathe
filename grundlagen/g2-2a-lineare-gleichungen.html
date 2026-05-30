@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.2a Lineare Gleichungen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Themen-spezifische Styles. Globale Klassen (.block, .merksatz, .ftb-tabelle, .dl, .lk …) liegen in ../style.css. ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:560px; margin:0 auto; }
+
+/* Verfahrens-Buttons */
+.verf-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.verf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.verf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.verf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* Lösungsfall-Anzeige */
+.lf-box { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin:14px 0; }
+.lf-card { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 10px; text-align:center; transition:all 0.2s; }
+.lf-card.aktiv { border-color:var(--blau); background:var(--blau-hell); transform:translateY(-2px); }
+.lf-card .lf-tit { font-family:var(--mono); font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--tinte-2); margin-bottom:6px; }
+.lf-card.aktiv .lf-tit { color:var(--blau); }
+.lf-card .lf-fml { font-family:var(--mono); font-size:0.95rem; color:var(--tinte); font-weight:700; }
+
+/* Aufgaben-Karten */
+.eingabe-row { display:flex; align-items:center; gap:9px; margin:10px 0; flex-wrap:wrap; }
+.eingabe-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.92rem; padding:6px 10px; border:1.5px solid var(--linie); border-radius:6px; width:130px; background:var(--papier-2); color:var(--tinte); }
+.eingabe-row input[type=text]:focus { outline:none; border-color:var(--blau); background:var(--weiss); }
+.cr { font-family:var(--mono); font-size:0.78rem; padding:6px 11px; border-radius:6px; margin-top:8px; display:none; }
+.cr.ok { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); display:block; }
+.cr.err { background:var(--rot-hell); color:var(--rot); border:1px solid var(--rot-rand); display:block; }
+
+/* Umform-Animation Stack */
+.umform-stack { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:14px 18px; margin:12px 0; min-height:170px; }
+.umform-zeile { display:flex; align-items:center; gap:14px; padding:5px 0; opacity:0; transform:translateY(-6px); transition:opacity 0.35s, transform 0.35s; }
+.umform-zeile.sichtbar { opacity:1; transform:translateY(0); }
+.umform-zeile .uf-glg { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--tinte); flex:1; }
+.umform-op { font-family:var(--mono); font-size:0.78rem; color:var(--blau); background:var(--blau-hell); padding:3px 9px; border-radius:5px; border:1px solid var(--blau-rand); }
+
+.umform-btn { font-family:var(--mono); font-size:0.75rem; padding:6px 14px; border-radius:6px; border:1.5px solid var(--linie); background:var(--weiss); cursor:pointer; color:var(--tinte); margin-right:7px; }
+.umform-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.umform-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* Parameter-Diskussion: dynamische Anzeige */
+.param-anz { background:var(--blau-hell); border:1.5px solid var(--blau-rand); border-radius:9px; padding:14px 18px; margin:12px 0; text-align:center; }
+.param-anz .pa-glg { font-family:var(--mono); font-size:1rem; font-weight:700; color:var(--blau); margin-bottom:8px; }
+.param-anz .pa-fall { font-family:var(--sans); font-size:0.85rem; color:var(--tinte); }
+.param-anz .pa-loes { font-family:var(--mono); font-size:0.95rem; font-weight:700; color:var(--tinte); margin-top:6px; }
+
+.hinweis { font-family:var(--sans); font-size:0.8rem; color:var(--tinte-2); font-style:italic; margin:6px 0; }
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ════════════════════════════════════════════════════════════════
+     1. TITEL + RLP-HEADER
+     ════════════════════════════════════════════════════════════════ -->
+<div class="page-titel">
+  <div class="pt-bereich">Grundlagenfach · Lerngebiet 2 · Gleichungen, Ungleichungen und Gleichungssysteme · 35 Lektionen</div>
+  <h1 class="pt-h1">2.2a Lineare Gleichungen</h1>
+  <div class="pt-untertitel">RLP 2.2 · Teil 1 von 2</div>
+</div>
+
+<p class="lead">Eine <strong>lineare Gleichung</strong> wie \(2x - 5 = 11\) lässt sich mit wenigen Äquivalenzumformungen lösen — sauber, eindeutig und nachprüfbar. Hier lernst du die Standard-Lösungsmethoden, übst den Umgang mit <strong>Parametern</strong> (wann hat die Gleichung keine, eine oder unendlich viele Lösungen?) und löst auch Verhältnis- und Bruchgleichungen.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">RLP-Kompetenzen (Auszug aus 2.2)</div>
+  <ul>
+    <li>lineare Gleichungen lösen, verschiedene Lösungsmethoden erklären und anwenden, inkl. Parameterdiskussion <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+  <p class="rlp-hinweis">Die quadratischen Gleichungen werden in <a href="g2-2b-quadratische-gleichungen.html">Teil 2 (g2-2b)</a> behandelt.</p>
+</div>
+
+<!-- ToC platzhalter — wird automatisch von nav.js befüllt -->
+<nav class="ohm" id="ohm-root"></nav>
+
+<!-- ════════════════════════════════════════════════════════════════
+     2. EINSTIEG — Werkstatt-Mietkosten als Modell
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="einstieg">Einstieg — Mietkosten als Geradenmodell</h2>
+
+<p>Eine Werkstatt mietet eine Hebebühne. Die Mietfirma berechnet eine Grundgebühr von 45 Fr. plus
+12 Fr. pro Stunde. Wie viele Stunden lassen sich für ein Budget von 117 Fr. mieten?</p>
+
+<p>Modellbildung: Sei <em>x</em> die Anzahl Mietstunden, <em>K</em> die Mietkosten in Franken. Dann ist</p>
+\[ K(x) \;=\; 12 \cdot x + 45 \]
+<p>eine lineare Funktion. Die Frage „wie viele Stunden für 117 Fr.?" wird zur <strong>linearen Gleichung</strong></p>
+\[ 12 \cdot x + 45 \;=\; 117. \]
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Schieber: Wann erreicht <em>K(x)</em> das Budget?</h3>
+    <p>Der Schieber verändert <em>x</em>. Die linke Seite zeigt die Mietkosten, die rechte das Budget. Die Lösung ist der Wert, bei dem beide Seiten gleich sind.</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label for="sl-budget">Stunden <em>x</em></label>
+      <input type="range" id="sl-budget" min="0" max="10" step="0.5" value="3">
+      <span class="sl-val" id="sv-budget">3</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Aktuelle Bilanz</div>
+      <div class="fl-eq" id="fl-budget">12·3 + 45 = 81 &nbsp;&nbsp; vs. &nbsp;&nbsp; 117</div>
+    </div>
+    <div class="cv-wrap"><canvas id="cv-budget" height="220"></canvas></div>
+  </div>
+</div>
+
+<p>Die Lösung lässt sich grafisch ablesen: dort, wo die Gerade <em>K(x) = 12·x + 45</em> die waagerechte
+Linie <em>K = 117</em> schneidet. Das ergibt <em>x</em> = 6 Stunden. Algebraisch erhält man dasselbe Ergebnis durch Äquivalenzumformungen — dazu kommen wir gleich.</p>
+
+<!-- ════════════════════════════════════════════════════════════════
+     3. DEFINITION
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="definition">Definition und Normalform</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition · Lineare Gleichung</div>
+  <p>Eine <strong>lineare Gleichung</strong> in einer Variablen ist eine Gleichung, die sich durch Äquivalenzumformungen auf die Form</p>
+  \[ a \cdot x + b \;=\; 0 \qquad \text{mit } a, b \in \mathbb{R} \]
+  <p>bringen lässt. Diese Form heisst <strong>Normalform</strong>. Die Variable <em>x</em> kommt dabei nur in der ersten Potenz vor — keine Quadrate, keine Wurzeln, kein <em>x</em> im Nenner.</p>
+</div>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Begriff</th><th>Symbol</th><th>Bedeutung</th></tr></thead>
+  <tbody>
+    <tr><td>Koeffizient</td>     <td>\(a\)</td>           <td class="li">Faktor vor der Variablen, \(a \in \mathbb{R}\)</td></tr>
+    <tr><td>Absolutglied</td>    <td>\(b\)</td>           <td class="li">konstanter Summand, \(b \in \mathbb{R}\)</td></tr>
+    <tr><td>Lösungsformel</td>  <td>\(x = -\dfrac{b}{a}\)</td><td class="li">gilt nur, wenn \(a \neq 0\)</td></tr>
+    <tr><td>Normalform</td>      <td>\(a \cdot x + b = 0\)</td><td class="li">Zielform für die Klassifikation</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Auf Normalform bringen</div>
+  <p>Die Gleichung \(12 \cdot x + 45 = 117\) ist eine lineare Gleichung. Subtraktion von 117 auf beiden Seiten liefert die Normalform:</p>
+  \[ 12 \cdot x + 45 - 117 \;=\; 0 \quad\Longleftrightarrow\quad 12 \cdot x - 72 \;=\; 0. \]
+  <p>Hier ist \(a = 12\) und \(b = -72\). Daraus die Lösungsformel: \(x = -\dfrac{-72}{12} = 6\).</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     4. VERKNÜPFUNG DER DARSTELLUNGEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="darstellungen">Drei Sichten auf dieselbe Gleichung</h2>
+
+<p>Die Gleichung \(a \cdot x + b = c\) lässt sich auf drei Arten lesen — algebraisch, tabellarisch und grafisch.
+Alle drei Darstellungen enthalten dieselbe Information, machen aber unterschiedliche Aspekte sichtbar.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Drei Darstellungen: \( 2 \cdot x - 3 = 5 \)</h3>
+    <p>Schiebe <em>x</em>. Die Wertetabelle zeigt linke und rechte Seite, der Graph zeigt die Geraden \(y = 2x - 3\) und \(y = 5\). Die Lösung ist der Schnittpunkt.</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label for="sl-three">x</label>
+      <input type="range" id="sl-three" min="-2" max="8" step="0.5" value="3">
+      <span class="sl-val" id="sv-three">3</span>
+    </div>
+    <table class="ftb-tabelle" style="margin-bottom:14px">
+      <thead><tr><th>x</th><th>linke Seite \(2x - 3\)</th><th>rechte Seite \(5\)</th><th>gleich?</th></tr></thead>
+      <tbody id="tab-three"></tbody>
+    </table>
+    <div class="cv-wrap"><canvas id="cv-three" height="240"></canvas></div>
+  </div>
+</div>
+
+<p>Die <strong>algebraische Sicht</strong> ist die Gleichung selbst. Die <strong>tabellarische Sicht</strong> probiert
+Werte aus. Die <strong>grafische Sicht</strong> zeichnet beide Seiten als Funktionen — der <em>x</em>-Wert des
+Schnittpunkts ist die Lösung. Letzteres heisst <em>Funktionen-Methode</em> und wird im Kapitel
+<a href="g3-2-lineare-funktionen.html">3.2 Lineare Funktionen</a> systematisch ausgebaut.</p>
+
+<!-- ════════════════════════════════════════════════════════════════
+     5. LÖSUNGSVERFAHREN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="verfahren">Lösungsverfahren — Äquivalenzumformungen <a class="quer" href="g1-3-algebraische-terme.html#klammern">↩ 1.3</a></h2>
+
+<p>Eine lineare Gleichung wird gelöst, indem man die Variable durch Äquivalenzumformungen Schritt
+für Schritt isoliert. Die Strategie ist immer dieselbe: zuerst alle <em>x</em>-Terme auf eine Seite,
+dann alle Konstanten auf die andere, schliesslich durch den Koeffizienten teilen.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Strategie · Lineare Gleichung lösen</div>
+  <ol style="margin:6px 0 0 22px">
+    <li>Klammern auflösen, Brüche durch Multiplikation eliminieren.</li>
+    <li>Alle <em>x</em>-Terme auf <strong>eine</strong> Seite, alle Konstanten auf die <strong>andere</strong> Seite.</li>
+    <li>Zusammenfassen.</li>
+    <li>Durch den Koeffizienten von <em>x</em> dividieren.</li>
+    <li>Probe in der ursprünglichen Gleichung.</li>
+  </ol>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Schrittweise: \( 5 \cdot x - 7 \;=\; 2 \cdot x + 8 \) <a class="quer" href="g2-1-grundlagen.html#aequivalenz">↩ 2.1</a></h3>
+    <p>Klick „Nächster Schritt" — jede Zeile zeigt den Umformungsschritt mit der angewandten Operation rechts.</p>
+  </div>
+  <div class="widget-body">
+    <div class="umform-stack" id="uf-lin"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="umform-btn" id="uf-zurueck">◀ Zurück</button>
+      <button class="umform-btn" id="uf-vor">Nächster Schritt ▶</button>
+      <button class="umform-btn" id="uf-reset">Zurücksetzen</button>
+    </div>
+  </div>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Mit Brüchen</div>
+  <p>Löse \(\dfrac{x}{3} + 2 \;=\; \dfrac{x}{2} - 1\).</p>
+  <p>Beide Seiten mit 6 multiplizieren (Hauptnenner), um die Brüche zu eliminieren:</p>
+  \[ 2 \cdot x + 12 \;=\; 3 \cdot x - 6. \]
+  <p>Subtraktion von \(2 \cdot x\) und Addition von 6 auf beiden Seiten:</p>
+  \[ 18 \;=\; x. \]
+  <p>Probe: \(\tfrac{18}{3} + 2 = 8\) und \(\tfrac{18}{2} - 1 = 8\). ✓</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufige Fehler</div>
+  <ul style="margin:6px 0 0 22px">
+    <li><strong>Vorzeichen vergessen</strong> beim Hinüberbringen: Aus \(2x = 3x - 6\) wird durch Subtraktion von <em>3x</em> die Gleichung \(-x = -6\), nicht \(x = -6\).</li>
+    <li><strong>Klammer falsch verteilt</strong>: Aus \(2(x - 3) = 4\) wird \(2x - 6 = 4\) — der Faktor 2 muss auf <em>beide</em> Glieder.</li>
+    <li><strong>Mit 0 multipliziert</strong>: Multiplikation oder Division mit 0 ist <em>keine</em> Äquivalenzumformung.</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     6. SPEZIALFÄLLE — die drei Lösungsfälle
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="spezialfaelle">Drei Lösungsfälle</h2>
+
+<p>Bringt man eine lineare Gleichung auf die Normalform \(a \cdot x + b = 0\), so entscheidet das Wertepaar
+\((a, b)\) darüber, wie viele Lösungen es gibt:</p>
+
+<div class="lf-box">
+  <div class="lf-card aktiv" data-fall="0">
+    <div class="lf-tit">Fall 1: eindeutig</div>
+    <div class="lf-fml">\(a \neq 0\)</div>
+    <div class="hinweis" style="margin-top:6px">\(\mathbb{L} = \{ -\tfrac{b}{a} \}\)</div>
+  </div>
+  <div class="lf-card" data-fall="1">
+    <div class="lf-tit">Fall 2: leer</div>
+    <div class="lf-fml">\(a = 0,\; b \neq 0\)</div>
+    <div class="hinweis" style="margin-top:6px">\(\mathbb{L} = \emptyset\)</div>
+  </div>
+  <div class="lf-card" data-fall="2">
+    <div class="lf-tit">Fall 3: alle</div>
+    <div class="lf-fml">\(a = 0,\; b = 0\)</div>
+    <div class="hinweis" style="margin-top:6px">\(\mathbb{L} = \mathbb{R}\)</div>
+  </div>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Klick auf einen Fall — sieh die typische Gleichung</h3>
+    <p>Die drei Fälle entstehen aus völlig harmlos aussehenden Gleichungen. Jeweils ist die Geometrie unterschiedlich: zwei sich schneidende Geraden, parallele Geraden oder identische Geraden.</p>
+  </div>
+  <div class="widget-body">
+    <div class="formel-live" style="text-align:left">
+      <div class="fl-label">Beispielgleichung</div>
+      <div class="fl-eq" id="lf-glg" style="font-size:1.05rem">3·x + 2 = 11</div>
+    </div>
+    <p id="lf-text" style="font-size:0.88rem;margin:10px 0">
+      Eindeutiger Lösungsfall. Die Gleichung wird durch Äquivalenzumformungen auf <em>x</em> = 3 reduziert. Geometrisch sind das zwei sich schneidende Geraden \(y = 3x + 2\) und \(y = 11\).
+    </p>
+    <div class="cv-wrap"><canvas id="cv-faelle" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Fall 2 (keine Lösung)</div>
+  <p>\(2 \cdot (x + 3) \;=\; 2 \cdot x + 9\). Ausmultiplizieren:</p>
+  \[ 2 \cdot x + 6 \;=\; 2 \cdot x + 9. \]
+  <p>Subtraktion von \(2 \cdot x\) liefert \(6 = 9\). Das ist falsch für jedes <em>x</em>. Also \(\mathbb{L} = \emptyset\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Fall 3 (Identität)</div>
+  <p>\(4 \cdot x + 8 \;=\; 4 \cdot (x + 2)\). Ausmultiplizieren rechts:</p>
+  \[ 4 \cdot x + 8 \;=\; 4 \cdot x + 8. \]
+  <p>Beide Seiten sind identisch. Die Gleichung ist für jedes <em>x</em> wahr. Also \(\mathbb{L} = \mathbb{R}\).</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     7. PARAMETER-DISKUSSION
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="parameter">Parameterdiskussion</h2>
+
+<p>In der Praxis enthält eine Gleichung oft einen <strong>Parameter</strong> — eine zweite Buchstaben-
+grösse, von der man wissen will, wie sich die Lösung in Abhängigkeit verhält. Beispiel: Wir untersuchen</p>
+
+\[ k \cdot x + 6 \;=\; 2 \cdot x + 3 \cdot k \qquad (k \in \mathbb{R}). \]
+
+<p>Sortieren auf die Form \(a(k) \cdot x = b(k)\):</p>
+\[ (k - 2) \cdot x \;=\; 3 \cdot k - 6 \quad\Longleftrightarrow\quad (k - 2) \cdot x \;=\; 3 \cdot (k - 2). \]
+
+<p>Jetzt entscheidet der Parameterwert <em>k</em>, in welchen der drei Lösungsfälle wir landen.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Schiebe den Parameter <em>k</em></h3>
+    <p>Die Anzeige zeigt links die Zwischenform \((k-2) \cdot x = 3(k-2)\) und rechts den daraus folgenden Lösungsfall.</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label for="sl-k">Parameter <em>k</em></label>
+      <input type="range" id="sl-k" min="-3" max="6" step="0.5" value="4">
+      <span class="sl-val" id="sv-k">4</span>
+    </div>
+    <div class="param-anz">
+      <div class="pa-glg" id="pk-glg">(4 − 2)·x = 3·(4 − 2)</div>
+      <div class="pa-fall" id="pk-fall">Fall 1: a = 2 ≠ 0 → eindeutig lösbar.</div>
+      <div class="pa-loes" id="pk-loes">x = 3</div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Vorgehen bei Parameterdiskussion</div>
+  <ol style="margin:6px 0 0 22px">
+    <li>Gleichung auf die Form \(a(k) \cdot x = b(k)\) sortieren.</li>
+    <li>Den kritischen Parameterwert finden, bei dem \(a(k) = 0\) wird.</li>
+    <li>Drei Fälle unterscheiden:
+      <ul style="margin-top:4px">
+        <li>\(a(k) \neq 0\): eindeutig lösbar, \(x = \tfrac{b(k)}{a(k)}\).</li>
+        <li>\(a(k) = 0\) und \(b(k) \neq 0\): keine Lösung.</li>
+        <li>\(a(k) = 0\) und \(b(k) = 0\): Identität, \(\mathbb{L} = \mathbb{R}\).</li>
+      </ul>
+    </li>
+    <li>Die Lösungsmenge in Abhängigkeit von <em>k</em> formulieren.</li>
+  </ol>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Lösung in Abhängigkeit von <em>k</em></div>
+  <p>Für die obige Gleichung \((k-2) \cdot x = 3 \cdot (k - 2)\) gilt:</p>
+  <ul style="margin:6px 0 0 22px">
+    <li><em>k</em> = 2: beide Seiten werden 0, also \(\mathbb{L} = \mathbb{R}\) (Identität).</li>
+    <li><em>k</em> ≠ 2: Division durch \((k - 2)\) ergibt \(x = 3\), also \(\mathbb{L} = \{3\}\).</li>
+  </ul>
+  <p>Bemerkenswert: für jedes <em>k</em> ≠ 2 ist die Lösung dieselbe (<em>x</em> = 3). Das hatten wir nicht zwingend erwarten müssen — es kommt vom Faktor \((k-2)\) auf beiden Seiten.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Zweites Beispiel · jetzt mit leerer Lösungsmenge</div>
+  <p>Das vorige Beispiel liefert beim kritischen Wert \(k = 2\) eine Identität (\(\mathbb{L} = \mathbb{R}\)) — das ist Fall 3. Der dritte Lösungsfall „keine Lösung" (\(\mathbb{L} = \emptyset\), Fall 2) tritt nur auf, wenn bei \(a(k) = 0\) der Term \(b(k)\) <em>nicht</em> ebenfalls verschwindet. Das zeigt folgendes System:</p>
+  \[ k \cdot x + 1 \;=\; 2 \cdot x + 3 \qquad (k \in \mathbb{R}). \]
+  <p>Sortieren auf \(a(k) \cdot x = b(k)\):</p>
+  \[ (k - 2) \cdot x \;=\; 2. \]
+  <p>Hier ist \(a(k) = k - 2\) und \(b(k) = 2\) — eine <em>Konstante</em>, die unabhängig von <em>k</em> ungleich 0 ist. Drei Fälle:</p>
+  <ul style="margin:6px 0 0 22px">
+    <li><em>k</em> ≠ 2: \(a(k) \neq 0\), eindeutig lösbar mit \(x = \tfrac{2}{k - 2}\).</li>
+    <li><em>k</em> = 2: \(a(k) = 0\) und \(b(k) = 2 \neq 0\), also \(0 \cdot x = 2\) — das ist <strong>für kein <em>x</em> erfüllbar</strong>. \(\mathbb{L} = \emptyset\).</li>
+  </ul>
+  <p>Probe für \(k = 3\): Gleichung \(3x + 1 = 2x + 3 \Rightarrow x = 2\). Formel: \(x = \tfrac{2}{3-2} = 2\) ✓. Für \(k = 4\): \(4x + 1 = 2x + 3 \Rightarrow 2x = 2 \Rightarrow x = 1\). Formel: \(x = \tfrac{2}{4-2} = 1\) ✓.</p>
+  <p><strong>Vergleich der beiden Beispiele:</strong> Was Fall 2 von Fall 3 unterscheidet, ist allein \(b(k)\): verschwindet \(b\) am kritischen Wert mit, gibt's eine Identität (Fall 3); verschwindet \(b\) nicht mit, gibt's einen Widerspruch (Fall 2).</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     7b. LINEARE UNGLEICHUNGEN — Kurzbehandlung
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="ungleichungen">Lineare Ungleichungen</h2>
+
+<p>Eine <strong>lineare Ungleichung</strong> entsteht, wenn das Gleichheitszeichen durch \(<,\;\le,\;>\) oder \(\ge\) ersetzt wird. Statt einer einzelnen Lösung erhält man typischerweise ein <em>Intervall</em>.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Umformen wie bei Gleichungen — mit einer Ausnahme</div>
+  <p>Addition und Subtraktion sowie Multiplikation und Division mit einer <em>positiven</em> Zahl funktionieren genau wie bei Gleichungen. <strong>Aber:</strong> Multiplikation oder Division mit einer <em>negativen</em> Zahl <strong>kehrt das Ungleichheitszeichen um</strong>.</p>
+  <p style="text-align:center;margin:6px 0">\(-x \le 5 \;\;\mid\, \cdot(-1) \;\;\Longleftrightarrow\;\; x \ge -5\)</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel — Mietkosten als Ungleichung</div>
+  <p>Ab welcher gefahrenen Strecke übersteigen die Kosten \(K(x) = 30 + 0.45 \cdot x\) das Budget von 75 Fr.?</p>
+  <p>\(30 + 0.45 \cdot x > 75 \;\;\mid\, -30\)</p>
+  <p>\(0.45 \cdot x > 45 \;\;\mid\, : 0.45\)</p>
+  <p>\(x > 100\). Lösungsmenge: \(\mathbb{L} = \{x \in \mathbb{R} \mid x > 100\}\) — also ab mehr als 100 km.</p>
+</div>
+
+<p style="font-size:0.92rem;color:var(--tinte-2);margin-top:6px"><em>Vertiefung:</em> Zwei Ungleichungs-Aufgaben (Vorzeichen-Umkehr und doppelte Ungleichung) findest du in der Druckseite <em>„Teste dich selbst"</em>.</p>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — bei linearen Gleichungen <em>vor</em> dem Rechnen sortieren</div>
+  <p>Bevor du eine lineare Gleichung Schritt für Schritt umformst, lohnt sich ein kurzer Überblick:</p>
+  <ol style="margin:5px 0 5px 20px">
+    <li><strong>Klammern auflösen</strong> (Distributivgesetz) — danach sind alle \(x\)-Terme einzeln sichtbar.</li>
+    <li><strong>Brüche entfernen</strong> — mit dem Hauptnenner durchmultiplizieren, dann hat man nur noch ganze Koeffizienten.</li>
+    <li><strong>Sortieren</strong> — alle \(x\)-Terme auf eine Seite, alle Konstanten auf die andere.</li>
+    <li><strong>Durch den \(x\)-Koeffizienten teilen</strong> — letzter Schritt zur isolierten Variablen.</li>
+  </ol>
+  <p>Wer von Anfang an erkennt, welche Schritte nötig sind, vermeidet überflüssiges Hin-und-Her — und kann bei einer Parametergleichung sofort sehen, wo der kritische Koeffizient \((a)\) auftritt.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     8. AUFGABEN — A1 bis A6 mit zunehmender Selbstständigkeit
+     ════════════════════════════════════════════════════════════════ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Vorzeichen beim Umstellen</div>
+  <p>Beim Verschieben eines Summanden über das Gleichheitszeichen ändert sich sein Vorzeichen. Aus \(2x + 5 = 11\) wird also \(2x = 11 - 5 = 6\), nicht \(2x = 11 + 5\). Wer mit Äquivalenzumformungen rechnet (\(-5\) auf beiden Seiten), läuft selten in diese Falle — bei mentalem „Rüberholen" passiert sie häufig. Tipp: Im Zweifel die Äquivalenzumformung explizit hinschreiben.</p>
+</div>
+
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 — Erkennen / Ablesen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Lösungsfall erkennen</span></div>
+  <p>Ordne jeder Gleichung den passenden Lösungsfall zu (eindeutig · keine Lösung · Identität). Klick auf die Buttons.</p>
+  <div id="a1-liste"></div>
+</div>
+
+<!-- A2 — Konstruieren -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Auf Normalform bringen</span></div>
+
+  <p>Bringe die Gleichungen auf die Normalform \(a \cdot x + b = 0\) und gib <em>a</em> und <em>b</em> an.</p>
+  <ol class="aufg-liste">
+  <li>\(7 \cdot x - 4 = 3 \cdot x + 12\)</li>
+  <li>\(5 - 2 \cdot (x + 1) = x\)</li>
+  <li>\(\dfrac{x}{4} + 3 = \dfrac{x}{2} - 1\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(4 \cdot x - 16 = 0\), also \(a = 4,\; b = -16\).</li>
+        <li>\(5 - 2x - 2 - x = 0 \Rightarrow -3x + 3 = 0\), also \(a = -3,\; b = 3\) (oder gleichwertig \(3x - 3 = 0\)).</li>
+        <li>Mit 4 multiplizieren: \(x + 12 = 2x - 4 \Rightarrow -x + 16 = 0\), also \(a = -1,\; b = 16\).</li>
+      </ol>
+      </div>
+  </div>
+</div>
+
+<!-- A3 — Rechnen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Lösen mit Probe</span></div>
+
+  <p>Löse die Gleichungen und führe die Probe durch.</p>
+  <ol class="aufg-liste">
+  <li>\(3 \cdot (x - 2) = 2 \cdot x + 1\)</li>
+  <li>\(\dfrac{2x - 1}{3} = \dfrac{x + 4}{5}\)</li>
+  <li>\(\dfrac{x}{2} - \dfrac{x - 3}{4} = 1\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a3')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(3x - 6 = 2x + 1 \Rightarrow x = 7\). Probe: \(3(7-2) = 15\), \(2 \cdot 7 + 1 = 15\) ✓. \(\mathbb{L} = \{7\}\).</li>
+        <li>Mit 15 multiplizieren: \(5(2x-1) = 3(x+4) \Rightarrow 10x - 5 = 3x + 12 \Rightarrow 7x = 17 \Rightarrow x = \tfrac{17}{7}\). Probe einsetzen ✓.</li>
+        <li>Mit 4 multiplizieren: \(2x - (x-3) = 4 \Rightarrow x + 3 = 4 \Rightarrow x = 1\). Probe: \(\tfrac{1}{2} - \tfrac{-2}{4} = \tfrac{1}{2} + \tfrac{1}{2} = 1\) ✓.</li>
+      </ol>
+      </div>
+  </div>
+</div>
+
+<!-- A4 — Eingabe-Aufgabe -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Eigene Lösung eingeben</span></div>
+  <p>Löse \(\;4 \cdot x + 11 \;=\; 9 \cdot x - 4\) und gib <em>x</em> ein.</p>
+  <div class="eingabe-row">
+  <label for="ea4">x =</label>
+  <input type="text" id="ea4" placeholder="z.B. 3 oder 1.5">
+  <button class="btn-pruef" onclick="checkA4()">Prüfen</button>
+  </div>
+  <div class="cr" id="cra4"></div>
+</div>
+
+<!-- A5 — Parameter-Aufgabe -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Parameterdiskussion</span></div>
+
+  <p>Diskutiere die Lösungsmenge der Gleichung in Abhängigkeit vom Parameter <em>m</em> ∈ ℝ:</p>
+  \[ m \cdot x - 4 \;=\; 2 \cdot x + 2 \cdot m. \]
+  <p>Wann ist sie eindeutig lösbar? Wann hat sie keine Lösung? Wann ist sie eine Identität?</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Sortieren: \((m - 2) \cdot x = 2m + 4\), also \((m - 2) \cdot x = 2 \cdot (m + 2)\).</p>
+      <p>Fallunterscheidung:</p>
+      <ul style="margin:6px 0 0 22px">
+      <li><strong><em>m</em> = 2</strong> → linke Seite wird 0, rechte Seite wird \(2 \cdot 4 = 8 \neq 0\). Widerspruch, also \(\mathbb{L} = \emptyset\).</li>
+      <li><strong><em>m</em> ≠ 2</strong> → eindeutig lösbar mit \(x = \dfrac{2(m+2)}{m-2}\).</li>
+      </ul>
+      <p><em>Bemerkung:</em> Für \(m = -2\) wird \(x = \tfrac{2 \cdot 0}{-4} = 0\) — die Standardformel funktioniert hier problemlos, anders als bei \(m = 2\). Kritisch ist also nur \(m = 2\), wo der Faktor \((m-2)\) vor dem \(x\) null wird.</p>
+      <p>Eine <em>Identität</em> (Lösungsmenge ganz \(\mathbb{R}\)) tritt für kein \(m\) auf: dafür müssten beide Seiten gleichzeitig null werden — also \((m-2) = 0\) <em>und</em> \(2(m+2) = 0\). Das widerspricht sich (\(m = 2\) bzw. \(m = -2\)).</p>
+      </div>
+  </div>
+</div>
+
+<!-- A6 — Anwendung -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — Gleicher Stand</span></div>
+
+  <p>Anbieter A verlangt eine Grundgebühr von 30 Fr. plus 0.20 Fr. pro Minute Telefonzeit. Anbieter B
+  hat keine Grundgebühr, aber 0.35 Fr. pro Minute. Ab welcher Gesprächsdauer kostet A weniger als B?</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Sei <em>t</em> die Gesprächsdauer in Minuten. Kosten: \(K_A(t) = 0.20 \cdot t + 30\) und \(K_B(t) = 0.35 \cdot t\). Die Frage „Ab wann kostet A weniger als B?" ist eine <em>Ungleichung</em>:</p>
+      \[ 0.20 \cdot t + 30 \;<\; 0.35 \cdot t \;\;\mid\, -0.20 \cdot t \]
+      \[ 30 \;<\; 0.15 \cdot t \;\;\mid\, : 0.15 \]
+      \[ 200 \;<\; t \quad\text{bzw.}\quad t \;>\; 200. \]
+      <p>Antwort: Ab <em>t</em> &gt; 200 Minuten ist A günstiger. Bei <em>t</em> = 200 Minuten kosten beide gleich viel (je 70 Fr.) — das ist der Schnittpunkt der beiden Kostengeraden.</p>
+      </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     9. ZUSAMMENFASSUNG
+     ════════════════════════════════════════════════════════════════ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Zwei Stundenlohn-Modelle <span class="aufg-vertiefung">Brücke zu 3.2</span></span></div>
+  <p>Eine Schülerin überlegt sich zwei Nebenjobs:</p>
+  <ul>
+    <li>(A) Café-Job: 25 CHF pro Stunde, sonst nichts.</li>
+    <li>(B) Stadtführungen: 18 CHF pro Stunde plus eine pauschale Antrittsgebühr von 70 CHF pro Tag (auch wenn nur eine Stunde geleistet wird).</li>
+  </ul>
+<ol class="aufg-liste">
+  <li>Stelle für beide Jobs eine lineare Funktion auf, die den Tagesverdienst \(L(t)\) in Abhängigkeit von der Arbeitszeit \(t\) (in Stunden) beschreibt.</li>
+  <li>Bei welcher Arbeitszeit verdient sie in beiden Jobs gleich viel?</li>
+  <li>Welches Modell ist für einen Halbtagsjob (4 h) günstiger?</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g2-2a-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g2-2a-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(L_A(t) = 25\cdot t\) und \(L_B(t) = 18\cdot t + 70\).</li>
+        <li>Gleichsetzen: \(25t = 18t + 70 \Rightarrow 7t = 70 \Rightarrow t = 10\,\text{h}\). Gemeinsamer Wert: \(L = 250\,\text{CHF}\).</li>
+        <li>Bei \(t = 4\): \(L_A = 100\,\text{CHF}\), \(L_B = 72 + 70 = 142\,\text{CHF}\). Für Halbtage ist <strong>Stadtführungen</strong> klar günstiger — die Pauschale wirkt sich stark aus. Erst ab 10 h Tagesarbeit lohnt sich der Café-Job.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A8</span><span class="aufg-titel-text">Reine Ungleichung mit Zeichenkippung <span class="aufg-vertiefung">Kurz</span></span></div>
+  <p>Bestimme die Lösungsmenge der Ungleichung:&nbsp; \(5 - 2 \cdot x \;\ge\; 13\).</p>
+  <button class="loesung-toggle" onclick="toggleL('l-g2-2a-a8')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g2-2a-a8">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Konstante isolieren:</p>
+      \[ 5 - 2 \cdot x \;\ge\; 13 \quad\big|\, -5 \]
+      \[ -2 \cdot x \;\ge\; 8 \]
+      <p>Jetzt durch \(-2\) teilen. <strong>Achtung — negativer Faktor: Ungleichheitszeichen kippt</strong> (\(\ge\) wird zu \(\le\)):</p>
+      \[ x \;\le\; -4. \]
+      <p>Lösungsmenge: \(\mathbb{L} = \{x \in \mathbb{R} \mid x \le -4\} = \,]\!-\!\infty;\;-4]\). Probe mit \(x = -5\): \(5 - 2 \cdot (-5) = 5 + 10 = 15 \ge 13\) ✓. Probe mit \(x = -3\) (sollte <em>nicht</em> erfüllt sein): \(5 - 2 \cdot (-3) = 11 \not\ge 13\) ✓ (also korrekt ausserhalb).</p>
+    </div>
+  </div>
+</div>
+
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Eine lineare Gleichung beschreibt einen Schnittpunkt zweier Geraden.
+  Sortiere <em>x</em>-Terme und Konstanten getrennt; bei einem Parameter trenne auf \(a(k) \cdot x = b(k)\) und prüfe drei Fälle.</p>
+</div>
+
+<table class="ftb-tabelle">
+  <tbody>
+    <tr><td class="li">Lineare Gleichung</td>          <td>\(a \cdot x + b = 0\) mit \(a, b \in \mathbb{R}\)</td></tr>
+    <tr><td class="li">Lösungsformel</td>             <td>\(x = -\dfrac{b}{a}\) für \(a \neq 0\)</td></tr>
+    <tr><td class="li">Drei Fälle</td>                 <td>eindeutig (\(a \neq 0\)) · keine Lösung (\(a=0,\; b\neq 0\)) · Identität (\(a=b=0\))</td></tr>
+    <tr><td class="li">Lösungsstrategie</td>           <td>Klammern → Brüche → <em>x</em> sortieren → dividieren → Probe</td></tr>
+    <tr><td class="li">Geometrie</td>                  <td>Lösung = <em>x</em>-Wert des Schnittpunkts der beiden Seitengeraden</td></tr>
+    <tr><td class="li">Parameterdiskussion</td>        <td>auf \(a(k) \cdot x = b(k)\) bringen, dann drei Fälle in <em>k</em></td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════
+     10. ZUSATZMATERIAL
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g2-2a-lineare-gleichungen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-2a-lineare-gleichungen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Begriffe und Lösungsfälle kompakt</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-2a-lineare-gleichungen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-2a-lineare-gleichungen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-2a-lineare-gleichungen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     11. EXTERNE RESSOURCEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lWPWBvEXDrcCEZ54ZdtYazp" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme vereinfachen — Playlist</div><div class="lk-s">MathemaTrick · 64 Videos · Vorarbeit für Lineare Gleichungen lösen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzmBhxJfVgJ9pTv2QeqJsbO_" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme &amp; Gleichungen — Playlist</div><div class="lk-s">Lehrerschmidt · 27 Videos · Lineare Gleichungen, Klammergleichungen, Brüche</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHjM0_gGTkVHw5tD61_5QzCn" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme und Gleichungen, Bruchgleichungen, Ungleichungen — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 54 Videos · Lösungsverfahren und Beispiele</div></div></a>
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g0/g05/aufg_g05.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Gleichungen (G05)</div><div class="lk-s">Aufgaben 27–33: Lineare Gleichungen ohne und mit Klammern, mit Brüchen — Lösungen vorhanden</div></div></a>
+  <a href="https://de.serlo.org/mathe/terme-gleichungen/lineare-gleichungen-loesen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Lineare Gleichungen lösen</div><div class="lk-s">Aufgaben mit Musterlösungen, Klammergleichungen, Bruchgleichungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/terme-gleichungen/gleichungen-mit-parametern" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Gleichungen mit Parametern</div><div class="lk-s">Vertiefung Parameterdiskussion (RLP-relevant)</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Grundlagenfach 2.2a Lineare Gleichungen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script>
+buildNav({
+  bereich:'grundlagen',
+  id:'g2-2a',
+  kapitelNr:'2.2a', kapitelTitel:'Lineare Gleichungen',
+  prev:{nr:'2.1',titel:'Grundlagen',url:'g2-1-grundlagen.html'},
+  next:{nr:'2.2b',titel:'Quadratische Gleichungen',url:'g2-2b-quadratische-gleichungen.html'}
+});
+
+/* ════════════════════════════════════════════════════════════════
+   2 · EINSTIEG — Mietkosten-Slider mit Canvas-Visualisierung
+   ════════════════════════════════════════════════════════════════ */
+function fmtNum(n) { return n % 1 === 0 ? n.toString() : n.toFixed(1); }
+
+function drawBudget() {
+  const x = +document.getElementById('sl-budget').value;
+  document.getElementById('sv-budget').textContent = fmtNum(x);
+  const ls = 12 * x + 45, rs = 117;
+  document.getElementById('fl-budget').innerHTML =
+    `12·${fmtNum(x)} + 45 = ${fmtNum(ls)} &nbsp;&nbsp; vs. &nbsp;&nbsp; ${rs}`;
+
+  const c = document.getElementById('cv-budget');
+  if (!c) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.offsetWidth || 540, H = 220;
+  c.width = W * dpr; c.height = H * dpr;
+  c.style.width = W + 'px'; c.style.height = H + 'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+
+  // Hintergrund
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+  // Achsen — aufgabenbezogene Skalierung
+  const xMin = 0, xMax = 11, yMin = 0, yMax = 180;
+  const padL = 50, padB = 32, padT = 14, padR = 14;
+  const PW = W - padL - padR, PH = H - padT - padB;
+  const cx = vx => padL + (vx - xMin) / (xMax - xMin) * PW;
+  const cy = vy => padT + PH - (vy - yMin) / (yMax - yMin) * PH;
+
+  // Gitter
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for (let gx = 1; gx <= 10; gx++) { ctx.beginPath(); ctx.moveTo(cx(gx), cy(0)); ctx.lineTo(cx(gx), cy(yMax)); ctx.stroke(); }
+  for (let gy = 30; gy <= 180; gy += 30) { ctx.beginPath(); ctx.moveTo(cx(0), cy(gy)); ctx.lineTo(cx(xMax), cy(gy)); ctx.stroke(); }
+
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(xMax), cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(0), cy(yMax)); ctx.stroke();
+
+  // Tick-Labels
+  ctx.fillStyle = '#9ca3af'; ctx.font = '10px JetBrains Mono,monospace';
+  ctx.textAlign = 'center';
+  for (let gx = 2; gx <= 10; gx += 2) ctx.fillText(gx, cx(gx), cy(0) + 14);
+  ctx.textAlign = 'right';
+  for (let gy = 30; gy <= 150; gy += 30) ctx.fillText(gy, cx(0) - 5, cy(gy) + 4);
+
+  // Achsen-Beschriftung mit Einheit
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'right'; ctx.fillText('x [h]', cx(xMax) + 8, cy(0) + 22);
+  ctx.textAlign = 'left';  ctx.fillText('K [CHF]', cx(0) - 38, cy(yMax) - 4);
+
+  // Gerade K(x) = 12x + 45 (blau)
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(cx(0), cy(45));
+  ctx.lineTo(cx(xMax), cy(12 * xMax + 45));
+  ctx.stroke();
+
+  // Budget-Linie K = 117 (gestrichelt grün)
+  ctx.strokeStyle = '#2d6a3e'; ctx.setLineDash([5, 4]); ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(117)); ctx.lineTo(cx(xMax), cy(117)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Aktueller x-Punkt auf der Geraden
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(cx(x), cy(ls), 6, 0, Math.PI * 2); ctx.fill();
+
+  // Vertikale Hilfslinie
+  ctx.strokeStyle = '#9ca3af'; ctx.setLineDash([2, 3]); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(cx(x), cy(0)); ctx.lineTo(cx(x), cy(ls)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Beschriftungen
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('K(x) = 12·x + 45', cx(7), cy(12 * 7 + 45) - 8);
+  ctx.fillStyle = '#2d6a3e';
+  ctx.fillText('Budget = 117', cx(7), cy(117) - 8);
+
+  // Lösungs-Hinweis bei x = 6
+  if (Math.abs(x - 6) < 0.4) {
+    ctx.fillStyle = '#2d6a3e'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('✓ Lösung x = 6', cx(6), cy(0) - 6);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   4 · DREI DARSTELLUNGEN — Tabelle + Graph für 2x − 3 = 5
+   ════════════════════════════════════════════════════════════════ */
+function drawThree() {
+  const x = +document.getElementById('sl-three').value;
+  document.getElementById('sv-three').textContent = fmtNum(x);
+
+  // Tabelle
+  const candidates = [-1, 1, 3, 4, 5];
+  const tab = document.getElementById('tab-three');
+  tab.innerHTML = candidates.map(xi => {
+    const ls = 2 * xi - 3, rs = 5;
+    const ok = ls === rs;
+    const aktiv = Math.abs(xi - x) < 0.25;
+    const bg = aktiv ? 'background:var(--blau-hell)' : '';
+    const symbol = ok ? '<span style="color:var(--gruen);font-weight:700">✓</span>' : `<span style="color:var(--tinte-2)">${ls > rs ? '>' : '<'}</span>`;
+    return `<tr style="${bg}"><td>${xi}</td><td>${ls}</td><td>${rs}</td><td>${symbol}</td></tr>`;
+  }).join('');
+
+  // Canvas
+  const c = document.getElementById('cv-three');
+  if (!c) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.offsetWidth || 540, H = 240;
+  c.width = W * dpr; c.height = H * dpr;
+  c.style.width = W + 'px'; c.style.height = H + 'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const xMin = -2, xMax = 8, yMin = -7, yMax = 11;
+  const padL = 35, padB = 28, padT = 14, padR = 14;
+  const PW = W - padL - padR, PH = H - padT - padB;
+  const cx = vx => padL + (vx - xMin) / (xMax - xMin) * PW;
+  const cy = vy => padT + PH - (vy - yMin) / (yMax - yMin) * PH;
+
+  // Gitter
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for (let gx = -2; gx <= 8; gx++) { ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), padT + PH); ctx.stroke(); }
+  for (let gy = -6; gy <= 10; gy += 2) { ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(padL + PW, cy(gy)); ctx.stroke(); }
+
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, cy(0)); ctx.lineTo(padL + PW, cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), padT); ctx.lineTo(cx(0), padT + PH); ctx.stroke();
+
+  // Labels
+  ctx.fillStyle = '#9ca3af'; ctx.font = '10px JetBrains Mono,monospace'; ctx.textAlign = 'center';
+  for (let gx = -2; gx <= 8; gx += 2) if (gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 13);
+  ctx.textAlign = 'right';
+  for (let gy = -6; gy <= 10; gy += 2) if (gy !== 0) ctx.fillText(gy, cx(0) - 5, cy(gy) + 3);
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax) - 4, cy(0) - 6);
+  ctx.textAlign = 'left';  ctx.fillText('y', cx(0) + 5, padT + 10);
+
+  // Gerade y = 2x - 3 (blau)
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(cx(xMin), cy(2 * xMin - 3));
+  ctx.lineTo(cx(xMax), cy(2 * xMax - 3));
+  ctx.stroke();
+
+  // Linie y = 5 (grün)
+  ctx.strokeStyle = '#2d6a3e'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(cx(xMin), cy(5)); ctx.lineTo(cx(xMax), cy(5)); ctx.stroke();
+
+  // Schnittpunkt (4 | 5)
+  ctx.fillStyle = '#b85a00';
+  ctx.beginPath(); ctx.arc(cx(4), cy(5), 6, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#b85a00'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.textAlign = 'left'; ctx.fillText('S(4 | 5)', cx(4) + 9, cy(5) - 5);
+
+  // Aktueller Punkt auf der blauen Geraden
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(cx(x), cy(2 * x - 3), 5, 0, Math.PI * 2); ctx.fill();
+
+  // Beschriftungen
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 10px monospace';
+  ctx.textAlign = 'left'; ctx.fillText('y = 2x − 3', cx(6) + 5, cy(2 * 6 - 3));
+  ctx.fillStyle = '#2d6a3e'; ctx.fillText('y = 5', cx(-1.5), cy(5) - 5);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   5 · UMFORMUNGS-STACK
+   ════════════════════════════════════════════════════════════════ */
+const UF_STEPS = [
+  { glg: '5·x − 7 = 2·x + 8',  op: 'gegeben' },
+  { glg: '3·x − 7 = 8',         op: '− 2·x' },
+  { glg: '3·x = 15',             op: '+ 7' },
+  { glg: 'x = 5',                op: ': 3' }
+];
+let ufIdx = 0;
+
+function renderUf() {
+  const wrap = document.getElementById('uf-lin');
+  wrap.innerHTML = UF_STEPS.map((s, i) =>
+    `<div class="umform-zeile ${i <= ufIdx ? 'sichtbar' : ''}">
+       <span class="uf-glg">${s.glg}</span>
+       <span class="umform-op">${s.op}</span>
+     </div>`
+  ).join('');
+  document.getElementById('uf-zurueck').disabled = ufIdx === 0;
+  document.getElementById('uf-vor').disabled = ufIdx === UF_STEPS.length - 1;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   6 · DREI LÖSUNGSFÄLLE — Klick-Visualisierung
+   ════════════════════════════════════════════════════════════════ */
+const FAELLE = [
+  {
+    glg: '3·x + 2 = 11',
+    text: 'Fall 1: Eindeutiger Lösungsfall. Die Gleichung wird durch Äquivalenzumformungen auf x = 3 reduziert. Geometrisch sind das zwei sich schneidende Geraden y = 3x + 2 und y = 11.',
+    geraden: [{ m: 3, b: 2, color: '#1a4f8a', label: 'y = 3x + 2' }, { m: 0, b: 11, color: '#2d6a3e', label: 'y = 11' }],
+    schnitt: { x: 3, y: 11 }
+  },
+  {
+    glg: '2·x + 5 = 2·x + 1',
+    text: 'Fall 2: Keine Lösung. Subtraktion von 2·x liefert 5 = 1 — falsch. Geometrisch sind das zwei parallele Geraden, die sich nie schneiden.',
+    geraden: [{ m: 2, b: 5, color: '#1a4f8a', label: 'y = 2x + 5' }, { m: 2, b: 1, color: '#2d6a3e', label: 'y = 2x + 1' }],
+    schnitt: null
+  },
+  {
+    glg: '4·x + 8 = 4·(x + 2)',
+    text: 'Fall 3: Identität. Beide Seiten ergeben 4x + 8. Geometrisch sind das zwei identische Geraden, die jeden Punkt teilen — also unendlich viele Lösungen.',
+    geraden: [{ m: 4, b: 8, color: '#1a4f8a', label: 'y = 4x + 8 (beide Seiten)' }],
+    schnitt: 'alle'
+  }
+];
+let faIdx = 0;
+
+function setFall(i) {
+  faIdx = i;
+  document.querySelectorAll('.lf-card').forEach((el, j) => el.classList.toggle('aktiv', j === i));
+  const f = FAELLE[i];
+  document.getElementById('lf-glg').textContent = f.glg;
+  document.getElementById('lf-text').textContent = f.text;
+  drawFaelle();
+}
+
+function drawFaelle() {
+  const c = document.getElementById('cv-faelle');
+  if (!c) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.offsetWidth || 540, H = 240;
+  c.width = W * dpr; c.height = H * dpr;
+  c.style.width = W + 'px'; c.style.height = H + 'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const xMin = -3, xMax = 6, yMin = -3, yMax = 15;
+  const padL = 35, padB = 28, padT = 14, padR = 14;
+  const PW = W - padL - padR, PH = H - padT - padB;
+  const cx = vx => padL + (vx - xMin) / (xMax - xMin) * PW;
+  const cy = vy => padT + PH - (vy - yMin) / (yMax - yMin) * PH;
+
+  // Gitter
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for (let gx = -3; gx <= 6; gx++) { ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), padT + PH); ctx.stroke(); }
+  for (let gy = -2; gy <= 14; gy += 2) { ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(padL + PW, cy(gy)); ctx.stroke(); }
+
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, cy(0)); ctx.lineTo(padL + PW, cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), padT); ctx.lineTo(cx(0), padT + PH); ctx.stroke();
+
+  // Tick-Labels
+  ctx.fillStyle = '#9ca3af'; ctx.font = '10px JetBrains Mono,monospace'; ctx.textAlign = 'center';
+  for (let gx = -2; gx <= 6; gx += 2) if (gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 13);
+  ctx.textAlign = 'right';
+  for (let gy = 2; gy <= 14; gy += 4) ctx.fillText(gy, cx(0) - 5, cy(gy) + 3);
+
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax) - 4, cy(0) - 6);
+  ctx.textAlign = 'left';  ctx.fillText('y', cx(0) + 5, padT + 10);
+
+  const f = FAELLE[faIdx];
+  // Bei identischen Geraden: nur eine zeichnen, dafür dicker
+  f.geraden.forEach((g, idx) => {
+    ctx.strokeStyle = g.color; ctx.lineWidth = (f.geraden.length === 1) ? 4 : 2.5;
+    ctx.beginPath();
+    ctx.moveTo(cx(xMin), cy(g.m * xMin + g.b));
+    ctx.lineTo(cx(xMax), cy(g.m * xMax + g.b));
+    ctx.stroke();
+    // Label
+    const labelX = xMax - 0.5, labelY = g.m * labelX + g.b;
+    if (labelY >= yMin && labelY <= yMax - 1) {
+      ctx.fillStyle = g.color; ctx.font = 'bold 10px monospace';
+      ctx.textAlign = 'right'; ctx.fillText(g.label, cx(labelX), cy(labelY) - 5);
+    }
+  });
+
+  // Schnittpunkt einzeichnen, falls vorhanden
+  if (f.schnitt && typeof f.schnitt === 'object') {
+    ctx.fillStyle = '#b85a00';
+    ctx.beginPath(); ctx.arc(cx(f.schnitt.x), cy(f.schnitt.y), 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#b85a00'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+    ctx.textAlign = 'left'; ctx.fillText(`S(${f.schnitt.x} | ${f.schnitt.y})`, cx(f.schnitt.x) + 9, cy(f.schnitt.y) + 4);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   7 · PARAMETERDISKUSSION — k-Slider
+   ════════════════════════════════════════════════════════════════ */
+function updateParam() {
+  const k = +document.getElementById('sl-k').value;
+  document.getElementById('sv-k').textContent = fmtNum(k);
+  const a = k - 2, b = 3 * (k - 2);
+  const aStr = (k - 2 >= 0 ? `(${fmtNum(k)} − 2)` : `(${fmtNum(k)} − 2)`);
+  const bStr = `3·${aStr}`;
+  document.getElementById('pk-glg').textContent = `${aStr}·x = ${bStr}`;
+
+  let fall, loes;
+  if (Math.abs(a) < 0.001 && Math.abs(b) < 0.001) {
+    fall = 'Fall 3: a = 0 und b = 0 → Identität. Jedes x ist Lösung.';
+    loes = '𝕃 = ℝ';
+  } else if (Math.abs(a) < 0.001) {
+    fall = `Fall 2: a = 0, b = ${fmtNum(b)} ≠ 0 → keine Lösung.`;
+    loes = '𝕃 = ∅';
+  } else {
+    fall = `Fall 1: a = ${fmtNum(a)} ≠ 0 → eindeutig lösbar.`;
+    const x = b / a;
+    loes = `x = ${fmtNum(x)}`;
+  }
+  document.getElementById('pk-fall').textContent = fall;
+  document.getElementById('pk-loes').textContent = loes;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   8 · AUFGABEN
+   ════════════════════════════════════════════════════════════════ */
+const A1 = [
+  { glg: '4·x − 5 = 2·x + 7',     correct: 'eindeutig',  hint: 'Auflösen: 2·x = 12, also x = 6.' },
+  { glg: '3·(x + 1) = 3·x + 5',    correct: 'leer',       hint: 'Ausmultiplizieren: 3x + 3 = 3x + 5 → 3 = 5, falsch.' },
+  { glg: '5·x − 10 = 5·(x − 2)',   correct: 'identitaet', hint: 'Beide Seiten = 5x − 10. Identität.' },
+  { glg: '7·x + 1 = 3·x + 9',      correct: 'eindeutig',  hint: 'Auflösen: 4·x = 8, also x = 2.' },
+  { glg: '2·x + 6 = 2·(x + 4)',    correct: 'leer',       hint: 'Ausmultiplizieren: 2x + 6 = 2x + 8 → 6 = 8, falsch.' },
+  { glg: 'x − 4 = (2·x − 8) : 2',  correct: 'identitaet', hint: 'Rechte Seite: x − 4. Identität.' }
+];
+const LABEL = { eindeutig: 'eindeutig', leer: 'keine Lösung', identitaet: 'Identität' };
+
+function buildA1() {
+  const cont = document.getElementById('a1-liste');
+  cont.innerHTML = A1.map((a, i) => `
+    <div style="background:var(--papier-2);border:1px solid var(--linie);border-radius:7px;padding:10px 14px;margin-bottom:7px">
+      <div style="font-family:var(--mono);font-size:0.95rem;font-weight:700;margin-bottom:7px">(${i+1})&nbsp; ${a.glg}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${['eindeutig','leer','identitaet'].map(opt =>
+          `<button class="verf-btn" data-i="${i}" data-v="${opt}" onclick="setA1(${i},'${opt}')">${LABEL[opt]}</button>`
+        ).join('')}
+      </div>
+      <div class="cr" id="cra1-${i}" style="margin-top:7px"></div>
+    </div>`).join('');
+}
+
+function setA1(i, v) {
+  const a = A1[i];
+  document.querySelectorAll(`button[data-i="${i}"]`).forEach(b => b.classList.toggle('aktiv', b.dataset.v === v));
+  const r = document.getElementById(`cra1-${i}`);
+  r.style.display = 'block';
+  if (v === a.correct) {
+    r.className = 'cr ok';
+    r.textContent = `✓ Richtig — ${a.hint}`;
+  } else {
+    r.className = 'cr err';
+    r.textContent = `✗ Nicht ganz. Versuche es nochmal.`;
+  }
+}
+
+function checkA4() {
+  const v = document.getElementById('ea4').value.replace(',', '.').trim();
+  const x = parseFloat(v);
+  const r = document.getElementById('cra4');
+  r.style.display = 'block';
+  if (isNaN(x)) { r.className = 'cr err'; r.textContent = '✗ Bitte eine Zahl eingeben.'; return; }
+  if (Math.abs(x - 3) < 0.001) {
+    r.className = 'cr ok';
+    r.textContent = '✓ Richtig. Auflösung: 4·x + 11 = 9·x − 4 → 15 = 5·x → x = 3.';
+  } else {
+    r.className = 'cr err';
+    r.textContent = '✗ Nicht ganz. Sortiere die x-Terme auf eine Seite und die Konstanten auf die andere, dann dividieren.';
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Einstieg
+  document.getElementById('sl-budget').addEventListener('input', drawBudget);
+  drawBudget();
+
+  // Drei Darstellungen
+  document.getElementById('sl-three').addEventListener('input', drawThree);
+  drawThree();
+
+  // Umformungs-Stack
+  renderUf();
+  document.getElementById('uf-vor').addEventListener('click', () => { if (ufIdx < UF_STEPS.length - 1) { ufIdx++; renderUf(); } });
+  document.getElementById('uf-zurueck').addEventListener('click', () => { if (ufIdx > 0) { ufIdx--; renderUf(); } });
+  document.getElementById('uf-reset').addEventListener('click', () => { ufIdx = 0; renderUf(); });
+
+  // Lösungsfälle: Klick auf Karten
+  document.querySelectorAll('.lf-card').forEach(card => {
+    card.addEventListener('click', () => setFall(+card.dataset.fall));
+  });
+  setFall(0);
+
+  // Parameter-Slider
+  document.getElementById('sl-k').addEventListener('input', updateParam);
+  updateParam();
+
+  // Aufgaben
+  buildA1();
+});
+
+window.addEventListener('resize', () => {
+  drawBudget();
+  drawThree();
+  drawFaelle();
+});
+</script>
+</body>
+</html>

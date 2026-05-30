@@ -1,0 +1,2379 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5.2b Vierecke — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ============================================================
+ *  LOKALES CSS — nur Klassen, die NICHT in style.css existieren
+ *  (1:1 gespiegelt aus g5-2a)
+ * ============================================================ */
+.anim {
+  background: var(--papier);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 14px 0 22px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+}
+.anim-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .anim-layout { grid-template-columns: 1fr; }
+}
+.anim canvas {
+  width: 100%;
+  height: auto;
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  display: block;
+  touch-action: none;
+}
+.anim .bedien {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.anim .regler {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.anim .regler-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--tinte-2);
+}
+.anim .regler-label .wert {
+  font-family: var(--mono);
+  color: var(--blau);
+  font-weight: 500;
+}
+.anim input[type="range"] {
+  width: 100%;
+  accent-color: var(--blau);
+}
+.anim .feld-titel {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tinte-2);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.anim .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.anim .chip {
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  color: var(--tinte-2);
+  padding: 5px 9px;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-family: var(--mono);
+  transition: all 0.12s;
+}
+.anim .chip:hover { border-color: var(--blau-rand); color: var(--blau); }
+.anim .chip.aktiv {
+  background: var(--blau);
+  border-color: var(--blau);
+  color: white;
+}
+.anim .toggle-zeile {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 0.88rem; color: var(--tinte-2);
+  cursor: pointer; user-select: none;
+}
+.anim .toggle-zeile input[type="checkbox"] {
+  width: 15px; height: 15px;
+  accent-color: var(--blau); cursor: pointer;
+}
+.anim .legende {
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  padding: 8px 11px;
+  font-size: 0.86rem;
+}
+.anim .legende-titel {
+  font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--tinte-2);
+  font-weight: 600; margin-bottom: 5px;
+}
+.anim .legende-zeile {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.85rem;
+  padding: 1px 0;
+}
+.anim .legende-zeile .lab { color: var(--tinte); }
+.anim .legende-zeile .val { color: var(--blau); font-weight: 500; }
+.anim .formel {
+  background: var(--blau-hell);
+  border: 1px solid var(--blau-rand);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.93rem;
+  transition: background 0.3s, border-color 0.3s;
+}
+.anim .formel.fertig {
+  background: var(--gruen-hell);
+  border-color: var(--gruen-rand);
+}
+.anim .schritte {
+  display: flex; justify-content: space-between;
+  margin-top: 3px; font-size: 0.74rem; color: var(--tinte-2);
+}
+.anim .schritte span.akt { color: var(--blau); font-weight: 600; }
+.anim .erklaerung {
+  background: var(--papier-2);
+  border-left: 3px solid var(--blau);
+  padding: 7px 11px;
+  font-size: 0.84rem;
+  color: var(--tinte-2);
+  border-radius: 0 4px 4px 0;
+  min-height: 36px;
+}
+.anim .anim-titel {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--blau);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+/* Tabelle innerhalb Animations-Bedienfeld */
+.anim .mini-tab {
+  width: 100%;
+  font-size: 0.78rem;
+  font-family: var(--mono);
+  border-collapse: collapse;
+  margin-top: 4px;
+}
+.anim .mini-tab th, .anim .mini-tab td {
+  padding: 3px 6px;
+  text-align: right;
+  border-bottom: 1px solid var(--linie-2);
+}
+.anim .mini-tab th {
+  color: var(--tinte-2);
+  font-weight: 600;
+  background: var(--papier-2);
+}
+.anim .mini-tab td.lab { text-align: left; color: var(--tinte-2); }
+.anim .mini-tab tr.aktiv td { background: var(--blau-hell); color: var(--blau); font-weight: 600; }
+.anim .mini-tab tr.exakt td { color: var(--gruen); font-weight: 600; }
+.anim .mini-tab td.dash { color: var(--tinte-2); font-style: italic; }
+
+/* Einstiegs-Animation: Viereck-Familie aufdecken */
+.fam-box{background:var(--papier-2,#f3eedf);border-radius:8px;padding:14px 16px;margin:12px 0}
+.fam-box .fb-grid{display:grid;grid-template-columns:1fr 280px;gap:16px;align-items:start}
+@media(max-width:780px){.fam-box .fb-grid{grid-template-columns:1fr}}
+.fam-box canvas{width:100%;height:340px;display:block;background:var(--weiss);border-radius:6px;cursor:move}
+.fam-box .fb-status{background:var(--weiss);border:1.5px solid var(--linie);border-radius:8px;padding:14px;font-family:var(--mono);font-size:0.88rem}
+.fam-box .fb-status h4{margin:0 0 8px 0;font-family:var(--serif);font-size:0.98rem;color:var(--tinte-2);font-weight:700;letter-spacing:0.5px;text-transform:uppercase}
+.fam-box .fb-typ{font-size:1.15rem;font-weight:700;color:var(--blau);margin-bottom:10px}
+.fam-box .fb-eigs{list-style:none;padding:0;margin:0}
+.fam-box .fb-eigs li{padding:4px 0;font-size:0.82rem;color:var(--tinte-2)}
+.fam-box .fb-eigs li.ja{color:var(--gruen);font-weight:600}
+.fam-box .fb-eigs li.nein{color:var(--tinte-2);opacity:0.55}
+.fam-box .fb-presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.fam-box .fb-presets button{font-family:var(--mono);font-size:0.72rem;font-weight:700;padding:5px 9px;border-radius:14px;border:1.5px solid var(--linie);background:var(--papier-2);cursor:pointer;color:var(--tinte-2);transition:all 0.15s}
+.fam-box .fb-presets button:hover{border-color:var(--blau-rand);background:var(--blau-hell);color:var(--blau)}
+.fam-box .fb-cap{font-size:0.85rem;color:var(--tinte-2);margin-top:8px;font-style:italic;grid-column:1 / -1}
+</style>
+</head>
+
+<body>
+<div id="nav-root"></div>
+
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Grundlagenfach · Lerngebiet 5 · Geometrie · 50 Lektionen</div>
+  <h1 class="pt-h1">5.2b Vierecke</h1>
+  <div class="pt-untertitel">RLP 5.2 · Teil 2 von 4</div>
+</div>
+
+<p class="lead">Die <strong>Familie der Vierecke</strong> bildet eine klare Hierarchie. Auf dieser Seite werden Eigenschaften, Diagonalen, Symmetrien sowie Umfang und Flächeninhalt aller Vierecksformen behandelt — zusätzlich die Sonderformen <strong>Sehnen- und Tangentenviereck</strong> sowie <strong>regelmässige Vielecke</strong>.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 5.2</div>
+  <ul>
+    <li>geometrische Sachverhalte von elementaren Objekten (Quadrat, Rechteck, allgemeine und spezielle Dreiecke, <strong>Parallelogramm, Rhombus, Trapez</strong>, Kreis) beschreiben</li>
+    <li>deren Elemente (Höhen, Seiten- und Winkelhalbierende, Mittelsenkrechte, <strong>Mittellinie im Trapez</strong>, Sehne, Sekante, Tangente, Sektor, Segment, Winkel und Winkelmass) und Zusammenhänge (<strong>Umfang, Flächeninhalt</strong>, Abstand) berechnen</li>
+    <li>die Ähnlichkeit für Berechnungen in der Ebene nutzen</li>
+  </ul>
+  <p class="rlp-hinweis">Dreiecke werden in <a href="g5-2a-dreiecke.html">Teil 1 (g5-2a)</a> behandelt, Kreis und Kreisteile in <a href="g5-2c-kreis-und-kreisteile.html">Teil 3 (g5-2c)</a>, zentrische Streckung und Ähnlichkeit in <a href="g5-2d-zentrische-streckung-aehnlichkeit.html">Teil 4 (g5-2d)</a>.</p>
+</div>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — die Vierecks-Familie</h2>
+
+<p>Vierecke sind allgegenwärtig: Fensterrahmen, Bauteile, Grundstückspläne, Verpackungen. Anders als beim Dreieck (das durch drei Stücke immer eindeutig festgelegt ist), gibt es bei Vierecken eine <strong>ganze Familie</strong> von Spezialfällen — vom unscheinbaren allgemeinen Viereck bis zum streng symmetrischen Quadrat. Jede Spezialisierung fügt eine zusätzliche Bedingung hinzu (zum Beispiel „zwei Seiten parallel" beim Trapez, „alle Winkel rechtwinklig" beim Rechteck) und macht die Figur dadurch berechenbarer.</p>
+
+<p>Eine zweite Art von Spezialisierung ergibt sich, wenn man ein Viereck in einen Kreis einschreibt oder um einen Kreis herumlegt: das führt zum <strong>Sehnenviereck</strong> und zum <strong>Tangentenviereck</strong>. Werden alle Seiten gleich lang und alle Winkel gleich gross, erhält man das <strong>regelmässige Vieleck</strong> — der natürliche Übergang vom Viereck zum Kreis.</p>
+
+<p>Verschiebe die vier Eckpunkte des Vierecks unten und beobachte, welcher Typ dabei entsteht:</p>
+
+<div class="fam-box">
+  <div class="fb-grid">
+    <canvas id="fam-canvas" aria-label="Verschiebbares Viereck mit Live-Klassifikation"></canvas>
+    <div class="fb-status">
+      <h4>Aktueller Typ</h4>
+      <div class="fb-typ" id="fam-typ">—</div>
+      <ul class="fb-eigs" id="fam-eigs">
+        <li id="fam-e-par1">— ein Paar paralleler Seiten</li>
+        <li id="fam-e-par2">— zweites Paar paralleler Seiten</li>
+        <li id="fam-e-gleich">— alle Seiten gleich lang</li>
+        <li id="fam-e-recht">— alle Winkel rechtwinklig</li>
+      </ul>
+      <div class="fb-presets">
+        <button data-fam="quad">Quadrat</button>
+        <button data-fam="rect">Rechteck</button>
+        <button data-fam="raute">Raute</button>
+        <button data-fam="par">Parallelogr.</button>
+        <button data-fam="trap">Trapez</button>
+        <button data-fam="allg">allgemein</button>
+      </div>
+    </div>
+    <div class="fb-cap">Greif einen der vier Eckpunkte (A, B, C, D) und zieh ihn — die Klassifikation rechts aktualisiert sich. Oder klick eine der Voreinstellungen unten.</div>
+  </div>
+</div>
+
+<p>Was du siehst: Je <em>mehr</em> Eigenschaften gleichzeitig erfüllt sind, desto <em>spezieller</em> wird das Viereck. Das Quadrat hat alle vier Eigenschaften — es ist also gleichzeitig Rechteck, Raute, Parallelogramm und Trapez. Diese Hierarchie ist das Gerüst des ganzen Kapitels: Ausgehend vom allgemeinen Viereck werden schrittweise Bedingungen hinzugefügt, jede gibt eine zusätzliche Berechnungsformel oder Symmetrie.</p>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<!-- ══ 3. DARSTELLUNGEN ══ -->
+<h2 id="definition">Definition — Familie der Vierecke</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Viereck</div>
+  <p>Ein <strong>Viereck</strong> ist eine geschlossene Figur in der Ebene aus vier Eckpunkten \(A, B, C, D\) und vier Seiten \(a = AB,\; b = BC,\; c = CD,\; d = DA\). Die Innenwinkel werden mit \(\alpha, \beta, \gamma, \delta\) bezeichnet, die beiden Diagonalen mit \(e = AC\) und \(f = BD\).</p>
+</div>
+
+<p>Wie aus der Animation oben erkennbar, gilt für jedes einfache Viereck (ohne sich kreuzende Seiten) als Spezialfall \(n = 4\):</p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Innenwinkelsumme im Viereck</div>
+  <p>\[\alpha + \beta + \gamma + \delta = 360°\]</p>
+  <p>Beweis: Jede Diagonale zerlegt das Viereck in zwei Dreiecke. Beide Dreiecke haben Innenwinkelsumme \(180°\); die vier Innenwinkel des Vierecks setzen sich genau aus den sechs Dreieckswinkeln zusammen.</p>
+</div>
+
+
+<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
+<h2 id="darstellungen">Darstellungen — n-Eck in Dreiecke zerlegen</h2>
+
+<p>Bevor wir Vierecke im Detail klassifizieren, ein didaktischer Umweg über das <strong>allgemeine n-Eck</strong>: Jedes n-Eck lässt sich durch Diagonalen von einem Eckpunkt aus in Dreiecke zerlegen — und weil jedes Dreieck Innenwinkelsumme \(180°\) hat, folgt die Innenwinkelsumme jedes n-Ecks direkt aus der Anzahl der Dreiecke. Wähle \(n\) zwischen 3 und 8.</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 1 · Innenwinkelsumme im n-Eck <a class="quer" href="g5-2a-dreiecke.html">↩ 5.2a</a></div>
+  <div class="anim-layout">
+    <canvas id="cv-nEck" width="560" height="420"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>n</span>
+          <span class="wert" id="lbl-n">5</span>
+        </div>
+        <input type="range" id="sld-n" min="3" max="8" step="1" value="5">
+      </div>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-n-diag" checked>
+        Dreiecks-Zerlegung anzeigen
+      </label>
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-n-winkel" checked>
+        Innenwinkel markieren
+      </label>
+
+      <div class="formel" id="formel-n">
+        \( \sigma_5 = (5-2)\cdot 180° = 540° \)
+      </div>
+
+      <div class="legende">
+        <div class="legende-titel">Innenwinkelsumme</div>
+        <table class="mini-tab" id="tab-n">
+          <thead><tr><th class="lab" style="text-align:left">n</th><th>Dreiecke</th><th>\(\sigma_n\)</th></tr></thead>
+          <tbody>
+            <tr data-n="3"><td class="lab">3</td><td>1</td><td>180°</td></tr>
+            <tr data-n="4"><td class="lab">4</td><td>2</td><td>360°</td></tr>
+            <tr data-n="5"><td class="lab">5</td><td>3</td><td>540°</td></tr>
+            <tr data-n="6"><td class="lab">6</td><td>4</td><td>720°</td></tr>
+            <tr data-n="7"><td class="lab">7</td><td>5</td><td>900°</td></tr>
+            <tr data-n="8"><td class="lab">8</td><td>6</td><td>1080°</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="erklaerung" id="erkl-n">
+        Vom Eckpunkt \(A\) ausgehend zerlegen \(n-3\) Diagonalen das n-Eck in \(n-2\) Dreiecke. Jedes Dreieck steuert \(180°\) bei.
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Stelle den Schieber auf \(n = 4\): zwei Dreiecke, Summe \(360°\). Damit wissen wir, was uns beim Viereck erwartet. Jetzt zur formalen Definition.</p>
+
+
+<!-- ══ 4. DEFINITION ══ -->
+<h2 id="typen">Typen — die Vierecks-Hierarchie</h2>
+
+<p>Vierecke lassen sich strikt hierarchisch ordnen. Jede speziellere Form erbt <em>alle</em> Eigenschaften der allgemeineren und fügt eine zusätzliche Bedingung hinzu. Eine Spezialform ist immer auch eine Allgemeinform — ein Quadrat ist gleichzeitig Rechteck, Rhombus, Parallelogramm, Trapez und Viereck.</p>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Typ</th><th>Zusätzliche Bedingung</th><th>Folgerungen</th></tr></thead>
+  <tbody>
+    <tr><td><strong>allgemeines Viereck</strong></td><td>—</td><td>Innenwinkelsumme \(360°\)</td></tr>
+    <tr><td><strong>Trapez</strong></td><td>ein Paar paralleler Seiten</td><td>Mittellinie \(m = \tfrac{1}{2}(a + c)\)</td></tr>
+    <tr><td><strong>Parallelogramm</strong></td><td>beide Seitenpaare parallel</td><td>Gegenseiten gleich lang, Diagonalen halbieren sich</td></tr>
+    <tr><td><strong>Rechteck</strong></td><td>Parallelogramm mit einem rechten Winkel</td><td>alle vier Winkel \(90°\), Diagonalen gleich lang</td></tr>
+    <tr><td><strong>Rhombus (Raute)</strong></td><td>Parallelogramm mit allen Seiten gleich</td><td>Diagonalen senkrecht, halbieren die Winkel</td></tr>
+    <tr><td><strong>Quadrat</strong></td><td>Rechteck und Rhombus zugleich</td><td>höchste Symmetrie: 4 Spiegelachsen, 4 Drehwinkel</td></tr>
+    <tr><td><strong>Drachen</strong></td><td>zwei Paar gleich langer benachbarter Seiten</td><td>eine Symmetrieachse, Diagonalen senkrecht</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Drachen und Rhombus</div>
+  <p>Ein <strong>Rhombus</strong> ist ein Spezialfall des Drachens, bei dem zusätzlich die <em>beiden</em> Seitenpaare gleich lang sind (statt nur benachbarte). Jeder Rhombus ist also ein Drachen, aber nicht jeder Drachen ist ein Rhombus.</p>
+</div>
+
+<h3 id="sehnen-tangenten">Sonderformen — Sehnen- und Tangentenviereck <a class="quer" href="g5-2c-kreis-und-kreisteile.html">↩ 5.2c</a></h3>
+
+<p>Ein <strong>Sehnenviereck</strong> hat alle vier Ecken auf einem gemeinsamen Kreis (dem Umkreis). Ein <strong>Tangentenviereck</strong> hat einen Inkreis, der alle vier Seiten berührt.</p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Charakterisierungen</div>
+  <p><strong>Sehnenviereck</strong>: \(\;\alpha + \gamma = 180°\) (gegenüberliegende Winkel ergänzen sich auf \(180°\)).</p>
+  <p><strong>Tangentenviereck</strong>: \(\;a + c = b + d\) (Summen gegenüberliegender Seiten gleich).</p>
+</div>
+
+<p>Ein Viereck kann gleichzeitig Sehnen- und Tangentenviereck sein (ein <em>bizentrisches</em> Viereck). Das Quadrat ist das einfachste Beispiel. Die nachfolgende Animation 4 zeigt beide Sonderformen mit ziehbaren Ecken bzw. Berührungspunkten.</p>
+
+<h3 id="regelmaessige-vielecke">Regelmässige Vielecke</h3>
+
+<p>Ein <strong>regelmässiges n-Eck</strong> hat alle \(n\) Seiten gleich lang <em>und</em> alle \(n\) Innenwinkel gleich gross. Es ist gleichzeitig Sehnen- und Tangentenviereck (für \(n=4\)) bzw. allgemeiner Sehnen- und Tangenten-n-Eck: es passt in einen Umkreis und um einen Inkreis.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Kenngrössen am regelmässigen n-Eck</div>
+  <p>Mit Seitenlänge \(s\), Umkreisradius \(R\), Inkreisradius (Apothem) \(r\):</p>
+  <ul style="margin-left:1.4em;line-height:1.7">
+    <li><strong>Zentriwinkel</strong> (Winkel zwischen zwei Radien zu benachbarten Ecken): \(\;\zeta_n = \dfrac{360°}{n}\)</li>
+    <li><strong>Innenwinkel</strong>: \(\;\alpha_n = \dfrac{(n-2) \cdot 180°}{n} = 180° - \zeta_n\)</li>
+    <li><strong>Seitenlänge</strong> aus Umkreisradius: \(\;s = 2R \cdot \sin(\zeta_n/2)\)</li>
+    <li><strong>Inkreisradius</strong> aus Umkreisradius: \(\;r = R \cdot \cos(\zeta_n/2)\)</li>
+  </ul>
+</div>
+
+<p>Für die drei Werte \(n = 3, 4, 6\) sind \(R\), \(r\) und \(s\) ohne Trigonometrie aus dem halben gleichseitigen Dreieck bzw. halben Quadrat ableitbar (siehe Animation 5 unten). Für andere Werte benötigt man die Winkelfunktionen aus Kapitel 5.3.</p>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Umfang und Flächeninhalt</h2>
+
+<p>Alle Flächenformeln der Vierecke leiten sich vom <strong>Rechteck</strong> \(A = a \cdot b\) ab. Die Strategie ist immer dieselbe: das Viereck wird durch <strong>Schneiden und Anbauen</strong> oder durch <strong>Drehspiegelung</strong> in ein flächengleiches Rechteck überführt. Die <strong>Anim 2</strong> unten festigt die Basis-Formel \(A = a \cdot b\); die <strong>Anim 3</strong> zeigt anschliessend die fünf Konstruktionen für Parallelogramm, Dreieck (zum Vergleich), Trapez, Raute und Drachen.</p>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Form</th><th>Umfang</th><th>Flächeninhalt</th></tr></thead>
+  <tbody>
+    <tr><td>Quadrat (Seite \(a\))</td><td>\(U = 4a\)</td><td>\(A = a^2\)</td></tr>
+    <tr><td>Rechteck (Seiten \(a, b\))</td><td>\(U = 2(a + b)\)</td><td>\(A = a \cdot b\)</td></tr>
+    <tr><td>Parallelogramm (\(a, b\) = Schenkel, \(h\) = Höhe)</td><td>\(U = 2(a + b)\)</td><td>\(A = a \cdot h\)</td></tr>
+    <tr><td>Trapez (Parallelseiten \(a, c\), Höhe \(h\))</td><td>\(U = a + b + c + d\)</td><td>\(A = \tfrac{1}{2}(a+c) \cdot h\)</td></tr>
+    <tr><td>Rhombus (Seite \(a\), Diagonalen \(e, f\))</td><td>\(U = 4a\)</td><td>\(A = \tfrac{1}{2}\, e \cdot f\)</td></tr>
+    <tr><td>Drachen (Diagonalen \(e, f\))</td><td>\(U = 2(a + b)\)</td><td>\(A = \tfrac{1}{2}\, e \cdot f\)</td></tr>
+  </tbody>
+</table>
+
+<p>Wähle Länge und Breite mit den Schiebern; das Einheitsquadrat-Raster macht die Formel \(A = a \cdot b\) anschaulich (Fläche = Anzahl der Einheitsquadrate).</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 2 · Flächenberechnung des Rechtecks</div>
+  <div class="anim-layout">
+    <canvas id="cv-rect" width="560" height="380"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Länge <em>a</em></span>
+          <span class="wert" id="flR-lblA">5</span>
+        </div>
+        <input type="range" id="flR-sldA" min="1" max="10" step="1" value="5">
+      </div>
+
+      <div class="regler">
+        <div class="regler-label">
+          <span>Breite <em>b</em></span>
+          <span class="wert" id="flR-lblB">3</span>
+        </div>
+        <input type="range" id="flR-sldB" min="1" max="8" step="1" value="3">
+      </div>
+
+      <div>
+        <div class="feld-titel">Einheit</div>
+        <div class="chips" id="flR-einheiten">
+          <button class="chip aktiv" data-einheit="cm">cm</button>
+          <button class="chip" data-einheit="dm">dm</button>
+          <button class="chip" data-einheit="m">m</button>
+        </div>
+      </div>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="flR-togRaster" checked>
+        Einheitsquadrate zeigen
+      </label>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="flR-togZaehlen">
+        Quadrate durchzählen
+      </label>
+
+      <div class="formel">
+        \( A = a \cdot b = \) <span id="flR-lblA2" class="wert" style="color:var(--blau);font-weight:600">5</span> · <span id="flR-lblB2" class="wert" style="color:var(--blau);font-weight:600">3</span> = <strong id="flR-lblF">15</strong> <span id="flR-lblEinheit2">cm²</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Bei allen anderen Vierecken nutzen wir das Rechteck als Referenz. Die folgende Animation zeigt für jede der fünf Figuren (Parallelogramm, Dreieck, Trapez, Raute, Drachen) die Konstruktion zum Rechteck. Figur per Chip wählen, dann den Schieber bedienen.</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 3 · Flächenberechnung — Umformung zum Rechteck</div>
+  <div class="anim-layout">
+    <canvas id="cv-flaeche" width="560" height="400"></canvas>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Figur</div>
+        <div class="chips" id="figuren">
+          <button class="chip aktiv" data-figur="parallelogramm">Parallelogramm</button>
+          <button class="chip" data-figur="dreieck">Dreieck</button>
+          <button class="chip" data-figur="trapez">Trapez</button>
+          <button class="chip" data-figur="raute">Raute</button>
+          <button class="chip" data-figur="drachen">Drachen</button>
+        </div>
+      </div>
+
+      <div class="regler">
+        <div class="regler-label">
+          <span>Umformungs-Schritt</span>
+          <span class="wert" id="lbl-tF">0.00</span>
+        </div>
+        <input type="range" id="sld-tF" min="0" max="1" step="0.01" value="0">
+        <div class="schritte" id="schritte-F">
+          <span class="akt">Start</span>
+          <span>Schneiden</span>
+          <span>Verschieben</span>
+          <span>Rechteck</span>
+        </div>
+      </div>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-F-mass" checked>
+        Masse beschriften
+      </label>
+
+      <div class="formel" id="formel-F">
+        \( A_{\text{Parallelogramm}} = \;? \)
+      </div>
+
+      <div class="erklaerung" id="erkl-F">
+        Ausgangsfigur: ein Parallelogramm mit Grundseite \(g\) und Höhe \(h\). Es bleibt während der gesamten Konstruktion stehen.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h3 id="sehnen-tangenten-anim">Sehnen- und Tangentenviereck im Kreis</h3>
+
+<p>Ziehe die <strong>Eckpunkte</strong> (Sehnenviereck) bzw. die <strong>Berührungspunkte</strong> (Tangentenviereck) auf dem Kreis. Die Animation zeigt live die charakteristischen Werte: für das Sehnenviereck die Summen gegenüberliegender Innenwinkel (müssen \(180°\) sein), für das Tangentenviereck die Summen gegenüberliegender Seiten (müssen gleich sein).</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 4 · Sehnen- und Tangentenviereck</div>
+  <div class="anim-layout">
+    <canvas id="cv-stv" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Typ</div>
+        <div class="chips" id="stv-typen">
+          <button class="chip aktiv" data-typ="sehnen">Sehnenviereck</button>
+          <button class="chip" data-typ="tangenten">Tangentenviereck</button>
+        </div>
+      </div>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-stv-werte" checked>
+        Werte im Bild beschriften
+      </label>
+
+      <div class="formel" id="formel-stv">
+        \( \alpha + \gamma = 180°,\quad \beta + \delta = 180° \)
+      </div>
+
+      <div class="legende" id="leg-stv">
+        <!-- Wird via JS gefüllt -->
+      </div>
+
+      <div class="erklaerung" id="erkl-stv">
+        Im Sehnenviereck ergänzen sich gegenüberliegende Innenwinkel zu \(180°\). Ziehe die vier Eckpunkte auf dem Kreis, um die Beziehung zu testen.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h3 id="regelmaessige-vielecke-anim">Regelmässiges Vieleck</h3>
+
+<p>Wähle \(n\) zwischen 3 und 20. Das Vieleck wird mit Umkreis (Radius \(R = 1\)) und Inkreis (Apothem \(r\)) gezeichnet. Die Tabelle daneben zeigt für jeden Wert \(n\) den Zentriwinkel, den Innenwinkel sowie \(R\) und \(r\). Die <strong>grün</strong> markierten Zeilen sind die Fälle (\(n = 3, 4, 6\)), in denen sich alle Werte ohne Trigonometrie aus dem halben gleichseitigen Dreieck oder dem halben Quadrat ableiten lassen.</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 5 · Regelmässiges Vieleck</div>
+  <div class="anim-layout">
+    <canvas id="cv-reg" width="560" height="500"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>n</span>
+          <span class="wert" id="lbl-nReg">6</span>
+        </div>
+        <input type="range" id="sld-nReg" min="3" max="20" step="1" value="6">
+      </div>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-reg-um" checked>
+        Umkreis anzeigen
+      </label>
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-reg-in" checked>
+        Inkreis anzeigen
+      </label>
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-reg-zentri" checked>
+        Zentriwinkel hervorheben
+      </label>
+
+      <div class="legende">
+        <div class="legende-titel">Kenngrössen (für \(R = 1\))</div>
+        <table class="mini-tab" id="tab-reg">
+          <thead><tr><th class="lab" style="text-align:left">n</th><th>\(\zeta_n\)</th><th>\(\alpha_n\)</th><th>\(r\)</th><th>\(s\)</th></tr></thead>
+          <tbody><!-- via JS gefüllt --></tbody>
+        </table>
+        <p style="margin:6px 0 0;font-size:0.72rem;color:var(--gruen);font-weight:600">grün: ohne Trigonometrie ableitbar</p>
+      </div>
+
+      <div class="erklaerung" id="erkl-reg">
+        Sechseck: Der Umkreisradius gleicht der Seitenlänge (\(R = s\)). Das Sechseck besteht aus sechs gleichseitigen Dreiecken.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \(d = s\sqrt{2}\) nur im Quadrat</div>
+  <p>Die schöne Formel \(d = s\cdot\sqrt{2}\) für die Diagonale gilt <strong>nur im Quadrat</strong> (alle Seiten gleich \(s\)). Beim Rechteck mit Länge \(l\) und Breite \(b\) ist die Diagonale \(d = \sqrt{l^2 + b^2}\) — ohne den \(\sqrt{2}\)-Faktor. Wer auswendig „Diagonale = Seite mal Wurzel zwei" weiss, ohne den Spezialfall zu kennen, kommt bei jedem nicht-quadratischen Rechteck auf einen falschen Wert.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Trapez-Höhe ist nicht der Schenkel</div>
+  <p>Beim Trapez \(A = \tfrac{1}{2}(a + c) \cdot h\) ist \(h\) die <strong>senkrechte</strong> Höhe zwischen den beiden Parallelseiten — nicht die schräge Schenkel-Länge. Bei einem gleichschenkligen Trapez mit Schenkel \(s\), Parallelseiten \(a\) und \(c\): die Höhe ergibt sich aus dem Pythagoras-Halbdreieck zu \(h = \sqrt{s^2 - \left(\tfrac{a-c}{2}\right)^2}\). Schräge Seite als Höhe einzusetzen, überschätzt die Fläche.</p>
+</div>
+
+<h2 id="aufgaben">Aufgaben</h2>
+
+<p>Sechs Aufgaben zur ganzen Bandbreite: Winkel, Hierarchie, Flächenformeln, Sehnen-/Tangentenviereck, regelmässige Vielecke, Anwendung. Lösungen sind ausklappbar.</p>
+
+<!-- A1 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Innenwinkelsumme im n-Eck</span></div>
+  <p>Bestimme die Innenwinkelsumme:</p>
+  <ol class="aufg-liste">
+    <li>im Zwölfeck</li>
+    <li>im 100-Eck</li>
+    <li>Ein regelmässiges n-Eck hat Innenwinkel \(150°\). Wie viele Ecken hat es?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA1')">▶ Lösung</button>
+  <div class="loesung-body" id="lA1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>\(\sigma_{12} = (12 - 2) \cdot 180° = 10 \cdot 180° = \mathbf{1800°}\).</li>
+        <li>\(\sigma_{100} = (100 - 2) \cdot 180° = 98 \cdot 180° = \mathbf{17\,640°}\).</li>
+        <li>Innenwinkel im regelmässigen n-Eck: \(\alpha_n = \dfrac{(n-2) \cdot 180°}{n} = 150°\). Auflösen:<br>
+         \((n-2) \cdot 180° = 150° \cdot n \;\Rightarrow\; 180n - 360 = 150n \;\Rightarrow\; 30n = 360 \;\Rightarrow\; \mathbf{n = 12}\). Ein regelmässiges Zwölfeck.</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Vierecks-Hierarchie</span></div>
+  <p>Welche Aussagen sind wahr? Begründe kurz.</p>
+  <ol class="aufg-liste">
+    <li>Jedes Quadrat ist ein Rechteck.</li>
+    <li>Jedes Rechteck ist ein Parallelogramm.</li>
+    <li>Jeder Rhombus ist ein Quadrat.</li>
+    <li>Jedes Parallelogramm ist ein Trapez.</li>
+    <li>Jeder Drachen ist ein Rhombus.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA2')">▶ Lösung</button>
+  <div class="loesung-body" id="lA2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li><strong>Wahr.</strong> Ein Quadrat ist ein Rechteck mit zusätzlich gleichen Seiten.</li>
+        <li><strong>Wahr.</strong> Ein Rechteck hat per Definition zwei Paar paralleler Seiten.</li>
+        <li><strong>Falsch.</strong> Ein Rhombus hat alle Seiten gleich, aber nicht zwangsläufig rechte Winkel. Erst <em>mit</em> rechten Winkeln wird er zum Quadrat.</li>
+        <li><strong>Wahr.</strong> Ein Parallelogramm hat sogar zwei Paare paralleler Seiten — also erst recht <em>ein</em> Paar (Definition Trapez).</li>
+        <li><strong>Falsch.</strong> Ein Drachen hat zwei <em>Paare benachbarter</em> gleich langer Seiten — die beiden Paare müssen aber nicht gleich lang sein. Beim Rhombus sind <em>alle vier</em> Seiten gleich. Jeder Rhombus ist Drachen, aber nicht umgekehrt.</li>
+      </ol>
+
+      <div class="block block-tipp" style="margin:6px 0">
+        <div class="block-titel">💡 Inklusive vs. exklusive Trapez-Definition</div>
+        <p>Die Aussage „Jedes Parallelogramm ist ein Trapez" gilt in der <strong>inklusiven</strong>
+        Definition (Trapez = Viereck mit <em>mindestens</em> einem Paar paralleler Seiten) — so wird
+        Trapez in diesem Lehrmittel, in der Schweizer Schul-Geometrie sowie im englischsprachigen
+        Raum verstanden. In manchen älteren DACH-Lehrbüchern findet sich die <em>exklusive</em>
+        Definition (Trapez = Viereck mit <em>genau</em> einem Paar paralleler Seiten); nach dieser
+        wäre ein Parallelogramm <em>kein</em> Trapez. Die Hierarchie-Tabelle oben (Quadrat →
+        Rechteck → Parallelogramm → Trapez → Viereck) funktioniert nur mit der inklusiven
+        Definition — und liefert dafür den klaren Vorteil, dass jede Spezialform <em>alle</em>
+        Eigenschaften ihrer Oberklassen erbt.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Flächen vergleichen</span></div>
+  <p>Drei Vierecke haben dieselbe Grundseite \(g = 12\,\text{cm}\) und Höhe \(h = 5\,\text{cm}\):</p>
+  <ol class="aufg-liste">
+    <li>Ein Rechteck \(12\,\text{cm} \times 5\,\text{cm}\).</li>
+    <li>Ein Parallelogramm mit Grundseite \(12\,\text{cm}\) und Höhe \(5\,\text{cm}\) (Schenkel \(6\,\text{cm}\)).</li>
+    <li>Ein Trapez mit Parallelseiten \(15\,\text{cm}\) und \(9\,\text{cm}\) und Höhe \(5\,\text{cm}\).</li>
+  </ol>
+  <p>Berechne jeweils die Fläche. Was beobachtest Du?</p>
+  <button class="loesung-toggle" onclick="toggleL('lA3')">▶ Lösung</button>
+  <div class="loesung-body" id="lA3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>\(A = 12 \cdot 5 = \mathbf{60\,\text{cm}^2}\).</li>
+        <li>\(A = g \cdot h = 12 \cdot 5 = \mathbf{60\,\text{cm}^2}\). (Der Schenkel taucht nicht in der Flächenformel auf!)</li>
+        <li>\(A = \tfrac{1}{2}(a+c) \cdot h = \tfrac{1}{2}(15 + 9) \cdot 5 = \tfrac{1}{2} \cdot 24 \cdot 5 = \mathbf{60\,\text{cm}^2}\).</li>
+      </ol>
+
+      <p><strong>Beobachtung:</strong> Alle drei Flächen sind gleich gross. Das Trapez hat in Aufgabe 3) die Mittellinie \(m = \tfrac{1}{2}(15+9) = 12\,\text{cm}\) — genau die Grundseite der ersten beiden Figuren. Die Mittellinie eines Trapezes spielt also die Rolle einer „effektiven Grundseite".</p>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Sehnen- und Tangentenviereck</span></div>
+  <p>Beantworte:</p>
+  <ol class="aufg-liste">
+    <li>Ein Sehnenviereck hat die Winkel \(\alpha = 78°\), \(\beta = 95°\), \(\gamma = 102°\). Bestimme \(\delta\). Prüfe Konsistenz.</li>
+    <li>Ein Tangentenviereck hat Seiten \(a = 7\,\text{cm}\), \(b = 4\,\text{cm}\), \(c = 5\,\text{cm}\). Bestimme \(d\).</li>
+    <li>Welcher der folgenden ist <em>kein</em> Sehnenviereck: Quadrat, Rechteck, allgemeines Parallelogramm, gleichschenkliges Trapez?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA4')">▶ Lösung</button>
+  <div class="loesung-body" id="lA4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>Bedingung Sehnenviereck: \(\alpha + \gamma = 180°\). Probe: \(78° + 102° = 180°\). ✓ Also auch \(\beta + \delta = 180°\), daraus \(\delta = 180° - 95° = \mathbf{85°}\). Kontrolle Winkelsumme: \(78 + 95 + 102 + 85 = 360°\). ✓</li>
+        <li>Bedingung Tangentenviereck: \(a + c = b + d\). Auflösen: \(d = a + c - b = 7 + 5 - 4 = \mathbf{8\,\text{cm}}\).</li>
+        <li><strong>Allgemeines Parallelogramm</strong>. Begründung: Im Parallelogramm gilt \(\alpha + \beta = 180°\) (zusammenliegende Winkel an parallelen Seiten). Sehnenviereck-Bedingung \(\alpha + \gamma = 180°\) zusätzlich erforderlich; im Parallelogramm ist aber \(\gamma = \alpha\) (Gegenwinkel gleich). Aus beidem würde \(2\alpha = 180°\), also \(\alpha = 90°\) folgen — das wäre dann ein Rechteck. Daher: Rechteck (und damit auch Quadrat) ist Sehnenviereck; gleichschenkliges Trapez ist Sehnenviereck (Symmetrieargument); ein <em>allgemeines</em> Parallelogramm aber nicht.</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Regelmässiges Sechseck</span></div>
+  <p>Ein regelmässiges Sechseck hat den Umkreisradius \(R = 4\,\text{cm}\). Bestimme:</p>
+  <ol class="aufg-liste">
+    <li>den Zentriwinkel \(\zeta_6\) und den Innenwinkel \(\alpha_6\)</li>
+    <li>die Seitenlänge \(s\) (begründe, warum hier keine Trigonometrie nötig ist)</li>
+    <li>den Inkreisradius \(r\) (Apothem)</li>
+    <li>den Umfang \(U\) und die Fläche \(A\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA5')">▶ Lösung</button>
+  <div class="loesung-body" id="lA5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>\(\zeta_6 = 360°/6 = \mathbf{60°}\). \(\alpha_6 = 180° - 60° = \mathbf{120°}\).</li>
+        <li>Das Sechseck zerfällt in sechs gleichseitige Dreiecke mit Seite \(R\) (das Bestimmungsdreieck ist gleichschenklig mit Spitzwinkel \(60°\) — also gleichseitig). Daher \(s = R = \mathbf{4\,\text{cm}}\). Keine Trigonometrie nötig.</li>
+        <li>Der Inkreisradius ist die Höhe eines dieser gleichseitigen Dreiecke: \(r = \dfrac{s \sqrt{3}}{2} = \dfrac{4\sqrt{3}}{2} = \mathbf{2\sqrt{3} \approx 3.46\,\text{cm}}\).</li>
+        <li>Umfang: \(U = 6s = \mathbf{24\,\text{cm}}\). Fläche: Sechs gleichseitige Dreiecke, jedes mit Fläche \(\tfrac{s^2\sqrt{3}}{4} = 4\sqrt{3}\). Also \(A = 6 \cdot 4\sqrt{3} = \mathbf{24\sqrt{3} \approx 41.57\,\text{cm}^2}\).</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung: Grundstück</span></div>
+  <p>Ein Grundstück hat die Form eines Trapezes. Die strassenseitige Grundseite ist \(28\,\text{m}\) lang, die parallele Rückseite \(20\,\text{m}\), die Tiefe (senkrecht zur Strasse) beträgt \(35\,\text{m}\). Berechne:</p>
+  <ol class="aufg-liste">
+    <li>die Grundstücksfläche</li>
+    <li>die Länge der Mittellinie (= Tiefe in der „mittleren Breite")</li>
+    <li>den Preis bei einem Bodenpreis von \(420\,\text{CHF/m}^2\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA6')">▶ Lösung</button>
+  <div class="loesung-body" id="lA6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>\(A = \tfrac{1}{2}(a + c) \cdot h = \tfrac{1}{2}(28 + 20) \cdot 35 = \tfrac{1}{2} \cdot 48 \cdot 35 = \mathbf{840\,\text{m}^2}\).</li>
+        <li>Mittellinie: \(m = \tfrac{1}{2}(a + c) = \tfrac{1}{2}(28 + 20) = \mathbf{24\,\text{m}}\). Probe über die Fläche: \(A = m \cdot h = 24 \cdot 35 = 840\,\text{m}^2\). ✓</li>
+        <li>Preis: \(840 \cdot 420 = \mathbf{352\,800\,\text{CHF}}\).</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Drachenkonstruktion aus Diagonalen</span></div>
+  <p>Ein Drache (Viereck mit zwei Paaren gleicher benachbarter Seiten) wird durch zwei senkrechte Diagonalen aufgebaut. Die horizontale Diagonale ist 60 cm lang, die vertikale 80 cm lang. Der Schnittpunkt der Diagonalen teilt die vertikale Diagonale im Verhältnis \(1:3\) (von oben).</p>
+  <div style="text-align:center;margin:10px 0">
+    <svg viewBox="0 0 200 240" width="160" height="190" style="border:1px solid var(--linie);border-radius:6px;background:var(--papier-2)" role="img" aria-label="Drachen mit senkrechten Diagonalen, vertikale Diagonale im Verhältnis 1:3 geteilt">
+      <!-- Diagonalen (Hilfslinien) -->
+      <line x1="100" y1="40" x2="100" y2="200" stroke="#888" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="40" y1="80" x2="160" y2="80" stroke="#888" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Drachen-Umriss -->
+            <p><!-- Eckpunkte -->
+      <circle cx="100" cy="40" r="3" fill="#1a4f8a"/>
+      <circle cx="160" cy="80" r="3" fill="#1a4f8a"/>
+      <circle cx="100" cy="200" r="3" fill="#1a4f8a"/>
+      <circle cx="40" cy="80" r="3" fill="#1a4f8a"/>
+      <circle cx="100" cy="80" r="2.5" fill="#b85c00"/>
+      <!-- Längenangaben -->
+      <text x="105" y="62" font-size="10" fill="#5a5040" font-family="JetBrains Mono, monospace">20</text>
+      <text x="105" y="140" font-size="10" fill="#5a5040" font-family="JetBrains Mono, monospace">60</text>
+      <text x="62" y="76" font-size="10" fill="#5a5040" font-family="JetBrains Mono, monospace">30</text>
+      <text x="125" y="76" font-size="10" fill="#5a5040" font-family="JetBrains Mono, monospace">30</text>
+      <!-- Ecken-Labels -->
+      <text x="92" y="36" font-size="11" fill="#1a4f8a" font-weight="700">A</text>
+      <text x="166" y="84" font-size="11" fill="#1a4f8a" font-weight="700">B</text>
+      <text x="92" y="216" font-size="11" fill="#1a4f8a" font-weight="700">C</text>
+      <text x="26" y="84" font-size="11" fill="#1a4f8a" font-weight="700">D</text>
+      <text x="106" y="88" font-size="10" fill="#b85c00" font-weight="700">M</text>
+    </svg>
+    <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:4px">Schnittpunkt \(M\) teilt \(\overline{AC}\) im Verhältnis \(20:60\), \(\overline{BD}\) ist halbiert (je 30 cm).</div>
+  </div>
+  <p></p>
+      <ol class="aufg-liste">
+        <li>Berechne die Längen der vier Drachenseiten</li>
+        <li>Welche Symmetrie hat das Viereck?</li>
+        <li>Berechne die Fläche</li>
+      </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2b-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2b-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Vertikale Diagonale 80 cm im Verhältnis \(1:3\) → oberer Teil \(20\,\text{cm}\), unterer Teil \(60\,\text{cm}\). Horizontale Diagonale halbiert (Drachen-Eigenschaft): je \(30\,\text{cm}\) links und rechts. Die zwei oberen Seiten: \(\sqrt{30^2 + 20^2} = \sqrt{1300} \approx 36.06\,\text{cm}\). Die zwei unteren Seiten: \(\sqrt{30^2 + 60^2} = \sqrt{4500} \approx 67.08\,\text{cm}\).</li>
+        <li>Achsensymmetrisch zur vertikalen Diagonale. Die horizontale Diagonale ist <em>keine</em> Symmetrieachse, weil sie das Viereck in asymmetrische Hälften teilt.</li>
+        <li>Drachenflächen-Formel: \(A = \tfrac{1}{2} \cdot d_1 \cdot d_2 = \tfrac{1}{2} \cdot 60 \cdot 80 = 2400\,\text{cm}^2\). Die Aufteilung der Diagonalen spielt für die Fläche keine Rolle.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Im <strong>n-Eck</strong> beträgt die Innenwinkelsumme \((n-2) \cdot 180°\) — das gilt universell, weil sich jedes n-Eck in \(n-2\) Dreiecke zerlegen lässt. Bei den speziellen Vierecken (Quadrat, Rechteck, Parallelogramm, Rhombus, Trapez) hilft die <strong>Hierarchie</strong> beim Beweisen: ein Quadrat ist immer auch Rechteck, Rhombus, Parallelogramm und Trapez — was für die obere Klasse gilt, gilt auch für die unteren.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-top:14px;margin-bottom:14px">
+  <thead><tr><th>Sachverhalt</th><th>Formel</th></tr></thead>
+  <tbody>
+    <tr><td>Innenwinkelsumme im Viereck</td><td>\( \alpha + \beta + \gamma + \delta = 360° \)</td></tr>
+    <tr><td>Innenwinkelsumme im n-Eck</td><td>\( \sigma_n = (n-2) \cdot 180° \)</td></tr>
+    <tr><td>Mittellinie im Trapez</td><td>\( m = \tfrac{1}{2}(a + c) \)</td></tr>
+    <tr><td>Fläche Parallelogramm</td><td>\( A = g \cdot h \)</td></tr>
+    <tr><td>Fläche Trapez</td><td>\( A = \tfrac{1}{2}(a + c) \cdot h = m \cdot h \)</td></tr>
+    <tr><td>Fläche Rhombus / Drachen</td><td>\( A = \tfrac{1}{2}\, e \cdot f \)</td></tr>
+    <tr><td>Sehnenviereck</td><td>\( \alpha + \gamma = 180°,\;\; \beta + \delta = 180° \)</td></tr>
+    <tr><td>Tangentenviereck</td><td>\( a + c = b + d \)</td></tr>
+    <tr><td>Regelmässiges n-Eck — Zentriwinkel</td><td>\( \zeta_n = 360°/n \)</td></tr>
+    <tr><td>Regelmässiges n-Eck — Innenwinkel</td><td>\( \alpha_n = 180° - \zeta_n \)</td></tr>
+    <tr><td>Regelmässiges n-Eck — Seitenlänge</td><td>\( s = 2R \sin(\zeta_n/2) \)</td></tr>
+    <tr><td>Regelmässiges n-Eck — Inkreisradius</td><td>\( r = R \cos(\zeta_n/2) \)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g5-2b-vierecke/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-2b-vierecke/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-2b-vierecke/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-2b-vierecke/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-2b-vierecke/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid" id="g52b-videos">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lVRLFql-2N3u5-2ZgWp9A7-" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">GEOMETRIE — Dreieck, Prisma, Kreis, Trapez — Playlist</div><div class="lk-s">MathemaTrick · 60 Videos · Trapez und Viereck-Anteile decken 5.2b ab</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzmX2iRZzdG8KuHJZA6sayy0" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Vierecke — Geometrie — Playlist</div><div class="lk-s">Lehrerschmidt · 30 Videos · Quadrat, Rechteck, Raute, Parallelogramm, Trapez, Drachen — komplette Cluster-Übersicht</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzk7Iw3l2Uxe7ftYXHmZ0Jhw" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Geometrie — Vierecke — Kurzversion — Playlist</div><div class="lk-s">Lehrerschmidt · 12 Videos · kompakter Schnelldurchgang</div></div></a>
+  <a class="lk" style="opacity:0.6;cursor:default;" aria-disabled="true">
+    <span class="lk-ic">⏳</span>
+    <div>
+      <div class="lk-t">In Vorbereitung</div>
+      <div class="lk-s">Eine vierte Quelle wird beim nächsten Recherche-Lauf ergänzt — Mathe SMI, Mathehoch13 und Magda decken Vierecks-Grundlagen kein passendes BM-Niveau ab.</div>
+    </div>
+  </a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid" id="g52b-aufgaben">
+  <a href="https://de.serlo.org/mathe/24392/aufgaben-zum-parallelogramm" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Parallelogramm</div><div class="lk-s">Eigenschaften, Diagonalen, Flächen-/Umfangsaufgaben · interaktive Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/24394/aufgaben-zum-trapez" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Trapez</div><div class="lk-s">Flächenformel, Mittellinie, Anwendungen · Schritt-für-Schritt-Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/40887/aufgaben-zu-besonderen-vierecksarten-und-ihren-eigenschaften" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Besondere Vierecksarten</div><div class="lk-s">Hierarchie, Eigenschaften der einzelnen Vierecksformen · mit Lösungen</div></div></a>
+  <a href="https://sos-mathe.ch/g/g6/g61/aufg_g61.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Konstruktionsaufgaben</div><div class="lk-s">G61 · Symmetrie, Vierecks-Konstruktionen · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Grundlagenfach 5.2b Vierecke</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script>
+buildNav({
+  bereich:'grundlagen',
+  id:'g5-2b',
+  kapitelNr:'5.2b', kapitelTitel:'Vierecke',
+  prev:{nr:'5.2a',titel:'Dreiecke',url:'g5-2a-dreiecke.html'},
+  next:{nr:'5.2c',titel:'Kreis und Kreisteile',url:'g5-2c-kreis-und-kreisteile.html'}
+});
+</script>
+
+<!-- ================================================================ -->
+<!-- ANIMATIONEN — JavaScript                                          -->
+<!-- ================================================================ -->
+<script>
+/* ============================================================
+ *  GEMEINSAME HELFER
+ * ============================================================ */
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function fmtDeg(rad) { return (rad * 180 / Math.PI).toFixed(1) + '°'; }
+
+function initCv(id) {
+  const cv = document.getElementById(id);
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  if (cv.width !== Math.round(rect.width * dpr)) {
+    cv.width = Math.round(rect.width * dpr);
+    cv.height = Math.round(rect.height * dpr);
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, rect.width, rect.height);
+  return { ctx, W: rect.width, H: rect.height, cv };
+}
+
+const css = getComputedStyle(document.documentElement);
+const C = {
+  blau:      (css.getPropertyValue('--blau').trim()       || '#1e3a8a'),
+  blauHell:  (css.getPropertyValue('--blau-hell').trim()  || '#dbeafe'),
+  blauRand:  (css.getPropertyValue('--blau-rand').trim()  || '#93c5fd'),
+  gruen:     (css.getPropertyValue('--gruen').trim()      || '#166534'),
+  gruenHell: (css.getPropertyValue('--gruen-hell').trim() || '#dcfce7'),
+  gruenRand: (css.getPropertyValue('--gruen-rand').trim() || '#86efac'),
+  rot:       (css.getPropertyValue('--rot').trim()        || '#991b1b'),
+  rotHell:   (css.getPropertyValue('--rot-hell').trim()   || '#fee2e2'),
+  orange:    (css.getPropertyValue('--orange').trim()     || '#c2410c'),
+  orangeH:   (css.getPropertyValue('--orange-hell').trim()|| '#ffedd5'),
+  lila:      (css.getPropertyValue('--lila').trim()       || '#6b21a8'),
+  linie:     (css.getPropertyValue('--linie').trim()      || '#cbd5e1'),
+  tinte:     (css.getPropertyValue('--tinte').trim()      || '#0f172a'),
+  tinte2:    (css.getPropertyValue('--tinte-2').trim()    || '#475569'),
+};
+const ORANGE_FILL = 'rgba(194, 65, 12, 0.22)';
+const GRUEN_FILL  = 'rgba(22, 101, 52, 0.30)';
+const BLAU_FILL   = 'rgba(30, 58, 138, 0.15)';
+
+function fillPoly(ctx, pts, fill, stroke, lw = 2, alpha = 1) {
+  if (pts.length < 2) return;
+  ctx.save();
+  if (alpha < 1) ctx.globalAlpha = alpha;
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.closePath();
+  if (fill)   { ctx.fillStyle   = fill;   ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+  ctx.restore();
+}
+function dashedSeg(ctx, p1, p2, color, lw = 1.5, dash = [5, 4]) {
+  ctx.save();
+  ctx.setLineDash(dash);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function seg(ctx, p1, p2, color, lw = 2) {
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = lw;
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='middle', weight='600') {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
+  ctx.textAlign = align;
+  ctx.textBaseline = base;
+  ctx.fillText(s, x, y);
+  ctx.restore();
+}
+function dot(ctx, p, color = C.blau, r = 5) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(p[0], p[1], r, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.restore();
+}
+function angleArc(ctx, P, Q, R, radius, color, lw = 1.5) {
+  const a1 = Math.atan2(Q[1] - P[1], Q[0] - P[0]);
+  const a2 = Math.atan2(R[1] - P[1], R[0] - P[0]);
+  let da = a2 - a1;
+  while (da < 0) da += 2 * Math.PI;
+  while (da > 2 * Math.PI) da -= 2 * Math.PI;
+  const ccw = da > Math.PI;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.beginPath();
+  ctx.arc(P[0], P[1], radius, a1, a2, ccw);
+  ctx.stroke();
+  ctx.restore();
+  return { a1, a2, da: ccw ? 2*Math.PI - da : da };
+}
+function dist(p, q) { return Math.hypot(p[0]-q[0], p[1]-q[1]); }
+function angleAt(P, Q, R) {
+  const v1 = [Q[0]-P[0], Q[1]-P[1]];
+  const v2 = [R[0]-P[0], R[1]-P[1]];
+  const cv = (v1[0]*v2[0] + v1[1]*v2[1]) / (Math.hypot(...v1) * Math.hypot(...v2));
+  return Math.acos(clamp(cv, -1, 1));
+}
+
+/* Masslinie mit Pfeilen (aus eval-Datei übernommen) */
+function arrow(ctx, x, y, dx, dy) {
+  const s = 5;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + s * dx + s * dy * 0.4, y + s * dy + s * dx * 0.4);
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + s * dx - s * dy * 0.4, y + s * dy - s * dx * 0.4);
+  ctx.stroke();
+}
+function drawMass(ctx, x1, y1, x2, y2, text, lage) {
+  ctx.save();
+  ctx.strokeStyle = C.tinte2;
+  ctx.fillStyle = C.tinte2;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+  ctx.stroke();
+  arrow(ctx, x1, y1, x2 < x1 ? +1 : (x2 > x1 ? -1 : 0), y2 < y1 ? +1 : (y2 > y1 ? -1 : 0));
+  arrow(ctx, x2, y2, x1 < x2 ? +1 : (x1 > x2 ? -1 : 0), y1 < y2 ? +1 : (y1 > y2 ? -1 : 0));
+  ctx.fillStyle = C.tinte;
+  ctx.font = '600 14px "Source Sans 3", sans-serif';
+  if (lage === 'unten') {
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText(text, (x1 + x2) / 2, y1 + 6);
+  } else if (lage === 'links') {
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(text, x1 - 6, (y1 + y2) / 2);
+  } else if (lage === 'oben') {
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText(text, (x1 + x2) / 2, y1 - 6);
+  } else if (lage === 'rechts') {
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(text, x1 + 6, (y1 + y2) / 2);
+  }
+  ctx.restore();
+}
+
+/* Grünes Resultat-Rechteck */
+function drawZielRechteck(ctx, xLinks, xRechts, yUnten, hoeheGruen, alpha) {
+  const Rect = [
+    [xLinks, yUnten],
+    [xRechts, yUnten],
+    [xRechts, yUnten - hoeheGruen],
+    [xLinks, yUnten - hoeheGruen]
+  ];
+  fillPoly(ctx, Rect, GRUEN_FILL, C.gruen, 2, alpha);
+}
+
+/* ============================================================
+ *  ANIMATION 2 — Rechteck (Flächenformel A = a · b)
+ *  Direkte Adaption aus eval-flaechenberechnung.html (Anim 1)
+ *  IDs mit Prefix flR- (Fläche-Rechteck), um Kollisionen zu vermeiden
+ * ============================================================ */
+const flR_sldA   = document.getElementById('flR-sldA');
+const flR_sldB   = document.getElementById('flR-sldB');
+const flR_lblA   = document.getElementById('flR-lblA');
+const flR_lblB   = document.getElementById('flR-lblB');
+const flR_lblA2  = document.getElementById('flR-lblA2');
+const flR_lblB2  = document.getElementById('flR-lblB2');
+const flR_lblF   = document.getElementById('flR-lblF');
+const flR_lblE2  = document.getElementById('flR-lblEinheit2');
+const flR_togRas = document.getElementById('flR-togRaster');
+const flR_togZ   = document.getElementById('flR-togZaehlen');
+let flR_einheit  = 'cm';
+
+document.querySelectorAll('#flR-einheiten .chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#flR-einheiten .chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    flR_einheit = btn.dataset.einheit;
+    drawRechteck();
+  });
+});
+[flR_sldA, flR_sldB, flR_togRas, flR_togZ].forEach(el => el.addEventListener('input', drawRechteck));
+
+function drawRechteck() {
+  const a = +flR_sldA.value, b = +flR_sldB.value;
+  flR_lblA.textContent  = a;
+  flR_lblB.textContent  = b;
+  flR_lblA2.textContent = a;
+  flR_lblB2.textContent = b;
+  flR_lblF.textContent  = a * b;
+  flR_lblE2.textContent = flR_einheit + '²';
+
+  const { ctx, W, H } = initCv('cv-rect');
+
+  // Zeichenfläche
+  const padL = 60, padR = 50, padT = 40, padB = 50;
+  const usableW = W - padL - padR;
+  const usableH = H - padT - padB;
+  // Quadratische Einheitsquadrate: Skalierungsfaktor anhand max(a, b)
+  const maxN = Math.max(a, b, 6);  // Mindest-Massstab für stabile Grösse
+  const cell = Math.min(usableW / Math.max(a, 1), usableH / Math.max(b, 1));
+  const cellSafe = Math.min(cell, Math.min(usableW / maxN, usableH / maxN) * 1.6);
+  const rectW = cellSafe * a;
+  const rectH = cellSafe * b;
+  const x0 = padL + (usableW - rectW) / 2;
+  const y0 = padT + (usableH - rectH) / 2;
+
+  // Rechteck-Füllung
+  ctx.fillStyle = C.blauHell;
+  ctx.fillRect(x0, y0, rectW, rectH);
+
+  // Einheitsquadrate-Raster
+  if (flR_togRas.checked) {
+    ctx.strokeStyle = C.blauRand;
+    ctx.lineWidth = 1;
+    for (let i = 1; i < a; i++) {
+      const x = x0 + i * cellSafe;
+      ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y0 + rectH); ctx.stroke();
+    }
+    for (let j = 1; j < b; j++) {
+      const y = y0 + j * cellSafe;
+      ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x0 + rectW, y); ctx.stroke();
+    }
+    // Quadrate zählen
+    if (flR_togZ.checked && cellSafe > 22) {
+      ctx.fillStyle = C.blau;
+      ctx.font = `${Math.min(14, cellSafe * 0.4)}px "JetBrains Mono", ui-monospace, monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      let k = 1;
+      for (let j = 0; j < b; j++) {
+        for (let i = 0; i < a; i++) {
+          const cxC = x0 + i * cellSafe + cellSafe / 2;
+          const cyC = y0 + j * cellSafe + cellSafe / 2;
+          ctx.fillText(k++, cxC, cyC);
+        }
+      }
+    }
+  }
+
+  // Aussenkontur
+  ctx.strokeStyle = C.blau;
+  ctx.lineWidth = 2.5;
+  ctx.strokeRect(x0, y0, rectW, rectH);
+
+  // Masslinien
+  drawMass(ctx, x0, y0 + rectH + 18, x0 + rectW, y0 + rectH + 18, `a = ${a} ${flR_einheit}`, 'unten');
+  drawMass(ctx, x0 - 18, y0, x0 - 18, y0 + rectH, `b = ${b} ${flR_einheit}`, 'links');
+
+  // Flächenangabe in der Mitte (nur wenn nicht durchgezählt wird)
+  if (!flR_togZ.checked || cellSafe <= 22) {
+    ctx.fillStyle = C.blau;
+    ctx.font = '700 22px "Source Serif 4", Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`A = ${a * b} ${flR_einheit}²`, x0 + rectW / 2, y0 + rectH / 2);
+  }
+}
+
+
+/* ============================================================
+ *  ANIMATION 1 — n-Eck mit Dreieckszerlegung
+ * ============================================================ */
+const sldN     = document.getElementById('sld-n');
+const lblN     = document.getElementById('lbl-n');
+const togNDiag = document.getElementById('tog-n-diag');
+const togNWk   = document.getElementById('tog-n-winkel');
+const formelN  = document.getElementById('formel-n');
+const tabN     = document.getElementById('tab-n');
+const erklN    = document.getElementById('erkl-n');
+
+function drawNEck() {
+  const { ctx, W, H } = initCv('cv-nEck');
+  const n = +sldN.value;
+  lblN.textContent = n;
+
+  // Tabellenzeile markieren
+  tabN.querySelectorAll('tr').forEach(r => r.classList.remove('aktiv'));
+  const aktRow = tabN.querySelector(`tr[data-n="${n}"]`);
+  if (aktRow) aktRow.classList.add('aktiv');
+
+  const summe = (n - 2) * 180;
+  formelN.innerHTML = `\\( \\sigma_{${n}} = (${n}-2)\\cdot 180° = ${summe}° \\)`;
+
+  // Erklärungstext
+  const txtMap = {
+    3: 'Das Dreieck ist die Basis aller Vielecke. Innenwinkelsumme \\(\\sigma_3 = 180°\\).',
+    4: 'Eine Diagonale teilt das Viereck in zwei Dreiecke. \\(\\sigma_4 = 2 \\cdot 180° = 360°\\).',
+    5: 'Vom Eckpunkt \\(A\\) ausgehend zerlegen \\(n-3\\) Diagonalen das n-Eck in \\(n-2\\) Dreiecke. Jedes Dreieck steuert \\(180°\\) bei.',
+    6: 'Sechs Ecken, vier Dreiecke. Im regelmässigen Sechseck beträgt jeder Innenwinkel \\(720°/6 = 120°\\).',
+    7: 'Sieben Ecken, fünf Dreiecke. Innenwinkelsumme \\(900°\\) — im regelmässigen Siebeneck je \\(900°/7 \\approx 128.6°\\).',
+    8: 'Acht Ecken, sechs Dreiecke. Innenwinkelsumme \\(1080°\\) — im regelmässigen Achteck je \\(135°\\).',
+  };
+  erklN.innerHTML = txtMap[n];
+
+  // Vieleck-Eckpunkte: gleichmässig auf Kreis um Mittelpunkt
+  const cx = W / 2, cy = H / 2 + 8;
+  const R = Math.min(W, H) * 0.36;
+  // Leichte Unregelmässigkeit per Versatz, damit es nicht zu „regelmässig" aussieht
+  // Für n=4 mache ich es absichtlich allgemeines Viereck
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    // Startwinkel oben (-π/2), Drehsinn UZS (positives Winkel = nach rechts)
+    let a = -Math.PI/2 + 2*Math.PI * i / n;
+    // Unregelmässigkeit: jede zweite Ecke leicht nach innen ziehen
+    const r = R * (i % 2 === 0 ? 1.0 : 0.85);
+    pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+  }
+
+  // Vieleck-Füllung (hellblau)
+  fillPoly(ctx, pts, C.blauHell, C.blau, 2.5);
+
+  // Diagonalen-Zerlegung
+  if (togNDiag.checked && n > 3) {
+    ctx.save();
+    ctx.strokeStyle = C.orange;
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([5, 3]);
+    // Vom Eckpunkt 0 ausgehend Diagonalen zu allen nicht-benachbarten Eckpunkten
+    for (let j = 2; j < n - 1; j++) {
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0], pts[0][1]);
+      ctx.lineTo(pts[j][0], pts[j][1]);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Innenwinkel markieren (kleine Bögen + Beschriftung im regelmässigen Fall)
+  if (togNWk.checked) {
+    const labels = ['α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ'];
+    for (let i = 0; i < n; i++) {
+      const prev = pts[(i - 1 + n) % n];
+      const next = pts[(i + 1) % n];
+      const cur  = pts[i];
+      // Bogen-Radius klein
+      const arcR = 18;
+      // Bogen vom Strahl zu prev zu Strahl zu next, innen
+      // Mittlerer Winkelvektor zur Innenrichtung
+      const v1 = [prev[0]-cur[0], prev[1]-cur[1]];
+      const v2 = [next[0]-cur[0], next[1]-cur[1]];
+      const len1 = Math.hypot(...v1), len2 = Math.hypot(...v2);
+      // Winkelhalbierende (innenwärts)
+      const bx = v1[0]/len1 + v2[0]/len2;
+      const by = v1[1]/len1 + v2[1]/len2;
+      const blen = Math.hypot(bx, by);
+      // Beschriftung an Winkelhalbierender
+      if (blen > 0.01 && n <= 6) {
+        const lx = cur[0] + bx/blen * 30;
+        const ly = cur[1] + by/blen * 30;
+        txt(ctx, lx, ly, labels[i], C.blau, 13);
+      }
+      // Bogen selbst zeichnen
+      angleArc(ctx, cur, prev, next, arcR, C.blau, 1.3);
+    }
+  }
+
+  // Eckpunkte
+  for (let i = 0; i < n; i++) {
+    dot(ctx, pts[i], C.blau, 4);
+  }
+  // A immer beschriften (das Eck, von dem Diagonalen ausgehen)
+  txt(ctx, pts[0][0], pts[0][1] - 16, 'A', C.tinte, 14);
+
+  // Innenwinkelsumme gross anzeigen unten links
+  txt(ctx, 80, H - 26, `σ${subscr(n)} = ${summe}°`, C.blau, 18, 'left', 'middle', '700');
+  txt(ctx, 80, H - 8, `${n - 2} Dreiecke × 180°`, C.tinte2, 12, 'left', 'middle', '400');
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([formelN, erklN]);
+}
+
+function subscr(n) {
+  const map = {'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'};
+  return n.toString().split('').map(d => map[d] || d).join('');
+}
+
+[sldN, togNDiag, togNWk].forEach(el => el.addEventListener('input', drawNEck));
+
+
+/* ============================================================
+ *  ANIMATION 2 — Flächenumformung (Parallelogramm/Dreieck/Trapez/Raute/Drachen)
+ *  Direkte Adaption aus eval-flaechenberechnung.html (Anim 2)
+ * ============================================================ */
+const sldTF   = document.getElementById('sld-tF');
+const lblTF   = document.getElementById('lbl-tF');
+const togFM   = document.getElementById('tog-F-mass');
+const fBoxF   = document.getElementById('formel-F');
+const erklF   = document.getElementById('erkl-F');
+const schritteF = document.getElementById('schritte-F');
+let figurF    = 'parallelogramm';
+
+document.querySelectorAll('#figuren .chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#figuren .chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    figurF = btn.dataset.figur;
+    sldTF.value = 0;
+    drawUmformung();
+  });
+});
+[sldTF, togFM].forEach(el => el.addEventListener('input', drawUmformung));
+
+function updateSchritteF(t) {
+  const idx =
+    t < 0.05 ? 0 :
+    t < 0.40 ? 1 :
+    t < 0.85 ? 2 :
+    3;
+  schritteF.querySelectorAll('span').forEach((s, i) =>
+    s.classList.toggle('akt', i === idx)
+  );
+}
+
+function drawUmformung() {
+  const t = +sldTF.value;
+  lblTF.textContent = t.toFixed(2);
+  updateSchritteF(t);
+
+  const { ctx, W, H } = initCv('cv-flaeche');
+  const cx = W / 2, cy = H / 2 + 10;
+  const G = 240, Hh = 130;
+
+  switch (figurF) {
+    case 'parallelogramm': drawParaF(ctx, cx, cy, G, Hh, 70, t); break;
+    case 'dreieck':        drawDreF (ctx, cx, cy, G, Hh, 60, t); break;
+    case 'trapez':         drawTrpF (ctx, cx, cy, 230, Hh, 120, 40, t); break;
+    case 'raute':          drawRauF (ctx, cx, cy, 210, 150, t); break;
+    case 'drachen':        drawDraF (ctx, cx, cy, 180, 90, 160, t); break;
+  }
+}
+
+/* PARALLELOGRAMM — Schnitt rechts, Anbau links aussen */
+function drawParaF(ctx, cx, cy, g, h, vers, t) {
+  const yU = cy + h / 2, yO = cy - h / 2;
+  const A  = [cx - g/2 - vers/2,        yU];
+  const B  = [cx + g/2 - vers/2,        yU];
+  const C0 = [cx + g/2 - vers/2 + vers, yO];
+  const D  = [cx - g/2 - vers/2 + vers, yO];
+  const S  = [B[0], yO];
+
+  fillPoly(ctx, [A, B, C0, D], C.blauHell, C.blau, 2);
+
+  const tCut   = clamp((t - 0.00) / 0.15, 0, 1);
+  const tColor = clamp((t - 0.15) / 0.25, 0, 1);
+  const tShift = clamp((t - 0.40) / 0.45, 0, 1);
+  const tFill  = clamp((t - 0.85) / 0.15, 0, 1);
+
+  const Anbau_S = [A[0],        yO];
+  const Anbau_C = [A[0] + vers, yO];
+  const Anbau_B = [A[0],        yU];
+  const T_versch = [
+    [lerp(S[0],  Anbau_S[0], tShift), S[1]],
+    [lerp(C0[0], Anbau_C[0], tShift), C0[1]],
+    [lerp(B[0],  Anbau_B[0], tShift), B[1]]
+  ];
+
+  if (tCut > 0) dashedSeg(ctx, S, B, C.orange, 1.5);
+  if (tColor > 0) fillPoly(ctx, T_versch, ORANGE_FILL, C.orange, 1.5, tColor);
+
+  if (tFill > 0) {
+    fillPoly(ctx, [A, [B[0], yU], [B[0], yO], [A[0], yO]], ORANGE_FILL, C.orange, 2, tFill);
+    drawZielRechteck(ctx, A[0], B[0], yU, h, tFill);
+  }
+
+  if (togFM.checked) {
+    drawMass(ctx, A[0], A[1] + 22, B[0], B[1] + 22, 'g', 'unten');
+    drawMass(ctx, B[0] + 18, yU, B[0] + 18, yO, 'h', 'rechts');
+  }
+
+  setFormelF(t, tFill, 'Parallelogramm', 'g \\cdot h');
+  setErklF(t, [
+    [0.05, 'Ausgangsfigur: ein Parallelogramm mit Grundseite g und Höhe h.'],
+    [0.40, 'Senkrechter Schnitt am rechten Rand — das rechte rechtwinklige Dreieck wird hervorgehoben.'],
+    [0.85, 'Das orange Dreieck wandert ganz nach links und wird AUSSEN an die linke Schenkelseite angefügt.'],
+    [1.01, 'Parallelogramm und Anbau zusammen bilden ein Rechteck mit Breite g und Höhe h. Daher A = g · h.']
+  ]);
+}
+
+/* DREIECK — Drehspiegelung um Mittelpunkt der schrägen Seite */
+function drawDreF(ctx, cx, cy, g, h, schraeg, t) {
+  const yU = cy + h / 2, yO = cy - h / 2;
+  const A  = [cx - g/2,           yU];
+  const B  = [cx + g/2,           yU];
+  const C0 = [cx - g/2 + schraeg, yO];
+  const M_BC = [(B[0] + C0[0]) / 2, (B[1] + C0[1]) / 2];
+  const Asp = [2*M_BC[0] - A[0], 2*M_BC[1] - A[1]];
+
+  fillPoly(ctx, [A, B, C0], C.blauHell, C.blau, 2);
+
+  const tRot   = clamp((t - 0.00) / 0.40, 0, 1);
+  const tShift = clamp((t - 0.50) / 0.40, 0, 1);
+  const tFill  = clamp((t - 0.90) / 0.10, 0, 1);
+
+  function rotateAround(p, m, angle) {
+    const co = Math.cos(angle), si = Math.sin(angle);
+    return [m[0] + co*(p[0]-m[0]) - si*(p[1]-m[1]), m[1] + si*(p[0]-m[0]) + co*(p[1]-m[1])];
+  }
+  const angle = Math.PI * tRot;
+  const A_rot = rotateAround(A, M_BC, angle);
+  const B_rot = rotateAround(B, M_BC, angle);
+  const C_rot = rotateAround(C0, M_BC, angle);
+
+  if (tRot > 0.01) fillPoly(ctx, [A_rot, B_rot, C_rot], ORANGE_FILL, C.orange, 1.5);
+
+  if (tShift > 0) {
+    const vers = C0[0] - A[0];
+    const S = [B[0], yO];
+    const dxV = -g;
+    const ziel = [[S[0]+dxV, S[1]], [Asp[0]+dxV, Asp[1]], [B[0]+dxV, yU]];
+    const Z = (p, q) => [lerp(p[0], q[0], tShift), p[1]];
+    const verschoben = [Z(S, ziel[0]), Z(Asp, ziel[1]), Z(B, ziel[2])];
+    fillPoly(ctx, verschoben, ORANGE_FILL, C.orange, 1.5);
+  }
+
+  if (tFill > 0) {
+    fillPoly(ctx, [A, [B[0], yU], [B[0], yO], [A[0], yO]], ORANGE_FILL, C.orange, 2, tFill);
+    drawZielRechteck(ctx, A[0], B[0], yU, h / 2, tFill);
+  }
+
+  if (togFM.checked) {
+    drawMass(ctx, A[0], A[1] + 22, B[0], B[1] + 22, 'g', 'unten');
+    drawMass(ctx, B[0] + 18, yU, B[0] + 18, yO, 'h', 'rechts');
+  }
+
+  setFormelF(t, tFill, 'Dreieck', '\\tfrac{1}{2}\\, g \\cdot h');
+  setErklF(t, [
+    [0.05, 'Ausgangsfigur: ein Dreieck mit Grundseite g und Höhe h.'],
+    [0.40, 'Eine orange Kopie dreht sich um 180° um den Mittelpunkt der schrägen Seite.'],
+    [0.50, 'Nach der Drehung bildet die Kopie mit dem blauen Dreieck ein Parallelogramm.'],
+    [0.90, 'Das rechte Dreieck des Parallelogramms wandert links aussen als Anbau — es entsteht ein Rechteck g × h.'],
+    [1.01, 'Das blaue Dreieck ist halb so gross wie das orange Rechteck g × h. Daher A = ½ · g · h.']
+  ]);
+}
+
+/* TRAPEZ — Drehung um Mittelpunkt der rechten Schenkelseite */
+function drawTrpF(ctx, cx, cy, a, h, c, vers, t) {
+  const trX = cx - (a + c) / 4 - 30;
+  const yU = cy + h / 2, yO = cy - h / 2;
+  const versLi = 50;
+  const A = [trX - a/2,           yU];
+  const B = [trX + a/2,           yU];
+  const D = [trX - a/2 + versLi,  yO];
+  const versRe = a - c - versLi;
+  const C0= [trX + a/2 - versRe,  yO];
+  const M_BC = [(B[0] + C0[0]) / 2, (B[1] + C0[1]) / 2];
+  const spiegel = p => [2*M_BC[0] - p[0], 2*M_BC[1] - p[1]];
+  const A_sp = spiegel(A);
+  const D_sp = spiegel(D);
+
+  fillPoly(ctx, [A, B, C0, D], C.blauHell, C.blau, 2);
+
+  const tRot   = clamp((t - 0.00) / 0.40, 0, 1);
+  const tShift = clamp((t - 0.50) / 0.40, 0, 1);
+  const tFill  = clamp((t - 0.90) / 0.10, 0, 1);
+
+  function rotateAround(p, m, angle) {
+    const co = Math.cos(angle), si = Math.sin(angle);
+    return [m[0] + co*(p[0]-m[0]) - si*(p[1]-m[1]), m[1] + si*(p[0]-m[0]) + co*(p[1]-m[1])];
+  }
+  const angle = Math.PI * tRot;
+  const A_rot = rotateAround(A, M_BC, angle);
+  const B_rot = rotateAround(B, M_BC, angle);
+  const C_rot = rotateAround(C0, M_BC, angle);
+  const D_rot = rotateAround(D, M_BC, angle);
+
+  if (tRot > 0.01) fillPoly(ctx, [A_rot, B_rot, C_rot, D_rot], ORANGE_FILL, C.orange, 1.5);
+
+  if (tShift > 0) {
+    const S_T = [D_sp[0], yO];
+    const dxV = -(a + c);
+    const ziel = [[S_T[0]+dxV, S_T[1]], [A_sp[0]+dxV, A_sp[1]], [D_sp[0]+dxV, D_sp[1]]];
+    const Z = (p, q) => [lerp(p[0], q[0], tShift), p[1]];
+    const verschoben = [Z(S_T, ziel[0]), Z(A_sp, ziel[1]), Z(D_sp, ziel[2])];
+    fillPoly(ctx, verschoben, ORANGE_FILL, C.orange, 1.5);
+  }
+
+  if (tFill > 0) {
+    fillPoly(ctx, [A, [A[0]+(a+c), yU], [A[0]+(a+c), yO], [A[0], yO]], ORANGE_FILL, C.orange, 2, tFill);
+    drawZielRechteck(ctx, A[0], A[0] + (a + c), yU, h / 2, tFill);
+  }
+
+  if (togFM.checked) {
+    drawMass(ctx, A[0], A[1] + 22, B[0], B[1] + 22, 'a', 'unten');
+    drawMass(ctx, D[0], D[1] - 14, C0[0], C0[1] - 14, 'c', 'oben');
+    drawMass(ctx, B[0] + 16, yU, B[0] + 16, yO, 'h', 'rechts');
+    if (t > 0.85) {
+      drawMass(ctx, A[0], yU + 38, A[0] + (a + c), yU + 38, 'a + c', 'unten');
+    }
+  }
+
+  setFormelF(t, tFill, 'Trapez', '\\tfrac{1}{2}(a + c)\\cdot h');
+  setErklF(t, [
+    [0.05, 'Ausgangsfigur: ein Trapez mit Parallelseiten a (unten) und c (oben), Höhe h.'],
+    [0.40, 'Eine orange Kopie dreht sich um 180° um den Mittelpunkt der rechten Schenkelseite.'],
+    [0.50, 'Nach der Drehung bildet die Kopie mit dem blauen Trapez ein Parallelogramm mit Grundseite (a + c).'],
+    [0.90, 'Das rechte Schnitt-Dreieck wandert links aussen als Anbau — es entsteht ein Rechteck (a+c) × h.'],
+    [1.01, 'Das blaue Trapez ist halb so gross wie das orange Rechteck (a+c) × h. Daher A = ½(a+c) · h.']
+  ]);
+}
+
+/* RAUTE — umschreibendes Rechteck e × f, Raute halb so gross */
+function drawRauF(ctx, cx, cy, e, f, t) {
+  const L  = [cx - e/2, cy];
+  const T_ = [cx,       cy - f/2];
+  const R  = [cx + e/2, cy];
+  const Bo = [cx,       cy + f/2];
+  const RUL = [cx - e/2, cy - f/2];
+  const RUR = [cx + e/2, cy - f/2];
+  const RBR = [cx + e/2, cy + f/2];
+  const RBL = [cx - e/2, cy + f/2];
+
+  fillPoly(ctx, [L, T_, R, Bo], C.blauHell, C.blau, 2);
+  dashedSeg(ctx, L, R, C.tinte2, 1, [4, 4]);
+  dashedSeg(ctx, T_, Bo, C.tinte2, 1, [4, 4]);
+
+  const tKontur = clamp((t - 0.05) / 0.20, 0, 1);
+  const tFill   = clamp((t - 0.25) / 0.40, 0, 1);
+  const tHalb   = clamp((t - 0.65) / 0.35, 0, 1);
+
+  if (tKontur > 0.01) {
+    ctx.save();
+    ctx.strokeStyle = C.orange; ctx.lineWidth = 2;
+    ctx.globalAlpha = tKontur; ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(RUL[0], RUL[1]); ctx.lineTo(RUR[0], RUR[1]);
+    ctx.lineTo(RBR[0], RBR[1]); ctx.lineTo(RBL[0], RBL[1]);
+    ctx.closePath(); ctx.stroke();
+    ctx.restore();
+  }
+  if (tFill > 0.01) fillPoly(ctx, [RUL, RUR, RBR, RBL], ORANGE_FILL, C.orange, 2, tFill);
+
+  if (tHalb > 0.01) {
+    const RotFill = `rgba(153, 27, 27, ${0.18 * tHalb})`;
+    fillPoly(ctx, [T_, RUL, L], RotFill, null);
+    fillPoly(ctx, [T_, RUR, R], RotFill, null);
+    fillPoly(ctx, [R, RBR, Bo], RotFill, null);
+    fillPoly(ctx, [Bo, RBL, L], RotFill, null);
+    drawZielRechteck(ctx, RUL[0], RUR[0], RBR[1], f / 2, tHalb);
+    if (tHalb > 0.5) {
+      ctx.save();
+      ctx.globalAlpha = (tHalb - 0.5) * 2;
+      ctx.fillStyle = C.rot;
+      ctx.font = 'bold 18px "Source Serif 4", Georgia, serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('½', RUL[0] + e * 0.15, RUL[1] + f * 0.30);
+      ctx.fillText('½', RUR[0] - e * 0.15, RUR[1] + f * 0.30);
+      ctx.fillText('½', RBR[0] - e * 0.15, RBR[1] - f * 0.30);
+      ctx.fillText('½', RBL[0] + e * 0.15, RBL[1] - f * 0.30);
+      ctx.restore();
+    }
+  }
+
+  if (togFM.checked) {
+    drawMass(ctx, L[0], cy + f/2 + 22, R[0], cy + f/2 + 22, 'e', 'unten');
+    drawMass(ctx, R[0] + 22, T_[1], R[0] + 22, Bo[1], 'f', 'rechts');
+  }
+
+  setFormelF(t, tHalb, 'Raute', '\\tfrac{1}{2}\\, e \\cdot f');
+  setErklF(t, [
+    [0.05, 'Ausgangsfigur: eine Raute mit Diagonalen e und f. Die Diagonalen stehen senkrecht aufeinander und halbieren sich.'],
+    [0.25, 'Wir umschreiben die Raute mit dem kleinstmöglichen Rechteck mit Seiten e und f.'],
+    [0.65, 'Das orange Rechteck hat Fläche e · f.'],
+    [1.01, 'Die Raute füllt genau die Hälfte des Rechtecks. Daher A = ½ · e · f.']
+  ]);
+}
+
+/* DRACHEN — wie Raute, aber mit asymmetrischer f-Aufteilung */
+function drawDraF(ctx, cx, cy, e, fOben, fUnten, t) {
+  const T_  = [cx, cy - fOben];
+  const Bo  = [cx, cy + fUnten];
+  const L   = [cx - e/2, cy];
+  const R   = [cx + e/2, cy];
+  const f   = fOben + fUnten;
+  const RUL = [cx - e/2, cy - fOben];
+  const RUR = [cx + e/2, cy - fOben];
+  const RBR = [cx + e/2, cy + fUnten];
+  const RBL = [cx - e/2, cy + fUnten];
+
+  fillPoly(ctx, [T_, R, Bo, L], C.blauHell, C.blau, 2);
+  dashedSeg(ctx, T_, Bo, C.tinte2, 1, [4, 4]);
+  dashedSeg(ctx, L, R, C.tinte2, 1, [4, 4]);
+
+  const tKontur = clamp((t - 0.05) / 0.20, 0, 1);
+  const tFill   = clamp((t - 0.25) / 0.40, 0, 1);
+  const tHalb   = clamp((t - 0.65) / 0.35, 0, 1);
+
+  if (tKontur > 0.01) {
+    ctx.save();
+    ctx.strokeStyle = C.orange; ctx.lineWidth = 2;
+    ctx.globalAlpha = tKontur; ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(RUL[0], RUL[1]); ctx.lineTo(RUR[0], RUR[1]);
+    ctx.lineTo(RBR[0], RBR[1]); ctx.lineTo(RBL[0], RBL[1]);
+    ctx.closePath(); ctx.stroke();
+    ctx.restore();
+  }
+  if (tFill > 0.01) fillPoly(ctx, [RUL, RUR, RBR, RBL], ORANGE_FILL, C.orange, 2, tFill);
+
+  if (tHalb > 0.01) {
+    const RotFill = `rgba(153, 27, 27, ${0.18 * tHalb})`;
+    fillPoly(ctx, [T_, RUL, L], RotFill, null);
+    fillPoly(ctx, [T_, RUR, R], RotFill, null);
+    fillPoly(ctx, [R, RBR, Bo], RotFill, null);
+    fillPoly(ctx, [Bo, RBL, L], RotFill, null);
+    drawZielRechteck(ctx, RUL[0], RUR[0], RBR[1], f / 2, tHalb);
+    if (tHalb > 0.5) {
+      ctx.save();
+      ctx.globalAlpha = (tHalb - 0.5) * 2;
+      ctx.fillStyle = C.rot;
+      ctx.font = 'bold 18px "Source Serif 4", Georgia, serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('½', RUL[0] + e * 0.15, RUL[1] + fOben * 0.30);
+      ctx.fillText('½', RUR[0] - e * 0.15, RUR[1] + fOben * 0.30);
+      ctx.fillText('½', RBR[0] - e * 0.15, RBR[1] - fUnten * 0.30);
+      ctx.fillText('½', RBL[0] + e * 0.15, RBL[1] - fUnten * 0.30);
+      ctx.restore();
+    }
+  }
+
+  if (togFM.checked) {
+    drawMass(ctx, L[0], RBL[1] + 28, R[0], RBR[1] + 28, 'e', 'unten');
+    drawMass(ctx, RUR[0] + 28, T_[1], RBR[0] + 28, Bo[1], 'f', 'rechts');
+  }
+
+  setFormelF(t, tHalb, 'Drachen', '\\tfrac{1}{2}\\, e \\cdot f');
+  setErklF(t, [
+    [0.05, 'Ausgangsfigur: ein Drachen mit den senkrecht aufeinander stehenden Diagonalen e und f.'],
+    [0.25, 'Wir umschreiben den Drachen mit dem kleinstmöglichen Rechteck mit Seiten e und f.'],
+    [0.65, 'Das orange Rechteck hat Fläche e · f.'],
+    [1.01, 'Der Drachen füllt genau die Hälfte des Rechtecks. Daher A = ½ · e · f.']
+  ]);
+}
+
+/* Helper: Formel- und Erklärungsbox setzen */
+function setFormelF(t, tFinal, name, formel) {
+  if (tFinal > 0.1) {
+    fBoxF.innerHTML = `\\( A_{\\text{${name}}} = ${formel} \\)`;
+    fBoxF.classList.add('fertig');
+  } else {
+    fBoxF.innerHTML = `\\( A_{\\text{${name}}} = \\;? \\)`;
+    fBoxF.classList.remove('fertig');
+  }
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fBoxF]);
+}
+function setErklF(t, schwellen) {
+  for (const [grenze, text] of schwellen) {
+    if (t < grenze) { erklF.textContent = text; return; }
+  }
+}
+
+
+/* ============================================================
+ *  ANIMATION 3 — Sehnen- und Tangentenviereck
+ * ============================================================ */
+const togSTVW = document.getElementById('tog-stv-werte');
+const fBoxSTV = document.getElementById('formel-stv');
+const legSTV  = document.getElementById('leg-stv');
+const erklSTV = document.getElementById('erkl-stv');
+let typSTV = 'sehnen';
+
+document.querySelectorAll('#stv-typen .chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#stv-typen .chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    typSTV = btn.dataset.typ;
+    drawSTV();
+  });
+});
+togSTVW.addEventListener('input', drawSTV);
+
+// Punkte auf Kreis — Winkel (in rad), wir machen 4 Punkte für jedes Set
+// sehnen: Eckpunkte direkt auf Kreis
+// tangenten: Berührungspunkte auf Kreis; Eckpunkte sind die Tangenten-Schnittpunkte
+const sehnenAngles    = [-2.5, -0.9, 0.6, 2.1];           // initial
+const tangentenAngles = [-2.0, -0.5, 1.0, 2.6];           // initial
+
+/* Pointer-Drag für STV: bewegt das nächste Eck-/Berührungspunkt-Pendant auf dem Kreis */
+let stvActive = -1;
+function getSTVCenter() {
+  const cv = document.getElementById('cv-stv');
+  const rect = cv.getBoundingClientRect();
+  return { cv, rect, W: rect.width, H: rect.height,
+           cx: rect.width / 2, cy: rect.height / 2 + 10,
+           R: Math.min(rect.width, rect.height) * 0.35 };
+}
+function stvAnglesActive() { return typSTV === 'sehnen' ? sehnenAngles : tangentenAngles; }
+
+(function setupSTVDrag(){
+  const cv = document.getElementById('cv-stv');
+  function pos(ev) {
+    const rect = cv.getBoundingClientRect();
+    const e = ev.touches ? ev.touches[0] : ev;
+    return [e.clientX - rect.left, e.clientY - rect.top];
+  }
+  function down(ev) {
+    const [x, y] = pos(ev);
+    const { cx, cy, R } = getSTVCenter();
+    const angs = stvAnglesActive();
+    let minD = Infinity, idx = -1;
+    for (let i = 0; i < 4; i++) {
+      const px = cx + R * Math.cos(angs[i]);
+      const py = cy + R * Math.sin(angs[i]);
+      const d = Math.hypot(px - x, py - y);
+      if (d < minD) { minD = d; idx = i; }
+    }
+    if (minD < 24) { stvActive = idx; ev.preventDefault(); }
+  }
+  function move(ev) {
+    if (stvActive < 0) return;
+    const [x, y] = pos(ev);
+    const { cx, cy } = getSTVCenter();
+    const angs = stvAnglesActive();
+    let a = Math.atan2(y - cy, x - cx);
+    // Verhindere, dass benachbarte Punkte sich überholen (Sortierung wahren)
+    const n = 4;
+    const prev = angs[(stvActive - 1 + n) % n];
+    const next = angs[(stvActive + 1) % n];
+    // Halte 0.15 rad Mindestabstand
+    // (Wir akzeptieren a, wenn die Sortierordnung nicht verletzt wird)
+    angs[stvActive] = a;
+    drawSTV();
+    ev.preventDefault();
+  }
+  function up() { stvActive = -1; }
+  cv.addEventListener('mousedown', down);
+  cv.addEventListener('mousemove', move);
+  cv.addEventListener('mouseup', up);
+  cv.addEventListener('mouseleave', up);
+  cv.addEventListener('touchstart', down, { passive: false });
+  cv.addEventListener('touchmove', move, { passive: false });
+  cv.addEventListener('touchend', up);
+})();
+
+function drawSTV() {
+  const { ctx, W, H } = initCv('cv-stv');
+  const cx = W / 2, cy = H / 2 + 10;
+  const R = Math.min(W, H) * 0.35;
+
+  // Kreis
+  ctx.save();
+  ctx.strokeStyle = C.lila;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.restore();
+  // Mittelpunkt
+  dot(ctx, [cx, cy], C.lila, 3);
+  txt(ctx, cx + 12, cy - 4, 'M', C.lila, 12);
+
+  if (typSTV === 'sehnen') {
+    drawSehnenviereck(ctx, cx, cy, R);
+  } else {
+    drawTangentenviereck(ctx, cx, cy, R);
+  }
+}
+
+function drawSehnenviereck(ctx, cx, cy, R) {
+  // 4 Eckpunkte direkt auf dem Kreis
+  // Sortiere Winkel aufsteigend modulo 2π, damit das Viereck konvex bleibt
+  const angsRaw = sehnenAngles.map(a => ({ a, idxOrig: sehnenAngles.indexOf(a) }));
+  const angs = sehnenAngles.slice().sort((u, v) => u - v);
+  const pts = angs.map(a => [cx + R * Math.cos(a), cy + R * Math.sin(a)]);
+
+  fillPoly(ctx, pts, BLAU_FILL, C.blau, 2);
+
+  // Winkel berechnen
+  const innen = [];
+  for (let i = 0; i < 4; i++) {
+    const prev = pts[(i - 1 + 4) % 4];
+    const next = pts[(i + 1) % 4];
+    innen.push(angleAt(pts[i], prev, next));
+  }
+  const labels = ['α', 'β', 'γ', 'δ'];
+  const ptNames = ['A', 'B', 'C', 'D'];
+
+  // Eckpunkte und Beschriftung
+  for (let i = 0; i < 4; i++) {
+    dot(ctx, pts[i], C.blau, 7);
+    // Beschriftung etwas nach aussen
+    const v = [pts[i][0] - cx, pts[i][1] - cy];
+    const len = Math.hypot(...v);
+    const lx = pts[i][0] + v[0]/len * 18;
+    const ly = pts[i][1] + v[1]/len * 18;
+    txt(ctx, lx, ly, ptNames[i], C.blau, 14);
+  }
+
+  // Winkelbögen
+  for (let i = 0; i < 4; i++) {
+    const prev = pts[(i - 1 + 4) % 4];
+    const next = pts[(i + 1) % 4];
+    angleArc(ctx, pts[i], prev, next, 22, C.blau, 1.4);
+    if (togSTVW.checked) {
+      // Innenrichtung
+      const v1 = [prev[0]-pts[i][0], prev[1]-pts[i][1]];
+      const v2 = [next[0]-pts[i][0], next[1]-pts[i][1]];
+      const l1 = Math.hypot(...v1), l2 = Math.hypot(...v2);
+      const bx = v1[0]/l1 + v2[0]/l2;
+      const by = v1[1]/l1 + v2[1]/l2;
+      const blen = Math.hypot(bx, by);
+      if (blen > 0.01) {
+        const lx = pts[i][0] + bx/blen * 38;
+        const ly = pts[i][1] + by/blen * 38;
+        const aDeg = (innen[i] * 180 / Math.PI).toFixed(1);
+        txt(ctx, lx, ly, `${labels[i]}=${aDeg}°`, C.blau, 12);
+      }
+    }
+  }
+
+  // Formel und Legende: Summen prüfen
+  const aDeg = innen.map(r => r * 180 / Math.PI);
+  const sum13 = aDeg[0] + aDeg[2];
+  const sum24 = aDeg[1] + aDeg[3];
+  fBoxSTV.innerHTML = `\\( \\alpha + \\gamma = 180°,\\quad \\beta + \\delta = 180° \\)`;
+
+  legSTV.innerHTML = `
+    <div class="legende-titel">Sehnenviereck — Innenwinkelsummen</div>
+    <div class="legende-zeile"><span class="lab">α + γ</span><span class="val">${sum13.toFixed(1)}°</span></div>
+    <div class="legende-zeile"><span class="lab">β + δ</span><span class="val">${sum24.toFixed(1)}°</span></div>
+    <div class="legende-zeile"><span class="lab" style="color:var(--tinte-2)">Erwartet</span><span class="val" style="color:var(--gruen)">180°</span></div>
+  `;
+
+  erklSTV.innerHTML = `Im Sehnenviereck liegen alle vier Eckpunkte auf einem gemeinsamen Kreis. Gegenüberliegende Innenwinkel ergänzen sich zu \\(180°\\) (Umfangswinkelsatz). Ziehe die Ecken über den Kreis.`;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fBoxSTV, erklSTV]);
+}
+
+function drawTangentenviereck(ctx, cx, cy, R) {
+  // 4 Berührungspunkte auf dem Kreis (sortiert)
+  const angs = tangentenAngles.slice().sort((u, v) => u - v);
+  const T = angs.map(a => [cx + R * Math.cos(a), cy + R * Math.sin(a)]);
+
+  // Eckpunkte = Schnitte der Tangenten in benachbarten Berührungspunkten
+  // Tangente in T_i: senkrecht auf Radius M-T_i, also Richtung (-sin a, cos a)
+  function tangentDir(a) { return [-Math.sin(a), Math.cos(a)]; }
+  function intersectLines(P1, d1, P2, d2) {
+    const det = d1[0]*d2[1] - d1[1]*d2[0];
+    if (Math.abs(det) < 1e-9) return null;
+    const t = ((P2[0]-P1[0])*d2[1] - (P2[1]-P1[1])*d2[0]) / det;
+    return [P1[0] + t*d1[0], P1[1] + t*d1[1]];
+  }
+  const pts = [];
+  for (let i = 0; i < 4; i++) {
+    const i2 = (i + 1) % 4;
+    const P = intersectLines(T[i], tangentDir(angs[i]), T[i2], tangentDir(angs[i2]));
+    if (P) pts.push(P); else pts.push(T[i]);  // Fallback
+  }
+  // Eckpunkte pts[i] ist Schnitt der Tangenten in T[i] und T[i+1]
+  // → Die Eckpunkt-Reihenfolge: pts[0] zwischen T[0] und T[1]; pts[3] zwischen T[3] und T[0]
+  // → Polygon-Reihenfolge: pts[3], pts[0], pts[1], pts[2]
+  const eckpunkte = [pts[3], pts[0], pts[1], pts[2]];
+
+  // Polygon-Sanity: alle Eckpunkte sollten in Sichtweite des Canvas sein
+  // Falls ein Eckpunkt sehr weit aussen ist (Tangenten fast parallel), klippen wir Anzeige
+  let validShape = true;
+  const maxR = R * 4;  // erlaubter Maximalradius
+  for (const p of eckpunkte) {
+    if (Math.hypot(p[0]-cx, p[1]-cy) > maxR) { validShape = false; break; }
+  }
+
+  if (validShape) {
+    fillPoly(ctx, eckpunkte, BLAU_FILL, C.blau, 2);
+  } else {
+    // Notdarstellung: nur Berührungspunkte
+    ctx.save();
+    ctx.strokeStyle = C.orange;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    for (let i = 0; i < 4; i++) {
+      const i2 = (i + 1) % 4;
+      // Tangente lang in beide Richtungen zeichnen
+      const d = tangentDir(angs[i]);
+      ctx.beginPath();
+      ctx.moveTo(T[i][0] - d[0]*200, T[i][1] - d[1]*200);
+      ctx.lineTo(T[i][0] + d[0]*200, T[i][1] + d[1]*200);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Berührungspunkte
+  for (let i = 0; i < 4; i++) {
+    dot(ctx, T[i], C.orange, 7);
+    const v = [T[i][0]-cx, T[i][1]-cy];
+    const len = Math.hypot(...v);
+    txt(ctx, T[i][0] - v[0]/len*14, T[i][1] - v[1]/len*14, 'T'+subscr(i+1), C.orange, 12);
+  }
+
+  // Eckpunkte beschriften (sofern valid)
+  const ptNames = ['A', 'B', 'C', 'D'];
+  if (validShape) {
+    for (let i = 0; i < 4; i++) {
+      dot(ctx, eckpunkte[i], C.blau, 5);
+      const v = [eckpunkte[i][0]-cx, eckpunkte[i][1]-cy];
+      const len = Math.hypot(...v);
+      txt(ctx, eckpunkte[i][0] + v[0]/len*16, eckpunkte[i][1] + v[1]/len*16, ptNames[i], C.blau, 14);
+    }
+  }
+
+  // Seitenlängen messen
+  let seiten = [0, 0, 0, 0];
+  if (validShape) {
+    for (let i = 0; i < 4; i++) {
+      const i2 = (i + 1) % 4;
+      seiten[i] = dist(eckpunkte[i], eckpunkte[i2]);
+    }
+  }
+  // a + c und b + d (in „Pixel-Einheiten" — Verhältnis ist invariant)
+  const sum_ac = seiten[0] + seiten[2];
+  const sum_bd = seiten[1] + seiten[3];
+
+  // Beschriftung der Seitenlängen
+  if (validShape && togSTVW.checked) {
+    const sLabels = ['a', 'b', 'c', 'd'];
+    for (let i = 0; i < 4; i++) {
+      const i2 = (i + 1) % 4;
+      const mid = [(eckpunkte[i][0]+eckpunkte[i2][0])/2, (eckpunkte[i][1]+eckpunkte[i2][1])/2];
+      // Etwas nach aussen verschieben
+      const v = [mid[0]-cx, mid[1]-cy];
+      const len = Math.hypot(...v);
+      const lx = mid[0] + v[0]/len*14;
+      const ly = mid[1] + v[1]/len*14;
+      txt(ctx, lx, ly, `${sLabels[i]}=${(seiten[i]/30).toFixed(2)}`, C.blau, 11);
+    }
+  }
+
+  fBoxSTV.innerHTML = `\\( a + c = b + d \\)`;
+  legSTV.innerHTML = `
+    <div class="legende-titel">Tangentenviereck — Seitensummen</div>
+    <div class="legende-zeile"><span class="lab">a + c</span><span class="val">${(sum_ac/30).toFixed(2)}</span></div>
+    <div class="legende-zeile"><span class="lab">b + d</span><span class="val">${(sum_bd/30).toFixed(2)}</span></div>
+    <div class="legende-zeile"><span class="lab" style="color:var(--tinte-2)">Differenz</span><span class="val" style="color:${Math.abs(sum_ac-sum_bd) < 1 ? 'var(--gruen)' : 'var(--orange)'}">${Math.abs(sum_ac-sum_bd).toFixed(3)}</span></div>
+  `;
+
+  erklSTV.innerHTML = `Im Tangentenviereck berührt der Inkreis alle vier Seiten. Die Summen gegenüberliegender Seiten sind gleich: \\(a + c = b + d\\). Ziehe die orangen Berührungspunkte auf dem Kreis.`;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fBoxSTV, erklSTV]);
+}
+
+
+/* ============================================================
+ *  ANIMATION 4 — Regelmässiges Vieleck
+ * ============================================================ */
+const sldNReg  = document.getElementById('sld-nReg');
+const lblNReg  = document.getElementById('lbl-nReg');
+const togRegUm = document.getElementById('tog-reg-um');
+const togRegIn = document.getElementById('tog-reg-in');
+const togRegZ  = document.getElementById('tog-reg-zentri');
+const tabReg   = document.getElementById('tab-reg');
+const erklReg  = document.getElementById('erkl-reg');
+
+let regUserInteracted = false;
+[sldNReg, togRegUm, togRegIn, togRegZ].forEach(el => el.addEventListener('input', () => {
+  regUserInteracted = true;
+  drawReg();
+}));
+
+/* Tabelle initial befüllen mit allen n = 3..20 */
+function regKenngroessen(n) {
+  const zeta = 360 / n;       // Zentriwinkel (Grad)
+  const alpha = 180 - zeta;   // Innenwinkel
+  const halbZeta = zeta * Math.PI / 360;
+  const r = Math.cos(halbZeta);
+  const s = 2 * Math.sin(halbZeta);
+  return { zeta, alpha, r, s };
+}
+function exaktN(n) { return n === 3 || n === 4 || n === 6; }
+function exaktVal(n, key) {
+  // n = 3: ζ=120°, α=60°, r=1/2, s=√3
+  // n = 4: ζ=90°,  α=90°, r=√2/2, s=√2
+  // n = 6: ζ=60°,  α=120°, r=√3/2, s=1
+  const m = {
+    3: { zeta:'120°', alpha:'60°',  r:'½',     s:'√3' },
+    4: { zeta:'90°',  alpha:'90°',  r:'√2/2',  s:'√2' },
+    6: { zeta:'60°',  alpha:'120°', r:'√3/2',  s:'1'  }
+  };
+  return m[n][key];
+}
+function fillRegTable() {
+  const tbody = tabReg.querySelector('tbody');
+  let html = '';
+  for (let n = 3; n <= 20; n++) {
+    const k = regKenngroessen(n);
+    const cls = exaktN(n) ? 'exakt' : '';
+    if (exaktN(n)) {
+      html += `<tr data-n="${n}" class="${cls}">
+        <td class="lab">${n}</td>
+        <td>${exaktVal(n,'zeta')}</td>
+        <td>${exaktVal(n,'alpha')}</td>
+        <td>${exaktVal(n,'r')}</td>
+        <td>${exaktVal(n,'s')}</td>
+      </tr>`;
+    } else {
+      html += `<tr data-n="${n}">
+        <td class="lab">${n}</td>
+        <td>${k.zeta.toFixed(1)}°</td>
+        <td>${k.alpha.toFixed(1)}°</td>
+        <td>${k.r.toFixed(3)}</td>
+        <td>${k.s.toFixed(3)}</td>
+      </tr>`;
+    }
+  }
+  tbody.innerHTML = html;
+}
+fillRegTable();
+
+function drawReg() {
+  const { ctx, W, H } = initCv('cv-reg');
+  const n = +sldNReg.value;
+  lblNReg.textContent = n;
+
+  // Tabellen-Zeile aktivieren
+  tabReg.querySelectorAll('tr').forEach(r => r.classList.remove('aktiv'));
+  const akt = tabReg.querySelector(`tr[data-n="${n}"]`);
+  if (akt) {
+    akt.classList.add('aktiv');
+    // Nur scrollen, nachdem der User mit der Animation interagiert hat
+    // (verhindert Auto-Scroll beim Seitenaufruf)
+    if (regUserInteracted && akt.scrollIntoView) {
+      akt.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
+  const k = regKenngroessen(n);
+  const cx = W / 2, cy = H / 2 + 8;
+  const R = Math.min(W, H) * 0.36;
+  const halbZeta = k.zeta * Math.PI / 360;
+  const r = R * k.r;
+
+  // Punkte berechnen (Startpunkt oben)
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI/2 + 2*Math.PI * i / n;
+    pts.push([cx + R * Math.cos(a), cy + R * Math.sin(a)]);
+  }
+
+  // Vieleck (zuerst zeichnen, dann werden Kreise darüber gelegt)
+  fillPoly(ctx, pts, C.blauHell, C.blau, 2);
+
+  // Umkreis
+  if (togRegUm.checked) {
+    ctx.save();
+    ctx.strokeStyle = C.lila;
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([5, 3]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, 2*Math.PI);
+    ctx.stroke();
+    ctx.restore();
+  }
+  // Inkreis
+  if (togRegIn.checked) {
+    ctx.save();
+    ctx.strokeStyle = C.gruen;
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2*Math.PI);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Bestimmungsdreieck (für den ersten Sektor) — als Hilfslinien
+  if (togRegZ.checked) {
+    // Sektor zwischen pts[0] und pts[1], beide Radien M-pts[0] und M-pts[1]
+    ctx.save();
+    ctx.strokeStyle = C.orange;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy); ctx.lineTo(pts[0][0], pts[0][1]);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy); ctx.lineTo(pts[1][0], pts[1][1]);
+    ctx.stroke();
+
+    // Apothem (Mittelpunkt von pts[0]-pts[1] zu M)
+    const Mid = [(pts[0][0] + pts[1][0])/2, (pts[0][1] + pts[1][1])/2];
+    ctx.strokeStyle = C.gruen;
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy); ctx.lineTo(Mid[0], Mid[1]);
+    ctx.stroke();
+    ctx.restore();
+
+    // Zentriwinkel-Bogen
+    const arcR = R * 0.18;
+    const a0 = Math.atan2(pts[0][1]-cy, pts[0][0]-cx);
+    const a1 = Math.atan2(pts[1][1]-cy, pts[1][0]-cx);
+    ctx.save();
+    ctx.strokeStyle = C.orange;
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, arcR, a0, a1);
+    ctx.stroke();
+    ctx.restore();
+    // Beschriftung Zentriwinkel
+    const aMid = (a0 + a1) / 2;
+    txt(ctx, cx + (arcR + 14) * Math.cos(aMid), cy + (arcR + 14) * Math.sin(aMid),
+        exaktN(n) ? exaktVal(n,'zeta') : k.zeta.toFixed(1)+'°', C.orange, 12);
+
+    // Beschriftung R
+    const mR0 = [(cx + pts[0][0])/2, (cy + pts[0][1])/2];
+    txt(ctx, mR0[0] - 12, mR0[1] - 6, 'R', C.lila, 13);
+    // Beschriftung r (Apothem)
+    const mRa = [(cx + Mid[0])/2, (cy + Mid[1])/2];
+    txt(ctx, mRa[0] + 12, mRa[1] - 4, 'r', C.gruen, 13);
+    // Beschriftung s (Seite)
+    txt(ctx, Mid[0] + (Mid[0]-cx)/R * 20, Mid[1] + (Mid[1]-cy)/R * 20, 's', C.blau, 13);
+  }
+
+  // Mittelpunkt
+  dot(ctx, [cx, cy], C.tinte2, 4);
+  txt(ctx, cx + 10, cy - 4, 'M', C.tinte2, 12);
+
+  // Eckpunkte als kleine Punkte
+  for (let i = 0; i < n; i++) {
+    dot(ctx, pts[i], C.blau, n <= 8 ? 4 : 3);
+  }
+
+  // Erklärung
+  const erklMap = {
+    3: 'Gleichseitiges Dreieck: Zentriwinkel \\(\\zeta_3 = 120°\\), Innenwinkel \\(60°\\). \\(r = R/2\\), \\(s = R\\sqrt{3}\\) — folgt aus dem 30°-60°-90°-Halbdreieck.',
+    4: 'Quadrat: Zentriwinkel \\(\\zeta_4 = 90°\\). Mit Hilfe des halben Quadrats: \\(r = R\\sqrt{2}/2\\), \\(s = R\\sqrt{2}\\).',
+    5: 'Fünfeck: Zentriwinkel \\(72°\\). Berechnung von \\(r\\) und \\(s\\) erfordert Trigonometrie (kommt in 5.3).',
+    6: 'Sechseck: Der Umkreisradius gleicht der Seitenlänge (\\(R = s\\)). Das Sechseck besteht aus sechs gleichseitigen Dreiecken. \\(r = R\\sqrt{3}/2\\).',
+    8: 'Achteck: Zentriwinkel \\(45°\\). Berechnung mit Trigonometrie.',
+    12: 'Zwölfeck: Zentriwinkel \\(30°\\). Wird oft als Annäherung an den Kreis benutzt.',
+  };
+  erklReg.innerHTML = erklMap[n] || `Regelmässiges ${n}-Eck: Zentriwinkel \\(\\zeta_{${n}} = ${k.zeta.toFixed(1)}°\\), Innenwinkel \\(\\alpha_{${n}} = ${k.alpha.toFixed(1)}°\\). Berechnung von \\(r\\) und \\(s\\) mit Trigonometrie.`;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklReg]);
+}
+
+
+/* ============================================================
+ *  INITIALER RENDER + RESIZE
+ * ============================================================ */
+window.addEventListener('load', () => {
+  drawNEck();
+  drawRechteck();
+  drawUmformung();
+  drawSTV();
+  drawReg();
+});
+window.addEventListener('resize', () => {
+  drawNEck();
+  drawRechteck();
+  drawUmformung();
+  drawSTV();
+  drawReg();
+});
+
+/* ============================================================
+ *  EINSTIEGS-ANIM: Viereck-Familie aufdecken
+ * ============================================================ */
+(function(){
+  const canvas = document.getElementById('fam-canvas');
+  if (!canvas) return;
+  let W, H;
+
+  // 4 Eckpunkte A, B, C, D im logischen Bezugssystem (0..10)
+  let pts = [
+    {x:2.0, y:2.0, name:'A'},
+    {x:8.0, y:2.0, name:'B'},
+    {x:8.0, y:8.0, name:'C'},
+    {x:2.0, y:8.0, name:'D'}
+  ];
+
+  const presets = {
+    quad: [{x:2.5,y:2.5},{x:7.5,y:2.5},{x:7.5,y:7.5},{x:2.5,y:7.5}],
+    rect: [{x:1.5,y:3.0},{x:8.5,y:3.0},{x:8.5,y:7.0},{x:1.5,y:7.0}],
+    raute:[{x:5.0,y:1.8},{x:8.2,y:5.0},{x:5.0,y:8.2},{x:1.8,y:5.0}],
+    par:  [{x:1.5,y:2.5},{x:6.5,y:2.5},{x:8.5,y:7.5},{x:3.5,y:7.5}],
+    trap: [{x:1.5,y:2.5},{x:8.5,y:2.5},{x:6.5,y:7.5},{x:3.5,y:7.5}],
+    allg: [{x:2.0,y:2.5},{x:7.5,y:1.8},{x:8.5,y:7.0},{x:2.5,y:8.5}]
+  };
+
+  function toCanvas(p){
+    const padX = 30, padY = 30;
+    const sx = (W - 2*padX) / 10;
+    const sy = (H - 2*padY) / 10;
+    const s = Math.min(sx, sy);
+    const offsetX = padX + (W - 2*padX - 10*s)/2;
+    const offsetY = padY + (H - 2*padY - 10*s)/2;
+    return {x: offsetX + p.x*s, y: H - offsetY - p.y*s};
+  }
+  function fromCanvas(cx, cy){
+    const padX = 30, padY = 30;
+    const sx = (W - 2*padX) / 10;
+    const sy = (H - 2*padY) / 10;
+    const s = Math.min(sx, sy);
+    const offsetX = padX + (W - 2*padX - 10*s)/2;
+    const offsetY = padY + (H - 2*padY - 10*s)/2;
+    return {x: (cx - offsetX)/s, y: (H - cy - offsetY)/s};
+  }
+
+  function vec(P, Q){ return {x:Q.x-P.x, y:Q.y-P.y}; }
+  function laenge(v){ return Math.sqrt(v.x*v.x + v.y*v.y); }
+  function cross(v, w){ return v.x*w.y - v.y*w.x; }
+  function dot(v, w){ return v.x*w.x + v.y*w.y; }
+
+  function klassifiziere(){
+    const [A, B, C, D] = pts;
+    const AB = vec(A, B), BC = vec(B, C), CD = vec(C, D), DA = vec(D, A);
+    const lAB = laenge(AB), lBC = laenge(BC), lCD = laenge(CD), lDA = laenge(DA);
+
+    // Parallel: cross/laenge ~ 0
+    const TOL_PAR = 0.06;
+    const par1 = Math.abs(cross(AB, CD))/(lAB*lCD + 1e-9) < TOL_PAR;  // AB || CD
+    const par2 = Math.abs(cross(BC, DA))/(lBC*lDA + 1e-9) < TOL_PAR;  // BC || DA
+
+    // Alle Seiten gleich
+    const avg = (lAB + lBC + lCD + lDA)/4;
+    const TOL_LEN = 0.06;
+    const alleGleich = [lAB, lBC, lCD, lDA].every(l => Math.abs(l - avg)/avg < TOL_LEN);
+
+    // Rechtwinklig: alle 4 Winkel ~90°
+    const TOL_RW = 0.06;
+    const ecks = [
+      [DA, AB],  // bei A
+      [AB, BC],  // bei B
+      [BC, CD],  // bei C
+      [CD, DA]   // bei D
+    ];
+    const alleRecht = ecks.every(([u, v]) => Math.abs(dot({x:-u.x,y:-u.y}, v))/(laenge(u)*laenge(v) + 1e-9) < TOL_RW);
+
+    let typ = 'allgemeines Viereck';
+    if (alleGleich && alleRecht) typ = 'Quadrat';
+    else if (alleRecht && par1 && par2) typ = 'Rechteck';
+    else if (alleGleich && par1 && par2) typ = 'Raute';
+    else if (par1 && par2) typ = 'Parallelogramm';
+    else if (par1 || par2) typ = 'Trapez';
+
+    return {typ, par1, par2, alleGleich, alleRecht, lAB, lBC, lCD, lDA};
+  }
+
+  function render(){
+    const dpr = window.devicePixelRatio || 1;
+    W = canvas.offsetWidth || 480;
+    H = canvas.offsetHeight || 340;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+    // Hintergrund-Raster (leichtes Karopapier-Gefühl)
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 0.8;
+    const padX = 30, padY = 30;
+    const sx = (W - 2*padX) / 10;
+    const sy = (H - 2*padY) / 10;
+    const s = Math.min(sx, sy);
+    const offsetX = padX + (W - 2*padX - 10*s)/2;
+    const offsetY = padY + (H - 2*padY - 10*s)/2;
+    for (let i = 0; i <= 10; i++){
+      ctx.beginPath();
+      ctx.moveTo(offsetX + i*s, offsetY);
+      ctx.lineTo(offsetX + i*s, offsetY + 10*s);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(offsetX, offsetY + i*s);
+      ctx.lineTo(offsetX + 10*s, offsetY + i*s);
+      ctx.stroke();
+    }
+
+    // Viereck zeichnen
+    const cv = pts.map(toCanvas);
+    ctx.fillStyle = 'rgba(26,79,138,0.10)';
+    ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(cv[0].x, cv[0].y);
+    for (let i = 1; i < 4; i++) ctx.lineTo(cv[i].x, cv[i].y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Eckpunkte
+    for (let i = 0; i < 4; i++){
+      ctx.fillStyle = '#1a4f8a';
+      ctx.beginPath(); ctx.arc(cv[i].x, cv[i].y, 7, 0, 2*Math.PI); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(cv[i].x, cv[i].y, 3.5, 0, 2*Math.PI); ctx.fill();
+
+      // Label aussen
+      const ctr = {x: (cv[0].x + cv[1].x + cv[2].x + cv[3].x)/4, y: (cv[0].y + cv[1].y + cv[2].y + cv[3].y)/4};
+      const dx = cv[i].x - ctr.x, dy = cv[i].y - ctr.y;
+      const ll = Math.sqrt(dx*dx + dy*dy);
+      const lx = cv[i].x + (dx/ll)*16;
+      const ly = cv[i].y + (dy/ll)*16;
+      ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 14px JetBrains Mono, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(pts[i].name, lx, ly);
+    }
+    ctx.textBaseline = 'alphabetic';
+
+    // Klassifikation auswerten und State-Panel updaten
+    const k = klassifiziere();
+    document.getElementById('fam-typ').textContent = k.typ;
+
+    function setEig(id, val, label){
+      const el = document.getElementById(id);
+      el.classList.toggle('ja', val);
+      el.classList.toggle('nein', !val);
+      el.textContent = (val ? '✓ ' : '✗ ') + label;
+    }
+    setEig('fam-e-par1', k.par1, 'AB ∥ CD');
+    setEig('fam-e-par2', k.par2, 'BC ∥ DA');
+    setEig('fam-e-gleich', k.alleGleich, 'alle Seiten gleich');
+    setEig('fam-e-recht', k.alleRecht, 'alle Winkel rechtwinklig');
+  }
+
+  // Drag-Logik
+  let dragIdx = -1;
+  function pointerPos(e){
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {x: t.clientX - r.left, y: t.clientY - r.top};
+  }
+  function findPointAt(cx, cy){
+    const cvs = pts.map(toCanvas);
+    for (let i = 0; i < 4; i++){
+      const dx = cx - cvs[i].x, dy = cy - cvs[i].y;
+      if (dx*dx + dy*dy < 18*18) return i;
+    }
+    return -1;
+  }
+  canvas.addEventListener('pointerdown', e => {
+    const p = pointerPos(e);
+    dragIdx = findPointAt(p.x, p.y);
+    if (dragIdx >= 0) canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (dragIdx < 0) return;
+    const p = pointerPos(e);
+    const lp = fromCanvas(p.x, p.y);
+    // Clamp ins Logik-Koordinatensystem
+    pts[dragIdx].x = Math.max(0.3, Math.min(9.7, lp.x));
+    pts[dragIdx].y = Math.max(0.3, Math.min(9.7, lp.y));
+    render();
+  });
+  canvas.addEventListener('pointerup', () => { dragIdx = -1; });
+  canvas.addEventListener('pointercancel', () => { dragIdx = -1; });
+
+  // Presets
+  document.querySelectorAll('.fb-presets button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const preset = presets[btn.dataset.fam];
+      if (!preset) return;
+      for (let i = 0; i < 4; i++){
+        pts[i].x = preset[i].x;
+        pts[i].y = preset[i].y;
+      }
+      render();
+    });
+  });
+
+  window.addEventListener('resize', render);
+  render();
+})();
+</script>
+</body>
+</html>

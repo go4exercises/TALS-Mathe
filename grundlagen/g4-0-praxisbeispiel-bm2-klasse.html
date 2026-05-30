@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.0 Praxisbeispiel BM2-Klasse — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']] },
+  svg: { fontCache:'global', scale:1.05 },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* === Preset-Buttons === */
+.preset-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 8px; padding: 12px 14px; background: var(--papier-2); border-radius: 8px; border: 1px solid var(--linie); }
+.preset-bar .pb-label { font-family: var(--mono); font-size: 0.82rem; color: var(--tinte-2); margin-right: 6px; align-self: center; }
+.preset-btn { padding: 6px 12px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.82rem; transition: 0.12s; }
+.preset-btn:hover { border-color: var(--blau); }
+.preset-btn.aktiv { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+
+/* === Bezugsrahmen-Pille === */
+.scope-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 10px 0 14px; font-size: 0.92rem; }
+.scope-bar .sb-lbl { font-family: var(--mono); font-size: 0.82rem; color: var(--tinte-2); }
+.scope-pill { padding: 4px 10px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 14px; cursor: pointer; font-family: var(--mono); font-size: 0.78rem; transition: 0.12s; }
+.scope-pill:hover { border-color: var(--blau); }
+.scope-pill.aktiv { background: var(--blau-hell); border-color: var(--blau); color: var(--blau); font-weight: 600; }
+
+/* === Datentabelle === */
+.daten-wrap { overflow-x: auto; margin: 8px 0 14px; border: 1px solid var(--linie); border-radius: 8px; }
+.daten-tab { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.82rem; min-width: 600px; }
+.daten-tab thead { background: var(--tinte); color: var(--weiss); position: sticky; top: 0; }
+.daten-tab thead th { padding: 8px 10px; text-align: left; font-weight: 600; font-size: 0.78rem; }
+.daten-tab tbody tr:nth-child(even) { background: var(--papier); }
+.daten-tab tbody tr:hover { background: var(--blau-hell); }
+.daten-tab td { padding: 0; border-bottom: 1px solid var(--linie); }
+.daten-tab td.col-nr { text-align: center; color: var(--tinte-2); font-weight: 600; padding: 6px 10px; width: 50px; }
+.daten-tab td input { width: 100%; border: none; background: transparent; padding: 6px 10px; font-family: var(--mono); font-size: 0.82rem; box-sizing: border-box; }
+.daten-tab td input:focus { background: var(--weiss); outline: 2px solid var(--blau); outline-offset: -2px; }
+.daten-tab td input[type="number"] { text-align: right; }
+.daten-tab td.col-gr input { color: var(--blau); }
+.daten-tab td.col-ma input { color: var(--gruen); }
+.daten-tab td.col-jg input { color: var(--lila); }
+.daten-tab td.col-sp input { color: var(--orange); }
+
+/* === Statistik-Dashboard === */
+.dash { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 12px 0; }
+.dash-card { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; padding: 10px 12px; }
+.dash-card .dc-merkmal { font-size: 0.74rem; color: var(--tinte-2); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.04em; }
+.dash-card .dc-kennzahl { font-size: 0.78rem; color: var(--tinte); margin-top: 2px; }
+.dash-card .dc-wert { font-family: var(--mono); font-size: 1.4rem; font-weight: 700; color: var(--blau); margin-top: 4px; }
+.dash-card .dc-einheit { font-size: 0.78rem; color: var(--tinte-2); font-weight: 400; }
+.dash-card.gr { border-left: 3px solid var(--blau); }
+.dash-card.ma { border-left: 3px solid var(--gruen); }
+.dash-card.jg { border-left: 3px solid var(--lila); }
+.dash-card.sp { border-left: 3px solid var(--orange); }
+.dash-card.ma .dc-wert { color: var(--gruen); }
+.dash-card.jg .dc-wert { color: var(--lila); }
+.dash-card.sp .dc-wert { color: var(--orange); }
+
+/* === Masszahlen-Tabelle (kompakt, eine Zeile pro Merkmal) === */
+.mz-tab { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.82rem; margin: 8px 0; border: 1px solid var(--linie); border-radius: 8px; overflow: hidden; }
+.mz-tab thead { background: var(--tinte); color: var(--weiss); }
+.mz-tab th { padding: 7px 10px; font-size: 0.74rem; font-weight: 600; text-align: right; }
+.mz-tab th:first-child { text-align: left; }
+.mz-tab td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--linie); }
+.mz-tab td:first-child { text-align: left; font-weight: 600; }
+.mz-tab tbody tr:last-child td { border-bottom: none; }
+.mz-tab tbody tr:nth-child(even) { background: var(--papier); }
+.mz-tab .na { color: var(--tinte-2); font-style: italic; font-size: 0.78rem; }
+
+/* === Diagramm-Container === */
+.dia-wrap { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; padding: 12px 14px; margin: 10px 0; }
+.dia-wrap .dw-titel { font-weight: 600; margin-bottom: 8px; font-size: 0.92rem; color: var(--tinte); }
+.dia-wrap .dw-sub { font-size: 0.82rem; color: var(--tinte-2); margin-bottom: 8px; }
+.dia-wrap > svg, .punkt-wrap > svg { width: 100%; height: auto; max-width: 100%; display: block; }
+mjx-container svg { width: auto !important; height: auto !important; display: inline-block !important; }
+.dia-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 700px) { .dia-grid-2 { grid-template-columns: 1fr; } }
+
+/* === Stichproben-Slider === */
+.stich-wrap { background: var(--lila-hell); border: 1px solid var(--lila-rand); border-radius: 8px; padding: 12px 14px; margin: 10px 0; }
+.stich-wrap .sw-label { font-weight: 600; font-size: 0.92rem; color: var(--lila); margin-bottom: 6px; }
+.stich-wrap .sw-control { display: flex; gap: 10px; align-items: center; margin: 8px 0; }
+.stich-wrap input[type="range"] { flex: 1; }
+.stich-wrap .sw-n { font-family: var(--mono); font-weight: 700; color: var(--lila); min-width: 60px; }
+.stich-wrap .sw-hint { font-size: 0.82rem; color: var(--tinte-2); font-style: italic; }
+.stich-werte { font-family: var(--mono); font-size: 0.78rem; color: var(--lila); margin-top: 6px; line-height: 1.6; }
+
+/* === Häufigkeitstabelle für Lieblingssport / Jahrgang === */
+.haeuf-tab { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.82rem; margin: 8px 0; }
+.haeuf-tab thead { background: var(--tinte); color: var(--weiss); }
+.haeuf-tab th { padding: 6px 10px; font-size: 0.72rem; font-weight: 600; }
+.haeuf-tab th:first-child { text-align: left; }
+.haeuf-tab td { padding: 5px 10px; border-bottom: 1px solid var(--linie); text-align: right; }
+.haeuf-tab td:first-child { text-align: left; }
+.haeuf-tab tbody tr:nth-child(even) { background: var(--papier); }
+.haeuf-tab tbody tr.modus { background: var(--orange-hell) !important; font-weight: 700; }
+.haeuf-tab-int th.hk { cursor: help; position: relative; user-select: none; }
+.haeuf-tab-int th.hk:hover { background: #2a2620; }
+.haeuf-tab-int th.hk.aktiv { background: var(--blau); }
+.haeuf-tab-int th.hk .kz-tip { display: none; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--tinte); color: var(--weiss); padding: 8px 12px; border-radius: 6px; font-family: var(--sans); font-size: 0.82rem; font-weight: 400; white-space: nowrap; z-index: 30; box-shadow: var(--sl); pointer-events: none; }
+.haeuf-tab-int th.hk .kz-tip::before { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-bottom-color: var(--tinte); }
+.haeuf-tab-int th.hk:hover .kz-tip { display: block; }
+
+/* === Workflow-Diagramm mit Klammern (Bezug 4.0–4.3) === */
+.workflow-block { background: var(--papier); border: 1px solid var(--linie); border-radius: 10px; padding: 14px 16px 18px; margin: 14px 0 18px; }
+.workflow-block .wb-titel { font-weight: 700; color: var(--tinte); font-size: 0.95rem; margin-bottom: 4px; }
+.workflow-block .wb-lead { font-size: 0.88rem; color: var(--tinte-2); margin-bottom: 14px; }
+.workflow-svg-wrap { width: 100%; max-width: 720px; margin: 0 auto; }
+.workflow-svg-wrap svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.workflow-svg-wrap a { cursor: pointer; }
+.workflow-svg-wrap a text { fill: var(--blau); font-weight: 700; }
+.workflow-svg-wrap a:hover text { fill: var(--rot); text-decoration: underline; }
+.workflow-svg-wrap a:hover rect.bracket-bg { fill: var(--blau-hell); }
+.workflow-legende { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.82rem; color: var(--tinte-2); margin-top: 10px; }
+.workflow-legende .wl-eintrag { display: inline-flex; align-items: center; gap: 5px; }
+.workflow-legende .wl-farbe { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+
+/* === RLP-Kompetenzen-Box (vollständig) === */
+
+/* === Daten-Qualitäts-Diskussion === */
+.dq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+@media (max-width: 700px) { .dq-grid { grid-template-columns: 1fr; } }
+.dq-card { padding: 10px 14px; border-radius: 8px; }
+.dq-gut { background: var(--gruen-hell); border: 1px solid var(--gruen-rand); }
+.dq-schlecht { background: var(--rot-hell); border: 1px solid var(--rot-rand); }
+.dq-card .dq-tit { font-weight: 700; margin-bottom: 6px; }
+.dq-gut .dq-tit { color: var(--gruen); }
+.dq-schlecht .dq-tit { color: var(--rot); }
+.dq-card ul { margin: 4px 0 0 0; padding-left: 18px; font-size: 0.88rem; }
+
+/* === Workflow-Bezug === */
+.kapitel-bezug { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0 8px; }
+@media (max-width: 700px) { .kapitel-bezug { grid-template-columns: 1fr 1fr; } }
+.kb-step { background: var(--blau-hell); border: 1px solid var(--blau-rand); border-radius: 8px; padding: 10px; text-align: center; font-size: 0.82rem; text-decoration: none; color: var(--tinte); transition: 0.12s; }
+.kb-step:hover { background: var(--blau); color: var(--weiss); }
+.kb-step .kb-n { display: block; font-family: var(--mono); font-size: 0.7rem; color: var(--blau); margin-bottom: 3px; }
+.kb-step:hover .kb-n { color: var(--weiss); }
+.kb-step strong { display: block; margin-bottom: 3px; }
+
+/* === Kennzahl-Header: Hover + Klick === */
+.mz-tab th.kz { cursor: help; position: relative; user-select: none; }
+.mz-tab th.kz:hover { background: #2a2620; }
+.mz-tab th.kz.aktiv { background: var(--blau); }
+.mz-tab th.kz .kz-tip { display: none; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--tinte); color: var(--weiss); padding: 8px 12px; border-radius: 6px; font-family: var(--sans); font-size: 0.82rem; font-weight: 400; white-space: nowrap; z-index: 30; box-shadow: var(--sl); pointer-events: none; }
+.mz-tab th.kz .kz-tip::before { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-bottom-color: var(--tinte); }
+.mz-tab th.kz:hover .kz-tip { display: block; }
+.kz-detail { background: var(--blau-hell); border: 1px solid var(--blau); border-radius: 8px; padding: 12px 14px; margin: 6px 0 10px; display: none; }
+.kz-detail.aktiv { display: block; }
+.kz-detail .kzd-titel { font-weight: 700; color: var(--blau); margin-bottom: 6px; }
+.kz-detail .kzd-formel { background: var(--weiss); padding: 8px 12px; border-radius: 6px; margin: 6px 0; font-family: var(--mono); }
+.kz-detail .kzd-bsp { font-size: 0.88rem; color: var(--tinte-2); margin-top: 6px; }
+.kz-detail .kzd-bsp code { background: var(--papier-2); padding: 1px 4px; border-radius: 3px; }
+.kz-detail .kzd-close { float: right; background: none; border: none; cursor: pointer; color: var(--tinte-2); font-size: 1.1rem; line-height: 1; }
+.kz-detail .kzd-close:hover { color: var(--rot); }
+
+/* === Punktdiagramm + Marker-Auswahl === */
+.punkt-wrap { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; padding: 10px 14px; margin: 10px 0; }
+.punkt-wrap .pw-titel { font-weight: 600; font-size: 0.92rem; color: var(--tinte); margin-bottom: 6px; }
+.marker-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+.marker-btn { padding: 5px 10px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 14px; cursor: pointer; font-family: var(--mono); font-size: 0.78rem; transition: 0.12s; }
+.marker-btn:hover { border-color: var(--tinte); }
+.marker-btn.aktiv { color: var(--weiss); border-color: transparent; }
+.marker-btn.aktiv[data-marker="min"] { background: #6b7280; }
+.marker-btn.aktiv[data-marker="max"] { background: #6b7280; }
+.marker-btn.aktiv[data-marker="median"] { background: #1d4ed8; }
+.marker-btn.aktiv[data-marker="q1"] { background: #059669; }
+.marker-btn.aktiv[data-marker="q3"] { background: #059669; }
+.marker-btn.aktiv[data-marker="modus"] { background: #b85c00; }
+.marker-erklaerung { font-size: 0.85rem; color: var(--tinte); background: var(--papier); border-radius: 6px; padding: 8px 12px; margin: 6px 0; min-height: 18px; }
+.sortliste-anzeige { font-family: var(--mono); font-size: 0.82rem; line-height: 1.9; word-spacing: 0.15em; }
+.sortliste-anzeige .sl-zahl { padding: 1px 3px; border-radius: 3px; }
+.sortliste-anzeige .sl-zahl.hl-min, .sortliste-anzeige .sl-zahl.hl-max { background: #6b7280; color: var(--weiss); font-weight: 700; }
+.sortliste-anzeige .sl-zahl.hl-median { background: #1d4ed8; color: var(--weiss); font-weight: 700; }
+.sortliste-anzeige .sl-zahl.hl-q1, .sortliste-anzeige .sl-zahl.hl-q3 { background: #059669; color: var(--weiss); font-weight: 700; }
+.sortliste-anzeige .sl-zahl.hl-modus { background: #b85c00; color: var(--weiss); font-weight: 700; }
+
+/* === Häufigkeitstabelle: Erklärblock === */
+.haeuf-erkl { background: var(--blau-hell); border-radius: 6px; padding: 10px 14px; margin: 8px 0; font-size: 0.88rem; }
+.haeuf-erkl .he-titel { font-weight: 700; color: var(--blau); margin-bottom: 4px; }
+
+/* === Klassenbreite-Auswahl === */
+.kbw-bar { display: inline-flex; gap: 4px; margin: 6px 0 8px; align-items: center; flex-wrap: wrap; }
+.kbw-bar .kbw-lbl { font-family: var(--mono); font-size: 0.78rem; color: var(--tinte-2); margin-right: 4px; }
+.kbw-btn { padding: 4px 10px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 4px; cursor: pointer; font-family: var(--mono); font-size: 0.78rem; transition: 0.12s; }
+.kbw-btn:hover { border-color: var(--blau); }
+.kbw-btn.aktiv { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+
+/* === Histogramm: SVG + Häufigkeitstabelle nebeneinander === */
+.histo-flex { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+.histo-flex > svg { flex: 1 1 280px; min-width: 0; max-width: 100%; height: auto; }
+.histo-tab-wrap { flex: 0 0 auto; max-width: 100%; overflow-x: auto; }
+.histo-tab { border-collapse: collapse; font-size: 0.82rem; font-family: var(--mono); }
+.histo-tab th, .histo-tab td { border: 1px solid var(--linie); padding: 3px 8px; text-align: right; }
+.histo-tab th { background: var(--papier); font-weight: 600; color: var(--tinte-2); }
+.histo-tab td.klasse { text-align: center; white-space: nowrap; }
+.histo-tab tr.total td { border-top: 2px solid var(--tinte-2); font-weight: 700; background: var(--blau-hell); }
+@media (max-width: 600px) { .histo-tab { font-size: 0.76rem; } .histo-tab th, .histo-tab td { padding: 2px 5px; } }
+
+/* === Diagnose-Boxen pro Diagramm === */
+.diag-aussage { background: var(--gruen-hell); border-left: 4px solid var(--gruen); padding: 8px 12px; margin: 8px 0 4px; border-radius: 0 6px 6px 0; font-size: 0.88rem; }
+.diag-aussage .da-tit { font-weight: 700; color: var(--gruen); font-size: 0.82rem; margin-bottom: 3px; }
+.diag-charakter { background: var(--lila-hell); border-left: 4px solid var(--lila); padding: 8px 12px; margin: 4px 0 8px; border-radius: 0 6px 6px 0; font-size: 0.88rem; }
+.diag-charakter .dc-tit { font-weight: 700; color: var(--lila); font-size: 0.82rem; margin-bottom: 3px; }
+
+/* === Plausibilitäts-Box === */
+.plausi-wrap { background: var(--papier); border: 1px solid var(--linie); border-radius: 8px; padding: 12px 14px; margin: 10px 0; }
+.plausi-wrap .pl-titel { font-weight: 700; color: var(--tinte); margin-bottom: 8px; font-size: 0.95rem; }
+.plausi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+@media (max-width: 800px) { .plausi-grid { grid-template-columns: 1fr; } }
+.plausi-cell { background: var(--weiss); border-radius: 6px; padding: 8px 10px; font-size: 0.85rem; }
+.plausi-cell .plc-merkmal { font-family: var(--mono); font-size: 0.75rem; color: var(--tinte-2); text-transform: uppercase; }
+.plausi-cell .plc-aussage { margin-top: 4px; }
+.plausi-cell .plc-aussage .check { color: var(--gruen); font-weight: 700; }
+.plausi-cell .plc-aussage .warn { color: var(--orange); font-weight: 700; }
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Grundlagenfach · Lerngebiet 4 · Datenanalyse · 20 Lektionen · Praxisbeispiel</div>
+  <h1 class="pt-h1">4.0 Praxisbeispiel — Datenerhebung in einer BM2-Klasse</h1>
+</div>
+
+<div class="block block-tipp" style="margin:14px 0 12px">
+  <div class="block-titel">💡 Sonderstatus dieser Seite</div>
+  <p><strong>4.0 ist keine Theorieseite</strong>, sondern ein durchlaufendes Anwendungsbeispiel für die Lerngebiete <a class="quer" href="g4-1-grundlagen.html">4.1</a>, <a class="quer" href="g4-2-diagramme.html">4.2</a> und <a class="quer" href="g4-3-masszahlen.html">4.3</a>. Hier werden die Begriffe, Diagramme und Masszahlen an einem einzigen Datensatz (26 Lernende, vier Merkmale) live gezeigt — die zugehörige Theorie steht in 4.1, 4.2 und 4.3. Die Seite eignet sich zum Erkunden vor oder nach dem Theoriestudium, ersetzt aber keine der drei Theorieseiten.</p>
+</div>
+
+<p class="lead">Diese Seite ist eine <strong>Spielwiese</strong> — die Theorie wird in den Kapiteln <a class="quer" href="g4-1-grundlagen.html">4.1</a>, <a class="quer" href="g4-2-diagramme.html">4.2</a> und <a class="quer" href="g4-3-masszahlen.html">4.3</a> systematisch entwickelt. Hier siehst du <em>alle</em> Kompetenzen aus Lerngebiet 4 an einem einzigen, durchgehenden Beispiel: einer Datenerhebung in einer fiktiven BM2-Klasse mit 26 Lernenden. Du kannst die Werte direkt in der Tabelle ändern — alle Diagramme und Masszahlen rechnen sich live neu. Fünf Knopfdruck-Datensätze zeigen, wie sich Form und Kennzahlen unter typischen Verteilungen verhalten.</p>
+
+<div class="workflow-block">
+  <div class="wb-titel">💡 Der Daten-Workflow — und wo welche Theorie zu finden ist</div>
+  <div class="wb-lead">Diese Seite deckt alle vier Schritte praktisch ab. Die theoretischen Details findest du anschliessend in den Kapiteln 4.1, 4.2 und 4.3.</div>
+
+  <div class="workflow-svg-wrap">
+    <svg viewBox="0 0 720 200" preserveAspectRatio="xMidYMid meet" aria-label="Workflow Daten-Analyse mit Bezug zu Kapiteln 4.0–4.3">
+      <!-- Definitionen -->
+      <defs>
+        <marker id="wf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M 0,0 L 10,5 L 0,10 z" fill="#5a5040"/>
+        </marker>
+      </defs>
+
+      <!-- Obere Klammer: 4.0 umfasst alle 4 Schritte -->
+      <a xlink:href="g4-0-praxisbeispiel-bm2-klasse.html">
+        <rect class="bracket-bg" x="40" y="6" width="640" height="26" fill="#fff7e6" stroke="#b85c00" stroke-width="1.2" rx="5"/>
+        <text x="360" y="23" text-anchor="middle" font-size="12" fill="#b85c00" font-weight="700">4.0 Praxisbeispiel — die ganze Reise an einer Datenerhebung</text>
+      </a>
+      <!-- Verbinder von 4.0-Klammer nach unten zu den Schritten -->
+      <line x1="100" y1="32" x2="100" y2="58" stroke="#b85c00" stroke-width="1.2" stroke-dasharray="3,3"/>
+      <line x1="280" y1="32" x2="280" y2="58" stroke="#b85c00" stroke-width="1.2" stroke-dasharray="3,3"/>
+      <line x1="440" y1="32" x2="440" y2="58" stroke="#b85c00" stroke-width="1.2" stroke-dasharray="3,3"/>
+      <line x1="620" y1="32" x2="620" y2="58" stroke="#b85c00" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+      <!-- Die vier Schritt-Karten (zentriert) -->
+      <g font-family="'Source Sans 3', system-ui, sans-serif">
+        <!-- Schritt 1 -->
+        <rect x="40" y="58" width="120" height="52" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5" rx="6"/>
+        <text x="100" y="72" text-anchor="middle" font-size="9" font-family="'JetBrains Mono', monospace" fill="#1a4f8a">Schritt 1</text>
+        <text x="100" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4f8a">Erheben</text>
+        <text x="100" y="103" text-anchor="middle" font-size="10" fill="#1c1a17">Daten sammeln</text>
+        <!-- Schritt 2 -->
+        <rect x="220" y="58" width="120" height="52" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5" rx="6"/>
+        <text x="280" y="72" text-anchor="middle" font-size="9" font-family="'JetBrains Mono', monospace" fill="#1a4f8a">Schritt 2</text>
+        <text x="280" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4f8a">Ordnen</text>
+        <text x="280" y="103" text-anchor="middle" font-size="10" fill="#1c1a17">Sortieren, klassieren</text>
+        <!-- Schritt 3 -->
+        <rect x="380" y="58" width="120" height="52" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5" rx="6"/>
+        <text x="440" y="72" text-anchor="middle" font-size="9" font-family="'JetBrains Mono', monospace" fill="#1a4f8a">Schritt 3</text>
+        <text x="440" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4f8a">Visualisieren</text>
+        <text x="440" y="103" text-anchor="middle" font-size="10" fill="#1c1a17">Diagramm wählen</text>
+        <!-- Schritt 4 -->
+        <rect x="560" y="58" width="120" height="52" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5" rx="6"/>
+        <text x="620" y="72" text-anchor="middle" font-size="9" font-family="'JetBrains Mono', monospace" fill="#1a4f8a">Schritt 4</text>
+        <text x="620" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4f8a">Auswerten</text>
+        <text x="620" y="103" text-anchor="middle" font-size="10" fill="#1c1a17">Kennzahlen, Aussage</text>
+
+        <!-- Pfeile zwischen Schritten -->
+        <line x1="165" y1="84" x2="215" y2="84" stroke="#5a5040" stroke-width="1.5" marker-end="url(#wf-arrow)"/>
+        <line x1="345" y1="84" x2="375" y2="84" stroke="#5a5040" stroke-width="1.5" marker-end="url(#wf-arrow)"/>
+        <line x1="505" y1="84" x2="555" y2="84" stroke="#5a5040" stroke-width="1.5" marker-end="url(#wf-arrow)"/>
+      </g>
+
+      <!-- Untere Klammern: 4.1 (Schritt 1), 4.2 (Schritt 2+3), 4.3 (Schritt 4) -->
+      <!-- 4.1 -->
+      <a xlink:href="g4-1-grundlagen.html">
+        <rect class="bracket-bg" x="40" y="130" width="120" height="34" fill="#fff" stroke="#1a4f8a" stroke-width="1.2" rx="5"/>
+        <text x="100" y="146" text-anchor="middle" font-size="12" fill="#1a4f8a" font-weight="700">4.1 Grundlagen</text>
+        <text x="100" y="159" text-anchor="middle" font-size="9" fill="#5a5040">Begriffe, Datenqualität</text>
+      </a>
+      <line x1="100" y1="110" x2="100" y2="130" stroke="#1a4f8a" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+      <!-- 4.2 -->
+      <a xlink:href="g4-2-diagramme.html">
+        <rect class="bracket-bg" x="220" y="130" width="280" height="34" fill="#fff" stroke="#1a4f8a" stroke-width="1.2" rx="5"/>
+        <text x="360" y="146" text-anchor="middle" font-size="12" fill="#1a4f8a" font-weight="700">4.2 Diagramme</text>
+        <text x="360" y="159" text-anchor="middle" font-size="9" fill="#5a5040">Klassieren, vier Diagrammtypen, bivariat</text>
+      </a>
+      <line x1="280" y1="110" x2="280" y2="130" stroke="#1a4f8a" stroke-width="1.2" stroke-dasharray="3,3"/>
+      <line x1="440" y1="110" x2="440" y2="130" stroke="#1a4f8a" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+      <!-- 4.3 -->
+      <a xlink:href="g4-3-masszahlen.html">
+        <rect class="bracket-bg" x="560" y="130" width="120" height="34" fill="#fff" stroke="#1a4f8a" stroke-width="1.2" rx="5"/>
+        <text x="620" y="146" text-anchor="middle" font-size="12" fill="#1a4f8a" font-weight="700">4.3 Masszahlen</text>
+        <text x="620" y="159" text-anchor="middle" font-size="9" fill="#5a5040">Lage, Streuung, Robustheit</text>
+      </a>
+      <line x1="620" y1="110" x2="620" y2="130" stroke="#1a4f8a" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+      <!-- Fussnote -->
+      <text x="360" y="188" text-anchor="middle" font-size="10" fill="#5a5040" font-style="italic">Auf die Kapitel-Boxen klicken, um zur jeweiligen Theorie-Seite zu wechseln.</text>
+    </svg>
+  </div>
+</div>
+
+
+<!-- ══ 2. EINSTIEG — Datenerhebung und Datentabelle ══ -->
+<h2 id="einstieg">Einstieg — die Datenerhebung</h2>
+
+<p>Eine BM2-Klasse mit 26 Lernenden wird befragt. Für jede Person werden vier Merkmale erfasst:</p>
+
+<table class="ftb-tabelle" style="margin: 10px 0">
+  <thead><tr><th>Merkmal</th><th>Einheit / Werte</th><th>Merkmalstyp</th><th>Hauptdiagramm</th></tr></thead>
+  <tbody>
+    <tr><td>Körpergrösse</td><td>cm</td><td>stetig</td><td>Histogramm, Boxplot</td></tr>
+    <tr><td>Körpermasse</td><td>kg</td><td>stetig</td><td>Histogramm, Boxplot</td></tr>
+    <tr><td>Jahrgang</td><td>Jahr</td><td>diskret</td><td>Balkendiagramm</td></tr>
+    <tr><td>Lieblingssport</td><td>Sportart</td><td>kategorial</td><td>Balken-/Kuchendiagramm</td></tr>
+  </tbody>
+</table>
+
+<p>Die Daten sind <strong>fiktiv und anonymisiert</strong>: jede Person trägt nur eine laufende Nummer von 1 bis 26. So bleibt das Beispiel datenschutzkonform und beliebig wiederverwendbar.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Grundgesamtheit · Gesamterhebung · Stichprobe — bezogen auf <em>unser</em> Beispiel</div>
+  <p>Welchen Bezugsrahmen man wählt, entscheidet, ob die Erhebung eine Gesamt&shy;erhebung oder eine Stichprobe ist. Klick auf eine Pille — die Tabelle bleibt dieselbe, der Status&shy;text rechts ändert sich.</p>
+  <div class="scope-bar">
+    <span class="sb-lbl">Bezugsrahmen:</span>
+    <button class="scope-pill aktiv" data-scope="klasse" onclick="setScope('klasse')">die Klasse selbst</button>
+    <button class="scope-pill" data-scope="schule" onclick="setScope('schule')">alle BM2-Klassen der Schule</button>
+    <button class="scope-pill" data-scope="schweiz" onclick="setScope('schweiz')">alle BM2-Lernenden der Schweiz</button>
+  </div>
+  <div id="scope-erklaerung" style="margin-top: 6px;">
+    <!-- wird von JS gefüllt -->
+  </div>
+</div>
+
+
+<!-- ══ Preset-Bar + Tabelle ══ -->
+<h2 id="urliste">Urliste — die Rohdaten in der Tabellenkalkulation</h2>
+
+<p>Die folgende Tabelle ist die <strong>Urliste</strong> der Erhebung — eingesammelt in der Reihenfolge, wie die 26 Lernenden geantwortet haben. Sie ist editierbar: ändere einen Wert, und alle Diagramme und Masszahlen weiter unten reagieren sofort. Mit den fünf Knöpfen lädst du verschiedene typische Verteilungen.</p>
+
+<div class="preset-bar">
+  <span class="pb-label">Datensatz wählen:</span>
+  <button class="preset-btn aktiv" data-preset="realistisch" onclick="ladePreset('realistisch')">Realistisch</button>
+  <button class="preset-btn" data-preset="ausreisser" onclick="ladePreset('ausreisser')">Mit Ausreisser</button>
+  <button class="preset-btn" data-preset="homogen" onclick="ladePreset('homogen')">Homogen</button>
+  <button class="preset-btn" data-preset="bimodal" onclick="ladePreset('bimodal')">Bimodal</button>
+  <button class="preset-btn" data-preset="rechtsschief" onclick="ladePreset('rechtsschief')">Rechtsschief (Masse)</button>
+</div>
+
+<div class="daten-wrap">
+  <table class="daten-tab" id="daten-tab">
+    <thead>
+      <tr>
+        <th style="width:50px">Nr.</th>
+        <th>Grösse [cm]</th>
+        <th>Masse [kg]</th>
+        <th>Jahrgang</th>
+        <th>Lieblingssport</th>
+      </tr>
+    </thead>
+    <tbody id="daten-body">
+      <!-- wird von JS gefüllt -->
+    </tbody>
+  </table>
+</div>
+
+<p style="font-size:0.85rem;color:var(--tinte-2);font-style:italic;margin-top:-4px">
+  Stichprobenumfang: <code>n = <span id="n-anzeige">26</span></code>. Klicke in eine Zelle, um den Wert direkt zu ändern.
+</p>
+
+
+<!-- ══ 3. BEGRIFFE AM BEISPIEL — Urliste, Rang ══ -->
+<h2 id="begriffe">Begriffe am Beispiel — Urliste, sortiert, Rang <a class="quer" href="g4-1-grundlagen.html#definition">↗ 4.1</a></h2>
+
+<p>Die Tabelle oben ist die <strong>Urliste</strong>: alle Werte in der Erhebungsreihenfolge. Um den <strong>Rang</strong> eines einzelnen Wertes abzulesen, müssen die Daten <em>sortiert</em> werden — denn der Rang ist die Position in der sortierten Liste. Für die Grösse sieht das so aus:</p>
+
+<div class="dia-wrap">
+  <div class="dw-titel">Grösse [cm] — Urliste, Punktdiagramm und sortierte Liste</div>
+  <div class="dw-sub">Klick auf eine Markierung unten — sie erscheint im Diagramm und in der sortierten Liste, plus eine kurze Erklärung.</div>
+
+  <div id="urliste-anzeige" style="font-family:var(--mono);font-size:0.82rem;line-height:1.8;margin-bottom:8px">
+    <!-- wird von JS gefüllt -->
+  </div>
+
+  <div class="punkt-wrap">
+    <div class="pw-titel">Punktdiagramm der Grösse [cm]</div>
+    <svg id="svg-punkt-groesse" viewBox="0 0 460 180" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="marker-tabs">
+      <span style="font-family:var(--mono);font-size:0.78rem;color:var(--tinte-2);align-self:center;margin-right:4px">Markierung:</span>
+      <button class="marker-btn" data-marker="min" onclick="toggleMarker('min')">Min</button>
+      <button class="marker-btn" data-marker="q1" onclick="toggleMarker('q1')">\(Q_1\)</button>
+      <button class="marker-btn" data-marker="median" onclick="toggleMarker('median')">Median \(\tilde{x}\)</button>
+      <button class="marker-btn" data-marker="q3" onclick="toggleMarker('q3')">\(Q_3\)</button>
+      <button class="marker-btn" data-marker="max" onclick="toggleMarker('max')">Max</button>
+      <button class="marker-btn" data-marker="modus" onclick="toggleMarker('modus')">Modus \(\hat{x}\)</button>
+      <button class="marker-btn" style="margin-left:auto;background:none" onclick="resetMarker()">⟲ alle aus</button>
+    </div>
+    <div class="marker-erklaerung" id="marker-erklaerung">
+      Wähle eine Markierung — sie wird im Diagramm <strong>und</strong> in der sortierten Liste hervorgehoben.
+    </div>
+  </div>
+
+  <div class="sortliste-anzeige" id="sortliste-anzeige">
+    <!-- wird von JS gefüllt: sortierte Liste mit Highlights -->
+  </div>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Was bedeutet „<em>Tabellenkalkulation einsetzen</em>"?</div>
+  <p>Genau das, was du oben gerade tust: Daten in Zellen erfassen, sortieren, automatisch Kennzahlen berechnen lassen. Die Funktionen sind in Excel/LibreOffice:
+  <code>MITTELWERT</code> → Mittelwert,
+  <code>MEDIAN</code> → Median,
+  <code>STABW.S</code> → Standardabweichung (Stichprobe),
+  <code>QUARTILE</code> → Q<sub>1</sub>, Q<sub>3</sub>,
+  <code>ZÄHLENWENN</code> → Häufigkeit einer Kategorie. Im Hintergrund läuft hier die gleiche Rechenlogik in JavaScript.</p>
+</div>
+
+
+<!-- ══ 4. KENNZAHLEN AM BEISPIEL — Lagemasse + Streumasse ══ -->
+<h2 id="kennzahlen">Kennzahlen — Lage- und Streumasse <a class="quer" href="g4-3-masszahlen.html">↗ 4.3</a></h2>
+
+<p>Auf der Tabelle oben berechnen wir hier alle Lage- und Streumasse für die <em>numerischen</em> Merkmale (Grösse, Masse, Jahrgang) und den Modus für das <em>kategoriale</em> Merkmal (Lieblingssport).</p>
+
+<p style="font-size:0.82rem;color:var(--tinte-2);margin:6px 0 4px 0;font-style:italic">Spaltennamen <em>überfahren</em> für einen Schnelltipp, <em>anklicken</em> für eine permanente Erklärbox mit Formel und Beispielrechnung.</p>
+
+<table class="mz-tab" id="mz-tab">
+  <thead>
+    <tr>
+      <th>Merkmal</th>
+      <th class="kz" data-kz="n" onclick="oeffneKzDetail('n')"><em>n</em><span class="kz-tip">Stichprobenumfang — Anzahl Werte</span></th>
+      <th class="kz" data-kz="min" onclick="oeffneKzDetail('min')">Min<span class="kz-tip">kleinster Wert in der Stichprobe</span></th>
+      <th class="kz" data-kz="max" onclick="oeffneKzDetail('max')">Max<span class="kz-tip">grösster Wert in der Stichprobe</span></th>
+      <th class="kz" data-kz="mw" onclick="oeffneKzDetail('mw')">\(\bar{x}\)<span class="kz-tip">Mittelwert (Arithmetisches Mittel)</span></th>
+      <th class="kz" data-kz="med" onclick="oeffneKzDetail('med')">\(\tilde{x}\)<span class="kz-tip">Median — Wert in der Mitte der sortierten Liste</span></th>
+      <th class="kz" data-kz="mod" onclick="oeffneKzDetail('mod')">\(\hat{x}\)<span class="kz-tip">Modus — häufigster Wert</span></th>
+      <th class="kz" data-kz="s" onclick="oeffneKzDetail('s')"><em>s</em><span class="kz-tip">Standardabweichung — mittlere Abweichung vom Mittelwert</span></th>
+      <th class="kz" data-kz="q1" onclick="oeffneKzDetail('q1')">\(Q_1\)<span class="kz-tip">unteres Quartil — 25 % der Werte sind \(\le Q_1\)</span></th>
+      <th class="kz" data-kz="q3" onclick="oeffneKzDetail('q3')">\(Q_3\)<span class="kz-tip">oberes Quartil — 75 % der Werte sind \(\le Q_3\)</span></th>
+      <th class="kz" data-kz="qd" onclick="oeffneKzDetail('qd')">QD<span class="kz-tip">Quartilsdifferenz \(Q_3 - Q_1\)</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="mz-groesse"><td>Grösse [cm]</td><td colspan="10" class="na">…</td></tr>
+    <tr id="mz-masse"><td>Masse [kg]</td><td colspan="10" class="na">…</td></tr>
+    <tr id="mz-jahrgang"><td>Jahrgang</td><td colspan="10" class="na">…</td></tr>
+    <tr id="mz-sport"><td>Lieblingssport</td><td colspan="10" class="na">…</td></tr>
+  </tbody>
+</table>
+
+<div class="kz-detail" id="kz-detail">
+  <button class="kzd-close" onclick="schliesseKzDetail()" title="schliessen">✕</button>
+  <div id="kz-detail-inhalt"><!-- per JS gefüllt --></div>
+</div>
+
+<div class="dash" id="dash-kennzahlen">
+  <!-- wird von JS gefüllt: Hervorhebung der wichtigsten Werte pro Merkmal -->
+</div>
+
+<div class="block block-def plausi-wrap">
+  <div class="block-titel">📘 Plausibilitätsprüfung der Masszahlen</div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin:0 0 8px 0">Bevor wir die Kennzahlen interpretieren, prüfen wir, ob sie überhaupt sinnvoll sind. Auffällige Werte sind nicht automatisch falsch, verdienen aber einen zweiten Blick.</p>
+  <div class="plausi-grid" id="plausi-grid"><!-- per JS gefüllt --></div>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Wann welche Kennzahl?</div>
+  <ul style="margin:6px 0 0 0">
+    <li><strong>Mittelwert \(\bar{x}\)</strong> nur bei numerischen, symmetrischen Daten ohne Ausreisser. Reagiert empfindlich auf Extremwerte.</li>
+    <li><strong>Median \(\tilde{x}\)</strong> bei schiefen Verteilungen oder Ausreissern — er ist <em>robust</em>.</li>
+    <li><strong>Modus \(\hat{x}\)</strong> einziges Lagemass für <em>kategoriale</em> Daten (hier: Lieblingssport).</li>
+    <li><strong>Standardabweichung <em>s</em></strong> bei symmetrischen Daten, in Verbindung mit dem Mittelwert.</li>
+    <li><strong>Quartilsdifferenz QD</strong> bei schiefen Daten oder Ausreissern, in Verbindung mit dem Median. Sie ist genau die Boxbreite im Boxplot.</li>
+  </ul>
+  <p style="margin:8px 0 0 0">Klick auf „Mit Ausreisser" oder „Rechtsschief" oben und beobachte, wie sich der Abstand zwischen Mittelwert und Median ändert — das ist Ausreisser- bzw. Schiefe-Sensitivität in Aktion.</p>
+</div>
+
+
+<!-- ══ 5. DIAGRAMME ══ -->
+<h2 id="diagramme">Diagramme — alle vier Standardtypen <a class="quer" href="g4-2-diagramme.html">↗ 4.2</a></h2>
+
+<p>Welches Diagramm zu welchen Daten passt, hängt vom <em>Merkmalstyp</em> ab. Wir zeigen alle vier Diagrammtypen aus 4.2 am gleichen Datensatz:</p>
+
+<!-- Lieblingssport: Balken + Kuchen -->
+<div class="dia-grid-2">
+  <div class="dia-wrap">
+    <div class="dw-titel">Lieblingssport — Balkendiagramm</div>
+    <div class="dw-sub">Kategoriales Merkmal. Lücken zwischen den Balken: zwischen den Kategorien gibt es nichts.</div>
+    <svg id="svg-sport-balken" viewBox="0 0 460 240" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="diag-aussage" id="diag-sport-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
+    <div class="diag-charakter" id="diag-sport-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
+  </div>
+  <div class="dia-wrap">
+    <div class="dw-titel">Lieblingssport — Kuchendiagramm</div>
+    <div class="dw-sub">Anteile am Ganzen. Bei vielen Kategorien wird&apos;s unübersichtlich — siehe rechts.</div>
+    <svg id="svg-sport-kuchen" viewBox="0 0 460 240" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="diag-aussage" id="diag-kuchen-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
+    <div class="diag-charakter" id="diag-kuchen-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
+  </div>
+</div>
+
+<div class="dia-wrap">
+  <div class="dw-titel">Lieblingssport — Häufigkeitstabelle</div>
+  <p style="font-size:0.82rem;color:var(--tinte-2);margin:0 0 6px 0;font-style:italic">Spaltennamen <em>überfahren</em> für einen Schnelltipp, <em>anklicken</em> für eine permanente Erklärbox mit Formel.</p>
+  <table class="haeuf-tab haeuf-tab-int" id="haeuf-sport">
+    <thead>
+      <tr>
+        <th>Kategorie</th>
+        <th class="hk" data-hk="h" onclick="oeffneHkDetail('h')">Absolute Häufigkeit <em>h</em><span class="kz-tip">Anzahl Nennungen pro Kategorie</span></th>
+        <th class="hk" data-hk="hn" onclick="oeffneHkDetail('hn')">Relative Häufigkeit <em>h/n</em><span class="kz-tip">Anteil am Ganzen, in % oder als Bruch</span></th>
+        <th class="hk" data-hk="winkel" onclick="oeffneHkDetail('winkel')">Winkel im Kuchen<span class="kz-tip">α = (h/n) · 360°</span></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <div class="kz-detail" id="hk-detail">
+    <button class="kzd-close" onclick="schliesseHkDetail()" title="schliessen">✕</button>
+    <div id="hk-detail-inhalt"></div>
+  </div>
+</div>
+
+<!-- Jahrgang: Balken -->
+<div class="dia-wrap">
+  <div class="dw-titel">Jahrgang — Balkendiagramm</div>
+  <div class="dw-sub">Diskretes Merkmal. Balken sind getrennt, weil zwischen den Jahrgängen keine Zwischenwerte sinnvoll sind.</div>
+  <svg id="svg-jg-balken" viewBox="0 0 460 200" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="diag-aussage" id="diag-jg-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
+  <div class="diag-charakter" id="diag-jg-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
+</div>
+
+<!-- Grösse: Histogramm + Boxplot -->
+<div class="dia-grid-2">
+  <div class="dia-wrap">
+    <div class="dw-titel">Grösse — Histogramm</div>
+    <div class="dw-sub">Stetiges Merkmal. Balken berühren sich, weil die Skala kontinuierlich ist.</div>
+    <div class="kbw-bar">
+      <span class="kbw-lbl">Klassenbreite:</span>
+      <button class="kbw-btn" data-merkmal="gr" data-kbw="2" onclick="setKbw('gr', 2)">2 cm</button>
+      <button class="kbw-btn aktiv" data-merkmal="gr" data-kbw="5" onclick="setKbw('gr', 5)">5 cm</button>
+      <button class="kbw-btn" data-merkmal="gr" data-kbw="10" onclick="setKbw('gr', 10)">10 cm</button>
+    </div>
+    <div class="kbw-bar">
+      <span class="kbw-lbl">Grenzen:</span>
+      <button class="kbw-btn aktiv" data-merkmal="gr" data-grenze="lo" onclick="setGrenze('gr', 'lo')">g<sub>L</sub> ≤ x &lt; g<sub>R</sub></button>
+      <button class="kbw-btn" data-merkmal="gr" data-grenze="hi" onclick="setGrenze('gr', 'hi')">g<sub>L</sub> &lt; x ≤ g<sub>R</sub></button>
+    </div>
+    <div style="font-size:0.78rem;color:var(--tinte-2);margin:2px 0 8px">
+      Schreibweise als Intervall: <code>[g<sub>L</sub>; g<sub>R</sub>[</code> bzw. <code>]g<sub>L</sub>; g<sub>R</sub>]</code>.
+      Die Klammer-Richtung zeigt, ob die Grenze dazugehört (zum Intervall hin: ja; weg: nein).
+      ↗ <a href="g1-2-zahlen-grundoperationen.html#typen">Intervalle — Repetition aus 1.2</a>
+    </div>
+    <div class="histo-flex">
+      <svg id="svg-gr-histo" viewBox="0 0 460 220" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="histo-tab-wrap" id="tab-gr-histo-wrap"><!-- wird von JS gefüllt --></div>
+    </div>
+    <div style="font-size:0.82rem;color:var(--tinte-2);margin-top:6px;font-style:italic">
+      Probier&apos;s aus: bei <code>2 cm</code> sieht jede einzelne Beule des Datensatzes wie ein Peak aus,
+      bei <code>10 cm</code> verschwinden die Details. <strong>Die Klassenwahl ist nicht eindeutig</strong> —
+      sie muss zum Stichprobenumfang passen (Faustregel: ca. \(\sqrt{n}\) Klassen, also bei n = 26 etwa 5 Klassen).
+    </div>
+    <div class="diag-aussage" id="diag-gr-histo-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
+    <div class="diag-charakter" id="diag-gr-histo-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
+  </div>
+  <div class="dia-wrap">
+    <div class="dw-titel">Grösse — Boxplot</div>
+    <div class="dw-sub">5-Zahlen-Zusammenfassung: min, Q₁, Median, Q₃, max. Die Box umfasst die mittleren 50%.</div>
+    <svg id="svg-gr-box" viewBox="0 0 460 160" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="diag-aussage" id="diag-gr-box-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
+    <div class="diag-charakter" id="diag-gr-box-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
+  </div>
+</div>
+
+<!-- Masse: Histogramm + Boxplot -->
+<div class="dia-grid-2">
+  <div class="dia-wrap">
+    <div class="dw-titel">Masse — Histogramm</div>
+    <div class="dw-sub">Stetiges Merkmal, klassiert. Hier dominieren beim Datensatz „Rechtsschief" wenige hohe Werte.</div>
+    <div class="kbw-bar">
+      <span class="kbw-lbl">Klassenbreite:</span>
+      <button class="kbw-btn" data-merkmal="ma" data-kbw="2" onclick="setKbw('ma', 2)">2 kg</button>
+      <button class="kbw-btn" data-merkmal="ma" data-kbw="5" onclick="setKbw('ma', 5)">5 kg</button>
+      <button class="kbw-btn aktiv" data-merkmal="ma" data-kbw="10" onclick="setKbw('ma', 10)">10 kg</button>
+    </div>
+    <div class="kbw-bar">
+      <span class="kbw-lbl">Grenzen:</span>
+      <button class="kbw-btn aktiv" data-merkmal="ma" data-grenze="lo" onclick="setGrenze('ma', 'lo')">g<sub>L</sub> ≤ x &lt; g<sub>R</sub></button>
+      <button class="kbw-btn" data-merkmal="ma" data-grenze="hi" onclick="setGrenze('ma', 'hi')">g<sub>L</sub> &lt; x ≤ g<sub>R</sub></button>
+    </div>
+    <div class="histo-flex">
+      <svg id="svg-ma-histo" viewBox="0 0 460 220" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="histo-tab-wrap" id="tab-ma-histo-wrap"><!-- wird von JS gefüllt --></div>
+    </div>
+    <div style="font-size:0.82rem;color:var(--tinte-2);margin-top:6px;font-style:italic">
+      Die Klassenbreite ändert die Form des Histogramms — die Daten bleiben gleich.
+      <strong>Es gibt kein „richtiges" Histogramm</strong>, sondern nur eine zweckmässige Klassenbreite.
+    </div>
+    <div class="diag-aussage" id="diag-ma-histo-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
+    <div class="diag-charakter" id="diag-ma-histo-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
+  </div>
+  <div class="dia-wrap">
+    <div class="dw-titel">Masse — Boxplot</div>
+    <div class="dw-sub">Bei rechtsschiefer Verteilung sieht man den langen rechten Whisker.</div>
+    <svg id="svg-ma-box" viewBox="0 0 460 160" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="diag-aussage" id="diag-ma-box-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
+    <div class="diag-charakter" id="diag-ma-box-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
+  </div>
+</div>
+
+<!-- Bivariat: Streudiagramm Grösse vs. Masse -->
+<div class="dia-wrap">
+  <div class="dw-titel">Bivariat — Grösse vs. Masse (Streudiagramm)</div>
+  <div class="dw-sub">Jede Person = ein Punkt. Erwartet: positiver Zusammenhang (grössere Personen sind tendenziell schwerer).</div>
+  <svg id="svg-streu" viewBox="0 0 460 320" preserveAspectRatio="xMidYMid meet"></svg>
+  <div id="streu-info" style="font-size:0.85rem;color:var(--tinte-2);margin-top:8px;font-style:italic"></div>
+  <div class="diag-aussage" id="diag-streu-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
+  <div class="diag-charakter" id="diag-streu-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Form der Verteilung — visuell ablesen</div>
+  <p>Schau auf das Histogramm der Masse:</p>
+  <ul style="margin:6px 0 0 0">
+    <li><strong>Symmetrisch</strong> (Glockenform): Mittelwert ≈ Median. Datensatz „Realistisch" und „Homogen".</li>
+    <li><strong>Rechtsschief</strong> (langer rechter Schwanz): Mittelwert &gt; Median. Datensatz „Rechtsschief".</li>
+    <li><strong>Bimodal</strong> (zwei Gipfel): Es gibt zwei Gruppen. Datensatz „Bimodal".</li>
+    <li><strong>Mit Ausreisser</strong>: Ein Wert weit ausserhalb. Datensatz „Mit Ausreisser".</li>
+  </ul>
+</div>
+
+
+<!-- ══ 6. STICHPROBE — Schul-Stichprobe aus der Klasse ziehen ══ -->
+<h2 id="stichprobe">Stichprobe — eine Auswahl ziehen</h2>
+
+<p>Wenn wir die Klasse als <em>Stichprobe</em> für „alle BM2-Klassen der Schule" betrachten, ist <code>n = 26</code> der <strong>Stichprobenumfang</strong>. Manchmal interessiert uns aber auch eine <em>noch kleinere</em> Auswahl — etwa eine Zufallsstichprobe von 8 Personen aus unserer Klasse, mit der wir die Klassenkennzahlen schätzen wollen.</p>
+
+<div class="stich-wrap">
+  <div class="sw-label">Zufallsstichprobe ziehen (ohne Zurücklegen):</div>
+  <div class="sw-control">
+    <span class="sw-lbl" style="font-family:var(--mono);font-size:0.82rem;color:var(--tinte-2)">Stichprobenumfang:</span>
+    <input type="range" id="stich-n" min="3" max="26" value="8">
+    <span class="sw-n">n = <span id="stich-n-anz">8</span></span>
+    <button class="preset-btn" onclick="neueStichprobe()">⟲ neu ziehen</button>
+  </div>
+  <div class="stich-werte" id="stich-werte"></div>
+  <div class="sw-hint">Beobachte den Mittelwert der Grösse in der Stichprobe (oben) und vergleiche mit dem wahren Klassen-Mittelwert. Bei kleinem n schwanken die Schätzungen stark.</div>
+</div>
+
+
+<!-- ══ 7. DATENGEWINNUNG UND -QUALITÄT ══ -->
+<h2 id="qualitaet">Datengewinnung und Datenqualität</h2>
+
+<p>Die schönsten Diagramme nützen nichts, wenn die Rohdaten schlecht sind. Bei einer Erhebung wie unserer gibt es typische Fallen — und einfache Regeln, sie zu vermeiden.</p>
+
+<div class="dq-grid">
+  <div class="dq-card dq-gut">
+    <div class="dq-tit">✓ Gute Datenqualität</div>
+    <ul>
+      <li><strong>Anonymisierung</strong>: Nummern statt Namen — Datenschutz und ehrlichere Antworten.</li>
+      <li><strong>Einheitliche Einheiten</strong>: alle Grössen in cm, alle Massen in kg.</li>
+      <li><strong>Klare Definition der Werte</strong>: „Jahrgang" = Geburtsjahr, nicht Alter (das Alter ändert sich übers Jahr, der Jahrgang nicht).</li>
+      <li><strong>Begrenzte Kategorien</strong>: „Lieblingssport" mit überschaubarer Auswahl, sonst zu viele Einzelnennungen.</li>
+      <li><strong>Plausibilitäts-Check</strong>: Eine Grösse von 250 cm oder 5 kg ist verdächtig — eintippen, dann nachfragen.</li>
+    </ul>
+  </div>
+  <div class="dq-card dq-schlecht">
+    <div class="dq-tit">✗ Häufige Fehler</div>
+    <ul>
+      <li><strong>Selbstauskunft ohne Messung</strong>: Gewichtsangaben werden oft beschönigt.</li>
+      <li><strong>Verschiedene Einheiten</strong>: kg und g, m und cm — gefährlich bei späteren Berechnungen.</li>
+      <li><strong>Offene Textfelder</strong> bei kategorialen Daten: „Fussball", „fussball", „Soccer" zählen als drei Kategorien.</li>
+      <li><strong>Leere Zellen</strong> bei numerischen Daten kommen in <code>MITTELWERT</code> nicht als 0 vor — aber bei eigener Berechnung schon ein typischer Bug.</li>
+      <li><strong>Stichproben-Verzerrung (Bias)</strong>: Wer nicht da war, antwortet nicht. Wenn die Abwesenden systematisch anders sind, ist die Stichprobe nicht repräsentativ.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Stichproben-Bias — ein konkretes Beispiel</div>
+  <p>Wenn ich „Lieblingssport" am Sportlager-Anlass befrage, sind Sportbegeisterte überrepräsentiert. Antwort „keiner" wird seltener gewählt — nicht weil sie unbeliebt ist, sondern weil die zugehörigen Personen schlicht nicht da sind. Die Stichprobe verzerrt das Bild der Grundgesamtheit. <em>Frage daran: Ist meine Stichprobe für die Grundgesamtheit repräsentativ?</em></p>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Grundlagenfach 4.0 Praxisbeispiel — Datenerhebung in einer BM2-Klasse</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script>
+buildNav({
+  bereich:'grundlagen', id:'g4-0',
+  kapitelNr:'4.0', kapitelTitel:'Praxisbeispiel BM2-Klasse',
+  prev:{nr:'3.3',titel:'Quadratische Funktionen',url:'g3-3-quadratische-funktionen.html'},
+  next:{nr:'4.1',titel:'Grundlagen',url:'g4-1-grundlagen.html'}
+});
+</script>
+
+<!-- ══ JS-LOGIK ══ -->
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   PRESETS · 5 fiktive Klassen mit 26 Lernenden
+   Format pro Zeile: [Nr, Grösse_cm, Masse_kg, Jahrgang, Sport]
+═══════════════════════════════════════════════════════════════ */
+const PRESETS = {
+  realistisch: [[1,175,70.2,2008,"Joggen"],[2,185,90.8,2005,"Fitness"],[3,165,59.6,2005,"Velo"],[4,179,81.3,2007,"Velo"],[5,181,73.8,2006,"Tennis"],[6,171,66.5,2008,"Fussball"],[7,175,66.6,2006,"Velo"],[8,172,64.8,2008,"Tennis"],[9,163,61.1,2005,"Joggen"],[10,164,72.6,2007,"Tennis"],[11,165,53.2,2007,"Fussball"],[12,161,66.3,2008,"keiner"],[13,158,53.0,2008,"Schwimmen"],[14,168,56.4,2005,"keiner"],[15,178,87.3,2008,"keiner"],[16,171,73.7,2008,"Fussball"],[17,171,57.2,2007,"Fussball"],[18,173,70.9,2007,"Fussball"],[19,194,60.9,2008,"Schwimmen"],[20,157,55.4,2005,"keiner"],[21,170,74.9,2007,"Schwimmen"],[22,167,63.3,2008,"Fitness"],[23,172,63.9,2006,"Fitness"],[24,174,74.7,2007,"keiner"],[25,171,75.1,2008,"Fussball"],[26,174,70.2,2007,"Volleyball"]],
+  ausreisser: [[1,167,68.0,2008,"Tennis"],[2,167,52.5,2007,"keiner"],[3,176,62.2,2007,"Velo"],[4,170,77.5,2007,"Velo"],[5,166,68.4,2008,"Fussball"],[6,174,55.4,2007,"Schwimmen"],[7,167,68.4,2008,"Fussball"],[8,176,62.4,2007,"Tennis"],[9,180,60.4,2006,"Schwimmen"],[10,171,72.7,2007,"Schwimmen"],[11,159,57.9,2007,"keiner"],[12,166,71.6,2006,"keiner"],[13,170,66.0,2008,"keiner"],[14,176,71.4,2008,"Joggen"],[15,165,76.2,2007,"Velo"],[16,158,67.8,2007,"Velo"],[17,166,73.5,2006,"Joggen"],[18,176,75.9,2006,"Fitness"],[19,167,79.0,2007,"Velo"],[20,175,57.4,2008,"keiner"],[21,178,60.0,2008,"Joggen"],[22,169,57.8,2007,"Fussball"],[23,168,52.0,2006,"Tennis"],[24,166,72.8,2008,"Fussball"],[25,198,118.0,2007,"Fussball"],[26,152,42.0,2008,"Reiten"]],
+  homogen: [[1,167,67.6,2008,"Fussball"],[2,172,62.3,2007,"Fitness"],[3,173,64.9,2007,"Fitness"],[4,172,68.6,2008,"Velo"],[5,172,68.5,2007,"Schwimmen"],[6,175,66.6,2008,"Schwimmen"],[7,176,64.5,2007,"Velo"],[8,172,63.5,2008,"Fitness"],[9,170,66.0,2007,"Joggen"],[10,173,71.6,2008,"Velo"],[11,176,63.4,2007,"Schwimmen"],[12,177,72.6,2007,"Fitness"],[13,167,72.4,2008,"Fitness"],[14,170,69.5,2008,"Velo"],[15,176,70.0,2007,"Fussball"],[16,173,57.5,2007,"Joggen"],[17,173,69.8,2007,"Fitness"],[18,173,65.5,2007,"Joggen"],[19,174,69.0,2007,"Fitness"],[20,173,66.5,2008,"Fussball"],[21,170,67.0,2008,"Joggen"],[22,170,62.6,2007,"Fussball"],[23,172,66.0,2007,"Velo"],[24,170,63.2,2008,"Schwimmen"],[25,170,60.0,2008,"Joggen"],[26,168,63.6,2007,"Schwimmen"]],
+  bimodal: [[1,167,57.0,2007,"Reiten"],[2,162,53.4,2008,"keiner"],[3,168,49.2,2007,"Joggen"],[4,166,55.9,2007,"Tanzen"],[5,156,56.9,2007,"Tanzen"],[6,159,53.5,2008,"Schwimmen"],[7,166,57.1,2007,"Tanzen"],[8,162,60.6,2008,"Volleyball"],[9,164,55.6,2007,"Tanzen"],[10,163,52.6,2007,"Volleyball"],[11,159,56.9,2008,"Schwimmen"],[12,155,58.6,2007,"Tanzen"],[13,165,67.6,2007,"Schwimmen"],[14,180,78.8,2007,"Basketball"],[15,184,72.7,2006,"Basketball"],[16,180,84.4,2006,"Fussball"],[17,180,79.8,2006,"Klettern"],[18,179,75.9,2007,"Fussball"],[19,184,79.5,2006,"Fussball"],[20,178,72.9,2006,"Basketball"],[21,176,75.6,2007,"Klettern"],[22,186,78.6,2007,"Basketball"],[23,179,70.9,2006,"Klettern"],[24,180,72.1,2007,"Klettern"],[25,180,83.0,2007,"Fitness"],[26,188,75.4,2006,"Fitness"]],
+  rechtsschief: [[1,180,67.5,2008,"Lesen"],[2,156,79.6,2006,"Velo"],[3,168,55.9,2007,"Fitness"],[4,168,73.9,2008,"Fitness"],[5,166,60.0,2007,"Velo"],[6,169,87.5,2008,"keiner"],[7,180,82.6,2006,"Joggen"],[8,159,57.4,2006,"keiner"],[9,162,57.7,2007,"Velo"],[10,176,103.5,2007,"Fitness"],[11,168,64.2,2008,"Lesen"],[12,178,73.5,2007,"Velo"],[13,170,68.0,2007,"Fussball"],[14,170,57.3,2007,"Joggen"],[15,172,84.0,2007,"Joggen"],[16,162,57.7,2008,"Joggen"],[17,164,57.6,2008,"keiner"],[18,162,57.5,2007,"Lesen"],[19,177,58.6,2008,"Joggen"],[20,162,58.1,2008,"Lesen"],[21,176,61.0,2007,"Joggen"],[22,167,57.0,2007,"Joggen"],[23,157,77.5,2007,"Fitness"],[24,166,72.5,2008,"Velo"],[25,166,58.7,2008,"Lesen"],[26,165,57.5,2006,"Schwimmen"]]
+};
+
+const SCOPE_TEXTE = {
+  klasse: '<strong>Bezugsrahmen Klasse:</strong> Die Klasse selbst ist die <em>Grundgesamtheit</em>. Wir haben <em>alle 26</em> Personen befragt — das ist eine <strong>Gesamterhebung</strong> (Volldatenerhebung). Es gibt keinen Stichprobenfehler.',
+  schule: '<strong>Bezugsrahmen Schule:</strong> Wenn uns „alle BM2-Lernenden der Schule" interessieren, ist <em>diese</em> sind die Grundgesamtheit (typisch 150–300 Personen). Die 26 Befragten sind eine <strong>Stichprobe</strong> mit <em>n = 26</em>. Wenn die Klasse zufällig zusammengewürfelt wäre, hätten wir eine repräsentative Stichprobe — in Wirklichkeit ist sie ein Klumpen (eine Klasse), und ggf. nicht repräsentativ.',
+  schweiz: '<strong>Bezugsrahmen Schweiz:</strong> Die Grundgesamtheit umfasst rund 8000 BM2-Lernende in der Schweiz. Unsere 26 sind eine <em>sehr kleine</em> Stichprobe (~0.3 %), und zudem ein <em>Klumpen</em> aus <em>einer</em> Klasse — Berufsfeld, Region und Kohorte sind verzerrt. Eine seriöse Aussage über alle Schweizer BM2-Lernenden lässt sich daraus nicht ableiten.'
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE — die aktuelle Klasse
+═══════════════════════════════════════════════════════════════ */
+let DATEN = JSON.parse(JSON.stringify(PRESETS.realistisch));
+let aktiverScope = 'klasse';
+let stichprobeIndices = null;
+let aktivesPreset = 'realistisch';
+let aktiveMarker = new Set();        // welche Marker im Punktdiagramm aktiv sind
+let aktivesKzDetail = null;          // welche Kennzahl-Detailbox offen ist
+let aktiveKbw = { gr: 5, ma: 10 };  // Klassenbreiten für Histogramme
+let aktiveGrenze = { gr: 'lo', ma: 'lo' };  // 'lo' = [a,b[  bzw.  g_L ≤ x < g_R · 'hi' = ]a,b] bzw. g_L < x ≤ g_R
+
+/* Erklärungen und Formeln für jede Kennzahl */
+const KZ_DETAILS = {
+  n:   { titel: 'n — Stichprobenumfang',
+         erkl: 'Die Anzahl der Werte in der Stichprobe.',
+         formel: '\\[ n = \\text{Anzahl Werte in der Urliste} \\]',
+         bsp: 'In unserer Klasse: n = 26.' },
+  min: { titel: 'Minimum',
+         erkl: 'Der kleinste Wert in der sortierten Liste — Rang 1.',
+         formel: '\\[ \\min = x_{(1)} \\]',
+         bsp: 'Sortiere die Liste aufsteigend, nimm den ersten Wert.' },
+  max: { titel: 'Maximum',
+         erkl: 'Der grösste Wert in der sortierten Liste — Rang n.',
+         formel: '\\[ \\max = x_{(n)} \\]',
+         bsp: 'Sortiere die Liste aufsteigend, nimm den letzten Wert.' },
+  mw:  { titel: 'Mittelwert \\(\\bar{x}\\) (Arithmetisches Mittel)',
+         erkl: 'Die Summe aller Werte geteilt durch ihre Anzahl. Reagiert empfindlich auf Ausreisser.',
+         formel: '\\[ \\bar{x} = \\frac{x_1 + x_2 + \\dots + x_n}{n} = \\frac{1}{n}\\sum_{i=1}^{n} x_i \\]',
+         bsp: 'Alle Werte addieren, durch n teilen.' },
+  med: { titel: 'Median \\(\\tilde{x}\\)',
+         erkl: 'Der mittlere Wert der <em>sortierten</em> Liste. Teilt die Daten in zwei gleich grosse Hälften, ist robust gegen Ausreisser.',
+         formel: '\\[ \\tilde{x} = \\begin{cases} x_{\\left(\\frac{n+1}{2}\\right)} & n \\text{ ungerade} \\\\ \\frac{1}{2}\\left(x_{(\\frac{n}{2})} + x_{(\\frac{n}{2}+1)}\\right) & n \\text{ gerade} \\end{cases} \\]',
+         bsp: 'Bei n = 26 (gerade): Mittel der Werte an Rang 13 und 14.' },
+  mod: { titel: 'Modus \\(\\hat{x}\\) (Modalwert)',
+         erkl: 'Der Wert, der <em>am häufigsten</em> vorkommt. Einziges Lagemass, das auch für kategoriale Daten (z.B. Lieblingssport) funktioniert.',
+         formel: '\\[ \\hat{x} = \\arg\\max_{x} \\; h(x) \\]',
+         bsp: 'Häufigkeiten zählen, Wert mit höchster Häufigkeit wählen. Es kann mehrere Modi geben (bimodal, multimodal).' },
+  s:   { titel: 's — Standardabweichung',
+         erkl: 'Die mittlere Abweichung der Werte vom Mittelwert. Quadrieren sorgt dafür, dass positive und negative Abweichungen sich nicht aufheben.',
+         formel: '\\[ s = \\sqrt{\\frac{1}{n-1}\\sum_{i=1}^{n}(x_i - \\bar{x})^2} \\]',
+         bsp: 'Division durch (n−1) statt n bei einer Stichprobe (Excel: <code>STABW.S</code>).' },
+  q1:  { titel: 'Q₁ — unteres Quartil',
+         erkl: '25 % der Werte sind kleiner oder gleich Q₁. Berechnung mit der <strong>Median-der-Hälften-Methode</strong>: Q₁ ist der Median der unteren Hälfte der sortierten Liste.',
+         formel: '\\[ Q_1 = \\tilde{x}_{\\text{untere Hälfte}} \\]',
+         bsp: 'Bei n = 26: untere Hälfte = Ränge 1–13 (13 Werte, ungerade Anzahl), Q₁ = Wert an Rang 7 (mittlere Position der unteren Hälfte). Bei ungeradem n wird der Median selbst <em>nicht</em> in die Hälften einbezogen.' },
+  q3:  { titel: 'Q₃ — oberes Quartil',
+         erkl: '75 % der Werte sind kleiner oder gleich Q₃. Berechnung mit der <strong>Median-der-Hälften-Methode</strong>: Q₃ ist der Median der oberen Hälfte der sortierten Liste.',
+         formel: '\\[ Q_3 = \\tilde{x}_{\\text{obere Hälfte}} \\]',
+         bsp: 'Bei n = 26: obere Hälfte = Ränge 14–26 (13 Werte, ungerade Anzahl), Q₃ = Wert an Rang 20 (mittlere Position der oberen Hälfte = Rang 14 + 6).' },
+  qd:  { titel: 'QD — Quartilsdifferenz (IQR)',
+         erkl: 'Die Breite der mittleren 50 % der Daten. Robust gegen Ausreisser. Genau die Boxbreite im Boxplot.',
+         formel: '\\[ \\text{QD} = Q_3 - Q_1 \\]',
+         bsp: 'Eignet sich besser als s, wenn die Daten schief sind oder Ausreisser haben.' }
+};
+
+function oeffneKzDetail(kz) {
+  if (aktivesKzDetail === kz) { schliesseKzDetail(); return; }
+  aktivesKzDetail = kz;
+  const d = KZ_DETAILS[kz];
+  const inh = document.getElementById('kz-detail-inhalt');
+  inh.innerHTML = `
+    <div class="kzd-titel">${d.titel}</div>
+    <div>${d.erkl}</div>
+    <div class="kzd-formel">${d.formel}</div>
+    <div class="kzd-bsp">${d.bsp}</div>
+  `;
+  document.getElementById('kz-detail').classList.add('aktiv');
+  // Visuell markieren
+  document.querySelectorAll('.mz-tab th.kz').forEach(th => {
+    th.classList.toggle('aktiv', th.dataset.kz === kz);
+  });
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([inh]);
+}
+function schliesseKzDetail() {
+  aktivesKzDetail = null;
+  document.getElementById('kz-detail').classList.remove('aktiv');
+  document.querySelectorAll('.mz-tab th.kz').forEach(th => th.classList.remove('aktiv'));
+}
+
+/* Häufigkeitstabelle-Detail-Box (Sport) */
+let aktivesHkDetail = null;
+const HK_DETAILS = {
+  h:      { titel: 'Absolute Häufigkeit h',
+            erkl: 'Zählt, wie oft eine Kategorie in der Stichprobe vorkommt.',
+            formel: '\\[ h_i = \\#\\{ \\text{Personen mit Kategorie } i \\} \\]',
+            bsp: 'Aus der Datentabelle: "Fussball" abzählen → das ist \\(h\\) für Fussball. Die Summe aller \\(h_i\\) ergibt \\(n\\) (Stichprobenumfang).' },
+  hn:     { titel: 'Relative Häufigkeit h/n',
+            erkl: 'Der Anteil einer Kategorie am Ganzen. Erlaubt den Vergleich zwischen Stichproben unterschiedlicher Grösse.',
+            formel: '\\[ \\frac{h_i}{n} \\;\\;\\text{bzw. in Prozent:}\\;\\; \\frac{h_i}{n}\\cdot 100\\,\\% \\]',
+            bsp: 'Bei \\(n = 26\\) und \\(h_{\\text{Fussball}} = 6\\): \\(6/26 \\approx 0.23 = 23\\,\\%\\). Die Summe aller relativen Häufigkeiten ergibt \\(1\\) (= 100 %).' },
+  winkel: { titel: 'Winkel im Kuchendiagramm',
+            erkl: 'Der Sektor-Winkel ist proportional zur relativen Häufigkeit. Volles 360°-Stück = die ganze Stichprobe.',
+            formel: '\\[ \\alpha_i = \\frac{h_i}{n} \\cdot 360° \\]',
+            bsp: 'Bei 23 % Anteil: \\(\\alpha = 0.23 \\cdot 360° \\approx 83°\\). Die Summe aller Winkel ergibt \\(360°\\).' }
+};
+function oeffneHkDetail(hk) {
+  if (aktivesHkDetail === hk) { schliesseHkDetail(); return; }
+  aktivesHkDetail = hk;
+  const d = HK_DETAILS[hk];
+  const inh = document.getElementById('hk-detail-inhalt');
+  inh.innerHTML = `
+    <div class="kzd-titel">${d.titel}</div>
+    <div>${d.erkl}</div>
+    <div class="kzd-formel">${d.formel}</div>
+    <div class="kzd-bsp">${d.bsp}</div>
+  `;
+  document.getElementById('hk-detail').classList.add('aktiv');
+  document.querySelectorAll('.haeuf-tab-int th.hk').forEach(th => {
+    th.classList.toggle('aktiv', th.dataset.hk === hk);
+  });
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([inh]);
+}
+function schliesseHkDetail() {
+  aktivesHkDetail = null;
+  document.getElementById('hk-detail').classList.remove('aktiv');
+  document.querySelectorAll('.haeuf-tab-int th.hk').forEach(th => th.classList.remove('aktiv'));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATISTISCHE FUNKTIONEN
+═══════════════════════════════════════════════════════════════ */
+function mittelwert(arr) {
+  if (arr.length === 0) return NaN;
+  return arr.reduce((a,b) => a+b, 0) / arr.length;
+}
+function median(arr) {
+  if (arr.length === 0) return NaN;
+  const s = [...arr].sort((a,b) => a-b);
+  const n = s.length;
+  return n % 2 === 1 ? s[(n-1)/2] : (s[n/2-1] + s[n/2]) / 2;
+}
+function standardabw(arr) {
+  if (arr.length < 2) return NaN;
+  const m = mittelwert(arr);
+  const sq = arr.reduce((a,b) => a + (b-m)*(b-m), 0);
+  return Math.sqrt(sq / (arr.length - 1));
+}
+/* Quartile nach Median-der-Hälften-Methode (Tukey).
+   Bei ungeradem n wird der Median NICHT in die Hälften einbezogen.
+   Bei geradem n teilen sich die Hälften am Median-Schnitt. */
+function quartilTukey(arr, p) {
+  if (arr.length === 0) return NaN;
+  if (p !== 0.25 && p !== 0.75) return median(arr); // p=0.5 fällt zurück auf Median
+  const s = [...arr].sort((a,b) => a-b);
+  const n = s.length;
+  let untere, obere;
+  if (n % 2 === 0) {
+    /* Gerade: untere n/2, obere n/2 */
+    untere = s.slice(0, n/2);
+    obere  = s.slice(n/2);
+  } else {
+    /* Ungerade: Median in der Mitte wird ausgelassen */
+    const mid = (n-1)/2;
+    untere = s.slice(0, mid);
+    obere  = s.slice(mid + 1);
+  }
+  return p === 0.25 ? median(untere) : median(obere);
+}
+/* Alter Name als Alias für allenfalls verbliebene Aufrufer (Rückwärtskompatibilität) */
+const quantilLinear = quartilTukey;
+function modusNumerisch(arr) {
+  if (arr.length === 0) return [];
+  const counts = {};
+  arr.forEach(v => counts[v] = (counts[v] || 0) + 1);
+  const maxC = Math.max(...Object.values(counts));
+  if (maxC <= 1) return [];  // alle einmalig → kein Modus
+  return Object.keys(counts).filter(k => counts[k] === maxC).map(Number).sort((a,b) => a-b);
+}
+function modusKategorial(arr) {
+  if (arr.length === 0) return [];
+  const counts = {};
+  arr.forEach(v => counts[v] = (counts[v] || 0) + 1);
+  const maxC = Math.max(...Object.values(counts));
+  return Object.keys(counts).filter(k => counts[k] === maxC);
+}
+function haeufigkeit(arr) {
+  const counts = {};
+  arr.forEach(v => counts[v] = (counts[v] || 0) + 1);
+  return counts;
+}
+function korrelation(xs, ys) {
+  if (xs.length !== ys.length || xs.length < 2) return NaN;
+  const mx = mittelwert(xs), my = mittelwert(ys);
+  let num = 0, dx = 0, dy = 0;
+  for (let i=0;i<xs.length;i++){
+    num += (xs[i]-mx)*(ys[i]-my);
+    dx += (xs[i]-mx)*(xs[i]-mx);
+    dy += (ys[i]-my)*(ys[i]-my);
+  }
+  return num / Math.sqrt(dx*dy);
+}
+
+function fmtN(x, d=1) {
+  if (!isFinite(x)) return '—';
+  return x.toFixed(d).replace(/\.0+$/, '').replace(/(\.\d*?)0+$/, '$1');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TABELLE EINHÄNGEN / EDITIEREN
+═══════════════════════════════════════════════════════════════ */
+function renderTabelle() {
+  const tbody = document.getElementById('daten-body');
+  tbody.innerHTML = '';
+  DATEN.forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="col-nr">${row[0]}</td>
+      <td class="col-gr"><input type="number" min="120" max="220" step="1" value="${row[1]}" data-row="${i}" data-col="1"></td>
+      <td class="col-ma"><input type="number" min="20" max="200" step="0.1" value="${row[2]}" data-row="${i}" data-col="2"></td>
+      <td class="col-jg"><input type="number" min="1990" max="2015" step="1" value="${row[3]}" data-row="${i}" data-col="3"></td>
+      <td class="col-sp"><input type="text" value="${row[4]}" data-row="${i}" data-col="4"></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  // Event-Listener für alle Inputs (delegiert)
+  tbody.addEventListener('change', e => {
+    const t = e.target;
+    if (t.tagName !== 'INPUT') return;
+    const r = +t.dataset.row, c = +t.dataset.col;
+    let v = t.value;
+    if (c === 1 || c === 3) v = parseInt(v, 10);
+    else if (c === 2) v = parseFloat(v);
+    DATEN[r][c] = v;
+    // Manuelle Änderung markiert den aktiven Preset als "modifiziert"
+    setActivePresetButton(null);
+    aktualisiereAlles();
+  });
+}
+
+function setActivePresetButton(name) {
+  document.querySelectorAll('.preset-btn[data-preset]').forEach(b => {
+    b.classList.toggle('aktiv', b.dataset.preset === name);
+  });
+  aktivesPreset = name;
+}
+
+function ladePreset(name) {
+  DATEN = JSON.parse(JSON.stringify(PRESETS[name]));
+  setActivePresetButton(name);
+  stichprobeIndices = null;
+  renderTabelle();
+  aktualisiereAlles();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BEZUGSRAHMEN
+═══════════════════════════════════════════════════════════════ */
+function setScope(s) {
+  aktiverScope = s;
+  document.querySelectorAll('.scope-pill').forEach(p => {
+    p.classList.toggle('aktiv', p.dataset.scope === s);
+  });
+  document.getElementById('scope-erklaerung').innerHTML = SCOPE_TEXTE[s];
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KENNZAHLEN-TABELLE und DASHBOARD
+═══════════════════════════════════════════════════════════════ */
+function aktualisiereKennzahlen() {
+  const gr = DATEN.map(r => r[1]);
+  const ma = DATEN.map(r => r[2]);
+  const jg = DATEN.map(r => r[3]);
+  const sp = DATEN.map(r => r[4]);
+  const n = DATEN.length;
+
+  function zeile(arr, nf) {
+    if (arr.length === 0) return `<td colspan="10" class="na">—</td>`;
+    const s = [...arr].sort((a,b) => a-b);
+    const min = s[0], max = s[s.length-1];
+    const mw = mittelwert(arr);
+    const md = median(arr);
+    const mo = modusNumerisch(arr);
+    const sd = standardabw(arr);
+    const q1 = quantilLinear(arr, 0.25);
+    const q3 = quantilLinear(arr, 0.75);
+    const qd = q3 - q1;
+    const moStr = mo.length === 0 ? '<span class="na">—</span>' : (mo.length > 3 ? `${mo.slice(0,3).map(v=>fmtN(v,nf)).join(', ')}…` : mo.map(v=>fmtN(v,nf)).join(', '));
+    return `
+      <td>${n}</td>
+      <td>${fmtN(min, nf)}</td>
+      <td>${fmtN(max, nf)}</td>
+      <td><strong>${fmtN(mw, nf)}</strong></td>
+      <td><strong>${fmtN(md, nf)}</strong></td>
+      <td>${moStr}</td>
+      <td>${fmtN(sd, nf + 1)}</td>
+      <td>${fmtN(q1, nf)}</td>
+      <td>${fmtN(q3, nf)}</td>
+      <td><strong>${fmtN(qd, nf)}</strong></td>
+    `;
+  }
+
+  document.getElementById('mz-groesse').innerHTML = `<td>Grösse [cm]</td>` + zeile(gr, 1);
+  document.getElementById('mz-masse').innerHTML = `<td>Masse [kg]</td>` + zeile(ma, 1);
+  document.getElementById('mz-jahrgang').innerHTML = `<td>Jahrgang</td>` + zeile(jg, 0);
+
+  // Sport: kategorial — Modus statt voll
+  const moSp = modusKategorial(sp);
+  const counts = haeufigkeit(sp);
+  const anzKat = Object.keys(counts).length;
+  document.getElementById('mz-sport').innerHTML = `
+    <td>Lieblingssport</td>
+    <td>${n}</td>
+    <td colspan="2" class="na">kategorial</td>
+    <td class="na">—</td>
+    <td class="na">—</td>
+    <td><strong>${moSp.join(', ')}</strong> <small style="color:var(--tinte-2)">(${counts[moSp[0]]}×)</small></td>
+    <td colspan="4" class="na">${anzKat} verschiedene Kategorien</td>
+  `;
+
+  // Dashboard: ein paar Highlight-Karten
+  const dash = document.getElementById('dash-kennzahlen');
+  const mwGr = mittelwert(gr), mdGr = median(gr);
+  const mwMa = mittelwert(ma), mdMa = median(ma);
+  const diffGr = mwGr - mdGr, diffMa = mwMa - mdMa;
+  const formStrGr = Math.abs(diffGr) < 0.5 ? 'symmetrisch' : (diffGr > 0 ? 'rechtsschief' : 'linksschief');
+  const formStrMa = Math.abs(diffMa) < 0.5 ? 'symmetrisch' : (diffMa > 0 ? 'rechtsschief' : 'linksschief');
+  dash.innerHTML = `
+    <div class="dash-card gr">
+      <div class="dc-merkmal">Grösse</div>
+      <div class="dc-kennzahl">Mittelwert</div>
+      <div class="dc-wert">${fmtN(mwGr, 1)} <span class="dc-einheit">cm</span></div>
+      <div class="dc-kennzahl" style="margin-top:4px">Median: ${fmtN(mdGr, 1)} cm</div>
+      <div class="dc-kennzahl">Form: <em>${formStrGr}</em></div>
+    </div>
+    <div class="dash-card ma">
+      <div class="dc-merkmal">Masse</div>
+      <div class="dc-kennzahl">Mittelwert</div>
+      <div class="dc-wert">${fmtN(mwMa, 1)} <span class="dc-einheit">kg</span></div>
+      <div class="dc-kennzahl" style="margin-top:4px">Median: ${fmtN(mdMa, 1)} kg</div>
+      <div class="dc-kennzahl">Form: <em>${formStrMa}</em></div>
+    </div>
+    <div class="dash-card jg">
+      <div class="dc-merkmal">Jahrgang</div>
+      <div class="dc-kennzahl">Median</div>
+      <div class="dc-wert">${median(jg)}</div>
+      <div class="dc-kennzahl" style="margin-top:4px">⌀ ≈ ${Math.round(mittelwert(jg))} <small style="color:var(--tinte-2)">(gerundet)</small></div>
+    </div>
+    <div class="dash-card sp">
+      <div class="dc-merkmal">Sport</div>
+      <div class="dc-kennzahl">Modus</div>
+      <div class="dc-wert" style="font-size: 1.1rem; line-height: 1.3">${moSp.join(', ')}</div>
+      <div class="dc-kennzahl" style="margin-top:4px">${counts[moSp[0]]}× genannt</div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   URLISTE / PUNKTDIAGRAMM / SORTIERTE LISTE
+═══════════════════════════════════════════════════════════════ */
+function aktualisiereUrliste() {
+  const gr = DATEN.map(r => r[1]);
+  document.getElementById('urliste-anzeige').innerHTML = `
+    <div><strong>Urliste (Erhebungsreihenfolge):</strong> ${gr.join(', ')} cm</div>
+  `;
+  zeichnePunktdiagramm();
+  zeichneSortliste();
+}
+
+function getMarkerWerte() {
+  /* Berechnet alle Marker-Werte aus DATEN für die Grösse-Spalte */
+  const gr = DATEN.map(r => r[1]);
+  const s = [...gr].sort((a,b) => a-b);
+  return {
+    min: s[0],
+    max: s[s.length-1],
+    median: median(gr),
+    q1: quantilLinear(gr, 0.25),
+    q3: quantilLinear(gr, 0.75),
+    modus: modusNumerisch(gr)   // Array (kann mehrere haben)
+  };
+}
+
+const MARKER_FARBEN = { min:'#6b7280', max:'#6b7280', median:'#1d4ed8', q1:'#059669', q3:'#059669', modus:'#b85c00' };
+
+function zeichnePunktdiagramm() {
+  const svg = document.getElementById('svg-punkt-groesse');
+  if (!svg) return;
+  const W = 460, H = 180;
+  const gr = DATEN.map(r => r[1]);
+  const min = Math.min(...gr), max = Math.max(...gr);
+  const range = max - min;
+  const pad_d = Math.max(range * 0.06, 2);
+  const vMin = min - pad_d, vMax = max + pad_d;
+  const padL = 30, padR = 20;
+  const innerW = W - padL - padR;
+  const xOf = v => padL + (v - vMin) / (vMax - vMin) * innerW;
+  const cy = 95;
+
+  let s = '';
+  /* Achse */
+  s += `<line x1="${padL}" y1="${cy}" x2="${W-padR}" y2="${cy}" stroke="#1f2937" stroke-width="1.5"/>`;
+  /* Ticks */
+  const tickAnz = 8;
+  for (let i = 0; i <= tickAnz; i++) {
+    const v = vMin + (vMax - vMin) * i / tickAnz;
+    const x = xOf(v);
+    s += `<line x1="${x}" y1="${cy}" x2="${x}" y2="${cy+4}" stroke="#1f2937" stroke-width="1"/>`;
+    s += `<text x="${x}" y="${cy+18}" font-size="9" text-anchor="middle" fill="#5a5040">${fmtN(v, 0)}</text>`;
+  }
+  /* Achsen-Label */
+  s += `<text x="${padL + innerW/2}" y="${cy+44}" font-size="11" text-anchor="middle" fill="#1c1a17" font-weight="600">Grösse [cm]</text>`;
+
+  /* Punkte mit Stacking bei gleichen Werten */
+  const seen = {};
+  gr.forEach(v => {
+    seen[v] = (seen[v] || 0) + 1;
+    const x = xOf(v);
+    const dy = (seen[v] - 1) * 7;
+    s += `<circle cx="${x}" cy="${cy - 8 - dy}" r="3.5" fill="#3b82f6" fill-opacity="0.7" stroke="#1d4ed8" stroke-width="0.8"/>`;
+  });
+
+  /* Marker zeichnen — Position exakt über dem x-Wert, kein Math.round-Offset */
+  const mw = getMarkerWerte();
+  /* Welche Marker sind aktiv? Sammle als (name, wert, label, labelUnten) */
+  const aktiveListe = [];
+  if (aktiveMarker.has('min'))    aktiveListe.push({name:'min',    v: mw.min,    label: `Min = ${fmtN(mw.min,1)}`,    unten: false});
+  if (aktiveMarker.has('q1'))     aktiveListe.push({name:'q1',     v: mw.q1,     label: `Q\u2081 = ${fmtN(mw.q1,1)}`,  unten: false});
+  if (aktiveMarker.has('median')) aktiveListe.push({name:'median', v: mw.median, label: `Median = ${fmtN(mw.median,1)}`, unten: false});
+  if (aktiveMarker.has('q3'))     aktiveListe.push({name:'q3',     v: mw.q3,     label: `Q\u2083 = ${fmtN(mw.q3,1)}`,  unten: false});
+  if (aktiveMarker.has('max'))    aktiveListe.push({name:'max',    v: mw.max,    label: `Max = ${fmtN(mw.max,1)}`,    unten: false});
+  if (aktiveMarker.has('modus') && mw.modus.length > 0) {
+    mw.modus.forEach(m => aktiveListe.push({name:'modus', v: m, label: `Modus = ${m}`, unten: true}));
+  }
+  /* Erst alle Linien zeichnen (so liegen sie hinten), dann die Labels (vorne) */
+  aktiveListe.forEach(mk => {
+    const x = xOf(mk.v);
+    const farbe = MARKER_FARBEN[mk.name];
+    s += `<line x1="${x}" y1="${cy-70}" x2="${x}" y2="${cy+8}" stroke="${farbe}" stroke-width="2.5"/>`;
+  });
+  /* Labels: oben für min/max/q1/q3/median, unten für modus */
+  /* Damit zwei eng beieinander liegende Marker sich nicht überlappen, stacken wir oben/unten je nach Y-Position */
+  const stackOben = []; // bereits belegte x-Bereiche oben
+  const stackUnten = [];
+  aktiveListe.forEach(mk => {
+    const x = xOf(mk.v);
+    const farbe = MARKER_FARBEN[mk.name];
+    const labelBreite = 6.5 * mk.label.length + 8;
+    const stack = mk.unten ? stackUnten : stackOben;
+    let zeile = 0;
+    while (true) {
+      const kollision = stack.some(item =>
+        item.zeile === zeile &&
+        Math.abs(item.x - x) < (item.breite + labelBreite) / 2);
+      if (!kollision) break;
+      zeile++;
+    }
+    stack.push({x, breite: labelBreite, zeile});
+    const yLabel = mk.unten
+      ? cy + 60 + zeile * 14   // unter dem Achsenlabel, ab y = cy+60
+      : cy - 74 - zeile * 14;  // über der Linie, ab y = cy-74
+    s += `<text x="${x}" y="${yLabel}" font-size="10" text-anchor="middle" fill="${farbe}" font-weight="700">${mk.label}</text>`;
+  });
+
+  svg.innerHTML = s;
+}
+
+function zeichneSortliste() {
+  const gr = DATEN.map(r => r[1]);
+  const s = [...gr].sort((a,b) => a-b);
+  const n = s.length;
+  const mw = getMarkerWerte();
+  const div = document.getElementById('sortliste-anzeige');
+  if (!div) return;
+  const hl = {};
+
+  /* Welche Ränge gehören zu Median-der-Hälften?
+     - n gerade: untere Hälfte = Ränge 1..n/2, obere Hälfte = Ränge n/2+1..n
+     - n ungerade: Median bei (n+1)/2 = Index (n-1)/2;
+                   untere = Indizes 0..mid-1, obere = mid+1..n-1
+     Q₁/Q₃ = Median der jeweiligen Hälfte: bei gerader Hälftenlänge die
+     zwei mittleren Werte (also zwei Ränge highlighten), bei ungerader
+     Hälftenlänge der eine mittlere. */
+  function medianRangeOf(start, end) {
+    /* Liefert [lo, hi] mit den 0-basierten Indizes, deren Mittel der Median ist */
+    const len = end - start;
+    if (len % 2 === 1) {
+      const mid = start + Math.floor(len/2);
+      return [mid, mid];
+    }
+    return [start + len/2 - 1, start + len/2];
+  }
+
+  let untereStart, untereEnde, obereStart, obereEnde, medianRanks;
+  if (n % 2 === 0) {
+    untereStart = 0; untereEnde = n/2;
+    obereStart = n/2; obereEnde = n;
+    medianRanks = [n/2 - 1, n/2];
+  } else {
+    const mid = (n-1)/2;
+    untereStart = 0; untereEnde = mid;
+    obereStart = mid + 1; obereEnde = n;
+    medianRanks = [mid, mid];
+  }
+
+  if (aktiveMarker.has('q1')) {
+    const [lo, hi] = medianRangeOf(untereStart, untereEnde);
+    hl[lo] = hl[lo] || []; hl[lo].push('q1');
+    if (hi !== lo) { hl[hi] = hl[hi] || []; hl[hi].push('q1'); }
+  }
+  if (aktiveMarker.has('q3')) {
+    const [lo, hi] = medianRangeOf(obereStart, obereEnde);
+    hl[lo] = hl[lo] || []; hl[lo].push('q3');
+    if (hi !== lo) { hl[hi] = hl[hi] || []; hl[hi].push('q3'); }
+  }
+  if (aktiveMarker.has('median')) {
+    const [lo, hi] = medianRanks;
+    hl[lo] = hl[lo] || []; hl[lo].push('median');
+    if (hi !== lo) { hl[hi] = hl[hi] || []; hl[hi].push('median'); }
+  }
+  if (aktiveMarker.has('min')) { hl[0] = hl[0] || []; hl[0].push('min'); }
+  if (aktiveMarker.has('max')) { hl[n-1] = hl[n-1] || []; hl[n-1].push('max'); }
+  if (aktiveMarker.has('modus') && mw.modus.length > 0) {
+    s.forEach((v, i) => {
+      if (mw.modus.includes(v)) { hl[i] = hl[i] || []; hl[i].push('modus'); }
+    });
+  }
+  let html = '<div style="margin-bottom:4px"><strong>Sortierte Liste</strong> — jeder Wert mit seinem Index \\(x_i\\):</div><div style="display:flex;flex-wrap:wrap;gap:4px 10px;align-items:flex-end">';
+  s.forEach((v, i) => {
+    const hls = hl[i];
+    const idx = i + 1;
+    const cls = (hls && hls.length > 0)
+      ? `sl-zahl hl-${['median','modus','min','max','q1','q3'].find(p => hls.includes(p))}`
+      : 'sl-zahl';
+    html += `<span style="display:inline-flex;flex-direction:column;align-items:center;font-family:var(--mono);font-size:0.78rem">`
+         + `<span style="color:var(--tinte-2);font-size:0.68rem">\\(x_{${idx}}\\)</span>`
+         + `<span class="${cls}">${v}</span>`
+         + `</span>`;
+  });
+  html += '</div>';
+  div.innerHTML = html;
+  // MathJax neu rendern für die x_i-Subscripts
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([div]);
+}
+
+function toggleMarker(name) {
+  if (aktiveMarker.has(name)) aktiveMarker.delete(name);
+  else aktiveMarker.add(name);
+  document.querySelectorAll('.marker-btn[data-marker]').forEach(b => {
+    b.classList.toggle('aktiv', aktiveMarker.has(b.dataset.marker));
+  });
+  updateMarkerErklaerung();
+  zeichnePunktdiagramm();
+  zeichneSortliste();
+}
+
+function resetMarker() {
+  aktiveMarker.clear();
+  document.querySelectorAll('.marker-btn[data-marker]').forEach(b => b.classList.remove('aktiv'));
+  updateMarkerErklaerung();
+  zeichnePunktdiagramm();
+  zeichneSortliste();
+}
+
+function updateMarkerErklaerung() {
+  const e = document.getElementById('marker-erklaerung');
+  if (!e) return;
+  if (aktiveMarker.size === 0) {
+    e.innerHTML = 'Wähle eine Markierung — sie wird im Diagramm <strong>und</strong> in der sortierten Liste hervorgehoben.';
+    return;
+  }
+  const gr = DATEN.map(r => r[1]);
+  const mw = getMarkerWerte();
+  const teile = [];
+  if (aktiveMarker.has('min')) teile.push(`<strong>Min = ${mw.min} cm</strong>: kleinster Wert (\\(x_1\\) in der sortierten Liste).`);
+  if (aktiveMarker.has('q1')) teile.push(`<strong>\\(Q_1\\) = ${fmtN(mw.q1,1)} cm</strong>: unteres Quartil — 25 % aller Werte sind \\(\\le Q_1\\).`);
+  if (aktiveMarker.has('median')) teile.push(`<strong>Median \\(\\tilde{x}\\) = ${fmtN(mw.median,1)} cm</strong>: die mittlere Person, robust gegen Ausreisser.`);
+  if (aktiveMarker.has('q3')) teile.push(`<strong>\\(Q_3\\) = ${fmtN(mw.q3,1)} cm</strong>: oberes Quartil — 75 % aller Werte sind \\(\\le Q_3\\).`);
+  if (aktiveMarker.has('max')) teile.push(`<strong>Max = ${mw.max} cm</strong>: grösster Wert (\\(x_{${gr.length}}\\) in der sortierten Liste).`);
+  if (aktiveMarker.has('modus')) {
+    if (mw.modus.length === 0) teile.push(`<strong>\\(\\hat{x}\\)</strong>: kein Modus — alle Werte kommen nur einmal vor.`);
+    else teile.push(`<strong>Modus \\(\\hat{x}\\) = ${mw.modus.join(', ')} cm</strong>: häufigster Wert.`);
+  }
+  e.innerHTML = teile.join(' · ');
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([e]);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SVG-DIAGRAMME — Balken, Kuchen, Histogramm, Boxplot, Streu
+═══════════════════════════════════════════════════════════════ */
+
+const FARBEN = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899','#84cc16','#f97316','#6366f1','#14b8a6','#a3a3a3'];
+
+function svgEscape(s) {
+  return String(s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+}
+
+/* --- Balken für kategoriale/diskrete Daten --- */
+function zeichneBalken(svgId, daten, opts={}) {
+  const svg = document.getElementById(svgId);
+  const W = 460, H = parseFloat(svg.getAttribute('viewBox').split(' ')[3]);
+  const sortiertNachHaeuf = opts.sortNach === 'haeuf';
+  const entries = Object.entries(haeufigkeit(daten));
+  if (sortiertNachHaeuf) entries.sort((a,b) => b[1]-a[1]);
+  else entries.sort((a,b) => String(a[0]) < String(b[0]) ? -1 : 1);
+
+  const maxH = Math.max(...entries.map(e => e[1]));
+  const padL = 50, padR = 20, padT = 30, padB = 50;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const balkenBreite = Math.min(50, innerW / entries.length * 0.7);
+  const schritt = innerW / entries.length;
+
+  let s = '';
+  // Achsen
+  s += `<line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#1f2937" stroke-width="1.5"/>`;
+  s += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" stroke="#1f2937" stroke-width="1.5"/>`;
+  // y-Achsen-Skala
+  const yTicks = Math.min(maxH, 6);
+  for (let i = 0; i <= yTicks; i++) {
+    const v = Math.round(maxH * i / yTicks);
+    const y = H - padB - (v / maxH) * innerH;
+    s += `<line x1="${padL-3}" y1="${y}" x2="${padL}" y2="${y}" stroke="#1f2937" stroke-width="1"/>`;
+    s += `<text x="${padL-6}" y="${y+4}" font-size="9" text-anchor="end" fill="#5a5040">${v}</text>`;
+  }
+  // Balken
+  entries.forEach((entry, i) => {
+    const [kat, h] = entry;
+    const x = padL + schritt * i + (schritt - balkenBreite) / 2;
+    const balkH = (h / maxH) * innerH;
+    const y = H - padB - balkH;
+    const farbe = FARBEN[i % FARBEN.length];
+    s += `<rect x="${x}" y="${y}" width="${balkenBreite}" height="${balkH}" fill="${farbe}" rx="2"/>`;
+    s += `<text x="${x + balkenBreite/2}" y="${y - 4}" font-size="10" text-anchor="middle" fill="#1f2937" font-weight="600">${h}</text>`;
+    // Kategorie-Label
+    const cx = padL + schritt * (i + 0.5);
+    const labelStr = svgEscape(String(kat).length > 9 ? String(kat).slice(0,8)+'…' : kat);
+    s += `<text x="${cx}" y="${H-padB+14}" font-size="9.5" text-anchor="middle" fill="#1c1a17" transform="rotate(-25, ${cx}, ${H-padB+14})">${labelStr}</text>`;
+  });
+  // y-Label
+  s += `<text x="14" y="${padT + innerH/2}" font-size="10" text-anchor="middle" fill="#5a5040" transform="rotate(-90, 14, ${padT + innerH/2})">Anzahl</text>`;
+  svg.innerHTML = s;
+}
+
+/* --- Kuchen --- */
+function zeichneKuchen(svgId, daten) {
+  const svg = document.getElementById(svgId);
+  const W = 460, H = 240;
+  const entries = Object.entries(haeufigkeit(daten)).sort((a,b) => b[1]-a[1]);
+  const total = entries.reduce((s,e) => s+e[1], 0);
+  const cx = 120, cy = 120, r = 90;
+
+  let s = '';
+  let startAngle = -Math.PI/2;
+  entries.forEach((entry, i) => {
+    const [kat, h] = entry;
+    const angle = (h / total) * 2 * Math.PI;
+    const endAngle = startAngle + angle;
+    const x1 = cx + r * Math.cos(startAngle);
+    const y1 = cy + r * Math.sin(startAngle);
+    const x2 = cx + r * Math.cos(endAngle);
+    const y2 = cy + r * Math.sin(endAngle);
+    const large = angle > Math.PI ? 1 : 0;
+    const farbe = FARBEN[i % FARBEN.length];
+    if (entries.length === 1) {
+      // Voller Kreis
+      s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${farbe}"/>`;
+    } else {
+      s += `<path d="M ${cx},${cy} L ${x1},${y1} A ${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${farbe}" stroke="#fff" stroke-width="1"/>`;
+    }
+    // % im Sektor (nur wenn gross genug)
+    if (angle > 0.25) {
+      const midAngle = (startAngle + endAngle) / 2;
+      const tx = cx + 0.65 * r * Math.cos(midAngle);
+      const ty = cy + 0.65 * r * Math.sin(midAngle);
+      const pct = Math.round(h / total * 100);
+      s += `<text x="${tx}" y="${ty+3}" font-size="11" text-anchor="middle" fill="#fff" font-weight="600">${pct}%</text>`;
+    }
+    startAngle = endAngle;
+  });
+  // Legende rechts
+  const legX = 250, legY0 = 30;
+  entries.forEach((entry, i) => {
+    const [kat, h] = entry;
+    const y = legY0 + i * 18;
+    if (y > H - 10) return;  // Platzlimit
+    const farbe = FARBEN[i % FARBEN.length];
+    s += `<rect x="${legX}" y="${y}" width="12" height="12" fill="${farbe}"/>`;
+    const labelStr = svgEscape(String(kat).length > 18 ? String(kat).slice(0,17)+'…' : kat);
+    s += `<text x="${legX+18}" y="${y+10}" font-size="10.5" fill="#1c1a17">${labelStr} <tspan fill="#5a5040">(${h})</tspan></text>`;
+  });
+  svg.innerHTML = s;
+}
+
+/* --- Histogramm für stetige Daten ---
+ * grenze: 'lo' = Klasse [g_L, g_R[  →  g_L ≤ x < g_R  (Standard-Konvention)
+ *         'hi' = Klasse ]g_L, g_R]  →  g_L < x ≤ g_R  (alternative Konvention)
+ * tabId : ID des Wrapper-DIVs für die Häufigkeitstabelle (optional)
+ */
+function zeichneHistogramm(svgId, daten, klassenBreite, einheit, grenze, tabId) {
+  grenze = grenze || 'lo';
+  const svg = document.getElementById(svgId);
+  const W = 460, H = parseFloat(svg.getAttribute('viewBox').split(' ')[3]);
+  if (daten.length === 0) { svg.innerHTML = ''; if (tabId) document.getElementById(tabId).innerHTML = ''; return; }
+  const min = Math.min(...daten), max = Math.max(...daten);
+  // Klassenstart so wählen, dass min in der ersten Klasse liegt — bei beiden Grenzen-Konventionen
+  let start, end;
+  if (grenze === 'lo') {
+    // [a, b): min liegt in [start, start+kb)  ⇒  start ≤ min < start+kb  ⇒  start = floor(min/kb)*kb
+    start = Math.floor(min / klassenBreite) * klassenBreite;
+    end   = Math.ceil((max + 1e-9) / klassenBreite) * klassenBreite;
+    if (end === Math.floor(max/klassenBreite)*klassenBreite) end += klassenBreite;
+  } else {
+    // (a, b]: min liegt in (start, start+kb]  ⇒  start < min ≤ start+kb  ⇒  start = ceil(min/kb)*kb - kb
+    start = Math.ceil((min - 1e-9) / klassenBreite) * klassenBreite - klassenBreite;
+    end   = Math.ceil(max / klassenBreite) * klassenBreite;
+    if (end === Math.floor(max/klassenBreite)*klassenBreite && max % klassenBreite !== 0) end += klassenBreite;
+    if (end <= max) end += klassenBreite;
+  }
+  const klassen = [];
+  for (let g = start; g < end - 1e-9; g += klassenBreite) {
+    const lower = g, upper = g + klassenBreite;
+    let h;
+    if (grenze === 'lo') {
+      h = daten.filter(v => v >= lower && v < upper).length;
+    } else {
+      h = daten.filter(v => v > lower && v <= upper).length;
+    }
+    klassen.push({lower, upper, h});
+  }
+  // Randwert-Sonderfall: bei 'lo' gehört max formal NICHT in die letzte Klasse [.., upper) → wir nehmen ihn rein
+  //                     bei 'hi' gehört min formal NICHT in die erste Klasse (.., upper]  → wir nehmen ihn rein
+  if (klassen.length > 0) {
+    if (grenze === 'lo') {
+      const last = klassen[klassen.length-1];
+      last.h = daten.filter(v => v >= last.lower && v <= last.upper).length;
+    } else {
+      const first = klassen[0];
+      first.h = daten.filter(v => v >= first.lower && v <= first.upper).length;
+    }
+  }
+  // Leere Randklassen am Ende entfernen (kosmetisch: würde sonst rechts ein leerer „Schatten" stehen)
+  while (klassen.length > 1 && klassen[klassen.length-1].h === 0) klassen.pop();
+  while (klassen.length > 1 && klassen[0].h === 0) klassen.shift();
+  const maxH = Math.max(...klassen.map(k => k.h), 1);
+
+  const padL = 50, padR = 15, padT = 20, padB = 50;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const balkenBreite = innerW / klassen.length;
+
+  let s = '';
+  s += `<line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#1f2937" stroke-width="1.5"/>`;
+  s += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" stroke="#1f2937" stroke-width="1.5"/>`;
+  // y-Achse
+  const yTicks = Math.min(maxH, 6);
+  for (let i = 0; i <= yTicks; i++) {
+    const v = Math.round(maxH * i / yTicks);
+    const y = H - padB - (v / maxH) * innerH;
+    s += `<line x1="${padL-3}" y1="${y}" x2="${padL}" y2="${y}" stroke="#1f2937" stroke-width="1"/>`;
+    s += `<text x="${padL-6}" y="${y+4}" font-size="9" text-anchor="end" fill="#5a5040">${v}</text>`;
+  }
+  // Balken (berühren sich)
+  klassen.forEach((k, i) => {
+    const x = padL + balkenBreite * i;
+    const balkH = (k.h / maxH) * innerH;
+    const y = H - padB - balkH;
+    s += `<rect x="${x}" y="${y}" width="${balkenBreite}" height="${balkH}" fill="#3b82f6" stroke="#fff" stroke-width="0.8"/>`;
+    if (k.h > 0) s += `<text x="${x + balkenBreite/2}" y="${y - 3}" font-size="9" text-anchor="middle" fill="#1f2937">${k.h}</text>`;
+  });
+  // x-Achsen-Ticks: an Klassengrenzen, ggf. ausgedünnt bei vielen Klassen
+  const tickJede = klassen.length > 10 ? 2 : 1;
+  klassen.forEach((k, i) => {
+    const x = padL + balkenBreite * i;
+    s += `<line x1="${x}" y1="${H-padB}" x2="${x}" y2="${H-padB+3}" stroke="#1f2937" stroke-width="1"/>`;
+    if (i % tickJede === 0) {
+      s += `<text x="${x}" y="${H-padB+14}" font-size="9" text-anchor="middle" fill="#5a5040">${k.lower}</text>`;
+    }
+  });
+  const xEnd = padL + balkenBreite * klassen.length;
+  s += `<line x1="${xEnd}" y1="${H-padB}" x2="${xEnd}" y2="${H-padB+3}" stroke="#1f2937" stroke-width="1"/>`;
+  s += `<text x="${xEnd}" y="${H-padB+14}" font-size="9" text-anchor="middle" fill="#5a5040">${klassen[klassen.length-1].upper}</text>`;
+  // x-Label
+  s += `<text x="${padL + innerW/2}" y="${H-8}" font-size="10.5" text-anchor="middle" fill="#1c1a17">${einheit}</text>`;
+  // y-Label
+  s += `<text x="14" y="${padT + innerH/2}" font-size="10" text-anchor="middle" fill="#5a5040" transform="rotate(-90, 14, ${padT + innerH/2})">Häufigkeit</text>`;
+  svg.innerHTML = s;
+
+  // Häufigkeitstabelle ausgeben
+  if (tabId) {
+    const wrap = document.getElementById(tabId);
+    if (wrap) wrap.innerHTML = baueHaeufTab(klassen, grenze);
+  }
+}
+
+/* --- Häufigkeitstabelle aus Klassen-Array bauen --- */
+function baueHaeufTab(klassen, grenze) {
+  // Spalte „Klasse" zeigt das Intervall in schweizerischer Notation:
+  // grenze='lo': [lower, upper)  →  "[a; b["  bzw.  "g_L ≤ x < g_R"
+  // grenze='hi': (lower, upper]  →  "]a; b]"  bzw.  "g_L < x ≤ g_R"
+  const fmt = (v) => Number.isInteger(v) ? String(v) : v.toFixed(1).replace(/\.0$/, '');
+  let n = 0;
+  let rows = '';
+  klassen.forEach((k, i) => {
+    n += k.h;
+    const klasseStr = (grenze === 'lo')
+      ? `[${fmt(k.lower)};&nbsp;${fmt(k.upper)}[`
+      : `]${fmt(k.lower)};&nbsp;${fmt(k.upper)}]`;
+    rows += `<tr><td>${i+1}</td><td class="klasse">${klasseStr}</td><td>${k.h}</td></tr>`;
+  });
+  return `<table class="histo-tab">
+    <thead><tr><th>i</th><th>Klasse</th><th>h<sub>i</sub></th></tr></thead>
+    <tbody>${rows}<tr class="total"><td colspan="2">Σ</td><td>${n}</td></tr></tbody>
+  </table>`;
+}
+
+/* --- Boxplot --- */
+function zeichneBoxplot(svgId, daten, einheit) {
+  const svg = document.getElementById(svgId);
+  const W = 460, H = parseFloat(svg.getAttribute('viewBox').split(' ')[3]);
+  if (daten.length === 0) { svg.innerHTML = ''; return; }
+  const s_arr = [...daten].sort((a,b) => a-b);
+  const min = s_arr[0], max = s_arr[s_arr.length-1];
+  const q1 = quantilLinear(daten, 0.25);
+  const med = median(daten);
+  const q3 = quantilLinear(daten, 0.75);
+
+  const padL = 40, padR = 40;
+  const innerW = W - padL - padR;
+  const cy = H/2 - 5;
+  const halbeBox = 28;
+
+  // Datenrange für Skalierung leicht erweitern
+  const range = max - min;
+  const pad_d = range * 0.08;
+  const vMin = min - pad_d;
+  const vMax = max + pad_d;
+  const xOf = v => padL + (v - vMin) / (vMax - vMin) * innerW;
+
+  let s = '';
+  // Achse
+  s += `<line x1="${padL}" y1="${H-30}" x2="${W-padR}" y2="${H-30}" stroke="#1f2937" stroke-width="1.5"/>`;
+  // Ticks
+  const tickAnz = 6;
+  for (let i = 0; i <= tickAnz; i++) {
+    const v = vMin + (vMax - vMin) * i / tickAnz;
+    const x = xOf(v);
+    s += `<line x1="${x}" y1="${H-30}" x2="${x}" y2="${H-26}" stroke="#1f2937" stroke-width="1"/>`;
+    s += `<text x="${x}" y="${H-14}" font-size="9" text-anchor="middle" fill="#5a5040">${fmtN(v, 0)}</text>`;
+  }
+  // Whisker links
+  s += `<line x1="${xOf(min)}" y1="${cy}" x2="${xOf(q1)}" y2="${cy}" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+  s += `<line x1="${xOf(min)}" y1="${cy-halbeBox+8}" x2="${xOf(min)}" y2="${cy+halbeBox-8}" stroke="#1f2937" stroke-width="2"/>`;
+  // Whisker rechts
+  s += `<line x1="${xOf(q3)}" y1="${cy}" x2="${xOf(max)}" y2="${cy}" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+  s += `<line x1="${xOf(max)}" y1="${cy-halbeBox+8}" x2="${xOf(max)}" y2="${cy+halbeBox-8}" stroke="#1f2937" stroke-width="2"/>`;
+  // Box
+  s += `<rect x="${xOf(q1)}" y="${cy-halbeBox}" width="${xOf(q3)-xOf(q1)}" height="${halbeBox*2}" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5"/>`;
+  // Median
+  s += `<line x1="${xOf(med)}" y1="${cy-halbeBox}" x2="${xOf(med)}" y2="${cy+halbeBox}" stroke="#1d4ed8" stroke-width="3"/>`;
+  // Labels
+  s += `<text x="${xOf(min)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1c1a17">min ${fmtN(min,1)}</text>`;
+  s += `<text x="${xOf(q1)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1c1a17">Q₁ ${fmtN(q1,1)}</text>`;
+  s += `<text x="${xOf(med)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1d4ed8" font-weight="700">Med ${fmtN(med,1)}</text>`;
+  s += `<text x="${xOf(q3)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1c1a17">Q₃ ${fmtN(q3,1)}</text>`;
+  s += `<text x="${xOf(max)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1c1a17">max ${fmtN(max,1)}</text>`;
+  // Einheit
+  s += `<text x="${padL + innerW/2}" y="${H-1}" font-size="10.5" text-anchor="middle" fill="#1c1a17">${einheit}</text>`;
+  svg.innerHTML = s;
+}
+
+/* --- Streudiagramm Grösse vs. Masse --- */
+function zeichneStreu() {
+  const svg = document.getElementById('svg-streu');
+  const W = 460, H = 320;
+  const xs = DATEN.map(r => r[1]);
+  const ys = DATEN.map(r => r[2]);
+  const xMin = Math.min(...xs) - 3, xMax = Math.max(...xs) + 3;
+  const yMin = Math.min(...ys) - 3, yMax = Math.max(...ys) + 3;
+
+  const padL = 50, padR = 20, padT = 20, padB = 40;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const xOf = x => padL + (x - xMin) / (xMax - xMin) * innerW;
+  const yOf = y => H - padB - (y - yMin) / (yMax - yMin) * innerH;
+
+  let s = '';
+  // Achsen
+  s += `<line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#1f2937" stroke-width="1.5"/>`;
+  s += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" stroke="#1f2937" stroke-width="1.5"/>`;
+  // x-Ticks
+  const xTicks = 6;
+  for (let i = 0; i <= xTicks; i++) {
+    const v = xMin + (xMax - xMin) * i / xTicks;
+    const x = xOf(v);
+    s += `<line x1="${x}" y1="${H-padB}" x2="${x}" y2="${H-padB+3}" stroke="#1f2937" stroke-width="1"/>`;
+    s += `<text x="${x}" y="${H-padB+15}" font-size="9" text-anchor="middle" fill="#5a5040">${Math.round(v)}</text>`;
+  }
+  // y-Ticks
+  const yTicks = 6;
+  for (let i = 0; i <= yTicks; i++) {
+    const v = yMin + (yMax - yMin) * i / yTicks;
+    const y = yOf(v);
+    s += `<line x1="${padL-3}" y1="${y}" x2="${padL}" y2="${y}" stroke="#1f2937" stroke-width="1"/>`;
+    s += `<text x="${padL-6}" y="${y+3}" font-size="9" text-anchor="end" fill="#5a5040">${Math.round(v)}</text>`;
+  }
+  // Punkte
+  DATEN.forEach((row, i) => {
+    s += `<circle cx="${xOf(row[1])}" cy="${yOf(row[2])}" r="4" fill="#3b82f6" fill-opacity="0.7" stroke="#1d4ed8" stroke-width="1"/>`;
+  });
+  // Achsenbeschriftung
+  s += `<text x="${padL + innerW/2}" y="${H-4}" font-size="10.5" text-anchor="middle" fill="#1c1a17">Grösse [cm]</text>`;
+  s += `<text x="14" y="${padT + innerH/2}" font-size="10.5" text-anchor="middle" fill="#1c1a17" transform="rotate(-90, 14, ${padT + innerH/2})">Masse [kg]</text>`;
+  svg.innerHTML = s;
+
+  // Korrelations-Info
+  const r = korrelation(xs, ys);
+  let beschr = '';
+  if (r > 0.7) beschr = 'starker positiver Zusammenhang';
+  else if (r > 0.3) beschr = 'mässig positiver Zusammenhang';
+  else if (r > -0.3) beschr = 'kaum Zusammenhang erkennbar';
+  else if (r > -0.7) beschr = 'mässig negativer Zusammenhang';
+  else beschr = 'starker negativer Zusammenhang';
+  document.getElementById('streu-info').textContent = `Korrelationskoeffizient r ≈ ${fmtN(r, 2)} — ${beschr}.`;
+}
+
+/* --- Häufigkeitstabelle für Sport --- */
+function aktualisiereHaeufTab() {
+  const sp = DATEN.map(r => r[4]);
+  const counts = haeufigkeit(sp);
+  const entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const n = sp.length;
+  const maxH = Math.max(...entries.map(e => e[1]));
+  const tbody = document.querySelector('#haeuf-sport tbody');
+  tbody.innerHTML = entries.map(([k, h]) => {
+    const rel = h/n;
+    const winkel = rel * 360;
+    const isModus = h === maxH;
+    return `<tr class="${isModus ? 'modus' : ''}">
+      <td>${svgEscape(k)}</td>
+      <td>${h}</td>
+      <td>${(rel*100).toFixed(1)} %</td>
+      <td>${winkel.toFixed(1)}°</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STICHPROBE
+═══════════════════════════════════════════════════════════════ */
+function neueStichprobe() {
+  const n = +document.getElementById('stich-n').value;
+  const indices = [...Array(DATEN.length).keys()];
+  // Fisher-Yates Shuffle
+  for (let i = indices.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  stichprobeIndices = indices.slice(0, n).sort((a,b) => a-b);
+  zeigeStichprobe();
+}
+function zeigeStichprobe() {
+  const div = document.getElementById('stich-werte');
+  if (!stichprobeIndices) {
+    div.innerHTML = '<em>Noch keine Stichprobe gezogen — klicke „neu ziehen".</em>';
+    return;
+  }
+  const gr = stichprobeIndices.map(i => DATEN[i][1]);
+  const ma = stichprobeIndices.map(i => DATEN[i][2]);
+  const nrs = stichprobeIndices.map(i => DATEN[i][0]);
+  const klassenMwGr = mittelwert(DATEN.map(r => r[1]));
+  const klassenMwMa = mittelwert(DATEN.map(r => r[2]));
+  const stichMwGr = mittelwert(gr);
+  const stichMwMa = mittelwert(ma);
+  div.innerHTML = `
+    <div>Gezogene Nummern: ${nrs.join(', ')}</div>
+    <div style="margin-top:6px">
+      Grösse-Stichproben-Mittelwert: <strong>${fmtN(stichMwGr,1)} cm</strong>
+      (wahrer Klassen-Wert: ${fmtN(klassenMwGr,1)} cm, Abweichung: ${fmtN(stichMwGr-klassenMwGr,1)} cm)
+    </div>
+    <div>
+      Masse-Stichproben-Mittelwert: <strong>${fmtN(stichMwMa,1)} kg</strong>
+      (wahrer Klassen-Wert: ${fmtN(klassenMwMa,1)} kg, Abweichung: ${fmtN(stichMwMa-klassenMwMa,1)} kg)
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KLASSENBREITE
+═══════════════════════════════════════════════════════════════ */
+function setKbw(merkmal, b) {
+  aktiveKbw[merkmal] = b;
+  document.querySelectorAll(`.kbw-btn[data-merkmal="${merkmal}"][data-kbw]`).forEach(btn => {
+    btn.classList.toggle('aktiv', +btn.dataset.kbw === b);
+  });
+  if (merkmal === 'gr') {
+    zeichneHistogramm('svg-gr-histo', DATEN.map(r => r[1]), b, 'Grösse [cm]', aktiveGrenze.gr, 'tab-gr-histo-wrap');
+    aktualisiereDiagnose('gr-histo', DATEN.map(r => r[1]), 'cm', 'Grösse');
+    typesetDiagnose('gr-histo');
+  } else {
+    zeichneHistogramm('svg-ma-histo', DATEN.map(r => r[2]), b, 'Masse [kg]', aktiveGrenze.ma, 'tab-ma-histo-wrap');
+    aktualisiereDiagnose('ma-histo', DATEN.map(r => r[2]), 'kg', 'Masse');
+    typesetDiagnose('ma-histo');
+  }
+}
+
+function setGrenze(merkmal, g) {
+  aktiveGrenze[merkmal] = g;
+  document.querySelectorAll(`.kbw-btn[data-merkmal="${merkmal}"][data-grenze]`).forEach(btn => {
+    btn.classList.toggle('aktiv', btn.dataset.grenze === g);
+  });
+  // Re-render mit aktueller Klassenbreite
+  if (merkmal === 'gr') {
+    zeichneHistogramm('svg-gr-histo', DATEN.map(r => r[1]), aktiveKbw.gr, 'Grösse [cm]', g, 'tab-gr-histo-wrap');
+  } else {
+    zeichneHistogramm('svg-ma-histo', DATEN.map(r => r[2]), aktiveKbw.ma, 'Masse [kg]', g, 'tab-ma-histo-wrap');
+  }
+}
+
+/* MathJax-Rerender für die Diagnose-Boxen eines einzelnen Diagramms.
+   Nötig nach allen dynamischen aktualisiereDiagnose-Aufrufen, weil
+   die Texte LaTeX-Snippets wie \(\bar{x} \approx \tilde{x}\) enthalten. */
+function typesetDiagnose(id) {
+  if (!window.MathJax || !MathJax.typesetPromise) return;
+  const targets = [];
+  const a = document.querySelector(`#diag-${id}-aussage .da-text`);
+  const c = document.querySelector(`#diag-${id}-charakter .dc-text`);
+  if (a) targets.push(a);
+  if (c) targets.push(c);
+  if (targets.length) MathJax.typesetPromise(targets);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DIAGNOSE-BOXEN — pro Diagramm Aussage und Charakter
+═══════════════════════════════════════════════════════════════ */
+function aktualisiereDiagnose(id, arr, einheit, merkmalName) {
+  /* Generischer Diagnosetext für numerische Daten */
+  const aussageEl = document.querySelector(`#diag-${id}-aussage .da-text`);
+  const charakterEl = document.querySelector(`#diag-${id}-charakter .dc-text`);
+  if (!aussageEl || !charakterEl) return;
+
+  const mw = mittelwert(arr), med = median(arr), s = standardabw(arr);
+  const min = Math.min(...arr), max = Math.max(...arr);
+  const q1 = quantilLinear(arr, 0.25), q3 = quantilLinear(arr, 0.75);
+  const range = max - min;
+  const qd = q3 - q1;
+  const diffMM = mw - med;
+  const cvPct = (s / mw) * 100; // Variationskoeffizient
+
+  /* Aussage zur Klasse */
+  let streuTxt = '';
+  if (cvPct < 5) streuTxt = 'sehr gering';
+  else if (cvPct < 10) streuTxt = 'gering';
+  else if (cvPct < 20) streuTxt = 'mittel';
+  else streuTxt = 'gross';
+
+  aussageEl.innerHTML = `
+    Die ${merkmalName} der Klasse liegt im Median bei <strong>${fmtN(med,1)} ${einheit}</strong> (Mittelwert ${fmtN(mw,1)} ${einheit}).
+    Die Streuung ist <strong>${streuTxt}</strong> (s = ${fmtN(s,1)} ${einheit}, das sind ${fmtN(cvPct,0)} % vom Mittelwert).
+    Die mittleren 50 % aller Lernenden liegen zwischen ${fmtN(q1,1)} und ${fmtN(q3,1)} ${einheit}.
+    Spanne insgesamt: ${fmtN(min,1)}–${fmtN(max,1)} ${einheit}.
+  `;
+
+  /* Charakter */
+  let formTxt = '';
+  const schwelle = s * 0.3; // Ab da nennen wir es schief
+  if (Math.abs(diffMM) < schwelle) formTxt = 'symmetrisch (\\(\\bar{x} \\approx \\tilde{x}\\))';
+  else if (diffMM > 0) formTxt = `rechtsschief (\\(\\bar{x} = ${fmtN(mw,1)} > \\tilde{x} = ${fmtN(med,1)}\\))`;
+  else formTxt = `linksschief (\\(\\bar{x} = ${fmtN(mw,1)} < \\tilde{x} = ${fmtN(med,1)}\\))`;
+
+  /* Modalität anhand der grössten Lücke in der sortierten Liste schätzen */
+  const sortiert = [...arr].sort((a,b)=>a-b);
+  let groessteLuecke = 0, idxLuecke = -1;
+  for (let i = 1; i < sortiert.length; i++) {
+    const d = sortiert[i] - sortiert[i-1];
+    if (d > groessteLuecke) { groessteLuecke = d; idxLuecke = i; }
+  }
+  const meanLuecke = range / (sortiert.length - 1);
+  const bimodalHinweis = (groessteLuecke > 3 * meanLuecke && idxLuecke > 3 && idxLuecke < sortiert.length - 3)
+    ? ` Hinweis: in der sortierten Liste gibt es eine ungewöhnliche Lücke (${fmtN(groessteLuecke,1)} ${einheit}) — möglicherweise <strong>zwei Gruppen</strong> in den Daten (bimodal).` : '';
+
+  /* Ausreisser-Hinweis (Tukey-Kriterium: ausserhalb 1.5·QD) */
+  const lowFence = q1 - 1.5 * qd, highFence = q3 + 1.5 * qd;
+  const ausreisser = arr.filter(v => v < lowFence || v > highFence);
+  const ausreisserHinweis = ausreisser.length > 0
+    ? ` <strong>${ausreisser.length} Ausreisser</strong> ausserhalb [${fmtN(lowFence,1)}, ${fmtN(highFence,1)}] ${einheit}.` : '';
+
+  charakterEl.innerHTML = `Verteilung wirkt <strong>${formTxt}</strong>.${bimodalHinweis}${ausreisserHinweis}`;
+}
+
+function aktualisiereDiagnoseSport() {
+  const sp = DATEN.map(r => r[4]);
+  const counts = haeufigkeit(sp);
+  const entries = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const n = sp.length;
+  const moSp = modusKategorial(sp);
+  const anzKat = entries.length;
+  const top1 = entries[0];
+  const top1Pct = Math.round(top1[1] / n * 100);
+  const top3Pct = Math.round(entries.slice(0,3).reduce((s,e) => s+e[1], 0) / n * 100);
+
+  const aussageBalken = document.querySelector('#diag-sport-aussage .da-text');
+  const charakterBalken = document.querySelector('#diag-sport-charakter .dc-text');
+  if (aussageBalken) {
+    aussageBalken.innerHTML = `
+      Der häufigste Lieblingssport ist <strong>${svgEscape(moSp.join(', '))}</strong> mit ${counts[moSp[0]]} Nennungen (${Math.round(counts[moSp[0]]/n*100)} %).
+      Die Klasse verteilt sich auf ${anzKat} verschiedene Kategorien.
+      Die häufigsten drei zusammen machen ${top3Pct} % aus.
+    `;
+  }
+  if (charakterBalken) {
+    let txt;
+    if (moSp.length > 1) txt = `<strong>Multimodal</strong>: ${moSp.length} Kategorien teilen sich den Spitzenplatz (je ${counts[moSp[0]]} Nennungen).`;
+    else if (anzKat > 8) txt = `<strong>Breit gestreut</strong>: viele kleine Kategorien, dominanter Modus fehlt — Kuchen wirkt unübersichtlich.`;
+    else if (top1Pct >= 30) txt = `<strong>Klar unimodal</strong> — eine Kategorie dominiert deutlich.`;
+    else txt = `Modus erkennbar, aber Anteile relativ ausgeglichen.`;
+    charakterBalken.innerHTML = txt;
+  }
+
+  /* Kuchen-Diagnose: dieselbe Aussage, anderer Charakter-Fokus */
+  const aussageKuchen = document.querySelector('#diag-kuchen-aussage .da-text');
+  const charakterKuchen = document.querySelector('#diag-kuchen-charakter .dc-text');
+  if (aussageKuchen) {
+    aussageKuchen.innerHTML = `
+      Anteile am Ganzen: ${svgEscape(top1[0])} ${top1Pct} %, danach folgen die restlichen Sportarten.
+      Bei ${anzKat} Kategorien ist die Übersichtlichkeit ${anzKat > 6 ? '<strong>schwierig</strong>' : 'noch <strong>gut</strong>'}.
+    `;
+  }
+  if (charakterKuchen) {
+    charakterKuchen.innerHTML = `${anzKat} Sektoren · ${anzKat > 6 ? 'einige Sektoren sind sehr schmal — bei vielen Kategorien ist ein Balkendiagramm meist lesbarer.' : 'Sektoren gut unterscheidbar.'}`;
+  }
+}
+
+function aktualisiereDiagnoseJg() {
+  const jg = DATEN.map(r => r[3]);
+  const counts = haeufigkeit(jg);
+  const entries = Object.entries(counts).map(([k,v]) => [+k, v]).sort((a,b) => a[0]-b[0]);
+  const n = jg.length;
+  const modus = modusNumerisch(jg);
+  const spanne = Math.max(...jg) - Math.min(...jg);
+
+  const aussage = document.querySelector('#diag-jg-aussage .da-text');
+  const charakter = document.querySelector('#diag-jg-charakter .dc-text');
+  if (aussage) {
+    aussage.innerHTML = `
+      Die Klasse umfasst ${entries.length} Jahrgänge zwischen ${entries[0][0]} und ${entries[entries.length-1][0]} (Spanne ${spanne} Jahre).
+      Häufigster Jahrgang: <strong>${modus.join(', ')}</strong>.
+    `;
+  }
+  if (charakter) {
+    let txt;
+    if (entries.length === 1) txt = `Alle Lernenden im gleichen Jahrgang — die Klasse ist altersmässig homogen.`;
+    else if (spanne <= 2) txt = `Klassisches BM-Bild: ${entries.length} aufeinanderfolgende Jahrgänge.`;
+    else txt = `Grosse Altersspanne (${spanne} Jahre) — eventuell Repetierende oder Quereinsteigende.`;
+    charakter.innerHTML = txt;
+  }
+}
+
+function aktualisiereDiagnoseStreu() {
+  const xs = DATEN.map(r => r[1]), ys = DATEN.map(r => r[2]);
+  const r = korrelation(xs, ys);
+  const aussage = document.querySelector('#diag-streu-aussage .da-text');
+  const charakter = document.querySelector('#diag-streu-charakter .dc-text');
+  if (aussage) {
+    let txtR = '';
+    if (r > 0.7) txtR = `<strong>starken positiven Zusammenhang</strong>: grössere Personen sind in dieser Klasse deutlich schwerer`;
+    else if (r > 0.3) txtR = `<strong>mässig positiven Zusammenhang</strong> zwischen Grösse und Masse`;
+    else if (r > -0.3) txtR = `<strong>kaum Zusammenhang</strong> zwischen Grösse und Masse — Grösse erklärt die Masse hier kaum`;
+    else if (r > -0.7) txtR = `<strong>mässig negativen Zusammenhang</strong> — physiologisch ungewöhnlich, in echten Daten meist nicht zu erwarten`;
+    else txtR = `<strong>starken negativen Zusammenhang</strong>`;
+    aussage.innerHTML = `Korrelationskoeffizient <strong>r ≈ ${fmtN(r,2)}</strong> → ${txtR}.`;
+  }
+  if (charakter) {
+    let txt;
+    if (Math.abs(r) < 0.3) txt = `Punktwolke ohne klare Trendrichtung.`;
+    else if (Math.abs(r) > 0.7) txt = `Klar erkennbare Punktwolke entlang einer gedachten Geraden${r > 0 ? ' nach rechts oben' : ' nach rechts unten'}.`;
+    else txt = `Tendenz erkennbar, aber Streuung um die Trendrichtung ist erheblich.`;
+    charakter.innerHTML = txt;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PLAUSIBILITÄTSPRÜFUNG
+═══════════════════════════════════════════════════════════════ */
+function aktualisierePlausibilitaet() {
+  const grid = document.getElementById('plausi-grid');
+  if (!grid) return;
+
+  const gr = DATEN.map(r => r[1]);
+  const ma = DATEN.map(r => r[2]);
+  const jg = DATEN.map(r => r[3]);
+
+  function pruef(merkmal, arr, einheit, grenzen) {
+    const min = Math.min(...arr), max = Math.max(...arr);
+    const mw = mittelwert(arr), med = median(arr);
+    const s = standardabw(arr);
+    const aussagen = [];
+    /* 1. Bereichsplausibilität */
+    if (min < grenzen[0] || max > grenzen[1]) {
+      aussagen.push(`<span class="warn">⚠</span> Wert ausserhalb des erwarteten Bereichs [${grenzen[0]}, ${grenzen[1]}] ${einheit}`);
+    } else {
+      aussagen.push(`<span class="check">✓</span> alle Werte im erwarteten Bereich [${grenzen[0]}, ${grenzen[1]}] ${einheit}`);
+    }
+    /* 2. μ ≈ med? */
+    if (Math.abs(mw - med) < s * 0.3) {
+      aussagen.push(`<span class="check">✓</span> \\(\\bar{x} \\approx \\tilde{x}\\) → keine Verzerrung`);
+    } else {
+      aussagen.push(`<span class="warn">⚠</span> \\(\\bar{x} \\neq \\tilde{x}\\) um ${fmtN(Math.abs(mw-med),1)} ${einheit} → ${mw>med?'rechts':'links'}schief oder Ausreisser`);
+    }
+    /* 3. s plausibel? */
+    if (s > 0 && s < (max - min)) {
+      aussagen.push(`<span class="check">✓</span> \\(s\\) plausibel (kleiner als Spannweite)`);
+    }
+    return `<div class="plausi-cell">
+      <div class="plc-merkmal">${merkmal}</div>
+      <div class="plc-aussage">${aussagen.map(a => `<div>${a}</div>`).join('')}</div>
+    </div>`;
+  }
+
+  grid.innerHTML =
+    pruef('Grösse [cm]', gr, 'cm', [140, 210]) +
+    pruef('Masse [kg]', ma, 'kg', [35, 150]) +
+    pruef('Jahrgang', jg, '', [2000, 2015]);
+}
+function aktualisiereAlles() {
+  document.getElementById('n-anzeige').textContent = DATEN.length;
+  aktualisiereUrliste();
+  aktualisiereKennzahlen();
+  aktualisiereHaeufTab();
+  aktualisierePlausibilitaet();
+  zeichneBalken('svg-sport-balken', DATEN.map(r => r[4]), {sortNach: 'haeuf'});
+  zeichneKuchen('svg-sport-kuchen', DATEN.map(r => r[4]));
+  zeichneBalken('svg-jg-balken', DATEN.map(r => r[3]));
+  zeichneHistogramm('svg-gr-histo', DATEN.map(r => r[1]), aktiveKbw.gr, 'Grösse [cm]', aktiveGrenze.gr, 'tab-gr-histo-wrap');
+  zeichneBoxplot('svg-gr-box', DATEN.map(r => r[1]), 'Grösse [cm]');
+  zeichneHistogramm('svg-ma-histo', DATEN.map(r => r[2]), aktiveKbw.ma, 'Masse [kg]', aktiveGrenze.ma, 'tab-ma-histo-wrap');
+  zeichneBoxplot('svg-ma-box', DATEN.map(r => r[2]), 'Masse [kg]');
+  zeichneStreu();
+  aktualisiereDiagnose('gr-histo', DATEN.map(r => r[1]), 'cm', 'Grösse');
+  aktualisiereDiagnose('gr-box', DATEN.map(r => r[1]), 'cm', 'Grösse');
+  aktualisiereDiagnose('ma-histo', DATEN.map(r => r[2]), 'kg', 'Masse');
+  aktualisiereDiagnose('ma-box', DATEN.map(r => r[2]), 'kg', 'Masse');
+  aktualisiereDiagnoseSport();
+  aktualisiereDiagnoseJg();
+  aktualisiereDiagnoseStreu();
+  if (stichprobeIndices) zeigeStichprobe();
+  /* MathJax: alles neu rendern, das dynamisch erzeugt wurde */
+  if (window.MathJax && MathJax.typesetPromise) {
+    const targets = [];
+    if (aktivesKzDetail) targets.push(document.getElementById('kz-detail-inhalt'));
+    if (aktivesHkDetail) targets.push(document.getElementById('hk-detail-inhalt'));
+    /* Diagnose-Boxen mit \(\bar{x}\) etc. */
+    document.querySelectorAll('.diag-aussage .da-text, .diag-charakter .dc-text').forEach(el => targets.push(el));
+    /* Plausibilitäts-Box */
+    const pg = document.getElementById('plausi-grid'); if (pg) targets.push(pg);
+    if (targets.length) MathJax.typesetPromise(targets);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT — Script steht am Body-Ende, DOM ist bereits parsed,
+   daher KEIN DOMContentLoaded-Listener (würde nie feuern, weil
+   das Event bereits passiert ist, bevor wir den Listener setzen).
+═══════════════════════════════════════════════════════════════ */
+(function init() {
+  setScope('klasse');
+  renderTabelle();
+  aktualisiereAlles();
+  document.getElementById('stich-n').addEventListener('input', e => {
+    document.getElementById('stich-n-anz').textContent = e.target.value;
+    if (stichprobeIndices) neueStichprobe();
+  });
+  zeigeStichprobe();
+  /* MathJax läuft initial automatisch auf die statische Seite — für die per
+     innerHTML eingefügten Marker-Buttons / Tabellen-Symbole brauchen wir oft
+     einen zweiten Lauf, sobald MathJax bereit ist. Wenn typesetPromise zum
+     Zeitpunkt von init noch nicht da ist (Script lädt asynchron), warten wir
+     via startup.promise. */
+  function rerenderAlleMathe() {
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+  }
+  if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+    MathJax.startup.promise.then(rerenderAlleMathe);
+  } else {
+    setTimeout(rerenderAlleMathe, 800);
+  }
+})();
+
+</script>
+
+</body>
+</html>

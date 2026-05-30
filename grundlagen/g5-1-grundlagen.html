@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grundlagen — TALS Mathematik</title>
+<title>5.1 Grundlagen — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
@@ -19,7 +19,77 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Konvention von g3-3) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:130px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:54px; text-align:right; }
+
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:10px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1rem; color:var(--tinte); font-weight:700; }
+.formel-live .fl-eq .acc { color:var(--blau); }
+
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Aufgaben-Block (Konvention von g3-3) ── */
+/* ── Themenspezifische Layouts für 5.1 ── */
+.skizze-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media (max-width:720px){.skizze-grid{grid-template-columns:1fr}}
+.skizze-box{background:var(--weiss);border:1.5px solid var(--linie);border-radius:10px;padding:12px;text-align:center}
+.skizze-box.gut{border-color:var(--gruen-rand);background:var(--gruen-hell)}
+.skizze-box.schlecht{border-color:var(--rot-rand);background:var(--rot-hell)}
+.skizze-box h4{margin:0 0 8px 0;font-size:0.92rem;font-family:var(--serif);font-weight:700}
+.skizze-box.gut h4{color:var(--gruen)}
+.skizze-box.schlecht h4{color:var(--rot)}
+.skizze-box svg{display:block;margin:0 auto;max-width:100%;height:auto}
+.skizze-box .sk-fazit{font-size:0.85rem;margin:8px 0 0;font-style:italic}
+.skizze-box.gut .sk-fazit{color:var(--gruen)}
+.skizze-box.schlecht .sk-fazit{color:var(--rot)}
+
+/* Tab-Widget Winkelpaare */
+.tabs-row{display:flex;gap:6px;margin:12px 0 0 0;flex-wrap:wrap}
+.tab-btn{font-family:var(--mono);font-size:0.72rem;font-weight:700;padding:6px 14px;border-radius:20px;border:1.5px solid var(--linie);background:var(--papier-2);cursor:pointer;color:var(--tinte-2);transition:all 0.15s}
+.tab-btn:hover{border-color:var(--blau-rand);background:var(--blau-hell);color:var(--blau)}
+.tab-btn.aktiv{border-color:var(--blau);background:var(--blau);color:#fff}
+.tab-panel{display:none;background:var(--weiss);border:1.5px solid var(--linie);border-radius:10px;padding:14px;margin-top:10px}
+.tab-panel.aktiv{display:block}
+.tab-panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center}
+@media(max-width:600px){.tab-panel-grid{grid-template-columns:1fr}}
+
+/* Winkeltyp-Karten */
+.winkeltyp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.wt-box{background:var(--weiss);border:1.5px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.wt-box svg{display:block;margin:0 auto 6px}
+.wt-box .wt-name{font-weight:700;font-size:0.92rem;color:var(--blau);font-family:var(--serif)}
+.wt-box .wt-bereich{font-size:0.78rem;color:var(--tinte-2);font-family:var(--mono);margin-top:2px}
+
+/* Workflow */
+.workflow-skizze{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+@media (max-width:720px){.workflow-skizze{grid-template-columns:repeat(2,1fr)}}
+.ws-step{background:var(--blau-hell);border:1px solid var(--blau-rand);border-radius:8px;padding:12px 8px;text-align:center}
+.ws-step .ws-nr{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--blau);color:#fff;font-weight:700;font-size:0.85rem;margin-bottom:6px;font-family:var(--mono)}
+.ws-step .ws-titel{font-weight:700;font-size:0.9rem;color:var(--blau);margin-bottom:4px;font-family:var(--serif)}
+.ws-step .ws-text{font-size:0.82rem;color:var(--tinte-2);line-height:1.4}
+
+/* Einstiegs-Animation: Diagonalen-Skizze */
+.diag-box{background:var(--papier-2,#f3eedf);border-radius:8px;padding:14px 16px;margin:12px 0}
+.diag-box .diag-sliders{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px}
+@media(max-width:640px){.diag-box .diag-sliders{grid-template-columns:1fr}}
+.diag-box .dg-row{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:0.88rem;flex-wrap:wrap}
+.diag-box .dg-row label{min-width:110px}
+.diag-box .dg-row input[type=range]{flex:1 1 140px;max-width:240px}
+.diag-box .dg-val{font-weight:700;color:var(--blau);min-width:24px}
+.diag-box canvas{width:100%;height:280px;display:block;background:var(--weiss);border-radius:6px;margin-top:8px}
+.diag-box .dg-cap{font-size:0.85rem;color:var(--tinte-2);margin-top:8px;font-style:italic}
 </style>
 </head>
 <body>
@@ -34,6 +104,8 @@ MathJax = {
 </div>
 
 <!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Geometrie beginnt mit einer guten <strong>Skizze</strong>: sie macht die Aufgabe lesbar und liefert eine Plausibilitätsprüfung für jedes Resultat. Hier übst du das Skizzieren als Werkzeug und lernst die zwei Winkelmasse <strong>Grad und Radiant</strong> kennen, die ab Lerngebiet 5.4 gleichwertig im Einsatz sind.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 5.1</div>
   <ul>
@@ -42,49 +114,837 @@ MathJax = {
   </ul>
 </div>
 
-
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — eine Skizze sagt mehr als drei Sätze</h2>
 
+<p>Geometrie beginnt nicht mit einer Formel, sondern mit einer <strong>Skizze</strong>. Sie ist das wichtigste Werkzeug, das du in diesem Lerngebiet kennenlernst — und sie wird dich durch alle 50 Lektionen begleiten.</p>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 Aufgabe ohne Skizze</div>
+  Ein rechteckiges Grundstück ist 24 m lang und 18 m breit. Vom Eingang in einer Ecke führt ein gerader Weg diagonal zum gegenüberliegenden Punkt. Wie lang ist der Weg?
+</div>
+
+<p>Nur aus dem Text musst du dir die Situation im Kopf zusammenbauen. Mit einer kleinen Skizze ist alles auf einen Blick klar — und das Beste: die Skizze rechnet mit:</p>
+
+<div class="diag-box">
+  <div class="diag-sliders">
+    <div class="dg-row">
+      <label>Länge \(l\): <span class="dg-val" id="dg-vl">24</span> m</label>
+      <input type="range" id="dg-l" min="6" max="40" step="1" value="24">
+    </div>
+    <div class="dg-row">
+      <label>Breite \(b\): <span class="dg-val" id="dg-vb">18</span> m</label>
+      <input type="range" id="dg-b" min="4" max="30" step="1" value="18">
+    </div>
+  </div>
+  <canvas id="dg-canvas" aria-label="Grundstück mit Diagonale"></canvas>
+  <div class="dg-cap">Verschiebe die Regler und beobachte, wie sich die Diagonale \(d\) ändert. Die Skizze zeigt das Grundstück massstabsgetreu — du kannst die Diagonale direkt am Bild ablesen.</div>
+</div>
+
+<p>Was du beobachtest: \(d\) ist immer <em>länger als die längere Seite</em>, aber <em>kürzer als die Summe</em> der beiden Seiten. Bei gleicher Länge und Breite (Quadrat) ist \(d\) etwa \(1.41\)-mal so lang wie die Seite. <strong>Wie genau berechnet man die Diagonale</strong>, ohne sie auf der Skizze abzumessen? Das ist eine der zentralen Fragen der Geometrie und wird im Kapitel über Dreiecke beantwortet <a class="quer" href="g5-2a-dreiecke.html#pythagoras">↗ 5.2a</a>. Was wir jetzt schon sehen: eine Skizze <em>strukturiert</em> die Aufgabe, <em>schlägt</em> einen Lösungsansatz vor und <em>kontrolliert</em> das Resultat auf Plausibilität.</p>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Skizze ≠ Kunstwerk</div>
+  Eine gute Skizze muss <em>nicht massstabsgetreu</em> sein. Sie muss <em>topologisch korrekt</em> sein: alle Beziehungen (rechte Winkel, parallele Linien, gleich lange Seiten) müssen erkennbar sein. Eine schiefe, schnelle Bleistiftzeichnung mit klarer Beschriftung schlägt jede saubere CAD-Zeichnung ohne Beschriftung.
+</div>
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Definitionen</h2>
 
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Geometrische Skizze</div>
+  Eine <strong>geometrische Skizze</strong> ist eine vereinfachte zeichnerische Darstellung einer Aufgabe, die alle <em>relevanten</em> Eigenschaften (gegebene Längen, Winkel, Beziehungen) sichtbar macht und die <em>gesuchten</em> Grössen klar markiert. Massstabsgetreue Genauigkeit ist nicht erforderlich.
+</div>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Definition — Winkel, Grad, Radiant</div>
+  Ein <strong>Winkel</strong> entsteht, wenn zwei Halbgeraden (Schenkel) einen gemeinsamen Anfangspunkt (Scheitelpunkt) haben. Er kann auf zwei Arten gemessen werden:
+  <ul style="margin:8px 0 0 0">
+    <li><strong>Grad</strong> (Symbol °): der volle Kreis hat \(360°\). Jeder Grad teilt sich in 60 Bogenminuten (\('\)) und jede Bogenminute in 60 Bogensekunden (\(''\)).</li>
+    <li><strong>Radiant</strong> (Symbol rad, oft weggelassen): der volle Kreis hat \(2\pi\) rad. Ein Radiant ist die Bogenlänge auf dem Einheitskreis (Radius 1).</li>
+  </ul>
+  Beide Masse beschreiben dieselbe Grösse — den Drehwinkel — und sind gleichwertig ineinander umrechenbar.
+</div>
 
+<div class="block block-tipp" style="margin-top:10px">
+  <div class="block-titel">💡 Warum zwei Masse?</div>
+  <strong>Grad</strong> ist intuitiv und in Alltag, Bauwesen und Geographie üblich. <strong>Radiant</strong> ist mathematisch natürlich: in der Analysis (Ableitung von \(\sin\), \(\cos\)) und in der Physik (Winkelgeschwindigkeit, Schwingungen) führt nur Radiant zu einfachen Formeln. Ab Kapitel 5.4 (Einheitskreis) wirst du beide Masse fliessend nutzen.
+</div>
+
+<!-- ══ 4. DARSTELLUNGEN — Live-Winkel-Widget ══ -->
+<h2 id="darstellungen">Darstellungen — Winkel live umrechnen</h2>
+
+<p>Verändere den Winkel mit dem Schieber. Der Bogen, die Grad- und die Radiant-Anzeige passen sich sofort an. So siehst du, wie die beiden Masse synchron mitlaufen.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>🎯 Winkel-Visualisierer</h3>
+    <p>Grad ↔ Radiant — gleicher Winkel, zwei Sprachen</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>Winkel  \(\alpha\)</label>
+      <input type="range" id="wv-deg" min="0" max="360" step="1" value="60">
+      <span class="sl-val"><span id="wv-deg-v">60</span>°</span>
+    </div>
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Visualisierung</div>
+        <svg id="wv-svg" viewBox="0 0 240 240" style="width:100%;max-width:300px;display:block;margin:0 auto;background:var(--weiss);border:1px solid var(--linie);border-radius:9px">
+          <!-- Kreis -->
+          <circle cx="120" cy="120" r="92" fill="none" stroke="#d8d0c4" stroke-width="1"/>
+          <!-- horizontaler Schenkel (fest) -->
+          <line x1="120" y1="120" x2="220" y2="120" stroke="#1c1a17" stroke-width="2"/>
+          <!-- beweglicher Schenkel -->
+          <line id="wv-arm" x1="120" y1="120" x2="220" y2="120" stroke="#1c1a17" stroke-width="2"/>
+          <!-- Winkelbogen (Kreissegment) -->
+          <path id="wv-arc" d="M 165 120 A 45 45 0 0 0 142.5 81" fill="#ddeaf8" fill-opacity="0.7" stroke="#1a4f8a" stroke-width="2"/>
+          <!-- Winkelpunkt -->
+          <circle cx="120" cy="120" r="3" fill="#1c1a17"/>
+          <!-- Winkel-Label -->
+          <text id="wv-label" x="155" y="105" font-size="14" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
+        </svg>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Anzeige in beiden Massen</div>
+        <div class="formel-live">
+          <div class="fl-label">In Grad</div>
+          <div class="fl-eq" style="font-size:1.3rem"><span id="wv-grad">60</span>°</div>
+        </div>
+        <div class="formel-live">
+          <div class="fl-label">In Radiant (exakt)</div>
+          <div class="fl-eq" id="wv-rad-exakt">π / 3</div>
+        </div>
+        <div class="formel-live">
+          <div class="fl-label">In Radiant (dezimal)</div>
+          <div class="fl-eq" id="wv-rad-dez">1.047 rad</div>
+        </div>
+        <div class="formel-live">
+          <div class="fl-label">Bogenlänge auf Einheitskreis</div>
+          <div class="fl-eq" id="wv-bogen">b = 1.047</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-merksatz" style="margin-top:14px">
+  <div class="block-titel">⭐ Umrechnungsformel</div>
+  Aus \(360° = 2\pi\) rad folgt direkt:
+  \[\boxed{\;180° = \pi \text{ rad}\;}\]
+  Daraus die zwei Umrechnungen:
+  \[\varphi_{\text{rad}} = \varphi_{\text{Grad}} \cdot \dfrac{\pi}{180°} \qquad \varphi_{\text{Grad}} = \varphi_{\text{rad}} \cdot \dfrac{180°}{\pi}\]
+</div>
+
+<p><strong>Eselsbrücke:</strong> Multipliziere mit \(\dfrac{\pi}{180°}\), um Radiant zu bekommen; mit \(\dfrac{180°}{\pi}\), um Grad zu bekommen. Die Einheit, die du <em>haben möchtest</em>, steht im Zähler.</p>
+
+<h3>Tabelle der Standardwinkel</h3>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Grad</th><th>Bruch von π</th><th>Radiant (Dezimal)</th><th>Wo es vorkommt</th></tr></thead>
+  <tbody>
+    <tr><td>0°</td><td>0</td><td>0</td><td style="font-family:var(--sans);text-align:left">Startwinkel, Ruhelage</td></tr>
+    <tr><td>30°</td><td>\(\frac{\pi}{6}\)</td><td>0.524</td><td style="font-family:var(--sans);text-align:left">Standardwinkel · halbe 60°</td></tr>
+    <tr><td>45°</td><td>\(\frac{\pi}{4}\)</td><td>0.785</td><td style="font-family:var(--sans);text-align:left">halbierter rechter Winkel</td></tr>
+    <tr><td>60°</td><td>\(\frac{\pi}{3}\)</td><td>1.047</td><td style="font-family:var(--sans);text-align:left">gleichseitiges Dreieck</td></tr>
+    <tr><td>90°</td><td>\(\frac{\pi}{2}\)</td><td>1.571</td><td style="font-family:var(--sans);text-align:left">rechter Winkel</td></tr>
+    <tr><td>180°</td><td>\(\pi\)</td><td>3.142</td><td style="font-family:var(--sans);text-align:left">gestreckter Winkel</td></tr>
+    <tr><td>270°</td><td>\(\frac{3\pi}{2}\)</td><td>4.712</td><td style="font-family:var(--sans);text-align:left">drei Viertel-Drehung</td></tr>
+    <tr><td>360°</td><td>\(2\pi\)</td><td>6.283</td><td style="font-family:var(--sans);text-align:left">volle Drehung</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel — Grad → Radiant</div>
+  Wandle 75° in Radiant um:
+  \[ 75° \cdot \dfrac{\pi}{180°} = \dfrac{75\pi}{180} = \dfrac{5\pi}{12} \approx 1.309 \text{ rad} \]
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel — Radiant → Grad</div>
+  Wandle \(\dfrac{2\pi}{3}\) rad in Grad um:
+  \[ \dfrac{2\pi}{3} \cdot \dfrac{180°}{\pi} = \dfrac{2 \cdot 180°}{3} = 120° \]
+</div>
+
+<div class="block block-fehler" style="margin-top:10px">
+  <div class="block-titel">⚠ Häufiger Fehler — Taschenrechner-Modus</div>
+  Jeder wissenschaftliche Taschenrechner hat einen Modus-Schalter <strong>DEG</strong> (Grad) / <strong>RAD</strong> (Radiant). Ein falsch eingestellter Modus liefert <em>plausibel aussehende</em>, aber <em>komplett falsche</em> Werte. Erste Kontrolle bei jedem trigonometrischen Resultat: Stimmt der Modus zur Aufgabe?
+</div>
 
 <!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<h2 id="typen">Winkeltypen und Winkelpaare</h2>
 
+<p>Geometrische Winkel werden nach ihrer Grösse benannt. Die Begriffe brauchst du in jedem späteren Kapitel.</p>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<div class="winkeltyp-grid">
+  <div class="wt-box">
+    <svg width="100" height="70" viewBox="0 0 100 70">
+      <!-- spitz (≈40°): vertex (15,58), beide Schenkel sichtbar -->
+      <line x1="15" y1="58" x2="85" y2="58" stroke="#1c1a17" stroke-width="2"/>
+      <line x1="15" y1="58" x2="68" y2="13" stroke="#1c1a17" stroke-width="2"/>
+      <path d="M 33 58 A 18 18 0 0 0 28.8 43.4" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5"/>
+      <text x="38" y="50" font-size="9" font-family="JetBrains Mono" fill="#1a4f8a" font-weight="700">α</text>
+    </svg>
+    <div class="wt-name">spitz</div>
+    <div class="wt-bereich">0° &lt; α &lt; 90°</div>
+  </div>
+  <div class="wt-box">
+    <svg width="100" height="70" viewBox="0 0 100 70">
+      <!-- recht (90°): vertex (20,58) -->
+      <line x1="20" y1="58" x2="85" y2="58" stroke="#1c1a17" stroke-width="2"/>
+      <line x1="20" y1="58" x2="20" y2="10" stroke="#1c1a17" stroke-width="2"/>
+      <rect x="20" y="48" width="10" height="10" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5"/>
+    </svg>
+    <div class="wt-name">recht</div>
+    <div class="wt-bereich">α = 90°</div>
+  </div>
+  <div class="wt-box">
+    <svg width="100" height="70" viewBox="0 0 100 70">
+      <!-- stumpf (≈130°): vertex (50,55), arm geht nach links-oben -->
+      <line x1="50" y1="55" x2="90" y2="55" stroke="#1c1a17" stroke-width="2"/>
+      <line x1="50" y1="55" x2="22" y2="22" stroke="#1c1a17" stroke-width="2"/>
+      <path d="M 68 55 A 18 18 0 0 0 38.4 41.2" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5"/>
+      <text x="48" y="48" font-size="9" font-family="JetBrains Mono" fill="#1a4f8a" font-weight="700">α</text>
+    </svg>
+    <div class="wt-name">stumpf</div>
+    <div class="wt-bereich">90° &lt; α &lt; 180°</div>
+  </div>
+  <div class="wt-box">
+    <svg width="100" height="70" viewBox="0 0 100 70">
+      <!-- gestreckt (180°): horizontale Linie durch Scheitel -->
+      <line x1="10" y1="42" x2="90" y2="42" stroke="#1c1a17" stroke-width="2"/>
+      <path d="M 70 42 A 20 20 0 0 0 30 42" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5"/>
+      <circle cx="50" cy="42" r="2.5" fill="#1c1a17"/>
+      <text x="46" y="35" font-size="9" font-family="JetBrains Mono" fill="#1a4f8a" font-weight="700">α</text>
+    </svg>
+    <div class="wt-name">gestreckt</div>
+    <div class="wt-bereich">α = 180°</div>
+  </div>
+  <div class="wt-box">
+    <svg width="100" height="70" viewBox="0 0 100 70">
+      <!-- überstumpf (≈260°): vertex (50,30), Bogen umrundet aussen -->
+      <line x1="50" y1="30" x2="90" y2="30" stroke="#1c1a17" stroke-width="2"/>
+      <line x1="50" y1="30" x2="44" y2="60" stroke="#1c1a17" stroke-width="2"/>
+      <path d="M 64 30 A 14 14 0 1 0 47.6 43.7" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5"/>
+    </svg>
+    <div class="wt-name">überstumpf</div>
+    <div class="wt-bereich">180° &lt; α &lt; 360°</div>
+  </div>
+  <div class="wt-box">
+    <svg width="100" height="70" viewBox="0 0 100 70">
+      <!-- voll: ganzer Kreis -->
+      <circle cx="50" cy="35" r="20" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5"/>
+      <circle cx="50" cy="35" r="2.5" fill="#1c1a17"/>
+      <line x1="50" y1="35" x2="70" y2="35" stroke="#1c1a17" stroke-width="2"/>
+    </svg>
+    <div class="wt-name">voll</div>
+    <div class="wt-bereich">α = 360°</div>
+  </div>
+</div>
 
+<h3 id="klassifikator">Trainer — selbst klassifizieren</h3>
+
+<p>Hier kannst du das Erkennen üben. Stelle einen Winkel ein und klicke den Typ, den du vermutest. Das Widget gibt dir sofort Rückmeldung.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>🎯 Winkel-Klassifikator</h3>
+    <p>Stelle den Winkel ein, klicke den passenden Typ — Live-Feedback</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>Winkel \(\alpha\)</label>
+      <input type="range" id="kl-deg" min="0" max="360" step="1" value="55">
+      <span class="sl-val"><span id="kl-deg-v">55</span>°</span>
+    </div>
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Visualisierung</div>
+        <svg id="kl-svg" viewBox="0 0 200 200" style="width:100%;max-width:240px;display:block;margin:0 auto;background:#fff;border:1px solid #d8d0c4;border-radius:9px">
+          <circle cx="100" cy="100" r="78" fill="none" stroke="#d8d0c4" stroke-width="1"/>
+          <line x1="100" y1="100" x2="178" y2="100" stroke="#1c1a17" stroke-width="2"/>
+          <line id="kl-arm" x1="100" y1="100" x2="178" y2="100" stroke="#1c1a17" stroke-width="2"/>
+          <path id="kl-arc" d="" fill="#ddeaf8" fill-opacity="0.7" stroke="#1a4f8a" stroke-width="2"/>
+          <circle cx="100" cy="100" r="2.5" fill="#1c1a17"/>
+          <text id="kl-label" x="135" y="92" font-size="13" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
+        </svg>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Welcher Typ?</div>
+        <div class="typ-btns" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:0">
+          <button class="kl-btn" data-typ="spitz">spitz</button>
+          <button class="kl-btn" data-typ="recht">recht</button>
+          <button class="kl-btn" data-typ="stumpf">stumpf</button>
+          <button class="kl-btn" data-typ="gestreckt">gestreckt</button>
+          <button class="kl-btn" data-typ="ueberstumpf">überstumpf</button>
+          <button class="kl-btn" data-typ="voll">voll</button>
+        </div>
+        <div id="kl-feedback" class="cr" style="display:block;margin-top:12px;background:var(--papier-2);color:var(--tinte-2);border:1px solid var(--linie)">Wähle einen Typ.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.kl-btn { font-family:var(--mono); font-size:0.78rem; font-weight:700; padding:10px 8px; border-radius:7px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.kl-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.kl-btn.ok { background:var(--gruen-hell); color:var(--gruen); border-color:var(--gruen); }
+.kl-btn.err { background:var(--rot-hell); color:var(--rot); border-color:var(--rot); }
+</style>
+
+<h3 id="winkelpaare">Winkelpaare — drei häufige Fälle</h3>
+
+<p>Wenn zwei Winkel zusammen auftreten, gibt es drei Standard-Beziehungen, die du erkennen können musst.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>🔬 Winkelpaare — interaktiv</h3>
+    <p>Wähle eine Beziehung. Skizze, Definition und Beispiel passen sich an.</p>
+  </div>
+  <div class="widget-body">
+    <div class="tabs-row">
+      <button class="tab-btn aktiv" onclick="showWP('komp')">Komplementär</button>
+      <button class="tab-btn" onclick="showWP('supp')">Supplementär</button>
+      <button class="tab-btn" onclick="showWP('schb')">Scheitel-/Nebenwinkel</button>
+    </div>
+
+    <div id="wp-komp" class="tab-panel aktiv">
+      <div class="tab-panel-grid">
+        <div>
+          <svg viewBox="0 0 220 140" style="width:100%;max-width:220px;display:block;margin:0 auto">
+            <!-- Drei Schenkel: horizontal (rechts), vertikal (oben), diagonal — α + β = 90° -->
+            <line x1="20" y1="115" x2="190" y2="115" stroke="#1c1a17" stroke-width="2"/>
+            <line x1="20" y1="115" x2="20" y2="20" stroke="#1c1a17" stroke-width="2"/>
+            <line x1="20" y1="115" x2="155" y2="40" stroke="#5a5040" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <!-- Rechter Winkel zwischen Horizontale und Vertikale -->
+            <rect x="20" y="106" width="9" height="9" fill="none" stroke="#5a5040" stroke-width="1"/>
+            <!-- α-Bogen: von Horizontal (0°) zu Diagonal (29.1°), Radius 30 -->
+            <path d="M 50 115 A 30 30 0 0 0 46.2 100.4" fill="#d8f0e2" stroke="#1f6b3a" stroke-width="1.5"/>
+            <!-- β-Bogen: von Diagonal (29.1°) zu Vertikal (90°), Radius 30 -->
+            <path d="M 46.2 100.4 A 30 30 0 0 0 20 85" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5"/>
+            <text x="38" y="111" font-size="13" fill="#1f6b3a" font-weight="700" font-family="JetBrains Mono">α</text>
+            <text x="26" y="98" font-size="13" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">β</text>
+            <text x="105" y="135" font-size="11" fill="#5a5040" text-anchor="middle">α + β = 90°</text>
+          </svg>
+        </div>
+        <div>
+          <p><strong>Komplementärwinkel</strong> ergänzen sich zu 90°:</p>
+          \[ \alpha + \beta = 90° \]
+          <p>Sie tauchen in jedem rechtwinkligen Dreieck auf — dort sind die beiden nicht-rechten Winkel komplementär.</p>
+          <p style="font-size:0.88rem;color:var(--tinte-2);margin-top:6px"><em>Beispiel:</em> Wenn ein Winkel 35° beträgt, ist sein Komplement \(90° - 35° = 55°\).</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="wp-supp" class="tab-panel">
+      <div class="tab-panel-grid">
+        <div>
+          <svg viewBox="0 0 240 140" style="width:100%;max-width:240px;display:block;margin:0 auto">
+            <!-- Gerade horizontal, dazu ein Strahl nach oben — α + β = 180° -->
+            <line x1="20" y1="100" x2="220" y2="100" stroke="#1c1a17" stroke-width="2"/>
+            <line x1="120" y1="100" x2="60" y2="25" stroke="#5a5040" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <!-- α-Bogen: von rechter Horizontale (0°) zu Diagonale (128.7°), Radius 30 -->
+            <path d="M 150 100 A 30 30 0 0 0 101.2 76.6" fill="#d8f0e2" stroke="#1f6b3a" stroke-width="1.5"/>
+            <!-- β-Bogen: von Diagonale (128.7°) zu linker Horizontale (180°), Radius 30 -->
+            <path d="M 101.2 76.6 A 30 30 0 0 0 90 100" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.5"/>
+            <!-- Scheitelpunkt -->
+            <circle cx="120" cy="100" r="2.5" fill="#1c1a17"/>
+            <text x="135" y="86" font-size="13" fill="#1f6b3a" font-weight="700" font-family="JetBrains Mono">α</text>
+            <text x="100" y="94" font-size="13" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">β</text>
+            <text x="120" y="125" font-size="11" fill="#5a5040" text-anchor="middle">α + β = 180°</text>
+          </svg>
+        </div>
+        <div>
+          <p><strong>Supplementärwinkel</strong> ergänzen sich zu 180°:</p>
+          \[ \alpha + \beta = 180° \]
+          <p>Beim Schnitt zweier Geraden bzw. zweier Halbgeraden auf einer Geraden sind benachbarte Winkel immer supplementär.</p>
+          <p style="font-size:0.88rem;color:var(--tinte-2);margin-top:6px"><em>Beispiel:</em> Wenn ein Winkel 110° beträgt, ist sein Supplement \(180° - 110° = 70°\).</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="wp-schb" class="tab-panel">
+      <div class="tab-panel-grid">
+        <div>
+          <svg viewBox="0 0 220 160" style="width:100%;max-width:220px;display:block;margin:0 auto">
+            <!-- Zwei Geraden, Schnittpunkt bei (110, 80) -->
+            <line x1="20" y1="30" x2="200" y2="130" stroke="#1c1a17" stroke-width="2"/>
+            <line x1="20" y1="130" x2="200" y2="30" stroke="#1c1a17" stroke-width="2"/>
+            <!-- α oben + α unten = Scheitelwinkel (gleich gross) -->
+            <path d="M 125.7 71.3 A 18 18 0 0 0 94.3 71.3" fill="#d8f0e2" stroke="#1f6b3a" stroke-width="1.4"/>
+            <path d="M 94.3 88.7 A 18 18 0 0 0 125.7 88.7" fill="#d8f0e2" stroke="#1f6b3a" stroke-width="1.4"/>
+            <!-- β rechts + β links = Nebenwinkel (auch gleich gross zueinander) -->
+            <path d="M 125.7 88.7 A 18 18 0 0 0 125.7 71.3" fill="#fde8e8" stroke="#9b1c1c" stroke-width="1.4"/>
+            <path d="M 94.3 71.3 A 18 18 0 0 0 94.3 88.7" fill="#fde8e8" stroke="#9b1c1c" stroke-width="1.4"/>
+            <!-- Scheitelpunkt -->
+            <circle cx="110" cy="80" r="2.5" fill="#1c1a17"/>
+            <text x="105" y="68" font-size="13" fill="#1f6b3a" font-weight="700" font-family="JetBrains Mono">α</text>
+            <text x="105" y="98" font-size="13" fill="#1f6b3a" font-weight="700" font-family="JetBrains Mono">α</text>
+            <text x="129" y="84" font-size="13" fill="#9b1c1c" font-weight="700" font-family="JetBrains Mono">β</text>
+            <text x="83" y="84" font-size="13" fill="#9b1c1c" font-weight="700" font-family="JetBrains Mono">β</text>
+            <text x="110" y="155" font-size="11" fill="#5a5040" text-anchor="middle">Scheitel: α = α · Neben: α + β = 180°</text>
+          </svg>
+        </div>
+        <div>
+          <p><strong>Scheitelwinkel</strong> liegen sich am Schnittpunkt zweier Geraden gegenüber. Sie sind <em>gleich gross</em>:</p>
+          \[ \alpha_{\text{ggü}} = \alpha \]
+          <p><strong>Nebenwinkel</strong> liegen am gleichen Schnittpunkt seitlich. Sie sind <em>supplementär</em> zueinander:</p>
+          \[ \alpha + \beta = 180° \]
+          <p style="font-size:0.88rem;color:var(--tinte-2);margin-top:6px"><em>Beispiel:</em> Wenn ein Winkel 73° ist, sind die anderen drei: 73° (gegenüber), 107°, 107° (links und rechts daneben).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 6. WEITERE THEORIE: Workflow + Plausibilität ══ -->
+<h2 id="theorie">Skizzieren als Workflow — und Plausibilität prüfen</h2>
+
+<p>Eine gute Skizze entsteht in vier nachvollziehbaren Schritten. Trainiere diese Reihenfolge — sie spart Zeit und verhindert Fehler.</p>
+
+<div class="workflow-skizze">
+  <div class="ws-step">
+    <div class="ws-nr">1</div>
+    <div class="ws-titel">Lesen</div>
+    <div class="ws-text">Aufgabe zweimal lesen. Markiere Zahlen und Beziehungen.</div>
+  </div>
+  <div class="ws-step">
+    <div class="ws-nr">2</div>
+    <div class="ws-titel">Skizzieren</div>
+    <div class="ws-text">Grobe Form aufs Papier — alle relevanten Elemente.</div>
+  </div>
+  <div class="ws-step">
+    <div class="ws-nr">3</div>
+    <div class="ws-titel">Beschriften</div>
+    <div class="ws-text">Gegebenes mit Werten, Gesuchtes mit Variablen (\(d\), \(\alpha\)).</div>
+  </div>
+  <div class="ws-step">
+    <div class="ws-nr">4</div>
+    <div class="ws-titel">Prüfen</div>
+    <div class="ws-text">Resultat plausibel? Mit der Skizze vergleichen.</div>
+  </div>
+</div>
+
+<h3>Plausibilitätsprüfung — drei Strategien</h3>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategien</div>
+  <ol style="margin:8px 0 0 0">
+    <li><strong>Grössenordnung:</strong> Eine Zimmerdiagonale von 200 m wäre absurd, von 5 m plausibel. Vergleiche mit bekannten Längen.</li>
+    <li><strong>Schranken:</strong> Eine Diagonale ist immer länger als jede Einzelseite — und kürzer als deren Summe (Dreiecksungleichung). Eine Hypotenuse ist immer länger als jede Kathete.</li>
+    <li><strong>Spezialfall:</strong> Setze Sonderwerte ein (\(\alpha = 0°\), \(\alpha = 90°\), \(b = a\), \(r \to 0\)) und prüfe, ob deine Formel sinnvolle Resultate liefert.</li>
+  </ol>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel — Plausibilität nutzen</div>
+  Aufgabe: In einem rechtwinkligen Dreieck sind die Katheten 5 cm und 12 cm lang. Wie lang ist die Hypotenuse?
+  <br><br>
+  <strong>Vor</strong> der Rechnung: Die Hypotenuse muss <em>länger</em> als 12 cm und <em>kürzer</em> als \(5 + 12 = 17\) cm sein. Das Resultat \(\sqrt{5^2 + 12^2} = \sqrt{169} = 13\) cm passt in dieses Intervall — plausibel. Wenn jemand „17 cm" oder „11 cm" schriebe, wären das sofort erkennbare Fehler.
+</div>
+
+<h3 id="plausi-widget">Plausibilität live ausprobieren</h3>
+
+<p>Wähle die Schenkellängen eines rechtwinkligen Dreiecks. Die Hypotenuse wird live berechnet und gleichzeitig die obere und untere Schranke gezeigt. Du siehst direkt: das Resultat liegt immer dazwischen.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>📐 Pythagoras live mit Schranken <a class="quer" href="g5-2a-dreiecke.html#pythagoras">↗ 5.2a</a></h3>
+    <p>Eingabe: zwei Katheten · Ausgabe: Hypotenuse + Plausibilitäts-Schranken</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>Kathete  \(a\)</label>
+      <input type="range" id="py-a" min="1" max="20" step="0.5" value="5">
+      <span class="sl-val"><span id="py-a-v">5</span></span>
+    </div>
+    <div class="sl-row">
+      <label>Kathete  \(b\)</label>
+      <input type="range" id="py-b" min="1" max="20" step="0.5" value="12">
+      <span class="sl-val"><span id="py-b-v">12</span></span>
+    </div>
+
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Skizze</div>
+        <svg id="py-svg" viewBox="0 0 240 200" style="width:100%;max-width:280px;display:block;margin:0 auto;background:var(--weiss);border:1px solid var(--linie);border-radius:9px">
+          <polygon id="py-tri" points="20,180 220,180 20,40" fill="#d8f0e2" stroke="#1f6b3a" stroke-width="2"/>
+          <rect x="20" y="170" width="10" height="10" fill="none" stroke="#1f6b3a" stroke-width="1.5"/>
+          <text id="py-lbl-a" x="120" y="195" text-anchor="middle" font-size="13" fill="#1c1a17" font-family="JetBrains Mono">a</text>
+          <text id="py-lbl-b" x="8" y="115" text-anchor="middle" font-size="13" fill="#1c1a17" font-family="JetBrains Mono" transform="rotate(-90 8 115)">b</text>
+          <text id="py-lbl-c" x="135" y="100" font-size="14" fill="#9b1c1c" font-weight="700" font-family="JetBrains Mono">c = ?</text>
+        </svg>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Schranken &amp; Resultat</div>
+        <div class="formel-live">
+          <div class="fl-label">Untere Schranke (längere Kathete)</div>
+          <div class="fl-eq" id="py-min" style="color:var(--tinte-2)">12.0</div>
+        </div>
+        <div class="formel-live" style="border-color:var(--rot-rand);background:var(--rot-hell)">
+          <div class="fl-label">Hypotenuse \(c\)</div>
+          <div class="fl-eq" id="py-c" style="color:var(--rot);font-size:1.3rem">13.0</div>
+        </div>
+        <div class="formel-live">
+          <div class="fl-label">Obere Schranke (Summe)</div>
+          <div class="fl-eq" id="py-max" style="color:var(--tinte-2)">17.0</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:0.78rem;color:var(--tinte-2);margin-top:8px;text-align:center">
+          \(c = \sqrt{a^2 + b^2}\)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ══ 7. AUFGABEN ══ -->
-<h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Winkelsumme im Vieleck</div>
+  <p>\(180°\) ist die Innenwinkelsumme im <strong>Dreieck</strong>. Beim Viereck sind es \(360°\), beim Fünfeck \(540°\) usw. — allgemein \((n - 2) \cdot 180°\) für ein \(n\)-Eck. Wer das stur mit \(180°\) ansetzt, kommt bei Vierecken auf einen Widerspruch. Ebenso aufpassen bei Aussen- vs. Innenwinkel: Aussenwinkel sind die Ergänzung zu \(180°\), nicht zu \(360°\).</p>
+</div>
 
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1: Erkennen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Winkeltypen erkennen</span></div>
+
+  <p>Welcher Winkeltyp liegt vor? Ordne jedem Wert die richtige Bezeichnung zu (spitz, recht, stumpf, gestreckt, überstumpf, voll).</p>
+  <ol class="aufg-liste">
+    <li>\(\alpha = 47°\)</li>
+    <li>\(\beta = \dfrac{\pi}{2}\)</li>
+    <li>\(\gamma = 215°\)</li>
+    <li>\(\delta = \pi\)</li>
+    <li>\(\varepsilon = 113°\)</li>
+    <li>\(\zeta = 2\pi\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l1')">▶ Lösung</button>
+  <div class="loesung-body" id="l1">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>spitz (zwischen 0° und 90°)</li>
+    <li>recht (\(\frac{\pi}{2} = 90°\))</li>
+    <li>überstumpf (zwischen 180° und 360°)</li>
+    <li>gestreckt (\(\pi = 180°\))</li>
+    <li>stumpf (zwischen 90° und 180°)</li>
+    <li>voll (\(2\pi = 360°\))</li>
+    </ol>
+  </div>
+    </div>
+
+</div>
+
+<!-- A2: Konstruieren / Zeichnen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Skizze zur Aufgabe konstruieren</span></div>
+
+  <p>Erstelle zu jeder der folgenden Aufgaben eine beschriftete Skizze (gegebene Werte mit Zahlen, Gesuchtes mit Variablen). Du musst sie <em>nicht</em> rechnen — nur skizzieren und beschriften.</p>
+  <ol class="aufg-liste">
+    <li>Eine Leiter von 4.5 m Länge lehnt an einer Wand, der Fusspunkt ist 1.2 m von der Wand entfernt. In welcher Höhe \(h\) berührt die Leiter die Wand?</li>
+    <li>Zwei Kreise mit den Radien 3 cm und 5 cm berühren sich von aussen. Wie weit \(d\) sind ihre Mittelpunkte voneinander entfernt?</li>
+    <li>Ein gleichseitiges Dreieck hat den Umfang 36 cm. Wie hoch \(h\) ist es?</li>
+    <li>Ein Wanderer geht 600 m geradeaus, dreht um 60° nach links und geht weitere 400 m. Wie weit \(d\) ist er Luftlinie vom Startpunkt entfernt?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l2')">▶ Lösung</button>
+  <div class="loesung-body" id="l2">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <p>Beispielskizzen — deine eigenen können anders aussehen, wichtig sind Beschriftung und korrekte Beziehungen:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px">
+    <svg viewBox="0 0 200 160" style="background:#fff;border:1px solid var(--linie);border-radius:8px">
+    <line x1="30" y1="20" x2="30" y2="140" stroke="#1c1a17" stroke-width="2"/>
+    <line x1="30" y1="140" x2="160" y2="140" stroke="#1c1a17" stroke-width="2"/>
+    <line x1="80" y1="140" x2="30" y2="40" stroke="#1a4f8a" stroke-width="2.2"/>
+    <rect x="30" y="131" width="9" height="9" fill="none" stroke="#1f6b3a" stroke-width="1.4"/>
+    <text x="50" y="155" font-size="11" fill="#1c1a17" font-family="JetBrains Mono">1.2 m</text>
+    <text x="110" y="80" font-size="11" fill="#1a4f8a" font-family="JetBrains Mono">4.5 m</text>
+    <text x="20" y="80" font-size="11" fill="#9b1c1c" font-family="JetBrains Mono" font-weight="700">h = ?</text>
+    <text x="100" y="20" font-size="11" fill="#5a5040" text-anchor="middle">1) Leiter</text>
+    </svg>
+    <svg viewBox="0 0 200 160" style="background:#fff;border:1px solid var(--linie);border-radius:8px">
+    <circle cx="60" cy="80" r="25" fill="none" stroke="#1a4f8a" stroke-width="2"/>
+    <circle cx="125" cy="80" r="40" fill="none" stroke="#1f6b3a" stroke-width="2"/>
+    <line x1="60" y1="80" x2="125" y2="80" stroke="#9b1c1c" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <circle cx="60" cy="80" r="2" fill="#1a4f8a"/>
+    <circle cx="125" cy="80" r="2" fill="#1f6b3a"/>
+    <circle cx="85" cy="80" r="3" fill="#b85c00"/>
+    <text x="55" y="110" font-size="11" fill="#1a4f8a" font-family="JetBrains Mono">r₁=3</text>
+    <text x="120" y="135" font-size="11" fill="#1f6b3a" font-family="JetBrains Mono">r₂=5</text>
+    <text x="85" y="100" font-size="11" fill="#9b1c1c" font-family="JetBrains Mono" font-weight="700">d=?</text>
+    <text x="100" y="20" font-size="11" fill="#5a5040" text-anchor="middle">2) Zwei Kreise</text>
+    </svg>
+    <svg viewBox="0 0 200 160" style="background:#fff;border:1px solid var(--linie);border-radius:8px">
+    <polygon points="30,140 170,140 100,20" fill="none" stroke="#1f6b3a" stroke-width="2"/>
+    <line x1="100" y1="20" x2="100" y2="140" stroke="#9b1c1c" stroke-width="1.8" stroke-dasharray="4,3"/>
+    <rect x="91" y="131" width="9" height="9" fill="none" stroke="#1f6b3a" stroke-width="1.4"/>
+    <text x="55" y="100" font-size="11" fill="#1f6b3a" font-family="JetBrains Mono">12 cm</text>
+    <text x="110" y="80" font-size="11" fill="#9b1c1c" font-family="JetBrains Mono" font-weight="700">h=?</text>
+    <text x="98" y="155" font-size="11" fill="#1f6b3a" font-family="JetBrains Mono">12</text>
+    <text x="100" y="14" font-size="11" fill="#5a5040" text-anchor="middle">3) Gleichseit. Δ</text>
+    </svg>
+    <svg viewBox="0 0 200 160" style="background:#fff;border:1px solid var(--linie);border-radius:8px">
+    <line x1="30" y1="120" x2="130" y2="120" stroke="#1a4f8a" stroke-width="2.2"/>
+    <line x1="130" y1="120" x2="180" y2="35" stroke="#1a4f8a" stroke-width="2.2"/>
+    <line x1="30" y1="120" x2="180" y2="35" stroke="#9b1c1c" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <path d="M 145 120 A 15 15 0 0 0 142 105" fill="#ddeaf8" stroke="#1a4f8a" stroke-width="1.4"/>
+    <text x="80" y="135" font-size="11" fill="#1a4f8a" font-family="JetBrains Mono">600 m</text>
+    <text x="170" y="90" font-size="11" fill="#1a4f8a" font-family="JetBrains Mono">400 m</text>
+    <text x="135" y="115" font-size="10" fill="#1a4f8a" font-weight="700">60°</text>
+    <text x="80" y="80" font-size="11" fill="#9b1c1c" font-family="JetBrains Mono" font-weight="700">d=?</text>
+    <text x="100" y="20" font-size="11" fill="#5a5040" text-anchor="middle">4) Wanderer</text>
+    </svg>
+    </div>
+    <p style="font-size:0.85rem;color:var(--tinte-2);margin-top:10px">In 2) ist das Resultat ohne Rechnung schon klar: \(d = r_1 + r_2 = 8\) cm. Bei 1)–4) gilt: deine Skizze macht den Lösungsweg sichtbar — und das ist der eigentliche Lerninhalt dieser Aufgabe.</p>
+  </div>
+    </div>
+
+</div>
+
+<!-- A3: Rechnen — Umrechnungen Grad/Radiant -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen — Grad und Radiant</span></div>
+
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Grad → Radiant (exakt als Bruch von π)</div>
+    <p>Wandle in Radiant um, exakt als Bruch von \(\pi\) und gerundet auf 3 Nachkommastellen.</p>
+    <ol class="aufg-liste">
+      <li>40°</li>
+      <li>135°</li>
+      <li>225°</li>
+      <li>15°</li>
+    </ol>
+    <button class="loesung-toggle" onclick="toggleL('l3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l3a">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>\(40° \cdot \frac{\pi}{180°} = \frac{2\pi}{9} \approx 0.698\) rad</li>
+    <li>\(135° \cdot \frac{\pi}{180°} = \frac{3\pi}{4} \approx 2.356\) rad</li>
+    <li>\(225° \cdot \frac{\pi}{180°} = \frac{5\pi}{4} \approx 3.927\) rad</li>
+    <li>\(15° \cdot \frac{\pi}{180°} = \frac{\pi}{12} \approx 0.262\) rad</li>
+    </ol>
+  </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Radiant → Grad</div>
+    <p>Wandle in Grad um.</p>
+    <ol class="aufg-liste">
+      <li>\(\dfrac{\pi}{5}\)</li>
+      <li>\(\dfrac{7\pi}{6}\)</li>
+      <li>\(\dfrac{3\pi}{8}\)</li>
+      <li>\(2\) (also 2 rad, ohne π)</li>
+    </ol>
+    <button class="loesung-toggle" onclick="toggleL('l3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l3b">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>\(\frac{\pi}{5} \cdot \frac{180°}{\pi} = 36°\)</li>
+    <li>\(\frac{7\pi}{6} \cdot \frac{180°}{\pi} = \frac{7 \cdot 180°}{6} = 210°\)</li>
+    <li>\(\frac{3\pi}{8} \cdot \frac{180°}{\pi} = \frac{3 \cdot 180°}{8} = 67.5°\)</li>
+    <li>\(2 \cdot \frac{180°}{\pi} \approx 114.59°\)</li>
+    </ol>
+  </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Winkelpaare berechnen</div>
+    <ol class="aufg-liste">
+      <li>Wie gross ist das Komplement von 27°?</li>
+      <li>Wie gross ist das Supplement von 142°?</li>
+      <li>Zwei Geraden schneiden sich. Einer der vier entstehenden Winkel beträgt 73°. Wie gross sind die anderen drei?</li>
+      <li>In einem rechtwinkligen Dreieck ist ein Winkel 32°. Wie gross sind die anderen beiden Winkel?</li>
+    </ol>
+    <button class="loesung-toggle" onclick="toggleL('l3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l3c">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>\(90° - 27° = 63°\) (Komplement)</li>
+    <li>\(180° - 142° = 38°\) (Supplement)</li>
+    <li>Gegenüber 73° (Scheitelwinkel), daneben jeweils \(180° - 73° = 107°\) (Nebenwinkel). Also: 73°, 107°, 73°, 107°.</li>
+    <li>Winkelsumme im Dreieck: \(180° - 90° - 32° = 58°\). Die beiden anderen Winkel sind 90° und 58°.</li>
+    </ol>
+  </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 d) Plausibilität — welche Antwort ist richtig?</div>
+    <p>Drei Schülerinnen rechnen die Aufgabe „Ein Rechteck ist 8 m lang und 6 m breit. Wie lang ist die Diagonale?". Folgende Antworten kommen heraus:</p>
+    <ul style="margin:6px 0">
+      <li>Anna: 10 m</li>
+      <li>Boran: 14 m</li>
+      <li>Cécile: 4 m</li>
+    </ul>
+    <p>Welche Antwort ist plausibel? Begründe ohne explizite Rechnung — nur über Schranken.</p>
+    <button class="loesung-toggle" onclick="toggleL('l3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l3d">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <p>Schranken: Die Diagonale eines Rechtecks ist immer <em>länger</em> als die längere Seite (8 m) und <em>kürzer</em> als die Summe der beiden Seiten (\(8 + 6 = 14\) m).</p>
+    <ul>
+    <li><strong>Cécile (4 m)</strong> — unmöglich, kürzer als beide Seiten.</li>
+    <li><strong>Boran (14 m)</strong> — unmöglich, das wäre die Summe der Seiten (Dreieck entartet).</li>
+    <li><strong>Anna (10 m)</strong> — plausibel, liegt zwischen 8 und 14. Kontrolle: \(\sqrt{64+36} = \sqrt{100} = 10\) ✓.</li>
+    </ul>
+  </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- A4: Anwendung — Bauwesen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Anwendung — Dachneigung</span></div>
+
+  <p>Ein Architekt plant ein Walmdach mit einer Dachneigung von 35°. Im Bauplan ist die Neigung in <strong>Radiant</strong> angegeben, weil das Statikprogramm so rechnet. Welcher Radiant-Wert (auf 4 Nachkommastellen) muss eingetragen werden? Welcher Anteil eines Vollkreises ist das?</p>
+  <button class="loesung-toggle" onclick="toggleL('l4')">▶ Lösung</button>
+  <div class="loesung-body" id="l4">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <p>Umrechnung Grad → Radiant:</p>
+    \[ 35° \cdot \dfrac{\pi}{180°} = \dfrac{35\pi}{180} = \dfrac{7\pi}{36} \approx 0.6109 \text{ rad} \]
+    <p>Anteil am Vollkreis:</p>
+    \[ \dfrac{35°}{360°} = \dfrac{7}{72} \approx 9.7\,\% \]
+    <p>Im Statikprogramm 0.6109 eintragen. Der Architekt prüft mit dem Anteil: knapp 10 % eines Vollkreises ist plausibel für ein eher flaches Walmdach.</p>
+  </div>
+    </div>
+
+</div>
+
+<!-- A5: Anwendung — Navigation -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Anwendung — Schiff auf Kurs</span></div>
+
+  <p>Ein Schiff fährt mit Kurs 75° (gemessen von Nord, im Uhrzeigersinn). Es soll einen Kursabweich-Befehl von „\(+\dfrac{\pi}{6}\) rad" ausführen. Welcher neue Kurs ergibt sich in Grad? Skizziere die Situation und prüfe das Resultat auf Plausibilität.</p>
+  <button class="loesung-toggle" onclick="toggleL('l5')">▶ Lösung</button>
+  <div class="loesung-body" id="l5">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <p>\(\frac{\pi}{6}\) rad in Grad:</p>
+    \[ \dfrac{\pi}{6} \cdot \dfrac{180°}{\pi} = 30° \]
+    <p>Neuer Kurs:</p>
+    \[ 75° + 30° = 105° \]
+    <p>Plausibilität: 105° ist immer noch ein gültiger Kurs (zwischen 0° und 360°), und das Schiff fährt jetzt etwas südlicher als vorher (vorher Nord-Ost-Süd-Mischung, jetzt mehr Richtung Süden geneigt). Das passt zum Befehl „nach Steuerbord drehen".</p>
+  </div>
+    </div>
+
+</div>
+
+<!-- A6: Anwendung — Eigenes -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — eigenes Beispiel <span class="aufg-vertiefung">Praxis-Projekt</span></span></div>
+
+  <p>Wähle einen Gegenstand in deiner Wohnung oder Schule (Tisch, Bilderrahmen, Türöffnung, Bücherregal). Miss zwei Längen und einen Winkel. Erstelle:</p>
+  <ol class="aufg-liste">
+    <li>eine beschriftete Skizze mit deinen Messwerten (Zahl <em>und</em> Einheit);</li>
+    <li>den Winkel in <em>beiden</em> Massen — Grad und Radiant;</li>
+    <li>eine Plausibilitätsprüfung: passt die Diagonalenlänge nach Pythagoras zum Messwert? Sind rechte Winkel wirklich rechtwinklig?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l6')">▶ Hinweise zur Eigenkontrolle</button>
+  <div class="loesung-body" id="l6">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <p>Da diese Aufgabe individuell ist, hier eine Kontroll-Liste:</p>
+    <ul>
+    <li>Stehen <em>alle</em> Gegebenen mit Zahl <em>und</em> Einheit auf der Skizze?</li>
+    <li>Sind rechte Winkel mit dem kleinen Quadrat-Symbol markiert?</li>
+    <li>Stimmt deine Radiant-Umrechnung? Kontrolliere mit dem Faktor \(\frac{\pi}{180°}\).</li>
+    <li>Ergibt eine Hypothesen-Rechnung (z.B. Pythagoras für die Diagonale) ein Resultat, das zu deiner gemessenen Länge passt? Wenn nicht: war der Winkel wirklich rechtwinklig oder war die Messung ungenau?</li>
+    </ul>
+  </div>
+    </div>
+
+</div>
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
-<h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Vermessen ohne Steigen</span></div>
+  <p>Du sollst die Höhe einer Fahnenstange bestimmen, ohne sie zu erklettern. Ein 1.50 m hoher Stab steht 12 m von der Fahnenstange entfernt. In dem Moment, in dem der Schatten des Stabs genau 0.8 m lang ist, misst du den Schatten der Fahnenstange — er beträgt 5.6 m.</p>
+  <p style="font-size:0.88rem;color:var(--tinte-2);font-style:italic">Diese Aufgabe ist ein klassischer <strong>Strahlensatz</strong> — die formale Behandlung folgt in <a class="quer" href="g5-2d-zentrische-streckung-aehnlichkeit.html">5.2d Zentrische Streckung &amp; Ähnlichkeit</a>. Hier reicht die Idee „gleicher Sonnenwinkel ⇒ gleiches Verhältnis".</p>
+<ol class="aufg-liste">
+  <li>Skizziere die Situation mit Sonnenstrahlen, Fahnenstange und Stab.</li>
+  <li>Verwende die Tatsache, dass die Sonne unter dem gleichen Winkel scheint, um die Fahnenstangenhöhe zu berechnen.</li>
+  <li>Welche Annahme über die Sonnenstrahlen liegt der Rechnung zugrunde?</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-1-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-1-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Skizze: zwei ähnliche rechtwinklige Dreiecke. Das kleine Dreieck hat Höhe \(1.50\,\text{m}\) und Schattenlänge \(0.8\,\text{m}\). Das grosse Dreieck hat Höhe \(h\) und Schattenlänge \(5.6\,\text{m}\). Sonnenstrahl bildet jeweils die Hypotenuse.</li>
+        <li>Gleicher Sonnenwinkel → gleiches Verhältnis Höhe/Schattenlänge: \(\tfrac{h}{5.6} = \tfrac{1.50}{0.8} = 1.875\). Also \(h = 5.6 \cdot 1.875 = 10.5\,\text{m}\). <a class="quer" href="g5-2d-zentrische-streckung-aehnlichkeit.html">↗ 5.2d</a></li>
+        <li>Die Sonnenstrahlen sind <em>parallel</em>, weil die Sonne so weit entfernt ist, dass ihre Strahlen am Boden praktisch parallel ankommen. Diese Annahme macht die zwei Dreiecke geometrisch ähnlich, sodass das Verhältnis aus dem kleinen Dreieck direkt aufs grosse übertragbar ist.</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Geometrie beginnt nicht mit der Formel, sondern mit der <strong>Skizze</strong>. Wer skizziert, sieht den Lösungsweg vor sich; wer prüft, erkennt Fehler, bevor sie ins Resultat einfliessen. Grad und Radiant sind <em>zwei Sprachen für dasselbe</em> — wer beide spricht, kann jede Aufgabe und jedes Lehrbuch verstehen.</p>
+</div>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Konzept</th><th>Kernidee</th><th>Praktische Anwendung</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);font-weight:700;text-align:left">Skizze</td>
+        <td style="font-family:var(--sans);text-align:left">vereinfachte Darstellung mit allen Beziehungen, nicht massstabsgetreu</td>
+        <td style="font-family:var(--sans);text-align:left">Aufgabe strukturieren, Lösungsweg finden, Plausibilität prüfen</td></tr>
+    <tr><td style="font-family:var(--sans);font-weight:700;text-align:left">Workflow</td>
+        <td style="font-family:var(--sans);text-align:left">Lesen → Skizzieren → Beschriften → Prüfen</td>
+        <td style="font-family:var(--sans);text-align:left">Reihenfolge in jeder Geometrie-Aufgabe</td></tr>
+    <tr><td style="font-family:var(--sans);font-weight:700;text-align:left">Grad</td>
+        <td style="font-family:var(--sans);text-align:left">\(360°\) = voller Kreis</td>
+        <td style="font-family:var(--sans);text-align:left">Alltag, Bauwesen, Geographie</td></tr>
+    <tr><td style="font-family:var(--sans);font-weight:700;text-align:left">Radiant</td>
+        <td style="font-family:var(--sans);text-align:left">\(2\pi\) rad = voller Kreis</td>
+        <td style="font-family:var(--sans);text-align:left">Analysis, Physik, Programmierung</td></tr>
+    <tr><td style="font-family:var(--sans);font-weight:700;text-align:left">Umrechnung</td>
+        <td>\(180° = \pi\) rad</td>
+        <td style="font-family:var(--sans);text-align:left">Faktor \(\frac{\pi}{180°}\) bzw. \(\frac{180°}{\pi}\)</td></tr>
+    <tr><td style="font-family:var(--sans);font-weight:700;text-align:left">Winkeltypen</td>
+        <td style="font-family:var(--sans);text-align:left">spitz, recht, stumpf, gestreckt, überstumpf, voll</td>
+        <td style="font-family:var(--sans);text-align:left">klassifizieren in Dreiecken und Vielecken</td></tr>
+    <tr><td style="font-family:var(--sans);font-weight:700;text-align:left">Winkelpaare</td>
+        <td style="font-family:var(--sans);text-align:left">komplementär (90°), supplementär (180°), Scheitel-/Nebenwinkel</td>
+        <td style="font-family:var(--sans);text-align:left">fehlende Winkel berechnen ohne Messen</td></tr>
+  </tbody>
+</table>
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g5-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung — Skizzieren und Winkelmasse</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Umrechnung Grad ↔ Radiant, Winkelpaare</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Standardwinkel und Begriffe</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAznYTqIZtyPBmorX8BxF7TY9" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Geometrie-Grundlagen — Playlist</div><div class="lk-s">Lehrerschmidt · 37 Videos · Winkel, Geodreieck, Konstruktionen, Geraden</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHgXgsj5jy-qDE41UePZveqr" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Trigonometrie — Playlist</div><div class="lk-s">Mathe by Daniel Jung · Grad ↔ Radiant, Taschenrechner, Berechnungen</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g6/g60/aufg_g60.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Winkel</div><div class="lk-s">G60 · Winkelarten, Umrechnungen, Aufgaben mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/geometrie/grundbegriffe/winkel/aufgaben-thema-winkel" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Thema Winkel</div><div class="lk-s">Klassifikation, Komplement/Supplement, Anwendungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/54051/aufgaben-zum-bogenmass" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Bogenmass</div><div class="lk-s">Umrechnung Grad ↔ Bogenmass · mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -92,7 +952,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Grundlagen</p>
+  <p>Grundlagenfach 5.1 Grundlagen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -102,8 +962,287 @@ buildNav({
   bereich:'grundlagen', id:'g5-1',
   kapitelNr:'5.1', kapitelTitel:'Grundlagen',
   prev:{nr:'4.3',titel:'Masszahlen',url:'g4-3-masszahlen.html'},
-  next:{nr:'5.2',titel:'Planimetrie',url:'g5-2-planimetrie.html'}
+  next:{nr:'5.2a',titel:'Dreiecke',url:'g5-2a-dreiecke.html'}
 });
+
+/* ══════════════════════════════════════════════════════════
+   TAB-LOGIK Winkelpaare
+   ══════════════════════════════════════════════════════════ */
+function showWP(key){
+  document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('aktiv'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('aktiv'));
+  event.target.classList.add('aktiv');
+  document.getElementById('wp-'+key).classList.add('aktiv');
+}
+
+/* ══════════════════════════════════════════════════════════
+   WIDGET 1: Winkel-Visualisierer (Grad ↔ Radiant)
+   ══════════════════════════════════════════════════════════ */
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){[a,b]=[b,a%b];} return a; }
+function radExakt(deg){
+  // Gibt einen sauberen Bruch von π zurück (oder Dezimal, wenn nicht möglich)
+  if(deg === 0) return '0';
+  if(deg === 360) return '2π';
+  // deg / 180 als gekürzten Bruch z*π/n
+  const g = gcd(deg, 180);
+  const z = deg / g;
+  const n = 180 / g;
+  if(n === 1) return z === 1 ? 'π' : `${z}π`;
+  if(z === 1) return `π / ${n}`;
+  return `${z}π / ${n}`;
+}
+function updateWV(){
+  const deg = parseInt(document.getElementById('wv-deg').value);
+  document.getElementById('wv-deg-v').textContent = deg;
+  document.getElementById('wv-grad').textContent = deg;
+  document.getElementById('wv-rad-exakt').textContent = radExakt(deg);
+  const rad = deg * Math.PI / 180;
+  document.getElementById('wv-rad-dez').textContent = rad.toFixed(3) + ' rad';
+  document.getElementById('wv-bogen').textContent = 'b = ' + rad.toFixed(3);
+
+  // SVG Update: Arm und Bogen
+  const cx = 120, cy = 120, r = 100;
+  // Arm: von Mittelpunkt im Winkel deg (gemessen vom horizontalen Schenkel, gegen Uhrzeigersinn)
+  const angRad = -deg * Math.PI / 180;  // SVG y ist invertiert, also Minus
+  const ex = cx + r * Math.cos(angRad);
+  const ey = cy + r * Math.sin(angRad);
+  document.getElementById('wv-arm').setAttribute('x2', ex.toFixed(1));
+  document.getElementById('wv-arm').setAttribute('y2', ey.toFixed(1));
+
+  // Winkelbogen-Pfad mit Radius 45
+  const rArc = 45;
+  const arcEx = cx + rArc * Math.cos(angRad);
+  const arcEy = cy + rArc * Math.sin(angRad);
+  const largeArc = deg > 180 ? 1 : 0;
+  // sweep flag: 0 = gegen den Uhrzeigersinn (für Standard-Mathekonvention)
+  const arcD = `M ${(cx + rArc).toFixed(1)} ${cy} A ${rArc} ${rArc} 0 ${largeArc} 0 ${arcEx.toFixed(1)} ${arcEy.toFixed(1)}`;
+  document.getElementById('wv-arc').setAttribute('d', arcD);
+
+  // Label-Position: Mitte des Bogens
+  const midRad = angRad / 2;
+  const lblR = 30;
+  const lx = cx + lblR * Math.cos(midRad);
+  const ly = cy + lblR * Math.sin(midRad);
+  document.getElementById('wv-label').setAttribute('x', lx.toFixed(1));
+  document.getElementById('wv-label').setAttribute('y', (ly+5).toFixed(1));
+}
+document.getElementById('wv-deg').addEventListener('input', updateWV);
+updateWV();
+
+/* ══════════════════════════════════════════════════════════
+   WIDGET 2: Pythagoras live mit Schranken
+   ══════════════════════════════════════════════════════════ */
+function updatePY(){
+  const a = parseFloat(document.getElementById('py-a').value);
+  const b = parseFloat(document.getElementById('py-b').value);
+  document.getElementById('py-a-v').textContent = a;
+  document.getElementById('py-b-v').textContent = b;
+
+  const c = Math.sqrt(a*a + b*b);
+  const minSchranke = Math.max(a, b);
+  const maxSchranke = a + b;
+  document.getElementById('py-c').textContent   = c.toFixed(2);
+  document.getElementById('py-min').textContent = minSchranke.toFixed(2);
+  document.getElementById('py-max').textContent = maxSchranke.toFixed(2);
+
+  // SVG-Update: Dreieck mit den korrekten Proportionen
+  // Maximaler Wert auf 200px-Grundlinie (a max=20)
+  const scale = 9; // 1 Einheit = 9 px
+  const aPx = a * scale;
+  const bPx = b * scale;
+  const x0 = 20, y0 = 180;
+  const xA = x0 + aPx, yA = y0;            // rechte Ecke (Kathete a)
+  const xB = x0,       yB = y0 - bPx;       // obere Ecke (Kathete b)
+  document.getElementById('py-tri').setAttribute('points', `${x0},${y0} ${xA},${yA} ${xB},${yB}`);
+  document.getElementById('py-lbl-a').setAttribute('x', (x0 + aPx/2).toFixed(1));
+  document.getElementById('py-lbl-a').setAttribute('y', y0 + 15);
+  document.getElementById('py-lbl-a').textContent = `a = ${a}`;
+  document.getElementById('py-lbl-b').setAttribute('y', (y0 - bPx/2).toFixed(1));
+  document.getElementById('py-lbl-b').textContent = `b = ${b}`;
+  // Hypotenuse-Label-Position: Mitte
+  document.getElementById('py-lbl-c').setAttribute('x', (x0 + aPx/2 + 8).toFixed(1));
+  document.getElementById('py-lbl-c').setAttribute('y', (y0 - bPx/2).toFixed(1));
+  document.getElementById('py-lbl-c').textContent = `c = ${c.toFixed(2)}`;
+}
+document.getElementById('py-a').addEventListener('input', updatePY);
+document.getElementById('py-b').addEventListener('input', updatePY);
+updatePY();
+
+/* ══════════════════════════════════════════════════════════
+   WIDGET 3: Winkel-Klassifikator (Trainer)
+   ══════════════════════════════════════════════════════════ */
+function klTyp(deg){
+  if(deg === 0)                     return null;
+  if(deg > 0   && deg < 90)         return 'spitz';
+  if(deg === 90)                    return 'recht';
+  if(deg > 90  && deg < 180)        return 'stumpf';
+  if(deg === 180)                   return 'gestreckt';
+  if(deg > 180 && deg < 360)        return 'ueberstumpf';
+  if(deg === 360)                   return 'voll';
+  return null;
+}
+function klFeedback(deg){
+  const fb = document.getElementById('kl-feedback');
+  document.querySelectorAll('.kl-btn').forEach(b=>b.classList.remove('ok','err'));
+  fb.textContent = 'Wähle einen Typ.';
+  fb.style.background = 'var(--papier-2)';
+  fb.style.color = 'var(--tinte-2)';
+  fb.style.border = '1px solid var(--linie)';
+}
+function updateKL(){
+  const deg = parseInt(document.getElementById('kl-deg').value);
+  document.getElementById('kl-deg-v').textContent = deg;
+  const cx = 100, cy = 100, rArm = 78, rArc = 28;
+  const angRad = -deg * Math.PI / 180;
+  const ex = cx + rArm * Math.cos(angRad);
+  const ey = cy + rArm * Math.sin(angRad);
+  document.getElementById('kl-arm').setAttribute('x2', ex.toFixed(1));
+  document.getElementById('kl-arm').setAttribute('y2', ey.toFixed(1));
+  // Bogen
+  const aex = cx + rArc * Math.cos(angRad);
+  const aey = cy + rArc * Math.sin(angRad);
+  const large = deg > 180 ? 1 : 0;
+  if(deg === 0){
+    document.getElementById('kl-arc').setAttribute('d', '');
+  } else if(deg === 360){
+    // Voller Kreis als zwei Halbkreise
+    document.getElementById('kl-arc').setAttribute('d', `M ${cx+rArc} ${cy} A ${rArc} ${rArc} 0 1 0 ${cx-rArc} ${cy} A ${rArc} ${rArc} 0 1 0 ${cx+rArc} ${cy} Z`);
+  } else {
+    document.getElementById('kl-arc').setAttribute('d', `M ${cx+rArc} ${cy} A ${rArc} ${rArc} 0 ${large} 0 ${aex.toFixed(1)} ${aey.toFixed(1)} L ${cx} ${cy} Z`);
+  }
+  // Label
+  const midRad = angRad / 2;
+  const lx = cx + 18 * Math.cos(midRad);
+  const ly = cy + 18 * Math.sin(midRad);
+  document.getElementById('kl-label').setAttribute('x', lx.toFixed(1));
+  document.getElementById('kl-label').setAttribute('y', (ly+5).toFixed(1));
+  klFeedback(deg);
+}
+document.getElementById('kl-deg').addEventListener('input', updateKL);
+document.querySelectorAll('.kl-btn').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    const deg = parseInt(document.getElementById('kl-deg').value);
+    const correct = klTyp(deg);
+    const choice = btn.dataset.typ;
+    const fb = document.getElementById('kl-feedback');
+    document.querySelectorAll('.kl-btn').forEach(b=>b.classList.remove('ok','err'));
+    if(choice === correct){
+      btn.classList.add('ok');
+      fb.textContent = `✓ Richtig! ${deg}° ist ein ${labelOf(correct)} Winkel.`;
+      fb.style.background = 'var(--gruen-hell)'; fb.style.color = 'var(--gruen)'; fb.style.border = '1px solid var(--gruen-rand)';
+    } else {
+      btn.classList.add('err');
+      fb.textContent = correct ? `✗ Nein, ${deg}° ist ${labelOf(correct)}.` : `✗ ${deg}° hat keinen Typ aus dieser Liste.`;
+      fb.style.background = 'var(--rot-hell)'; fb.style.color = 'var(--rot)'; fb.style.border = '1px solid var(--rot-rand)';
+    }
+  });
+});
+function labelOf(t){
+  return {spitz:'spitz', recht:'recht', stumpf:'stumpf', gestreckt:'gestreckt', ueberstumpf:'überstumpf', voll:'voll'}[t] || t;
+}
+updateKL();
+
+/* Einstieg: Diagonalen-Skizze mit Live-Berechnung */
+(function(){
+  const sL = document.getElementById('dg-l');
+  const sB = document.getElementById('dg-b');
+  if (!sL || !sB) return;
+
+  function render(){
+    const l = parseFloat(sL.value);
+    const b = parseFloat(sB.value);
+    document.getElementById('dg-vl').textContent = l;
+    document.getElementById('dg-vb').textContent = b;
+
+    const c = document.getElementById('dg-canvas');
+    if (!c) return;
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.offsetWidth || 480, H = c.offsetHeight || 280;
+    c.width = W*dpr; c.height = H*dpr;
+    const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+
+    // Massstab: Rechteck soll im Canvas Platz haben (mit Margins)
+    const padL = 30, padR = 90, padT = 30, padB = 50;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+    // Skalieren auf maximalen Längen-/Breitenbereich (40 × 30 m)
+    const mx = 40, my = 30;
+    const px = Math.min(plotW / mx, plotH / my);
+    const rectW = l * px;
+    const rectH = b * px;
+    const x0 = padL;
+    const y0 = padT + (plotH - rectH);  // Rechteck am Boden anker
+    const x1 = x0 + rectW;
+    const y1 = y0 + rectH;
+
+    // Rechteck
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 2;
+    ctx.fillStyle = 'rgba(31,107,58,0.05)';
+    ctx.fillRect(x0, y0, rectW, rectH);
+    ctx.strokeRect(x0, y0, rectW, rectH);
+
+    // Diagonale: von Eingangsecke (links unten) zur gegenüberliegenden Ecke (rechts oben)
+    ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 2.4;
+    ctx.setLineDash([6,4]);
+    ctx.beginPath();
+    ctx.moveTo(x0, y1);
+    ctx.lineTo(x1, y0);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Rechter Winkel an Eingangsecke
+    const w = 12;
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.5;
+    ctx.strokeRect(x0, y1 - w, w, w);
+
+    // Eingangs-Markierung (links unten)
+    ctx.fillStyle = '#1a4f8a';
+    ctx.beginPath(); ctx.arc(x0, y1, 5, 0, 2*Math.PI); ctx.fill();
+    ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+    ctx.textAlign = 'left';
+    ctx.fillText('Eingang', x0 + 8, y1 + 16);
+
+    // Beschriftung Länge
+    ctx.fillStyle = '#1c1a17'; ctx.font = 'bold 12px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(l + ' m', x0 + rectW/2, y1 + 30);
+    // Breite
+    ctx.save();
+    ctx.translate(x0 - 14, y0 + rectH/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText(b + ' m', 0, 0);
+    ctx.restore();
+
+    // Diagonale beschriften — mittig
+    const d = Math.sqrt(l*l + b*b);
+    ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px JetBrains Mono, monospace';
+    ctx.textAlign = 'left';
+    // Position oberhalb der Diagonal-Mitte
+    const dxLabel = (x0 + x1)/2 + 6;
+    const dyLabel = (y0 + y1)/2 - 6;
+    ctx.fillText('d ≈ ' + d.toFixed(2) + ' m', dxLabel, dyLabel);
+
+    // Plausibilitäts-Anzeige rechts
+    const longer = Math.max(l, b);
+    const sumLB = l + b;
+    const x_info = W - padR + 5;
+    ctx.fillStyle = '#374151'; ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('Plausibel?', x_info, padT + 8);
+    ctx.fillStyle = '#1f6b3a';
+    ctx.fillText('✓ d > ' + longer, x_info, padT + 24);
+    ctx.fillText('  (= ' + longer + ')', x_info, padT + 36);
+    ctx.fillStyle = '#1f6b3a';
+    ctx.fillText('✓ d < l + b', x_info, padT + 52);
+    ctx.fillText('  (= ' + sumLB + ')', x_info, padT + 64);
+  }
+
+  sL.addEventListener('input', render);
+  sB.addEventListener('input', render);
+  window.addEventListener('resize', render);
+  render();
+})();
 </script>
 </body>
 </html>

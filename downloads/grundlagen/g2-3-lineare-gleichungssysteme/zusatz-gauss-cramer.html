@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zusatz · Gauss-Verfahren und Cramersche Regel — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 0.95 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g2-3-lineare-gleichungssysteme.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Zusatz · A4 · 3 Seiten</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · Lineare Gleichungssysteme · Zusatzmaterial</div>
+    <h1>Gauss-Verfahren und Cramersche Regel</h1>
+    <p class="dk-untertitel">Fakultative Vertiefung — zwei systematische Lösungsverfahren für Gleichungssysteme</p>
+  </header>
+
+  <div class="block block-def" style="margin:5mm 0">
+    <strong>Hinweis.</strong> Dieser Auszug ergänzt Kapitel 2.3 um zwei systematische Verfahren, die im
+    RLP 2030 für das Grundlagenfach <em>nicht zwingend</em> verlangt werden. Sie sind aber nützlich,
+    wenn 3×3-Systeme häufig auftreten oder ein Computer eingesetzt wird (Cramer für formelhafte
+    Lösungen, Gauss für rechnerische).
+  </div>
+
+  <h2>1. Erweiterte Koeffizientenmatrix</h2>
+  <p>Ein lineares Gleichungssystem wird kompakt als <strong>erweiterte Koeffizientenmatrix</strong>
+  geschrieben — der senkrechte Strich trennt die Koeffizienten der Variablen von den rechten Seiten:</p>
+  \[
+    \begin{cases} 2x + y + z = 19 \\ x + 3y + 2z = 34 \\ 3x + 2y + z = 27 \end{cases}
+    \;\;\longleftrightarrow\;\;
+    \left[\begin{array}{rrr|r} 2 & 1 & 1 & 19 \\ 1 & 3 & 2 & 34 \\ 3 & 2 & 1 & 27 \end{array}\right]
+  \]
+  <p>Auf dieser Schreibweise basieren beide Verfahren dieser Druckseite.</p>
+
+
+  <h2>2. Gauss-Verfahren</h2>
+  <p>Beim <strong>Gauss-Verfahren</strong> wird die erweiterte Matrix durch
+  <strong>Zeilenoperationen</strong> in <em>obere Dreiecksform</em> gebracht — alle Einträge unterhalb
+  der Hauptdiagonale werden zu null. Anschliessend folgt das <strong>Rückwärtseinsetzen</strong>:
+  aus der untersten Zeile <em>z</em>, dann <em>y</em>, dann <em>x</em>.</p>
+
+  <h3 style="font-family:var(--serif);font-size:11pt;margin-top:4mm">Erlaubte Zeilenoperationen</h3>
+  <p>Diese Operationen verändern die Lösungsmenge \(\mathbb{L}\) <strong>nicht</strong>:</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Operation</th><th>Schreibweise</th></tr></thead>
+    <tbody>
+      <tr><td>Zwei Zeilen vertauschen</td><td>\(Z_i \leftrightarrow Z_j\)</td></tr>
+      <tr><td>Eine Zeile mit \(c \neq 0\) multiplizieren</td><td>\(Z_i \leftarrow c \cdot Z_i\)</td></tr>
+      <tr><td>Vielfaches einer Zeile zu einer anderen addieren</td><td>\(Z_i \leftarrow Z_i + k \cdot Z_j\)</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="font-family:var(--serif);font-size:11pt;margin-top:4mm">Beispiel</h3>
+  <p>System:
+  \(\begin{cases} a + b + c = 18 \\ 2a - b + c = 11 \\ a + 2b - c = 5 \end{cases}\)</p>
+
+  <p>Erweiterte Matrix:</p>
+  \[ \left[\begin{array}{rrr|r} 1 & 1 & 1 & 18 \\ 2 & -1 & 1 & 11 \\ 1 & 2 & -1 & 5 \end{array}\right] \]
+
+  <p>\(Z_2 \leftarrow Z_2 - 2 \cdot Z_1\), \(\;Z_3 \leftarrow Z_3 - Z_1\):</p>
+  \[ \left[\begin{array}{rrr|r} 1 & 1 & 1 & 18 \\ 0 & -3 & -1 & -25 \\ 0 & 1 & -2 & -13 \end{array}\right] \]
+
+  <p>\(Z_3 \leftarrow 3 \cdot Z_3 + Z_2\):</p>
+  \[ \left[\begin{array}{rrr|r} 1 & 1 & 1 & 18 \\ 0 & -3 & -1 & -25 \\ 0 & 0 & -7 & -64 \end{array}\right] \]
+
+  <p>Rückwärtseinsetzen:</p>
+  <ul>
+    <li>Aus Zeile 3: \(-7c = -64 \Rightarrow c = \tfrac{64}{7}\).</li>
+    <li>Aus Zeile 2: \(-3b - c = -25 \Rightarrow b = \tfrac{25 - 64/7}{3} = \tfrac{37}{7}\).</li>
+    <li>Aus Zeile 1: \(a = 18 - b - c = \tfrac{25}{7}\).</li>
+  </ul>
+
+  <p>Das Ergebnis stimmt mit dem überein, das aus der Additions- und Einsetzmethode (Hauptkapitel)
+  folgt — nur ist das Gauss-Verfahren systematischer und besser für die Maschine geeignet.</p>
+
+
+  <h2 style="page-break-before:always">3. Determinanten</h2>
+  <p>Eine <strong>Determinante</strong> ist eine Zahl, die einer quadratischen Matrix zugeordnet wird.
+  Sie sagt unter anderem, ob das zugehörige Gleichungssystem eindeutig lösbar ist (\(D \neq 0\)) oder
+  nicht (\(D = 0\)).</p>
+
+  <h3 style="font-family:var(--serif);font-size:11pt">2×2-Determinante</h3>
+  \[ \det \begin{pmatrix} a & b \\ c & d \end{pmatrix} = a \cdot d - b \cdot c. \]
+  <p>Beispiel: \(\det \begin{pmatrix} 2 & 5 \\ 3 & 4 \end{pmatrix} = 2 \cdot 4 - 5 \cdot 3 = -7\).</p>
+
+  <h3 style="font-family:var(--serif);font-size:11pt;margin-top:4mm">3×3-Determinante — Regel von Sarrus</h3>
+  <p>Bei einer 3×3-Matrix schreibt man die ersten zwei Spalten rechts daneben und summiert die drei
+  abwärts laufenden Diagonalen mit Plus, die drei aufwärts laufenden mit Minus:</p>
+  \[
+    \det \begin{pmatrix} a & b & c \\ d & e & f \\ g & h & i \end{pmatrix}
+    = aei + bfg + cdh \;-\; ceg - afh - bdi.
+  \]
+
+  <p>Bildlich (Pfeile rechts unten = Plus, Pfeile rechts oben = Minus):</p>
+  <div style="text-align:center;margin:3mm 0">
+    <svg viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg" style="max-width:380px;width:100%">
+      <g font-family="JetBrains Mono, monospace" font-size="14" fill="#374151">
+        <text x="20"  y="25">a</text><text x="60" y="25">b</text><text x="100" y="25">c</text>
+        <text x="140" y="25">a</text><text x="180" y="25">b</text>
+        <text x="20"  y="55">d</text><text x="60" y="55">e</text><text x="100" y="55">f</text>
+        <text x="140" y="55">d</text><text x="180" y="55">e</text>
+        <text x="20"  y="85">g</text><text x="60" y="85">h</text><text x="100" y="85">i</text>
+        <text x="140" y="85">g</text><text x="180" y="85">h</text>
+      </g>
+      <!-- Plus-Diagonalen (abwärts) -->
+      <g stroke="#0f7a3a" stroke-width="1.5" fill="none">
+        <line x1="22" y1="30" x2="106" y2="90"/>
+        <line x1="62" y1="30" x2="146" y2="90"/>
+        <line x1="102" y1="30" x2="186" y2="90"/>
+      </g>
+      <!-- Minus-Diagonalen (aufwärts) -->
+      <g stroke="#a0392c" stroke-width="1.5" fill="none">
+        <line x1="22" y1="90" x2="106" y2="30"/>
+        <line x1="62" y1="90" x2="146" y2="30"/>
+        <line x1="102" y1="90" x2="186" y2="30"/>
+      </g>
+      <text x="118" y="105" font-family="Source Sans 3, sans-serif" font-size="9" fill="#0f7a3a" text-anchor="middle">+ + +</text>
+      <text x="118" y="14"  font-family="Source Sans 3, sans-serif" font-size="9" fill="#a0392c" text-anchor="middle">− − −</text>
+    </svg>
+  </div>
+
+
+  <h2>4. Cramersche Regel</h2>
+  <p>Hat ein quadratisches System \(n\) Gleichungen in \(n\) Variablen und ist die Hauptdeterminante
+  \(D \neq 0\), so lautet die Lösung</p>
+  \[ x_i = \frac{D_i}{D}, \]
+  <p>wobei \(D_i\) entsteht, indem in <em>D</em> die <em>i</em>-te Spalte durch die rechte Seite
+  ersetzt wird.</p>
+
+  <h3 style="font-family:var(--serif);font-size:11pt;margin-top:4mm">2×2-Beispiel</h3>
+  <p>System: \(\begin{cases} 5x + 3y = 14 \\ 2x - y = 3 \end{cases}\).</p>
+  \[ D = \det\begin{pmatrix} 5 & 3 \\ 2 & -1 \end{pmatrix} = -5 - 6 = -11. \]
+  \[ D_x = \det\begin{pmatrix} 14 & 3 \\ 3 & -1 \end{pmatrix} = -14 - 9 = -23,\quad
+     D_y = \det\begin{pmatrix} 5 & 14 \\ 2 & 3 \end{pmatrix} = 15 - 28 = -13. \]
+  \[ x = \tfrac{-23}{-11} = \tfrac{23}{11},\qquad y = \tfrac{-13}{-11} = \tfrac{13}{11}. \]
+
+  <h3 style="font-family:var(--serif);font-size:11pt;margin-top:4mm">3×3-Beispiel</h3>
+  <p>System: \(\begin{cases} 2s + b + h = 19 \\ s + 3b + 2h = 34 \\ 3s + 2b + h = 27 \end{cases}\).</p>
+  <p>Hauptdeterminante (mit Sarrus):</p>
+  \[ D = \det\begin{pmatrix} 2 & 1 & 1 \\ 1 & 3 & 2 \\ 3 & 2 & 1 \end{pmatrix}
+        = 6 + 6 + 2 - 9 - 8 - 1 = -4. \]
+  <p>Spaltenersatz mit der rechten Seite \((19, 34, 27)\):</p>
+  \[ D_s = \det\begin{pmatrix} 19 & 1 & 1 \\ 34 & 3 & 2 \\ 27 & 2 & 1 \end{pmatrix} = -12, \quad
+     D_b = \det\begin{pmatrix} 2 & 19 & 1 \\ 1 & 34 & 2 \\ 3 & 27 & 1 \end{pmatrix} = -20, \quad
+     D_h = \det\begin{pmatrix} 2 & 1 & 19 \\ 1 & 3 & 34 \\ 3 & 2 & 27 \end{pmatrix} = -32. \]
+  \[ s = \tfrac{-12}{-4} = 3,\quad b = \tfrac{-20}{-4} = 5,\quad h = \tfrac{-32}{-4} = 8. \]
+  <p>Wieder dieselbe Lösung — Cramer ist eleganter zu notieren, das eigentliche Rechnen ist (für 3×3)
+  aber aufwendiger als die Additionsmethode.</p>
+
+
+  <h2 style="page-break-before:always">5. Vergleich der drei Verfahren</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Verfahren</th><th>Vorteil</th><th>Nachteil</th></tr></thead>
+    <tbody>
+      <tr><td>Addition + Einsetzen<br><em>(Hauptkapitel)</em></td><td>einfach, ohne neue Notation, schnell für 2×2 und übersichtliche 3×3</td><td>bei grossen Systemen unübersichtlich</td></tr>
+      <tr><td>Gauss-Verfahren</td><td>systematisch, beliebig grosse Systeme, computer-freundlich</td><td>Matrix-Notation muss eingeführt werden</td></tr>
+      <tr><td>Cramer</td><td>liefert geschlossene Formeln \(x_i = D_i / D\)</td><td>\(n^2 \cdot n!\) Operationen — sehr aufwendig ab 4×4; nur \(D \neq 0\)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. Drei Lösungsfälle anhand der Determinante</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>\(D\)</th><th>Erläuterung</th><th>Lösungsmenge</th></tr></thead>
+    <tbody>
+      <tr><td>\(D \neq 0\)</td><td>Cramer liefert direkt \(x_i = D_i / D\)</td><td>genau eine Lösung — \(\mathbb{L} = \{(x_1 \mid \dots \mid x_n)\}\)</td></tr>
+      <tr><td>\(D = 0,\;\) ein \(D_i \neq 0\)</td><td>Cramer schlägt fehl, beim Gauss erscheint \(0 = c\) mit \(c \neq 0\)</td><td>\(\mathbb{L} = \emptyset\) (keine Lösung)</td></tr>
+      <tr><td>\(D = 0,\;\) alle \(D_i = 0\)</td><td>beim Gauss erscheint \(0 = 0\) — eine Variable bleibt frei</td><td>\(\mathbb{L}\) enthält unendlich viele Tupel</td></tr>
+    </tbody>
+  </table>
+
+  <div class="merksatz" style="margin-top:5mm">
+    <strong>Zusammenfassung.</strong> Gauss und Cramer sind <em>Werkzeuge mit Matrix-Notation</em>. Sie
+    liefern dieselben Antworten wie die Additions- und Einsetzmethode des Hauptkapitels, aber in
+    einer Form, die für grosse Systeme oder formelhafte Argumentation besser geeignet ist. Im RLP 2030
+    Grundlagenfach wird dieses Wissen <em>nicht zwingend</em> vorausgesetzt — es ist aber im
+    Schwerpunktfach und in technischen Anwendungen häufig anzutreffen.
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Grundlagen Lineare Gleichungssysteme</span>
+    <span>Zusatz · Gauss &amp; Cramer</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagramme — TALS Mathematik</title>
+<title>4.2 Diagramme — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
-<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<!-- MathJax -->
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
@@ -19,7 +19,50 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+.diag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+@media (max-width: 700px) { .diag-grid { grid-template-columns: 1fr; } }
+.diag-box { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; padding: 10px 12px; }
+.diag-box .db-tit { font-weight: 600; font-size: 0.88rem; color: var(--tinte); margin-bottom: 6px; }
+.diag-box svg { display: block; width: 100%; height: auto; }
+.diag-box .db-cap { font-size: 0.78rem; color: var(--tinte-2); margin-top: 6px; font-style: italic; }
+
+.dia-tabs { display: flex; gap: 4px; margin: 10px 0 0; flex-wrap: wrap; }
+.dia-tab { padding: 6px 12px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.78rem; transition: 0.15s; }
+.dia-tab.aktiv { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+.dia-tab:hover { border-color: var(--blau); }
+.dia-panel { background: var(--blau-hell); border: 1px solid var(--blau); border-radius: 8px; padding: 12px 14px; margin-top: 6px; }
+.dia-panel h4 { color: var(--blau); margin: 0 0 6px; font-size: 1rem; }
+.dia-panel svg { display: block; max-width: 480px; width: 100%; height: auto; margin: 8px auto; background: var(--weiss); border-radius: 6px; }
+.dia-panel .dp-bsp { font-size: 0.85rem; color: var(--tinte-2); margin-top: 6px; font-style: italic; }
+
+.entscheid { background: var(--gruen-hell); border: 1px solid var(--gruen); border-radius: 8px; padding: 14px 16px; margin: 14px 0; }
+.entscheid h4 { color: var(--gruen); margin: 0 0 8px; }
+.entscheid table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.entscheid th { background: var(--gruen); color: var(--weiss); padding: 6px 8px; text-align: left; font-weight: 600; }
+.entscheid td { padding: 6px 8px; border-bottom: 1px solid var(--linie); }
+.entscheid td:first-child { font-weight: 600; color: var(--gruen); white-space: nowrap; }
+
+.formen-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+@media (max-width: 700px) { .formen-grid { grid-template-columns: 1fr 1fr; } }
+.formen-grid .fg-box { background: var(--papier); border: 1px solid var(--linie); border-radius: 8px; padding: 8px; text-align: center; }
+.formen-grid .fg-box svg { display: block; width: 100%; height: 90px; }
+.formen-grid .fg-tit { font-size: 0.8rem; font-weight: 600; color: var(--tinte); margin-top: 4px; }
+.formen-grid .fg-sub { font-size: 0.72rem; color: var(--tinte-2); }
+
+/* Einstieg: animierter Diagramm-Aufbau */
+.einstieg-anim { background: var(--papier-2, #f3eedf); border-radius: 8px; padding: 14px 16px; margin: 12px 0; }
+.einstieg-anim .ea-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+.einstieg-anim .ea-tab { padding: 6px 12px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.78rem; transition: 0.12s; }
+.einstieg-anim .ea-tab.aktiv { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+.einstieg-anim .ea-tab:hover { border-color: var(--blau); }
+.einstieg-anim .ea-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.einstieg-anim .ea-frage { font-weight: 600; font-size: 0.92rem; color: var(--tinte); flex: 1 1 200px; }
+.einstieg-anim .ea-zaehler { font-family: var(--mono); font-size: 0.85rem; color: var(--blau); font-weight: 700; min-width: 110px; }
+.einstieg-anim .ea-play { padding: 6px 14px; border: 1px solid var(--blau); background: var(--blau); color: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.82rem; transition: 0.12s; }
+.einstieg-anim .ea-play:hover { background: #163e6e; }
+.einstieg-anim .ea-play:disabled { background: var(--tinte-2); border-color: var(--tinte-2); cursor: not-allowed; }
+.einstieg-anim canvas { width: 100%; height: 200px; display: block; background: var(--weiss); border-radius: 6px; }
+.einstieg-anim .ea-cap { font-size: 0.85rem; color: var(--tinte-2); margin-top: 6px; font-style: italic; text-align: center; }
 </style>
 </head>
 <body>
@@ -33,7 +76,8 @@ MathJax = {
   <h1 class="pt-h1">4.2 Diagramme</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Ein gut gewähltes Diagramm zeigt eine Aussage in Sekunden — ein schlecht gewähltes verwirrt oder täuscht. In diesem Kapitel lernst du die vier Standard-Diagramme der deskriptiven Statistik kennen, wann welches passt, und wie sich Daten durch Form und Streuung charakterisieren lassen.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.2</div>
   <ul>
@@ -46,46 +90,686 @@ MathJax = {
 
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — vier Daten, vier Diagramme</h2>
+
+<p>Eine Schule erhebt vier ganz unterschiedliche Datensätze. Wähle einen aus und drücke <em>Animation starten</em> — du siehst, wie das passende Diagramm Datenpunkt für Datenpunkt entsteht. Frage dabei mit: <em>Warum passt dieses Diagramm zu genau diesen Daten?</em></p>
+
+<div class="einstieg-anim">
+  <div class="ea-tabs" id="ea-tabs">
+    <button class="ea-tab aktiv" data-key="balken">📊 Lieblingsfach</button>
+    <button class="ea-tab" data-key="kuchen">🥧 Verkehrsmittel</button>
+    <button class="ea-tab" data-key="histo">📈 Körpergrösse</button>
+    <button class="ea-tab" data-key="box">📦 Lernzeiten</button>
+  </div>
+  <div class="ea-bar">
+    <div class="ea-frage" id="ea-frage">Welches Schulfach mögen 100 Lernende am liebsten?</div>
+    <span class="ea-zaehler">Datenpunkte: <span id="ea-n">0</span> / <span id="ea-total">100</span></span>
+    <button class="ea-play" id="ea-play">▶ Animation starten</button>
+  </div>
+  <canvas id="ea-canvas" aria-label="Animiertes Diagramm"></canvas>
+  <div class="ea-cap" id="ea-cap">Klicke <em>Animation starten</em>, um zu sehen, wie das Balkendiagramm entsteht.</div>
+</div>
+
+<p>Jeder Datensatz hat seinen eigenen <em>Datentyp</em> — kategorial, stetig oder diskret. Genau dieser Typ entscheidet, welches Diagramm sinnvoll ist. In den folgenden Abschnitten klären wir das systematisch.</p>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Klassieren — der Schritt vor dem Diagramm <a class="quer" href="g4-1-grundlagen.html#darstellungen">↩ 4.1</a></h2>
+
+<p>Bei stetigen Daten sind alle Werte verschieden (z.B. Körpergrössen 169.3 cm, 169.4 cm, 169.7 cm). Eine Strichliste „wie oft kommt jeder Wert vor?" produziert dann meist nur Einsen — nutzlos. Deshalb fasst man Werte in <strong>Klassen</strong> (Intervalle gleicher Breite) zusammen.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Klasseneinteilung</div>
+  <p>Daten werden in <strong>Klassen</strong> \(K_1, K_2, \dots, K_k\) eingeteilt — typischerweise gleich breite, aneinandergrenzende Intervalle. Für jede Klasse \(K_i\) zählt man, wie viele Werte hineinfallen — die <strong>absolute Häufigkeit</strong> \(h_i\). Der Anteil \(h_i / n\) ist die <strong>relative Häufigkeit</strong>.</p>
+  <p style="margin-top:8px">Faustregel für die Anzahl Klassen bei \(n\) Werten:</p>
+  \[ k \approx \sqrt{n} \]
+  <p>Bei \(n = 60\) also etwa 8 Klassen, bei \(n = 200\) etwa 14.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel — Körpergrössen klassieren</div>
+  <p>60 Lernende, Grössen zwischen 156 cm und 184 cm. Mit 6 Klassen à 5 cm:</p>
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <thead><tr><th>Klasse [cm]</th><th>\(h_i\)</th><th>\(h_i/n\)</th></tr></thead>
+    <tbody>
+      <tr><td>[155; 160[</td><td>5</td><td>0.083</td></tr>
+      <tr><td>[160; 165[</td><td>12</td><td>0.200</td></tr>
+      <tr><td>[165; 170[</td><td>18</td><td>0.300</td></tr>
+      <tr><td>[170; 175[</td><td>14</td><td>0.233</td></tr>
+      <tr><td>[175; 180[</td><td>8</td><td>0.133</td></tr>
+      <tr><td>[180; 185[</td><td>3</td><td>0.050</td></tr>
+      <tr><td>Summe</td><td>60</td><td>1.000</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.85rem;margin-top:6px;color:var(--tinte-2)">Die Notation [155; 160[ bedeutet: 155 inklusive, 160 exklusiv — so wird jeder Wert genau einer Klasse zugeordnet.</p>
+</div>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Die vier Standarddiagramme</h2>
+
+<p>Klick auf eine Kachel, um Definition und Beispiel zu sehen.</p>
+
+<div class="dia-tabs">
+  <button class="dia-tab aktiv" onclick="showDia('balken', this)">Balkendiagramm</button>
+  <button class="dia-tab" onclick="showDia('kuchen', this)">Kuchendiagramm</button>
+  <button class="dia-tab" onclick="showDia('histo', this)">Histogramm</button>
+  <button class="dia-tab" onclick="showDia('box', this)">Boxplot</button>
+</div>
+
+<!-- BALKEN -->
+<div class="dia-panel" id="dp-balken">
+  <h4>Balkendiagramm</h4>
+  <p>Für <strong>kategoriale</strong> oder <strong>diskrete</strong> Daten. Jede Kategorie wird zu einem Rechteck, dessen Höhe die Häufigkeit darstellt. Die Balken berühren sich <em>nicht</em> — die Lücken signalisieren: zwischen den Kategorien gibt es nichts.</p>
+  <svg viewBox="0 0 460 200" preserveAspectRatio="xMidYMid meet">
+    <line x1="50" y1="170" x2="440" y2="170" stroke="#1f2937" stroke-width="1.5"/>
+    <line x1="50" y1="170" x2="50" y2="20" stroke="#1f2937" stroke-width="1.5"/>
+    <rect x="80"  y="80"  width="50" height="90"  fill="#3b82f6"/>
+    <rect x="160" y="40"  width="50" height="130" fill="#3b82f6"/>
+    <rect x="240" y="100" width="50" height="70"  fill="#3b82f6"/>
+    <rect x="320" y="120" width="50" height="50"  fill="#3b82f6"/>
+    <text x="105" y="187" font-size="11" text-anchor="middle">Mathe</text>
+    <text x="185" y="187" font-size="11" text-anchor="middle">Sport</text>
+    <text x="265" y="187" font-size="11" text-anchor="middle">Deutsch</text>
+    <text x="345" y="187" font-size="11" text-anchor="middle">Englisch</text>
+    <text x="105" y="75"  font-size="11" text-anchor="middle" fill="#1d4ed8">22</text>
+    <text x="185" y="35"  font-size="11" text-anchor="middle" fill="#1d4ed8">32</text>
+    <text x="265" y="95"  font-size="11" text-anchor="middle" fill="#1d4ed8">17</text>
+    <text x="345" y="115" font-size="11" text-anchor="middle" fill="#1d4ed8">12</text>
+    <text x="35" y="174" font-size="10" text-anchor="end">0</text>
+    <text x="35" y="124" font-size="10" text-anchor="end">10</text>
+    <text x="35" y="74"  font-size="10" text-anchor="end">20</text>
+    <text x="35" y="24"  font-size="10" text-anchor="end">30</text>
+    <text x="20" y="100" font-size="11" text-anchor="middle" transform="rotate(-90, 20, 100)">Anzahl</text>
+  </svg>
+  <div class="dp-bsp">Beispiel: Lieblingsfach von 83 Lernenden. Achsen-Beschriftung: Kategorien an x, Häufigkeit an y. Balken haben Lücken.</div>
+</div>
+
+<!-- KUCHEN -->
+<div class="dia-panel" id="dp-kuchen" style="display:none">
+  <h4>Kuchendiagramm (Kreisdiagramm)</h4>
+  <p>Für <strong>kategoriale</strong> Daten, wenn die <em>Anteile am Ganzen</em> betont werden sollen. Jede Kategorie wird zu einem Kreissektor, dessen Winkel zur relativen Häufigkeit proportional ist:</p>
+  \[ \alpha_i = \frac{h_i}{n} \cdot 360° \]
+  <svg viewBox="0 0 460 220" preserveAspectRatio="xMidYMid meet">
+    <g transform="translate(160, 110)">
+      <!-- 40%, 30%, 20%, 10% -->
+      <path d="M 0,0 L 90,0 A 90,90 0 0,1 -27.81,85.59 Z" fill="#3b82f6"/>
+      <path d="M 0,0 L -27.81,85.59 A 90,90 0 0,1 -85.59,-27.81 Z" fill="#10b981"/>
+      <path d="M 0,0 L -85.59,-27.81 A 90,90 0 0,1 -27.81,-85.59 Z" fill="#f59e0b"/>
+      <path d="M 0,0 L -27.81,-85.59 A 90,90 0 0,1 90,0 Z" fill="#ef4444"/>
+      <text x="35" y="40"  font-size="13" fill="#fff" font-weight="600">40%</text>
+      <text x="-50" y="35" font-size="13" fill="#fff" font-weight="600">30%</text>
+      <text x="-65" y="-20" font-size="13" fill="#fff" font-weight="600">20%</text>
+      <text x="20" y="-40" font-size="13" fill="#fff" font-weight="600">10%</text>
+    </g>
+    <rect x="290" y="60" width="14" height="14" fill="#3b82f6"/><text x="312" y="72" font-size="12">Velo (40%)</text>
+    <rect x="290" y="85" width="14" height="14" fill="#10b981"/><text x="312" y="97" font-size="12">ÖV (30%)</text>
+    <rect x="290" y="110" width="14" height="14" fill="#f59e0b"/><text x="312" y="122" font-size="12">Auto (20%)</text>
+    <rect x="290" y="135" width="14" height="14" fill="#ef4444"/><text x="312" y="147" font-size="12">zu Fuss (10%)</text>
+  </svg>
+  <div class="dp-bsp">Sinnvoll bei wenigen Kategorien (≤ 6) und wenn die Summe 100% ergibt. Bei vielen Kategorien werden die Sektoren zu schmal — dann besser Balkendiagramm.</div>
+</div>
+
+<!-- HISTOGRAMM -->
+<div class="dia-panel" id="dp-histo" style="display:none">
+  <h4>Histogramm</h4>
+  <p>Für <strong>stetige</strong> Daten nach Klasseneinteilung. Sieht aus wie ein Balkendiagramm, aber die Balken berühren sich — denn auf der x-Achse ist eine durchgehende Skala (z.B. cm, kg, Sekunden), keine getrennten Kategorien.</p>
+  <svg viewBox="0 0 460 220" preserveAspectRatio="xMidYMid meet">
+    <line x1="50" y1="180" x2="440" y2="180" stroke="#1f2937" stroke-width="1.5"/>
+    <line x1="50" y1="180" x2="50" y2="20" stroke="#1f2937" stroke-width="1.5"/>
+    <rect x="50"  y="155" width="55" height="25"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
+    <rect x="105" y="120" width="55" height="60"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
+    <rect x="160" y="60"  width="55" height="120" fill="#3b82f6" stroke="#fff" stroke-width="1"/>
+    <rect x="215" y="50"  width="55" height="130" fill="#3b82f6" stroke="#fff" stroke-width="1"/>
+    <rect x="270" y="105" width="55" height="75"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
+    <rect x="325" y="135" width="55" height="45"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
+    <rect x="380" y="165" width="55" height="15"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
+    <text x="50"  y="197" font-size="10" text-anchor="middle">155</text>
+    <text x="105" y="197" font-size="10" text-anchor="middle">160</text>
+    <text x="160" y="197" font-size="10" text-anchor="middle">165</text>
+    <text x="215" y="197" font-size="10" text-anchor="middle">170</text>
+    <text x="270" y="197" font-size="10" text-anchor="middle">175</text>
+    <text x="325" y="197" font-size="10" text-anchor="middle">180</text>
+    <text x="380" y="197" font-size="10" text-anchor="middle">185</text>
+    <text x="435" y="197" font-size="10" text-anchor="middle">190</text>
+    <text x="245" y="213" font-size="11" text-anchor="middle">Körpergrösse [cm]</text>
+    <text x="20" y="100" font-size="11" text-anchor="middle" transform="rotate(-90, 20, 100)">Häufigkeit</text>
+  </svg>
+  <div class="dp-bsp">Wichtig: Die Klassenbreite ist konstant; sonst wird das Bild verzerrt. Die Höhe ist die Häufigkeit, die Breite das Klassenintervall.</div>
+</div>
+
+<!-- BOX -->
+<div class="dia-panel" id="dp-box" style="display:none">
+  <h4>Boxplot (Kastendiagramm)</h4>
+  <p>Eine kompakte 5-Zahlen-Zusammenfassung für <strong>numerische</strong> Daten: Minimum, unteres Quartil \(Q_1\), Median, oberes Quartil \(Q_3\), Maximum. Die Box umfasst die <em>mittleren</em> 50% der Daten.</p>
+  <svg viewBox="0 0 460 180" preserveAspectRatio="xMidYMid meet">
+    <line x1="40" y1="100" x2="430" y2="100" stroke="#1f2937" stroke-width="1.5"/>
+    <!-- Werte: min=0, Q1=3, Med=4, Q3=5, max=8 in [0..8]·48px -->
+    <line x1="40"  y1="100" x2="40"  y2="60"  stroke="#1f2937" stroke-width="2"/>
+    <line x1="40"  y1="100" x2="184" y2="100" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <rect x="184" y="60" width="96" height="80" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5"/>
+    <line x1="232" y1="60" x2="232" y2="140" stroke="#1d4ed8" stroke-width="3"/>
+    <line x1="280" y1="100" x2="424" y2="100" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="424" y1="100" x2="424" y2="60"  stroke="#1f2937" stroke-width="2"/>
+    <text x="40"  y="160" font-size="11" text-anchor="middle">min = 0</text>
+    <text x="184" y="160" font-size="11" text-anchor="middle">Q₁ = 3</text>
+    <text x="232" y="160" font-size="11" text-anchor="middle" fill="#1d4ed8" font-weight="600">Med = 4</text>
+    <text x="280" y="160" font-size="11" text-anchor="middle">Q₃ = 5</text>
+    <text x="424" y="160" font-size="11" text-anchor="middle">max = 8</text>
+    <text x="232" y="35" font-size="11" text-anchor="middle" fill="#1d4ed8">mittlere 50% in der Box</text>
+  </svg>
+  <div class="dp-bsp">Box = Q₃ − Q₁ ist die <em>Quartilsdifferenz</em> (siehe Kapitel 4.3). Boxplots eignen sich besonders zum <em>Vergleich mehrerer Gruppen</em> in einem Bild.</div>
+</div>
 
 
 <!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<h2 id="typen">Diagramme charakterisieren</h2>
+
+<p>Histogramme und Boxplots zeigen die <strong>Form der Verteilung</strong>. Drei Begriffspaare reichen, um die meisten Verteilungen zu beschreiben:</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Symmetrisch ↔ schief</div>
+  <p>Eine Verteilung ist <strong>symmetrisch</strong>, wenn die linke und rechte Hälfte des Histogramms spiegelbildlich aussehen. Sie ist <strong>linksschief</strong>, wenn der Schwanz nach links ausläuft (die Masse rechts), <strong>rechtsschief</strong>, wenn der Schwanz nach rechts ausläuft (die Masse links).</p>
+  <p>Diese Schiefe lässt sich auch an den Lagemassen ablesen: Bei <strong>rechtsschiefer</strong> Verteilung ist der Mittelwert <em>grösser</em> als der Median (der lange Schwanz nach rechts zieht den Mittelwert hoch), bei <strong>linksschiefer</strong> Verteilung ist er <em>kleiner</em>. Mehr dazu in <a class="quer" href="g4-3-masszahlen.html#theorie">Kapitel 4.3</a>.</p>
+</div>
+
+<div class="formen-grid">
+  <div class="fg-box">
+    <svg viewBox="0 0 100 70" preserveAspectRatio="xMidYMid meet">
+      <line x1="5" y1="60" x2="95" y2="60" stroke="#1f2937" stroke-width="1"/>
+      <rect x="10" y="48" width="10" height="12" fill="#3b82f6"/>
+      <rect x="20" y="38" width="10" height="22" fill="#3b82f6"/>
+      <rect x="30" y="22" width="10" height="38" fill="#3b82f6"/>
+      <rect x="40" y="10" width="10" height="50" fill="#3b82f6"/>
+      <rect x="50" y="10" width="10" height="50" fill="#3b82f6"/>
+      <rect x="60" y="22" width="10" height="38" fill="#3b82f6"/>
+      <rect x="70" y="38" width="10" height="22" fill="#3b82f6"/>
+      <rect x="80" y="48" width="10" height="12" fill="#3b82f6"/>
+    </svg>
+    <div class="fg-tit">symmetrisch</div>
+    <div class="fg-sub">Glockenform</div>
+  </div>
+  <div class="fg-box">
+    <svg viewBox="0 0 100 70" preserveAspectRatio="xMidYMid meet">
+      <line x1="5" y1="60" x2="95" y2="60" stroke="#1f2937" stroke-width="1"/>
+      <rect x="10" y="48" width="10" height="12" fill="#3b82f6"/>
+      <rect x="20" y="42" width="10" height="18" fill="#3b82f6"/>
+      <rect x="30" y="35" width="10" height="25" fill="#3b82f6"/>
+      <rect x="40" y="25" width="10" height="35" fill="#3b82f6"/>
+      <rect x="50" y="14" width="10" height="46" fill="#3b82f6"/>
+      <rect x="60" y="10" width="10" height="50" fill="#3b82f6"/>
+      <rect x="70" y="20" width="10" height="40" fill="#3b82f6"/>
+      <rect x="80" y="38" width="10" height="22" fill="#3b82f6"/>
+    </svg>
+    <div class="fg-tit">linksschief</div>
+    <div class="fg-sub">Schwanz links</div>
+  </div>
+  <div class="fg-box">
+    <svg viewBox="0 0 100 70" preserveAspectRatio="xMidYMid meet">
+      <line x1="5" y1="60" x2="95" y2="60" stroke="#1f2937" stroke-width="1"/>
+      <rect x="10" y="38" width="10" height="22" fill="#3b82f6"/>
+      <rect x="20" y="20" width="10" height="40" fill="#3b82f6"/>
+      <rect x="30" y="10" width="10" height="50" fill="#3b82f6"/>
+      <rect x="40" y="14" width="10" height="46" fill="#3b82f6"/>
+      <rect x="50" y="25" width="10" height="35" fill="#3b82f6"/>
+      <rect x="60" y="35" width="10" height="25" fill="#3b82f6"/>
+      <rect x="70" y="42" width="10" height="18" fill="#3b82f6"/>
+      <rect x="80" y="48" width="10" height="12" fill="#3b82f6"/>
+    </svg>
+    <div class="fg-tit">rechtsschief</div>
+    <div class="fg-sub">Schwanz rechts</div>
+  </div>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Unimodal ↔ multimodal</div>
+  <p>Ein Histogramm ist <strong>unimodal</strong>, wenn es genau einen Gipfel hat. Es ist <strong>bimodal</strong> bei zwei Gipfeln, allgemein <strong>multimodal</strong> bei mehreren. Mehrere Gipfel sind oft ein Hinweis darauf, dass die Stichprobe aus zwei verschiedenen Gruppen stammt (z.B. Körpergrössen einer Klasse, in der Frauen und Männer beide stark vertreten sind).</p>
+</div>
+
+<div class="formen-grid">
+  <div class="fg-box">
+    <svg viewBox="0 0 100 70" preserveAspectRatio="xMidYMid meet">
+      <line x1="5" y1="60" x2="95" y2="60" stroke="#1f2937" stroke-width="1"/>
+      <rect x="10" y="48" width="10" height="12" fill="#10b981"/>
+      <rect x="20" y="35" width="10" height="25" fill="#10b981"/>
+      <rect x="30" y="20" width="10" height="40" fill="#10b981"/>
+      <rect x="40" y="10" width="10" height="50" fill="#10b981"/>
+      <rect x="50" y="20" width="10" height="40" fill="#10b981"/>
+      <rect x="60" y="35" width="10" height="25" fill="#10b981"/>
+      <rect x="70" y="48" width="10" height="12" fill="#10b981"/>
+    </svg>
+    <div class="fg-tit">unimodal</div>
+    <div class="fg-sub">ein Gipfel</div>
+  </div>
+  <div class="fg-box">
+    <svg viewBox="0 0 100 70" preserveAspectRatio="xMidYMid meet">
+      <line x1="5" y1="60" x2="95" y2="60" stroke="#1f2937" stroke-width="1"/>
+      <rect x="10" y="38" width="10" height="22" fill="#10b981"/>
+      <rect x="20" y="18" width="10" height="42" fill="#10b981"/>
+      <rect x="30" y="10" width="10" height="50" fill="#10b981"/>
+      <rect x="40" y="30" width="10" height="30" fill="#10b981"/>
+      <rect x="50" y="44" width="10" height="16" fill="#10b981"/>
+      <rect x="60" y="30" width="10" height="30" fill="#10b981"/>
+      <rect x="70" y="14" width="10" height="46" fill="#10b981"/>
+      <rect x="80" y="35" width="10" height="25" fill="#10b981"/>
+    </svg>
+    <div class="fg-tit">bimodal</div>
+    <div class="fg-sub">zwei Gipfel</div>
+  </div>
+  <div class="fg-box">
+    <svg viewBox="0 0 100 70" preserveAspectRatio="xMidYMid meet">
+      <line x1="5" y1="60" x2="95" y2="60" stroke="#1f2937" stroke-width="1"/>
+      <rect x="10" y="20" width="10" height="40" fill="#10b981"/>
+      <rect x="20" y="40" width="10" height="20" fill="#10b981"/>
+      <rect x="30" y="20" width="10" height="40" fill="#10b981"/>
+      <rect x="40" y="40" width="10" height="20" fill="#10b981"/>
+      <rect x="50" y="22" width="10" height="38" fill="#10b981"/>
+      <rect x="60" y="42" width="10" height="18" fill="#10b981"/>
+      <rect x="70" y="25" width="10" height="35" fill="#10b981"/>
+      <rect x="80" y="45" width="10" height="15" fill="#10b981"/>
+    </svg>
+    <div class="fg-tit">multimodal</div>
+    <div class="fg-sub">mehrere Gipfel</div>
+  </div>
+</div>
 
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<!-- ══ 6. WEITERE THEORIE — bivariate Daten ══ -->
+<h2 id="theorie">Bivariate Daten — Streudiagramm</h2>
+
+<p>Bisher betrachteten wir <strong>univariate</strong> Daten: ein Merkmal pro Person. Bei <strong>bivariaten</strong> Daten erheben wir <em>zwei</em> Merkmale gleichzeitig — zum Beispiel Körpergrösse <em>und</em> Schuhgrösse jeder Person. Die natürliche Visualisierung ist das <strong>Streudiagramm</strong>:</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Streudiagramm (Punktwolke)</div>
+  <p>Jede Person wird zu einem Punkt \((x_i, y_i)\) im Koordinatensystem. Die x-Koordinate ist das eine Merkmal, die y-Koordinate das andere. Aus der Form der Punktwolke liest man Zusammenhänge ab.</p>
+</div>
+
+<div class="diag-grid" style="margin-top:14px">
+  <div class="diag-box">
+    <div class="db-tit">Positiver Zusammenhang</div>
+    <svg viewBox="0 0 280 180" preserveAspectRatio="xMidYMid meet">
+      <line x1="40" y1="150" x2="270" y2="150" stroke="#1f2937" stroke-width="1.2"/>
+      <line x1="40" y1="150" x2="40"  y2="20"  stroke="#1f2937" stroke-width="1.2"/>
+      <circle cx="60"  cy="135" r="3" fill="#3b82f6"/>
+      <circle cx="80"  cy="125" r="3" fill="#3b82f6"/>
+      <circle cx="95"  cy="120" r="3" fill="#3b82f6"/>
+      <circle cx="115" cy="108" r="3" fill="#3b82f6"/>
+      <circle cx="130" cy="100" r="3" fill="#3b82f6"/>
+      <circle cx="150" cy="92"  r="3" fill="#3b82f6"/>
+      <circle cx="165" cy="85"  r="3" fill="#3b82f6"/>
+      <circle cx="185" cy="72"  r="3" fill="#3b82f6"/>
+      <circle cx="205" cy="60"  r="3" fill="#3b82f6"/>
+      <circle cx="225" cy="50"  r="3" fill="#3b82f6"/>
+      <circle cx="245" cy="38"  r="3" fill="#3b82f6"/>
+      <text x="155" y="170" font-size="10" text-anchor="middle">Körpergrösse [cm]</text>
+      <text x="20" y="85" font-size="10" text-anchor="middle" transform="rotate(-90, 20, 85)">Schuhgrösse</text>
+    </svg>
+    <div class="db-cap">Punkte steigen von links unten nach rechts oben.</div>
+  </div>
+  <div class="diag-box">
+    <div class="db-tit">Negativer Zusammenhang</div>
+    <svg viewBox="0 0 280 180" preserveAspectRatio="xMidYMid meet">
+      <line x1="40" y1="150" x2="270" y2="150" stroke="#1f2937" stroke-width="1.2"/>
+      <line x1="40" y1="150" x2="40"  y2="20"  stroke="#1f2937" stroke-width="1.2"/>
+      <circle cx="60"  cy="40"  r="3" fill="#ef4444"/>
+      <circle cx="80"  cy="55"  r="3" fill="#ef4444"/>
+      <circle cx="100" cy="65"  r="3" fill="#ef4444"/>
+      <circle cx="120" cy="78"  r="3" fill="#ef4444"/>
+      <circle cx="140" cy="88"  r="3" fill="#ef4444"/>
+      <circle cx="160" cy="100" r="3" fill="#ef4444"/>
+      <circle cx="180" cy="110" r="3" fill="#ef4444"/>
+      <circle cx="200" cy="120" r="3" fill="#ef4444"/>
+      <circle cx="220" cy="128" r="3" fill="#ef4444"/>
+      <circle cx="245" cy="140" r="3" fill="#ef4444"/>
+      <text x="155" y="170" font-size="10" text-anchor="middle">Auto-Alter [Jahre]</text>
+      <text x="20" y="85" font-size="10" text-anchor="middle" transform="rotate(-90, 20, 85)">Wert [CHF]</text>
+    </svg>
+    <div class="db-cap">Punkte fallen von links oben nach rechts unten.</div>
+  </div>
+  <div class="diag-box">
+    <div class="db-tit">Kein Zusammenhang</div>
+    <svg viewBox="0 0 280 180" preserveAspectRatio="xMidYMid meet">
+      <line x1="40" y1="150" x2="270" y2="150" stroke="#1f2937" stroke-width="1.2"/>
+      <line x1="40" y1="150" x2="40"  y2="20"  stroke="#1f2937" stroke-width="1.2"/>
+      <circle cx="60"  cy="80"  r="3" fill="#6b7280"/>
+      <circle cx="85"  cy="50"  r="3" fill="#6b7280"/>
+      <circle cx="105" cy="120" r="3" fill="#6b7280"/>
+      <circle cx="125" cy="65"  r="3" fill="#6b7280"/>
+      <circle cx="140" cy="100" r="3" fill="#6b7280"/>
+      <circle cx="160" cy="40"  r="3" fill="#6b7280"/>
+      <circle cx="175" cy="135" r="3" fill="#6b7280"/>
+      <circle cx="195" cy="75"  r="3" fill="#6b7280"/>
+      <circle cx="215" cy="110" r="3" fill="#6b7280"/>
+      <circle cx="240" cy="55"  r="3" fill="#6b7280"/>
+      <text x="155" y="170" font-size="10" text-anchor="middle">Schuhgrösse</text>
+      <text x="20" y="85" font-size="10" text-anchor="middle" transform="rotate(-90, 20, 85)">Mathe-Note</text>
+    </svg>
+    <div class="db-cap">Wolke ohne erkennbares Muster — kein Zusammenhang.</div>
+  </div>
+  <div class="diag-box">
+    <div class="db-tit">Nichtlinearer Zusammenhang</div>
+    <svg viewBox="0 0 280 180" preserveAspectRatio="xMidYMid meet">
+      <line x1="40" y1="150" x2="270" y2="150" stroke="#1f2937" stroke-width="1.2"/>
+      <line x1="40" y1="150" x2="40"  y2="20"  stroke="#1f2937" stroke-width="1.2"/>
+      <circle cx="55"  cy="135" r="3" fill="#7c3aed"/>
+      <circle cx="75"  cy="105" r="3" fill="#7c3aed"/>
+      <circle cx="95"  cy="75"  r="3" fill="#7c3aed"/>
+      <circle cx="120" cy="50"  r="3" fill="#7c3aed"/>
+      <circle cx="145" cy="40"  r="3" fill="#7c3aed"/>
+      <circle cx="170" cy="50"  r="3" fill="#7c3aed"/>
+      <circle cx="195" cy="75"  r="3" fill="#7c3aed"/>
+      <circle cx="220" cy="105" r="3" fill="#7c3aed"/>
+      <circle cx="245" cy="135" r="3" fill="#7c3aed"/>
+      <text x="155" y="170" font-size="10" text-anchor="middle">Trainingsstunden / Woche</text>
+      <text x="20" y="85" font-size="10" text-anchor="middle" transform="rotate(-90, 20, 85)">Verletzungsrisiko</text>
+    </svg>
+    <div class="db-cap">U-Form: zu wenig oder zu viel Training erhöhen das Risiko.</div>
+  </div>
+</div>
+
+<div class="block block-fehler" style="margin-top:14px">
+  <div class="block-titel">⚠ Korrelation ≠ Kausalität</div>
+  <p>Ein Zusammenhang im Streudiagramm bedeutet <em>nicht</em>, dass die eine Grösse die andere <strong>verursacht</strong>. Klassisches Beispiel: Eis-Verkauf und Sonnenbrände korrelieren stark — beides hängt aber von der dritten Grösse <em>Sonnenintensität</em> ab. Eis kaufen verursacht keinen Sonnenbrand.</p>
+</div>
+
+
+<!-- WANN WELCHES DIAGRAMM -->
+<div class="entscheid">
+  <h4>🎯 Entscheidungs­tabelle: Welches Diagramm wann?</h4>
+  <table>
+    <thead><tr><th>Datentyp</th><th>Frage</th><th>Diagramm</th></tr></thead>
+    <tbody>
+      <tr><td>kategorial</td><td>Häufigkeitsvergleich</td><td>Balkendiagramm</td></tr>
+      <tr><td>kategorial</td><td>Anteile am Ganzen</td><td>Kuchendiagramm</td></tr>
+      <tr><td>diskret</td><td>Häufigkeit pro Wert</td><td>Balkendiagramm</td></tr>
+      <tr><td>stetig</td><td>Verteilungsform</td><td>Histogramm</td></tr>
+      <tr><td>numerisch</td><td>5-Zahlen-Übersicht, Vergleich Gruppen</td><td>Boxplot</td></tr>
+      <tr><td>bivariat</td><td>Zusammenhang zweier Grössen</td><td>Streudiagramm</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — vom Datentyp zum Diagramm</div>
+  <p>Die Wahl des Diagramms folgt immer aus zwei Fragen:</p>
+  <ol style="margin:5px 0 5px 20px">
+    <li><strong>Was für Daten habe ich?</strong> Kategorial (Lieblingsfach), diskret (Anzahl Geschwister), stetig (Körpergrösse) oder bivariat (zwei Merkmale gleichzeitig)?</li>
+    <li><strong>Was möchte ich zeigen?</strong> Häufigkeiten vergleichen, Anteile darstellen, Verteilungsform zeigen oder Zusammenhang erkunden?</li>
+  </ol>
+  <p>Erst diese zwei Fragen klären, <em>dann</em> die Tabelle oben konsultieren — so vermeidest du den Reflex, einfach das Diagramm zu nehmen, das man am häufigsten gesehen hat (typischerweise Kuchendiagramm oder Balken — beide oft fehl am Platz).</p>
+</div>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Histogramm und Balkendiagramm verwechseln</div>
+  <p>Beide haben rechteckige Balken, sind aber für verschiedene Datentypen gemacht. Beim <strong>Balkendiagramm</strong> stehen die Balken für <em>kategoriale</em> Daten (Lieblingsfach, Verkehrsmittel) und sind durch Lücken getrennt. Beim <strong>Histogramm</strong> stehen sie für <em>klassierte stetige</em> Daten (Körpergrösse in 5-cm-Klassen) und stehen lückenlos nebeneinander — die x-Achse ist hier eine echte Zahlenachse, keine Aufzählung. Lücken oder keine Lücken: das ist das Signal.</p>
+</div>
+
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Diagramm wählen</span></div>
+  <p>Welches Diagramm ist jeweils am besten geeignet?</p>
+  <ol class="aufg-liste">
+    <li>Lieblingssport von 200 Personen — 7 Sportarten zur Auswahl.</li>
+    <li>Marktanteile von 4 Smartphone-Herstellern (in %).</li>
+    <li>Verteilung der Wartezeit am Pizza-Stand (gemessen in Minuten, n = 80).</li>
+    <li>Vergleich der Mathe-Noten in den Klassen A, B und C.</li>
+    <li>Zusammenhang zwischen täglicher Lernzeit und Notendurchschnitt.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l1')">▶ Lösung</button>
+  <div class="loesung-body" id="l1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li><strong>Balkendiagramm</strong> — 7 Kategorien sind für ein Kuchendiagramm zu viele (zu schmale Sektoren).</li>
+        <li><strong>Kuchendiagramm</strong> — wenige Kategorien, Anteile addieren sich zu 100%.</li>
+        <li><strong>Histogramm</strong> — stetige Daten, Verteilungsform interessiert.</li>
+        <li><strong>Boxplots nebeneinander</strong> — drei Gruppen vergleichen, kompakt.</li>
+        <li><strong>Streudiagramm</strong> — bivariat, Zusammenhang sichtbar machen.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Klasseneinteilung erstellen</span></div>
+  <p>Bei einer Stadtumfrage ergab sich: \(n = 100\), Werte zwischen 0 und 50.</p>
+  <ol class="aufg-liste">
+    <li>Wie viele Klassen empfiehlt die Faustregel?</li>
+    <li>Schlage gleichbreite Klassen vor.</li>
+    <li>Wie nennt man eine Tabelle, die zu jeder Klasse die Anzahl Werte angibt?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l2')">▶ Lösung</button>
+  <div class="loesung-body" id="l2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(k \approx \sqrt{100} = 10\) Klassen.</li>
+        <li>10 Klassen à 5 Einheiten: [0; 5[, [5; 10[, …, [45; 50].</li>
+        <li><strong>Häufigkeitstabelle</strong>.</li>
+      </ol>
+      <div class="block block-tipp" style="margin:8px 0 0">
+        <div class="block-titel">💡 Die letzte Klasse ist beidseitig geschlossen</div>
+        <p>Bei der Klassen-Folge \([0;5[, [5;10[, \dots, [45;50[\) würde der Wert \(50\)
+        in <em>keine</em> Klasse fallen — er wäre in der Auszählung verloren. Damit der
+        Maximalwert mitgezählt wird, schreibt man die letzte Klasse <strong>beidseitig
+        geschlossen</strong>: \([45; 50]\). Alle übrigen Klassen bleiben halboffen
+        \([\text{links}; \text{rechts}[\), damit Werte am Klassen-Übergang eindeutig einer
+        einzigen Klasse zugeordnet sind.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Histogramm zeichnen</span></div>
+  <p>Gegeben: Lernzeit pro Woche (in Stunden) von 30 Lernenden.</p>
+  <p style="font-family:var(--mono);font-size:0.86rem;margin:6px 0">2, 3, 5, 1, 4, 6, 3, 5, 7, 2, 8, 4, 5, 3, 6, 4, 9, 5, 4, 3, 7, 5, 4, 6, 2, 5, 4, 3, 6, 5</p>
+  <ol class="aufg-liste">
+    <li>Erstelle eine Häufigkeitstabelle mit Klassen [1; 3[, [3; 5[, [5; 7[, [7; 9[, [9; 11[.</li>
+    <li>Charakterisiere die Verteilung (symmetrisch / schief, unimodal / multimodal).</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l3')">▶ Lösung</button>
+  <div class="loesung-body" id="l3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Häufigkeiten zählen:</p>
+      <table class="ftb-tabelle" style="margin:6px 0">
+        <thead><tr><th>Klasse [h]</th><th>\(h_i\)</th></tr></thead>
+        <tbody>
+          <tr><td>[1; 3[</td><td>4</td></tr>
+          <tr><td>[3; 5[</td><td>11</td></tr>
+          <tr><td>[5; 7[</td><td>11</td></tr>
+          <tr><td>[7; 9[</td><td>3</td></tr>
+          <tr><td>[9; 11[</td><td>1</td></tr>
+          <tr><td>Σ</td><td>30</td></tr>
+        </tbody>
+      </table>
+      <p>Charakteristik: <strong>leicht rechtsschief</strong> (lange Schwanz nach rechts) und <strong>unimodal</strong> bzw. flache Doppelspitze bei den beiden mittleren Klassen.</p>
+      <svg viewBox="0 0 480 200" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:480px;width:100%;margin:8px 0">
+        <!-- Achsen -->
+        <line x1="50" y1="170" x2="440" y2="170" stroke="#1f2937" stroke-width="1.2"/>
+        <line x1="50" y1="170" x2="50" y2="30" stroke="#1f2937" stroke-width="1.2"/>
+        <!-- y-Achsen-Tickmarks 0, 5, 10 -->
+        <line x1="46" y1="170" x2="50" y2="170" stroke="#1f2937" stroke-width="1"/>
+        <line x1="46" y1="112" x2="50" y2="112" stroke="#1f2937" stroke-width="1"/>
+        <line x1="46" y1="53" x2="50" y2="53" stroke="#1f2937" stroke-width="1"/>
+        <text x="42" y="173" font-size="10" text-anchor="end">0</text>
+        <text x="42" y="115" font-size="10" text-anchor="end">5</text>
+        <text x="42" y="56" font-size="10" text-anchor="end">10</text>
+        <text x="32" y="35" font-size="10" text-anchor="end">\(h_i\)</text>
+        <!-- Säulen (Histogramm — Säulen berühren sich) -->
+        <rect x="50"  y="123" width="76" height="47"  fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+        <rect x="126" y="42"  width="76" height="128" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+        <rect x="202" y="42"  width="76" height="128" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+        <rect x="278" y="135" width="76" height="35"  fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+        <rect x="354" y="158" width="76" height="12"  fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+        <!-- Werte über den Säulen -->
+        <text x="88"  y="118" font-size="10" text-anchor="middle" font-weight="bold">4</text>
+        <text x="164" y="37"  font-size="10" text-anchor="middle" font-weight="bold">11</text>
+        <text x="240" y="37"  font-size="10" text-anchor="middle" font-weight="bold">11</text>
+        <text x="316" y="130" font-size="10" text-anchor="middle" font-weight="bold">3</text>
+        <text x="392" y="153" font-size="10" text-anchor="middle" font-weight="bold">1</text>
+        <!-- Klassen-Beschriftung auf x-Achse -->
+        <text x="88"  y="186" font-size="9" text-anchor="middle">[1; 3[</text>
+        <text x="164" y="186" font-size="9" text-anchor="middle">[3; 5[</text>
+        <text x="240" y="186" font-size="9" text-anchor="middle">[5; 7[</text>
+        <text x="316" y="186" font-size="9" text-anchor="middle">[7; 9[</text>
+        <text x="392" y="186" font-size="9" text-anchor="middle">[9; 11[</text>
+        <text x="440" y="173" font-size="9" text-anchor="start" dx="4">Stunden</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Boxplot lesen</span></div>
+  <p>Folgender Boxplot zeigt die Punktzahlen einer Mathe-Prüfung (max. 60 Punkte):</p>
+  <svg viewBox="0 0 460 110" preserveAspectRatio="xMidYMid meet" style="display:block;max-width:460px;width:100%;margin:8px 0">
+    <line x1="20" y1="70" x2="440" y2="70" stroke="#1f2937" stroke-width="1.2"/>
+    <line x1="40"  y1="70" x2="40"  y2="50" stroke="#1f2937" stroke-width="1.5"/>
+    <line x1="40"  y1="70" x2="180" y2="70" stroke="#1f2937" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <rect x="180" y="35" width="160" height="70" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="240" y1="35" x2="240" y2="105" stroke="#1d4ed8" stroke-width="2.5"/>
+    <line x1="340" y1="70" x2="420" y2="70" stroke="#1f2937" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <line x1="420" y1="70" x2="420" y2="50" stroke="#1f2937" stroke-width="1.5"/>
+    <text x="40"  y="22" font-size="10" text-anchor="middle">15</text>
+    <text x="180" y="22" font-size="10" text-anchor="middle">28</text>
+    <text x="240" y="22" font-size="10" text-anchor="middle">35</text>
+    <text x="340" y="22" font-size="10" text-anchor="middle">45</text>
+    <text x="420" y="22" font-size="10" text-anchor="middle">54</text>
+  </svg>
+  <ol class="aufg-liste">
+    <li>Wie viele Punkte hatte das schlechteste / beste Resultat?</li>
+    <li>Was ist der Median?</li>
+    <li>Welche Punkt-Spanne umfasst die mittleren 50%?</li>
+    <li>Ist die Verteilung eher symmetrisch, links- oder rechtsschief?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l4')">▶ Lösung</button>
+  <div class="loesung-body" id="l4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Schlechtestes 15 Punkte, bestes 54 Punkte.</li>
+        <li>Median = 35 Punkte.</li>
+        <li>Q₁ = 28, Q₃ = 45 — die mittleren 50% liegen zwischen 28 und 45 Punkten (Quartilsdifferenz \(Q_3 - Q_1 = 17\)).</li>
+        <li>Hier zeigt der Boxplot <strong>widersprüchliche Signale</strong>: Innerhalb der Box liegt der Median (35) näher am unteren Quartil (Abstand zu Q₁ = 7) als am oberen (Abstand zu Q₃ = 10) — das deutet auf <em>rechtsschiefe Box</em> (mehr Streuung oben). Die Antennen geben das Gegenteil her: die linke Antenne (15 bis 28, Länge 13) ist länger als die rechte (45 bis 54, Länge 9) — das deutet auf <em>linksschiefen Schwanz</em>. Die Verteilung ist also nicht eindeutig schief; ein Boxplot allein kann hier keine klare Diagnose liefern, dafür bräuchte es ein Histogramm oder die Rohdaten.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Streudiagramm interpretieren</span></div>
+  <p>Eine Studie misst bei 50 Studierenden zwei Merkmale: Anzahl Stunden Schlaf in der Nacht vor der Prüfung (\(x\)) und erreichte Punktzahl (\(y\)). Das Streudiagramm zeigt eine deutlich aufsteigende Punktwolke mit moderater Streuung. Bei 4 Studierenden mit jeweils 9 h Schlaf liegen die Punktzahlen aber zwischen 30 und 90.</p>
+  <ol class="aufg-liste">
+    <li>Welcher Zusammenhang besteht zwischen \(x\) und \(y\)?</li>
+    <li>Darfst du folgern: „Wer mehr schläft, schreibt automatisch besser"?</li>
+    <li>Wie erklärst du die grosse Streuung bei 9 h Schlaf?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l5')">▶ Lösung</button>
+  <div class="loesung-body" id="l5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Positiver Zusammenhang — mehr Schlaf geht tendenziell mit höheren Punktzahlen einher.</li>
+        <li>Nein. Korrelation ist nicht Kausalität. Wer regelmässig genug schläft, lernt vielleicht auch sonst strukturierter — der Schlaf wäre dann nur ein Indikator, nicht die Ursache. Kontrollierte Experimente wären nötig.</li>
+        <li>Andere Faktoren spielen mit: Vorbereitung, Talent, Schwierigkeit der Aufgaben, Tagesform. Auch bei gleicher Schlafdauer können Punktzahlen weit auseinanderliegen. <span style="color:var(--tinte-2);font-style:italic;font-size:0.9em">— Wer es technischer mag: Wenn die Streuung von \(y\) für unterschiedliche \(x\)-Bereiche stark variiert, spricht man von <em>Heteroskedastizität</em>. Bei 9 h Schlaf scheint die Streuung deutlich grösser als bei 5 h — ein Hinweis darauf.</span></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Diagramm-Kritik</span></div>
+  <p>Ein Zeitungsartikel zeigt ein Balkendiagramm mit drei Werten: 8.0, 8.2, 8.5. Die y-Achse beginnt bei 7.5. Die Schlagzeile lautet: <em>„Riesige Steigerung beim Quartalsumsatz!"</em></p>
+  <p>Was ist an dieser Darstellung problematisch?</p>
+  <button class="loesung-toggle" onclick="toggleL('l6')">▶ Lösung</button>
+  <div class="loesung-body" id="l6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Die abgeschnittene y-Achse (Beginn bei 7.5 statt bei 0) lässt die Unterschiede grösser erscheinen, als sie sind:</p>
+      <ul style="margin-left:1.4em;margin-top:4px">
+        <li>Tatsächlicher Anstieg von 8.0 auf 8.5: <strong>+6.25%</strong>.</li>
+        <li>Im Diagramm sieht der dritte Balken ungefähr <strong>doppelt so hoch</strong> aus wie der erste — visuell suggerierte Steigerung etwa +100%.</li>
+      </ul>
+      <p style="margin-top:6px">Saubere Darstellung: y-Achse bei 0 beginnen lassen, oder einen Achsenbruch deutlich kennzeichnen. Die Schlagzeile passt nicht zu einer 6%-Steigerung.</p>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Welches Diagramm passt zu welchen Daten?</span></div>
+  <p>Vier Datensätze sollen jeweils visualisiert werden. Entscheide pro Datensatz, welches Diagramm angemessen ist (Balken-, Kuchen-, Histogramm- oder Boxplot), und begründe.</p>
+  <ul>
+    <li>(I) Marktanteile der fünf grössten Smartphone-Hersteller in der Schweiz (in Prozent, zusammen 100 %).</li>
+    <li>(II) Körpergrösse von 80 Lernenden, in 5-cm-Klassen \([150\,\text{cm}; 155\,\text{cm}[\), \([155\,\text{cm}; 160\,\text{cm}[\), …</li>
+    <li>(III) Mathematik-Endnoten einer Klasse mit 22 Lernenden — Min/Max/Median sind interessant.</li>
+    <li>(IV) Lieblingssportart der gleichen Klasse (Fussball, Tennis, Basketball, Reiten, anderes).</li>
+  </ul>
+  <button class="loesung-toggle" onclick="toggleL('l-g4-2-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g4-2-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>(I) <strong>Kuchendiagramm</strong> — Anteile am Ganzen (Summe genau 100 %). Alternativ Balkendiagramm bei vielen Kategorien.</p>
+      <p>(II) <strong>Histogramm</strong> — stetige Daten, klassiert; Balken stehen lückenlos nebeneinander.</p>
+      <p>(III) <strong>Boxplot</strong> — Min/Max/Median sind explizit ablesbar; zeigt zusätzlich Quartile und Ausreisser.</p>
+      <p>(IV) <strong>Balkendiagramm</strong> — kategoriale Daten ohne natürliche Ordnung, Balken mit Lücken.</p>
+      <p>Das passende Diagramm folgt aus dem Datentyp und der Fragestellung — diese Wahl ist ein wichtiger Teil jedes datenanalytischen Projekts.</p>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Das richtige Diagramm folgt dem Datentyp, nicht der Vorliebe. Drei Fragen entscheiden: <strong>(1)</strong> Kategorial, diskret oder stetig? <strong>(2)</strong> Geht es um Häufigkeit, Verteilungsform oder Zusammenhang? <strong>(3)</strong> Eine Gruppe oder mehrere? Aus den Antworten ergibt sich die Wahl.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead><tr><th>Diagramm</th><th>Datentyp</th><th>Zeigt</th></tr></thead>
+  <tbody>
+    <tr><td>Balkendiagramm</td><td>kategorial / diskret</td><td>Häufigkeit pro Kategorie</td></tr>
+    <tr><td>Kuchendiagramm</td><td>kategorial</td><td>Anteile am Ganzen</td></tr>
+    <tr><td>Histogramm</td><td>stetig (klassiert)</td><td>Verteilungsform</td></tr>
+    <tr><td>Boxplot</td><td>numerisch</td><td>5-Zahlen-Übersicht</td></tr>
+    <tr><td>Streudiagramm</td><td>bivariat</td><td>Zusammenhang \(x\) ↔ \(y\)</td></tr>
+  </tbody>
+</table>
+
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+
+<p>Zum Ausdrucken und Mitnehmen — Theorie, Formelsammlung, Karteikarten und Aufgaben mit Lösungen.</p>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g4-2-diagramme/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-2-diagramme/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Diagrammtypen und Klasseneinteilung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-2-diagramme/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-2-diagramme/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-2-diagramme/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAznKJ7-xAyq6tOtqQYzs5_38" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Statistische Grundbegriffe &amp; Diagramme — Playlist</div><div class="lk-s">Lehrerschmidt · 35 Videos · Säulen-, Balken-, Kreis-, Histogramm, Boxplot</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHifw_3OhBTvQq2EGX5NedOy" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Statistik — Playlist (5.–10. Klasse)</div><div class="lk-s">Mathe by Daniel Jung · 31 Videos · Diagramme, Boxplot, Häufigkeiten</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/1352/diagramme" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Diagramme</div><div class="lk-s">Aufgaben zu Säulen-, Balken-, Kreis-Diagramm · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/22778/daten-und-datendarstellung" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Daten und Datendarstellung</div><div class="lk-s">Übersicht zu Diagrammtypen und Kenngrössen</div></div></a>
+</div>
 
 
 </main>
@@ -94,7 +778,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Diagramme</p>
+  <p>Grundlagenfach 4.2 Diagramme</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -106,6 +790,401 @@ buildNav({
   prev:{nr:'4.1',titel:'Grundlagen',url:'g4-1-grundlagen.html'},
   next:{nr:'4.3',titel:'Masszahlen',url:'g4-3-masszahlen.html'}
 });
+
+/* Tabs für Diagrammtypen */
+function showDia(key, btn){
+  ['balken','kuchen','histo','box'].forEach(k => {
+    document.getElementById('dp-'+k).style.display = (k===key) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.dia-tab').forEach(t => t.classList.remove('aktiv'));
+  btn.classList.add('aktiv');
+}
+
+/* Einstieg: animierter Diagramm-Aufbau */
+(function(){
+  // ── Datensätze ────────────────────────────────────────────────
+  const balkenKats = ['Mathe','Sport','Deutsch','Eng.','andere'];
+  const balkenZiel = [20, 30, 15, 10, 25]; // Summe = 100
+  const balkenPunkte = (() => {
+    const arr = [];
+    balkenZiel.forEach((cnt, i) => { for (let k = 0; k < cnt; k++) arr.push(i); });
+    // mischen, damit die Animation sich natürlich anfühlt
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  })();
+
+  const kuchenKats = ['Velo','ÖV','Auto','Fuss'];
+  const kuchenAnt = [40, 30, 20, 10]; // %
+  const kuchenFarben = ['#3b82f6','#10b981','#f59e0b','#ef4444'];
+
+  // Histogramm: 60 Werte mit Klassenmitten 157.5, 162.5, …, 182.5
+  const histoBins = [3, 9, 14, 17, 11, 6]; // n=60
+  const histoCenters = [157.5, 162.5, 167.5, 172.5, 177.5, 182.5];
+  const histoPunkte = (() => {
+    const arr = [];
+    histoBins.forEach((cnt, i) => {
+      const c = histoCenters[i];
+      for (let k = 0; k < cnt; k++) arr.push(c + (Math.random()-0.5)*4.8);
+    });
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  })();
+
+  // Boxplot: 22 Lernzeit-Werte (sortiert) -> min=0, Q1=3, Med=4, Q3=5, max=8
+  const boxPunkte = [0, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 7, 8];
+
+  const dataSet = {
+    balken: { total: 100, frage: 'Welches Schulfach mögen 100 Lernende am liebsten?', cap: 'Balkendiagramm — Höhe der Balken zeigt die Häufigkeit jeder Kategorie.', punkte: balkenPunkte },
+    kuchen: { total: 100, frage: 'Womit kommen 100 Lernende zur Schule?', cap: 'Kuchendiagramm — Sektorgrösse zeigt den Anteil am Ganzen (100 %).', punkte: kuchenAnt },
+    histo:  { total: 60,  frage: 'Wie verteilt sich die Körpergrösse von 60 Personen?', cap: 'Histogramm — Balken zeigen, wie viele Werte in jede Klasse fallen.', punkte: histoPunkte },
+    box:    { total: 22,  frage: 'Wie viel haben 22 Lernende für Mathe gelernt?', cap: 'Boxplot — fünf Kennzahlen min, Q₁, Median, Q₃, max fassen alle Werte zusammen.', punkte: boxPunkte }
+  };
+
+  // ── State ─────────────────────────────────────────────────────
+  let aktKey = 'balken';
+  let aktStep = 0;
+  let aktTotal = dataSet.balken.total;
+  let timer = null;
+
+  // ── Helpers ───────────────────────────────────────────────────
+  function getCtx(){
+    const c = document.getElementById('ea-canvas');
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.offsetWidth || 480, H = c.offsetHeight || 200;
+    c.width = W*dpr; c.height = H*dpr;
+    const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+    return {ctx, W, H};
+  }
+
+  // ── Render-Funktionen ─────────────────────────────────────────
+  function renderBalken(step){
+    const {ctx, W, H} = getCtx();
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+    const padL = 48, padR = 12, padT = 18, padB = 30;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+    const nKat = balkenKats.length;
+    const binW = plotW / nKat;
+    // aktuelle Counts bis step
+    const counts = new Array(nKat).fill(0);
+    for (let i = 0; i < step; i++) counts[balkenPunkte[i]]++;
+    const maxC = Math.max(35, ...counts);
+    // Gitter + Achsen
+    ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+    for (let v = 10; v <= maxC; v += 10){
+      const y = padT + plotH - (v/maxC)*plotH;
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
+    }
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT+plotH); ctx.lineTo(W-padR, padT+plotH); ctx.stroke();
+    // y-Beschriftung
+    ctx.fillStyle = '#6b7280'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+    for (let v = 10; v <= maxC; v += 10){
+      const y = padT + plotH - (v/maxC)*plotH;
+      ctx.fillText(v, padL-4, y+3);
+    }
+    // Balken
+    for (let i = 0; i < nKat; i++){
+      const v = counts[i];
+      if (v > 0){
+        const x = padL + i*binW + binW*0.18;
+        const w = binW*0.64;
+        const h = (v/maxC)*plotH;
+        const y = padT + plotH - h;
+        ctx.fillStyle = '#3b82f6'; ctx.fillRect(x, y, w, h);
+        ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+        ctx.fillText(v, x + w/2, y - 3);
+      }
+    }
+    // Kategorie-Labels
+    ctx.fillStyle = '#374151'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    for (let i = 0; i < nKat; i++){
+      ctx.fillText(balkenKats[i], padL + i*binW + binW/2, padT + plotH + 16);
+    }
+    // letzter hinzugefügter Punkt: Pulse
+    if (step > 0 && step <= balkenPunkte.length){
+      const i = balkenPunkte[step-1];
+      const v = counts[i];
+      const x = padL + i*binW + binW*0.5;
+      const y = padT + plotH - (v/maxC)*plotH;
+      ctx.strokeStyle = '#b85a00'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, y - 8, 7, 0, 2*Math.PI); ctx.stroke();
+    }
+  }
+
+  function renderKuchen(step){
+    const {ctx, W, H} = getCtx();
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+    const cxM = W/2 - 60, cyM = H/2;
+    const r = Math.min(H/2 - 18, 75);
+    // step geht von 0..360 (Grad)
+    const totalAngle = step; // wir mappen step direkt auf Grad
+
+    // Vollkreis-Rand
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cxM, cyM, r, 0, 2*Math.PI); ctx.stroke();
+
+    // Sektoren bis totalAngle
+    let startDeg = 0;
+    kuchenAnt.forEach((p, i) => {
+      const sectDeg = p * 3.6; // 100% = 360°
+      const drawDeg = Math.max(0, Math.min(sectDeg, totalAngle - startDeg));
+      if (drawDeg > 0){
+        const a0 = (startDeg - 90) * Math.PI / 180;
+        const a1 = (startDeg + drawDeg - 90) * Math.PI / 180;
+        ctx.fillStyle = kuchenFarben[i];
+        ctx.beginPath();
+        ctx.moveTo(cxM, cyM);
+        ctx.arc(cxM, cyM, r, a0, a1);
+        ctx.closePath();
+        ctx.fill();
+        // Beschriftung im Sektor, wenn fertig
+        if (drawDeg >= sectDeg - 0.1){
+          const aM = (startDeg + sectDeg/2 - 90) * Math.PI / 180;
+          const lx = cxM + Math.cos(aM) * r * 0.6;
+          const ly = cyM + Math.sin(aM) * r * 0.6;
+          ctx.fillStyle = '#fff'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+          ctx.fillText(p + '%', lx, ly + 4);
+        }
+      }
+      startDeg += sectDeg;
+    });
+
+    // Legende rechts
+    const lx0 = W - 110;
+    ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+    kuchenKats.forEach((k, i) => {
+      const ly = cyM - 36 + i*20;
+      ctx.fillStyle = kuchenFarben[i];
+      ctx.fillRect(lx0, ly, 12, 12);
+      ctx.fillStyle = '#374151';
+      ctx.fillText(k + ' ' + kuchenAnt[i] + '%', lx0 + 18, ly + 10);
+    });
+  }
+
+  function renderHisto(step){
+    const {ctx, W, H} = getCtx();
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+    const padL = 38, padR = 12, padT = 18, padB = 30;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+    const nBins = histoBins.length;
+    const binW = plotW / nBins;
+    // counts
+    const counts = new Array(nBins).fill(0);
+    for (let i = 0; i < step; i++){
+      const v = histoPunkte[i];
+      const bi = Math.max(0, Math.min(nBins-1, Math.floor((v - 155)/5)));
+      counts[bi]++;
+    }
+    const maxC = Math.max(18, ...counts);
+    // Gitter
+    ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+    for (let v = 5; v <= maxC; v += 5){
+      const y = padT + plotH - (v/maxC)*plotH;
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
+    }
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT+plotH); ctx.lineTo(W-padR, padT+plotH); ctx.stroke();
+    // y-Beschriftung
+    ctx.fillStyle = '#6b7280'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+    for (let v = 5; v <= maxC; v += 5){
+      const y = padT + plotH - (v/maxC)*plotH;
+      ctx.fillText(v, padL-4, y+3);
+    }
+    // Balken (Histogramm, ohne Lücke)
+    for (let i = 0; i < nBins; i++){
+      const v = counts[i];
+      if (v > 0){
+        const x = padL + i*binW;
+        const w = binW;
+        const h = (v/maxC)*plotH;
+        const y = padT + plotH - h;
+        ctx.fillStyle = '#3b82f6'; ctx.fillRect(x, y, w, h);
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, w, h);
+        ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+        ctx.fillText(v, x + w/2, y - 3);
+      }
+    }
+    // x-Beschriftung (Klassengrenzen)
+    ctx.fillStyle = '#374151'; ctx.font = '9px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    for (let i = 0; i <= nBins; i++){
+      const x = padL + i*binW;
+      ctx.fillText(155 + i*5, x, padT + plotH + 14);
+    }
+    ctx.textAlign = 'right'; ctx.fillStyle = '#6b7280';
+    ctx.fillText('cm', W-padR, padT + plotH + 24);
+    // letzter Punkt: Tropfen-Animation auf der zugehörigen Säule
+    if (step > 0 && step <= histoPunkte.length){
+      const v = histoPunkte[step-1];
+      const bi = Math.max(0, Math.min(nBins-1, Math.floor((v - 155)/5)));
+      const x = padL + bi*binW + binW/2;
+      const cnt = counts[bi];
+      const y = padT + plotH - (cnt/maxC)*plotH;
+      ctx.strokeStyle = '#b85a00'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, y - 10, 6, 0, 2*Math.PI); ctx.stroke();
+    }
+  }
+
+  function renderBox(step){
+    const {ctx, W, H} = getCtx();
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+    const padL = 30, padR = 30, padT = 60, padB = 50;
+    const plotW = W - padL - padR;
+    const xMin = 0, xMax = 9;
+    const xPx = v => padL + (v - xMin)/(xMax - xMin) * plotW;
+    const yBase = padT + 40;
+
+    // x-Achse
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(padL, yBase + 30); ctx.lineTo(W-padR, yBase + 30); ctx.stroke();
+    ctx.fillStyle = '#6b7280'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    for (let v = 0; v <= 8; v++){
+      ctx.fillText(v, xPx(v), yBase + 44);
+    }
+    ctx.textAlign = 'right'; ctx.fillText('Lernzeit [h]', W-padR, yBase + 56);
+
+    // Phase 1: Punkte einzeichnen (step 1..22)
+    // Phase 2: Quartile + Box zeichnen (step 23+)
+    const punkteN = Math.min(step, 22);
+    // Punkte auf Strich-Achse
+    for (let i = 0; i < punkteN; i++){
+      const v = boxPunkte[i];
+      // bei gleichen Werten leicht versetzen
+      const dup = boxPunkte.slice(0, i+1).filter(x => x === v).length - 1;
+      ctx.fillStyle = '#94a3b8';
+      ctx.beginPath();
+      ctx.arc(xPx(v), yBase + 30 - 6 - dup*7, 3, 0, 2*Math.PI);
+      ctx.fill();
+    }
+
+    // Wenn alle 22 Punkte da sind: Quartile berechnen und Box zeichnen
+    if (step >= 22){
+      const sorted = [...boxPunkte].sort((a,b) => a-b);
+      const min = sorted[0], max = sorted[sorted.length-1];
+      const q1 = 3, med = 4, q3 = 5; // bekannt aus Datensatz
+      const boxY = yBase - 10;
+      const boxH = 28;
+
+      const phase = step - 22; // 0..5
+
+      // (1) min/max Whisker-Enden
+      if (phase >= 1){
+        ctx.strokeStyle = '#1f2937'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(xPx(min), boxY - 4); ctx.lineTo(xPx(min), boxY + boxH + 4); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(xPx(max), boxY - 4); ctx.lineTo(xPx(max), boxY + boxH + 4); ctx.stroke();
+        ctx.fillStyle = '#1f2937'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+        ctx.fillText('min', xPx(min), boxY - 8);
+        ctx.fillText('max', xPx(max), boxY - 8);
+      }
+      // (2) Q1 + Q3 Box
+      if (phase >= 2){
+        ctx.fillStyle = '#dbeafe';
+        ctx.fillRect(xPx(q1), boxY, xPx(q3)-xPx(q1), boxH);
+        ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2;
+        ctx.strokeRect(xPx(q1), boxY, xPx(q3)-xPx(q1), boxH);
+        ctx.fillStyle = '#1e40af'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Q₁', xPx(q1), boxY + boxH + 14);
+        ctx.fillText('Q₃', xPx(q3), boxY + boxH + 14);
+      }
+      // (3) Median
+      if (phase >= 3){
+        ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(xPx(med), boxY); ctx.lineTo(xPx(med), boxY + boxH); ctx.stroke();
+        ctx.fillStyle = '#1d4ed8'; ctx.textAlign = 'center';
+        ctx.fillText('Median', xPx(med), boxY + boxH + 14);
+      }
+      // (4) Whisker-Linien
+      if (phase >= 4){
+        ctx.strokeStyle = '#1f2937'; ctx.lineWidth = 1.5; ctx.setLineDash([3,2]);
+        ctx.beginPath(); ctx.moveTo(xPx(min), boxY + boxH/2); ctx.lineTo(xPx(q1), boxY + boxH/2); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(xPx(q3), boxY + boxH/2); ctx.lineTo(xPx(max), boxY + boxH/2); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    } else if (step > 0){
+      // Pulse für letzten Punkt
+      const v = boxPunkte[step-1];
+      const dup = boxPunkte.slice(0, step).filter(x => x === v).length - 1;
+      ctx.strokeStyle = '#b85a00'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(xPx(v), yBase + 30 - 6 - dup*7, 6, 0, 2*Math.PI);
+      ctx.stroke();
+    }
+  }
+
+  function render(){
+    if (aktKey === 'balken') renderBalken(aktStep);
+    else if (aktKey === 'kuchen') renderKuchen(aktStep);
+    else if (aktKey === 'histo') renderHisto(aktStep);
+    else if (aktKey === 'box') renderBox(aktStep);
+    // Zähler aktualisieren
+    let zaehlerWert = aktStep;
+    if (aktKey === 'kuchen') zaehlerWert = Math.round(aktStep / 3.6); // Grad → %
+    if (aktKey === 'box') zaehlerWert = Math.min(aktStep, 22);
+    document.getElementById('ea-n').textContent = zaehlerWert;
+  }
+
+  function switchTab(key, btn){
+    aktKey = key;
+    aktStep = 0;
+    aktTotal = dataSet[key].total;
+    stopAnim();
+    document.querySelectorAll('#ea-tabs .ea-tab').forEach(t => t.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    document.getElementById('ea-frage').textContent = dataSet[key].frage;
+    document.getElementById('ea-total').textContent = dataSet[key].total;
+    document.getElementById('ea-cap').textContent = dataSet[key].cap;
+    document.getElementById('ea-play').textContent = '▶ Animation starten';
+    document.getElementById('ea-play').disabled = false;
+    render();
+  }
+
+  function stopAnim(){
+    if (timer){ clearInterval(timer); timer = null; }
+  }
+
+  function playAnim(){
+    stopAnim();
+    aktStep = 0;
+    render();
+    const btn = document.getElementById('ea-play');
+    btn.textContent = '… läuft';
+    btn.disabled = true;
+
+    // Schrittweite und Geschwindigkeit je nach Diagrammtyp
+    let maxStep, intervalMs;
+    if (aktKey === 'balken'){ maxStep = 100; intervalMs = 40; }
+    else if (aktKey === 'kuchen'){ maxStep = 360; intervalMs = 12; }
+    else if (aktKey === 'histo'){ maxStep = 60; intervalMs = 60; }
+    else { maxStep = 22 + 5; intervalMs = 250; } // 22 Punkte + 5 Box-Phasen
+
+    timer = setInterval(() => {
+      aktStep++;
+      render();
+      if (aktStep >= maxStep){
+        stopAnim();
+        btn.textContent = '↻ nochmal abspielen';
+        btn.disabled = false;
+      }
+    }, intervalMs);
+  }
+
+  // ── Events ────────────────────────────────────────────────────
+  document.querySelectorAll('#ea-tabs .ea-tab').forEach(t => {
+    t.addEventListener('click', () => switchTab(t.dataset.key, t));
+  });
+  document.getElementById('ea-play').addEventListener('click', playAnim);
+
+  // Initial: leeres Achsensystem zeichnen
+  render();
+  window.addEventListener('resize', render);
+})();
 </script>
 </body>
 </html>

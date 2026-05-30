@@ -307,6 +307,9 @@ table.ftb-tabelle td .li { text-align: left; font-family: var(--sans); }
   margin: 1.2mm 0;
 }
 
+.lin-mehr { margin-bottom: 2mm; }
+.lin-mehr .lin { height: 7mm; }
+
 /* MathJax / KaTeX Container */
 mjx-container[display="true"] {
   margin: 2mm 0 !important;
@@ -343,6 +346,42 @@ mjx-container[display="true"] {
 .neue-seite   { page-break-before: always; break-before: page; }
 .no-print     { /* sichtbar im Browser, ausgeblendet im Druck */ }
 
+/* ── Aufgaben-Block mit aufklappbarer Lösung (für Druck-Aufgabenserien) ──
+   Format: <div class="aufg-block"><h2>Aufgabe N — …</h2><p>…</p>
+            <details><summary>Lösung</summary>…</details></div>
+   Genutzt in Aufgabenserien-Drucken; Lösungen erscheinen in der Web-Vorschau
+   als Falt-Container und im Druck aufgeklappt (siehe @media print unten). */
+.aufg-block {
+  margin: 6mm 0;
+  padding: 3mm 4mm;
+  border-left: 3px solid var(--orange);
+  background: var(--orange-hell);
+  border-radius: 4px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.aufg-block h2 {
+  margin: 0 0 2mm 0;
+  font-size: 12pt;
+  color: var(--orange);
+  border-bottom: none;
+}
+.aufg-block details {
+  margin-top: 3mm;
+  padding-top: 2mm;
+  border-top: 1px dashed var(--orange-rand);
+}
+.aufg-block details summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--gruen);
+  font-size: 0.95rem;
+  margin-bottom: 2mm;
+}
+.aufg-block details[open] summary {
+  margin-bottom: 3mm;
+}
+
 /* ═══════════════════════════════════════════════════════════
    DRUCK-MEDIUM
    ═══════════════════════════════════════════════════════════ */
@@ -362,4 +401,10 @@ mjx-container[display="true"] {
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   a { color: var(--tinte); text-decoration: none; }
   h2 { margin-top: 5mm; }
+  /* aufg-block: Lösungs-Details im Druck immer aufgeklappt anzeigen */
+  .aufg-block details { display: block; }
+  .aufg-block details > *:not(summary) { display: block !important; }
+  .aufg-block details summary { list-style: none; }
+  .aufg-block details summary::-webkit-details-marker { display: none; }
+  .aufg-block details summary::before { content: "✓ "; color: var(--gruen); }
 }

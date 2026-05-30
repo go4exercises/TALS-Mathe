@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5.2d Zentrische Streckung und Ähnlichkeit — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ============================================================
+ *  LOKALES CSS — analog g5-2a / g5-2b / g5-2c
+ * ============================================================ */
+.anim {
+  background: var(--papier);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 14px 0 22px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+}
+.anim-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .anim-layout { grid-template-columns: 1fr; }
+}
+.anim canvas {
+  width: 100%;
+  height: auto;
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  display: block;
+  touch-action: none;
+}
+.anim .bedien {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.anim .regler {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.anim .regler-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--tinte-2);
+}
+.anim .regler-label .wert {
+  font-family: var(--mono);
+  color: var(--blau);
+  font-weight: 500;
+}
+.anim input[type="range"] {
+  width: 100%;
+  accent-color: var(--blau);
+}
+.anim .feld-titel {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tinte-2);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.anim .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.anim .chip {
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  color: var(--tinte-2);
+  padding: 5px 9px;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-family: var(--mono);
+  transition: all 0.12s;
+}
+.anim .chip:hover { border-color: var(--blau-rand); color: var(--blau); }
+.anim .chip.aktiv {
+  background: var(--blau);
+  border-color: var(--blau);
+  color: white;
+}
+.anim .toggle-zeile {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 0.88rem; color: var(--tinte-2);
+  cursor: pointer; user-select: none;
+}
+.anim .toggle-zeile input[type="checkbox"] {
+  width: 15px; height: 15px;
+  accent-color: var(--blau); cursor: pointer;
+}
+.anim .legende {
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  padding: 8px 11px;
+  font-size: 0.86rem;
+}
+.anim .legende-titel {
+  font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--tinte-2);
+  font-weight: 600; margin-bottom: 5px;
+}
+.anim .legende-zeile {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.85rem;
+  padding: 1px 0;
+}
+.anim .legende-zeile .lab { color: var(--tinte); }
+.anim .legende-zeile .val { color: var(--blau); font-weight: 500; }
+.anim .formel {
+  background: var(--blau-hell);
+  border: 1px solid var(--blau-rand);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.93rem;
+  transition: background 0.3s, border-color 0.3s;
+}
+.anim .formel.fertig {
+  background: var(--gruen-hell);
+  border-color: var(--gruen-rand);
+}
+.anim .erklaerung {
+  background: var(--papier-2);
+  border-left: 3px solid var(--blau);
+  padding: 7px 11px;
+  font-size: 0.84rem;
+  color: var(--tinte-2);
+  border-radius: 0 4px 4px 0;
+  min-height: 36px;
+}
+.anim .anim-titel {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--blau);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.anim .mini-tab {
+  width: 100%;
+  font-size: 0.78rem;
+  font-family: var(--mono);
+  border-collapse: collapse;
+  margin-top: 4px;
+}
+.anim .mini-tab th, .anim .mini-tab td {
+  padding: 3px 6px;
+  text-align: right;
+  border-bottom: 1px solid var(--linie-2);
+}
+.anim .mini-tab th {
+  color: var(--tinte-2);
+  font-weight: 600;
+  background: var(--papier-2);
+}
+.anim .mini-tab td.lab { text-align: left; color: var(--tinte-2); }
+.anim .mini-tab tr.aktiv td { background: var(--blau-hell); color: var(--blau); font-weight: 600; }
+.anim .mini-tab tr.exakt td { color: var(--gruen); font-weight: 600; }
+
+/* Einstiegs-Animation: Schatten unter Strassenlaterne */
+.schatten-box{background:var(--papier-2,#f3eedf);border-radius:8px;padding:14px 16px;margin:12px 0}
+.schatten-box .sb-row{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:0.9rem;margin-bottom:10px;flex-wrap:wrap}
+.schatten-box .sb-row label{min-width:160px}
+.schatten-box .sb-row input[type=range]{flex:1 1 220px;max-width:320px}
+.schatten-box .sb-val{font-weight:700;color:var(--blau);min-width:36px}
+.schatten-box canvas{width:100%;height:280px;display:block;background:linear-gradient(to bottom, #1e3a5f 0%, #2a5078 60%, #3b6a9a 100%);border-radius:6px}
+.schatten-box .sb-readout{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;padding:10px 14px;background:var(--weiss);border-radius:6px;font-family:var(--mono);font-size:0.86rem}
+.schatten-box .sb-readout .rb-item{display:flex;flex-direction:column}
+.schatten-box .sb-readout .rb-lab{font-size:0.7rem;color:var(--tinte-2);text-transform:uppercase;letter-spacing:0.5px;font-weight:700}
+.schatten-box .sb-readout .rb-val{color:var(--blau);font-weight:700;font-size:1rem}
+.schatten-box .sb-cap{font-size:0.85rem;color:var(--tinte-2);margin-top:8px;font-style:italic}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Grundlagenfach · Lerngebiet 5 · Geometrie · 50 Lektionen</div>
+  <h1 class="pt-h1">5.2d Zentrische Streckung und Ähnlichkeit</h1>
+  <div class="pt-untertitel">RLP 5.2 · Teil 4 von 4</div>
+</div>
+
+<p class="lead">Vergrössern und verkleinern, ohne die Form zu verändern — das ist <strong>zentrische Streckung</strong>. Sie produziert Figuren, die zueinander <strong>ähnlich</strong> sind: gleiche Winkel, proportionale Seiten. Anwendungen reichen von Massstäben auf Landkarten über Schattenwurf und Höhenmessung bis zu den klassischen <strong>Strahlensätzen</strong>.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 5.2</div>
+  <ul>
+    <li>geometrische Sachverhalte von elementaren Objekten (Quadrat, Rechteck, allgemeine und spezielle Dreiecke, Parallelogramm, Rhombus, Trapez, Kreis) beschreiben</li>
+    <li>deren Elemente (Höhen, Seiten- und Winkelhalbierende, Mittelsenkrechte, Mittellinie im Trapez, Sehne, Sekante, Tangente, Sektor, Segment, Winkel und Winkelmass) und Zusammenhänge (Umfang, Flächeninhalt, Abstand) berechnen</li>
+    <li><strong>die Ähnlichkeit für Berechnungen in der Ebene nutzen</strong></li>
+  </ul>
+  <p class="rlp-hinweis">Dreiecke werden in <a href="g5-2a-dreiecke.html">Teil 1 (g5-2a)</a> behandelt, Vierecke in <a href="g5-2b-vierecke.html">Teil 2 (g5-2b)</a>, Kreis und Kreisteile in <a href="g5-2c-kreis-und-kreisteile.html">Teil 3 (g5-2c)</a>.</p>
+</div>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — vom Schattenwurf zur Mathematik</h2>
+
+<p>Stell dir vor, eine Strassenlaterne wirft den Schatten eines Velofahrers auf die Strasse. Wie verändert sich der Schatten, wenn die Person näher zur Lampe geht oder weiter weg?</p>
+
+<div class="schatten-box">
+  <div class="sb-row">
+    <label>Abstand Mast → Person \(d\): <span class="sb-val" id="sch-vd">6</span> m</label>
+    <input type="range" id="sch-d" min="1.5" max="10" step="0.1" value="6">
+  </div>
+  <canvas id="sch-canvas" aria-label="Strassenlaterne mit Schatten eines Velofahrers"></canvas>
+  <div class="sb-readout">
+    <div class="rb-item"><span class="rb-lab">Person-Höhe \(h\)</span><span class="rb-val">1.8 m</span></div>
+    <div class="rb-item"><span class="rb-lab">Lampenhöhe \(H\)</span><span class="rb-val">6.0 m</span></div>
+    <div class="rb-item"><span class="rb-lab">Schattenlänge \(s\)</span><span class="rb-val" id="sch-s">2.57 m</span></div>
+    <div class="rb-item"><span class="rb-lab">Mast → Schattenende</span><span class="rb-val" id="sch-ende">8.57 m</span></div>
+  </div>
+  <div class="sb-cap">Verschiebe die Person mit dem Regler. Beobachte: Was bleibt gleich, was verändert sich?</div>
+</div>
+
+<p>Vom Lichtpunkt der Lampe aus werden alle Punkte der Person auf den Boden projiziert. Wenn du die Werte oben vergleichst, fällt auf: das <em>Verhältnis</em> «Mast→Schattenende geteilt durch Mast→Person» bleibt immer gleich, egal wo die Person steht. Dieses konstante Verhältnis ist die mathematische Kernidee dieses Kapitels — der <strong>Streckfaktor</strong> \(k\). Vom Lichtpunkt (dem <em>Streckungszentrum</em> \(Z\)) aus wandert jeder Punkt der Person um denselben Faktor weiter.</p>
+
+<p>Die entstehende Figur hat dieselbe <em>Form</em> wie das Original — sie ist <strong>ähnlich</strong>. Diese Idee ist eine der mächtigsten Werkzeuge der Geometrie: Höhen aus Schattenlängen, Massstäbe auf Karten, Verkleinern beim Drucken oder Photographieren, sogar Höhensatz und Kathetensatz im rechtwinkligen Dreieck sind direkte Anwendungen der Ähnlichkeit.</p>
+
+
+<!-- ══ 3. DARSTELLUNGEN — ANIM 1 ZENTRISCHE STRECKUNG ══ -->
+<h2 id="darstellungen">Darstellungen — Zentrische Streckung</h2>
+
+<p>Wähle ein <strong>Streckungszentrum</strong> \(Z\) und einen <strong>Streckfaktor</strong> \(k\). Jeder Punkt \(P\) wird auf einen Bildpunkt \(P'\) abgebildet, der auf der Geraden durch \(Z\) und \(P\) liegt; sein Abstand zu \(Z\) ist \(|k|\)-mal so gross wie der von \(P\) zu \(Z\). Bei \(k > 0\) liegt \(P'\) auf derselben Seite von \(Z\) wie \(P\), bei \(k < 0\) auf der gegenüberliegenden.</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 1 · Zentrische Streckung — Original bleibt, Bild bewegt sich</div>
+  <div class="anim-layout">
+    <canvas id="cv-streck" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Streckfaktor \(k\)</span>
+          <span class="wert" id="lbl-strK">1.5</span>
+        </div>
+        <input type="range" id="sld-strK" min="-2" max="2" step="0.1" value="1.5">
+      </div>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-str-strahlen" checked>
+        Strahlen \(Z \to P \to P'\) anzeigen
+      </label>
+
+      <div class="formel">
+        \(\overrightarrow{ZP'} = k \cdot \overrightarrow{ZP}\)
+      </div>
+
+      <div class="legende">
+        <div class="legende-titel">Werte</div>
+        <div class="legende-zeile"><span class="lab">\(k\)</span><span class="val" id="leg-strK">1.5</span></div>
+        <div class="legende-zeile"><span class="lab">Streckenfaktor \(|k|\)</span><span class="val" id="leg-strAbs">1.5</span></div>
+        <div class="legende-zeile"><span class="lab">Flächenfaktor \(k^2\)</span><span class="val" id="leg-strFla">2.25</span></div>
+        <div class="legende-zeile"><span class="lab">Orientierung</span><span class="val" id="leg-strOri">erhalten</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-str">
+        Original (blau): festes Dreieck bei \(k = 1\). Bild (orange): wird mit dem Schieber bewegt. Bei \(k = 1\) liegen beide übereinander; bei \(k &lt; 0\) springt das Bild auf die andere Seite von \(Z\).
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Die zentrische Streckung hat vier prägende <strong>Eigenschaften</strong> — sie definieren letztlich, was wir unter „ähnlichen Figuren" verstehen:</p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Eigenschaften der zentrischen Streckung</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <tbody>
+      <tr><td style="white-space:nowrap"><strong>Gleichsinnigkeit (nur bei \(k > 0\))</strong></td><td>Bei \(k > 0\) ist die zentrische Streckung gleichsinnig: die Orientierung der Figur bleibt erhalten. Bei \(k < 0\) ist die Abbildung gegensinnig — die Figur wird zusätzlich am Zentrum punktgespiegelt.</td></tr>
+      <tr><td style="white-space:nowrap"><strong>Parallelentreue</strong></td><td>Parallele Geraden bleiben parallel.</td></tr>
+      <tr><td style="white-space:nowrap"><strong>Winkeltreue</strong></td><td>Das Bild eines Winkels ist stets ein Winkel gleicher Grösse.</td></tr>
+      <tr><td style="white-space:nowrap"><strong>Verhältnistreue</strong></td><td>Das Verhältnis der Längen sich entsprechender Seiten bleibt erhalten. Der Quotient aus Bildstrecke und Originalstrecke ist konstant und gleich dem Streckungsfaktor \(k\).</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:8px">Daraus folgt: <strong>Strecken \(\times |k|\)</strong>, <strong>Flächen \(\times k^2\)</strong>, Volumina im Raum \(\times |k|^3\).</p>
+</div>
+
+
+<!-- ══ 4. STRAHLENSÄTZE ══ -->
+<h2 id="strahlensaetze">Strahlensätze</h2>
+
+<p>Schneidet man zwei <strong>Strahlen</strong>, die von einem gemeinsamen Punkt \(S\) ausgehen, mit zwei <strong>parallelen Geraden</strong> \(AB\) und \(A'B'\), so entstehen Strecken auf den Strahlen und auf den Parallelen, deren Verhältnisse miteinander gekoppelt sind. Das sind die <strong>Strahlensätze</strong> — sie folgen direkt aus der zentrischen Streckung mit Zentrum \(S\).</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 2 · Strahlensätze — 1. und 2. Strahlensatz</div>
+  <div class="anim-layout">
+    <canvas id="cv-strahl" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Welcher Satz?</div>
+        <div class="chips" id="strahl-chips">
+          <button class="chip aktiv" data-satz="1">1. Strahlensatz</button>
+          <button class="chip" data-satz="2">2. Strahlensatz</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="feld-titel">Situation</div>
+        <div class="chips" id="strahl-sit-chips">
+          <button class="chip aktiv" data-sit="A">A</button>
+          <button class="chip" data-sit="B">B</button>
+        </div>
+      </div>
+
+      <div class="regler">
+        <div class="regler-label">
+          <span>Schritt</span>
+          <span class="wert" id="lbl-strSchritt">0</span><span>&nbsp;/&nbsp;5</span>
+        </div>
+        <input type="range" id="sld-strSchritt" min="0" max="5" step="1" value="0">
+      </div>
+
+      <div class="formel" id="formel-strahl-bez" style="text-align:center; font-size:1.1rem; margin-top:6px">
+        <!-- wird von JS gefüllt -->
+      </div>
+      <div class="formel" id="formel-strahl-wert" style="text-align:center; font-size:1.05rem; margin-top:4px">
+        <!-- wird von JS gefüllt -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ 1. Strahlensatz (ohne Parallelenabschnitte)</div>
+  <p>Werden zwei Strahlen mit gemeinsamem Anfangspunkt \(S\) von zwei Parallelen \(AB\) und \(A'B'\) (\(AB \parallel A'B'\)) geschnitten, dann stehen die <strong>Strahlenabschnitte</strong> im gleichen Verhältnis:</p>
+  <p>\[\overline{SA} : \overline{SA'} = \overline{SB} : \overline{SB'}\]</p>
+  <p>und gleichwertig</p>
+  <p>\[\overline{SA} : \overline{AA'} = \overline{SB} : \overline{BB'}\]</p>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ 2. Strahlensatz (mit Parallelenabschnitten)</div>
+  <p>Unter denselben Voraussetzungen stehen die <strong>Parallelenabschnitte</strong> \(\overline{AB}\) und \(\overline{A'B'}\) im gleichen Verhältnis wie die zugehörigen Strahlenabschnitte:</p>
+  <p>\[\overline{SA} : \overline{SA'} = \overline{AB} : \overline{A'B'} \qquad\text{und}\qquad \overline{SB} : \overline{SB'} = \overline{AB} : \overline{A'B'}\]</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Umkehrung des 1. Strahlensatzes</div>
+  <p>Gilt \(\overline{SA} : \overline{SA'} = \overline{SB} : \overline{SB'}\), dann sind die Geraden \(AB\) und \(A'B'\) zueinander <strong>parallel</strong>. Das ist die übliche Konstruktion einer Parallelen durch einen vorgegebenen Punkt.</p>
+</div>
+
+
+<!-- ══ 5. ÄHNLICHE FIGUREN — ANIM 3 ══ -->
+<h2 id="aehnlichkeit">Ähnliche Figuren — Dreieck, Rechteck, Kreis</h2>
+
+<p>Eine zentrische Streckung erzeugt aus jeder Figur eine ähnliche Kopie. Probier es an verschiedenen Figuren aus: Dreieck, Rechteck, Kreis. Beobachte: Winkel bleiben gleich, alle Strecken werden mit \(|k|\) skaliert, Flächen mit \(k^2\).</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 3 · Ähnlichkeit bei Dreiecken, Vierecken und Kreisen</div>
+  <div class="anim-layout">
+    <canvas id="cv-figur" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Figur wählen</div>
+        <div class="chips" id="fig-chips">
+          <button class="chip aktiv" data-fig="dreieck">Dreieck</button>
+          <button class="chip" data-fig="rechteck">Rechteck</button>
+          <button class="chip" data-fig="kreis">Kreis</button>
+        </div>
+      </div>
+
+      <div class="regler">
+        <div class="regler-label">
+          <span>Streckfaktor \(k\)</span>
+          <span class="wert" id="lbl-figK">1.5</span>
+        </div>
+        <input type="range" id="sld-figK" min="-2" max="2" step="0.1" value="1.5">
+      </div>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-fig-strahlen" checked>
+        Strahlen vom Zentrum anzeigen
+      </label>
+
+      <div class="formel">
+        \(\dfrac{a'}{a} = \dfrac{b'}{b} = \ldots = k \qquad \dfrac{A'}{A} = k^2\)
+      </div>
+
+      <div class="legende">
+        <div class="legende-titel">Werte</div>
+        <div class="legende-zeile"><span class="lab">\(k\)</span><span class="val" id="leg-figK">1.5</span></div>
+        <div class="legende-zeile"><span class="lab">Streckenfaktor \(|k|\)</span><span class="val" id="leg-figStreck">1.5</span></div>
+        <div class="legende-zeile"><span class="lab">Flächenfaktor \(k^2\)</span><span class="val" id="leg-figFla">2.25</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-fig">
+        Die Form bleibt erhalten. Längen wachsen linear mit \(|k|\), Flächen quadratisch mit \(k^2\). Bei doppeltem \(k\) hat die Bildfigur viermal so viel Fläche.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Ähnliche Figuren</div>
+  <p>Zwei Figuren \(F_1\) und \(F_2\) heissen <strong>ähnlich</strong>, wenn sie durch eine <strong>Ähnlichkeitsabbildung</strong> ineinander überführt werden können. Notation: \(F_1 \sim F_2\).</p>
+  <p style="margin-top:6px">Eine Ähnlichkeitsabbildung ist eine zentrische Streckung, eventuell kombiniert mit einer Kongruenzabbildung (Verschiebung, Drehung, Spiegelung). Gleichwertig: Figuren sind ähnlich, wenn sie durch eine zentrische Streckung in zueinander kongruente Figuren übergeführt werden können.</p>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Eigenschaften ähnlicher Figuren</div>
+  <p>Sich entsprechende <strong>Winkel sind gleich gross</strong>:</p>
+  <p>\[\alpha = \alpha', \quad \beta = \beta', \quad \ldots\]</p>
+  <p>Sich entsprechende <strong>Streckenverhältnisse sind konstant</strong> (Ähnlichkeitsfaktor \(k\)):</p>
+  <p>\[\frac{a'}{a} = \frac{b'}{b} = \ldots = k\]</p>
+  <p>Die <strong>Flächeninhalte verhalten sich wie die Quadrate</strong> der Streckenverhältnisse:</p>
+  <p>\[\frac{A'}{A} = \left(\frac{a'}{a}\right)^2 = \left(\frac{b'}{b}\right)^2 = \ldots = k^2\]</p>
+</div>
+
+
+<!-- ══ 6. ÄHNLICHKEITSSÄTZE — ANIM 4 ══ -->
+<h2 id="aehnlichkeitssaetze">Ähnlichkeitssätze für Dreiecke</h2>
+
+<p>Wann sind zwei Dreiecke ähnlich? Es genügen — analog zu den Kongruenzsätzen aus 5.2a — schon wenige Stücke, um die Ähnlichkeit zu garantieren. Der <strong>Hauptähnlichkeitssatz</strong> verlangt nur zwei gleiche Winkel; weitere Sätze ergeben sich aus Seitenverhältnissen und Winkeln.</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 4 · Ähnlichkeitssätze — Hauptsatz und Varianten</div>
+  <div class="anim-layout">
+    <canvas id="cv-aehnSatz" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Ähnlichkeitssatz</div>
+        <div class="chips" id="aehn-chips">
+          <button class="chip aktiv" data-satz="WW">WW (Hauptsatz)</button>
+          <button class="chip" data-satz="sss">sss</button>
+          <button class="chip" data-satz="sWs">sWs</button>
+          <button class="chip" data-satz="SsW">SsW</button>
+        </div>
+      </div>
+
+      <div class="regler">
+        <div class="regler-label">
+          <span>Streckfaktor für 2. Dreieck</span>
+          <span class="wert" id="lbl-aehnK">1.4</span>
+        </div>
+        <input type="range" id="sld-aehnK" min="0.6" max="1.8" step="0.1" value="1.4">
+      </div>
+
+      <div class="formel" id="formel-aehn">
+        WW: \(\alpha = \alpha'\) und \(\beta = \beta'\) \(\Rightarrow\) ähnlich
+      </div>
+
+      <div class="legende" id="leg-aehn-box">
+        <div class="legende-titel">Gegebene Stücke</div>
+        <div class="legende-zeile"><span class="lab">α</span><span class="val">50°</span></div>
+        <div class="legende-zeile"><span class="lab">β</span><span class="val">70°</span></div>
+        <div class="legende-zeile"><span class="lab">γ</span><span class="val">60° (folgt)</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-aehn">
+        <strong>WW-Satz (Hauptähnlichkeitssatz):</strong> Stimmen zwei Winkel überein, stimmt automatisch der dritte überein (Winkelsumme 180°) — die Dreiecke sind ähnlich.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Hauptähnlichkeitssatz am Dreieck</div>
+  <p><strong>Zwei Dreiecke sind ähnlich, wenn sie in zwei Winkeln übereinstimmen.</strong></p>
+  <p style="margin-top:6px">Kommentar: Wenn zwei Winkel gleich gross sind, ist wegen der Innenwinkelsumme \(180°\) auch der dritte Winkel gleich gross — also stimmen alle Winkel überein.</p>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Weitere Ähnlichkeitssätze am Dreieck</div>
+  <p>Zwei Dreiecke sind ähnlich, wenn sie übereinstimmen in:</p>
+  <ul style="margin-left:1.4em;margin-top:6px;line-height:1.7">
+    <li>im <strong>Verhältnis entsprechender Seiten</strong> (sss),</li>
+    <li>im <strong>Verhältnis zweier entsprechender Seiten und dem eingeschlossenen Winkel</strong> (sWs),</li>
+    <li>im <strong>Verhältnis zweier entsprechender Seiten und im Gegenwinkel der jeweils grösseren Seite</strong> (SsW).</li>
+  </ul>
+  <p style="margin-top:6px">Vergleich zu den Kongruenzsätzen (5.2a): Statt <em>gleicher Seitenlängen</em> werden <em>gleiche Seitenverhältnisse</em> verlangt — die Form ist dieselbe.</p>
+  <p style="margin-top:6px"><strong>Schreibweise:</strong> Bei den Kongruenzsätzen (SSS, SWS, WSW, SsW) steht <em>grosses S</em> für eine konkrete Seitenlänge. Bei den Ähnlichkeitssätzen (sss, sWs, SsW) steht <em>kleines s</em> für ein Seitenverhältnis. Beim SsW-Satz markiert das <em>grosse S</em> ausnahmsweise die <strong>grössere</strong> der beiden Seiten — diese Konvention ist von der Kongruenz übernommen.</p>
+</div>
+
+
+<!-- ══ 7. RECHTWINKLIGES DREIECK — ANIM 5 ══ -->
+<h3 id="recht-dreieck">Ähnliche Dreiecke im rechtwinkligen Dreieck <a class="quer" href="g5-2a-dreiecke.html#pythagoras">↩ 5.2a</a></h3>
+
+<p>Zerlegt man ein rechtwinkliges Dreieck durch die <strong>Höhe \(h\) auf die Hypotenuse</strong>, entstehen zwei kleinere Dreiecke, die zum ursprünglichen ähnlich sind — und untereinander auch. Aus diesen Ähnlichkeiten folgen direkt der <strong>Höhensatz</strong> und der <strong>Kathetensatz</strong> (Satzgruppe des Pythagoras, siehe 5.2a).</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 5 · Höhe im rechtwinkligen Dreieck — drei ähnliche Dreiecke</div>
+  <div class="anim-layout">
+    <canvas id="cv-recht" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Teildreieck hervorheben</div>
+        <div class="chips" id="recht-chips">
+          <button class="chip aktiv" data-tri="ABC">Ganzes Dreieck ABC</button>
+          <button class="chip" data-tri="AHC">Links AHC (mit α)</button>
+          <button class="chip" data-tri="CHB">Rechts CHB (mit β)</button>
+        </div>
+      </div>
+
+      <div class="regler">
+        <div class="regler-label">
+          <span>Form (Winkel α)</span>
+          <span class="wert" id="lbl-rAlpha">35°</span>
+        </div>
+        <input type="range" id="sld-rAlpha" min="20" max="70" step="5" value="35">
+      </div>
+
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-r-bezeichnung" checked>
+        Bezeichnungen (a, b, c, p, q, h) anzeigen
+      </label>
+
+      <div class="formel">
+        \(\triangle ABC \sim \triangle AHC \sim \triangle CHB\)
+      </div>
+
+      <div class="legende">
+        <div class="legende-titel">Werte (c = 10 fest)</div>
+        <div class="legende-zeile"><span class="lab">\(\alpha\)</span><span class="val" id="leg-rA">35°</span></div>
+        <div class="legende-zeile"><span class="lab">\(\beta\)</span><span class="val" id="leg-rB">55°</span></div>
+        <div class="legende-zeile"><span class="lab">\(a\) (Kathete bei A)</span><span class="val" id="leg-ra">8.19</span></div>
+        <div class="legende-zeile"><span class="lab">\(b\) (Kathete bei B)</span><span class="val" id="leg-rb">5.74</span></div>
+        <div class="legende-zeile"><span class="lab">\(p\) (Hyp.-Abschnitt)</span><span class="val" id="leg-rp">6.71</span></div>
+        <div class="legende-zeile"><span class="lab">\(q\) (Hyp.-Abschnitt)</span><span class="val" id="leg-rq">3.29</span></div>
+        <div class="legende-zeile"><span class="lab">\(h\) (Höhe)</span><span class="val" id="leg-rh">4.70</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-recht">
+        Verschiebe \(\alpha\): die drei Dreiecke ABC, AHC, CHB sind stets ähnlich. Verhältnisse: \(b/c = q/b\) (Kathetensatz für \(b^2 = q\cdot c\)) und \(h/q = p/h\) (Höhensatz für \(h^2 = p\cdot q\)).
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Hauptähnlichkeitssatz im rechtwinkligen Dreieck</div>
+  <p>Im rechtwinkligen Dreieck \(ABC\) mit rechtem Winkel bei \(C\) und Höhe \(h\) auf der Hypotenuse \(c\) (Fusspunkt \(H\)) gilt:</p>
+  <p>\[\triangle ABC \,\sim\, \triangle AHC \,\sim\, \triangle CHB\]</p>
+  <p>Daraus folgen direkt:</p>
+  <ul style="margin-left:1.4em;margin-top:6px;line-height:1.7">
+    <li><strong>Kathetensatz:</strong> \(a^2 = p \cdot c\) und \(b^2 = q \cdot c\) (Kathete \(\times\) Kathete = Hypotenusen-Abschnitt \(\times\) Hypotenuse)</li>
+    <li><strong>Höhensatz:</strong> \(h^2 = p \cdot q\) (Höhe-Quadrat = Produkt der Hypotenusen-Abschnitte)</li>
+    <li><strong>Pythagoras</strong> folgt durch Addition: \(a^2 + b^2 = pc + qc = (p+q)c = c^2\).</li>
+  </ul>
+</div>
+
+
+<!-- ══ 8. AUFGABEN ══ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Flächen-Verhältnis = Streckfaktor</div>
+  <p>Wird eine Figur mit Streckfaktor \(k\) zentrisch gestreckt, werden <em>Längen</em> mit \(k\) multipliziert, aber <em>Flächen</em> mit \(k^2\) und <em>Volumen</em> mit \(k^3\). Eine Pizza mit doppeltem Radius (\(k = 2\)) hat also <strong>viermal</strong> so viel Belag, nicht doppelt so viel. Wer das Flächen-Verhältnis als Streckfaktor angibt, übergeht den quadratischen Zusammenhang.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Strahlensatz ohne Parallelen</div>
+  <p>Der Strahlensatz \(\tfrac{|ZA|}{|ZB|} = \tfrac{|ZA'|}{|ZB'|}\) gilt nur, wenn die zwei Geraden \(AA'\) und \(BB'\) <strong>parallel</strong> zueinander sind. Bei beliebigen Schnittlinien stimmt die Verhältnisaussage nicht. Bevor du den Strahlensatz ansetzt: zwei Parallelen im Bild erkennen können. Sonst ist es eine andere Konstellation (z. B. allgemeines Dreieck) und du brauchst Sinus- oder Cosinussatz <a class="quer" href="g5-3-trigonometrische-berechnungen.html">↗ 5.3</a>.</p>
+</div>
+
+<h2 id="aufgaben">Aufgaben</h2>
+
+<p>Sechs Aufgaben rund um Streckung, Strahlensätze, Ähnlichkeit und das rechtwinklige Dreieck. Lösungen sind ausklappbar.</p>
+
+<!-- A1 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Zentrische Streckung</span></div>
+  <p>Ein Dreieck \(ABC\) mit \(A(0|0)\), \(B(6|0)\), \(C(2|4)\) wird vom Zentrum \(Z(1|1)\) mit \(k = 2\) gestreckt. Bestimme die Bildpunkte \(A', B', C'\) und den Flächenfaktor.</p>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2d-a1')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2d-a1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(\overrightarrow{ZP'} = 2\,\overrightarrow{ZP}\), also \(P' = Z + 2(P - Z) = 2P - Z\).</p>
+      <p>\(A' = 2(0|0) - (1|1) = (-1|-1)\), \(B' = 2(6|0) - (1|1) = (11|-1)\), \(C' = 2(2|4) - (1|1) = (3|7)\).</p>
+      <p>Flächenfaktor \(k^2 = 4\), also \(A' = 4 \cdot A_{\triangle ABC}\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">1. Strahlensatz</span></div>
+  <p>Vom Punkt \(S\) gehen zwei Strahlen aus. Auf dem ersten liegen \(A\) und \(A'\) mit \(\overline{SA} = 4\) und \(\overline{SA'} = 10\). Auf dem zweiten liegt \(B\) mit \(\overline{SB} = 3\); die Geraden \(AB\) und \(A'B'\) sind parallel. Bestimme \(\overline{SB'}\) und \(\overline{BB'}\).</p>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2d-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2d-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(\dfrac{\overline{SA}}{\overline{SA'}} = \dfrac{\overline{SB}}{\overline{SB'}}\), also \(\dfrac{4}{10} = \dfrac{3}{\overline{SB'}}\). Daraus \(\overline{SB'} = \dfrac{10\cdot 3}{4} = 7.5\). \(\overline{BB'} = \overline{SB'} - \overline{SB} = 4.5\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">2. Strahlensatz</span></div>
+  <p>Mit \(\overline{SA} = 5\), \(\overline{SA'} = 12\) und \(\overline{AB} = 4\) (auf der ersten Parallelen). Berechne die Länge \(\overline{A'B'}\) der zweiten Parallelen, wenn \(AB \parallel A'B'\).</p>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2d-a3')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2d-a3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(\dfrac{\overline{SA}}{\overline{SA'}} = \dfrac{\overline{AB}}{\overline{A'B'}}\), also \(\dfrac{5}{12} = \dfrac{4}{\overline{A'B'}}\), und \(\overline{A'B'} = \dfrac{12\cdot 4}{5} = 9.6\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Ähnlichkeit über WW und sss</span></div>
+    <ol class="aufg-liste">
+    <li>Zwei Dreiecke haben jeweils einen Winkel \(40°\) und einen Winkel \(75°\). Sind sie ähnlich? Begründe.</li>
+    <li>Dreieck \(D_1\) hat die Seiten \(3,\;4,\;5\), Dreieck \(D_2\) hat die Seiten \(6,\;8,\;10\). Sind sie ähnlich? Wenn ja, mit welchem Streckfaktor? Was, wenn \(D_2\) die Seiten \(6,\;8,\;9\) hätte?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2d-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2d-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Ja, die Dreiecke sind ähnlich (Hauptähnlichkeitssatz WW). Aus \(40° + 75° = 115°\) folgt für den dritten Winkel \(180° - 115° = 65°\). Da alle drei Winkel übereinstimmen, sind die Dreiecke ähnlich.</li>
+        <li><strong>3-4-5 vs. 6-8-10:</strong> Verhältnisse \( \tfrac{6}{3} = \tfrac{8}{4} = \tfrac{10}{5} = 2 \) — alle drei Seitenverhältnisse stimmen überein. Nach <strong>sss</strong> sind die Dreiecke ähnlich mit Streckfaktor \(k = 2\). Beide sind übrigens rechtwinklig (pythagoräisches Tripel).</li>
+      </ol>
+      <p><strong>Kontrast 3-4-5 vs. 6-8-9:</strong> Verhältnisse \( \tfrac{6}{3} = 2,\;\tfrac{8}{4} = 2,\;\tfrac{9}{5} = 1.8 \) — die drei Verhältnisse sind <em>nicht</em> gleich. Die Dreiecke sind <strong>nicht ähnlich</strong>. Sehr wichtig: <em>zwei</em> übereinstimmende Verhältnisse genügen nicht, alle <em>drei</em> müssen passen.</p>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Kathetensatz und Höhensatz</span></div>
+  <p>Im rechtwinkligen Dreieck \(ABC\) (rechter Winkel bei \(C\)) mit Hypotenuse \(c = 25\) und Hypotenusenabschnitt \(p = 16\) (von \(B\) aus). Berechne \(q\), \(a\), \(b\) und die Höhe \(h\).</p>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2d-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2d-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(q = c - p = 25 - 16 = 9\).</p>
+      <p>Kathetensatz: \(a^2 = p \cdot c = 16 \cdot 25 = 400\), also \(a = 20\). Und \(b^2 = q \cdot c = 9 \cdot 25 = 225\), also \(b = 15\).</p>
+      <p>Höhensatz: \(h^2 = p \cdot q = 16 \cdot 9 = 144\), also \(h = 12\).</p>
+      <p>Probe: \(a^2 + b^2 = 400 + 225 = 625 = c^2\). ✓</p>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Schattenwurf (Höhenmessung)</span></div>
+  <p>Ein Stab von 1.80 m Höhe wirft einen Schatten von 1.20 m. Zur gleichen Zeit wirft ein Baum einen Schatten von 7.80 m. Wie hoch ist der Baum?</p>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2d-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2d-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Wegen gleichem Sonnenstand sind die Schattendreiecke ähnlich (WW). Verhältnis Höhe : Schatten ist konstant:</p>
+      <p>\[\frac{h_{Baum}}{7.80} = \frac{1.80}{1.20} \quad\Rightarrow\quad h_{Baum} = 7.80 \cdot 1.5 = 11.70\,\text{m}\]</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 9. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Bauplan im Massstab vergrössern</span></div>
+  <p>Ein Architekt hat einen Bauplan im Massstab \(1{:}200\) gezeichnet. Auf dem Plan ist ein quadratischer Raum mit Seitenlänge \(2.5\,\text{cm}\) eingezeichnet, dessen Wandbild mit \(0.8\,\text{cm}\) Höhe markiert ist. Der Plan soll auf das Doppelte vergrössert werden (neuer Massstab \(1{:}100\)).</p>
+<ol class="aufg-liste">
+  <li>Welche reale Seitenlänge hat der Raum, und welche Wandbildhöhe in der Realität?</li>
+  <li>Welche Seitenlänge und welche Wandbildhöhe haben die Elemente auf dem neuen, vergrösserten Plan?</li>
+  <li>Wie verhält sich die Fläche des Raumquadrats auf dem neuen Plan zum alten?</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2d-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2d-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Massstab \(1{:}200\) heisst: 1 cm auf dem Plan entspricht 200 cm = 2 m in der Realität. Raum: \(2.5\,\text{cm} \cdot 200 = 500\,\text{cm} = 5\,\text{m}\) Seitenlänge. Wandbild: \(0.8\,\text{cm} \cdot 200 = 160\,\text{cm} = 1.60\,\text{m}\) hoch.</li>
+        <li>Plan-Vergrösserung um Faktor \(k = 2\) (\(1{:}200 \to 1{:}100\)): Raum \(5\,\text{cm}\), Wandbild \(1.6\,\text{cm}\) — alle Längen doppelt so gross auf dem Papier.</li>
+        <li>Fläche des Raumquadrats alt: \(2.5^2 = 6.25\,\text{cm}^2\); neu: \(5^2 = 25\,\text{cm}^2\). Verhältnis \(25 : 6.25 = 4 : 1\). Bestätigt: Flächen-Verhältnis = \(k^2\) — die Fläche wird viermal so gross, wenn die Längen doppelt so gross werden. Klassischer Fall der zentrischen Streckung.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Zentrische Streckung mit Faktor \(k\) verändert <strong>Längen um \(|k|\)</strong>, aber <strong>Winkel und Verhältnisse bleiben gleich</strong> — daraus folgt direkt Ähnlichkeit. Die <strong>Strahlensätze</strong> sind die rechnerische Form dieser Beobachtung: gleiche Verhältnisse auf beiden Strahlen, gleiche Verhältnisse zwischen Strahl und Parallele. <strong>Flächen skalieren mit \(k^2\)</strong>, Volumen mit \(k^3\) — das ist der Grund, warum eine doppelt so grosse Pizza viermal mehr Belag braucht.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead><tr><th>Begriff / Satz</th><th>Aussage</th></tr></thead>
+  <tbody>
+    <tr><td>Zentrische Streckung</td><td>\(\overrightarrow{ZP'} = k \cdot \overrightarrow{ZP}\); Strecken \(\times|k|\), Flächen \(\times k^2\)</td></tr>
+    <tr><td>Eigenschaften</td><td>Gleichsinnig (bei \(k>0\)), parallelentreu, winkeltreu, verhältnistreu</td></tr>
+    <tr><td>1. Strahlensatz</td><td>\(\overline{SA} : \overline{SA'} = \overline{SB} : \overline{SB'}\)</td></tr>
+    <tr><td>2. Strahlensatz</td><td>\(\overline{SA} : \overline{SA'} = \overline{AB} : \overline{A'B'}\)</td></tr>
+    <tr><td>Umkehrung 1. Strahlensatz</td><td>Gleiche Strahlenverhältnisse \(\Rightarrow\) Geraden parallel</td></tr>
+    <tr><td>Ähnliche Figuren</td><td>Gleiche Winkel; \(a'/a = b'/b = \ldots = k\); \(A'/A = k^2\)</td></tr>
+    <tr><td>Hauptähnlichkeitssatz</td><td>Dreiecke mit zwei gleichen Winkeln sind ähnlich (WW)</td></tr>
+    <tr><td>Weitere Sätze</td><td>sss, sWs, SsW (mit Seitenverhältnissen statt Seitenlängen)</td></tr>
+    <tr><td>Rechtwinkliges Dreieck</td><td>\(\triangle ABC \sim \triangle AHC \sim \triangle CHB\); daraus Höhensatz \(h^2 = pq\) und Kathetensatz \(a^2 = pc\), \(b^2 = qc\)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 10. DOWNLOADS ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<div class="dl-grid">
+  <a class="dl" href="../downloads/grundlagen/g5-2d-zentrische-streckung-aehnlichkeit/handout.html" target="_blank">
+    <span class="dl-ic">📄</span><div><div class="dl-t">Handout — Theorie</div><div class="dl-s">A4, druckbar · alle Definitionen, Sätze, Plausibilitäts-Tipps</div></div>
+  </a>
+  <a class="dl" href="../downloads/grundlagen/g5-2d-zentrische-streckung-aehnlichkeit/formelauszug.html" target="_blank">
+    <span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">A4, druckbar · alle Formeln auf einer Seite</div></div>
+  </a>
+  <a class="dl" href="../downloads/grundlagen/g5-2d-zentrische-streckung-aehnlichkeit/teste-dich-selbst.html" target="_blank">
+    <span class="dl-ic">✏️</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Multiple-Choice und Kurzfragen mit Lösungen</div></div>
+  </a>
+  <a class="dl" href="../downloads/grundlagen/g5-2d-zentrische-streckung-aehnlichkeit/aufgabenserie.html" target="_blank">
+    <span class="dl-ic">📝</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit ausführlichen Lösungen</div></div>
+  </a>
+  <a class="dl" href="../downloads/grundlagen/g5-2d-zentrische-streckung-aehnlichkeit/ankideck.apkg" download>
+    <span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten für Spaced Repetition · .apkg-Datei</div></div>
+  </a>
+</div>
+
+
+<!-- ══ 11. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid" id="g52d-videos">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lUNbU0fVhEzAxQAuQAj5SJU" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Strahlensatz, Zentrische Streckung, Ähnlichkeit — Playlist</div><div class="lk-s">MathemaTrick · Videos zu Strahlensatz und ähnlichen Dreiecken</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzlpb6FOXyZSlpiNbYI4eqM2" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Strahlensätze und ähnliche Dreiecke — Playlist</div><div class="lk-s">Lehrerschmidt · 1. und 2. Strahlensatz, viele Anwendungsaufgaben</div></div></a>
+  <a class="lk" style="opacity:0.6;cursor:default;" aria-disabled="true">
+    <span class="lk-ic">⏳</span>
+    <div>
+      <div class="lk-t">In Vorbereitung</div>
+      <div class="lk-s">Weitere Quellen zu Ähnlichkeit und Höhensatz / Kathetensatz folgen beim nächsten Recherche-Lauf.</div>
+    </div>
+  </a>
+  <a class="lk" style="opacity:0.6;cursor:default;" aria-disabled="true">
+    <span class="lk-ic">⏳</span>
+    <div>
+      <div class="lk-t">In Vorbereitung</div>
+      <div class="lk-s">Vorschläge für gute BM-Quellen zur zentrischen Streckung gerne per Issue oder E-Mail.</div>
+    </div>
+  </a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid" id="g52d-aufgaben">
+  <a href="https://www.sos-mathe.ch/g/g6/g65/aufg_g65.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — G65 Strahlensätze</div><div class="lk-s">Schweizer Aufgabensammlung · klassische Strahlensatz-Aufgaben mit Lösungen</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g6/g66/aufg_g66.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — G66 Ähnliche Dreiecke</div><div class="lk-s">Schweizer Aufgabensammlung · Ähnlichkeit, Höhensatz, Kathetensatz · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/27059/strahlensatz" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Strahlensatz</div><div class="lk-s">Lernpfad mit Erklärung, Beispielen und Aufgaben mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/1640/zentrische-streckung" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Zentrische Streckung</div><div class="lk-s">Theorie und Aufgaben · interaktive Lösungen</div></div></a>
+</div>
+
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Grundlagenfach 5.2d Zentrische Streckung und Ähnlichkeit</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script>
+buildNav({
+  bereich:'grundlagen',
+  id:'g5-2d',
+  kapitelNr:'5.2d', kapitelTitel:'Zentrische Streckung und Ähnlichkeit',
+  prev:{nr:'5.2c',titel:'Kreis und Kreisteile',url:'g5-2c-kreis-und-kreisteile.html'},
+  next:{nr:'5.3',titel:'Trigonometrische Berechnungen',url:'g5-3-trigonometrische-berechnungen.html'}
+});
+</script>
+
+<!-- ================================================================ -->
+<!-- ANIMATIONEN — JavaScript                                          -->
+<!-- ================================================================ -->
+<script>
+/* ============================================================
+ *  HELFER
+ * ============================================================ */
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+const css = getComputedStyle(document.documentElement);
+const C = {
+  blau:      (css.getPropertyValue('--blau').trim()       || '#1e3a8a'),
+  blauHell:  (css.getPropertyValue('--blau-hell').trim()  || '#dbeafe'),
+  blauRand:  (css.getPropertyValue('--blau-rand').trim()  || '#93c5fd'),
+  gruen:     (css.getPropertyValue('--gruen').trim()      || '#166534'),
+  rot:       (css.getPropertyValue('--rot').trim()        || '#991b1b'),
+  orange:    (css.getPropertyValue('--orange').trim()     || '#c2410c'),
+  lila:      (css.getPropertyValue('--lila').trim()       || '#6b21a8'),
+  linie:     (css.getPropertyValue('--linie').trim()      || '#cbd5e1'),
+  tinte:     (css.getPropertyValue('--tinte').trim()      || '#0f172a'),
+  tinte2:    (css.getPropertyValue('--tinte-2').trim()    || '#475569'),
+};
+const ORANGE_FILL = 'rgba(194, 65, 12, 0.22)';
+const BLAU_FILL   = 'rgba(30, 58, 138, 0.15)';
+const GRUEN_FILL  = 'rgba(22, 101, 52, 0.25)';
+const LILA_FILL   = 'rgba(107, 33, 168, 0.20)';
+
+function initCv(id) {
+  const cv = document.getElementById(id);
+  if (!cv) return null;
+  // Logische Zeichenfläche aus den initial gesetzten width/height-Attributen lesen.
+  // Diese werden beim ersten Aufruf in dataset gespeichert, damit spätere Aufrufe
+  // (z.B. nach Resize) nicht von den bereits skalierten cv.width-Werten ausgehen.
+  if (!cv.dataset.logicalW) {
+    cv.dataset.logicalW = cv.width;
+    cv.dataset.logicalH = cv.height;
+  }
+  const W = +cv.dataset.logicalW;
+  const H = +cv.dataset.logicalH;
+  // Buffer-Auflösung an Display-Pixel-Ratio anpassen (HiDPI / Retina).
+  // CSS-Grösse kommt vom Layout (width:100% / height:auto im CSS) — wir holen sie
+  // aus getBoundingClientRect (fällt zurück auf logische Grösse, falls Canvas noch
+  // nicht gerendert ist).
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  const cssW = rect.width  || W;
+  const cssH = rect.height || H;
+  const bufW = Math.max(1, Math.round(cssW * dpr));
+  const bufH = Math.max(1, Math.round(cssH * dpr));
+  // Buffer nur dann setzen, wenn sich was geändert hat (vermeidet Flackern und
+  // unnötiges Clear bei jedem Re-Draw).
+  if (cv.width !== bufW || cv.height !== bufH) {
+    cv.width  = bufW;
+    cv.height = bufH;
+  }
+  const ctx = cv.getContext('2d');
+  // Transform zurücksetzen (sonst akkumuliert ctx.scale bei wiederholten Aufrufen)
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  // Skala so setzen, dass logische Koordinaten (0..W / 0..H) auf den echten Buffer mappen.
+  // Damit kann der Rest der Zeichen-Logik unverändert in logischen Koordinaten arbeiten.
+  ctx.scale(bufW / W, bufH / H);
+  ctx.clearRect(0, 0, W, H);
+  return { ctx, W, H, cv };
+}
+function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='middle', weight='600') {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.textAlign = align;
+  ctx.textBaseline = base;
+  ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
+  ctx.fillText(s, x, y);
+  ctx.restore();
+}
+function seg(ctx, p1, p2, color, lw = 2) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]);
+  ctx.lineTo(p2[0], p2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function dashedSeg(ctx, p1, p2, color, lw = 1.5, dash = [5, 4]) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]);
+  ctx.lineTo(p2[0], p2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function dot(ctx, p, color = C.blau, r = 5) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(p[0], p[1], r, 0, 2*Math.PI);
+  ctx.fill();
+  ctx.restore();
+}
+function circleK(ctx, cx, cy, r, color = C.blau, lw = 2) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, 2*Math.PI);
+  ctx.stroke();
+  ctx.restore();
+}
+function fillTriangle(ctx, p1, p2, p3, fillStyle, strokeStyle, lw = 2) {
+  ctx.save();
+  if (fillStyle) { ctx.fillStyle = fillStyle; }
+  if (strokeStyle) { ctx.strokeStyle = strokeStyle; ctx.lineWidth = lw; }
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]);
+  ctx.lineTo(p2[0], p2[1]);
+  ctx.lineTo(p3[0], p3[1]);
+  ctx.closePath();
+  if (fillStyle) ctx.fill();
+  if (strokeStyle) ctx.stroke();
+  ctx.restore();
+}
+function rightAngleMarker(ctx, vert, p1, p2, size, color) {
+  // Markiert den rechten Winkel bei `vert`, mit Seiten zu p1 und p2.
+  // Zwei Einheits-Richtungen
+  const u1 = [(p1[0]-vert[0]), (p1[1]-vert[1])];
+  const u2 = [(p2[0]-vert[0]), (p2[1]-vert[1])];
+  const n1 = Math.hypot(u1[0], u1[1]);
+  const n2 = Math.hypot(u2[0], u2[1]);
+  u1[0]/=n1; u1[1]/=n1; u2[0]/=n2; u2[1]/=n2;
+  const A = [vert[0] + u1[0]*size, vert[1] + u1[1]*size];
+  const B = [vert[0] + u1[0]*size + u2[0]*size, vert[1] + u1[1]*size + u2[1]*size];
+  const D = [vert[0] + u2[0]*size, vert[1] + u2[1]*size];
+  ctx.save();
+  ctx.strokeStyle = color || C.tinte2;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(A[0], A[1]);
+  ctx.lineTo(B[0], B[1]);
+  ctx.lineTo(D[0], D[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+
+
+/* ============================================================
+ *  ANIM 1 — Zentrische Streckung (Original bleibt, Bild bewegt sich)
+ * ============================================================ */
+// Anim 1 State (Drag & Drop für Z und Eckpunkte A, B, C).
+// Initialpositionen werden beim ersten drawStreck-Aufruf gesetzt (relativ zur Canvas-Grösse).
+let strPunkte = null;            // {Z, A, B, C} jeweils [x, y] in Canvas-Koord
+let strDragging = null;          // Name des gerade gezogenen Punkts: 'Z', 'A', 'B', 'C' oder null
+let strHover = null;             // Name des unter Maus stehenden Punkts (für Cursor + Highlight)
+const STR_HANDLE_R = 4;          // sichtbarer Radius des Drag-Handles
+const STR_HIT_TOL = 14;          // Trefferradius für Klick/Touch (grosszügig für Touch)
+
+// Wandelt einen Pointer-Event in Canvas-interne (logische) Koordinaten um.
+// Achtet auf CSS-Skalierung (Canvas hat width:100% / height:auto im Layout) und
+// auf die logische Auflösung in dataset.logicalW/H (siehe initCv).
+function canvasCoordsFromEvent(cv, ev) {
+  const rect = cv.getBoundingClientRect();
+  const logicalW = +cv.dataset.logicalW || cv.width;
+  const logicalH = +cv.dataset.logicalH || cv.height;
+  const sx = logicalW / rect.width;
+  const sy = logicalH / rect.height;
+  return [(ev.clientX - rect.left) * sx, (ev.clientY - rect.top) * sy];
+}
+
+// Hit-Test: liefert Punkt-Name, dessen Position innerhalb tol Pixel um (x,y) liegt;
+// in Reihenfolge {Z, A, B, C} (Z hat Priorität, da später hinzugefügt).
+function strHitTest(x, y, tol) {
+  if (!strPunkte) return null;
+  // Eckpunkte zuerst — sie überlappen Z nicht im Normalfall, aber wenn doch, sollen
+  // sie greifbar bleiben. Wir prüfen alle und nehmen den NÄCHSTEN.
+  let best = null, bestD2 = tol * tol;
+  for (const name of ['Z', 'A', 'B', 'C']) {
+    const p = strPunkte[name];
+    const dx = p[0] - x, dy = p[1] - y;
+    const d2 = dx*dx + dy*dy;
+    if (d2 <= bestD2) { best = name; bestD2 = d2; }
+  }
+  return best;
+}
+
+// Clamp Position auf Canvas-Bereich mit Rand-Margin (damit Punkt nicht verschwindet)
+function strClamp(p, W, H) {
+  const m = 14;
+  return [Math.max(m, Math.min(W - m, p[0])), Math.max(m, Math.min(H - m, p[1]))];
+}
+
+const sldStrK = document.getElementById('sld-strK');
+const lblStrK = document.getElementById('lbl-strK');
+const togStrStrahl = document.getElementById('tog-str-strahlen');
+const legStrK   = document.getElementById('leg-strK');
+const legStrAbs = document.getElementById('leg-strAbs');
+const legStrFla = document.getElementById('leg-strFla');
+const legStrOri = document.getElementById('leg-strOri');
+const erklStr   = document.getElementById('erkl-str');
+
+function drawStreck() {
+  const r = initCv('cv-streck'); if (!r) return;
+  const { ctx, W, H, cv } = r;
+  const k = +sldStrK.value;
+  lblStrK.textContent = k.toFixed(1);
+
+  // Initialposition beim ersten Aufruf
+  if (!strPunkte) {
+    const Zx = W * 0.50, Zy = H * 0.50;
+    strPunkte = {
+      Z: [Zx, Zy],
+      A: [Zx +  95, Zy - 50],
+      B: [Zx + 110, Zy + 45],
+      C: [Zx +  45, Zy + 25],
+    };
+  }
+  const Z = strPunkte.Z;
+  // Original-Eckpunkte (in Canvas-Koord) und Vektoren von Z aus (für Streckung)
+  const OR_PT = [strPunkte.A, strPunkte.B, strPunkte.C];
+  const REL = OR_PT.map(p => [p[0] - Z[0], p[1] - Z[1]]);
+
+  // Strahlen vom Zentrum durch Original-Eckpunkte verlängert
+  if (togStrStrahl.checked) {
+    for (const rel of REL) {
+      const t = 2.4;
+      const Pmax = [Z[0] + rel[0]*t, Z[1] + rel[1]*t];
+      const Pmin = [Z[0] - rel[0]*t, Z[1] - rel[1]*t];
+      seg(ctx, Pmin, Pmax, C.linie, 1);
+    }
+  }
+
+  // Original-Dreieck (blau)
+  fillTriangle(ctx, OR_PT[0], OR_PT[1], OR_PT[2], BLAU_FILL, C.blau, 2);
+
+  // Bild-Dreieck bei aktuellem k (orange)
+  const BI_PT = REL.map(rel => [Z[0] + k*rel[0], Z[1] + k*rel[1]]);
+  if (Math.abs(k) > 0.05) {
+    fillTriangle(ctx, BI_PT[0], BI_PT[1], BI_PT[2], ORANGE_FILL, C.orange, 2.4);
+  }
+
+  // Drag-Handles: Z und Eckpunkte als interaktive Kreise zeichnen
+  // (über den Linien, damit anklickbar)
+  const labels = ['A', 'B', 'C'];
+  for (let i = 0; i < 3; i++) {
+    const isHover = (strHover === labels[i]) || (strDragging === labels[i]);
+    // Halo-Ring bei Hover/Drag (etwas grösser als Punkt, deutet die Hit-Area an)
+    if (isHover) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(31, 90, 168, 0.18)';
+      ctx.beginPath();
+      ctx.arc(OR_PT[i][0], OR_PT[i][1], STR_HANDLE_R + 6, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.restore();
+    }
+    dot(ctx, OR_PT[i], C.blau, STR_HANDLE_R);
+    // Eckpunkt-Beschriftung versetzt nach aussen (vom Zentrum Z weg)
+    const n = Math.hypot(REL[i][0], REL[i][1]) || 1;
+    txt(ctx, OR_PT[i][0] + REL[i][0]/n*16, OR_PT[i][1] + REL[i][1]/n*16, labels[i], C.blau, 13);
+    // Bild-Label (orange) nur wenn deutlich von Original entfernt
+    if (Math.abs(k) > 0.05 && Math.abs(k - 1) > 0.1) {
+      const sgn = (k >= 0 ? 1 : -1);
+      txt(ctx, BI_PT[i][0] + REL[i][0]*sgn/n*14, BI_PT[i][1] + REL[i][1]*sgn/n*14, labels[i] + "'", C.orange, 13);
+    }
+  }
+
+  // Zentrum Z mit Beschriftung
+  const isZHover = (strHover === 'Z') || (strDragging === 'Z');
+  if (isZHover) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.15)';
+    ctx.beginPath();
+    ctx.arc(Z[0], Z[1], STR_HANDLE_R + 6, 0, 2*Math.PI);
+    ctx.fill();
+    ctx.restore();
+  }
+  dot(ctx, Z, C.tinte, STR_HANDLE_R - 1);
+  txt(ctx, Z[0] + 14, Z[1] - 14, 'Z', C.tinte, 15, 'left', 'middle', '700');
+
+  // Live-Werte
+  legStrK.textContent = k.toFixed(2);
+  legStrAbs.textContent = Math.abs(k).toFixed(2);
+  legStrFla.textContent = (k*k).toFixed(2);
+  legStrOri.textContent = k >= 0 ? 'erhalten' : 'gespiegelt';
+
+  // Erklärungstext dynamisch
+  let erkl;
+  if (Math.abs(k) < 0.05) erkl = 'Bei \\(k \\approx 0\\) schrumpft das Bild auf das Zentrum \\(Z\\).';
+  else if (Math.abs(k - 1) < 0.05) erkl = 'Bei \\(k = 1\\) liegen Original und Bild übereinander (Identität).';
+  else if (Math.abs(k + 1) < 0.05) erkl = 'Bei \\(k = -1\\) ist die Streckung eine Punktspiegelung am Zentrum \\(Z\\).';
+  else if (k > 1) erkl = `Vergrösserung: Bild ist um Faktor ${k.toFixed(1)} grösser als Original, Fläche um Faktor ${(k*k).toFixed(2)}.`;
+  else if (k > 0 && k < 1) erkl = `Verkleinerung: Bild ist um Faktor ${k.toFixed(1)} kleiner als Original.`;
+  else erkl = `Negativer Streckfaktor: Bild liegt auf der anderen Seite von \\(Z\\) und ist am Zentrum gespiegelt. \\(|k| = ${Math.abs(k).toFixed(1)}\\).`;
+  erkl += ' <em>Tipp: ziehe Z, A, B oder C — Bild folgt der Streckung von Z aus.</em>';
+  erklStr.innerHTML = erkl;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklStr]);
+}
+
+// Drag & Drop für Anim 1 — wird einmal initialisiert, sobald das Canvas im DOM ist.
+function strInitDrag() {
+  const cv = document.getElementById('cv-streck');
+  if (!cv) return;
+  cv.style.touchAction = 'none';  // wird zwar im CSS gesetzt, hier zur Sicherheit
+  cv.addEventListener('pointerdown', (ev) => {
+    if (!strPunkte) return;
+    const [x, y] = canvasCoordsFromEvent(cv, ev);
+    const hit = strHitTest(x, y, STR_HIT_TOL);
+    if (hit) {
+      strDragging = hit;
+      strHover = hit;
+      cv.setPointerCapture(ev.pointerId);
+      cv.style.cursor = 'grabbing';
+      drawStreck();
+      ev.preventDefault();
+    }
+  });
+  cv.addEventListener('pointermove', (ev) => {
+    if (!strPunkte) return;
+    const [x, y] = canvasCoordsFromEvent(cv, ev);
+    if (strDragging) {
+      const lW = +cv.dataset.logicalW || cv.width;
+      const lH = +cv.dataset.logicalH || cv.height;
+      const newPos = strClamp([x, y], lW, lH);
+      strPunkte[strDragging] = newPos;
+      drawStreck();
+      ev.preventDefault();
+    } else {
+      // Hover-State aktualisieren (für Cursor + Highlight)
+      const hit = strHitTest(x, y, STR_HIT_TOL);
+      if (hit !== strHover) {
+        strHover = hit;
+        cv.style.cursor = hit ? 'grab' : 'default';
+        drawStreck();
+      }
+    }
+  });
+  const endDrag = (ev) => {
+    if (strDragging) {
+      strDragging = null;
+      try { cv.releasePointerCapture(ev.pointerId); } catch(_) {}
+      cv.style.cursor = strHover ? 'grab' : 'default';
+      drawStreck();
+    }
+  };
+  cv.addEventListener('pointerup', endDrag);
+  cv.addEventListener('pointercancel', endDrag);
+  cv.addEventListener('pointerleave', (ev) => {
+    if (strHover && !strDragging) {
+      strHover = null;
+      cv.style.cursor = 'default';
+      drawStreck();
+    }
+  });
+}
+
+sldStrK.addEventListener('input', drawStreck);
+togStrStrahl.addEventListener('change', drawStreck);
+
+
+/* ============================================================
+ *  ANIM 2 — Strahlensätze (Neugestaltung 2026-05-16)
+ *  Aufbau in 5 Schritten, zwei vordefinierte Situationen, Strecken-Einfärbung
+ *  parallel zum schrittweisen Gleichungs-Aufbau (Strecken-Bezeichnungen + Werte).
+ * ============================================================ */
+const sldStrSchritt    = document.getElementById('sld-strSchritt');
+const lblStrSchritt    = document.getElementById('lbl-strSchritt');
+const formelStrahlBez  = document.getElementById('formel-strahl-bez');
+const formelStrahlWert = document.getElementById('formel-strahl-wert');
+const strahlChips      = document.getElementById('strahl-chips');
+const strahlSitChips   = document.getElementById('strahl-sit-chips');
+
+let strSatz = '1';        // '1' oder '2'
+let strSituation = 'A';   // 'A' oder 'B'
+
+// Vordefinierte ganzzahlige Situationen
+const STRAHL_SITUATIONEN = {
+  A: { SA: 2, SB: 3, k: 2 },   // SA'=4, SB'=6
+  B: { SA: 3, SB: 2, k: 3 },   // SA'=9, SB'=6
+};
+
+// Farben für die einzelnen Strecken (in der Reihenfolge der Aufbau-Schritte)
+const STRAHL_FARBE = {
+  SA:  '#1f5aa8',   // blau
+  SAp: '#7c3aed',   // violett (für SA')
+  AAp: '#7c3aed',   // violett (für AA', Variante 2 im 1. Strahlensatz)
+  SB:  '#d97706',   // orange (Strahl 2, beim 1. Strahlensatz)
+  SBp: '#dc2626',   // rot (für SB' beim 1. Strahlensatz)
+  BBp: '#dc2626',   // rot (für BB', Variante 2 im 1. Strahlensatz)
+  // 2. Strahlensatz: eigene Farben für die Parallelenabschnitte AB und A'B',
+  // damit sie sich klar von SB/SB' (orange/rot) unterscheiden.
+  AB:  '#16a34a',   // grün (für AB beim 2. Strahlensatz)
+  ABp: '#0891b2',   // petrol/teal (für A'B' beim 2. Strahlensatz)
+};
+
+strahlChips.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    strahlChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    strSatz = c.dataset.satz;
+    drawStrahl();
+  });
+});
+strahlSitChips.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    strahlSitChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    strSituation = c.dataset.sit;
+    drawStrahl();
+  });
+});
+sldStrSchritt.addEventListener('input', drawStrahl);
+
+function drawStrahl() {
+  const r = initCv('cv-strahl'); if (!r) return;
+  const { ctx, W, H } = r;
+  const sit = STRAHL_SITUATIONEN[strSituation];
+  const SA = sit.SA, SB = sit.SB, k = sit.k;
+  const SAp = SA * k, SBp = SB * k;
+  const schritt = +sldStrSchritt.value;
+  lblStrSchritt.textContent = schritt;
+
+  // Zentrum S links
+  const Sx = 60, Sy = H * 0.5;
+  // Zwei Strahlen, symmetrisch zur Horizontalen um γ/2 = 20.70° nach oben/unten.
+  // Der Winkel zwischen den Strahlen ist γ ≈ 41.41° (cos γ = 0.75) — diese Wahl
+  // sorgt dafür, dass AB und A'B' in beiden vordefinierten Situationen ganzzahlig
+  // werden: AB² = SA² + SB² − 2·SA·SB·cos(γ) = SA² + SB² − 1.5·SA·SB.
+  // Sit A (SA=2, SB=3, k=2): AB = √(4+9−9) = 2,   A'B' = 4.
+  // Sit B (SA=3, SB=2, k=3): AB = √(9+4−9) = 2,   A'B' = 6.
+  const ang1 = -0.3614, ang2 = 0.3614;
+  const dirA = [Math.cos(ang1), Math.sin(ang1)];
+  const dirB = [Math.cos(ang2), Math.sin(ang2)];
+
+  // Skala. Worst case Sit B: SA'=9, dirA[0]=0.95 → 9*0.95*U + 60 ≤ 540 → U ≤ 56.
+  // Sit A worst case: SA'=4 → 4*0.95*U ≤ 470 → U ≤ 124 (locker).
+  // Wir nehmen U = 50, damit Sit B noch breit dargestellt ist und Sit A nicht zu klein.
+  const U = 50;
+
+  // Strahl-Endpunkte
+  const maxRayLen = 11 * U;
+  const ray1End = [Sx + dirA[0]*maxRayLen, Sy + dirA[1]*maxRayLen];
+  const ray2End = [Sx + dirB[0]*maxRayLen, Sy + dirB[1]*maxRayLen];
+
+  // Punkte auf den Strahlen
+  const A  = [Sx + dirA[0]*SA *U, Sy + dirA[1]*SA *U];
+  const B  = [Sx + dirB[0]*SB *U, Sy + dirB[1]*SB *U];
+  const Ap = [Sx + dirA[0]*SAp*U, Sy + dirA[1]*SAp*U];
+  const Bp = [Sx + dirB[0]*SBp*U, Sy + dirB[1]*SBp*U];
+
+  // --- Strahlen-Grundgerüst (hellgrau, immer sichtbar) ---
+  seg(ctx, [Sx, Sy], ray1End, C.linie, 1.2);
+  seg(ctx, [Sx, Sy], ray2End, C.linie, 1.2);
+
+  // --- Parallelen AB und A'B' (immer da, grau, dünn — kein Highlight bis Schritt 3/4) ---
+  seg(ctx, A, B, C.linie, 1.4);
+  seg(ctx, Ap, Bp, C.linie, 1.4);
+
+  // Versatz-Vektoren für SA' und SB': SENKRECHT zum jeweiligen Strahl, nach AUSSEN
+  // (weg vom Innenraum zwischen den beiden Strahlen). Damit SA und SA' als zwei
+  // parallele Strecken sichtbar sind.
+  const OFF = 8;  // Pixel Versatz
+  // Senkrechte auf dirA = (-dirA[1], dirA[0]). Für Strahl 1 (oberer, dirA[1]<0) ist
+  // -dirA[1] > 0 → diese Normale zeigt nach rechts-unten. Wir wollen aber NACH AUSSEN
+  // (= weg von Strahl 2), also für Strahl 1: nach OBEN (negatives y). Drehe um:
+  //   offA = (dirA[1], -dirA[0]) — bei dirA[1]<0 → x negativ, y negativ → nach links-oben.
+  //   Hmm das gibt auch eine schräge Komponente nach links. Besser: nimm reine y-Normale.
+  // Pragmatischer: senkrecht zur Strahlrichtung, mit y-Komponente in gewünschte Richtung:
+  // perpA = (-dirA[1], dirA[0]). Für dirA[1]<0 → perpA = (positiv, positiv) = unten-rechts.
+  // Wir wollen oben → also -perpA = (positiv·(-1), positiv·(-1)) — nein, vorzeichendifferenziert:
+  // Wir wählen das Vorzeichen so, dass die y-Komponente die gewünschte Richtung hat.
+  function makePerp(dir, signY) {
+    let nx = -dir[1], ny = dir[0];
+    if ((ny > 0 && signY < 0) || (ny < 0 && signY > 0)) { nx = -nx; ny = -ny; }
+    return [nx * OFF, ny * OFF];
+  }
+  const offA = makePerp(dirA, -1);   // SA'-Versatz: nach oben (Strahl 1 ist oberer)
+  const offB = makePerp(dirB, +1);   // SB'-Versatz: nach unten (Strahl 2 ist unterer)
+
+  // Hilfsfunktion: Liniensegment mit Versatz parallel verschoben zeichnen,
+  // mit kleinen "Tick"-Markierungen senkrecht an Anfang und Ende — so wird klar,
+  // dass diese Strecke die GANZE Strecke von S bis A' (bzw. S bis B') misst.
+  function segVersetzt(p1, p2, off, color, lw) {
+    const q1 = [p1[0] + off[0], p1[1] + off[1]];
+    const q2 = [p2[0] + off[0], p2[1] + off[1]];
+    seg(ctx, q1, q2, color, lw);
+    // Kleine Anschluss-Striche, die zeigen "diese Versatz-Strecke gehört zu p1...p2"
+    seg(ctx, p1, q1, color, lw * 0.6);
+    seg(ctx, p2, q2, color, lw * 0.6);
+  }
+
+  // --- Farbige Strecken-Einfärbung in Abhängigkeit des aktuellen Schritts ---
+  // Schritt 0: nichts färben — nur Grundgerüst, Punkte und Werte
+  // Schritt 1-4 (1. Strahlensatz): SA, SA' (versetzt), SB, SB' (versetzt) schrittweise
+  // Schritt 5 (1. Strahlensatz): Variante 2 — SA, AA', SB, BB'
+  // Schritt 1-4 (2. Strahlensatz): SA, SA' (versetzt), AB, A'B' schrittweise
+  // Schritt 5 (2. Strahlensatz): Variante 2 — SB, SB' (versetzt), AB, A'B'
+  if (strSatz === '1') {
+    if (schritt >= 1 && schritt <= 4) {
+      if (schritt >= 1) seg(ctx, [Sx, Sy], A,  STRAHL_FARBE.SA,  4);
+      if (schritt >= 2) segVersetzt([Sx, Sy], Ap, offA, STRAHL_FARBE.SAp, 4);   // SA' als ganze Strecke, versetzt
+      if (schritt >= 3) seg(ctx, [Sx, Sy], B,  STRAHL_FARBE.SB,  4);
+      if (schritt >= 4) segVersetzt([Sx, Sy], Bp, offB, STRAHL_FARBE.SBp, 4);   // SB' als ganze Strecke, versetzt
+    } else if (schritt === 5) {
+      // Variante 2: SA : AA' = SB : BB' (Teilstücke direkt auf den Strahlen)
+      seg(ctx, [Sx, Sy], A,  STRAHL_FARBE.SA,  4);
+      seg(ctx, A, Ap,         STRAHL_FARBE.AAp, 4);
+      seg(ctx, [Sx, Sy], B,  STRAHL_FARBE.SB,  4);
+      seg(ctx, B, Bp,         STRAHL_FARBE.BBp, 4);
+    }
+  } else {
+    // 2. Strahlensatz
+    if (schritt >= 1 && schritt <= 4) {
+      if (schritt >= 1) seg(ctx, [Sx, Sy], A,  STRAHL_FARBE.SA,  4);
+      if (schritt >= 2) segVersetzt([Sx, Sy], Ap, offA, STRAHL_FARBE.SAp, 4);   // SA' versetzt
+      if (schritt >= 3) seg(ctx, A, B,          STRAHL_FARBE.AB,  4);
+      if (schritt >= 4) seg(ctx, Ap, Bp,        STRAHL_FARBE.ABp, 4);
+    } else if (schritt === 5) {
+      // Variante 2: SB : SB' = AB : A'B'
+      seg(ctx, [Sx, Sy], B,  STRAHL_FARBE.SB,  4);
+      segVersetzt([Sx, Sy], Bp, offB, STRAHL_FARBE.SBp, 4);   // SB' versetzt
+      seg(ctx, A, B,          STRAHL_FARBE.AB,  4);
+      seg(ctx, Ap, Bp,        STRAHL_FARBE.ABp, 4);
+    }
+  }
+
+  // --- Punkte markieren ---
+  dot(ctx, [Sx, Sy], C.tinte, 4);
+  dot(ctx, A, C.tinte, 4);
+  dot(ctx, B, C.tinte, 4);
+  dot(ctx, Ap, C.tinte, 4);
+  dot(ctx, Bp, C.tinte, 4);
+
+  // --- Punkt-Beschriftungen ---
+  txt(ctx, Sx - 14, Sy, 'S', C.tinte, 15, 'right');
+  txt(ctx, A[0] - 14, A[1] - 4, 'A', C.tinte, 14, 'right');
+  txt(ctx, B[0] - 14, B[1] + 12, 'B', C.tinte, 14, 'right');
+  txt(ctx, Ap[0] + 14, Ap[1] - 4, "A'", C.tinte, 14, 'left');
+  txt(ctx, Bp[0] + 14, Bp[1] + 12, "B'", C.tinte, 14, 'left');
+
+  // --- Werte an den Strecken (immer ab Schritt 0 sichtbar) ---
+  // Strahlenabschnitte: SA, SA', SB, SB'. Auf der äusseren Seite des jeweiligen Strahls.
+  // Versatz von 22 px senkrecht zur Strecke — bei schrägen Strahlen wirkt weniger Abstand
+  // optisch noch wie "auf der Linie".
+  const LABEL_OFFSET = 22;
+  // valLabel mit optionalem 't'-Parameter: t=0.5 = Streckenmitte (Default),
+  // t=0.75 = näher am Endpunkt p2 (weiter weg von p1=S).
+  function valLabel(p1, p2, txtStr, sideOuterDirY, color, t = 0.5) {
+    const mx = p1[0] + (p2[0]-p1[0])*t, my = p1[1] + (p2[1]-p1[1])*t;
+    const dx = p2[0]-p1[0], dy = p2[1]-p1[1];
+    const len = Math.hypot(dx, dy) || 1;
+    let nx = -dy/len, ny = dx/len;
+    if ((ny > 0 && sideOuterDirY < 0) || (ny < 0 && sideOuterDirY > 0)) { nx = -nx; ny = -ny; }
+    txt(ctx, mx + nx*LABEL_OFFSET, my + ny*LABEL_OFFSET, txtStr, color, 12);
+  }
+  // Wie valLabel, aber Label-Seite ist die WEG von refPoint
+  function valLabelAwayFrom(p1, p2, refPoint, txtStr, color) {
+    const mx = (p1[0]+p2[0])/2, my = (p1[1]+p2[1])/2;
+    const dx = p2[0]-p1[0], dy = p2[1]-p1[1];
+    const len = Math.hypot(dx, dy) || 1;
+    let nx = -dy/len, ny = dx/len;
+    const rx = refPoint[0] - mx, ry = refPoint[1] - my;
+    if (nx*rx + ny*ry > 0) { nx = -nx; ny = -ny; }
+    txt(ctx, mx + nx*LABEL_OFFSET, my + ny*LABEL_OFFSET, txtStr, color, 12);
+  }
+  // SA-Label nahe S (auf Streckenmitte), SA'-Label näher an A' (75%)
+  // — so kollidiert das SA'-Label nicht mit der AB-Parallele bei kompakten Situationen.
+  valLabel([Sx, Sy], A,  `SA = ${SA}`,    -1, C.tinte2);
+  valLabel([Sx, Sy], Ap, `SA' = ${SAp}`,  -1, C.tinte2, 0.75);
+  // Werte für SB, SB' (Strahl 2 = unten, Versatz nach unten)
+  valLabel([Sx, Sy], B,  `SB = ${SB}`,    +1, C.tinte2);
+  valLabel([Sx, Sy], Bp, `SB' = ${SBp}`,  +1, C.tinte2, 0.75);
+  // Beim 2. Strahlensatz auch AB und A'B' beschriften — Labels auf der Seite WEG von S
+  if (strSatz === '2') {
+    const ABval  = Math.hypot(B[0]-A[0],  B[1]-A[1])  / U;
+    const ABpval = Math.hypot(Bp[0]-Ap[0], Bp[1]-Ap[1]) / U;
+    // Ganzzahl-Anzeige wenn nahe daran (bei der gewählten Strahlgeometrie sind beide
+    // Werte in den vordefinierten Situationen exakt ganzzahlig)
+    const fmtLbl = (v) => Math.abs(v - Math.round(v)) < 0.02 ? String(Math.round(v)) : v.toFixed(2);
+    valLabelAwayFrom(A, B,   [Sx, Sy], `AB = ${fmtLbl(ABval)}`,    C.tinte2);
+    valLabelAwayFrom(Ap, Bp, [Sx, Sy], `A'B' = ${fmtLbl(ABpval)}`, C.tinte2);
+  }
+
+  // --- Gleichungen schrittweise aufbauen ---
+  // Helper: erzeugt ein <span> mit eingefärbtem Inhalt (für inline-HTML-Gleichungen)
+  function colored(html, color) {
+    return `<span style="color:${color};font-weight:600">${html}</span>`;
+  }
+  let bezGleichung = '';
+  let wertGleichung = '';
+  if (schritt === 0) {
+    // Schritt 0: keine Gleichung — der Lernende sieht zuerst nur die Skizze mit Werten
+    bezGleichung  = '<span style="color:#94a3b8">— Skizze betrachten, dann Schritt 1 wählen —</span>';
+    wertGleichung = '';
+  } else if (strSatz === '1') {
+    if (schritt < 5) {
+      // Variante 1: SA : SA' = SB : SB'
+      const teilSA  = colored(`SA`,  STRAHL_FARBE.SA);
+      const teilSAp = colored(`SA'`, STRAHL_FARBE.SAp);
+      const teilSB  = colored(`SB`,  STRAHL_FARBE.SB);
+      const teilSBp = colored(`SB'`, STRAHL_FARBE.SBp);
+      const wSA  = colored(SA,  STRAHL_FARBE.SA);
+      const wSAp = colored(SAp, STRAHL_FARBE.SAp);
+      const wSB  = colored(SB,  STRAHL_FARBE.SB);
+      const wSBp = colored(SBp, STRAHL_FARBE.SBp);
+      if (schritt === 1) { bezGleichung = teilSA;                                          wertGleichung = wSA; }
+      if (schritt === 2) { bezGleichung = `${teilSA} : ${teilSAp}`;                        wertGleichung = `${wSA} : ${wSAp}`; }
+      if (schritt === 3) { bezGleichung = `${teilSA} : ${teilSAp} = ${teilSB}`;            wertGleichung = `${wSA} : ${wSAp} = ${wSB}`; }
+      if (schritt === 4) { bezGleichung = `${teilSA} : ${teilSAp} = ${teilSB} : ${teilSBp}`; wertGleichung = `${wSA} : ${wSAp} = ${wSB} : ${wSBp}`; }
+    } else {
+      // Variante 2: SA : AA' = SB : BB'
+      const teilSA  = colored(`SA`,  STRAHL_FARBE.SA);
+      const teilAAp = colored(`AA'`, STRAHL_FARBE.AAp);
+      const teilSB  = colored(`SB`,  STRAHL_FARBE.SB);
+      const teilBBp = colored(`BB'`, STRAHL_FARBE.BBp);
+      const wSA  = colored(SA,        STRAHL_FARBE.SA);
+      const wAAp = colored(SAp - SA,  STRAHL_FARBE.AAp);
+      const wSB  = colored(SB,        STRAHL_FARBE.SB);
+      const wBBp = colored(SBp - SB,  STRAHL_FARBE.BBp);
+      bezGleichung  = `${teilSA} : ${teilAAp} = ${teilSB} : ${teilBBp}`;
+      wertGleichung = `${wSA} : ${wAAp} = ${wSB} : ${wBBp}`;
+    }
+  } else {
+    // 2. Strahlensatz
+    // AB und A'B' in Einheiten als gemessene Länge (zwischen den Punkten in Canvas, geteilt durch U)
+    const ABval  = Math.hypot(B[0]-A[0],  B[1]-A[1])  / U;
+    const ABpval = Math.hypot(Bp[0]-Ap[0], Bp[1]-Ap[1]) / U;
+    // Anzeige als Ganzzahl wenn nahe daran, sonst 2 Dezimalstellen
+    const fmt = (v) => Math.abs(v - Math.round(v)) < 0.02 ? String(Math.round(v)) : v.toFixed(2);
+    const ABstr  = fmt(ABval);
+    const ABpstr = fmt(ABpval);
+    if (schritt < 5) {
+      // Variante 1: SA : SA' = AB : A'B'
+      const teilSA  = colored(`SA`,   STRAHL_FARBE.SA);
+      const teilSAp = colored(`SA'`,  STRAHL_FARBE.SAp);
+      const teilAB  = colored(`AB`,   STRAHL_FARBE.AB);
+      const teilABp = colored(`A'B'`, STRAHL_FARBE.ABp);
+      const wSA  = colored(SA,      STRAHL_FARBE.SA);
+      const wSAp = colored(SAp,     STRAHL_FARBE.SAp);
+      const wAB  = colored(ABstr,   STRAHL_FARBE.AB);
+      const wABp = colored(ABpstr,  STRAHL_FARBE.ABp);
+      if (schritt === 1) { bezGleichung = teilSA;                                            wertGleichung = wSA; }
+      if (schritt === 2) { bezGleichung = `${teilSA} : ${teilSAp}`;                          wertGleichung = `${wSA} : ${wSAp}`; }
+      if (schritt === 3) { bezGleichung = `${teilSA} : ${teilSAp} = ${teilAB}`;              wertGleichung = `${wSA} : ${wSAp} = ${wAB}`; }
+      if (schritt === 4) { bezGleichung = `${teilSA} : ${teilSAp} = ${teilAB} : ${teilABp}`; wertGleichung = `${wSA} : ${wSAp} = ${wAB} : ${wABp}`; }
+    } else {
+      // Variante 2: SB : SB' = AB : A'B'
+      const teilSB  = colored(`SB`,   STRAHL_FARBE.SB);
+      const teilSBp = colored(`SB'`,  STRAHL_FARBE.SBp);
+      const teilAB  = colored(`AB`,   STRAHL_FARBE.AB);
+      const teilABp = colored(`A'B'`, STRAHL_FARBE.ABp);
+      const wSB  = colored(SB,      STRAHL_FARBE.SB);
+      const wSBp = colored(SBp,     STRAHL_FARBE.SBp);
+      const wAB  = colored(ABstr,   STRAHL_FARBE.AB);
+      const wABp = colored(ABpstr,  STRAHL_FARBE.ABp);
+      bezGleichung  = `${teilSB} : ${teilSBp} = ${teilAB} : ${teilABp}`;
+      wertGleichung = `${wSB} : ${wSBp} = ${wAB} : ${wABp}`;
+    }
+  }
+  formelStrahlBez.innerHTML  = bezGleichung;
+  formelStrahlWert.innerHTML = wertGleichung;
+}
+
+
+/* ============================================================
+ *  ANIM 3 — Ähnliche Figuren (Dreieck, Rechteck, Kreis)
+ * ============================================================ */
+const sldFigK = document.getElementById('sld-figK');
+const lblFigK = document.getElementById('lbl-figK');
+const togFigStrahl = document.getElementById('tog-fig-strahlen');
+const legFigK = document.getElementById('leg-figK');
+const legFigStreck = document.getElementById('leg-figStreck');
+const legFigFla = document.getElementById('leg-figFla');
+const erklFig = document.getElementById('erkl-fig');
+const figChips = document.getElementById('fig-chips');
+
+let figForm = 'dreieck';
+figChips.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    figChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    figForm = c.dataset.fig;
+    drawFig();
+  });
+});
+
+function drawFig() {
+  const r = initCv('cv-figur'); if (!r) return;
+  const { ctx, W, H } = r;
+  const k = +sldFigK.value;
+  lblFigK.textContent = k.toFixed(1);
+
+  const Zx = W * 0.50, Zy = H * 0.50;
+
+  // Original-Form definieren (Relativkoordinaten zu Z)
+  // |rel_x|*2 ≤ 220 (Reserve 30 in 280) → max |rel_x|=110
+  let pts;  // Liste der Punkte (für Polygon-Figuren); Kreis braucht separat
+  if (figForm === 'dreieck') {
+    pts = [[85, -55], [110, 50], [40, 35]];
+  } else if (figForm === 'rechteck') {
+    pts = [[-50, -45], [100, -45], [100, 40], [-50, 40]];
+  } else {
+    pts = null; // Kreis
+  }
+
+  // Strahlen vom Zentrum durch Eckpunkte (bei Polygon) oder durch Kreis-Spitze
+  if (togFigStrahl.checked) {
+    if (pts) {
+      for (const rel of pts) {
+        const t = 2.4;
+        const Pmax = [Zx + rel[0]*t, Zy + rel[1]*t];
+        const Pmin = [Zx - rel[0]*t, Zy - rel[1]*t];
+        seg(ctx, Pmin, Pmax, C.linie, 1);
+      }
+    } else {
+      // Beim Kreis: Strahlen durch Mittelpunkt-Position
+      const Mrel = [85, 0];   // Originalmittelpunkt rel zu Z
+      const t = 2.4;
+      seg(ctx, [Zx - Mrel[0]*t, Zy - Mrel[1]*t], [Zx + Mrel[0]*t, Zy + Mrel[1]*t], C.linie, 1);
+    }
+  }
+
+  // Original (blau)
+  if (pts) {
+    const OR = pts.map(rel => [Zx + rel[0], Zy + rel[1]]);
+    ctx.save();
+    ctx.fillStyle = BLAU_FILL;
+    ctx.strokeStyle = C.blau;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(OR[0][0], OR[0][1]);
+    for (let i = 1; i < OR.length; i++) ctx.lineTo(OR[i][0], OR[i][1]);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  } else {
+    // Kreis: Mittelpunkt-Versatz rel = (85, 0), Radius 35
+    const Mr = [85, 0];
+    const rad = 35;
+    const Mx = Zx + Mr[0], My = Zy + Mr[1];
+    ctx.save();
+    ctx.fillStyle = BLAU_FILL;
+    ctx.strokeStyle = C.blau;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(Mx, My, rad, 0, 2*Math.PI);
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Bild (orange)
+  if (Math.abs(k) > 0.05) {
+    if (pts) {
+      const BI = pts.map(rel => [Zx + k*rel[0], Zy + k*rel[1]]);
+      ctx.save();
+      ctx.fillStyle = ORANGE_FILL;
+      ctx.strokeStyle = C.orange;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(BI[0][0], BI[0][1]);
+      for (let i = 1; i < BI.length; i++) ctx.lineTo(BI[i][0], BI[i][1]);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    } else {
+      const Mr = [85, 0];
+      const rad = 35;
+      const Mx = Zx + k*Mr[0], My = Zy + k*Mr[1];
+      const rad2 = Math.abs(k) * rad;
+      ctx.save();
+      ctx.fillStyle = ORANGE_FILL;
+      ctx.strokeStyle = C.orange;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.arc(Mx, My, rad2, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  // 4-fache-Fläche-Visualisierung: bei k = ±2 vier kongruente Original-Kopien zeichnen,
+  // die das Bild exakt überdecken (nur für Polygon-Figuren Dreieck und Rechteck).
+  // Beweist visuell die Beziehung Fläche(Bild) = k² · Fläche(Original) für |k| = 2.
+  if (pts && Math.abs(Math.abs(k) - 2) < 0.05) {
+    const sign = k > 0 ? 1 : -1;  // Bei k<0: Original am Zentrum punktgespiegelt
+    // Original (evtl. punktgespiegelt) als Vektor-Liste
+    const baseRel = pts.map(p => [sign*p[0], sign*p[1]]);
+    // Eck-Kopien: für jede Original-Ecke i eine Kopie, deren Ecke i auf der entsprechenden Bild-Ecke liegt
+    // Verschiebung an Ecke i: (k - sign) * pts[i]
+    const kopien = [];
+    for (let i = 0; i < pts.length; i++) {
+      const dx = (k - sign) * pts[i][0];
+      const dy = (k - sign) * pts[i][1];
+      kopien.push(baseRel.map(p => [Zx + p[0] + dx, Zy + p[1] + dy]));
+    }
+    // Mitten-Kopie (nur bei Dreieck und Rechteck strukturell sinnvoll):
+    //   Eckpunkte: Mittelpunkte der Bildkanten = (k/2) · Summe-Nachbarn
+    // Bei Dreieck: 3 Mittelpunkte M(A',B'), M(B',C'), M(A',C') — bildet das Mittendreieck (kongruent, umgedreht)
+    // Bei Rechteck: 4 Mittelpunkte M(A',B'), M(B',C'), M(C',D'), M(A',D') — bildet die mittige Raute, die das mittlere
+    //   Original-Rechteck umfasst. Allerdings ist die Mittelpunkts-Konstruktion beim Rechteck KEIN Rechteck mehr,
+    //   sondern eine Raute. Stattdessen verwenden wir bei Rechtecken keine fünfte Kopie — die vier Eck-Kopien
+    //   überlappen sich bereits in der Mitte und decken zusammen die volle Bildfläche ab.
+    let mittenKopie = null;
+    if (pts.length === 3) {
+      mittenKopie = [];
+      for (let i = 0; i < 3; i++) {
+        const j = (i + 1) % 3;
+        // Mittelpunkt der Bildkante zwischen Eckpunkt i und Eckpunkt j
+        const mx = (k * pts[i][0] + k * pts[j][0]) / 2;
+        const my = (k * pts[i][1] + k * pts[j][1]) / 2;
+        mittenKopie.push([Zx + mx, Zy + my]);
+      }
+    }
+    // Alle Kopien zeichnen — gefüllt mit leicht durchscheinendem Blau, dünner blauer Linie
+    const KOPIE_FILL = 'rgba(31, 90, 168, 0.22)';   // helles Blau, ca. 22 % opak
+    const KOPIE_STROKE = 'rgba(31, 90, 168, 0.85)'; // kräftigeres Blau für die Linie
+    ctx.save();
+    ctx.fillStyle = KOPIE_FILL;
+    ctx.strokeStyle = KOPIE_STROKE;
+    ctx.lineWidth = 1.2;
+    for (const kop of kopien) {
+      ctx.beginPath();
+      ctx.moveTo(kop[0][0], kop[0][1]);
+      for (let i = 1; i < kop.length; i++) ctx.lineTo(kop[i][0], kop[i][1]);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+    if (mittenKopie) {
+      ctx.beginPath();
+      ctx.moveTo(mittenKopie[0][0], mittenKopie[0][1]);
+      for (let i = 1; i < mittenKopie.length; i++) ctx.lineTo(mittenKopie[i][0], mittenKopie[i][1]);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Zentrum Z
+  dot(ctx, [Zx, Zy], C.tinte, 4);
+  txt(ctx, Zx + 12, Zy - 12, 'Z', C.tinte, 15, 'left', 'middle', '700');
+
+  // Werte
+  legFigK.textContent = k.toFixed(2);
+  legFigStreck.textContent = Math.abs(k).toFixed(2);
+  legFigFla.textContent = (k*k).toFixed(2);
+
+  // Erklärung
+  let erkl;
+  const formNames = { dreieck: 'Dreiecks', rechteck: 'Rechtecks', kreis: 'Kreises' };
+  if (Math.abs(k) < 0.05) erkl = 'Bild schrumpft auf den Punkt \\(Z\\).';
+  else if (Math.abs(k - 1) < 0.05) erkl = `Identität: Bild liegt auf dem Original (\\(k = 1\\)).`;
+  else erkl = `Das Bild des ${formNames[figForm]} ist ähnlich zum Original. Strecken: Faktor \\(${Math.abs(k).toFixed(1)}\\), Fläche: Faktor \\(${(k*k).toFixed(2)}\\).`;
+  // Zusatztext bei k = ±2 (nur für Polygon-Figuren): die vierfache Fläche wird gezeigt
+  if (pts && Math.abs(Math.abs(k) - 2) < 0.05) {
+    const figLabel = figForm === 'dreieck' ? 'Dreiecke' : 'Rechtecke';
+    erkl += ` Die hellen blauen ${figLabel} zeigen: vier original-grosse Kopien decken das Bild exakt ab — also Fläche \\(\\times 4 = k^2\\).`;
+  }
+  erklFig.innerHTML = erkl;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklFig]);
+}
+sldFigK.addEventListener('input', drawFig);
+togFigStrahl.addEventListener('change', drawFig);
+
+
+/* ============================================================
+ *  ANIM 4 — Ähnlichkeitssätze (WW / sss / sWs / SsW)
+ * ============================================================ */
+const sldAehnK = document.getElementById('sld-aehnK');
+const lblAehnK = document.getElementById('lbl-aehnK');
+const formelAehn = document.getElementById('formel-aehn');
+const erklAehn = document.getElementById('erkl-aehn');
+const legAehnBox = document.getElementById('leg-aehn-box');
+const aehnChips = document.getElementById('aehn-chips');
+
+let aehnSatz = 'WW';
+aehnChips.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    aehnChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    aehnSatz = c.dataset.satz;
+    drawAehnSatz();
+  });
+});
+
+function drawAehnSatz() {
+  const r = initCv('cv-aehnSatz'); if (!r) return;
+  const { ctx, W, H } = r;
+  const k = +sldAehnK.value;
+  lblAehnK.textContent = k.toFixed(1);
+
+  // Zwei Dreiecke nebeneinander. Original links, Bild rechts.
+  // Original-Dreieck: festgelegt mit α=50°, β=70°, γ=60°
+  // Seitenlängen über Sinussatz: a/sin α = b/sin β = c/sin γ
+  // c (zwischen α und β) sei 5 Einheiten.
+  // Worst case k=1.8: xBp = 60 + offsetX + 5*k*scale ≤ 530
+  // → 60 + 240 + 5*1.8*24 = 60 + 240 + 216 = 516 ok
+  const alpha = 50, beta = 70, gamma = 180 - alpha - beta;
+  const scale = 24;
+  const c0 = 5;
+  const a0 = c0 * Math.sin(alpha*Math.PI/180) / Math.sin(gamma*Math.PI/180);
+  const b0 = c0 * Math.sin(beta *Math.PI/180) / Math.sin(gamma*Math.PI/180);
+
+  // Original-Dreieck mit Eckpunkten A,B,C
+  const cyOff = H * 0.68;
+  const xA = 50, yA = cyOff;
+  const xB = xA + c0 * scale;
+  const yB = cyOff;
+  // C über A nach Winkel α (gegen den Uhrzeigersinn nach oben)
+  const xC = xA + b0 * scale * Math.cos(alpha*Math.PI/180);
+  const yC = yA - b0 * scale * Math.sin(alpha*Math.PI/180);
+
+  // Bild-Dreieck rechts (skaliert um k)
+  const offsetX = 240;
+  const xAp = xA + offsetX;
+  const yAp = cyOff;
+  const xBp = xAp + c0*k * scale;
+  const yBp = cyOff;
+  const xCp = xAp + b0*k * scale * Math.cos(alpha*Math.PI/180);
+  const yCp = yAp - b0*k * scale * Math.sin(alpha*Math.PI/180);
+
+  // Dreiecke zeichnen
+  fillTriangle(ctx, [xA, yA], [xB, yB], [xC, yC], BLAU_FILL, C.blau, 2);
+  fillTriangle(ctx, [xAp, yAp], [xBp, yBp], [xCp, yCp], ORANGE_FILL, C.orange, 2.4);
+
+  // Eckpunkt-Beschriftungen
+  txt(ctx, xA - 10, yA + 12, 'A', C.blau, 13);
+  txt(ctx, xB + 10, yB + 12, 'B', C.blau, 13);
+  txt(ctx, xC, yC - 12, 'C', C.blau, 13);
+  txt(ctx, xAp - 10, yAp + 12, "A'", C.orange, 13);
+  txt(ctx, xBp + 10, yBp + 12, "B'", C.orange, 13);
+  txt(ctx, xCp, yCp - 12, "C'", C.orange, 13);
+
+  // Markierungen je nach Ähnlichkeitssatz
+  ctx.save();
+  if (aehnSatz === 'WW') {
+    // Markiere α und β bei beiden Dreiecken — Labels nahe am Vertex (labelDist=30, knapp hinter Bogen)
+    drawAngleArc(ctx, [xA, yA], [xB, yB], [xC, yC], 22, C.blau, 'α', 30);
+    drawAngleArc(ctx, [xB, yB], [xC, yC], [xA, yA], 22, C.gruen, 'β', 30);
+    drawAngleArc(ctx, [xAp, yAp], [xBp, yBp], [xCp, yCp], 22, C.blau, "α'", 30);
+    drawAngleArc(ctx, [xBp, yBp], [xCp, yCp], [xAp, yAp], 22, C.gruen, "β'", 30);
+  } else if (aehnSatz === 'sss') {
+    // Markiere alle drei Seiten mit Längen
+    midLabelArr(ctx, [xA, yA], [xB, yB], 'c=' + c0, C.blau, 1);
+    midLabelArr(ctx, [xB, yB], [xC, yC], 'a=' + a0.toFixed(2), C.blau, 1);
+    midLabelArr(ctx, [xA, yA], [xC, yC], 'b=' + b0.toFixed(2), C.blau, -1);
+    midLabelArr(ctx, [xAp, yAp], [xBp, yBp], "c'=" + (c0*k).toFixed(2), C.orange, 1);
+    midLabelArr(ctx, [xBp, yBp], [xCp, yCp], "a'=" + (a0*k).toFixed(2), C.orange, 1);
+    midLabelArr(ctx, [xAp, yAp], [xCp, yCp], "b'=" + (b0*k).toFixed(2), C.orange, -1);
+  } else if (aehnSatz === 'sWs') {
+    // Markiere zwei Seiten (b, c) und eingeschlossenen Winkel α (Label nahe am Vertex)
+    midLabelArr(ctx, [xA, yA], [xB, yB], 'c=' + c0, C.blau, 1);
+    midLabelArr(ctx, [xA, yA], [xC, yC], 'b=' + b0.toFixed(2), C.blau, -1);
+    drawAngleArc(ctx, [xA, yA], [xB, yB], [xC, yC], 22, C.lila, 'α', 30);
+    midLabelArr(ctx, [xAp, yAp], [xBp, yBp], "c'=" + (c0*k).toFixed(2), C.orange, 1);
+    midLabelArr(ctx, [xAp, yAp], [xCp, yCp], "b'=" + (b0*k).toFixed(2), C.orange, -1);
+    drawAngleArc(ctx, [xAp, yAp], [xBp, yBp], [xCp, yCp], 22, C.lila, "α'", 30);
+  } else if (aehnSatz === 'SsW') {
+    // Markiere zwei Seiten (a, b) und Gegenwinkel der grösseren (b liegt gegenüber β; Label nahe am Vertex)
+    midLabelArr(ctx, [xA, yA], [xC, yC], 'b=' + b0.toFixed(2), C.blau, -1);
+    midLabelArr(ctx, [xB, yB], [xC, yC], 'a=' + a0.toFixed(2), C.blau, 1);
+    drawAngleArc(ctx, [xB, yB], [xC, yC], [xA, yA], 22, C.gruen, 'β', 30);
+    midLabelArr(ctx, [xAp, yAp], [xCp, yCp], "b'=" + (b0*k).toFixed(2), C.orange, -1);
+    midLabelArr(ctx, [xBp, yBp], [xCp, yCp], "a'=" + (a0*k).toFixed(2), C.orange, 1);
+    drawAngleArc(ctx, [xBp, yBp], [xCp, yCp], [xAp, yAp], 22, C.gruen, "β'", 30);
+  }
+  ctx.restore();
+
+  // Formel + Erklärung umschalten
+  let formel, erkl, legHtml;
+  if (aehnSatz === 'WW') {
+    formel = '\\(\\alpha = \\alpha\'\\) und \\(\\beta = \\beta\'\\) \\(\\Rightarrow\\) Dreiecke ähnlich';
+    erkl = '<strong>WW-Satz (Hauptähnlichkeitssatz):</strong> Stimmen zwei Winkel überein, ist wegen Winkelsumme 180° auch der dritte gleich — die Dreiecke sind ähnlich.';
+    legHtml = '<div class="legende-titel">Gegebene Stücke</div>'
+            + `<div class="legende-zeile"><span class="lab">α = α\'</span><span class="val">${alpha}°</span></div>`
+            + `<div class="legende-zeile"><span class="lab">β = β\'</span><span class="val">${beta}°</span></div>`
+            + `<div class="legende-zeile"><span class="lab">γ (folgt)</span><span class="val">${gamma}°</span></div>`;
+  } else if (aehnSatz === 'sss') {
+    formel = '\\(\\dfrac{a\'}{a} = \\dfrac{b\'}{b} = \\dfrac{c\'}{c} = k\\)';
+    erkl = '<strong>sss-Satz:</strong> Stimmen alle drei Seitenverhältnisse überein, sind die Dreiecke ähnlich. (Kleinbuchstaben, weil es um Verhältnisse geht — nicht um konkrete Seitenlängen wie bei der Kongruenz.)';
+    legHtml = '<div class="legende-titel">Seitenverhältnisse</div>'
+            + `<div class="legende-zeile"><span class="lab">a\'/a</span><span class="val">${k.toFixed(2)}</span></div>`
+            + `<div class="legende-zeile"><span class="lab">b\'/b</span><span class="val">${k.toFixed(2)}</span></div>`
+            + `<div class="legende-zeile"><span class="lab">c\'/c</span><span class="val">${k.toFixed(2)}</span></div>`;
+  } else if (aehnSatz === 'sWs') {
+    formel = '\\(\\dfrac{b\'}{b} = \\dfrac{c\'}{c}\\) und \\(\\alpha = \\alpha\'\\)';
+    erkl = '<strong>sWs-Satz:</strong> Stimmen zwei Seitenverhältnisse und der eingeschlossene Winkel überein, sind die Dreiecke ähnlich.';
+    legHtml = '<div class="legende-titel">Gegebene Stücke</div>'
+            + `<div class="legende-zeile"><span class="lab">b\'/b</span><span class="val">${k.toFixed(2)}</span></div>`
+            + `<div class="legende-zeile"><span class="lab">c\'/c</span><span class="val">${k.toFixed(2)}</span></div>`
+            + `<div class="legende-zeile"><span class="lab">α = α\'</span><span class="val">${alpha}°</span></div>`;
+  } else {
+    formel = '\\(\\dfrac{a\'}{a} = \\dfrac{b\'}{b}\\) und \\(\\beta = \\beta\'\\)';
+    erkl = '<strong>SsW-Satz:</strong> Stimmen zwei Seitenverhältnisse und der Gegenwinkel der grösseren Seite überein, sind die Dreiecke ähnlich. (b ist hier die grössere Seite, β ihr Gegenwinkel.)';
+    legHtml = '<div class="legende-titel">Gegebene Stücke</div>'
+            + `<div class="legende-zeile"><span class="lab">a\'/a</span><span class="val">${k.toFixed(2)}</span></div>`
+            + `<div class="legende-zeile"><span class="lab">b\'/b</span><span class="val">${k.toFixed(2)}</span></div>`
+            + `<div class="legende-zeile"><span class="lab">β = β\'</span><span class="val">${beta}° (zu grösserer Seite b)</span></div>`;
+  }
+  formelAehn.innerHTML = formel;
+  erklAehn.innerHTML = erkl;
+  legAehnBox.innerHTML = legHtml;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([formelAehn, erklAehn]);
+}
+
+function drawAngleArc(ctx, vert, p1, p2, radius, color, label, labelDist) {
+  // Bogen für den KLEINEREN Winkel bei vert zwischen Richtungen vert→p1 und vert→p2.
+  // Label wird auf der Bisektrix dieses kleineren Winkels platziert (per Default
+  // bei radius+14 — also auf der Innen-Seite des Winkels, jenseits des Bogens).
+  // Optional kann labelDist eine andere Distanz wählen (z.B. radius+8 für Label
+  // näher am Vertex).
+  const a1 = Math.atan2(p1[1]-vert[1], p1[0]-vert[0]);
+  const a2 = Math.atan2(p2[1]-vert[1], p2[0]-vert[0]);
+  let diff = ((a2 - a1) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+  let ccw = diff > Math.PI;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.arc(vert[0], vert[1], radius, a1, a2, ccw);
+  ctx.stroke();
+  ctx.restore();
+  // Bisektrix des kleineren Winkels: signed Winkel-Diff in (-π, π], dann halbieren.
+  // (Diese Formel umgeht den ±180°-Branch-Cut von atan2.)
+  const dSigned = ((a2 - a1 + Math.PI) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI) - Math.PI;
+  let mid = a1 + dSigned/2;
+  mid = Math.atan2(Math.sin(mid), Math.cos(mid));
+  const d = (labelDist !== undefined) ? labelDist : (radius + 14);
+  const lx = vert[0] + Math.cos(mid)*d;
+  const ly = vert[1] + Math.sin(mid)*d;
+  txt(ctx, lx, ly, label, color, 13);
+}
+function midLabelArr(ctx, p1, p2, label, color, sidesign=1) {
+  const mx = (p1[0]+p2[0])/2, my = (p1[1]+p2[1])/2;
+  const dx = p2[0]-p1[0], dy = p2[1]-p1[1];
+  const len = Math.hypot(dx, dy) || 1;
+  // Offset 18 — Beschriftung soll deutlich neben der Strecke stehen, nicht auf ihr.
+  // (Reicht auch bei diagonalen Strecken, wo der senkrechte Anteil zum Text-Mittelpunkt
+  //  durch die Textbox-Höhe etwas geschmälert wird.)
+  const nx = -dy/len * 18 * sidesign;
+  const ny =  dx/len * 18 * sidesign;
+  txt(ctx, mx + nx, my + ny, label, color, 12);
+}
+// Rotation um center mit Winkel thetaDeg (Grad). In Canvas-Koord (y nach unten) entspricht
+// +θ einer visuell im Uhrzeigersinn drehenden Bewegung.
+function rotateAround(p, center, thetaDeg) {
+  const rad = thetaDeg * Math.PI / 180;
+  const cs = Math.cos(rad), sn = Math.sin(rad);
+  const dx = p[0] - center[0], dy = p[1] - center[1];
+  return [center[0] + cs*dx - sn*dy, center[1] + sn*dx + cs*dy];
+}
+
+sldAehnK.addEventListener('input', drawAehnSatz);
+
+
+/* ============================================================
+ *  ANIM 5 — Rechtwinkliges Dreieck (Hauptähnlichkeitssatz)
+ * ============================================================ */
+const sldRAlpha = document.getElementById('sld-rAlpha');
+const lblRAlpha = document.getElementById('lbl-rAlpha');
+const togRBez = document.getElementById('tog-r-bezeichnung');
+const legRA = document.getElementById('leg-rA');
+const legRB = document.getElementById('leg-rB');
+const legra = document.getElementById('leg-ra');
+const legrb = document.getElementById('leg-rb');
+const legrp = document.getElementById('leg-rp');
+const legrq = document.getElementById('leg-rq');
+const legrh = document.getElementById('leg-rh');
+const erklRecht = document.getElementById('erkl-recht');
+const rechtChips = document.getElementById('recht-chips');
+
+let rechtTri = 'ABC';
+rechtChips.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    rechtChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    rechtTri = c.dataset.tri;
+    drawRecht();
+  });
+});
+
+function drawRecht() {
+  const r = initCv('cv-recht'); if (!r) return;
+  const { ctx, W, H } = r;
+  const alphaD = +sldRAlpha.value;
+  const beta  = 90 - alphaD;
+  lblRAlpha.textContent = alphaD + '°';
+
+  // Hypotenuse c = 10 (Einheiten). Skala: damit Dreieck schön passt
+  const cVal = 10;
+  // Berechne a (gegenüber α), b (gegenüber β)
+  // a = c sin α, b = c sin β = c cos α
+  const a = cVal * Math.sin(alphaD*Math.PI/180);
+  const b = cVal * Math.cos(alphaD*Math.PI/180);
+  // Höhe h = ab/c, p = a²/c, q = b²/c
+  const h = a*b / cVal;
+  const p = a*a / cVal;
+  const q = b*b / cVal;
+
+  // Skala (Pixel pro Einheit) — Hypotenuse soll ca. 380 px sein
+  const px = 38;
+  // A links unten, B rechts unten, C oben mit rechtwinkel
+  const xA = 90, yA = H * 0.78;
+  const xB = xA + cVal * px;
+  const yB = yA;
+  // C: von A aus mit Winkel α nach oben (Hypotenuse ist AB).
+  // Position von H (Höhenfusspunkt auf AB): q von A entfernt, also xA + q*px
+  const xH = xA + q * px;
+  const yH = yA;
+  // C über H um h
+  const xC = xH;
+  const yC = yA - h * px;
+
+  // Hervorgehobenes Teildreieck: leicht gefüllt
+  if (rechtTri === 'ABC') {
+    fillTriangle(ctx, [xA, yA], [xB, yB], [xC, yC], BLAU_FILL, C.blau, 2.4);
+  } else if (rechtTri === 'AHC') {
+    fillTriangle(ctx, [xA, yA], [xH, yH], [xC, yC], GRUEN_FILL, C.gruen, 2.4);
+    // Anderes Dreieck schwächer
+    fillTriangle(ctx, [xH, yH], [xB, yB], [xC, yC], null, C.linie, 1.2);
+  } else {
+    fillTriangle(ctx, [xH, yH], [xB, yB], [xC, yC], LILA_FILL, C.lila, 2.4);
+    fillTriangle(ctx, [xA, yA], [xH, yH], [xC, yC], null, C.linie, 1.2);
+  }
+  // Höhenlinie immer zeichnen (mit Markierung)
+  seg(ctx, [xC, yC], [xH, yH], C.tinte2, 1.6);
+
+  // Drehkopie an H um 90° — zeigt anschaulich die Ähnlichkeit der zwei Teildreiecke.
+  // Linkes Teildreieck AHC mit α ∈ [45°, 70°]: Kopie im Uhrzeigersinn (visuell)
+  // Rechtes Teildreieck CHB mit α ∈ [20°, 45°]: Kopie im Gegen-Uhrzeigersinn (visuell)
+  // Bei α=45° sind beide Teildreiecke kongruent — die Drehkopie fällt exakt auf das andere.
+  let drehkopie = null;
+  let drehkopieLabels = null;  // [[name, point], ...]
+  if (rechtTri === 'AHC' && alphaD >= 44.5 && alphaD <= 70.5) {
+    // Drehkopie von AHC um H, visuell im UZS (+90°)
+    const Ar = rotateAround([xA, yA], [xH, yH], 90);
+    const Cr = rotateAround([xC, yC], [xH, yH], 90);
+    drehkopie = { pts: [Ar, [xH, yH], Cr], farbe: C.gruen, fill: GRUEN_FILL };
+    drehkopieLabels = [['A\'', Ar], ['C\'', Cr]];
+  } else if (rechtTri === 'CHB' && alphaD >= 19.5 && alphaD <= 45.5) {
+    // Drehkopie von CHB um H, visuell im Gegen-UZS (−90°)
+    const Br = rotateAround([xB, yB], [xH, yH], -90);
+    const Cr = rotateAround([xC, yC], [xH, yH], -90);
+    drehkopie = { pts: [[xH, yH], Br, Cr], farbe: C.lila, fill: LILA_FILL };
+    drehkopieLabels = [['B\'', Br], ['C\'', Cr]];
+  }
+  if (drehkopie) {
+    // Zeichne die Drehkopie als dünne, halb-transparente Füllung
+    ctx.save();
+    ctx.fillStyle = drehkopie.fill;
+    ctx.strokeStyle = drehkopie.farbe;
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([5, 3]);   // gestrichelt — als "Konstruktionslinie"
+    ctx.beginPath();
+    ctx.moveTo(drehkopie.pts[0][0], drehkopie.pts[0][1]);
+    for (let i = 1; i < drehkopie.pts.length; i++) ctx.lineTo(drehkopie.pts[i][0], drehkopie.pts[i][1]);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+    // Eckpunkt-Beschriftungen der gestrichelten Kopie (klein, in Kopie-Farbe)
+    for (const lbl of drehkopieLabels) {
+      const name = lbl[0], pt = lbl[1];
+      // Label etwas vom Vertex weg in eine sinnvolle Richtung (weg vom Höhenfusspunkt H)
+      const dxL = pt[0] - xH, dyL = pt[1] - yH;
+      const len = Math.hypot(dxL, dyL) || 1;
+      const lx = pt[0] + dxL/len * 12;
+      const ly = pt[1] + dyL/len * 12;
+      txt(ctx, lx, ly, name, drehkopie.farbe, 12, 'center', 'middle', '700');
+    }
+  }
+
+  // Rechte Winkel markieren
+  rightAngleMarker(ctx, [xC, yC], [xA, yA], [xB, yB], 10, C.tinte2);
+  rightAngleMarker(ctx, [xH, yH], [xC, yC], [xB, yB], 8, C.tinte2);
+
+  // Punkte
+  dot(ctx, [xA, yA], C.tinte, 4);
+  dot(ctx, [xB, yB], C.tinte, 4);
+  dot(ctx, [xC, yC], C.tinte, 4);
+  dot(ctx, [xH, yH], C.tinte, 3);
+
+  // Eckpunkt-Beschriftungen
+  txt(ctx, xA - 12, yA + 14, 'A', C.tinte, 14);
+  txt(ctx, xB + 12, yB + 14, 'B', C.tinte, 14);
+  txt(ctx, xC, yC - 14, 'C', C.tinte, 14);
+  txt(ctx, xH, yH + 16, 'H', C.tinte2, 13);
+
+  // Streckenbezeichnungen
+  if (togRBez.checked) {
+    // c: Hypotenuse zwischen A und B (unten)
+    txt(ctx, (xA+xB)/2, yA + 32, `c = ${cVal}`, C.tinte2, 13);
+    // q: A bis H, p: H bis B
+    txt(ctx, (xA+xH)/2, yA + 16, `q = ${q.toFixed(2)}`, C.tinte2, 12);
+    txt(ctx, (xH+xB)/2, yA + 16, `p = ${p.toFixed(2)}`, C.tinte2, 12);
+    // b: A nach C (links)
+    const mb = [(xA+xC)/2, (yA+yC)/2];
+    txt(ctx, mb[0] - 16, mb[1] - 6, `b = ${b.toFixed(2)}`, C.tinte2, 12, 'right');
+    // a: B nach C (rechts)
+    const ma = [(xB+xC)/2, (yB+yC)/2];
+    txt(ctx, ma[0] + 16, ma[1] - 6, `a = ${a.toFixed(2)}`, C.tinte2, 12, 'left');
+    // h: zwischen C und H
+    txt(ctx, xH + 12, (yC+yH)/2, `h = ${h.toFixed(2)}`, C.tinte2, 12, 'left');
+    // Winkel
+    drawAngleArc(ctx, [xA, yA], [xB, yB], [xC, yC], 26, C.blau, 'α');
+    drawAngleArc(ctx, [xB, yB], [xC, yC], [xA, yA], 26, C.gruen, 'β');
+    // Winkel bei C: bei links β, bei rechts α (Wechselwinkel der Höhe)
+    // Bei C den linken Sektor markieren (Richtung zu A, dann Richtung zu H)
+    drawAngleArc(ctx, [xC, yC], [xA, yA], [xH, yH], 20, C.gruen, 'β');
+    drawAngleArc(ctx, [xC, yC], [xH, yH], [xB, yB], 20, C.blau, 'α');
+  }
+
+  // Live-Werte
+  legRA.textContent = alphaD + '°';
+  legRB.textContent = beta + '°';
+  legra.textContent = a.toFixed(2);
+  legrb.textContent = b.toFixed(2);
+  legrp.textContent = p.toFixed(2);
+  legrq.textContent = q.toFixed(2);
+  legrh.textContent = h.toFixed(2);
+
+  // Erklärungstext je nach Teildreieck
+  let erkl;
+  if (rechtTri === 'ABC') {
+    erkl = `Das ganze Dreieck ABC: rechter Winkel bei C, Hypotenuse \\(c = ${cVal}\\) auf AB, Katheten \\(a = ${a.toFixed(2)}\\) und \\(b = ${b.toFixed(2)}\\).`;
+  } else if (rechtTri === 'AHC') {
+    erkl = `Teildreieck AHC (links): rechter Winkel bei H, Winkel α bei A bleibt erhalten. Es ist <strong>ähnlich</strong> zu ABC (gemeinsame Winkel α und 90°). Daraus: \\(b/c = q/b\\), also \\(b^2 = q \\cdot c = ${q.toFixed(2)} \\cdot ${cVal} = ${(q*cVal).toFixed(2)}\\) (Kathetensatz).`;
+    if (alphaD >= 44.5 && alphaD <= 70.5) {
+      erkl += ` Die gestrichelte Kopie zeigt AHC, um H um 90° im Uhrzeigersinn gedreht: ${alphaD === 45 ? 'sie fällt genau auf CHB (bei α = 45° sind beide Teildreiecke kongruent)' : 'so wird die Ähnlichkeit zu CHB direkt sichtbar — gleiche Form, anderes Format'}.`;
+    }
+  } else {
+    erkl = `Teildreieck CHB (rechts): rechter Winkel bei H, Winkel β bei B bleibt erhalten. <strong>Ähnlich</strong> zu ABC. Daraus: \\(a/c = p/a\\), also \\(a^2 = p \\cdot c = ${p.toFixed(2)} \\cdot ${cVal} = ${(p*cVal).toFixed(2)}\\) (Kathetensatz).`;
+    if (alphaD >= 19.5 && alphaD <= 45.5) {
+      erkl += ` Die gestrichelte Kopie zeigt CHB, um H um 90° im Gegen-Uhrzeigersinn gedreht: ${alphaD === 45 ? 'sie fällt genau auf AHC (bei α = 45° sind beide Teildreiecke kongruent)' : 'so wird die Ähnlichkeit zu AHC direkt sichtbar — gleiche Form, anderes Format'}.`;
+    }
+  }
+  erklRecht.innerHTML = erkl;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklRecht]);
+}
+sldRAlpha.addEventListener('input', drawRecht);
+togRBez.addEventListener('change', drawRecht);
+
+
+/* ============================================================
+ *  INITIALER RENDER
+ * ============================================================ */
+window.addEventListener('load', () => {
+  drawStreck();
+  strInitDrag();
+  drawStrahl();
+  drawFig();
+  drawAehnSatz();
+  drawRecht();
+});
+window.addEventListener('resize', () => {
+  drawStreck();
+  drawStrahl();
+  drawFig();
+  drawAehnSatz();
+  drawRecht();
+});
+
+/* ============================================================
+ *  EINSTIEGS-ANIM: Strassenlaterne mit Schatten
+ * ============================================================ */
+(function(){
+  const slider = document.getElementById('sch-d');
+  const canvas = document.getElementById('sch-canvas');
+  if (!slider || !canvas) return;
+
+  const H = 6.0;   // Lampenhöhe (m)
+  const h = 1.8;   // Person-Höhe (m)
+  const D_max = 18;  // m, Sichtbereich x-Achse in Logik-Koords (Mast bei x=2)
+  const x_mast = 2.0;  // x-Position des Mastes (m)
+
+  function render(){
+    const d = parseFloat(slider.value);
+    document.getElementById('sch-vd').textContent = d.toFixed(1);
+
+    const schatten_laenge = h * d / (H - h);
+    const ende = d + schatten_laenge;  // Distanz Mast → Schattenende
+    document.getElementById('sch-s').textContent = schatten_laenge.toFixed(2) + ' m';
+    document.getElementById('sch-ende').textContent = ende.toFixed(2) + ' m';
+
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.offsetWidth || 720, He = canvas.offsetHeight || 280;
+    canvas.width = W*dpr; canvas.height = He*dpr;
+    const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+
+    // Hintergrund (Nachthimmel-Gradient ist via CSS schon da; wir füllen die Strasse)
+    ctx.fillStyle = '#1e3a5f';
+    ctx.fillRect(0, 0, W, He);
+
+    // Massstab: x-Achse in Pixel
+    const padL = 30, padR = 30;
+    const plotW = W - padL - padR;
+    const ground_y = He - 40;   // Boden-Linie
+    const top_y = 20;           // oberer Rand (Lampenspitze ungefähr)
+    const px_per_m_x = plotW / D_max;
+    // Vertikalskala: H + etwas Luft = ~7m für Mastspitze
+    const total_height_m = 7.5;
+    const plotH = ground_y - top_y;
+    const px_per_m_y = plotH / total_height_m;
+
+    function xpx(xm){ return padL + xm * px_per_m_x; }
+    function ypx(ym){ return ground_y - ym * px_per_m_y; }  // y aufwärts
+
+    // Strasse (Boden-Streifen)
+    ctx.fillStyle = '#2e2a2a';
+    ctx.fillRect(0, ground_y, W, He - ground_y);
+    // Bodenlinie
+    ctx.strokeStyle = '#566';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, ground_y); ctx.lineTo(W, ground_y); ctx.stroke();
+    // Strassenmarkierungen (gestrichelte Mittellinie)
+    ctx.strokeStyle = '#fbcb6e'; ctx.lineWidth = 2; ctx.setLineDash([10, 8]);
+    ctx.beginPath();
+    ctx.moveTo(0, ground_y + (He - ground_y)/2);
+    ctx.lineTo(W, ground_y + (He - ground_y)/2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Lampenmast
+    const xm_px = xpx(x_mast);
+    const ym_top_px = ypx(H);
+    ctx.strokeStyle = '#444'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(xm_px, ground_y); ctx.lineTo(xm_px, ym_top_px); ctx.stroke();
+    // Mast-Fuss (Verbreiterung)
+    ctx.fillStyle = '#333';
+    ctx.fillRect(xm_px - 5, ground_y - 5, 10, 5);
+    // Lampenkopf
+    ctx.fillStyle = '#fff7c0';
+    ctx.beginPath(); ctx.arc(xm_px, ym_top_px, 7, 0, 2*Math.PI); ctx.fill();
+    // Lampe-Glow
+    const glowGrad = ctx.createRadialGradient(xm_px, ym_top_px, 4, xm_px, ym_top_px, 30);
+    glowGrad.addColorStop(0, 'rgba(255,247,192,0.85)');
+    glowGrad.addColorStop(1, 'rgba(255,247,192,0)');
+    ctx.fillStyle = glowGrad;
+    ctx.beginPath(); ctx.arc(xm_px, ym_top_px, 30, 0, 2*Math.PI); ctx.fill();
+
+    // Person (Strichfigur) bei x = x_mast + d
+    const xp_log = x_mast + d;
+    const xp_px = xpx(xp_log);
+    const head_y_px = ypx(h);
+    const torso_top_y = ypx(h * 0.82);
+    const torso_bot_y = ypx(h * 0.50);
+    const knee_y = ypx(h * 0.28);
+    const foot_y = ground_y;
+
+    // Schatten-Strahl: vom Lampenkopf durch Personenkopf zum Boden
+    // Schattenende (Boden) bei x = x_mast + ende
+    const x_ende_log = x_mast + ende;
+    const x_ende_px = xpx(x_ende_log);
+
+    // Lichtstrahlen (zwei: einer durch den Kopf, einer zum Fuss zur Kontrolle)
+    ctx.strokeStyle = 'rgba(255,247,192,0.5)'; ctx.lineWidth = 1.4; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(xm_px, ym_top_px); ctx.lineTo(x_ende_px, ground_y); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Schatten auf dem Boden (von Fuss-Position bis Schattenende-Position)
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.beginPath();
+    ctx.moveTo(xp_px, ground_y);
+    ctx.lineTo(x_ende_px, ground_y);
+    ctx.lineTo(x_ende_px, ground_y + 4);
+    ctx.lineTo(xp_px, ground_y + 5);
+    ctx.closePath();
+    ctx.fill();
+    // Schatten-Etikette
+    if (x_ende_px - xp_px > 50){
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 11px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('Schatten s = ' + schatten_laenge.toFixed(2) + ' m',
+                   (xp_px + x_ende_px)/2, ground_y - 8);
+    }
+
+    // Person zeichnen (Strichfigur)
+    ctx.strokeStyle = '#fff'; ctx.fillStyle = '#fff'; ctx.lineWidth = 2.2;
+    // Kopf
+    ctx.beginPath(); ctx.arc(xp_px, head_y_px, 6, 0, 2*Math.PI); ctx.stroke();
+    // Torso
+    ctx.beginPath(); ctx.moveTo(xp_px, head_y_px + 6); ctx.lineTo(xp_px, torso_bot_y); ctx.stroke();
+    // Arme
+    ctx.beginPath();
+    ctx.moveTo(xp_px - 9, torso_bot_y + 6);
+    ctx.lineTo(xp_px, torso_top_y);
+    ctx.lineTo(xp_px + 9, torso_bot_y + 6);
+    ctx.stroke();
+    // Beine
+    ctx.beginPath();
+    ctx.moveTo(xp_px - 6, foot_y);
+    ctx.lineTo(xp_px, torso_bot_y);
+    ctx.lineTo(xp_px + 6, foot_y);
+    ctx.stroke();
+
+    // Abstandsbalken: Mast → Person (unter der Bodenlinie)
+    const bar_y = ground_y + (He - ground_y) - 8;
+    ctx.strokeStyle = '#fbcb6e'; ctx.lineWidth = 1.5; ctx.fillStyle = '#fbcb6e';
+    ctx.beginPath(); ctx.moveTo(xm_px, bar_y); ctx.lineTo(xp_px, bar_y); ctx.stroke();
+    // Tickenden
+    ctx.beginPath(); ctx.moveTo(xm_px, bar_y - 4); ctx.lineTo(xm_px, bar_y + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xp_px, bar_y - 4); ctx.lineTo(xp_px, bar_y + 4); ctx.stroke();
+    ctx.font = 'bold 10px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('d = ' + d.toFixed(1) + ' m', (xm_px + xp_px)/2, bar_y - 5);
+
+    // Massstabs-Ticks am Boden (alle 2 m)
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 0.8;
+    ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.font = '9px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    for (let m = 0; m <= D_max; m += 2){
+      const x = xpx(m);
+      ctx.beginPath(); ctx.moveTo(x, ground_y); ctx.lineTo(x, ground_y - 3); ctx.stroke();
+    }
+  }
+
+  slider.addEventListener('input', render);
+  window.addEventListener('resize', render);
+  render();
+})();
+</script>
+
+</body>
+</html>

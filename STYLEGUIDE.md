@@ -1,6 +1,6 @@
 # TALS-Mathematik · Styleguide
 
-**Version 1.1 · Stand: Mai 2026**
+**Version 1.9 · Stand: Mai 2026**
 
 Dieser Styleguide ist die verbindliche Referenz für alle Themenseiten des Lehrmittels „TALS-Mathematik". Er sichert Konsistenz in Notation, Aufbau, Sprache und visuellem Design — kapitelübergreifend und chatübergreifend.
 
@@ -81,6 +81,61 @@ f : \mathbb{R} \longrightarrow \mathbb{R}, \quad x \longmapsto m \cdot x + b
 - **Symbole:** `\parallel`, `\perp`, `\Longrightarrow` (kein einfacher Pfeil)
 - **Mengen:** `\mathbb{R}`, `\mathbb{N}`
 
+**Highlighting verbundener Formel-Teile (`\bbox`):** Wenn derselbe Term in zwei Formeln auftaucht und visuell verbunden werden soll (z.B. Diskriminante in Mitternachtsformel und in `D = b² − 4ac` in g3-3), benutze `\bbox[#fde9c7, 3px]{b^2 - 4ac}` (orange Hinterlegung mit 3 px Padding) konsistent in beiden Formeln. Optional ein verbindender Text „↑ derselbe Ausdruck ↓" zwischen den Formeln. Bei dynamischer Live-Anzeige im JS gleiche Farbgebung über CSS-Klasse (z.B. `<span class="disk-hl">`, Hintergrund `#fde9c7`).
+
+MathJax-Voraussetzung: `bbox` und `color` müssen als Pakete geladen sein. Konfig:
+
+```js
+MathJax = {
+  loader: { load: ['[tex]/bbox', '[tex]/color'] },
+  tex: { packages: { '[+]': ['boldsymbol', 'bbox', 'color'] }, ... }
+};
+```
+
+Ohne die Loader-Erweiterung wird `\bbox` nicht gerendert und die Formel bleibt unhervorgehoben.
+
+**Antipattern: lange `\quad`-Inline-Formel-Reihen in Druckdateien.** Eine Inline-Formel `\(A; \quad B; \quad C; \quad D; ...\)` rendert MathJax als zusammenhängenden, nicht-umbrechbaren Block. Auf A4-Druckseiten mit fester Spaltenbreite läuft so eine Reihe leicht über den rechten Rand hinaus, ohne dass am Semikolon oder `\quad` umgebrochen werden kann. Stattdessen: jeden Beispiel-Eintrag als **eigene Inline-Formel in einer Tabellenzelle**:
+
+```html
+<!-- FALSCH (überläuft im Druck) -->
+<p>\(\sqrt{12} = 2\sqrt{3};\quad \sqrt{18} = 3\sqrt{2};\quad \sqrt{20} = 2\sqrt{5};\quad ...\)</p>
+
+<!-- RICHTIG (jede Zelle eigene Inline-Formel, Tabelle bricht zwischen Zellen um) -->
+<table class="ftb-tabelle"><tbody>
+  <tr><td class="li">\(\sqrt{12} = 2\sqrt{3}\)</td>
+      <td class="li">\(\sqrt{18} = 3\sqrt{2}\)</td>
+      <td class="li">\(\sqrt{20} = 2\sqrt{5}\)</td></tr>
+</tbody></table>
+```
+
+Faustregel: Inline-Formeln in Druckdateien > 120 Zeichen Inhalt sind verdächtig — entweder als Display-Formel `\[...\]` umbauen oder auf mehrere Inline-Formeln in einer Tabelle/Liste aufteilen.
+
+### 2.7 Intervallnotation (verbindlich, deutsche Schreibweise)
+
+Das Lehrmittel verwendet die **deutsche Intervallnotation** (ISO 31-11), nicht die internationale:
+
+| Typ | Lehrmittel-Standard | NICHT verwenden |
+|---|---|---|
+| geschlossen | `\([a;\, b]\)` | `[a, b]` (Komma) |
+| offen | `\(]a;\, b[\)` | `(a, b)` oder `(a; b)` |
+| halboffen (links zu) | `\([a;\, b[\)` | `[a, b)` |
+| halboffen (rechts zu) | `\(]a;\, b]\)` | `(a, b]` |
+| unbeschränkt nach links | `\(]-\infty;\, b]\)` | `(-\infty, b]` |
+| unbeschränkt nach rechts | `\([a;\, +\infty[\)` | `[a, +\infty)` |
+
+**Regel-Logik:**
+
+- **Trennzeichen ist das Semikolon** `;`, nicht das Komma (Komma ist im deutschsprachigen Raum für Aufzählungen reserviert).
+- **Klammer-Richtung signalisiert offen/zu:** Klammer zeigt zum Intervall hin → Grenze dabei (zu); Klammer zeigt weg → Grenze nicht dabei (offen). Eckige Klammer wird also entweder nach innen `[…]` oder nach aussen `]…[` geöffnet.
+- **Bei `\infty` immer Klammer nach aussen** — Unendlich ist keine Zahl und kann nicht „dabei" sein.
+
+**Verbale Begleitsprache:**
+
+- Schreib nicht „runde Klammer für offen" — die offene Intervall-Klammer ist eckig nach aussen geöffnet, nicht rund. Sag stattdessen „Klammer nach aussen geöffnet" oder „Klammer weist vom Intervall weg".
+- Im Zweifel an die Tabelle in g1-2 §5 (Intervalle — Teilmengen von ℝ) anlehnen.
+
+**Diese Konvention gilt auch in Zusammenfassungs- und Kurzform-Tabellen.** Restfunde des M1-Patches (Mai 2026) zeigten, dass Zusammenfassungstabellen leicht übersehen werden — bei Migrationen jede Tabelle einzeln prüfen, die das Wort „Intervall", „Klammer" oder den Begriff „offen/geschlossen" enthält.
+
 ---
 
 ## 3. Achsenskalierung (verbindlich)
@@ -110,6 +165,21 @@ Bei Anwendungsaufgaben **immer** Achsen mit Grösse und Einheit beschriften, in 
 
 Bei reiner Mathematik genügt `x` und `y` ohne Einheit.
 
+### 3.4 Canvas-Inhalt darf bei keinem Schieber-Wert überlaufen (verbindlich)
+
+> **Diese Regel ist aus der Iteration [26_7] hinzugekommen — vergessen kostet Zeit.**
+
+Bei jeder Canvas-Animation, deren Inhalt von Schiebern abhängt, muss die Zeichnung im **Extremfall jedes Sliders** noch komplett im Canvas liegen. Konkret:
+
+- Für **jeden** Schieber das **Worst Case**-Ende durchrechnen — bei `min` und bei `max`. Beispiele:
+  - Streckung mit \(k \in [-2, 2]\): bei \(k = -2\) und \(k = +2\) muss das Bild noch in den Canvas passen.
+  - Strahlensatz mit Strahlenabschnitt \(\overline{SA} \in [1,4]\) und Streckfaktor \(k \in [2,4]\): worst case \(\overline{SA'} = 4 \cdot 4 = 16\) Einheiten — die Skala (Pixel pro Einheit) muss daraufhin festgelegt sein.
+- **Faustregel**: aus den Worst-Case-Pixelkoordinaten ableiten, wie viele Pixel/Einheit zur Verfügung stehen. Dann eher 10–20% Reserve einbauen für Beschriftungen.
+- **Originalfigur klein genug wählen**, damit das Bild auch bei \(k = -2\) noch reinpasst — bei zentraler Position bedeutet das: \(|\text{rel}_x|_{\max} \cdot |k|_{\max} + \text{Rand} \leq W/2\).
+- **Prüfung beim Schreiben** mit kurzem Python-Skript oder durch Bewegen des Schiebers in beide Extreme. Visuelle Inspektion „in der Mitte" reicht nicht — am Rand wird's eng.
+
+Verstöße in der Vergangenheit: Anim 1/2/3/4 in g5-2d hatten initial Werte gewählt, die bei Schieber-Extremen weit über die Canvas-Grenzen hinausragten. Korrektur in Iteration [26_7].
+
 ---
 
 ## 4. Didaktischer Aufbau (Master-Schema)
@@ -132,10 +202,10 @@ Jede Themenseite folgt diesem Schema in genau dieser Reihenfolge:
 9. Zusatzmaterial         — fünf Einträge in fester Reihenfolge:
       • Handout (HTML-Druckseite, neuer Tab) — Theorie ohne Beispiele und ohne Aufgaben
       • Formelauszug (HTML-Druckseite, neuer Tab) — kompakte Formelsammlung, FTB-konform
-      • Anki-Deck (Download `.apkg`)
+      • Anki-Deck erstellen zu automatisieren der Grundlagen (Download `.apkg`)
       • Teste dich selbst (HTML-Druckseite, neuer Tab) — Grundlagenaufgaben mit Lösungen
       • Aufgabenserie (HTML-Druckseite, neuer Tab) — Anwendungsaufgaben mit Lösungen
-10. Externe Ressourcen    — Videos, Aufgabensammlungen
+10. Externe Videos &amp; Aufgabensammlungen — Sektions-ID `ressourcen`, kuratierte Playlists/Watch-URLs in fester Anbieter-Reihenfolge (Details siehe §4 weiter unten)
 ```
 
 Das Schema ist **didaktisch begründet**:
@@ -148,6 +218,62 @@ Das Schema ist **didaktisch begründet**:
 **Trennung Handout ↔ Aufgaben:** Das Handout enthält nur Theorie (Definitionen, Sätze, Tabellen, Übersichts-SVGs wie eine Geradenschar). **Beispiele** stehen in der Themenseite und in „Teste dich selbst", **Aufgaben** in „Teste dich selbst" (rein-mathematisch) und in der „Aufgabenserie" (Anwendungen). So bleibt das Handout als knapper Theorie-Auszug zum Mitnehmen brauchbar.
 
 **Druckseiten-Anforderungen:** Jede HTML-Druckseite hat oben einen sticky „Seite drucken"-Knopf (`window.print()`) und einen Rück-Link zur Themenseite. Druck-CSS (`@page A4 portrait`, 14 mm Rand, `@media print`) sorgt für saubere Ausnutzung und gute Seitenwechsel. Druckseiten öffnen von der Themenseite immer in einem neuen Tab (`target="_blank" rel="noopener"`).
+
+**Optionale Zusatz-Druckseiten („über RLP hinaus"):** Über die fünf Standard-Druckseiten hinaus dürfen weitere Druckseiten existieren, wenn sie methodisch wertvoll sind, aber den RLP-Stoff verlassen (z.B. `zusatz-gauss-cramer.html` in g2-3). Solche Seiten **müssen** auf der Themenseite klar gekennzeichnet sein — der Subtitel des Download-Links enthält den Zusatz „— fakultativ, über RLP hinaus", und das Format-Feld lautet „Druckseite · über RLP hinaus". Zusatz-Druckseiten zählen nicht zur Pflicht-Materialliste der Themenseite und werden in Übersichten nicht als RLP-Pflichtstoff gewertet.
+
+**Externe Ressourcen (Sektion 10) — Konventionen:**
+
+- Sektions-Header einheitlich: `<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>` — die ID ist immer `ressourcen` (nicht `extern`), der Titel immer dieser exakte Wortlaut. Begründung: ToC-Anchor-Konsistenz, vorhersagbare Cross-Page-Links.
+- Strukturiert in zwei Untergruppen mit `<div class="ressourcen-subtitel">`:
+  - „🎬 Erklärvideos (Playlists)" — bis zu 4 Einträge
+  - „📝 Aufgabensammlungen" — bis zu 4 Einträge
+- **Video-Links: nur stabile Watch-/Playlist-URLs** (`youtube.com/playlist?list=…` bevorzugt, ersatzweise `youtube.com/watch?v=…`). **Keine YouTube-Suchergebnis-Links** (`youtube.com/results?search_query=…`) und **keine `youtu.be/…`-Kurz-URLs**.
+- **Bevorzugte YouTube-Kanäle (verbindliche Reihenfolge, max. 1 Playlist pro Anbieter, max. 4 Links total):**
+  1. MathemaTrick · 2. Lehrerschmidt · 3. Mathe SMI · 4. Mathehoch13 · 5. Magda liebt Mathe · 6. Mathe by Daniel Jung.
+  Playlists strikt bevorzugt. Hat ein Anbieter zum Thema keine Playlist → überspringen. Falls nach Durchlauf aller 6 Anbieter weniger als 4 Playlists vorhanden → mit Einzelvideos in derselben Anbieter-Reihenfolge auffüllen.
+- **Bevorzugte Aufgabensammlungen (verbindliche Reihenfolge, mehrere Treffer pro Plattform erlaubt, max. 4 Links total):**
+  1. sos-mathe.ch · 2. serlo.org · 3. SwissEduc Munterbunt.
+  Lösungen müssen verfügbar sein. Negativ-Liste: kein mathebibel.de, kein mathepower.com, kein klassenarbeiten.de.
+- **Verifikations-Methode bei Playlist-Kandidaten:** `web_fetch` auf die Playlist-URL liefert Owner und Videocount. Playlist-ID-Präfixe sind keine zuverlässigen Kanal-Indikatoren — immer per `web_fetch` verifizieren.
+- **Detail-Anleitung:** `HOWTO-externe-ressourcen.md` (im Repo) enthält das Schritt-für-Schritt-Verfahren, die Anbieter-Map mit bereits verifizierten Playlist-IDs und Platzhalter-HTML für leere Slots. Kurzfassung in `COLLABORATION.md` §9 (Project-Knowledge).
+
+**RLP-Hilfsmittel-Pill (`<span class="ohm">`) — wann verwenden:**
+
+- Pill **nur** dann, wenn der RLP-Originaltext exakt **„auch ohne Hilfsmittel"** lautet (also für eindeutige, vollständige ohne-Hilfsmittel-Kompetenzen).
+- **Nicht** als Pill, sondern als **Inline-Klammertext**, wenn die RLP-Formulierung differenziert ist:
+  - „(mit und ohne Hilfsmittel)" — z.B. Schwerpunkt 3.5 Trigonometrische Funktionen
+  - „kleine Stichproben auch ohne Hilfsmittel und grosse Stichproben mit Hilfsmitteln" — z.B. Grundlagen 4.3 Masszahlen
+  - Solche differenzierten Bedingungen lassen sich nicht in eine kurze Pill pressen, ohne Information zu verlieren — der ungekürzte Klammertext ist hier richtig.
+- Begründung für die enge Pill-Verwendung: Eine Pill ist eine **starke visuelle Botschaft** („dieser Stoff muss kopfgerecht sitzen"). Wenn sie inflationär bei jeder „mit Hilfsmittel"-Variation aufkäme, würde sie ihre Signalkraft verlieren.
+
+---
+
+## 4.1 Sub-Split bei umfangreichen RLP-Punkten
+
+Manche RLP-Punkte umfassen so viel Stoff, dass eine einzelne Themenseite nach Master-Schema unhandlich wird (Richtwert: > 1500 HTML-Zeilen oder > 45 Min. Lesezeit). In diesem Fall wird das **RLP-Teilgebiet** auf **zwei oder mehr aufeinanderfolgende Themenseiten** aufgeteilt, die mit Buchstaben-Suffixen `a`, `b`, `c`… nummeriert sind.
+
+**Beispiel:** RLP-Punkt 2.2 *„Lineare und quadratische Gleichungen"* wird umgesetzt als:
+
+```
+g2-2a-lineare-gleichungen.html       ← Teil 1 von 2
+g2-2b-quadratische-gleichungen.html  ← Teil 2 von 2
+```
+
+**Regeln für den Sub-Split:**
+
+- Jede Sub-Seite folgt **vollständig** dem Master-Schema (Abschnitte 1–10): eigener Einstieg, eigene Definition, eigene A1–A6, eigene Zusammenfassung — keine Verweise auf die Schwesterseite für fehlende Inhalte.
+- Im **RLP-Header** wird auf die Aufteilung hingewiesen: „Teil 1 von 2" bzw. „Teil 2 von 2". Die genannten RLP-Kompetenzen sind diejenigen, die auf der jeweiligen Sub-Seite tatsächlich abgedeckt werden (anteilig, nicht das ganze Bündel).
+- **Zusatzmaterial getrennt pro Sub-Seite**: jede Sub-Seite hat ihren eigenen Ordner unter `downloads/<bereich>/<id>/` mit den fünf Standard-Dateien (Handout, Formelauszug, Anki-Deck, Teste dich selbst, Aufgabenserie). Damit bleibt jede Sub-Seite als eigene Lerneinheit selbsttragend.
+- **Externe Ressourcen ebenfalls getrennt** und auf den Inhalt der Sub-Seite zugeschnitten.
+- **Footer pro Sub-Seite** nennt den Sub-Themennamen (nicht den RLP-Sammeltitel): „Grundlagenfach 2.2a Lineare Gleichungen" für `g2-2a`, „Grundlagenfach 2.2b Quadratische Gleichungen" für `g2-2b` (Format gemäss §7).
+- **Hinweis im RLP-Header (zwischen Themen-Titel und RLP-Kompetenz-Box)** explizit setzen: „RLP 2.2 · Teil 1 von 2" bzw. „RLP 2.2 · Teil 2 von 2". Bei nicht-gesplitteten Themenseiten erscheint dieser Hinweis **nicht**.
+- Die **Lektionenangabe** im RLP-Header gibt die Lektionen des gesamten **Lerngebiets** an (z.B. „35 Lektionen" für alle Sub-Seiten in Lerngebiet 2, „50 Lektionen" für alle in Lerngebiet 5). Sie steht in der `<div class="pt-bereich">`-Zeile (Format: „Grundlagenfach · Lerngebiet X · &lt;Name&gt; · N Lektionen") und ist über alle Sub-Seiten desselben Lerngebiets identisch — auch für nicht gesplittete Themenseiten dieses Lerngebiets. Der Sub-Indikator („Teil 1 von 2" etc.) erscheint **getrennt** in der `<div class="pt-untertitel">`-Zeile darunter (Format: „RLP 2.2 · Teil 1 von 2"); siehe vorherige Regel. Diese Trennung wurde gewählt, weil die Lerngebiet-Lektionen für den Lernenden die nützlichere Orientierungsangabe sind (Gesamtgewicht des Lerngebiets im RLP) und sich der Sub-Split-Hinweis auf die RLP-Punkt-Ebene bezieht — die zwei Aussagen sind separierbar und lesen sich übersichtlicher in zwei Zeilen.
+- **Praxisbeispiel-Seiten** (Dateiname-Präfix `gN-0-…` oder `sN-0-…`) sind Sonderfälle: sie tragen ein zusätzliches Suffix `· Praxisbeispiel` in der `pt-bereich`-Zeile (Beispiel: „Grundlagenfach · Lerngebiet 4 · Datenanalyse · 20 Lektionen · Praxisbeispiel"). Praxisbeispiel-Seiten sind keine RLP-Teilgebiete, sondern thematische Hüllen — siehe §6.1.1.
+- **Index.html**: Sub-Seiten werden in einem gemeinsamen Sub-Container `<div class="ksub">` gerendert: ein Header mit der gemeinsamen RLP-Nummer und dem RLP-Sammeltitel (z.B. „2.2 Lineare und quadratische Gleichungen"), darunter die zwei Sub-Karten als 2-Spalten-Grid (`<div class="ksub-grid">`). So sieht man auf einen Blick, dass es sich um *ein* RLP-Teilgebiet handelt, ohne den Klick-Zugang zur einzelnen Sub-Seite zu verlieren.
+- **Nav-Verkettung** läuft kontinuierlich durch: …→ 2.1 → 2.2a → 2.2b → 2.3 → … . Die Sub-Seiten kennen sich gegenseitig als prev/next.
+- Die **Zählung der RLP-Teilgebiete** im Index (z.B. „3 Teilgebiete" für Lerngebiet 2) bleibt **unverändert** — die RLP-Struktur wird nicht angetastet, nur die interne Themenseiten-Aufteilung. In den Stats werden allerdings *Themenseiten* gezählt (also `2.2a` und `2.2b` getrennt), nicht RLP-Teilgebiete; der Hint unter den Stats macht diese Unterscheidung sichtbar.
+
+**Wann sub-splitten und wann nicht:** Faustregel — zwei klar abgrenzbare didaktische Verfahren mit eigenen Animationen rechtfertigen einen Split. Reine Längenbedenken nicht; eine 1200-Zeilen-Seite zu einem geschlossenen Thema bleibt lesbar.
 
 ---
 
@@ -162,6 +288,8 @@ Das Schema ist **didaktisch begründet**:
 | 🟠 Orange | Aufgabe, Übung | `block-aufg`, „🟠"-Blöcke |
 | 🔴 Rot | Häufiger Fehler, Warnung | `block-fehler`, „⚠"-Blöcke |
 | 🟣 Violett | Beweis, Herleitung | `block-beweis`, „🔷"-Blöcke |
+| 🟢 Grün (Variante) | Tipp, Strategie, Hinweis | `block-tipp`, „💡"-Blöcke |
+| 🔵 Blau (Variante) | Merksatz, Schlussfazit | `block-merksatz`, „⭐"-Blöcke |
 
 Die Farben sind kapitelübergreifend identisch — das schafft ein konsistentes mentales Modell beim Schüler.
 
@@ -176,54 +304,125 @@ Die Farben sind kapitelübergreifend identisch — das schafft ein konsistentes 
 - **Sans** (`Source Sans 3`): Fliesstext
 - **Mono** (`JetBrains Mono`): Code, Formeln in Live-Anzeigen, Slider-Werte, Chip-Labels
 
-### 5.4 Zusatzmaterial- und Ressourcen-Sektion (zentrale Klassen)
+### 5.4 Aufgaben-Nummerierung (verbindlich)
 
-Die zwei Schluss-Sektionen jeder Themenseite (Schritt 9 und 10 im Master-Schema) verwenden ausschliesslich Klassen, die zentral in `style.css` definiert sind. **Lokale Style-Definitionen dieser Klassen sind verboten** — Konsistenz über alle Themen ist Pflicht und das Erscheinungsbild muss exakt mit der Referenz übereinstimmen.
+Zwei Stellen, an denen Aufgabennummern in Themenseiten erscheinen. Beide nutzen ausschliesslich Klassen aus `style.css`, **nicht** lokal in der Themenseite definieren.
 
-**Klassen-Übersicht:**
-
-| Klasse | Verwendung |
-|---|---|
-| `.dl-grid` | Container für die 5 Download-Kacheln (Auto-Wrap-Grid, min. 200 px) |
-| `.dl` | Einzelne Download-Kachel — weisser Hintergrund, blauer Linksbalken, Hover-Lift |
-| `.dl-ic`, `.dl-t`, `.dl-s`, `.dl-fmt` | Icon, Titel, Untertitel, Format-Label (z.B. „Druckseite", „APKG") |
-| `.links-grid` | Container für externe Link-Kacheln (zweispaltig, einspaltig <520 px) |
-| `.lk` | Externe Link-Kachel — ohne blauen Linksbalken, roter Hover-Rand |
-| `.lk.aufg` | Variante für Aufgabensammlungen — oranger Hover-Rand statt rot |
-| `.lk-ic`, `.lk-t`, `.lk-s` | Icon, Titel, Untertitel |
-| `.ressourcen-subtitel` | Mono-Caps-Label für Untergruppen wie „🎬 ERKLÄRVIDEOS" |
-
-**Markup-Vorgaben:**
+**Aufgaben-Karten-Titel** (jede `block-aufg`-Karte hat einen Titel mit Aufgabennummer):
 
 ```html
-<h2 id="downloads">Zusatzmaterial</h2>
-<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
-<div class="dl-grid">
-  <a href="../downloads/<bereich>/<datei-id>/handout.html" target="_blank" rel="noopener" class="dl">
-    <span class="dl-ic">📄</span>
-    <div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div>
-  </a>
-  <!-- weitere Kacheln in fester Reihenfolge: Formelauszug, Anki-Deck, Teste dich selbst, Aufgabenserie -->
-</div>
-
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<div class="ressourcen-subtitel">🎬 Erklärvideos</div>
-<div class="links-grid">
-  <a href="https://..." target="_blank" rel="noopener" class="lk">
-    <span class="lk-ic">▶️</span>
-    <div><div class="lk-t">Titel</div><div class="lk-s">Kanal · Hinweis</div></div>
-  </a>
-</div>
-<div class="ressourcen-subtitel">📝 Aufgabensammlungen</div>
-<div class="links-grid">
-  <a href="https://..." target="_blank" rel="noopener" class="lk aufg">
-    <span class="lk-ic">📝</span>
-    <div><div class="lk-t">Quelle — Thema</div><div class="lk-s">Beschreibung</div></div>
-  </a>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Hauptoperation erkennen</span></div>
+  …
 </div>
 ```
 
-**Reihenfolge der Download-Kacheln** (verbindlich, damit das visuelle Layout zwischen den Themenseiten austauschbar bleibt): Handout · Formelauszug · Anki-Deck · Teste dich selbst · Aufgabenserie. Die Druckseiten-Kacheln haben das Format-Label „Druckseite", das Anki-Deck „APKG".
+Die `aufg-nr-tag`-Pille ist orange (auf der orangen `block-aufg`-Hintergrundfarbe), monospace, kompakt. Der `aufg-titel-text`-Span enthält den eigentlichen Aufgabentitel; ein optionales `<span class="aufg-vertiefung">`-Pille darf am Ende stehen.
+
+Verboten: das alte Muster `🟠 A1 — Hauptoperation erkennen` mit Spiegelstrich.
+
+**Teil-Listen innerhalb einer Aufgabe** (mehrere nummerierte Teilaufgaben):
+
+```html
+<ol class="aufg-liste">
+  <li>\(7 - 3 \cdot x\)</li>
+  <li>\((x - 2) \cdot (x + 5)\)</li>
+  …
+</ol>
+```
+
+Die Klasse `aufg-liste` ersetzt das frühere `<ol style="margin:8px 0 0 22px">` mit Default-Marker. Die `1.`, `2.`, `3.` werden via CSS-Counter als kleine orange Pillen gerendert und stehen deutlich abgesetzt vom Listeninhalt. Funktioniert ohne JS, kein MathJax-Konflikt.
+
+**Klassifizier-Term-Nummern** (`kl-spiel`-Widget; bisher nur in g1-1):
+
+```html
+<div class="kl-term"><span class="kl-nr">(1)</span>5+2·x</div>
+```
+
+`kl-nr` ist eine kleine neutrale Pille mit `margin-right:18px` zum Term.
+
+### 5.5 Canvas-Animationen — technische Konventionen
+
+Interaktive Animationen werden mit HTML5 Canvas und reinem JavaScript (kein Framework) umgesetzt. Folgende Konventionen sind verbindlich, weil sie sich über mehrere Iterationen als robust erwiesen haben.
+
+#### 5.5.1 HiDPI-Rendering (Pflicht bei jeder neuen Canvas-Datei)
+
+Auf Retina-/HiDPI-Displays werden Canvas-Inhalte unscharf gerendert, wenn der Buffer auf logische Pixel statt auf echte Display-Pixel angelegt wird. Standard-`initCv`-Funktion (in jeder Themenseite mit Canvas eigenständig vorhanden, gemeinsame Library möglich aber nicht zwingend):
+
+```js
+function initCv(id) {
+  const cv = document.getElementById(id);
+  if (!cv) return null;
+  // Logische Zeichenfläche aus den initial gesetzten width/height-Attributen lesen
+  if (!cv.dataset.logicalW) {
+    cv.dataset.logicalW = cv.width;
+    cv.dataset.logicalH = cv.height;
+  }
+  const W = +cv.dataset.logicalW;
+  const H = +cv.dataset.logicalH;
+  // Buffer-Auflösung an Display-Pixel-Ratio anpassen
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  const cssW = rect.width  || W;
+  const cssH = rect.height || H;
+  const bufW = Math.max(1, Math.round(cssW * dpr));
+  const bufH = Math.max(1, Math.round(cssH * dpr));
+  if (cv.width !== bufW || cv.height !== bufH) {
+    cv.width  = bufW;
+    cv.height = bufH;
+  }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(bufW / W, bufH / H);
+  ctx.clearRect(0, 0, W, H);
+  return { ctx, W, H, cv };
+}
+```
+
+**Konsequenzen für die Zeichnungs-Logik:**
+
+- Alle Koordinaten arbeiten in **logischen Pixeln** (z.B. 0..560 × 0..440 für ein `<canvas width="560" height="440">`)
+- `cv.width` / `cv.height` enthalten nach `initCv` die **physischen** Pixel — niemals direkt für Layout-Logik verwenden. Stattdessen `cv.dataset.logicalW` / `logicalH` (oder die `W`/`H` aus dem `initCv`-Rückgabewert) verwenden
+- Bei Pointer-Events (Drag&Drop, Klick-Hit-Tests) muss `getBoundingClientRect()` mit der **logischen** Auflösung verglichen werden, nicht mit `cv.width`
+
+#### 5.5.2 Helper für Winkelmarkierungen — Bisektrix-Formel
+
+Die naive Formel für die Winkelhalbierende zwischen zwei Strahlen vom selben Vertex,
+
+```js
+let mid = (a1 + a2) / 2;  // FALSCH bei Branch-Cut von atan2
+```
+
+liefert das **falsche Ergebnis**, sobald die Strahlen den ±π-Branch-Cut von `atan2` überstreichen (z.B. ein Strahl bei +170°, der andere bei −170°: naive Mitte = 0°, korrekt wäre ±180°). Die robuste Formel arbeitet mit dem **signierten Winkel-Diff in (−π, π]**:
+
+```js
+const dSigned = ((a2 - a1 + Math.PI) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI) - Math.PI;
+const mid = a1 + dSigned / 2;
+```
+
+Die Helper-Funktion `drawAngleArc` in `grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html` (ab Anim 4) verwendet diese Formel. Bei jeder zukünftigen Winkelmarkierung diese Formel übernehmen, um Spiegelungs-Bugs zu vermeiden.
+
+#### 5.5.3 Drag-&-Drop-Punkte (Pointer Events)
+
+Für interaktive Eckpunkte (Maus + Touch in einer Implementierung) wird das **Pointer-Events-API** verwendet (`pointerdown` / `pointermove` / `pointerup` / `pointercancel` / `pointerleave`), nicht Maus- und Touch-Events separat. Wichtige Details:
+
+- **`touch-action: none`** im CSS auf dem Canvas-Element setzen (verhindert Browser-Pinch/Scroll während Drag)
+- **`setPointerCapture(ev.pointerId)`** beim `pointerdown` — der Pointer bleibt am Canvas gebunden, auch wenn er zwischendurch ausserhalb gleitet
+- **Hit-Toleranz** grosszügig wählen (mind. 12–14 px), damit Touch-Bedienung funktioniert; sichtbarer Punkt-Radius kann kleiner sein (4–6 px ist ausreichend)
+- **Visuelles Feedback**: Halo-Ring bei Hover/Drag macht die Hit-Area sichtbar
+- **Cursor**: `grab` über aktivem Punkt, `grabbing` während Drag, sonst `default`
+
+Vollständige Referenz-Implementierung in `grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html` (Anim 1, Funktion `strInitDrag` mit Helfern `canvasCoordsFromEvent`, `strHitTest`, `strClamp`).
+
+#### 5.5.4 Skizzen-Geometrie für ganzzahlige Beispielwerte
+
+Wenn eine Skizze ganzzahlige Werte zeigen soll (z.B. SA=2, SA'=4), aber abgeleitete Grössen (z.B. AB-Parallelenabschnitt) durch die Geometrie automatisch krumm würden, **kann die Geometrie selbst angepasst werden**, statt die Werte zu runden. Beispiel aus den Strahlensätzen:
+
+- Nach Kosinussatz: \\(AB^2 = SA^2 + SB^2 - 2 \\cdot SA \\cdot SB \\cdot \\cos \\gamma\\)
+- Wahl \\(\\cos \\gamma = 0{.}75\\) (statt z.B. 0.7) → für SA=2, SB=3 ergibt sich \\(AB^2 = 13 - 9 = 4\\) → AB = 2 (ganzzahlig)
+- Strahl-Winkel symmetrisch zur Horizontalen: \\(\\pm \\gamma/2 \\approx \\pm 20.7°\\)
+
+Solche „massgeschneiderten" Winkel sind didaktisch wertvoll und sollten Skizzen mit krummen Werten vorgezogen werden.
 
 ---
 
@@ -234,43 +433,25 @@ TALS-Mathe/
 ├── index.html                              ← Übersichtsseite
 ├── style.css                               ← gemeinsames Stylesheet
 ├── nav.js                                  ← Navigation (sticky header + breadcrumb + ToC)
-├── mathlib.js                              ← Canvas-Helper, Formatter, Parser, Lösungs-Toggle
 ├── README.md
 ├── STYLEGUIDE.md                           ← diese Datei
-├── TEMPLATE.html                           ← Vorlage für neue Themen (nutzt ../-Pfade)
-├── grundlagen/                             ← 18 Themenseiten
-│   ├── g1-1-grundlagen.html
-│   ├── g1-2-zahlen-grundoperationen.html
-│   ├── g1-3-algebraische-terme.html
-│   ├── g1-4-zehnerpotenzen-quadratwurzeln.html
-│   ├── g2-1-grundlagen.html
-│   ├── g2-2-lineare-quadratische-gleichungen.html
-│   ├── g2-3-lineare-gleichungssysteme.html
-│   ├── g3-1-grundlagen.html
+├── TEMPLATE.html                           ← Vorlage für neue Themen
+├── grundlagen/
+│   ├── g1-arithmetik-algebra.html
+│   ├── g2-gleichungen.html
+│   ├── g3-1-funktionen-grundlagen.html
 │   ├── g3-2-lineare-funktionen.html        ← Referenz-Implementierung
 │   ├── g3-3-quadratische-funktionen.html
-│   ├── g4-1-grundlagen.html
-│   ├── g4-2-diagramme.html
-│   ├── g4-3-masszahlen.html
-│   ├── g5-1-grundlagen.html
-│   ├── g5-2-planimetrie.html
-│   ├── g5-3-trigonometrische-berechnungen.html
-│   ├── g5-4-einheitskreis.html
-│   └── g5-5-trigonometrische-gleichungen.html
-├── schwerpunkt/                            ← 13 Themenseiten
-│   ├── s1-1-grundlagen.html
-│   ├── s1-2-potenzen.html
-│   ├── s1-3-logarithmen.html
-│   ├── s2-1-grundlagen.html
-│   ├── s2-2-gleichungstypen.html
-│   ├── s3-1-grundlagen.html
-│   ├── s3-2-potenz-wurzelfunktionen.html
-│   ├── s3-3-polynomfunktionen.html
-│   ├── s3-4-exponential-logarithmusfunktionen.html
-│   ├── s3-5-trigonometrische-funktionen.html
-│   ├── s4-1-grundlagen.html
-│   ├── s4-2-stereometrie.html
-│   └── s4-3-vektorgeometrie.html
+│   ├── g3-4-…
+│   ├── g4-datenanalyse.html
+│   └── g5-geometrie.html
+├── schwerpunkt/
+│   ├── s1-arithmetik.html
+│   ├── s2-gleichungen.html
+│   ├── s3-1-funktionen-grundlagen.html
+│   ├── s3-2-polynome.html
+│   ├── …
+│   └── s4-geometrie.html
 └── downloads/
     ├── README.md
     ├── print.css                              ← gemeinsames Druck-Stylesheet (A4)
@@ -278,7 +459,7 @@ TALS-Mathe/
     ├── grundlagen/
     │   ├── g3-2-lineare-funktionen/
     │   │   ├── handout.html                   ← Druckseite (Theorie, ohne Beispiele/Aufgaben)
-    │   │   ├── formelauszug.html              ← Druckseite (kompakte Formelübersicht)
+    │   │   ├── formelauszug.html              ← Druckseite (Formelsammlung)
     │   │   ├── ankideck.apkg                  ← Anki-Karteikarten (Download)
     │   │   ├── teste-dich-selbst.html         ← Druckseite (Grundlagenaufgaben + Lösungen)
     │   │   └── aufgabenserie.html             ← Druckseite (Anwendungsaufgaben + Lösungen)
@@ -290,8 +471,375 @@ TALS-Mathe/
 **Naming-Regeln:**
 - Bereichs-Präfix: `g` für Grundlagen, `s` für Schwerpunkt
 - Lerngebiet-Nummer: `g3-2` = Grundlagen, Lerngebiet 3 (Funktionen), Thema 2 (Lineare)
+- **Sub-Split** (siehe 4.1): Buchstaben-Suffixe `a`, `b`, `c` direkt an die RLP-Nummer angehängt — `g2-2a`, `g2-2b`. Die Schwesterseiten teilen das gemeinsame Numerik-Präfix (`g2-2`), unterscheiden sich nur im Suffix.
 - Dateinamen kleingeschrieben, mit Bindestrichen, ohne Umlaute (`-funktionen.html`, nicht `_Funktionen.html`)
 - **Druckseiten-Dateinamen** sind über alle Themen hinweg identisch: `handout.html`, `formelauszug.html`, `teste-dich-selbst.html`, `aufgabenserie.html` (plus `ankideck.apkg`). Das erleichtert Verlinkung, Kopiervorlagen und Suche.
+
+---
+
+## 6.1 HTML-Skelett für Themenseiten (verbindlich)
+
+Jede Themenseite verwendet **exakt** die folgende Body-Struktur. Abweichungen (eigene Wrapper-Klassen, hardcoded TOC, semantische `<section>`-Tags um die h2-Sektionen, abweichende `buildNav`-Signatur) brechen das CSS-Grid-Layout `.page-wrap` und/oder die Navigation und sind verboten.
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⟪RLP-Nr⟫ ⟪Themenname⟫ — TALS Mathematik</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:..." rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script>
+  MathJax = {
+    tex: { inlineMath: [['\(','\)']], displayMath: [['\[','\]']] },
+    svg: { fontCache: 'global', scale: 1.0 }
+  };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <!-- ggf. seitenspezifisches <style>…</style> hier -->
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+  <div class="page-titel">
+    <div class="pt-bereich">⟪Bereich⟫ · Lerngebiet ⟪n⟫ · ⟪Lerngebiet-Name⟫ · ⟪L⟫ Lektionen</div>
+    <h1 class="pt-h1">⟪RLP-Nr⟫ ⟪Themenname⟫</h1>
+  </div>
+
+  <p class="lead">⟪Lead-Absatz⟫</p>
+
+  <div class="rlp-kompetenzen">
+    <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet ⟪RLP-Nr⟫</div>
+    <ul>
+      <li>⟪Kompetenz⟫ <span class="ohm">auch ohne Hilfsmittel</span></li>
+    </ul>
+  </div>
+
+  <h2 id="einstieg">Einstieg — ⟪Titel⟫</h2>
+  <!-- … weitere h2-Abschnitte gemäss Master-Schema, jeweils mit id="…" direkt am h2 … -->
+  <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+  <!-- … -->
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>⟪Bereich⟫ ⟪RLP-Nr⟫ ⟪Themenname⟫</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script>
+buildNav({
+  bereich:'grundlagen', id:'g⟪RLP⟫',
+  kapitelNr:'⟪RLP-Nr⟫', kapitelTitel:'⟪Themenname⟫',
+  prev:{nr:'⟪prev⟫',titel:'⟪prev-titel⟫',url:'⟪prev⟫.html'},
+  next:{nr:'⟪next⟫',titel:'⟪next-titel⟫',url:'⟪next⟫.html'}
+});
+</script>
+
+</body>
+</html>
+```
+
+**Verbindlich (nicht verhandelbar):**
+
+| Regel | Warum |
+|---|---|
+| **Genau diese Container-Hierarchie:** `body > div#nav-root > div.page-wrap > main.content` und parallel `aside.toc-wrap` *als Geschwister von `main`*, beide innerhalb von `.page-wrap`. | `.page-wrap` ist das CSS-Grid mit `grid-template-areas: "content toc"`. Ohne `.page-wrap` oder mit `<aside>` *vor* `<main>` greift das Grid nicht — Sidebar und Inhalt überlappen. |
+| **`<main class="content">`** — *nicht* `class="inhalt"` oder ähnlich. | CSS-Selektor `.content` definiert das gesamte Typographie-Stack der Themenseite. |
+| **TOC als leerer Container `<aside class="toc-wrap"><div id="toc"></div></aside>`**, keine hardcoded TOC-Liste. | nav.js generiert die TOC dynamisch aus den `<h2 id="…">` und hält sie sticky. Eine handgeschriebene TOC bleibt veraltet. |
+| **`<h2 id="…">…</h2>`** — IDs *direkt* an den h2, **nicht** an einem `<section>`-Wrapper. | Konsistenz aller 32 Seiten; Sticky-Highlight in nav.js orientiert sich an h2-IDs. Keine `<section>`-Wrapper rund um Abschnitte. |
+| **`<script src="../nav.js"></script>` ohne `defer`** — direkt vor dem `buildNav()`-Inline-Script am Ende des Body. | Mit `defer` läuft nav.js *nach* dem Inline-Aufruf. `buildNav` ist dann undefined, Navigation und TOC fehlen komplett. |
+| **`<script src="../mathlib.js"></script>` direkt nach `nav.js`** — auch wenn die Seite (scheinbar) keine mathlib-Funktion nutzt. | `toggleL` (Lösungs-Aufklapp-Mechanismus) lebt in `mathlib.js`. Fehlt das Skript, klappen die Lösungen ohne Konsole-Hinweis nicht auf — der User sieht nur, dass der Klick nichts tut. Auch `fmt`, `parseL` u.a. werden gerne ad-hoc gebraucht. |
+| **`buildNav()`-Signatur:** `{ bereich, id, kapitelNr, kapitelTitel, prev, next }`. | Die einzige API von nav.js. Falsche Signaturen (`{current: {…}}` o.ä.) führen zu stillen Fehlern. |
+| **Footer:** `<footer class="site-footer">` mit zwei `<p>` (siehe § 7). | Konsistente Fusszeile über alle Seiten. |
+
+**Zusatzmaterial-Sektion (Pflicht-Konvention):**
+
+```html
+<h2 id="downloads">Zusatzmaterial</h2>
+
+<p>Zum Ausdrucken und Mitnehmen — Theorie, Formelsammlung, Karteikarten und Aufgaben mit Lösungen.</p>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/⟪slug⟫/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/⟪slug⟫/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">…</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/⟪slug⟫/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+  <a href="../downloads/grundlagen/⟪slug⟫/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/⟪slug⟫/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+</div>
+```
+
+Container ist `.dl-grid` (nicht `dl-box`, das existiert nicht). Jede Karte ist `<a class="dl">` mit Icon-Span, Titel-Div und Sub-Div. Reihenfolge ist fix: Handout → Formelauszug → Anki-Deck → Teste dich selbst → Aufgabenserie. Optionale 6. Karte für „Zusatz: …" über RLP hinaus erlaubt.
+
+**Externe-Ressourcen-Sektion (Pflicht-Konvention):**
+
+```html
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="…" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Titel</div><div class="lk-s">Quelle · kurze Beschreibung</div></div></a>
+  …
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="…" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">Titel</div><div class="lk-s">Quelle · Beschreibung</div></div></a>
+  …
+</div>
+```
+
+Container ist `.links-grid` (nicht `ressourcen-grid`, das existiert nicht). Jeder Link ist `<a class="lk">` für Videos (▶️, roter Hover) oder `<a class="lk aufg">` für Aufgabensammlungen (📝, oranger Hover). Innere Struktur: ein `<span class="lk-ic">` + ein verschachteltes `<div>` mit `<div class="lk-t">` (Titel) und `<div class="lk-s">` (Sub-Zeile, hier konvergieren Quelle und Beschreibung mit `·`-Trenner).
+
+**Pre-Flight-Check vor Commit** (Bash-Schnipsel, kopierbar):
+
+```bash
+for f in grundlagen/g*.html schwerpunkt/s*.html; do
+  pw=$(grep -c "page-wrap" "$f")
+  mc=$(grep -c 'main class="content"' "$f")
+  navjs=$(grep -c 'src="../nav.js">' "$f")
+  navdef=$(grep -c 'src="../nav.js" defer' "$f")
+  ml=$(grep -c 'src="../mathlib.js"' "$f")
+  bn=$(grep -cE 'buildNav\(\{[[:space:]]*$|buildNav\(\{ bereich' "$f")
+  sec=$(grep -cE '<section\b' "$f")
+  # Klassen-Check: Phantom-Klassen, die im CSS nicht existieren
+  bad=$(grep -cE 'class="(inhalt|brot|seiten-kopf|rlp\b|rlp-list|rlp-label|seiten-fuss|dl-box|ressourcen-grid|ress|ress-titel|ress-beschr|ress-quelle)"' "$f")
+  # Skript-Konsistenz: wenn loesung-toggle benutzt, MUSS mathlib.js eingebunden sein
+  togL=$(grep -c 'class="loesung-toggle"' "$f")
+  if [ "$togL" != "0" ] && [ "$ml" = "0" ]; then mlw="MATHLIB-FEHLT!"; else mlw="ok"; fi
+  printf "%-50s pw=%s mc=%s nav=%s def=%s ml=%s bn=%s sec=%s bad=%s tog=%s/%s\n" "$f" "$pw" "$mc" "$navjs" "$navdef" "$ml" "$bn" "$sec" "$bad" "$togL" "$mlw"
+done
+```
+
+Erwartete Werte: `pw=1 mc=1 nav=1 def=0 ml=1 bn=1 sec=0 bad=0` und `tog=N/ok` (N = beliebige Anzahl Toggles, `ok` = mathlib.js eingebunden). Jede Phantom-Klasse (im Klassen-Check) zeigt eine eigenkreierte Klasse an, die nicht im CSS existiert — Layout bricht entsprechend stillschweigend. `MATHLIB-FEHLT!` zeigt eine Seite, die `toggleL` aufruft, aber `mathlib.js` nicht lädt — Lösungen klappen ohne Konsole-Hinweis nicht auf.
+
+---
+
+## 6.1.1 Praxisbeispiel-Seiten (Sonderfall des Skeletts)
+
+Praxisbeispiel-Seiten sind thematische Hüllen, die einem ganzen Lerngebiet ein konkretes, durchgehendes Anwendungs-Beispiel zur Seite stellen (z.B. eine BM2-Klasse als Datensatz für alle Themen aus Lerngebiet 4). Sie sind **keine RLP-Teilgebiete** und folgen einem reduzierten Skelett.
+
+**Erkennungsmerkmal** ist der Dateiname-Präfix `gN-0-…` (Grundlagenfach) oder `sN-0-…` (Schwerpunktfach) — die `0`-Position kollidiert nie mit RLP-Teilgebiet-Nummern, die ab `1` zählen.
+
+**Erlaubte Abweichungen vom Standard-Skelett:**
+
+| Element | Standard-Themenseite | Praxisbeispiel-Seite |
+|---|---|---|
+| `pt-bereich`-Suffix | Endet mit Lektionenzahl | Zusätzlich `· Praxisbeispiel` am Ende |
+| `<div class="rlp-kompetenzen">` | Pflicht | **Entfällt** (kein RLP-Teilgebiet) |
+| `<h2 id="aufgaben">` | Pflicht | **Entfällt** (Aufgaben stehen auf den verlinkten Themenseiten) |
+| `<h2 id="downloads">` | Pflicht | **Entfällt** |
+| `<h2 id="ressourcen">` | Pflicht | **Entfällt** |
+| Merksatz-Block | Üblich | Entfällt typischerweise |
+
+**Pflicht bleibt** weiterhin: HTML-Skelett (`page-wrap`/`main.content`/`nav.js`/`mathlib.js`/`buildNav`), `pt-bereich`, `pt-h1`, `<p class="lead">`, `<h2 id="einstieg">`, Footer.
+
+**Erkennbar bleiben muss** im `pt-bereich`, dass es sich um ein Praxisbeispiel handelt (Suffix `· Praxisbeispiel`). Damit weiss die Lernende sofort, dass diese Seite die Themen-Anwendung zeigt, nicht ein eigenständiges Lerngebiet.
+
+Aktuell ist `g4-0-praxisbeispiel-bm2-klasse.html` die einzige Praxisbeispiel-Seite im Lehrmittel. Beim Anlegen weiterer (z.B. `s2-0-…` für ein Schwerpunkt-Anwendungsbeispiel) gelten dieselben Regeln.
+
+---
+
+## 6.2 Reservierte Top-Level-Identifier (kollidieren mit `mathlib.js` / `nav.js`)
+
+Themenseiten binden `nav.js` und `mathlib.js` als geteilte Bibliotheken ein. Beide deklarieren mehrere Symbole im globalen Scope. Wenn Inline-Skripte einer Themenseite ein Symbol mit demselben Namen erneut deklarieren, ist das Verhalten je nach Deklarationsart unterschiedlich:
+
+- **`const`, `let`, `class`** → harter `SyntaxError: Identifier '...' has already been declared` beim Parsen. Das **gesamte** weitere Inline-Skript wird nicht ausgeführt. Effekt: alle Animationen blank, Console rot, isolierter `node --check` der Themenseite findet's nicht (Kollision entsteht erst beim kombinierten Laden).
+- **`function`, `var`** → keine Fehlermeldung, die zweite Definition überschreibt die erste. Funktioniert technisch, ist aber unsauber und ein versteckter Stolperstein für die nächste Person, die `mathlib.toggleL()` aufruft und plötzlich anderes Verhalten bekommt.
+
+**Aus `mathlib.js` reserviert:**
+
+| Symbol | Typ | Zweck |
+|---|---|---|
+| `fmt` | `const` | Zahlen-Formatierer (0, ganzzahlig, sonst eine Nachkommastelle) |
+| `fmtS` | `const` | Vorzeichen-Term mit Unicode-Minus |
+| `fmtMx` | `const` | Matrix-Formatierer |
+| `fmtAffine` | `const` | Affine Abbildung als String |
+| `parseL` | `function` | Term-Parser für Aufgaben |
+| `toggleL` | `function` | Lösungs-Toggle |
+| `initCanvas` | `function` | Canvas-Initialisierung mit DPR |
+| `drawGrid` | `function` | Achsenraster zeichnen |
+| `drawLine` | `function` | Linie mit logischen Koordinaten |
+| `drawDot` | `function` | Punkt mit logischen Koordinaten |
+
+**Aus `nav.js` reserviert:**
+
+| Symbol | Typ | Zweck |
+|---|---|---|
+| `SITE` | `const` | Komplette Themenseiten-Hierarchie |
+| `GROUPS` | `const` | Bereich-Gruppierung für Header |
+| `TOC_KURZ` | `const` | Kurz-Labels für Standard-Sektionen |
+| `buildNav` | `function` | Header und Breadcrumb einsetzen |
+| `buildToC` | `function` | Sticky ToC aufbauen |
+| `toggleDD` | `function` | Dropdown-Menü-Toggle |
+| `toggleMobileNav` | `function` | Mobile-Nav-Toggle |
+
+**Vermeiden in Inline-Skripten von Themenseiten:**
+- **`const`/`let`/`class` mit reserviertem Namen auf Top-Level redeklarieren** ist verboten — bricht die ganze Seite. Lokal innerhalb einer Funktion (`function foo() { const fmt = ...; }`) ist okay, das ist Block-Scope.
+- **`function`/`var` mit reserviertem Namen redeklarieren** ist erlaubt, aber zu vermeiden — wenn andere Codestellen die mathlib-Variante des Symbols erwarten, bekommen sie deine Ersatz-Implementierung. Stattdessen unter eigenem Namensraum ablegen (`const Anim = { fmt: ..., draw: ... }`), oder lokal in einer IIFE.
+- **Keine griechischen Unicode-Buchstaben als Identifier** (`const α = ...`). Sprachspezifikation erlaubt sie, Browser-Engines sind aber inkonsistent — vor allem bei Misch-Identifiern wie `αs`. Stattdessen `alpha`, `beta`, `gamma`, `alphaS` etc. verwenden. Strings für die Anzeige (`txt(ctx, x, y, 'α', ...)`) bleiben unverändert.
+
+**Pre-Flight-Erweiterung — Kollisions-Check:**
+
+```python
+# scripts/check_identifier_collisions.py
+import re
+from pathlib import Path
+
+reserved = {'fmt', 'fmtS', 'fmtMx', 'fmtAffine', 'parseL', 'toggleL',
+            'initCanvas', 'drawGrid', 'drawLine', 'drawDot',
+            'SITE', 'GROUPS', 'TOC_KURZ',
+            'buildNav', 'buildToC', 'toggleDD', 'toggleMobileNav'}
+
+def find_top_level_decls(js):
+    """Findet const/let/var/function/class-Deklarationen NUR auf Top-Level
+    (Klammertiefe = 0, Strings/Kommentare ausgeschlossen)."""
+    decls, depth, i = [], 0, 0
+    in_s = in_d = in_b = in_lc = in_bc = False
+    line_start = True
+    while i < len(js):
+        c = js[i]; nxt = js[i+1] if i+1 < len(js) else ''
+        if in_lc:
+            if c == '\n': in_lc = False; line_start = True
+            i += 1; continue
+        if in_bc:
+            if c == '*' and nxt == '/': in_bc = False; i += 2; continue
+            i += 1; continue
+        if in_s:
+            if c == '\\': i += 2; continue
+            if c == "'": in_s = False
+            i += 1; continue
+        if in_d:
+            if c == '\\': i += 2; continue
+            if c == '"': in_d = False
+            i += 1; continue
+        if in_b:
+            if c == '\\': i += 2; continue
+            if c == '`': in_b = False
+            i += 1; continue
+        if c == '/' and nxt == '/': in_lc = True; i += 2; continue
+        if c == '/' and nxt == '*': in_bc = True; i += 2; continue
+        if c == "'": in_s = True; i += 1; continue
+        if c == '"': in_d = True; i += 1; continue
+        if c == '`': in_b = True; i += 1; continue
+        if c in '{[(': depth += 1
+        if c in '}])': depth -= 1
+        if c == '\n': line_start = True; i += 1; continue
+        if line_start and depth == 0:
+            if c in ' \t': i += 1; continue
+            m = re.match(r'(const|let|var|function|class)\s+(\w+)', js[i:])
+            if m: decls.append((m.group(2), m.group(1)))
+            line_start = False
+        i += 1
+    return decls
+
+hard = []  # const/let/class → harter Fehler
+soft = []  # function/var → unsauber, überlebt
+for f in sorted(Path('.').rglob('*.html')):
+    html = f.read_text()
+    for s in re.findall(r'<script(?![^>]*src=)[^>]*>(.*?)</script>', html, re.DOTALL):
+        for name, kind in find_top_level_decls(s):
+            if name in reserved:
+                (hard if kind in ('const', 'let', 'class') else soft).append((str(f), name, kind))
+
+if hard:
+    print("BLOCKIEREND (Seite bricht):")
+    for f, n, k in hard: print(f"  ⛔ {f}: {k} {n}")
+if soft:
+    print("AUFRÄUMEN (unsauber, läuft aber):")
+    for f, n, k in soft: print(f"  ⚠  {f}: {k} {n}")
+if not (hard or soft):
+    print("✓ Keine Kollisionen")
+```
+
+Erwartet im sauberen Repo: keine Ausgabe. Eine `⛔`-Meldung blockiert die betroffene Seite komplett (alle Inline-JS-Funktionen nicht definiert); `⚠` ist tolerierbar, sollte aber bei nächster Berührung der Seite saubergezogen werden.
+
+---
+
+## 6.3 Werkzeug-Skripte für Konventions-Erzwingung
+
+Unter `scripts/` liegen mehrere Python-Skripte, die bei der Massen-Bereinigung des Lehrmittels nach Konventions-Updates **wiederverwendbar** sind. Besonders relevant bei der Schwerpunktfach-Ausarbeitung (s1–s4), wenn neue Inhalte aus externen Vorlagen übernommen werden, die typische deutsche Konventionen mitbringen (Dezimalkomma, ß, „Kosinus").
+
+Alle vier `convert_*.py`-Skripte folgen dem gleichen Aufbau:
+- Schutzlogik (protect_regions): URLs, `<script>`, `<style>`, `<svg>`, SVG-Attribute werden vor der Ersetzung ausmaskiert
+- Dry-Run-Modus möglich (Aufruf-Argument `--dry-run`)
+- Diff-Ausgabe pro veränderte Datei (zur Inspektion)
+- Verifikations-Funktion `verify_no_residuals(filepath)` für nachgelagerte Checks
+
+### 6.3.1 `scripts/convert_decimals.py` — Dezimalkomma → Dezimalpunkt
+
+**Zweck:** Massenkonversion aller Klartext- und MathJax-Dezimalkommas auf Dezimalpunkte (gemäss §2.4 dieses Styleguides).
+
+**Strategie:** Behält Funktionskommas in `f(1, 2)` etc. bei. Greift nur auf Muster `[0-9],[0-9]` zu, schützt zuvor `<style>`, `<svg>`, Google-Fonts-URLs, SVG-Attribute (`d/points/viewBox/transform`). In `<script>`-Blöcken werden nur eindeutige MathJax-Dezimal-Strings (`[0-9]{,}[0-9]`) ersetzt.
+
+**Bietet auch:** `verify_no_residuals(filepath)` — liefert ein Dictionary mit eventuellen Rest-Funden (für Verifikations-Loops nach Massenpatches).
+
+```bash
+python3 scripts/convert_decimals.py            # echte Konversion
+python3 scripts/convert_decimals.py --dry-run  # nur Diff anzeigen
+```
+
+### 6.3.2 `scripts/convert_eszett.py` — ß → ss
+
+**Zweck:** Schweizer Hochdeutsch ohne ß (gemäss §2.5). Variante A: auch Eigennamen (`Gauß-Algorithmus → Gauss-Algorithmus`).
+
+**Geltungsbereich:** alle HTML-Lehrmittel-Dateien (grundlagen/, downloads/, schwerpunkt/, index, TEMPLATE). **KEINE** Markdown-Dokumentation — dort sind ß in Meta-Erwähnungen der Regel selbst legitim.
+
+**Schutz:** ß-Vorkommen in `<style>`, `<svg>`, SVG-Attributen werden nicht angetastet (defensiv — kommt in der Praxis nicht vor).
+
+### 6.3.3 `scripts/convert_cosinus.py` — Kosinus → Cosinus
+
+**Zweck:** Schweizer Konvention (gemäss §2.5). Ersetzt case-erhaltend (`Kosinus` → `Cosinus`, `kosinus` → `cosinus`).
+
+**Schutz:** URLs (`href`/`src`), `<script>`, `<style>`, `<svg>`, SVG-Attribute werden ausmaskiert. Externe Serlo-Links mit `kosinus` im URL-Pfad bleiben so erhalten.
+
+### 6.3.4 `scripts/convert_punktkoord.py` — Punkt-Koordinaten `(x, y)` → `(x | y)`
+
+**Zweck:** FTB-Notation für Punkt-Koordinaten (gemäss §2.4: `P(x \mid y)`).
+
+**Strategie:** Pro Datei eine handgepflegte Liste von alt→neu-Replacements. Das vermeidet Falsch-Positiva in Datenwert-Aufzählungen wie „2 Werte (158, 162)" in Statistik-Übungen. **Beim Übernehmen für Schwerpunktfach-Seiten** muss die `REPLACEMENTS`-Liste pro neuer Seite manuell um die identifizierten Stellen erweitert werden — die Skript-Struktur ist als Template gedacht.
+
+### 6.3.5 Empfohlene Reihenfolge bei einer neuen Seitenfamilie (z.B. s1–s4)
+
+Nach Erstellung der neuen Themenseiten und vor Pre-Flight-Check:
+
+```bash
+python3 scripts/convert_eszett.py        # ß → ss
+python3 scripts/convert_cosinus.py       # Kosinus → Cosinus
+python3 scripts/convert_decimals.py      # Dezimalkomma → Dezimalpunkt
+# convert_punktkoord.py NUR ausführen, wenn die REPLACEMENTS-Liste für die neuen
+# Seiten manuell ergänzt wurde (sonst sinnlos, da hartkodiert).
+python3 scripts/check_identifier_collisions.py
+```
+
+Anschliessend Pre-Flight-Check aus §6.1 fahren.
+
+### 6.3.6 Verifikations-Loop nach Massenpatches
+
+Nach jedem Skript-Lauf sollte global geprüft werden, ob keine Residuen oder Strays übrig sind. Standard-Snippet (in mehreren Sessions bewährt):
+
+```python
+import glob, sys
+sys.path.insert(0, 'scripts')
+import convert_decimals as cd
+
+files = sorted(glob.glob('grundlagen/*.html') +
+               glob.glob('downloads/grundlagen/**/*.html', recursive=True) +
+               glob.glob('schwerpunkt/*.html'))
+strays = sum(1 for fp in files if '\x00' in open(fp).read() or '\x01' in open(fp).read())
+residue = sum(1 for fp in files if any(cd.verify_no_residuals(fp).values()))
+total_ss = sum(open(fp).read().count('ß') for fp in files)
+print(f"Stray: {strays} | Residuen: {residue} | ß: {total_ss}")
+```
+
+Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächsten Schritt behoben werden.
 
 ---
 
@@ -299,10 +847,10 @@ TALS-Mathe/
 
 | Seite | Footer-Inhalt |
 |---|---|
-| **`index.html`** | Zeile 1: „**TALS Mathematik** — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences"<br>Zeile 2: GitHub Pages-Link |
-| **Themenseiten** | Zeile 1: „**TALS Mathematik** — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences"<br>Zeile 2: „<Bereich> <Themenname>" — z.B. „Grundlagen Lineare Funktionen", „Schwerpunkt Logarithmusfunktionen" |
+| **`index.html`** | Zeile 1: „**TALS Mathematik** — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences"<br>Zeile 2: GitHub Pages-Link zum Repo (`https://github.com/go4exercises/tals-mathe`) |
+| **Themenseiten** | Zeile 1: „**TALS Mathematik** — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences"<br>Zeile 2: „⟪Bereich⟫ ⟪RLP-Nr⟫ ⟪Themenname⟫" — z.B. „Grundlagenfach 3.2 Lineare Funktionen", „Schwerpunktfach 3.4 Exponential- und Logarithmusfunktionen" |
 
-**Format Bereich/Thema:** Ohne Trennzeichen, ohne Kapitelnummer. Nur „Grundlagen" oder „Schwerpunkt", Leerzeichen, Themenname.
+**Format Bereich/Nr/Thema:** Vollständige Bereichsbezeichnung („Grundlagenfach" oder „Schwerpunktfach", **mit** „-fach"-Suffix), Leerzeichen, RLP-Teilgebiet-Nummer (z.B. `3.2`, bei Sub-Split mit Suffix `2.2a`), Leerzeichen, Themenname (= Sub-Themenname bei Sub-Split, also „Lineare Gleichungen", nicht „Lineare und quadratische Gleichungen"). Keine zusätzlichen Wörter, kein Lerngebiets-Name.
 
 ---
 
@@ -337,9 +885,25 @@ Bevor eine Themenseite live geht, prüfe:
 - [ ] Alle 5 Einträge in fester Reihenfolge: Handout · Formelauszug · Anki-Deck · Teste dich selbst · Aufgabenserie
 - [ ] Druckseiten öffnen in neuem Tab (`target="_blank" rel="noopener"`)
 - [ ] Anki-Deck als Download verlinkt (`.apkg`), die anderen vier als HTML-Druckseiten
-- [ ] Footer korrekt: „Grundlagen <Thema>" oder „Schwerpunkt <Thema>"
-- [ ] `nav.js` korrekt eingebunden mit prev/next
-- [ ] ToC funktioniert (alle h2 haben `id`)
+- [ ] **Footer korrekt im Format „⟪Bereich⟫ ⟪RLP-Nr⟫ ⟪Themenname⟫"** — z.B. „Grundlagenfach 3.2 Lineare Funktionen" (siehe §7)
+- [ ] **Titel-Präfix in `<h1 class="pt-h1">`** enthält die RLP-Nummer — z.B. „3.2 Lineare Funktionen", bei Sub-Split „2.2a Lineare Gleichungen"
+- [ ] **Externe-Ressourcen-Sektion: `<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>`** (genauer Wortlaut, siehe §4)
+- [ ] **YouTube-Links sind stabile Watch-/Playlist-URLs** — keine `youtube.com/results?…`-Suchen
+- [ ] **RLP-Pill `<span class="ohm">`** nur für exakt „auch ohne Hilfsmittel" — differenzierte Hinweise als Inline-Klammertext
+- [ ] **Bei Sub-Split**: Hinweis „RLP X.Y · Teil n von m" zwischen Titel und RLP-Box; Sub-Karten im Index in `<div class="ksub">`-Container gruppiert
+
+**HTML-Skelett (siehe §6.1)**
+- [ ] Body-Struktur: `body > div#nav-root > div.page-wrap > main.content` + Geschwister `aside.toc-wrap`
+- [ ] **`<main class="content">`** — nicht `inhalt` oder andere Eigenkreationen
+- [ ] **`<aside class="toc-wrap"><div id="toc"></div></aside>`** als leerer Container *nach* `</main>`, nicht davor; keine hardcoded TOC-Liste
+- [ ] **Anker-IDs direkt am `<h2 id="…">`** — keine `<section>`-Wrapper rund um Abschnitte
+- [ ] **`<script src="../nav.js"></script>` ohne `defer`** und direkt vor dem `buildNav()`-Inline-Script
+- [ ] **`buildNav({ bereich, id, kapitelNr, kapitelTitel, prev, next })`** — exakt diese Signatur, alle Felder gesetzt
+- [ ] **Zusatzmaterial:** Container `<div class="dl-grid">`, Karten `<a class="dl">` (siehe §6.1) — nicht `dl-box`
+- [ ] **Externe Ressourcen:** Container `<div class="links-grid">`, Karten `<a class="lk">` für Videos / `<a class="lk aufg">` für Aufgabensammlungen mit `<span class="lk-ic">` + verschachtelter Title/Sub-Struktur — nicht `ressourcen-grid`/`ress`
+- [ ] **Block-Modifier** sind aus dem Inventar von §5.1: `block-def`/`block-bsp`/`block-aufg`/`block-fehler`/`block-beweis`/`block-tipp`/`block-merksatz` — keine Eigenkreationen
+- [ ] Pre-Flight-Bash-Check aus §6.1 ausgeführt — alle Werte stimmen, Phantom-Klassen-Check `bad=0`
+- [ ] ToC funktioniert (jeder h2 mit Sektionsfunktion hat eine `id`)
 
 **Druckseiten (`downloads/.../*.html`)**
 - [ ] Handout enthält ausschliesslich Theorie — keine Beispiele, keine Aufgaben
@@ -347,12 +911,36 @@ Bevor eine Themenseite live geht, prüfe:
 - [ ] `print.css` und (falls Diagramme) `diagram.js` eingebunden
 - [ ] Saubere A4-Seitenwechsel (`page-break-inside: avoid` für Aufgaben/Lösungs-Blöcke)
 - [ ] Diagramme: reine Mathematik 1:1, Anwendungen mit Achsenbeschriftung und Einheit
+- [ ] Ankideck erstellt und verlinkt?
 
 **Technisch**
 - [ ] MathJax lädt
 - [ ] Responsiv auf Mobile (≤500 px Viewport)
 - [ ] Alle interaktiven Widgets funktionieren
 - [ ] Lösungen zugeklappt by default
+
+---
+
+## 9. Stub-Seiten (in Vorbereitung)
+
+Eine **Stub-Seite** ist eine Themenseite, deren Struktur (RLP-Header, Master-Schema, Section-Headings, Footer, Nav) bereits steht, aber inhaltlich noch leer ist. Sie macht die Lehrplan-Abdeckung vollständig sichtbar, ohne 404-Links zu produzieren.
+
+**Pflicht-Elemente einer Stub-Seite:**
+
+- **Stub-Banner** als allererstes Element nach dem `<div class="page-titel">` und **vor** der RLP-Kompetenzen-Box. Genauer Wortlaut:
+  ```html
+  <div class="stub-banner">
+    <strong>In Vorbereitung</strong>
+    Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: ⟪Monat Jahr⟫.
+  </div>
+  ```
+  Beim Veröffentlichen einer Themenseite (Übergang Stub → fertig) wird der Banner ersatzlos entfernt.
+- **RLP-Kompetenzen-Box** vollständig — die Stub-Seite ist die zuverlässige Quelle dafür, was später inhaltlich abgedeckt wird.
+- **Master-Schema-Skelett** mit Platzhalter-Texten („*Wird ausgearbeitet — formal nach FTB-Notation.*") in jedem Abschnitt. Die `<h2 id="…">`-IDs müssen schon richtig stehen, damit ToC und Cross-Links auch im Stub-Zustand funktionieren.
+- **Footer und Nav (`buildNav`)** sind bereits korrekt gesetzt — Stubs sind voll in der Prev/Next-Kette.
+- Keine Zusatzmaterial-Sektion und keine externen Ressourcen, solange die Seite Stub ist (würde leere Karten produzieren).
+
+**Index-Karte einer Stub-Seite:** Die Karte erhält die Klasse `karte geplant` (kein grüner Streifen, ausgegrauter Titel, Cursor `help`, Pseudo-Element-Badge „in Vorbereitung" oben rechts). Sie bleibt klickbar — der Stub-Banner auf der Zielseite ist dann selbsterklärend.
 
 ---
 

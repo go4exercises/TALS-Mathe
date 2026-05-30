@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Masszahlen — TALS Mathematik</title>
+<title>4.3 Masszahlen — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
-<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<!-- MathJax -->
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
@@ -19,7 +19,62 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* Klassen-Vergleich (Einstieg, Robustheit) */
+.vergleich-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+@media (max-width: 720px) { .vergleich-grid { grid-template-columns: 1fr; } }
+.vergleich-box { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; padding: 12px 14px; }
+.vergleich-box h4 { margin: 0 0 6px; font-size: 0.95rem; color: var(--tinte); }
+.vergleich-box .liste { font-family: var(--mono); font-size: 0.95rem; color: var(--blau); background: var(--blau-hell); padding: 7px 10px; border-radius: 6px; margin: 6px 0; }
+.vergleich-box .kennz { font-size: 0.88rem; color: var(--tinte-2); margin-top: 4px; }
+
+/* Tabs für die drei Lagemasse */
+.lage-tabs { display: flex; gap: 4px; margin: 10px 0 0; flex-wrap: wrap; }
+.lage-tab { padding: 6px 14px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.78rem; transition: 0.15s; }
+.lage-tab.aktiv { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+.lage-tab:hover { border-color: var(--blau); }
+.lage-panel { display: none; background: var(--blau-hell); border: 1px solid var(--blau); border-radius: 8px; padding: 12px 14px; margin-top: 6px; }
+.lage-panel.aktiv { display: block; }
+.lage-panel h3 { color: var(--blau); margin: 0 0 8px; font-size: 1.05rem; }
+
+/* Berechnungs-Kästchen (Inline-Rechenschritte) */
+.berechnung { background: var(--papier-2); border-left: 3px solid var(--blau); padding: 8px 12px; margin: 8px 0; font-family: var(--mono); font-size: 0.92rem; color: var(--tinte); border-radius: 0 6px 6px 0; }
+
+/* Tabellen-Kalkulations-Formelreferenz */
+.tk-formeln { width: 100%; border-collapse: collapse; margin: 12px 0; background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; overflow: hidden; box-shadow: var(--s); }
+.tk-formeln th { background: var(--tinte); color: var(--weiss); padding: 8px 12px; text-align: left; font-size: 0.78rem; font-weight: 600; }
+.tk-formeln td { padding: 7px 12px; border-bottom: 1px solid var(--linie); font-size: 0.85rem; vertical-align: top; }
+.tk-formeln td:first-child { font-weight: 600; color: var(--tinte); width: 30%; }
+.tk-formeln td:nth-child(2) { font-family: var(--mono); color: var(--blau); width: 38%; }
+.tk-formeln tr:nth-child(even) td { background: var(--papier); }
+.tk-formeln tr:last-child td { border-bottom: none; }
+
+/* Robustheit-Vergleich (Median vs. Mittelwert) */
+.robust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+@media (max-width: 720px) { .robust-grid { grid-template-columns: 1fr; } }
+.robust-box { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; padding: 12px 14px; }
+.robust-box.ohne { border-color: var(--gruen-rand); }
+.robust-box.mit  { border-color: var(--rot-rand); }
+.robust-box h4 { margin: 0 0 6px; font-size: 0.95rem; }
+.robust-box.ohne h4 { color: var(--gruen); }
+.robust-box.mit  h4 { color: var(--rot); }
+.robust-box .werte { font-family: var(--mono); font-size: 0.88rem; color: var(--tinte); background: var(--papier-2); padding: 6px 10px; border-radius: 5px; margin: 6px 0; }
+.robust-box .interpr { font-size: 0.88rem; color: var(--tinte-2); margin-top: 4px; }
+
+/* Boxplot-Bezug-Kasten (Verbindung zu 4.2) */
+.boxplot-bezug { background: var(--blau-hell); border: 1px solid var(--blau-rand); border-radius: 8px; padding: 12px 14px; margin: 14px 0; }
+.boxplot-bezug h4 { margin: 0 0 6px; color: var(--blau); font-size: 0.95rem; }
+.boxplot-bezug p { margin: 0; font-size: 0.9rem; }
+
+/* Einstieg: Streuungs-Animation */
+.streu-box { background: var(--papier-2, #f3eedf); border-radius: 8px; padding: 14px 16px; margin: 12px 0; }
+.streu-box .sl-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; font-family: var(--mono); font-size: 0.88rem; }
+.streu-box .sl-row label { min-width: 130px; }
+.streu-box .sl-row input[type=range] { flex: 1 1 200px; max-width: 280px; }
+.streu-box .sl-val { font-weight: 700; color: var(--blau); min-width: 30px; }
+.streu-box canvas { width: 100%; height: 230px; display: block; background: var(--weiss); border-radius: 6px; margin-top: 8px; }
+.streu-box .sl-cap { font-size: 0.85rem; color: var(--tinte-2); margin-top: 6px; font-style: italic; }
+
+/* Zusammenfassungs-Tabelle */
 </style>
 </head>
 <body>
@@ -27,13 +82,18 @@ MathJax = {
 <div class="page-wrap">
 <main class="content">
 
-<!-- ══ 1. TITEL + RLP-HEADER ══ -->
 <div class="page-titel">
   <div class="pt-bereich">Grundlagenfach · Lerngebiet 4 · Datenanalyse · 20 Lektionen</div>
   <h1 class="pt-h1">4.3 Masszahlen</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">
+  Eine ganze Stichprobe in <em>einer einzigen Zahl</em> zusammenfassen — das ist die Idee der Masszahlen.
+  <strong>Lagemasse</strong> (Mittelwert, Median, Modus) sagen, <em>wo</em> die Daten liegen.
+  <strong>Streumasse</strong> (Standardabweichung, Quartilsdifferenz) sagen, <em>wie weit</em> sie auseinandergehen.
+  Erst beide zusammen ergeben ein vollständiges Bild.
+</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.3</div>
   <ul>
@@ -42,49 +102,494 @@ MathJax = {
   </ul>
 </div>
 
+<h2 id="einstieg">Einstieg — Welche Klasse ist besser?</h2>
 
-<!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<p>In zwei Mathe-Klassen wurde die gleiche Prüfung geschrieben. Beide Klassen haben <strong>denselben Mittelwert von 4.5</strong>. Verschiebe den Regler unten und beobachte, was mit den Noten in Klasse B passiert — und was mit dem Mittelwert:</p>
 
+<div class="streu-box">
+  <div class="sl-row">
+    <label>Streuung Klasse B: <span class="sl-val" id="sl-s">100</span> %</label>
+    <input type="range" id="sl-streuung" min="0" max="100" step="1" value="100">
+  </div>
+  <canvas id="sl-canvas" aria-label="Notenverteilungen zweier Klassen"></canvas>
+  <div class="sl-cap">Beide Klassen haben acht Noten und denselben Mittelwert 4.5 (rote Linie). Der Regler ändert nur, wie weit die Noten von Klasse B auseinander liegen.</div>
+</div>
 
-<!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<p>Was du beobachtest: Der <strong>Mittelwert bleibt fix bei 4.5</strong>, egal wie du den Regler einstellst. Trotzdem sehen die Klassen sehr unterschiedlich aus — bei voller Spreizung liegen einzelne Noten weit ausserhalb, bei null Spreizung sind beide Klassen identisch. Mittelwert alleine erzählt also nicht die ganze Geschichte. Du brauchst eine zweite Zahl, die misst, <em>wie breit</em> die Werte verteilt sind. In diesem Kapitel lernst du beide Arten von Masszahlen — und siehst, wann welche relevant ist.</p>
 
+<div class="block block-tipp">
+  <div class="block-titel">💡 Wichtiger Bezug zu Kapitel 4.2</div>
+  Den <strong>Boxplot</strong> aus Kapitel 4.2 baust du aus <em>genau diesen</em> Masszahlen: minimum, Q<sub>1</sub>, Median, Q<sub>3</sub>, maximum. Wer Masszahlen versteht, versteht den Boxplot.
+</div>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<h2 id="definition">Lagemasse — wo liegt die Mitte? <a class="quer" href="g4-1-grundlagen.html#darstellungen">↩ 4.1</a></h2>
 
+<div class="lage-tabs">
+  <button class="lage-tab aktiv" onclick="showLage('mw', this)">Mittelwert</button>
+  <button class="lage-tab" onclick="showLage('med', this)">Median</button>
+  <button class="lage-tab" onclick="showLage('mod', this)">Modus</button>
+</div>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<div id="lage-mw" class="lage-panel aktiv">
+  <h3>Arithmetisches Mittel (Mittelwert) \(\bar{x}\)</h3>
+  <div class="block block-def"><div class="block-titel">📘 Definition</div>
+    Der <strong>Mittelwert</strong> ist die Summe aller Werte geteilt durch ihre Anzahl:
+    \[\bar{x} = \frac{x_1 + x_2 + \dots + x_n}{n} = \frac{1}{n}\sum_{i=1}^{n} x_i\]
+  </div>
+  <div class="block block-bsp"><div class="block-titel">🟢 Beispiel — Klasse A</div>
+    Werte: 4.0, 4.3, 4.4, 4.5, 4.5, 4.6, 4.7, 5.0
+    <div class="berechnung">\(\bar{x} = \frac{4.0+4.3+4.4+4.5+4.5+4.6+4.7+5.0}{8} = \frac{36.0}{8} = 4.5\)</div>
+  </div>
+  <p><strong>Eigenschaft:</strong> Der Mittelwert nutzt <em>jeden</em> Wert. Dadurch reagiert er stark auf Ausreisser (siehe weiter unten „Robustheit").</p>
+</div>
 
+<div id="lage-med" class="lage-panel">
+  <h3>Median \(\tilde{x}\)</h3>
+  <div class="block block-def"><div class="block-titel">📘 Definition</div>
+    Der <strong>Median</strong> ist der mittlere Wert der <em>sortierten</em> Liste. Er teilt die Daten in zwei gleich grosse Hälften.
+    <ul style="margin:8px 0 0 0">
+      <li>Bei <strong>ungeradem</strong> n: der Wert an Position \(\frac{n+1}{2}\).</li>
+      <li>Bei <strong>geradem</strong> n: der Mittelwert der beiden Werte an Positionen \(\frac{n}{2}\) und \(\frac{n}{2}+1\).</li>
+    </ul>
+  </div>
+  <div class="block block-bsp"><div class="block-titel">🟢 Beispiel — n ungerade (n = 7)</div>
+    Sortiert: 2, 4, 5, <strong>7</strong>, 8, 9, 10 — Position \(\frac{7+1}{2} = 4\) → Median = <strong>7</strong>.
+  </div>
+  <div class="block block-bsp"><div class="block-titel">🟢 Beispiel — n gerade (n = 8, Klasse A)</div>
+    Sortiert: 4.0, 4.3, 4.4, <strong>4.5, 4.5</strong>, 4.6, 4.7, 5.0 — Positionen 4 und 5.
+    <div class="berechnung">\(\tilde{x} = \frac{4.5 + 4.5}{2} = 4.5\)</div>
+  </div>
+  <div class="block block-fehler">
+    <div class="block-titel">⚠ Häufiger Fehler</div>
+    Der Median wird aus der <em>sortierten</em> Liste bestimmt — nicht aus der Urliste. Wer das Sortieren vergisst, liest oft eine völlig falsche Zahl ab.
+  </div>
+</div>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<div id="lage-mod" class="lage-panel">
+  <h3>Modus (Modalwert) \(\hat{x}\)</h3>
+  <div class="block block-def"><div class="block-titel">📘 Definition</div>
+    Der <strong>Modus</strong> ist der Wert, der <em>am häufigsten</em> vorkommt. Eine Stichprobe kann auch <em>mehrere</em> Modi haben (bimodal, multimodal — siehe Kapitel 4.2) oder gar keinen.
+  </div>
+  <div class="block block-bsp"><div class="block-titel">🟢 Beispiel</div>
+    Schuhgrössen einer Klasse: 38, 39, 39, 40, 40, 40, 41, 42, 43.
+    <br>Die Grösse <strong>40</strong> kommt dreimal vor — das ist der Modus.
+  </div>
+  <p><strong>Wichtig:</strong> Der Modus ist das <em>einzige</em> Lagemass, das auch für <strong>kategoriale</strong> Daten funktioniert. Bei „Lieblingsfach" gibt es keinen Mittelwert — aber sehr wohl ein häufigstes Fach.</p>
+</div>
 
+<h2 id="darstellungen">Streumasse — wie breit verteilt?</h2>
 
-<!-- ══ 7. AUFGABEN ══ -->
+<h3>Standardabweichung \(s\)</h3>
+
+<div class="block block-def"><div class="block-titel">📘 Definition (empirische Standardabweichung)</div>
+  Die <strong>Standardabweichung</strong> misst die durchschnittliche Abweichung der Werte vom Mittelwert:
+  \[s = \sqrt{\dfrac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2}\]
+  Das Quadrat in der Klammer heisst <em>Varianz</em> \(s^2\). Die Wurzel bringt die Einheit zurück (z. B. Punkte statt Punkte²).
+</div>
+
+<div class="block block-bsp"><div class="block-titel">🟢 Beispiel — Klasse A händisch</div>
+  Werte 4.0, 4.3, 4.4, 4.5, 4.5, 4.6, 4.7, 5.0 mit \(\bar{x} = 4.5\).
+  <table class="ftb-tabelle" style="margin-top:10px">
+    <tr><th>\(x_i\)</th><th>\(x_i - \bar{x}\)</th><th>\((x_i - \bar{x})^2\)</th></tr>
+    <tr><td class="td-x">4.0</td><td class="td-calc">−0.5</td><td class="td-calc">0.25</td></tr>
+    <tr><td class="td-x">4.3</td><td class="td-calc">−0.2</td><td class="td-calc">0.04</td></tr>
+    <tr><td class="td-x">4.4</td><td class="td-calc">−0.1</td><td class="td-calc">0.01</td></tr>
+    <tr><td class="td-x">4.5</td><td class="td-calc">0.0</td><td class="td-calc">0.00</td></tr>
+    <tr><td class="td-x">4.5</td><td class="td-calc">0.0</td><td class="td-calc">0.00</td></tr>
+    <tr><td class="td-x">4.6</td><td class="td-calc">0.1</td><td class="td-calc">0.01</td></tr>
+    <tr><td class="td-x">4.7</td><td class="td-calc">0.2</td><td class="td-calc">0.04</td></tr>
+    <tr><td class="td-x">5.0</td><td class="td-calc">0.5</td><td class="td-calc">0.25</td></tr>
+    <tr><td colspan="2"><strong>Summe</strong></td><td class="td-calc"><strong>0.60</strong></td></tr>
+  </table>
+  <div class="berechnung">\(s = \sqrt{\dfrac{0.60}{8-1}} = \sqrt{0.0857\dots} \approx 0.29\)</div>
+  Im Vergleich: Klasse B (Werte 2.5, 3.0, 3.8, 4.5, 4.5, 5.2, 6.0, 6.5) hat \(s \approx 1.39\) — fast fünfmal grösser. Das passt zum visuellen Eindruck der breiten Streuung.
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Warum geteilt durch (n − 1) und nicht durch n?</div>
+  Bei einer <em>Stichprobe</em> liefert die Division durch \(n-1\) eine bessere Schätzung der „wahren" Streuung in der Grundgesamtheit. Das ist die in der Schule und in Tabellenkalkulationen übliche Konvention (Funktion <code>STABW.S</code>).
+</div>
+
+<h3>Quartile und Quartilsdifferenz <a class="quer" href="g4-2-diagramme.html">↗ 4.2</a></h3>
+
+<div class="block block-def"><div class="block-titel">📘 Definition — Quartile</div>
+  Die <strong>Quartile</strong> Q<sub>1</sub>, Q<sub>2</sub>, Q<sub>3</sub> teilen die <em>sortierte</em> Stichprobe in vier gleich grosse Teile:
+  <ul style="margin:8px 0 0 0">
+    <li><strong>Q<sub>1</sub></strong> (unteres Quartil): Median der unteren Hälfte — 25 % der Werte sind kleiner oder gleich Q<sub>1</sub>.</li>
+    <li><strong>Q<sub>2</sub></strong> = Median \(\tilde{x}\) — 50 % der Werte sind kleiner oder gleich Q<sub>2</sub>.</li>
+    <li><strong>Q<sub>3</sub></strong> (oberes Quartil): Median der oberen Hälfte — 75 % der Werte sind kleiner oder gleich Q<sub>3</sub>.</li>
+  </ul>
+  <p style="margin:8px 0 0 0"><em>Berechnungsmethode:</em> Q<sub>1</sub> ist der Median der unteren Hälfte der sortierten Liste, Q<sub>3</sub> der Median der oberen Hälfte (Median-der-Hälften-Methode, auch Tukey-Methode). Bei ungeradem \(n\) wird der Median selbst <em>nicht</em> in die Hälften einbezogen.</p>
+</div>
+
+<div class="block block-def"><div class="block-titel">📘 Definition — Quartilsdifferenz (IQR)</div>
+  Die <strong>Quartilsdifferenz</strong> ist
+  \[\text{QD} = Q_3 - Q_1\]
+  Sie misst die Breite der mittleren 50 % der Daten — das ist genau die <em>Boxbreite</em> im Boxplot.
+</div>
+
+<div class="block block-bsp"><div class="block-titel">🟢 Beispiel — Klasse B (n = 8)</div>
+  Sortiert: 2.5, 3.0, 3.8, 4.5, 4.5, 5.2, 6.0, 6.5
+  <ul style="margin:8px 0 0 0">
+    <li>Untere Hälfte: 2.5, 3.0, 3.8, 4.5 → \(Q_1 = \frac{3.0+3.8}{2} = 3.4\)</li>
+    <li>Median: \(\tilde{x} = \frac{4.5+4.5}{2} = 4.5\)</li>
+    <li>Obere Hälfte: 4.5, 5.2, 6.0, 6.5 → \(Q_3 = \frac{5.2+6.0}{2} = 5.6\)</li>
+    <li>Quartilsdifferenz: \(\text{QD} = 5.6 - 3.4 = 2.2\)</li>
+  </ul>
+</div>
+
+<div class="boxplot-bezug">
+  <h4>🔗 Verbindung zum Boxplot (Kapitel 4.2)</h4>
+  <p>Die fünf Zahlen für jeden Boxplot sind genau:
+  <strong>min, Q<sub>1</sub>, Median, Q<sub>3</sub>, max</strong>. Die <em>Box</em> reicht von Q<sub>1</sub> bis Q<sub>3</sub>, ihre Breite ist die Quartilsdifferenz. Die <em>Whisker</em> reichen zum kleinsten und grössten Wert. Wer die Quartile berechnet, kann den Boxplot zeichnen — und umgekehrt.</p>
+</div>
+
+<h2 id="typen">Grosse Stichproben — Tabellenkalkulation</h2>
+
+<p>Bei \(n = 8\) ist Handrechnung noch zumutbar. Bei \(n = 200\) Prüfungsergebnissen oder \(n = 1500\) Verkaufszahlen ist eine Tabellenkalkulation der einzige sinnvolle Weg. Die deutschen Funktionsnamen in Excel und LibreOffice Calc:</p>
+
+<table class="tk-formeln">
+  <tr><th>Masszahl</th><th>Formel</th><th>Hinweis</th></tr>
+  <tr><td>Mittelwert</td><td>=MITTELWERT(A1:A200)</td><td>arithmetisches Mittel</td></tr>
+  <tr><td>Median</td><td>=MEDIAN(A1:A200)</td><td>auch bei Ausreissern stabil</td></tr>
+  <tr><td>Modus</td><td>=MODUS.EINF(A1:A200)</td><td>häufigster Wert; bei stetigen Daten oft sinnlos</td></tr>
+  <tr><td>Standardabweichung</td><td>=STABW.S(A1:A200)</td><td>Stichprobe (mit \(n-1\)) — Standard</td></tr>
+  <tr><td>1. Quartil</td><td>=QUARTILE.INKL(A1:A200; 1)</td><td>Q<sub>1</sub></td></tr>
+  <tr><td>3. Quartil</td><td>=QUARTILE.INKL(A1:A200; 3)</td><td>Q<sub>3</sub></td></tr>
+  <tr><td>Quartilsdifferenz</td><td>=QUARTILE.INKL(...;3) − QUARTILE.INKL(...;1)</td><td>QD händisch zusammensetzen</td></tr>
+</table>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Excel-Quartile ≠ Handrechnung — zwei Methoden im Umlauf</div>
+  <p>Die Funktion <code>QUARTILE.INKL</code> in Excel verwendet eine andere Methode als die in
+  diesem Kapitel gelernte: sie rechnet mit <strong>linearer Interpolation</strong> zwischen
+  benachbarten Rangwerten (Methode nach Hyndman-Fan, Variante 7), während wir hier nach der
+  <strong>Median-der-Hälften-Methode</strong> (auch Tukey-Methode) arbeiten. Bei kleinen
+  Stichproben können beide Methoden <em>unterschiedliche Werte</em> für \(Q_1\) und \(Q_3\)
+  liefern. Bei \(n \geq 50\) wird die Differenz typischerweise klein, kann aber auch dann
+  noch um eine Datenpunkt-Position abweichen. Für Schul-Rechnungen ist die hier gelernte
+  Methode verbindlich; wer Excel-Ergebnisse vergleicht, sollte die Methodik-Differenz
+  kennen.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Google Sheets / englische Versionen</div>
+  In Google Sheets und in englischen Office-Versionen heissen die Funktionen <code>AVERAGE</code>, <code>MEDIAN</code>, <code>MODE</code>, <code>STDEV.S</code>, <code>QUARTILE.INC</code> — gleiche Bedeutung, andere Namen.
+</div>
+
+<h2 id="theorie">Robustheit — Mittelwert oder Median?</h2>
+
+<p>Die wichtigste Entscheidung in der Datenanalyse: <strong>Welches Lagemass passt zu meinen Daten?</strong> Die Antwort hängt davon ab, ob es <em>Ausreisser</em> gibt.</p>
+
+<div class="block block-bsp"><div class="block-titel">🟢 Beispiel — Löhne in einem kleinen Betrieb</div>
+  Sieben Angestellte verdienen monatlich:
+  <div class="berechnung">3500, 3800, 4000, 4200, 4400, 4600, <strong>25 000</strong> Franken</div>
+  Der letzte Wert ist die Inhaberin.
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin:6px 0 0;font-style:italic">📝 Hinweis: Die Werte sind bereits aufsteigend sortiert. Bei realen Daten erst sortieren, dann den mittleren Wert ablesen — siehe die Fehler-Box unten.</p>
+  <div class="robust-grid">
+    <div class="robust-box mit">
+      <h4>Mittelwert</h4>
+      <div class="werte">\(\bar{x} = \frac{3500+3800+\dots+25000}{7} \approx 7\,071\) Fr.</div>
+      <p class="interpr">→ <em>Niemand</em> verdient ungefähr so viel. Der Wert ist durch den Ausreisser stark verzerrt.</p>
+    </div>
+    <div class="robust-box ohne">
+      <h4>Median</h4>
+      <div class="werte">\(\tilde{x} = 4\,200\) Fr. (mittlerer Wert)</div>
+      <p class="interpr">→ Beschreibt den „typischen" Lohn realistisch. Ausreisser haben keinen Einfluss.</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz — Robustheit</div>
+  Der <strong>Median</strong> ist <em>robust</em>: einzelne Extremwerte verschieben ihn kaum.
+  Der <strong>Mittelwert</strong> ist <em>nicht robust</em>: jeder Wert geht mit voller Stärke ein.
+  → Bei <strong>Schiefe oder Ausreissern</strong>: Median bevorzugen.
+  → Bei <strong>symmetrischen Verteilungen ohne Ausreisser</strong>: Mittelwert ist genauso gut und mathematisch oft handlicher.
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Faustregel</div>
+  Wenn Mittelwert und Median <em>nahe beieinander</em> liegen → Verteilung ist annähernd symmetrisch. Wenn sie <em>weit auseinander</em> liegen → Verteilung ist schief, oft mit Ausreissern auf einer Seite. Diese Information liest du sofort aus dem Vergleich der beiden Zahlen ab.
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Median aus unsortierter Liste</div>
+  <p>Der Median ist der mittlere Wert der <strong>sortierten</strong> Liste. Aus der Urliste \(8, 3, 5, 1, 7\) den dritten Wert \(5\) als Median anzugeben, ist falsch begründet: erst sortieren (\(1, 3, 5, 7, 8\)), dann den mittleren Wert ablesen — hier kommt zufällig wieder \(5\) heraus. Bei \(8, 3, 9, 1, 7\) hingegen wäre die Urlisten-Mitte \(9\), der korrekte Median nach Sortieren (\(1, 3, 7, 8, 9\)) aber \(7\). Die Regel: <em>sortieren ist nicht optional</em>.</p>
+</div>
+
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
 
+<div class="block block-tipp" style="margin-bottom:10px">
+  <div class="block-titel">💡 Klassen-Namen in diesem Kapitel</div>
+  <p>In den Theorie-Beispielen oben begegnen dir <strong>Klasse A</strong> und <strong>Klasse B</strong>
+  — sie illustrieren immer dasselbe Konzept (Streuung bei gleichem Mittelwert) mit denselben acht
+  Notenwerten. In den Aufgaben A5 und A7 unten kommen <strong>Klasse X</strong> und <strong>Klasse Y</strong>
+  hinzu — bewusst andere Buchstaben, weil sie <em>andere</em> Datensätze enthalten und für
+  Vergleichsaufgaben dienen. Die Namen sind nicht austauschbar.</p>
+</div>
 
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h3 id="a1">A1 · Kleine Stichprobe händisch</h3>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Kleine Stichprobe händisch</span></div>
+  Eine Klasse hat in einem Test folgende Punktzahlen erreicht:
+  <div class="berechnung">14, 18, 12, 20, 15, 17, 12</div>
+  <ol class="aufg-liste">
+    <li>Sortiere die Werte und berechne Mittelwert, Median und Modus.</li>
+    <li>Bestimme Q<sub>1</sub>, Q<sub>3</sub> und die Quartilsdifferenz.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l1')">Lösung anzeigen</button>
+  <div id="l1" class="loesung-body">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Sortiert: 12, 12, 14, 15, 17, 18, 20 (n = 7).</li>
+        <li>Untere Hälfte (ohne Median bei ungeradem n): 12, 12, 14 → \(Q_1 = 12\). Obere Hälfte: 17, 18, 20 → \(Q_3 = 18\). Quartilsdifferenz: \(\text{QD} = 18 - 12 = 6\).</li>
+      </ol>
+      <div class="block block-tipp" style="margin:8px 0 0">
+        <div class="block-titel">💡 Excel rechnet anders</div>
+        <p>Wer diese Aufgabe in Excel mit <code>=QUARTILE.INKL(...;1)</code> nachrechnet, erhält
+        \(Q_1 = 13\) (und \(Q_3 = 17.5\)) — Excel interpoliert linear zwischen Rangwerten, statt
+        die untere Hälfte als eigene Stichprobe zu behandeln. Beide Resultate sind korrekt
+        <em>nach ihrer jeweiligen Definition</em>. Für Handrechnungen im Unterricht gilt
+        die hier verwendete Tukey-Methode.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 id="a2">A2 · Standardabweichung berechnen</h3>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Standardabweichung berechnen</span></div>
+  Eine Schwimmerin hat ihre Zeiten über 50 m (in Sekunden) notiert:
+  <div class="berechnung">28.4, 28.6, 28.5, 28.9, 28.6</div>
+  Berechne den Mittelwert und die Standardabweichung händisch. Runde am Ende auf zwei Nachkommastellen.
+  <button class="loesung-toggle" onclick="toggleL('l2')">Lösung anzeigen</button>
+  <div id="l2" class="loesung-body">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p><strong>Mittelwert:</strong> \(\bar{x} = \frac{28.4+28.6+28.5+28.9+28.6}{5} = \frac{143.0}{5} = 28.60\)</p>
+      <p><strong>Abweichungen und Quadrate:</strong></p>
+      <table class="ftb-tabelle">
+      <tr><th>\(x_i\)</th><th>\(x_i - \bar{x}\)</th><th>\((x_i - \bar{x})^2\)</th></tr>
+      <tr><td class="td-x">28.4</td><td class="td-calc">−0.20</td><td class="td-calc">0.0400</td></tr>
+      <tr><td class="td-x">28.6</td><td class="td-calc">0.00</td><td class="td-calc">0.0000</td></tr>
+      <tr><td class="td-x">28.5</td><td class="td-calc">−0.10</td><td class="td-calc">0.0100</td></tr>
+      <tr><td class="td-x">28.9</td><td class="td-calc">0.30</td><td class="td-calc">0.0900</td></tr>
+      <tr><td class="td-x">28.6</td><td class="td-calc">0.00</td><td class="td-calc">0.0000</td></tr>
+      <tr><td colspan="2"><strong>Summe</strong></td><td class="td-calc"><strong>0.1400</strong></td></tr>
+      </table>
+      <p>\(s = \sqrt{\dfrac{0.14}{5-1}} = \sqrt{0.035} \approx 0.19\) s.</p>
+      <p>Die Zeiten streuen also nur um etwa zwei Zehntelsekunden um den Mittelwert — eine sehr konstante Schwimmerin.</p>
+    </div>
+  </div>
+</div>
+
+<h3 id="a3">A3 · Mittelwert oder Median?</h3>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Mittelwert oder Median?</span></div>
+  In welcher der folgenden Situationen ist der <em>Median</em> aussagekräftiger als der Mittelwert? Begründe jeweils kurz.
+  <ol class="aufg-liste">
+    <li>Durchschnittliche Körpergrösse aller Schülerinnen einer Klasse.</li>
+    <li>Durchschnittliches Vermögen der Bewohnerinnen eines Quartiers, in dem auch eine Milliardärin wohnt.</li>
+    <li>Durchschnittliche Wartezeit am Bankschalter, gemessen über eine Woche.</li>
+    <li>Durchschnittlicher Notendurchschnitt aller Schülerinnen einer Schule.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l3')">Lösung anzeigen</button>
+  <div id="l3" class="loesung-body">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+      <li><strong>Mittelwert genügt</strong> — Körpergrössen sind annähernd symmetrisch verteilt, ohne extreme Ausreisser.</li>
+      <li><strong>Median deutlich besser</strong> — die Milliardärin verzerrt den Mittelwert massiv. Der Median beschreibt die typische Bewohnerin realistisch.</li>
+      <li><strong>Median oft besser</strong> — Wartezeiten sind meist rechtsschief: viele kurze Wartezeiten, einzelne sehr lange. Der Median sagt, was du „normalerweise" erwarten musst.</li>
+      <li><strong>Mittelwert genügt</strong> — Notendurchschnitte sind in einem festen Bereich (1–6), starke Ausreisser sind nicht möglich.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<h3 id="a4">A4 · Tabellenkalkulation</h3>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Tabellenkalkulation</span></div>
+  In einer Tabelle stehen 150 Verkaufszahlen in den Zellen A2 bis A151. Schreibe die Formeln auf für:
+  <ol class="aufg-liste">
+    <li>Mittelwert</li>
+    <li>Median</li>
+    <li>Standardabweichung der Stichprobe</li>
+    <li>Quartilsdifferenz (in einer einzigen Formel)</li>
+    <li>Anzahl der Werte, die <em>grösser</em> als der Mittelwert sind. (Tipp: Funktion ZÄHLENWENN.)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l4')">Lösung anzeigen</button>
+  <div id="l4" class="loesung-body">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+      <li><code>=MITTELWERT(A2:A151)</code></li>
+      <li><code>=MEDIAN(A2:A151)</code></li>
+      <li><code>=STABW.S(A2:A151)</code></li>
+      <li><code>=QUARTILE.INKL(A2:A151;3) − QUARTILE.INKL(A2:A151;1)</code></li>
+      <li><code>=ZÄHLENWENN(A2:A151;">"&amp;MITTELWERT(A2:A151))</code></li>
+      </ol>
+      <p>Bei e) ist das <code>&amp;</code>-Zeichen wichtig: es verbindet den Vergleichsoperator <code>"&gt;"</code> mit dem Wert des Mittelwerts zu einer einzigen Zeichenkette, die ZÄHLENWENN als Kriterium akzeptiert.</p>
+      <div class="block block-tipp" style="margin-top:8px">
+        <div class="block-titel">💡 Alternative Formel-Varianten</div>
+        <p>Eine echte <em>Ein-Funktions-IQR</em>-Funktion gibt es in Excel/LibreOffice nicht. Praktikable Alternativen:</p>
+        <ul style="margin:4px 0 4px 1.4em">
+          <li><strong>Mit Hilfszellen:</strong> in B1 <code>=QUARTILE.INKL(A2:A151;3)</code>, in B2 <code>=QUARTILE.INKL(A2:A151;1)</code>, dann in B3 <code>=B1−B2</code>. Vorteil: Q1 und Q3 sind auch einzeln sichtbar.</li>
+          <li><strong>Alternative Quartile-Konvention:</strong> <code>=QUARTILE.EXC(A2:A151;3) − QUARTILE.EXC(A2:A151;1)</code> verwendet die Hyndman-Fan-Variante 6 — gibt bei kleinen Stichproben andere Werte (siehe Kasten „Excel-Quartile ≠ Handrechnung").</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 id="a5">A5 · Zwei Klassen vergleichen</h3>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Zwei Klassen vergleichen</span></div>
+  Zwei Klassen schreiben dieselbe Prüfung. Die Masszahlen lauten:
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <tr><th></th><th>Klasse X</th><th>Klasse Y</th></tr>
+    <tr><td class="td-x">Mittelwert</td><td class="td-y">4.6</td><td class="td-y">4.6</td></tr>
+    <tr><td class="td-x">Median</td><td class="td-y">4.7</td><td class="td-y">5.1</td></tr>
+    <tr><td class="td-x">Standardabweichung</td><td class="td-y">0.8</td><td class="td-y">1.5</td></tr>
+    <tr><td class="td-x">Quartilsdifferenz</td><td class="td-y">1.0</td><td class="td-y">2.4</td></tr>
+  </table>
+  <ol class="aufg-liste">
+    <li>Welche Klasse hat ein homogeneres Ergebnis? Begründe.</li>
+    <li>In welcher Klasse ist die Verteilung schief? Wie erkennst du das aus den Masszahlen?</li>
+    <li>In welcher Klasse vermutest du eher Ausreisser? Begründe.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l5')">Lösung anzeigen</button>
+  <div id="l5" class="loesung-body">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+      <li><strong>Klasse X</strong> ist homogener: kleinere Standardabweichung (0.8 vs. 1.5) und kleinere Quartilsdifferenz (1.0 vs. 2.4). Die Ergebnisse liegen näher beieinander.</li>
+      <li><strong>Klasse Y</strong> ist schief: Mittelwert (4.6) und Median (5.1) liegen 0.5 Punkte auseinander. Da der Median <em>höher</em> ist als der Mittelwert, ist die Verteilung <em>linksschief</em> — der „Schwanz" mit den niedrigen Werten zieht den Mittelwert nach unten. In Klasse X (4.6 vs. 4.7) liegen die beiden fast gleich auf, also nahezu symmetrisch.</li>
+      <li><strong>Klasse Y</strong>: grosse Streumasse <em>plus</em> deutlicher Unterschied zwischen Mittelwert und Median deuten auf einzelne weit nach unten abweichende Werte (Ausreisser) hin.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<h3 id="a6">A6 · Eigene Daten analysieren</h3>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Eigene Daten analysieren <span class="aufg-vertiefung">offen</span></span></div>
+  Erhebe selbst eine kleine Stichprobe (n ≥ 15) zu einem Merkmal deiner Wahl — z. B. tägliche Bildschirmzeit, Anzahl Schritte, Schlafdauer, Pulsfrequenz nach 1 min Hampelmänner. Erstelle:
+  <ol class="aufg-liste">
+    <li>Eine Urliste und eine sortierte Liste.</li>
+    <li>Mittelwert, Median, Modus, Standardabweichung, Q<sub>1</sub>, Q<sub>3</sub>, Quartilsdifferenz.</li>
+    <li>Einen Boxplot von Hand (oder mit Tabellenkalkulation).</li>
+    <li>Einen kurzen Interpretationstext (3–5 Sätze): Was sagen die Masszahlen über deine Daten? Gibt es Ausreisser? Welches Lagemass passt besser?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l6')">Hinweise zur Eigenkontrolle</button>
+  <div id="l6" class="loesung-body">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Da diese Aufgabe individuell ist, hier nur ein Kontroll-Schema:</p>
+      <ul>
+      <li>Stimmt deine Anzahl Werte? Hast du n korrekt gezählt?</li>
+      <li>Liegt der Median <em>zwischen</em> Q<sub>1</sub> und Q<sub>3</sub>? (Sonst hast du dich verrechnet.)</li>
+      <li>Ist die Standardabweichung positiv und in einer plausiblen Grössenordnung verglichen mit dem Mittelwert?</li>
+      <li>Wenn Mittelwert und Median weit auseinander liegen → suche im Boxplot oder Histogramm nach Ausreissern. Prüfe, ob der Median das bessere Lagemass ist.</li>
+      <li>Tipp: Lass eine zweite Person dieselbe Stichprobe in der Tabellenkalkulation nachrechnen — so findest du Tippfehler.</li>
+      </ul>
+      <p style="margin-top:8px"><strong>Beispiel-Lösung mit fiktivem Datensatz</strong> (Bildschirmzeit in Minuten, \(n = 15\)):</p>
+      <div class="berechnung">Urliste: 95, 120, 240, 180, 75, 200, 165, 320, 145, 90, 210, 135, 110, 180, 155</div>
+      <div class="berechnung">Sortiert: 75, 90, 95, 110, 120, 135, 145, 155, 165, 180, 180, 200, 210, 240, 320</div>
+      <ul>
+      <li><strong>Mittelwert:</strong> \(\bar{x} = \dfrac{2420}{15} \approx 161.3\) min</li>
+      <li><strong>Median</strong> (Position \(\tfrac{15+1}{2} = 8\)): \(\tilde{x} = 155\) min</li>
+      <li><strong>Modus:</strong> 180 (zweimal, alle anderen einmal)</li>
+      <li><strong>\(Q_1\)</strong> (Median der unteren 7 Werte 75…145): \(Q_1 = 110\) min</li>
+      <li><strong>\(Q_3\)</strong> (Median der oberen 7 Werte 165…320): \(Q_3 = 200\) min</li>
+      <li><strong>QD:</strong> \(200 - 110 = 90\) min</li>
+      <li><strong>Standardabweichung:</strong> \(s \approx 64.5\) min (Quadratwurzel der Varianz \(s^2 \approx 4159\), berechnet mit \(\tfrac{1}{n-1}\sum (x_i - \bar{x})^2\); händisch mühsam, Tabellenkalkulation empfohlen).</li>
+      </ul>
+      <p><strong>Interpretation</strong> (3 Sätze): Die mittlere Bildschirmzeit liegt bei rund
+      161 min/Tag, der Median bei 155 min — die beiden Lagemasse stimmen fast überein, die
+      Verteilung ist also annähernd symmetrisch. Der höchste Wert (320 min) liegt aber rund
+      2.5 Standardabweichungen über dem Mittelwert und ist ein klarer Ausreisser nach oben.
+      Da der Median weniger empfindlich auf diesen Ausreisser reagiert, ist er hier das
+      etwas robustere Lagemass — der Unterschied zum Mittelwert ist mit 6 min jedoch klein.</p>
+    </div>
+  </div>
+</div>
+
+<h3 id="a7">A7 · Zwei Klassen vergleichen — Lage und Streuung</h3>
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Zwei Klassen vergleichen — Lage und Streuung</span></div>
+  <p>Zwei Klassen schreiben dieselbe Prüfung. Die Notenlisten:</p>
+  <ul>
+    <li>Klasse X: 4.0, 4.2, 4.5, 4.5, 4.8, 5.0, 5.0, 5.3</li>
+    <li>Klasse Y: 2.5, 3.0, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5</li>
+  </ul>
+<ol class="aufg-liste">
+  <li>Berechne für beide Klassen Mittelwert, Median und Spannweite.</li>
+  <li>Welche Klasse zeigt das homogenere Bild? Begründe mit einer Masszahl.</li>
+  <li>Eine Aussage lautet: „Klasse X ist besser als Klasse Y, weil der Mittelwert höher ist." Diskutiere kurz, was an dieser Aussage stimmt und was sie ausblendet.</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l7')">▶ Lösung</button>
+  <div class="loesung-body" id="l7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li><strong>Klasse X</strong>: \(\bar{x} = \tfrac{37.3}{8} \approx 4.66\), Median \(= \tfrac{4.5 + 4.8}{2} = 4.65\), Spannweite \(= 5.3 - 4.0 = 1.3\). <strong>Klasse Y</strong>: \(\bar{y} = \tfrac{37}{8} = 4.625\), Median \(= \tfrac{4.5 + 5.0}{2} = 4.75\), Spannweite \(= 6.5 - 2.5 = 4.0\).</li>
+        <li>Klasse X ist homogener — Spannweite \(1.3\) gegenüber \(4.0\) bei Y. Die meisten X-Lernenden liegen knapp um \(4.5\), bei Y reichen die Noten von „knapp nicht bestanden" bis „sehr gut".</li>
+        <li>Die Mittelwerte sind fast identisch (\(4.66\) vs. \(4.625\)). Die Aussage „X ist besser" stützt sich also auf eine winzige Differenz und ignoriert die deutlich grössere Streuung in Y. Korrekter wäre: „Im Mittel praktisch gleich; X homogener, Y stärker gespreizt." Wer urteilt, sollte beide Aspekte (Lage + Streuung) berücksichtigen.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
 
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Eine Stichprobe ist erst dann beschrieben, wenn du <em>beide</em> Aspekte angibst:
+  <strong>Lage</strong> (wo liegt die Mitte?) und <strong>Streuung</strong> (wie breit verteilt sind die Daten?).
+  Mittelwert und Standardabweichung gehen zusammen — Median und Quartilsdifferenz gehen zusammen.
+  Mische die Paare nicht.</p>
+</div>
 
-<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<table class="ftb-tabelle">
+  <thead>
+    <tr><th>Masszahl</th><th>Symbol</th><th>Was sagt sie?</th><th>Wann besonders nützlich</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Mittelwert</td><td>\(\bar{x}\)</td><td>Schwerpunkt der Daten</td><td>Symmetrische Verteilung, keine Ausreisser</td></tr>
+    <tr><td>Median</td><td>\(\tilde{x}\)</td><td>Mitte der sortierten Liste (50/50)</td><td>Schiefe Verteilung, Ausreisser, Vergleiche</td></tr>
+    <tr><td>Modus</td><td>\(\hat{x}\)</td><td>Häufigster Wert</td><td>Kategoriale Daten, multimodale Verteilungen</td></tr>
+    <tr><td>Standardabweichung</td><td>\(s\)</td><td>Mittlere Abweichung vom Mittelwert</td><td>Symmetrische Daten, präzise Streuungs­angabe</td></tr>
+    <tr><td>Quartilsdifferenz</td><td>\(Q_3 - Q_1\)</td><td>Breite der mittleren 50 %</td><td>Robust, passt zu Median und Boxplot</td></tr>
+  </tbody>
+</table>
+
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
 
+<p>Zum Ausdrucken und Mitnehmen — Theorie, Formelsammlung, Karteikarten und Aufgaben mit Lösungen.</p>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g4-3-masszahlen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie kompakt — alle Definitionen und Formeln</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-3-masszahlen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Mittelwert, Standardabweichung, Quartile auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-3-masszahlen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-3-masszahlen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Vertiefungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-3-masszahlen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Begriffe und Formeln zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAznKJ7-xAyq6tOtqQYzs5_38" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Statistische Grundbegriffe &amp; Diagramme — Playlist</div><div class="lk-s">Lehrerschmidt · 35 Videos · Mittelwert, Median, Modus, Spannweite, Quartile</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHifw_3OhBTvQq2EGX5NedOy" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Statistik — Playlist (5.–10. Klasse)</div><div class="lk-s">Mathe by Daniel Jung · 31 Videos · Mittelwert, Median, Modalwert, Boxplot, Abweichung</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/22834/daten-und-kenngroessen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Daten und Kenngrössen</div><div class="lk-s">Übersicht zu Lage- und Streumassen · Aufgaben mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/24551/aufgaben-zum-median" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Median</div><div class="lk-s">Mit Schritt-für-Schritt-Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/24548/aufgaben-zu-varianz-und-standardabweichung" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Varianz und Standardabweichung</div><div class="lk-s">Übungsaufgaben · Berechnen und Interpretieren</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -92,7 +597,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Masszahlen</p>
+  <p>Grundlagenfach 4.3 Masszahlen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -104,6 +609,111 @@ buildNav({
   prev:{nr:'4.2',titel:'Diagramme',url:'g4-2-diagramme.html'},
   next:{nr:'5.1',titel:'Grundlagen',url:'g5-1-grundlagen.html'}
 });
+
+/* Tabs für Lagemasse */
+function showLage(key, btn){
+  ['mw','med','mod'].forEach(k => {
+    document.getElementById('lage-'+k).classList.toggle('aktiv', k===key);
+  });
+  document.querySelectorAll('.lage-tab').forEach(t => t.classList.remove('aktiv'));
+  btn.classList.add('aktiv');
+}
+
+/* Einstieg: Streuungs-Animation */
+(function(){
+  // Klasse A: knapp um Mittelwert 4.5 (geringe Streuung)
+  const klasseA = [4.0, 4.3, 4.4, 4.5, 4.5, 4.6, 4.7, 5.0];
+  // Klasse B: breit gestreut um 4.5
+  const klasseB = [2.5, 3.0, 3.8, 4.5, 4.5, 5.2, 6.0, 6.5];
+  const mittel = 4.5;
+
+  function slRender(){
+    const c = document.getElementById('sl-canvas');
+    if (!c) return;
+    const s = parseFloat(document.getElementById('sl-streuung').value) / 100;
+    document.getElementById('sl-s').textContent = (s*100).toFixed(0);
+
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.offsetWidth || 480, H = c.offsetHeight || 230;
+    c.width = W*dpr; c.height = H*dpr;
+    const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+
+    const padL = 60, padR = 24, padT = 24, padB = 30;
+    const plotW = W - padL - padR;
+    const xMin = 1, xMax = 6;
+    const xPx = v => padL + (v - xMin)/(xMax - xMin) * plotW;
+    const yA = padT + 35;
+    const yB = padT + 110;
+
+    // Achsen für beide Klassen
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(padL, yA); ctx.lineTo(W-padR, yA); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(padL, yB); ctx.lineTo(W-padR, yB); ctx.stroke();
+    // Ticks
+    ctx.fillStyle = '#6b7280'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    for (let v = 1; v <= 6; v++){
+      ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(xPx(v), yA-3); ctx.lineTo(xPx(v), yA+3); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(xPx(v), yB-3); ctx.lineTo(xPx(v), yB+3); ctx.stroke();
+      ctx.fillText(v, xPx(v), yB+14);
+    }
+    ctx.textAlign = 'right'; ctx.fillStyle = '#6b7280';
+    ctx.fillText('Note', W-padR, yB+24);
+
+    // Klassen-Labels links
+    ctx.fillStyle = '#374151'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+    ctx.fillText('Klasse A', padL - 10, yA + 4);
+    ctx.fillText('Klasse B', padL - 10, yB + 4);
+
+    // Mittelwert-Linie (rot, durch beide Achsen)
+    ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2; ctx.setLineDash([5,3]);
+    ctx.beginPath(); ctx.moveTo(xPx(mittel), padT+5); ctx.lineTo(xPx(mittel), yB+10); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#dc2626'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('Mittelwert = 4.5', xPx(mittel), padT - 4);
+
+    // Punkte zeichnen (mit Versatz bei gleichen Werten)
+    function drawPoints(werte, y, farbe){
+      const seen = {};
+      werte.forEach(v => {
+        const key = v.toFixed(2);
+        seen[key] = (seen[key] || 0) + 1;
+      });
+      const used = {};
+      werte.forEach(v => {
+        const key = v.toFixed(2);
+        used[key] = (used[key] || 0) + 1;
+        const offset = (used[key] - 1) * 7 - (seen[key] - 1) * 3.5;
+        ctx.fillStyle = farbe;
+        ctx.beginPath();
+        ctx.arc(xPx(v), y - 14 + offset, 4.5, 0, 2*Math.PI);
+        ctx.fill();
+      });
+    }
+
+    // Klasse A: fix
+    drawPoints(klasseA, yA, '#10b981');
+    // Klasse B: interpoliert zwischen A (s=0) und B (s=1)
+    const klasseBaktuell = klasseA.map((a, i) => a + s * (klasseB[i] - a));
+    drawPoints(klasseBaktuell, yB, '#f59e0b');
+
+    // Mittelwerte beider Klassen rechnen und annotieren (zur Verifikation)
+    const meanA = klasseA.reduce((x,y) => x+y, 0) / klasseA.length;
+    const meanB = klasseBaktuell.reduce((x,y) => x+y, 0) / klasseBaktuell.length;
+    // Spreizung in „Bereich" anzeigen (Max minus Min) als zweite Aussage
+    const spanA = Math.max(...klasseA) - Math.min(...klasseA);
+    const spanB = Math.max(...klasseBaktuell) - Math.min(...klasseBaktuell);
+    ctx.fillStyle = '#10b981'; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+    ctx.fillText('MW = ' + meanA.toFixed(2) + '  ·  Spannweite = ' + spanA.toFixed(1), W - padR - 200, yA + 22);
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillText('MW = ' + meanB.toFixed(2) + '  ·  Spannweite = ' + spanB.toFixed(1), W - padR - 200, yB + 28);
+  }
+
+  document.getElementById('sl-streuung').addEventListener('input', slRender);
+  slRender();
+  window.addEventListener('resize', slRender);
+})();
 </script>
 </body>
 </html>

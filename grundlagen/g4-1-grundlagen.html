@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grundlagen — TALS Mathematik</title>
+<title>4.1 Grundlagen — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
-<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<!-- MathJax -->
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
@@ -19,7 +19,54 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+.workflow-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0 6px; }
+.wf-step { background: var(--blau-hell); border: 1px solid var(--blau); border-radius: 8px; padding: 10px 8px; text-align: center; font-size: 0.82rem; }
+.wf-step .wf-n { display: block; font-family: var(--mono); font-size: 0.7rem; color: var(--blau); margin-bottom: 4px; }
+.wf-step strong { color: var(--blau); display: block; margin-bottom: 3px; }
+@media (max-width: 600px) { .workflow-grid { grid-template-columns: 1fr 1fr; } }
+
+.merkmal-tabs { display: flex; gap: 4px; margin: 10px 0 0; flex-wrap: wrap; }
+.merkmal-tab { padding: 6px 12px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.8rem; transition: 0.15s; }
+.merkmal-tab.aktiv { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+.merkmal-tab:hover { border-color: var(--blau); }
+.merkmal-info { background: var(--blau-hell); border: 1px solid var(--blau); border-radius: 8px; padding: 12px 14px; margin-top: 6px; font-size: 0.92rem; }
+.merkmal-info .mi-tit { font-weight: 600; color: var(--blau); margin-bottom: 4px; }
+.merkmal-info .mi-bsp { font-family: var(--mono); font-size: 0.82rem; color: var(--tinte-2); margin-top: 6px; }
+
+.urliste-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+@media (max-width: 600px) { .urliste-demo { grid-template-columns: 1fr; } }
+.urliste-demo .ud-box { background: var(--papier); border: 1px solid var(--linie); border-radius: 8px; padding: 10px 12px; }
+.urliste-demo .ud-tit { font-weight: 600; font-size: 0.85rem; color: var(--tinte); margin-bottom: 6px; }
+.urliste-demo .ud-data { font-family: var(--mono); font-size: 0.82rem; line-height: 1.7; }
+
+.tk-demo { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; overflow: hidden; margin: 10px 0; font-family: var(--mono); font-size: 0.82rem; }
+.tk-demo .tk-head { background: var(--tinte); color: var(--weiss); display: grid; grid-template-columns: 40px 1fr 1fr 1fr; padding: 6px 0; }
+.tk-demo .tk-head > div { padding: 0 8px; font-weight: 600; }
+.tk-demo .tk-row { display: grid; grid-template-columns: 40px 1fr 1fr 1fr; border-top: 1px solid var(--linie); }
+.tk-demo .tk-row > div { padding: 6px 8px; border-right: 1px solid var(--linie); }
+.tk-demo .tk-row > div:last-child { border-right: none; background: var(--gruen-hell); color: var(--gruen); font-weight: 600; }
+.tk-demo .tk-rn { background: var(--papier-2); text-align: center; color: var(--tinte-2); }
+
+.qual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+@media (max-width: 600px) { .qual-grid { grid-template-columns: 1fr; } }
+.qual-grid .qg-box { padding: 12px 14px; border-radius: 8px; }
+.qg-gut { background: var(--gruen-hell); border: 1px solid var(--gruen); }
+.qg-schlecht { background: var(--rot-hell); border: 1px solid var(--rot); }
+.qg-tit { font-weight: 700; margin-bottom: 6px; }
+.qg-gut .qg-tit { color: var(--gruen); }
+.qg-schlecht .qg-tit { color: var(--rot); }
+
+/* Einstieg: Datensammel-Animation */
+.sammel-box { background: var(--papier-2, #f3eedf); border-radius: 8px; padding: 14px 16px; margin: 12px 0; }
+.sammel-box .sb-frage { font-family: var(--mono); font-size: 0.88rem; margin-bottom: 10px; color: var(--tinte); }
+.sammel-box .sb-buttons { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.sammel-box .sb-btn { padding: 6px 10px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.82rem; min-width: 32px; transition: 0.12s; }
+.sammel-box .sb-btn:hover { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+.sammel-box .sb-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+.sammel-box .sb-zaehler { font-family: var(--mono); font-size: 0.85rem; color: var(--blau); font-weight: 700; }
+.sammel-box .sb-reset { background: none; border: none; color: var(--tinte-2); text-decoration: underline; cursor: pointer; font-size: 0.82rem; font-family: var(--mono); margin-left: 8px; }
+.sammel-box canvas { width: 100%; height: 180px; display: block; margin-top: 6px; }
+.sammel-box .sb-hint { font-size: 0.85rem; color: var(--tinte-2); margin-top: 8px; font-style: italic; }
 </style>
 </head>
 <body>
@@ -33,7 +80,8 @@ MathJax = {
   <h1 class="pt-h1">4.1 Grundlagen</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Wer Daten sinnvoll auswerten will, muss zuerst die richtigen <em>Begriffe</em> haben — und ein Gefühl dafür, woran man eine gute Datenerhebung erkennt. In diesem Kapitel klären wir das Vokabular der Datenanalyse, unterscheiden Merkmalstypen und sehen, wie eine Tabellenkalkulation der natürliche Werkzeugkasten dafür ist.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.1</div>
   <ul>
@@ -45,46 +93,440 @@ MathJax = {
 
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — eine Klassenumfrage</h2>
+
+<p>Eine BM-Klasse mit 22 Lernenden wird gefragt: <em>„Wie viele Stunden hast du letzte Woche für Mathe gelernt?"</em> Sammle die Antworten selbst ein — klicke für jede befragte Person die passende Stundenzahl an und beobachte, wie die Verteilung entsteht.</p>
+
+<div class="sammel-box">
+  <div class="sb-frage">Klick für jede befragte Person die Lernstunden an (0 bis 8 h):</div>
+  <div class="sb-buttons" id="sb-buttons">
+    <button class="sb-btn" data-val="0">0 h</button>
+    <button class="sb-btn" data-val="1">1 h</button>
+    <button class="sb-btn" data-val="2">2 h</button>
+    <button class="sb-btn" data-val="3">3 h</button>
+    <button class="sb-btn" data-val="4">4 h</button>
+    <button class="sb-btn" data-val="5">5 h</button>
+    <button class="sb-btn" data-val="6">6 h</button>
+    <button class="sb-btn" data-val="7">7 h</button>
+    <button class="sb-btn" data-val="8">8 h</button>
+  </div>
+  <div>
+    <span class="sb-zaehler">Befragt: <span id="sb-n">0</span> / 22</span>
+    <button class="sb-reset" id="sb-reset">⟲ zurücksetzen</button>
+  </div>
+  <canvas id="sb-canvas" aria-label="Verteilung der Lernstunden"></canvas>
+  <div class="sb-hint">Tipp: Klicke schnell hintereinander oder gib eine typische Verteilung ein — was siehst du nach ein paar Klicks?</div>
+</div>
+
+<p>Was Sie eben gesammelt haben, ist eine <strong>Urliste</strong>: eine Folge von Einzelwerten in der Reihenfolge der Erhebung. Mit dieser Liste allein lässt sich noch keine Aussage über die Klasse machen. Erst wenn die Daten <strong>geordnet</strong>, <strong>gezählt</strong>, <strong>gruppiert</strong> oder durch eine <strong>Kennzahl</strong> zusammengefasst werden, entsteht eine Aussage. Genau das ist <em>Datenanalyse</em>: aus einer Liste eine Aussage machen.</p>
+
+<p>Bevor wir loslegen, brauchen wir saubere Begriffe — denn „22 Lernende" sind nicht unbedingt die <em>ganze</em> Gruppe, an der wir interessiert sind, und „Stunden" verhalten sich anders als „Geschlecht" oder „Lieblingsfach".</p>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Der Daten-Workflow</div>
+  <div class="workflow-grid">
+    <div class="wf-step"><span class="wf-n">Schritt 1</span><strong>Erheben</strong>Daten sammeln</div>
+    <div class="wf-step"><span class="wf-n">Schritt 2</span><strong>Ordnen</strong>Sortieren, klassieren</div>
+    <div class="wf-step"><span class="wf-n">Schritt 3</span><strong>Visualisieren</strong>Diagramm wählen</div>
+    <div class="wf-step"><span class="wf-n">Schritt 4</span><strong>Auswerten</strong>Kennzahlen, Aussage</div>
+  </div>
+  <p style="margin:8px 0 0;font-size:0.9rem">Dieses Kapitel deckt Schritt 1 ab. Schritt 2–3 in <a href="g4-2-diagramme.html">4.2 Diagramme</a>, Schritt 4 in <a href="g4-3-masszahlen.html">4.3 Masszahlen</a>.</p>
+</div>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Definitionen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Grundgesamtheit und Stichprobe</div>
+  <p>Die <strong>Grundgesamtheit</strong> (auch <em>Population</em>) ist die Menge aller Objekte, über die wir eine Aussage treffen wollen. Eine <strong>Stichprobe</strong> ist eine Teilmenge der Grundgesamtheit, an der wir tatsächlich messen.</p>
+  <p style="margin-top:8px"><strong>Beispiel:</strong> Will man wissen, wie viele Stunden BM-Lernende in der Schweiz pro Woche für Mathe lernen, ist die Grundgesamtheit „alle BM-Lernenden in der Schweiz". Die 22 Lernenden einer Klasse sind eine (kleine) Stichprobe daraus.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Urliste und Stichprobenumfang</div>
+  <p>Die <strong>Urliste</strong> ist die rohe, unsortierte Liste der erhobenen Werte — genau so, wie sie eingesammelt wurden. Der <strong>Stichprobenumfang</strong> \(n\) ist die Anzahl der Werte in der Stichprobe.</p>
+  <p style="margin-top:8px">Im Klassenbeispiel oben: \(n = 22\). Die Urliste ist <code>3, 5, 2, 4, 6, 3, 0, …</code>.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Sortierte Liste und Rang</div>
+  <p>Wird die Urliste der Grösse nach sortiert (aufsteigend), entsteht die <strong>sortierte Liste</strong> oder <em>Rangliste</em>. Der <strong>Rang</strong> eines Wertes ist seine Position in der sortierten Liste: der kleinste Wert hat Rang 1, der zweitkleinste Rang 2, und so weiter.</p>
+</div>
+
+<div class="urliste-demo">
+  <div class="ud-box">
+    <div class="ud-tit">Urliste (so erhoben)</div>
+    <div class="ud-data">3, 5, 2, 4, 6, 3, 0, 7, 4, 5,<br>8, 3, 4, 2, 5, 6, 4, 3, 5, 4,<br>7, 4</div>
+    <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px">\(n = 22\)</div>
+  </div>
+  <div class="ud-box">
+    <div class="ud-tit">Sortierte Liste (Rangliste)</div>
+    <div class="ud-data">0, 2, 2, 3, 3, 3, 3, 4, 4, 4,<br>4, 4, 4, 5, 5, 5, 5, 6, 6, 7,<br>7, 8</div>
+    <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px">Rang 1: Wert 0 · Rang 22: Wert 8</div>
+  </div>
+</div>
+
+<div class="block block-fehler" style="margin-top:10px">
+  <div class="block-titel">⚠ Häufiger Fehler</div>
+  <p>Wenn ein Wert mehrfach vorkommt (z.B. die Drei viermal in der Liste), bekommen alle gleichen Werte <em>verschiedene</em> Ränge — nicht denselben. Der Rang bezeichnet die Position in der Liste, nicht den Wert. Erst bei Lagemassen (Kapitel 4.3) wird die Mehrfachzählung interessant.</p>
+</div>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Merkmalstypen — was wird gemessen?</h2>
+
+<p>Nicht alle Daten verhalten sich gleich. „Lieblingsfarbe" und „Körpergrösse" lassen sich beide erfassen, aber nicht beide auf dieselbe Weise auswerten — man kann den Mittelwert von Grössen rechnen, nicht aber den Mittelwert von Farben. Deshalb unterscheidet die Statistik drei <strong>Merkmalstypen</strong>:</p>
+
+<div class="merkmal-tabs">
+  <button class="merkmal-tab aktiv" data-mt="kat" onclick="showMerkmal('kat', this)">Kategorial</button>
+  <button class="merkmal-tab" data-mt="dis" onclick="showMerkmal('dis', this)">Diskret</button>
+  <button class="merkmal-tab" data-mt="ste" onclick="showMerkmal('ste', this)">Stetig</button>
+</div>
+
+<div class="merkmal-info" id="mi-kat">
+  <div class="mi-tit">Kategorial (qualitativ)</div>
+  <p>Werte sind Kategorien, keine Zahlen. Man kann sie zählen und ordnen, aber nicht rechnen.</p>
+  <div class="mi-bsp">Beispiele: Lieblingsfach, Geschlecht, Wohnkanton, Augenfarbe, Berufswunsch.</div>
+</div>
+<div class="merkmal-info" id="mi-dis" style="display:none">
+  <div class="mi-tit">Diskret (zählend)</div>
+  <p>Werte sind ganze Zahlen, die man <em>zählen</em> kann. Zwischenwerte sind nicht sinnvoll.</p>
+  <div class="mi-bsp">Beispiele: Anzahl Geschwister, Anzahl Stifte, Würfelaugen, Anzahl Personen im Haushalt.</div>
+</div>
+<div class="merkmal-info" id="mi-ste" style="display:none">
+  <div class="mi-tit">Stetig (messend)</div>
+  <p>Werte können beliebig genau sein und liegen auf einem kontinuierlichen Skalenstrahl. Zwischenwerte sind sinnvoll, die Genauigkeit hängt vom Messgerät ab.</p>
+  <div class="mi-bsp">Beispiele: Körpergrösse [cm], Zeit [s], Temperatur [°C], Einkommen [CHF].</div>
+</div>
+
+<div class="block block-tipp" style="margin-top:14px">
+  <div class="block-titel">💡 Schnell-Test zum Unterscheiden</div>
+  <p>Frage: <em>„Ergibt der Mittelwert Sinn?"</em></p>
+  <ul style="margin-left:1.2em;margin-top:6px">
+    <li>Mittelwert sinnlos → <strong>kategorial</strong> (z.B. „durchschnittliche Lieblingsfarbe" gibt es nicht)</li>
+    <li>Mittelwert sinnvoll, aber Werte sind ganze Zahlen → <strong>diskret</strong> (z.B. „1.7 Kinder" ist rechnerisch korrekt, real aber kein Kind)</li>
+    <li>Mittelwert sinnvoll, Zwischenwerte real möglich → <strong>stetig</strong></li>
+  </ul>
+  <p style="margin-top:8px"><em>Der Merkmalstyp entscheidet, welche Werkzeuge sinnvoll sind:</em> welches Diagramm zum Typ passt, lernst du in <a class="quer" href="g4-2-diagramme.html">↗ 4.2 Diagramme</a>; welche Masszahlen relevant sind, in <a class="quer" href="g4-3-masszahlen.html">↗ 4.3 Masszahlen</a>.</p>
+</div>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. TYPEN ══ -->
+<h2 id="typen">Tabellenkalkulation als Werkzeug</h2>
+
+<p>Eine <strong>Tabellenkalkulation</strong> (Excel, Numbers, Google Sheets, LibreOffice Calc) ist der Standard-Werkzeugkasten der deskriptiven Statistik. Drei Eigenschaften machen sie unverzichtbar:</p>
+
+<ul style="margin-left:1.2em;margin-bottom:14px">
+  <li><strong>Spalten = Merkmale, Zeilen = Beobachtungen.</strong> Jede Zeile ist eine Person, ein Würfelwurf, ein Tag — was auch immer die Beobachtungseinheit ist.</li>
+  <li><strong>Formeln statt Taschenrechner.</strong> Eine Formel berechnet sich automatisch neu, sobald sich Daten ändern. Bei 22 Werten ist das nett, bei 22 000 Werten unverzichtbar.</li>
+  <li><strong>Sortieren, Filtern, Gruppieren.</strong> Die Operationen aus Schritt 2 des Workflows — Ordnen, Klassieren — sind eingebaut.</li>
+</ul>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Klassenumfrage in der Tabellenkalkulation</div>
+  <div class="tk-demo">
+    <div class="tk-head"><div></div><div>A: Name</div><div>B: Lernzeit [h]</div><div>C: Sortiert</div></div>
+    <div class="tk-row"><div class="tk-rn">1</div><div>Anna</div><div>3</div><div>0</div></div>
+    <div class="tk-row"><div class="tk-rn">2</div><div>Ben</div><div>5</div><div>2</div></div>
+    <div class="tk-row"><div class="tk-rn">3</div><div>Clara</div><div>2</div><div>2</div></div>
+    <div class="tk-row"><div class="tk-rn">4</div><div>Dario</div><div>4</div><div>3</div></div>
+    <div class="tk-row"><div class="tk-rn">…</div><div>…</div><div>…</div><div>…</div></div>
+  </div>
+  <p style="font-size:0.9rem;margin-top:8px">Spalte B enthält die Urliste. Spalte C entsteht durch Sortieren von B (in Excel: <code>=KKLEINSTE(B$2:B$23; ZEILE()-1)</code> oder einfach „Daten → Sortieren"). Aus Spalte C ist sofort der Rang ablesbar.</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Vier nützliche Tabellenkalkulations-Funktionen</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Funktion</th><th>Was sie tut</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td style="font-style:italic">ANZAHL(...)</td><td>zählt numerische Werte</td><td>Stichprobenumfang \(n\)</td></tr>
+      <tr><td style="font-style:italic">MITTELWERT(...)</td><td>arithmetisches Mittel</td><td>siehe Kapitel 4.3</td></tr>
+      <tr><td style="font-style:italic">MEDIAN(...)</td><td>mittlerer Wert</td><td>siehe Kapitel 4.3</td></tr>
+      <tr><td style="font-style:italic">KKLEINSTE(...; k)</td><td>k-kleinster Wert</td><td>Wert von Rang \(k\)</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.85rem;margin-top:8px;color:var(--tinte-2)">Englisch: <code>COUNT</code>, <code>AVERAGE</code>, <code>MEDIAN</code>, <code>SMALL</code>. In Google Sheets identisch zu Excel.</p>
+</div>
 
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<!-- ══ 6. THEORIE ══ -->
+<h2 id="theorie">Datengewinnung und Datenqualität</h2>
+
+<p>Eine Auswertung ist nur so gut wie die Daten, auf denen sie beruht. Bevor man rechnet, lohnt es sich zu fragen: <em>Sind diese Daten überhaupt aussagekräftig?</em> Zwei Fragen sind dabei zu unterscheiden: <em>Welche Personen / Objekte kommen in die Stichprobe?</em> (Stichproben-Design — Kriterien <strong>Repräsentativität</strong>, <strong>Stichprobenumfang</strong>, <strong>Verzerrung</strong>) und <em>Wie sauber wird gemessen?</em> (Mess-Setup — Kriterien <strong>Objektivität</strong>, <strong>Genauigkeit</strong>).</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Repräsentativität</div>
+  <p>Eine Stichprobe ist <strong>repräsentativ</strong>, wenn sie die Grundgesamtheit in den relevanten Eigenschaften annähernd widerspiegelt. Eine BM-Klasse aus dem Aargau ist nicht automatisch repräsentativ für „alle BM-Lernenden in der Schweiz" — Region, Schwerpunktfach und Klassengrösse können das Ergebnis verzerren.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Stichprobenumfang</div>
+  <p>Je grösser \(n\), desto kleiner sind zufällige Schwankungen. Bei \(n = 5\) kann ein einzelner Ausreisser den Mittelwert kippen; bei \(n = 500\) nicht mehr. Faustregel für Klassenumfragen: \(n \geq 30\) liefert verlässliche Tendenzen, darunter sind Aussagen mit Vorsicht zu geniessen.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Verzerrung (Bias)</div>
+  <p>Eine Erhebung ist <strong>verzerrt</strong>, wenn die Methode der Datengewinnung selbst das Ergebnis beeinflusst. Klassische Quellen:</p>
+  <ul style="margin-left:1.2em;margin-top:6px">
+    <li><em>Auswahl-Bias:</em> Nur Personen mit Internetzugang füllen Online-Umfragen aus.</li>
+    <li><em>Antwort-Bias:</em> Menschen geben sozial erwünschte Antworten („Ich lerne 5 h" statt „2 h").</li>
+    <li><em>Frage-Bias:</em> Die Frageformulierung legt eine Antwort nahe.</li>
+  </ul>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Objektivität und Genauigkeit (Mess-Setup)</div>
+  <p>Während die ersten drei Kriterien das <em>Stichproben-Design</em> betreffen, geht es hier um die <em>Messung selbst</em>:</p>
+  <ul style="margin-left:1.2em;margin-top:6px">
+    <li><strong>Objektivität:</strong> Würde eine andere Person mit derselben Methode dieselben Werte messen? Eine Lehrperson, die mündlich nach Lernzeiten fragt, beeinflusst die Antworten anders als ein anonymer Fragebogen — die Erhebung ist <em>nicht objektiv</em>.</li>
+    <li><strong>Genauigkeit (Messpräzision):</strong> Passt die Messpräzision zum Zweck? Körpergrössen werden auf cm gemessen, nicht auf 0.1 mm — das wäre unverhältnismässig genau und täuscht eine Präzision vor, die das Massband nicht liefert. Umgekehrt sind „grob 1.6 m" oder „1.8 m" zu unscharf, wenn man Quartile berechnen will.</li>
+  </ul>
+</div>
+
+<div class="qual-grid">
+  <div class="qg-box qg-gut">
+    <div class="qg-tit">✓ Gut erhoben</div>
+    <p style="font-size:0.92rem">Anonyme schriftliche Umfrage in 12 zufällig ausgewählten BM-Klassen aus 5 Kantonen, \(n = 280\), Frage neutral formuliert.</p>
+  </div>
+  <div class="qg-box qg-schlecht">
+    <div class="qg-tit">✗ Schlecht erhoben</div>
+    <p style="font-size:0.92rem">Lehrperson fragt mündlich in der eigenen Klasse: „Wer lernt mehr als 5 Stunden?" Hände werden gehoben. Klein, nicht repräsentativ, sozialer Druck.</p>
+  </div>
+</div>
+
+<div class="block block-tipp" style="margin-top:14px">
+  <div class="block-titel">💡 Methodik vor Resultat</div>
+  <p>Die Antwort einer Statistik ist immer eine Antwort auf <em>diese</em> Stichprobe — und nur in dem Mass auf die Grundgesamtheit, in dem die Stichprobe repräsentativ war. <strong>Wer Daten interpretiert, fragt zuerst nach der Methode der Erhebung.</strong></p>
+</div>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Stichprobe und Grundgesamtheit verwechseln</div>
+  <p>Eine einzelne Klasse ist <strong>nicht</strong> die Grundgesamtheit aller BM-Lernenden — sie ist eine Stichprobe daraus. Wer aus den 22 Antworten einer Klasse Aussagen über „alle BM-Schweizer" macht, übergeht den Stichproben-Charakter. Umgekehrt: betrachtet man genau diese eine Klasse als Untersuchungsgegenstand, ist sie die Grundgesamtheit; eine Auswahl von 5 davon wäre dann die Stichprobe. Die Begriffe sind <em>relativ</em> zur Fragestellung.</p>
+</div>
+
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<p>Sechs Aufgaben mit zunehmender Selbstständigkeit. Lösung jeweils per Klick auf <em>▶ Lösung</em>.</p>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Begriffe zuordnen</span></div>
+  <p>Eine Stadt hat 4'200 Einwohnerinnen und Einwohner zwischen 18 und 25 Jahren. Davon werden 200 zufällig ausgewählt und gefragt, ob sie gerade in einer Berufslehre sind.</p>
+  <p style="margin-top:6px">Bestimme: <em>Grundgesamtheit</em>, <em>Stichprobe</em>, <em>Stichprobenumfang</em>, <em>Merkmalstyp</em> der Antwortvariable.</p>
+  <button class="loesung-toggle" onclick="toggleL('l1')">▶ Lösung</button>
+  <div class="loesung-body" id="l1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ul style="margin-left:1.2em">
+        <li><strong>Grundgesamtheit:</strong> alle 4'200 Personen zwischen 18 und 25 Jahren in dieser Stadt.</li>
+        <li><strong>Stichprobe:</strong> die 200 zufällig ausgewählten Personen.</li>
+        <li><strong>Stichprobenumfang:</strong> \(n = 200\).</li>
+        <li><strong>Merkmalstyp:</strong> kategorial (Antwort „ja"/„nein"). Es lassen sich Anteile berechnen, aber kein Mittelwert.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Merkmalstypen erkennen</span></div>
+  <p>Klassifiziere jedes Merkmal als <em>kategorial</em>, <em>diskret</em> oder <em>stetig</em>:</p>
+  <ol class="aufg-liste">
+    <li>Schuhgrösse (z.B. 41, 42, 43)</li>
+    <li>Reaktionszeit beim Bremsen [s]</li>
+    <li>Postleitzahl des Wohnorts</li>
+    <li>Anzahl Geschwister</li>
+    <li>Körpergewicht [kg]</li>
+    <li>Lieblings-Streamingdienst</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l2')">▶ Lösung</button>
+  <div class="loesung-body" id="l2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li><strong>Diskret (mit Grauzone)</strong> — formell zählt die Schuhgrösse als diskret (festes Raster aus Halbschritten 41, 41.5, 42, …), und ein Mittelwert ist rechnerisch möglich. <em>Inhaltlich</em> ist Schuhgrösse aber eine grob klassierte Messung einer stetigen Grösse (Fusslänge in cm). Wer den Schritt zwischen 41 und 42 nicht für einen frei wählbaren Zähl-Schritt hält, kann sie auch als stetig auffassen. Beide Sichtweisen sind in der Schweizer Fachliteratur belegt — wichtig ist, die getroffene Wahl im Kontext zu begründen.</li>
+        <li><strong>Stetig</strong> — beliebig genau messbar.</li>
+        <li><strong>Kategorial</strong> — auch wenn Postleitzahlen Zahlen <em>sind</em>: ein Mittelwert von 8001 und 1200 ergibt keinen Sinn.</li>
+        <li><strong>Diskret</strong> — zählend.</li>
+        <li><strong>Stetig</strong> — beliebig genau, abhängig von der Waage.</li>
+        <li><strong>Kategorial</strong> — Namen, keine Rechnung möglich.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Urliste, sortierte Liste, Rang</span></div>
+  <p>Bei einem 100m-Lauf einer Sportklasse werden folgende Zeiten gemessen (in Sekunden):</p>
+  <p style="font-family:var(--mono);font-size:0.88rem;margin:6px 0">14.2, 13.8, 15.1, 13.5, 14.0, 14.7, 13.9, 15.6, 14.2, 13.8</p>
+  <ol class="aufg-liste">
+    <li>Wie gross ist der Stichprobenumfang?</li>
+    <li>Erstelle die sortierte Liste.</li>
+    <li>Welcher Rang gehört zur Zeit 14.0 s?</li>
+    <li>Welcher Merkmalstyp liegt vor?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l3')">▶ Lösung</button>
+  <div class="loesung-body" id="l3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(n = 10\).</li>
+        <li>Sortierte Liste: 13.5 · 13.8 · 13.8 · 13.9 · 14.0 · 14.2 · 14.2 · 14.7 · 15.1 · 15.6.</li>
+        <li>Die Zeit 14.0 s steht an Position 5 — Rang 5.</li>
+        <li><strong>Stetig</strong> (Zeit, beliebig genau messbar).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Tabellenkalkulation einsetzen</span></div>
+  <p>In einer Tabellenkalkulation stehen in den Zellen <code>B2:B23</code> die Lernzeiten (in Stunden) der Klasse aus dem Einstieg.</p>
+  <ol class="aufg-liste">
+    <li>Welche Formel liefert den Stichprobenumfang in Zelle <code>D2</code>?</li>
+    <li>Welche Formel liefert den kleinsten Wert?</li>
+    <li>Welche Formel liefert den drittkleinsten Wert?</li>
+    <li>Was passiert mit allen drei Werten, wenn in <code>B24</code> ein zusätzlicher Wert eingetragen wird?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l4')">▶ Lösung</button>
+  <div class="loesung-body" id="l4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li><code>=ANZAHL(B2:B23)</code> — Ergebnis 22 (22 Zellen mit Zahlenwert).</li>
+        <li><code>=MIN(B2:B23)</code> oder <code>=KKLEINSTE(B2:B23; 1)</code>.</li>
+        <li><code>=KKLEINSTE(B2:B23; 3)</code>.</li>
+        <li>Nichts. Der Bereich endet bei <code>B23</code> — der Wert in <code>B24</code> wird ignoriert. <em>Tipp:</em> als „Tabelle" formatieren oder den Bereich auf eine ganze Spalte erweitern (<code>B:B</code>), dann passt er sich automatisch an.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Erhebung kritisch prüfen</span></div>
+  <p>Eine Schülerin postet auf Instagram die Frage „Findet ihr das Schulessen gut?" und erhält 320 Antworten — 78&nbsp;% sagen Nein. Sie folgert: <em>„An unserer Schule findet die Mehrheit das Essen schlecht."</em></p>
+  <p>Diskutiere drei Probleme dieser Erhebung.</p>
+  <button class="loesung-toggle" onclick="toggleL('l5')">▶ Lösung</button>
+  <div class="loesung-body" id="l5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ul style="margin-left:1.4em">
+        <li><strong>Auswahl-Bias:</strong> Nur Personen, die der Schülerin auf Instagram folgen, antworten. Das ist nicht zwingend ein Querschnitt der Schule.</li>
+        <li><strong>Selbstselektion:</strong> Wer das Essen mag, hat oft keinen Grund zu antworten. Wer es nicht mag, beschwert sich gern. Negative Stimmen sind überrepräsentiert.</li>
+        <li><strong>Vage Frage:</strong> „Gut" ist nicht definiert. Geschmack? Preis? Qualität? Verschiedene Personen antworten auf verschiedene Fragen.</li>
+        <li><em>Bonus:</em> Die Stichprobe stammt vermutlich nicht nur aus der eigenen Schule — Instagram hat keine Schulgrenzen.</li>
+      </ul>
+      <p style="margin-top:6px">Sauberer wäre: anonyme Papier-Umfrage an einem zufällig ausgewählten Schultag, an alle Klassen verteilt, mit konkreter Skala (z.B. 1–5).</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg" style="margin-top:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Eigene Mini-Erhebung planen</span></div>
+  <p>Du willst herausfinden, wie viele Stunden Bildschirmzeit BM-Lernende deiner Schule pro Tag haben. Plane die Erhebung in einem kurzen Konzept.</p>
+  <ol class="aufg-liste">
+    <li>Definiere Grundgesamtheit und gewünschte Stichprobengrösse.</li>
+    <li>Beschreibe, wie du die Stichprobe ziehst (so, dass sie repräsentativ ist).</li>
+    <li>Formuliere die Frage präzise (Zeitraum, Zählung, Skala).</li>
+    <li>Welcher Merkmalstyp entsteht?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l6')">▶ Lösung</button>
+  <div class="loesung-body" id="l6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Beispiel-Lösung</div>
+      <p>Es gibt mehrere richtige Antworten — folgendes Konzept ist tragfähig:</p>
+      <ol class="aufg-liste">
+        <li><strong>Grundgesamtheit:</strong> alle BM-Lernenden der Schule (z.B. 240 Personen). Stichprobengrösse \(n = 60\) (Faustregel ≥ 30, lieber mehr).</li>
+        <li><strong>Auswahl:</strong> Aus jeder der 12 BM-Klassen werden 5 Personen per Losverfahren ausgewählt (Zettel mit Namen, ziehen). Damit ist die Stichprobe geschichtet — jede Klasse ist gleich vertreten.</li>
+        <li><strong>Frage:</strong> „Wie viele Stunden hast du <em>gestern</em> insgesamt einen Bildschirm benutzt (Smartphone, Laptop, TV) — gerundet auf halbe Stunden?" Konkrete Skala: 0, 0.5, 1, 1.5, … h.</li>
+        <li><strong>Merkmalstyp:</strong> stetig (Zeit), aber durch das Runden auf halbe Stunden in der Praxis diskret. Mittelwert sinnvoll.</li>
+      </ol>
+      <p><strong>Geplante Auswertung:</strong> Werteliste der 60 Antworten in eine Tabellenkalkulation eintragen, dann Mittelwert, Median, Standardabweichung und ein Histogramm (Klassen \([0;1[, [1;2[, \ldots\)) erzeugen. Mit dem Median (statt nur dem Mittelwert) sind „Vielnutzer-Ausreisser" (z.B. einzelne 10-Stunden-Werte) gut abgesichert — der Median bleibt robust.</p>
+      <p><strong>Mögliche Fallstricke:</strong> Selbstauskunft (Schüler schätzen sich oft tiefer ein), Wochentag-Effekt („gestern" an einem Sonntag liefert andere Werte als an einem Schultag — daher in der Frage präzisieren oder über mehrere Tage erheben), Doppeltyp-Aktivitäten (Smartphone und TV gleichzeitig).</p>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Eigene Klassenumfrage konzipieren</span></div>
+  <p>Du sollst eine kleine statistische Untersuchung in deiner Klasse durchführen. Wähle eine der folgenden Fragestellungen:</p>
+  <ul>
+    <li>(A) „Wie viele Stunden pro Woche verbringst du mit Sport?"</li>
+    <li>(B) „Welches Verkehrsmittel nutzt du hauptsächlich für den Schulweg?"</li>
+    <li>(C) „Wie viele Geschwister hast du?"</li>
+  </ul>
+  
+  <ol class="aufg-liste">
+    <li>Welcher Datentyp entsteht bei jeder Frage (kategorial, diskret, stetig)?</li>
+    <li>Welche Form der Urliste würdest du anlegen — zeilenweise Wertesammlung oder Strichliste mit Kategorien?</li>
+    <li>Welche Probleme der <em>Datenqualität</em> könnten bei jeder Frage auftauchen (Selbstauskunft, Erinnerungsfehler, Eindeutigkeit)?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g4-1-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g4-1-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>(A) stetig (Stunden sind eine kontinuierliche Grösse, in der Praxis aber auf Halbstunden gerundet); (B) kategorial (Velo, Tram, zu Fuss, Auto, …); (C) diskret (ganzzahlige Anzahl).</li>
+        <li>(A) und (C) als Werteliste mit \(n\) Einträgen, (B) als Strichliste mit Häufigkeit pro Kategorie. Beide Formen können später ineinander umgeformt werden (Werteliste lässt sich klassieren oder zählen, Strichliste lässt sich in eine lange Werteliste mit Wiederholungen umwandeln).</li>
+        <li>(A) Selbstauskunft optimistisch — viele schätzen sich aktiver ein, als sie sind. Erinnerungsfehler bei „letzte Woche". (B) „Hauptsächlich" mehrdeutig: was, wenn man die Hälfte des Wegs Velo und die Hälfte Tram nutzt? (C) Eindeutig, ausser bei zusammengesetzten Familien — was zählt als Geschwister? Datenqualität ist oft die unsichtbare Hürde.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Datenanalyse beginnt nicht beim Rechnen, sondern bei der <strong>Erhebung</strong>. Wer Grundgesamtheit, Stichprobe und Merkmalstyp sauber benennt, vermeidet die häufigsten Fehler — bevor das erste Diagramm gezeichnet ist.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+  <tbody>
+    <tr><td>Grundgesamtheit</td><td>alle relevanten Objekte</td><td>alle BM-Lernenden CH</td></tr>
+    <tr><td>Stichprobe</td><td>tatsächlich gemessene Teilmenge</td><td>22 Lernende einer Klasse</td></tr>
+    <tr><td>Urliste</td><td>rohe, unsortierte Werte</td><td>3, 5, 2, 4, …</td></tr>
+    <tr><td>Stichprobenumfang \(n\)</td><td>Anzahl Werte</td><td>\(n = 22\)</td></tr>
+    <tr><td>Rang</td><td>Position in sortierter Liste</td><td>Rang 1 = kleinster</td></tr>
+    <tr><td>Kategorial</td><td>Kategorien, kein Mittelwert</td><td>Lieblingsfach</td></tr>
+    <tr><td>Diskret</td><td>zählende ganze Zahlen</td><td>Anzahl Geschwister</td></tr>
+    <tr><td>Stetig</td><td>beliebig genau messbar</td><td>Körpergrösse</td></tr>
+  </tbody>
+</table>
+
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+
+<p>Zum Ausdrucken und Mitnehmen — Theorie, Formelsammlung, Karteikarten und Aufgaben mit Lösungen.</p>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g4-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Begriffe und Tabellenkalkulations-Funktionen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g4-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAznKJ7-xAyq6tOtqQYzs5_38" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Statistische Grundbegriffe &amp; Diagramme — Playlist</div><div class="lk-s">Lehrerschmidt · 35 Videos · Grundbegriffe, Häufigkeiten, Diagramme, Kennwerte</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHifw_3OhBTvQq2EGX5NedOy" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Statistik — Playlist (5.–10. Klasse)</div><div class="lk-s">Mathe by Daniel Jung · 31 Videos · Daten, Häufigkeit, Mittelwert, Median, Boxplot</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/22778/daten-und-datendarstellung" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Daten und Datendarstellung</div><div class="lk-s">Übersicht zu Kenngrössen und Diagrammen · Aufgaben mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/16416/statistik" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Statistik</div><div class="lk-s">Grundlagen &amp; Übungen · Häufigkeiten, Mittelwert, Prozentanteile</div></div></a>
+</div>
 
 
 </main>
@@ -93,7 +535,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Grundlagen</p>
+  <p>Grundlagenfach 4.1 Grundlagen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -102,9 +544,117 @@ MathJax = {
 buildNav({
   bereich:'grundlagen', id:'g4-1',
   kapitelNr:'4.1', kapitelTitel:'Grundlagen',
-  prev:{nr:'3.3',titel:'Quadratische Funktionen',url:'g3-3-quadratische-funktionen.html'},
+  prev:{nr:'4.0',titel:'Praxisbeispiel BM2-Klasse',url:'g4-0-praxisbeispiel-bm2-klasse.html'},
   next:{nr:'4.2',titel:'Diagramme',url:'g4-2-diagramme.html'}
 });
+
+/* Tabs für Merkmalstypen */
+function showMerkmal(key, btn){
+  ['kat','dis','ste'].forEach(k => {
+    document.getElementById('mi-'+k).style.display = (k===key) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.merkmal-tab').forEach(t => t.classList.remove('aktiv'));
+  btn.classList.add('aktiv');
+}
+
+/* Einstieg: Datensammel-Animation */
+(function(){
+  const sbBuckets = [0,0,0,0,0,0,0,0,0]; // 0h .. 8h
+  const sbMaxN = 22;
+  let sbN = 0;
+
+  function sbRender(){
+    const c = document.getElementById('sb-canvas');
+    if (!c) return;
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.offsetWidth || 460, H = c.offsetHeight || 180;
+    c.width = W*dpr; c.height = H*dpr;
+    const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+
+    const padL = 32, padR = 12, padT = 14, padB = 26;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+    const nBins = 9;
+    const binW = plotW / nBins;
+    // Y-Skala: max immer mind. 4, sonst ans aktuelle Max anpassen
+    const maxBin = Math.max(4, ...sbBuckets);
+
+    // y-Achse + Gitter
+    ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+    for (let i = 1; i <= maxBin; i++){
+      const y = padT + plotH - (i/maxBin)*plotH;
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
+    }
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT+plotH); ctx.lineTo(W-padR, padT+plotH); ctx.stroke();
+
+    // y-Beschriftung
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'right';
+    for (let i = 1; i <= maxBin; i++){
+      const y = padT + plotH - (i/maxBin)*plotH;
+      ctx.fillText(i, padL-4, y+3);
+    }
+
+    // Säulen
+    for (let i = 0; i < nBins; i++){
+      const v = sbBuckets[i];
+      if (v > 0){
+        const x = padL + i*binW + binW*0.12;
+        const w = binW*0.76;
+        const h = (v/maxBin)*plotH;
+        const y = padT + plotH - h;
+        ctx.fillStyle = '#3b82f6';
+        ctx.fillRect(x, y, w, h);
+        // Zahl auf der Säule
+        ctx.fillStyle = '#1a4f8a';
+        ctx.font = 'bold 10px JetBrains Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(v, x + w/2, y - 3);
+      }
+    }
+    // x-Beschriftung
+    ctx.fillStyle = '#374151';
+    ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    for (let i = 0; i < nBins; i++){
+      ctx.fillText(i, padL + i*binW + binW/2, padT + plotH + 14);
+    }
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#6b7280';
+    ctx.fillText('Lernzeit [h]', W-padR, padT + plotH + 22);
+  }
+
+  function sbAdd(v){
+    if (sbN >= sbMaxN) return;
+    sbBuckets[v]++;
+    sbN++;
+    document.getElementById('sb-n').textContent = sbN;
+    if (sbN >= sbMaxN){
+      document.querySelectorAll('#sb-buttons .sb-btn').forEach(b => b.disabled = true);
+    }
+    sbRender();
+  }
+
+  function sbReset(){
+    for (let i = 0; i < sbBuckets.length; i++) sbBuckets[i] = 0;
+    sbN = 0;
+    document.getElementById('sb-n').textContent = 0;
+    document.querySelectorAll('#sb-buttons .sb-btn').forEach(b => b.disabled = false);
+    sbRender();
+  }
+
+  document.querySelectorAll('#sb-buttons .sb-btn').forEach(b => {
+    b.addEventListener('click', () => sbAdd(parseInt(b.dataset.val, 10)));
+  });
+  document.getElementById('sb-reset').addEventListener('click', sbReset);
+
+  // Initial-Render + Reaktion auf Resize
+  sbRender();
+  window.addEventListener('resize', sbRender);
+})();
 </script>
 </body>
 </html>

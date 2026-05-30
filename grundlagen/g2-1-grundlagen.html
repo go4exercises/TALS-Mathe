@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grundlagen — TALS Mathematik</title>
+<title>2.1 Grundlagen — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
@@ -19,7 +19,63 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Themen-spezifische Styles. Globale Klassen (.block, .merksatz, .ftb-tabelle, .dl, .lk …) liegen in ../style.css. ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:520px; margin:0 auto; }
+
+/* Typ-Buttons */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* Aufgaben-Karten */
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:200px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Umformungs-Stack (animiert) */
+.umform-stack { display:flex; flex-direction:column; gap:8px; margin:14px 0; }
+.umform-zeile { display:flex; align-items:center; gap:12px; background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:9px 14px; opacity:0; transform:translateY(-6px); transition:opacity 0.4s ease, transform 0.4s ease; }
+.umform-zeile.sichtbar { opacity:1; transform:translateY(0); }
+.umform-zeile.aktuell { background:var(--blau-hell); border-color:var(--blau-rand); }
+.umform-eq { font-family:var(--mono); font-size:1rem; font-weight:700; color:var(--tinte); flex:1; }
+.umform-op { font-family:var(--mono); font-size:0.78rem; color:var(--blau); background:var(--weiss); padding:3px 10px; border-radius:14px; border:1px solid var(--blau-rand); white-space:nowrap; }
+.umform-ctrl { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.umform-btn { font-family:var(--sans); font-size:0.82rem; font-weight:700; padding:6px 14px; border-radius:8px; border:1.5px solid var(--blau); background:var(--blau); color:#fff; cursor:pointer; }
+.umform-btn:hover { background:#133d6e; }
+.umform-btn.sec { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); }
+.umform-btn.sec:hover { background:var(--linie); }
+.umform-btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+/* Probe-Animation */
+.probe-step { padding:10px 14px; background:var(--gruen-hell); border:1px solid var(--gruen-rand); border-radius:9px; margin:8px 0; font-family:var(--mono); font-size:0.95rem; color:var(--tinte); transition:background 0.3s ease, border-color 0.3s ease; }
+.probe-step.fail { background:var(--rot-hell); border-color:var(--rot-rand); }
+.probe-step .pf-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gruen); margin-bottom:3px; display:block; }
+.probe-step.fail .pf-label { color:var(--rot); }
+
+/* Hinweis-Box */
+.hinweis { background:var(--papier-2); border-left:3px solid var(--tinte-2); border-radius:6px; padding:10px 14px; font-size:0.88rem; color:var(--tinte); margin:10px 0; }
 </style>
 </head>
 <body>
@@ -34,6 +90,8 @@ MathJax = {
 </div>
 
 <!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Eine Gleichung beschreibt eine Bedingung an eine unbekannte Grösse. Hier lernst du, einen technischen Sachverhalt als Gleichung, Ungleichung oder System zu <strong>formulieren</strong>, den Gleichungstyp zu erkennen und die <strong>Lösungsmenge</strong> über Äquivalenzumformungen zu bestimmen.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 2.1</div>
   <ul>
@@ -43,49 +101,532 @@ MathJax = {
   </ul>
 </div>
 
-
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — die Waage als Modell</h2>
 
+<p>In einer Werkstatt werden <strong>vier gleich schwere Pakete</strong> zusammen mit einem <strong>3 kg schweren Werkzeugkasten</strong> auf eine Waage gestellt. Die Waage zeigt im Gleichgewicht <strong>15 kg</strong> auf der Gegenseite. Wie schwer ist ein einzelnes Paket?</p>
+
+<p>Übersetze den Sachverhalt in eine <strong>Gleichung</strong>: Wenn \(x\) die Masse eines Pakets ist, dann gilt</p>
+
+\[ 4 \cdot x + 3 = 15 \]
+
+<p>Verschiebe den Regler — die Waage neigt sich, bis sie waagerecht steht. Genau dann hat \(x\) den Wert, der die Gleichung erfüllt.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>⚖ Werkstatt-Waage — \(4 \cdot x + 3 = 15\)</h3>
+    <p>Vier Pakete + 3 kg Werkzeug = 15 kg · finde die Paketmasse</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>Paketmasse \(x\) [kg]</label>
+      <input type="range" id="wg-x" min="0" max="6" step="0.5" value="2">
+      <span class="sl-val"><span id="wg-xv">2</span> kg</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Linke Seite vs. rechte Seite</div>
+      <div class="fl-eq" id="wg-eq">4·2 + 3 = 11    ≠    15</div>
+      <div class="fl-eq fl-eval" id="wg-status" style="font-size:0.95rem;color:var(--rot);margin-top:4px">Linke Schale ist zu leicht</div>
+    </div>
+    <div class="cv-wrap"><canvas id="wg-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was zeigt die Waage?</div>
+  <p>Eine <strong>Gleichung</strong> behauptet: zwei Ausdrücke sind <em>gleich gross</em>. Bildlich: zwei Schalen einer Waage stehen waagerecht. Die <strong>Lösung</strong> ist genau jener Wert für die unbekannte Grösse, bei dem das Gleichheitszeichen tatsächlich stimmt.</p>
+  <ul style="margin-top:6px">
+    <li>Ist \(x\) zu klein, ist die linke Seite zu leicht — keine Lösung</li>
+    <li>Ist \(x\) zu gross, ist die linke Seite zu schwer — keine Lösung</li>
+    <li>Bei \(x = 3\) sind beide Seiten genau \(15\) — <em>das</em> ist die Lösung</li>
+  </ul>
+</div>
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Begriffe und Definition</h2>
 
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Gleichung</div>
+  <p>Eine <strong>Gleichung</strong> ist eine Aussageform der Gestalt</p>
+  \[ T_1(x) = T_2(x) \]
+  <p>wobei \(T_1\) und \(T_2\) Terme sind, die eine oder mehrere Variablen enthalten dürfen. Eine Zahl \(x_0\) heisst <strong>Lösung</strong>, wenn beim Einsetzen die linke und die rechte Seite denselben Wert ergeben.</p>
+</div>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Bausteine einer Gleichung</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Begriff</th><th>Symbol / Beispiel</th><th>Bedeutung</th></tr></thead>
+    <tbody>
+      <tr><td class="td-x">Variable</td><td>\(x,\, t,\, n,\, \ldots\)</td><td style="text-align:left;font-family:var(--sans)">unbekannte Grösse, deren Wert gesucht wird</td></tr>
+      <tr><td>Term</td><td>\(4 \cdot x + 3\)</td><td style="text-align:left;font-family:var(--sans)">Rechenausdruck — links und rechts vom \(=\)</td></tr>
+      <tr><td>Gleichung</td><td>\(4 \cdot x + 3 = 15\)</td><td style="text-align:left;font-family:var(--sans)">zwei Terme, verbunden durch \(=\)</td></tr>
+      <tr><td class="td-pt">Lösung</td><td>\(x_0 = 3\)</td><td style="text-align:left;font-family:var(--sans)">Wert, bei dem die Gleichheit erfüllt ist</td></tr>
+      <tr><td>Lösungsmenge</td><td>\(\mathbb{L} = \{3\}\)</td><td style="text-align:left;font-family:var(--sans)">Menge aller Lösungen</td></tr>
+      <tr><td>Grundmenge</td><td>\(\mathbb{G} = \mathbb{R}\)</td><td style="text-align:left;font-family:var(--sans)">Menge der erlaubten Werte für die Variable</td></tr>
+    </tbody>
+  </table>
+</div>
 
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Verwandte Aussageformen</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Begriff</th><th>Symbol</th><th>Bedeutung</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left">Ungleichung</td><td>\(<,\; \le,\; >,\; \ge\)</td><td style="text-align:left;font-family:var(--sans)">eine Seite ist <em>kleiner</em> oder <em>grösser</em> (oder gleich) als die andere</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Gleichungssystem</td><td>\(\begin{cases} \ldots \\ \ldots \end{cases}\)</td><td style="text-align:left;font-family:var(--sans)">mehrere Gleichungen, die <em>gleichzeitig</em> erfüllt sein müssen</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Identität</td><td>\(\equiv\) (oder \(=\))</td><td style="text-align:left;font-family:var(--sans)">Gleichung, die für <em>alle</em> erlaubten Werte gilt — z.B. \((x+1)^2 \equiv x^2+2 \cdot x+1\). Das Zeichen \(\equiv\) betont „identisch gleich für jedes \(x\)".</td></tr>
+    </tbody>
+  </table>
+</div>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 4. SACHVERHALTE ALS GLEICHUNG FORMULIEREN ══ -->
+<h2 id="formulieren">Sachverhalte als Gleichung formulieren</h2>
 
+<p>Der erste Schritt jeder Anwendungsaufgabe: aus dem Text eine Gleichung machen. Drei Fragen helfen dabei.</p>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<table class="ftb-tabelle">
+  <thead><tr><th>Schritt</th><th>Frage</th><th>Ergebnis</th></tr></thead>
+  <tbody>
+    <tr><td class="td-x">①</td><td style="text-align:left;font-family:var(--sans)">Was ist gesucht?</td><td style="text-align:left;font-family:var(--sans)">Variable benennen: <em>„Sei \(x\) = …"</em></td></tr>
+    <tr><td class="td-x">②</td><td style="text-align:left;font-family:var(--sans)">Was ist gegeben?</td><td style="text-align:left;font-family:var(--sans)">Zahlen, Beziehungen und Einheiten festhalten</td></tr>
+    <tr><td class="td-x">③</td><td style="text-align:left;font-family:var(--sans)">Welche Gleichheit gilt?</td><td style="text-align:left;font-family:var(--sans)">linke = rechte Seite mit \(x\) ausdrücken</td></tr>
+  </tbody>
+</table>
 
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Beispiel 1 — Werkstatt-Pakete</div>
+  <p><em>Vier gleich schwere Pakete und ein 3 kg schwerer Werkzeugkasten wiegen zusammen 15 kg. Wie schwer ist ein Paket?</em></p>
+  <p>① Sei \(x\) die Masse eines Pakets in kg.<br>
+  ② Vier Pakete \(\Rightarrow 4 \cdot x\), Werkzeug \(= 3\) kg, Gesamt \(= 15\) kg.<br>
+  ③ Gesamtmasse: \(\;\boxed{4 \cdot x + 3 = 15}\)</p>
+</div>
 
-<!-- ══ 7. AUFGABEN ══ -->
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Mietkosten</div>
+  <p><em>Eine Werkstatt mietet ein Gerät für 50 CHF Grundgebühr plus 12 CHF pro Tag. Nach wie vielen Tagen kostet die Miete 170 CHF?</em></p>
+  <p>① Sei \(t\) die Anzahl Tage.<br>
+  ② Grundgebühr \(50\) CHF, Tagespreis \(12\) CHF/Tag, Zielsumme \(170\) CHF.<br>
+  ③ Gesamtkosten: \(\;\boxed{12 \cdot t + 50 = 170}\)</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Ungleichung</div>
+  <p><em>Ein Aufzug darf höchstens 600 kg transportieren. Eine Person wiegt im Mittel 75 kg. Wie viele Personen \(n\) dürfen einsteigen?</em></p>
+  <p>① Sei \(n\) die Anzahl Personen.<br>
+  ② Eine Person \(75\) kg, Maximum \(600\) kg.<br>
+  ③ Höchstmasse: \(\;\boxed{75 \cdot n \le 600}\) — eine <em>Ungleichung</em>, kein \(=\), sondern \(\le\).</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 4 — Gleichungssystem</div>
+  <p><em>Zwei Werkstücke wiegen zusammen 7 kg. Das schwerere ist 1 kg schwerer als das leichtere. Wie schwer sind die beiden?</em></p>
+  <p>① Seien \(a\) (schwerer) und \(b\) (leichter) die Massen in kg.<br>
+  ② Summe \(7\) kg, Differenz \(1\) kg.<br>
+  ③ Beide Aussagen gleichzeitig: \(\;\boxed{\begin{cases} a + b = 7 \\ a - b = 1 \end{cases}}\)</p>
+</div>
+
+<h2 id="ungleichungen-formulieren">Ungleichungen formulieren</h2>
+
+<p>Im technischen Alltag tauchen Bedingungen oft als <em>Grenzwerte</em> auf — Tragkräfte, Höchstdrücke, Mindestabstände, Budget-Obergrenzen. Wer einen Sachverhalt nicht als Gleichheit, sondern als Ungleichung lesen kann, vermeidet einen Modellfehler. Die drei Fragen aus der Tabelle oben gelten weiterhin; nur in Schritt ③ entscheidet die Sprache, welches Zeichen passt:</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Sprachliches Signal</th><th>Mathematisches Zeichen</th><th>Bedeutung</th></tr></thead>
+  <tbody>
+    <tr><td style="text-align:left;font-family:var(--sans)">„höchstens", „nicht mehr als", „maximal"</td><td>\(\le\)</td><td style="text-align:left;font-family:var(--sans)">Grenze ist <em>erlaubt</em></td></tr>
+    <tr><td style="text-align:left;font-family:var(--sans)">„mindestens", „nicht weniger als", „wenigstens"</td><td>\(\ge\)</td><td style="text-align:left;font-family:var(--sans)">Grenze ist <em>erlaubt</em></td></tr>
+    <tr><td style="text-align:left;font-family:var(--sans)">„weniger als", „kleiner als", „unter"</td><td>\(<\)</td><td style="text-align:left;font-family:var(--sans)">Grenze ist <em>nicht</em> erlaubt</td></tr>
+    <tr><td style="text-align:left;font-family:var(--sans)">„mehr als", „grösser als", „über"</td><td>\(>\)</td><td style="text-align:left;font-family:var(--sans)">Grenze ist <em>nicht</em> erlaubt</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Werkstatt-Beispiel 1 — Tragfähigkeit eines Gerüsts</div>
+  <p><em>Auf ein Gerüst dürfen höchstens 450 kg geladen werden. Eine Materialkiste wiegt 18 kg, der Werkzeugkasten 25 kg. Wie viele Kisten \(n\) dürfen zusätzlich zum Werkzeugkasten aufs Gerüst?</em></p>
+  <p>① Sei \(n\) die Anzahl Materialkisten.<br>
+  ② Eine Kiste \(18\) kg, Werkzeug \(25\) kg, Tragfähigkeit \(450\) kg.<br>
+  ③ „höchstens 450 kg" → \(\le 450\): \(\;\boxed{18 \cdot n + 25 \le 450}\)</p>
+  <p>Aufgelöst: \(18 n \le 425\), also \(n \le 23.61\). Da \(n \in \mathbb{N}\), dürfen maximal <strong>23 Kisten</strong> dazu. Auf 24 Kisten wäre die Tragfähigkeit überschritten.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Werkstatt-Beispiel 2 — Mindestlohn pro Auftrag</div>
+  <p><em>Ein Servicetechniker rechnet pauschal 90 CHF Anfahrt plus 75 CHF pro Stunde. Damit der Auftrag rentabel ist, muss er mindestens 240 CHF einbringen. Welche Mindestdauer \(t\) (in Stunden) muss eingeplant werden?</em></p>
+  <p>① Sei \(t\) die Auftragsdauer in Stunden.<br>
+  ② Anfahrt \(90\) CHF, Stundenansatz \(75\) CHF/h, Mindest-Ertrag \(240\) CHF.<br>
+  ③ „mindestens 240 CHF" → \(\ge 240\): \(\;\boxed{75 \cdot t + 90 \ge 240}\)</p>
+  <p>Aufgelöst: \(75 t \ge 150\), also \(t \ge 2\). Die <strong>Auftragsdauer muss mindestens 2 Stunden</strong> betragen.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Werkstatt-Beispiel 3 — Sicherheitsabstand bei einer Drehbank</div>
+  <p><em>Bei einer Drehbank muss der Abstand <em>d</em> (in cm) vom Bedienpunkt zur rotierenden Spindel <strong>echt grösser</strong> als 35 cm sein. Die Schutzhaube ist 12 cm dick. Welcher freie Abstand <em>x</em> ist nötig?</em></p>
+  <p>① Sei \(x\) der freie Abstand zur Schutzhaube in cm.<br>
+  ② Schutzhaube \(12\) cm, Sicherheitsabstand-Vorgabe \(d > 35\) cm.<br>
+  ③ „echt grösser als 35" → \(>\), Grenze nicht erlaubt: \(\;\boxed{x + 12 > 35}\)</p>
+  <p>Aufgelöst: \(x > 23\). Genau 23 cm Abstand wäre zu wenig — es braucht <strong>echt mehr als 23 cm</strong>. In der Praxis legt man darum eine Reserve drauf (z.B. \(x \ge 25\) cm).</p>
+</div>
+
+<div class="block block-fehler" style="margin-top:10px">
+  <div class="block-titel">⚠ Häufiger Fehler — strenges oder erlaubendes Zeichen</div>
+  <p>„Mindestens" und „höchstens" schliessen die Grenze <em>ein</em> (\(\ge\), \(\le\)). „Mehr als" und „weniger als" schliessen die Grenze <em>aus</em> (\(>\), \(<\)). Das ist nicht Pingeligkeit — ein Auto, das „weniger als 30 km/h" fährt, fährt nicht 30. Eines, das „höchstens 30 km/h" fährt, darf 30. Bei Sicherheits-Schranken (Tragfähigkeiten, Druck-Maxima) lohnt es sich, das ganz genau zu lesen.</p>
+</div>
+
+<!-- ══ 5. ÄQUIVALENZUMFORMUNGEN (animiert) ══ -->
+<h2 id="aequivalenz">Algebraische Äquivalenz <a class="quer" href="g1-3-algebraische-terme.html">↩ 1.3</a></h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Äquivalente Gleichungen</div>
+  <p>Zwei Gleichungen heissen <strong>äquivalent</strong> (Schreibweise <strong>\(\Longleftrightarrow\)</strong>), wenn sie <em>dieselbe Lösungsmenge</em> haben.</p>
+  <p>Eine <strong>Äquivalenzumformung</strong> ist eine Operation, die eine Gleichung in eine äquivalente verwandelt — also die Lösungsmenge nicht verändert. Damit darf eine Gleichung Schritt für Schritt umgeformt werden, bis \(x\) allein steht.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Die vier Äquivalenzumformungen</div>
+  <p>Eine Gleichung bleibt äquivalent, wenn man auf <em>beiden</em> Seiten dieselbe Operation ausführt:</p>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Umformung</th><th>Schreibweise</th><th>Bedingung</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left">Addition</td><td>\(\,\mid\, +c\)</td><td style="font-family:var(--sans);text-align:left">\(c \in \mathbb{R}\) beliebig</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Subtraktion</td><td>\(\,\mid\, -c\)</td><td style="font-family:var(--sans);text-align:left">\(c \in \mathbb{R}\) beliebig</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Multiplikation</td><td>\(\,\mid\, \cdot c\)</td><td style="font-family:var(--sans);text-align:left">\(c \neq 0\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Division</td><td>\(\,\mid\, : c\)</td><td style="font-family:var(--sans);text-align:left">\(c \neq 0\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:8px;font-size:0.92rem"><strong>Bei Ungleichungen</strong> (\(<,\;\le,\;>,\;\ge\)) gelten dieselben Umformungen, mit <em>einer Ausnahme</em>: Multiplikation oder Division mit einer <em>negativen</em> Zahl <strong>kehrt das Ungleichheitszeichen um</strong>. Beispiel:</p>
+  <p style="text-align:center;margin:4px 0">\(-x \le 5 \;\;\mid\, \cdot(-1) \;\;\Longleftrightarrow\;\; x \ge -5\)</p>
+</div>
+
+<p style="margin-top:14px">Klicke unten auf <em>„Nächster Schritt"</em> — jede Umformung erscheint einzeln, und du siehst, wie sich die Gleichung verändert, ohne ihre Lösung zu verlieren. Die Waage rechts bleibt stets im Gleichgewicht.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>🔄 Äquivalenzumformungen Schritt für Schritt</h3>
+    <p>Beispiel \(4 \cdot x + 3 = 15\) — zwei Schritte bis zur Lösung</p>
+  </div>
+  <div class="widget-body">
+    <div class="umform-ctrl">
+      <button class="umform-btn" id="uf-step">▶ Nächster Schritt</button>
+      <button class="umform-btn sec" id="uf-reset">↺ Zurücksetzen</button>
+    </div>
+    <div class="umform-stack" id="uf-stack"></div>
+    <div class="cv-wrap"><canvas id="uf-canvas" height="180"></canvas></div>
+    <div style="font-size:0.82rem;color:var(--tinte-2);margin-top:10px;font-style:italic;text-align:center" id="uf-status">Drücke „Nächster Schritt" — die Waage bleibt im Gleichgewicht.</div>
+  </div>
+</div>
+
+<div class="block block-fehler" style="margin-top:10px">
+  <div class="block-titel">⚠ Häufige Fehler</div>
+  <ul style="margin-top:4px">
+    <li><strong>Operation nur auf einer Seite</strong> — die Waage kippt, die Gleichung wird falsch.</li>
+    <li><strong>Multiplikation/Division mit \(0\)</strong> — verboten. \(0=0\) gilt zwar, aber es geht jede Information verloren — auf einmal wäre <em>jede</em> Zahl „Lösung".</li>
+    <li><strong>Quadrieren</strong> ist <em>keine</em> reine Äquivalenzumformung — es kann <em>Scheinlösungen</em> erzeugen. Probe ist Pflicht.</li>
+  </ul>
+</div>
+
+<!-- ══ 6. TYPEN VON GLEICHUNGEN ══ -->
+<h2 id="typen">Gleichungstypen erkennen</h2>
+
+<p>Bevor man losrechnet, lohnt sich ein kurzer Blick: <em>Welcher Typ Gleichung liegt vor?</em> Davon hängt die Lösungsmethode ab. Klicke auf einen Typ — die typische Form, ein Beispiel und die übliche Lösungsmethode werden angezeigt.</p>
+
+<div class="typ-btns" id="typ-btns"></div>
+
+<div class="formel-live" style="text-align:left">
+  <div class="fl-label" id="typ-name">linear</div>
+  <div class="fl-eq" id="typ-form" style="font-size:1.05rem">a·x + b = 0</div>
+  <div class="fl-eq" id="typ-bsp" style="font-size:0.95rem;color:var(--blau);margin-top:8px;font-style:italic">Beispiel: 3·x + 5 = 14</div>
+  <div style="font-family:var(--sans);font-size:0.86rem;color:var(--tinte-2);margin-top:8px" id="typ-method">Lösungsmethode: Äquivalenzumformungen — x auf einer Seite isolieren.</div>
+  <div style="font-family:var(--sans);font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic" id="typ-info">Behandelt in: Teilgebiet 2.2</div>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Übersicht — Gleichungstypen</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Typ</th><th>Form</th><th>Beispiel</th><th>Lösungen (in \(\mathbb{R}\))</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left">linear</td><td>\(a \cdot x + b = 0\)</td><td>\(3 \cdot x + 5 = 14\)</td><td>genau 1</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">quadratisch</td><td>\(a \cdot x^2 + b \cdot x + c = 0\)</td><td>\(x^2 - 5 \cdot x + 6 = 0\)</td><td>0, 1 oder 2</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Bruchgleichung</td><td>\(\dfrac{P(x)}{Q(x)} = R(x)\)</td><td>\(\dfrac{2}{x-1} = 4\)</td><td>je nach \(Q(x)\neq 0\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Wurzelgleichung</td><td>\(\sqrt{P(x)} = R(x)\)</td><td>\(\sqrt{x+3} = x-1\)</td><td>nur Werte mit \(P(x)\ge 0\)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="hinweis">
+  <strong>Hinweis:</strong> Im Grundlagenfach werden in 2.2 die linearen und quadratischen Gleichungen vertieft behandelt. Bruch- und Wurzelgleichungen werden im Schwerpunktfach (Teilgebiet 2.2) eingeführt.
+</div>
+
+<!-- ══ 7. LÖSEN UND PROBE ══ -->
+<h2 id="loesen-probe">Lösen und Probe</h2>
+
+<p>Eine Gleichung ist „gelöst", wenn die Variable allein steht und ihr Wert bekannt ist. Eine <strong>Probe</strong> kontrolliert das Ergebnis durch Einsetzen — sie ist <em>nicht</em> optional, sondern Pflichtteil jeder sauberen Lösung.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Probe — Einsetzen und Vergleichen</div>
+  <p>Setze den gefundenen Wert \(x_0\) in <em>beide</em> Seiten der ursprünglichen Gleichung ein. Stimmen beide Seiten überein, ist \(x_0\) eine Lösung. Stimmen sie nicht überein, war ein Rechenfehler im Spiel — oder es handelt sich um eine <em>Scheinlösung</em> (entstanden durch Quadrieren oder ähnliche Nicht-Äquivalenzumformungen).</p>
+</div>
+
+<p>Wähle einen Versuchswert für \(x\) — die Probe wird Schritt für Schritt durchgeführt.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>🔍 Probe für \(4 \cdot x + 3 = 15\)</h3>
+    <p>Einsetzen, ausrechnen, vergleichen</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>Versuchswert \(x\)</label>
+      <input type="range" id="pr-x" min="0" max="6" step="0.5" value="2">
+      <span class="sl-val" id="pr-xv">2</span>
+    </div>
+    <div class="probe-step" id="pr-1"><span class="pf-label">① Einsetzen</span><span id="pr-1t">4·2 + 3 = 15</span></div>
+    <div class="probe-step" id="pr-2"><span class="pf-label">② Linke Seite ausrechnen</span><span id="pr-2t">8 + 3 = 11</span></div>
+    <div class="probe-step" id="pr-3"><span class="pf-label">③ Vergleichen</span><span id="pr-3t">11 = 15  →  falsch</span></div>
+    <div class="formel-live" style="margin-top:6px">
+      <div class="fl-label">Ergebnis</div>
+      <div class="fl-eq" id="pr-erg" style="color:var(--rot)">x = 2 ist KEINE Lösung</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 8. AUFGABEN ══ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Multiplizieren mit einem Term</div>
+  <p>Multipliziert man beide Seiten mit einem Ausdruck wie \((x - 3)\), kann das die Lösungsmenge verändern: Wird der Term zufällig null, entstehen Schein-Lösungen, oder echte Lösungen gehen verloren. <strong>Regel</strong>: Bei jeder Multiplikation mit einem variablen Term muss am Ende geprüft werden, ob dieser für die gefundene Lösung tatsächlich \(\neq 0\) ist. Sonst Probe machen — immer.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Lösen in drei Phasen</div>
+  <p>Bewährt sich bei fast jeder Gleichung in Lerngebiet 2:</p>
+  <ol style="margin:5px 0 5px 20px">
+    <li><strong>Typ bestimmen</strong> — linear, quadratisch, Bruch, Wurzel? Davon hängt die Methode ab.</li>
+    <li><strong>Lösbar machen</strong> — Klammern auflösen, Brüche durch Multiplikation mit dem Hauptnenner entfernen, Wurzeln durch Quadrieren wegbringen. Jeder dieser Schritte ist eine bewusste Umformung; die Definitionsmenge ändert sich dabei nicht, aber Scheinlösungen können entstehen.</li>
+    <li><strong>Probe machen</strong> — Lösung in die <em>ursprüngliche</em> Gleichung einsetzen. Stimmt die Gleichheit? Liegt die Lösung in der Definitionsmenge?</li>
+  </ol>
+  <p>Wer alle drei Phasen sauber trennt, vermeidet die typischen Fallen — Scheinlösungen, vergessene Definitionsmengen, falsche Probe-Stelle.</p>
+</div>
+
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
 
+<!-- A1: Erkennen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Gleichungstypen erkennen</span></div>
 
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Gleichung — klicke dann den passenden Typ.</p>
+  <div class="typ-btns" id="a1-list"></div>
+  <div class="formel-live">
+    <div class="fl-label">Gleichung</div>
+    <div class="fl-eq" id="a1-eq">—</div>
+  </div>
+  <div class="typ-btns" id="a1-choices" style="margin-top:6px"></div>
+  <div class="cr" id="a1-cr"></div>
+
+</div>
+
+<!-- A2: Sachverhalt → Gleichung -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Sachverhalt → Gleichung formulieren</span></div>
+
+  <ol class="aufg-liste">
+    <li>
+      <p><strong>Werkstatt-Pakete.</strong> Drei gleiche Pakete und 2 kg Werkzeug wiegen zusammen 14 kg. Stelle die Gleichung in \(x\) (Paketmasse in kg) auf.</p>
+      <div class="eingabe-row">
+        <input type="text" id="a2a" placeholder="z.B. 3·x+2=14">
+        <button class="btn-pruef" onclick="checkEq('a2a','3x+2=14','3·x + 2 = 14')">Prüfen</button>
+      </div>
+      <div class="cr" id="a2a-cr"></div>
+    </li>
+
+    <li>
+      <p><strong>Mietgerät.</strong> Grundgebühr 60 CHF plus 8 CHF pro Tag. Nach wie vielen Tagen \(t\) sind die Kosten 132 CHF? Stelle die Gleichung auf.</p>
+      <div class="eingabe-row">
+        <input type="text" id="a2b" placeholder="z.B. 8·t+60=132">
+        <button class="btn-pruef" onclick="checkEq('a2b','8t+60=132','8·t + 60 = 132')">Prüfen</button>
+      </div>
+      <div class="cr" id="a2b-cr"></div>
+    </li>
+
+    <li>
+      <p><strong>Aufzugsgrenze.</strong> Ein Aufzug darf höchstens 480 kg tragen. Pro Person rechnet man mit 80 kg. Wie viele Personen \(n\) dürfen maximal einsteigen? Stelle die <em>Ungleichung</em> auf.</p>
+      <div class="eingabe-row">
+        <input type="text" id="a2c" placeholder="z.B. 80·n &lt;= 480">
+        <button class="btn-pruef" onclick="checkIneq('a2c','80n&lt;=480','80·n ≤ 480')">Prüfen</button>
+      </div>
+      <div class="cr" id="a2c-cr"></div>
+    </li>
+
+    <li>
+      <p><strong>Werkstücke.</strong> Zwei Werkstücke wiegen zusammen 12 kg. Das schwerere ist 4 kg schwerer als das leichtere. Stelle ein <em>Gleichungssystem</em> in \(x\) (schwer) und \(y\) (leicht) auf.</p>
+      <button class="loesung-toggle" onclick="toggleL('l-a2d')">▶ Lösung</button>
+      <div class="loesung-body" id="l-a2d">
+        <div class="block block-bsp" style="margin:6px 0 0">
+          <div class="block-titel">🟢 Lösung</div>
+          \[ \begin{cases} x + y = 12 \\ x - y = 4 \end{cases} \]
+          <p>Erste Zeile: Summe \(=12\) kg. Zweite Zeile: Differenz \(=4\) kg.</p>
+        </div>
+      </div>
+    </li>
+  </ol>
+
+</div>
+
+<!-- A3: Umformungen zuordnen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Äquivalenzumformungen — Schritte zuordnen</span></div>
+
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Welche Umformung führt von der oberen zur unteren Gleichung?</p>
+
+  <ol class="aufg-liste">
+    <li>
+      <p>Von \(2 \cdot x + 5 = 11\) zu \(2 \cdot x = 6\)</p>
+      <div class="typ-btns" id="a3a-choices"></div>
+      <div class="cr" id="a3a-cr"></div>
+    </li>
+
+    <li>
+      <p>Von \(3 \cdot x = 12\) zu \(x = 4\)</p>
+      <div class="typ-btns" id="a3b-choices"></div>
+      <div class="cr" id="a3b-cr"></div>
+    </li>
+
+    <li>
+      <p>Von \(x - 7 = 2\) zu \(x = 9\)</p>
+      <div class="typ-btns" id="a3c-choices"></div>
+      <div class="cr" id="a3c-cr"></div>
+    </li>
+  </ol>
+
+</div>
+
+<!-- A4: Probe -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Lösung mit Probe bestätigen</span></div>
+
+  <p>Gegeben: \(5 \cdot x - 4 = 11\). Behauptung: \(x = 3\) ist die Lösung. Führe die Probe sauber durch.</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Probe</div>
+      <p>① Einsetzen in die linke Seite: \(5 \cdot 3 - 4 = 15 - 4 = 11\)</p>
+      <p>② Vergleichen: \(11 = 11\) ✓</p>
+      <p>Die Behauptung stimmt. Lösungsmenge: \(\;\mathbb{L} = \{3\}\)</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- A5: Anwendung Drahtlänge -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Anwendung — Drahtlänge</span></div>
+
+  <p>Aus einem Drahtstück werden vier gleich lange Stücke und ein Rest von 8 cm zugeschnitten. Insgesamt war der Draht 60 cm lang. Stelle die Gleichung auf, gib die Lösung an und mache die Probe.</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p><strong>Aufstellen:</strong> Sei \(x\) die Länge eines Stücks in cm.</p>
+      \[ 4 \cdot x + 8 = 60 \]
+      <p><strong>Lösen:</strong></p>
+      \[ 4 \cdot x + 8 = 60 \quad |\, -8 \quad\Longleftrightarrow\quad 4 \cdot x = 52 \quad |\, :4 \quad\Longleftrightarrow\quad x = 13 \]
+      <p><strong>Probe:</strong> \(4 \cdot 13 + 8 = 52 + 8 = 60\) ✓</p>
+      <p>Antwort: Jedes Stück ist <strong>13 cm</strong> lang.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- A6: Scheinlösung -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — Quadrieren erzeugt Scheinlösungen</span></div>
+
+  <p>Eine Schülerin hat die Gleichung \(x = 3\). Um sie zu „verallgemeinern", quadriert sie beide Seiten und erhält \(x^2 = 9\). Sie löst diese neue Gleichung und findet zwei Kandidaten: \(x_1 = 3\) und \(x_2 = -3\).</p>
+    <ol class="aufg-liste">
+    <li>Sind beide Werte Lösung der <em>ursprünglichen</em> Gleichung \(x = 3\)? Mache jeweils die Probe.</li>
+    <li>Was zeigt dieses Beispiel über das Quadrieren als Umformungsschritt?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Probe für beide Kandidaten</div>
+      <ol class="aufg-liste">
+        <li>
+          <p><strong>Probe \(x = 3\):</strong> linke Seite \(3\), rechte Seite \(3\). Es gilt \(3 = 3\) ✓ — also <em>tatsächliche</em> Lösung der Originalgleichung.</p>
+          <p><strong>Probe \(x = -3\):</strong> linke Seite \(-3\), rechte Seite \(3\). Es gilt \(-3 \neq 3\) — also <em>keine</em> Lösung der Originalgleichung. \(x_2 = -3\) ist eine <strong>Scheinlösung</strong>, entstanden durchs Quadrieren.</p>
+          <p>Lösungsmenge der Originalgleichung \(\;\mathbb{L} = \{3\}\). Nur \(x_1 = 3\) ist Lösung; \(x_2 = -3\) ist eine Scheinlösung.</p>
+        </li>
+        <li>Quadrieren ist <em>keine</em> Äquivalenzumformung — beim Übergang von \(x = 3\) zu \(x^2 = 9\) wird die Lösungsmenge unzulässig erweitert (von \(\{3\}\) zu \(\{3,\,-3\}\)). Das Quadrieren ist deshalb in der Parameterdiskussion und in der Aussagenlogik kein erlaubter Umformungsschritt; in der Praxis ist nach Quadrieren <em>immer</em> die Probe in der Originalgleichung Pflicht.</li>
+      </ol>
+      <p style="font-size:0.85rem;color:var(--tinte-2);font-style:italic;margin-top:8px">Merke: Quadrieren ist <em>keine</em> Äquivalenzumformung. Nach jedem Quadrieren <em>immer</em> alle Kandidaten in die <strong>Originalgleichung</strong> einsetzen — Scheinlösungen aussortieren.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ 9. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Sport-Wettrennen aus dem Stand <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Lara und Tim starten gleichzeitig zu einem Wettlauf. Lara läuft konstant 4 m/s. Tim ist langsamer, läuft aber konstant — und gibt Lara einen Vorsprung von 12 m, weil er bei \(x = 12\,\text{m}\) erst startet. Nach welcher Strecke holt Lara Tim ein, wenn Tims Geschwindigkeit \(v\) (in m/s) ist?</p>
+<ol class="aufg-liste">
+  <li>Formuliere die Gleichung „Lara-Position = Tim-Position" als Funktion der Zeit \(t\).</li>
+  <li>Welche Geschwindigkeit hätte Tim, damit Lara ihn nach genau \(t = 20\,\text{s}\) einholt?</li>
+  <li>Was passiert mit der Gleichung, wenn Tim genau \(4\,\text{m/s}\) läuft?</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g2-1-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g2-1-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Position von Lara: \(s_L(t) = 4t\). Position von Tim: \(s_T(t) = 12 + v\cdot t\). Einholen: \(4t = 12 + v\cdot t\), also \(t \cdot (4 - v) = 12\), \(t = \tfrac{12}{4 - v}\) (sofern \(v < 4\)).</li>
+        <li>Bei \(t = 20\): \(20 \cdot (4 - v) = 12 \Rightarrow 4 - v = 0.6 \Rightarrow v = 3.4\,\text{m/s}\).</li>
+        <li>Wenn \(v = 4\,\text{m/s}\), wird die Gleichung \(0 = 12\) — keine Lösung. Geometrisch: zwei parallele Geraden in einem Weg-Zeit-Diagramm, sie schneiden sich nie. Lara holt Tim nie ein. <a class="quer" href="g2-3-lineare-gleichungssysteme.html">↗ 2.3</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
 
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Eine Gleichung ist eine Waage. Was du auf einer Seite tust, musst du auf der anderen genauso tun — sonst kippt sie. Und ohne Probe weisst du nie, ob das Ergebnis stimmt.</p>
+</div>
 
-<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Begriff</th><th>Symbol / Beispiel</th><th>Kernidee</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Gleichung</td><td>\(T_1(x) = T_2(x)\)</td><td style="font-family:var(--sans);text-align:left">zwei Terme, verbunden durch \(=\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Lösung</td><td>\(x_0\)</td><td style="font-family:var(--sans);text-align:left">Wert, der die Gleichheit erfüllt</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Lösungsmenge</td><td>\(\mathbb{L}\)</td><td style="font-family:var(--sans);text-align:left">Menge aller Lösungen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Äquivalenz</td><td>\(\Longleftrightarrow\)</td><td style="font-family:var(--sans);text-align:left">gleiche Lösungsmenge</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Umformung</td><td>\(\mid\,+c,\,-c,\,\cdot c,\,:c\)</td><td style="font-family:var(--sans);text-align:left">auf <em>beiden</em> Seiten gleich (\(c \neq 0\) bei \(\cdot, :\))</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Probe</td><td>\(T_1(x_0) \stackrel{?}{=} T_2(x_0)\)</td><td style="font-family:var(--sans);text-align:left">Einsetzen und Vergleichen — Pflicht!</td></tr>
+  </tbody>
+</table>
+
+<!-- ══ 10. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g2-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Begriffe und Umformungen kompakt</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
 
+<!-- ══ 11. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lWPWBvEXDrcCEZ54ZdtYazp" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme vereinfachen — Playlist</div><div class="lk-s">MathemaTrick · 64 Videos · Termumformungen, Klammern auflösen, Vorbereitung Gleichungen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzmBhxJfVgJ9pTv2QeqJsbO_" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme &amp; Gleichungen — Playlist</div><div class="lk-s">Lehrerschmidt · 27 Videos · Äquivalenzumformungen, Gleichungstypen</div></div></a>
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g0/g05/aufg_g05.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Gleichungen (G05)</div><div class="lk-s">Textaufgaben aus Zahlen, Geschwindigkeit, Prozentrechnung, Geometrie + Ungleichungen — Aufgaben mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/1495/gleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Gleichungen</div><div class="lk-s">Theorie + interaktive Aufgaben mit Lösungen, Übersicht aller Gleichungstypen</div></div></a>
+  <a href="https://de.serlo.org/mathe/1525/aequivalenzumformungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Äquivalenzumformungen</div><div class="lk-s">Erklärung mit Schritt-für-Schritt-Aufgaben</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -93,7 +634,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Grundlagen</p>
+  <p>Grundlagenfach 2.1 Grundlagen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -103,7 +644,368 @@ buildNav({
   bereich:'grundlagen', id:'g2-1',
   kapitelNr:'2.1', kapitelTitel:'Grundlagen',
   prev:{nr:'1.4',titel:'Zehnerpotenzen und Quadratwurzeln',url:'g1-4-zehnerpotenzen-quadratwurzeln.html'},
-  next:{nr:'2.2',titel:'Lineare und quadratische Gleichungen',url:'g2-2-lineare-quadratische-gleichungen.html'}
+  next:{nr:'2.2a',titel:'Lineare Gleichungen',url:'g2-2a-lineare-gleichungen.html'}
+});
+
+/* ════════════════════════════════════════════════════════════════
+   1) WAAGEN-CANVAS (geteilt von Einstieg + Äquivalenz-Animation)
+════════════════════════════════════════════════════════════════ */
+function drawWaage(canvasId, leftMass, rightMass, leftLabel, rightLabel) {
+  const c = document.getElementById(canvasId);
+  if (!c) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.offsetWidth || 480;
+  const H = canvasId === 'wg-canvas' ? 220 : 180;
+  c.width = W * dpr; c.height = H * dpr;
+  c.style.width = W + 'px'; c.style.height = H + 'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+  const cxM = W / 2;
+  const cyM = H / 2 + 6;
+  const beamLen = Math.min(W * 0.40, 200);
+  // Differenz → Winkel (begrenzt)
+  const diff = leftMass - rightMass;
+  const maxDiff = 18;
+  const maxAngle = 0.26;
+  let angle = Math.max(-maxAngle, Math.min(maxAngle, diff / maxDiff * maxAngle));
+
+  // Stativ
+  ctx.fillStyle = '#5a5040';
+  ctx.fillRect(cxM - 4, cyM, 8, H - cyM - 16);
+  ctx.fillRect(cxM - 30, H - 16, 60, 6);
+  // Drehpunkt-Dreieck
+  ctx.beginPath();
+  ctx.moveTo(cxM - 10, cyM); ctx.lineTo(cxM + 10, cyM); ctx.lineTo(cxM, cyM - 14); ctx.closePath();
+  ctx.fillStyle = '#7a6d57'; ctx.fill();
+
+  // Balken
+  const lx = cxM - Math.cos(angle) * beamLen;
+  const ly = cyM + Math.sin(angle) * beamLen;
+  const rx = cxM + Math.cos(angle) * beamLen;
+  const ry = cyM - Math.sin(angle) * beamLen;
+  ctx.strokeStyle = '#3a322a'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(rx, ry); ctx.stroke();
+
+  // Schalen-Aufhängungen
+  ctx.lineWidth = 1.2; ctx.strokeStyle = '#5a5040';
+  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx - 26, ly + 26); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 26, ly + 26); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx - 26, ry + 26); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx + 26, ry + 26); ctx.stroke();
+
+  // Schalen
+  function bowl(cx0, cy0, color) {
+    ctx.beginPath();
+    ctx.moveTo(cx0 - 32, cy0);
+    ctx.bezierCurveTo(cx0 - 32, cy0 + 22, cx0 + 32, cy0 + 22, cx0 + 32, cy0);
+    ctx.closePath();
+    ctx.fillStyle = color; ctx.fill();
+    ctx.strokeStyle = '#3a322a'; ctx.lineWidth = 1.5; ctx.stroke();
+  }
+  const lbx = lx, lby = ly + 28;
+  const rbx = rx, rby = ry + 28;
+  bowl(lbx, lby, '#ddeaf8');
+  bowl(rbx, rby, '#fdefd8');
+
+  // Beschriftungen
+  ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#1a4f8a'; ctx.fillText(leftLabel, lbx, lby - 4);
+  ctx.fillStyle = '#b85c00'; ctx.fillText(rightLabel, rbx, rby - 4);
+
+  // Status-Anzeige
+  ctx.font = 'bold 11px sans-serif';
+  ctx.textAlign = 'center';
+  if (Math.abs(diff) < 0.01) {
+    ctx.fillStyle = '#1f6b3a';
+    ctx.fillText('⚖ Gleichgewicht', cxM, 18);
+  } else if (diff > 0) {
+    ctx.fillStyle = '#9b1c1c';
+    ctx.fillText('← linke Seite zu schwer', cxM, 18);
+  } else {
+    ctx.fillStyle = '#9b1c1c';
+    ctx.fillText('rechte Seite zu schwer →', cxM, 18);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   2) EINSTIEG — Live-Waage zur Originalgleichung
+════════════════════════════════════════════════════════════════ */
+function fmtNum(n) { return n % 1 === 0 ? `${n}` : n.toFixed(1); }
+
+function updateWG() {
+  const x = parseFloat(document.getElementById('wg-x').value);
+  document.getElementById('wg-xv').textContent = fmtNum(x);
+  const ls = 4 * x + 3;
+  const rs = 15;
+  const sign = Math.abs(ls - rs) < 0.01 ? '=' : '≠';
+  document.getElementById('wg-eq').textContent = `4·${fmtNum(x)} + 3 = ${fmtNum(ls)}    ${sign}    ${rs}`;
+  const st = document.getElementById('wg-status');
+  if (Math.abs(ls - rs) < 0.01) {
+    st.style.color = 'var(--gruen)';
+    st.textContent = '✓ Gleichgewicht — Lösung gefunden!';
+  } else if (ls < rs) {
+    st.style.color = 'var(--rot)';
+    st.textContent = 'Linke Schale ist zu leicht';
+  } else {
+    st.style.color = 'var(--rot)';
+    st.textContent = 'Linke Schale ist zu schwer';
+  }
+  drawWaage('wg-canvas', ls, rs, `${fmtNum(ls)} kg`, '15 kg');
+}
+document.getElementById('wg-x').addEventListener('input', updateWG);
+
+/* ════════════════════════════════════════════════════════════════
+   3) ÄQUIVALENZUMFORMUNGEN — schrittweise Animation
+════════════════════════════════════════════════════════════════ */
+const ufSteps = [
+  { eq: '4·x + 3 = 15', op: '',       lWert: 15, rWert: 15, lLabel: '4·x + 3 (= 15 bei x=3)', rLabel: '15',
+    info: 'Startgleichung. Beide Seiten haben den Wert 15, wenn x = 3 ist.' },
+  { eq: '4·x = 12',     op: '|  − 3', lWert: 12, rWert: 12, lLabel: '4·x (= 12 bei x=3)',     rLabel: '12',
+    info: 'Auf BEIDEN Seiten 3 abgezogen — die Waage bleibt im Gleichgewicht.' },
+  { eq: 'x = 3',        op: '|  : 4', lWert: 3,  rWert: 3,  lLabel: 'x (= 3)',                rLabel: '3',
+    info: 'Auf BEIDEN Seiten durch 4 geteilt — die Lösung steht da: x = 3.' },
+];
+let ufIdx = 0;
+
+function renderUf() {
+  const stack = document.getElementById('uf-stack');
+  stack.innerHTML = ufSteps.slice(0, ufIdx + 1).map((s, i) => {
+    const opHtml = s.op ? `<span class="umform-op">${s.op}</span>` : '<span class="umform-op" style="opacity:0">·</span>';
+    const cur = i === ufIdx ? ' aktuell' : '';
+    return `<div class="umform-zeile${cur}" id="uf-zeile-${i}">
+      <span class="umform-eq">${s.eq}</span>${opHtml}
+    </div>`;
+  }).join('');
+  // Sichtbarkeits-Animation
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.umform-zeile').forEach(el => el.classList.add('sichtbar'));
+  });
+  // Status
+  document.getElementById('uf-status').textContent = ufSteps[ufIdx].info;
+  // Waage
+  const s = ufSteps[ufIdx];
+  drawWaage('uf-canvas', s.lWert, s.rWert, s.lLabel, s.rLabel);
+  // Button-Status
+  const btn = document.getElementById('uf-step');
+  if (ufIdx >= ufSteps.length - 1) { btn.textContent = '✓ Lösung erreicht'; btn.disabled = true; }
+  else { btn.textContent = '▶ Nächster Schritt'; btn.disabled = false; }
+}
+document.getElementById('uf-step').addEventListener('click', () => {
+  if (ufIdx < ufSteps.length - 1) ufIdx++;
+  renderUf();
+});
+document.getElementById('uf-reset').addEventListener('click', () => {
+  ufIdx = 0; renderUf();
+});
+
+/* ════════════════════════════════════════════════════════════════
+   4) GLEICHUNGSTYPEN — Klick-Visualisierung
+════════════════════════════════════════════════════════════════ */
+const typen = [
+  { label: 'linear',       form: 'a·x + b = 0',           bsp: '3·x + 5 = 14',          method: 'Lösungsmethode: Äquivalenzumformungen — x auf einer Seite isolieren.', info: 'Behandelt in: Teilgebiet 2.2' },
+  { label: 'quadratisch',  form: 'a·x² + b·x + c = 0',    bsp: 'x² − 5·x + 6 = 0',      method: 'Lösungsmethode: Mitternachtsformel, p-q-Formel oder Faktorisieren.',  info: 'Behandelt in: Teilgebiet 2.2' },
+  { label: 'Bruch',        form: 'P(x) / Q(x) = R(x)',    bsp: '2 / (x − 1) = 4',       method: 'Lösungsmethode: mit Hauptnenner multiplizieren — Definitionsbereich (Q(x) ≠ 0) beachten!', info: 'Behandelt in: Schwerpunkt 2.2' },
+  { label: 'Wurzel',       form: '√(P(x)) = R(x)',        bsp: '√(x + 3) = x − 1',      method: 'Lösungsmethode: Quadrieren — Probe Pflicht (Scheinlösungen möglich).', info: 'Behandelt in: Schwerpunkt 2.2' },
+];
+let typActive = 0;
+
+function buildTypBtns() {
+  document.getElementById('typ-btns').innerHTML = typen.map((t, i) =>
+    `<button class="typ-btn${i === 0 ? ' aktiv' : ''}" onclick="setTyp(${i})">${t.label}</button>`
+  ).join('');
+}
+function setTyp(i) {
+  typActive = i;
+  document.querySelectorAll('#typ-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  const t = typen[i];
+  document.getElementById('typ-name').textContent = t.label;
+  document.getElementById('typ-form').textContent = t.form;
+  document.getElementById('typ-bsp').textContent = `Beispiel: ${t.bsp}`;
+  document.getElementById('typ-method').textContent = t.method;
+  document.getElementById('typ-info').textContent = t.info;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   5) PROBE — Live-Animation
+════════════════════════════════════════════════════════════════ */
+function updatePR() {
+  const x = parseFloat(document.getElementById('pr-x').value);
+  document.getElementById('pr-xv').textContent = fmtNum(x);
+  const xDispRaw = fmtNum(x);
+  const xDispMul = x < 0 ? `(${xDispRaw})` : xDispRaw;
+  const ls = 4 * x + 3;
+  const rs = 15;
+  const lsMul = 4 * x;
+  const ok = Math.abs(ls - rs) < 0.01;
+
+  document.getElementById('pr-1t').textContent = `4·${xDispMul} + 3 = 15`;
+  document.getElementById('pr-2t').textContent = `${fmtNum(lsMul)} + 3 = ${fmtNum(ls)}`;
+  document.getElementById('pr-3t').textContent = `${fmtNum(ls)} = ${rs}  →  ${ok ? 'wahr ✓' : 'falsch ✗'}`;
+
+  // Steps färben (alle gleich, aber Schritt 3 + Ergebnis je nach OK/Fail)
+  const step3 = document.getElementById('pr-3');
+  step3.classList.toggle('fail', !ok);
+
+  const erg = document.getElementById('pr-erg');
+  if (ok) {
+    erg.textContent = `x = ${xDispRaw} IST eine Lösung ✓`;
+    erg.style.color = 'var(--gruen)';
+  } else {
+    erg.textContent = `x = ${xDispRaw} ist KEINE Lösung`;
+    erg.style.color = 'var(--rot)';
+  }
+}
+document.getElementById('pr-x').addEventListener('input', updatePR);
+
+/* ════════════════════════════════════════════════════════════════
+   6) AUFGABE A1 — Gleichungstypen erkennen
+════════════════════════════════════════════════════════════════ */
+const a1Aufg = [
+  { eq: '2·x − 7 = 11',          typ: 'linear' },
+  { eq: 'x² − 4·x + 3 = 0',      typ: 'quadratisch' },
+  { eq: '√(x + 5) = 3',          typ: 'Wurzel' },
+  { eq: '3 / (x − 2) = 6',       typ: 'Bruch' },
+  { eq: '−5·x + 8 = 2·x − 6',    typ: 'linear' },
+  { eq: '0.5·x² + x − 4 = 0',    typ: 'quadratisch' },
+];
+let a1Idx = 0;
+const a1Choices = ['linear', 'quadratisch', 'Wurzel', 'Bruch'];
+
+function buildA1() {
+  document.getElementById('a1-list').innerHTML = a1Aufg.map((a, i) =>
+    `<button class="typ-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">Gl. ${i+1}</button>`
+  ).join('');
+  document.getElementById('a1-choices').innerHTML = a1Choices.map(c =>
+    `<button class="typ-btn" onclick="checkA1('${c}')">${c}</button>`
+  ).join('');
+  setA1(0);
+}
+function setA1(i) {
+  a1Idx = i;
+  document.querySelectorAll('#a1-list .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-eq').textContent = a1Aufg[i].eq;
+  document.getElementById('a1-cr').style.display = 'none';
+  document.querySelectorAll('#a1-choices .typ-btn').forEach(b => b.classList.remove('aktiv'));
+}
+function checkA1(choice) {
+  const a = a1Aufg[a1Idx];
+  document.querySelectorAll('#a1-choices .typ-btn').forEach(b => {
+    b.classList.toggle('aktiv', b.textContent === choice);
+  });
+  const r = document.getElementById('a1-cr');
+  r.style.display = 'block';
+  if (choice === a.typ) {
+    r.className = 'cr ok';
+    let bezeichnung;
+    if (a.typ === 'linear') bezeichnung = 'eine lineare Gleichung';
+    else if (a.typ === 'quadratisch') bezeichnung = 'eine quadratische Gleichung';
+    else if (a.typ === 'Bruch') bezeichnung = 'eine Bruchgleichung';
+    else bezeichnung = 'eine Wurzelgleichung';
+    r.textContent = `✓ Richtig — ${a.eq} ist ${bezeichnung}.`;
+  } else {
+    r.className = 'cr err';
+    r.textContent = `✗ Nicht ganz. Schau, wo das x steht — unter einer Wurzel? Im Nenner? Mit Quadrat? Versuch es nochmal.`;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   7) AUFGABE A2 — Gleichung aus Sachverhalt
+════════════════════════════════════════════════════════════════ */
+function normEq(s) {
+  return s.replace(/\s/g, '').replace(/,/g, '.').toLowerCase()
+          .replace(/−/g, '-').replace(/[·*×]/g, '');
+}
+function checkEq(id, expected, displayCorrect) {
+  const inp = document.getElementById(id).value;
+  const u = normEq(inp);
+  const e = normEq(expected);
+  const r = document.getElementById(id + '-cr');
+  r.style.display = 'block';
+  // Akzeptiere auch Reihenfolgen-Tausch (z.B. "14 = 3x+2")
+  const parts = u.split('=');
+  const eparts = e.split('=');
+  let ok = false;
+  if (parts.length === 2 && eparts.length === 2) {
+    ok = (parts[0] === eparts[0] && parts[1] === eparts[1]) ||
+         (parts[0] === eparts[1] && parts[1] === eparts[0]);
+  }
+  if (ok) {
+    r.className = 'cr ok';
+    r.textContent = `✓ Richtig — die Gleichung ist ${displayCorrect}.`;
+  } else {
+    r.className = 'cr err';
+    r.textContent = `✗ Nicht ganz. Tipp — was ist gegeben, was gesucht? Beispiel-Lösung: ${displayCorrect}`;
+  }
+}
+function checkIneq(id, expected, displayCorrect) {
+  const inp = document.getElementById(id).value;
+  // Normalisiere ≤, <=, =< zu '<='
+  let u = inp.replace(/\s/g, '').replace(/,/g, '.').toLowerCase().replace(/−/g, '-')
+             .replace(/[·*×]/g, '').replace(/≤/g, '<=').replace(/=</g, '<=');
+  const e = expected.replace(/\s/g, '').toLowerCase();
+  const r = document.getElementById(id + '-cr');
+  r.style.display = 'block';
+  const parts = u.split('<=');
+  const eparts = e.split('<=');
+  const ok = parts.length === 2 && eparts.length === 2 &&
+             parts[0] === eparts[0] && parts[1] === eparts[1];
+  if (ok) {
+    r.className = 'cr ok';
+    r.textContent = `✓ Richtig — die Ungleichung ist ${displayCorrect}.`;
+  } else {
+    r.className = 'cr err';
+    r.textContent = `✗ Nicht ganz. Pro Person 80 kg, höchstens 480 kg. Beispiel-Lösung: ${displayCorrect}`;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   8) AUFGABE A3 — Umformung zuordnen
+════════════════════════════════════════════════════════════════ */
+const a3 = {
+  'a3a': { correct: '| − 5', options: ['| + 5', '| − 5', '| · 5', '| : 5'], hint: 'Auf beiden Seiten 5 abziehen — die +5 verschwindet links.' },
+  'a3b': { correct: '| : 3', options: ['| − 3', '| + 3', '| · 3', '| : 3'], hint: 'Auf beiden Seiten durch 3 teilen — der Faktor 3 verschwindet links.' },
+  'a3c': { correct: '| + 7', options: ['| − 7', '| + 7', '| · 7', '| : 7'], hint: 'Auf beiden Seiten 7 addieren — die −7 verschwindet links.' },
+};
+function buildA3() {
+  Object.keys(a3).forEach(id => {
+    const div = document.getElementById(id + '-choices');
+    div.innerHTML = a3[id].options.map(opt =>
+      `<button class="typ-btn" onclick="checkA3('${id}','${opt}')">${opt}</button>`
+    ).join('');
+  });
+}
+function checkA3(id, choice) {
+  const a = a3[id];
+  document.querySelectorAll(`#${id}-choices .typ-btn`).forEach(b => {
+    b.classList.toggle('aktiv', b.textContent === choice);
+  });
+  const r = document.getElementById(id + '-cr');
+  r.style.display = 'block';
+  if (choice === a.correct) {
+    r.className = 'cr ok';
+    r.textContent = `✓ Richtig — ${a.hint}`;
+  } else {
+    r.className = 'cr err';
+    r.textContent = '✗ Nicht ganz. Vergleiche die linke Seite vorher und nachher — was hat sich geändert?';
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateWG();
+  renderUf();
+  buildTypBtns();
+  setTyp(0);
+  updatePR();
+  buildA1();
+  buildA3();
+});
+window.addEventListener('resize', () => {
+  updateWG();
+  renderUf();
 });
 </script>
 </body>

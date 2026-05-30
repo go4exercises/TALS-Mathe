@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anwendungsaufgaben · Lineare Gleichungssysteme — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  .aufg-rahmen { border: 1pt solid var(--linie); border-radius: 4px; padding: 4mm; margin: 3mm 0; page-break-inside: avoid; break-inside: avoid; }
+  .aufg-rahmen .aufg-kopf { margin-bottom: 2mm; align-items: baseline; }
+  .schwierig { font-family: var(--mono); font-size: 8pt; color: var(--tinte-2); margin-left: auto; letter-spacing: 0.5px; }
+  .schwierig .punkt { color: var(--orange); font-size: 9pt; }
+  .schwierig .punkt-leer { color: var(--linie); font-size: 9pt; }
+  .bereich-tag { font-family: var(--mono); font-size: 7.5pt; color: var(--blau); background: var(--blau-hell); padding: 0.5mm 2mm; border-radius: 3px; text-transform: uppercase; letter-spacing: 1px; margin-left: 3mm; }
+  .lin-mehr { margin-bottom: 2mm; }
+  .lin-mehr .lin { height: 7mm; }
+  .uebersicht { width: 100%; border-collapse: collapse; font-size: 9.2pt; margin: 3mm 0 5mm; }
+  .uebersicht th, .uebersicht td { border: 1px solid var(--linie); padding: 1.4mm 2.5mm; text-align: left; }
+  .uebersicht th { background: var(--papier-2); font-family: var(--sans); font-weight: 700; }
+  .uebersicht td.nr { text-align: center; font-family: var(--mono); width: 10mm; }
+  .uebersicht td.s  { text-align: center; font-family: var(--mono); width: 18mm; color: var(--orange); letter-spacing: 1px; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g2-3-lineare-gleichungssysteme.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Anwendungsaufgaben · A4</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · Lineare Gleichungssysteme</div>
+    <h1>Anwendungsaufgaben — Lineare Gleichungssysteme</h1>
+  </header>
+
+  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik, Architektur und Life Sciences. Jeder Sachverhalt führt
+    auf ein lineares Gleichungssystem mit zwei oder drei Variablen. Vorgehen: Variablen definieren →
+    Gleichungen aufstellen → System lösen (Verfahren wählen) → Probe in <em>allen</em> Gleichungen
+    → Antwortsatz mit Einheit. Musterlösungen am Ende.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Grösse</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Mobilität</td>      <td>Begegnung zweier Züge</td>            <td style="text-align:center">2×2</td><td class="s">●○○</td></tr>
+      <tr><td class="nr">2</td><td>Mischung</td>       <td>Lötzinn-Legierung mischen</td>        <td style="text-align:center">2×2</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Elektrotechnik</td> <td>Spannungsteiler dimensionieren</td>   <td style="text-align:center">2×2</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Architektur</td>    <td>Tragwerk-Knoten: drei Stäbe</td>      <td style="text-align:center">3×3</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Life Sciences</td>  <td>Drei Nährlösungen mischen</td>        <td style="text-align:center">3×3</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Logistik</td>       <td>Transportbedarf bestimmen</td>        <td style="text-align:center">3×3</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 1 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">1</span><span class="aufg-titel">Begegnung zweier Züge</span>
+      <span class="bereich-tag">Mobilität</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt-leer">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Zwei Züge fahren auf parallelen Gleisen aufeinander zu. Zug <em>A</em> startet um 8:00 Uhr in
+    Bern Richtung Zürich mit konstant 130 km/h. Zug <em>B</em> startet zur gleichen Zeit in Zürich
+    Richtung Bern mit konstant 110 km/h. Die Strecke Bern–Zürich beträgt 120 km.</p>
+    <p>(a) Wann begegnen sich die zwei Züge? &nbsp; (b) Wo liegt der Begegnungspunkt (Distanz ab Bern)?</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">2</span><span class="aufg-titel">Lötzinn-Legierung mischen</span>
+      <span class="bereich-tag">Mischung</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>In einer Werkstatt sollen 200 g einer Lötzinn-Legierung mit 60 % Zinngehalt hergestellt werden.
+    Verfügbar sind zwei Vorräte: eine Sorte mit 80 % Zinn und eine Sorte mit 30 % Zinn.</p>
+    <p>(a) Stelle ein 2×2-System für die zu mischenden Massen \(x\) (Sorte 80 %) und \(y\) (Sorte 30 %)
+    auf. &nbsp; (b) Löse mit einer Methode deiner Wahl. &nbsp; (c) Probe.</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">3</span><span class="aufg-titel">Spannungsteiler dimensionieren</span>
+      <span class="bereich-tag">Elektrotechnik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>An eine Spannungsquelle mit \(U_0 = 12\) V werden zwei Widerstände \(R_1\) und \(R_2\) in Serie
+    geschaltet. Über \(R_2\) fällt eine Spannung von \(U_2 = 4{.}5\) V ab. Der Gesamtwiderstand soll
+    \(R_1 + R_2 = 200\) Ω betragen.</p>
+    <p>Bestimme \(R_1\) und \(R_2\). <em>Hinweis:</em> Die Spannungsteiler-Regel besagt
+    \(U_2 / U_0 = R_2 / (R_1 + R_2)\).</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">4</span><span class="aufg-titel">Tragwerk-Knoten: drei Stäbe</span>
+      <span class="bereich-tag">Architektur</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div style="display:flex;gap:6mm;align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:1;min-width:55%">
+    <p>An einem Knotenpunkt eines Stahlfachwerks treffen drei Stäbe \(a\), \(b\), \(c\) zusammen
+    (Kräfte in kN). Die Kräftebilanz und die Längenverteilung führen auf das System</p>
+    \[
+      \begin{cases}
+        a + b + c = 18 \\
+        2a - b + c = 11 \\
+        a + 2b - c = 5
+      \end{cases}
+    \]
+    <p>(a) Bestimme \(a\), \(b\), \(c\) mit Additions- und Einsetzmethode. &nbsp;
+    (b) Mache die Probe in allen drei Gleichungen.</p>
+      </div>
+      <div style="flex:0 0 35%;min-width:140px">
+        <svg viewBox="0 0 160 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+          <!-- Knoten in der Mitte -->
+          <circle cx="80" cy="75" r="5" fill="#374151"/>
+          <!-- Stab a (links oben) -->
+          <line x1="80" y1="75" x2="20" y2="20" stroke="#1a4f8a" stroke-width="3"/>
+          <text x="42" y="40" font-family="JetBrains Mono, monospace" font-size="11" fill="#1a4f8a" font-weight="700">a</text>
+          <!-- Stab b (rechts oben) -->
+          <line x1="80" y1="75" x2="140" y2="20" stroke="#1a4f8a" stroke-width="3"/>
+          <text x="120" y="40" font-family="JetBrains Mono, monospace" font-size="11" fill="#1a4f8a" font-weight="700">b</text>
+          <!-- Stab c (unten) -->
+          <line x1="80" y1="75" x2="80" y2="120" stroke="#1a4f8a" stroke-width="3"/>
+          <text x="86" y="105" font-family="JetBrains Mono, monospace" font-size="11" fill="#1a4f8a" font-weight="700">c</text>
+          <!-- Auflager-Hatching links und rechts oben -->
+          <g stroke="#374151" stroke-width="0.7">
+            <line x1="6" y1="14" x2="34" y2="14"/>
+            <line x1="6" y1="14" x2="10" y2="22"/>
+            <line x1="14" y1="14" x2="18" y2="22"/>
+            <line x1="22" y1="14" x2="26" y2="22"/>
+            <line x1="30" y1="14" x2="34" y2="22"/>
+            <line x1="126" y1="14" x2="154" y2="14"/>
+            <line x1="126" y1="14" x2="130" y2="22"/>
+            <line x1="134" y1="14" x2="138" y2="22"/>
+            <line x1="142" y1="14" x2="146" y2="22"/>
+            <line x1="150" y1="14" x2="154" y2="22"/>
+          </g>
+          <text x="80" y="60" font-family="Source Sans 3, sans-serif" font-size="9" fill="#5c5550" text-anchor="middle">Knoten</text>
+        </svg>
+      </div>
+    </div>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">5</span><span class="aufg-titel">Drei Nährlösungen mischen</span>
+      <span class="bereich-tag">Life Sciences</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div style="display:flex;gap:5mm;align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:1;min-width:55%">
+    <p>Aus drei Stammlösungen sollen 600 ml einer Endlösung gemischt werden. Die Inhaltsstoffe pro
+    Liter Stammlösung sind:</p>
+    <table class="ftb-tabelle" style="margin:2mm 0">
+      <thead><tr><th></th><th>Glukose [g/L]</th><th>Salz [g/L]</th><th>Vitamin C [g/L]</th></tr></thead>
+      <tbody>
+        <tr><td>Stamm 1</td><td>40</td><td>10</td><td>5</td></tr>
+        <tr><td>Stamm 2</td><td>20</td><td>30</td><td>10</td></tr>
+        <tr><td>Stamm 3</td><td>10</td><td>20</td><td>30</td></tr>
+      </tbody>
+    </table>
+    <p>Die Endlösung soll genau 19 g Glukose, 9 g Salz und 6 g Vitamin C enthalten.</p>
+    <p>Bestimme die Volumen \(x\), \(y\), \(z\) (in Litern) der drei Stammlösungen. <em>Hinweis:</em>
+    drei Bilanzen — eine pro Inhaltsstoff. Eine vierte Bilanz für das Gesamtvolumen ist nicht nötig
+    und würde das System überbestimmen.</p>
+      </div>
+      <div style="flex:0 0 30%;min-width:120px">
+        <svg viewBox="0 0 130 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+          <!-- 3 Reagenzgläser -->
+          <g stroke="#374151" stroke-width="1.2" fill="none">
+            <!-- Glas 1 -->
+            <path d="M 15 10 L 15 90 Q 15 100 25 100 Q 35 100 35 90 L 35 10 Z"/>
+            <rect x="15" y="50" width="20" height="40" fill="#1a4f8a" fill-opacity="0.35" stroke="none"/>
+            <!-- Glas 2 -->
+            <path d="M 55 10 L 55 90 Q 55 100 65 100 Q 75 100 75 90 L 75 10 Z"/>
+            <rect x="55" y="40" width="20" height="50" fill="#0f7a3a" fill-opacity="0.35" stroke="none"/>
+            <!-- Glas 3 -->
+            <path d="M 95 10 L 95 90 Q 95 100 105 100 Q 115 100 115 90 L 115 10 Z"/>
+            <rect x="95" y="55" width="20" height="35" fill="#a0392c" fill-opacity="0.35" stroke="none"/>
+          </g>
+          <text x="25" y="115" font-family="JetBrains Mono, monospace" font-size="10" fill="#374151" text-anchor="middle" font-weight="700">x [L]</text>
+          <text x="65" y="115" font-family="JetBrains Mono, monospace" font-size="10" fill="#374151" text-anchor="middle" font-weight="700">y [L]</text>
+          <text x="105" y="115" font-family="JetBrains Mono, monospace" font-size="10" fill="#374151" text-anchor="middle" font-weight="700">z [L]</text>
+        </svg>
+      </div>
+    </div>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">6</span><span class="aufg-titel">Transportbedarf bestimmen</span>
+      <span class="bereich-tag">Logistik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div style="display:flex;gap:5mm;align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:1;min-width:60%">
+    <p>Eine Spedition transportiert die drei Frachtarten Stahl (S), Beton (B) und Holz (H). Die
+    Beladungs-Verhältnisse je Tour und die Gesamtfracht je Tour (in Tonnen) sind:</p>
+    <table class="ftb-tabelle" style="margin:2mm 0">
+      <thead><tr><th>Tour</th><th>Stahl-Einheiten</th><th>Beton-Einheiten</th><th>Holz-Einheiten</th><th>Total [t]</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>2</td><td>1</td><td>1</td><td>19</td></tr>
+        <tr><td>2</td><td>1</td><td>3</td><td>2</td><td>34</td></tr>
+        <tr><td>3</td><td>3</td><td>2</td><td>1</td><td>27</td></tr>
+      </tbody>
+    </table>
+    <p>Wie schwer ist eine Einheit Stahl, Beton bzw. Holz?
+    Stelle das System auf und löse mit Additions- und Einsetzmethode. Mache die Probe.</p>
+      </div>
+      <div style="flex:0 0 30%;min-width:120px">
+        <svg viewBox="0 0 140 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+          <!-- LKW-Skizze -->
+          <g stroke="#374151" stroke-width="1.3" fill="none">
+            <!-- Führerhaus -->
+            <rect x="10" y="50" width="28" height="35" fill="#fff"/>
+            <rect x="14" y="55" width="20" height="14" fill="#1a4f8a" fill-opacity="0.3"/>
+            <!-- Container -->
+            <rect x="38" y="35" width="90" height="50" fill="#fff"/>
+            <line x1="68" y1="35" x2="68" y2="85"/>
+            <line x1="98" y1="35" x2="98" y2="85"/>
+            <text x="53" y="65" font-family="Source Sans 3, sans-serif" font-size="9" fill="#5c5550" text-anchor="middle" font-weight="700">S</text>
+            <text x="83" y="65" font-family="Source Sans 3, sans-serif" font-size="9" fill="#5c5550" text-anchor="middle" font-weight="700">B</text>
+            <text x="113" y="65" font-family="Source Sans 3, sans-serif" font-size="9" fill="#5c5550" text-anchor="middle" font-weight="700">H</text>
+            <!-- Räder -->
+            <circle cx="22" cy="92" r="8" fill="#374151"/>
+            <circle cx="60" cy="92" r="8" fill="#374151"/>
+            <circle cx="110" cy="92" r="8" fill="#374151"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- ── LÖSUNGEN ──────────────────────────────────────────────────── -->
+  <h2 style="page-break-before: always; margin-top: 0">Musterlösungen</h2>
+
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf"><span class="aufg-nr">1</span><span class="aufg-titel">Begegnung zweier Züge — Lösung</span></div>
+    <p>Sei \(t\) die Zeit ab 8:00 in Stunden, \(s\) die Position in km ab Bern.</p>
+    \[ \begin{cases} s = 130 \cdot t \\ s = 120 - 110 \cdot t \end{cases} \]
+    <p>Gleichsetzen: \(130 t = 120 - 110 t \;\Rightarrow\; 240 t = 120 \;\Rightarrow\; t = 0{.}5\) h.
+    Einsetzen: \(s = 130 \cdot 0{.}5 = 65\) km.</p>
+    <p><strong>Probe:</strong> \(120 - 110 \cdot 0{.}5 = 65\;\checkmark\).</p>
+    <p><strong>Antwort:</strong> Die zwei Züge begegnen sich um 8:30 Uhr, 65 km nach Bern.</p>
+  </div>
+
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf"><span class="aufg-nr">2</span><span class="aufg-titel">Lötzinn-Legierung — Lösung</span></div>
+    <p>Mit \(x\) = Masse Sorte 80 %, \(y\) = Masse Sorte 30 % (in g):</p>
+    \[ \begin{cases} x + y = 200 \\ 0{.}80 x + 0{.}30 y = 0{.}60 \cdot 200 = 120 \end{cases} \]
+    <p>Aus (I): \(y = 200 - x\). Einsetzen in (II):
+    \(0{.}80 x + 0{.}30 (200 - x) = 120 \;\Rightarrow\; 0{.}50 x = 60 \;\Rightarrow\; x = 120\) g, \(y = 80\) g.</p>
+    <p><strong>Probe:</strong> \(120 + 80 = 200\;\checkmark\); \(0{.}8 \cdot 120 + 0{.}3 \cdot 80 = 96 + 24 = 120\;\checkmark\).</p>
+    <p><strong>Antwort:</strong> 120 g der 80 %-Sorte und 80 g der 30 %-Sorte mischen.</p>
+  </div>
+
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf"><span class="aufg-nr">3</span><span class="aufg-titel">Spannungsteiler — Lösung</span></div>
+    <p>Aus der Spannungsteiler-Regel: \(\dfrac{R_2}{R_1 + R_2} = \dfrac{4{.}5}{12} = \dfrac{3}{8}\).
+    Da \(R_1 + R_2 = 200\) Ω, ist \(R_2 = \tfrac{3}{8} \cdot 200 = 75\) Ω und somit \(R_1 = 125\) Ω.</p>
+    <p>Alternative als 2×2-System: aus \(8 R_2 = 3 (R_1 + R_2)\) folgt \(5 R_2 = 3 R_1\), also</p>
+    \[ \begin{cases} R_1 + R_2 = 200 \\ 3 R_1 - 5 R_2 = 0 \end{cases}
+       \;\Rightarrow\; R_1 = 125\ \Omega,\quad R_2 = 75\ \Omega. \]
+    <p><strong>Probe:</strong> \(125 + 75 = 200\;\checkmark\); \(75/200 \cdot 12 = 4{.}5\) V \(\checkmark\).</p>
+  </div>
+
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf"><span class="aufg-nr">4</span><span class="aufg-titel">Tragwerk-Knoten — Lösung</span></div>
+    <p>System: \(\;a + b + c = 18\) (G1), \(\;2a - b + c = 11\) (G2), \(\;a + 2b - c = 5\) (G3).</p>
+    <p><strong>z eliminieren mit Addition:</strong> G1 + G3 ergibt \(2a + 3b = 23\) (G4).
+    G2 + G3 ergibt \(3a + b = 16\) (G5).</p>
+    <p><strong>2×2-System lösen:</strong> aus G5 nach <em>b</em> auflösen: \(b = 16 - 3a\). Einsetzen in G4:
+    \(2a + 3 \cdot (16 - 3a) = 23 \Rightarrow 2a + 48 - 9a = 23 \Rightarrow -7a = -25 \Rightarrow a = \tfrac{25}{7}\) kN
+    \(\approx 3{.}57\) kN.</p>
+    <p>Daraus \(b = 16 - 3 \cdot \tfrac{25}{7} = \tfrac{37}{7}\) kN \(\approx 5{.}29\) kN
+    und aus G1: \(c = 18 - a - b = 18 - \tfrac{62}{7} = \tfrac{64}{7}\) kN \(\approx 9{.}14\) kN.</p>
+    <p><strong>Probe:</strong>
+    \(\tfrac{25 + 37 + 64}{7} = \tfrac{126}{7} = 18\;\checkmark\);
+    \(2 \cdot \tfrac{25}{7} - \tfrac{37}{7} + \tfrac{64}{7} = \tfrac{77}{7} = 11\;\checkmark\);
+    \(\tfrac{25}{7} + 2 \cdot \tfrac{37}{7} - \tfrac{64}{7} = \tfrac{35}{7} = 5\;\checkmark\).</p>
+  </div>
+
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf"><span class="aufg-nr">5</span><span class="aufg-titel">Nährlösungen — Lösung</span></div>
+    <p>Mit \(x\), \(y\), \(z\) in Litern. Bilanzen pro Inhaltsstoff (Glukose, Salz, Vitamin C):</p>
+    \[ \begin{cases} 40x + 20y + 10z = 19 & \text{(G1)} \\ 10x + 30y + 20z = 9 & \text{(G2)} \\ 5x + 10y + 30z = 6 & \text{(G3)} \end{cases} \]
+    <p><strong>x eliminieren mit Addition:</strong>
+    \(4 \cdot \text{G2} - \text{G1}\) ergibt \(100y + 70z = 17\) (G4).
+    \(8 \cdot \text{G3} - \text{G1}\) ergibt \(60y + 230z = 29\) (G5).</p>
+    <p><strong>2×2-System lösen mit Addition:</strong>
+    \(5 \cdot \text{G5} - 3 \cdot \text{G4}\) ergibt \(940z = 94 \Rightarrow z = 0{.}1\) L.</p>
+    <p><strong>Einsetzen:</strong> in G4: \(100y + 7 = 17 \Rightarrow y = 0{.}1\) L. In G1:
+    \(40x + 2 + 1 = 19 \Rightarrow 40x = 16 \Rightarrow x = 0{.}4\) L.</p>
+    <p><strong>Probe:</strong>
+    Glukose: \(40 \cdot 0{.}4 + 20 \cdot 0{.}1 + 10 \cdot 0{.}1 = 16 + 2 + 1 = 19\;\checkmark\).
+    Salz: \(4 + 3 + 2 = 9\;\checkmark\).
+    Vitamin C: \(2 + 1 + 3 = 6\;\checkmark\).</p>
+    <p><strong>Antwort:</strong> 400 ml Stamm 1, 100 ml Stamm 2, 100 ml Stamm 3 mischen — Total 600 ml.</p>
+  </div>
+
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf"><span class="aufg-nr">6</span><span class="aufg-titel">Transportbedarf — Lösung</span></div>
+    <p>Mit \(s\), \(b\), \(h\) in Tonnen pro Einheit:</p>
+    \[ \begin{cases} 2s + b + h = 19 & \text{(G1)} \\ s + 3b + 2h = 34 & \text{(G2)} \\ 3s + 2b + h = 27 & \text{(G3)} \end{cases} \]
+    <p><strong>h eliminieren mit Addition:</strong>
+    \(\text{G1} - \text{G3}\) ergibt \(-s - b = -8\), also \(s + b = 8\) (G4).
+    \(2 \cdot \text{G1} - \text{G2}\) ergibt \(3s - b = 4\) (G5).</p>
+    <p><strong>2×2-System lösen mit Addition:</strong> G4 + G5 ergibt \(4s = 12 \Rightarrow s = 3\).
+    Aus G4: \(b = 8 - 3 = 5\).</p>
+    <p><strong>Einsetzen:</strong> in G1: \(2 \cdot 3 + 5 + h = 19 \Rightarrow h = 8\).</p>
+    <p><strong>Probe:</strong> G1: \(6 + 5 + 8 = 19\;\checkmark\); G2: \(3 + 15 + 16 = 34\;\checkmark\); G3: \(9 + 10 + 8 = 27\;\checkmark\).</p>
+    <p><strong>Antwort:</strong> Eine Einheit Stahl wiegt 3 t, Beton 5 t, Holz 8 t.</p>
+  </div>
+
+  <div class="block block-fehler" style="margin-top:6mm">
+    <div class="block-titel">⚠ Häufige Fehler bei Anwendungsaufgaben</div>
+    <ul>
+      <li><strong>Variablen nicht klar definiert:</strong> immer in Worten festhalten („sei \(x\) = … in [Einheit]").</li>
+      <li><strong>Einheiten gemischt:</strong> bei Geschwindigkeiten konsequent km/h und km, oder m/s und m.</li>
+      <li><strong>Probe nur in einer Gleichung:</strong> bei Systemen <em>jede</em> Gleichung prüfen.</li>
+      <li><strong>Negative oder unsinnige Lösungen:</strong> physikalisch interpretieren — Massen, Längen, Konzentrationen sind &gt; 0.</li>
+      <li><strong>Antwortsatz vergessen:</strong> Lehrpersonen erwarten den Schluss in ganzen Sätzen mit Einheit.</li>
+    </ul>
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Grundlagen Lineare Gleichungssysteme</span>
+    <span>Aufgabenserie</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -3,23 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grundlagen — TALS Mathematik</title>
+<title>1.1 Grundlagen — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
 <!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
 <script>
 MathJax = {
-  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol','color']} },
   svg: { fontCache:'global', scale:1.05 },
-  loader: { load:['[tex]/boldsymbol'] },
+  loader: { load:['[tex]/boldsymbol','[tex]/color'] },
   options: { skipHtmlTags:['script','noscript','style','textarea'] }
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Themen-spezifische Styles. Globale Klassen liegen in ../style.css. ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* Term-Strukturbaum */
+.baum { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:18px; margin:12px 0; }
+.baum-zeile { display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+.baum-zeile:last-child { margin-bottom:0; }
+.baum-pfeil { font-family:var(--mono); color:var(--tinte-2); font-size:0.85rem; }
+.term-box { font-family:var(--mono); font-size:0.95rem; font-weight:700; padding:6px 12px; border-radius:6px; border:1.5px solid var(--linie); background:var(--weiss); }
+.term-box.haupt { background:var(--blau-hell); border-color:var(--blau-rand); color:var(--blau); }
+.term-box.faktor { background:var(--gruen-hell); border-color:var(--gruen-rand); color:var(--gruen); }
+.term-box.summand { background:#fef3c7; border-color:#f59e0b; color:#92400e; }
+.term-box.basis { background:#fce7f3; border-color:#ec4899; color:#9d174d; }
+.term-tag { font-family:var(--mono); font-size:0.62rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--tinte-2); }
+
+/* Operator-Hierarchie-Kette */
+.hierarchie { display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:center; margin:14px 0; padding:14px; background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; }
+.hi-stufe { background:var(--weiss); border:1.5px solid var(--blau-rand); border-radius:8px; padding:8px 14px; text-align:center; min-width:120px; }
+.hi-stufe .hi-nr { font-family:var(--mono); font-size:0.6rem; font-weight:700; color:var(--blau); letter-spacing:1.5px; }
+.hi-stufe .hi-name { font-family:var(--serif); font-size:0.85rem; font-weight:700; color:var(--tinte); margin:2px 0; }
+.hi-stufe .hi-ops { font-family:var(--mono); font-size:0.85rem; color:var(--tinte-2); }
+.hi-pfeil { font-family:var(--mono); font-size:1.2rem; color:var(--tinte-2); }
+
+/* Klassifizier-Spiel */
+.kl-spiel { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:14px; margin:10px 0; }
+.kl-term { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--tinte); padding:10px 14px; background:var(--weiss); border:1.5px solid var(--linie); border-radius:7px; margin-bottom:10px; text-align:center; }
+.kl-buttons { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.kl-btn { font-family:var(--mono); font-size:0.78rem; font-weight:700; padding:6px 14px; border-radius:20px; border:1.5px solid var(--linie); background:var(--weiss); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.kl-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.kl-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.kl-btn.korrekt { border-color:var(--gruen); background:var(--gruen); color:#fff; }
+.kl-btn.falsch { border-color:var(--rot); background:var(--rot); color:#fff; }
+.kl-feedback { margin-top:10px; padding:8px 12px; border-radius:7px; font-size:0.85rem; display:none; }
+.kl-feedback.ok { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); display:block; }
+.kl-feedback.err { background:var(--rot-hell); color:var(--rot); border:1px solid var(--rot-rand); display:block; }
+
+/* Aufgaben-Karten */
+.eingabe-row { display:flex; align-items:center; gap:9px; margin:10px 0; flex-wrap:wrap; }
+.eingabe-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.92rem; padding:6px 10px; border:1.5px solid var(--linie); border-radius:6px; width:160px; background:var(--papier-2); color:var(--tinte); }
+.eingabe-row input[type=text]:focus { outline:none; border-color:var(--blau); background:var(--weiss); }
+.cr { font-family:var(--mono); font-size:0.78rem; padding:6px 11px; border-radius:6px; margin-top:8px; display:none; }
+.cr.ok { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); display:block; }
+.cr.err { background:var(--rot-hell); color:var(--rot); border:1px solid var(--rot-rand); display:block; }
+.btn-pruef { font-family:var(--sans); font-size:0.78rem; font-weight:600; padding:6px 14px; border-radius:7px; border:none; background:var(--blau); color:#fff; cursor:pointer; }
+.btn-pruef:hover { background:#15406d; }
+
+/* Aufgaben-Titel: zusätzlicher Abstand zwischen den block-titel-Kindern (Emoji, Pille, Text) */
+.block-aufg .block-titel { gap:10px; }
+
+/* Hierarchie-Stufen: Hover-Tooltip mit Beispielen */
+.hi-stufe { position:relative; cursor:help; }
+.hi-stufe .hi-bsp {
+  position:absolute; left:50%; transform:translateX(-50%);
+  bottom:calc(100% + 8px);
+  background:var(--tinte); color:var(--weiss);
+  font-family:var(--mono); font-size:0.78rem;
+  padding:8px 12px; border-radius:7px;
+  white-space:nowrap; box-shadow:var(--s);
+  opacity:0; pointer-events:none; transition:opacity 0.15s;
+  z-index:50;
+}
+.hi-stufe .hi-bsp::after {
+  content:""; position:absolute; left:50%; top:100%;
+  transform:translateX(-50%);
+  border:6px solid transparent; border-top-color:var(--tinte);
+}
+.hi-stufe .hi-bsp ul { margin:0; padding:0; list-style:none; text-align:left; }
+.hi-stufe .hi-bsp li { padding:2px 0; }
+.hi-stufe:hover .hi-bsp { opacity:1; }
+
+/* Term-Tabelle mit farbig markierter Hauptoperation */
+.hop-add { color:var(--gruen); font-weight:700; background:var(--gruen-hell); padding:0 4px; border-radius:3px; }
+.hop-sub { color:var(--rot); font-weight:700; background:var(--rot-hell); padding:0 4px; border-radius:3px; }
+.hop-mul { color:var(--blau); font-weight:700; background:var(--blau-hell); padding:0 4px; border-radius:3px; }
+.hop-div { color:#9d4d00; font-weight:700; background:#fef3c7; padding:0 4px; border-radius:3px; }
+.hop-pot { color:#9d174d; font-weight:700; background:#fce7f3; padding:0 4px; border-radius:3px; }
+.hop-neg { color:var(--tinte); font-weight:700; background:#e5e7eb; padding:0 4px; border-radius:3px; }
+/* Hochgestellte Potenz mit Hinterlegung (Tabelle Hierarchie, Zeile (2·x)^3) */
+.hop-sup-pot {
+  color:#9d174d; font-weight:700;
+  background:#fce7f3;
+  padding:0 4px; border-radius:3px;
+  font-size:0.75em;
+  vertical-align:super;
+  margin-left:1px;
+}
+
+/* Bruch mit farbig hinterlegtem Bruchstrich (Tabelle Hierarchie) */
+.bruch-hop {
+  display:inline-flex; flex-direction:column; align-items:center;
+  vertical-align:middle; line-height:1.15;
+}
+.bruch-hop .bruch-zaehler, .bruch-hop .bruch-nenner {
+  padding:0 6px;
+}
+.bruch-hop .bruch-strich {
+  display:block;
+  width:100%;
+  min-width:2.4em;
+  height:6px;
+  background:#fef3c7;
+  border-radius:2px;
+  margin:3px 0;
+  box-shadow: 0 0 0 1.5px #9d4d00 inset;
+}
+
+/* Kompakte 2-Spalten-Klassifizierübung */
+.kl-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; }
+@media (max-width:700px) { .kl-grid { grid-template-columns:1fr; } }
+.kl-grid .kl-spiel { margin:0; padding:12px; }
+.kl-grid .kl-term { font-size:0.95rem; padding:8px 10px; margin-bottom:8px; }
+.kl-grid .kl-btn { font-size:0.7rem; padding:4px 10px; }
+.kl-grid .kl-feedback { font-size:0.78rem; padding:6px 9px; margin-top:8px; }
+
+/* Strukturbaum-Wähler */
+.sb-waehler { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
+.sb-waehler .sb-btn {
+  font-family:var(--mono); font-size:0.85rem; font-weight:600;
+  padding:6px 12px; border-radius:7px;
+  border:1.5px solid var(--linie); background:var(--weiss);
+  color:var(--tinte-2); cursor:pointer; transition:all 0.15s;
+}
+.sb-waehler .sb-btn:hover { border-color:var(--blau-rand); color:var(--blau); }
+.sb-waehler .sb-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.sb-eigen {
+  display:flex; gap:8px; align-items:center;
+  margin:10px 0 0; padding:10px 12px;
+  background:var(--papier-2); border:1px solid var(--linie); border-radius:8px;
+}
+.sb-eigen label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); }
+.sb-eigen input {
+  font-family:var(--mono); font-size:0.9rem;
+  padding:6px 10px; border:1.5px solid var(--linie); border-radius:6px;
+  background:var(--weiss); color:var(--tinte); flex:1; min-width:160px;
+}
+.sb-eigen input:focus { outline:none; border-color:var(--blau); }
+.sb-eigen .sb-fehler { color:var(--rot); font-size:0.78rem; font-family:var(--mono); display:none; }
+.sb-eigen .sb-fehler.sichtbar { display:inline; }
+
+/* Würfel-Demo für Rechengesetze */
+.wuerfel-box {
+  background:var(--papier-2); border:1px solid var(--linie); border-radius:9px;
+  padding:14px 16px; margin:10px 0;
+}
+.wuerfel-row { display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+.wuerfel-row .gesetz-name { font-family:var(--sans); font-size:0.8rem; font-weight:700; color:var(--tinte); letter-spacing:0.5px; }
+.wuerfel-row .gesetz-form { font-family:var(--mono); font-size:0.92rem; color:var(--tinte-2); }
+.wuerfel-row .btn-wuerfel {
+  font-family:var(--sans); font-size:0.78rem; font-weight:600;
+  padding:5px 12px; border-radius:6px; border:1.5px solid var(--blau-rand);
+  background:var(--blau-hell); color:var(--blau); cursor:pointer;
+  margin-left:auto;
+}
+.wuerfel-row .btn-wuerfel:hover { background:var(--blau); color:#fff; }
+.wuerfel-bsp {
+  font-family:var(--mono); font-size:0.95rem;
+  padding:8px 12px; background:var(--weiss); border-radius:6px;
+  border:1px solid var(--linie); color:var(--tinte);
+}
+/* 2-Spalten-Layout: Addition links, Multiplikation rechts */
+.wb-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+  align-items:start;
+}
+@media (max-width:760px) {
+  .wb-grid { grid-template-columns: 1fr; gap:8px; }
+}
+.wb-zelle { padding:4px 8px; }
+.wb-label {
+  font-family:var(--sans); font-size:0.7rem; font-weight:700;
+  color:var(--tinte-2); letter-spacing:1.5px; text-transform:uppercase;
+  margin-bottom:4px;
+}
+.wb-formel {
+  font-family:var(--mono); font-size:0.95rem;
+  color:var(--tinte);
+  line-height:1.7;
+}
+/* Gesetz selbst (im Header der Würfel-Box, vor den Beispielen) — zweispaltig wie die Beispiele */
+.wb-gesetz {
+  padding:6px 12px;
+  background:var(--weiss);
+  border-radius:7px;
+  border:1px solid var(--linie);
+  margin:8px 0 10px;
+}
+.wb-gesetz .wb-zelle { padding:2px 8px; }
+.wb-gesetz .wb-formel { font-size:1.0rem; line-height:1.3; color:var(--tinte); font-weight:500; }
+/* Distributiv: Gleichheitszeichen zwischen den zwei Zellen (Produkt-Form = Summen-Form) */
+.wb-mit-gleich { position:relative; }
+.wb-mit-gleich::before {
+  content:"=";
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%, -50%);
+  font-family:var(--mono); font-size:1.2rem; font-weight:700;
+  color:var(--tinte-2);
+  background:var(--weiss);
+  padding:0 6px;
+  pointer-events:none;
+  z-index:2;
+}
+@media (max-width:760px) {
+  .wb-mit-gleich::before { display:none; }
+}
+/* Alte Klassen (nicht mehr verwendet, aber Rückwärts-Kompatibilität): */
+.wuerfel-bsp .links, .wuerfel-bsp .rechts { display:inline-block; }
+.wuerfel-bsp .gleich { color:var(--gruen); font-weight:700; margin:0 8px; }
+.wuerfel-bsp .ungleich { color:var(--rot); font-weight:700; margin:0 8px; }
+
+/* Strukturbaum: dynamisch generiert */
+.baum-dyn .baum-zeile { margin-bottom:8px; }
+.baum-dyn .baum-zeile.tief-1 { margin-left:30px; }
+.baum-dyn .baum-zeile.tief-2 { margin-left:60px; }
+.baum-dyn .baum-zeile.tief-3 { margin-left:90px; }
+.baum-dyn .baum-zeile.tief-4 { margin-left:120px; }
 </style>
 </head>
 <body>
@@ -27,13 +249,16 @@ MathJax = {
 <div class="page-wrap">
 <main class="content">
 
-<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<!-- ════════════════════════════════════════════════════════════════
+     1. TITEL + RLP-HEADER
+     ════════════════════════════════════════════════════════════════ -->
 <div class="page-titel">
   <div class="pt-bereich">Grundlagenfach · Lerngebiet 1 · Arithmetik/Algebra · 45 Lektionen</div>
   <h1 class="pt-h1">1.1 Grundlagen</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">In diesem Teilgebiet geht es um <strong>Struktur</strong>: einen algebraischen Ausdruck als Ganzes lesen, seine Bausteine erkennen und entscheiden, welche Umformung erlaubt ist. Wer Strukturen sieht, rechnet schneller — und macht weniger Vorzeichenfehler.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 1.1</div>
   <ul>
@@ -41,49 +266,476 @@ MathJax = {
   </ul>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════
+     2. EINSTIEG
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="einstieg">Einstieg — was ist die Hauptoperation?</h2>
 
-<!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<p>Beim Einkauf rechnen drei Personen denselben Betrag verschieden aus:</p>
 
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Drei Wege, denselben Betrag zu schreiben</div>
+  <p>Ein Päckchen Schrauben kostet 4 Fr., ein Päckchen Dübel kostet 3 Fr. Anna kauft je <em>x</em> Päckchen jeder Sorte und legt zusätzlich 5 Fr. für Verpackung dazu. Drei korrekte Schreibweisen für ihre Gesamtausgabe in Franken:</p>
+  \[ 4 \cdot x + 3 \cdot x + 5 \qquad (4 + 3) \cdot x + 5 \qquad 7 \cdot x + 5 \]
+  <p>Alle drei Terme liefern für jedes <em>x</em> denselben Wert (ausprobieren mit \(x = 2\): 8 + 6 + 5 = 19, oder 7·2 + 5 = 19). Sie sind <strong>äquivalent</strong>. Aber nur einer von ihnen lässt direkt erkennen, dass es sich um eine <em>Summe</em> aus „7·x" und „5" handelt — das ist die mittlere und die rechte Form.</p>
+</div>
 
-<!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<div class="anim">
+  <div class="anim-titel">Drei Terme, ein Wert — Schieb \(x\) und vergleiche</div>
+  <div class="anim-layout">
+    <canvas id="cv-hauptop" width="560" height="320"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Anzahl Päckchen \(x\)</span>
+          <span class="wert" id="lbl-hauptopX">2</span>
+        </div>
+        <input type="range" id="sld-hauptopX" min="0" max="10" step="1" value="2">
+      </div>
 
+      <div class="legende">
+        <div class="legende-titel">Werte aller drei Terme</div>
+        <div class="legende-zeile"><span class="lab">Form 1</span><span class="val" id="leg-hauptopT1">19</span></div>
+        <div class="legende-zeile"><span class="lab">Form 2</span><span class="val" id="leg-hauptopT2">19</span></div>
+        <div class="legende-zeile"><span class="lab">Form 3</span><span class="val" id="leg-hauptopT3">19</span></div>
+      </div>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+      <div class="erklaerung" id="erkl-hauptop">
+        Alle drei Terme liefern denselben Wert. Sie sind <strong>äquivalent</strong>. Die rechte Form macht aber direkt sichtbar, dass es sich um eine <em>Summe</em> aus „7·x" und „5" handelt — die Hauptoperation ist eine Addition.
+      </div>
+    </div>
+  </div>
+</div>
 
+<p>Diese Beobachtung ist der Kern des Kapitels: <strong>Bevor man rechnet, schaut man auf die Struktur</strong>. Eine Strukturanalyse beantwortet drei Fragen:</p>
+<ol style="margin:6px 0 12px 22px">
+  <li><strong>Was ist die Hauptoperation</strong> — eine Summe, ein Produkt, eine Potenz, ein Bruch?</li>
+  <li><strong>Aus welchen Bausteinen</strong> ist der Term zusammengesetzt — Summanden, Faktoren, Basis und Exponent?</li>
+  <li><strong>Welches Rechen- oder Umformgesetz</strong> passt zu dieser Struktur?</li>
+</ol>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<p>Wer auf diese Weise liest, vermeidet die typischen Vorzeichen- und Klammer-Stolperer, die später in jeder Termumformung lauern.</p>
 
+<!-- ════════════════════════════════════════════════════════════════
+     3. DEFINITION
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="definition">Definition — Term, Variable, Operation</h2>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<div class="block block-def">
+  <div class="block-titel">📘 Definition · Algebraischer Term</div>
+  <p>Ein <strong>algebraischer Term</strong> ist ein sinnvoll geschriebener Rechenausdruck aus <em>Zahlen</em>, <em>Variablen</em> und <em>Operationen</em>. Er liefert für jede Belegung der Variablen mit erlaubten Werten einen Zahlenwert.</p>
+  <p>Die <strong>Hauptoperation</strong> eines Terms ist diejenige Operation, die zuletzt ausgeführt wird, wenn man den Term Schritt für Schritt nach den Vorrangregeln auswertet.</p>
+</div>
 
+<table class="ftb-tabelle">
+  <thead><tr><th>Begriff</th><th>Symbol</th><th>Beispiel</th><th>Bedeutung</th></tr></thead>
+  <tbody>
+    <tr><td>Term</td>          <td>\(T,\, T(x)\)</td>       <td>\(3x^2 - 5\)</td>          <td class="li">Rechenausdruck aus Zahlen, Variablen, Operationen</td></tr>
+    <tr><td>Variable</td>      <td>\(x,\, y,\, t\)</td>     <td>\(x\)</td>                 <td class="li">Platzhalter für eine Zahl</td></tr>
+    <tr><td>Konstante</td>     <td>\(a, b, c \in \mathbb{R}\)</td>  <td>\(5,\;\pi\)</td>   <td class="li">fester Zahlenwert</td></tr>
+    <tr><td>Summand</td>       <td>—</td>                    <td>in \(2x + 3\): \(2x\) und \(3\)</td>  <td class="li">Bestandteil einer Summe</td></tr>
+    <tr><td>Faktor</td>        <td>—</td>                    <td>in \(2 \cdot x\): \(2\) und \(x\)</td><td class="li">Bestandteil eines Produkts</td></tr>
+    <tr><td>Koeffizient</td>   <td>—</td>                    <td>in \(2x\): \(2\)</td>     <td class="li">Zahlfaktor vor einer Variablen</td></tr>
+    <tr><td>Basis · Exponent</td><td>\(a^n\)</td>            <td>\(x^3\): Basis \(x\), Exp. 3</td>     <td class="li">Wiederholter Faktor</td></tr>
+  </tbody>
+</table>
 
-<!-- ══ 7. AUFGABEN ══ -->
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Hauptoperation bestimmen</div>
+  <p>Was ist die Hauptoperation in \( T = 3 \cdot (x + 2)^2 - 5 \)?</p>
+  <p>Auswertung der Reihenfolge: zuerst \(x + 2\), dann das Quadrat, dann mal 3, <strong>zuletzt minus 5</strong>. Der Term ist also eine <em>Differenz</em> — die Hauptoperation ist die Subtraktion. Die beiden Summanden sind \(3 \cdot (x+2)^2\) und \(-5\).</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     4. HIERARCHIE DER OPERATIONEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="hierarchie">Hierarchie der Operationen <a class="quer" href="g1-4-zehnerpotenzen-quadratwurzeln.html">↗ 1.4</a></h2>
+
+<p>Welche Operation in einem Term zuletzt ausgeführt wird, hängt von der <strong>Hierarchie</strong> (Vorrangregeln) ab. Die Hierarchie löst Mehrdeutigkeiten auf — z.B. ist \(2 + 3 \cdot 4 = 14\) (nicht 20), weil die Multiplikation Vorrang vor der Addition hat.</p>
+
+<div class="hierarchie">
+  <div class="hi-stufe" style="border-color:var(--rot)">
+    <div class="hi-nr">Stufe 1</div><div class="hi-name">Klammern</div><div class="hi-ops">( )</div>
+    <div class="hi-bsp"><ul>
+      <li>\((2+3) \cdot 4 = 20\)</li>
+      <li>\(2 \cdot (5-1)^2 = 32\)</li>
+      <li>\(-(3+4) = -7\)</li>
+    </ul></div>
+  </div>
+  <span class="hi-pfeil">▶</span>
+  <div class="hi-stufe" style="border-color:var(--lila-rand)">
+    <div class="hi-nr">Stufe 2</div><div class="hi-name">Potenzen, Wurzeln</div><div class="hi-ops">\(a^n,\, \sqrt{a}\)</div>
+    <div class="hi-bsp"><ul>
+      <li>\(2 \cdot 3^2 = 18\) (nicht 36)</li>
+      <li>\(-3^2 = -9\) (nicht +9)</li>
+      <li>\(\sqrt{9+16} = 5\)</li>
+    </ul></div>
+  </div>
+  <span class="hi-pfeil">▶</span>
+  <div class="hi-stufe">
+    <div class="hi-nr">Stufe 3</div><div class="hi-name">Punktrechnung</div><div class="hi-ops">\(\cdot,\, :\)</div>
+    <div class="hi-bsp"><ul>
+      <li>\(2 + 3 \cdot 4 = 14\) (nicht 20)</li>
+      <li>\(20 - 6 : 2 = 17\)</li>
+      <li>\(8 : 4 \cdot 2 = 4\) (links→rechts)</li>
+    </ul></div>
+  </div>
+  <span class="hi-pfeil">▶</span>
+  <div class="hi-stufe" style="border-color:var(--gruen-rand)">
+    <div class="hi-nr">Stufe 4</div><div class="hi-name">Strichrechnung</div><div class="hi-ops">\(+,\, -\)</div>
+    <div class="hi-bsp"><ul>
+      <li>\(a - b - c\) heisst \((a-b)-c\)</li>
+      <li>\(10 - 3 + 2 = 9\) (nicht 5)</li>
+      <li>von links nach rechts auswerten</li>
+    </ul></div>
+  </div>
+</div>
+
+<p>Eselsbrücke: <em>„Klammer vor Potenz vor Punkt vor Strich"</em>. Innerhalb derselben Stufe wird von <strong>links nach rechts</strong> gerechnet (\(a - b - c\) heisst \((a-b) - c\), nicht \(a - (b-c)\)). Bei Mausüberflug auf eine Stufe siehst du weitere Beispiele.</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Term</th><th>Hauptoperation</th><th>Begründung</th></tr></thead>
+  <tbody>
+    <tr><td>\(2 \;\colorbox{#d8f0e2}{$\color{#2d9d5e}\boldsymbol{+}$}\; 3 \cdot 4\)</td>                       <td class="li"><span class="hop-add">Addition</span></td>     <td class="li">Punkt vor Strich → erst \(3 \cdot 4\), dann + 2</td></tr>
+    <tr><td>\((2 + 3) \;\colorbox{#ddeaf8}{$\color{#1a4f8a}\boldsymbol{\cdot}$}\; 4\)</td>                    <td class="li"><span class="hop-mul">Multiplikation</span></td><td class="li">Klammer zuerst → \(5 \cdot 4\)</td></tr>
+    <tr><td>\(2 \;\colorbox{#ddeaf8}{$\color{#1a4f8a}\boldsymbol{\cdot}$}\; x^3\)</td>                        <td class="li"><span class="hop-mul">Multiplikation</span></td><td class="li">Potenz vor Punkt → erst \(x^3\), dann mal 2</td></tr>
+    <tr><td>\((2 \cdot x)\)<sup class="hop-sup-pot">3</sup></td>                                              <td class="li"><span class="hop-pot">Potenz</span></td>       <td class="li">Klammer zuerst → \(2x\), dann hoch 3</td></tr>
+    <tr><td><span class="bruch-hop"><span class="bruch-zaehler">\(a + b\)</span><span class="bruch-strich"></span><span class="bruch-nenner">\(2\)</span></span></td>
+                                                                                                              <td class="li"><span class="hop-div">Division</span></td>     <td class="li">Bruch = Division mit unsichtbarer Klammer um Zähler</td></tr>
+    <tr><td>\(\colorbox{#e5e7eb}{$\color{#374151}\boldsymbol{-}$}\,x^2\)</td>                                  <td class="li"><span class="hop-neg">Negation einer Potenz</span></td><td class="li">Potenz vor Vorzeichen → \(-(x^2)\), nicht \((-x)^2\)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — bei langen Termen die Hauptoperation zuerst finden</div>
+  <p>Bevor du losrechnest, frage dich: <em>welche Operation wird zuletzt ausgeführt?</em> Das ist die <strong>Hauptoperation</strong> — sie bestimmt, mit welcher Regel du den Term umformen darfst. Beispiel: \(\,3 \cdot (x + 5) - x^2\) hat als Hauptoperation die <em>Subtraktion</em> (Strichrechnung bindet am schwächsten, Klammer und Potenz sind „weiter innen"). Eine Klammer-Auflösung in einem Summanden lässt den anderen unberührt.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufige Fehler bei der Hierarchie</div>
+  <p><strong>Punkt vor Strich vergessen:</strong> \(2 + 3 \cdot 4\) ist <em>nicht</em> \((2 + 3) \cdot 4\). Richtig: erst \(3 \cdot 4 = 12\), dann \(2 + 12 = 14\). Wer Klammer setzt, wo keine steht, ändert das Resultat (hier von 14 auf 20).</p>
+  <p><strong>Klammer-Potenz-Verwechslung:</strong> \(x^2 + x^2\) ist <em>nicht</em> \((x+x)^2\). Test \(x=3\): links \(9+9 = 18\), rechts \(6^2 = 36\).</p>
+  <p><strong>Vorzeichen vor Potenz:</strong> Setze \(x = 3\):</p>
+  <ul style="margin:5px 0 5px 20px">
+    <li>\(-x^2 = -(3^2) = -9\)</li>
+    <li>\((-x)^2 = (-3)^2 = +9\)</li>
+  </ul>
+  <p>Die Klammer ändert das Ergebnis komplett. Schreibweise auf dem Taschenrechner und auf dem Papier müssen sich entsprechen.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     5. STRUKTURBAUM — Visualisierung der Hierarchie, interaktiv
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="strukturbaum">Strukturbaum lesen</h2>
+
+<p>Ein <strong>Strukturbaum</strong> macht die Hauptoperation und die Bausteine eines Terms sichtbar. Er hilft besonders, wenn ein Term mehrere Klammern, Brüche oder Potenzen enthält. Die Hierarchie aus dem vorhergehenden Abschnitt bestimmt, welche Operation zuoberst im Baum steht.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Strukturbaum erkunden — wähle einen Term oder gib einen eigenen ein</h3>
+    <p>Von oben nach unten: Hauptoperation → Bausteine → Bausteine der Bausteine.</p>
+  </div>
+  <div class="widget-body">
+    <div class="sb-waehler" id="sb-waehler">
+      <button class="sb-btn aktiv" data-i="0" onclick="sbWaehleVorgabe(0)" type="button">\(3 \cdot (x+2)^2 - 5\)</button>
+      <button class="sb-btn" data-i="1" onclick="sbWaehleVorgabe(1)" type="button">\((a+b) \cdot (a-b)\)</button>
+      <button class="sb-btn" data-i="2" onclick="sbWaehleVorgabe(2)" type="button">\(\dfrac{2x+3}{x^2-1}\)</button>
+      <button class="sb-btn" data-i="3" onclick="sbWaehleVorgabe(3)" type="button">\(-x^2 + \sqrt{x+4}\)</button>
+    </div>
+    <div class="sb-eigen">
+      <label for="sb-input">Eigener Term:</label>
+      <input type="text" id="sb-input" placeholder="z.B. 2*(x+1)^2 - 3*x   oder   (a+b)/(a-b)">
+      <button class="btn-pruef" onclick="sbAnalysiereEigen()">Analysieren</button>
+      <span class="sb-fehler" id="sb-fehler"></span>
+    </div>
+    <div class="baum baum-dyn" id="sb-baum">
+      <!-- wird per JS gefüllt -->
+    </div>
+  </div>
+</div>
+
+<p>Mit dem Strukturbaum erkennt man: ein Term ist nicht „eine Potenz", weil irgendwo \(\,(\cdot)^2\) vorkommt — die <em>Hauptoperation</em> kann eine ganz andere sein. Der Baum zeigt sie zuoberst.</p>
+
+<!-- Interaktive Klassifikation — kompakt, 2 Spalten -->
+<div class="widget">
+  <div class="widget-header">
+    <h3>Klassifizier-Übung — Hauptoperation</h3>
+    <p>Welche Operation wird beim Auswerten zuletzt ausgeführt?</p>
+  </div>
+  <div class="widget-body">
+    <div id="kl-spiel-cont" class="kl-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     6. WEITERE THEORIE — Rechengesetze als Strukturwerkzeug
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="theorie">Rechengesetze für Umformungen</h2>
+
+<p>Die Strukturanalyse zeigt, <em>welches</em> Rechengesetz auf einen Term passt. Drei Gesetze stehen im Zentrum. Probiere die Gesetze mit konkreten Zahlen aus — würfle neue Werte für \(a, b, c \in \{-10, \dots, 10\}\) und beobachte, dass linke und rechte Seite tatsächlich denselben Wert liefern.</p>
+
+<div class="wuerfel-box" id="wb-kommutativ">
+  <div class="wuerfel-row">
+    <span class="gesetz-name">Kommutativgesetz</span>
+    <button class="btn-wuerfel" onclick="wuerfelKommutativ()">🎲 Neue Zahlen</button>
+  </div>
+  <div class="wb-grid wb-gesetz">
+    <div class="wb-zelle"><div class="wb-formel">\(a + b = b + a\)</div></div>
+    <div class="wb-zelle"><div class="wb-formel">\(a \cdot b = b \cdot a\)</div></div>
+  </div>
+  <div class="wuerfel-bsp" id="wb-k-bsp"><!-- wird per JS gefüllt --></div>
+</div>
+
+<div class="wuerfel-box" id="wb-assoziativ">
+  <div class="wuerfel-row">
+    <span class="gesetz-name">Assoziativgesetz</span>
+    <button class="btn-wuerfel" onclick="wuerfelAssoziativ()">🎲 Neue Zahlen</button>
+  </div>
+  <div class="wb-grid wb-gesetz">
+    <div class="wb-zelle"><div class="wb-formel">\((a+b)+c = a+(b+c)\)</div></div>
+    <div class="wb-zelle"><div class="wb-formel">\((a \cdot b) \cdot c = a \cdot (b \cdot c)\)</div></div>
+  </div>
+  <div class="wuerfel-bsp" id="wb-a-bsp"><!-- wird per JS gefüllt --></div>
+</div>
+
+<div class="wuerfel-box" id="wb-distributiv">
+  <div class="wuerfel-row">
+    <span class="gesetz-name">Distributivgesetz</span>
+    <button class="btn-wuerfel" onclick="wuerfelDistributiv()">🎲 Neue Zahlen</button>
+  </div>
+  <div class="wb-grid wb-gesetz wb-mit-gleich">
+    <div class="wb-zelle"><div class="wb-formel">\(a \cdot (b + c)\)</div></div>
+    <div class="wb-zelle"><div class="wb-formel">\(a \cdot b + a \cdot c\)</div></div>
+  </div>
+  <div class="wuerfel-bsp" id="wb-d-bsp"><!-- wird per JS gefüllt --></div>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Wichtig — Kommutativ und Assoziativ nur für Addition und Multiplikation</div>
+  <p>Diese beiden Gesetze gelten <em>nur</em> für Addition und Multiplikation, <em>nicht</em> für Subtraktion und Division. Die Subtraktion ist nicht kommutativ (\(5 - 2 = 3\), aber \(2 - 5 = -3\)) und nicht assoziativ.</p>
+  <p><strong>Trick:</strong> Schreibe die Subtraktion als Addition einer negativen Zahl — danach gelten die Gesetze wieder. Beispiel: \(5 - 2 = 5 + (-2)\). Auf <em>diese</em> Addition darf das Kommutativgesetz angewandt werden:</p>
+  \[ 5 + (-2) \;=\; (-2) + 5 \;=\; 3. \]
+  <p>So lassen sich Summanden in beliebiger Reihenfolge zusammenfassen, sobald die Differenz in eine Summe (mit Vorzeichen) umgeschrieben ist.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Distributivgesetz nach Struktur einsetzen</div>
+  <p>Vereinfache \(4 \cdot (3 + x) - 2 \cdot (5 - x)\).</p>
+  <p>Strukturanalyse: Hauptoperation ist <em>Differenz</em>. Beide Minuend und Subtrahend sind <em>Produkte</em> mit Klammer. Auf jedes Produkt das Distributivgesetz anwenden:</p>
+  \[ 4 \cdot 3 + 4 \cdot x - (2 \cdot 5 - 2 \cdot x) = 12 + 4x - 10 + 2x = 2 + 6x. \]
+  <p>Beachte das Vorzeichen: das Minus vor der zweiten Klammer kehrt jedes Vorzeichen darin um.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     7. AUFGABEN — A1 bis A6
+     ════════════════════════════════════════════════════════════════ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
 
+<!-- A1: Klassifikation -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Hauptoperation erkennen</span></div>
 
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+  <p>Bestimme zu jedem Term die Hauptoperation (jene, die zuletzt ausgeführt wird).</p>
+  <ol class="aufg-liste">
+  <li>\(7 - 3 \cdot x\)</li>
+  <li>\((x - 2) \cdot (x + 5)\)</li>
+  <li>\(\dfrac{x + 1}{x - 1}\)</li>
+  <li>\(2 \cdot x^3 + 1\)</li>
+  <li>\(\sqrt{x + 4}\)</li>
+  <li>\(-(x + 3)^2\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a1')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li><em>Subtraktion</em> (Minuend 7, Subtrahend \(3x\))</li>
+        <li><em>Multiplikation</em> der beiden Klammerfaktoren</li>
+        <li><em>Division</em> (Bruch)</li>
+        <li><em>Addition</em> (Summanden \(2x^3\) und 1)</li>
+        <li><em>Wurzel</em> (Stufe 2 vor allem darunter)</li>
+        <li><em>Negation einer Potenz</em>: erst quadrieren, dann Vorzeichen-Wechsel — also Multiplikation mit \(-1\)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A2: Bausteine bestimmen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Bausteine benennen</span></div>
+
+  <p>Schreibe Hauptoperation, Summanden bzw. Faktoren auf. Achte besonders auf Vorzeichen.</p>
+  <ol class="aufg-liste">
+  <li>\(T_1 = 5 \cdot x^2 - 3 \cdot x + 7\)</li>
+  <li>\(T_2 = (a + b) \cdot (a - b)\)</li>
+  <li>\(T_3 = \dfrac{2 \cdot x + 3}{x^2 - 1}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Hauptoperation = <em>Addition / Subtraktion</em>; drei Summanden: \(+5x^2,\;-3x,\;+7\).</li>
+        <li>Hauptoperation = <em>Multiplikation</em>; zwei Faktoren \(a+b\) und \(a-b\). (Beide Faktoren sind selber Summen.)</li>
+        <li>Hauptoperation = <em>Division</em>; Zähler \(2x+3\) ist eine Summe, Nenner \(x^2-1\) ist eine Differenz aus Quadrat und 1.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3: Strukturäquivalenz -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Sind die Terme äquivalent?</span></div>
+
+  <p>Prüfe rechnerisch (für mehrere <em>x</em>-Werte) und durch Strukturanalyse, ob die beiden Terme äquivalent sind. Begründe dein Urteil.</p>
+  <ol class="aufg-liste">
+  <li>\(2 \cdot (x + 3)\) und \(2 \cdot x + 3\)</li>
+  <li>\(x^2 + x^2\) und \(2 \cdot x^2\)</li>
+  <li>\(x^2 + x^2\) und \((2 \cdot x)^2\)</li>
+  <li>\(\sqrt{a + b}\) und \(\sqrt{a} + \sqrt{b}\) <span style="color:var(--text-li); font-size:0.92em">(Wurzel-Gesetze formal in <a class="quer" href="g1-4-zehnerpotenzen-quadratwurzeln.html">1.4 Zehnerpotenzen &amp; Quadratwurzeln</a> — hier reicht der Strukturvergleich)</span></li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a3')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li><strong>Nicht äquivalent.</strong> Test \(x = 1\): links \(2 \cdot 4 = 8\), rechts \(2 + 3 = 5\). Erst die Klammer (Hauptop. der linken Seite ist Multiplikation), rechts ist Hauptop. eine Addition.</li>
+        <li><strong>Äquivalent.</strong> \(x^2 + x^2 = 2 \cdot x^2\) — Zusammenfassen gleicher Summanden.</li>
+        <li><strong>Nicht äquivalent.</strong> \((2x)^2 = 4x^2 \neq 2x^2\). Test \(x = 1\): \(2\) vs. \(4\).</li>
+        <li><strong>Nicht äquivalent.</strong> Test \(a = b = 1\): \(\sqrt{2} \approx 1.41\), aber \(1 + 1 = 2\). Die Wurzel verteilt sich nicht über die Summe. (Das Gegenbeispiel zur „Wurzel-Distributivität" wird in <em>1.4 Wurzelgesetze</em> systematisch behandelt.)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A4: Wert eintippen -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Termwert berechnen</span></div>
+  <p>Berechne den Wert des Terms \(\;T(x) = 2 \cdot (x + 1)^2 - 3 \cdot x \;\) für \(x = 4\) und gib das Ergebnis ein.</p>
+  <div class="eingabe-row">
+  <label for="ea4">T(4) =</label>
+  <input type="text" id="ea4" placeholder="Resultat eingeben">
+  <button class="btn-pruef" onclick="checkA4()">Prüfen</button>
+  </div>
+  <div class="cr" id="cra4"></div>
+</div>
+
+<!-- A5: Strukturwechsel -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Strukturwechsel durch Distributivgesetz</span></div>
+
+  <p>Klammere mit dem Distributivgesetz aus dem Term \(\;6 \cdot x^2 + 9 \cdot x\;\) den grössten gemeinsamen Faktor heraus. Welche Hauptoperation hat der Term <em>vor</em> und <em>nach</em> der Umformung? Was hilft die neue Form?</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p><strong>Wozu ausklammern?</strong> Ein Strukturwechsel von Summe zu Produkt eröffnet neue Werkzeuge. Zwei wichtige Anwendungen:</p>
+      <ul style="margin:5px 0 10px 22px">
+        <li><em>Gleichung lösen:</em> Aus dem Produkt \(3x \cdot (2x+3) = 0\) liest man direkt zwei Lösungen ab (Satz vom Nullprodukt).</li>
+        <li><em>Bruch kürzen:</em> Steht der Term in einem Bruch, lässt sich nur ein <em>Faktor</em> wegkürzen, nie ein Summand. Erst die Faktor-Form erlaubt Kürzen.</li>
+      </ul>
+      <p><strong>Anwendung 1 — Gleichung:</strong> \(6x^2 + 9x = 0 \;\Longleftrightarrow\; 3x \cdot (2x+3) = 0\). Aus dem Produkt liest man direkt zwei Lösungen ab: \(x = 0\) und \(x = -1.5\). Der Strukturwechsel macht aus „eine Gleichung zweiten Grades" den Satz „ein Produkt ist null genau dann, wenn ein Faktor null ist".</p>
+      <p><strong>Anwendung 2 — Bruch kürzen:</strong> \(\;\dfrac{6x^2 + 9x}{12x} = \dfrac{3x \cdot (2x+3)}{12x} = \dfrac{2x+3}{4}\;\) (für \(x \neq 0\)). Aus dem Zähler kürzt sich nur der gemeinsame Faktor \(3x\) mit dem Nenner \(12x\) zu \(\tfrac{1}{4}\). Ohne Ausklammern wäre das nicht möglich, weil sich aus der Summe \(6x^2 + 9x\) <em>kein</em> einzelner Summand mit dem Nenner kürzen lässt.</p>
+    </div>
+  </div>
+</div>
+
+<!-- A6: Anwendung -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — Strukturwahl</span></div>
+
+  <p>Ein Werkstück besteht aus einem rechteckigen Brett der Breite \(b\) und der Länge \(2 \cdot b + 4\). Stelle einen Term für den Flächeninhalt auf und einen für den Umfang. Welche Hauptoperation hat jeder der beiden Terme?</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p><strong>Fläche:</strong> \(A = b \cdot (2b + 4) = 2b^2 + 4b\). Hauptop. <em>Multiplikation</em> in der Faktor-Form, <em>Addition</em> in der ausgerechneten Form. Beide äquivalent.</p>
+      <p><strong>Umfang:</strong> \(U = 2 \cdot b + 2 \cdot (2b + 4) = 2b + 4b + 8 = 6b + 8\). Hauptop. <em>Addition</em>.</p>
+      <p>Strategisch: Will man ausrechnen, ist \(6b + 8\) bequem. Will man <em>faktorisieren</em>, ist \(2 \cdot (3b + 4)\) bequem — daraus liest man ab, dass der Umfang stets gerade ist.</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Fehler in fremden Rechnungen finden <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Drei Lernende berechnen denselben Term \(T = -3^2 + 2 \cdot (5 - 1)^2\) für sich, kommen aber zu verschiedenen Ergebnissen. Lies jede Rechnung sorgfältig — finde den Fehler, benenne die verletzte Regel und korrigiere.</p>
+  <ul>
+    <li><strong>Anna:</strong> \(-3^2 + 2 \cdot (5-1)^2 = 9 + 2 \cdot 4^2 = 9 + 2 \cdot 16 = 9 + 32 = 41\)</li>
+    <li><strong>Bruno:</strong> \(-3^2 + 2 \cdot (5-1)^2 = -9 + (2 \cdot 4)^2 = -9 + 64 = 55\)</li>
+    <li><strong>Carlo:</strong> \(-3^2 + 2 \cdot (5-1)^2 = -9 + 2 \cdot 4^2 = -9 + 8^2 = -9 + 64 = 55\)</li>
+  </ul>
+<ol class="aufg-liste">
+  <li>Wer hat richtig gerechnet?</li>
+  <li>Identifiziere bei den falschen Rechnungen den ersten Fehler-Schritt und benenne die verletzte Regel.</li>
+  <li>Welcher Term wäre statt \(-3^2\) gemeint, wenn man tatsächlich \(+9\) als Resultat erhalten wollte?</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-1-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-1-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p><strong>Richtiges Resultat:</strong> Hauptoperation ist die <em>Addition</em>. Linker Summand: \(-3^2 = -(3^2) = -9\) (das Minus ist <em>kein</em> Teil der Basis, weil das Potenzieren stärker bindet). Rechter Summand: \((5-1)^2 = 4^2 = 16\), dann \(2 \cdot 16 = 32\). Ergebnis: \(-9 + 32 = 23\).</p>
+            <ol class="aufg-liste">
+        <li><strong>Niemand!</strong> Das richtige Resultat ist \(23\), nicht \(41\) und nicht \(55\).</li>
+        <li>Fehler-Diagnose:</li>
+        <li>Damit das Resultat des linken Summanden \(+9\) wäre, müsste man Klammern setzen: \((-3)^2 = (-3) \cdot (-3) = +9\). Die Klammer macht das Minus zum Teil der Basis. Genau dieser Unterschied ist im Theorieteil <em>häufiger Fehler</em> festgehalten. <em>Strategie:</em> Bei Termen mit Minuszeichen vor einer Potenz lohnt sich ein Blick auf den <em>Strukturbaum</em>: ist \(-x^2\) die Form \(-(x^2)\) (Minus aussen) oder \((-x)^2\) (Minus innen)?</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     8. ZUSAMMENFASSUNG
+     ════════════════════════════════════════════════════════════════ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
 
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Wer einen Term richtig <em>liest</em>, weiss schon halb, was er <em>tun</em> soll: Hauptoperation finden, Bausteine benennen, Gesetz auswählen.</p>
+</div>
 
-<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<table class="ftb-tabelle">
+  <tbody>
+    <tr><td class="li">Hauptoperation</td>            <td>die zuletzt auszuführende Operation eines Terms</td></tr>
+    <tr><td class="li">Hierarchie</td>                <td>Klammer ▶ Potenz/Wurzel ▶ Punkt ▶ Strich · gleiche Stufe von links nach rechts</td></tr>
+    <tr><td class="li">Bausteine</td>                 <td>Summanden bei Summen, Subtrahend/Minuend bei Differenzen, Faktoren bei Produkten, Dividend/Divisor bzw. Zähler/Nenner bei Quotienten, Basis und Exponent bei Potenzen</td></tr>
+    <tr><td class="li">Äquivalenz</td>                <td>zwei Terme heissen äquivalent, wenn sie für <em>jede</em> erlaubte Belegung der Variablen denselben Wert liefern — <strong>nicht</strong> nur für einzelne Testwerte</td></tr>
+    <tr><td class="li">Distributivgesetz</td>         <td>\(a(b+c) = ab + ac\) — Klammer auflösen oder ausklammern (Strukturwechsel!)</td></tr>
+    <tr><td class="li">Werkzeug</td>                  <td>Strukturbaum sichtbar machen → passendes Rechengesetz auswählen</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════
+     9. ZUSATZMATERIAL
+     ════════════════════════════════════════════════════════════════ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
 
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g1-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Begriffe und Hierarchie kompakt</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     10. EXTERNE RESSOURCEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lWPWBvEXDrcCEZ54ZdtYazp" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme vereinfachen — Playlist</div><div class="lk-s">MathemaTrick · 64 Videos · Vereinfachen, Zusammenfassen, Bruchterme</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzmBhxJfVgJ9pTv2QeqJsbO_" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme &amp; Gleichungen — Playlist</div><div class="lk-s">Lehrerschmidt · 27 Videos · komplette Übersicht zum Thema</div></div></a>
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g0/g01/aufg_g01.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Arithmetik (G01)</div><div class="lk-s">Aufgabe 1: Rechenreihenfolge, Klammerstrukturen, ggT/kgV — mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/55227/aufgaben-zum-vereinfachen-von-termen-mit-zahlen-und-variablen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Terme vereinfachen</div><div class="lk-s">Aufgaben mit Schritt-für-Schritt-Lösungen, Variablen und Zahlen</div></div></a>
+  <a href="https://de.serlo.org/mathe/50453/aufgaben-zum-umformen-von-termen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Terme umformen</div><div class="lk-s">Klammern auflösen, Kommutativgesetz, Zusammenfassen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26307/aufgaben-zum-belegen-von-termvariablen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Termvariablen belegen</div><div class="lk-s">Werte einsetzen, Punkt-vor-Strich, mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -91,7 +743,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Grundlagen</p>
+  <p>Grundlagenfach 1.1 Grundlagen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -102,6 +754,574 @@ buildNav({
   kapitelNr:'1.1', kapitelTitel:'Grundlagen',
   prev:null,
   next:{nr:'1.2',titel:'Zahlen und zugehörige Grundoperationen',url:'g1-2-zahlen-grundoperationen.html'}
+});
+
+/* Lösungen ein-/ausklappen — toggleL stammt aus mathlib.js */
+
+/* Klassifizier-Übung (interaktiv) */
+const KL_AUFG = [
+  { term:'\\( 5 + 2 \\cdot x \\)',         opt:['Addition','Multiplikation','Subtraktion','Potenz'], ok:0, hint:'Punkt vor Strich \u2192 erst \\(2 \\cdot x\\), dann + 5. Hauptop. = Addition.' },
+  { term:'\\( (x - 3)^2 \\)',              opt:['Subtraktion','Multiplikation','Potenz','Wurzel'],   ok:2, hint:'Klammer wird zur Basis, dann hoch 2. Hauptop. = Potenz.' },
+  { term:'\\( \\dfrac{a + b}{a - b} \\)',  opt:['Addition','Subtraktion','Division','Multiplikation'], ok:2, hint:'Bruch = Division. Z\u00e4hler und Nenner sind je eine Summe bzw. Differenz, aber zuletzt wird dividiert.' },
+  { term:'\\( -2 \\cdot x^3 \\)',          opt:['Negation','Multiplikation','Potenz','Subtraktion'], ok:1, hint:'Erst \\(x^3\\), dann mal \\(-2\\). Hauptop. = Multiplikation.' },
+  { term:'\\( \\sqrt{x^2 + 9} \\)',         opt:['Addition','Potenz','Wurzel','Multiplikation'],     ok:2, hint:'Wurzel ist die letzte Operation. Argument ist eine Summe.' },
+  { term:'\\( 7 - 4 \\cdot (x + 1) \\)',   opt:['Subtraktion','Multiplikation','Addition','Klammer'],ok:0, hint:'Erst Klammer, dann mal 4, zuletzt 7 minus alles. Hauptop. = Subtraktion.' }
+];
+
+function buildKlSpiel() {
+  const cont = document.getElementById('kl-spiel-cont');
+  cont.innerHTML = KL_AUFG.map((a, i) => `
+    <div class="kl-spiel">
+      <div class="kl-term"><span class="kl-nr">(${i+1})</span>${a.term}</div>
+      <div class="kl-buttons">
+        ${a.opt.map((o, j) => `<button class="kl-btn" data-i="${i}" data-j="${j}" onclick="checkKl(${i},${j})">${o}</button>`).join('')}
+      </div>
+      <div class="kl-feedback" id="klf-${i}"></div>
+    </div>
+  `).join('');
+  if (window.MathJax) MathJax.typesetPromise([cont]).catch(()=>{});
+}
+
+function checkKl(i, j) {
+  const a = KL_AUFG[i];
+  document.querySelectorAll(`button[data-i="${i}"]`).forEach(b => b.classList.remove('aktiv','korrekt','falsch'));
+  const btn = document.querySelector(`button[data-i="${i}"][data-j="${j}"]`);
+  const fb = document.getElementById(`klf-${i}`);
+  if (j === a.ok) {
+    btn.classList.add('korrekt');
+    fb.className = 'kl-feedback ok';
+    fb.textContent = `\u2713 Richtig — ${a.hint}`;
+  } else {
+    btn.classList.add('falsch');
+    fb.className = 'kl-feedback err';
+    fb.textContent = `\u2717 Nicht ganz. ${a.hint}`;
+  }
+}
+
+function checkA4() {
+  const v = document.getElementById('ea4').value.replace(',', '.').trim();
+  const x = parseFloat(v);
+  const r = document.getElementById('cra4');
+  r.style.display = 'block';
+  if (isNaN(x)) { r.className = 'cr err'; r.textContent = '\u2717 Bitte eine Zahl eingeben.'; return; }
+  // T(4) = 2·(4+1)² - 3·4 = 2·25 - 12 = 38
+  if (Math.abs(x - 38) < 0.001) {
+    r.className = 'cr ok';
+    r.textContent = '\u2713 Richtig. Schritte: (4+1)² = 25, dann 2·25 = 50, dann 3·4 = 12, dann 50 \u2212 12 = 38.';
+  } else {
+    r.className = 'cr err';
+    r.textContent = '\u2717 Stimmt noch nicht. Erinnerung: erst Klammer, dann Potenz, dann Punkt, zuletzt Strich.';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildKlSpiel();
+  drawHauptop();
+  sbInit();
+  wuerfelInit();
+});
+
+/* ════════════════════════════════════════════════════════════════
+ *  STRUKTURBAUM — interaktiv, mit Term-Parser
+ *  Vier vorgegebene Terme + eigene Eingabe (geparst zu AST,
+ *  dann als verschachtelter Strukturbaum gerendert).
+ * ════════════════════════════════════════════════════════════════ */
+
+/* AST-Knoten: { typ: 'sum'|'sub'|'mul'|'div'|'pow'|'neg'|'sqrt'|'var'|'num',
+                 wert?, links?, rechts?, kind? } */
+
+/* Tokenizer: Eingabe-String → Token-Liste.
+   Erlaubt: Zahlen (auch dezimal), Variablen [a-zA-Z], + - * / ^ ( ) sowie sqrt(...) */
+function sbTokenize(s) {
+  const tokens = [];
+  let i = 0;
+  // Normalisierung: Unicode-Operatoren auf ASCII
+  s = s.replace(/·/g, '*').replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/√/g, 'sqrt');
+  while (i < s.length) {
+    const c = s[i];
+    if (/\s/.test(c)) { i++; continue; }
+    if (/[0-9.]/.test(c)) {
+      let j = i;
+      while (j < s.length && /[0-9.]/.test(s[j])) j++;
+      tokens.push({ t:'num', v: parseFloat(s.slice(i, j)) });
+      i = j;
+    } else if (/[a-zA-Z]/.test(c)) {
+      let j = i;
+      while (j < s.length && /[a-zA-Z]/.test(s[j])) j++;
+      const name = s.slice(i, j);
+      if (name === 'sqrt') {
+        tokens.push({ t:'sqrt' });
+      } else {
+        tokens.push({ t:'var', v: name });
+      }
+      i = j;
+    } else if ('+-*/^()'.includes(c)) {
+      tokens.push({ t: c });
+      i++;
+    } else {
+      throw new Error(`Unbekanntes Zeichen: '${c}'`);
+    }
+  }
+  return tokens;
+}
+
+/* Pratt-Parser für Terme.
+   Präzedenz: + - (1, links-assoc) · * / (2, links-assoc) · ^ (3, rechts-assoc) · unäres minus / sqrt (4) */
+function sbParse(tokens) {
+  let p = 0;
+  function peek() { return tokens[p]; }
+  function consume() { return tokens[p++]; }
+  function parseExpr(minPrec) {
+    let left = parseUnary();
+    while (true) {
+      const tk = peek();
+      if (!tk) break;
+      let prec, rightAssoc = false, opTyp;
+      if (tk.t === '+') { prec = 1; opTyp = 'sum'; }
+      else if (tk.t === '-') { prec = 1; opTyp = 'sub'; }
+      else if (tk.t === '*') { prec = 2; opTyp = 'mul'; }
+      else if (tk.t === '/') { prec = 2; opTyp = 'div'; }
+      else if (tk.t === '^') { prec = 3; opTyp = 'pow'; rightAssoc = true; }
+      else break;
+      if (prec < minPrec) break;
+      consume();
+      const right = parseExpr(rightAssoc ? prec : prec + 1);
+      left = { typ: opTyp, links: left, rechts: right };
+    }
+    return left;
+  }
+  function parseUnary() {
+    const tk = peek();
+    if (!tk) throw new Error('Term endet zu früh');
+    if (tk.t === '-') {
+      consume();
+      // Unäres Minus bindet SCHWÄCHER als Potenz (mathematische Konvention):
+      // -x^2 bedeutet -(x^2), nicht (-x)^2.
+      // Wir parsen die Basis als Potenz (Prec 3) und packen sie in neg.
+      const kind = parseExpr(3);
+      return { typ:'neg', kind };
+    }
+    if (tk.t === '+') { consume(); return parseUnary(); }
+    if (tk.t === 'sqrt') {
+      consume();
+      const nxt = peek();
+      if (!nxt || nxt.t !== '(') throw new Error('sqrt muss von Klammer gefolgt sein');
+      consume();
+      const inner = parseExpr(1);
+      const cl = peek();
+      if (!cl || cl.t !== ')') throw new Error('Klammer nach sqrt nicht geschlossen');
+      consume();
+      return { typ:'sqrt', kind: inner };
+    }
+    if (tk.t === '(') {
+      consume();
+      const inner = parseExpr(1);
+      const cl = peek();
+      if (!cl || cl.t !== ')') throw new Error('Klammer nicht geschlossen');
+      consume();
+      return inner;
+    }
+    if (tk.t === 'num') { consume(); return { typ:'num', wert: tk.v }; }
+    if (tk.t === 'var') { consume(); return { typ:'var', wert: tk.v }; }
+    throw new Error(`Unerwartetes Token: ${JSON.stringify(tk)}`);
+  }
+  const ast = parseExpr(1);
+  if (p < tokens.length) throw new Error(`Term nicht vollständig geparst (Rest ab Position ${p})`);
+  return ast;
+}
+
+/* AST → LaTeX-String (für Anzeige in Boxen) */
+function sbToTex(ast) {
+  switch (ast.typ) {
+    case 'num': return String(ast.wert);
+    case 'var': return ast.wert;
+    case 'neg': {
+      const inner = sbToTex(ast.kind);
+      // Klammer um Summen/Differenzen
+      if (['sum','sub'].includes(ast.kind.typ)) return `-(${inner})`;
+      return `-${inner}`;
+    }
+    case 'sqrt': return `\\sqrt{${sbToTex(ast.kind)}}`;
+    case 'pow': {
+      let basis = sbToTex(ast.links);
+      // Klammer um zusammengesetzte Basen
+      if (['sum','sub','mul','div','neg'].includes(ast.links.typ)) basis = `(${basis})`;
+      return `${basis}^{${sbToTex(ast.rechts)}}`;
+    }
+    case 'sum': return `${sbToTex(ast.links)} + ${sbToTex(ast.rechts)}`;
+    case 'sub': return `${sbToTex(ast.links)} - ${sbToTex(ast.rechts)}`;
+    case 'mul': {
+      let l = sbToTex(ast.links), r = sbToTex(ast.rechts);
+      if (['sum','sub'].includes(ast.links.typ)) l = `(${l})`;
+      if (['sum','sub'].includes(ast.rechts.typ)) r = `(${r})`;
+      return `${l} \\cdot ${r}`;
+    }
+    case 'div': return `\\dfrac{${sbToTex(ast.links)}}{${sbToTex(ast.rechts)}}`;
+  }
+  return '?';
+}
+
+/* Beschreibung der Hauptoperation eines AST-Knotens */
+function sbHauptop(ast) {
+  switch (ast.typ) {
+    case 'sum':  return { name:'Summe',         klasse:'haupt',   bauteile:[['Summand 1', ast.links], ['Summand 2', ast.rechts]] };
+    case 'sub':  return { name:'Differenz',     klasse:'haupt',   bauteile:[['Minuend',   ast.links], ['Subtrahend', ast.rechts]] };
+    case 'mul':  return { name:'Produkt',       klasse:'haupt',   bauteile:[['Faktor 1',  ast.links], ['Faktor 2',   ast.rechts]] };
+    case 'div':  return { name:'Quotient',      klasse:'haupt',   bauteile:[['Zähler',    ast.links], ['Nenner',     ast.rechts]] };
+    case 'pow':  return { name:'Potenz',        klasse:'haupt',   bauteile:[['Basis',     ast.links], ['Exponent',   ast.rechts]] };
+    case 'neg':  return { name:'Negation',      klasse:'haupt',   bauteile:[['Argument',  ast.kind]] };
+    case 'sqrt': return { name:'Wurzel',        klasse:'haupt',   bauteile:[['Radikand',  ast.kind]] };
+    case 'num':  return null;
+    case 'var':  return null;
+  }
+}
+
+/* Beschreibungstext für einen Sub-AST (rechts vom Boxinhalt) */
+function sbBeschreibung(ast) {
+  switch (ast.typ) {
+    case 'sum':  return '— eine Summe';
+    case 'sub':  return '— eine Differenz';
+    case 'mul':  return '— ein Produkt';
+    case 'div':  return '— ein Quotient (Bruch)';
+    case 'pow':  return '— eine Potenz';
+    case 'neg':  return '— Negation (Vorzeichenwechsel)';
+    case 'sqrt': return '— eine Wurzel';
+    case 'num':  return '— eine Zahl';
+    case 'var':  return '— eine Variable';
+  }
+  return '';
+}
+
+/* Klassen-Zuordnung für Box-Farbe je nach Rolle.
+   Basis und Exponent gehören zur selben Potenz → beide rosa.
+   Radikand → rosa (analog).
+   Argument einer Negation → rosa. */
+function sbBoxKlasse(rolle) {
+  if (rolle === 'haupt') return 'haupt';
+  if (rolle.startsWith('Faktor')) return 'faktor';
+  if (['Basis', 'Exponent', 'Radikand', 'Argument'].includes(rolle)) return 'basis';
+  // Summanden, Minuend, Subtrahend, Zähler, Nenner
+  return 'summand';
+}
+
+/* Rendert den AST als verschachtelten Strukturbaum (HTML-String) */
+function sbRender(ast, rolle, tiefe, maxTiefe) {
+  const tex = sbToTex(ast);
+  const boxCls = sbBoxKlasse(rolle);
+  const beschr = sbBeschreibung(ast);
+  let html = '';
+  html += `<div class="baum-zeile tief-${tiefe}">`;
+  html += `<span class="term-tag">${rolle}</span>`;
+  html += `<span class="baum-pfeil">→</span>`;
+  html += `<span class="term-box ${boxCls}">\\(${tex}\\)</span>`;
+  if (beschr) html += `<span class="term-tag">${beschr}</span>`;
+  html += `</div>`;
+  if (tiefe >= maxTiefe) return html;
+  const hop = sbHauptop(ast);
+  if (!hop) return html;
+  for (const [unterRolle, unterAst] of hop.bauteile) {
+    html += sbRender(unterAst, unterRolle, tiefe + 1, maxTiefe);
+  }
+  return html;
+}
+
+/* Top-Level: AST → HTML mit Hauptoperation als erster Zeile */
+function sbBaumHtml(ast) {
+  const hop = sbHauptop(ast);
+  let html = '';
+  if (hop) {
+    html += `<div class="baum-zeile tief-0">`;
+    html += `<span class="term-tag">Hauptoperation</span>`;
+    html += `<span class="baum-pfeil">→</span>`;
+    html += `<span class="term-box haupt">${hop.name}</span>`;
+    html += `</div>`;
+    for (const [unterRolle, unterAst] of hop.bauteile) {
+      html += sbRender(unterAst, unterRolle, 1, 4);
+    }
+  } else {
+    // Nur Zahl oder Variable
+    html += sbRender(ast, 'Term', 0, 0);
+  }
+  return html;
+}
+
+/* Vier vorgegebene Beispiel-Terme (in Eingabe-Syntax) */
+const SB_VORGABE = [
+  '3*(x+2)^2 - 5',
+  '(a+b)*(a-b)',
+  '(2*x+3)/(x^2-1)',
+  '-x^2 + sqrt(x+4)'
+];
+
+function sbZeichne(eingabe) {
+  const baum = document.getElementById('sb-baum');
+  const fehler = document.getElementById('sb-fehler');
+  fehler.classList.remove('sichtbar');
+  fehler.textContent = '';
+  try {
+    const tokens = sbTokenize(eingabe);
+    const ast = sbParse(tokens);
+    baum.innerHTML = sbBaumHtml(ast);
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      window.MathJax.typesetPromise([baum]);
+    }
+    return true;
+  } catch (e) {
+    baum.innerHTML = '<p style="color:var(--rot); font-family:var(--mono); font-size:0.85rem">Term konnte nicht geparst werden.</p>';
+    fehler.textContent = e.message;
+    fehler.classList.add('sichtbar');
+    return false;
+  }
+}
+
+function sbWaehleVorgabe(i) {
+  // Buttons aktualisieren
+  document.querySelectorAll('#sb-waehler .sb-btn').forEach(b => b.classList.remove('aktiv'));
+  const btn = document.querySelector(`#sb-waehler .sb-btn[data-i="${i}"]`);
+  if (btn) btn.classList.add('aktiv');
+  // Eingabefeld zurücksetzen
+  document.getElementById('sb-input').value = '';
+  sbZeichne(SB_VORGABE[i]);
+}
+
+function sbAnalysiereEigen() {
+  const eingabe = document.getElementById('sb-input').value.trim();
+  if (!eingabe) {
+    document.getElementById('sb-fehler').textContent = 'Bitte einen Term eingeben.';
+    document.getElementById('sb-fehler').classList.add('sichtbar');
+    return;
+  }
+  document.querySelectorAll('#sb-waehler .sb-btn').forEach(b => b.classList.remove('aktiv'));
+  sbZeichne(eingabe);
+}
+
+function sbInit() {
+  // Enter im Eingabefeld
+  const inp = document.getElementById('sb-input');
+  if (inp) inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); sbAnalysiereEigen(); }
+  });
+  // Initial: erstes Beispiel zeichnen
+  sbZeichne(SB_VORGABE[0]);
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  WÜRFEL-DEMOS für die drei Rechengesetze
+ *  Zufällige a, b, c ∈ {−10..10} \ {0}, zeigt das Gesetz konkret.
+ * ════════════════════════════════════════════════════════════════ */
+
+function rndInt(lo, hi, ausschluss) {
+  let v;
+  do { v = lo + Math.floor(Math.random() * (hi - lo + 1)); }
+  while (ausschluss && ausschluss.includes(v));
+  return v;
+}
+
+/* Formatiere Zahl: negative in Klammern, wenn sie als zweiter Operand stehen */
+function fmtOp(z) { return z < 0 ? `(${z})` : String(z); }
+
+function wuerfelKommutativ() {
+  const a = rndInt(-10, 10, [0]);
+  const b = rndInt(-10, 10, [0]);
+  const c = rndInt(-9, 9, [0]);
+  const d = rndInt(-9, 9, [0]);
+  const sum1 = a + b, sum2 = b + a;
+  const prod1 = c * d, prod2 = d * c;
+  document.getElementById('wb-k-bsp').innerHTML = `
+    <div class="wb-grid">
+      <div class="wb-zelle">
+        <div class="wb-label">Addition</div>
+        <div class="wb-formel">\\(${a} + ${fmtOp(b)} = ${sum1}\\) \\(\\quad\\) \\(${b} + ${fmtOp(a)} = ${sum2}\\)</div>
+      </div>
+      <div class="wb-zelle">
+        <div class="wb-label">Multiplikation</div>
+        <div class="wb-formel">\\(${c} \\cdot ${fmtOp(d)} = ${prod1}\\) \\(\\quad\\) \\(${d} \\cdot ${fmtOp(c)} = ${prod2}\\)</div>
+      </div>
+    </div>
+  `;
+  if (window.MathJax) MathJax.typesetPromise([document.getElementById('wb-k-bsp')]);
+}
+
+function wuerfelAssoziativ() {
+  const a = rndInt(-10, 10, [0]);
+  const b = rndInt(-10, 10, [0]);
+  const c = rndInt(-10, 10, [0]);
+  const d = rndInt(-5, 5, [0]);
+  const e = rndInt(-5, 5, [0]);
+  const f = rndInt(-5, 5, [0]);
+  const ab_c = (a + b) + c, a_bc = a + (b + c);
+  const def_l = (d * e) * f, def_r = d * (e * f);
+  document.getElementById('wb-a-bsp').innerHTML = `
+    <div class="wb-grid">
+      <div class="wb-zelle">
+        <div class="wb-label">Addition</div>
+        <div class="wb-formel">\\((${a} + ${fmtOp(b)}) + ${fmtOp(c)} = ${ab_c}\\) \\(\\quad\\) \\(${a} + (${b} + ${fmtOp(c)}) = ${a_bc}\\)</div>
+      </div>
+      <div class="wb-zelle">
+        <div class="wb-label">Multiplikation</div>
+        <div class="wb-formel">\\((${d} \\cdot ${fmtOp(e)}) \\cdot ${fmtOp(f)} = ${def_l}\\) \\(\\quad\\) \\(${d} \\cdot (${e} \\cdot ${fmtOp(f)}) = ${def_r}\\)</div>
+      </div>
+    </div>
+  `;
+  if (window.MathJax) MathJax.typesetPromise([document.getElementById('wb-a-bsp')]);
+}
+
+function wuerfelDistributiv() {
+  const a = rndInt(-9, 9, [0]);
+  const b = rndInt(-9, 9, [0]);
+  const c = rndInt(-9, 9, [0]);
+  const links = a * (b + c);
+  const rechts = a * b + a * c;
+  // Distributiv vereint Produkt und Summe: links die Produkt-Form, rechts die Summen-Form (genau wie im Gesetz a·(b+c) = ab+ac).
+  document.getElementById('wb-d-bsp').innerHTML = `
+    <div class="wb-grid">
+      <div class="wb-zelle">
+        <div class="wb-label">Produkt-Form (links)</div>
+        <div class="wb-formel">\\(${a} \\cdot (${b} + ${fmtOp(c)}) = ${a} \\cdot ${b + c} = ${links}\\)</div>
+      </div>
+      <div class="wb-zelle">
+        <div class="wb-label">Summen-Form (rechts)</div>
+        <div class="wb-formel">\\(${a} \\cdot ${fmtOp(b)} + ${a} \\cdot ${fmtOp(c)} = ${a*b} + ${fmtOp(a*c)} = ${rechts}\\)</div>
+      </div>
+    </div>
+  `;
+  if (window.MathJax) MathJax.typesetPromise([document.getElementById('wb-d-bsp')]);
+}
+
+function wuerfelInit() {
+  wuerfelKommutativ();
+  wuerfelAssoziativ();
+  wuerfelDistributiv();
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  EINSTIEG · Drei Terme, ein Wert
+ *  Drei algebraisch äquivalente Terme nebeneinander, mit Live-
+ *  Auswertung in einer Schritt-für-Schritt-Form. Der Lerner schiebt
+ *  x und sieht, dass alle drei Terme immer denselben Wert liefern.
+ * ════════════════════════════════════════════════════════════════ */
+function drawHauptop() {
+  const sld = document.getElementById('sld-hauptopX');
+  if (!sld) return;
+  const x = +sld.value;
+  document.getElementById('lbl-hauptopX').textContent = x;
+
+  const { ctx, W, H } = initCanvas('cv-hauptop', 320);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  // Drei Terme, drei Spalten
+  const colW = W / 3;
+  const terme = [
+    { titel: 'Form 1', formel: '4·x + 3·x + 5', berechnung: `4·${x} + 3·${x} + 5`, schritte: [`${4*x} + ${3*x} + 5`, `${4*x + 3*x + 5}`] },
+    { titel: 'Form 2', formel: '(4+3)·x + 5', berechnung: `(4+3)·${x} + 5`,        schritte: [`7·${x} + 5`,            `${7*x} + 5`, `${7*x + 5}`] },
+    { titel: 'Form 3', formel: '7·x + 5',     berechnung: `7·${x} + 5`,            schritte: [`${7*x} + 5`,            `${7*x + 5}`] },
+  ];
+  const ergebnis = 7 * x + 5;
+
+  terme.forEach((t, i) => {
+    const cx = colW * i + colW / 2;
+    let cy = 30;
+
+    // Spaltentitel
+    ctx.fillStyle = '#5a5040';
+    ctx.font = 'bold 11px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(t.titel.toUpperCase(), cx, cy);
+    cy += 22;
+
+    // Formel-Box
+    ctx.fillStyle = '#dceaf8';
+    ctx.strokeStyle = '#1a4f8a';
+    ctx.lineWidth = 1.5;
+    const boxW = colW - 30;
+    ctx.fillRect(cx - boxW/2, cy - 14, boxW, 26);
+    ctx.strokeRect(cx - boxW/2, cy - 14, boxW, 26);
+    ctx.fillStyle = '#1a4f8a';
+    ctx.font = 'bold 14px monospace';
+    ctx.fillText(t.formel, cx, cy + 4);
+    cy += 35;
+
+    // Pfeil nach unten
+    ctx.strokeStyle = '#a89b85';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - 14);
+    ctx.lineTo(cx, cy);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx - 4, cy - 4);
+    ctx.lineTo(cx, cy);
+    ctx.lineTo(cx + 4, cy - 4);
+    ctx.stroke();
+    cy += 8;
+
+    // Einsetzen
+    ctx.fillStyle = '#3a342a';
+    ctx.font = '12px monospace';
+    ctx.fillText(`x = ${x} einsetzen:`, cx, cy);
+    cy += 18;
+    ctx.fillStyle = '#1c1a17';
+    ctx.font = '13px monospace';
+    ctx.fillText('= ' + t.berechnung, cx, cy);
+    cy += 18;
+
+    // Schritte
+    t.schritte.forEach(s => {
+      ctx.fillStyle = '#1c1a17';
+      ctx.fillText('= ' + s, cx, cy);
+      cy += 18;
+    });
+
+    // Ergebnis-Highlight (alle gleich, deshalb hervorgehoben grün)
+    cy += 4;
+    ctx.fillStyle = '#d4f0d4';
+    ctx.strokeStyle = '#2d9d5e';
+    ctx.lineWidth = 2;
+    ctx.fillRect(cx - 36, cy - 18, 72, 28);
+    ctx.strokeRect(cx - 36, cy - 18, 72, 28);
+    ctx.fillStyle = '#1c1a17';
+    ctx.font = 'bold 16px monospace';
+    ctx.fillText(ergebnis, cx, cy);
+
+    // Trennlinie zwischen Spalten
+    if (i < 2) {
+      ctx.strokeStyle = '#d4cab5';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(colW * (i + 1), 20);
+      ctx.lineTo(colW * (i + 1), H - 20);
+      ctx.stroke();
+    }
+  });
+
+  // Schluss-Streifen unten: «alle drei gleich»
+  ctx.fillStyle = '#2d9d5e';
+  ctx.font = 'bold 12px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(`✓ Alle drei Terme liefern denselben Wert: ${ergebnis}`, W / 2, H - 12);
+
+  // Legende aktualisieren
+  document.getElementById('leg-hauptopT1').textContent = ergebnis;
+  document.getElementById('leg-hauptopT2').textContent = ergebnis;
+  document.getElementById('leg-hauptopT3').textContent = ergebnis;
+
+  // Erklärung
+  let erkl;
+  if (x === 0) {
+    erkl = `Bei \\(x = 0\\): nur die 5 Fr. Verpackung. Alle Terme liefern <strong>5</strong>.`;
+  } else {
+    erkl = `Bei \\(x = ${x}\\): Anna zahlt <strong>${ergebnis} Fr.</strong> für ${x} Schrauben-, ${x} Dübel-Päckchen und Verpackung. Die Hauptoperation ist eine <em>Addition</em> — Form 3 zeigt das direkt.`;
+  }
+  const erklEl = document.getElementById('erkl-hauptop');
+  erklEl.innerHTML = erkl;
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([erklEl]);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const sld = document.getElementById('sld-hauptopX');
+  if (sld) sld.addEventListener('input', drawHauptop);
 });
 </script>
 </body>

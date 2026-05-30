@@ -18,7 +18,7 @@ Das Projekt entsteht schrittweise. Fertige Teilgebiete sind sofort verfügbar; w
 ## Ziele
 
 - Den gesamten TALS-Mathematikstoff **strukturiert, verständlich und interaktiv** aufbereiten
-- Die **Lehrplanstruktur des RLP 2030** (SBFI, 13. Juni 2025) **1:1 abbilden** — jedes der 31 Teilgebiete hat eine eigene Seite
+- Die **Lehrplanstruktur des RLP 2030** (SBFI, 13. Juni 2025) **1:1 abbilden** — jedes der 31 Teilgebiete hat eine eigene Seite (umfangreiche Teilgebiete werden per Sub-Split auf mehrere Seiten aufgeteilt, siehe STYLEGUIDE §4.1; aktuell betrifft das Teilgebiet 2.2 → 2.2a + 2.2b und Teilgebiet 5.2 → 5.2a + 5.2b + 5.2c + 5.2d)
 - **Notation und Symbolik** konsistent nach *Formeln, Tabellen, Begriffe* (Orell Füssli Lehrmittel) halten
 - Formeln in **echtem LaTeX** darstellen (via MathJax), wie aus gedruckten Lehrmitteln gewohnt
 - Ein **didaktisches Design-System** verwenden, das auf jeder Seite gleich funktioniert:
@@ -35,28 +35,33 @@ Das Projekt entsteht schrittweise. Fertige Teilgebiete sind sofort verfügbar; w
 
 ## Inhalt — 31 Teilgebiete in 9 Lerngebieten
 
-### Grundlagenfach — RLP 2030, Kap. 6.4.4.1 Gruppe 1 (200 Lektionen, 18 Teilgebiete)
+### Grundlagenfach — RLP 2030, Kap. 6.4.4.1 Gruppe 1 (200 Lektionen, 18 Teilgebiete + 1 Praxisbeispiel)
 
 | Nr. | Teilgebiet | Status |
 |-----|------------|--------|
-| 1.1 | Grundlagen | 🔜 geplant |
-| 1.2 | Zahlen und zugehörige Grundoperationen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 1.3 | Grundoperationen mit algebraischen Termen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 1.4 | Zehnerpotenzen und Quadratwurzeln  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 2.1 | Grundlagen | 🔜 geplant |
-| 2.2 | Lineare und quadratische Gleichungen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 2.3 | Lineare Gleichungssysteme  *(auch ohne Hilfsmittel)* | 🔜 geplant |
+| 1.1 | Grundlagen | ✅ verfügbar |
+| 1.2 | Zahlen und zugehörige Grundoperationen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 1.3 | Grundoperationen mit algebraischen Termen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 1.4 | Zehnerpotenzen und Quadratwurzeln  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 2.1 | Grundlagen | ✅ verfügbar |
+| 2.2a | Lineare Gleichungen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 2.2b | Quadratische Gleichungen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 2.3 | Lineare Gleichungssysteme  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
 | 3.1 | Grundlagen | ✅ verfügbar |
 | 3.2 | Lineare Funktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
 | 3.3 | Quadratische Funktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
-| 4.1 | Grundlagen | 🔜 geplant |
-| 4.2 | Diagramme | 🔜 geplant |
-| 4.3 | Masszahlen | 🔜 geplant |
-| 5.1 | Grundlagen | 🔜 geplant |
-| 5.2 | Planimetrie | 🔜 geplant |
-| 5.3 | Trigonometrische Berechnungen | 🔜 geplant |
-| 5.4 | Einheitskreis  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 5.5 | Trigonometrische Gleichungen | 🔜 geplant |
+| 4.0 | Praxisbeispiel BM2-Klasse  *(über RLP hinaus — Datenerhebung als Anwendungsfall)* | ✅ verfügbar |
+| 4.1 | Grundlagen | ✅ verfügbar |
+| 4.2 | Diagramme | ✅ verfügbar |
+| 4.3 | Masszahlen | ✅ verfügbar |
+| 5.1 | Grundlagen | ✅ verfügbar |
+| 5.2a | Dreiecke | ✅ verfügbar |
+| 5.2b | Vierecke | ✅ verfügbar |
+| 5.2c | Kreis und Kreisteile | ✅ verfügbar |
+| 5.2d | Zentrische Streckung und Ähnlichkeit | ✅ verfügbar |
+| 5.3 | Trigonometrische Berechnungen | ✅ verfügbar |
+| 5.4 | Einheitskreis  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 5.5 | Trigonometrische Gleichungen | ✅ verfügbar |
 
 ### Schwerpunktfach — RLP 2030, Kap. 7.4.4 (200 Lektionen, 13 Teilgebiete)
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Einheitskreis — TALS Mathematik</title>
+<title>5.4 Einheitskreis — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
@@ -19,7 +19,152 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Konvention von g5-3/g3-3) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:130px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:54px; text-align:right; }
+
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:10px 16px; text-align:center; margin:8px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1rem; color:var(--tinte); font-weight:700; }
+
+/* ── Aufgaben-Block ── */
+/* ── Themenspezifische Layouts für 5.4 ── */
+/* Live-Werte am Einheitskreis */
+.ek-live-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:10px; margin-top:10px; }
+.ek-live-cell { background:var(--papier-2); border:1px solid var(--linie); border-radius:8px; padding:8px 10px; text-align:center; }
+.ek-live-cell .elc-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:3px; }
+.ek-live-cell .elc-val { font-family:var(--mono); font-size:0.95rem; font-weight:700; color:var(--blau); }
+.ek-live-cell.neg .elc-val { color:var(--rot); }
+.ek-live-cell.quad { background:var(--blau-hell); border-color:var(--blau-rand); }
+.ek-live-cell.quad .elc-val { color:var(--blau); font-size:1.05rem; }
+
+/* Quadranten-Tabelle (Vorzeichen) */
+.quad-tab { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.9rem; }
+.quad-tab th, .quad-tab td { border:1px solid var(--linie); padding:8px 10px; text-align:center; }
+.quad-tab th { background:var(--blau-hell); color:var(--blau); font-family:var(--serif); font-weight:700; }
+.quad-tab td:first-child { font-family:var(--mono); font-weight:700; background:var(--papier-2); }
+.quad-tab td { font-family:var(--mono); }
+.quad-tab td.pos { color:var(--gruen); font-weight:700; }
+.quad-tab td.neg { color:var(--rot); font-weight:700; }
+
+/* Spezialwinkel-Tabelle (erweitert) */
+.spez-tab { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.85rem; }
+.spez-tab th, .spez-tab td { border:1px solid var(--linie); padding:6px 8px; text-align:center; }
+.spez-tab th { background:var(--blau-hell); color:var(--blau); font-family:var(--serif); font-weight:700; }
+.spez-tab td:first-child { font-family:var(--mono); font-weight:700; background:var(--papier-2); }
+.spez-tab td { font-family:var(--mono); }
+
+/* Tabs (für Beziehungen-Widget) */
+.tabs-row { display:flex; gap:6px; margin:0 0 12px 0; flex-wrap:wrap; }
+.tab-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:6px 14px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.tab-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.tab-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* Beziehungs-Karten */
+.bez-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px; margin:14px 0; }
+.bez-box { background:var(--weiss); border:1.5px solid var(--linie); border-radius:10px; padding:14px; }
+.bez-box h4 { color:var(--blau); font-family:var(--serif); font-size:0.95rem; margin-bottom:6px; }
+.bez-box .bez-formel { background:var(--papier-2); border-radius:6px; padding:8px 10px; margin:6px 0; font-family:var(--mono); font-size:0.88rem; text-align:center; }
+.bez-box .bez-bsp { font-size:0.78rem; color:var(--tinte-2); font-style:italic; margin-top:6px; }
+
+/* Hero-SVG */
+.hero-svg { display:flex; justify-content:center; margin:14px 0; }
+.hero-svg svg { width:100%; max-width:520px; height:auto; }
+
+/* Quadranten-Beschriftung im SVG */
+.q-marker { font-family:var(--mono); font-size:11px; font-weight:700; }
+
+/* ════════════════════════════════════════════════════════════
+ * Anim-Karten (Standard wie g5-2a/b/c/d, g5-3)
+ * ════════════════════════════════════════════════════════════ */
+.anim {
+  background: var(--papier);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 14px 0 22px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+}
+.anim-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 820px) { .anim-layout { grid-template-columns: 1fr; } }
+.anim canvas {
+  width: 100%; height: auto;
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  display: block;
+  touch-action: none;
+}
+.anim .bedien { display: flex; flex-direction: column; gap: 12px; }
+.anim .regler { display: flex; flex-direction: column; gap: 3px; }
+.anim .regler-label {
+  display: flex; justify-content: space-between;
+  font-size: 0.88rem; color: var(--tinte-2);
+}
+.anim .regler-label .wert { font-family: var(--mono); color: var(--blau); font-weight: 500; }
+.anim input[type="range"] { width: 100%; accent-color: var(--blau); }
+.anim .feld-titel {
+  font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--tinte-2); font-weight: 600; margin-bottom: 2px;
+}
+.anim .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.anim .chip {
+  background: var(--papier-2); border: 1px solid var(--linie);
+  color: var(--tinte-2); padding: 5px 9px; border-radius: 14px;
+  font-size: 0.82rem; cursor: pointer; font-family: var(--mono);
+  transition: all 0.12s;
+}
+.anim .chip:hover { border-color: var(--blau-rand); color: var(--blau); }
+.anim .chip.aktiv { background: var(--blau); border-color: var(--blau); color: white; }
+.anim .toggle-zeile {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 0.88rem; color: var(--tinte-2);
+  cursor: pointer; user-select: none;
+}
+.anim .toggle-zeile input[type="checkbox"] {
+  width: 15px; height: 15px; accent-color: var(--blau); cursor: pointer;
+}
+.anim .legende {
+  background: var(--papier-2); border: 1px solid var(--linie);
+  border-radius: 6px; padding: 8px 11px; font-size: 0.86rem;
+}
+.anim .legende-titel {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--tinte-2); font-weight: 600; margin-bottom: 5px;
+}
+.anim .legende-zeile {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.85rem; padding: 1px 0;
+}
+.anim .legende-zeile .lab { color: var(--tinte); }
+.anim .legende-zeile .val { color: var(--blau); font-weight: 500; }
+.anim .formel {
+  background: var(--blau-hell); border: 1px solid var(--blau-rand);
+  border-radius: 6px; padding: 8px 12px; font-size: 0.93rem;
+}
+.anim .erklaerung {
+  background: var(--papier-2); border-left: 3px solid var(--blau);
+  padding: 7px 11px; font-size: 0.84rem; color: var(--tinte-2);
+  border-radius: 0 4px 4px 0; min-height: 36px;
+}
+.anim .anim-titel {
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--blau); font-weight: 700; margin-bottom: 8px;
+}
 </style>
 </head>
 <body>
@@ -34,58 +179,681 @@ MathJax = {
 </div>
 
 <!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">In Kapitel 5.3 haben wir <strong>Sinus, Cosinus und Tangens</strong> als Seitenverhältnisse im rechtwinkligen Dreieck kennengelernt — gültig nur für spitze Winkel zwischen \(0°\) und \(90°\). Was aber, wenn ein Winkel grösser als \(90°\) ist? Oder gar negativ? Hier hilft der <strong>Einheitskreis</strong>: Er erweitert die trigonometrischen Funktionen auf alle Winkel und legt damit das Fundament für die Behandlung als <em>Funktionen</em> in Kapitel 5.5.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 5.4</div>
   <ul>
-    <li>die Definition von Sinus, Kosinus und Tangens am Einheitskreis sowie deren Umkehroperationen erläutern</li>
+    <li>die Definition von Sinus, Cosinus und Tangens am Einheitskreis sowie deren Umkehroperationen erläutern</li>
     <li>für ausgewählte Winkel entsprechende Funktionswerte am Einheitskreis bestimmen und visualisieren</li>
     <li>elementare trigonometrische Beziehungen erläutern (trigonometrischer Pythagoras, Periodizität, Symmetrien, \(\sin(\frac{\pi}{2}-\varphi) = \cos(\varphi)\) usw.) <span class="ohm">auch ohne Hilfsmittel</span></li>
   </ul>
 </div>
 
-
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — ein Schiff fährt um die Boje</h2>
 
+<p>Ein Segelschiff umfährt eine Hafenboje auf einer kreisförmigen Bahn mit Radius einer Seemeile. Die Boje liegt im Zentrum, das Schiff im Abstand 1 SM. Es startet östlich der Boje und fährt im Gegenuhrzeigersinn. Während der Fahrt ändern sich zwei Werte ständig: wie weit das Schiff <strong>nach Norden</strong> versetzt ist, und wie weit <strong>nach Osten</strong>.</p>
 
-<!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<p>Schieb den Winkel-Regler und schau, was passiert. Zwei Stellen sind besonders interessant: Bei einem Drittel der Runde (120°) ist das Schiff <em>mehr nach Norden</em> als nach Süden, aber <em>westlich</em> der Boje. Bei drei Vierteln (270°) ist es <em>direkt südlich</em>, der Ost-West-Versatz ist null.</p>
 
+<div class="anim">
+  <div class="anim-titel">Schiff um Boje — Ost- und Nord-Versatz</div>
+  <div class="anim-layout">
+    <canvas id="cv-schiff" width="560" height="420"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Position auf der Bahn</span>
+          <span class="wert" id="lbl-schiffPhi">45°</span>
+        </div>
+        <input type="range" id="sld-schiffPhi" min="0" max="360" step="5" value="45">
+      </div>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+      <div class="kn-row" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px">
+        <button class="kn-quad" data-phi="45">Q I (45°)</button>
+        <button class="kn-quad" data-phi="120">Q II (120°)</button>
+        <button class="kn-quad" data-phi="210">Q III (210°)</button>
+        <button class="kn-quad" data-phi="300">Q IV (300°)</button>
+      </div>
 
+      <div class="legende">
+        <div class="legende-titel">Schiffs-Position</div>
+        <div class="legende-zeile"><span class="lab">Ost-Versatz</span><span class="val" id="leg-schiffX">+0.707</span></div>
+        <div class="legende-zeile"><span class="lab">Nord-Versatz</span><span class="val" id="leg-schiffY">+0.707</span></div>
+      </div>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+      <div class="erklaerung" id="erkl-schiff">
+        In Quadrant I sind <em>beide</em> Versätze positiv: Schiff ist nordöstlich.
+      </div>
+    </div>
+  </div>
+</div>
 
+<p>Bei Winkeln zwischen 0° und 90° passt die alte Definition aus 5.3 (Sinus = Gegenkathete/Hypotenuse) — das Schiff bildet mit Ost-Achse und Verbindungslinie ein rechtwinkliges Dreieck. Aber was bedeutet \(\sin(120°)\)? In diesem Bereich gibt es kein rechtwinkliges Dreieck mit Innenwinkel 120°. Die Animation zeigt die Antwort schon: <strong>die Koordinaten des Schiffs</strong> sind die Werte, die der Taschenrechner ausspuckt — egal wie gross oder klein der Winkel ist.</p>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<!-- ══ 3. DEFINITION SIN UND COS AM EINHEITSKREIS ══ -->
+<h2 id="definition">Definition am Einheitskreis</h2>
 
+<p>Bisher (5.3) sind \(\sin\), \(\cos\) und \(\tan\) als Seitenverhältnisse im rechtwinkligen Dreieck definiert — also nur für spitze Winkel \(0° &lt; \alpha &lt; 90°\). Am <strong>Einheitskreis</strong> dehnen wir die Definition auf alle Winkel \(\varphi\) aus, auch auf stumpfe, negative oder solche grösser als \(360°\).</p>
 
-<!-- ══ 7. AUFGABEN ══ -->
+<div class="anim">
+  <div class="anim-titel">Anim 1 · Sinus und Cosinus am Einheitskreis</div>
+  <div class="anim-layout">
+    <canvas id="cv-sincos" width="560" height="500"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Winkel \(\varphi\)</span>
+          <span class="wert" id="lbl-ek1Phi">60°</span>
+        </div>
+        <input type="range" id="sld-ek1Phi" min="0" max="360" step="1" value="60">
+      </div>
+
+      <div>
+        <div class="feld-titel">Spezialwinkel</div>
+        <div class="chips" id="ek1-spez">
+          <button class="chip" data-w="0">0°</button>
+          <button class="chip" data-w="30">30°</button>
+          <button class="chip" data-w="45">45°</button>
+          <button class="chip" data-w="60">60°</button>
+          <button class="chip" data-w="90">90°</button>
+          <button class="chip" data-w="120">120°</button>
+          <button class="chip" data-w="135">135°</button>
+          <button class="chip" data-w="150">150°</button>
+          <button class="chip" data-w="180">180°</button>
+          <button class="chip" data-w="210">210°</button>
+          <button class="chip" data-w="225">225°</button>
+          <button class="chip" data-w="240">240°</button>
+          <button class="chip" data-w="270">270°</button>
+          <button class="chip" data-w="300">300°</button>
+          <button class="chip" data-w="315">315°</button>
+          <button class="chip" data-w="330">330°</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="feld-titel">Winkel-Einheit</div>
+        <div class="chips" id="ek1-einheit">
+          <button class="chip aktiv" data-e="deg">°</button>
+          <button class="chip" data-e="rad">rad (× π)</button>
+        </div>
+      </div>
+
+      <div class="formel">
+        \(P = (\cos\varphi, \sin\varphi)\) auf Einheitskreis (\(r = 1\))
+      </div>
+
+      <div class="legende">
+        <div class="legende-titel">Werte</div>
+        <div class="legende-zeile"><span class="lab">\(\varphi\)</span><span class="val" id="leg-ek1-phi">60°</span></div>
+        <div class="legende-zeile"><span class="lab">\(\cos\varphi = x_P\)</span><span class="val" id="leg-ek1-cos">0.500</span></div>
+        <div class="legende-zeile"><span class="lab">\(\sin\varphi = y_P\)</span><span class="val" id="leg-ek1-sin">0.866</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-ek1">
+        Der Punkt \(P\) wandert auf dem Kreis. Seine \(x\)-Koordinate ist \(\cos\varphi\), seine \(y\)-Koordinate ist \(\sin\varphi\). Für \(0° &lt; \varphi &lt; 90°\) stimmt das mit der Definition am rechtwinkligen Dreieck überein.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Sinus und Cosinus am Einheitskreis</div>
+  <p>Am Einheitskreis gilt für einen beliebigen Punkt \(P\) auf der Kreislinie und den zugehörigen <strong>Zentriwinkel</strong> \(\varphi\):</p>
+  <p>Die \(y\)-Koordinate des Punktes \(P\) ist der <em>Sinuswert</em> von \(\varphi\):</p>
+  <p>\[y_P = \sin\varphi\]</p>
+  <p>Die \(x\)-Koordinate des Punktes \(P\) ist der <em>Cosinuswert</em> von \(\varphi\):</p>
+  <p>\[x_P = \cos\varphi\]</p>
+</div>
+
+<!-- ══ 4. TANGENS AM EINHEITSKREIS ══ -->
+<h2 id="tangens">Tangens am Einheitskreis</h2>
+
+<p>Den Tangens visualisiert man am Einheitskreis als Strecke auf der <strong>rechten Tangente</strong> (die senkrechte Linie bei \(x = 1\)). Der Strahl von \(O\) durch \(P\) schneidet diese Tangente im Punkt \(S\); die \(y\)-Koordinate von \(S\) ist \(\tan\varphi\).</p>
+
+<div class="block block-tipp" style="margin:6px 0">
+  <div class="block-titel">💡 Wenn \(P\) in Q&nbsp;II oder Q&nbsp;III liegt</div>
+  <p>Liegt \(P\) im 1. oder 4. Quadranten (also \(\cos\varphi > 0\)), so trifft der vorwärtige Strahl
+  \(OP\) die rechte Tangente direkt. Liegt \(P\) jedoch im 2. oder 3. Quadranten (\(\cos\varphi < 0\)),
+  zeigt \(OP\) <em>weg</em> von der rechten Tangente — man verwendet dann die <strong>rückwärtige
+  Verlängerung</strong> des Strahls \(OP\) durch \(O\) hindurch. Diese Verlängerung trifft die rechte
+  Tangente, und die \(y\)-Koordinate dieses Schnittpunkts ist erneut \(\tan\varphi\). Die Konstruktion
+  erklärt das Vorzeichen: In Q&nbsp;II ist \(\sin\varphi > 0\), \(\cos\varphi < 0\), also \(\tan\varphi < 0\)
+  — und tatsächlich liegt der Schnittpunkt der rückwärtigen Verlängerung mit \(x = 1\) <em>unter</em>
+  der x-Achse. Analog in Q&nbsp;III: \(\sin\varphi < 0\), \(\cos\varphi < 0\), \(\tan\varphi > 0\),
+  Schnittpunkt <em>über</em> der x-Achse.</p>
+</div>
+
+<div class="anim">
+  <div class="anim-titel">Anim 2 · Tangens am Einheitskreis</div>
+  <div class="anim-layout">
+    <canvas id="cv-tan" width="560" height="500"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Winkel \(\varphi\)</span>
+          <span class="wert" id="lbl-ek2Phi">60°</span>
+        </div>
+        <input type="range" id="sld-ek2Phi" min="0" max="360" step="1" value="60">
+      </div>
+
+      <div>
+        <div class="feld-titel">Spezialwinkel</div>
+        <div class="chips" id="ek2-spez">
+          <button class="chip" data-w="0">0°</button>
+          <button class="chip" data-w="30">30°</button>
+          <button class="chip" data-w="45">45°</button>
+          <button class="chip" data-w="60">60°</button>
+          <button class="chip" data-w="120">120°</button>
+          <button class="chip" data-w="135">135°</button>
+          <button class="chip" data-w="150">150°</button>
+          <button class="chip" data-w="180">180°</button>
+          <button class="chip" data-w="210">210°</button>
+          <button class="chip" data-w="225">225°</button>
+          <button class="chip" data-w="240">240°</button>
+          <button class="chip" data-w="300">300°</button>
+          <button class="chip" data-w="315">315°</button>
+          <button class="chip" data-w="330">330°</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="feld-titel">Winkel-Einheit</div>
+        <div class="chips" id="ek2-einheit">
+          <button class="chip aktiv" data-e="deg">°</button>
+          <button class="chip" data-e="rad">rad (× π)</button>
+        </div>
+      </div>
+
+      <div class="formel">
+        \(y_S = \tan\varphi\) (Länge des Tangentenabschnitts \(\overline{RS}\))
+      </div>
+
+      <div class="legende">
+        <div class="legende-titel">Werte</div>
+        <div class="legende-zeile"><span class="lab">\(\varphi\)</span><span class="val" id="leg-ek2-phi">60°</span></div>
+        <div class="legende-zeile"><span class="lab">\(\tan\varphi\)</span><span class="val" id="leg-ek2-tan">1.732</span></div>
+        <div class="legende-zeile"><span class="lab">\(\sin\varphi/\cos\varphi\)</span><span class="val" id="leg-ek2-quot">1.732</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-ek2">
+        Der Strahl \(OP\) verlängert wird bis zur rechten Tangente bei \(x = 1\); der Schnittpunkt ist \(S = (1, \tan\varphi)\). Bei \(\varphi = 90°\) oder \(270°\) ist der Strahl parallel zur Tangente — \(\tan\varphi\) ist <strong>nicht definiert</strong>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Tangens am Einheitskreis</div>
+  <p>Am Einheitskreis gilt für einen beliebigen Punkt \(P\) auf der Kreislinie und den zugehörigen Zentriwinkel \(\varphi\): die \(y\)-Koordinate des Schnittpunkts \(S\) des Strahls \(OP\) mit der rechten Tangente (\(x = 1\)) ist der <em>Tangenswert</em> von \(\varphi\):</p>
+  <p>\[y_S = \tan\varphi\]</p>
+  <p>Dies entspricht der Länge des Tangentenabschnitts \(\overline{RS}\) auf der rechten Tangente.</p>
+</div>
+
+<!-- ══ 5. BEZIEHUNGEN ZWISCHEN DEN WINKELFUNKTIONEN ══ -->
+<h2 id="beziehungen">Beziehungen zwischen den Winkelfunktionen</h2>
+
+<p>Aus der <strong>Ähnlichkeit</strong> der beiden Dreiecke \(\triangle OQP\) und \(\triangle ORS\) folgt, dass entsprechende Seitenverhältnisse gleich sind:</p>
+<p>\[\frac{\tan\varphi}{1} = \frac{\sin\varphi}{\cos\varphi}\]</p>
+<p>Wenden wir den <strong>Satz des Pythagoras</strong> am rechtwinkligen Dreieck \(\triangle OQP\) an, so erhalten wir:</p>
+<p>\[\overline{OQ}^2 + \overline{PQ}^2 = \overline{OP}^2 \quad\Rightarrow\quad \cos^2\varphi + \sin^2\varphi = 1\]</p>
+
+<div class="anim">
+  <div class="anim-titel">Anim 3 · Ähnlichkeit und Pythagoras am Einheitskreis <a class="quer" href="g5-2a-dreiecke.html#pythagoras">↩ 5.2a</a></div>
+  <div class="anim-layout">
+    <canvas id="cv-bez" width="560" height="500"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Winkel \(\varphi\)</span>
+          <span class="wert" id="lbl-bezPhi">55°</span>
+        </div>
+        <input type="range" id="sld-bezPhi" min="5" max="85" step="1" value="55">
+      </div>
+
+      <div>
+        <div class="feld-titel">Welche Beziehung hervorheben?</div>
+        <div class="chips" id="bez-chips">
+          <button class="chip aktiv" data-bez="aehnl">Ähnlichkeit (tan = sin/cos)</button>
+          <button class="chip" data-bez="pyth">Pythagoras (sin² + cos² = 1)</button>
+        </div>
+      </div>
+
+      <div class="formel" id="formel-bez">
+        \(\tan\varphi = \dfrac{\sin\varphi}{\cos\varphi}\)
+      </div>
+
+      <div class="legende">
+        <div class="legende-titel">Werte</div>
+        <div class="legende-zeile"><span class="lab">\(\sin\varphi\)</span><span class="val" id="leg-bez-sin">0.819</span></div>
+        <div class="legende-zeile"><span class="lab">\(\cos\varphi\)</span><span class="val" id="leg-bez-cos">0.574</span></div>
+        <div class="legende-zeile"><span class="lab">\(\tan\varphi\)</span><span class="val" id="leg-bez-tan">1.428</span></div>
+        <div class="legende-zeile"><span class="lab">\(\sin\varphi/\cos\varphi\)</span><span class="val" id="leg-bez-quot">1.428</span></div>
+        <div class="legende-zeile"><span class="lab">\(\sin^2\varphi + \cos^2\varphi\)</span><span class="val" id="leg-bez-pyth">1.000</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-bez">
+        <strong>Ähnlichkeit:</strong> Die Dreiecke \(\triangle OQP\) (klein, im Inneren) und \(\triangle ORS\) (gross, bis zur Tangente) sind ähnlich — sie haben beide den Winkel \(\varphi\) bei \(O\) und beide einen rechten Winkel. Daher: \(\tan\varphi / 1 = \sin\varphi / \cos\varphi\).
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Beziehungen zwischen den Winkelfunktionen</div>
+  <p><em>Ähnlichkeit</em> am Einheitskreis:</p>
+  <p>\[\tan\varphi = \frac{\sin\varphi}{\cos\varphi}\]</p>
+  <p><em>Pythagoras</em> am Einheitskreis (der „trigonometrische Pythagoras"):</p>
+  <p>\[\sin^2\varphi + \cos^2\varphi = 1\]</p>
+</div>
+
+<!-- ══ 6. UMRECHNUNGSTABELLE GEGEBEN/GESUCHT ══ -->
+<h3 id="umrechnung">Umrechnung zwischen den Winkelfunktionen <a class="quer" href="g5-3-trigonometrische-berechnungen.html">↩ 5.3</a></h3>
+
+<p>Mit den beiden Beziehungen lassen sich aus jedem der drei Werte die anderen beiden berechnen — bis auf das Vorzeichen, das von Quadrant und Funktion abhängt:</p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Umrechnungs-Tabelle (im 1. Quadranten, sonst Vorzeichen beachten)</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead>
+      <tr><th style="text-align:right">gesucht ↓ \ gegeben →</th><th>\(\sin\varphi\)</th><th>\(\cos\varphi\)</th><th>\(\tan\varphi\)</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>\(\sin\varphi\)</strong></td>
+        <td>\(\sin\varphi\)</td>
+        <td>\(\sqrt{1 - \cos^2\varphi}\)</td>
+        <td>\(\dfrac{\tan\varphi}{\sqrt{1 + \tan^2\varphi}}\)</td>
+      </tr>
+      <tr>
+        <td><strong>\(\cos\varphi\)</strong></td>
+        <td>\(\sqrt{1 - \sin^2\varphi}\)</td>
+        <td>\(\cos\varphi\)</td>
+        <td>\(\dfrac{1}{\sqrt{1 + \tan^2\varphi}}\)</td>
+      </tr>
+      <tr>
+        <td><strong>\(\tan\varphi\)</strong></td>
+        <td>\(\dfrac{\sin\varphi}{\sqrt{1 - \sin^2\varphi}}\)</td>
+        <td>\(\dfrac{\sqrt{1 - \cos^2\varphi}}{\cos\varphi}\)</td>
+        <td>\(\tan\varphi\)</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Alle Formeln folgen aus \(\sin^2\varphi + \cos^2\varphi = 1\) und \(\tan\varphi = \sin\varphi/\cos\varphi\). Vorzeichen je nach Quadrant separat festlegen (siehe nächste Tabelle).</p>
+</div>
+
+<!-- ══ 7. VORZEICHEN IN DEN QUADRANTEN ══ -->
+<h3 id="quadranten">Vorzeichen in den vier Quadranten</h3>
+
+<p>Je nachdem, in welchem Quadranten \(P\) liegt, sind \(x_P\) und \(y_P\) positiv oder negativ — und damit auch \(\sin\), \(\cos\), \(\tan\):</p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Vorzeichen-Tabelle</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Quadrant</th><th>Intervall</th><th>\(\sin\varphi\)</th><th>\(\cos\varphi\)</th><th>\(\tan\varphi\)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>I</strong></td><td>\(0° &lt; \varphi &lt; 90°\)</td><td style="color:var(--gruen);font-weight:700">+</td><td style="color:var(--gruen);font-weight:700">+</td><td style="color:var(--gruen);font-weight:700">+</td></tr>
+      <tr><td><strong>II</strong></td><td>\(90° &lt; \varphi &lt; 180°\)</td><td style="color:var(--gruen);font-weight:700">+</td><td style="color:var(--rot);font-weight:700">−</td><td style="color:var(--rot);font-weight:700">−</td></tr>
+      <tr><td><strong>III</strong></td><td>\(180° &lt; \varphi &lt; 270°\)</td><td style="color:var(--rot);font-weight:700">−</td><td style="color:var(--rot);font-weight:700">−</td><td style="color:var(--gruen);font-weight:700">+</td></tr>
+      <tr><td><strong>IV</strong></td><td>\(270° &lt; \varphi &lt; 360°\)</td><td style="color:var(--rot);font-weight:700">−</td><td style="color:var(--gruen);font-weight:700">+</td><td style="color:var(--rot);font-weight:700">−</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Merkregel „<em>All Students Take Calculus</em>": in Quadrant I sind <em>A</em>lle positiv, in II nur <em>S</em>inus, in III nur <em>T</em>angens, in IV nur <em>C</em>osinus.</p>
+</div>
+
+<!-- ══ 8. SYMMETRIEEIGENSCHAFTEN ══ -->
+<h3 id="symmetrie">Symmetrieeigenschaften</h3>
+
+<p>Aus der Geometrie am Einheitskreis ergeben sich direkt Beziehungen für Winkel, die zueinander an einer Achse gespiegelt sind. Sie werden oft gebraucht, um Werte für \(\varphi &gt; 90°\) auf bekannte Werte im 1. Quadranten zurückzuführen:</p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Symmetrieeigenschaften</div>
+  <table class="ftb-tabelle" style="margin-top:6px">
+    <thead><tr><th>Beziehung</th><th>Sinus</th><th>Cosinus</th><th>Tangens</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>\(-\alpha\)</strong> (Spiegelung an x-Achse)</td>
+        <td>\(\sin(-\alpha) = -\sin\alpha\)</td>
+        <td>\(\cos(-\alpha) = \cos\alpha\)</td>
+        <td>\(\tan(-\alpha) = -\tan\alpha\)</td>
+      </tr>
+      <tr>
+        <td><strong>\(180° - \alpha\)</strong> (Q&nbsp;II)</td>
+        <td>\(\sin(180° - \alpha) = \sin\alpha\)</td>
+        <td>\(\cos(180° - \alpha) = -\cos\alpha\)</td>
+        <td>\(\tan(180° - \alpha) = -\tan\alpha\)</td>
+      </tr>
+      <tr>
+        <td><strong>\(180° + \alpha\)</strong> (Q&nbsp;III)</td>
+        <td>\(\sin(180° + \alpha) = -\sin\alpha\)</td>
+        <td>\(\cos(180° + \alpha) = -\cos\alpha\)</td>
+        <td>\(\tan(180° + \alpha) = \tan\alpha\)</td>
+      </tr>
+      <tr>
+        <td><strong>\(360° - \alpha\)</strong> (Q&nbsp;IV)</td>
+        <td>\(\sin(360° - \alpha) = -\sin\alpha\)</td>
+        <td>\(\cos(360° - \alpha) = \cos\alpha\)</td>
+        <td>\(\tan(360° - \alpha) = -\tan\alpha\)</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Die <em>(\(-\alpha\))-Zeile</em> ist die kürzeste Form der Q-IV-Spiegelung (\(-\alpha\) und \(360° - \alpha\) bezeichnen denselben Punkt am Einheitskreis). \(\cos\) ist eine <em>gerade</em> Funktion (\(\cos(-\alpha) = \cos\alpha\)), \(\sin\) und \(\tan\) sind <em>ungerade</em>. Diese Beziehungen kombiniert mit der Periodizität (\(\sin\) und \(\cos\) haben Periode \(360°\), \(\tan\) hat Periode \(180°\)) lassen alle Werte auf das Intervall \([0°; 90°]\) zurückführen.</p>
+</div>
+
+<!-- ══ 9. DEFINITIONS- UND WERTEMENGE ══ -->
+<h3 id="def-werte">Definitions- und Wertemenge der Winkelfunktionen</h3>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Definitions- und Wertemenge</div>
+  <p><strong>Sinus und Cosinus</strong></p>
+  <p>\[\mathbb{D} = \mathbb{R}, \qquad \mathbb{W} = [-1; 1]\]</p>
+  <p><strong>Tangens</strong></p>
+  <p>\[\mathbb{D} = \mathbb{R} \setminus \left\{\frac{\pi}{2} + k\pi \,:\, k \in \mathbb{Z}\right\}, \qquad \mathbb{W} = \mathbb{R}\]</p>
+  <p style="margin-top:6px">Sinus und Cosinus sind für jeden Winkel definiert; ihre Werte liegen stets zwischen \(-1\) und \(+1\). Der Tangens ist überall definiert ausser bei \(\varphi = 90° + k\cdot 180°\) (\(= \pi/2 \pm k\pi\)), wo der Cosinus null wird — und nimmt jeden reellen Wert an.</p>
+</div>
+
+<!-- ══ 9. AUFGABEN ══ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Vorzeichen im falschen Quadranten</div>
+  <p>Am Einheitskreis ist \(\cos(\varphi)\) die x-Koordinate, \(\sin(\varphi)\) die y-Koordinate des entsprechenden Punktes. Daraus folgen die Vorzeichen: im 2. Quadranten ist \(\cos\) negativ und \(\sin\) positiv; im 3. Quadranten sind <em>beide</em> negativ; im 4. ist nur \(\sin\) negativ. Wer aus \(\cos(120°)\) blind \(0.5\) macht (richtig wäre \(-0.5\)), übergeht den Quadranten. Eselsbrücke: <em>x-Achse → cos, y-Achse → sin</em>, Vorzeichen direkt am Punkt ablesen.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Periodizität ignorieren</div>
+  <p>\(\sin\) und \(\cos\) sind periodisch mit Periode \(360°\). Aus \(\sin(\varphi) = 0.5\) folgen also unendlich viele Lösungen: \(\varphi = 30° + k \cdot 360°\) <em>und</em> \(\varphi = 150° + k \cdot 360°\) für jedes ganze \(k\). Wer nur \(\varphi = 30°\) angibt, übersieht die zweite Lösung im selben Hauptbereich und alle periodischen Wiederholungen. <a class="quer" href="g5-5-trigonometrische-gleichungen.html">↗ 5.5</a></p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Werte am Einheitskreis ohne Taschenrechner ablesen</div>
+  <p>Für die wichtigen Winkel \(0°, 30°, 45°, 60°, 90°\) und ihre Vielfachen lohnt es sich, die Werte auswendig zu lernen oder am Einheitskreis abzulesen:</p>
+  <ul style="margin:5px 0 5px 20px">
+    <li><strong>\(0°, 90°, 180°, 270°\)</strong>: die Punkte liegen direkt auf den Achsen, Werte sind \(0\) oder \(\pm 1\).</li>
+    <li><strong>\(30°, 150°, 210°, 330°\)</strong>: \(\sin = \pm \tfrac{1}{2}\), \(\cos = \pm \tfrac{\sqrt{3}}{2}\). Vorzeichen aus dem Quadranten.</li>
+    <li><strong>\(45°, 135°, 225°, 315°\)</strong>: \(|\sin| = |\cos| = \tfrac{\sqrt{2}}{2}\). Vorzeichen aus dem Quadranten.</li>
+    <li><strong>\(60°, 120°, 240°, 300°\)</strong>: \(\sin = \pm \tfrac{\sqrt{3}}{2}\), \(\cos = \pm \tfrac{1}{2}\). Vorzeichen aus dem Quadranten.</li>
+  </ul>
+  <p>Eselsbrücke: <em>x-Achse → \(\cos\), y-Achse → \(\sin\)</em>. Zeichne den Punkt im richtigen Quadranten, lies x und y ab — Vorzeichen ergeben sich automatisch.</p>
+</div>
+
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
 
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Punkt am Einheitskreis ablesen — auch ohne Hilfsmittel</span></div>
 
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+  <p>Gib die Koordinaten des Punktes \(P\) am Einheitskreis für den jeweiligen Winkel an. Verwende exakte Werte (Wurzeln, Brüche).</p>
+  <ol class="aufg-liste">
+    <li>\(\varphi = 90°\)</li>
+    <li>\(\varphi = 180°\)</li>
+    <li>\(\varphi = 270°\)</li>
+    <li>\(\varphi = 30°\)</li>
+    <li>\(\varphi = 135°\)</li>
+    <li>\(\varphi = 240°\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l1')">Lösung zeigen ↓</button>
+  <div id="l1" class="loesung-body">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>\(P(0 \mid 1)\)</li>
+    <li>\(P(-1 \mid 0)\)</li>
+    <li>\(P(0 \mid -1)\)</li>
+    <li>\(P\left(\tfrac{\sqrt{3}}{2} \mid \tfrac{1}{2}\right)\)</li>
+    <li>Quadrant II, Referenzwinkel \(45°\): \(P\left(-\tfrac{\sqrt{2}}{2} \mid \tfrac{\sqrt{2}}{2}\right)\)</li>
+    <li>Quadrant III, Referenzwinkel \(60°\): \(P\left(-\tfrac{1}{2} \mid -\tfrac{\sqrt{3}}{2}\right)\)</li>
+    </ol>
+  </div>
+    </div>
+
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Vorzeichen — auch ohne Hilfsmittel</span></div>
+
+  <p>Gib das Vorzeichen (<strong>+</strong> oder <strong>−</strong>) an, ohne den Wert auszurechnen.</p>
+  <ol class="aufg-liste">
+    <li>\(\sin(200°)\)</li>
+    <li>\(\cos(200°)\)</li>
+    <li>\(\tan(200°)\)</li>
+    <li>\(\sin(-50°)\)</li>
+    <li>\(\cos(310°)\)</li>
+    <li>\(\tan(95°)\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l2')">Lösung zeigen ↓</button>
+  <div id="l2" class="loesung-body">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>\(200°\) liegt in Quadrant III → \(\sin\) negativ → <strong>\(-\)</strong></li>
+    <li>Quadrant III → \(\cos\) negativ → <strong>\(-\)</strong></li>
+    <li>Quadrant III → \(\tan\) positiv (negativ/negativ) → <strong>\(+\)</strong></li>
+    <li>\(-50°\) entspricht Quadrant IV (gleich \(310°\)) → \(\sin\) negativ → <strong>\(-\)</strong></li>
+    <li>Quadrant IV → \(\cos\) positiv → <strong>\(+\)</strong></li>
+    <li>Quadrant II → \(\tan\) negativ → <strong>\(-\)</strong></li>
+    </ol>
+  </div>
+    </div>
+
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Mit Referenzwinkel rechnen — auch ohne Hilfsmittel</span></div>
+
+  <p>Berechne exakt, ohne Taschenrechner. Strategie: Quadrant bestimmen, Referenzwinkel zur \(x\)-Achse finden, Vorzeichen festlegen.</p>
+  <ol class="aufg-liste">
+    <li>\(\sin(150°)\)</li>
+    <li>\(\cos(120°)\)</li>
+    <li>\(\sin(225°)\)</li>
+    <li>\(\cos(330°)\)</li>
+    <li>\(\tan(135°)\)</li>
+    <li>\(\sin(-60°)\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l3')">Lösung zeigen ↓</button>
+  <div id="l3" class="loesung-body">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>Quadrant II, Ref. \(180° - 150° = 30°\), sin in Q II positiv: \(\sin(150°) = +\sin(30°) = \tfrac{1}{2}\)</li>
+    <li>Quadrant II, Ref. \(180° - 120° = 60°\), cos in Q II negativ: \(\cos(120°) = -\cos(60°) = -\tfrac{1}{2}\)</li>
+    <li>Quadrant III, Ref. \(225° - 180° = 45°\), sin in Q III negativ: \(\sin(225°) = -\sin(45°) = -\tfrac{\sqrt{2}}{2}\)</li>
+    <li>Quadrant IV, Ref. \(360° - 330° = 30°\), cos in Q IV positiv: \(\cos(330°) = +\cos(30°) = \tfrac{\sqrt{3}}{2}\)</li>
+    <li>Quadrant II, Ref. \(180° - 135° = 45°\), tan in Q II negativ: \(\tan(135°) = -\tan(45°) = -1\)</li>
+    <li>Symmetrie: \(\sin(-60°) = -\sin(60°) = -\tfrac{\sqrt{3}}{2}\)</li>
+    </ol>
+  </div>
+    </div>
+
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Trigonometrischer Pythagoras anwenden</span></div>
+
+  <p>Aus einem gegebenen Funktionswert und dem Quadranten den anderen Funktionswert bestimmen.</p>
+  <ol class="aufg-liste">
+    <li>\(\sin(\varphi) = 0.6\) und \(\varphi\) liegt in Quadrant I. Berechne \(\cos(\varphi)\).</li>
+    <li>\(\cos(\varphi) = -\tfrac{4}{5}\) und \(\varphi\) liegt in Quadrant II. Berechne \(\sin(\varphi)\).</li>
+    <li>\(\sin(\varphi) = -\tfrac{3}{5}\) und \(\varphi\) liegt in Quadrant III. Berechne \(\cos(\varphi)\) und \(\tan(\varphi)\).</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l4')">Lösung zeigen ↓</button>
+  <div id="l4" class="loesung-body">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>\(\cos^2(\varphi) = 1 - 0.36 = 0.64 \Rightarrow \cos(\varphi) = \pm 0.8\). In Q I positiv: \(\cos(\varphi) = 0.8\).</li>
+    <li>\(\sin^2(\varphi) = 1 - \tfrac{16}{25} = \tfrac{9}{25} \Rightarrow \sin(\varphi) = \pm \tfrac{3}{5}\). In Q II positiv: \(\sin(\varphi) = \tfrac{3}{5}\).</li>
+    <li>\(\cos^2(\varphi) = 1 - \tfrac{9}{25} = \tfrac{16}{25} \Rightarrow \cos(\varphi) = \pm \tfrac{4}{5}\). In Q III negativ: \(\cos(\varphi) = -\tfrac{4}{5}\). Damit \(\tan(\varphi) = \tfrac{-3/5}{-4/5} = \tfrac{3}{4}\) (in Q III positiv ✓).</li>
+    </ol>
+  </div>
+    </div>
+
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Periodizität und Symmetrien</span></div>
+
+  <p>Reduziere auf einen Winkel im Bereich \(0° \leq \varphi < 360°\) und gib den Wert an.</p>
+  <ol class="aufg-liste">
+    <li>\(\sin(420°)\)</li>
+    <li>\(\cos(-150°)\)</li>
+    <li>\(\sin(750°)\)</li>
+    <li>\(\tan(-45°)\)</li>
+    <li>\(\cos(810°)\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l5')">Lösung zeigen ↓</button>
+  <div id="l5" class="loesung-body">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>\(420° - 360° = 60°\); \(\sin(420°) = \sin(60°) = \tfrac{\sqrt{3}}{2}\)</li>
+    <li>\(\cos(-150°) = \cos(150°)\) (Symmetrie); \(\cos(150°) = -\tfrac{\sqrt{3}}{2}\)</li>
+    <li>\(750° - 2 \cdot 360° = 30°\); \(\sin(750°) = \sin(30°) = \tfrac{1}{2}\)</li>
+    <li>\(\tan(-45°) = -\tan(45°) = -1\)</li>
+    <li>\(810° - 2 \cdot 360° = 90°\); \(\cos(810°) = \cos(90°) = 0\)</li>
+    </ol>
+  </div>
+    </div>
+
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Beziehungen anwenden</span></div>
+
+  <p>Vereinfache durch Anwendung der Beziehungen am Einheitskreis.</p>
+  <ol class="aufg-liste">
+    <li>Vereinfache: \(\sin(180° - \varphi) + \sin(180° + \varphi)\)</li>
+    <li>Vereinfache: \(\cos^2(\varphi) - \sin^2(\varphi) + 2\sin^2(\varphi)\)</li>
+    <li>Drücke \(\sin(60°)\) durch \(\cos\) eines anderen Winkels aus.</li>
+    <li>Wahr oder falsch? \(\sin(\varphi) = \sin(180° - \varphi)\) für jeden Winkel \(\varphi\). Begründe am Einheitskreis.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l6')">Lösung zeigen ↓</button>
+  <div id="l6" class="loesung-body">
+  <div class="block block-bsp" style="margin:6px 0 0">
+    <div class="block-titel">🟢 Lösung</div>
+    <ol class="aufg-liste">
+    <li>\(\sin(180° - \varphi) = \sin(\varphi)\) (Supplement). \(\sin(180° + \varphi) = -\sin(\varphi)\) (Q III, Ref. \(\varphi\), sin negativ). Summe: \(\sin(\varphi) + (-\sin(\varphi)) = \mathbf{0}\).</li>
+    <li>\(\cos^2(\varphi) - \sin^2(\varphi) + 2\sin^2(\varphi) = \cos^2(\varphi) + \sin^2(\varphi) = \mathbf{1}\) (trigonometrischer Pythagoras).</li>
+    <li>Komplement: \(\sin(60°) = \cos(90° - 60°) = \cos(30°) = \tfrac{\sqrt{3}}{2}\) ✓</li>
+    <li><strong>Wahr.</strong> Am Einheitskreis: \(\varphi\) und \(180° - \varphi\) sind <em>spiegelbildlich</em> zur \(y\)-Achse. Beide Punkte haben dieselbe \(y\)-Koordinate (= sin), aber entgegengesetzte \(x\)-Koordinaten (cos wechselt das Vorzeichen).</li>
+    </ol>
+  </div>
+    </div>
+
+</div>
+
+<!-- ══ 10. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Tagestemperatur als Sinuskurve</span></div>
+  <p>An einem klaren Sommertag schwankt die Lufttemperatur in Lugano zwischen \(15\,°\text{C}\) (kühlster Punkt um 5 Uhr morgens) und \(29\,°\text{C}\) (wärmster Punkt um 17 Uhr nachmittags). Die Temperaturkurve lässt sich näherungsweise mit einer Sinusfunktion beschreiben.</p>
+<ol class="aufg-liste">
+  <li>Bestimme den Mittelwert \(T_0\) und die Amplitude \(A\) der Schwankung.</li>
+  <li>Welche Periode \(P\) hat die Funktion, und welcher Winkel-Argument-Faktor entspricht dem?</li>
+  <li>Stelle eine Funktionsgleichung der Form \(T(t) = T_0 + A \cdot \sin(\ldots)\) auf, mit \(t\) in Stunden ab 0 Uhr.</li>
+</ol>
+      <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg"
+           style="width:100%;max-width:640px;height:auto;display:block;margin:8px auto 4px"
+           aria-label="Tagestemperatur als Sinuskurve, Minimum bei 5 Uhr 15 Grad, Maximum bei 17 Uhr 29 Grad">
+        <!-- Hilfsraster: Mittelwertlinie 22 °C -->
+        <line x1="60" y1="130" x2="580" y2="130" stroke="#888" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="585" y="134" font-family="monospace" font-size="11" fill="#666">T<tspan baseline-shift="sub" font-size="9">0</tspan> = 22°C</text>
+
+        <!-- x-Achse -->
+        <line x1="60" y1="230" x2="595" y2="230" stroke="#1a1a1a" stroke-width="1.2"/>
+        <text x="600" y="234" font-family="serif" font-style="italic" font-size="13">t / h</text>
+        <!-- x-Ticks bei 0, 5, 11, 17, 23, 24 -->
+        <g font-family="monospace" font-size="11" text-anchor="middle">
+          <line x1="60.00" y1="226" x2="60.00" y2="234" stroke="#1a1a1a"/><text x="60.00" y="248">0</text>
+          <line x1="168.33" y1="226" x2="168.33" y2="234" stroke="#1a1a1a"/><text x="168.33" y="248">5</text>
+          <line x1="298.33" y1="226" x2="298.33" y2="234" stroke="#1a1a1a"/><text x="298.33" y="248">11</text>
+          <line x1="428.33" y1="226" x2="428.33" y2="234" stroke="#1a1a1a"/><text x="428.33" y="248">17</text>
+          <line x1="558.33" y1="226" x2="558.33" y2="234" stroke="#1a1a1a"/><text x="558.33" y="248">23</text>
+          <line x1="580.00" y1="226" x2="580.00" y2="234" stroke="#1a1a1a"/><text x="580.00" y="266">24</text>
+        </g>
+
+        <!-- y-Achse -->
+        <line x1="60" y1="245" x2="60" y2="15" stroke="#1a1a1a" stroke-width="1.2"/>
+        <text x="48" y="22" font-family="serif" font-style="italic" font-size="13" text-anchor="end">T / °C</text>
+        <!-- y-Ticks bei 15, 22, 29 -->
+        <g font-family="monospace" font-size="11" text-anchor="end">
+          <line x1="56" y1="207.78" x2="64" y2="207.78" stroke="#1a1a1a"/><text x="52" y="211">15</text>
+          <line x1="56" y1="130.00" x2="64" y2="130.00" stroke="#1a1a1a"/><text x="52" y="133">22</text>
+          <line x1="56" y1="52.22" x2="64" y2="52.22" stroke="#1a1a1a"/><text x="52" y="55">29</text>
+        </g>
+
+        <!-- Sinus-Kurve -->
+        <path d="M 60.00,150.13 L 65.42,155.00 L 70.83,159.76 L 76.25,164.40 L 81.67,168.89 L 87.08,173.21 L 92.50,177.35 L 97.92,181.28 L 103.33,185.00 L 108.75,188.48 L 114.17,191.71 L 119.58,194.67 L 125.00,197.36 L 130.42,199.76 L 135.83,201.86 L 141.25,203.65 L 146.67,205.13 L 152.08,206.28 L 157.50,207.11 L 162.92,207.61 L 168.33,207.78 L 173.75,207.61 L 179.17,207.11 L 184.58,206.28 L 190.00,205.13 L 195.42,203.65 L 200.83,201.86 L 206.25,199.76 L 211.67,197.36 L 217.08,194.67 L 222.50,191.71 L 227.92,188.48 L 233.33,185.00 L 238.75,181.28 L 244.17,177.35 L 249.58,173.21 L 255.00,168.89 L 260.42,164.40 L 265.83,159.76 L 271.25,155.00 L 276.67,150.13 L 282.08,145.17 L 287.50,140.15 L 292.92,135.09 L 298.33,130.00 L 303.75,124.91 L 309.17,119.85 L 314.58,114.83 L 320.00,109.87 L 325.42,105.00 L 330.83,100.24 L 336.25,95.60 L 341.67,91.11 L 347.08,86.79 L 352.50,82.65 L 357.92,78.72 L 363.33,75.00 L 368.75,71.52 L 374.17,68.29 L 379.58,65.33 L 385.00,62.64 L 390.42,60.24 L 395.83,58.14 L 401.25,56.35 L 406.67,54.87 L 412.08,53.72 L 417.50,52.89 L 422.92,52.39 L 428.33,52.22 L 433.75,52.39 L 439.17,52.89 L 444.58,53.72 L 450.00,54.87 L 455.42,56.35 L 460.83,58.14 L 466.25,60.24 L 471.67,62.64 L 477.08,65.33 L 482.50,68.29 L 487.92,71.52 L 493.33,75.00 L 498.75,78.72 L 504.17,82.65 L 509.58,86.79 L 515.00,91.11 L 520.42,95.60 L 525.83,100.24 L 531.25,105.00 L 536.67,109.87 L 542.08,114.83 L 547.50,119.85 L 552.92,124.91 L 558.33,130.00 L 563.75,135.09 L 569.17,140.15 L 574.58,145.17 L 580.00,150.13" fill="none" stroke="#1a4f8a" stroke-width="2"/>
+
+        <!-- Markierte Extrema -->
+        <circle cx="168.33" cy="207.78" r="4.2" fill="#c8412c"/>
+        <text x="173" y="225" font-family="monospace" font-size="11" fill="#c8412c">(5 | 15)  Min</text>
+        <circle cx="428.33" cy="52.22" r="4.2" fill="#2d7d3a"/>
+        <text x="433" y="48" font-family="monospace" font-size="11" fill="#2d7d3a">(17 | 29)  Max</text>
+
+        <!-- Amplitude-Pfeil rechts -->
+        <line x1="610" y1="52.22" x2="610" y2="207.78" stroke="#666" stroke-width="1"/>
+        <line x1="606" y1="52.22" x2="614" y2="52.22" stroke="#666" stroke-width="1"/>
+        <line x1="606" y1="207.78" x2="614" y2="207.78" stroke="#666" stroke-width="1"/>
+        <text x="618" y="134" font-family="monospace" font-size="11" fill="#666">2A = 14</text>
+      </svg>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-4-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-4-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Mittelwert \(T_0 = \tfrac{15 + 29}{2} = 22\,°\text{C}\). Amplitude \(A = \tfrac{29 - 15}{2} = 7\,°\text{C}\).</li>
+        <li>Periode \(P = 24\) Stunden. Damit \(\sin\) sich um \(360°\) ändert, wenn \(t\) sich um 24 ändert, braucht das Argument den Faktor \(\tfrac{360°}{24} = 15°\) pro Stunde.</li>
+        <li>Maximum bei \(t = 17\). Der Sinus erreicht sein Maximum bei Argument \(90°\). Also \(15° \cdot (17 - t_0) = 90° \Rightarrow t_0 = 11\). Damit: \(T(t) = 22 + 7 \cdot \sin\bigl(15° \cdot (t - 11)\bigr)\). Probe: \(T(17) = 22 + 7 \cdot \sin(90°) = 29\) ✓, \(T(5) = 22 + 7 \cdot \sin(-90°) = 22 - 7 = 15\) ✓. <a class="quer" href="g5-5-trigonometrische-gleichungen.html">↗ 5.5</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
 
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Am Einheitskreis sind die Koordinaten eines Punktes \(P\) zum Winkel \(\varphi\) <em>die</em> trigonometrischen Funktionswerte: \(P(\cos\varphi \mid \sin\varphi)\). Alles andere — Vorzeichen, Periodizität, Symmetrien — folgt aus der Geometrie des Kreises.</p>
+  <p><strong>Trigonometrischer Pythagoras:</strong> \(\sin^2(\varphi) + \cos^2(\varphi) = 1\) — gilt für jeden Winkel und ist die wichtigste Identität.</p>
+</div>
 
-<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead>
+    <tr><th>Konzept</th><th>Formel / Aussage</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Definition</td><td>\(P(\cos\varphi \mid \sin\varphi)\) auf Einheitskreis (Radius 1)</td></tr>
+    <tr><td>Tangens</td><td>\(\tan(\varphi) = \dfrac{\sin(\varphi)}{\cos(\varphi)}\), nicht definiert bei \(\varphi = 90°, 270°\)</td></tr>
+    <tr><td>Vorzeichen</td><td>Q I: alle +; Q II: nur sin +; Q III: nur tan +; Q IV: nur cos +</td></tr>
+    <tr><td>Pythagoras</td><td>\(\sin^2(\varphi) + \cos^2(\varphi) = 1\)</td></tr>
+    <tr><td>Periodizität</td><td>\(\sin(\varphi + 360°) = \sin(\varphi)\), \(\cos(\varphi + 360°) = \cos(\varphi)\)</td></tr>
+    <tr><td>Symmetrie</td><td>\(\sin(-\varphi) = -\sin(\varphi)\), \(\cos(-\varphi) = \cos(\varphi)\)</td></tr>
+    <tr><td>Komplement</td><td>\(\sin(90° - \varphi) = \cos(\varphi)\), \(\cos(90° - \varphi) = \sin(\varphi)\)</td></tr>
+    <tr><td>Supplement</td><td>\(\sin(180° - \varphi) = \sin(\varphi)\), \(\cos(180° - \varphi) = -\cos(\varphi)\)</td></tr>
+  </tbody>
+</table>
+
+<!-- ══ 11. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g5-4-einheitskreis/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung — Einheitskreis, Beziehungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-4-einheitskreis/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Spezialwerte 0°–360° und Beziehungen kompakt</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-4-einheitskreis/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen — auch ohne Hilfsmittel</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-4-einheitskreis/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Vertiefte Aufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-4-einheitskreis/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Quadranten, Vorzeichen, Beziehungen, Spezialwerte</div><div class="dl-fmt">APKG</div></div></a>
+</div>
 
+<!-- ══ 12. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzlIHjv0J_R8sIj-xn8cVs0J" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Trigonometrie (Sinus, Cosinus, Tangens) — Playlist</div><div class="lk-s">Lehrerschmidt · 20 Videos · Einheitskreis, Quadranten, Spezialwinkel</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHgXgsj5jy-qDE41UePZveqr" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Trigonometrie — Playlist</div><div class="lk-s">Mathe by Daniel Jung · sin/cos am Einheitskreis, trig. Pythagoras</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/26747/aufgaben-zum-einheitskreis" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Einheitskreis</div><div class="lk-s">Werte sin/cos in den Quadranten · mit ausführlichen Lösungen</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g4/g43/aufg_g43.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Goniometrische Umformungen</div><div class="lk-s">G43 · Beziehungen sin/cos/tan · trigonometrischer Pythagoras</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -93,7 +861,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Einheitskreis</p>
+  <p>Grundlagenfach 5.4 Einheitskreis</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -104,6 +872,770 @@ buildNav({
   kapitelNr:'5.4', kapitelTitel:'Einheitskreis',
   prev:{nr:'5.3',titel:'Trigonometrische Berechnungen',url:'g5-3-trigonometrische-berechnungen.html'},
   next:{nr:'5.5',titel:'Trigonometrische Gleichungen',url:'g5-5-trigonometrische-gleichungen.html'}
+});
+</script>
+
+<!-- ================================================================ -->
+<!-- ANIMATIONEN — JavaScript                                          -->
+<!-- ================================================================ -->
+<script>
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+
+const css = getComputedStyle(document.documentElement);
+const C = {
+  blau:      (css.getPropertyValue('--blau').trim()       || '#1e3a8a'),
+  blauHell:  (css.getPropertyValue('--blau-hell').trim()  || '#dbeafe'),
+  blauRand:  (css.getPropertyValue('--blau-rand').trim()  || '#93c5fd'),
+  gruen:     (css.getPropertyValue('--gruen').trim()      || '#166534'),
+  rot:       (css.getPropertyValue('--rot').trim()        || '#991b1b'),
+  orange:    (css.getPropertyValue('--orange').trim()     || '#c2410c'),
+  lila:      (css.getPropertyValue('--lila').trim()       || '#6b21a8'),
+  linie:     (css.getPropertyValue('--linie').trim()      || '#cbd5e1'),
+  tinte:     (css.getPropertyValue('--tinte').trim()      || '#0f172a'),
+  tinte2:    (css.getPropertyValue('--tinte-2').trim()    || '#475569'),
+};
+const ORANGE_FILL = 'rgba(194, 65, 12, 0.22)';
+const BLAU_FILL   = 'rgba(30, 58, 138, 0.15)';
+const LILA_FILL   = 'rgba(107, 33, 168, 0.20)';
+
+function initCv(id) {
+  const cv = document.getElementById(id);
+  if (!cv) return null;
+  // Logische Zeichenfläche aus den initial gesetzten width/height-Attributen lesen.
+  if (!cv.dataset.logicalW) {
+    cv.dataset.logicalW = cv.width;
+    cv.dataset.logicalH = cv.height;
+  }
+  const W = +cv.dataset.logicalW;
+  const H = +cv.dataset.logicalH;
+  // Buffer-Auflösung an Display-Pixel-Ratio anpassen (HiDPI / Retina).
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  const cssW = rect.width  || W;
+  const cssH = rect.height || H;
+  const bufW = Math.max(1, Math.round(cssW * dpr));
+  const bufH = Math.max(1, Math.round(cssH * dpr));
+  if (cv.width !== bufW || cv.height !== bufH) {
+    cv.width  = bufW;
+    cv.height = bufH;
+  }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(bufW / W, bufH / H);
+  ctx.clearRect(0, 0, W, H);
+  return { ctx, W, H, cv };
+}
+function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='middle', weight='600') {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.textAlign = align;
+  ctx.textBaseline = base;
+  ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
+  ctx.fillText(s, x, y);
+  ctx.restore();
+}
+function seg(ctx, p1, p2, color, lw = 2) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]);
+  ctx.lineTo(p2[0], p2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function dashedSeg(ctx, p1, p2, color, lw = 1.5, dash = [5, 4]) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]);
+  ctx.lineTo(p2[0], p2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function dot(ctx, p, color = C.blau, r = 5) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(p[0], p[1], r, 0, 2*Math.PI);
+  ctx.fill();
+  ctx.restore();
+}
+function fillTriangle(ctx, p1, p2, p3, fillStyle, strokeStyle, lw = 2) {
+  ctx.save();
+  if (fillStyle) ctx.fillStyle = fillStyle;
+  if (strokeStyle) { ctx.strokeStyle = strokeStyle; ctx.lineWidth = lw; }
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]);
+  ctx.lineTo(p2[0], p2[1]);
+  ctx.lineTo(p3[0], p3[1]);
+  ctx.closePath();
+  if (fillStyle) ctx.fill();
+  if (strokeStyle) ctx.stroke();
+  ctx.restore();
+}
+function rightAngleMarker(ctx, vert, p1, p2, size, color) {
+  const u1 = [(p1[0]-vert[0]), (p1[1]-vert[1])];
+  const u2 = [(p2[0]-vert[0]), (p2[1]-vert[1])];
+  const n1 = Math.hypot(u1[0], u1[1]);
+  const n2 = Math.hypot(u2[0], u2[1]);
+  if (n1 < 1 || n2 < 1) return;
+  u1[0]/=n1; u1[1]/=n1; u2[0]/=n2; u2[1]/=n2;
+  const A = [vert[0] + u1[0]*size, vert[1] + u1[1]*size];
+  const B = [vert[0] + u1[0]*size + u2[0]*size, vert[1] + u1[1]*size + u2[1]*size];
+  const D = [vert[0] + u2[0]*size, vert[1] + u2[1]*size];
+  ctx.save();
+  ctx.strokeStyle = color || C.tinte2;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.lineTo(D[0], D[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function drawAngleArc(ctx, vert, radius, fromRadMath, toRadMath, color, label) {
+  // Math-Konvention: 0=rechts, ccw positiv. Canvas-y geht runter → also clockwise auf Canvas
+  // canvas.arc(x, y, r, start, end, anticlockwise) — wir spiegeln die Winkel
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.arc(vert[0], vert[1], radius, -fromRadMath, -toRadMath, true);
+  ctx.stroke();
+  ctx.restore();
+  if (label) {
+    const midRad = (fromRadMath + toRadMath) / 2;
+    const lx = vert[0] + Math.cos(midRad) * (radius + 14);
+    const ly = vert[1] - Math.sin(midRad) * (radius + 14);
+    txt(ctx, lx, ly, label, color, 13);
+  }
+}
+
+// Bogenmass-Label als Bruch von π
+function radLabel(deg) {
+  const d = Math.round(deg);
+  if (d === 0) return '0';
+  if (d === 360) return '2π';
+  if (d === 180) return 'π';
+  if (d === 90) return 'π/2';
+  if (d === 270) return '3π/2';
+  function gcd(a,b){return b===0?a:gcd(b,a%b);}
+  const g = gcd(d, 180);
+  const num = d/g;
+  const den = 180/g;
+  if (num === 1) return `π/${den}`;
+  if (den === 1) return `${num}π`;
+  return `${num}π/${den}`;
+}
+
+/* ============================================================
+ *  ANIM 1 — Sin & Cos am Einheitskreis
+ * ============================================================ */
+const sldEk1Phi = document.getElementById('sld-ek1Phi');
+const lblEk1Phi = document.getElementById('lbl-ek1Phi');
+const legEk1Phi = document.getElementById('leg-ek1-phi');
+const legEk1Cos = document.getElementById('leg-ek1-cos');
+const legEk1Sin = document.getElementById('leg-ek1-sin');
+const erklEk1   = document.getElementById('erkl-ek1');
+const ek1Spez   = document.getElementById('ek1-spez');
+const ek1Einheit = document.getElementById('ek1-einheit');
+
+let ek1EinheitMode = 'deg';
+ek1Spez.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    sldEk1Phi.value = c.dataset.w;
+    drawSinCos();
+  });
+});
+ek1Einheit.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    ek1Einheit.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    ek1EinheitMode = c.dataset.e;
+    drawSinCos();
+  });
+});
+
+function drawSinCos() {
+  const r = initCv('cv-sincos'); if (!r) return;
+  const { ctx, W, H } = r;
+  const phiD = +sldEk1Phi.value;
+  const phiR = phiD * Math.PI / 180;
+  const phiLabel = (ek1EinheitMode === 'deg') ? `${phiD}°` : radLabel(phiD);
+  lblEk1Phi.textContent = phiLabel;
+
+  const cx = W * 0.42, cy = H * 0.50;
+  const R = 175;
+
+  // Achsen
+  seg(ctx, [cx - R - 30, cy], [cx + R + 30, cy], C.linie, 1);
+  seg(ctx, [cx, cy - R - 30], [cx, cy + R + 30], C.linie, 1);
+  ctx.save(); ctx.fillStyle = C.linie;
+  ctx.beginPath(); ctx.moveTo(cx + R + 30, cy); ctx.lineTo(cx + R + 23, cy - 4); ctx.lineTo(cx + R + 23, cy + 4); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx, cy - R - 30); ctx.lineTo(cx - 4, cy - R - 23); ctx.lineTo(cx + 4, cy - R - 23); ctx.fill();
+  ctx.restore();
+  txt(ctx, cx + R + 32, cy + 14, 'x', C.tinte2, 13, 'left');
+  txt(ctx, cx + 14, cy - R - 30, 'y', C.tinte2, 13, 'left');
+
+  // Kreis
+  ctx.save();
+  ctx.strokeStyle = C.tinte;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2*Math.PI); ctx.stroke();
+  ctx.restore();
+
+  txt(ctx, cx + R, cy + 14, '1', C.tinte2, 11);
+  txt(ctx, cx - 14, cy - R, '1', C.tinte2, 11);
+  txt(ctx, cx - 12, cy + 14, 'O', C.tinte, 13);
+
+  const Px = cx + R * Math.cos(phiR);
+  const Py = cy - R * Math.sin(phiR);
+  const Qx = Px, Qy = cy;
+
+  // Radius OP
+  seg(ctx, [cx, cy], [Px, Py], C.tinte, 2);
+  const radMid = [(cx+Px)/2, (cy+Py)/2];
+  const dx = Px-cx, dy = Py-cy;
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = -dy/len * 14, ny = dx/len * 14;
+  txt(ctx, radMid[0] + nx, radMid[1] + ny, 'r = 1', C.tinte2, 12);
+
+  // sin: senkrecht von Q nach P (rot)
+  seg(ctx, [Qx, Qy], [Px, Py], C.rot, 3);
+  // cos: horizontal von O nach Q (grün)
+  seg(ctx, [cx, cy], [Qx, Qy], C.gruen, 3);
+
+  fillTriangle(ctx, [cx, cy], [Qx, Qy], [Px, Py], BLAU_FILL, null);
+  rightAngleMarker(ctx, [Qx, Qy], [cx, cy], [Px, Py], 8, C.tinte2);
+  drawAngleArc(ctx, [cx, cy], 28, 0, phiR, C.lila, 'φ');
+
+  dot(ctx, [Px, Py], C.blau, 5);
+  const off_dx = Math.cos(phiR), off_dy = -Math.sin(phiR);
+  txt(ctx, Px + off_dx*14, Py + off_dy*14, `P = (cos φ, sin φ)`, C.blau, 12);
+  dot(ctx, [Qx, Qy], C.tinte2, 3);
+
+  const sinMid = [Qx, (Qy + Py) / 2];
+  const sinSign = Math.cos(phiR) >= 0 ? 1 : -1;
+  txt(ctx, sinMid[0] + sinSign * 18, sinMid[1], 'sin φ', C.rot, 12, sinSign>0?'left':'right');
+  const cosMid = [(cx + Qx) / 2, Qy];
+  const cosSign = Math.sin(phiR) >= 0 ? 1 : -1;
+  txt(ctx, cosMid[0], cosMid[1] + cosSign * 14, 'cos φ', C.gruen, 12);
+
+  const cosVal = Math.cos(phiR);
+  const sinVal = Math.sin(phiR);
+
+  legEk1Phi.textContent = phiLabel;
+  legEk1Cos.textContent = cosVal.toFixed(3);
+  legEk1Sin.textContent = sinVal.toFixed(3);
+
+  let q;
+  if (phiD === 0 || phiD === 360) q = 'auf der positiven x-Achse';
+  else if (phiD === 90) q = 'auf der positiven y-Achse';
+  else if (phiD === 180) q = 'auf der negativen x-Achse';
+  else if (phiD === 270) q = 'auf der negativen y-Achse';
+  else if (phiD < 90) q = 'im Quadranten I (sin > 0, cos > 0)';
+  else if (phiD < 180) q = 'im Quadranten II (sin > 0, cos < 0)';
+  else if (phiD < 270) q = 'im Quadranten III (sin < 0, cos < 0)';
+  else q = 'im Quadranten IV (sin < 0, cos > 0)';
+  erklEk1.innerHTML = `\\(P\\) liegt ${q}. Koordinaten: \\(\\cos ${phiLabel} = ${cosVal.toFixed(3)}\\), \\(\\sin ${phiLabel} = ${sinVal.toFixed(3)}\\).`;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklEk1]);
+}
+sldEk1Phi.addEventListener('input', drawSinCos);
+
+/* ============================================================
+ *  ANIM 2 — Tangens am Einheitskreis
+ * ============================================================ */
+const sldEk2Phi = document.getElementById('sld-ek2Phi');
+const lblEk2Phi = document.getElementById('lbl-ek2Phi');
+const legEk2Phi = document.getElementById('leg-ek2-phi');
+const legEk2Tan = document.getElementById('leg-ek2-tan');
+const legEk2Quot = document.getElementById('leg-ek2-quot');
+const erklEk2   = document.getElementById('erkl-ek2');
+const ek2Spez   = document.getElementById('ek2-spez');
+const ek2Einheit = document.getElementById('ek2-einheit');
+
+let ek2EinheitMode = 'deg';
+ek2Spez.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    sldEk2Phi.value = c.dataset.w;
+    drawTan();
+  });
+});
+ek2Einheit.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    ek2Einheit.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    ek2EinheitMode = c.dataset.e;
+    drawTan();
+  });
+});
+
+function drawTan() {
+  const r = initCv('cv-tan'); if (!r) return;
+  const { ctx, W, H } = r;
+  const phiD = +sldEk2Phi.value;
+  const phiR = phiD * Math.PI / 180;
+  const phiLabel = (ek2EinheitMode === 'deg') ? `${phiD}°` : radLabel(phiD);
+  lblEk2Phi.textContent = phiLabel;
+
+  const cx = W * 0.38, cy = H * 0.50;
+  const R = 100;
+
+  // Achsen
+  seg(ctx, [cx - R - 30, cy], [cx + R + 70, cy], C.linie, 1);
+  seg(ctx, [cx, cy - R - 30], [cx, cy + R + 30], C.linie, 1);
+  ctx.save(); ctx.fillStyle = C.linie;
+  ctx.beginPath(); ctx.moveTo(cx + R + 70, cy); ctx.lineTo(cx + R + 63, cy - 4); ctx.lineTo(cx + R + 63, cy + 4); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx, cy - R - 30); ctx.lineTo(cx - 4, cy - R - 23); ctx.lineTo(cx + 4, cy - R - 23); ctx.fill();
+  ctx.restore();
+  txt(ctx, cx + R + 72, cy + 14, 'x', C.tinte2, 13, 'left');
+  txt(ctx, cx + 14, cy - R - 30, 'y', C.tinte2, 13, 'left');
+
+  // Kreis
+  ctx.save();
+  ctx.strokeStyle = C.tinte;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2*Math.PI); ctx.stroke();
+  ctx.restore();
+
+  // Tangente bei x = 1
+  const tanX = cx + R;
+  seg(ctx, [tanX, cy - R - 30], [tanX, cy + R + 30], C.tinte2, 1.4);
+  txt(ctx, tanX + 6, cy + R + 22, 'Tangente x=1', C.tinte2, 10, 'left');
+
+  txt(ctx, cx - 12, cy + 14, 'O', C.tinte, 13);
+  txt(ctx, tanX + 6, cy + 14, 'R', C.tinte, 13, 'left');
+  txt(ctx, cx + R - 10, cy + 14, 'r=1', C.tinte2, 10);
+
+  const Px = cx + R * Math.cos(phiR);
+  const Py = cy - R * Math.sin(phiR);
+  const Qx = Px, Qy = cy;
+
+  seg(ctx, [cx, cy], [Px, Py], C.tinte, 2);
+
+  seg(ctx, [Qx, Qy], [Px, Py], C.rot, 2.5);
+  seg(ctx, [cx, cy], [Qx, Qy], C.gruen, 2.5);
+
+  const tanVal = Math.tan(phiR);
+  const cosVal = Math.cos(phiR);
+  const tanDefiniert = !(phiD === 90 || phiD === 270);
+
+  let Sx = tanX, Sy = cy - R * tanVal;
+  // |tan φ|·R auf Canvas-Bereich beschränken (oben/unten je 220 px ab Mitte)
+  const tanMaxShow = 220;
+  if (tanDefiniert && Math.abs(R * tanVal) <= tanMaxShow) {
+    // Verlängerung des Strahls OP zur Tangente
+    if (cosVal > 0) {
+      dashedSeg(ctx, [Px, Py], [Sx, Sy], C.lila, 1.2, [4,3]);
+    } else if (cosVal < 0) {
+      dashedSeg(ctx, [cx, cy], [Sx, Sy], C.lila, 1.2, [4,3]);
+    }
+  }
+
+  fillTriangle(ctx, [cx, cy], [Qx, Qy], [Px, Py], BLAU_FILL, null);
+  rightAngleMarker(ctx, [Qx, Qy], [cx, cy], [Px, Py], 8, C.tinte2);
+  drawAngleArc(ctx, [cx, cy], 24, 0, phiR, C.lila, 'φ');
+
+  dot(ctx, [Px, Py], C.blau, 5);
+  txt(ctx, Px + Math.cos(phiR)*14, Py - Math.sin(phiR)*14 - 4, 'P', C.blau, 13);
+
+  if (tanDefiniert && Math.abs(R * tanVal) <= tanMaxShow) {
+    dot(ctx, [Sx, Sy], C.orange, 5);
+    txt(ctx, tanX + 6, Sy - 8, `S = (1, tan φ)`, C.orange, 11, 'left');
+    seg(ctx, [tanX, cy], [Sx, Sy], C.orange, 3.5);
+    const tanMidY = (cy + Sy) / 2;
+    txt(ctx, tanX + 6, tanMidY, 'tan φ', C.orange, 12, 'left');
+  } else if (!tanDefiniert) {
+    txt(ctx, tanX + 6, cy - R, 'tan φ nicht', C.rot, 11, 'left');
+    txt(ctx, tanX + 6, cy - R + 14, 'definiert!', C.rot, 11, 'left');
+  } else {
+    const yPos = tanVal > 0 ? cy - R - 10 : cy + R + 10;
+    txt(ctx, tanX + 6, yPos, `tan φ = ${tanVal.toFixed(2)}`, C.orange, 11, 'left');
+    txt(ctx, tanX + 6, yPos + 14, '(zu gross für Bild)', C.tinte2, 10, 'left');
+  }
+
+  legEk2Phi.textContent = phiLabel;
+  if (tanDefiniert) {
+    legEk2Tan.textContent  = tanVal.toFixed(3);
+    legEk2Quot.textContent = (Math.sin(phiR)/Math.cos(phiR)).toFixed(3);
+  } else {
+    legEk2Tan.textContent  = 'undefiniert';
+    legEk2Quot.textContent = 'cos = 0';
+  }
+
+  if (!tanDefiniert) {
+    erklEk2.innerHTML = `Bei \\(\\varphi = ${phiLabel}\\) liegt \\(P\\) genau über/unter \\(O\\); der Strahl \\(OP\\) ist parallel zur Tangente und schneidet sie nicht — \\(\\tan ${phiLabel}\\) ist <strong>nicht definiert</strong>.`;
+  } else if (Math.abs(tanVal) > 4) {
+    erklEk2.innerHTML = `\\(\\tan ${phiLabel} = ${tanVal.toFixed(2)}\\) — sehr gross, da \\(\\cos\\varphi\\) nahe 0 ist.`;
+  } else {
+    erklEk2.innerHTML = `Der Strahl \\(OP\\) schneidet die rechte Tangente in \\(S = (1, ${tanVal.toFixed(3)})\\); die Länge \\(\\overline{RS} = |\\tan ${phiLabel}| = ${Math.abs(tanVal).toFixed(3)}\\).`;
+  }
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklEk2]);
+}
+sldEk2Phi.addEventListener('input', drawTan);
+
+/* ============================================================
+ *  ANIM 3 — Beziehungen
+ * ============================================================ */
+const sldBezPhi = document.getElementById('sld-bezPhi');
+const lblBezPhi = document.getElementById('lbl-bezPhi');
+const bezChips  = document.getElementById('bez-chips');
+const formelBez = document.getElementById('formel-bez');
+const erklBez   = document.getElementById('erkl-bez');
+const legBezSin = document.getElementById('leg-bez-sin');
+const legBezCos = document.getElementById('leg-bez-cos');
+const legBezTan = document.getElementById('leg-bez-tan');
+const legBezQuot = document.getElementById('leg-bez-quot');
+const legBezPyth = document.getElementById('leg-bez-pyth');
+
+let bezMode = 'aehnl';
+bezChips.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    bezChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    bezMode = c.dataset.bez;
+    drawBez();
+  });
+});
+
+function drawBez() {
+  const r = initCv('cv-bez'); if (!r) return;
+  const { ctx, W, H } = r;
+  const phiD = +sldBezPhi.value;
+  const phiR = phiD * Math.PI / 180;
+  lblBezPhi.textContent = phiD + '°';
+
+  const cx = W * 0.38, cy = H * 0.60;
+  const R = 145;
+
+  // Achsen
+  seg(ctx, [cx - R - 20, cy], [cx + R + 70, cy], C.linie, 1);
+  seg(ctx, [cx, cy - R - 30], [cx, cy + R + 20], C.linie, 1);
+  ctx.save(); ctx.fillStyle = C.linie;
+  ctx.beginPath(); ctx.moveTo(cx + R + 70, cy); ctx.lineTo(cx + R + 63, cy - 4); ctx.lineTo(cx + R + 63, cy + 4); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx, cy - R - 30); ctx.lineTo(cx - 4, cy - R - 23); ctx.lineTo(cx + 4, cy - R - 23); ctx.fill();
+  ctx.restore();
+  txt(ctx, cx + R + 72, cy + 14, 'x', C.tinte2, 13, 'left');
+  txt(ctx, cx + 14, cy - R - 30, 'y', C.tinte2, 13, 'left');
+
+  // Kreis
+  ctx.save();
+  ctx.strokeStyle = C.tinte;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2*Math.PI); ctx.stroke();
+  ctx.restore();
+
+  const tanX = cx + R;
+  seg(ctx, [tanX, cy - R - 30], [tanX, cy + R + 20], C.tinte2, 1.4);
+
+  txt(ctx, cx - 12, cy + 14, 'O', C.tinte, 13);
+  txt(ctx, tanX + 6, cy + 14, 'R', C.tinte, 13, 'left');
+
+  const Px = cx + R * Math.cos(phiR);
+  const Py = cy - R * Math.sin(phiR);
+  const Qx = Px, Qy = cy;
+  const Sy_raw = cy - R * Math.tan(phiR);
+  const Sx = tanX;
+  const Sy = clamp(Sy_raw, cy - R - 25, cy + R + 20);
+
+  if (bezMode === 'aehnl') {
+    fillTriangle(ctx, [cx, cy], [Qx, Qy], [Px, Py], BLAU_FILL, C.blau, 2.4);
+    if (Sy === Sy_raw) {
+      // S noch im Canvas → Dreieck ORS zeichnen
+      fillTriangle(ctx, [cx, cy], [tanX, cy], [Sx, Sy], LILA_FILL, C.lila, 2.4);
+    } else {
+      // S zu hoch → wir zeichnen das Dreieck mit gekapptem S
+      ctx.save();
+      ctx.strokeStyle = C.lila; ctx.lineWidth = 2.4; ctx.fillStyle = LILA_FILL;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(tanX, cy);
+      ctx.lineTo(Sx, Sy);
+      ctx.stroke();
+      ctx.restore();
+    }
+    rightAngleMarker(ctx, [Qx, Qy], [cx, cy], [Px, Py], 8, C.tinte2);
+    rightAngleMarker(ctx, [tanX, cy], [cx, cy], [Sx, Sy], 8, C.tinte2);
+
+    seg(ctx, [Qx, Qy], [Px, Py], C.rot, 3);
+    seg(ctx, [cx, cy], [Qx, Qy], C.gruen, 3);
+    seg(ctx, [tanX, cy], [Sx, Sy], C.orange, 3);
+
+    txt(ctx, Qx + 16, (Qy + Py) / 2, 'sin φ', C.rot, 11, 'left');
+    txt(ctx, (cx + Qx) / 2, Qy + 14, 'cos φ', C.gruen, 11);
+    txt(ctx, tanX + 6, (cy + Sy) / 2, 'tan φ', C.orange, 11, 'left');
+    txt(ctx, (cx + tanX) / 2, cy - 12, 'OR = 1', C.tinte2, 11);
+
+    dashedSeg(ctx, [Px, Py], [Sx, Sy_raw], C.tinte2, 1.2, [4,3]);
+
+    formelBez.innerHTML = '\\(\\dfrac{\\tan\\varphi}{1} = \\dfrac{\\sin\\varphi}{\\cos\\varphi} \\quad\\Rightarrow\\quad \\tan\\varphi = \\dfrac{\\sin\\varphi}{\\cos\\varphi}\\)';
+    erklBez.innerHTML = `<strong>Ähnlichkeit:</strong> Dreiecke \\(\\triangle OQP\\) (blau) und \\(\\triangle ORS\\) (lila) sind ähnlich — beide haben \\(\\varphi\\) bei \\(O\\) und einen rechten Winkel. Entsprechende Seitenverhältnisse: \\(\\dfrac{\\tan\\varphi}{1} = \\dfrac{\\sin\\varphi}{\\cos\\varphi}\\). Probe: \\(\\tan ${phiD}° = ${Math.tan(phiR).toFixed(3)}\\), \\(\\sin/\\cos = ${(Math.sin(phiR)/Math.cos(phiR)).toFixed(3)}\\).`;
+  } else {
+    // Pythagoras-Modus
+    fillTriangle(ctx, [cx, cy], [Qx, Qy], [Px, Py], BLAU_FILL, C.blau, 2.4);
+    rightAngleMarker(ctx, [Qx, Qy], [cx, cy], [Px, Py], 8, C.tinte2);
+
+    seg(ctx, [cx, cy], [Px, Py], C.orange, 3);
+    seg(ctx, [Qx, Qy], [Px, Py], C.rot, 3);
+    seg(ctx, [cx, cy], [Qx, Qy], C.gruen, 3);
+
+    const radMid = [(cx+Px)/2, (cy+Py)/2];
+    const dx = Px-cx, dy = Py-cy;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy/len * 14, ny = dx/len * 14;
+    txt(ctx, radMid[0] + nx, radMid[1] + ny, 'OP = 1', C.orange, 12);
+    txt(ctx, Qx + 16, (Qy + Py)/2, 'sin φ', C.rot, 11, 'left');
+    txt(ctx, (cx + Qx)/2, Qy + 14, 'cos φ', C.gruen, 11);
+
+    formelBez.innerHTML = '\\(\\sin^2\\varphi + \\cos^2\\varphi = 1\\)';
+    erklBez.innerHTML = `<strong>Pythagoras am Dreieck OQP:</strong> Hypotenuse \\(OP\\) hat Länge 1 (Radius), Katheten sind \\(\\sin\\varphi\\) und \\(\\cos\\varphi\\). Probe für \\(\\varphi = ${phiD}°\\): \\(${(Math.sin(phiR)**2).toFixed(3)} + ${(Math.cos(phiR)**2).toFixed(3)} = ${(Math.sin(phiR)**2 + Math.cos(phiR)**2).toFixed(3)}\\).`;
+  }
+
+  drawAngleArc(ctx, [cx, cy], 26, 0, phiR, C.lila, 'φ');
+
+  dot(ctx, [Px, Py], C.blau, 5);
+  txt(ctx, Px + Math.cos(phiR)*14, Py - Math.sin(phiR)*14 - 4, 'P', C.blau, 13);
+  dot(ctx, [Qx, Qy], C.tinte2, 3);
+  txt(ctx, Qx, Qy + 14, 'Q', C.tinte2, 11);
+  if (bezMode === 'aehnl' && Sy === Sy_raw) {
+    dot(ctx, [Sx, Sy], C.lila, 5);
+    txt(ctx, tanX + 6, Sy - 4, 'S', C.lila, 13, 'left');
+  }
+
+  legBezSin.textContent  = Math.sin(phiR).toFixed(3);
+  legBezCos.textContent  = Math.cos(phiR).toFixed(3);
+  legBezTan.textContent  = Math.tan(phiR).toFixed(3);
+  legBezQuot.textContent = (Math.sin(phiR)/Math.cos(phiR)).toFixed(3);
+  legBezPyth.textContent = (Math.sin(phiR)**2 + Math.cos(phiR)**2).toFixed(3);
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([formelBez, erklBez]);
+}
+sldBezPhi.addEventListener('input', drawBez);
+
+/* ============================================================
+ *  INITIAL RENDER
+ * ============================================================ */
+window.addEventListener('load', () => {
+  drawSchiff();
+  drawSinCos();
+  drawTan();
+  drawBez();
+});
+window.addEventListener('resize', () => {
+  drawSchiff();
+  drawSinCos();
+  drawTan();
+  drawBez();
+});
+
+/* ════════════════════════════════════════════════════════════════
+ *  EINSTIEG · Schiff um Boje
+ *  Kreis mit Radius 1 SM, Boje im Zentrum, Schiff auf Kreis bei
+ *  Winkel φ. Ost-Versatz = cos(φ), Nord-Versatz = sin(φ).
+ *  Quadranten-Knöpfe setzen den Schieber direkt.
+ * ════════════════════════════════════════════════════════════════ */
+function drawSchiff() {
+  const sld = document.getElementById('sld-schiffPhi');
+  if (!sld) return;
+  const phiDeg = +sld.value;
+  const phiRad = phiDeg * Math.PI / 180;
+  document.getElementById('lbl-schiffPhi').textContent = `${phiDeg}°`;
+
+  const { ctx, W, H } = initCanvas('cv-schiff', 420);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  // Zentrum und Radius
+  const cx = W / 2;
+  const cy = H / 2;
+  const R = Math.min(W, H) * 0.36;
+
+  // Achsen (Ost = +x, Nord = +y nach oben → Bildschirm-y umdrehen)
+  ctx.strokeStyle = '#a89b85';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  ctx.moveTo(cx - R * 1.25, cy);
+  ctx.lineTo(cx + R * 1.25, cy);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - R * 1.25);
+  ctx.lineTo(cx, cy + R * 1.25);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Himmelsrichtungs-Labels
+  ctx.fillStyle = '#5a5040';
+  ctx.font = 'bold 12px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('N', cx, cy - R * 1.30);
+  ctx.fillText('S', cx, cy + R * 1.30 + 4);
+  ctx.fillText('O', cx + R * 1.30 + 6, cy + 4);
+  ctx.fillText('W', cx - R * 1.30 - 6, cy + 4);
+
+  // Bahn-Kreis
+  ctx.strokeStyle = '#1a4f8a';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+  ctx.stroke();
+
+  // Boje im Zentrum
+  ctx.fillStyle = '#a83a3a';
+  ctx.beginPath();
+  ctx.arc(cx, cy, 6, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.strokeStyle = '#a83a3a';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - 12);
+  ctx.lineTo(cx, cy + 12);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(cx - 12, cy);
+  ctx.lineTo(cx + 12, cy);
+  ctx.stroke();
+  ctx.fillStyle = '#1c1a17';
+  ctx.font = '11px sans-serif';
+  ctx.fillText('Boje', cx, cy + 26);
+
+  // Schiff-Position
+  const sx = cx + Math.cos(phiRad) * R;
+  const sy = cy - Math.sin(phiRad) * R; // Y nach oben
+
+  // Hilfslinien (Ost-Versatz und Nord-Versatz)
+  ctx.strokeStyle = '#1f6b3a';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 3]);
+  // Vertikale Linie vom Schiff zur Ost-Achse (zeigt Nord-Versatz)
+  ctx.beginPath();
+  ctx.moveTo(sx, sy);
+  ctx.lineTo(sx, cy);
+  ctx.stroke();
+  // Horizontale Linie vom Schiff zur Nord-Achse (zeigt Ost-Versatz)
+  ctx.strokeStyle = '#b85c00';
+  ctx.beginPath();
+  ctx.moveTo(sx, sy);
+  ctx.lineTo(cx, sy);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Ost-Versatz-Strecke direkt auf der Achse (orange, dick)
+  ctx.strokeStyle = '#b85c00';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(sx, cy);
+  ctx.stroke();
+  // Nord-Versatz-Strecke direkt auf der Achse (grün, dick)
+  ctx.strokeStyle = '#1f6b3a';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx, sy);
+  ctx.stroke();
+
+  // Winkel-Bogen
+  ctx.strokeStyle = '#1a4f8a';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 22, 0, -phiRad, true); // Bildschirm-Mathematik-Winkel
+  ctx.stroke();
+  // Winkel-Label
+  const midRad = phiRad / 2;
+  const lblX = cx + Math.cos(midRad) * 38;
+  const lblY = cy - Math.sin(midRad) * 38;
+  ctx.fillStyle = '#1a4f8a';
+  ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('φ', lblX, lblY + 4);
+
+  // Schiff (kleines Boot-Symbol: Rumpf + Mast)
+  ctx.save();
+  ctx.translate(sx, sy);
+  // Tangentenrichtung = Bewegungsrichtung
+  const tangAngle = phiRad + Math.PI / 2;
+  ctx.rotate(-tangAngle); // Bildschirm
+  ctx.fillStyle = '#1c1a17';
+  // Rumpf (Halb-Ellipse)
+  ctx.beginPath();
+  ctx.moveTo(-14, 0);
+  ctx.lineTo(14, 0);
+  ctx.lineTo(10, 5);
+  ctx.lineTo(-10, 5);
+  ctx.closePath();
+  ctx.fill();
+  // Mast
+  ctx.strokeStyle = '#1c1a17';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, -12);
+  ctx.stroke();
+  // Segel
+  ctx.fillStyle = '#dceaf8';
+  ctx.beginPath();
+  ctx.moveTo(0, -12);
+  ctx.lineTo(0, 0);
+  ctx.lineTo(8, -3);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#1a4f8a';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.restore();
+
+  // Versatz-Labels neben den dicken Strecken
+  const ostVersatz = Math.cos(phiRad);
+  const nordVersatz = Math.sin(phiRad);
+  ctx.fillStyle = '#b85c00';
+  ctx.font = 'bold 12px monospace';
+  ctx.textAlign = 'center';
+  const ostLblX = cx + Math.cos(phiRad) * R / 2;
+  ctx.fillText(`${ostVersatz >= 0 ? '+' : ''}${ostVersatz.toFixed(2)}`, ostLblX, cy - 8);
+  ctx.fillStyle = '#1f6b3a';
+  const nordLblY = cy - Math.sin(phiRad) * R / 2;
+  ctx.textAlign = 'left';
+  ctx.fillText(`${nordVersatz >= 0 ? '+' : ''}${nordVersatz.toFixed(2)}`, cx + 8, nordLblY + 4);
+
+  // Quadranten-Anzeige unten
+  const quadrant = phiDeg < 90 ? 'I' : phiDeg < 180 ? 'II' : phiDeg < 270 ? 'III' : 'IV';
+  ctx.fillStyle = '#5a5040';
+  ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(`Quadrant ${quadrant}`, cx, H - 12);
+
+  // Live-Anzeigen
+  document.getElementById('leg-schiffX').textContent =
+    `${ostVersatz >= 0 ? '+' : ''}${ostVersatz.toFixed(3)}`;
+  document.getElementById('leg-schiffY').textContent =
+    `${nordVersatz >= 0 ? '+' : ''}${nordVersatz.toFixed(3)}`;
+
+  // Erklärung je nach Quadrant
+  let erkl;
+  if (quadrant === 'I') {
+    erkl = 'Quadrant I (0°–90°): <em>beide</em> Versätze positiv. Schiff ist nordöstlich der Boje.';
+  } else if (quadrant === 'II') {
+    erkl = 'Quadrant II (90°–180°): Ost-Versatz <em>negativ</em> (= westlich), Nord-Versatz positiv. Schiff ist nordwestlich.';
+  } else if (quadrant === 'III') {
+    erkl = 'Quadrant III (180°–270°): beide Versätze negativ. Schiff ist südwestlich.';
+  } else {
+    erkl = 'Quadrant IV (270°–360°): Ost-Versatz positiv, Nord-Versatz negativ. Schiff ist südöstlich.';
+  }
+  document.getElementById('erkl-schiff').innerHTML = erkl;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const sld = document.getElementById('sld-schiffPhi');
+  if (sld) {
+    sld.addEventListener('input', drawSchiff);
+    document.querySelectorAll('.kn-quad').forEach(btn => {
+      btn.addEventListener('click', () => {
+        sld.value = btn.dataset.phi;
+        drawSchiff();
+      });
+    });
+  }
 });
 </script>
 </body>

@@ -3,23 +3,212 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grundoperationen mit algebraischen Termen — TALS Mathematik</title>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>1.3 Grundoperationen mit algebraischen Termen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
-
-<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
 <script>
 MathJax = {
-  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
-  svg: { fontCache:'global', scale:1.05 },
-  loader: { load:['[tex]/boldsymbol'] },
-  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+  /* Klammern-Auflösen-Visualisierung */
+  .klammer-vis { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 22px 0; }
+  .klammer-zeile { padding: 14px 18px; border: 1px solid var(--linie); border-radius: 8px; background: var(--papier-2); display: grid; grid-template-columns: 30mm 1fr 30mm; align-items: center; gap: 14px; }
+  .klammer-zeile .kz-label { font-family: var(--mono); font-size: 11pt; color: var(--tinte-2); }
+  .klammer-zeile .kz-formel { font-family: var(--serif); font-size: 14pt; text-align: center; }
+  .klammer-zeile .kz-tag { font-family: var(--mono); font-size: 9pt; color: var(--blau); text-align: right; }
+  .kz-math { font-family: var(--serif); font-size: 15pt; }
+  .kz-math i { font-style: italic; font-family: var(--serif); }
+  /* Binomi-Tabellen */
+  .bin-tab { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 11pt; }
+  .bin-tab th, .bin-tab td { border: 1px solid var(--linie); padding: 10px 14px; text-align: left; vertical-align: middle; }
+  .bin-tab th { background: var(--papier-2); font-family: var(--sans); font-weight: 700; }
+  .bin-tab td.formel { font-family: var(--serif); font-size: 13pt; text-align: center; }
+  /* Faktorisier-Übung */
+  .fak-uebung { border: 1px solid var(--linie); border-radius: 10px; padding: 18px 22px; background: var(--papier-2); margin: 18px 0; }
+  .fak-row { display: grid; grid-template-columns: 50mm 30mm 1fr; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px dotted var(--linie); }
+  .fak-row:last-child { border-bottom: 0; }
+  .fak-row .fak-formel { font-family: var(--serif); font-size: 13pt; }
+  .fak-row .fak-eingabe input { width: 100%; padding: 6px 8px; font-family: var(--mono); font-size: 11pt; border: 1px solid var(--linie); border-radius: 4px; background: var(--papier); }
+  .fak-row .fak-feedback { font-family: var(--mono); font-size: 10pt; }
+  .fak-row .fak-feedback.ok { color: var(--gruen); }
+  .fak-row .fak-feedback.fehl { color: var(--orange); }
+
+  /* Begriffe-Animation — Farben für die fünf Begriffe */
+  .begr-display {
+    background: var(--papier-2);
+    border: 1px solid var(--linie);
+    border-radius: 8px;
+    padding: 24px 18px;
+    margin-top: 12px;
+    font-family: var(--serif);
+    font-size: 22pt;
+    text-align: center;
+    min-height: 70px;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1.4;
+  }
+  .begr-display .gl { padding: 2px 4px; border-radius: 3px; transition: background 0.18s, color 0.18s, outline 0.18s; }
+  .begr-display .ko { padding: 1px 2px; border-radius: 2px; transition: background 0.18s, color 0.18s; }
+  .begr-display .vr { padding: 1px 2px; border-radius: 2px; transition: background 0.18s, color 0.18s; }
+  .begr-display .ex { transition: background 0.18s, color 0.18s, outline 0.18s; padding: 0 2px; border-radius: 2px; }
+  .begr-display .op { color: var(--tinte-2); margin: 0 4px; }
+  /* Glied-Hervorhebung (gelb) */
+  .begr-display.show-glied .gl { outline: 2px solid #d4a017; outline-offset: 1px; background: #fff4d6; }
+  /* Koeffizienten-Hervorhebung (blau) */
+  .begr-display.show-koeff .ko { background: #cde0f4; color: #14416f; font-weight: 700; }
+  /* Grad eines Glieds (violett auf Exponenten) */
+  .begr-display.show-gradGlied .ex { background: #e8d5f0; color: #5b2b75; font-weight: 700; outline: 1.5px solid #8a3fb0; outline-offset: 1px; }
+  /* Grad des Polynoms (orange — nur den Exponenten des Glieds höchsten Grades) */
+  .begr-display.show-gradPoly .gl.gradmax .ex { background: #fde0c0; color: #c25a00; font-weight: 700; outline: 1.5px solid #c25a00; outline-offset: 1px; }
+  /* Konstantes Glied (grün) */
+  .begr-display.show-konst .gl.konstant { outline: 2px solid #1f8a3f; outline-offset: 1px; background: #d6f0d6; color: #14502a; font-weight: 600; }
+
+  .begr-erkl {
+    background: var(--papier-2);
+    border-left: 3px solid var(--blau);
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: var(--tinte);
+    border-radius: 0 4px 4px 0;
+    margin-top: 12px;
+    min-height: 42px;
+    transition: border-left-color 0.18s, background 0.18s;
+  }
+  /* Erklärungstext-Farbe synchron zum aktiven Begriff */
+  .begr-erkl.show-glied     { border-left-color: #d4a017; background: #fff9e6; }
+  .begr-erkl.show-koeff     { border-left-color: #14416f; background: #eaf1f9; }
+  .begr-erkl.show-gradGlied { border-left-color: #8a3fb0; background: #f3e8f8; }
+  .begr-erkl.show-gradPoly  { border-left-color: #c25a00; background: #fdecd6; }
+  .begr-erkl.show-konst     { border-left-color: #1f8a3f; background: #e6f5e6; }
+
+  /* Begriff-Buttons: pro Begriff eine eigene Farbe (statt der einheitlichen Chip-Optik) */
+  .begr-chip {
+    border: 1.5px solid transparent;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, font-weight 0.15s;
+  }
+  .begr-chip[data-begriff="glied"]     { background: #fff4d6; border-color: #d4a017; color: #6e5410; }
+  .begr-chip[data-begriff="koeff"]     { background: #cde0f4; border-color: #14416f; color: #14416f; }
+  .begr-chip[data-begriff="gradGlied"] { background: #e8d5f0; border-color: #8a3fb0; color: #5b2b75; }
+  .begr-chip[data-begriff="gradPoly"]  { background: #fde0c0; border-color: #c25a00; color: #8a3500; }
+  .begr-chip[data-begriff="konst"]     { background: #d6f0d6; border-color: #1f8a3f; color: #14502a; }
+  /* Aktive Auswahl: Begriffsfarbe NICHT ändern — nur fette Umrandung.
+     Overrides für die globale .anim .chip.aktiv-Regel (blauer Fill) sind nötig,
+     darum werden Hintergrund + Textfarbe pro Begriff erneut gesetzt. */
+  .begr-chip.aktiv {
+    border-width: 3px;
+    border-style: solid;
+    font-weight: 700;
+    box-shadow: none;
+  }
+  .begr-chip[data-begriff="glied"].aktiv     { background: #fff4d6; border-color: #6e5410; color: #6e5410; }
+  .begr-chip[data-begriff="koeff"].aktiv     { background: #cde0f4; border-color: #0d2c4d; color: #14416f; }
+  .begr-chip[data-begriff="gradGlied"].aktiv { background: #e8d5f0; border-color: #5b2b75; color: #5b2b75; }
+  .begr-chip[data-begriff="gradPoly"].aktiv  { background: #fde0c0; border-color: #8a3500; color: #8a3500; }
+  .begr-chip[data-begriff="konst"].aktiv     { background: #d6f0d6; border-color: #14502a; color: #14502a; }
+  .begr-chip:hover { filter: brightness(0.96); }
+
+  /* Zusammenfassen-Animation — Slider-Schritte */
+  .zus-display {
+    background: var(--papier-2);
+    border: 1px solid var(--linie);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    font-family: var(--serif);
+    font-size: 18pt;
+    min-height: 80px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 18px;
+    row-gap: 10px;
+    align-items: center;
+  }
+  .zus-display .zeile-label {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--blau);
+    white-space: nowrap;
+    text-align: right;
+  }
+  .zus-display .zeile-poly {
+    text-align: left;
+    line-height: 1.4;
+  }
+  .zus-display .gl {
+    display: inline-block; padding: 2px 4px; border-radius: 3px;
+    transition: background 0.3s, color 0.3s, transform 0.4s;
+  }
+  .zus-display .gl.farbe-A { background: #cde0f4; color: #14416f; }
+  .zus-display .gl.farbe-B { background: #fde0c0; color: #8a3500; }
+  .zus-display .gl.farbe-C { background: #d6f0d6; color: #14502a; }
+  .zus-display .gl.farbe-D { background: #e8d5f0; color: #5b2b75; }
+  .zus-display .gl.farbe-E { background: #fde2e0; color: #7a2a2a; }
+  .zus-display .op { color: var(--tinte-2); margin: 0 2px; }
+
+  /* Klammern-Vorzeichen-Toggle: schwache Plus-Zeichen */
+  .vz-schwach { color: var(--tinte-2); opacity: 0.45; transition: opacity 0.18s, color 0.18s; }
+  .klammer-vis.vz-stark .vz-schwach { color: var(--rot); opacity: 1; font-weight: 700; }
+  .vz-toggle {
+    display: inline-block; margin-left: 12px;
+    font-family: var(--mono); font-size: 0.78rem;
+    padding: 3px 8px; border-radius: 12px;
+    background: var(--papier-2); border: 1px solid var(--linie);
+    color: var(--tinte-2); cursor: pointer; transition: all 0.12s;
+  }
+  .vz-toggle:hover { border-color: var(--blau-rand); color: var(--blau); }
+  .vz-toggle.aktiv { background: var(--blau); border-color: var(--blau); color: white; }
+
+  /* Binomi-Visualisierung — Quadrat-Skizze */
+  .bin-vis { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; margin: 12px 0; }
+  @media (max-width: 820px) { .bin-vis { grid-template-columns: 1fr; } }
+  .bin-rechnung {
+    background: var(--papier-2);
+    border-radius: 8px;
+    padding: 18px;
+    font-family: var(--serif);
+    font-size: 14pt;
+    line-height: 1.7;
+  }
+  .bin-rechnung .zeile { padding: 4px 0; }
+  .bin-rechnung .zeile-label { font-family: var(--sans); font-size: 0.78rem; color: var(--tinte-2); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+  /* Hintergrund-Farben passend zur Grafik (a² hellgelb, a·b orange, b² dunkelbraun) */
+  .bin-rechnung .hl-a2     { background: #fde2a8; color: #5a4010; padding: 2px 5px; border-radius: 3px; font-weight: 700; }
+  .bin-rechnung .hl-ab     { background: #e6b87a; color: #5a2e08; padding: 2px 5px; border-radius: 3px; font-weight: 700; }
+  .bin-rechnung .hl-b2     { background: #c8884a; color: #ffffff; padding: 2px 5px; border-radius: 3px; font-weight: 700; }
+  .bin-rechnung .hl-minus  { color: #9b1c1c; font-weight: 700; }
+  /* Binom-3-spezifische Hinterlegungen (passend zur 3.-Binom-Grafik):
+     green = Produkt-Rechteck, area = Flächenfarbe der L-Form/Ergebnis,
+     blue = a²-Umrandung, red = b²-Fläche. */
+  .bin-rechnung .hl-green  { background: #9be0ac; color: #14532d; padding: 2px 5px; border-radius: 3px; font-weight: 700; }
+  .bin-rechnung .hl-area   { background: #f7d9b3; color: #5a4010; padding: 2px 5px; border-radius: 3px; font-weight: 700; }
+  .bin-rechnung .hl-blue   { background: #2f6fb0; color: #ffffff; padding: 2px 5px; border-radius: 3px; font-weight: 700; }
+  .bin-rechnung .hl-red    { background: #f3b0a8; color: #7a1f15; padding: 2px 5px; border-radius: 3px; font-weight: 700; }
+  /* Zweites Quadrat (Anim für 2. Binom) ist standardmässig versteckt */
+  .bin-canvas-paar { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; flex-wrap: nowrap; justify-content: center; }
+  .bin-canvas-paar canvas { flex: 0 0 auto; width: 300px; height: 300px; }
+  /* Bei zwei sichtbaren Canvas (Binom 2/3) dürfen beide proportional schrumpfen, bleiben aber gleich gross */
+  .bin-canvas-paar.zeige-rechts canvas { max-width: 48%; height: auto; aspect-ratio: 300 / 340; }
+  #cv-binomi-rechts { display: none; }
+  .bin-canvas-paar.zeige-rechts #cv-binomi-rechts { display: block; }
+  /* Schritt-Slider für die 2.-Binom-Animation: standardmässig versteckt */
+  .anim .bin-schritt-regler { display: none; }
+  .anim .bin-schritt-regler.aktiv { display: flex; }
+  .bin-schritt-titel {
+    font-family: var(--sans); font-size: 0.78rem; font-weight: 600;
+    text-transform: none; letter-spacing: 0.02em;
+    color: var(--blau); margin-top: 8px; text-align: center;
+    min-height: 1.2em;
+  }
 </style>
 </head>
 <body>
@@ -27,13 +216,16 @@ MathJax = {
 <div class="page-wrap">
 <main class="content">
 
-<!-- ══ 1. TITEL + RLP-HEADER ══ -->
 <div class="page-titel">
   <div class="pt-bereich">Grundlagenfach · Lerngebiet 1 · Arithmetik/Algebra · 45 Lektionen</div>
   <h1 class="pt-h1">1.3 Grundoperationen mit algebraischen Termen</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Algebraische Terme sind die Sprache der Mathematik. Wer sie sicher umformt — Klammern
+auflösen, gleichartige Glieder zusammenfassen, ausklammern — kann jede Gleichung knacken und jede
+Formel umstellen. In diesem Kapitel erwirbst du die Werkzeuge, mit denen Terme nicht ihren Wert,
+aber ihre Form ändern.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 1.3</div>
   <ul>
@@ -42,49 +234,769 @@ MathJax = {
   </ul>
 </div>
 
+<!-- ──────────────────────── 1. EINSTIEG ──────────────────────── -->
+<h2 id="einstieg">Einstieg — Drei Wege zur gleichen Zahl</h2>
 
-<!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<p>Eine Werkstatt verkauft pro Monat \(x\) Werkstücke der Sorte A und \(y\) Werkstücke der Sorte B.
+Für jedes Werkstück A nimmt sie 80 Fr. ein, für jedes Werkstück B 50 Fr., wobei sich der Erlös von B intern in 30 Fr. <em>Material</em> und 20 Fr. <em>Lohn</em> aufteilt. Drei Mitarbeitende rechnen den Monatsumsatz auf je eigene Weise:</p>
 
+<table class="bin-tab">
+  <thead><tr><th style="width:20%">Person</th><th>Rechnung</th><th style="width:30%">Form</th></tr></thead>
+  <tbody>
+    <tr><td>Anna</td>      <td class="formel">\(80 \cdot x + 50 \cdot y\)</td>           <td>Summe — direkt nach Preisen</td></tr>
+    <tr><td>Bruno</td>     <td class="formel">\(10 \cdot (8x + 5y)\)</td>                <td>10 Fr.-Einheiten ausgeklammert</td></tr>
+    <tr><td>Cinzia</td>    <td class="formel">\(80x + 30y + 20y\)</td>                   <td>B aufgeteilt in Material + Lohn</td></tr>
+  </tbody>
+</table>
 
-<!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<p>Alle drei Ausdrücke liefern für jedes Wertepaar \((x, y)\) denselben Zahlenwert. Sie sind
+<strong>algebraisch äquivalent</strong>. Der Trick beim Termumformen: die Form auswählen, die für
+das gerade anstehende Problem am bequemsten ist — kompakt zum Hinschreiben, faktorisiert zum
+Ausklammern, ausmultipliziert zum Sortieren.</p>
 
+<div class="block block-def">
+  <div class="block-titel">📘 Schlüsselidee</div>
+  <p>Termumformen heisst: die <em>Form</em> verändern, ohne den <em>Wert</em> zu verändern. Genau
+  dafür gibt es Klammergesetze, binomische Formeln und Faktorisier-Techniken.</p>
+</div>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<p>In der Animation kannst du die Verkaufszahlen \(x\) (Sorte A) und \(y\) (Sorte B) ändern und siehst, dass die drei Terme von Anna, Bruno und Cinzia immer denselben Wert liefern — sie sind <strong>algebraisch äquivalent</strong>. Dario versucht, das auch zu zeigen. Sein Term sieht aus, als sei er bloss „anders ausgeklammert" — doch er liefert <em>nicht</em> denselben Wert. Eine plausibel aussehende Umformung ist nicht automatisch eine richtige.</p>
 
+<div class="anim">
+  <div class="anim-titel">Drei äquivalente Terme — und ein vierter, der nicht passt</div>
+  <div class="anim-layout">
+    <canvas id="cv-equiv" width="560" height="260"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Sorte A: \(x\)</span>
+          <span class="wert" id="lbl-equivX">5</span>
+        </div>
+        <input type="range" id="sld-equivX" min="0" max="20" step="1" value="5">
+      </div>
+      <div class="regler">
+        <div class="regler-label">
+          <span>Sorte B: \(y\)</span>
+          <span class="wert" id="lbl-equivY">3</span>
+        </div>
+        <input type="range" id="sld-equivY" min="0" max="20" step="1" value="3">
+      </div>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+      <div class="legende">
+        <div class="legende-titel">Werte der vier Terme</div>
+        <div class="legende-zeile"><span class="lab">Anna</span><span class="val" id="leg-equivA">550</span></div>
+        <div class="legende-zeile"><span class="lab">Bruno</span><span class="val" id="leg-equivB">550</span></div>
+        <div class="legende-zeile"><span class="lab">Cinzia</span><span class="val" id="leg-equivC">550</span></div>
+        <div class="legende-zeile"><span class="lab">Dario (?)</span><span class="val" id="leg-equivD">650</span></div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- ──────────────────────── 2. DEFINITIONEN ──────────────────────── -->
+<h2 id="definition">Definitionen — Termarten</h2>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<p>Schon in Kapitel <a href="g1-1-grundlagen.html">1.1</a> hast du den Begriff Term kennengelernt.
+Hier vertiefen wir die Klassifizierung — denn nicht jeder Term lässt sich gleich umformen.</p>
 
+<table class="bin-tab">
+  <thead><tr><th>Termart</th><th>Definition</th><th>Beispiel</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Monom</strong></td>
+        <td>Produkt aus Zahl(en) und Potenzen von Variablen mit natürlichen Exponenten</td>
+        <td class="formel">\(7 x^2 y\)</td></tr>
+    <tr><td><strong>Polynom</strong></td>
+        <td>Summe von endlich vielen Monomen</td>
+        <td class="formel">\(3x^3 - 2x + 5\)</td></tr>
+    <tr><td><strong>rationaler Term</strong></td>
+        <td>Quotient zweier Polynome (Nenner \(\neq 0\))</td>
+        <td class="formel">\(\dfrac{x + 1}{x^2 - 4}\)</td></tr>
+    <tr><td><strong>Wurzelterm</strong></td>
+        <td>Term, der Wurzeln enthält (siehe Kapitel <a href="g1-4-zehnerpotenzen-quadratwurzeln.html">1.4</a>)</td>
+        <td class="formel">\(\sqrt{x + 3}\)</td></tr>
+  </tbody>
+</table>
 
-<!-- ══ 7. AUFGABEN ══ -->
+<p class="hinweis">Ein Polynom mit nur einer Variablen heisst <em>Polynom in einer Variablen</em>.
+Polynome vom Grad 1 heissen <em>linear</em>, vom Grad 2 <em>quadratisch</em>, vom Grad 3
+<em>kubisch</em> — diese Begriffe begegnen dir in den Kapiteln 2 und 3 wieder.</p>
+
+<p>Die folgenden Begriffe sind das Vokabular, mit dem du jedes Polynom beschreiben kannst. Wähle ein Polynom, klick einen Begriff an, und sieh sofort, welche Teile des Terms gemeint sind:</p>
+
+<div class="anim">
+  <div class="anim-titel">Begriffe am Polynom — interaktiv</div>
+  <div class="anim-layout">
+    <div>
+      <div class="feld-titel">Polynom wählen</div>
+      <div class="chips" id="begr-poly-chips"></div>
+      <div id="begr-display" class="begr-display"></div>
+      <div id="begr-erkl" class="begr-erkl"></div>
+    </div>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Begriff hervorheben</div>
+        <div class="chips begr-chips" id="begr-begriff-chips">
+          <button class="chip begr-chip" data-begriff="glied">Glied</button>
+          <button class="chip begr-chip" data-begriff="koeff">Koeffizient</button>
+          <button class="chip begr-chip" data-begriff="gradGlied">Grad eines Glieds</button>
+          <button class="chip begr-chip" data-begriff="gradPoly">Grad des Polynoms</button>
+          <button class="chip begr-chip" data-begriff="konst">Konstantes Glied</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────────────── 3. GLEICHARTIGE TERME ──────────────────────── -->
+<h2 id="zusammenfassen">Gleichartige Glieder zusammenfassen</h2>
+
+<p>Zwei Glieder heissen <strong>gleichartig</strong>, wenn sie sich nur im Koeffizienten unterscheiden
+— derselbe Variablen-Anteil, dieselben Exponenten:</p>
+
+\[ 3x^2 \text{ und } -7x^2 \text{ sind gleichartig.} \qquad 3x^2 \text{ und } 3x \text{ nicht.} \]
+
+<p>Gleichartige Glieder werden zusammengefasst, indem ihre Koeffizienten addiert werden — der
+Variablen-Anteil bleibt unverändert (Distributivgesetz, rückwärts gelesen):</p>
+
+\[ a \cdot c + b \cdot c = (a + b) \cdot c \]
+
+<p>Die Animation zeigt das in vier Schritten: aus einem unsortierten Polynom werden gleichartige Glieder gleich eingefärbt, sortiert und verrechnet. Probier es an verschiedenen Polynomen aus:</p>
+
+<div class="anim">
+  <div class="anim-titel">Gleichartige Glieder zusammenfassen — Schritt für Schritt</div>
+  <div class="anim-layout">
+    <div>
+      <div class="feld-titel">Polynom wählen</div>
+      <div class="chips" id="zus-poly-chips"></div>
+      <div id="zus-display" class="zus-display"></div>
+    </div>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Schritt</span>
+          <span class="wert" id="lbl-zus-schritt">0</span>
+        </div>
+        <input type="range" id="sld-zus" min="0" max="3" step="1" value="0">
+      </div>
+      <div class="erklaerung" id="zus-erkl">
+        Beobachte, wie sich die gleichartigen Glieder zuerst farblich gruppieren, dann zueinander rücken und schliesslich zu einem einzigen Glied zusammenschmelzen.
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Klassische Beispiele in Tabellenform:</p>
+
+<table class="bin-tab">
+  <thead><tr><th>Term</th><th>nach Sortieren</th><th>nach Zusammenfassen</th></tr></thead>
+  <tbody>
+    <tr><td class="formel">\(5x + 3 - 2x + 7\)</td>
+        <td class="formel">\(5x - 2x + 3 + 7\)</td>
+        <td class="formel">\(3x + 10\)</td></tr>
+    <tr><td class="formel">\(4x^2 + 3x - x^2 + 2x - 5\)</td>
+        <td class="formel">\(4x^2 - x^2 + 3x + 2x - 5\)</td>
+        <td class="formel">\(3x^2 + 5x - 5\)</td></tr>
+    <tr><td class="formel">\(2ab - 5a^2b + 7ab + 2a^2b\)</td>
+        <td class="formel">\(2ab + 7ab - 5a^2b + 2a^2b\)</td>
+        <td class="formel">\(9ab - 3a^2b\)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \(x\) und \(x^2\) sind nicht gleichartig</div>
+  <p>\(3x + 2x^2\) lässt sich <em>nicht</em> zu \(5x^3\) oder \(5x^2\) zusammenfassen. Die Variable
+  hat unterschiedliche Exponenten — die Glieder bleiben separat stehen.</p>
+</div>
+
+<!-- ──────────────────────── 4. KLAMMERN AUFLÖSEN ──────────────────────── -->
+<h2 id="klammern">Klammern auflösen <a class="quer" href="g1-2-zahlen-grundoperationen.html#theorie">↩ 1.2</a></h2>
+
+<p>Vier Regeln decken alle Klammer-Operationen ab. Mit dem Knopf „Vorzeichen zeigen" siehst du die unsichtbaren Plus-Zeichen vor dem ersten Summanden — so wird klar, welches Vorzeichen beim Auflösen <em>kippt</em> und welches nicht:</p>
+
+<p style="margin:8px 0 6px"><button class="vz-toggle" id="btn-vz-toggle">Vorzeichen zeigen</button></p>
+
+<div class="klammer-vis" id="klammer-vis">
+  <div class="klammer-zeile">
+    <div class="kz-label">Pluszeichen davor</div>
+    <div class="kz-formel"><span class="kz-math">+(<span class="vz-schwach">+</span><i>a</i> + <i>b</i> &minus; <i>c</i>) &nbsp;=&nbsp; <span class="vz-schwach">+</span><i>a</i> + <i>b</i> &minus; <i>c</i></span></div>
+    <div class="kz-tag">unverändert</div>
+  </div>
+  <div class="klammer-zeile">
+    <div class="kz-label">Minuszeichen davor</div>
+    <div class="kz-formel"><span class="kz-math">&minus;(<span class="vz-schwach">+</span><i>a</i> + <i>b</i> &minus; <i>c</i>) &nbsp;=&nbsp; &minus;<i>a</i> &minus; <i>b</i> + <i>c</i></span></div>
+    <div class="kz-tag">alle Vorzeichen kippen</div>
+  </div>
+  <div class="klammer-zeile">
+    <div class="kz-label">Faktor davor</div>
+    <div class="kz-formel"><span class="kz-math"><i>k</i> · (<span class="vz-schwach">+</span><i>a</i> + <i>b</i> &minus; <i>c</i>) &nbsp;=&nbsp; <span class="vz-schwach">+</span><i>ka</i> + <i>kb</i> &minus; <i>kc</i></span></div>
+    <div class="kz-tag">Distributivgesetz</div>
+  </div>
+  <div class="klammer-zeile">
+    <div class="kz-label">Klammer mal Klammer</div>
+    <div class="kz-formel"><span class="kz-math">(<i>a</i> &minus; <i>b</i>)(&minus;<i>c</i> + <i>d</i>) &nbsp;=&nbsp; &minus;<i>ac</i> + <i>ad</i> + <i>bc</i> &minus; <i>bd</i></span></div>
+    <div class="kz-tag">jeder mit jedem</div>
+  </div>
+</div>
+
+<p>Die letzte Regel — <em>jeder mit jedem</em> — folgt aus dem Distributivgesetz, zweimal angewendet:</p>
+
+\[ (a - b)(-c + d) \;=\; a(-c + d) - b(-c + d) \;=\; -ac + ad + bc - bd \]
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel — gemischter Ausdruck</div>
+  \[ \begin{aligned}
+     3(x + 2) - 2(x - 5) + (x - 1)(x + 4) \;&=\; 3x + 6 - 2x + 10 + (x^2 + 4x - x - 4) \\
+     &=\; x + 16 + x^2 + 3x - 4 \\
+     &=\; x^2 + 4x + 12.
+  \end{aligned} \]
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Vorzeichen vor der Klammer</div>
+  <p>\(5 - (3x - 2) = 5 - 3x + 2 = 7 - 3x\). <em>Beide</em> Vorzeichen in der Klammer kippen — der
+  Term \(-2\) wird zu \(+2\), nicht etwa zu \(-(-2) = -2\), wenn man unsorgfältig arbeitet. Wenn ein
+  Minus vor der Klammer steht, denk an \((-1) \cdot (\ldots)\).</p>
+</div>
+
+<!-- ──────────────────────── 5. BINOMISCHE FORMELN ──────────────────────── -->
+<h2 id="binomi">Binomische Formeln <a class="quer" href="g1-4-zehnerpotenzen-quadratwurzeln.html#potenzgesetze">↗ 1.4</a></h2>
+
+<p>Die binomischen Formeln sind Spezialfälle der Regel <em>Klammer mal Klammer</em>. Sie tauchen so
+oft auf, dass man sie auswendig kennen sollte:</p>
+
+<table class="bin-tab">
+  <thead><tr><th style="width:30%">Name</th><th style="width:40%">Formel</th><th>Merksatz</th></tr></thead>
+  <tbody>
+    <tr><td>1. binomische Formel</td>
+        <td class="formel">\((a + b)^2 = a^2 + 2ab + b^2\)</td>
+        <td class="li">Quadrat plus doppeltes Produkt plus Quadrat</td></tr>
+    <tr><td>2. binomische Formel</td>
+        <td class="formel">\((a - b)^2 = a^2 - 2ab + b^2\)</td>
+        <td class="li">wie oben, mittlerer Term mit Minus</td></tr>
+    <tr><td>3. binomische Formel</td>
+        <td class="formel">\((a + b)(a - b) = a^2 - b^2\)</td>
+        <td class="li">Differenz der Quadrate</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiele</div>
+  <ul>
+    <li>\((x + 3)^2 = x^2 + 2 \cdot x \cdot 3 + 3^2 = x^2 + 6x + 9\).</li>
+    <li>\((2x - 5)^2 = (2x)^2 - 2 \cdot 2x \cdot 5 + 5^2 = 4x^2 - 20x + 25\).</li>
+    <li>\((3a + 4)(3a - 4) = (3a)^2 - 4^2 = 9a^2 - 16\).</li>
+    <li>Im Kopf: \(99^2 = (100 - 1)^2 = 10\,000 - 200 + 1 = 9\,801\).</li>
+  </ul>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \((a + b)^2 \neq a^2 + b^2\)</div>
+  <p>Der mittlere Term \(2ab\) wird oft vergessen. Probe mit Zahlen:
+  \((3 + 4)^2 = 49\), aber \(3^2 + 4^2 = 9 + 16 = 25\) — das ist nicht dasselbe! Der gesuchte mittlere
+  Term ist \(2 \cdot 3 \cdot 4 = 24\), und \(9 + 24 + 16 = 49\) ✓.</p>
+</div>
+
+<p>Mit der Animation kannst du die binomischen Formeln <em>geometrisch sehen</em>: jede Formel beschreibt die Fläche eines Quadrats, das aus Teilflächen zusammengesetzt ist. Wähle die Formel, stell <em>a</em> und <em>b</em> ein, und sieh, wie die Teilflächen ihre Werte bekommen:</p>
+
+<div class="anim">
+  <div class="anim-titel">Binomische Formeln — geometrisch</div>
+  <div class="anim-layout">
+    <div>
+      <div class="feld-titel">Binom wählen</div>
+      <div class="chips" id="bin-chips">
+        <button class="chip aktiv" data-bin="1">1. Binom (a+b)²</button>
+        <button class="chip" data-bin="2">2. Binom (a−b)²</button>
+        <button class="chip" data-bin="3">3. Binom (a+b)(a−b)</button>
+      </div>
+      <div class="bin-canvas-paar" id="bin-canvas-paar">
+        <canvas id="cv-binomi" width="300" height="340"></canvas>
+        <canvas id="cv-binomi-rechts" width="300" height="340"></canvas>
+      </div>
+      <div class="bin-schritt-titel" id="bin-schritt-titel"></div>
+    </div>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>\(a\)</span>
+          <span class="wert" id="lbl-bin-a">5</span>
+        </div>
+        <input type="range" id="sld-bin-a" min="4" max="6" step="1" value="5">
+      </div>
+      <div class="regler">
+        <div class="regler-label">
+          <span>\(b\)</span>
+          <span class="wert" id="lbl-bin-b">2</span>
+        </div>
+        <input type="range" id="sld-bin-b" min="1" max="3" step="1" value="2">
+      </div>
+
+      <div class="bin-rechnung" id="bin-rechnung">
+        <!-- wird per JS gefüllt -->
+      </div>
+
+      <div class="regler bin-schritt-regler" id="bin-schritt-regler">
+        <div class="regler-label">
+          <span>Schritt (Herleitung)</span>
+          <span class="wert" id="lbl-bin-schritt">0</span>
+        </div>
+        <input type="range" id="sld-bin-schritt" min="0" max="3" step="1" value="0">
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Die binomischen Formeln gelten ebenso <em>rückwärts</em> — und genau das brauchen wir gleich beim
+Faktorisieren.</p>
+
+<!-- ──────────────────────── 6. FAKTORISIEREN ──────────────────────── -->
+<h2 id="faktorisieren">Faktorisieren — den Term in Produkte zerlegen</h2>
+
+<p>Faktorisieren ist die Umkehrung von Ausmultiplizieren: aus einer Summe wird ein Produkt. Drei
+Standard-Techniken decken den Lehrplan ab (ohne Polynomdivision).</p>
+
+<h3>6.1 Gemeinsamer Faktor ausklammern <a class="quer" href="g1-1-grundlagen.html">↩ 1.1</a></h3>
+
+<p>Suche den <strong>grössten gemeinsamen Teiler (ggT)</strong> der Zahlen-Koeffizienten — über die Primfaktorzerlegung: jeden gemeinsamen Primfaktor mit dem kleinsten vorkommenden Exponenten — und bei Variablen den niedrigsten gemeinsamen Exponenten:</p>
+
+<table class="bin-tab">
+  <thead><tr><th style="width:38%">Term</th><th style="width:24%">Gemeinsamer Faktor</th><th>Ergebnis</th></tr></thead>
+  <tbody>
+    <tr><td class="formel">\(6x + 9\)</td>
+        <td class="formel">\(3\)</td>
+        <td class="formel">\(3(2x + 3)\)</td></tr>
+    <tr><td class="formel">\(4x^3 - 2x^2 + 6x\)</td>
+        <td class="formel">\(2x\)</td>
+        <td class="formel">\(2x(2x^2 - x + 3)\)</td></tr>
+    <tr><td class="formel">\(15a^2 b - 10 a b^2\)</td>
+        <td class="formel">\(5ab\)</td>
+        <td class="formel">\(5ab(3a - 2b)\)</td></tr>
+  </tbody>
+</table>
+
+<h3>6.2 Binomische Formeln rückwärts</h3>
+
+<p>Erkennt man im Term das Muster <em>Quadrat ± doppeltes Produkt ± Quadrat</em> oder <em>Differenz
+zweier Quadrate</em>, lässt sich der Term direkt als Produkt schreiben:</p>
+
+<table class="bin-tab">
+  <thead><tr><th style="width:40%">Erkanntes Muster</th><th>Faktorisierte Form</th></tr></thead>
+  <tbody>
+    <tr><td class="formel">\(x^2 + 10x + 25 = x^2 + 2 \cdot x \cdot 5 + 5^2\)</td>
+        <td class="formel">\((x + 5)^2\)</td></tr>
+    <tr><td class="formel">\(4y^2 - 12y + 9 = (2y)^2 - 2 \cdot 2y \cdot 3 + 3^2\)</td>
+        <td class="formel">\((2y - 3)^2\)</td></tr>
+    <tr><td class="formel">\(x^2 + 6x + 9 = x^2 + 2 \cdot x \cdot 3 + 3^2\)</td>
+        <td class="formel">\((x + 3)^2\)</td></tr>
+    <tr><td class="formel">\(x^2 - 49 = x^2 - 7^2\)</td>
+        <td class="formel">\((x + 7)(x - 7)\)</td></tr>
+    <tr><td class="formel">\(9a^2 - 16b^2 = (3a)^2 - (4b)^2\)</td>
+        <td class="formel">\((3a + 4b)(3a - 4b)\)</td></tr>
+  </tbody>
+</table>
+
+<h3>6.3 Zweiklammersatz (Satz von Vieta rückwärts)</h3>
+
+<p>Ein Polynom der Form \(x^2 + px + q\) — drei Glieder, das mittlere kein doppeltes Produkt — lässt sich
+oft als Produkt zweier einfacher Klammern schreiben:</p>
+
+\[ x^2 + p\,x + q \;=\; (x + r)(x + s), \quad \text{wobei } r + s = p \;\text{ und }\; r \cdot s = q. \]
+
+<p>Du suchst also zwei Zahlen \(r\) und \(s\), die <em>zusammen</em> den mittleren Koeffizienten und
+<em>multipliziert</em> das konstante Glied ergeben. Das funktioniert besonders schnell, wenn \(q\)
+nur wenige Teilerpaare hat.</p>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiele</div>
+  <ul>
+    <li>\(x^2 + 5x + 6\): Welche zwei Zahlen multipliziert geben 6 und addiert 5? \(\;2\) und \(3\).
+        Also \(x^2 + 5x + 6 = (x + 2)(x + 3)\).</li>
+    <li>\(x^2 - 7x + 12\): zwei Zahlen mit Produkt \(+12\) und Summe \(-7\). Beide negativ: \(-3\) und \(-4\).
+        Also \((x - 3)(x - 4)\).</li>
+    <li>\(x^2 + 2x - 15\): Produkt \(-15\), Summe \(+2\). Eine positiv, eine negativ: \(+5\) und \(-3\).
+        Also \((x + 5)(x - 3)\).</li>
+  </ul>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Vorzeichen-Faustregel</div>
+  <ul>
+    <li>\(q &gt; 0\): \(r\) und \(s\) haben das gleiche Vorzeichen (beide positiv oder beide negativ),
+        das ergibt sich aus dem Vorzeichen von \(p\).</li>
+    <li>\(q &lt; 0\): \(r\) und \(s\) haben verschiedene Vorzeichen, die grössere absolute Zahl trägt
+        das Vorzeichen von \(p\).</li>
+  </ul>
+</div>
+
+<h3>6.4 Gruppieren — Summe von vier Gliedern als Produkt</h3>
+
+<p>Bei einem Polynom mit <strong>vier Gliedern</strong>, das keinen gemeinsamen Faktor über alles hat,
+gruppiert man je zwei Glieder, klammert dort getrennt aus und hofft, dass eine gemeinsame Klammer entsteht
+— die dann nochmals ausgeklammert wird:</p>
+
+\[ \underbrace{ax + ay}_{a(x+y)} + \underbrace{bx + by}_{b(x+y)} \;=\; a(x+y) + b(x+y) \;=\; (x+y)(a+b). \]
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel</div>
+  \[ \begin{aligned}
+      x^3 + 3x^2 + 2x + 6 \;&=\; \underbrace{x^3 + 3x^2}_{x^2(x+3)} \;+\; \underbrace{2x + 6}_{2(x+3)} \\
+      &=\; x^2(x+3) + 2(x+3) \\
+      &=\; (x+3)(x^2 + 2).
+  \end{aligned} \]
+  <p style="margin-top:6px">Trick: Sucht man <em>einen</em> Faktor pro Paar, der so gewählt ist, dass in
+  <em>beiden</em> Restklammern dieselbe Klammer steht. Wenn die zweite Klammer beim ersten Versuch nicht
+  passt, hilft oft eine andere Paarung der vier Glieder.</p>
+</div>
+
+<h3>6.5 Kombinieren — erst ausklammern, dann binomisch</h3>
+
+<p>Bei vielen Termen muss man <em>mehrere</em> Techniken nacheinander anwenden — und zwar in einer
+festen Reihenfolge: <strong>zuerst</strong> immer der gemeinsame Faktor, danach erst Binom oder
+Zweiklammersatz.</p>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel</div>
+  \[ 2x^3 - 18x \;=\; 2x(x^2 - 9) \;=\; 2x(x + 3)(x - 3). \]
+  <p style="margin-top:6px">Erst den gemeinsamen Faktor \(2x\) ausklammern, dann die dritte
+  binomische Formel rückwärts anwenden.</p>
+</div>
+
+<h3 style="margin-top:18px">Übung — schnell und richtig faktorisieren</h3>
+
+<div class="fak-uebung">
+  <div class="fak-row">
+    <div class="fak-formel">\(12x^2 - 8x = \;\square\)</div>
+    <div class="fak-eingabe"><input id="fak1" placeholder="z. B. 4x(...)"></div>
+    <div class="fak-feedback" id="fb1"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(x^2 - 81 = \;\square\)</div>
+    <div class="fak-eingabe"><input id="fak2" placeholder="zwei Klammern"></div>
+    <div class="fak-feedback" id="fb2"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(x^2 + 6x + 9 = \;\square\)</div>
+    <div class="fak-eingabe"><input id="fak3" placeholder="Quadrat einer Klammer"></div>
+    <div class="fak-feedback" id="fb3"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(x^2 + 7x + 12 = \;\square\)</div>
+    <div class="fak-eingabe"><input id="fak5" placeholder="Zweiklammersatz"></div>
+    <div class="fak-feedback" id="fb5"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(x^2 - x - 6 = \;\square\)</div>
+    <div class="fak-eingabe"><input id="fak6" placeholder="Zweiklammersatz"></div>
+    <div class="fak-feedback" id="fb6"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(ax + ay + 2x + 2y = \;\square\)</div>
+    <div class="fak-eingabe"><input id="fak7" placeholder="gruppieren"></div>
+    <div class="fak-feedback" id="fb7"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(3a^2 - 27 = \;\square\)</div>
+    <div class="fak-eingabe"><input id="fak4" placeholder="erst ausklammern"></div>
+    <div class="fak-feedback" id="fb4"></div>
+  </div>
+  <p style="margin-top:10px;font-size:9.5pt;color:var(--tinte-2);font-style:italic">
+    Schreib die Antwort so, wie du sie auch von Hand notieren würdest — Leerzeichen und
+    Reihenfolge der Faktoren sind egal. Beispiele für gültige Eingaben: <code>4x(3x - 2)</code>,
+    <code>(x+9)(x-9)</code>, <code>(x+3)^2</code>.</p>
+</div>
+
+<script>
+(function() {
+  function norm(s) {
+    return s.replace(/\s+/g, '').replace(/\*/g, '').replace(/·/g, '').toLowerCase();
+  }
+  function check(id, fbId, alternativen) {
+    const inp = document.getElementById(id);
+    const fb = document.getElementById(fbId);
+    if (!inp) return;
+    inp.addEventListener('input', () => {
+      const v = norm(inp.value);
+      if (!v) { fb.textContent = ''; fb.className = 'fak-feedback'; return; }
+      if (alternativen.some(a => norm(a) === v)) {
+        fb.textContent = '✓ richtig';
+        fb.className = 'fak-feedback ok';
+      } else {
+        fb.textContent = '… probier nochmal';
+        fb.className = 'fak-feedback fehl';
+      }
+    });
+  }
+  check('fak1', 'fb1', ['4x(3x-2)', '4x(3x-2)', '(3x-2)4x', '4·x(3x-2)']);
+  check('fak2', 'fb2', ['(x+9)(x-9)', '(x-9)(x+9)']);
+  check('fak3', 'fb3', ['(x+3)^2', '(x+3)(x+3)', '(x+3)²']);
+  check('fak4', 'fb4', ['3(a+3)(a-3)', '3(a-3)(a+3)']);
+  check('fak5', 'fb5', ['(x+3)(x+4)', '(x+4)(x+3)']);
+  check('fak6', 'fb6', ['(x-3)(x+2)', '(x+2)(x-3)']);
+  check('fak7', 'fb7', ['(x+y)(a+2)', '(a+2)(x+y)']);
+})();
+</script>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — in welcher Reihenfolge?</div>
+  <ol>
+    <li>Gibt es einen <strong>gemeinsamen Faktor</strong>? Erst ausklammern (Abschnitt 6.1).</li>
+    <li>Hat der Rest <strong>zwei Glieder</strong>? Auf Differenz von Quadraten prüfen (Abschnitt 6.2).</li>
+    <li>Hat der Rest <strong>drei Glieder</strong>? Erst auf binomische Formel prüfen
+        (\(a^2 \pm 2ab + b^2\), Abschnitt 6.2), wenn das nicht passt: Zweiklammersatz (Abschnitt 6.3).</li>
+    <li>Hat der Rest <strong>vier Glieder</strong>? Paarweise gruppieren und ggT je Paar
+        ausklammern (Abschnitt 6.4) — gemeinsame Klammer suchen.</li>
+    <li>Sonst: stehen lassen oder weiter im Kapitel <em>Quadratische Gleichungen</em> mit der
+        \(p,q\)-Formel angehen.</li>
+  </ol>
+</div>
+
+<!-- ──────────────────────── 7. AUFGABEN ──────────────────────── -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
 
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Gleichartige Glieder zusammenfassen</span></div>
+  <p>Vereinfache:</p>
+    <ol class="aufg-liste">
+    <li>\(\;7x - 3 + 2x + 8\)</li>
+    <li>\(\;5a^2 - 3a + 2 - a^2 + 7a - 5\)</li>
+    <li>\(\;4xy - 2x^2 y + 3xy + x^2 y\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a1')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(7x + 2x - 3 + 8 = 9x + 5\).</li>
+        <li>\(5a^2 - a^2 - 3a + 7a + 2 - 5 = 4a^2 + 4a - 3\).</li>
+        <li>\(4xy + 3xy - 2x^2 y + x^2 y = 7xy - x^2 y\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Klammern auflösen</span></div>
+    <ol class="aufg-liste">
+    <li>\(\;3(2x - 5) + 4(x + 2)\)</li>
+    <li>\(\;-(3a - 2b) - 2(a - b)\)</li>
+    <li>\(\;5 - 2[3 - (x - 4)]\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(6x - 15 + 4x + 8 = 10x - 7\).</li>
+        <li>\(-3a + 2b - 2a + 2b = -5a + 4b\).</li>
+        <li>Innere Klammer zuerst: \(3 - (x - 4) = 3 - x + 4 = 7 - x\). Dann
+      \(5 - 2(7 - x) = 5 - 14 + 2x = -9 + 2x\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Klammer mal Klammer ausmultiplizieren</span></div>
+    <ol class="aufg-liste">
+    <li>\(\;(x + 3)(x - 5)\)</li>
+    <li>\(\;(2a - 1)(a + 4)\)</li>
+    <li>\(\;(x + y)(x - y) - (x - y)^2\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a3')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(x^2 - 5x + 3x - 15 = x^2 - 2x - 15\).</li>
+        <li>\(2a^2 + 8a - a - 4 = 2a^2 + 7a - 4\).</li>
+        <li>Erst beide Teile: \((x+y)(x-y) = x^2 - y^2\) und \((x-y)^2 = x^2 - 2xy + y^2\).
+      Differenz: \((x^2 - y^2) - (x^2 - 2xy + y^2) = -2y^2 + 2xy = 2y(x - y)\).</li>
+      </ol>
+      <p><em>Alternativ — schneller über den gemeinsamen Faktor \((x-y)\):</em>
+      \((x+y)(x-y) - (x-y)^2 = (x-y)\cdot\bigl((x+y) - (x-y)\bigr) = (x-y) \cdot 2y = 2y(x-y)\).</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Binomische Formeln direkt</span></div>
+  <p>Ohne ausführliches Ausmultiplizieren — direkt mit der binomischen Formel:</p>
+<ol class="aufg-liste">
+  <li>\(\;(x - 6)^2\)</li>
+  <li>\(\;(3a + 2b)^2\)</li>
+  <li>\(\;(5x + 7)(5x - 7)\)</li>
+  <li>\(\;102^2\) im Kopf</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(x^2 - 12x + 36\).</li>
+        <li>\(9a^2 + 12ab + 4b^2\).</li>
+        <li>\(25x^2 - 49\).</li>
+        <li>\(102^2 = (100 + 2)^2 = 10\,000 + 400 + 4 = 10\,404\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Faktorisieren — Kombinationen</span></div>
+    <ol class="aufg-liste">
+    <li>\(\;6x^2 - 9x\)</li>
+    <li>\(\;x^2 - 25\)</li>
+    <li>\(\;x^2 - 14x + 49\)</li>
+    <li>\(\;5x^3 - 20x\)</li>
+    <li>\(\;a^4 - 16\) &nbsp;<span style="font-family:var(--mono);font-size:9pt;color:var(--tinte-2)">(zweimal anwenden!)</span></li>
+    <li>\(\;x^2 + 8x + 15\) &nbsp;<span style="font-family:var(--mono);font-size:9pt;color:var(--tinte-2)">(Zweiklammersatz)</span></li>
+    <li>\(\;x^2 - 2x - 24\) &nbsp;<span style="font-family:var(--mono);font-size:9pt;color:var(--tinte-2)">(Zweiklammersatz)</span></li>
+    <li>\(\;2x^2 - 10x + 12\) &nbsp;<span style="font-family:var(--mono);font-size:9pt;color:var(--tinte-2)">(erst ausklammern, dann Zweiklammersatz)</span></li>
+    <li>\(\;3ax + 3ay + 4bx + 4by\) &nbsp;<span style="font-family:var(--mono);font-size:9pt;color:var(--tinte-2)">(gruppieren)</span></li>
+    <li>\(\;x^3 - x^2 + 3x - 3\) &nbsp;<span style="font-family:var(--mono);font-size:9pt;color:var(--tinte-2)">(gruppieren)</span></li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(3x(2x - 3)\).</li>
+        <li>Differenz von Quadraten: \((x + 5)(x - 5)\).</li>
+        <li>Zweite binomische Formel: \((x - 7)^2\).</li>
+        <li>Erst \(5x\) ausklammern: \(5x(x^2 - 4) = 5x(x + 2)(x - 2)\).</li>
+        <li>\(a^4 - 16 = (a^2)^2 - 4^2 = (a^2 + 4)(a^2 - 4) = (a^2 + 4)(a + 2)(a - 2)\).
+      Hinweis: \(a^2 + 4\) lässt sich in \(\mathbb{R}\) nicht weiter zerlegen.</li>
+        <li>Produkt \(+15\), Summe \(+8\) → \(+3\) und \(+5\). Also \((x + 3)(x + 5)\).</li>
+        <li>Produkt \(-24\), Summe \(-2\) → verschiedene Vorzeichen, das grössere mit Minus: \(-6\) und \(+4\).
+            Also \((x - 6)(x + 4)\).</li>
+        <li>Erst \(2\) ausklammern: \(2(x^2 - 5x + 6)\). Dann Zweiklammersatz: \(-2\) und \(-3\).
+            Ergebnis: \(2(x - 2)(x - 3)\).</li>
+        <li>Paarweise gruppieren: \(3a(x + y) + 4b(x + y) = (x + y)(3a + 4b)\).</li>
+        <li>Paarweise gruppieren: \(x^2(x - 1) + 3(x - 1) = (x - 1)(x^2 + 3)\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — Restmaterial beim Zuschnitt</span></div>
+  <p>Aus einem grossen Holzbrett wird in einer Schreinerei ein rechteckiges Werkstück mit
+  Länge \((x + 4)\) m und Breite \((x - 1)\) m zugeschnitten, ausserdem ein quadratisches
+  Verschnittstück mit Seitenlänge \(x\) m für ein anderes Projekt.</p>
+    <ol class="aufg-liste">
+    <li>Drücke die <strong>Restfläche</strong> (Werkstück minus Verschnitt) als Term in \(x\) aus,
+  einmal ausmultipliziert und einmal in faktorisierter Form.</li>
+    <li>Wie gross ist die Restfläche für \(x = 5\) m?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Werkstückfläche: \((x + 4)(x - 1) = x^2 + 3x - 4\).
+      Verschnittfläche: \(x^2\).
+      Restfläche: \(x^2 + 3x - 4 - x^2 = 3x - 4\).
+      Faktorisierte Form: nicht weiter zerlegbar — der lineare Term \(3x - 4\) ist schon einfach.</li>
+        <li>\(3 \cdot 5 - 4 = 11\) m².</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────────────── 8. ZUSAMMENFASSUNG ──────────────────────── -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Werbeslogan auf algebraische Korrektheit prüfen <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Auf einer Verpackung steht: „Mit unserer neuen Formel \((a + b)^2 = a^2 + b^2\) sparst du Zeit beim Rechnen!" Ein anderer Slogan bei einer Konkurrenzmarke: „Wir wissen: \(2 \cdot (x + y) = 2x + 2y\) — das ist Mathematik, der man trauen kann." Auf einer Bauwerkstattbroschüre wirbt jemand: „Diagonale aus zwei Schenkeln? Wir nehmen einfach \(\sqrt{a^2 + b^2} = a + b\) und sparen den Wurzeltaster!" Und in einem Mathematik-Comic prahlt eine Figur: „Quadrieren? Kubieren? Beides geht gleich: \((a + b)^3 = a^3 + b^3\)!"</p>
+<ol class="aufg-liste">
+  <li>Welche der vier Slogans sind algebraisch korrekt, welche falsch?</li>
+  <li>Gib bei jedem falschen Slogan eine Wertekombination an, mit der man ihn widerlegen kann.</li>
+  <li>Wie könnten die falschen Slogans algebraisch korrekt formuliert werden, ohne ihre „Einfachheit" zu verlieren?</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Nur der zweite Slogan ist korrekt (Distributivgesetz). Die anderen drei sind <strong>falsch</strong> — alle gehören zur gleichen Fehlerfamilie: man darf eine Operation (Potenz, Wurzel) <em>nicht</em> einfach auf jedes Glied einer Summe einzeln anwenden.</li>
+        <li>Gegenbeispiele jeweils mit \(a = 1, b = 2\):</li>
+        <li>Korrekte Formen:</li>
+      </ol>
+      <ul style="margin:4px 0 0 18px">
+        <li>Slogan 1: \((a + b)^2 = a^2 + 2ab + b^2\) (1. binomische Formel).</li>
+        <li>Slogan 3: Die Wurzel aus einer Summe lässt sich nicht weiter vereinfachen — man muss
+            erst die Summe ausrechnen, dann die Wurzel ziehen.</li>
+        <li>Slogan 4: \((a + b)^3 = a^3 + 3a^2 b + 3a b^2 + b^3\) (Erweiterung der binomischen Formeln,
+            wird im Schwerpunktfach 1.1 / 1.2 behandelt).</li>
+      </ul>
+      <p>Der „Spar-Effekt" der falschen Slogans liegt im <em>Weglassen</em> der gemischten Glieder
+      — und damit verschwindet die Korrektheit.</p>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
 
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <ol style="margin:0">
+    <li><strong>Gleichartige Glieder</strong> haben denselben Variablen-Anteil — nur sie können
+        zusammengefasst werden.</li>
+    <li><strong>Klammern auflösen:</strong> \(+\) lässt unverändert, \(-\) kippt alle Vorzeichen,
+        Faktor multipliziert <em>jedes</em> Glied, Klammer mal Klammer macht <em>jeder mit jedem</em>.</li>
+    <li><strong>Drei binomische Formeln:</strong>
+        \((a + b)^2 = a^2 + 2ab + b^2\),
+        \((a - b)^2 = a^2 - 2ab + b^2\),
+        \((a + b)(a - b) = a^2 - b^2\) — auswendig.</li>
+    <li><strong>Faktorisieren in zwei Schritten:</strong> erst gemeinsamen Faktor ausklammern,
+        dann auf binomische Formeln prüfen.</li>
+  </ol>
+</div>
 
-<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead><tr><th>Operation</th><th>Regel</th><th>Beispiel</th></tr></thead>
+  <tbody>
+    <tr><td>Zusammenfassen</td><td>nur gleichartige Glieder addieren</td><td>\(3x + 5x = 8x\)</td></tr>
+    <tr><td>\(+\)-Klammer auflösen</td><td>Vorzeichen unverändert</td><td>\(a + (b - c) = a + b - c\)</td></tr>
+    <tr><td>\(-\)-Klammer auflösen</td><td>alle Vorzeichen kippen</td><td>\(a - (b - c) = a - b + c\)</td></tr>
+    <tr><td>Distributivgesetz</td><td>Faktor mal jedes Glied</td><td>\(3(x + 2) = 3x + 6\)</td></tr>
+    <tr><td>Klammer mal Klammer</td><td>jeder mit jedem</td><td>\((a+b)(c+d) = ac + ad + bc + bd\)</td></tr>
+    <tr><td>1. binomische Formel</td><td>\((a+b)^2\)</td><td>\(a^2 + 2ab + b^2\)</td></tr>
+    <tr><td>2. binomische Formel</td><td>\((a-b)^2\)</td><td>\(a^2 - 2ab + b^2\)</td></tr>
+    <tr><td>3. binomische Formel</td><td>\((a+b)(a-b)\)</td><td>\(a^2 - b^2\)</td></tr>
+    <tr><td>Ausklammern</td><td>gemeinsamen Faktor heraus</td><td>\(6x^2 + 4x = 2x(3x + 2)\)</td></tr>
+  </tbody>
+</table>
+
+<!-- ──────────────────────── 9. DOWNLOADS ──────────────────────── -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
 
+<p>Zu diesem Thema gehören fünf Standardmaterialien — Theorie zum Mitnehmen, Karteikarten zum
+Auswendiglernen, Aufgabenserien zum Üben:</p>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g1-3-algebraische-terme/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-3-algebraische-terme/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Klammergesetze und binomische Formeln</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-3-algebraische-terme/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-3-algebraische-terme/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-3-algebraische-terme/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ──────────────────────── 10. EXTERNE RESSOURCEN ──────────────────────── -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lWPWBvEXDrcCEZ54ZdtYazp" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme vereinfachen — Playlist</div><div class="lk-s">MathemaTrick · 64 Videos · Klammern auflösen, Zusammenfassen, Bruchterme</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzmBhxJfVgJ9pTv2QeqJsbO_" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme &amp; Gleichungen — Playlist</div><div class="lk-s">Lehrerschmidt · 27 Videos · Termumformungen Schritt für Schritt</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHjM0_gGTkVHw5tD61_5QzCn" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme und Gleichungen — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 54 Videos · Ausklammern, Faktorisieren, binomische Formeln</div></div></a>
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g0/g02/aufg_g02.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Algebra mit ganzen Zahlen (G02)</div><div class="lk-s">Binomische Formeln und Faktorzerlegung mit ausführlichen Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/50453/aufgaben-zum-umformen-von-termen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Terme umformen</div><div class="lk-s">Klammern auflösen, Kommutativgesetz, Zusammenfassen mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/terme-gleichungen/terme-variablen/bruchterme/aufgaben-umgang-bruchtermen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Bruchterme</div><div class="lk-s">Vereinfachen, Definitionsmenge, Erweitern und Kürzen</div></div></a>
+  <a href="https://de.serlo.org/mathe/terme-gleichungen/terme-variablen/faktorisieren-ausklammern/faktorisieren" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Faktorisieren</div><div class="lk-s">Ausklammern und binomische Formeln rückwärts üben</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -92,11 +1004,1245 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Grundoperationen mit algebraischen Termen</p>
+  <p>Grundlagenfach 1.3 Grundoperationen mit algebraischen Termen</p>
 </footer>
 
-<script src="../nav.js"></script>
-<script src="../mathlib.js"></script>
+<script>
+/* ════════════════════════════════════════════════════════════════
+ *  EINSTIEG · Drei äquivalente Terme + ein falscher
+ *  Vier Terme nebeneinander, alle mit Werten von x und y. Anna,
+ *  Bruno und Cinzia liefern denselben Wert (äquivalent). Dario
+ *  ist eine plausible-aussehende Umformung, aber falsch — der
+ *  Wert weicht ab.
+ * ════════════════════════════════════════════════════════════════ */
+function drawEquiv() {
+  const sldX = document.getElementById('sld-equivX');
+  const sldY = document.getElementById('sld-equivY');
+  if (!sldX) return;
+  const x = +sldX.value;
+  const y = +sldY.value;
+  document.getElementById('lbl-equivX').textContent = x;
+  document.getElementById('lbl-equivY').textContent = y;
+
+  const { ctx, W, H } = initCanvas('cv-equiv', 260);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  // Vier Terme, vier Spalten
+  const colW = W / 4;
+  // Anna: 80x + 50y
+  // Bruno: 10(8x + 5y)
+  // Cinzia: 80x + 30y + 20y
+  // Dario: (80 + 50)(x + y) ← FALSCH
+  const anna   = 80 * x + 50 * y;
+  const bruno  = 10 * (8 * x + 5 * y);
+  const cinzia = 80 * x + 30 * y + 20 * y;
+  const dario  = (80 + 50) * (x + y);
+  const terme = [
+    { titel: 'Anna',   formel: '80·x + 50·y',         berechnung: `80·${x} + 50·${y}`,           ergebnis: anna,   korrekt: true },
+    { titel: 'Bruno',  formel: '10·(8·x + 5·y)',      berechnung: `10·(8·${x} + 5·${y})`,        ergebnis: bruno,  korrekt: true },
+    { titel: 'Cinzia', formel: '80·x + 30·y + 20·y',  berechnung: `80·${x} + 30·${y} + 20·${y}`, ergebnis: cinzia, korrekt: true },
+    { titel: 'Dario',  formel: '(80+50)·(x+y)',       berechnung: `(80+50)·(${x}+${y})`,         ergebnis: dario,  korrekt: (anna === dario) },
+  ];
+
+  terme.forEach((t, i) => {
+    const cx = colW * i + colW / 2;
+    let cy = 20;
+
+    // Spaltentitel mit Farbcode
+    ctx.fillStyle = t.korrekt ? '#5a5040' : '#a83a3a';
+    ctx.font = 'bold 11px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(t.titel.toUpperCase() + (t.korrekt ? '' : ' (?)'), cx, cy);
+    cy += 16;
+
+    // Formel-Box
+    ctx.fillStyle = t.korrekt ? '#dceaf8' : '#fde2e0';
+    ctx.strokeStyle = t.korrekt ? '#1a4f8a' : '#a83a3a';
+    ctx.lineWidth = 1.5;
+    const boxW = colW - 18;
+    ctx.fillRect(cx - boxW/2, cy - 12, boxW, 22);
+    ctx.strokeRect(cx - boxW/2, cy - 12, boxW, 22);
+    ctx.fillStyle = t.korrekt ? '#1a4f8a' : '#a83a3a';
+    ctx.font = 'bold 12px monospace';
+    ctx.fillText(t.formel, cx, cy + 3);
+    cy += 24;
+
+    // Einsetzen
+    ctx.fillStyle = '#3a342a';
+    ctx.font = '11px monospace';
+    ctx.fillText(`x=${x}, y=${y}:`, cx, cy);
+    cy += 14;
+
+    // Berechnung
+    ctx.fillStyle = '#1c1a17';
+    ctx.font = '11px monospace';
+    ctx.fillText('= ' + t.berechnung, cx, cy);
+    cy += 14;
+
+    // Zwischenschritt für jede Person
+    let zw;
+    if (t.titel === 'Anna')        zw = `= ${80*x} + ${50*y}`;
+    else if (t.titel === 'Bruno')  zw = `= 10·${8*x + 5*y}`;
+    else if (t.titel === 'Cinzia') zw = `= ${80*x} + ${30*y} + ${20*y}`;
+    else                            zw = `= 130·${x + y}`;
+    ctx.fillText(zw, cx, cy);
+    cy += 18;
+
+    // Ergebnis
+    const isSame = t.ergebnis === anna;
+    ctx.fillStyle = isSame ? '#d4f0d4' : '#fde2e0';
+    ctx.strokeStyle = isSame ? '#2d9d5e' : '#a83a3a';
+    ctx.lineWidth = 2;
+    ctx.fillRect(cx - 38, cy - 15, 76, 26);
+    ctx.strokeRect(cx - 38, cy - 15, 76, 26);
+    ctx.fillStyle = '#1c1a17';
+    ctx.font = 'bold 14px monospace';
+    ctx.fillText(t.ergebnis, cx, cy + 2);
+    cy += 22;
+
+    // Vermerk direkt unter Darios Ergebnis: er ist nicht äquivalent
+    if (t.titel === 'Dario') {
+      ctx.fillStyle = '#a83a3a';
+      ctx.font = 'bold 10px monospace';
+      const diff = dario - anna;
+      if (diff === 0) {
+        ctx.fillText('zufällig gleich –', cx, cy);
+        ctx.fillText('nicht äquivalent', cx, cy + 10);
+      } else {
+        ctx.fillText('nicht äquivalent', cx, cy);
+        ctx.font = '10px monospace';
+        ctx.fillStyle = '#7a2a2a';
+        ctx.fillText((diff > 0 ? '+' : '') + diff + ' zu viel', cx, cy + 10);
+      }
+    }
+
+    // Trennlinie
+    if (i < 3) {
+      ctx.strokeStyle = '#d4cab5';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(colW * (i + 1), 12);
+      ctx.lineTo(colW * (i + 1), H - 18);
+      ctx.stroke();
+    }
+  });
+
+  // Streifen unten
+  const allGleich = (anna === bruno) && (bruno === cinzia);
+  ctx.fillStyle = allGleich ? '#2d9d5e' : '#5a5040';
+  ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(`Anna = Bruno = Cinzia = ${anna}    ·    Dario = ${dario}`, W / 2, H - 6);
+
+  // Live-Anzeigen
+  document.getElementById('leg-equivA').textContent = anna;
+  document.getElementById('leg-equivB').textContent = bruno;
+  document.getElementById('leg-equivC').textContent = cinzia;
+  const dEl = document.getElementById('leg-equivD');
+  dEl.textContent = dario;
+  dEl.style.color = (dario === anna) ? 'var(--gruen)' : 'var(--rot)';
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const sldX = document.getElementById('sld-equivX');
+  if (sldX) {
+    sldX.addEventListener('input', drawEquiv);
+    document.getElementById('sld-equivY').addEventListener('input', drawEquiv);
+    drawEquiv();
+  }
+});
+</script>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+ *  DEFINITIONEN · Begriffe-am-Polynom-Animation
+ *  Fünf Polynome, fünf Begriffe (Glied / Koeffizient / Grad eines
+ *  Glieds / Grad des Polynoms / Konstantes Glied).
+ *  Bei Klick wird der zugehörige Begriff im Polynom hervorgehoben.
+ * ════════════════════════════════════════════════════════════════ */
+(function() {
+  // Polynome als Liste von Gliedern. coeff: Vorzeichen+Zahl, exp: Exponent.
+  // "konst" = true für konstantes Glied.
+  const POLYNOME = [
+    { label: '2x + 5',                     glieder: [
+      { coeff: 2,  exp: 1, konst: false },
+      { coeff: 5,  exp: 0, konst: true  },
+    ]},
+    { label: 'x² − 4x + 3',                glieder: [
+      { coeff: 1,  exp: 2, konst: false },
+      { coeff: -4, exp: 1, konst: false },
+      { coeff: 3,  exp: 0, konst: true  },
+    ]},
+    { label: '3x³ − 2x + 5',               glieder: [
+      { coeff: 3,  exp: 3, konst: false },
+      { coeff: -2, exp: 1, konst: false },
+      { coeff: 5,  exp: 0, konst: true  },
+    ]},
+    { label: '−2x³ + x² + 7',              glieder: [
+      { coeff: -2, exp: 3, konst: false },
+      { coeff: 1,  exp: 2, konst: false },
+      { coeff: 7,  exp: 0, konst: true  },
+    ]},
+    { label: '4x² − x',                    glieder: [
+      { coeff: 4,  exp: 2, konst: false },
+      { coeff: -1, exp: 1, konst: false },
+      // kein konstantes Glied!
+    ]},
+  ];
+
+  let aktuellesPoly = 0;
+  let aktuellerBegriff = null;
+
+  function rendere() {
+    const poly = POLYNOME[aktuellesPoly];
+    const maxGrad = Math.max(...poly.glieder.map(g => g.exp));
+    const display = document.getElementById('begr-display');
+    // Bei Grad-Begriffen (gradGlied / gradPoly) wird ein Glied vom Grad 1 als x¹
+    // mit hervorgehobener "1" gerendert — sonst nur als x.
+    const zeigeExp1 = (aktuellerBegriff === 'gradGlied' || aktuellerBegriff === 'gradPoly');
+    let html = '';
+    poly.glieder.forEach((g, i) => {
+      // Vorzeichen-Operator vor jedem Glied (ausser dem ersten,
+      // wo das Vorzeichen Teil des Koeffizienten ist)
+      let vz = '';
+      let absKoeff = Math.abs(g.coeff);
+      if (i === 0) {
+        if (g.coeff < 0) vz = '−';
+      } else {
+        vz = g.coeff < 0 ? '−' : '+';
+      }
+      // Koeffizient als String: bei |coeff|=1 und exp>0 weglassen
+      let koStr;
+      if (g.exp > 0 && absKoeff === 1) {
+        koStr = '';
+      } else {
+        koStr = String(absKoeff);
+      }
+      // Variable + Exponent. Bei Grad-Begriff wird auch der implizite Exp=1
+      // ausgeschrieben, damit die "1" als .ex hervorgehoben werden kann.
+      let varStr = '';
+      if (g.exp > 0) {
+        varStr = 'x';
+        if (g.exp > 1) {
+          varStr += '<sup class="ex">' + g.exp + '</sup>';
+        } else if (zeigeExp1) {
+          varStr += '<sup class="ex">1</sup>';
+        }
+      }
+      // Klassen für das Glied
+      const klassen = ['gl'];
+      if (g.exp === maxGrad) klassen.push('gradmax');
+      if (g.konst) klassen.push('konstant');
+      // Operator (Vorzeichen) ausserhalb des gl-Spans, wenn nicht erstes Glied
+      if (i > 0) {
+        html += '<span class="op">&nbsp;' + vz + '&nbsp;</span>';
+      } else if (vz === '−') {
+        // Erstes Glied mit Minus: Minus im Glied
+      }
+      html += '<span class="' + klassen.join(' ') + '">';
+      if (i === 0 && vz === '−') {
+        html += '<span class="vr">−</span>';
+      }
+      if (koStr) {
+        html += '<span class="ko">' + koStr + '</span>';
+      }
+      html += varStr;
+      html += '</span>';
+    });
+    display.innerHTML = html;
+    display.className = 'begr-display' + (aktuellerBegriff ? ' show-' + aktuellerBegriff : '');
+
+    // Erklärungstext
+    const erkl = document.getElementById('begr-erkl');
+    erkl.className = 'begr-erkl' + (aktuellerBegriff ? ' show-' + aktuellerBegriff : '');
+    if (!aktuellerBegriff) {
+      erkl.innerHTML = 'Wähle einen Begriff rechts, um zu sehen, was er am Polynom <em>'
+        + poly.label + '</em> bedeutet.';
+    } else {
+      const grad = maxGrad;
+      const hatKonst = poly.glieder.some(g => g.konst);
+      const konstWert = hatKonst ? poly.glieder.find(g => g.konst).coeff : null;
+      const koeffListe = poly.glieder.map(g => g.coeff).join(', ');
+      const erklTexte = {
+        glied:     'Die <strong>Glieder</strong> (auch Monome) sind die einzelnen Summanden des Polynoms — durch <em>+</em> oder <em>−</em> voneinander getrennt. Hier hat <em>' + poly.label + '</em> insgesamt ' + poly.glieder.length + ' Glieder.',
+        koeff:     'Der <strong>Koeffizient</strong> jedes Glieds ist die Zahl vor der Variable (mit Vorzeichen). Hier: ' + koeffListe + '.',
+        gradGlied: 'Der <strong>Grad eines Glieds</strong> ist der Exponent der Variable. Glieder ohne Variable haben den Grad 0.',
+        gradPoly:  'Der <strong>Grad des Polynoms</strong> ist der grösste Grad, der unter den Gliedern vorkommt. Hier: Grad ' + grad + '.',
+        konst:     hatKonst
+          ? 'Das <strong>konstante Glied</strong> ist das Glied ohne Variable (Grad 0). Hier: ' + konstWert + '.'
+          : '<em>' + poly.label + '</em> hat <strong>kein konstantes Glied</strong> — alle Glieder enthalten die Variable. Das konstante Glied wäre 0.',
+      };
+      erkl.innerHTML = erklTexte[aktuellerBegriff];
+    }
+  }
+
+  function init() {
+    // Polynom-Chips bauen
+    const polyChips = document.getElementById('begr-poly-chips');
+    if (!polyChips) return;
+    POLYNOME.forEach((p, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'chip' + (i === 0 ? ' aktiv' : '');
+      btn.innerHTML = p.label;
+      btn.addEventListener('click', () => {
+        aktuellesPoly = i;
+        polyChips.querySelectorAll('.chip').forEach(c => c.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        rendere();
+      });
+      polyChips.appendChild(btn);
+    });
+    // Begriff-Chips
+    document.querySelectorAll('#begr-begriff-chips .begr-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const b = btn.dataset.begriff;
+        if (aktuellerBegriff === b) {
+          // Nochmal klicken = aus
+          aktuellerBegriff = null;
+          btn.classList.remove('aktiv');
+        } else {
+          aktuellerBegriff = b;
+          document.querySelectorAll('#begr-begriff-chips .begr-chip').forEach(c => c.classList.remove('aktiv'));
+          btn.classList.add('aktiv');
+        }
+        rendere();
+      });
+    });
+    rendere();
+  }
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+ *  ZUSAMMENFASSEN · 4-Schritt-Animation mit Slider
+ *  Schritt 0: unsortiertes Polynom (alle Glieder grau)
+ *  Schritt 1: gleichartige Glieder gleich einfärben
+ *  Schritt 2: nach Farbe sortieren (CSS-Reihenfolge ändern)
+ *  Schritt 3: zusammenfassen — pro Farbgruppe ein einziges Glied
+ * ════════════════════════════════════════════════════════════════ */
+(function() {
+  // Polynome als Liste von Gliedern mit Sort-Schlüssel
+  // sortKey: gleicher Schlüssel → gleichartig → gleiche Farbe
+  // Wir nutzen 5 unsortierte Polynome unterschiedlicher Komplexität.
+  const POLYS = [
+    { label: '5x + 3 − 2x + 7',
+      glieder: [
+        { coeff: 5, varStr: 'x', sortKey: 'x' },
+        { coeff: 3, varStr: '',  sortKey: 'k' },
+        { coeff: -2,varStr: 'x', sortKey: 'x' },
+        { coeff: 7, varStr: '',  sortKey: 'k' },
+      ]
+    },
+    { label: '4x² + 3x − x² + 2x − 5',
+      glieder: [
+        { coeff: 4, varStr: 'x²', sortKey: 'x2' },
+        { coeff: 3, varStr: 'x',  sortKey: 'x' },
+        { coeff: -1,varStr: 'x²', sortKey: 'x2' },
+        { coeff: 2, varStr: 'x',  sortKey: 'x' },
+        { coeff: -5,varStr: '',   sortKey: 'k' },
+      ]
+    },
+    { label: '2ab − 5a²b + 7ab + 2a²b',
+      glieder: [
+        { coeff: 2, varStr: 'ab',  sortKey: 'ab' },
+        { coeff: -5,varStr: 'a²b', sortKey: 'a2b' },
+        { coeff: 7, varStr: 'ab',  sortKey: 'ab' },
+        { coeff: 2, varStr: 'a²b', sortKey: 'a2b' },
+      ]
+    },
+    { label: '2x² + 3x − 7x² + 5 + 4x − 2',
+      glieder: [
+        { coeff: 2, varStr: 'x²', sortKey: 'x2' },
+        { coeff: 3, varStr: 'x',  sortKey: 'x' },
+        { coeff: -7,varStr: 'x²', sortKey: 'x2' },
+        { coeff: 5, varStr: '',   sortKey: 'k' },
+        { coeff: 4, varStr: 'x',  sortKey: 'x' },
+        { coeff: -2,varStr: '',   sortKey: 'k' },
+      ]
+    },
+    { label: '5x³ − 2x² + 3x³ + x² − 4',
+      glieder: [
+        { coeff: 5, varStr: 'x³', sortKey: 'x3' },
+        { coeff: -2,varStr: 'x²', sortKey: 'x2' },
+        { coeff: 3, varStr: 'x³', sortKey: 'x3' },
+        { coeff: 1, varStr: 'x²', sortKey: 'x2' },
+        { coeff: -4,varStr: '',   sortKey: 'k' },
+      ]
+    },
+  ];
+
+  // Map sortKey → CSS-Farbklasse (max. 5 verschiedene Farben)
+  const FARBKLASSEN = ['farbe-A', 'farbe-B', 'farbe-C', 'farbe-D', 'farbe-E'];
+  function farbenZuweisen(glieder) {
+    const map = {};
+    let i = 0;
+    glieder.forEach(g => {
+      if (!(g.sortKey in map)) {
+        map[g.sortKey] = FARBKLASSEN[i % FARBKLASSEN.length];
+        i++;
+      }
+    });
+    return map;
+  }
+  // Variable-Display in HTML (Hochstellung)
+  function varHtml(v) {
+    return v.replace(/²/g, '<sup>2</sup>').replace(/³/g, '<sup>3</sup>');
+  }
+  // Ein Glied zu HTML (mit Operator-Span davor, ausser für das erste)
+  function gliedHtml(g, idx, klass, sup) {
+    let vz = '';
+    if (idx === 0) {
+      vz = g.coeff < 0 ? '−' : '';
+    } else {
+      vz = g.coeff < 0 ? '−' : '+';
+    }
+    const absK = Math.abs(g.coeff);
+    let koStr;
+    if (g.varStr && absK === 1) koStr = '';
+    else koStr = String(absK);
+    const inner = (idx === 0 && vz === '−' ? '−' : '') + koStr + varHtml(g.varStr);
+    let out = '';
+    if (idx > 0) {
+      out += '<span class="op">' + vz + '</span> ';
+    }
+    out += '<span class="gl ' + (klass || '') + '"' + (sup ? ' ' + sup : '') + '>' + inner + '</span> ';
+    return out;
+  }
+
+  let aktuellesPoly = 0;
+  let aktuellerSchritt = 0;
+
+  const SCHRITT_LABELS = [
+    'Schritt 0 · unsortiert',
+    'Schritt 1 · einfärben',
+    'Schritt 2 · sortieren',
+    'Schritt 3 · zusammenfassen',
+  ];
+  const SCHRITT_ERKL = [
+    'Das Polynom in seiner ursprünglichen Form — Glieder noch wild durcheinander.',
+    'Glieder mit demselben Variablen-Anteil (gleichartig) bekommen dieselbe Farbe. Konstanten sind eine eigene Gruppe.',
+    'Die Glieder werden so umsortiert, dass gleichartige (= gleichfarbige) Glieder zusammen stehen.',
+    'Innerhalb jeder Farbgruppe werden die Koeffizienten addiert — fertig ist die zusammengefasste Form.',
+  ];
+
+  // Erzeugt das HTML für die Polynom-Anzeige zu einem bestimmten Schritt
+  function polyHtmlFuerSchritt(poly, schritt) {
+    const farbmap = farbenZuweisen(poly.glieder);
+    let html = '';
+    if (schritt === 0) {
+      poly.glieder.forEach((g, i) => { html += gliedHtml(g, i, ''); });
+    } else if (schritt === 1) {
+      poly.glieder.forEach((g, i) => { html += gliedHtml(g, i, farbmap[g.sortKey]); });
+    } else if (schritt === 2) {
+      const keys = [];
+      poly.glieder.forEach(g => { if (!keys.includes(g.sortKey)) keys.push(g.sortKey); });
+      let idx = 0;
+      keys.forEach(k => {
+        const grp = poly.glieder.filter(g => g.sortKey === k);
+        grp.forEach(g => {
+          html += gliedHtml(g, idx, farbmap[g.sortKey]);
+          idx++;
+        });
+      });
+    } else {
+      const keys = [];
+      poly.glieder.forEach(g => { if (!keys.includes(g.sortKey)) keys.push(g.sortKey); });
+      const summen = keys.map(k => {
+        const grp = poly.glieder.filter(g => g.sortKey === k);
+        const summe = grp.reduce((s, g) => s + g.coeff, 0);
+        return { coeff: summe, varStr: grp[0].varStr, sortKey: k };
+      }).filter(s => s.coeff !== 0);
+      summen.forEach((g, i) => {
+        html += gliedHtml(g, i, farbmap[g.sortKey]);
+      });
+      if (summen.length === 0) {
+        html = '<span class="gl">0</span>';
+      }
+    }
+    return html;
+  }
+
+  function rendere() {
+    const poly = POLYS[aktuellesPoly];
+    const display = document.getElementById('zus-display');
+    // Kumulativ: alle Schritte 0 .. aktuellerSchritt als eigene Zeile
+    let html = '';
+    for (let s = 0; s <= aktuellerSchritt; s++) {
+      html += '<div class="zeile-label">' + SCHRITT_LABELS[s] + '</div>';
+      html += '<div class="zeile-poly">' + polyHtmlFuerSchritt(poly, s) + '</div>';
+    }
+    display.innerHTML = html;
+    document.getElementById('zus-erkl').innerHTML = SCHRITT_ERKL[aktuellerSchritt];
+    document.getElementById('lbl-zus-schritt').textContent = aktuellerSchritt;
+  }
+
+  function init() {
+    const chips = document.getElementById('zus-poly-chips');
+    if (!chips) return;
+    POLYS.forEach((p, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'chip' + (i === 0 ? ' aktiv' : '');
+      btn.innerHTML = p.label.replace(/²/g, '<sup>2</sup>').replace(/³/g, '<sup>3</sup>');
+      btn.addEventListener('click', () => {
+        aktuellesPoly = i;
+        chips.querySelectorAll('.chip').forEach(c => c.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        rendere();
+      });
+      chips.appendChild(btn);
+    });
+    const sld = document.getElementById('sld-zus');
+    if (sld) {
+      sld.addEventListener('input', () => {
+        aktuellerSchritt = +sld.value;
+        rendere();
+      });
+    }
+    rendere();
+  }
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+ *  KLAMMERN AUFLÖSEN · Vorzeichen-Toggle
+ *  Schwache Plus-Zeichen vor erstem Summanden ein-/ausblenden.
+ * ════════════════════════════════════════════════════════════════ */
+(function() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btn-vz-toggle');
+    const vis = document.getElementById('klammer-vis');
+    if (!btn || !vis) return;
+    btn.addEventListener('click', () => {
+      const aktiv = vis.classList.toggle('vz-stark');
+      btn.classList.toggle('aktiv', aktiv);
+      btn.textContent = aktiv ? 'Vorzeichen ausblenden' : 'Vorzeichen zeigen';
+    });
+  });
+})();
+</script>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+ *  BINOMISCHE FORMELN · Geometrische Visualisierung
+ *  Quadrat (a±b)·(a±b), Teilflächen, beschriftet mit aktuellen
+ *  Werten von a und b. Synchron rechts: Produktform und Summenform.
+ *  Wahl zwischen 1./2./3. Binom.
+ * ════════════════════════════════════════════════════════════════ */
+function drawBinomi() {
+  const binAktivBtn = document.querySelector('#bin-chips .chip.aktiv');
+  if (!binAktivBtn) return;
+  const which = +binAktivBtn.dataset.bin;
+  const a = +document.getElementById('sld-bin-a').value;
+  const b = +document.getElementById('sld-bin-b').value;
+  document.getElementById('lbl-bin-a').textContent = a;
+  document.getElementById('lbl-bin-b').textContent = b;
+
+  // Ein-/Ausblenden des rechten Canvas + Schritt-Slider je nach Binom
+  const paar     = document.getElementById('bin-canvas-paar');
+  const sReg     = document.getElementById('bin-schritt-regler');
+  const sTitel   = document.getElementById('bin-schritt-titel');
+  if (which === 2 || which === 3) {
+    paar.classList.add('zeige-rechts');
+    sReg.classList.add('aktiv');
+  } else {
+    // 1. Binom: kein zweites Canvas, kein Schritt-Slider (Herleitung ausgeblendet)
+    paar.classList.remove('zeige-rechts');
+    sReg.classList.remove('aktiv');
+    sTitel.textContent = '';
+  }
+
+  // Binom 2/3 zeigen einen mehrzeiligen Untertitel + rechtes Canvas → mehr Höhe,
+  // damit die Beschriftung auch bei a=6 unter dem Quadrat Platz hat. Binom 1 bleibt quadratisch.
+  const H_CANVAS = (which === 1) ? 300 : 340;
+  const { ctx, W, H } = initCanvas('cv-binomi', H_CANVAS);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  // Layout: Quadrat hat Seitenlänge a, Skala so dass a max (=6) ins Canvas passt.
+  const padL = 38, padT = 34, padR = 16, padB = 26;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const skala = Math.min(innerW, innerH) / 6;
+  const sideA = a * skala;
+  const sideB = b * skala;
+  const x0 = padL, y0 = padT;
+
+  // FARBEN (passen zur Rechnung auf der rechten Seite)
+  const F_A2 = '#fde2a8';
+  const F_AB = '#e6b87a';
+  const F_B2 = '#c8884a';
+  const F_AmB2 = '#fde2a8';  // (a-b)² in derselben hellgelben Familie wie a²
+  const F_RAND = '#1c1a17';
+
+  ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (which === 1) {
+    // (a+b)² — Quadrat mit Seite (a+b), Skala anders!
+    const skala2 = Math.min(innerW, innerH) / 9;
+    const sA = a * skala2;
+    const sB = b * skala2;
+    const xx = padL, yy = padT;
+    // a² oben-links
+    ctx.fillStyle = F_A2;
+    ctx.fillRect(xx, yy, sA, sA);
+    // a·b oben-rechts
+    ctx.fillStyle = F_AB;
+    ctx.fillRect(xx + sA, yy, sB, sA);
+    // a·b unten-links
+    ctx.fillStyle = F_AB;
+    ctx.fillRect(xx, yy + sA, sA, sB);
+    // b² unten-rechts
+    ctx.fillStyle = F_B2;
+    ctx.fillRect(xx + sA, yy + sA, sB, sB);
+    // Rahmen
+    ctx.strokeStyle = F_RAND;
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(xx, yy, sA + sB, sA + sB);
+    ctx.beginPath();
+    ctx.moveTo(xx + sA, yy);
+    ctx.lineTo(xx + sA, yy + sA + sB);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(xx, yy + sA);
+    ctx.lineTo(xx + sA + sB, yy + sA);
+    ctx.stroke();
+    // Beschriftungen
+    ctx.fillStyle = F_RAND;
+    ctx.fillText('a² = ' + (a*a), xx + sA/2, yy + sA/2);
+    ctx.fillText('a·b = ' + (a*b), xx + sA + sB/2, yy + sA/2);
+    ctx.fillText('a·b = ' + (a*b), xx + sA/2, yy + sA + sB/2);
+    ctx.fillText('b² = ' + (b*b), xx + sA + sB/2, yy + sA + sB/2);
+    // Aussenlabels
+    ctx.font = 'bold 12px monospace';
+    ctx.fillStyle = '#1a4f8a';
+    ctx.fillText('a = ' + a, xx + sA/2, yy - 14);
+    ctx.fillText('b = ' + b, xx + sA + sB/2, yy - 14);
+    ctx.save();
+    ctx.translate(xx - 16, yy + sA/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('a = ' + a, 0, 0);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(xx - 16, yy + sA + sB/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('b = ' + b, 0, 0);
+    ctx.restore();
+    ctx.font = 'bold 12px monospace';
+    ctx.fillStyle = '#3a342a';
+    ctx.fillText('Gesamtquadrat: (' + a + '+' + b + ')² = ' + ((a+b)*(a+b)), W/2, H - 10);
+  }
+  else if (which === 2) {
+    // (a−b)² über ÜBERLAPPUNG sichtbar gemacht:
+    // Grundfläche a² (hellgelb). Darüber zwei halbtransparente a·b-Streifen
+    // (rechter: volle Höhe a × Breite b; unterer: volle Breite a × Höhe b).
+    // Sie überlappen sich im b²-Eck unten-rechts → dort doppelt gezählt.
+    // Unbedeckt oben-links bleibt (a−b)².  (a−b)² = a² − 2ab + b²
+    const sA = a * skala;
+    const sB = b * skala;
+    const sAmB = (a - b) * skala;
+    const xx = x0, yy = y0;
+
+    // 1. Grundquadrat a² (hellgelb, voll)
+    ctx.fillStyle = F_A2;
+    ctx.fillRect(xx, yy, sA, sA);
+    ctx.fillStyle = F_RAND;
+    ctx.font = 'bold 12px monospace';
+    if (sAmB > 26) ctx.fillText('(a−b)²', xx + sAmB/2, yy + sAmB/2);
+
+    // 2. Zwei halbtransparente a·b-Streifen (orange) — Überlappung wird dunkler
+    ctx.save();
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = F_AB;
+    ctx.fillRect(xx + sAmB, yy, sB, sA);   // rechter Streifen (volle Höhe a)
+    ctx.fillRect(xx, yy + sAmB, sA, sB);   // unterer Streifen (volle Breite a)
+    ctx.restore();
+
+    // 3. Überlappungs-Eck b² zusätzlich markieren (kräftiges Braun + Schraffur-Rahmen)
+    ctx.fillStyle = F_B2;
+    ctx.fillRect(xx + sAmB, yy + sAmB, sB, sB);
+
+    // Rahmen + Trennlinien
+    ctx.strokeStyle = F_RAND;
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(xx, yy, sA, sA);
+    ctx.beginPath(); ctx.moveTo(xx + sAmB, yy); ctx.lineTo(xx + sAmB, yy + sA); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xx, yy + sAmB); ctx.lineTo(xx + sA, yy + sAmB); ctx.stroke();
+
+    // Grüner Rahmen um die beiden a·b-Streifen (rechts + unten), gleiches Grün
+    // wie die Hervorhebung des Untertitels weiter unten (Projekt-Grün --gruen).
+    const F_GRUEN = '#1f6b3a';
+    ctx.save();
+    ctx.strokeStyle = F_GRUEN;
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    ctx.strokeRect(xx + sAmB + 1.25, yy + 1.25, sB - 2.5, sA - 2.5);   // rechter a·b-Streifen
+    ctx.strokeRect(xx + 1.25, yy + sAmB + 1.25, sA - 2.5, sB - 2.5);   // unterer a·b-Streifen
+    ctx.restore();
+
+    // Beschriftung der Streifen + b²
+    ctx.fillStyle = '#5a2e08';
+    ctx.font = 'bold 11px monospace';
+    if (sB > 16 && sAmB > 20) {
+      ctx.fillText('a·b', xx + sAmB + sB/2, yy + sAmB/2);   // rechter Streifen, oberer Teil
+      ctx.fillText('a·b', xx + sAmB/2, yy + sAmB + sB/2);   // unterer Streifen, linker Teil
+    }
+    if (sB > 18) {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('b²', xx + sAmB + sB/2, yy + sAmB + sB/2);
+    }
+
+    // Aussenlabels: pro Seite die zwei Segmente (a−b) und b beschriften,
+    // dazu aussen ein Massstrich (Klammer) über die Gesamtlänge a.
+    ctx.font = 'bold 11px monospace';
+    ctx.fillStyle = '#1a4f8a';
+    ctx.textAlign = 'center';
+
+    // — OBEN — Segment-Labels direkt über der Kante
+    ctx.fillText('(a−b)', xx + sAmB/2, yy - 12);
+    ctx.fillText('b',     xx + sAmB + sB/2, yy - 12);
+    // — OBEN — Massstrich (eckige Klammer) über die Gesamtlänge a, darüber 'a'
+    ctx.strokeStyle = '#1a4f8a';
+    ctx.lineWidth = 1;
+    const tickY = yy - 24;        // Höhe der Massklammer
+    ctx.beginPath();
+    ctx.moveTo(xx,      tickY + 4); ctx.lineTo(xx,      tickY);
+    ctx.lineTo(xx + sA, tickY);     ctx.lineTo(xx + sA, tickY + 4);
+    ctx.stroke();
+    ctx.fillText('a = ' + a, xx + sA/2, tickY - 7);
+
+    // — LINKS — Segment-Labels (gedreht) an den Segment-Mitten
+    ctx.save();
+    ctx.translate(xx - 13, yy + sAmB/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('(a−b)', 0, 0);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(xx - 13, yy + sAmB + sB/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('b', 0, 0);
+    ctx.restore();
+    // — LINKS — Massstrich über die Gesamthöhe a
+    const tickX = xx - 26;
+    ctx.beginPath();
+    ctx.moveTo(tickX + 4, yy);      ctx.lineTo(tickX, yy);
+    ctx.lineTo(tickX, yy + sA);     ctx.lineTo(tickX + 4, yy + sA);
+    ctx.stroke();
+    ctx.save();
+    ctx.translate(tickX - 7, yy + sA/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('a = ' + a, 0, 0);
+    ctx.restore();
+
+    // Untertitel: zwei a·b überlappen im b²-Eck
+    ctx.font = 'bold 11px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    // Hervorhebung des Erklär-Satzes mit demselben Grün wie der Streifen-Rahmen:
+    // hellgrüne Füllung (--gruen-hell) mit grünem Rand (--gruen).
+    const satz = 'Zwei a·b-Streifen überlappen sich im b²-Eck.';
+    const tw = ctx.measureText(satz).width;
+    const bw = Math.min(tw + 12, W - 6);   // nie über den Canvas-Rand hinaus
+    const bx = (W - bw) / 2, by = (H - 22) - 9, bh = 17;
+    ctx.save();
+    ctx.fillStyle = '#d8f0e2';
+    ctx.strokeStyle = '#1f6b3a';
+    ctx.lineWidth = 1.25;
+    if (ctx.roundRect) {
+      ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 4); ctx.fill(); ctx.stroke();
+    } else {
+      ctx.fillRect(bx, by, bw, bh); ctx.strokeRect(bx, by, bw, bh);
+    }
+    ctx.restore();
+    ctx.fillStyle = '#3a342a';
+    ctx.fillText(satz, W/2, H - 22);
+    ctx.fillText('(a−b)² = a² − 2ab + b² = ' + ((a-b)*(a-b)), W/2, H - 8);
+
+    // --- Animiertes Quadrat rechts (4-Schritt-Herleitung) ---
+    const schritt = +document.getElementById('sld-bin-schritt').value;
+    drawBinomi2Schritte(a, b, schritt, skala);
+
+    // Schritt-Titel
+    document.getElementById('lbl-bin-schritt').textContent = schritt;
+    const SCHRITT_TITEL_2 = [
+      'Schritt 0 · Start mit a²',
+      'Schritt 1 · −a·b (rechter Streifen weg)',
+      'Schritt 2 · +b² (Doppelzählung korrigieren)',
+      'Schritt 3 · −a·b (unterer Streifen weg) → (a−b)²',
+    ];
+    sTitel.textContent = SCHRITT_TITEL_2[schritt];
+  }
+  else if (which === 3) {
+    // (a+b)(a−b) = a² − b²  — Flächengleichheit per Zerschneiden & Umlegen.
+    // LINKS: immer das Ergebnis-Bild (Bild 4) — a×a-Quadrat mit ausgespartem
+    //        b²-Eck unten rechts = a² − b² (L-Form).
+    // RECHTS: 4-Schritt-Animation vom Produkt-Rechteck (a+b)(a−b) zur L-Form.
+    // Layout vertikal: Quadrat-Breite a, Gesamthöhe a+b (Produkt ragt unten heraus).
+    const innerH3 = H - padT - 40;
+    const skala3 = Math.min(innerW / a, innerH3 / (a + b));
+    const sA = a * skala3;
+    const sB = b * skala3;
+    const sAmB = (a - b) * skala3;
+    const xx = x0, yy = y0;
+    const F_ORANGE_FILL = '#f7d9b3';   // Flächenfarbe der L-Form
+    const F_ORANGE_RAND = '#e0883c';
+    const F_BLUE_RAND   = '#2f6fb0';   // a²-Umrandung blau
+    const F_RED_FILL    = '#f3b0a8';   // b²-Fläche rot
+    const F_RED_RAND    = '#c0392b';
+
+    // L-Form (a²−b²): ganzes a²-Quadrat orange, b²-Eck unten rechts rot herausgehoben.
+    ctx.fillStyle = F_ORANGE_FILL;
+    ctx.fillRect(xx, yy, sA, sA);
+    ctx.fillStyle = F_RED_FILL;                      // b²-Eck als rote Fläche
+    ctx.fillRect(xx + sAmB, yy + sAmB, sB, sB);
+    ctx.strokeStyle = F_RED_RAND; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+    ctx.strokeRect(xx + sAmB + 0.75, yy + sAmB + 0.75, sB - 1.5, sB - 1.5); ctx.setLineDash([]);
+    // a²-Umrandung blau (volles Quadrat, ganzer Umfang, fett)
+    ctx.strokeStyle = F_BLUE_RAND; ctx.lineWidth = 3.5; ctx.lineJoin = 'miter';
+    ctx.strokeRect(xx + 1.75, yy + 1.75, sA - 3.5, sA - 3.5);
+    // Aussenkontur der L-Form (orange) betonen
+    ctx.strokeStyle = F_ORANGE_RAND; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(xx, yy);
+    ctx.lineTo(xx + sA, yy);
+    ctx.lineTo(xx + sA, yy + sAmB);
+    ctx.lineTo(xx + sAmB, yy + sAmB);
+    ctx.lineTo(xx + sAmB, yy + sA);
+    ctx.lineTo(xx, yy + sA);
+    ctx.closePath(); ctx.stroke();
+
+    // Feld-Beschriftung
+    ctx.fillStyle = F_RAND; ctx.font = 'bold 12px monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    if (sAmB > 22) ctx.fillText('a² − b²', xx + sAmB * 0.55, yy + sA * 0.6);
+    ctx.fillStyle = F_RED_RAND; ctx.font = 'bold 11px monospace';
+    if (sB > 15) ctx.fillText('b²', xx + sAmB + sB / 2, yy + sAmB + sB / 2);
+
+    // Aussenlabels: a oben, a links, b oben-rechts, b rechts unten
+    ctx.font = 'bold 11px monospace'; ctx.fillStyle = '#1a4f8a';
+    ctx.fillText('a = ' + a, xx + sA / 2, yy - 14);
+    ctx.save(); ctx.translate(xx - 14, yy + sA / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('a = ' + a, 0, 0); ctx.restore();
+    if (sB > 14) ctx.fillText('b', xx + sAmB + sB / 2, yy - 14);
+    if (sB > 14) { ctx.save(); ctx.translate(xx + sA + 12, yy + sAmB + sB / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('b', 0, 0); ctx.restore(); }
+
+    ctx.fillStyle = '#3a342a'; ctx.font = 'bold 11px monospace';
+    ctx.fillText('a² − b² = ' + (a * a - b * b), W / 2, H - 9);
+
+    // --- Animation rechts: Produkt (a+b)(a−b) → L-Form ---
+    const schritt = +document.getElementById('sld-bin-schritt').value;
+    drawBinomi3Schritte(a, b, schritt, skala3);
+    document.getElementById('lbl-bin-schritt').textContent = schritt;
+    const SCHRITT_TITEL_3 = [
+      'Schritt 0 · Raster mit Vermassung',
+      'Schritt 1 · Produktform (a+b)·(a−b)',
+      'Schritt 2 · Streifen b·(a−b) umlegen',
+      'Schritt 3 · Ergebnis a² − b²',
+    ];
+    sTitel.textContent = SCHRITT_TITEL_3[schritt];
+  }
+
+  // Rechte Spalte: Rechnung als Produkt und als Summe
+  const rechn = document.getElementById('bin-rechnung');
+  let html = '';
+  if (which === 1) {
+    // 1. Binom — allgemeine Formel und konkrete Werte mit Hintergrundfarben
+    html =
+      '<div class="zeile"><div class="zeile-label">1. binomische Formel</div>' +
+      '(a + b)² = <span class="hl-a2">a²</span> + <span class="hl-ab">2ab</span> + <span class="hl-b2">b²</span></div>' +
+      '<div class="zeile"><div class="zeile-label">mit a = ' + a + ', b = ' + b + '</div>' +
+      '<span class="hl-a2">' + (a*a) + '</span> + <span class="hl-ab">2·' + a + '·' + b + '</span> + <span class="hl-b2">' + (b*b) + '</span>' +
+      ' = <strong>' + ((a+b)*(a+b)) + '</strong></div>' +
+      '<div class="zeile"><div class="zeile-label">Produktform</div>' +
+      '(' + a + '+' + b + ')(' + a + '+' + b + ') = <strong>' + ((a+b)*(a+b)) + '</strong></div>';
+  } else if (which === 2) {
+    html =
+      '<div class="zeile"><div class="zeile-label">2. binomische Formel</div>' +
+      '(a − b)² = <span class="hl-a2">a²</span> <span class="hl-minus">−</span> <span class="hl-ab">2ab</span> + <span class="hl-b2">b²</span></div>' +
+      '<div class="zeile"><div class="zeile-label">mit a = ' + a + ', b = ' + b + '</div>' +
+      '<span class="hl-a2">' + (a*a) + '</span> <span class="hl-minus">−</span> <span class="hl-ab">2·' + a + '·' + b + '</span> + <span class="hl-b2">' + (b*b) + '</span>' +
+      ' = <strong>' + ((a-b)*(a-b)) + '</strong></div>' +
+      '<div class="zeile"><div class="zeile-label">Produktform</div>' +
+      '(' + a + '−' + b + ')(' + a + '−' + b + ') = <strong>' + ((a-b)*(a-b)) + '</strong></div>';
+  } else {
+    html =
+      '<div class="zeile"><div class="zeile-label">3. binomische Formel</div>' +
+      '<span class="hl-green">(a + b)(a − b)</span> = <span class="hl-area">a² − b²</span></div>' +
+      '<div class="zeile"><div class="zeile-label">mit a = ' + a + ', b = ' + b + '</div>' +
+      '<span class="hl-blue">' + (a*a) + '</span> <span class="hl-minus">−</span> <span class="hl-red">' + (b*b) + '</span>' +
+      ' = <span class="hl-area">' + ((a+b)*(a-b)) + '</span></div>' +
+      '<div class="zeile"><div class="zeile-label">Produktform</div>' +
+      '<span class="hl-green">(' + a + '+' + b + ')(' + a + '−' + b + ')</span> = <span class="hl-area">' + ((a+b)*(a-b)) + '</span></div>';
+  }
+  rechn.innerHTML = html;
+}
+
+// Animation für das rechte (2.-Binom-)Quadrat: 4-Schritt-Herleitung
+// 0: a² (voll)
+// 1: rechter a·b-Streifen wird ausgeblendet → a² − ab
+// 2: b²-Quadrat im rechten unteren Eck wird wieder eingeblendet (Korrektur)
+// 3: unterer a·b-Streifen wird ausgeblendet → (a−b)²
+function drawBinomi2Schritte(a, b, schritt, skala) {
+  const { ctx, W, H } = initCanvas('cv-binomi-rechts', 340);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  const padL = 38, padT = 34, padR = 16, padB = 26;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const sA = a * skala;
+  const sB = b * skala;
+  const sAmB = (a - b) * skala;
+  const xx = padL, yy = padT;
+
+  const F_A2 = '#fde2a8';
+  const F_AB = '#e6b87a';
+  const F_B2 = '#c8884a';
+  const F_AUS = '#efeade';   // ausgeblendet = Canvas-Hintergrund
+  const F_RAND = '#1c1a17';
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Wir bauen das Bild Schritt für Schritt auf: bei jedem Schritt
+  // ist ein bestimmtes Set von Teilflächen sichtbar.
+  // Aufteilung des a²-Quadrats in vier Bereiche:
+  //   A: (a-b)²-Eck   oben-links
+  //   B: rechter Streifen (oberer Teil)   = b × (a-b)
+  //   C: unterer Streifen (linker Teil)   = (a-b) × b
+  //   D: b²-Eck    unten-rechts
+  // Die zwei a·b-Streifen sind: rechts = B + D, unten = C + D.
+
+  // Sichtbarkeit pro Schritt:
+  //   0: A B C D  (= a²)
+  //   1: A     C    (rechter a·b-Streifen = B+D entfernt)
+  //   2: A     C D  (b² zurück)
+  //   3: A          (unterer a·b-Streifen = C+D entfernt, aber D ist eh schon weg) → (a-b)²
+  // Schritt 3: D ist in (2) wieder dazu, in (3) zusammen mit C wieder weg.
+  const sicht = [
+    { A: true, B: true,  C: true,  D: true  },
+    { A: true, B: false, C: true,  D: false },
+    { A: true, B: false, C: true,  D: true  },
+    { A: true, B: false, C: false, D: false },
+  ][schritt];
+
+  // Sicht-Hilfen: bei „weg" malen wir die Fläche im Hintergrund-Farbton
+  function malen(x, y, w, h, vorhanden, farbeAn) {
+    ctx.fillStyle = vorhanden ? farbeAn : F_AUS;
+    ctx.fillRect(x, y, w, h);
+    if (!vorhanden) {
+      // gestrichelter Rahmen als „weg"-Hinweis
+      ctx.save();
+      ctx.strokeStyle = '#bbb1a1';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+      ctx.restore();
+    }
+  }
+
+  malen(xx,         yy,         sAmB, sAmB, sicht.A, F_A2);
+  malen(xx + sAmB,  yy,         sB,   sAmB, sicht.B, F_AB);
+  malen(xx,         yy + sAmB,  sAmB, sB,   sicht.C, F_AB);
+  malen(xx + sAmB,  yy + sAmB,  sB,   sB,   sicht.D, F_B2);
+
+  // Rahmen aussen (immer komplett)
+  ctx.strokeStyle = F_RAND;
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(xx, yy, sA, sA);
+  ctx.beginPath();
+  ctx.moveTo(xx + sAmB, yy);
+  ctx.lineTo(xx + sAmB, yy + sA);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(xx, yy + sAmB);
+  ctx.lineTo(xx + sA, yy + sAmB);
+  ctx.stroke();
+
+  // Grüner Rahmen um die beiden a·b-Streifen (rechts volle Höhe, unten volle Breite).
+  // Bleibt in ALLEN Schritten stehen, auch wenn der Streifen-Inhalt ausgeblendet
+  // ist — zeigt durchgehend, wo a·b sitzt bzw. abgezogen wird. Gleiches Grün
+  // (--gruen) wie im linken Bild und in der Term-Hervorhebung unten.
+  const F_GRUEN = '#1f6b3a';
+  ctx.save();
+  ctx.strokeStyle = F_GRUEN;
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.strokeRect(xx + sAmB + 1.25, yy + 1.25, sB - 2.5, sA - 2.5);   // rechter a·b-Streifen
+  ctx.strokeRect(xx + 1.25, yy + sAmB + 1.25, sA - 2.5, sB - 2.5);   // unterer a·b-Streifen
+  ctx.restore();
+
+  // Beschriftungen (nur in sichtbaren Feldern)
+  ctx.font = 'bold 12px monospace';
+  ctx.fillStyle = F_RAND;
+  if (sicht.A && sAmB > 28) {
+    ctx.fillText('(a−b)² = ' + ((a-b)*(a-b)), xx + sAmB/2, yy + sAmB/2);
+  }
+  if (sicht.B && sicht.D && sB > 18) {
+    // Beide Felder zusammen = volles a·b-Rechteck rechts
+    ctx.fillText('a·b = ' + (a*b), xx + sAmB + sB/2, yy + sA/2);
+  } else if (sicht.B && sB > 18 && sAmB > 22) {
+    ctx.fillText('a·b', xx + sAmB + sB/2, yy + sAmB/2);
+  }
+  if (sicht.C && sicht.D && sB > 18) {
+    ctx.fillText('a·b = ' + (a*b), xx + sA/2, yy + sAmB + sB/2);
+  } else if (sicht.C && sB > 18 && sAmB > 22) {
+    ctx.fillText('a·b', xx + sAmB/2, yy + sAmB + sB/2);
+  }
+  if (sicht.D && !sicht.B && !sicht.C && sB > 18) {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('b² = ' + (b*b), xx + sAmB + sB/2, yy + sAmB + sB/2);
+  } else if (sicht.D && (!sicht.B || !sicht.C) && sB > 18) {
+    // b² als eigenes Quadrat sichtbar (in Schritt 2)
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('b² = ' + (b*b), xx + sAmB + sB/2, yy + sAmB + sB/2);
+  }
+
+  // Aussenlabels
+  ctx.font = 'bold 11px monospace';
+  ctx.fillStyle = '#1a4f8a';
+  ctx.fillText('a = ' + a, xx + sA/2, yy - 14);
+  ctx.save();
+  ctx.translate(xx - 16, yy + sA/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('a = ' + a, 0, 0);
+  ctx.restore();
+
+  // Untertitel mit der aktuellen Rechnung. Der symbolische Term −ab bzw. −2ab
+  // wird grün hinterlegt (gleiche Grün-Familie wie die a·b-Rahmen):
+  // Box --gruen-hell mit Rand --gruen.
+  ctx.font = 'bold 11px monospace';
+  ctx.textBaseline = 'middle';
+  const aa = a*a, ab = a*b, bb = b*b;
+  // Segmente: { t: Text, hl: grün hervorheben? }
+  let segs;
+  if (schritt === 0) {
+    segs = [{ t: 'a² = ' + aa, hl: false }];
+  } else if (schritt === 1) {
+    segs = [{ t: 'a² ', hl: false }, { t: '− ab', hl: true },
+            { t: ' = ' + aa + ' − ' + ab + ' = ' + (aa - ab), hl: false }];
+  } else if (schritt === 2) {
+    segs = [{ t: 'a² ', hl: false }, { t: '− ab', hl: true },
+            { t: ' + b² = ' + aa + ' − ' + ab + ' + ' + bb + ' = ' + (aa - ab + bb), hl: false }];
+  } else {
+    segs = [{ t: 'a² ', hl: false }, { t: '− 2ab', hl: true },
+            { t: ' + b² = (a−b)² = ' + ((a-b)*(a-b)), hl: false }];
+  }
+  // Gesamtbreite messen, zentriert ab linker Kante zeichnen
+  const wTot = segs.reduce((s, g) => s + ctx.measureText(g.t).width, 0);
+  let curX = W/2 - wTot/2;
+  const baseY = H - 10;
+  ctx.textAlign = 'left';
+  for (const g of segs) {
+    const gw = ctx.measureText(g.t).width;
+    if (g.hl) {
+      ctx.save();
+      ctx.fillStyle = '#d8f0e2';
+      ctx.strokeStyle = '#1f6b3a';
+      ctx.lineWidth = 1;
+      const bx = curX - 2, byh = baseY - 8, bwh = gw + 4, bhh = 16;
+      if (ctx.roundRect) {
+        ctx.beginPath(); ctx.roundRect(bx, byh, bwh, bhh, 3); ctx.fill(); ctx.stroke();
+      } else {
+        ctx.fillRect(bx, byh, bwh, bhh); ctx.strokeRect(bx, byh, bwh, bhh);
+      }
+      ctx.restore();
+    }
+    ctx.fillStyle = '#3a342a';
+    ctx.fillText(g.t, curX, baseY);
+    curX += gw;
+  }
+  ctx.textAlign = 'center';   // für Folgeaufrufe zurücksetzen
+}
+
+// Animation für das rechte (3.-Binom-)Bild: 4-Schritt-Herleitung (a+b)(a−b) = a²−b².
+// Layout vertikal: a×a-Quadrat (x:0..a, y:0..a), Produkt-Rechteck (a−b)×(a+b)
+// ragt um b nach unten heraus (y bis a+b).
+// 0: nur Raster mit Vermassung (Bild 1)
+// 1: orange Produkt-Rechteck (a−b)×(a+b) = Produktform (Bild 2)
+// 2: unteren grünen Streifen b·(a−b) abtrennen, rechts oben in a² wieder anlegen (Bild 3, ohne Pfeil)
+// 3: Ergebnis — L-Form a²−b² (Bild 4)
+function drawBinomi3Schritte(a, b, schritt, skalaIgnored) {
+  const { ctx, W, H } = initCanvas('cv-binomi-rechts', 340);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  // Breiterer linker Rand, damit die verschachtelte Vermassung (a+b aussen, a innen,
+  // b darunter) links lesbar Platz hat. Eigene Skala passend zu diesem Gutter.
+  const padL = 56, padT = 38, padR = 16;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - 44;
+  const skala = Math.min(innerW / a, innerH / (a + b));
+  const sA = a * skala;
+  const sB = b * skala;
+  const sAmB = (a - b) * skala;
+  const xx = padL, yy = padT;
+
+  const F_ORANGE_FILL = '#f7d9b3';
+  const F_ORANGE_RAND = '#e0883c';
+  const F_GREEN_FILL  = '#9be0ac';   // helles Grün (Produkt-Rechteck, grosses Stück)
+  const F_GREEN_RAND  = '#2f9e44';
+  const F_GREEN_DARK  = '#5cb96f';   // dunkleres Grün (die zwei umgelegten b·(a−b)-Streifen)
+  const F_GREEN_DARK_R= '#218838';
+  const F_RED_FILL    = '#f3b0a8';   // b²-Fläche rot (= Farbe für „4")
+  const F_RED_RAND    = '#c0392b';
+  const F_BLUE_RAND   = '#2f6fb0';   // a²-Umrandung blau (= Farbe für „36")
+  const F_RAND  = '#1c1a17';
+  const F_GHOST = '#bbb1a1';
+  const F_BLAU  = '#1a4f8a';
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // einfaches blaues Label (rot=true → 90° gedreht)
+  function blau(txt, cx, cy, rot) {
+    ctx.save();
+    ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = F_BLAU;
+    if (rot) { ctx.translate(cx, cy); ctx.rotate(-Math.PI / 2); ctx.fillText(txt, 0, 0); }
+    else ctx.fillText(txt, cx, cy);
+    ctx.restore();
+  }
+  // eckige Massklammer horizontal über [x1,x2] auf Höhe y (Zacken nach unten)
+  function klammerH(x1, x2, y, txt) {
+    ctx.strokeStyle = F_BLAU; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x1, y + 4); ctx.lineTo(x1, y); ctx.lineTo(x2, y); ctx.lineTo(x2, y + 4); ctx.stroke();
+    blau(txt, (x1 + x2) / 2, y - 7);
+  }
+  // eckige Massklammer vertikal über [y1,y2] bei x (Zacken nach rechts)
+  function klammerV(y1, y2, x, txt) {
+    ctx.strokeStyle = F_BLAU; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x + 4, y1); ctx.lineTo(x, y1); ctx.lineTo(x, y2); ctx.lineTo(x + 4, y2); ctx.stroke();
+    ctx.save(); ctx.translate(x - 8, (y1 + y2) / 2); ctx.rotate(-Math.PI / 2); blau(txt, 0, 0); ctx.restore();
+  }
+  function subtitel(txt) {
+    ctx.fillStyle = '#3a342a'; ctx.font = 'bold 11px monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(txt, W / 2, H - 9);
+  }
+  // Einheitliche Vermassung (oben + links), identisch in allen Schritten.
+  // Oben: a (gesamt, oberste Klammer), darunter a−b und b als Segmentlabels.
+  // Links: a+b (aussen), a (innen), b (darunter, unterhalb von a).
+  function vermassung() {
+    // oben: Segmentlabels a−b / b auf Höhe yy-10
+    blau('a−b', xx + sAmB / 2, yy - 10);
+    if (sB > 12) blau('b', xx + sAmB + sB / 2, yy - 10);
+    // oben: Gesamtklammer a auf Höhe yy-24
+    klammerH(xx, xx + sA, yy - 24, 'a');
+    // links: a (innen, Quadrathöhe) bei xx-16, a+b (aussen) bei xx-30
+    klammerV(yy, yy + sA, xx - 16, 'a');
+    klammerV(yy, yy + sA + sB, xx - 30, 'a+b');
+    // links: b unterhalb der a-Klammer (Höhe des unteren Streifens) bei xx-16
+    if (sB > 12) klammerV(yy + sA, yy + sA + sB, xx - 16, 'b');
+  }
+
+  if (schritt === 0) {
+    // ----- Raster + Vermassung (Bild 1) -----
+    // a×a-Quadrat + Produkt-Verlängerung (a−b)×b unten, alles als helle Hilfslinien.
+    ctx.strokeStyle = '#cfc7b6'; ctx.lineWidth = 1;
+    ctx.strokeRect(xx, yy, sA, sA);                                  // a²-Quadrat
+    ctx.beginPath(); ctx.moveTo(xx + sAmB, yy); ctx.lineTo(xx + sAmB, yy + sA); ctx.stroke(); // Teiler x=a−b
+    // Verlängerung unten (Produkt ragt um b heraus), gestrichelt
+    ctx.setLineDash([4, 4]);
+    ctx.strokeRect(xx + 0.5, yy + sA + 0.5, sAmB - 1, sB - 1);
+    ctx.setLineDash([]);
+    vermassung();
+    subtitel('(a+b)·(a−b) = a² − b²');
+  }
+  else if (schritt === 1) {
+    // ----- Produktform: hellgrünes Rechteck (a−b)×(a+b) (Bild 2) -----
+    // helle Hilfslinien des Quadrats
+    ctx.strokeStyle = '#cfc7b6'; ctx.lineWidth = 1;
+    ctx.strokeRect(xx, yy, sA, sA);
+    ctx.beginPath(); ctx.moveTo(xx + sAmB, yy); ctx.lineTo(xx + sAmB, yy + sA); ctx.stroke();
+    // hellgrünes Produkt-Rechteck (a−b) breit × (a+b) hoch
+    ctx.fillStyle = F_GREEN_FILL;
+    ctx.fillRect(xx, yy, sAmB, sA + sB);
+    ctx.strokeStyle = F_GREEN_RAND; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+    ctx.strokeRect(xx + 1.5, yy + 1.5, sAmB - 3, sA + sB - 3);
+    vermassung();
+    subtitel('(a+b)·(a−b) = ' + ((a + b) * (a - b)));
+  }
+  else if (schritt === 2) {
+    // ----- Streifen b·(a−b) umlegen (Bild 3, ohne Pfeil) -----
+    // helle Quadrat-Hilfslinien
+    ctx.strokeStyle = '#cfc7b6'; ctx.lineWidth = 1;
+    ctx.strokeRect(xx, yy, sA, sA);
+    // grosses Rechteck links = (a−b) breit × volle Höhe a, HELL grün
+    ctx.fillStyle = F_GREEN_FILL;
+    ctx.fillRect(xx, yy, sAmB, sA);
+    ctx.strokeStyle = F_GREEN_RAND; ctx.lineWidth = 2;
+    ctx.strokeRect(xx + 1, yy + 1, sAmB - 2, sA - 2);
+    // die beiden kleineren Streifen b·(a−b) in DUNKLEREM grün:
+    // rechts oben innerhalb a² (neue Position, oben bündig, Höhe a−b, Breite b)
+    ctx.fillStyle = F_GREEN_DARK;
+    ctx.fillRect(xx + sAmB, yy, sB, sAmB);
+    ctx.strokeStyle = F_GREEN_DARK_R; ctx.lineWidth = 2;
+    ctx.strokeRect(xx + sAmB + 1, yy + 1, sB - 2, sAmB - 2);
+    // unten (Ausgangslage, ragt unter dem grossen Rechteck heraus, Breite a−b, Höhe b)
+    ctx.fillStyle = F_GREEN_DARK;
+    ctx.fillRect(xx, yy + sA, sAmB, sB);
+    ctx.strokeStyle = F_GREEN_DARK_R; ctx.lineWidth = 2;
+    ctx.strokeRect(xx + 1, yy + sA + 1, sAmB - 2, sB - 2);
+    vermassung();
+    subtitel('b·(a−b) umlegen → rechts oben');
+  }
+  else {
+    // ----- Ergebnis: L-Form a²−b² (Bild 4) -----
+    // Fläche grün (wie (a+b)(a−b)-Hinterlegung), a²-Umrandung blau (fett, ganzer Umfang), b²-Eck rot.
+    ctx.fillStyle = F_GREEN_FILL;
+    ctx.fillRect(xx, yy, sA, sA);
+    // b²-Eck als rote Fläche kennzeichnen (herausgenommenes Quadrat) — bleibt wie es ist
+    ctx.fillStyle = F_RED_FILL;
+    ctx.fillRect(xx + sAmB, yy + sAmB, sB, sB);
+    ctx.strokeStyle = F_RED_RAND; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+    ctx.strokeRect(xx + sAmB + 0.75, yy + sAmB + 0.75, sB - 1.5, sB - 1.5); ctx.setLineDash([]);
+    // L-Form-Aussenkontur grün
+    ctx.strokeStyle = F_GREEN_RAND; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(xx, yy); ctx.lineTo(xx + sA, yy); ctx.lineTo(xx + sA, yy + sAmB);
+    ctx.lineTo(xx + sAmB, yy + sAmB); ctx.lineTo(xx + sAmB, yy + sA);
+    ctx.lineTo(xx, yy + sA); ctx.closePath(); ctx.stroke();
+    // a²-Umrandung blau (volles Quadrat, ganzer Umfang, fett)
+    ctx.strokeStyle = F_BLUE_RAND; ctx.lineWidth = 3.5; ctx.lineJoin = 'miter';
+    ctx.strokeRect(xx + 1.75, yy + 1.75, sA - 3.5, sA - 3.5);
+
+    ctx.fillStyle = F_RAND; ctx.font = 'bold 12px monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    if (sAmB > 22) ctx.fillText('a² − b²', xx + sAmB * 0.55, yy + sA * 0.6);
+    ctx.fillStyle = F_RED_RAND; ctx.font = 'bold 11px monospace';
+    if (sB > 15) ctx.fillText('b²', xx + sAmB + sB / 2, yy + sAmB + sB / 2);
+    vermassung();
+    subtitel('(a+b)(a−b) = a² − b² = ' + ((a + b) * (a - b)));
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  // Chips
+  document.querySelectorAll('#bin-chips .chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#bin-chips .chip').forEach(c => c.classList.remove('aktiv'));
+      btn.classList.add('aktiv');
+      drawBinomi();
+    });
+  });
+  // Slider
+  const sA = document.getElementById('sld-bin-a');
+  const sB = document.getElementById('sld-bin-b');
+  const sS = document.getElementById('sld-bin-schritt');
+  if (sA && sB) {
+    sA.addEventListener('input', drawBinomi);
+    sB.addEventListener('input', drawBinomi);
+    if (sS) sS.addEventListener('input', drawBinomi);
+    drawBinomi();
+  }
+});
+</script>
+
 <script>
 buildNav({
   bereich:'grundlagen', id:'g1-3',
@@ -105,5 +2251,6 @@ buildNav({
   next:{nr:'1.4',titel:'Zehnerpotenzen und Quadratwurzeln',url:'g1-4-zehnerpotenzen-quadratwurzeln.html'}
 });
 </script>
+
 </body>
 </html>

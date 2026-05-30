@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zahlen und zugehörige Grundoperationen — TALS Mathematik</title>
+<title>1.2 Zahlen und zugehörige Grundoperationen — TALS Mathematik</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
-<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
@@ -19,7 +18,115 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* Zahlenmengen-Diagramm (verschachtelte Boxen) */
+.mengen-vis { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:18px; margin:14px 0; }
+.menge-r { background:#fee2e2; border:2px solid #dc2626; border-radius:11px; padding:18px 14px 12px; position:relative; transition:box-shadow .15s; }
+.menge-q { background:#fef3c7; border:2px solid #f59e0b; border-radius:10px; padding:18px 14px 12px; margin-top:14px; position:relative; transition:box-shadow .15s; }
+.menge-z { background:var(--gruen-hell); border:2px solid var(--gruen-rand); border-radius:9px; padding:18px 14px 12px; margin-top:14px; position:relative; transition:box-shadow .15s; }
+.menge-n { background:var(--blau-hell); border:2px solid var(--blau-rand); border-radius:8px; padding:18px 14px 12px; margin-top:14px; position:relative; transition:box-shadow .15s; }
+.menge-name { position:absolute; top:6px; left:12px; font-family:var(--mono); font-size:0.72rem; font-weight:700; letter-spacing:1px; }
+.mv-aktive { position:absolute; top:6px; right:12px; font-family:var(--mono); font-weight:700; font-size:0.95rem; color:#a83a3a; background:#fff; padding:2px 9px; border-radius:5px; border:1.5px solid #a83a3a; }
+.mv-treffer { box-shadow:0 0 0 3px #a83a3a, 0 0 14px rgba(168,58,58,.35); }
+
+/* Definitions-Tabelle: Zeilenfarben passend zum Mengen-Diagramm (ganze Zeile).
+   Spezifität bewusst hoch (table…tbody…td), um die Zebra-Regel
+   .ftb-tabelle tbody tr:nth-child(even) td aus style.css zu überschreiben —
+   sonst blieben die geraden Zeilen (Z, R) auf --papier statt in ihrer Mengenfarbe. */
+table.zm-def-tabelle tbody tr.zm-row-N td { background:var(--blau-hell); }
+table.zm-def-tabelle tbody tr.zm-row-Z td { background:var(--gruen-hell); }
+table.zm-def-tabelle tbody tr.zm-row-Q td { background:#fef3c7; }
+table.zm-def-tabelle tbody tr.zm-row-R td { background:#fee2e2; }
+table.zm-def-tabelle tbody tr.zm-row-N td:first-child { border-left:3px solid var(--blau); }
+table.zm-def-tabelle tbody tr.zm-row-Z td:first-child { border-left:3px solid var(--gruen); }
+table.zm-def-tabelle tbody tr.zm-row-Q td:first-child { border-left:3px solid #f59e0b; }
+table.zm-def-tabelle tbody tr.zm-row-R td:first-child { border-left:3px solid #dc2626; }
+.menge-bsp { font-family:var(--mono); font-size:0.85rem; color:var(--tinte); margin-top:4px; }
+
+/* Zahlengeraden-Slider für Intervall */
+.zg-canvas-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; padding:14px; margin:10px 0; }
+
+/* Schieber-Zeile */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:60px; text-align:right; }
+
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:14px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:8px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.1rem; color:var(--tinte); font-weight:700; line-height:1.4; }
+
+/* Aufgaben-Karten */
+.eingabe-row { display:flex; align-items:center; gap:9px; margin:10px 0; flex-wrap:wrap; }
+.eingabe-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.92rem; padding:6px 10px; border:1.5px solid var(--linie); border-radius:6px; width:160px; background:var(--papier-2); color:var(--tinte); }
+.eingabe-row input[type=text]:focus { outline:none; border-color:var(--blau); background:var(--weiss); }
+.cr { font-family:var(--mono); font-size:0.78rem; padding:6px 11px; border-radius:6px; margin-top:8px; display:none; }
+.cr.ok { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); display:block; }
+.cr.err { background:var(--rot-hell); color:var(--rot); border:1px solid var(--rot-rand); display:block; }
+.btn-pruef { font-family:var(--sans); font-size:0.78rem; font-weight:600; padding:6px 14px; border-radius:7px; border:none; background:var(--blau); color:#fff; cursor:pointer; }
+.btn-pruef:hover { background:#15406d; }
+
+/* Klassifizier-Übung */
+.kl-spiel { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:10px 12px; display:flex; flex-direction:column; }
+.kl-zahl { font-family:var(--mono); font-size:1rem; font-weight:700; color:var(--tinte); padding:8px 10px; background:var(--weiss); border:1.5px solid var(--linie); border-radius:7px; margin-bottom:8px; text-align:center; min-height:42px; display:flex; align-items:center; justify-content:center; }
+.kl-buttons { display:flex; gap:4px; flex-wrap:nowrap; justify-content:center; }
+.kl-btn { font-family:var(--mono); font-size:0.78rem; font-weight:700; padding:5px 0; border-radius:18px; border:1.5px solid var(--linie); background:var(--weiss); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; flex:1; min-width:0; }
+.kl-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.kl-btn.korrekt { border-color:var(--gruen); background:var(--gruen); color:#fff; }
+.kl-btn.falsch { border-color:var(--rot); background:var(--rot); color:#fff; }
+.kl-feedback { margin-top:8px; padding:6px 9px; border-radius:6px; font-size:0.78rem; line-height:1.35; display:none; }
+.kl-feedback.ok { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); display:block; }
+.kl-feedback.err { background:var(--rot-hell); color:var(--rot); border:1px solid var(--rot-rand); display:block; }
+.kl-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+@media (max-width: 720px) { .kl-grid { grid-template-columns:repeat(2, 1fr); } }
+@media (max-width: 480px) { .kl-grid { grid-template-columns:1fr; } }
+
+/* Intervalle-Animation: Tabelle links, formale+grafische Darstellung rechts (übereinander) */
+.iv-anim { display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap:18px; margin:14px 0; align-items:start; }
+@media (max-width: 880px) { .iv-anim { grid-template-columns: 1fr; } }
+.iv-tabelle .iv-tab { margin:0; cursor:default; }
+/* Intervalle-Animation: SVG-Inhalte sollen Klicks an die Zelle durchreichen.
+   WICHTIG: pointer-events:none NUR auf die Inhalte der Zelle legen, NICHT auf
+   die td selbst — sonst ist die ganze Zeile nicht mehr klickbar (der Klick
+   fällt durch die Zelle hindurch und ev.target liegt ausserhalb .iv-row). */
+.iv-tab .iv-row,
+.iv-tab .iv-row td { cursor: pointer; }
+.iv-tab .iv-row td * { pointer-events: none; }
+.iv-tab .iv-row { transition: background-color .15s; }
+.iv-tab .iv-row:hover { background:var(--blau-hell); }
+.iv-tab .iv-row.aktiv { background:#fef3c7; }
+.iv-tab .iv-row.aktiv td:first-child { border-left:3px solid #b85c00; }
+.iv-vis { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:14px 16px; }
+.iv-vis-titel { font-family:var(--sans); font-size:0.72rem; font-weight:700; letter-spacing:1px; color:var(--tinte-2); text-transform:uppercase; margin-bottom:8px; }
+.iv-formal { font-family:var(--mono); font-size:1.35rem; font-weight:700; color:#b85c00; text-align:center; padding:10px 14px; background:var(--weiss); border:1.5px solid #f59e0b; border-radius:7px; margin-bottom:8px; }
+.iv-formal-mengen { font-family:var(--mono); font-size:0.9rem; color:var(--tinte-2); text-align:center; padding:6px 10px; margin-bottom:10px; }
+.iv-vis canvas { display:block; width:100%; max-width:520px; min-height:110px; aspect-ratio:520/120; margin:0 auto; background:var(--weiss); border:1px solid var(--linie); border-radius:6px; }
+.iv-erkl { font-size:0.85rem; color:var(--tinte-2); margin-top:10px; line-height:1.5; }
+
+/* Inklusionszeile unter Werkstatt-Zahlenstrahl */
+.zm-inklusion {
+  font-family: var(--mono);
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #a83a3a;
+  background: var(--weiss);
+  border: 1.5px solid var(--linie);
+  border-radius: 7px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.zm-inklusion .ink-stuf { display:inline-block; padding:1px 5px; border-radius:4px; margin:0 1px; }
+.zm-inklusion .ink-stuf.kleinste { background:#a83a3a; color:#fff; }
+.zm-inklusion .ink-rel { color: var(--tinte-2); font-weight: 500; }
 </style>
 </head>
 <body>
@@ -27,13 +134,16 @@ MathJax = {
 <div class="page-wrap">
 <main class="content">
 
-<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<!-- ════════════════════════════════════════════════════════════════
+     1. TITEL + RLP-HEADER
+     ════════════════════════════════════════════════════════════════ -->
 <div class="page-titel">
   <div class="pt-bereich">Grundlagenfach · Lerngebiet 1 · Arithmetik/Algebra · 45 Lektionen</div>
   <h1 class="pt-h1">1.2 Zahlen und zugehörige Grundoperationen</h1>
 </div>
 
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
+<p class="lead">Zahlen kann man auf verschiedene Arten darstellen: als Bruch, in Prozent, als Dezimalzahl. Hier ordnest du jede Zahl in eine der vier Zahlenmengen <strong>\(\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{R}\)</strong> ein, beschreibst Bereiche mit Intervallen und rechnest die vier Grundoperationen sauber — auch ohne Taschenrechner.</p>
+
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 1.2</div>
   <ul>
@@ -43,49 +153,557 @@ MathJax = {
   </ul>
 </div>
 
+<!-- ════════════════════════════════════════════════════════════════
+     2. EINSTIEG
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="einstieg">Einstieg — Werkstatt-Bestandsliste</h2>
 
-<!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<p>In einer Werkstatt werden über eine Woche hinweg Bestände gezählt, Temperaturen gemessen und Anteile berechnet. Dabei tauchen ganz verschiedene <em>Zahlentypen</em> auf:</p>
 
+<table class="ftb-tabelle">
+  <thead><tr><th>Messung</th><th>Wert</th><th>Zahlentyp</th></tr></thead>
+  <tbody>
+    <tr><td>Anzahl Werkstücke im Lager</td>          <td>\(5\)</td>                     <td class="li">natürliche Zahl \((\mathbb{N})\)</td></tr>
+    <tr><td>Lager-Veränderung über Nacht</td>        <td>\(-2\)</td>                     <td class="li">ganze Zahl \((\mathbb{Z})\)</td></tr>
+    <tr><td>Anteil Ausschuss</td>                    <td>\(\tfrac{3}{40} = 7.5\%\)</td>  <td class="li">rationale Zahl \((\mathbb{Q})\)</td></tr>
+    <tr><td>Aussentemperatur am Montagmorgen</td>    <td>\(-3.5\,°C\)</td>               <td class="li">rationale Zahl \((\mathbb{Q})\)</td></tr>
+    <tr><td>Diagonale eines 1×1-Quadrats (Werkbank)</td><td>\(\sqrt{2} \approx 1.414\)</td>   <td class="li">irrationale Zahl, in \(\mathbb{R}\)</td></tr>
+  </tbody>
+</table>
 
-<!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<p>Damit Rechnungen in unterschiedlichen Situationen funktionieren, hat die Mathematik die Zahlen in <strong>Zahlenmengen</strong> geordnet. Jede Erweiterung — von \(\mathbb{N}\) zu \(\mathbb{Z}\), zu \(\mathbb{Q}\), zu \(\mathbb{R}\) — löst genau ein Problem, das in der kleineren Menge nicht lösbar war.</p>
 
+<p>Klick auf eine Messung in der Animation und schau, in welche Zahlenmengen der Wert gehört — und in welche nicht.</p>
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<div class="anim">
+  <div class="anim-titel">Werkstatt-Werte auf der Zahlengeraden</div>
+  <div class="anim-layout">
+    <div>
+      <canvas id="cv-zahlmenge" width="560" height="220"></canvas>
+      <div class="zm-inklusion" id="zm-inklusion">5 ∈ ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ</div>
+    </div>
+    <div class="bedien">
+      <div class="feld-titel">Werkstatt-Messungen</div>
+      <div class="chips">
+        <span class="chip aktiv" data-zm="0">5</span>
+        <span class="chip" data-zm="1">−2</span>
+        <span class="chip" data-zm="2">3/40</span>
+        <span class="chip" data-zm="3">−3.5</span>
+        <span class="chip" data-zm="4">√2</span>
+      </div>
 
+      <div class="legende">
+        <div class="legende-titel">Wo wohnt diese Zahl?</div>
+        <div class="legende-zeile"><span class="lab">\(\mathbb{N}\) natürlich</span><span class="val" id="leg-zmN">✓</span></div>
+        <div class="legende-zeile"><span class="lab">\(\mathbb{Z}\) ganz</span><span class="val" id="leg-zmZ">✓</span></div>
+        <div class="legende-zeile"><span class="lab">\(\mathbb{Q}\) rational</span><span class="val" id="leg-zmQ">✓</span></div>
+        <div class="legende-zeile"><span class="lab">\(\mathbb{R}\) reell</span><span class="val" id="leg-zmR">✓</span></div>
+      </div>
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+      <div class="erklaerung" id="erkl-zm">
+        5 ist eine natürliche Zahl — und damit automatisch auch ganz, rational und reell.
+      </div>
+    </div>
+  </div>
+</div>
 
+<p>Dieselbe Zahl, ein zweiter Blick: das <strong>Venn-artige Diagramm</strong> zeigt die Inklusionen \(\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}\) als verschachtelte Boxen. Die in der Animation oben gewählte Zahl erscheint direkt in der kleinsten Menge, in die sie passt.</p>
 
-<!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<div class="mengen-vis">
+  <div class="menge-r" id="mv-R">
+    <span class="menge-name" style="color:var(--rot)">ℝ — reell</span>
+    <div class="menge-bsp">\(\sqrt{2},\;\pi,\;e\)</div>
+    <div class="menge-q" id="mv-Q">
+      <span class="menge-name" style="color:var(--orange)">ℚ — rational</span>
+      <div class="menge-bsp">\(\tfrac{3}{4},\;-2.5,\;0.\overline{3}\)</div>
+      <div class="menge-z" id="mv-Z">
+        <span class="menge-name" style="color:var(--gruen)">ℤ — ganz</span>
+        <div class="menge-bsp">\(-2,\;-1,\;0\)</div>
+        <div class="menge-n" id="mv-N">
+          <span class="menge-name" style="color:var(--blau)">ℕ — natürlich</span>
+          <div class="menge-bsp">\(0,\;1,\;2,\;5,\;42\)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<p>Die Lücke zwischen \(\mathbb{Q}\) und \(\mathbb{R}\) (also \(\mathbb{R} \setminus \mathbb{Q}\)) heisst Menge der <strong>irrationalen Zahlen</strong>. Beispiele: \(\sqrt{2}\), \(\sqrt{3}\), \(\pi\), \(e\). Sie sind reelle Zahlen, aber kein Bruch ganzer Zahlen.</p>
 
-<!-- ══ 7. AUFGABEN ══ -->
+<!-- ════════════════════════════════════════════════════════════════
+     3. DEFINITION
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="definition">Definitionen — die vier Standard-Zahlenmengen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition · Zahlenmengen \(\mathbb{N},\, \mathbb{Z},\, \mathbb{Q},\, \mathbb{R}\)</div>
+  <table class="ftb-tabelle zm-def-tabelle" style="margin-top:8px">
+    <thead><tr><th>Symbol</th><th>Name</th><th>Beschreibung</th><th>Beispiele</th></tr></thead>
+    <tbody>
+      <tr class="zm-row-N"><td>\(\mathbb{N}\)</td>     <td>natürliche Zahlen</td>          <td class="li">\(\{0, 1, 2, 3, \ldots\}\)</td>           <td class="li">\(0,\;5,\;42\)</td></tr>
+      <tr class="zm-row-Z"><td>\(\mathbb{Z}\)</td>     <td>ganze Zahlen</td>               <td class="li">\(\{\ldots, -2, -1, 0, 1, 2, \ldots\}\)</td><td class="li">\(-2,\;0,\;7\)</td></tr>
+      <tr class="zm-row-Q"><td>\(\mathbb{Q}\)</td>     <td>rationale Zahlen</td>           <td class="li">\(\left\{\dfrac{p}{q} \mid p \in \mathbb{Z},\, q \in \mathbb{N},\, q \neq 0 \right\}\)</td><td class="li">\(\tfrac{3}{4},\; -2.5,\;7\)</td></tr>
+      <tr class="zm-row-R"><td>\(\mathbb{R}\)</td>     <td>reelle Zahlen</td>              <td class="li">alle Punkte der Zahlengeraden</td>       <td class="li">\(\sqrt{2},\;\pi,\;-1.5\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:10px"><strong>Inklusionskette:</strong></p>
+  \[ \mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R} \]
+  <p>Jede natürliche Zahl ist auch eine ganze, jede ganze auch eine rationale, jede rationale auch eine reelle Zahl. Die Erweiterungen sind <em>echt</em> — z.B. ist \(-1 \in \mathbb{Z}\), aber \(-1 \notin \mathbb{N}\); und \(\sqrt{2} \in \mathbb{R}\), aber \(\sqrt{2} \notin \mathbb{Q}\).</p>
+</div>
+
+<!-- Interaktive Klassifikation: Welche Zahlenmenge? -->
+<div class="widget">
+  <div class="widget-header">
+    <h3>Welche Zahlenmenge?</h3>
+    <p>Klick auf die kleinste Menge, in der die Zahl liegt.</p>
+  </div>
+  <div class="widget-body">
+    <div id="kl-cont"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     4. DARSTELLUNGEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="darstellungen">Drei Darstellungen rationaler Zahlen</h2>
+
+<p>Eine rationale Zahl lässt sich in <strong>drei äquivalenten Formen</strong> schreiben — als Bruch, als Dezimalzahl und als Prozentangabe. Welche Form passt, hängt vom Kontext ab.</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Bruch</th><th>Dezimal</th><th>Prozent</th><th>Bemerkung</th></tr></thead>
+  <tbody>
+    <tr><td>\(\dfrac{1}{2}\)</td>     <td>\(0.5\)</td>       <td>\(50\%\)</td>     <td class="li">abbrechende Dezimaldarstellung</td></tr>
+    <tr><td>\(\dfrac{3}{4}\)</td>     <td>\(0.75\)</td>      <td>\(75\%\)</td>     <td class="li">abbrechend</td></tr>
+    <tr><td>\(\dfrac{1}{3}\)</td>     <td>\(0.\overline{3}\)</td><td>\(33.\overline{3}\%\)</td><td class="li">periodisch (Periode 3)</td></tr>
+    <tr><td>\(\dfrac{2}{7}\)</td>     <td>\(0.\overline{285714}\)</td><td>\(\approx 28.57\%\)</td><td class="li">periodisch (Periode 6)</td></tr>
+    <tr><td>\(-\dfrac{7}{4}\)</td>    <td>\(-1.75\)</td>     <td>\(-175\%\)</td>   <td class="li">negativ; Vorzeichen vor dem Bruch</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Wichtiger Satz</div>
+  <p>Eine reelle Zahl ist <strong>rational</strong> genau dann, wenn ihre Dezimaldarstellung <em>abbricht</em> oder <em>periodisch</em> wird. Eine reelle Zahl ist <strong>irrational</strong>, wenn ihre Dezimaldarstellung weder abbricht noch periodisch ist (z.B. \(\sqrt{2} = 1.41421356\ldots\), \(\pi = 3.14159265\ldots\)).</p>
+</div>
+
+<!-- Interaktiver Konverter -->
+<div class="widget">
+  <div class="widget-header">
+    <h3>Konverter — Bruch ↔ Dezimal ↔ Prozent</h3>
+    <p>Verschiebe den Schieber für Zähler und Nenner und beobachte alle drei Darstellungen.</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>Zähler \(p\)</label>
+      <input type="range" id="cv-p" min="-12" max="12" step="1" value="3">
+      <span class="sl-val" id="cv-pv">3</span>
+    </div>
+    <div class="sl-row">
+      <label>Nenner \(q\)</label>
+      <input type="range" id="cv-q" min="1" max="12" step="1" value="4">
+      <span class="sl-val" id="cv-qv">4</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Drei Darstellungen</div>
+      <div class="fl-eq" id="cv-out">\(\dfrac{3}{4} \;=\; 0.75 \;=\; 75\%\)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     5. TYPEN / SPEZIALFÄLLE — Mengendiagramm + Intervalle
+     ════════════════════════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════════════════════════
+     6. WEITERE THEORIE — Vorzeichenregeln, Betrag, Rundung, Intervalle
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="theorie">Weitere Theorie — Vorzeichen, Betrag, Rundung, Intervalle</h2>
+
+<h3 style="font-family:var(--serif);font-size:1.05rem;margin:14px 0 6px">Vorzeichenregeln <a class="quer" href="g1-3-algebraische-terme.html">↗ 1.3</a></h3>
+
+<p>Bei Multiplikation und Division gilt: <em>„gleiches Vorzeichen → plus, ungleiches Vorzeichen → minus"</em>. Konkret in vier Fällen:</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Vorzeichen</th><th>Multiplikation</th><th>Division</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>+ &middot; +</strong> &nbsp;respektive&nbsp; <strong>+ : +</strong></td>
+      <td class="li" style="text-align:center">\((+6) \cdot (+2) = +12\)</td>
+      <td class="li" style="text-align:center">\((+12) : (+4) \;=\; \dfrac{+12}{+4} \;=\; +3\)</td>
+    </tr>
+    <tr>
+      <td><strong>+ &middot; −</strong> &nbsp;respektive&nbsp; <strong>+ : −</strong></td>
+      <td class="li" style="text-align:center">\((+6) \cdot (-2) = -12\)</td>
+      <td class="li" style="text-align:center">\((+12) : (-4) \;=\; \dfrac{+12}{-4} \;=\; -3\)</td>
+    </tr>
+    <tr>
+      <td><strong>− &middot; +</strong> &nbsp;respektive&nbsp; <strong>− : +</strong></td>
+      <td class="li" style="text-align:center">\((-6) \cdot (+2) = -12\)</td>
+      <td class="li" style="text-align:center">\((-12) : (+4) \;=\; \dfrac{-12}{+4} \;=\; -3\)</td>
+    </tr>
+    <tr>
+      <td><strong>− &middot; −</strong> &nbsp;respektive&nbsp; <strong>− : −</strong></td>
+      <td class="li" style="text-align:center">\((-6) \cdot (-2) = +12\)</td>
+      <td class="li" style="text-align:center">\((-12) : (-4) \;=\; \dfrac{-12}{-4} \;=\; +3\)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Bei Addition und Subtraktion gibt es keine solche Tabelle — dort entscheidet die Stellung auf der Zahlengeraden.</p>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Rechnen mit Vorzeichen</div>
+  <p>\((-3) \cdot (-4) = +12\) — minus mal minus = plus.</p>
+  <p>\((-3) + (-4) = -7\) — beide negativ, Beträge addieren, Vorzeichen behalten.</p>
+  <p>\(7 - (-2) = 7 + 2 = 9\) — minus von minus = plus.</p>
+  <p>\(\dfrac{-15}{3} = -5\) und \(\dfrac{-15}{-3} = +5\).</p>
+</div>
+
+<h3 style="font-family:var(--serif);font-size:1.05rem;margin:14px 0 6px">Doppelminus-Regel</h3>
+
+<p>Zwei aufeinanderfolgende Minuszeichen heben sich gegenseitig auf. Diese Regel hat zwei
+Erscheinungsformen, die im Folgenden ständig verwendet werden — auch in <a class="quer" href="g1-3-algebraische-terme.html">↗ 1.3</a> beim Auflösen von Klammern:</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Form</th><th>Regel</th><th>Sprechweise</th></tr></thead>
+  <tbody>
+    <tr><td>Subtraktion einer negativen Zahl</td>  <td class="li" style="text-align:center">\(a - (-b) = a + b\)</td>  <td class="li">„minus minus = plus"</td></tr>
+    <tr><td>Negative Zahl multipliziert</td>      <td class="li" style="text-align:center">\((-a) \cdot (-b) = +ab\)</td>  <td class="li">„minus mal minus = plus"</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel · Doppelminus in drei Situationen</div>
+  <p>(a) \(5 - (-3) = 5 + 3 = 8\) (Subtraktion einer negativen Zahl).</p>
+  <p>(b) \((-6) \cdot (-2) = +12\) (Produkt zweier negativer Zahlen).</p>
+  <p>(c) \(-(-(-4)) = -(4) = -4\) (drei Minuszeichen: das erste Paar hebt sich auf, das einzelne bleibt).</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Faustregel — Vorzeichen zählen</div>
+  <p>Bei einer Kette aus Minuszeichen kannst du sie einfach zählen: eine <em>gerade</em> Anzahl
+  ergibt am Schluss ein Plus, eine <em>ungerade</em> Anzahl ein Minus. Beispiel:
+  \(-(-(-(-5))) = +5\) (vier Minuszeichen → gerade → plus).</p>
+</div>
+
+<h3 style="font-family:var(--serif);font-size:1.05rem;margin:14px 0 6px">Betrag (Absolutwert)</h3>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition · Betrag</div>
+  <p>Der <strong>Betrag</strong> einer Zahl \(a \in \mathbb{R}\) ist ihre Distanz zur Null auf der Zahlengeraden:</p>
+  \[ |a| \;=\; \begin{cases} a, & a \geq 0 \\ -a, & a < 0 \end{cases} \]
+  <p>Der Betrag ist nie negativ. Beispiele: \(|7| = 7\), \(|-3| = 3\), \(|0| = 0\).</p>
+</div>
+
+<h3 style="font-family:var(--serif);font-size:1.05rem;margin:14px 0 6px">Ordnungsrelationen</h3>
+
+<p>Auf der Zahlengeraden liegen kleinere Zahlen weiter <em>links</em>. Die Ordnungsrelationen \(<,\; \leq,\; >,\; \geq\) erlauben Vergleiche:</p>
+
+<table class="ftb-tabelle">
+  <tbody>
+    <tr><td class="li">\(-5 < 3\)</td>       <td>−5 liegt links von 3</td></tr>
+    <tr><td class="li">\(\tfrac{2}{3} < \tfrac{3}{4}\)</td>  <td>weil \(\tfrac{2}{3} \approx 0.667 < 0.750\)</td></tr>
+    <tr><td class="li">\(-7 < -2\)</td>      <td>bei negativen Zahlen: kleinerer <em>Betrag</em> nach Vorzeichen-Wechsel = grösser</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Brüche vergleichen</div>
+  <p>Für den Vergleich zweier Brüche \(\tfrac{a}{b}\) und \(\tfrac{c}{d}\) gibt es zwei zuverlässige Wege:</p>
+  <ul style="margin:5px 0 5px 20px">
+    <li><strong>Dezimal-Vergleich:</strong> beide Brüche in Dezimaldarstellung umrechnen (\(\tfrac{2}{3} \approx 0.667\), \(\tfrac{3}{4} = 0.750\)) — danach ist der Vergleich offensichtlich.</li>
+    <li><strong>Hauptnenner:</strong> beide auf den gemeinsamen Nenner \(b \cdot d\) bringen, dann nur die Zähler vergleichen (\(\tfrac{2}{3} = \tfrac{8}{12},\; \tfrac{3}{4} = \tfrac{9}{12} \Rightarrow \tfrac{8}{12} < \tfrac{9}{12}\)).</li>
+  </ul>
+  <p>Die Dezimal-Variante ist auf dem Taschenrechner schneller, die Hauptnenner-Variante zeigt das Ergebnis exakt — beide Wege müssen dasselbe Ergebnis liefern.</p>
+</div>
+
+<h3 style="font-family:var(--serif);font-size:1.05rem;margin:14px 0 6px">Runden</h3>
+
+<p>Beim Runden auf <em>n</em> Nachkommastellen gilt die Regel: <em>„5 oder grösser → aufrunden"</em>. Die letzte Spalte zeigt das Runden auf <em>3 signifikante Stellen</em> in wissenschaftlicher Notation (Mantisse mit 3 Stellen mal 10er-Potenz).</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Zahl</th><th>auf 0 Stellen</th><th>auf 1 Stelle</th><th>auf 2 Stellen</th><th>auf 3 signifikante Stellen</th></tr></thead>
+  <tbody>
+    <tr><td>\(3.14159\)</td>      <td class="li">3</td>     <td class="li">3.1</td>    <td class="li">3.14</td>   <td class="li">\(3.14 \cdot 10^0\)</td></tr>
+    <tr><td>\(7.85\)</td>         <td class="li">8</td>     <td class="li">7.9</td>    <td class="li">7.85</td>   <td class="li">\(7.85 \cdot 10^0\)</td></tr>
+    <tr><td>\(-2.475\)</td>       <td class="li">−2</td>    <td class="li">−2.5</td>   <td class="li">−2.48</td>  <td class="li">\(-2.48 \cdot 10^0\)</td></tr>
+    <tr><td>\(0.000\,041\,28\)</td><td class="li">0</td>    <td class="li">0.0</td>    <td class="li">0.00</td>   <td class="li">\(4.13 \cdot 10^{-5}\)</td></tr>
+    <tr><td>\(284\,500\)</td>     <td class="li">284500</td><td class="li">284500.0</td><td class="li">284500.00</td><td class="li">\(2.85 \cdot 10^{5}\)</td></tr>
+  </tbody>
+</table>
+
+<p style="font-size:0.85rem;color:var(--tinte-2);margin-top:6px"><em>Signifikante Stellen</em> sind alle Ziffern ab der ersten von Null verschiedenen Ziffer — bei \(0.000\,041\,28\) also \(4,\,1,\,2,\,8\), bei \(284\,500\) je nach Quelle 4 bis 6 (Endnullen sind mehrdeutig; in wissenschaftlicher Notation eindeutig). Vorteil: die Genauigkeit ist klar erkennbar, unabhängig von der Grössenordnung der Zahl.</p>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Erst am Schluss runden!</div>
+  <p>Wer Zwischenresultate rundet, sammelt Fehler. Faustregel: rechne mit voller Genauigkeit, runde erst das Endergebnis. Wenn Zwischenrundung doch nötig ist, mindestens 2 Stellen mehr behalten als das gewünschte Endergebnis.</p>
+</div>
+
+<h3 id="typen" style="font-family:var(--serif);font-size:1.05rem;margin:14px 0 6px">Intervalle — Teilmengen von \(\mathbb{R}\)</h3>
+
+<p>Ein Intervall ist eine zusammenhängende Teilmenge der reellen Zahlen. Die <strong>Klammer-Richtung</strong> sagt, ob die Grenze dazugehört (Klammer zeigt zum Intervall hin: ja; Klammer zeigt weg: nein). Klick auf eine Zeile und sieh dir das konkrete Beispiel daneben an — in formaler Schreibweise <em>und</em> auf der Zahlengeraden.</p>
+
+<div class="iv-anim">
+  <div class="iv-tabelle">
+    <table class="ftb-tabelle iv-tab">
+      <thead><tr><th>Schreibweise</th><th>Mengen-Schreibweise</th><th>Beispiel</th></tr></thead>
+      <tbody>
+        <tr class="iv-row aktiv" data-iv="0">
+          <td>\([a;\, b]\)</td>
+          <td class="li">\(\{x \in \mathbb{R} \mid a \leq x \leq b\}\)</td>
+          <td class="li">\([2;\, 5]\)</td>
+        </tr>
+        <tr class="iv-row" data-iv="1">
+          <td>\(]a;\, b[\)</td>
+          <td class="li">\(\{x \in \mathbb{R} \mid a < x < b\}\)</td>
+          <td class="li">\(]{-1};\, 3[\)</td>
+        </tr>
+        <tr class="iv-row" data-iv="2">
+          <td>\([a;\, b[\)</td>
+          <td class="li">\(\{x \in \mathbb{R} \mid a \leq x < b\}\)</td>
+          <td class="li">\([0;\, 4[\)</td>
+        </tr>
+        <tr class="iv-row" data-iv="3">
+          <td>\(]-\infty;\, b]\)</td>
+          <td class="li">\(\{x \in \mathbb{R} \mid x \leq b\}\)</td>
+          <td class="li">\(]-\infty;\, 2]\)</td>
+        </tr>
+        <tr class="iv-row" data-iv="4">
+          <td>\([a;\, +\infty[\)</td>
+          <td class="li">\(\{x \in \mathbb{R} \mid x \geq a\}\)</td>
+          <td class="li">\([{-1};\, +\infty[\)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="iv-vis">
+    <div class="iv-vis-titel">Gewähltes Intervall</div>
+    <div class="iv-formal" id="iv-formal">\([2;\, 5]\)</div>
+    <div class="iv-formal-mengen" id="iv-mengen">\(\{x \in \mathbb{R} \mid 2 \leq x \leq 5\}\)</div>
+    <canvas id="cv-iv" width="520" height="120"></canvas>
+    <div class="iv-erkl" id="iv-erkl">Beide Endpunkte gehören dazu — eckige Klammern, gefüllte Punkte.</div>
+  </div>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Bei \(\infty\) immer nach aussen geöffnete Klammer</div>
+  <p>Unendlich ist keine Zahl, sondern ein Symbol für „beliebig gross". Es kann nie als Intervall-Endpunkt „dabei" sein. Daher gilt stets <em>…; \(\infty\)[</em> bzw. <em>]\(-\infty\); …</em> — niemals <em>…; \(\infty\)]</em>.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     7. AUFGABEN
+     ════════════════════════════════════════════════════════════════ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
 
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Zahlen klassifizieren</span></div>
 
-<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+  <p>Ordne jede Zahl der <em>kleinsten</em> Standardmenge zu, in der sie liegt.</p>
+  <ol class="aufg-liste">
+  <li>\(7\)</li><li>\(-12\)</li><li>\(\dfrac{5}{8}\)</li>
+  <li>\(0.\overline{6}\)</li><li>\(\sqrt{9}\)</li><li>\(\sqrt{5}\)</li><li>\(\pi\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a1')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>\(7 \in \mathbb{N}\)</li>
+        <li>\(-12 \in \mathbb{Z}\)</li>
+        <li>\(\tfrac{5}{8} = 0.625 \in \mathbb{Q}\)</li>
+        <li>\(0.\overline{6} = \tfrac{2}{3} \in \mathbb{Q}\)</li>
+        <li>\(\sqrt{9} = 3 \in \mathbb{N}\)</li>
+        <li>\(\sqrt{5} \approx 2.236\ldots\) — irrational, also \(\in \mathbb{R}\)</li>
+        <li>\(\pi\) — irrational, also \(\in \mathbb{R}\)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Darstellungen umrechnen</span></div>
+
+  <p>Schreibe jede Zahl in den anderen beiden Darstellungen (Bruch · Dezimal · Prozent). Brüche möglichst gekürzt.</p>
+  <ol class="aufg-liste">
+  <li>\(\dfrac{3}{8}\)</li>
+  <li>\(0.45\)</li>
+  <li>\(120\%\)</li>
+  <li>\(\dfrac{7}{20}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(\tfrac{3}{8} = 0.375 = 37.5\%\).</li>
+        <li>\(0.45 = \tfrac{45}{100} = \tfrac{9}{20} = 45\%\).</li>
+        <li>\(120\% = 1.20 = \tfrac{6}{5}\).</li>
+        <li>\(\tfrac{7}{20} = 0.35 = 35\%\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3: Rechnen ohne Hilfsmittel -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen — auch ohne Hilfsmittel</span></div>
+
+  <p>Berechne ohne Taschenrechner. Beachte Vorzeichen- und Hierarchieregeln.</p>
+  <ol class="aufg-liste">
+  <li>\((-7) + 12 - (-3)\)</li>
+  <li>\((-4) \cdot (-3) + (-5) \cdot 2\)</li>
+  <li>\(20 - 3 \cdot (4 - 7)\)</li>
+  <li>\(\dfrac{2}{3} + \dfrac{3}{4} - \dfrac{1}{6}\)</li>
+  <li>\(\dfrac{3}{5} \cdot \dfrac{10}{9}\)</li>
+  <li>\(\dfrac{4}{7} : \dfrac{2}{3}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a3')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(-7 + 12 + 3 = 8\).</li>
+        <li>\((-4)(-3) + (-5)(2) = 12 - 10 = 2\).</li>
+        <li>Klammer zuerst: \(4 - 7 = -3\). Dann \(20 - 3 \cdot (-3) = 20 + 9 = 29\).</li>
+        <li>Hauptnenner 12: \(\tfrac{8}{12} + \tfrac{9}{12} - \tfrac{2}{12} = \tfrac{15}{12} = \tfrac{5}{4}\).</li>
+        <li>\(\tfrac{3 \cdot 10}{5 \cdot 9} = \tfrac{30}{45} = \tfrac{2}{3}\) (gekürzt durch 15). Endwert: \(\tfrac{2}{3}\).</li>
+        <li>\(\tfrac{4}{7} : \tfrac{2}{3} = \tfrac{4}{7} \cdot \tfrac{3}{2} = \tfrac{12}{14} = \tfrac{6}{7}\) (gekürzt durch 2). Endwert: \(\tfrac{6}{7}\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A4: Eingabe Betrag -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Beträge berechnen</span></div>
+  <p>Berechne \(\;|{-3} - 7| - |2 - 5|\;\) und gib das Ergebnis ein.</p>
+  <div class="eingabe-row">
+  <label>Wert =</label>
+  <input type="text" id="ea4" placeholder="z.B. 7">
+  <button class="btn-pruef" onclick="checkA4()">Prüfen</button>
+  </div>
+  <div class="cr" id="cra4"></div>
+</div>
+
+<!-- A5: Intervall -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Intervalle übersetzen</span></div>
+
+  <p>Schreibe jede Beschreibung als Intervall.</p>
+  <ol class="aufg-liste">
+  <li>Alle reellen Zahlen, die mindestens \(-2\) und höchstens 5 sind</li>
+  <li>Alle reellen Zahlen kleiner als 3</li>
+  <li>Alle reellen Zahlen mit \(-1 < x \leq 4\)</li>
+  <li>\(\{x \in \mathbb{R} \mid x \geq 0\}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>\([-2;\,5]\)</li>
+        <li>\(]-\infty;\,3[\)</li>
+        <li>\(]-1;\,4]\)</li>
+        <li>\([0;\,+\infty[\)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6: Anwendung -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — Mischtemperatur</span></div>
+
+  <p>An einem Wintertag werden drei Temperaturen gemessen (morgens, mittags, abends): \(-3.5\,°C\), \(+1.2\,°C\) und \(-0.8\,°C\). Berechne den Tagesdurchschnitt aus diesen drei Messungen auf eine Nachkommastelle. Stelle das Ergebnis als Bruch und als Dezimalzahl dar. In welcher Zahlenmenge liegt der Wert?</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Summe: \(-3.5 + 1.2 + (-0.8) = -3.1\). Durchschnitt: \(-3.1 / 3 = -\tfrac{31}{30} = -1.0\overline{3}\,°C\).</p>
+      <p>Auf eine Nachkommastelle gerundet: \(-1.0\,°C\). Als Bruch: \(-\tfrac{31}{30}\). Als Dezimalzahl periodisch: \(-1.0\overline{3}\). Die Zahl ist eine rationale Zahl, liegt also in \(\mathbb{Q}\) (und in \(\mathbb{R}\)).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     8. ZUSAMMENFASSUNG
+     ════════════════════════════════════════════════════════════════ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Rabatt-Vergleich an der Tankstelle <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Eine Tankstelle bietet drei Rabattvarianten auf 1 Liter Benzin zum Grundpreis 1.80 CHF:</p>
+  <ul>
+    <li>(A) 0.15 CHF Abzug pro Liter</li>
+    <li>(B) 8 % Rabatt</li>
+    <li>(C) 1/12 günstiger (Bruch-Angabe auf der Tafel)</li>
+  </ul>
+  <p>Welche Variante ist am günstigsten? Vergleiche durch Umrechnen in die gleiche Darstellung (Dezimal).</p>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-2-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-2-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>(A) Endpreis = \(1.80 - 0.15 = 1.65\,\text{CHF}\).</p>
+      <p>(B) Rabatt \(8\,\% = 0.08\), Abzug \(= 1.80 \cdot 0.08 = 0.144\,\text{CHF}\). Endpreis \(= 1.80 - 0.144 = 1.656\,\text{CHF}\).</p>
+      <p>(C) Rabatt \(= \tfrac{1}{12} \cdot 1.80 = 0.15\,\text{CHF}\). Endpreis \(= 1.80 - 0.15 = 1.65\,\text{CHF}\).</p>
+      <p><strong>Ranking:</strong> (A) und (C) gleich gut bei 1.65 CHF, (B) leicht teurer bei 1.656 CHF. Dass (A) und (C) gleich sind, ist kein Zufall: \(\tfrac{1}{12} \cdot 1.80 = 0.15\) — die Bruch-Angabe wurde gerade so gewählt.</p>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
 
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Jede neue Zahlenmenge entsteht, weil die alte ein Problem nicht lösen kann: \(\mathbb{Z}\) erlaubt Subtraktion, \(\mathbb{Q}\) erlaubt Division, \(\mathbb{R}\) erlaubt Wurzeln und Grenzwerte. \(\sqrt{2}\) ist <em>der</em> Beweis dafür, dass \(\mathbb{Q}\) nicht ausreicht.</p>
+</div>
 
-<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<table class="ftb-tabelle">
+  <tbody>
+    <tr><td class="li">Zahlenmengen</td>      <td>\(\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}\)</td></tr>
+    <tr><td class="li">Rationale Zahl</td>    <td>Bruch \(p/q\) mit \(p \in \mathbb{Z},\; q \in \mathbb{N}^*\) — Dezimaldarstellung abbrechend oder periodisch</td></tr>
+    <tr><td class="li">Irrationale Zahl</td>  <td>nicht-abbrechend, nicht-periodisch (z.B. \(\sqrt{2},\;\pi\))</td></tr>
+    <tr><td class="li">Drei Darstellungen</td><td>Bruch ↔ Dezimal ↔ Prozent</td></tr>
+    <tr><td class="li">Vorzeichen-Tabelle</td><td>+·+ = +, +·− = −, −·− = +</td></tr>
+    <tr><td class="li">Betrag</td>            <td>\(|a| \geq 0\) — Distanz zur Null</td></tr>
+    <tr><td class="li">Intervalle</td>        <td>\([\ldots]\) geschlossen, \(]\ldots[\) offen, \(\infty\) immer mit Klammer nach aussen</td></tr>
+    <tr><td class="li">Rundung</td>           <td>5 oder grösser → aufrunden; erst am Ende runden</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════
+     9. ZUSATZMATERIAL
+     ════════════════════════════════════════════════════════════════ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
-<!-- ══ 10. RESSOURCEN ══ -->
-<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
 
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g1-2-zahlen-grundoperationen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-2-zahlen-grundoperationen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Mengen, Vorzeichen, Intervalle</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-2-zahlen-grundoperationen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-2-zahlen-grundoperationen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g1-2-zahlen-grundoperationen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     10. EXTERNE RESSOURCEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lUDQ1_6S13Jol663DF2CQfq" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über Brüche — Playlist</div><div class="lk-s">MathemaTrick · 65 Videos · Rechenregeln, Aufgaben, Beispiele</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzkM5G1elN_rZV-Z4oQU0kpj" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Brüche &amp; Bruchrechnung — Playlist</div><div class="lk-s">Lehrerschmidt · 24 Videos · komplette Übersicht zum Thema</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHhk-YUb4y3NGM324XnkyGY-" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Bruchrechnung, Brüche — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 47 Videos · Erweitern, Kürzen, Grundrechenarten</div></div></a>
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g0/g01/aufg_g01.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Arithmetik (G01)</div><div class="lk-s">Aufgaben mit Lösungen zu Grundrechenarten und Zahlenmengen</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g0/g03/aufg_g03.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Bruchrechnen (G03)</div><div class="lk-s">Brüche addieren, multiplizieren, kürzen, erweitern — mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/zahlen-groessen/zahlen/zahlenmengen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Zahlenmengen</div><div class="lk-s">Theorie ℕ, ℤ, ℚ, ℝ und Übungsaufgaben mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/zahlen-groessen/bruche-dezimalzahlen-prozente" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Brüche, Dezimalzahlen, Prozente</div><div class="lk-s">Drei Darstellungen üben und ineinander umrechnen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -93,7 +711,7 @@ MathJax = {
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Zahlen und zugehörige Grundoperationen</p>
+  <p>Grundlagenfach 1.2 Zahlen und zugehörige Grundoperationen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -104,6 +722,573 @@ buildNav({
   kapitelNr:'1.2', kapitelTitel:'Zahlen und zugehörige Grundoperationen',
   prev:{nr:'1.1',titel:'Grundlagen',url:'g1-1-grundlagen.html'},
   next:{nr:'1.3',titel:'Grundoperationen mit algebraischen Termen',url:'g1-3-algebraische-terme.html'}
+});
+
+/* Lösungen ein-/ausklappen — toggleL stammt aus mathlib.js */
+
+/* Konverter Bruch ↔ Dezimal ↔ Prozent */
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while(b) { [a,b] = [b, a%b]; } return a; }
+
+function fmtPeriode(p, q) {
+  // Klassifikation terminierend/periodisch: der Nenner muss GEKÜRZT betrachtet
+  // werden. Beispiel: -9/12 hat gcd=3 → gekürzt -3/4 → Nenner 4 = 2² → terminierend.
+  if (q === 0) return 'undef.';
+  const g = gcd(p, q) || 1;
+  const v = p / q;
+  let m = Math.abs(q / g);
+  while (m % 2 === 0) m /= 2;
+  while (m % 5 === 0) m /= 5;
+  if (m === 1) {
+    // terminierend — knappe Dezimaldarstellung ohne unnötige Nullen
+    return v.toString();
+  }
+  return v.toFixed(4) + '\u2026';
+}
+
+function updateConv() {
+  let p = +document.getElementById('cv-p').value;
+  let q = +document.getElementById('cv-q').value;
+  document.getElementById('cv-pv').textContent = p;
+  document.getElementById('cv-qv').textContent = q;
+  // gekürzter Bruch
+  const g = gcd(p, q) || 1;
+  const pk = p / g, qk = q / g;
+  const dec = fmtPeriode(p, q);
+  const pct = (p / q * 100);
+  const pctStr = (Number.isInteger(pct) ? pct.toString() : pct.toFixed(2));
+
+  // LaTeX-Bruch mit horizontalem Strich. Wenn ungekürzter und gekürzter Bruch
+  // identisch sind, wird der ungekürzte weggelassen.
+  const tex = (n, d) => {
+    if (d < 0) { n = -n; d = -d; }
+    if (n < 0) return `-\\dfrac{${-n}}{${d}}`;
+    return `\\dfrac{${n}}{${d}}`;
+  };
+  const ungekuerztGleich = (p === pk && q === qk);
+  const lhs = ungekuerztGleich ? tex(p, q) : `${tex(p, q)} \\;=\\; ${tex(pk, qk)}`;
+  const out = document.getElementById('cv-out');
+  out.innerHTML = `\\(${lhs} \\;=\\; ${dec} \\;=\\; ${pctStr}\\%\\)`;
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([out]);
+  }
+}
+
+/* Klassifikation */
+const KL_AUFG = [
+  // Reihe 1 — Einstieg
+  { z:'\\(42\\)',                  opt:['\u2115','\u2124','\u211a','\u211d'], ok:0, hint:'Positive ganze Zahl \u2192 in \\(\\mathbb{N}\\).' },
+  { z:'\\(-9\\)',                  opt:['\u2115','\u2124','\u211a','\u211d'], ok:1, hint:'Negative ganze Zahl \u2192 kleinste enthaltende Menge ist \\(\\mathbb{Z}\\).' },
+  { z:'\\(0.5\\)',                 opt:['\u2115','\u2124','\u211a','\u211d'], ok:2, hint:'Endliche Dezimalzahl \\(= \\tfrac{1}{2}\\) \u2192 \\(\\mathbb{Q}\\).' },
+  // Reihe 2 — Brüche und Vorzeichen
+  { z:'\\(\\dfrac{5}{8}\\)',        opt:['\u2115','\u2124','\u211a','\u211d'], ok:2, hint:'Bruch mit teilerfremdem Z\u00e4hler und Nenner \u2192 \\(\\mathbb{Q}\\).' },
+  { z:'\\(-3\\)',                  opt:['\u2115','\u2124','\u211a','\u211d'], ok:1, hint:'Negative ganze Zahl \u2192 \\(\\mathbb{Z}\\), aber nicht \\(\\mathbb{N}\\).' },
+  { z:'\\(0\\)',                   opt:['\u2115','\u2124','\u211a','\u211d'], ok:0, hint:'Null geh\u00f6rt zu allen vier Mengen \u2014 kleinste ist \\(\\mathbb{N}\\) (in der schweizerischen Konvention \\(0 \\in \\mathbb{N}\\)).' },
+  // Reihe 3 — Wurzeln, irrational
+  { z:'\\(\\sqrt{25}\\)',           opt:['\u2115','\u2124','\u211a','\u211d'], ok:0, hint:'\\(\\sqrt{25} = 5\\) \u2192 doch eine nat\u00fcrliche Zahl. Die Wurzel macht eine Zahl nicht automatisch irrational.' },
+  { z:'\\(\\sqrt{7}\\)',            opt:['\u2115','\u2124','\u211a','\u211d'], ok:3, hint:'\\(\\sqrt{7} \\approx 2.6458\\ldots\\) ist irrational \u2192 nur in \\(\\mathbb{R}\\).' },
+  { z:'\\(\\pi\\)',                 opt:['\u2115','\u2124','\u211a','\u211d'], ok:3, hint:'\\(\\pi\\) ist irrational \u2192 nur in \\(\\mathbb{R}\\).' },
+  // Reihe 4 — subtil
+  { z:'\\(-2^4\\)',                opt:['\u2115','\u2124','\u211a','\u211d'], ok:1, hint:'Potenz vor Vorzeichen: \\(-2^4 = -(2^4) = -16\\) \u2192 \\(\\mathbb{Z}\\).' },
+  { z:'\\(0.\\overline{142857}\\)', opt:['\u2115','\u2124','\u211a','\u211d'], ok:2, hint:'Periodische Dezimaldarstellung \u2192 \\(\\mathbb{Q}\\) (es ist \\(\\tfrac{1}{7}\\)).' },
+  { z:'\\(\\sqrt{2}\\)',            opt:['\u2115','\u2124','\u211a','\u211d'], ok:3, hint:'\\(\\sqrt{2}\\) ist irrational (klassischer Beweis von Euklid) \u2192 nur in \\(\\mathbb{R}\\).' }
+];
+
+function buildKl() {
+  const cont = document.getElementById('kl-cont');
+  cont.innerHTML = `<div class="kl-grid">${KL_AUFG.map((a, i) => `
+    <div class="kl-spiel">
+      <div class="kl-zahl">${a.z}</div>
+      <div class="kl-buttons">
+        ${a.opt.map((o, j) => `<button class="kl-btn" data-i="${i}" data-j="${j}" onclick="checkKl(${i},${j})">${o}</button>`).join('')}
+      </div>
+      <div class="kl-feedback" id="klf-${i}"></div>
+    </div>
+  `).join('')}</div>`;
+  if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([cont]).catch(()=>{});
+}
+
+function checkKl(i, j) {
+  const a = KL_AUFG[i];
+  document.querySelectorAll(`button[data-i="${i}"]`).forEach(b => b.classList.remove('korrekt','falsch'));
+  const btn = document.querySelector(`button[data-i="${i}"][data-j="${j}"]`);
+  const fb = document.getElementById(`klf-${i}`);
+  if (j === a.ok) {
+    btn.classList.add('korrekt');
+    fb.className = 'kl-feedback ok';
+    fb.innerHTML = `\u2713 Richtig — ${a.hint}`;
+  } else {
+    btn.classList.add('falsch');
+    fb.className = 'kl-feedback err';
+    fb.innerHTML = `\u2717 Nicht ganz. ${a.hint}`;
+  }
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([fb]);
+  }
+}
+
+function checkA4() {
+  const v = document.getElementById('ea4').value.replace(',', '.').trim();
+  const x = parseFloat(v);
+  const r = document.getElementById('cra4');
+  r.style.display = 'block';
+  if (isNaN(x)) { r.className = 'cr err'; r.textContent = '\u2717 Bitte eine Zahl eingeben.'; return; }
+  // |-3-7| - |2-5| = |-10| - |-3| = 10 - 3 = 7
+  if (Math.abs(x - 7) < 0.001) {
+    r.className = 'cr ok';
+    r.textContent = '\u2713 Richtig. |\u22123\u22127| = |\u221210| = 10, |2\u22125| = |\u22123| = 3, also 10 \u2212 3 = 7.';
+  } else {
+    r.className = 'cr err';
+    r.textContent = '\u2717 Stimmt noch nicht. Erst innerhalb des Betrags ausrechnen, dann den Betrag bilden.';
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+ *  THEORIE · Intervall-Animation
+ *  Anklickbare Tabellenzeilen wählen ein Beispiel-Intervall;
+ *  formale Schreibweise + Zahlenstrahl werden synchron aktualisiert.
+ * ════════════════════════════════════════════════════════════════ */
+const IV_BEISPIELE = [
+  { typ:'geschlossen',  a: 2,    b: 5,    linksZu:true,  rechtsZu:true,
+    formal:'[2;\\, 5]', mengen:'\\{x \\in \\mathbb{R} \\mid 2 \\leq x \\leq 5\\}',
+    erkl:'Beide Endpunkte gehören dazu — eckige Klammern, gefüllte Punkte.' },
+  { typ:'offen',        a: -1,   b: 3,    linksZu:false, rechtsZu:false,
+    formal:']{-1};\\, 3[', mengen:'\\{x \\in \\mathbb{R} \\mid -1 < x < 3\\}',
+    erkl:'Beide Endpunkte gehören <em>nicht</em> dazu — Klammern nach aussen, hohle Punkte.' },
+  { typ:'halboffen',    a: 0,    b: 4,    linksZu:true,  rechtsZu:false,
+    formal:'[0;\\, 4[', mengen:'\\{x \\in \\mathbb{R} \\mid 0 \\leq x < 4\\}',
+    erkl:'Linker Endpunkt dabei (gefüllt), rechter Endpunkt nicht (hohl).' },
+  { typ:'links unbeschränkt',  a: null, b: 2,    linksZu:false, rechtsZu:true,
+    formal:']-\\infty;\\, 2]', mengen:'\\{x \\in \\mathbb{R} \\mid x \\leq 2\\}',
+    erkl:'Nach links unbeschränkt — Pfeil ohne Endpunkt. Rechts gehört die 2 dazu.' },
+  { typ:'rechts unbeschränkt', a: -1,   b: null, linksZu:true,  rechtsZu:false,
+    formal:'[{-1};\\, +\\infty[', mengen:'\\{x \\in \\mathbb{R} \\mid x \\geq -1\\}',
+    erkl:'Nach rechts unbeschränkt — Pfeil ohne Endpunkt. Links gehört die −1 dazu.' },
+];
+let IV_AKTIV = 0;
+
+function drawIntervall() {
+  const iv = IV_BEISPIELE[IV_AKTIV];
+  const { ctx, W, H } = initCanvas('cv-iv', 120);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, W, H);
+
+  // Zahlengerade
+  const padL = 30, padR = 30;
+  const axisY = H / 2 + 10;
+  const xMin = -5, xMax = 6;
+  const xPx = v => padL + (v - xMin) / (xMax - xMin) * (W - padL - padR);
+
+  // Hervorhebungsbereich (das Intervall als Balken)
+  const xLinks  = (iv.a === null) ? xMin       : iv.a;
+  const xRechts = (iv.b === null) ? xMax       : iv.b;
+  const pxL = xPx(xLinks);
+  const pxR = xPx(xRechts);
+  ctx.fillStyle = '#fef3c7';
+  ctx.fillRect(pxL, axisY - 9, pxR - pxL, 18);
+  ctx.strokeStyle = '#f59e0b';
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(pxL, axisY - 9, pxR - pxL, 18);
+
+  // Achse
+  ctx.strokeStyle = '#5a5040';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(padL - 5, axisY);
+  ctx.lineTo(W - padR + 5, axisY);
+  ctx.stroke();
+  // Rechter Pfeil (Achse)
+  ctx.fillStyle = '#5a5040';
+  ctx.beginPath();
+  ctx.moveTo(W - padR + 5, axisY);
+  ctx.lineTo(W - padR - 3, axisY - 5);
+  ctx.lineTo(W - padR - 3, axisY + 5);
+  ctx.closePath();
+  ctx.fill();
+
+  // Skala alle 1
+  ctx.fillStyle = '#5a5040';
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'center';
+  for (let v = Math.ceil(xMin); v <= Math.floor(xMax); v++) {
+    ctx.beginPath();
+    ctx.moveTo(xPx(v), axisY - 4);
+    ctx.lineTo(xPx(v), axisY + 4);
+    ctx.stroke();
+    ctx.fillText(String(v), xPx(v), axisY + 18);
+  }
+
+  // Endpunkte zeichnen
+  function endpunktVoll(x, gefuellt) {
+    ctx.beginPath();
+    ctx.arc(x, axisY, 5.5, 0, 2 * Math.PI);
+    if (gefuellt) {
+      ctx.fillStyle = '#b85c00';
+      ctx.fill();
+      ctx.strokeStyle = '#b85c00';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      ctx.strokeStyle = '#b85c00';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  }
+  function pfeilOffen(richtungLinks) {
+    // Gestrichelter dicker Pfeil nach links bzw. rechts vom Balken weg
+    const y = axisY;
+    ctx.strokeStyle = '#b85c00';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([5, 3]);
+    ctx.beginPath();
+    if (richtungLinks) {
+      ctx.moveTo(padL + 8, y);
+      ctx.lineTo(padL - 8, y);
+    } else {
+      ctx.moveTo(W - padR - 8, y);
+      ctx.lineTo(W - padR + 8, y);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Pfeilspitze
+    ctx.fillStyle = '#b85c00';
+    ctx.beginPath();
+    if (richtungLinks) {
+      ctx.moveTo(padL - 12, y);
+      ctx.lineTo(padL - 4, y - 5);
+      ctx.lineTo(padL - 4, y + 5);
+    } else {
+      ctx.moveTo(W - padR + 12, y);
+      ctx.lineTo(W - padR + 4, y - 5);
+      ctx.lineTo(W - padR + 4, y + 5);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Linker Rand
+  if (iv.a === null) {
+    pfeilOffen(true);
+  } else {
+    endpunktVoll(pxL, iv.linksZu);
+  }
+  // Rechter Rand
+  if (iv.b === null) {
+    pfeilOffen(false);
+  } else {
+    endpunktVoll(pxR, iv.rechtsZu);
+  }
+
+  // Labels (a / b) unter den Endpunkten — etwas tiefer als die Skala
+  ctx.font = 'bold 11px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#b85c00';
+  if (iv.a !== null) ctx.fillText('a = ' + iv.a, pxL, axisY + 36);
+  if (iv.b !== null) ctx.fillText('b = ' + iv.b, pxR, axisY + 36);
+
+  // Texte oberhalb (formal + mengen) sind separate DOM-Elemente
+  const formalEl = document.getElementById('iv-formal');
+  const mengenEl = document.getElementById('iv-mengen');
+  const erklEl   = document.getElementById('iv-erkl');
+  formalEl.innerHTML = `\\(${iv.formal}\\)`;
+  mengenEl.innerHTML = `\\(${iv.mengen}\\)`;
+  erklEl.innerHTML = iv.erkl;
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([formalEl, mengenEl, erklEl]);
+  }
+}
+
+function selectIntervall(i) {
+  IV_AKTIV = i;
+  document.querySelectorAll('.iv-row').forEach((r, idx) => {
+    r.classList.toggle('aktiv', idx === i);
+  });
+  drawIntervall();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('cv-p').addEventListener('input', updateConv);
+  document.getElementById('cv-q').addEventListener('input', updateConv);
+  updateConv();
+  buildKl();
+  drawZahlmenge();
+
+  // Intervalle-Animation initialisieren — Event-Delegation auf <tbody>,
+  // damit MathJax-SVG-Inhalte den Klick nicht abfangen können.
+  const ivTbody = document.querySelector('.iv-tab tbody');
+  if (ivTbody) {
+    ivTbody.addEventListener('click', (ev) => {
+      const row = ev.target.closest('.iv-row');
+      if (!row) return;
+      const idx = +row.dataset.iv;
+      if (!Number.isFinite(idx)) return;
+      selectIntervall(idx);
+    });
+  }
+  // Erstes Zeichnen: synchron + nach Layout + nach MathJax fertig
+  drawIntervall();
+  requestAnimationFrame(() => drawIntervall());
+  if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
+    window.MathJax.startup.promise.then(() => { drawIntervall(); drawZahlmenge(); });
+  }
+  // Bei Resize neu zeichnen (Canvas reagiert auf Container-Breite)
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { drawIntervall(); drawZahlmenge(); }, 120);
+  });
+});
+
+/* ════════════════════════════════════════════════════════════════
+ *  EINSTIEG · Zahlenmengen-Visualisierung
+ *  Zahlengerade mit fünf Werkstatt-Werten als markierten Punkten.
+ *  Anklickbare Chips selektieren einen Wert; ineinanderliegende
+ *  Mengen ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ werden hervorgehoben.
+ * ════════════════════════════════════════════════════════════════ */
+const ZM_WERTE = [
+  { id: 0, x: 5,         label: '5',         displayLabel: '5',
+    inN: true,  inZ: true,  inQ: true,  inR: true,
+    erkl: '<strong>5</strong> ist eine natürliche Zahl — und damit automatisch auch ganz, rational und reell. Die kleinste Menge, die sie enthält, ist \\(\\mathbb{N}\\).' },
+  { id: 1, x: -2,        label: '−2',        displayLabel: '−2',
+    inN: false, inZ: true,  inQ: true,  inR: true,
+    erkl: '<strong>−2</strong> liegt links der Null. In \\(\\mathbb{N}\\) gibt es keine negativen Zahlen — erst in \\(\\mathbb{Z}\\). Trotzdem auch in \\(\\mathbb{Q}\\) und \\(\\mathbb{R}\\), denn \\(\\mathbb{Z} \\subset \\mathbb{Q} \\subset \\mathbb{R}\\).' },
+  { id: 2, x: 3/40,      label: '3/40',      displayLabel: '3/40 = 0.075',
+    inN: false, inZ: false, inQ: true,  inR: true,
+    erkl: '<strong>3/40 = 0.075</strong> ist ein Bruch — eine rationale Zahl in \\(\\mathbb{Q}\\), aber nicht ganz und schon gar nicht natürlich.' },
+  { id: 3, x: -3.5,      label: '−3.5',      displayLabel: '−3.5',
+    inN: false, inZ: false, inQ: true,  inR: true,
+    erkl: '<strong>−3.5</strong> ist als endliche Dezimalzahl darstellbar (\\(= -7/2\\)) und damit rational. Negativ → nicht in \\(\\mathbb{N}\\). Nicht ganz → nicht in \\(\\mathbb{Z}\\).' },
+  { id: 4, x: Math.SQRT2, label: '√2',        displayLabel: '√2 ≈ 1.41421...',
+    inN: false, inZ: false, inQ: false, inR: true,
+    erkl: '<strong>√2 ≈ 1.41421...</strong> ist <em>nicht</em> als Bruch darstellbar (klassischer Beweis von Euklid). Sie ist <em>irrational</em>. Sie wohnt also in \\(\\mathbb{R}\\), aber nicht in \\(\\mathbb{Q}\\).' },
+];
+let ZM_AKTIV = 0;
+
+function drawZahlmenge() {
+  const w = ZM_WERTE[ZM_AKTIV];
+  const { ctx, W, H } = initCanvas('cv-zahlmenge', 220);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  // Zahlengerade
+  const padL = 100, padR = 30;
+  const axisY = H - 60;
+  const xMin = -4, xMax = 6;
+  const xPx = v => padL + (v - xMin) / (xMax - xMin) * (W - padL - padR);
+
+  // Ineinandergeschachtelte Streifen (von aussen nach innen)
+  // Farben passend zum Mengen-Diagramm unten:
+  //   ℝ  Rot      #fee2e2 BG, #dc2626 Border
+  //   ℚ  Orange   #fef3c7 BG, #f59e0b Border
+  //   ℤ  Grün     var(--gruen-hell) BG, var(--gruen) Border
+  //   ℕ  Blau     var(--blau-hell) BG, var(--blau) Border
+
+  const streifenY = 36;
+  const streifenH = 18;
+  const streifenGap = 22;
+  const streifen = [
+    { name: 'ℝ (reell)',     y: streifenY,                       color: '#fee2e2', textColor: '#dc2626', aktiv: w.inR, von: xMin, bis: xMax },
+    { name: 'ℚ (rational)',  y: streifenY + streifenGap,         color: '#fef3c7', textColor: '#b85c00', aktiv: w.inQ, von: xMin, bis: xMax },
+    { name: 'ℤ (ganz)',      y: streifenY + 2*streifenGap,       color: '#d8f0e2', textColor: '#1f6b3a', aktiv: w.inZ, von: xMin, bis: xMax },
+    { name: 'ℕ (natürlich)', y: streifenY + 3*streifenGap,       color: '#ddeaf8', textColor: '#1a4f8a', aktiv: w.inN, von: 0,    bis: xMax },
+  ];
+
+  streifen.forEach(s => {
+    const x1 = xPx(s.von);
+    const x2 = xPx(s.bis);
+    const xFullStart = padL;
+    const xFullEnd = W - padR;
+
+    // (a) Hintergrund über die GESAMTE Zeile in der Mengenfarbe (hell, falls inaktiv leicht entsättigt)
+    ctx.fillStyle = s.aktiv ? s.color : '#f4f0e3';
+    ctx.fillRect(xFullStart, s.y - streifenH/2, xFullEnd - xFullStart, streifenH);
+
+    // (b) Der tatsächlich gültige Definitionsbereich der Menge wird als Box mit
+    //     Border hervorgehoben — bei ℕ ist das nur [0, xMax].
+    ctx.strokeStyle = s.aktiv ? s.textColor : '#d4cab5';
+    ctx.lineWidth = s.aktiv ? 1.5 : 1;
+    ctx.strokeRect(x1, s.y - streifenH/2, x2 - x1, streifenH);
+
+    // Label links — grösser und ausgeschrieben
+    ctx.fillStyle = s.aktiv ? s.textColor : '#a89b85';
+    ctx.font = `${s.aktiv ? 'bold ' : ''}12px sans-serif`;
+    ctx.textAlign = 'right';
+    ctx.fillText(s.name, x1 - 8, s.y + 4);
+
+    // ℤ: kleine Punkte bei jeder ganzen Zahl
+    if (s.name.includes('ganz')) {
+      for (let v = Math.ceil(xMin); v <= Math.floor(xMax); v++) {
+        ctx.fillStyle = s.aktiv ? s.textColor : '#d4cab5';
+        ctx.beginPath();
+        ctx.arc(xPx(v), s.y, 1.8, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+    if (s.name.includes('natürlich')) {
+      for (let v = 0; v <= Math.floor(xMax); v++) {
+        ctx.fillStyle = s.aktiv ? s.textColor : '#d4cab5';
+        ctx.beginPath();
+        ctx.arc(xPx(v), s.y, 1.8, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+  });
+
+  // Untere Zahlengerade (klassische Achse)
+  ctx.strokeStyle = '#5a5040';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(padL - 5, axisY);
+  ctx.lineTo(W - padR + 5, axisY);
+  ctx.stroke();
+  // Pfeil
+  ctx.fillStyle = '#5a5040';
+  ctx.beginPath();
+  ctx.moveTo(W - padR + 5, axisY);
+  ctx.lineTo(W - padR - 3, axisY - 5);
+  ctx.lineTo(W - padR - 3, axisY + 5);
+  ctx.closePath();
+  ctx.fill();
+
+  // Skalen-Marken jede ganze Zahl
+  ctx.fillStyle = '#5a5040';
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'center';
+  for (let v = Math.ceil(xMin); v <= Math.floor(xMax); v++) {
+    ctx.beginPath();
+    ctx.moveTo(xPx(v), axisY - 4);
+    ctx.lineTo(xPx(v), axisY + 4);
+    ctx.stroke();
+    ctx.fillText(String(v), xPx(v), axisY + 18);
+  }
+
+  // Markierungspunkt für den aktiven Wert
+  const px = xPx(w.x);
+  if (w.x >= xMin && w.x <= xMax) {
+    // Vertikale Linie nach oben zu den Streifen
+    ctx.strokeStyle = '#a83a3a';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(px, axisY);
+    ctx.lineTo(px, streifenY - 12);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Punkt
+    ctx.fillStyle = '#a83a3a';
+    ctx.beginPath();
+    ctx.arc(px, axisY, 6, 0, 2 * Math.PI);
+    ctx.fill();
+    // Label oberhalb (im sichtbaren Canvas-Bereich)
+    ctx.fillStyle = '#a83a3a';
+    ctx.font = 'bold 13px monospace';
+    ctx.fillText(w.displayLabel, px, streifenY - 18);
+  } else {
+    // Bei ausserhalb: Pfeil am Rand mit Label
+    const rand = (w.x > xMax) ? W - padR + 2 : padL - 2;
+    const dir = (w.x > xMax) ? 1 : -1;
+    ctx.fillStyle = '#a83a3a';
+    ctx.strokeStyle = '#a83a3a';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(rand, axisY);
+    ctx.lineTo(rand - dir * 14, axisY - 6);
+    ctx.lineTo(rand - dir * 14, axisY + 6);
+    ctx.closePath();
+    ctx.fill();
+    ctx.font = 'bold 12px monospace';
+    ctx.textAlign = (w.x > xMax) ? 'right' : 'left';
+    ctx.fillText(`→ ${w.displayLabel}`, rand - dir * 18, axisY - 10);
+    ctx.textAlign = 'center';
+  }
+
+  // Live-Anzeigen
+  const setLeg = (id, ok) => {
+    const el = document.getElementById(id);
+    el.textContent = ok ? '✓' : '✗';
+    el.style.color = ok ? 'var(--gruen)' : 'var(--rot)';
+  };
+  setLeg('leg-zmN', w.inN);
+  setLeg('leg-zmZ', w.inZ);
+  setLeg('leg-zmQ', w.inQ);
+  setLeg('leg-zmR', w.inR);
+
+  // Inklusions-Zeile unter dem Zahlenstrahl: dynamisch je nach Mitgliedschaft
+  // Beispiele:
+  //   5    : 5 ∈ ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ
+  //   −2   : −2 ∈ ℤ ⊂ ℚ ⊂ ℝ  (ℕ entfällt)
+  //   3/40 : 3/40 ∈ ℚ ⊂ ℝ
+  //   √2   : √2 ∈ ℝ
+  // Die kleinste enthaltende Menge ist farblich hervorgehoben.
+  const inkEl = document.getElementById('zm-inklusion');
+  if (inkEl) {
+    const stufen = [];
+    if (w.inN) stufen.push({ sym: 'ℕ', name: 'natürlich' });
+    if (w.inZ) stufen.push({ sym: 'ℤ', name: 'ganz' });
+    if (w.inQ) stufen.push({ sym: 'ℚ', name: 'rational' });
+    if (w.inR) stufen.push({ sym: 'ℝ', name: 'reell' });
+    // kleinste Menge = stufen[0]
+    let html = `<span class="ink-zahl">${w.displayLabel}</span> `;
+    stufen.forEach((s, i) => {
+      const kls = (i === 0) ? 'ink-stuf kleinste' : 'ink-stuf';
+      const rel = (i === 0) ? ' ∈ ' : ' ⊂ ';
+      if (i === 0) html += `<span class="ink-rel">${rel}</span>`;
+      else         html += `<span class="ink-rel">${rel}</span>`;
+      html += `<span class="${kls}">${s.sym}</span>`;
+    });
+    inkEl.innerHTML = html;
+  }
+
+  // Mengen-Diagramm: aktive Zahl in der passenden (kleinsten) Menge anzeigen
+  // und diese Menge per box-shadow hervorheben.
+  ['mv-N','mv-Z','mv-Q','mv-R'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.remove('mv-treffer');
+      // bestehende eingehängte Zahl in dieser Menge entfernen
+      const alteBox = el.querySelector(':scope > .mv-aktive');
+      if (alteBox) alteBox.remove();
+    }
+  });
+  // Kleinste enthaltende Menge bestimmen
+  const ziel = w.inN ? 'mv-N' : w.inZ ? 'mv-Z' : w.inQ ? 'mv-Q' : 'mv-R';
+  // Farbe der Box passend zur Menge
+  const farben = {
+    'mv-N': { bg:'#fff', col:'var(--blau)',   bd:'var(--blau)'    },
+    'mv-Z': { bg:'#fff', col:'var(--gruen)',  bd:'var(--gruen)'   },
+    'mv-Q': { bg:'#fff', col:'#b85c00',       bd:'#f59e0b'        },
+    'mv-R': { bg:'#fff', col:'var(--rot)',    bd:'var(--rot)'     },
+  };
+  const zielEl = document.getElementById(ziel);
+  if (zielEl) {
+    zielEl.classList.add('mv-treffer');
+    const f = farben[ziel];
+    const box = document.createElement('span');
+    box.className = 'mv-aktive';
+    box.id = 'mv-aktive-zahl';
+    box.style.color = f.col;
+    box.style.borderColor = f.bd;
+    box.textContent = w.displayLabel;
+    zielEl.appendChild(box);
+  }
+
+  const erklEl = document.getElementById('erkl-zm');
+  erklEl.innerHTML = w.erkl;
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([erklEl]);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.chip[data-zm]').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('.chip[data-zm]').forEach(o => o.classList.remove('aktiv'));
+      c.classList.add('aktiv');
+      ZM_AKTIV = +c.dataset.zm;
+      drawZahlmenge();
+    });
+  });
 });
 </script>
 </body>

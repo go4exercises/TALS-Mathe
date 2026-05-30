@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.2b Quadratische Gleichungen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:50px; text-align:right; }
+
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:560px; margin:0 auto; }
+
+.meth-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.meth-btn { font-family:var(--mono); font-size:0.75rem; font-weight:700; padding:6px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.meth-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.meth-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+.lf-box { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin:14px 0; }
+.lf-card { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 10px; text-align:center; transition:all 0.2s; cursor:pointer; }
+.lf-card:hover { border-color:var(--blau-rand); }
+.lf-card.aktiv { border-color:var(--blau); background:var(--blau-hell); transform:translateY(-2px); }
+.lf-card .lf-tit { font-family:var(--mono); font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--tinte-2); margin-bottom:6px; }
+.lf-card.aktiv .lf-tit { color:var(--blau); }
+.lf-card .lf-fml { font-family:var(--mono); font-size:0.8rem; color:var(--tinte); font-weight:700; }
+
+.eingabe-row { display:flex; align-items:center; gap:9px; margin:10px 0; flex-wrap:wrap; }
+.eingabe-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.92rem; padding:6px 10px; border:1.5px solid var(--linie); border-radius:6px; width:80px; background:var(--papier-2); color:var(--tinte); }
+.eingabe-row input[type=text]:focus { outline:none; border-color:var(--blau); background:var(--weiss); }
+.btn-pruef { font-family:var(--sans); font-size:0.78rem; font-weight:600; padding:6px 14px; border-radius:7px; border:none; background:var(--blau); color:#fff; cursor:pointer; }
+.btn-pruef:hover { background:#15406d; }
+
+.cr { font-family:var(--mono); font-size:0.78rem; padding:6px 11px; border-radius:6px; margin-top:8px; display:none; }
+.cr.ok { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); display:block; }
+.cr.err { background:var(--rot-hell); color:var(--rot); border:1px solid var(--rot-rand); display:block; }
+
+.umform-stack { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:14px 18px; margin:12px 0; min-height:240px; }
+.umform-zeile { display:flex; align-items:center; gap:14px; padding:5px 0; opacity:0; transform:translateY(-6px); transition:opacity 0.35s, transform 0.35s; }
+.umform-zeile.sichtbar { opacity:1; transform:translateY(0); }
+.umform-zeile .uf-glg { font-family:var(--mono); font-size:0.95rem; font-weight:700; color:var(--tinte); flex:1; }
+.umform-op { font-family:var(--mono); font-size:0.75rem; color:var(--blau); background:var(--blau-hell); padding:3px 9px; border-radius:5px; border:1px solid var(--blau-rand); white-space:nowrap; }
+.umform-zeile.kommentar { padding-left:8px; }
+.umform-zeile.kommentar .uf-glg { font-family:var(--sans); font-style:italic; color:var(--tinte-2); font-size:0.83rem; font-weight:400; }
+.umform-zeile.kernschritt .uf-glg { background:#fff3a8; padding:4px 8px; border-radius:5px; box-shadow:0 1px 3px rgba(0,0,0,0.05); }
+.umform-zeile.kernschritt .kern-hinweis { font-family:var(--mono); font-size:0.7rem; color:#fff; background:var(--orange); border-radius:5px; padding:4px 9px; font-weight:700; letter-spacing:0.5px; white-space:nowrap; }
+
+.umform-btn { font-family:var(--mono); font-size:0.75rem; padding:6px 14px; border-radius:6px; border:1.5px solid var(--linie); background:var(--weiss); cursor:pointer; color:var(--tinte); margin-right:7px; }
+.umform-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.umform-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+.meth-info { background:var(--blau-hell); border:1px solid var(--blau-rand); border-radius:9px; padding:11px 16px; margin-bottom:12px; font-size:0.88rem; color:var(--tinte); }
+.meth-info strong { color:var(--blau); }
+
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px; }
+@media (max-width:760px) { .zwei-spalten { grid-template-columns:1fr; } }
+
+.hinweis { font-family:var(--sans); font-size:0.8rem; color:var(--tinte-2); font-style:italic; margin:6px 0; }
+
+.ftb-tabelle tbody tr.aktiv td { background:var(--blau-hell); font-weight:700; color:var(--blau); }
+
+/* Stolpersteine-Hinweis (Sub-Block in Faktorisier-Methoden) */
+.stolper { background:var(--rot-hell); border-left:3px solid var(--rot); border-radius:7px; padding:10px 14px; margin:10px 0; font-size:0.85rem; }
+.stolper strong { color:var(--rot); }
+
+/* Wurzelterm-Visualisierung — die Mitternachtsformel als Baum */
+.wurzelterm-vis { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:18px; margin:12px 0; text-align:center; }
+.wurzelterm-vis .formel-d { font-family:var(--mono); font-size:1.15rem; font-weight:700; color:var(--tinte); margin-bottom:14px; }
+.wurzelterm-vis .formel-d .D-wert { background:#fff3a8; padding:2px 8px; border-radius:5px; }
+.wurzelterm-vis .baum { display:flex; justify-content:center; gap:30px; margin-top:14px; flex-wrap:wrap; }
+.wurzelterm-vis .ast { background:var(--weiss); border:1.5px solid var(--linie); border-radius:9px; padding:14px 16px; min-width:130px; }
+.wurzelterm-vis .ast.aktiv { border-color:var(--blau); box-shadow:0 0 0 3px var(--blau-hell); }
+.wurzelterm-vis .ast.warn { border-color:var(--rot); background:var(--rot-hell); }
+.wurzelterm-vis .ast .ast-tit { font-family:var(--mono); font-size:0.7rem; color:var(--tinte-2); margin-bottom:6px; letter-spacing:1px; }
+.wurzelterm-vis .ast .ast-val { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--tinte); }
+.wurzelterm-vis .info-zeile { font-family:var(--sans); font-size:0.85rem; color:var(--tinte-2); margin-top:14px; font-style:italic; }
+
+/* Diskriminanten-Zahlenstrahl für Parameterdiskussion */
+.zs-wrap { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:14px 18px; margin:12px 0; }
+.zs-info { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px; }
+.zs-info .zs-formel { font-family:var(--mono); font-size:0.95rem; font-weight:700; color:var(--tinte); }
+.zs-info .zs-fall { font-family:var(--mono); font-size:0.8rem; padding:4px 10px; border-radius:6px; font-weight:700; }
+.zs-info .zs-fall.eindeutig { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.zs-info .zs-fall.doppelt   { background:var(--blau-hell);  color:var(--blau);  border:1px solid var(--blau-rand); }
+.zs-info .zs-fall.keine     { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Einstiegs-Animation: Anna fährt Velo */
+.velo-box{background:var(--papier-2,#f3eedf);border-radius:8px;padding:14px 16px;margin:12px 0}
+.velo-box .vb-row{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:0.9rem;margin-bottom:10px;flex-wrap:wrap}
+.velo-box .vb-row label{min-width:170px}
+.velo-box .vb-row input[type=range]{flex:1 1 220px;max-width:340px}
+.velo-box .vb-val{font-weight:700;color:var(--blau);min-width:48px}
+.velo-box canvas{width:100%;height:240px;display:block;background:var(--weiss);border-radius:6px}
+.velo-box .vb-readout{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;padding:10px 14px;background:var(--weiss);border-radius:6px;font-family:var(--mono);font-size:0.86rem;align-items:baseline}
+.velo-box .vb-readout .rb-item{display:flex;flex-direction:column;min-width:118px}
+.velo-box .vb-readout .rb-lab{font-size:0.7rem;color:var(--tinte-2);text-transform:uppercase;letter-spacing:0.5px;font-weight:700}
+.velo-box .vb-readout .rb-val{color:var(--blau);font-weight:700;font-size:1rem}
+.velo-box .vb-readout .rb-summe{margin-left:auto;padding:6px 12px;border-radius:6px;border:1.5px solid var(--linie);font-size:1.05rem;font-weight:700}
+.velo-box .vb-readout .rb-summe.treffer{background:var(--gruen-hell);color:var(--gruen);border-color:var(--gruen)}
+.velo-box .vb-readout .rb-summe.fern{background:var(--rot-hell);color:var(--rot);border-color:var(--rot)}
+.velo-box .vb-readout .rb-summe.nah{background:var(--blau-hell);color:var(--blau);border-color:var(--blau-rand)}
+.velo-box .vb-buttons{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.velo-box .vb-buttons button{font-family:var(--mono);font-size:0.78rem;font-weight:700;padding:6px 12px;border-radius:18px;border:1.5px solid var(--linie);background:var(--papier-2);cursor:pointer;color:var(--tinte-2);transition:all 0.15s}
+.velo-box .vb-buttons button:hover{border-color:var(--blau-rand);background:var(--blau-hell);color:var(--blau)}
+.velo-box .vb-buttons button.aktiv{border-color:var(--blau);background:var(--blau);color:#fff}
+.velo-box .vb-cap{font-size:0.85rem;color:var(--tinte-2);margin-top:8px;font-style:italic}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ════════════════════════════════════════════════════════════════
+     1. TITEL + RLP-HEADER
+     ════════════════════════════════════════════════════════════════ -->
+<div class="page-titel">
+  <div class="pt-bereich">Grundlagenfach · Lerngebiet 2 · Gleichungen, Ungleichungen und Gleichungssysteme · 35 Lektionen</div>
+  <h1 class="pt-h1">2.2b Quadratische Gleichungen</h1>
+  <div class="pt-untertitel">RLP 2.2 · Teil 2 von 2</div>
+</div>
+
+<p class="lead">Eine <strong>quadratische Gleichung</strong> der Form \(a\cdot x^2 + b\cdot x + c = 0\) kann keine, eine oder zwei Lösungen haben. Hier vergleichst du verschiedene Lösungsmethoden — Lösungsformel, quadratische Ergänzung, Faktorisieren, Satz von Vieta — und entscheidest aufgabenbezogen, welche am schnellsten zum Ziel führt.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">RLP-Kompetenzen (Auszug aus 2.2)</div>
+  <ul>
+    <li>quadratische Gleichungen lösen, verschiedene Lösungsmethoden erklären und anwenden, inkl. Parameterdiskussion <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+  <p class="rlp-hinweis">Die linearen Gleichungen werden in <a href="g2-2a-lineare-gleichungen.html">Teil 1 (g2-2a)</a> behandelt.</p>
+</div>
+
+<nav class="ohm" id="ohm-root"></nav>
+
+<!-- ════════════════════════════════════════════════════════════════
+     2. EINSTIEG — Bruchgleichung führt auf quadratische Gleichung
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="einstieg">Einstieg — Anna fährt Velo</h2>
+
+<p>Anna fährt mit dem Velo zur Schule und wieder zurück. Die Strecke beträgt je <strong>12 km</strong>. Auf dem Hinweg fährt sie mit einer gewissen Geschwindigkeit \(v\) (in km/h). Auf dem Rückweg ist sie wegen Gegenwind <strong>4 km/h langsamer</strong>. Insgesamt ist sie <strong>1 Stunde 30 Minuten</strong> unterwegs. Wie schnell ist sie auf dem Hinweg gefahren?</p>
+
+<p>Stell den Schieber so ein, dass Annas Gesamtzeit möglichst nahe an 1 h 30 min herankommt:</p>
+
+<div class="velo-box">
+  <div class="vb-row">
+    <label>Hinweg-Geschwindigkeit \(v\): <span class="vb-val" id="velo-vv">15.0</span> km/h</label>
+    <input type="range" id="velo-v" min="5" max="30" step="0.1" value="15">
+  </div>
+  <canvas id="velo-canvas" aria-label="Annas Hin- und Rückweg mit Geschwindigkeitsregler"></canvas>
+  <div class="vb-readout">
+    <div class="rb-item"><span class="rb-lab">Hinweg \(v\)</span><span class="rb-val" id="velo-vh">15.0 km/h</span></div>
+    <div class="rb-item"><span class="rb-lab">Rückweg \(v\!-\!4\)</span><span class="rb-val" id="velo-vr">11.0 km/h</span></div>
+    <div class="rb-item"><span class="rb-lab">Zeit hin</span><span class="rb-val" id="velo-th">48 min</span></div>
+    <div class="rb-item"><span class="rb-lab">Zeit zurück</span><span class="rb-val" id="velo-tr">65 min</span></div>
+    <div class="rb-summe nah" id="velo-summe">Σ = 113 min</div>
+  </div>
+  <div class="vb-buttons">
+    <button id="velo-play">▶ Fahrt starten</button>
+    <button id="velo-reset">↺ Reset</button>
+  </div>
+  <div class="vb-cap">Probiere verschiedene Werte für \(v\). Klick „Fahrt starten", um Hin- und Rückweg parallel als Animation laufen zu lassen — die Geschwindigkeiten sind dabei massstäblich. Ziel: Gesamtzeit möglichst nahe an 90 min.</div>
+</div>
+
+<p>Du siehst: Die Gesamtzeit hängt empfindlich vom Wert von \(v\) ab — und nur für *einen* bestimmten Wert kommt genau 90 Minuten heraus. Wie findet man diesen Wert <strong>ohne</strong> Probieren? Schreibt man die Aufgabe als Gleichung mit „Zeit = Strecke / Geschwindigkeit":</p>
+
+\[ \underbrace{\frac{12}{v}}_{\text{Hinweg}} + \underbrace{\frac{12}{v - 4}}_{\text{Rückweg}} = \tfrac{3}{2}. \]
+
+<p>Das ist eine <strong>Bruchgleichung</strong>. Multipliziert man sie mit dem Hauptnenner und vereinfacht, entsteht eine <strong>quadratische Gleichung</strong> in \(v\) — genau die Sorte Gleichung, die dieses Kapitel behandelt. Sie hat im Allgemeinen zwei Lösungen; eine davon wird Annas Geschwindigkeit sein, die andere passt zwar zur Gleichung, ergibt aber im Sachzusammenhang keinen Sinn (z. B. negative Rückweg-Geschwindigkeit).</p>
+
+<p>Quadratische Gleichungen tauchen überall auf, wo zwei Faktoren in einem Produkt vorkommen:
+Flächenberechnungen, Bewegungsaufgaben, Zerfallsprozesse. In diesem Kapitel lernst du, sie
+systematisch zu lösen — mit Faktorisieren, der pq-Formel und der Mitternachtsformel.</p>
+
+<!-- ════════════════════════════════════════════════════════════════
+     3. DEFINITION
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="definition">Definition und Normalformen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Quadratische Gleichung</div>
+  <p>Eine Gleichung der Form</p>
+  \[ a \cdot x^2 + b \cdot x + c = 0 \quad (a \neq 0) \]
+  <p>mit \(a, b, c \in \mathbb{R}\) heisst <strong>quadratische Gleichung</strong> in der Variable <em>x</em>.
+  Der Term \(a \cdot x^2\) heisst <em>quadratisches Glied</em>, \(b \cdot x\) <em>lineares Glied</em>
+  und \(c\) <em>konstantes Glied</em>.</p>
+</div>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Form</th><th>Aussehen</th><th>Wann praktisch</th></tr></thead>
+  <tbody>
+    <tr><td>Allgemeine Form</td><td>\(a \cdot x^2 + b \cdot x + c = 0\)</td><td>Mitternachtsformel</td></tr>
+    <tr><td>Normalform</td><td>\(x^2 + p \cdot x + q = 0\)</td><td>pq-Formel, Vieta</td></tr>
+    <tr><td>Faktorform</td><td>\((x - x_1) \cdot (x - x_2) = 0\)</td><td>Lösungen direkt ablesbar</td></tr>
+    <tr><td>Reine Form</td><td>\(x^2 = c\)</td><td>Wurzelziehen genügt</td></tr>
+  </tbody>
+</table>
+
+<div class="merksatz">
+  <strong>Merksatz.</strong> Jede quadratische Gleichung lässt sich durch Division durch <em>a</em>
+  in die Normalform bringen. Die Lösungsmenge \(\mathbb{L}\) bleibt dabei gleich.
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     4. DREI DARSTELLUNGEN — Gleichung, Tabelle, Lösungsmenge
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="darstellungen">Drei Darstellungen — Gleichung, Tabelle, Lösungsmenge</h2>
+
+<p>Eine quadratische Gleichung lässt sich auf drei Wegen darstellen: als Term, als Wertetabelle
+und über ihre Lösungsmenge. Verschiebe die Schieber für die Koeffizienten <em>p</em> und <em>q</em>
+und beobachte, welche Werte den Term zu null machen.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Drei Darstellungen — \(x^2 + p \cdot x + q = 0\)</h3>
+    <p>Die Tabelle zeigt den Wert von \(f(x) = x^2 + p \cdot x + q\). Genau dort, wo \(f(x) = 0\), liegt eine Lösung.</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label for="sl-p">p =</label>
+      <input id="sl-p" type="range" min="-6" max="6" step="1" value="-5">
+      <span class="sl-val" id="sl-p-v">−5</span>
+    </div>
+    <div class="sl-row">
+      <label for="sl-q">q =</label>
+      <input id="sl-q" type="range" min="-6" max="9" step="1" value="6">
+      <span class="sl-val" id="sl-q-v">6</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Aktuelle Gleichung</div>
+      <div class="fl-eq" id="three-eq">x² − 5·x + 6 = 0</div>
+    </div>
+    <table class="ftb-tabelle" id="three-table">
+      <thead><tr><th>x</th><th>x²</th><th>p·x</th><th>f(x) = x² + p·x + q</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="formel-live" style="margin-top:12px">
+      <div class="fl-label">Lösungsmenge</div>
+      <div class="fl-eq" id="three-l"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     5. LÖSUNGSVERFAHREN — Übersicht
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="verfahren">Lösungsverfahren — wann welches?</h2>
+
+<p>Es gibt vier wichtige Verfahren zum Lösen einer quadratischen Gleichung. Welches am
+schnellsten zum Ziel führt, hängt vom Aussehen der Gleichung ab.</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Verfahren</th><th>Wann besonders gut</th><th>Was wird gemacht</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Wurzelziehen</strong></td><td>\(b = 0\)  (rein quadratisch: \(a \cdot x^2 + c = 0\))</td><td>Nach \(x^2\) auflösen, Wurzel ziehen.</td></tr>
+    <tr><td><strong>Faktorisieren</strong></td><td>spezielle Struktur erkennbar</td><td>Drei Sub-Methoden, siehe unten.</td></tr>
+    <tr><td><strong>pq-Formel</strong></td><td>Normalform \(x^2 + p \cdot x + q = 0\)</td><td>\(x_{1,2} = -\tfrac{p}{2} \pm \sqrt{\left(\tfrac{p}{2}\right)^2 - q}\)</td></tr>
+    <tr><td><strong>Mitternachtsformel</strong></td><td>allgemeine Form, immer einsetzbar</td><td>\(x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4 \cdot a \cdot c}}{2 \cdot a}\)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-beweis" style="margin-top:14px">
+  <div class="block-titel">🔷 Herleitung der pq-Formel — quadratische Ergänzung</div>
+  <p>Woher kommt die pq-Formel? Sie folgt aus einem einzigen Trick: <em>quadratisch ergänzen</em>, sodass auf der linken Seite ein vollständiges Quadrat steht.</p>
+  <p><strong>① Ausgangsgleichung in Normalform:</strong></p>
+  \[ x^2 + p \cdot x + q = 0 \;\;\mid\, -q \;\;\Longrightarrow\;\; x^2 + p \cdot x = -q. \]
+  <p><strong>② Quadratisch ergänzen:</strong> Auf beiden Seiten \(\left(\tfrac{p}{2}\right)^2\) addieren, damit links die binomische Formel anwendbar wird:</p>
+  \[ x^2 + p \cdot x + \left(\tfrac{p}{2}\right)^2 = \left(\tfrac{p}{2}\right)^2 - q
+     \;\;\Longleftrightarrow\;\; \left(x + \tfrac{p}{2}\right)^2 = \left(\tfrac{p}{2}\right)^2 - q. \]
+  <p><strong>③ Wurzelziehen</strong> (mit \(\pm\), weil eine quadrierte Zahl zwei Vorzeichen haben kann), dann nach \(x\) auflösen:</p>
+  \[ x + \tfrac{p}{2} = \pm\sqrt{\left(\tfrac{p}{2}\right)^2 - q}
+     \;\;\Longleftrightarrow\;\; x_{1,2} = -\tfrac{p}{2} \pm \sqrt{\left(\tfrac{p}{2}\right)^2 - q}. \]
+  <p>Das ist die pq-Formel. Die Mitternachtsformel folgt analog aus \(a \cdot x^2 + b \cdot x + c = 0\) — Division durch \(a\) liefert die Normalform mit \(p = b/a\), \(q = c/a\), und nach Einsetzen und Vereinfachen erhält man \(x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}\).</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     6. FAKTORISIEREN — drei Sub-Methoden
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="faktorisieren">Faktorisieren — drei Sub-Methoden <a class="quer" href="g1-3-algebraische-terme.html">↩ 1.3</a></h2>
+
+<p>Faktorisieren heisst, das quadratische Polynom als <strong>Produkt</strong> von zwei
+linearen Faktoren zu schreiben:</p>
+
+\[ a \cdot x^2 + b \cdot x + c \;=\; a \cdot (x - x_1) \cdot (x - x_2). \]
+
+<p>Sobald das gelingt, sieht man die Lösungen direkt: ein Produkt ist null, wenn (mindestens)
+einer der Faktoren null ist. Es gibt drei häufige Wege, das Faktorisieren zu schaffen — wähle
+eine Methode und sieh dir das Beispiel Schritt für Schritt an.</p>
+
+<div class="widget">
+  <div class="widget-body">
+    <div class="meth-btns" id="fak-btns">
+      <button class="meth-btn aktiv" data-fak="cnull">a) c = 0 → x ausklammern</button>
+      <button class="meth-btn" data-fak="binom">b) Binom erkennen</button>
+      <button class="meth-btn" data-fak="vieta">c) Zweiklammersatz / Vieta</button>
+    </div>
+    <div class="meth-info" id="fak-info"></div>
+    <div class="umform-stack" id="fak-stack"></div>
+    <div style="margin-top:10px">
+      <button class="umform-btn" id="fak-zurueck">◀ Zurück</button>
+      <button class="umform-btn" id="fak-vor">Vor ▶</button>
+      <button class="umform-btn" id="fak-reset">⟲ Zurücksetzen</button>
+    </div>
+    <div class="stolper" id="fak-stolper"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     7. DISKRIMINANTE — am Wurzelterm der Mitternachtsformel
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="diskriminante">Diskriminante und Anzahl Lösungen</h2>
+
+<p>Schaue dir den Wurzelterm der Mitternachtsformel an:</p>
+
+\[ x_{1,2} = \frac{-b \pm \sqrt{\,\overbrace{b^2 - 4 \cdot a \cdot c}^{\,D = \text{Diskriminante}}\,}}{2 \cdot a}. \]
+
+<p>Der Ausdruck unter der Wurzel — \(D = b^2 - 4 \cdot a \cdot c\) — heisst <strong>Diskriminante</strong>
+(„das Unterscheidende"). Sie entscheidet allein durch ihr Vorzeichen, wie viele reelle Lösungen die
+Gleichung hat. Klicke die drei Fälle durch und beobachte, was im Wurzelterm passiert:</p>
+
+<div class="widget">
+  <div class="widget-body">
+    <div class="lf-box">
+      <div class="lf-card aktiv" data-d="pos">
+        <div class="lf-tit">D &gt; 0</div>
+        <div class="lf-fml">Zwei Lösungen</div>
+      </div>
+      <div class="lf-card" data-d="null">
+        <div class="lf-tit">D = 0</div>
+        <div class="lf-fml">Eine doppelte Lösung</div>
+      </div>
+      <div class="lf-card" data-d="neg">
+        <div class="lf-tit">D &lt; 0</div>
+        <div class="lf-fml">Keine reelle Lösung</div>
+      </div>
+    </div>
+    <div class="wurzelterm-vis" id="wurzelterm-vis">
+      <div class="formel-d" id="d-formel"></div>
+      <div class="baum" id="d-baum"></div>
+      <div class="info-zeile" id="d-info"></div>
+    </div>
+  </div>
+</div>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Diskriminante</th><th>Wurzelterm</th><th>Lösungsmenge</th></tr></thead>
+  <tbody>
+    <tr><td>\(D &gt; 0\)</td><td>\(\sqrt{D}\) ist eine reelle Zahl &gt; 0 — \(\pm\) liefert zwei verschiedene Werte.</td><td>\(\mathbb{L} = \{x_1,\, x_2\}\)</td></tr>
+    <tr><td>\(D = 0\)</td><td>\(\sqrt{D} = 0\) — der \(\pm\)-Term verschwindet.</td><td>\(\mathbb{L} = \left\{-\tfrac{b}{2a}\right\}\) (doppelte Lösung)</td></tr>
+    <tr><td>\(D &lt; 0\)</td><td>\(\sqrt{D}\) in \(\mathbb{R}\) nicht definiert — kein Ergebnis.</td><td>\(\mathbb{L} = \emptyset\)</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════
+     8. SATZ VON VIETA — und wozu er nützt
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="vieta">Satz von Vieta</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Satz von Vieta (für Normalform)</div>
+  <p>Sind \(x_1\) und \(x_2\) die Lösungen der Gleichung \(x^2 + p \cdot x + q = 0\), so gilt</p>
+  \[ x_1 + x_2 \;=\; -p, \qquad x_1 \cdot x_2 \;=\; q. \]
+  <p>In Worten: Die <strong>Summe</strong> der Lösungen ist \(-p\), das <strong>Produkt</strong> ist \(q\).</p>
+</div>
+
+<h3 style="margin-top:18px;font-family:var(--serif);font-size:1.05rem">Wozu kann ich Vieta brauchen?</h3>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 1. Probekontrolle</div>
+  <p>Du hast \(x^2 - 5 \cdot x + 6 = 0\) gelöst und glaubst \(x_1 = 2, x_2 = 3\) zu haben.
+  Schnelltest mit Vieta:</p>
+  \[ x_1 + x_2 = 2 + 3 = 5 \stackrel{?}{=} -p = 5 \;\checkmark \qquad x_1 \cdot x_2 = 2 \cdot 3 = 6 \stackrel{?}{=} q = 6 \;\checkmark \]
+  <p>Beides stimmt — die Lösungen sind richtig. Vieta ist eine Probekontrolle, die schneller geht
+  als Einsetzen in die Originalgleichung.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 2. Ganzzahlige Lösungen erraten</div>
+  <p>Bei \(x^2 - 7 \cdot x + 12 = 0\): Welche zwei ganzen Zahlen ergeben Summe 7 und Produkt 12?
+  Probiere die Teiler von 12: 3 und 4 ergeben Summe 7 ✓. Also \(x_1 = 3, x_2 = 4\).</p>
+  <p>Kein Rechnen mit Wurzeln, keine Mitternachtsformel — nur Kopfrechnen mit den Teilern von <em>q</em>.
+  Funktioniert allerdings nur, wenn die Lösungen ganze Zahlen sind.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 3. Faktorisieren</div>
+  <p>Mit den gefundenen Lösungen schreibst du die Gleichung als Produkt:</p>
+  \[ x^2 - 7 \cdot x + 12 \;=\; (x - 3) \cdot (x - 4). \]
+  <p>Diese Form ist beim Kürzen von Bruchtermen oder beim Lösen von Polynom-Ungleichungen oft
+  nützlich.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     9. PARAMETERDISKUSSION — Diskriminante als Funktion eines Parameters
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="parameter">Parameterdiskussion</h2>
+
+<p>In Anwendungen taucht oft eine quadratische Gleichung mit einem zusätzlichen Parameter <em>k</em>
+auf. Für welche <em>k</em> hat die Gleichung wie viele Lösungen? Die <strong>Diskriminante</strong>
+beantwortet die Frage — sie wird selbst zu einer Funktion von <em>k</em>.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Beispiel — \(x^2 - 6 \cdot x + k = 0\)</h3>
+    <p>Verschiebe den Schieber für <em>k</em> und beobachte den Diskriminanten-Wert auf dem Zahlenstrahl. Drei Bereiche, drei Lösungsfälle.</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label for="sl-k">k =</label>
+      <input id="sl-k" type="range" min="-2" max="14" step="0.5" value="5">
+      <span class="sl-val" id="sl-k-v">5</span>
+    </div>
+    <div class="zs-wrap">
+      <div class="zs-info">
+        <div class="zs-formel" id="pk-formel">D(k) = 36 − 4·k = 16</div>
+        <div class="zs-fall" id="pk-fall">D &gt; 0 — zwei Lösungen</div>
+      </div>
+      <div class="cv-wrap"><canvas id="cv-pk"></canvas></div>
+    </div>
+    <div class="formel-live" style="margin-top:12px">
+      <div class="fl-label">Lösungen aus Mitternachtsformel</div>
+      <div class="fl-eq" id="pk-loesungen">x₁ = 5, x₂ = 1</div>
+    </div>
+    <p class="hinweis">D(k) = b² − 4·a·c mit a = 1, b = −6, c = k → D(k) = 36 − 4k. Grenzfall: D = 0 ⇔ k = 9.</p>
+  </div>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Zusammenfassung der Fälle</div>
+  <ul>
+    <li><strong>k &lt; 9:</strong>&nbsp; \(D(k) &gt; 0\) → zwei verschiedene reelle Lösungen</li>
+    <li><strong>k = 9:</strong>&nbsp; \(D(k) = 0\) → eine doppelte Lösung \(x = 3\)</li>
+    <li><strong>k &gt; 9:</strong>&nbsp; \(D(k) &lt; 0\) → keine reelle Lösung, \(\mathbb{L} = \emptyset\)</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     10. AUFGABEN
+     ════════════════════════════════════════════════════════════════ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Quadratwurzel nur positiv</div>
+  <p>Aus \(x^2 = 9\) folgt \(x = \pm 3\), nicht nur \(x = 3\). Beide Werte erfüllen die Gleichung: \(3^2 = 9\) und \((-3)^2 = 9\). Das Quadrieren „löscht" das Vorzeichen, also gibt es im Allgemeinen zwei Lösungen. Vergessen wird oft die negative — sie ist aber genauso gültig wie die positive, solange der Sachzusammenhang sie zulässt.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — pq-Formel braucht Normalform</div>
+  <p>Die pq-Formel \(x_{1,2} = -\tfrac{p}{2} \pm \sqrt{\left(\tfrac{p}{2}\right)^2 - q}\) gilt nur für \(x^2 + p\cdot x + q = 0\) — also Leitkoeffizient \(1\). Bei \(2x^2 + 4x - 6 = 0\) zuerst durch \(2\) teilen: \(x^2 + 2x - 3 = 0\), dann \(p = 2\), \(q = -3\). Wer die pq-Formel direkt mit \(p = 4\) und \(q = -6\) rechnet, erhält falsche Lösungen. Alternativ: Mitternachtsformel benutzen — die funktioniert auch ohne vorheriges Teilen.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — das richtige Lösungsverfahren zuerst wählen</div>
+  <p>Quadratische Gleichungen lassen sich auf vier Wegen lösen — und der schnellste hängt von der Form ab:</p>
+  <ul style="margin:5px 0 5px 20px">
+    <li><strong>Reine quadratische Form</strong> (\(x^2 = c\), kein \(x\)-Term): direkt Wurzel, \(x = \pm \sqrt{c}\).</li>
+    <li><strong>Kein Konstantenglied</strong> (\(ax^2 + bx = 0\)): \(x\) ausklammern, Produkt-gleich-Null-Regel.</li>
+    <li><strong>Schöne Koeffizienten</strong>, ganzzahlige Lösungen vermutet: Vieta-Probe — geht im Kopf in 10 Sekunden.</li>
+    <li><strong>Sonst</strong>: Mitternachtsformel — funktioniert immer, ist aber rechenaufwendiger.</li>
+  </ul>
+  <p>Wer vor dem Rechnen die Form analysiert, spart oft mehr als die Hälfte des Aufwands.</p>
+</div>
+
+<h2 id="aufgaben">Aufgaben</h2>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Bestes Verfahren erkennen</span></div>
+
+  <p>Welche Methode wählst du am schnellsten? Ordne den Gleichungen den passenden Weg zu.</p>
+  <table class="ftb-tabelle">
+  <thead><tr><th>Gleichung</th><th>Empfohlenes Verfahren</th></tr></thead>
+  <tbody>
+  <tr><td>\(x^2 - 49 = 0\)</td><td>Wurzelziehen (rein quadratisch)</td></tr>
+  <tr><td>\(2 \cdot x^2 - 8 \cdot x = 0\)</td><td>Faktorisieren · x ausklammern (c = 0)</td></tr>
+  <tr><td>\(x^2 - 6 \cdot x + 9 = 0\)</td><td>Faktorisieren · Binom \((x - 3)^2\)</td></tr>
+  <tr><td>\(x^2 - 5 \cdot x + 6 = 0\)</td><td>Faktorisieren · Vieta (Summe 5, Produkt 6)</td></tr>
+  <tr><td>\(3 \cdot x^2 + 7 \cdot x - 2 = 0\)</td><td>Mitternachtsformel</td></tr>
+  </tbody>
+  </table>
+  <button class="loesung-toggle" onclick="toggleL('a1-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a1-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Die Tabelle oben zeigt direkt, welches Verfahren am schnellsten zum Ziel führt. Faustregel:
+      Erst nach Spezialstrukturen schauen (rein quadratisch, c = 0, Binom, ganzzahlige Lösungen mit
+      Vieta) — erst zur Mitternachtsformel greifen, wenn nichts davon offensichtlich ist.</p>
+      <p><strong>Vieta-Zwischenrechnung für \(x^2 - 5 \cdot x + 6 = 0\):</strong> Vergleich mit der Normalform \(x^2 + p \cdot x + q = 0\) liefert \(p = -5\) und \(q = 6\). Vieta sagt: \(x_1 + x_2 = -p = -(-5) = 5\) und \(x_1 \cdot x_2 = q = 6\). Gesucht sind also zwei Zahlen mit Summe \(5\) und Produkt \(6\) — das sind \(2\) und \(3\). Also \(\mathbb{L} = \{2, 3\}\). Der Vorzeichen-Wechsel \(p \to -p\) ist die häufigste Stolperstelle bei Vieta.</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Ausklammern und Wurzelziehen</span></div>
+
+  <p>Löse:&nbsp; \( 3 \cdot x^2 - 12 \cdot x = 0 \).</p>
+  <div class="eingabe-row">
+  <label>x₁ =</label><input id="a2-x1" type="text" inputmode="numeric">
+  <label>x₂ =</label><input id="a2-x2" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA2()">Prüfen</button>
+  </div>
+  <div id="a2-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a2-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a2-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(3 \cdot x^2 - 12 \cdot x = 3 \cdot x \cdot (x - 4) = 0\). Ein Produkt ist null, wenn ein Faktor null ist:
+      \(x_1 = 0\) oder \(x_2 = 4\). Also \(\mathbb{L} = \{0, 4\}\).</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Mitternachtsformel</span></div>
+
+  <p>Löse:&nbsp; \( 2 \cdot x^2 + 3 \cdot x - 5 = 0 \).</p>
+  <div class="eingabe-row">
+  <label>x₁ =</label><input id="a3-x1" type="text" inputmode="numeric">
+  <label>x₂ =</label><input id="a3-x2" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA3()">Prüfen</button>
+  </div>
+  <div id="a3-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a3-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a3-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(D = 9 + 40 = 49\), \(\sqrt{D} = 7\). Mit \(a = 2\):</p>
+      \[ x_{1,2} = \frac{-3 \pm 7}{4} \;\;\Longrightarrow\;\; x_1 = 1,\; x_2 = -\tfrac{5}{2}. \]
+      <p>\(\mathbb{L} = \left\{1,\, -\tfrac{5}{2}\right\}\). Brüche kannst du als 5/2 oder 2.5 eingeben.</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Anzahl Lösungen über die Diskriminante</span></div>
+
+  <p>Wie viele reelle Lösungen hat die Gleichung \(x^2 - 4 \cdot x + 5 = 0\)?</p>
+  <div class="eingabe-row">
+  <label>D =</label><input id="a4-d" type="text" inputmode="numeric">
+  <label>Anzahl Lösungen:</label><input id="a4-n" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA4()">Prüfen</button>
+  </div>
+  <div id="a4-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a4-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a4-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(D = (-4)^2 - 4 \cdot 1 \cdot 5 = 16 - 20 = -4\). Da \(D &lt; 0\), gibt es <strong>keine</strong>
+      reelle Lösung. \(\mathbb{L} = \emptyset\).</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Vieta zum Erraten</span></div>
+
+  <p>Löse mit Vieta (ohne Mitternachtsformel):&nbsp; \( x^2 - 9 \cdot x + 20 = 0 \).</p>
+  <div class="eingabe-row">
+  <label>x₁ =</label><input id="a5-x1" type="text" inputmode="numeric">
+  <label>x₂ =</label><input id="a5-x2" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA5()">Prüfen</button>
+  </div>
+  <div id="a5-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a5-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a5-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Gesucht: zwei Zahlen mit Summe 9 und Produkt 20. Teiler von 20: 1·20, 2·10, 4·5. Davon hat
+      4 + 5 = 9 die richtige Summe. Also \(x_1 = 4, x_2 = 5\), \(\mathbb{L} = \{4, 5\}\).</p>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung — Anna fährt Velo</span></div>
+
+  <p>Löse die Bruchgleichung aus dem Einstieg:&nbsp; \(\dfrac{12}{v} + \dfrac{12}{v - 4} = \dfrac{3}{2}\).
+  Wie schnell fährt Anna auf dem Hinweg?</p>
+  <div class="eingabe-row">
+  <label>v [km/h] =</label><input id="a6-v" type="text" inputmode="numeric">
+  <button class="btn-pruef" onclick="pruefA6()">Prüfen</button>
+  </div>
+  <div id="a6-cr" class="cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('a6-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a6-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Die Definitionsmenge ist \(\mathbb{D} = \mathbb{R} \setminus \{0, 4\}\) — sonst entstünde Division durch null. Hauptnenner: \(2 \cdot v \cdot (v - 4)\). Multiplikation jedes Bruchs damit:</p>
+      \[ \tfrac{12}{v} \cdot 2v(v-4) + \tfrac{12}{v-4} \cdot 2v(v-4) = \tfrac{3}{2} \cdot 2v(v-4) \]
+      \[ 24 \cdot (v-4) + 24 \cdot v = 3 \cdot v \cdot (v-4) \]
+      <p>Klammern auflösen und sortieren:</p>
+      \[ 24v - 96 + 24v = 3v^2 - 12v \quad\Longrightarrow\quad 48v - 96 = 3v^2 - 12v \]
+      \[ 3v^2 - 60v + 96 = 0 \quad\Big|:3 \quad\Longrightarrow\quad v^2 - 20 \cdot v + 32 = 0 \]
+      <p>Mit der Mitternachtsformel:
+      \(D = 400 - 128 = 272\), \(\sqrt{D} \approx 16.49\). Wir nennen die beiden Lösungen \(v_a\) und \(v_b\):</p>
+      \[ v_{a,b} = \tfrac{20 \pm 16.49}{2} \;\;\Longrightarrow\;\; v_a \approx 18.25,\; v_b \approx 1.76. \]
+      <p>Bei \(v_b \approx 1.76\) wäre die Rückweg-Geschwindigkeit \(v_b - 4 \approx -2.24\) negativ — physikalisch nicht sinnvoll. Damit ist \(v = v_a \approx 18.25\); Anna fährt etwa <strong>18.2 km/h</strong> auf dem Hinweg.</p>
+    </div>
+    <div class="block block-tipp" style="margin:6px 0 0">
+      <div class="block-titel">💡 Tipp — zwei Lösungen, nur eine sinnvoll</div>
+      <p>Die quadratische Gleichung „kennt" den Sachzusammenhang nicht — sie liefert formal beide Lösungen. Der Sachkontext (Geschwindigkeit positiv, Rückweg-Geschwindigkeit \(v - 4 > 0\)) sortiert die unsinnige Lösung aus. Bei jeder Anwendungsaufgabe gehört darum nach dem Rechnen eine kurze Sinn-Prüfung beider Lösungen.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     11. ZUSAMMENFASSUNG
+     ════════════════════════════════════════════════════════════════ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Goldener Schnitt aus quadratischer Gleichung <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Eine Strecke der Länge \(1\) wird so in zwei Teile \(\varphi\) und \(1 - \varphi\) geteilt, dass sich der grössere Teil zum kleineren verhält wie die ganze Strecke zum grösseren:</p>
+  <p>\[\dfrac{\varphi}{1 - \varphi} = \dfrac{1}{\varphi}.\]</p>
+  
+  <ol class="aufg-liste">
+    <li>Forme die Verhältnisgleichung in eine quadratische Standardgleichung in \(\varphi\) um.</li>
+    <li>Löse die quadratische Gleichung.</li>
+    <li>Welche Lösung ist im Kontext sinnvoll (\(0 < \varphi < 1\))? Drücke das Resultat als exakten Wurzelausdruck aus.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g2-2b-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g2-2b-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Über Kreuz multiplizieren: \(\varphi^2 = 1 - \varphi\), also \(\varphi^2 + \varphi - 1 = 0\).</li>
+        <li>Mit der pq-Formel (\(p = 1\), \(q = -1\)): \(\varphi_{1,2} = -\tfrac{1}{2} \pm \sqrt{\tfrac{1}{4} + 1} = -\tfrac{1}{2} \pm \tfrac{\sqrt{5}}{2} = \dfrac{-1 \pm \sqrt{5}}{2}\).</li>
+        <li>Mit \(\sqrt{5} \approx 2.236\) gilt \(\varphi_1 \approx 0.618\) (positiv, im Intervall) und \(\varphi_2 \approx -1.618\) (negativ, raus). Die im Kontext sinnvolle Lösung ist also \(\varphi = \dfrac{-1 + \sqrt{5}}{2}\) — bekannt als <strong>Goldener Schnitt</strong>. Der Kehrwert \(1/\varphi = \tfrac{1 + \sqrt{5}}{2} \approx 1.618\) heisst „Goldene Zahl" und taucht in Architektur, Kunst und Natur (Blattstellung, Schneckenhaus-Spiralen) immer wieder auf.</li>
+      </ol>
+    </div>
+    <div class="block block-tipp" style="margin:6px 0 0">
+      <div class="block-titel">💡 Achtung — drei Zahlen verwechseln</div>
+      <p>\(\varphi_1 \approx 0.618\) ist der <em>Goldene Schnitt</em> (die im Intervall liegende Lösung). \(\varphi_2 \approx -1.618\) ist die <em>verworfene</em> Lösung der quadratischen Gleichung — sie ist negativ, hat keinen Bezug zum Verhältnis-Problem und ist insbesondere <em>nicht</em> die „Goldene Zahl". Die Goldene Zahl \(\Phi = \tfrac{1+\sqrt{5}}{2} \approx +1.618\) ist der Kehrwert von \(\varphi_1\) — gleicher Betrag wie \(\varphi_2\), aber positiv. Der Vorzeichen-Unterschied ist entscheidend.</p>
+    </div>
+  </div>
+</div>
+
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Vor der Mitternachtsformel: <em>schau hin</em>. Ist \(b = 0\)? Ist \(c = 0\)?
+  Sieht es nach einem Binom aus? Hat \(q\) zwei Teiler, deren Summe \(-p\) ist?
+  Spezialstrukturen sparen viel Rechnerei — die Mitternachtsformel ist der Allzweck-Hammer für den Rest.</p>
+</div>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Begriff / Verfahren</th><th>Kernidee</th><th>Spezialität</th></tr></thead>
+  <tbody>
+    <tr><td>Quadratische Gleichung</td><td>\(a x^2 + b x + c = 0\) mit \(a \neq 0\)</td><td>Drei Glieder: quadratisch, linear, konstant</td></tr>
+    <tr><td>Wurzelziehen</td><td>nur bei \(b = 0\)</td><td>\(x^2 = -c/a\); falls \(-c/a \geq 0\): \(x = \pm\sqrt{-c/a}\), sonst \(\mathbb{L} = \emptyset\)</td></tr>
+    <tr><td>Faktorisieren</td><td>als Produkt schreiben</td><td>3 Sub-Methoden: c = 0 / Binom / Vieta</td></tr>
+    <tr><td>pq-Formel</td><td>nach Division durch <em>a</em></td><td>\(x_{1,2} = -\tfrac{p}{2} \pm \sqrt{(\tfrac{p}{2})^2 - q}\)</td></tr>
+    <tr><td>Mitternachtsformel</td><td>immer einsetzbar</td><td>\(x_{1,2} = \tfrac{-b \pm \sqrt{D}}{2a}\), \(D = b^2 - 4ac\)</td></tr>
+    <tr><td>Diskriminante</td><td>\(D = b^2 - 4 a c\)</td><td>D &gt; 0 / D = 0 / D &lt; 0 → 2 / 1 / 0 Lösungen</td></tr>
+    <tr><td>Vieta</td><td>\(x_1 + x_2 = -p\), \(x_1 \cdot x_2 = q\)</td><td>Probe, Erraten, Faktorisieren</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════
+     12. ZUSATZMATERIAL
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g2-2b-quadratische-gleichungen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-2b-quadratische-gleichungen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Mitternachts-, pq-Formel und Vieta kompakt</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-2b-quadratische-gleichungen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-2b-quadratische-gleichungen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-2b-quadratische-gleichungen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     13. EXTERNE RESSOURCEN
+     ════════════════════════════════════════════════════════════════ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzl5hAVeVOwWassi_01eoBMO" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Parabeln &amp; Quadratische Gleichungen — Playlist</div><div class="lk-s">Lehrerschmidt · 32 Videos · p-q-Formel, quadratische Ergänzung, Anwendungen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHiRkoZnu2dIFv94wddmJRMi" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Quadratische Gleichungen — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 35 Videos · Quadratische Ergänzung, PQ-Formel, Beispiele</div></div></a>
+</div>
+
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g3/g31/aufg_g31.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Quadratische Gleichungen (G31)</div><div class="lk-s">Faktorzerlegung, Lösungsformel, Textaufgaben, Parameter- und Ungleichungs-Aufgaben — mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/terme-gleichungen/quadratische-gleichungen-loesen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Quadratische Gleichungen lösen</div><div class="lk-s">Aufgaben mit Musterlösungen, alle Lösungsmethoden</div></div></a>
+  <a href="https://de.serlo.org/mathe/terme-gleichungen/satz-von-vieta" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Satz von Vieta</div><div class="lk-s">Vertiefung Lösungen ablesen und prüfen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Grundlagenfach 2.2b Quadratische Gleichungen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script>
+buildNav({
+  bereich:'grundlagen',
+  id:'g2-2b',
+  kapitelNr:'2.2b', kapitelTitel:'Quadratische Gleichungen',
+  prev:{nr:'2.2a',titel:'Lineare Gleichungen',url:'g2-2a-lineare-gleichungen.html'},
+  next:{nr:'2.3',titel:'Lineare Gleichungssysteme',url:'g2-3-lineare-gleichungssysteme.html'}
+});
+
+/* ══════════════════════════════════════════════════════════════
+   4. DREI DARSTELLUNGEN — interaktive Wertetabelle
+   ══════════════════════════════════════════════════════════════ */
+function fmtPx(p) {
+  if (p === 0) return '';
+  if (p === 1) return ' + x';
+  if (p === -1) return ' − x';
+  return p > 0 ? ` + ${p}·x` : ` − ${-p}·x`;
+}
+function fmtQ(q) {
+  if (q === 0) return '';
+  return q > 0 ? ` + ${q}` : ` − ${-q}`;
+}
+function loesungstext(p, q) {
+  const D = p*p - 4*q;
+  if (D < 0)  return 'L = ∅  (D = ' + D + ' < 0)';
+  if (D === 0) return 'L = { ' + (-p/2) + ' }  (doppelte Lösung)';
+  const w = Math.sqrt(D);
+  const x1 = (-p + w) / 2, x2 = (-p - w) / 2;
+  const fmt = x => Number.isInteger(x) ? x.toString() : x.toFixed(2);
+  return 'L = { ' + fmt(x1) + ',  ' + fmt(x2) + ' }';
+}
+function updateThree() {
+  const p = parseInt(document.getElementById('sl-p').value);
+  const q = parseInt(document.getElementById('sl-q').value);
+  document.getElementById('sl-p-v').textContent = p < 0 ? '−' + (-p) : p;
+  document.getElementById('sl-q-v').textContent = q < 0 ? '−' + (-q) : q;
+  document.getElementById('three-eq').textContent = 'x²' + fmtPx(p) + fmtQ(q) + ' = 0';
+  // Wertetabelle
+  const tbody = document.querySelector('#three-table tbody');
+  const xs = [-2, -1, 0, 1, 2, 3, 4, 5, 6];
+  tbody.innerHTML = xs.map(x => {
+    const x2 = x*x, px = p*x, fx = x2 + px + q;
+    const cls = fx === 0 ? 'aktiv' : '';
+    return `<tr class="${cls}"><td>${x}</td><td>${x2}</td><td>${px}</td><td>${fx}</td></tr>`;
+  }).join('');
+  document.getElementById('three-l').textContent = loesungstext(p, q);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6. FAKTORISIEREN — drei Sub-Methoden
+   ══════════════════════════════════════════════════════════════ */
+const FAK_INFO = {
+  cnull: '<strong>c = 0 — x ausklammern.</strong> Wenn das konstante Glied null ist, kannst du x aus jedem Term ausklammern. Eine Lösung ist dann immer x = 0.',
+  binom: '<strong>Binom erkennen.</strong> Sieht der Term aus wie \\(a^2 \\pm 2ab + b^2\\)? Dann ist es ein Binom: \\((a \\pm b)^2\\). Doppelte Lösung.',
+  vieta: '<strong>Zweiklammersatz / Vieta-Faktorisierung.</strong> Suche zwei Zahlen, deren Summe \\(-p\\) und deren Produkt \\(q\\) ist. Sie sind direkt die Lösungen.'
+};
+const FAK_STOLPER = {
+  cnull: '<strong>Stolperstein.</strong> Vergiss x = 0 nicht! Studierende kürzen oft ungewollt durch x — und verlieren damit eine Lösung. Niemals durch eine Variable dividieren, ohne den Fall x = 0 separat zu prüfen.',
+  binom: '<strong>Stolperstein.</strong> Das mittlere Glied muss <em>genau</em> \\(2 \\cdot a \\cdot b\\) sein. Bei \\(x^2 - 6x + 9\\) prüfst du: \\(2 \\cdot 1 \\cdot 3 = 6\\) ✓. Bei \\(x^2 - 6x + 8\\) wäre es kein Binom — das Mittelstück passt nicht zum Quadrat von 8.',
+  vieta: '<strong>Stolperstein.</strong> Vieta-Faktorisierung gelingt nur sicher, wenn die Lösungen ganzzahlig (oder einfache Brüche) sind. Wenn du keine zwei passenden Teiler von <em>q</em> findest, sind die Lösungen wahrscheinlich nicht ganz — dann ist die Mitternachtsformel der schnellere Weg.'
+};
+const FAK_STEPS = {
+  cnull: [
+    ['kommentar', 'Beispiel:'],
+    ['glg', '2·x² − 8·x = 0', ''],
+    ['kommentar', 'Schritt 1: Höchsten gemeinsamen Faktor von 2x² und −8x ausklammern: 2·x.'],
+    ['kern', '2·x · (x − 4) = 0', 'AUSKLAMMERN'],
+    ['kommentar', 'Schritt 2: Ein Produkt ist null, wenn ein Faktor null ist.'],
+    ['glg', '2·x = 0    oder    x − 4 = 0', ''],
+    ['glg', 'x₁ = 0    oder    x₂ = 4', ''],
+    ['kommentar', 'Lösung: 𝕃 = { 0, 4 }']
+  ],
+  binom: [
+    ['kommentar', 'Beispiel:'],
+    ['glg', 'x² − 6·x + 9 = 0', ''],
+    ['kommentar', 'Schritt 1: Erkennen — sieht das aus wie a² − 2·a·b + b² mit a = x, b = 3?'],
+    ['glg', 'Probe: 2·a·b = 2·x·3 = 6·x ✓', ''],
+    ['kommentar', 'Schritt 2: Als Binom-Quadrat schreiben.'],
+    ['kern', '(x − 3)² = 0', 'BINOM'],
+    ['kommentar', 'Schritt 3: Wurzel ziehen.'],
+    ['glg', 'x − 3 = 0', ''],
+    ['glg', 'x = 3 (doppelt)', ''],
+    ['kommentar', 'Lösung: 𝕃 = { 3 }, doppelte Nullstelle.']
+  ],
+  vieta: [
+    ['kommentar', 'Beispiel (Normalform):'],
+    ['glg', 'x² − 5·x + 6 = 0', ''],
+    ['kommentar', 'Schritt 1: Suche zwei Zahlen mit Summe −p = 5 und Produkt q = 6.'],
+    ['glg', 'Teiler von 6: 1·6, 2·3', ''],
+    ['glg', '2 + 3 = 5 ✓ — passt.', ''],
+    ['kommentar', 'Schritt 2: Mit den gefundenen Lösungen den Term in zwei Klammern zerlegen.'],
+    ['kern', '(x − 2)·(x − 3) = 0', 'ZWEIKLAMMER'],
+    ['kommentar', 'Schritt 3: Faktor null setzen.'],
+    ['glg', 'x₁ = 2,  x₂ = 3', ''],
+    ['kommentar', 'Lösung: 𝕃 = { 2, 3 }']
+  ]
+};
+let fakAktiv = 'cnull', fakSchritt = 0;
+function rendFak() {
+  document.getElementById('fak-info').innerHTML = FAK_INFO[fakAktiv];
+  document.getElementById('fak-stolper').innerHTML = FAK_STOLPER[fakAktiv];
+  const stack = document.getElementById('fak-stack');
+  const steps = FAK_STEPS[fakAktiv];
+  let html = '';
+  for (let i = 0; i < steps.length; i++) {
+    const visible = i <= fakSchritt;
+    const cls = visible ? 'sichtbar' : '';
+    const [type, ...rest] = steps[i];
+    if (type === 'kommentar') {
+      html += `<div class="umform-zeile kommentar ${cls}"><div class="uf-glg">${rest[0]}</div></div>`;
+    } else if (type === 'kern') {
+      html += `<div class="umform-zeile kernschritt ${cls}"><div class="uf-glg">${rest[0]}</div>${rest[1] ? `<span class="kern-hinweis">${rest[1]}</span>` : ''}</div>`;
+    } else {
+      html += `<div class="umform-zeile ${cls}"><div class="uf-glg">${rest[0]}</div>${rest[1] ? `<span class="umform-op">${rest[1]}</span>` : ''}</div>`;
+    }
+  }
+  stack.innerHTML = html;
+  document.getElementById('fak-zurueck').disabled = fakSchritt === 0;
+  document.getElementById('fak-vor').disabled = fakSchritt >= steps.length - 1;
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([document.getElementById('fak-info'), document.getElementById('fak-stolper')]);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. DISKRIMINANTE — Wurzelterm-Visualisierung
+   ══════════════════════════════════════════════════════════════ */
+const D_FAELLE = {
+  pos:  { D:  16, b: -5, a: 1, c: 6,
+          formel: 'b² − 4·a·c = 25 − 24 = ',
+          info: '√16 = 4, also liefert ±√D zwei verschiedene Werte. Damit hat die Mitternachtsformel zwei verschiedene Lösungen: x₁ = 3, x₂ = 2.',
+          aeste: [
+            { tit: 'b² − 4ac', val: 'D = 16', cls: 'aktiv' },
+            { tit: '√D', val: '√16 = 4', cls: 'aktiv' },
+            { tit: '−b ± √D', val: '5 + 4  und  5 − 4', cls: 'aktiv' }
+          ] },
+  null: { D:   0, b: -6, a: 1, c: 9,
+          formel: 'b² − 4·a·c = 36 − 36 = ',
+          info: '√0 = 0, also wird der ±-Term zu null. Beide Vorzeichen liefern dieselbe Lösung: x = 3 — eine doppelte Lösung.',
+          aeste: [
+            { tit: 'b² − 4ac', val: 'D = 0', cls: 'aktiv' },
+            { tit: '√D', val: '√0 = 0', cls: 'aktiv' },
+            { tit: '−b ± √D', val: '6 + 0  und  6 − 0', cls: 'aktiv' }
+          ] },
+  neg:  { D:  -7, b:  1, a: 1, c: 2,
+          formel: 'b² − 4·a·c = 1 − 8 = ',
+          info: '√(−7) ist in ℝ nicht definiert — Quadratwurzel aus einer negativen Zahl gibt es in den reellen Zahlen nicht. Die Gleichung hat keine reelle Lösung.',
+          aeste: [
+            { tit: 'b² − 4ac', val: 'D = −7', cls: 'warn' },
+            { tit: '√D', val: '√(−7)  in ℝ ?', cls: 'warn' },
+            { tit: '−b ± √D', val: 'nicht berechenbar', cls: 'warn' }
+          ] }
+};
+let dAktiv = 'pos';
+function setD(f) {
+  dAktiv = f;
+  document.querySelectorAll('.lf-card[data-d]').forEach(c => c.classList.toggle('aktiv', c.dataset.d === f));
+  const fall = D_FAELLE[f];
+  document.getElementById('d-formel').innerHTML =
+    `D = ${fall.formel}<span class="D-wert">${fall.D}</span>`;
+  const baum = document.getElementById('d-baum');
+  baum.innerHTML = fall.aeste.map(a =>
+    `<div class="ast ${a.cls}"><div class="ast-tit">${a.tit}</div><div class="ast-val">${a.val}</div></div>`
+  ).join('');
+  document.getElementById('d-info').textContent = fall.info;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   9. PARAMETERDISKUSSION — Diskriminanten-Zahlenstrahl
+   System: x² − 6x + k = 0  ⇒  D(k) = 36 − 4k
+   ══════════════════════════════════════════════════════════════ */
+function drawPK() {
+  const k = parseFloat(document.getElementById('sl-k').value);
+  document.getElementById('sl-k-v').textContent = k.toString();
+  const D = 36 - 4*k;
+  // Formel + Fall-Pille
+  const sign = D >= 0 ? '+' : '−';
+  document.getElementById('pk-formel').textContent = `D(k) = 36 − 4·${k} = ${D.toFixed(1)}`;
+  const fallEl = document.getElementById('pk-fall');
+  fallEl.classList.remove('eindeutig','doppelt','keine');
+  if (D > 0.001)       { fallEl.classList.add('eindeutig'); fallEl.textContent = 'D > 0 — zwei Lösungen'; }
+  else if (D < -0.001) { fallEl.classList.add('keine');     fallEl.textContent = 'D < 0 — keine reelle Lösung'; }
+  else                 { fallEl.classList.add('doppelt');   fallEl.textContent = 'D = 0 — eine doppelte Lösung'; }
+  // Lösungen
+  const lEl = document.getElementById('pk-loesungen');
+  if (D > 0.001) {
+    const w = Math.sqrt(D);
+    const x1 = (6 + w) / 2, x2 = (6 - w) / 2;
+    lEl.textContent = `x₁ = ${x1.toFixed(2)},  x₂ = ${x2.toFixed(2)}`;
+  } else if (D < -0.001) {
+    lEl.textContent = '𝕃 = ∅  (D < 0)';
+  } else {
+    lEl.textContent = 'x = 3  (doppelt)';
+  }
+  // Zahlenstrahl auf Canvas — D-Achse von Dmin = -20 bis Dmax = 50
+  const c = document.getElementById('cv-pk');
+  const dpr = window.devicePixelRatio || 1;
+  const W = c.offsetWidth || 540;
+  const H = 80;
+  c.width = W*dpr; c.height = H*dpr; c.style.width = W+'px'; c.style.height = H+'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const Dmin = -20, Dmax = 50;
+  const padL = 40, padR = 30;
+  const cx = D => padL + (D - Dmin) / (Dmax - Dmin) * (W - padL - padR);
+  const yAchse = 50;
+  // Zonen
+  ctx.fillStyle = 'rgba(160, 57, 44, 0.12)';
+  ctx.fillRect(cx(Dmin), yAchse - 12, cx(0) - cx(Dmin), 24);   // D < 0 rot
+  ctx.fillStyle = 'rgba(15, 122, 58, 0.12)';
+  ctx.fillRect(cx(0),    yAchse - 12, cx(Dmax) - cx(0),  24);  // D > 0 grün
+  // Zahlenstrahl-Linie
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(cx(Dmin), yAchse); ctx.lineTo(cx(Dmax), yAchse); ctx.stroke();
+  // Pfeil
+  ctx.fillStyle = '#374151';
+  ctx.beginPath();
+  ctx.moveTo(cx(Dmax), yAchse - 5); ctx.lineTo(cx(Dmax) + 8, yAchse); ctx.lineTo(cx(Dmax), yAchse + 5);
+  ctx.fill();
+  // Tickmarks bei -20, 0, 20, 40
+  ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  for (const t of [-20, 0, 20, 40]) {
+    ctx.beginPath(); ctx.moveTo(cx(t), yAchse - 4); ctx.lineTo(cx(t), yAchse + 4); ctx.stroke();
+    ctx.fillText(t, cx(t), yAchse + 17);
+  }
+  // 0-Linie hervorheben (Grenzfall)
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(cx(0), 8); ctx.lineTo(cx(0), 42); ctx.stroke();
+  ctx.setLineDash([]);
+  // Beschriftung: D < 0 / D > 0
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#a0392c'; ctx.textAlign = 'center';
+  ctx.fillText('D < 0  (keine Lösung)', (cx(Dmin) + cx(0))/2, 18);
+  ctx.fillStyle = '#0f7a3a';
+  ctx.fillText('D > 0  (zwei Lösungen)', (cx(0) + cx(Dmax))/2, 18);
+  // Aktueller D-Wert als Punkt
+  const dClamped = Math.max(Dmin, Math.min(Dmax, D));
+  ctx.fillStyle = D > 0.001 ? '#0f7a3a' : (D < -0.001 ? '#a0392c' : '#1a4f8a');
+  ctx.beginPath(); ctx.arc(cx(dClamped), yAchse, 7, 0, Math.PI*2); ctx.fill();
+  // Beschriftung "D = ..." über Punkt
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
+  ctx.fillText('D = ' + D.toFixed(1), cx(dClamped), yAchse - 12);
+  // Achsenbeschriftung links
+  ctx.font = 'bold 11px monospace'; ctx.fillStyle = '#374151'; ctx.textAlign = 'left';
+  ctx.fillText('D', 6, yAchse + 4);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AUFGABEN — Eingabeprüfung
+   ══════════════════════════════════════════════════════════════ */
+function parseNum(s) {
+  if (!s) return null;
+  s = s.trim().replace(',', '.').replace(/−/g, '-');
+  if (s.includes('/')) {
+    const [a, b] = s.split('/');
+    const an = parseFloat(a), bn = parseFloat(b);
+    if (isFinite(an) && isFinite(bn) && bn !== 0) return an / bn;
+    return null;
+  }
+  const n = parseFloat(s);
+  return isFinite(n) ? n : null;
+}
+function aboutEq(a, b) { return Math.abs(a - b) < 1e-2; }
+function pruefPaar(idA, idB, gut, idCr) {
+  const a = parseNum(document.getElementById(idA).value);
+  const b = parseNum(document.getElementById(idB).value);
+  const cr = document.getElementById(idCr);
+  if (a === null || b === null) {
+    cr.textContent = 'Bitte beide Werte eingeben — Brüche wie 5/2 sind erlaubt.';
+    cr.className = 'cr err'; return;
+  }
+  const ok = (aboutEq(a, gut[0]) && aboutEq(b, gut[1])) || (aboutEq(a, gut[1]) && aboutEq(b, gut[0]));
+  if (ok) { cr.textContent = '✓ Richtig — gut gemacht!'; cr.className = 'cr ok'; }
+  else    { cr.textContent = '✗ Stimmt noch nicht — schau die Lösung an.'; cr.className = 'cr err'; }
+}
+function pruefA2() { pruefPaar('a2-x1','a2-x2',[0, 4],'a2-cr'); }
+function pruefA3() { pruefPaar('a3-x1','a3-x2',[1, -2.5],'a3-cr'); }
+function pruefA4() {
+  const d = parseNum(document.getElementById('a4-d').value);
+  const n = parseNum(document.getElementById('a4-n').value);
+  const cr = document.getElementById('a4-cr');
+  if (d === null || n === null) { cr.textContent = 'Bitte beide Werte eingeben.'; cr.className = 'cr err'; return; }
+  if (aboutEq(d, -4) && aboutEq(n, 0)) { cr.textContent = '✓ Richtig!'; cr.className = 'cr ok'; }
+  else                                  { cr.textContent = '✗ D = (−4)² − 4·1·5 = −4, also keine reelle Lösung.'; cr.className = 'cr err'; }
+}
+function pruefA5() { pruefPaar('a5-x1','a5-x2',[4, 5],'a5-cr'); }
+function pruefA6() {
+  const v = parseNum(document.getElementById('a6-v').value);
+  const cr = document.getElementById('a6-cr');
+  if (v === null) { cr.textContent = 'Bitte einen Wert eingeben.'; cr.className = 'cr err'; return; }
+  if (Math.abs(v - 18.25) < 0.3) { cr.textContent = '✓ Richtig — etwa 18.2 km/h.'; cr.className = 'cr ok'; }
+  else                            { cr.textContent = '✗ Stimmt noch nicht — schau die Lösung an.'; cr.className = 'cr err'; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   INITIALISIERUNG
+   ══════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Drei Darstellungen
+  document.getElementById('sl-p').addEventListener('input', updateThree);
+  document.getElementById('sl-q').addEventListener('input', updateThree);
+  updateThree();
+  // Faktorisieren
+  document.querySelectorAll('#fak-btns .meth-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      fakAktiv = b.dataset.fak; fakSchritt = 0;
+      document.querySelectorAll('#fak-btns .meth-btn').forEach(x => x.classList.toggle('aktiv', x === b));
+      rendFak();
+    });
+  });
+  document.getElementById('fak-vor').addEventListener('click', () => {
+    if (fakSchritt < FAK_STEPS[fakAktiv].length - 1) { fakSchritt++; rendFak(); }
+  });
+  document.getElementById('fak-zurueck').addEventListener('click', () => {
+    if (fakSchritt > 0) { fakSchritt--; rendFak(); }
+  });
+  document.getElementById('fak-reset').addEventListener('click', () => { fakSchritt = 0; rendFak(); });
+  rendFak();
+  // Diskriminante
+  document.querySelectorAll('.lf-card[data-d]').forEach(c => c.addEventListener('click', () => setD(c.dataset.d)));
+  setD('pos');
+  // Parameterdiskussion
+  document.getElementById('sl-k').addEventListener('input', drawPK);
+  drawPK();
+});
+
+/* ══════════════════════════════════════════════════════════════
+   EINSTIEGS-ANIM: Anna fährt Velo
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  const slider = document.getElementById('velo-v');
+  const canvas = document.getElementById('velo-canvas');
+  if (!slider || !canvas) return;
+
+  const STRECKE = 12;       // km (eine Richtung)
+  const ZIEL_MIN = 90;      // Zielzeit in Minuten
+
+  let anim = {
+    running: false,
+    t0: 0,                  // Animations-Startzeit (perf)
+    pace: 0.5               // 0.5 h pro Sekunde reale Zeit → 90 min Aufgabe = 3 s Anim
+  };
+  let frameId = null;
+
+  function fmtMin(t_h){
+    const min = t_h * 60;
+    if (min < 100) return min.toFixed(1) + ' min';
+    return min.toFixed(0) + ' min';
+  }
+
+  function compute(){
+    const v = parseFloat(slider.value);
+    const vH = v;
+    const vR = v - 4;
+    const tH = STRECKE / vH;             // h
+    const tR = (vR > 0) ? STRECKE / vR : Infinity;
+    const tS = tH + tR;
+    return { v, vH, vR, tH, tR, tS };
+  }
+
+  function renderReadout(c){
+    document.getElementById('velo-vv').textContent = c.v.toFixed(1);
+    document.getElementById('velo-vh').textContent = c.vH.toFixed(1) + ' km/h';
+    document.getElementById('velo-vr').textContent = c.vR.toFixed(1) + ' km/h';
+    document.getElementById('velo-th').textContent = fmtMin(c.tH);
+    document.getElementById('velo-tr').textContent = isFinite(c.tR) ? fmtMin(c.tR) : '∞';
+
+    const summe = document.getElementById('velo-summe');
+    if (!isFinite(c.tS)){
+      summe.textContent = 'Σ = ∞';
+      summe.className = 'rb-summe fern';
+    } else {
+      const tot_min = c.tS * 60;
+      const diff = Math.abs(tot_min - ZIEL_MIN);
+      summe.textContent = 'Σ = ' + (tot_min < 100 ? tot_min.toFixed(1) : tot_min.toFixed(0)) + ' min';
+      if (diff < 1) summe.className = 'rb-summe treffer';
+      else if (diff < 8) summe.className = 'rb-summe nah';
+      else summe.className = 'rb-summe fern';
+    }
+  }
+
+  function draw(progressH, progressR){
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.offsetWidth || 720, H = canvas.offsetHeight || 240;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+    const padL = 70, padR = 30, padT = 28, padB = 28;
+    const plotW = W - padL - padR;
+    const yHin = padT + 36;
+    const yRueck = H - padB - 36;
+
+    // Strassen-Balken Hinweg
+    ctx.fillStyle = '#f3eedf';
+    ctx.fillRect(padL, yHin - 14, plotW, 28);
+    ctx.fillRect(padL, yRueck - 14, plotW, 28);
+
+    // Mittellinien gestrichelt
+    ctx.strokeStyle = '#cbb98b'; ctx.lineWidth = 1.5; ctx.setLineDash([8, 6]);
+    ctx.beginPath(); ctx.moveTo(padL, yHin); ctx.lineTo(padL + plotW, yHin); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(padL, yRueck); ctx.lineTo(padL + plotW, yRueck); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Markierungen Anfang und Ende (Haus links, Schule rechts; bei Rückweg umgekehrt)
+    ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('🏠 Zuhause', padL - 8, yHin - 22);
+    ctx.textAlign = 'right';
+    ctx.fillText('Schule 🏫', padL + plotW + 8, yHin - 22);
+    ctx.textAlign = 'left';
+    ctx.fillText('🏫 Schule', padL - 8, yRueck + 28);
+    ctx.textAlign = 'right';
+    ctx.fillText('Zuhause 🏠', padL + plotW + 8, yRueck + 28);
+    ctx.textAlign = 'left';
+
+    // km-Ticks (alle 2 km)
+    ctx.strokeStyle = '#a89677'; ctx.lineWidth = 0.8;
+    ctx.fillStyle = '#7a6f5e'; ctx.font = '9px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    for (let km = 0; km <= STRECKE; km += 2){
+      const x = padL + (km / STRECKE) * plotW;
+      ctx.beginPath(); ctx.moveTo(x, yHin + 14); ctx.lineTo(x, yHin + 18); ctx.stroke();
+      ctx.fillText(km, x, yHin + 28);
+      ctx.beginPath(); ctx.moveTo(x, yRueck - 14); ctx.lineTo(x, yRueck - 18); ctx.stroke();
+      ctx.fillText(km, x, yRueck - 20);
+    }
+
+    // Labels für die Wege
+    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('Hinweg →', padL - 14, yHin + 4);
+    ctx.fillText('← Rückweg', padL - 14, yRueck + 4);
+    ctx.textAlign = 'left';
+
+    // Velo Hinweg (Bewegung von links nach rechts)
+    const xH = padL + progressH * plotW;
+    drawVelo(ctx, xH, yHin, +1);
+
+    // Velo Rückweg (Bewegung von rechts nach links)
+    const xR = padL + plotW - progressR * plotW;
+    drawVelo(ctx, xR, yRueck, -1);
+  }
+
+  function drawVelo(ctx, x, y, dir){
+    // Einfache Velo-Darstellung: zwei Räder + Rahmen + Strichfigur
+    const wheelR = 5;
+    const frameTop = y - 14;
+    // Räder
+    ctx.fillStyle = '#1c1a17';
+    ctx.beginPath(); ctx.arc(x - 8, y + 7, wheelR, 0, 2*Math.PI); ctx.fill();
+    ctx.beginPath(); ctx.arc(x + 8, y + 7, wheelR, 0, 2*Math.PI); ctx.fill();
+    // Felgen (heller)
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(x - 8, y + 7, wheelR - 2, 0, 2*Math.PI); ctx.fill();
+    ctx.beginPath(); ctx.arc(x + 8, y + 7, wheelR - 2, 0, 2*Math.PI); ctx.fill();
+    // Rahmen
+    ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.moveTo(x - 8, y + 7);
+    ctx.lineTo(x + 2, y - 4);
+    ctx.lineTo(x + 8, y + 7);
+    ctx.moveTo(x + 2, y - 4);
+    ctx.lineTo(x - 2, y + 7);
+    ctx.stroke();
+    // Lenkstange
+    ctx.beginPath();
+    ctx.moveTo(x + 2, y - 4);
+    ctx.lineTo(x + 8 * dir, y - 8);
+    ctx.stroke();
+    // Strichfigur (Anna)
+    ctx.fillStyle = '#dc2626';
+    ctx.beginPath(); ctx.arc(x - 2 * dir, y - 14, 3.5, 0, 2*Math.PI); ctx.fill();
+    ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.moveTo(x - 2 * dir, y - 11);
+    ctx.lineTo(x - 2 * dir, y - 4);
+    ctx.stroke();
+  }
+
+  function update(){
+    const c = compute();
+    renderReadout(c);
+
+    if (anim.running){
+      const elapsed = (performance.now() - anim.t0) / 1000;   // Sekunden
+      const elapsedH = elapsed * anim.pace;                    // simulierte Stunden Anna-Zeit
+      const progressH = Math.min(1, elapsedH / c.tH);
+      let progressR = 0;
+      if (elapsedH > c.tH){
+        const elapsedR = elapsedH - c.tH;
+        progressR = (isFinite(c.tR)) ? Math.min(1, elapsedR / c.tR) : 0;
+      }
+      draw(progressH, progressR);
+
+      if (progressH >= 1 && progressR >= 1){
+        anim.running = false;
+        document.getElementById('velo-play').textContent = '▶ Nochmal starten';
+      } else {
+        frameId = requestAnimationFrame(update);
+      }
+    } else {
+      // Statischer Zustand: Velos je in der Mitte ihrer Strasse
+      draw(0.5, 0.5);
+    }
+  }
+
+  function startAnim(){
+    if (anim.running){
+      anim.running = false;
+      if (frameId) cancelAnimationFrame(frameId);
+      draw(0.5, 0.5);
+      document.getElementById('velo-play').textContent = '▶ Fahrt starten';
+      return;
+    }
+    anim.running = true;
+    anim.t0 = performance.now();
+    document.getElementById('velo-play').textContent = '■ Stopp';
+    update();
+  }
+
+  function reset(){
+    anim.running = false;
+    if (frameId) cancelAnimationFrame(frameId);
+    document.getElementById('velo-play').textContent = '▶ Fahrt starten';
+    update();
+  }
+
+  slider.addEventListener('input', () => {
+    if (anim.running){
+      // Bei Slider-Drag während laufender Anim: stoppen, statisch neu zeichnen
+      anim.running = false;
+      if (frameId) cancelAnimationFrame(frameId);
+      document.getElementById('velo-play').textContent = '▶ Fahrt starten';
+    }
+    update();
+  });
+  document.getElementById('velo-play').addEventListener('click', startAnim);
+  document.getElementById('velo-reset').addEventListener('click', reset);
+  window.addEventListener('resize', () => { if (!anim.running) update(); });
+  update();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,3532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5.2a Dreiecke — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ============================================================
+ *  LOKALES CSS — nur Klassen, die NICHT in style.css existieren
+ * ============================================================ */
+
+/* Animations-Karte (analog Eval-Seite) */
+.anim {
+  background: var(--papier);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 14px 0 22px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+}
+.anim-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .anim-layout { grid-template-columns: 1fr; }
+}
+.anim canvas {
+  width: 100%;
+  height: auto;
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  display: block;
+  touch-action: none;
+}
+.anim .bedien {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.anim .regler {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.anim .regler-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--tinte-2);
+}
+.anim .regler-label .wert {
+  font-family: var(--mono);
+  color: var(--blau);
+  font-weight: 500;
+}
+.anim input[type="range"] {
+  width: 100%;
+  accent-color: var(--blau);
+}
+.anim .feld-titel {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tinte-2);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.anim .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.anim .chip {
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  color: var(--tinte-2);
+  padding: 5px 9px;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-family: var(--mono);
+  transition: all 0.12s;
+}
+.anim .chip:hover { border-color: var(--blau-rand); color: var(--blau); }
+.anim .chip.aktiv {
+  background: var(--blau);
+  border-color: var(--blau);
+  color: white;
+}
+.anim .toggle-zeile {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 0.88rem; color: var(--tinte-2);
+  cursor: pointer; user-select: none;
+}
+.anim .toggle-zeile input[type="checkbox"] {
+  width: 15px; height: 15px;
+  accent-color: var(--blau); cursor: pointer;
+}
+.anim .legende {
+  background: var(--papier-2);
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  padding: 8px 11px;
+  font-size: 0.86rem;
+}
+.anim .legende-titel {
+  font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--tinte-2);
+  font-weight: 600; margin-bottom: 5px;
+}
+.anim .legende-zeile {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.85rem;
+  padding: 1px 0;
+}
+.anim .legende-zeile .lab { color: var(--tinte); }
+.anim .legende-zeile .val { color: var(--blau); font-weight: 500; }
+.anim .formel {
+  background: var(--blau-hell);
+  border: 1px solid var(--blau-rand);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.93rem;
+  transition: background 0.3s, border-color 0.3s;
+}
+.anim .formel.fertig {
+  background: var(--gruen-hell);
+  border-color: var(--gruen-rand);
+}
+.anim .schritte {
+  display: flex; justify-content: space-between;
+  margin-top: 3px; font-size: 0.74rem; color: var(--tinte-2);
+}
+.anim .schritte span.akt { color: var(--blau); font-weight: 600; }
+.anim .erklaerung {
+  background: var(--papier-2);
+  border-left: 3px solid var(--blau);
+  padding: 7px 11px;
+  font-size: 0.84rem;
+  color: var(--tinte-2);
+  border-radius: 0 4px 4px 0;
+  min-height: 36px;
+}
+.anim .anim-titel {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--blau);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+<div id="nav-root"></div>
+
+<div class="page-wrap">
+<main class="content">
+
+<div class="page-titel">
+  <div class="pt-bereich">Grundlagenfach · Lerngebiet 5 · Geometrie · 50 Lektionen</div>
+  <h1 class="pt-h1">5.2a Dreiecke</h1>
+  <div class="pt-untertitel">RLP 5.2 · Teil 1 von 4</div>
+</div>
+
+<p class="lead">Das <strong>Dreieck</strong> ist die einfachste geradlinig begrenzte Fläche der Ebene: drei Eckpunkte, drei Seiten, drei Innenwinkel — und doch der Baustein, aus dem sich alle anderen Vielecke zusammensetzen lassen. Wer das Dreieck versteht, versteht die halbe Planimetrie.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 5.2</div>
+  <ul>
+    <li>geometrische Sachverhalte von elementaren Objekten (Quadrat, Rechteck, <strong>allgemeine und spezielle Dreiecke</strong>, Parallelogramm, Rhombus, Trapez, Kreis) beschreiben</li>
+    <li>deren Elemente (<strong>Höhen, Seiten- und Winkelhalbierende, Mittelsenkrechte</strong>, Mittellinie im Trapez, Sehne, Sekante, Tangente, Sektor, Segment, <strong>Winkel und Winkelmass</strong>) und Zusammenhänge (<strong>Umfang, Flächeninhalt</strong>, Abstand) berechnen</li>
+    <li>die Ähnlichkeit für Berechnungen in der Ebene nutzen</li>
+  </ul>
+  <p class="rlp-hinweis">Vierecke werden in <a href="g5-2b-vierecke.html">Teil 2 (g5-2b)</a> behandelt, Kreis und Kreisteile in <a href="g5-2c-kreis-und-kreisteile.html">Teil 3 (g5-2c)</a>, zentrische Streckung und Ähnlichkeit in <a href="g5-2d-zentrische-streckung-aehnlichkeit.html">Teil 4 (g5-2d)</a>.</p>
+</div>
+
+<!-- ================================================================ -->
+<!-- EINSTIEG                                                          -->
+<!-- ================================================================ -->
+<h2 id="einstieg">Einstieg — der einfachste Vielecks-Baustein</h2>
+
+<p>Ein Fotograf baut sein Stativ auf: drei Beine, gespreizt — und es steht von selbst. Warum eigentlich drei? Versuchst du es mit <strong>vier</strong> Beinen, kippelt das Stativ am ersten unebenen Boden zwischen zwei Diagonal-Positionen hin und her. Mit <strong>zwei</strong> Beinen fällt es sofort um. Drei scheint die magische Zahl zu sein.</p>
+
+<p>Probier es in der Animation: Ziehe den Schieber <em>Boden-Unebenheit</em> nach rechts und schau, was passiert.</p>
+
+<div class="anim">
+  <div class="anim-titel">Stabil oder wackelig? — Anzahl Beine und Bodenkontakt</div>
+  <div class="anim-layout">
+    <canvas id="cv-stativ" width="560" height="360"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Anzahl Beine</span>
+          <span class="wert" id="lbl-stativN">3</span>
+        </div>
+        <input type="range" id="sld-stativN" min="2" max="5" step="1" value="3">
+      </div>
+
+      <div class="regler">
+        <div class="regler-label">
+          <span>Boden-Unebenheit</span>
+          <span class="wert" id="lbl-stativU">0</span>
+        </div>
+        <input type="range" id="sld-stativU" min="0" max="20" step="1" value="0">
+      </div>
+
+      <div class="legende">
+        <div class="legende-titel">Bodenkontakte</div>
+        <div class="legende-zeile"><span class="lab">erreicht</span><span class="val" id="leg-stativK">3 von 3</span></div>
+        <div class="legende-zeile"><span class="lab">stabil?</span><span class="val" id="leg-stativS">✓ ja</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-stativ">
+        Drei Beine: alle drei Punkte liegen <em>immer</em> auf einer Ebene — egal wie uneben der Boden ist. Das Stativ steht stabil.
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Drei Punkte legen ein Dreieck — und damit eine Ebene — eindeutig fest. Genau deshalb ist das Dreieck der <strong>Baustein der Planimetrie</strong>. Aus ihm lassen sich alle anderen Vielecke zusammensetzen, und alle ihre Eigenschaften gehen letztlich auf Dreieckseigenschaften zurück. Wer das Dreieck kennt, kennt die Hälfte der Planimetrie.</p>
+
+<p>Dieses Kapitel beleuchtet das Dreieck aus vier Blickwinkeln:</p>
+
+<ul>
+  <li><strong>Allgemeines Dreieck</strong> — Bezeichnungen, Winkelsummen, Aussenwinkel</li>
+  <li><strong>Spezielle Dreiecke</strong> — gleichschenklig, rechtwinklig, gleichseitig</li>
+  <li><strong>Konstruktion</strong> — wann ist ein Dreieck eindeutig festgelegt? (Kongruenzsätze)</li>
+  <li><strong>Berechnung</strong> — Fläche, Pythagoras, Anwendungen</li>
+</ul>
+
+<!-- ================================================================ -->
+<!-- DEFINITION                                                        -->
+<!-- ================================================================ -->
+<h2 id="definition">Definition — Eckpunkte, Seiten, Winkel</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Dreieck</div>
+  <p>Ein <em>Dreieck</em> ist eine geradlinig begrenzte Fläche mit drei Eckpunkten \(A\), \(B\), \(C\), die nicht auf einer Geraden liegen. Die drei Verbindungsstrecken \(\overline{BC}\), \(\overline{CA}\), \(\overline{AB}\) heissen <em>Seiten</em>, üblicherweise mit den Kleinbuchstaben \(a\), \(b\), \(c\) bezeichnet — wobei Seite \(a\) dem Eckpunkt \(A\) <em>gegenüber</em> liegt, ebenso \(b\) gegenüber \(B\) und \(c\) gegenüber \(C\).</p>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Konvention zur Beschriftung</div>
+  <ul style="margin: 6px 0">
+    <li>Eckpunkte: Grossbuchstaben \(A\), \(B\), \(C\) — gegen den Uhrzeigersinn beschriftet</li>
+    <li>Seiten: Kleinbuchstaben \(a\), \(b\), \(c\) — gegenüber dem gleichnamigen Eckpunkt</li>
+    <li>Innenwinkel: griechische Buchstaben \(\alpha\) (bei \(A\)), \(\beta\) (bei \(B\)), \(\gamma\) (bei \(C\))</li>
+    <li>Aussenwinkel: \(\alpha'\), \(\beta'\), \(\gamma'\) — der Nebenwinkel des jeweiligen Innenwinkels</li>
+  </ul>
+</div>
+
+<h3>Allgemeines Dreieck — interaktiv</h3>
+
+<div class="anim">
+  <div class="anim-titel">Animation · Allgemeines Dreieck</div>
+  <div class="anim-layout">
+    <canvas id="cv-allg" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div class="feld-titel">Eckpunkte ziehen</div>
+      <p style="font-size: 0.82rem; color: var(--tinte-2); margin: 0 0 4px">Ziehe die Punkte A, B, C mit der Maus oder dem Finger. Beschriftungen aktualisieren sich live.</p>
+      <label class="toggle-zeile">
+        <input type="checkbox" id="tog-allg-aussen" checked>
+        Aussenwinkel anzeigen
+      </label>
+      <div class="legende">
+        <div class="legende-titel">Innenwinkel</div>
+        <div class="legende-zeile"><span class="lab">α</span><span class="val" id="allg-α">—</span></div>
+        <div class="legende-zeile"><span class="lab">β</span><span class="val" id="allg-β">—</span></div>
+        <div class="legende-zeile"><span class="lab">γ</span><span class="val" id="allg-γ">—</span></div>
+        <div class="legende-zeile" style="border-top: 1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab"><strong>Summe</strong></span><span class="val" id="allg-summe">—</span></div>
+      </div>
+      <div class="legende">
+        <div class="legende-titel">Aussenwinkel</div>
+        <div class="legende-zeile"><span class="lab">α' = 180° − α</span><span class="val" id="allg-αs">—</span></div>
+        <div class="legende-zeile"><span class="lab">β' = 180° − β</span><span class="val" id="allg-βs">—</span></div>
+        <div class="legende-zeile"><span class="lab">γ' = 180° − γ</span><span class="val" id="allg-γs">—</span></div>
+        <div class="legende-zeile" style="border-top: 1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab"><strong>Summe</strong></span><span class="val" id="allg-summe-a">—</span></div>
+      </div>
+      <div class="formel">
+        \(\alpha + \beta + \gamma = 180°\)<br>
+        \(\alpha' + \beta' + \gamma' = 360°\)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- DARSTELLUNGEN — Beweis Innenwinkelsumme                         -->
+<!-- ================================================================ -->
+<h2 id="darstellungen">Innenwinkelsumme — Beweis durch Wechselwinkel</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Innenwinkelsumme</div>
+  <p>Die Summe der drei Innenwinkel eines Dreiecks beträgt stets \(180°\):</p>
+  \[ \alpha + \beta + \gamma = 180° \]
+</div>
+
+<p>Der Beweis benutzt eine Hilfslinie: durch den Eckpunkt \(C\) wird die Parallele zur Seite \(c\) (also zu \(\overline{AB}\)) gezeichnet. Die <em>Wechselwinkel</em> an parallelen Geraden, geschnitten von einer Quergeraden, sind gleich gross — und damit verteilt sich der gestreckte Winkel bei \(C\) genau auf \(\alpha\), \(\gamma\), \(\beta\).</p>
+
+<p style="font-size:0.88rem;color:var(--tinte-2);font-style:italic;margin-top:6px">Tipp zur Animation: In Schritt 3 („Wechselwinkel") werden die zwei Wechselwinkel-Paare farblich identisch markiert — der untere α (bei \(A\)) und der obere α (bei \(C\) links der Parallelen) tragen dieselbe Farbe; ebenso für β. So lässt sich die Wechselwinkel-Eigenschaft <em>visuell</em> nachvollziehen, bevor sie formal angewendet wird.</p>
+
+<div class="anim">
+  <div class="anim-titel">Animation · Beweis Innenwinkelsumme</div>
+  <div class="anim-layout">
+    <canvas id="cv-beweis" width="560" height="380"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Beweis-Schritt</span>
+          <span class="wert" id="beweis-t">0.00</span>
+        </div>
+        <input type="range" id="sld-beweis" min="0" max="1" step="0.01" value="0">
+        <div class="schritte" id="beweis-schritte">
+          <span class="akt">Start</span>
+          <span>Parallele</span>
+          <span>Wechselwinkel</span>
+          <span>= 180°</span>
+        </div>
+      </div>
+      <div class="formel" id="beweis-fbox">
+        \(\alpha + \beta + \gamma = \;?\)
+      </div>
+      <div class="erklaerung" id="beweis-erkl">
+        Ausgangsfigur: ein beliebiges Dreieck mit Innenwinkeln α, β, γ.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- TYPEN — Spezielle Dreiecke + Elemente                            -->
+<!-- ================================================================ -->
+<h2 id="typen">Spezielle Dreiecke und Dreieckselemente</h2>
+
+<h3 id="spezielle-dreiecke">Spezielle Dreiecke</h3>
+
+<p>Drei Sonderfälle sind so häufig, dass sie eigene Namen tragen:</p>
+
+<table class="ftb-tabelle">
+  <thead>
+    <tr><th>Typ</th><th>Eigenschaft</th><th>Folgerung</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Gleichschenklig</strong></td><td>zwei Seiten gleich lang (Schenkel)</td><td>zwei Basiswinkel gleich gross</td></tr>
+    <tr><td><strong>Rechtwinklig</strong></td><td>ein Winkel = \(90°\)</td><td>Hypotenuse gegenüber, zwei Katheten</td></tr>
+    <tr><td><strong>Gleichseitig</strong></td><td>alle drei Seiten gleich lang</td><td>alle drei Winkel \(= 60°\)</td></tr>
+  </tbody>
+</table>
+
+<div class="anim">
+  <div class="anim-titel">Animation · Spezielle Dreiecke</div>
+  <div class="anim-layout">
+    <canvas id="cv-spez" width="560" height="400"></canvas>
+    <div class="bedien">
+      <div class="feld-titel">Typ</div>
+      <div class="chips" id="spez-tabs">
+        <button class="chip aktiv" data-typ="gleichschenklig">Gleichschenklig</button>
+        <button class="chip" data-typ="rechtwinklig">Rechtwinklig</button>
+        <button class="chip" data-typ="gleichseitig">Gleichseitig</button>
+      </div>
+      <div class="regler" id="spez-regler-1">
+        <div class="regler-label">
+          <span id="spez-lbl-1">Schenkellänge</span>
+          <span class="wert" id="spez-val-1">—</span>
+        </div>
+        <input type="range" id="spez-sld-1" min="80" max="200" step="1" value="140">
+      </div>
+      <div class="regler" id="spez-regler-2">
+        <div class="regler-label">
+          <span id="spez-lbl-2">Basiswinkel</span>
+          <span class="wert" id="spez-val-2">—</span>
+        </div>
+        <input type="range" id="spez-sld-2" min="20" max="85" step="1" value="55">
+      </div>
+      <div class="legende" id="spez-legende">
+        <div class="legende-titel">Werte</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Dreieckselemente</h3>
+
+<p>In jedem Dreieck gibt es vier ausgezeichnete Linien-Familien, die sich jeweils in einem gemeinsamen Punkt schneiden:</p>
+
+<table class="ftb-tabelle">
+  <thead>
+    <tr><th>Element</th><th>Definition</th><th>Schnittpunkt</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Höhen</strong> \(h_a, h_b, h_c\)</td><td>Lot vom Eckpunkt auf die Gegenseite</td><td>Höhenschnittpunkt \(H\)</td></tr>
+    <tr><td><strong>Mittelsenkrechten</strong></td><td>Senkrechte durch die Mitte jeder Seite</td><td>Umkreismittelpunkt \(M_U\)</td></tr>
+    <tr><td><strong>Seitenhalbierende</strong></td><td>Verbindung Eckpunkt — Mitte der Gegenseite</td><td>Schwerpunkt \(S\) (teilt 2 : 1)</td></tr>
+    <tr><td><strong>Winkelhalbierende</strong> \(w_\alpha, w_\beta, w_\gamma\)</td><td>halbiert den Innenwinkel</td><td>Inkreismittelpunkt \(M_I\)</td></tr>
+  </tbody>
+</table>
+
+<div class="anim">
+  <div class="anim-titel">Animation · Dreieckselemente</div>
+  <div class="anim-layout">
+    <canvas id="cv-elem" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div class="feld-titel">Element</div>
+      <div class="chips" id="elem-tabs">
+        <button class="chip aktiv" data-el="hoehen">Höhen</button>
+        <button class="chip" data-el="mittelsenkrechten">Mittelsenkrechten</button>
+        <button class="chip" data-el="seitenhalbierende">Seitenhalbierende</button>
+        <button class="chip" data-el="winkelhalbierende">Winkelhalbierende</button>
+      </div>
+      <label class="toggle-zeile">
+        <input type="checkbox" id="elem-tog-kreis">
+        zugehörigen Kreis zeigen (Um- bzw. Inkreis)
+      </label>
+      <div class="legende" id="elem-legende">
+        <div class="legende-titel">Schnittpunkt</div>
+        <div class="legende-zeile"><span class="lab" id="elem-name">—</span><span class="val" id="elem-val">—</span></div>
+      </div>
+      <div class="erklaerung" id="elem-erkl">
+        Wähle ein Element. Die drei Linien schneiden sich stets in einem Punkt — und der trägt einen Namen.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- THEORIE — Fläche + Kongruenz + Pythagoras + Anwendung           -->
+<!-- ================================================================ -->
+<h2 id="theorie">Berechnung — Fläche, Kongruenz, Pythagoras</h2>
+
+<h3>Flächenberechnung</h3>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Flächenformel</div>
+  <p>Die Fläche eines Dreiecks beträgt</p>
+  \[ A = \tfrac{1}{2}\, g \cdot h \]
+  <p>wobei \(g\) eine Grundseite und \(h\) die zugehörige Höhe ist (das Lot des gegenüberliegenden Eckpunkts auf die Grundseite).</p>
+</div>
+
+<p>Die Formel folgt direkt aus dem Rechteck: zwei kongruente Dreiecke bilden ein Parallelogramm der Fläche \(g \cdot h\), das durch Schneiden und Anfügen in ein Rechteck \(g \times h\) überführt wird. Das Dreieck hat genau die halbe Fläche.</p>
+
+<div class="anim">
+  <div class="anim-titel">Animation · Flächenberechnung des Dreiecks</div>
+  <div class="anim-layout">
+    <canvas id="cv-flaeche" width="560" height="380"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Umformungs-Schritt</span>
+          <span class="wert" id="fl-t">0.00</span>
+        </div>
+        <input type="range" id="sld-fl" min="0" max="1" step="0.01" value="0">
+        <div class="schritte" id="fl-schritte">
+          <span class="akt">Start</span>
+          <span>Drehen</span>
+          <span>Anbau</span>
+          <span>Resultat</span>
+        </div>
+      </div>
+      <label class="toggle-zeile">
+        <input type="checkbox" id="fl-tog-masse" checked>
+        Masse beschriften
+      </label>
+      <div class="formel" id="fl-fbox">
+        \(A_{\text{Dreieck}} = \;?\)
+      </div>
+      <div class="erklaerung" id="fl-erkl">
+        Ausgangsfigur: ein Dreieck mit Grundseite g und Höhe h. Es bleibt stehen.
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 id="kongruenz">Kongruenzsätze — wann ist ein Dreieck eindeutig?</h3>
+
+<p>Aus wie vielen Angaben lässt sich ein Dreieck eindeutig konstruieren? Die Antwort ist immer dieselbe: <strong>drei Stücke</strong> — aber nicht jede Kombination reicht. Vier Kombinationen führen zu einem eindeutigen Dreieck:</p>
+
+<div class="anim">
+  <div class="anim-titel">Animation · Kongruenzsätze</div>
+  <div class="anim-layout">
+    <canvas id="cv-kong" width="560" height="400"></canvas>
+    <div class="bedien">
+      <div class="feld-titel">Kongruenzsatz</div>
+      <div class="chips" id="kong-tabs">
+        <button class="chip aktiv" data-fall="sss">SSS</button>
+        <button class="chip" data-fall="sws">SWS</button>
+        <button class="chip" data-fall="wsw">WSW</button>
+        <button class="chip" data-fall="ssw_unique">SsW (1 Lösung)</button>
+        <button class="chip" data-fall="ssw_two">sSW (2 Lösungen)</button>
+      </div>
+      <div class="regler">
+        <div class="regler-label">
+          <span>Konstruktions-Schritt</span>
+          <span class="wert" id="kong-t">0.00</span>
+        </div>
+        <input type="range" id="sld-kong" min="0" max="1" step="0.01" value="0">
+      </div>
+      <div class="legende" id="kong-gegeben">
+        <div class="legende-titel">Gegeben</div>
+      </div>
+      <div class="erklaerung" id="kong-erkl">
+        Wähle einen Kongruenzsatz. Die gegebenen Stücke sind grün eingezeichnet; der Konstruktionsablauf zeigt, wie das Dreieck eindeutig entsteht.
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 id="pythagoras">Satzgruppe Pythagoras</h3>
+
+<p>Im rechtwinkligen Dreieck — dem rechte Winkel sitze bei \(C\) — gelten drei verwandte Sätze. Sie alle drücken Längen-Beziehungen aus, die mit der Höhe \(h\) auf der Hypotenuse \(c\) und den Hypotenusen-Abschnitten \(p\) (unter \(a\)) und \(q\) (unter \(b\)) zusammenhängen.</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Satz</th><th>Aussage</th><th>Was er bedeutet</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Pythagoras</strong></td><td>\(a^2 + b^2 = c^2\)</td><td>Kathetenquadrate summieren sich zum Hypotenusenquadrat</td></tr>
+    <tr><td><strong>Kathetensatz</strong></td><td>\(a^2 = p \cdot c\) bzw. \(b^2 = q \cdot c\)</td><td>Kathetenquadrat = Hypotenuse mal anliegender Abschnitt</td></tr>
+    <tr><td><strong>Höhensatz</strong></td><td>\(h^2 = p \cdot q\)</td><td>Höhenquadrat = Produkt der Hypotenusen-Abschnitte</td></tr>
+  </tbody>
+</table>
+
+<div class="anim">
+  <div class="anim-titel">Animation · Satzgruppe Pythagoras</div>
+  <div class="anim-layout">
+    <canvas id="cv-pyth" width="530" height="555"></canvas>
+    <div class="bedien">
+      <div class="feld-titel">Satz</div>
+      <div class="chips" id="pyth-tabs">
+        <button class="chip aktiv" data-satz="pyth">Pythagoras + Kathetensatz</button>
+        <button class="chip" data-satz="hoehe">Höhensatz</button>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--tinte-2); margin: 0">Ziehe den Eckpunkt C, um den rechten Winkel zu verschieben.</p>
+      <div class="regler" id="pyth-regler-wrap">
+        <div class="regler-label">
+          <span>Quadrate → Hypotenusen-Rechtecke</span>
+          <span class="wert" id="pyth-t">0.00</span>
+        </div>
+        <input type="range" id="sld-pyth" min="0" max="1" step="0.01" value="0">
+        <div class="schritte" id="pyth-schritte">
+          <span class="akt">Scherung 1</span>
+          <span>Drehung</span>
+          <span>Scherung 2</span>
+        </div>
+      </div>
+      <div class="legende" id="pyth-legende">
+        <div class="legende-titel">Werte</div>
+      </div>
+      <div class="formel" id="pyth-fbox">
+        \( a^2 + b^2 = c^2 \)
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 id="halbes-dreieck">Anwendung — halbes gleichseitiges Dreieck, halbes Quadrat <a class="quer" href="g5-3-trigonometrische-berechnungen.html#spezialwinkel">↗ 5.3</a></h3>
+
+<p>Zwei rechtwinklige Dreiecke tauchen so häufig auf, dass ihre Seitenverhältnisse auswendig sitzen sollten:</p>
+
+<ul>
+  <li><strong>Halbes gleichseitiges Dreieck</strong> (also ein 30°-60°-90°-Dreieck): Höhe halbiert die Grundseite; Verhältnis \(1 : \sqrt{3} : 2\).</li>
+  <li><strong>Halbes Quadrat</strong> (45°-45°-90°-Dreieck): Diagonale teilt das Quadrat; Verhältnis \(1 : 1 : \sqrt{2}\).</li>
+</ul>
+
+<div class="anim">
+  <div class="anim-titel">Animation · Pythagoras-Anwendung</div>
+  <div class="anim-layout">
+    <canvas id="cv-anw" width="560" height="400"></canvas>
+    <div class="bedien">
+      <div class="feld-titel">Dreieckstyp</div>
+      <div class="chips" id="anw-tabs">
+        <button class="chip aktiv" data-typ="gleichseitig">Halbes gleichseitiges Δ</button>
+        <button class="chip" data-typ="quadrat">Halbes Quadrat</button>
+      </div>
+      <div class="feld-titel">Gegebene Seite</div>
+      <div class="chips" id="anw-seite">
+        <button class="chip aktiv" data-seite="a">Kathete a</button>
+        <button class="chip" data-seite="b">Kathete b</button>
+        <button class="chip" data-seite="c">Hypotenuse c</button>
+      </div>
+      <div class="feld-titel">Wert der gegebenen Seite</div>
+      <div class="chips" id="anw-wert">
+        <button class="chip aktiv" data-wert="1">1</button>
+        <button class="chip" data-wert="g">g</button>
+      </div>
+      <div class="legende" id="anw-legende">
+        <div class="legende-titel">Werte</div>
+      </div>
+      <div class="formel" id="anw-fbox">
+        \( a^2 + b^2 = c^2 \)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- AUFGABEN                                                          -->
+<!-- ================================================================ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Pythagoras ohne rechten Winkel</div>
+  <p>\(a^2 + b^2 = c^2\) gilt <strong>nur</strong>, wenn zwischen \(a\) und \(b\) ein rechter Winkel liegt. Im allgemeinen (schiefwinkligen) Dreieck stimmt die Beziehung nicht — dafür braucht es Sinus- oder Cosinussatz <a class="quer" href="g5-3-trigonometrische-berechnungen.html">↗ 5.3</a>. Bevor du Pythagoras anwendest, prüfe immer: gibt es im Dreieck einen rechten Winkel, und sind die zwei Katheten die <em>Schenkel</em> dieses rechten Winkels?</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Hypotenuse falsch identifiziert</div>
+  <p>Die Hypotenuse ist die <strong>längste Seite</strong> des rechtwinkligen Dreiecks — und sie liegt immer <em>gegenüber</em> dem rechten Winkel. Wer in \(a^2 + b^2 = c^2\) die Hypotenuse als \(a\) oder \(b\) einsetzt, bekommt eine falsche Zahl heraus. Eselsbrücke: Hypo-„tenuse" wie „liegt herum" — sie liegt der \(90°\)-Ecke gegenüber.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Dreieck-Aufgaben sauber starten</div>
+  <p>Bevor du eine Berechnung beginnst, lohnt sich ein 30-Sekunden-Check:</p>
+  <ol style="margin:5px 0 5px 20px">
+    <li><strong>Skizze zeichnen</strong> — auch wenn der Aufgabentext keine Figur zeigt. Beschriftung mit \(A\), \(B\), \(C\) gegen den Uhrzeigersinn; \(a\) liegt gegenüber von \(A\), usw.</li>
+    <li><strong>Gegebene Grössen eintragen</strong> — was ist bekannt, was gesucht?</li>
+    <li><strong>Spezielle Eigenschaften erkennen</strong> — gleichschenklig? rechtwinklig? gleichseitig? Daraus folgen oft zusätzliche Beziehungen (gleiche Seiten, gleiche Winkel, \(90°\)-Winkel).</li>
+    <li><strong>Werkzeug wählen</strong> — Pythagoras (nur rechtwinklig), Innenwinkelsumme \(180°\), Flächenformel, oder bei schiefwinklig: Sinus-/Cosinussatz <a class="quer" href="g5-3-trigonometrische-berechnungen.html">↗ 5.3</a>.</li>
+  </ol>
+</div>
+
+<h2 id="aufgaben">Aufgaben</h2>
+
+<p>Sechs Aufgaben quer durchs Thema: Winkel, spezielle Dreiecke, Pythagoras, Kongruenz, Dreieckselemente, Anwendung. Lösungen sind ausklappbar — versuche zuerst selbst, bevor Du nachschaust.</p>
+
+<!-- A1 — Innenwinkelsumme & Aussenwinkelsatz -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Innenwinkel und Aussenwinkelsatz</span></div>
+  <p>In einem Dreieck ABC ist \(\alpha = 47°\) und \(\beta = 68°\). Bestimme:</p>
+  <ol class="aufg-liste">
+    <li>den dritten Innenwinkel \(\gamma\)</li>
+    <li>den Aussenwinkel \(\alpha'\) bei A</li>
+    <li>den Aussenwinkel \(\gamma'\) bei C — einmal über den Nebenwinkel und einmal über den Aussenwinkelsatz. Vergleiche die Resultate.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA1')">▶ Lösung</button>
+  <div class="loesung-body" id="lA1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>Innenwinkelsumme: \(\gamma = 180° - \alpha - \beta = 180° - 47° - 68° = \mathbf{65°}\).</li>
+        <li>Nebenwinkel: \(\alpha' = 180° - \alpha = 180° - 47° = \mathbf{133°}\).</li>
+        <li>Über Nebenwinkel: \(\gamma' = 180° - \gamma = 180° - 65° = \mathbf{115°}\).<br>
+         Über Aussenwinkelsatz: \(\gamma' = \alpha + \beta = 47° + 68° = \mathbf{115°}\). Beide Resultate stimmen überein — das ist kein Zufall: \( \alpha + \beta = 180° - \gamma = \gamma' \).</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+<!-- A2 — Spezielle Dreiecke -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Halbes gleichseitiges Dreieck</span></div>
+  <p>Ein gleichseitiges Dreieck hat die Seitenlänge \(s = 8\,\text{cm}\). Die Höhe halbiert es in zwei kongruente 30°-60°-90°-Dreiecke. Bestimme für eines dieser Halbdreiecke:</p>
+  <ol class="aufg-liste">
+    <li>die drei Seitenlängen (kurze Kathete, lange Kathete, Hypotenuse)</li>
+    <li>die Fläche des Halbdreiecks</li>
+    <li>die Fläche des ursprünglichen gleichseitigen Dreiecks</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA2')">▶ Lösung</button>
+  <div class="loesung-body" id="lA2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>Verhältnis im 30°-60°-90°: \(1 : \sqrt{3} : 2\). Hypotenuse = Schenkel des Volldreiecks = \(s = 8\,\text{cm}\).<br>
+         Kurze Kathete: \(a = s/2 = \mathbf{4\,\text{cm}}\).<br>
+         Lange Kathete (= Höhe): \(b = s \cdot \sqrt{3}/2 = 8 \cdot \sqrt{3}/2 = \mathbf{4\sqrt{3}\,\text{cm} \approx 6.93\,\text{cm}}\).<br>
+         Hypotenuse: \(c = \mathbf{8\,\text{cm}}\).</li>
+        <li>Fläche Halbdreieck: \(A_h = \tfrac{1}{2}\, a \cdot b = \tfrac{1}{2} \cdot 4 \cdot 4\sqrt{3} = \mathbf{8\sqrt{3} \approx 13.86\,\text{cm}^2}\).</li>
+        <li>Volldreieck ist doppelt so gross: \(A = 2 \cdot A_h = \mathbf{16\sqrt{3} \approx 27.71\,\text{cm}^2}\).</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+<!-- A3 — Pythagoras -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Pythagoras und Höhensatz</span></div>
+  <p>Ein rechtwinkliges Dreieck (rechter Winkel bei C) hat die Hypotenuse \(c = 13\,\text{cm}\) und die Kathete \(a = 5\,\text{cm}\). Bestimme:</p>
+  <ol class="aufg-liste">
+    <li>die zweite Kathete \(b\)</li>
+    <li>die Höhe \(h\) auf der Hypotenuse</li>
+    <li>die Hypotenusenabschnitte \(p\) und \(q\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA3')">▶ Lösung</button>
+  <div class="loesung-body" id="lA3">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>Pythagoras: \(b = \sqrt{c^2 - a^2} = \sqrt{169 - 25} = \sqrt{144} = \mathbf{12\,\text{cm}}\). (Bekanntes 5-12-13-Tripel.)</li>
+        <li>Fläche zweimal ausdrücken: \(A = \tfrac{1}{2}\, a \cdot b = \tfrac{1}{2}\, c \cdot h\). Also \(h = \tfrac{a \cdot b}{c} = \tfrac{5 \cdot 12}{13} = \mathbf{\tfrac{60}{13} \approx 4.62\,\text{cm}}\).</li>
+        <li>Kathetensatz: \(a^2 = p \cdot c \;\Rightarrow\; p = \tfrac{a^2}{c} = \tfrac{25}{13} \approx \mathbf{1.92\,\text{cm}}\).<br>
+         Analog \(q = \tfrac{b^2}{c} = \tfrac{144}{13} \approx \mathbf{11.08\,\text{cm}}\).<br>
+         Probe: \(p + q = \tfrac{25+144}{13} = \tfrac{169}{13} = 13 = c\). ✓</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+<!-- A4 — Kongruenz -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Eindeutig konstruierbar?</span></div>
+  <p>Welche der folgenden Angaben legen das Dreieck <strong>eindeutig</strong> fest? Begründe kurz mit dem zutreffenden Kongruenzsatz (SSS / SWS / WSW / SsW) — oder erkläre, warum die Angabe mehrdeutig ist.</p>
+  <ol class="aufg-liste">
+    <li>\(a = 5\,\text{cm},\; b = 7\,\text{cm},\; c = 9\,\text{cm}\)</li>
+    <li>\(a = 6\,\text{cm},\; b = 4\,\text{cm},\; \gamma = 50°\)</li>
+    <li>\(\alpha = 30°,\; \beta = 60°,\; \gamma = 90°\)</li>
+    <li>\(a = 8\,\text{cm},\; b = 5\,\text{cm},\; \alpha = 30°\) (\(\alpha\) liegt der Seite \(a\) gegenüber)</li>
+    <li>\(a = 4\,\text{cm},\; b = 8\,\text{cm},\; \alpha = 30°\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA4')">▶ Lösung</button>
+  <div class="loesung-body" id="lA4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      
+      <ol class="aufg-liste">
+        <li>Drei Seiten — <strong>SSS, eindeutig</strong>. (Dreiecksungleichung erfüllt: \(5 + 7 > 9\). ✓)</li>
+        <li>Zwei Seiten und der von ihnen eingeschlossene Winkel — <strong>SWS, eindeutig</strong>.</li>
+        <li>Nur Winkel, keine Seite — <strong>nicht eindeutig</strong>. Es gibt unendlich viele <em>ähnliche</em>, aber verschieden grosse Dreiecke (alle 30°-60°-90°).</li>
+        <li>Zwei Seiten, Winkel gegenüber der <strong>grösseren</strong> Seite (\(a > b\)) — <strong>SsW, eindeutig</strong>. Der Kreis um C schneidet den Strahl nur einmal.</li>
+        <li>Zwei Seiten und der Winkel gegenüber der <strong>kleineren</strong> Seite (\(a < b\)) — der <strong>sSW-Fall</strong>. Hier entscheidet der Vergleich \(a\) gegen \(b \cdot \sin\alpha\): \(b \cdot \sin\alpha = 8 \cdot 0.5 = 4\), und \(a = 4\). Wegen \(a = b \cdot \sin\alpha\) liegt der <strong>Grenzfall</strong> vor — <strong>genau eine Lösung</strong> (rechtwinkliges Dreieck bei B). Allgemein: bei \(a > b \cdot \sin\alpha\) zwei Lösungen, bei \(a = b \cdot \sin\alpha\) eine, bei \(a < b \cdot \sin\alpha\) keine.</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+<!-- A5 — Dreieckselemente -->
+<div class="block block-aufg" style="margin-bottom:14px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Dreieckselemente zuordnen</span></div>
+  <p>Ordne jedem der vier Schnittpunkte zu, durch welche drei Linien er entsteht — und welche besondere Lage er hat.</p>
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <thead><tr><th>Schnittpunkt</th><th>entsteht durch …</th><th>besondere Eigenschaft</th></tr></thead>
+    <tbody>
+      <tr><td>H (Höhenschnittpunkt)</td><td>?</td><td>?</td></tr>
+      <tr><td>S (Schwerpunkt)</td><td>?</td><td>?</td></tr>
+      <tr><td>\(M_U\) (Umkreismittelpunkt)</td><td>?</td><td>?</td></tr>
+      <tr><td>\(M_I\) (Inkreismittelpunkt)</td><td>?</td><td>?</td></tr>
+    </tbody>
+  </table>
+  <button class="loesung-toggle" onclick="toggleL('lA5')">▶ Lösung</button>
+  <div class="loesung-body" id="lA5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <table class="ftb-tabelle">
+        <thead><tr><th>Schnittpunkt</th><th>entsteht durch …</th><th>besondere Eigenschaft</th></tr></thead>
+        <tbody>
+          <tr><td>H</td><td>die drei <strong>Höhen</strong></td><td>liegt im Innern (spitzwinklig), auf C (rechtwinklig) oder ausserhalb (stumpfwinklig)</td></tr>
+          <tr><td>S</td><td>die drei <strong>Seitenhalbierenden</strong></td><td>teilt jede Seitenhalbierende im Verhältnis 2 : 1 (vom Eckpunkt aus)</td></tr>
+          <tr><td>\(M_U\)</td><td>die drei <strong>Mittelsenkrechten</strong></td><td>von allen drei Eckpunkten gleich weit entfernt — Mittelpunkt des Umkreises</td></tr>
+          <tr><td>\(M_I\)</td><td>die drei <strong>Winkelhalbierenden</strong></td><td>von allen drei Seiten gleich weit entfernt — Mittelpunkt des Inkreises</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- A6 — Anwendung -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Anwendung: Dachgiebel <span class="aufg-vertiefung">mit Vorgriff auf 5.3</span></span></div>
+  <p>Ein symmetrischer Dachgiebel ist ein gleichschenkliges Dreieck. Der Hausfirst liegt \(h = 3.5\,\text{m}\) über dem oberen Mauerrand; die Mauer ist \(b = 8\,\text{m}\) breit. Bestimme:</p>
+  <ol class="aufg-liste">
+    <li>die Länge eines Dachschenkels (von der Mauerecke bis zum First)</li>
+    <li>den Neigungswinkel des Daches gegenüber der Waagerechten <em>(Teilaufgabe braucht den Arkustangens — wird formal in <a class="quer" href="g5-3-trigonometrische-berechnungen.html">5.3</a> eingeführt)</em></li>
+    <li>die Dachfläche, wenn das Haus \(L = 12\,\text{m}\) lang ist (zwei Dachflächen, jede ein Rechteck Schenkel × Hauslänge)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('lA6')">▶ Lösung</button>
+  <div class="loesung-body" id="lA6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Halbieren wir den Giebel entlang der Höhe: rechtwinkliges Dreieck mit Kathete \(b/2 = 4\,\text{m}\) (waagerecht) und Kathete \(h = 3.5\,\text{m}\) (senkrecht).</p>
+      
+      <ol class="aufg-liste">
+        <li>Pythagoras: \(s = \sqrt{(b/2)^2 + h^2} = \sqrt{16 + 12.25} = \sqrt{28.25} \approx \mathbf{5.32\,\text{m}}\).</li>
+        <li>Neigungswinkel \(\varphi\) gegen Waagerechte: \(\tan\varphi = \dfrac{h}{b/2} = \dfrac{3.5}{4} = 0.875\). Daraus \(\varphi = \arctan(0.875) \approx \mathbf{41.2°}\).</li>
+        <li>Eine Dachfläche: \(A_1 = s \cdot L \approx 5.32 \cdot 12 \approx 63.85\,\text{m}^2\). Gesamtdachfläche: \(2 \cdot A_1 \approx \mathbf{127.7\,\text{m}^2}\).</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- ZUSAMMENFASSUNG                                                  -->
+<!-- ================================================================ -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Pythagoras im Raum</span></div>
+  <p>Ein quaderförmiges Aquarium hat die Innenmasse \(80\,\text{cm} \times 60\,\text{cm} \times 50\,\text{cm}\). Eine schwimmende Laser-Pointer-Halterung soll diagonal von einer unteren Ecke zur gegenüberliegenden oberen Ecke gespannt werden.</p>
+<ol class="aufg-liste">
+  <li>Berechne zuerst die Bodendiagonale (über das rechtwinklige Dreieck am Boden).</li>
+  <li>Mit der Bodendiagonale als Kathete und der Höhe als zweiter Kathete: berechne die Raumdiagonale.</li>
+  <li>Vergleiche das Resultat mit \(5\sqrt{5}\,\text{m}\) — passt das Vorzeichen der Grössenordnung?</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g5-2a-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g5-2a-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Bodendiagonale \(d_B\): \(d_B^2 = 80^2 + 60^2 = 6400 + 3600 = 10000 \Rightarrow d_B = 100\,\text{cm}\). Schöne runde Zahl wegen des \(3{:}4{:}5\)-Dreiecks (\(60{:}80{:}100\)).</li>
+        <li>Raumdiagonale \(d_R\): das Dreieck mit \(d_B = 100\), Höhe \(50\) und der Raumdiagonalen ist wieder rechtwinklig. \(d_R^2 = 100^2 + 50^2 = 10000 + 2500 = 12500 \Rightarrow d_R = \sqrt{12500} = 50\sqrt{5} \approx 111.80\,\text{cm}\).</li>
+        <li>\(5\sqrt{5}\,\text{m} = 500\sqrt{5}\,\text{cm} \approx 1118\,\text{cm}\) — das wäre eine Raumdiagonale von rund 11 Metern, also rund 10× zu gross für das Aquarium. Korrekt ist \(50\sqrt{5}\,\text{cm}\). Die <strong>Pythagoras-Idee im Raum</strong>: \(d_R = \sqrt{a^2 + b^2 + c^2}\) für einen Quader mit Kanten \(a, b, c\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Jedes Dreieck ist durch seine drei Innenwinkel und seine drei Seiten festgelegt — aber meistens reichen <strong>drei Bestimmungsstücke</strong> (z.B. SSS, SWS, WSW), um es eindeutig zu konstruieren. Innenwinkelsumme <strong>180°</strong> und der <strong>Satz des Pythagoras</strong> im rechtwinkligen Dreieck sind die zwei Werkzeuge, die in fast jeder Aufgabe vorkommen.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead><tr><th>Sachverhalt</th><th>Formel</th></tr></thead>
+  <tbody>
+    <tr><td>Innenwinkelsumme</td><td>\( \alpha + \beta + \gamma = 180° \)</td></tr>
+    <tr><td>Aussenwinkelsumme</td><td>\( \alpha' + \beta' + \gamma' = 360° \)</td></tr>
+    <tr><td>Innen- und Aussenwinkel</td><td>\( \alpha + \alpha' = 180° \) (Nebenwinkel)</td></tr>
+    <tr><td>Aussenwinkelsatz</td><td>\( \alpha' = \beta + \gamma \) (jeder Aussenwinkel = Summe der beiden nicht anliegenden Innenwinkel)</td></tr>
+    <tr><td>Fläche</td><td>\( A = \tfrac{1}{2}\, g \cdot h \)</td></tr>
+    <tr><td>Pythagoras (mit \(\gamma = 90°\))</td><td>\( a^2 + b^2 = c^2 \)</td></tr>
+    <tr><td>Kathetensatz</td><td>\( a^2 = p \cdot c,\quad b^2 = q \cdot c \)</td></tr>
+    <tr><td>Höhensatz</td><td>\( h^2 = p \cdot q \)</td></tr>
+    <tr><td>Halbes gleichseitiges Δ (30°-60°-90°)</td><td>Verhältnis \( 1 : \sqrt{3} : 2 \)</td></tr>
+    <tr><td>Halbes Quadrat (45°-45°-90°)</td><td>Verhältnis \( 1 : 1 : \sqrt{2} \)</td></tr>
+  </tbody>
+</table>
+
+<!-- ================================================================ -->
+<!-- ZUSATZMATERIAL                                                    -->
+<!-- ================================================================ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/grundlagen/g5-2a-dreiecke/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-2a-dreiecke/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-2a-dreiecke/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-2a-dreiecke/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g5-2a-dreiecke/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ================================================================ -->
+<!-- EXTERNE RESSOURCEN                                                -->
+<!-- ================================================================ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid" id="g52a-videos">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lVRLFql-2N3u5-2ZgWp9A7-" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">GEOMETRIE — Dreieck, Prisma, Kreis, Trapez — Playlist</div><div class="lk-s">MathemaTrick · 60 Videos · Dreieck-Anteile (rechtwinklig, allgemein) decken 5.2a ab</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAznju8Er07GiFuaHGegrGtUe" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Dreiecke konstruieren — geometrische Grundkonstruktionen — Playlist</div><div class="lk-s">Lehrerschmidt · 15 Videos · SSS, SWS, WSW, SsW; Höhen, Schwerpunkt, Mittelsenkrechte</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHgCcNWha7A2N_gR6UGAeQe2" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Satzgruppe des Pythagoras, Berechnungen am Dreieck — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 25 Videos · Pythagoras, Höhensatz, Kathetensatz, Thales</div></div></a>
+  <a class="lk" style="opacity:0.6;cursor:default;" aria-disabled="true">
+    <span class="lk-ic">⏳</span>
+    <div>
+      <div class="lk-t">In Vorbereitung</div>
+      <div class="lk-s">Eine vierte Quelle zu 5.2a wird beim nächsten Recherche-Lauf ergänzt — Mathe SMI, Mathehoch13 und Magda decken zu Dreiecken-Grundlagen kein passendes BM-Niveau ab.</div>
+    </div>
+  </a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid" id="g52a-aufgaben">
+  <a href="https://sos-mathe.ch/g/g6/g61/aufg_g61.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Konstruktionsaufgaben</div><div class="lk-s">G61 · Punktmengen, Symmetrie, Drei- und Vierecke konstruieren · mit Lösungen</div></div></a>
+  <a href="https://sos-mathe.ch/g/g6/g68/aufg_g68.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Kongruenzbeweise</div><div class="lk-s">G68 · 7 Beweisaufgaben zu Kongruenz und Mittellinie · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/28875/aufgaben-zu-dreiecken" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu Dreiecken</div><div class="lk-s">Dreieckstypen, Fläche, besondere Linien · interaktive Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/30678/aufgaben-zur-satzgruppe-des-pythagoras" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zur Satzgruppe des Pythagoras</div><div class="lk-s">Pythagoras, Höhen- und Kathetensatz, Anwendungen · Schritt-für-Schritt-Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Grundlagenfach 5.2a Dreiecke</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script>
+buildNav({
+  bereich:'grundlagen',
+  id:'g5-2a',
+  kapitelNr:'5.2a', kapitelTitel:'Dreiecke',
+  prev:{nr:'5.1',titel:'Grundlagen',url:'g5-1-grundlagen.html'},
+  next:{nr:'5.2b',titel:'Vierecke',url:'g5-2b-vierecke.html'}
+});
+</script>
+
+<!-- ================================================================ -->
+<!-- ANIMATIONEN — JavaScript                                          -->
+<!-- ================================================================ -->
+<script>
+/* ============================================================
+ *  GEMEINSAME HELFER
+ * ============================================================ */
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function fmtDeg(rad) { return (rad * 180 / Math.PI).toFixed(1) + '°'; }
+
+function initCv(id) {
+  const cv = document.getElementById(id);
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  if (cv.width !== Math.round(rect.width * dpr)) {
+    cv.width = Math.round(rect.width * dpr);
+    cv.height = Math.round(rect.height * dpr);
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, rect.width, rect.height);
+  return { ctx, W: rect.width, H: rect.height, cv };
+}
+
+const css = getComputedStyle(document.documentElement);
+const C = {
+  blau:      (css.getPropertyValue('--blau').trim()       || '#1e3a8a'),
+  blauHell:  (css.getPropertyValue('--blau-hell').trim()  || '#dbeafe'),
+  blauRand:  (css.getPropertyValue('--blau-rand').trim()  || '#93c5fd'),
+  gruen:     (css.getPropertyValue('--gruen').trim()      || '#166534'),
+  gruenHell: (css.getPropertyValue('--gruen-hell').trim() || '#dcfce7'),
+  gruenRand: (css.getPropertyValue('--gruen-rand').trim() || '#86efac'),
+  rot:       (css.getPropertyValue('--rot').trim()        || '#991b1b'),
+  rotHell:   (css.getPropertyValue('--rot-hell').trim()   || '#fee2e2'),
+  orange:    (css.getPropertyValue('--orange').trim()     || '#c2410c'),
+  orangeH:   (css.getPropertyValue('--orange-hell').trim()|| '#ffedd5'),
+  lila:      (css.getPropertyValue('--lila').trim()       || '#6b21a8'),
+  linie:     (css.getPropertyValue('--linie').trim()      || '#cbd5e1'),
+  tinte:     (css.getPropertyValue('--tinte').trim()      || '#0f172a'),
+  tinte2:    (css.getPropertyValue('--tinte-2').trim()    || '#475569'),
+};
+const ORANGE_FILL = 'rgba(194, 65, 12, 0.22)';
+const GRUEN_FILL  = 'rgba(22, 101, 52, 0.30)';
+const BLAU_FILL   = 'rgba(30, 58, 138, 0.15)';
+
+function fillPoly(ctx, pts, fill, stroke, lw = 2, alpha = 1) {
+  if (pts.length < 2) return;
+  ctx.save();
+  if (alpha < 1) ctx.globalAlpha = alpha;
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.closePath();
+  if (fill)   { ctx.fillStyle   = fill;   ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+  ctx.restore();
+}
+function dashedSeg(ctx, p1, p2, color, lw = 1.5, dash = [5, 4]) {
+  ctx.save();
+  ctx.setLineDash(dash);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function seg(ctx, p1, p2, color, lw = 2) {
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = lw;
+  ctx.beginPath();
+  ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='middle', weight='600') {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
+  ctx.textAlign = align;
+  ctx.textBaseline = base;
+  ctx.fillText(s, x, y);
+  ctx.restore();
+}
+function dot(ctx, p, color = C.blau, r = 5) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(p[0], p[1], r, 0, 2 * Math.PI);
+  ctx.fill();
+  ctx.restore();
+}
+// Winkelbogen am Eckpunkt P zwischen Strahlen nach Q und R
+function angleArc(ctx, P, Q, R, radius, color, lw = 1.5) {
+  const a1 = Math.atan2(Q[1] - P[1], Q[0] - P[0]);
+  const a2 = Math.atan2(R[1] - P[1], R[0] - P[0]);
+  // Winkel im mathematischen Sinn: ggu UZS sweep
+  let da = a2 - a1;
+  while (da < 0) da += 2 * Math.PI;
+  while (da > 2 * Math.PI) da -= 2 * Math.PI;
+  const ccw = da > Math.PI;
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  ctx.beginPath();
+  ctx.arc(P[0], P[1], radius, a1, a2, ccw);
+  ctx.stroke();
+  ctx.restore();
+  return { a1, a2, mid: a1 + (ccw ? -da + 2*Math.PI : da) / 2, da: ccw ? 2*Math.PI - da : da };
+}
+function dist(p, q) { return Math.hypot(p[0]-q[0], p[1]-q[1]); }
+function angleAt(P, Q, R) {
+  // Winkel bei P zwischen PQ und PR (innerer Winkel, in [0, π])
+  const v1 = [Q[0]-P[0], Q[1]-P[1]];
+  const v2 = [R[0]-P[0], R[1]-P[1]];
+  const c = (v1[0]*v2[0] + v1[1]*v2[1]) / (Math.hypot(...v1) * Math.hypot(...v2));
+  return Math.acos(clamp(c, -1, 1));
+}
+// Schnittpunkt von 2 Strahlen P1+t·d1 und P2+s·d2
+function lineIntersect(P1, d1, P2, d2) {
+  const det = d1[0]*d2[1] - d1[1]*d2[0];
+  if (Math.abs(det) < 1e-9) return null;
+  const dx = P2[0] - P1[0], dy = P2[1] - P1[1];
+  const t = (dx*d2[1] - dy*d2[0]) / det;
+  return [P1[0] + t*d1[0], P1[1] + t*d1[1]];
+}
+// Lotfuss von P auf Gerade durch A, B
+function footPerp(P, A, B) {
+  const dx = B[0]-A[0], dy = B[1]-A[1];
+  const len2 = dx*dx + dy*dy;
+  const t = ((P[0]-A[0])*dx + (P[1]-A[1])*dy) / len2;
+  return [A[0] + t*dx, A[1] + t*dy];
+}
+
+// Schneide Gerade durch P in Richtung d mit dem Rechteck [0,0,W,H]
+// Gibt die zwei Schnittpunkte auf dem Rechtecksrand zurück, oder null wenn parallel/ausserhalb.
+function clipLineToRect(P, d, W, H) {
+  const ts = [];
+  if (Math.abs(d[0]) > 1e-9) {
+    ts.push((0 - P[0]) / d[0]);
+    ts.push((W - P[0]) / d[0]);
+  }
+  if (Math.abs(d[1]) > 1e-9) {
+    ts.push((0 - P[1]) / d[1]);
+    ts.push((H - P[1]) / d[1]);
+  }
+  // Welche t-Werte liefern Punkte tatsächlich auf dem Rechtecksrand?
+  const pts = [];
+  for (const t of ts) {
+    const x = P[0] + t * d[0];
+    const y = P[1] + t * d[1];
+    if (x >= -0.5 && x <= W + 0.5 && y >= -0.5 && y <= H + 0.5) {
+      pts.push([x, y, t]);
+    }
+  }
+  if (pts.length < 2) return null;
+  // Sortiere nach t und nimm Extremwerte
+  pts.sort((a, b) => a[2] - b[2]);
+  return [[pts[0][0], pts[0][1]], [pts[pts.length-1][0], pts[pts.length-1][1]]];
+}
+
+/* ============================================================
+ *  Pointer/Drag-Handling für ziehbare Eckpunkte
+ * ============================================================ */
+function makeDraggable(cv, pts, redrawFn, radius = 12, allowIdx = null) {
+  let activeIdx = -1;
+  function getPos(ev) {
+    const rect = cv.getBoundingClientRect();
+    const e = ev.touches ? ev.touches[0] : ev;
+    return [e.clientX - rect.left, e.clientY - rect.top];
+  }
+  function down(ev) {
+    const [x, y] = getPos(ev);
+    let minD = Infinity, idx = -1;
+    pts.forEach((p, i) => {
+      if (allowIdx && !allowIdx.includes(i)) return;
+      const d = Math.hypot(p[0]-x, p[1]-y);
+      if (d < minD) { minD = d; idx = i; }
+    });
+    if (minD < radius * 2) {
+      activeIdx = idx;
+      ev.preventDefault();
+    }
+  }
+  function move(ev) {
+    if (activeIdx < 0) return;
+    const [x, y] = getPos(ev);
+    pts[activeIdx][0] = x; pts[activeIdx][1] = y;
+    redrawFn();
+    ev.preventDefault();
+  }
+  function up() { activeIdx = -1; }
+  cv.addEventListener('mousedown', down);
+  cv.addEventListener('mousemove', move);
+  cv.addEventListener('mouseup', up);
+  cv.addEventListener('mouseleave', up);
+  cv.addEventListener('touchstart', down, { passive: false });
+  cv.addEventListener('touchmove', move, { passive: false });
+  cv.addEventListener('touchend', up);
+}
+
+/* ============================================================
+ *  ANIMATION 1 — Allgemeines Dreieck (ziehbare Eckpunkte)
+ * ============================================================ */
+const allgPts = [[120, 320], [440, 320], [260, 90]];  // A, B, C
+const allgEl = {
+  alpha: document.getElementById('allg-α'),
+  beta: document.getElementById('allg-β'),
+  gamma: document.getElementById('allg-γ'),
+  summe: document.getElementById('allg-summe'),
+  alphaS: document.getElementById('allg-αs'),
+  betaS: document.getElementById('allg-βs'),
+  gammaS: document.getElementById('allg-γs'),
+  summeA: document.getElementById('allg-summe-a'),
+};
+const togAllgAussen = document.getElementById('tog-allg-aussen');
+togAllgAussen.addEventListener('change', drawAllg);
+
+function drawAllg() {
+  const { ctx, W, H, cv } = initCv('cv-allg');
+  const [A, B, C0] = allgPts;
+  // Berechne Innenwinkel
+  const alpha = angleAt(A, B, C0);
+  const beta = angleAt(B, C0, A);
+  const gamma = angleAt(C0, A, B);
+  // Aussenwinkel
+  const alphaS = Math.PI - alpha, betaS = Math.PI - beta, gammaS = Math.PI - gamma;
+
+  // Verlängerungen der Seiten für Aussenwinkel
+  if (togAllgAussen.checked) {
+    const extend = (P, Q) => [P[0] + (P[0]-Q[0]) * 0.5, P[1] + (P[1]-Q[1]) * 0.5];
+    dashedSeg(ctx, A, extend(A, B), C.tinte2);
+    dashedSeg(ctx, B, extend(B, C0), C.tinte2);
+    dashedSeg(ctx, C0, extend(C0, A), C.tinte2);
+  }
+
+  // Füllung
+  fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+
+  // Innenwinkelbögen — die mid-Winkel-Rückgabe für Beschriftung nutzen
+  const rIn = 32;
+  const midA = drawAngleSector(ctx, A, B, C0, rIn, 'rgba(30,58,138,0.18)',  C.blau);
+  const midB = drawAngleSector(ctx, B, C0, A, rIn, 'rgba(22,101,52,0.18)',  C.gruen);
+  const midC = drawAngleSector(ctx, C0, A, B, rIn, 'rgba(107,33,168,0.18)', C.lila);
+  // Symbole im Innenbogen
+  const labInA = arcLabelPos(A,  midA, rIn + 14);
+  const labInB = arcLabelPos(B,  midB, rIn + 14);
+  const labInC = arcLabelPos(C0, midC, rIn + 14);
+  txt(ctx, labInA[0], labInA[1], 'α', C.blau,  14, 'center', 'middle', '700');
+  txt(ctx, labInB[0], labInB[1], 'β', C.gruen, 14, 'center', 'middle', '700');
+  txt(ctx, labInC[0], labInC[1], 'γ', C.lila,  14, 'center', 'middle', '700');
+
+  // Aussenwinkelbögen mit Symbolen α', β', γ'
+  if (togAllgAussen.checked) {
+    const extend = (P, Q) => [P[0] + (P[0]-Q[0]) * 0.5, P[1] + (P[1]-Q[1]) * 0.5];
+    const rOut = 26;
+    const midAa = drawAngleSector(ctx, A,  extend(A, B),  C0, rOut, 'rgba(194,65,12,0.15)', C.orange, true);
+    const midBa = drawAngleSector(ctx, B,  extend(B, C0), A,  rOut, 'rgba(194,65,12,0.15)', C.orange, true);
+    const midCa = drawAngleSector(ctx, C0, extend(C0, A), B,  rOut, 'rgba(194,65,12,0.15)', C.orange, true);
+    const labOutA = arcLabelPos(A,  midAa, rOut + 14);
+    const labOutB = arcLabelPos(B,  midBa, rOut + 14);
+    const labOutC = arcLabelPos(C0, midCa, rOut + 14);
+    txt(ctx, labOutA[0], labOutA[1], "α'", C.orange, 14, 'center', 'middle', '700');
+    txt(ctx, labOutB[0], labOutB[1], "β'", C.orange, 14, 'center', 'middle', '700');
+    txt(ctx, labOutC[0], labOutC[1], "γ'", C.orange, 14, 'center', 'middle', '700');
+  }
+
+  // Eckpunkt-Beschriftungen NACH AUSSEN (24 px statt 18 — verhindert Kollision mit Bögen)
+  const offsetLabel = (P, away1, away2, d = 24) => {
+    const cx = (away1[0] + away2[0]) / 2 - P[0];
+    const cy = (away1[1] + away2[1]) / 2 - P[1];
+    const len = Math.hypot(cx, cy) || 1;
+    return [P[0] - cx/len * d, P[1] - cy/len * d];
+  };
+  const lA = offsetLabel(A, B, C0);
+  const lB = offsetLabel(B, A, C0);
+  const lC = offsetLabel(C0, A, B);
+  txt(ctx, lA[0], lA[1], 'A', C.tinte, 14);
+  txt(ctx, lB[0], lB[1], 'B', C.tinte, 14);
+  txt(ctx, lC[0], lC[1], 'C', C.tinte, 14);
+
+  // Seitenbeschriftung — etwas weiter aussen (20 statt 16)
+  const sideLabel = (P, Q, R) => {
+    const mid = [(P[0]+Q[0])/2, (P[1]+Q[1])/2];
+    const dx = mid[0] - R[0], dy = mid[1] - R[1];
+    const len = Math.hypot(dx, dy) || 1;
+    return [mid[0] + dx/len * 20, mid[1] + dy/len * 20];
+  };
+  const labA = sideLabel(B, C0, A);
+  const labB = sideLabel(C0, A, B);
+  const labC = sideLabel(A, B, C0);
+  txt(ctx, labA[0], labA[1], 'a', C.tinte2, 14, 'center', 'middle', '600');
+  txt(ctx, labB[0], labB[1], 'b', C.tinte2, 14, 'center', 'middle', '600');
+  txt(ctx, labC[0], labC[1], 'c', C.tinte2, 14, 'center', 'middle', '600');
+
+  // Eckpunkte als Drag-Handles
+  dot(ctx, A,  C.blau, 6);
+  dot(ctx, B,  C.blau, 6);
+  dot(ctx, C0, C.blau, 6);
+
+  // Legende
+  allgEl.alpha.textContent = fmtDeg(alpha);
+  allgEl.beta.textContent  = fmtDeg(beta);
+  allgEl.gamma.textContent = fmtDeg(gamma);
+  allgEl.summe.textContent = fmtDeg(alpha + beta + gamma);
+  allgEl.alphaS.textContent = fmtDeg(alphaS);
+  allgEl.betaS.textContent  = fmtDeg(betaS);
+  allgEl.gammaS.textContent = fmtDeg(gammaS);
+  allgEl.summeA.textContent = fmtDeg(alphaS + betaS + gammaS);
+}
+
+function drawAngleSector(ctx, P, Q, R, radius, fill, stroke, outside = false) {
+  // Berechne Winkel der Strahlen PQ und PR
+  let a1 = Math.atan2(Q[1] - P[1], Q[0] - P[0]);
+  let a2 = Math.atan2(R[1] - P[1], R[0] - P[0]);
+  // Wir wollen den kleineren der beiden Bögen für Innenwinkel,
+  // bzw. den entsprechenden Aussenwinkel-Bogen
+  let da = a2 - a1;
+  while (da < -Math.PI) da += 2 * Math.PI;
+  while (da > Math.PI)  da -= 2 * Math.PI;
+  // Bogen
+  ctx.save();
+  ctx.fillStyle = fill;
+  ctx.beginPath();
+  ctx.moveTo(P[0], P[1]);
+  ctx.arc(P[0], P[1], radius, a1, a1 + da, da < 0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(P[0], P[1], radius, a1, a1 + da, da < 0);
+  ctx.stroke();
+  ctx.restore();
+  // Mittel-Winkel zurückgeben, damit Aufrufer dort Beschriftung platzieren kann
+  return a1 + da / 2;
+}
+
+// Hilfsfunktion: Position ausserhalb des Bogens für Label
+function arcLabelPos(P, midAngle, radius) {
+  return [P[0] + Math.cos(midAngle) * radius, P[1] + Math.sin(midAngle) * radius];
+}
+
+makeDraggable(document.getElementById('cv-allg'), allgPts, drawAllg);
+
+/* ============================================================
+ *  ANIMATION 2 — Beweis Innenwinkelsumme = 180°
+ * ============================================================ */
+const sldBeweis = document.getElementById('sld-beweis');
+const beweisLbl = document.getElementById('beweis-t');
+const beweisFbox = document.getElementById('beweis-fbox');
+const beweisErkl = document.getElementById('beweis-erkl');
+const beweisSchritte = document.getElementById('beweis-schritte');
+
+function updateSchritte(container, t, thresholds = [0.05, 0.5, 0.95]) {
+  const kids = container.querySelectorAll('span');
+  kids.forEach(k => k.classList.remove('akt'));
+  let idx = 0;
+  for (let i = 0; i < thresholds.length; i++) {
+    if (t >= thresholds[i]) idx = i + 1;
+  }
+  if (kids[idx]) kids[idx].classList.add('akt');
+}
+
+sldBeweis.addEventListener('input', drawBeweis);
+
+function drawBeweis() {
+  const t = +sldBeweis.value;
+  beweisLbl.textContent = t.toFixed(2);
+  updateSchritte(beweisSchritte, t, [0.05, 0.35, 0.70]);
+
+  const { ctx, W, H } = initCv('cv-beweis');
+
+  // Festes Dreieck — etwas weiter unten platziert, damit oben Platz für die Parallele und ihre Beschriftung bleibt
+  const A = [130, 320], B = [430, 320], C0 = [290, 150];
+
+  // Innenwinkel berechnen
+  const alpha = angleAt(A, B, C0);
+  const beta  = angleAt(B, C0, A);
+  const gamma = angleAt(C0, A, B);
+
+  // Phase 1: Dreieck mit Innenwinkel-Bögen + Symbolen an Bogenmitten
+  fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+  const rIn = 30;
+  const midA = drawAngleSector(ctx, A,  B,  C0, rIn, 'rgba(30,58,138,0.18)',  C.blau);
+  const midB = drawAngleSector(ctx, B,  C0, A,  rIn, 'rgba(22,101,52,0.18)',  C.gruen);
+  const midC = drawAngleSector(ctx, C0, A,  B,  rIn, 'rgba(107,33,168,0.18)', C.lila);
+  // Symbole an Bogenmitten (weiter aussen)
+  const lblA = arcLabelPos(A,  midA, rIn + 14);
+  const lblB = arcLabelPos(B,  midB, rIn + 14);
+  const lblC = arcLabelPos(C0, midC, rIn + 14);
+  txt(ctx, lblA[0], lblA[1], 'α', C.blau,  14, 'center', 'middle', '700');
+  txt(ctx, lblB[0], lblB[1], 'β', C.gruen, 14, 'center', 'middle', '700');
+  txt(ctx, lblC[0], lblC[1], 'γ', C.lila,  14, 'center', 'middle', '700');
+
+  // Eckpunkte: weit nach AUSSEN versetzt, klar vom Bogen abgesetzt
+  txt(ctx, A[0] - 18, A[1] + 18, 'A', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, B[0] + 18, B[1] + 18, 'B', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, C0[0],     C0[1] - 22, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+  // Phase 2: Parallele durch C zur Seite c (= AB)
+  const tParallel = clamp((t - 0.05) / 0.30, 0, 1);
+  if (tParallel > 0.01) {
+    const dx = B[0] - A[0], dy = B[1] - A[1];
+    const len = Math.hypot(dx, dy);
+    const ux = dx / len, uy = dy / len;
+    const reach = 180 * tParallel;
+    const PL = [C0[0] - ux * reach, C0[1] - uy * reach];
+    const PR = [C0[0] + ux * reach, C0[1] + uy * reach];
+    seg(ctx, PL, PR, C.orange, 2);
+    if (tParallel > 0.6) {
+      // Beschriftung der Parallele OBERHALB (Y - 12), damit sie nicht mit dem Dreieck kollidiert
+      txt(ctx, PR[0] - 6, PR[1] - 12, 'parallel zu c', C.orange, 14, 'right', 'middle', '600');
+    }
+  }
+
+  // Phase 3: Wechselwinkel bei C — α auf der linken Seite, β auf der rechten
+  const tWechsel = clamp((t - 0.35) / 0.35, 0, 1);
+  if (tWechsel > 0.01) {
+    const dx = B[0] - A[0], dy = B[1] - A[1];
+    const len = Math.hypot(dx, dy);
+    const ux = dx / len, uy = dy / len;
+    const reach = 60;
+    const PL = [C0[0] - ux * reach, C0[1] - uy * reach];
+    const PR = [C0[0] + ux * reach, C0[1] + uy * reach];
+    const rWX = 28;
+    const midL = drawAngleSector(ctx, C0, A, PL, rWX, `rgba(30,58,138,${0.20 * tWechsel})`, C.blau);
+    const midR = drawAngleSector(ctx, C0, B, PR, rWX, `rgba(22,101,52,${0.20 * tWechsel})`, C.gruen);
+    if (tWechsel > 0.5) {
+      const lL = arcLabelPos(C0, midL, rWX + 14);
+      const lR = arcLabelPos(C0, midR, rWX + 14);
+      txt(ctx, lL[0], lL[1], 'α', C.blau,  14, 'center', 'middle', '700');
+      txt(ctx, lR[0], lR[1], 'β', C.gruen, 14, 'center', 'middle', '700');
+    }
+  }
+
+  // Phase 4: gestreckter 180°-Winkel bei C
+  const tFinal = clamp((t - 0.70) / 0.30, 0, 1);
+  if (tFinal > 0.5) {
+    ctx.save();
+    ctx.strokeStyle = C.rot;
+    ctx.lineWidth = 2.5;
+    ctx.globalAlpha = (tFinal - 0.5) * 2;
+    const dx = B[0] - A[0], dy = B[1] - A[1];
+    const len = Math.hypot(dx, dy);
+    const ux = dx / len, uy = dy / len;
+    ctx.beginPath();
+    ctx.moveTo(C0[0] - ux * 90, C0[1] - uy * 90);
+    ctx.lineTo(C0[0] + ux * 90, C0[1] + uy * 90);
+    ctx.stroke();
+    ctx.restore();
+    // 180°-Beschriftung WEIT oberhalb C (Y - 56), so dass sie über dem 'C' und der Parallele steht
+    txt(ctx, C0[0], C0[1] - 60, 'α + γ + β = 180°', C.rot, 14, 'center', 'middle', '700');
+  }
+
+  // Formel + Erklärung
+  if (tFinal > 0.7) {
+    beweisFbox.innerHTML = '\\( \\alpha + \\beta + \\gamma = 180° \\)';
+    beweisFbox.classList.add('fertig');
+  } else {
+    beweisFbox.innerHTML = '\\( \\alpha + \\beta + \\gamma = \\;?\\)';
+    beweisFbox.classList.remove('fertig');
+  }
+  if (t < 0.05) {
+    beweisErkl.textContent = 'Ausgangsfigur: ein beliebiges Dreieck mit Innenwinkeln α, β, γ.';
+  } else if (t < 0.35) {
+    beweisErkl.textContent = 'Wir ziehen durch C die Parallele zur Seite c (= AB).';
+  } else if (t < 0.70) {
+    beweisErkl.textContent = 'An parallelen Geraden sind Wechselwinkel gleich gross: bei C entsteht α auf der einen, β auf der anderen Seite — neben γ.';
+  } else {
+    beweisErkl.textContent = 'Die drei Winkel α, γ, β bilden bei C zusammen einen gestreckten Winkel: α + γ + β = 180°.';
+  }
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([beweisFbox]);
+}
+
+/* ============================================================
+ *  ANIMATION 3 — Spezielle Dreiecke
+ * ============================================================ */
+let spezTyp = 'gleichschenklig';
+const spezTabs = document.getElementById('spez-tabs');
+const spezSld1 = document.getElementById('spez-sld-1');
+const spezSld2 = document.getElementById('spez-sld-2');
+const spezLbl1 = document.getElementById('spez-lbl-1');
+const spezLbl2 = document.getElementById('spez-lbl-2');
+const spezVal1 = document.getElementById('spez-val-1');
+const spezVal2 = document.getElementById('spez-val-2');
+const spezLegende = document.getElementById('spez-legende');
+const spezReglerEl2 = document.getElementById('spez-regler-2');
+
+spezTabs.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    spezTabs.querySelectorAll('.chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    spezTyp = btn.dataset.typ;
+    updateSpezRegler();
+    drawSpez();
+  });
+});
+spezSld1.addEventListener('input', drawSpez);
+spezSld2.addEventListener('input', drawSpez);
+
+function updateSpezRegler() {
+  if (spezTyp === 'gleichschenklig') {
+    spezLbl1.textContent = 'Schenkellänge';
+    spezLbl2.textContent = 'Basiswinkel β = γ';
+    spezSld1.min = 80; spezSld1.max = 200; spezSld1.value = 140;
+    spezSld2.min = 20; spezSld2.max = 85;  spezSld2.value = 55;
+    spezReglerEl2.style.display = '';
+  } else if (spezTyp === 'rechtwinklig') {
+    spezLbl1.textContent = 'Kathete a';
+    spezLbl2.textContent = 'Kathete b';
+    spezSld1.min = 80; spezSld1.max = 220; spezSld1.value = 160;
+    spezSld2.min = 60; spezSld2.max = 180; spezSld2.value = 120;
+    spezReglerEl2.style.display = '';
+  } else { // gleichseitig
+    spezLbl1.textContent = 'Seitenlänge a';
+    spezSld1.min = 80; spezSld1.max = 220; spezSld1.value = 150;
+    spezReglerEl2.style.display = 'none';
+  }
+}
+updateSpezRegler();
+
+function drawSpez() {
+  const { ctx, W, H } = initCv('cv-spez');
+  const cx = W / 2, cy = H / 2 + 20;
+
+  if (spezTyp === 'gleichschenklig') {
+    const s = +spezSld1.value;                       // Schenkellänge in Pixeln
+    const basisWinkel = +spezSld2.value * Math.PI / 180;
+    const basis = 2 * s * Math.cos(basisWinkel);
+    const A = [cx - basis / 2, cy + s * Math.sin(basisWinkel) / 2];
+    const B = [cx + basis / 2, cy + s * Math.sin(basisWinkel) / 2];
+    const C0 = [cx, cy - s * Math.sin(basisWinkel) / 2];
+    fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+    // Schenkel hervorheben (gleich lang) — das sind a (zwischen B und C) und b (zwischen A und C)
+    seg(ctx, A, C0, C.gruen, 3);
+    seg(ctx, B, C0, C.gruen, 3);
+
+    // Winkel-Bögen mit korrekter Beschriftung (α bei A, β bei B, γ bei C)
+    const rb = 26;
+    const midAlpha = drawAngleSector(ctx, A,  B,  C0, rb, 'rgba(30,58,138,0.18)',  C.blau);
+    const midBeta  = drawAngleSector(ctx, B,  C0, A,  rb, 'rgba(30,58,138,0.18)',  C.blau);
+    const midGamma = drawAngleSector(ctx, C0, A,  B,  22, 'rgba(107,33,168,0.18)', C.lila);
+    const lA = arcLabelPos(A,  midAlpha, rb + 14);
+    const lB = arcLabelPos(B,  midBeta,  rb + 14);
+    const lG = arcLabelPos(C0, midGamma, 22 + 14);
+    txt(ctx, lA[0], lA[1], 'α', C.blau,  14, 'center', 'middle', '700');
+    txt(ctx, lB[0], lB[1], 'β', C.blau,  14, 'center', 'middle', '700');
+    txt(ctx, lG[0], lG[1], 'γ', C.lila,  14, 'center', 'middle', '700');
+
+    // Eckpunkt-Beschriftungen weiter aussen
+    txt(ctx, A[0]-18, A[1]+18, 'A', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B[0]+18, B[1]+18, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C0[0],   C0[1]-20, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+    // Seitenbeschriftung mit Versatz nach AUSSEN
+    const sideLabel = (P, Q, R, dist = 18) => {
+      const mid = [(P[0]+Q[0])/2, (P[1]+Q[1])/2];
+      const dx = mid[0] - R[0], dy = mid[1] - R[1];
+      const len = Math.hypot(dx, dy) || 1;
+      return [mid[0] + dx/len * dist, mid[1] + dy/len * dist];
+    };
+    const labA = sideLabel(B, C0, A);
+    const labB = sideLabel(C0, A, B);
+    const labC = sideLabel(A, B, C0);
+    txt(ctx, labA[0], labA[1], 'a', C.gruen, 14, 'center', 'middle', '600');
+    txt(ctx, labB[0], labB[1], 'b', C.gruen, 14, 'center', 'middle', '600');
+    txt(ctx, labC[0], labC[1], 'c', C.tinte2, 14, 'center', 'middle', '600');
+
+    // Werte
+    const gammaDeg = (Math.PI - 2 * basisWinkel) * 180 / Math.PI;
+    const betaDeg = basisWinkel * 180 / Math.PI;
+    spezVal1.textContent = (s/10).toFixed(1) + ' cm';
+    spezVal2.textContent = betaDeg.toFixed(1) + '°';
+    spezLegende.innerHTML = `
+      <div class="legende-titel">Werte</div>
+      <div class="legende-zeile"><span class="lab">a = b (Schenkel)</span><span class="val">${(s/10).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">c (Basis)</span><span class="val">${(basis/10).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">α = β (Basiswinkel)</span><span class="val">${betaDeg.toFixed(1)}°</span></div>
+      <div class="legende-zeile"><span class="lab">γ (Spitzenwinkel)</span><span class="val">${gammaDeg.toFixed(1)}°</span></div>
+      <div class="legende-zeile" style="border-top: 1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab"><strong>Summe</strong></span><span class="val"><strong>180°</strong></span></div>
+    `;
+  }
+  else if (spezTyp === 'rechtwinklig') {
+    // Konvention: rechter Winkel bei C (also γ = 90°).
+    // → c = Hypotenuse (gegenüber C, zwischen A und B)
+    //   a = gegenüber A (zwischen B und C)
+    //   b = gegenüber B (zwischen A und C)
+    // Wir platzieren C unten links (rechter Winkel), B unten rechts, A oben links.
+    // Dann ist:  Kathete a (B→C) waagerecht  (Strecke unten)
+    //            Kathete b (A→C) senkrecht   (Strecke links)
+    //            Hypotenuse c diagonal       (oben rechts)
+    // Schieber 1 = Kathete a (waagerecht), Schieber 2 = Kathete b (senkrecht)
+    const aLen = +spezSld1.value;    // waagerechte Kathete
+    const bLen = +spezSld2.value;    // senkrechte Kathete
+    const C0_  = [cx - aLen / 2,  cy + bLen / 2];     // rechter Winkel
+    const B_   = [C0_[0] + aLen,  C0_[1]];             // unten rechts
+    const A_   = [C0_[0],         C0_[1] - bLen];      // oben links
+
+    fillPoly(ctx, [A_, B_, C0_], BLAU_FILL, C.blau, 2);
+    seg(ctx, B_, C0_, C.gruen, 3);   // a (zwischen B und C)
+    seg(ctx, A_, C0_, C.gruen, 3);   // b (zwischen A und C)
+    seg(ctx, A_, B_,  C.lila,  3);   // c = Hypotenuse
+
+    // Rechtwinkel-Marker bei C
+    const sq = 14;
+    ctx.save();
+    ctx.strokeStyle = C.tinte;
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(C0_[0], C0_[1] - sq, sq, sq);
+    ctx.restore();
+
+    // Winkel-Bögen für α (bei A) und β (bei B) — γ ist 90° und schon markiert
+    const rRW = 24;
+    const midA = drawAngleSector(ctx, A_, B_, C0_, rRW, 'rgba(30,58,138,0.18)', C.blau);
+    const midB = drawAngleSector(ctx, B_, C0_, A_, rRW, 'rgba(22,101,52,0.18)', C.gruen);
+    const lA = arcLabelPos(A_, midA, rRW + 14);
+    const lB = arcLabelPos(B_, midB, rRW + 14);
+    txt(ctx, lA[0], lA[1], 'α', C.blau,  14, 'center', 'middle', '700');
+    txt(ctx, lB[0], lB[1], 'β', C.gruen, 14, 'center', 'middle', '700');
+
+    // Eckpunkt-Beschriftungen
+    txt(ctx, A_[0]-18,  A_[1],     'A', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B_[0]+18,  B_[1]+10,  'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C0_[0]-18, C0_[1]+10, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+    // Seitenbeschriftungen mit Versatz nach AUSSEN
+    txt(ctx, (B_[0]+C0_[0])/2,       C0_[1]+20,           'a', C.gruen,  14, 'center', 'middle', '700');
+    txt(ctx, C0_[0]-12,              (A_[1]+C0_[1])/2,    'b', C.gruen,  14, 'right',  'middle', '700');
+    txt(ctx, (A_[0]+B_[0])/2 + 18,   (A_[1]+B_[1])/2 - 4, 'c', C.lila,   14, 'left',   'middle', '700');
+
+    // Werte
+    const cLen = Math.hypot(aLen, bLen);
+    const alphaDeg = Math.atan2(aLen, bLen) * 180 / Math.PI;   // Winkel bei A (gegenüber a)
+    const betaDeg  = Math.atan2(bLen, aLen) * 180 / Math.PI;   // Winkel bei B (gegenüber b)
+    spezVal1.textContent = (aLen/10).toFixed(1) + ' cm';
+    spezVal2.textContent = (bLen/10).toFixed(1) + ' cm';
+    spezLegende.innerHTML = `
+      <div class="legende-titel">Werte</div>
+      <div class="legende-zeile"><span class="lab">a (Kathete)</span><span class="val">${(aLen/10).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">b (Kathete)</span><span class="val">${(bLen/10).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">c (Hypotenuse)</span><span class="val">${(cLen/10).toFixed(2)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">α</span><span class="val">${alphaDeg.toFixed(1)}°</span></div>
+      <div class="legende-zeile"><span class="lab">β</span><span class="val">${betaDeg.toFixed(1)}°</span></div>
+      <div class="legende-zeile"><span class="lab">γ</span><span class="val">90°</span></div>
+    `;
+  }
+  else { // gleichseitig
+    const s = +spezSld1.value;
+    const h = s * Math.sqrt(3) / 2;
+    const A = [cx - s/2, cy + h/3];
+    const B = [cx + s/2, cy + h/3];
+    const C0 = [cx, cy + h/3 - h];
+    fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+    seg(ctx, A, B,  C.gruen, 3);
+    seg(ctx, B, C0, C.gruen, 3);
+    seg(ctx, C0, A, C.gruen, 3);
+
+    // Drei 60°-Winkelbögen, alle gleich gross — Symbole 60° an Bogenmitten
+    const r60 = 22;
+    const midA = drawAngleSector(ctx, A,  B,  C0, r60, 'rgba(30,58,138,0.18)', C.blau);
+    const midB = drawAngleSector(ctx, B,  C0, A,  r60, 'rgba(30,58,138,0.18)', C.blau);
+    const midC = drawAngleSector(ctx, C0, A,  B,  r60, 'rgba(30,58,138,0.18)', C.blau);
+    const lA = arcLabelPos(A,  midA, r60 + 16);
+    const lB = arcLabelPos(B,  midB, r60 + 16);
+    const lC = arcLabelPos(C0, midC, r60 + 16);
+    txt(ctx, lA[0], lA[1], '60°', C.blau, 14, 'center', 'middle', '700');
+    txt(ctx, lB[0], lB[1], '60°', C.blau, 14, 'center', 'middle', '700');
+    txt(ctx, lC[0], lC[1], '60°', C.blau, 14, 'center', 'middle', '700');
+
+    // Eckpunkte
+    txt(ctx, A[0]-18, A[1]+18, 'A', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B[0]+18, B[1]+18, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C0[0],   C0[1]-20, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+    // Alle drei Seiten beschriften (a, b, c)
+    const sideLabel = (P, Q, R, dist = 18) => {
+      const mid = [(P[0]+Q[0])/2, (P[1]+Q[1])/2];
+      const dx = mid[0] - R[0], dy = mid[1] - R[1];
+      const len = Math.hypot(dx, dy) || 1;
+      return [mid[0] + dx/len * dist, mid[1] + dy/len * dist];
+    };
+    const labA = sideLabel(B, C0, A);
+    const labB = sideLabel(C0, A, B);
+    const labC = sideLabel(A, B, C0);
+    txt(ctx, labA[0], labA[1], 'a', C.gruen, 14, 'center', 'middle', '700');
+    txt(ctx, labB[0], labB[1], 'b', C.gruen, 14, 'center', 'middle', '700');
+    txt(ctx, labC[0], labC[1], 'c', C.gruen, 14, 'center', 'middle', '700');
+
+    spezVal1.textContent = (s/10).toFixed(1) + ' cm';
+    spezLegende.innerHTML = `
+      <div class="legende-titel">Werte</div>
+      <div class="legende-zeile"><span class="lab">a = b = c</span><span class="val">${(s/10).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">α = β = γ</span><span class="val">60°</span></div>
+      <div class="legende-zeile"><span class="lab">Höhe h = a·√3/2</span><span class="val">${(h/10).toFixed(2)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">Fläche A = a²·√3/4</span><span class="val">${(s*s*Math.sqrt(3)/4/100).toFixed(2)} cm²</span></div>
+    `;
+  }
+}
+
+/* ============================================================
+ *  ANIMATION 4 — Dreieckselemente
+ * ============================================================ */
+let elemTyp = 'hoehen';
+const elemTabs = document.getElementById('elem-tabs');
+const elemTogKreis = document.getElementById('elem-tog-kreis');
+const elemNameEl = document.getElementById('elem-name');
+const elemValEl = document.getElementById('elem-val');
+const elemErkl = document.getElementById('elem-erkl');
+
+const elemPts = [[110, 350], [450, 350], [260, 110]];
+
+elemTabs.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    elemTabs.querySelectorAll('.chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    elemTyp = btn.dataset.el;
+    drawElem();
+  });
+});
+elemTogKreis.addEventListener('change', drawElem);
+
+function drawElem() {
+  const { ctx, W, H, cv } = initCv('cv-elem');
+  const [A, B, C0] = elemPts;
+  fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+
+  let schnittpunkt = null;
+  let kreisRadius = 0;
+  let kreisMitte = null;
+  let beschreibung = '';
+  let punktName = '';
+
+  if (elemTyp === 'hoehen') {
+    // Lotfusspunkte
+    const fA = footPerp(A, B, C0);   // Fuss auf BC
+    const fB = footPerp(B, A, C0);   // Fuss auf AC
+    const fC = footPerp(C0, A, B);   // Fuss auf AB
+    // Höhen — als ganze Geraden bis zum Bildrand zeichnen,
+    // damit die Schnittpunkte auch bei stumpfwinkligen Dreiecken sichtbar sind.
+    const drawFullLine = (P, Q) => {
+      const d = [Q[0]-P[0], Q[1]-P[1]];
+      const seg2 = clipLineToRect(P, d, W, H);
+      if (seg2) seg(ctx, seg2[0], seg2[1], C.orange, 2);
+      else      seg(ctx, P, Q, C.orange, 2);
+    };
+    drawFullLine(A,  fA);
+    drawFullLine(B,  fB);
+    drawFullLine(C0, fC);
+    // Schnittpunkt (Höhenschnittpunkt H)
+    const H1 = lineIntersect(A, [fA[0]-A[0], fA[1]-A[1]], B, [fB[0]-B[0], fB[1]-B[1]]);
+    schnittpunkt = H1;
+    punktName = 'Höhenschnittpunkt H';
+    beschreibung = 'Die drei Höhen (Lote vom Eckpunkt auf die Gegenseite) schneiden sich im Höhenschnittpunkt H.';
+    // Rechtwinkel-Marker
+    drawSmallRect(ctx, A, fA, B);
+    drawSmallRect(ctx, B, fB, A);
+    drawSmallRect(ctx, C0, fC, A);
+  }
+  else if (elemTyp === 'mittelsenkrechten') {
+    // Mittelpunkte der Seiten
+    const mAB = [(A[0]+B[0])/2, (A[1]+B[1])/2];
+    const mBC = [(B[0]+C0[0])/2, (B[1]+C0[1])/2];
+    const mCA = [(C0[0]+A[0])/2, (C0[1]+A[1])/2];
+    // Senkrechte Richtungen (90° zur Seite)
+    const perp = (p, q) => [-(q[1]-p[1]), q[0]-p[0]];
+    const dAB = perp(A, B), dBC = perp(B, C0), dCA = perp(C0, A);
+    // Verlängern bis zum Bildrand — sonst schneiden sich die Geraden visuell nicht,
+    // wenn der Schnittpunkt (Umkreismittelpunkt) bei stumpfwinkligen Dreiecken
+    // ausserhalb des Dreiecks liegt.
+    const drawPerp = (m, d) => {
+      const seg2 = clipLineToRect(m, d, W, H);
+      if (seg2) seg(ctx, seg2[0], seg2[1], C.orange, 2);
+    };
+    drawPerp(mAB, dAB);
+    drawPerp(mBC, dBC);
+    drawPerp(mCA, dCA);
+    // Schnittpunkt = Umkreismittelpunkt
+    const MU = lineIntersect(mAB, dAB, mBC, dBC);
+    schnittpunkt = MU;
+    kreisMitte = MU;
+    kreisRadius = dist(MU, A);
+    punktName = 'Umkreismittelpunkt M<sub>U</sub>';
+    beschreibung = 'Die drei Mittelsenkrechten schneiden sich im Umkreismittelpunkt M_U — er liegt von allen Eckpunkten gleich weit entfernt.';
+    // Mittelpunkte markieren mit Beschriftung M_a (Mitte von BC, gegenüber A), M_b (Mitte CA), M_c (Mitte AB)
+    dot(ctx, mAB, C.tinte2, 4);
+    dot(ctx, mBC, C.tinte2, 4);
+    dot(ctx, mCA, C.tinte2, 4);
+    // Beschriftung der Mittelpunkte mit Versatz nach AUSSEN (weg vom Dreiecks-Zentrum)
+    const tri_center = [(A[0]+B[0]+C0[0])/3, (A[1]+B[1]+C0[1])/3];
+    const lbl_offset = (P, dist = 14) => {
+      const dx = P[0] - tri_center[0], dy = P[1] - tri_center[1];
+      const len = Math.hypot(dx, dy) || 1;
+      return [P[0] + dx/len * dist, P[1] + dy/len * dist];
+    };
+    const lMc = lbl_offset(mAB);   // Mitte von c = AB → M_c
+    const lMa = lbl_offset(mBC);   // Mitte von a = BC → M_a
+    const lMb = lbl_offset(mCA);   // Mitte von b = CA → M_b
+    txt(ctx, lMc[0], lMc[1], 'M_c', C.tinte2, 14, 'center', 'middle', '700');
+    txt(ctx, lMa[0], lMa[1], 'M_a', C.tinte2, 14, 'center', 'middle', '700');
+    txt(ctx, lMb[0], lMb[1], 'M_b', C.tinte2, 14, 'center', 'middle', '700');
+    // Rechtwinkel-Marker AN JEDEM Seitenmittelpunkt (Mittelsenkrechte ⊥ Seite)
+    // Wir geben drawSmallRect die richtigen Richtungen: ein Schenkel entlang der Seite,
+    // der andere entlang der Mittelsenkrechten — Ecke an mAB
+    const mark = (mid, sideEnd, perpEnd) => {
+      // Klein-Quadrat-Marker; "P" und "towards" sind beliebige Richtungspunkte
+      const sz = 9;
+      const v1 = [sideEnd[0]-mid[0], sideEnd[1]-mid[1]];
+      const v2 = [perpEnd[0]-mid[0], perpEnd[1]-mid[1]];
+      const n1 = Math.hypot(...v1), n2 = Math.hypot(...v2);
+      if (n1 < 1 || n2 < 1) return;
+      const u1 = [v1[0]/n1*sz, v1[1]/n1*sz];
+      const u2 = [v2[0]/n2*sz, v2[1]/n2*sz];
+      ctx.save();
+      ctx.strokeStyle = C.orange; ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(mid[0]+u1[0], mid[1]+u1[1]);
+      ctx.lineTo(mid[0]+u1[0]+u2[0], mid[1]+u1[1]+u2[1]);
+      ctx.lineTo(mid[0]+u2[0], mid[1]+u2[1]);
+      ctx.stroke();
+      ctx.restore();
+    };
+    // Wir setzen die Marker auf die Seite hin, dann zur Mittelsenkrechten hin (zur Innen-Seite des Dreiecks)
+    mark(mAB, B,  MU || tri_center);   // bei M_c: Schenkel zu B, Schenkel zu MU
+    mark(mBC, C0, MU || tri_center);   // bei M_a
+    mark(mCA, A,  MU || tri_center);   // bei M_b
+  }
+  else if (elemTyp === 'seitenhalbierende') {
+    const mAB = [(A[0]+B[0])/2, (A[1]+B[1])/2];
+    const mBC = [(B[0]+C0[0])/2, (B[1]+C0[1])/2];
+    const mCA = [(C0[0]+A[0])/2, (C0[1]+A[1])/2];
+    seg(ctx, C0, mAB, C.orange, 2);
+    seg(ctx, A, mBC, C.orange, 2);
+    seg(ctx, B, mCA, C.orange, 2);
+    const S = [(A[0]+B[0]+C0[0])/3, (A[1]+B[1]+C0[1])/3];
+    schnittpunkt = S;
+    punktName = 'Schwerpunkt S';
+    beschreibung = 'Die drei Seitenhalbierenden (Verbindung Eckpunkt — Mittelpunkt der Gegenseite) schneiden sich im Schwerpunkt S; er teilt jede Seitenhalbierende im Verhältnis 2 : 1.';
+    // Mittelpunkte mit Beschriftung M_a, M_b, M_c (gleich wie bei Mittelsenkrechten)
+    dot(ctx, mAB, C.tinte2, 4);
+    dot(ctx, mBC, C.tinte2, 4);
+    dot(ctx, mCA, C.tinte2, 4);
+    const tri_center_s = [(A[0]+B[0]+C0[0])/3, (A[1]+B[1]+C0[1])/3];
+    const lbl_offset_s = (P, dist = 14) => {
+      const dx = P[0] - tri_center_s[0], dy = P[1] - tri_center_s[1];
+      const len = Math.hypot(dx, dy) || 1;
+      return [P[0] + dx/len * dist, P[1] + dy/len * dist];
+    };
+    const lMc_s = lbl_offset_s(mAB);
+    const lMa_s = lbl_offset_s(mBC);
+    const lMb_s = lbl_offset_s(mCA);
+    txt(ctx, lMc_s[0], lMc_s[1], 'M_c', C.tinte2, 14, 'center', 'middle', '700');
+    txt(ctx, lMa_s[0], lMa_s[1], 'M_a', C.tinte2, 14, 'center', 'middle', '700');
+    txt(ctx, lMb_s[0], lMb_s[1], 'M_b', C.tinte2, 14, 'center', 'middle', '700');
+  }
+  else if (elemTyp === 'winkelhalbierende') {
+    // Winkelhalbierende: durch jede Ecke, halbiert den Innenwinkel.
+    // Richtung der Winkelhalbierenden = normierte Summe der Richtungen zu den anderen beiden Ecken.
+    const norm = v => { const l = Math.hypot(...v); return [v[0]/l, v[1]/l]; };
+    const dirHalfA = norm([norm([B[0]-A[0], B[1]-A[1]])[0] + norm([C0[0]-A[0], C0[1]-A[1]])[0],
+                            norm([B[0]-A[0], B[1]-A[1]])[1] + norm([C0[0]-A[0], C0[1]-A[1]])[1]]);
+    const dirHalfB = norm([norm([A[0]-B[0], A[1]-B[1]])[0] + norm([C0[0]-B[0], C0[1]-B[1]])[0],
+                            norm([A[0]-B[0], A[1]-B[1]])[1] + norm([C0[0]-B[0], C0[1]-B[1]])[1]]);
+    const dirHalfC = norm([norm([A[0]-C0[0], A[1]-C0[1]])[0] + norm([B[0]-C0[0], B[1]-C0[1]])[0],
+                            norm([A[0]-C0[0], A[1]-C0[1]])[1] + norm([B[0]-C0[0], B[1]-C0[1]])[1]]);
+    // Schnittpunkt der Winkelhalbierenden = Inkreismittelpunkt
+    const MI = lineIntersect(A, dirHalfA, B, dirHalfB);
+    // Verlängern OVER MI hinaus zum gegenüberliegenden Seitenrand
+    const fA_opp = lineIntersect(A, dirHalfA, B, [C0[0]-B[0], C0[1]-B[1]]);
+    const fB_opp = lineIntersect(B, dirHalfB, A, [C0[0]-A[0], C0[1]-A[1]]);
+    const fC_opp = lineIntersect(C0, dirHalfC, A, [B[0]-A[0], B[1]-A[1]]);
+    // Die drei Linien: von Ecke bis Seitenrand (über MI hinaus geführt)
+    seg(ctx, A,  fA_opp || [A[0]+dirHalfA[0]*400, A[1]+dirHalfA[1]*400], C.orange, 2);
+    seg(ctx, B,  fB_opp || [B[0]+dirHalfB[0]*400, B[1]+dirHalfB[1]*400], C.orange, 2);
+    seg(ctx, C0, fC_opp || [C0[0]+dirHalfC[0]*400, C0[1]+dirHalfC[1]*400], C.orange, 2);
+
+    // === HALBE WINKEL einzeichnen — pro Ecke zwei Bögen (links und rechts der Halbierenden) ===
+    // Helfer: Punkt auf Halbierender (Richtung), Punkt auf einer Seite des Dreiecks
+    const halfArc = (P, sidePt, halfDirEnd, color) => {
+      // Bogen zwischen Strahl (P → sidePt) und Strahl (P → halfDirEnd)
+      // Diesen Bogen einzeichnen, mit kleinerem Radius als ein voller Innenwinkel-Bogen,
+      // damit zwei nebeneinander Platz haben.
+      const r = 22;
+      const mid = drawAngleSector(ctx, P, sidePt, halfDirEnd, r,
+                                   'rgba(194, 65, 12, 0.12)', color);
+      return [mid, r];
+    };
+    // Punkt auf der Halbierenden in Richtung der Innenseite (kurzer Strahl):
+    const hEndA = [A[0]  + dirHalfA[0]*80, A[1]  + dirHalfA[1]*80];
+    const hEndB = [B[0]  + dirHalfB[0]*80, B[1]  + dirHalfB[1]*80];
+    const hEndC = [C0[0] + dirHalfC[0]*80, C0[1] + dirHalfC[1]*80];
+
+    // Bei A: Bogen zwischen AB und Halbierender + Bogen zwischen AC und Halbierender
+    const [midAh1] = halfArc(A, B,  hEndA, C.orange);
+    const [midAh2] = halfArc(A, hEndA, C0,  C.orange);
+    // Symbol "α/2" einmalig in der Mitte des inneren Bogens (zwischen AB und Halbierender)
+    const lblA = arcLabelPos(A, midAh1, 22 + 14);
+    txt(ctx, lblA[0], lblA[1], 'α/2', C.orange, 14, 'center', 'middle', '700');
+    const lblA2 = arcLabelPos(A, midAh2, 22 + 14);
+    txt(ctx, lblA2[0], lblA2[1], 'α/2', C.orange, 14, 'center', 'middle', '700');
+
+    // Bei B: zwischen BA und Halbierender + zwischen BC und Halbierender
+    const [midBh1] = halfArc(B, A,  hEndB, C.orange);
+    const [midBh2] = halfArc(B, hEndB, C0, C.orange);
+    const lblB1 = arcLabelPos(B, midBh1, 22 + 14);
+    const lblB2 = arcLabelPos(B, midBh2, 22 + 14);
+    txt(ctx, lblB1[0], lblB1[1], 'β/2', C.orange, 14, 'center', 'middle', '700');
+    txt(ctx, lblB2[0], lblB2[1], 'β/2', C.orange, 14, 'center', 'middle', '700');
+
+    // Bei C: zwischen CA und Halbierender + zwischen CB und Halbierender
+    const [midCh1] = halfArc(C0, A,  hEndC, C.orange);
+    const [midCh2] = halfArc(C0, hEndC, B,  C.orange);
+    const lblC1 = arcLabelPos(C0, midCh1, 22 + 14);
+    const lblC2 = arcLabelPos(C0, midCh2, 22 + 14);
+    txt(ctx, lblC1[0], lblC1[1], 'γ/2', C.orange, 14, 'center', 'middle', '700');
+    txt(ctx, lblC2[0], lblC2[1], 'γ/2', C.orange, 14, 'center', 'middle', '700');
+
+    schnittpunkt = MI;
+    kreisMitte = MI;
+    if (MI) {
+      const f_AB = footPerp(MI, A, B);
+      kreisRadius = dist(MI, f_AB);
+    }
+    punktName = 'Inkreismittelpunkt M<sub>I</sub>';
+    beschreibung = 'Die drei Winkelhalbierenden schneiden sich im Inkreismittelpunkt M_I. Jede halbiert den Innenwinkel in zwei gleich grosse Teile (α/2, β/2, γ/2).';
+  }
+
+  // Eckpunkte
+  txt(ctx, A[0]-16, A[1]+16, 'A', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, B[0]+16, B[1]+16, 'B', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, C0[0],   C0[1]-18, 'C', C.tinte, 14, 'center', 'middle', '700');
+  dot(ctx, A, C.blau, 5);
+  dot(ctx, B, C.blau, 5);
+  dot(ctx, C0, C.blau, 5);
+
+  // Schnittpunkt einzeichnen
+  if (schnittpunkt) {
+    dot(ctx, schnittpunkt, C.rot, 6);
+    const labelTxt = elemTyp === 'hoehen' ? 'H'
+                    : elemTyp === 'mittelsenkrechten' ? 'M_U'
+                    : elemTyp === 'seitenhalbierende' ? 'S'
+                    : 'M_I';
+    txt(ctx, schnittpunkt[0]+12, schnittpunkt[1]-12, labelTxt, C.rot, 14, 'left', 'middle', '700');
+  }
+
+  // Um- bzw. Inkreis
+  if (elemTogKreis.checked && kreisMitte && kreisRadius > 0) {
+    ctx.save();
+    ctx.strokeStyle = C.lila;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(kreisMitte[0], kreisMitte[1], kreisRadius, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Legende
+  elemNameEl.innerHTML = punktName;
+  elemValEl.textContent = '';
+  elemErkl.textContent = beschreibung;
+}
+
+function drawSmallRect(ctx, P, F, towards) {
+  // Kleines Quadrat-Symbol für rechten Winkel bei F, Seite zeigt auf P und Q (towards)
+  const sz = 10;
+  const v1 = [P[0]-F[0], P[1]-F[1]];
+  const v2 = [towards[0]-F[0], towards[1]-F[1]];
+  const n1 = Math.hypot(...v1), n2 = Math.hypot(...v2);
+  if (n1 < 1 || n2 < 1) return;
+  const u1 = [v1[0]/n1*sz, v1[1]/n1*sz];
+  const u2 = [v2[0]/n2*sz, v2[1]/n2*sz];
+  ctx.save();
+  ctx.strokeStyle = C.tinte2;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(F[0]+u1[0], F[1]+u1[1]);
+  ctx.lineTo(F[0]+u1[0]+u2[0], F[1]+u1[1]+u2[1]);
+  ctx.lineTo(F[0]+u2[0], F[1]+u2[1]);
+  ctx.stroke();
+  ctx.restore();
+}
+
+makeDraggable(document.getElementById('cv-elem'), elemPts, drawElem);
+
+/* ============================================================
+ *  ANIMATION 5 — Flächenberechnung Dreieck (aus Eval-Seite)
+ * ============================================================ */
+const sldFl = document.getElementById('sld-fl');
+const flLbl = document.getElementById('fl-t');
+const flFbox = document.getElementById('fl-fbox');
+const flErkl = document.getElementById('fl-erkl');
+const flSchritte = document.getElementById('fl-schritte');
+const flTogMasse = document.getElementById('fl-tog-masse');
+
+sldFl.addEventListener('input', drawFl);
+flTogMasse.addEventListener('change', drawFl);
+
+function drawZielRechteckSimple(ctx, xLinks, xRechts, yUnten, hoeheGruen, alpha) {
+  if (alpha <= 0.01) return;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = GRUEN_FILL;
+  ctx.fillRect(xLinks, yUnten - hoeheGruen, xRechts - xLinks, hoeheGruen);
+  ctx.strokeStyle = C.gruen;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(xLinks, yUnten - hoeheGruen, xRechts - xLinks, hoeheGruen);
+  ctx.restore();
+}
+function drawMassFl(ctx, x1, y1, x2, y2, label, lage) {
+  ctx.save();
+  ctx.strokeStyle = C.tinte2;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.fillStyle = C.tinte;
+  ctx.font = '600 13px "Source Sans 3", sans-serif';
+  if (lage === 'unten') {
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText(label, (x1+x2)/2, y1+5);
+  } else if (lage === 'rechts') {
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(label, x1+5, (y1+y2)/2);
+  }
+  ctx.restore();
+}
+
+function drawFl() {
+  const t = +sldFl.value;
+  flLbl.textContent = t.toFixed(2);
+  updateSchritte(flSchritte, t, [0.05, 0.40, 0.85]);
+
+  const { ctx, W, H } = initCv('cv-flaeche');
+  const cx = W / 2, cy = H / 2 + 10;
+  const g = 260, h = 140, schraeg = 70;
+  const yU = cy + h / 2, yO = cy - h / 2;
+  const A  = [cx - g/2,           yU];
+  const B  = [cx + g/2,           yU];
+  const C0 = [cx - g/2 + schraeg, yO];
+
+  // Drehzentrum
+  const M_BC = [(B[0] + C0[0]) / 2, (B[1] + C0[1]) / 2];
+  const Asp = [2 * M_BC[0] - A[0], 2 * M_BC[1] - A[1]];
+
+  // Original-Dreieck immer blau
+  fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+
+  // Phase 1: Drehung des Spiegeldreiecks
+  const tRot = clamp(t / 0.40, 0, 1);
+  function rotateAround(p, m, angle) {
+    const cos = Math.cos(angle), sin = Math.sin(angle);
+    const dx = p[0]-m[0], dy = p[1]-m[1];
+    return [m[0] + cos*dx - sin*dy, m[1] + sin*dx + cos*dy];
+  }
+  const angle = Math.PI * tRot;
+  const A_rot = rotateAround(A, M_BC, angle);
+  const B_rot = rotateAround(B, M_BC, angle);
+  const C0_rot = rotateAround(C0, M_BC, angle);
+  if (tRot > 0.01) {
+    fillPoly(ctx, [A_rot, B_rot, C0_rot], ORANGE_FILL, C.orange, 1.5);
+  }
+
+  // Phase 2: Schnitt rechts + Anbau links
+  const tShift = clamp((t - 0.50) / 0.40, 0, 1);
+  const tFill  = clamp((t - 0.90) / 0.10, 0, 1);
+  if (tShift > 0) {
+    const vers = C0[0] - A[0];
+    const S = [B[0], yO];
+    const Anbau_S   = [S[0]  - g, yO];
+    const Anbau_Asp = [Asp[0] - g, yO];
+    const Anbau_B   = [B[0]  - g, yU];
+    const Z = (p, q) => [lerp(p[0], q[0], tShift), p[1]];
+    fillPoly(ctx, [Z(S, Anbau_S), Z(Asp, Anbau_Asp), Z(B, Anbau_B)], ORANGE_FILL, C.orange, 1.5);
+  }
+
+  // Endphase: orange Rechteck + grünes Resultatsrechteck
+  if (tFill > 0) {
+    const Rect = [A, [B[0], yU], [B[0], yO], [A[0], yO]];
+    fillPoly(ctx, Rect, ORANGE_FILL, C.orange, 2, tFill);
+    drawZielRechteckSimple(ctx, A[0], B[0], yU, h / 2, tFill);
+  }
+
+  // Masse
+  if (flTogMasse.checked) {
+    drawMassFl(ctx, A[0], yU + 22, B[0], yU + 22, 'g', 'unten');
+    drawMassFl(ctx, B[0] + 16, yU, B[0] + 16, yO, 'h', 'rechts');
+  }
+
+  // Formel + Erklärung
+  if (tFill > 0.1) {
+    flFbox.innerHTML = '\\( A_{\\text{Dreieck}} = \\tfrac{1}{2}\\, g \\cdot h \\)';
+    flFbox.classList.add('fertig');
+  } else {
+    flFbox.innerHTML = '\\( A_{\\text{Dreieck}} = \\;?\\)';
+    flFbox.classList.remove('fertig');
+  }
+  if (t < 0.05) {
+    flErkl.textContent = 'Ausgangsfigur: ein Dreieck mit Grundseite g und Höhe h. Es bleibt stehen.';
+  } else if (t < 0.40) {
+    flErkl.textContent = 'Eine orange Kopie des Dreiecks dreht sich um den Mittelpunkt der schrägen Seite um 180°.';
+  } else if (t < 0.50) {
+    flErkl.textContent = 'Nach der Drehung bildet die orange Kopie mit dem blauen Dreieck ein Parallelogramm.';
+  } else if (t < 0.90) {
+    flErkl.textContent = 'Das rechte Dreieck des Parallelogramms wandert links aussen als Anbau — es entsteht ein Rechteck g × h.';
+  } else {
+    flErkl.textContent = 'Das blaue Dreieck ist halb so gross wie das orange Rechteck — also A = ½ · g · h. Das grüne Rechteck g × ½h zeigt diese Fläche direkt.';
+  }
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([flFbox]);
+}
+
+/* ============================================================
+ *  ANIMATION 6 — Kongruenzsätze
+ * ============================================================ */
+let kongFall = 'sss';
+const kongTabs = document.getElementById('kong-tabs');
+const sldKong = document.getElementById('sld-kong');
+const kongLbl = document.getElementById('kong-t');
+const kongGegeben = document.getElementById('kong-gegeben');
+const kongErkl = document.getElementById('kong-erkl');
+
+kongTabs.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    kongTabs.querySelectorAll('.chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    kongFall = btn.dataset.fall;
+    sldKong.value = 0;
+    drawKong();
+  });
+});
+sldKong.addEventListener('input', drawKong);
+
+function drawKong() {
+  const t = +sldKong.value;
+  kongLbl.textContent = t.toFixed(2);
+
+  const { ctx, W, H } = initCv('cv-kong');
+
+  // Festes Beispiel-Dreieck (Werte je nach Fall) — A unten links, B unten rechts, C oben
+  const A = [120, 320];
+  const a_len = 200;
+  const b_len = 170;
+  const c_len = 240;
+  const B = [A[0] + c_len, A[1]];
+  const d = c_len;
+  const xC = (d*d + b_len*b_len - a_len*a_len) / (2*d);
+  const yC2 = b_len*b_len - xC*xC;
+  const yC = yC2 > 0 ? Math.sqrt(yC2) : 0;
+  const C0 = [A[0] + xC, A[1] - yC];
+
+  // Innenwinkel aus den Seiten (für SWS-/WSW-/SsW-Konstruktion benötigt)
+  const alpha = Math.acos((b_len*b_len + c_len*c_len - a_len*a_len) / (2*b_len*c_len));
+  const beta  = Math.acos((a_len*a_len + c_len*c_len - b_len*b_len) / (2*a_len*c_len));
+  const gamma = Math.acos((a_len*a_len + b_len*b_len - c_len*c_len) / (2*a_len*b_len));
+
+  let gegebenHtml = '';
+  let erkl = '';
+  let insetGiven = '';   // welche Stücke im Inset grün hervorzuheben sind
+
+  if (kongFall === 'sss') {
+    insetGiven = 'a,b,c';
+    if (t > 0.05) { seg(ctx, A, B, C.gruen, 3); txt(ctx, (A[0]+B[0])/2, A[1]+22, 'c', C.gruen, 14, 'center', 'middle', '700'); }
+    if (t > 0.25) {
+      ctx.save(); ctx.strokeStyle = C.orange; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.arc(A[0], A[1], b_len, 0, 2 * Math.PI); ctx.stroke();
+      ctx.restore();
+    }
+    if (t > 0.45) {
+      ctx.save(); ctx.strokeStyle = C.orange; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.arc(B[0], B[1], a_len, 0, 2 * Math.PI); ctx.stroke();
+      ctx.restore();
+    }
+    if (t > 0.7) {
+      seg(ctx, A, C0, C.gruen, 3);
+      seg(ctx, B, C0, C.gruen, 3);
+      const lbB = sideLabelOutside(C0, A, B, 16);
+      const lbA = sideLabelOutside(B, C0, A, 16);
+      txt(ctx, lbB[0], lbB[1], 'b', C.gruen, 14, 'center', 'middle', '700');
+      txt(ctx, lbA[0], lbA[1], 'a', C.gruen, 14, 'center', 'middle', '700');
+    }
+    if (t > 0.95) fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+
+    gegebenHtml = `
+      <div class="legende-titel">Gegeben: 3 Seiten (SSS)</div>
+      <div class="legende-zeile"><span class="lab">a</span><span class="val">${(a_len/40).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">b</span><span class="val">${(b_len/40).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">c</span><span class="val">${(c_len/40).toFixed(1)} cm</span></div>`;
+    erkl = t < 0.25 ? 'Seite c als Grundlinie zwischen A und B.' :
+           t < 0.45 ? 'Kreis um A mit Radius b — alle möglichen Lagen von C.' :
+           t < 0.70 ? 'Kreis um B mit Radius a — zweite Bedingung.' :
+           t < 0.95 ? 'Schnittpunkt der beiden Kreise = Eckpunkt C.' :
+                      'Drei Seiten legen das Dreieck eindeutig fest (SSS).';
+  }
+  else if (kongFall === 'sws') {
+    insetGiven = 'b,alpha,c';
+    if (t > 0.05) { seg(ctx, A, B, C.gruen, 3); txt(ctx, (A[0]+B[0])/2, A[1]+22, 'c', C.gruen, 14, 'center', 'middle', '700'); }
+    if (t > 0.25) {
+      const rArc = 32;
+      const midA = drawAngleSector(ctx, A, B, [A[0]+Math.cos(-alpha)*100, A[1]+Math.sin(-alpha)*100], rArc,
+                                    `rgba(22,101,52,${0.20 * clamp((t-0.25)/0.15, 0, 1)})`, C.gruen);
+      const l = arcLabelPos(A, midA, rArc + 14);
+      txt(ctx, l[0], l[1], 'α', C.gruen, 14, 'center', 'middle', '700');
+    }
+    if (t > 0.45) {
+      const tStrahl = clamp((t - 0.45)/0.25, 0, 1);
+      const ende = [A[0] + Math.cos(-alpha) * b_len * tStrahl, A[1] + Math.sin(-alpha) * b_len * tStrahl];
+      seg(ctx, A, ende, C.gruen, 3);
+      if (tStrahl > 0.95) {
+        const lb = sideLabelOutside(C0, A, B, 16);
+        txt(ctx, lb[0], lb[1], 'b', C.gruen, 14, 'center', 'middle', '700');
+      }
+    }
+    if (t > 0.75) {
+      seg(ctx, B, C0, C.tinte2, 2);
+      const la = sideLabelOutside(B, C0, A, 16);
+      txt(ctx, la[0], la[1], 'a', C.tinte2, 14, 'center', 'middle', '700');
+    }
+    if (t > 0.95) fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+
+    gegebenHtml = `
+      <div class="legende-titel">Gegeben: 2 Seiten + eingeschlossener Winkel (SWS)</div>
+      <div class="legende-zeile"><span class="lab">b</span><span class="val">${(b_len/40).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">α (bei A)</span><span class="val">${(alpha*180/Math.PI).toFixed(1)}°</span></div>
+      <div class="legende-zeile"><span class="lab">c</span><span class="val">${(c_len/40).toFixed(1)} cm</span></div>`;
+    erkl = t < 0.25 ? 'Seite c als Grundlinie.' :
+           t < 0.45 ? 'Winkel α bei A antragen.' :
+           t < 0.75 ? 'Seite b vom Strahl abtragen — C festgelegt.' :
+           t < 0.95 ? 'Verbindung B–C ergibt Seite a.' :
+                      'Zwei Seiten und der eingeschlossene Winkel legen das Dreieck eindeutig fest (SWS).';
+  }
+  else if (kongFall === 'wsw') {
+    insetGiven = 'alpha,c,beta';
+    if (t > 0.05) { seg(ctx, A, B, C.gruen, 3); txt(ctx, (A[0]+B[0])/2, A[1]+22, 'c', C.gruen, 14, 'center', 'middle', '700'); }
+    if (t > 0.25) {
+      const rA = 32;
+      const midA = drawAngleSector(ctx, A, B, [A[0]+Math.cos(-alpha)*100, A[1]+Math.sin(-alpha)*100], rA,
+                                    `rgba(22,101,52,${0.20 * clamp((t-0.25)/0.15, 0, 1)})`, C.gruen);
+      const lA = arcLabelPos(A, midA, rA + 14);
+      txt(ctx, lA[0], lA[1], 'α', C.gruen, 14, 'center', 'middle', '700');
+    }
+    if (t > 0.40) {
+      const rB = 32;
+      const midB = drawAngleSector(ctx, B, [B[0]+Math.cos(Math.PI+beta)*100, B[1]+Math.sin(Math.PI+beta)*100], A, rB,
+                                    `rgba(22,101,52,${0.20 * clamp((t-0.40)/0.15, 0, 1)})`, C.gruen);
+      const lB = arcLabelPos(B, midB, rB + 14);
+      txt(ctx, lB[0], lB[1], 'β', C.gruen, 14, 'center', 'middle', '700');
+    }
+    if (t > 0.60) {
+      const tStrahl = clamp((t - 0.60)/0.30, 0, 1);
+      const endeA = [A[0] + Math.cos(-alpha) * 350 * tStrahl, A[1] + Math.sin(-alpha) * 350 * tStrahl];
+      const endeB = [B[0] + Math.cos(Math.PI+beta) * 350 * tStrahl, B[1] + Math.sin(Math.PI+beta) * 350 * tStrahl];
+      seg(ctx, A, endeA, C.orange, 1.5);
+      seg(ctx, B, endeB, C.orange, 1.5);
+    }
+    if (t > 0.90) {
+      dot(ctx, C0, C.rot, 6);
+      fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+    }
+    gegebenHtml = `
+      <div class="legende-titel">Gegeben: 1 Seite + 2 anliegende Winkel (WSW)</div>
+      <div class="legende-zeile"><span class="lab">α (bei A)</span><span class="val">${(alpha*180/Math.PI).toFixed(1)}°</span></div>
+      <div class="legende-zeile"><span class="lab">c</span><span class="val">${(c_len/40).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">β (bei B)</span><span class="val">${(beta*180/Math.PI).toFixed(1)}°</span></div>`;
+    erkl = t < 0.25 ? 'Seite c als Grundlinie.' :
+           t < 0.40 ? 'Winkel α bei A antragen.' :
+           t < 0.60 ? 'Winkel β bei B antragen.' :
+           t < 0.90 ? 'Die beiden Strahlen ausziehen — sie treffen sich in C.' :
+                      'Eine Seite mit den beiden anliegenden Winkeln legt das Dreieck eindeutig fest (WSW).';
+  }
+  else if (kongFall === 'ssw_unique') {
+    // SsW: gegeben sind GROSSE Seite (S) + kleine seite (s) + Winkel gegenüber der grossen Seite
+    // Beispiel-Belegung: S = c, s = b, W = γ (gegenüber c)
+    // Aber didaktischer mit Standard-Layout: nehmen wir S = a, s = b (b<a), W = α (gegenüber a).
+    // Konstruktion gemäss Auftrag: "s abtragen, Hilfsstrahl mit W, Kreis mit S, schneidet Strahl ein Mal"
+    //   Schritt 1: kleine Seite s = b abtragen → festgelegt sind die Endpunkte. Wir wählen: A und C als Endpunkte der kleinen Seite.
+    //   Schritt 2: Hilfsstrahl von A aus mit Winkel α = W; α liegt gegenüber a (der grossen Seite, die noch nicht da ist)
+    //   Schritt 3: Kreis um C mit Radius a → schneidet den Hilfsstrahl in einem Punkt = B (da a > b, ein Schnittpunkt)
+    insetGiven = 'a_big,b_small,alpha';
+
+    if (t > 0.05) {
+      // Schritt 1: kleine Seite b von A nach C zeichnen
+      seg(ctx, A, C0, C.gruen, 3);
+      const lb = sideLabelOutside(C0, A, B, 16);
+      txt(ctx, lb[0], lb[1], 'b', C.gruen, 14, 'center', 'middle', '700');
+    }
+    if (t > 0.30) {
+      // Schritt 2: Hilfsstrahl bei A mit Winkel α (zwischen AC und AB)
+      // α ist Winkel CAB — wir kennen alpha. Strahl AB liegt waagerecht nach rechts.
+      // Wir lassen den Strahl bis weit nach rechts wachsen
+      const tStrahl = clamp((t - 0.30) / 0.20, 0, 1);
+      const reach = 360 * tStrahl;
+      const ende = [A[0] + reach, A[1]];   // Strahl AB nach rechts
+      seg(ctx, A, ende, C.orange, 1.5);
+      // Winkel-Bogen α
+      const rA = 30;
+      const midA = drawAngleSector(ctx, A, ende, C0, rA, `rgba(22,101,52,${0.20 * tStrahl})`, C.gruen);
+      const lA = arcLabelPos(A, midA, rA + 14);
+      txt(ctx, lA[0], lA[1], 'α', C.gruen, 14, 'center', 'middle', '700');
+    }
+    if (t > 0.55) {
+      // Schritt 3: Kreis um C mit Radius a (grosse Seite)
+      ctx.save(); ctx.strokeStyle = C.orange; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.arc(C0[0], C0[1], a_len, 0, 2 * Math.PI); ctx.stroke();
+      ctx.restore();
+    }
+    if (t > 0.80) {
+      // Schnittpunkt zwischen Kreis und Strahl = B
+      seg(ctx, B, C0, C.gruen, 3);
+      const la = sideLabelOutside(B, C0, A, 16);
+      txt(ctx, la[0], la[1], 'a', C.gruen, 14, 'center', 'middle', '700');
+      // gestrichelte Seite c (NICHT gegeben, ergibt sich aus Konstruktion)
+      seg(ctx, A, B, C.tinte2, 2);
+      const lc = [(A[0]+B[0])/2, A[1]+22];
+      txt(ctx, lc[0], lc[1], 'c', C.tinte2, 14, 'center', 'middle', '600');
+    }
+    if (t > 0.95) fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+
+    gegebenHtml = `
+      <div class="legende-titel">Gegeben: 2 Seiten + Gegenwinkel der grösseren (SsW)</div>
+      <div class="legende-zeile"><span class="lab">a (gross)</span><span class="val">${(a_len/40).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">b (klein)</span><span class="val">${(b_len/40).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">α (gegenüber a)</span><span class="val">${(alpha*180/Math.PI).toFixed(1)}°</span></div>`;
+    erkl = t < 0.30 ? 'Kleine Seite b von A nach C antragen.' :
+           t < 0.55 ? 'Hilfsstrahl bei A mit Winkel α nach rechts ziehen.' :
+           t < 0.80 ? 'Kreis um C mit Radius a (grosse Seite).' :
+                      'Der Kreis schneidet den Strahl genau einmal in B.';
+  }
+  else { // 'ssw_two' — sSW: kleine Seite ist die GEGENÜBER des Winkels → 2 Lösungen
+    // Gegeben: a (klein, gegenüber α), b (gross), α
+    // Inset-Skizze: a klein gegenüber α, b gross, α gegeben
+    insetGiven = 'a_small,b_big,alpha';
+
+    const a_small = 110;
+    const b_large = 200;
+    const alpha2 = 25 * Math.PI / 180;   // 25° — sorgt für b·sin(α)=84.5 < a=110 < b=200 ⇒ 2 Schnittpunkte
+    // C liegt auf Strahl AC mit Winkel α gegen die Waagerechte, Abstand b_large
+    const C2 = [A[0] + Math.cos(-alpha2) * b_large, A[1] + Math.sin(-alpha2) * b_large];
+    const dy2 = A[1] - C2[1];
+    const disc = a_small*a_small - dy2*dy2;
+    if (disc > 0) {
+      const dx2 = Math.sqrt(disc);
+      const B1 = [C2[0] - dx2, A[1]];
+      const B2 = [C2[0] + dx2, A[1]];
+
+      // Phase 1 (t > 0.05): Grosse Seite b von A nach C
+      if (t > 0.05) {
+        seg(ctx, A, C2, C.gruen, 3);
+        const lb = [(A[0]+C2[0])/2 - 18, (A[1]+C2[1])/2];
+        txt(ctx, lb[0], lb[1], 'b', C.gruen, 14, 'center', 'middle', '700');
+      }
+      // Phase 2 (t > 0.30): Hilfsstrahl bei A mit Winkel α (waagerecht nach rechts)
+      if (t > 0.30) {
+        const tStrahl = clamp((t - 0.30) / 0.20, 0, 1);
+        const ende = [A[0] + 380 * tStrahl, A[1]];
+        seg(ctx, A, ende, C.orange, 1.5);
+        const rA = 30;
+        const midA = drawAngleSector(ctx, A, ende, C2, rA, `rgba(22,101,52,${0.20 * tStrahl})`, C.gruen);
+        const lA = arcLabelPos(A, midA, rA + 14);
+        txt(ctx, lA[0], lA[1], 'α', C.gruen, 14, 'center', 'middle', '700');
+      }
+      // Phase 3 (t > 0.55): Kreis um C mit Radius a (klein)
+      if (t > 0.55) {
+        ctx.save(); ctx.strokeStyle = C.orange; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+        ctx.beginPath(); ctx.arc(C2[0], C2[1], a_small, 0, 2 * Math.PI); ctx.stroke();
+        ctx.restore();
+      }
+      // Phase 4 (t > 0.80): Beide Schnittpunkte = 2 mögliche Dreiecke
+      if (t > 0.80) {
+        // Dreieck 1 (B1, blau): kleinere Lösung
+        fillPoly(ctx, [A, B1, C2], 'rgba(30, 58, 138, 0.12)', C.blau, 1.5);
+        seg(ctx, B1, C2, C.gruen, 2);
+        // Dreieck 2 (B2, lila): grössere Lösung
+        fillPoly(ctx, [A, B2, C2], 'rgba(107, 33, 168, 0.12)', C.lila, 1.5);
+        seg(ctx, B2, C2, C.gruen, 2);
+        // Schnittpunkte markieren
+        dot(ctx, B1, C.blau, 5);
+        dot(ctx, B2, C.lila, 5);
+        txt(ctx, B1[0]-2,  A[1]+22, 'B₁', C.blau,  14, 'center', 'middle', '700');
+        txt(ctx, B2[0]+2,  A[1]+22, 'B₂', C.lila,  14, 'center', 'middle', '700');
+      }
+    }
+
+    // C-Beschriftung an der korrekten Position (schräg oben)
+    if (t > 0.05) {
+      txt(ctx, C2[0]+16, C2[1]-8, 'C', C.tinte, 14, 'center', 'middle', '700');
+    }
+
+    gegebenHtml = `
+      <div class="legende-titel">Gegeben: 2 Seiten + Gegenwinkel der kleineren (sSW)</div>
+      <div class="legende-zeile"><span class="lab">a (klein)</span><span class="val">${(a_small/40).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">b (gross)</span><span class="val">${(b_large/40).toFixed(1)} cm</span></div>
+      <div class="legende-zeile"><span class="lab">α (gegenüber a)</span><span class="val">${(alpha2*180/Math.PI).toFixed(1)}°</span></div>`;
+    erkl = t < 0.30 ? 'Grosse Seite b von A nach C antragen.' :
+           t < 0.55 ? 'Hilfsstrahl bei A mit Winkel α nach rechts.' :
+           t < 0.80 ? 'Kreis um C mit Radius a (kleine Seite).' :
+                      'Der Kreis schneidet den Strahl an ZWEI Punkten B₁ und B₂ — zwei mögliche Dreiecke.';
+  }
+
+  // Eckpunkte A, B, C — Beschriftung erst sobald die Konstruktion gestartet ist (t > 0.05).
+  // Bei t == 0 ist nur die Mini-Skizze (Inset) sichtbar.
+  if (t > 0.05) {
+    // A erscheint bei JEDEM Fall mit Schritt 1
+    txt(ctx, A[0]-14, A[1]+18, 'A', C.tinte, 14, 'center', 'middle', '700');
+  }
+  // B-Beschriftung:
+  //   SSS/SWS/WSW: B ist Endpunkt der Grundseite c, erscheint mit Schritt 1
+  //   SsW (ssw_unique): B entsteht erst in Schritt 4 (Schnitt Kreis ∩ Strahl)
+  //   sSW (ssw_two): es gibt nur B₁ und B₂, kein einzelnes B
+  if (kongFall === 'sss' || kongFall === 'sws' || kongFall === 'wsw') {
+    if (t > 0.05) txt(ctx, B[0]+14, B[1]+18, 'B', C.tinte, 14, 'center', 'middle', '700');
+  } else if (kongFall === 'ssw_unique') {
+    if (t > 0.80) txt(ctx, B[0]+14, B[1]+18, 'B', C.tinte, 14, 'center', 'middle', '700');
+  }
+  // C-Beschriftung:
+  //   SSS: C entsteht in Schritt 4 (Kreis-Schnitt)
+  //   SWS: C entsteht in Schritt 3 (Strecke b abtragen, Endpunkt = C)
+  //   WSW: C entsteht in Schritt 4 (Treffpunkt der zwei Strahlen)
+  //   SsW: C ist von Anfang an Endpunkt der kleinen Seite (Schritt 1)
+  //   sSW: C ist Endpunkt der grossen Seite b (Schritt 1) — bereits oben oben in der ssw_two-Logik
+  if (kongFall === 'sss' && t > 0.7)       txt(ctx, C0[0], C0[1]-20, 'C', C.tinte, 14, 'center', 'middle', '700');
+  else if (kongFall === 'sws' && t > 0.7)  txt(ctx, C0[0], C0[1]-20, 'C', C.tinte, 14, 'center', 'middle', '700');
+  else if (kongFall === 'wsw' && t > 0.90) txt(ctx, C0[0], C0[1]-20, 'C', C.tinte, 14, 'center', 'middle', '700');
+  else if (kongFall === 'ssw_unique' && t > 0.05) txt(ctx, C0[0], C0[1]-20, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+  // Wenn der Schieber noch ganz links ist: Hinweis im Canvas einblenden.
+  if (t < 0.05) {
+    txt(ctx, W/2, H/2 + 40,
+        'Schieberegler bewegen, um die Konstruktion Schritt für Schritt aufzubauen.',
+        C.tinte2, 14, 'center', 'middle', '500');
+  }
+
+  // Inset-Skizze oben links — IMMER sichtbar (auch bei t = 0)
+  drawKongInset(ctx, insetGiven);
+
+  kongGegeben.innerHTML = gegebenHtml;
+  kongErkl.textContent = (t < 0.05) ? 'Die Mini-Skizze oben links zeigt, welche Stücke gegeben sind. Bewege den Schieber, um die Konstruktion zu starten.' : erkl;
+}
+
+// Helfer: Seitenbeschriftung ausserhalb (Position für a, b, c im Hauptbild)
+function sideLabelOutside(P, Q, R, dist = 16) {
+  const mid = [(P[0]+Q[0])/2, (P[1]+Q[1])/2];
+  const dx = mid[0] - R[0], dy = mid[1] - R[1];
+  const len = Math.hypot(dx, dy) || 1;
+  return [mid[0] + dx/len * dist, mid[1] + dy/len * dist];
+}
+
+// Inset-Skizze für Kongruenzsätze — klein, oben links in der Canvas-Ecke
+function drawKongInset(ctx, given) {
+  ctx.save();
+  // Position: oben links
+  const ox = 12, oy = 14;
+  const w = 84, hI = 84;
+  // Rahmen
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.strokeStyle = C.linie;
+  ctx.lineWidth = 1;
+  ctx.fillRect(ox, oy, w, hI);
+  ctx.strokeRect(ox, oy, w, hI);
+  // Beschriftung
+  ctx.fillStyle = C.tinte2;
+  ctx.font = '600 9px "Source Sans 3", sans-serif';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText('Gegeben:', ox + 4, oy + 3);
+
+  // Schematisches Dreieck im Inset (nicht im Massstab — klassische Form)
+  const tA = [ox + 14,    oy + hI - 14];
+  const tB = [ox + w - 12, oy + hI - 14];
+  const tC = [ox + w/2 + 2, oy + 28];
+
+  // Welche Stücke sind gegeben? Wir zeichnen alles grau, dann gegebenes grün/farbig drauf
+  const gray = '#94a3b8';
+  ctx.lineWidth = 1.5;
+  // Alle Seiten grau zuerst
+  ctx.strokeStyle = gray;
+  ctx.beginPath();
+  ctx.moveTo(tA[0], tA[1]); ctx.lineTo(tB[0], tB[1]);
+  ctx.lineTo(tC[0], tC[1]); ctx.closePath();
+  ctx.stroke();
+
+  // Eckpunktbuchstaben (klein, grau)
+  ctx.fillStyle = C.tinte2;
+  ctx.font = '700 9px "Source Sans 3", sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('A', tA[0]-6, tA[1]+6);
+  ctx.fillText('B', tB[0]+6, tB[1]+6);
+  ctx.fillText('C', tC[0],   tC[1]-8);
+
+  // Helfer: einzelne Seite/Winkel im Inset einfärben
+  const greenSeg = (p1, p2) => {
+    ctx.save();
+    ctx.strokeStyle = C.gruen; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(p1[0],p1[1]); ctx.lineTo(p2[0],p2[1]); ctx.stroke();
+    ctx.restore();
+  };
+  const greenArc = (P, Q, R, r=10) => {
+    ctx.save();
+    ctx.strokeStyle = C.gruen; ctx.lineWidth = 2;
+    let a1 = Math.atan2(Q[1]-P[1], Q[0]-P[0]);
+    let a2 = Math.atan2(R[1]-P[1], R[0]-P[0]);
+    let da = a2 - a1;
+    while (da < -Math.PI) da += 2*Math.PI;
+    while (da >  Math.PI) da -= 2*Math.PI;
+    ctx.beginPath();
+    ctx.arc(P[0], P[1], r, a1, a1+da, da<0);
+    ctx.stroke();
+    ctx.restore();
+  };
+
+  // Welche Stücke gemäss given?
+  const items = given.split(',');
+  if (items.includes('a'))      greenSeg(tB, tC);       // a = BC
+  if (items.includes('b'))      greenSeg(tC, tA);       // b = CA
+  if (items.includes('c'))      greenSeg(tA, tB);       // c = AB
+  if (items.includes('a_big'))  greenSeg(tB, tC);       // a (gross)
+  if (items.includes('b_small'))greenSeg(tC, tA);       // b (klein)
+  if (items.includes('a_small'))greenSeg(tB, tC);       // a (klein)
+  if (items.includes('b_big'))  greenSeg(tC, tA);       // b (gross)
+  if (items.includes('alpha'))  greenArc(tA, tB, tC);   // α bei A
+  if (items.includes('beta'))   greenArc(tB, tC, tA);   // β bei B
+  if (items.includes('gamma'))  greenArc(tC, tA, tB);   // γ bei C
+
+  ctx.restore();
+}
+
+/* ============================================================
+ *  ANIMATION 7 — Satzgruppe Pythagoras
+ * ============================================================ */
+let pythSatz = 'pyth';
+const pythTabs = document.getElementById('pyth-tabs');
+const pythFbox = document.getElementById('pyth-fbox');
+const pythLegende = document.getElementById('pyth-legende');
+const pythReglerWrap = document.getElementById('pyth-regler-wrap');
+const sldPyth = document.getElementById('sld-pyth');
+const pythLbl = document.getElementById('pyth-t');
+const pythSchritte = document.getElementById('pyth-schritte');
+// Anker-Geometrie: A links, B rechts, C oben — Hypotenuse 240 px
+// Dreieck weiter unten, damit Kathetenquadrate oben Platz finden, c²-Quadrat unten passt
+const pythPts = [[145, 295], [385, 295], [215, 180]];   // A, B, C — C ziehbar (asymmetrisch links)
+
+pythTabs.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    pythTabs.querySelectorAll('.chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    pythSatz = btn.dataset.satz;
+    // Schieber in beiden Tabs sichtbar (Tab 1 + Tab 2 haben Animationen)
+    pythReglerWrap.style.display = '';
+    sldPyth.value = 0;
+    drawPyth();
+  });
+});
+sldPyth.addEventListener('input', drawPyth);
+
+function drawPyth() {
+  const tMorph = +sldPyth.value;       // 0 = Quadrate, 1 = Hypotenusen-Rechtecke
+  pythLbl.textContent = tMorph.toFixed(2);
+  if (pythSchritte) updateSchritte(pythSchritte, tMorph, [1/3, 2/3]);
+
+  const { ctx, W, H, cv } = initCv('cv-pyth');
+  const A = pythPts[0], B = pythPts[1], C0 = pythPts[2];
+
+  // C auf Thales-Kreis projizieren (rechter Winkel bei C garantiert)
+  const midAB = [(A[0]+B[0])/2, (A[1]+B[1])/2];
+  const rAB = dist(A, B) / 2;
+  const dCM = dist(C0, midAB);
+  if (dCM > 1) {
+    C0[0] = midAB[0] + (C0[0]-midAB[0]) * rAB / dCM;
+    C0[1] = midAB[1] + (C0[1]-midAB[1]) * rAB / dCM;
+  }
+  // C nicht UNTERHALB der Hypotenuse zulassen (Dreieck soll oben sein)
+  if (C0[1] > midAB[1] - 5) {
+    // spiegeln nach oben
+    C0[1] = 2 * midAB[1] - C0[1];
+    if (C0[1] > midAB[1] - 5) C0[1] = midAB[1] - 5;
+  }
+
+  const c = dist(A, B);
+  const a = dist(C0, B);
+  const b = dist(A, C0);
+  const F = footPerp(C0, A, B);
+  const h = dist(C0, F);
+  const p = dist(F, B);
+  const q = dist(A, F);
+
+  if (pythSatz === 'pyth') {
+    drawPythKath(ctx, A, B, C0, F, a, b, c, p, q, h, tMorph);
+  } else {
+    drawHoehe(ctx, A, B, C0, F, a, b, c, p, q, h, tMorph);
+  }
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([pythFbox]);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  TAB 1: Pythagoras + Kathetensatz mit Schieber
+// ─────────────────────────────────────────────────────────────
+function drawPythKath(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
+  // ====================================================================
+  //  KLASSISCHER EUKLID-BEWEIS: Scherung - Drehung - Scherung
+  // 
+  //  Für a² → p·c (orange Familie):
+  //    Phase 1: Scherung des a²-Quadrats mit Achse BL (untere/innere Quadratseite,
+  //             gegenüber von C). C und K wandern parallel zu BL nach innen,
+  //             C landet exakt auf A. Fläche bleibt a². B und L bleiben fest.
+  //    Phase 2: Drehung des Parallelogramms um den Punkt B um -90° (math.) 
+  //             bzw. +90° im Canvas-System. B bleibt Drehzentrum. 
+  //             Punkt A wandert nach B+out·c (= untere Ecke des c²-Quadrats unter B).
+  //    Phase 3: Scherung des gedrehten Parallelogramms mit Achse [B, B+out·c]
+  //             (= rechte Kante des p·c-Rechtecks). Die zwei Punkte auf x=B[0]
+  //             bleiben fest, die anderen zwei verschieben sich parallel.
+  //             Ergibt das p·c-Rechteck im c²-Quadrat (rechte Hälfte).
+  //
+  //  Analog für b² → q·c (lila Familie): spiegelbildlich um den Höhenfusspunkt F.
+  // ====================================================================
+
+  const COL_A_FILL = 'rgba(194, 65, 12, 0.30)';
+  const COL_A_LIGHT = 'rgba(194, 65, 12, 0.15)';
+  const COL_A_LINE = C.orange;
+  const COL_B_FILL = 'rgba(107, 33, 168, 0.30)';
+  const COL_B_LIGHT = 'rgba(107, 33, 168, 0.15)';
+  const COL_B_LINE = C.lila;
+  const COL_C_FILL = 'rgba(22, 101, 52, 0.22)';
+  const COL_C_LINE = C.gruen;
+
+  // Aussen-Richtung des c²-Quadrats: senkrecht zur Hypotenuse, vom Dreieck weg
+  const cVec = [B[0]-A[0], B[1]-A[1]];
+  const cN = [cVec[0]/c, cVec[1]/c];
+  const cPerp = [cN[1], -cN[0]];
+  const toC = [C0[0]-A[0], C0[1]-A[1]];
+  const dotProd = toC[0]*cPerp[0] + toC[1]*cPerp[1];
+  const out = (dotProd > 0) ? [-cPerp[0], -cPerp[1]] : cPerp;
+
+  // === c²-Quadrat (IMMER sichtbar) ===
+  const cQuad = [
+    A,
+    B,
+    [B[0] + out[0]*c, B[1] + out[1]*c],
+    [A[0] + out[0]*c, A[1] + out[1]*c]
+  ];
+  fillPoly(ctx, cQuad, COL_C_FILL, COL_C_LINE, 2);
+  const cqMid = [(cQuad[0][0]+cQuad[2][0])/2, (cQuad[0][1]+cQuad[2][1])/2];
+  txt(ctx, cqMid[0], cqMid[1], 'c²', COL_C_LINE, 14, 'center', 'middle', '700');
+
+  // Trennlinie F in c²-Quadrat
+  const Fout = [F[0] + out[0]*c, F[1] + out[1]*c];
+  ctx.save();
+  ctx.strokeStyle = C.tinte2; ctx.lineWidth = 1.2; ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(F[0], F[1]); ctx.lineTo(Fout[0], Fout[1]); ctx.stroke();
+  ctx.restore();
+
+  // ====================================================================
+  //  Geometrie: a²-Familie (orange)
+  // ====================================================================
+  // Quadrat a² über Kathete BC (aussen):
+  //   Z0_a = [B, C, K0_a, L0_a] mit K0_a = C + aOut*a, L0_a = B + aOut*a
+  const aVec = [C0[0]-B[0], C0[1]-B[1]];
+  const aPerpRaw = [-aVec[1], aVec[0]];
+  const aPerpN = Math.hypot(...aPerpRaw) || 1;
+  const aPerp = [aPerpRaw[0]/aPerpN, aPerpRaw[1]/aPerpN];
+  const toAfromB = [A[0]-B[0], A[1]-B[1]];
+  const aOut = (toAfromB[0]*aPerp[0] + toAfromB[1]*aPerp[1] > 0) ? [-aPerp[0], -aPerp[1]] : aPerp;
+  const Z0_a = [
+    B,                                           // 0: B (fest in Phase 1)
+    C0,                                          // 1: C  (wandert in Phase 1 → A)
+    [C0[0] + aOut[0]*a, C0[1] + aOut[1]*a],     // 2: K0 (wandert in Phase 1)
+    [B[0]  + aOut[0]*a, B[1]  + aOut[1]*a]      // 3: L0 (fest in Phase 1)
+  ];
+  // Z1_a: nach Scherung 1.  C → A, K → K1
+  // Verschiebung parallel zu aOut, Betrag = (A−C)·aOut
+  const t_a = (A[0]-C0[0])*aOut[0] + (A[1]-C0[1])*aOut[1];
+  const Z1_a = [
+    Z0_a[0],                                                                // B (fest)
+    A,                                                                       // C → A
+    [Z0_a[2][0] + t_a*aOut[0], Z0_a[2][1] + t_a*aOut[1]],                  // K → K1
+    Z0_a[3]                                                                  // L0 (fest)
+  ];
+  // Z2_a: Drehung um B um -90° (math) = +90° (Canvas mit y nach unten)
+  // Im Canvas-System: (x,y) gedreht um Pivot P um +90°: dy → -dx-Anteil ...
+  // Konkret: R_{Canvas+90°}(dx, dy) = (-dy, dx)  (für y nach unten)
+  // Wir testen das anschaulich: wir wollen A→B+out·c.
+  // A−B = (−c, 0) im Canvas-System. Out im Canvas ist (cN[1], -cN[0]) bzw. (-cN[1], cN[0]),
+  // je nach Seite. Es ist out = die Seite "weg vom Dreieck".
+  // 
+  // Sauberer: ich definiere die Drehfunktion explizit.
+  // Wir wollen: A → B+out·c
+  // Vektor B→A = A-B. Wir wollen, dass dieser zu Vektor (out·c) wird.
+  // Drehung um B mit Winkel θ: (A-B) → R(θ)·(A-B). Wir suchen θ so dass das = out·c.
+  // Da |A-B| = c und |out·c| = c, ist nur die RICHTUNG wichtig.
+  // Drehrichtung: A-B = -c·cN (Vektor von B zu A entlang Hypotenuse). 
+  // Soll werden: out·c.
+  // Wenn out = (cN[1], -cN[0]) (Canvas), dann -cN → out ist Drehung um... lass mich rechnen:
+  //   -cN = (-cN[0], -cN[1])
+  //   out = (cN[1], -cN[0])
+  // Drehmatrix [cos θ, -sin θ; sin θ, cos θ] * (-cN[0], -cN[1]) = (cN[1], -cN[0])
+  //   → cos θ · (-cN[0]) + sin θ · cN[1] = cN[1]    
+  //   → -sin θ · (-cN[0]) + cos θ · (-cN[1]) = -cN[0]   →  sin θ · cN[0] - cos θ · cN[1] = -cN[0]
+  // Diese muss für alle cN gelten. Probier θ = -π/2:
+  //   cos(-π/2) = 0, sin(-π/2) = -1
+  //   → 0 · (-cN[0]) + (-1) · cN[1] = -cN[1]   — sollte aber cN[1] sein. ❌
+  // Probier θ = +π/2:
+  //   cos = 0, sin = 1
+  //   → 0 · (-cN[0]) + 1 · cN[1] = cN[1] ✓
+  //   → -(-cN[0]) + 0 · (-cN[1]) = cN[0] — sollte -cN[0] sein ❌
+  // Hmm.
+  // 
+  // OK ich teste numerisch im Code mit verschiedenen Winkeln.
+  
+  function rotAround(P, pivot, angle) {
+    const cosA = Math.cos(angle), sinA = Math.sin(angle);
+    const dx = P[0] - pivot[0], dy = P[1] - pivot[1];
+    return [pivot[0] + cosA*dx - sinA*dy, pivot[1] + sinA*dx + cosA*dy];
+  }
+  // Drehwinkel testen: welcher bringt A nach B+out·c?
+  // Target = B + out·c. Vector B→Target = out·c.
+  // Wir berechnen den Winkel zwischen (A-B) und (out·c):
+  const v_BA = [A[0]-B[0], A[1]-B[1]];
+  const v_BT = [out[0]*c, out[1]*c];
+  // Winkel = atan2(v_BT.y, v_BT.x) - atan2(v_BA.y, v_BA.x)
+  const angle_a = Math.atan2(v_BT[1], v_BT[0]) - Math.atan2(v_BA[1], v_BA[0]);
+  
+  const Z2_a = Z1_a.map(P => rotAround(P, B, angle_a));
+  // Z3_a: p·c-Rechteck im c²-Quadrat (rechte Hälfte, von F bis B, c-tief nach out)
+  const Z3_a = [
+    F,
+    B,
+    [B[0] + out[0]*c, B[1] + out[1]*c],
+    [F[0] + out[0]*c, F[1] + out[1]*c]
+  ];
+  // Eckpunkt-Korrespondenz Z2_a → Z3_a:
+  // Z2_a[0] = B (Pivot, fest) ↔ Z3_a[1] = B
+  // Z2_a[1] = A_rot = B+out·c ↔ Z3_a[2] = B+out·c
+  // Z2_a[2] = K_rot ↔ Z3_a[3] = F+out·c
+  // Z2_a[3] = L0_rot ↔ Z3_a[0] = F
+  const Z2_a_re = [Z2_a[3], Z2_a[0], Z2_a[1], Z2_a[2]];   // umordnen für gleiche Reihenfolge wie Z3_a
+  // Beschrifte Korrespondenz: Z2_a_re[i] ↔ Z3_a[i]
+
+  // ====================================================================
+  //  Geometrie: b²-Familie (lila), analog zu a²
+  // ====================================================================
+  // Quadrat b² über Kathete AC (aussen):
+  //   Z0_b = [A, C, K0_b, L0_b] mit K0_b = C + bOut*b, L0_b = A + bOut*b
+  const bVec = [C0[0]-A[0], C0[1]-A[1]];
+  const bPerpRaw = [-bVec[1], bVec[0]];
+  const bPerpN = Math.hypot(...bPerpRaw) || 1;
+  const bPerp = [bPerpRaw[0]/bPerpN, bPerpRaw[1]/bPerpN];
+  const toBfromA = [B[0]-A[0], B[1]-A[1]];
+  const bOut = (toBfromA[0]*bPerp[0] + toBfromA[1]*bPerp[1] > 0) ? [-bPerp[0], -bPerp[1]] : bPerp;
+  const Z0_b = [
+    A,                                           // 0: A (fest in Phase 1)
+    C0,                                          // 1: C (wandert → B)
+    [C0[0] + bOut[0]*b, C0[1] + bOut[1]*b],     // 2: K (wandert)
+    [A[0]  + bOut[0]*b, A[1]  + bOut[1]*b]      // 3: L0 (fest)
+  ];
+  const t_b = (B[0]-C0[0])*bOut[0] + (B[1]-C0[1])*bOut[1];
+  const Z1_b = [
+    Z0_b[0],
+    B,                                                                       // C → B
+    [Z0_b[2][0] + t_b*bOut[0], Z0_b[2][1] + t_b*bOut[1]],
+    Z0_b[3]
+  ];
+  // Drehung um A: B → A+out·c
+  const v_AB = [B[0]-A[0], B[1]-A[1]];
+  const v_AT = [out[0]*c, out[1]*c];
+  const angle_b = Math.atan2(v_AT[1], v_AT[0]) - Math.atan2(v_AB[1], v_AB[0]);
+  const Z2_b = Z1_b.map(P => rotAround(P, A, angle_b));
+  // Z3_b: q·c-Rechteck (linke Hälfte des c²-Quadrats)
+  const Z3_b = [
+    A,
+    F,
+    [F[0] + out[0]*c, F[1] + out[1]*c],
+    [A[0] + out[0]*c, A[1] + out[1]*c]
+  ];
+  // Korrespondenz Z2_b → Z3_b:
+  // Z2_b[0] = A (Pivot) ↔ Z3_b[0] = A
+  // Z2_b[1] = B_rot = A+out·c ↔ Z3_b[3] = A+out·c
+  // Z2_b[2] = K_rot ↔ Z3_b[2] = F+out·c
+  // Z2_b[3] = L0_rot ↔ Z3_b[1] = F
+  const Z2_b_re = [Z2_b[0], Z2_b[3], Z2_b[2], Z2_b[1]];
+
+  // ====================================================================
+  //  Aktuelle Pose berechnen für a²
+  // ====================================================================
+  let aPoly;
+  if (t <= 1/3) {
+    // Phase 1: Scherung Z0_a → Z1_a (C → A, K → K1)
+    const tL = t * 3;
+    aPoly = [
+      Z0_a[0],   // B fest
+      [lerp(Z0_a[1][0], Z1_a[1][0], tL), lerp(Z0_a[1][1], Z1_a[1][1], tL)],   // C → A
+      [lerp(Z0_a[2][0], Z1_a[2][0], tL), lerp(Z0_a[2][1], Z1_a[2][1], tL)],   // K0 → K1
+      Z0_a[3]    // L0 fest
+    ];
+  } else if (t <= 2/3) {
+    // Phase 2: Drehung Z1_a → Z2_a um B um Winkel angle_a
+    const tL = (t - 1/3) * 3;
+    aPoly = Z1_a.map(P => rotAround(P, B, angle_a * tL));
+  } else {
+    // Phase 3: Scherung Z2_a → Z3_a
+    const tL = (t - 2/3) * 3;
+    aPoly = Z2_a_re.map((P, i) => [
+      lerp(P[0], Z3_a[i][0], tL),
+      lerp(P[1], Z3_a[i][1], tL)
+    ]);
+  }
+
+  // Analog für b
+  let bPoly;
+  if (t <= 1/3) {
+    const tL = t * 3;
+    bPoly = [
+      Z0_b[0],
+      [lerp(Z0_b[1][0], Z1_b[1][0], tL), lerp(Z0_b[1][1], Z1_b[1][1], tL)],
+      [lerp(Z0_b[2][0], Z1_b[2][0], tL), lerp(Z0_b[2][1], Z1_b[2][1], tL)],
+      Z0_b[3]
+    ];
+  } else if (t <= 2/3) {
+    const tL = (t - 1/3) * 3;
+    bPoly = Z1_b.map(P => rotAround(P, A, angle_b * tL));
+  } else {
+    const tL = (t - 2/3) * 3;
+    bPoly = Z2_b_re.map((P, i) => [
+      lerp(P[0], Z3_b[i][0], tL),
+      lerp(P[1], Z3_b[i][1], tL)
+    ]);
+  }
+
+  // ====================================================================
+  //  Zeichnen
+  // ====================================================================
+  // Original-Quadrate IMMER sichtbar (etwas blasser, im Hintergrund)
+  fillPoly(ctx, Z0_a, COL_A_LIGHT, COL_A_LINE, 1.5);
+  const aSqMid = [(Z0_a[0][0]+Z0_a[2][0])/2, (Z0_a[0][1]+Z0_a[2][1])/2];
+  txt(ctx, aSqMid[0], aSqMid[1], 'a²', COL_A_LINE, 14, 'center', 'middle', '700');
+
+  fillPoly(ctx, Z0_b, COL_B_LIGHT, COL_B_LINE, 1.5);
+  const bSqMid = [(Z0_b[0][0]+Z0_b[2][0])/2, (Z0_b[0][1]+Z0_b[2][1])/2];
+  txt(ctx, bSqMid[0], bSqMid[1], 'b²', COL_B_LINE, 14, 'center', 'middle', '700');
+
+  // Animierte Kopien
+  fillPoly(ctx, aPoly, COL_A_FILL, COL_A_LINE, 2);
+  fillPoly(ctx, bPoly, COL_B_FILL, COL_B_LINE, 2);
+  
+  // Labels in den animierten Polygonen
+  const aPolyMid = [(aPoly[0][0]+aPoly[2][0])/2, (aPoly[0][1]+aPoly[2][1])/2];
+  const bPolyMid = [(bPoly[0][0]+bPoly[2][0])/2, (bPoly[0][1]+bPoly[2][1])/2];
+  if (t > 2/3 + 0.05) {
+    txt(ctx, aPolyMid[0], aPolyMid[1], 'p · c', COL_A_LINE, 14, 'center', 'middle', '700');
+    txt(ctx, bPolyMid[0], bPolyMid[1], 'q · c', COL_B_LINE, 14, 'center', 'middle', '700');
+  }
+
+  // Dreieck + Beschriftungen oben drauf
+  fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+  drawSmallRect(ctx, A, C0, B);
+  txt(ctx, A[0]-16, A[1]+14, 'A', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, B[0]+16, B[1]+14, 'B', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, C0[0],   C0[1]-16, 'C', C.tinte, 14, 'center', 'middle', '700');
+  // Seitenlabels
+  const sLab = (P, Q, R, dist = 14) => {
+    const mid = [(P[0]+Q[0])/2, (P[1]+Q[1])/2];
+    const dx = mid[0] - R[0], dy = mid[1] - R[1];
+    const len = Math.hypot(dx, dy) || 1;
+    return [mid[0] + dx/len * dist, mid[1] + dy/len * dist];
+  };
+  const lA_side = sLab(B, C0, A, 12);
+  txt(ctx, lA_side[0], lA_side[1], 'a', C.tinte, 14, 'center', 'middle', '700');
+  const lB_side = sLab(A, C0, B, 12);
+  txt(ctx, lB_side[0], lB_side[1], 'b', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, (A[0]+B[0])/2, A[1]-12, 'c', C.tinte, 14, 'center', 'middle', '700');
+
+  // F-Punkt + p, q
+  seg(ctx, C0, F, C.tinte2, 1);
+  dot(ctx, F, C.tinte2, 3);
+  txt(ctx, F[0], F[1]-8, 'F', C.tinte2, 14, 'center', 'middle', '600');
+  txt(ctx, (A[0]+F[0])/2, A[1]+12, 'q', C.tinte2, 14, 'center', 'middle', '600');
+  txt(ctx, (F[0]+B[0])/2, A[1]+12, 'p', C.tinte2, 14, 'center', 'middle', '600');
+
+  // C als Drag-Handle
+  dot(ctx, C0, C.blau, 7);
+
+  // Phasen-Beschriftung
+  let phaseTitle = '';
+  if      (t < 1/3) phaseTitle = 'Phase 1: Scherung — Quadrate ins Dreieck';
+  else if (t < 2/3) phaseTitle = 'Phase 2: Drehung um 90° um A bzw. B';
+  else              phaseTitle = 'Phase 3: Scherung — Parallelogramm zum Rechteck';
+  ctx.save();
+  ctx.fillStyle = C.tinte2;
+  ctx.font = '600 12px "Source Sans 3", sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText(phaseTitle, 265, 8);
+  ctx.restore();
+
+  // Formel + Legende
+  pythFbox.innerHTML =
+    t < 0.5
+    ? `\\( a^2 + b^2 = c^2 \\)<br>
+       <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--tinte-2)">${(a*a/100).toFixed(2)} + ${(b*b/100).toFixed(2)} = ${(c*c/100).toFixed(2)} cm²</span>`
+    : `\\( a^2 = p \\cdot c,\\ \\ b^2 = q \\cdot c \\)<br>
+       <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--tinte-2)">${(a*a/100).toFixed(2)} = ${(p*c/100).toFixed(2)}, ${(b*b/100).toFixed(2)} = ${(q*c/100).toFixed(2)}</span>`;
+  pythLegende.innerHTML = `
+    <div class="legende-titel">Werte</div>
+    <div class="legende-zeile"><span class="lab">a</span><span class="val">${(a/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile"><span class="lab">b</span><span class="val">${(b/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile"><span class="lab">c</span><span class="val">${(c/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile"><span class="lab">p (unter a)</span><span class="val">${(p/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile"><span class="lab">q (unter b)</span><span class="val">${(q/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile" style="border-top:1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab" style="color:${COL_A_LINE}">a²</span><span class="val" style="color:${COL_A_LINE}">${(a*a/100).toFixed(2)} cm²</span></div>
+    <div class="legende-zeile"><span class="lab" style="color:${COL_A_LINE}">p · c</span><span class="val" style="color:${COL_A_LINE}">${(p*c/100).toFixed(2)} cm²</span></div>
+    <div class="legende-zeile"><span class="lab" style="color:${COL_B_LINE}">b²</span><span class="val" style="color:${COL_B_LINE}">${(b*b/100).toFixed(2)} cm²</span></div>
+    <div class="legende-zeile"><span class="lab" style="color:${COL_B_LINE}">q · c</span><span class="val" style="color:${COL_B_LINE}">${(q*c/100).toFixed(2)} cm²</span></div>
+    <div class="legende-zeile"><span class="lab" style="color:${COL_C_LINE}">c²</span><span class="val" style="color:${COL_C_LINE}">${(c*c/100).toFixed(2)} cm²</span></div>`;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+//  TAB 2: Höhensatz
+// ─────────────────────────────────────────────────────────────
+function drawHoehe(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
+  // ====================================================================
+  //  HÖHENSATZ-ANIMATION mit drei Phasen: Scherung — Drehung — Scherung
+  //
+  //  Z0_h: h²-Quadrat über Höhe CF, aussen (Seite der LÄNGEREN Hypotenuse-Hälfte)
+  //  Z1_h (Scherung 1): Eq und Fq bleiben auf der Geraden Eq-Fq, Fq wandert nach G
+  //         = Schnittpunkt mit Kreis(F, R) wobei R = MAX(p, q)
+  //  Z2_h (Drehung um F): G → entsprechender Hypotenusen-Eckpunkt (B falls p>=q, sonst A)
+  //  Z3_h (Scherung 2): Achse FB (bzw. AF). C_rot/Eq_rot wandern horizontal zu Rechteck-Ecken.
+  //
+  //  Endrechteck p·q liegt unter der Hypotenuse (auf längerer Hälfte).
+  // ====================================================================
+
+  // Aussen-Richtung des c²-Bereichs (vom Dreieck weg)
+  const cVec = [B[0]-A[0], B[1]-A[1]];
+  const cN = [cVec[0]/c, cVec[1]/c];
+  const cPerp = [cN[1], -cN[0]];
+  const toC = [C0[0]-A[0], C0[1]-A[1]];
+  const out = (toC[0]*cPerp[0] + toC[1]*cPerp[1] > 0) ? [-cPerp[0], -cPerp[1]] : cPerp;
+
+  // Höhen-Richtung: Vektor F→C (normalisiert)
+  const hN = [(C0[0]-F[0])/h, (C0[1]-F[1])/h];
+  // Senkrecht zu hN (Aussenrichtung des h²-Quadrats)
+  // Wir wählen so, dass das Quadrat auf der Seite der KÜRZEREN Hypotenusen-Hälfte liegt
+  // (also Richtung A wenn q < p, Richtung B wenn p < q)
+  // Damit "wandert" das Quadrat zur kürzeren Seite hin, und das p·q-Rechteck liegt auf der LÄNGEREN.
+  // Konstruktions-Konvention: Quadrat zur längeren Hälfte (p>=q → Quadrat Richtung A, Drehung G→B).
+  const pGreaterQ = (p >= q);
+  const target = pGreaterQ ? B : A;       // wohin G in Phase 2 gedreht wird
+  const R = pGreaterQ ? p : q;            // Radius des Kreises in Phase 1
+  // hOut: senkrecht zu hN, zeigt zur Seite der KÜRZEREN Hypotenuse-Hälfte
+  // Bei p>=q (q kürzer): hOut zeigt zu A (Richtung A vom F aus)
+  const toA_from_F = [A[0]-F[0], A[1]-F[1]];
+  const toB_from_F = [B[0]-F[0], B[1]-F[1]];
+  // Senkrechte zu hN: zwei Optionen, (hN[1], -hN[0]) oder (-hN[1], hN[0])
+  let hOut = [hN[1], -hN[0]];
+  // Wähle die, die zum kürzeren Seite zeigt
+  const toShort = pGreaterQ ? toA_from_F : toB_from_F;
+  if (hOut[0]*toShort[0] + hOut[1]*toShort[1] < 0) hOut = [-hOut[0], -hOut[1]];
+
+  // === h²-Quadrat (Z0_h): Ecken [F, C, Eq, Fq] ===
+  const Eq0 = [C0[0]+hOut[0]*h, C0[1]+hOut[1]*h];
+  const Fq0 = [F[0]+hOut[0]*h,  F[1]+hOut[1]*h];
+  const Z0_h = [F, C0, Eq0, Fq0];
+
+  // === Phase 1: Scherung mit Fixgerade CF ===
+  // Eq und Fq verschieben sich parallel zu CF (also parallel zu hN).
+  // Fq → G mit |F-G| = R (Schnittpunkt von Gerade Eq-Fq mit Kreis(F, R)).
+  //
+  // Gerade Eq-Fq: parametrisch P(s) = Fq + s*hN (entlang hN-Richtung, also parallel zu Höhe)
+  // Kreis: |P(s) - F|² = R²
+  // |Fq - F + s*hN|² = R². Setze d = Fq - F = hOut*h (senkrecht zu hN, Länge h).
+  // |d + s*hN|² = |d|² + s² (weil d ⊥ hN) = h² + s² = R²
+  // → s² = R² - h². Wir nehmen das negative s (G liegt "unter" der Hypotenuse).
+  const disc = R*R - h*h;
+  const sShear = (disc > 0) ? -Math.sqrt(disc) : 0;   // negativ → G liegt jenseits der Hypotenuse
+  const shiftVec = [sShear*hN[0], sShear*hN[1]];
+  const G_pt = [Fq0[0]+shiftVec[0], Fq0[1]+shiftVec[1]];
+  const Eq1  = [Eq0[0]+shiftVec[0], Eq0[1]+shiftVec[1]];
+  const Z1_h = [F, C0, Eq1, G_pt];
+
+  // === Phase 2: Drehung um F, sodass G → target (= B oder A, je nach p≥q) ===
+  // |F-G| = R, |F-target| = R ✓
+  const aG = Math.atan2(G_pt[1]-F[1], G_pt[0]-F[0]);
+  const aT = Math.atan2(target[1]-F[1], target[0]-F[0]);
+  const drehAngle = aT - aG;
+
+  function rotAround(P, pivot, ang) {
+    const cs = Math.cos(ang), sn = Math.sin(ang);
+    const dx = P[0]-pivot[0], dy = P[1]-pivot[1];
+    return [pivot[0] + cs*dx - sn*dy, pivot[1] + sn*dx + cs*dy];
+  }
+
+  const Z2_h = Z1_h.map(P => rotAround(P, F, drehAngle));
+
+  // === Phase 3: Scherung mit Achse F-target ===
+  // Z2_h Endpose: F (fest), target (= rotiertes G, fest), C_rot, Eq_rot.
+  // Z3_h: Rechteck p·q über Strecke [F, target] mit Höhe (q falls p≥q, p sonst), nach out gerichtet.
+  const rectHeight = pGreaterQ ? q : p;
+  // Z3_h-Ecken in derselben Reihenfolge wie Z2_h:
+  // Z2_h[0] = F (Pivot, fest) ↔ Z3_h[0] = F
+  // Z2_h[3] = target (= G_rot, fest) ↔ Z3_h[1] = target
+  // Z2_h[1] = C_rot ↔ Z3_h[?] (untere Ecke "rechts" von F-Sicht)
+  // Z2_h[2] = Eq_rot ↔ Z3_h[?]
+  //
+  // Z3_h = [F, target, target+out·rectHeight, F+out·rectHeight]
+  // Mapping mit Z2_h: 
+  //  Z2_h[0] = F → Z3_h[0] = F ✓
+  //  Z2_h[1] = C_rot (entspricht ehemals C, das nach Drehung in Richtung target gedreht ist)
+  //           In unserem konkreten Test ist Z2_h[1] = (-30, -30) bei p=60, q=30. Das passt
+  //           zu Z3_h[3] = F+out·q = (0, -30)? NEIN — die x-Koord ist anders.
+  //           Aber bei Scherung mit Achse y=0 ändert sich x, nicht y. Verschiebung von 
+  //           (-30,-30) nach (0,-30) ist Δx=+30, Δy=0 ✓.
+  //  Z2_h[2] = Eq_rot — in Test (30, -30) → Z3_h[2] = (60, -30) (Δx=+30) ✓
+  //  Z2_h[3] = G_rot = target → Z3_h[1] = target ✓
+  // 
+  // Korrespondenz: Z2_h[0]↔Z3_h[0], Z2_h[1]↔Z3_h[3], Z2_h[2]↔Z3_h[2], Z2_h[3]↔Z3_h[1]
+  const Z3_h = [
+    F,
+    target,
+    [target[0]+out[0]*rectHeight, target[1]+out[1]*rectHeight],
+    [F[0]+out[0]*rectHeight, F[1]+out[1]*rectHeight]
+  ];
+  // Z3 in Reihenfolge passend zu Z2: [Z3_h[0], Z3_h[3], Z3_h[2], Z3_h[1]]
+  const Z3_h_re = [Z3_h[0], Z3_h[3], Z3_h[2], Z3_h[1]];
+
+  // === Aktuelle Pose berechnen ===
+  let hPoly;
+  if (t <= 1/3) {
+    // Phase 1: Scherung Z0_h → Z1_h
+    const tL = t * 3;
+    hPoly = [
+      Z0_h[0],   // F fest
+      Z0_h[1],   // C fest
+      [lerp(Z0_h[2][0], Z1_h[2][0], tL), lerp(Z0_h[2][1], Z1_h[2][1], tL)],   // Eq → Eq_neu
+      [lerp(Z0_h[3][0], Z1_h[3][0], tL), lerp(Z0_h[3][1], Z1_h[3][1], tL)]    // Fq → G
+    ];
+  } else if (t <= 2/3) {
+    // Phase 2: Drehung Z1_h → Z2_h
+    const tL = (t - 1/3) * 3;
+    hPoly = Z1_h.map(P => rotAround(P, F, drehAngle * tL));
+  } else {
+    // Phase 3: Scherung Z2_h → Z3_h_re (Eckpunkt-für-Eckpunkt)
+    const tL = (t - 2/3) * 3;
+    hPoly = Z2_h.map((P, i) => [
+      lerp(P[0], Z3_h_re[i][0], tL),
+      lerp(P[1], Z3_h_re[i][1], tL)
+    ]);
+  }
+
+  // ====================================================================
+  //  Zeichnen
+  // ====================================================================
+
+  // Dreieck
+  fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+  drawSmallRect(ctx, A, C0, B);   // rechter Winkel bei C
+
+  // Höhe von C zu F
+  seg(ctx, C0, F, C.tinte2, 1.5);
+  drawSmallRect(ctx, C0, F, B);   // rechter Winkel am Höhenfusspunkt
+  dot(ctx, F, C.tinte2, 4);
+
+  // Ziel-Rechteck p·q in HINTERGRUND (immer schwach sichtbar als grünes Polygon)
+  fillPoly(ctx, Z3_h, 'rgba(22, 101, 52, 0.15)', C.gruen, 1.5);
+  // Label
+  const Z3_mid = [(Z3_h[0][0]+Z3_h[2][0])/2, (Z3_h[0][1]+Z3_h[2][1])/2];
+  txt(ctx, Z3_mid[0], Z3_mid[1], 'p · q', C.gruen, 14, 'center', 'middle', '700');
+
+  // Original h²-Quadrat IMMER sichtbar (schwach orange)
+  fillPoly(ctx, Z0_h, 'rgba(194, 65, 12, 0.15)', C.orange, 1.5);
+  const Z0_mid = [(Z0_h[0][0]+Z0_h[2][0])/2, (Z0_h[0][1]+Z0_h[2][1])/2];
+  txt(ctx, Z0_mid[0], Z0_mid[1], 'h²', C.orange, 14, 'center', 'middle', '700');
+
+  // Animierte Kopie (kräftiger orange)
+  fillPoly(ctx, hPoly, 'rgba(194, 65, 12, 0.40)', C.orange, 2);
+
+  // Eckpunkte und Beschriftungen
+  txt(ctx, A[0]-12, A[1]+12, 'A', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, B[0]+12, B[1]+12, 'B', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, C0[0],   C0[1]-16, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+  // Seitenlabels (a, b an den Katheten)
+  const sLab = (P, Q, R_, dist = 12) => {
+    const mid = [(P[0]+Q[0])/2, (P[1]+Q[1])/2];
+    const dx = mid[0] - R_[0], dy = mid[1] - R_[1];
+    const len = Math.hypot(dx, dy) || 1;
+    return [mid[0] + dx/len * dist, mid[1] + dy/len * dist];
+  };
+  const lA = sLab(B, C0, A); txt(ctx, lA[0], lA[1], 'a', C.tinte2, 14, 'center', 'middle', '600');
+  const lB = sLab(A, C0, B); txt(ctx, lB[0], lB[1], 'b', C.tinte2, 14, 'center', 'middle', '600');
+  // c-Beschriftung auf Hypotenuse, abseits von p, q
+  const cLabX = A[0] + (B[0]-A[0]) * 0.5;   // mittig
+  txt(ctx, cLabX, A[1]-10, 'c', C.tinte, 14, 'center', 'middle', '700');
+  // F-Label
+  txt(ctx, F[0]-8, F[1]-10, 'F', C.tinte2, 14, 'center', 'middle', '700');
+  // p, q-Labels UNTERHALB des Rechtecks
+  const labelY = F[1] + rectHeight + 14;
+  txt(ctx, (A[0]+F[0])/2, labelY, 'q', C.tinte2, 14, 'center', 'middle', '700');
+  txt(ctx, (F[0]+B[0])/2, labelY, 'p', C.tinte2, 14, 'center', 'middle', '700');
+  // h-Beschriftung neben der Höhe
+  txt(ctx, (C0[0]+F[0])/2 - 12, (C0[1]+F[1])/2, 'h', C.orange, 14, 'center', 'middle', '700');
+
+  // C als Drag-Handle
+  dot(ctx, C0, C.blau, 7);
+
+  // Phase-Beschriftung oben
+  let phaseTitle = '';
+  if      (t < 1/3) phaseTitle = 'Phase 1: Scherung des h²-Quadrats';
+  else if (t < 2/3) phaseTitle = 'Phase 2: Drehung um Höhenfusspunkt';
+  else              phaseTitle = 'Phase 3: Scherung zum p·q-Rechteck';
+  ctx.save();
+  ctx.fillStyle = C.tinte2;
+  ctx.font = '600 12px "Source Sans 3", sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText(phaseTitle, 265, 8);
+  ctx.restore();
+
+  pythFbox.innerHTML = `\\( h^2 = p \\cdot q \\)<br>
+    <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--tinte-2)">${(h*h/100).toFixed(2)} = ${(p*q/100).toFixed(2)} cm²</span>`;
+  pythLegende.innerHTML = `
+    <div class="legende-titel">Werte</div>
+    <div class="legende-zeile"><span class="lab">a</span><span class="val">${(a/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile"><span class="lab">b</span><span class="val">${(b/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile"><span class="lab">c</span><span class="val">${(c/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile" style="border-top:1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab">h (Höhe auf c)</span><span class="val">${(h/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile"><span class="lab">p</span><span class="val">${(p/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile"><span class="lab">q</span><span class="val">${(q/10).toFixed(2)} cm</span></div>
+    <div class="legende-zeile" style="border-top:1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab" style="color:${C.orange}">h²</span><span class="val" style="color:${C.orange}">${(h*h/100).toFixed(2)} cm²</span></div>
+    <div class="legende-zeile"><span class="lab" style="color:${C.gruen}">p · q</span><span class="val" style="color:${C.gruen}">${(p*q/100).toFixed(2)} cm²</span></div>`;
+}
+
+function drawQuadOnSeg(ctx, P, Q, fill, stroke, label) {
+  // Quadrat über Strecke PQ, AUSSEN vom Dreieck (auf der vom dritten Punkt abgewandten Seite)
+  const dx = Q[0]-P[0], dy = Q[1]-P[1];
+  // Senkrechte AUSSEN: per default (-dy, dx) → liegt links der Strecke
+  // Wir versuchen es so und drehen ggf.
+  const perp = [-dy, dx];
+  // Quadratecken: P, Q, Q+perp, P+perp
+  const P2 = [Q[0]+perp[0], Q[1]+perp[1]];
+  const P3 = [P[0]+perp[0], P[1]+perp[1]];
+  fillPoly(ctx, [P, Q, P2, P3], fill, stroke, 2);
+  // Beschriftung in der Mitte
+  const cx = (P[0]+Q[0]+P2[0]+P3[0]) / 4;
+  const cy = (P[1]+Q[1]+P2[1]+P3[1]) / 4;
+  txt(ctx, cx, cy, label, stroke, 14, 'center', 'middle', '700');
+}
+
+makeDraggable(document.getElementById('cv-pyth'), pythPts, drawPyth, 12, [2]);
+
+/* ============================================================
+ *  ANIMATION 8 — Pythagoras-Anwendung (halbes Δ / halbes Quadrat)
+ * ============================================================ */
+let anwTyp = 'gleichseitig';
+let anwSeite = 'a';
+let anwWert = '1';            // '1' = konkrete Zahl, 'g' = symbolische Variable g
+const anwTabs = document.getElementById('anw-tabs');
+const anwSeiteTabs = document.getElementById('anw-seite');
+const anwWertTabs = document.getElementById('anw-wert');
+const anwLegende = document.getElementById('anw-legende');
+const anwFbox = document.getElementById('anw-fbox');
+
+anwTabs.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    anwTabs.querySelectorAll('.chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    anwTyp = btn.dataset.typ;
+    drawAnw();
+  });
+});
+anwSeiteTabs.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    anwSeiteTabs.querySelectorAll('.chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    anwSeite = btn.dataset.seite;
+    drawAnw();
+  });
+});
+anwWertTabs.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    anwWertTabs.querySelectorAll('.chip').forEach(b => b.classList.remove('aktiv'));
+    btn.classList.add('aktiv');
+    anwWert = btn.dataset.wert;
+    drawAnw();
+  });
+});
+
+function drawAnw() {
+  const { ctx, W, H } = initCv('cv-anw');
+  const cx = W / 2, cy = H / 2 + 10;
+
+  // ----------------------------------------------------------
+  // Geometrie der Vollform und Halbierung
+  //   Gleichseitig: Vollform = gleichseitiges Δ mit Seite s_voll
+  //                 Halbierung: Lot von Spitze auf Grundseite,
+  //                 ergibt rechtwinkliges Δ mit
+  //                   a (kurze Kathete) = s_voll / 2
+  //                   b (lange Kathete) = s_voll · √3/2
+  //                   c (Hypotenuse)    = s_voll
+  //   Quadrat:      Vollform = Quadrat mit Seite s_voll
+  //                 Halbierung: Diagonale teilt das Quadrat,
+  //                   a = b = s_voll
+  //                   c (Hypotenuse) = s_voll · √2
+  // ----------------------------------------------------------
+
+  // Anzeige-Skala: das Vollformbild soll ca. 240 px breit/hoch sein
+  let s_voll_px;   // Pixel-Länge der Vollformseite (Volldreieck-Seitenlänge / Quadrat-Seitenlänge)
+  if (anwTyp === 'gleichseitig') s_voll_px = 240;
+  else                            s_voll_px = 200;
+
+  // ----------------------------------------------------------
+  // Zeichne die Volldarstellung (gestrichelter Schenkel/Quadrat-Linie)
+  // mit hervorgehobener Halbierung.
+  // ----------------------------------------------------------
+  if (anwTyp === 'gleichseitig') {
+    // Gleichseitiges Dreieck: Eckpunkte unten links (UL), unten rechts (UR), Spitze oben
+    const s = s_voll_px;
+    const h = s * Math.sqrt(3) / 2;
+    const UL = [cx - s/2, cy + h/2];
+    const UR = [cx + s/2, cy + h/2];
+    const SP = [cx,       cy - h/2];     // Spitze oben
+    const MM = [cx,       cy + h/2];     // Lotfusspunkt (Mitte UL-UR)
+
+    // Gestricheltes Volldreieck (linke Hälfte) — die rechte Hälfte wird unten durchgezogen gezeichnet
+    dashedSeg(ctx, UL, SP, C.tinte2, 1.5);
+    dashedSeg(ctx, UL, MM, C.tinte2, 1.5);
+    // Mittellinie (Höhe von Spitze) gestrichelt
+    dashedSeg(ctx, SP, MM, C.tinte2, 1.5);
+
+    // Rechte Hälfte: das hervorgehobene Halbdreieck
+    fillPoly(ctx, [MM, UR, SP], BLAU_FILL, C.blau, 2);
+
+    // Rechtwinkel-Marker bei MM
+    const rwSize = 12;
+    ctx.save();
+    ctx.strokeStyle = C.tinte; ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.moveTo(MM[0] + rwSize, MM[1]);
+    ctx.lineTo(MM[0] + rwSize, MM[1] - rwSize);
+    ctx.lineTo(MM[0],          MM[1] - rwSize);
+    ctx.stroke();
+    ctx.restore();
+
+    // Winkel-Bögen und -Labels
+    // Im Halbdreieck: A = UR (unten rechts, Winkel α = 60°),
+    //                  B = SP (oben, Winkel β = 30°),
+    //                  C = MM (Lotfuss, γ = 90°)
+    const A_h = UR, B_h = SP, C_h = MM;
+    drawAngleSector(ctx, A_h, B_h, C_h, 28, 'rgba(30,58,138,0.18)', C.blau);
+    drawAngleSector(ctx, B_h, C_h, A_h, 28, 'rgba(30,58,138,0.18)', C.blau);
+
+    // Labels für die Winkel
+    // 60° bei A_h: irgendwo links-oberhalb von A_h
+    txt(ctx, A_h[0] - 30, A_h[1] - 12, '60°', C.blau, 14, 'center', 'middle', '700');
+    // 30° bei B_h: rechts-unterhalb von B_h
+    txt(ctx, B_h[0] + 18, B_h[1] + 28, '30°', C.blau, 14, 'center', 'middle', '700');
+    // 90° bei C_h: in der Innenecke (rechts oberhalb von MM)
+    txt(ctx, C_h[0] + 18, C_h[1] - 18, '90°', C.tinte, 13, 'center', 'middle', '600');
+
+    // Eckpunkte beschriften
+    txt(ctx, A_h[0] + 14, A_h[1] + 14, 'A', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B_h[0],      B_h[1] - 16, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C_h[0] - 14, C_h[1] + 14, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+    // Vollform-Spitze links (Spiegelung von A_h) als Punkt sichtbar
+    txt(ctx, UL[0] - 14, UL[1] + 14, "A'", C.tinte2, 14, 'center', 'middle', '600');
+
+    // Seitenbeschriftungen (Halbdreieck): a = C-A (unten), b = C-B (vertikal), c = A-B (Schenkel)
+    txt(ctx, (C_h[0] + A_h[0]) / 2,            C_h[1] + 16,                'a', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C_h[0] + 12,                       (C_h[1] + B_h[1]) / 2,      'b', C.tinte, 14, 'left',   'middle', '700');
+    txt(ctx, (A_h[0] + B_h[0]) / 2 + 18,        (A_h[1] + B_h[1]) / 2,      'c', C.tinte, 14, 'left',   'middle', '700');
+
+    // Bildunterzeile: Erklärung der Halbierung
+    txt(ctx, cx, UR[1] + 38,
+        'Das gleichseitige Dreieck wird durch die Höhe in zwei deckungsgleiche 30°-60°-90°-Dreiecke geteilt.',
+        C.tinte2, 13, 'center', 'middle', '500');
+  }
+  else {
+    // Halbes Quadrat: Quadrat mit Diagonale, untere rechtwinklige Hälfte hervorgehoben
+    const s = s_voll_px;
+    const UL = [cx - s/2, cy - s/2];
+    const UR = [cx + s/2, cy - s/2];
+    const DR = [cx + s/2, cy + s/2];
+    const DL = [cx - s/2, cy + s/2];
+
+    // Obere Hälfte (Dreieck UL, UR, DL) gestrichelt
+    dashedSeg(ctx, UL, UR, C.tinte2, 1.5);
+    dashedSeg(ctx, UL, DL, C.tinte2, 1.5);
+    // Diagonale (durchgezogen — sie ist sowohl Quadrat-Diagonale als auch Hypotenuse des Halbdreiecks)
+    // Wird gleich nochmal durch das fillPoly gezeichnet — Reihenfolge egal
+
+    // Untere Hälfte (Dreieck UR, DR, DL) hervorgehoben
+    fillPoly(ctx, [UR, DR, DL], BLAU_FILL, C.blau, 2);
+
+    // Rechtwinkel-Marker bei DR
+    const rwSize = 12;
+    ctx.save();
+    ctx.strokeStyle = C.tinte; ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.moveTo(DR[0] - rwSize, DR[1]);
+    ctx.lineTo(DR[0] - rwSize, DR[1] - rwSize);
+    ctx.lineTo(DR[0],          DR[1] - rwSize);
+    ctx.stroke();
+    ctx.restore();
+
+    // Winkel-Bögen und -Labels
+    // Halbdreieck: A = DL (Winkel α = 45°), B = UR (Winkel β = 45°), C = DR (γ = 90°)
+    const A_h = DL, B_h = UR, C_h = DR;
+    drawAngleSector(ctx, A_h, B_h, C_h, 28, 'rgba(30,58,138,0.18)', C.blau);
+    drawAngleSector(ctx, B_h, C_h, A_h, 28, 'rgba(30,58,138,0.18)', C.blau);
+
+    txt(ctx, A_h[0] + 36, A_h[1] - 14, '45°', C.blau, 14, 'center', 'middle', '700');
+    txt(ctx, B_h[0] - 14, B_h[1] + 36, '45°', C.blau, 14, 'center', 'middle', '700');
+    txt(ctx, C_h[0] - 18, C_h[1] - 18, '90°', C.tinte, 13, 'center', 'middle', '600');
+
+    // Eckpunkte beschriften
+    txt(ctx, A_h[0] - 14, A_h[1] + 14, 'A', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B_h[0] + 14, B_h[1] - 14, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C_h[0] + 14, C_h[1] + 14, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+    // Vierter (gespiegelter) Eckpunkt
+    txt(ctx, UL[0] - 14, UL[1] - 14, "C'", C.tinte2, 14, 'center', 'middle', '600');
+
+    // Seitenbeschriftungen (Halbdreieck): a = C-A (unten), b = C-B (rechts), c = A-B (Diagonale)
+    txt(ctx, (C_h[0] + A_h[0]) / 2,            C_h[1] + 16,                'a', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C_h[0] + 14,                       (C_h[1] + B_h[1]) / 2,      'b', C.tinte, 14, 'left',   'middle', '700');
+    // c auf der Hypotenuse — Mittelpunkt versetzt nach rechts-unten (in die hervorgehobene Hälfte)
+    txt(ctx, (A_h[0] + B_h[0]) / 2 + 12,        (A_h[1] + B_h[1]) / 2 + 12, 'c', C.tinte, 14, 'left',   'middle', '700');
+
+    // Bildunterzeile
+    txt(ctx, cx, DR[1] + 38,
+        'Das Quadrat wird durch die Diagonale in zwei deckungsgleiche 45°-45°-90°-Dreiecke geteilt.',
+        C.tinte2, 13, 'center', 'middle', '500');
+  }
+
+  // ----------------------------------------------------------
+  // Werte-Legende rechts:
+  //   zeigt für a, b, c die symbolischen Werte (in Variable g oder Zahlen).
+  // ----------------------------------------------------------
+  const w = anwWert;                          // '1' oder 'g'
+  const farbeOf = (s) => (anwSeite === s ? C.gruen : C.orange);
+
+  let aTxt, bTxt, cTxt;
+  if (anwTyp === 'gleichseitig') {
+    // Verhältnis a : b : c = 1 : √3 : 2
+    if (anwSeite === 'a') {
+      aTxt = w;
+      bTxt = (w === '1') ? '√3 ≈ 1.732'         : 'g · √3';
+      cTxt = (w === '1') ? '2'                  : '2g';
+    } else if (anwSeite === 'b') {
+      aTxt = (w === '1') ? '1/√3 ≈ 0.577'       : 'g / √3 = g·√3 / 3';
+      bTxt = w;
+      cTxt = (w === '1') ? '2/√3 ≈ 1.155'       : '2g / √3 = 2g·√3 / 3';
+    } else { // c
+      aTxt = (w === '1') ? '0.5'                : 'g / 2';
+      bTxt = (w === '1') ? '√3/2 ≈ 0.866'       : 'g·√3 / 2';
+      cTxt = w;
+    }
+  } else {
+    // Quadrat: a : b : c = 1 : 1 : √2
+    if (anwSeite === 'a') {
+      aTxt = w;
+      bTxt = w;
+      cTxt = (w === '1') ? '√2 ≈ 1.414'         : 'g · √2';
+    } else if (anwSeite === 'b') {
+      aTxt = w;
+      bTxt = w;
+      cTxt = (w === '1') ? '√2 ≈ 1.414'         : 'g · √2';
+    } else { // c
+      aTxt = (w === '1') ? '1/√2 ≈ 0.707'       : 'g / √2 = g·√2 / 2';
+      bTxt = (w === '1') ? '1/√2 ≈ 0.707'       : 'g / √2 = g·√2 / 2';
+      cTxt = w;
+    }
+  }
+
+  anwLegende.innerHTML = `
+    <div class="legende-titel">Werte</div>
+    <div class="legende-zeile"><span class="lab">a (Kathete)</span><span class="val" style="color:${farbeOf('a')}">${aTxt}</span></div>
+    <div class="legende-zeile"><span class="lab">b (Kathete)</span><span class="val" style="color:${farbeOf('b')}">${bTxt}</span></div>
+    <div class="legende-zeile"><span class="lab">c (Hypotenuse)</span><span class="val" style="color:${farbeOf('c')}">${cTxt}</span></div>`;
+
+  // ----------------------------------------------------------
+  // Rechenweg (Box unten):
+  //   statisch, aber Inhalt dynamisch nach (Typ, Seite, Wert)
+  // ----------------------------------------------------------
+  anwFbox.innerHTML = pythRechnung(anwTyp, anwSeite, anwWert);
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([anwFbox]);
+}
+
+// Rechenweg-Generator: liefert HTML mit MathJax-Formeln.
+// Aufbau: (1) Geometrie-Beziehung, (2) Pythagoras-Ansatz, (3) Umformung,
+// (4) Resultat. Bei Bedarf Numerik-Auswertung am Schluss.
+function pythRechnung(typ, gegSeite, wert) {
+  const isNum = (wert === '1');
+  const v = isNum ? '1' : 'g';   // String zum Einsetzen
+
+  // Helfer für gemeinsamen Rahmen
+  const titel = `<div style="font-weight:600;color:var(--blau);margin-bottom:6px;font-size:0.88rem">Rechenweg</div>`;
+  const schritte = [];
+
+  if (typ === 'gleichseitig') {
+    // ─── Halbes gleichseitiges Dreieck ─────────────────────────
+    // Geometrie: kurze Kathete a = c/2 (C halbiert die Grundseite des Volldreiecks)
+    schritte.push(`Geometrie: \\( a = \\dfrac{c}{2} \\) — der Lotfusspunkt halbiert die Grundseite.`);
+
+    if (gegSeite === 'a') {
+      // a gegeben → c = 2a → b über Pythagoras
+      schritte.push(`Gegeben: \\( a = ${v} \\)`);
+      schritte.push(`Daraus folgt: \\( c = 2a = ${isNum ? '2' : '2g'} \\)`);
+      schritte.push(`Pythagoras: \\( a^2 + b^2 = c^2 \\)`);
+      schritte.push(`Auflösen nach \\( b \\): \\( b^2 = c^2 - a^2 = ${isNum ? '4 - 1 = 3' : '4g^2 - g^2 = 3g^2'} \\)`);
+      schritte.push(`\\( b = \\sqrt{${isNum ? '3' : '3g^2'}} = ${isNum ? '\\sqrt{3} \\approx 1.732' : 'g\\sqrt{3}'} \\)`);
+    }
+    else if (gegSeite === 'b') {
+      // b gegeben → finde c via Pythagoras mit a = c/2
+      schritte.push(`Gegeben: \\( b = ${v} \\)`);
+      schritte.push(`Pythagoras mit \\( a = c/2 \\): \\( \\left(\\dfrac{c}{2}\\right)^2 + b^2 = c^2 \\)`);
+      schritte.push(`\\( \\dfrac{c^2}{4} + b^2 = c^2 \\;\\Longrightarrow\\; b^2 = c^2 - \\dfrac{c^2}{4} = \\dfrac{3c^2}{4} \\)`);
+      schritte.push(`Auflösen nach \\( c \\): \\( c^2 = \\dfrac{4b^2}{3} \\;\\Longrightarrow\\; c = \\dfrac{2b}{\\sqrt{3}} = \\dfrac{2b\\sqrt{3}}{3} \\)`);
+      if (isNum) schritte.push(`Einsetzen: \\( c = \\dfrac{2\\sqrt{3}}{3} \\approx 1.155 \\)`);
+      else       schritte.push(`Einsetzen: \\( c = \\dfrac{2g\\sqrt{3}}{3} \\)`);
+      schritte.push(`Und: \\( a = \\dfrac{c}{2} = ${isNum ? '\\dfrac{\\sqrt{3}}{3} \\approx 0.577' : '\\dfrac{g\\sqrt{3}}{3}'} \\)`);
+    }
+    else { // c
+      schritte.push(`Gegeben: \\( c = ${v} \\)`);
+      schritte.push(`Sofort: \\( a = \\dfrac{c}{2} = ${isNum ? '\\dfrac{1}{2} = 0.5' : '\\dfrac{g}{2}'} \\)`);
+      schritte.push(`Pythagoras: \\( a^2 + b^2 = c^2 \\)`);
+      schritte.push(`Auflösen nach \\( b \\): \\( b^2 = c^2 - a^2 = ${isNum ? '1 - \\tfrac{1}{4} = \\tfrac{3}{4}' : 'g^2 - \\tfrac{g^2}{4} = \\tfrac{3g^2}{4}'} \\)`);
+      schritte.push(`\\( b = ${isNum ? '\\dfrac{\\sqrt{3}}{2} \\approx 0.866' : '\\dfrac{g\\sqrt{3}}{2}'} \\)`);
+    }
+    schritte.push(`<span style="color:var(--tinte-2)">Verhältnis: \\( a : b : c = 1 : \\sqrt{3} : 2 \\)</span>`);
+  }
+  else {
+    // ─── Halbes Quadrat ────────────────────────────────────────
+    schritte.push(`Geometrie: \\( a = b \\) — beide Katheten sind Quadratseiten.`);
+
+    if (gegSeite === 'a' || gegSeite === 'b') {
+      const lab = gegSeite;
+      const other = (gegSeite === 'a') ? 'b' : 'a';
+      schritte.push(`Gegeben: \\( ${lab} = ${v} \\)`);
+      schritte.push(`Wegen \\( a = b \\): \\( ${other} = ${v} \\)`);
+      schritte.push(`Pythagoras: \\( a^2 + b^2 = c^2 \\;\\Longrightarrow\\; ${isNum ? '1 + 1 = c^2' : 'g^2 + g^2 = c^2'} \\)`);
+      schritte.push(`\\( c^2 = ${isNum ? '2' : '2g^2'} \\;\\Longrightarrow\\; c = ${isNum ? '\\sqrt{2} \\approx 1.414' : 'g\\sqrt{2}'} \\)`);
+    }
+    else { // c
+      schritte.push(`Gegeben: \\( c = ${v} \\)`);
+      schritte.push(`Pythagoras mit \\( a = b \\): \\( a^2 + a^2 = c^2 \\;\\Longrightarrow\\; 2a^2 = c^2 \\)`);
+      schritte.push(`Auflösen: \\( a^2 = \\dfrac{c^2}{2} \\;\\Longrightarrow\\; a = \\dfrac{c}{\\sqrt{2}} = \\dfrac{c\\sqrt{2}}{2} \\)`);
+      if (isNum) schritte.push(`Einsetzen: \\( a = \\dfrac{\\sqrt{2}}{2} \\approx 0.707 \\), und \\( b = a \\)`);
+      else       schritte.push(`Einsetzen: \\( a = \\dfrac{g\\sqrt{2}}{2} \\), und \\( b = a \\)`);
+    }
+    schritte.push(`<span style="color:var(--tinte-2)">Verhältnis: \\( a : b : c = 1 : 1 : \\sqrt{2} \\)</span>`);
+  }
+
+  return titel + schritte.map(s => `<div style="margin:3px 0;font-size:0.86rem">${s}</div>`).join('');
+}
+
+/* ============================================================
+ *  INITIAL DRAW
+ * ============================================================ */
+window.addEventListener('load', () => {
+  drawAllg();
+  drawBeweis();
+  drawSpez();
+  drawElem();
+  drawFl();
+  drawKong();
+  drawPyth();
+  drawAnw();
+});
+window.addEventListener('resize', () => {
+  drawAllg();
+  drawBeweis();
+  drawSpez();
+  drawElem();
+  drawFl();
+  drawKong();
+  drawPyth();
+  drawAnw();
+  drawStativ();
+});
+
+/* ════════════════════════════════════════════════════════════════
+ *  EINSTIEG · Stativ-Animation
+ *  Sicht von schräg oben. Boden-Unebenheit hebt einen Aufstandspunkt
+ *  in der Höhe an; bei N=2 fällt das Stativ, bei N=3 immer stabil
+ *  (drei Punkte definieren eine Ebene), bei N>=4 mit Unebenheit > 0
+ *  hebt sich genau ein Bein vom Boden.
+ * ════════════════════════════════════════════════════════════════ */
+function drawStativ() {
+  const N = +document.getElementById('sld-stativN').value;
+  const U = +document.getElementById('sld-stativU').value;
+  document.getElementById('lbl-stativN').textContent = N;
+  document.getElementById('lbl-stativU').textContent = U;
+
+  const { ctx, W, H } = initCanvas('cv-stativ', 360);
+  // Hintergrund-Boden
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  // Stativ-Geometrie
+  const cx = W / 2;
+  const cy_top = 80;       // Stativ-Spitze (Bildschirm-Y)
+  const cy_floor = H - 70; // Boden-Mittelpunkt
+  const radius_screen_x = 130; // Boden-Ellipsen-Halbachse horizontal
+  const radius_screen_y = 36;  // Boden-Ellipsen-Halbachse vertikal (Perspektive)
+
+  // Boden als perspektivische Ellipse zeichnen (gestrichelt)
+  ctx.strokeStyle = '#a89b85';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.ellipse(cx, cy_floor, radius_screen_x, radius_screen_y, 0, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Boden-Höhen pro Bein berechnen (Unebenheit als sinusoide Welle über Winkel)
+  // u_i = U * sin(2 * angle_i)  → ergibt sichtbares Auf-und-Ab
+  const beine = [];
+  for (let i = 0; i < N; i++) {
+    const angle = -Math.PI / 2 + (2 * Math.PI * i) / N; // start oben, Gegenuhrzeiger
+    const fx = cx + Math.cos(angle) * radius_screen_x;
+    const fy_base = cy_floor + Math.sin(angle) * radius_screen_y;
+    // Höhe des Bodens am Aufstandspunkt — nur 1.Bein hebt sich (für klare Visualisierung)
+    const u_i = (i === 0) ? U : 0; // einfacher: ein Bein wird angehoben
+    const fy = fy_base - u_i;       // negativ = höher auf Bildschirm
+    beine.push({ fx, fy, fy_base, u: u_i, angle });
+  }
+
+  // Welche Beine berühren den Boden?
+  // N=2: nie stabil (Linie kippt um) — beide Beine zwar in Kontakt, aber kein Stand
+  // N=3: alle drei Beine immer in Kontakt
+  // N>=4: bei U>0 verliert ein Bein den Kontakt; bei U=0 alle in Kontakt
+  let bodenKontakte, stabil, erkl;
+  if (N === 2) {
+    bodenKontakte = 2;
+    stabil = false;
+    erkl = 'Zwei Beine: das „Stativ" ist nur eine Linie. Es kippt sofort zur Seite weg.';
+  } else if (N === 3) {
+    bodenKontakte = 3;
+    stabil = true;
+    erkl = 'Drei Beine: die drei Aufstandspunkte definieren <em>immer</em> eine Ebene. Egal wie uneben der Boden — das Stativ steht stabil.';
+  } else {
+    if (U === 0) {
+      bodenKontakte = N;
+      stabil = true;
+      erkl = `${N} Beine bei perfekt ebenem Boden: alle berühren ihn. Aber sobald der Boden uneben wird …`;
+    } else {
+      bodenKontakte = N - 1;
+      stabil = false;
+      erkl = `${N} Beine: ein Bein ist in der Luft (gelb markiert). Das Stativ kippelt zwischen Diagonal-Positionen.`;
+    }
+  }
+
+  // Beine zeichnen
+  beine.forEach((b, i) => {
+    const inKontakt = (N === 3) || (N >= 4 && U === 0) || (N >= 4 && i !== 0);
+    const farbe = inKontakt ? '#1f6b3a' : '#d4a017'; // grün = Kontakt, gelb = abgehoben
+    const linewidth = 3;
+
+    ctx.strokeStyle = farbe;
+    ctx.lineWidth = linewidth;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy_top);
+    ctx.lineTo(b.fx, b.fy);
+    ctx.stroke();
+
+    // Aufstandspunkt
+    ctx.fillStyle = farbe;
+    ctx.beginPath();
+    ctx.arc(b.fx, b.fy, 6, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Wenn Bein abgehoben: gestrichelte Linie nach unten zum Boden
+    if (!inKontakt) {
+      ctx.strokeStyle = '#d4a017';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(b.fx, b.fy);
+      ctx.lineTo(b.fx, b.fy_base);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Markierung "schwebt"
+      ctx.fillStyle = '#9a7508';
+      ctx.font = 'bold 11px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`+${U} cm`, b.fx, b.fy - 10);
+    }
+  });
+
+  // Stativ-Spitze (Kamera-Symbol als Kasten oben)
+  ctx.fillStyle = '#1c1a17';
+  ctx.fillRect(cx - 18, cy_top - 14, 36, 14);
+  // Objektiv vorne
+  ctx.fillStyle = '#5a5040';
+  ctx.beginPath();
+  ctx.arc(cx, cy_top - 7, 6, 0, 2 * Math.PI);
+  ctx.fill();
+  // Spitzen-Punkt unten an der Kamera
+  ctx.fillStyle = '#1c1a17';
+  ctx.beginPath();
+  ctx.arc(cx, cy_top, 4, 0, 2 * Math.PI);
+  ctx.fill();
+
+  // Bei N=2: Kipp-Indikator (gestrichelte Linie nach links)
+  if (N === 2) {
+    ctx.strokeStyle = '#a83a3a';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy_top);
+    ctx.lineTo(cx - 80, cy_floor - 20);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#a83a3a';
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('kippt!', cx - 110, cy_floor - 35);
+  }
+
+  // Anzeigen aktualisieren
+  document.getElementById('leg-stativK').textContent = `${bodenKontakte} von ${N}`;
+  const sEl = document.getElementById('leg-stativS');
+  sEl.textContent = stabil ? '✓ ja' : '✗ nein';
+  sEl.style.color = stabil ? 'var(--gruen)' : 'var(--rot)';
+  document.getElementById('erkl-stativ').innerHTML = erkl;
+}
+document.getElementById('sld-stativN').addEventListener('input', drawStativ);
+document.getElementById('sld-stativU').addEventListener('input', drawStativ);
+</script>
+</body>
+</html>

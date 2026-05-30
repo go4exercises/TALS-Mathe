@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anwendungsaufgaben · Quadratische Gleichungen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  .aufg-rahmen { border: 1pt solid var(--linie); border-radius: 4px; padding: 4mm; margin: 3mm 0; page-break-inside: avoid; break-inside: avoid; }
+  .aufg-rahmen .aufg-kopf { margin-bottom: 2mm; align-items: baseline; }
+  .schwierig { font-family: var(--mono); font-size: 8pt; color: var(--tinte-2); margin-left: auto; letter-spacing: 0.5px; }
+  .schwierig .punkt { color: var(--orange); font-size: 9pt; }
+  .schwierig .punkt-leer { color: var(--linie); font-size: 9pt; }
+  .bereich-tag { font-family: var(--mono); font-size: 7.5pt; color: var(--blau); background: var(--blau-hell); padding: 0.5mm 2mm; border-radius: 3px; text-transform: uppercase; letter-spacing: 1px; margin-left: 3mm; }
+  .lin-mehr { margin-bottom: 2mm; }
+  .lin-mehr .lin { height: 7mm; }
+  .uebersicht { width: 100%; border-collapse: collapse; font-size: 9.2pt; margin: 3mm 0 5mm; }
+  .uebersicht th, .uebersicht td { border: 1px solid var(--linie); padding: 1.4mm 2.5mm; text-align: left; }
+  .uebersicht th { background: var(--papier-2); font-family: var(--sans); font-weight: 700; }
+  .uebersicht td.nr { text-align: center; font-family: var(--mono); width: 10mm; }
+  .uebersicht td.s  { text-align: center; font-family: var(--mono); width: 18mm; color: var(--orange); letter-spacing: 1px; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g2-2b-quadratische-gleichungen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Anwendungsaufgaben · A4</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · Quadratische Gleichungen</div>
+    <h1>Anwendungsaufgaben — Quadratische Gleichungen</h1>
+  </header>
+
+  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik, Architektur und Life Sciences. Jeder Sachverhalt führt
+    auf eine quadratische Gleichung. Vorgehen: Variable festlegen → Gleichung aufstellen → auf
+    allgemeine Form bringen → lösen → Probe → Antwortsatz mit Einheit. Negative Lösungen werden in
+    physikalischen Kontexten oft verworfen — kommentiere das jeweils. Musterlösungen am Ende.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Mobilität</td>    <td>Velotour mit Bruchgleichung</td>              <td class="s">●●●</td></tr>
+      <tr><td class="nr">2</td><td>Mobilität</td>    <td>Bremsweg eines PKWs</td>                      <td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Verpackung</td>   <td>Optimale Dose</td>                            <td class="s">●●●</td></tr>
+      <tr><td class="nr">4</td><td>Elektrotechnik</td><td>Leistung und Spannung</td>                   <td class="s">●●○</td></tr>
+      <tr><td class="nr">5</td><td>Life Sciences</td><td>Bakterienwachstum bis zur Schwelle</td>       <td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Architektur</td>  <td>Rechteckiger Garten am Haus</td>              <td class="s">●●○</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 1 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">1</span><span class="aufg-titel">Velotour mit Bruchgleichung</span>
+      <span class="bereich-tag">Mobilität</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <div style="display:flex;gap:5mm;align-items:flex-start">
+      <div style="flex:1.6">
+        <p>Anna fährt mit dem Velo eine Tour von 12 km. Auf dem Hinweg fährt sie mit einer Geschwindigkeit
+        \(v\) (in km/h). Auf dem Rückweg ist sie 4 km/h <em>langsamer</em>. Insgesamt benötigt sie für
+        Hin- und Rückweg zusammen <strong>1.5 Stunden</strong>.</p>
+        <p>(a) Stelle eine Gleichung mit \(v\) auf (Tipp: Zeit = Strecke / Geschwindigkeit). <br>
+        (b) Bringe die Bruchgleichung auf Normalform und löse mit der Mitternachtsformel. <br>
+        (c) Wie schnell fährt sie hin, wie schnell zurück? Antwortsatz mit Einheit.</p>
+      </div>
+      <svg viewBox="0 0 100 60" style="flex:1;max-width:42mm;height:auto" xmlns="http://www.w3.org/2000/svg">
+        <!-- Strecke -->
+        <line x1="12" y1="22" x2="88" y2="22" stroke="#1f6feb" stroke-width="1.4"/>
+        <polygon points="88,22 84,20 84,24" fill="#1f6feb"/>
+        <line x1="88" y1="38" x2="12" y2="38" stroke="#7c3aed" stroke-width="1.4"/>
+        <polygon points="12,38 16,36 16,40" fill="#7c3aed"/>
+        <!-- Beschriftungen -->
+        <text x="50" y="17" font-family="serif" font-size="5" text-anchor="middle" fill="#1f6feb">Hinweg: v · t₁ = 12 km</text>
+        <text x="50" y="46" font-family="serif" font-size="5" text-anchor="middle" fill="#7c3aed">Rückweg: (v − 4) · t₂ = 12 km</text>
+        <text x="50" y="55" font-family="serif" font-size="4.5" text-anchor="middle" fill="#444">t₁ + t₂ = 1.5 h</text>
+        <!-- Stadtsymbole -->
+        <circle cx="10" cy="30" r="3" fill="#10b981"/>
+        <text x="10" y="9" font-family="serif" font-size="4.5" text-anchor="middle">Start</text>
+        <circle cx="90" cy="30" r="3" fill="#ef4444"/>
+        <text x="90" y="9" font-family="serif" font-size="4.5" text-anchor="middle">Ziel</text>
+      </svg>
+    </div>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">2</span><span class="aufg-titel">Bremsweg eines PKWs</span>
+      <span class="bereich-tag">Mobilität</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Der Bremsweg lässt sich (ohne Reaktionsweg) durch \(s(v) = v^2/(2 a)\) modellieren, mit
+    \(a = 7\) m/s² (typische Vollbremsung trockene Strasse). Bei welcher Geschwindigkeit beträgt der
+    Bremsweg genau 25 m? Gib das Ergebnis in km/h an.</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">3</span><span class="aufg-titel">Optimale Dose</span>
+      <span class="bereich-tag">Verpackung</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Eine zylindrische Dose hat das Volumen \(V = 500\) cm³. Die Mantelhöhe sei \(h\), der Radius
+    \(r\). Aus \(V = \pi r^2 h\) folgt \(h = V / (\pi r^2)\). Die Oberfläche ist
+    \(O(r) = 2 \pi r^2 + 2 \pi r h = 2 \pi r^2 + 2V/r\).</p>
+    <p>Bei welchem Radius \(r\) wird \(O(r) = 350\) cm² erreicht? Hinweis: nach Multiplikation mit \(r\)
+    und Umformen entsteht eine quadratische Gleichung in \(r\) — mit \(r\) als Variable und einem
+    Restterm in \(r^3\) ist sie eigentlich kubisch. <strong>Vereinfachung:</strong> setze direkt
+    \(r = 4\) cm ein und prüfe rechnerisch, ob die Oberfläche in der Nähe von 350 cm² liegt; bestimme
+    dann die Höhe \(h\).</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">4</span><span class="aufg-titel">Leistung und Spannung</span>
+      <span class="bereich-tag">Elektrotechnik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>An einem Widerstand \(R = 18\) Ω wird die Leistung \(P = U^2/R\) abgegeben. Bei welcher
+    Spannung \(U\) (in V) wird die Leistung \(P = 50\) W abgegeben? Diskutiere, weshalb die negative
+    Lösung physikalisch zwar gültig ist (umgekehrte Polarität), aber dieselbe Leistung liefert.</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">5</span><span class="aufg-titel">Bakterienwachstum bis zur Schwelle</span>
+      <span class="bereich-tag">Life Sciences</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>In einer Petrischale wächst eine Bakterienkolonie näherungsweise quadratisch in der Anfangsphase:
+    \(N(t) = 50 + 4 \cdot t^2\), mit \(t\) in Stunden und \(N\) in Tausend Zellen. Ab welcher Zeit
+    übersteigt die Population eine kritische Schwelle von 250'000 Zellen? Wann liegt sie bei genau
+    150'000?</p>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">6</span><span class="aufg-titel">Rechteckiger Garten am Haus</span>
+      <span class="bereich-tag">Architektur</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <div style="display:flex;gap:5mm;align-items:flex-start">
+      <div style="flex:1.6">
+        <p>An eine Hauswand soll ein rechteckiger Garten angebaut werden. Auf der Hausseite ist
+        keine Umzäunung nötig; die anderen drei Seiten sollen mit insgesamt <strong>40 m</strong>
+        Zaun umfasst werden. Sei \(b\) die Breite (parallel zum Haus) und \(t\) die Tiefe.</p>
+        <p>(a) Drücke \(b\) durch \(t\) aus. <br>
+        (b) Stelle die Fläche \(A\) als Funktion von \(t\) auf und löse \(A(t) = 192\) m². <br>
+        (c) Beide Lösungen sind geometrisch sinnvoll — was bedeuten sie?</p>
+      </div>
+      <svg viewBox="0 0 100 70" style="flex:1;max-width:42mm;height:auto" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hauswand (oben) mit Hatching -->
+        <line x1="10" y1="10" x2="90" y2="10" stroke="#444" stroke-width="1.5"/>
+        <g stroke="#444" stroke-width="0.5">
+          <line x1="12" y1="10" x2="9" y2="6"/>
+          <line x1="20" y1="10" x2="17" y2="6"/>
+          <line x1="28" y1="10" x2="25" y2="6"/>
+          <line x1="36" y1="10" x2="33" y2="6"/>
+          <line x1="44" y1="10" x2="41" y2="6"/>
+          <line x1="52" y1="10" x2="49" y2="6"/>
+          <line x1="60" y1="10" x2="57" y2="6"/>
+          <line x1="68" y1="10" x2="65" y2="6"/>
+          <line x1="76" y1="10" x2="73" y2="6"/>
+          <line x1="84" y1="10" x2="81" y2="6"/>
+          <line x1="92" y1="10" x2="89" y2="6"/>
+        </g>
+        <text x="50" y="5" font-family="serif" font-size="5" text-anchor="middle" fill="#444">Haus</text>
+        <!-- Garten Rechteck -->
+        <rect x="10" y="10" width="80" height="50" fill="#86efac" fill-opacity="0.3" stroke="#10b981" stroke-width="1.2" stroke-dasharray="2,1.5"/>
+        <text x="50" y="38" font-family="serif" font-size="6" text-anchor="middle" fill="#065f46" font-style="italic">Garten</text>
+        <!-- Beschriftungen Seiten -->
+        <text x="50" y="68" font-family="serif" font-size="5" text-anchor="middle" fill="#1f6feb">b (Breite)</text>
+        <text x="6" y="35" font-family="serif" font-size="5" text-anchor="middle" fill="#1f6feb" transform="rotate(-90 6 35)">t (Tiefe)</text>
+        <text x="94" y="35" font-family="serif" font-size="5" text-anchor="middle" fill="#1f6feb" transform="rotate(90 94 35)">t</text>
+      </svg>
+    </div>
+    <div class="lin-mehr"><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <!-- LÖSUNGEN -->
+  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen);page-break-before:always;break-before:page;margin-top:0">Musterlösungen</h2>
+
+  <div class="loes"><div class="loes-titel">✓ Lösung 1 — Velotour</div>
+    <p>(a) Hinweg dauert \(t_1 = 12/v\), Rückweg \(t_2 = 12/(v-4)\). Total:
+    \(\dfrac{12}{v} + \dfrac{12}{v-4} = \dfrac{3}{2}\).</p>
+    <p>(b) Mit \(v(v-4)\) durchmultiplizieren:
+    \(12(v-4) + 12 v = \dfrac{3}{2} \cdot v(v-4)\). Beide Seiten mal 2:
+    \(24 v - 96 + 24 v = 3 v^2 - 12 v\), also
+    \(48 v - 96 = 3 v^2 - 12 v\). Auf Normalform:
+    \(3 v^2 - 60 v + 96 = 0 \;\Leftrightarrow\; v^2 - 20 v + 32 = 0\).</p>
+    <p>Mitternachtsformel: \(v = \dfrac{20 \pm \sqrt{400 - 128}}{2} = \dfrac{20 \pm \sqrt{272}}{2}
+    \approx \dfrac{20 \pm 16.49}{2}\), also \(v_1 \approx 18.25\) km/h oder \(v_2 \approx 1.75\) km/h.</p>
+    <p>(c) Die zweite Lösung ergibt einen negativen Rückweg-Wert (\(v_2 - 4 < 0\)) und ist
+    physikalisch sinnlos. <strong>Antwort:</strong> Anna fährt hin mit ca. 18.25 km/h und zurück
+    mit ca. 14.25 km/h. <strong>Probe:</strong>
+    \(12/18.25 + 12/14.25 \approx 0.658 + 0.842 = 1.50\) h ✓.</p>
+  </div>
+
+  <div class="loes"><div class="loes-titel">✓ Lösung 2 — Bremsweg</div>
+    <p>\(v^2 / 14 = 25 \Rightarrow v^2 = 350 \Rightarrow v \approx 18.71\) m/s. In km/h:
+    \(18.71 \cdot 3.6 \approx 67.3\) km/h. Negative Lösung wird verworfen (Geschwindigkeit positiv).</p>
+  </div>
+
+  <div class="loes"><div class="loes-titel">✓ Lösung 3 — Optimale Dose</div>
+    <p>Bei \(r = 4\) cm: \(O(4) = 2\pi \cdot 16 + 2 \cdot 500/4 = 32\pi + 250 \approx 100.5 + 250 = 350.5\)
+    cm² — sehr nahe an 350 ✓. Höhe: \(h = 500/(\pi \cdot 16) \approx 9.95\) cm. Bemerkung: das
+    eigentliche Optimum (minimale Oberfläche) liegt bei \(h = 2r\), also \(r \approx 4.30\) cm.</p>
+  </div>
+
+  <div class="loes"><div class="loes-titel">✓ Lösung 4 — Leistung</div>
+    <p>\(U^2 / 18 = 50 \Rightarrow U^2 = 900 \Rightarrow U = \pm 30\) V. Beide Lösungen sind
+    physikalisch gültig; die negative entspricht umgekehrter Polarität. Da die Leistung \(P = U^2/R\)
+    quadratisch in \(U\) ist, liefern \(+30\) V und \(-30\) V dieselbe Leistung 50 W. Üblicherweise
+    notiert man \(U = 30\) V.</p>
+  </div>
+
+  <div class="loes"><div class="loes-titel">✓ Lösung 5 — Bakterien</div>
+    <p>Schwelle 250: \(50 + 4 t^2 = 250 \Rightarrow t^2 = 50 \Rightarrow t = \sqrt{50} \approx 7.07\)
+    h. Ab etwa 7.07 h wird die Schwelle überschritten.</p>
+    <p>Genau 150: \(50 + 4 t^2 = 150 \Rightarrow t^2 = 25 \Rightarrow t = 5\) h. Negative Lösung
+    \(t = -5\) ist physikalisch sinnlos.</p>
+  </div>
+
+  <div class="loes"><div class="loes-titel">✓ Lösung 6 — Garten am Haus</div>
+    <p>(a) Drei Seiten zäunen: \(b + 2 t = 40 \;\Rightarrow\; b = 40 - 2 t\).</p>
+    <p>(b) Fläche \(A = b \cdot t = (40 - 2 t) \cdot t = 40 t - 2 t^2\). Setze \(A = 192\):
+    \(40 t - 2 t^2 = 192 \;\Leftrightarrow\; 2 t^2 - 40 t + 192 = 0 \;\Leftrightarrow\; t^2 - 20 t + 96 = 0\).</p>
+    <p>Mitternachtsformel: \(t = \dfrac{20 \pm \sqrt{400 - 384}}{2} = \dfrac{20 \pm 4}{2}\), also
+    \(t_1 = 12\) m oder \(t_2 = 8\) m.</p>
+    <p>(c) Beide Lösungen sind sinnvoll: zu \(t_1 = 12\) m gehört \(b_1 = 40 - 24 = 16\) m
+    (Garten 16 m × 12 m), zu \(t_2 = 8\) m gehört \(b_2 = 40 - 16 = 24\) m (Garten 24 m × 8 m).
+    Beide haben Fläche 192 m². Welche Form sinnvoller ist, hängt vom verfügbaren Platz an der
+    Hauswand ab.</p>
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Grundlagen Quadratische Gleichungen</span>
+    <span>Anwendungsaufgaben</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handout · Quadratische Gleichungen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 0.95 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g2-2b-quadratische-gleichungen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Handout · A4 · 2 Seiten</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · Quadratische Gleichungen</div>
+    <h1>Quadratische Gleichungen — Handout</h1>
+  </header>
+
+  <h2>1. Definition</h2>
+  <p>Eine <strong>quadratische Gleichung</strong> in einer Variablen \(x\) lässt sich auf die
+  allgemeine Form bringen:</p>
+  \[ a \cdot x^2 + b \cdot x + c \;=\; 0 \qquad (a \neq 0). \]
+  <p>Die normierte Form mit \(a = 1\) wird als <em>pq-Form</em> bezeichnet:</p>
+  \[ x^2 + p \cdot x + q \;=\; 0. \]
+
+  <h2>2. Vier Lösungsverfahren — wann welches?</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Verfahren</th><th>Geeignet für</th><th>Lösung</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Reinquadratisch</td>
+          <td class="li">\(b = 0\)</td>
+          <td>falls \(-c/a \geq 0\): \(x_{1,2} = \pm \sqrt{-c/a}\); sonst \(\mathbb{L} = \emptyset\)</td></tr>
+      <tr><td class="li">Ausklammern</td>
+          <td class="li">\(c = 0\)</td>
+          <td>\(x_1 = 0,\;\; x_2 = -b/a\)</td></tr>
+      <tr><td class="li">Mitternachtsformel</td>
+          <td class="li">universell</td>
+          <td>\(x_{1,2} = \dfrac{-b \pm \sqrt{D}}{2a},\; D = b^2 - 4ac\)</td></tr>
+      <tr><td class="li">pq-Formel</td>
+          <td class="li">normierte Form (\(a = 1\))</td>
+          <td>\(x_{1,2} = -\dfrac{p}{2} \pm \sqrt{(p/2)^2 - q}\)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Diskriminante</h2>
+  <p>Der Term unter der Wurzel in der Mitternachtsformel heisst <strong>Diskriminante</strong>:</p>
+  \[ D \;=\; b^2 - 4 \cdot a \cdot c. \]
+  <p>Sie entscheidet allein durch ihr Vorzeichen über die Anzahl reeller Lösungen — der Wurzelterm
+  \(\sqrt{D}\) ist je nach Vorzeichen positiv, null oder gar nicht definiert.</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Vorzeichen von \(D\)</th><th>Wurzelterm \(\sqrt{D}\)</th><th>Lösungsmenge</th></tr></thead>
+    <tbody>
+      <tr><td>\(D > 0\)</td><td>positive reelle Zahl — \(\pm\) liefert zwei Werte</td><td>\(\mathbb{L} = \{x_1,\, x_2\}\)</td></tr>
+      <tr><td>\(D = 0\)</td><td>\(\sqrt{0} = 0\) — \(\pm\)-Term verschwindet</td><td>\(\mathbb{L} = \{-b/(2a)\}\) (doppelt)</td></tr>
+      <tr><td>\(D < 0\)</td><td>in \(\mathbb{R}\) nicht definiert</td><td>\(\mathbb{L} = \emptyset\)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Satz von Vieta</h2>
+  <p>Hat die normierte Form \(x^2 + p \cdot x + q = 0\) zwei reelle Lösungen \(x_1, x_2\), so gilt:</p>
+  \[ x_1 + x_2 \;=\; -p \qquad \text{und} \qquad x_1 \cdot x_2 \;=\; q. \]
+  <p>Bei einfachen ganzzahligen Lösungen ist Vieta oft schneller als die pq-Formel: gesucht sind zwei
+  Zahlen, deren <em>Summe</em> \(-p\) und deren <em>Produkt</em> \(q\) ist.</p>
+
+  <div class="block block-fehler">
+    <div class="block-titel">⚠ Häufige Fehler</div>
+    <p><strong>Vorzeichenfehler bei \(b\):</strong> in der Mitternachtsformel steht \(-b\), nicht
+    \(b\). Bei \(2x^2 - 5x - 3 = 0\) ist \(b = -5\), also \(-b = 5\). <br>
+    <strong>Klammern beim Diskriminanten-Term:</strong> \(b^2 - 4ac\), aber Achtung mit dem Vorzeichen
+    von \(c\). Bei \(c = -3\) und \(a = 2\) ist \(-4ac = -4 \cdot 2 \cdot (-3) = +24\). <br>
+    <strong>Beide Vorzeichen vergessen:</strong> bei reinquadratischen Gleichungen liefert das
+    Wurzelziehen <em>zwei</em> Lösungen \(\pm\), nicht nur eine.</p>
+  </div>
+
+  <h2>5. Drei Darstellungen</h2>
+  <p>Die Gleichung \(a \cdot x^2 + b \cdot x + c = 0\) lässt sich auf drei äquivalente Arten ansehen:</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Form</th><th>Beispiel \(x^2 - 4x + 3 = 0\)</th><th>Stärke</th></tr></thead>
+    <tbody>
+      <tr><td class="li">algebraisch</td>
+          <td class="li">Mitternachtsformel: \(x_{1,2} = (4 \pm 2)/2 = 1, 3\)</td>
+          <td class="li">exaktes Rechnen</td></tr>
+      <tr><td class="li">Wertetabelle</td>
+          <td class="li">\(f(1) = 0\), \(f(3) = 0\)</td>
+          <td class="li">Probe, Erkennen ganzzahliger Lösungen</td></tr>
+      <tr><td class="li">Faktorform</td>
+          <td class="li">\((x - 1)(x - 3) = 0\)</td>
+          <td class="li">Lösungen direkt ablesbar</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. Faktorisieren — drei Sub-Methoden</h2>
+  <p>Beim Faktorisieren wird der quadratische Term als Produkt zweier linearer Faktoren geschrieben.
+  Drei Strukturen lassen sich besonders schnell erkennen:</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Methode</th><th>Wann?</th><th>Vorgehen / Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td><strong>x ausklammern</strong></td><td>\(c = 0\)</td>
+          <td>\(2x^2 - 8x = 2x(x - 4) = 0 \Rightarrow x_1 = 0, x_2 = 4\)<br>
+          <em>Stolperstein:</em> nicht durch \(x\) teilen — \(x = 0\) wäre sonst weg.</td></tr>
+      <tr><td><strong>Binom erkennen</strong></td><td>Mittelterm \(= \pm 2 a b\)</td>
+          <td>\(x^2 - 6x + 9 = (x - 3)^2 = 0 \Rightarrow x = 3\) (doppelt).<br>
+          <em>Stolperstein:</em> Mittelterm muss exakt passen — kontrollieren.</td></tr>
+      <tr><td><strong>Zweiklammersatz / Vieta</strong></td><td>Normalform mit ganzzahligen Lösungen</td>
+          <td>\(x^2 - 5x + 6 = 0\): suche zwei Zahlen mit Summe 5 und Produkt 6 → 2 und 3 →
+          \((x - 2)(x - 3) = 0\).<br>
+          <em>Stolperstein:</em> klappt nur bei rationalen Lösungen — sonst Mitternachtsformel.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>7. Parameter-Diskussion</h2>
+  <p>Hängen die Koeffizienten von einem Parameter \(k\) ab, läuft die Diskussion stets über die
+  Diskriminante:</p>
+  <ol>
+    <li>\(D(k) = b(k)^2 - 4 \cdot a(k) \cdot c(k)\) berechnen.</li>
+    <li>Kritische \(k\)-Werte mit \(D(k) = 0\) finden.</li>
+    <li>Drei Bereiche unterscheiden: \(D > 0\) (zwei), \(D = 0\) (eine), \(D < 0\) (keine).</li>
+    <li>Falls \(a(k) = 0\) möglich: Sonderfall — die Gleichung wird linear, die Mitternachtsformel
+        ist nicht anwendbar.</li>
+  </ol>
+
+  <h2>8. Zusammenfassung</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li">Allgemeine Form</td><td>\(a \cdot x^2 + b \cdot x + c = 0\) mit \(a \neq 0\)</td></tr>
+      <tr><td class="li">Reinquadratisch</td><td>\(x^2 = -c/a\), Wurzel mit beiden Vorzeichen</td></tr>
+      <tr><td class="li">Ausklammern</td>    <td>\(x \cdot (a x + b) = 0\): \(x_1 = 0,\, x_2 = -b/a\)</td></tr>
+      <tr><td class="li">Mitternachtsformel</td><td>\(x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}\)</td></tr>
+      <tr><td class="li">pq-Formel</td>      <td>\(x_{1,2} = -p/2 \pm \sqrt{(p/2)^2 - q}\)</td></tr>
+      <tr><td class="li">Diskriminante</td>  <td>\(D = b^2 - 4ac\): drei Fälle</td></tr>
+      <tr><td class="li">Vieta</td>          <td>\(x_1 + x_2 = -p,\; x_1 \cdot x_2 = q\)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="merksatz">
+    <strong>Merksatz.</strong> Erst auf die allgemeine Form bringen, dann den Spezialfall prüfen
+    (\(b = 0\) oder \(c = 0\)), und nur wenn keiner zutrifft, zur Mitternachts- oder pq-Formel
+    greifen. Die Diskriminante verrät dir vorab, ob das Rechnen sich lohnt.
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Grundlagen Quadratische Gleichungen</span>
+    <span>Handout</span>
+  </footer>
+
+</div>
+</body>
+</html>

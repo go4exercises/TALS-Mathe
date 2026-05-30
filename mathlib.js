@@ -26,9 +26,28 @@
 
 /* ── Zahlen-Formatierer ──────────────────────────────────── */
 const fmt  = n => n === 0 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(1));
+// Vorzeichen-Term für Verkettung: '+ 5' / '− 5' (Unicode-Minus U+2212)
 const fmtS = n => n >= 0 ? `+ ${fmt(n)}` : `− ${fmt(Math.abs(n))}`;
 // Steigungsterm m·x mit Sonderfällen für m∈{0,1,−1}, sonst „m·x" (FTB-konform mit ·)
-const fmtMx = m => m === 0 ? '0' : m === 1 ? 'x' : m === -1 ? '-x' : `${fmt(m)}·x`;
+// Verwendet Unicode-Minus U+2212 (−), konsistent zu fmtS.
+const fmtMx = m => {
+  if (m === 0)  return '0';
+  if (m === 1)  return 'x';
+  if (m === -1) return '−x';
+  if (m < 0)    return `−${fmt(Math.abs(m))}·x`;
+  return `${fmt(m)}·x`;
+};
+// Komplette affin-lineare Funktion m·x + b mit sauberer Behandlung der Sonderfälle:
+//   m=0, b=5  →  '5'
+//   m=2, b=0  →  '2·x'
+//   m=0, b=0  →  '0'
+//   m=2, b=5  →  '2·x + 5'
+//   m=2, b=-5 →  '2·x − 5'
+const fmtAffine = (m, b) => {
+  if (m === 0) return fmt(b);
+  if (b === 0) return fmtMx(m);
+  return `${fmtMx(m)} ${fmtS(b)}`;
+};
 
 /* ── Term-Parser ──────────────────────────────────────────
    Toleranter Eingabe-Parser für lineare Funktionen:

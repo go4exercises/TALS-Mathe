@@ -30,6 +30,8 @@ MathJax = {
   .slider-box label { display: block; margin-bottom: 6px; }
   .slider-box input[type=range] { width: 100%; max-width: 300px; }
   .slider-val { font-weight: 700; color: var(--blau, #1a4f8a); }
+  .slider-box .sl-row { margin-bottom: 10px; }
+  .slider-box .sl-row:last-of-type { margin-bottom: 4px; }
 
   .einstieg-grid {
     display: grid;
@@ -160,6 +162,7 @@ MathJax = {
   .bsp-panel { display: none; }
   .bsp-panel.aktiv { display: block; }
   .bsp-panel canvas { width: 100%; height: auto; max-width: 480px; display: block; margin: 8px auto; }
+  #lin-canvas, #par-canvas, #schn-canvas { width: 100%; height: auto; max-width: 480px; display: block; margin: 8px auto; }
 </style>
 </head>
 <body>
@@ -172,6 +175,8 @@ MathJax = {
   <div class="pt-bereich">Grundlagenfach · Lerngebiet 3 · Funktionen · 50 Lektionen</div>
   <h1 class="pt-h1">3.1 Grundlagen</h1>
 </div>
+
+<p class="lead">Eine <strong>Funktion</strong> ist eine Vorschrift, die jeder Zahl aus einem Definitionsbereich genau eine Zahl im Wertebereich zuordnet. Hier lernst du die zentralen Begriffe — Zuordnung, Funktionsgleichung, Wertetabelle, Graph — und übst die Notationen, die in allen folgenden Funktionstypen wiederkehren.</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.1</div>
@@ -188,7 +193,7 @@ MathJax = {
 
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg: Wasser im Becher</h2>
+<h2 id="einstieg">Einstieg — Wasser im Becher</h2>
 
 <p>Ein Wasserhahn liefert konstant <strong>3 dl pro Sekunde</strong> in einen Becher. Zu jedem
 Zeitpunkt \(t\) (in Sekunden) gehört eindeutig eine Wassermenge \(V\) (in dl) im Becher:</p>
@@ -247,7 +252,7 @@ Der dazugehörige Wert \(y = f(x)\) heisst <strong>Funktionswert</strong> oder
 </table>
 
 <div class="block block-bsp">
-  <div class="block-titel">💡 Beispiel</div>
+  <div class="block-titel">🟢 Beispiel</div>
   <p>Für \(f : \mathbb{R} \longrightarrow \mathbb{R}, \; x \longmapsto 2 \cdot x + 1\) ist:</p>
   <ul>
     <li>\(f(0) = 2 \cdot 0 + 1 = 1\)</li>
@@ -299,6 +304,17 @@ genügt das im Allgemeinen <em>nicht</em> — sie zeigt nur einzelne Punkte).</p
   <strong>Term:</strong> ist die kompakteste Form und ermöglicht exaktes Rechnen für beliebige \(x\).</p>
 </div>
 
+<div class="block block-fehler" style="margin-top:10px">
+  <div class="block-titel">⚠ Wertetabelle legt eine Funktion <em>nicht</em> eindeutig fest</div>
+  <p>Eine Wertetabelle zeigt nur die Werte an den eingetragenen Stellen — was <em>zwischen</em> und <em>ausserhalb</em> dieser Stellen passiert, bleibt offen. Betrachte die Wertetabelle</p>
+  <table style="margin:6px auto;border-collapse:collapse;font-family:var(--mono);font-size:0.9rem">
+    <tr><td style="border:1pt solid var(--linie);padding:3px 10px">\(x\)</td><td style="border:1pt solid var(--linie);padding:3px 10px">0</td><td style="border:1pt solid var(--linie);padding:3px 10px">1</td><td style="border:1pt solid var(--linie);padding:3px 10px">2</td><td style="border:1pt solid var(--linie);padding:3px 10px">3</td></tr>
+    <tr><td style="border:1pt solid var(--linie);padding:3px 10px">\(f(x)\)</td><td style="border:1pt solid var(--linie);padding:3px 10px">0</td><td style="border:1pt solid var(--linie);padding:3px 10px">1</td><td style="border:1pt solid var(--linie);padding:3px 10px">4</td><td style="border:1pt solid var(--linie);padding:3px 10px">9</td></tr>
+  </table>
+  <p>Die Werte passen zu \(f(x) = x^2\). Sie passen aber auch zu \(h(x) = x^2 + x \cdot (x-1) \cdot (x-2) \cdot (x-3)\) — denn der zusätzliche Term verschwindet an genau \(x = 0, 1, 2, 3\). Probe: \(h(0)=0\), \(h(1)=1\), \(h(2)=4\), \(h(3)=9\) ✓. Trotzdem ist \(h\) keineswegs \(f\): an \(x = 4\) liefert \(f\) den Wert 16, \(h\) hingegen 40. Es gibt <em>unendlich viele</em> Funktionen mit derselben Wertetabelle — man kann beliebige Terme hinzufügen, die an den Tabellenstellen verschwinden.</p>
+  <p><strong>Konsequenz:</strong> Eine Wertetabelle allein bestimmt eine Funktion nur, wenn der Funktionstyp (z.B. „lineare Funktion") vorgegeben ist. Verbale Vorschrift, Graph und Funktionsterm sind in dem Sinn vollständiger — sie legen den Wert für <em>jedes</em> \(x\) im Definitionsbereich fest.</p>
+</div>
+
 
 <!-- ══ 5. NOTATIONEN ══ -->
 <h2 id="notationen">Drei Schreibweisen für dieselbe Funktion</h2>
@@ -344,7 +360,7 @@ muss die Vollform-Schreibweise mit Definitions- und Wertebereich beherrscht werd
         <td>\(D = \mathbb{R} \setminus \{0\}\)</td></tr>
     <tr><td>\(f(x) = \sqrt{x}\)</td>
         <td class="li">Radikand muss \(\geq 0\) sein</td>
-        <td>\(D = \mathbb{R}_{\geq 0} = [0, \infty)\)</td></tr>
+        <td>\(D = \mathbb{R}_{\geq 0} = [0; \infty[\)</td></tr>
     <tr><td>\(f(x) = x^2\)</td>
         <td class="li">keine</td>
         <td>\(D = \mathbb{R},\; W = \mathbb{R}_{\geq 0}\) (\(y\) nie negativ)</td></tr>
@@ -431,7 +447,7 @@ und die Schnitte mit der \(x\)-Achse. Wir betrachten zwei Beispiele unterschiedl
 <!-- Beispiel 1: Lineare Funktion -->
 <div class="bsp-panel aktiv" id="ach-1">
   <div class="block block-bsp">
-    <div class="block-titel">💡 Beispiel 1 — \(f(x) = 2 \cdot x - 6\)</div>
+    <div class="block-titel">🟢 Beispiel 1 — \(f(x) = 2 \cdot x - 6\)</div>
 
     <p><strong>y-Achsenabschnitt</strong> (Schnitt mit \(y\)-Achse, dort gilt \(x = 0\)):</p>
     \[ y_0 = f(0) = 2 \cdot 0 - 6 = -6 \]
@@ -447,7 +463,7 @@ und die Schnitte mit der \(x\)-Achse. Wir betrachten zwei Beispiele unterschiedl
 <!-- Beispiel 2: Quadratische Funktion -->
 <div class="bsp-panel" id="ach-2">
   <div class="block block-bsp">
-    <div class="block-titel">💡 Beispiel 2 — \(g(x) = x^2 - 4\)</div>
+    <div class="block-titel">🟢 Beispiel 2 — \(g(x) = x^2 - 4\)</div>
 
     <p><strong>y-Achsenabschnitt</strong>:</p>
     \[ y_0 = g(0) = 0^2 - 4 = -4 \]
@@ -473,6 +489,36 @@ und die Schnitte mit der \(x\)-Achse. Wir betrachten zwei Beispiele unterschiedl
   </ol>
 </div>
 
+<p style="margin-top:14px">Stelle die Parameter \(a\) und \(b\) ein und beobachte, wie sich y-Achsenabschnitt und Nullstelle der Geraden \(f(x) = a \cdot x + b\) verändern:</p>
+
+<div class="slider-box">
+  <div class="sl-row"><label>Steigung \(a\): <span class="slider-val" id="lin-a-val">2</span></label>
+    <input type="range" id="lin-a" min="-3" max="3" step="0.25" value="2"></div>
+  <div class="sl-row"><label>y-Achsenabschnitt \(b\): <span class="slider-val" id="lin-b-val">-4</span></label>
+    <input type="range" id="lin-b" min="-6" max="6" step="0.5" value="-4"></div>
+  <div style="margin-top:8px">
+    \(f(x) = \)<span class="slider-val" id="lin-fx">2·x − 4</span>
+    &nbsp;·&nbsp; y-Achsenabschnitt: <span class="slider-val" id="lin-y0">−4</span>
+    &nbsp;·&nbsp; Nullstelle \(x_0\): <span class="slider-val" id="lin-x0">2</span>
+  </div>
+</div>
+<canvas id="lin-canvas"></canvas>
+
+<p style="margin-top:14px">Eine quadratische Funktion in Scheitelform \(g(x) = (x - u)^2 + v\) hat — je nach Lage des Scheitels — keine, eine oder zwei Nullstellen. Verschiebe die Parabel und beobachte:</p>
+
+<div class="slider-box">
+  <div class="sl-row"><label>Scheitel-x \(u\): <span class="slider-val" id="par-u-val">1</span></label>
+    <input type="range" id="par-u" min="-4" max="4" step="0.5" value="1"></div>
+  <div class="sl-row"><label>Scheitel-y \(v\): <span class="slider-val" id="par-v-val">-2</span></label>
+    <input type="range" id="par-v" min="-5" max="5" step="0.5" value="-2"></div>
+  <div style="margin-top:8px">
+    \(g(x) = (x - \)<span class="slider-val" id="par-u-eq">1</span>\()^2 + \)<span class="slider-val" id="par-v-eq">−2</span>
+    &nbsp;·&nbsp; Scheitel: <span class="slider-val" id="par-S">S(1 | −2)</span>
+    &nbsp;·&nbsp; <span class="slider-val" id="par-anzahl">2 Nullstellen</span> <span id="par-nst" style="color:var(--tinte-2);font-weight:400">(x ≈ −0.41 und x ≈ 2.41)</span>
+  </div>
+</div>
+<canvas id="par-canvas"></canvas>
+
 
 <!-- ══ 9. SCHNITTPUNKTE ZWEIER GRAPHEN ══ -->
 <h2 id="schnittpunkte">Schnittpunkte zweier Funktionsgraphen</h2>
@@ -490,7 +536,7 @@ Einsetzen in eine der beiden Funktionen.</p>
 <!-- Beispiel 1: Zwei Geraden -->
 <div class="bsp-panel aktiv" id="schn-1">
   <div class="block block-bsp">
-    <div class="block-titel">💡 Beispiel 1 — zwei Geraden</div>
+    <div class="block-titel">🟢 Beispiel 1 — zwei Geraden</div>
     <p>Gegeben: \(f(x) = 2 \cdot x - 4\) und \(g(x) = -x + 5\).</p>
 
     <p>Gleichsetzen: \(2 \cdot x - 4 = -x + 5\)</p>
@@ -505,7 +551,7 @@ Einsetzen in eine der beiden Funktionen.</p>
 <!-- Beispiel 2: Gerade × Parabel -->
 <div class="bsp-panel" id="schn-2">
   <div class="block block-bsp">
-    <div class="block-titel">💡 Beispiel 2 — Gerade und Parabel</div>
+    <div class="block-titel">🟢 Beispiel 2 — Gerade und Parabel</div>
     <p>Gegeben: \(f(x) = x + 1\) und \(g(x) = x^2 - 1\).</p>
 
     <p>Gleichsetzen: \(x + 1 = x^2 - 1\)</p>
@@ -532,13 +578,39 @@ Einsetzen in eine der beiden Funktionen.</p>
   </ol>
 </div>
 
+<p style="margin-top:14px">Verschiebe die Gerade \(f(x) = m \cdot x + b\) und beobachte, wie sich Anzahl und Lage der Schnittpunkte mit der festen Parabel \(g(x) = x^2\) verändern. Die Schnittbedingung \(m \cdot x + b = x^2\) ergibt eine quadratische Gleichung — die Diskriminante entscheidet:</p>
+
+<div class="slider-box">
+  <div class="sl-row"><label>Steigung \(m\): <span class="slider-val" id="schn-m-val">2</span></label>
+    <input type="range" id="schn-m" min="-4" max="4" step="0.25" value="2"></div>
+  <div class="sl-row"><label>y-Achsenabschnitt \(b\): <span class="slider-val" id="schn-b-val">-1</span></label>
+    <input type="range" id="schn-b" min="-3" max="4" step="0.25" value="-1"></div>
+  <div style="margin-top:8px">
+    \(f(x) = \)<span class="slider-val" id="schn-fx">2·x − 1</span>
+    &nbsp;·&nbsp; Diskriminante \(D = m^2 + 4b = \)<span class="slider-val" id="schn-D">0</span>
+    &nbsp;·&nbsp; <span class="slider-val" id="schn-anzahl">1 Schnittpunkt</span>
+    <span id="schn-pts" style="color:var(--tinte-2);font-weight:400"> &nbsp;S(1 | 1)</span>
+  </div>
+</div>
+<canvas id="schn-canvas"></canvas>
+
 
 <!-- ══ 10. AUFGABEN ══ -->
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Argument und Funktionswert vertauschen</div>
+  <p>Die Notation \(f(3) = 5\) bedeutet: das Argument ist \(x = 3\), der Funktionswert ist \(y = 5\). Im Punkt \((3 \mid 5)\) auf dem Graphen. Wer das vertauscht (\(x = 5\), \(y = 3\)), liest den Punkt falsch ab und kommt bei jeder Folgeaufgabe auf falsche Resultate. Eselsbrücke: was <em>in</em> der Klammer steht, geht <em>in</em> die Funktion hinein.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Schnittpunkte ohne Umwege</div>
+  <p>Für „Schnittpunkt von \(f\) und \(g\)" reicht <em>eine</em> Gleichung: \(f(x) = g(x)\). Das ergibt die \(x\)-Koordinate des Schnittpunkts. Den \(y\)-Wert bekommst du, indem du diese \(x\)-Lösung in <em>irgendeine</em> der beiden Funktionen einsetzt — beide Funktionen liefern denselben Wert, weil sie sich ja genau dort schneiden. Diese Doppelprobe (\(x\)-Lösung in \(f\) <em>und</em> in \(g\) einsetzen, beide Werte vergleichen) ist die einfachste Probe, die du dir vorstellen kannst.</p>
+</div>
+
 <h2 id="aufgaben">Aufgaben</h2>
 
 <!-- A1 -->
 <div class="block block-aufg check-aufg" id="A1">
-  <div class="block-titel">▲ Aufgabe 1 · Funktionswerte berechnen</div>
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Funktionswerte berechnen</span></div>
   <p>Gegeben: \(f(x) = -3 \cdot x + 5\). Berechne die fehlenden Werte:</p>
   <div class="check-row">\(f(0) = \) <input id="a1-0" type="text" placeholder="?"> &nbsp;</div>
   <div class="check-row">\(f(2) = \) <input id="a1-2" type="text" placeholder="?"> &nbsp;</div>
@@ -549,50 +621,84 @@ Einsetzen in eine der beiden Funktionen.</p>
   </div>
   <button class="loesung-toggle" onclick="toggleL('A1L')">▶ Lösung</button>
   <div class="loesung-body" id="A1L">
-    <p>\(f(0) = -3 \cdot 0 + 5 = 5\), \(f(2) = -3 \cdot 2 + 5 = -1\),<br>
-    \(f(-1) = -3 \cdot (-1) + 5 = 8\), \(f(\tfrac{5}{3}) = -3 \cdot \tfrac{5}{3} + 5 = -5 + 5 = 0\).</p>
-    <p>Beobachtung: \(f(\tfrac{5}{3}) = 0\) — die Stelle \(x = \tfrac{5}{3}\) ist also die Nullstelle.</p>
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(f(0) = -3 \cdot 0 + 5 = 5\), \(f(2) = -3 \cdot 2 + 5 = -1\),<br>
+      \(f(-1) = -3 \cdot (-1) + 5 = 8\), \(f(\tfrac{5}{3}) = -3 \cdot \tfrac{5}{3} + 5 = -5 + 5 = 0\).</p>
+      <p>Beobachtung: \(f(\tfrac{5}{3}) = 0\) — die Stelle \(x = \tfrac{5}{3}\) ist also die Nullstelle.</p>
+    </div>
   </div>
 </div>
 
 <!-- A2 -->
 <div class="block block-aufg check-aufg" id="A2">
-  <div class="block-titel">▲ Aufgabe 2 · Definitionsbereich bestimmen</div>
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Definitionsbereich bestimmen</span></div>
   <p>Gib den grösstmöglichen reellen Definitionsbereich \(D\) jeder Funktion an.</p>
-  <p>(a) \(f(x) = \dfrac{4}{x - 3}\) &nbsp;&nbsp; (b) \(g(x) = \sqrt{x + 5}\) &nbsp;&nbsp;
-     (c) \(h(x) = \dfrac{1}{\sqrt{x}}\) &nbsp;&nbsp; (d) \(k(x) = x^2 - 7\)</p>
+  
+  <ol class="aufg-liste">
+    <li>\(f(x) = \dfrac{4}{x - 3}\)</li>
+    <li>\(g(x) = \sqrt{x + 5}\)</li>
+    <li>\(h(x) = \dfrac{1}{\sqrt{x}}\) <span class="aufg-vertiefung">Vertiefung</span></li>
+    <li>\(k(x) = x^2 - 7\)</li>
+  </ol>
   <button class="loesung-toggle" onclick="toggleL('A2L')">▶ Lösung</button>
   <div class="loesung-body" id="A2L">
-    <p>(a) Nenner \(\neq 0\): \(x \neq 3\). \(D = \mathbb{R} \setminus \{3\}\).</p>
-    <p>(b) Radikand \(\geq 0\): \(x + 5 \geq 0 \Longrightarrow x \geq -5\). \(D = [-5, \infty)\).</p>
-    <p>(c) Wurzel-Radikand \(\geq 0\) <em>und</em> Nenner \(\neq 0\): \(x > 0\). \(D = (0, \infty)\).</p>
-    <p>(d) Keine Einschränkung. \(D = \mathbb{R}\).</p>
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Nenner \(\neq 0\): \(x \neq 3\). \(D = \mathbb{R} \setminus \{3\}\).</li>
+        <li>Radikand \(\geq 0\): \(x + 5 \geq 0 \Longrightarrow x \geq -5\). \(D = [-5; \infty[\).</li>
+        <li>Wurzel-Radikand \(\geq 0\) <em>und</em> Nenner \(\neq 0\): \(x > 0\). \(D = ]0; \infty[\).</li>
+        <li>Keine Einschränkung. \(D = \mathbb{R}\).</li>
+      </ol>
+    </div>
   </div>
 </div>
 
 <!-- A3 -->
-<div class="block block-aufg" id="A3">
-  <div class="block-titel">▲ Aufgabe 3 · Vertikaltest</div>
-  <p>Welche der folgenden Aussagen sind richtig? Kreuze an.</p>
-  <ul style="line-height:1.8">
-    <li>(a) Jede Gerade in der Ebene ist Graph einer Funktion.</li>
-    <li>(b) Eine senkrechte Gerade \(x = 2\) ist <em>kein</em> Funktionsgraph.</li>
-    <li>(c) Ein Kreis um den Ursprung ist Funktionsgraph (jeder \(x\)-Wert hat einen \(y\)-Wert).</li>
-    <li>(d) Jede Parabel \(y = a \cdot x^2 + b \cdot x + c\) ist Funktionsgraph.</li>
-  </ul>
+<div class="block block-aufg check-aufg" id="A3">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Vertikaltest</span></div>
+  <p>Welche der folgenden Aussagen sind richtig? Klicke pro Aussage auf <strong>✓</strong> oder <strong>✗</strong>.</p>
+  <div style="margin:8px 0 6px">
+    <div class="check-row" style="margin:6px 0">1. Jede Gerade in der Ebene ist Graph einer Funktion. &nbsp;
+      <button onclick="checkA3('1', true, this)" class="btn-tf">✓</button>
+      <button onclick="checkA3('1', false, this)" class="btn-tf">✗</button>
+      <span class="feedback" id="a3-1-fb"></span>
+    </div>
+    <div class="check-row" style="margin:6px 0">2. Eine senkrechte Gerade \(x = 2\) ist <em>kein</em> Funktionsgraph. &nbsp;
+      <button onclick="checkA3('2', true, this)" class="btn-tf">✓</button>
+      <button onclick="checkA3('2', false, this)" class="btn-tf">✗</button>
+      <span class="feedback" id="a3-2-fb"></span>
+    </div>
+    <div class="check-row" style="margin:6px 0">3. Ein Kreis um den Ursprung ist Funktionsgraph. &nbsp;
+      <button onclick="checkA3('3', true, this)" class="btn-tf">✓</button>
+      <button onclick="checkA3('3', false, this)" class="btn-tf">✗</button>
+      <span class="feedback" id="a3-3-fb"></span>
+    </div>
+    <div class="check-row" style="margin:6px 0">4. Jede Parabel \(y = a \cdot x^2 + b \cdot x + c\) ist Funktionsgraph. &nbsp;
+      <button onclick="checkA3('4', true, this)" class="btn-tf">✓</button>
+      <button onclick="checkA3('4', false, this)" class="btn-tf">✗</button>
+      <span class="feedback" id="a3-4-fb"></span>
+    </div>
+  </div>
   <button class="loesung-toggle" onclick="toggleL('A3L')">▶ Lösung</button>
   <div class="loesung-body" id="A3L">
-    <p>(a) <strong>Falsch.</strong> Senkrechte Geraden sind keine Funktionen — siehe (b).</p>
-    <p>(b) <strong>Richtig.</strong> Bei \(x = 2\) gibt es unendlich viele \(y\)-Werte, also keine Eindeutigkeit.</p>
-    <p>(c) <strong>Falsch.</strong> Ein Kreis hat zu jedem \(x\) im Innern <em>zwei</em> \(y\)-Werte (oben und unten).
-    Vertikaltest schlägt fehl.</p>
-    <p>(d) <strong>Richtig.</strong> Quadratische Funktionen sind eindeutig.</p>
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li><strong>Falsch.</strong> Senkrechte Geraden sind keine Funktionen — siehe 2.</li>
+        <li><strong>Richtig.</strong> Bei \(x = 2\) gibt es unendlich viele \(y\)-Werte, also keine Eindeutigkeit.</li>
+        <li><strong>Falsch.</strong> Ein Kreis hat zu jedem \(x\) im Innern <em>zwei</em> \(y\)-Werte (oben und unten).
+      Vertikaltest schlägt fehl.</li>
+        <li><strong>Richtig.</strong> Quadratische Funktionen sind eindeutig.</li>
+      </ol>
+    </div>
   </div>
 </div>
 
 <!-- A4 -->
 <div class="block block-aufg check-aufg" id="A4">
-  <div class="block-titel">▲ Aufgabe 4 · Achsenschnittpunkte</div>
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Achsenschnittpunkte</span></div>
   <p>Gegeben: \(f(x) = -2 \cdot x + 8\). Bestimme:</p>
   <div class="check-row">y-Achsenabschnitt \(y_0 = \) <input id="a4-y" type="text" placeholder="?"> &nbsp;</div>
   <div class="check-row">Nullstelle \(x_0 = \) <input id="a4-x" type="text" placeholder="?"> &nbsp;
@@ -601,14 +707,17 @@ Einsetzen in eine der beiden Funktionen.</p>
   </div>
   <button class="loesung-toggle" onclick="toggleL('A4L')">▶ Lösung</button>
   <div class="loesung-body" id="A4L">
-    <p>y-Achsenabschnitt: \(f(0) = -2 \cdot 0 + 8 = 8\). Punkt \((0 \mid 8)\).</p>
-    <p>Nullstelle: \(-2 \cdot x + 8 = 0 \Longrightarrow x = 4\). Punkt \((4 \mid 0)\).</p>
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>y-Achsenabschnitt: \(f(0) = -2 \cdot 0 + 8 = 8\). Punkt \((0 \mid 8)\).</p>
+      <p>Nullstelle: \(-2 \cdot x + 8 = 0 \Longrightarrow x = 4\). Punkt \((4 \mid 0)\).</p>
+    </div>
   </div>
 </div>
 
 <!-- A5 -->
 <div class="block block-aufg check-aufg" id="A5">
-  <div class="block-titel">▲ Aufgabe 5 · Schnittpunkt</div>
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Schnittpunkt</span></div>
   <p>Berechne den Schnittpunkt \(S\) der Funktionsgraphen \(f(x) = x + 2\) und \(g(x) = -2 \cdot x + 8\).</p>
   <div class="check-row">\(x_S = \) <input id="a5-x" type="text" placeholder="?"> &nbsp;
     \(y_S = \) <input id="a5-y" type="text" placeholder="?"> &nbsp;
@@ -617,30 +726,84 @@ Einsetzen in eine der beiden Funktionen.</p>
   </div>
   <button class="loesung-toggle" onclick="toggleL('A5L')">▶ Lösung</button>
   <div class="loesung-body" id="A5L">
-    <p>Gleichsetzen: \(x + 2 = -2 \cdot x + 8 \Longrightarrow 3 \cdot x = 6 \Longrightarrow x_S = 2\).</p>
-    <p>\(y_S = f(2) = 2 + 2 = 4\). Probe: \(g(2) = -4 + 8 = 4\) ✓. \(S(2 \mid 4)\).</p>
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Gleichsetzen: \(x + 2 = -2 \cdot x + 8 \Longrightarrow 3 \cdot x = 6 \Longrightarrow x_S = 2\).</p>
+      <p>\(y_S = f(2) = 2 + 2 = 4\). Probe: \(g(2) = -4 + 8 = 4\) ✓. \(S(2 \mid 4)\).</p>
+    </div>
   </div>
 </div>
 
 <!-- A6 -->
 <div class="block block-aufg" id="A6">
-  <div class="block-titel">▲ Aufgabe 6 · Modellierung</div>
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Modellierung</span></div>
   <p>Ein Tank enthält 200 L Wasser. Pro Minute fliessen 8 L ab.</p>
-  <p>(a) Stelle die Funktion \(V(t)\) (Wassermenge in L, \(t\) in min) auf.<br>
-     (b) Was bedeuten die Achsenschnittpunkte in der Sachsituation?<br>
-     (c) Wie lange ist die Funktion sinnvoll definiert?</p>
+  
+  <ol class="aufg-liste">
+    <li>Stelle die Funktion \(V(t)\) (Wassermenge in L, \(t\) in min) auf.</li>
+    <li>Was bedeuten die Achsenschnittpunkte in der Sachsituation?</li>
+    <li>Wie lange ist die Funktion sinnvoll definiert?</li>
+  </ol>
   <button class="loesung-toggle" onclick="toggleL('A6L')">▶ Lösung</button>
   <div class="loesung-body" id="A6L">
-    <p>(a) \(V(t) = 200 - 8 \cdot t\). Mit \(t\) in min, \(V\) in L.</p>
-    <p>(b) y-Achsenabschnitt \(V(0) = 200\): Anfangsfüllung. Nullstelle \(V(t) = 0 \Longrightarrow t = 25\): nach 25 min ist der Tank leer.</p>
-    <p>(c) Sachlich: \(D = [0\,\text{min}, 25\,\text{min}]\). Mathematisch wäre \(D = \mathbb{R}\),
-    aber für \(t < 0\) und \(t > 25\) macht das Modell physikalisch keinen Sinn (negative Zeit, negative Wassermenge).</p>
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(V(t) = 200 - 8 \cdot t\). Mit \(t\) in min, \(V\) in L.</li>
+        <li>y-Achsenabschnitt \(V(0) = 200\): Anfangsfüllung. Nullstelle \(V(t) = 0 \Longrightarrow t = 25\): nach 25 min ist der Tank leer.</li>
+        <li>Sachlich: \(D = [0\,\text{min}, 25\,\text{min}]\). Mathematisch wäre \(D = \mathbb{R}\),
+      aber für \(t < 0\) und \(t > 25\) macht das Modell physikalisch keinen Sinn (negative Zeit, negative Wassermenge).</li>
+      </ol>
+      <div class="block block-tipp" style="margin:8px 0 0">
+        <div class="block-titel">💡 \([0;25]\) oder \([0;25[\)?</div>
+        <p>Bei \(t = 25\) ist \(V(25) = 0\) — der Tank ist gerade leer. Mathematisch ist \(0\) ein
+        zulässiger Wassermengen-Wert; deshalb wird \(t = 25\) typischerweise <em>eingeschlossen</em>:
+        \(D = [0;25]\). Wer das Modell streng als „Wasser fliesst ab" liest, könnte \(t = 25\)
+        ausschliessen (\(D = [0;25[\)), weil nach diesem Zeitpunkt nichts mehr abfliesst. Beide
+        Konventionen sind verteidigbar — wichtig ist, die Entscheidung im Sachzusammenhang zu
+        begründen. Im Zweifel: <em>geschlossen</em>, wenn der Randwert physikalisch erreichbar ist.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="block block-aufg" id="A7">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Tarifvergleich mit zwei Funktionen</span></div>
+  <p>Zwei Mobilfunkanbieter bieten Datentarife für \(g\) Gigabyte:</p>
+  <ul>
+    <li>Anbieter A: \(P_A(g) = 5\cdot g + 10\) (CHF)</li>
+    <li>Anbieter B: \(P_B(g) = 2\cdot g + 25\) (CHF)</li>
+  </ul>
+<ol class="aufg-liste">
+  <li>Bestimme den Schnittpunkt der beiden Funktionen rechnerisch und interpretiere ihn im Sachzusammenhang.</li>
+  <li>Welcher Anbieter ist bei einem Verbrauch von 3 GB günstiger? Welcher bei 10 GB?</li>
+  <li>Beschreibe in einem Satz, in welchem Verbrauchsbereich welcher Anbieter günstiger ist.</li>
+</ol>
+  <button class="loesung-toggle" onclick="toggleL('A7L')">▶ Lösung</button>
+  <div class="loesung-body" id="A7L">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>Schnittpunkt: \(P_A(g) = P_B(g) \Rightarrow 5g + 10 = 2g + 25 \Rightarrow 3g = 15 \Rightarrow g = 5\). Preis bei diesem Verbrauch: \(P_A(5) = 35 = P_B(5)\). Interpretation: bei \(5\,\text{GB}\) kosten beide Anbieter gleich viel (35 CHF).</li>
+        <li>Bei \(3\,\text{GB}\): \(P_A = 25\), \(P_B = 31\) → A ist günstiger. Bei \(10\,\text{GB}\): \(P_A = 60\), \(P_B = 45\) → B ist günstiger.</li>
+        <li>Bei einem Datenverbrauch <strong>unter 5 GB</strong> ist A günstiger, <strong>über 5 GB</strong>
+      ist B günstiger; bei <strong>genau 5 GB</strong> sind beide gleich teuer. <a class="quer" href="g3-2-lineare-funktionen.html">↗ 3.2</a></li>
+      </ol>
+    </div>
   </div>
 </div>
 
 
 <!-- ══ 11. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Eine Funktion ordnet jedem Argument <em>genau einen</em> Funktionswert zu.
+  Die Wahl von Definitions- und Wertebereich ist Teil der Funktion — bei Anwendungsaufgaben oft
+  enger als der mathematisch mögliche Bereich.</p>
+</div>
 
 <table class="ftb-tabelle">
   <thead><tr><th>Konzept</th><th>Symbol/Schreibweise</th><th>Zentrale Aussage</th></tr></thead>
@@ -675,12 +838,21 @@ Einsetzen in eine der beiden Funktionen.</p>
   </tbody>
 </table>
 
-<div class="merksatz">
-  <strong>Merksatz.</strong> Eine Funktion ordnet jedem Argument <em>genau einen</em> Funktionswert zu.
-  Die Wahl von Definitions- und Wertebereich ist Teil der Funktion — bei Anwendungsaufgaben oft
-  enger als der mathematisch mögliche Bereich.
+<div class="block block-tipp" style="margin-top:18px">
+  <div class="block-titel">💡 Du kannst jetzt die zwei wichtigsten Funktionstypen vertiefen</div>
+  <p>Mit den Grundbegriffen aus diesem Kapitel hast du das Fundament — jetzt geht es um die zwei zentralen Funktionsfamilien des Grundlagenfachs:</p>
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <thead><tr><th>Thema</th><th>Form</th><th>Was du dort lernst</th></tr></thead>
+    <tbody>
+      <tr><td><strong><a class="quer" href="g3-2-lineare-funktionen.html">↗ 3.2 Lineare Funktionen</a></strong></td>
+          <td>\(f(x) = m\cdot x + b\)</td>
+          <td class="li">Steigung, Achsenabschnitt, Gleichung aus Graph/zwei Punkten aufstellen</td></tr>
+      <tr><td><strong><a class="quer" href="g3-3-quadratische-funktionen.html">↗ 3.3 Quadratische Funktionen</a></strong></td>
+          <td>\(f(x) = a\cdot x^2 + b\cdot x + c\)</td>
+          <td class="li">Parabel-Formen, Scheitelpunkt, Nullstellen, Extremwertaufgaben</td></tr>
+    </tbody>
+  </table>
 </div>
-
 
 <!-- ══ 12. DOWNLOADS ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
@@ -688,24 +860,24 @@ Einsetzen in eine der beiden Funktionen.</p>
 <div class="dl-grid">
   <a href="../downloads/grundlagen/g3-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/g3-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Begriffe auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
-  <a href="../downloads/grundlagen/g3-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
   <a href="../downloads/grundlagen/g3-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/g3-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/g3-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
 </div>
 
 
 <!-- ══ 13. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<div class="ressourcen-subtitel">🎬 Erklärvideos</div>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
 <div class="links-grid">
-  <a href="https://www.youtube.com/watch?v=Z4xARW7wLJI" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Funktionsbegriff: Was ist eine Funktion?</div><div class="lk-s">Lehrermarktplatz · eindeutige Zuordnung x ↦ y</div></div></a>
-  <a href="https://www.youtube.com/watch?v=KUpG-11W8Jc" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Funktionen — Übersicht der Funktionstypen</div><div class="lk-s">Mathe by Daniel Jung · Eigenschaften</div></div></a>
-  <a href="https://www.youtube.com/watch?v=r9FeNr2XI2A" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Definitionsbereich, Wertebereich</div><div class="lk-s">Mathe by Daniel Jung · Übersicht</div></div></a>
+  <a href="https://www.youtube.com/watch?v=hhb4zRxr9rA" target="_blank" rel="noopener" class="lk"><span class="lk-ic">🎬</span><div><div class="lk-t">MathemaTrick — Was ist eine Funktion?</div><div class="lk-s">Einführung in den Funktionsbegriff · 4:20 min · Susanne Scherer</div></div></a>
+  <a href="https://www.youtube.com/watch?v=134fNptk0ew" target="_blank" rel="noopener" class="lk"><span class="lk-ic">🎬</span><div><div class="lk-t">MathemaTrick — Maximaler Definitionsbereich bestimmen</div><div class="lk-s">Definitionsbereich finden · 4:41 min · Susanne Scherer</div></div></a>
+  <a href="https://www.youtube.com/watch?v=hbXagiKYL1I" target="_blank" rel="noopener" class="lk"><span class="lk-ic">🎬</span><div><div class="lk-t">Daniel Jung — Definitionsbereich &amp; Wertebereich</div><div class="lk-s">Kompakte Übersicht · 2:37 min</div></div></a>
 </div>
-<div class="ressourcen-subtitel">📝 Aufgabensammlungen</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
 <div class="links-grid">
-  <a href="https://www.sos-mathe.ch/g/g2/g21/funktion.pdf" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Funktionen: Begriffe und Eigenschaften</div><div class="lk-s">PDF mit Übersicht und Beispielen</div></div></a>
-  <a href="https://de.serlo.org/mathe/26409/aufgaben-zur-bestimmung-von-definitionsmengen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Definitionsmengen bestimmen</div><div class="lk-s">Aufgaben mit Schritt-für-Schritt-Lösungen</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g2/g21/funktion.pdf" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Funktion (Einführung)</div><div class="lk-s">G21 · Begriff und Eigenschaften · PDF mit Beispielen</div></div></a>
+  <a href="https://de.serlo.org/mathe/174389/aufgaben-zum-begriff-der-funktion-als-eindeutiger-zuordnung" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Funktion als eindeutige Zuordnung</div><div class="lk-s">Aufgaben zum Funktionsbegriff · mit Schritt-für-Schritt-Lösungen</div></div></a>
   <a href="https://de.serlo.org/mathe/36045/aufgaben-zum-definitions-und-wertebereich-von-funktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Definitions- &amp; Wertebereich</div><div class="lk-s">Aufgaben mit Lösungen</div></div></a>
 </div>
 
@@ -716,7 +888,7 @@ Einsetzen in eine der beiden Funktionen.</p>
 
 <footer class="site-footer">
   <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
-  <p>Grundlagen Grundlagen</p>
+  <p>Grundlagenfach 3.1 Grundlagen</p>
 </footer>
 
 <script src="../nav.js"></script>
@@ -1097,6 +1269,148 @@ function renderAllPlots() {
   Object.keys(PLOTS).forEach(id => plotChart(PLOTS[id]));
 }
 
+/* ============================================================
+   Drei Slider-Widgets (P2.10)
+   ============================================================ */
+
+/* Hilfsformat: Zahl mit max. 2 Nachkommastellen, Minus als Unicode */
+function fmtNum(x, dp) {
+  const s = (Math.round(x * 100) / 100).toFixed(dp !== undefined ? dp : 2);
+  return s.replace(/\.?0+$/, '').replace(/^-/, '\u2212') || '0';
+}
+/* Term der Form "a·x + b" mit Vorzeichen-Logik */
+function fmtLin(a, b) {
+  const aStr = (a === 1) ? 'x' : (a === -1) ? '\u2212x' : fmtNum(a) + '\u00B7x';
+  if (b === 0) return aStr;
+  const bAbs = fmtNum(Math.abs(b));
+  return aStr + (b > 0 ? ' + ' : ' \u2212 ') + bAbs;
+}
+
+/* Widget A — Lineare Funktion: a, b -> Live-Nullstelle */
+function linRender() {
+  const a = parseFloat(document.getElementById('lin-a').value);
+  const b = parseFloat(document.getElementById('lin-b').value);
+  document.getElementById('lin-a-val').textContent = fmtNum(a);
+  document.getElementById('lin-b-val').textContent = fmtNum(b);
+  document.getElementById('lin-fx').textContent = fmtLin(a, b);
+  document.getElementById('lin-y0').textContent = fmtNum(b);
+  const x0el = document.getElementById('lin-x0');
+  // Nullstelle: a·x + b = 0 -> x = -b/a, Sonderfälle
+  if (Math.abs(a) < 1e-9) {
+    x0el.textContent = (Math.abs(b) < 1e-9) ? 'jede Zahl (Konstante 0)' : 'keine (Konstante \u2260 0)';
+  } else {
+    x0el.textContent = fmtNum(-b / a);
+  }
+  // Plot-Konfig
+  const cfg = {
+    canvasId: 'lin-canvas',
+    xMin: -7, xMax: 7, yMin: -7, yMax: 7,
+    curves: [{ fn: x => a * x + b, color: '#1a4f8a', label: 'f(x) = ' + fmtLin(a, b), labelX: 5 }],
+    points: [{ x: 0, y: b, label: 'y\u2080 = ' + fmtNum(b), color: '#2d6a3e', labelPos: 'l' }]
+  };
+  if (Math.abs(a) > 1e-9) {
+    const x0 = -b / a;
+    if (x0 >= cfg.xMin && x0 <= cfg.xMax) {
+      cfg.points.push({ x: x0, y: 0, label: 'x\u2080 = ' + fmtNum(x0), color: '#b85a00', labelPos: 'b' });
+    }
+  }
+  plotChart(cfg);
+}
+
+/* Widget B — Verschobene Parabel: g(x) = (x - u)^2 + v */
+function parRender() {
+  const u = parseFloat(document.getElementById('par-u').value);
+  const v = parseFloat(document.getElementById('par-v').value);
+  document.getElementById('par-u-val').textContent = fmtNum(u);
+  document.getElementById('par-v-val').textContent = fmtNum(v);
+  document.getElementById('par-u-eq').textContent = fmtNum(u);
+  document.getElementById('par-v-eq').textContent = fmtNum(v);
+  document.getElementById('par-S').textContent = 'S(' + fmtNum(u) + ' | ' + fmtNum(v) + ')';
+  // Anzahl Nullstellen: (x-u)^2 = -v
+  const anzEl = document.getElementById('par-anzahl');
+  const nstEl = document.getElementById('par-nst');
+  let nstPoints = [];
+  if (v > 1e-9) {
+    anzEl.textContent = '0 Nullstellen';
+    nstEl.textContent = '(Scheitel oberhalb der x-Achse)';
+  } else if (Math.abs(v) <= 1e-9) {
+    anzEl.textContent = '1 Nullstelle';
+    nstEl.textContent = '(x = ' + fmtNum(u) + ', Berührpunkt = Scheitel)';
+    // kein zusätzlicher Marker — Scheitel und Nullstelle fallen zusammen
+  } else {
+    const r = Math.sqrt(-v);
+    const x1 = u - r, x2 = u + r;
+    anzEl.textContent = '2 Nullstellen';
+    nstEl.textContent = '(x \u2248 ' + fmtNum(x1) + ' und x \u2248 ' + fmtNum(x2) + ')';
+    nstPoints.push({ x: x1, y: 0 }, { x: x2, y: 0 });
+  }
+  // Plot-Konfig
+  const cfg = {
+    canvasId: 'par-canvas',
+    xMin: -7, xMax: 7, yMin: -7, yMax: 7,
+    curves: [{ fn: x => (x - u) * (x - u) + v, color: '#1a4f8a', label: 'g(x) = (x \u2212 ' + fmtNum(u) + ')\u00B2 + ' + fmtNum(v), labelX: 5 }],
+    points: [{ x: u, y: v, label: 'S', color: '#a02828', labelPos: (v <= 0 ? 'b' : 'r') }]
+  };
+  nstPoints.forEach(p => {
+    cfg.points.push({ x: p.x, y: p.y, label: 'x = ' + fmtNum(p.x), color: '#b85a00', labelPos: 'b' });
+  });
+  plotChart(cfg);
+}
+
+/* Widget C — Schnitt Gerade f(x) = m·x + b mit Parabel g(x) = x^2 */
+function schnRender() {
+  const m = parseFloat(document.getElementById('schn-m').value);
+  const b = parseFloat(document.getElementById('schn-b').value);
+  document.getElementById('schn-m-val').textContent = fmtNum(m);
+  document.getElementById('schn-b-val').textContent = fmtNum(b);
+  document.getElementById('schn-fx').textContent = fmtLin(m, b);
+  // Schnittbedingung: m·x + b = x^2 -> x^2 - m·x - b = 0; D = m^2 + 4b
+  const D = m * m + 4 * b;
+  document.getElementById('schn-D').textContent = fmtNum(D);
+  const anzEl = document.getElementById('schn-anzahl');
+  const ptsEl = document.getElementById('schn-pts');
+  let schnPoints = [];
+  if (D < -1e-9) {
+    anzEl.textContent = '0 Schnittpunkte';
+    ptsEl.textContent = ' (Diskriminante D < 0)';
+  } else if (Math.abs(D) <= 1e-9) {
+    const x = m / 2, y = x * x;
+    anzEl.textContent = '1 Schnittpunkt';
+    ptsEl.textContent = ' \u00B7 S(' + fmtNum(x) + ' | ' + fmtNum(y) + ')  (Tangente)';
+    schnPoints.push({ x, y });
+  } else {
+    const sq = Math.sqrt(D);
+    const x1 = (m - sq) / 2, x2 = (m + sq) / 2;
+    const y1 = x1 * x1, y2 = x2 * x2;
+    anzEl.textContent = '2 Schnittpunkte';
+    ptsEl.textContent = ' \u00B7 S\u2081(' + fmtNum(x1) + ' | ' + fmtNum(y1) + '), S\u2082(' + fmtNum(x2) + ' | ' + fmtNum(y2) + ')';
+    schnPoints.push({ x: x1, y: y1 }, { x: x2, y: y2 });
+  }
+  const cfg = {
+    canvasId: 'schn-canvas',
+    xMin: -4, xMax: 4, yMin: -4, yMax: 12,
+    curves: [
+      { fn: x => x * x, color: '#b85a00', label: 'g(x) = x\u00B2', labelX: -2.5 },
+      { fn: x => m * x + b, color: '#1a4f8a', label: 'f(x) = ' + fmtLin(m, b), labelX: 3 }
+    ],
+    points: []
+  };
+  schnPoints.forEach((p, i) => {
+    if (p.y < cfg.yMin - 0.5 || p.y > cfg.yMax + 0.5) return;
+    cfg.points.push({
+      x: p.x, y: p.y,
+      label: (schnPoints.length === 1 ? 'S' : 'S' + (i === 0 ? '\u2081' : '\u2082')),
+      color: '#a02828', labelPos: (i === 0 ? 'l' : 'r')
+    });
+  });
+  plotChart(cfg);
+}
+
+/* Slider-Events verdrahten */
+['lin-a', 'lin-b'].forEach(id => document.getElementById(id).addEventListener('input', linRender));
+['par-u', 'par-v'].forEach(id => document.getElementById(id).addEventListener('input', parRender));
+['schn-m', 'schn-b'].forEach(id => document.getElementById(id).addEventListener('input', schnRender));
+
 /* Tab-Switcher */
 document.querySelectorAll('.bsp-tabs').forEach(tabs => {
   tabs.querySelectorAll('button').forEach(btn => {
@@ -1144,6 +1458,18 @@ function checkA1() {
   }
 }
 
+function checkA3(teil, userSaysTrue, btn) {
+  // korrekte Antworten: 1 falsch, 2 richtig, 3 falsch, 4 richtig
+  const korrekt = { '1': false, '2': true, '3': false, '4': true };
+  const istKorrekt = (userSaysTrue === korrekt[teil]);
+  const fb = document.getElementById('a3-' + teil + '-fb');
+  if (istKorrekt) {
+    fb.textContent = '\u2713'; fb.className = 'feedback ok';
+  } else {
+    fb.textContent = '\u2717 \u2014 schau die L\u00F6sung an.'; fb.className = 'feedback fehler';
+  }
+}
+
 function checkA4() {
   const y = readNum('a4-y'), x = readNum('a4-x');
   const fb = document.getElementById('a4-fb');
@@ -1169,12 +1495,18 @@ window.addEventListener('load', () => {
   glasRender();
   darstGraphRender();
   renderAllPlots();
+  linRender();
+  parRender();
+  schnRender();
 });
 window.addEventListener('resize', () => {
   einstiegRender();
   glasRender();
   darstGraphRender();
   renderAllPlots();
+  linRender();
+  parRender();
+  schnRender();
 });
 </script>
 </body>
