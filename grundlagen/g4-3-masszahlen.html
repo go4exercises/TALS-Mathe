@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -102,12 +102,25 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Lagemasse Mittelwert, Median und Modus berechnen und deuten.</li>
+      <li>Ich kann die Streumasse Spannweite, Quartilsdifferenz und Standardabweichung berechnen und deuten.</li>
+      <li>Ich kann begründen, wann der Median und wann der Mittelwert das passendere Lagemass ist (Robustheit).</li>
+      <li>Ich kann Masszahlen grosser Stichproben mit der Tabellenkalkulation bestimmen.</li>
+      <li>Ich kann aus Masszahlen den Boxplot konstruieren und umgekehrt Masszahlen aus ihm ablesen.</li>
+    </ul>
+  </div>
+</details>
+
 <h2 id="einstieg">Einstieg — Welche Klasse ist besser?</h2>
 
 <p>In zwei Mathe-Klassen wurde die gleiche Prüfung geschrieben. Beide Klassen haben <strong>denselben Mittelwert von 4.5</strong>. Verschiebe den Regler unten und beobachte, was mit den Noten in Klasse B passiert — und was mit dem Mittelwert:</p>
 
 <div class="streu-box">
-  <div class="sl-row">
+  <div class="sl-row akz-blau">
     <label>Streuung Klasse B: <span class="sl-val" id="sl-s">100</span> %</label>
     <input type="range" id="sl-streuung" min="0" max="100" step="1" value="100">
   </div>
@@ -152,10 +165,10 @@ MathJax = {
       <li>Bei <strong>geradem</strong> n: der Mittelwert der beiden Werte an Positionen \(\frac{n}{2}\) und \(\frac{n}{2}+1\).</li>
     </ul>
   </div>
-  <div class="block block-bsp"><div class="block-titel">🟢 Beispiel — n ungerade (n = 7)</div>
+  <div class="block block-bsp"><div class="block-titel">🟢 Beispiel — \(n\) ungerade (\(n = 7\))</div>
     Sortiert: 2, 4, 5, <strong>7</strong>, 8, 9, 10 — Position \(\frac{7+1}{2} = 4\) → Median = <strong>7</strong>.
   </div>
-  <div class="block block-bsp"><div class="block-titel">🟢 Beispiel — n gerade (n = 8, Klasse A)</div>
+  <div class="block block-bsp"><div class="block-titel">🟢 Beispiel — \(n\) gerade (\(n = 8\), Klasse A)</div>
     Sortiert: 4.0, 4.3, 4.4, <strong>4.5, 4.5</strong>, 4.6, 4.7, 5.0 — Positionen 4 und 5.
     <div class="berechnung">\(\tilde{x} = \frac{4.5 + 4.5}{2} = 4.5\)</div>
   </div>
@@ -176,6 +189,14 @@ MathJax = {
   </div>
   <p><strong>Wichtig:</strong> Der Modus ist das <em>einzige</em> Lagemass, das auch für <strong>kategoriale</strong> Daten funktioniert. Bei „Lieblingsfach" gibt es keinen Mittelwert — aber sehr wohl ein häufigstes Fach.</p>
 </div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Lagemasse</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Der Median von 2, 3, 7, 9, 14 ist …</p><ul class="mc-optionen"><li data-opt="A">\(7\)</li><li data-opt="B">\(6\)</li><li data-opt="C">\(9\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Fünf Werte → der dritte der geordneten Liste.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der häufigste Wert einer Stichprobe heisst <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Modus (Modalwert) \(\hat{x}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne den Mittelwert von 4, 5, 6, 9.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\bar{x} = \tfrac{4+5+6+9}{4} = \tfrac{24}{4} = 6\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Bestimme den Median von 3, 5, 9, 11 — was ist bei gerader Anzahl zu tun?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Bei gerader Anzahl gibt es keine einzelne Mitte: Mittel der beiden mittleren Werte, \(\tilde{x} = \tfrac{5+9}{2} = 7\).</div></details></div>
+</details>
 
 <h2 id="darstellungen">Streumasse — wie breit verteilt?</h2>
 
@@ -206,7 +227,7 @@ MathJax = {
 </div>
 
 <div class="block block-tipp">
-  <div class="block-titel">💡 Warum geteilt durch (n − 1) und nicht durch n?</div>
+  <div class="block-titel">💡 Warum geteilt durch \((n-1)\) und nicht durch \(n\)?</div>
   Bei einer <em>Stichprobe</em> liefert die Division durch \(n-1\) eine bessere Schätzung der „wahren" Streuung in der Grundgesamtheit. Das ist die in der Schule und in Tabellenkalkulationen übliche Konvention (Funktion <code>STABW.S</code>).
 </div>
 
@@ -228,7 +249,7 @@ MathJax = {
   Sie misst die Breite der mittleren 50 % der Daten — das ist genau die <em>Boxbreite</em> im Boxplot.
 </div>
 
-<div class="block block-bsp"><div class="block-titel">🟢 Beispiel — Klasse B (n = 8)</div>
+<div class="block block-bsp"><div class="block-titel">🟢 Beispiel — Klasse B (\(n = 8\))</div>
   Sortiert: 2.5, 3.0, 3.8, 4.5, 4.5, 5.2, 6.0, 6.5
   <ul style="margin:8px 0 0 0">
     <li>Untere Hälfte: 2.5, 3.0, 3.8, 4.5 → \(Q_1 = \frac{3.0+3.8}{2} = 3.4\)</li>
@@ -243,6 +264,14 @@ MathJax = {
   <p>Die fünf Zahlen für jeden Boxplot sind genau:
   <strong>min, Q<sub>1</sub>, Median, Q<sub>3</sub>, max</strong>. Die <em>Box</em> reicht von Q<sub>1</sub> bis Q<sub>3</sub>, ihre Breite ist die Quartilsdifferenz. Die <em>Whisker</em> reichen zum kleinsten und grössten Wert. Wer die Quartile berechnet, kann den Boxplot zeichnen — und umgekehrt.</p>
 </div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Streumasse</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Spannweite der Werte 2 bis 14 ist …</p><ul class="mc-optionen"><li data-opt="A">\(12\)</li><li data-opt="B">\(14\)</li><li data-opt="C">\(16\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(R = x_{max} - x_{min} = 14 - 2 = 12\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Standardabweichung misst die mittlere Abweichung vom <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Mittelwert \(\bar{x}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie gross ist \(s\) für die Daten 4, 4, 4, 4?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(s = 0\) — keine Streuung, alle Werte gleich.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum ist die Quartilsdifferenz \(Q_3 - Q_1\) oft aussagekräftiger als die Spannweite?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die Spannweite hängt nur von den zwei Extremwerten ab — ein einziger Ausreisser bläht sie auf. Die Quartilsdifferenz beschreibt die mittleren 50% und ist robust.</div></details></div>
+</details>
 
 <h2 id="typen">Grosse Stichproben — Tabellenkalkulation</h2>
 
@@ -276,6 +305,14 @@ MathJax = {
   <div class="block-titel">💡 Google Sheets / englische Versionen</div>
   In Google Sheets und in englischen Office-Versionen heissen die Funktionen <code>AVERAGE</code>, <code>MEDIAN</code>, <code>MODE</code>, <code>STDEV.S</code>, <code>QUARTILE.INC</code> — gleiche Bedeutung, andere Namen.
 </div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Tabellenkalkulation</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Funktion für den Mittelwert lautet …</p><ul class="mc-optionen"><li data-opt="A">=MITTELWERT()</li><li data-opt="B">=SUMME()</li><li data-opt="C">=ANZAHL()</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Z.B. =MITTELWERT(A1:A20); =MEDIAN() analog.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">=MEDIAN(A1:A20) liefert den <span class="mc-luecke"></span> des Bereichs.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Median.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Worin unterscheiden sich =STABW.S und =STABW.N?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">STABW.S rechnet mit \(n - 1\) (Stichprobe), STABW.N mit \(n\) (Grundgesamtheit) — bei grossen \(n\) nähern sich die Werte an.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum bei \(n = 200\) die Tabellenkalkulation statt Handrechnung?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Handrechnung ist bei 200 Werten fehleranfällig und nicht reproduzierbar. Mit Funktionen bleibt der Rechenweg nachvollziehbar, Änderungen an den Rohdaten aktualisieren alle Masszahlen automatisch.</div></details></div>
+</details>
 
 <h2 id="theorie">Robustheit — Mittelwert oder Median?</h2>
 
@@ -318,6 +355,14 @@ MathJax = {
   <p>Der Median ist der mittlere Wert der <strong>sortierten</strong> Liste. Aus der Urliste \(8, 3, 5, 1, 7\) den dritten Wert \(5\) als Median anzugeben, ist falsch begründet: erst sortieren (\(1, 3, 5, 7, 8\)), dann den mittleren Wert ablesen — hier kommt zufällig wieder \(5\) heraus. Bei \(8, 3, 9, 1, 7\) hingegen wäre die Urlisten-Mitte \(9\), der korrekte Median nach Sortieren (\(1, 3, 7, 8, 9\)) aber \(7\). Die Regel: <em>sortieren ist nicht optional</em>.</p>
 </div>
 
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Robustheit</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Ausreisser beeinflussen am stärksten …</p><ul class="mc-optionen"><li data-opt="A">den Median</li><li data-opt="B">den Mittelwert</li><li data-opt="C">den Modus</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Jeder Wert geht in die Summe ein — Extremwerte ziehen den Mittelwert mit.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Median ist <span class="mc-luecke"></span> gegenüber Ausreissern.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">robust.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Vergleiche {4, 6, 8} und {4, 6, 80}: Median und Mittelwert?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Median: bleibt \(6\). Mittelwert: springt von \(6\) auf \(\tfrac{4+6+80}{3} = 30\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum wird bei Löhnen meist der Median berichtet?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Lohnverteilungen sind rechtsschief: wenige sehr hohe Löhne ziehen den Mittelwert nach oben, ohne dass die «typische» Person mehr verdient. Der Median beschreibt die Mitte der Bevölkerung unverzerrt.</div></details></div>
+</details>
+
 <h2 id="aufgaben">Aufgaben</h2>
 
 <div class="block block-tipp" style="margin-bottom:10px">
@@ -343,7 +388,7 @@ MathJax = {
     <div class="block block-bsp" style="margin:6px 0 0">
       <div class="block-titel">🟢 Lösung</div>
             <ol class="aufg-liste">
-        <li>Sortiert: 12, 12, 14, 15, 17, 18, 20 (n = 7).</li>
+        <li>Sortiert: 12, 12, 14, 15, 17, 18, 20 (n = 7). Mittelwert: \(\bar{x} = \dfrac{14+18+12+20+15+17+12}{7} = \dfrac{108}{7} \approx 15.43\). Median (Position 4 der sortierten Liste): \(\tilde{x} = 15\). Modus: \(\hat{x} = 12\) (kommt zweimal vor, alle anderen Werte einmal).</li>
         <li>Untere Hälfte (ohne Median bei ungeradem n): 12, 12, 14 → \(Q_1 = 12\). Obere Hälfte: 17, 18, 20 → \(Q_3 = 18\). Quartilsdifferenz: \(\text{QD} = 18 - 12 = 6\).</li>
       </ol>
       <div class="block block-tipp" style="margin:8px 0 0">
@@ -602,6 +647,8 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'grundlagen', id:'g4-3',

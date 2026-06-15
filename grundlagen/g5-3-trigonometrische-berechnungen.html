@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -198,6 +198,19 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann Sinus, Cosinus und Tangens als Seitenverhältnisse am rechtwinkligen Dreieck definieren.</li>
+      <li>Ich kann fehlende Seiten und Winkel im rechtwinkligen Dreieck berechnen.</li>
+      <li>Ich kann die Spezialwinkel \(30°\), \(45°\), \(60°\) aus halbem Quadrat und halbem gleichseitigem Dreieck herleiten.</li>
+      <li>Ich kann Sinus- und Cosinussatz am schiefwinkligen Dreieck anwenden.</li>
+      <li>Ich kann Vermessungsaufgaben (Höhen, Distanzen) trigonometrisch lösen.</li>
+    </ul>
+  </div>
+</details>
+
 <!-- ══ 2. EINSTIEG ══ -->
 <h2 id="einstieg">Einstieg — wie hoch ist der Baum?</h2>
 
@@ -289,6 +302,14 @@ MathJax = {
 </div>
 
 <!-- ══ 4. DEFINITION WINKELFUNKTIONEN ══ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Rechtwinkliges Dreieck</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Hypotenuse liegt …</p><ul class="mc-optionen"><li data-opt="A">am rechten Winkel an</li><li data-opt="B">dem rechten Winkel gegenüber</li><li data-opt="C">beliebig</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Sie ist die längste Seite; die beiden anderen heissen Katheten.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die dem Winkel \(\alpha\) gegenüberliegende Kathete heisst <span class="mc-luecke"></span>kathete.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Gegen- — die anliegende heisst Ankathete.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Katheten \(6\) und \(8\): Hypotenuse?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(c = \sqrt{36 + 64} = \sqrt{100} = 10\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum hängen die Seitenverhältnisse nur vom Winkel ab, nicht von der Dreiecksgrösse?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Alle rechtwinkligen Dreiecke mit demselben spitzen Winkel sind ähnlich (WW) — ihre Seiten sind proportional, die Verhältnisse also identisch. Genau das macht \(\sin\), \(\cos\), \(\tan\) zu Funktionen des Winkels.</div></details></div>
+</details>
+
 <h2 id="definition">Definition — Sinus, Cosinus, Tangens am rechtwinkligen Dreieck <a class="quer" href="g5-4-einheitskreis.html">↗ 5.4</a></h2>
 
 <p>Wir bezeichnen den betrachteten Winkel bewusst mit \(x\), nicht mit einem fixen Symbol — denn die drei Seiten werden <em>relativ zu \(x\)</em> benannt:</p>
@@ -300,7 +321,23 @@ MathJax = {
 </ul>
 
 <div class="anim">
-  <div class="anim-titel">Anim 2 · Definition Winkelfunktionen — sin/cos/tan und Winkelposition umschaltbar</div>
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Anim 2 · Definition Winkelfunktionen — \(\sin/\cos/\tan\) und Winkelposition umschaltbar</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Halte den Winkel fest und ändere die Dreiecksgrösse: Was passiert mit den drei Seitenverhältnissen? Ändere dann den Winkel.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Halte den Winkel fest und ändere die Dreiecksgrösse: Was passiert mit den drei Seitenverhältnissen? Ändere dann den Winkel.">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Bei festem Winkel bleiben die Verhältnisse exakt konstant (ähnliche Dreiecke) — sie ändern sich nur mit dem Winkel. Darum sind \(\sin\), \(\cos\) und \(\tan\) reine Winkelfunktionen.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Bei festem Winkel bleiben die Verhältnisse exakt konstant, wegen ähnlicher Dreiecke — sie ändern sich nur mit dem Winkel. Darum sind Sinus, Cosinus und Tangens reine Winkelfunktionen.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
   <div class="anim-layout">
     <canvas id="cv-defWF" width="560" height="420"></canvas>
     <div class="bedien">
@@ -314,7 +351,7 @@ MathJax = {
       </div>
 
       <div>
-        <div class="feld-titel">Position von x</div>
+        <div class="feld-titel">Position von \(x\)</div>
         <div class="chips" id="defwf-pos">
           <button class="chip aktiv" data-pos="A">bei A (unten rechts)</button>
           <button class="chip" data-pos="B">bei B (oben)</button>
@@ -458,6 +495,14 @@ MathJax = {
 </div>
 
 <!-- ══ 8. ALLGEMEINES DREIECK — SINUSSATZ ══ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Sinus, Cosinus, Tangens</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(\sin(\alpha)\) ist das Verhältnis …</p><ul class="mc-optionen"><li data-opt="A">Gegenkathete zu Hypotenuse</li><li data-opt="B">Ankathete zu Hypotenuse</li><li data-opt="C">Gegenkathete zu Ankathete</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> GAGA-Merkhilfe: \(\sin\) = GK/Hyp, \(\cos\) = AK/Hyp, \(\tan\) = GK/AK.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(\sin(30°) =\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(0.5\) — aus dem halben gleichseitigen Dreieck.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Baum: Distanz \(20\) m, Höhenwinkel \(35°\) (Augenhöhe vernachlässigt). Höhe?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(h = 20 \cdot \tan(35°) \approx 20 \cdot 0.7002 \approx 14.0\) m.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Du kennst die Hypotenuse und einen spitzen Winkel. Mit welcher Funktion findest du die Ankathete?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Mit dem Cosinus: \(\cos(\alpha) = \tfrac{AK}{Hyp}\), also \(AK = Hyp \cdot \cos(\alpha)\). Die Wahl der Funktion folgt immer aus «welche zwei Seiten sind im Spiel».</div></details></div>
+</details>
+
 <h2 id="schief-dreieck">Berechnungen am schiefwinkligen Dreieck</h2>
 
 <p>Was, wenn das Dreieck <strong>keinen rechten Winkel</strong> hat? Dann hilft sin/cos/tan im Dreieck nicht direkt. Die Lösung sind zwei Sätze, die in <strong>jedem</strong> Dreieck gelten: der <strong>Sinussatz</strong> und der <strong>Cosinussatz</strong>.</p>
@@ -772,11 +817,19 @@ MathJax = {
   <p>Beim Sinussatz mit gegebener Seite, gegenüberliegendem Winkel und einer zweiten Seite (SSW-Fall) gibt es manchmal <strong>zwei</strong> Lösungen — den spitzen Winkel \(\arcsin(\ldots)\) und den stumpfen Winkel \(180° - \arcsin(\ldots)\). Beide musst du prüfen: passt der zweite Winkel mit \(\alpha + \beta < 180°\), ist er eine echte zweite Lösung. Wer nur den Taschenrechner-Wert nimmt, übersieht die zweite Konfiguration.</p>
 </div>
 
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Schiefwinkliges Dreieck</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Der Sinussatz lautet …</p><ul class="mc-optionen"><li data-opt="A">\(\tfrac{a}{\sin\alpha} = \tfrac{b}{\sin\beta} = \tfrac{c}{\sin\gamma}\)</li><li data-opt="B">\(a^2 = b^2 + c^2\)</li><li data-opt="C">\(\sin\alpha + \sin\beta = \sin\gamma\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Seite zu Sinus des Gegenwinkels — in jedem Dreieck konstant (Umkreisdurchmesser).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Cosinussatz \(c^2 = a^2 + b^2 - 2ab\cos\gamma\) wird für \(\gamma = 90°\) zum Satz des <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Pythagoras — denn \(\cos(90°) = 0\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wann brauchst du den Cosinussatz statt des Sinussatzes?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Bei SWS (zwei Seiten + eingeschlossener Winkel) und SSS (drei Seiten) — dort fehlt jedes Seite-Gegenwinkel-Paar.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Gegeben \(a = 7\), \(\alpha = 40°\), \(\beta = 60°\): Skizziere den Lösungsweg für \(b\).</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Sinussatz: \(\tfrac{b}{\sin 60°} = \tfrac{7}{\sin 40°}\) → \(b = 7 \cdot \tfrac{\sin 60°}{\sin 40°} \approx 9.4\). Danach \(\gamma = 80°\) und \(c\) analog.</div></details></div>
+</details>
+
 <h2 id="aufgaben">Aufgaben</h2>
 
 <!-- A1: Erkennen / Werkzeug-Wahl -->
 <div class="block block-aufg">
-  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Welches Werkzeug? — sin/cos/tan, Sinussatz oder Cosinussatz?</span></div>
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Welches Werkzeug? — \(\sin/\cos/\tan\), Sinussatz oder Cosinussatz?</span></div>
 
   <p>Welche Methode löst die Aufgabe am direktesten?</p>
   <ol class="aufg-liste">
@@ -1128,6 +1181,8 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'grundlagen', id:'g5-3',

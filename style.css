@@ -285,43 +285,6 @@ a:hover { text-decoration: underline; }
   padding: 8px 10px 2px; margin-top: 2px;
 }
 
-/* ── BREADCRUMB + PREV/NEXT ─────────────────────────────────── */
-.breadcrumb-bar {
-  background: var(--weiss);
-  border-bottom: 1px solid var(--linie);
-  padding: 10px 32px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 10px;
-}
-.breadcrumb {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.78rem; color: var(--tinte-2);
-}
-.breadcrumb a { color: var(--blau); text-decoration: none; font-weight: 600; }
-.breadcrumb a:hover { text-decoration: underline; }
-.bc-sep { color: var(--linie); }
-.bc-cur { color: var(--tinte); font-weight: 600; }
-
-.prev-next { display: flex; gap: 8px; }
-.pn-btn {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.78rem; padding: 5px 12px; border-radius: 7px;
-  border: 1px solid var(--linie); background: var(--papier);
-  text-decoration: none; color: var(--tinte-2);
-  transition: border-color 0.15s, background 0.15s, color 0.15s;
-  white-space: nowrap;
-}
-.pn-btn:hover { border-color: var(--blau-rand); background: var(--blau-hell); color: var(--blau); text-decoration: none; }
-.pn-dis { opacity: 0.4; cursor: default; pointer-events: none; }
-.pn-nr  { font-family: var(--mono); font-size: 0.65rem; opacity: 0.7; }
-.pn-tit { font-weight: 600; }
-/* On small screens hide the title, keep arrows */
-@media (max-width: 700px) {
-  .pn-tit, .pn-nr { display: none; }
-  .pn-btn.pn-prev::before { content: '←'; }
-  .pn-btn.pn-next::after  { content: '→'; }
-}
-
 /* ── SEITEN-LAYOUT ──────────────────────────────────────────── */
 .page-wrap {
   max-width: 1400px; margin: 0 auto;
@@ -618,11 +581,25 @@ a.quer:hover { background: var(--blau); color: #fff; border-color: var(--blau); 
   font-size: 0.8rem;
 }
 .toc-title {
+  display: flex; align-items: baseline; gap: 6px;
+  width: 100%; text-align: left;
   font-family: var(--mono); font-size: 0.62rem; font-weight: 700;
   letter-spacing: 2px; text-transform: uppercase;
   color: var(--tinte-2); margin-bottom: 10px;
-  padding-bottom: 8px; border-bottom: 1px solid var(--linie);
+  padding: 2px 6px 8px; border: none; border-bottom: 1px solid var(--linie);
+  background: none; cursor: pointer; border-radius: 5px 5px 0 0;
+  transition: color 0.12s, background 0.12s;
 }
+.toc-title:hover, .toc-title:focus-visible {
+  color: var(--blau); background: var(--blau-hell); outline: none;
+}
+.toc-title .toc-title-pfeil {
+  margin-left: auto; font-weight: 700;
+  opacity: 0; transition: opacity 0.12s;
+}
+.toc-title:hover .toc-title-pfeil,
+.toc-title:focus-visible .toc-title-pfeil { opacity: 1; }
+.toc-kapnr { text-transform: none; }
 .toc-link {
   display: block; padding: 4px 8px; border-radius: 5px;
   color: var(--tinte-2); text-decoration: none;
@@ -724,7 +701,6 @@ canvas { display: block; width: 100%; }
 }
 @media (max-width: 640px) {
   .site-hdr { padding: 0 14px; }
-  .breadcrumb-bar { padding: 8px 14px; }
   .page-wrap { padding: 20px 14px 60px; }
 }
 
@@ -931,3 +907,174 @@ canvas { display: block; width: 100%; }
   transition: all 0.12s;
 }
 .anim .kn-quad:hover { border-color: var(--blau-rand); color: var(--blau); }
+
+/* ── MINI-CHECKS (Pilot g3-2; Muster aus TALS-Physik, Farben: Orange = Aufgabe/Übung) ──
+   Einklappbare Verständnisfragen je Abschnitt; Akkordeon-Logik in minicheck.js. */
+.minicheck { background: var(--weiss); border: 1px solid var(--orange-rand); border-radius: 12px; margin: 18px 0; overflow: hidden; }
+.minicheck > summary.mc-kopf {
+  cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px;
+  font-family: var(--serif); font-weight: 700; font-size: 0.9rem; color: var(--orange);
+  background: var(--orange-hell); padding: 9px 16px;
+}
+.minicheck > summary.mc-kopf::-webkit-details-marker { display: none; }
+.minicheck > summary.mc-kopf::after { content: '▸'; margin-left: auto; color: var(--orange-rand); transition: transform 0.15s ease; }
+.minicheck[open] > summary.mc-kopf::after { transform: rotate(90deg); }
+.minicheck[open] > summary.mc-kopf { border-bottom: 1px solid var(--orange-rand); }
+.minicheck > summary.mc-kopf:hover { filter: brightness(0.97); }
+.mc-item { padding: 12px 16px; }
+.mc-item + .mc-item { border-top: 1px solid var(--linie); }
+.mc-typ { display: inline-block; font-family: var(--sans); font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.03em; text-transform: uppercase; color: var(--orange); background: var(--orange-hell);
+  border: 1px solid var(--orange-rand); border-radius: 5px; padding: 1px 7px; margin-bottom: 7px; }
+.mc-frage { font-size: 0.92rem; line-height: 1.55; margin: 0 0 8px; }
+.mc-optionen { list-style: none; margin: 0 0 8px; padding: 0; }
+.mc-optionen li { position: relative; padding: 3px 0 3px 1.8em; font-size: 0.9rem; line-height: 1.45; }
+.mc-optionen li::before { content: attr(data-opt) ')'; position: absolute; left: 0; font-weight: 700; color: var(--orange); }
+.mc-luecke { display: inline-block; min-width: 3.4em; border-bottom: 1.5px solid var(--orange); margin: 0 2px; }
+.mc-loesung { margin-top: 4px; }
+.mc-loesung > summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--sans); font-size: 0.8rem; font-weight: 600; color: var(--orange); }
+.mc-loesung > summary::-webkit-details-marker { display: none; }
+.mc-loesung > summary::before { content: '▸'; transition: transform 0.15s ease; }
+.mc-loesung[open] > summary::before { transform: rotate(90deg); }
+.mc-loesung > summary:hover { filter: brightness(0.97); }
+.mc-antwort { margin-top: 8px; padding: 9px 12px; font-size: 0.88rem; line-height: 1.55; background: var(--orange-hell); border-radius: 7px; }
+
+/* ── ANIMATIONS-HINWEISE (Pilot g3-2; Muster aus TALS-Physik, Farben: Blau = Animation) ──
+   Rollover «Worauf achten?» / «Erkenntnis» mit Vorlese-Option; Logik in anim-hinweise.js. */
+.widget-titelzeile { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin:0; }
+.widget-titelzeile h3 { margin:0; }
+.anim-hinweis { position:relative; display:inline-block; }
+.anim-hinweis.rechts { margin-left:auto; }
+.ah-trigger { font-size:0.8rem; color:var(--tinte-2); border-bottom:1px dotted var(--blau-rand);
+  cursor:help; user-select:none; padding:1px 0; display:inline-block; white-space:nowrap; }
+.ah-trigger:focus-visible { outline:2px solid var(--blau-rand); outline-offset:2px; border-radius:2px; }
+.ah-pop { position:absolute; left:0; top:calc(100% + 8px); z-index:50; width:min(440px,86vw);
+  background:var(--blau-hell); border:1px solid var(--blau-rand); border-radius:8px;
+  padding:11px 13px; box-shadow:0 6px 18px rgba(28,26,23,0.18);
+  opacity:0; visibility:hidden; transform:translateY(-3px);
+  transition:opacity .15s ease, transform .15s ease; pointer-events:none; }
+.anim-hinweis.rechts .ah-pop { left:auto; right:0; }
+.ah-pop::before { content:""; position:absolute; left:0; right:0; top:-8px; height:8px; }
+.anim-hinweis:hover .ah-pop,
+.anim-hinweis:focus-within .ah-pop,
+.anim-hinweis.fixiert .ah-pop { opacity:1; visibility:visible; transform:none; pointer-events:auto; }
+.ah-titel { display:block; font-weight:600; font-size:0.8rem; color:var(--blau); margin-bottom:5px; }
+.ah-text { font-size:0.8rem; line-height:1.5; color:var(--tinte); }
+.ah-text ul { margin:0; padding-left:1.15em; }
+.ah-text li { margin:3px 0; }
+.ah-speak { margin-top:10px; font-size:0.74rem; color:var(--blau); background:var(--papier);
+  border:1px solid var(--blau-rand); border-radius:6px; padding:3px 9px; cursor:pointer; }
+.ah-speak:hover { background:#fff; }
+.ah-speak[aria-pressed="true"] { background:var(--blau); color:var(--papier); border-color:var(--blau); }
+
+/* ── SLIDER-GRUPPIERUNG (Muster aus TALS-Physik Phase 5.34) ──
+   Mehrere Regler einer Animation in EINER .sl-row: jede .sl-grp ist eine
+   unzertrennliche Einheit Label+Slider+Wert; auf schmalen Screens brechen
+   ganze Gruppen um (kein Overflow, Label bleibt beim Regler).
+   Die .sl-row-Basisstile liegen seitenlokal (Widget-Pattern-Seiten). */
+.sl-row { flex-wrap: wrap; }
+.sl-row .sl-grp { display: flex; align-items: center; gap: 10px; flex: 1 1 210px; min-width: 0; }
+.sl-row .sl-grp label { min-width: 0; }
+.sl-row .sl-grp input[type=range] { min-width: 60px; }
+
+/* ── LERNZIELE (Pilot g3-2; Muster aus TALS-Physik, Blau = Orientierung/Begriff) ──
+   Aufklappbare Ich-kann-Liste direkt nach der RLP-Kompetenzen-Box. */
+.lernziele { border-radius: 8px; margin: 14px 0 28px; border: 1.5px solid var(--blau-rand);
+  background: var(--blau-hell); overflow: hidden; }
+.lernziele > summary { list-style: none; cursor: pointer; padding: 11px 16px;
+  font-family: var(--sans); font-weight: 700; font-size: 0.9rem; color: var(--blau);
+  display: flex; align-items: center; gap: 9px; user-select: none; }
+.lernziele > summary::-webkit-details-marker { display: none; }
+.lernziele > summary::after { content: '▸'; margin-left: auto; font-size: 0.85rem; transition: transform 0.18s; }
+.lernziele[open] > summary::after { transform: rotate(90deg); }
+.lernziele > summary:hover { filter: brightness(0.97); }
+.lernziele .lz-body { padding: 4px 18px 14px; }
+.lernziele ul { margin: 0; padding-left: 1.25em; }
+.lernziele li { margin: 5px 0; font-size: 0.92rem; }
+.lernziele li::marker { color: var(--blau-rand); }
+
+/* ── WERTEZUGEHÖRIGKEIT in zusammengelegten Slider-Zeilen ──
+   Wert direkt neben dem eigenen Slider (Nähe), deutlicher Abstand zwischen
+   den Gruppen (Distanz). Übersteuert per Spezifität die seitenlokalen
+   .sl-val-Regeln (min-width:64px / text-align:right). */
+.sl-row:has(.sl-grp) { gap: 30px; row-gap: 10px; }
+.sl-row .sl-grp { gap: 8px; }
+.sl-row .sl-grp .sl-val { min-width: 0; text-align: left; }
+
+/* Akzentfarbe pro Regler-Gruppe — koppelt Slider, Wert und Label-Variable.
+   Dieselben Farben stehen als .tx-*-Textakzente für Formelbestandteile bereit. */
+.sl-grp.akz-blau,   .sl-row.akz-blau   { --akz: var(--blau); }
+.sl-grp.akz-orange, .sl-row.akz-orange { --akz: var(--orange); }
+.sl-grp.akz-gruen,  .sl-row.akz-gruen  { --akz: var(--gruen); }
+.sl-grp[class*="akz-"] input[type=range],
+.sl-row[class*="akz-"] input[type=range] { accent-color: var(--akz); }
+.sl-grp[class*="akz-"] input[type=range]::-webkit-slider-thumb,
+.sl-row[class*="akz-"] input[type=range]::-webkit-slider-thumb { background: var(--akz); }
+.sl-grp[class*="akz-"] .sl-val,
+.sl-row[class*="akz-"] .sl-val { color: var(--akz); }
+.sl-grp[class*="akz-"] label .var,
+.sl-row[class*="akz-"] label .var { color: var(--akz); font-weight: 600; }
+.tx-blau   { color: var(--blau); }
+.tx-orange { color: var(--orange); }
+.tx-gruen  { color: var(--gruen); }
+
+/* ── Nachschlagen: Glossar & Formelsammlung (ab ZIP 59) ───────── */
+/* Glossar-Sprungleiste (A B C …) */
+.glossar-az {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin: 6px 0 22px;
+}
+.glossar-az a {
+  font-family: var(--mono); font-size: 0.78rem; font-weight: 700;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; text-decoration: none;
+  background: var(--blau-hell); color: var(--blau);
+  border: 1px solid var(--blau-rand);
+}
+.glossar-az a:hover { background: var(--blau); color: #fff; }
+/* Glossar-Eintrag: Begriff + Definition */
+.glossar-eintrag {
+  border-left: 3px solid var(--blau-rand);
+  padding: 4px 0 4px 14px;
+  margin: 14px 0;
+}
+.glossar-eintrag .ge-begriff {
+  font-family: var(--serif); font-weight: 700; font-size: 1.02rem;
+  color: var(--tinte);
+}
+.glossar-eintrag .ge-formel {
+  font-family: var(--mono); font-size: 0.82rem; color: var(--blau);
+  margin-left: 8px;
+}
+.glossar-eintrag p { margin: 4px 0 0; font-size: 0.93rem; }
+.glossar-eintrag .ge-quer { font-size: 0.82rem; color: var(--tinte-2, var(--tinte)); font-style: italic; }
+/* Formelsammlung: Lerngebiet-Block mit Formelzeilen */
+.fs-block {
+  border: 1px solid var(--linie); border-radius: 10px;
+  padding: 16px 18px; margin: 16px 0; box-shadow: var(--s);
+  background: var(--weiss);
+}
+.fs-block > h3 {
+  font-family: var(--serif); font-size: 1.05rem; font-weight: 700;
+  margin: 0 0 4px; color: var(--tinte);
+}
+.fs-thema {
+  margin: 12px 0 4px; font-family: var(--mono); font-size: 0.68rem;
+  font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--orange);
+}
+.fs-zeile {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px;
+  padding: 5px 0; border-bottom: 1px solid var(--linie);
+}
+.fs-zeile:last-child { border-bottom: none; }
+.fs-name { flex: 0 0 200px; font-size: 0.9rem; color: var(--tinte); }
+.fs-formel { flex: 1 1 200px; font-size: 0.96rem; }
+.fs-quer {
+  font-family: var(--mono); font-size: 0.74rem; color: var(--blau);
+  text-decoration: none; white-space: nowrap;
+}
+.fs-quer:hover { text-decoration: underline; }
+@media (max-width: 640px) { .fs-name { flex-basis: 100%; } }

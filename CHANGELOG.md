@@ -4,6 +4,340 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [68] — 2026-06-13 · .gitignore ergänzt
+
+Repo-Hygiene: `.gitignore` schliesst dauerhaft vom Push aus:
+- `COLLABORATION.md` (gehört laut Datei selbst nur ins Project-Knowledge)
+- `TODO-lehrerbegutachtung.md`, `master-todoliste.md` (interne Arbeitslisten, nicht öffentlich)
+- `node_modules/`, `package*.json` (Tool-Artefakte der Tiefenprüfung), `.DS_Store`/`Thumbs.db`
+
+Hinweis: Bei bereits getrackten Dateien einmalig `git rm --cached <datei>` nötig, damit sie aus dem Repo verschwinden (lokale Kopie bleibt).
+
+---
+
+## [67] — 2026-06-13 · LICENSE und .nojekyll ergänzt
+
+Repo-Hygiene für GitHub Pages:
+- **LICENSE** (CC BY-NC 4.0 Volltext-Zusammenfassung mit Copyright-Zeile und Links auf legalcode/deed.de) im Repo-Root — GitHub erkennt und zeigt die Lizenz damit im Repo-Header an. Inhaltlich identisch zur bereits im Meta-Menü und README deklarierten Lizenz.
+- **.nojekyll** (leer) — schaltet die Jekyll-Verarbeitung auf GitHub Pages ab. Aktuell unkritisch (keine Unterstrich-Pfade), aber als Absicherung gegen künftige Dateien mit führendem Unterstrich.
+
+---
+
+## [66] — 2026-06-13 · Cross-Repo-Links auf absolute URLs (Schwesterseiten-Vorbereitung)
+
+Vorbereitung der Physik-Schwesterseite auf GitHub Pages (`go4exercises.github.io/TALS-Physik/`). Die gegenseitigen Querlinks waren teils relativ (`../tals-physik/`) und teils mit falscher Gross-/Kleinschreibung — auf case-sensitiven GitHub-Pages-URLs hätten sie ins Leere gezeigt.
+
+**Umgestellt auf absolute URLs (Variante A, repo-namen-robust):**
+- Physik-Querlink im Header (Desktop + Mobile): `https://go4exercises.github.io/TALS-Physik/` (vorher relativ `../tals-physik/`), `target=_blank`.
+- glossar.html / formelsammlung.html: Verweise aufs Physik-Pendant auf absolute `TALS-Physik`-URLs.
+- Self-Repo-Links (GitHub) vereinheitlicht auf `github.com/go4exercises/TALS-Mathe`.
+
+Alle Schreibweisen jetzt konsistent: TALS-Mathe (self) / TALS-Physik (cross). `node --check` grün.
+
+---
+
+## [65] — 2026-06-13 · Header entschlackt: «Übersicht»-Link und Breadcrumb-Zeile entfernt
+
+Beide Elemente waren redundant: der «Übersicht»-Link im Header dupliziert das ohnehin zur Startseite führende Logo, und die zweite Headerzeile (Breadcrumb + Vor/Zurück) wiederholt Inhalte, die bereits anderswo stehen.
+
+**Entfernt (zentral in `nav.js`):**
+- Der Desktop-Header-Link «Übersicht» (das Logo bleibt die Heim-Verknüpfung).
+- Die komplette Breadcrumb-Zeile (`breadcrumb-bar`): Der Pfad «Übersicht › Grundlagenfach › 4.3 · …» dupliziert den Titelblock der Seite (`pt-bereich` + `pt-h1`), die Vor/Zurück-Buttons dupliziieren die Prev/Next-Links der TOC-Seitenleiste. `prevBtn`/`nextBtn`/`bcHTML`/`fachLabel`/`fachHash` ersatzlos gestrichen; Injection vereinfacht zu `nav-root.innerHTML = headerHTML` (kein Sonderfall homepage mehr nötig).
+
+**Bewusst erhalten:**
+- `cfg.prev`/`cfg.next` bleiben im buildNav-cfg — die **TOC-Seitenleiste** nutzt sie weiterhin für ihre Vor/Zurück-Links (← 4.2 / 5.1 →).
+- Das mobile «← Übersicht» im Flyout-Menü bleibt (mobile Heim-Verknüpfung, nicht Teil von Header-Zeile/Breadcrumb).
+
+**Mobile-Abwägung dokumentiert:** Die TOC ist ab 900px ausgeblendet, die Breadcrumb-Vor/Zurück war damit bisher die einzige mobile Kapitel-Navigation. Nach Rücksprache bewusst akzeptiert: Der Kapitelwechsel bleibt mobil über die Dropdowns «Grundlagenfach»/«Schwerpunktfach» möglich (Direktsprung zu jedem Kapitel), und die Hauptnavigation bleibt vollständig erhalten.
+
+**CSS aufgeräumt:** alle verwaisten Regeln entfernt (`.breadcrumb-bar`, `.breadcrumb`, `.bc-sep`, `.bc-cur`, `.prev-next`, `.pn-btn` samt Varianten und 700px-/640px-Sonderregeln).
+
+**Verifiziert:** `node --check nav.js` grün; keine `breadcrumb`/`pn-`/`bc-`-Reste in nav.js oder style.css; jsdom-Render Homepage + Themenseite: keine Breadcrumb-Zeile, kein Übersicht-Header-Link, Logo «Mathematik», TOC behält prev (← 4.2) und next (5.1 →), mobiles «← Übersicht» erhalten.
+
+---
+
+## [64] — 2026-06-13 · Header: Logo ohne TALS-Pille, Physik als Top-Level-Link
+
+Zwei Anpassungen am Header (zentral in `nav.js`):
+
+**Logo ohne Pille.** Die `<span class="logo-pill">TALS</span>`-Pille ist aus dem Logo entfernt; der erste Link zeigt nur noch «Mathematik». Die `.logo-pill`-CSS-Regel bleibt ungenutzt in `style.css` (kein Schaden, falls die Pille je zurück soll). Das `.logo` selbst (`display:flex; gap:9px`) bleibt unverändert — ohne zweites Flex-Kind ist der Gap wirkungslos.
+
+**Physik als Top-Level-Link.** Der Querverweis auf das Physik-Lehrmittel war bisher Unterpunkt der «Extern»-Gruppe im Nachschlagen-Dropdown. Er steht nun direkt im Header als «Physik ↗» — zwischen dem Nachschlagen-Dropdown und dem Trennstrich vor «Über», exakt spiegelbildlich zu «Mathematik ↗» im Physik-Header. Im Dropdown «Extern» verbleibt nur die SBFI-Formelsammlung. Mobile-Nav analog: Physik-Link aus der Nachschlagen-Gruppe gelöst und als eigenständiger Eintrag nach den Fächern platziert. Link relativ (`${prefix}../tals-physik/index.html`), funktioniert von Root- und Themenseiten.
+
+**Verifiziert:** `node --check nav.js` grün; keine `logo-pill`-Referenz mehr im JS; jsdom-Render (homepage): Logo-Inhalt nur «Mathematik», «Physik ↗» als Top-Level-Link in Position (nach Nachschlagen, vor Über), Physik nicht mehr im dd-ref-Dropdown.
+
+---
+
+## [63] — 2026-06-13 · TOC: Kapiteltitel als «nach oben», Vor/Zurück wieder symmetrisch
+
+Idee aus dem Betrieb: Der Kapiteltitel sitzt ohnehin zuoberst im Inhaltsbereich — ihn klickbar zu machen und mit der Seitenanfang-Funktion zu belegen, macht den separaten «↑ nach oben»-Link überflüssig und stellt die Symmetrie der Navigationszeilen wieder her.
+
+**Umsetzung (zentral in `nav.js`/`style.css`):**
+- Der Kapiteltitel (`KAPITEL 5.2d`) ist neu ein `<button class="toc-title">` und springt bei Klick instant an den Seitenanfang (`window.scrollTo(0,0)`, kein Smooth-Scroll), entfernt die Aktiv-Markierung und bereinigt den URL-Hash — identisches Verhalten wie der frühere Top-Link.
+- **Entdeckbarkeit:** dezenter ↑-Indikator (`.toc-title-pfeil`), der nur bei Hover/Fokus erscheint, plus Hover-/Fokus-Färbung (Blau-Familie) und `cursor:pointer`. Als echtes Button-Element tastatur-fokussierbar (`:focus-visible`) und screenreader-zugänglich; der Pfeil ist `aria-hidden`.
+- **Symmetrie wiederhergestellt:** obere Zeile trägt wieder nur den Zurück-Link (`← 5.2c`), untere nur den Vorwärts-Link (`5.3 →`) — beide Zeilen erscheinen nur, wenn der jeweilige Nachbar existiert. Der separate `.toc-top`-Link und seine CSS-Regeln (inkl. der `toc-nav-*:has()`-Ausrichtungsregeln aus [61]/[62]) sind entfernt.
+
+**Verifiziert:** `node --check nav.js` grün; keine `toc-top`-Reste in nav.js/style.css; jsdom-Render g5-2d: Titel ist Button mit Pfeil-Indikator, Kapitelnummer klein («5.2d»), obere Zeile nur prev, untere nur next; Klick-Simulation auf den Titel löst `scrollTo(0,0)` aus und entfernt die Aktiv-Markierung.
+
+---
+
+## [62] — 2026-06-13 · TOC-Feinschliff (4 Browsertest-Befunde)
+
+Nachjustierung von [61] anhand eines Screenshots (g5-2d):
+
+1. **«nach oben» nach oben verschoben.** Der Top-Link sitzt jetzt in der oberen TOC-Navigationszeile (`toc-nav-oben`) rechts neben dem Zurück-Link, nicht mehr zuunterst. Untere Zeile (`toc-nav-unten`) trägt nur noch den Vorwärts-Link und erscheint nur, wenn dieser existiert. Auf der ersten Seite eines Lerngebiets (kein prev) steht der Top-Link allein rechtsbündig (`toc-nav-oben:has(.toc-top:only-child)`).
+
+2. **Instant statt rollend.** Der Sprung an den Seitenanfang nutzt `window.scrollTo(0, 0)` ohne `behavior:'smooth'` — identisches Sofort-Verhalten wie die Anker-Sprünge bei Titelwahl. Inline-`onclick` durch zentralen `addEventListener`-Handler in buildToC ersetzt.
+
+3. **Aktiv-Markierung beim Springen konsistent.** Bisher setzte nur der IntersectionObserver die `toc-aktiv`-Markierung — beim Klick wanderte sie verzögert mit, beim Sprung an den Seitenanfang (oberhalb des ersten beobachteten `h2`) blieb die alte Markierung hängen. Jetzt setzt ein Klick-Handler die Markierung sofort auf den geklickten Titel; der «nach oben»-Handler entfernt sie (oben ist kein Abschnitt aktiv). Verhalten dadurch bei Klick und Sprung einheitlich.
+
+4. **Kapitelnummer im TOC-Titel klein.** Der Titel hat `text-transform: uppercase` — das machte aus «5.2d» fälschlich «5.2D», während prev/next die Nummer korrekt klein zeigen. Die Nummer steht nun in `<span class="toc-kapnr">` mit `text-transform: none`; das Wort «KAPITEL» bleibt versal, die Sub-Kennung (a/b/c/d) bleibt klein — konsistent mit der Vor-/Zurück-Beschriftung.
+
+**Verifiziert:** `node --check nav.js` grün; jsdom-Render g5-2d (prev+next): Top-Link oben mit prev, unten nur next, kapnr-Span «5.2d» klein, kein Smooth-Handler; g5-1 (kein prev): Top-Link allein oben rechtsbündig. Verwaiste `toc-nav-unten:has`-Regel aus [61] entfernt.
+
+---
+
+## [61] — 2026-06-13 · TOC: «nach oben»-Link in der Seiten-Inhaltsleiste
+
+Navigationswunsch: schnelles Zurück zum Seitenanfang auf langen Themenseiten, ohne dauerhaft Platz zu kosten. Bewusst <em>nicht</em> umgesetzt: zweite sticky Header-Leiste (kostet ~40px vertikalen Lesebereich auf jeder Seite) und Floating-Button fürs Handy (auf Wunsch weggelassen).
+
+**Umsetzung (zentral in `nav.js` / `style.css`, gilt für alle Themenseiten):** In `buildToC()` erhält die untere TOC-Navigationszeile (`toc-nav-unten`) zusätzlich einen `.toc-top`-Link «↑ nach oben» mit sanftem Scroll (`window.scrollTo({top:0,behavior:'smooth'})`). Die Zeile wird nun immer gerendert (vorher nur, wenn ein Next-Link existierte) — so ist der Top-Link auch auf der jeweils letzten Seite eines Lerngebiets vorhanden.
+
+**Layout:** `toc-nav-unten` auf `justify-content: space-between` — bei vorhandenem Next steht dieser links, «nach oben» rechts; auf Seiten ohne Next (`:has(.toc-top:only-child)`) rückt der Top-Link rechtsbündig. `.toc-top` im selben Mono-Stil wie `toc-prev`/`toc-next` (Hover: Blau-Familie). Kein zusätzlicher vertikaler Platzverbrauch im Lesebereich, da die TOC ohnehin sticky mitscrollt.
+
+**Verifiziert:** `node --check nav.js` grün; jsdom-Render auf g5-2a (prev+next): 9 TOC-Einträge, Top-Link mit Next in der unteren Zeile, Smooth-Scroll-Handler vorhanden; jsdom-Render auf g5-5 (nur prev, kein next): Top-Link trotzdem vorhanden, kein verwaister Next.
+
+**Hinweis:** Die `:has()`-CSS-Regel wird von allen aktuellen Browsern unterstützt; als reine Layout-Verfeinerung (Ausrichtung) ohne Funktionsverlust bei älteren Engines.
+
+---
+
+## [60] — 2026-06-13 · Korrektur LG5: fehlplatzierte Lernziele g5-2a/g5-2b
+
+Browsertest-Befund: auf g5-2a und g5-2b waren die Lernziele-Boxen aus [58] nicht sichtbar an der erwarteten Stelle. Ursache: beide Seiten haben (wie g2-2a/g2-2b) einen `rlp-hinweis`-Absatz innerhalb der RLP-Box. Der Index-basierte Einfüge-Anker `</ul>\n</div>` der Rollout-`apply()`-Funktion traf deshalb nicht das RLP-Box-Ende (dort folgt nach `</ul>` erst der `rlp-hinweis`-Absatz, dann `</div>`), sondern das nächste `</ul>\n</div>` weiter unten — die Beschriftungs-Konventionsliste in der Definition-Sektion. Die Boxen landeten dadurch mitten in der Theorie statt nach der RLP-Box.
+
+**Fix:** Box in beiden Seiten entfernt und mit literalem rlp-hinweis-Box-Ende-Anker korrekt direkt nach der RLP-Box platziert (g5-2a Zeile 195, g5-2b Zeile 235 — jeweils zwischen rlp-hinweis-Ende und der Einstieg-Sektion). Inhalt unverändert (5 Ich-kann-Punkte je Seite).
+
+**Lehre (verschärft):** Die in [54] für LG2 dokumentierte Regel «literaler Box-Ende-Anker statt Regex/Index» gilt auch für den Index-Anker `txt.find('</ul>\n</div>')` — bei Seiten mit rlp-hinweis ist dieser nicht eindeutig das Box-Ende. Künftig Lernziele immer am `rlp-hinweis`-Absatz (falls vorhanden) bzw. am literalen Box-Schluss verankern, nie am ersten `</ul></div>`. Dieselbe Schwachstelle betraf nur g5-2a/g5-2b; g5-2c wurde in [58] bereits korrekt am rlp-hinweis verankert, alle übrigen LG5-Seiten haben keinen rlp-hinweis.
+
+**Verifiziert:** Reihenfolge geprüft (Lernziele zwischen rlp-hinweis und erster h2-Sektion); §3.9-Schnell-Check GRÜN; Tiefenprüfung 449 MathJax-Ausdrücke, 0 Fehler; jsdom-Laufzeit grün auf beiden Seiten.
+
+---
+
+## [59] — 2026-06-13 · Nachschlagen: zentrales Glossar und Formelsammlung + Physik-Querlink
+
+Neue Referenz-Infrastruktur im Repo-Root, Struktur 1:1 aus TALS-Physik übernommen, Inhalte mathe-eigen.
+
+**`glossar.html`** (id:glossar): A–Z-Sprungleiste über 21 Buchstaben, rund 50 Einträge aus allen fünf Lerngebieten (Ähnlichkeit, Äquivalenzumformung, Diskriminante, Funktion, Median, Mitternachtsformel, Pythagoras, Scheitelpunkt, Vieta, Zentrische Streckung …). Jeder Eintrag mit Kurzdefinition, optionaler Formel (`.ge-formel`) und Themenverweis (`.ge-quer`).
+
+**`formelsammlung.html`** (id:formeln): kuratiert aus den 23 thematischen `formelauszug.html`, gegliedert in fünf Lerngebiet-Abschnitte mit 11 `.fs-block`-Karten — binomische Formeln, Potenz-/Wurzelgesetze, Lösungsformel + Diskriminante + Vieta, LGS-Lösungsfälle, lineare/quadratische Funktionsformen, Lage- und Streumasse, Planimetrie- und Trigonometrie-Formeln (Sinus-/Cosinussatz, trig. Pythagoras, Spezialwinkel, Grad↔Bogenmass). Jede Zeile verlinkt auf die Themenseite; die offizielle SBFI-Prüfungs-Formelsammlung bleibt separat als Hinweis-Box und Extern-Link.
+
+**Navigation (`nav.js`):** neues Header-Dropdown «Nachschlagen ▾» mit zwei Gruppen — «In diesem Lehrmittel» (Glossar A–Z, Formelsammlung ∑) und «Extern» (SBFI-PDF behalten, TALS Physik ⚛). Mobile-Nav analog erweitert. Aktiv-Zustand bei id glossar/formeln. **Physik-Querlink relativ** `${prefix}../tals-physik/…` — korrekt von Root- und Themenseiten; auch die beiden Schlusssätze von Glossar und Formelsammlung verweisen wechselseitig aufeinander und auf das Physik-Pendant.
+
+**CSS:** Glossar-/Formelsammlung-Klassen zentral an `style.css` angehängt, auf Mathe-Akzentvariablen adaptiert (`--blau`/`--orange` statt Physik-`--bernstein`).
+
+**Verifiziert:** Skelett-Pre-Flight beide Seiten grün (page-wrap, content, nav.js, mathlib.js, toc-wrap, footer, buildNav je 1×); §3.9-Schnell-Check GRÜN (Delimiter-, div-Bilanz, keine Doppel-IDs, kein ß); Tiefenprüfung 148 MathJax-Ausdrücke, 0 Fehler; jsdom-buildNav-Render bestätigt aktiven Button und alle Links; **Anker-Validierung aller Querlinks gegen reale h2-ids** — zwei falsche g3-2-Anker (#aufstellen→#gleichung-aufstellen, #lage→#typen) vor dem ZIP korrigiert. STYLEGUIDE → v1.13, §11.
+
+**Offen:** Browsertest der beiden Seiten (Dropdown, Sprungleiste, Physik-Link). Schwerpunktfach-Begriffe/-Formeln sind noch nicht enthalten (Grundlagenfach vollständig); Erweiterung auf Zuruf.
+
+---
+
+## [58] — 2026-06-13 · Rollout LG5: Lernziele, Mini-Checks, Animations-Hinweise, akz-Kopplung (g5-1 bis g5-5, 8 Seiten)
+
+Fünfter und letzter Rollout-Cluster nach STYLEGUIDE §10 — damit sind **alle Grundlagen-Seiten ausgerollt** (LG1–LG5 plus Pilot g3-2).
+
+**Lernziele (8 Boxen)** je 5 Ich-kann-Punkte nach der RLP-Box; g5-2c nach dem rlp-hinweis-Absatz (geteiltes Teilgebiet 5.2, literaler Box-Ende-Anker gemäss Lehre aus [54]).
+
+**Mini-Checks (25 Stück, 100 Items):** g5-1: Winkel/Umrechnung, Winkeltypen/-paare, Skizzieren/Plausibilität (3). g5-2a: Bezeichnungen, Innenwinkelsumme, Spezielle Dreiecke, Fläche/Pythagoras (4). g5-2b: n-Eck-Winkelsumme, Hierarchie, Umfang/Fläche (3). g5-2c: Linien am Kreis, Pi, Umfang/Fläche/Ring (3). g5-2d: Zentrische Streckung, Strahlensätze, Ähnlichkeit (3). g5-3: Rechtwinkliges Dreieck, sin/cos/tan, Schiefwinkliges (3). g5-4: Einheitskreis-Definition, Tangens, Beziehungen (3). g5-5: Grundgleichungen, Zweite Lösung, Lösungsmenge/Periode (3). **Alle 24 Rechen-Behauptungen vorab verifiziert** (math-Modul: Bogenmass, Pythagoras-Tripel, n-Eck-Summen, Kreis-/Ringflächen, tan-35°-Baumhöhe, sin/cos-Spezialwerte, beide Lösungen der Grundgleichungen).
+
+**Animations-Hinweis-Paare (8):** g5-1 Winkel-Visualisierer (h3-Widget); g5-2a Beweis Innenwinkelsumme; g5-2b n-Eck-Zerlegung; g5-2c Sektoren-zum-Rechteck; g5-2d Strahlensätze; g5-3 Definition Winkelfunktionen; g5-4 Sinus/Cosinus am Einheitskreis; g5-5 Riesenrad. Alle `.anim`-Paare via rfind/find-Wrap des `anim-titel` in eine `widget-titelzeile` (Trigger ausserhalb des uppercase-Titels).
+
+**akz-Kopplung:** g5-1 Winkel-Visualisierer-Gruppe (2 Slider blau/orange). Die übrigen LG5-Animationen nutzen das `.anim/bedien`-Seitenspalten-Muster ohne `sl-row` — akz dort konstruktionsbedingt nicht anwendbar.
+
+**Behobener Zwischenfehler:** ein g5-4-Lückentext zerschnitt einen `\dfrac`-Ausdruck über die `mc-luecke` hinweg (2 TeX-Fehler in der Tiefenprüfung) — umformuliert ohne Ausdrucks-Split («Quotient aus sin α und ___»). Lehre: MathJax-Ausdrücke nie über Lücken-Spans aufteilen; jede Lücke steht zwischen vollständigen Ausdrücken.
+
+**Verifiziert:** Skelett-Pre-Flight grün auf allen 8 Seiten; §3.9-Schnell-Check GRÜN; Tiefenprüfung 2322 MathJax-Ausdrücke, nach Fix 0 Fehler; jsdom-Laufzeit 0 JS-Fehler.
+
+**Rollout-Status: abgeschlossen.** Offen bleiben: Browsertests LG3–LG5; optionale Nachrüstungen (Hinweis-Anker für g3-1/LG4-Widgets, Live-Formel-Einfärbung g3-1/g3-2-Zeichenroutinen) auf Zuruf.
+
+---
+
+## [57] — 2026-06-13 · Rollout LG4: Lernziele, Mini-Checks, akz-Kopplung (g4-0 bis g4-3)
+
+Vierter Rollout-Cluster nach STYLEGUIDE §10, alle vier LG4-Seiten mit `minicheck.js` + `anim-hinweise.js` (Letzteres vorsorglich eingebunden; siehe Hinweis unten).
+
+**Lernziele (4 Boxen)** je 5 Ich-kann-Punkte. **Sonderfall g4-0** (Praxisbeispiel-Seite ohne RLP-Kompetenzen-Box): Lernziele-Box direkt vor dem Einstieg platziert — dokumentierte Abweichung von §10.1, da kein RLP-Anker existiert.
+
+**Mini-Checks (14 Stück, 56 Items):** g4-0: Urliste/Rang, Kennzahlen, Diagramm/Stichprobe (3). g4-1: Grundbegriffe, Merkmalstypen, Datengewinnung/Qualität (3). g4-2: Klassieren, Standarddiagramme, Charakterisieren/Manipulation, Streudiagramm (4). g4-3: Lagemasse, Streumasse, Tabellenkalkulation, Robustheit (4). **Alle 15 Rechen-Behauptungen vorab mit Python (statistics) verifiziert** (u.a. Ausreisser-Sprung Mittelwert 6 → 29.5 bzw. 6 → 30 bei stabilem Median, Kreissektoren 180°/90°, Klassenbreite 40 : 8, y-Achsen-Manipulation 1 : 5 statt 1 : 2).
+
+**Animations-Hinweis-Paare: keine.** LG4 hat keine `widget-header`/`anim-titel`-Strukturen — die Interaktiva (z.B. Streuungs-Regler im g4-3-Einstieg) sind titellose Inline-Blöcke ohne §10.3-Anker. Bewusst nicht nachgerüstet (kein unaufgefordertes Refactoring); bei einem späteren Widget-Refactor nachholbar.
+
+**akz-Kopplung:** g4-3 Streuungs-Regler im Einstieg → `sl-row akz-blau` (Slider + Prozentwert blau). Keine Live-Formeln betroffen.
+
+**Verifiziert:** Skelett-Pre-Flight grün; §3.9-Schnell-Check GRÜN; Tiefenprüfung MathJax 0 Fehler; jsdom-Laufzeit 0 JS-Fehler auf allen 4 Seiten.
+
+**Offen:** Browsertest LG4; Rollout LG5 (8 Seiten) anschliessend.
+
+---
+
+## [56] — 2026-06-13 · Rollout LG3: Lernziele, Mini-Checks, Animations-Hinweise, akz-Kopplung (g3-1, g3-3)
+
+Dritter Rollout-Cluster nach STYLEGUIDE §10 (g3-2 war bereits Pilot, ZIP 49–52). Beide Seiten mit `minicheck.js` + `anim-hinweise.js`.
+
+**Lernziele (2 Boxen)** je 5 Ich-kann-Punkte nach der RLP-Box (Teilgebiete 3.1, 3.3).
+
+**Mini-Checks (8 Stück, 32 Items):** g3-1: Funktionsbegriff, Notationen/D/W, Funktion-oder-nicht, Achsenschnitte/Schnittpunkte (4). g3-3: Parameter der Parabel, Scheitelform/Diskriminante, Die drei Formen nutzen, Funktionsgleichung aufstellen (4). **Alle 9 Rechen-Behauptungen vorab sympy-verifiziert** (u.a. Schnittpunkt (3 | 2), quadratische Ergänzung x²−6x+5 = (x−3)²−4, Aufstellen aus Scheitel (1 | −2) und Punkt (3 | 6) → a = 2, Produktform-Ansatz aus Nullstellen 1, 5 und (0 | 10) → a = 2).
+
+**Animations-Hinweis-Paare (2, beide g3-3):** 🎾 Wurfparabel (Scheitel = höchster Punkt, Nullstellen = Abwurf/Landung) und 📐 Diskriminante (Lage der Parabel zur x-Achse). Mehrzeilige h3-Titel via Titelzeilen-Öffnung am h3-Start und Insert nach dem zugehörigen `</h3>`. g3-1 hat keine Hinweis-tauglichen Titel-Anker (Widgets ohne h3/anim-titel) — dort bewusst keine Paare; bei einem späteren Widget-Refactor nachrüstbar.
+
+**akz-Kopplung (Werte/Labels, Färbe-Regel §10.4):** g3-1 drei Gruppen — lineare Funktion a blau / b orange, Parabel-Scheitel u blau / v orange, Schnittpunkt-Gerade m blau; g3-3 Scheitelform-Trio a blau / u orange / v grün. Label-Variablen in `span.var`. Live-Formel-Einfärbungen (JS) wurden in diesem Cluster nicht angefasst — die betroffenen Widgets bauen ihre Formeln in nicht inspizierten Zeichenroutinen auf; Kandidat für einen gezielten Folgeauftrag mit Äquivalenztest.
+
+**Verifiziert:** Skelett-Pre-Flight grün; §3.9-Schnell-Check GRÜN (Delimiter-, div-, details-Bilanz, keine Doppel-IDs, kein ß); Tiefenprüfung 707 MathJax-Ausdrücke, 0 Fehler; jsdom-Laufzeit 0 JS-Fehler.
+
+**Offen:** Browsertest LG3; Rollout LG4 und LG5 in dieser bzw. Folge-Sitzung.
+
+---
+
+## [55] — 2026-06-13 · g2-2b Färbe-Korrekturen (Bild-Auftrag) + STYLEGUIDE v1.12: verbindliche Färbe-Regel
+
+Zwei Befunde aus dem Browsertest von ZIP 54, beide in g2-2b:
+
+**Bild 1 — three-eq überfärbt:** in «x² − 5·x + 6 = 0» war der ganze p-Anteil samt «·x» blau. Das x ist dort aber nicht der Regler — gefärbt werden darf nur der Wert. Fix: neue Formatter `fmtPxC`/`fmtQC` färben ausschliesslich die Ziffern (Operatoren und ·x neutral); statischer Initialinhalt analog. Äquivalenz alt/neu nach Tag-Strip über das volle Raster p ∈ [−6,6] × q ∈ [−6,9] erneut bestanden.
+
+**Bild 2 — k-Widget ohne Kopplung:** der k-Slider der Parameterdiskussion hatte kein akz. Fix: `sl-row akz-blau`, Label-k in `span.var`; in der D(k)-Zeile sind jetzt das k (Variable = Regler) und der eingesetzte k-Wert blau, der D-Wert bleibt neutral (abgeleitet). `pk-formel` von textContent auf innerHTML; Äquivalenz über den ganzen k-Bereich (−2…14, Schritt 0.5) bestanden — gesamt 241 Kombinationen, 0 Abweichungen.
+
+**Kontrolle der bereits gepatchten Färbungen** (Repo-weiter Scan aller tx-Spans und T()-Aufrufe): g3-2 dr-eq/ks-eq und g1-2 cv-out sind regelkonform — dort ist die gefärbte Variable jeweils selbst der Regler (Eingabewert x bzw. Menge x) oder es sind reine Ziffern. Einziger Verstoss war three-eq.
+
+**STYLEGUIDE → v1.12:** §10.4 um die **verbindliche Färbe-Regel** ergänzt (vier Punkte: nur slider-gebundene Werte; Variable nur, wenn sie selbst der Regler ist; Abgeleitetes neutral; entfallende Glieder tragen folgerichtig keine Farbe) inkl. Falsch/Richtig-Beispiel aus genau diesem Befund, plus Pflicht-Verifikation «volles Sliderraster, null Abweichungen, sonst kein ZIP». Project-Knowledge-Kopie manuell nachziehen.
+
+**Verifiziert:** Tiefenprüfung g2-2b 288 Ausdrücke, 0 Fehler; jsdom-Laufzeit grün; §3.9-Schnell-Check GRÜN (inline 270/270, span 83/83, keine Doppel-IDs, kein ß).
+
+---
+
+## [54] — 2026-06-13 · Rollout LG2: Lernziele, Mini-Checks, Animations-Hinweise, akz-Kopplung (g2-1, g2-2a, g2-2b, g2-3)
+
+Zweiter Rollout-Cluster nach STYLEGUIDE §10, alle vier LG2-Seiten mit `minicheck.js` + `anim-hinweise.js`.
+
+**Lernziele (4 Boxen)** je 5 Ich-kann-Punkte nach der RLP-Box; bei g2-2a/g2-2b nach dem `rlp-hinweis`-Absatz (geteiltes Teilgebiet 2.2). Zwischenfix dokumentiert: ein non-greedy-Regex platzierte die g2-2b-Box zunächst <em>in</em> die RLP-Box (nach dem rlp-titel-div) — vor dem ZIP erkannt und an die korrekte Stelle nach dem Box-Ende verschoben; bestätigt per Kontext-Probe.
+
+**Mini-Checks (17 Stück, 68 Items):** g2-1: Gleichung/Waage, Formulieren, Äquivalenzumformungen, Typ/Lösen/Probe (4). g2-2a: Normalform, Lösungsverfahren, Lösungsfälle/Parameter, Ungleichungen (4). g2-2b: Quadratische Gleichung, Verfahrenswahl, Diskriminante, Vieta, Parameterdiskussion (5). g2-3: LGS-Begriff, Verfahren, Lösungsfälle, 3×3 (4). **Alle 24 Rechen-Behauptungen vorab sympy-verifiziert** (u.a. Quadrieren-Scheinlösung x = ±2, (k−2)x = 4-Sonderfall, D-Diskussion 36−4k, Vieta-Konstruktion (x−2)(x+5), Widerspruchssystem x+y = 3/5).
+
+**Animations-Hinweis-Paare (8):** g2-1 Waage + Äquivalenz-Schritte; g2-2a Budget-Schieber + Parameter-k; g2-2b p/q-Darstellungen + Parameter-k-Beispiel; g2-3 grafische Lösung + drei Verfahren.
+
+**akz-Kopplung:** g2-2b p/q-Gruppe (p blau, q orange) inkl. Live-Gleichung — `updateThree()` färbt den p- und q-Anteil via tx-Spans (Äquivalenz alt/neu nach Tag-Strip über das volle Raster p ∈ [−6,6] × q ∈ [−6,9]: 208 Kombinationen, 0 Abweichungen); statischer Initialinhalt analog. Einzel-Slider akz-blau: g2-1 (Paketmasse x, Versuchswert x), g2-2a (Budget-x, Drei-Sichten-x, Parameter-k), Label-Variablen in `span.var`.
+
+**Verifiziert:** Skelett-Pre-Flight grün (Modul-Einbindung 1/1 überall); §3.9-Schnell-Check GRÜN inkl. div/details-Bilanz; Tiefenprüfung 948 MathJax-Ausdrücke, 0 Fehler; jsdom-Laufzeit 0 JS-Fehler auf allen 4 Seiten.
+
+**Offen:** Browsertest LG2; Rollout LG3 (g3-1, g3-3), LG4, LG5 in Folge-Sitzungen.
+
+---
+
+## [53] — 2026-06-12 · Rollout LG1: Lernziele, Mini-Checks, Animations-Hinweise, akz-Kopplung (g1-1 bis g1-4) + STYLEGUIDE v1.11
+
+Erster Rollout-Cluster der Pilot-Module (ZIP 49–52) gemäss LG-clusterweisem Vorgehen (COLLABORATION §9.4). Alle vier LG1-Seiten erhalten `minicheck.js` + `anim-hinweise.js`.
+
+**Lernziele (4 Boxen):** je 5 Ich-kann-Punkte direkt nach der RLP-Kompetenzen-Box, abgeleitet aus den Teilgebiets-Kompetenzen 1.1–1.4 und dem Seiteninhalt.
+
+**Mini-Checks (18 Stück, 72 Items):** an den Sektionsgrenzen — g1-1: Term/Hauptoperation, Hierarchie, Strukturbaum, Rechengesetze (4). g1-2: Zahlentypen, Zahlenmengen, Bruch/Dezimal/Prozent, Vorzeichen/Betrag/Intervalle (4). g1-3: Äquivalenz, Gleichartige Glieder, Klammern, Binomische Formeln, Faktorisieren (5). g1-4: Zehnerpotenzen, Wissenschaftliche Notation, Potenzgesetze, Wurzeln/Wurzelgesetze, Hierarchie (5). Je MC/Lückentext/kurze Rechnung/Transfer; **alle 38 Rechen-Behauptungen vorab sympy-verifiziert** (u.a. 0.4̄ = 4/9, 2³·5⁴ = 5000 ≠ 10⁷, √(9+16) = 5-Gegenbeispiel, Zweiklammersatz x²+7x+12).
+
+**Animations-Hinweis-Paare (8):** g1-1 Hauptoperations-Anim + Strukturbaum-Widget; g1-2 Zahlengeraden-Anim + Konverter-Widget; g1-3 Äquivalenz-, Zusammenfassen- und Binom-Anim; g1-4 Zoom-Skala. Bei `.anim`-Blöcken wird der `anim-titel` in die `widget-titelzeile` gefasst — die Trigger stehen ausserhalb des uppercase-Titels und bleiben gemischt geschrieben. Vorlese-Texte als Klartext.
+
+**akz-Kopplung Konverter (g1-2):** Zähler \(p\) blau, Nenner \(q\) orange (Slider, Wert, Label-Variable); in der Live-Formel der **ungekürzte** Bruch via MathJax `\textcolor` in denselben Farben, gekürzter Bruch und abgeleitete Darstellungen neutral (Prinzip: nur slider-gebundene Grössen färben). Die Binom-Anim in g1-3 nutzt das `.anim`-Seitenspalten-Muster ohne `sl-row` — akz dort bewusst nicht angewendet.
+
+**STYLEGUIDE → v1.11, neuer §10:** alle vier Muster verbindlich dokumentiert (Markup-Skelette, Platzierungsregeln, Klartext-Konvention für `data-vorlesen`, Äquivalenztest-Pflicht bei innerHTML-Umstellungen). Die Project-Knowledge-Kopie muss manuell synchronisiert werden.
+
+**Verifiziert:** Skelett-Pre-Flight grün auf allen 4 Seiten (inkl. Modul-Einbindungs-Zählung); §3.9-Schnell-Check GRÜN (Delimiter-, div- und details-Bilanz, keine Doppel-IDs, kein ß); Tiefenprüfung 1208 MathJax-Ausdrücke, 0 Fehler (validiert auch die textcolor-Ausdrücke); jsdom-Laufzeit 0 JS-Fehler auf allen 4 Seiten mit eingebundenen Modulen.
+
+**Offen:** Browsertest LG1 (Rollover-Positionen, Vorlesen, Konverter-Farben); Rollout LG2–LG5 in Folge-Sitzungen, je ein Cluster.
+
+---
+
+## [52] — 2026-06-12 · Pilot-Nachschliff g3-2: Kartoffeln-Widget — x-Kopplung in Blau
+
+Bild-Auftrag zum Einstiegs-Widget: gleiche Farbkopplung wie im Darstellungen-Widget, hier mit dem einzigen Regler \(x\) in Blau (der Slider war bereits blau).
+
+- **Zentral:** akz-System von `.sl-grp` auf `.sl-row` erweitert (Selektoren-Paare), damit auch Einzel-Slider-Zeilen die Kopplung Slider↔Wert↔Label-Variable nutzen können.
+- **Widget:** Zeile auf `sl-row akz-blau`, Label-\(x\) in `span.var`; in beiden Formelzeilen **nur** die \(x\)-Vorkommen blau (`K(x) = 2·x + 5` → x blau, 2 und 5 neutral; Auswertungszeile analog mit eingesetztem Wert), Pauschal-Blau der Eval-Zeile entfernt; `updateKS()` von textContent auf innerHTML mit `tx-blau`-Spans.
+- **Äquivalenz verifiziert:** alte vs. neue Eval-Ausgabe nach Tag-Strip über den ganzen Reglerbereich x ∈ {0, 2, …, 14} — 0 Abweichungen. Tiefenprüfung 268 Ausdrücke, 0 Fehler; jsdom-Laufzeit grün; Schnell-Check GRÜN (inline 257/257, span 90/90).
+- **Hinweis (Farbsemantik über Widgets hinweg):** im Darstellungen-Widget derselben Seite ist \(x\) grün (dort braucht es drei unterscheidbare Gruppenfarben, Blau ist von \(m\) belegt). Innerhalb jedes Widgets ist die Kopplung konsistent: die Reglerfarbe zieht sich durch Wert, Label und Formel. Falls eine seitenweite Konvention «x immer gleiche Farbe» gewünscht ist, müsste das Darstellungen-Widget auf x = blau / m = grün umgestellt werden — auf Zuruf.
+
+---
+
+## [51] — 2026-06-12 · Pilot-Nachschliff g3-2: Wertezugehörigkeit der Slider-Gruppen (Nähe/Distanz + Akzentfarben) und eingefärbte Live-Formel
+
+Bild-Auftrag zum zusammengelegten Darstellungen-Widget: die Wertanzeige klebte am rechten Gruppenrand und damit optisch am Label der nächsten Gruppe.
+
+**Nähe/Distanz (zentral, wirkt auf alle zusammengelegten Zeilen):** in `.sl-row:has(.sl-grp)` Gruppen-Abstand auf 30 px erhöht (row-gap 10 px beim Umbruch); innerhalb der Gruppe Abstand auf 8 px verdichtet und `.sl-val` per Spezifität von `min-width:64px / text-align:right` (seitenlokal) auf `min-width:0 / text-align:left` übersteuert — der Wert steht jetzt direkt neben dem eigenen Slider.
+
+**Akzentfarben (Pilot-Widget g3-2):** neues zentrales Farbkopplungs-System `.sl-grp.akz-blau/-orange/-gruen` (Custom Property `--akz`) färbt Slider (accent-color + Webkit-Thumb), Wertanzeige und die Label-Variable (`label .var`, MathJax erbt via currentColor). Zuordnung: Steigung \(m\) blau, Achsenabschnitt \(b\) orange, Eingabewert \(x\) grün.
+
+**Live-Formel in denselben Farben:** `updateDR()` baut Gleichungs- und Auswertungszeile jetzt mit `.tx-blau/-orange/-gruen`-Spans (innerHTML; Werte sind Slider-Ganzzahlen, unkritisch) — \(m\)-Faktor blau, \(x\) grün, \(b\)-Summand orange, Resultat neutral. Pauschal-blaue Inline-Farbe der Eval-Zeile entfernt; statischer Initialinhalt analog eingefärbt. **Äquivalenz verifiziert:** alte textContent- vs. neue innerHTML-Ausgabe nach Tag-Strip über das volle Sliderraster m, b, x ∈ [−5, 5] — 1331 Kombinationen, 0 Abweichungen (inkl. Sonderfälle m ∈ {−1, 0, 1}, b = 0, x < 0 mit Klammern).
+
+**Verifiziert:** Tiefenprüfung 268 MathJax-Ausdrücke, 0 Fehler; jsdom-Laufzeit 0 JS-Fehler; §3.9-Schnell-Check GRÜN (inline 257/257, display 11/11, div 243/243, span 84/84, keine Doppel-IDs, kein ß).
+
+**Offen:** Browsertest der Farbabstimmung; bei Gefallen ist die g3-3-Dreiergruppe (Scheitelform) der nächste Kandidat für dasselbe Farbschema.
+
+---
+
+## [50] — 2026-06-12 · Physik-Transfer Paket 4: Lernziele (Pilot g3-2) + Slider-Zusammenlegung (Rollout, 6 Seiten)
+
+**Lernziele-Box (Pilot g3-2).** Aufklappbare `details.lernziele` («🎯 Lernziele — das kann ich nach dieser Seite») direkt nach der RLP-Kompetenzen-Box, nach Physik-Muster (dort Phase 5.13). Sechs Ich-kann-Formulierungen, abgeleitet aus den drei RLP-Kompetenzen des Teilgebiets 3.2 und dem Seiteninhalt (Darstellungswechsel, Nullstelle vs. Achsenabschnitt, Typen/Lagebeziehungen). CSS zentral, Klassen 1:1 aus Physik (`.lernziele`/`.lz-body`), Farbwahl Blau-Familie (Orientierung/Begriff; Physik nutzt dort seine Bereichsfarbe Bernstein). Rollout auf weitere Seiten nach Abnahme des Piloten.
+
+**Slider-Zusammenlegung (Rollout auf alle Befund-Seiten).** Muster aus Physik Phase 5.34: mehrere Regler einer Animation in EINER `.sl-row` mit `.sl-grp`-Einheiten (Label+Slider+Wert unzertrennlich, `flex:1 1 210px`); auf schmalen Screens brechen ganze Gruppen um. CSS zentral ergänzt (`.sl-row{flex-wrap:wrap}` + `.sl-grp`-Regeln — die `.sl-row`-Basisstile bleiben seitenlokal; die zentrale Regel `.sl-row .sl-grp label{min-width:0}` übersteuert das lokale `min-width:90px` per Spezifität). Per Skript 8 Gruppen mit zusammen 18 Regler-Zeilen auf 6 Seiten zusammengeführt: g1-2 (1×2), g2-2b (1×2), g3-1 (3×2), g3-2 (1×3), g3-3 (1×3), g5-1 (1×2). Einzelne `.sl-row`-Regler und nicht-konsekutive Regler getrennter Widgets (g2-1, g2-2a, g4-3, g2-3, Kartoffeln-Widget g3-2) bewusst unverändert. Kein JS greift strukturell auf `.sl-row`/`.sl-grp` zu (grep-verifiziert); Slider-IDs und Wertebereiche unverändert.
+
+**Verifiziert:** Slider-Anzahl pro Seite vor/nach identisch (assert im Merge-Skript); Skelett-Pre-Flight grün auf allen 6 Seiten; §3.9-Schnell-Check GRÜN (Delimiter-Bilanz, Doppel-IDs, ß, div-Bilanz); Tiefenprüfung 1353 MathJax-Ausdrücke, 0 Fehler; jsdom-Laufzeit 0 JS-Fehler auf allen 6 Seiten.
+
+**Offen (lokaler Render-Check empfohlen, analog Physik 5.34):** Pixel-Sicht bei 1280/360 px — Erwartung: 2er/3er-Gruppen einzeilig auf Desktop, gruppenweiser Umbruch auf Mobile.
+
+---
+
+## [49] — 2026-06-12 · Physik-Transfer Paket 3 (Pilot g3-2): Mini-Checks + Animations-Hinweise
+
+Beide didaktischen Module aus TALS-Physik (dort Phasen 5.14/5.15 und 5.17/5.18) als Pilot auf `grundlagen/g3-2-lineare-funktionen.html`. Rollout auf weitere Seiten erst nach Abnahme des Piloten.
+
+**Neue zentrale Module (Repo-Root):** `minicheck.js` (1:1 aus Physik — Akkordeon: höchstens ein Mini-Check offen, Lösungseinblendungen unberührt) und `anim-hinweise.js` (aus Physik, Vorlese-Sprache auf `de-CH` umgestellt — Rollover «Worauf achten?»/«Erkenntnis» mit Fixierung per Klick, Vorlese-Knopf mit Klartext in `data-vorlesen`, Escape schliesst und stoppt).
+
+**CSS zentral in `style.css`,** Klassen 1:1 aus Physik übernommen (keine erfundenen Klassen), Farben auf die Mathe-Semantik gemappt: Mini-Checks in der **Orange-Familie** (= Aufgabe/Übung), Animations-Hinweise in der **Blau-Familie** (= Animation). Neue Blöcke: `.minicheck`/`.mc-*` und `.widget-titelzeile`/`.anim-hinweis`/`.ah-*`.
+
+**4 Mini-Checks** an den Sektionsgrenzen (nach Einstieg, nach Steigung/Achsenabschnitt/Nullstelle, nach Typen, nach Funktionsgleichung aufstellen), je 4 Fragetypen (Multiple Choice, Lückentext, kurze Rechnung, Transfer). Alle Rechnungen sympy-verifiziert: Anbietervergleich Schnitt bei x = 6 (17 CHF beidseits, bei 7 kg 19 vs. 18.50); m = (9−1)/(6−2) = 2; x₀ = 6/4 = 1.5; f(x) = −2x+8 mit (0|8) und (4|0); m₂ = −1/2; 3x+2 = 3x−5 ohne Lösung (parallel); b = 1−(−2)·3 = 7; P₁(−1|4), P₂(2|−2) → f(x) = −2x+2; Nullstelle 5 + b = 10 → f(x) = −2x+10.
+
+**3 Animations-Hinweis-Paare:** Kartoffeln-Widget und Darstellungen-Widget (h3 jeweils in neue `.widget-titelzeile` gefasst, Untertitel-Absatz unverändert), Typen-Visualisierung (Titelzeile ohne h3 — Anleitungssatz + Hinweise in einer Flexzeile über den Fall-Buttons). Vorlese-Texte als Klartext formuliert (kein roher LaTeX-Code in der Sprachausgabe).
+
+**`scripts/verify_js_runtime.js` erweitert:** Lib-Liste und src-Ersetzung um `minicheck.js` und `anim-hinweise.js` — die Module laufen damit in der jsdom-Prüfung mit.
+
+**Verifiziert:** Skelett-Pre-Flight grün (pw=1 mc=1 ml=1 bad=0); §3.9-Schnell-Check GRÜN (inline 250/250, display 11/11, keine Doppel-IDs, kein ß); Tiefenprüfung 261 MathJax-Ausdrücke, 0 Fehler; jsdom-Laufzeit 0 JS-Fehler, libs/nav/toc ok; Tag-Bilanz details 20/20, div 241/241, span 72/72, button 27/27; `node --check` beider Module fehlerfrei.
+
+**Offen (Browsertest durch Auftraggeber):** Rollover-Positionierung der `.ah-pop` auf schmalen Screens (360 px), Vorlese-Funktion (Browser-/Stimmen-abhängig), Akkordeon-Verhalten. STYLEGUIDE-Dokumentation der beiden Muster folgt mit dem Rollout-Entscheid.
+
+---
+
+## [48] — 2026-06-12 · Physik-Transfer Paket 2: Erweiterter Pre-Flight + Tiefenprüfungs-Skripte — ein Defekt in g1-1 gefunden und behoben
+
+Übertragung der Verifikations-Infrastruktur aus TALS-Physik (dort P2-3 / Phase 5.16, 5.24).
+
+**Neue Skripte in `scripts/`:** `verify_mathjax.js` (rendert alle MathJax-Ausdrücke headless durch die echte TeX-Engine, meldet Syntaxfehler/undefinierte Makros) und `verify_js_runtime.js` (lädt jede Themenseite in jsdom mit Canvas-/MathJax-Mocks, feuert DOMContentLoaded/load/resize, meldet Laufzeit-JS-Fehler und prüft buildNav/initCanvas/toggleL sowie Nav-/ToC-Rendering; Lib-Liste auf nav.js + mathlib.js angepasst). Verbesserung gegenüber dem Physik-Original in `verify_mathjax.js`: HTML-Entities werden vor der TeX-Prüfung dekodiert (Browser liefert MathJax den DOM-Text) — ohne Dekodierung 24 Fehlalarme «Misplaced &» bei `&lt;`/`&gt;` in Formeln. Rückport-Kandidat für TALS-Physik, dort gemeldet, nicht ungefragt gepatcht.
+
+**COLLABORATION.md → v1.7, neuer §3.9:** verbindlicher Schnell-Check vor jedem ZIP (MathJax-Delimiter-Bilanz ausserhalb script-Blöcken, Doppel-ID-Check, ß-Check) plus situative Tiefenprüfung mit den beiden Node-Skripten. Die Project-Knowledge-Kopie muss manuell auf v1.7 synchronisiert werden.
+
+**Baseline-Erstlauf über das gesamte Repo:** 130 HTML-Dateien auf Delimiter-Bilanz/Doppel-IDs/ß sauber; Tiefenprüfung 4556 MathJax-Ausdrücke, 0 TeX-Fehler; JS-Laufzeit auf 36 von 37 Themenseiten fehlerfrei.
+
+**Gefundener und behobener Defekt (g1-1-grundlagen.html, 4 Stellen):** schwache MathJax-Guards `if (window.MathJax) MathJax.typesetPromise(…)` — da Zeile 12 das MathJax-Config-Objekt definiert, ist `window.MathJax` schon vor dem Laden von tex-svg.js truthy, hat aber kein `typesetPromise`; frühe Widget-Interaktion (langsame Verbindung) warf einen TypeError und das Widget reagierte still nicht. Auf den Projektstandard `if (window.MathJax && window.MathJax.typesetPromise)` gehärtet (wie an den übrigen 2 Stellen derselben Seite und auf allen anderen Seiten).
+
+**Verifiziert:** Re-Lauf verify_js_runtime auf g1-1 grün (0 JS-Fehler, libs/nav/toc ok); §3.9-Schnell-Check GRÜN über alle geänderten Dateien; `node_modules`/`package*.json` nicht im ZIP.
+
+---
+
+## [47] — 2026-06-12 · Physik-Transfer Paket 1: Grössen-Schreibweise in uppercase-Titeln + Dokumentsprache de-CH
+
+Übertragung zweier Defekt-Fixes aus TALS-Physik (dort Phasen 5.35 und 5.23) nach identischem Befund in Mathe.
+
+**Grössen-Schreibweise (18 Stellen, 8 Seiten).** `block-titel`, `anim-titel`, `legende-titel` und `feld-titel` setzen designbedingt `text-transform: uppercase` — case-sensitive Plaintext-Mathe-Symbole wurden dadurch verfälscht: y→Y (y-Achsenabschnitt, 3× g3-2), n→N (Stichprobenumfang n = 7/8 und (n−1), 4× g4-3; n-Eck, 3× g5-2b, 1× g5-2c), π→Π (g5-1, g5-2c), c→C (g5-2d Legende), k→K (g2-2a), x→X (g5-3 feld-titel), sin/cos/tan→SIN/COS/TAN (2× g5-3). Fix nach bestehender Konvention (kein neues CSS, analog zum bin-schritt-titel-Fix vom 29.05.): die Symbole in MathJax gesetzt — MathJax-Ausgabe ist von text-transform unberührt. Aufzählungsbuchstaben a)/b)/c) in Titeln bewusst unverändert (Nummerierung, nicht bedeutungstragend). Korrekt grossgeschriebene Titel (Klasse A/B) unverändert.
+
+**Dokumentsprache de-CH (131 Dateien).** Alle HTML-Dateien (Themenseiten, index, TEMPLATE, sämtliche Druckseiten in downloads/) von `lang="de"` auf `lang="de-CH"` umgestellt — korrekte Silbentrennung und Screenreader-Aussprache nach Schweizer Konvention, konsistent mit TALS-Physik.
+
+**Verifiziert:** Skelett-Pre-Flight grün auf allen 8 gepatchten Seiten (pw=1 mc=1 ml=1 bad=0); MathJax-Delimiter-Bilanz inline+display ausgeglichen auf allen 8 Seiten (ausserhalb script-Blöcke); kein ß; Rest-Scan der uppercase-Klassen über alle Themenseiten ohne verbleibende Symbol-Verfälschung; lang-Umstellung vollständig (131/131, 0 Rest). Kein JS, kein CSS berührt.
+
+---
+
 ## [unreleased] — 2026-05-29 · `g1-3` Binom-3: Einfärbung & Schritt-2-Aufteilung nachgezogen
 
 Feinschliff nach Bild-Auftrag `Anpassung_der_Einfärbung.pdf` (mit Referenzbildern für die korrekte Schritt-2-Aufteilung).

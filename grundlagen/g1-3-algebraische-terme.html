@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,8 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <style>
   /* Klammern-Auflösen-Visualisierung */
   .klammer-vis { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 22px 0; }
@@ -234,6 +236,19 @@ aber ihre Form ändern.</p>
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann erklären, wann zwei Terme äquivalent sind, und Termumformen als Formänderung bei gleichem Wert verstehen.</li>
+      <li>Ich kann gleichartige Glieder erkennen und zusammenfassen.</li>
+      <li>Ich kann Klammern nach den vier Regeln auflösen — insbesondere Minusklammern mit kippenden Vorzeichen.</li>
+      <li>Ich kann die drei binomischen Formeln anwenden und geometrisch begründen.</li>
+      <li>Ich kann Terme faktorisieren: gemeinsamen Faktor ausklammern, binomische Formeln rückwärts, Zweiklammersatz.</li>
+    </ul>
+  </div>
+</details>
+
 <!-- ──────────────────────── 1. EINSTIEG ──────────────────────── -->
 <h2 id="einstieg">Einstieg — Drei Wege zur gleichen Zahl</h2>
 
@@ -263,7 +278,23 @@ Ausklammern, ausmultipliziert zum Sortieren.</p>
 <p>In der Animation kannst du die Verkaufszahlen \(x\) (Sorte A) und \(y\) (Sorte B) ändern und siehst, dass die drei Terme von Anna, Bruno und Cinzia immer denselben Wert liefern — sie sind <strong>algebraisch äquivalent</strong>. Dario versucht, das auch zu zeigen. Sein Term sieht aus, als sei er bloss „anders ausgeklammert" — doch er liefert <em>nicht</em> denselben Wert. Eine plausibel aussehende Umformung ist nicht automatisch eine richtige.</p>
 
 <div class="anim">
-  <div class="anim-titel">Drei äquivalente Terme — und ein vierter, der nicht passt</div>
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Drei äquivalente Terme — und ein vierter, der nicht passt</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Verändere \(x\) und \(y\) unabhängig: Bleiben Anna, Bruno und Cinzia wirklich <em>immer</em> gleich? Und gibt es Wertepaare, bei denen Darios Term zufällig auch stimmt?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Verändere x und y unabhängig: Bleiben Anna, Bruno und Cinzia wirklich immer gleich? Und gibt es Wertepaare, bei denen Darios Term zufällig auch stimmt?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Äquivalent heisst: gleicher Wert für <strong>jede</strong> Belegung. Dass Darios Term bei einzelnen Wertepaaren zufällig passt, genügt nicht — ein einziges abweichendes Paar widerlegt die Äquivalenz.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Äquivalent heisst: gleicher Wert für jede Belegung. Dass Darios Term bei einzelnen Wertepaaren zufällig passt, genügt nicht — ein einziges abweichendes Paar widerlegt die Äquivalenz.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
   <div class="anim-layout">
     <canvas id="cv-equiv" width="560" height="260"></canvas>
     <div class="bedien">
@@ -348,6 +379,14 @@ Polynome vom Grad 1 heissen <em>linear</em>, vom Grad 2 <em>quadratisch</em>, vo
 </div>
 
 <!-- ──────────────────────── 3. GLEICHARTIGE TERME ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Äquivalenz</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Zwei Terme sind äquivalent, wenn …</p><ul class="mc-optionen"><li data-opt="A">sie gleich aussehen</li><li data-opt="B">sie für jede Belegung der Variablen denselben Wert liefern</li><li data-opt="C">sie gleich viele Glieder haben</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Auf die Werte kommt es an, nicht auf die Schreibweise.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Termumformen heisst: die Form verändern, ohne den <span class="mc-luecke"></span> zu verändern.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Wert.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Sind \(4x + 3x\) und \(7x\) äquivalent? Mit welchem Gesetz?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ja: \(4x + 3x = (4 + 3) \cdot x = 7x\) — Distributivgesetz.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Eine Zahlenprobe mit \(x = 2\) stimmt. Beweist das die Äquivalenz zweier Terme?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nein. Eine Probe kann eine Umformung <em>widerlegen</em> (ein Gegenbeispiel genügt), aber nie für alle Belegungen <em>beweisen</em>. Der Beweis läuft über regelgerechte Umformungen.</div></details></div>
+</details>
+
 <h2 id="zusammenfassen">Gleichartige Glieder zusammenfassen</h2>
 
 <p>Zwei Glieder heissen <strong>gleichartig</strong>, wenn sie sich nur im Koeffizienten unterscheiden
@@ -363,7 +402,23 @@ Variablen-Anteil bleibt unverändert (Distributivgesetz, rückwärts gelesen):</
 <p>Die Animation zeigt das in vier Schritten: aus einem unsortierten Polynom werden gleichartige Glieder gleich eingefärbt, sortiert und verrechnet. Probier es an verschiedenen Polynomen aus:</p>
 
 <div class="anim">
-  <div class="anim-titel">Gleichartige Glieder zusammenfassen — Schritt für Schritt</div>
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Gleichartige Glieder zusammenfassen — Schritt für Schritt</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Achte in Schritt 1 auf die Farben: Welche Glieder bekommen dieselbe Farbe — und woran entscheidet sich das? Schau genau bei \(x\) und \(x^2\) hin.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Achte in Schritt eins auf die Farben: Welche Glieder bekommen dieselbe Farbe — und woran entscheidet sich das? Schau genau bei x und x Quadrat hin.">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Gleichartig heisst: identischer Variablenteil, nur der Koeffizient darf sich unterscheiden. \(x\) und \(x^2\) sind deshalb <strong>nicht</strong> gleichartig — zusammengefasst werden nur die Koeffizienten gleichfarbiger Glieder.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Gleichartig heisst: identischer Variablenteil, nur der Koeffizient darf sich unterscheiden. x und x Quadrat sind deshalb nicht gleichartig — zusammengefasst werden nur die Koeffizienten gleichfarbiger Glieder.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
   <div class="anim-layout">
     <div>
       <div class="feld-titel">Polynom wählen</div>
@@ -409,6 +464,14 @@ Variablen-Anteil bleibt unverändert (Distributivgesetz, rückwärts gelesen):</
 </div>
 
 <!-- ──────────────────────── 4. KLAMMERN AUFLÖSEN ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Gleichartige Glieder</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(3x + 2x^2 = \;?\)</p><ul class="mc-optionen"><li data-opt="A">\(5x^3\)</li><li data-opt="B">\(5x^2\)</li><li data-opt="C">lässt sich nicht zusammenfassen</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(x\) und \(x^2\) sind nicht gleichartig — verschiedene Variablenteile.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Gleichartige Glieder unterscheiden sich höchstens im <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Koeffizienten — der Variablenteil muss identisch sein.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Fasse zusammen: \(5a + 3b - 2a + b\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((5 - 2)a + (3 + 1)b = 3a + 4b\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Sind \(2xy\) und \(3yx\) gleichartig?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ja — wegen des Kommutativgesetzes ist \(yx = xy\), der Variablenteil ist also identisch: \(2xy + 3yx = 5xy\).</div></details></div>
+</details>
+
 <h2 id="klammern">Klammern auflösen <a class="quer" href="g1-2-zahlen-grundoperationen.html#theorie">↩ 1.2</a></h2>
 
 <p>Vier Regeln decken alle Klammer-Operationen ab. Mit dem Knopf „Vorzeichen zeigen" siehst du die unsichtbaren Plus-Zeichen vor dem ersten Summanden — so wird klar, welches Vorzeichen beim Auflösen <em>kippt</em> und welches nicht:</p>
@@ -459,6 +522,14 @@ Variablen-Anteil bleibt unverändert (Distributivgesetz, rückwärts gelesen):</
 </div>
 
 <!-- ──────────────────────── 5. BINOMISCHE FORMELN ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Klammern auflösen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(-(a - b) = \;?\)</p><ul class="mc-optionen"><li data-opt="A">\(-a - b\)</li><li data-opt="B">\(-a + b\)</li><li data-opt="C">\(a - b\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Die Minusklammer kippt beide Vorzeichen: \(-(a - b) = -a + b\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Beim Auflösen einer Minusklammer kippen alle <span class="mc-luecke"></span> in der Klammer.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Vorzeichen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Vereinfache: \(5 - (2x - 3)\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(5 - 2x + 3 = 8 - 2x\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Vereinfache: \(2 \cdot (3x - 4) - 3 \cdot (x - 2)\).</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ausmultiplizieren: \(6x - 8 - 3x + 6\) (Achtung: \(-3 \cdot (-2) = +6\)). Zusammenfassen: \(3x - 2\).</div></details></div>
+</details>
+
 <h2 id="binomi">Binomische Formeln <a class="quer" href="g1-4-zehnerpotenzen-quadratwurzeln.html#potenzgesetze">↗ 1.4</a></h2>
 
 <p>Die binomischen Formeln sind Spezialfälle der Regel <em>Klammer mal Klammer</em>. Sie tauchen so
@@ -499,7 +570,23 @@ oft auf, dass man sie auswendig kennen sollte:</p>
 <p>Mit der Animation kannst du die binomischen Formeln <em>geometrisch sehen</em>: jede Formel beschreibt die Fläche eines Quadrats, das aus Teilflächen zusammengesetzt ist. Wähle die Formel, stell <em>a</em> und <em>b</em> ein, und sieh, wie die Teilflächen ihre Werte bekommen:</p>
 
 <div class="anim">
-  <div class="anim-titel">Binomische Formeln — geometrisch</div>
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Binomische Formeln — geometrisch</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Wähle das 1. Binom und verändere \(a\) und \(b\): Aus welchen vier Teilflächen besteht das grosse Quadrat? Wo steckt das doppelte Produkt \(2ab\)?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Wähle das erste Binom und verändere a und b: Aus welchen vier Teilflächen besteht das grosse Quadrat? Wo steckt das doppelte Produkt zwei a b?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Das Quadrat über \(a + b\) zerfällt in \(a^2\), \(b^2\) und <strong>zwei</strong> Rechtecke \(a \cdot b\) — geometrisch sichtbar, warum \((a+b)^2 = a^2 + 2ab + b^2\) gilt und der Mittelterm nicht fehlen darf.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Das Quadrat über a plus b zerfällt in a Quadrat, b Quadrat und zwei Rechtecke a mal b — geometrisch sichtbar, warum der Mittelterm zwei a b nicht fehlen darf.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
   <div class="anim-layout">
     <div>
       <div class="feld-titel">Binom wählen</div>
@@ -549,6 +636,14 @@ oft auf, dass man sie auswendig kennen sollte:</p>
 Faktorisieren.</p>
 
 <!-- ──────────────────────── 6. FAKTORISIEREN ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Binomische Formeln</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\((a + b)^2 = \;?\)</p><ul class="mc-optionen"><li data-opt="A">\(a^2 + b^2\)</li><li data-opt="B">\(a^2 + 2ab + b^2\)</li><li data-opt="C">\(a^2 + ab + b^2\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Das doppelte Produkt \(2ab\) gehört dazu — geometrisch sind es die zwei Rechtecke im Quadrat.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\((a + b)(a - b) = a^2 -\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(b^2\) — das dritte Binom.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Multipliziere aus: \((x + 3)^2\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(x^2 + 2 \cdot 3 \cdot x + 9 = x^2 + 6x + 9\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Berechne \(21^2\) im Kopf — mit einer binomischen Formel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(21^2 = (20 + 1)^2 = 400 + 2 \cdot 20 \cdot 1 + 1 = 441\).</div></details></div>
+</details>
+
 <h2 id="faktorisieren">Faktorisieren — den Term in Produkte zerlegen</h2>
 
 <p>Faktorisieren ist die Umkehrung von Ausmultiplizieren: aus einer Summe wird ein Produkt. Drei
@@ -750,6 +845,14 @@ Zweiklammersatz.</p>
 </div>
 
 <!-- ──────────────────────── 7. AUFGABEN ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Faktorisieren</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(x^2 - 9\) faktorisiert?</p><ul class="mc-optionen"><li data-opt="A">\((x - 3)^2\)</li><li data-opt="B">\((x + 3)(x - 3)\)</li><li data-opt="C">nicht faktorisierbar</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Differenz zweier Quadrate → drittes Binom rückwärts.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Faktorisieren ist die Umkehrung von <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ausmultiplizieren — aus einer Summe wird ein Produkt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Klammere aus: \(6x^2 + 9x\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">ggT der Koeffizienten ist 3, niedrigster \(x\)-Exponent ist 1: \(6x^2 + 9x = 3x \cdot (2x + 3)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Faktorisiere \(x^2 + 7x + 12\) mit dem Zweiklammersatz.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Gesucht: \(r + s = 7\) und \(r \cdot s = 12\) → \(r = 3\), \(s = 4\). Also \(x^2 + 7x + 12 = (x + 3)(x + 4)\). Probe durch Ausmultiplizieren bestätigt.</div></details></div>
+</details>
+
 <h2 id="aufgaben">Aufgaben</h2>
 
 <div class="block block-aufg">
@@ -883,8 +986,8 @@ Zweiklammersatz.</p>
   Länge \((x + 4)\) m und Breite \((x - 1)\) m zugeschnitten, ausserdem ein quadratisches
   Verschnittstück mit Seitenlänge \(x\) m für ein anderes Projekt.</p>
     <ol class="aufg-liste">
-    <li>Drücke die <strong>Restfläche</strong> (Werkstück minus Verschnitt) als Term in \(x\) aus,
-  einmal ausmultipliziert und einmal in faktorisierter Form.</li>
+    <li>Drücke die <strong>Restfläche</strong> (Werkstück minus Verschnitt) als Term in \(x\) aus
+  und vereinfache so weit wie möglich. Lässt sich das Resultat faktorisieren?</li>
     <li>Wie gross ist die Restfläche für \(x = 5\) m?</li>
   </ol>
   <button class="loesung-toggle" onclick="toggleL('l-g1-3-a6')">▶ Lösung</button>
@@ -895,7 +998,7 @@ Zweiklammersatz.</p>
         <li>Werkstückfläche: \((x + 4)(x - 1) = x^2 + 3x - 4\).
       Verschnittfläche: \(x^2\).
       Restfläche: \(x^2 + 3x - 4 - x^2 = 3x - 4\).
-      Faktorisierte Form: nicht weiter zerlegbar — der lineare Term \(3x - 4\) ist schon einfach.</li>
+      Faktorisieren? Nein — der lineare Term \(3x - 4\) hat keinen gemeinsamen Faktor und ist nicht weiter zerlegbar; einfacher geht es nicht.</li>
         <li>\(3 \cdot 5 - 4 = 11\) m².</li>
       </ol>
     </div>
@@ -917,7 +1020,13 @@ Zweiklammersatz.</p>
       <div class="block-titel">🟢 Lösung</div>
             <ol class="aufg-liste">
         <li>Nur der zweite Slogan ist korrekt (Distributivgesetz). Die anderen drei sind <strong>falsch</strong> — alle gehören zur gleichen Fehlerfamilie: man darf eine Operation (Potenz, Wurzel) <em>nicht</em> einfach auf jedes Glied einer Summe einzeln anwenden.</li>
-        <li>Gegenbeispiele jeweils mit \(a = 1, b = 2\):</li>
+        <li>Gegenbeispiele jeweils mit \(a = 1, b = 2\) (bzw. \(x = 1, y = 2\)):
+          <ul>
+            <li>Slogan 1: \((1 + 2)^2 = 9\), aber \(1^2 + 2^2 = 5\) — also \(9 \neq 5\).</li>
+            <li>Slogan 3: \(\sqrt{1^2 + 2^2} = \sqrt{5} \approx 2.24\), aber \(1 + 2 = 3\) — also \(\sqrt{5} \neq 3\).</li>
+            <li>Slogan 4: \((1 + 2)^3 = 27\), aber \(1^3 + 2^3 = 9\) — also \(27 \neq 9\).</li>
+          </ul>
+        </li>
         <li>Korrekte Formen:</li>
       </ol>
       <ul style="margin:4px 0 0 18px">

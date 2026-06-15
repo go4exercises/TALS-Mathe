@@ -143,7 +143,7 @@ function buildNav(cfg) {
     <p>Fehler gefunden? Verbesserungsvorschlag? Fehlendes Thema?
        Bitte über den GitHub-Issue-Tracker melden — so geht keine Rückmeldung verloren
        und alle anderen profitieren von der Diskussion.</p>
-    <p><a href="https://github.com/go4exercises/tals-mathe/issues/new" target="_blank" rel="noopener" class="meta-link">
+    <p><a href="https://github.com/go4exercises/TALS-Mathe/issues/new" target="_blank" rel="noopener" class="meta-link">
        → Issue auf GitHub erstellen</a></p>
     <p><em>Feedbackformular folgt.</em></p>`;
 
@@ -161,10 +161,9 @@ function buildNav(cfg) {
   const headerHTML = `
 <header class="site-hdr">
   <a href="${indexHref}" class="logo">
-    <span class="logo-pill">TALS</span>Mathematik
+    Mathematik
   </a>
   <nav class="site-nav">
-    <a href="${indexHref}">Übersicht</a>
     <div class="dropdown">
       <button class="nav-btn${cfg.bereich==='grundlagen' ? ' aktiv':''}" onclick="toggleDD('dd-gl')">
         Grundlagenfach ▾
@@ -181,7 +180,29 @@ function buildNav(cfg) {
         ${renderDropdown('schwerpunkt','dd-sp')}
       </div>
     </div>
-    <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">Formelsammlung</a>
+    <div class="dropdown">
+      <button class="nav-btn${(cfg.id==='glossar'||cfg.id==='formeln') ? ' aktiv':''}" onclick="toggleDD('dd-ref')">
+        Nachschlagen ▾
+      </button>
+      <div class="dd-menu" id="dd-ref">
+        <div class="dd-gruppe">
+          <div class="dd-gruppe-titel">In diesem Lehrmittel</div>
+          <a href="${prefix}glossar.html" class="${cfg.id==='glossar'?'dd-aktiv':''}">
+            <span class="dd-nr">A–Z</span><span class="dd-tit">Glossar</span>
+          </a>
+          <a href="${prefix}formelsammlung.html" class="${cfg.id==='formeln'?'dd-aktiv':''}">
+            <span class="dd-nr">∑</span><span class="dd-tit">Formelsammlung</span>
+          </a>
+        </div>
+        <div class="dd-gruppe">
+          <div class="dd-gruppe-titel">Extern</div>
+          <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">
+            <span class="dd-nr">PDF</span><span class="dd-tit">SBFI-Formelsammlung (Prüfung)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener">Physik ↗</a>
 
     <span class="nav-sep" aria-hidden="true"></span>
 
@@ -213,6 +234,11 @@ function buildNav(cfg) {
   ${renderMobileGroup('grundlagen')}
   <div class="mn-gruppe">Schwerpunktfach</div>
   ${renderMobileGroup('schwerpunkt')}
+  <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener">Physik ↗</a>
+  <div class="mn-gruppe">Nachschlagen</div>
+  <a href="${prefix}glossar.html" class="${cfg.id==='glossar'?'mn-aktiv':''}">A–Z · Glossar</a>
+  <a href="${prefix}formelsammlung.html" class="${cfg.id==='formeln'?'mn-aktiv':''}">∑ · Formelsammlung</a>
+  <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">PDF · SBFI-Formelsammlung</a>
   <div class="mn-gruppe">Über dieses Lehrmittel</div>
   <details class="mn-meta"><summary>Autor &amp; Intention</summary><div class="mn-meta-body">${metaAutorHTML}</div></details>
   <details class="mn-meta"><summary>Ausblick</summary><div class="mn-meta-body">${metaAusblickHTML}</div></details>
@@ -220,41 +246,8 @@ function buildNav(cfg) {
   <details class="mn-meta"><summary>Lizenz</summary><div class="mn-meta-body">${metaLizenzHTML}</div></details>
 </div>`;
 
-  // ── BREADCRUMB + PREV/NEXT ───────────────────────────────────
-  const fachLabel  = cfg.bereich === 'grundlagen' ? 'Grundlagenfach' : 'Schwerpunktfach';
-  const fachHash   = cfg.bereich === 'grundlagen' ? '#gl' : '#sp';
-
-  const prevBtn = cfg.prev
-    ? `<a href="${cfg.prev.url}" class="pn-btn pn-prev" title="${cfg.prev.titel}">
-         ← <span class="pn-nr">${cfg.prev.nr}</span>
-         <span class="pn-tit">${cfg.prev.titel}</span>
-       </a>`
-    : `<span class="pn-btn pn-prev pn-dis">← Erstes Kapitel</span>`;
-
-  const nextBtn = cfg.next
-    ? `<a href="${cfg.next.url}" class="pn-btn pn-next" title="${cfg.next.titel}">
-         <span class="pn-nr">${cfg.next.nr}</span>
-         <span class="pn-tit">${cfg.next.titel}</span> →
-       </a>`
-    : `<span class="pn-btn pn-next pn-dis">Letztes Kapitel →</span>`;
-
-  const bcHTML = `
-<div class="breadcrumb-bar">
-  <div class="breadcrumb">
-    <a href="${indexHref}">Übersicht</a>
-    <span class="bc-sep">›</span>
-    <a href="${indexHref}${fachHash}">${fachLabel}</a>
-    <span class="bc-sep">›</span>
-    <span class="bc-cur">${cfg.kapitelNr} · ${cfg.kapitelTitel}</span>
-  </div>
-  <div class="prev-next">
-    ${prevBtn}
-    ${nextBtn}
-  </div>
-</div>`;
-
   // ── INJECT ───────────────────────────────────────────────────
-  document.getElementById('nav-root').innerHTML = cfg.homepage ? headerHTML : (headerHTML + bcHTML);
+  document.getElementById('nav-root').innerHTML = headerHTML;
 
   // Close dropdowns on outside click
   document.addEventListener('click', e => {
@@ -311,7 +304,9 @@ function buildToC() {
 
   // Aus buildNav-Aufruf: Kapitelnummer + Prev/Next
   const cfg = window.__navCfg || {};
-  const kapitel = cfg.kapitelNr ? `Kapitel ${cfg.kapitelNr}` : 'Auf dieser Seite';
+  const kapitel = cfg.kapitelNr
+    ? `Kapitel <span class="toc-kapnr">${cfg.kapitelNr}</span>`
+    : 'Auf dieser Seite';
   const prevLink = cfg.prev
     ? `<a href="${cfg.prev.url}" class="toc-prev" title="${cfg.prev.titel}">← ${cfg.prev.nr}</a>`
     : '';
@@ -321,7 +316,7 @@ function buildToC() {
 
   toc.innerHTML =
     (prevLink ? `<div class="toc-nav toc-nav-oben">${prevLink}</div>` : '') +
-    `<div class="toc-title">${kapitel}</div>` +
+    `<button type="button" class="toc-title" title="Zum Seitenanfang">${kapitel}<span class="toc-title-pfeil" aria-hidden="true">↑</span></button>` +
     [...headings].map(h => {
       const label = TOC_KURZ[h.id] || h.textContent;
       return `
@@ -342,6 +337,22 @@ function buildToC() {
   }, { rootMargin: '-20% 0px -70% 0px' });
 
   headings.forEach(h => observer.observe(h));
+
+  // Sofortige, konsistente Markierung beim Klick (ohne auf den Observer zu warten);
+  // Sprünge sind instant (kein Smooth-Scroll), wie bei der Titelwahl.
+  toc.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('toc-aktiv'));
+      link.classList.add('toc-aktiv');
+    });
+  });
+  // Kapiteltitel = Sprung an den Seitenanfang (instant), Markierung zurücksetzen.
+  const titelEl = toc.querySelector('.toc-title');
+  if (titelEl) titelEl.addEventListener('click', () => {
+    window.scrollTo(0, 0);
+    history.replaceState(null, '', location.pathname + location.search);
+    document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('toc-aktiv'));
+  });
 }
 
 document.addEventListener('DOMContentLoaded', buildToC);

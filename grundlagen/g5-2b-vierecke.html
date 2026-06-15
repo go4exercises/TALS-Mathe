@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -232,6 +232,19 @@ MathJax = {
   <p class="rlp-hinweis">Dreiecke werden in <a href="g5-2a-dreiecke.html">Teil 1 (g5-2a)</a> behandelt, Kreis und Kreisteile in <a href="g5-2c-kreis-und-kreisteile.html">Teil 3 (g5-2c)</a>, zentrische Streckung und Ähnlichkeit in <a href="g5-2d-zentrische-streckung-aehnlichkeit.html">Teil 4 (g5-2d)</a>.</p>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Vierecks-Familie (Quadrat, Rechteck, Raute, Parallelogramm, Trapez, Drachen) und ihre Hierarchie erklären.</li>
+      <li>Ich kann die Innenwinkelsumme eines \(n\)-Ecks über die Zerlegung in Dreiecke herleiten.</li>
+      <li>Ich kann Umfang und Flächeninhalt der Standard-Vierecke berechnen.</li>
+      <li>Ich kann Flächenformeln durch Umformung zum Rechteck begründen.</li>
+      <li>Ich kann Sehnen-, Tangentenvierecke und regelmässige Vielecke charakterisieren.</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
 <h2 id="einstieg">Einstieg — die Vierecks-Familie</h2>
@@ -294,7 +307,23 @@ MathJax = {
 <p>Bevor wir Vierecke im Detail klassifizieren, ein didaktischer Umweg über das <strong>allgemeine n-Eck</strong>: Jedes n-Eck lässt sich durch Diagonalen von einem Eckpunkt aus in Dreiecke zerlegen — und weil jedes Dreieck Innenwinkelsumme \(180°\) hat, folgt die Innenwinkelsumme jedes n-Ecks direkt aus der Anzahl der Dreiecke. Wähle \(n\) zwischen 3 und 8.</p>
 
 <div class="anim">
-  <div class="anim-titel">Anim 1 · Innenwinkelsumme im n-Eck <a class="quer" href="g5-2a-dreiecke.html">↩ 5.2a</a></div>
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Anim 1 · Innenwinkelsumme im \(n\)-Eck <a class="quer" href="g5-2a-dreiecke.html">↩ 5.2a</a></div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Erhöhe \(n\) schrittweise: Wie viele Dreiecke entstehen von der gewählten Ecke aus — und um wie viel wächst die Winkelsumme pro Schritt?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Erhöhe n schrittweise: Wie viele Dreiecke entstehen von der gewählten Ecke aus — und um wie viel wächst die Winkelsumme pro Schritt?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Von einer Ecke aus entstehen immer \(n - 2\) Dreiecke — jedes neue Eck fügt genau ein Dreieck und damit \(180°\) hinzu. Die Formel \((n-2) \cdot 180°\) ist nichts anderes als dieses Zerlegungsbild.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Von einer Ecke aus entstehen immer n minus zwei Dreiecke — jedes neue Eck fügt genau ein Dreieck und damit hundertachtzig Grad hinzu. Die Formel ist nichts anderes als dieses Zerlegungsbild.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
   <div class="anim-layout">
     <canvas id="cv-nEck" width="560" height="420"></canvas>
     <div class="bedien">
@@ -345,6 +374,14 @@ MathJax = {
 
 
 <!-- ══ 4. DEFINITION ══ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Innenwinkelsumme im n-Eck</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Innenwinkelsumme im \(n\)-Eck beträgt …</p><ul class="mc-optionen"><li data-opt="A">\(n \cdot 180°\)</li><li data-opt="B">\((n-2) \cdot 180°\)</li><li data-opt="C">\((n-1) \cdot 180°\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Ein \(n\)-Eck zerfällt von einer Ecke aus in \(n - 2\) Dreiecke.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Ein Viereck zerfällt entlang einer Diagonalen in <span class="mc-luecke"></span> Dreiecke.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">zwei — darum Innenwinkelsumme \(2 \cdot 180° = 360°\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie gross ist die Innenwinkelsumme im Fünfeck?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((5 - 2) \cdot 180° = 540°\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Wie gross ist jeder Innenwinkel im regelmässigen Sechseck?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Summe \((6-2) \cdot 180° = 720°\), gleichmässig verteilt: \(720° : 6 = 120°\).</div></details></div>
+</details>
+
 <h2 id="typen">Typen — die Vierecks-Hierarchie</h2>
 
 <p>Vierecke lassen sich strikt hierarchisch ordnen. Jede speziellere Form erbt <em>alle</em> Eigenschaften der allgemeineren und fügt eine zusätzliche Bedingung hinzu. Eine Spezialform ist immer auch eine Allgemeinform — ein Quadrat ist gleichzeitig Rechteck, Rhombus, Parallelogramm, Trapez und Viereck.</p>
@@ -384,7 +421,7 @@ MathJax = {
 <p>Ein <strong>regelmässiges n-Eck</strong> hat alle \(n\) Seiten gleich lang <em>und</em> alle \(n\) Innenwinkel gleich gross. Es ist gleichzeitig Sehnen- und Tangentenviereck (für \(n=4\)) bzw. allgemeiner Sehnen- und Tangenten-n-Eck: es passt in einen Umkreis und um einen Inkreis.</p>
 
 <div class="block block-def">
-  <div class="block-titel">📘 Kenngrössen am regelmässigen n-Eck</div>
+  <div class="block-titel">📘 Kenngrössen am regelmässigen \(n\)-Eck</div>
   <p>Mit Seitenlänge \(s\), Umkreisradius \(R\), Inkreisradius (Apothem) \(r\):</p>
   <ul style="margin-left:1.4em;line-height:1.7">
     <li><strong>Zentriwinkel</strong> (Winkel zwischen zwei Radien zu benachbarten Ecken): \(\;\zeta_n = \dfrac{360°}{n}\)</li>
@@ -398,6 +435,14 @@ MathJax = {
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Vierecks-Hierarchie</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Jedes Quadrat ist zugleich …</p><ul class="mc-optionen"><li data-opt="A">ein Rechteck und eine Raute</li><li data-opt="B">nur ein Rechteck</li><li data-opt="C">keines von beiden</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Es erfüllt beide Bedingungen: vier rechte Winkel und vier gleiche Seiten.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Ein Parallelogramm mit einem rechten Winkel ist ein <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Rechteck — aus einem rechten Winkel folgen im Parallelogramm alle vier.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Ist jedes Rechteck ein Parallelogramm? Und umgekehrt?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ja — gegenüberliegende Seiten sind parallel. Umgekehrt nein: ein Parallelogramm braucht keine rechten Winkel.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum stehen die «spezielleren» Figuren in der Hierarchie unten?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Jede Stufe nach unten fügt eine Bedingung hinzu (Parallelität, rechte Winkel, gleiche Seiten) — die Eigenschaften der Oberklasse werden geerbt. Das Quadrat erfüllt alle Bedingungen und steht zuunterst.</div></details></div>
+</details>
+
 <h2 id="theorie">Umfang und Flächeninhalt</h2>
 
 <p>Alle Flächenformeln der Vierecke leiten sich vom <strong>Rechteck</strong> \(A = a \cdot b\) ab. Die Strategie ist immer dieselbe: das Viereck wird durch <strong>Schneiden und Anbauen</strong> oder durch <strong>Drehspiegelung</strong> in ein flächengleiches Rechteck überführt. Die <strong>Anim 2</strong> unten festigt die Basis-Formel \(A = a \cdot b\); die <strong>Anim 3</strong> zeigt anschliessend die fünf Konstruktionen für Parallelogramm, Dreieck (zum Vergleich), Trapez, Raute und Drachen.</p>
@@ -608,13 +653,21 @@ MathJax = {
   <p>Beim Trapez \(A = \tfrac{1}{2}(a + c) \cdot h\) ist \(h\) die <strong>senkrechte</strong> Höhe zwischen den beiden Parallelseiten — nicht die schräge Schenkel-Länge. Bei einem gleichschenkligen Trapez mit Schenkel \(s\), Parallelseiten \(a\) und \(c\): die Höhe ergibt sich aus dem Pythagoras-Halbdreieck zu \(h = \sqrt{s^2 - \left(\tfrac{a-c}{2}\right)^2}\). Schräge Seite als Höhe einzusetzen, überschätzt die Fläche.</p>
 </div>
 
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Umfang und Fläche</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Parallelogramm-Fläche ist …</p><ul class="mc-optionen"><li data-opt="A">\(a \cdot b\)</li><li data-opt="B">\(g \cdot h\)</li><li data-opt="C">\(\tfrac{g \cdot h}{2}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Grundseite mal <em>Höhe</em> — nicht mal Schenkellänge; das zeigt die Umformung zum Rechteck.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Beim Trapez wird die <span class="mc-luecke"></span> der parallelen Seiten mit der Höhe multipliziert.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Mittellinie (das Mittel \(\tfrac{a + c}{2}\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Trapez: \(a = 6\), \(c = 4\), \(h = 3\) — Fläche?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(A = \tfrac{6 + 4}{2} \cdot 3 = 15\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Parallelogramm mit \(g = 8\), \(h = 5\): Fläche — und warum ist die schräge Seite irrelevant?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(A = 8 \cdot 5 = 40\). Das abgeschnittene Dreieck links passt rechts wieder an — die Figur wird zum Rechteck \(g \times h\); die Schräge ändert nur den Umfang, nicht die Fläche.</div></details></div>
+</details>
+
 <h2 id="aufgaben">Aufgaben</h2>
 
-<p>Sechs Aufgaben zur ganzen Bandbreite: Winkel, Hierarchie, Flächenformeln, Sehnen-/Tangentenviereck, regelmässige Vielecke, Anwendung. Lösungen sind ausklappbar.</p>
+<p>Sieben Aufgaben zur ganzen Bandbreite: Winkel, Hierarchie, Flächenformeln, Sehnen-/Tangentenviereck, regelmässige Vielecke, Anwendung. Lösungen sind ausklappbar.</p>
 
 <!-- A1 -->
 <div class="block block-aufg" style="margin-bottom:14px">
-  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Innenwinkelsumme im n-Eck</span></div>
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Innenwinkelsumme im \(n\)-Eck</span></div>
   <p>Bestimme die Innenwinkelsumme:</p>
   <ol class="aufg-liste">
     <li>im Zwölfeck</li>
@@ -898,6 +951,8 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'grundlagen',

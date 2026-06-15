@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -266,6 +266,19 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann erklären, was ein algebraischer Term ist und woraus er besteht (Zahlen, Variablen, Operationen).</li>
+      <li>Ich kann die Hauptoperation eines Terms bestimmen und damit seine Struktur beschreiben.</li>
+      <li>Ich kann die Hierarchie der Operationen («Klammer vor Potenz vor Punkt vor Strich», innerhalb einer Stufe von links nach rechts) sicher anwenden.</li>
+      <li>Ich kann einen Strukturbaum lesen und zu einem Term aufstellen.</li>
+      <li>Ich kann Rechengesetze (Kommutativ-, Assoziativ-, Distributivgesetz) erkennen und für Umformungen nutzen.</li>
+    </ul>
+  </div>
+</details>
+
 <!-- ════════════════════════════════════════════════════════════════
      2. EINSTIEG
      ════════════════════════════════════════════════════════════════ -->
@@ -281,7 +294,23 @@ MathJax = {
 </div>
 
 <div class="anim">
-  <div class="anim-titel">Drei Terme, ein Wert — Schieb \(x\) und vergleiche</div>
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Drei Terme, ein Wert — Schieb \(x\) und vergleiche</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Schiebe \(x\) durch den ganzen Bereich: Laufen die drei Werte jemals auseinander? Und welche der drei Formen verrät dir am schnellsten, <em>was zuletzt</em> gerechnet wird?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Schiebe x durch den ganzen Bereich: Laufen die drei Werte jemals auseinander? Und welche der drei Formen verrät dir am schnellsten, was zuletzt gerechnet wird?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Die drei Werte bleiben für jedes \(x\) identisch — die Terme sind <strong>äquivalent</strong>. Die Form \(7 \cdot x + 5\) zeigt die Struktur direkt: zuletzt wird addiert, die Hauptoperation ist eine Summe.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Die drei Werte bleiben für jedes x identisch — die Terme sind äquivalent. Die Form sieben mal x plus fünf zeigt die Struktur direkt: zuletzt wird addiert, die Hauptoperation ist eine Summe.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
   <div class="anim-layout">
     <canvas id="cv-hauptop" width="560" height="320"></canvas>
     <div class="bedien">
@@ -343,12 +372,20 @@ MathJax = {
 <div class="block block-bsp">
   <div class="block-titel">🟢 Beispiel · Hauptoperation bestimmen</div>
   <p>Was ist die Hauptoperation in \( T = 3 \cdot (x + 2)^2 - 5 \)?</p>
-  <p>Auswertung der Reihenfolge: zuerst \(x + 2\), dann das Quadrat, dann mal 3, <strong>zuletzt minus 5</strong>. Der Term ist also eine <em>Differenz</em> — die Hauptoperation ist die Subtraktion. Die beiden Summanden sind \(3 \cdot (x+2)^2\) und \(-5\).</p>
+  <p>Auswertung der Reihenfolge: zuerst \(x + 2\), dann das Quadrat, dann mal 3, <strong>zuletzt minus 5</strong>. Der Term ist also eine <em>Differenz</em> — die Hauptoperation ist die Subtraktion. Minuend ist \(3 \cdot (x+2)^2\), Subtrahend ist \(5\). (Gleichwertig als Summe gelesen: die Summanden sind \(3 \cdot (x+2)^2\) und \(-5\).)</p>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════
      4. HIERARCHIE DER OPERATIONEN
      ════════════════════════════════════════════════════════════════ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Term und Hauptoperation</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Hauptoperation hat der Term \(3 \cdot (x + 5) - x^2\)?</p><ul class="mc-optionen"><li data-opt="A">Multiplikation</li><li data-opt="B">Subtraktion</li><li data-opt="C">Potenz</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Strichrechnung bindet am schwächsten — die Subtraktion wird zuletzt ausgeführt. Klammer und Potenz sind «weiter innen».</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Hauptoperation eines Terms ist die Operation, die <span class="mc-luecke"></span> ausgeführt wird.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">zuletzt — sie bestimmt, mit welcher Regel der Term umgeformt werden darf.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Werte den Term \(7 \cdot x + 5\) für \(x = 2\) aus.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(7 \cdot 2 + 5 = 14 + 5 = 19\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Sind \(4 \cdot x + 3 \cdot x + 5\) und \(7 \cdot x + 5\) äquivalent? Und warum zeigt die zweite Form die Struktur besser?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ja — nach dem Distributivgesetz ist \(4x + 3x = (4+3) \cdot x = 7x\), beide Terme liefern für jedes \(x\) denselben Wert (Probe \(x = 2\): beidseits 19). Die Form \(7x + 5\) lässt direkt erkennen, dass der Term eine <em>Summe</em> aus \(7x\) und \(5\) ist.</div></details></div>
+</details>
+
 <h2 id="hierarchie">Hierarchie der Operationen <a class="quer" href="g1-4-zehnerpotenzen-quadratwurzeln.html">↗ 1.4</a></h2>
 
 <p>Welche Operation in einem Term zuletzt ausgeführt wird, hängt von der <strong>Hierarchie</strong> (Vorrangregeln) ab. Die Hierarchie löst Mehrdeutigkeiten auf — z.B. ist \(2 + 3 \cdot 4 = 14\) (nicht 20), weil die Multiplikation Vorrang vor der Addition hat.</p>
@@ -426,13 +463,37 @@ MathJax = {
 <!-- ════════════════════════════════════════════════════════════════
      5. STRUKTURBAUM — Visualisierung der Hierarchie, interaktiv
      ════════════════════════════════════════════════════════════════ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Hierarchie der Operationen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(2 + 3 \cdot 4 = \;?\)</p><ul class="mc-optionen"><li data-opt="A">\(20\)</li><li data-opt="B">\(14\)</li><li data-opt="C">\(24\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Punkt vor Strich: erst \(3 \cdot 4 = 12\), dann \(2 + 12 = 14\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Innerhalb derselben Stufe wird von <span class="mc-luecke"></span> nach rechts gerechnet.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">links — darum ist \(a - b - c = (a - b) - c\) und nicht \(a - (b - c)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(2 \cdot 3^2\) und \(-3^2\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Potenz vor Punkt: \(2 \cdot 3^2 = 2 \cdot 9 = 18\). Potenz vor Vorzeichen: \(-3^2 = -(3^2) = -9\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Was ergibt \(8 : 4 \cdot 2\) — und warum nicht \(1\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Division und Multiplikation stehen auf derselben Stufe, also von links nach rechts: \(8 : 4 = 2\), dann \(2 \cdot 2 = 4\). Das Resultat \(1\) entstünde nur mit einer Klammer: \(8 : (4 \cdot 2)\).</div></details></div>
+</details>
+
 <h2 id="strukturbaum">Strukturbaum lesen</h2>
 
 <p>Ein <strong>Strukturbaum</strong> macht die Hauptoperation und die Bausteine eines Terms sichtbar. Er hilft besonders, wenn ein Term mehrere Klammern, Brüche oder Potenzen enthält. Die Hierarchie aus dem vorhergehenden Abschnitt bestimmt, welche Operation zuoberst im Baum steht.</p>
 
 <div class="widget">
   <div class="widget-header">
-    <h3>Strukturbaum erkunden — wähle einen Term oder gib einen eigenen ein</h3>
+    <div class="widget-titelzeile">
+      <h3>Strukturbaum erkunden — wähle einen Term oder gib einen eigenen ein</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Vergleiche die vier Vorgabe-Terme: Was steht jeweils <em>zuoberst</em> im Baum? Achte beim Bruch darauf, wie Zähler und Nenner als Teilbäume erscheinen.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vergleiche die vier Vorgabe-Terme: Was steht jeweils zuoberst im Baum? Achte beim Bruch darauf, wie Zähler und Nenner als Teilbäume erscheinen.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Zuoberst steht immer die <strong>Hauptoperation</strong> — die Operation, die zuletzt ausgeführt wird. Der Bruchstrich wirkt dabei wie eine unsichtbare Klammer um Zähler und Nenner.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Zuoberst steht immer die Hauptoperation — die Operation, die zuletzt ausgeführt wird. Der Bruchstrich wirkt dabei wie eine unsichtbare Klammer um Zähler und Nenner.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
     <p>Von oben nach unten: Hauptoperation → Bausteine → Bausteine der Bausteine.</p>
   </div>
   <div class="widget-body">
@@ -470,6 +531,14 @@ MathJax = {
 <!-- ════════════════════════════════════════════════════════════════
      6. WEITERE THEORIE — Rechengesetze als Strukturwerkzeug
      ════════════════════════════════════════════════════════════════ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Strukturbaum</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was steht in einem Strukturbaum zuoberst?</p><ul class="mc-optionen"><li data-opt="A">Die innerste Klammer</li><li data-opt="B">Die Hauptoperation</li><li data-opt="C">Die grösste Zahl</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der Baum wird von der zuletzt ausgeführten Operation aus aufgebaut — der Hauptoperation.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Bruchstrich wirkt wie eine unsichtbare <span class="mc-luecke"></span> um Zähler und Nenner.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Klammer — die Hauptoperation eines Bruchs ist deshalb immer die Division.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Welche Hauptoperation hat \((a + b) \cdot (a - b)\)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Die Multiplikation — beide Klammern werden zuerst ausgewertet, das Produkt zuletzt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Welche Hauptoperation hat \(-x^2 + \sqrt{x + 4}\)? Skizziere den Baum im Kopf.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die Addition: der Term ist eine Summe aus den zwei Bausteinen \(-x^2\) und \(\sqrt{x+4}\). Zuoberst steht das \(+\), darunter links die Negation der Potenz, rechts die Wurzel mit der inneren Summe \(x + 4\).</div></details></div>
+</details>
+
 <h2 id="theorie">Rechengesetze für Umformungen</h2>
 
 <p>Die Strukturanalyse zeigt, <em>welches</em> Rechengesetz auf einen Term passt. Drei Gesetze stehen im Zentrum. Probiere die Gesetze mit konkreten Zahlen aus — würfle neue Werte für \(a, b, c \in \{-10, \dots, 10\}\) und beobachte, dass linke und rechte Seite tatsächlich denselben Wert liefern.</p>
@@ -521,7 +590,7 @@ MathJax = {
 <div class="block block-bsp">
   <div class="block-titel">🟢 Beispiel · Distributivgesetz nach Struktur einsetzen</div>
   <p>Vereinfache \(4 \cdot (3 + x) - 2 \cdot (5 - x)\).</p>
-  <p>Strukturanalyse: Hauptoperation ist <em>Differenz</em>. Beide Minuend und Subtrahend sind <em>Produkte</em> mit Klammer. Auf jedes Produkt das Distributivgesetz anwenden:</p>
+  <p>Strukturanalyse: Hauptoperation ist <em>Differenz</em>. Minuend und Subtrahend sind beide <em>Produkte</em> mit Klammer. Auf jedes Produkt das Distributivgesetz anwenden:</p>
   \[ 4 \cdot 3 + 4 \cdot x - (2 \cdot 5 - 2 \cdot x) = 12 + 4x - 10 + 2x = 2 + 6x. \]
   <p>Beachte das Vorzeichen: das Minus vor der zweiten Klammer kehrt jedes Vorzeichen darin um.</p>
 </div>
@@ -529,6 +598,14 @@ MathJax = {
 <!-- ════════════════════════════════════════════════════════════════
      7. AUFGABEN — A1 bis A6
      ════════════════════════════════════════════════════════════════ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Rechengesetze</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welches Gesetz steckt hinter \(4x + 3x = (4 + 3) \cdot x\)?</p><ul class="mc-optionen"><li data-opt="A">Kommutativgesetz</li><li data-opt="B">Distributivgesetz</li><li data-opt="C">Assoziativgesetz</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der gemeinsame Faktor \(x\) wird ausgeklammert: \(a \cdot c + b \cdot c = (a + b) \cdot c\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(a \cdot b = b \cdot a\) heisst <span class="mc-luecke"></span>gesetz.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Kommutativ- (Vertauschungsgesetz) — es gilt für Addition und Multiplikation.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(25 \cdot 17 \cdot 4\) geschickt im Kopf.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Umordnen und gruppieren (Kommutativ- + Assoziativgesetz): \((25 \cdot 4) \cdot 17 = 100 \cdot 17 = 1700\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Gilt \(a - b = b - a\)? Begründe mit einem Gegenbeispiel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nein — die Subtraktion ist nicht kommutativ. Gegenbeispiel: \(5 - 3 = 2\), aber \(3 - 5 = -2\). Ein einziges Gegenbeispiel genügt als Widerlegung.</div></details></div>
+</details>
+
 <h2 id="aufgaben">Aufgaben</h2>
 
 <!-- A1: Klassifikation -->
@@ -659,7 +736,7 @@ MathJax = {
 
 <div class="block block-aufg">
   <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Fehler in fremden Rechnungen finden <span class="aufg-vertiefung">Vertiefung</span></span></div>
-  <p>Drei Lernende berechnen denselben Term \(T = -3^2 + 2 \cdot (5 - 1)^2\) für sich, kommen aber zu verschiedenen Ergebnissen. Lies jede Rechnung sorgfältig — finde den Fehler, benenne die verletzte Regel und korrigiere.</p>
+  <p>Drei Lernende berechnen denselben Term \(T = -3^2 + 2 \cdot (5 - 1)^2\) für sich — höchstens eine der drei Rechnungen kann stimmen. Lies jede Rechnung sorgfältig — finde den Fehler, benenne die verletzte Regel und korrigiere.</p>
   <ul>
     <li><strong>Anna:</strong> \(-3^2 + 2 \cdot (5-1)^2 = 9 + 2 \cdot 4^2 = 9 + 2 \cdot 16 = 9 + 32 = 41\)</li>
     <li><strong>Bruno:</strong> \(-3^2 + 2 \cdot (5-1)^2 = -9 + (2 \cdot 4)^2 = -9 + 64 = 55\)</li>
@@ -677,7 +754,13 @@ MathJax = {
       <p><strong>Richtiges Resultat:</strong> Hauptoperation ist die <em>Addition</em>. Linker Summand: \(-3^2 = -(3^2) = -9\) (das Minus ist <em>kein</em> Teil der Basis, weil das Potenzieren stärker bindet). Rechter Summand: \((5-1)^2 = 4^2 = 16\), dann \(2 \cdot 16 = 32\). Ergebnis: \(-9 + 32 = 23\).</p>
             <ol class="aufg-liste">
         <li><strong>Niemand!</strong> Das richtige Resultat ist \(23\), nicht \(41\) und nicht \(55\).</li>
-        <li>Fehler-Diagnose:</li>
+        <li>Fehler-Diagnose:
+          <ul>
+            <li><strong>Anna</strong> rechnet \(-3^2 = 9\) — sie behandelt das Minus als Teil der Basis. Verletzte Regel: Potenzieren bindet stärker als das Vorzeichen, \(-3^2 = -(3^2) = -9\). Der Rest ihrer Rechnung ist korrekt.</li>
+            <li><strong>Bruno</strong> rechnet \((2 \cdot 4)^2 = 64\) statt \(2 \cdot 4^2\) — er zieht den Faktor \(2\) unzulässig in die Basis hinein (erfundene Klammer). Verletzte Regel: Potenzieren bindet stärker als Multiplizieren.</li>
+            <li><strong>Carlo</strong> rechnet \(2 \cdot 4^2 \rightarrow 8^2\) — er multipliziert zuerst \(2 \cdot 4 = 8\) und potenziert dann. Derselbe Regelverstoss wie bei Bruno (Hierarchie der Operationen), nur anders notiert; deshalb landen beide beim gleichen falschen Wert \(55\).</li>
+          </ul>
+        </li>
         <li>Damit das Resultat des linken Summanden \(+9\) wäre, müsste man Klammern setzen: \((-3)^2 = (-3) \cdot (-3) = +9\). Die Klammer macht das Minus zum Teil der Basis. Genau dieser Unterschied ist im Theorieteil <em>häufiger Fehler</em> festgehalten. <em>Strategie:</em> Bei Termen mit Minuszeichen vor einer Potenz lohnt sich ein Blick auf den <em>Strukturbaum</em>: ist \(-x^2\) die Form \(-(x^2)\) (Minus aussen) oder \((-x)^2\) (Minus innen)?</li>
       </ol>
     </div>
@@ -698,7 +781,7 @@ MathJax = {
   <tbody>
     <tr><td class="li">Hauptoperation</td>            <td>die zuletzt auszuführende Operation eines Terms</td></tr>
     <tr><td class="li">Hierarchie</td>                <td>Klammer ▶ Potenz/Wurzel ▶ Punkt ▶ Strich · gleiche Stufe von links nach rechts</td></tr>
-    <tr><td class="li">Bausteine</td>                 <td>Summanden bei Summen, Subtrahend/Minuend bei Differenzen, Faktoren bei Produkten, Dividend/Divisor bzw. Zähler/Nenner bei Quotienten, Basis und Exponent bei Potenzen</td></tr>
+    <tr><td class="li">Bausteine</td>                 <td>Summanden bei Summen, Minuend/Subtrahend bei Differenzen, Faktoren bei Produkten, Dividend/Divisor bzw. Zähler/Nenner bei Quotienten, Basis und Exponent bei Potenzen</td></tr>
     <tr><td class="li">Äquivalenz</td>                <td>zwei Terme heissen äquivalent, wenn sie für <em>jede</em> erlaubte Belegung der Variablen denselben Wert liefern — <strong>nicht</strong> nur für einzelne Testwerte</td></tr>
     <tr><td class="li">Distributivgesetz</td>         <td>\(a(b+c) = ab + ac\) — Klammer auflösen oder ausklammern (Strukturwechsel!)</td></tr>
     <tr><td class="li">Werkzeug</td>                  <td>Strukturbaum sichtbar machen → passendes Rechengesetz auswählen</td></tr>
@@ -748,6 +831,8 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'grundlagen', id:'g1-1',
@@ -779,7 +864,7 @@ function buildKlSpiel() {
       <div class="kl-feedback" id="klf-${i}"></div>
     </div>
   `).join('');
-  if (window.MathJax) MathJax.typesetPromise([cont]).catch(()=>{});
+  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([cont]).catch(()=>{});
 }
 
 function checkKl(i, j) {
@@ -1139,7 +1224,7 @@ function wuerfelKommutativ() {
       </div>
     </div>
   `;
-  if (window.MathJax) MathJax.typesetPromise([document.getElementById('wb-k-bsp')]);
+  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([document.getElementById('wb-k-bsp')]);
 }
 
 function wuerfelAssoziativ() {
@@ -1163,7 +1248,7 @@ function wuerfelAssoziativ() {
       </div>
     </div>
   `;
-  if (window.MathJax) MathJax.typesetPromise([document.getElementById('wb-a-bsp')]);
+  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([document.getElementById('wb-a-bsp')]);
 }
 
 function wuerfelDistributiv() {
@@ -1185,7 +1270,7 @@ function wuerfelDistributiv() {
       </div>
     </div>
   `;
-  if (window.MathJax) MathJax.typesetPromise([document.getElementById('wb-d-bsp')]);
+  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([document.getElementById('wb-d-bsp')]);
 }
 
 function wuerfelInit() {

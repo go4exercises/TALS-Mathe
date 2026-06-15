@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -98,12 +98,25 @@ MathJax = {
 <p class="lead">Eine <strong>lineare Gleichung</strong> wie \(2x - 5 = 11\) lässt sich mit wenigen Äquivalenzumformungen lösen — sauber, eindeutig und nachprüfbar. Hier lernst du die Standard-Lösungsmethoden, übst den Umgang mit <strong>Parametern</strong> (wann hat die Gleichung keine, eine oder unendlich viele Lösungen?) und löst auch Verhältnis- und Bruchgleichungen.</p>
 
 <div class="rlp-kompetenzen">
-  <div class="rlp-titel">RLP-Kompetenzen (Auszug aus 2.2)</div>
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 2.2</div>
   <ul>
     <li>lineare Gleichungen lösen, verschiedene Lösungsmethoden erklären und anwenden, inkl. Parameterdiskussion <span class="ohm">auch ohne Hilfsmittel</span></li>
   </ul>
   <p class="rlp-hinweis">Die quadratischen Gleichungen werden in <a href="g2-2b-quadratische-gleichungen.html">Teil 2 (g2-2b)</a> behandelt.</p>
 </div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann lineare Gleichungen mit Äquivalenzumformungen sicher lösen und die Schritte begründen.</li>
+      <li>Ich kann die Normalform \(a \cdot x + b = 0\) herstellen und die Lösung \(x = -\tfrac{b}{a}\) deuten.</li>
+      <li>Ich kann die drei Lösungsfälle (genau eine Lösung, keine, unendlich viele) erkennen und unterscheiden.</li>
+      <li>Ich kann eine Parameterdiskussion führen: die Lösung in Abhängigkeit von \(k\) formulieren und Sonderfälle benennen.</li>
+      <li>Ich kann lineare Ungleichungen lösen — inklusive Vorzeichenkipp bei Multiplikation mit negativen Zahlen.</li>
+    </ul>
+  </div>
+</details>
 
 <!-- ToC platzhalter — wird automatisch von nav.js befüllt -->
 <nav class="ohm" id="ohm-root"></nav>
@@ -123,12 +136,28 @@ MathJax = {
 
 <div class="widget">
   <div class="widget-header">
-    <h3>Schieber: Wann erreicht <em>K(x)</em> das Budget?</h3>
+    <div class="widget-titelzeile">
+      <h3>Schieber: Wann erreicht <em>K(x)</em> das Budget?</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe \(x\), bis beide Seiten gleich sind: Bei welchem Wert kippt der Vergleich von «unter dem Budget» zu «über dem Budget»?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schiebe x, bis beide Seiten gleich sind: Bei welchem Wert kippt der Vergleich von unter dem Budget zu über dem Budget?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die <strong>Lösung der Gleichung</strong> ist genau der Kippunkt: dort sind linke und rechte Seite wertgleich. Links davon gilt \(<\), rechts davon \(>\) — die Gleichung trennt die beiden Ungleichungs-Bereiche.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Lösung der Gleichung ist genau der Kippunkt: dort sind linke und rechte Seite wertgleich. Links davon gilt kleiner, rechts davon grösser — die Gleichung trennt die beiden Ungleichungs-Bereiche.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
     <p>Der Schieber verändert <em>x</em>. Die linke Seite zeigt die Mietkosten, die rechte das Budget. Die Lösung ist der Wert, bei dem beide Seiten gleich sind.</p>
   </div>
   <div class="widget-body">
-    <div class="sl-row">
-      <label for="sl-budget">Stunden <em>x</em></label>
+    <div class="sl-row akz-blau">
+      <label for="sl-budget">Stunden <span class="var"><em>x</em></span></label>
       <input type="range" id="sl-budget" min="0" max="10" step="0.5" value="3">
       <span class="sl-val" id="sv-budget">3</span>
     </div>
@@ -175,6 +204,14 @@ Linie <em>K = 117</em> schneidet. Das ergibt <em>x</em> = 6 Stunden. Algebraisch
 <!-- ════════════════════════════════════════════════════════════════
      4. VERKNÜPFUNG DER DARSTELLUNGEN
      ════════════════════════════════════════════════════════════════ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Normalform</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Normalform der linearen Gleichung lautet …</p><ul class="mc-optionen"><li data-opt="A">\(a x^2 + b = 0\)</li><li data-opt="B">\(a \cdot x + b = 0\) mit \(a \neq 0\)</li><li data-opt="C">\(a \cdot x + b\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Ohne Gleichheitszeichen (C) ist es nur ein Term; mit \(x^2\) (A) wäre die Gleichung quadratisch.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(2x - 3 = 5\) hat die Lösung \(x =\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(4\): \(2x = 8\), also \(x = 4\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bringe \(2x - 3 = 5\) auf Normalform.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Beidseitig \(-5\): \(2x - 8 = 0\) — Form \(ax + b = 0\) mit \(a = 2\), \(b = -8\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum verlangt die Definition \(a \neq 0\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Mit \(a = 0\) verschwindet die Variable: \(0 \cdot x + b = 0\) ist keine Gleichung <em>in</em> \(x\) mehr, sondern nur noch die Aussage \(b = 0\) — je nach \(b\) immer wahr oder immer falsch.</div></details></div>
+</details>
+
 <h2 id="darstellungen">Drei Sichten auf dieselbe Gleichung</h2>
 
 <p>Die Gleichung \(a \cdot x + b = c\) lässt sich auf drei Arten lesen — algebraisch, tabellarisch und grafisch.
@@ -186,8 +223,8 @@ Alle drei Darstellungen enthalten dieselbe Information, machen aber unterschiedl
     <p>Schiebe <em>x</em>. Die Wertetabelle zeigt linke und rechte Seite, der Graph zeigt die Geraden \(y = 2x - 3\) und \(y = 5\). Die Lösung ist der Schnittpunkt.</p>
   </div>
   <div class="widget-body">
-    <div class="sl-row">
-      <label for="sl-three">x</label>
+    <div class="sl-row akz-blau">
+      <label for="sl-three"><span class="var"><em>x</em></span></label>
       <input type="range" id="sl-three" min="-2" max="8" step="0.5" value="3">
       <span class="sl-val" id="sv-three">3</span>
     </div>
@@ -261,6 +298,14 @@ dann alle Konstanten auf die andere, schliesslich durch den Koeffizienten teilen
 <!-- ════════════════════════════════════════════════════════════════
      6. SPEZIALFÄLLE — die drei Lösungsfälle
      ════════════════════════════════════════════════════════════════ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Lösungsverfahren</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(5x - 7 = 2x + 8\): Welcher erste Schritt sammelt die Variablen links?</p><ul class="mc-optionen"><li data-opt="A">beidseitig \(: 5\)</li><li data-opt="B">beidseitig \(- 2x\)</li><li data-opt="C">beidseitig \(\cdot\, 2\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(- 2x\) ergibt \(3x - 7 = 8\) — alle \(x\)-Glieder auf einer Seite.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Ziel der Äquivalenzumformungen ist, die Variable zu <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">isolieren — am Ende steht \(x = \ldots\) allein.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(5x - 7 = 2x + 8\) fertig.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(3x - 7 = 8\) → \(3x = 15\) → \(x = 5\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Löse \(4 \cdot (x - 2) = 2x + 6\).</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Klammer auflösen: \(4x - 8 = 2x + 6\). Dann \(2x = 14\), also \(x = 7\). Probe: \(4 \cdot 5 = 20 = 14 + 6\) ✓.</div></details></div>
+</details>
+
 <h2 id="spezialfaelle">Drei Lösungsfälle</h2>
 
 <p>Bringt man eine lineare Gleichung auf die Normalform \(a \cdot x + b = 0\), so entscheidet das Wertepaar
@@ -332,12 +377,28 @@ grösse, von der man wissen will, wie sich die Lösung in Abhängigkeit verhält
 
 <div class="widget">
   <div class="widget-header">
-    <h3>Schiebe den Parameter <em>k</em></h3>
+    <div class="widget-titelzeile">
+      <h3>Schiebe den Parameter <em>k</em></h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Fahre langsam über den ganzen \(k\)-Bereich: Bei welchem Wert passiert etwas Besonderes mit dem Lösungsfall — und was zeigt die Anzeige genau dort?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Fahre langsam über den ganzen k-Bereich: Bei welchem Wert passiert etwas Besonderes mit dem Lösungsfall — und was zeigt die Anzeige genau dort?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Eine Parameterdiskussion behandelt <strong>alle</strong> \(k\)-Werte auf einmal: am Sonderwert ändert sich der Lösungsfall, überall sonst gibt es genau eine Lösung als Formel in \(k\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Eine Parameterdiskussion behandelt alle k-Werte auf einmal: am Sonderwert ändert sich der Lösungsfall, überall sonst gibt es genau eine Lösung als Formel in k.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
     <p>Die Anzeige zeigt links die Zwischenform \((k-2) \cdot x = 3(k-2)\) und rechts den daraus folgenden Lösungsfall.</p>
   </div>
   <div class="widget-body">
-    <div class="sl-row">
-      <label for="sl-k">Parameter <em>k</em></label>
+    <div class="sl-row akz-blau">
+      <label for="sl-k">Parameter <span class="var"><em>k</em></span></label>
       <input type="range" id="sl-k" min="-3" max="6" step="0.5" value="4">
       <span class="sl-val" id="sv-k">4</span>
     </div>
@@ -366,7 +427,7 @@ grösse, von der man wissen will, wie sich die Lösung in Abhängigkeit verhält
 </div>
 
 <div class="block block-bsp">
-  <div class="block-titel">🟢 Beispiel · Lösung in Abhängigkeit von <em>k</em></div>
+  <div class="block-titel">🟢 Beispiel · Lösung in Abhängigkeit von \(k\)</div>
   <p>Für die obige Gleichung \((k-2) \cdot x = 3 \cdot (k - 2)\) gilt:</p>
   <ul style="margin:6px 0 0 22px">
     <li><em>k</em> = 2: beide Seiten werden 0, also \(\mathbb{L} = \mathbb{R}\) (Identität).</li>
@@ -393,6 +454,14 @@ grösse, von der man wissen will, wie sich die Lösung in Abhängigkeit verhält
 <!-- ════════════════════════════════════════════════════════════════
      7b. LINEARE UNGLEICHUNGEN — Kurzbehandlung
      ════════════════════════════════════════════════════════════════ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Lösungsfälle und Parameter</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(2x + 3 = 2x + 3\) hat …</p><ul class="mc-optionen"><li data-opt="A">keine Lösung</li><li data-opt="B">genau eine Lösung</li><li data-opt="C">unendlich viele Lösungen</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> Die Gleichung ist allgemeingültig: \(\mathbb{L} = \mathbb{R}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(0 \cdot x = 5\) hat <span class="mc-luecke"></span> Lösung.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">keine — \(\mathbb{L} = \emptyset\), die Aussage \(0 = 5\) ist für jedes \(x\) falsch.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(k \cdot x = 6\) — für \(k \neq 0\) und für \(k = 0\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(k \neq 0\): genau eine Lösung \(x = \tfrac{6}{k}\). \(k = 0\): \(0 = 6\) ist falsch, \(\mathbb{L} = \emptyset\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Für welchen Wert von \(k\) hat \(kx - 2x = 4\) keine Lösung?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Zusammenfassen: \((k - 2) \cdot x = 4\). Für \(k = 2\) wird daraus \(0 = 4\) — Widerspruch, \(\mathbb{L} = \emptyset\). Für alle \(k \neq 2\) gibt es genau eine Lösung \(x = \tfrac{4}{k-2}\).</div></details></div>
+</details>
+
 <h2 id="ungleichungen">Lineare Ungleichungen</h2>
 
 <p>Eine <strong>lineare Ungleichung</strong> entsteht, wenn das Gleichheitszeichen durch \(<,\;\le,\;>\) oder \(\ge\) ersetzt wird. Statt einer einzelnen Lösung erhält man typischerweise ein <em>Intervall</em>.</p>
@@ -432,6 +501,14 @@ grösse, von der man wissen will, wie sich die Lösung in Abhängigkeit verhält
   <div class="block-titel">⚠ Häufiger Fehler — Vorzeichen beim Umstellen</div>
   <p>Beim Verschieben eines Summanden über das Gleichheitszeichen ändert sich sein Vorzeichen. Aus \(2x + 5 = 11\) wird also \(2x = 11 - 5 = 6\), nicht \(2x = 11 + 5\). Wer mit Äquivalenzumformungen rechnet (\(-5\) auf beiden Seiten), läuft selten in diese Falle — bei mentalem „Rüberholen" passiert sie häufig. Tipp: Im Zweifel die Äquivalenzumformung explizit hinschreiben.</p>
 </div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Lineare Ungleichungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(-2x < 6\) — die Lösungsmenge ist …</p><ul class="mc-optionen"><li data-opt="A">\(x < -3\)</li><li data-opt="B">\(x > -3\)</li><li data-opt="C">\(x < 3\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Division durch \(-2\) kippt das Zeichen: \(x > -3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei Multiplikation oder Division mit einer negativen Zahl <span class="mc-luecke"></span> das Ungleichheitszeichen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">kippt (dreht sich um).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(3x - 5 \leq 7\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(3x \leq 12\), also \(x \leq 4\) — kein Kipp, da durch \(+3\) geteilt wird.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Schreibe die Lösungsmenge von \(x > -3\) als Intervall.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\mathbb{L} = \;]-3;\, \infty[\) — links offen (die \(-3\) gehört nicht dazu), rechts offen gegen unendlich.</div></details></div>
+</details>
 
 <h2 id="aufgaben">Aufgaben</h2>
 
@@ -649,6 +726,8 @@ grösse, von der man wissen will, wie sich die Lösung in Abhängigkeit verhält
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'grundlagen',

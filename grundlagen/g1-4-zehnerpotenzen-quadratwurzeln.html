@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,8 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <style>
   .pot-vis { display: grid; grid-template-columns: 1fr; gap: 4px; margin: 18px 0; max-width: 740px; }
   .pot-zeile { display: grid; grid-template-columns: 22mm 65mm 1fr; align-items: center; padding: 6px 12px; border-radius: 4px; gap: 12px; font-family: var(--mono); }
@@ -83,6 +85,19 @@ Notation.</p>
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann Zehnerpotenzen mit positiven und negativen Exponenten deuten und umrechnen.</li>
+      <li>Ich kann Zahlen in wissenschaftlicher Notation schreiben, lesen und vergleichen.</li>
+      <li>Ich kann die Potenzgesetze anwenden — bei gleicher Basis bzw. gleichem Exponenten.</li>
+      <li>Ich kann die Quadratwurzel definieren und die Wurzelgesetze nutzen.</li>
+      <li>Ich kann gemischte Terme mit Potenzen, Wurzeln und Klammern in der richtigen Reihenfolge auswerten.</li>
+    </ul>
+  </div>
+</details>
+
 <!-- ──────────────────────── 1. EINSTIEG ──────────────────────── -->
 <h2 id="einstieg">Einstieg — Vom Kosmos zum Atom</h2>
 
@@ -108,7 +123,23 @@ beherrscht, dem stehen Naturwissenschaften und Technik offen.</p>
 <p>Schieb in der Animation den Zoom-Regler von ganz klein bis ganz gross. Jede Stufe entspricht einer Zehnerpotenz — und an jeder Stelle ist ein Alltagsobjekt einsortiert. So bekommt der trockene Exponent ein Bild.</p>
 
 <div class="anim">
-  <div class="anim-titel">Vom Atom zur Galaxie — Zehnerpotenzen als Zoom-Skala</div>
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Vom Atom zur Galaxie — Zehnerpotenzen als Zoom-Skala</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Schiebe von \(10^0\) je eine Stufe nach oben und nach unten: Um welchen Faktor ändert sich die Länge pro Schritt? Und wo auf der Skala wohnst du selber (Körpergrösse)?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Schiebe von zehn hoch null je eine Stufe nach oben und nach unten: Um welchen Faktor ändert sich die Länge pro Schritt? Und wo auf der Skala wohnst du selber, also deine Körpergrösse?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Jede Stufe ist ein <strong>Faktor 10</strong> — der Exponent zählt die Kommaverschiebungen. Negative Exponenten sind nichts Exotisches: \(10^{-n}\) heisst einfach \(\tfrac{1}{10^n}\), die Skala läuft nahtlos weiter.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Jede Stufe ist ein Faktor zehn — der Exponent zählt die Kommaverschiebungen. Negative Exponenten sind nichts Exotisches: zehn hoch minus n heisst einfach eins durch zehn hoch n, die Skala läuft nahtlos weiter.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
   <div class="anim-layout">
     <canvas id="cv-zoom" width="560" height="340"></canvas>
     <div class="bedien">
@@ -236,6 +267,14 @@ ohne Sonderfall durchlaufen).</p>
 </div>
 
 <!-- ──────────────────────── 3. WISSENSCHAFTLICHE NOTATION ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Zehnerpotenzen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(10^{-3} = \;?\)</p><ul class="mc-optionen"><li data-opt="A">\(-1000\)</li><li data-opt="B">\(0.001\)</li><li data-opt="C">\(-0.001\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(10^{-3} = \tfrac{1}{10^3} = 0.001\) — der negative Exponent macht die Zahl klein, nicht negativ.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(10^0 =\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(1\) — jede Potenz mit Exponent 0 hat den Wert 1.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(10^2 \cdot 10^3\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(10^{2+3} = 10^5 = 100\,000\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Schreibe \(4.7 \cdot 10^4\) als gewöhnliche Zahl — mit der Komma-Verschiebungs-Regel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Exponent \(+4\) → Komma 4 Stellen nach rechts: \(4.7 \cdot 10^4 = 47\,000\).</div></details></div>
+</details>
+
 <h2 id="wissenschaftlich">Wissenschaftliche Notation</h2>
 
 <p>In der wissenschaftlichen Notation wird jede Zahl als Produkt einer <em>Mantisse</em> mit einer
@@ -336,6 +375,14 @@ Zehnerpotenz geschrieben:</p>
 </div>
 
 <!-- ──────────────────────── 4. POTENZGESETZE ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Wissenschaftliche Notation</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(5972 \cdot 10^{21}\) kg in wissenschaftlicher Notation?</p><ul class="mc-optionen"><li data-opt="A">\(5.972 \cdot 10^{24}\)</li><li data-opt="B">\(59.72 \cdot 10^{23}\)</li><li data-opt="C">\(0.5972 \cdot 10^{25}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Die Mantisse muss zwischen 1 und 10 liegen: \(5972 = 5.972 \cdot 10^3\), also \(5.972 \cdot 10^{3+21} = 5.972 \cdot 10^{24}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">In wissenschaftlicher Notation \(m \cdot 10^n\) gilt für die Mantisse: \(1 \leq m <\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(10\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Schreibe \(0.00042\) in wissenschaftlicher Notation.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Komma 4 Stellen nach rechts: \(0.00042 = 4.2 \cdot 10^{-4}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Welche Zahl ist grösser: \(3.1 \cdot 10^5\) oder \(9.8 \cdot 10^4\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Zuerst die Exponenten vergleichen: \(10^5 > 10^4\), also ist \(3.1 \cdot 10^5 = 310\,000\) grösser als \(9.8 \cdot 10^4 = 98\,000\) — obwohl die Mantisse 9.8 grösser als 3.1 ist.</div></details></div>
+</details>
+
 <h2 id="potenzgesetze">Potenzgesetze <a class="quer" href="g1-3-algebraische-terme.html#binomi">↗ 1.3</a></h2>
 
 <p>Die folgenden Regeln gelten für <em>jede</em> Basis \(a, b\) (mit \(a, b \neq 0\) wo Division
@@ -384,6 +431,14 @@ oder negative Exponenten auftreten) und ganzzahlige Exponenten \(n, m\):</p>
 </div>
 
 <!-- ──────────────────────── 5. QUADRATWURZELN ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Potenzgesetze</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(2^3 \cdot 5^4 = \;?\)</p><ul class="mc-optionen"><li data-opt="A">\(10^7\)</li><li data-opt="B">\(10^{12}\)</li><li data-opt="C">lässt sich nicht zu einer Potenz zusammenfassen</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> Verschiedene Basen <em>und</em> verschiedene Exponenten — kein Potenzgesetz greift. Der Wert ist \(8 \cdot 625 = 5\,000\), nicht \(10^7\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei gleicher Basis gilt \(a^n \cdot a^m = a^{\,n\; \square\; m}\) mit \(\square =\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(+\) — die Exponenten werden addiert.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \((10^2)^3\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Potenz einer Potenz → Exponenten multiplizieren: \(10^{2 \cdot 3} = 10^6\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Vereinfache \(\dfrac{4^5}{4^3}\) und gib den Wert an.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Gleiche Basis, Division → Exponenten subtrahieren: \(4^{5-3} = 4^2 = 16\).</div></details></div>
+</details>
+
 <h2 id="wurzeln">Quadratwurzeln</h2>
 
 <p>Die <strong>Quadratwurzel</strong> aus einer nichtnegativen Zahl \(a\) ist die <em>nichtnegative</em>
@@ -429,8 +484,8 @@ Formeln rückwärts.</p>
 <h3>Wurzeln aus Nicht-Quadratzahlen <a class="quer" href="g1-2-zahlen-grundoperationen.html">↩ 1.2</a></h3>
 
 <p>Wurzeln aus Zahlen, die keine perfekten Quadrate sind, ergeben <em>irrationale</em> Zahlen — sie
-besitzen unendlich viele Nachkommastellen ohne Periode. Im Sekundarstufen-Unterricht stehen oft drei
-besonders wichtige bei:</p>
+besitzen unendlich viele Nachkommastellen ohne Periode. Einige besonders häufige lohnt es sich,
+ungefähr im Kopf zu haben:</p>
 
 \[ \sqrt{2} \approx 1.4142 \qquad \sqrt{3} \approx 1.7321 \qquad \sqrt{5} \approx 2.2361 \qquad \sqrt{7} \approx 2.6458 \qquad \sqrt{10} \approx 3.1623 \]
 
@@ -556,6 +611,14 @@ herausgezogen werden:</p>
    \;=\; \dfrac{\sqrt{5} + \sqrt{3}}{5 - 3} \;=\; \dfrac{\sqrt{5} + \sqrt{3}}{2}. \]
 
 <!-- ──────────────────────── 7. HIERARCHIE DER OPERATIONEN ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Wurzeln und Wurzelgesetze</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(\sqrt{9 + 16} = \;?\)</p><ul class="mc-optionen"><li data-opt="A">\(7\)</li><li data-opt="B">\(5\)</li><li data-opt="C">\(3 + 4\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Die Wurzel wirkt wie eine Klammer: erst \(9 + 16 = 25\), dann \(\sqrt{25} = 5\). Nicht \(\sqrt{9} + \sqrt{16} = 7\)!</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(\sqrt{a}\) ist für \(a \geq 0\) die <span class="mc-luecke"></span> Zahl, deren Quadrat \(a\) ergibt.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">nichtnegative — darum ist \(\sqrt{9} = 3\) und nicht \(\pm 3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(\sqrt{36 \cdot 25}\) mit einem Wurzelgesetz.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\sqrt{36 \cdot 25} = \sqrt{36} \cdot \sqrt{25} = 6 \cdot 5 = 30\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Gilt \(\sqrt{a + b} = \sqrt{a} + \sqrt{b}\)? Begründe mit einem Gegenbeispiel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nein — die Wurzelgesetze gelten nur für Produkt und Quotient. Gegenbeispiel \(a = 9\), \(b = 16\): links \(\sqrt{25} = 5\), rechts \(3 + 4 = 7\).</div></details></div>
+</details>
+
 <h2 id="hierarchie">Hierarchie — wenn Potenzen, Wurzeln und Operationen aufeinandertreffen <a class="quer" href="g1-1-grundlagen.html#typen">↩ 1.1</a></h2>
 
 <p>Aus Kapitel 1.1 kennst du die Hierarchie der Operationen. Mit Potenzen und Wurzeln wird sie um
@@ -586,6 +649,14 @@ zwei Stufen erweitert:</p>
 </div>
 
 <!-- ──────────────────────── 8. AUFGABEN ──────────────────────── -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Hierarchie mit Potenzen und Wurzeln</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(-3^2 = \;?\)</p><ul class="mc-optionen"><li data-opt="A">\(9\)</li><li data-opt="B">\(-9\)</li><li data-opt="C">\(\pm 9\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(-3^2 = -(3^2) = -9\). Für \(+9\) braucht es die Klammer: \((-3)^2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Potenz bindet stärker als das <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Vorzeichen (die Negation) — deshalb gilt \(-x^2 = -(x^2)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(2 \cdot (5 - 1)^2\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Klammer zuerst: \((5-1) = 4\), dann Potenz: \(4^2 = 16\), dann \(2 \cdot 16 = 32\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Berechne \(3 \cdot \sqrt{25} - 2^2\) — in der richtigen Reihenfolge.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Wurzel und Potenz zuerst: \(\sqrt{25} = 5\), \(2^2 = 4\). Dann Punkt vor Strich: \(3 \cdot 5 = 15\), zuletzt \(15 - 4 = 11\).</div></details></div>
+</details>
+
 <h2 id="aufgaben">Aufgaben</h2>
 
 <div class="block block-aufg">

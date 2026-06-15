@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-CH">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,6 +101,20 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann den Graphen einer linearen Funktion \(f(x) = m \cdot x + b\) als Gerade zeichnen und umgekehrt aus einem Graphen die Gleichung ablesen.</li>
+      <li>Ich kann \(m\) als Steigung \(\frac{\Delta y}{\Delta x}\) und \(b\) als \(y\)-Achsenabschnitt deuten — auch im Sachkontext (Kilopreis, Fixkosten).</li>
+      <li>Ich kann zwischen den drei Darstellungen Gleichung, Wertetabelle und Graph wechseln und sie aufeinander beziehen.</li>
+      <li>Ich kann die Nullstelle \(x_0 = -\frac{b}{m}\) berechnen und sie vom \(y\)-Achsenabschnitt unterscheiden.</li>
+      <li>Ich kann die Typen linearer Funktionen (proportional, konstant, Identität) sowie parallele und senkrechte Geraden an den Koeffizienten erkennen.</li>
+      <li>Ich kann die Funktionsgleichung einer Geraden aus Steigung und Punkt oder aus zwei Punkten aufstellen.</li>
+    </ul>
+  </div>
+</details>
+
 <!-- ══ 1. EINSTIEG ══ -->
 <h2 id="einstieg">Einstieg — eine Kostenfunktion</h2>
 
@@ -112,19 +126,35 @@ MathJax = {
 
 <div class="widget">
   <div class="widget-header">
-    <h3>🥔 Kartoffeln kaufen — \(K(x) = 2 \cdot x + 5\) <a class="quer" href="g2-2a-lineare-gleichungen.html">↩ 2.2a</a></h3>
+    <div class="widget-titelzeile">
+      <h3>🥔 Kartoffeln kaufen — \(K(x) = 2 \cdot x + 5\) <a class="quer" href="g2-2a-lineare-gleichungen.html">↩ 2.2a</a></h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Stelle den Regler zuerst auf \(0\) kg: Was kostet es trotzdem? Beobachte dann, um wie viel \(K(x)\) bei jedem Schritt (+2 kg) wächst — in der Tabelle <em>und</em> am Punkt im Graphen.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Stelle den Regler zuerst auf null Kilogramm: Was kostet es trotzdem? Beobachte dann, um wie viel K von x bei jedem Schritt von plus zwei Kilogramm wächst — in der Tabelle und am Punkt im Graphen.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Wert bei \(x = 0\) ist der Achsenabschnitt \(b = 5\) — die Fixkosten. Der gleichmässige Zuwachs von 2&nbsp;CHF pro kg ist die Steigung \(m\). Eine lineare Funktion wächst in gleichen Schritten immer um den gleichen Betrag.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Wert bei x gleich null ist der Achsenabschnitt b gleich fünf — die Fixkosten. Der gleichmässige Zuwachs von zwei Franken pro Kilogramm ist die Steigung m. Eine lineare Funktion wächst in gleichen Schritten immer um den gleichen Betrag.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
     <p>Gebinde 5 CHF · Kilopreis 2 CHF/kg · Menge 0–14 kg</p>
   </div>
   <div class="widget-body">
-    <div class="sl-row">
-      <label>Menge \(x\) [kg]</label>
+    <div class="sl-row akz-blau">
+      <label>Menge <span class="var">\(x\)</span> [kg]</label>
       <input type="range" id="ks-x" min="0" max="14" step="2" value="4">
       <span class="sl-val"><span id="ks-xv">4</span> kg</span>
     </div>
     <div class="formel-live">
       <div class="fl-label">Funktion und Auswertung</div>
-      <div class="fl-eq">K(x) = 2·x + 5</div>
-      <div class="fl-eq fl-eval" id="ks-eq" style="font-size:0.95rem;color:var(--blau);margin-top:4px">K(4) = 2·4 + 5 = 13.00 CHF</div>
+      <div class="fl-eq">K(<span class="tx-blau">x</span>) = 2·<span class="tx-blau">x</span> + 5</div>
+      <div class="fl-eq fl-eval" id="ks-eq" style="font-size:0.95rem;margin-top:4px">K(<span class="tx-blau">4</span>) = 2·<span class="tx-blau">4</span> + 5 = 13.00 CHF</div>
     </div>
     <div class="zwei-spalten">
       <div>
@@ -150,6 +180,14 @@ MathJax = {
     <li>Der <strong>Achsenabschnitt \(b=5\)</strong> sind die Fixkosten: auch ohne Kartoffeln kostet das Gebinde 5 CHF</li>
   </ul>
 </div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was bedeutet die \(5\) in \(K(x) = 2 \cdot x + 5\)?</p><ul class="mc-optionen"><li data-opt="A">Den Kilopreis der Kartoffeln</li><li data-opt="B">Die Fixkosten für das Gebinde</li><li data-opt="C">Die maximale Menge in kg</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Bei \(x = 0\) kg gilt \(K(0) = 5\) CHF — das Gebinde kostet auch ohne Kartoffeln. Der Kilopreis steckt in der Steigung \(m = 2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Pro zusätzliches Kilogramm steigen die Kosten um <span class="mc-luecke"></span> CHF — das ist die Steigung der Funktion.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">2 CHF (die Steigung \(m = 2\); ablesbar als gleichmässiger Zuwachs in der Wertetabelle).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Was kosten \(10\) kg Kartoffeln?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(K(10) = 2 \cdot 10 + 5 = 25\) CHF.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein zweiter Anbieter verlangt \(8\) CHF fürs Gebinde, aber nur \(1.50\) CHF pro kg: \(K_2(x) = 1.5 \cdot x + 8\). Ab welcher Menge ist er günstiger?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ansatz: \(K(x) = K_2(x)\), also \(2 \cdot x + 5 = 1.5 \cdot x + 8\). Auflösen: \(0.5 \cdot x = 3\), also \(x = 6\). Bei genau \(6\) kg kosten beide \(17\) CHF — für mehr als \(6\) kg ist Anbieter 2 günstiger (Probe: bei \(7\) kg sind es \(19\) gegen \(18.50\) CHF).</div></details></div>
+</details>
 
 <!-- ══ 2. DEFINITION ══ -->
 <h2 id="definition">Definition und Parameter</h2>
@@ -183,18 +221,36 @@ MathJax = {
 
 <div class="widget">
   <div class="widget-header">
-    <h3>Interaktive Darstellungen</h3>
+    <div class="widget-titelzeile">
+      <h3>Interaktive Darstellungen</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verändere zuerst <em>nur</em> \(b\): Was passiert mit der Geraden, was mit der Wertetabelle? Verändere dann <em>nur</em> \(m\) — vergleiche besonders \(m = 2\) mit \(m = -2\). Wo findest du \(b\) in allen drei Darstellungen wieder?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verändere zuerst nur b: Was passiert mit der Geraden, was mit der Wertetabelle? Verändere dann nur m — vergleiche besonders m gleich zwei mit m gleich minus zwei. Wo findest du b in allen drei Darstellungen wieder?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">\(b\) verschiebt die Gerade nur senkrecht — in der Tabelle ändert sich jeder \(y\)-Wert um denselben Betrag. \(m\) kippt die Gerade um den Punkt \((0 \mid b)\); negatives \(m\) lässt sie fallen. Gleichung, Tabelle und Graph zeigen immer dieselbe Funktion.</div>
+          <button class="ah-speak" type="button" data-vorlesen="b verschiebt die Gerade nur senkrecht — in der Tabelle ändert sich jeder y-Wert um denselben Betrag. m kippt die Gerade um den Punkt null senkrecht b; negatives m lässt sie fallen. Gleichung, Tabelle und Graph zeigen immer dieselbe Funktion.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
     <p>\(f(x) = mx + b\) · alle drei Darstellungsformen verknüpft</p>
   </div>
   <div class="widget-body">
-    <div class="sl-row"><label>Steigung \(m\)</label><input type="range" id="dr-m" min="-5" max="5" step="1" value="2"><span class="sl-val" id="dr-mv">2</span></div>
-    <div class="sl-row"><label>Achsenabschnitt \(b\)</label><input type="range" id="dr-b" min="-5" max="5" step="1" value="-3"><span class="sl-val" id="dr-bv">−3</span></div>
-    <div class="sl-row"><label>Eingabewert \(x\)</label><input type="range" id="dr-x" min="-5" max="5" step="1" value="2"><span class="sl-val" id="dr-xv">2</span></div>
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Steigung <span class="var">\(m\)</span></label><input type="range" id="dr-m" min="-5" max="5" step="1" value="2"><span class="sl-val" id="dr-mv">2</span></div>
+      <div class="sl-grp akz-orange"><label>Achsenabschnitt <span class="var">\(b\)</span></label><input type="range" id="dr-b" min="-5" max="5" step="1" value="-3"><span class="sl-val" id="dr-bv">−3</span></div>
+      <div class="sl-grp akz-gruen"><label>Eingabewert <span class="var">\(x\)</span></label><input type="range" id="dr-x" min="-5" max="5" step="1" value="2"><span class="sl-val" id="dr-xv">2</span></div>
+    </div>
 
     <div class="formel-live">
       <div class="fl-label">① Funktionsgleichung</div>
-      <div class="fl-eq" id="dr-eq">f(x) = 2·x − 3</div>
-      <div class="fl-eq fl-eval" id="dr-eval" style="font-size:0.95rem;color:var(--blau);margin-top:4px">f(2) = 2·2 − 3 = 1</div>
+      <div class="fl-eq" id="dr-eq">f(<span class="tx-gruen">x</span>) = <span class="tx-blau">2</span>·<span class="tx-gruen">x</span> − <span class="tx-orange">3</span></div>
+      <div class="fl-eq fl-eval" id="dr-eval" style="font-size:0.95rem;margin-top:4px">f(<span class="tx-gruen">2</span>) = <span class="tx-blau">2</span>·<span class="tx-gruen">2</span> − <span class="tx-orange">3</span> = 1</div>
     </div>
 
     <div class="zwei-spalten">
@@ -226,6 +282,14 @@ MathJax = {
   \[ 0 = mx_0+b \quad\Longrightarrow\quad x_0 = -\frac{b}{m} \quad(m\neq 0) \]
 </div>
 
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Steigung, Achsenabschnitt, Nullstelle</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Eine Gerade geht durch \(P(2 \mid 1)\) und \(Q(6 \mid 9)\). Wie gross ist die Steigung \(m\)?</p><ul class="mc-optionen"><li data-opt="A">\(m = 2\)</li><li data-opt="B">\(m = 4\)</li><li data-opt="C">\(m = 8\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(m = \dfrac{y_2 - y_1}{x_2 - x_1} = \dfrac{9 - 1}{6 - 2} = \dfrac{8}{4} = 2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Nullstelle von \(f(x) = m \cdot x + b\) liegt bei \(x_0 = \) <span class="mc-luecke"></span> (für \(m \neq 0\)).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(x_0 = -\dfrac{b}{m}\) — aus dem Ansatz \(0 = m \cdot x_0 + b\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme die Nullstelle von \(f(x) = 4 \cdot x - 6\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(0 = 4 \cdot x_0 - 6\), also \(x_0 = \dfrac{6}{4} = 1.5\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Für \(f(x) = -2 \cdot x + 8\): In welchem Punkt schneidet der Graph die \(y\)-Achse, in welchem die \(x\)-Achse? Und woran erkennst du schon an der Gleichung, dass der Graph fällt?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(y\)-Achse: \(f(0) = 8\), also Punkt \((0 \mid 8)\) — der Achsenabschnitt \(b\). \(x\)-Achse: \(x_0 = -\dfrac{8}{-2} = 4\), also Punkt \((4 \mid 0)\) — die Nullstelle. Der Graph fällt, weil \(m = -2 < 0\) ist.</div></details></div>
+</details>
+
 <!-- ══ 5. TYPEN + VISUALISIERUNG ══ -->
 <h2 id="typen">Typen linearer Funktionen</h2>
 
@@ -252,11 +316,35 @@ MathJax = {
   </table>
 </div>
 
-<p style="margin-top:14px;margin-bottom:8px">Klicke auf einen Fall — nur dieser wird angezeigt:</p>
+<div class="widget-titelzeile" style="margin-top:14px;margin-bottom:8px">
+  <p style="margin:0">Klicke auf einen Fall — nur dieser wird angezeigt:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Klicke nacheinander durch alle Fälle: Worin unterscheiden sich proportionale Funktion und Identität? Und warum trägt die senkrechte Gerade den Hinweis «keine Funktion»?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Klicke nacheinander durch alle Fälle: Worin unterscheiden sich proportionale Funktion und Identität? Und warum trägt die senkrechte Gerade den Hinweis keine Funktion?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Proportional heisst \(b = 0\) — die Gerade geht durch den Ursprung; die Identität ist davon der Spezialfall \(m = 1\). Die senkrechte Gerade \(x = k\) ordnet einem einzigen \(x\)-Wert unendlich viele \(y\)-Werte zu — das verletzt die Funktionsdefinition.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Proportional heisst b gleich null — die Gerade geht durch den Ursprung; die Identität ist davon der Spezialfall m gleich eins. Die senkrechte Gerade x gleich k ordnet einem einzigen x-Wert unendlich viele y-Werte zu — das verletzt die Funktionsdefinition.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
 
 <div class="typ-btns" id="typ-btns"></div>
 <div class="cv-wrap"><canvas id="typ-canvas" height="220"></canvas></div>
 <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="typ-desc"></div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Typen und Lagebeziehungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Gleichung beschreibt eine Gerade, die <em>keine</em> Funktion ist?</p><ul class="mc-optionen"><li data-opt="A">\(y = 3\)</li><li data-opt="B">\(x = 3\)</li><li data-opt="C">\(y = 3 \cdot x\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Die senkrechte Gerade \(x = 3\) ordnet dem einen Wert \(x = 3\) unendlich viele \(y\)-Werte zu — das verletzt die Funktionsdefinition. \(y = 3\) ist die konstante Funktion, \(y = 3 \cdot x\) eine proportionale Funktion.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Eine proportionale Funktion hat die Form \(f(x) = m \cdot x\); ihr Graph geht immer durch den <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ursprung \((0 \mid 0)\) — denn \(b = 0\) bedeutet \(f(0) = 0\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Welche Steigung hat eine Gerade, die senkrecht auf \(y = 2 \cdot x + 1\) steht?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Bedingung \(m_1 \cdot m_2 = -1\), also \(m_2 = -\dfrac{1}{2}\) (Probe: \(2 \cdot \left(-\tfrac{1}{2}\right) = -1\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Schneiden sich die Geraden \(y = 3 \cdot x + 2\) und \(y = 3 \cdot x - 5\)? Begründe rechnerisch.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ansatz Schnittpunkt: \(3 \cdot x + 2 = 3 \cdot x - 5\) führt auf \(2 = -5\) — ein Widerspruch, es gibt keine Lösung. Die Geraden sind parallel (\(m_1 = m_2 = 3\), aber \(b_1 \neq b_2\)) und schneiden sich nie.</div></details></div>
+</details>
 
 <!-- ══ 6. GLEICHUNG AUFSTELLEN ══ -->
 <h2 id="gleichung-aufstellen">Funktionsgleichung aufstellen</h2>
@@ -284,7 +372,7 @@ MathJax = {
 </div>
 
 <div class="block block-fehler">
-  <div class="block-titel">⚠ Häufiger Fehler — y-Achsenabschnitt mit Nullstelle verwechseln</div>
+  <div class="block-titel">⚠ Häufiger Fehler — \(y\)-Achsenabschnitt mit Nullstelle verwechseln</div>
   <p>In der Gleichung \(y = m\cdot x + b\) ist \(b\) der <strong>y-Wert bei \(x = 0\)</strong> — der Schnittpunkt der Geraden mit der y-Achse. Die Nullstelle hingegen ist der x-Wert, bei dem \(y = 0\) ist, also \(x = -b/m\). Beide Werte sind gleichzeitig im Graphen sichtbar, aber sie bedeuten verschiedene Dinge. Wer „Achsenabschnitt" hört und automatisch die Nullstelle hinschreibt, verfehlt die Aufgabe.</p>
 </div>
 
@@ -292,6 +380,14 @@ MathJax = {
   <div class="block-titel">💡 Strategie — Steigung im Graphen ablesen</div>
   <p>Suche zwei <em>Gitterpunkte</em> auf der Geraden — Punkte, deren \(x\)- und \(y\)-Koordinaten ganzzahlig sind. Zähle die Schritte nach rechts (\(\Delta x\)) und nach oben (\(\Delta y\), nach unten zählt negativ). Die Steigung ist \(m = \Delta y / \Delta x\). Beispiel: zwei Schritte nach rechts, drei Schritte nach unten → \(m = -3/2 = -1.5\). Wer immer Gitterpunkte wählt, vermeidet Ablese-Fehler durch ungenaue Zwischenwerte.</p>
 </div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Funktionsgleichung aufstellen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Eine Gerade mit Steigung \(m = -2\) geht durch \(P(3 \mid 1)\). Wie gross ist \(b\)?</p><ul class="mc-optionen"><li data-opt="A">\(b = -5\)</li><li data-opt="B">\(b = 7\)</li><li data-opt="C">\(b = 5\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(b = y_1 - m \cdot x_1 = 1 - (-2) \cdot 3 = 1 + 6 = 7\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Durch zwei verschiedene Punkte (mit \(x_1 \neq x_2\)) geht genau <span class="mc-luecke"></span> Gerade.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">eine — darum genügen zwei Punkte, um \(m\) und \(b\) eindeutig zu bestimmen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Stelle die Funktionsgleichung der Geraden durch \(P_1(-1 \mid 4)\) und \(P_2(2 \mid -2)\) auf.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(m = \dfrac{-2 - 4}{2 - (-1)} = \dfrac{-6}{3} = -2\), dann \(b = 4 - (-2) \cdot (-1) = 2\). Also \(f(x) = -2 \cdot x + 2\) (Probe: \(f(2) = -2\) ✓).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Eine Gerade hat die Nullstelle \(x_0 = 5\) und den \(y\)-Achsenabschnitt \(b = 10\). Bestimme die Funktionsgleichung — ohne dass zwei Punkte direkt gegeben sind.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nullstelle und Achsenabschnitt <em>sind</em> zwei Punkte: \((5 \mid 0)\) und \((0 \mid 10)\). Daraus \(m = \dfrac{0 - 10}{5 - 0} = -2\), und \(b = 10\) ist gegeben. Also \(f(x) = -2 \cdot x + 10\) (Probe: \(f(5) = 0\) ✓).</div></details></div>
+</details>
 
 <h2 id="aufgaben">Aufgaben</h2>
 
@@ -335,7 +431,7 @@ MathJax = {
 
 
   <div class="block block-aufg" style="margin-bottom:10px">
-    <div class="block-titel">🟠 a) Aus Steigung und y-Achsenabschnitt</div>
+    <div class="block-titel">🟠 a) Aus Steigung und \(y\)-Achsenabschnitt</div>
     <p>\(m=3\), \(b=-4\). Wie lautet \(f(x)\)?</p>
     <div class="eingabe-row"><input type="text" id="a3a" placeholder="f(x) = ..."><button class="btn-pruef" onclick="chk('a3a','3x-4','3·x − 4')">Prüfen</button></div>
     <div class="cr" id="a3a-cr"></div>
@@ -349,7 +445,7 @@ MathJax = {
   </div>
 
   <div class="block block-aufg" style="margin-bottom:10px">
-    <div class="block-titel">🟠 c) Aus y-Achsenabschnitt und einem Punkt</div>
+    <div class="block-titel">🟠 c) Aus \(y\)-Achsenabschnitt und einem Punkt</div>
     <p>\(b=2\), \(P(4\mid 10)\). Wie lautet \(f(x)\)?</p>
     <div class="eingabe-row"><input type="text" id="a3c" placeholder="f(x) = ..."><button class="btn-pruef" onclick="chk('a3c','2x+2','2·x + 2')">Prüfen</button></div>
     <div class="cr" id="a3c-cr"></div>
@@ -518,6 +614,8 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'grundlagen', id:'g3-2',
@@ -532,7 +630,8 @@ function updateKS(){
   const x=parseInt(document.getElementById('ks-x').value);
   document.getElementById('ks-xv').textContent=x;
   const y=KS.m*x+KS.b;
-  document.getElementById('ks-eq').textContent=`K(${x}) = 2·${x} + 5 = ${y.toFixed(2)} CHF`;
+  const xB=`<span class="tx-blau">${x}</span>`;
+  document.getElementById('ks-eq').innerHTML=`K(${xB}) = 2·${xB} + 5 = ${y.toFixed(2)} CHF`;
   // Table
   const tbody=document.querySelector('#ks-table tbody');
   tbody.innerHTML=KS.xs.map(xi=>{
@@ -584,20 +683,22 @@ function updateDR(){
   document.getElementById('dr-mv').textContent=m;
   document.getElementById('dr-bv').textContent=b;
   document.getElementById('dr-xv').textContent=x;
-  // Gleichung (allgemeine Form)
-  const bStr=b===0?'':(b>0?` + ${b}`:` − ${Math.abs(b)}`);
-  const mStr=m===0?'':(m===1?'x':(m===-1?'-x':`${m}·x`));
-  document.getElementById('dr-eq').textContent=`f(x) = ${mStr||'0'}${bStr}`;
+  // Gleichung (allgemeine Form) — Bestandteile in den Gruppen-Akzentfarben:
+  // m blau, x grün, b orange (Werte sind Slider-Ganzzahlen, innerHTML unkritisch)
+  const T=(c,s)=>`<span class="tx-${c}">${s}</span>`;
+  const bStr=b===0?'':(b>0?` + ${T('orange',b)}`:` − ${T('orange',Math.abs(b))}`);
+  const mStr=m===0?'':(m===1?T('gruen','x'):(m===-1?`-${T('gruen','x')}`:`${T('blau',m)}·${T('gruen','x')}`));
+  document.getElementById('dr-eq').innerHTML=`f(${T('gruen','x')}) = ${mStr||T('blau','0')}${bStr}`;
   // Auswertung (konkrete Zeile mit eingesetztem x)
   // Konvention: negative Zahlen in Klammern setzen, wenn sie als Faktor stehen
-  const xDisp = x<0 ? `(${x})` : `${x}`;
+  const xDisp = x<0 ? `(${T('gruen',x)})` : T('gruen',x);
   let mxTerm;
-  if(m===0) mxTerm = '0';
+  if(m===0) mxTerm = T('blau','0');
   else if(m===1) mxTerm = xDisp;
-  else if(m===-1) mxTerm = x<0 ? `-${xDisp}` : `-${x}`;
-  else mxTerm = `${m}·${xDisp}`;
-  const evalStr = m===0 ? `${b}` : `${mxTerm}${bStr}`;
-  document.getElementById('dr-eval').textContent = `f(${x}) = ${evalStr} = ${y}`;
+  else if(m===-1) mxTerm = x<0 ? `-${xDisp}` : `-${T('gruen',x)}`;
+  else mxTerm = `${T('blau',m)}·${xDisp}`;
+  const evalStr = m===0 ? T('orange',b) : `${mxTerm}${bStr}`;
+  document.getElementById('dr-eval').innerHTML = `f(${T('gruen',x)}) = ${evalStr} = ${y}`;
   // Tabelle
   const xs=[-3,-2,-1,0,1,2,3];
   const tbody=document.querySelector('#dr-table tbody');

@@ -1,6 +1,6 @@
 # TALS-Mathematik · Styleguide
 
-**Version 1.9 · Stand: Mai 2026**
+**Version 1.13 · Stand: Juni 2026** · (1.13: §11 Nachschlagen-Seiten Glossar/Formelsammlung; 1.12: §10.4 verbindliche Färbe-Regel präzisiert; 1.11: §10 Didaktische Module aus TALS-Physik — Lernziele, Mini-Checks, Animations-Hinweise, Slider-Gruppierung mit akz-Farbkopplung)
 
 Dieser Styleguide ist die verbindliche Referenz für alle Themenseiten des Lehrmittels „TALS-Mathematik". Er sichert Konsistenz in Notation, Aufbau, Sprache und visuellem Design — kapitelübergreifend und chatübergreifend.
 
@@ -78,7 +78,7 @@ f : \mathbb{R} \longrightarrow \mathbb{R}, \quad x \longmapsto m \cdot x + b
 - **Display-Formeln:** `\[...\]` — eigene Zeile
 - **Fraktionen:** `\frac{Zähler}{Nenner}`, in Tabellen `\displaystyle\frac{...}{...}` für volle Höhe
 - **Bedingung am Ende:** `\quad (m \neq 0)`
-- **Symbole:** `\parallel`, `\perp`, `\Longrightarrow` (kein einfacher Pfeil)
+- **Symbole:** `\parallel`, `\perp`, Folgerungspfeil `\Longrightarrow` oder `\Rightarrow` (innerhalb einer Seite einheitlich; nie der einfache Pfeil `\rightarrow` als Folgerung)
 - **Mengen:** `\mathbb{R}`, `\mathbb{N}`
 
 **Highlighting verbundener Formel-Teile (`\bbox`):** Wenn derselbe Term in zwei Formeln auftaucht und visuell verbunden werden soll (z.B. Diskriminante in Mitternachtsformel und in `D = b² − 4ac` in g3-3), benutze `\bbox[#fde9c7, 3px]{b^2 - 4ac}` (orange Hinterlegung mit 3 px Padding) konsistent in beiden Formeln. Optional ein verbindender Text „↑ derselbe Ausdruck ↓" zwischen den Formeln. Bei dynamischer Live-Anzeige im JS gleiche Farbgebung über CSS-Klasse (z.B. `<span class="disk-hl">`, Hintergrund `#fde9c7`).
@@ -261,7 +261,7 @@ g2-2b-quadratische-gleichungen.html  ← Teil 2 von 2
 
 **Regeln für den Sub-Split:**
 
-- Jede Sub-Seite folgt **vollständig** dem Master-Schema (Abschnitte 1–10): eigener Einstieg, eigene Definition, eigene A1–A6, eigene Zusammenfassung — keine Verweise auf die Schwesterseite für fehlende Inhalte.
+- Jede Sub-Seite folgt **vollständig** dem Master-Schema (Abschnitte 1–10): eigener Einstieg, eigene Definition, eigene A1–A6 (plus optional A7 Vertiefung), eigene Zusammenfassung — keine Verweise auf die Schwesterseite für fehlende Inhalte.
 - Im **RLP-Header** wird auf die Aufteilung hingewiesen: „Teil 1 von 2" bzw. „Teil 2 von 2". Die genannten RLP-Kompetenzen sind diejenigen, die auf der jeweiligen Sub-Seite tatsächlich abgedeckt werden (anteilig, nicht das ganze Bündel).
 - **Zusatzmaterial getrennt pro Sub-Seite**: jede Sub-Seite hat ihren eigenen Ordner unter `downloads/<bereich>/<id>/` mit den fünf Standard-Dateien (Handout, Formelauszug, Anki-Deck, Teste dich selbst, Aufgabenserie). Damit bleibt jede Sub-Seite als eigene Lerneinheit selbsttragend.
 - **Externe Ressourcen ebenfalls getrennt** und auf den Inhalt der Sub-Seite zugeschnitten.
@@ -570,13 +570,13 @@ buildNav({
 <div class="dl-grid">
   <a href="../downloads/grundlagen/⟪slug⟫/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/⟪slug⟫/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">…</div><div class="dl-fmt">Druckseite</div></div></a>
-  <a href="../downloads/grundlagen/⟪slug⟫/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
   <a href="../downloads/grundlagen/⟪slug⟫/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/⟪slug⟫/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/grundlagen/⟪slug⟫/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
 </div>
 ```
 
-Container ist `.dl-grid` (nicht `dl-box`, das existiert nicht). Jede Karte ist `<a class="dl">` mit Icon-Span, Titel-Div und Sub-Div. Reihenfolge ist fix: Handout → Formelauszug → Anki-Deck → Teste dich selbst → Aufgabenserie. Optionale 6. Karte für „Zusatz: …" über RLP hinaus erlaubt.
+Container ist `.dl-grid` (nicht `dl-box`, das existiert nicht). Jede Karte ist `<a class="dl">` mit Icon-Span, Titel-Div und Sub-Div. Reihenfolge ist fix: Handout → Formelauszug → Teste dich selbst → Aufgabenserie → Anki-Deck. Optionale 6. Karte für „Zusatz: …" über RLP hinaus erlaubt — sie steht am Ende des Grids (nach dem Anki-Deck).
 
 **Externe-Ressourcen-Sektion (Pflicht-Konvention):**
 
@@ -864,7 +864,7 @@ Bevor eine Themenseite live geht, prüfe:
 - [ ] Mindestens ein Anwendungsbeispiel im Einstieg
 - [ ] Drei Darstellungen (Gleichung/Tabelle/Graph) verknüpft
 - [ ] Spezialfälle visualisiert
-- [ ] 6 Aufgaben mit zunehmender Selbstständigkeit
+- [ ] 6 Aufgaben (A1–A6) mit zunehmender Selbstständigkeit; optional eine 7. Vertiefungsaufgabe (A7, Badge „Vertiefung") — der Intro-Text nennt dann „Sieben Aufgaben" bzw. eine neutrale Formulierung
 - [ ] Zusammenfassung als kompakte Tabelle
 
 **Notation**
@@ -882,7 +882,7 @@ Bevor eine Themenseite live geht, prüfe:
 
 **Struktur & Konventionen**
 - [ ] Zusatzmaterial-Sektion vor externen Ressourcen
-- [ ] Alle 5 Einträge in fester Reihenfolge: Handout · Formelauszug · Anki-Deck · Teste dich selbst · Aufgabenserie
+- [ ] Alle 5 Einträge in fester Reihenfolge: Handout · Formelauszug · Teste dich selbst · Aufgabenserie · Anki-Deck (optionale Zusatz-Karte am Ende)
 - [ ] Druckseiten öffnen in neuem Tab (`target="_blank" rel="noopener"`)
 - [ ] Anki-Deck als Download verlinkt (`.apkg`), die anderen vier als HTML-Druckseiten
 - [ ] **Footer korrekt im Format „⟪Bereich⟫ ⟪RLP-Nr⟫ ⟪Themenname⟫"** — z.B. „Grundlagenfach 3.2 Lineare Funktionen" (siehe §7)
@@ -938,10 +938,101 @@ Eine **Stub-Seite** ist eine Themenseite, deren Struktur (RLP-Header, Master-Sch
 - **RLP-Kompetenzen-Box** vollständig — die Stub-Seite ist die zuverlässige Quelle dafür, was später inhaltlich abgedeckt wird.
 - **Master-Schema-Skelett** mit Platzhalter-Texten („*Wird ausgearbeitet — formal nach FTB-Notation.*") in jedem Abschnitt. Die `<h2 id="…">`-IDs müssen schon richtig stehen, damit ToC und Cross-Links auch im Stub-Zustand funktionieren.
 - **Footer und Nav (`buildNav`)** sind bereits korrekt gesetzt — Stubs sind voll in der Prev/Next-Kette.
-- Keine Zusatzmaterial-Sektion und keine externen Ressourcen, solange die Seite Stub ist (würde leere Karten produzieren).
+- Kein `dl-grid` (Download-Karten) und keine externen Ressourcen-Karten, solange die Seite Stub ist (würde leere Karten produzieren). Die `<h2 id="downloads">`- und `<h2 id="ressourcen">`-Überschriften mit Platzhaltertext „*Wird ergänzt.*" sind zulässig und erwünscht, damit ToC und Cross-Links bereits funktionieren.
 
 **Index-Karte einer Stub-Seite:** Die Karte erhält die Klasse `karte geplant` (kein grüner Streifen, ausgegrauter Titel, Cursor `help`, Pseudo-Element-Badge „in Vorbereitung" oben rechts). Sie bleibt klickbar — der Stub-Banner auf der Zielseite ist dann selbsterklärend.
 
 ---
+
+
+---
+
+## 10. Didaktische Module (übernommen aus TALS-Physik, ab ZIP 49–53)
+
+Vier Muster, pilotiert auf `g3-2` und ausgerollt ab LG1. Klassen und Skripte werden **1:1 verwendet, nie nachgebaut**; Referenz-Implementierung: `grundlagen/g3-2-lineare-funktionen.html`.
+
+### 10.1 Lernziele
+
+Aufklappbare Ich-kann-Liste **direkt nach der RLP-Kompetenzen-Box**, Blau-Familie. 4–6 Punkte, abgeleitet aus RLP-Kompetenzen + Seiteninhalt, jede beginnt mit «Ich kann …».
+
+```html
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body"><ul><li>Ich kann …</li></ul></div>
+</details>
+```
+
+### 10.2 Mini-Checks
+
+Einklappbare Verständnisfragen **vor jeder Sektionsgrenze** (vor dem nächsten `<h2>`), Orange-Familie (= Aufgabe/Übung). Akkordeon via `minicheck.js` (Pflicht-Einbindung: `<script src="../minicheck.js"></script>`). Pro Check vier Items in fester Reihenfolge: **Multiple Choice** (3 Optionen, `data-opt="A|B|C"`), **Lückentext** (`<span class="mc-luecke"></span>`), **Kurze Rechnung**, **Transfer** (Lösung als «Lösungsweg anzeigen»). Alle Rechnungen vor Auslieferung sympy-verifizieren.
+
+```html
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — <Thema></summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">…</p>
+  <ul class="mc-optionen"><li data-opt="A">…</li>…</ul>
+  <details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">…</div></details></div>
+…
+</details>
+```
+
+### 10.3 Animations-Hinweise
+
+Rollover-Paar «👁 Worauf achten?» (links) / «💡 Erkenntnis» (rechts) pro interaktiver Animation, Blau-Familie, Logik in `anim-hinweise.js` (Pflicht-Einbindung). Container ist eine `.widget-titelzeile`:
+- **Widgets:** das `<h3>` im `widget-header` in die Titelzeile fassen, Untertitel-`<p>` bleibt darunter.
+- **`.anim`-Blöcke:** den bestehenden `.anim-titel` in die Titelzeile fassen (Trigger stehen ausserhalb des uppercase-Titels und bleiben gemischt geschrieben).
+- Vorlese-Knopf: `data-vorlesen` enthält den **Klartext** (kein LaTeX, Symbole ausgeschrieben: «x gleich null», «Wurzel zwei»).
+
+```html
+<div class="widget-titelzeile">
+  <div class="anim-titel">…</div>  <!-- oder <h3>…</h3> -->
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">…</div>
+      <button class="ah-speak" type="button" data-vorlesen="…">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">…analog mit «💡 Erkenntnis»…</div>
+</div>
+```
+
+### 10.4 Slider-Gruppierung und akz-Farbkopplung
+
+Mehrere Regler **einer** Animation stehen in EINER `.sl-row`, jeder Regler als `.sl-grp` (Label + Slider + Wert unzertrennlich; Umbruch gruppenweise). Wertanzeige steht links direkt am Slider (zentrale Übersteuerung der lokalen `.sl-val`-Regeln).
+
+**Farbkopplung:** `akz-blau / akz-orange / akz-gruen` auf `.sl-grp` (oder `.sl-row` bei Einzel-Reglern) färbt Slider, Wert und die Label-Variable (`label .var`, MathJax erbt currentColor). **Dieselben Farben in der Live-Formel**: HTML-Teile via `.tx-blau/-orange/-gruen`-Spans (innerHTML nur mit Slider-Zahlen), MathJax-Teile via `\textcolor{#1a4f8a}{…}` (blau) / `\textcolor{#b85c00}{…}` (orange) / `\textcolor{#1f6b3a}{…}` (grün).
+
+**Verbindliche Färbe-Regel (was genau gefärbt wird):**
+1. **Nur der slider-gebundene Wert** (die Ziffern) wird gefärbt — nie Operatoren (+, −, ·, =) und nie fremde Variablen. Falsch: `x² <span>− 5·x</span>` (das x ist nicht der Regler); richtig: `x² − <span>5</span>·x`.
+2. **Die Variable selbst wird nur gefärbt, wenn sie der Regler ist** — z.B. x im Kartoffeln-Widget (`K(x)`, x ist der Schieber) oder k in einer Parameterdiskussion (`D(k)`, k ist der Schieber). Ein Koeffizienten-Regler (p, q, m, b) färbt nur seinen Zahlwert, nicht das daneben stehende x.
+3. **Abgeleitete Resultate bleiben neutral** (Lösungen, gekürzte Brüche, D-Wert, Funktionswert).
+4. Verschwindet der Wert aus der Anzeige (Koeffizient ±1 wird nicht geschrieben, Glied entfällt bei 0), erscheint dort folgerichtig keine Farbe — die gefärbte Wertanzeige am Slider bleibt die Referenz.
+
+**Pflicht-Verifikation** bei jeder JS-Umstellung von textContent auf innerHTML: Äquivalenz der Ausgabe nach Tag-Strip über das **volle Sliderraster** (alle Wertkombinationen inkl. Sonderfälle 0, ±1, Vorzeichenwechsel) — null Abweichungen, sonst kein ZIP.
+
+```html
+<div class="sl-row">
+  <div class="sl-grp akz-blau"><label>Steigung <span class="var">\(m\)</span></label>
+    <input type="range" id="…"><span class="sl-val" id="…">2</span></div>
+  …
+</div>
+```
+
+
+
+---
+
+## 11. Nachschlagen: Glossar und Formelsammlung (ab ZIP 59)
+
+Zwei zentrale Referenzseiten im Repo-Root, übernommen aus TALS-Physik:
+
+- **`glossar.html`** (`buildNav({ id:'glossar', homepage:true })`): A–Z-Sprungleiste (`.glossar-az`), Einträge als `.glossar-eintrag` mit `.ge-begriff`, optional `.ge-formel`, Definition (`<p>`) und `.ge-quer`-Themenverweis. Begriffe knapp und einheitlich; Herleitung bleibt auf der Themenseite.
+- **`formelsammlung.html`** (`buildNav({ id:'formeln', homepage:true })`): pro Lerngebiet ein `.fs-block` mit `<h3>`, `.fs-thema`-Label und `.fs-zeile`-Einträgen (`.fs-name` / `.fs-formel` / `.fs-quer`-Themenlink). Inhalte aus den thematischen `formelauszug.html` aggregiert; die offizielle SBFI-Prüfungs-Formelsammlung bleibt separat verlinkt.
+
+**Navigation:** Header-Dropdown «Nachschlagen ▾» (Gruppen «In diesem Lehrmittel» / «Extern») plus Mobile-Nav-Gruppe; aktiv bei `cfg.id==='glossar'||cfg.id==='formeln'`. Der Physik-Querlink ist relativ (`${prefix}../tals-physik/…`), funktioniert von Root- (`prefix=''`) und Themenseiten (`prefix='../'`) gleichermassen.
+
+**Pflege:** Jeder `.fs-quer`/`.ge-quer`-Link zeigt auf eine existierende `#id` einer Themenseite — vor jedem ZIP per Anker-Validierung gegen die realen `h2 id`-Werte prüfen (verhindert tote Sprungmarken). CSS-Klassen liegen zentral in `style.css` (Mathe-Akzentvariablen `--blau`/`--orange`, nicht Physik-`--bernstein`).
+
 
 *Pflege dieses Dokuments: bei Konvention-Erweiterungen Version hochzählen, Datum aktualisieren.*
