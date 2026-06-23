@@ -942,10 +942,10 @@ canvas { display: block; width: 100%; }
 
 /* ── ANIMATIONS-HINWEISE (Pilot g3-2; Muster aus TALS-Physik, Farben: Blau = Animation) ──
    Rollover «Worauf achten?» / «Erkenntnis» mit Vorlese-Option; Logik in anim-hinweise.js. */
-.widget-titelzeile { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin:0; }
-.widget-titelzeile h3 { margin:0; }
+.widget-titelzeile { position:relative; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin:0; }
+.widget-titelzeile h3 { margin:0; margin-right:auto; }
 .anim-hinweis { position:relative; display:inline-block; }
-.anim-hinweis.rechts { margin-left:auto; }
+.anim-hinweis.links { position:static; }
 .ah-trigger { font-size:0.8rem; color:var(--tinte-2); border-bottom:1px dotted var(--blau-rand);
   cursor:help; user-select:none; padding:1px 0; display:inline-block; white-space:nowrap; }
 .ah-trigger:focus-visible { outline:2px solid var(--blau-rand); outline-offset:2px; border-radius:2px; }
@@ -954,7 +954,8 @@ canvas { display: block; width: 100%; }
   padding:11px 13px; box-shadow:0 6px 18px rgba(28,26,23,0.18);
   opacity:0; visibility:hidden; transform:translateY(-3px);
   transition:opacity .15s ease, transform .15s ease; pointer-events:none; }
-.anim-hinweis.rechts .ah-pop { left:auto; right:0; }
+.anim-hinweis.rechts .ah-pop,
+.anim-hinweis.links  .ah-pop { left:auto; right:0; }
 .ah-pop::before { content:""; position:absolute; left:0; right:0; top:-8px; height:8px; }
 .anim-hinweis:hover .ah-pop,
 .anim-hinweis:focus-within .ah-pop,

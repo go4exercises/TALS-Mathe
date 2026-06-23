@@ -1024,11 +1024,11 @@ function updateWS(){
   ctx.fillStyle='#fff';
   ctx.fillRect(W-30, cy(0)-22, 30, 18);
   ctx.fillRect(cx(0)+4, 0, 22, 18);
-  ctx.fillStyle='#374151'; ctx.font='bold 11px monospace';
+  ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
   ctx.textAlign='right'; ctx.fillText('x [m]', W-2, cy(0)-7);
   ctx.textAlign='left';  ctx.fillText('h [m]', cx(0)+5, 11);
   // Zahlen-Labels
-  ctx.font='10px monospace'; ctx.fillStyle='#9ca3af'; ctx.textAlign='center';
+  ctx.font='13px monospace'; ctx.fillStyle='#9ca3af'; ctx.textAlign='center';
   for(let gx=1; gx<=9; gx++) ctx.fillText(gx, cx(gx), cy(0)+13);
   ctx.textAlign='right';
   for(let gy=1; gy<=5; gy++) ctx.fillText(gy, cx(0)-4, cy(gy)+4);
@@ -1039,7 +1039,7 @@ function updateWS(){
   // Aktiver Punkt
   if(y >= 0){
     drawDot(ctx, cx, cy, x, y, '#1a4f8a', 7);
-    ctx.fillStyle='#1a4f8a'; ctx.font='bold 11px monospace';
+    ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace';
     const lx = x>7 ? cx(x)-70 : cx(x)+8;
     ctx.textAlign='left'; ctx.fillText(`(${x} | ${fmtNum(y)})`, lx, cy(y)-8);
     // gestrichelte Linien
@@ -1050,7 +1050,7 @@ function updateWS(){
   }
   // Scheitelpunkt markieren
   drawDot(ctx, cx, cy, WS.u, WS.v, '#9b1c1c', 5);
-  ctx.fillStyle='#9b1c1c'; ctx.font='bold 11px monospace'; ctx.textAlign='left';
+  ctx.fillStyle='#9b1c1c'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
   ctx.fillText(`S(${WS.u} | ${WS.v})`, cx(WS.u)+8, cy(WS.v)-8);
 }
 document.getElementById('ws-x').addEventListener('input', updateWS);
@@ -1150,13 +1150,13 @@ function drawDR(){
   // Scheitelpunkt (blau)
   if(Math.abs(u)<=rng && Math.abs(v)<=rng){
     drawDot(ctx, cx, cy, u, v, '#1a4f8a', 7);
-    ctx.fillStyle='#1a4f8a'; ctx.font='bold 11px monospace'; ctx.textAlign='left';
+    ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
     ctx.fillText(`S(${fmtNum(u)} | ${fmtNum(v)})`, cx(u)+8, cy(v)-8);
   }
   // y-Achsenabschnitt (grün)
   if(Math.abs(C)<=rng){
     drawDot(ctx, cx, cy, 0, C, '#1f6b3a', 6);
-    ctx.fillStyle='#1f6b3a'; ctx.font='bold 11px monospace'; ctx.textAlign='left';
+    ctx.fillStyle='#1f6b3a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
     ctx.fillText(`(0 | ${fmtNum(C)})`, cx(0)+8, cy(C)+13);
   }
   // Nullstellen (orange)
@@ -1165,7 +1165,7 @@ function drawDR(){
     const drawN = (xn) => {
       if(Math.abs(xn) > rng) return;
       drawDot(ctx, cx, cy, xn, 0, '#b85c00', 6);
-      ctx.fillStyle='#b85c00'; ctx.font='bold 11px monospace'; ctx.textAlign='center';
+      ctx.fillStyle='#b85c00'; ctx.font='bold 13px monospace'; ctx.textAlign='center';
       ctx.fillText(fmtNum(xn), cx(xn), cy(0)+24);
     };
     if(ns.n === 2){ drawN(ns.x1); drawN(ns.x2); }
@@ -1266,7 +1266,7 @@ function updateDisk(){
     [(-b-sq)/(2*a), (-b+sq)/(2*a)].forEach(xn => {
       if(Math.abs(xn) <= rng){
         drawDot(ctx, cx, cy, xn, 0, f.farbe, 7);
-        ctx.fillStyle=f.farbe; ctx.font='bold 11px monospace'; ctx.textAlign='center';
+        ctx.fillStyle=f.farbe; ctx.font='bold 13px monospace'; ctx.textAlign='center';
         ctx.fillText(fmtNum(xn), cx(xn), cy(0)+24);
       }
     });
@@ -1274,7 +1274,7 @@ function updateDisk(){
     const xn = -b/(2*a);
     if(Math.abs(xn) <= rng){
       drawDot(ctx, cx, cy, xn, 0, f.farbe, 7);
-      ctx.fillStyle=f.farbe; ctx.font='bold 11px monospace'; ctx.textAlign='center';
+      ctx.fillStyle=f.farbe; ctx.font='bold 13px monospace'; ctx.textAlign='center';
       ctx.fillText(fmtNum(xn), cx(xn), cy(0)+24);
     }
   }
@@ -1439,7 +1439,7 @@ function drawA2(){
   // User-Scheitelpunkt
   ctx.fillStyle = '#b85c00'; ctx.strokeStyle='#fff'; ctx.lineWidth=2;
   ctx.beginPath(); ctx.arc(cx(a2S.u), cy(a2S.v), 11, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-  ctx.fillStyle='#fff'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
+  ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
   ctx.fillText('S', cx(a2S.u), cy(a2S.v)+4);
   document.getElementById('a2-pos').textContent = `S(${a2S.u} | ${a2S.v})`;
 }

@@ -649,11 +649,11 @@ function updateKS(){
   ctx.fillRect(W-30, cy(0)-22, 30, 18);   // alter "x"-Bereich rechts oben am Pfeil
   ctx.fillRect(cx(0)+4, 0, 22, 18);       // alter "y"-Bereich links oben am Pfeil
   // Neue Labels mit Einheit
-  ctx.fillStyle='#374151'; ctx.font='bold 11px monospace';
+  ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
   ctx.textAlign='right'; ctx.fillText('x [kg]', W-2, cy(0)-7);
   ctx.textAlign='left';  ctx.fillText('K [CHF]', cx(0)+5, 11);
   // x-axis number labels override (Zahlen alle 2 kg)
-  ctx.font='10px monospace'; ctx.fillStyle='#9ca3af'; ctx.textAlign='center';
+  ctx.font='13px monospace'; ctx.fillStyle='#9ca3af'; ctx.textAlign='center';
   for(let gx=0;gx<=14;gx+=2) ctx.fillText(gx,cx(gx),cy(0)+13);
   ctx.textAlign='right';
   for(let gy=0;gy<=30;gy+=5) ctx.fillText(gy,cx(0)-4,cy(gy)+4);
@@ -663,7 +663,7 @@ function updateKS(){
   KS.xs.forEach(xi=>{ const yi=KS.m*xi+KS.b; drawDot(ctx,cx,cy,xi,yi,'#b8c4d4',4); });
   // Active dot
   drawDot(ctx,cx,cy,x,y,'#1a4f8a',7);
-  ctx.fillStyle='#1a4f8a'; ctx.font='bold 11px monospace';
+  ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace';
   const lx=x>11?cx(x)-60:cx(x)+8;
   ctx.textAlign='left'; ctx.fillText(`(${x}|${y})`,lx,cy(y)-8);
   // Dashed lines
@@ -722,7 +722,7 @@ function updateDR(){
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(0),cy(y)); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle='#1a4f8a'; ctx.font='bold 11px monospace'; ctx.textAlign='left';
+    ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
     ctx.fillText(`(${x}|${y})`,cx(x)+7,cy(y)-7);
   }
 }
@@ -770,7 +770,7 @@ function drawTyp(){
     ctx.strokeStyle=t.color; ctx.lineWidth=3; ctx.setLineDash([]);
     ctx.beginPath(); ctx.moveTo(cx(t.b),0); ctx.lineTo(cx(t.b),H); ctx.stroke();
     // Warning label
-    ctx.fillStyle=t.color; ctx.font='bold 11px sans-serif'; ctx.textAlign='left';
+    ctx.fillStyle=t.color; ctx.font='bold 13px sans-serif'; ctx.textAlign='left';
     ctx.fillText('⚠ Keine Funktion!', cx(t.b)+8, H/2);
   } else {
     drawLine(ctx,cx,cy,t.m,t.b,-rng,rng,t.color,3);
@@ -861,7 +861,7 @@ function drawA2(){
   a2Pts.forEach((p,i)=>{
     ctx.fillStyle=cols[i]; ctx.strokeStyle='#fff'; ctx.lineWidth=2;
     ctx.beginPath(); ctx.arc(a2CX(p.x),a2CY(p.y),9,0,Math.PI*2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle='#fff'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
+    ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
     ctx.fillText(i===0?'P1':'P2',a2CX(p.x),a2CY(p.y)+4);
   });
   document.getElementById('a2-p1c').textContent=`(${a2Pts[0].x}|${a2Pts[0].y})`;

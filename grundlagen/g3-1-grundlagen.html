@@ -983,10 +983,10 @@ function einstiegRender() {
   ctx.fillStyle = '#374151';
   ctx.beginPath(); ctx.moveTo(cx(tMax)+8, cy(0)); ctx.lineTo(cx(tMax)+2, cy(0)-4); ctx.lineTo(cx(tMax)+2, cy(0)+4); ctx.fill();
   ctx.beginPath(); ctx.moveTo(cx(0), cy(VMax)-6); ctx.lineTo(cx(0)-4, cy(VMax)); ctx.lineTo(cx(0)+4, cy(VMax)); ctx.fill();
-  ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.font = 'bold 13px JetBrains Mono,monospace';
   ctx.textAlign = 'right'; ctx.fillText('t [s]', cx(tMax)+8, cy(0)+18);
   ctx.textAlign = 'left'; ctx.fillText('V [dl]', cx(0)+5, cy(VMax)-2);
-  ctx.font = '11px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
+  ctx.font = '13px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
   ctx.textAlign = 'center';
   for (let i = 2; i <= 10; i += 2) ctx.fillText(i, cx(i), cy(0)+14);
   ctx.textAlign = 'right';
@@ -1001,7 +1001,7 @@ function einstiegRender() {
   ctx.setLineDash([]);
   ctx.fillStyle = '#b85a00';
   ctx.beginPath(); ctx.arc(cx(t), cy(V), 6, 0, 2*Math.PI); ctx.fill();
-  ctx.fillStyle = '#1a1a1a'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.fillStyle = '#1a1a1a'; ctx.font = 'bold 13px JetBrains Mono,monospace';
   ctx.textAlign = 'left';
   ctx.fillText('('+t+' | '+V.toFixed(1)+')', cx(t)+8, cy(V)-8);
 }
@@ -1069,7 +1069,7 @@ function glasRender() {
 
   // Skalenstriche an der rechten Seite (alle 5 dl)
   ctx.strokeStyle = '#6b6657'; ctx.lineWidth = 0.8;
-  ctx.fillStyle = '#6b6657'; ctx.font = '9px JetBrains Mono,monospace'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#6b6657'; ctx.font = '13px JetBrains Mono,monospace'; ctx.textAlign = 'left';
   for (let v = 5; v <= 30; v += 5) {
     const ratio = v / Vmax;
     const yMark = botY - (botY - topY) * ratio;
@@ -1080,7 +1080,7 @@ function glasRender() {
   }
 
   // Aktuelle Wassermenge als Label oben (falls Platz)
-  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono,monospace';
   ctx.textAlign = 'center';
   ctx.fillText('V = ' + V.toFixed(1) + ' dl', cxG, H - 4);
 }
@@ -1104,7 +1104,7 @@ function darstGraphRender() {
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2;
   ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(tMax), cy(0)); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(0), cy(VMax)); ctx.stroke();
-  ctx.fillStyle = '#374151'; ctx.font = '9px JetBrains Mono,monospace';
+  ctx.fillStyle = '#374151'; ctx.font = '13px JetBrains Mono,monospace';
   ctx.textAlign = 'right'; ctx.fillText('t', cx(tMax), cy(0)+11);
   ctx.textAlign = 'left'; ctx.fillText('V', cx(0)+3, cy(VMax)+8);
   ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2;
@@ -1224,13 +1224,13 @@ function plotChart(cfg) {
   ctx.beginPath(); ctx.moveTo(cx(xMin), cy(0)); ctx.lineTo(cx(xMax), cy(0)); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cx(0), cy(yMin)); ctx.lineTo(cx(0), cy(yMax)); ctx.stroke();
   // Tick-Beschriftungen
-  ctx.fillStyle = '#9ca3af'; ctx.font = '10px JetBrains Mono,monospace';
+  ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace';
   ctx.textAlign = 'center';
   for (let g = Math.ceil(xMin); g <= Math.floor(xMax); g++) { if (g !== 0) ctx.fillText(g, cx(g), cy(0)+12); }
   ctx.textAlign = 'right';
   for (let g = Math.ceil(yMin); g <= Math.floor(yMax); g++) { if (g !== 0) ctx.fillText(g, cx(0)-4, cy(g)+3); }
   // Achsen-Labels
-  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px JetBrains Mono,monospace';
   ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax)-4, cy(0)-5);
   ctx.textAlign = 'left'; ctx.fillText('y', cx(0)+5, cy(yMax)+10);
 
@@ -1252,7 +1252,7 @@ function plotChart(cfg) {
     if (cv.label) {
       const lx = (cv.labelX !== undefined) ? cv.labelX : xMax - 0.2;
       const ly = cv.fn(lx);
-      ctx.fillStyle = cv.color; ctx.font = '10px JetBrains Mono,monospace';
+      ctx.fillStyle = cv.color; ctx.font = '13px JetBrains Mono,monospace';
       ctx.textAlign = 'right';
       const yPx = (ly >= yMin && ly <= yMax) ? cy(ly) - 6 : cy(yMax) + 14;
       ctx.fillText(cv.label, cx(lx) - 2, yPx);
@@ -1264,7 +1264,7 @@ function plotChart(cfg) {
     ctx.fillStyle = p.color || '#a02828';
     ctx.beginPath(); ctx.arc(cx(p.x), cy(p.y), 5.5, 0, 2*Math.PI); ctx.fill();
     if (p.label) {
-      ctx.font = 'bold 11px JetBrains Mono,monospace';
+      ctx.font = 'bold 13px JetBrains Mono,monospace';
       ctx.textAlign = (p.labelPos === 'l') ? 'right' : 'left';
       const dx = (p.labelPos === 'l') ? -8 : 8;
       const dy = (p.labelPos === 'b') ? 14 : -7;

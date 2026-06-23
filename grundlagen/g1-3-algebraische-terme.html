@@ -1160,7 +1160,7 @@ function drawEquiv() {
 
     // Spaltentitel mit Farbcode
     ctx.fillStyle = t.korrekt ? '#5a5040' : '#a83a3a';
-    ctx.font = 'bold 11px monospace';
+    ctx.font = 'bold 13px monospace';
     ctx.textAlign = 'center';
     ctx.fillText(t.titel.toUpperCase() + (t.korrekt ? '' : ' (?)'), cx, cy);
     cy += 16;
@@ -1173,19 +1173,19 @@ function drawEquiv() {
     ctx.fillRect(cx - boxW/2, cy - 12, boxW, 22);
     ctx.strokeRect(cx - boxW/2, cy - 12, boxW, 22);
     ctx.fillStyle = t.korrekt ? '#1a4f8a' : '#a83a3a';
-    ctx.font = 'bold 12px monospace';
+    ctx.font = 'bold 13px monospace';
     ctx.fillText(t.formel, cx, cy + 3);
     cy += 24;
 
     // Einsetzen
     ctx.fillStyle = '#3a342a';
-    ctx.font = '11px monospace';
+    ctx.font = '13px monospace';
     ctx.fillText(`x=${x}, y=${y}:`, cx, cy);
     cy += 14;
 
     // Berechnung
     ctx.fillStyle = '#1c1a17';
-    ctx.font = '11px monospace';
+    ctx.font = '13px monospace';
     ctx.fillText('= ' + t.berechnung, cx, cy);
     cy += 14;
 
@@ -1213,14 +1213,14 @@ function drawEquiv() {
     // Vermerk direkt unter Darios Ergebnis: er ist nicht äquivalent
     if (t.titel === 'Dario') {
       ctx.fillStyle = '#a83a3a';
-      ctx.font = 'bold 10px monospace';
+      ctx.font = 'bold 13px monospace';
       const diff = dario - anna;
       if (diff === 0) {
         ctx.fillText('zufällig gleich –', cx, cy);
         ctx.fillText('nicht äquivalent', cx, cy + 10);
       } else {
         ctx.fillText('nicht äquivalent', cx, cy);
-        ctx.font = '10px monospace';
+        ctx.font = '13px monospace';
         ctx.fillStyle = '#7a2a2a';
         ctx.fillText((diff > 0 ? '+' : '') + diff + ' zu viel', cx, cy + 10);
       }
@@ -1240,7 +1240,7 @@ function drawEquiv() {
   // Streifen unten
   const allGleich = (anna === bruno) && (bruno === cinzia);
   ctx.fillStyle = allGleich ? '#2d9d5e' : '#5a5040';
-  ctx.font = 'bold 11px monospace';
+  ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'center';
   ctx.fillText(`Anna = Bruno = Cinzia = ${anna}    ·    Dario = ${dario}`, W / 2, H - 6);
 
@@ -1728,7 +1728,7 @@ function drawBinomi() {
     ctx.fillText('a·b = ' + (a*b), xx + sA/2, yy + sA + sB/2);
     ctx.fillText('b² = ' + (b*b), xx + sA + sB/2, yy + sA + sB/2);
     // Aussenlabels
-    ctx.font = 'bold 12px monospace';
+    ctx.font = 'bold 13px monospace';
     ctx.fillStyle = '#1a4f8a';
     ctx.fillText('a = ' + a, xx + sA/2, yy - 14);
     ctx.fillText('b = ' + b, xx + sA + sB/2, yy - 14);
@@ -1742,7 +1742,7 @@ function drawBinomi() {
     ctx.rotate(-Math.PI/2);
     ctx.fillText('b = ' + b, 0, 0);
     ctx.restore();
-    ctx.font = 'bold 12px monospace';
+    ctx.font = 'bold 13px monospace';
     ctx.fillStyle = '#3a342a';
     ctx.fillText('Gesamtquadrat: (' + a + '+' + b + ')² = ' + ((a+b)*(a+b)), W/2, H - 10);
   }
@@ -1761,7 +1761,7 @@ function drawBinomi() {
     ctx.fillStyle = F_A2;
     ctx.fillRect(xx, yy, sA, sA);
     ctx.fillStyle = F_RAND;
-    ctx.font = 'bold 12px monospace';
+    ctx.font = 'bold 13px monospace';
     if (sAmB > 26) ctx.fillText('(a−b)²', xx + sAmB/2, yy + sAmB/2);
 
     // 2. Zwei halbtransparente a·b-Streifen (orange) — Überlappung wird dunkler
@@ -1796,7 +1796,7 @@ function drawBinomi() {
 
     // Beschriftung der Streifen + b²
     ctx.fillStyle = '#5a2e08';
-    ctx.font = 'bold 11px monospace';
+    ctx.font = 'bold 13px monospace';
     if (sB > 16 && sAmB > 20) {
       ctx.fillText('a·b', xx + sAmB + sB/2, yy + sAmB/2);   // rechter Streifen, oberer Teil
       ctx.fillText('a·b', xx + sAmB/2, yy + sAmB + sB/2);   // unterer Streifen, linker Teil
@@ -1808,7 +1808,7 @@ function drawBinomi() {
 
     // Aussenlabels: pro Seite die zwei Segmente (a−b) und b beschriften,
     // dazu aussen ein Massstrich (Klammer) über die Gesamtlänge a.
-    ctx.font = 'bold 11px monospace';
+    ctx.font = 'bold 13px monospace';
     ctx.fillStyle = '#1a4f8a';
     ctx.textAlign = 'center';
 
@@ -1849,7 +1849,7 @@ function drawBinomi() {
     ctx.restore();
 
     // Untertitel: zwei a·b überlappen im b²-Eck
-    ctx.font = 'bold 11px monospace';
+    ctx.font = 'bold 13px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     // Hervorhebung des Erklär-Satzes mit demselben Grün wie der Streifen-Rahmen:
@@ -1926,21 +1926,21 @@ function drawBinomi() {
     ctx.closePath(); ctx.stroke();
 
     // Feld-Beschriftung
-    ctx.fillStyle = F_RAND; ctx.font = 'bold 12px monospace';
+    ctx.fillStyle = F_RAND; ctx.font = 'bold 13px monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     if (sAmB > 22) ctx.fillText('a² − b²', xx + sAmB * 0.55, yy + sA * 0.6);
-    ctx.fillStyle = F_RED_RAND; ctx.font = 'bold 11px monospace';
+    ctx.fillStyle = F_RED_RAND; ctx.font = 'bold 13px monospace';
     if (sB > 15) ctx.fillText('b²', xx + sAmB + sB / 2, yy + sAmB + sB / 2);
 
     // Aussenlabels: a oben, a links, b oben-rechts, b rechts unten
-    ctx.font = 'bold 11px monospace'; ctx.fillStyle = '#1a4f8a';
+    ctx.font = 'bold 13px monospace'; ctx.fillStyle = '#1a4f8a';
     ctx.fillText('a = ' + a, xx + sA / 2, yy - 14);
     ctx.save(); ctx.translate(xx - 14, yy + sA / 2); ctx.rotate(-Math.PI / 2);
     ctx.fillText('a = ' + a, 0, 0); ctx.restore();
     if (sB > 14) ctx.fillText('b', xx + sAmB + sB / 2, yy - 14);
     if (sB > 14) { ctx.save(); ctx.translate(xx + sA + 12, yy + sAmB + sB / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('b', 0, 0); ctx.restore(); }
 
-    ctx.fillStyle = '#3a342a'; ctx.font = 'bold 11px monospace';
+    ctx.fillStyle = '#3a342a'; ctx.font = 'bold 13px monospace';
     ctx.fillText('a² − b² = ' + (a * a - b * b), W / 2, H - 9);
 
     // --- Animation rechts: Produkt (a+b)(a−b) → L-Form ---
@@ -2087,7 +2087,7 @@ function drawBinomi2Schritte(a, b, schritt, skala) {
   ctx.restore();
 
   // Beschriftungen (nur in sichtbaren Feldern)
-  ctx.font = 'bold 12px monospace';
+  ctx.font = 'bold 13px monospace';
   ctx.fillStyle = F_RAND;
   if (sicht.A && sAmB > 28) {
     ctx.fillText('(a−b)² = ' + ((a-b)*(a-b)), xx + sAmB/2, yy + sAmB/2);
@@ -2113,7 +2113,7 @@ function drawBinomi2Schritte(a, b, schritt, skala) {
   }
 
   // Aussenlabels
-  ctx.font = 'bold 11px monospace';
+  ctx.font = 'bold 13px monospace';
   ctx.fillStyle = '#1a4f8a';
   ctx.fillText('a = ' + a, xx + sA/2, yy - 14);
   ctx.save();
@@ -2125,7 +2125,7 @@ function drawBinomi2Schritte(a, b, schritt, skala) {
   // Untertitel mit der aktuellen Rechnung. Der symbolische Term −ab bzw. −2ab
   // wird grün hinterlegt (gleiche Grün-Familie wie die a·b-Rahmen):
   // Box --gruen-hell mit Rand --gruen.
-  ctx.font = 'bold 11px monospace';
+  ctx.font = 'bold 13px monospace';
   ctx.textBaseline = 'middle';
   const aa = a*a, ab = a*b, bb = b*b;
   // Segmente: { t: Text, hl: grün hervorheben? }
@@ -2211,7 +2211,7 @@ function drawBinomi3Schritte(a, b, schritt, skalaIgnored) {
   // einfaches blaues Label (rot=true → 90° gedreht)
   function blau(txt, cx, cy, rot) {
     ctx.save();
-    ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = 'bold 13px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillStyle = F_BLAU;
     if (rot) { ctx.translate(cx, cy); ctx.rotate(-Math.PI / 2); ctx.fillText(txt, 0, 0); }
     else ctx.fillText(txt, cx, cy);
@@ -2230,7 +2230,7 @@ function drawBinomi3Schritte(a, b, schritt, skalaIgnored) {
     ctx.save(); ctx.translate(x - 8, (y1 + y2) / 2); ctx.rotate(-Math.PI / 2); blau(txt, 0, 0); ctx.restore();
   }
   function subtitel(txt) {
-    ctx.fillStyle = '#3a342a'; ctx.font = 'bold 11px monospace';
+    ctx.fillStyle = '#3a342a'; ctx.font = 'bold 13px monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(txt, W / 2, H - 9);
   }
@@ -2321,10 +2321,10 @@ function drawBinomi3Schritte(a, b, schritt, skalaIgnored) {
     ctx.strokeStyle = F_BLUE_RAND; ctx.lineWidth = 3.5; ctx.lineJoin = 'miter';
     ctx.strokeRect(xx + 1.75, yy + 1.75, sA - 3.5, sA - 3.5);
 
-    ctx.fillStyle = F_RAND; ctx.font = 'bold 12px monospace';
+    ctx.fillStyle = F_RAND; ctx.font = 'bold 13px monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     if (sAmB > 22) ctx.fillText('a² − b²', xx + sAmB * 0.55, yy + sA * 0.6);
-    ctx.fillStyle = F_RED_RAND; ctx.font = 'bold 11px monospace';
+    ctx.fillStyle = F_RED_RAND; ctx.font = 'bold 13px monospace';
     if (sB > 15) ctx.fillText('b²', xx + sAmB + sB / 2, yy + sAmB + sB / 2);
     vermassung();
     subtitel('(a+b)(a−b) = a² − b² = ' + ((a + b) * (a - b)));

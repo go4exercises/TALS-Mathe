@@ -1033,7 +1033,7 @@ function drawPK() {
   ctx.moveTo(cx(Dmax), yAchse - 5); ctx.lineTo(cx(Dmax) + 8, yAchse); ctx.lineTo(cx(Dmax), yAchse + 5);
   ctx.fill();
   // Tickmarks bei -20, 0, 20, 40
-  ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#374151'; ctx.font = '13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
   for (const t of [-20, 0, 20, 40]) {
     ctx.beginPath(); ctx.moveTo(cx(t), yAchse - 4); ctx.lineTo(cx(t), yAchse + 4); ctx.stroke();
     ctx.fillText(t, cx(t), yAchse + 17);
@@ -1043,7 +1043,7 @@ function drawPK() {
   ctx.beginPath(); ctx.moveTo(cx(0), 8); ctx.lineTo(cx(0), 42); ctx.stroke();
   ctx.setLineDash([]);
   // Beschriftung: D < 0 / D > 0
-  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
   ctx.fillStyle = '#a0392c'; ctx.textAlign = 'center';
   ctx.fillText('D < 0  (keine Lösung)', (cx(Dmin) + cx(0))/2, 18);
   ctx.fillStyle = '#0f7a3a';
@@ -1053,11 +1053,11 @@ function drawPK() {
   ctx.fillStyle = D > 0.001 ? '#0f7a3a' : (D < -0.001 ? '#a0392c' : '#1a4f8a');
   ctx.beginPath(); ctx.arc(cx(dClamped), yAchse, 7, 0, Math.PI*2); ctx.fill();
   // Beschriftung "D = ..." über Punkt
-  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
   ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
   ctx.fillText('D = ' + D.toFixed(1), cx(dClamped), yAchse - 12);
   // Achsenbeschriftung links
-  ctx.font = 'bold 11px monospace'; ctx.fillStyle = '#374151'; ctx.textAlign = 'left';
+  ctx.font = 'bold 13px monospace'; ctx.fillStyle = '#374151'; ctx.textAlign = 'left';
   ctx.fillText('D', 6, yAchse + 4);
 }
 
@@ -1219,7 +1219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.setLineDash([]);
 
     // Markierungen Anfang und Ende (Haus links, Schule rechts; bei Rückweg umgekehrt)
-    ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace';
+    ctx.fillStyle = '#374151'; ctx.font = '13px JetBrains Mono, monospace';
     ctx.textAlign = 'left';
     ctx.fillText('🏠 Zuhause', padL - 8, yHin - 22);
     ctx.textAlign = 'right';
@@ -1232,7 +1232,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // km-Ticks (alle 2 km)
     ctx.strokeStyle = '#a89677'; ctx.lineWidth = 0.8;
-    ctx.fillStyle = '#7a6f5e'; ctx.font = '9px JetBrains Mono, monospace';
+    ctx.fillStyle = '#7a6f5e'; ctx.font = '13px JetBrains Mono, monospace';
     ctx.textAlign = 'center';
     for (let km = 0; km <= STRECKE; km += 2){
       const x = padL + (km / STRECKE) * plotW;
@@ -1243,7 +1243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Labels für die Wege
-    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono, monospace';
     ctx.textAlign = 'right';
     ctx.fillText('Hinweg →', padL - 14, yHin + 4);
     ctx.fillText('← Rückweg', padL - 14, yRueck + 4);

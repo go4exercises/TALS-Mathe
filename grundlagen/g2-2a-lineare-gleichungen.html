@@ -778,14 +778,14 @@ function drawBudget() {
   ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(0), cy(yMax)); ctx.stroke();
 
   // Tick-Labels
-  ctx.fillStyle = '#9ca3af'; ctx.font = '10px JetBrains Mono,monospace';
+  ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace';
   ctx.textAlign = 'center';
   for (let gx = 2; gx <= 10; gx += 2) ctx.fillText(gx, cx(gx), cy(0) + 14);
   ctx.textAlign = 'right';
   for (let gy = 30; gy <= 150; gy += 30) ctx.fillText(gy, cx(0) - 5, cy(gy) + 4);
 
   // Achsen-Beschriftung mit Einheit
-  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace';
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'right'; ctx.fillText('x [h]', cx(xMax) + 8, cy(0) + 22);
   ctx.textAlign = 'left';  ctx.fillText('K [CHF]', cx(0) - 38, cy(yMax) - 4);
 
@@ -811,14 +811,14 @@ function drawBudget() {
   ctx.setLineDash([]);
 
   // Beschriftungen
-  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
   ctx.fillText('K(x) = 12·x + 45', cx(7), cy(12 * 7 + 45) - 8);
   ctx.fillStyle = '#2d6a3e';
   ctx.fillText('Budget = 117', cx(7), cy(117) - 8);
 
   // Lösungs-Hinweis bei x = 6
   if (Math.abs(x - 6) < 0.4) {
-    ctx.fillStyle = '#2d6a3e'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+    ctx.fillStyle = '#2d6a3e'; ctx.font = 'bold 13px JetBrains Mono,monospace';
     ctx.textAlign = 'center';
     ctx.fillText('✓ Lösung x = 6', cx(6), cy(0) - 6);
   }
@@ -870,11 +870,11 @@ function drawThree() {
   ctx.beginPath(); ctx.moveTo(cx(0), padT); ctx.lineTo(cx(0), padT + PH); ctx.stroke();
 
   // Labels
-  ctx.fillStyle = '#9ca3af'; ctx.font = '10px JetBrains Mono,monospace'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace'; ctx.textAlign = 'center';
   for (let gx = -2; gx <= 8; gx += 2) if (gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 13);
   ctx.textAlign = 'right';
   for (let gy = -6; gy <= 10; gy += 2) if (gy !== 0) ctx.fillText(gy, cx(0) - 5, cy(gy) + 3);
-  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace';
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax) - 4, cy(0) - 6);
   ctx.textAlign = 'left';  ctx.fillText('y', cx(0) + 5, padT + 10);
 
@@ -892,7 +892,7 @@ function drawThree() {
   // Schnittpunkt (4 | 5)
   ctx.fillStyle = '#b85a00';
   ctx.beginPath(); ctx.arc(cx(4), cy(5), 6, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#b85a00'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+  ctx.fillStyle = '#b85a00'; ctx.font = 'bold 13px JetBrains Mono,monospace';
   ctx.textAlign = 'left'; ctx.fillText('S(4 | 5)', cx(4) + 9, cy(5) - 5);
 
   // Aktueller Punkt auf der blauen Geraden
@@ -900,7 +900,7 @@ function drawThree() {
   ctx.beginPath(); ctx.arc(cx(x), cy(2 * x - 3), 5, 0, Math.PI * 2); ctx.fill();
 
   // Beschriftungen
-  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 10px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'left'; ctx.fillText('y = 2x − 3', cx(6) + 5, cy(2 * 6 - 3));
   ctx.fillStyle = '#2d6a3e'; ctx.fillText('y = 5', cx(-1.5), cy(5) - 5);
 }
@@ -989,12 +989,12 @@ function drawFaelle() {
   ctx.beginPath(); ctx.moveTo(cx(0), padT); ctx.lineTo(cx(0), padT + PH); ctx.stroke();
 
   // Tick-Labels
-  ctx.fillStyle = '#9ca3af'; ctx.font = '10px JetBrains Mono,monospace'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace'; ctx.textAlign = 'center';
   for (let gx = -2; gx <= 6; gx += 2) if (gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 13);
   ctx.textAlign = 'right';
   for (let gy = 2; gy <= 14; gy += 4) ctx.fillText(gy, cx(0) - 5, cy(gy) + 3);
 
-  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace';
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax) - 4, cy(0) - 6);
   ctx.textAlign = 'left';  ctx.fillText('y', cx(0) + 5, padT + 10);
 
@@ -1009,7 +1009,7 @@ function drawFaelle() {
     // Label
     const labelX = xMax - 0.5, labelY = g.m * labelX + g.b;
     if (labelY >= yMin && labelY <= yMax - 1) {
-      ctx.fillStyle = g.color; ctx.font = 'bold 10px monospace';
+      ctx.fillStyle = g.color; ctx.font = 'bold 13px monospace';
       ctx.textAlign = 'right'; ctx.fillText(g.label, cx(labelX), cy(labelY) - 5);
     }
   });
@@ -1018,7 +1018,7 @@ function drawFaelle() {
   if (f.schnitt && typeof f.schnitt === 'object') {
     ctx.fillStyle = '#b85a00';
     ctx.beginPath(); ctx.arc(cx(f.schnitt.x), cy(f.schnitt.y), 6, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#b85a00'; ctx.font = 'bold 11px JetBrains Mono,monospace';
+    ctx.fillStyle = '#b85a00'; ctx.font = 'bold 13px JetBrains Mono,monospace';
     ctx.textAlign = 'left'; ctx.fillText(`S(${f.schnitt.x} | ${f.schnitt.y})`, cx(f.schnitt.x) + 9, cy(f.schnitt.y) + 4);
   }
 }

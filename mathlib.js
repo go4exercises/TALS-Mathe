@@ -19,7 +19,7 @@
 //    ctx.fillStyle='#fff';
 //    ctx.fillRect(W-30, cy(0)-22, 30, 18);   // alter "x"-Bereich
 //    ctx.fillRect(cx(0)+4, 0, 22, 18);       // alter "y"-Bereich
-//    ctx.fillStyle='#374151'; ctx.font='bold 11px monospace';
+//    ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
 //    ctx.textAlign='right'; ctx.fillText('x [kg]', W-2, cy(0)-7);
 //    ctx.textAlign='left';  ctx.fillText('K [CHF]', cx(0)+5, 11);
 // ─────────────────────────────────────────────────────────────
@@ -105,13 +105,13 @@ function drawGrid(ctx, W, H, xMin, xMax, yMin, yMax) {
   ctx.beginPath(); ctx.moveTo(W - 8, cy(0) - 4); ctx.lineTo(W, cy(0));   ctx.lineTo(W - 8, cy(0) + 4); ctx.fill();
   ctx.beginPath(); ctx.moveTo(cx(0) - 4, 8);     ctx.lineTo(cx(0), 0);   ctx.lineTo(cx(0) + 4, 8);     ctx.fill();
   // Zahlen-Labels (generisch — bei Anwendungen überschreiben)
-  ctx.font = '11px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
+  ctx.font = '13px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
   ctx.textAlign = 'center';
   for (let gx = Math.ceil(xMin) + 1; gx < xMax; gx++) { if (gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 14); }
   ctx.textAlign = 'right';
   for (let gy = Math.ceil(yMin) + 1; gy < yMax; gy += 2) { if (gy !== 0) ctx.fillText(gy, cx(0) - 5, cy(gy) + 4); }
   // Achsen-Labels (generisch — bei Anwendungen überschreiben)
-  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace';
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'left';   ctx.fillText('x', W - 14, cy(0) - 7);
   ctx.textAlign = 'center'; ctx.fillText('y', cx(0) + 13, 14);
   return { cx, cy };
