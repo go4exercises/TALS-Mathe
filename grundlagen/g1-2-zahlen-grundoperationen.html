@@ -1071,16 +1071,32 @@ function drawIntervall() {
   if (iv.a !== null) ctx.fillText('a = ' + iv.a, pxL, axisY + 36);
   if (iv.b !== null) ctx.fillText('b = ' + iv.b, pxR, axisY + 36);
 
-  // Texte oberhalb (formal + mengen) sind separate DOM-Elemente
+  // Die Texte oberhalb (formal + mengen + Erklärung) sind separate DOM-Elemente
+  // und werden NICHT hier, sondern in updateIvText() aktualisiert — drawIntervall()
+  // läuft auch bei Resize/rAF/Startup, und ein erneutes Setzen + Typeset bei jedem
+  // Canvas-Redraw löste konkurrierende (sich überlappende) MathJax-Durchläufe aus,
+  // wodurch die Mengen-Zeile mal gerendert wurde und mal nicht.
+}
+
+// MathJax-Durchläufe serialisieren: typesetPromise darf nicht erneut starten, bevor
+// der vorige fertig ist (sonst Race → leere SVG-Glyphen, v. a. mit fontCache:'global').
+let ivMjQueue = Promise.resolve();
+function typesetIv(els) {
+  if (!(window.MathJax && window.MathJax.typesetPromise)) return;
+  ivMjQueue = ivMjQueue
+    .then(() => window.MathJax.typesetPromise(els))
+    .catch(err => console.error('MathJax (Intervall):', err));
+}
+
+function updateIvText() {
+  const iv = IV_BEISPIELE[IV_AKTIV];
   const formalEl = document.getElementById('iv-formal');
   const mengenEl = document.getElementById('iv-mengen');
   const erklEl   = document.getElementById('iv-erkl');
   formalEl.innerHTML = `\\(${iv.formal}\\)`;
   mengenEl.innerHTML = `\\(${iv.mengen}\\)`;
   erklEl.innerHTML = iv.erkl;
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([formalEl, mengenEl, erklEl]);
-  }
+  typesetIv([formalEl, mengenEl, erklEl]);
 }
 
 function selectIntervall(i) {
@@ -1089,6 +1105,7 @@ function selectIntervall(i) {
     r.classList.toggle('aktiv', idx === i);
   });
   drawIntervall();
+  updateIvText();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
