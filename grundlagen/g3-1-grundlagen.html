@@ -961,7 +961,7 @@ function einstiegRender() {
   document.getElementById('einstieg-t-out').textContent = t;
   document.getElementById('einstieg-t-out2').textContent = t;
   document.getElementById('einstieg-v-out').textContent = V.toFixed(1);
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+  mjTypeset();
   const c = document.getElementById('einstieg-canvas');
   const dpr = window.devicePixelRatio || 1;
   const W = c.offsetWidth || 460, H = c.offsetHeight || 200;
@@ -1483,7 +1483,7 @@ document.querySelectorAll('.bsp-tabs').forEach(tabs => {
       const cfg = Object.values(PLOTS).find(p => document.getElementById(p.canvasId) &&
         document.getElementById(tabId) && document.getElementById(tabId).contains(document.getElementById(p.canvasId)));
       if (cfg) plotChart(cfg);
-      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+      mjTypeset();
     });
   });
 });

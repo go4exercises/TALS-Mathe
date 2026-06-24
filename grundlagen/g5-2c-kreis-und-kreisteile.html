@@ -1480,7 +1480,7 @@ function drawStrecken() {
     formelSt.innerHTML = beschr[aktiverTyp].formel;
     erklSt.innerHTML   = beschr[aktiverTyp].erkl;
   }
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([formelSt, erklSt]);
+  mjTypeset([formelSt, erklSt]);
 }
 
 
@@ -1775,7 +1775,7 @@ function drawUmfang() {
   else if (t < 0.99) erkl = `Bisher abgerollt: ${(t * 100).toFixed(0)} % einer vollen Umdrehung — Punkt \\(P\\) hat ${(t * 360).toFixed(0)}° rotiert, abgerollte Strecke ${(t * Math.PI * dVal).toFixed(2)}\\,m.`;
   else erkl = `Volle Umdrehung erreicht: Punkt \\(P\\) berührt wieder den Boden, abgerollte Strecke = Umfang \\(U = \\pi \\cdot d \\approx ${(Math.PI * dVal).toFixed(2)}\\,m\\).`;
   erklU.innerHTML = erkl;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklU]);
+  mjTypeset([erklU]);
 }
 
 
@@ -2028,7 +2028,7 @@ function drawRing() {
   else if (rv < 0.5) erkl = `Innenradius klein (r = ${rv.toFixed(1)}) — der Ring nimmt fast die ganze Kreisfläche ein.`;
   else erkl = `Verschiebe \\(R\\) und \\(r\\) — die Ringfläche reagiert sofort. Beachte: \\(A = R^2\\pi - r^2\\pi\\) und \\(A = 2\\pi r_m b\\) liefern stets denselben Wert.`;
   erklRing.innerHTML = erkl;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklRing]);
+  mjTypeset([erklRing]);
 }
 
 function drawArrowHead(ctx, p, dir, color) {

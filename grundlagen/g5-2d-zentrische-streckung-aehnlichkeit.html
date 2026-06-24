@@ -1141,7 +1141,7 @@ function drawStreck() {
   else erkl = `Negativer Streckfaktor: Bild liegt auf der anderen Seite von \\(Z\\) und ist am Zentrum gespiegelt. \\(|k| = ${Math.abs(k).toFixed(1)}\\).`;
   erkl += ' <em>Tipp: ziehe Z, A, B oder C — Bild folgt der Streckung von Z aus.</em>';
   erklStr.innerHTML = erkl;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklStr]);
+  mjTypeset([erklStr]);
 }
 
 // Drag & Drop für Anim 1 — wird einmal initialisiert, sobald das Canvas im DOM ist.
@@ -1709,7 +1709,7 @@ function drawFig() {
     erkl += ` Die hellen blauen ${figLabel} zeigen: vier original-grosse Kopien decken das Bild exakt ab — also Fläche \\(\\times 4 = k^2\\).`;
   }
   erklFig.innerHTML = erkl;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklFig]);
+  mjTypeset([erklFig]);
 }
 sldFigK.addEventListener('input', drawFig);
 togFigStrahl.addEventListener('change', drawFig);
@@ -1852,7 +1852,7 @@ function drawAehnSatz() {
   formelAehn.innerHTML = formel;
   erklAehn.innerHTML = erkl;
   legAehnBox.innerHTML = legHtml;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([formelAehn, erklAehn]);
+  mjTypeset([formelAehn, erklAehn]);
 }
 
 function drawAngleArc(ctx, vert, p1, p2, radius, color, label, labelDist) {
@@ -2087,7 +2087,7 @@ function drawRecht() {
     }
   }
   erklRecht.innerHTML = erkl;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklRecht]);
+  mjTypeset([erklRecht]);
 }
 sldRAlpha.addEventListener('input', drawRecht);
 togRBez.addEventListener('change', drawRecht);

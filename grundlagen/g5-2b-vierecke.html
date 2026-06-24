@@ -1341,7 +1341,7 @@ function drawNEck() {
   txt(ctx, 80, H - 26, `σ${subscr(n)} = ${summe}°`, C.blau, 18, 'left', 'middle', '700');
   txt(ctx, 80, H - 8, `${n - 2} Dreiecke × 180°`, C.tinte2, 12, 'left', 'middle', '400');
 
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([formelN, erklN]);
+  mjTypeset([formelN, erklN]);
 }
 
 function subscr(n) {
@@ -1715,7 +1715,7 @@ function setFormelF(t, tFinal, name, formel) {
     fBoxF.innerHTML = `\\( A_{\\text{${name}}} = \\;? \\)`;
     fBoxF.classList.remove('fertig');
   }
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fBoxF]);
+  mjTypeset([fBoxF]);
 }
 function setErklF(t, schwellen) {
   for (const [grenze, text] of schwellen) {
@@ -1896,7 +1896,7 @@ function drawSehnenviereck(ctx, cx, cy, R) {
   `;
 
   erklSTV.innerHTML = `Im Sehnenviereck liegen alle vier Eckpunkte auf einem gemeinsamen Kreis. Gegenüberliegende Innenwinkel ergänzen sich zu \\(180°\\) (Umfangswinkelsatz). Ziehe die Ecken über den Kreis.`;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fBoxSTV, erklSTV]);
+  mjTypeset([fBoxSTV, erklSTV]);
 }
 
 function drawTangentenviereck(ctx, cx, cy, R) {
@@ -2007,7 +2007,7 @@ function drawTangentenviereck(ctx, cx, cy, R) {
   `;
 
   erklSTV.innerHTML = `Im Tangentenviereck berührt der Inkreis alle vier Seiten. Die Summen gegenüberliegender Seiten sind gleich: \\(a + c = b + d\\). Ziehe die orangen Berührungspunkte auf dem Kreis.`;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fBoxSTV, erklSTV]);
+  mjTypeset([fBoxSTV, erklSTV]);
 }
 
 
@@ -2202,7 +2202,7 @@ function drawReg() {
     12: 'Zwölfeck: Zentriwinkel \\(30°\\). Wird oft als Annäherung an den Kreis benutzt.',
   };
   erklReg.innerHTML = erklMap[n] || `Regelmässiges ${n}-Eck: Zentriwinkel \\(\\zeta_{${n}} = ${k.zeta.toFixed(1)}°\\), Innenwinkel \\(\\alpha_{${n}} = ${k.alpha.toFixed(1)}°\\). Berechnung von \\(r\\) und \\(s\\) mit Trigonometrie.`;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklReg]);
+  mjTypeset([erklReg]);
 }
 
 

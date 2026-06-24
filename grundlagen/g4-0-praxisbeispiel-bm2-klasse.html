@@ -854,7 +854,7 @@ function oeffneKzDetail(kz) {
   document.querySelectorAll('.mz-tab th.kz').forEach(th => {
     th.classList.toggle('aktiv', th.dataset.kz === kz);
   });
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([inh]);
+  mjTypeset([inh]);
 }
 function schliesseKzDetail() {
   aktivesKzDetail = null;
@@ -893,7 +893,7 @@ function oeffneHkDetail(hk) {
   document.querySelectorAll('.haeuf-tab-int th.hk').forEach(th => {
     th.classList.toggle('aktiv', th.dataset.hk === hk);
   });
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([inh]);
+  mjTypeset([inh]);
 }
 function schliesseHkDetail() {
   aktivesHkDetail = null;
@@ -1314,7 +1314,7 @@ function zeichneSortliste() {
   html += '</div>';
   div.innerHTML = html;
   // MathJax neu rendern für die x_i-Subscripts
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([div]);
+  mjTypeset([div]);
 }
 
 function toggleMarker(name) {
@@ -1356,7 +1356,7 @@ function updateMarkerErklaerung() {
     else teile.push(`<strong>Modus \\(\\hat{x}\\) = ${mw.modus.join(', ')} cm</strong>: häufigster Wert.`);
   }
   e.innerHTML = teile.join(' · ');
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([e]);
+  mjTypeset([e]);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1801,7 +1801,7 @@ function typesetDiagnose(id) {
   const c = document.querySelector(`#diag-${id}-charakter .dc-text`);
   if (a) targets.push(a);
   if (c) targets.push(c);
-  if (targets.length) MathJax.typesetPromise(targets);
+  if (targets.length) mjTypeset(targets);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2027,7 +2027,7 @@ function aktualisiereAlles() {
     document.querySelectorAll('.diag-aussage .da-text, .diag-charakter .dc-text').forEach(el => targets.push(el));
     /* Plausibilitäts-Box */
     const pg = document.getElementById('plausi-grid'); if (pg) targets.push(pg);
-    if (targets.length) MathJax.typesetPromise(targets);
+    if (targets.length) mjTypeset(targets);
   }
 }
 
@@ -2051,7 +2051,7 @@ function aktualisiereAlles() {
      Zeitpunkt von init noch nicht da ist (Script lädt asynchron), warten wir
      via startup.promise. */
   function rerenderAlleMathe() {
-    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+    mjTypeset();
   }
   if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
     MathJax.startup.promise.then(rerenderAlleMathe);

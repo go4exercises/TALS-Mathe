@@ -1195,7 +1195,7 @@ function drawSinCos() {
   else if (phiD < 270) q = 'im Quadranten III (sin < 0, cos < 0)';
   else q = 'im Quadranten IV (sin < 0, cos > 0)';
   erklEk1.innerHTML = `\\(P\\) liegt ${q}. Koordinaten: \\(\\cos ${phiLabel} = ${cosVal.toFixed(3)}\\), \\(\\sin ${phiLabel} = ${sinVal.toFixed(3)}\\).`;
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklEk1]);
+  mjTypeset([erklEk1]);
 }
 sldEk1Phi.addEventListener('input', drawSinCos);
 
@@ -1327,7 +1327,7 @@ function drawTan() {
   } else {
     erklEk2.innerHTML = `Der Strahl \\(OP\\) schneidet die rechte Tangente in \\(S = (1, ${tanVal.toFixed(3)})\\); die Länge \\(\\overline{RS} = |\\tan ${phiLabel}| = ${Math.abs(tanVal).toFixed(3)}\\).`;
   }
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([erklEk2]);
+  mjTypeset([erklEk2]);
 }
 sldEk2Phi.addEventListener('input', drawTan);
 
@@ -1465,7 +1465,7 @@ function drawBez() {
   legBezQuot.textContent = (Math.sin(phiR)/Math.cos(phiR)).toFixed(3);
   legBezPyth.textContent = (Math.sin(phiR)**2 + Math.cos(phiR)**2).toFixed(3);
 
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([formelBez, erklBez]);
+  mjTypeset([formelBez, erklBez]);
 }
 sldBezPhi.addEventListener('input', drawBez);
 

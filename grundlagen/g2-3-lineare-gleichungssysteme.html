@@ -937,9 +937,7 @@ function setLf(f) {
   lfAktiv = f;
   document.querySelectorAll('.lf-card').forEach(c => c.classList.toggle('aktiv', c.dataset.fall === f));
   document.getElementById('lf-info').innerHTML = LF_INFO[f];
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([document.getElementById('lf-info')]);
-  }
+  mjTypeset([document.getElementById('lf-info')]);
   drawLf();
 }
 

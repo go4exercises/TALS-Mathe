@@ -137,3 +137,27 @@ function toggleL(id) {
   const o = b.classList.toggle('sichtbar');
   btn.textContent = o ? '▼ Lösung verbergen' : '▶ Lösung';
 }
+
+/* ── MathJax: serialisiertes, Startup-gegateetes Typesetting ───────────────────
+   Zentraler Ersatz für direkte MathJax.typesetPromise(...)-Aufrufe. Behebt zwei
+   Races, die einzelne Formeln sporadisch leer rendern liessen (vor allem beim
+   Hard-Refresh, nicht beim Zurückblättern aus dem bfcache):
+     1) eigene Typeset-Aufrufe beim Laden, die mit MathJax' initialem Render der
+        ganzen Seite kollidieren  → die erste Queue-Stufe wartet auf
+        MathJax.startup.promise, läuft also erst NACH dem Initial-Render;
+     2) sich überlappende Re-Typesets auf denselben Elementen (verstärkt durch
+        svg.fontCache:'global')  → alle Aufrufe werden seriell verkettet, ein
+        neuer startet erst, wenn der vorige fertig ist.
+   Aufruf:  mjTypeset([el, ...])   bzw.   mjTypeset()  für die ganze Seite.
+   Gibt das Promise des Durchlaufs zurück (für optionales .then()/await). */
+let _mjTypesetQueue = null;
+function mjTypeset(els) {
+  if (!(window.MathJax && MathJax.typesetPromise)) return Promise.resolve();
+  if (!_mjTypesetQueue) {
+    _mjTypesetQueue = (MathJax.startup && MathJax.startup.promise) || Promise.resolve();
+  }
+  _mjTypesetQueue = _mjTypesetQueue
+    .then(() => MathJax.typesetPromise(els))
+    .catch(err => console.error('mjTypeset:', err));
+  return _mjTypesetQueue;
+}

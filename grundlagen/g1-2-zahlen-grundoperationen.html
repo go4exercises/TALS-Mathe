@@ -852,9 +852,7 @@ function updateConv() {
   const lhs = ungekuerztGleich ? texC(p, q) : `${texC(p, q)} \\;=\\; ${tex(pk, qk)}`;
   const out = document.getElementById('cv-out');
   out.innerHTML = `\\(${lhs} \\;=\\; ${dec} \\;=\\; ${pctStr}\\%\\)`;
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([out]);
-  }
+  mjTypeset([out]);
 }
 
 /* Klassifikation */
@@ -888,7 +886,7 @@ function buildKl() {
       <div class="kl-feedback" id="klf-${i}"></div>
     </div>
   `).join('')}</div>`;
-  if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([cont]).catch(()=>{});
+  mjTypeset([cont]).catch(()=>{});
 }
 
 function checkKl(i, j) {
@@ -905,9 +903,7 @@ function checkKl(i, j) {
     fb.className = 'kl-feedback err';
     fb.innerHTML = `\u2717 Nicht ganz. ${a.hint}`;
   }
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([fb]);
-  }
+  mjTypeset([fb]);
 }
 
 function checkA4() {
@@ -1078,16 +1074,6 @@ function drawIntervall() {
   // wodurch die Mengen-Zeile mal gerendert wurde und mal nicht.
 }
 
-// MathJax-Durchläufe serialisieren: typesetPromise darf nicht erneut starten, bevor
-// der vorige fertig ist (sonst Race → leere SVG-Glyphen, v. a. mit fontCache:'global').
-let ivMjQueue = Promise.resolve();
-function typesetIv(els) {
-  if (!(window.MathJax && window.MathJax.typesetPromise)) return;
-  ivMjQueue = ivMjQueue
-    .then(() => window.MathJax.typesetPromise(els))
-    .catch(err => console.error('MathJax (Intervall):', err));
-}
-
 function updateIvText() {
   const iv = IV_BEISPIELE[IV_AKTIV];
   const formalEl = document.getElementById('iv-formal');
@@ -1096,7 +1082,7 @@ function updateIvText() {
   formalEl.innerHTML = `\\(${iv.formal}\\)`;
   mengenEl.innerHTML = `\\(${iv.mengen}\\)`;
   erklEl.innerHTML = iv.erkl;
-  typesetIv([formalEl, mengenEl, erklEl]);
+  mjTypeset([formalEl, mengenEl, erklEl]);
 }
 
 function selectIntervall(i) {
@@ -1376,9 +1362,7 @@ function drawZahlmenge() {
 
   const erklEl = document.getElementById('erkl-zm');
   erklEl.innerHTML = w.erkl;
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([erklEl]);
-  }
+  mjTypeset([erklEl]);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

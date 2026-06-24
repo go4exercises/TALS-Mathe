@@ -361,6 +361,11 @@ buildNav({
      - fmt(n), fmtS(n), fmtMx(m)   → Zahlen-Formatierer (FTB)
      - parseL(s)                    → toleranter Term-Parser
      - toggleL(id)                  → Lösungs-Aufklappen
+     - mjTypeset([el, …])           → MathJax neu rendern (Pflicht statt
+       direkt MathJax.typesetPromise(…)). Serialisiert + wartet auf den
+       Initial-Render → keine sporadisch leeren Formeln beim Hard-Refresh.
+       Nur bei dynamisch (per innerHTML) geänderter Mathematik aufrufen;
+       statisch im HTML stehende Formeln rendert MathJax selbst.
 
    Bei Anwendungen (square=false) NACH drawGrid die generischen
    Achsenlabels „x"/„y" überschreiben:

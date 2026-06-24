@@ -864,7 +864,7 @@ function buildKlSpiel() {
       <div class="kl-feedback" id="klf-${i}"></div>
     </div>
   `).join('');
-  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([cont]).catch(()=>{});
+  mjTypeset([cont]).catch(()=>{});
 }
 
 function checkKl(i, j) {
@@ -1147,9 +1147,7 @@ function sbZeichne(eingabe) {
     const tokens = sbTokenize(eingabe);
     const ast = sbParse(tokens);
     baum.innerHTML = sbBaumHtml(ast);
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([baum]);
-    }
+    mjTypeset([baum]);
     return true;
   } catch (e) {
     baum.innerHTML = '<p style="color:var(--rot); font-family:var(--mono); font-size:0.85rem">Term konnte nicht geparst werden.</p>';
@@ -1224,7 +1222,7 @@ function wuerfelKommutativ() {
       </div>
     </div>
   `;
-  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([document.getElementById('wb-k-bsp')]);
+  mjTypeset([document.getElementById('wb-k-bsp')]);
 }
 
 function wuerfelAssoziativ() {
@@ -1248,7 +1246,7 @@ function wuerfelAssoziativ() {
       </div>
     </div>
   `;
-  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([document.getElementById('wb-a-bsp')]);
+  mjTypeset([document.getElementById('wb-a-bsp')]);
 }
 
 function wuerfelDistributiv() {
@@ -1270,7 +1268,7 @@ function wuerfelDistributiv() {
       </div>
     </div>
   `;
-  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([document.getElementById('wb-d-bsp')]);
+  mjTypeset([document.getElementById('wb-d-bsp')]);
 }
 
 function wuerfelInit() {
@@ -1400,9 +1398,7 @@ function drawHauptop() {
   }
   const erklEl = document.getElementById('erkl-hauptop');
   erklEl.innerHTML = erkl;
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([erklEl]);
-  }
+  mjTypeset([erklEl]);
 }
 document.addEventListener('DOMContentLoaded', () => {
   const sld = document.getElementById('sld-hauptopX');
