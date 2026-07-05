@@ -102,6 +102,30 @@ Für **Mathe SMI** und **Mathehoch13** funktioniert oft auch der direkte Weg üb
 | Anbieter „hat doch keine Playlist" | falsche Schlussfolgerung aus 1 Suche | mehrere Pattern probieren, dann erst aufgeben |
 | Serlo-Link ergibt 404 oder leitet ins Leere | pfadbasierte Serlo-URLs (`/mathe/zahlen-grossen/...`, `/mathe/terme-gleichungen/...`) werden umbenannt, **ohne Redirect** | immer **ID-basierte URLs** verwenden: `https://de.serlo.org/mathe/{ID}/{slug}` (z.B. `/mathe/23665/aufgaben-zu-den-potenzgesetzen`). Der `canonical`-Eintrag im HTML-Header einer Serlo-Seite zeigt die kanonische ID-URL. Bei Bestandspflege regelmässig prüfen. |
 
+### 3.4 Effizienz-Regeln (Lehre aus dem s3-2-Lauf, Juli 2026)
+
+Qualität heisst: Owner verifiziert + Niveau passt. Der Weg dorthin ist budgetiert:
+
+1. **Zuerst die Anbieter-Map (§8) konsultieren** — bereits verifizierte IDs nie neu recherchieren.
+2. **Ein Discovery-Abruf pro Thema:** die YouTube-Suchergebnis-Seite einmal abrufen (nur zur
+   Kandidaten-Findung — Suchergebnis-URLs werden nie verlinkt!), daraus die Playlist-IDs der
+   bevorzugten Anbieter ziehen. Danach **je Kandidat genau ein direkter Playlist-Abruf** — der
+   liefert Titel, Owner und Videoanzahl autoritativ in einem Schritt.
+3. **Kein Kanal-Seiten-Scraping.** Die Playlist-Übersichten der Kanäle liefern Titel und IDs in
+   getrennten Datenstrukturen — die Zuordnung ist fehleranfällig (verschobene Paarungen im
+   s3-2-Lauf). Der direkte Playlist-Abruf ist billiger und eindeutig.
+4. **Niveau-Passung am Playlist-Titel entscheiden**, nicht durch Sichten der Einzelvideos.
+   Nur bei mehrdeutigem Titel einen Blick in die ersten Videotitel werfen.
+5. **Abruf-Budget: max. ~6 Abrufe pro Sub-Sektion** (Videos bzw. Aufgaben). Ist das Budget
+   erschöpft, Platzhalter setzen (§6) und weiterarbeiten — Platzhalter sind reversibel, verlorene
+   Session-Zeit nicht.
+6. **serlo immer über die Sitemap:** `https://de.serlo.org/sitemap.xml` einmal abrufen und lokal
+   nach Thema greppen — ein Abruf liefert alle ID-basierten Aufgaben-URLs. Die Such-Seite von
+   serlo ist clientseitig und für Fetches leer.
+7. **sos-mathe über die Code-Map (§8.1)** — nicht blind G-Codes durchprobieren.
+8. **Ressourcen vom Seitenbau entkoppeln:** Neue Themenseiten dürfen mit Platzhaltern committet
+   werden; die Ressourcen-Kuratierung läuft als eigener Cluster-Lauf pro Lerngebiet (§7).
+
 ---
 
 ## 4. Schritt-für-Schritt-Verfahren pro Themenseite
@@ -273,8 +297,32 @@ Diese Tabelle wird mit jedem abgeschlossenen Thema erweitert. So muss eine berei
 | g5-3 Trigonometrische Berechnungen | — | `PLa0u3J0uzAzlIHjv0J_R8sIj-xn8cVs0J` (20 Vid „Trigonometrie") | — | — | — | `PLLTAHuUj-zHgXgsj5jy-qDE41UePZveqr` (siehe g5-1) |
 | g5-4 Einheitskreis | — | `PLa0u3J0uzAzlIHjv0J_R8sIj-xn8cVs0J` (siehe g5-3) | — | — | — | `PLLTAHuUj-zHgXgsj5jy-qDE41UePZveqr` (siehe g5-1) |
 | g5-5 Trigonometrische Gleichungen | — | `PLa0u3J0uzAzlIHjv0J_R8sIj-xn8cVs0J` (siehe g5-3) | — | — | — | `PLLTAHuUj-zHgXgsj5jy-qDE41UePZveqr` (siehe g5-1) |
+| s3-2a Potenzfunktionen | — *(nur Einzelvideo `watch?v=eOYTlV0Af3o` „Potenzfunktionen aufstellen mit 2 Punkten")* | — *(nur „Potenz- und Wurzelrechnung" = Rechnen, Thema passt nicht)* | `PL2jCdV8ykKMrnQfRszg204hlZYiGnkpqq` (24 Vid „Gebrochen-rationale Funktionen" — Asymptoten/Polstellen, deckt Hyperbel-Teil) | `PLLkr4Hf_IwvPyPsggHjtOLlj_6R3T9MlW` (14 Vid „gebrochen-rationale Funktionen") | — | — *(nur Einzelvideo `watch?v=OVWF5UATHVc` „Potenzfunktionen Übersicht")* |
+| s3-2b Wurzelfunktionen | `PLF29x0idI4lXu1WcPP0oXEF_AnfOtYjkw` (56 Vid „Alles über WURZELN" — Wurzelrechnung als Grundlage; Einzelvideo `watch?v=GMjEAYtCHQg` „Definitionsmenge Wurzelterm") | — | — | — | — | `PLLTAHuUj-zHiqJlnyr_iYcbxsL7ztyWp8` (31 Vid „Wurzel, Wurzelrechnungen, Wurzelfunktionen"; Einzelvideo `watch?v=_ZA-ZB-SqTc` „Wertebereich und Umkehrfunktion") |
 
 *Diese Tabelle wird bei jedem neuen Recherche-Lauf erweitert. Bei Erweiterung: pro Thema eine Zeile, Playlist-IDs nur eintragen, wenn per `web_fetch` verifiziert. Wenn ein Anbieter zum Thema nichts hat: `—`.*
+
+### 8.1 sos-mathe.ch Code-Map (verifizierte Aufgabenseiten)
+
+URL-Schema: `https://www.sos-mathe.ch/g/g<n>/g<nm>/aufg_g<nm>.html`. Kein Sitemap, keine
+Übersichtsseite — darum hier die bereits verifizierten Codes festhalten (Stand: Juli 2026):
+
+| Code | Thema | verwendet auf |
+|---|---|---|
+| G01–G05 | Arithmetik-Grundlagen | g1-x |
+| G11 | Quadratwurzeln | g1-4 |
+| G12 | Potenzen und Wurzeln (Rechnen) | g1-4 |
+| G21 | Lineare Funktion | g3-2 |
+| G22 | Funktion 2. Grades (Parabel, Extremalwertaufgaben) | g3-3 |
+| G31 | Quadratische Gleichungen | g2-2b |
+| G32 | Gleichungen höheren Grades (Potenzgleichungen) | s3-2a |
+| G33 | Wurzelgleichungen | s3-2b |
+| G34a/b | Gleichungssysteme mit zwei Unbekannten | g2-3 |
+| G35 | Lineare Ungleichungen, lineare Optimierung | — |
+| G41–G44 | Datenanalyse | g4-x |
+| G60–G66 | Geometrie/Trigonometrie | g5-x |
+
+*Nicht existent (2026-07 geprüft): G23, G24, G25. Bei neuen Codes: erst per Abruf verifizieren, dann hier ergänzen.*
 
 ---
 
