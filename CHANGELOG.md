@@ -4,6 +4,33 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [72] — 2026-07-05 · s3-5 Trigonometrische Funktionen ausgebaut
+
+Vierter Vollausbau im Schwerpunktfach (Quelle: FTB Kap. 8 «Trigonometrische Funktionen und ihre
+Graphen», RLP-Kompetenz 3.5) — damit ist Lerngebiet 3 bis auf den Grundlagen-Stub 3.1 komplett:
+
+- **`schwerpunkt/s3-5-trigonometrische-funktionen.html`** — Einstieg Riesenrad
+  \(h(t) = 35 - 30\cos(\tfrac{2\pi}{12}t)\) (interaktive Rad-Ansicht + Höhenkurve),
+  Einheitskreis-Abrollung als Kern-Widget (sin/cos/tan umschaltbar, Funktionsstrecke am Kreis
+  rot markiert, Graph mit π-Raster synchron), Eigenschaften-Tabelle sin/cos/tan mit
+  Klick-Visualisierung (inkl. Kongruenz-Ansicht sin &amp; cos), Transformations-Baukasten
+  \(a\sin(b(x-u))+v\) mit vier Slidern (Amplitude, Periode als π-Bruch, Mittellinie live),
+  allgemeine Sinusfunktion (\(p = 2\pi/b\), \(x_0 = -c/b\)), harmonische Schwingungen
+  (\(A\sin(\omega t + \varphi)\), \(T\), \(f\), Phasenverschiebung), A1–A7 (u.a.
+  Wechselspannung, Federpendel, Pendel mit Start am Maximum), 4 Mini-Checks, Querlink g5-4
+  Einheitskreis.
+- **Materialien komplett:** 4 Druckseiten (`build_print_s3.py` F-Block, Bestand byte-identisch;
+  Aufgabenserie mit Netzspannung, Gezeiten, Kammerton, Tageslänge) und Anki-Deck mit 20 Karten
+  (`build_apkg.py`, nur neues Deck gebaut).
+- Alle Zahlenwerte numerisch verifiziert (u.a. \(x_H = \pi/3\), \(p = 8\pi/3\), \(b = 5\pi/6\)
+  und \(c = \pi/3\) aus Graphendaten, \(U(0) \approx -126.2\) V, Feder \(y(1.3) \approx 4.41\) cm,
+  längster Tag \(d \approx 171\)).
+- index.html-Karte 3.5 auf «fertig»; Ressourcen ohne neue Abrufe aus der Anbieter-Map
+  (Lehrerschmidt/Daniel Jung, owner-verifiziert seit g5-x) + serlo-Sitemap-Cache
+  (allg. Sinusfunktion, Verschieben/Strecken, Einheitskreis); Map §8 um s3-5 ergänzt.
+
+---
+
 ## [71] — 2026-07-05 · s3-4 ausgebaut: Sub-Split 3.4a Exponentialfunktionen / 3.4b Logarithmusfunktionen
 
 Dritter Vollausbau im Schwerpunktfach (Quelle: FTB Kap. 19, RLP-Kompetenzen 3.4). Der Stub

@@ -1654,6 +1654,322 @@ E_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s3-5  TRIGONOMETRISCHE FUNKTIONEN
+# ═══════════════════════════════════════════════════════════════════
+
+F_HANDOUT = r'''
+  <h2>1. Definition</h2>
+
+  <div class="block block-def">
+    <div class="block-titel">📘 Trigonometrische Funktionen</div>
+    <p>Am Einheitskreis gehört zu jedem Winkel \(x\) (Bogenmass) ein Punkt \(P\): seine
+    \(y\)-Koordinate ist \(\sin x\), seine \(x\)-Koordinate \(\cos x\), der Tangentenabschnitt
+    bei \(x = 1\) ist \(\tan x\). Als Funktionen von \(x\) heissen</p>
+    \[ f(x) = \sin x, \qquad f(x) = \cos x, \qquad f(x) = \tan x \]
+    <p><strong>Sinus-, Cosinus- und Tangensfunktion</strong> (Winkelfunktionen).</p>
+  </div>
+
+  <h2>2. Eigenschaften</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th></th><th>\( \sin x \)</th><th>\( \cos x \)</th><th>\( \tan x \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Definitionsmenge</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R} \setminus \{\tfrac{\pi}{2} + k\pi\} \)</td></tr>
+      <tr><td class="li">Wertemenge</td><td>\( [-1;\,1] \)</td><td>\( [-1;\,1] \)</td><td>\( \mathbb{R} \)</td></tr>
+      <tr><td class="li">Periodenlänge</td><td>\( 2\pi \)</td><td>\( 2\pi \)</td><td>\( \pi \)</td></tr>
+      <tr><td class="li">Nullstellen</td><td>\( k\pi \)</td><td>\( \tfrac{\pi}{2} + k\pi \)</td><td>\( k\pi \)</td></tr>
+      <tr><td class="li">Symmetrieachsen</td><td>\( x = \tfrac{\pi}{2} + k\pi \)</td><td>\( x = k\pi \)</td><td>—</td></tr>
+      <tr><td class="li">Symmetriezentren</td><td>\( (k\pi \mid 0) \)</td><td>\( (\tfrac{\pi}{2} + k\pi \mid 0) \)</td><td>\( (\tfrac{k\pi}{2} \mid 0) \)</td></tr>
+      <tr><td class="li">Pole</td><td>—</td><td>—</td><td>\( x = \tfrac{\pi}{2} + k\pi \)</td></tr>
+    </tbody>
+  </table>
+  <p>(jeweils \( k \in \mathbb{Z} \)) Die Tangensfunktion springt an jedem Pol von \(+\infty\)
+  nach \(-\infty\); ihre Periode ist nur halb so lang.</p>
+
+  <h2>3. Kongruenz und Beziehungen</h2>
+  <p>Sinus- und Cosinuskurve sind <strong>kongruent</strong> — horizontale Verschiebung um \(\tfrac{\pi}{2}\):</p>
+  \[ \cos x = \sin\left(x + \tfrac{\pi}{2}\right), \qquad \sin x = \cos\left(x - \tfrac{\pi}{2}\right) \]
+  <table class="ftb-tabelle">
+    <thead><tr><th>Sinus</th><th>Cosinus</th><th>Tangens</th></tr></thead>
+    <tbody>
+      <tr><td>\( \sin(\pi - x) = \sin x \)</td><td>\( \cos(\pi - x) = -\cos x \)</td><td>\( \tan(\pi - x) = -\tan x \)</td></tr>
+      <tr><td>\( \sin(\pi + x) = -\sin x \)</td><td>\( \cos(\pi + x) = -\cos x \)</td><td>\( \tan(\pi + x) = \tan x \)</td></tr>
+      <tr><td>\( \sin(2\pi - x) = -\sin x \)</td><td>\( \cos(2\pi - x) = \cos x \)</td><td>\( \tan(2\pi - x) = -\tan x \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Transformationen</h2>
+  <p>Ausgangsfunktion \( y = \sin x \), Bildfunktion \( y = a \cdot \sin\bigl(b(x-u)\bigr) + v \)
+  (analog für Cosinus und Tangens):</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Parameter</th><th>Wirkung</th></tr></thead>
+    <tbody>
+      <tr><td>\(a\)</td><td class="li">Streckung/Stauchung in \(y\)-Richtung — die <strong>Amplitude</strong></td></tr>
+      <tr><td>\(b\)</td><td class="li">Streckung/Stauchung mit Faktor \(\tfrac{1}{b}\) in \(x\)-Richtung — neue Periode \( p = \tfrac{2\pi}{b} \)</td></tr>
+      <tr><td>\(u\)</td><td class="li">Verschiebung in \(x\)-Richtung (nach rechts für \(u > 0\))</td></tr>
+      <tr><td>\(v\)</td><td class="li">Verschiebung in \(y\)-Richtung — Mittellinie \( y = v \)</td></tr>
+    </tbody>
+  </table>
+  <p>Negative \(a\), \(b\) sind entbehrlich: \( \sin(-x) = -\sin x = \sin(x - \pi) \).</p>
+
+  <h2>5. Allgemeine Sinusfunktion</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 \( y = a \sin(bx + c) \), \( a, b \in \mathbb{R}^+ \), \( c \in \mathbb{R} \)</div>
+    <p>Amplitude \(a\), Periodenlänge \( p = \tfrac{2\pi}{b} \), Wertebereich \( -a \leq y \leq a \),
+    Verschiebung («Startpunkt») \( x_0 = -\tfrac{c}{b} \). Ausklammern verbindet beide Formen:
+    \( a\sin(bx + c) = a\sin\bigl(b(x + \tfrac{c}{b})\bigr) \).</p>
+  </div>
+
+  <h2>6. Harmonische Schwingungen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 \( y = f(t) = A \sin(\omega t + \varphi) \)</div>
+    <p>Amplitude \(A\), Kreisfrequenz \(\omega\) [rad/s], Phasenwinkel \(\varphi\) (Bogenmass).
+    Periodendauer \( T = \tfrac{2\pi}{\omega} \), Frequenz \( f = \tfrac{1}{T} = \tfrac{\omega}{2\pi} \)
+    [Hz], Phasenverschiebung \( t_0 = -\tfrac{\varphi}{\omega} \). Es gilt \( \omega = 2\pi f \).</p>
+  </div>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Sinus und Cosinus pendeln mit Periode \(2\pi\) zwischen \(-1\) und \(1\) und sind kongruent;
+    der Tangens hat Periode \(\pi\) und Pole. In \( a\sin\bigl(b(x-u)\bigr) + v \) bestimmt \(a\) die
+    Amplitude und \(b\) die Periode \( \tfrac{2\pi}{b} \) — zeitabhängig beschreibt dieselbe Form
+    als \( A\sin(\omega t + \varphi) \) jede harmonische Schwingung.</p>
+  </div>
+'''
+
+F_FORMELAUSZUG = r'''
+  <h2>1. Die drei Winkelfunktionen</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th></th><th>\( \sin x \)</th><th>\( \cos x \)</th><th>\( \tan x \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">am Einheitskreis</td><td class="li">\(y\)-Koordinate von \(P\)</td><td class="li">\(x\)-Koordinate von \(P\)</td><td class="li">Tangentenabschnitt</td></tr>
+      <tr><td class="li">\(D\)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R} \setminus \{\tfrac{\pi}{2} + k\pi\} \)</td></tr>
+      <tr><td class="li">\(W\)</td><td>\( [-1;\,1] \)</td><td>\( [-1;\,1] \)</td><td>\( \mathbb{R} \)</td></tr>
+      <tr><td class="li">Periode</td><td>\( 2\pi \)</td><td>\( 2\pi \)</td><td>\( \pi \)</td></tr>
+      <tr><td class="li">Nullstellen</td><td>\( k\pi \)</td><td>\( \tfrac{\pi}{2} + k\pi \)</td><td>\( k\pi \)</td></tr>
+      <tr><td class="li">Symmetrie</td><td class="li">ungerade (Punkt)</td><td class="li">gerade (Achse)</td><td class="li">ungerade (Punkt)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Kongruenz und Beziehungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Kongruenz</td><td>\( \cos x = \sin(x + \tfrac{\pi}{2}), \quad \sin x = \cos(x - \tfrac{\pi}{2}) \)</td></tr>
+      <tr><td class="li">Ergänzung auf \(\pi\)</td><td>\( \sin(\pi - x) = \sin x, \quad \cos(\pi - x) = -\cos x \)</td></tr>
+      <tr><td class="li">Verschiebung um \(\pi\)</td><td>\( \sin(\pi + x) = -\sin x, \quad \tan(\pi + x) = \tan x \)</td></tr>
+      <tr><td class="li">negatives Argument</td><td>\( \sin(-x) = -\sin x, \quad \cos(-x) = \cos x \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Transformationen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Bildfunktion</td><td>\( y = a \cdot \sin\bigl(b(x-u)\bigr) + v \)</td></tr>
+      <tr><td class="li">Amplitude</td><td>\( a \)</td></tr>
+      <tr><td class="li">Periodenlänge</td><td>\( p = \dfrac{2\pi}{b} \)</td></tr>
+      <tr><td class="li">Mittellinie</td><td>\( y = v \)</td></tr>
+      <tr><td class="li">Wertebereich</td><td>\( v - a \leq y \leq v + a \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Allgemeine Sinusfunktion</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Form</td><td>\( y = a \sin(bx + c), \quad a, b \in \mathbb{R}^+ \)</td></tr>
+      <tr><td class="li">Verschiebung («Startpunkt»)</td><td>\( x_0 = -\dfrac{c}{b} \)</td></tr>
+      <tr><td class="li">Umrechnung</td><td>\( a\sin(bx + c) = a\sin\bigl(b(x + \tfrac{c}{b})\bigr) \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Harmonische Schwingungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Form</td><td>\( y = A \sin(\omega t + \varphi) \)</td></tr>
+      <tr><td class="li">Periodendauer</td><td>\( T = \dfrac{2\pi}{\omega} \)</td></tr>
+      <tr><td class="li">Frequenz</td><td>\( f = \dfrac{1}{T} = \dfrac{\omega}{2\pi} \) [Hz], \( 1\ \text{Hz} = 1\ \text{s}^{-1} \)</td></tr>
+      <tr><td class="li">Kreisfrequenz</td><td>\( \omega = 2\pi f = \dfrac{2\pi}{T} \) [rad/s]</td></tr>
+      <tr><td class="li">Phasenverschiebung</td><td>\( t_0 = -\dfrac{\varphi}{\omega} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. Hoch- und Tiefpunkte finden</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Funktion</th><th>Hochpunkt: Argument =</th><th>Tiefpunkt: Argument =</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Sinus</td><td>\( \tfrac{\pi}{2} + 2k\pi \)</td><td>\( \tfrac{3\pi}{2} + 2k\pi \)</td></tr>
+      <tr><td class="li">Cosinus</td><td>\( 2k\pi \)</td><td>\( \pi + 2k\pi \)</td></tr>
+    </tbody>
+  </table>
+'''
+
+F_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Definition vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Am Einheitskreis ist \( \sin x \) die <span class="lueck"></span>-Koordinate des Punktes \(P\).<br>
+      Sinus und Cosinus haben die Periodenlänge <span class="lueck"></span>,<br>
+      die Tangensfunktion hat die Periodenlänge <span class="lueck"></span>
+      und Pole bei \( x = \) <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Werte ohne Taschenrechner', 1, r'''    <p>Gib exakt an:</p>
+    <p>(a) \( \sin\tfrac{\pi}{2} \) &nbsp;&nbsp; (b) \( \cos \pi \) &nbsp;&nbsp;
+       (c) \( \tan 0 \) &nbsp;&nbsp; (d) \( \sin\tfrac{\pi}{6} \)</p>
+''' + LINS)
+    + aufg(3, 'Steckbrief ausfüllen', 1, r'''    <p>Gib Definitionsmenge, Wertemenge und Periodenlänge an:</p>
+    <p>(a) \( y = \sin x \) &nbsp;&nbsp;&nbsp; (b) \( y = \tan x \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Eigenschaften</div>\n'
+    + aufg(4, 'Nullstellen', 2, r'''    <p>Gib alle Nullstellen der Cosinusfunktion an (mit \( k \in \mathbb{Z} \)).</p>
+''' + LINS)
+    + aufg(5, 'Symmetrie', 2, r'''    <p>Zeige mit der Bedingung \( f(-x) = \pm f(x) \): Die Sinusfunktion ist ungerade,
+    die Cosinusfunktion gerade.</p>
+''' + LINS)
+    + aufg(6, 'Terme vereinfachen', 2, r'''    <p>Vereinfache mithilfe der Symmetrie-Beziehungen:</p>
+    <p>(a) \( \sin(\pi - x) \) &nbsp;&nbsp;&nbsp; (b) \( \cos(\pi + x) + \cos x \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Transformationen</div>\n'
+    + aufg(7, 'Kenngrössen ablesen', 2, r'''    <p>Gib Amplitude, Periodenlänge und Mittellinie von \( y = 4\sin(2x) - 1 \) an.</p>
+''' + LINS)
+    + aufg(8, 'Periode berechnen', 1, r'''    <p>Welche Periodenlänge hat \( y = \cos\left(\tfrac{1}{2}x\right) \)?</p>
+''' + LINS)
+    + aufg(9, 'Verschiebung erkennen', 2, r'''    <p>Wie geht der Graph von \( y = \sin\left(x - \tfrac{\pi}{3}\right) \) aus dem Graphen
+    von \( y = \sin x \) hervor? Wo liegt seine erste positive Nullstelle?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Parameter bestimmen</div>\n'
+    + aufg(10, 'Allgemeine Sinusfunktion', 2, r'''    <p>Gegeben ist \( y = 2\sin\left(\tfrac{\pi}{4}x - \tfrac{\pi}{2}\right) \). Bestimme die
+    Periodenlänge \(p\) und die Verschiebung \(x_0\).</p>
+''' + LINS)
+    + aufg(11, 'Gleichung aus Kenngrössen', 3, r'''    <p>Eine Sinuskurve durch den Ursprung (steigend) hat die Amplitude \(3\) und die
+    Periodenlänge \(\pi\). Gib die Funktionsgleichung an.</p>
+''' + LINS)
+    + aufg(12, 'Kongruenz anwenden', 3, r'''    <p>Schreibe \( y = \cos x \) als verschobene Sinusfunktion und begründe mit dem
+    Einheitskreis oder den Graphen.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p>\( \sin x \) ist die <strong>\(y\)</strong>-Koordinate von \(P\). Periode von Sinus und
+    Cosinus: <strong>\(2\pi\)</strong>; Tangens: <strong>\(\pi\)</strong>, Pole bei
+    \( x = \tfrac{\pi}{2} + k\pi \).</p>''')
+    + loes(2, r'''    <p>(a) \(1\) · (b) \(-1\) · (c) \(0\) · (d) \(\tfrac{1}{2}\).</p>''')
+    + loes(3, r'''    <p>(a) \( D = \mathbb{R} \), \( W = [-1;\,1] \), \( p = 2\pi \) ·
+    (b) \( D = \mathbb{R} \setminus \{\tfrac{\pi}{2} + k\pi\} \), \( W = \mathbb{R} \), \( p = \pi \).</p>''')
+    + loes(4, r'''    <p>\( x_0 = \tfrac{\pi}{2} + k\pi \), \( k \in \mathbb{Z} \) — versetzt zu den
+    Sinus-Nullstellen \( k\pi \).</p>''')
+    + loes(5, r'''    <p>\( \sin(-x) = -\sin x \) (Punktsymmetrie zum Ursprung → ungerade);
+    \( \cos(-x) = \cos x \) (Achsensymmetrie zur \(y\)-Achse → gerade) — am Einheitskreis:
+    Spiegeln von \(P\) an der \(x\)-Achse wechselt das Vorzeichen der \(y\)-Koordinate,
+    nicht aber das der \(x\)-Koordinate.</p>''')
+    + loes(6, r'''    <p>(a) \( \sin(\pi - x) = \sin x \) ·
+    (b) \( \cos(\pi + x) + \cos x = -\cos x + \cos x = 0 \).</p>''')
+    + loes(7, r'''    <p>Amplitude \(4\); Periode \( p = \tfrac{2\pi}{2} = \pi \); Mittellinie \( y = -1 \)
+    (Kurve pendelt zwischen \(-5\) und \(3\)).</p>''')
+    + loes(8, r'''    <p>\( p = \dfrac{2\pi}{1/2} = 4\pi \) — kleines \(b\) heisst lange Periode.</p>''')
+    + loes(9, r'''    <p>Verschiebung um \( \tfrac{\pi}{3} \) <strong>nach rechts</strong>; die Nullstelle wandert
+    von \(0\) zu \( x = \tfrac{\pi}{3} \).</p>''')
+    + loes(10, r'''    <p>\( b = \tfrac{\pi}{4} \Rightarrow p = \tfrac{2\pi}{\pi/4} = 8 \);
+    \( x_0 = -\tfrac{c}{b} = \tfrac{\pi/2}{\pi/4} = 2 \) (nach rechts).</p>''')
+    + loes(11, r'''    <p>Amplitude \( a = 3 \); \( p = \pi \Rightarrow b = \tfrac{2\pi}{p} = 2 \):
+    \( y = 3\sin(2x) \).</p>''')
+    + loes(12, r'''    <p>\( \cos x = \sin\left(x + \tfrac{\pi}{2}\right) \) — die Cosinuskurve ist die um
+    \( \tfrac{\pi}{2} \) nach links verschobene Sinuskurve. Am Einheitskreis: Die \(x\)-Koordinate
+    von \(P(x)\) ist gleich der \(y\)-Koordinate des um \( \tfrac{\pi}{2} \) weitergedrehten
+    Punktes.</p>''')
+)
+
+F_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik und Naturwissenschaft, nach zunehmendem Schwierigkeitsgrad
+    geordnet. Die Musterlösungen folgen am Ende des Dokuments. Taschenrechner im RAD-Modus!
+    Alle Graphen mit beschrifteten Achsen (Grösse und Einheit) skizzieren.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Elektrotechnik</td><td>Netzspannung</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Geografie</td><td>Gezeiten</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Mechanik</td><td>Federpendel</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Akustik</td><td>Kammerton a</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Astronomie</td><td>Tageslänge im Jahresverlauf</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Mechanik</td><td>Sekundenpendel</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Netzspannung', 2, r'''    <p>Die Spannung im Stromnetz verläuft sinusförmig: \( U(t) = 325 \cdot \sin(100\pi\, t) \)
+    (\(U\) in Volt, \(t\) in Sekunden).</p>
+    <p>(a) Gib Amplitude, Periodendauer und Frequenz an.</p>
+    <p>(b) Berechne die Spannung zum Zeitpunkt \( t = 0.002 \) s.</p>
+    <p>(c) Die Netzspannung wird mit «230 V» angegeben, die Amplitude beträgt aber 325 V.
+    Woran könnte das liegen? (Stichwort: Effektivwert — keine Rechnung verlangt.)</p>
+''' + LINS4, tag='Elektrotechnik')
+    + aufg(2, 'Gezeiten', 2, r'''    <p>In einem Hafen schwankt der Wasserstand näherungsweise sinusförmig:
+    \( h(t) = 5 + 3 \cdot \sin\left(\tfrac{2\pi}{12.4}\, t\right) \) (\(h\) in m, \(t\) in Stunden
+    seit Mittelwasser bei steigender Flut).</p>
+    <p>(a) Gib mittleren Wasserstand, Tidenhub (Differenz Hoch-/Niedrigwasser) und Periode an.</p>
+    <p>(b) Berechne den Wasserstand nach \( 3.1 \) Stunden.</p>
+    <p>(c) Wie viele Stunden nach \( t = 0 \) tritt das erste Niedrigwasser ein?</p>
+''' + LINS4, tag='Geografie')
+    + aufg(3, 'Federpendel', 2, r'''    <p>Eine Masse an einer Feder schwingt harmonisch: \( y(t) = 8 \cdot \sin(4\pi\, t) \)
+    (\(y\) in cm, \(t\) in s).</p>
+    <p>(a) Gib Amplitude, Kreisfrequenz, Periodendauer und Frequenz an.</p>
+    <p>(b) Berechne die Auslenkung nach \( 0.1 \) s.</p>
+    <p>(c) Zu welchen Zeitpunkten ist die Auslenkung maximal?</p>
+''' + LINS4, tag='Mechanik')
+    + aufg(4, 'Kammerton a', 3, r'''    <p>Der Kammerton a ist eine Schallschwingung mit der Frequenz \( f = 440 \) Hz.</p>
+    <p>(a) Berechne Periodendauer und Kreisfrequenz.</p>
+    <p>(b) Gib die Funktionsgleichung \( p(t) = A \sin(\omega t) \) für die Amplitude
+    \( A = 0.2 \) Pa an.</p>
+    <p>(c) Die Oktave darüber hat die doppelte Frequenz. Wie ändern sich \(T\) und \(\omega\)?</p>
+''' + LINS4, tag='Akustik')
+    + aufg(5, 'Tageslänge im Jahresverlauf', 3, r'''    <p>Die Tageslänge (Sonnenaufgang bis -untergang) lässt sich näherungsweise beschreiben durch
+    \( L(d) = 12.2 + 4.3 \cdot \sin\left(\tfrac{2\pi}{365}(d - 80)\right) \)
+    (\(L\) in Stunden, \(d\): Tag des Jahres).</p>
+    <p>(a) Gib den kürzesten und den längsten Tag (Stundenzahl) sowie die Periode an.</p>
+    <p>(b) An welchem Tag \(d\) ist der Tag am längsten?</p>
+    <p>(c) Berechne die Tageslänge am Tag \( d = 355 \) (21. Dezember).</p>
+''' + LINS4, tag='Astronomie')
+    + aufg(6, 'Sekundenpendel', 3, r'''    <p>Ein Uhrenpendel schwingt mit Periodendauer \( T = 2 \) s und maximaler Auslenkung
+    \( 3 \) cm. Beim Start (\( t = 0 \)) ist die Auslenkung maximal.</p>
+    <p>(a) Bestimme \(\omega\) und den Phasenwinkel \(\varphi\) in \( x(t) = A\sin(\omega t + \varphi) \).</p>
+    <p>(b) Zeige, dass sich die Schwingung auch als \( x(t) = 3\cos(\pi t) \) schreiben lässt.</p>
+    <p>(c) Wo befindet sich das Pendel bei \( t = 0.5 \) s und bei \( t = 1 \) s?</p>
+''' + LINS4, tag='Mechanik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) Amplitude \( 325 \) V; \( \omega = 100\pi \Rightarrow T = \tfrac{2\pi}{100\pi} = 0.02 \) s;
+    \( f = \tfrac{1}{T} = 50 \) Hz.</p>
+    <p>(b) \( U(0.002) = 325\sin(0.2\pi) \approx 191 \) V.</p>
+    <p>(c) 230 V ist der <em>Effektivwert</em> — ein zeitlicher Mittelwert der Leistung; die
+    Spitzenspannung (Amplitude) ist um den Faktor \( \sqrt{2} \) grösser: \( 230 \cdot \sqrt{2} \approx 325 \) V.</p>''')
+    + loes(2, r'''    <p>(a) Mittelwasser \( 5 \) m; Tidenhub \( 2 \cdot 3 = 6 \) m; Periode \( 12.4 \) h.</p>
+    <p>(b) \( t = 3.1 = \tfrac{12.4}{4} \): Argument \( = \tfrac{\pi}{2} \), also
+    \( h = 5 + 3 = 8 \) m — Hochwasser.</p>
+    <p>(c) Niedrigwasser beim Argument \( \tfrac{3\pi}{2} \): \( t = \tfrac{3}{4} \cdot 12.4 = 9.3 \) h.</p>''')
+    + loes(3, r'''    <p>(a) \( A = 8 \) cm; \( \omega = 4\pi \approx 12.57\ \text{s}^{-1} \);
+    \( T = \tfrac{2\pi}{4\pi} = 0.5 \) s; \( f = 2 \) Hz.</p>
+    <p>(b) \( y(0.1) = 8\sin(0.4\pi) \approx 7.61 \) cm.</p>
+    <p>(c) Beim Argument \( \tfrac{\pi}{2} + 2k\pi \): \( t = 0.125 + 0.5k \) s (\( k \in \mathbb{N}_0 \)).</p>''')
+    + loes(4, r'''    <p>(a) \( T = \tfrac{1}{440} \approx 0.00227 \) s; \( \omega = 2\pi \cdot 440 \approx 2765\ \text{rad/s} \).</p>
+    <p>(b) \( p(t) = 0.2 \cdot \sin(2765\, t) \) [Pa].</p>
+    <p>(c) Doppelte Frequenz (880 Hz): \(T\) halbiert sich, \(\omega\) verdoppelt sich
+    (\( \omega \approx 5529\ \text{rad/s} \)).</p>''')
+    + loes(5, r'''    <p>(a) Kürzester Tag \( 12.2 - 4.3 = 7.9 \) h, längster \( 12.2 + 4.3 = 16.5 \) h;
+    Periode \( 365 \) Tage.</p>
+    <p>(b) Maximum beim Argument \( \tfrac{\pi}{2} \): \( d = 80 + \tfrac{365}{4} \approx 171 \)
+    (etwa 20. Juni — Sommersonnenwende).</p>
+    <p>(c) \( L(355) = 12.2 + 4.3\sin\left(\tfrac{2\pi \cdot 275}{365}\right) \approx 7.9 \) h —
+    der kürzeste Tag.</p>''')
+    + loes(6, r'''    <p>(a) \( \omega = \tfrac{2\pi}{T} = \pi\ \text{s}^{-1} \); Start am Maximum:
+    \( \sin\varphi = 1 \Rightarrow \varphi = \tfrac{\pi}{2} \); also
+    \( x(t) = 3\sin\left(\pi t + \tfrac{\pi}{2}\right) \).</p>
+    <p>(b) Kongruenz: \( \sin\left(x + \tfrac{\pi}{2}\right) = \cos x \), also
+    \( x(t) = 3\cos(\pi t) \).</p>
+    <p>(c) \( x(0.5) = 3\cos\tfrac{\pi}{2} = 0 \) (Nulldurchgang);
+    \( x(1) = 3\cos\pi = -3 \) cm (Gegenseite, maximal ausgelenkt).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -1700,6 +2016,14 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', E_TDS),
     ('s3-4b-logarithmusfunktionen', 'Logarithmusfunktionen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Logarithmusfunktionen', STYLE_SERIE, '1.0', '', E_SERIE),
+    ('s3-5-trigonometrische-funktionen', 'Trigonometrische Funktionen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', F_HANDOUT),
+    ('s3-5-trigonometrische-funktionen', 'Trigonometrische Funktionen', 'Formelauszug', 'formelauszug.html',
+     'Trigonometrische Funktionen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, F_FORMELAUSZUG),
+    ('s3-5-trigonometrische-funktionen', 'Trigonometrische Funktionen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', F_TDS),
+    ('s3-5-trigonometrische-funktionen', 'Trigonometrische Funktionen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Trigonometrische Funktionen', STYLE_SERIE, '1.0', '', F_SERIE),
 ]
 
 

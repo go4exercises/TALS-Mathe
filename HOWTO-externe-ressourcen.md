@@ -302,6 +302,7 @@ Diese Tabelle wird mit jedem abgeschlossenen Thema erweitert. So muss eine berei
 | s3-3 Polynomfunktionen | — *(Einzelvideo `watch?v=QrC4wTZoj8k` „Linearfaktorzerlegung")* | — | — | `PLLkr4Hf_IwvN-lbzbyC4Zol0uSLuDleqL` („Ganzrationale Funktionen") | — | `PLLTAHuUj-zHjqKr3k2YwD8m1tzhqlHHr0` („Ganzrationale Funktionen, Polynomfunktionen, Analysis"; Einzelvideo `watch?v=Lb5sQlgKDeU` „Doppelte und dreifache Nullstellen") |
 | s3-4a Exponentialfunktionen | `PLF29x0idI4lVs82KN0GTG3hQMpTM_84lV` (22 Vid „Exponentialgleichungen lösen") | — | `PL2jCdV8ykKMpkosfUPe8-mJDM5UI9AzOb` (25 Vid „Exponentialfunktionen") | `PLLkr4Hf_IwvPCVVWwpJ6QQJt3-kqxZEaP` (31 Vid „Exponentialfunktionen und Exponentialgleichungen") | — | `PLLTAHuUj-zHgfDNg5jmBmfnvDHcc4y_Ey` (39 Vid „Exponentialfunktionen, Logarithmus, Gleichungen" — deckt 3.4a+3.4b) |
 | s3-4b Logarithmusfunktionen | `PLF29x0idI4lXSN6xlwAQUjS71Tv-jdQ49` (12 Vid „Alles über LOGARITHMUS") | — | — | — | — | `PLLTAHuUj-zHgfDNg5jmBmfnvDHcc4y_Ey` (siehe s3-4a) |
+| s3-5 Trigonometrische Funktionen | — | `PLa0u3J0uzAzlIHjv0J_R8sIj-xn8cVs0J` (siehe g5-3, trig. Grundlagen) | — | — | — | `PLLTAHuUj-zHgXgsj5jy-qDE41UePZveqr` (siehe g5-1/g5-3) — *ohne neue Abrufe aus der Map übernommen; Aufgaben via serlo-Sitemap (allg. Sinusfunktion 112676, Verschieben/Strecken 54054, Einheitskreis 30679)* |
 
 *Diese Tabelle wird bei jedem neuen Recherche-Lauf erweitert. Bei Erweiterung: pro Thema eine Zeile, Playlist-IDs nur eintragen, wenn per `web_fetch` verifiziert. Wenn ein Anbieter zum Thema nichts hat: `—`.*
 

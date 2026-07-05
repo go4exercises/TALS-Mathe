@@ -19,7 +19,58 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -33,65 +84,635 @@ MathJax = {
   <h1 class="pt-h1">3.5 Trigonometrische Funktionen</h1>
 </div>
 
-<!-- Stub-Banner: Seite ist noch in Vorbereitung -->
-<div class="stub-banner">
-  <strong>In Vorbereitung</strong>
-  Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: Mai 2026.
-</div>
-
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
-<p class="lead">Die <strong>trigonometrischen Funktionen</strong> Sinus, Cosinus und Tangens sind periodisch und beschreiben jede Schwingung — vom Wechselstrom bis zur Schallwelle. Hier untersuchst du Amplitude, Periode und Phasenverschiebung, löst Gleichungen mit Arkusfunktionen und modellierst periodische Vorgänge.</p>
+<p class="lead">Die <strong>trigonometrischen Funktionen</strong> Sinus, Cosinus und Tangens sind <strong>periodisch</strong> — sie wiederholen ihre Werte in festen Abständen und beschreiben damit jede Schwingung: vom Wechselstrom über die Schallwelle bis zum Riesenrad. Hier leitest du ihre Graphen am Einheitskreis her, untersuchst Periodizität und Symmetrien, transformierst die Kurven mit Amplitude, Periode und Verschiebung und modellierst harmonische Schwingungen.</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.5</div>
   <ul>
-    <li>den Funktionsverlauf der Sinus-, Cosinus- und Tangensfunktion visualisieren sowie die elementaren Eigenschaften kennen (Periodizität, Symmetrien) (mit und ohne Hilfsmittel)</li>
+    <li>den Funktionsverlauf der Sinus-, Cosinus- und Tangensfunktion visualisieren sowie die elementaren Eigenschaften kennen (Periodizität, Symmetrien) <span class="ohm">mit und ohne Hilfsmittel</span></li>
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Graphen von \(\sin x\), \(\cos x\) und \(\tan x\) am Einheitskreis herleiten und ohne Hilfsmittel skizzieren.</li>
+      <li>Ich kann Definitions- und Wertemenge, Periodenlänge, Nullstellen und Symmetrien der drei Funktionen angeben — inklusive der Pole der Tangensfunktion.</li>
+      <li>Ich kann die Kongruenz von Sinus- und Cosinuskurve nutzen: \(\cos x = \sin\left(x + \tfrac{\pi}{2}\right)\).</li>
+      <li>Ich kann die Wirkung der Parameter in \(y = a \cdot \sin\bigl(b(x-u)\bigr) + v\) beschreiben und Graphen schrittweise entwickeln.</li>
+      <li>Ich kann bei der allgemeinen Sinusfunktion \(y = a \sin(bx + c)\) Amplitude, Periodenlänge \(p = \tfrac{2\pi}{b}\) und Verschiebung \(x_0 = -\tfrac{c}{b}\) bestimmen — auch umgekehrt aus dem Graphen.</li>
+      <li>Ich kann harmonische Schwingungen \(y = A \sin(\omega t + \varphi)\) mit Periodendauer, Frequenz und Phasenverschiebung deuten und berechnen.</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — eine Fahrt im Riesenrad</h2>
+
+<p>Ein Riesenrad hat den Radius \(30\) m, seine Achse liegt \(35\) m über dem Boden, und eine Umdrehung dauert \(12\) Minuten. Du steigst am tiefsten Punkt ein (\(5\) m). Wie hoch bist du nach \(t\) Minuten?</p>
+
+\[ h(t) = 35 - 30 \cdot \cos\!\left(\frac{2\pi}{12}\, t\right) \quad [\text{m}] \]
+
+<p>Die Höhe <strong>pendelt</strong> zwischen \(5\) m und \(65\) m — und nach jeder vollen Umdrehung wiederholt sich alles. Genau dieses Verhalten heisst <strong>periodisch</strong>.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🎡 Riesenrad — \(h(t) = 35 - 30\cos\!\left(\tfrac{2\pi}{12}t\right)\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Fahre eine ganze Umdrehung (\(0\) bis \(12\) min) ab: Wo ändert sich die Höhe schnell, wo kaum? Und vergleiche \(t = 2\) mit \(t = 14\) — was fällt auf?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Fahre eine ganze Umdrehung von null bis zwölf Minuten ab: Wo ändert sich die Höhe schnell, wo kaum? Und vergleiche t gleich zwei mit t gleich vierzehn — was fällt auf?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Oben und unten (Hoch- und Tiefpunkt) ändert sich die Höhe kaum, auf halber Höhe am schnellsten. Nach \(12\) Minuten wiederholt sich alles exakt: \(h(t + 12) = h(t)\) — die Kurve ist periodisch mit Periodendauer \(12\) min.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Oben und unten ändert sich die Höhe kaum, auf halber Höhe am schnellsten. Nach zwölf Minuten wiederholt sich alles exakt — die Kurve ist periodisch mit Periodendauer zwölf Minuten.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Radius 30 m · Achshöhe 35 m · Umlaufzeit 12 min · zwei volle Umdrehungen</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Zeit <span class="var">\(t\)</span> [min]</label>
+      <input type="range" id="rr-t" min="0" max="24" step="0.5" value="4">
+      <span class="sl-val"><span id="rr-tv">4.0</span> min</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Auswertung</div>
+      <div class="fl-eq" id="rr-eq">h(<span class="tx-blau">4.0</span>) = 50.00 m</div>
+    </div>
+    <div class="zwei-spalten">
+      <div class="cv-wrap"><canvas id="rr-rad" height="220"></canvas></div>
+      <div class="cv-wrap"><canvas id="rr-canvas" height="220"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Die Höhe folgt keiner Geraden, keiner Parabel und keiner Exponentialkurve — sie <strong>schwingt</strong>:</p>
+  <ul style="margin-top:6px">
+    <li>Die Werte wiederholen sich nach jeder Umlaufzeit: \(h(t+12) = h(t)\) — <strong>Periodizität</strong>.</li>
+    <li>Die Kurve entsteht aus der Drehbewegung: Die Höhe des Punktes auf dem Rad ist eine <strong>Cosinus-Kurve</strong> — gestreckt, gespiegelt und verschoben.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Nach welcher Zeit wiederholt sich die Höhe des Riesenrad-Punktes exakt?</p><ul class="mc-optionen"><li data-opt="A">nach 6 Minuten</li><li data-opt="B">nach 12 Minuten</li><li data-opt="C">nach 30 Minuten</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Eine volle Umdrehung dauert \(12\) Minuten — das ist die Periodendauer: \(h(t + 12) = h(t)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Eine Funktion, deren Werte sich in festen Abständen wiederholen, heisst <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">periodisch — der feste Abstand ist die Periodenlänge.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne die Höhe nach \(6\) Minuten.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(h(6) = 35 - 30 \cos(\pi) = 35 + 30 = 65\) m — der höchste Punkt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Zwischen welchen Höhen pendelt die Kabine, und wie liest man das an der Funktionsgleichung ab?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\cos\) liegt immer zwischen \(-1\) und \(1\), also liegt \(h\) zwischen \(35 - 30 = 5\) m und \(35 + 30 = 65\) m. Die \(35\) ist die Mittellage, die \(30\) die maximale Auslenkung — die <strong>Amplitude</strong>.</div></details></div>
+</details>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Definition — vom Einheitskreis zur Funktion</h2>
+
+<p>Am <a class="quer" href="../grundlagen/g5-4-einheitskreis.html">↩ Einheitskreis (5.4)</a> gehört zu jedem Winkel \(x\) (im Bogenmass) ein Punkt \(P\) — seine \(y\)-Koordinate ist \(\sin x\), seine \(x\)-Koordinate ist \(\cos x\). Lässt man \(x\) alle reellen Zahlen durchlaufen, entsteht aus dieser Zuordnung eine <strong>Funktion</strong>:</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Trigonometrische Funktionen</div>
+  <p>Die Zuordnungen</p>
+  \[ f(x) = \sin x, \qquad f(x) = \cos x \qquad (x \in \mathbb{R}) \]
+  \[ f(x) = \tan x \qquad \left(x \in \mathbb{R} \setminus \left\{\tfrac{\pi}{2} + k\pi\right\},\ k \in \mathbb{Z}\right) \]
+  <p>heissen <strong>Sinus-, Cosinus- und Tangensfunktion</strong> (Winkelfunktionen). Das Argument \(x\) ist der Winkel im <strong>Bogenmass</strong>; da der Punkt \(P\) beliebig viele Umdrehungen in beide Richtungen machen kann, sind Sinus und Cosinus für alle reellen \(x\) definiert.</p>
+</div>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Vom Kreis zur Kurve — die drei Graphen</h2>
+
+<p>Drehe den Punkt auf dem Einheitskreis — rechts entsteht der Funktionsgraph. Wechsle zwischen \(\sin\), \(\cos\) und \(\tan\):</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Einheitskreis-Abrollung — \(x \mapsto \sin x,\ \cos x,\ \tan x\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Beim Sinus: Verfolge die rote Strecke (\(y\)-Koordinate von \(P\)) — sie ist genau der Funktionswert rechts. Wechsle zu \(\tan\) und nähere den Winkel an \(\tfrac{\pi}{2} \approx 1.57\): Was passiert mit dem Tangentenabschnitt?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Beim Sinus: Verfolge die rote Strecke, die y-Koordinate von P — sie ist genau der Funktionswert rechts. Wechsle zu Tangens und nähere den Winkel an pi halbe: Was passiert mit dem Tangentenabschnitt?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Sinus und Cosinus pendeln zwischen \(-1\) und \(1\) und wiederholen sich nach \(2\pi\). Der Tangens (Tangentenabschnitt bei \(x = 1\)) wächst bei \(\tfrac{\pi}{2}\) über alle Grenzen — dort hat die Funktion einen <strong>Pol</strong>, und seine Periode ist nur \(\pi\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Sinus und Cosinus pendeln zwischen minus eins und eins und wiederholen sich nach zwei pi. Der Tangens wächst bei pi halbe über alle Grenzen — dort hat die Funktion einen Pol, und seine Periode ist nur pi.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Winkel \(x\) in Schritten von \(\tfrac{\pi}{12}\) · links Einheitskreis, rechts Graph · Funktionswert rot</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="ek-btns">
+      <button class="typ-btn aktiv" onclick="setEk(0)">sin x</button>
+      <button class="typ-btn" onclick="setEk(1)">cos x</button>
+      <button class="typ-btn" onclick="setEk(2)">tan x</button>
+    </div>
+    <div class="sl-row akz-blau">
+      <label>Winkel <span class="var">\(x\)</span></label>
+      <input type="range" id="ek-x" min="0" max="24" step="1" value="7">
+      <span class="sl-val" id="ek-xv">7π/12</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Auswertung</div>
+      <div class="fl-eq" id="ek-eq">sin(7π/12) ≈ 0.97 · x ≈ 105°</div>
+    </div>
+    <div class="zwei-spalten">
+      <div class="cv-wrap"><canvas id="ek-kreis" height="220"></canvas></div>
+      <div class="cv-wrap"><canvas id="ek-canvas" height="220"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition und Herleitung</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was ist \(\sin x\) am Einheitskreis?</p><ul class="mc-optionen"><li data-opt="A">die \(x\)-Koordinate des Punktes \(P\)</li><li data-opt="B">die \(y\)-Koordinate des Punktes \(P\)</li><li data-opt="C">die Länge des Kreisbogens</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Die \(y\)-Koordinate von \(P\) ist \(\sin x\), die \(x\)-Koordinate ist \(\cos x\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Tangensfunktion ist bei \(x = \tfrac{\pi}{2} + k\pi\) nicht definiert — dort hat sie einen <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Pol (Definitionslücke) — von links gehen die Werte gegen \(+\infty\), von rechts gegen \(-\infty\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Gib \(\sin\!\left(\tfrac{\pi}{2}\right)\), \(\cos(\pi)\) und \(\tan(0)\) ohne Taschenrechner an.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\sin\!\left(\tfrac{\pi}{2}\right) = 1\), \(\cos(\pi) = -1\), \(\tan(0) = 0\) — direkt am Einheitskreis ablesbar.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum ist die Sinusfunktion für <em>alle</em> reellen Zahlen definiert, obwohl ein Winkel doch nur bis \(360°\) geht?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Der Punkt \(P\) kann beliebig viele Umdrehungen machen — im Gegenuhrzeigersinn (positive Winkel) und im Uhrzeigersinn (negative Winkel). Jedes \(x \in \mathbb{R}\) landet auf einer eindeutigen Position: \(\sin(x + 2k\pi) = \sin x\).</div></details></div>
+</details>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. EIGENSCHAFTEN ══ -->
+<h2 id="typen">Eigenschaften — Periodizität und Symmetrien</h2>
+
+<table class="ftb-tabelle" style="margin-top:10px">
+  <thead><tr><th>Eigenschaften</th><th>\(y = \sin x\)</th><th>\(y = \cos x\)</th><th>\(y = \tan x\)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Definitionsmenge</td><td>\(\mathbb{R}\)</td><td>\(\mathbb{R}\)</td><td>\(\mathbb{R} \setminus \left\{\tfrac{\pi}{2} + k\pi\right\}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wertemenge</td><td>\([-1;\, 1]\)</td><td>\([-1;\, 1]\)</td><td>\(\mathbb{R}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Periodenlänge</td><td>\(2\pi\)</td><td>\(2\pi\)</td><td>\(\pi\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstellen</td><td>\(x_0 = k\pi\)</td><td>\(x_0 = \tfrac{\pi}{2} + k\pi\)</td><td>\(x_0 = k\pi\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetrieachsen</td><td>\(x = \tfrac{\pi}{2} + k\pi\)</td><td>\(x = k\pi\)</td><td>—</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetriezentren</td><td>\((k\pi \mid 0)\)</td><td>\(\left(\tfrac{\pi}{2} + k\pi \,\middle|\, 0\right)\)</td><td>\(\left(\tfrac{k\pi}{2} \,\middle|\, 0\right)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Pole</td><td>—</td><td>—</td><td>\(x = \tfrac{\pi}{2} + k\pi\)</td></tr>
+  </tbody>
+</table>
+<p style="font-size:0.82rem;color:var(--tinte-2);margin-top:6px">(jeweils \(k \in \mathbb{Z}\); alle Angaben gelten analog in Altgrad)</p>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Kongruenz von Sinus und Cosinus</div>
+  <p>Die beiden Kurven sind <strong>kongruent</strong>: Eine horizontale Verschiebung um \(\tfrac{\pi}{2}\) führt sie ineinander über. Für alle \(x \in \mathbb{R}\) gilt:</p>
+  \[ \cos x = \sin\!\left(x + \tfrac{\pi}{2}\right) \qquad\qquad \sin x = \cos\!\left(x - \tfrac{\pi}{2}\right) \]
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Beziehungen aus Periodizität und Symmetrie</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Sinus</th><th>Cosinus</th><th>Tangens</th></tr></thead>
+    <tbody>
+      <tr><td>\(\sin(\pi - x) = \sin x\)</td><td>\(\cos(\pi - x) = -\cos x\)</td><td>\(\tan(\pi - x) = -\tan x\)</td></tr>
+      <tr><td>\(\sin(\pi + x) = -\sin x\)</td><td>\(\cos(\pi + x) = -\cos x\)</td><td>\(\tan(\pi + x) = \tan x\)</td></tr>
+      <tr><td>\(\sin(2\pi - x) = -\sin x\)</td><td>\(\cos(2\pi - x) = \cos x\)</td><td>\(\tan(2\pi - x) = -\tan x\)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="widget-titelzeile" style="margin-top:14px;margin-bottom:8px">
+  <p style="margin:0">Klicke auf eine Funktion — ihr Graph über zwei Perioden wird angezeigt:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Vergleiche die Nullstellen von \(\sin\) und \(\cos\): Wo liegen sie jeweils? Beim Tangens: Wie verhält sich die Kurve links und rechts eines Pols? Und bei «sin &amp; cos»: Um wie viel sind die Kurven gegeneinander verschoben?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Vergleiche die Nullstellen von Sinus und Cosinus: Wo liegen sie jeweils? Beim Tangens: Wie verhält sich die Kurve links und rechts eines Pols? Und bei Sinus und Cosinus zusammen: Um wie viel sind die Kurven gegeneinander verschoben?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">\(\sin\) hat Nullstellen bei \(k\pi\), \(\cos\) bei \(\tfrac{\pi}{2} + k\pi\) — genau versetzt. Der Tangens springt an jedem Pol von \(+\infty\) nach \(-\infty\) und wiederholt sich schon nach \(\pi\). Die Cosinuskurve ist die um \(\tfrac{\pi}{2}\) nach links verschobene Sinuskurve.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Sinus hat Nullstellen bei k mal pi, Cosinus bei pi halbe plus k mal pi — genau versetzt. Der Tangens springt an jedem Pol von plus unendlich nach minus unendlich und wiederholt sich schon nach pi. Die Cosinuskurve ist die um pi halbe nach links verschobene Sinuskurve.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+
+<div class="typ-btns" id="ty-btns"></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="ty-canvas" height="220"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="ty-desc"></div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Eigenschaften</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Periodenlänge hat die Tangensfunktion?</p><ul class="mc-optionen"><li data-opt="A">\(2\pi\)</li><li data-opt="B">\(\pi\)</li><li data-opt="C">\(\tfrac{\pi}{2}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(\tan(x + \pi) = \tan x\) — halb so lang wie bei Sinus und Cosinus.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Wertemenge von Sinus und Cosinus ist das Intervall <span class="mc-luecke"></span> — die des Tangens dagegen ganz \(\mathbb{R}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\([-1;\, 1]\) — die Koordinaten eines Punktes auf dem Einheitskreis liegen nie ausserhalb.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(\sin 150°\) exakt ohne Taschenrechner.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\sin(180° - x) = \sin x\), also \(\sin 150° = \sin 30° = \tfrac{1}{2}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Bestimme alle Lösungen von \(\sin x = \tfrac{1}{2}\) mit \(\cos x &lt; 0\) im Intervall \([0;\, 2\pi]\).</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\sin x = \tfrac{1}{2}\) hat die Lösungen \(x_1 = \tfrac{\pi}{6}\) und \(x_2 = \pi - \tfrac{\pi}{6} = \tfrac{5\pi}{6}\). Wegen \(\cos\tfrac{\pi}{6} &gt; 0\) und \(\cos\tfrac{5\pi}{6} &lt; 0\) bleibt nur \(L = \left\{\tfrac{5\pi}{6}\right\}\).</div></details></div>
+</details>
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<h2 id="theorie">Transformationen, allgemeine Sinusfunktion und Schwingungen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Schieben und Strecken — \(y = a \cdot \sin\bigl(b(x-u)\bigr) + v\)</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Parameter</th><th>Wirkung auf den Graphen von \(y = \sin x\)</th></tr></thead>
+    <tbody>
+      <tr><td>\(a\)</td><td style="text-align:left;font-family:var(--sans)">Streckung (\(a &gt; 1\)) bzw. Stauchung (\(a &lt; 1\)) mit Faktor \(a\) in \(y\)-Richtung — die <strong>Amplitude</strong></td></tr>
+      <tr><td>\(b\)</td><td style="text-align:left;font-family:var(--sans)">Streckung bzw. Stauchung mit Faktor \(\tfrac{1}{b}\) in \(x\)-Richtung — ändert die Periodenlänge</td></tr>
+      <tr><td>\(u\)</td><td style="text-align:left;font-family:var(--sans)">Verschiebung um \(u\) in \(x\)-Richtung (nach rechts für \(u &gt; 0\))</td></tr>
+      <tr><td>\(v\)</td><td style="text-align:left;font-family:var(--sans)">Verschiebung um \(v\) in \(y\)-Richtung — die <strong>Mittellinie</strong> liegt bei \(y = v\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Für \(a\) und \(b\) genügen positive Werte: Negative lassen sich durch eine Verschiebung um \(\pi\) darstellen, denn \(\sin(-x) = -\sin x = \sin(x - \pi)\). Die Regeln gelten analog für Cosinus und Tangens.</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Transformations-Baukasten — \(y = a \cdot \sin\bigl(b(x-u)\bigr) + v\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verändere zuerst nur \(a\): Was passiert mit Hoch- und Tiefpunkten? Dann nur \(b\): Zähle die Wellen im Bild — wird die Periode länger oder kürzer? Zum Schluss \(v\): Verfolge die gestrichelte Mittellinie.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verändere zuerst nur a: Was passiert mit Hoch- und Tiefpunkten? Dann nur b: Zähle die Wellen im Bild — wird die Periode länger oder kürzer? Zum Schluss v: Verfolge die gestrichelte Mittellinie.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">\(a\) streckt nur vertikal (Amplitude), \(b\) staucht horizontal: grösseres \(b\) heisst <strong>kürzere</strong> Periode \(p = \tfrac{2\pi}{b}\). Die Kurve schwingt immer um die Mittellinie \(y = v\), und \(u\) schiebt das ganze Wellenmuster seitlich.</div>
+          <button class="ah-speak" type="button" data-vorlesen="a streckt nur vertikal, b staucht horizontal: grösseres b heisst kürzere Periode. Die Kurve schwingt immer um die Mittellinie y gleich v, und u schiebt das ganze Wellenmuster seitlich.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Grundfunktion \(\sin x\) grau gestrichelt · Mittellinie \(y = v\) orange gestrichelt</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Amplitude <span class="var">\(a\)</span></label><input type="range" id="tr-a" min="0" max="4" step="1" value="1"><span class="sl-val" id="tr-av">1</span></div>
+      <div class="sl-grp akz-orange"><label>Frequenzfaktor <span class="var">\(b\)</span></label><input type="range" id="tr-b" min="0" max="3" step="1" value="1"><span class="sl-val" id="tr-bv">1</span></div>
+    </div>
+    <div class="sl-row">
+      <div class="sl-grp akz-gruen"><label>Verschiebung <span class="var">\(u\)</span></label><input type="range" id="tr-u" min="-2" max="2" step="1" value="0"><span class="sl-val" id="tr-uv">0</span></div>
+      <div class="sl-grp akz-orange"><label>Verschiebung <span class="var">\(v\)</span></label><input type="range" id="tr-v" min="-2" max="2" step="1" value="0"><span class="sl-val" id="tr-vv">0</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktionsgleichung und Kenngrössen</div>
+      <div class="fl-eq" id="tr-eq">y = sin(x)</div>
+      <div class="fl-eq" id="tr-info" style="font-size:0.95rem;margin-top:4px">Amplitude 1 · Periode p = 2π · Mittellinie y = 0</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="tr-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Beispiel 1 — Graph schrittweise entwickeln</div>
+  <p>Skizziere den Graphen von \(y = 3\sin(2x - 4) + 1\).</p>
+  <p><strong>Lösung:</strong> Zuerst in die Form \(y = a\sin\bigl(b(x-u)\bigr) + v\) bringen: \(3\sin(2x-4)+1 = 3\sin\bigl(2(x-2)\bigr)+1\). Dann in vier Schritten aus \(g(x) = \sin x\) entwickeln:</p>
+  <ol class="aufg-liste">
+    <li>Stauchen mit Faktor \(\tfrac{1}{2}\) in \(x\)-Richtung: \(y_1 = \sin 2x\) (Periode \(\pi\))</li>
+    <li>Strecken mit Faktor \(3\) in \(y\)-Richtung: \(y_2 = 3\sin 2x\) (Amplitude \(3\))</li>
+    <li>Schieben um \(2\) nach rechts: \(y_3 = 3\sin\bigl(2(x-2)\bigr)\)</li>
+    <li>Schieben um \(1\) nach oben: \(y_4 = 3\sin\bigl(2(x-2)\bigr) + 1\) (Mittellinie \(y = 1\))</li>
+  </ol>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Definition — Allgemeine Sinusfunktion</div>
+  \[ y = a \cdot \sin(bx + c) \qquad a, b \in \mathbb{R}^+,\ c \in \mathbb{R} \]
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left;width:40%">Amplitude (maximale Auslenkung)</td><td>\(a\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Periodenlänge</td><td>\(p = \dfrac{2\pi}{b}\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Wertebereich</td><td>\(-a \leq y \leq a\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Verschiebung auf der \(x\)-Achse («Startpunkt»)</td><td>\(x_0 = -\dfrac{c}{b}\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Ausklammern von \(b\) verbindet beide Schreibweisen: \(a\sin(bx + c) = a\sin\bigl(b\bigl(x + \tfrac{c}{b}\bigr)\bigr)\), also \(u = -\tfrac{c}{b}\). Für die allgemeine Cosinusfunktion gilt alles analog.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Beispiel 2 — Kenngrössen ablesen</div>
+  <p>Gegeben ist \(y = \tfrac{1}{2}\cos\!\left(\tfrac{3}{4}x - \tfrac{\pi}{4}\right)\). Berechne (a) den Schnittpunkt \(Q\) mit der \(y\)-Achse, (b) die Periodenlänge \(p\), (c) die kleinste positive Nullstelle \(x_N\).</p>
+  <p><strong>Lösung:</strong></p>
+  <p>(a) \(x = 0\) einsetzen: \(y = \tfrac{1}{2}\cos\!\left(-\tfrac{\pi}{4}\right) = \tfrac{1}{2} \cdot \tfrac{\sqrt{2}}{2} = \tfrac{\sqrt{2}}{4} \approx 0.354\), also \(Q = \left(0 \,\middle|\, \tfrac{\sqrt{2}}{4}\right)\).</p>
+  <p>(b) \(b = \tfrac{3}{4}\): \(p = \dfrac{2\pi}{3/4} = \dfrac{8\pi}{3} \approx 8.38\).</p>
+  <p>(c) Die erste positive Nullstelle von \(\cos\) liegt bei \(\tfrac{\pi}{2}\) — Argument gleichsetzen: \(\tfrac{3}{4}x_N - \tfrac{\pi}{4} = \tfrac{\pi}{2} \Rightarrow x_N = \pi\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Funktionsgleichung aus dem Graphen</div>
+  <p>Von \(y = a\sin(bx + c)\) kennt man den ersten Hochpunkt \(H = \left(\tfrac{1}{5} \,\middle|\, \tfrac{6}{5}\right)\) und die Nullstelle \(x_N = \tfrac{4}{5}\) (fallend). Bestimme die Gleichung.</p>
+  <p><strong>Lösung:</strong> Die Amplitude \(a = \tfrac{6}{5}\) liest man am Hochpunkt ab. \(\sin x\) hat den ersten Hochpunkt bei \(\tfrac{\pi}{2}\) und die anschliessende Nullstelle bei \(\pi\) — das gibt ein Gleichungssystem:</p>
+  \[ \tfrac{1}{5}b + c = \tfrac{\pi}{2}, \qquad \tfrac{4}{5}b + c = \pi \]
+  <p>Subtrahieren: \(\tfrac{3}{5}b = \tfrac{\pi}{2} \Rightarrow b = \tfrac{5\pi}{6}\), dann \(c = \tfrac{\pi}{2} - \tfrac{1}{5} \cdot \tfrac{5\pi}{6} = \tfrac{\pi}{3}\):</p>
+  \[ y = \tfrac{6}{5}\sin\!\left(\tfrac{5\pi}{6}x + \tfrac{\pi}{3}\right) \]
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Definition — Harmonische Schwingung</div>
+  <p>Ändert sich eine Grösse sinusförmig mit der Zeit \(t\), spricht man von einer <strong>harmonischen Schwingung</strong>:</p>
+  \[ y = f(t) = A \cdot \sin(\omega t + \varphi) \]
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left;width:40%">Amplitude (maximale Auslenkung)</td><td>\(A\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Kreisfrequenz (Winkelgeschwindigkeit)</td><td>\(\omega = 2\pi f = \dfrac{2\pi}{T}\) \([\text{rad/s}]\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Phasenwinkel (Bogenmass)</td><td>\(\varphi\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Periodendauer (Zeit für eine Schwingung)</td><td>\(T = \dfrac{2\pi}{\omega}\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Frequenz (Wiederholungen pro Sekunde)</td><td>\(f = \dfrac{1}{T} = \dfrac{\omega}{2\pi}\) \([\text{Hz}]\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Phasenverschiebung («Startpunkt»)</td><td>\(t_0 = -\dfrac{\varphi}{\omega}\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Die Einheit der Frequenz ist Hertz: \(1\ \text{Hz} = 1\ \text{s}^{-1}\). Da \(\omega\) und \(f\) dieselbe Einheit tragen, muss stets klar sein, mit welcher Grösse gerechnet wird.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Taschenrechner im falschen Winkelmodus</div>
+  <p>\(\sin 30\) ergibt im <strong>DEG</strong>-Modus \(0.5\), im <strong>RAD</strong>-Modus aber \(-0.988\). Bei Funktionsgraphen und Schwingungen wird <strong>immer im Bogenmass</strong> gerechnet — vor jeder Rechnung den Modus prüfen und Gradwerte zuerst umrechnen (\(x_{\text{rad}} = x° \cdot \tfrac{\pi}{180}\)).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — «grosses \(b\) heisst lange Periode»</div>
+  <p>Genau umgekehrt: \(p = \tfrac{2\pi}{b}\). Der Faktor \(b = 2\) <strong>halbiert</strong> die Periode (\(\sin 2x\) schwingt doppelt so schnell), \(b = \tfrac{1}{2}\) verdoppelt sie. Kontrolle: Wellen im Intervall \([0;\, 2\pi]\) zählen — es sind genau \(b\) Stück.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Transformationskette in fester Reihenfolge</div>
+  <p>Erst die Gleichung in die Form \(a\sin\bigl(b(x-u)\bigr)+v\) bringen (Ausklammern von \(b\)!), dann in dieser Reihenfolge entwickeln: <strong>(1) Strecken in \(x\)</strong> (Periode), <strong>(2) Strecken in \(y\)</strong> (Amplitude), <strong>(3) Schieben in \(x\)</strong>, <strong>(4) Schieben in \(y\)</strong>. Hoch- und Tiefpunkte findet man, indem man das <strong>Argument</strong> gleich \(\tfrac{\pi}{2}\) bzw. \(\tfrac{3\pi}{2}\) (Sinus) oder \(0\) bzw. \(\pi\) (Cosinus) setzt.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Transformationen und Schwingungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Periodenlänge hat \(y = \sin(4x)\)?</p><ul class="mc-optionen"><li data-opt="A">\(8\pi\)</li><li data-opt="B">\(4\pi\)</li><li data-opt="C">\(\tfrac{\pi}{2}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(p = \tfrac{2\pi}{b} = \tfrac{2\pi}{4} = \tfrac{\pi}{2}\) — grosses \(b\), kurze Periode.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei \(y = 5\sin(2x) - 3\) beträgt die Amplitude <span class="mc-luecke"></span> und die Mittellinie liegt bei \(y = -3\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(5\) — die Kurve pendelt zwischen \(-8\) und \(2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Eine Schwingung hat die Periodendauer \(T = 0.02\) s. Berechne Frequenz und Kreisfrequenz.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(f = \tfrac{1}{T} = 50\) Hz und \(\omega = 2\pi f = 100\pi \approx 314.2\ \text{s}^{-1}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Bestimme die Verschiebung \(x_0\) der Funktion \(y = \sin\!\left(\pi x - \tfrac{\pi}{2}\right)\) und deute sie am Graphen.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(x_0 = -\tfrac{c}{b} = -\tfrac{-\pi/2}{\pi} = \tfrac{1}{2}\) — die Sinuswelle «startet» (steigender Nulldurchgang) bei \(x = 0.5\) statt bei \(0\); die Periode beträgt \(p = \tfrac{2\pi}{\pi} = 2\).</div></details></div>
+</details>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Winkelfunktion am Graphen erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Graphen und entscheide, welche Funktionsgleichung dazu passt.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört zum angezeigten Graphen?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Graphen skizzieren</span></div>
+  <p>Skizziere die folgenden Graphen <strong>von Hand</strong> im Intervall \(-\pi \leq x \leq 2\pi\). Gehe von der Grundfunktion aus und wende die Transformationsschritte der Reihe nach an. Vergleiche danach mit der Lösung.</p>
+  <ol class="aufg-liste">
+    <li>\(y = 2\sin\!\left(x - \tfrac{\pi}{6}\right) - 1\)</li>
+    <li>\(y = \cos x + 1\)</li>
+    <li>\(y = -\sin\!\left(\tfrac{1}{2}x\right)\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2'); drawA2Sol();">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <div class="cv-wrap" style="margin-bottom:8px;max-width:520px"><canvas id="a2-canvas" height="240"></canvas></div>
+      <ol class="aufg-liste">
+        <li><span style="color:#1a4f8a;font-weight:700">Blau:</span> Amplitude \(2\), um \(\tfrac{\pi}{6}\) nach rechts und \(1\) nach unten verschoben; Mittellinie \(y = -1\), pendelt zwischen \(-3\) und \(1\).</li>
+        <li><span style="color:#1f6b3a;font-weight:700">Grün:</span> Cosinuskurve, um \(1\) nach oben; pendelt zwischen \(0\) und \(2\), berührt die \(x\)-Achse bei \(x = \pi + 2k\pi\).</li>
+        <li><span style="color:#5b2d8e;font-weight:700">Violett:</span> Periode verdoppelt (\(p = 4\pi\)) und an der \(x\)-Achse gespiegelt — startet fallend.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Winkelfunktionen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Exakte Werte ohne Taschenrechner</div>
+    <p>Berechne exakt (spezielle Dreiecke und Symmetriebeziehungen nutzen) und gib den Wert als Dezimalzahl an:</p>
+    <div class="eingabe-row"><label>sin 150° =&nbsp;</label><input type="text" id="a3a1" placeholder="Wert"><button class="btn-pruef" onclick="chkNum('a3a1', 0.5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>cos 135° ≈&nbsp;</label><input type="text" id="a3a2" placeholder="Wert"><button class="btn-pruef" onclick="chkNum('a3a2', -0.7071, 0.001, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>tan 225° =&nbsp;</label><input type="text" id="a3a3" placeholder="Wert"><button class="btn-pruef" onclick="chkNum('a3a3', 1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a3-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <ol class="aufg-liste">
+          <li>\(\sin 150° = \sin(180° - 150°) = \sin 30° = \tfrac{1}{2} = 0.5\)</li>
+          <li>\(\cos 135° = -\cos 45° = -\tfrac{\sqrt{2}}{2} \approx -0.707\)</li>
+          <li>\(\tan 225° = \tan(180° + 45°) = \tan 45° = 1\)</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Kenngrössen der allgemeinen Sinusfunktion</div>
+    <p>Gegeben ist \(y = 3\sin\!\left(\tfrac{\pi}{3}x + \pi\right)\). Bestimme Periodenlänge \(p\) und Verschiebung \(x_0\).</p>
+    <div class="eingabe-row"><label>p =&nbsp;</label><input type="text" id="a3b1" placeholder="p"><button class="btn-pruef" onclick="chkNum('a3b1', 6, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x₀ =&nbsp;</label><input type="text" id="a3b2" placeholder="x₀"><button class="btn-pruef" onclick="chkNum('a3b2', -3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(b = \tfrac{\pi}{3}\), also \(p = \dfrac{2\pi}{\pi/3} = 6\). Verschiebung: \(x_0 = -\dfrac{c}{b} = -\dfrac{\pi}{\pi/3} = -3\) (nach links). Amplitude \(a = 3\); Schnittpunkt mit der \(y\)-Achse: \(y(0) = 3\sin\pi = 0\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Hochpunkt und Periode</div>
+    <p>Gegeben ist \(y = \tfrac{1}{2}\cos\!\left(\tfrac{3}{4}x - \tfrac{\pi}{4}\right)\). Bestimme die \(x\)-Koordinate des ersten Hochpunktes und die Periodenlänge.</p>
+    <div class="eingabe-row"><label>x_H ≈&nbsp;</label><input type="text" id="a3c1" placeholder="x_H"><button class="btn-pruef" onclick="chkNum('a3c1', 1.047, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>p ≈&nbsp;</label><input type="text" id="a3c2" placeholder="p"><button class="btn-pruef" onclick="chkNum('a3c2', 8.378, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(\cos x\) hat den ersten Hochpunkt bei Argument \(0\): \(\tfrac{3}{4}x_H - \tfrac{\pi}{4} = 0 \Rightarrow x_H = \tfrac{\pi}{3} \approx 1.047\); Höhe \(y_H = \tfrac{1}{2}\). Periode: \(p = \dfrac{2\pi}{3/4} = \dfrac{8\pi}{3} \approx 8.38\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Funktionsgleichung aus Graphendaten</div>
+    <p>Von \(y = a\sin(bx + c)\) sind der erste Hochpunkt \(H = \left(\tfrac{1}{5} \,\middle|\, \tfrac{6}{5}\right)\) und die folgende Nullstelle \(x_N = \tfrac{4}{5}\) bekannt. Bestimme \(b\) und \(c\).</p>
+    <div class="eingabe-row"><label>b ≈&nbsp;</label><input type="text" id="a3d1" placeholder="b"><button class="btn-pruef" onclick="chkNum('a3d1', 2.618, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>c ≈&nbsp;</label><input type="text" id="a3d2" placeholder="c"><button class="btn-pruef" onclick="chkNum('a3d2', 1.047, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Hochpunkt: \(\tfrac{1}{5}b + c = \tfrac{\pi}{2}\); Nullstelle: \(\tfrac{4}{5}b + c = \pi\). Subtrahieren: \(\tfrac{3}{5}b = \tfrac{\pi}{2} \Rightarrow b = \tfrac{5\pi}{6} \approx 2.618\), dann \(c = \tfrac{\pi}{3} \approx 1.047\). (Amplitude \(a = \tfrac{6}{5}\) direkt aus \(H\).)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Gleichung mit Bedingung</div>
+    <p>Bestimme die Lösung von \(\sin x = \tfrac{1}{2}\) mit \(\cos x &lt; 0\) im Intervall \([0;\, 2\pi]\) (Bogenmass, drei Dezimalen).</p>
+    <div class="eingabe-row"><label>x ≈&nbsp;</label><input type="text" id="a3e1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3e1', 2.618, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(x_1 = \arcsin\tfrac{1}{2} = \tfrac{\pi}{6}\) und \(x_2 = \pi - \tfrac{\pi}{6} = \tfrac{5\pi}{6}\). Nur bei \(x_2\) ist der Cosinus negativ: \(x = \tfrac{5\pi}{6} \approx 2.618\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Wechselspannung</span></div>
+  <p>Die Spannung eines Wechselstroms wird beschrieben durch</p>
+  \[ U(t) = 200 \cdot \sin(50\pi\, t - 0.683) \qquad [U \text{ in V},\ t \text{ in s}] \]
+  <ol class="aufg-liste">
+    <li>Gib Amplitude, Periodendauer, Frequenz und Phasenverschiebung an.</li>
+    <li>Berechne \(U\) zum Zeitpunkt \(t = 0\).</li>
+    <li>Wann ist \(U\) erstmals maximal?</li>
+  </ol>
+  <div class="eingabe-row"><label>f =&nbsp;</label><input type="text" id="a4-1" placeholder="Hz"><button class="btn-pruef" onclick="chkNum('a4-1', 25, 0.1, 'Hz')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>U(0) ≈&nbsp;</label><input type="text" id="a4-2" placeholder="V"><button class="btn-pruef" onclick="chkNum('a4-2', -126.2, 0.5, 'V')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Amplitude \(A = 200\) V; \(\omega = 50\pi \Rightarrow T = \tfrac{2\pi}{50\pi} = 0.04\) s; \(f = \tfrac{1}{T} = 25\) Hz; Phasenverschiebung \(t_0 = -\tfrac{\varphi}{\omega} = \tfrac{0.683}{50\pi} \approx 0.0043\) s.</li>
+        <li>\(U(0) = 200\sin(-0.683) \approx -126.2\) V (Taschenrechner im RAD-Modus!).</li>
+        <li>Maximal, wenn das Argument \(\tfrac{\pi}{2}\) beträgt: \(50\pi t - 0.683 = \tfrac{\pi}{2} \Rightarrow t = \tfrac{\pi/2 + 0.683}{50\pi} \approx 0.0143\) s.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Wechselstrom aufstellen</span></div>
+  <p>Die Stromstärke \(I\) eines Wechselstroms hat den Maximalwert \(30\) A und die Frequenz \(50\) Hz; zum Zeitpunkt \(t = 0\) beträgt sie \(0\) A (steigend). Drücke \(I\) in der Form \(I = B\sin(\omega t)\) aus.</p>
+  <div class="eingabe-row"><label>ω ≈&nbsp;</label><input type="text" id="a5-1" placeholder="rad/s"><button class="btn-pruef" onclick="chkNum('a5-1', 314.16, 0.2, 'rad/s')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(\omega = 2\pi f = 2\pi \cdot 50 = 100\pi \approx 314.16\ \text{rad/s}\). Da \(I(0) = 0\) und steigend, braucht es keinen Phasenwinkel:</p>
+      \[ I(t) = 30 \cdot \sin(100\pi\, t) \quad [\text{A}] \]
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Federpendel</span></div>
+  <p>Eine Punktmasse an einer Feder wird um \(\hat{y} = 5.3\) cm ausgelenkt und schwingt harmonisch mit Periodendauer \(T = 5\) s. Zum Zeitpunkt \(t = 0\) befindet sie sich bei \(y = 2.65\) cm und bewegt sich nach oben.</p>
+  <ol class="aufg-liste">
+    <li>Bestimme die Kreisfrequenz \(\omega\).</li>
+    <li>Bestimme den Phasenwinkel \(\varphi\) und die Funktionsgleichung \(y = A\sin(\omega t + \varphi)\).</li>
+    <li>Wo befindet sich die Masse zum Zeitpunkt \(t_1 = 1.3\) s?</li>
+  </ol>
+  <div class="eingabe-row"><label>ω ≈&nbsp;</label><input type="text" id="a6-1" placeholder="rad/s"><button class="btn-pruef" onclick="chkNum('a6-1', 1.257, 0.005, 'rad/s')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>y(1.3) ≈&nbsp;</label><input type="text" id="a6-2" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a6-2', 4.41, 0.02, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\omega = \tfrac{2\pi}{T} = \tfrac{2\pi}{5} \approx 1.257\ \text{s}^{-1}\).</li>
+        <li>\(y(0) = 2.65 = \tfrac{A}{2}\), also \(\sin\varphi = 0.5 \Rightarrow \varphi = \tfrac{\pi}{6} \approx 0.524\) (steigend!). Gleichung: \(y = 5.3\sin(1.257\,t + 0.524)\).</li>
+        <li>\(y(1.3) = 5.3\sin(1.257 \cdot 1.3 + 0.524) \approx 4.41\) cm.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Pendel mit Start am Maximum <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Ein Pendel schwingt harmonisch mit maximaler seitlicher Auslenkung \(30\) cm und Frequenz \(0.5\) Hz. Zum Startzeitpunkt wird es <strong>bei maximaler Auslenkung</strong> losgelassen.</p>
+  <ol class="aufg-liste">
+    <li>Drücke die Position in der Form \(P(t) = A\sin(\omega t + \varphi)\) aus.</li>
+    <li>Zeige, dass sich dieselbe Schwingung auch als reine Cosinusfunktion schreiben lässt.</li>
+    <li>Begründe mit der Kongruenzbeziehung, warum das immer geht.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\omega = 2\pi f = \pi\ \text{s}^{-1}\). Start am Maximum heisst \(\sin\varphi = 1\), also \(\varphi = \tfrac{\pi}{2}\): \(P(t) = 30\sin\!\left(\pi t + \tfrac{\pi}{2}\right)\) [cm].</li>
+        <li>Mit \(\sin\!\left(x + \tfrac{\pi}{2}\right) = \cos x\) folgt \(P(t) = 30\cos(\pi t)\) — Kontrolle: \(P(0) = 30\) ✓, \(P(1) = -30\) ✓ (nach einer halben Periode auf der Gegenseite).</li>
+        <li>Sinus- und Cosinuskurve sind kongruent; jede Sinusschwingung mit Phasenwinkel ist eine verschobene Cosinusschwingung und umgekehrt. Welche Form man wählt, ist nur eine Frage des bequemsten «Startpunkts».</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Sinus, Cosinus und Tangens entstehen am <strong>Einheitskreis</strong> und sind <strong>periodisch</strong>: \(\sin\) und \(\cos\) pendeln mit Periode \(2\pi\) zwischen \(-1\) und \(1\) und sind kongruent (\(\cos x = \sin(x + \tfrac{\pi}{2})\)); \(\tan\) hat Periode \(\pi\) und Pole bei \(\tfrac{\pi}{2} + k\pi\). In \(y = a\sin\bigl(b(x-u)\bigr) + v\) bestimmt \(a\) die Amplitude, \(b\) die Periode \(p = \tfrac{2\pi}{b}\), \(u\) und \(v\) die Verschiebung. Zeitabhängig als \(y = A\sin(\omega t + \varphi)\) beschreibt dieselbe Mathematik jede harmonische Schwingung — mit \(T = \tfrac{2\pi}{\omega}\) und \(f = \tfrac{1}{T}\).</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th></th><th>\(\sin x\)</th><th>\(\cos x\)</th><th>\(\tan x\)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">\(D\)</td><td>\(\mathbb{R}\)</td><td>\(\mathbb{R}\)</td><td>\(\mathbb{R} \setminus \{\tfrac{\pi}{2} + k\pi\}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">\(W\)</td><td>\([-1;\,1]\)</td><td>\([-1;\,1]\)</td><td>\(\mathbb{R}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Periode</td><td>\(2\pi\)</td><td>\(2\pi\)</td><td>\(\pi\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstellen</td><td>\(k\pi\)</td><td>\(\tfrac{\pi}{2} + k\pi\)</td><td>\(k\pi\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Besonderes</td><td style="font-family:var(--sans)">ungerade (punktsym.)</td><td style="font-family:var(--sans)">gerade (achsensym.)</td><td style="font-family:var(--sans)">Pole, \(W = \mathbb{R}\)</td></tr>
+  </tbody>
+</table>
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s3-5-trigonometrische-funktionen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-5-trigonometrische-funktionen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-5-trigonometrische-funktionen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-5-trigonometrische-funktionen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-5-trigonometrische-funktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzlIHjv0J_R8sIj-xn8cVs0J" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Trigonometrie (Sinus, Cosinus, Tangens) — Playlist</div><div class="lk-s">Lehrerschmidt · 20 Videos · trigonometrische Grundlagen als Auffrischung</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHgXgsj5jy-qDE41UePZveqr" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Trigonometrie — Playlist</div><div class="lk-s">Mathe by Daniel Jung · sin/cos/tan, Einheitskreis, Anwendungen</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/112676/aufgaben-zur-allgemeinen-sinusfunktion" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zur allgemeinen Sinusfunktion</div><div class="lk-s">Amplitude, Periode, Parameter ablesen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/54054/aufgaben-zum-verschieben-und-strecken-trigonometrischer-funktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Verschieben und Strecken trigonometrischer Funktionen</div><div class="lk-s">Transformations-Aufgaben · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/30679/aufgaben-zum-sinus-und-kosinus-am-einheitskreis" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Sinus und Kosinus am Einheitskreis</div><div class="lk-s">Herleitung und exakte Werte · mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -104,12 +725,349 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'schwerpunkt', id:'s3-5',
   kapitelNr:'3.5', kapitelTitel:'Trigonometrische Funktionen',
   prev:{nr:'3.4b',titel:'Logarithmusfunktionen',url:'s3-4b-logarithmusfunktionen.html'},
   next:{nr:'4.1',titel:'Grundlagen',url:'s4-1-grundlagen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const PI = Math.PI;
+// Zahlformat mit 2 Nachkommastellen
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+// Bruchdarstellung von k·π/den, gekürzt (z.B. piFrac(7,12) -> '7π/12')
+function piFrac(k, den){
+  if(k === 0) return '0';
+  const g = (a, b) => b ? g(b, a % b) : a;
+  const t = g(Math.abs(k), den);
+  const z = k / t, n = den / t;
+  const zs = z === 1 ? 'π' : (z === -1 ? '−π' : String(z).replace('-', '−') + 'π');
+  return n === 1 ? zs : `${zs}/${n}`;
+}
+
+// Kurven-Plot mit Segmenttrennung bei Polen/Ausreissern (wie s3-2a)
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+// Anwendungs-Raster mit frei wählbaren Schritten und Einheiten-Labels (wie s3-4a)
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  // Labels mit Einheit
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+// Trig-Raster: x-Gitterlinien und Labels bei Vielfachen von π/2
+function gridTrig(id, H, xMin, xMax, yMin, yMax){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const cx = x => (x - xMin) / (xMax - xMin) * W;
+  const cy = y => HH - (y - yMin) / (yMax - yMin) * HH;
+  // Vertikale Gitterlinien bei k·π/2
+  for(let k = Math.ceil(xMin / (PI/2)); k * PI/2 <= xMax; k++){
+    const gx = k * PI/2;
+    ctx.strokeStyle = k === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = k === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), 0); ctx.lineTo(cx(gx), HH); ctx.stroke();
+  }
+  // Horizontale Gitterlinien ganzzahlig
+  for(let gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(0, cy(gy)); ctx.lineTo(W, cy(gy)); ctx.stroke();
+  }
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, cy(0)); ctx.lineTo(W, cy(0)); ctx.stroke();
+  if(xMin <= 0 && xMax >= 0){ ctx.beginPath(); ctx.moveTo(cx(0), 0); ctx.lineTo(cx(0), HH); ctx.stroke(); }
+  // x-Labels bei Vielfachen von π (und π/2, wenn Platz)
+  ctx.font = '12px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+  const halfStep = (xMax - xMin) > 4 * PI ? 2 : 1;   // bei breitem Bereich nur ganze π
+  for(let k = Math.ceil(xMin / (PI/2)); k * PI/2 <= xMax; k += halfStep){
+    if(k === 0) continue;
+    ctx.fillText(piFrac(k, 2), cx(k * PI/2), cy(0) + 15);
+  }
+  // y-Labels
+  ctx.textAlign = 'right';
+  for(let gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++){
+    if(gy !== 0) ctx.fillText(gy, (xMin <= 0 ? cx(0) : 30) - 5, cy(gy) + 4);
+  }
+  // Achsen-Labels
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'left'; ctx.fillText('x', W - 14, cy(0) - 7);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Riesenrad ══ */
+const RR = { r: 30, m: 35, T: 12 };
+function updateRR(){
+  const t = parseFloat(document.getElementById('rr-t').value);
+  document.getElementById('rr-tv').textContent = t.toFixed(1);
+  const th = 2 * PI * t / RR.T;                    // Drehwinkel ab Tiefpunkt
+  const h = RR.m - RR.r * Math.cos(th);
+  const tB = `<span class="tx-blau">${t.toFixed(1)}</span>`;
+  document.getElementById('rr-eq').innerHTML = `h(${tB}) = ${h.toFixed(2)} m`;
+  // Rad-Ansicht
+  const {ctx, W, H} = initCanvas('rr-rad', 220, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const s = (H - 40) / 70;                          // Skala m -> px (0..70 m)
+  const x0 = W / 2, yG = H - 12;                    // Boden
+  const cyM = yG - RR.m * s, R = RR.r * s;
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(10, yG); ctx.lineTo(W - 10, yG); ctx.stroke();   // Boden
+  ctx.beginPath(); ctx.moveTo(x0 - 14, yG); ctx.lineTo(x0, cyM); ctx.lineTo(x0 + 14, yG); ctx.stroke();  // Stützen
+  ctx.strokeStyle = '#b8c4d4'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(x0, cyM, R, 0, 2 * PI); ctx.stroke();               // Rad
+  for(let k = 0; k < 8; k++){                                                  // Speichen
+    ctx.beginPath(); ctx.moveTo(x0, cyM);
+    ctx.lineTo(x0 + R * Math.sin(th + k * PI/4), cyM + R * Math.cos(th + k * PI/4)); ctx.stroke();
+  }
+  const px = x0 + R * Math.sin(th), py = cyM + R * Math.cos(th);               // Kabine
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(px, py, 7, 0, 2 * PI); ctx.fill();
+  ctx.strokeStyle = '#1a4f8a55'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);   // Höhenlinie
+  ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, yG); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText(`${h.toFixed(1)} m`, px + 10, py - 8);
+  // Kurve h(t)
+  const g = gridApp('rr-canvas', 220, 0, 24, 0, 75, 2, 10, 't [min]', 'h [m]');
+  plotFx(g.ctx, g.cx, g.cy, x => RR.m - RR.r * Math.cos(2 * PI * x / RR.T), 0, 24, '#1a4f8a', 2.5, 1e6);
+  drawDot(g.ctx, g.cx, g.cy, t, h, '#1a4f8a', 6);
+}
+document.getElementById('rr-t').addEventListener('input', updateRR);
+
+/* ══ EINHEITSKREIS-ABROLLUNG ══ */
+const EK_F = [
+  {lab:'sin', f: x => Math.sin(x)},
+  {lab:'cos', f: x => Math.cos(x)},
+  {lab:'tan', f: x => Math.tan(x)},
+];
+let ekActive = 0;
+function setEk(i){
+  ekActive = i;
+  document.querySelectorAll('#ek-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  updateEK();
+}
+function updateEK(){
+  const k = parseInt(document.getElementById('ek-x').value);   // x = k·π/12
+  const x = k * PI / 12;
+  const F = EK_F[ekActive];
+  const y = F.f(x);
+  const xLab = piFrac(k, 12);
+  document.getElementById('ek-xv').textContent = xLab;
+  const grad = k * 15;
+  const yTxt = Math.abs(y) > 100 ? 'nicht definiert (Pol!)' : `≈ ${y.toFixed(2)}`;
+  document.getElementById('ek-eq').innerHTML =
+    `${F.lab}(<span class="tx-blau">${xLab}</span>) ${yTxt} · x = ${grad}°`;
+  // Einheitskreis (1:1)
+  const {ctx, W, H} = initCanvas('ek-kreis', 220, true);
+  const rng = 1.6;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  ctx.strokeStyle = '#b8c4d4'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx(0), cy(0), cx(1) - cx(0), 0, 2 * PI); ctx.stroke();
+  const px = Math.cos(x), py = Math.sin(x);
+  // Radius
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(px), cy(py)); ctx.stroke();
+  // Funktionsstrecke rot
+  ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 3;
+  if(ekActive === 0){        // sin: y-Koordinate von P
+    ctx.beginPath(); ctx.moveTo(cx(px), cy(0)); ctx.lineTo(cx(px), cy(py)); ctx.stroke();
+  } else if(ekActive === 1){ // cos: x-Koordinate von P
+    ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(px), cy(0)); ctx.stroke();
+  } else {                   // tan: Tangentenabschnitt bei x = 1
+    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(cx(1), cy(-rng)); ctx.lineTo(cx(1), cy(rng)); ctx.stroke();
+    if(Math.abs(y) <= 100){
+      // Verlängerter Radius bis zur Tangente
+      ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(Math.sign(px) >= 0 ? 1 : -1), cy(Math.sign(px) >= 0 ? y : -y)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 3;
+      const yClip = Math.max(-rng, Math.min(rng, y));
+      ctx.beginPath(); ctx.moveTo(cx(1), cy(0)); ctx.lineTo(cx(1), cy(yClip)); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+  drawDot(ctx, cx, cy, px, py, '#1a4f8a', 6);
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('P', cx(px) + 8, cy(py) - 8);
+  // Graph rechts
+  const g = gridTrig('ek-canvas', 220, -0.4, 2 * PI + 0.4, -2.4, 2.4);
+  plotFx(g.ctx, g.cx, g.cy, F.f, 0, 2 * PI, '#5b2d8e', 2.5, 10);
+  if(Math.abs(y) <= 2.4) drawDot(g.ctx, g.cx, g.cy, x, y, '#9b1c1c', 6);
+}
+document.getElementById('ek-x').addEventListener('input', updateEK);
+
+/* ══ TYPEN-VISUALISIERUNG ══ */
+const typen = [
+  {label:'sin x',     desc:'y = sin x  ·  Periode 2π  ·  Nullstellen bei kπ  ·  ungerade (punktsymmetrisch)', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.sin, -2*PI, 2*PI, '#1a4f8a', 3, 10)},
+  {label:'cos x',     desc:'y = cos x  ·  Periode 2π  ·  Nullstellen bei π/2 + kπ  ·  gerade (achsensymmetrisch)', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.cos, -2*PI, 2*PI, '#1f6b3a', 3, 10)},
+  {label:'tan x',     desc:'y = tan x  ·  Periode π  ·  Pole bei π/2 + kπ  ·  Wertemenge ℝ', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.tan, -2*PI, 2*PI, '#b85c00', 3, 8)},
+  {label:'sin & cos', desc:'cos x (grün) ist die um π/2 nach links verschobene Sinuskurve (blau) — kongruent!', draw: g => { plotFx(g.ctx, g.cx, g.cy, Math.sin, -2*PI, 2*PI, '#1a4f8a', 2.5, 10); plotFx(g.ctx, g.cx, g.cy, Math.cos, -2*PI, 2*PI, '#1f6b3a', 2.5, 10); }},
+];
+let tyActive = 0;
+function buildTyBtns(){
+  document.getElementById('ty-btns').innerHTML = typen.map((t, i) =>
+    `<button class="typ-btn${i === tyActive ? ' aktiv' : ''}" onclick="setTy(${i})">${t.label}</button>`
+  ).join('');
+}
+function setTy(i){
+  tyActive = i;
+  document.querySelectorAll('#ty-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawTy();
+}
+function drawTy(){
+  const g = gridTrig('ty-canvas', 220, -2 * PI - 0.4, 2 * PI + 0.4, -2.6, 2.6);
+  typen[tyActive].draw(g);
+  document.getElementById('ty-desc').textContent = typen[tyActive].desc;
+}
+
+/* ══ TRANSFORMATIONS-BAUKASTEN ══ */
+const TR_A = [0.5, 1, 1.5, 2, 3];
+const TR_BV = [0.5, 1, 2, 3];
+function updateTR(){
+  const a = TR_A[parseInt(document.getElementById('tr-a').value)];
+  const b = TR_BV[parseInt(document.getElementById('tr-b').value)];
+  const uk = parseInt(document.getElementById('tr-u').value);    // u = uk·π/4
+  const u = uk * PI / 4;
+  const v = parseInt(document.getElementById('tr-v').value);
+  document.getElementById('tr-av').textContent = fmt(a);
+  document.getElementById('tr-bv').textContent = fmt(b);
+  document.getElementById('tr-uv').textContent = piFrac(uk, 4);
+  document.getElementById('tr-vv').textContent = String(v).replace('-', '−');
+  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
+  const aStr = a === 1 ? '' : `${T('blau', fmt(a))}·`;
+  const bStr = b === 1 ? '' : `${T('orange', fmt(b))}·`;
+  const arg = uk === 0 ? (b === 1 ? 'x' : `${bStr}x`) : `${bStr}(x ${uk > 0 ? '−' : '+'} ${T('gruen', piFrac(Math.abs(uk), 4))})`;
+  const vTerm = v === 0 ? '' : (v > 0 ? ` + ${T('orange', v)}` : ` − ${T('orange', Math.abs(v))}`);
+  document.getElementById('tr-eq').innerHTML = `y = ${aStr}sin(${arg})${vTerm}`;
+  // Periode als π-Bruch: p = 2π/b -> b=0.5:4π, 1:2π, 2:π, 3:2π/3
+  const pStr = {0.5:'4π', 1:'2π', 2:'π', 3:'2π/3'}[b];
+  document.getElementById('tr-info').innerHTML =
+    `Amplitude ${T('blau', fmt(a))} · Periode p = ${T('orange', pStr)} · Mittellinie y = ${T('orange', String(v).replace('-', '−'))}`;
+  const g = gridTrig('tr-canvas', 240, -2 * PI - 0.4, 2 * PI + 0.4, -4.4, 4.4);
+  // Grundfunktion gestrichelt grau
+  g.ctx.setLineDash([5, 4]);
+  plotFx(g.ctx, g.cx, g.cy, Math.sin, -2*PI, 2*PI, '#9ca3af', 1.5, 10);
+  g.ctx.setLineDash([]);
+  // Mittellinie orange gestrichelt
+  g.ctx.setLineDash([6, 4]); g.ctx.strokeStyle = '#b85c00'; g.ctx.lineWidth = 1.5;
+  g.ctx.beginPath(); g.ctx.moveTo(0, g.cy(v)); g.ctx.lineTo(g.W, g.cy(v)); g.ctx.stroke();
+  g.ctx.setLineDash([]);
+  plotFx(g.ctx, g.cx, g.cy, x => a * Math.sin(b * (x - u)) + v, -2*PI, 2*PI, '#5b2d8e', 2.5, 20);
+}
+['tr-a', 'tr-b', 'tr-u', 'tr-v'].forEach(id => document.getElementById(id).addEventListener('input', updateTR));
+
+/* ══ A1: Erkennen ══ */
+const a1G = [
+  {label:'Graph 1', f: x => Math.sin(x),     eq:'y = sin x'},
+  {label:'Graph 2', f: x => Math.cos(x),     eq:'y = cos x'},
+  {label:'Graph 3', f: x => Math.sin(2*x),   eq:'y = sin 2x'},
+  {label:'Graph 4', f: x => 2*Math.sin(x),   eq:'y = 2 sin x'},
+];
+const a1Opts = ['y = sin x', 'y = cos x', 'y = sin 2x', 'y = 2 sin x'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const g = gridTrig('a1-canvas', 220, -0.4, 2 * PI + 0.4, -2.6, 2.6);
+  plotFx(g.ctx, g.cx, g.cy, a1G[a1Act].f, 0, 2 * PI, '#1a4f8a', 2.5, 10);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Achte auf den Startwert bei x = 0, die Amplitude (Höhe) und die Anzahl Wellen bis 2π.';
+  }
+}
+
+/* ══ A2: Lösungs-Skizzen ══ */
+function drawA2Sol(){
+  const body = document.getElementById('l-a2');
+  if(!body.classList.contains('sichtbar')) return;
+  const g = gridTrig('a2-canvas', 240, -PI - 0.3, 2 * PI + 0.3, -3.6, 3.6);
+  plotFx(g.ctx, g.cx, g.cy, x => 2 * Math.sin(x - PI/6) - 1, -PI, 2*PI, '#1a4f8a', 2.5, 10);  // a
+  plotFx(g.ctx, g.cx, g.cy, x => Math.cos(x) + 1, -PI, 2*PI, '#1f6b3a', 2.5, 10);             // b
+  plotFx(g.ctx, g.cx, g.cy, x => -Math.sin(0.5 * x), -PI, 2*PI, '#5b2d8e', 2.5, 10);          // c
+}
+
+/* ══ Zahlenwert-Prüfung (A3–A6) ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung (Taschenrechner im RAD-Modus?).';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateRR();
+  updateEK();
+  buildTyBtns(); drawTy();
+  updateTR();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateRR(); updateEK(); drawTy(); updateTR(); drawA1(); drawA2Sol();
 });
 </script>
 </body>

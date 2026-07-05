@@ -1189,6 +1189,54 @@ s34b_cards = [
      '<b>pH = −lg c</b>; Umkehrung durch Exponenzieren: <b>c = 10^(−pH)</b>.'),
 ]
 
+# ─── s3-5 Trigonometrische Funktionen (Schwerpunkt) ─────────
+s35_cards = [
+    # Definitionen am Einheitskreis
+    ('Was ist sin x am <i>Einheitskreis</i>?',
+     'Die <b>y-Koordinate</b> des Punktes P zum Winkel x (Bogenmass).'),
+    ('Was ist cos x am <i>Einheitskreis</i>?',
+     'Die <b>x-Koordinate</b> des Punktes P — und tan x der <b>Tangentenabschnitt</b> bei x = 1.'),
+    ('Warum ist die Sinusfunktion für alle reellen x definiert?',
+     'Der Punkt P kann <b>beliebig viele Umdrehungen</b> in beide Richtungen machen: sin(x + 2kπ) = sin x.'),
+    ('Definitionsmenge der Tangensfunktion?',
+     '<b>D = ℝ \\ {π/2 + kπ}</b> — an diesen Stellen hat tan x <b>Pole</b> (Definitionslücken).'),
+    # Eigenschaften
+    ('D und W von sin x und cos x?',
+     '<b>D = ℝ, W = [−1; 1]</b> — die Koordinaten am Einheitskreis liegen nie ausserhalb.'),
+    ('Wertemenge der Tangensfunktion?',
+     '<b>W = ℝ</b> — im Gegensatz zu Sinus und Cosinus unbeschränkt.'),
+    ('Periodenlängen von sin, cos und tan?',
+     'sin und cos: <b>2π</b> · tan: <b>π</b> (halb so lang!).'),
+    ('Nullstellen von sin x und cos x?',
+     'sin: <b>x₀ = kπ</b> · cos: <b>x₀ = π/2 + kπ</b> — genau versetzt.'),
+    ('Symmetrie von Sinus- und Cosinusfunktion?',
+     'sin ist <b>ungerade</b> (punktsymmetrisch, sin(−x) = −sin x), cos ist <b>gerade</b> (achsensymmetrisch, cos(−x) = cos x).'),
+    ('Kongruenz von Sinus- und Cosinuskurve?',
+     'Horizontale Verschiebung um π/2: <b>cos x = sin(x + π/2)</b> und sin x = cos(x − π/2).'),
+    ('Was ergibt sin(π − x)?',
+     '<b>sin x</b> — Ergänzungsbeziehung; dagegen cos(π − x) = −cos x.'),
+    # Transformationen
+    ('Wirkung von a in y = a·sin(b(x−u)) + v?',
+     'Streckung in y-Richtung — a ist die <b>Amplitude</b> (maximale Auslenkung von der Mittellinie).'),
+    ('Wirkung von b in y = a·sin(b(x−u)) + v?',
+     'Streckung mit Faktor 1/b in x-Richtung — neue <b>Periode p = 2π/b</b>: grosses b, kurze Periode!'),
+    ('Wirkung von u und v in y = a·sin(b(x−u)) + v?',
+     'u verschiebt <b>horizontal</b> (rechts für u &gt; 0), v <b>vertikal</b> — die Mittellinie liegt bei y = v.'),
+    ('Periodenlänge von y = sin(2x)?',
+     '<b>p = 2π/2 = π</b> — die Kurve schwingt doppelt so schnell.'),
+    ('Verschiebung x₀ der allgemeinen Sinusfunktion y = a·sin(bx + c)?',
+     '<b>x₀ = −c/b</b> — Ausklammern zeigt es: a·sin(b(x + c/b)).'),
+    # Harmonische Schwingungen
+    ('Form und Grössen einer <i>harmonischen Schwingung</i>?',
+     '<b>y = A·sin(ωt + φ)</b>: Amplitude A, Kreisfrequenz ω, Phasenwinkel φ (Bogenmass).'),
+    ('Zusammenhang von T, f und ω?',
+     '<b>T = 2π/ω</b>, <b>f = 1/T = ω/(2π)</b>, <b>ω = 2πf</b>. Einheit von f: Hertz (1 Hz = 1 s⁻¹).'),
+    ('Wie findet man den ersten Hochpunkt von y = a·sin(bx + c)?',
+     'Das <b>Argument gleich π/2 setzen</b>: bx + c = π/2 und nach x auflösen. (Cosinus: Argument = 0.)'),
+    ('Häufige Taschenrechner-Falle bei Winkelfunktionen?',
+     'Falscher Winkelmodus: Für Graphen und Schwingungen immer <b>RAD</b> (Bogenmass) verwenden — sin 30 ist im DEG-Modus 0.5, im RAD-Modus −0.988.'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -1258,6 +1306,8 @@ SP_DECKS = [
      'Basis und Verlauf, Punkt (0|1), Asymptote, Transformationen, e-Funktion und Basiswechsel.', s34a_cards),
     ('s3-4b-logarithmusfunktionen', '3.4b Logarithmusfunktionen',
      'Umkehrfunktion, Spiegelung an y = x, Nullstelle x = 1, Basiswechsel, logarithmische Skalen.', s34b_cards),
+    ('s3-5-trigonometrische-funktionen', '3.5 Trigonometrische Funktionen',
+     'Einheitskreis, Periodizität und Symmetrien, Transformationen, allgemeine Sinusfunktion, harmonische Schwingungen.', s35_cards),
 ]
 
 for slug, deck_short, deck_desc, cards in SP_DECKS:
