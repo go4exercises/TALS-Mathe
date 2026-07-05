@@ -2947,6 +2947,246 @@ J_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s2-1  GRUNDLAGEN (GLEICHUNGS-WERKZEUGKASTEN)
+# ═══════════════════════════════════════════════════════════════════
+
+K_HANDOUT = r'''
+  <h2>1. Vokabular</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Gleichung</td><td class="li">Aussage \( T_1(x) = T_2(x) \) — zwei Terme haben denselben Wert</td></tr>
+      <tr><td class="li">Grundmenge \(G\)</td><td class="li">erlaubte Zahlenmenge (meist \( \mathbb{R} \))</td></tr>
+      <tr><td class="li">Definitionsmenge \(D\)</td><td class="li">alle \(x\), für die beide Terme definiert sind (Nenner \( \neq 0 \), Radikand \( \geq 0 \), Log-Argument \( > 0 \))</td></tr>
+      <tr><td class="li">Lösungsmenge \(L\)</td><td class="li">alle \( x \in D \), welche die Gleichung erfüllen — kann leer, endlich oder unendlich sein</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Äquivalenzumformungen — und ihre gefährlichen Verwandten</h2>
+  <p><strong>Sicher</strong> (Lösungsmenge bleibt): beidseitig addieren/subtrahieren; beidseitig
+  mit fester Zahl \( \neq 0 \) multiplizieren/dividieren — das Waage-Prinzip.</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Gefährliche Umformung</th><th>Risiko</th><th>Gegenmittel</th></tr></thead>
+    <tbody>
+      <tr><td class="li">quadrieren / potenzieren</td><td class="li">Scheinlösungen</td><td class="li">Probe in der Ausgangsgleichung</td></tr>
+      <tr><td class="li">mit Term multiplizieren</td><td class="li">Scheinlösung bei Term = 0</td><td class="li">\(D\) notieren, Lösungen prüfen</td></tr>
+      <tr><td class="li">durch Term dividieren</td><td class="li">Lösungen gehen verloren</td><td class="li">ausklammern + Nullprodukt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Der Typen-Blick: Wo steht die Unbekannte?</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Typ</th><th>Wo steht \(x\)?</th><th>Beispiel</th><th>Methode</th></tr></thead>
+    <tbody>
+      <tr><td class="li">linear</td><td class="li">nur 1. Potenz</td><td>\( 3x + 2 = 11 \)</td><td class="li">Äquivalenzumformungen</td></tr>
+      <tr><td class="li">quadratisch</td><td class="li">2. Potenz</td><td>\( x^2 + 3x - 10 = 0 \)</td><td class="li">Faktorisieren · Lösungsformel</td></tr>
+      <tr><td class="li">Potenzgleichung</td><td class="li">Basis</td><td>\( x^4 = 81 \)</td><td class="li">\(n\)-te Wurzel (Parität!)</td></tr>
+      <tr><td class="li">Wurzelgleichung</td><td class="li">Radikand</td><td>\( \sqrt{2x+1} = 7 \)</td><td class="li">separieren · quadrieren · Probe</td></tr>
+      <tr><td class="li">rational</td><td class="li">Nenner</td><td>\( \tfrac{6}{x+1} = 2 \)</td><td class="li">\(D\) · Hauptnenner</td></tr>
+      <tr><td class="li">exponentiell</td><td class="li">Exponent</td><td>\( 5 \cdot 2^x = 80 \)</td><td class="li">Exponentenvergleich · logarithmieren</td></tr>
+      <tr><td class="li">logarithmisch</td><td class="li">Log-Argument</td><td>\( \lg(x+3) = 2 \)</td><td class="li">\(D\) · entlogarithmieren · Probe</td></tr>
+      <tr><td class="li">Betrag</td><td class="li">im Betrag</td><td>\( |x-4| = 9 \)</td><td class="li">zwei Fälle \( \pm \)</td></tr>
+      <tr><td class="li">Produktform</td><td class="li">Faktoren</td><td>\( x(x-3)(x+2) = 0 \)</td><td class="li">Nullprodukt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Der Vier-Schritte-Fahrplan</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Typ → D → Methode → Kontrolle</div>
+    <p>(1) Typ bestimmen («Wo steht \(x\)?») · (2) Definitionsmenge notieren ·
+    (3) passende Methode anwenden · (4) überprüfen: <strong>Probe</strong> (Ausgangsgleichung),
+    <strong>Skizze</strong> (Anzahl Schnittpunkte = erwartete Lösungsanzahl),
+    <strong>Plausibilität</strong> (Vorzeichen, Grössenordnung, Einheit).</p>
+  </div>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Die wichtigste Entscheidung fällt <strong>vor</strong> dem Rechnen: den Typ am Ort der
+    Unbekannten erkennen. Sichere Umformungen erhalten die Waage; Quadrieren, Terme-Multiplikation
+    und -Division verlangen \(D\) und Probe. Ohne Kontrolle ist keine Lösungsmenge bestimmt.</p>
+  </div>
+'''
+
+K_FORMELAUSZUG = r'''
+  <h2>1. Mengen-Begriffe</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Definitionsmenge \(D\)</td><td class="li">Nenner \( \neq 0 \) · Radikand \( \geq 0 \) · Log-Argument \( > 0 \)</td></tr>
+      <tr><td class="li">Lösungsmenge \(L\)</td><td class="li">leer \( \{\,\} \) · endlich \( \{x_1; \dots\} \) · allgemeingültig \( G \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Umformungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">äquivalent</td><td class="li">\( \pm \) Term · \( \cdot/: \) Zahl \( \neq 0 \)</td></tr>
+      <tr><td class="li">Scheinlösungs-Gefahr</td><td class="li">quadrieren · mit Term multiplizieren · entlogarithmieren</td></tr>
+      <tr><td class="li">Verlust-Gefahr</td><td class="li">durch Term dividieren · \( \lg x^2 = 2\lg x \) statt \( 2\lg|x| \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Typ-Erkennung und Methode</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>\(x\) steht …</th><th>Typ</th><th>Methode</th></tr></thead>
+    <tbody>
+      <tr><td class="li">in 1. Potenz</td><td class="li">linear</td><td class="li">umformen</td></tr>
+      <tr><td class="li">in 2. Potenz</td><td class="li">quadratisch</td><td class="li">faktorisieren · Formel</td></tr>
+      <tr><td class="li">in der Basis (\(x^n = c\))</td><td class="li">Potenzgleichung</td><td class="li">\(n\)-te Wurzel, Parität</td></tr>
+      <tr><td class="li">im Radikanden</td><td class="li">Wurzelgleichung</td><td class="li">separieren + quadrieren</td></tr>
+      <tr><td class="li">im Nenner</td><td class="li">rational</td><td class="li">Hauptnenner</td></tr>
+      <tr><td class="li">im Exponenten</td><td class="li">exponentiell</td><td class="li">logarithmieren</td></tr>
+      <tr><td class="li">im Log-Argument</td><td class="li">logarithmisch</td><td class="li">entlogarithmieren</td></tr>
+      <tr><td class="li">im Betrag</td><td class="li">Betragsgleichung</td><td class="li">zwei Fälle</td></tr>
+      <tr><td class="li">in Faktoren (\( \cdot = 0 \))</td><td class="li">Produktform</td><td class="li">Nullprodukt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Kontrolle</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Probe</td><td class="li">in die <strong>Ausgangs</strong>gleichung einsetzen</td></tr>
+      <tr><td class="li">Skizze</td><td class="li">Schnittpunkte beider Seiten = erwartete Lösungsanzahl</td></tr>
+      <tr><td class="li">Plausibilität</td><td class="li">Vorzeichen, Grössenordnung, Einheit zur Anwendung passend?</td></tr>
+    </tbody>
+  </table>
+'''
+
+K_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Vokabular vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Umformungen, welche die Lösungsmenge nicht ändern, heissen <span class="lueck"></span>.<br>
+      Die <span class="lueck"></span>menge enthält alle \(x\), für die beide Seiten definiert sind.<br>
+      Die Probe macht man in der <span class="lueck"></span>gleichung.
+    </div>''')
+    + aufg(2, 'Äquivalent oder nicht?', 2, r'''    <p>Beurteile die Umformung (äquivalent / Scheinlösungs-Gefahr / Verlust-Gefahr):</p>
+    <p>(a) beidseitig \( +9 \) &nbsp;&nbsp; (b) beidseitig quadrieren &nbsp;&nbsp;
+       (c) beidseitig durch \(x\) dividieren</p>
+''' + LINS)
+    + aufg(3, 'Lösungsmengen-Spezialfälle', 2, r'''    <p>Bestimme die Lösungsmenge:</p>
+    <p>(a) \( 2(x+1) = 2x + 2 \) &nbsp;&nbsp;&nbsp; (b) \( x = x + 1 \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Typ bestimmen</div>\n'
+    + aufg(4, 'Wo steht die Unbekannte?', 1, r'''    <p>Bestimme den Typ (ohne zu lösen):</p>
+    <p>(a) \( \sqrt{x-5} = 4 \) &nbsp;&nbsp; (b) \( 3^x = 125 \) &nbsp;&nbsp;
+       (c) \( x^3 = 125 \) &nbsp;&nbsp; (d) \( \tfrac{8}{x-3} = 5 \)</p>
+''' + LINS)
+    + aufg(5, 'Verwechslungsgefahr', 2, r'''    <p>Worin unterscheiden sich \( x^4 = 81 \) und \( 4^x = 81 \)? Gib zu beiden Typ und
+    Lösungsmenge an.</p>
+''' + LINS)
+    + aufg(6, 'Definitionsmenge zuerst', 2, r'''    <p>Bestimme die Definitionsmenge:</p>
+    <p>(a) \( \tfrac{5}{x-3} = x \) &nbsp;&nbsp; (b) \( \sqrt{2x-8} = 3 \) &nbsp;&nbsp;
+       (c) \( \lg(x+2) = 1 \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Quer durch die Typen</div>\n'
+    + aufg(7, 'Linear', 1, r'''    <p>Löse \( 5x - 4 = 3x + 5 \) mit Probe.</p>
+''' + LINS)
+    + aufg(8, 'Quadratisch', 2, r'''    <p>Löse \( x^2 - 5x + 6 = 0 \) durch Faktorisieren; Kontrolle mit Vieta.</p>
+''' + LINS)
+    + aufg(9, 'Rational', 2, r'''    <p>Löse \( \tfrac{12}{x} = 3 \) (mit \(D\)).</p>
+''' + LINS)
+    + aufg(10, 'Wurzel', 2, r'''    <p>Löse \( \sqrt{x} + 1 = 5 \) mit Probe.</p>
+''' + LINS)
+    + aufg(11, 'Exponentiell', 2, r'''    <p>Löse \( 2^x = 32 \) durch Exponentenvergleich.</p>
+''' + LINS)
+    + aufg(12, 'Fehlersuche', 3, r'''    <p>Finde den Fehler: \( x^2 = 4x \ \mid : x \ \Rightarrow\ x = 4 \Rightarrow L = \{4\} \).</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Äquivalenzumformungen</strong> · <strong>Definitions</strong>menge ·
+    <strong>Ausgangs</strong>gleichung.</p>''')
+    + loes(2, r'''    <p>(a) äquivalent · (b) Scheinlösungs-Gefahr (Vorzeichen geht verloren) ·
+    (c) Verlust-Gefahr (\( x = 0 \) wird getilgt).</p>''')
+    + loes(3, r'''    <p>(a) allgemeingültig: \( L = \mathbb{R} \) (Identität) · (b) unlösbar: \( L = \{\,\} \).</p>''')
+    + loes(4, r'''    <p>(a) Wurzelgleichung · (b) Exponentialgleichung (\(x\) im Exponenten) ·
+    (c) Potenzgleichung (\(x\) in der Basis) · (d) rationale Gleichung.</p>''')
+    + loes(5, r'''    <p>\( x^4 = 81 \): Potenzgleichung, \( L = \{-3;\ 3\} \) (gerader Exponent!) ·
+    \( 4^x = 81 \): Exponentialgleichung, \( L = \{\log_4 81\} \approx \{3.17\} \) — genau eine Lösung.</p>''')
+    + loes(6, r'''    <p>(a) \( D = \mathbb{R} \setminus \{3\} \) · (b) \( 2x - 8 \geq 0 \Rightarrow x \geq 4 \) ·
+    (c) \( x + 2 > 0 \Rightarrow x > -2 \).</p>''')
+    + loes(7, r'''    <p>\( 2x = 9 \Rightarrow x = 4.5 \). Probe: \( 18.5 = 18.5 \) ✓</p>''')
+    + loes(8, r'''    <p>\( (x-2)(x-3) = 0 \Rightarrow L = \{2;\ 3\} \). Vieta: Produkt \(6\) ✓, Summe \(5\) ✓</p>''')
+    + loes(9, r'''    <p>\( D: x \neq 0 \); \( 12 = 3x \Rightarrow x = 4 \in D \): \( L = \{4\} \).</p>''')
+    + loes(10, r'''    <p>\( \sqrt{x} = 4 \Rightarrow x = 16 \). Probe: \( 4 + 1 = 5 \) ✓</p>''')
+    + loes(11, r'''    <p>\( 2^x = 2^5 \Rightarrow x = 5 \).</p>''')
+    + loes(12, r'''    <p>Die Division durch \(x\) hat die Lösung \( x = 0 \) vernichtet. Korrekt:
+    \( x(x-4) = 0 \Rightarrow L = \{0;\ 4\} \).</p>''')
+)
+
+K_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Bei jeder Aufgabe
+    gehört dazu: Gleichung aufstellen, <strong>Typ benennen</strong>, lösen und die Lösung auf
+    <strong>Plausibilität</strong> prüfen. Die Musterlösungen folgen am Ende des Dokuments.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Alltag</td><td>Zwei Handy-Abos</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Geometrie</td><td>Rechteck gesucht</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Konstruktion</td><td>Kegel umgekehrt</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Physik</td><td>Fallhöhe</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Finanzen</td><td>Sparziel</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Werkstatt</td><td>Toleranz-Check</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Zwei Handy-Abos', 2, r'''    <p>Abo A: \(25\) CHF plus \(0.40\) CHF pro Einheit; Abo B: \(40\) CHF plus \(0.25\) CHF
+    pro Einheit.</p>
+    <p>(a) Stelle die Gleichung für «gleich teuer» auf und benenne den Typ.</p>
+    <p>(b) Löse sie und gib die gemeinsamen Kosten an.</p>
+    <p>(c) Ab wann lohnt sich B? (Blick voraus: Ungleichung.)</p>
+''' + LINS4, tag='Alltag')
+    + aufg(2, 'Rechteck gesucht', 2, r'''    <p>Ein Rechteck hat Umfang \(28\) cm und Flächeninhalt \(48\ \text{cm}^2\).</p>
+    <p>(a) Stelle mit der Breite \(x\) eine Gleichung auf. Welcher Typ?</p>
+    <p>(b) Löse sie und deute beide Lösungen.</p>
+''' + LINS4, tag='Geometrie')
+    + aufg(3, 'Kegel umgekehrt', 2, r'''    <p>Für einen Kegel gilt \( V = \tfrac{1}{3}\pi r^2 h \); gegeben \( V = 100\ \text{cm}^3 \),
+    \( h = 12 \) cm.</p>
+    <p>(a) Stelle die Gleichung für \(r\) auf und benenne den Typ.</p>
+    <p>(b) Löse sie — welche Lösung ist plausibel?</p>
+''' + LINS4, tag='Konstruktion')
+    + aufg(4, 'Fallhöhe', 3, r'''    <p>Ein Stein fällt \( t = \sqrt{2h/g} \) Sekunden aus der Höhe \(h\) (\( g = 9.81\ \text{m/s}^2 \)).
+    Gemessen werden \( 2.5 \) s.</p>
+    <p>(a) Stelle die Gleichung für \(h\) auf und benenne den Typ.</p>
+    <p>(b) Löse sie (Wurzel separieren, quadrieren) und prüfe die Grössenordnung.</p>
+''' + LINS4, tag='Physik')
+    + aufg(5, 'Sparziel', 3, r'''    <p>Ein Konto mit \( 8000 \) CHF wird zu \(2\) % verzinst: \( K(n) = 8000 \cdot 1.02^n \).
+    Ziel sind \( 10\,000 \) CHF.</p>
+    <p>(a) Stelle die Gleichung auf und benenne den Typ.</p>
+    <p>(b) Löse sie exakt und runde sinnvoll.</p>
+''' + LINS4, tag='Finanzen')
+    + aufg(6, 'Toleranz-Check', 3, r'''    <p>Ein Bolzen hat Sollmass \(12\) mm; zulässig ist eine Abweichung von höchstens
+    \( 0.05 \) mm.</p>
+    <p>(a) Für welche Durchmesser \(d\) gilt exakt Grenzmass? Stelle die Gleichung auf
+    (Typ?) und löse sie.</p>
+    <p>(b) Formuliere den brauchbaren Bereich als Ungleichung und als Intervall.</p>
+''' + LINS4, tag='Werkstatt')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( 25 + 0.4x = 40 + 0.25x \) — <strong>linear</strong>.</p>
+    <p>(b) \( 0.15x = 15 \Rightarrow x = 100 \) Einheiten; Kosten \(65\) CHF (Probe mit B ✓).</p>
+    <p>(c) \( 40 + 0.25x < 25 + 0.4x \Rightarrow x > 100 \).</p>''')
+    + loes(2, r'''    <p>(a) Länge \( 14 - x \): \( x(14-x) = 48 \) — <strong>quadratisch</strong>.</p>
+    <p>(b) \( x^2 - 14x + 48 = 0 \Rightarrow (x-6)(x-8) = 0 \) — beide Lösungen beschreiben
+    dasselbe Rechteck mit Seiten \(6\) und \(8\) cm (Probe: \(48\ \text{cm}^2\), \(28\) cm ✓).</p>''')
+    + loes(3, r'''    <p>(a) \( r^2 = \tfrac{3V}{\pi h} = \tfrac{300}{12\pi} \) — <strong>Potenzgleichung</strong>
+    (gerader Exponent).</p>
+    <p>(b) \( r = \pm 2.82 \) cm; plausibel ist nur der positive Radius.</p>''')
+    + loes(4, r'''    <p>(a) \( \sqrt{2h/9.81} = 2.5 \) — <strong>Wurzelgleichung</strong>.</p>
+    <p>(b) Quadrieren: \( \tfrac{2h}{9.81} = 6.25 \Rightarrow h = \tfrac{9.81 \cdot 6.25}{2}
+    \approx 30.7 \) m — etwa ein zehnstöckiges Haus, plausibel.</p>''')
+    + loes(5, r'''    <p>(a) \( 8000 \cdot 1.02^n = 10\,000 \) — <strong>Exponentialgleichung</strong>.</p>
+    <p>(b) \( 1.02^n = 1.25 \Rightarrow n = \tfrac{\ln 1.25}{\ln 1.02} \approx 11.3 \) —
+    nach \(12\) vollen Jahren ist das Ziel erreicht.</p>''')
+    + loes(6, r'''    <p>(a) \( |d - 12| = 0.05 \) — <strong>Betragsgleichung</strong>, zwei Fälle:
+    \( d = 11.95 \) oder \( d = 12.05 \) mm.</p>
+    <p>(b) \( |d - 12| \leq 0.05 \), also \( d \in [11.95;\ 12.05] \) mm.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -3033,6 +3273,14 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', J_TDS),
     ('s2-2c-betrag-polynom-ungleichungen', 'Betrags- und Polynomgleichungen, Ungleichungen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Betrag, Nullprodukt, Ungleichungen', STYLE_SERIE, '1.0', '', J_SERIE),
+    ('s2-1-grundlagen', 'Grundlagen Gleichungen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', K_HANDOUT),
+    ('s2-1-grundlagen', 'Grundlagen Gleichungen', 'Formelauszug', 'formelauszug.html',
+     'Grundlagen Gleichungen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, K_FORMELAUSZUG),
+    ('s2-1-grundlagen', 'Grundlagen Gleichungen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', K_TDS),
+    ('s2-1-grundlagen', 'Grundlagen Gleichungen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Grundlagen Gleichungen', STYLE_SERIE, '1.0', '', K_SERIE),
 ]
 
 

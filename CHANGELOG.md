@@ -4,6 +4,34 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [75] — 2026-07-05 · s2-1 Grundlagen (Gleichungs-Werkzeugkasten) ausgebaut
+
+Siebter Vollausbau im Schwerpunktfach — damit ist **Lerngebiet 2 komplett** (2.1 + 2.2a–c).
+Ohne FTB-Quell-PDF gebaut: Inhalt entlang der beiden RLP-Kompetenzen 2.1 (Typ bestimmen,
+geeignete Methoden anwenden und überprüfen):
+
+- **`schwerpunkt/s2-1-grundlagen.html`** — Einstieg **Waage-Modell** \(3x + 2 = 11\)
+  (interaktiv: Umformungs-Buttons wirken beidseitig, Waage bleibt im Gleichgewicht; der
+  «falsche» Weg über \(:3\) wird didaktisch kommentiert), Vokabular (\(G\), \(D\), \(L\)),
+  Äquivalenzumformungen vs. gefährliche Verwandte (Quadrieren, Terme-Multiplikation/-Division),
+  **Typen-Bestimmer** (sechs Gleichungen mit Steckbrief: Wo steht \(x\)? → Typ → Methode),
+  Typen-Landkarte mit Querlinks zu 2.2a–c und ins Grundlagenfach, Vier-Schritte-Fahrplan
+  (Typ → \(D\) → Methode → Kontrolle), drei Arten der Überprüfung (Probe, Skizze,
+  Plausibilität), A1–A7 (u.a. Typ-Quiz, Rechteck 6×8, Handy-Abos, Kegel-Radius,
+  Fehlersuche als Vertiefung), 4 Mini-Checks.
+- **Materialien komplett:** 4 Druckseiten (`build_print_s3.py` K-Block, Bestand byte-identisch)
+  und Anki-Deck mit 20 Karten (nur neues Deck gebaut).
+- Alle Zahlenwerte numerisch verifiziert (u.a. Rechteck \(x^2 - 14x + 48 = 0 \Rightarrow 6/8\),
+  Abo-Break-even \(x = 100\), Kegel \(r \approx 2.82\) cm, Fallhöhe \(30.7\) m,
+  Sparziel \(n \approx 11.3\) a).
+- **Korrektur:** Die drei s2-2-Seiten trugen fälschlich «30 Lektionen» im Seitenkopf —
+  gemäss Stub sind es für Lerngebiet 2 **50 Lektionen**; auf allen drei Seiten behoben.
+- index.html-Karte 2.1 auf «fertig»; Ressourcen ohne neue Abrufe (Map: MathemaTrick
+  «Terme vereinfachen», Lehrerschmidt «Terme &amp; Gleichungen»; serlo-Sitemap-Cache 25103,
+  26259; sos-mathe G31); Map §8 um s2-1 ergänzt.
+
+---
+
 ## [74] — 2026-07-05 · s2-2 ausgebaut: Dreier-Sub-Split 2.2a / 2.2b / 2.2c
 
 Sechster Vollausbau im Schwerpunktfach. Der Stub `s2-2-gleichungstypen.html` wurde durch

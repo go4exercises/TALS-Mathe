@@ -19,7 +19,63 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* ── Typ-Steckbrief (Typen-Bestimmer) ── */
+.tb-panel { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:14px 18px; margin-top:12px; }
+.tb-panel .tb-typ { font-family:var(--mono); font-size:0.85rem; font-weight:700; color:var(--blau); margin-bottom:4px; }
+.tb-panel .tb-text { font-size:0.88rem; }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -33,14 +89,7 @@ MathJax = {
   <h1 class="pt-h1">2.1 Grundlagen</h1>
 </div>
 
-<!-- Stub-Banner: Seite ist noch in Vorbereitung -->
-<div class="stub-banner">
-  <strong>In Vorbereitung</strong>
-  Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: Mai 2026.
-</div>
-
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
-<p class="lead">Im Grundlagenfach hast du lineare und quadratische Gleichungen gelöst — im Schwerpunkt kommen weitere Gleichungstypen dazu. Hier wiederholst du die Lösungsstrategien, lernst die <strong>algebraische Äquivalenz</strong> als Leitprinzip kennen und übst, den Gleichungstyp vor dem Lösen zu identifizieren.</p>
+<p class="lead">Im Grundlagenfach hast du lineare und quadratische Gleichungen gelöst — im Schwerpunkt kommen Wurzel-, Bruch-, Exponential-, Logarithmus- und Betragsgleichungen dazu. Diese Seite legt das Fundament: die Gleichung als <strong>Waage</strong>, die <strong>Äquivalenzumformung</strong> als Leitprinzip, der geschulte Blick für den <strong>Gleichungstyp</strong> — und die Gewohnheit, jede Lösung zu <strong>überprüfen</strong>. Denn die wichtigste Entscheidung fällt <em>vor</em> dem Rechnen: Welcher Typ ist das, und welche Methode passt?</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 2.1</div>
@@ -50,49 +99,524 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Begriffe Gleichung, Grundmenge, Definitionsmenge und Lösungsmenge sauber verwenden.</li>
+      <li>Ich kann Äquivalenzumformungen von gefährlichen Umformungen (quadrieren, mit Termen multiplizieren, durch Terme dividieren) unterscheiden.</li>
+      <li>Ich kann am «Wo steht die Unbekannte?»-Blick den Typ einer Gleichung bestimmen — von linear bis Betrag.</li>
+      <li>Ich kann jedem Gleichungstyp die passende Lösungsmethode zuordnen.</li>
+      <li>Ich kann Lösungen dreifach überprüfen: durch die Probe, grafisch und auf Plausibilität in der Anwendung.</li>
+      <li>Ich kann einfache Vertreter jedes Typs lösen — als Vorbereitung auf die Detailseiten 2.2a–c.</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — die Gleichung als Waage</h2>
+
+<p>Eine Gleichung ist eine <strong>Waage im Gleichgewicht</strong>: Links liegt \(3x + 2\), rechts \(11\). Gesucht ist der Inhalt eines \(x\)-Pakets. Die Regel: Was man auf der einen Seite tut, muss man <strong>auch auf der anderen</strong> tun — sonst kippt die Waage.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>⚖️ Waage-Modell — \(3x + 2 = 11\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Führe die beiden Umformungen aus und beobachte die Waage: Sie bleibt nach jedem Schritt im Gleichgewicht. Was passiert wohl, wenn man zuerst durch \(3\) teilen würde?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Führe die beiden Umformungen aus und beobachte die Waage: Sie bleibt nach jedem Schritt im Gleichgewicht. Was passiert wohl, wenn man zuerst durch drei teilen würde?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Beidseitiges Subtrahieren und Dividieren erhält das Gleichgewicht — das sind <strong>Äquivalenzumformungen</strong>: Die Lösungsmenge bleibt bei jedem Schritt dieselbe, sie wird nur immer besser sichtbar, bis \(x = 3\) dasteht.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Beidseitiges Subtrahieren und Dividieren erhält das Gleichgewicht — das sind Äquivalenzumformungen: Die Lösungsmenge bleibt bei jedem Schritt dieselbe, bis x gleich drei dasteht.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>x-Pakete blau · Einheitsgewichte orange · Umformungen wirken beidseitig</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="wa-btns">
+      <button class="typ-btn" id="wa-b1" onclick="waStep(1)">beidseitig − 2</button>
+      <button class="typ-btn" id="wa-b2" onclick="waStep(2)">beidseitig : 3</button>
+      <button class="typ-btn" onclick="waReset()">↺ zurücksetzen</button>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Aktuelle Gleichung</div>
+      <div class="fl-eq" id="wa-eq">3x + 2 = 11</div>
+      <div class="fl-eq" id="wa-info" style="font-size:0.9rem;margin-top:4px">Schaffe zuerst die +2 weg, dann die 3 vor dem x.</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="wa-canvas" height="200"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Das Lösen einer Gleichung ist kein Zaubertrick, sondern kontrolliertes Umbauen:</p>
+  <ul style="margin-top:6px">
+    <li>Jede Umformung wirkt <strong>auf beide Seiten</strong> — das Gleichgewicht (die Lösungsmenge) bleibt erhalten.</li>
+    <li>Das Ziel ist immer dasselbe: die Unbekannte <strong>isolieren</strong>, bis «\(x = \dots\)» dasteht.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was bedeutet «Äquivalenzumformung» im Waage-Bild?</p><ul class="mc-optionen"><li data-opt="A">Die Waage wird auf einer Seite entlastet.</li><li data-opt="B">Beide Seiten werden gleich verändert — das Gleichgewicht bleibt.</li><li data-opt="C">Die Gewichte werden geschätzt.</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Gleiche Operation auf beiden Seiten — die Lösungsmenge ändert sich nicht.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Ziel jeder Umformungskette ist es, die Unbekannte zu <span class="mc-luecke"></span> — bis «\(x = \dots\)» dasteht.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">isolieren.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(5x - 7 = 18\) mit zwei Umformungen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(+7\): \(5x = 25\); \(:5\): \(x = 5\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Auch «zuerst durch 3 teilen» führt bei \(3x + 2 = 11\) zum Ziel. Führe es vor — was ist der Nachteil?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(x + \tfrac{2}{3} = \tfrac{11}{3}\), dann \(-\tfrac{2}{3}\): \(x = \tfrac{9}{3} = 3\). Es geht — aber mit Brüchen in jedem Schritt. Faustregel: erst Summanden wegschaffen, dann Faktoren.</div></details></div>
+</details>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Definitionen — das Vokabular</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Gleichung, Grundmenge, Lösungsmenge</div>
+  <p>Eine <strong>Gleichung</strong> ist eine Aussage, dass zwei Terme denselben Wert haben: \(T_1(x) = T_2(x)\).</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left;width:35%">Grundmenge \(G\)</td><td style="text-align:left;font-family:var(--sans)">die Zahlenmenge, aus der Lösungen stammen dürfen (meist \(\mathbb{R}\))</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Definitionsmenge \(D\)</td><td style="text-align:left;font-family:var(--sans)">alle \(x \in G\), für die beide Terme definiert sind (Nenner \(\neq 0\), Radikand \(\geq 0\), Logarithmus-Argument \(&gt; 0\))</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Lösungsmenge \(L\)</td><td style="text-align:left;font-family:var(--sans)">alle \(x \in D\), welche die Gleichung erfüllen — \(L\) kann leer sein, endlich viele oder unendlich viele Elemente haben</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Äquivalenzumformungen — und ihre gefährlichen Verwandten</div>
+  <p><strong>Äquivalenzumformungen</strong> ändern die Lösungsmenge nicht:</p>
+  <ul style="margin-top:4px">
+    <li>beidseitig denselben Term <strong>addieren oder subtrahieren</strong></li>
+    <li>beidseitig mit derselben Zahl \(\neq 0\) <strong>multiplizieren oder dividieren</strong></li>
+  </ul>
+  <p style="margin-top:8px"><strong>Keine Äquivalenzumformungen</strong> (Lösungsmenge kann sich ändern!):</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Umformung</th><th>Gefahr</th><th>Gegenmittel</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Quadrieren / Potenzieren</td><td style="text-align:left;font-family:var(--sans)">Scheinlösungen kommen dazu</td><td style="text-align:left;font-family:var(--sans)">Probe in der Ausgangsgleichung</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">mit variablenhaltigem Term multiplizieren</td><td style="text-align:left;font-family:var(--sans)">Scheinlösung, wenn der Term null wird</td><td style="text-align:left;font-family:var(--sans)">\(D\) notieren, Lösungen prüfen</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">durch variablenhaltigen Term dividieren</td><td style="text-align:left;font-family:var(--sans)">Lösungen gehen verloren</td><td style="text-align:left;font-family:var(--sans)">stattdessen ausklammern + Nullprodukt</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Vokabular</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Umformung ist eine Äquivalenzumformung?</p><ul class="mc-optionen"><li data-opt="A">beidseitig \(+7\)</li><li data-opt="B">beidseitig quadrieren</li><li data-opt="C">beidseitig durch \((x-1)\) dividieren</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Quadrieren kann Scheinlösungen erzeugen, Division durch \((x-1)\) kann die Lösung \(x = 1\) vernichten.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die <span class="mc-luecke"></span>menge enthält alle \(x\), für die beide Seiten der Gleichung überhaupt definiert sind.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Definitions(menge) — Nenner \(\neq 0\), Radikand \(\geq 0\), Log-Argument \(&gt; 0\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme die Definitionsmenge von \(\dfrac{5}{x-3} = x\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Nenner \(\neq 0\): \(D = \mathbb{R} \setminus \{3\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Kann eine Gleichung die Lösungsmenge \(L = \mathbb{R}\) haben? Gib ein Beispiel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ja — eine <em>allgemeingültige</em> Gleichung (Identität) wie \(2(x+1) = 2x + 2\): Jede reelle Zahl erfüllt sie. Das Gegenstück ist \(x = x + 1\) mit \(L = \{\,\}\).</div></details></div>
+</details>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Der Typen-Bestimmer — wo steht die Unbekannte?</h2>
+
+<p>Der Gleichungstyp entscheidet über die Methode — und er lässt sich fast immer an <strong>einer</strong> Frage ablesen: <em>Wo steht die Unbekannte?</em> Klicke dich durch die sechs Gleichungen:</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Typen-Bestimmer — sechs Gleichungen, sechs Methoden</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Stelle dir bei jeder Gleichung zuerst selbst die Frage «Wo steht \(x\)?» — dann klicke und vergleiche mit dem Steckbrief. Merke dir das Paar Kennzeichen → Methode.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Stelle dir bei jeder Gleichung zuerst selbst die Frage: Wo steht x? — dann klicke und vergleiche mit dem Steckbrief. Merke dir das Paar Kennzeichen und Methode.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Basis, Exponent, Radikand, Nenner, Betrag — die <strong>Position</strong> der Unbekannten verrät den Typ, und jeder Typ hat seine Standard-Methode samt eigener Detailseite. Wer den Typ erkennt, hat die halbe Lösung.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Basis, Exponent, Radikand, Nenner, Betrag — die Position der Unbekannten verrät den Typ, und jeder Typ hat seine Standard-Methode. Wer den Typ erkennt, hat die halbe Lösung.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Gleichung wählen · Steckbrief mit Typ, Methode und Lösung erscheint darunter</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="tb-btns"></div>
+    <div class="tb-panel" id="tb-panel">
+      <div class="tb-typ" id="tb-typ"></div>
+      <div class="tb-text" id="tb-text"></div>
+    </div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Typen erkennen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welcher Typ ist \(3^x = 81\)?</p><ul class="mc-optionen"><li data-opt="A">Potenzgleichung</li><li data-opt="B">Exponentialgleichung</li><li data-opt="C">Wurzelgleichung</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Die Unbekannte steht im <em>Exponenten</em>. Bei der Potenzgleichung \(x^3 = 81\) stünde sie in der Basis.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Steht die Unbekannte im Nenner eines Bruchterms, liegt eine <span class="mc-luecke"></span> Gleichung vor.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">rationale (Bruchgleichung) — Methode: \(D\) notieren, Hauptnenner.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme Typ und Lösung von \(x^2 = 49\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Potenzgleichung mit geradem Exponenten: \(x = \pm 7\), also \(L = \{-7;\ 7\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">\(x^x = 27\) passt in keine der sechs Schubladen. Warum nicht?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die Unbekannte steht <em>gleichzeitig</em> in Basis und Exponent — weder Wurzelziehen noch Logarithmieren isoliert sie vollständig. Solche Gleichungen sind nur numerisch (Probieren, Näherungsverfahren) lösbar — hier findet man \(x = 3\) durch Probieren: \(3^3 = 27\).</div></details></div>
+</details>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. TYPEN-TABELLE ══ -->
+<h2 id="typen">Die Typen-Übersicht — Landkarte des Lerngebiets</h2>
+
+<table class="ftb-tabelle" style="margin-top:10px">
+  <thead><tr><th>Typ</th><th>Wo steht \(x\)?</th><th>Beispiel</th><th>Methode</th><th>Detailseite</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">linear</td><td style="text-align:left;font-family:var(--sans)">nur in 1. Potenz</td><td>\(3x + 2 = 11\)</td><td style="text-align:left;font-family:var(--sans)">Äquivalenzumformungen</td><td style="text-align:left;font-family:var(--sans)">Grundlagenfach 2.2a</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">quadratisch</td><td style="text-align:left;font-family:var(--sans)">in 2. Potenz</td><td>\(x^2 + 3x - 10 = 0\)</td><td style="text-align:left;font-family:var(--sans)">Faktorisieren · Lösungsformel</td><td style="text-align:left;font-family:var(--sans)">Grundlagenfach 2.2b</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Potenzgleichung</td><td style="text-align:left;font-family:var(--sans)">in der Basis, \(x^n = c\)</td><td>\(x^4 = 81\)</td><td style="text-align:left;font-family:var(--sans)">\(n\)-te Wurzel (Parität!)</td><td style="text-align:left;font-family:var(--sans)"><a href="s2-2a-potenz-wurzel-rationale-gleichungen.html">2.2a</a></td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wurzelgleichung</td><td style="text-align:left;font-family:var(--sans)">im Radikanden</td><td>\(\sqrt{2x+1} = 7\)</td><td style="text-align:left;font-family:var(--sans)">separieren · quadrieren · Probe</td><td style="text-align:left;font-family:var(--sans)"><a href="s2-2a-potenz-wurzel-rationale-gleichungen.html">2.2a</a></td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">rational</td><td style="text-align:left;font-family:var(--sans)">im Nenner</td><td>\(\tfrac{6}{x+1} = 2\)</td><td style="text-align:left;font-family:var(--sans)">\(D\) · Hauptnenner</td><td style="text-align:left;font-family:var(--sans)"><a href="s2-2a-potenz-wurzel-rationale-gleichungen.html">2.2a</a></td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">exponentiell</td><td style="text-align:left;font-family:var(--sans)">im Exponenten</td><td>\(5 \cdot 2^x = 80\)</td><td style="text-align:left;font-family:var(--sans)">Exponentenvergleich · logarithmieren</td><td style="text-align:left;font-family:var(--sans)"><a href="s2-2b-exponential-logarithmische-gleichungen.html">2.2b</a></td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">logarithmisch</td><td style="text-align:left;font-family:var(--sans)">im Log-Argument</td><td>\(\lg(x+3) = 2\)</td><td style="text-align:left;font-family:var(--sans)">\(D\) · entlogarithmieren · Probe</td><td style="text-align:left;font-family:var(--sans)"><a href="s2-2b-exponential-logarithmische-gleichungen.html">2.2b</a></td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Betragsgleichung</td><td style="text-align:left;font-family:var(--sans)">im Betrag</td><td>\(|x-4| = 9\)</td><td style="text-align:left;font-family:var(--sans)">zwei Fälle \(\pm\)</td><td style="text-align:left;font-family:var(--sans)"><a href="s2-2c-betrag-polynom-ungleichungen.html">2.2c</a></td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Polynom (Produktform)</td><td style="text-align:left;font-family:var(--sans)">in Faktoren</td><td>\(x(x-3)(x+2) = 0\)</td><td style="text-align:left;font-family:var(--sans)">Satz vom Nullprodukt</td><td style="text-align:left;font-family:var(--sans)"><a href="s2-2c-betrag-polynom-ungleichungen.html">2.2c</a></td></tr>
+  </tbody>
+</table>
+
+<div class="block block-tipp" style="margin-top:10px">
+  <div class="block-titel">💡 Mischformen</div>
+  <p>Viele Gleichungen kombinieren Typen: \(4^x - 7 \cdot 2^x = 8\) ist exponentiell <em>und</em> quadratisch (Substitution!), \(x^3 = 9x\) wird per Ausklammern zur Produktform. Der Typen-Blick zeigt dann die <strong>Reihenfolge</strong> der Werkzeuge.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Landkarte</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Für welchen Typ ist die «Probe durch Einsetzen» zwingender Bestandteil des Verfahrens?</p><ul class="mc-optionen"><li data-opt="A">lineare Gleichungen</li><li data-opt="B">Wurzel- und Logarithmusgleichungen</li><li data-opt="C">Nullprodukt</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Quadrieren und Entlogarithmieren sind keine Äquivalenzumformungen — ohne Probe ist \(L\) nicht bestimmt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(x^4 = 81\) und \(4^x = 81\) sehen ähnlich aus, sind aber verschiedene Typen: Bei der ersten steht \(x\) in der <span class="mc-luecke"></span>, bei der zweiten im Exponenten.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Basis — Potenzgleichung (\(x = \pm 3\)) vs. Exponentialgleichung (\(x = \log_4 81\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Welcher Typ ist \(\dfrac{6}{x+1} = 2\)? Löse die Gleichung.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Rationale Gleichung, \(D: x \neq -1\). Hauptnenner: \(6 = 2(x+1) \Rightarrow x = 2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Welche zwei Typen stecken in \(\sqrt{x^2 + 9} = 5\), und in welcher Reihenfolge löst man sie?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Aussen eine <strong>Wurzelgleichung</strong> (quadrieren: \(x^2 + 9 = 25\)), innen eine <strong>Potenzgleichung</strong> (\(x^2 = 16 \Rightarrow x = \pm 4\)). Erst die äussere Schicht abtragen, dann die innere — wie beim Zwiebelschälen.</div></details></div>
+</details>
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<h2 id="theorie">Der Fahrplan — lösen und überprüfen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Der Vier-Schritte-Fahrplan</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li><strong>Typ bestimmen:</strong> Wo steht die Unbekannte? (Basis, Exponent, Radikand, Nenner, Betrag …)</li>
+    <li><strong>Definitionsmenge notieren</strong> — bei Brüchen, Wurzeln und Logarithmen zwingend.</li>
+    <li><strong>Passende Methode anwenden</strong> — Umkehroperation, Fallunterscheidung, Substitution, Nullprodukt.</li>
+    <li><strong>Überprüfen:</strong> Probe, grafische Kontrolle, Plausibilität.</li>
+  </ol>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Drei Arten der Überprüfung</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Kontrolle</th><th>Wie?</th><th>Fängt ab …</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)"><strong>Probe</strong></td><td style="text-align:left;font-family:var(--sans)">Lösung in die <em>Ausgangsgleichung</em> einsetzen</td><td style="text-align:left;font-family:var(--sans)">Rechenfehler und Scheinlösungen</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)"><strong>grafisch</strong></td><td style="text-align:left;font-family:var(--sans)">beide Seiten als Graphen — Schnittstellen zählen und schätzen</td><td style="text-align:left;font-family:var(--sans)">verlorene und übersehene Lösungen</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)"><strong>Plausibilität</strong></td><td style="text-align:left;font-family:var(--sans)">Passt die Lösung zur Anwendung? (Vorzeichen, Grössenordnung, Einheit)</td><td style="text-align:left;font-family:var(--sans)">mathematisch richtige, sachlich sinnlose Werte</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Beispiel 1 — Lineare Gleichung mit Probe</div>
+  <p>Löse \(\dfrac{x-1}{2} = 4 - x\).</p>
+  <p><strong>Lösung:</strong> Mit \(2\) multiplizieren (Zahl, keine Variable — Äquivalenzumformung):</p>
+  \[ x - 1 = 8 - 2x \;\Rightarrow\; 3x = 9 \;\Rightarrow\; x = 3 \]
+  <p>Probe: links \(\tfrac{3-1}{2} = 1\), rechts \(4 - 3 = 1\) ✓ — \(L = \{3\}\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Quadratische Gleichung, zwei Wege</div>
+  <p>Löse \(x^2 - 5x + 6 = 0\).</p>
+  <p><strong>Weg 1 (Faktorisieren):</strong> \((x-2)(x-3) = 0 \Rightarrow L = \{2;\ 3\}\).</p>
+  <p><strong>Weg 2 (Lösungsformel):</strong></p>
+  \[ x_{1,2} = \frac{5 \pm \sqrt{25 - 24}}{2} = \frac{5 \pm 1}{2} \;\Rightarrow\; x_1 = 2,\quad x_2 = 3 \]
+  <p>Probe mit Vieta: \(2 \cdot 3 = 6\) ✓ und \(2 + 3 = 5\) ✓.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Typ erkennen rettet den Tag</div>
+  <p>Löse \(5 \cdot 2^x = 80\).</p>
+  <p><strong>Lösung:</strong> Die Unbekannte steht im <strong>Exponenten</strong> — also nicht «hoch \(\tfrac{1}{x}\)» rechnen, sondern erst isolieren, dann die Basis vergleichen:</p>
+  \[ 2^x = 16 = 2^4 \;\Rightarrow\; x = 4 \]
+  <p>Probe: \(5 \cdot 2^4 = 5 \cdot 16 = 80\) ✓ — \(L = \{4\}\). (Mehr dazu in <a class="quer" href="s2-2b-exponential-logarithmische-gleichungen.html">↩ 2.2b</a>.)</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — «einseitig umformen»</div>
+  <p>Wer bei \(3x + 2 = 11\) nur links die \(2\) streicht, hat die Waage gekippt: \(3x = 11\) ist eine <strong>andere</strong> Gleichung. Jede Operation wirkt auf <strong>beide</strong> Seiten — auch beim Multiplizieren: \(\tfrac{x}{2} + 1 = 5\) mal \(2\) gibt \(x + 2 = 10\), nicht \(x + 1 = 10\).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Typ verwechselt</div>
+  <p>\(x^4 = 81\) (Potenzgleichung, \(x = \pm 3\)) und \(4^x = 81\) (Exponentialgleichung, \(x = \log_4 81 \approx 3.17\)) sehen zum Verwechseln ähnlich aus. <strong>Erst hinschauen, dann rechnen</strong> — die falsche Methode führt ins Leere oder zu halben Lösungsmengen.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — die Skizze als Frühwarnsystem</div>
+  <p>Vor dem Rechnen beide Seiten grob skizzieren (Grundgraphen aus <a class="quer" href="s3-1-grundlagen.html">↩ 3.1</a>): Die Anzahl Schnittpunkte sagt, <strong>wie viele Lösungen</strong> zu erwarten sind. Findet die Rechnung mehr — Scheinlösungen prüfen. Findet sie weniger — irgendwo ist eine Lösung verloren gegangen.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Fahrplan und Überprüfung</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">In welche Gleichung setzt man bei der Probe ein?</p><ul class="mc-optionen"><li data-opt="A">in die letzte umgeformte Gleichung</li><li data-opt="B">in die Ausgangsgleichung</li><li data-opt="C">in beide</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Nur die Ausgangsgleichung entlarvt Scheinlösungen — die umgeformte erfüllen sie ja gerade.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei Anwendungsaufgaben gehört neben der Probe die <span class="mc-luecke"></span>skontrolle dazu: Vorzeichen, Grössenordnung und Einheit müssen zur Situation passen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Plausibilität(skontrolle) — eine negative Länge ist keine Lösung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(x^2 - 5x + 6 = 0\) durch Faktorisieren.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((x-2)(x-3) = 0 \Rightarrow L = \{2;\ 3\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Eine Rechnung liefert für eine Wurzelgleichung die Kandidaten \(x = 2\) und \(x = -5\); die Skizze zeigt nur <em>einen</em> Schnittpunkt. Was ist zu tun?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Beide Kandidaten in der <em>Ausgangsgleichung</em> prüfen — einer ist mit grosser Wahrscheinlichkeit eine Scheinlösung aus dem Quadrieren. Die Skizze hat das Frühwarnsystem gespielt: erwartete Lösungsanzahl 1, gefundene Kandidaten 2.</div></details></div>
+</details>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Typ bestimmen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Gleichung und bestimme ihren Typ — ohne zu rechnen.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Gleichung</div>
+    <div class="fl-eq" id="a1-eq"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welcher Typ liegt vor?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Äquivalent oder gefährlich?</span></div>
+  <p>Beurteile jede Umformung: Äquivalenzumformung, Scheinlösungs-Gefahr oder Verlust-Gefahr? Begründe kurz.</p>
+  <ol class="aufg-liste">
+    <li>beidseitig \(-5\)</li>
+    <li>beidseitig mit \((x+3)\) multiplizieren</li>
+    <li>beidseitig quadrieren</li>
+    <li>beidseitig durch \(x\) dividieren</li>
+    <li>beidseitig mit \(\tfrac{1}{4}\) multiplizieren</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li><strong>Äquivalent</strong> — Addition/Subtraktion ist immer sicher.</li>
+        <li><strong>Scheinlösungs-Gefahr</strong>: Für \(x = -3\) wird mit null multipliziert — dieser Wert kann als falsche Lösung hereinrutschen (\(D\) prüfen!).</li>
+        <li><strong>Scheinlösungs-Gefahr</strong>: Das Vorzeichen geht verloren (\(\sqrt{x} = -5\) → \(x = 25\)).</li>
+        <li><strong>Verlust-Gefahr</strong>: \(x = 0\) wird aus der Lösungsmenge getilgt — stattdessen ausklammern.</li>
+        <li><strong>Äquivalent</strong> — Multiplikation mit einer festen Zahl \(\neq 0\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Einmal quer durch alle Typen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Linear</div>
+    <p>Löse \(5x - 4 = 3x + 5\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3a1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3a1', 4.5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 2x = 9 \;\Rightarrow\; x = 4.5 \qquad \text{Probe: } 22.5 - 4 = 13.5 + 5 \ \checkmark \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Quadratisch</div>
+    <p>Löse \(x^2 - 5x + 6 = 0\).</p>
+    <div class="eingabe-row"><label>kleinere Lösung x₁ =&nbsp;</label><input type="text" id="a3b1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a3b1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>grössere Lösung x₂ =&nbsp;</label><input type="text" id="a3b2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3b2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Faktorisieren: \((x-2)(x-3) = 0 \Rightarrow L = \{2;\ 3\}\). Kontrolle (Vieta): Produkt \(6\), Summe \(5\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Rational</div>
+    <p>Löse \(\dfrac{12}{x} = 3\). Notiere zuerst \(D\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3c1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3c1', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(D: x \neq 0\). Mit \(x\) multiplizieren: \(12 = 3x \Rightarrow x = 4\) (liegt in \(D\)) — \(L = \{4\}\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Wurzelgleichung</div>
+    <p>Löse \(\sqrt{x} + 1 = 5\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3d1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3d1', 16, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Separieren: \(\sqrt{x} = 4\); quadrieren: \(x = 16\). Probe: \(\sqrt{16} + 1 = 5\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Exponentiell</div>
+    <p>Löse \(2^x = 32\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3e1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3e1', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Exponentenvergleich: \(2^x = 2^5 \Rightarrow x = 5\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Rechteck gesucht</span></div>
+  <p>Ein Rechteck hat den Umfang \(28\) cm und den Flächeninhalt \(48\ \text{cm}^2\).</p>
+  <ol class="aufg-liste">
+    <li>Stelle mit der Breite \(x\) eine Gleichung auf (Länge über den Umfang ausdrücken).</li>
+    <li>Bestimme Typ und Lösungen — und prüfe die Plausibilität.</li>
+  </ol>
+  <div class="eingabe-row"><label>kürzere Seite =&nbsp;</label><input type="text" id="a4-1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a4-1', 6, 0.01, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>längere Seite =&nbsp;</label><input type="text" id="a4-2" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a4-2', 8, 0.01, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Länge \(= 14 - x\), also \(x(14 - x) = 48\).</li>
+        <li>Quadratische Gleichung: \(x^2 - 14x + 48 = 0 \Rightarrow (x-6)(x-8) = 0\). Beide Lösungen sind positiv und ergeben zusammen \(14\) — sie beschreiben <em>dasselbe</em> Rechteck mit Seiten \(6\) und \(8\) cm. Probe: \(6 \cdot 8 = 48\) ✓, \(2(6+8) = 28\) ✓</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Zwei Handy-Abos</span></div>
+  <p>Abo A kostet \(25\) CHF Grundgebühr plus \(0.40\) CHF pro Einheit, Abo B \(40\) CHF plus \(0.25\) CHF pro Einheit.</p>
+  <ol class="aufg-liste">
+    <li>Stelle die Gleichung für «gleich teuer» auf und bestimme ihren Typ.</li>
+    <li>Löse sie und gib die gemeinsamen Kosten an.</li>
+  </ol>
+  <div class="eingabe-row"><label>gleich teuer bei x =&nbsp;</label><input type="text" id="a5-1" placeholder="Einheiten"><button class="btn-pruef" onclick="chkNum('a5-1', 100, 0.5, 'Einheiten')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Kosten =&nbsp;</label><input type="text" id="a5-2" placeholder="CHF"><button class="btn-pruef" onclick="chkNum('a5-2', 65, 0.5, 'CHF')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(25 + 0.4x = 40 + 0.25x\) — eine <strong>lineare</strong> Gleichung.</li>
+        <li>\(0.15x = 15 \Rightarrow x = 100\) Einheiten; Kosten \(25 + 0.4 \cdot 100 = 65\) CHF. Probe mit B: \(40 + 25 = 65\) ✓</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Kegelvolumen umgekehrt</span></div>
+  <p>Ein Kegel hat das Volumen \(V = \tfrac{1}{3}\pi r^2 h\). Gegeben sind \(V = 100\ \text{cm}^3\) und \(h = 12\) cm.</p>
+  <ol class="aufg-liste">
+    <li>Stelle die Gleichung für \(r\) auf. Welcher Typ entsteht?</li>
+    <li>Löse sie und begründe, warum nur eine der beiden Lösungen zählt.</li>
+  </ol>
+  <div class="eingabe-row"><label>r ≈&nbsp;</label><input type="text" id="a6-1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a6-1', 2.82, 0.01, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(r^2 = \dfrac{3V}{\pi h} = \dfrac{300}{12\pi}\) — eine <strong>Potenzgleichung</strong> mit geradem Exponenten.</li>
+        <li>\(r = \pm\sqrt{\tfrac{300}{12\pi}} \approx \pm 2.82\) cm. Plausibilität: Ein Radius ist positiv — \(r \approx 2.82\) cm.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Fehlersuche <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Zwei «Musterlösungen» — beide enthalten einen typischen Fehler. Finde und korrigiere ihn:</p>
+  <p><strong>Rechnung 1:</strong> \(x^2 = 4x \ \mid\, :x \ \Rightarrow\ x = 4 \ \Rightarrow\ L = \{4\}\)</p>
+  <p><strong>Rechnung 2:</strong> \(\sqrt{3-x} = x - 3 \ \mid\, (\ )^2 \ \Rightarrow\ 3 - x = (x-3)^2 \ \Rightarrow\ x^2 - 5x + 6 = 0 \ \Rightarrow\ L = \{2;\ 3\}\)</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li><strong>Division durch \(x\)</strong> hat die Lösung \(x = 0\) vernichtet. Korrekt: \(x^2 - 4x = 0 \Rightarrow x(x-4) = 0 \Rightarrow L = \{0;\ 4\}\).</li>
+        <li>Die <strong>Probe fehlt</strong>: Bei \(x = 2\) steht links \(\sqrt{1} = 1\), rechts \(2 - 3 = -1\) — Scheinlösung! Nur \(x = 3\) besteht (\(0 = 0\)): \(L = \{3\}\). (Vorab-Check: Die rechte Seite muss \(\geq 0\) sein, also \(x \geq 3\) — das hätte \(x = 2\) sofort ausgeschlossen.)</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Eine Gleichung ist eine <strong>Waage</strong>: Äquivalenzumformungen (beidseitig addieren, subtrahieren, mit Zahlen \(\neq 0\) multiplizieren/dividieren) erhalten die Lösungsmenge. Quadrieren, Terme-Multiplikation und Terme-Division sind <strong>gefährlich</strong> — sie verlangen Definitionsmenge und Probe. Der <strong>Typ</strong> einer Gleichung steht dort, wo die Unbekannte steht (Basis, Exponent, Radikand, Nenner, Betrag) und bestimmt die Methode. Der Fahrplan: <strong>Typ → \(D\) → Methode → Überprüfen</strong> (Probe, Skizze, Plausibilität).</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Schritt</th><th>Leitfrage</th><th>Werkzeug</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">1 · Typ</td><td style="text-align:left;font-family:var(--sans)">Wo steht die Unbekannte?</td><td style="text-align:left;font-family:var(--sans)">Typen-Tabelle (Landkarte oben)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">2 · \(D\)</td><td style="text-align:left;font-family:var(--sans)">Wo sind beide Seiten definiert?</td><td style="text-align:left;font-family:var(--sans)">Nenner \(\neq 0\), Radikand \(\geq 0\), Log-Argument \(&gt; 0\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">3 · Methode</td><td style="text-align:left;font-family:var(--sans)">Welche Umkehroperation isoliert \(x\)?</td><td style="text-align:left;font-family:var(--sans)">Detailseiten 2.2a / 2.2b / 2.2c</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">4 · Kontrolle</td><td style="text-align:left;font-family:var(--sans)">Stimmt die Lösung wirklich?</td><td style="text-align:left;font-family:var(--sans)">Probe · Skizze · Plausibilität</td></tr>
+  </tbody>
+</table>
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s2-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lWPWBvEXDrcCEZ54ZdtYazp" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme vereinfachen — Playlist</div><div class="lk-s">MathemaTrick · 64 Videos · Umformungs-Handwerk als Grundlage</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzmBhxJfVgJ9pTv2QeqJsbO_" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme &amp; Gleichungen — Playlist</div><div class="lk-s">Lehrerschmidt · 27 Videos · Gleichungen Schritt für Schritt lösen</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/25103/gemischte-aufgaben-zu-gleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Gemischte Aufgaben zu Gleichungen</div><div class="lk-s">Typen-Mix zum Methoden-Training · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26259/aufgaben-zu-quadratischen-gleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu quadratischen Gleichungen</div><div class="lk-s">Faktorisieren und Lösungsformel · mit Lösungen</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g3/g31/aufg_g31.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Quadratische Gleichungen (G31)</div><div class="lk-s">Repetition mit PDF-Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -105,12 +629,175 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'schwerpunkt', id:'s2-1',
   kapitelNr:'2.1', kapitelTitel:'Grundlagen',
   prev:{nr:'1.3',titel:'Logarithmen',url:'s1-3-logarithmen.html'},
   next:{nr:'2.2a',titel:'Potenz-, Wurzel- und rationale Gleichungen',url:'s2-2a-potenz-wurzel-rationale-gleichungen.html'}
+});
+
+/* ══ EINSTIEG: Waage ══ */
+// Zustände: 0: 3x+2=11 · 1: 3x=9 · 2: x=3
+const WA = [
+  {eq: '3x + 2 = 11', links: {x: 3, g: 2}, rechts: 11, info: 'Schaffe zuerst die +2 weg, dann die 3 vor dem x.'},
+  {eq: '3x = 9',      links: {x: 3, g: 0}, rechts: 9,  info: 'Gut! Jetzt beide Seiten durch 3 teilen.'},
+  {eq: 'x = 3',       links: {x: 1, g: 0}, rechts: 3,  info: 'Gelöst: Ein x-Paket wiegt 3 — die Waage blieb immer im Gleichgewicht.'},
+];
+let waStage = 0;
+function waStep(n){
+  if(n === 1 && waStage === 0){ waStage = 1; }
+  else if(n === 2 && waStage === 1){ waStage = 2; }
+  else if(n === 2 && waStage === 0){
+    document.getElementById('wa-info').textContent =
+      'Das ginge auch — gibt aber Brüche (x + 2/3 = 11/3). Bequemer: zuerst −2.';
+    return;
+  } else { return; }
+  drawWA();
+}
+function waReset(){ waStage = 0; drawWA(); }
+function drawWA(){
+  const s = WA[waStage];
+  document.getElementById('wa-eq').textContent = s.eq;
+  document.getElementById('wa-info').textContent = s.info;
+  document.getElementById('wa-b1').classList.toggle('aktiv', waStage === 0);
+  document.getElementById('wa-b2').classList.toggle('aktiv', waStage === 1);
+  const {ctx, W, H} = initCanvas('wa-canvas', 200, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const midX = W / 2, beamY = 60, beamW = W * 0.72;
+  // Ständer und Balken
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(midX, beamY); ctx.lineTo(midX, H - 20); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(midX - 30, H - 20); ctx.lineTo(midX + 30, H - 20); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(midX - beamW/2, beamY); ctx.lineTo(midX + beamW/2, beamY); ctx.stroke();
+  // Schalen
+  const schaleY = beamY + 26;
+  [-1, 1].forEach(dir => {
+    const sx = midX + dir * beamW/2;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(sx, beamY); ctx.lineTo(sx - 34, schaleY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx, beamY); ctx.lineTo(sx + 34, schaleY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx - 40, schaleY); ctx.lineTo(sx + 40, schaleY); ctx.stroke();
+  });
+  // Linke Schale: x-Pakete (blau) + Einheitsgewichte (orange)
+  const lx = midX - beamW/2;
+  ctx.font = 'bold 12px JetBrains Mono,monospace'; ctx.textAlign = 'center';
+  for(let i = 0; i < s.links.x; i++){
+    ctx.fillStyle = '#1a4f8a';
+    ctx.fillRect(lx - 36 + i * 26, schaleY - 24, 22, 22);
+    ctx.fillStyle = '#fff';
+    ctx.fillText('x', lx - 25 + i * 26, schaleY - 8);
+  }
+  for(let i = 0; i < s.links.g; i++){
+    ctx.fillStyle = '#b85c00';
+    ctx.beginPath(); ctx.arc(lx - 25 + i * 20, schaleY - 36, 8, 0, 2 * Math.PI); ctx.fill();
+  }
+  // Rechte Schale: Einheitsgewichte, gestapelt in Reihen zu 4
+  const rx = midX + beamW/2;
+  for(let i = 0; i < s.rechts; i++){
+    const reihe = Math.floor(i / 4), spalte = i % 4;
+    ctx.fillStyle = '#b85c00';
+    ctx.beginPath(); ctx.arc(rx - 30 + spalte * 20, schaleY - 12 - reihe * 18, 8, 0, 2 * Math.PI); ctx.fill();
+  }
+  // Beschriftung
+  ctx.fillStyle = '#374151'; ctx.font = '12px monospace';
+  ctx.fillText('linke Seite', lx, H - 4);
+  ctx.fillText('rechte Seite', rx, H - 4);
+}
+
+/* ══ TYPEN-BESTIMMER ══ */
+const TB = [
+  {eq: '3(x − 2) = x + 4',  typ: 'Lineare Gleichung',
+   text: 'Die Unbekannte kommt nur in erster Potenz vor. Methode: ausmultiplizieren und Äquivalenzumformungen — 3x − 6 = x + 4 ⇒ x = 5.'},
+  {eq: 'x² + 3x − 10 = 0',  typ: 'Quadratische Gleichung',
+   text: 'Höchste Potenz 2. Methode: Faktorisieren oder Lösungsformel — (x + 5)(x − 2) = 0 ⇒ L = {−5; 2}.'},
+  {eq: '√(2x + 1) = 7',     typ: 'Wurzelgleichung → 2.2a',
+   text: 'Die Unbekannte steht im Radikanden. Methode: separieren, quadrieren, Probe — 2x + 1 = 49 ⇒ x = 24.'},
+  {eq: '5 · 2ˣ = 80',       typ: 'Exponentialgleichung → 2.2b',
+   text: 'Die Unbekannte steht im Exponenten. Methode: isolieren, Exponentenvergleich oder logarithmieren — 2ˣ = 16 ⇒ x = 4.'},
+  {eq: '6/(x + 1) = 2',     typ: 'Rationale Gleichung → 2.2a',
+   text: 'Die Unbekannte steht im Nenner. Methode: D notieren (x ≠ −1), Hauptnenner — 6 = 2(x + 1) ⇒ x = 2.'},
+  {eq: '|x − 4| = 9',       typ: 'Betragsgleichung → 2.2c',
+   text: 'Die Unbekannte steht im Betrag. Methode: zwei Fälle x − 4 = ±9 — L = {−5; 13}.'},
+];
+let tbActive = 0;
+function buildTbBtns(){
+  document.getElementById('tb-btns').innerHTML = TB.map((t, i) =>
+    `<button class="typ-btn${i === tbActive ? ' aktiv' : ''}" onclick="setTb(${i})">${t.eq}</button>`
+  ).join('');
+}
+function setTb(i){
+  tbActive = i;
+  document.querySelectorAll('#tb-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawTb();
+}
+function drawTb(){
+  const t = TB[tbActive];
+  document.getElementById('tb-typ').textContent = t.typ;
+  document.getElementById('tb-text').textContent = t.text;
+}
+
+/* ══ A1: Typ bestimmen ══ */
+const a1G = [
+  {eq: '7x − 3 = 2x + 12',    typ: 'linear'},
+  {eq: 'x³ = 125',            typ: 'Potenzgleichung'},
+  {eq: '3ˣ = 125',            typ: 'exponentiell'},
+  {eq: '√(x − 5) = 4',        typ: 'Wurzelgleichung'},
+  {eq: '8/(x − 3) = 5',       typ: 'rational'},
+  {eq: '|2x − 6| = 10',       typ: 'Betragsgleichung'},
+];
+const a1Opts = ['linear', 'Potenzgleichung', 'exponentiell', 'Wurzelgleichung', 'rational', 'Betragsgleichung'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">Gleichung ${i + 1}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].eq;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.typ){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq} ist ${g.typ === 'linear' || g.typ === 'exponentiell' || g.typ === 'rational' ? 'eine ' + g.typ + 'e Gleichung' : 'eine ' + g.typ}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Frage dich: Wo genau steht die Unbekannte — Basis, Exponent, Radikand, Nenner oder Betrag?';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Typ prüfen, Methode prüfen, Probe machen.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  drawWA();
+  buildTbBtns(); drawTb();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  drawWA();
 });
 </script>
 </body>

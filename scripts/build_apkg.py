@@ -1419,6 +1419,53 @@ s22c_cards = [
      'Vorzeichentabelle: <b>−2 &lt; x &lt; 1 ∨ x &gt; 4</b>.'),
 ]
 
+# ─── s2-1 Grundlagen / Gleichungs-Werkzeugkasten (Schwerpunkt) ──
+s21_cards = [
+    # Vokabular
+    ('Was ist eine <i>Gleichung</i>?',
+     'Die Aussage, dass zwei Terme denselben Wert haben: <b>T₁(x) = T₂(x)</b>.'),
+    ('Grundmenge G, Definitionsmenge D, Lösungsmenge L?',
+     '<b>G</b>: erlaubte Zahlen (meist ℝ) · <b>D</b>: wo beide Seiten definiert sind · <b>L</b>: alle x ∈ D, welche die Gleichung erfüllen.'),
+    ('Woraus ergibt sich die Definitionsmenge?',
+     '<b>Nenner ≠ 0</b>, <b>Radikand ≥ 0</b>, <b>Logarithmus-Argument &gt; 0</b>.'),
+    ('Was ist eine <i>Äquivalenzumformung</i>?',
+     'Eine Umformung, welche die <b>Lösungsmenge nicht ändert</b> — im Waage-Bild: beide Seiten gleich verändern.'),
+    ('Welche Umformungen sind immer äquivalent?',
+     'Beidseitig <b>addieren/subtrahieren</b>; beidseitig mit fester Zahl <b>≠ 0 multiplizieren/dividieren</b>.'),
+    ('Drei gefährliche Umformungen?',
+     '<b>Quadrieren</b> (Scheinlösungen), <b>mit Term multiplizieren</b> (Scheinlösung bei Term = 0), <b>durch Term dividieren</b> (Lösungsverlust).'),
+    ('Kann L leer oder ganz ℝ sein?',
+     'Ja: <b>unlösbar</b> (x = x + 1 → L = { }) und <b>allgemeingültig</b> (2(x+1) = 2x + 2 → L = ℝ).'),
+    # Typen
+    ('Die Leitfrage zur Typ-Bestimmung?',
+     '<b>«Wo steht die Unbekannte?»</b> — Basis, Exponent, Radikand, Nenner oder Betrag.'),
+    ('x⁴ = 81 vs. 4ˣ = 81 — Typ und Lösung?',
+     'x⁴ = 81: <b>Potenzgleichung</b>, L = {−3; 3} · 4ˣ = 81: <b>Exponentialgleichung</b>, L = {log₄ 81} ≈ {3.17}.'),
+    ('Typ und Methode von √(2x+1) = 7?',
+     '<b>Wurzelgleichung</b>: separieren, quadrieren, Probe — x = 24.'),
+    ('Typ und Methode von 6/(x+1) = 2?',
+     '<b>Rationale Gleichung</b>: D notieren (x ≠ −1), Hauptnenner — x = 2.'),
+    ('Typ und Methode von |x − 4| = 9?',
+     '<b>Betragsgleichung</b>: zwei Fälle x − 4 = ±9 — L = {−5; 13}.'),
+    ('Typ und Methode von 5·2ˣ = 80?',
+     '<b>Exponentialgleichung</b>: isolieren (2ˣ = 16), Exponentenvergleich — x = 4.'),
+    ('Typ und Methode von x(x−3)(x+2) = 0?',
+     '<b>Produktform</b>: Satz vom Nullprodukt — L = {−2; 0; 3}.'),
+    # Fahrplan & Kontrolle
+    ('Der Vier-Schritte-Fahrplan?',
+     '1. <b>Typ</b> bestimmen, 2. <b>D</b> notieren, 3. passende <b>Methode</b>, 4. <b>überprüfen</b>.'),
+    ('Drei Arten der Überprüfung?',
+     '<b>Probe</b> (Ausgangsgleichung!), <b>Skizze</b> (Anzahl Schnittpunkte), <b>Plausibilität</b> (Vorzeichen, Grössenordnung, Einheit).'),
+    ('Warum die Probe in der AUSGANGSgleichung?',
+     'Scheinlösungen erfüllen die umgeformte Gleichung — nur die ursprüngliche entlarvt sie.'),
+    ('Wozu die Skizze vor dem Rechnen?',
+     'Sie zeigt die <b>erwartete Lösungsanzahl</b> — findet die Rechnung mehr: Scheinlösung prüfen; weniger: Lösung verloren.'),
+    ('Faustregel beim Isolieren von x (3x + 2 = 11)?',
+     'Erst <b>Summanden</b> wegschaffen (−2), dann <b>Faktoren</b> (:3) — sonst entstehen unnötige Brüche.'),
+    ('Fehlersuche: x² = 4x | :x ⇒ x = 4. Was fehlt?',
+     'Die Division durch x hat <b>x = 0 vernichtet</b>. Korrekt: x(x−4) = 0 → L = {0; 4}.'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -1498,6 +1545,8 @@ SP_DECKS = [
      'Exponentenvergleich, Logarithmieren, Ausklammern, Substitution, Entlogarithmieren, Scheinlösungen.', s22b_cards),
     ('s2-2c-betrag-polynom-ungleichungen', '2.2c Betrags- und Polynomgleichungen, Ungleichungen',
      'Betrag als Abstand, Fallunterscheidung, Nullprodukt, Relationszeichen, Vorzeichentabelle.', s22c_cards),
+    ('s2-1-grundlagen', '2.1 Grundlagen Gleichungen',
+     'Gleichung als Waage, Äquivalenzumformungen, Typ-Bestimmung, Vier-Schritte-Fahrplan, Überprüfen.', s21_cards),
 ]
 
 for slug, deck_short, deck_desc, cards in SP_DECKS:

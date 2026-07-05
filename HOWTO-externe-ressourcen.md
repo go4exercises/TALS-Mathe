@@ -307,6 +307,7 @@ Diese Tabelle wird mit jedem abgeschlossenen Thema erweitert. So muss eine berei
 | s2-2a Potenz-/Wurzel-/rationale Gleichungen | `PLF29x0idI4lXu1WcPP0oXEF_AnfOtYjkw` (siehe s3-2b «Alles über WURZELN») | — | — | — | — | `PLLTAHuUj-zHiqJlnyr_iYcbxsL7ztyWp8` (siehe s3-2b) — *Aufgaben: sos-mathe G33 + G32 aus Code-Map §8.1* |
 | s2-2b Exponential-/log. Gleichungen | `PLF29x0idI4lVs82KN0GTG3hQMpTM_84lV` + `PLF29x0idI4lXSN6xlwAQUjS71Tv-jdQ49` (siehe s3-4a/b) | — | — | `PLLkr4Hf_IwvPCVVWwpJ6QQJt3-kqxZEaP` (siehe s3-4a) | — | — *(Aufgaben via serlo-Sitemap: 40846, 26262, 23768)* |
 | s2-2c Betrag/Polynom/Ungleichungen | — | — | — | — | — | — *(keine passende Playlist der bevorzugten Anbieter in der Map; Video-Sektion mit Platzhalter. Aufgaben: sos-mathe G35 + serlo-Sitemap 169291, 223589)* |
+| s2-1 Grundlagen (Gleichungs-Werkzeugkasten) | `PLF29x0idI4lWPWBvEXDrcCEZ54ZdtYazp` (siehe g1-1/g2-1 «Terme vereinfachen») | `PLa0u3J0uzAzmBhxJfVgJ9pTv2QeqJsbO_` (siehe g2-1 «Terme &amp; Gleichungen») | — | — | — | — *(Aufgaben: serlo-Sitemap 25103 gemischte Gleichungen, 26259 quadratische + sos-mathe G31)* |
 
 *Diese Tabelle wird bei jedem neuen Recherche-Lauf erweitert. Bei Erweiterung: pro Thema eine Zeile, Playlist-IDs nur eintragen, wenn per `web_fetch` verifiziert. Wenn ein Anbieter zum Thema nichts hat: `—`.*
 
