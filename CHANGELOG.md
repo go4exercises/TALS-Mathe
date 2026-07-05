@@ -4,6 +4,27 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [70] — 2026-07-05 · s3-3 Polynomfunktionen ausgebaut
+
+Zweiter Vollausbau im Schwerpunktfach (Quelle: FTB Kap. 18, RLP-Kompetenzen 3.3):
+
+- **`schwerpunkt/s3-3-polynomfunktionen.html`** — Einstieg Schachtel-Faltung
+  \(V(x) = x(20-2x)(15-2x)\) (interaktiv mit Hochpunkt-Markierung), Definition (Grad,
+  Leitkoeffizient), **Linearfaktor-Baukasten** (drei Nullstellen-Slider + Streckfaktor,
+  Produkt- und Summenform live, Vielfachheits-Hinweis bei zusammenfallenden Nullstellen),
+  Globalverlauf-Visualisierung (4 Fälle), Extremalstellen am Beispiel \(x^3-x^2-2x+1\)
+  (statischer Graph mit H/T), Symmetrie-Schnellcheck, A1–A7 (u.a. Truthahn-Population,
+  Temperaturverlauf, Lastwagen-Tank, Rechteck unter Parabel), 4 Mini-Checks.
+- **Materialien komplett:** `downloads/schwerpunkt/s3-3-polynomfunktionen/` mit Handout,
+  Formelauszug, Teste-dich-selbst (12 Aufgaben), Aufgabenserie (6 Anwendungen, u.a. Kegel
+  in Kugel mit exakten Werten \(h = 8/3\), \(V = 256\pi/81\)) und Anki-Deck (20 Karten).
+- Alle Zahlenwerte numerisch verifiziert (Schachtel-Maximum 2.83/379, Truthahn exakt
+  300 d/460 Tiere, Temperatur-Extrema 23.1/8.1 °C, Tank 1.59 m, Marmorplatte 0.69/1.54).
+- index.html-Karte 3.3 auf «fertig»; Anbieter-Map (HOWTO §8) um s3-3 erweitert
+  (Mathehoch13- und Daniel-Jung-Playlists owner-verifiziert, 8 Abrufe — Budget §3.4 eingehalten).
+
+---
+
 ## [69] — 2026-07-05 · s3-2 ausgebaut: Sub-Split 3.2a Potenzfunktionen / 3.2b Wurzelfunktionen
 
 Erster Vollausbau im Schwerpunktfach. Der Stub `s3-2-potenz-wurzelfunktionen.html` wurde durch

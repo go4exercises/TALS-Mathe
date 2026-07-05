@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handout · Polynomfunktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../schwerpunkt/s3-3-polynomfunktionen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Handout · A4 · Bereit zum Drucken</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Schwerpunktfach · Polynomfunktionen</div>
+    <h1>Handout — Theorie</h1>
+  </header>
+
+
+  <h2>1. Definition</h2>
+
+  <div class="block block-def">
+    <div class="block-titel">📘 Polynomfunktion n-ten Grades</div>
+    <p>Eine Funktion \( f : \mathbb{R} \longrightarrow \mathbb{R} \) mit einer Gleichung der Form</p>
+    \[ y = f(x) = a_n x^n + a_{n-1} x^{n-1} + \dots + a_1 x + a_0, \qquad n \in \mathbb{N} \]
+    <p>heisst <strong>Polynomfunktion</strong> (ganzrationale Funktion), mit \( a_k \in \mathbb{R} \)
+    und \( a_n \neq 0 \). \(n\) heisst <strong>Grad</strong>, \(a_n\) <strong>Leitkoeffizient</strong>.</p>
+  </div>
+
+  <p><strong>Spezialfälle:</strong> Grad 1 = lineare Funktion, Grad 2 = quadratische Funktion,
+  Potenzfunktionen \( a_n x^n \) = Polynomfunktionen mit nur einem Term. Eine Polynomfunktion ist
+  eine Linearkombination von Potenzfunktionen.</p>
+
+  <h2>2. Linearfaktoren und Nullstellen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Linearfaktordarstellung</div>
+    <p>Sind \( x_1, \dots, x_n \) die Nullstellen, so gilt</p>
+    \[ f(x) = a_n \cdot (x - x_1)(x - x_2) \cdots (x - x_n) \]
+    <p>Jeder Linearfaktor liefert genau eine Nullstelle (Satz vom Nullprodukt) — und umgekehrt.</p>
+  </div>
+
+  <h3>Vielfachheit einer Nullstelle</h3>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Vielfachheit</th><th>Faktor</th><th>Graph an der Nullstelle</th></tr></thead>
+    <tbody>
+      <tr><td class="li">einfach</td><td>\( (x-x_1)^1 \)</td><td class="li"><strong>schneidet</strong> die x-Achse (Vorzeichenwechsel)</td></tr>
+      <tr><td class="li">doppelt</td><td>\( (x-x_1)^2 \)</td><td class="li"><strong>berührt</strong> die x-Achse (Hoch-/Tiefpunkt auf der Achse)</td></tr>
+      <tr><td class="li">dreifach</td><td>\( (x-x_1)^3 \)</td><td class="li"><strong>schneidet terrassenförmig</strong> abgeflacht</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Globalverlauf</h2>
+  <p>Für grosse \( |x| \) dominiert der Leitterm \( a_n x^n \):</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Grad \(n\)</th><th>\( a_n > 0 \)</th><th>\( a_n < 0 \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">ungerade</td><td class="li">links unten → rechts oben ↗</td><td class="li">links oben → rechts unten ↘</td></tr>
+      <tr><td class="li">gerade</td><td class="li">beide Enden oben ∪</td><td class="li">beide Enden unten ∩</td></tr>
+    </tbody>
+  </table>
+  <p>Eine Polynomfunktion n-ten Grades hat <strong>höchstens \(n\) Nullstellen</strong> und
+  <strong>höchstens \(n-1\) lokale Extremstellen</strong>; bei ungeradem Grad mindestens eine Nullstelle.</p>
+
+  <h2>4. Extremalstellen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Hochpunkt, Tiefpunkt, lokal und absolut</div>
+    <p>Ein <strong>Hochpunkt</strong> \(H\) ist ein lokal höchster Punkt des Graphen (\(y\)-Koordinate:
+    <strong>lokales/relatives Maximum</strong>), ein <strong>Tiefpunkt</strong> \(T\) ein lokal tiefster
+    Punkt (lokales Minimum). Ein <strong>absolutes</strong> Maximum/Minimum ist der grösste bzw.
+    kleinste Funktionswert überhaupt — Polynomfunktionen ungeraden Grades besitzen keines, da sie
+    unbeschränkt wachsen und fallen.</p>
+  </div>
+
+  <h2>5. Symmetrie-Schnellcheck</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:45%">nur gerade Exponenten (inkl. \(a_0\))</td><td class="li"><strong>gerade</strong> Funktion — achsensymmetrisch zur \(y\)-Achse</td></tr>
+      <tr><td class="li">nur ungerade Exponenten (also \(a_0 = 0\))</td><td class="li"><strong>ungerade</strong> Funktion — punktsymmetrisch zum Ursprung</td></tr>
+      <tr><td class="li">gemischte Exponenten</td><td class="li">weder gerade noch ungerade</td></tr>
+    </tbody>
+  </table>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Grad und Leitkoeffizient bestimmen den <strong>Globalverlauf</strong>, die Linearfaktoren die
+    <strong>Nullstellen</strong> samt Vielfachheit (schneiden — berühren — Terrassen-Schnitt).
+    Hoch- und Tiefpunkte sind <strong>lokale</strong> Extremwerte.</p>
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Schwerpunkt Polynomfunktionen</span>
+    <span>Handout</span>
+  </footer>
+
+</div>
+</body>
+</html>

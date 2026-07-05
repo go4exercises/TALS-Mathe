@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aufgabenserie · Polynomfunktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  .aufg-rahmen { border: 1pt solid var(--linie); border-radius: 4px; padding: 4mm; margin: 3mm 0;
+                 page-break-inside: avoid; break-inside: avoid; }
+  .aufg-rahmen .aufg-kopf { margin-bottom: 2mm; align-items: baseline; }
+  .schwierig { font-family: var(--mono); font-size: 8pt; color: var(--tinte-2); margin-left: auto; letter-spacing: 0.5px; }
+  .schwierig .punkt { color: var(--blau); font-size: 9pt; }
+  .schwierig .punkt-leer { color: var(--linie); font-size: 9pt; }
+  .bereich-tag { font-family: var(--mono); font-size: 7.5pt; color: var(--blau); background: var(--blau-hell);
+                 padding: 0.5mm 2mm; border-radius: 3px; text-transform: uppercase; letter-spacing: 1px; margin-left: 3mm; }
+  .lin-mehr { margin-bottom: 2mm; }
+  .lin-mehr .lin { height: 7mm; }
+  .uebersicht { width: 100%; border-collapse: collapse; font-size: 9.2pt; margin: 3mm 0 5mm; }
+  .uebersicht th, .uebersicht td { border: 1px solid var(--linie); padding: 1.4mm 2.5mm; text-align: left; }
+  .uebersicht th { background: var(--papier-2); font-family: var(--sans); font-weight: 700; font-size: 9pt; }
+  .uebersicht td.nr { text-align: center; font-family: var(--mono); width: 10mm; }
+  .uebersicht td.s  { text-align: center; font-family: var(--mono); width: 18mm; color: var(--orange); letter-spacing: 1px; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../schwerpunkt/s3-3-polynomfunktionen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Aufgabenserie · A4 · Bereit zum Drucken</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Schwerpunktfach · Polynomfunktionen</div>
+    <h1>Anwendungsaufgaben — Polynomfunktionen</h1>
+  </header>
+
+  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Extremwerte werden
+    <strong>grafisch</strong> bestimmt (Graph zeichnen bzw. Grafikrechner) — Differentialrechnung wird
+    nicht vorausgesetzt. Musterlösungen am Ende.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Verpackung</td><td>Die offene Schachtel</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Biologie</td><td>Truthahn-Population</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Meteorologie</td><td>Temperaturverlauf</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">4</td><td>Fahrzeugbau</td><td>Flüssigkeitstank</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Geometrie</td><td>Kegel in der Kugel</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Fertigung</td><td>Tisch aus der Marmorplatte</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">1</span>
+      <span class="aufg-titel">Die offene Schachtel</span><span class="bereich-tag">Verpackung</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Aus einem Karton von \( 20 \times 15 \) cm wird eine offene Schachtel gefaltet: In den vier
+    Ecken wird je ein Quadrat der Seite \(x\) ausgeschnitten.</p>
+    <p>(a) Zeige: \( V(x) = x(20-2x)(15-2x) = 4x^3 - 70x^2 + 300x \). Grad? Sinnvoller Bereich?</p>
+    <p>(b) Bestimme grafisch das maximale Volumen und das zugehörige \(x\).</p>
+    <p>(c) Für welche \(x\) fasst die Schachtel genau \( 300\ \text{cm}^3 \)? (grafisch, zwei Lösungen)</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">2</span>
+      <span class="aufg-titel">Truthahn-Population</span><span class="bereich-tag">Biologie</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Auf einer Insel ohne natürliche Feinde entwickelt sich eine ausgesetzte Truthahn-Population
+    näherungsweise gemäss \( h(t) = -0.00001\,t^3 + 0.002\,t^2 + 1.5\,t + 100 \) (\(t\) in Tagen).</p>
+    <p>(a) Bestimme die Anfangspopulation und skizziere den Graphen für \( 0 \leq t \leq 550 \).</p>
+    <p>(b) Wann ist die Population maximal, und wie gross ist sie dann?</p>
+    <p>(c) Wann sagt das Modell das Verschwinden der Population voraus? Deute biologisch.</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">3</span>
+      <span class="aufg-titel">Temperaturverlauf</span><span class="bereich-tag">Meteorologie</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Die Temperatur einer Stadt über 24 Stunden: \( T(t) = 0.01\,t(t-24)(t-18) + 10 \) in °C,
+    \( t = 0 \) um 8 Uhr morgens.</p>
+    <p>(a) Bestimme \( T(0) \), \( T(18) \), \( T(24) \) — was fällt auf?</p>
+    <p>(b) Bestimme grafisch Höchst- und Tiefsttemperatur samt Uhrzeit sowie die Wertemenge.</p>
+    <p>(c) Wann beträgt die Temperatur \(20\) °C?</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">4</span>
+      <span class="aufg-titel">Flüssigkeitstank</span><span class="bereich-tag">Fahrzeugbau</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Ein Tank besteht aus einem Zylinder mit zwei angesetzten Halbkugeln (alle Radius \(x\));
+    Gesamtlänge \(4.2\) m. Es gilt \( V(x) = 4.2\,\pi x^2 - \tfrac{2}{3}\pi x^3 \).</p>
+    <p>(a) Leite die Formel her (Zylinderlänge \( 4.2 - 2x \)) und begründe \( 0 < x \leq 2.1 \).</p>
+    <p>(b) Für welchen Radius fasst der Tank \( 25\ \text{m}^3 \)? (grafisch, Probe)</p>
+    <p>(c) Bei welchem \(x\) ist \(V\) maximal? Welche Form hat der Tank dann?</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">5</span>
+      <span class="aufg-titel">Kegel in der Kugel</span><span class="bereich-tag">Geometrie</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>In eine Kugel mit Radius \( r_1 = 2 \) dm wird ein gerader Kreiskegel (Radius \(r_2\),
+    Höhe \(h\)) einbeschrieben. Nach dem Höhensatz gilt \( r_2^2 = h\,(2r_1 - h) = h\,(4 - h) \).</p>
+    <p>(a) Zeige: \( V(h) = \tfrac{\pi}{3}\,h^2\,(4 - h) \). Welchen Grad hat dieses Polynom in \(h\)?</p>
+    <p>(b) Bestimme grafisch, für welche Höhe \(h\) das Kegelvolumen maximal wird.</p>
+    <p>(c) Gib \( r_2 \) und \( V_{\max} \) an.</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">6</span>
+      <span class="aufg-titel">Tisch aus der Marmorplatte</span><span class="bereich-tag">Fertigung</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Die Bruchkante einer Marmorplatte folgt näherungsweise \( y = x^2 - 4.6x + 4.93 \)
+    (für \( 0 \leq x \leq 1.7 \), Masse in m). Daraus soll ein rechteckiger Tisch mit Ecke
+    \( P(a \mid y(a)) \) geschnitten werden: Fläche \( A(a) = a \cdot y(a) \).</p>
+    <p>(a) Zeige: \( A(a) = a^3 - 4.6a^2 + 4.93a \) — eine Polynomfunktion dritten Grades.</p>
+    <p>(b) Bestimme grafisch das optimale \(a\) und die maximale Fläche.</p>
+    <p>(c) Gib die beiden Seitenlängen des optimalen Tischs an.</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 1</div>
+    <p>(a) Ausmultiplizieren liefert \( 4x^3 - 70x^2 + 300x \) — Grad 3; sinnvoll: \( 0 < x < 7.5 \).</p>
+    <p>(b) Hochpunkt bei \( x \approx 2.83 \) cm mit \( V_{\max} \approx 379\ \text{cm}^3 \).</p>
+    <p>(c) Ablesen am Graphen: \( x \approx 1.5 \) cm und \( x \approx 4.6 \) cm
+    (Kontrolle: \( V(1.5) \approx 306 \), genauer \( x_1 \approx 1.46 \); \( V(4.6) \approx 297 \),
+    genauer \( x_2 \approx 4.65 \) — Ablesegenauigkeit genügt).</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 2</div>
+    <p>(a) \( h(0) = 100 \) Tiere.</p>
+    <p>(b) Hochpunkt bei \( t = 300 \) Tagen: \( h(300) = 460 \) Tiere.</p>
+    <p>(c) Nullstelle bei \( t \approx 523 \) Tagen — das Modell sagt den Zusammenbruch voraus,
+    plausibel durch Überweidung der begrenzten Insel-Ressourcen. Danach verliert das Polynom-Modell
+    seine Gültigkeit (negative Bestände).</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 3</div>
+    <p>(a) \( T(0) = T(18) = T(24) = 10 \) °C — an den Nullstellen des Produktterms bleibt nur
+    die Verschiebung \(+10\).</p>
+    <p>(b) Hochpunkt \( t \approx 6.8 \) (≈ 14:50 Uhr): \( T_{\max} \approx 23.1 \) °C; Tiefpunkt
+    \( t \approx 21.2 \) (≈ 5:10 Uhr): \( T_{\min} \approx 8.1 \) °C. \( W \approx [8.1;\, 23.1] \).</p>
+    <p>(c) \( t \approx 3.3 \) (≈ 11:15 Uhr) und \( t \approx 11.0 \) (≈ 19:00 Uhr); die dritte
+    Lösung \( t \approx 27.7 \) liegt ausserhalb von \( D = [0;\, 24] \).</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 4</div>
+    <p>(a) \( V = \pi x^2 (4.2 - 2x) + \tfrac{4}{3}\pi x^3 = 4.2\pi x^2 - \tfrac{2}{3}\pi x^3 \);
+    die Halbkugeln brauchen zusammen die Länge \(2x \leq 4.2\).</p>
+    <p>(b) \( x \approx 1.59 \) m (Probe: \( V(1.592) \approx 25.0\ \text{m}^3 \) ✓).</p>
+    <p>(c) \(V\) wächst auf dem ganzen Bereich — Randmaximum bei \( x = 2.1 \) m mit
+    \( V \approx 38.8\ \text{m}^3 \): Der Tank ist dann eine reine Kugel.</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 5</div>
+    <p>(a) \( V = \tfrac{\pi}{3} r_2^2 h = \tfrac{\pi}{3} h(4-h) \cdot h = \tfrac{\pi}{3} h^2 (4-h) \)
+    — Grad 3 in \(h\).</p>
+    <p>(b) Hochpunkt bei \( h = \tfrac{8}{3} \approx 2.67 \) dm.</p>
+    <p>(c) \( r_2 = \sqrt{h(4-h)} = \tfrac{\sqrt{32}}{3} \approx 1.89 \) dm;
+    \( V_{\max} = \tfrac{256\pi}{81} \approx 9.93\ \text{dm}^3 \).</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 6</div>
+    <p>(a) \( A(a) = a(a^2 - 4.6a + 4.93) = a^3 - 4.6a^2 + 4.93a \). ✓</p>
+    <p>(b) Hochpunkt bei \( a \approx 0.69 \) m mit \( A_{\max} \approx 1.54\ \text{m}^2 \).</p>
+    <p>(c) Seiten \( a \approx 0.69 \) m und \( y(0.69) \approx 2.23 \) m.</p>
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Schwerpunkt Polynomfunktionen</span>
+    <span>Aufgabenserie</span>
+  </footer>
+
+</div>
+</body>
+</html>

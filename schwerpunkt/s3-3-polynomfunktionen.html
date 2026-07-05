@@ -19,7 +19,57 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Muster: g3-2 / s3-2a) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* A1: Polynom-ja/nein-Zeilen */
+.pn-item { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:7px 10px; border:1px solid var(--linie); border-radius:8px; background:var(--papier-2); margin-bottom:8px; }
+.pn-term { flex:1; min-width:170px; }
+.pn-fb { font-size:0.78rem; font-weight:700; min-width:100px; }
+.pn-fb.ok { color:var(--gruen); }
+.pn-fb.err { color:var(--rot); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -33,14 +83,7 @@ MathJax = {
   <h1 class="pt-h1">3.3 Polynomfunktionen</h1>
 </div>
 
-<!-- Stub-Banner: Seite ist noch in Vorbereitung -->
-<div class="stub-banner">
-  <strong>In Vorbereitung</strong>
-  Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: Mai 2026.
-</div>
-
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
-<p class="lead">Eine <strong>Polynomfunktion</strong> ist die Summe von Potenzfunktionen mit ganzzahligen, nicht-negativen Exponenten. Hier lernst du Grad und Leitkoeffizient zu lesen, Nullstellen zu bestimmen (Faktorisieren, Polynomdivision), den globalen Verlauf zu skizzieren und das Verhalten im Unendlichen vorherzusagen.</p>
+<p class="lead">Eine <strong>Polynomfunktion</strong> (ganzrationale Funktion) ist eine Summe von Potenzfunktionen mit natürlichen Exponenten. Hier lernst du, Grad und Leitkoeffizient zu lesen, den Zusammenhang zwischen <strong>Linearfaktoren und Nullstellen</strong> herzustellen (auch mehrfache Nullstellen), den Verlauf des Graphen qualitativ zu charakterisieren und <strong>Hoch- und Tiefpunkte</strong> grafisch zu bestimmen.</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.3</div>
@@ -51,49 +94,576 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann eine Polynomfunktion \(f(x) = a_n x^n + \dots + a_1 x + a_0\) erkennen, ihren Grad und ihren Leitkoeffizienten angeben.</li>
+      <li>Ich kann aus Nullstellen die Linearfaktordarstellung aufstellen — und umgekehrt aus Linearfaktoren die Nullstellen ablesen.</li>
+      <li>Ich kann einfache, doppelte und dreifache Nullstellen am Graphen unterscheiden (schneiden, berühren, Terrassen-Schnitt).</li>
+      <li>Ich kann den Globalverlauf aus Grad und Leitkoeffizient vorhersagen und die maximale Anzahl Nullstellen und lokaler Extremstellen angeben.</li>
+      <li>Ich kann Hochpunkte und Tiefpunkte am Graphen ablesen und lokale von absoluten Extremwerten unterscheiden.</li>
+      <li>Ich kann Polynomfunktionen mit dem Schnellcheck der Exponenten auf Symmetrie untersuchen.</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — die offene Schachtel</h2>
+
+<p>Aus einem Karton von <strong>20&nbsp;cm × 15&nbsp;cm</strong> soll eine offene Schachtel entstehen: In den vier Ecken wird je ein Quadrat der Seitenlänge \(x\) ausgeschnitten, dann werden die Ränder hochgefaltet. Das Volumen ist</p>
+
+\[ V(x) = x \cdot (20 - 2x) \cdot (15 - 2x) \]
+
+<p>— ein Produkt dreier linearer Faktoren, also eine <strong>Polynomfunktion dritten Grades</strong>. Für welches \(x\) fasst die Schachtel am meisten?</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>📦 Schachtel falten — \(V(x) = x(20-2x)(15-2x)\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Fahre mit dem Regler von \(0.5\) bis \(7\): Wo wächst das Volumen, wo fällt es? Was passiert an den Rändern \(x \to 0\) und \(x \to 7.5\) — und warum ergibt das anschaulich Sinn?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Fahre mit dem Regler von null Komma fünf bis sieben: Wo wächst das Volumen, wo fällt es? Was passiert an den Rändern x gegen null und x gegen sieben Komma fünf — und warum ergibt das anschaulich Sinn?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">An beiden Rändern ist das Volumen null (kein Boden bzw. keine Höhe) — dazwischen muss ein Maximum liegen: der <em>Hochpunkt</em> der Polynomfunktion bei \(x \approx 2.83\) cm mit rund \(379\ \text{cm}^3\). Genau solche ausgezeichneten Stellen sind das Thema dieser Seite.</div>
+          <button class="ah-speak" type="button" data-vorlesen="An beiden Rändern ist das Volumen null — dazwischen muss ein Maximum liegen: der Hochpunkt der Polynomfunktion bei x ungefähr zwei Komma acht drei Zentimeter mit rund dreihundertneunundsiebzig Kubikzentimetern. Genau solche ausgezeichneten Stellen sind das Thema dieser Seite.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Karton 20 × 15 cm · Eckquadrate mit Seite \(x\) · sinnvoller Bereich \(0 &lt; x &lt; 7.5\)</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Schnitt <span class="var">\(x\)</span> [cm]</label>
+      <input type="range" id="sc-x" min="0.5" max="7" step="0.25" value="2">
+      <span class="sl-val"><span id="sc-xv">2.00</span> cm</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Auswertung</div>
+      <div class="fl-eq" id="sc-eq">V(<span class="tx-blau">2.00</span>) = 2.00 · 16.0 · 11.0 = 352.0 cm³</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="sc-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <ul style="margin-top:6px">
+    <li>\(V(x)\) ist ein Produkt dreier linearer Faktoren — ausmultipliziert eine Polynomfunktion dritten Grades: \(V(x) = 4x^3 - 70x^2 + 300x\)</li>
+    <li>Die Nullstellen \(x = 0\), \(x = 7.5\), \(x = 10\) stehen direkt in den Faktoren — physikalisch sinnvoll ist nur \(0 &lt; x &lt; 7.5\)</li>
+    <li>Das Maximum bei \(x \approx 2.83\) ist ein <strong>Hochpunkt</strong> — grafisch ablesbar, ohne Rechnung</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Warum ist \(V(x) = x(20-2x)(15-2x)\) eine Polynomfunktion dritten Grades?</p><ul class="mc-optionen"><li data-opt="A">Weil drei Klammern vorkommen</li><li data-opt="B">Weil das Produkt dreier linearer Faktoren ausmultipliziert die Höchstpotenz \(x^3\) ergibt</li><li data-opt="C">Weil das Volumen dreidimensional ist</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(x \cdot (-2x) \cdot (-2x) = 4x^3\) — der Leitterm hat Grad 3. (Dass auch drei Faktoren bzw. drei Dimensionen im Spiel sind, ist hier nur ein hübscher Zufall.)</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Sinnvoll ist nur \(0 &lt; x &lt; \) <span class="mc-luecke"></span>, denn sonst bliebe von der kürzeren Kartonseite (15 cm) kein Boden übrig.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(7.5\) — bei \(x = 7.5\) ist \(15 - 2x = 0\), der Boden hätte die Breite null.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(V(1)\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V(1) = 1 \cdot 18 \cdot 13 = 234\ \text{cm}^3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Das Maximum liegt bei \(x \approx 2.83\). Ist das ein <em>absolutes</em> Maximum der Polynomfunktion \(V(x) = 4x^3 - 70x^2 + 300x\) auf ganz \(\mathbb{R}\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nein — nur ein <strong>lokales</strong> Maximum. Für sehr grosse \(x\) wächst \(4x^3\) über alle Grenzen, die Funktion nimmt beliebig grosse Werte an. Absolut maximal ist \(V(2.83) \approx 379\ \text{cm}^3\) nur auf dem Sachkontext-Intervall \([0;\, 7.5]\).</div></details></div>
+</details>
 
 
 <!-- ══ 3. DEFINITION ══ -->
 <h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Polynomfunktion n-ten Grades</div>
+  <p>Eine Funktion \(f : \mathbb{R} \longrightarrow \mathbb{R}\) mit einer Gleichung der Form</p>
+  \[ y = f(x) = a_n x^n + a_{n-1} x^{n-1} + \dots + a_1 x + a_0, \qquad n \in \mathbb{N} \]
+  <p>heisst <strong>Polynomfunktion</strong> (auch: ganzrationale Funktion). Für die Koeffizienten \(a_k\) mit \(k = 0,\, 1,\, \dots,\, n\) gilt \(a_k \in \mathbb{R}\) und \(a_n \neq 0\).</p>
+  <p style="margin-top:6px">\(n\) heisst <strong>Grad</strong>, \(a_n\) <strong>Leitkoeffizient</strong> der Polynomfunktion.</p>
+</div>
+
+<div class="block block-tipp" style="margin-top:8px">
+  <div class="block-titel">💡 Bekannte Spezialfälle</div>
+  <ul style="margin-top:4px">
+    <li>Eine Polynomfunktion ist eine <strong>Linearkombination von Potenzfunktionen</strong> (<a class="quer" href="s3-2a-potenzfunktionen.html">↩ 3.2a</a>).</li>
+    <li>Grad 1: die <strong>lineare Funktion</strong> \(f(x) = a_1 x + a_0\).</li>
+    <li>Grad 2: die <strong>quadratische Funktion</strong> \(f(x) = a_2 x^2 + a_1 x + a_0\).</li>
+    <li>Potenzfunktionen \(f(x) = a_n x^n\) sind Polynomfunktionen, bei denen alle übrigen Koeffizienten null sind.</li>
+  </ul>
+</div>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN: LINEARFAKTOREN ══ -->
+<h2 id="darstellungen">Linearfaktoren und Nullstellen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Linearfaktordarstellung</div>
+  <p>Sind \(x_1,\, x_2,\, \dots,\, x_n\) die Nullstellen einer Polynomfunktion n-ten Grades, so lässt sie sich als Produkt von <strong>Linearfaktoren</strong> schreiben:</p>
+  \[ f(x) = a_n \cdot (x - x_1) \cdot (x - x_2) \cdots (x - x_n) \]
+  <p>Jeder Linearfaktor \((x - x_k)\) wird genau an der Stelle \(x_k\) null — die Nullstellen stehen also direkt in den Faktoren. Umgekehrt liefert jede bekannte Nullstelle einen Linearfaktor.</p>
+</div>
+
+<p style="margin-top:12px">Verschiebe die drei Nullstellen und den Streckfaktor — Produktform, Summenform und Graph reagieren gleichzeitig. Lege zwei Nullstellen aufeinander!</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Linearfaktor-Baukasten — \(f(x) = a\,(x-x_1)(x-x_2)(x-x_3)\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Beobachte, wie jeder Regler «seine» Nullstelle im Graphen verschiebt. Lege dann \(x_2\) auf \(x_1\): Wie verhält sich der Graph an einer doppelten Nullstelle? Und bei allen dreien aufeinander?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Beobachte, wie jeder Regler seine Nullstelle im Graphen verschiebt. Lege dann x zwei auf x eins: Wie verhält sich der Graph an einer doppelten Nullstelle? Und bei allen dreien aufeinander?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Einfache Nullstelle: Der Graph <em>schneidet</em> die x-Achse. Doppelte: Er <em>berührt</em> sie (Hoch- oder Tiefpunkt auf der Achse). Dreifache: Er schneidet sie <em>terrassenförmig abgeflacht</em>. Die Summenform ändert sich mit — beide Formen beschreiben dieselbe Funktion.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Einfache Nullstelle: Der Graph schneidet die x-Achse. Doppelte: Er berührt sie. Dreifache: Er schneidet sie terrassenförmig abgeflacht. Die Summenform ändert sich mit — beide Formen beschreiben dieselbe Funktion.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Nullstellen \(x_1, x_2, x_3 \in [-3;\, 3]\) · Streckfaktor \(a\)</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Nullstelle <span class="var">\(x_1\)</span></label><input type="range" id="lf-n1" min="-3" max="3" step="1" value="-2"><span class="sl-val" id="lf-n1v">−2</span></div>
+      <div class="sl-grp akz-orange"><label>Nullstelle <span class="var">\(x_2\)</span></label><input type="range" id="lf-n2" min="-3" max="3" step="1" value="1"><span class="sl-val" id="lf-n2v">1</span></div>
+      <div class="sl-grp akz-gruen"><label>Nullstelle <span class="var">\(x_3\)</span></label><input type="range" id="lf-n3" min="-3" max="3" step="1" value="3"><span class="sl-val" id="lf-n3v">3</span></div>
+    </div>
+    <div class="sl-row">
+      <div class="sl-grp"><label>Streckfaktor <span class="var">\(a\)</span></label><input type="range" id="lf-a" min="0" max="5" step="1" value="4"><span class="sl-val" id="lf-av">0.5</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Produktform · Summenform · Nullstellen</div>
+      <div class="fl-eq" id="lf-eq"></div>
+      <div class="fl-eq" id="lf-sum" style="font-size:0.95rem;margin-top:4px"></div>
+      <div id="lf-hint" style="font-size:0.8rem;color:var(--tinte-2);margin-top:5px;font-style:italic"></div>
+    </div>
+    <div class="cv-wrap"><canvas id="lf-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition und Linearfaktoren</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welchen Grad hat die Polynomfunktion \(f(x) = \dfrac{-4x^3 + x^2 - x}{10}\)?</p><ul class="mc-optionen"><li data-opt="A">Grad 10</li><li data-opt="B">Grad 3</li><li data-opt="C">keinen — das ist keine Polynomfunktion</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der Bruch ist nur eine Schreibweise für \(-0.4x^3 + 0.1x^2 - 0.1x\) — eine Polynomfunktion dritten Grades mit Leitkoeffizient \(-0.4\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Koeffizient der höchsten Potenz, \(a_n\), heisst <span class="mc-luecke"></span> der Polynomfunktion.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Leitkoeffizient — er bestimmt zusammen mit dem Grad den Globalverlauf.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Gib die Nullstellen von \(f(x) = 2(x-3)(x+4)\) an.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(x_1 = 3\) und \(x_2 = -4\) — direkt aus den Linearfaktoren (Satz vom Nullprodukt).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Eine Polynomfunktion zweiten Grades hat die <em>einzige</em> Nullstelle \(x = 2\). Was folgt daraus für die Linearfaktordarstellung — und für den Graphen?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Beide Linearfaktoren müssen gleich sein: \(f(x) = a(x-2)^2\) — eine <strong>doppelte</strong> Nullstelle. Der Graph <em>berührt</em> die x-Achse bei \(x = 2\) (Scheitel auf der Achse), statt sie zu schneiden.</div></details></div>
+</details>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. TYPEN: GLOBALVERLAUF ══ -->
+<h2 id="typen">Verlauf qualitativ — Grad und Leitkoeffizient</h2>
+
+<p>Für grosse \(|x|\) dominiert der Leitterm \(a_n x^n\) — Grad und Vorzeichen des Leitkoeffizienten legen den <strong>Globalverlauf</strong> fest:</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th>Grad \(n\)</th><th>\(a_n &gt; 0\)</th><th>\(a_n &lt; 0\)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">ungerade</td><td style="font-family:var(--sans)">von links unten nach rechts oben ↗</td><td style="font-family:var(--sans)">von links oben nach rechts unten ↘</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">gerade</td><td style="font-family:var(--sans)">beide Enden nach oben ∪</td><td style="font-family:var(--sans)">beide Enden nach unten ∩</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-def" style="margin-top:12px">
+  <div class="block-titel">📘 Wie viele Nullstellen, wie viele Extremstellen?</div>
+  <p>Eine Polynomfunktion n-ten Grades hat <strong>höchstens \(n\) Nullstellen</strong> und <strong>höchstens \(n-1\) lokale Extremstellen</strong>. Bei ungeradem Grad gibt es immer mindestens eine Nullstelle (der Graph kommt von einer Seite unten und geht auf der anderen nach oben — oder umgekehrt).</p>
+</div>
+
+<div class="widget-titelzeile" style="margin-top:14px;margin-bottom:8px">
+  <p style="margin:0">Klicke auf einen Fall — Beispielgraph und Beschreibung:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Vergleiche die vier Fälle: Woran erkennst du am rechten Ende des Graphen das Vorzeichen von \(a_n\)? Und woran die Parität des Grades?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Vergleiche die vier Fälle: Woran erkennst du am rechten Ende des Graphen das Vorzeichen des Leitkoeffizienten? Und woran die Parität des Grades?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Rechtes Ende oben ⇔ \(a_n &gt; 0\). Beide Enden gleich ⇔ Grad gerade; Enden entgegengesetzt ⇔ Grad ungerade. Was dazwischen passiert (Anzahl Hügel und Täler), hängt von den übrigen Koeffizienten ab — höchstens \(n-1\) Extremstellen.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Rechtes Ende oben heisst Leitkoeffizient positiv. Beide Enden gleich heisst Grad gerade; Enden entgegengesetzt heisst Grad ungerade. Was dazwischen passiert, hängt von den übrigen Koeffizienten ab — höchstens n minus eins Extremstellen.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+
+<div class="typ-btns" id="gv-btns"></div>
+<div class="cv-wrap"><canvas id="gv-canvas" height="220"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="gv-desc"></div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Globalverlauf</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie verläuft der Graph von \(f(x) = -2x^5 + 7x^2 - 1\) global?</p><ul class="mc-optionen"><li data-opt="A">von links unten nach rechts oben</li><li data-opt="B">von links oben nach rechts unten</li><li data-opt="C">beide Enden nach unten</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Grad 5 (ungerade) und \(a_5 = -2 &lt; 0\): links oben, rechts unten. Die übrigen Terme spielen für den Globalverlauf keine Rolle.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Eine Polynomfunktion n-ten Grades hat höchstens <span class="mc-luecke"></span> lokale Extremstellen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(n - 1\) — zwischen zwei Nullstellen liegt jeweils höchstens ein Hügel oder Tal.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie viele Nullstellen kann eine Polynomfunktion sechsten Grades höchstens haben — und wie viele mindestens?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Höchstens \(6\); mindestens \(0\) — bei geradem Grad kann der Graph ganz oberhalb (oder unterhalb) der x-Achse verlaufen, z.B. \(x^6 + 1\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Begründe, warum jede Polynomfunktion <em>ungeraden</em> Grades mindestens eine Nullstelle hat.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Bei ungeradem Grad zeigen die beiden Enden des Graphen in entgegengesetzte Richtungen (eines nach \(-\infty\), eines nach \(+\infty\)). Der Graph einer Polynomfunktion ist eine durchgehende Kurve ohne Sprünge — auf dem Weg von unten nach oben muss er die x-Achse mindestens einmal kreuzen.</div></details></div>
+</details>
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<h2 id="theorie">Mehrfache Nullstellen, Extremalstellen, Symmetrie</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Vielfachheit einer Nullstelle</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Vielfachheit</th><th>Linearfaktor</th><th>Verhalten des Graphen an der Nullstelle</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans)">einfach</td><td>\((x - x_1)^1\)</td><td style="text-align:left;font-family:var(--sans)"><strong>schneidet</strong> die x-Achse (Vorzeichenwechsel)</td></tr>
+      <tr><td style="font-family:var(--sans)">doppelt</td><td>\((x - x_1)^2\)</td><td style="text-align:left;font-family:var(--sans)"><strong>berührt</strong> die x-Achse — Hoch- oder Tiefpunkt auf der Achse, kein Vorzeichenwechsel</td></tr>
+      <tr><td style="font-family:var(--sans)">dreifach</td><td>\((x - x_1)^3\)</td><td style="text-align:left;font-family:var(--sans)"><strong>schneidet terrassenförmig abgeflacht</strong> (Vorzeichenwechsel mit Sattel)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Funktionsgleichung aus Nullstellen</div>
+  <p>Gesucht ist die Polynomfunktion zweiten Grades mit den Nullstellen \(3\) und \(-4\) und dem \(y\)-Achsenabschnitt \(-24\).</p>
+  <p><strong>Lösung:</strong> Ansatz mit Linearfaktoren und unbekanntem Streckfaktor:</p>
+  \[ f(x) = a\,(x-3)(x+4) \]
+  <p>Der \(y\)-Achsenabschnitt liefert \(a\): &nbsp; \(f(0) = a \cdot (-3) \cdot 4 = -12a = -24 \Rightarrow a = 2\)</p>
+  \[ f(x) = 2\,(x-3)(x+4) = 2x^2 + 2x - 24 \]
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Extremalstellen — Hochpunkt und Tiefpunkt</div>
+  <p>Ein <strong>Hochpunkt</strong> \(H\) ist ein lokal höchster Punkt des Graphen: Seine \(y\)-Koordinate ist ein <strong>lokales (relatives) Maximum</strong>. Entsprechend ist ein <strong>Tiefpunkt</strong> \(T\) ein lokal tiefster Punkt (lokales Minimum). Ein <strong>absolutes Maximum/Minimum</strong> ist der grösste bzw. kleinste Funktionswert überhaupt — viele Polynomfunktionen haben keines, weil sie für grosse \(|x|\) über alle Grenzen wachsen oder fallen.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — ausgezeichnete Stellen ablesen</div>
+  <p>Der Graph von \(f(x) = x^3 - x^2 - 2x + 1\):</p>
+  <div class="cv-wrap" style="margin:10px auto"><canvas id="ex-canvas" height="220"></canvas></div>
+  <ul style="margin-top:6px">
+    <li><strong>Nullstellen</strong> (grafisch bestimmt): \(x_1 \approx -1.25\), \(x_2 \approx 0.45\), \(x_3 \approx 1.80\)</li>
+    <li><strong>Hochpunkt</strong> \(H(-0.55 \mid 1.63)\) — lokales Maximum</li>
+    <li><strong>Tiefpunkt</strong> \(T(1.22 \mid -1.11)\) — lokales Minimum</li>
+    <li>Kein absolutes Maximum oder Minimum: Für \(x \to \pm\infty\) wächst bzw. fällt \(f\) unbeschränkt</li>
+  </ul>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Symmetrie-Schnellcheck über die Exponenten</div>
+  <ul style="margin-top:4px">
+    <li>Kommen <strong>nur gerade Exponenten</strong> vor (das konstante Glied \(a_0 = a_0 x^0\) zählt als gerade) → <strong>gerade Funktion</strong>, achsensymmetrisch zur \(y\)-Achse.</li>
+    <li>Kommen <strong>nur ungerade Exponenten</strong> vor (also auch \(a_0 = 0\)!) → <strong>ungerade Funktion</strong>, punktsymmetrisch zum Ursprung.</li>
+    <li>Gemischte Exponenten → weder gerade noch ungerade.</li>
+  </ul>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Symmetrienachweis</div>
+  <p>Untersuche \(f(x) = x^3 - 4x\) auf Symmetrie.</p>
+  <p><strong>Lösung:</strong> Nur ungerade Exponenten (3 und 1) — Vermutung: ungerade. Nachweis mit dem Kriterium \(f(-x) = -f(x)\):</p>
+  \[ f(-x) = (-x)^3 - 4(-x) = -x^3 + 4x = -\bigl(x^3 - 4x\bigr) = -f(x) \quad\checkmark \]
+  <p>Der Graph ist punktsymmetrisch zum Ursprung.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — «Grad = Anzahl Nullstellen»</div>
+  <p>Der Grad gibt nur die <strong>Höchstzahl</strong> möglicher Nullstellen an. \(f(x) = x^2 + 1\) hat Grad 2 und <strong>keine</strong> Nullstelle; \(f(x) = (x-1)^2\) hat Grad 2 und nur <strong>eine</strong> (doppelte). Erst der Graph oder die Rechnung zeigt, wie viele es wirklich sind.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — lokales Maximum als grössten Funktionswert ausgeben</div>
+  <p>Die \(y\)-Koordinate eines Hochpunkts ist nur <strong>lokal</strong> maximal. Eine Polynomfunktion ungeraden Grades nimmt für grosse \(x\) beliebig grosse Werte an — sie hat <strong>nie</strong> ein absolutes Maximum. Bei Anwendungen entsteht das «echte» Maximum oft erst durch den eingeschränkten Definitionsbereich des Sachkontexts.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Nullstellen durch Ausklammern</div>
+  <p>Fehlt das konstante Glied, lässt sich \(x\) ausklammern: \(x^3 - 9x = x\,(x^2 - 9) = x\,(x-3)(x+3)\). Nach dem <strong>Satz vom Nullprodukt</strong> ist das Produkt genau dann null, wenn ein Faktor null ist — die Nullstellen \(0\), \(3\), \(-3\) stehen da, ganz ohne Lösungsformel.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Nullstellen, Extrema, Symmetrie</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Der Graph von \(f(x) = (x+1)^2 (x-2)\) verhält sich bei \(x = -1\) wie folgt:</p><ul class="mc-optionen"><li data-opt="A">Er schneidet die x-Achse</li><li data-opt="B">Er berührt die x-Achse</li><li data-opt="C">Er hat dort eine Definitionslücke</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \((x+1)^2\) ist eine doppelte Nullstelle — der Graph berührt die Achse bei \(x = -1\) (Hochpunkt auf der Achse) und schneidet sie nur bei \(x = 2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der lokal höchste Punkt eines Graphen heisst <span class="mc-luecke"></span>; seine \(y\)-Koordinate ist ein lokales Maximum.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Hochpunkt \(H\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Ist \(f(x) = x^6 - 3x^4 + x^2\) gerade, ungerade oder keines von beidem?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Nur gerade Exponenten (6, 4, 2) → <strong>gerade</strong> Funktion, achsensymmetrisch zur \(y\)-Achse.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Eine gerade Polynomfunktion hat eine Nullstelle bei \(x = 2\). Welche weitere Nullstelle besitzt sie mit Sicherheit — und warum?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Bei \(x = -2\): Aus der Achsensymmetrie folgt \(f(-2) = f(2) = 0\). Nullstellen gerader Funktionen treten (ausser bei \(x = 0\)) immer paarweise symmetrisch auf.</div></details></div>
+</details>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Polynomfunktion oder nicht?</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Entscheide für jeden Funktionsterm: Polynomfunktion oder nicht?</p>
+  <div id="a1-items"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a1')">▶ Lösung mit Begründungen</button>
+  <div class="loesung-body" id="l-a1">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(f(x) = -0.5x + 10\): <strong>ja</strong> — Grad 1, \(a_1 = -0.5\), \(a_0 = 10\)</li>
+        <li>\(f(x) = x^8\): <strong>ja</strong> — Grad 8 (Potenzfunktion als Spezialfall)</li>
+        <li>\(f(x) = 2x^4 - \tfrac{1}{x^2}\): <strong>nein</strong> — \(\tfrac{1}{x^2} = x^{-2}\) hat einen negativen Exponenten</li>
+        <li>\(f(x) = 10^x - x^3\): <strong>nein</strong> — bei \(10^x\) steht \(x\) im Exponenten (Exponentialterm)</li>
+        <li>\(f(x) = \dfrac{-4x^3 + x^2 - x}{10}\): <strong>ja</strong> — Grad 3 mit \(a_3 = -0.4\), \(a_2 = 0.1\), \(a_1 = -0.1\)</li>
+        <li>\(f(x) = 5\): <strong>ja</strong> — konstante Funktion, Grad 0</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Graph und Gleichung zuordnen — Vielfachheit erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Graphen und entscheide, welche Gleichung passt. Achte darauf, wo der Graph die x-Achse <em>schneidet</em>, <em>berührt</em> oder <em>terrassenförmig</em> kreuzt.</p>
+  <div class="graf-btn-row" id="a2-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a2-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört zum angezeigten Graphen?</p>
+  <div class="graf-btn-row" id="a2-opts"></div>
+  <div class="cr" id="a2-cr"></div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Polynomfunktionen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Nullstellen durch Ausklammern</div>
+    <p>Bestimme die drei Nullstellen von \(f(x) = x^3 - 9x\) (kleinste zuerst).</p>
+    <div class="eingabe-row"><label>x₁ =&nbsp;</label><input type="text" id="a3a1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a3a1', -3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x₂ =&nbsp;</label><input type="text" id="a3a2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3a2', 0, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x₃ =&nbsp;</label><input type="text" id="a3a3" placeholder="x₃"><button class="btn-pruef" onclick="chkNum('a3a3', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a3-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ x^3 - 9x = x\,(x^2 - 9) = x\,(x-3)(x+3) = 0 \;\Longrightarrow\; x_1 = -3,\; x_2 = 0,\; x_3 = 3 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Funktionsgleichung aus Nullstellen</div>
+    <p>Grad 2, Nullstellen \(3\) und \(-4\), \(y\)-Achsenabschnitt \(-24\). Bestimme den Streckfaktor \(a\) im Ansatz \(f(x) = a(x-3)(x+4)\).</p>
+    <div class="eingabe-row"><label>a =&nbsp;</label><input type="text" id="a3b1" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3b1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(f(0) = a(-3)(4) = -12a = -24 \Rightarrow a = 2\), also \(f(x) = 2(x-3)(x+4) = 2x^2 + 2x - 24\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Doppelte Nullstelle</div>
+    <p>Grad 2, <em>einzige</em> Nullstelle \(2\), \(y\)-Achsenabschnitt \(8\). Bestimme \(a\) im Ansatz \(f(x) = a(x-2)^2\).</p>
+    <div class="eingabe-row"><label>a =&nbsp;</label><input type="text" id="a3c1" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3c1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Eine einzige Nullstelle bei Grad 2 heisst: doppelte Nullstelle, \(f(x) = a(x-2)^2\). Aus \(f(0) = 4a = 8\) folgt \(a = 2\), also \(f(x) = 2(x-2)^2\). Der Graph <strong>berührt</strong> die x-Achse bei \(x = 2\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Grad 3 aus Nullstellen</div>
+    <p>Grad 3, Nullstellen \(-2\), \(1\) und \(4\), \(y\)-Achsenabschnitt \(40\). Bestimme \(a\).</p>
+    <div class="eingabe-row"><label>a =&nbsp;</label><input type="text" id="a3d1" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3d1', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(f(x) = a(x+2)(x-1)(x-4)\); &nbsp; \(f(0) = a \cdot 2 \cdot (-1) \cdot (-4) = 8a = 40 \Rightarrow a = 5\).</p>
+        \[ f(x) = 5\,(x+2)(x-1)(x-4) \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Symmetrie-Schnellcheck</div>
+    <p>Gerade, ungerade oder keines von beidem?</p>
+    <ol class="aufg-liste">
+      <li>\(y = x^5 - 3x^3 + x\)</li>
+      <li>\(y = x^6 - 3x^4 + x^2\)</li>
+      <li>\(y = x^5 - 3x^3 + x + 1\)</li>
+    </ol>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <ol class="aufg-liste">
+          <li>Nur ungerade Exponenten (5, 3, 1) → <strong>ungerade</strong>, punktsymmetrisch zum Ursprung.</li>
+          <li>Nur gerade Exponenten (6, 4, 2) → <strong>gerade</strong>, achsensymmetrisch zur \(y\)-Achse.</li>
+          <li>Gemischt — das konstante Glied \(+1\) ist ein gerader Anteil (\(x^0\)) neben ungeraden → <strong>weder noch</strong>.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Truthahn-Population</span></div>
+  <p>Eine Gruppe wilder Truthähne wird auf einer Insel ohne natürliche Feinde ausgesetzt. Die Populationsgrösse lässt sich näherungsweise beschreiben durch</p>
+  \[ h(t) = -0.00001\,t^3 + 0.002\,t^2 + 1.5\,t + 100 \qquad (t \text{ in Tagen seit Aussetzung}) \]
+  <ol class="aufg-liste">
+    <li>Wie gross ist die Anfangspopulation?</li>
+    <li>Bestimme grafisch, wann die Population ihr Maximum erreicht und wie gross sie dann ist.</li>
+    <li>Wie entwickelt sich die Population danach — und was könnte die Erklärung sein?</li>
+  </ol>
+  <div class="eingabe-row"><label>Maximum bei t ≈&nbsp;</label><input type="text" id="a4-1" placeholder="Tage"><button class="btn-pruef" onclick="chkNum('a4-1', 300, 10, 'Tagen')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>h(t_max) ≈&nbsp;</label><input type="text" id="a4-2" placeholder="Tiere"><button class="btn-pruef" onclick="chkNum('a4-2', 460, 10, 'Tiere')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(h(0) = 100\) Tiere.</li>
+        <li>Der Hochpunkt liegt bei \(t = 300\) Tagen mit \(h(300) = -270 + 180 + 450 + 100 = 460\) Tieren.</li>
+        <li>Danach fällt die Kurve und erreicht bei \(t \approx 523\) Tagen die Nullstelle — das Modell sagt einen Zusammenbruch der Population voraus. Plausible Erklärung: Ohne Feinde wächst die Population zunächst schnell, überweidet aber die begrenzten Futterressourcen der Insel. (Und: Ausserhalb des Bereichs \(0 \leq t \lesssim 523\) ist das Polynom-Modell nicht mehr sinnvoll — negative Tierzahlen gibt es nicht.)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Temperaturverlauf einer Stadt</span></div>
+  <p>Die Temperatur (in °C) über 24 Stunden lässt sich annähern durch</p>
+  \[ T(t) = 0.01\,t\,(t-24)(t-18) + 10 \qquad (t = 0 \text{ um 8 Uhr morgens}) \]
+  <ol class="aufg-liste">
+    <li>Gib die Definitionsmenge an und bestimme \(T(0)\), \(T(18)\) und \(T(24)\).</li>
+    <li>Bestimme grafisch die höchste und die tiefste Temperatur mit Uhrzeit.</li>
+    <li>Wann beträgt die Temperatur \(20\) °C?</li>
+  </ol>
+  <div class="eingabe-row"><label>T_max ≈&nbsp;</label><input type="text" id="a5-1" placeholder="°C"><button class="btn-pruef" onclick="chkNum('a5-1', 23.1, 0.3, '°C')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>T_min ≈&nbsp;</label><input type="text" id="a5-2" placeholder="°C"><button class="btn-pruef" onclick="chkNum('a5-2', 8.1, 0.3, '°C')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(D = [0;\, 24]\) (eine Tagesperiode). An den Nullstellen des Produktterms gilt \(T = 10\) °C: \(T(0) = T(18) = T(24) = 10\).</li>
+        <li>Hochpunkt bei \(t \approx 6.8\) h (\(\approx\) 14:50 Uhr): \(T_{\max} \approx 23.1\) °C. Tiefpunkt bei \(t \approx 21.2\) h (\(\approx\) 5:10 Uhr morgens): \(T_{\min} \approx 8.1\) °C. Damit ist \(W \approx [8.1;\, 23.1]\).</li>
+        <li>\(T(t) = 20\) führt auf \(0.01\,t(t-24)(t-18) = 10\) mit den Lösungen \(t \approx 3.3\) und \(t \approx 11.0\) im Definitionsbereich — also gegen <strong>11:15 Uhr</strong> und <strong>19:00 Uhr</strong>. (Die dritte Lösung \(t \approx 27.7\) liegt ausserhalb von \(D\).)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Flüssigkeitstank eines Lastwagens</span></div>
+  <p>Ein Tank besteht aus einem Zylinder und zwei angesetzten Halbkugeln, alle mit Radius \(x\). Die Gesamtlänge beträgt \(4.2\) m — der Zylinder ist also \(4.2 - 2x\) lang. Das Volumen:</p>
+  \[ V(x) = \pi x^2 (4.2 - 2x) + \tfrac{4}{3}\pi x^3 = 4.2\,\pi x^2 - \tfrac{2}{3}\pi x^3 \]
+  <ol class="aufg-liste">
+    <li>Zwischen welchen Werten muss der Radius \(x\) liegen?</li>
+    <li>Wie muss \(x\) gewählt werden, damit der Tank genau \(25\ \text{m}^3\) fasst? (grafisch, dann Probe)</li>
+    <li>Mit welchem Radius wird das Volumen am grössten — und welche Form hat der Tank dann?</li>
+  </ol>
+  <div class="eingabe-row"><label>x für V = 25 ≈&nbsp;</label><input type="text" id="a6-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a6-1', 1.59, 0.02, 'm')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>V_max ≈&nbsp;</label><input type="text" id="a6-2" placeholder="m³"><button class="btn-pruef" onclick="chkNum('a6-2', 38.8, 0.3, 'm³')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(0 &lt; x \leq 2.1\) — die beiden Halbkugeln (zusammen Länge \(2x\)) dürfen die Gesamtlänge \(4.2\) m nicht überschreiten.</li>
+        <li>Grafisch liest man \(x \approx 1.6\) m ab; die genauere Rechnung liefert \(x \approx 1.59\) m (Probe: \(V(1.592) \approx 25.0\ \text{m}^3\) ✓).</li>
+        <li>\(V(x)\) wächst auf dem ganzen zulässigen Bereich — das Maximum liegt am Rand: \(x = 2.1\) m mit \(V(2.1) \approx 38.8\ \text{m}^3\). Der Zylinder hat dann die Länge null, der Tank ist eine <strong>reine Kugel</strong>. (Die Kugel fasst bei gegebener Länge am meisten — praktisch fährt trotzdem kein Lastwagen mit Kugeltank: Bauhöhe!)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Rechteck unter der Parabel <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Aus der Fläche zwischen der \(x\)-Achse und der Parabel \(y = 4 - x^2\) wird ein achsenparalleles Rechteck ausgeschnitten, symmetrisch zur \(y\)-Achse mit Eckpunkt \(P(x \mid 4 - x^2)\).</p>
+  <ol class="aufg-liste">
+    <li>Zeige: Die Rechtecksfläche ist \(A(x) = 2x\,(4 - x^2) = 8x - 2x^3\). Welchen Grad hat \(A\)?</li>
+    <li>Bestimme grafisch, für welches \(x\) die Fläche maximal wird.</li>
+    <li>Gib die zugehörige waagrechte Seite und die maximale Fläche an.</li>
+  </ol>
+  <div class="eingabe-row"><label>optimales x ≈&nbsp;</label><input type="text" id="a7-1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a7-1', 1.15, 0.02, '')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>A_max ≈&nbsp;</label><input type="text" id="a7-2" placeholder="FE"><button class="btn-pruef" onclick="chkNum('a7-2', 6.16, 0.05, 'FE')">Prüfen</button></div>
+  <div class="cr" id="a7-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Waagrechte Seite \(2x\) (Symmetrie), Höhe \(4 - x^2\): \(A(x) = 2x(4-x^2) = 8x - 2x^3\) — Polynomfunktion <strong>dritten</strong> Grades mit \(D = ]0;\, 2[\).</li>
+        <li>Der Hochpunkt liegt bei \(x = \dfrac{2}{\sqrt{3}} \approx 1.155\).</li>
+        <li>Waagrechte Seite \(2x \approx 2.31\), Höhe \(4 - \tfrac{4}{3} = \tfrac{8}{3} \approx 2.67\), maximale Fläche \(A \approx 6.16\) Flächeneinheiten.</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p><strong>Grad und Leitkoeffizient</strong> legen den Globalverlauf fest, die <strong>Linearfaktoren</strong> die Nullstellen: \(f(x) = a_n(x-x_1)\cdots(x-x_n)\). Einfache Nullstellen schneiden, doppelte berühren, dreifache kreuzen terrassenförmig. Hoch- und Tiefpunkte sind <strong>lokale</strong> Extremwerte — absolut maximal wird eine Polynomfunktion oft erst durch den eingeschränkten Definitionsbereich einer Anwendung.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Stichwort</th><th>Regel</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Polynomfunktion</td><td>\(f(x) = a_n x^n + \dots + a_1 x + a_0\), \(a_n \neq 0\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstellen</td><td style="font-family:var(--sans)">höchstens \(n\); ungerader Grad: mindestens 1</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Lokale Extremstellen</td><td style="font-family:var(--sans)">höchstens \(n-1\) (Hochpunkte und Tiefpunkte)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Linearfaktoren</td><td>\(f(x) = a_n(x-x_1)(x-x_2)\cdots(x-x_n)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Vielfachheit</td><td style="font-family:var(--sans)">einfach: schneidet · doppelt: berührt · dreifach: Terrassen-Schnitt</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Globalverlauf</td><td style="font-family:var(--sans)">Grad gerade: Enden gleich · ungerade: entgegengesetzt · Vorzeichen von \(a_n\) entscheidet oben/unten</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetrie</td><td style="font-family:var(--sans)">nur gerade Exponenten: gerade · nur ungerade: ungerade</td></tr>
+  </tbody>
+</table>
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s3-3-polynomfunktionen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-3-polynomfunktionen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-3-polynomfunktionen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-3-polynomfunktionen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-3-polynomfunktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLLkr4Hf_IwvN-lbzbyC4Zol0uSLuDleqL" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Ganzrationale Funktionen — Playlist</div><div class="lk-s">Mathehoch13 · komplettes Kapitel der Oberstufe</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHjqKr3k2YwD8m1tzhqlHHr0" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Ganzrationale Funktionen, Polynomfunktionen — Playlist</div><div class="lk-s">Mathe by Daniel Jung · Begriffe, Nullstellen, Verlauf</div></div></a>
+  <a href="https://www.youtube.com/watch?v=QrC4wTZoj8k" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Linearfaktorzerlegung — Nullstellen, Beispiele</div><div class="lk-s">MathemaTrick · Einzelvideo · passt zu Aufgabe A3b–d</div></div></a>
+  <a href="https://www.youtube.com/watch?v=Lb5sQlgKDeU" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Doppelte und dreifache Nullstellen mit Schaubild</div><div class="lk-s">Mathe by Daniel Jung · Einzelvideo · Vielfachheit am Graphen</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g3/g32/aufg_g32.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Gleichungen höheren Grades (G32)</div><div class="lk-s">Polynomgleichungen · mit PDF-Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26405/aufgaben-zur-polynomfunktion" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zur Polynomfunktion</div><div class="lk-s">Grad, Verlauf, Nullstellen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/273164/aufgaben-zur-vielfachheit-von-nullstellen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Vielfachheit von Nullstellen</div><div class="lk-s">Schneiden vs. berühren · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/128661/aufgaben-zu-polynomfunktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu Polynomfunktionen</div><div class="lk-s">Gemischte Aufgaben · mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -106,12 +676,279 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'schwerpunkt', id:'s3-3',
   kapitelNr:'3.3', kapitelTitel:'Polynomfunktionen',
   prev:{nr:'3.2b',titel:'Wurzelfunktionen',url:'s3-2b-wurzelfunktionen.html'},
   next:{nr:'3.4',titel:'Exponential- und Logarithmusfunktionen',url:'s3-4-exponential-logarithmusfunktionen.html'}
+});
+
+/* ── Lokale Helfer (Muster: s3-2a) ── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : (Math.abs(n*10) % 1 < 1e-9 ? n.toFixed(1) : n.toFixed(2)));
+
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Schachtel ══ */
+function updateSC(){
+  const x = parseFloat(document.getElementById('sc-x').value);
+  document.getElementById('sc-xv').textContent = x.toFixed(2);
+  const b = 20 - 2*x, t = 15 - 2*x, V = x * b * t;
+  const xB = `<span class="tx-blau">${x.toFixed(2)}</span>`;
+  document.getElementById('sc-eq').innerHTML =
+    `V(${xB}) = ${xB} · ${b.toFixed(1)} · ${t.toFixed(1)} = ${V.toFixed(1)} cm³`;
+  const {ctx, cx, cy} = gridApp('sc-canvas', 240, 0, 7.5, 0, 400, 1, 50, 'x [cm]', 'V [cm³]');
+  plotFx(ctx, cx, cy, u => u*(20-2*u)*(15-2*u), 0, 7.5, '#1a4f8a', 2.5, 1e6);
+  // Hochpunkt-Markierung
+  const xm = 2.8287, Vm = xm*(20-2*xm)*(15-2*xm);
+  drawDot(ctx, cx, cy, xm, Vm, '#1f6b3a', 5);
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('H', cx(xm) + 7, cy(Vm) - 5);
+  // aktueller Punkt
+  drawDot(ctx, cx, cy, x, V, '#1a4f8a', 7);
+  ctx.strokeStyle = '#1a4f8a55'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(cx(x), cy(V)); ctx.lineTo(cx(x), cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(x), cy(V)); ctx.lineTo(cx(0), cy(V)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = x > 5.5 ? 'right' : 'left';
+  ctx.fillText(`(${x.toFixed(2)}|${V.toFixed(0)})`, cx(x) + (x > 5.5 ? -8 : 8), cy(V) - 8);
+}
+document.getElementById('sc-x').addEventListener('input', updateSC);
+
+/* ══ LINEARFAKTOR-BAUKASTEN ══ */
+const LF_A = [-1, -0.5, -0.25, 0.25, 0.5, 1];
+function updateLF(){
+  const n1 = parseInt(document.getElementById('lf-n1').value);
+  const n2 = parseInt(document.getElementById('lf-n2').value);
+  const n3 = parseInt(document.getElementById('lf-n3').value);
+  const a  = LF_A[parseInt(document.getElementById('lf-a').value)];
+  const mm = s => String(s).replace('-', '−');
+  document.getElementById('lf-n1v').textContent = mm(n1);
+  document.getElementById('lf-n2v').textContent = mm(n2);
+  document.getElementById('lf-n3v').textContent = mm(n3);
+  document.getElementById('lf-av').textContent = mm(fmt2(a));
+  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
+  const fac = (n, col) => n === 0 ? 'x' : (n > 0 ? `(x − ${T(col, n)})` : `(x + ${T(col, Math.abs(n))})`);
+  const aStr = a === 1 ? '' : (a === -1 ? '−' : `${mm(fmt2(a))}·`);
+  document.getElementById('lf-eq').innerHTML =
+    `f(x) = ${aStr}${fac(n1,'blau')}·${fac(n2,'orange')}·${fac(n3,'gruen')}`;
+  // Summenform: a(x³ − s1x² + s2x − s3)
+  const s1 = n1 + n2 + n3, s2 = n1*n2 + n1*n3 + n2*n3, s3 = n1*n2*n3;
+  const term = (c, pot) => {
+    if(Math.abs(c) < 1e-9) return '';
+    const sign = c > 0 ? ' + ' : ' − ';
+    const v = Math.abs(c);
+    const coef = (v === 1 && pot) ? '' : mm(fmt2(v)) + (pot ? '·' : '');
+    return sign + coef + pot;
+  };
+  let sum = (a === 1 ? '' : (a === -1 ? '−' : mm(fmt2(a)) + '·')) + 'x³'
+          + term(-a*s1, 'x²') + term(a*s2, 'x') + term(-a*s3, '');
+  document.getElementById('lf-sum').innerHTML = 'Summenform: f(x) = ' + sum;
+  // Vielfachheits-Hinweis
+  const roots = [n1, n2, n3];
+  const counts = {};
+  roots.forEach(r => counts[r] = (counts[r] || 0) + 1);
+  const mehrfach = Object.entries(counts).filter(([, c]) => c > 1);
+  let hint = 'Drei einfache Nullstellen — der Graph schneidet die x-Achse dreimal.';
+  if(mehrfach.length){
+    const [r, c] = mehrfach[0];
+    hint = c === 3
+      ? `Dreifache Nullstelle bei x = ${mm(r)} — der Graph schneidet terrassenförmig abgeflacht!`
+      : `Doppelte Nullstelle bei x = ${mm(r)} — der Graph berührt dort die x-Achse!`;
+  }
+  document.getElementById('lf-hint').textContent = hint;
+  // Graph (reine Mathematik → 1:1)
+  const {ctx, W, H} = initCanvas('lf-canvas', 220, true);
+  const rng = 5;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  plotFx(ctx, cx, cy, x => a*(x-n1)*(x-n2)*(x-n3), -rng, rng, '#1a4f8a', 2.5, rng * 5);
+  [...new Set(roots)].forEach(r => drawDot(ctx, cx, cy, r, 0, '#9b1c1c', 5));
+}
+['lf-n1','lf-n2','lf-n3','lf-a'].forEach(id => document.getElementById(id).addEventListener('input', updateLF));
+
+/* ══ GLOBALVERLAUF-VISUALISIERUNG ══ */
+const gvFaelle = [
+  {label:'n ungerade, a>0', f: x => 0.5*x*x*x - 2*x,      color:'#1a4f8a', desc:'f(x) = 0.5x³ − 2x  ·  Grad 3, a₃ > 0: von links unten nach rechts oben ↗'},
+  {label:'n ungerade, a<0', f: x => -0.5*x*x*x + 2*x,     color:'#9b1c1c', desc:'f(x) = −0.5x³ + 2x  ·  Grad 3, a₃ < 0: von links oben nach rechts unten ↘'},
+  {label:'n gerade, a>0',   f: x => 0.25*x*x*x*x - 2*x*x, color:'#1f6b3a', desc:'f(x) = 0.25x⁴ − 2x²  ·  Grad 4, a₄ > 0: beide Enden nach oben ∪ (W-Form)'},
+  {label:'n gerade, a<0',   f: x => -0.25*x*x*x*x + 2*x*x,color:'#b85c00', desc:'f(x) = −0.25x⁴ + 2x²  ·  Grad 4, a₄ < 0: beide Enden nach unten ∩ (M-Form)'},
+];
+let gvActive = 0;
+function buildGvBtns(){
+  document.getElementById('gv-btns').innerHTML = gvFaelle.map((t, i) =>
+    `<button class="typ-btn${i === gvActive ? ' aktiv' : ''}" onclick="setGv(${i})">${t.label}</button>`
+  ).join('');
+}
+function setGv(i){
+  gvActive = i;
+  document.querySelectorAll('#gv-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawGv();
+}
+function drawGv(){
+  const {ctx, W, H} = initCanvas('gv-canvas', 220, true);
+  const rng = 5;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  const t = gvFaelle[gvActive];
+  plotFx(ctx, cx, cy, t.f, -rng, rng, t.color, 3, rng * 5);
+  document.getElementById('gv-desc').textContent = t.desc;
+}
+
+/* ══ BEISPIEL 2: Extremalstellen (statisch) ══ */
+function drawEX(){
+  const {ctx, W, H} = initCanvas('ex-canvas', 220, true);
+  const rng = 3;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  const f = x => x*x*x - x*x - 2*x + 1;
+  plotFx(ctx, cx, cy, f, -rng, rng, '#1a4f8a', 2.5, rng * 5);
+  // Nullstellen
+  [-1.247, 0.445, 1.802].forEach(r => drawDot(ctx, cx, cy, r, 0, '#9b1c1c', 4));
+  // Hoch- und Tiefpunkt
+  const xh = -0.549, xt = 1.215;
+  drawDot(ctx, cx, cy, xh, f(xh), '#1f6b3a', 6);
+  drawDot(ctx, cx, cy, xt, f(xt), '#b85c00', 6);
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1f6b3a'; ctx.textAlign = 'left';
+  ctx.fillText('H', cx(xh) + 7, cy(f(xh)) - 6);
+  ctx.fillStyle = '#b85c00';
+  ctx.fillText('T', cx(xt) + 7, cy(f(xt)) + 14);
+}
+
+/* ══ A1: Polynom oder nicht ══ */
+const a1Items = [
+  {term:'f(x) = −0.5·x + 10',        poly:true,  why:'Grad 1'},
+  {term:'f(x) = x⁸',                 poly:true,  why:'Grad 8'},
+  {term:'f(x) = 2x⁴ − 1/x²',         poly:false, why:'negativer Exponent'},
+  {term:'f(x) = 10ˣ − x³',           poly:false, why:'x im Exponenten'},
+  {term:'f(x) = (−4x³ + x² − x)/10', poly:true,  why:'Grad 3'},
+  {term:'f(x) = 5',                  poly:true,  why:'Grad 0'},
+];
+function buildA1(){
+  document.getElementById('a1-items').innerHTML = a1Items.map((it, i) => `
+    <div class="pn-item">
+      <span class="pn-term" style="font-family:var(--mono);font-size:0.85rem">${it.term}</span>
+      <button class="graf-btn" onclick="checkA1(${i}, true)">Polynom</button>
+      <button class="graf-btn" onclick="checkA1(${i}, false)">kein Polynom</button>
+      <span class="pn-fb" id="a1-fb-${i}"></span>
+    </div>`).join('');
+}
+function checkA1(i, answer){
+  const it = a1Items[i];
+  const fb = document.getElementById('a1-fb-' + i);
+  if(answer === it.poly){
+    fb.className = 'pn-fb ok'; fb.textContent = `✓ richtig (${it.why})`;
+  } else {
+    fb.className = 'pn-fb err'; fb.textContent = `✗ (${it.why})`;
+  }
+}
+
+/* ══ A2: Graph ↔ Gleichung (Vielfachheit) ══ */
+const a2G = [
+  {label:'Graph 1', f: x => 0.5*(x+2)*(x-1)*(x-3),   eq:'y = 0.5(x+2)(x−1)(x−3)'},
+  {label:'Graph 2', f: x => 0.5*(x+2)*(x-1)*(x-1),   eq:'y = 0.5(x+2)(x−1)²'},
+  {label:'Graph 3', f: x => -0.25*x*x*x*x + 2*x*x,   eq:'y = −0.25x⁴ + 2x²'},
+  {label:'Graph 4', f: x => 0.25*(x+1)*(x+1)*(x+1),  eq:'y = 0.25(x+1)³'},
+];
+const a2Opts = ['y = 0.5(x+2)(x−1)(x−3)', 'y = 0.5(x+2)(x−1)²', 'y = −0.25x⁴ + 2x²', 'y = 0.25(x+1)³'];
+let a2Act = 0;
+function buildA2(){
+  document.getElementById('a2-btns').innerHTML = a2G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA2(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a2-opts').innerHTML = a2Opts.map((o, i) =>
+    `<button class="graf-btn" onclick="checkA2(${i})">${o}</button>`
+  ).join('');
+}
+function setA2(i){
+  a2Act = i;
+  document.querySelectorAll('#a2-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a2-cr').style.display = 'none';
+  drawA2();
+}
+function drawA2(){
+  const {ctx, W, H} = initCanvas('a2-canvas', 220, true);
+  const rng = 5;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  plotFx(ctx, cx, cy, a2G[a2Act].f, -rng, rng, '#1a4f8a', 2.5, rng * 5);
+}
+function checkA2(i){
+  const g = a2G[a2Act];
+  const r = document.getElementById('a2-cr'); r.style.display = 'block';
+  if(a2Opts[i] === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Zähle die Nullstellen und prüfe: schneiden, berühren oder Terrassen-Schnitt?';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-Z°³²]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateSC();
+  updateLF();
+  buildGvBtns(); drawGv();
+  drawEX();
+  buildA1();
+  buildA2(); drawA2();
+});
+window.addEventListener('resize', () => {
+  updateSC(); updateLF(); drawGv(); drawEX(); drawA2();
 });
 </script>
 </body>

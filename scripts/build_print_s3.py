@@ -768,6 +768,300 @@ B_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s3-3  POLYNOMFUNKTIONEN
+# ═══════════════════════════════════════════════════════════════════
+
+C_HANDOUT = r'''
+  <h2>1. Definition</h2>
+
+  <div class="block block-def">
+    <div class="block-titel">📘 Polynomfunktion n-ten Grades</div>
+    <p>Eine Funktion \( f : \mathbb{R} \longrightarrow \mathbb{R} \) mit einer Gleichung der Form</p>
+    \[ y = f(x) = a_n x^n + a_{n-1} x^{n-1} + \dots + a_1 x + a_0, \qquad n \in \mathbb{N} \]
+    <p>heisst <strong>Polynomfunktion</strong> (ganzrationale Funktion), mit \( a_k \in \mathbb{R} \)
+    und \( a_n \neq 0 \). \(n\) heisst <strong>Grad</strong>, \(a_n\) <strong>Leitkoeffizient</strong>.</p>
+  </div>
+
+  <p><strong>Spezialfälle:</strong> Grad 1 = lineare Funktion, Grad 2 = quadratische Funktion,
+  Potenzfunktionen \( a_n x^n \) = Polynomfunktionen mit nur einem Term. Eine Polynomfunktion ist
+  eine Linearkombination von Potenzfunktionen.</p>
+
+  <h2>2. Linearfaktoren und Nullstellen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Linearfaktordarstellung</div>
+    <p>Sind \( x_1, \dots, x_n \) die Nullstellen, so gilt</p>
+    \[ f(x) = a_n \cdot (x - x_1)(x - x_2) \cdots (x - x_n) \]
+    <p>Jeder Linearfaktor liefert genau eine Nullstelle (Satz vom Nullprodukt) — und umgekehrt.</p>
+  </div>
+
+  <h3>Vielfachheit einer Nullstelle</h3>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Vielfachheit</th><th>Faktor</th><th>Graph an der Nullstelle</th></tr></thead>
+    <tbody>
+      <tr><td class="li">einfach</td><td>\( (x-x_1)^1 \)</td><td class="li"><strong>schneidet</strong> die x-Achse (Vorzeichenwechsel)</td></tr>
+      <tr><td class="li">doppelt</td><td>\( (x-x_1)^2 \)</td><td class="li"><strong>berührt</strong> die x-Achse (Hoch-/Tiefpunkt auf der Achse)</td></tr>
+      <tr><td class="li">dreifach</td><td>\( (x-x_1)^3 \)</td><td class="li"><strong>schneidet terrassenförmig</strong> abgeflacht</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Globalverlauf</h2>
+  <p>Für grosse \( |x| \) dominiert der Leitterm \( a_n x^n \):</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Grad \(n\)</th><th>\( a_n > 0 \)</th><th>\( a_n < 0 \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">ungerade</td><td class="li">links unten → rechts oben ↗</td><td class="li">links oben → rechts unten ↘</td></tr>
+      <tr><td class="li">gerade</td><td class="li">beide Enden oben ∪</td><td class="li">beide Enden unten ∩</td></tr>
+    </tbody>
+  </table>
+  <p>Eine Polynomfunktion n-ten Grades hat <strong>höchstens \(n\) Nullstellen</strong> und
+  <strong>höchstens \(n-1\) lokale Extremstellen</strong>; bei ungeradem Grad mindestens eine Nullstelle.</p>
+
+  <h2>4. Extremalstellen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Hochpunkt, Tiefpunkt, lokal und absolut</div>
+    <p>Ein <strong>Hochpunkt</strong> \(H\) ist ein lokal höchster Punkt des Graphen (\(y\)-Koordinate:
+    <strong>lokales/relatives Maximum</strong>), ein <strong>Tiefpunkt</strong> \(T\) ein lokal tiefster
+    Punkt (lokales Minimum). Ein <strong>absolutes</strong> Maximum/Minimum ist der grösste bzw.
+    kleinste Funktionswert überhaupt — Polynomfunktionen ungeraden Grades besitzen keines, da sie
+    unbeschränkt wachsen und fallen.</p>
+  </div>
+
+  <h2>5. Symmetrie-Schnellcheck</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:45%">nur gerade Exponenten (inkl. \(a_0\))</td><td class="li"><strong>gerade</strong> Funktion — achsensymmetrisch zur \(y\)-Achse</td></tr>
+      <tr><td class="li">nur ungerade Exponenten (also \(a_0 = 0\))</td><td class="li"><strong>ungerade</strong> Funktion — punktsymmetrisch zum Ursprung</td></tr>
+      <tr><td class="li">gemischte Exponenten</td><td class="li">weder gerade noch ungerade</td></tr>
+    </tbody>
+  </table>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Grad und Leitkoeffizient bestimmen den <strong>Globalverlauf</strong>, die Linearfaktoren die
+    <strong>Nullstellen</strong> samt Vielfachheit (schneiden — berühren — Terrassen-Schnitt).
+    Hoch- und Tiefpunkte sind <strong>lokale</strong> Extremwerte.</p>
+  </div>
+'''
+
+C_FORMELAUSZUG = r'''
+  <h2>1. Definition</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Polynomfunktion</td>
+          <td>\( f(x) = a_n x^n + \dots + a_1 x + a_0, \quad a_n \neq 0 \)</td></tr>
+      <tr><td class="li">Grad / Leitkoeffizient</td>
+          <td class="li">\(n\) bzw. \(a_n\)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Linearfaktoren</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Produktform</td>
+          <td>\( f(x) = a_n (x-x_1)(x-x_2)\cdots(x-x_n) \)</td></tr>
+      <tr><td class="li">Nullstellen</td>
+          <td class="li">stehen direkt in den Faktoren (Satz vom Nullprodukt)</td></tr>
+      <tr><td class="li">aus Nullstellen + Punkt</td>
+          <td class="li">Ansatz mit Faktoren, \(a\) aus dem \(y\)-Achsenabschnitt: \( f(0) = a \cdot (-x_1)(-x_2)\cdots \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Vielfachheit</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Faktor</th><th>Verhalten an der Nullstelle</th></tr></thead>
+    <tbody>
+      <tr><td>\( (x-x_1)^1 \)</td><td class="li">schneidet (Vorzeichenwechsel)</td></tr>
+      <tr><td>\( (x-x_1)^2 \)</td><td class="li">berührt (kein Vorzeichenwechsel)</td></tr>
+      <tr><td>\( (x-x_1)^3 \)</td><td class="li">schneidet terrassenförmig abgeflacht</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Globalverlauf</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Grad</th><th>\( a_n > 0 \)</th><th>\( a_n < 0 \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">ungerade</td><td class="li">↗ (unten → oben)</td><td class="li">↘ (oben → unten)</td></tr>
+      <tr><td class="li">gerade</td><td class="li">∪ (beide oben)</td><td class="li">∩ (beide unten)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Anzahlen und Begriffe</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:45%">Nullstellen</td><td class="li">höchstens \(n\); ungerader Grad: mindestens 1</td></tr>
+      <tr><td class="li">lokale Extremstellen</td><td class="li">höchstens \(n-1\)</td></tr>
+      <tr><td class="li">Hochpunkt / Tiefpunkt</td><td class="li">lokal höchster / tiefster Punkt (lokales Max./Min.)</td></tr>
+      <tr><td class="li">absolutes Max./Min.</td><td class="li">grösster/kleinster Funktionswert überhaupt — existiert nicht immer</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. Symmetrie-Schnellcheck</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:45%">nur gerade Exponenten</td><td class="li">gerade Funktion (\( f(-x) = f(x) \))</td></tr>
+      <tr><td class="li">nur ungerade Exponenten</td><td class="li">ungerade Funktion (\( f(-x) = -f(x) \))</td></tr>
+    </tbody>
+  </table>
+'''
+
+C_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Definition vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Eine Polynomfunktion n-ten Grades hat die Form
+      \( f(x) = \) <span class="lueck"></span>.<br>
+      Der Koeffizient der höchsten Potenz heisst <span class="lueck"></span>
+      und darf nicht <span class="lueck"></span> sein.
+    </div>''')
+    + aufg(2, 'Polynomfunktion erkennen', 1, r'''    <p>Polynomfunktion oder nicht? Begründe kurz:</p>
+    <p>(a) \( f(x) = 3x^5 - x \) &nbsp;&nbsp; (b) \( g(x) = \sqrt{x} + 1 \) &nbsp;&nbsp;
+       (c) \( h(x) = \dfrac{x^2}{4} \) &nbsp;&nbsp; (d) \( k(x) = 2^x \)</p>
+''' + LINS)
+    + aufg(3, 'Grad und Leitkoeffizient', 1, r'''    <p>Gib Grad und Leitkoeffizient von \( f(x) = \dfrac{-4x^3 + x^2 - x}{10} \) an.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Linearfaktoren und Nullstellen</div>\n'
+    + aufg(4, 'Nullstellen ablesen', 1, r'''    <p>Gib die Nullstellen von \( f(x) = 3\,(x-1)(x+5) \) an.</p>
+''' + LINS)
+    + aufg(5, 'Ausklammern', 2, r'''    <p>Bestimme alle Nullstellen von \( f(x) = x^3 - 16x \) durch Ausklammern.</p>
+''' + LINS)
+    + aufg(6, 'Funktionsgleichung aus Nullstellen', 2, r'''    <p>Eine Polynomfunktion zweiten Grades hat die Nullstellen \(-1\) und \(3\) und den
+    \(y\)-Achsenabschnitt \(6\). Bestimme die Funktionsgleichung.</p>
+''' + LINS)
+    + aufg(7, 'Vielfachheit deuten', 2, r'''    <p>Wie verhält sich der Graph von \( f(x) = (x-2)^2 (x+3) \) an den Stellen \( x = 2 \)
+    und \( x = -3 \)?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Verlauf und Symmetrie</div>\n'
+    + aufg(8, 'Globalverlauf', 2, r'''    <p>Beschreibe den Globalverlauf von \( f(x) = -3x^4 + x \) (beide Enden des Graphen).</p>
+''' + LINS)
+    + aufg(9, 'Maximale Anzahlen', 1, r'''    <p>Wie viele Nullstellen und wie viele lokale Extremstellen kann eine Polynomfunktion
+    fünften Grades höchstens haben?</p>
+''' + LINS)
+    + aufg(10, 'Symmetrie-Schnellcheck', 2, r'''    <p>Gerade, ungerade oder keines von beidem?</p>
+    <p>(a) \( y = x^4 - 2x^2 \) &nbsp;&nbsp; (b) \( y = x^3 + x \) &nbsp;&nbsp; (c) \( y = x^3 + 1 \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Extremwerte</div>\n'
+    + aufg(11, 'Lokal oder absolut?', 3, r'''    <p>Der Graph von \( f(x) = x^3 - x^2 - 2x + 1 \) hat den Hochpunkt \( H(-0.55 \mid 1.63) \).
+    Warum ist \( 1.63 \) nur ein <em>lokales</em>, kein absolutes Maximum?</p>
+''' + LINS)
+    + aufg(12, 'Begründung', 3, r'''    <p>Begründe, warum \( f(x) = x^3 + 2x \) weder ein absolutes Maximum noch ein absolutes
+    Minimum besitzt.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p>\( f(x) = a_n x^n + a_{n-1} x^{n-1} + \dots + a_1 x + a_0 \); der Koeffizient \(a_n\)
+    heisst <strong>Leitkoeffizient</strong> und darf nicht <strong>null</strong> sein.</p>''')
+    + loes(2, r'''    <p>(a) ja, Grad 5 · (b) nein — \( \sqrt{x} = x^{1/2} \) hat keinen natürlichen Exponenten ·
+    (c) ja, Grad 2 mit \( a_2 = \tfrac{1}{4} \) · (d) nein — \(x\) steht im Exponenten.</p>''')
+    + loes(3, r'''    <p>\( f(x) = -0.4x^3 + 0.1x^2 - 0.1x \): Grad \(3\), Leitkoeffizient \(-0.4\).</p>''')
+    + loes(4, r'''    <p>\( x_1 = 1 \) und \( x_2 = -5 \) — direkt aus den Linearfaktoren.</p>''')
+    + loes(5, r'''    <p>\( x^3 - 16x = x(x^2 - 16) = x(x-4)(x+4) \Rightarrow x_1 = -4,\; x_2 = 0,\; x_3 = 4 \).</p>''')
+    + loes(6, r'''    <p>Ansatz \( f(x) = a(x+1)(x-3) \); \( f(0) = a \cdot 1 \cdot (-3) = -3a = 6 \Rightarrow a = -2 \).</p>
+    \[ f(x) = -2\,(x+1)(x-3) = -2x^2 + 4x + 6 \]''')
+    + loes(7, r'''    <p>Bei \( x = 2 \) (doppelte Nullstelle): Der Graph <strong>berührt</strong> die x-Achse.
+    Bei \( x = -3 \) (einfache Nullstelle): Er <strong>schneidet</strong> sie.</p>''')
+    + loes(8, r'''    <p>Grad 4 (gerade), \( a_4 = -3 < 0 \): <strong>beide Enden nach unten</strong> (∩-Form).</p>''')
+    + loes(9, r'''    <p>Höchstens \(5\) Nullstellen und höchstens \(4\) lokale Extremstellen.</p>''')
+    + loes(10, r'''    <p>(a) gerade (nur Exponenten 4, 2) · (b) ungerade (nur 3, 1) ·
+    (c) weder noch — das konstante Glied \(+1\) ist ein gerader Anteil neben ungeraden.</p>''')
+    + loes(11, r'''    <p>Für grosse \(x\) wächst \( x^3 \) unbeschränkt — z.B. \( f(10) = 881 \gg 1.63 \).
+    Der Wert \(1.63\) ist nur in einer <em>Umgebung</em> des Hochpunkts der grösste Funktionswert.</p>''')
+    + loes(12, r'''    <p>Grad 3 (ungerade): Für \( x \to +\infty \) wächst \(f\) über alle Grenzen, für
+    \( x \to -\infty \) fällt sie unter alle Grenzen — es gibt weder einen grössten noch einen
+    kleinsten Funktionswert. (Diese Funktion hat nicht einmal lokale Extremstellen: Sie steigt überall.)</p>''')
+)
+
+C_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Extremwerte werden
+    <strong>grafisch</strong> bestimmt (Graph zeichnen bzw. Grafikrechner) — Differentialrechnung wird
+    nicht vorausgesetzt. Musterlösungen am Ende.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Verpackung</td><td>Die offene Schachtel</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Biologie</td><td>Truthahn-Population</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Meteorologie</td><td>Temperaturverlauf</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">4</td><td>Fahrzeugbau</td><td>Flüssigkeitstank</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Geometrie</td><td>Kegel in der Kugel</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Fertigung</td><td>Tisch aus der Marmorplatte</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Die offene Schachtel', 2, r'''    <p>Aus einem Karton von \( 20 \times 15 \) cm wird eine offene Schachtel gefaltet: In den vier
+    Ecken wird je ein Quadrat der Seite \(x\) ausgeschnitten.</p>
+    <p>(a) Zeige: \( V(x) = x(20-2x)(15-2x) = 4x^3 - 70x^2 + 300x \). Grad? Sinnvoller Bereich?</p>
+    <p>(b) Bestimme grafisch das maximale Volumen und das zugehörige \(x\).</p>
+    <p>(c) Für welche \(x\) fasst die Schachtel genau \( 300\ \text{cm}^3 \)? (grafisch, zwei Lösungen)</p>
+''' + LINS4, tag='Verpackung')
+    + aufg(2, 'Truthahn-Population', 2, r'''    <p>Auf einer Insel ohne natürliche Feinde entwickelt sich eine ausgesetzte Truthahn-Population
+    näherungsweise gemäss \( h(t) = -0.00001\,t^3 + 0.002\,t^2 + 1.5\,t + 100 \) (\(t\) in Tagen).</p>
+    <p>(a) Bestimme die Anfangspopulation und skizziere den Graphen für \( 0 \leq t \leq 550 \).</p>
+    <p>(b) Wann ist die Population maximal, und wie gross ist sie dann?</p>
+    <p>(c) Wann sagt das Modell das Verschwinden der Population voraus? Deute biologisch.</p>
+''' + LINS4, tag='Biologie')
+    + aufg(3, 'Temperaturverlauf', 3, r'''    <p>Die Temperatur einer Stadt über 24 Stunden: \( T(t) = 0.01\,t(t-24)(t-18) + 10 \) in °C,
+    \( t = 0 \) um 8 Uhr morgens.</p>
+    <p>(a) Bestimme \( T(0) \), \( T(18) \), \( T(24) \) — was fällt auf?</p>
+    <p>(b) Bestimme grafisch Höchst- und Tiefsttemperatur samt Uhrzeit sowie die Wertemenge.</p>
+    <p>(c) Wann beträgt die Temperatur \(20\) °C?</p>
+''' + LINS4, tag='Meteorologie')
+    + aufg(4, 'Flüssigkeitstank', 3, r'''    <p>Ein Tank besteht aus einem Zylinder mit zwei angesetzten Halbkugeln (alle Radius \(x\));
+    Gesamtlänge \(4.2\) m. Es gilt \( V(x) = 4.2\,\pi x^2 - \tfrac{2}{3}\pi x^3 \).</p>
+    <p>(a) Leite die Formel her (Zylinderlänge \( 4.2 - 2x \)) und begründe \( 0 < x \leq 2.1 \).</p>
+    <p>(b) Für welchen Radius fasst der Tank \( 25\ \text{m}^3 \)? (grafisch, Probe)</p>
+    <p>(c) Bei welchem \(x\) ist \(V\) maximal? Welche Form hat der Tank dann?</p>
+''' + LINS4, tag='Fahrzeugbau')
+    + aufg(5, 'Kegel in der Kugel', 3, r'''    <p>In eine Kugel mit Radius \( r_1 = 2 \) dm wird ein gerader Kreiskegel (Radius \(r_2\),
+    Höhe \(h\)) einbeschrieben. Nach dem Höhensatz gilt \( r_2^2 = h\,(2r_1 - h) = h\,(4 - h) \).</p>
+    <p>(a) Zeige: \( V(h) = \tfrac{\pi}{3}\,h^2\,(4 - h) \). Welchen Grad hat dieses Polynom in \(h\)?</p>
+    <p>(b) Bestimme grafisch, für welche Höhe \(h\) das Kegelvolumen maximal wird.</p>
+    <p>(c) Gib \( r_2 \) und \( V_{\max} \) an.</p>
+''' + LINS4, tag='Geometrie')
+    + aufg(6, 'Tisch aus der Marmorplatte', 3, r'''    <p>Die Bruchkante einer Marmorplatte folgt näherungsweise \( y = x^2 - 4.6x + 4.93 \)
+    (für \( 0 \leq x \leq 1.7 \), Masse in m). Daraus soll ein rechteckiger Tisch mit Ecke
+    \( P(a \mid y(a)) \) geschnitten werden: Fläche \( A(a) = a \cdot y(a) \).</p>
+    <p>(a) Zeige: \( A(a) = a^3 - 4.6a^2 + 4.93a \) — eine Polynomfunktion dritten Grades.</p>
+    <p>(b) Bestimme grafisch das optimale \(a\) und die maximale Fläche.</p>
+    <p>(c) Gib die beiden Seitenlängen des optimalen Tischs an.</p>
+''' + LINS4, tag='Fertigung')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) Ausmultiplizieren liefert \( 4x^3 - 70x^2 + 300x \) — Grad 3; sinnvoll: \( 0 < x < 7.5 \).</p>
+    <p>(b) Hochpunkt bei \( x \approx 2.83 \) cm mit \( V_{\max} \approx 379\ \text{cm}^3 \).</p>
+    <p>(c) Ablesen am Graphen: \( x \approx 1.5 \) cm und \( x \approx 4.6 \) cm
+    (Kontrolle: \( V(1.5) \approx 306 \), genauer \( x_1 \approx 1.46 \); \( V(4.6) \approx 297 \),
+    genauer \( x_2 \approx 4.65 \) — Ablesegenauigkeit genügt).</p>''')
+    + loes(2, r'''    <p>(a) \( h(0) = 100 \) Tiere.</p>
+    <p>(b) Hochpunkt bei \( t = 300 \) Tagen: \( h(300) = 460 \) Tiere.</p>
+    <p>(c) Nullstelle bei \( t \approx 523 \) Tagen — das Modell sagt den Zusammenbruch voraus,
+    plausibel durch Überweidung der begrenzten Insel-Ressourcen. Danach verliert das Polynom-Modell
+    seine Gültigkeit (negative Bestände).</p>''')
+    + loes(3, r'''    <p>(a) \( T(0) = T(18) = T(24) = 10 \) °C — an den Nullstellen des Produktterms bleibt nur
+    die Verschiebung \(+10\).</p>
+    <p>(b) Hochpunkt \( t \approx 6.8 \) (≈ 14:50 Uhr): \( T_{\max} \approx 23.1 \) °C; Tiefpunkt
+    \( t \approx 21.2 \) (≈ 5:10 Uhr): \( T_{\min} \approx 8.1 \) °C. \( W \approx [8.1;\, 23.1] \).</p>
+    <p>(c) \( t \approx 3.3 \) (≈ 11:15 Uhr) und \( t \approx 11.0 \) (≈ 19:00 Uhr); die dritte
+    Lösung \( t \approx 27.7 \) liegt ausserhalb von \( D = [0;\, 24] \).</p>''')
+    + loes(4, r'''    <p>(a) \( V = \pi x^2 (4.2 - 2x) + \tfrac{4}{3}\pi x^3 = 4.2\pi x^2 - \tfrac{2}{3}\pi x^3 \);
+    die Halbkugeln brauchen zusammen die Länge \(2x \leq 4.2\).</p>
+    <p>(b) \( x \approx 1.59 \) m (Probe: \( V(1.592) \approx 25.0\ \text{m}^3 \) ✓).</p>
+    <p>(c) \(V\) wächst auf dem ganzen Bereich — Randmaximum bei \( x = 2.1 \) m mit
+    \( V \approx 38.8\ \text{m}^3 \): Der Tank ist dann eine reine Kugel.</p>''')
+    + loes(5, r'''    <p>(a) \( V = \tfrac{\pi}{3} r_2^2 h = \tfrac{\pi}{3} h(4-h) \cdot h = \tfrac{\pi}{3} h^2 (4-h) \)
+    — Grad 3 in \(h\).</p>
+    <p>(b) Hochpunkt bei \( h = \tfrac{8}{3} \approx 2.67 \) dm.</p>
+    <p>(c) \( r_2 = \sqrt{h(4-h)} = \tfrac{\sqrt{32}}{3} \approx 1.89 \) dm;
+    \( V_{\max} = \tfrac{256\pi}{81} \approx 9.93\ \text{dm}^3 \).</p>''')
+    + loes(6, r'''    <p>(a) \( A(a) = a(a^2 - 4.6a + 4.93) = a^3 - 4.6a^2 + 4.93a \). ✓</p>
+    <p>(b) Hochpunkt bei \( a \approx 0.69 \) m mit \( A_{\max} \approx 1.54\ \text{m}^2 \).</p>
+    <p>(c) Seiten \( a \approx 0.69 \) m und \( y(0.69) \approx 2.23 \) m.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -790,6 +1084,14 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', B_TDS),
     ('s3-2b-wurzelfunktionen', 'Wurzelfunktionen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Wurzelfunktionen', STYLE_SERIE, '1.0', '', B_SERIE),
+    ('s3-3-polynomfunktionen', 'Polynomfunktionen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', C_HANDOUT),
+    ('s3-3-polynomfunktionen', 'Polynomfunktionen', 'Formelauszug', 'formelauszug.html',
+     'Polynomfunktionen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, C_FORMELAUSZUG),
+    ('s3-3-polynomfunktionen', 'Polynomfunktionen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', C_TDS),
+    ('s3-3-polynomfunktionen', 'Polynomfunktionen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Polynomfunktionen', STYLE_SERIE, '1.0', '', C_SERIE),
 ]
 
 

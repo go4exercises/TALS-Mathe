@@ -1045,6 +1045,55 @@ s32b_cards = [
 ]
 
 
+# ─── s3-3 Polynomfunktionen (Schwerpunkt) ───────────────────
+s33_cards = [
+    # Definitionen
+    ('Was ist eine <i>Polynomfunktion</i> (ganzrationale Funktion)?',
+     '<b>f(x) = aₙxⁿ + … + a₁x + a₀</b> mit n ∈ ℕ, aₖ ∈ ℝ, aₙ ≠ 0 — eine Linearkombination von Potenzfunktionen.'),
+    ('Was heisst <i>Grad</i> und <i>Leitkoeffizient</i>?',
+     'Der <b>Grad n</b> ist der höchste Exponent, der <b>Leitkoeffizient aₙ</b> der Koeffizient davor (aₙ ≠ 0).'),
+    ('Bekannte Spezialfälle der Polynomfunktion?',
+     'Grad 1: <b>lineare Funktion</b>; Grad 2: <b>quadratische Funktion</b>; nur ein Term aₙxⁿ: <b>Potenzfunktion</b>.'),
+    ('Ist f(x) = 2x⁴ − 1/x² eine Polynomfunktion?',
+     '<b>Nein</b> — 1/x² = x⁻² hat einen negativen Exponenten. Polynome brauchen natürliche Exponenten.'),
+    # Linearfaktoren
+    ('Was ist die <i>Linearfaktordarstellung</i>?',
+     '<b>f(x) = aₙ·(x−x₁)(x−x₂)···(x−xₙ)</b> — die Nullstellen stehen direkt in den Faktoren.'),
+    ('Wie verhält sich der Graph an einer <i>einfachen</i> Nullstelle?',
+     'Er <b>schneidet</b> die x-Achse (Vorzeichenwechsel).'),
+    ('Wie verhält sich der Graph an einer <i>doppelten</i> Nullstelle?',
+     'Er <b>berührt</b> die x-Achse — Hoch- oder Tiefpunkt auf der Achse, kein Vorzeichenwechsel.'),
+    ('Wie verhält sich der Graph an einer <i>dreifachen</i> Nullstelle?',
+     'Er <b>schneidet terrassenförmig abgeflacht</b> (Vorzeichenwechsel mit Sattel).'),
+    ('Grad 2, Nullstellen 3 und −4, y-Achsenabschnitt −24: Funktionsgleichung?',
+     'Ansatz f(x) = a(x−3)(x+4); f(0) = −12a = −24 → a = 2: <b>f(x) = 2(x−3)(x+4)</b>.'),
+    ('Nullstellen von f(x) = x³ − 9x?',
+     'Ausklammern: x(x−3)(x+3) → <b>x = −3, 0, 3</b> (Satz vom Nullprodukt).'),
+    # Verlauf
+    ('Globalverlauf bei ungeradem Grad?',
+     'Enden <b>entgegengesetzt</b>: aₙ &gt; 0 von links unten nach rechts oben ↗; aₙ &lt; 0 umgekehrt ↘.'),
+    ('Globalverlauf bei geradem Grad?',
+     'Enden <b>gleich</b>: aₙ &gt; 0 beide oben ∪; aₙ &lt; 0 beide unten ∩.'),
+    ('Wie viele Nullstellen hat eine Polynomfunktion n-ten Grades höchstens?',
+     '<b>Höchstens n</b> — bei ungeradem Grad mindestens eine (durchgehende Kurve kreuzt die Achse).'),
+    ('Wie viele lokale Extremstellen höchstens?',
+     '<b>Höchstens n − 1</b> (Hochpunkte und Tiefpunkte zusammen).'),
+    ('Stimmt «Grad = Anzahl Nullstellen»?',
+     '<b>Nein</b> — der Grad ist nur die Obergrenze: x² + 1 hat Grad 2 und keine Nullstelle.'),
+    # Extremwerte
+    ('Was ist ein <i>Hochpunkt</i>?',
+     'Ein <b>lokal höchster Punkt</b> des Graphen; seine y-Koordinate ist ein lokales (relatives) Maximum.'),
+    ('Lokales vs. absolutes Maximum?',
+     '<b>Lokal</b>: grösster Wert in einer Umgebung. <b>Absolut</b>: grösster Funktionswert überhaupt — bei ungeradem Grad existiert er nie.'),
+    # Symmetrie
+    ('Symmetrie-Schnellcheck über die Exponenten?',
+     'Nur <b>gerade</b> Exponenten (inkl. a₀): gerade Funktion, achsensymmetrisch. Nur <b>ungerade</b> (a₀ = 0!): ungerade, punktsymmetrisch.'),
+    ('Ist f(x) = x⁵ − 3x³ + x + 1 gerade oder ungerade?',
+     '<b>Weder noch</b> — das konstante Glied +1 ist ein gerader Anteil neben den ungeraden Exponenten.'),
+    ('Gerade Funktion mit Nullstelle bei x = 2: Welche weitere Nullstelle ist sicher?',
+     '<b>x = −2</b> — Achsensymmetrie: f(−2) = f(2) = 0.'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -1108,6 +1157,8 @@ SP_DECKS = [
      'Parabeln und Hyperbeln n-ter Ordnung, Symmetrie, Asymptoten, Transformationen.', s32a_cards),
     ('s3-2b-wurzelfunktionen', '3.2b Wurzelfunktionen',
      'Wurzelfunktion als Umkehrfunktion, Spiegelung an y = x, Definitionsbereiche, Wurzelgleichungen.', s32b_cards),
+    ('s3-3-polynomfunktionen', '3.3 Polynomfunktionen',
+     'Grad und Leitkoeffizient, Linearfaktoren und Vielfachheit, Globalverlauf, Extremstellen.', s33_cards),
 ]
 
 for slug, deck_short, deck_desc, cards in SP_DECKS:
