@@ -6,7 +6,10 @@ Berechnet zwei Metriken:
 import re
 from pathlib import Path
 
-ROOT = Path("/home/claude/tals-mathe_26_5/downloads/grundlagen")
+import os
+
+# Repo-Root: Elternverzeichnis von scripts/, überschreibbar via Umgebungsvariable TALS_ROOT
+ROOT = Path(os.environ.get("TALS_ROOT") or Path(__file__).resolve().parent.parent) / "downloads" / "grundlagen"
 
 def extract_content(html_path: Path) -> str:
     """Extrahiere den Inhalts-Bereich (zwischen druck-wrapper / druck-bar) als plain text."""

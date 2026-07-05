@@ -17,7 +17,8 @@ import glob
 import sys
 import difflib
 
-ROOT = "/home/claude/work/tals-mathe_26_9"
+# Repo-Root: Elternverzeichnis von scripts/, überschreibbar via Umgebungsvariable TALS_ROOT
+ROOT = os.environ.get("TALS_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def protect_regions(text):

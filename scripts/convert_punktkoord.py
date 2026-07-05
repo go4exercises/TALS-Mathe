@@ -17,7 +17,8 @@ Identifizierte echte Punkt-Koordinaten (alle in g5-2d):
 import os
 import sys
 
-ROOT = "/home/claude/work/tals-mathe_26_9"
+# Repo-Root: Elternverzeichnis von scripts/, überschreibbar via Umgebungsvariable TALS_ROOT
+ROOT = os.environ.get("TALS_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Liste von (Datei, alt, neu)-Tripeln.
 # Jede Stelle wird einzeln verifiziert und ersetzt.
