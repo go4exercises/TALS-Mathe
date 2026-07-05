@@ -40,7 +40,8 @@ const SITE = {
     { id:'s2-1', nr:'2.1', titel:'Grundlagen', url:'schwerpunkt/s2-1-grundlagen.html' },
     { id:'s2-2', nr:'2.2', titel:'Gleichungstypen', url:'schwerpunkt/s2-2-gleichungstypen.html' },
     { id:'s3-1', nr:'3.1', titel:'Grundlagen', url:'schwerpunkt/s3-1-grundlagen.html' },
-    { id:'s3-2', nr:'3.2', titel:'Potenz- und Wurzelfunktionen', url:'schwerpunkt/s3-2-potenz-wurzelfunktionen.html' },
+    { id:'s3-2a', nr:'3.2a', titel:'Potenzfunktionen', url:'schwerpunkt/s3-2a-potenzfunktionen.html' },
+    { id:'s3-2b', nr:'3.2b', titel:'Wurzelfunktionen', url:'schwerpunkt/s3-2b-wurzelfunktionen.html' },
     { id:'s3-3', nr:'3.3', titel:'Polynomfunktionen', url:'schwerpunkt/s3-3-polynomfunktionen.html' },
     { id:'s3-4', nr:'3.4', titel:'Exponential- und Logarithmusfunktionen', url:'schwerpunkt/s3-4-exponential-logarithmusfunktionen.html' },
     { id:'s3-5', nr:'3.5', titel:'Trigonometrische Funktionen', url:'schwerpunkt/s3-5-trigonometrische-funktionen.html' },
@@ -62,7 +63,7 @@ const GROUPS = {
   schwerpunkt: [
     { nr:'1', titel:'Arithmetik/Algebra', ids:['s1-1', 's1-2', 's1-3'] },
     { nr:'2', titel:'Gleichungen', ids:['s2-1', 's2-2'] },
-    { nr:'3', titel:'Funktionen', ids:['s3-1', 's3-2', 's3-3', 's3-4', 's3-5'] },
+    { nr:'3', titel:'Funktionen', ids:['s3-1', 's3-2a', 's3-2b', 's3-3', 's3-4', 's3-5'] },
     { nr:'4', titel:'Geometrie', ids:['s4-1', 's4-2', 's4-3'] }
   ]
 };

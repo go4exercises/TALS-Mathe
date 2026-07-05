@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3.2a Potenzfunktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 3 · Funktionen · 55 Lektionen</div>
+  <h1 class="pt-h1">3.2a Potenzfunktionen</h1>
+  <div class="pt-untertitel">RLP 3.2 · Teil 1 von 2</div>
+</div>
+
+<p class="lead"><strong>Potenzfunktionen</strong> der Form \(f(x) = a \cdot x^n\) mit ganzzahligen Exponenten sind die Grundbausteine vieler Funktionsklassen: Ihre Graphen sind <strong>Parabeln n-ter Ordnung</strong> (positive Exponenten) oder <strong>Hyperbeln n-ter Ordnung</strong> (negative Exponenten). Hier untersuchst du ihren Verlauf, ihre Symmetrien, das asymptotische Verhalten und die Wirkung von Streckungen und Verschiebungen.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.2</div>
+  <ul>
+    <li>die Wurzelfunktionen als Umkehrfunktion der Potenzfunktion mit ganzzahligen Exponenten berechnen, interpretieren und grafisch darstellen <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite legt den Grundstein: die Potenzfunktionen selbst. Die Wurzelfunktionen als ihre Umkehrfunktionen werden in <a href="s3-2b-wurzelfunktionen.html">Teil 2 (s3-2b)</a> behandelt.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann eine Potenzfunktion \(f(x) = a \cdot x^n\) mit \(n \in \mathbb{Z} \setminus \{0\}\) erkennen und von anderen Funktionstypen unterscheiden.</li>
+      <li>Ich kann die Graphen für gerade und ungerade Exponenten skizzieren und ihre Symmetrie (Achsen- bzw. Punktsymmetrie) begründen.</li>
+      <li>Ich kann Definitions- und Wertemenge sowie die gemeinsamen Punkte der Parabeln und Hyperbeln n-ter Ordnung angeben.</li>
+      <li>Ich kann horizontale und vertikale Asymptoten von Hyperbeln bestimmen und die Polstelle benennen.</li>
+      <li>Ich kann die Wirkung der Parameter in \(f(x) = a \cdot (x-u)^n + v\) beschreiben und Nullstellen solcher Funktionen berechnen.</li>
+      <li>Ich kann aus vorgegebenen Punkten die Parameter \(a\) und \(n\) einer Potenzfunktion bestimmen.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — ein Ballon wird aufgeblasen</h2>
+
+<p>Ein kugelförmiger Ballon wird mit Helium gefüllt. Sein Radius wächst dabei um <strong>4&nbsp;cm pro Sekunde</strong>, also \(r(t) = 0.4 \cdot t\) in Dezimetern. Für das Volumen gilt:</p>
+
+\[ V(t) = \frac{4}{3}\,\pi \cdot \bigl(0.4 \cdot t\bigr)^3 \approx 0.268 \cdot t^3 \quad [\text{dm}^3] \]
+
+<p>Das Volumen wächst mit der <strong>dritten Potenz</strong> der Zeit. Bei \(150\ \text{dm}^3\) platzt der Ballon — wann ist es so weit?</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🎈 Ballon füllen — \(V(t) \approx 0.268 \cdot t^3\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verdopple die Zeit, z.B. von \(2.5\) s auf \(5\) s: Um welchen Faktor wächst das Volumen? Vergleiche den Zuwachs am Anfang (flach) mit dem Zuwachs am Ende (steil).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verdopple die Zeit, zum Beispiel von zwei Komma fünf Sekunden auf fünf Sekunden: Um welchen Faktor wächst das Volumen? Vergleiche den Zuwachs am Anfang mit dem Zuwachs am Ende.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Doppelte Zeit heisst \(2^3 = 8\)-faches Volumen — typisch für eine Potenzfunktion dritten Grades. Der Graph ist keine Gerade: Die Änderungsrate wächst mit. Der Ballon platzt nach etwa \(8.2\) Sekunden.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Doppelte Zeit heisst zwei hoch drei gleich achtfaches Volumen — typisch für eine Potenzfunktion dritten Grades. Der Graph ist keine Gerade: Die Änderungsrate wächst mit. Der Ballon platzt nach etwa acht Komma zwei Sekunden.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Radiuswachstum 4 cm/s · Platzgrenze 150 dm³</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Zeit <span class="var">\(t\)</span> [s]</label>
+      <input type="range" id="ba-t" min="0" max="8" step="0.5" value="5">
+      <span class="sl-val"><span id="ba-tv">5.0</span> s</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktion und Auswertung</div>
+      <div class="fl-eq">V(<span class="tx-blau">t</span>) = 0.268·<span class="tx-blau">t</span>³</div>
+      <div class="fl-eq" id="ba-eq" style="font-size:0.95rem;margin-top:4px">V(<span class="tx-blau">5.0</span>) = 0.268·<span class="tx-blau">5.0</span>³ = 33.51 dm³</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ba-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Zusammenhang \(t \mapsto V\) ist keine lineare und keine quadratische Funktion — das Volumen hängt von der <strong>dritten Potenz</strong> der Zeit ab:</p>
+  <ul style="margin-top:6px">
+    <li>Verdoppelung der Zeit → Verachtfachung des Volumens (\(2^3 = 8\))</li>
+    <li>Der Graph startet flach und wird immer steiler — die Änderungsrate ist nicht konstant</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Zeit wird verdreifacht. Um welchen Faktor wächst das Ballonvolumen \(V(t) \approx 0.268 \cdot t^3\)?</p><ul class="mc-optionen"><li data-opt="A">Faktor 3</li><li data-opt="B">Faktor 9</li><li data-opt="C">Faktor 27</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(V(3t) = 0.268 \cdot (3t)^3 = 3^3 \cdot 0.268 \cdot t^3 = 27 \cdot V(t)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Exponent der Zeitvariablen in der Ballon-Funktion ist <span class="mc-luecke"></span> — darum verachtfacht sich das Volumen bei Verdopplung der Zeit.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">3 — denn \(V\) hängt über \(r^3\) von \(t\) ab, und \(2^3 = 8\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne das Ballonvolumen nach \(2\) Sekunden.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V(2) = 0.268 \cdot 2^3 = 0.268 \cdot 8 \approx 2.14\ \text{dm}^3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Der Ballon platzt bei \(150\ \text{dm}^3\). Stelle die Gleichung auf und bestimme die Platzzeit.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ansatz: \(0.268 \cdot t^3 = 150\), also \(t^3 = \dfrac{150}{0.268} \approx 559.6\) und damit \(t = \sqrt[3]{559.6} \approx 8.2\) s. (Die dritte Wurzel ist die Umkehrung des Potenzierens — genau darum geht es in <a href="s3-2b-wurzelfunktionen.html">Teil 2</a>.)</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definition</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Potenzfunktion</div>
+  <p>Eine Funktion \(f : \mathbb{R} \longrightarrow \mathbb{R}\) mit einer Gleichung der Form</p>
+  \[ y = f(x) = a \cdot x^n, \qquad n \in \mathbb{Z} \setminus \{0\},\quad a \in \mathbb{R} \setminus \{0\} \]
+  <p>heisst <strong>Potenzfunktion</strong>. Der Exponent \(n\) ist eine ganze Zahl, der Koeffizient \(a\) eine reelle Zahl.</p>
+</div>
+
+<div class="block block-tipp" style="margin-top:8px">
+  <div class="block-titel">💡 Zwei Spezialfälle des Exponenten</div>
+  <ul style="margin-top:4px">
+    <li>\(n = 0\): Es ergäbe sich die <strong>konstante Funktion</strong> \(y = x^0 = 1\). Dieser Fall gehört <strong>nicht</strong> zu den Potenzfunktionen.</li>
+    <li>\(n = 1\): Es ergibt sich die <strong>lineare Funktion</strong> \(y = x\). Dieser Fall gehört zu den Potenzfunktionen.</li>
+  </ul>
+  <p style="margin-top:6px">Die Rechenregeln für Potenzen (Potenzgesetze) werden auf der Seite <a class="quer" href="s1-2-potenzen.html">↩ 1.2 Potenzen</a> behandelt.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Gerade und ungerade Funktionen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Begriff</th><th>Bedingung</th><th>Symmetrie des Graphen</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left">gerade Funktion</td><td>\(f(-x) = f(x)\)</td><td style="text-align:left;font-family:var(--sans)">Achsensymmetrie bezüglich der \(y\)-Achse</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">ungerade Funktion</td><td>\(f(-x) = -f(x)\)</td><td style="text-align:left;font-family:var(--sans)">Punktsymmetrie bezüglich des Ursprungs \((0 \mid 0)\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Bei Potenzfunktionen entscheidet die <strong>Parität des Exponenten</strong>: gerades \(n\) → gerade Funktion, ungerades \(n\) → ungerade Funktion.</p>
+</div>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Die drei Darstellungen</h2>
+
+<p>Verändere den Koeffizienten \(a\), den Exponenten \(n\) und den Eingabewert \(x\) — Gleichung, Wertetabelle und Graph aktualisieren sich gleichzeitig.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Interaktive Darstellungen — \(f(x) = a \cdot x^n\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Stelle zuerst \(a = 1\) und wechsle nur \(n\): Vergleiche \(n = 2\) mit \(n = 4\) und \(n = 3\) mit \(n = 5\). Was passiert bei negativen \(n\) an der Stelle \(x = 0\) — schau in die Wertetabelle!</div>
+          <button class="ah-speak" type="button" data-vorlesen="Stelle zuerst a gleich eins und wechsle nur n: Vergleiche n gleich zwei mit n gleich vier und n gleich drei mit n gleich fünf. Was passiert bei negativen n an der Stelle x gleich null — schau in die Wertetabelle!">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Gerades \(n\): achsensymmetrischer Graph; ungerades \(n\): punktsymmetrischer Graph. Grösseres \(|n|\) macht die Kurve zwischen \(-1\) und \(1\) flacher und aussen steiler. Bei negativem \(n\) ist \(x = 0\) nicht definiert — der Graph zerfällt in zwei Äste.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Gerades n: achsensymmetrischer Graph; ungerades n: punktsymmetrischer Graph. Grösseres n macht die Kurve zwischen minus eins und eins flacher und aussen steiler. Bei negativem n ist x gleich null nicht definiert — der Graph zerfällt in zwei Äste.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Koeffizient \(a\) · Exponent \(n \in \{-4,\dots,-1,\,1,\dots,5\}\) · Auswertung an der Stelle \(x\)</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Koeffizient <span class="var">\(a\)</span></label><input type="range" id="dr-a" min="0" max="7" step="1" value="5"><span class="sl-val" id="dr-av">1</span></div>
+      <div class="sl-grp akz-orange"><label>Exponent <span class="var">\(n\)</span></label><input type="range" id="dr-n" min="0" max="8" step="1" value="6"><span class="sl-val" id="dr-nv">3</span></div>
+      <div class="sl-grp akz-gruen"><label>Eingabewert <span class="var">\(x\)</span></label><input type="range" id="dr-x" min="-3" max="3" step="1" value="2"><span class="sl-val" id="dr-xv">2</span></div>
+    </div>
+
+    <div class="formel-live">
+      <div class="fl-label">① Funktionsgleichung</div>
+      <div class="fl-eq" id="dr-eq">f(<span class="tx-gruen">x</span>) = <span class="tx-blau">1</span>·<span class="tx-gruen">x</span><span class="tx-orange">³</span></div>
+      <div class="fl-eq" id="dr-eval" style="font-size:0.95rem;margin-top:4px">f(<span class="tx-gruen">2</span>) = 8</div>
+    </div>
+
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">② Wertetabelle</div>
+        <table class="ftb-tabelle" id="dr-table">
+          <thead><tr><th>\(x\)</th><th>\(y=f(x)\)</th><th>Punkt</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">③ Graph</div>
+        <div class="cv-wrap"><canvas id="dr-canvas" height="220"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition und Darstellungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche der folgenden Funktionen ist eine Potenzfunktion im Sinn der Definition?</p><ul class="mc-optionen"><li data-opt="A">\(f(x) = 3 \cdot x^{-2}\)</li><li data-opt="B">\(f(x) = 2^x\)</li><li data-opt="C">\(f(x) = x^2 + 1\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(3 \cdot x^{-2}\) hat die Form \(a \cdot x^n\) mit \(a = 3\), \(n = -2\). Bei \(2^x\) steht \(x\) im Exponenten (Exponentialfunktion), und \(x^2 + 1\) ist wegen des Summanden keine reine Potenzfunktion.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Gilt \(f(-x) = -f(x)\) für alle \(x\), so heisst die Funktion <span class="mc-luecke"></span> und ihr Graph ist punktsymmetrisch zum Ursprung.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">ungerade — bei Potenzfunktionen genau dann, wenn der Exponent ungerade ist.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(f(-2)\) für \(f(x) = x^5\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(f(-2) = (-2)^5 = -32\) — das Minus bleibt, weil der Exponent ungerade ist.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum hat \(f(x) = x^{-2}\) an der Stelle \(x = 0\) keinen Funktionswert, und was bedeutet das für den Graphen?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(x^{-2} = \dfrac{1}{x^2}\) — bei \(x = 0\) müsste durch null dividiert werden. Die Stelle \(x_0 = 0\) ist eine <strong>Definitionslücke</strong>: Der Graph zerfällt in zwei Äste, die sich der \(y\)-Achse beliebig nähern, sie aber nie erreichen (vertikale Asymptote).</div></details></div>
+</details>
+
+
+<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
+<h2 id="typen">Typen — Parabeln und Hyperbeln n-ter Ordnung</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Parabel n-ter Ordnung</div>
+  <p>Der Graph einer Potenzfunktion mit \(n \in \mathbb{N}^* = \{1;\, 2;\, 3;\, \dots\}\) heisst <strong>Parabel n-ter Ordnung</strong>.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-top:10px">
+  <thead><tr><th>Eigenschaften</th><th>\(y = x^{2n-1}\) (ungerade)</th><th>\(y = x^{2n}\) (gerade)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Definitionsmenge</td><td>\(D = \mathbb{R}\)</td><td>\(D = \mathbb{R}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wertemenge</td><td>\(W = \mathbb{R}\)</td><td>\(W = \mathbb{R}_0^+\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Gemeinsame Punkte</td><td>\((0 \mid 0)\), \((1 \mid 1)\), \((-1 \mid -1)\)</td><td>\((0 \mid 0)\), \((1 \mid 1)\), \((-1 \mid 1)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstellen</td><td>\(x_0 = 0\)</td><td>\(x_0 = 0\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetrie</td><td style="text-align:left;font-family:var(--sans)">punktsymmetrisch zum Ursprung (ungerade Funktion)</td><td style="text-align:left;font-family:var(--sans)">achsensymmetrisch zur \(y\)-Achse (gerade Funktion)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-tipp" style="margin-top:10px">
+  <div class="block-titel">💡 Terrassenpunkt und Flachpunkt</div>
+  <p>Der Punkt \(S = (0 \mid 0)\) heisst bei Potenzfunktionen mit ungeraden Exponenten (\(n \geq 3\)) <strong>Terrassenpunkt</strong>, bei geraden Exponenten <strong>Flachpunkt</strong> — die Kurve verläuft dort besonders flach.</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Hyperbel n-ter Ordnung</div>
+  <p>Der Graph einer Potenzfunktion mit \(n \in \mathbb{Z}^- = \{-1;\, -2;\, -3;\, \dots\}\) heisst <strong>Hyperbel n-ter Ordnung</strong>. Der Funktionsterm kann als Bruch geschrieben werden:</p>
+  \[ y = x^{-n} = \frac{1}{x^{n}}, \qquad n \in \mathbb{N}^* \]
+</div>
+
+<table class="ftb-tabelle" style="margin-top:10px">
+  <thead><tr><th>Eigenschaften</th><th>\(y = \dfrac{1}{x^{2n-1}}\) (ungerade)</th><th>\(y = \dfrac{1}{x^{2n}}\) (gerade)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Definitionsmenge</td><td>\(D = \mathbb{R} \setminus \{0\}\)</td><td>\(D = \mathbb{R} \setminus \{0\}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wertemenge</td><td>\(W = \mathbb{R} \setminus \{0\}\)</td><td>\(W = \mathbb{R}^+\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Gemeinsame Punkte</td><td>\((1 \mid 1)\), \((-1 \mid -1)\)</td><td>\((1 \mid 1)\), \((-1 \mid 1)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstellen</td><td>—</td><td>—</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetrie</td><td style="text-align:left;font-family:var(--sans)">punktsymmetrisch zum Ursprung (ungerade Funktion)</td><td style="text-align:left;font-family:var(--sans)">achsensymmetrisch zur \(y\)-Achse (gerade Funktion)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Asymptoten</td><td>\(x = 0\); \(y = 0\)</td><td>\(x = 0\); \(y = 0\)</td></tr>
+  </tbody>
+</table>
+
+<div class="widget-titelzeile" style="margin-top:14px;margin-bottom:8px">
+  <p style="margin:0">Klicke auf eine Funktion — ihr Graph mit den gemeinsamen Punkten wird angezeigt:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Vergleiche \(x^2\) mit \(x^4\): Wo liegt \(x^4\) unterhalb, wo oberhalb von \(x^2\)? Und beobachte bei den Hyperbeln, wie sich die Äste den Achsen nähern, ohne sie je zu berühren.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Vergleiche x hoch zwei mit x hoch vier: Wo liegt x hoch vier unterhalb, wo oberhalb von x hoch zwei? Und beobachte bei den Hyperbeln, wie sich die Äste den Achsen nähern, ohne sie je zu berühren.">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Alle Graphen laufen durch \((1 \mid 1)\). Zwischen \(0\) und \(1\) gilt \(x^4 &lt; x^2\), ausserhalb \(x^4 &gt; x^2\). Die Hyperbel-Äste schmiegen sich an die Koordinatenachsen an — das ist asymptotisches Verhalten.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Alle Graphen laufen durch den Punkt eins senkrecht eins. Zwischen null und eins ist x hoch vier kleiner als x hoch zwei, ausserhalb grösser. Die Hyperbel-Äste schmiegen sich an die Koordinatenachsen an — das ist asymptotisches Verhalten.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+
+<div class="typ-btns" id="typ-btns"></div>
+<div class="cv-wrap"><canvas id="typ-canvas" height="220"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="typ-desc"></div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Parabeln und Hyperbeln</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Punkte haben <em>alle</em> Potenzfunktionen \(y = x^{2n}\) mit geraden, natürlichen Exponenten gemeinsam?</p><ul class="mc-optionen"><li data-opt="A">\((0 \mid 0)\), \((1 \mid 1)\), \((-1 \mid 1)\)</li><li data-opt="B">\((0 \mid 0)\), \((1 \mid 1)\), \((-1 \mid -1)\)</li><li data-opt="C">\((0 \mid 1)\), \((1 \mid 1)\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(0^{2n} = 0\), \(1^{2n} = 1\) und \((-1)^{2n} = 1\) für jedes gerade \(2n\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Definitionslücke einer Hyperbel bei \(x_0 = 0\) heisst auch <span class="mc-luecke"></span>, die zugehörige senkrechte Gerade Polgerade.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Polstelle (kurz: Pol) — dort wächst \(|f(x)|\) über alle Grenzen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Gib die Asymptoten der Hyperbel \(y = \dfrac{1}{x^3}\) an.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Vertikale Asymptote \(x = 0\) (die \(y\)-Achse), horizontale Asymptote \(y = 0\) (die \(x\)-Achse).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Begründe, warum die Wertemenge von \(y = \dfrac{1}{x^2}\) nur aus positiven Zahlen besteht — und warum die \(0\) nicht dazugehört.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(x^2 &gt; 0\) für alle \(x \neq 0\), also ist auch \(\tfrac{1}{x^2} &gt; 0\). Der Wert \(0\) wird nie erreicht: \(\tfrac{1}{x^2} = 0\) hätte keine Lösung, denn ein Bruch mit Zähler \(1\) wird nie null. Also \(W = \mathbb{R}^+\).</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Asymptoten und Transformationen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Horizontale Asymptote</div>
+  <p>Eine Gerade, an die sich der Graph einer Funktion mit immer grösser werdender Entfernung vom Ursprung des Koordinatensystems <strong>in \(x\)-Richtung</strong> immer mehr annähert, ohne sie zu schneiden.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Definition — Vertikale Asymptote</div>
+  <p>Eine Gerade, an die sich der Graph einer Funktion mit immer grösser werdender Entfernung vom Ursprung des Koordinatensystems <strong>in \(y\)-Richtung</strong> immer mehr annähert, ohne sie zu schneiden. Die zugehörige Definitionslücke \(x_0\) heisst <strong>Polstelle</strong> (kurz: Pol), die senkrechte Gerade \(x = x_0\) <strong>Polgerade</strong>.</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Transformationen — \(y = a \cdot (x-u)^n + v\)</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Parameter</th><th>Wirkung auf den Graphen von \(y = x^n\)</th></tr></thead>
+    <tbody>
+      <tr><td>\(u\)</td><td style="text-align:left;font-family:var(--sans)">Verschiebung um \(u\) in \(x\)-Richtung (nach rechts für \(u &gt; 0\))</td></tr>
+      <tr><td>\(v\)</td><td style="text-align:left;font-family:var(--sans)">Verschiebung um \(v\) in \(y\)-Richtung (nach oben für \(v &gt; 0\))</td></tr>
+      <tr><td>\(|a|\)</td><td style="text-align:left;font-family:var(--sans)">Streckung (\(|a| &gt; 1\)) bzw. Stauchung (\(|a| &lt; 1\)) in \(y\)-Richtung</td></tr>
+      <tr><td>\(a &lt; 0\)</td><td style="text-align:left;font-family:var(--sans)">zusätzlich Spiegelung an der \(x\)-Achse</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Bei einer verschobenen Hyperbel wandern die Asymptoten mit: vertikale Asymptote \(x = u\), horizontale Asymptote \(y = v\).</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Verschobene Hyperbel — \(y = \dfrac{1}{(x-u)^p} + v\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verschiebe zuerst nur \(u\): Welche Asymptote wandert mit? Dann nur \(v\). Wechsle zwischen den Ordnungen \(p = 1\) und \(p = 2\): Wie unterscheiden sich die beiden Äste?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verschiebe zuerst nur u: Welche Asymptote wandert mit? Dann nur v. Wechsle zwischen den Ordnungen p gleich eins und p gleich zwei: Wie unterscheiden sich die beiden Äste?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Polgerade \(x = u\) folgt der horizontalen, die Asymptote \(y = v\) der vertikalen Verschiebung. Bei ungerader Ordnung liegen die Äste diagonal gegenüber, bei gerader Ordnung beide oberhalb von \(y = v\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Polgerade x gleich u folgt der horizontalen, die Asymptote y gleich v der vertikalen Verschiebung. Bei ungerader Ordnung liegen die Äste diagonal gegenüber, bei gerader Ordnung beide oberhalb von y gleich v.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Verschiebung \(u\), \(v\) · Hyperbel-Ordnung \(p \in \{1;\, 2\}\) · Asymptoten gestrichelt</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="hy-p-btns">
+      <button class="typ-btn aktiv" onclick="setHyP(1)">p = 1</button>
+      <button class="typ-btn" onclick="setHyP(2)">p = 2</button>
+    </div>
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Verschiebung <span class="var">\(u\)</span></label><input type="range" id="hy-u" min="-3" max="3" step="1" value="1"><span class="sl-val" id="hy-uv">1</span></div>
+      <div class="sl-grp akz-orange"><label>Verschiebung <span class="var">\(v\)</span></label><input type="range" id="hy-v" min="-3" max="3" step="1" value="-1"><span class="sl-val" id="hy-vv">−1</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktionsgleichung und Asymptoten</div>
+      <div class="fl-eq" id="hy-eq">y = 1/(x − <span class="tx-blau">1</span>)¹ − <span class="tx-orange">1</span></div>
+      <div class="fl-eq" id="hy-asym" style="font-size:0.95rem;margin-top:4px">Polgerade: x = <span class="tx-blau">1</span> · Asymptote: y = <span class="tx-orange">−1</span></div>
+    </div>
+    <div class="cv-wrap"><canvas id="hy-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Beispiel 1 — Verschiebung</div>
+  <p>Der Graph von \(f_1: y = \tfrac{1}{4} \cdot x^5\) wird um \(4\) Einheiten nach rechts und \(3\) Einheiten nach oben verschoben. Gesucht ist die Gleichung der Bildfunktion \(f_2\).</p>
+  <p><strong>Lösung:</strong></p>
+  \[ f_2:\; y = \tfrac{1}{4} \cdot (x-4)^5 + 3 \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Nullstellen</div>
+  <p>Bestimme die Nullstellen der Funktion \(f: y = (x-3)^4 - 16\).</p>
+  <p><strong>Lösung:</strong> Wir setzen \(y = 0\) und lösen nach \(x\) auf:</p>
+  \[ 0 = (x-3)^4 - 16 \;\Longrightarrow\; (x-3)^4 = 16 \;\Longrightarrow\; x - 3 = \pm\sqrt[4]{16} = \pm 2 \]
+  \[ x_1 = 3 + 2 = 5, \qquad x_2 = 3 - 2 = 1 \]
+  <p>Beim Wurzelziehen mit geradem Exponenten entstehen <strong>zwei</strong> Lösungen (\(\pm\)).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Symmetrienachweis</div>
+  <p>Zeige, dass die Funktion \(f: y = \tfrac{1}{2} x^8 - 3\) gerade ist.</p>
+  <p><strong>Lösung:</strong> Es muss \(f(-x) = f(x)\) gelten. Wir ersetzen \(x\) durch \(-x\):</p>
+  \[ f(-x) = \tfrac{1}{2} (-x)^8 - 3 = \tfrac{1}{2} x^8 - 3 = f(x) \quad\checkmark \]
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \((-x)^n\) und \(-x^n\) verwechseln</div>
+  <p>\((-2)^4 = 16\), aber \(-2^4 = -(2^4) = -16\). Die Klammer entscheidet, ob das Minus mitpotenziert wird. Beim Symmetrienachweis \(f(-x)\) muss das <strong>ganze</strong> Argument in Klammern ersetzt werden: \(f(-x) = a \cdot (-x)^n\), nicht \(a \cdot (-x^n)\).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — „Der Graph berührt die Asymptote irgendwann"</div>
+  <p>Die Hyperbel kommt der Asymptote beliebig nahe, <strong>erreicht sie aber nie</strong>: \(\tfrac{1}{x} = 0\) hat keine Lösung. Wer im Graphen die Kurve auf der Achse „aufliegen" lässt, zeichnet falsch — bei jeder noch so grossen Entfernung bleibt ein Abstand.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Nullstellen von \(a(x-u)^n + v = 0\)</div>
+  <p>Immer zuerst nach der Potenz auflösen: \((x-u)^n = -\tfrac{v}{a}\). Dann die \(n\)-te Wurzel ziehen — bei <strong>geradem</strong> \(n\) gibt es zwei Lösungen (\(\pm\)), falls die rechte Seite positiv ist, und keine, falls sie negativ ist. Bei <strong>ungeradem</strong> \(n\) gibt es immer genau eine Lösung.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Asymptoten und Transformationen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie geht der Graph von \(y = (x-4)^5\) aus dem Graphen von \(y = x^5\) hervor?</p><ul class="mc-optionen"><li data-opt="A">Verschiebung um 4 nach links</li><li data-opt="B">Verschiebung um 4 nach rechts</li><li data-opt="C">Verschiebung um 4 nach oben</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \((x - u)\) mit \(u = 4\) verschiebt nach rechts — Kontrolle: Die Nullstelle wandert von \(x = 0\) zu \(x = 4\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Hyperbel \(y = \dfrac{1}{(x+2)^3} - 3\) hat die Polgerade \(x = \) <span class="mc-luecke"></span> und die horizontale Asymptote \(y = -3\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(x = -2\) — denn \(x + 2 = x - (-2)\), also \(u = -2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme die Nullstellen von \(y = (x-3)^4 - 16\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((x-3)^4 = 16 \Rightarrow x - 3 = \pm 2 \Rightarrow x_1 = 5\), \(x_2 = 1\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Hat die Funktion \(y = (x-1)^6 + 2\) Nullstellen? Begründe ohne zu rechnen.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nein: \((x-1)^6 \geq 0\) für alle \(x\) (gerader Exponent), also ist \(y \geq 2 &gt; 0\). Der Ansatz \((x-1)^6 = -2\) hätte keine Lösung, weil eine gerade Potenz nie negativ ist.</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Potenzfunktion am Graphen erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Graphen und entscheide, welche Funktionsgleichung dazu passt.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört zum angezeigten Graphen?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Graphen skizzieren</span></div>
+  <p>Skizziere die folgenden Graphen <strong>von Hand</strong> auf Häuschenpapier. Nutze die gemeinsamen Punkte und die Symmetrie. Vergleiche danach mit der Lösung.</p>
+  <ol class="aufg-liste">
+    <li>\(y = \tfrac{1}{2} x^4 - 2\)</li>
+    <li>\(y = -(x+1)^3\)</li>
+    <li>\(y = \dfrac{1}{x-2} + 1\) (mit Asymptoten!)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2'); drawA2Sol();">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <div class="cv-wrap" style="margin-bottom:8px"><canvas id="a2-canvas" height="240"></canvas></div>
+      <ol class="aufg-liste">
+        <li><span style="color:#1a4f8a;font-weight:700">Blau:</span> gestauchte Parabel 4. Ordnung, um 2 nach unten verschoben; achsensymmetrisch, Nullstellen bei \(x = \pm\sqrt[4]{4} = \pm\sqrt{2} \approx \pm 1.41\).</li>
+        <li><span style="color:#1f6b3a;font-weight:700">Grün:</span> Parabel 3. Ordnung, um 1 nach links verschoben und an der \(x\)-Achse gespiegelt; Terrassenpunkt bei \((-1 \mid 0)\).</li>
+        <li><span style="color:#5b2d8e;font-weight:700">Violett:</span> Hyperbel 1. Ordnung mit Polgerade \(x = 2\) und horizontaler Asymptote \(y = 1\) (gestrichelt).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Potenzfunktionen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Nullstellen bestimmen</div>
+    <p>Bestimme die beiden Nullstellen von \(f(x) = (x+1)^4 - 81\).</p>
+    <div class="eingabe-row"><label>kleinere Nullstelle:&nbsp;</label><input type="text" id="a3a1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a3a1', -4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>grössere Nullstelle:&nbsp;</label><input type="text" id="a3a2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3a2', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ (x+1)^4 = 81 \;\Longrightarrow\; x + 1 = \pm\sqrt[4]{81} = \pm 3 \;\Longrightarrow\; x_1 = -4,\quad x_2 = 2 \]
+        <p>Probe: \((2+1)^4 - 81 = 81 - 81 = 0\) ✓ und \((-4+1)^4 - 81 = 81 - 81 = 0\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Exponent bestimmen</div>
+    <p>Bestimme \(n\) so, dass die Potenzfunktion \(y = x^n\) durch den Punkt geht:</p>
+    <div class="eingabe-row"><label>\(P_1 = (3 \mid 27)\): n =&nbsp;</label><input type="text" id="a3b1" placeholder="n"><button class="btn-pruef" onclick="chkNum('a3b1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>\(P_2 = (-2 \mid -32)\): n =&nbsp;</label><input type="text" id="a3b2" placeholder="n"><button class="btn-pruef" onclick="chkNum('a3b2', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>\(P_3 = (2 \mid 64)\): n =&nbsp;</label><input type="text" id="a3b3" placeholder="n"><button class="btn-pruef" onclick="chkNum('a3b3', 6, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b3-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <ol class="aufg-liste">
+          <li>\(3^n = 27 = 3^3 \Rightarrow n = 3\)</li>
+          <li>\((-2)^n = -32\): Wegen des negativen Ergebnisses muss \(n\) ungerade sein; \((-2)^5 = -32 \Rightarrow n = 5\)</li>
+          <li>\(2^n = 64 = 2^6 \Rightarrow n = 6\)</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Koeffizient und Exponent aus zwei Punkten</div>
+    <p>Die Potenzfunktion \(y = a \cdot x^n\) geht durch \(P = (1 \mid 2)\) und \(Q = (2 \mid 16)\). Bestimme \(a\) und \(n\).</p>
+    <div class="eingabe-row"><label>a =&nbsp;</label><input type="text" id="a3c1" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3c1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>n =&nbsp;</label><input type="text" id="a3c2" placeholder="n"><button class="btn-pruef" onclick="chkNum('a3c2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Aus \(P\): \(a \cdot 1^n = 2 \Rightarrow a = 2\). Aus \(Q\): \(2 \cdot 2^n = 16 \Rightarrow 2^n = 8 \Rightarrow n = 3\).</p>
+        <p>Probe: \(y = 2 \cdot x^3\) liefert \(2 \cdot 2^3 = 16\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Asymptoten angeben</div>
+    <p>Bestimme Polgerade und horizontale Asymptote von \(y = -\dfrac{1}{x+2}\).</p>
+    <div class="eingabe-row"><label>Polgerade x =&nbsp;</label><input type="text" id="a3d1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3d1', -2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>Asymptote y =&nbsp;</label><input type="text" id="a3d2" placeholder="y"><button class="btn-pruef" onclick="chkNum('a3d2', 0, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Definitionslücke bei \(x + 2 = 0\), also Polgerade \(x = -2\). Keine Verschiebung in \(y\)-Richtung, also horizontale Asymptote \(y = 0\). Das Minuszeichen spiegelt die Hyperbel nur an der \(x\)-Achse — die Asymptoten ändert es nicht.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Transformationskette</div>
+    <p>Der Graph von \(y = \tfrac{1}{2} x^4\) wird um \(3\) Einheiten nach rechts und \(2\) Einheiten nach unten verschoben. Gib die Gleichung der Bildfunktion an und bestimme ihre Nullstellen.</p>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ y = \tfrac{1}{2}(x-3)^4 - 2 \]
+        <p>Nullstellen: \(\tfrac{1}{2}(x-3)^4 = 2 \Rightarrow (x-3)^4 = 4 \Rightarrow x - 3 = \pm\sqrt[4]{4} = \pm\sqrt{2}\)</p>
+        \[ x_1 = 3 + \sqrt{2} \approx 4.41, \qquad x_2 = 3 - \sqrt{2} \approx 1.59 \]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Gesetz von Boyle-Mariotte</span></div>
+  <p>Für ein ideales Gas bei konstanter Temperatur gilt \(p \cdot V = \text{const}\). Für eine eingeschlossene Gasmenge sei \(p \cdot V = 450\) (Druck \(p\) in kPa, Volumen \(V\) in dm³), also:</p>
+  \[ p(V) = \frac{450}{V} \]
+  <ol class="aufg-liste">
+    <li>Berechne den Druck bei \(V = 3\ \text{dm}^3\).</li>
+    <li>Bei welchem Volumen beträgt der Druck \(100\) kPa?</li>
+    <li>Welcher Funktionstyp liegt vor? Was bedeuten die Asymptoten physikalisch?</li>
+  </ol>
+  <div class="eingabe-row"><label>p(3) =&nbsp;</label><input type="text" id="a4-1" placeholder="kPa"><button class="btn-pruef" onclick="chkNum('a4-1', 150, 0.5, 'kPa')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>V bei p = 100:&nbsp;</label><input type="text" id="a4-2" placeholder="dm³"><button class="btn-pruef" onclick="chkNum('a4-2', 4.5, 0.05, 'dm³')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(p(3) = \dfrac{450}{3} = 150\) kPa</li>
+        <li>\(100 = \dfrac{450}{V} \Rightarrow V = \dfrac{450}{100} = 4.5\ \text{dm}^3\)</li>
+        <li>\(p(V) = 450 \cdot V^{-1}\) ist eine Potenzfunktion mit \(n = -1\) — der Graph ist eine <strong>Hyperbel</strong> (nur der Ast im 1. Quadranten ist physikalisch sinnvoll, da \(V &gt; 0\)). Asymptoten: Für \(V \to \infty\) geht \(p \to 0\) (riesiges Volumen → verschwindender Druck), für \(V \to 0\) wächst \(p\) über alle Grenzen (Zusammenpressen auf null Volumen ist unmöglich).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Würfel und Kugel</span></div>
+  <p>Ein Würfel hat die Kantenlänge \(2a\), eine Kugel den Radius \(a\).</p>
+  <ol class="aufg-liste">
+    <li>Gib die Funktionsgleichungen \(V_W(a)\) und \(V_K(a)\) an.</li>
+    <li>Berechne \(V_W(1.5)\).</li>
+    <li>Um welchen Faktor ist das Würfelvolumen stets grösser als das Kugelvolumen?</li>
+    <li>Wie gross muss der Radius \(r\) einer Kugel sein, damit ihr Volumen gleich dem Volumen eines Würfels mit \(a = 1\) m ist?</li>
+  </ol>
+  <div class="eingabe-row"><label>V<sub>W</sub>(1.5) =&nbsp;</label><input type="text" id="a5-1" placeholder="m³"><button class="btn-pruef" onclick="chkNum('a5-1', 27, 0.1, 'm³')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>r ≈&nbsp;</label><input type="text" id="a5-2" placeholder="m"><button class="btn-pruef" onclick="chkNum('a5-2', 1.24, 0.01, 'm')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(V_W(a) = (2a)^3 = 8a^3\) und \(V_K(a) = \tfrac{4}{3}\pi a^3 \approx 4.19\,a^3\) — beides Potenzfunktionen dritten Grades.</li>
+        <li>\(V_W(1.5) = 8 \cdot 1.5^3 = 8 \cdot 3.375 = 27\ \text{m}^3\)</li>
+        <li>\(\dfrac{V_W}{V_K} = \dfrac{8}{\tfrac{4}{3}\pi} = \dfrac{6}{\pi} \approx 1.91\) — unabhängig von \(a\), weil beide denselben Exponenten haben.</li>
+        <li>Ansatz: \(\tfrac{4}{3}\pi r^3 = 8\ \text{m}^3 \Rightarrow r^3 = \dfrac{6}{\pi} \Rightarrow r = \sqrt[3]{6/\pi} \approx 1.24\) m.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Parallelschaltung von Widerständen</span></div>
+  <p>Der Gesamtwiderstand \(R\) zweier parallel geschalteter Widerstände \(R_1\) und \(R_2\) ist</p>
+  \[ R = \frac{R_1 \cdot R_2}{R_1 + R_2} \]
+  <p>Es sei \(R_2 = 2200\ \Omega\) fest, also \(R(R_1) = \dfrac{2200 \cdot R_1}{R_1 + 2200}\).</p>
+  <ol class="aufg-liste">
+    <li>Berechne \(R(2200)\).</li>
+    <li>Wie gross muss \(R_1\) sein, damit der Gesamtwiderstand \(1500\ \Omega\) beträgt?</li>
+    <li>Welchem Wert nähert sich \(R\) für sehr grosse \(R_1\)? Deute die horizontale Asymptote physikalisch.</li>
+  </ol>
+  <div class="eingabe-row"><label>R(2200) =&nbsp;</label><input type="text" id="a6-1" placeholder="Ω"><button class="btn-pruef" onclick="chkNum('a6-1', 1100, 1, 'Ω')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>R₁ ≈&nbsp;</label><input type="text" id="a6-2" placeholder="Ω"><button class="btn-pruef" onclick="chkNum('a6-2', 4714, 10, 'Ω')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(R(2200) = \dfrac{2200 \cdot 2200}{4400} = 1100\ \Omega\) — zwei gleiche Widerstände parallel halbieren den Widerstand.</li>
+        <li>Über die Kehrwert-Form \(\dfrac{1}{R} = \dfrac{1}{R_1} + \dfrac{1}{R_2}\): \(\dfrac{1}{R_1} = \dfrac{1}{1500} - \dfrac{1}{2200} = \dfrac{2200 - 1500}{1500 \cdot 2200} = \dfrac{700}{3.3 \cdot 10^6}\), also \(R_1 = \dfrac{3.3 \cdot 10^6}{700} \approx 4714\ \Omega \approx 4.71\ \text{k}\Omega\).</li>
+        <li>Für \(R_1 \to \infty\) geht \(R \to 2200\ \Omega\) — horizontale Asymptote \(R = R_2\). Physikalisch: Ein riesiger Parallelwiderstand lässt fast keinen Strom durch; es bleibt praktisch nur der Zweig mit \(R_2\). Der Gesamtwiderstand einer Parallelschaltung ist <strong>immer kleiner</strong> als der kleinste Einzelwiderstand.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Optimale Getränkedose <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Eine zylindrische Getränkedose mit Radius \(r\) und Höhe \(h\) fasst exakt \(355\ \text{cm}^3\). Der Hersteller sucht die Abmessungen mit minimalem Blechverbrauch (Oberfläche \(S\)).</p>
+  <ol class="aufg-liste">
+    <li>Zeige: Mit \(h = \dfrac{355}{\pi r^2}\) gilt \(S(r) = 2\pi r^2 + \dfrac{710}{r}\).</li>
+    <li>Aus welchen zwei Potenzfunktionen setzt sich \(S(r)\) zusammen?</li>
+    <li>Werte \(S(r)\) für \(r = 2, 3, 4, 5, 6\) cm aus und lies das Minimum näherungsweise ab.</li>
+    <li>Vergleiche \(h\) und \(r\) an der optimalen Stelle.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(S = 2\pi r^2 + 2\pi r h\) (zwei Deckel + Mantel). Mit \(h = \dfrac{355}{\pi r^2}\): \(2\pi r \cdot \dfrac{355}{\pi r^2} = \dfrac{710}{r}\), also \(S(r) = 2\pi r^2 + \dfrac{710}{r}\). ✓</li>
+        <li>\(g(r) = 2\pi \cdot r^2\) (Parabel, \(n = 2\)) und \(h(r) = 710 \cdot r^{-1}\) (Hyperbel, \(n = -1\)).</li>
+        <li>\(S(2) \approx 380.1\), \(S(3) \approx 293.2\), \(S(4) \approx 278.0\), \(S(5) \approx 299.1\), \(S(6) \approx 344.5\) (alle in cm²). Das Minimum liegt bei etwa \(r \approx 3.8\) cm mit \(S_{\min} \approx 277.5\ \text{cm}^2\).</li>
+        <li>An der optimalen Stelle \(r \approx 3.84\) cm ist \(h = \dfrac{355}{\pi r^2} \approx 7.67\) cm — es gilt exakt \(h = 2r\): Die optimale Dose ist genau so hoch wie breit. (Reale Dosen sind schlanker — aus Gründen der Handhabung, nicht der Blechersparnis.)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Der Exponent \(n\) bestimmt die <strong>Grundform</strong> (Parabel für \(n &gt; 0\), Hyperbel für \(n &lt; 0\)), seine <strong>Parität</strong> die Symmetrie (gerade → Achsensymmetrie, ungerade → Punktsymmetrie). Die Parameter in \(a \cdot (x-u)^n + v\) strecken, spiegeln und verschieben diese Grundform — bei Hyperbeln wandern die Asymptoten zu \(x = u\) und \(y = v\) mit.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Typ</th><th>\(x^{2n}\)</th><th>\(x^{2n-1}\)</th><th>\(x^{-2n}\)</th><th>\(x^{-(2n-1)}\)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Graph</td><td style="font-family:var(--sans)">Parabel</td><td style="font-family:var(--sans)">Parabel</td><td style="font-family:var(--sans)">Hyperbel</td><td style="font-family:var(--sans)">Hyperbel</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">\(D\)</td><td>\(\mathbb{R}\)</td><td>\(\mathbb{R}\)</td><td>\(\mathbb{R} \setminus \{0\}\)</td><td>\(\mathbb{R} \setminus \{0\}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">\(W\)</td><td>\(\mathbb{R}_0^+\)</td><td>\(\mathbb{R}\)</td><td>\(\mathbb{R}^+\)</td><td>\(\mathbb{R} \setminus \{0\}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetrie</td><td style="font-family:var(--sans)">Achse</td><td style="font-family:var(--sans)">Punkt</td><td style="font-family:var(--sans)">Achse</td><td style="font-family:var(--sans)">Punkt</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstelle</td><td>\(x_0 = 0\)</td><td>\(x_0 = 0\)</td><td>—</td><td>—</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Asymptoten</td><td>—</td><td>—</td><td>\(x = 0\), \(y = 0\)</td><td>\(x = 0\), \(y = 0\)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s3-2a-potenzfunktionen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-2a-potenzfunktionen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-2a-potenzfunktionen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-2a-potenzfunktionen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-2a-potenzfunktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PL2jCdV8ykKMrnQfRszg204hlZYiGnkpqq" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Gebrochen-rationale Funktionen — Playlist</div><div class="lk-s">Mathe SMI · 24 Videos · Asymptoten, Polstellen — vertieft den Hyperbel-Teil</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLkr4Hf_IwvPyPsggHjtOLlj_6R3T9MlW" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Gebrochen-rationale Funktionen — Playlist</div><div class="lk-s">Mathehoch13 · 14 Videos · Definitionslücken und Asymptoten</div></div></a>
+  <a href="https://www.youtube.com/watch?v=eOYTlV0Af3o" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Potenzfunktionen aufstellen mit 2 Punkten</div><div class="lk-s">MathemaTrick · Einzelvideo · passt zu Aufgabe A3c</div></div></a>
+  <a href="https://www.youtube.com/watch?v=OVWF5UATHVc" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Potenzfunktionen — Übersicht, Basis, Exponent, Verlauf</div><div class="lk-s">Mathe by Daniel Jung · Einzelvideo · kompakter Überblick</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g3/g32/aufg_g32.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Gleichungen höheren Grades (G32)</div><div class="lk-s">Potenzgleichungen x&#8319; = c · mit PDF-Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/40772/aufgaben-zu-potenzfunktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu Potenzfunktionen</div><div class="lk-s">Graphen zuordnen, Eigenschaften · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/63356/aufgaben-zu-potenzfunktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu Potenzfunktionen II</div><div class="lk-s">Zweite Sammlung · Parameter bestimmen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26402/aufgaben-zu-potenz-und-wurzelfunktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Potenz- und Wurzelfunktionen</div><div class="lk-s">Gemischte Aufgaben zu beiden Teilseiten · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 3.2a Potenzfunktionen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s3-2a',
+  kapitelNr:'3.2a', kapitelTitel:'Potenzfunktionen',
+  prev:{nr:'3.1',titel:'Grundlagen',url:'s3-1-grundlagen.html'},
+  next:{nr:'3.2b',titel:'Wurzelfunktionen',url:'s3-2b-wurzelfunktionen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+// Zahlformat mit 2 Nachkommastellen für Tabellenwerte (fmt aus mathlib rundet auf 1)
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+// Unicode-Hochzahlen für Live-Formeln
+const SUP = {'-4':'⁻⁴','-3':'⁻³','-2':'⁻²','-1':'⁻¹','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵'};
+
+// Kurven-Plot mit Pol-Behandlung: Segmente werden bei Sprüngen/Ausreissern getrennt
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+// Anwendungs-Raster mit frei wählbaren Schritten und Einheiten-Labels
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  // Labels mit Einheit
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Ballon ══ */
+const BA = { k: 4/3 * Math.PI * 0.064 };   // 0.26808… dm³/s³
+function updateBA(){
+  const t = parseFloat(document.getElementById('ba-t').value);
+  document.getElementById('ba-tv').textContent = t.toFixed(1);
+  const V = BA.k * t * t * t;
+  const tB = `<span class="tx-blau">${t.toFixed(1)}</span>`;
+  document.getElementById('ba-eq').innerHTML = `V(${tB}) = 0.268·${tB}³ = ${V.toFixed(2)} dm³`;
+  const {ctx, cx, cy} = gridApp('ba-canvas', 240, 0, 9, 0, 160, 1, 20, 't [s]', 'V [dm³]');
+  // Platzgrenze
+  ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(150)); ctx.lineTo(cx(9), cy(150)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('platzt (150 dm³)', cx(0.2), cy(150) - 6);
+  // Kurve bis V=160
+  plotFx(ctx, cx, cy, x => BA.k * x * x * x, 0, Math.cbrt(160 / BA.k), '#1a4f8a', 2.5, 1e6);
+  // Punkt
+  if(V <= 160){
+    drawDot(ctx, cx, cy, t, V, '#1a4f8a', 7);
+    ctx.strokeStyle = '#1a4f8a55'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(cx(t), cy(V)); ctx.lineTo(cx(t), cy(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx(t), cy(V)); ctx.lineTo(cx(0), cy(V)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace';
+    ctx.textAlign = t > 6.5 ? 'right' : 'left';
+    ctx.fillText(`(${t.toFixed(1)}|${V.toFixed(1)})`, cx(t) + (t > 6.5 ? -8 : 8), cy(V) - 8);
+  }
+}
+document.getElementById('ba-t').addEventListener('input', updateBA);
+
+/* ══ DREI DARSTELLUNGEN ══ */
+const DR_A = [-3, -2, -1, -0.5, 0.5, 1, 2, 3];
+const DR_N = [-4, -3, -2, -1, 1, 2, 3, 4, 5];
+function updateDR(){
+  const a = DR_A[parseInt(document.getElementById('dr-a').value)];
+  const n = DR_N[parseInt(document.getElementById('dr-n').value)];
+  const x = parseInt(document.getElementById('dr-x').value);
+  document.getElementById('dr-av').textContent = fmt(a).replace('-', '−');
+  document.getElementById('dr-nv').textContent = String(n).replace('-', '−');
+  document.getElementById('dr-xv').textContent = String(x).replace('-', '−');
+  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
+  // Gleichung: a farbig (blau), Exponent farbig (orange), x grün
+  // Koeffizient ±1 wird nicht geschrieben (STYLEGUIDE §10.4) — die Slider-Anzeige bleibt Referenz
+  const aStr = a === 1 ? '' : (a === -1 ? '−' : `${T('blau', fmt(a).replace('-', '−'))}·`);
+  document.getElementById('dr-eq').innerHTML =
+    `f(${T('gruen','x')}) = ${aStr}${T('gruen','x')}${T('orange', SUP[String(n)])}`;
+  // Auswertung
+  let evalHtml;
+  if(x === 0 && n < 0){
+    evalHtml = `f(${T('gruen','0')}) — nicht definiert (Definitionslücke!)`;
+  } else {
+    const y = a * Math.pow(x, n);
+    evalHtml = `f(${T('gruen', String(x).replace('-','−'))}) = ${fmt2(y).replace('-','−')}`;
+  }
+  document.getElementById('dr-eval').innerHTML = evalHtml;
+  // Tabelle
+  const xs = [-3, -2, -1, 0, 1, 2, 3];
+  const tbody = document.querySelector('#dr-table tbody');
+  tbody.innerHTML = xs.map(xi => {
+    const act = xi === x;
+    if(xi === 0 && n < 0){
+      return `<tr class="${act ? 'aktiv-zeile' : ''}"><td class="td-x">0</td><td class="td-y">–</td><td class="td-pt">Def.-Lücke</td></tr>`;
+    }
+    const yi = a * Math.pow(xi, n);
+    return `<tr class="${act ? 'aktiv-zeile' : ''}"><td class="td-x">${xi}</td><td class="td-y">${fmt2(yi)}</td><td class="td-pt">(${xi}|${fmt2(yi)})</td></tr>`;
+  }).join('');
+  // Graph (reine Mathematik → square 1:1)
+  const {ctx, W, H} = initCanvas('dr-canvas', 220, true);
+  const rng = 4;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  plotFx(ctx, cx, cy, t => a * Math.pow(t, n), -rng, rng, '#1a4f8a', 2.5, rng * 4);
+  if(!(x === 0 && n < 0)){
+    const y = a * Math.pow(x, n);
+    if(Math.abs(y) <= rng){
+      drawDot(ctx, cx, cy, x, y, '#1f6b3a', 6);
+    }
+  }
+}
+['dr-a', 'dr-n', 'dr-x'].forEach(id => document.getElementById(id).addEventListener('input', updateDR));
+
+/* ══ TYPEN-VISUALISIERUNG ══ */
+const typen = [
+  {label:'x¹',   n:1,  desc:'y = x¹  ·  Parabel 1. Ordnung (Gerade)  ·  ungerade, punktsymmetrisch', color:'#1a4f8a'},
+  {label:'x²',   n:2,  desc:'y = x²  ·  Parabel 2. Ordnung  ·  gerade, achsensymmetrisch, W = ℝ₀⁺', color:'#1f6b3a'},
+  {label:'x³',   n:3,  desc:'y = x³  ·  Parabel 3. Ordnung  ·  ungerade, Terrassenpunkt in (0|0)', color:'#1a4f8a'},
+  {label:'x⁴',   n:4,  desc:'y = x⁴  ·  Parabel 4. Ordnung  ·  gerade, Flachpunkt in (0|0)', color:'#1f6b3a'},
+  {label:'x⁵',   n:5,  desc:'y = x⁵  ·  Parabel 5. Ordnung  ·  ungerade, zwischen −1 und 1 sehr flach', color:'#1a4f8a'},
+  {label:'1/x',  n:-1, desc:'y = 1/x  ·  Hyperbel 1. Ordnung  ·  ungerade, Asymptoten x = 0 und y = 0', color:'#5b2d8e'},
+  {label:'1/x²', n:-2, desc:'y = 1/x²  ·  Hyperbel 2. Ordnung  ·  gerade, beide Äste oben, W = ℝ⁺', color:'#b85c00'},
+  {label:'1/x³', n:-3, desc:'y = 1/x³  ·  Hyperbel 3. Ordnung  ·  ungerade, schmiegt sich schneller an die Achsen', color:'#5b2d8e'},
+  {label:'1/x⁴', n:-4, desc:'y = 1/x⁴  ·  Hyperbel 4. Ordnung  ·  gerade, W = ℝ⁺', color:'#b85c00'},
+];
+let typActive = 1;
+function buildTypBtns(){
+  document.getElementById('typ-btns').innerHTML = typen.map((t, i) =>
+    `<button class="typ-btn${i === typActive ? ' aktiv' : ''}" onclick="setTyp(${i})">${t.label}</button>`
+  ).join('');
+}
+function setTyp(i){
+  typActive = i;
+  document.querySelectorAll('#typ-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawTyp();
+}
+function drawTyp(){
+  const {ctx, W, H} = initCanvas('typ-canvas', 220, true);
+  const rng = 3;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  const t = typen[typActive];
+  plotFx(ctx, cx, cy, x => Math.pow(x, t.n), -rng, rng, t.color, 3, rng * 5);
+  // Gemeinsame Punkte markieren
+  drawDot(ctx, cx, cy, 1, 1, '#9b1c1c', 5);
+  if(t.n > 0) drawDot(ctx, cx, cy, 0, 0, '#9b1c1c', 5);
+  const yM1 = Math.pow(-1, t.n);
+  drawDot(ctx, cx, cy, -1, yM1, '#9b1c1c', 5);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('(1|1)', cx(1) + 7, cy(1) - 7);
+  document.getElementById('typ-desc').textContent = t.desc;
+}
+
+/* ══ HYPERBEL-TRANSFORMATION ══ */
+let hyP = 1;
+function setHyP(p){
+  hyP = p;
+  document.querySelectorAll('#hy-p-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === p - 1));
+  updateHY();
+}
+function updateHY(){
+  const u = parseInt(document.getElementById('hy-u').value);
+  const v = parseInt(document.getElementById('hy-v').value);
+  document.getElementById('hy-uv').textContent = String(u).replace('-', '−');
+  document.getElementById('hy-vv').textContent = String(v).replace('-', '−');
+  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
+  const uD = String(u).replace('-', '−'), vD = String(v).replace('-', '−');
+  const uTerm = u === 0 ? 'x' : (u > 0 ? `x − ${T('blau', u)}` : `x + ${T('blau', Math.abs(u))}`);
+  const vTerm = v === 0 ? '' : (v > 0 ? ` + ${T('orange', v)}` : ` − ${T('orange', Math.abs(v))}`);
+  document.getElementById('hy-eq').innerHTML = `y = 1/(${uTerm})${SUP[String(hyP)]}${vTerm}`;
+  document.getElementById('hy-asym').innerHTML =
+    `Polgerade: x = ${T('blau', uD)} · Asymptote: y = ${T('orange', vD)}`;
+  const {ctx, W, H} = initCanvas('hy-canvas', 220, true);
+  const rng = 6;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  // Asymptoten gestrichelt in den Akzentfarben
+  ctx.setLineDash([6, 4]); ctx.lineWidth = 1.5;
+  ctx.strokeStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.moveTo(cx(u), 0); ctx.lineTo(cx(u), H); ctx.stroke();
+  ctx.strokeStyle = '#b85c00';
+  ctx.beginPath(); ctx.moveTo(0, cy(v)); ctx.lineTo(W, cy(v)); ctx.stroke();
+  ctx.setLineDash([]);
+  plotFx(ctx, cx, cy, x => 1 / Math.pow(x - u, hyP) + v, -rng, rng, '#5b2d8e', 2.5, rng * 4);
+}
+['hy-u', 'hy-v'].forEach(id => document.getElementById(id).addEventListener('input', updateHY));
+
+/* ══ A1: Erkennen ══ */
+const a1G = [
+  {label:'Graph 1', n:3,  eq:'y = x³'},
+  {label:'Graph 2', n:4,  eq:'y = x⁴'},
+  {label:'Graph 3', n:-1, eq:'y = 1/x'},
+  {label:'Graph 4', n:-2, eq:'y = 1/x²'},
+];
+const a1Opts = ['y = x³', 'y = x⁴', 'y = 1/x', 'y = 1/x²'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, true);
+  const rng = 3;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  plotFx(ctx, cx, cy, x => Math.pow(x, a1G[a1Act].n), -rng, rng, '#1a4f8a', 2.5, rng * 5);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Achte auf Symmetrie (gerade/ungerade) und ob der Graph eine Definitionslücke hat.';
+  }
+}
+
+/* ══ A2: Lösungs-Skizzen ══ */
+function drawA2Sol(){
+  const body = document.getElementById('l-a2');
+  if(!body.classList.contains('sichtbar')) return;
+  const {ctx, W, H} = initCanvas('a2-canvas', 240, true);
+  const rng = 5;
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
+  // c) zuerst: Asymptoten der Hyperbel
+  ctx.setLineDash([6, 4]); ctx.strokeStyle = '#5b2d8e88'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx(2), 0); ctx.lineTo(cx(2), H); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, cy(1)); ctx.lineTo(W, cy(1)); ctx.stroke();
+  ctx.setLineDash([]);
+  plotFx(ctx, cx, cy, x => 0.5 * Math.pow(x, 4) - 2, -rng, rng, '#1a4f8a', 2.5, rng * 4);   // a
+  plotFx(ctx, cx, cy, x => -Math.pow(x + 1, 3), -rng, rng, '#1f6b3a', 2.5, rng * 4);          // b
+  plotFx(ctx, cx, cy, x => 1 / (x - 2) + 1, -rng, rng, '#5b2d8e', 2.5, rng * 4);              // c
+}
+
+/* ══ Zahlenwert-Prüfung (A3–A6) ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateBA();
+  updateDR();
+  buildTypBtns(); drawTyp();
+  updateHY();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateBA(); updateDR(); drawTyp(); updateHY(); drawA1(); drawA2Sol();
+});
+</script>
+</body>
+</html>

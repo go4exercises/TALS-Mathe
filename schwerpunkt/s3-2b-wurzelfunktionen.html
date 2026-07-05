@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3.2b Wurzelfunktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 3 · Funktionen · 55 Lektionen</div>
+  <h1 class="pt-h1">3.2b Wurzelfunktionen</h1>
+  <div class="pt-untertitel">RLP 3.2 · Teil 2 von 2</div>
+</div>
+
+<p class="lead"><strong>Wurzelfunktionen</strong> \(f(x) = \sqrt[n]{x}\) sind die <strong>Umkehrfunktionen</strong> der Potenzfunktionen: Sie beantworten die Frage „welche Zahl ergibt hoch \(n\) genau \(x\)?". Hier lernst du, wann eine Potenzfunktion umkehrbar ist, wie der Graph der Wurzelfunktion durch Spiegelung entsteht und wie sich Wurzelgleichungen grafisch lösen lassen.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.2</div>
+  <ul>
+    <li>die Wurzelfunktionen als Umkehrfunktion der Potenzfunktion mit ganzzahligen Exponenten berechnen, interpretieren und grafisch darstellen <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+  <p class="rlp-hinweis">Die Potenzfunktionen als Grundlage werden in <a href="s3-2a-potenzfunktionen.html">Teil 1 (s3-2a)</a> behandelt.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Wurzelfunktion \(f(x) = \sqrt[n]{x} = x^{1/n}\) definieren und ihre Definitions- und Wertemenge angeben.</li>
+      <li>Ich kann erklären, warum Potenzfunktionen mit geradem Exponenten nur auf \(\mathbb{R}_0^+\) umkehrbar sind — und die Umkehrung grafisch als Spiegelung an der Winkelhalbierenden \(y = x\) deuten.</li>
+      <li>Ich kann Graphen von Wurzelfunktionen skizzieren und die Wirkung der Parameter in \(a \cdot \sqrt[n]{x-u} + v\) beschreiben.</li>
+      <li>Ich kann den maximalen Definitionsbereich eines Wurzelterms bestimmen.</li>
+      <li>Ich kann Ordinatenabschnitt und Nullstellen von Wurzelfunktionen berechnen.</li>
+      <li>Ich kann Wurzelgleichungen grafisch lösen und die Lösung algebraisch überprüfen.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — das Fadenpendel</h2>
+
+<p>Die Schwingungsdauer \(T\) eines Fadenpendels hängt nur von der Fadenlänge \(l\) und der Erdbeschleunigung \(g = 9.81\ \text{m/s}^2\) ab:</p>
+
+\[ T = 2\pi \cdot \sqrt{\frac{l}{g}} \approx 2 \cdot \sqrt{l} \qquad (T \text{ in s},\ l \text{ in m}) \]
+
+<p>Die Schwingungsdauer wächst mit der <strong>Wurzel</strong> der Länge — nicht proportional. Ein viermal so langes Pendel schwingt nur doppelt so langsam.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🕰 Fadenpendel — \(T \approx 2\sqrt{l}\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Vervierfache die Länge, z.B. von \(1\) m auf \(4\) m: Wie ändert sich \(T\)? Vergleiche die Kurvenform mit der Parabel: steil am Anfang, flach am Ende — oder umgekehrt?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vervierfache die Länge, zum Beispiel von einem Meter auf vier Meter: Wie ändert sich die Schwingungsdauer? Vergleiche die Kurvenform mit der Parabel: steil am Anfang, flach am Ende — oder umgekehrt?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Vierfache Länge heisst \(\sqrt{4} = 2\)-fache Schwingungsdauer. Die Wurzelkurve ist das Spiegelbild der Parabel: steil am Anfang, immer flacher werdend. Genau diese Spiegelbeziehung — Wurzel als Umkehrung der Potenz — ist das Thema dieser Seite.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vierfache Länge heisst Wurzel aus vier gleich zweifache Schwingungsdauer. Die Wurzelkurve ist das Spiegelbild der Parabel: steil am Anfang, immer flacher werdend. Genau diese Spiegelbeziehung — Wurzel als Umkehrung der Potenz — ist das Thema dieser Seite.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Fadenlänge 0.1–10 m · Erdbeschleunigung 9.81 m/s²</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Länge <span class="var">\(l\)</span> [m]</label>
+      <input type="range" id="pe-l" min="0.1" max="10" step="0.1" value="1">
+      <span class="sl-val"><span id="pe-lv">1.0</span> m</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktion und Auswertung</div>
+      <div class="fl-eq">T(<span class="tx-blau">l</span>) = 2π·√(<span class="tx-blau">l</span>/9.81)</div>
+      <div class="fl-eq" id="pe-eq" style="font-size:0.95rem;margin-top:4px">T(<span class="tx-blau">1.0</span>) = 2.01 s</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="pe-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Zusammenhang \(l \mapsto T\) folgt einer Wurzelfunktion:</p>
+  <ul style="margin-top:6px">
+    <li>Vervierfachung der Länge → nur Verdopplung der Schwingungsdauer (\(\sqrt{4} = 2\))</li>
+    <li>Die Kurve steigt am Anfang steil und wird immer flacher — genau umgekehrt wie die Parabel</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Pendellänge wird verdoppelt. Was passiert mit der Schwingungsdauer \(T \approx 2\sqrt{l}\)?</p><ul class="mc-optionen"><li data-opt="A">Sie wird verdoppelt.</li><li data-opt="B">Sie wächst um den Faktor \(\sqrt{2} \approx 1.41\) — weniger als verdoppelt.</li><li data-opt="C">Sie wird vervierfacht.</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(T(2l) = 2\sqrt{2l} = \sqrt{2} \cdot 2\sqrt{l} = \sqrt{2} \cdot T(l) \approx 1.41 \cdot T(l)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Schwingungsdauer hängt von der <span class="mc-luecke"></span> der Fadenlänge ab — darum wächst \(T\) langsamer als \(l\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">(Quadrat-)Wurzel — \(T \approx 2\sqrt{l}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(T\) für \(l = 0.25\) m mit der Näherung \(T \approx 2\sqrt{l}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(T \approx 2 \cdot \sqrt{0.25} = 2 \cdot 0.5 = 1\) s.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Welche Fadenlänge braucht ein Pendel mit Schwingungsdauer \(T = 1\) s? Löse die Formel nach \(l\) auf.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Auflösen (= Umkehrfunktion bilden!): \(T = 2\pi\sqrt{l/g} \Rightarrow l = \dfrac{g \cdot T^2}{4\pi^2} \approx 0.248 \cdot T^2\). Für \(T = 1\) s: \(l \approx 0.25\) m, also etwa \(25\) cm. Die Umkehrfunktion einer Wurzelfunktion ist wieder eine Potenzfunktion.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definition</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Wurzelfunktion</div>
+  <p>Eine Funktion \(f : \mathbb{R}_0^+ \longrightarrow \mathbb{R}_0^+\) mit einer Gleichung der Form</p>
+  \[ y = f(x) = \sqrt[n]{x} = x^{\frac{1}{n}}, \qquad n \in \mathbb{N}^* \]
+  <p>heisst <strong>Wurzelfunktion</strong> mit Wurzelexponent \(n\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Wurzelfunktion als Umkehrfunktion</div>
+  <p>Die Wurzelfunktion ist die <strong>Umkehrfunktion</strong> der Potenzfunktion — und umgekehrt:</p>
+  \[ f:\; y = x^n \;\Longrightarrow\; \sqrt[n]{y} = \sqrt[n]{x^n} \;\Longrightarrow\; x = \sqrt[n]{y} \;\Longrightarrow\; f^{-1}:\; y = \sqrt[n]{x} \]
+  <p>Grafisch entsteht der Graph von \(f^{-1}\) durch <strong>Spiegelung an der Winkelhalbierenden</strong> \(y = x\): Jeder Punkt \((a \mid b)\) wird zu \((b \mid a)\).</p>
+</div>
+
+<div class="block block-tipp" style="margin-top:8px">
+  <div class="block-titel">💡 Schreibweise mit rationalem Exponenten</div>
+  <p>Wegen \(a^{1/n} = \sqrt[n]{a}\) sind Wurzelfunktionen Potenzfunktionen mit <strong>rationalen Exponenten</strong> der Form \(\tfrac{1}{n}\). Die Rechenregeln (Potenzgesetze) übertragen sich direkt — siehe <a class="quer" href="s1-2-potenzen.html">↩ 1.2 Potenzen</a>.</p>
+</div>
+
+
+<!-- ══ 4. UMKEHRFUNKTION / DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Umkehrbarkeit — wann darf man spiegeln?</h2>
+
+<p>Nicht jede Potenzfunktion ist auf ihrem ganzen Definitionsbereich umkehrbar. Es kommt auf die Parität des Exponenten an:</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Umkehrbarkeit der Potenzfunktionen</div>
+  <ul style="margin-top:4px">
+    <li><strong>Gerader Exponent</strong> (z.B. \(y = x^2\)): Auf ganz \(\mathbb{R}\) <em>nicht</em> umkehrbar — zu jedem \(y &gt; 0\) gehören zwei \(x\)-Werte (\(\pm\)). Beschränkt man sich auf den rechten Ast (\(x \in \mathbb{R}_0^+\)), wird die Funktion umkehrbar: \(f^{-1}: y = \sqrt{x}\). (Der linke Ast hätte die Umkehrfunktion \(y = -\sqrt{x}\).)</li>
+    <li><strong>Ungerader Exponent</strong> (z.B. \(y = x^3\)): Auf ganz \(\mathbb{R}\) umkehrbar, denn jede Höhe wird genau einmal erreicht: \(f^{-1}: y = \sqrt[3]{x}\) mit \(x \in \mathbb{R}\).</li>
+  </ul>
+  <p style="margin-top:6px">Es ist sinnvoll, die Umkehrbarkeit aller Potenzfunktionen <strong>einheitlich auf \(D = \mathbb{R}_0^+\)</strong> zu beschränken.</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Spiegelung an der Winkelhalbierenden — \(y = x^n\) ↔ \(y = \sqrt[n]{x}\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Bewege den Punkt \(P\) auf der Potenzkurve und beobachte seinen Spiegelpunkt \(P'\) auf der Wurzelkurve: Wie hängen die Koordinaten zusammen? Wo treffen sich beide Kurven?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Bewege den Punkt P auf der Potenzkurve und beobachte seinen Spiegelpunkt P Strich auf der Wurzelkurve: Wie hängen die Koordinaten zusammen? Wo treffen sich beide Kurven?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Koordinaten sind vertauscht: \(P(a \mid a^n)\) wird zu \(P'(a^n \mid a)\). Beide Kurven schneiden sich auf der Winkelhalbierenden in \((0 \mid 0)\) und \((1 \mid 1)\) — dort ist Spiegeln wirkungslos.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Koordinaten sind vertauscht: P mit Koordinaten a und a hoch n wird zu P Strich mit Koordinaten a hoch n und a. Beide Kurven schneiden sich auf der Winkelhalbierenden im Ursprung und im Punkt eins senkrecht eins — dort ist Spiegeln wirkungslos.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Potenzkurve blau · Wurzelkurve grün · Winkelhalbierende \(y = x\) gestrichelt</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="um-n-btns">
+      <button class="typ-btn aktiv" onclick="setUmN(2)">n = 2</button>
+      <button class="typ-btn" onclick="setUmN(3)">n = 3</button>
+    </div>
+    <div class="sl-row akz-blau">
+      <label>Punkt <span class="var">\(a\)</span></label>
+      <input type="range" id="um-a" min="0" max="1.5" step="0.1" value="1.2">
+      <span class="sl-val" id="um-av">1.2</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Punkt und Spiegelpunkt</div>
+      <div class="fl-eq" id="um-eq">P(1.2 | 1.44) auf y = x² &nbsp;→&nbsp; P′(1.44 | 1.2) auf y = √x</div>
+    </div>
+    <div class="cv-wrap"><canvas id="um-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Umkehrfunktion</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie lautet die Umkehrfunktion von \(f: y = x^3\) (auf \(\mathbb{R}_0^+\))?</p><ul class="mc-optionen"><li data-opt="A">\(y = \dfrac{1}{x^3}\)</li><li data-opt="B">\(y = \sqrt[3]{x}\)</li><li data-opt="C">\(y = 3\sqrt{x}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Umkehren heisst: nach \(x\) auflösen und Variablen tauschen. \(y = x^3 \Rightarrow x = \sqrt[3]{y}\), also \(f^{-1}: y = \sqrt[3]{x}\). (Achtung: \(\tfrac{1}{x^3} = x^{-3}\) ist der Kehrwert, nicht die Umkehrfunktion!)</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Graph der Umkehrfunktion entsteht durch Spiegelung an der <span class="mc-luecke"></span> \(y = x\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Winkelhalbierenden (des 1. und 3. Quadranten).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(\sqrt[3]{125}\) und \(\sqrt[5]{32}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\sqrt[3]{125} = 5\) (denn \(5^3 = 125\)) und \(\sqrt[5]{32} = 2\) (denn \(2^5 = 32\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum ist \(f: y = x^2\) auf ganz \(\mathbb{R}\) nicht umkehrbar? Argumentiere mit einem konkreten Zahlenbeispiel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Zur Höhe \(y = 4\) gehören <strong>zwei</strong> Urbilder: \(x = 2\) und \(x = -2\). Eine Umkehrfunktion müsste der \(4\) einen eindeutigen Wert zuordnen — das geht nicht. Erst die Einschränkung auf \(x \geq 0\) macht die Zuordnung eindeutig und die Funktion umkehrbar.</div></details></div>
+</details>
+
+
+<!-- ══ 5. EIGENSCHAFTEN ══ -->
+<h2 id="typen">Eigenschaften der Wurzelfunktionen</h2>
+
+<p>Der Einfluss des Wurzelexponenten wird sichtbar, wenn man mehrere Wurzelkurven in ein Koordinatensystem zeichnet:</p>
+
+<div class="typ-btns" id="wz-btns"></div>
+<div class="cv-wrap"><canvas id="wz-canvas" height="220"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="wz-desc"></div>
+
+<table class="ftb-tabelle" style="margin-top:14px">
+  <thead><tr><th>Eigenschaften</th><th>\(y = f(x) = \sqrt[n]{x} = x^{1/n}\), \(n \in \mathbb{N}^*\)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Definitionsmenge</td><td>\(D = \mathbb{R}_0^+\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wertemenge</td><td>\(W = \mathbb{R}_0^+\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Gemeinsame Punkte</td><td>\((0 \mid 0)\) und \((1 \mid 1)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Ordinatenabschnitt</td><td>\(y_0 = 0\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstellen</td><td>\(x_0 = 0\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetrie</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-tipp" style="margin-top:10px">
+  <div class="block-titel">💡 Warum keine Symmetrie?</div>
+  <p>Achsen- oder Punktsymmetrie verlangt, dass mit \(x\) auch \(-x\) im Definitionsbereich liegt. \(D = \mathbb{R}_0^+\) ist aber nicht symmetrisch zum Ursprung — die Frage stellt sich gar nicht.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Eigenschaften</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Definitionsmenge hat die Wurzelfunktion \(y = \sqrt[4]{x}\)?</p><ul class="mc-optionen"><li data-opt="A">\(D = \mathbb{R}\)</li><li data-opt="B">\(D = \mathbb{R}_0^+\)</li><li data-opt="C">\(D = \mathbb{R}^+\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Das Argument unter einer geraden Wurzel muss \(\geq 0\) sein; \(x = 0\) ist erlaubt (\(\sqrt[4]{0} = 0\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Alle Wurzelfunktionen \(y = \sqrt[n]{x}\) laufen durch die Punkte \((0 \mid 0)\) und <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((1 \mid 1)\) — denn \(\sqrt[n]{1} = 1\) für jedes \(n\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Welcher Wert ist grösser: \(\sqrt{0.5}\) oder \(\sqrt[5]{0.5}\)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\sqrt{0.5} \approx 0.71\) und \(\sqrt[5]{0.5} \approx 0.87\) — zwischen \(0\) und \(1\) liegt die höhere Wurzel <strong>über</strong> der niedrigeren (rechts von \(1\) ist es umgekehrt).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Die Wurzelkurven wirken wie „gekippte" Parabeln. Erkläre diesen Eindruck mit der Umkehrbeziehung.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(y = \sqrt[n]{x}\) ist die Spiegelung von \(y = x^n\) (rechter Ast) an der Winkelhalbierenden \(y = x\). Die Spiegelung vertauscht die Rollen der Achsen — darum sieht die Wurzelkurve aus wie eine um 90° gekippte (liegende) Parabel.</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Transformationen und Wurzelgleichungen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Transformationen — \(y = a \cdot \sqrt[n]{x-u} + v\)</div>
+  <p>Die Parameter wirken wie bei den Potenzfunktionen: \(u\) verschiebt horizontal, \(v\) vertikal, \(|a|\) streckt in \(y\)-Richtung, negatives \(a\) spiegelt an der \(x\)-Achse. Neu ist die Wirkung auf den Definitionsbereich:</p>
+  \[ x - u \geq 0 \;\Longrightarrow\; D = [u;\, +\infty[ \]
+  <p>Der „Startpunkt" der Kurve liegt bei \((u \mid v)\).</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Ordinatenabschnitt und Nullstelle</div>
+  <p>Gegeben ist \(f: y = 2 \cdot \sqrt[3]{x+1} - 4\).</p>
+  <p><strong>Ordinatenabschnitt</strong> (\(x = 0\) einsetzen):</p>
+  \[ y_0 = 2 \cdot \sqrt[3]{0+1} - 4 = 2 \cdot 1 - 4 = -2 \]
+  <p><strong>Nullstelle</strong> (\(y = 0\) setzen):</p>
+  \[ 0 = 2 \cdot \sqrt[3]{x_0+1} - 4 \;\Longrightarrow\; \sqrt[3]{x_0+1} = 2 \;\Longrightarrow\; x_0 + 1 = 2^3 = 8 \;\Longrightarrow\; x_0 = 7 \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Transformation und Definitionsbereich</div>
+  <p>Gegeben sind \(f_1: y = \sqrt[3]{x}\) und \(f_2: y = 2 \cdot \sqrt[3]{x-1}\).</p>
+  <p><strong>(a)</strong> Der Graph von \(f_2\) geht aus dem von \(f_1\) durch Verschiebung um \(1\) Einheit nach rechts und Streckung um den Faktor \(2\) in \(y\)-Richtung hervor.</p>
+  <p><strong>(b)</strong> Das Argument unter der Wurzel muss grösser oder gleich null sein:</p>
+  \[ x - 1 \geq 0 \;\Longrightarrow\; x \geq 1 \;\Longrightarrow\; D = [1;\, +\infty[ , \qquad W = \mathbb{R}_0^+ \]
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Grafische Lösung von Wurzelgleichungen</div>
+  <p>Beide Seiten einer Wurzelgleichung werden als Funktionsterme aufgefasst. Die \(x\)-Koordinate des Schnittpunkts \(P\) der beiden Graphen liefert die Lösung — näherungsweise beim Ablesen, exakt nach algebraischer Kontrolle.</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Wurzelgleichung grafisch — \(\sqrt[3]{x+2} = c\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verschiebe die Höhe \(c\) der horizontalen Geraden: Wie wandert der Schnittpunkt \(P\)? Prüfe die abgelesene Lösung jeweils im Kopf: Stimmt \(x_P = c^3 - 2\)?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verschiebe die Höhe c der horizontalen Geraden: Wie wandert der Schnittpunkt P? Prüfe die abgelesene Lösung jeweils im Kopf: Stimmt x P gleich c hoch drei minus zwei?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die linke Seite ist die Wurzelkurve \(y = \sqrt[3]{x+2}\), die rechte die konstante Funktion \(y = c\). Der Schnittpunkt hat die \(x\)-Koordinate \(c^3 - 2\) — das Auflösen der Gleichung entspricht dem Anwenden der Umkehrfunktion (hoch 3).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die linke Seite ist die Wurzelkurve, die rechte die konstante Funktion y gleich c. Der Schnittpunkt hat die x-Koordinate c hoch drei minus zwei — das Auflösen der Gleichung entspricht dem Anwenden der Umkehrfunktion hoch drei.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Höhe \(c\) der rechten Seite · Schnittpunkt \(P\) markiert</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-orange">
+      <label>Höhe <span class="var">\(c\)</span></label>
+      <input type="range" id="wg-c" min="0.5" max="2" step="0.25" value="2">
+      <span class="sl-val" id="wg-cv">2.00</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Gleichung und Lösung</div>
+      <div class="fl-eq" id="wg-eq">∛(x + 2) = <span class="tx-orange">2</span> &nbsp;⇒&nbsp; x = <span class="tx-orange">2</span>³ − 2 = 6</div>
+    </div>
+    <div class="cv-wrap"><canvas id="wg-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Wurzelwerte sind nie negativ</div>
+  <p>Die (gerade) Wurzel liefert per Definition Werte \(\geq 0\). Eine Gleichung wie \(\sqrt{3-x} = -1\) hat deshalb <strong>keine Lösung</strong> — egal, was beim formalen Quadrieren herauskommt. Erst denken, dann quadrieren: Ist die rechte Seite negativ, ist die Lösungsmenge leer.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Scheinlösungen nach dem Quadrieren</div>
+  <p>Quadrieren ist <strong>keine Äquivalenzumformung</strong>: Es können Scheinlösungen entstehen, die die Ausgangsgleichung nicht erfüllen. Nach dem algebraischen Lösen einer Wurzelgleichung gehört immer die <strong>Probe</strong> in der ursprünglichen Gleichung dazu.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Definitionsbereich zuerst</div>
+  <p>Bestimme vor dem Lösen den Definitionsbereich: Radikand \(\geq 0\) setzen und auflösen. Lösungen ausserhalb von \(D\) sind automatisch ungültig — das entlarvt Scheinlösungen oft schon vor der Probe.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Transformationen und Wurzelgleichungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welchen maximalen Definitionsbereich hat \(y = \sqrt{x-1}\)?</p><ul class="mc-optionen"><li data-opt="A">\(D = [1;\, +\infty[\)</li><li data-opt="B">\(D = \mathbb{R}_0^+\)</li><li data-opt="C">\(D = ]1;\, +\infty[\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(x - 1 \geq 0 \Rightarrow x \geq 1\). Die \(1\) gehört dazu (\(\sqrt{0} = 0\)) — also geschlossene Klammer.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Graph von \(y = \sqrt{x-u} + v\) „startet" im Punkt \((u \mid\) <span class="mc-luecke"></span>\()\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(v\) — an der Stelle \(x = u\) ist die Wurzel null, also \(y = v\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme die Nullstelle von \(y = \sqrt{x-3} - 2\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\sqrt{x-3} = 2 \Rightarrow x - 3 = 4 \Rightarrow x_0 = 7\). Probe: \(\sqrt{4} - 2 = 0\) ✓</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Hat die Gleichung \(\sqrt{x+2} = -3\) eine Lösung? Begründe — ohne zu quadrieren.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nein. Die linke Seite ist ein Wurzelwert und damit \(\geq 0\), die rechte Seite ist \(-3 &lt; 0\). Gleichheit ist unmöglich, \(L = \{\,\}\). (Formales Quadrieren ergäbe die Scheinlösung \(x = 7\) — die Probe \(\sqrt{9} = 3 \neq -3\) entlarvt sie.)</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Wurzelfunktion am Graphen erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Graphen und entscheide, welche Funktionsgleichung dazu passt. Achte auf Startpunkt und Öffnungsrichtung.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört zum angezeigten Graphen?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Graphen skizzieren, Definitions- und Wertemenge angeben</span></div>
+  <p>Skizziere die folgenden Graphen <strong>von Hand</strong>. Bestimme jeweils zuerst den Startpunkt \((u \mid v)\) und den Definitionsbereich. Vergleiche danach mit der Lösung.</p>
+  <ol class="aufg-liste">
+    <li>\(y = \sqrt{x-2} + 1\)</li>
+    <li>\(y = -2\sqrt{x} + 3\)</li>
+    <li>\(y = \sqrt{x+3} - 2\)</li>
+  </ol>
+  <div class="eingabe-row"><label>a) D = [ ? ; ∞[ — untere Grenze:&nbsp;</label><input type="text" id="a2-1" placeholder="u"><button class="btn-pruef" onclick="chkNum('a2-1', 2, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a2-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>c) D = [ ? ; ∞[ — untere Grenze:&nbsp;</label><input type="text" id="a2-2" placeholder="u"><button class="btn-pruef" onclick="chkNum('a2-2', -3, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a2-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a2'); drawA2Sol();">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <div class="cv-wrap" style="margin-bottom:8px"><canvas id="a2-canvas" height="240"></canvas></div>
+      <ol class="aufg-liste">
+        <li><span style="color:#1a4f8a;font-weight:700">Blau:</span> Startpunkt \((2 \mid 1)\), \(D = [2;\, +\infty[\), \(W = [1;\, +\infty[\).</li>
+        <li><span style="color:#1f6b3a;font-weight:700">Grün:</span> Startpunkt \((0 \mid 3)\), an der \(x\)-Achse gespiegelt und gestreckt; \(D = \mathbb{R}_0^+\), \(W = ]-\infty;\, 3]\).</li>
+        <li><span style="color:#5b2d8e;font-weight:700">Violett:</span> Startpunkt \((-3 \mid -2)\), \(D = [-3;\, +\infty[\), \(W = [-2;\, +\infty[\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Wurzelfunktionen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Ordinatenabschnitt und Nullstelle</div>
+    <p>Bestimme Ordinatenabschnitt und Nullstelle von \(f(x) = 2\sqrt{x+4} - 6\).</p>
+    <div class="eingabe-row"><label>y₀ =&nbsp;</label><input type="text" id="a3a1" placeholder="y₀"><button class="btn-pruef" onclick="chkNum('a3a1', -2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x₀ =&nbsp;</label><input type="text" id="a3a2" placeholder="x₀"><button class="btn-pruef" onclick="chkNum('a3a2', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Ordinatenabschnitt: \(y_0 = 2\sqrt{0+4} - 6 = 2 \cdot 2 - 6 = -2\).</p>
+        <p>Nullstelle: \(2\sqrt{x_0+4} = 6 \Rightarrow \sqrt{x_0+4} = 3 \Rightarrow x_0 + 4 = 9 \Rightarrow x_0 = 5\). Probe: \(2\sqrt{9} - 6 = 0\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Definitionsbereich</div>
+    <p>Bestimme den maximalen Definitionsbereich von \(y = 3\sqrt{x-2}\).</p>
+    <div class="eingabe-row"><label>D = [ ? ; ∞[ — untere Grenze:&nbsp;</label><input type="text" id="a3b1" placeholder="u"><button class="btn-pruef" onclick="chkNum('a3b1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(x - 2 \geq 0 \Rightarrow x \geq 2 \Rightarrow D = [2;\, +\infty[\). Wertemenge: \(W = \mathbb{R}_0^+\) (positiver Streckfaktor).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Parameter aus zwei Punkten</div>
+    <p>Die Funktion \(f(x) = a \cdot \sqrt[n]{x}\) geht durch \(P = (1 \mid 2)\) und \(Q = (8 \mid 4)\). Bestimme \(a\) und \(n\).</p>
+    <div class="eingabe-row"><label>a =&nbsp;</label><input type="text" id="a3c1" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3c1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>n =&nbsp;</label><input type="text" id="a3c2" placeholder="n"><button class="btn-pruef" onclick="chkNum('a3c2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Aus \(P\): \(a \cdot \sqrt[n]{1} = 2 \Rightarrow a = 2\). Aus \(Q\): \(2 \cdot \sqrt[n]{8} = 4 \Rightarrow \sqrt[n]{8} = 2 \Rightarrow 2^n = 8 \Rightarrow n = 3\).</p>
+        <p>Also \(f(x) = 2\sqrt[3]{x}\). Probe: \(2 \cdot \sqrt[3]{8} = 2 \cdot 2 = 4\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 d) Wurzelgleichungen — grafisch lösen, algebraisch prüfen</div>
+    <ol class="aufg-liste">
+      <li>\(\sqrt{x+2} = 6\)</li>
+      <li>\(\sqrt{2x-1} = 2\)</li>
+      <li>\(2\sqrt{3-x} = -1\)</li>
+    </ol>
+    <div class="eingabe-row"><label>1. x =&nbsp;</label><input type="text" id="a3d1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3d1', 34, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>2. x =&nbsp;</label><input type="text" id="a3d2" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3d2', 2.5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <ol class="aufg-liste">
+          <li>Quadrieren: \(x + 2 = 36 \Rightarrow x = 34\). Probe: \(\sqrt{36} = 6\) ✓</li>
+          <li>Quadrieren: \(2x - 1 = 4 \Rightarrow x = 2.5\). Probe: \(\sqrt{4} = 2\) ✓</li>
+          <li><strong>Keine Lösung:</strong> Die linke Seite ist \(\geq 0\), die rechte \(-1 &lt; 0\). \(L = \{\,\}\) — grafisch: Die Wurzelkurve und die Gerade \(y = -1\) schneiden sich nie.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Fadenpendel — hin und zurück</span></div>
+  <p>Für ein Fadenpendel gilt \(T = 2\pi\sqrt{\dfrac{l}{g}}\) mit \(g = 9.81\ \text{m/s}^2\).</p>
+  <ol class="aufg-liste">
+    <li>Zeige, dass auf der Erde näherungsweise \(T \approx 2\sqrt{l}\) gilt.</li>
+    <li>Berechne \(T\) für \(l = 1\) m.</li>
+    <li>Bestimme die Umkehrfunktion \(l(T)\) und berechne die Pendellänge für \(T = 1\) s.</li>
+    <li>Welche Schwingungsdauer hätte ein 1-m-Pendel auf dem Mond (\(g = 1.6\ \text{m/s}^2\))?</li>
+  </ol>
+  <div class="eingabe-row"><label>T(1 m) ≈&nbsp;</label><input type="text" id="a4-1" placeholder="s"><button class="btn-pruef" onclick="chkNum('a4-1', 2.01, 0.02, 's')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>l bei T = 1 s ≈&nbsp;</label><input type="text" id="a4-2" placeholder="m"><button class="btn-pruef" onclick="chkNum('a4-2', 0.25, 0.005, 'm')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>T auf dem Mond ≈&nbsp;</label><input type="text" id="a4-3" placeholder="s"><button class="btn-pruef" onclick="chkNum('a4-3', 4.97, 0.05, 's')">Prüfen</button></div>
+  <div class="cr" id="a4-3-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(T = \dfrac{2\pi}{\sqrt{g}} \cdot \sqrt{l} = \dfrac{2\pi}{\sqrt{9.81}} \cdot \sqrt{l} \approx 2.006 \cdot \sqrt{l} \approx 2\sqrt{l}\). ✓</li>
+        <li>\(T(1) = 2\pi\sqrt{1/9.81} \approx 2.01\) s.</li>
+        <li>Quadrieren und auflösen: \(T^2 = 4\pi^2 \cdot \dfrac{l}{g} \Rightarrow l(T) = \dfrac{g \cdot T^2}{4\pi^2} \approx 0.248 \cdot T^2\). Für \(T = 1\) s: \(l \approx 0.25\) m — die Umkehrfunktion der Wurzelfunktion ist eine quadratische Funktion.</li>
+        <li>\(T = 2\pi\sqrt{1/1.6} \approx 4.97\) s — auf dem Mond schwingt dasselbe Pendel rund 2.5-mal langsamer.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Wasserwellen im Ozean</span></div>
+  <p>Die Geschwindigkeit von Oberflächenwellen hängt von der Wellenlänge \(x\) ab (nicht von der Wellenhöhe):</p>
+  \[ v = 1.25 \cdot \sqrt{x} \qquad (v \text{ in m/s},\ x \text{ in m}) \]
+  <p>Die Formel gilt, solange die Wellenlänge höchstens das Sechsfache der Wassertiefe \(h\) beträgt.</p>
+  <ol class="aufg-liste">
+    <li>Berechne die Geschwindigkeit für Wellenlängen von \(20\) m und \(100\) m.</li>
+    <li>Wie schnell können Wellen in einem Ozean der Tiefe \(4000\) m höchstens werden?</li>
+    <li>Wie lange bräuchte eine solche Welle für eine Erdumrundung (\(40\,000\) km)?</li>
+  </ol>
+  <div class="eingabe-row"><label>v(100) =&nbsp;</label><input type="text" id="a5-1" placeholder="m/s"><button class="btn-pruef" onclick="chkNum('a5-1', 12.5, 0.1, 'm/s')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>v_max ≈&nbsp;</label><input type="text" id="a5-2" placeholder="m/s"><button class="btn-pruef" onclick="chkNum('a5-2', 194, 2, 'm/s')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(v(20) = 1.25\sqrt{20} \approx 5.59\) m/s und \(v(100) = 1.25\sqrt{100} = 12.5\) m/s.</li>
+        <li>Maximale Wellenlänge: \(x_{\max} = 6 \cdot 4000 = 24\,000\) m. Also \(v_{\max} = 1.25 \cdot \sqrt{24\,000} \approx 193.6\) m/s — fast \(700\) km/h (Tsunami-Grössenordnung).</li>
+        <li>\(t = \dfrac{40\,000\,000\ \text{m}}{193.6\ \text{m/s}} \approx 206\,600\ \text{s} \approx 57.4\) h — gut zweieinhalb Tage.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Der Stein im Brunnen</span></div>
+  <p>Für die Fallhöhe gilt \(s(t) = \tfrac{1}{2} g t^2\) mit \(g = 9.81\ \text{m/s}^2\); der Schall läuft mit \(v = 340\) m/s zurück.</p>
+  <ol class="aufg-liste">
+    <li>Löse \(s(t)\) nach \(t\) auf. Welcher Funktionstyp ergibt sich?</li>
+    <li>Ein Stein fällt in einen \(100\) m tiefen Sodbrunnen. Nach welcher Zeit hört man den Aufprall (Fallzeit + Schall-Laufzeit)?</li>
+    <li>In einem anderen Brunnen hört man den Aufprall nach \(1.8\) s. Wie tief ist der Brunnen (mit Berücksichtigung des Schalls)?</li>
+  </ol>
+  <div class="eingabe-row"><label>2. Gesamtzeit ≈&nbsp;</label><input type="text" id="a6-1" placeholder="s"><button class="btn-pruef" onclick="chkNum('a6-1', 4.81, 0.02, 's')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>3. Tiefe ≈&nbsp;</label><input type="text" id="a6-2" placeholder="m"><button class="btn-pruef" onclick="chkNum('a6-2', 15.1, 0.2, 'm')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(t(s) = \sqrt{\dfrac{2s}{g}}\) — die Umkehrfunktion der quadratischen Fallfunktion ist eine <strong>Wurzelfunktion</strong>.</li>
+        <li>Fallzeit \(t_1 = \sqrt{200/9.81} \approx 4.52\) s, Schall \(t_2 = 100/340 \approx 0.29\) s, zusammen \(\approx 4.81\) s.</li>
+        <li>Ansatz: \(t_1 + t_2 = 1.8\) mit \(s = \tfrac{1}{2} g t_1^2\) und \(t_2 = \tfrac{s}{340}\). Einsetzen liefert die quadratische Gleichung \(4.905\,t_1^2 + 340\,t_1 - 612 = 0\) mit der positiven Lösung \(t_1 \approx 1.756\) s. Daraus \(s = \tfrac{1}{2} \cdot 9.81 \cdot 1.756^2 \approx 15.1\) m. (Ohne Schallkorrektur ergäben sich \(15.9\) m — der Schall macht knapp einen Meter aus.)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Zehnkampf-Punkteformeln <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Der Leichtathletik-Weltverband vergibt Zehnkampf-Punkte nach Potenzformeln: für Laufdisziplinen \(P(l) = A \cdot (B - l)^C\), für Sprung- und Wurfdisziplinen \(P(l) = A \cdot (l - B)^C\) (Leistung \(l\) in s bzw. cm/m):</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Disziplin</th><th>A</th><th>B</th><th>C</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left">100 m [s]</td><td>25.4347</td><td>18</td><td>1.81</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Weitsprung [cm]</td><td>0.14354</td><td>220</td><td>1.40</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Kugelstossen [m]</td><td>51.39</td><td>1.5</td><td>1.05</td></tr>
+    </tbody>
+  </table>
+  <ol class="aufg-liste">
+    <li>Schreibe den Exponenten \(C = 1.4\) des Weitsprungs als gemeinen Bruch.</li>
+    <li>Bestimme die Umkehrzuordnung „Punkte \(\to\) Leistung": Löse \(P = A(l-B)^C\) nach \(l\) auf. Welche Rolle spielt dabei die Wurzel?</li>
+    <li>Welche Leistung braucht es in jeder der drei Disziplinen für \(1000\) Punkte?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(1.4 = \dfrac{7}{5}\), also \((l-B)^{7/5} = \sqrt[5]{(l-B)^7}\).</li>
+        <li>\(P = A(l-B)^C \Rightarrow (l-B)^C = \dfrac{P}{A} \Rightarrow l = B + \left(\dfrac{P}{A}\right)^{1/C}\). Der Exponent \(\tfrac{1}{C}\) ist eine <strong>Wurzel</strong> — die Umkehrung des Potenzierens, genau wie bei \(x^n \leftrightarrow \sqrt[n]{x}\). (Laufdisziplinen analog: \(l = B - (P/A)^{1/C}\).)</li>
+        <li>100 m: \(l = 18 - (1000/25.4347)^{1/1.81} \approx 10.40\) s.<br>
+            Weitsprung: \(l = 220 + (1000/0.14354)^{1/1.4} \approx 776\) cm \(\approx 7.76\) m.<br>
+            Kugelstossen: \(l = 1.5 + (1000/51.39)^{1/1.05} \approx 18.4\) m.<br>
+            Alles Weltklasse-Leistungen — 1000 Punkte pro Disziplin entsprechen rund 10 000 Zehnkampf-Punkten.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Die Wurzelfunktion \(y = \sqrt[n]{x}\) ist die <strong>Umkehrfunktion</strong> der Potenzfunktion \(y = x^n\) (auf \(\mathbb{R}_0^+\)): Ihr Graph entsteht durch <strong>Spiegelung an der Winkelhalbierenden</strong> \(y = x\). Potenzfunktionen mit geradem Exponenten müssen dazu auf \(\mathbb{R}_0^+\) eingeschränkt werden; bei ungeradem Exponenten wäre die Umkehrung auf ganz \(\mathbb{R}\) möglich.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Grösse</th><th>Formel / Wert</th><th>Bedeutung</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Wurzelfunktion</td><td>\(y = \sqrt[n]{x} = x^{1/n}\)</td><td style="font-family:var(--sans);text-align:left">Umkehrfunktion von \(y = x^n\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">\(D\) und \(W\)</td><td>\(D = W = \mathbb{R}_0^+\)</td><td style="font-family:var(--sans);text-align:left">Radikand und Wurzelwert \(\geq 0\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Gemeinsame Punkte</td><td>\((0 \mid 0)\), \((1 \mid 1)\)</td><td style="font-family:var(--sans);text-align:left">für alle Wurzelexponenten \(n\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Transformation</td><td>\(y = a\sqrt[n]{x-u} + v\)</td><td style="font-family:var(--sans);text-align:left">Startpunkt \((u \mid v)\), \(D = [u;\, +\infty[\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wurzelgleichung</td><td>\(\sqrt[n]{\dots} = c\)</td><td style="font-family:var(--sans);text-align:left">grafisch: Schnittpunkt mit \(y = c\) · algebraisch: hoch \(n\), dann Probe!</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s3-2b-wurzelfunktionen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-2b-wurzelfunktionen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-2b-wurzelfunktionen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-2b-wurzelfunktionen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-2b-wurzelfunktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lXu1WcPP0oXEF_AnfOtYjkw" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über WURZELN — Playlist</div><div class="lk-s">MathemaTrick · 56 Videos · Wurzelrechnung als Grundlage auffrischen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHiqJlnyr_iYcbxsL7ztyWp8" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Wurzel, Wurzelrechnungen, Wurzelfunktionen — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 31 Videos · inkl. Wurzelgleichungen mit Probe</div></div></a>
+  <a href="https://www.youtube.com/watch?v=GMjEAYtCHQg" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Definitionsmenge eines Wurzelterms bestimmen</div><div class="lk-s">MathemaTrick · Einzelvideo · passt zu Aufgabe A3b</div></div></a>
+  <a href="https://www.youtube.com/watch?v=_ZA-ZB-SqTc" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Wurzelfunktionen — Wertebereich und Umkehrfunktion</div><div class="lk-s">Mathe by Daniel Jung · Einzelvideo · Kernthema dieser Seite</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g3/g33/aufg_g33.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Wurzelgleichungen (G33)</div><div class="lk-s">Wurzelgleichungen mit PDF-Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26402/aufgaben-zu-potenz-und-wurzelfunktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Potenz- und Wurzelfunktionen</div><div class="lk-s">Graphen, Definitionsbereiche · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26395/aufgaben-zur-umkehrfunktion" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zur Umkehrfunktion</div><div class="lk-s">Umkehrbarkeit, Umkehrfunktion bestimmen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/260827/aufgaben-zu-wurzelgleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu Wurzelgleichungen</div><div class="lk-s">Lösen mit Probe, Scheinlösungen · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 3.2b Wurzelfunktionen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s3-2b',
+  kapitelNr:'3.2b', kapitelTitel:'Wurzelfunktionen',
+  prev:{nr:'3.2a',titel:'Potenzfunktionen',url:'s3-2a-potenzfunktionen.html'},
+  next:{nr:'3.3',titel:'Polynomfunktionen',url:'s3-3-polynomfunktionen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+// Kurven-Plot mit Definitionslücken-Behandlung (NaN wird übersprungen)
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+// Anwendungs-Raster mit frei wählbaren Schritten und Einheiten-Labels
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Fadenpendel ══ */
+const PE = { g: 9.81 };
+function updatePE(){
+  const l = parseFloat(document.getElementById('pe-l').value);
+  document.getElementById('pe-lv').textContent = l.toFixed(1);
+  const T = 2 * Math.PI * Math.sqrt(l / PE.g);
+  const lB = `<span class="tx-blau">${l.toFixed(1)}</span>`;
+  document.getElementById('pe-eq').innerHTML = `T(${lB}) = ${T.toFixed(2)} s`;
+  const {ctx, cx, cy} = gridApp('pe-canvas', 240, 0, 11, 0, 7, 1, 1, 'l [m]', 'T [s]');
+  plotFx(ctx, cx, cy, x => 2 * Math.PI * Math.sqrt(x / PE.g), 0, 11, '#1a4f8a', 2.5, 1e6);
+  drawDot(ctx, cx, cy, l, T, '#1a4f8a', 7);
+  ctx.strokeStyle = '#1a4f8a55'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(cx(l), cy(T)); ctx.lineTo(cx(l), cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(l), cy(T)); ctx.lineTo(cx(0), cy(T)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = l > 8 ? 'right' : 'left';
+  ctx.fillText(`(${l.toFixed(1)}|${T.toFixed(2)})`, cx(l) + (l > 8 ? -8 : 8), cy(T) - 8);
+}
+document.getElementById('pe-l').addEventListener('input', updatePE);
+
+/* ══ UMKEHRFUNKTION: Spiegelung an y = x ══ */
+let umN = 2;
+function setUmN(n){
+  umN = n;
+  document.querySelectorAll('#um-n-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === n - 2));
+  updateUM();
+}
+function updateUM(){
+  const a = parseFloat(document.getElementById('um-a').value);
+  document.getElementById('um-av').textContent = a.toFixed(1);
+  const b = Math.pow(a, umN);
+  const wSym = umN === 2 ? '√x' : '∛x';
+  document.getElementById('um-eq').innerHTML =
+    `P(<span class="tx-blau">${a.toFixed(1)}</span> | ${fmt2(b)}) auf y = x${umN === 2 ? '²' : '³'} &nbsp;→&nbsp; P′(${fmt2(b)} | <span class="tx-blau">${a.toFixed(1)}</span>) auf y = ${wSym}`;
+  const {ctx, W, H} = initCanvas('um-canvas', 220, true);
+  const xMin = -1, xMax = 4;
+  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, xMin, xMax);
+  // Winkelhalbierende gestrichelt
+  ctx.setLineDash([6, 4]); ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx(xMin), cy(xMin)); ctx.lineTo(cx(xMax), cy(xMax)); ctx.stroke();
+  ctx.setLineDash([]);
+  // Potenzkurve (blau) und Wurzelkurve (grün) auf R0+
+  plotFx(ctx, cx, cy, x => x < 0 ? NaN : Math.pow(x, umN), 0, Math.pow(xMax, 1 / umN), '#1a4f8a', 2.5, 20);
+  plotFx(ctx, cx, cy, x => x < 0 ? NaN : Math.pow(x, 1 / umN), 0, xMax, '#1f6b3a', 2.5, 20);
+  // Spiegelstrecke + Punkte
+  if(b <= xMax){
+    ctx.setLineDash([4, 3]); ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(cx(a), cy(b)); ctx.lineTo(cx(b), cy(a)); ctx.stroke();
+    ctx.setLineDash([]);
+    drawDot(ctx, cx, cy, a, b, '#1a4f8a', 7);
+    drawDot(ctx, cx, cy, b, a, '#1f6b3a', 7);
+    ctx.font = 'bold 13px monospace';
+    ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'left';
+    ctx.fillText('P', cx(a) - 14, cy(b) - 8);
+    ctx.fillStyle = '#1f6b3a';
+    ctx.fillText("P'", cx(b) + 8, cy(a) + 14);
+  }
+  // Kurven-Labels
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'left';
+  ctx.fillText(umN === 2 ? 'y=x²' : 'y=x³', cx(Math.pow(3.4, 1 / umN)) - 48, cy(3.4));
+  ctx.fillStyle = '#1f6b3a';
+  ctx.fillText(umN === 2 ? 'y=√x' : 'y=∛x', cx(3.0), cy(Math.pow(3.0, 1 / umN)) - 10);
+}
+document.getElementById('um-a').addEventListener('input', updateUM);
+
+/* ══ EIGENSCHAFTEN: Wurzelkurven-Vergleich ══ */
+const wzKurven = [
+  {label:'√x',  n:2, color:'#1a4f8a', desc:'k₁: y = √x  ·  Quadratwurzel — Umkehrung von x² (rechter Ast)'},
+  {label:'∛x',  n:3, color:'#1f6b3a', desc:'k₂: y = ∛x  ·  Kubikwurzel — Umkehrung von x³'},
+  {label:'⁵√x', n:5, color:'#5b2d8e', desc:'k₃: y = ⁵√x  ·  5. Wurzel — zwischen 0 und 1 am höchsten, danach am flachsten'},
+  {label:'alle drei', n:0, color:'', desc:'Alle Wurzelkurven laufen durch (0|0) und (1|1); je grösser n, desto flacher rechts von 1.'},
+];
+let wzActive = 3;
+function buildWzBtns(){
+  document.getElementById('wz-btns').innerHTML = wzKurven.map((k, i) =>
+    `<button class="typ-btn${i === wzActive ? ' aktiv' : ''}" onclick="setWz(${i})">${k.label}</button>`
+  ).join('');
+}
+function setWz(i){
+  wzActive = i;
+  document.querySelectorAll('#wz-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawWz();
+}
+function drawWz(){
+  const {ctx, W, H} = initCanvas('wz-canvas', 220, true);
+  const xMin = -0.5, xMax = 4.5;
+  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, xMin, xMax);
+  const k = wzKurven[wzActive];
+  const toDraw = k.n === 0 ? wzKurven.slice(0, 3) : [k];
+  toDraw.forEach(kk => {
+    plotFx(ctx, cx, cy, x => x < 0 ? NaN : Math.pow(x, 1 / kk.n), 0, xMax, kk.color, 2.5, 20);
+  });
+  // Gemeinsame Punkte
+  drawDot(ctx, cx, cy, 0, 0, '#9b1c1c', 5);
+  drawDot(ctx, cx, cy, 1, 1, '#9b1c1c', 5);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('(1|1)', cx(1) + 7, cy(1) + 16);
+  // Labels am rechten Rand
+  if(k.n === 0){
+    ctx.textAlign = 'left'; ctx.font = 'bold 13px monospace';
+    ctx.fillStyle = '#1a4f8a'; ctx.fillText('√x',  cx(4.05), cy(Math.sqrt(4.05)) - 6);
+    ctx.fillStyle = '#1f6b3a'; ctx.fillText('∛x',  cx(4.05), cy(Math.pow(4.05, 1/3)) + 5);
+    ctx.fillStyle = '#5b2d8e'; ctx.fillText('⁵√x', cx(4.05), cy(Math.pow(4.05, 1/5)) + 16);
+  }
+  document.getElementById('wz-desc').textContent = k.desc;
+}
+
+/* ══ WURZELGLEICHUNG GRAFISCH ══ */
+function updateWG(){
+  const c = parseFloat(document.getElementById('wg-c').value);
+  document.getElementById('wg-cv').textContent = c.toFixed(2);
+  const xP = Math.pow(c, 3) - 2;
+  const T = s => `<span class="tx-orange">${s}</span>`;
+  document.getElementById('wg-eq').innerHTML =
+    `∛(x + 2) = ${T(c.toFixed(2))} &nbsp;⇒&nbsp; x = ${T(c.toFixed(2))}³ − 2 = ${fmt2(xP)}`;
+  const {ctx, W, H} = initCanvas('wg-canvas', 220, true);
+  const xMin = -3, xMax = 7, yMin = -2, yMax = 8;
+  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+  // Wurzelkurve (Radikand >= 0, also x >= -2)
+  plotFx(ctx, cx, cy, x => x < -2 ? NaN : Math.pow(x + 2, 1/3), -2, xMax, '#1a4f8a', 2.5, 30);
+  // Konstante y = c
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, cy(c)); ctx.lineTo(W, cy(c)); ctx.stroke();
+  // Schnittpunkt
+  drawDot(ctx, cx, cy, xP, c, '#9b1c1c', 7);
+  ctx.strokeStyle = '#9b1c1c55'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(cx(xP), cy(c)); ctx.lineTo(cx(xP), cy(0)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = xP > 5 ? 'right' : 'left';
+  ctx.fillText(`P(${fmt2(xP)}|${c.toFixed(2)})`, cx(xP) + (xP > 5 ? -8 : 8), cy(c) - 10);
+  // Beschriftung der Kurven
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'left';
+  ctx.fillText('y = ∛(x+2)', cx(xMin) + 8, cy(yMax) + 18);
+  ctx.fillStyle = '#b85c00'; ctx.textAlign = 'right';
+  ctx.fillText('y = c', W - 8, cy(c) - 6);
+}
+document.getElementById('wg-c').addEventListener('input', updateWG);
+
+/* ══ A1: Erkennen ══ */
+const a1G = [
+  {label:'Graph 1', f: x => x < 0 ? NaN : Math.sqrt(x),            eq:'y = √x'},
+  {label:'Graph 2', f: x => x < 2 ? NaN : Math.sqrt(x - 2) + 1,    eq:'y = √(x−2) + 1'},
+  {label:'Graph 3', f: x => x < 0 ? NaN : -2 * Math.sqrt(x) + 3,   eq:'y = −2·√x + 3'},
+  {label:'Graph 4', f: x => x < 0 ? NaN : Math.pow(x, 1/3),        eq:'y = ∛x'},
+];
+const a1Opts = ['y = √x', 'y = √(x−2) + 1', 'y = −2·√x + 3', 'y = ∛x'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map((o, i) =>
+    `<button class="graf-btn" onclick="checkA1(${i})">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, true);
+  const {cx, cy} = drawGrid(ctx, W, H, -2, 6, -3, 5);
+  plotFx(ctx, cx, cy, a1G[a1Act].f, -2, 6, '#1a4f8a', 2.5, 30);
+}
+function checkA1(i){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(a1Opts[i] === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Achte auf den Startpunkt (u|v) und darauf, ob die Kurve steigt oder fällt.';
+  }
+}
+
+/* ══ A2: Lösungs-Skizzen ══ */
+function drawA2Sol(){
+  const body = document.getElementById('l-a2');
+  if(!body.classList.contains('sichtbar')) return;
+  const {ctx, W, H} = initCanvas('a2-canvas', 240, true);
+  const {cx, cy} = drawGrid(ctx, W, H, -4, 6, -4, 6);
+  plotFx(ctx, cx, cy, x => x < 2 ? NaN : Math.sqrt(x - 2) + 1,  -4, 6, '#1a4f8a', 2.5, 30);
+  plotFx(ctx, cx, cy, x => x < 0 ? NaN : -2 * Math.sqrt(x) + 3, -4, 6, '#1f6b3a', 2.5, 30);
+  plotFx(ctx, cx, cy, x => x < -3 ? NaN : Math.sqrt(x + 3) - 2, -4, 6, '#5b2d8e', 2.5, 30);
+  // Startpunkte markieren
+  drawDot(ctx, cx, cy, 2, 1, '#1a4f8a', 5);
+  drawDot(ctx, cx, cy, 0, 3, '#1f6b3a', 5);
+  drawDot(ctx, cx, cy, -3, -2, '#5b2d8e', 5);
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-Z°/]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updatePE();
+  updateUM();
+  buildWzBtns(); drawWz();
+  updateWG();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updatePE(); updateUM(); drawWz(); updateWG(); drawA1(); drawA2Sol();
+});
+</script>
+</body>
+</html>

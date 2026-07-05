@@ -4,6 +4,38 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [69] — 2026-07-05 · s3-2 ausgebaut: Sub-Split 3.2a Potenzfunktionen / 3.2b Wurzelfunktionen
+
+Erster Vollausbau im Schwerpunktfach. Der Stub `s3-2-potenz-wurzelfunktionen.html` wurde durch
+zwei vollwertige Themenseiten nach Master-Schema ersetzt (Sub-Split gemäss STYLEGUIDE §4.1):
+
+- **`schwerpunkt/s3-2a-potenzfunktionen.html`** — Einstieg Ballon-Volumen \(V(t)\approx 0.268\,t^3\)
+  (interaktiv), Definition, Darstellungen-Widget (Slider \(a\), \(n\), \(x\) mit Wertetabelle und
+  Graph inkl. Definitionslücken-Anzeige), Parabeln/Hyperbeln n-ter Ordnung mit Klick-Visualisierung,
+  Asymptoten und Transformationen (Hyperbel-Widget mit mitwandernden Asymptoten), A1–A7
+  (u.a. Boyle-Mariotte, Parallelwiderstand, Getränkedose-Optimierung), 4 Mini-Checks.
+- **`schwerpunkt/s3-2b-wurzelfunktionen.html`** — Einstieg Fadenpendel \(T\approx 2\sqrt{l}\)
+  (interaktiv), Wurzelfunktion als Umkehrfunktion mit Spiegelungs-Widget an \(y=x\),
+  Eigenschaften-Vergleich \(\sqrt{x}/\sqrt[3]{x}/\sqrt[5]{x}\), Transformationen und grafisches
+  Lösen von Wurzelgleichungen (Widget), A1–A7 (u.a. Fadenpendel, Wasserwellen, Brunnen mit
+  Schall-Laufzeit, Zehnkampf-Punkteformeln als Vertiefung), 4 Mini-Checks.
+- **Materialien komplett** (je Sub-Seite): `downloads/schwerpunkt/<slug>/` mit Handout,
+  Formelauszug, Teste-dich-selbst (12 Aufgaben mit Lösungen), Aufgabenserie (6 Anwendungen mit
+  Musterlösungen) und Anki-Deck (19 bzw. 20 Karten). Neuer Generator `scripts/build_print_s3.py`;
+  `scripts/build_apkg.py` um `SP_DECKS` (Schwerpunkt-Pfad) erweitert.
+- **Navigation/Index:** `nav.js` SITE/GROUPS auf `s3-2a`/`s3-2b`, prev/next-Kette in s3-1/s3-3
+  angepasst, `index.html` mit `ksub span-2`-Container (Karten «fertig»), Zählung 37 Themenseiten.
+- Alle Zahlenwerte python-verifiziert; Pre-Flight über alle Themenseiten grün
+  (MathJax-Renderprüfung 713 Ausdrücke Themenseiten + 451 Druckseiten, 0 Fehler);
+  Broken-Link-Check 121 Download-Links, 0 broken. Externe Ressourcen owner-verifiziert
+  (Mathe SMI, Mathehoch13, MathemaTrick, Daniel Jung; sos-mathe G32/G33, serlo ID-URLs).
+
+Hinweis: `scripts/convert_*.py` tragen noch den alten Sandbox-Pfad (`/home/claude/work/…`) und
+laufen lokal nicht — Konventions-Checks (ß, Dezimalkomma, Cosinus) wurden für die neuen Dateien
+manuell ausgeführt (0 Treffer). Pfad-Parametrisierung wäre ein künftiger Wartungspunkt.
+
+---
+
 ## [68] — 2026-06-13 · .gitignore ergänzt
 
 Repo-Hygiene: `.gitignore` schliesst dauerhaft vom Push aus:

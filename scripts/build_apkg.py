@@ -948,6 +948,103 @@ g52d_cards = [
 ]
 
 
+# ─── s3-2a Potenzfunktionen (Schwerpunkt) ───────────────────
+s32a_cards = [
+    # Definitionen
+    ('Was ist eine <i>Potenzfunktion</i>?',
+     'Eine Funktion mit <b>f(x) = a · xⁿ</b>, n ∈ ℤ\\{0}, a ∈ ℝ\\{0}. (n = 0 zählt nicht dazu, n = 1 schon.)'),
+    ('Was ist eine <i>Parabel n-ter Ordnung</i>?',
+     'Der Graph einer Potenzfunktion mit <b>natürlichem Exponenten</b> n ∈ ℕ*.'),
+    ('Was ist eine <i>Hyperbel n-ter Ordnung</i>?',
+     'Der Graph einer Potenzfunktion mit <b>negativem ganzzahligem Exponenten</b>; Schreibweise x⁻ⁿ = 1/xⁿ.'),
+    ('Wann heisst eine Funktion <i>gerade</i>?',
+     '<b>f(−x) = f(x)</b> — der Graph ist achsensymmetrisch zur y-Achse. Bei Potenzfunktionen: gerader Exponent.'),
+    ('Wann heisst eine Funktion <i>ungerade</i>?',
+     '<b>f(−x) = −f(x)</b> — der Graph ist punktsymmetrisch zum Ursprung. Bei Potenzfunktionen: ungerader Exponent.'),
+    ('Was ist eine <i>horizontale Asymptote</i>?',
+     'Eine Gerade, an die sich der Graph <b>in x-Richtung</b> immer mehr annähert, ohne sie zu schneiden.'),
+    ('Was ist eine <i>Polstelle</i> (Pol)?',
+     'Die <b>Definitionslücke</b> x₀ einer Hyperbel; dort wächst |f(x)| über alle Grenzen. Die senkrechte Gerade x = x₀ heisst Polgerade.'),
+    # Eigenschaften
+    ('D und W von y = x²ⁿ (gerader Exponent)?',
+     '<b>D = ℝ, W = ℝ₀⁺</b>. Gemeinsame Punkte: (0|0), (1|1), (−1|1).'),
+    ('D und W von y = 1/x²ⁿ (gerade Hyperbel)?',
+     '<b>D = ℝ\\{0}, W = ℝ⁺</b>. Asymptoten x = 0 und y = 0, keine Nullstellen.'),
+    ('Gemeinsame Punkte aller ungeraden Parabeln y = x²ⁿ⁻¹?',
+     '<b>(0|0), (1|1), (−1|−1)</b>.'),
+    ('Asymptoten von y = 1/xⁿ?',
+     'Vertikal <b>x = 0</b> (y-Achse), horizontal <b>y = 0</b> (x-Achse).'),
+    ('Terrassenpunkt vs. Flachpunkt bei S(0|0)?',
+     '<b>Terrassenpunkt</b> bei ungeraden Exponenten (n ≥ 3), <b>Flachpunkt</b> bei geraden Exponenten.'),
+    # Transformationen
+    ('Wirkung von u und v in y = a·(x−u)ⁿ + v?',
+     'u verschiebt <b>horizontal</b> (rechts für u &gt; 0), v <b>vertikal</b>. Hyperbel-Asymptoten wandern mit: x = u, y = v.'),
+    ('Wirkung von a in y = a·(x−u)ⁿ + v?',
+     '|a| &gt; 1 <b>Streckung</b>, |a| &lt; 1 Stauchung in y-Richtung; a &lt; 0 zusätzlich <b>Spiegelung an der x-Achse</b>.'),
+    # Beispiele
+    ('Nullstellen von (x−3)⁴ − 16 = 0',
+     '(x−3)⁴ = 16 → x − 3 = ±2 → <b>x₁ = 5, x₂ = 1</b>. (Gerader Exponent: ±-Fall!)'),
+    ('Nullstelle von (x−2)³ + 8 = 0',
+     '(x−2)³ = −8 → x − 2 = −2 → <b>x₀ = 0</b>. (Ungerader Exponent: genau eine Lösung.)'),
+    ('y = xⁿ geht durch P(2|32). Bestimme n.',
+     '2ⁿ = 32 = 2⁵ → <b>n = 5</b>.'),
+    # Faustregeln
+    ('Anzahl Lösungen von (x−u)ⁿ = r bei geradem n?',
+     '<b>Zwei</b> für r &gt; 0 (±ⁿ√r), <b>keine</b> für r &lt; 0, eine für r = 0.'),
+    ('y = x³: Was passiert mit y, wenn x verdoppelt wird?',
+     'Faktor <b>2³ = 8</b> — Verdopplung des Arguments verachtfacht den Funktionswert.'),
+]
+
+# ─── s3-2b Wurzelfunktionen (Schwerpunkt) ───────────────────
+s32b_cards = [
+    # Definitionen
+    ('Was ist eine <i>Wurzelfunktion</i>?',
+     'Eine Funktion <b>f(x) = ⁿ√x = x^(1/n)</b> mit n ∈ ℕ*; f : ℝ₀⁺ → ℝ₀⁺.'),
+    ('Wurzelfunktion und Potenzfunktion — Zusammenhang?',
+     'Die Wurzelfunktion ist die <b>Umkehrfunktion</b> der Potenzfunktion y = xⁿ (auf ℝ₀⁺) — und umgekehrt.'),
+    ('Wie entsteht der Graph der Umkehrfunktion grafisch?',
+     'Durch <b>Spiegelung an der Winkelhalbierenden y = x</b>: Jeder Punkt (a|b) wird zu (b|a).'),
+    ('Warum ist y = x² auf ganz ℝ nicht umkehrbar?',
+     'Zu jeder Höhe y &gt; 0 gehören <b>zwei Urbilder ±x</b>. Erst die Einschränkung auf ℝ₀⁺ macht die Zuordnung eindeutig.'),
+    ('Umkehrfunktion von y = x³?',
+     '<b>y = ∛x</b> — bei ungeradem Exponenten wäre die Umkehrung sogar auf ganz ℝ möglich.'),
+    # Eigenschaften
+    ('D und W der Wurzelfunktion y = ⁿ√x?',
+     '<b>D = W = ℝ₀⁺</b> — Radikand und Wurzelwert sind nie negativ.'),
+    ('Gemeinsame Punkte aller Wurzelkurven?',
+     '<b>(0|0) und (1|1)</b> — denn ⁿ√1 = 1 für jedes n.'),
+    ('Warum hat die Wurzelfunktion keine Symmetrie?',
+     'D = ℝ₀⁺ ist <b>nicht symmetrisch zum Ursprung</b> — mit x liegt −x nie im Definitionsbereich.'),
+    ('Maximaler Definitionsbereich von y = √(x−u)?',
+     'Radikand ≥ 0: x − u ≥ 0 → <b>D = [u; +∞[</b>.'),
+    ('Startpunkt von y = a·√(x−u) + v?',
+     '<b>(u | v)</b> — dort ist die Wurzel null.'),
+    # Schreibweise / Werte
+    ('√x und ∛(x²) als Potenzen geschrieben?',
+     '√x = <b>x^(1/2)</b>, ∛(x²) = <b>x^(2/3)</b>.'),
+    ('⁵√32 und ⁴√81 im Kopf?',
+     '⁵√32 = <b>2</b> (2⁵ = 32), ⁴√81 = <b>3</b> (3⁴ = 81).'),
+    # Wurzelgleichungen
+    ('Strategie zum Lösen einer Wurzelgleichung?',
+     '1. <b>Definitionsbereich</b> (Radikand ≥ 0), 2. Wurzel isolieren, 3. hoch n, 4. <b>Probe</b> in der Ausgangsgleichung.'),
+    ('Warum ist nach dem Quadrieren eine Probe nötig?',
+     'Quadrieren ist <b>keine Äquivalenzumformung</b> — es können Scheinlösungen entstehen.'),
+    ('√(…) = c mit c &lt; 0 — Lösungsmenge?',
+     '<b>L = { }</b> — Wurzelwerte sind nie negativ, die Gleichung ist unlösbar.'),
+    ('Löse √(3x+1) = 4.',
+     'Quadrieren: 3x + 1 = 16 → <b>x = 5</b>. Probe: √16 = 4 ✓'),
+    ('Löse ∛(x−5) = 3.',
+     'Hoch 3: x − 5 = 27 → <b>x = 32</b>. Probe: ∛27 = 3 ✓'),
+    ('Ordinatenabschnitt von y = 3√(x+1) − 6?',
+     'x = 0 einsetzen: y₀ = 3·√1 − 6 = <b>−3</b>.'),
+    # Anwendung
+    ('Fadenpendel T = 2π·√(l/g): Umkehrfunktion l(T)?',
+     '<b>l = g·T²/(4π²) ≈ 0.248·T²</b> — die Umkehrung der Wurzelfunktion ist quadratisch.'),
+    ('√x oder ⁵√x — welcher Wert ist zwischen 0 und 1 grösser?',
+     'Die <b>höhere Wurzel</b>: ⁵√x &gt; √x für 0 &lt; x &lt; 1 (rechts von 1 ist es umgekehrt).'),
+]
+
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -1000,6 +1097,24 @@ for slug, deck_short, deck_desc, cards in NEW_DECKS:
     os.makedirs(out_dir, exist_ok=True)
     n = build_apkg(os.path.join(out_dir, 'ankideck.apkg'),
                    f'TALS Mathematik::Grundlagen::{deck_short}',
+                   f'TALS Mathematik · {deck_desc}',
+                   cards)
+    print(f"{slug}: {n} Karten erzeugt")
+    new_dirs.append(out_dir)
+
+# ─── Schwerpunkt-Decks (downloads/schwerpunkt/) ─────────────
+SP_DECKS = [
+    ('s3-2a-potenzfunktionen', '3.2a Potenzfunktionen',
+     'Parabeln und Hyperbeln n-ter Ordnung, Symmetrie, Asymptoten, Transformationen.', s32a_cards),
+    ('s3-2b-wurzelfunktionen', '3.2b Wurzelfunktionen',
+     'Wurzelfunktion als Umkehrfunktion, Spiegelung an y = x, Definitionsbereiche, Wurzelgleichungen.', s32b_cards),
+]
+
+for slug, deck_short, deck_desc, cards in SP_DECKS:
+    out_dir = f'downloads/schwerpunkt/{slug}'
+    os.makedirs(out_dir, exist_ok=True)
+    n = build_apkg(os.path.join(out_dir, 'ankideck.apkg'),
+                   f'TALS Mathematik::Schwerpunkt::{deck_short}',
                    f'TALS Mathematik · {deck_desc}',
                    cards)
     print(f"{slug}: {n} Karten erzeugt")
