@@ -1970,6 +1970,295 @@ F_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s3-1  GRUNDLAGEN (WERKZEUGKASTEN FUNKTIONEN)
+# ═══════════════════════════════════════════════════════════════════
+
+G_HANDOUT = r'''
+  <h2>1. Elementare Funktionen — die Grundgraphen</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Funktion</th><th>\(D\)</th><th>\(W\)</th><th>markante Punkte</th><th>Besonderes</th></tr></thead>
+    <tbody>
+      <tr><td>\( x \)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R} \)</td><td>\( (0 \mid 0) \)</td><td class="li">Gerade, ungerade Funktion</td></tr>
+      <tr><td>\( x^2 \)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R}_0^+ \)</td><td>\( (0 \mid 0),\ (\pm 1 \mid 1) \)</td><td class="li">Normalparabel, gerade Funktion</td></tr>
+      <tr><td>\( x^3 \)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R} \)</td><td>\( (0 \mid 0),\ (\pm 1 \mid \pm 1) \)</td><td class="li">ungerade, Terrassenpunkt</td></tr>
+      <tr><td>\( \sqrt{x} \)</td><td>\( \mathbb{R}_0^+ \)</td><td>\( \mathbb{R}_0^+ \)</td><td>\( (0 \mid 0),\ (1 \mid 1) \)</td><td class="li">Umkehrfunktion von \(x^2\)</td></tr>
+      <tr><td>\( \tfrac{1}{x} \)</td><td>\( \mathbb{R} \setminus \{0\} \)</td><td>\( \mathbb{R} \setminus \{0\} \)</td><td>\( (\pm 1 \mid \pm 1) \)</td><td class="li">Hyperbel, Asymptoten \(x = 0\), \(y = 0\)</td></tr>
+      <tr><td>\( a^x \)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R}^+ \)</td><td>\( (0 \mid 1),\ (1 \mid a) \)</td><td class="li">Asymptote \(y = 0\)</td></tr>
+      <tr><td>\( \log_a x \)</td><td>\( \mathbb{R}^+ \)</td><td>\( \mathbb{R} \)</td><td>\( (1 \mid 0) \)</td><td class="li">Asymptote \(x = 0\)</td></tr>
+      <tr><td>\( \sin x \)</td><td>\( \mathbb{R} \)</td><td>\( [-1;\,1] \)</td><td>\( (0 \mid 0),\ (\tfrac{\pi}{2} \mid 1) \)</td><td class="li">periodisch (\(2\pi\)), ungerade</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Transformationen</h2>
+  <p>Aus jeder Grundfunktion \(f\) entsteht die Familie \( y = a \cdot f(x-u) + v \):</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Parameter</th><th>Wirkung</th></tr></thead>
+    <tbody>
+      <tr><td>\(u\)</td><td class="li">Verschiebung in \(x\)-Richtung (nach rechts für \(u > 0\))</td></tr>
+      <tr><td>\(v\)</td><td class="li">Verschiebung in \(y\)-Richtung (nach oben für \(v > 0\))</td></tr>
+      <tr><td>\(|a|\)</td><td class="li">Streckung (\(|a| > 1\)) bzw. Stauchung (\(|a| < 1\)) in \(y\)-Richtung</td></tr>
+      <tr><td>\(a < 0\)</td><td class="li">zusätzlich Spiegelung an der \(x\)-Achse</td></tr>
+    </tbody>
+  </table>
+  <p>Die Ersetzung \( x \to -x \) spiegelt an der \(y\)-Achse. Markante Punkte und Asymptoten
+  wandern mit; \((x-3)\) verschiebt nach <strong>rechts</strong>, nicht nach links!</p>
+
+  <h2>3. Schnittpunkte zweier Graphen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Verfahren</div>
+    <p><strong>Gleichsetzen → lösen → einsetzen:</strong> \( f(x) = g(x) \) liefert die
+    Schnittstellen \(x_i\); Einsetzen in \(f\) oder \(g\) die Schnittpunkte
+    \( S_i = (x_i \mid f(x_i)) \). Grafisch: die Kreuzungspunkte der Kurven.</p>
+  </div>
+
+  <h2>4. Gleichungen und Ungleichungen am Graphen</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Algebra</th><th>Bild am Graphen</th><th>Lösungsmenge</th></tr></thead>
+    <tbody>
+      <tr><td>\( f(x) = g(x) \)</td><td class="li">Kurven kreuzen sich</td><td class="li">einzelne Schnittstellen</td></tr>
+      <tr><td>\( f(x) > g(x) \)</td><td class="li">Kurve von \(f\) liegt oberhalb</td><td class="li">Intervalle</td></tr>
+      <tr><td>\( f(x) = 0 \)</td><td class="li">Kurve schneidet die \(x\)-Achse</td><td class="li">Nullstellen</td></tr>
+    </tbody>
+  </table>
+  <p>Die Schnittstellen zerlegen die \(x\)-Achse in Abschnitte — ein <strong>Testwert pro
+  Abschnitt</strong> entscheidet, wo die Ungleichung gilt. Randpunkte gehören nur bei
+  \(\geq\)/\(\leq\) dazu.</p>
+
+  <h2>5. Extremwertaufgaben</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Strategie</div>
+    <p>(1) <strong>Zielgrösse</strong> festlegen · (2) <strong>Nebenbedingung</strong> aufschreiben ·
+    (3) einsetzen → Zielfunktion mit einer Variablen (Definitionsbereich!) ·
+    (4) Extremum über die <strong>Scheitelform</strong> \( a(x-u)^2 + v \) (Scheitel \((u \mid v)\))
+    oder grafisch bestimmen.</p>
+  </div>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Grundgraphen kennen, mit \( a \cdot f(x-u) + v \) transformieren, Schnittpunkte durch
+    Gleichsetzen, Ungleichungen als «oberhalb/unterhalb»-Frage, Extremwerte über Zielfunktion +
+    Nebenbedingung. Die Skizze zuerst — sie verrät Anzahl und Lage der Lösungen.</p>
+  </div>
+'''
+
+G_FORMELAUSZUG = r'''
+  <h2>1. Transformationen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Bildfunktion</td><td>\( y = a \cdot f(x-u) + v \)</td></tr>
+      <tr><td class="li">Verschiebung</td><td>\(u\) in \(x\)-Richtung (rechts für \(u > 0\)), \(v\) in \(y\)-Richtung</td></tr>
+      <tr><td class="li">Streckung / Spiegelung</td><td>\(|a|\) in \(y\)-Richtung; \(a < 0\): Spiegelung an der \(x\)-Achse</td></tr>
+      <tr><td class="li">Spiegelung an der \(y\)-Achse</td><td>\( y = f(-x) \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Grundgraphen-Kenndaten</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th></th><th>\( x^2 \)</th><th>\( \sqrt{x} \)</th><th>\( \tfrac{1}{x} \)</th><th>\( a^x \)</th><th>\( \log_a x \)</th><th>\( \sin x \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">\(D\)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R}_0^+ \)</td><td>\( \mathbb{R} \setminus \{0\} \)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R}^+ \)</td><td>\( \mathbb{R} \)</td></tr>
+      <tr><td class="li">\(W\)</td><td>\( \mathbb{R}_0^+ \)</td><td>\( \mathbb{R}_0^+ \)</td><td>\( \mathbb{R} \setminus \{0\} \)</td><td>\( \mathbb{R}^+ \)</td><td>\( \mathbb{R} \)</td><td>\( [-1;\,1] \)</td></tr>
+      <tr><td class="li">Punkt</td><td>\( (0 \mid 0) \)</td><td>\( (0 \mid 0) \)</td><td>\( (1 \mid 1) \)</td><td>\( (0 \mid 1) \)</td><td>\( (1 \mid 0) \)</td><td>\( (0 \mid 0) \)</td></tr>
+      <tr><td class="li">Asymptoten</td><td>—</td><td>—</td><td>\( x = 0,\ y = 0 \)</td><td>\( y = 0 \)</td><td>\( x = 0 \)</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Schnittpunkte</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Verfahren</td><td class="li">gleichsetzen → lösen → einsetzen</td></tr>
+      <tr><td class="li">Schnittstellen</td><td>Lösungen von \( f(x) = g(x) \)</td></tr>
+      <tr><td class="li">Schnittpunkte</td><td>\( S_i = \bigl(x_i \mid f(x_i)\bigr) \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Un-/Gleichungen grafisch</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">\( f(x) = g(x) \)</td><td class="li">Schnittstellen der Kurven</td></tr>
+      <tr><td class="li">\( f(x) > g(x) \)</td><td class="li">Kurve von \(f\) oberhalb — Lösungsmenge sind Intervalle</td></tr>
+      <tr><td class="li">Testwert-Methode</td><td class="li">Schnittstellen zerlegen die Achse; ein Testwert pro Abschnitt</td></tr>
+      <tr><td class="li">Monotonie-Argument</td><td class="li">streng steigend gegen streng fallend → höchstens ein Schnitt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Extremwertaufgaben</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Schritte</td><td class="li">Zielgrösse → Nebenbedingung → einsetzen → Extremum</td></tr>
+      <tr><td class="li">Scheitelform</td><td>\( y = a(x-u)^2 + v \) — Scheitel \( S = (u \mid v) \)</td></tr>
+      <tr><td class="li">Maximum / Minimum</td><td>\( a < 0 \): Maximum \(v\) · \( a > 0 \): Minimum \(v\)</td></tr>
+    </tbody>
+  </table>
+'''
+
+G_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Transformationsschema vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      In \( y = a \cdot f(x-u) + v \) verschiebt \(u\) den Graphen in <span class="lueck"></span>-Richtung,<br>
+      \(v\) in <span class="lueck"></span>-Richtung, \(|a|\) <span class="lueck"></span> in \(y\)-Richtung,<br>
+      und \( a < 0 \) spiegelt an der <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Definitionsmengen der Grundfunktionen', 1, r'''    <p>Gib die Definitionsmenge an:</p>
+    <p>(a) \( y = \sqrt{x} \) &nbsp;&nbsp; (b) \( y = \dfrac{1}{x} \) &nbsp;&nbsp; (c) \( y = \ln x \)</p>
+''' + LINS)
+    + aufg(3, 'Markante Punkte', 1, r'''    <p>Durch welchen Punkt laufen <em>alle</em> Kurven der Familie?</p>
+    <p>(a) \( y = a^x \) &nbsp;&nbsp; (b) \( y = \log_a x \) &nbsp;&nbsp; (c) \( y = x^n \) (\(n\) ungerade)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Transformationen</div>\n'
+    + aufg(4, 'Scheitel ablesen', 1, r'''    <p>Gib den Scheitelpunkt von \( y = 3(x+2)^2 - 7 \) an.</p>
+''' + LINS)
+    + aufg(5, 'Gleichung aus Beschreibung', 2, r'''    <p>Die Normalparabel wird um \(1\) nach rechts und \(4\) nach unten verschoben.
+    Gib die Funktionsgleichung an und berechne die Nullstellen.</p>
+''' + LINS)
+    + aufg(6, 'Spiegelungen unterscheiden', 2, r'''    <p>Was bewirkt jeweils die Umformung am Graphen von \( y = f(x) \)?</p>
+    <p>(a) \( y = -f(x) \) &nbsp;&nbsp;&nbsp; (b) \( y = f(-x) \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Schnittpunkte und Ungleichungen</div>\n'
+    + aufg(7, 'Schnittpunkt zweier Geraden', 2, r'''    <p>Berechne den Schnittpunkt von \( y = x + 2 \) und \( y = 3x - 4 \).</p>
+''' + LINS)
+    + aufg(8, 'Gerade schneidet Parabel', 2, r'''    <p>Berechne die Schnittstellen von \( f(x) = x^2 \) und \( g(x) = 2x + 3 \).</p>
+''' + LINS)
+    + aufg(9, 'Ungleichung grafisch', 2, r'''    <p>Für welche \(x\) gilt \( x^2 < 4 \)? Argumentiere am Graphen der Normalparabel
+    und der Geraden \( y = 4 \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Nullstellen und Extremwerte</div>\n'
+    + aufg(10, 'Nullstellen einer verschobenen Parabel', 2, r'''    <p>Berechne die Nullstellen von \( y = (x+2)^2 - 9 \).</p>
+''' + LINS)
+    + aufg(11, 'Extremwertaufgabe', 3, r'''    <p>Ein Rechteck hat den Umfang \(40\) cm. Welche Seitenlängen maximieren den
+    Flächeninhalt? Stelle die Zielfunktion auf und nutze die Scheitelform.</p>
+''' + LINS)
+    + aufg(12, 'Monotonie-Argument', 3, r'''    <p>Begründe ohne Rechnung, dass die Gleichung \( 3^x = -1 \) keine Lösung hat —
+    und dass \( 3^x = 5 - x \) genau eine hat.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p>\(u\): <strong>\(x\)</strong>-Richtung · \(v\): <strong>\(y\)</strong>-Richtung ·
+    \(|a|\): <strong>streckt/staucht</strong> · \(a < 0\): Spiegelung an der <strong>\(x\)-Achse</strong>.</p>''')
+    + loes(2, r'''    <p>(a) \( D = \mathbb{R}_0^+ \) · (b) \( D = \mathbb{R} \setminus \{0\} \) ·
+    (c) \( D = \mathbb{R}^+ \).</p>''')
+    + loes(3, r'''    <p>(a) \( (0 \mid 1) \), denn \( a^0 = 1 \) · (b) \( (1 \mid 0) \), denn \( \log_a 1 = 0 \) ·
+    (c) \( (0 \mid 0) \), \( (1 \mid 1) \) und \( (-1 \mid -1) \).</p>''')
+    + loes(4, r'''    <p>\( x + 2 = x - (-2) \), also \( S = (-2 \mid -7) \).</p>''')
+    + loes(5, r'''    <p>\( y = (x-1)^2 - 4 \). Nullstellen: \( (x-1)^2 = 4 \Rightarrow x - 1 = \pm 2
+    \Rightarrow x_1 = -1,\ x_2 = 3 \).</p>''')
+    + loes(6, r'''    <p>(a) Spiegelung an der <strong>\(x\)-Achse</strong> (alle Funktionswerte wechseln das
+    Vorzeichen) · (b) Spiegelung an der <strong>\(y\)-Achse</strong> (der Graph wird seitenverkehrt).</p>''')
+    + loes(7, r'''    <p>\( x + 2 = 3x - 4 \Rightarrow 2x = 6 \Rightarrow x = 3 \); \( y = 5 \):
+    \( S = (3 \mid 5) \).</p>''')
+    + loes(8, r'''    <p>\( x^2 = 2x + 3 \Rightarrow x^2 - 2x - 3 = 0 \Rightarrow (x+1)(x-3) = 0
+    \Rightarrow x_1 = -1,\ x_2 = 3 \).</p>''')
+    + loes(9, r'''    <p>Die Parabel liegt zwischen den Schnittstellen \( \pm 2 \) unterhalb der Geraden:
+    \( L = \{x \mid -2 < x < 2\} \) — Randpunkte ausgeschlossen (striktes «kleiner»).</p>''')
+    + loes(10, r'''    <p>\( (x+2)^2 = 9 \Rightarrow x + 2 = \pm 3 \Rightarrow x_1 = -5,\ x_2 = 1 \).</p>''')
+    + loes(11, r'''    <p>Nebenbedingung \( 2x + 2y = 40 \Rightarrow y = 20 - x \). Zielfunktion
+    \( A(x) = x(20-x) = -(x-10)^2 + 100 \) — Maximum bei \( x = y = 10 \) cm, \( A = 100\ \text{cm}^2 \):
+    Das Quadrat ist das flächengrösste Rechteck bei festem Umfang.</p>''')
+    + loes(12, r'''    <p>\( 3^x > 0 \) für alle \(x\) — die Kurve erreicht \(-1\) nie. Bei \( 3^x = 5 - x \)
+    ist die linke Seite streng steigend, die rechte streng fallend: höchstens ein Schnitt; da
+    für \( x = 0 \) die Gerade oben liegt (\(1 < 5\)) und für \( x = 2 \) die Exponentialkurve
+    (\(9 > 3\)), gibt es genau eine Lösung dazwischen.</p>''')
+)
+
+G_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik und Naturwissenschaft, nach zunehmendem Schwierigkeitsgrad
+    geordnet. Die Musterlösungen folgen am Ende des Dokuments. Alle Graphen mit beschrifteten Achsen
+    (Grösse und Einheit) skizzieren.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Architektur</td><td>Brückenbogen</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Sport / Physik</td><td>Ballwurf</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Betriebswirtschaft</td><td>Break-even-Analyse</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Bauplanung</td><td>Fensterrahmen</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Energie</td><td>Stromtarife vergleichen</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Mathematik</td><td>Parabel trifft Exponentialkurve</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Brückenbogen', 2, r'''    <p>Ein parabelförmiger Brückenbogen wird beschrieben durch \( y = 4 - 0.1\,x^2 \)
+    (\(x\), \(y\) in m; \(x = 0\) in der Bogenmitte).</p>
+    <p>(a) Wie hoch ist der Bogen in der Mitte, und wie breit ist er am Boden (\(y = 0\))?</p>
+    <p>(b) Ein Lastwagen ist \(3\) m hoch. Wie breit ist die Durchfahrt auf dieser Höhe?</p>
+    <p>(c) Formuliere Teilaufgabe (b) als Gleichung und als Ungleichung.</p>
+''' + LINS4, tag='Architektur')
+    + aufg(2, 'Ballwurf', 2, r'''    <p>Die Flugbahn eines Balls: \( h(x) = -0.05\,x^2 + x + 2 \) (\(h\): Höhe in m,
+    \(x\): horizontale Entfernung in m).</p>
+    <p>(a) Aus welcher Höhe wird der Ball abgeworfen?</p>
+    <p>(b) Bestimme den höchsten Punkt der Flugbahn (Scheitelform!).</p>
+    <p>(c) In welcher Entfernung landet der Ball (\(h = 0\))?</p>
+''' + LINS4, tag='Sport / Physik')
+    + aufg(3, 'Break-even-Analyse', 2, r'''    <p>Ein Kleinbetrieb produziert Werkstücke: Fixkosten \(2000\) CHF, variable Kosten
+    \(15\) CHF/Stück, Verkaufspreis \(40\) CHF/Stück. Also \( K(x) = 2000 + 15x \) und
+    \( E(x) = 40x \).</p>
+    <p>(a) Zeichne beide Graphen in ein Koordinatensystem (bis \(x = 150\)).</p>
+    <p>(b) Berechne den Break-even-Punkt (\(E = K\)).</p>
+    <p>(c) Interpretiere die Bereiche links und rechts davon als Ungleichung.</p>
+''' + LINS4, tag='Betriebswirtschaft')
+    + aufg(4, 'Fensterrahmen', 3, r'''    <p>Für ein rechteckiges Fenster stehen \(6\) m Rahmenprofil zur Verfügung (alle vier
+    Seiten).</p>
+    <p>(a) Stelle die Zielfunktion \( A(x) \) für die Glasfläche auf (\(x\): Breite).</p>
+    <p>(b) Bestimme die Masse mit maximaler Fläche über die Scheitelform.</p>
+    <p>(c) Welche geometrische Form ergibt sich — und wäre das Ergebnis anders, wenn eine
+    Seite (z.B. an einer Mauer) kein Profil bräuchte?</p>
+''' + LINS4, tag='Bauplanung')
+    + aufg(5, 'Stromtarife vergleichen', 3, r'''    <p>Zwei Stromtarife: Grundtarif \( G(x) = 120 + 0.18x \) (Grundgebühr plus
+    18 Rp./kWh) und Pauschaltarif \( P(x) = 0.30x \) (30 Rp./kWh, keine Grundgebühr);
+    \(x\) in kWh pro Jahr, Kosten in CHF.</p>
+    <p>(a) Bei welchem Jahresverbrauch kosten beide gleich viel?</p>
+    <p>(b) Formuliere als Ungleichung: Für wen lohnt sich der Pauschaltarif?</p>
+    <p>(c) Ein Haushalt verbraucht \(3500\) kWh. Welcher Tarif ist günstiger, und um wie viel?</p>
+''' + LINS4, tag='Energie')
+    + aufg(6, 'Parabel trifft Exponentialkurve', 3, r'''    <p>Betrachte die Gleichung \( x^2 = 2^x \).</p>
+    <p>(a) Skizziere beide Graphen im Intervall \( -2 \leq x \leq 5 \).</p>
+    <p>(b) Finde durch Probieren zwei ganzzahlige Lösungen.</p>
+    <p>(c) Der Skizze nach gibt es noch eine dritte Lösung. Wo ungefähr liegt sie, und
+    warum kann sie nicht ganzzahlig sein?</p>
+''' + LINS4, tag='Mathematik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) Mitte: \( y(0) = 4 \) m. Boden: \( 4 - 0.1x^2 = 0 \Rightarrow x = \pm\sqrt{40}
+    \approx \pm 6.32 \) — Breite \( \approx 12.6 \) m.</p>
+    <p>(b) \( 4 - 0.1x^2 = 3 \Rightarrow x^2 = 10 \Rightarrow x = \pm\sqrt{10} \approx \pm 3.16 \) —
+    Durchfahrtsbreite \( \approx 6.3 \) m.</p>
+    <p>(c) Gleichung: \( 4 - 0.1x^2 = 3 \) (Grenzfall). Ungleichung: \( 4 - 0.1x^2 > 3 \) —
+    dort ist der Bogen höher als der Lastwagen: \( -\sqrt{10} < x < \sqrt{10} \).</p>''')
+    + loes(2, r'''    <p>(a) \( h(0) = 2 \) m.</p>
+    <p>(b) \( h(x) = -0.05(x^2 - 20x) + 2 = -0.05(x-10)^2 + 7 \) — Hochpunkt \( (10 \mid 7) \):
+    nach \(10\) m Distanz, \(7\) m Höhe.</p>
+    <p>(c) \( -0.05x^2 + x + 2 = 0 \Rightarrow x^2 - 20x - 40 = 0 \Rightarrow
+    x = 10 + \sqrt{140} \approx 21.8 \) m (negative Lösung entfällt).</p>''')
+    + loes(3, r'''    <p>(b) \( 40x = 2000 + 15x \Rightarrow 25x = 2000 \Rightarrow x = 80 \) Stück
+    (Kosten = Erlös = \(3200\) CHF).</p>
+    <p>(c) Für \( x < 80 \) gilt \( E(x) < K(x) \) — Verlustzone (Erlösgerade unterhalb);
+    für \( x > 80 \) gilt \( E(x) > K(x) \) — Gewinnzone.</p>''')
+    + loes(4, r'''    <p>(a) Nebenbedingung \( 2x + 2y = 6 \Rightarrow y = 3 - x \);
+    \( A(x) = x(3-x) \) mit \( 0 < x < 3 \).</p>
+    <p>(b) \( A(x) = -(x-1.5)^2 + 2.25 \) — Maximum bei \( x = y = 1.5 \) m,
+    \( A = 2.25\ \text{m}^2 \).</p>
+    <p>(c) Ein <strong>Quadrat</strong>. Mit einer profillosen Seite (Nebenbedingung
+    \( 2x + y = 6 \)) wäre das Optimum ein Rechteck mit \( y = 2x \) — wie beim Weide-Beispiel
+    auf der Themenseite.</p>''')
+    + loes(5, r'''    <p>(a) \( 120 + 0.18x = 0.30x \Rightarrow 0.12x = 120 \Rightarrow x = 1000 \) kWh
+    (beide \(300\) CHF).</p>
+    <p>(b) \( P(x) < G(x) \Leftrightarrow x < 1000 \) — der Pauschaltarif lohnt sich für
+    <em>Wenigverbraucher</em>.</p>
+    <p>(c) \( G(3500) = 120 + 630 = 750 \) CHF, \( P(3500) = 1050 \) CHF — der Grundtarif ist
+    \(300\) CHF günstiger.</p>''')
+    + loes(6, r'''    <p>(b) \( x = 2 \): \( 4 = 4 \) ✓ und \( x = 4 \): \( 16 = 16 \) ✓.</p>
+    <p>(c) Links der \(y\)-Achse: Die Parabel steigt (nach links), die Exponentialkurve fällt
+    gegen \(0\) — ein Schnitt bei \( x \approx -0.77 \). Für ganzzahlige negative \(x\) ist
+    \( x^2 \geq 1 \), aber \( 2^x \leq \tfrac{1}{2} \) — Gleichheit unmöglich, die Lösung liegt
+    zwischen \(-1\) und \(0\).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -2024,6 +2313,14 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', F_TDS),
     ('s3-5-trigonometrische-funktionen', 'Trigonometrische Funktionen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Trigonometrische Funktionen', STYLE_SERIE, '1.0', '', F_SERIE),
+    ('s3-1-grundlagen', 'Grundlagen Funktionen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', G_HANDOUT),
+    ('s3-1-grundlagen', 'Grundlagen Funktionen', 'Formelauszug', 'formelauszug.html',
+     'Grundlagen Funktionen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, G_FORMELAUSZUG),
+    ('s3-1-grundlagen', 'Grundlagen Funktionen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', G_TDS),
+    ('s3-1-grundlagen', 'Grundlagen Funktionen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Grundlagen Funktionen', STYLE_SERIE, '1.0', '', G_SERIE),
 ]
 
 

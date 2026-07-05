@@ -1237,6 +1237,56 @@ s35_cards = [
      'Falscher Winkelmodus: Für Graphen und Schwingungen immer <b>RAD</b> (Bogenmass) verwenden — sin 30 ist im DEG-Modus 0.5, im RAD-Modus −0.988.'),
 ]
 
+# ─── s3-1 Grundlagen / Werkzeugkasten Funktionen (Schwerpunkt) ──
+s31_cards = [
+    # Transformationen
+    ('Wirkung von u und v in y = a·f(x−u) + v?',
+     'u verschiebt <b>horizontal</b> (nach rechts für u &gt; 0), v <b>vertikal</b> (nach oben für v &gt; 0) — bei jeder Grundfunktion f.'),
+    ('Wirkung von a in y = a·f(x−u) + v?',
+     '|a| &gt; 1 <b>Streckung</b>, |a| &lt; 1 Stauchung in y-Richtung; a &lt; 0 zusätzlich <b>Spiegelung an der x-Achse</b>.'),
+    ('Was bewirkt die Ersetzung x → −x?',
+     '<b>Spiegelung an der y-Achse</b>: y = f(−x) ist das seitenverkehrte Bild von y = f(x).'),
+    ('(x − 3) im Argument: nach links oder rechts?',
+     'Nach <b>rechts</b>! f(x−3) nimmt bei x = 3 den Wert f(0) an. Kontrolle: Scheitel von (x−3)² liegt bei x = 3.'),
+    ('Scheitelpunkt von y = a(x−u)² + v?',
+     '<b>S = (u | v)</b> — a &lt; 0: Maximum, a &gt; 0: Minimum. Der Faktor a ändert den Scheitel nicht.'),
+    # Grundgraphen
+    ('Definitionsmengen von √x, 1/x und ln x?',
+     '√x: <b>ℝ₀⁺</b> · 1/x: <b>ℝ \\ {0}</b> · ln x: <b>ℝ⁺</b>.'),
+    ('Markante Punkte von aˣ und log_a x?',
+     'aˣ: durch <b>(0|1)</b> und (1|a) · log_a x: durch <b>(1|0)</b>.'),
+    ('Asymptoten der Grundfunktionen 1/x, aˣ, log_a x?',
+     '1/x: <b>x = 0 und y = 0</b> · aˣ: <b>y = 0</b> · log_a x: <b>x = 0</b>.'),
+    ('Zusammenhang der Graphen von x² und √x?',
+     'Sie sind <b>Umkehrfunktionen</b> (auf ℝ₀⁺): Spiegelung an der Winkelhalbierenden <b>y = x</b>.'),
+    # Schnittpunkte
+    ('Schnittpunkte zweier Graphen — Verfahren?',
+     '<b>Gleichsetzen → lösen → einsetzen</b>: f(x) = g(x) liefert die Schnittstellen, Einsetzen die Punkte.'),
+    ('Schnittpunkt von y = 2x − 3 und y = −x + 6?',
+     '2x − 3 = −x + 6 → 3x = 9 → x = 3, y = 3: <b>S = (3|3)</b>.'),
+    ('Was bedeutet f(x) = g(x) grafisch?',
+     'Die Graphen <b>kreuzen sich</b> an den Lösungsstellen — Gleichung lösen heisst Schnittstellen suchen.'),
+    # Ungleichungen
+    ('Was bedeutet f(x) &gt; g(x) grafisch?',
+     'Die Kurve von f liegt <b>oberhalb</b> der Kurve von g — die Lösungsmenge besteht aus <b>Intervallen</b>.'),
+    ('Wie löst man eine Ungleichung mit der Testwert-Methode?',
+     'Schnittstellen berechnen — sie zerlegen die x-Achse in Abschnitte; <b>ein Testwert pro Abschnitt</b> entscheidet, wo die Ungleichung gilt.'),
+    ('Wann gehören die Schnittstellen zur Lösungsmenge einer Ungleichung?',
+     'Nur bei <b>≥ oder ≤</b> — bei striktem &lt;/&gt; sind die Randpunkte ausgeschlossen.'),
+    # Extremwertaufgaben
+    ('Extremwertaufgabe — die vier Schritte?',
+     '1. <b>Zielgrösse</b> festlegen, 2. <b>Nebenbedingung</b> aufschreiben, 3. einsetzen (eine Variable + Definitionsbereich), 4. Extremum via <b>Scheitelform</b> oder grafisch.'),
+    ('Weide am Fluss (60 m Zaun, Flussseite offen): Zielfunktion und Optimum?',
+     'A(x) = x(60 − 2x) = −2(x−15)² + 450 → Breite <b>15 m</b>, Länge 30 m, <b>A = 450 m²</b>.'),
+    ('Rechteck mit festem Umfang: Welche Form maximiert die Fläche?',
+     'Das <b>Quadrat</b> — z.B. Umfang 40: A(x) = x(20−x), Maximum bei x = 10.'),
+    # Grafische Argumente
+    ('Monotonie-Argument für die Lösungsanzahl?',
+     'Streng <b>steigende</b> gegen streng <b>fallende</b> Funktion: höchstens <b>ein</b> Schnittpunkt — z.B. 2ˣ = 3 − x hat genau die Lösung x = 1.'),
+    ('Warum lohnt sich die Skizze vor der Rechnung?',
+     'Sie zeigt <b>Anzahl und ungefähre Lage</b> der Lösungen — schützt vor verlorenen Lösungen und Rechenfehlern.'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -1308,6 +1358,8 @@ SP_DECKS = [
      'Umkehrfunktion, Spiegelung an y = x, Nullstelle x = 1, Basiswechsel, logarithmische Skalen.', s34b_cards),
     ('s3-5-trigonometrische-funktionen', '3.5 Trigonometrische Funktionen',
      'Einheitskreis, Periodizität und Symmetrien, Transformationen, allgemeine Sinusfunktion, harmonische Schwingungen.', s35_cards),
+    ('s3-1-grundlagen', '3.1 Grundlagen Funktionen',
+     'Grundgraphen, Transformationen, Schnittpunkte, Un-/Gleichungen am Graphen, Extremwertaufgaben.', s31_cards),
 ]
 
 for slug, deck_short, deck_desc, cards in SP_DECKS:

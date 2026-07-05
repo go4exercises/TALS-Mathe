@@ -19,7 +19,58 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -33,14 +84,7 @@ MathJax = {
   <h1 class="pt-h1">3.1 Grundlagen</h1>
 </div>
 
-<!-- Stub-Banner: Seite ist noch in Vorbereitung -->
-<div class="stub-banner">
-  <strong>In Vorbereitung</strong>
-  Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: Mai 2026.
-</div>
-
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
-<p class="lead">Funktionen im Schwerpunktfach sind keine neuen Objekte, sondern bekannte aus einer höheren Perspektive: <strong>Symmetrie, Verhalten im Unendlichen, Verkettung, Umkehrfunktion</strong>. Hier baust du das Vokabular aus, mit dem du Polynome, Exponential- und trigonometrische Funktionen einheitlich beschreiben kannst.</p>
+<p class="lead">Funktionen im Schwerpunktfach sind keine neuen Objekte, sondern bekannte aus einer höheren Perspektive: Diese Seite baut den <strong>Werkzeugkasten</strong> auf, mit dem du jede elementare Funktion behandelst — <strong>Graph und Gleichung</strong> ineinander übersetzen, <strong>Schnittpunkte</strong> berechnen, <strong>Gleichungen und Ungleichungen</strong> am Graphen ablesen, <strong>Extremwertaufgaben</strong> lösen und Graphen mit <strong>Transformationen</strong> verschieben, spiegeln und strecken. Die Kapitel 3.2 bis 3.5 wenden genau diese Werkzeuge auf die einzelnen Funktionsklassen an.</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.1</div>
@@ -53,49 +97,562 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Graphen der elementaren Funktionen (\(x\), \(x^2\), \(x^3\), \(\sqrt{x}\), \(\tfrac{1}{x}\), \(a^x\), \(\log_a x\), \(\sin x\)) ohne Hilfsmittel skizzieren und am Graphen erkennen.</li>
+      <li>Ich kann die Wirkung der Parameter in \(y = a \cdot f(x-u) + v\) beschreiben und aus einem transformierten Graphen die Gleichung rekonstruieren.</li>
+      <li>Ich kann Schnittpunkte zweier Funktionsgraphen durch Gleichsetzen berechnen und grafisch kontrollieren.</li>
+      <li>Ich kann eine Gleichung \(f(x) = g(x)\) als Schnittstellen-Frage und eine Ungleichung \(f(x) &gt; g(x)\) als «Kurve oberhalb»-Frage deuten und die Lösungsmenge als Intervall angeben.</li>
+      <li>Ich kann Extremwertaufgaben mit Zielfunktion und Nebenbedingung aufstellen und über die Scheitelform oder grafisch lösen.</li>
+      <li>Ich kann begründen, ob eine Gleichung genau eine, mehrere oder keine Lösung hat (Monotonie-Argument am Graphen).</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — ein Drohnenflug über der Leitung</h2>
+
+<p>Eine Drohne steigt auf, fliegt einen Bogen und landet wieder. Ihre Flughöhe folgt näherungsweise der Parabel</p>
+
+\[ h(t) = -0.5\,t^2 + 6\,t \qquad [h \text{ in m},\ t \text{ in min}] \]
+
+<p>Quer durch das Fluggebiet verläuft eine Hochspannungsleitung auf \(16\) m Höhe. <strong>Drei Fragen — ein Graph:</strong> Wie hoch steigt die Drohne maximal? Wann kreuzt sie die Leitungshöhe? In welchem Zeitraum fliegt sie <em>über</em> der Leitung?</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🚁 Drohnenflug — \(h(t) = -0.5\,t^2 + 6\,t\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Fahre mit dem Slider die Kreuzungspunkte mit der roten Linie an: Bei welchen Zeiten ist \(h = 16\)? Und wo liegt der höchste Punkt — genau in der Mitte wovon?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Fahre mit dem Slider die Kreuzungspunkte mit der roten Linie an: Bei welchen Zeiten ist h gleich sechzehn? Und wo liegt der höchste Punkt — genau in der Mitte wovon?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Hochpunkt \((6 \mid 18)\) beantwortet die <strong>Extremwert</strong>-Frage, die Schnittpunkte \(t = 4\) und \(t = 8\) die <strong>Gleichung</strong> \(h(t) = 16\), und das Intervall \(4 &lt; t &lt; 8\) dazwischen die <strong>Ungleichung</strong> \(h(t) &gt; 16\) — drei Werkzeuge an einem Graphen.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Hochpunkt sechs senkrecht achtzehn beantwortet die Extremwert-Frage, die Schnittpunkte t gleich vier und t gleich acht die Gleichung, und das Intervall dazwischen die Ungleichung — drei Werkzeuge an einem Graphen.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Leitungshöhe 16 m rot gestrichelt · Hochpunkt grün · Kreuzungspunkte rot</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Zeit <span class="var">\(t\)</span> [min]</label>
+      <input type="range" id="dn-t" min="0" max="12" step="0.5" value="3">
+      <span class="sl-val"><span id="dn-tv">3.0</span> min</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Auswertung und Lage</div>
+      <div class="fl-eq" id="dn-eq">h(<span class="tx-blau">3.0</span>) = 13.50 m — unterhalb der Leitung</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="dn-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Ein einziger Graph beantwortet drei verschiedene Fragetypen:</p>
+  <ul style="margin-top:6px">
+    <li><strong>Extremwert:</strong> Der Hochpunkt \((6 \mid 18)\) — die maximale Flughöhe beträgt \(18\) m.</li>
+    <li><strong>Gleichung</strong> \(h(t) = 16\): Die Schnittstellen mit der Horizontalen — \(t_1 = 4\) und \(t_2 = 8\).</li>
+    <li><strong>Ungleichung</strong> \(h(t) &gt; 16\): Der Bereich, in dem die Kurve <em>oberhalb</em> der Linie liegt — das Intervall \(4 &lt; t &lt; 8\).</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was bedeutet die Lösungsmenge der Ungleichung \(h(t) &gt; 16\) am Graphen?</p><ul class="mc-optionen"><li data-opt="A">Die Kurve schneidet dort die \(t\)-Achse.</li><li data-opt="B">Die Kurve verläuft dort oberhalb der Geraden \(y = 16\).</li><li data-opt="C">Die Kurve hat dort ihren Hochpunkt.</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> «Grösser als» heisst grafisch «liegt oberhalb» — zwischen den beiden Schnittstellen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Gleichung \(h(t) = 16\) grafisch lösen heisst: die <span class="mc-luecke"></span> des Graphen von \(h\) mit der horizontalen Geraden \(y = 16\) bestimmen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Schnittstellen (Schnittpunkte) — hier \(t_1 = 4\) und \(t_2 = 8\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne die Flughöhe nach \(2\) Minuten.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(h(2) = -0.5 \cdot 4 + 12 = 10\) m.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Löse \(h(t) = 16\) algebraisch und vergleiche mit dem Graphen.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(-0.5t^2 + 6t = 16 \;\Leftrightarrow\; t^2 - 12t + 32 = 0 \;\Leftrightarrow\; t = \dfrac{12 \pm \sqrt{144 - 128}}{2} = \dfrac{12 \pm 4}{2}\), also \(t_1 = 4\), \(t_2 = 8\) — genau die Kreuzungspunkte im Bild.</div></details></div>
+</details>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Definition — elementare Funktionen</h2>
+
+<p>Der Funktionsbegriff selbst (eindeutige Zuordnung, Definitions- und Wertemenge, Funktionsgraph) ist aus dem Grundlagenfach bekannt — siehe <a class="quer" href="../grundlagen/g3-1-grundlagen.html">↩ 3.1 Grundlagen Funktionen (Grundlagenfach)</a>. Neu ist der systematische Blick auf die Familie der Grundfunktionen:</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Elementare Funktionen</div>
+  <p>Als <strong>elementare Funktionen</strong> bezeichnen wir die Grundfunktionen</p>
+  \[ x,\quad x^2,\quad x^3,\quad \sqrt{x},\quad \frac{1}{x},\quad a^x,\quad \log_a x,\quad \sin x,\ \cos x \]
+  <p>sowie alles, was durch <strong>Transformationen</strong> (Verschieben, Spiegeln, Strecken) und einfache Verknüpfungen daraus entsteht. Wer die Grundgraphen und ihre Kenndaten (Definitionsmenge, markante Punkte, Asymptoten) kennt, kann jede transformierte Variante <strong>ohne Wertetabelle</strong> skizzieren.</p>
+</div>
+
+<div class="block block-tipp" style="margin-top:8px">
+  <div class="block-titel">💡 Die Detailkapitel</div>
+  <p>Jede Funktionsklasse hat ihre eigene Seite: <a class="quer" href="s3-2a-potenzfunktionen.html">↩ 3.2a Potenzfunktionen</a> · <a class="quer" href="s3-2b-wurzelfunktionen.html">↩ 3.2b Wurzelfunktionen</a> · <a class="quer" href="s3-3-polynomfunktionen.html">↩ 3.3 Polynomfunktionen</a> · <a class="quer" href="s3-4a-exponentialfunktionen.html">↩ 3.4a Exponentialfunktionen</a> · <a class="quer" href="s3-4b-logarithmusfunktionen.html">↩ 3.4b Logarithmusfunktionen</a> · <a class="quer" href="s3-5-trigonometrische-funktionen.html">↩ 3.5 Trigonometrische Funktionen</a>. Hier geht es um die <strong>gemeinsamen Werkzeuge</strong>.</p>
+</div>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Die Grundgraphen im Steckbrief</h2>
+
+<p>Klicke dich durch die acht Grundfunktionen — Graph und Steckbrief gehören zusammen. Diese Bilder solltest du <strong>auswendig</strong> skizzieren können:</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Grundfunktionen-Galerie</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Achte bei jedem Graphen auf drei Dinge: Wo ist die Funktion definiert? Durch welche markanten Punkte läuft die Kurve? Gibt es Asymptoten oder Symmetrien?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Achte bei jedem Graphen auf drei Dinge: Wo ist die Funktion definiert? Durch welche markanten Punkte läuft die Kurve? Gibt es Asymptoten oder Symmetrien?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Jede Grundfunktion hat ein unverwechselbares Profil: Parabel und Wurzel sind Umkehrbilder, Hyperbel und Logarithmus schmiegen sich an Asymptoten, Sinus wiederholt sich. Wer die acht Profile kennt, erkennt jede transformierte Version wieder.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Jede Grundfunktion hat ein unverwechselbares Profil: Parabel und Wurzel sind Umkehrbilder, Hyperbel und Logarithmus schmiegen sich an Asymptoten, Sinus wiederholt sich. Wer die acht Profile kennt, erkennt jede transformierte Version wieder.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Acht Grundfunktionen · markante Punkte rot · Steckbrief unter dem Graphen</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="st-btns"></div>
+    <div class="cv-wrap"><canvas id="st-canvas" height="240"></canvas></div>
+    <table class="ftb-tabelle" style="margin-top:12px" id="st-tabelle">
+      <tbody>
+        <tr><td style="font-family:var(--sans);text-align:left;width:35%">Definitionsmenge</td><td id="st-d" style="text-align:left"></td></tr>
+        <tr><td style="font-family:var(--sans);text-align:left">Wertemenge</td><td id="st-w" style="text-align:left"></td></tr>
+        <tr><td style="font-family:var(--sans);text-align:left">Markante Punkte</td><td id="st-p" style="text-align:left"></td></tr>
+        <tr><td style="font-family:var(--sans);text-align:left">Besonderes</td><td id="st-b" style="text-align:left;font-family:var(--sans)"></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Grundgraphen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Grundfunktion hat die Definitionsmenge \(D = \mathbb{R}_0^+\)?</p><ul class="mc-optionen"><li data-opt="A">\(y = \sqrt{x}\)</li><li data-opt="B">\(y = \dfrac{1}{x}\)</li><li data-opt="C">\(y = x^3\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Der Radikand darf nicht negativ sein. \(\tfrac{1}{x}\) hat \(D = \mathbb{R} \setminus \{0\}\), \(x^3\) ganz \(\mathbb{R}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Graphen von \(y = x^2\) (auf \(\mathbb{R}_0^+\)) und \(y = \sqrt{x}\) gehen durch Spiegelung an der <span class="mc-luecke"></span> auseinander hervor.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Winkelhalbierenden \(y = x\) — sie sind Umkehrfunktionen voneinander.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Durch welche zwei markanten Punkte läuft jede Exponentialkurve \(y = a^x\), und durch welchen jede Logarithmuskurve?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(a^x\): durch \((0 \mid 1)\) und \((1 \mid a)\); \(\log_a x\): durch \((1 \mid 0)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Graph läuft durch \((1 \mid 1)\), existiert nur für \(x \neq 0\) und schmiegt sich an beide Koordinatenachsen. Welche Grundfunktion ist es — und woran hast du sie erkannt?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(y = \tfrac{1}{x}\) — Definitionslücke bei \(0\) plus beide Achsen als Asymptoten gibt es nur bei der Hyperbel. Der Punkt \((1 \mid 1)\) bestätigt: \(\tfrac{1}{1} = 1\).</div></details></div>
+</details>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. TRANSFORMATIONEN ══ -->
+<h2 id="typen">Transformationen — ein Schema für alle Funktionen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Transformationen — \(y = a \cdot f(x-u) + v\)</div>
+  <p>Aus <strong>jeder</strong> Grundfunktion \(f\) entsteht durch die Parameter \(a\), \(u\), \(v\) eine ganze Familie:</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Parameter</th><th>Wirkung auf den Graphen von \(y = f(x)\)</th></tr></thead>
+    <tbody>
+      <tr><td>\(u\)</td><td style="text-align:left;font-family:var(--sans)">Verschiebung um \(u\) in \(x\)-Richtung (nach rechts für \(u &gt; 0\))</td></tr>
+      <tr><td>\(v\)</td><td style="text-align:left;font-family:var(--sans)">Verschiebung um \(v\) in \(y\)-Richtung (nach oben für \(v &gt; 0\))</td></tr>
+      <tr><td>\(|a|\)</td><td style="text-align:left;font-family:var(--sans)">Streckung (\(|a| &gt; 1\)) bzw. Stauchung (\(|a| &lt; 1\)) in \(y\)-Richtung</td></tr>
+      <tr><td>\(a &lt; 0\)</td><td style="text-align:left;font-family:var(--sans)">zusätzlich Spiegelung an der \(x\)-Achse</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Die Ersetzung \(x \to -x\) spiegelt an der \(y\)-Achse: \(y = f(-x)\). Markante Punkte und Asymptoten wandern bei allen Transformationen mit.</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Transformations-Labor — \(y = a \cdot f(x-u) + v\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle \(x^2\) und stelle \(a = -1\): Was passiert? Wechsle dann die Grundfunktion bei festen Parametern: Die Transformation wirkt bei jeder Funktion gleich — verfolge den markierten Ankerpunkt.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Wähle x Quadrat und stelle a gleich minus eins: Was passiert? Wechsle dann die Grundfunktion bei festen Parametern: Die Transformation wirkt bei jeder Funktion gleich — verfolge den markierten Ankerpunkt.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Das Schema ist universell: \(u\) und \(v\) schieben den Ankerpunkt der Grundfunktion nach \((u \mid v)\), \(|a|\) streckt vertikal, negatives \(a\) klappt die Kurve um. Genau so entstanden Scheitelform, verschobene Hyperbeln und die allgemeine Sinusfunktion in 3.2–3.5.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Das Schema ist universell: u und v schieben den Ankerpunkt der Grundfunktion, der Betrag von a streckt vertikal, negatives a klappt die Kurve um. Genau so entstanden Scheitelform, verschobene Hyperbeln und die allgemeine Sinusfunktion.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Grundfunktion grau gestrichelt · transformierte Kurve violett · Ankerpunkt grün</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="tr-f-btns"></div>
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Faktor <span class="var">\(a\)</span></label><input type="range" id="tr-a" min="0" max="5" step="1" value="3"><span class="sl-val" id="tr-av">1</span></div>
+      <div class="sl-grp akz-orange"><label>Verschiebung <span class="var">\(u\)</span></label><input type="range" id="tr-u" min="-3" max="3" step="1" value="0"><span class="sl-val" id="tr-uv">0</span></div>
+      <div class="sl-grp akz-gruen"><label>Verschiebung <span class="var">\(v\)</span></label><input type="range" id="tr-v" min="-3" max="3" step="1" value="0"><span class="sl-val" id="tr-vv">0</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktionsgleichung</div>
+      <div class="fl-eq" id="tr-eq">y = x²</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="tr-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-fehler" style="margin-top:14px">
+  <div class="block-titel">⚠ Häufiger Fehler — \((x - 3)\) verschiebt nach links?</div>
+  <p>Nein — <strong>nach rechts!</strong> \(y = f(x-3)\) nimmt an der Stelle \(x = 3\) den Wert \(f(0)\) an: Alles passiert \(3\) Einheiten <em>später</em>. Kontrolle über einen markanten Punkt: Der Scheitel von \((x-3)^2\) liegt bei \(x = 3\), nicht bei \(-3\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Transformationen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie geht der Graph von \(y = -\sqrt{x} + 2\) aus dem Graphen von \(y = \sqrt{x}\) hervor?</p><ul class="mc-optionen"><li data-opt="A">Spiegelung an der \(x\)-Achse, dann 2 nach oben</li><li data-opt="B">Spiegelung an der \(y\)-Achse, dann 2 nach rechts</li><li data-opt="C">Verschiebung um 2 nach unten</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Das Minus vor der Wurzel spiegelt an der \(x\)-Achse (\(a = -1\)), das \(+2\) hebt um \(2\) an.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Graph von \(y = (x+4)^2 - 1\) ist die Normalparabel, um \(4\) nach <span class="mc-luecke"></span> und um \(1\) nach unten verschoben.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">links — denn \(x + 4 = x - (-4)\), also \(u = -4\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Gib die Gleichung der Normalparabel an, die um \(2\) nach rechts und \(5\) nach oben verschoben ist.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(y = (x-2)^2 + 5\) — Scheitel \((2 \mid 5)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Graph sieht aus wie \(y = \tfrac{1}{x}\), hat aber die Asymptoten \(x = 2\) und \(y = -3\). Rekonstruiere die Funktionsgleichung.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die Asymptoten verraten die Verschiebung: \(u = 2\), \(v = -3\), also \(y = \dfrac{1}{x-2} - 3\) (Streckfaktor \(a\) wäre nur mit einem zusätzlichen Kurvenpunkt bestimmbar).</div></details></div>
+</details>
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<h2 id="theorie">Schnittpunkte, Un-/Gleichungen und Extremwerte</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Schnittpunkte zweier Graphen</div>
+  <p>Ein Punkt liegt auf beiden Graphen, wenn beide Funktionen dort denselben Wert haben. Rechnerisch:</p>
+  \[ f(x) = g(x) \quad\xrightarrow{\ \text{lösen}\ }\quad \text{Schnittstellen } x_i \quad\xrightarrow{\ \text{einsetzen}\ }\quad S_i = \bigl(x_i \mid f(x_i)\bigr) \]
+  <p><strong>Gleichsetzen → lösen → einsetzen.</strong> Grafisch: die Kreuzungspunkte der beiden Kurven.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Gerade schneidet Parabel</div>
+  <p>Bestimme die Schnittpunkte von \(f(x) = x^2 - 1\) und \(g(x) = x + 1\).</p>
+  <p><strong>Lösung:</strong> Gleichsetzen und ordnen:</p>
+  \[ x^2 - 1 = x + 1 \;\Longrightarrow\; x^2 - x - 2 = 0 \;\Longrightarrow\; (x+1)(x-2) = 0 \]
+  <p>Schnittstellen \(x_1 = -1\), \(x_2 = 2\); Einsetzen in \(g\): \(S_1 = (-1 \mid 0)\), \(S_2 = (2 \mid 3)\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Gleichungen und Ungleichungen am Graphen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Algebra</th><th>Bild am Graphen</th><th>Lösungsmenge</th></tr></thead>
+    <tbody>
+      <tr><td>\(f(x) = g(x)\)</td><td style="text-align:left;font-family:var(--sans)">Kurven <strong>kreuzen</strong> sich</td><td style="text-align:left;font-family:var(--sans)">einzelne Schnittstellen</td></tr>
+      <tr><td>\(f(x) &gt; g(x)\)</td><td style="text-align:left;font-family:var(--sans)">Kurve von \(f\) liegt <strong>oberhalb</strong></td><td style="text-align:left;font-family:var(--sans)">Intervalle zwischen bzw. ausserhalb der Schnittstellen</td></tr>
+      <tr><td>\(f(x) = 0\)</td><td style="text-align:left;font-family:var(--sans)">Kurve schneidet die <strong>\(x\)-Achse</strong></td><td style="text-align:left;font-family:var(--sans)">Nullstellen</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Die Schnittstellen zerlegen die \(x\)-Achse in Abschnitte; in jedem Abschnitt liegt eine Kurve durchgehend oben. Ein <strong>Testwert pro Abschnitt</strong> entscheidet.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Ungleichung grafisch lösen</div>
+  <p>Für welche \(x\) gilt \(x^2 - 1 &gt; x + 1\)?</p>
+  <p><strong>Lösung:</strong> Die Schnittstellen aus Beispiel 1 sind \(-1\) und \(2\). Testwert \(x = 0\) dazwischen: \(0^2 - 1 = -1 &lt; 1 = 0 + 1\) — dort liegt die Parabel <em>unterhalb</em>. Also liegt sie aussen oberhalb:</p>
+  \[ L = \{x \mid x &lt; -1 \ \vee\ x &gt; 2\} \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Gleichung grafisch lösen (mit Monotonie-Argument)</div>
+  <p>Löse \(2^x = 3 - x\).</p>
+  <p><strong>Lösung:</strong> Algebraisch ist die Gleichung nicht lösbar (die Unbekannte steht im Exponenten <em>und</em> linear). Grafisch: \(y = 2^x\) ist <strong>streng steigend</strong>, \(y = 3 - x\) <strong>streng fallend</strong> — die Kurven schneiden sich höchstens einmal. Probieren liefert den Treffer exakt:</p>
+  \[ x = 1:\quad 2^1 = 2 = 3 - 1 \quad\checkmark \qquad\Longrightarrow\qquad L = \{1\} \]
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Extremwertaufgaben — die Strategie</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li><strong>Zielgrösse</strong> festlegen: Was soll maximal/minimal werden? (Fläche, Kosten, …)</li>
+    <li><strong>Nebenbedingung</strong> aufschreiben: Welche Einschränkung verbindet die Variablen?</li>
+    <li>Nebenbedingung <strong>einsetzen</strong> → Zielfunktion mit <em>einer</em> Variablen (sinnvollen Definitionsbereich angeben!).</li>
+    <li><strong>Extremum bestimmen:</strong> Bei quadratischer Zielfunktion über die Scheitelform; sonst grafisch oder mit Wertetabelle.</li>
+  </ol>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 4 — Zaun am Fluss</div>
+  <p>Mit \(60\) m Zaun soll am geraden Flussufer eine rechteckige Weide abgesteckt werden — die Flussseite braucht keinen Zaun. Welche Masse maximieren die Fläche?</p>
+  <p><strong>Lösung:</strong> Zielgrösse \(A = x \cdot y\) (Breite \(x\) senkrecht zum Fluss). Nebenbedingung: \(2x + y = 60\), also \(y = 60 - 2x\). Einsetzen (\(0 &lt; x &lt; 30\)):</p>
+  \[ A(x) = x(60 - 2x) = -2x^2 + 60x = -2(x - 15)^2 + 450 \]
+  <p>Scheitel bei \(x = 15\): Breite \(15\) m, Länge \(y = 30\) m, maximale Fläche \(A = 450\ \text{m}^2\).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Randpunkte und Definitionsbereich vergessen</div>
+  <p>Bei Ungleichungen gehören die Schnittstellen selbst <strong>nur bei \(\geq\)/\(\leq\)</strong> zur Lösungsmenge. Und bei Extremwertaufgaben muss die Lösung im sinnvollen Bereich liegen: Eine «optimale Breite» von \(-5\) m oder ausserhalb der Nebenbedingung ist keine Lösung — Definitionsbereich immer mitdenken.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — grafisch zuerst, algebraisch danach</div>
+  <p>Eine schnelle Skizze zeigt, <strong>wie viele</strong> Lösungen zu erwarten sind und <strong>wo ungefähr</strong> sie liegen — das schützt vor verlorenen Lösungen und Rechenfehlern. Danach liefert die Algebra die exakten Werte. Bei monotonen Funktionen (nur steigend oder nur fallend) gibt es höchstens einen Schnittpunkt.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Schnittpunkte, Ungleichungen, Extremwerte</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie berechnet man die Schnittpunkte zweier Funktionsgraphen?</p><ul class="mc-optionen"><li data-opt="A">Beide Funktionen null setzen</li><li data-opt="B">Die Funktionsterme gleichsetzen und die Gleichung lösen</li><li data-opt="C">Die Funktionsterme addieren</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(f(x) = g(x)\) lösen, dann die Schnittstellen in eine der beiden Funktionen einsetzen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei einer Extremwertaufgabe verbindet die <span class="mc-luecke"></span> die beiden Variablen, sodass die Zielfunktion nur noch von einer Variablen abhängt.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Nebenbedingung — z.B. der feste Zaunumfang beim Weide-Beispiel.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme den Schnittpunkt der Geraden \(y = 2x - 3\) und \(y = -x + 6\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(2x - 3 = -x + 6 \Rightarrow 3x = 9 \Rightarrow x = 3\), \(y = 3\): \(S = (3 \mid 3)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum kann die Gleichung \(3^x = -2 + x\) keine Lösung mit \(x \leq 2\) haben — und wie sieht man am Graphen, ob es überhaupt eine gibt?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Für \(x \leq 2\) ist die rechte Seite \(x - 2 \leq 0\), aber \(3^x &gt; 0\) — kein Schnitt möglich. Am Graphen: \(3^x\) wächst ab \(x = 2\) viel schneller als die Gerade \(y = x - 2\) und liegt dort bereits oberhalb (\(9 &gt; 0\)) — die Kurven schneiden sich nie, \(L = \{\,\}\).</div></details></div>
+</details>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Transformation am Graphen erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Graphen und entscheide, welche Funktionsgleichung dazu passt — alle vier sind transformierte Normalparabeln.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört zum angezeigten Graphen?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Graphen skizzieren</span></div>
+  <p>Skizziere die folgenden Graphen <strong>von Hand</strong>: Grundfunktion erkennen, Ankerpunkt verschieben, Kurve zeichnen. Vergleiche danach mit der Lösung.</p>
+  <ol class="aufg-liste">
+    <li>\(y = (x-1)^2 - 4\)</li>
+    <li>\(y = -\sqrt{x+2} + 1\)</li>
+    <li>\(y = 2^{\,x-1}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2'); drawA2Sol();">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <div class="cv-wrap" style="margin-bottom:8px"><canvas id="a2-canvas" height="240"></canvas></div>
+      <ol class="aufg-liste">
+        <li><span style="color:#1a4f8a;font-weight:700">Blau:</span> Normalparabel mit Scheitel \((1 \mid -4)\); Nullstellen bei \(x = -1\) und \(x = 3\).</li>
+        <li><span style="color:#1f6b3a;font-weight:700">Grün:</span> Wurzelkurve, an der \(x\)-Achse gespiegelt, Startpunkt \((-2 \mid 1)\); Nullstelle bei \(x = -1\), \(D = [-2;\, \infty[\).</li>
+        <li><span style="color:#5b2d8e;font-weight:700">Violett:</span> Exponentialkurve, um \(1\) nach rechts verschoben — läuft durch \((1 \mid 1)\) und \((2 \mid 2)\), Asymptote \(y = 0\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit dem Werkzeugkasten</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Schnittpunkte Gerade–Parabel</div>
+    <p>Bestimme die Schnittstellen von \(f(x) = x^2 - 1\) und \(g(x) = x + 1\).</p>
+    <div class="eingabe-row"><label>kleinere Schnittstelle x₁ =&nbsp;</label><input type="text" id="a3a1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a3a1', -1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>grössere Schnittstelle x₂ =&nbsp;</label><input type="text" id="a3a2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3a2', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ x^2 - 1 = x + 1 \;\Longrightarrow\; x^2 - x - 2 = 0 \;\Longrightarrow\; x_1 = -1,\quad x_2 = 2 \]
+        <p>Schnittpunkte: \(S_1 = (-1 \mid 0)\) und \(S_2 = (2 \mid 3)\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Schnittpunkt zweier Geraden</div>
+    <p>Bestimme den Schnittpunkt von \(y = 2x - 3\) und \(y = -x + 6\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3b1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3b1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>y =&nbsp;</label><input type="text" id="a3b2" placeholder="y"><button class="btn-pruef" onclick="chkNum('a3b2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(2x - 3 = -x + 6 \Rightarrow 3x = 9 \Rightarrow x = 3\); einsetzen: \(y = 2 \cdot 3 - 3 = 3\). Schnittpunkt \(S = (3 \mid 3)\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Scheitel ablesen</div>
+    <p>Gib den Scheitelpunkt \(S = (x_S \mid y_S)\) von \(y = 2(x-3)^2 - 5\) an.</p>
+    <div class="eingabe-row"><label>x_S =&nbsp;</label><input type="text" id="a3c1" placeholder="x_S"><button class="btn-pruef" onclick="chkNum('a3c1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>y_S =&nbsp;</label><input type="text" id="a3c2" placeholder="y_S"><button class="btn-pruef" onclick="chkNum('a3c2', -5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Die Form \(a(x-u)^2 + v\) zeigt die Verschiebung direkt: \(S = (3 \mid -5)\). Der Faktor \(2\) streckt die Parabel, ändert aber den Scheitel nicht.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Nullstellen einer transformierten Funktion</div>
+    <p>Bestimme die Nullstellen von \(y = (x-1)^2 - 4\).</p>
+    <div class="eingabe-row"><label>x₁ =&nbsp;</label><input type="text" id="a3d1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a3d1', -1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x₂ =&nbsp;</label><input type="text" id="a3d2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3d2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ (x-1)^2 = 4 \;\Longrightarrow\; x - 1 = \pm 2 \;\Longrightarrow\; x_1 = -1,\quad x_2 = 3 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Ungleichung interpretieren</div>
+    <p>Für welche \(x\) gilt \(x^2 - 1 &gt; x + 1\)? Gib die Grenze des <strong>rechten</strong> Lösungsintervalls an.</p>
+    <div class="eingabe-row"><label>rechtes Intervall: x &gt;&nbsp;</label><input type="text" id="a3e1" placeholder="Grenze"><button class="btn-pruef" onclick="chkNum('a3e1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Schnittstellen \(-1\) und \(2\) (Teilaufgabe a). Testwert \(x = 0\): Parabel unterhalb. Also gilt die Ungleichung aussen: \(L = \{x \mid x &lt; -1 \ \vee\ x &gt; 2\}\) — das rechte Intervall beginnt bei \(x = 2\) (offen, da strikt «grösser»).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Weide am Fluss</span></div>
+  <p>Mit \(60\) m Zaun wird am geraden Flussufer eine rechteckige Weide abgesteckt; die Flussseite bleibt offen. Die Breite senkrecht zum Fluss sei \(x\).</p>
+  <ol class="aufg-liste">
+    <li>Stelle die Zielfunktion \(A(x)\) auf (Nebenbedingung: \(2x + y = 60\)).</li>
+    <li>Bestimme die optimale Breite \(x\) über die Scheitelform.</li>
+    <li>Gib die maximale Fläche an.</li>
+  </ol>
+  <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a4-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a4-1', 15, 0.1, 'm')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>A_max =&nbsp;</label><input type="text" id="a4-2" placeholder="m²"><button class="btn-pruef" onclick="chkNum('a4-2', 450, 1, 'm²')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(y = 60 - 2x\), also \(A(x) = x(60 - 2x) = -2x^2 + 60x\) mit \(0 &lt; x &lt; 30\).</li>
+        <li>Quadratische Ergänzung: \(A(x) = -2(x-15)^2 + 450\) — Scheitel bei \(x = 15\) m (Länge \(y = 30\) m).</li>
+        <li>\(A_{\max} = 450\ \text{m}^2\). Kontrolle mit Nachbarwerten: \(A(10) = A(20) = 400 &lt; 450\) ✓</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Zwei Service-Angebote</span></div>
+  <p>Für die Wartung einer Maschine liegen zwei Offerten vor (\(x\): Anzahl Serviceeinsätze pro Jahr, Kosten in CHF):</p>
+  \[ K_A(x) = 80 + 40x \qquad\qquad K_B(x) = 200 + 25x \]
+  <ol class="aufg-liste">
+    <li>Ab wie vielen Einsätzen ist Angebot B günstiger? Löse grafisch <em>und</em> rechnerisch.</li>
+    <li>Interpretiere: Was bedeuten Schnittpunkt, «oberhalb» und «unterhalb» hier konkret?</li>
+  </ol>
+  <div class="eingabe-row"><label>gleich teuer bei x =&nbsp;</label><input type="text" id="a5-1" placeholder="Einsätze"><button class="btn-pruef" onclick="chkNum('a5-1', 8, 0.01, 'Einsätzen')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(80 + 40x = 200 + 25x \Rightarrow 15x = 120 \Rightarrow x = 8\) (beide \(400\) CHF). Für \(x &gt; 8\) ist B günstiger — die Gerade von B verläuft dort unterhalb.</li>
+        <li>Der Schnittpunkt \((8 \mid 400)\) ist der «Break-even»: Bei genau \(8\) Einsätzen kosten beide gleich viel. «\(K_B\) unterhalb \(K_A\)» heisst: B ist günstiger — die Ungleichung \(K_B(x) &lt; K_A(x)\) hat die Lösungsmenge \(x &gt; 8\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Grafisch lösen mit Monotonie-Argument</span></div>
+  <p>Betrachte die Gleichung \(2^x = 3 - x\).</p>
+  <ol class="aufg-liste">
+    <li>Skizziere beide Graphen und lies die Lösung ab.</li>
+    <li>Begründe mit dem Kurvenverlauf, dass es <strong>genau eine</strong> Lösung gibt.</li>
+    <li>Bestätige die Lösung durch Einsetzen.</li>
+  </ol>
+  <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a6-1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a6-1', 1, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Die Exponentialkurve und die fallende Gerade kreuzen sich bei \(x = 1\).</li>
+        <li>\(2^x\) ist streng steigend, \(3 - x\) streng fallend — zwei solche Kurven schneiden sich höchstens einmal. Da links (\(x = 0\): \(1 &lt; 3\)) die Gerade oben liegt und rechts (\(x = 2\): \(4 &gt; 1\)) die Exponentialkurve, gibt es genau einen Schnitt.</li>
+        <li>\(2^1 = 2 = 3 - 1\) ✓ — also \(L = \{1\}\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Rechteck unter der Parabel <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Einem Parabelbogen \(y = 12 - x^2\) (für \(0 \leq x \leq \sqrt{12}\)) wird ein Rechteck einbeschrieben: Ecken in \((0 \mid 0)\), \((x \mid 0)\), \((x \mid 12 - x^2)\) und \((0 \mid 12 - x^2)\).</p>
+  <ol class="aufg-liste">
+    <li>Stelle die Zielfunktion \(A(x)\) für den Flächeninhalt auf.</li>
+    <li>Werte \(A(x)\) für \(x = 1,\ 1.5,\ 2,\ 2.5,\ 3\) aus und lies das Maximum näherungsweise ab.</li>
+    <li>Warum hilft die Scheitelform hier nicht weiter — und welches Werkzeug bräuchte es für die exakte Lösung?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(A(x) = x \cdot (12 - x^2) = 12x - x^3\) mit \(0 &lt; x &lt; \sqrt{12}\).</li>
+        <li>\(A(1) = 11\), \(A(1.5) \approx 14.63\), \(A(2) = 16\), \(A(2.5) \approx 14.38\), \(A(3) = 9\) — das Maximum liegt bei \(x = 2\) mit \(A = 16\).</li>
+        <li>\(A(x)\) ist eine Polynomfunktion <strong>dritten</strong> Grades — quadratische Ergänzung greift nicht. Exakt findet man das Maximum mit der Differenzialrechnung (Analysis); bis dahin liefern Wertetabelle und Graph eine verlässliche Näherung. (Sie trifft hier sogar exakt: \(x = 2\).)</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Der Werkzeugkasten für alle Funktionsklassen: <strong>Grundgraphen</strong> auswendig kennen und mit \(y = a \cdot f(x-u) + v\) verschieben, spiegeln und strecken — markante Punkte und Asymptoten wandern mit. <strong>Schnittpunkte</strong> durch Gleichsetzen, <strong>Gleichungen</strong> als Schnittstellen-Frage, <strong>Ungleichungen</strong> als «Kurve oberhalb»-Frage mit Intervall-Lösungen, <strong>Extremwertaufgaben</strong> über Zielfunktion + Nebenbedingung und die Scheitelform. Die Skizze zuerst — sie verrät Anzahl und Lage der Lösungen.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Aufgabe</th><th>Verfahren</th><th>Grafisches Bild</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Graph skizzieren</td><td style="text-align:left;font-family:var(--sans)">Grundfunktion + Transformation \(a \cdot f(x-u) + v\)</td><td style="text-align:left;font-family:var(--sans)">Ankerpunkt nach \((u \mid v)\) schieben</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Gleichung bestimmen</td><td style="text-align:left;font-family:var(--sans)">Grundform erkennen, Parameter aus markanten Punkten</td><td style="text-align:left;font-family:var(--sans)">Scheitel, Asymptoten, Schnitt mit Achsen ablesen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Schnittpunkte</td><td style="text-align:left;font-family:var(--sans)">gleichsetzen → lösen → einsetzen</td><td style="text-align:left;font-family:var(--sans)">Kreuzungspunkte der Kurven</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Ungleichung \(f &gt; g\)</td><td style="text-align:left;font-family:var(--sans)">Schnittstellen + Testwert je Abschnitt</td><td style="text-align:left;font-family:var(--sans)">Bereiche, wo \(f\) oberhalb liegt</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Extremwertaufgabe</td><td style="text-align:left;font-family:var(--sans)">Zielfunktion + Nebenbedingung → Scheitelform</td><td style="text-align:left;font-family:var(--sans)">Hoch-/Tiefpunkt der Zielfunktion</td></tr>
+  </tbody>
+</table>
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s3-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lVDfsit7iy1j6Nmx3znS5bV" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über PARABELN — Playlist</div><div class="lk-s">MathemaTrick · 42 Videos · Scheitelform und Verschiebungen als Transformations-Training</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLkr4Hf_IwvMts1O-fD_YBbcDiq8bvXHU" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Quadratische Funktionen und Gleichungen — Playlist</div><div class="lk-s">Mathehoch13 · 32 Videos · Scheitel, Nullstellen, Schnittpunkte</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/159266/aufgaben-zu-extremwertproblemen-aus-der-geometrie" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Extremwertprobleme aus der Geometrie</div><div class="lk-s">Zielfunktion und Nebenbedingung aufstellen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/160385/aufgaben-zur-berechnung-von-schnittpunkten-von-geraden" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Schnittpunkte von Geraden</div><div class="lk-s">Gleichsetzen und einsetzen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26411/aufgaben-zur-symmetrie-von-graphen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Symmetrie von Graphen</div><div class="lk-s">Gerade und ungerade Funktionen erkennen · mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -108,12 +665,262 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'schwerpunkt', id:'s3-1',
   kapitelNr:'3.1', kapitelTitel:'Grundlagen',
   prev:{nr:'2.2',titel:'Gleichungstypen',url:'s2-2-gleichungstypen.html'},
   next:{nr:'3.2a',titel:'Potenzfunktionen',url:'s3-2a-potenzfunktionen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+// Zahlformat mit 2 Nachkommastellen
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+// Kurven-Plot mit Segmenttrennung bei Polen/Ausreissern (wie s3-2a)
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+// Anwendungs-Raster mit frei wählbaren Schritten und Einheiten-Labels (wie s3-4a)
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  // Labels mit Einheit
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Drohnenflug ══ */
+function updateDN(){
+  const t = parseFloat(document.getElementById('dn-t').value);
+  document.getElementById('dn-tv').textContent = t.toFixed(1);
+  const h = -0.5 * t * t + 6 * t;
+  const lage = h > 16 ? 'oberhalb der Leitung!' : (h === 16 ? 'exakt auf Leitungshöhe' : 'unterhalb der Leitung');
+  const tB = `<span class="tx-blau">${t.toFixed(1)}</span>`;
+  document.getElementById('dn-eq').innerHTML = `h(${tB}) = ${h.toFixed(2)} m — ${lage}`;
+  const {ctx, cx, cy} = gridApp('dn-canvas', 240, 0, 12, 0, 20, 1, 2, 't [min]', 'h [m]');
+  // Leitungshöhe
+  ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(16)); ctx.lineTo(cx(12), cy(16)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Leitung (16 m)', cx(0.2), cy(16) - 6);
+  // Flugkurve
+  plotFx(ctx, cx, cy, x => -0.5 * x * x + 6 * x, 0, 12, '#1a4f8a', 2.5, 1e6);
+  // Schnittpunkte und Hochpunkt
+  drawDot(ctx, cx, cy, 4, 16, '#9b1c1c', 5);
+  drawDot(ctx, cx, cy, 8, 16, '#9b1c1c', 5);
+  drawDot(ctx, cx, cy, 6, 18, '#1f6b3a', 6);
+  ctx.fillStyle = '#1f6b3a'; ctx.textAlign = 'center';
+  ctx.fillText('(6|18)', cx(6), cy(18) - 10);
+  // Drohnen-Position
+  drawDot(ctx, cx, cy, t, h, '#1a4f8a', 7);
+}
+document.getElementById('dn-t').addEventListener('input', updateDN);
+
+/* ══ GRUNDFUNKTIONEN-GALERIE ══ */
+const ST = [
+  {label:'x',      f: x => x,                             d:'\\(\\mathbb{R}\\)',                 w:'\\(\\mathbb{R}\\)',            p:'\\((0 \\mid 0)\\), \\((1 \\mid 1)\\)',                  b:'Gerade durch den Ursprung, ungerade', pts:[[0,0],[1,1]], color:'#1a4f8a'},
+  {label:'x²',     f: x => x * x,                         d:'\\(\\mathbb{R}\\)',                 w:'\\(\\mathbb{R}_0^+\\)',        p:'\\((0 \\mid 0)\\), \\((\\pm 1 \\mid 1)\\)',             b:'Normalparabel, gerade (achsensymmetrisch)', pts:[[0,0],[1,1],[-1,1]], color:'#1f6b3a'},
+  {label:'x³',     f: x => x * x * x,                     d:'\\(\\mathbb{R}\\)',                 w:'\\(\\mathbb{R}\\)',            p:'\\((0 \\mid 0)\\), \\((\\pm 1 \\mid \\pm 1)\\)',        b:'ungerade (punktsymmetrisch), Terrassenpunkt', pts:[[0,0],[1,1],[-1,-1]], color:'#5b2d8e'},
+  {label:'√x',     f: x => x >= 0 ? Math.sqrt(x) : NaN,   d:'\\(\\mathbb{R}_0^+\\)',             w:'\\(\\mathbb{R}_0^+\\)',        p:'\\((0 \\mid 0)\\), \\((1 \\mid 1)\\)',                  b:'Umkehrfunktion von x² (auf ℝ₀⁺)', pts:[[0,0],[1,1]], color:'#b85c00'},
+  {label:'1/x',    f: x => 1 / x,                         d:'\\(\\mathbb{R} \\setminus \\{0\\}\\)', w:'\\(\\mathbb{R} \\setminus \\{0\\}\\)', p:'\\((1 \\mid 1)\\), \\((-1 \\mid -1)\\)',      b:'Hyperbel, Asymptoten x = 0 und y = 0', pts:[[1,1],[-1,-1]], color:'#9b1c1c'},
+  {label:'2ˣ',     f: x => Math.pow(2, x),                d:'\\(\\mathbb{R}\\)',                 w:'\\(\\mathbb{R}^+\\)',          p:'\\((0 \\mid 1)\\), \\((1 \\mid 2)\\)',                  b:'Exponentialkurve, Asymptote y = 0', pts:[[0,1],[1,2]], color:'#1a4f8a'},
+  {label:'ln x',   f: x => x > 0 ? Math.log(x) : NaN,     d:'\\(\\mathbb{R}^+\\)',               w:'\\(\\mathbb{R}\\)',            p:'\\((1 \\mid 0)\\), \\((e \\mid 1)\\)',                  b:'Logarithmuskurve, Asymptote x = 0', pts:[[1,0],[Math.E,1]], color:'#1f6b3a'},
+  {label:'sin x',  f: x => Math.sin(x),                   d:'\\(\\mathbb{R}\\)',                 w:'\\([-1;\\,1]\\)',              p:'\\((0 \\mid 0)\\), \\((\\tfrac{\\pi}{2} \\mid 1)\\)',   b:'periodisch (2π), ungerade', pts:[[0,0],[Math.PI/2,1]], color:'#5b2d8e'},
+];
+let stActive = 1;
+function buildStBtns(){
+  document.getElementById('st-btns').innerHTML = ST.map((t, i) =>
+    `<button class="typ-btn${i === stActive ? ' aktiv' : ''}" onclick="setSt(${i})">${t.label}</button>`
+  ).join('');
+}
+function setSt(i){
+  stActive = i;
+  document.querySelectorAll('#st-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawSt();
+}
+function drawSt(){
+  const s = ST[stActive];
+  const {ctx, W, H} = initCanvas('st-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -4, 4, -3, 3);
+  plotFx(ctx, cx, cy, s.f, -4, 4, s.color, 3, 15);
+  s.pts.forEach(([px, py]) => {
+    if(px >= -4 && px <= 4 && py >= -3 && py <= 3) drawDot(ctx, cx, cy, px, py, '#9b1c1c', 5);
+  });
+  document.getElementById('st-d').innerHTML = s.d;
+  document.getElementById('st-w').innerHTML = s.w;
+  document.getElementById('st-p').innerHTML = s.p;
+  document.getElementById('st-b').textContent = s.b;
+  mjTypeset([document.getElementById('st-tabelle')]);
+}
+
+/* ══ TRANSFORMATIONS-LABOR ══ */
+const TR_F = [
+  {label:'x²',   f: x => x * x,                           anker:[0, 0], eq: 'x²',      sup: true},
+  {label:'√x',   f: x => x >= 0 ? Math.sqrt(x) : NaN,     anker:[0, 0], eq: '√x',      sup: false},
+  {label:'1/x',  f: x => 1 / x,                           anker:[1, 1], eq: '1/x',     sup: false},
+  {label:'2ˣ',   f: x => Math.pow(2, x),                  anker:[0, 1], eq: '2ˣ',      sup: false},
+  {label:'sin x',f: x => Math.sin(x),                     anker:[0, 0], eq: 'sin x',   sup: false},
+];
+const TR_A = [-2, -1, -0.5, 0.5, 1, 2];
+let trF = 0;
+function buildTrFBtns(){
+  document.getElementById('tr-f-btns').innerHTML = TR_F.map((t, i) =>
+    `<button class="typ-btn${i === trF ? ' aktiv' : ''}" onclick="setTrF(${i})">${t.label}</button>`
+  ).join('');
+}
+function setTrF(i){
+  trF = i;
+  document.querySelectorAll('#tr-f-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  updateTR();
+}
+function updateTR(){
+  const a = TR_A[parseInt(document.getElementById('tr-a').value)];
+  const u = parseInt(document.getElementById('tr-u').value);
+  const v = parseInt(document.getElementById('tr-v').value);
+  document.getElementById('tr-av').textContent = fmt(a).replace('-', '−');
+  document.getElementById('tr-uv').textContent = String(u).replace('-', '−');
+  document.getElementById('tr-vv').textContent = String(v).replace('-', '−');
+  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
+  const F = TR_F[trF];
+  const arg = u === 0 ? 'x' : (u > 0 ? `x − ${T('orange', u)}` : `x + ${T('orange', Math.abs(u))}`);
+  // Grundterm mit eingesetztem Argument
+  let kern;
+  if(F.label === 'x²')       kern = `(${arg})²`;
+  else if(F.label === '√x')  kern = `√(${arg})`;
+  else if(F.label === '1/x') kern = `1/(${arg})`;
+  else if(F.label === '2ˣ')  kern = `2<sup>${arg}</sup>`;
+  else                       kern = `sin(${arg})`;
+  const aStr = a === 1 ? '' : (a === -1 ? '−' : `${T('blau', fmt(a).replace('-', '−'))}·`);
+  const vTerm = v === 0 ? '' : (v > 0 ? ` + ${T('gruen', v)}` : ` − ${T('gruen', Math.abs(v))}`);
+  document.getElementById('tr-eq').innerHTML = `y = ${aStr}${kern}${vTerm}`;
+  const {ctx, W, H} = initCanvas('tr-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -6, 6, -5, 5);
+  // Grundfunktion gestrichelt grau
+  ctx.setLineDash([5, 4]);
+  plotFx(ctx, cx, cy, F.f, -6, 6, '#9ca3af', 1.5, 25);
+  ctx.setLineDash([]);
+  // Transformierte Kurve
+  plotFx(ctx, cx, cy, x => a * F.f(x - u) + v, -6, 6, '#5b2d8e', 2.5, 25);
+  // Ankerpunkt der Grundfunktion mitverschoben
+  const ax = F.anker[0] + u, ay = a * F.anker[1] + v;
+  if(ax >= -6 && ax <= 6 && ay >= -5 && ay <= 5){
+    drawDot(ctx, cx, cy, ax, ay, '#1f6b3a', 6);
+    ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+    ctx.fillText(`(${fmt2(ax)}|${fmt2(ay)})`, cx(ax) + 8, cy(ay) - 8);
+  }
+}
+['tr-a', 'tr-u', 'tr-v'].forEach(id => document.getElementById(id).addEventListener('input', updateTR));
+
+/* ══ A1: Erkennen ══ */
+const a1G = [
+  {label:'Graph 1', f: x => (x - 2) * (x - 2),      eq:'y = (x−2)²'},
+  {label:'Graph 2', f: x => x * x - 2,              eq:'y = x²−2'},
+  {label:'Graph 3', f: x => -(x * x) + 2,           eq:'y = −x²+2'},
+  {label:'Graph 4', f: x => (x + 2) * (x + 2),      eq:'y = (x+2)²'},
+];
+const a1Opts = ['y = (x−2)²', 'y = x²−2', 'y = −x²+2', 'y = (x+2)²'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 6);
+  plotFx(ctx, cx, cy, a1G[a1Act].f, -5, 5, '#1a4f8a', 2.5, 25);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Lies den Scheitel ab: (x−u)² schiebt horizontal, +v vertikal, ein Minus davor öffnet die Parabel nach unten.';
+  }
+}
+
+/* ══ A2: Lösungs-Skizzen ══ */
+function drawA2Sol(){
+  const body = document.getElementById('l-a2');
+  if(!body.classList.contains('sichtbar')) return;
+  const {ctx, W, H} = initCanvas('a2-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -5, 5);
+  plotFx(ctx, cx, cy, x => (x - 1) * (x - 1) - 4, -5, 5, '#1a4f8a', 2.5, 25);                 // a
+  plotFx(ctx, cx, cy, x => x >= -2 ? -Math.sqrt(x + 2) + 1 : NaN, -5, 5, '#1f6b3a', 2.5, 25); // b
+  plotFx(ctx, cx, cy, x => Math.pow(2, x - 1), -5, 5, '#5b2d8e', 2.5, 25);                    // c
+}
+
+/* ══ Zahlenwert-Prüfung (A3–A6) ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateDN();
+  buildStBtns(); drawSt();
+  buildTrFBtns(); updateTR();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateDN(); drawSt(); updateTR(); drawA1(); drawA2Sol();
 });
 </script>
 </body>

@@ -4,6 +4,34 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [73] — 2026-07-05 · s3-1 Grundlagen (Werkzeugkasten Funktionen) ausgebaut
+
+Fünfter Vollausbau im Schwerpunktfach — damit ist **Lerngebiet 3 komplett** (3.1–3.5, sieben
+Themenseiten). Ohne FTB-Quell-PDF gebaut: Inhalt entlang der fünf RLP-Kompetenzen 3.1, Notation
+und Muster wie in 3.2–3.5:
+
+- **`schwerpunkt/s3-1-grundlagen.html`** — Einstieg Drohnenflug \(h(t) = -0.5t^2 + 6t\) über
+  einer 16-m-Leitung (Extremwert, Gleichung und Ungleichung an *einem* Graphen),
+  Grundfunktionen-Galerie (acht Grundgraphen mit Steckbrief-Tabelle: \(D\), \(W\), markante
+  Punkte, Asymptoten), Transformations-Labor \(y = a \cdot f(x-u) + v\) mit wählbarer
+  Grundfunktion (\(x^2\), \(\sqrt{x}\), \(1/x\), \(2^x\), \(\sin x\)) und mitwanderndem
+  Ankerpunkt, Verfahren Schnittpunkte (gleichsetzen–lösen–einsetzen), Un-/Gleichungen am
+  Graphen (Testwert-Methode), Extremwert-Strategie (Zielfunktion + Nebenbedingung +
+  Scheitelform), Monotonie-Argument (Beispiel \(2^x = 3-x\)), A1–A7 (u.a. Weide am Fluss,
+  Service-Offerten-Break-even, Rechteck unter der Parabel als Analysis-Ausblick), 4 Mini-Checks,
+  Querlinks zu g3-1 und allen s3-Detailseiten.
+- **Materialien komplett:** 4 Druckseiten (`build_print_s3.py` G-Block, Bestand byte-identisch;
+  Aufgabenserie mit Brückenbogen, Ballwurf, Break-even, Fensterrahmen, Stromtarifen,
+  \(x^2 = 2^x\)) und Anki-Deck mit 20 Karten (nur neues Deck gebaut).
+- Alle Zahlenwerte numerisch verifiziert (u.a. Drohne Hochpunkt \((6 \mid 18)\) und
+  Schnittstellen \(4/8\), Weide \(15\) m / \(450\ \text{m}^2\), Ballwurf-Weite
+  \(10 + \sqrt{140} \approx 21.8\) m, dritter Schnitt von \(x^2 = 2^x\) bei \(\approx -0.77\)).
+- index.html-Karte 3.1 auf «fertig»; Ressourcen budgetiert (1 Discovery-Abruf, keine neue
+  Playlist bei den bevorzugten Anbietern gefunden → thematisch passende, bereits verifizierte
+  Map-Einträge MathemaTrick/Mathehoch13 + serlo-Sitemap-Cache); Map §8 um s3-1 ergänzt.
+
+---
+
 ## [72] — 2026-07-05 · s3-5 Trigonometrische Funktionen ausgebaut
 
 Vierter Vollausbau im Schwerpunktfach (Quelle: FTB Kap. 8 «Trigonometrische Funktionen und ihre
