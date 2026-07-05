@@ -4,6 +4,45 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [74] — 2026-07-05 · s2-2 ausgebaut: Dreier-Sub-Split 2.2a / 2.2b / 2.2c
+
+Sechster Vollausbau im Schwerpunktfach. Der Stub `s2-2-gleichungstypen.html` wurde durch
+**drei** Themenseiten ersetzt (Dreier-Split nach Rücksprache; Quellen: FTB Kap. 11
+Wurzelgleichungen und Kap. 12 Exponential-/log. Gleichungen; 2.2c ohne PDF entlang der RLP-Box):
+
+- **`schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html`** (RLP-Kompetenzen 2+3) —
+  Einstieg Sichtweite \(s = 3.57\sqrt{h}\) (Umkehrfrage als Wurzelgleichung),
+  Paritäts-Tabelle für \(x^n = c\), **Scheinlösungs-Labor** (\(\sqrt{6x+7} = \pm 5\) grafisch:
+  gleicher Kandidat, verschiedene Lösungsmengen), 5-Schritte-Lösungsmethode, doppeltes
+  Quadrieren, Substitution (FTB-Beispiel mit vier Lösungen), Bruchgleichungen mit Hauptnenner,
+  A1 «Lösbar oder nicht?» am Graphen, A4–A6 Sichtweite/Pendel/freier Fall, 4 Mini-Checks.
+- **`schwerpunkt/s2-2b-exponential-logarithmische-gleichungen.html`** (RLP-Kompetenz 4) —
+  Einstieg Algensee \(2.5 \cdot 2^{t/4}\) («Wann kippt der See?»), die vier Techniken
+  (Exponentenvergleich, Logarithmieren, Ausklammern, Substitution \(u = a^x\)) je mit
+  FTB-Beispiel, Schnittpunkt-Widget (eine/zwei/keine Lösung), logarithmische Gleichungen mit
+  \(D\), Scheinlösung (\(\lg(x-3) = 1 - \lg x\)) und verlorener Lösung (\(3\lg x^2 + 7 = 13\)),
+  A4–A7 Kapital/Algen/Auto/Erdbeben-Energie, 4 Mini-Checks.
+- **`schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html`** (RLP-Kompetenzen 1+5+6, ohne PDF) —
+  Einstieg Fertigungstoleranz \(|d - 12| \leq 0.05\) (V-Kurve mit Toleranzband), Betrag
+  abschnittsweise + als Abstand, Zwei-Fälle-Verfahren, Satz vom Nullprodukt (inkl.
+  «nie durch \(x\) dividieren»), Ungleichungs-Regeln (Zeichen dreht bei negativem Faktor),
+  **Vorzeichentabellen-Labor** (verschiebbare Nullstellen, Tabelle + eingefärbte Achse live),
+  Betragsungleichungen als Toleranzband, A4–A7 Welle/Gewinnzone/drei Faktoren/\(|A| = |B|\),
+  4 Mini-Checks.
+- **Materialien komplett:** je 4 Druckseiten (`build_print_s3.py` H/I/J-Blöcke, Bestand
+  byte-identisch) und drei Anki-Decks mit je 20 Karten (nur neue Decks gebaut).
+- Alle Zahlenwerte numerisch verifiziert (u.a. \(h = (100/3.57)^2 \approx 785\) m,
+  Substitution \(L = \{-7; -6; 1; 2\}\), Algen 100 % nach \(21.3\) d, Kapital-Verdopplung
+  \(15.75\) a, Basel 1356 \(\approx 7.9 \cdot 10^6\) t TNT, Gewinnzone \(]10;\ 50[\)).
+- Infrastruktur: `nav.js` (SITE + GROUPS s2-2a/b/c), `index.html` (ksub span-2 mit drei
+  Karten, 40 Themenseiten), Kette s2-1 → 2.2a → 2.2b → 2.2c → 3.1; alter Stub entfernt.
+- Ressourcen ohne neue Abrufe: Map-Wiederverwendung (MathemaTrick Wurzeln/Exp/Log,
+  Mathehoch13, Daniel Jung) + sos-mathe-Code-Map (G32, G33, G35) + serlo-Sitemap-Cache;
+  2.2c-Videosektion mit Platzhalter (kein passender Anbieter in der Map); Map §8 um drei
+  Zeilen ergänzt.
+
+---
+
 ## [73] — 2026-07-05 · s3-1 Grundlagen (Werkzeugkasten Funktionen) ausgebaut
 
 Fünfter Vollausbau im Schwerpunktfach — damit ist **Lerngebiet 3 komplett** (3.1–3.5, sieben

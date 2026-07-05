@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.2b Exponential- und logarithmische Gleichungen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 2 · Gleichungen · 30 Lektionen</div>
+  <h1 class="pt-h1">2.2b Exponential- und logarithmische Gleichungen</h1>
+  <div class="pt-untertitel">RLP 2.2 · Teil 2 von 3</div>
+</div>
+
+<p class="lead">Steht die Unbekannte im <strong>Exponenten</strong>, holt sie nur das <strong>Logarithmieren</strong> herunter; steht sie im <strong>Logarithmus</strong>, befreit sie das <strong>Entlogarithmieren</strong>. Radioaktiver Zerfall, Zellwachstum und Zinseszins führen genau auf solche Gleichungen. Auch hier gilt: Beide Umformungen sind heikel — Definitionsmenge und Kontrolle gehören dazu.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 2.2</div>
+  <ul>
+    <li>lineare und nichtlineare Ungleichungen mithilfe einer Grafik oder der Vorzeichentabelle umformen und lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Potenzgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Wurzelgleichungen und rationale Gleichungen lösen, die auf lineare oder quadratische Gleichungen führen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Exponential- und Logarithmusgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Betragsgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Polynomgleichungen höheren Grades lösen, wenn das Polynom als Produkt linearer und quadratischer Faktoren vorliegt <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt die Kompetenz 4: Exponential- und Logarithmusgleichungen. Potenz-, Wurzel- und rationale Gleichungen stehen in <a href="s2-2a-potenz-wurzel-rationale-gleichungen.html">Teil 1 (s2-2a)</a>, Betrags- und Polynomgleichungen sowie Ungleichungen in <a href="s2-2c-betrag-polynom-ungleichungen.html">Teil 3 (s2-2c)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann Exponentialgleichungen durch <strong>Exponentenvergleich</strong> lösen, wenn beide Seiten dieselbe Basis haben.</li>
+      <li>Ich kann Exponentialgleichungen durch <strong>Logarithmieren</strong> lösen und weiss, warum das bei Summen nicht funktioniert.</li>
+      <li>Ich kann gleiche Basen <strong>ausklammern</strong>, um Summen in Produkte zu verwandeln, und Gleichungen mit <strong>Substitution</strong> \(u = a^x\) auf quadratische Gleichungen zurückführen.</li>
+      <li>Ich kann logarithmische Gleichungen durch Zusammenfassen und <strong>Entlogarithmieren</strong> lösen.</li>
+      <li>Ich kann die Definitionsmenge logarithmischer Gleichungen bestimmen und Scheinlösungen durch die Kontrolle ausschliessen.</li>
+      <li>Ich kann Wachstums- und Zerfallsaufgaben (Kapital, Algen, Wertverlust) als Exponentialgleichungen formulieren und exakt lösen.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — wann kippt der See?</h2>
+
+<p>Ein See ist zu \(2.5\) % mit Algen bedeckt; die Algenfläche <strong>verdoppelt sich alle 4 Tage</strong>. Der bedeckte Anteil (in %) nach \(t\) Tagen:</p>
+
+\[ A(t) = 2.5 \cdot 2^{\,t/4} \]
+
+<p>Die Frage «wie viel nach \(20\) Tagen?» ist einfaches Einsetzen. Aber: <strong>Wann ist der See vollständig bedeckt?</strong> Jetzt steht die Unbekannte im Exponenten:</p>
+
+\[ 2.5 \cdot 2^{\,t/4} = 100 \]
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🌿 Algenteppich — \(A(t) = 2.5 \cdot 2^{t/4}\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Nach \(16\) Tagen wirkt der See noch halbwegs in Ordnung (\(40\) %). Wie viele Tage bleiben ab da noch bis zur vollständigen Bedeckung? Beobachte die letzten Verdopplungen.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Nach sechzehn Tagen wirkt der See noch halbwegs in Ordnung, vierzig Prozent. Wie viele Tage bleiben ab da noch bis zur vollständigen Bedeckung? Beobachte die letzten Verdopplungen.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Von \(50\) % auf \(100\) % dauert es nur noch <strong>eine</strong> Verdopplung — vier Tage. Exakt beantwortet die Frage nur das Logarithmieren: \(2^{t/4} = 40 \Rightarrow t = 4\log_2 40 \approx 21.3\) Tage.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Von fünfzig auf hundert Prozent dauert es nur noch eine Verdopplung — vier Tage. Exakt beantwortet die Frage nur das Logarithmieren: rund einundzwanzig Komma drei Tage.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Start 2.5 % · Verdopplung alle 4 Tage · 100-%-Marke rot gestrichelt</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Zeit <span class="var">\(t\)</span> [d]</label>
+      <input type="range" id="al-t" min="0" max="24" step="0.5" value="12">
+      <span class="sl-val"><span id="al-tv">12.0</span> d</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Auswertung</div>
+      <div class="fl-eq" id="al-eq">A(12.0) = 20.0 %</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="al-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Die «Wann?»-Frage kehrt die Wachstumsfunktion um und führt auf eine <strong>Exponentialgleichung</strong>:</p>
+  <ul style="margin-top:6px">
+    <li>Isolieren: \(2^{t/4} = \tfrac{100}{2.5} = 40\).</li>
+    <li><strong>Logarithmieren</strong> holt die Unbekannte herunter: \(\tfrac{t}{4} = \log_2 40 \Rightarrow t \approx 21.3\) Tage.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Der See ist zur Hälfte bedeckt. Wie lange dauert es noch bis zur vollständigen Bedeckung?</p><ul class="mc-optionen"><li data-opt="A">nochmals gleich lange wie bisher</li><li data-opt="B">4 Tage</li><li data-opt="C">8 Tage</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Eine Verdopplung fehlt noch — also genau eine Verdopplungszeit von \(4\) Tagen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Eine Gleichung, bei der die Lösungsvariable im Exponenten einer Potenz steht, heisst <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Exponentialgleichung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne den bedeckten Anteil nach \(20\) Tagen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(A(20) = 2.5 \cdot 2^5 = 2.5 \cdot 32 = 80\) %.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Stelle die Gleichung für «50 % bedeckt» auf und löse sie exakt.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(2.5 \cdot 2^{t/4} = 50 \Rightarrow 2^{t/4} = 20 \Rightarrow \tfrac{t}{4} = \log_2 20 \Rightarrow t = 4\log_2 20 \approx 17.3\) Tage.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definitionen und Lösungsverfahren</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Exponentialgleichung</div>
+  <p>Eine Gleichung, bei der die Lösungsvariable <strong>im Exponenten</strong> von Potenzen steht. Beispiel: \(7^{4x-13} = 343\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Lösen von Exponentialgleichungen</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li>Gleiche Basis auf beiden Seiten? <strong>Exponentenvergleich:</strong> \(a^m = a^n \Rightarrow m = n\).</li>
+    <li>Sonst: Potenz isolieren und <strong>logarithmieren</strong> — das Gesetz \(\log_a u^x = x \cdot \log_a u\) holt die Unbekannte aus dem Exponenten.</li>
+    <li>Die entstandene Gleichung mit den üblichen Äquivalenzumformungen lösen.</li>
+  </ol>
+  <p style="margin-top:6px">Ein allgemeines Verfahren gibt es nicht — manche Exponentialgleichungen sind nur mit Näherungsverfahren lösbar. Die Logarithmengesetze: <a class="quer" href="s1-3-logarithmen.html">↩ 1.3 Logarithmen</a>.</p>
+</div>
+
+<div class="block block-fehler" style="margin-top:10px">
+  <div class="block-titel">⚠ Häufiger Fehler — Logarithmieren bei Summen</div>
+  <p><strong>Nie logarithmieren, wenn auf einer Seite noch eine Summe oder Differenz steht:</strong> \(\log_a(u^x + v)\) lässt sich nicht zerlegen — die Variable bleibt gefangen. Erst ausklammern oder substituieren, bis Produkte dastehen, dann logarithmieren.</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Definition — Logarithmische Gleichung</div>
+  <p>Eine Gleichung, bei der die Lösungsvariable <strong>in den Argumenten von Logarithmen</strong> steht. Beispiel: \(\lg(x-3) = 1 - \lg x\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Lösen von logarithmischen Gleichungen</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li><strong>Definitionsmenge</strong> bestimmen: Alle Logarithmus-Argumente müssen positiv sein.</li>
+    <li>Beide Seiten mit den Logarithmengesetzen zu je <strong>einem</strong> Logarithmusterm zusammenfassen.</li>
+    <li><strong>Entlogarithmieren</strong> (mit der passenden Basis potenzieren).</li>
+    <li>Die entstandene Gleichung lösen und <strong>kontrollieren</strong> — Entlogarithmieren ist keine Äquivalenzumformung, Scheinlösungen sind möglich.</li>
+  </ol>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Begriffe und Verfahren</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Gleichung ist eine Exponentialgleichung?</p><ul class="mc-optionen"><li data-opt="A">\(x^5 = 32\)</li><li data-opt="B">\(5^x = 32\)</li><li data-opt="C">\(\lg x = 32\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Die Variable steht im Exponenten. \(x^5 = 32\) ist eine Potenzgleichung (Teil 1), \(\lg x = 32\) eine logarithmische Gleichung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Vor dem Entlogarithmieren fasst man beide Seiten mithilfe der <span class="mc-luecke"></span> zu je einem Logarithmusterm zusammen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Logarithmengesetze.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(2^x = 16\) durch Exponentenvergleich.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(2^x = 2^4 \Rightarrow x = 4\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum ist die Definitionsmenge von \(\ln(x+2) = 1 + \ln 3x\) nicht ganz \(\mathbb{R}\)? Bestimme sie.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Beide Argumente müssen positiv sein: \(x + 2 &gt; 0\) <em>und</em> \(3x &gt; 0\), also \(x &gt; -2 \wedge x &gt; 0\). Zusammen: \(D = \,]0;\ \infty[\).</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Wie viele Lösungen? Der Blick auf die Graphen</h2>
+
+<p>Jede Gleichung ist eine Schnittpunkt-Frage: linke Seite gegen rechte Seite. Schalte durch die drei Fälle:</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Gleichung als Schnittpunkt-Frage</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Zähle bei jeder Variante die Schnittpunkte. Bei der Substitutions-Gleichung: Wo liegen die beiden Schnittstellen — und was haben sie mit \(3^x = 1\) bzw. \(3^x = 9\) zu tun?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Zähle bei jeder Variante die Schnittpunkte. Bei der Substitutions-Gleichung: Wo liegen die beiden Schnittstellen — und was haben sie mit drei hoch x gleich eins beziehungsweise drei hoch x gleich neun zu tun?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">\(3^x = 8\) hat genau eine Lösung (streng steigende Kurve gegen Horizontale). \(3^{2x} + 9 = 10 \cdot 3^x\) hat zwei — die Substitution \(u = 3^x\) findet beide. Und \(2^x = -4\) hat keine: Exponentialwerte sind nie negativ.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Drei hoch x gleich acht hat genau eine Lösung. Die Substitutions-Gleichung hat zwei — die Substitution u gleich drei hoch x findet beide. Und zwei hoch x gleich minus vier hat keine: Exponentialwerte sind nie negativ.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Linke Seite blau · rechte Seite orange · Schnittpunkte = Lösungen</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="gl-btns">
+      <button class="typ-btn aktiv" onclick="setGl(0)">3ˣ = 8</button>
+      <button class="typ-btn" onclick="setGl(1)">3²ˣ + 9 = 10·3ˣ</button>
+      <button class="typ-btn" onclick="setGl(2)">2ˣ = −4</button>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Lösung</div>
+      <div class="fl-eq" id="gl-eq">x = log₃(8) = ln 8 / ln 3 ≈ 1.89 · L = {1.89}</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="gl-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Lösungsanzahl</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie viele Lösungen hat \(5^x = -25\)?</p><ul class="mc-optionen"><li data-opt="A">eine</li><li data-opt="B">zwei</li><li data-opt="C">keine</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(5^x &gt; 0\) für alle \(x\) — die Kurve erreicht \(-25\) nie.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Eine streng steigende Exponentialkurve schneidet eine horizontale Gerade \(y = c\) mit \(c &gt; 0\) genau <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">einmal — darum hat \(a^x = c\) für \(c &gt; 0\) genau eine Lösung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(10^x = 0.0001\) ohne Taschenrechner.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(0.0001 = 10^{-4}\), Exponentenvergleich: \(x = -4\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Die Gleichung \(3^{2x} + 9 = 10 \cdot 3^x\) hat zwei Lösungen. Warum widerspricht das nicht dem Monotonie-Argument?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Hier stehen <em>zwei gekrümmte</em> Kurven gegeneinander (links \(3^{2x}+9\), rechts \(10 \cdot 3^x\)) — nicht steigend gegen fallend. Zwei gekrümmte Kurven können sich mehrfach schneiden; die Substitution \(u = 3^x\) macht daraus eine quadratische Gleichung mit zwei Lösungen.</div></details></div>
+</details>
+
+
+<!-- ══ 5. BEISPIELE EXPONENTIALGLEICHUNGEN ══ -->
+<h2 id="typen">Exponentialgleichungen — die vier Techniken</h2>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 1 — Exponentenvergleich oder Logarithmieren</div>
+  <p>Löse \(7^{4x-13} = 343\).</p>
+  <p><strong>Weg 1 (Exponentenvergleich):</strong> \(343 = 7^3\), also</p>
+  \[ 7^{4x-13} = 7^3 \;\Rightarrow\; 4x - 13 = 3 \;\Rightarrow\; x = 4 \]
+  <p><strong>Weg 2 (Logarithmieren):</strong> \((4x-13)\ln 7 = \ln 343 \Rightarrow x = \dfrac{\ln 343 + 13\ln 7}{4\ln 7} = 4\). Beide Wege liefern \(L = \{4\}\) — der Basen-Blick zuerst spart Arbeit.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Logarithmieren bei verschiedenen Basen</div>
+  <p>Löse \(3^x = 8\).</p>
+  <p><strong>Lösung:</strong> Keine gemeinsame Basis — logarithmieren:</p>
+  \[ x \cdot \ln 3 = \ln 8 \;\Rightarrow\; x = \frac{\ln 8}{\ln 3} \approx 1.893 \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Summe durch Ausklammern in ein Produkt verwandeln</div>
+  <p>Löse \(3^{x+1} + 3^x = 20\).</p>
+  <p><strong>Lösung:</strong> Links steht eine Summe — logarithmieren verboten! Erst \(3^x\) ausklammern:</p>
+  \[ 3^x \cdot (3 + 1) = 20 \;\Rightarrow\; 3^x = 5 \;\Rightarrow\; x = \log_3 5 = \frac{\ln 5}{\ln 3} \approx 1.465 \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 4 — Substitution \(u = a^x\)</div>
+  <p>Löse \(3^{2x} + 9 = 10 \cdot 3^x\).</p>
+  <p><strong>Lösung:</strong> Wegen \(3^{2x} = (3^x)^2\) substituieren wir \(u = 3^x\):</p>
+  \[ u^2 - 10u + 9 = 0 \;\Rightarrow\; (u-9)(u-1) = 0 \;\Rightarrow\; u_1 = 9,\quad u_2 = 1 \]
+  <p>Rücksubstitution: \(3^x = 9 \Rightarrow x_1 = 2\) und \(3^x = 1 \Rightarrow x_2 = 0\). Also \(L = \{0;\ 2\}\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Exponentialgleichungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was ist der richtige erste Schritt bei \(5^{y+1} + 5^{y-1} = 130\)?</p><ul class="mc-optionen"><li data-opt="A">Sofort logarithmieren</li><li data-opt="B">\(5^{y-1}\) ausklammern</li><li data-opt="C">Substituieren mit \(u = y\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(5^{y-1}(5^2 + 1) = 130 \Rightarrow 5^{y-1} = 5 \Rightarrow y = 2\). Logarithmieren scheitert an der Summe.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Kommt \(a^{2x}\) zusammen mit \(a^x\) vor, hilft die Substitution \(u = \) <span class="mc-luecke"></span> — sie führt auf eine quadratische Gleichung.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(a^x\) — denn \(a^{2x} = (a^x)^2 = u^2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(11^{\,\frac{3x+1}{2}} = 11^{\,\frac{x-4}{6}}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Exponentenvergleich: \(\tfrac{3x+1}{2} = \tfrac{x-4}{6} \Rightarrow 3(3x+1) = x - 4 \Rightarrow 8x = -7 \Rightarrow x = -\tfrac{7}{8}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Bei der Substitution \(u = 2^x\) ergibt sich \(u_2 = -1\). Was folgt daraus für die Lösungsmenge?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(2^x = -1\) hat keine Lösung, denn Exponentialwerte sind stets positiv — dieser Fall entfällt ersatzlos. Nur die positiven \(u\)-Werte liefern über \(x = \log_2 u\) Lösungen.</div></details></div>
+</details>
+
+
+<!-- ══ 6. LOGARITHMISCHE GLEICHUNGEN ══ -->
+<h2 id="theorie">Logarithmische Gleichungen</h2>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 5 — Zusammenfassen und Entlogarithmieren</div>
+  <p>Löse \(\ln(x+2) = 1 + \ln 3x\).</p>
+  <p><strong>Lösung:</strong> Definitionsmenge: \(x + 2 &gt; 0 \wedge 3x &gt; 0 \Rightarrow D = \,]0;\ \infty[\). Zusammenfassen:</p>
+  \[ \ln(x+2) - \ln 3x = 1 \;\Rightarrow\; \ln\frac{x+2}{3x} = 1 \;\Rightarrow\; \frac{x+2}{3x} = e \]
+  \[ x + 2 = 3ex \;\Rightarrow\; (3e-1)\,x = 2 \;\Rightarrow\; x = \frac{2}{3e-1} \approx 0.280 \]
+  <p>Der Wert liegt in \(D\): \(L = \left\{\tfrac{2}{3e-1}\right\}\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 6 — Scheinlösung bei logarithmischen Gleichungen</div>
+  <p>Löse \(\lg(x-3) = 1 - \lg x\).</p>
+  <p><strong>Lösung:</strong> \(D: x &gt; 3\). Zusammenfassen und entlogarithmieren:</p>
+  \[ \lg\bigl((x-3) \cdot x\bigr) = 1 \;\Rightarrow\; x^2 - 3x = 10 \;\Rightarrow\; (x-5)(x+2) = 0 \]
+  <p>Kandidaten \(x_1 = 5\) und \(x_2 = -2\). Kontrolle: \(x_1 = 5\) passt (\(\lg 2 = 1 - \lg 5\) ✓); bei \(x_2 = -2\) wäre \(\lg(-5)\) nicht definiert — <strong>Scheinlösung</strong>. Also \(L = \{5\}\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 7 — Verlorene Lösung bei ungeschicktem Weg</div>
+  <p>Löse \(3\lg x^2 + 7 = 13\).</p>
+  <p><strong>Lösung:</strong> \(\lg x^2 = 2\), entlogarithmieren: \(x^2 = 100 \Rightarrow x = \pm 10\). Beide bestehen die Kontrolle (\(x^2\) ist positiv): \(L = \{-10;\ 10\}\).</p>
+  <p><strong>Achtung:</strong> Wer stattdessen \(3\lg x^2 = 6\lg x\) setzt, erhält nur \(x = 10\) — die Lösung \(-10\) geht verloren! Korrekt wäre \(\lg x^2 = 2\lg|x|\). Auch so können also Lösungen <em>verschwinden</em>, nicht nur Scheinlösungen dazukommen.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Definitionsmenge erst am Schluss</div>
+  <p>Wer die Bedingung «Argumente positiv» überspringt, merkt nicht, dass ein Kandidat wie \(x = -2\) in Beispiel 6 von Anfang an unzulässig war. \(D\) <strong>zuerst</strong> notieren — die Kontrolle wird dann zum schnellen Abgleich.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Werkzeugwahl auf einen Blick</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Situation</th><th>Werkzeug</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">gleiche Basis möglich</td><td style="text-align:left;font-family:var(--sans)">Exponentenvergleich \(a^m = a^n \Rightarrow m = n\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Produkt von Potenzen</td><td style="text-align:left;font-family:var(--sans)">logarithmieren, Gesetze anwenden</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Summe gleicher Basen</td><td style="text-align:left;font-family:var(--sans)">ausklammern → Produkt → logarithmieren</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(a^{2x}\) und \(a^x\) gemischt</td><td style="text-align:left;font-family:var(--sans)">Substitution \(u = a^x\) → quadratische Gleichung</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(x\) im Logarithmus</td><td style="text-align:left;font-family:var(--sans)">\(D\) → zusammenfassen → entlogarithmieren → Kontrolle</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — logarithmische Gleichungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was bedeutet «entlogarithmieren» bei \(\lg T(x) = 2\)?</p><ul class="mc-optionen"><li data-opt="A">\(T(x) = 2^{10}\)</li><li data-opt="B">\(T(x) = 10^2\)</li><li data-opt="C">\(T(x) = \lg 2\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Beide Seiten als Exponent zur Basis \(10\): \(T(x) = 10^2 = 100\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Argumente aller Logarithmen müssen <span class="mc-luecke"></span> sein — das legt die Definitionsmenge fest.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">positiv (grösser als null).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(\lg(x+3) = 2\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(x + 3 = 10^2 = 100 \Rightarrow x = 97\) (liegt in \(D: x &gt; -3\) ✓).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Löse \(\log_2 u + \log_2(u-2) = 3\) inklusive Kontrolle.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(D: u &gt; 2\). Zusammenfassen: \(\log_2\bigl(u(u-2)\bigr) = 3 \Rightarrow u^2 - 2u = 8 \Rightarrow (u-4)(u+2) = 0\). Kandidat \(u = -2\) liegt nicht in \(D\) (Scheinlösung), \(u = 4\) passt: \(\log_2 4 + \log_2 2 = 2 + 1 = 3\) ✓. \(L = \{4\}\).</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Lösungsmenge am Graphen erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Gleichung — der Graph zeigt beide Seiten. Welche Lösungsmenge passt?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Lösungsmenge gehört zur angezeigten Gleichung?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Welche Technik passt?</span></div>
+  <p>Ordne jeder Gleichung das passende Werkzeug zu (Exponentenvergleich · Logarithmieren · Ausklammern · Substitution · Entlogarithmieren) — <strong>ohne</strong> zu rechnen:</p>
+  <ol class="aufg-liste">
+    <li>\(5^{2x} = 7 \cdot 3^{x-1}\)</li>
+    <li>\(2^{x-1} = 32\)</li>
+    <li>\(4^x - 7 \cdot 2^x = 8\)</li>
+    <li>\(\ln z + \ln 2 = 3\)</li>
+    <li>\(2^{3x+1} - 3^{x-1} = 2^{3x+2} - 3^{x+1}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li><strong>Logarithmieren</strong> — Produkt von Potenzen, verschiedene Basen.</li>
+        <li><strong>Exponentenvergleich</strong> — \(32 = 2^5\), also \(x - 1 = 5 \Rightarrow x = 6\).</li>
+        <li><strong>Substitution</strong> \(u = 2^x\) — denn \(4^x = (2^x)^2\).</li>
+        <li><strong>Entlogarithmieren</strong> — logarithmische Gleichung: \(\ln 2z = 3 \Rightarrow z = \tfrac{e^3}{2}\).</li>
+        <li><strong>Ausklammern</strong> — Basen sortieren, \(2^{3x+1}\) bzw. \(3^{x-1}\) ausklammern, dann logarithmieren.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit den Techniken</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Exponentenvergleich</div>
+    <p>Löse \(2^x = 16\) und \(10^x = 0.0001\).</p>
+    <div class="eingabe-row"><label>2ˣ = 16: x =&nbsp;</label><input type="text" id="a3a1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3a1', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>10ˣ = 0.0001: x =&nbsp;</label><input type="text" id="a3a2" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3a2', -4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(2^x = 2^4 \Rightarrow x = 4\) und \(10^x = 10^{-4} \Rightarrow x = -4\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Logarithmieren</div>
+    <p>Löse \(3^x = 8\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>x ≈&nbsp;</label><input type="text" id="a3b1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3b1', 1.89, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ x = \frac{\ln 8}{\ln 3} \approx 1.89 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Substitution</div>
+    <p>Löse \(4^x - 7 \cdot 2^x = 8\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3c1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3c1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(u = 2^x\): \(u^2 - 7u - 8 = 0 \Rightarrow (u-8)(u+1) = 0\). \(u = -1\) entfällt (\(2^x &gt; 0\)); \(u = 8 \Rightarrow x = \log_2 8 = 3\). \(L = \{3\}\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Entlogarithmieren</div>
+    <p>Löse \(\lg(x+3) = 2\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3d1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3d1', 97, 0.1, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ x + 3 = 10^2 \;\Rightarrow\; x = 97 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Logarithmische Gleichung mit Scheinlösung</div>
+    <p>Löse \(\log_2 u + \log_2(u-2) = 3\).</p>
+    <div class="eingabe-row"><label>u =&nbsp;</label><input type="text" id="a3e1" placeholder="u"><button class="btn-pruef" onclick="chkNum('a3e1', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(D: u &gt; 2\). \(\log_2\bigl(u(u-2)\bigr) = 3 \Rightarrow u^2 - 2u - 8 = 0 \Rightarrow (u-4)(u+2) = 0\). Nur \(u = 4\) liegt in \(D\): \(L = \{4\}\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Kapital mit Zinseszins</span></div>
+  <p>Ein Kapital von \(22\,000\) CHF wird zu \(4.5\) % Jahreszins angelegt: \(K(n) = 22\,000 \cdot 1.045^n\).</p>
+  <ol class="aufg-liste">
+    <li>Auf welchen Betrag wächst das Kapital in \(6\) Jahren?</li>
+    <li>Nach wie vielen Jahren hat es sich verdoppelt? (Exponentialgleichung!)</li>
+  </ol>
+  <div class="eingabe-row"><label>K(6) ≈&nbsp;</label><input type="text" id="a4-1" placeholder="CHF"><button class="btn-pruef" onclick="chkNum('a4-1', 28649.72, 1, 'CHF')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>n ≈&nbsp;</label><input type="text" id="a4-2" placeholder="Jahre"><button class="btn-pruef" onclick="chkNum('a4-2', 15.75, 0.05, 'Jahre')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(K(6) = 22\,000 \cdot 1.045^6 \approx 28\,649.72\) CHF.</li>
+        <li>\(1.045^n = 2 \Rightarrow n = \dfrac{\ln 2}{\ln 1.045} \approx 15.75\) Jahre.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Der Algensee, exakt gerechnet</span></div>
+  <p>Zum Einstieg: \(A(t) = 2.5 \cdot 2^{t/4}\) (Anteil in %, \(t\) in Tagen).</p>
+  <ol class="aufg-liste">
+    <li>Welcher Teil des Sees ist nach \(20\) Tagen bedeckt?</li>
+    <li>Nach wie vielen Tagen ist der See zur Hälfte bedeckt? (Exakt lösen, dann runden.)</li>
+  </ol>
+  <div class="eingabe-row"><label>A(20) =&nbsp;</label><input type="text" id="a5-1" placeholder="%"><button class="btn-pruef" onclick="chkNum('a5-1', 80, 0.5, '%')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>t ≈&nbsp;</label><input type="text" id="a5-2" placeholder="Tage"><button class="btn-pruef" onclick="chkNum('a5-2', 17.29, 0.05, 'Tage')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(A(20) = 2.5 \cdot 2^5 = 80\) %.</li>
+        <li>\(2^{t/4} = 20 \Rightarrow t = 4 \cdot \log_2 20 = 4 \cdot \tfrac{\ln 20}{\ln 2} \approx 17.29\) Tage.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Wertverlust eines Autos</span></div>
+  <p>Ein Auto kostet neu \(32\,000\) CHF und verliert pro Jahr \(22\) % an Wert: \(W(n) = 32\,000 \cdot 0.78^n\).</p>
+  <ol class="aufg-liste">
+    <li>Wie viel ist das Auto nach \(6\) Jahren noch wert?</li>
+    <li>Nach wie vielen Jahren ist es noch die Hälfte wert?</li>
+  </ol>
+  <div class="eingabe-row"><label>W(6) ≈&nbsp;</label><input type="text" id="a6-1" placeholder="CHF"><button class="btn-pruef" onclick="chkNum('a6-1', 7206.39, 1, 'CHF')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>n ≈&nbsp;</label><input type="text" id="a6-2" placeholder="Jahre"><button class="btn-pruef" onclick="chkNum('a6-2', 2.79, 0.02, 'Jahre')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(W(6) = 32\,000 \cdot 0.78^6 \approx 7206\) CHF.</li>
+        <li>\(0.78^n = 0.5 \Rightarrow n = \dfrac{\ln 0.5}{\ln 0.78} \approx 2.79\) Jahre — nach knapp drei Jahren!</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Erdbeben-Energie <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Zwischen der Magnitude \(M\) eines Erdbebens und der freigesetzten äquivalenten Energie \(W\) (in Tonnen TNT) gilt näherungsweise:</p>
+  \[ M = 2 + \tfrac{2}{3}\lg W \]
+  <ol class="aufg-liste">
+    <li>Löse die Formel nach \(W\) auf (logarithmische Gleichung!).</li>
+    <li>Welcher Energie entspricht das Basler Beben von 1356 (\(M = 6.6\))?</li>
+    <li>Um welchen Faktor wächst \(W\), wenn \(M\) um \(1\) steigt?</li>
+  </ol>
+  <div class="eingabe-row"><label>W(6.6) ≈&nbsp;</label><input type="text" id="a7-1" placeholder="t TNT"><button class="btn-pruef" onclick="chkNum('a7-1', 7943282, 20000, 't TNT')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Faktor ≈&nbsp;</label><input type="text" id="a7-2" placeholder="Faktor"><button class="btn-pruef" onclick="chkNum('a7-2', 31.6, 0.2, '')">Prüfen</button></div>
+  <div class="cr" id="a7-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\lg W = \tfrac{3}{2}(M-2) \Rightarrow W = 10^{\,1.5\,(M-2)}\).</li>
+        <li>\(W = 10^{\,1.5 \cdot 4.6} = 10^{6.9} \approx 7.9\) Millionen Tonnen TNT.</li>
+        <li>\(\Delta M = 1 \Rightarrow\) Faktor \(10^{1.5} \approx 31.6\) — eine Magnitude mehr heisst gut \(30\)-fache Energie.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Steht die Unbekannte im <strong>Exponenten</strong>: gleiche Basis suchen (Exponentenvergleich) oder <strong>logarithmieren</strong> — aber nie bei Summen; die verwandelt erst das <strong>Ausklammern</strong> in Produkte, und \(a^{2x}\)-Terme knackt die <strong>Substitution</strong> \(u = a^x\). Steht die Unbekannte im <strong>Logarithmus</strong>: Definitionsmenge notieren, zu einem Logarithmusterm zusammenfassen, <strong>entlogarithmieren</strong>, kontrollieren. Beide Umkehrwege können Scheinlösungen erzeugen oder Lösungen verlieren — \(D\) und Kontrolle sind Teil des Verfahrens.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Typ</th><th>Kennzeichen</th><th>Verfahren</th><th>Stolperstein</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Exponentialgleichung</td><td>\(x\) im Exponenten</td><td style="text-align:left;font-family:var(--sans)">Exponentenvergleich · logarithmieren · ausklammern · Substitution</td><td style="text-align:left;font-family:var(--sans)">Summen nicht logarithmieren; \(a^x = c \leq 0\) unlösbar</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">logarithmische Gleichung</td><td>\(x\) im Logarithmus-Argument</td><td style="text-align:left;font-family:var(--sans)">\(D\) → zusammenfassen → entlogarithmieren</td><td style="text-align:left;font-family:var(--sans)">Scheinlösungen; \(\lg x^2 = 2\lg|x|\) (verlorene Lösung)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s2-2b-exponential-logarithmische-gleichungen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2b-exponential-logarithmische-gleichungen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2b-exponential-logarithmische-gleichungen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2b-exponential-logarithmische-gleichungen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2b-exponential-logarithmische-gleichungen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lVs82KN0GTG3hQMpTM_84lV" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Exponentialgleichungen lösen — Playlist</div><div class="lk-s">MathemaTrick · 22 Videos · alle Techniken dieser Seite</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lXSN6xlwAQUjS71Tv-jdQ49" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über LOGARITHMUS — Playlist</div><div class="lk-s">MathemaTrick · 12 Videos · Logarithmengesetze und logarithmische Gleichungen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLkr4Hf_IwvPCVVWwpJ6QQJt3-kqxZEaP" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Exponentialfunktionen und Exponentialgleichungen — Playlist</div><div class="lk-s">Mathehoch13 · 31 Videos · Gleichungen im Funktions-Kontext</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/40846/aufgaben-zu-exponential-und-logarithmusgleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Exponential- und Logarithmusgleichungen</div><div class="lk-s">Gemischte Gleichungen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26262/aufgaben-zu-exponential-und-logarithmusgleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Exponential- und Logarithmusgleichungen II</div><div class="lk-s">Zweite Sammlung · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/23768/aufgaben-zum-rechnen-mit-logarithmen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Rechnen mit Logarithmen</div><div class="lk-s">Logarithmengesetze als Grundlage · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 2.2b Exponential- und logarithmische Gleichungen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s2-2b',
+  kapitelNr:'2.2b', kapitelTitel:'Exponential- und logarithmische Gleichungen',
+  prev:{nr:'2.2a',titel:'Potenz-, Wurzel- und rationale Gleichungen',url:'s2-2a-potenz-wurzel-rationale-gleichungen.html'},
+  next:{nr:'2.2c',titel:'Betrags- und Polynomgleichungen, Ungleichungen',url:'s2-2c-betrag-polynom-ungleichungen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Algensee ══ */
+function updateAL(){
+  const t = parseFloat(document.getElementById('al-t').value);
+  document.getElementById('al-tv').textContent = t.toFixed(1);
+  const A = Math.min(100, 2.5 * Math.pow(2, t / 4));
+  document.getElementById('al-eq').innerHTML =
+    `A(<span class="tx-blau">${t.toFixed(1)}</span>) = ${A.toFixed(1)} %${A >= 100 ? ' — vollständig bedeckt!' : ''}`;
+  const {ctx, cx, cy} = gridApp('al-canvas', 240, 0, 24, 0, 110, 2, 10, 't [d]', 'A [%]');
+  ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(100)); ctx.lineTo(cx(24), cy(100)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('100 %', cx(0.4), cy(100) + 14);
+  plotFx(ctx, cx, cy, x => 2.5 * Math.pow(2, x / 4), 0, Math.min(24, 4 * Math.log2(110 / 2.5)), '#1a4f8a', 2.5, 1e6);
+  if(2.5 * Math.pow(2, t / 4) <= 110) drawDot(ctx, cx, cy, t, 2.5 * Math.pow(2, t / 4), '#1a4f8a', 7);
+}
+document.getElementById('al-t').addEventListener('input', updateAL);
+
+/* ══ GLEICHUNG ALS SCHNITTPUNKT-FRAGE ══ */
+const GL = [
+  {lhs: x => Math.pow(3, x),                    rhs: x => 8,                       eq: 'x = log₃(8) = ln 8 / ln 3 ≈ 1.89 · L = {1.89}',
+   dots: [[Math.log(8)/Math.log(3), 8]]},
+  {lhs: x => Math.pow(3, 2*x) + 9,              rhs: x => 10 * Math.pow(3, x),     eq: 'Substitution u = 3ˣ: u² − 10u + 9 = 0 ⇒ u = 1, 9 ⇒ L = {0; 2}',
+   dots: [[0, 10], [2, 90]]},
+  {lhs: x => Math.pow(2, x),                    rhs: x => -4,                      eq: '2ˣ > 0 für alle x ⇒ kein Schnittpunkt ⇒ L = { }',
+   dots: []},
+];
+let glActive = 0;
+function setGl(i){
+  glActive = i;
+  document.querySelectorAll('#gl-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawGl();
+}
+function drawGl(){
+  const v = GL[glActive];
+  document.getElementById('gl-eq').textContent = v.eq;
+  const {ctx, W, H} = initCanvas('gl-canvas', 220, false);
+  const yMax = glActive === 1 ? 100 : 12;
+  const yMin = glActive === 2 ? -8 : (glActive === 1 ? -10 : -6);
+  const {cx, cy} = drawGrid(ctx, W, H, -3, 4, yMin, yMax);
+  ctx.setLineDash([6, 4]);
+  plotFx(ctx, cx, cy, v.rhs, -3, 4, '#b85c00', 2, 500);
+  ctx.setLineDash([]);
+  plotFx(ctx, cx, cy, v.lhs, -3, 4, '#1a4f8a', 2.5, 500);
+  v.dots.forEach(([dx, dy]) => {
+    if(dy <= yMax && dy >= yMin) drawDot(ctx, cx, cy, dx, dy, '#1f6b3a', 6);
+  });
+}
+
+/* ══ A1: Lösungsmenge erkennen ══ */
+const a1G = [
+  {label:'2ˣ = 8',    lhs: x => Math.pow(2, x),                rhs: x => 8,    sol:'L = {3}',   dots:[[3, 8]]},
+  {label:'2ˣ = −2',   lhs: x => Math.pow(2, x),                rhs: x => -2,   sol:'L = { }',   dots:[]},
+  {label:'10ˣ = 100', lhs: x => Math.pow(10, x),               rhs: x => 100,  sol:'L = {2}',   dots:[[2, 100]]},
+  {label:'lg x = −1', lhs: x => x > 0 ? Math.log10(x) : NaN,   rhs: x => -1,   sol:'L = {0.1}', dots:[[0.1, -1]]},
+];
+const a1Opts = ['L = {3}', 'L = { }', 'L = {2}', 'L = {0.1}'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const g = a1G[a1Act];
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const big = a1Act === 2;
+  const {cx, cy} = drawGrid(ctx, W, H, -3, 4, big ? -20 : -4, big ? 120 : 10);
+  ctx.setLineDash([6, 4]);
+  plotFx(ctx, cx, cy, g.rhs, -3, 4, '#b85c00', 2, 500);
+  ctx.setLineDash([]);
+  plotFx(ctx, cx, cy, g.lhs, -3, 4, '#1a4f8a', 2.5, 500);
+  g.dots.forEach(([dx, dy]) => drawDot(ctx, cx, cy, dx, dy, '#1f6b3a', 6));
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.sol}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Suche den Schnittpunkt der blauen Kurve mit der orangen Linie — gibt es überhaupt einen?';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/%]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung (und die Definitionsmenge).';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateAL();
+  drawGl();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateAL(); drawGl(); drawA1();
+});
+</script>
+</body>
+</html>

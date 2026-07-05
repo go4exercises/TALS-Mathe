@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.2a Potenz-, Wurzel- und rationale Gleichungen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 2 · Gleichungen · 30 Lektionen</div>
+  <h1 class="pt-h1">2.2a Potenz-, Wurzel- und rationale Gleichungen</h1>
+  <div class="pt-untertitel">RLP 2.2 · Teil 1 von 3</div>
+</div>
+
+<p class="lead">Steht die Unbekannte unter einer <strong>Wurzel</strong>, in einer <strong>Potenz</strong> oder im <strong>Nenner</strong> eines Bruchs, reichen lineare Umformungen nicht mehr. Der Schlüssel ist die passende <strong>Umkehroperation</strong> — Wurzelziehen bzw. Potenzieren. Doch Vorsicht: Quadrieren ist <strong>keine Äquivalenzumformung</strong>. Es können <strong>Scheinlösungen</strong> entstehen, und darum gehört die Kontrolle durch Einsetzen immer dazu.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 2.2</div>
+  <ul>
+    <li>lineare und nichtlineare Ungleichungen mithilfe einer Grafik oder der Vorzeichentabelle umformen und lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Potenzgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Wurzelgleichungen und rationale Gleichungen lösen, die auf lineare oder quadratische Gleichungen führen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Exponential- und Logarithmusgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Betragsgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Polynomgleichungen höheren Grades lösen, wenn das Polynom als Produkt linearer und quadratischer Faktoren vorliegt <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt die Kompetenzen 2 und 3: Potenz-, Wurzel- und rationale Gleichungen. Exponential- und Logarithmusgleichungen folgen in <a href="s2-2b-exponential-logarithmische-gleichungen.html">Teil 2 (s2-2b)</a>, Betrags- und Polynomgleichungen sowie Ungleichungen in <a href="s2-2c-betrag-polynom-ungleichungen.html">Teil 3 (s2-2c)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann elementare Potenzgleichungen \(x^n = c\) lösen und weiss, wann es zwei, eine oder keine Lösung gibt.</li>
+      <li>Ich kann Wurzelgleichungen durch Separieren und Quadrieren lösen — auch wenn zweimal quadriert werden muss.</li>
+      <li>Ich kann erklären, warum Quadrieren keine Äquivalenzumformung ist, und Scheinlösungen durch die Kontrolle in der Ausgangsgleichung entlarven.</li>
+      <li>Ich kann die Definitionsmenge einer Wurzel- oder Bruchgleichung bestimmen (Radikand \(\geq 0\), Nenner \(\neq 0\)).</li>
+      <li>Ich kann rationale Gleichungen mit dem Hauptnenner in lineare oder quadratische Gleichungen überführen.</li>
+      <li>Ich kann Wurzelgleichungen aus Anwendungen aufstellen und lösen (Sichtweite, Pendel, freier Fall).</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — wie weit sieht man vom Turm?</h2>
+
+<p>Von einem erhöhten Standpunkt reicht der Blick bis zum Horizont. Für die Sichtweite \(s\) (in km) bei Augenhöhe \(h\) (in m über Meer, klare Sicht) gilt näherungsweise:</p>
+
+\[ s(h) \approx 3.57 \cdot \sqrt{h} \]
+
+<p>Vom Uetliberg-Turm (\(h \approx 900\) m über dem Mittelland) sieht man also gut \(100\) km weit. Aber <strong>umgekehrt</strong> gefragt: Wie hoch muss man steigen, um \(100\) km weit zu sehen? Jetzt steht die Unbekannte <strong>unter der Wurzel</strong>:</p>
+
+\[ 3.57 \cdot \sqrt{h} = 100 \]
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🔭 Sichtweite — \(s(h) = 3.57\sqrt{h}\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Vervierfache die Höhe, z.B. von \(100\) m auf \(400\) m: Wie ändert sich die Sichtweite? Und suche die Höhe, bei der die rote 100-km-Marke erreicht wird.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vervierfache die Höhe, zum Beispiel von hundert Metern auf vierhundert Meter: Wie ändert sich die Sichtweite? Und suche die Höhe, bei der die rote Hundert-Kilometer-Marke erreicht wird.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Vierfache Höhe gibt nur doppelte Sichtweite — typisch Wurzel. Die 100-km-Frage führt auf die Wurzelgleichung \(3.57\sqrt{h} = 100\): Separieren, quadrieren, fertig — \(h = (100/3.57)^2 \approx 785\) m.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vierfache Höhe gibt nur doppelte Sichtweite — typisch Wurzel. Die Hundert-Kilometer-Frage führt auf eine Wurzelgleichung: Separieren, quadrieren, fertig — rund siebenhundertfünfundachtzig Meter.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Näherungsformel für klare Sicht · 100-km-Marke rot gestrichelt</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Höhe <span class="var">\(h\)</span> [m]</label>
+      <input type="range" id="sw-h" min="0" max="900" step="25" value="300">
+      <span class="sl-val"><span id="sw-hv">300</span> m</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Auswertung</div>
+      <div class="fl-eq" id="sw-eq">s(300) = 3.57·√300 ≈ 61.8 km</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="sw-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Die Frage «welche Höhe für \(100\) km Sicht?» dreht die Funktion um — und führt auf eine Gleichung mit der Unbekannten unter der Wurzel:</p>
+  <ul style="margin-top:6px">
+    <li>Lösen durch die <strong>Umkehroperation</strong>: Wurzel separieren, dann <strong>quadrieren</strong>.</li>
+    <li>\(\sqrt{h} = \tfrac{100}{3.57} \Rightarrow h = \left(\tfrac{100}{3.57}\right)^2 \approx 785\) m.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Augenhöhe wird vervierfacht. Um welchen Faktor wächst die Sichtweite \(s = 3.57\sqrt{h}\)?</p><ul class="mc-optionen"><li data-opt="A">Faktor 4</li><li data-opt="B">Faktor 2</li><li data-opt="C">Faktor \(\sqrt{2}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(\sqrt{4h} = 2\sqrt{h}\) — die Wurzel macht aus Faktor \(4\) den Faktor \(2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Eine Gleichung, bei der die Lösungsvariable unter einer Wurzel vorkommt, heisst <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Wurzelgleichung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne die Sichtweite bei \(h = 25\) m.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(s = 3.57 \cdot \sqrt{25} = 3.57 \cdot 5 \approx 17.9\) km.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Löse \(3.57\sqrt{h} = 100\) Schritt für Schritt.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Separieren: \(\sqrt{h} = \tfrac{100}{3.57} \approx 28.01\). Quadrieren: \(h \approx 28.01^2 \approx 785\) m. Kontrolle: \(3.57\sqrt{785} \approx 100\) ✓</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definitionen — drei Gleichungstypen, eine Idee</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Potenzgleichung</div>
+  <p>Eine Gleichung der Form</p>
+  \[ x^n = c \qquad n \in \mathbb{N}^*,\ c \in \mathbb{R} \]
+  <p>heisst <strong>elementare Potenzgleichung</strong>. Gelöst wird sie durch Ziehen der \(n\)-ten Wurzel — die Anzahl Lösungen hängt von der Parität von \(n\) und dem Vorzeichen von \(c\) ab:</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Exponent</th><th>\(c &gt; 0\)</th><th>\(c = 0\)</th><th>\(c &lt; 0\)</th></tr></thead>
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left">\(n\) gerade</td><td>\(x = \pm\sqrt[n]{c}\) (zwei)</td><td>\(x = 0\)</td><td style="font-family:var(--sans)">keine Lösung</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">\(n\) ungerade</td><td>\(x = \sqrt[n]{c}\) (eine)</td><td>\(x = 0\)</td><td>\(x = -\sqrt[n]{|c|}\) (eine)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Definition — Wurzelgleichung</div>
+  <p>Eine Gleichung, bei der die Lösungsvariable <strong>unter einer Wurzel</strong> vorkommt. Beispiel: \(\sqrt{6x+7} - 5 = 0\).</p>
+  <p style="margin-top:6px">Wurzelgleichungen lassen sich nicht mit einem allgemeinen Verfahren lösen; oft ist die Lösungsmenge leer. In den behandelten Fällen führen elementare Umformungen oder eine Substitution auf Gleichungen ersten oder zweiten Grades.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Definition — Rationale Gleichung (Bruchgleichung)</div>
+  <p>Eine Gleichung, bei der die Lösungsvariable <strong>im Nenner</strong> eines Bruchterms vorkommt. Beispiel: \(\dfrac{2}{x-1} + 1 = x\).</p>
+  <p style="margin-top:6px">Gelöst wird durch Multiplikation mit dem <strong>Hauptnenner</strong> — vorher gehören alle Werte, die einen Nenner null machen, aus der Definitionsmenge ausgeschlossen.</p>
+</div>
+
+<div class="block block-tipp" style="margin-top:8px">
+  <div class="block-titel">💡 Definitionsmenge zuerst</div>
+  <p>Bei Wurzelgleichungen: <strong>Radikand \(\geq 0\)</strong>. Bei Bruchgleichungen: <strong>Nenner \(\neq 0\)</strong>. Die Definitionsmenge \(D\) vor dem Lösen zu notieren kostet eine Zeile — und entlarvt am Schluss manche Scheinlösung sofort. Das Rechnen mit Wurzeln selbst: <a class="quer" href="s1-2-potenzen.html">↩ 1.2 Potenzen</a>.</p>
+</div>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Warum Scheinlösungen entstehen — der Blick auf den Graphen</h2>
+
+<p>Zwei fast gleiche Gleichungen, zwei verschiedene Welten. Schalte um und vergleiche:</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Scheinlösungs-Labor — \(\sqrt{6x+7} = \pm 5\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Variante A: Wo schneidet die Wurzelkurve die Gerade \(y = 5\)? Variante B: Schneidet sie die Gerade \(y = -5\) irgendwo? Und was liefert das Quadrieren in beiden Fällen?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Variante A: Wo schneidet die Wurzelkurve die Gerade y gleich fünf? Variante B: Schneidet sie die Gerade y gleich minus fünf irgendwo? Und was liefert das Quadrieren in beiden Fällen?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Wurzelwerte sind nie negativ — Variante B hat grafisch offensichtlich keine Lösung. Nach dem Quadrieren liefern aber <strong>beide</strong> Varianten \(x = 3\): Das Quadrieren vernichtet das Vorzeichen. Darum ist die Kontrolle in der Ausgangsgleichung Pflicht.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Wurzelwerte sind nie negativ — Variante B hat grafisch offensichtlich keine Lösung. Nach dem Quadrieren liefern aber beide Varianten x gleich drei: Das Quadrieren vernichtet das Vorzeichen. Darum ist die Kontrolle in der Ausgangsgleichung Pflicht.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Wurzelkurve blau · rechte Seite orange · Schnittpunkt = Lösung</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="sc-btns">
+      <button class="typ-btn aktiv" onclick="setSc(0)">A: √(6x+7) = 5</button>
+      <button class="typ-btn" onclick="setSc(1)">B: √(6x+7) = −5</button>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Nach dem Quadrieren · Kontrolle</div>
+      <div class="fl-eq" id="sc-eq">6x + 7 = 25 ⇒ x = 3 · Kontrolle: √25 = 5 ✓ · L = {3}</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="sc-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Lösungsmethode für Wurzelgleichungen</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li><strong>Separieren:</strong> einen Wurzelausdruck allein auf eine Seite bringen (bei mehreren Wurzeln: auf beide Seiten verteilen).</li>
+    <li><strong>Quadrieren</strong> (bzw. mit \(n\) potenzieren).</li>
+    <li>Falls noch Wurzeln übrig sind: Schritte 1 und 2 <strong>wiederholen</strong>.</li>
+    <li>Die wurzelfreie Gleichung nach \(x\) auflösen.</li>
+    <li><strong>Kontrolle:</strong> Einsetzen in die <em>ursprüngliche</em> Gleichung, um Scheinlösungen auszuschliessen.</li>
+  </ol>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Potenzgleichungen und Scheinlösungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie viele Lösungen hat die Potenzgleichung \(x^4 = -16\)?</p><ul class="mc-optionen"><li data-opt="A">zwei</li><li data-opt="B">eine</li><li data-opt="C">keine</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> Eine gerade Potenz ist nie negativ — \(L = \{\,\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Das Quadrieren beider Seiten ist keine <span class="mc-luecke"></span> — es können Scheinlösungen entstehen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Äquivalenzumformung — die Lösungsmenge kann sich vergrössern.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse die Potenzgleichung \(x^3 = -27\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ungerader Exponent, eine Lösung: \(x = \sqrt[3]{-27} = -3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Begründe ohne zu rechnen, dass \(\sqrt{x-3} = -2\) keine Lösung hat — und was das Quadrieren trotzdem liefert.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die linke Seite ist als Wurzelwert nie negativ, die rechte ist \(-2\) — kein \(x\) passt, \(L = \{\,\}\). Quadrieren liefert \(x - 3 = 4\), also \(x = 7\): eine <strong>Scheinlösung</strong> (Kontrolle: \(\sqrt{4} = 2 \neq -2\)).</div></details></div>
+</details>
+
+
+<!-- ══ 5. TYPEN / BEISPIELE ══ -->
+<h2 id="typen">Die Verfahren an Beispielen</h2>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 1 — Wurzeln zusammenfassen, Definitionsmenge angeben</div>
+  <p>Bestimme \(D\) und \(L\) der Gleichung \(9\sqrt{5x+1} = 20 + 4\sqrt{5x+1}\).</p>
+  <p><strong>Lösung:</strong> Radikand \(\geq 0\): \(5x + 1 \geq 0 \Rightarrow D = \left\{x \in \mathbb{R} \,\middle|\, x \geq -\tfrac{1}{5}\right\}\).</p>
+  <p>Die gleichartigen Wurzelterme zusammenfassen, dann separieren und quadrieren:</p>
+  \[ 5\sqrt{5x+1} = 20 \;\Rightarrow\; \sqrt{5x+1} = 4 \;\Rightarrow\; 5x + 1 = 16 \;\Rightarrow\; x = 3 \]
+  <p>Kontrolle: \(9\sqrt{16} = 36 = 20 + 4\sqrt{16}\) ✓ — also \(L = \{3\}\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Zweimal quadrieren, Scheinlösung entlarven</div>
+  <p>Löse \(\sqrt{a-4} = 1 - \sqrt{a+3}\).</p>
+  <p><strong>Lösung:</strong> Erstes Quadrieren (rechts entsteht ein binomischer Ausdruck!):</p>
+  \[ a - 4 = 1 + (a+3) - 2\sqrt{a+3} \;\Rightarrow\; -8 = -2\sqrt{a+3} \;\Rightarrow\; \sqrt{a+3} = 4 \]
+  <p>Zweites Quadrieren: \(a + 3 = 16 \Rightarrow a = 13\). Kontrolle in der Ausgangsgleichung:</p>
+  \[ \sqrt{13-4} = 3, \qquad 1 - \sqrt{13+3} = 1 - 4 = -3 \qquad 3 \neq -3 \]
+  <p>\(a = 13\) ist eine <strong>Scheinlösung</strong> — die Lösungsmenge ist \(L = \{\,\}\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Rationale Gleichung mit dem Hauptnenner</div>
+  <p>Löse \(\dfrac{2}{x-1} + 1 = x\).</p>
+  <p><strong>Lösung:</strong> Definitionsmenge: \(x \neq 1\). Multiplikation mit dem Hauptnenner \((x-1)\):</p>
+  \[ 2 + (x-1) = x(x-1) \;\Rightarrow\; x + 1 = x^2 - x \;\Rightarrow\; x^2 - 2x - 1 = 0 \]
+  \[ x_{1,2} = \frac{2 \pm \sqrt{4+4}}{2} = 1 \pm \sqrt{2} \]
+  <p>Beide Werte liegen in \(D\) (keiner ist \(1\)): \(L = \{1 - \sqrt{2};\ 1 + \sqrt{2}\}\) — numerisch \(\approx \{-0.41;\ 2.41\}\).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Quadrieren ohne Separieren</div>
+  <p>Wer \(\sqrt{x} + 2 = 5\) direkt quadriert, erhält \(x + 4\sqrt{x} + 4 = 25\) — die Wurzel ist <strong>immer noch da</strong>, nur die Gleichung ist hässlicher. Erst separieren (\(\sqrt{x} = 3\)), dann quadrieren (\(x = 9\)).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Kontrolle weggelassen</div>
+  <p>Nach jedem Quadrieren können Scheinlösungen in der Rechnung stehen, die die Ausgangsgleichung <strong>nicht</strong> erfüllen. Die Kontrolle ist kein «nice to have», sondern Teil des Lösungsverfahrens — ohne sie ist die Lösungsmenge nicht bestimmt.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Verfahren</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was ist der richtige erste Schritt bei \(\sqrt{2x+3} - 4 = 1\)?</p><ul class="mc-optionen"><li data-opt="A">Sofort quadrieren</li><li data-opt="B">Die Wurzel separieren: \(\sqrt{2x+3} = 5\)</li><li data-opt="C">Durch 2 teilen</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Erst separieren, dann quadrieren: \(2x + 3 = 25 \Rightarrow x = 11\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei einer Bruchgleichung multipliziert man mit dem <span class="mc-luecke"></span> — und schliesst vorher alle Werte aus, die einen Nenner null machen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Hauptnenner.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme die Definitionsmenge von \(\sqrt{4-2x} = 7\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(4 - 2x \geq 0 \Rightarrow x \leq 2\), also \(D = \{x \in \mathbb{R} \mid x \leq 2\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Beim Lösen von \(\dfrac{6}{x-2} = x + 3\) erhält jemand \(x = 2\) als eine von zwei Lösungen. Was ist passiert?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(x = 2\) liegt nicht in der Definitionsmenge (Nenner null!) — beim Multiplizieren mit \((x-2)\) kann genau dieser Wert als Scheinlösung hereinrutschen. Er muss ausgeschlossen werden; nur die andere Lösung zählt.</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Substitution — wenn dieselbe Wurzel mehrfach auftritt</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Substitution bei Wurzelgleichungen</div>
+  <p>Tritt derselbe Wurzelterm mehrfach auf, lohnt sich die Ersetzung \(u = \sqrt{T(x)}\): Die Gleichung wird zu einer gewöhnlichen Gleichung in \(u\) (oft quadratisch). Danach <strong>Rücksubstitution</strong>: jedes gefundene \(u \geq 0\) liefert über \(\sqrt{T(x)} = u\) die zugehörigen \(x\)-Werte — negative \(u\)-Werte entfallen, denn Wurzelwerte sind nie negativ.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 4 — Substitution</div>
+  <p>Löse \(\sqrt{x^2+5x-5} = \dfrac{4\sqrt{x^2+5x-5} - 3}{\sqrt{x^2+5x-5}}\).</p>
+  <p><strong>Lösung:</strong> Mit \(u = \sqrt{x^2+5x-5}\) wird daraus \(u = \dfrac{4u-3}{u}\), also</p>
+  \[ u^2 - 4u + 3 = 0 \;\Rightarrow\; (u-1)(u-3) = 0 \;\Rightarrow\; u_1 = 1,\quad u_2 = 3 \]
+  <p>Rücksubstitution \(u_1 = 1\): \(x^2 + 5x - 5 = 1 \Rightarrow x^2 + 5x - 6 = 0 \Rightarrow x = 1\) oder \(x = -6\).</p>
+  <p>Rücksubstitution \(u_2 = 3\): \(x^2 + 5x - 5 = 9 \Rightarrow x^2 + 5x - 14 = 0 \Rightarrow x = 2\) oder \(x = -7\).</p>
+  <p>Alle vier bestehen die Kontrolle: \(L = \{-7;\ -6;\ 1;\ 2\}\).</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — welcher Weg für welche Gleichung?</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Situation</th><th>Werkzeug</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(x^n = c\)</td><td style="text-align:left;font-family:var(--sans)">\(n\)-te Wurzel ziehen (Paritäts-Tabelle!)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">eine Wurzel</td><td style="text-align:left;font-family:var(--sans)">separieren → quadrieren → Kontrolle</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">zwei Wurzeln</td><td style="text-align:left;font-family:var(--sans)">auf beide Seiten verteilen → zweimal quadrieren</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">gleicher Wurzelterm mehrfach</td><td style="text-align:left;font-family:var(--sans)">Substitution \(u = \sqrt{T(x)}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(x\) im Nenner</td><td style="text-align:left;font-family:var(--sans)">\(D\) notieren → Hauptnenner → lösen → \(D\) prüfen</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Substitution und Strategie</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Bei der Rücksubstitution ergibt sich \(u_2 = -2\) für \(u = \sqrt{T(x)}\). Was folgt daraus?</p><ul class="mc-optionen"><li data-opt="A">\(T(x) = 4\) lösen</li><li data-opt="B">Dieser Fall entfällt</li><li data-opt="C">\(x = -2\) ist Lösung</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Ein Wurzelwert kann nicht \(-2\) sein — nur \(u \geq 0\) liefert Lösungen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Tritt derselbe Wurzelterm mehrfach auf, ersetzt man ihn durch eine neue Variable — das Verfahren heisst <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Substitution (danach: Rücksubstitution nicht vergessen).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(\sqrt{x^2+9} = 5\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Quadrieren: \(x^2 + 9 = 25 \Rightarrow x^2 = 16 \Rightarrow x = \pm 4\). Beide bestehen die Kontrolle.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Wie viele Kontrollen braucht Beispiel 4 (vier Kandidaten) wirklich — und warum darf man keine weglassen?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Alle vier: Beim Aufstellen der \(u\)-Gleichung wurde mit \(u\) multipliziert und quadriert — beides kann Scheinlösungen erzeugen. Jeder Kandidat muss einzeln in der <em>Ausgangsgleichung</em> geprüft werden (hier bestehen zufällig alle).</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Lösbar oder nicht? Am Graphen entscheiden</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Gleichung — links siehst du beide Seiten als Graphen. Welche Lösungsmenge passt?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Lösungsmenge gehört zur angezeigten Gleichung?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Äquivalent oder nicht?</span></div>
+  <p>Die Gleichung \(A(x)\) wird wie angegeben umgeformt zur Gleichung \(N(x)\). Bestimme beide Lösungsmengen: Wo liegt eine Äquivalenzumformung vor, wo kommen Scheinlösungen dazu, wo gehen Lösungen verloren?</p>
+  <ol class="aufg-liste">
+    <li>\(A(x):\ \sqrt{x} = 5\) — quadrieren</li>
+    <li>\(A(x):\ \sqrt{x} = -5\) — quadrieren</li>
+    <li>\(A(x):\ (x+2)(x-2) = 0\) — geteilt durch \((x+2)\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(L_A = \{25\}\), \(N(x): x = 25\), \(L_N = \{25\}\) — hier zufällig <strong>äquivalent</strong> (die linke Seite war nie negativ).</li>
+        <li>\(L_A = \{\,\}\), aber \(N(x): x = 25\) mit \(L_N = \{25\}\) — das Quadrieren hat eine <strong>Scheinlösung</strong> erzeugt.</li>
+        <li>\(L_A = \{-2;\ 2\}\), \(N(x): x - 2 = 0\) mit \(L_N = \{2\}\) — die Division durch \((x+2)\) hat die Lösung \(x = -2\) <strong>vernichtet</strong> (Division durch null für genau diesen Wert!).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit den drei Gleichungstypen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Potenzgleichungen</div>
+    <p>Löse \(x^3 = -27\) und \(x^4 = 81\) (gib bei zwei Lösungen die positive an).</p>
+    <div class="eingabe-row"><label>x³ = −27: x =&nbsp;</label><input type="text" id="a3a1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3a1', -3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x⁴ = 81: x =&nbsp;</label><input type="text" id="a3a2" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3a2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <ol class="aufg-liste">
+          <li>Ungerader Exponent: genau eine Lösung \(x = \sqrt[3]{-27} = -3\).</li>
+          <li>Gerader Exponent, \(c &gt; 0\): zwei Lösungen \(x = \pm\sqrt[4]{81} = \pm 3\).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Wurzel separieren</div>
+    <p>Löse \(\sqrt{4b+16} + 5 = 7\).</p>
+    <div class="eingabe-row"><label>b =&nbsp;</label><input type="text" id="a3b1" placeholder="b"><button class="btn-pruef" onclick="chkNum('a3b1', -3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \sqrt{4b+16} = 2 \;\Rightarrow\; 4b + 16 = 4 \;\Rightarrow\; b = -3 \]
+        <p>Kontrolle: \(\sqrt{-12+16} + 5 = 2 + 5 = 7\) ✓ (der Radikand ist positiv, obwohl \(b\) negativ ist!)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Wurzel auf der rechten Seite</div>
+    <p>Löse \(3 = \sqrt{20 - 4w}\).</p>
+    <div class="eingabe-row"><label>w =&nbsp;</label><input type="text" id="a3c1" placeholder="w"><button class="btn-pruef" onclick="chkNum('a3c1', 2.75, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 9 = 20 - 4w \;\Rightarrow\; 4w = 11 \;\Rightarrow\; w = \tfrac{11}{4} = 2.75 \]
+        <p>Kontrolle: \(\sqrt{20 - 11} = \sqrt{9} = 3\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Quadrieren mit zwei Lösungen</div>
+    <p>Löse \(\sqrt{x^2+9} = 5\) (gib die positive Lösung an).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3d1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3d1', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ x^2 + 9 = 25 \;\Rightarrow\; x^2 = 16 \;\Rightarrow\; x = \pm 4 \qquad L = \{-4;\ 4\} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Rationale Gleichung</div>
+    <p>Löse \(\dfrac{2}{x-1} + 1 = x\) (gib die grössere Lösung auf zwei Dezimalen an).</p>
+    <div class="eingabe-row"><label>x ≈&nbsp;</label><input type="text" id="a3e1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3e1', 2.41, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(D: x \neq 1\). Mit \((x-1)\) multiplizieren: \(2 + x - 1 = x^2 - x \Rightarrow x^2 - 2x - 1 = 0\), also \(x = 1 \pm \sqrt{2}\). Beide in \(D\): grössere Lösung \(1 + \sqrt{2} \approx 2.41\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Sichtweite zum Horizont</span></div>
+  <p>Für die Sichtweite gilt \(s(h) = 3.57\sqrt{h}\) (\(s\) in km, \(h\) in m).</p>
+  <ol class="aufg-liste">
+    <li>Wie weit sieht man aus einem Flugzeug in \(3000\) m Höhe?</li>
+    <li>Welche Höhe braucht es für \(50\) km Sichtweite? (Wurzelgleichung aufstellen und lösen.)</li>
+  </ol>
+  <div class="eingabe-row"><label>s(3000) ≈&nbsp;</label><input type="text" id="a4-1" placeholder="km"><button class="btn-pruef" onclick="chkNum('a4-1', 195.5, 0.5, 'km')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>h ≈&nbsp;</label><input type="text" id="a4-2" placeholder="m"><button class="btn-pruef" onclick="chkNum('a4-2', 196.2, 0.5, 'm')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(s = 3.57 \cdot \sqrt{3000} \approx 195.5\) km.</li>
+        <li>\(3.57\sqrt{h} = 50 \Rightarrow \sqrt{h} = \tfrac{50}{3.57} \Rightarrow h = \left(\tfrac{50}{3.57}\right)^2 \approx 196.2\) m.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Fadenpendel</span></div>
+  <p>Für die Schwingungsdauer eines Fadenpendels gilt \(T = 2\pi\sqrt{\dfrac{l}{g}}\) mit \(g = 9.81\ \text{m/s}^2\).</p>
+  <ol class="aufg-liste">
+    <li>Löse die Formel nach \(l\) auf (Wurzel separieren, quadrieren).</li>
+    <li>Wie lang muss ein Pendel für \(T = 2\) s sein (Sekundenpendel)?</li>
+    <li>Welche Schwingungsdauer hat ein \(4\) m langes Pendel?</li>
+  </ol>
+  <div class="eingabe-row"><label>l(T=2) ≈&nbsp;</label><input type="text" id="a5-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a5-1', 0.99, 0.01, 'm')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>T(l=4) ≈&nbsp;</label><input type="text" id="a5-2" placeholder="s"><button class="btn-pruef" onclick="chkNum('a5-2', 4.01, 0.02, 's')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\sqrt{\tfrac{l}{g}} = \tfrac{T}{2\pi} \Rightarrow \tfrac{l}{g} = \tfrac{T^2}{4\pi^2} \Rightarrow l = g \cdot \left(\tfrac{T}{2\pi}\right)^2\).</li>
+        <li>\(l = 9.81 \cdot \left(\tfrac{2}{2\pi}\right)^2 \approx 0.99\) m — knapp ein Meter.</li>
+        <li>\(T = 2\pi\sqrt{\tfrac{4}{9.81}} \approx 4.01\) s.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Freier Fall</span></div>
+  <p>Für die Fallzeit aus der Höhe \(h\) (ohne Luftwiderstand) gilt \(t = \sqrt{\dfrac{2h}{g}}\) mit \(g = 9.81\ \text{m/s}^2\).</p>
+  <ol class="aufg-liste">
+    <li>Wie lange fällt ein Stein von einer \(80\) m hohen Brücke?</li>
+    <li>Aus welcher Höhe fällt ein Körper, der \(3\) s unterwegs ist? (Nach \(h\) auflösen.)</li>
+  </ol>
+  <div class="eingabe-row"><label>t(80) ≈&nbsp;</label><input type="text" id="a6-1" placeholder="s"><button class="btn-pruef" onclick="chkNum('a6-1', 4.04, 0.02, 's')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>h(3 s) ≈&nbsp;</label><input type="text" id="a6-2" placeholder="m"><button class="btn-pruef" onclick="chkNum('a6-2', 44.1, 0.2, 'm')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(t = \sqrt{\tfrac{2 \cdot 80}{9.81}} \approx 4.04\) s.</li>
+        <li>Quadrieren: \(t^2 = \tfrac{2h}{g} \Rightarrow h = \tfrac{g \cdot t^2}{2} = \tfrac{9.81 \cdot 9}{2} \approx 44.1\) m.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Vier Lösungen per Substitution <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Löse die Gleichung</p>
+  \[ \sqrt{x^2+5x-5} = \frac{4\sqrt{x^2+5x-5} - 3}{\sqrt{x^2+5x-5}} \]
+  <ol class="aufg-liste">
+    <li>Substituiere \(u = \sqrt{x^2+5x-5}\) und löse die entstehende Gleichung in \(u\).</li>
+    <li>Führe beide Rücksubstitutionen durch und bestimme alle \(x\)-Kandidaten.</li>
+    <li>Kontrolliere und gib \(L\) an. Gib die kleinste Lösung ein:</li>
+  </ol>
+  <div class="eingabe-row"><label>kleinste Lösung x =&nbsp;</label><input type="text" id="a7-1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a7-1', -7, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(u = \tfrac{4u-3}{u} \Rightarrow u^2 - 4u + 3 = 0 \Rightarrow u_1 = 1\), \(u_2 = 3\) (beide \(\geq 0\), beide brauchbar).</li>
+        <li>\(u_1\): \(x^2+5x-6 = 0 \Rightarrow x \in \{-6;\ 1\}\); \(u_2\): \(x^2+5x-14 = 0 \Rightarrow x \in \{-7;\ 2\}\).</li>
+        <li>Alle vier bestehen die Kontrolle (Radikand jeweils \(1\) bzw. \(9\)): \(L = \{-7;\ -6;\ 1;\ 2\}\) — kleinste Lösung \(-7\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Potenz-, Wurzel- und Bruchgleichungen löst die passende <strong>Umkehroperation</strong>: Wurzelziehen (Paritäts-Tabelle beachten), Quadrieren nach dem Separieren, Multiplizieren mit dem Hauptnenner. Quadrieren und Hauptnenner-Multiplikation sind <strong>keine Äquivalenzumformungen</strong> — darum gehören <strong>Definitionsmenge</strong> (Radikand \(\geq 0\), Nenner \(\neq 0\)) und <strong>Kontrolle</strong> in der Ausgangsgleichung zwingend zum Verfahren. Gleicher Wurzelterm mehrfach? <strong>Substitution.</strong></p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Typ</th><th>Kennzeichen</th><th>Verfahren</th><th>Stolperstein</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Potenzgleichung</td><td>\(x^n = c\)</td><td style="text-align:left;font-family:var(--sans)">\(n\)-te Wurzel ziehen</td><td style="text-align:left;font-family:var(--sans)">gerades \(n\): \(\pm\)-Fall bzw. keine Lösung</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wurzelgleichung</td><td>\(x\) unter der Wurzel</td><td style="text-align:left;font-family:var(--sans)">separieren → quadrieren → Kontrolle</td><td style="text-align:left;font-family:var(--sans)">Scheinlösungen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">rationale Gleichung</td><td>\(x\) im Nenner</td><td style="text-align:left;font-family:var(--sans)">\(D\) → Hauptnenner → lösen</td><td style="text-align:left;font-family:var(--sans)">Nenner-Nullstellen ausschliessen</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lXu1WcPP0oXEF_AnfOtYjkw" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über WURZELN — Playlist</div><div class="lk-s">MathemaTrick · 56 Videos · Wurzelrechnung und Wurzelgleichungen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHiqJlnyr_iYcbxsL7ztyWp8" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Wurzel, Wurzelrechnungen, Wurzelfunktionen — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 31 Videos · inkl. Wurzelgleichungen</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g3/g33/aufg_g33.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Wurzelgleichungen (G33)</div><div class="lk-s">Wurzelgleichungen mit PDF-Lösungen</div></div></a>
+  <a href="https://www.sos-mathe.ch/g/g3/g32/aufg_g32.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Gleichungen höheren Grades (G32)</div><div class="lk-s">Potenzgleichungen xⁿ = c · mit PDF-Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 2.2a Potenz-, Wurzel- und rationale Gleichungen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s2-2a',
+  kapitelNr:'2.2a', kapitelTitel:'Potenz-, Wurzel- und rationale Gleichungen',
+  prev:{nr:'2.1',titel:'Grundlagen',url:'s2-1-grundlagen.html'},
+  next:{nr:'2.2b',titel:'Exponential- und logarithmische Gleichungen',url:'s2-2b-exponential-logarithmische-gleichungen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+// Kurven-Plot mit Segmenttrennung (wie s3-2a)
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+// Anwendungs-Raster mit Einheiten-Labels (wie s3-4a)
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Sichtweite ══ */
+function updateSW(){
+  const h = parseFloat(document.getElementById('sw-h').value);
+  document.getElementById('sw-hv').textContent = h;
+  const s = 3.57 * Math.sqrt(h);
+  const hB = `<span class="tx-blau">${h}</span>`;
+  document.getElementById('sw-eq').innerHTML = `s(${hB}) = 3.57·√${hB} ≈ ${s.toFixed(1)} km`;
+  const {ctx, cx, cy} = gridApp('sw-canvas', 240, 0, 900, 0, 110, 100, 10, 'h [m]', 's [km]');
+  // 100-km-Marke
+  ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(100)); ctx.lineTo(cx(900), cy(100)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('100 km', cx(15), cy(100) - 6);
+  plotFx(ctx, cx, cy, x => 3.57 * Math.sqrt(x), 0, 900, '#1a4f8a', 2.5, 1e6);
+  drawDot(ctx, cx, cy, h, s, '#1a4f8a', 7);
+}
+document.getElementById('sw-h').addEventListener('input', updateSW);
+
+/* ══ SCHEINLÖSUNGS-LABOR ══ */
+const SC = [
+  {c: 5,  eq: '6x + 7 = 25 ⇒ x = 3 · Kontrolle: √25 = 5 ✓ · L = {3}'},
+  {c: -5, eq: '6x + 7 = 25 ⇒ x = 3 · Kontrolle: √25 = 5 ≠ −5 ✗ · L = { } (Scheinlösung!)'},
+];
+let scActive = 0;
+function setSc(i){
+  scActive = i;
+  document.querySelectorAll('#sc-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawSc();
+}
+function drawSc(){
+  const v = SC[scActive];
+  document.getElementById('sc-eq').textContent = v.eq;
+  const {ctx, W, H} = initCanvas('sc-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -3, 6, -7, 7);
+  // rechte Seite (orange)
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(0, cy(v.c)); ctx.lineTo(W, cy(v.c)); ctx.stroke();
+  ctx.setLineDash([]);
+  // Wurzelkurve (blau), D: x >= -7/6
+  plotFx(ctx, cx, cy, x => x >= -7/6 ? Math.sqrt(6*x + 7) : NaN, -3, 6, '#1a4f8a', 2.5, 30);
+  if(scActive === 0){
+    drawDot(ctx, cx, cy, 3, 5, '#1f6b3a', 6);
+    ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+    ctx.fillText('(3|5)', cx(3) + 8, cy(5) - 8);
+  } else {
+    ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('kein Schnittpunkt!', cx(1.5), cy(-3.5));
+  }
+}
+
+/* ══ A1: Lösbar oder nicht? ══ */
+const a1G = [
+  {label:'√x = 5',   f: x => x >= 0 ? Math.sqrt(x) : NaN,    c: 5,  sol:'L = {25}',  dot:[25, 5]},
+  {label:'√x = −5',  f: x => x >= 0 ? Math.sqrt(x) : NaN,    c: -5, sol:'L = { }',   dot:null},
+  {label:'−√x = −4', f: x => x >= 0 ? -Math.sqrt(x) : NaN,   c: -4, sol:'L = {16}',  dot:[16, -4]},
+  {label:'√(−x) = 3',f: x => x <= 0 ? Math.sqrt(-x) : NaN,   c: 3,  sol:'L = {−9}',  dot:[-9, 3]},
+];
+const a1Opts = ['L = {25}', 'L = { }', 'L = {16}', 'L = {−9}'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const g = a1G[a1Act];
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -28, 28, -7, 7);
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(0, cy(g.c)); ctx.lineTo(W, cy(g.c)); ctx.stroke();
+  ctx.setLineDash([]);
+  plotFx(ctx, cx, cy, g.f, -28, 28, '#1a4f8a', 2.5, 30);
+  if(g.dot) drawDot(ctx, cx, cy, g.dot[0], g.dot[1], '#1f6b3a', 6);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.sol}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Schau, ob und wo sich Wurzelkurve und Gerade schneiden — und beachte das Vorzeichen der Wurzel.';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung — und die Kontrolle in der Ausgangsgleichung.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateSW();
+  drawSc();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateSW(); drawSc(); drawA1();
+});
+</script>
+</body>
+</html>

@@ -38,7 +38,9 @@ const SITE = {
     { id:'s1-2', nr:'1.2', titel:'Potenzen', url:'schwerpunkt/s1-2-potenzen.html' },
     { id:'s1-3', nr:'1.3', titel:'Logarithmen', url:'schwerpunkt/s1-3-logarithmen.html' },
     { id:'s2-1', nr:'2.1', titel:'Grundlagen', url:'schwerpunkt/s2-1-grundlagen.html' },
-    { id:'s2-2', nr:'2.2', titel:'Gleichungstypen', url:'schwerpunkt/s2-2-gleichungstypen.html' },
+    { id:'s2-2a', nr:'2.2a', titel:'Potenz-, Wurzel- und rationale Gleichungen', url:'schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html' },
+    { id:'s2-2b', nr:'2.2b', titel:'Exponential- und logarithmische Gleichungen', url:'schwerpunkt/s2-2b-exponential-logarithmische-gleichungen.html' },
+    { id:'s2-2c', nr:'2.2c', titel:'Betrags- und Polynomgleichungen, Ungleichungen', url:'schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html' },
     { id:'s3-1', nr:'3.1', titel:'Grundlagen', url:'schwerpunkt/s3-1-grundlagen.html' },
     { id:'s3-2a', nr:'3.2a', titel:'Potenzfunktionen', url:'schwerpunkt/s3-2a-potenzfunktionen.html' },
     { id:'s3-2b', nr:'3.2b', titel:'Wurzelfunktionen', url:'schwerpunkt/s3-2b-wurzelfunktionen.html' },
@@ -63,7 +65,7 @@ const GROUPS = {
   ],
   schwerpunkt: [
     { nr:'1', titel:'Arithmetik/Algebra', ids:['s1-1', 's1-2', 's1-3'] },
-    { nr:'2', titel:'Gleichungen', ids:['s2-1', 's2-2'] },
+    { nr:'2', titel:'Gleichungen', ids:['s2-1', 's2-2a', 's2-2b', 's2-2c'] },
     { nr:'3', titel:'Funktionen', ids:['s3-1', 's3-2a', 's3-2b', 's3-3', 's3-4a', 's3-4b', 's3-5'] },
     { nr:'4', titel:'Geometrie', ids:['s4-1', 's4-2', 's4-3'] }
   ]

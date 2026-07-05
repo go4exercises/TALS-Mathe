@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.2c Betrags- und Polynomgleichungen, Ungleichungen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* ── Vorzeichentabelle ── */
+.vz-tabelle { width:100%; border-collapse:collapse; font-family:var(--mono); font-size:0.82rem; margin-top:12px; }
+.vz-tabelle th, .vz-tabelle td { border:1px solid var(--linie); padding:6px 10px; text-align:center; }
+.vz-tabelle th { background:var(--papier-2); font-family:var(--sans); font-weight:700; }
+.vz-tabelle td.plus  { color:var(--gruen); font-weight:700; }
+.vz-tabelle td.minus { color:var(--rot); font-weight:700; }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 2 · Gleichungen · 30 Lektionen</div>
+  <h1 class="pt-h1">2.2c Betrags- und Polynomgleichungen, Ungleichungen</h1>
+  <div class="pt-untertitel">RLP 2.2 · Teil 3 von 3</div>
+</div>
+
+<p class="lead">Drei Themen, ein gemeinsamer Kern: das <strong>Vorzeichen</strong>. Der <strong>Betrag</strong> löscht es und zwingt zur Fallunterscheidung, der <strong>Satz vom Nullprodukt</strong> zerlegt Polynomgleichungen Faktor für Faktor, und bei <strong>Ungleichungen</strong> entscheidet die <strong>Vorzeichentabelle</strong>, wo ein Produkt positiv oder negativ ist. Dazu die wichtigste Umformungsregel: Multiplizieren mit einer negativen Zahl <strong>dreht das Relationszeichen</strong>.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 2.2</div>
+  <ul>
+    <li>lineare und nichtlineare Ungleichungen mithilfe einer Grafik oder der Vorzeichentabelle umformen und lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Potenzgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Wurzelgleichungen und rationale Gleichungen lösen, die auf lineare oder quadratische Gleichungen führen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Exponential- und Logarithmusgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>elementare Betragsgleichungen lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Polynomgleichungen höheren Grades lösen, wenn das Polynom als Produkt linearer und quadratischer Faktoren vorliegt <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt die Kompetenzen 1, 5 und 6: Ungleichungen, Betrags- und Polynomgleichungen. Potenz-, Wurzel- und rationale Gleichungen stehen in <a href="s2-2a-potenz-wurzel-rationale-gleichungen.html">Teil 1 (s2-2a)</a>, Exponential- und Logarithmusgleichungen in <a href="s2-2b-exponential-logarithmische-gleichungen.html">Teil 2 (s2-2b)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann den Betrag \(|x|\) abschnittsweise definieren und geometrisch als Abstand deuten.</li>
+      <li>Ich kann elementare Betragsgleichungen \(|T(x)| = c\) über die zwei Fälle lösen — und erkenne, wann die Lösungsmenge leer ist.</li>
+      <li>Ich kann Polynomgleichungen in Produktform mit dem Satz vom Nullprodukt lösen und gemeinsame Faktoren zuerst ausklammern.</li>
+      <li>Ich kann lineare Ungleichungen umformen und weiss, wann das Relationszeichen dreht.</li>
+      <li>Ich kann nichtlineare Ungleichungen mit der Vorzeichentabelle oder grafisch lösen und die Lösungsmenge als Intervall angeben.</li>
+      <li>Ich kann Betragsungleichungen \(|x - m| \leq r\) als Intervall um \(m\) deuten (Toleranzen!).</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — Toleranz in der Fertigung</h2>
+
+<p>Eine CNC-Fräse fertigt Bolzen mit Soll-Durchmesser \(12\) mm. Die Zeichnung erlaubt eine Toleranz von \(\pm 0.05\) mm — ein Bolzen ist brauchbar, wenn die <strong>Abweichung vom Sollmass</strong> höchstens \(0.05\) mm beträgt. Das Vorzeichen der Abweichung spielt keine Rolle, nur ihre Grösse:</p>
+
+\[ |d - 12| \leq 0.05 \]
+
+<p>Der <strong>Betrag</strong> misst den Abstand — und die Betragsungleichung beschreibt das Toleranzband.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🔩 Toleranzband — \(|d - 12| \leq 0.05\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe den gemessenen Durchmesser durch das Band: Bei welchen Werten kippt die Anzeige auf «Ausschuss»? Beachte die V-Form der Betragsfunktion — sie behandelt Plus- und Minus-Abweichung gleich.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schiebe den gemessenen Durchmesser durch das Band: Bei welchen Werten kippt die Anzeige auf Ausschuss? Beachte die V-Form der Betragsfunktion — sie behandelt Plus- und Minus-Abweichung gleich.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Brauchbar ist der Bolzen genau im Intervall \([11.95;\ 12.05]\) — die Betragsungleichung \(|d - 12| \leq 0.05\) ist nur eine kompakte Schreibweise für \(11.95 \leq d \leq 12.05\): ein Abstand von höchstens \(0.05\) um die Mitte \(12\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Brauchbar ist der Bolzen genau im Intervall von elf Komma fünfundneunzig bis zwölf Komma null fünf — die Betragsungleichung ist nur eine kompakte Schreibweise für einen Abstand von höchstens null Komma null fünf um die Mitte zwölf.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Abweichung in Hundertstel-mm · Toleranzband grün · V-Kurve = Betragsfunktion</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Mass <span class="var">\(d\)</span> [mm]</label>
+      <input type="range" id="to-d" min="-10" max="10" step="1" value="3">
+      <span class="sl-val" id="to-dv">12.03</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Abweichung und Urteil</div>
+      <div class="fl-eq" id="to-eq">|12.03 − 12| = 0.03 ≤ 0.05 ✓ brauchbar</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="to-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Betrag macht aus «höchstens \(0.05\) daneben — egal in welche Richtung» eine einzige Bedingung:</p>
+  <ul style="margin-top:6px">
+    <li>\(|d - 12| \leq 0.05\) heisst: Der <strong>Abstand</strong> von \(d\) zur \(12\) ist höchstens \(0.05\).</li>
+    <li>Als Intervall: \(12 - 0.05 \leq d \leq 12 + 0.05\) — das Toleranzband \([11.95;\ 12.05]\).</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was bedeutet \(|d - 12|\) geometrisch?</p><ul class="mc-optionen"><li data-opt="A">den Durchmesser \(d\)</li><li data-opt="B">den Abstand von \(d\) zur Zahl 12</li><li data-opt="C">immer \(d - 12\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der Betrag einer Differenz ist der Abstand der beiden Zahlen auf der Zahlengeraden.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Betragsungleichung \(|x - m| \leq r\) beschreibt das Intervall \([m - r;\ m + r]\) — alle Zahlen mit Abstand höchstens \(r\) von der Mitte <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(m\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Ist ein Bolzen mit \(d = 11.93\) mm brauchbar (Toleranz \(\pm 0.05\))?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(|11.93 - 12| = 0.07 &gt; 0.05\) — <strong>Ausschuss</strong>.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Schreibe das Intervall \([9.8;\ 10.2]\) als Betragsungleichung.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Mitte \(m = 10\), Radius \(r = 0.2\): \(|x - 10| \leq 0.2\).</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Betrag und Betragsgleichungen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Betrag</div>
+  <p>Der <strong>Betrag</strong> einer reellen Zahl ist ihr Abstand zum Nullpunkt:</p>
+  \[ |x| = \begin{cases} x & \text{für } x \geq 0 \\ -x & \text{für } x &lt; 0 \end{cases} \]
+  <p>Beispiele: \(|7| = 7\), \(|-7| = 7\), \(|0| = 0\). Es gilt stets \(|x| \geq 0\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Lösen von Betragsgleichungen \(|T(x)| = c\)</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Fall</th><th>Vorgehen</th></tr></thead>
+    <tbody>
+      <tr><td>\(c &gt; 0\)</td><td style="text-align:left;font-family:var(--sans)">zwei Fälle: \(T(x) = c\) <strong>oder</strong> \(T(x) = -c\) — meist zwei Lösungen</td></tr>
+      <tr><td>\(c = 0\)</td><td style="text-align:left;font-family:var(--sans)">\(T(x) = 0\) — eine Bedingung</td></tr>
+      <tr><td>\(c &lt; 0\)</td><td style="text-align:left;font-family:var(--sans)">keine Lösung: Beträge sind nie negativ, \(L = \{\,\}\)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Betragsgleichung mit zwei Fällen</div>
+  <p>Löse \(|2x + 1| = 7\).</p>
+  <p><strong>Lösung:</strong> Fall 1: \(2x + 1 = 7 \Rightarrow x = 3\). Fall 2: \(2x + 1 = -7 \Rightarrow x = -4\).</p>
+  \[ L = \{-4;\ 3\} \]
+  <p>Geometrisch: Die V-Kurve \(y = |2x+1|\) schneidet die Horizontale \(y = 7\) zweimal.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — nur einen Fall rechnen</div>
+  <p>Wer bei \(|x - 3| = 5\) nur \(x - 3 = 5\) löst, verliert die halbe Lösungsmenge. Der Betrag versteckt <strong>zwei</strong> Gleichungen: \(x - 3 = 5\) <em>und</em> \(x - 3 = -5\), also \(L = \{-2;\ 8\}\). Kontrolle am Abstandsbild: Welche Zahlen haben Abstand \(5\) von der \(3\)?</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Betragsgleichungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie viele Lösungen hat \(|x - 2| = -3\)?</p><ul class="mc-optionen"><li data-opt="A">zwei</li><li data-opt="B">eine</li><li data-opt="C">keine</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> Ein Betrag ist nie negativ — \(L = \{\,\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(|x| = 7\) bedeutet: \(x\) hat den <span class="mc-luecke"></span> \(7\) vom Nullpunkt — also \(x = 7\) oder \(x = -7\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Abstand.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(|x - 3| = 5\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(x - 3 = \pm 5 \Rightarrow x_1 = 8\), \(x_2 = -2\): \(L = \{-2;\ 8\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Für welche \(c\) hat \(|T(x)| = c\) garantiert keine Lösung — unabhängig von \(T\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Für alle \(c &lt; 0\): Die linke Seite ist als Betrag stets \(\geq 0\), die rechte negativ — kein \(x\) kann das erfüllen.</div></details></div>
+</details>
+
+
+<!-- ══ 4. POLYNOMGLEICHUNGEN ══ -->
+<h2 id="darstellungen">Polynomgleichungen in Produktform</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Satz vom Nullprodukt</div>
+  <p>Ein Produkt ist genau dann null, wenn <strong>mindestens ein Faktor</strong> null ist:</p>
+  \[ A \cdot B = 0 \quad\Longleftrightarrow\quad A = 0 \ \vee\ B = 0 \]
+  <p>Liegt eine Polynomgleichung als <strong>Produkt linearer und quadratischer Faktoren</strong> vor, wird jeder Faktor einzeln null gesetzt — die Teillösungen bilden zusammen die Lösungsmenge.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Produktform ablesen</div>
+  <p>Löse \((x+1)(x-2)(x^2-9) = 0\).</p>
+  <p><strong>Lösung:</strong> Faktor für Faktor: \(x + 1 = 0 \Rightarrow x = -1\); \(x - 2 = 0 \Rightarrow x = 2\); \(x^2 - 9 = 0 \Rightarrow x = \pm 3\).</p>
+  \[ L = \{-3;\ -1;\ 2;\ 3\} \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Erst ausklammern, dann Nullprodukt</div>
+  <p>Löse \(x^3 = 9x\).</p>
+  <p><strong>Lösung:</strong> Alles auf eine Seite und \(x\) ausklammern:</p>
+  \[ x^3 - 9x = 0 \;\Rightarrow\; x\,(x^2 - 9) = 0 \;\Rightarrow\; x\,(x-3)(x+3) = 0 \;\Rightarrow\; L = \{-3;\ 0;\ 3\} \]
+  <p><strong>Achtung:</strong> Wer die Gleichung durch \(x\) dividiert, verliert die Lösung \(x = 0\)!</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Verbindung zu den Polynomfunktionen</div>
+  <p>Die Faktoren sind genau die <strong>Linearfaktoren</strong> aus <a class="quer" href="s3-3-polynomfunktionen.html">↩ 3.3 Polynomfunktionen</a>: Jede Lösung der Gleichung ist eine Nullstelle des zugehörigen Graphen. Ein quadratischer Faktor ohne reelle Nullstelle (z.B. \(x^2 + 1\)) trägt nichts zur Lösungsmenge bei.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Nullprodukt</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie viele reelle Lösungen hat \((x-4)(x^2+1) = 0\)?</p><ul class="mc-optionen"><li data-opt="A">drei</li><li data-opt="B">eine</li><li data-opt="C">zwei</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(x = 4\); der Faktor \(x^2 + 1\) ist stets positiv und liefert keine reelle Lösung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Ein Produkt ist genau dann null, wenn mindestens ein <span class="mc-luecke"></span> null ist.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Faktor.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(2x\,(x-5)(x+7) = 0\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(L = \{-7;\ 0;\ 5\}\) — der konstante Faktor \(2\) liefert keine Lösung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Beim Lösen von \(x^2 = 4x\) dividiert jemand durch \(x\) und erhält \(L = \{4\}\). Was ist schiefgelaufen?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die Division durch \(x\) ist für \(x = 0\) verboten — und genau dieser Wert ist eine Lösung. Richtig: \(x^2 - 4x = 0 \Rightarrow x(x-4) = 0 \Rightarrow L = \{0;\ 4\}\).</div></details></div>
+</details>
+
+
+<!-- ══ 5. UNGLEICHUNGEN ══ -->
+<h2 id="typen">Ungleichungen — Umformen und Vorzeichentabelle</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Äquivalenzumformungen bei Ungleichungen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Umformung</th><th>Relationszeichen</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">beidseitig addieren / subtrahieren</td><td style="font-family:var(--sans)">bleibt</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">multiplizieren / dividieren mit <strong>positiver</strong> Zahl</td><td style="font-family:var(--sans)">bleibt</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">multiplizieren / dividieren mit <strong>negativer</strong> Zahl</td><td style="font-family:var(--sans)"><strong>dreht!</strong> (\(&lt;\) wird \(&gt;\))</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Beispiel: \(5 - 2x &lt; 11 \Rightarrow -2x &lt; 6 \Rightarrow x &gt; -3\) — beim Teilen durch \(-2\) dreht das Zeichen.</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Nichtlineare Ungleichungen — die Vorzeichentabelle</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li>Alles auf eine Seite bringen und <strong>faktorisieren</strong>: Produkt \(\gtrless 0\).</li>
+    <li>Die <strong>Nullstellen aller Faktoren</strong> bestimmen — sie zerlegen die Zahlengerade in Abschnitte.</li>
+    <li>Je Abschnitt das Vorzeichen <strong>jedes Faktors</strong> notieren; das Produktvorzeichen folgt daraus.</li>
+    <li>Die Abschnitte mit dem gesuchten Vorzeichen bilden die Lösungsmenge (Randpunkte nur bei \(\geq\)/\(\leq\)).</li>
+  </ol>
+  <p style="margin-top:6px">Alternative: die grafische Lösung — Kurve oberhalb/unterhalb, siehe <a class="quer" href="s3-1-grundlagen.html">↩ 3.1 Grundlagen Funktionen</a>.</p>
+</div>
+
+<p style="margin-top:14px">Stelle das Produkt ein und lies die Tabelle ab — grün heisst positiv, rot negativ:</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Vorzeichentabellen-Labor — \((x-a)(x-b) \gtrless 0\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verfolge einen Abschnitt in der Tabelle: Wo sind beide Faktoren negativ — und welches Vorzeichen hat dann das Produkt? Vergleiche mit dem Graphen: Wo liegt die Parabel unterhalb der Achse?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verfolge einen Abschnitt in der Tabelle: Wo sind beide Faktoren negativ — und welches Vorzeichen hat dann das Produkt? Vergleiche mit dem Graphen: Wo liegt die Parabel unterhalb der Achse?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Zwischen den Nullstellen haben die Faktoren verschiedene Vorzeichen — das Produkt ist negativ, die Parabel liegt unter der Achse. Aussen sind beide gleich — Produkt positiv. Tabelle und Graph sagen dasselbe.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Zwischen den Nullstellen haben die Faktoren verschiedene Vorzeichen — das Produkt ist negativ, die Parabel liegt unter der Achse. Aussen sind beide gleich — Produkt positiv. Tabelle und Graph sagen dasselbe.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Nullstellen \(a\), \(b\) verschiebbar · Lösungsmenge für beide Relationen live</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Nullstelle <span class="var">\(a\)</span></label><input type="range" id="vz-a" min="-4" max="0" step="1" value="-2"><span class="sl-val" id="vz-av">−2</span></div>
+      <div class="sl-grp akz-orange"><label>Nullstelle <span class="var">\(b\)</span></label><input type="range" id="vz-b" min="1" max="4" step="1" value="1"><span class="sl-val" id="vz-bv">1</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Produkt und Lösungsmengen</div>
+      <div class="fl-eq" id="vz-eq">(x + 2)(x − 1) &gt; 0: L = {x | x &lt; −2 ∨ x &gt; 1}</div>
+      <div class="fl-eq" id="vz-eq2" style="font-size:0.95rem;margin-top:4px">(x + 2)(x − 1) &lt; 0: L = {x | −2 &lt; x &lt; 1}</div>
+    </div>
+    <table class="vz-tabelle" id="vz-tabelle">
+      <thead><tr id="vz-kopf"></tr></thead>
+      <tbody>
+        <tr id="vz-f1"></tr>
+        <tr id="vz-f2"></tr>
+        <tr id="vz-prod"></tr>
+      </tbody>
+    </table>
+    <div class="cv-wrap" style="max-width:520px;margin-top:12px"><canvas id="vz-canvas" height="200"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Beispiel 4 — Vorzeichentabelle mit drei Faktoren</div>
+  <p>Löse \((x+2)(x-1)(x-4) &gt; 0\).</p>
+  <p><strong>Lösung:</strong> Nullstellen \(-2\), \(1\), \(4\) zerlegen die Zahlengerade in vier Abschnitte:</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th></th><th>\(x &lt; -2\)</th><th>\(-2 &lt; x &lt; 1\)</th><th>\(1 &lt; x &lt; 4\)</th><th>\(x &gt; 4\)</th></tr></thead>
+    <tbody>
+      <tr><td>\(x+2\)</td><td>−</td><td>+</td><td>+</td><td>+</td></tr>
+      <tr><td>\(x-1\)</td><td>−</td><td>−</td><td>+</td><td>+</td></tr>
+      <tr><td>\(x-4\)</td><td>−</td><td>−</td><td>−</td><td>+</td></tr>
+      <tr><td><strong>Produkt</strong></td><td><strong>−</strong></td><td><strong>+</strong></td><td><strong>−</strong></td><td><strong>+</strong></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Positiv in den Abschnitten zwei und vier: \(L = \{x \mid -2 &lt; x &lt; 1 \ \vee\ x &gt; 4\}\).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Relationszeichen nicht gedreht</div>
+  <p>\(-2x &lt; 6\) heisst \(x &gt; -3\), <strong>nicht</strong> \(x &lt; -3\). Kontrolle mit einem Testwert: \(x = 0\) erfüllt \(-2 \cdot 0 = 0 &lt; 6\) ✓ — also muss \(0\) in der Lösungsmenge liegen.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Ungleichungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Bei welcher Umformung dreht das Relationszeichen?</p><ul class="mc-optionen"><li data-opt="A">beidseitig \(5\) subtrahieren</li><li data-opt="B">beidseitig mit \(-3\) multiplizieren</li><li data-opt="C">beidseitig durch \(2\) dividieren</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Nur Multiplikation/Division mit <em>negativen</em> Zahlen dreht das Zeichen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Nullstellen der Faktoren zerlegen die Zahlengerade in Abschnitte — in jedem Abschnitt hat das Produkt ein konstantes <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Vorzeichen — genau das nutzt die Vorzeichentabelle.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(5 - 2x &lt; 11\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(-2x &lt; 6 \Rightarrow x &gt; -3\) (Zeichen gedreht!): \(L = \{x \mid x &gt; -3\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Löse \((x-1)(x+3) &lt; 0\) mit der Vorzeichentabelle.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nullstellen \(-3\) und \(1\). Testwert \(x = 0\): \((-1)(3) = -3 &lt; 0\) ✓ — negativ genau dazwischen: \(L = \{x \mid -3 &lt; x &lt; 1\}\).</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Betragsungleichungen — Toleranz als Intervall</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Betragsungleichungen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Ungleichung</th><th>Bedeutung</th><th>Lösungsmenge</th></tr></thead>
+    <tbody>
+      <tr><td>\(|x - m| \leq r\)</td><td style="text-align:left;font-family:var(--sans)">Abstand von \(m\) höchstens \(r\)</td><td>\([m-r;\ m+r]\)</td></tr>
+      <tr><td>\(|x - m| &gt; r\)</td><td style="text-align:left;font-family:var(--sans)">Abstand von \(m\) grösser als \(r\)</td><td>\(x &lt; m-r \ \vee\ x &gt; m+r\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">(\(r &gt; 0\); für \(r &lt; 0\) ist die \(\leq\)-Variante unlösbar und die \(&gt;\)-Variante immer wahr.)</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 5 — Betragsungleichung</div>
+  <p>Löse \(|x - 2| \leq 3\).</p>
+  <p><strong>Lösung:</strong> Abstand von \(2\) höchstens \(3\): von \(2 - 3 = -1\) bis \(2 + 3 = 5\).</p>
+  \[ L = [-1;\ 5] \]
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Werkzeugwahl auf einen Blick</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Situation</th><th>Werkzeug</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(|T(x)| = c\)</td><td style="text-align:left;font-family:var(--sans)">zwei Fälle \(T = \pm c\); \(c &lt; 0\): unlösbar</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(|x - m| \lessgtr r\)</td><td style="text-align:left;font-family:var(--sans)">Abstandsbild: Intervall um \(m\) bzw. Aussenbereich</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Produkt \(= 0\)</td><td style="text-align:left;font-family:var(--sans)">Nullprodukt: jeden Faktor null setzen (nie durch \(x\) teilen!)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">lineare Ungleichung</td><td style="text-align:left;font-family:var(--sans)">umformen; bei negativem Faktor Zeichen drehen</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Produkt \(\gtrless 0\)</td><td style="text-align:left;font-family:var(--sans)">Vorzeichentabelle oder Graph</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Betragsungleichungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Lösungsmenge hat \(|x| &gt; 4\)?</p><ul class="mc-optionen"><li data-opt="A">\(]-4;\ 4[\)</li><li data-opt="B">\(x &lt; -4 \ \vee\ x &gt; 4\)</li><li data-opt="C">\(x &gt; 4\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Abstand grösser als \(4\) — beide Aussenbereiche.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(|x - m| \leq r\) beschreibt ein Intervall mit Mitte \(m\) und «Radius» <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(r\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(|x + 1| &lt; 2\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(x + 1 = x - (-1)\): Abstand von \(-1\) kleiner als \(2\): \(L = \,]-3;\ 1[\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Widerstand hat den Nennwert \(470\ \Omega\) mit \(5\) % Toleranz. Schreibe den zulässigen Bereich als Betragsungleichung und als Intervall.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(5\) % von \(470\) sind \(23.5\): \(|R - 470| \leq 23.5\), also \(R \in [446.5;\ 493.5]\ \Omega\).</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Betragsfunktion am Graphen erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Graphen — alle vier sind transformierte Betragsfunktionen (V-Kurven).</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört zum angezeigten Graphen?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Vorzeichentabelle von Hand</span></div>
+  <p>Stelle die Vorzeichentabelle für \((x+3)(x-2) \geq 0\) auf: Nullstellen bestimmen, Abschnitte bilden, Vorzeichen je Faktor eintragen, Lösungsmenge ablesen. Achte auf die Randpunkte!</p>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <table class="ftb-tabelle" style="margin:6px 0 0">
+        <thead><tr><th></th><th>\(x &lt; -3\)</th><th>\(-3 &lt; x &lt; 2\)</th><th>\(x &gt; 2\)</th></tr></thead>
+        <tbody>
+          <tr><td>\(x+3\)</td><td>−</td><td>+</td><td>+</td></tr>
+          <tr><td>\(x-2\)</td><td>−</td><td>−</td><td>+</td></tr>
+          <tr><td><strong>Produkt</strong></td><td><strong>+</strong></td><td><strong>−</strong></td><td><strong>+</strong></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:6px">Wegen \(\geq\) gehören die Nullstellen dazu: \(L = \{x \mid x \leq -3 \ \vee\ x \geq 2\}\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Betrag, Nullprodukt und Ungleichungen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Betragsgleichung</div>
+    <p>Löse \(|x - 3| = 5\).</p>
+    <div class="eingabe-row"><label>kleinere Lösung x₁ =&nbsp;</label><input type="text" id="a3a1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a3a1', -2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>grössere Lösung x₂ =&nbsp;</label><input type="text" id="a3a2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3a2', 8, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(x - 3 = \pm 5 \Rightarrow x_1 = -2\), \(x_2 = 8\). Abstandsbild: Welche Zahlen haben Abstand \(5\) von der \(3\)?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Betragsgleichung mit linearem Term</div>
+    <p>Löse \(|2x + 1| = 7\).</p>
+    <div class="eingabe-row"><label>kleinere Lösung x₁ =&nbsp;</label><input type="text" id="a3b1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a3b1', -4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>grössere Lösung x₂ =&nbsp;</label><input type="text" id="a3b2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3b2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(2x + 1 = 7 \Rightarrow x = 3\) und \(2x + 1 = -7 \Rightarrow x = -4\): \(L = \{-4;\ 3\}\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Nullprodukt</div>
+    <p>Löse \((x+1)(x-2)(x-5) = 0\).</p>
+    <div class="eingabe-row"><label>kleinste Lösung =&nbsp;</label><input type="text" id="a3c1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3c1', -1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>grösste Lösung =&nbsp;</label><input type="text" id="a3c2" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3c2', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Jeder Faktor einzeln: \(L = \{-1;\ 2;\ 5\}\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Ausklammern, dann Nullprodukt</div>
+    <p>Löse \(x^3 = 9x\). Wie viele Lösungen gibt es, und wie lautet die grösste?</p>
+    <div class="eingabe-row"><label>Anzahl Lösungen =&nbsp;</label><input type="text" id="a3d1" placeholder="Anzahl"><button class="btn-pruef" onclick="chkNum('a3d1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>grösste Lösung =&nbsp;</label><input type="text" id="a3d2" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3d2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ x^3 - 9x = 0 \;\Rightarrow\; x(x-3)(x+3) = 0 \;\Rightarrow\; L = \{-3;\ 0;\ 3\} \]
+        <p>Drei Lösungen — wer durch \(x\) dividiert, verliert die \(0\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Lineare Ungleichung mit Vorzeichenwechsel</div>
+    <p>Löse \(5 - 2x &lt; 11\) und gib die Grenze der Lösungsmenge an.</p>
+    <div class="eingabe-row"><label>x &gt;&nbsp;</label><input type="text" id="a3e1" placeholder="Grenze"><button class="btn-pruef" onclick="chkNum('a3e1', -3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(-2x &lt; 6\), Division durch \(-2\) <strong>dreht</strong> das Zeichen: \(x &gt; -3\). Testwert \(x = 0\): \(5 &lt; 11\) ✓</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Toleranzprüfung in der Werkstatt</span></div>
+  <p>Eine Welle hat das Sollmass \(25\) mm mit Toleranz \(\pm 0.02\) mm: brauchbar, wenn \(|d - 25| \leq 0.02\).</p>
+  <ol class="aufg-liste">
+    <li>Gib das Toleranzband als Intervall an.</li>
+    <li>Ein Werkstück misst \(24.97\) mm. Berechne die Abweichung \(|d - 25|\) — brauchbar oder Ausschuss?</li>
+  </ol>
+  <div class="eingabe-row"><label>obere Grenze =&nbsp;</label><input type="text" id="a4-1" placeholder="mm"><button class="btn-pruef" onclick="chkNum('a4-1', 25.02, 0.001, 'mm')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>|24.97 − 25| =&nbsp;</label><input type="text" id="a4-2" placeholder="mm"><button class="btn-pruef" onclick="chkNum('a4-2', 0.03, 0.001, 'mm')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\([25 - 0.02;\ 25 + 0.02] = [24.98;\ 25.02]\) mm.</li>
+        <li>\(|24.97 - 25| = 0.03 &gt; 0.02\) — <strong>Ausschuss</strong>.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Gewinnzone</span></div>
+  <p>Der Tagesgewinn einer Produktion (in CHF) hängt von der Stückzahl \(x\) ab:</p>
+  \[ G(x) = -(x-30)^2 + 400 \]
+  <ol class="aufg-liste">
+    <li>Forme die Bedingung \(G(x) &gt; 0\) in eine Betragsungleichung um.</li>
+    <li>In welchem Stückzahl-Bereich arbeitet der Betrieb mit Gewinn?</li>
+  </ol>
+  <div class="eingabe-row"><label>untere Grenze =&nbsp;</label><input type="text" id="a5-1" placeholder="Stück"><button class="btn-pruef" onclick="chkNum('a5-1', 10, 0.1, '')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>obere Grenze =&nbsp;</label><input type="text" id="a5-2" placeholder="Stück"><button class="btn-pruef" onclick="chkNum('a5-2', 50, 0.1, '')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(-(x-30)^2 + 400 &gt; 0 \Leftrightarrow (x-30)^2 &lt; 400 \Leftrightarrow |x - 30| &lt; 20\).</li>
+        <li>Abstand von \(30\) kleiner als \(20\): Gewinnzone \(10 &lt; x &lt; 50\) Stück.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Vorzeichentabelle mit drei Faktoren</span></div>
+  <p>Löse \((x+2)(x-1)(x-4) &gt; 0\) mit der Vorzeichentabelle (siehe Beispiel 4) und gib die Grenzen des <strong>beschränkten</strong> Lösungsintervalls an.</p>
+  <div class="eingabe-row"><label>von x =&nbsp;</label><input type="text" id="a6-1" placeholder="Grenze"><button class="btn-pruef" onclick="chkNum('a6-1', -2, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>bis x =&nbsp;</label><input type="text" id="a6-2" placeholder="Grenze"><button class="btn-pruef" onclick="chkNum('a6-2', 1, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>Die Tabelle (Beispiel 4) zeigt Plus in \(]-2;\ 1[\) und \(]4;\ \infty[\): \(L = \{x \mid -2 &lt; x &lt; 1 \ \vee\ x &gt; 4\}\). Das beschränkte Intervall ist \(]-2;\ 1[\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Betrag gegen Betrag <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Löse \(|x - 1| = |2x - 5|\).</p>
+  <ol class="aufg-liste">
+    <li>Begründe: Zwei Beträge sind gleich, wenn die Terme gleich <em>oder</em> entgegengesetzt sind.</li>
+    <li>Löse beide Fälle und kontrolliere.</li>
+    <li>Skizziere beide V-Kurven — wo schneiden sie sich?</li>
+  </ol>
+  <div class="eingabe-row"><label>kleinere Lösung x₁ =&nbsp;</label><input type="text" id="a7-1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a7-1', 2, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>grössere Lösung x₂ =&nbsp;</label><input type="text" id="a7-2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a7-2', 4, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a7-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(|A| = |B| \Leftrightarrow A = B \ \vee\ A = -B\) — gleicher Abstand vom Nullpunkt heisst gleich oder gespiegelt.</li>
+        <li>Fall 1: \(x - 1 = 2x - 5 \Rightarrow x = 4\). Fall 2: \(x - 1 = -(2x-5) \Rightarrow 3x = 6 \Rightarrow x = 2\). Kontrolle: \(|3| = |3|\) ✓ und \(|1| = |-1|\) ✓. \(L = \{2;\ 4\}\).</li>
+        <li>Die V-Kurve von \(|x-1|\) (Spitze bei \(1\)) und die steilere von \(|2x-5|\) (Spitze bei \(2.5\)) schneiden sich in \((2 \mid 1)\) und \((4 \mid 3)\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Der <strong>Betrag</strong> ist ein Abstand: \(|T(x)| = c\) verlangt zwei Fälle \(T = \pm c\) (für \(c &lt; 0\): unlösbar), und \(|x - m| \leq r\) ist das Intervall \([m-r;\ m+r]\) — die Sprache der Toleranzen. Polynomgleichungen in Produktform knackt der <strong>Satz vom Nullprodukt</strong> Faktor für Faktor (nie durch \(x\) dividieren!). Bei <strong>Ungleichungen</strong> dreht Multiplizieren mit Negativem das Relationszeichen, und für Produkte entscheidet die <strong>Vorzeichentabelle</strong> abschnittsweise — Randpunkte gehören nur bei \(\geq\)/\(\leq\) dazu.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Typ</th><th>Kennzeichen</th><th>Verfahren</th><th>Stolperstein</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Betragsgleichung</td><td>\(|T(x)| = c\)</td><td style="text-align:left;font-family:var(--sans)">zwei Fälle \(T = \pm c\)</td><td style="text-align:left;font-family:var(--sans)">zweiten Fall vergessen; \(c &lt; 0\) übersehen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Polynomgleichung (Produktform)</td><td>\(A \cdot B \cdot C = 0\)</td><td style="text-align:left;font-family:var(--sans)">Nullprodukt, vorher ausklammern</td><td style="text-align:left;font-family:var(--sans)">Division durch \(x\) vernichtet Lösungen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Ungleichung</td><td>\(&lt;, \leq, &gt;, \geq\)</td><td style="text-align:left;font-family:var(--sans)">umformen · Vorzeichentabelle · Graph</td><td style="text-align:left;font-family:var(--sans)">Zeichen bei \(\cdot(-1)\) nicht gedreht; Randpunkte</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s2-2c-betrag-polynom-ungleichungen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2c-betrag-polynom-ungleichungen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2c-betrag-polynom-ungleichungen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2c-betrag-polynom-ungleichungen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s2-2c-betrag-polynom-ungleichungen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a class="lk" style="opacity:0.6;cursor:default;" aria-disabled="true"><span class="lk-ic">⏳</span><div><div class="lk-t">In Vorbereitung</div><div class="lk-s">Zu Betragsgleichungen und Ungleichungen ist noch keine passende Playlist der bevorzugten Anbieter kuratiert.</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://www.sos-mathe.ch/g/g3/g35/aufg_g35.html" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">sos-mathe.ch — Lineare Ungleichungen (G35)</div><div class="lk-s">Ungleichungen und lineare Optimierung · mit PDF-Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/169291/aufgaben-zum-loesen-von-ungleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Lösen von Ungleichungen</div><div class="lk-s">Umformen und Lösungsmengen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/223589/aufgaben-zum-betrag-einer-zahl" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Betrag einer Zahl</div><div class="lk-s">Betrag und Abstand als Grundlage · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 2.2c Betrags- und Polynomgleichungen, Ungleichungen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s2-2c',
+  kapitelNr:'2.2c', kapitelTitel:'Betrags- und Polynomgleichungen, Ungleichungen',
+  prev:{nr:'2.2b',titel:'Exponential- und logarithmische Gleichungen',url:'s2-2b-exponential-logarithmische-gleichungen.html'},
+  next:{nr:'3.1',titel:'Grundlagen',url:'s3-1-grundlagen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+/* ══ EINSTIEG: Toleranzband ══ */
+function updateTO(){
+  const k = parseInt(document.getElementById('to-d').value);   // Abweichung in 1/100 mm
+  const d = 12 + k / 100;
+  const abw = Math.abs(k) / 100;
+  const ok = Math.abs(k) <= 5;
+  document.getElementById('to-dv').textContent = d.toFixed(2);
+  document.getElementById('to-eq').innerHTML =
+    `|${d.toFixed(2)} − 12| = ${abw.toFixed(2)} ${ok ? '≤ 0.05 ✓ brauchbar' : '&gt; 0.05 ✗ Ausschuss'}`;
+  // Achsen in Hundertstel-mm: x = Abweichung, y = |Abweichung|
+  const {ctx, W, H} = initCanvas('to-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -11, 11, -2, 11);
+  // Toleranzband (grün hinterlegt bis 5)
+  ctx.fillStyle = 'rgba(31,107,58,0.10)';
+  ctx.fillRect(cx(-5), 0, cx(5) - cx(-5), H);
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(-5), 0); ctx.lineTo(cx(-5), H); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(5), 0); ctx.lineTo(cx(5), H); ctx.stroke();
+  // Toleranzgrenze horizontal
+  ctx.strokeStyle = '#9b1c1c';
+  ctx.beginPath(); ctx.moveTo(0, cy(5)); ctx.lineTo(W, cy(5)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('0.05 mm', cx(-10.5), cy(5) - 6);
+  // Betragsfunktion (in Hundertstel)
+  plotFx(ctx, cx, cy, x => Math.abs(x), -11, 11, '#1a4f8a', 2.5, 30);
+  drawDot(ctx, cx, cy, k, Math.abs(k), ok ? '#1f6b3a' : '#9b1c1c', 7);
+  ctx.fillStyle = '#374151'; ctx.font = '12px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('Abweichung in 1/100 mm', cx(0), H - 6);
+}
+document.getElementById('to-d').addEventListener('input', updateTO);
+
+/* ══ VORZEICHENTABELLEN-LABOR ══ */
+function updateVZ(){
+  const a = parseInt(document.getElementById('vz-a').value);
+  const b = parseInt(document.getElementById('vz-b').value);
+  document.getElementById('vz-av').textContent = String(a).replace('-', '−');
+  document.getElementById('vz-bv').textContent = String(b).replace('-', '−');
+  const fT = v => v >= 0 ? `x − ${v}` : `x + ${-v}`;
+  const t1 = fT(a), t2 = fT(b);
+  const aD = String(a).replace('-', '−'), bD = String(b).replace('-', '−');
+  document.getElementById('vz-eq').innerHTML =
+    `(${t1})(${t2}) &gt; 0: L = {x | x &lt; ${aD} ∨ x &gt; ${bD}}`;
+  document.getElementById('vz-eq2').innerHTML =
+    `(${t1})(${t2}) &lt; 0: L = {x | ${aD} &lt; x &lt; ${bD}}`;
+  // Tabelle
+  document.getElementById('vz-kopf').innerHTML =
+    `<th></th><th>x &lt; ${aD}</th><th>${aD} &lt; x &lt; ${bD}</th><th>x &gt; ${bD}</th>`;
+  document.getElementById('vz-f1').innerHTML =
+    `<td>${t1}</td><td class="minus">−</td><td class="plus">+</td><td class="plus">+</td>`;
+  document.getElementById('vz-f2').innerHTML =
+    `<td>${t2}</td><td class="minus">−</td><td class="minus">−</td><td class="plus">+</td>`;
+  document.getElementById('vz-prod').innerHTML =
+    `<td><strong>Produkt</strong></td><td class="plus">+</td><td class="minus">−</td><td class="plus">+</td>`;
+  // Graph
+  const {ctx, W, H} = initCanvas('vz-canvas', 200, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -6, 6, -8, 10);
+  // Lösungsbereiche auf der Achse einfärben
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.moveTo(0, cy(0)); ctx.lineTo(cx(a), cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(b), cy(0)); ctx.lineTo(W, cy(0)); ctx.stroke();
+  ctx.strokeStyle = '#9b1c1c';
+  ctx.beginPath(); ctx.moveTo(cx(a), cy(0)); ctx.lineTo(cx(b), cy(0)); ctx.stroke();
+  plotFx(ctx, cx, cy, x => (x - a) * (x - b), -6, 6, '#5b2d8e', 2.5, 40);
+  drawDot(ctx, cx, cy, a, 0, '#374151', 5);
+  drawDot(ctx, cx, cy, b, 0, '#374151', 5);
+}
+['vz-a', 'vz-b'].forEach(id => document.getElementById(id).addEventListener('input', updateVZ));
+
+/* ══ A1: V-Kurven erkennen ══ */
+const a1G = [
+  {label:'Graph 1', f: x => Math.abs(x),          eq:'y = |x|'},
+  {label:'Graph 2', f: x => Math.abs(x - 2),      eq:'y = |x−2|'},
+  {label:'Graph 3', f: x => Math.abs(x) - 2,      eq:'y = |x|−2'},
+  {label:'Graph 4', f: x => -Math.abs(x) + 2,     eq:'y = −|x|+2'},
+];
+const a1Opts = ['y = |x|', 'y = |x−2|', 'y = |x|−2', 'y = −|x|+2'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 6);
+  plotFx(ctx, cx, cy, a1G[a1Act].f, -5, 5, '#1a4f8a', 2.5, 25);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Wo liegt die Spitze des V — und öffnet es nach oben oder unten?';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe die Fälle bzw. das Relationszeichen.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateTO();
+  updateVZ();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateTO(); updateVZ(); drawA1();
+});
+</script>
+</body>
+</html>

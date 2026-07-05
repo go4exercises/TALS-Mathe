@@ -2259,6 +2259,694 @@ G_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s2-2a  POTENZ-, WURZEL- UND RATIONALE GLEICHUNGEN
+# ═══════════════════════════════════════════════════════════════════
+
+H_HANDOUT = r'''
+  <h2>1. Potenzgleichungen \( x^n = c \)</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Exponent</th><th>\( c > 0 \)</th><th>\( c = 0 \)</th><th>\( c < 0 \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">\(n\) gerade</td><td>\( x = \pm\sqrt[n]{c} \) (zwei)</td><td>\( x = 0 \)</td><td class="li">keine Lösung</td></tr>
+      <tr><td class="li">\(n\) ungerade</td><td>\( x = \sqrt[n]{c} \) (eine)</td><td>\( x = 0 \)</td><td>\( x = -\sqrt[n]{|c|} \) (eine)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Wurzelgleichungen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Definition und Lösungsmethode</div>
+    <p>Die Lösungsvariable steht <strong>unter einer Wurzel</strong>. Verfahren:
+    (1) Wurzel <strong>separieren</strong> (bei mehreren Wurzeln: auf beide Seiten verteilen) ·
+    (2) <strong>quadrieren</strong> · (3) nötigenfalls wiederholen · (4) wurzelfreie Gleichung lösen ·
+    (5) <strong>Kontrolle</strong> in der Ausgangsgleichung.</p>
+  </div>
+  <p><strong>Quadrieren ist keine Äquivalenzumformung</strong> — es können Scheinlösungen entstehen:
+  \( \sqrt{x-3} = -2 \) hat keine Lösung (Wurzelwerte sind nie negativ), quadriert liefert sie aber
+  \( x = 7 \). Definitionsmenge: Radikand \( \geq 0 \).</p>
+
+  <h2>3. Substitution</h2>
+  <p>Tritt derselbe Wurzelterm mehrfach auf: \( u = \sqrt{T(x)} \) setzen, Gleichung in \(u\) lösen
+  (nur \( u \geq 0 \) brauchbar), dann <strong>Rücksubstitution</strong> \( T(x) = u^2 \).</p>
+
+  <h2>4. Rationale Gleichungen (Bruchgleichungen)</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Verfahren</div>
+    <p>Die Lösungsvariable steht <strong>im Nenner</strong>. (1) Definitionsmenge: Nenner-Nullstellen
+    ausschliessen · (2) mit dem <strong>Hauptnenner</strong> multiplizieren · (3) entstehende lineare
+    oder quadratische Gleichung lösen · (4) Lösungen gegen \(D\) prüfen.</p>
+  </div>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Die passende <strong>Umkehroperation</strong> löst den Gleichungstyp — aber Quadrieren und
+    Hauptnenner-Multiplikation können Scheinlösungen erzeugen: <strong>Definitionsmenge notieren,
+    am Schluss kontrollieren.</strong> Gerade Exponenten: an den \(\pm\)-Fall denken.</p>
+  </div>
+'''
+
+H_FORMELAUSZUG = r'''
+  <h2>1. Potenzgleichungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">\( x^n = c \), \(n\) ungerade</td><td>genau eine Lösung \( x = \sqrt[n]{c} \) (Vorzeichen bleibt)</td></tr>
+      <tr><td class="li">\( x^n = c \), \(n\) gerade, \( c > 0 \)</td><td>\( x = \pm\sqrt[n]{c} \)</td></tr>
+      <tr><td class="li">\( x^n = c \), \(n\) gerade, \( c < 0 \)</td><td class="li">keine Lösung</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Wurzelgleichungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Definitionsmenge</td><td>Radikand \( \geq 0 \)</td></tr>
+      <tr><td class="li">Verfahren</td><td class="li">separieren → quadrieren → (wiederholen) → lösen → Kontrolle</td></tr>
+      <tr><td class="li">Scheinlösung</td><td class="li">erfüllt die quadrierte, nicht aber die ursprüngliche Gleichung</td></tr>
+      <tr><td class="li">Substitution</td><td>\( u = \sqrt{T(x)} \) bei mehrfachem Wurzelterm; nur \( u \geq 0 \)</td></tr>
+      <tr><td class="li">unlösbar</td><td>\( \sqrt{T(x)} = c \) mit \( c < 0 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Rationale Gleichungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Definitionsmenge</td><td>Nenner \( \neq 0 \)</td></tr>
+      <tr><td class="li">Verfahren</td><td class="li">\(D\) → mit Hauptnenner multiplizieren → lösen → gegen \(D\) prüfen</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Anwendungsformeln (Beispiele)</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Sichtweite</td><td>\( s = 3.57\sqrt{h} \) [km; \(h\) in m]</td></tr>
+      <tr><td class="li">Fadenpendel</td><td>\( T = 2\pi\sqrt{l/g} \;\Rightarrow\; l = g\,(T/2\pi)^2 \)</td></tr>
+      <tr><td class="li">Freier Fall</td><td>\( t = \sqrt{2h/g} \;\Rightarrow\; h = g\,t^2/2 \)</td></tr>
+    </tbody>
+  </table>
+'''
+
+H_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Bei einer Wurzelgleichung steht die Lösungsvariable unter einer <span class="lueck"></span>.<br>
+      Quadrieren ist keine <span class="lueck"></span>umformung — es können<br>
+      <span class="lueck"></span> entstehen, darum ist die <span class="lueck"></span> Pflicht.
+    </div>''')
+    + aufg(2, 'Potenzgleichungen', 1, r'''    <p>Gib die Lösungsmenge an:</p>
+    <p>(a) \( x^3 = -27 \) &nbsp;&nbsp; (b) \( x^4 = 81 \) &nbsp;&nbsp; (c) \( x^2 = -9 \)</p>
+''' + LINS)
+    + aufg(3, 'Lösbar oder nicht?', 1, r'''    <p>Entscheide ohne grosse Rechnung, ob die Gleichung lösbar ist:</p>
+    <p>(a) \( \sqrt{x} = 11 \) &nbsp;&nbsp; (b) \( \sqrt{x} = -11 \) &nbsp;&nbsp;
+       (c) \( \sqrt{-x} = 11 \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Wurzelgleichungen</div>\n'
+    + aufg(4, 'Definitionsmenge', 2, r'''    <p>Bestimme die Definitionsmenge von \( \sqrt{5x+1} = 4 \) und von \( \sqrt{4-2x} = 7 \).</p>
+''' + LINS)
+    + aufg(5, 'Separieren und Quadrieren', 2, r'''    <p>Löse \( \sqrt{6x+7} - 5 = 0 \) inklusive Kontrolle.</p>
+''' + LINS)
+    + aufg(6, 'Scheinlösung entlarven', 2, r'''    <p>Löse \( \sqrt{6x+7} + 5 = 0 \). Was liefert das Quadrieren, und wie lautet die
+    Lösungsmenge wirklich?</p>
+''' + LINS)
+    + aufg(7, 'Wurzeln zusammenfassen', 2, r'''    <p>Löse \( 9\sqrt{5x+1} = 20 + 4\sqrt{5x+1} \).</p>
+''' + LINS)
+    + aufg(8, 'Zweimal quadrieren', 3, r'''    <p>Löse \( \sqrt{a-4} = 1 - \sqrt{a+3} \) inklusive Kontrolle.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Rationale Gleichungen</div>\n'
+    + aufg(9, 'Bruchgleichung', 2, r'''    <p>Löse \( \dfrac{6}{x-2} = x + 3 \). Notiere zuerst die Definitionsmenge.</p>
+''' + LINS)
+    + aufg(10, 'Bruchgleichung mit zwei Lösungen', 3, r'''    <p>Löse \( \dfrac{2}{x-1} + 1 = x \) (exakte Werte).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Vertiefung</div>\n'
+    + aufg(11, 'Substitution', 3, r'''    <p>Löse \( \sqrt{x^2+9} = 5 \). Welche Rolle spielt der \(\pm\)-Fall?</p>
+''' + LINS)
+    + aufg(12, 'Äquivalenz beurteilen', 3, r'''    <p>Die Gleichung \( (x+2)(x-2) = 0 \) wird durch \( (x+2) \) dividiert. Bestimme die
+    Lösungsmengen vor und nach der Umformung — was ist passiert?</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Wurzel</strong> · <strong>Äquivalenz</strong>umformung · <strong>Scheinlösungen</strong> ·
+    <strong>Kontrolle</strong> (Einsetzen in die Ausgangsgleichung).</p>''')
+    + loes(2, r'''    <p>(a) \( L = \{-3\} \) (ungerader Exponent) · (b) \( L = \{-3;\ 3\} \) ·
+    (c) \( L = \{\,\} \) (gerade Potenz nie negativ).</p>''')
+    + loes(3, r'''    <p>(a) lösbar: \( x = 121 \) · (b) unlösbar (Wurzelwert nie negativ) ·
+    (c) lösbar: \( -x = 121 \Rightarrow x = -121 \).</p>''')
+    + loes(4, r'''    <p>\( 5x+1 \geq 0 \Rightarrow D = \{x \mid x \geq -\tfrac{1}{5}\} \);
+    \( 4-2x \geq 0 \Rightarrow D = \{x \mid x \leq 2\} \).</p>''')
+    + loes(5, r'''    <p>\( \sqrt{6x+7} = 5 \Rightarrow 6x+7 = 25 \Rightarrow x = 3 \).
+    Kontrolle: \( \sqrt{25} - 5 = 0 \) ✓ — \( L = \{3\} \).</p>''')
+    + loes(6, r'''    <p>Quadrieren liefert ebenfalls \( x = 3 \) — aber die Kontrolle scheitert:
+    \( \sqrt{25} + 5 = 10 \neq 0 \). Die linke Seite ist stets \( \geq 5 \):
+    \( L = \{\,\} \).</p>''')
+    + loes(7, r'''    <p>\( 5\sqrt{5x+1} = 20 \Rightarrow \sqrt{5x+1} = 4 \Rightarrow 5x+1 = 16
+    \Rightarrow x = 3 \). Kontrolle: \( 36 = 36 \) ✓</p>''')
+    + loes(8, r'''    <p>Quadrieren: \( a-4 = 1 + a + 3 - 2\sqrt{a+3} \Rightarrow \sqrt{a+3} = 4
+    \Rightarrow a = 13 \). Kontrolle: \( 3 \neq 1 - 4 = -3 \) — Scheinlösung,
+    \( L = \{\,\} \).</p>''')
+    + loes(9, r'''    <p>\( D: x \neq 2 \). \( 6 = (x+3)(x-2) \Rightarrow x^2 + x - 12 = 0
+    \Rightarrow (x+4)(x-3) = 0 \Rightarrow L = \{-4;\ 3\} \) (beide in \(D\)).</p>''')
+    + loes(10, r'''    <p>\( D: x \neq 1 \). \( 2 + x - 1 = x^2 - x \Rightarrow x^2 - 2x - 1 = 0
+    \Rightarrow x = 1 \pm \sqrt{2} \) — beide in \(D\).</p>''')
+    + loes(11, r'''    <p>\( x^2 + 9 = 25 \Rightarrow x^2 = 16 \Rightarrow x = \pm 4 \) — die
+    Potenzgleichung im zweiten Schritt hat den \(\pm\)-Fall: \( L = \{-4;\ 4\} \).</p>''')
+    + loes(12, r'''    <p>Vorher \( L = \{-2;\ 2\} \), nachher \( x - 2 = 0 \Rightarrow L = \{2\} \) —
+    die Division durch \( (x+2) \) ist für \( x = -2 \) eine Division durch null und
+    <strong>vernichtet</strong> diese Lösung.</p>''')
+)
+
+H_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik und Naturwissenschaft, nach zunehmendem Schwierigkeitsgrad
+    geordnet. Die Musterlösungen folgen am Ende des Dokuments. Definitionsmenge und Kontrolle gehören
+    zu jeder Wurzel- und Bruchgleichung dazu!</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Navigation</td><td>Sichtweite zum Horizont</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Mechanik</td><td>Fadenpendel</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Physik</td><td>Freier Fall</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Konstruktion</td><td>Zylinder-Radius</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Fahrzeugtechnik</td><td>Kurvengeschwindigkeit</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Optik</td><td>Linsengleichung</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Sichtweite zum Horizont', 2, r'''    <p>Für die Sichtweite gilt \( s = 3.57\sqrt{h} \) (\(s\) in km, \(h\) in m).</p>
+    <p>(a) Wie weit sieht man von einem \(30\) m hohen Leuchtturm?</p>
+    <p>(b) Welche Höhe braucht es für \(50\) km Sichtweite?</p>
+    <p>(c) Warum verdoppelt die vierfache Höhe die Sichtweite nur?</p>
+''' + LINS4, tag='Navigation')
+    + aufg(2, 'Fadenpendel', 2, r'''    <p>Für ein Fadenpendel gilt \( T = 2\pi\sqrt{l/g} \) mit \( g = 9.81\ \text{m/s}^2 \).</p>
+    <p>(a) Löse die Formel nach \(l\) auf.</p>
+    <p>(b) Wie lang ist ein Sekundenpendel (\( T = 2 \) s)?</p>
+    <p>(c) Berechne die Schwingungsdauer eines \(4\) m langen Pendels.</p>
+''' + LINS4, tag='Mechanik')
+    + aufg(3, 'Freier Fall', 2, r'''    <p>Für die Fallzeit gilt \( t = \sqrt{2h/g} \).</p>
+    <p>(a) Wie lange fällt ein Stein von einer \(80\) m hohen Brücke?</p>
+    <p>(b) Aus welcher Höhe fällt ein Körper \(3\) Sekunden lang?</p>
+    <p>(c) Ein Echo-Test misst die doppelte Zeit. Ändert sich die Formel?</p>
+''' + LINS4, tag='Physik')
+    + aufg(4, 'Zylinder-Radius', 3, r'''    <p>Ein zylindrischer Tank soll \( V = 1000\ \text{cm}^3 \) fassen bei Höhe
+    \( h = 10 \) cm; es gilt \( V = \pi r^2 h \).</p>
+    <p>(a) Löse die Formel nach \(r\) auf.</p>
+    <p>(b) Berechne den nötigen Radius.</p>
+    <p>(c) Warum ist die negative Wurzel hier keine Lösung?</p>
+''' + LINS4, tag='Konstruktion')
+    + aufg(5, 'Kurvengeschwindigkeit', 3, r'''    <p>Die maximale Kurvengeschwindigkeit (trockene Strasse) beträgt näherungsweise
+    \( v = \sqrt{\mu \cdot g \cdot r} \) mit Haftreibungszahl \( \mu = 0.8 \),
+    \( g = 9.81\ \text{m/s}^2 \) und Kurvenradius \(r\).</p>
+    <p>(a) Berechne \(v\) für \( r = 50 \) m (in m/s und km/h).</p>
+    <p>(b) Welcher Radius erlaubt \(30\) m/s? (Nach \(r\) auflösen.)</p>
+    <p>(c) Der Radius wird vervierfacht. Um welchen Faktor steigt \(v\)?</p>
+''' + LINS4, tag='Fahrzeugtechnik')
+    + aufg(6, 'Linsengleichung', 3, r'''    <p>Für dünne Linsen gilt \( \dfrac{1}{f} = \dfrac{1}{g} + \dfrac{1}{b} \)
+    (Brennweite \(f\), Gegenstandsweite \(g\), Bildweite \(b\)).</p>
+    <p>(a) Eine Linse hat \( f = 5 \) cm; der Gegenstand steht bei \( g = 8 \) cm.
+    Berechne die Bildweite \(b\) (rationale Gleichung!).</p>
+    <p>(b) Für welche Gegenstandsweite wäre die Gleichung unlösbar? Deute das optisch.</p>
+''' + LINS4, tag='Optik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( s = 3.57\sqrt{30} \approx 19.6 \) km.</p>
+    <p>(b) \( \sqrt{h} = \tfrac{50}{3.57} \Rightarrow h \approx 196 \) m.</p>
+    <p>(c) \( \sqrt{4h} = 2\sqrt{h} \) — die Wurzel halbiert den Faktor im Exponentensinn.</p>''')
+    + loes(2, r'''    <p>(a) \( l = g \cdot (T/2\pi)^2 \).</p>
+    <p>(b) \( l = 9.81 \cdot (2/2\pi)^2 \approx 0.99 \) m.</p>
+    <p>(c) \( T = 2\pi\sqrt{4/9.81} \approx 4.01 \) s.</p>''')
+    + loes(3, r'''    <p>(a) \( t = \sqrt{160/9.81} \approx 4.04 \) s.</p>
+    <p>(b) Quadrieren: \( h = g t^2/2 = 9.81 \cdot 9/2 \approx 44.1 \) m.</p>
+    <p>(c) Nein — nur die gemessene Zeit muss vorher halbiert werden (Hin- und Rückweg des Schalls).</p>''')
+    + loes(4, r'''    <p>(a) \( r^2 = \dfrac{V}{\pi h} \Rightarrow r = \sqrt{\dfrac{V}{\pi h}} \).</p>
+    <p>(b) \( r = \sqrt{1000/(10\pi)} \approx 5.64 \) cm.</p>
+    <p>(c) Ein Radius ist eine Länge — nur die positive Lösung der Potenzgleichung ist
+    physikalisch sinnvoll.</p>''')
+    + loes(5, r'''    <p>(a) \( v = \sqrt{0.8 \cdot 9.81 \cdot 50} \approx 19.8\ \text{m/s} \approx 71\ \text{km/h} \).</p>
+    <p>(b) Quadrieren: \( r = \dfrac{v^2}{\mu g} = \dfrac{900}{0.8 \cdot 9.81} \approx 115 \) m.</p>
+    <p>(c) Faktor \( \sqrt{4} = 2 \).</p>''')
+    + loes(6, r'''    <p>(a) \( \tfrac{1}{b} = \tfrac{1}{5} - \tfrac{1}{8} = \tfrac{3}{40} \Rightarrow
+    b = \tfrac{40}{3} \approx 13.3 \) cm.</p>
+    <p>(b) Für \( g = f = 5 \) cm: \( \tfrac{1}{b} = 0 \) hat keine Lösung — der Gegenstand
+    steht im Brennpunkt, es entsteht kein reelles Bild (Strahlen parallel).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s2-2b  EXPONENTIAL- UND LOGARITHMISCHE GLEICHUNGEN
+# ═══════════════════════════════════════════════════════════════════
+
+I_HANDOUT = r'''
+  <h2>1. Exponentialgleichungen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Definition und Verfahren</div>
+    <p>Die Lösungsvariable steht <strong>im Exponenten</strong>. Werkzeuge:
+    (1) gleiche Basis → <strong>Exponentenvergleich</strong> \( a^m = a^n \Rightarrow m = n \) ·
+    (2) sonst <strong>logarithmieren</strong>: \( \log_a u^x = x \log_a u \) holt die Variable herunter ·
+    (3) Summen gleicher Basen erst <strong>ausklammern</strong> ·
+    (4) \( a^{2x} \) und \( a^x \) gemischt: <strong>Substitution</strong> \( u = a^x \).</p>
+  </div>
+  <p><strong>Nie logarithmieren, wenn eine Summe dasteht:</strong> \( \log_a(u^x + v) \) lässt sich
+  nicht zerlegen. Und \( a^x = c \) mit \( c \leq 0 \) ist unlösbar (\( a^x > 0 \)).</p>
+
+  <h2>2. Logarithmische Gleichungen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Definition und Verfahren</div>
+    <p>Die Lösungsvariable steht <strong>im Argument von Logarithmen</strong>. Verfahren:
+    (1) <strong>Definitionsmenge</strong>: alle Argumente positiv ·
+    (2) mit den Logarithmengesetzen zu je einem Term <strong>zusammenfassen</strong> ·
+    (3) <strong>entlogarithmieren</strong> (potenzieren mit der Basis) ·
+    (4) lösen und <strong>kontrollieren</strong> — Scheinlösungen möglich.</p>
+  </div>
+  <p>Vorsicht in beide Richtungen: Entlogarithmieren kann Scheinlösungen erzeugen; die Umformung
+  \( \lg x^2 = 2\lg x \) (statt \( 2\lg|x| \)) kann Lösungen <strong>verlieren</strong>.</p>
+
+  <h2>3. Typische Anwendungen</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Prozess</th><th>Modell</th><th>«Wann?»-Gleichung</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Zinseszins</td><td>\( K_0 \cdot q^n \)</td><td>\( q^n = c \Rightarrow n = \ln c / \ln q \)</td></tr>
+      <tr><td class="li">Verdopplung alle \(T\)</td><td>\( N_0 \cdot 2^{t/T} \)</td><td>\( 2^{t/T} = c \Rightarrow t = T \log_2 c \)</td></tr>
+      <tr><td class="li">Zerfall um \(p\,\%\)</td><td>\( W_0 \cdot (1 - \tfrac{p}{100})^n \)</td><td class="li">logarithmieren</td></tr>
+    </tbody>
+  </table>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Variable im Exponenten → <strong>logarithmieren</strong> (nach Basen-Check und Ausklammern);
+    Variable im Logarithmus → <strong>entlogarithmieren</strong> (nach \(D\)-Check und Zusammenfassen).
+    Beide Wege verlangen die <strong>Kontrolle</strong> — und die Substitution \( u = a^x \) macht aus
+    gemischten Termen eine quadratische Gleichung.</p>
+  </div>
+'''
+
+I_FORMELAUSZUG = r'''
+  <h2>1. Exponentialgleichungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Exponentenvergleich</td><td>\( a^m = a^n \Rightarrow m = n \)</td></tr>
+      <tr><td class="li">Logarithmieren</td><td>\( a^x = c \Rightarrow x = \dfrac{\ln c}{\ln a} = \log_a c \) (für \( c > 0 \))</td></tr>
+      <tr><td class="li">Summe gleicher Basen</td><td>\( a^{x+1} + a^x = a^x (a + 1) \) — erst ausklammern</td></tr>
+      <tr><td class="li">Substitution</td><td>\( a^{2x} = (a^x)^2 \Rightarrow u = a^x \), nur \( u > 0 \) brauchbar</td></tr>
+      <tr><td class="li">unlösbar</td><td>\( a^x = c \) mit \( c \leq 0 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Logarithmische Gleichungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Definitionsmenge</td><td class="li">alle Logarithmus-Argumente positiv</td></tr>
+      <tr><td class="li">Entlogarithmieren</td><td>\( \log_a T(x) = c \Rightarrow T(x) = a^c \)</td></tr>
+      <tr><td class="li">Zusammenfassen</td><td>\( \log u + \log v = \log(uv), \quad \log u - \log v = \log\tfrac{u}{v} \)</td></tr>
+      <tr><td class="li">Betrags-Falle</td><td>\( \lg x^2 = 2\lg|x| \) — sonst geht eine Lösung verloren</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Wachstums- und Zerfallsgleichungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Verdopplungszeit</td><td>\( q^n = 2 \Rightarrow n = \dfrac{\ln 2}{\ln q} \)</td></tr>
+      <tr><td class="li">Halbwertszeit-Modell</td><td>\( N(t) = N_0 \cdot 0.5^{\,t/T} \Rightarrow t = T \cdot \dfrac{\ln(N/N_0)}{\ln 0.5} \)</td></tr>
+      <tr><td class="li">Zielwert erreichen</td><td>\( N_0 \cdot q^t = Z \Rightarrow t = \dfrac{\ln(Z/N_0)}{\ln q} \)</td></tr>
+    </tbody>
+  </table>
+'''
+
+I_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Steht die Variable im Exponenten, hilft das <span class="lueck"></span>;<br>
+      steht sie im Logarithmus, das <span class="lueck"></span>.<br>
+      Bei Summen zuerst <span class="lueck"></span>; bei \( a^{2x} \) und \( a^x \)
+      die <span class="lueck"></span> \( u = a^x \).
+    </div>''')
+    + aufg(2, 'Exponentenvergleich', 1, r'''    <p>Löse durch Exponentenvergleich:</p>
+    <p>(a) \( 2^x = 16 \) &nbsp;&nbsp; (b) \( 3^x = \tfrac{1}{27} \) &nbsp;&nbsp;
+       (c) \( 10^x = 0.0001 \)</p>
+''' + LINS)
+    + aufg(3, 'Lösbar oder nicht?', 1, r'''    <p>Wie viele Lösungen haben die Gleichungen?</p>
+    <p>(a) \( 5^x = 30 \) &nbsp;&nbsp; (b) \( 5^x = -30 \) &nbsp;&nbsp; (c) \( 5^x = 0 \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Exponentialgleichungen</div>\n'
+    + aufg(4, 'Logarithmieren', 2, r'''    <p>Löse \( 3^x = 8 \) und \( 4^{y-5} = 100 \) (zwei Dezimalen).</p>
+''' + LINS)
+    + aufg(5, 'Ausklammern', 2, r'''    <p>Löse \( 3^{x+1} + 3^x = 20 \).</p>
+''' + LINS)
+    + aufg(6, 'Substitution', 3, r'''    <p>Löse \( 4^x - 7 \cdot 2^x = 8 \).</p>
+''' + LINS)
+    + aufg(7, 'Substitution mit zwei Lösungen', 3, r'''    <p>Löse \( 3^{2x} + 9 = 10 \cdot 3^x \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Logarithmische Gleichungen</div>\n'
+    + aufg(8, 'Entlogarithmieren', 1, r'''    <p>Bestimme \(x\): (a) \( \lg x = 4 \) &nbsp;&nbsp; (b) \( \ln x = -1 \) &nbsp;&nbsp;
+    (c) \( \lg(x+3) = 2 \)</p>
+''' + LINS)
+    + aufg(9, 'Zusammenfassen', 2, r'''    <p>Löse \( \ln z + \ln 2 = 3 \).</p>
+''' + LINS)
+    + aufg(10, 'Mit Scheinlösung', 3, r'''    <p>Löse \( \log_2 u + \log_2(u-2) = 3 \) inklusive Definitionsmenge und Kontrolle.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Vertiefung</div>\n'
+    + aufg(11, 'Scheinlösung bei lg', 3, r'''    <p>Löse \( \lg(x-3) = 1 - \lg x \). Warum ist einer der Kandidaten keine Lösung?</p>
+''' + LINS)
+    + aufg(12, 'Verlorene Lösung', 3, r'''    <p>Löse \( 3\lg x^2 + 7 = 13 \). Warum liefert der Weg über \( 6\lg x = 6 \) nur die
+    halbe Lösungsmenge?</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Logarithmieren</strong> · <strong>Entlogarithmieren</strong> ·
+    <strong>ausklammern</strong> · <strong>Substitution</strong>.</p>''')
+    + loes(2, r'''    <p>(a) \( x = 4 \) · (b) \( 3^x = 3^{-3} \Rightarrow x = -3 \) ·
+    (c) \( x = -4 \).</p>''')
+    + loes(3, r'''    <p>(a) genau eine (\( x = \log_5 30 \)) · (b) keine · (c) keine —
+    \( 5^x > 0 \) für alle \(x\).</p>''')
+    + loes(4, r'''    <p>\( x = \tfrac{\ln 8}{\ln 3} \approx 1.89 \);
+    \( (y-5)\ln 4 = \ln 100 \Rightarrow y = 5 + \tfrac{\ln 100}{\ln 4} \approx 8.32 \).</p>''')
+    + loes(5, r'''    <p>\( 3^x (3+1) = 20 \Rightarrow 3^x = 5 \Rightarrow x = \log_3 5 \approx 1.46 \).</p>''')
+    + loes(6, r'''    <p>\( u = 2^x \): \( u^2 - 7u - 8 = 0 \Rightarrow u = 8 \) (\( u = -1 \) entfällt)
+    \( \Rightarrow x = 3 \).</p>''')
+    + loes(7, r'''    <p>\( u = 3^x \): \( u^2 - 10u + 9 = 0 \Rightarrow u = 1, 9 \Rightarrow
+    L = \{0;\ 2\} \).</p>''')
+    + loes(8, r'''    <p>(a) \( x = 10^4 \) · (b) \( x = e^{-1} \approx 0.37 \) ·
+    (c) \( x = 100 - 3 = 97 \).</p>''')
+    + loes(9, r'''    <p>\( \ln 2z = 3 \Rightarrow 2z = e^3 \Rightarrow z = \tfrac{e^3}{2} \approx 10.04 \).</p>''')
+    + loes(10, r'''    <p>\( D: u > 2 \). \( u(u-2) = 8 \Rightarrow (u-4)(u+2) = 0 \) —
+    \( u = -2 \notin D \) (Scheinlösung), \( u = 4 \): Kontrolle \( 2 + 1 = 3 \) ✓.
+    \( L = \{4\} \).</p>''')
+    + loes(11, r'''    <p>\( D: x > 3 \). \( x(x-3) = 10 \Rightarrow (x-5)(x+2) = 0 \). \( x = -2 \)
+    verletzt \(D\) (\( \lg(-2) \) existiert nicht) — Scheinlösung. \( L = \{5\} \).</p>''')
+    + loes(12, r'''    <p>\( \lg x^2 = 2 \Rightarrow x^2 = 100 \Rightarrow L = \{-10;\ 10\} \).
+    Der Weg \( 6\lg x = 6 \) setzt stillschweigend \( x > 0 \) voraus (korrekt wäre
+    \( 2\lg|x| \)) und verliert \( x = -10 \).</p>''')
+)
+
+I_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik und Naturwissenschaft, nach zunehmendem Schwierigkeitsgrad
+    geordnet. Die Musterlösungen folgen am Ende des Dokuments. Exakt lösen (Logarithmus), dann runden.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Finanzmathematik</td><td>Zinseszins</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Biologie</td><td>Algen im See</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Wirtschaft</td><td>Wertverlust eines Autos</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Physik</td><td>Radioaktiver Zerfall</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Meteorologie</td><td>Barometrische Höhenformel</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Alltag / Physik</td><td>Kaffee-Abkühlung</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Zinseszins', 2, r'''    <p>Ein Kapital von \( 22\,000 \) CHF wird zu \(4.5\) % angelegt: \( K(n) = 22\,000 \cdot 1.045^n \).</p>
+    <p>(a) Auf welchen Betrag wächst es in \(6\) Jahren?</p>
+    <p>(b) Nach wie vielen Jahren erreicht es \( 30\,000 \) CHF?</p>
+    <p>(c) Nach wie vielen Jahren hat es sich verdoppelt?</p>
+''' + LINS4, tag='Finanzmathematik')
+    + aufg(2, 'Algen im See', 2, r'''    <p>Ein See ist zu \(2.5\) % mit Algen bedeckt; die Fläche verdoppelt sich alle \(4\) Tage:
+    \( A(t) = 2.5 \cdot 2^{t/4} \) (in %).</p>
+    <p>(a) Welcher Anteil ist nach \(20\) Tagen bedeckt?</p>
+    <p>(b) Wann ist der See zur Hälfte bedeckt?</p>
+    <p>(c) Wann vollständig?</p>
+''' + LINS4, tag='Biologie')
+    + aufg(3, 'Wertverlust eines Autos', 2, r'''    <p>Neupreis \( 32\,000 \) CHF, Wertverlust \(22\) % pro Jahr: \( W(n) = 32\,000 \cdot 0.78^n \).</p>
+    <p>(a) Wie viel ist das Auto nach \(6\) Jahren wert?</p>
+    <p>(b) Nach wie vielen Jahren ist es noch die Hälfte wert?</p>
+    <p>(c) Skizziere den Verlauf über \(10\) Jahre.</p>
+''' + LINS4, tag='Wirtschaft')
+    + aufg(4, 'Radioaktiver Zerfall', 3, r'''    <p>Ein radioaktiver Stoff hat die Halbwertszeit \(5\) Tage: \( N(t) = N_0 \cdot 0.5^{t/5} \).</p>
+    <p>(a) Welcher Anteil ist nach \(10\) Tagen noch vorhanden?</p>
+    <p>(b) Nach wie vielen Tagen ist noch ein Zehntel vorhanden?</p>
+    <p>(c) Warum genügt «zweimal die Halbwertszeit» nicht für ein Viertel → ein Zehntel?</p>
+''' + LINS4, tag='Physik')
+    + aufg(5, 'Barometrische Höhenformel', 3, r'''    <p>Näherungsweise gilt \( p(h) = 1013 \cdot 0.5^{\,h/5500} \) (Druck in hPa, Höhe in m).</p>
+    <p>(a) Berechne den Luftdruck in Bern (\(542\) m) und auf dem Jungfraujoch (\(3471\) m).</p>
+    <p>(b) In welcher Höhe beträgt der Druck noch \(500\) hPa? (Logarithmieren!)</p>
+''' + LINS4, tag='Meteorologie')
+    + aufg(6, 'Kaffee-Abkühlung', 3, r'''    <p>Ein Kaffee kühlt gegen die Raumtemperatur ab: \( T(t) = 20 + 70 \cdot 0.9^t \)
+    (\(T\) in °C, \(t\) in min).</p>
+    <p>(a) Wie heiss ist der Kaffee zu Beginn und nach \(5\) Minuten?</p>
+    <p>(b) Wann erreicht er trinkbare \(40\) °C? (Erst \(0.9^t\) isolieren!)</p>
+    <p>(c) Warum darf man hier nicht sofort logarithmieren?</p>
+''' + LINS4, tag='Alltag / Physik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( 22\,000 \cdot 1.045^6 \approx 28\,650 \) CHF.</p>
+    <p>(b) \( 1.045^n = \tfrac{30}{22} \Rightarrow n = \tfrac{\ln(30/22)}{\ln 1.045} \approx 7.0 \) Jahre.</p>
+    <p>(c) \( n = \tfrac{\ln 2}{\ln 1.045} \approx 15.7 \) Jahre.</p>''')
+    + loes(2, r'''    <p>(a) \( 2.5 \cdot 2^5 = 80 \) %.</p>
+    <p>(b) \( 2^{t/4} = 20 \Rightarrow t = 4\log_2 20 \approx 17.3 \) Tage.</p>
+    <p>(c) \( 2^{t/4} = 40 \Rightarrow t = 4\log_2 40 \approx 21.3 \) Tage.</p>''')
+    + loes(3, r'''    <p>(a) \( 32\,000 \cdot 0.78^6 \approx 7206 \) CHF.</p>
+    <p>(b) \( 0.78^n = 0.5 \Rightarrow n = \tfrac{\ln 0.5}{\ln 0.78} \approx 2.8 \) Jahre.</p>
+    <p>(c) Fallende Exponentialkurve mit Asymptote \( W = 0 \).</p>''')
+    + loes(4, r'''    <p>(a) \( 0.5^2 = 0.25 \) — ein Viertel.</p>
+    <p>(b) \( 0.5^{t/5} = 0.1 \Rightarrow t = 5 \cdot \tfrac{\ln 0.1}{\ln 0.5} \approx 16.6 \) Tage.</p>
+    <p>(c) Zwei Halbwertszeiten geben den Faktor \( \tfrac{1}{4} \), nicht \( \tfrac{1}{10} \) —
+    exponentieller Zerfall rechnet multiplikativ.</p>''')
+    + loes(5, r'''    <p>(a) Bern: \( 1013 \cdot 0.5^{542/5500} \approx 946 \) hPa; Jungfraujoch:
+    \( \approx 654 \) hPa.</p>
+    <p>(b) \( 0.5^{h/5500} = \tfrac{500}{1013} \Rightarrow h = 5500 \cdot
+    \tfrac{\ln(500/1013)}{\ln 0.5} \approx 5600 \) m.</p>''')
+    + loes(6, r'''    <p>(a) \( T(0) = 90 \) °C; \( T(5) = 20 + 70 \cdot 0.9^5 \approx 61.3 \) °C.</p>
+    <p>(b) \( 70 \cdot 0.9^t = 20 \Rightarrow 0.9^t = \tfrac{2}{7} \Rightarrow
+    t = \tfrac{\ln(2/7)}{\ln 0.9} \approx 11.9 \) min.</p>
+    <p>(c) Links steht die Summe \( 20 + 70 \cdot 0.9^t \) — Logarithmieren einer Summe
+    ist nicht zerlegbar. Erst die Potenz isolieren.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s2-2c  BETRAGS- UND POLYNOMGLEICHUNGEN, UNGLEICHUNGEN
+# ═══════════════════════════════════════════════════════════════════
+
+J_HANDOUT = r'''
+  <h2>1. Betrag und Betragsgleichungen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Betrag</div>
+    <p>\( |x| = x \) für \( x \geq 0 \), \( |x| = -x \) für \( x < 0 \) — geometrisch der
+    <strong>Abstand</strong> zum Nullpunkt; \( |x - m| \) ist der Abstand zu \(m\).</p>
+  </div>
+  <table class="ftb-tabelle">
+    <thead><tr><th>\( |T(x)| = c \)</th><th>Vorgehen</th></tr></thead>
+    <tbody>
+      <tr><td>\( c > 0 \)</td><td class="li">zwei Fälle: \( T(x) = c \) oder \( T(x) = -c \)</td></tr>
+      <tr><td>\( c = 0 \)</td><td>\( T(x) = 0 \)</td></tr>
+      <tr><td>\( c < 0 \)</td><td class="li">keine Lösung (Beträge nie negativ)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Polynomgleichungen in Produktform</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Satz vom Nullprodukt</div>
+    <p>\( A \cdot B = 0 \Leftrightarrow A = 0 \vee B = 0 \) — jeden Faktor einzeln null setzen.
+    Gemeinsame Faktoren zuerst <strong>ausklammern</strong> (\( x^3 = 9x \Rightarrow x(x-3)(x+3) = 0 \));
+    <strong>nie durch \(x\) dividieren</strong> — das vernichtet die Lösung \( x = 0 \).</p>
+  </div>
+
+  <h2>3. Ungleichungen</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Umformung</th><th>Relationszeichen</th></tr></thead>
+    <tbody>
+      <tr><td class="li">addieren / subtrahieren</td><td class="li">bleibt</td></tr>
+      <tr><td class="li">mal / durch positive Zahl</td><td class="li">bleibt</td></tr>
+      <tr><td class="li">mal / durch <strong>negative</strong> Zahl</td><td class="li"><strong>dreht</strong> (\(<\) wird \(>\))</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Vorzeichentabelle</strong> für Produkte: Nullstellen aller Faktoren zerlegen die
+  Zahlengerade in Abschnitte; je Abschnitt das Vorzeichen jedes Faktors notieren, Produktvorzeichen
+  ablesen. Randpunkte gehören nur bei \( \geq/\leq \) zur Lösungsmenge. Alternative: grafisch
+  (Kurve oberhalb/unterhalb).</p>
+
+  <h2>4. Betragsungleichungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">\( |x - m| \leq r \)</td><td>Intervall \( [m-r;\ m+r] \) — «Toleranzband» um \(m\)</td></tr>
+      <tr><td class="li">\( |x - m| > r \)</td><td>\( x < m-r \ \vee\ x > m+r \) — Aussenbereiche</td></tr>
+    </tbody>
+  </table>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Betrag = Abstand: Gleichungen brauchen <strong>zwei Fälle</strong>, Ungleichungen liefern
+    <strong>Intervalle</strong>. Produkte gleich null löst der <strong>Satz vom Nullprodukt</strong>,
+    Produkte grösser/kleiner null die <strong>Vorzeichentabelle</strong>. Und beim Multiplizieren mit
+    Negativem: Relationszeichen <strong>drehen</strong>.</p>
+  </div>
+'''
+
+J_FORMELAUSZUG = r'''
+  <h2>1. Betrag</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Definition</td><td>\( |x| = \begin{cases} x & x \geq 0 \\ -x & x < 0 \end{cases} \)</td></tr>
+      <tr><td class="li">geometrisch</td><td class="li">Abstand zum Nullpunkt; \( |x-m| \): Abstand zu \(m\)</td></tr>
+      <tr><td class="li">\( |T(x)| = c > 0 \)</td><td>\( T(x) = c \ \vee\ T(x) = -c \)</td></tr>
+      <tr><td class="li">\( |T(x)| = c < 0 \)</td><td>\( L = \{\,\} \)</td></tr>
+      <tr><td class="li">\( |A| = |B| \)</td><td>\( A = B \ \vee\ A = -B \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Betragsungleichungen (\( r > 0 \))</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">\( |x-m| \leq r \)</td><td>\( [m-r;\ m+r] \)</td></tr>
+      <tr><td class="li">\( |x-m| < r \)</td><td>\( ]m-r;\ m+r[ \)</td></tr>
+      <tr><td class="li">\( |x-m| > r \)</td><td>\( x < m-r \ \vee\ x > m+r \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Nullprodukt</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Satz</td><td>\( A \cdot B = 0 \Leftrightarrow A = 0 \ \vee\ B = 0 \)</td></tr>
+      <tr><td class="li">Vorbereitung</td><td class="li">alles auf eine Seite, gemeinsame Faktoren ausklammern</td></tr>
+      <tr><td class="li">Verboten</td><td class="li">Division durch \(x\) (vernichtet \( x = 0 \))</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Ungleichungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Zeichen dreht bei</td><td class="li">Multiplikation/Division mit negativer Zahl</td></tr>
+      <tr><td class="li">Vorzeichentabelle</td><td class="li">Nullstellen → Abschnitte → Faktor-Vorzeichen → Produkt</td></tr>
+      <tr><td class="li">Randpunkte</td><td class="li">nur bei \( \geq \) / \( \leq \) in der Lösungsmenge</td></tr>
+      <tr><td class="li">Kontrolle</td><td class="li">ein Testwert pro Abschnitt</td></tr>
+    </tbody>
+  </table>
+'''
+
+J_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Der Betrag \( |x - m| \) misst den <span class="lueck"></span> von \(x\) zu \(m\).<br>
+      Ein Produkt ist null, wenn mindestens ein <span class="lueck"></span> null ist.<br>
+      Multiplizieren mit einer negativen Zahl <span class="lueck"></span> das Relationszeichen.
+    </div>''')
+    + aufg(2, 'Beträge berechnen', 1, r'''    <p>Berechne: (a) \( |{-7}| \) &nbsp;&nbsp; (b) \( |4 - 9| \) &nbsp;&nbsp;
+    (c) \( |3 - \pi| \)</p>
+''' + LINS)
+    + aufg(3, 'Lösbar oder nicht?', 1, r'''    <p>Wie viele Lösungen haben die Gleichungen?</p>
+    <p>(a) \( |x| = 6 \) &nbsp;&nbsp; (b) \( |x| = 0 \) &nbsp;&nbsp; (c) \( |x| = -6 \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Betragsgleichungen</div>\n'
+    + aufg(4, 'Zwei Fälle', 2, r'''    <p>Löse \( |x - 3| = 5 \) und deute die Lösungen als Abstände.</p>
+''' + LINS)
+    + aufg(5, 'Linearer Term im Betrag', 2, r'''    <p>Löse \( |2x + 1| = 7 \).</p>
+''' + LINS)
+    + aufg(6, 'Betragsungleichung', 2, r'''    <p>Löse \( |x - 2| \leq 3 \) und gib die Lösungsmenge als Intervall an.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Polynomgleichungen</div>\n'
+    + aufg(7, 'Nullprodukt ablesen', 1, r'''    <p>Löse \( (x+1)(x-2)(x-5) = 0 \).</p>
+''' + LINS)
+    + aufg(8, 'Erst ausklammern', 2, r'''    <p>Löse \( x^3 = 9x \). Warum darf nicht durch \(x\) dividiert werden?</p>
+''' + LINS)
+    + aufg(9, 'Quadratischer Faktor', 2, r'''    <p>Löse \( (x-4)(x^2+1) = 0 \). Wie viele reelle Lösungen gibt es?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Ungleichungen</div>\n'
+    + aufg(10, 'Zeichen drehen', 2, r'''    <p>Löse \( 5 - 2x < 11 \) und prüfe mit einem Testwert.</p>
+''' + LINS)
+    + aufg(11, 'Vorzeichentabelle', 3, r'''    <p>Löse \( (x-1)(x+3) < 0 \) mit der Vorzeichentabelle.</p>
+''' + LINS)
+    + aufg(12, 'Drei Faktoren', 3, r'''    <p>Löse \( (x+2)(x-1)(x-4) > 0 \).</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Abstand</strong> · <strong>Faktor</strong> · <strong>dreht</strong>.</p>''')
+    + loes(2, r'''    <p>(a) \(7\) · (b) \( |-5| = 5 \) · (c) \( \pi > 3 \), also \( \pi - 3 \approx 0.14 \).</p>''')
+    + loes(3, r'''    <p>(a) zwei (\( \pm 6 \)) · (b) eine (\( x = 0 \)) · (c) keine.</p>''')
+    + loes(4, r'''    <p>\( x - 3 = \pm 5 \Rightarrow L = \{-2;\ 8\} \) — die beiden Zahlen mit Abstand \(5\)
+    von der \(3\).</p>''')
+    + loes(5, r'''    <p>\( 2x+1 = 7 \Rightarrow x = 3 \); \( 2x+1 = -7 \Rightarrow x = -4 \):
+    \( L = \{-4;\ 3\} \).</p>''')
+    + loes(6, r'''    <p>Abstand von \(2\) höchstens \(3\): \( L = [-1;\ 5] \).</p>''')
+    + loes(7, r'''    <p>\( L = \{-1;\ 2;\ 5\} \).</p>''')
+    + loes(8, r'''    <p>\( x(x-3)(x+3) = 0 \Rightarrow L = \{-3;\ 0;\ 3\} \). Division durch \(x\) ist für
+    \( x = 0 \) verboten und würde genau diese Lösung vernichten.</p>''')
+    + loes(9, r'''    <p>Nur \( x = 4 \) — der Faktor \( x^2 + 1 \geq 1 \) wird nie null: eine reelle Lösung.</p>''')
+    + loes(10, r'''    <p>\( -2x < 6 \Rightarrow x > -3 \) (Zeichen gedreht). Testwert \( x = 0 \):
+    \( 5 < 11 \) ✓</p>''')
+    + loes(11, r'''    <p>Nullstellen \( -3, 1 \); dazwischen ist genau ein Faktor negativ → Produkt negativ:
+    \( L = \{x \mid -3 < x < 1\} \).</p>''')
+    + loes(12, r'''    <p>Nullstellen \( -2, 1, 4 \); Tabelle gibt \(+\) in \( ]-2;\,1[ \) und \( ]4;\,\infty[ \):
+    \( L = \{x \mid -2 < x < 1 \ \vee\ x > 4\} \).</p>''')
+)
+
+J_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik und Wirtschaft, nach zunehmendem Schwierigkeitsgrad
+    geordnet. Die Musterlösungen folgen am Ende des Dokuments. Lösungsmengen als Intervalle angeben.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Fertigung</td><td>Toleranzprüfung</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Elektrotechnik</td><td>Widerstands-Toleranz</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Medizin</td><td>Fieber-Grenzen</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Betriebswirtschaft</td><td>Gewinnzone</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Wirtschaft</td><td>Break-even als Ungleichung</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Verkehr</td><td>Bremsweg-Limite</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Toleranzprüfung', 2, r'''    <p>Eine Welle hat das Sollmass \(25\) mm mit Toleranz \( \pm 0.02 \) mm:
+    brauchbar, wenn \( |d - 25| \leq 0.02 \).</p>
+    <p>(a) Gib das Toleranzband als Intervall an.</p>
+    <p>(b) Beurteile drei Werkstücke: \( 25.01 \), \( 24.97 \) und \( 25.02 \) mm.</p>
+''' + LINS4, tag='Fertigung')
+    + aufg(2, 'Widerstands-Toleranz', 2, r'''    <p>Ein Widerstand hat den Nennwert \( 470\ \Omega \) mit \(5\) % Toleranz.</p>
+    <p>(a) Schreibe den zulässigen Bereich als Betragsungleichung.</p>
+    <p>(b) Gib das Intervall an.</p>
+    <p>(c) Ist ein gemessener Wert von \( 495\ \Omega \) innerhalb der Toleranz?</p>
+''' + LINS4, tag='Elektrotechnik')
+    + aufg(3, 'Fieber-Grenzen', 2, r'''    <p>Als auffällig gilt eine Körpertemperatur, die um mehr als \(1.2\) °C von \(36.8\) °C
+    abweicht: \( |T - 36.8| > 1.2 \).</p>
+    <p>(a) Gib die auffälligen Temperaturbereiche an.</p>
+    <p>(b) Formuliere den unauffälligen Bereich als Intervall.</p>
+''' + LINS4, tag='Medizin')
+    + aufg(4, 'Gewinnzone', 3, r'''    <p>Der Tagesgewinn beträgt \( G(x) = -(x-30)^2 + 400 \) (CHF, Stückzahl \(x\)).</p>
+    <p>(a) Forme \( G(x) > 0 \) in eine Betragsungleichung um.</p>
+    <p>(b) Bestimme die Gewinnzone.</p>
+    <p>(c) Bei welcher Stückzahl ist der Gewinn maximal?</p>
+''' + LINS4, tag='Betriebswirtschaft')
+    + aufg(5, 'Break-even als Ungleichung', 3, r'''    <p>Kosten \( K(x) = 2000 + 15x \), Erlös \( E(x) = 40x \).</p>
+    <p>(a) Formuliere «Gewinn» als Ungleichung.</p>
+    <p>(b) Löse sie und interpretiere die Grenze.</p>
+    <p>(c) Was ändert sich, wenn die Fixkosten auf \(2500\) steigen?</p>
+''' + LINS4, tag='Wirtschaft')
+    + aufg(6, 'Bremsweg-Limite', 3, r'''    <p>Faustregel für den Bremsweg: \( s = \dfrac{v^2}{100} \) (\(s\) in m, \(v\) in km/h).</p>
+    <p>(a) Vor einem Hindernis stehen höchstens \(40\) m zur Verfügung. Formuliere die
+    Bedingung als Ungleichung.</p>
+    <p>(b) Löse sie nach \(v\) auf — welche Höchstgeschwindigkeit ist zulässig?</p>
+    <p>(c) Warum ist die negative Lösung der Potenzgleichung hier bedeutungslos?</p>
+''' + LINS4, tag='Verkehr')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( [24.98;\ 25.02] \) mm.</p>
+    <p>(b) \( |25.01-25| = 0.01 \) ✓ brauchbar; \( |24.97-25| = 0.03 \) ✗ Ausschuss;
+    \( |25.02-25| = 0.02 \) ✓ gerade noch brauchbar (Randpunkt, \( \leq \)).</p>''')
+    + loes(2, r'''    <p>(a) \(5\) % von \(470\) sind \(23.5\): \( |R - 470| \leq 23.5 \).</p>
+    <p>(b) \( [446.5;\ 493.5]\ \Omega \).</p>
+    <p>(c) \( |495 - 470| = 25 > 23.5 \) — ausserhalb der Toleranz.</p>''')
+    + loes(3, r'''    <p>(a) \( T < 35.6 \) °C oder \( T > 38 \) °C.</p>
+    <p>(b) \( [35.6;\ 38] \) °C (mit \( \leq \): Randwerte gelten als unauffällig).</p>''')
+    + loes(4, r'''    <p>(a) \( (x-30)^2 < 400 \Leftrightarrow |x - 30| < 20 \).</p>
+    <p>(b) \( 10 < x < 50 \) Stück.</p>
+    <p>(c) Scheitel der Parabel: \( x = 30 \), Maximalgewinn \(400\) CHF.</p>''')
+    + loes(5, r'''    <p>(a) \( E(x) > K(x) \): \( 40x > 2000 + 15x \).</p>
+    <p>(b) \( 25x > 2000 \Rightarrow x > 80 \) — ab dem \(81\). Stück Gewinn.</p>
+    <p>(c) \( 25x > 2500 \Rightarrow x > 100 \) — die Gewinnzone beginnt später.</p>''')
+    + loes(6, r'''    <p>(a) \( \dfrac{v^2}{100} \leq 40 \).</p>
+    <p>(b) \( v^2 \leq 4000 \Rightarrow v \leq \sqrt{4000} \approx 63 \) km/h
+    (für \( v \geq 0 \)).</p>
+    <p>(c) Geschwindigkeiten sind hier nicht negativ — nur der Ast \( v \geq 0 \)
+    der Potenzgleichung ist physikalisch sinnvoll.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -2321,6 +3009,30 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', G_TDS),
     ('s3-1-grundlagen', 'Grundlagen Funktionen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Grundlagen Funktionen', STYLE_SERIE, '1.0', '', G_SERIE),
+    ('s2-2a-potenz-wurzel-rationale-gleichungen', 'Potenz-, Wurzel- und rationale Gleichungen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', H_HANDOUT),
+    ('s2-2a-potenz-wurzel-rationale-gleichungen', 'Potenz-, Wurzel- und rationale Gleichungen', 'Formelauszug', 'formelauszug.html',
+     'Potenz-, Wurzel- und rationale Gleichungen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, H_FORMELAUSZUG),
+    ('s2-2a-potenz-wurzel-rationale-gleichungen', 'Potenz-, Wurzel- und rationale Gleichungen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', H_TDS),
+    ('s2-2a-potenz-wurzel-rationale-gleichungen', 'Potenz-, Wurzel- und rationale Gleichungen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Potenz-, Wurzel- und rationale Gleichungen', STYLE_SERIE, '1.0', '', H_SERIE),
+    ('s2-2b-exponential-logarithmische-gleichungen', 'Exponential- und logarithmische Gleichungen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', I_HANDOUT),
+    ('s2-2b-exponential-logarithmische-gleichungen', 'Exponential- und logarithmische Gleichungen', 'Formelauszug', 'formelauszug.html',
+     'Exponential- und logarithmische Gleichungen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, I_FORMELAUSZUG),
+    ('s2-2b-exponential-logarithmische-gleichungen', 'Exponential- und logarithmische Gleichungen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', I_TDS),
+    ('s2-2b-exponential-logarithmische-gleichungen', 'Exponential- und logarithmische Gleichungen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Exponential- und logarithmische Gleichungen', STYLE_SERIE, '1.0', '', I_SERIE),
+    ('s2-2c-betrag-polynom-ungleichungen', 'Betrags- und Polynomgleichungen, Ungleichungen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', J_HANDOUT),
+    ('s2-2c-betrag-polynom-ungleichungen', 'Betrags- und Polynomgleichungen, Ungleichungen', 'Formelauszug', 'formelauszug.html',
+     'Betrag, Nullprodukt, Ungleichungen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, J_FORMELAUSZUG),
+    ('s2-2c-betrag-polynom-ungleichungen', 'Betrags- und Polynomgleichungen, Ungleichungen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', J_TDS),
+    ('s2-2c-betrag-polynom-ungleichungen', 'Betrags- und Polynomgleichungen, Ungleichungen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Betrag, Nullprodukt, Ungleichungen', STYLE_SERIE, '1.0', '', J_SERIE),
 ]
 
 

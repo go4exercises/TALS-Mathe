@@ -304,6 +304,9 @@ Diese Tabelle wird mit jedem abgeschlossenen Thema erweitert. So muss eine berei
 | s3-4b Logarithmusfunktionen | `PLF29x0idI4lXSN6xlwAQUjS71Tv-jdQ49` (12 Vid „Alles über LOGARITHMUS") | — | — | — | — | `PLLTAHuUj-zHgfDNg5jmBmfnvDHcc4y_Ey` (siehe s3-4a) |
 | s3-5 Trigonometrische Funktionen | — | `PLa0u3J0uzAzlIHjv0J_R8sIj-xn8cVs0J` (siehe g5-3, trig. Grundlagen) | — | — | — | `PLLTAHuUj-zHgXgsj5jy-qDE41UePZveqr` (siehe g5-1/g5-3) — *ohne neue Abrufe aus der Map übernommen; Aufgaben via serlo-Sitemap (allg. Sinusfunktion 112676, Verschieben/Strecken 54054, Einheitskreis 30679)* |
 | s3-1 Grundlagen (Werkzeugkasten) | `PLF29x0idI4lVDfsit7iy1j6Nmx3znS5bV` (siehe g3-3 «Alles über PARABELN» — Transformations-Training) | — | — | `PLLkr4Hf_IwvMts1O-fD_YBbcDiq8bvXHU` (siehe g3-3) | — | — *(Discovery-Lauf 2026-07 fand keine allgemeine Transformations-Playlist der bevorzugten Anbieter; Aufgaben via serlo-Sitemap: Extremwertprobleme 159266, Schnittpunkte Geraden 160385, Symmetrie 26411)* |
+| s2-2a Potenz-/Wurzel-/rationale Gleichungen | `PLF29x0idI4lXu1WcPP0oXEF_AnfOtYjkw` (siehe s3-2b «Alles über WURZELN») | — | — | — | — | `PLLTAHuUj-zHiqJlnyr_iYcbxsL7ztyWp8` (siehe s3-2b) — *Aufgaben: sos-mathe G33 + G32 aus Code-Map §8.1* |
+| s2-2b Exponential-/log. Gleichungen | `PLF29x0idI4lVs82KN0GTG3hQMpTM_84lV` + `PLF29x0idI4lXSN6xlwAQUjS71Tv-jdQ49` (siehe s3-4a/b) | — | — | `PLLkr4Hf_IwvPCVVWwpJ6QQJt3-kqxZEaP` (siehe s3-4a) | — | — *(Aufgaben via serlo-Sitemap: 40846, 26262, 23768)* |
+| s2-2c Betrag/Polynom/Ungleichungen | — | — | — | — | — | — *(keine passende Playlist der bevorzugten Anbieter in der Map; Video-Sektion mit Platzhalter. Aufgaben: sos-mathe G35 + serlo-Sitemap 169291, 223589)* |
 
 *Diese Tabelle wird bei jedem neuen Recherche-Lauf erweitert. Bei Erweiterung: pro Thema eine Zeile, Playlist-IDs nur eintragen, wenn per `web_fetch` verifiziert. Wenn ein Anbieter zum Thema nichts hat: `—`.*
 
