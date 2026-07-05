@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3.4a Exponentialfunktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 3 · Funktionen · 55 Lektionen</div>
+  <h1 class="pt-h1">3.4a Exponentialfunktionen</h1>
+  <div class="pt-untertitel">RLP 3.4 · Teil 1 von 2</div>
+</div>
+
+<p class="lead"><strong>Exponentialfunktionen</strong> \(f(x) = a^x\) beschreiben Vorgänge mit konstantem <strong>Wachstumsfaktor</strong>: Bakterienkulturen, Zinseszins, radioaktiven Zerfall. Nicht der Zuwachs ist konstant wie bei linearen Funktionen, sondern der <strong>Faktor</strong> pro Schritt — darum wachsen diese Funktionen schneller als jede Potenzfunktion. Hier untersuchst du ihren Verlauf, die Wirkung der Basis \(a\), Streckungen und Verschiebungen sowie die natürliche Exponentialfunktion \(e^x\).</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 3.4</div>
+  <ul>
+    <li>Exponentialfunktionen \(f : x \longmapsto a^x\) mit \(a \in \mathbb{R}^+,\ a \neq 1\) grafisch darstellen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Wachstums-, Zerfalls- und Sättigungsprozesse mit Hilfe von Exponentialfunktionen interpretieren, modellieren, visualisieren und berechnen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die natürliche Exponentialfunktion (e-Funktion) visualisieren, Basiswechsel zu beliebiger Basis durchführen <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die Logarithmusfunktion als Umkehrfunktion der Exponentialfunktion berechnen und visualisieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt die ersten drei Kompetenzen: die Exponentialfunktionen. Die Logarithmusfunktion als ihre Umkehrfunktion wird in <a href="s3-4b-logarithmusfunktionen.html">Teil 2 (s3-4b)</a> behandelt.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann eine Exponentialfunktion \(f(x) = a^x\) erkennen und von Potenzfunktionen unterscheiden: Bei ihr steht die Variable im <strong>Exponenten</strong>.</li>
+      <li>Ich kann die Graphen für \(a &gt; 1\) (Wachstum) und \(0 &lt; a &lt; 1\) (Zerfall) ohne Hilfsmittel skizzieren.</li>
+      <li>Ich kann Definitions- und Wertemenge, den gemeinsamen Punkt \((0 \mid 1)\) und die Asymptote aller Exponentialkurven angeben.</li>
+      <li>Ich kann die Wirkung der Parameter in \(k \cdot a^{x-u} + v\) beschreiben und weiss, dass sich Streckung in \(y\)-Richtung und Verschiebung in \(x\)-Richtung gegenseitig ersetzen können.</li>
+      <li>Ich kann aus vorgegebenen Punkten die Basis \(a\) und den Faktor \(k\) einer Exponentialfunktion bestimmen.</li>
+      <li>Ich kann jede Exponentialfunktion mit der Basis \(e\) schreiben (Basiswechsel zur e-Funktion) und Wachstums- und Zerfallsprozesse damit modellieren.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — eine Bakterienkultur wächst</h2>
+
+<p>Eine Kultur aus <strong>1000 Bakterien</strong> wird in eine Petrischale mit Nährlösung gegeben. Unter diesen Bedingungen <strong>verdoppelt</strong> sich die Bakterienzahl jede Stunde. Nach \(t\) Stunden sind es also \(1000 \cdot 2^t\) Bakterien — in Tausend gezählt:</p>
+
+\[ N(t) = 2^t \quad [\text{Tausend}] \]
+
+<p>Die Variable \(t\) steht im <strong>Exponenten</strong> — das ist das Kennzeichen jeder Exponentialfunktion. Wann überschreitet die Kultur die <strong>Million</strong>?</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🦠 Bakterienkultur — \(N(t) = 1000 \cdot 2^t\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe \(t\) in gleichen Schritten, z.B. von \(2\) auf \(3\) auf \(4\) Stunden: Um welchen <strong>Faktor</strong> wächst die Zahl jeweils? Vergleiche den absoluten Zuwachs am Anfang mit dem am Ende.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schiebe t in gleichen Schritten, zum Beispiel von zwei auf drei auf vier Stunden: Um welchen Faktor wächst die Zahl jeweils? Vergleiche den absoluten Zuwachs am Anfang mit dem am Ende.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Pro Stunde immer <strong>Faktor 2</strong> — egal wo man startet. Der absolute Zuwachs explodiert dadurch: Von Stunde 9 auf 10 kommen über 500&nbsp;000 Bakterien dazu. Die Million fällt nach knapp \(10\) Stunden (\(2^{10} = 1024\)).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Pro Stunde immer Faktor zwei — egal wo man startet. Der absolute Zuwachs explodiert dadurch: Von Stunde neun auf zehn kommen über fünfhunderttausend Bakterien dazu. Die Million fällt nach knapp zehn Stunden.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Startwert 1000 · Verdopplung pro Stunde · Millionengrenze rot gestrichelt</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Zeit <span class="var">\(t\)</span> [h]</label>
+      <input type="range" id="bk-t" min="0" max="10" step="0.5" value="5">
+      <span class="sl-val"><span id="bk-tv">5.0</span> h</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktion und Auswertung</div>
+      <div class="fl-eq">N(<span class="tx-blau">t</span>) = 1000·2<sup class="tx-blau">t</sup></div>
+      <div class="fl-eq" id="bk-eq" style="font-size:0.95rem;margin-top:4px">N(<span class="tx-blau">5.0</span>) = 1000·2<sup class="tx-blau">5.0</sup> = 32000 Bakterien</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="bk-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Zusammenhang \(t \mapsto N\) ist weder linear noch eine Potenzfunktion — pro Zeitschritt wird mit einem <strong>konstanten Faktor</strong> multipliziert:</p>
+  <ul style="margin-top:6px">
+    <li>Jede Stunde: Faktor \(2\). Drei Stunden: Faktor \(2^3 = 8\). Der Zuwachs ist <strong>prozentual konstant</strong> (+100 % pro Stunde), nicht absolut konstant.</li>
+    <li>Der Graph startet scheinbar flach und wird immer steiler — links schmiegt er sich an die \(t\)-Achse an.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Zeit wird um \(3\) Stunden erhöht. Um welchen Faktor wächst die Bakterienzahl \(N(t) = 1000 \cdot 2^t\)?</p><ul class="mc-optionen"><li data-opt="A">Faktor 3</li><li data-opt="B">Faktor 6</li><li data-opt="C">Faktor 8</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(N(t+3) = 1000 \cdot 2^{t+3} = 2^3 \cdot 1000 \cdot 2^t = 8 \cdot N(t)\) — unabhängig von \(t\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei einer Exponentialfunktion steht die Variable im <span class="mc-luecke"></span> — bei einer Potenzfunktion dagegen in der Basis.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Exponenten — vergleiche \(2^x\) (Exponentialfunktion) mit \(x^2\) (Potenzfunktion).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne die Bakterienzahl nach \(4\) Stunden.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(N(4) = 1000 \cdot 2^4 = 1000 \cdot 16 = 16\,000\) Bakterien.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Stelle die Gleichung für den Zeitpunkt auf, an dem die Kultur \(1\) Million Bakterien erreicht. Woran scheitert das Auflösen mit den bisherigen Mitteln?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ansatz: \(1000 \cdot 2^t = 1\,000\,000\), also \(2^t = 1000\). Die Unbekannte steht im <strong>Exponenten</strong> — zum Auflösen braucht es den Logarithmus: \(t = \log_2 1000 \approx 9.97\) h. Genau darum geht es in <a href="s3-4b-logarithmusfunktionen.html">Teil 2</a>.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definition</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Exponentialfunktion</div>
+  <p>Eine Funktion \(f : \mathbb{R} \longrightarrow \mathbb{R}^+\) mit einer Gleichung der Form</p>
+  \[ y = f(x) = a^x, \qquad a \in \mathbb{R}^+,\quad a \neq 1 \]
+  <p>heisst <strong>Exponentialfunktion</strong> mit der Basis \(a\). Die unabhängige Variable \(x\) steht im <strong>Exponenten</strong>.</p>
+</div>
+
+<div class="block block-tipp" style="margin-top:8px">
+  <div class="block-titel">💡 Warum \(a \neq 1\) und \(a &gt; 0\)?</div>
+  <ul style="margin-top:4px">
+    <li>\(a = 1\): Es ergäbe sich die <strong>konstante Funktion</strong> \(y = 1^x = 1\) — kein Wachstum, kein Zerfall.</li>
+    <li>\(a \leq 0\): Potenzen wie \((-2)^{1/2}\) sind nicht für alle reellen Exponenten definiert — darum werden nur positive Basen zugelassen.</li>
+  </ul>
+  <p style="margin-top:6px">Für den Umgang mit Exponentialfunktionen sind die Potenzgesetze zentral — sie werden auf der Seite <a class="quer" href="s1-2-potenzen.html">↩ 1.2 Potenzen</a> behandelt.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Spiegelung an der \(y\)-Achse — Wachstum wird Zerfall</div>
+  <p>Wird die Kurve \(k:\ y = a^x\) an der \(y\)-Achse gespiegelt (Ersetzung \(x \to -x\)), entsteht die Kurve</p>
+  \[ k':\ y = a^{-x} = \frac{1}{a^x} = \left(\frac{1}{a}\right)^{x} \]
+  <p>Aus einer steigenden Kurve (Wachstum) wird eine fallende Kurve (Zerfall) — und umgekehrt. Die Basen \(a\) und \(\tfrac{1}{a}\) gehören zu spiegelbildlichen Graphen.</p>
+</div>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Die drei Darstellungen</h2>
+
+<p>Verändere die Basis \(a\) und den Eingabewert \(x\) — Gleichung, Wertetabelle und Graph aktualisieren sich gleichzeitig.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Interaktive Darstellungen — \(f(x) = a^x\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Vergleiche \(a = 2\) mit \(a = 5\): Was ändert sich für \(x &gt; 0\), was für \(x &lt; 0\)? Wechsle dann zu \(a = \tfrac{1}{2}\) und vergleiche mit \(a = 2\). Schau in der Wertetabelle: Welcher Wert steht bei <strong>jeder</strong> Basis an der Stelle \(x = 0\)?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vergleiche a gleich zwei mit a gleich fünf: Was ändert sich für positive x, was für negative x? Wechsle dann zu a gleich ein halb und vergleiche mit a gleich zwei. Schau in der Wertetabelle: Welcher Wert steht bei jeder Basis an der Stelle x gleich null?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Alle Graphen laufen durch \((0 \mid 1)\), denn \(a^0 = 1\). Grössere Basis heisst steilerer Anstieg rechts und schnelleres Abklingen links. \(a = \tfrac{1}{2}\) ist das Spiegelbild von \(a = 2\) — und die Funktionswerte sind <strong>immer positiv</strong>, nie null.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Alle Graphen laufen durch null senkrecht eins, denn a hoch null ist eins. Grössere Basis heisst steilerer Anstieg rechts und schnelleres Abklingen links. a gleich ein halb ist das Spiegelbild von a gleich zwei — und die Funktionswerte sind immer positiv, nie null.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Basis \(a \in \{\tfrac{1}{4},\, \tfrac{1}{3},\, \tfrac{1}{2},\, 2,\, 3,\, 4,\, 5\}\) · Auswertung an der Stelle \(x\)</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Basis <span class="var">\(a\)</span></label><input type="range" id="dr-a" min="0" max="6" step="1" value="3"><span class="sl-val" id="dr-av">2</span></div>
+      <div class="sl-grp akz-gruen"><label>Eingabewert <span class="var">\(x\)</span></label><input type="range" id="dr-x" min="-3" max="3" step="1" value="2"><span class="sl-val" id="dr-xv">2</span></div>
+    </div>
+
+    <div class="formel-live">
+      <div class="fl-label">① Funktionsgleichung</div>
+      <div class="fl-eq" id="dr-eq">f(<span class="tx-gruen">x</span>) = <span class="tx-blau">2</span><sup class="tx-gruen">x</sup></div>
+      <div class="fl-eq" id="dr-eval" style="font-size:0.95rem;margin-top:4px">f(<span class="tx-gruen">2</span>) = 4</div>
+    </div>
+
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">② Wertetabelle</div>
+        <table class="ftb-tabelle" id="dr-table">
+          <thead><tr><th>\(x\)</th><th>\(y=f(x)\)</th><th>Punkt</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">③ Graph</div>
+        <div class="cv-wrap"><canvas id="dr-canvas" height="260"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition und Darstellungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche der folgenden Funktionen ist eine Exponentialfunktion im Sinn der Definition?</p><ul class="mc-optionen"><li data-opt="A">\(f(x) = x^3\)</li><li data-opt="B">\(f(x) = 3^x\)</li><li data-opt="C">\(f(x) = 3 \cdot x\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Bei \(3^x\) steht die Variable im Exponenten. \(x^3\) ist eine Potenzfunktion, \(3x\) eine lineare Funktion.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Alle Graphen von Exponentialfunktionen \(y = a^x\) gehen durch den Punkt <span class="mc-luecke"></span>, denn \(a^0 = 1\) für jede zulässige Basis.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((0 \mid 1)\) — der Ordinatenabschnitt ist immer \(y_0 = 1\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Der Graph von \(f(x) = \left(\tfrac{2}{5}\right)^x\) wird an der \(y\)-Achse gespiegelt. Wie lautet die Gleichung der Bildfunktion \(g\)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(g(x) = f(-x) = \left(\tfrac{2}{5}\right)^{-x} = \left(\tfrac{5}{2}\right)^{x}\) — aus Zerfall wird Wachstum.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Begründe, warum die Wertemenge von \(y = a^x\) nur aus positiven Zahlen besteht — und warum die \(0\) nicht dazugehört.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Eine positive Basis \(a\), beliebig oft multipliziert oder als Wurzel/Kehrwert genommen, bleibt positiv: \(a^x &gt; 0\) für alle \(x\). Der Wert \(0\) wird nie erreicht — \(a^x = 0\) hat keine Lösung, die Kurve nähert sich der \(x\)-Achse nur asymptotisch. Also \(W = \mathbb{R}^+\).</div></details></div>
+</details>
+
+
+<!-- ══ 5. TYPEN / EIGENSCHAFTEN ══ -->
+<h2 id="typen">Eigenschaften — die Basis bestimmt den Verlauf</h2>
+
+<table class="ftb-tabelle" style="margin-top:10px">
+  <thead><tr><th>Eigenschaften</th><th colspan="2">\(y = f(x) = a^x\), \(a &gt; 0\) und \(a \neq 1\)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Definitionsmenge</td><td colspan="2">\(D = \mathbb{R}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wertemenge</td><td colspan="2">\(W = \mathbb{R}^+\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Gemeinsamer Punkt</td><td colspan="2">\((0 \mid 1)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Ordinatenabschnitt</td><td colspan="2">\(y_0 = 1\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstellen</td><td colspan="2">—</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetrien</td><td colspan="2">—</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Verlauf</td><td style="text-align:left;font-family:var(--sans)">\(a &gt; 1\): Kurve steigt von links nach rechts</td><td style="text-align:left;font-family:var(--sans)">\(a &lt; 1\): Kurve fällt von links nach rechts</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Asymptote</td><td colspan="2">\(x\)-Achse (\(y = 0\))</td></tr>
+  </tbody>
+</table>
+
+<div class="widget-titelzeile" style="margin-top:14px;margin-bottom:8px">
+  <p style="margin:0">Klicke auf eine Funktion — ihr Graph mit dem gemeinsamen Punkt wird angezeigt:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Vergleiche \(2^x\), \(3^x\) und \(5^x\): Wo überholen sich die Kurven? Wechsle dann zu \(\left(\tfrac{1}{2}\right)^x\): Wie hängt dieser Graph mit \(2^x\) zusammen? Und wo liegt \(e^x\) im Vergleich zu \(2^x\) und \(3^x\)?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Vergleiche zwei hoch x, drei hoch x und fünf hoch x: Wo überholen sich die Kurven? Wechsle dann zu ein halb hoch x: Wie hängt dieser Graph mit zwei hoch x zusammen? Und wo liegt e hoch x im Vergleich zu zwei hoch x und drei hoch x?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Alle Kurven laufen durch \((0 \mid 1)\) und bleiben oberhalb der \(x\)-Achse. Je grösser die Basis, desto steiler rechts von der \(y\)-Achse. \(\left(\tfrac{1}{2}\right)^x\) ist das Spiegelbild von \(2^x\), und \(e^x\) liegt zwischen \(2^x\) und \(3^x\), denn \(e \approx 2.718\).</div>
+      <button class="ah-speak" type="button" data-vorlesen="Alle Kurven laufen durch null senkrecht eins und bleiben oberhalb der x-Achse. Je grösser die Basis, desto steiler rechts von der y-Achse. Ein halb hoch x ist das Spiegelbild von zwei hoch x, und e hoch x liegt zwischen zwei hoch x und drei hoch x, denn e ist ungefähr zwei Komma sieben eins acht.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+
+<div class="typ-btns" id="ty-btns"></div>
+<div class="cv-wrap"><canvas id="ty-canvas" height="240"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="ty-desc"></div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Eigenschaften</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Aussage trifft auf <em>alle</em> Exponentialfunktionen \(y = a^x\) zu?</p><ul class="mc-optionen"><li data-opt="A">Sie haben genau eine Nullstelle.</li><li data-opt="B">Die \(x\)-Achse ist horizontale Asymptote.</li><li data-opt="C">Die Wertemenge ist \(\mathbb{R}\).</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Für \(a &gt; 1\) schmiegt sich die Kurve links an die \(x\)-Achse an, für \(a &lt; 1\) rechts. Nullstellen gibt es keine, und die Wertemenge ist \(\mathbb{R}^+\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Für Basen \(0 &lt; a &lt; 1\) <span class="mc-luecke"></span> die Exponentialkurve von links nach rechts — sie beschreibt einen Zerfallsprozess.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">fällt — z.B. \(y = \left(\tfrac{1}{2}\right)^x\): halbieren statt verdoppeln.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme die Basis \(a\) so, dass der Graph von \(y = a^x\) durch den Punkt \(Q = (1 \mid 0.25)\) geht.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(a^1 = 0.25\), also \(a = 0.25 = \tfrac{1}{4}\) — eine fallende Exponentialkurve.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Der Graph von \(y = a^x\) geht durch \(P = \left(\tfrac{3}{2} \mid 8\right)\). Bestimme die Basis \(a\).</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(a^{3/2} = 8 \;\Rightarrow\; a = 8^{2/3} = \left(\sqrt[3]{8}\right)^2 = 2^2 = 4\). Kontrolle: \(4^{3/2} = \left(\sqrt{4}\right)^3 = 2^3 = 8\) ✓</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Schieben, Strecken und die e-Funktion</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Transformationen — \(y = k \cdot a^{x-u} + v\)</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Parameter</th><th>Wirkung auf den Graphen von \(y = a^x\)</th></tr></thead>
+    <tbody>
+      <tr><td>\(u\)</td><td style="text-align:left;font-family:var(--sans)">Verschiebung um \(u\) in \(x\)-Richtung (nach rechts für \(u &gt; 0\))</td></tr>
+      <tr><td>\(v\)</td><td style="text-align:left;font-family:var(--sans)">Verschiebung um \(v\) in \(y\)-Richtung (nach oben für \(v &gt; 0\))</td></tr>
+      <tr><td>\(|k|\)</td><td style="text-align:left;font-family:var(--sans)">Streckung (\(|k| &gt; 1\)) bzw. Stauchung (\(|k| &lt; 1\)) in \(y\)-Richtung</td></tr>
+      <tr><td>\(k &lt; 0\)</td><td style="text-align:left;font-family:var(--sans)">zusätzlich Spiegelung an der \(x\)-Achse</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Die horizontale Asymptote wandert bei der Verschiebung mit: Sie liegt bei \(y = v\). Der Ordinatenabschnitt ist \(y_0 = k \cdot a^{-u} + v\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Besonderheit 1 — Streckung in \(x\)-Richtung = Basiswechsel</div>
+  <p>Eine Streckung des Graphen von \(f(x) = a^x\) mit Faktor \(\tfrac{1}{b}\) in \(x\)-Richtung lässt sich als neue Exponentialfunktion schreiben:</p>
+  \[ h(x) = f(b \cdot x) = a^{b \cdot x} = \left(a^{b}\right)^{x} = c^x \quad \text{mit } c = a^b \]
+  <p>Beispiel: \(4^{x} = 2^{2x}\) — die Kurve von \(2^x\), in \(x\)-Richtung auf die Hälfte gestaucht, ist die Kurve von \(4^x\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Besonderheit 2 — Streckung in \(y\) = Verschiebung in \(x\)</div>
+  <p>Wird der Graph von \(f(x) = a^x\) um \(u\) Einheiten horizontal verschoben, liefern die Potenzgesetze:</p>
+  \[ l(x) = f(x-u) = a^{x-u} = a^{-u} \cdot a^x = k \cdot a^x \quad \text{mit } k = \frac{1}{a^u} \]
+  <p>Horizontale Verschiebung und vertikale Streckung sind bei Exponentialfunktionen <strong>dieselbe</strong> Abbildung! Die Graphen von \(k \cdot a^x\) und \(a^{x-u}\) sind identisch, wenn gilt:</p>
+  \[ k \cdot a^u = 1 \qquad\Longleftrightarrow\qquad u = -\log_a k \]
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Verschobene Exponentialkurve — \(y = a^{x-u} + v\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verschiebe zuerst nur \(v\): Was passiert mit der Asymptote — und bekommt die Kurve plötzlich eine Nullstelle? Dann nur \(u\): Die Kurve wandert seitlich; vergleiche die Wirkung mit einer Streckung in \(y\)-Richtung.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verschiebe zuerst nur v: Was passiert mit der Asymptote — und bekommt die Kurve plötzlich eine Nullstelle? Dann nur u: Die Kurve wandert seitlich; vergleiche die Wirkung mit einer Streckung in y-Richtung.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Asymptote folgt \(v\): Sie liegt bei \(y = v\). Für \(v &lt; 0\) schneidet die Kurve die \(x\)-Achse — erst dann gibt es eine Nullstelle. Die \(u\)-Verschiebung wirkt wie eine Streckung: \(a^{x-u} = a^{-u} \cdot a^x\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Asymptote folgt v: Sie liegt bei y gleich v. Für negatives v schneidet die Kurve die x-Achse — erst dann gibt es eine Nullstelle. Die u-Verschiebung wirkt wie eine Streckung.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Basis \(a \in \{2;\, e;\, \tfrac{1}{2}\}\) · Verschiebung \(u\), \(v\) · Asymptote gestrichelt</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="tr-b-btns">
+      <button class="typ-btn aktiv" onclick="setTrB(0)">a = 2</button>
+      <button class="typ-btn" onclick="setTrB(1)">a = e</button>
+      <button class="typ-btn" onclick="setTrB(2)">a = 1/2</button>
+    </div>
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Verschiebung <span class="var">\(u\)</span></label><input type="range" id="tr-u" min="-3" max="3" step="1" value="0"><span class="sl-val" id="tr-uv">0</span></div>
+      <div class="sl-grp akz-orange"><label>Verschiebung <span class="var">\(v\)</span></label><input type="range" id="tr-v" min="-3" max="3" step="1" value="-2"><span class="sl-val" id="tr-vv">−2</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktionsgleichung und Asymptote</div>
+      <div class="fl-eq" id="tr-eq">y = 2<sup>x</sup> − <span class="tx-orange">2</span></div>
+      <div class="fl-eq" id="tr-asym" style="font-size:0.95rem;margin-top:4px">Asymptote: y = <span class="tx-orange">−2</span></div>
+    </div>
+    <div class="cv-wrap"><canvas id="tr-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Definition — Natürliche Exponentialfunktion (e-Funktion)</div>
+  <p>Die Exponentialfunktion mit der irrationalen Basis \(e \approx 2.71828\) (Eulersche Zahl):</p>
+  \[ y = f(x) = e^x \]
+  <p>Jede Exponentialfunktion lässt sich mit der Basis \(e\) schreiben (<strong>Basiswechsel</strong>): Setzt man \(a = e^b\), so gilt</p>
+  \[ y = a^x = \left(e^{b}\right)^{x} = e^{b \cdot x} \qquad \text{mit } b = \ln a \]
+  <p>Darum beschränkt man sich in Anwendungen häufig auf die e-Funktion.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:14px">
+  <div class="block-titel">🟢 Beispiel 1 — Streckung durch Verschiebung ersetzen</div>
+  <p>Der Graph \(G_g\) geht durch Streckung mit \(k = \tfrac{1}{8}\) in \(y\)-Richtung aus dem Graphen von \(f(x) = 2^x\) hervor. (a) Wie lautet \(g(x)\)? (b) Welche Verschiebung führt \(G_f\) ebenfalls in \(G_g\) über?</p>
+  <p><strong>Lösung:</strong></p>
+  <p>(a) \(g(x) = \tfrac{1}{8} \cdot 2^x\)</p>
+  <p>(b) Mit \(k \cdot a^u = 1\): \(u = -\log_2 \tfrac{1}{8} = -\log_2 2^{-3} = 3\). Den Graphen um \(\tfrac{1}{8}\) stauchen hat dieselbe Wirkung, wie ihn um \(3\) Einheiten <strong>nach rechts</strong> zu schieben:</p>
+  \[ g(x) = \tfrac{1}{8} \cdot 2^x = 2^{-3} \cdot 2^x = 2^{x-3} \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Basis und Faktor aus zwei Punkten</div>
+  <p>Bestimme \(a\) und \(k\) der Funktion \(f(x) = k \cdot a^x\) so, dass der Graph durch \(P = (2 \mid 24)\) und \(Q = \left(\tfrac{5}{2} \,\middle|\, 48\right)\) geht.</p>
+  <p><strong>Lösung:</strong> Einsetzen liefert das Gleichungssystem \(24 = k \cdot a^2\) und \(48 = k \cdot a^{5/2}\). Division der zweiten durch die erste Gleichung eliminiert \(k\):</p>
+  \[ \frac{k \cdot a^{5/2}}{k \cdot a^{2}} = \frac{48}{24} \;\Longrightarrow\; a^{1/2} = 2 \;\Longrightarrow\; a = 4 \]
+  \[ k = \frac{24}{a^2} = \frac{24}{16} = \frac{3}{2} \qquad\Longrightarrow\qquad y = \tfrac{3}{2} \cdot 4^x \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Ordinatenabschnitt und Nullstelle</div>
+  <p>Gegeben ist \(f:\ y = 3^x - 6\). Berechne den Ordinatenabschnitt und die Nullstelle.</p>
+  <p><strong>Lösung:</strong> Ordinatenabschnitt (\(x = 0\)): \(y_0 = 3^0 - 6 = 1 - 6 = -5\).</p>
+  <p>Nullstelle (\(y = 0\)): \(3^x = 6\). Die Unbekannte steht im Exponenten — Logarithmieren liefert</p>
+  \[ x_0 = \log_3 6 \approx 1.631 \]
+  <p>(Das Werkzeug dafür ist der Logarithmus — ausführlich in <a href="s3-4b-logarithmusfunktionen.html">Teil 2</a>.)</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 4 — Basiswechsel zur e-Funktion</div>
+  <p>Schreibe \(f(x) = 2^x\) als natürliche Exponentialfunktion.</p>
+  <p><strong>Lösung:</strong> Ansatz \(2 = e^b\). Logarithmieren: \(b = \ln 2 \approx 0.693\). Also:</p>
+  \[ f(x) = e^{\ln 2 \cdot x} \approx e^{0.693 \cdot x} \]
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \(2^x\) und \(x^2\) verwechseln</div>
+  <p>\(x^2\) ist eine <strong>Potenzfunktion</strong> (Variable in der Basis), \(2^x\) eine <strong>Exponentialfunktion</strong> (Variable im Exponenten). Für kleine \(x\) liegen die Werte nah beieinander (\(3^2 = 9\) vs. \(2^3 = 8\)) — aber für grosse \(x\) gewinnt die Exponentialfunktion haushoch: \(10^2 = 100\), aber \(2^{10} = 1024\).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — „Die Kurve erreicht die \(x\)-Achse irgendwann"</div>
+  <p>\(a^x = 0\) hat <strong>keine</strong> Lösung: Die Exponentialkurve kommt der \(x\)-Achse beliebig nahe, berührt sie aber nie. Wer die Kurve auf der Achse „aufliegen" lässt, zeichnet falsch. Eine Nullstelle entsteht erst durch Verschiebung nach unten (\(v &lt; 0\)).</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Nullstellen von \(k \cdot a^x + v = 0\)</div>
+  <p>Immer zuerst nach der Potenz auflösen: \(a^x = -\tfrac{v}{k}\). Ist die rechte Seite <strong>positiv</strong>, liefert Logarithmieren genau eine Lösung; ist sie negativ oder null, gibt es <strong>keine</strong> Nullstelle, denn \(a^x &gt; 0\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Transformationen und e-Funktion</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie geht der Graph von \(y = 2^x + 3\) aus dem Graphen von \(y = 2^x\) hervor?</p><ul class="mc-optionen"><li data-opt="A">Verschiebung um 3 nach rechts</li><li data-opt="B">Verschiebung um 3 nach oben</li><li data-opt="C">Streckung mit Faktor 3</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der Summand \(+3\) verschiebt nach oben — die Asymptote wandert mit zu \(y = 3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Funktion \(y = e^x - 4\) hat die horizontale Asymptote \(y = \) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(-4\) — die Asymptote folgt der vertikalen Verschiebung \(v\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Schreibe \(g(x) = \tfrac{1}{4} \cdot 2^x\) als verschobene Funktion \(2^{x-u}\). Bestimme \(u\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\tfrac{1}{4} = 2^{-2}\), also \(g(x) = 2^{-2} \cdot 2^x = 2^{x-2}\) — Verschiebung um \(u = 2\) nach rechts.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Hat die Funktion \(y = 2 \cdot 3^x + 1\) Nullstellen? Begründe ohne zu rechnen.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nein: Der Ansatz \(3^x = -\tfrac{1}{2}\) hat keine Lösung, weil \(3^x &gt; 0\) für alle \(x\). Die Kurve liegt vollständig oberhalb ihrer Asymptote \(y = 1\).</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Exponentialfunktion am Graphen erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Graphen und entscheide, welche Funktionsgleichung dazu passt.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört zum angezeigten Graphen?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Graphen skizzieren</span></div>
+  <p>Skizziere die folgenden Graphen <strong>von Hand</strong> auf Häuschenpapier. Nutze den Punkt \((0 \mid 1)\) der Grundfunktion, die Asymptote und je einen weiteren Stützpunkt. Vergleiche danach mit der Lösung.</p>
+  <ol class="aufg-liste">
+    <li>\(y = 2^x - 3\) (mit Asymptote!)</li>
+    <li>\(y = -3^x\)</li>
+    <li>\(y = \left(\tfrac{1}{2}\right)^{x-2}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2'); drawA2Sol();">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <div class="cv-wrap" style="margin-bottom:8px"><canvas id="a2-canvas" height="240"></canvas></div>
+      <ol class="aufg-liste">
+        <li><span style="color:#1a4f8a;font-weight:700">Blau:</span> \(2^x\), um \(3\) nach unten verschoben; Asymptote \(y = -3\) (gestrichelt), Ordinatenabschnitt \(y_0 = -2\), Nullstelle bei \(x_0 = \log_2 3 \approx 1.58\).</li>
+        <li><span style="color:#1f6b3a;font-weight:700">Grün:</span> \(3^x\), an der \(x\)-Achse gespiegelt; fällt steil, Wertemenge \(\mathbb{R}^-\), Asymptote \(y = 0\).</li>
+        <li><span style="color:#5b2d8e;font-weight:700">Violett:</span> fallende Kurve \(\left(\tfrac{1}{2}\right)^x\), um \(2\) nach rechts verschoben; geht durch \((2 \mid 1)\), Asymptote \(y = 0\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Exponentialfunktionen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Basis aus einem Punkt bestimmen</div>
+    <p>Bestimme die Basis \(a\) so, dass der Graph von \(y = a^x\) durch den Punkt geht:</p>
+    <div class="eingabe-row"><label>\(P = \left(\tfrac{3}{2} \,\middle|\, 8\right)\): a =&nbsp;</label><input type="text" id="a3a1" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3a1', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>\(R = (-1 \mid 5)\): a =&nbsp;</label><input type="text" id="a3a2" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3a2', 0.2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <ol class="aufg-liste">
+          <li>\(a^{3/2} = 8 \Rightarrow a = 8^{2/3} = \left(\sqrt[3]{8}\right)^2 = 4\). Probe: \(4^{3/2} = 8\) ✓</li>
+          <li>\(a^{-1} = 5 \Rightarrow \dfrac{1}{a} = 5 \Rightarrow a = \dfrac{1}{5} = 0.2\). Probe: \(0.2^{-1} = 5\) ✓</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Basis und Faktor aus zwei Punkten</div>
+    <p>Die Kurve \(y = k \cdot a^x\) geht durch \(P = (1 \mid 6)\) und \(Q = (4 \mid 48)\). Bestimme \(a\) und \(k\).</p>
+    <div class="eingabe-row"><label>a =&nbsp;</label><input type="text" id="a3b1" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3b1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>k =&nbsp;</label><input type="text" id="a3b2" placeholder="k"><button class="btn-pruef" onclick="chkNum('a3b2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Division der beiden Gleichungen \(48 = k \cdot a^4\) und \(6 = k \cdot a^1\):</p>
+        \[ \frac{k \cdot a^4}{k \cdot a} = \frac{48}{6} \;\Longrightarrow\; a^3 = 8 \;\Longrightarrow\; a = 2, \qquad k = \frac{6}{a} = 3 \]
+        <p>Probe: \(y = 3 \cdot 2^x\) liefert \(3 \cdot 2^4 = 48\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Ordinatenabschnitt und Nullstelle</div>
+    <p>Berechne Ordinatenabschnitt und Nullstelle von \(f:\ y = e^x - 5\).</p>
+    <div class="eingabe-row"><label>y₀ =&nbsp;</label><input type="text" id="a3c1" placeholder="y₀"><button class="btn-pruef" onclick="chkNum('a3c1', -4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x₀ ≈&nbsp;</label><input type="text" id="a3c2" placeholder="x₀"><button class="btn-pruef" onclick="chkNum('a3c2', 1.609, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Ordinatenabschnitt: \(y_0 = e^0 - 5 = 1 - 5 = -4\).</p>
+        <p>Nullstelle: \(e^x = 5 \Rightarrow x_0 = \ln 5 \approx 1.609\) (Taschenrechner: <code>ln(5)</code>).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) In die Form \(a^x\) bringen</div>
+    <p>Schreibe die Funktionsgleichung in der Form \(f(x) = a^x\) und gib \(a\) an:</p>
+    <div class="eingabe-row"><label>\(f_1(x) = 3^{2x}\): a =&nbsp;</label><input type="text" id="a3d1" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3d1', 9, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>\(f_2(x) = 625^{0.25x}\): a =&nbsp;</label><input type="text" id="a3d2" placeholder="a"><button class="btn-pruef" onclick="chkNum('a3d2', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <ol class="aufg-liste">
+          <li>\(3^{2x} = \left(3^2\right)^x = 9^x \Rightarrow a = 9\)</li>
+          <li>\(625^{0.25x} = \left(625^{0.25}\right)^x = \left(\sqrt[4]{625}\right)^x = 5^x \Rightarrow a = 5\)</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Streckung durch Verschiebung ersetzen</div>
+    <p>Der Graph von \(g(x) = \tfrac{1}{16} \cdot 4^x\) entsteht aus dem Graphen von \(f(x) = 4^x\) durch Schieben in \(x\)-Richtung. Um wie viele Einheiten nach rechts?</p>
+    <div class="eingabe-row"><label>u =&nbsp;</label><input type="text" id="a3e1" placeholder="u"><button class="btn-pruef" onclick="chkNum('a3e1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \tfrac{1}{16} = 4^{-2} \;\Longrightarrow\; g(x) = 4^{-2} \cdot 4^x = 4^{x-2} \]
+        <p>Die Stauchung mit Faktor \(\tfrac{1}{16}\) entspricht einer Verschiebung um \(u = 2\) nach rechts.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Bakterienstamm</span></div>
+  <p>Ein Bakterienstamm aus \(G_0 = 3000\) Bakterien wird in eine Petrischale gegeben. Die Bakterienzahl <strong>verdoppelt sich alle drei Stunden</strong>.</p>
+  <ol class="aufg-liste">
+    <li>Gib die Funktionsgleichung \(G(t)\) an (\(t\) in Stunden).</li>
+    <li>Berechne die Bakterienzahl nach \(24\) Stunden.</li>
+    <li>Nach wie vielen Stunden überschreitet die Bakterienzahl \(1\) Milliarde? (Grafisch oder durch systematisches Probieren — exakt geht es mit dem Logarithmus aus Teil 2.)</li>
+  </ol>
+  <div class="eingabe-row"><label>G(24) =&nbsp;</label><input type="text" id="a4-1" placeholder="Bakterien"><button class="btn-pruef" onclick="chkNum('a4-1', 768000, 100, 'Bakterien')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>t ≈&nbsp;</label><input type="text" id="a4-2" placeholder="h"><button class="btn-pruef" onclick="chkNum('a4-2', 55, 0.5, 'h')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Pro \(3\) Stunden Faktor \(2\), also \(G(t) = 3000 \cdot 2^{t/3}\).</li>
+        <li>\(G(24) = 3000 \cdot 2^{24/3} = 3000 \cdot 2^8 = 3000 \cdot 256 = 768\,000\) Bakterien.</li>
+        <li>Ansatz \(3000 \cdot 2^{t/3} = 10^9\), also \(2^{t/3} = \dfrac{10^9}{3000} \approx 333\,333\). Wegen \(2^{18} = 262\,144\) und \(2^{19} = 524\,288\) liegt \(t/3\) zwischen \(18\) und \(19\); exakt: \(t = 3 \cdot \log_2 333\,333 \approx 55.0\) h — nach gut zwei Tagen.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Bierschaum-Zerfall</span></div>
+  <p>Bierschaum zerfällt exponentiell — das wird für Qualitätstests genutzt. Bei einer Biersorte nimmt die Höhe des Schaumkranzes pro Minute um \(30\) % ab; zu Beginn beträgt sie \(50\) mm.</p>
+  <ol class="aufg-liste">
+    <li>Gib die Funktionsgleichung \(h(t)\) an (\(t\) in Minuten, \(h\) in mm).</li>
+    <li>Berechne die Schaumhöhe nach \(3\) Minuten.</li>
+    <li>Nach wie vielen Minuten beträgt die Höhe noch genau \(25\) mm (die Hälfte)?</li>
+  </ol>
+  <div class="eingabe-row"><label>h(3) =&nbsp;</label><input type="text" id="a5-1" placeholder="mm"><button class="btn-pruef" onclick="chkNum('a5-1', 17.15, 0.05, 'mm')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>t ≈&nbsp;</label><input type="text" id="a5-2" placeholder="min"><button class="btn-pruef" onclick="chkNum('a5-2', 1.94, 0.02, 'min')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Pro Minute bleiben \(70\) % übrig: \(h(t) = 50 \cdot 0.7^t\).</li>
+        <li>\(h(3) = 50 \cdot 0.7^3 = 50 \cdot 0.343 = 17.15\) mm.</li>
+        <li>\(50 \cdot 0.7^t = 25 \Rightarrow 0.7^t = 0.5 \Rightarrow t = \log_{0.7} 0.5 \approx 1.94\) min — die „Halbwertszeit" des Schaums.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Zinseszins</span></div>
+  <p>Ein Kapital von \(5000\) CHF wird zu \(2\) % Jahreszins angelegt. Der Zins wird jedes Jahr dem Kapital gutgeschrieben und mitverzinst.</p>
+  <ol class="aufg-liste">
+    <li>Gib die Funktionsgleichung \(K(n)\) für das Kapital nach \(n\) Jahren an.</li>
+    <li>Berechne das Kapital nach \(10\) Jahren.</li>
+    <li>Nach wie vielen Jahren hat sich das Kapital verdoppelt?</li>
+  </ol>
+  <div class="eingabe-row"><label>K(10) ≈&nbsp;</label><input type="text" id="a6-1" placeholder="CHF"><button class="btn-pruef" onclick="chkNum('a6-1', 6094.97, 0.5, 'CHF')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>n ≈&nbsp;</label><input type="text" id="a6-2" placeholder="Jahre"><button class="btn-pruef" onclick="chkNum('a6-2', 35, 0.5, 'Jahre')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Pro Jahr Faktor \(1.02\): \(K(n) = 5000 \cdot 1.02^n\) — ein Wachstumsprozess mit Basis \(1.02\).</li>
+        <li>\(K(10) = 5000 \cdot 1.02^{10} \approx 6094.97\) CHF.</li>
+        <li>\(1.02^n = 2 \Rightarrow n = \log_{1.02} 2 \approx 35.0\) Jahre. Der Startwert spielt keine Rolle — die Verdopplungszeit hängt nur vom Zinssatz ab.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Die Eulersche Zahl entdecken <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Woher kommt die Zahl \(e \approx 2.71828\)? Betrachte die Funktion \(f(x) = \left(1 + \tfrac{1}{x}\right)^x\) für \(x &gt; 0\) — sie beschreibt ein Guthaben bei immer feinerer Zinsgutschrift (Zinssatz 100 %, aufgeteilt auf \(x\) Teilperioden).</p>
+  <ol class="aufg-liste">
+    <li>Berechne die Funktionswerte für \(x = 1,\ 10,\ 100,\ 1000,\ 10^6\) und vergleiche.</li>
+    <li>Untersuche das Verhalten für \(x \to \infty\). Formuliere eine Vermutung.</li>
+    <li>Schreibe \(f(x) = 5^x\) mithilfe von \(e\) als natürliche Exponentialfunktion.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(f(1) = 2\), \(f(10) \approx 2.5937\), \(f(100) \approx 2.7048\), \(f(1000) \approx 2.7169\), \(f(10^6) \approx 2.71828\).</li>
+        <li>Die Werte wachsen, aber immer langsamer — sie nähern sich einem Grenzwert: \(\displaystyle\lim_{x \to \infty}\left(1 + \tfrac{1}{x}\right)^x = e \approx 2.71828\). Genau so ist die Eulersche Zahl definiert.</li>
+        <li>\(5 = e^{\ln 5}\), also \(5^x = e^{\ln 5 \cdot x} \approx e^{1.609 \cdot x}\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Bei der Exponentialfunktion \(y = a^x\) steht die Variable im <strong>Exponenten</strong>: Pro Schritt wird mit dem konstanten Faktor \(a\) multipliziert. Die Basis bestimmt den Verlauf (\(a &gt; 1\) Wachstum, \(0 &lt; a &lt; 1\) Zerfall), alle Kurven laufen durch \((0 \mid 1)\) und haben die \(x\)-Achse als Asymptote. Verschieben und Strecken funktioniert wie gewohnt — mit der Besonderheit, dass horizontale Verschiebung und vertikale Streckung dasselbe bewirken (\(a^{x-u} = a^{-u} \cdot a^x\)). Mit \(a = e^{\ln a}\) lässt sich jede Exponentialfunktion auf die Basis \(e\) umschreiben.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Typ</th><th>\(a &gt; 1\) (z.B. \(2^x\), \(e^x\))</th><th>\(0 &lt; a &lt; 1\) (z.B. \(\left(\tfrac{1}{2}\right)^x\))</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Prozesstyp</td><td style="font-family:var(--sans)">Wachstum</td><td style="font-family:var(--sans)">Zerfall</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">\(D\)</td><td>\(\mathbb{R}\)</td><td>\(\mathbb{R}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">\(W\)</td><td>\(\mathbb{R}^+\)</td><td>\(\mathbb{R}^+\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Gemeinsamer Punkt</td><td>\((0 \mid 1)\)</td><td>\((0 \mid 1)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Verlauf</td><td style="font-family:var(--sans)">steigend</td><td style="font-family:var(--sans)">fallend</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Asymptote</td><td>\(y = 0\) (für \(x \to -\infty\))</td><td>\(y = 0\) (für \(x \to +\infty\))</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstellen</td><td>—</td><td>—</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s3-4a-exponentialfunktionen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-4a-exponentialfunktionen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-4a-exponentialfunktionen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-4a-exponentialfunktionen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-4a-exponentialfunktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lVs82KN0GTG3hQMpTM_84lV" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Exponentialgleichungen lösen — Playlist</div><div class="lk-s">MathemaTrick · 22 Videos · passt zu Nullstellen und Aufgaben A3–A6</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PL2jCdV8ykKMpkosfUPe8-mJDM5UI9AzOb" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Exponentialfunktionen — Playlist</div><div class="lk-s">Mathe SMI · 25 Videos · Verlauf, Parameter, Anwendungen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLkr4Hf_IwvPCVVWwpJ6QQJt3-kqxZEaP" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Exponentialfunktionen und Exponentialgleichungen — Playlist</div><div class="lk-s">Mathehoch13 · 31 Videos · von den Grundlagen bis zu Wachstumsprozessen</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHgfDNg5jmBmfnvDHcc4y_Ey" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Exponentialfunktionen, Logarithmus, Gleichungen — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 39 Videos · deckt beide Teilseiten 3.4a/3.4b</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/58876/aufgaben-zu-exponentialfunktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu Exponentialfunktionen</div><div class="lk-s">Graphen, Parameter, Wachstum · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/63359/aufgaben-zu-exponentialfunktionen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu Exponentialfunktionen II</div><div class="lk-s">Zweite Sammlung · Modellieren und Berechnen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/40846/aufgaben-zu-exponential-und-logarithmusgleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Exponential- und Logarithmusgleichungen</div><div class="lk-s">Gemischte Gleichungen zu beiden Teilseiten · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 3.4a Exponentialfunktionen</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s3-4a',
+  kapitelNr:'3.4a', kapitelTitel:'Exponentialfunktionen',
+  prev:{nr:'3.3',titel:'Polynomfunktionen',url:'s3-3-polynomfunktionen.html'},
+  next:{nr:'3.4b',titel:'Logarithmusfunktionen',url:'s3-4b-logarithmusfunktionen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+// Zahlformat mit 2 Nachkommastellen für Tabellenwerte (fmt aus mathlib rundet auf 1)
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+// Kurven-Plot mit Segmenttrennung bei Ausreissern (wie s3-2a)
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+// Anwendungs-Raster mit frei wählbaren Schritten und Einheiten-Labels
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  // Labels mit Einheit
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Bakterienkultur ══ */
+function updateBK(){
+  const t = parseFloat(document.getElementById('bk-t').value);
+  document.getElementById('bk-tv').textContent = t.toFixed(1);
+  const N = Math.pow(2, t);                       // in Tausend
+  const abs = Math.round(1000 * N);               // absolute Bakterienzahl
+  const tB = `<span class="tx-blau">${t.toFixed(1)}</span>`;
+  document.getElementById('bk-eq').innerHTML = `N(${tB}) = 1000·2<sup class="tx-blau">${t.toFixed(1)}</sup> ≈ ${abs} Bakterien`;
+  const {ctx, cx, cy} = gridApp('bk-canvas', 240, 0, 10.5, 0, 1100, 1, 100, 't [h]', 'N [Tausend]');
+  // Millionengrenze
+  ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(1000)); ctx.lineTo(cx(10.5), cy(1000)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('1 Million', cx(0.2), cy(1000) + 14);
+  // Kurve bis N=1100 Tausend
+  plotFx(ctx, cx, cy, x => Math.pow(2, x), 0, Math.log2(1100), '#1a4f8a', 2.5, 1e6);
+  // Punkt mit Hilfslinien
+  if(N <= 1100){
+    drawDot(ctx, cx, cy, t, N, '#1a4f8a', 7);
+    ctx.strokeStyle = '#1a4f8a55'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(cx(t), cy(N)); ctx.lineTo(cx(t), cy(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx(t), cy(N)); ctx.lineTo(cx(0), cy(N)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace';
+    ctx.textAlign = t > 7.5 ? 'right' : 'left';
+    ctx.fillText(`(${t.toFixed(1)}|${fmt2(N)})`, cx(t) + (t > 7.5 ? -8 : 8), cy(N) - 8);
+  }
+}
+document.getElementById('bk-t').addEventListener('input', updateBK);
+
+/* ══ DREI DARSTELLUNGEN ══ */
+const DR_A   = [0.25, 1/3, 0.5, 2, 3, 4, 5];
+const DR_LAB = ['1/4', '1/3', '1/2', '2', '3', '4', '5'];
+function updateDR(){
+  const ai = parseInt(document.getElementById('dr-a').value);
+  const a = DR_A[ai];
+  const x = parseInt(document.getElementById('dr-x').value);
+  document.getElementById('dr-av').textContent = DR_LAB[ai];
+  document.getElementById('dr-xv').textContent = String(x).replace('-', '−');
+  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
+  const aStr = DR_LAB[ai].includes('/') ? `(${DR_LAB[ai]})` : DR_LAB[ai];
+  document.getElementById('dr-eq').innerHTML =
+    `f(${T('gruen','x')}) = ${T('blau', aStr)}<sup>${T('gruen','x')}</sup>`;
+  const y = Math.pow(a, x);
+  document.getElementById('dr-eval').innerHTML =
+    `f(${T('gruen', String(x).replace('-','−'))}) = ${fmt2(y).replace('-','−')}`;
+  // Tabelle
+  const xs = [-3, -2, -1, 0, 1, 2, 3];
+  const tbody = document.querySelector('#dr-table tbody');
+  tbody.innerHTML = xs.map(xi => {
+    const yi = Math.pow(a, xi);
+    const act = xi === x;
+    return `<tr class="${act ? 'aktiv-zeile' : ''}"><td class="td-x">${xi}</td><td class="td-y">${fmt2(yi)}</td><td class="td-pt">(${xi}|${fmt2(yi)})</td></tr>`;
+  }).join('');
+  // Graph: x −4…4, y −2…10 (aufgabenbezogene Skalierung)
+  const {ctx, W, H} = initCanvas('dr-canvas', 260, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -4, 4, -2, 10);
+  plotFx(ctx, cx, cy, t => Math.pow(a, t), -4, 4, '#1a4f8a', 2.5, 40);
+  drawDot(ctx, cx, cy, 0, 1, '#9b1c1c', 5);
+  if(y <= 10 && y >= -2){
+    drawDot(ctx, cx, cy, x, y, '#1f6b3a', 6);
+  }
+}
+['dr-a', 'dr-x'].forEach(id => document.getElementById(id).addEventListener('input', updateDR));
+
+/* ══ TYPEN-VISUALISIERUNG ══ */
+const typen = [
+  {label:'2ˣ',     f: x => Math.pow(2, x),   desc:'y = 2ˣ  ·  Wachstum (a > 1)  ·  steigt, Asymptote links', color:'#1a4f8a'},
+  {label:'3ˣ',     f: x => Math.pow(3, x),   desc:'y = 3ˣ  ·  Wachstum, steiler als 2ˣ für x > 0', color:'#1f6b3a'},
+  {label:'5ˣ',     f: x => Math.pow(5, x),   desc:'y = 5ˣ  ·  Wachstum, noch steiler — grosse Basis heisst schneller Anstieg', color:'#5b2d8e'},
+  {label:'eˣ',     f: x => Math.exp(x),      desc:'y = eˣ  ·  natürliche Exponentialfunktion, e ≈ 2.718 — zwischen 2ˣ und 3ˣ', color:'#b85c00'},
+  {label:'(1/2)ˣ', f: x => Math.pow(0.5, x), desc:'y = (1/2)ˣ  ·  Zerfall (a < 1)  ·  Spiegelbild von 2ˣ, Asymptote rechts', color:'#1a4f8a'},
+  {label:'(1/3)ˣ', f: x => Math.pow(1/3, x), desc:'y = (1/3)ˣ  ·  Zerfall, fällt schneller als (1/2)ˣ', color:'#1f6b3a'},
+];
+let tyActive = 0;
+function buildTyBtns(){
+  document.getElementById('ty-btns').innerHTML = typen.map((t, i) =>
+    `<button class="typ-btn${i === tyActive ? ' aktiv' : ''}" onclick="setTy(${i})">${t.label}</button>`
+  ).join('');
+}
+function setTy(i){
+  tyActive = i;
+  document.querySelectorAll('#ty-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawTy();
+}
+function drawTy(){
+  const {ctx, W, H} = initCanvas('ty-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -4, 4, -1, 9);
+  const t = typen[tyActive];
+  plotFx(ctx, cx, cy, t.f, -4, 4, t.color, 3, 40);
+  // Gemeinsamer Punkt (0|1)
+  drawDot(ctx, cx, cy, 0, 1, '#9b1c1c', 5);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('(0|1)', cx(0) + 8, cy(1) - 8);
+  document.getElementById('ty-desc').textContent = t.desc;
+}
+
+/* ══ TRANSFORMATION ══ */
+const TR_B   = [{lab:'2', f:(x)=>Math.pow(2,x), base:2}, {lab:'e', f:(x)=>Math.exp(x), base:Math.E}, {lab:'1/2', f:(x)=>Math.pow(0.5,x), base:0.5}];
+let trB = 0;
+function setTrB(i){
+  trB = i;
+  document.querySelectorAll('#tr-b-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  updateTR();
+}
+function updateTR(){
+  const u = parseInt(document.getElementById('tr-u').value);
+  const v = parseInt(document.getElementById('tr-v').value);
+  document.getElementById('tr-uv').textContent = String(u).replace('-', '−');
+  document.getElementById('tr-vv').textContent = String(v).replace('-', '−');
+  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
+  const b = TR_B[trB];
+  const bStr = b.lab === '1/2' ? '(1/2)' : b.lab;
+  const expo = u === 0 ? 'x' : (u > 0 ? `x − ${T('blau', u)}` : `x + ${T('blau', Math.abs(u))}`);
+  const vTerm = v === 0 ? '' : (v > 0 ? ` + ${T('orange', v)}` : ` − ${T('orange', Math.abs(v))}`);
+  document.getElementById('tr-eq').innerHTML = `y = ${bStr}<sup>${expo}</sup>${vTerm}`;
+  document.getElementById('tr-asym').innerHTML =
+    `Asymptote: y = ${T('orange', String(v).replace('-', '−'))} · Ordinatenabschnitt: y₀ = ${fmt2(b.f(-u) + v).replace('-', '−')}`;
+  const {ctx, W, H} = initCanvas('tr-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 8);
+  // Asymptote gestrichelt (orange)
+  ctx.setLineDash([6, 4]); ctx.lineWidth = 1.5;
+  ctx.strokeStyle = '#b85c00';
+  ctx.beginPath(); ctx.moveTo(0, cy(v)); ctx.lineTo(W, cy(v)); ctx.stroke();
+  ctx.setLineDash([]);
+  plotFx(ctx, cx, cy, x => b.f(x - u) + v, -5, 5, '#5b2d8e', 2.5, 60);
+  // Ordinatenabschnitt markieren
+  const y0 = b.f(-u) + v;
+  if(y0 >= -4 && y0 <= 8) drawDot(ctx, cx, cy, 0, y0, '#1f6b3a', 5);
+}
+['tr-u', 'tr-v'].forEach(id => document.getElementById(id).addEventListener('input', updateTR));
+
+/* ══ A1: Erkennen ══ */
+const a1G = [
+  {label:'Graph 1', f: x => Math.pow(2, x),    eq:'y = 2ˣ'},
+  {label:'Graph 2', f: x => Math.pow(0.5, x),  eq:'y = (1/2)ˣ'},
+  {label:'Graph 3', f: x => Math.pow(3, x),    eq:'y = 3ˣ'},
+  {label:'Graph 4', f: x => -Math.pow(2, x),   eq:'y = −2ˣ'},
+];
+const a1Opts = ['y = 2ˣ', 'y = (1/2)ˣ', 'y = 3ˣ', 'y = −2ˣ'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -4, 4, -5, 7);
+  plotFx(ctx, cx, cy, a1G[a1Act].f, -4, 4, '#1a4f8a', 2.5, 30);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Achte auf steigend/fallend, den Punkt (0|1) und ob die Kurve oberhalb oder unterhalb der x-Achse liegt.';
+  }
+}
+
+/* ══ A2: Lösungs-Skizzen ══ */
+function drawA2Sol(){
+  const body = document.getElementById('l-a2');
+  if(!body.classList.contains('sichtbar')) return;
+  const {ctx, W, H} = initCanvas('a2-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -4, 5, -6, 6);
+  // Asymptote von a) y = −3
+  ctx.setLineDash([6, 4]); ctx.strokeStyle = '#1a4f8a88'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, cy(-3)); ctx.lineTo(W, cy(-3)); ctx.stroke();
+  ctx.setLineDash([]);
+  plotFx(ctx, cx, cy, x => Math.pow(2, x) - 3, -4, 5, '#1a4f8a', 2.5, 30);         // a
+  plotFx(ctx, cx, cy, x => -Math.pow(3, x), -4, 5, '#1f6b3a', 2.5, 30);            // b
+  plotFx(ctx, cx, cy, x => Math.pow(0.5, x - 2), -4, 5, '#5b2d8e', 2.5, 30);       // c
+}
+
+/* ══ Zahlenwert-Prüfung (A3–A6) ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²']/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateBK();
+  updateDR();
+  buildTyBtns(); drawTy();
+  updateTR();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateBK(); updateDR(); drawTy(); updateTR(); drawA1(); drawA2Sol();
+});
+</script>
+</body>
+</html>

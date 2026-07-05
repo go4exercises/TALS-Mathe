@@ -1094,6 +1094,101 @@ s33_cards = [
      '<b>x = −2</b> — Achsensymmetrie: f(−2) = f(2) = 0.'),
 ]
 
+# ─── s3-4a Exponentialfunktionen (Schwerpunkt) ──────────────
+s34a_cards = [
+    # Definitionen
+    ('Was ist eine <i>Exponentialfunktion</i>?',
+     'Eine Funktion <b>f(x) = aˣ</b> mit a ∈ ℝ⁺, a ≠ 1 — die Variable steht im <b>Exponenten</b>.'),
+    ('Warum sind a = 1 und a ≤ 0 als Basis ausgeschlossen?',
+     'a = 1 ergäbe die <b>konstante Funktion</b> y = 1; für a ≤ 0 sind Potenzen wie a^(1/2) nicht für alle reellen Exponenten definiert.'),
+    ('Unterschied 2ˣ und x²?',
+     '<b>2ˣ</b>: Exponentialfunktion (Variable im Exponenten), <b>x²</b>: Potenzfunktion. Für grosse x gewinnt 2ˣ haushoch: 2¹⁰ = 1024, aber 10² = 100.'),
+    ('Was ist die <i>e-Funktion</i>?',
+     'Die Exponentialfunktion <b>y = eˣ</b> mit der irrationalen Basis e ≈ 2.71828 (Eulersche Zahl).'),
+    ('Wie ist die Eulersche Zahl e definiert?',
+     'Als Grenzwert <b>(1 + 1/x)ˣ für x → ∞</b> — z.B. Zinseszins bei immer feinerer Gutschrift.'),
+    # Eigenschaften
+    ('D und W von y = aˣ?',
+     '<b>D = ℝ, W = ℝ⁺</b> — die Funktionswerte sind immer positiv, nie null.'),
+    ('Gemeinsamer Punkt aller Exponentialkurven?',
+     '<b>(0|1)</b> — denn a⁰ = 1 für jede zulässige Basis.'),
+    ('Asymptote von y = aˣ?',
+     'Die <b>x-Achse</b> (y = 0). Sie wird nie erreicht: aˣ = 0 hat keine Lösung.'),
+    ('Verlauf bei a &gt; 1 bzw. a &lt; 1?',
+     'a &gt; 1: <b>steigend</b> (Wachstum) · 0 &lt; a &lt; 1: <b>fallend</b> (Zerfall).'),
+    ('Spiegelung von y = aˣ an der y-Achse?',
+     '<b>a⁻ˣ = (1/a)ˣ</b> — aus Wachstum wird Zerfall und umgekehrt.'),
+    ('Wann hat k·aˣ + v eine Nullstelle?',
+     'Nur wenn aˣ = −v/k eine <b>positive</b> rechte Seite hat — sonst keine (aˣ &gt; 0).'),
+    # Transformationen
+    ('Wirkung von v in y = aˣ + v?',
+     'Vertikale Verschiebung — die <b>Asymptote wandert mit</b> zu y = v.'),
+    ('Besonderheit: Streckung in y vs. Verschiebung in x?',
+     'Bei Exponentialfunktionen <b>dasselbe</b>: a^(x−u) = a⁻ᵘ·aˣ = k·aˣ. Identisch, wenn k·aᵘ = 1, d.h. u = −log_a k.'),
+    ('Basiswechsel bei Streckung in x-Richtung?',
+     '<b>a^(b·x) = (aᵇ)ˣ = cˣ</b> mit c = aᵇ — z.B. 2²ˣ = 4ˣ.'),
+    ('Wie schreibt man aˣ mit der Basis e?',
+     '<b>aˣ = e^(ln a · x)</b> — z.B. 2ˣ = e^(0.693·x).'),
+    # Beispiele
+    ('y = aˣ geht durch P(3|125). Bestimme a.',
+     'a³ = 125 = 5³ → <b>a = 5</b>.'),
+    ('Ordinatenabschnitt und Nullstelle von y = 3ˣ − 6?',
+     'y₀ = 3⁰ − 6 = <b>−5</b>; Nullstelle 3ˣ = 6 → <b>x₀ = log₃ 6 ≈ 1.63</b>.'),
+    ('Modell «Verdopplung alle T Schritte»?',
+     '<b>N(t) = N₀ · 2^(t/T)</b> — analog Halbierung: N₀ · 0.5^(t/T).'),
+    ('Abnahme um 30 % pro Minute — Funktionsgleichung?',
+     'Pro Minute bleiben 70 %: <b>h(t) = h₀ · 0.7ᵗ</b>.'),
+    ('Zinseszins mit 2 % Jahreszins?',
+     '<b>K(n) = K₀ · 1.02ⁿ</b> — Wachstumsfaktor 1 + p/100.'),
+]
+
+# ─── s3-4b Logarithmusfunktionen (Schwerpunkt) ──────────────
+s34b_cards = [
+    # Definitionen
+    ('Was ist eine <i>Logarithmusfunktion</i>?',
+     'Eine Funktion <b>f(x) = log_a x</b> mit a ∈ ℝ⁺, a ≠ 1; f : ℝ⁺ → ℝ — die <b>Umkehrfunktion</b> der Exponentialfunktion y = aˣ.'),
+    ('Wie entsteht der Graph von log_a x grafisch?',
+     'Durch <b>Spiegelung der Exponentialkurve an der Winkelhalbierenden y = x</b>: Jeder Punkt (a|b) wird zu (b|a).'),
+    ('D und W von y = log_a x?',
+     '<b>D = ℝ⁺, W = ℝ</b> — gegenüber der Exponentialfunktion tauschen D und W die Rollen.'),
+    ('Gemeinsamer Punkt aller Logarithmuskurven?',
+     '<b>(1|0)</b> — denn log_a 1 = 0 für jede Basis (a⁰ = 1).'),
+    ('Nullstelle von y = log_a x?',
+     '<b>x₀ = 1</b> — das gespiegelte Gegenstück zum Punkt (0|1) der Exponentialkurve.'),
+    ('Asymptote von y = log_a x?',
+     'Die <b>y-Achse</b> (x = 0) — eine <b>vertikale</b> Asymptote.'),
+    ('Warum ist log_a von 0 oder negativen Zahlen nicht definiert?',
+     'Gesucht wäre ein Exponent t mit aᵗ ≤ 0 — unmöglich, denn <b>aᵗ &gt; 0</b> für alle t.'),
+    ('Hat die Logarithmuskurve eine horizontale Asymptote?',
+     '<b>Nein</b> — W = ℝ: Sie wächst über alle Grenzen, nur immer langsamer. Flach ≠ beschränkt!'),
+    # ln und lg
+    ('Was ist die <i>ln-Funktion</i>?',
+     'Die Logarithmusfunktion mit Basis e: <b>ln x = log_e x</b> (natürlicher Logarithmus).'),
+    ('Was bedeutet lg x?',
+     'Der <b>Zehnerlogarithmus</b> log₁₀ x — Standard bei logarithmischen Skalen (pH, Phon).'),
+    ('Basiswechsel-Formel?',
+     '<b>log_a x = ln x / ln a = lg x / lg a</b> — darum genügen dem Taschenrechner ln und log.'),
+    ('Streckung in y-Richtung bei Logarithmusfunktionen?',
+     'Entspricht einem <b>Basiswechsel</b>: k·log_a x = log_c x, wenn k·log_a c = 1. Alle Log-Kurven sind gestreckte Kopien voneinander.'),
+    ('Was ergibt log_a(b·x)?',
+     '<b>log_a x + log_a b</b> — Streckung in x-Richtung ist dasselbe wie Verschiebung in y-Richtung.'),
+    # Transformationen / Beispiele
+    ('Vertikale Asymptote und D von y = log₂(x − 3)?',
+     'Asymptote <b>x = 3</b>; Argument positiv: <b>D = {x | x &gt; 3}</b>.'),
+    ('Nullstelle von f(x) = log₂ x − 3?',
+     'log₂ x = 3 → <b>x₀ = 2³ = 8</b>.'),
+    ('Umkehrfunktion bestimmen — Vorgehen?',
+     '1. Nach x auflösen (<b>logarithmieren</b> bzw. <b>exponenzieren</b>), 2. Variablen tauschen. Kontrolle: D und W tauschen die Rollen.'),
+    ('Umkehrfunktion von y = 5ˣ − 4?',
+     'y + 4 = 5ˣ → x = log₅(y + 4) → <b>f⁻¹: y = log₅(x + 4)</b>.'),
+    ('P(3|8) liegt auf y = 2ˣ. Welcher Punkt liegt auf y = log₂ x?',
+     '<b>(8|3)</b> — Spiegelung an y = x vertauscht die Koordinaten.'),
+    ('Weber-Fechner: Wirkung einer Verdopplung der Schallintensität?',
+     'L = 10·lg(J/J₀) steigt um <b>10·lg 2 ≈ 3 Phon</b> — Faktoren werden Summanden.'),
+    ('pH-Wert: Definition und Umkehrung?',
+     '<b>pH = −lg c</b>; Umkehrung durch Exponenzieren: <b>c = 10^(−pH)</b>.'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -1159,6 +1254,10 @@ SP_DECKS = [
      'Wurzelfunktion als Umkehrfunktion, Spiegelung an y = x, Definitionsbereiche, Wurzelgleichungen.', s32b_cards),
     ('s3-3-polynomfunktionen', '3.3 Polynomfunktionen',
      'Grad und Leitkoeffizient, Linearfaktoren und Vielfachheit, Globalverlauf, Extremstellen.', s33_cards),
+    ('s3-4a-exponentialfunktionen', '3.4a Exponentialfunktionen',
+     'Basis und Verlauf, Punkt (0|1), Asymptote, Transformationen, e-Funktion und Basiswechsel.', s34a_cards),
+    ('s3-4b-logarithmusfunktionen', '3.4b Logarithmusfunktionen',
+     'Umkehrfunktion, Spiegelung an y = x, Nullstelle x = 1, Basiswechsel, logarithmische Skalen.', s34b_cards),
 ]
 
 for slug, deck_short, deck_desc, cards in SP_DECKS:

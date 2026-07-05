@@ -4,6 +4,38 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [71] — 2026-07-05 · s3-4 ausgebaut: Sub-Split 3.4a Exponentialfunktionen / 3.4b Logarithmusfunktionen
+
+Dritter Vollausbau im Schwerpunktfach (Quelle: FTB Kap. 19, RLP-Kompetenzen 3.4). Der Stub
+`s3-4-exponential-logarithmusfunktionen.html` wurde durch zwei vollwertige Themenseiten nach
+Master-Schema ersetzt (Sub-Split wie 3.2a/b):
+
+- **`schwerpunkt/s3-4a-exponentialfunktionen.html`** — Einstieg Bakterienkultur
+  \(N(t) = 1000 \cdot 2^t\) (interaktiv mit Millionengrenze), Definition, Darstellungen-Widget
+  (Basis-Slider mit Wertetabelle und Graph), Eigenschaften-Tabelle mit Klick-Visualisierung
+  (\(2^x\) bis \(e^x\) und Zerfallsbasen), Transformationen-Widget \(a^{x-u}+v\) mit
+  mitwandernder Asymptote, Besonderheiten (Basiswechsel, Streckung = Verschiebung,
+  \(u = -\log_a k\)), e-Funktion, A1–A7 (u.a. Bakterienstamm, Bierschaum-Zerfall, Zinseszins,
+  Eulersche Zahl über \((1+1/x)^x\)), 4 Mini-Checks.
+- **`schwerpunkt/s3-4b-logarithmusfunktionen.html`** — Einstieg Umkehrfrage
+  \(t = \log_2 y\) (interaktiv, Verdopplung = +1 h), Herleitung der Umkehrfunktion,
+  Spiegelungs-Widget an \(y = x\) (Basen 2, e, 10, 1/2), Eigenschaften mit
+  Klick-Visualisierung, Transformationen-Widget \(\log_a(x-u)+v\) mit vertikaler Asymptote
+  und Nullstelle \(x_0 = u + a^{-v}\), Basiswechsel/ln-Funktion, A1–A7 (u.a. Weber-Fechner-
+  Lautstärke, pH-Wert, C-14-Datierung), 4 Mini-Checks.
+- **Materialien komplett:** je 4 Druckseiten (`scripts/build_print_s3.py` um D-/E-Blöcke
+  erweitert, Bestand byte-identisch) und Anki-Decks mit je 20 Karten (`build_apkg.py`,
+  nur neue Decks gebaut).
+- Alle Zahlenwerte numerisch verifiziert (u.a. \(\log_2 1000 \approx 9.97\), Bakterien
+  \(55.0\) h bis 1 Mrd., Bierschaum-Halbwertszeit \(1.94\) min, C-14 bei 70 % Rest
+  \(2949\) a, \(f^{-1}(0) = e^{3/2}-5 \approx -0.52\)).
+- Infrastruktur: `nav.js` (SITE + GROUPS), `index.html` (ksub span-2, 38 Themenseiten),
+  prev/next-Kette s3-3 ↔ s3-4a ↔ s3-4b ↔ s3-5; alter Stub entfernt.
+- Ressourcen owner-verifiziert nach HOWTO §3.4 (9 Abrufe): MathemaTrick, Mathe SMI,
+  Mathehoch13, Daniel Jung (Videos) + serlo-Sitemap (Aufgaben); Anbieter-Map §8 erweitert.
+
+---
+
 ## [70] — 2026-07-05 · s3-3 Polynomfunktionen ausgebaut
 
 Zweiter Vollausbau im Schwerpunktfach (Quelle: FTB Kap. 18, RLP-Kompetenzen 3.3):

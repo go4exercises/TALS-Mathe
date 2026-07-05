@@ -1062,6 +1062,598 @@ C_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s3-4a  EXPONENTIALFUNKTIONEN
+# ═══════════════════════════════════════════════════════════════════
+
+D_HANDOUT = r'''
+  <h2>1. Definition</h2>
+
+  <div class="block block-def">
+    <div class="block-titel">📘 Exponentialfunktion</div>
+    <p>Eine Funktion \( f : \mathbb{R} \longrightarrow \mathbb{R}^+ \) mit einer Gleichung der Form</p>
+    \[ y = f(x) = a^x, \qquad a \in \mathbb{R}^+,\quad a \neq 1 \]
+    <p>heisst <strong>Exponentialfunktion</strong> mit der Basis \(a\). Die Variable steht im
+    <strong>Exponenten</strong>.</p>
+  </div>
+
+  <p><strong>Ausgeschlossene Basen:</strong> \(a = 1\) ergäbe die konstante Funktion \(y = 1\);
+  Basen \(a \leq 0\) sind nicht für alle reellen Exponenten definiert.</p>
+
+  <h2>2. Eigenschaften</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Eigenschaften</th><th colspan="2">\( y = a^x \), \( a > 0 \), \( a \neq 1 \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Definitionsmenge</td><td colspan="2">\( D = \mathbb{R} \)</td></tr>
+      <tr><td class="li">Wertemenge</td><td colspan="2">\( W = \mathbb{R}^+ \)</td></tr>
+      <tr><td class="li">Gemeinsamer Punkt</td><td colspan="2">\( (0 \mid 1) \), denn \( a^0 = 1 \)</td></tr>
+      <tr><td class="li">Nullstellen</td><td colspan="2">—</td></tr>
+      <tr><td class="li">Verlauf</td><td class="li">\( a > 1 \): steigend (Wachstum)</td><td class="li">\( a < 1 \): fallend (Zerfall)</td></tr>
+      <tr><td class="li">Asymptote</td><td colspan="2">\(x\)-Achse (\( y = 0 \))</td></tr>
+    </tbody>
+  </table>
+  <p>Spiegelung an der \(y\)-Achse wechselt zwischen Wachstum und Zerfall:
+  \( a^{-x} = \left(\tfrac{1}{a}\right)^{x} \).</p>
+
+  <h2>3. Transformationen</h2>
+  <p>Ausgangsfunktion \( y = a^x \), Bildfunktion \( y = k \cdot a^{x-u} + v \):</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Parameter</th><th>Wirkung</th></tr></thead>
+    <tbody>
+      <tr><td>\(u\)</td><td class="li">Verschiebung in \(x\)-Richtung (nach rechts für \(u > 0\))</td></tr>
+      <tr><td>\(v\)</td><td class="li">Verschiebung in \(y\)-Richtung — die Asymptote wandert mit zu \( y = v \)</td></tr>
+      <tr><td>\(|k|\)</td><td class="li">Streckung (\(|k| > 1\)) bzw. Stauchung (\(|k| < 1\)) in \(y\)-Richtung</td></tr>
+      <tr><td>\(k < 0\)</td><td class="li">zusätzlich Spiegelung an der \(x\)-Achse</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Zwei Besonderheiten</h2>
+  <p><strong>Streckung in \(x\) = Basiswechsel:</strong>
+  \( a^{b \cdot x} = \left(a^b\right)^x = c^x \) mit \( c = a^b \).</p>
+  <p><strong>Streckung in \(y\) = Verschiebung in \(x\):</strong>
+  \( a^{x-u} = a^{-u} \cdot a^x = k \cdot a^x \). Die Graphen von \( k \cdot a^x \) und
+  \( a^{x-u} \) sind identisch, wenn \( k \cdot a^u = 1 \), d.h. \( u = -\log_a k \).</p>
+
+  <h2>5. Die natürliche Exponentialfunktion</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 e-Funktion</div>
+    <p>Exponentialfunktion mit der irrationalen Basis \( e \approx 2.71828 \) (Eulersche Zahl):
+    \( y = e^x \). Jede Exponentialfunktion lässt sich mit Basis \(e\) schreiben:</p>
+    \[ a^x = e^{b \cdot x} \qquad \text{mit } b = \ln a \]
+  </div>
+
+  <h2>6. Modellieren von Wachstum und Zerfall</h2>
+  <p>Startwert \(N_0\), pro Schritt Faktor \(a\): \( N(t) = N_0 \cdot a^t \). Prozentuale Änderung
+  um \(p\,\%\) pro Schritt: \( a = 1 \pm \tfrac{p}{100} \). Verdopplung alle \(T\) Schritte:
+  \( N(t) = N_0 \cdot 2^{t/T} \); Halbierung alle \(T\) Schritte: \( N(t) = N_0 \cdot 0.5^{\,t/T} \).</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Exponentialfunktionen wachsen mit konstantem <strong>Faktor</strong> pro Schritt — nicht mit
+    konstantem Summand. Alle Kurven laufen durch \( (0 \mid 1) \), bleiben positiv und haben die
+    \(x\)-Achse als Asymptote. Die Basis entscheidet: \( a > 1 \) Wachstum, \( a < 1 \) Zerfall.</p>
+  </div>
+'''
+
+D_FORMELAUSZUG = r'''
+  <h2>1. Definition</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Exponentialfunktion</td>
+          <td>\( y = f(x) = a^x, \quad a \in \mathbb{R}^+,\; a \neq 1 \)</td></tr>
+      <tr><td class="li">Spiegelung an \(y\)-Achse</td>
+          <td>\( a^{-x} = \dfrac{1}{a^x} = \left(\dfrac{1}{a}\right)^{x} \)</td></tr>
+      <tr><td class="li">e-Funktion</td>
+          <td>\( y = e^x, \quad e \approx 2.71828 \)</td></tr>
+      <tr><td class="li">Basiswechsel zu \(e\)</td>
+          <td>\( a^x = e^{b \cdot x} \quad \text{mit } b = \ln a \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Eigenschaften</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th></th><th>\( a > 1 \)</th><th>\( 0 < a < 1 \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Prozesstyp</td><td class="li">Wachstum</td><td class="li">Zerfall</td></tr>
+      <tr><td class="li">\(D\)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R} \)</td></tr>
+      <tr><td class="li">\(W\)</td><td>\( \mathbb{R}^+ \)</td><td>\( \mathbb{R}^+ \)</td></tr>
+      <tr><td class="li">Gemeinsamer Punkt</td><td>\( (0 \mid 1) \)</td><td>\( (0 \mid 1) \)</td></tr>
+      <tr><td class="li">Nullstellen</td><td>—</td><td>—</td></tr>
+      <tr><td class="li">Asymptote</td><td>\( y = 0 \) (links)</td><td>\( y = 0 \) (rechts)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Transformationen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Bildfunktion</td><td>\( y = k \cdot a^{x-u} + v \)</td></tr>
+      <tr><td class="li">Asymptote</td><td>\( y = v \)</td></tr>
+      <tr><td class="li">Ordinatenabschnitt</td><td>\( y_0 = k \cdot a^{-u} + v \)</td></tr>
+      <tr><td class="li">Streckung in \(x\) = Basiswechsel</td><td>\( a^{b x} = (a^b)^x = c^x \)</td></tr>
+      <tr><td class="li">Streckung in \(y\) = Verschiebung in \(x\)</td><td>\( a^{x-u} = a^{-u} \cdot a^x = k \cdot a^x, \quad k \cdot a^u = 1 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Nullstellen von \( k \cdot a^x + v = 0 \)</h2>
+  \[ a^x = -\frac{v}{k} \]
+  <table class="ftb-tabelle">
+    <thead><tr><th>rechte Seite</th><th>Lösungen</th></tr></thead>
+    <tbody>
+      <tr><td>\( > 0 \)</td><td>genau eine: \( x_0 = \log_a\left(-\tfrac{v}{k}\right) \)</td></tr>
+      <tr><td>\( \leq 0 \)</td><td class="li">keine — denn \( a^x > 0 \) für alle \(x\)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Wachstums- und Zerfallsprozesse</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Grundform</td><td>\( N(t) = N_0 \cdot a^t \) (Startwert \(N_0\), Faktor \(a\) pro Schritt)</td></tr>
+      <tr><td class="li">Änderung um \(p\,\%\) pro Schritt</td><td>\( a = 1 \pm \dfrac{p}{100} \)</td></tr>
+      <tr><td class="li">Verdopplung alle \(T\) Schritte</td><td>\( N(t) = N_0 \cdot 2^{t/T} \)</td></tr>
+      <tr><td class="li">Halbierung alle \(T\) Schritte</td><td>\( N(t) = N_0 \cdot 0.5^{\,t/T} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6. Parameter aus Punkten bestimmen</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Gegeben</th><th>Vorgehen</th></tr></thead>
+    <tbody>
+      <tr><td class="li">\( y = a^x \) durch \( P(x_1 \mid y_1) \)</td>
+          <td>\( a = y_1^{\,1/x_1} \)</td></tr>
+      <tr><td class="li">\( y = k \cdot a^x \) durch \(P\) und \(Q\)</td>
+          <td class="li">beide Punkte einsetzen, Gleichungen dividieren → \(a\), dann \(k\)</td></tr>
+    </tbody>
+  </table>
+'''
+
+D_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Definition vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Eine Exponentialfunktion hat die Form \( f(x) = \) <span class="lueck"></span>
+      &nbsp;mit&nbsp; \( a \in \) <span class="lueck"></span>.<br>
+      Für \( a > 1 \) beschreibt sie einen <span class="lueck"></span>sprozess,<br>
+      für \( 0 < a < 1 \) einen <span class="lueck"></span>sprozess.
+    </div>''')
+    + aufg(2, 'Exponentialfunktionen erkennen', 1, r'''    <p>Welche der folgenden Funktionen sind Exponentialfunktionen? Kreuze an und begründe kurz:</p>
+    <p>(a) \( f(x) = 3 \cdot x^4 \) &nbsp;&nbsp; (b) \( g(x) = 2^x \) &nbsp;&nbsp;
+       (c) \( h(x) = 5^{1-x} \) &nbsp;&nbsp; (d) \( k(x) = x^2 + 2^x \)</p>
+''' + LINS)
+    + aufg(3, 'Steigend oder fallend?', 1, r'''    <p>Entscheide ohne zu zeichnen, ob die Kurve steigt oder fällt:</p>
+    <p>(a) \( y = 3^x \) &nbsp;&nbsp; (b) \( y = \left(\tfrac{1}{4}\right)^{x} \) &nbsp;&nbsp;
+       (c) \( y = 0.9^x \) &nbsp;&nbsp; (d) \( y = \left(\tfrac{5}{2}\right)^{x} \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Eigenschaften</div>\n'
+    + aufg(4, 'Definitions- und Wertemenge', 2, r'''    <p>Gib \(D\) und \(W\) an:</p>
+    <p>(a) \( y = 2^x \) &nbsp;&nbsp;&nbsp; (b) \( y = 2^x - 4 \)</p>
+''' + LINS)
+    + aufg(5, 'Gemeinsamer Punkt', 1, r'''    <p>Durch welchen Punkt verlaufen <em>alle</em> Exponentialkurven \( y = a^x \)? Begründe.</p>
+''' + LINS)
+    + aufg(6, 'Funktionswerte', 1, r'''    <p>Berechne ohne Taschenrechner:</p>
+    <p>(a) \( f(x) = 3 \cdot 2^x \): \( f(4) = \,? \) &nbsp;&nbsp;&nbsp;
+       (b) \( g(x) = \left(\tfrac{1}{3}\right)^{x} \): \( g(-2) = \,? \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Transformationen</div>\n'
+    + aufg(7, 'Verschiebung', 2, r'''    <p>Der Graph von \( y = 2^x \) wird um \(3\) Einheiten nach links und \(1\) Einheit nach unten
+    verschoben. Gib die Gleichung der Bildfunktion an.</p>
+''' + LINS)
+    + aufg(8, 'Asymptote und Nullstelle', 2, r'''    <p>Bestimme die horizontale Asymptote und die Nullstelle von \( y = 2^x - 8 \).</p>
+''' + LINS)
+    + aufg(9, 'In die Form \\( a^x \\) bringen', 2, r'''    <p>Schreibe \( f(x) = 5^{2x} \) in der Form \( f(x) = a^x \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Parameter bestimmen</div>\n'
+    + aufg(10, 'Basis aus Punkt', 2, r'''    <p>Die Exponentialkurve \( y = a^x \) geht durch \( P(3 \mid 125) \). Bestimme \(a\).</p>
+''' + LINS)
+    + aufg(11, 'Faktor und Basis', 3, r'''    <p>Die Kurve \( y = k \cdot a^x \) geht durch \( P(0 \mid 4) \) und \( Q(3 \mid 32) \).
+    Bestimme \(k\) und \(a\).</p>
+''' + LINS)
+    + aufg(12, 'Streckung durch Verschiebung ersetzen', 3, r'''    <p>Zeige, dass \( g(x) = \tfrac{1}{9} \cdot 3^x \) eine verschobene Kopie von \( f(x) = 3^x \)
+    ist. Um wie viele Einheiten und in welche Richtung?</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p>\( f(x) = a^x \) mit \( a \in \mathbb{R}^+ \setminus \{1\} \). Für \( a > 1 \):
+    <strong>Wachstums</strong>prozess, für \( 0 < a < 1 \): <strong>Zerfalls</strong>prozess.</p>''')
+    + loes(2, r'''    <p>(a) nein — \(x\) steht in der Basis (Potenzfunktion) · (b) ja ·
+    (c) ja — \( 5^{1-x} = 5 \cdot \left(\tfrac{1}{5}\right)^{x} \) · (d) nein — Summe aus Potenz-
+    und Exponentialterm.</p>''')
+    + loes(3, r'''    <p>(a) steigend (\( a = 3 > 1 \)) · (b) fallend (\( a = \tfrac{1}{4} < 1 \)) ·
+    (c) fallend (\( a = 0.9 < 1 \)) · (d) steigend (\( a = \tfrac{5}{2} > 1 \)).</p>''')
+    + loes(4, r'''    <p>(a) \( D = \mathbb{R} \), \( W = \mathbb{R}^+ \) ·
+    (b) \( D = \mathbb{R} \), \( W = \{ y \mid y > -4 \} \) — die Verschiebung nimmt die
+    Wertemenge mit.</p>''')
+    + loes(5, r'''    <p>\( (0 \mid 1) \) — denn \( a^0 = 1 \) für jede zulässige Basis \(a\).</p>''')
+    + loes(6, r'''    <p>(a) \( f(4) = 3 \cdot 2^4 = 3 \cdot 16 = 48 \) ·
+    (b) \( g(-2) = \left(\tfrac{1}{3}\right)^{-2} = 3^2 = 9 \).</p>''')
+    + loes(7, r'''    \[ y = 2^{x+3} - 1 \]''')
+    + loes(8, r'''    <p>Asymptote \( y = -8 \) (Verschiebung um \(-8\)); Nullstelle: \( 2^x = 8 \Rightarrow x_0 = 3 \).</p>''')
+    + loes(9, r'''    <p>\( 5^{2x} = \left(5^2\right)^x = 25^x \) — also \( a = 25 \).</p>''')
+    + loes(10, r'''    <p>\( a^3 = 125 = 5^3 \;\Longrightarrow\; a = 5 \).</p>''')
+    + loes(11, r'''    <p>Aus \(P\): \( k \cdot a^0 = k = 4 \). Aus \(Q\): \( 4 \cdot a^3 = 32 \Rightarrow a^3 = 8
+    \Rightarrow a = 2 \). Also \( y = 4 \cdot 2^x \).</p>''')
+    + loes(12, r'''    <p>\( \tfrac{1}{9} = 3^{-2} \), also \( g(x) = 3^{-2} \cdot 3^x = 3^{x-2} \) —
+    Verschiebung um \(2\) Einheiten <strong>nach rechts</strong>.</p>''')
+)
+
+D_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik und Naturwissenschaft, nach zunehmendem Schwierigkeitsgrad
+    geordnet. Die Musterlösungen folgen am Ende des Dokuments. Alle Graphen mit beschrifteten Achsen
+    (Grösse und Einheit) skizzieren.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Biologie</td><td>Zellkultur</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Finanzmathematik</td><td>Degressive Abschreibung</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Physik</td><td>Luftdruck und Höhe</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">4</td><td>Elektrotechnik</td><td>Kondensator-Entladung</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Finanzmathematik</td><td>Zinseszins und Verdopplung</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Life Sciences</td><td>Medikamentenabbau</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Zellkultur', 2, r'''    <p>Eine Zellkultur startet mit \( N_0 = 500 \) Zellen; die Zellzahl verdoppelt sich alle
+    \(2\) Stunden.</p>
+    <p>(a) Gib die Funktionsgleichung \( N(t) \) an (\(t\) in Stunden).</p>
+    <p>(b) Berechne die Zellzahl nach \(6\) Stunden.</p>
+    <p>(c) Nach wie vielen Stunden sind \( 64\,000 \) Zellen erreicht? (Ohne Logarithmus lösbar!)</p>
+''' + LINS4, tag='Biologie')
+    + aufg(2, 'Degressive Abschreibung', 2, r'''    <p>Eine Maschine kostet neu \( 24\,000 \) CHF und verliert pro Jahr \(20\) % ihres
+    Buchwerts.</p>
+    <p>(a) Gib die Funktionsgleichung \( W(n) \) für den Buchwert nach \(n\) Jahren an.</p>
+    <p>(b) Berechne den Buchwert nach \(3\) Jahren.</p>
+    <p>(c) Ab welchem Jahr liegt der Buchwert erstmals unter einem Drittel des Neuwerts?</p>
+''' + LINS4, tag='Finanzmathematik')
+    + aufg(3, 'Luftdruck und Höhe', 3, r'''    <p>Näherungsweise nimmt der Luftdruck pro Kilometer Höhe um \(12\) % ab; auf Meereshöhe
+    beträgt er \( 1013 \) hPa: \( p(h) = 1013 \cdot 0.88^h \) (\(h\) in km).</p>
+    <p>(a) Berechne den Luftdruck auf \( 3000 \) m Höhe.</p>
+    <p>(b) In welcher Höhe hat sich der Druck halbiert?</p>
+    <p>(c) Warum ist ein exponentielles Modell hier plausibler als ein lineares?</p>
+''' + LINS4, tag='Physik')
+    + aufg(4, 'Kondensator-Entladung', 3, r'''    <p>Ein Kondensator entlädt sich über einen Widerstand nach \( U(t) = 12 \cdot e^{-t/2} \)
+    (\(U\) in Volt, \(t\) in Sekunden).</p>
+    <p>(a) Gib Startspannung und Asymptote an.</p>
+    <p>(b) Berechne die Spannung nach \(1\) Sekunde.</p>
+    <p>(c) Nach welcher Zeit ist die Spannung auf \(1\) V gesunken?</p>
+''' + LINS4, tag='Elektrotechnik')
+    + aufg(5, 'Zinseszins und Verdopplung', 3, r'''    <p>Ein Kapital von \( 2000 \) CHF wird zu \(3\) % Jahreszins mit Zinseszins angelegt.</p>
+    <p>(a) Gib die Funktionsgleichung \( K(n) \) an.</p>
+    <p>(b) Berechne das Kapital nach \(10\) Jahren.</p>
+    <p>(c) Nach wie vielen Jahren hat sich das Kapital verdoppelt? Zeige, dass die Antwort
+    nicht vom Startkapital abhängt.</p>
+''' + LINS4, tag='Finanzmathematik')
+    + aufg(6, 'Medikamentenabbau', 3, r'''    <p>Nach der Einnahme baut der Körper ein Medikament exponentiell ab: pro Stunde um \(15\) %.
+    Die Anfangsdosis beträgt \( 100 \) mg.</p>
+    <p>(a) Gib die Funktionsgleichung \( C(t) \) an (\(t\) in Stunden, \(C\) in mg).</p>
+    <p>(b) Welche Menge ist nach \(6\) Stunden noch im Körper?</p>
+    <p>(c) Bestimme die Halbwertszeit des Medikaments.</p>
+''' + LINS4, tag='Life Sciences')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) Verdopplung alle \(2\) h: \( N(t) = 500 \cdot 2^{t/2} \).</p>
+    <p>(b) \( N(6) = 500 \cdot 2^3 = 4000 \) Zellen.</p>
+    <p>(c) \( 2^{t/2} = \dfrac{64\,000}{500} = 128 = 2^7 \Rightarrow \dfrac{t}{2} = 7
+    \Rightarrow t = 14 \) h.</p>''')
+    + loes(2, r'''    <p>(a) Pro Jahr bleiben \(80\) %: \( W(n) = 24\,000 \cdot 0.8^n \).</p>
+    <p>(b) \( W(3) = 24\,000 \cdot 0.512 = 12\,288 \) CHF.</p>
+    <p>(c) Ansatz \( 0.8^n < \tfrac{1}{3} \): \( n = \log_{0.8} \tfrac{1}{3} \approx 4.92 \) —
+    ab dem \(5\). Jahr (\( W(5) \approx 7864 \) CHF \( < 8000 \) CHF).</p>''')
+    + loes(3, r'''    <p>(a) \( p(3) = 1013 \cdot 0.88^3 \approx 690 \) hPa.</p>
+    <p>(b) \( 0.88^h = 0.5 \Rightarrow h = \log_{0.88} 0.5 = \dfrac{\ln 0.5}{\ln 0.88}
+    \approx 5.4 \) km.</p>
+    <p>(c) Die Abnahme ist proportional zum aktuellen Druck (gleiche Höhendifferenz → gleicher
+    Faktor). Ein lineares Modell würde ab ca. \(8.4\) km negativen Druck liefern — physikalisch
+    unmöglich; die Exponentialkurve bleibt positiv.</p>''')
+    + loes(4, r'''    <p>(a) Startspannung \( U(0) = 12 \) V; Asymptote \( U = 0 \) (vollständige Entladung).</p>
+    <p>(b) \( U(1) = 12 \cdot e^{-0.5} \approx 7.28 \) V.</p>
+    <p>(c) \( 12 \cdot e^{-t/2} = 1 \Rightarrow e^{-t/2} = \tfrac{1}{12} \Rightarrow
+    t = 2 \ln 12 \approx 4.97 \) s.</p>''')
+    + loes(5, r'''    <p>(a) \( K(n) = 2000 \cdot 1.03^n \).</p>
+    <p>(b) \( K(10) = 2000 \cdot 1.03^{10} \approx 2687.83 \) CHF.</p>
+    <p>(c) \( K_0 \cdot 1.03^n = 2 K_0 \Rightarrow 1.03^n = 2 \Rightarrow n = \log_{1.03} 2
+    \approx 23.4 \) Jahre — \(K_0\) kürzt sich weg, die Verdopplungszeit hängt nur vom Zinssatz ab.</p>''')
+    + loes(6, r'''    <p>(a) Pro Stunde bleiben \(85\) %: \( C(t) = 100 \cdot 0.85^t \).</p>
+    <p>(b) \( C(6) = 100 \cdot 0.85^6 \approx 37.7 \) mg.</p>
+    <p>(c) \( 0.85^t = 0.5 \Rightarrow t = \dfrac{\ln 0.5}{\ln 0.85} \approx 4.3 \) h.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s3-4b  LOGARITHMUSFUNKTIONEN
+# ═══════════════════════════════════════════════════════════════════
+
+E_HANDOUT = r'''
+  <h2>1. Definition</h2>
+
+  <p>Die Umkehrfunktion der Exponentialfunktion \( y = a^x \) entsteht durch Auflösen nach \(x\)
+  (Logarithmieren) und Variablentausch:</p>
+  \[ y = a^x \;\Longrightarrow\; x = \log_a y \qquad \Longrightarrow \qquad f^{-1}:\ y = \log_a x \]
+
+  <div class="block block-def">
+    <div class="block-titel">📘 Logarithmusfunktion</div>
+    <p>Eine Funktion \( f : \mathbb{R}^+ \longrightarrow \mathbb{R} \) mit einer Gleichung der Form</p>
+    \[ y = f(x) = \log_a x, \qquad a \in \mathbb{R}^+,\quad a \neq 1 \]
+    <p>heisst <strong>Logarithmusfunktion</strong> mit der Basis \(a\).</p>
+  </div>
+
+  <p>Der Graph ist die an der <strong>Winkelhalbierenden</strong> \( y = x \) gespiegelte
+  Exponentialkurve — alle Eigenschaften folgen aus dieser Spiegelung.</p>
+
+  <h2>2. Eigenschaften</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Eigenschaften</th><th colspan="2">\( y = \log_a x \), \( a > 0 \), \( a \neq 1 \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Definitionsmenge</td><td colspan="2">\( D = \mathbb{R}^+ \)</td></tr>
+      <tr><td class="li">Wertemenge</td><td colspan="2">\( W = \mathbb{R} \)</td></tr>
+      <tr><td class="li">Gemeinsamer Punkt</td><td colspan="2">\( (1 \mid 0) \), denn \( \log_a 1 = 0 \)</td></tr>
+      <tr><td class="li">Nullstelle</td><td colspan="2">\( x_0 = 1 \)</td></tr>
+      <tr><td class="li">Verlauf</td><td class="li">\( a > 1 \): steigend, immer flacher</td><td class="li">\( a < 1 \): fallend</td></tr>
+      <tr><td class="li">Asymptote</td><td colspan="2">\(y\)-Achse (\( x = 0 \))</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Transformationen</h2>
+  <p>Ausgangsfunktion \( y = \log_a x \), Bildfunktion \( y = k \cdot \log_a(x-u) + v \):</p>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Parameter</th><th>Wirkung</th></tr></thead>
+    <tbody>
+      <tr><td>\(u\)</td><td class="li">Verschiebung in \(x\)-Richtung — die vertikale Asymptote wandert mit zu \( x = u \)</td></tr>
+      <tr><td>\(v\)</td><td class="li">Verschiebung in \(y\)-Richtung</td></tr>
+      <tr><td>\(|k|\)</td><td class="li">Streckung (\(|k| > 1\)) bzw. Stauchung (\(|k| < 1\)) in \(y\)-Richtung</td></tr>
+      <tr><td>\(k < 0\)</td><td class="li">zusätzlich Spiegelung an der \(x\)-Achse</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Zwei Besonderheiten</h2>
+  <p><strong>Streckung in \(y\) = Basiswechsel:</strong>
+  \( k \cdot \log_a x = \log_c x \), wenn \( k \cdot \log_a c = 1 \). Alle Logarithmuskurven
+  sind vertikal gestreckte Kopien voneinander.</p>
+  <p><strong>Streckung in \(x\) = Verschiebung in \(y\):</strong>
+  \( \log_a(b \cdot x) = \log_a x + \log_a b = \log_a x + v \) mit \( v = \log_a b \).</p>
+
+  <h2>5. Die natürliche Logarithmusfunktion</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 ln-Funktion</div>
+    <p>Logarithmusfunktion mit der irrationalen Basis \( e \approx 2.71828 \):
+    \( y = \log_e x = \ln x \). Basiswechsel:</p>
+    \[ \log_a x = \frac{\ln x}{\ln a} = k \cdot \ln x \qquad \text{mit } k = \frac{1}{\ln a} \]
+  </div>
+
+  <h2>6. Umkehrfunktionen bestimmen</h2>
+  <p>Vorgehen: (1) Funktionsgleichung nach \(x\) auflösen — bei \(x\) im Exponenten durch
+  <strong>Logarithmieren</strong>, bei \(x\) im Logarithmus durch <strong>Exponenzieren</strong>.
+  (2) Variablen vertauschen. Kontrolle: \(D\) und \(W\) tauschen die Rollen.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Die Logarithmusfunktion ist die <strong>Umkehrfunktion</strong> der Exponentialfunktion:
+    Spiegelung an \( y = x \) vertauscht \( (0 \mid 1) \leftrightarrow (1 \mid 0) \), horizontale
+    und vertikale Asymptote sowie \(D\) und \(W\). Der Logarithmus macht aus Faktoren
+    Summanden — darum eignet er sich für Skalen über viele Grössenordnungen (Phon, pH, Magnitude).</p>
+  </div>
+'''
+
+E_FORMELAUSZUG = r'''
+  <h2>1. Definition</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Logarithmusfunktion</td>
+          <td>\( y = f(x) = \log_a x, \quad a \in \mathbb{R}^+,\; a \neq 1 \)</td></tr>
+      <tr><td class="li">Umkehrfunktion von</td>
+          <td>\( y = a^x \) — Spiegelung an \( y = x \)</td></tr>
+      <tr><td class="li">ln-Funktion</td>
+          <td>\( y = \ln x = \log_e x, \quad e \approx 2.71828 \)</td></tr>
+      <tr><td class="li">Basiswechsel</td>
+          <td>\( \log_a x = \dfrac{\ln x}{\ln a} = \dfrac{\lg x}{\lg a} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Exponential- und Logarithmusfunktion im Vergleich</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th></th><th>\( y = a^x \)</th><th>\( y = \log_a x \)</th></tr></thead>
+    <tbody>
+      <tr><td class="li">\(D\)</td><td>\( \mathbb{R} \)</td><td>\( \mathbb{R}^+ \)</td></tr>
+      <tr><td class="li">\(W\)</td><td>\( \mathbb{R}^+ \)</td><td>\( \mathbb{R} \)</td></tr>
+      <tr><td class="li">Gemeinsamer Punkt</td><td>\( (0 \mid 1) \)</td><td>\( (1 \mid 0) \)</td></tr>
+      <tr><td class="li">Nullstelle</td><td>—</td><td>\( x_0 = 1 \)</td></tr>
+      <tr><td class="li">Asymptote</td><td>\( y = 0 \)</td><td>\( x = 0 \)</td></tr>
+      <tr><td class="li">Spezialfall Basis \(e\)</td><td>\( e^x \)</td><td>\( \ln x \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Transformationen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Bildfunktion</td><td>\( y = k \cdot \log_a(x-u) + v \)</td></tr>
+      <tr><td class="li">Vertikale Asymptote</td><td>\( x = u \)</td></tr>
+      <tr><td class="li">Definitionsmenge</td><td>\( D = \{ x \mid x > u \} \)</td></tr>
+      <tr><td class="li">Nullstelle</td><td>\( x_0 = u + a^{-v/k} \)</td></tr>
+      <tr><td class="li">Streckung in \(y\) = Basiswechsel</td><td>\( k \cdot \log_a x = \log_c x, \quad k \cdot \log_a c = 1 \)</td></tr>
+      <tr><td class="li">Streckung in \(x\) = Verschiebung in \(y\)</td><td>\( \log_a(b x) = \log_a x + \log_a b \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Umkehrfunktionen</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Funktion</th><th>Umkehrfunktion</th></tr></thead>
+    <tbody>
+      <tr><td>\( y = a^x \)</td><td>\( y = \log_a x \)</td></tr>
+      <tr><td>\( y = e^x \)</td><td>\( y = \ln x \)</td></tr>
+      <tr><td>\( y = k \cdot a^x \)</td><td>\( y = \log_a \dfrac{x}{k} \)</td></tr>
+      <tr><td>\( y = a^x + v \)</td><td>\( y = \log_a(x - v) \)</td></tr>
+    </tbody>
+  </table>
+  <p class="li">Vorgehen: nach \(x\) auflösen (logarithmieren bzw. exponenzieren), dann Variablen tauschen.</p>
+
+  <h2>5. Logarithmische Skalen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Lautstärke (Weber-Fechner)</td><td>\( L = 10 \cdot \lg\dfrac{J}{J_0} \) [Phon]</td></tr>
+      <tr><td class="li">pH-Wert</td><td>\( \text{pH} = -\lg c \)</td></tr>
+      <tr><td class="li">Zerfallsdauer aus Restanteil</td><td>\( \dfrac{N}{N_0} = 0.5^{\,t/T} \;\Rightarrow\; t = T \cdot \dfrac{\ln(N/N_0)}{\ln 0.5} \)</td></tr>
+    </tbody>
+  </table>
+'''
+
+E_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Definition vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Die Logarithmusfunktion \( f(x) = \) <span class="lueck"></span> ist die
+      <span class="lueck"></span> der Exponentialfunktion \( y = a^x \).<br>
+      Ihre Definitionsmenge ist \( D = \) <span class="lueck"></span>,
+      ihre Nullstelle liegt bei \( x_0 = \) <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Logarithmen ohne Taschenrechner', 1, r'''    <p>Berechne:</p>
+    <p>(a) \( \log_2 32 \) &nbsp;&nbsp; (b) \( \log_3 \dfrac{1}{9} \) &nbsp;&nbsp;
+       (c) \( \lg 10\,000 \) &nbsp;&nbsp; (d) \( \ln e \)</p>
+''' + LINS)
+    + aufg(3, 'Umkehrfunktionen angeben', 1, r'''    <p>Gib die Umkehrfunktion an:</p>
+    <p>(a) \( y = 4^x \) &nbsp;&nbsp;&nbsp; (b) \( y = \lg x \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Eigenschaften</div>\n'
+    + aufg(4, 'Definitions- und Wertemenge', 2, r'''    <p>Gib \(D\) und \(W\) an:</p>
+    <p>(a) \( y = \log_5 x \) &nbsp;&nbsp;&nbsp; (b) \( y = \ln(x - 2) \)</p>
+''' + LINS)
+    + aufg(5, 'Gemeinsamer Punkt', 1, r'''    <p>Durch welchen Punkt verlaufen <em>alle</em> Logarithmuskurven \( y = \log_a x \)? Begründe.</p>
+''' + LINS)
+    + aufg(6, 'Steigend oder fallend?', 1, r'''    <p>Entscheide ohne zu zeichnen, ob die Kurve steigt oder fällt:</p>
+    <p>(a) \( y = \log_3 x \) &nbsp;&nbsp; (b) \( y = \log_{1/3} x \) &nbsp;&nbsp;
+       (c) \( y = -\ln x \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Transformationen</div>\n'
+    + aufg(7, 'Verschiebung', 2, r'''    <p>Der Graph von \( y = \ln x \) wird um \(2\) Einheiten nach rechts und \(1\) Einheit nach
+    oben verschoben. Gib die Gleichung der Bildfunktion und ihre vertikale Asymptote an.</p>
+''' + LINS)
+    + aufg(8, 'Nullstelle', 2, r'''    <p>Bestimme die Nullstelle von \( f(x) = \log_2 x - 3 \).</p>
+''' + LINS)
+    + aufg(9, 'Basiswechsel', 2, r'''    <p>Schreibe \( y = \log_4 x \) in der Form \( y = k \cdot \ln x \). Bestimme \(k\) auf drei
+    Dezimalen.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Parameter bestimmen</div>\n'
+    + aufg(10, 'Streckfaktor aus Punkt', 2, r'''    <p>Die Kurve \( y = k \cdot \log_2 x \) geht durch \( P(8 \mid 6) \). Bestimme \(k\).</p>
+''' + LINS)
+    + aufg(11, 'Punkte spiegeln', 3, r'''    <p>Der Punkt \( P(3 \mid 8) \) liegt auf dem Graphen von \( y = 2^x \). Gib ohne Rechnung
+    einen Punkt des Graphen von \( y = \log_2 x \) an und begründe.</p>
+''' + LINS)
+    + aufg(12, 'Identische Funktionen', 3, r'''    <p>Zeige durch Basiswechsel, dass \( f(x) = 2 \cdot \log_9 x \) und \( g(x) = \log_3 x \)
+    identisch sind.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p>\( f(x) = \log_a x \) ist die <strong>Umkehrfunktion</strong> von \( y = a^x \);
+    \( D = \mathbb{R}^+ \), Nullstelle \( x_0 = 1 \).</p>''')
+    + loes(2, r'''    <p>(a) \( 2^5 = 32 \Rightarrow 5 \) · (b) \( 3^{-2} = \tfrac{1}{9} \Rightarrow -2 \) ·
+    (c) \( 10^4 \Rightarrow 4 \) · (d) \( e^1 = e \Rightarrow 1 \).</p>''')
+    + loes(3, r'''    <p>(a) \( y = \log_4 x \) · (b) \( y = 10^x \) — die Umkehrfunktion der Logarithmusfunktion
+    ist eine Exponentialfunktion.</p>''')
+    + loes(4, r'''    <p>(a) \( D = \mathbb{R}^+ \), \( W = \mathbb{R} \) ·
+    (b) \( x - 2 > 0 \Rightarrow D = \{ x \mid x > 2 \} \), \( W = \mathbb{R} \).</p>''')
+    + loes(5, r'''    <p>\( (1 \mid 0) \) — denn \( \log_a 1 = 0 \) für jede zulässige Basis (\( a^0 = 1 \)).</p>''')
+    + loes(6, r'''    <p>(a) steigend (\( a = 3 > 1 \)) · (b) fallend (\( a < 1 \)) ·
+    (c) fallend — \( \ln x \) an der \(x\)-Achse gespiegelt.</p>''')
+    + loes(7, r'''    <p>\( y = \ln(x-2) + 1 \); vertikale Asymptote \( x = 2 \).</p>''')
+    + loes(8, r'''    <p>\( \log_2 x = 3 \Rightarrow x_0 = 2^3 = 8 \).</p>''')
+    + loes(9, r'''    <p>\( \log_4 x = \dfrac{\ln x}{\ln 4} \approx 0.721 \cdot \ln x \) — also \( k = \dfrac{1}{\ln 4} \approx 0.721 \).</p>''')
+    + loes(10, r'''    <p>\( \log_2 8 = 3 \), also \( 6 = k \cdot 3 \Rightarrow k = 2 \).</p>''')
+    + loes(11, r'''    <p>\( P'(8 \mid 3) \) — die Spiegelung an \( y = x \) vertauscht die Koordinaten.
+    Kontrolle: \( \log_2 8 = 3 \) ✓</p>''')
+    + loes(12, r'''    <p>\( f(x) = 2 \cdot \log_9 x = 2 \cdot \dfrac{\log_3 x}{\log_3 9} = 2 \cdot
+    \dfrac{\log_3 x}{2} = \log_3 x = g(x) \) ✓</p>''')
+)
+
+E_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik und Naturwissenschaft, nach zunehmendem Schwierigkeitsgrad
+    geordnet. Die Musterlösungen folgen am Ende des Dokuments. Alle Graphen mit beschrifteten Achsen
+    (Grösse und Einheit) skizzieren.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Akustik</td><td>Schallpegel</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Chemie</td><td>pH-Wert</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Geologie</td><td>Erdbeben-Magnitude</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Archäologie</td><td>C-14-Datierung</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Finanzmathematik</td><td>Verdopplungszeit</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Elektrotechnik</td><td>Entladezeit eines Kondensators</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Schallpegel', 2, r'''    <p>Das Lautstärkeempfinden folgt dem Weber-Fechner-Gesetz \( L = 10 \cdot \lg\dfrac{J}{J_0} \)
+    (\(L\) in Phon, \(J_0\): Hörschwelle).</p>
+    <p>(a) Ein Düsentriebwerk erreicht \( J = 10^{12} \cdot J_0 \). Berechne \(L\).</p>
+    <p>(b) Zwei gleich laute Schallquellen verdoppeln die Intensität. Um wie viele Phon steigt
+    der Pegel?</p>
+    <p>(c) Warum ist eine logarithmische Skala hier sinnvoll?</p>
+''' + LINS4, tag='Akustik')
+    + aufg(2, 'pH-Wert', 2, r'''    <p>Der pH-Wert ist definiert als \( \text{pH} = -\lg c \) (\(c\): Wasserstoffionen-Konzentration
+    in mol/l).</p>
+    <p>(a) Berechne den pH-Wert einer Lösung mit \( c = 2 \cdot 10^{-5} \) mol/l.</p>
+    <p>(b) Um wie viel ändert sich der pH-Wert, wenn die Konzentration verzehnfacht wird?</p>
+    <p>(c) Welche Konzentration hat eine Lösung mit pH \(9\)?</p>
+''' + LINS4, tag='Chemie')
+    + aufg(3, 'Erdbeben-Magnitude', 2, r'''    <p>Die Magnitude eines Erdbebens ist näherungsweise \( M = \lg\dfrac{A}{A_0} \)
+    (\(A\): Amplitude im Seismogramm, \(A_0\): Referenzamplitude).</p>
+    <p>(a) Ein Beben hat die tausendfache Referenzamplitude. Berechne \(M\).</p>
+    <p>(b) Beben B hat Magnitude \(6\), Beben C Magnitude \(4\). Um welchen Faktor unterscheiden
+    sich die Amplituden?</p>
+    <p>(c) Was bedeutet ein Magnitudenschritt von \(+1\) für die Amplitude?</p>
+''' + LINS4, tag='Geologie')
+    + aufg(4, 'C-14-Datierung', 3, r'''    <p>C-14 zerfällt mit Halbwertszeit \( T = 5730 \) Jahren:
+    \( \dfrac{N(t)}{N_0} = 0.5^{\,t/T} \).</p>
+    <p>(a) Löse die Gleichung allgemein nach \(t\) auf.</p>
+    <p>(b) In einem Fund werden noch \(60\) % des ursprünglichen C-14 gemessen. Wie alt ist er?</p>
+    <p>(c) Warum ist die Methode für sehr junge Funde (unter 100 Jahren) ungenau? Argumentiere
+    mit der Flachheit der Kurve.</p>
+''' + LINS4, tag='Archäologie')
+    + aufg(5, 'Verdopplungszeit', 3, r'''    <p>Ein Kapital wird zu \(2.5\) % Jahreszins mit Zinseszins angelegt: \( K(n) = K_0 \cdot 1.025^n \).</p>
+    <p>(a) Leite mit dem Logarithmus eine Formel für die Verdopplungszeit her.</p>
+    <p>(b) Berechne die Verdopplungszeit.</p>
+    <p>(c) Faustregel: „Verdopplungszeit \( \approx 70 / p \)" (\(p\) in %). Prüfe die Regel an
+    diesem Beispiel.</p>
+''' + LINS4, tag='Finanzmathematik')
+    + aufg(6, 'Entladezeit eines Kondensators', 3, r'''    <p>Ein Kondensator entlädt sich nach \( U(t) = 9 \cdot e^{-t/3} \) (\(U\) in Volt,
+    \(t\) in Sekunden).</p>
+    <p>(a) Löse die Gleichung allgemein nach \(t\) auf (Umkehrfunktion).</p>
+    <p>(b) Nach welcher Zeit ist die Spannung auf \( 0.5 \) V gesunken?</p>
+    <p>(c) Skizziere \(U(t)\) und die Umkehrfunktion \(t(U)\) — welche Kurventypen entstehen?</p>
+''' + LINS4, tag='Elektrotechnik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( L = 10 \cdot \lg 10^{12} = 120 \) Phon.</p>
+    <p>(b) \( \Delta L = 10 \cdot \lg 2 \approx 3 \) Phon — Verdopplung der Intensität gibt immer
+    \(+3\) Phon.</p>
+    <p>(c) Das Ohr verarbeitet Intensitäten über \(12\) Grössenordnungen; der Logarithmus bildet
+    diese auf eine handliche Skala von \(0\) bis \(120\) ab (Faktoren werden Summanden).</p>''')
+    + loes(2, r'''    <p>(a) \( \text{pH} = -\lg(2 \cdot 10^{-5}) \approx 4.7 \).</p>
+    <p>(b) \( -\lg(10 c) = -\lg c - 1 \) — der pH-Wert sinkt um \(1\).</p>
+    <p>(c) \( c = 10^{-9} \) mol/l (Exponenzieren als Umkehrung).</p>''')
+    + loes(3, r'''    <p>(a) \( M = \lg 1000 = 3 \).</p>
+    <p>(b) \( \Delta M = 2 \Rightarrow \) Faktor \( 10^2 = 100 \).</p>
+    <p>(c) Ein Schritt \(+1\) bedeutet <strong>zehnfache</strong> Amplitude — die Skala ist
+    logarithmisch.</p>''')
+    + loes(4, r'''    <p>(a) Logarithmieren: \( t = T \cdot \dfrac{\ln(N/N_0)}{\ln 0.5} \).</p>
+    <p>(b) \( t = 5730 \cdot \dfrac{\ln 0.6}{\ln 0.5} \approx 4223 \) Jahre.</p>
+    <p>(c) Nach \(100\) Jahren sind noch \( 0.5^{100/5730} \approx 98.8 \) % vorhanden — die
+    Kurve ist dort fast flach. Kleine Messfehler im Anteil ergeben grosse Fehler in \(t\).</p>''')
+    + loes(5, r'''    <p>(a) \( 1.025^n = 2 \Rightarrow n = \dfrac{\ln 2}{\ln 1.025} \).</p>
+    <p>(b) \( n \approx 28.1 \) Jahre.</p>
+    <p>(c) Faustregel: \( 70 / 2.5 = 28 \) — sehr nahe am exakten Wert \(28.1\); die Regel
+    nutzt \( \ln 2 \approx 0.7 \) und \( \ln(1+p/100) \approx p/100 \) für kleine \(p\).</p>''')
+    + loes(6, r'''    <p>(a) \( \dfrac{U}{9} = e^{-t/3} \Rightarrow t = -3 \ln\dfrac{U}{9} = 3 \ln\dfrac{9}{U} \).</p>
+    <p>(b) \( t = 3 \ln\dfrac{9}{0.5} = 3 \ln 18 \approx 8.67 \) s.</p>
+    <p>(c) \( U(t) \) ist eine fallende Exponentialkurve mit Asymptote \( U = 0 \); die
+    Umkehrfunktion \( t(U) \) ist eine Logarithmuskurve mit vertikaler Asymptote \( U = 0 \) —
+    gespiegelt an der Winkelhalbierenden.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -1092,6 +1684,22 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', C_TDS),
     ('s3-3-polynomfunktionen', 'Polynomfunktionen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Polynomfunktionen', STYLE_SERIE, '1.0', '', C_SERIE),
+    ('s3-4a-exponentialfunktionen', 'Exponentialfunktionen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', D_HANDOUT),
+    ('s3-4a-exponentialfunktionen', 'Exponentialfunktionen', 'Formelauszug', 'formelauszug.html',
+     'Exponentialfunktionen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, D_FORMELAUSZUG),
+    ('s3-4a-exponentialfunktionen', 'Exponentialfunktionen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', D_TDS),
+    ('s3-4a-exponentialfunktionen', 'Exponentialfunktionen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Exponentialfunktionen', STYLE_SERIE, '1.0', '', D_SERIE),
+    ('s3-4b-logarithmusfunktionen', 'Logarithmusfunktionen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', E_HANDOUT),
+    ('s3-4b-logarithmusfunktionen', 'Logarithmusfunktionen', 'Formelauszug', 'formelauszug.html',
+     'Logarithmusfunktionen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, E_FORMELAUSZUG),
+    ('s3-4b-logarithmusfunktionen', 'Logarithmusfunktionen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', E_TDS),
+    ('s3-4b-logarithmusfunktionen', 'Logarithmusfunktionen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Logarithmusfunktionen', STYLE_SERIE, '1.0', '', E_SERIE),
 ]
 
 
