@@ -48,6 +48,7 @@ const SITE = {
     { id:'s3-4a', nr:'3.4a', titel:'Exponentialfunktionen', url:'schwerpunkt/s3-4a-exponentialfunktionen.html' },
     { id:'s3-4b', nr:'3.4b', titel:'Logarithmusfunktionen', url:'schwerpunkt/s3-4b-logarithmusfunktionen.html' },
     { id:'s3-5', nr:'3.5', titel:'Trigonometrische Funktionen', url:'schwerpunkt/s3-5-trigonometrische-funktionen.html' },
+    { id:'s3-6', nr:'3.6', titel:'Betragsfunktionen', url:'schwerpunkt/s3-6-betragsfunktionen.html' },
     { id:'s4-1', nr:'4.1', titel:'Grundlagen', url:'schwerpunkt/s4-1-grundlagen.html' },
     { id:'s4-2', nr:'4.2', titel:'Stereometrie', url:'schwerpunkt/s4-2-stereometrie.html' },
     { id:'s4-3', nr:'4.3', titel:'Zwei- und dreidimensionale Vektorgeometrie', url:'schwerpunkt/s4-3-vektorgeometrie.html' },
@@ -66,7 +67,7 @@ const GROUPS = {
   schwerpunkt: [
     { nr:'1', titel:'Arithmetik/Algebra', ids:['s1-1', 's1-2', 's1-3'] },
     { nr:'2', titel:'Gleichungen', ids:['s2-1', 's2-2a', 's2-2b', 's2-2c'] },
-    { nr:'3', titel:'Funktionen', ids:['s3-1', 's3-2a', 's3-2b', 's3-3', 's3-4a', 's3-4b', 's3-5'] },
+    { nr:'3', titel:'Funktionen', ids:['s3-1', 's3-2a', 's3-2b', 's3-3', 's3-4a', 's3-4b', 's3-5', 's3-6'] },
     { nr:'4', titel:'Geometrie', ids:['s4-1', 's4-2', 's4-3'] }
   ]
 };

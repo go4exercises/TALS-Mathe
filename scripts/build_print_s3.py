@@ -3187,6 +3187,262 @@ K_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s3-6  BETRAGSFUNKTIONEN (ERGÄNZUNG TALS)
+# ═══════════════════════════════════════════════════════════════════
+
+L_HANDOUT = r'''
+  <h2>1. Definition</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Betragsfunktion</div>
+    <p>\( f : \mathbb{R} \to \mathbb{R}_0^+ \) mit
+    \( f(x) = |x| = \begin{cases} x & x \geq 0 \\ -x & x < 0 \end{cases} \) —
+    <strong>abschnittsweise linear</strong>, Graph ist ein V.</p>
+  </div>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">\(D\) / \(W\)</td><td>\( \mathbb{R} \) / \( \mathbb{R}_0^+ \)</td></tr>
+      <tr><td class="li">Nullstelle</td><td>\( x_0 = 0 \)</td></tr>
+      <tr><td class="li">Symmetrie</td><td class="li">gerade Funktion (\( |-x| = |x| \)), achsensymmetrisch zur \(y\)-Achse</td></tr>
+      <tr><td class="li">Knickpunkt</td><td>\( (0 \mid 0) \) — Steigungswechsel von \(-1\) auf \(+1\)</td></tr>
+    </tbody>
+  </table>
+  <p><em>Hinweis: Teilgebiet 3.6 ist eine Ergänzung des TALS-Lehrmittels und kein
+  RLP-2030-Teilgebiet.</em></p>
+
+  <h2>2. Transformationen \( y = a \cdot |x-u| + v \)</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Knickpunkt</td><td>\( (u \mid v) \) — Rolle des Parabel-Scheitels; Symmetrieachse \( x = u \)</td></tr>
+      <tr><td class="li">Ast-Steigungen</td><td>\( \pm a \) — grosses \(|a|\): spitzes V; \( a < 0 \): Dach (Öffnung unten)</td></tr>
+      <tr><td class="li">Nullstellen</td><td>\( x = u \pm |v/a| \), falls Knick auf der «falschen» Seite der Achse liegt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Das Umklapp-Prinzip: \( y = |f(x)| \)</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Von \(f\) zu \(|f|\)</div>
+    <p>Alle Kurventeile <strong>unterhalb</strong> der \(x\)-Achse an der \(x\)-Achse nach oben
+    spiegeln; Teile oberhalb bleiben. An den <strong>Nullstellen von \(f\)</strong> entstehen Knicke.
+    Beispiele: Gerade → V; Parabel \( x^2 - 4 \) → <strong>W</strong> (Scheitel \( (0 \mid -4) \)
+    wird Buckel \( (0 \mid 4) \)); \( x^2 + 1 \) bleibt unverändert (nie negativ).</p>
+  </div>
+
+  <h2>4. Abschnittsweise schreiben</h2>
+  <p>Fallunterscheidung an der Nullstelle des <strong>Arguments</strong>:</p>
+  \[ |2x - 6| = \begin{cases} 2x - 6 & x \geq 3 \\ -2x + 6 & x < 3 \end{cases} \]
+  <p>Der Knick liegt bei \( x = 3 \) (Argument-Nullstelle), nicht bei \(6\)! Es gilt
+  \( |2x-6| = 2\,|x-3| \).</p>
+
+  <h2>5. Gleichungen und Ungleichungen grafisch</h2>
+  <p>\( |T(x)| = c \): Schnittstellen der Betragskurve mit der Horizontalen \( y = c \) — die
+  <strong>Skizze verrät die Lösungsanzahl</strong> (z.B. hat \( |x^2-4| = 3 \) <em>vier</em>
+  Lösungen: \( \pm 1, \pm\sqrt{7} \)). Ungleichungen: oberhalb/unterhalb ablesen
+  (\( |x+1| > 2 \Rightarrow x < -3 \vee x > 1 \)).</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Das V von \( a|x-u|+v \) hat seinen <strong>Knick bei \( (u \mid v) \)</strong> und
+    Ast-Steigungen \( \pm a \). Für beliebige \(f\) gilt das <strong>Umklapp-Prinzip</strong>
+    mit Knicken an den Nullstellen. Betragsstriche verschwinden per Fallunterscheidung —
+    und die Skizze zählt die Lösungen, bevor gerechnet wird.</p>
+  </div>
+'''
+
+L_FORMELAUSZUG = r'''
+  <h2>1. Betragsfunktion</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Definition</td><td>\( |x| = \begin{cases} x & x \geq 0 \\ -x & x < 0 \end{cases} \)</td></tr>
+      <tr><td class="li">\(D\) / \(W\)</td><td>\( \mathbb{R} \) / \( \mathbb{R}_0^+ \)</td></tr>
+      <tr><td class="li">Symmetrie</td><td class="li">gerade Funktion — achsensymmetrisch zur \(y\)-Achse</td></tr>
+      <tr><td class="li">Knick</td><td>\( (0 \mid 0) \), Steigungen \( \pm 1 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Transformierte Form</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Gleichung</td><td>\( y = a \cdot |x - u| + v \)</td></tr>
+      <tr><td class="li">Knickpunkt</td><td>\( (u \mid v) \), Symmetrieachse \( x = u \)</td></tr>
+      <tr><td class="li">Ast-Steigungen</td><td>\( \pm a \); \( a < 0 \): Öffnung nach unten</td></tr>
+      <tr><td class="li">Nullstellen (falls vorhanden)</td><td>\( a|x-u| + v = 0 \Rightarrow x = u \pm \left|\tfrac{v}{a}\right| \)</td></tr>
+      <tr><td class="li">Betrag einer Geraden</td><td>\( |mx + b| \): Knick bei \( x = -\tfrac{b}{m} \), Steigungen \( \pm|m| \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Umklapp-Prinzip</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">\( y = |f(x)| \)</td><td class="li">negative Teile von \(f\) an der \(x\)-Achse hochspiegeln</td></tr>
+      <tr><td class="li">Knicke</td><td class="li">an den Nullstellen von \(f\)</td></tr>
+      <tr><td class="li">Parabel mit 2 Nullstellen</td><td class="li">W-Form; geklappter Scheitel wird lokaler Hochpunkt</td></tr>
+      <tr><td class="li">\( f > 0 \) überall</td><td>\( |f| = f \) — nichts zu klappen</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Abschnittsweise Form</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Grenze</td><td class="li">Nullstelle des Arguments</td></tr>
+      <tr><td class="li">Beispiel</td><td>\( |2x-6| = \begin{cases} 2x-6 & x \geq 3 \\ -2x+6 & x < 3 \end{cases} \)</td></tr>
+      <tr><td class="li">Faktor herausziehen</td><td>\( |2x - 6| = 2\,|x - 3| \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Gleichungen / Ungleichungen (vgl. 2.2c)</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">\( |T(x)| = c > 0 \)</td><td>\( T(x) = \pm c \); grafisch: Schnitt mit \( y = c \)</td></tr>
+      <tr><td class="li">\( |x - m| \leq r \)</td><td>\( [m - r;\ m + r] \)</td></tr>
+      <tr><td class="li">\( |x - m| > r \)</td><td>\( x < m-r \ \vee\ x > m+r \)</td></tr>
+    </tbody>
+  </table>
+'''
+
+L_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Definition vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Die Betragsfunktion ist abschnittsweise <span class="lueck"></span>;<br>
+      ihr Graph ist ein V mit <span class="lueck"></span>punkt bei \( (0 \mid 0) \)<br>
+      und den Ast-Steigungen <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Werte berechnen', 1, r'''    <p>Berechne: (a) \( f(-4) \) für \( f(x) = |x| \) &nbsp;&nbsp;
+    (b) \( g(1) \) für \( g(x) = |2x - 6| \) &nbsp;&nbsp; (c) \( h(0) \) für \( h(x) = |x - 3| + 2 \)</p>
+''' + LINS)
+    + aufg(3, 'Eigenschaften', 1, r'''    <p>Gib für \( y = |x| \) an: Definitionsmenge, Wertemenge, Symmetrie.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Transformationen</div>\n'
+    + aufg(4, 'Knickpunkt ablesen', 1, r'''    <p>Wo liegt der Knickpunkt? (a) \( y = |x - 5| \) &nbsp;&nbsp;
+    (b) \( y = |x + 2| - 3 \) &nbsp;&nbsp; (c) \( y = 2|x| + 1 \)</p>
+''' + LINS)
+    + aufg(5, 'Gleichung aufstellen', 2, r'''    <p>Gib die Gleichung der V-Kurve mit Knick \( (3 \mid -2) \) und Ast-Steigungen \( \pm 1 \) an
+    und berechne ihre Nullstellen.</p>
+''' + LINS)
+    + aufg(6, 'Knick an der richtigen Stelle', 2, r'''    <p>Wo knickt der Graph von \( y = |3x + 9| \)? Schreibe die Funktion in der Form
+    \( a|x - u| \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Umklapp-Prinzip</div>\n'
+    + aufg(7, 'Gerade umklappen', 2, r'''    <p>Skizziere \( y = |x - 2| \), ausgehend von der Geraden \( y = x - 2 \). Wo entsteht
+    der Knick?</p>
+''' + LINS)
+    + aufg(8, 'Parabel umklappen', 2, r'''    <p>Skizziere \( y = |x^2 - 4| \). Welche Form entsteht, und wohin klappt der Scheitel?</p>
+''' + LINS)
+    + aufg(9, 'Nichts zu klappen?', 2, r'''    <p>Warum gilt \( |x^2 + 1| = x^2 + 1 \) für alle \(x\)?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Abschnittsweise und Gleichungen</div>\n'
+    + aufg(10, 'Abschnittsweise schreiben', 3, r'''    <p>Schreibe \( y = |2x - 6| \) ohne Betragsstriche (zwei Abschnitte mit Bedingung).</p>
+''' + LINS)
+    + aufg(11, 'Gleichung grafisch', 3, r'''    <p>Wie viele Lösungen hat \( |x^2 - 4| = 3 \)? Skizziere und berechne alle.</p>
+''' + LINS)
+    + aufg(12, 'Ungleichung', 3, r'''    <p>Löse \( |x + 1| > 2 \) grafisch und algebraisch.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>linear</strong> · <strong>Knick</strong>punkt · <strong>\( \pm 1 \)</strong>.</p>''')
+    + loes(2, r'''    <p>(a) \( 4 \) · (b) \( |{-4}| = 4 \) · (c) \( |-3| + 2 = 5 \).</p>''')
+    + loes(3, r'''    <p>\( D = \mathbb{R} \), \( W = \mathbb{R}_0^+ \); gerade Funktion —
+    achsensymmetrisch zur \(y\)-Achse.</p>''')
+    + loes(4, r'''    <p>(a) \( (5 \mid 0) \) · (b) \( (-2 \mid -3) \) · (c) \( (0 \mid 1) \).</p>''')
+    + loes(5, r'''    <p>\( y = |x - 3| - 2 \); Nullstellen: \( |x-3| = 2 \Rightarrow x = 1 \) und \( x = 5 \).</p>''')
+    + loes(6, r'''    <p>Argument null: \( 3x + 9 = 0 \Rightarrow x = -3 \) — Knick bei \( (-3 \mid 0) \);
+    \( |3x + 9| = 3\,|x + 3| \).</p>''')
+    + loes(7, r'''    <p>Der Teil der Geraden links von \( x = 2 \) (dort negativ) wird hochgeklappt —
+    Knick an der Nullstelle \( (2 \mid 0) \), V mit Steigungen \( \pm 1 \).</p>''')
+    + loes(8, r'''    <p>Ein <strong>W</strong>: Der Parabelbogen zwischen den Nullstellen \( \pm 2 \) klappt
+    nach oben; der Scheitel \( (0 \mid -4) \) wird zum Buckel \( (0 \mid 4) \).</p>''')
+    + loes(9, r'''    <p>\( x^2 + 1 \geq 1 > 0 \) — die Funktion hat keine negativen Werte, der Betrag
+    ändert nichts.</p>''')
+    + loes(10, r'''    <p>\( |2x-6| = \begin{cases} 2x-6 & x \geq 3 \\ -2x+6 & x < 3 \end{cases} \) —
+    Grenze an der Argument-Nullstelle \( x = 3 \).</p>''')
+    + loes(11, r'''    <p>Vier (Skizze: Horizontale \( y = 3 \) schneidet das W viermal):
+    \( x^2 - 4 = 3 \Rightarrow x = \pm\sqrt{7} \) und \( x^2 - 4 = -3 \Rightarrow x = \pm 1 \).</p>''')
+    + loes(12, r'''    <p>Schnittstellen \( x + 1 = \pm 2 \Rightarrow x = -3, 1 \); das V liegt aussen
+    oberhalb: \( L = \{x \mid x < -3 \ \vee\ x > 1\} \).</p>''')
+)
+
+L_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben aus Technik und Alltag, nach zunehmendem Schwierigkeitsgrad
+    geordnet. Die Musterlösungen folgen am Ende des Dokuments. Immer zuerst skizzieren —
+    das V bzw. W zeigt Lösungsanzahl und Lage.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Verkehr</td><td>Abstand zum Bahnhof</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Fertigung</td><td>Kosten der Abweichung</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Elektrotechnik</td><td>Spannungstoleranz</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Logistik</td><td>Der beste Standort</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Maschinenbau</td><td>Materialabtrag</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Mathematik</td><td>Lösungsanzahl am W</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Abstand zum Bahnhof', 2, r'''    <p>Auf einer geraden Strasse liegt der Bahnhof bei km \(6\); der Abstand einer Position
+    \(x\) ist \( a(x) = |x - 6| \).</p>
+    <p>(a) Skizziere \(a(x)\) für \( 0 \leq x \leq 12 \) und beschrifte den Knick.</p>
+    <p>(b) Berechne \( a(2) \) und \( a(9) \).</p>
+    <p>(c) Welche Positionen haben Abstand \(4\) km? (Gleichung und Skizze.)</p>
+''' + LINS4, tag='Verkehr')
+    + aufg(2, 'Kosten der Abweichung', 2, r'''    <p>Eine Abfüllanlage (Soll \(500\) ml) verursacht Abweichungskosten
+    \( K(x) = 0.5 \cdot |x - 500| \) (Rappen pro Flasche).</p>
+    <p>(a) Deute den Knickpunkt der Kostenfunktion.</p>
+    <p>(b) Berechne \( K(508) \).</p>
+    <p>(c) Für welche Füllmengen bleiben die Kosten unter \(3\) Rappen?</p>
+''' + LINS4, tag='Fertigung')
+    + aufg(3, 'Spannungstoleranz', 2, r'''    <p>Ein Netzteil soll \(12\) V liefern; zulässig ist \( |U - 12| \leq 0.5 \) V.</p>
+    <p>(a) Skizziere die Abweichungsfunktion \( f(U) = |U - 12| \) samt Toleranzgrenze.</p>
+    <p>(b) Gib den zulässigen Bereich als Intervall an.</p>
+    <p>(c) Ist \( U = 12.6 \) V zulässig?</p>
+''' + LINS4, tag='Elektrotechnik')
+    + aufg(4, 'Der beste Standort', 3, r'''    <p>Ari wohnt bei km \(2\), Bea bei km \(8\); der Gesamtweg zu einem Treffpunkt \(x\) ist
+    \( d(x) = |x - 2| + |x - 8| \).</p>
+    <p>(a) Berechne \( d(0) \), \( d(5) \), \( d(10) \).</p>
+    <p>(b) Schreibe \( d(x) \) abschnittsweise (drei Abschnitte).</p>
+    <p>(c) Wo ist der Gesamtweg minimal? Begründe mit der abschnittsweisen Form.</p>
+''' + LINS4, tag='Logistik')
+    + aufg(5, 'Materialabtrag', 3, r'''    <p>Ein Werkstückprofil weicht um \( f(x) = x^2 - 4 \) (mm) vom Soll ab; die Fräse trägt
+    \( A(x) = |x^2 - 4| \) ab (\( -3 \leq x \leq 3 \), \(x\) in cm).</p>
+    <p>(a) Skizziere \( A(x) \) — welche Form entsteht?</p>
+    <p>(b) Berechne den Abtrag bei \( x = 1 \) und \( x = 3 \).</p>
+    <p>(c) Wo ist nichts abzutragen, und wo ist der Abtrag im Innenbereich maximal?</p>
+''' + LINS4, tag='Maschinenbau')
+    + aufg(6, 'Lösungsanzahl am W', 3, r'''    <p>Betrachte die Gleichung \( |x^2 - 4| = c \) mit dem Parameter \( c \geq 0 \).</p>
+    <p>(a) Skizziere \( y = |x^2 - 4| \) und verschiedene Horizontalen \( y = c \).</p>
+    <p>(b) Für welche \(c\) gibt es vier, drei bzw. zwei Lösungen?</p>
+    <p>(c) Berechne alle Lösungen für \( c = 3 \).</p>
+''' + LINS4, tag='Mathematik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) V mit Knick \( (6 \mid 0) \), Steigungen \( \pm 1 \).</p>
+    <p>(b) \( a(2) = 4 \) km, \( a(9) = 3 \) km.</p>
+    <p>(c) \( |x - 6| = 4 \Rightarrow x = 2 \) oder \( x = 10 \) — symmetrisch um den Bahnhof.</p>''')
+    + loes(2, r'''    <p>(a) Knick \( (500 \mid 0) \): exakte Füllmenge kostet nichts, jede Abweichung
+    symmetrisch mehr.</p>
+    <p>(b) \( K(508) = 0.5 \cdot 8 = 4 \) Rappen.</p>
+    <p>(c) \( 0.5|x-500| < 3 \Rightarrow |x-500| < 6 \Rightarrow 494 < x < 506 \) ml.</p>''')
+    + loes(3, r'''    <p>(a) V mit Knick \( (12 \mid 0) \), Toleranzgrenze als Horizontale \( y = 0.5 \).</p>
+    <p>(b) \( [11.5;\ 12.5] \) V.</p>
+    <p>(c) \( |12.6 - 12| = 0.6 > 0.5 \) — nicht zulässig.</p>''')
+    + loes(4, r'''    <p>(a) \( d(0) = 10 \), \( d(5) = 6 \), \( d(10) = 10 \) km.</p>
+    <p>(b) \( x < 2 \): \( -2x + 10 \); \( 2 \leq x \leq 8 \): \( 6 \); \( x > 8 \): \( 2x - 10 \).</p>
+    <p>(c) Im mittleren Abschnitt ist \(d\) konstant \(6\) — <strong>jeder</strong> Punkt
+    zwischen den Wohnorten ist optimal («Wanne mit flachem Boden»).</p>''')
+    + loes(5, r'''    <p>(a) Ein <strong>W</strong> — die Parabel zwischen \( \pm 2 \) hochgeklappt.</p>
+    <p>(b) \( A(1) = 3 \) mm, \( A(3) = 5 \) mm.</p>
+    <p>(c) Nichts bei \( x = \pm 2 \) (Nullstellen); im Innenbereich maximal beim geklappten
+    Scheitel: \( A(0) = 4 \) mm.</p>''')
+    + loes(6, r'''    <p>(b) Vier Lösungen für \( 0 < c < 4 \), drei für \( c = 4 \) (Berührung am Buckel),
+    zwei für \( c > 4 \) oder \( c = 0 \).</p>
+    <p>(c) \( x^2 - 4 = \pm 3 \Rightarrow x = \pm\sqrt{7} \approx \pm 2.65 \) und
+    \( x = \pm 1 \).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -3281,6 +3537,14 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', K_TDS),
     ('s2-1-grundlagen', 'Grundlagen Gleichungen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Grundlagen Gleichungen', STYLE_SERIE, '1.0', '', K_SERIE),
+    ('s3-6-betragsfunktionen', 'Betragsfunktionen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', L_HANDOUT),
+    ('s3-6-betragsfunktionen', 'Betragsfunktionen', 'Formelauszug', 'formelauszug.html',
+     'Betragsfunktionen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, L_FORMELAUSZUG),
+    ('s3-6-betragsfunktionen', 'Betragsfunktionen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', L_TDS),
+    ('s3-6-betragsfunktionen', 'Betragsfunktionen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Betragsfunktionen', STYLE_SERIE, '1.0', '', L_SERIE),
 ]
 
 

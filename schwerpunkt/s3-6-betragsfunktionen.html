@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3.6 Betragsfunktionen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 3 · Funktionen · 55 Lektionen</div>
+  <h1 class="pt-h1">3.6 Betragsfunktionen</h1>
+  <div class="pt-untertitel">Ergänzung TALS · nicht Teil des RLP 2030</div>
+</div>
+
+<p class="lead">Die <strong>Betragsfunktion</strong> \(f(x) = |x|\) ist die einfachste Funktion mit einem <strong>Knick</strong>: Ihre Äste sind Geraden, ihr Graph ist ein V. Aus linearen und quadratischen Funktionen entstehen durch den Betrag neue Kurvenformen — mit dem <strong>Umklapp-Prinzip</strong> als grafischem Werkzeug: Alles unter der \(x\)-Achse wird nach oben gespiegelt. Damit lassen sich Abstände, Toleranzen und Abweichungen als Funktionen beschreiben — und Betragsgleichungen grafisch lösen.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen — Ergänzung TALS (über den RLP 2030 hinaus)</div>
+  <ul>
+    <li>die Betragsfunktion \(f(x) = |x|\) abschnittsweise definieren und ihren Graphen skizzieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>Betragsfunktionen der Form \(y = a \cdot |x-u| + v\) skizzieren und die Parameter interpretieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>den Betrag linearer und quadratischer Funktionen \(y = |f(x)|\) mit dem Umklapp-Prinzip grafisch darstellen</li>
+    <li>Betragsterme abschnittsweise (ohne Betragsstriche) schreiben und abschnittsweise definierte Funktionen lesen</li>
+    <li>Betragsgleichungen und -ungleichungen grafisch lösen und mit der algebraischen Lösung vergleichen</li>
+  </ul>
+  <p class="rlp-hinweis">Dieses Teilgebiet ist eine <strong>Ergänzung des TALS-Lehrmittels</strong> und kein RLP-2030-Teilgebiet. Es verbindet die Betragsgleichungen aus <a href="s2-2c-betrag-polynom-ungleichungen.html">2.2c</a> mit der Funktionssicht aus <a href="s3-1-grundlagen.html">3.1</a> — als Brücke zu Toleranzbändern, Abstandsfunktionen und abschnittsweise definierten Funktionen, wie sie in Technik und Analysis laufend auftreten.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann \(|x|\) abschnittsweise definieren und den V-Graphen mit Knickpunkt, Symmetrieachse und Ast-Steigungen \(\pm 1\) beschreiben.</li>
+      <li>Ich kann \(y = a \cdot |x-u| + v\) ohne Wertetabelle skizzieren: Knick bei \((u \mid v)\), Äste mit Steigung \(\pm a\).</li>
+      <li>Ich kann den Graphen von \(y = |f(x)|\) aus dem Graphen von \(f\) konstruieren — Umklappen der negativen Teile.</li>
+      <li>Ich kann Betragsterme wie \(|2x-6|\) abschnittsweise ohne Betragsstriche schreiben.</li>
+      <li>Ich kann Nullstellen und Schnittpunkte von Betragsfunktionen berechnen und grafisch kontrollieren.</li>
+      <li>Ich kann Abstands- und Toleranzsituationen als Betragsfunktionen modellieren.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — der Abstand zum Bahnhof</h2>
+
+<p>Eine Velofahrerin fährt einer geraden Talstrasse entlang; ihre Position ist der Kilometer \(x\). Der Bahnhof liegt bei Kilometer \(6\). Ihr <strong>Abstand</strong> zum Bahnhof ist</p>
+
+\[ a(x) = |x - 6| \qquad [\text{km}] \]
+
+<p>— egal, ob sie <em>vor</em> oder <em>hinter</em> dem Bahnhof ist: Der Abstand ist nie negativ. Als Funktion gezeichnet entsteht das charakteristische <strong>V</strong>.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🚲 Abstandsfunktion — \(a(x) = |x - 6|\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Fahre am Bahnhof vorbei (über \(x = 6\) hinaus): Was macht der Abstand? Vergleiche die Positionen \(x = 4\) und \(x = 8\) — und schau dir die Form des Graphen am Knick genau an.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Fahre am Bahnhof vorbei, über x gleich sechs hinaus: Was macht der Abstand? Vergleiche die Positionen vier und acht — und schau dir die Form des Graphen am Knick genau an.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Abstand nimmt bis zum Bahnhof ab (Gerade mit Steigung \(-1\)) und danach wieder zu (Steigung \(+1\)) — am Bahnhof selbst ist er null: der <strong>Knickpunkt</strong> \((6 \mid 0)\). Positionen mit gleichem Abstand liegen symmetrisch: \(a(4) = a(8) = 2\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Abstand nimmt bis zum Bahnhof ab, Gerade mit Steigung minus eins, und danach wieder zu, Steigung plus eins — am Bahnhof selbst ist er null: der Knickpunkt. Positionen mit gleichem Abstand liegen symmetrisch.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Bahnhof bei km 6 · Abstand als V-Kurve · Position verschiebbar</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Position <span class="var">\(x\)</span> [km]</label>
+      <input type="range" id="ab-x" min="0" max="12" step="0.5" value="2">
+      <span class="sl-val"><span id="ab-xv">2.0</span> km</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Auswertung</div>
+      <div class="fl-eq" id="ab-eq">a(2.0) = |2.0 − 6| = 4.0 km</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ab-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Abstand als Funktion der Position hat eine besondere Gestalt:</p>
+  <ul style="margin-top:6px">
+    <li>Zwei <strong>gerade Äste</strong> mit den Steigungen \(-1\) und \(+1\) — die Betragsfunktion ist stückweise <em>linear</em>.</li>
+    <li>Der <strong>Knickpunkt</strong> liegt dort, wo das Argument null wird: bei \(x = 6\).</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wo hat die Funktion \(a(x) = |x - 6|\) ihren Knickpunkt?</p><ul class="mc-optionen"><li data-opt="A">bei \(x = -6\)</li><li data-opt="B">bei \(x = 6\)</li><li data-opt="C">bei \(x = 0\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der Knick liegt dort, wo das Argument \(x - 6\) null wird — beim Bahnhof.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die beiden Äste der V-Kurve von \(|x - 6|\) sind Geraden mit den Steigungen <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(-1\) und \(+1\) — links fallend, rechts steigend.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne den Abstand bei \(x = 9\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(a(9) = |9 - 6| = 3\) km.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">An welchen Positionen beträgt der Abstand genau \(4\) km? Löse grafisch und algebraisch.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Grafisch: Die Horizontale \(y = 4\) schneidet das V zweimal. Algebraisch: \(|x - 6| = 4 \Rightarrow x - 6 = \pm 4 \Rightarrow x = 2\) oder \(x = 10\) — symmetrisch um den Bahnhof.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definition — die Betragsfunktion</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Betragsfunktion</div>
+  <p>Die Funktion \(f : \mathbb{R} \longrightarrow \mathbb{R}_0^+\) mit</p>
+  \[ y = f(x) = |x| = \begin{cases} x & \text{für } x \geq 0 \\ -x & \text{für } x &lt; 0 \end{cases} \]
+  <p>heisst <strong>Betragsfunktion</strong>. Sie ist <strong>abschnittsweise linear</strong>: Für \(x \geq 0\) stimmt sie mit \(y = x\) überein, für \(x &lt; 0\) mit \(y = -x\).</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-top:10px">
+  <thead><tr><th>Eigenschaften</th><th>\(y = f(x) = |x|\)</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Definitionsmenge</td><td>\(D = \mathbb{R}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Wertemenge</td><td>\(W = \mathbb{R}_0^+\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Nullstelle</td><td>\(x_0 = 0\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Symmetrie</td><td style="text-align:left;font-family:var(--sans)">gerade Funktion: \(|-x| = |x|\) — achsensymmetrisch zur \(y\)-Achse</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Knickpunkt</td><td>\((0 \mid 0)\) — Steigungswechsel von \(-1\) auf \(+1\)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-tipp" style="margin-top:10px">
+  <div class="block-titel">💡 Zwei Sichtweisen auf denselben Betrag</div>
+  <p>Als <strong>Zahl</strong> ist \(|x - m|\) der Abstand von \(x\) zu \(m\) (so in <a class="quer" href="s2-2c-betrag-polynom-ungleichungen.html">↩ 2.2c Betragsgleichungen</a>). Als <strong>Funktion</strong> beschreibt \(x \mapsto |x - m|\), wie sich dieser Abstand ändert — der Graph macht die Lösungsmengen von Betragsgleichungen und -ungleichungen <em>sichtbar</em>.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Wertemenge hat \(y = |x|\)?</p><ul class="mc-optionen"><li data-opt="A">\(\mathbb{R}\)</li><li data-opt="B">\(\mathbb{R}_0^+\)</li><li data-opt="C">\(\mathbb{R}^+\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Beträge sind nie negativ, und die \(0\) wird bei \(x = 0\) erreicht.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Wegen \(|-x| = |x|\) ist die Betragsfunktion eine <span class="mc-luecke"></span> Funktion — ihr Graph ist achsensymmetrisch zur \(y\)-Achse.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">gerade — wie \(x^2\) (vgl. <a href="s3-2a-potenzfunktionen.html">3.2a</a>).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Schreibe \(f(x) = |x|\) für \(x = -3\) und \(x = 5\) aus.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(f(-3) = -(-3) = 3\) (Fall \(x &lt; 0\)) und \(f(5) = 5\) (Fall \(x \geq 0\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Worin unterscheidet sich der Knickpunkt von \(|x|\) vom Scheitel der Parabel \(x^2\) — beide liegen doch bei \((0 \mid 0)\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die Parabel läuft <em>glatt</em> durch ihren Scheitel (Steigung ändert sich stetig, ist im Scheitel null); das V hat einen echten <strong>Knick</strong>: Die Steigung springt von \(-1\) auf \(+1\), im Knickpunkt selbst ist keine eindeutige Steigung definierbar.</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Transformationen — das V verschieben und strecken</h2>
+
+<p>Das Transformations-Schema aus <a class="quer" href="s3-1-grundlagen.html">↩ 3.1</a> gilt unverändert — mit dem Knickpunkt als Ankerpunkt:</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Transformationen — \(y = a \cdot |x - u| + v\)</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Parameter</th><th>Wirkung auf den Graphen von \(y = |x|\)</th></tr></thead>
+    <tbody>
+      <tr><td>\(u\), \(v\)</td><td style="text-align:left;font-family:var(--sans)">Der <strong>Knickpunkt</strong> wandert nach \((u \mid v)\); Symmetrieachse \(x = u\)</td></tr>
+      <tr><td>\(|a|\)</td><td style="text-align:left;font-family:var(--sans)">Die Äste werden Geraden mit Steigung \(\pm a\) — Streckung in \(y\)-Richtung</td></tr>
+      <tr><td>\(a &lt; 0\)</td><td style="text-align:left;font-family:var(--sans)">Das V klappt zum Dach: Öffnung nach unten</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Nullstellen gibt es genau dann, wenn der Knick unter (bei \(a &gt; 0\)) bzw. über (bei \(a &lt; 0\)) der \(x\)-Achse liegt: \(a|x-u| + v = 0 \Rightarrow x = u \pm \left|\tfrac{v}{a}\right|\) für \(\tfrac{v}{a} &lt; 0\).</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>V-Labor — \(y = a \cdot |x - u| + v\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verfolge den grünen Knickpunkt beim Verschieben. Stelle dann \(a = 2\) und \(a = 0.5\) ein: Was passiert mit den Ästen? Und bei negativem \(a\)?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verfolge den grünen Knickpunkt beim Verschieben. Stelle dann a gleich zwei und a gleich null Komma fünf ein: Was passiert mit den Ästen? Und bei negativem a?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Knick sitzt immer bei \((u \mid v)\) — wie der Scheitel in der Scheitelform der Parabel. \(|a|\) ist die Ast-Steigung: grosses \(a\) macht das V spitz, kleines flach; negatives \(a\) öffnet es nach unten.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Knick sitzt immer bei u senkrecht v — wie der Scheitel in der Scheitelform der Parabel. Der Betrag von a ist die Ast-Steigung: grosses a macht das V spitz, kleines flach; negatives a öffnet es nach unten.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Grundfunktion \(|x|\) grau gestrichelt · Knickpunkt grün · Äste mit Steigung \(\pm a\)</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Faktor <span class="var">\(a\)</span></label><input type="range" id="tr-a" min="0" max="5" step="1" value="3"><span class="sl-val" id="tr-av">1</span></div>
+      <div class="sl-grp akz-orange"><label>Verschiebung <span class="var">\(u\)</span></label><input type="range" id="tr-u" min="-3" max="3" step="1" value="0"><span class="sl-val" id="tr-uv">0</span></div>
+      <div class="sl-grp akz-gruen"><label>Verschiebung <span class="var">\(v\)</span></label><input type="range" id="tr-v" min="-3" max="3" step="1" value="0"><span class="sl-val" id="tr-vv">0</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktionsgleichung und Knickpunkt</div>
+      <div class="fl-eq" id="tr-eq">y = |x|</div>
+      <div class="fl-eq" id="tr-info" style="font-size:0.95rem;margin-top:4px">Knick (0|0) · Ast-Steigungen ±1</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="tr-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Transformationen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wo liegt der Knickpunkt von \(y = 3|x - 2| + 1\)?</p><ul class="mc-optionen"><li data-opt="A">\((2 \mid 1)\)</li><li data-opt="B">\((-2 \mid 1)\)</li><li data-opt="C">\((3 \mid 2)\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(u = 2\), \(v = 1\) — der Faktor \(3\) steilt nur die Äste auf.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Äste von \(y = a|x-u| + v\) sind Geraden mit den Steigungen <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(-a\) und \(+a\) — darum heisst das Ganze «stückweise linear».</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Gib die Gleichung der V-Kurve mit Knick \((-1 \mid 2)\) und Ast-Steigungen \(\pm 1\) an.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(y = |x + 1| + 2\) — denn \(x + 1 = x - (-1)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Berechne die Nullstellen von \(y = 2|x - 1| - 4\) und deute sie am Graphen.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(2|x-1| = 4 \Rightarrow |x-1| = 2 \Rightarrow x = -1\) oder \(x = 3\). Der Knick \((1 \mid -4)\) liegt unter der Achse; die beiden Äste (Steigung \(\pm 2\)) kreuzen sie symmetrisch zur Achse \(x = 1\).</div></details></div>
+</details>
+
+
+<!-- ══ 5. UMKLAPP-PRINZIP ══ -->
+<h2 id="typen">Das Umklapp-Prinzip — \(y = |f(x)|\)</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Vom Graphen von \(f\) zum Graphen von \(|f|\)</div>
+  <p>Der Betrag wirkt auf die <strong>Funktionswerte</strong>: Wo \(f(x) \geq 0\) ist, bleibt alles unverändert; wo \(f(x) &lt; 0\) ist, wird das Vorzeichen gedreht. Grafisch:</p>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li>Graph von \(f\) zeichnen.</li>
+    <li>Alle Teile <strong>unterhalb</strong> der \(x\)-Achse an der \(x\)-Achse <strong>nach oben spiegeln</strong> («umklappen»).</li>
+    <li>Teile oberhalb bleiben, wie sie sind. An den Nullstellen von \(f\) entstehen <strong>Knicke</strong>.</li>
+  </ol>
+</div>
+
+<p style="margin-top:14px">Schalte durch drei Grundfunktionen — gestrichelt die Original-Funktion \(f\), ausgezogen ihr Betrag \(|f|\):</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Umklapp-Labor — von \(f\) zu \(|f|\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Vergleiche gestrichelte und ausgezogene Kurve: Wo sind sie identisch, wo gespiegelt? Zähle bei der Parabel die Knicke — und beachte, was mit dem Scheitel unterhalb der Achse passiert.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vergleiche gestrichelte und ausgezogene Kurve: Wo sind sie identisch, wo gespiegelt? Zähle bei der Parabel die Knicke — und beachte, was mit dem Scheitel unterhalb der Achse passiert.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Aus der Geraden wird ein V mit Knick an der Nullstelle. Aus der Parabel \(x^2 - 4\) wird ein <strong>W</strong>: Der Bogen zwischen den Nullstellen \(\pm 2\) klappt nach oben, der Scheitel \((0 \mid -4)\) landet bei \((0 \mid 4)\). Ohne negative Teile (wie bei \(x^2 + 1\)) ändert der Betrag nichts.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Aus der Geraden wird ein V mit Knick an der Nullstelle. Aus der Parabel x Quadrat minus vier wird ein W: Der Bogen zwischen den Nullstellen klappt nach oben. Ohne negative Teile ändert der Betrag nichts.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Original \(f\) grau gestrichelt · Betrag \(|f|\) violett · Knicke an den Nullstellen</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="uk-btns"></div>
+    <div class="formel-live">
+      <div class="fl-label">Funktion und Beschreibung</div>
+      <div class="fl-eq" id="uk-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="uk-canvas" height="240"></canvas></div>
+    <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="uk-desc"></div>
+  </div>
+</div>
+
+<div class="block block-fehler" style="margin-top:14px">
+  <div class="block-titel">⚠ Häufiger Fehler — die ganze Kurve spiegeln</div>
+  <p>\(|f(x)|\) ist <strong>nicht</strong> \(-f(x)\): Gespiegelt werden nur die Teile <em>unterhalb</em> der \(x\)-Achse. Was schon oberhalb liegt, bleibt liegen. Kontrolle: Der Graph von \(|f|\) verläuft nie unterhalb der \(x\)-Achse.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Umklapp-Prinzip</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie viele Knicke hat der Graph von \(y = |x^2 - 4|\)?</p><ul class="mc-optionen"><li data-opt="A">einen</li><li data-opt="B">zwei</li><li data-opt="C">keinen</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Je einen an jeder Nullstelle von \(f\): bei \(x = -2\) und \(x = 2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Beim Umklappen entstehen Knicke genau an den <span class="mc-luecke"></span> der ursprünglichen Funktion.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Nullstellen — dort wechselt \(f\) das Vorzeichen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wohin klappt der Scheitel \((0 \mid -4)\) der Parabel \(y = x^2 - 4\) beim Übergang zu \(y = |x^2 - 4|\)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Nach \((0 \mid 4)\) — er wird zum lokalen <em>Hochpunkt</em> des W.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum verändert der Betrag die Funktion \(y = x^2 + 1\) überhaupt nicht?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(x^2 + 1 \geq 1 &gt; 0\) für alle \(x\) — es gibt nichts umzuklappen: \(|x^2 + 1| = x^2 + 1\). Der Betrag wirkt nur auf negative Funktionswerte.</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Abschnittsweise schreiben und grafisch lösen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Betragsterme abschnittsweise schreiben</div>
+  <p>Jeder Betragsterm lässt sich <strong>ohne Betragsstriche</strong> schreiben — mit einer Fallunterscheidung an der Nullstelle des Arguments:</p>
+  \[ |2x - 6| = \begin{cases} 2x - 6 & \text{für } x \geq 3 \\ -2x + 6 & \text{für } x &lt; 3 \end{cases} \]
+  <p>Die Grenze \(x = 3\) ist die Nullstelle von \(2x - 6\); links davon wird das Vorzeichen des ganzen Terms gedreht.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Skizzieren über die abschnittsweise Form</div>
+  <p>Skizziere \(y = |2x - 6|\).</p>
+  <p><strong>Lösung:</strong> Knick an der Nullstelle des Arguments: \(x = 3\), also Knickpunkt \((3 \mid 0)\). Rechts davon die Gerade \(y = 2x - 6\) (Steigung \(+2\)), links \(y = -2x + 6\) (Steigung \(-2\)). Kontrollpunkt: \(y(1) = |{-4}| = 4\) ✓</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Betragsgleichung grafisch: vier Lösungen!</div>
+  <p>Löse \(|x^2 - 4| = 3\).</p>
+  <p><strong>Lösung:</strong> Grafisch: Die Horizontale \(y = 3\) schneidet das W von \(|x^2 - 4|\) <strong>viermal</strong>. Algebraisch (zwei Fälle):</p>
+  \[ x^2 - 4 = 3 \;\Rightarrow\; x = \pm\sqrt{7} \qquad\quad x^2 - 4 = -3 \;\Rightarrow\; x = \pm 1 \]
+  <p>\(L = \{-\sqrt{7};\ -1;\ 1;\ \sqrt{7}\}\) — ohne die Skizze würde man leicht Lösungen übersehen (vgl. das Frühwarnsystem aus <a class="quer" href="s2-1-grundlagen.html">↩ 2.1</a>).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Betragsungleichung am Graphen</div>
+  <p>Löse \(|x + 1| &gt; 2\).</p>
+  <p><strong>Lösung:</strong> Das V mit Knick \((-1 \mid 0)\) liegt <em>oberhalb</em> der Horizontalen \(y = 2\) links und rechts der Schnittstellen. Schnittstellen: \(x + 1 = \pm 2 \Rightarrow x = -3\) oder \(x = 1\):</p>
+  \[ L = \{x \mid x &lt; -3 \ \vee\ x &gt; 1\} \]
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Knick an der falschen Stelle</div>
+  <p>Der Knick von \(|2x - 6|\) liegt bei \(x = 3\) (Nullstelle des <strong>Arguments</strong>), nicht bei \(x = 6\). Immer zuerst das Argument null setzen — wie bei den Transformationen: \(|2x-6| = 2|x-3|\).</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Betragsfunktionen im Griff</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Aufgabe</th><th>Werkzeug</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(a|x-u|+v\) skizzieren</td><td style="text-align:left;font-family:var(--sans)">Knick \((u \mid v)\), Äste mit Steigung \(\pm a\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(|f(x)|\) skizzieren</td><td style="text-align:left;font-family:var(--sans)">Umklapp-Prinzip: negative Teile hochspiegeln</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Betragsstriche loswerden</td><td style="text-align:left;font-family:var(--sans)">Fallunterscheidung an der Argument-Nullstelle</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">\(|T(x)| = c\) lösen</td><td style="text-align:left;font-family:var(--sans)">Skizze für die Anzahl, zwei Fälle für die Werte</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — abschnittsweise und grafisch</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wo liegt der Knick von \(y = |3x + 9|\)?</p><ul class="mc-optionen"><li data-opt="A">bei \(x = 9\)</li><li data-opt="B">bei \(x = -3\)</li><li data-opt="C">bei \(x = 3\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Argument null setzen: \(3x + 9 = 0 \Rightarrow x = -3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Beim abschnittsweisen Schreiben von \(|T(x)|\) wird links der Argument-Nullstelle das <span class="mc-luecke"></span> des ganzen Terms gedreht.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Vorzeichen — aus \(2x-6\) wird \(-2x+6\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie viele Lösungen hat \(|x^2 - 4| = 5\)? (Skizze!)</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Zwei: Die Horizontale \(y = 5\) liegt über dem W-Buckel (Höhe \(4\)) — nur die äusseren Äste schneiden: \(x^2 = 9 \Rightarrow x = \pm 3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Für welche \(c\) hat \(|x^2 - 4| = c\) genau vier, genau drei, genau zwei Lösungen?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die Horizontale wandert am W entlang: <strong>vier</strong> Lösungen für \(0 &lt; c &lt; 4\), <strong>drei</strong> für \(c = 4\) (Berührung am Buckel), <strong>zwei</strong> für \(c &gt; 4\) oder \(c = 0\) — und keine für \(c &lt; 0\).</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">V-Kurve am Graphen erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Graphen und entscheide, welche Funktionsgleichung dazu passt — achte auf Knickpunkt, Ast-Steigung und Öffnung.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört zum angezeigten Graphen?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Graphen skizzieren</span></div>
+  <p>Skizziere die folgenden Graphen <strong>von Hand</strong>: Knickpunkt bzw. Nullstellen bestimmen, dann Äste zeichnen bzw. umklappen. Vergleiche danach mit der Lösung.</p>
+  <ol class="aufg-liste">
+    <li>\(y = |x| - 3\)</li>
+    <li>\(y = |x + 2| - 1\)</li>
+    <li>\(y = |x^2 - 4|\) (Umklapp-Prinzip!)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2'); drawA2Sol();">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <div class="cv-wrap" style="margin-bottom:8px"><canvas id="a2-canvas" height="240"></canvas></div>
+      <ol class="aufg-liste">
+        <li><span style="color:#1a4f8a;font-weight:700">Blau:</span> V mit Knick \((0 \mid -3)\); Nullstellen bei \(x = \pm 3\).</li>
+        <li><span style="color:#1f6b3a;font-weight:700">Grün:</span> V mit Knick \((-2 \mid -1)\); Nullstellen bei \(x = -3\) und \(x = -1\).</li>
+        <li><span style="color:#5b2d8e;font-weight:700">Violett:</span> W-Kurve — die Parabel \(x^2 - 4\), zwischen den Nullstellen \(\pm 2\) nach oben geklappt; lokaler Hochpunkt \((0 \mid 4)\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Betragsfunktionen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Knickpunkt ablesen</div>
+    <p>Gib den Knickpunkt \(K = (x_K \mid y_K)\) von \(y = 3|x - 2| + 1\) an.</p>
+    <div class="eingabe-row"><label>x_K =&nbsp;</label><input type="text" id="a3a1" placeholder="x_K"><button class="btn-pruef" onclick="chkNum('a3a1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>y_K =&nbsp;</label><input type="text" id="a3a2" placeholder="y_K"><button class="btn-pruef" onclick="chkNum('a3a2', 1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(K = (2 \mid 1)\); die Äste haben die Steigungen \(\pm 3\). Da der Knick über der Achse liegt und das V nach oben öffnet: keine Nullstellen.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Nullstellen berechnen</div>
+    <p>Berechne die Nullstellen von \(y = |x - 1| - 4\).</p>
+    <div class="eingabe-row"><label>x₁ =&nbsp;</label><input type="text" id="a3b1" placeholder="x₁"><button class="btn-pruef" onclick="chkNum('a3b1', -3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x₂ =&nbsp;</label><input type="text" id="a3b2" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3b2', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ |x-1| = 4 \;\Rightarrow\; x - 1 = \pm 4 \;\Rightarrow\; x_1 = -3,\quad x_2 = 5 \]
+        <p>Symmetrisch um die Knick-Achse \(x = 1\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Abschnittsweise schreiben</div>
+    <p>Schreibe \(y = |2x - 6|\) ohne Betragsstriche. Gib die Steigung des <strong>linken</strong> Astes und den Funktionswert bei \(x = 1\) an.</p>
+    <div class="eingabe-row"><label>Steigung links =&nbsp;</label><input type="text" id="a3c1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a3c1', -2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>y(1) =&nbsp;</label><input type="text" id="a3c2" placeholder="y"><button class="btn-pruef" onclick="chkNum('a3c2', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Grenze bei \(x = 3\): rechts \(y = 2x - 6\), links \(y = -2x + 6\) (Steigung \(-2\)). Kontrolle: \(y(1) = -2 + 6 = 4 = |2 - 6|\) ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Betragsgleichung mit vier Lösungen</div>
+    <p>Löse \(|x^2 - 4| = 3\). Wie viele Lösungen gibt es, und wie lautet die grösste (zwei Dezimalen)?</p>
+    <div class="eingabe-row"><label>Anzahl Lösungen =&nbsp;</label><input type="text" id="a3d1" placeholder="Anzahl"><button class="btn-pruef" onclick="chkNum('a3d1', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>grösste Lösung ≈&nbsp;</label><input type="text" id="a3d2" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3d2', 2.65, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Zwei Fälle: \(x^2 - 4 = 3 \Rightarrow x = \pm\sqrt{7} \approx \pm 2.65\) und \(x^2 - 4 = -3 \Rightarrow x = \pm 1\). Vier Lösungen — die Skizze (W-Kurve gegen \(y = 3\)) zeigt es sofort.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Betragsungleichung</div>
+    <p>Löse \(|x + 1| &gt; 2\) und gib die beiden Grenzen an.</p>
+    <div class="eingabe-row"><label>x &lt;&nbsp;</label><input type="text" id="a3e1" placeholder="Grenze"><button class="btn-pruef" onclick="chkNum('a3e1', -3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>oder x &gt;&nbsp;</label><input type="text" id="a3e2" placeholder="Grenze"><button class="btn-pruef" onclick="chkNum('a3e2', 1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Abstand von \(-1\) grösser als \(2\): \(L = \{x \mid x &lt; -3 \ \vee\ x &gt; 1\}\). Grafisch: Das V liegt aussen oberhalb der Horizontalen \(y = 2\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Abfüllanlage — Kosten der Abweichung</span></div>
+  <p>Eine Abfüllanlage soll \(500\) ml abfüllen. Jede Abweichung kostet — Nacharbeit oder verschenkter Inhalt — näherungsweise</p>
+  \[ K(x) = 0.5 \cdot |x - 500| \qquad [\text{Rappen pro Flasche},\ x \text{ in ml}] \]
+  <ol class="aufg-liste">
+    <li>Skizziere \(K(x)\) und deute den Knickpunkt.</li>
+    <li>Berechne die Kosten bei \(x = 508\) ml.</li>
+    <li>Bis zu welcher Füllmenge bleiben die Kosten unter \(3\) Rappen? (Betragsungleichung!)</li>
+  </ol>
+  <div class="eingabe-row"><label>K(508) =&nbsp;</label><input type="text" id="a4-1" placeholder="Rp."><button class="btn-pruef" onclick="chkNum('a4-1', 4, 0.01, 'Rp.')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>obere Grenze =&nbsp;</label><input type="text" id="a4-2" placeholder="ml"><button class="btn-pruef" onclick="chkNum('a4-2', 506, 0.1, 'ml')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>V-Kurve mit Knick \((500 \mid 0)\): Bei exakter Füllmenge entstehen keine Kosten; jede Abweichung kostet symmetrisch.</li>
+        <li>\(K(508) = 0.5 \cdot 8 = 4\) Rappen.</li>
+        <li>\(0.5|x-500| &lt; 3 \Rightarrow |x-500| &lt; 6 \Rightarrow 494 &lt; x &lt; 506\) ml — obere Grenze \(506\) ml.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Der beste Standort</span></div>
+  <p>An einer geraden Strasse wohnen Ari bei km \(2\) und Bea bei km \(8\). Für einen Treffpunkt bei Position \(x\) ist der <strong>Gesamtweg</strong> beider Personen</p>
+  \[ d(x) = |x - 2| + |x - 8| \]
+  <ol class="aufg-liste">
+    <li>Berechne \(d(0)\), \(d(5)\) und \(d(10)\).</li>
+    <li>Wo ist der Gesamtweg minimal — und wie gross ist er dort?</li>
+  </ol>
+  <div class="eingabe-row"><label>d(0) =&nbsp;</label><input type="text" id="a5-1" placeholder="km"><button class="btn-pruef" onclick="chkNum('a5-1', 10, 0.01, 'km')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Minimum =&nbsp;</label><input type="text" id="a5-2" placeholder="km"><button class="btn-pruef" onclick="chkNum('a5-2', 6, 0.01, 'km')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(d(0) = 2 + 8 = 10\); \(d(5) = 3 + 3 = 6\); \(d(10) = 8 + 2 = 10\) km.</li>
+        <li>Zwischen den beiden Wohnorten ist der Gesamtweg konstant gleich dem Abstand der Wohnorte: \(d(x) = 6\) km für alle \(2 \leq x \leq 8\) — <strong>jeder</strong> Treffpunkt dazwischen ist optimal. Ausserhalb wächst \(d\) linear an (Wannenform mit flachem Boden).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Materialabtrag an der Fräse</span></div>
+  <p>Das Profil eines Werkstücks weicht vom Sollniveau ab: \(f(x) = x^2 - 4\) (Abweichung in mm, Position \(x\) in cm, \(-3 \leq x \leq 3\)). Die Fräse muss an jeder Stelle den <strong>Betrag</strong> der Abweichung abtragen:</p>
+  \[ A(x) = |x^2 - 4| \]
+  <ol class="aufg-liste">
+    <li>Wie viel Material wird bei \(x = 1\) abgetragen, wie viel bei \(x = 3\)?</li>
+    <li>An welchen Positionen ist gar nichts abzutragen?</li>
+  </ol>
+  <div class="eingabe-row"><label>A(1) =&nbsp;</label><input type="text" id="a6-1" placeholder="mm"><button class="btn-pruef" onclick="chkNum('a6-1', 3, 0.01, 'mm')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>nichts abzutragen bei x = ±&nbsp;</label><input type="text" id="a6-2" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a6-2', 2, 0.01, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(A(1) = |1 - 4| = 3\) mm (Profil liegt <em>unter</em> dem Soll, der Betrag zählt trotzdem); \(A(3) = |9 - 4| = 5\) mm.</li>
+        <li>An den Nullstellen von \(f\): \(x = \pm 2\) cm — dort trifft das Profil genau das Sollniveau (die Knicke der W-Kurve).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Die Wanne komplett zerlegt <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Betrachte die Standort-Funktion aus A5: \(d(x) = |x - 2| + |x - 8|\).</p>
+  <ol class="aufg-liste">
+    <li>Schreibe \(d(x)\) <strong>abschnittsweise</strong> ohne Betragsstriche (drei Abschnitte: \(x &lt; 2\), \(2 \leq x \leq 8\), \(x &gt; 8\)).</li>
+    <li>Kontrolliere mit \(d(0)\) und \(d(10)\) aus A5.</li>
+    <li>Begründe mit der abschnittsweisen Form, warum das Minimum ein ganzes <strong>Intervall</strong> ist.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Für \(x &lt; 2\): beide Argumente negativ — \(d(x) = (2-x) + (8-x) = -2x + 10\). Für \(2 \leq x \leq 8\): \(d(x) = (x-2) + (8-x) = 6\). Für \(x &gt; 8\): \(d(x) = (x-2) + (x-8) = 2x - 10\).</li>
+        <li>\(d(0) = 10\) ✓ und \(d(10) = 10\) ✓ — passt zu A5.</li>
+        <li>Im mittleren Abschnitt heben sich die \(x\)-Terme exakt auf: \(d\) ist dort <strong>konstant</strong> \(6\). Links fällt die Funktion (Steigung \(-2\)), rechts steigt sie (Steigung \(+2\)) — der «Boden der Wanne» ist das gesamte Intervall \([2;\ 8]\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Die Betragsfunktion ist <strong>stückweise linear</strong>: \(y = a|x-u| + v\) ist ein V mit <strong>Knick</strong> bei \((u \mid v)\), Symmetrieachse \(x = u\) und Ast-Steigungen \(\pm a\) — der Knick spielt die Rolle des Parabel-Scheitels. Für beliebige Funktionen gilt das <strong>Umklapp-Prinzip</strong>: \(|f(x)|\) spiegelt die negativen Teile von \(f\) nach oben, mit Knicken an den Nullstellen (aus der Parabel \(x^2-4\) wird ein W). Betragsstriche verschwinden durch <strong>Fallunterscheidung</strong> an der Argument-Nullstelle — und die Skizze verrät bei Betragsgleichungen die Lösungsanzahl, bevor gerechnet wird.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Form</th><th>Gestalt</th><th>Kenndaten</th></tr></thead>
+  <tbody>
+    <tr><td>\(y = |x|\)</td><td style="font-family:var(--sans)">V</td><td style="text-align:left;font-family:var(--sans)">Knick \((0 \mid 0)\), Steigungen \(\pm 1\), gerade Funktion, \(W = \mathbb{R}_0^+\)</td></tr>
+    <tr><td>\(y = a|x-u|+v\)</td><td style="font-family:var(--sans)">V bzw. Dach</td><td style="text-align:left;font-family:var(--sans)">Knick \((u \mid v)\), Steigungen \(\pm a\), Achse \(x = u\)</td></tr>
+    <tr><td>\(y = |mx+b|\)</td><td style="font-family:var(--sans)">V</td><td style="text-align:left;font-family:var(--sans)">Knick an der Nullstelle \(-\tfrac{b}{m}\), Steigungen \(\pm|m|\)</td></tr>
+    <tr><td>\(y = |f(x)|\), \(f\) quadratisch</td><td style="font-family:var(--sans)">W (bei zwei Nullstellen)</td><td style="text-align:left;font-family:var(--sans)">Knicke an den Nullstellen von \(f\), Buckel = geklappter Scheitel</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s3-6-betragsfunktionen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-6-betragsfunktionen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-6-betragsfunktionen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-6-betragsfunktionen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s3-6-betragsfunktionen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a class="lk" style="opacity:0.6;cursor:default;" aria-disabled="true"><span class="lk-ic">⏳</span><div><div class="lk-t">In Vorbereitung</div><div class="lk-s">Zu Betragsfunktionen ist noch keine passende Playlist der bevorzugten Anbieter kuratiert.</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/26406/aufgaben-zur-betragsfunktion" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zur Betragsfunktion</div><div class="lk-s">Graphen, Gleichungen, abschnittsweise Definition · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/223589/aufgaben-zum-betrag-einer-zahl" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Betrag einer Zahl</div><div class="lk-s">Betrag und Abstand als Grundlage · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 3.6 Betragsfunktionen (Ergänzung)</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s3-6',
+  kapitelNr:'3.6', kapitelTitel:'Betragsfunktionen',
+  prev:{nr:'3.5',titel:'Trigonometrische Funktionen',url:'s3-5-trigonometrische-funktionen.html'},
+  next:{nr:'4.1',titel:'Grundlagen',url:'s4-1-grundlagen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
+  ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const N = 400;
+  let started = false, prevY = null;
+  ctx.beginPath();
+  for(let i = 0; i <= N; i++){
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = f(x);
+    if(!isFinite(y) || Math.abs(y) > yCap){ started = false; prevY = null; continue; }
+    if(prevY !== null && Math.abs(y - prevY) > yCap){ started = false; }
+    if(!started){ ctx.moveTo(cx(x), cy(y)); started = true; }
+    else ctx.lineTo(cx(x), cy(y));
+    prevY = y;
+  }
+  ctx.stroke();
+}
+
+function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
+  const {ctx, W, H: HH} = initCanvas(id, H, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, HH);
+  const padL = 48, padB = 28, padT = 14, padR = 16;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => HH - padB - (y - yMin) / (yMax - yMin) * (HH - padB - padT);
+  ctx.font = '13px JetBrains Mono,monospace';
+  for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+  }
+  for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
+    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+  }
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, HH - padB); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'right'; ctx.fillText(labX, W - padR, HH - padB - 6);
+  ctx.textAlign = 'left';  ctx.fillText(labY, padL + 5, padT + 4);
+  return {ctx, W, H: HH, cx, cy};
+}
+
+/* ══ EINSTIEG: Abstand zum Bahnhof ══ */
+function updateAB(){
+  const x = parseFloat(document.getElementById('ab-x').value);
+  document.getElementById('ab-xv').textContent = x.toFixed(1);
+  const a = Math.abs(x - 6);
+  const xB = `<span class="tx-blau">${x.toFixed(1)}</span>`;
+  document.getElementById('ab-eq').innerHTML = `a(${xB}) = |${xB} − 6| = ${a.toFixed(1)} km`;
+  const {ctx, cx, cy} = gridApp('ab-canvas', 220, 0, 12, 0, 8, 1, 1, 'x [km]', 'a [km]');
+  // Bahnhof markieren
+  ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(6), cy(0)); ctx.lineTo(cx(6), cy(8)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('Bahnhof', cx(6), cy(8) + 12);
+  plotFx(ctx, cx, cy, t => Math.abs(t - 6), 0, 12, '#1a4f8a', 2.5, 1e6);
+  drawDot(ctx, cx, cy, x, a, '#1a4f8a', 7);
+}
+document.getElementById('ab-x').addEventListener('input', updateAB);
+
+/* ══ V-LABOR: TRANSFORMATIONEN ══ */
+const TR_A = [-2, -1, -0.5, 0.5, 1, 2];
+function updateTR(){
+  const a = TR_A[parseInt(document.getElementById('tr-a').value)];
+  const u = parseInt(document.getElementById('tr-u').value);
+  const v = parseInt(document.getElementById('tr-v').value);
+  document.getElementById('tr-av').textContent = fmt(a).replace('-', '−');
+  document.getElementById('tr-uv').textContent = String(u).replace('-', '−');
+  document.getElementById('tr-vv').textContent = String(v).replace('-', '−');
+  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
+  const arg = u === 0 ? 'x' : (u > 0 ? `x − ${T('orange', u)}` : `x + ${T('orange', Math.abs(u))}`);
+  const aStr = a === 1 ? '' : (a === -1 ? '−' : `${T('blau', fmt(a).replace('-', '−'))}·`);
+  const vTerm = v === 0 ? '' : (v > 0 ? ` + ${T('gruen', v)}` : ` − ${T('gruen', Math.abs(v))}`);
+  document.getElementById('tr-eq').innerHTML = `y = ${aStr}|${arg}|${vTerm}`;
+  document.getElementById('tr-info').innerHTML =
+    `Knick (${T('orange', String(u).replace('-', '−'))}|${T('gruen', String(v).replace('-', '−'))}) · Ast-Steigungen ±${fmt(Math.abs(a))}`;
+  const {ctx, W, H} = initCanvas('tr-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -6, 6, -5, 5);
+  // Grundfunktion gestrichelt grau
+  ctx.setLineDash([5, 4]);
+  plotFx(ctx, cx, cy, x => Math.abs(x), -6, 6, '#9ca3af', 1.5, 25);
+  ctx.setLineDash([]);
+  plotFx(ctx, cx, cy, x => a * Math.abs(x - u) + v, -6, 6, '#5b2d8e', 2.5, 25);
+  // Knickpunkt
+  drawDot(ctx, cx, cy, u, v, '#1f6b3a', 6);
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText(`(${String(u).replace('-', '−')}|${String(v).replace('-', '−')})`, cx(u) + 8, cy(v) + (a > 0 ? 16 : -10));
+}
+['tr-a', 'tr-u', 'tr-v'].forEach(id => document.getElementById(id).addEventListener('input', updateTR));
+
+/* ══ UMKLAPP-LABOR ══ */
+const UK = [
+  {label:'x − 2',    f: x => x - 2,                 eq:'y = |x − 2|',
+   desc:'Aus der Geraden wird ein V — Knick an der Nullstelle x = 2, Ast-Steigungen ±1.'},
+  {label:'x² − 4',   f: x => x * x - 4,             eq:'y = |x² − 4|',
+   desc:'Aus der Parabel wird ein W — der Bogen zwischen den Nullstellen ±2 klappt hoch, der Scheitel (0|−4) wird zum Buckel (0|4).'},
+  {label:'x² + 1',   f: x => x * x + 1,             eq:'y = |x² + 1|',
+   desc:'Nichts zu klappen: x² + 1 ist überall positiv — Betrag und Original sind identisch.'},
+];
+let ukActive = 0;
+function buildUkBtns(){
+  document.getElementById('uk-btns').innerHTML = UK.map((t, i) =>
+    `<button class="typ-btn${i === ukActive ? ' aktiv' : ''}" onclick="setUk(${i})">f(x) = ${t.label}</button>`
+  ).join('');
+}
+function setUk(i){
+  ukActive = i;
+  document.querySelectorAll('#uk-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  drawUk();
+}
+function drawUk(){
+  const t = UK[ukActive];
+  document.getElementById('uk-eq').textContent = t.eq;
+  document.getElementById('uk-desc').textContent = t.desc;
+  const {ctx, W, H} = initCanvas('uk-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -5, 6);
+  // Original gestrichelt grau
+  ctx.setLineDash([5, 4]);
+  plotFx(ctx, cx, cy, t.f, -5, 5, '#9ca3af', 1.5, 30);
+  ctx.setLineDash([]);
+  // Betrag violett
+  plotFx(ctx, cx, cy, x => Math.abs(t.f(x)), -5, 5, '#5b2d8e', 2.5, 30);
+}
+
+/* ══ A1: V-Kurven erkennen ══ */
+const a1G = [
+  {label:'Graph 1', f: x => 2 * Math.abs(x),          eq:'y = 2|x|'},
+  {label:'Graph 2', f: x => Math.abs(x + 3),          eq:'y = |x+3|'},
+  {label:'Graph 3', f: x => Math.abs(x - 1) - 2,      eq:'y = |x−1|−2'},
+  {label:'Graph 4', f: x => -Math.abs(x) + 3,         eq:'y = −|x|+3'},
+];
+const a1Opts = ['y = 2|x|', 'y = |x+3|', 'y = |x−1|−2', 'y = −|x|+3'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 6);
+  plotFx(ctx, cx, cy, a1G[a1Act].f, -5, 5, '#1a4f8a', 2.5, 25);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Lies den Knickpunkt ab, prüfe die Ast-Steigung — und ob das V nach oben oder unten öffnet.';
+  }
+}
+
+/* ══ A2: Lösungs-Skizzen ══ */
+function drawA2Sol(){
+  const body = document.getElementById('l-a2');
+  if(!body.classList.contains('sichtbar')) return;
+  const {ctx, W, H} = initCanvas('a2-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 6);
+  plotFx(ctx, cx, cy, x => Math.abs(x) - 3, -5, 5, '#1a4f8a', 2.5, 25);            // a
+  plotFx(ctx, cx, cy, x => Math.abs(x + 2) - 1, -5, 5, '#1f6b3a', 2.5, 25);        // b
+  plotFx(ctx, cx, cy, x => Math.abs(x * x - 4), -5, 5, '#5b2d8e', 2.5, 25);        // c
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Knickpunkt und Fälle prüfen — hilft die Skizze?';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateAB();
+  updateTR();
+  buildUkBtns(); drawUk();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateAB(); updateTR(); drawUk(); drawA1(); drawA2Sol();
+});
+</script>
+</body>
+</html>

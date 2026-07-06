@@ -1466,6 +1466,50 @@ s21_cards = [
      'Die Division durch x hat <b>x = 0 vernichtet</b>. Korrekt: x(x−4) = 0 → L = {0; 4}.'),
 ]
 
+# ─── s3-6 Betragsfunktionen (Schwerpunkt, Ergänzung TALS) ───
+s36_cards = [
+    ('Definition der <i>Betragsfunktion</i>?',
+     '<b>f(x) = |x| = x für x ≥ 0, −x für x &lt; 0</b> — abschnittsweise linear, Graph ist ein V.'),
+    ('D, W und Symmetrie von y = |x|?',
+     '<b>D = ℝ, W = ℝ₀⁺</b>; gerade Funktion (|−x| = |x|) — achsensymmetrisch zur y-Achse.'),
+    ('Was ist der <i>Knickpunkt</i>?',
+     'Der Punkt, an dem die Steigung springt (bei |x|: von −1 auf +1 in (0|0)) — das Gegenstück zum Parabel-Scheitel, aber <b>nicht glatt</b>.'),
+    ('Knickpunkt und Ast-Steigungen von y = a·|x−u| + v?',
+     'Knick <b>(u|v)</b>, Symmetrieachse x = u, Ast-Steigungen <b>±a</b>; a &lt; 0: Dach statt V.'),
+    ('Knickpunkt von y = 3|x−2| + 1?',
+     '<b>(2|1)</b> — der Faktor 3 steilt nur die Äste auf (±3).'),
+    ('Wo knickt y = |mx + b|?',
+     'An der <b>Nullstelle des Arguments</b>: x = −b/m; Ast-Steigungen ±|m|. Beispiel: |2x−6| knickt bei x = 3 (nicht 6!).'),
+    ('Wann hat y = a|x−u| + v Nullstellen?',
+     'Wenn der Knick auf der «falschen» Seite der x-Achse liegt: <b>x = u ± |v/a|</b> — z.B. 2|x−1|−4: x = −1 und 3.'),
+    ('Das <i>Umklapp-Prinzip</i> für y = |f(x)|?',
+     'Kurventeile <b>unterhalb</b> der x-Achse an ihr <b>nach oben spiegeln</b>; Teile oberhalb bleiben. Knicke an den Nullstellen von f.'),
+    ('Was wird aus der Geraden y = x − 2 unter dem Betrag?',
+     'Ein <b>V</b> mit Knick an der Nullstelle (2|0) und Steigungen ±1.'),
+    ('Was wird aus der Parabel y = x² − 4 unter dem Betrag?',
+     'Ein <b>W</b>: Der Bogen zwischen den Nullstellen ±2 klappt hoch; der Scheitel (0|−4) wird zum Buckel <b>(0|4)</b>.'),
+    ('Warum ändert der Betrag y = x² + 1 nicht?',
+     'x² + 1 ≥ 1 &gt; 0 — <b>keine negativen Teile</b>, nichts zu klappen: |f| = f.'),
+    ('Häufiger Fehler beim Umklappen?',
+     '|f| ist <b>nicht −f</b>: Nur die negativen Teile werden gespiegelt. Kontrolle: |f| verläuft nie unterhalb der x-Achse.'),
+    ('|2x − 6| abschnittsweise geschrieben?',
+     '<b>2x − 6 für x ≥ 3, −2x + 6 für x &lt; 3</b> — Fallgrenze an der Argument-Nullstelle.'),
+    ('Wie zieht man den Faktor aus |2x − 6| heraus?',
+     '<b>|2x − 6| = 2·|x − 3|</b> — Betrag des Faktors mal Betrag des Restes.'),
+    ('Wie viele Lösungen hat |x² − 4| = 3 — und welche?',
+     '<b>Vier</b>: x² − 4 = ±3 → x = ±√7 ≈ ±2.65 und x = ±1. Die W-Skizze zeigt die Anzahl sofort.'),
+    ('|x² − 4| = c: Lösungsanzahl je nach c?',
+     '<b>4</b> für 0 &lt; c &lt; 4 · <b>3</b> für c = 4 (Buckel-Berührung) · <b>2</b> für c &gt; 4 oder c = 0 · keine für c &lt; 0.'),
+    ('Betragsungleichung |x + 1| &gt; 2 grafisch?',
+     'Das V (Knick (−1|0)) liegt <b>aussen</b> oberhalb von y = 2: L = {x | x &lt; −3 ∨ x &gt; 1}.'),
+    ('Wie modelliert man Toleranzkosten mit dem Betrag?',
+     'Als V-Funktion um den Sollwert, z.B. <b>K(x) = 0.5·|x − 500|</b> — Knick beim Soll, symmetrisch steigende Kosten.'),
+    ('d(x) = |x−2| + |x−8|: Wo ist das Minimum?',
+     'Auf dem <b>ganzen Intervall [2; 8]</b> konstant 6 — abschnittsweise: −2x+10 / 6 / 2x−10 («Wanne mit flachem Boden»).'),
+    ('Ist 3.6 Betragsfunktionen Teil des RLP 2030?',
+     '<b>Nein</b> — eine Ergänzung des TALS-Lehrmittels: Brücke zwischen Betragsgleichungen (2.2c) und der Funktionssicht (3.1).'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -1547,6 +1591,8 @@ SP_DECKS = [
      'Betrag als Abstand, Fallunterscheidung, Nullprodukt, Relationszeichen, Vorzeichentabelle.', s22c_cards),
     ('s2-1-grundlagen', '2.1 Grundlagen Gleichungen',
      'Gleichung als Waage, Äquivalenzumformungen, Typ-Bestimmung, Vier-Schritte-Fahrplan, Überprüfen.', s21_cards),
+    ('s3-6-betragsfunktionen', '3.6 Betragsfunktionen (Ergänzung)',
+     'V-Kurve mit Knickpunkt, Transformationen, Umklapp-Prinzip, abschnittsweise Definition, grafisches Lösen.', s36_cards),
 ]
 
 for slug, deck_short, deck_desc, cards in SP_DECKS:

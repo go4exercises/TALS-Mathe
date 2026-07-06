@@ -4,6 +4,36 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [76] — 2026-07-06 · s3-6 Betragsfunktionen — neue Ergänzungsseite (ausserhalb RLP)
+
+Auf Wunsch des Auftraggebers ergänzt: ein **neues Teilgebiet 3.6**, das nicht Teil des
+RLP 2030 ist — als `pt-untertitel` und in der Kompetenzen-Box entsprechend deklariert
+(«Kompetenzen — Ergänzung TALS (über den RLP 2030 hinaus)» mit eigenen Kompetenzen statt
+RLP-Zitat). Aufbauend auf linearen und quadratischen Funktionen, ohne Quell-PDF:
+
+- **`schwerpunkt/s3-6-betragsfunktionen.html`** — Einstieg Abstandsfunktion
+  \(a(x) = |x - 6|\) (Velofahrerin und Bahnhof, interaktiv), Definition mit
+  Eigenschaften-Tabelle (V, Knickpunkt, gerade Funktion), **V-Labor** \(y = a|x-u|+v\)
+  (Knick als Ankerpunkt, Ast-Steigungen \(\pm a\)), **Umklapp-Labor** für \(y = |f(x)|\)
+  (Gerade → V, Parabel \(x^2-4\) → W, \(x^2+1\) unverändert), abschnittsweises Schreiben
+  (Fallgrenze an der Argument-Nullstelle, \(|2x-6| = 2|x-3|\)), grafisches Lösen
+  (\(|x^2-4| = 3\) mit vier Lösungen), A1–A7 (u.a. Abfüllanlage-Kosten, Standort-Funktion
+  \(|x-2|+|x-8|\) mit Intervall-Minimum, Materialabtrag als W-Kurve, Wannen-Zerlegung als
+  Vertiefung), 4 Mini-Checks, Querlinks zu 2.2c und 3.1.
+- **Materialien komplett:** 4 Druckseiten (`build_print_s3.py` L-Block, Bestand
+  byte-identisch; Hinweis auf den Ergänzungs-Status auch im Handout) und Anki-Deck mit
+  20 Karten (nur neues Deck gebaut).
+- Alle Zahlenwerte numerisch verifiziert (u.a. \(|x^2-4| = 3 \Rightarrow \pm 1, \pm\sqrt{7}\),
+  Nullstellen \(|x-1|-4 \Rightarrow -3/5\), Standort-Minimum konstant \(6\) auf \([2;\ 8]\),
+  Abfüllanlage \(494 &lt; x &lt; 506\)).
+- Infrastruktur: `nav.js` (SITE + GROUPS s3-6), Kette 3.5 → 3.6 → 4.1, index.html-Karte
+  3.6 «fertig» mit Ergänzungs-Vermerk (41 Themenseiten; die 31 RLP-Teilgebiete bleiben).
+- Ressourcen: Discovery-Lauf fand keine Betragsfunktions-Playlist der bevorzugten Anbieter
+  (3 Kandidaten owner-verifiziert, alle themenfremd) → Video-Platzhalter; Aufgaben aus dem
+  serlo-Sitemap-Cache (26406, 223589); Map §8 ergänzt.
+
+---
+
 ## [75] — 2026-07-05 · s2-1 Grundlagen (Gleichungs-Werkzeugkasten) ausgebaut
 
 Siebter Vollausbau im Schwerpunktfach — damit ist **Lerngebiet 2 komplett** (2.1 + 2.2a–c).
