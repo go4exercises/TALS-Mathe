@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.3a Vektorbegriff und Komponenten — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 4 · Geometrie · 70 Lektionen</div>
+  <h1 class="pt-h1">4.3a Vektorbegriff und Komponenten</h1>
+  <div class="pt-untertitel">RLP 4.3 · Teil 1 von 4</div>
+</div>
+
+<p class="lead">Ein <strong>Vektor</strong> hat Länge und Richtung — mehr nicht, aber auch nicht weniger. Kräfte, Geschwindigkeiten und Verschiebungen sind Vektoren; Temperatur oder Masse sind es nicht. Auf dieser Seite lernst du das Rechnen mit Pfeilen (addieren, subtrahieren, strecken), übersetzt sie in <strong>Komponenten</strong> für Ebene und Raum, wechselst zwischen kartesischen und <strong>Polarkoordinaten</strong> — und zerlegst Vektoren in vorgegebene Richtungen.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.3</div>
+  <ul>
+    <li>Vektoren definieren, skalieren, addieren, subtrahieren und normieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>zweidimensionale Vektoren in kartesische Koordinaten und Polarkoordinaten darstellen, entsprechende Umrechnung durchführen</li>
+    <li>einen Vektor grafisch in vorgeschriebene Richtungen zerlegen und Linearkombinationen berechnen (als Übergang zur koordinatenbezogenen Vektorgeometrie) <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die Begriffe der koordinatenbezogenen Vektorrechnung (Richtung, Norm (Länge, Betrag), inverser Vektor (Gegenvektor), Ortsvektor, Einheitsvektor) erklären, anwenden und visualisieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die Operationen (Addition, Subtraktion, Multiplikation mit einem Skalar, Skalarprodukt) koordinatenbezogen ausführen und grafisch visualisieren — in numerisch einfachen Fällen ohne, in schwierigen mit Hilfsmitteln</li>
+    <li>die Parametergleichung einer Geraden aufstellen und die gegenseitige Lage von zwei Geraden bestimmen — in numerisch einfachen Fällen ohne, in schwierigen mit Hilfsmitteln</li>
+    <li>Längen-, Winkel- und Abstandsprobleme lösen — numerisch einfache Fälle und geometrisch einfache Lagen auch ohne Hilfsmittel, numerisch schwierige Fälle und geometrisch komplizierte Lagen mit Hilfsmitteln</li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt die Kompetenzen 1–5 (ohne Skalarprodukt): Vektorbegriff, Operationen, Komponenten- und Polardarstellung, Linearkombinationen. Es folgen <a href="s4-3b-skalarprodukt.html">Teil 2: Skalarprodukt (s4-3b)</a>, <a href="s4-3c-geraden.html">Teil 3: Geraden (s4-3c)</a> und als Ergänzung <a href="s4-3d-ebenen.html">Teil 4: Ebenen (s4-3d)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann vektorielle von skalaren Grössen unterscheiden und einen Vektor als Klasse gleich langer, gleich gerichteter Pfeile deuten.</li>
+      <li>Ich kann Vektoren zeichnerisch und komponentenweise addieren, subtrahieren und mit Skalaren multiplizieren — inklusive Gegenvektor und Nullvektor.</li>
+      <li>Ich kann Orts- und Verbindungsvektoren aufstellen (\(\vec{AB} = \vec{r}_B - \vec{r}_A\)) und Beträge in Ebene und Raum berechnen.</li>
+      <li>Ich kann zweidimensionale Vektoren zwischen kartesischer Darstellung und Polarform \((r;\ \varphi)\) umrechnen.</li>
+      <li>Ich kann Einheitsvektoren bestimmen (normieren) und Vektoren als Linearkombinationen \(s\vec{a} + t\vec{b}\) zerlegen.</li>
+      <li>Ich kann Kollinearität prüfen und einfache Anwendungen (Kräfte, Geschwindigkeiten, Mittelpunkte) vektoriell lösen.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — mit dem Boot über den Fluss</h2>
+
+<p>Ein Boot hält mit \(4\ \text{m/s}\) genau quer auf das andere Ufer zu. Die Strömung schiebt es gleichzeitig mit \(v_S\) flussabwärts. Wohin fährt das Boot <strong>wirklich</strong>?</p>
+
+<p>Beide Geschwindigkeiten sind <strong>Vektoren</strong> — sie haben Betrag <em>und</em> Richtung. Die tatsächliche Bewegung ist ihre <strong>Summe</strong>: der Diagonalpfeil im Kräfteparallelogramm.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🚣 Flussüberquerung — \(\vec{v} = \vec{v}_B + \vec{v}_S\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Stelle die Strömung auf \(0\) und erhöhe sie schrittweise: Wie ändern sich Richtung und Betrag des resultierenden Pfeils? Bei welcher Strömung ist die Fahrt genau \(45°\) schräg?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Stelle die Strömung auf null und erhöhe sie schrittweise: Wie ändern sich Richtung und Betrag des resultierenden Pfeils? Bei welcher Strömung ist die Fahrt genau fünfundvierzig Grad schräg?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Vektoren addiert man, indem man die Pfeile <strong>aneinanderhängt</strong> — der Summenpfeil geht vom Start des ersten zur Spitze des letzten. Bei \(v_S = 3\) und \(v_B = 4\) entsteht das 3-4-5-Dreieck: \(|\vec{v}| = 5\ \text{m/s}\). Gleich schnelle Strömung wie Boot heisst \(45°\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vektoren addiert man, indem man die Pfeile aneinanderhängt — der Summenpfeil geht vom Start des ersten zur Spitze des letzten. Bei Strömung drei und Boot vier entsteht das Drei-Vier-Fünf-Dreieck: Betrag fünf Meter pro Sekunde.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Bootsgeschwindigkeit quer (blau) · Strömung (orange) · resultierende Fahrt (violett)</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Boot <span class="var">\(v_B\)</span> [m/s]</label><input type="range" id="fl-vb" min="1" max="5" step="0.5" value="4"><span class="sl-val" id="fl-vbv">4.0</span></div>
+      <div class="sl-grp akz-orange"><label>Strömung <span class="var">\(v_S\)</span> [m/s]</label><input type="range" id="fl-vs" min="0" max="5" step="0.5" value="3"><span class="sl-val" id="fl-vsv">3.0</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Resultierende Geschwindigkeit</div>
+      <div class="fl-eq" id="fl-eq">|v| = √(3.0² + 4.0²) = 5.00 m/s · 36.9° zur Querrichtung</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="fl-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Geschwindigkeiten lassen sich nicht einfach als Zahlen addieren — die <strong>Richtung</strong> gehört dazu:</p>
+  <ul style="margin-top:6px">
+    <li>\(4\ \text{m/s}\) quer plus \(3\ \text{m/s}\) längs geben nicht \(7\), sondern \(5\ \text{m/s}\) schräg.</li>
+    <li>Das Aneinanderhängen der Pfeile <em>ist</em> die Vektoraddition — komponentenweise: \(\binom{0}{4} + \binom{3}{0} = \binom{3}{4}\).</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche dieser Grössen ist ein Vektor?</p><ul class="mc-optionen"><li data-opt="A">die Wassertemperatur</li><li data-opt="B">die Strömungsgeschwindigkeit</li><li data-opt="C">die Flussbreite</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Sie hat Betrag <em>und</em> Richtung. Temperatur und Breite sind Skalare — eine Zahl genügt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Zwei Vektoren addiert man zeichnerisch, indem man die Pfeile <span class="mc-luecke"></span> — der Summenpfeil verbindet Start und Spitze.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">aneinanderhängt (oder das Parallelogramm aufspannt).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Boot \(4\ \text{m/s}\) quer, Strömung \(3\ \text{m/s}\): Berechne den Betrag der resultierenden Geschwindigkeit.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(|\vec{v}| = \sqrt{3^2 + 4^2} = 5\ \text{m/s}\) — Pythagoras im Kräftedreieck.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Der Fluss ist \(60\) m breit. Wie lange dauert die Überquerung, und wie weit wird das Boot abgetrieben (Boot \(4\ \text{m/s}\), Strömung \(3\ \text{m/s}\))?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Quer zählt nur die Querkomponente: \(t = \tfrac{60}{4} = 15\) s. In dieser Zeit treibt die Strömung das Boot \(3 \cdot 15 = 45\) m ab — die Komponenten arbeiten unabhängig.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definitionen — Vektor, Betrag, Gegenvektor</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Skalare und vektorielle Grössen</div>
+  <p>Eine <strong>skalare Grösse</strong> ist durch eine einzige Zahl (mit Einheit) bestimmt: Masse, Temperatur, Zeit. Eine <strong>vektorielle Grösse</strong> braucht zusätzlich eine <strong>Richtung</strong>: Kraft, Geschwindigkeit, Verschiebung.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Definition — Vektor</div>
+  <p>Ein <strong>Vektor</strong> \(\vec{a}\) ist die Menge aller Pfeile mit gleicher <strong>Länge</strong> und gleicher <strong>Richtung</strong> — jeder einzelne Pfeil ist ein Repräsentant. Ein Vektor beschreibt eine <strong>Verschiebung</strong> (Translation); wo der Pfeil startet, spielt keine Rolle.</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left;width:35%">Betrag (Norm, Länge)</td><td style="text-align:left;font-family:var(--sans)">\(|\vec{a}|\) — die Länge des Pfeils, stets \(\geq 0\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Gleichheit</td><td style="text-align:left;font-family:var(--sans)">\(\vec{a} = \vec{b}\), wenn Länge <em>und</em> Richtung übereinstimmen</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Nullvektor \(\vec{0}\)</td><td style="text-align:left;font-family:var(--sans)">Länge \(0\), keine Richtung</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Gegenvektor \(-\vec{a}\)</td><td style="text-align:left;font-family:var(--sans)">gleiche Länge, <strong>entgegengesetzte</strong> Richtung; \(\vec{a} + (-\vec{a}) = \vec{0}\)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Operationen mit Pfeilen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Operation</th><th>zeichnerisch</th><th>Ergebnis</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Addition \(\vec{a} + \vec{b}\)</td><td style="text-align:left;font-family:var(--sans)">Pfeile aneinanderhängen (oder Parallelogramm)</td><td style="text-align:left;font-family:var(--sans)">Pfeil vom Start von \(\vec{a}\) zur Spitze von \(\vec{b}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Subtraktion \(\vec{a} - \vec{b}\)</td><td style="text-align:left;font-family:var(--sans)">Gegenvektor addieren: \(\vec{a} + (-\vec{b})\)</td><td style="text-align:left;font-family:var(--sans)">Pfeil von der Spitze von \(\vec{b}\) zur Spitze von \(\vec{a}\) (gleicher Start)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">skalare Multiplikation \(s \cdot \vec{a}\)</td><td style="text-align:left;font-family:var(--sans)">Pfeil strecken/stauchen</td><td style="text-align:left;font-family:var(--sans)">Länge \(|s| \cdot |\vec{a}|\); \(s &lt; 0\) dreht die Richtung um</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px"><strong>Kollinear</strong> heissen Vektoren, die Vielfache voneinander sind: \(\vec{b} = s \cdot \vec{a}\) — ihre Pfeile sind parallel.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Begriffe</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was gilt für den Gegenvektor \(-\vec{a}\)?</p><ul class="mc-optionen"><li data-opt="A">Er ist kürzer als \(\vec{a}\).</li><li data-opt="B">Er hat gleiche Länge und entgegengesetzte Richtung.</li><li data-opt="C">Er steht senkrecht auf \(\vec{a}\).</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Zusammen ergeben sie den Nullvektor: \(\vec{a} + (-\vec{a}) = \vec{0}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Vektoren, die Vielfache voneinander sind, heissen <span class="mc-luecke"></span> — ihre Pfeile sind parallel.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">kollinear.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">\(|\vec{a}| = 3\). Welche Länge hat \(-2\vec{a}\), und wie ist seine Richtung?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Länge \(|-2| \cdot 3 = 6\); Richtung entgegengesetzt zu \(\vec{a}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Zwei Pfeile starten an verschiedenen Punkten, sind aber gleich lang und gleich gerichtet. Sind sie derselbe Vektor?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ja — ein Vektor ist die <em>Klasse</em> aller solchen Pfeile; der Startpunkt gehört nicht zum Vektor. Genau das unterscheidet den Vektor vom Punkt.</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Komponenten — Vektoren in Zahlen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Komponentendarstellung und Ortsvektor</div>
+  <p>Im Koordinatensystem wird jeder Vektor durch seine <strong>Komponenten</strong> beschrieben — die Verschiebungen entlang der Achsen:</p>
+  \[ \vec{a} = \begin{pmatrix} a_1 \\ a_2 \end{pmatrix} \ \text{(Ebene)}, \qquad \vec{a} = \begin{pmatrix} a_1 \\ a_2 \\ a_3 \end{pmatrix} \ \text{(Raum)} \]
+  <p>Der <strong>Ortsvektor</strong> \(\vec{r}_A = \vec{OA}\) zeigt vom Ursprung zum Punkt \(A\). Der <strong>Verbindungsvektor</strong> zweier Punkte ist die Differenz der Ortsvektoren:</p>
+  \[ \vec{AB} = \vec{r}_B - \vec{r}_A = \begin{pmatrix} b_1 - a_1 \\ b_2 - a_2 \end{pmatrix} \qquad \text{«Spitze minus Fuss»} \]
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Betrag und Operationen in Komponenten</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left;width:35%">Betrag (Ebene)</td><td>\(|\vec{a}| = \sqrt{a_1^2 + a_2^2}\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Betrag (Raum)</td><td>\(|\vec{a}| = \sqrt{a_1^2 + a_2^2 + a_3^2}\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Addition / Subtraktion</td><td style="text-align:left;font-family:var(--sans)">komponentenweise: \(\binom{a_1}{a_2} \pm \binom{b_1}{b_2} = \binom{a_1 \pm b_1}{a_2 \pm b_2}\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">skalare Multiplikation</td><td style="text-align:left;font-family:var(--sans)">jede Komponente mal \(s\): \(s\binom{a_1}{a_2} = \binom{s a_1}{s a_2}\)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Additions-Labor — \(\vec{a} + \vec{b}\) als Pfeilkette</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Der orange Pfeil \(\vec{b}\) startet an der Spitze von \(\vec{a}\). Vergleiche die Komponenten des violetten Summenpfeils mit den einzelnen Komponenten — und stelle \(\vec{b} = -\vec{a}\) ein.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der orange Pfeil b startet an der Spitze von a. Vergleiche die Komponenten des violetten Summenpfeils mit den einzelnen Komponenten — und stelle b gleich minus a ein.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Komponenten addieren sich <strong>einzeln</strong>: erste plus erste, zweite plus zweite. Bei \(\vec{b} = -\vec{a}\) schrumpft die Summe zum Nullvektor — die Pfeilkette kehrt zum Start zurück.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Komponenten addieren sich einzeln: erste plus erste, zweite plus zweite. Bei b gleich minus a schrumpft die Summe zum Nullvektor — die Pfeilkette kehrt zum Start zurück.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>\(\vec{a}\) blau · \(\vec{b}\) orange (an der Spitze von \(\vec{a}\)) · Summe violett</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>\(a_1\)</label><input type="range" id="ad-a1" min="-4" max="4" step="1" value="3"><span class="sl-val" id="ad-a1v">3</span></div>
+      <div class="sl-grp akz-blau"><label>\(a_2\)</label><input type="range" id="ad-a2" min="-4" max="4" step="1" value="1"><span class="sl-val" id="ad-a2v">1</span></div>
+    </div>
+    <div class="sl-row">
+      <div class="sl-grp akz-orange"><label>\(b_1\)</label><input type="range" id="ad-b1" min="-4" max="4" step="1" value="1"><span class="sl-val" id="ad-b1v">1</span></div>
+      <div class="sl-grp akz-orange"><label>\(b_2\)</label><input type="range" id="ad-b2" min="-4" max="4" step="1" value="2"><span class="sl-val" id="ad-b2v">2</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Summe und Betrag</div>
+      <div class="fl-eq" id="ad-eq">a + b = (4 | 3) · |a + b| = 5.00</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ad-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Komponenten</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie berechnet man den Verbindungsvektor \(\vec{AB}\)?</p><ul class="mc-optionen"><li data-opt="A">\(\vec{r}_A - \vec{r}_B\)</li><li data-opt="B">\(\vec{r}_B - \vec{r}_A\)</li><li data-opt="C">\(\vec{r}_A + \vec{r}_B\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> «Spitze minus Fuss» — Ziel minus Start.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Vektor \(\vec{OA}\) vom Ursprung zum Punkt \(A\) heisst <span class="mc-luecke"></span> von \(A\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ortsvektor — seine Komponenten sind die Koordinaten von \(A\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(\vec{AB}\) und \(|\vec{AB}|\) für \(A(2 \mid 1)\) und \(B(5 \mid 3)\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\vec{AB} = \binom{5-2}{3-1} = \binom{3}{2}\); \(|\vec{AB}| = \sqrt{9+4} = \sqrt{13} \approx 3.61\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Berechne den Betrag des Raumvektors \(\vec{a} = \begin{pmatrix} 2 \\ -1 \\ 2 \end{pmatrix}\). Warum funktioniert Pythagoras auch in 3D?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(|\vec{a}| = \sqrt{4 + 1 + 4} = 3\). Pythagoras wird zweimal angewendet: erst in der Grundebene (\(\sqrt{a_1^2+a_2^2}\)), dann mit der Höhe \(a_3\) — die Wurzel fasst beides zusammen.</div></details></div>
+</details>
+
+
+<!-- ══ 5. POLARKOORDINATEN ══ -->
+<h2 id="typen">Polarform — Betrag und Winkel statt Komponenten</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Kartesisch ↔ polar (nur Ebene)</div>
+  <p>Ein ebener Vektor lässt sich statt durch Komponenten auch durch <strong>Betrag und Richtungswinkel</strong> beschreiben — die <strong>Polarform</strong> \((r;\ \varphi)\) mit \(\varphi\) gegen die positive \(x\)-Achse:</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Richtung</th><th>Formeln</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">polar → kartesisch</td><td>\(a_1 = r\cos\varphi, \qquad a_2 = r\sin\varphi\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">kartesisch → polar</td><td>\(r = \sqrt{a_1^2 + a_2^2}, \qquad \tan\varphi = \dfrac{a_2}{a_1}\) (Quadrant am Vorzeichen prüfen!)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — beide Richtungen</div>
+  <p><strong>Polar → kartesisch:</strong> \(r = 6\), \(\varphi = 30°\):</p>
+  \[ a_1 = 6\cos 30° \approx 5.196, \qquad a_2 = 6\sin 30° = 3 \]
+  <p><strong>Kartesisch → polar:</strong> \(\vec{a} = \binom{3}{4}\): \(r = \sqrt{9+16} = 5\), \(\tan\varphi = \tfrac{4}{3} \Rightarrow \varphi \approx 53.13°\) (1. Quadrant ✓).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — der Quadrant beim Winkel</div>
+  <p>\(\tan\varphi = \tfrac{a_2}{a_1}\) liefert am Taschenrechner nur Winkel zwischen \(-90°\) und \(90°\). Für \(\binom{-2}{2}\) ergibt \(\arctan(-1) = -45°\) — richtig ist aber \(\varphi = 135°\) (2. Quadrant). <strong>Immer die Vorzeichen der Komponenten anschauen</strong> und nötigenfalls \(180°\) addieren.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Polarform</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Angaben legen einen ebenen Vektor in Polarform fest?</p><ul class="mc-optionen"><li data-opt="A">zwei Komponenten</li><li data-opt="B">Betrag und Richtungswinkel</li><li data-opt="C">Start- und Endpunkt</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \((r;\ \varphi)\) — gleichwertig zur Komponentendarstellung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Umrechnung polar → kartesisch lautet \(a_1 = r \cdot \) <span class="mc-luecke"></span> und \(a_2 = r \cdot \sin\varphi\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\cos\varphi\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Gib \(\vec{a} = \binom{3}{4}\) in Polarform an.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(r = 5\), \(\varphi = \arctan\tfrac{4}{3} \approx 53.1°\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Bestimme die Polarform von \(\binom{-2}{2}\) — Vorsicht, Quadrant!</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(r = \sqrt{4+4} = 2\sqrt{2} \approx 2.83\). Der Rechner gibt \(\arctan(-1) = -45°\); wegen \(a_1 &lt; 0\), \(a_2 &gt; 0\) (2. Quadrant): \(\varphi = -45° + 180° = 135°\).</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Einheitsvektoren und Linearkombinationen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Einheitsvektor — normieren</div>
+  <p>Ein <strong>Einheitsvektor</strong> hat den Betrag \(1\). Zu jedem Vektor \(\vec{a} \neq \vec{0}\) gehört der Einheitsvektor in seine Richtung:</p>
+  \[ \vec{e}_a = \frac{1}{|\vec{a}|} \cdot \vec{a} \]
+  <p>Diesen Vorgang nennt man <strong>Normieren</strong>. Die <strong>Standard-Einheitsvektoren</strong> \(\vec{e}_1 = \binom{1}{0}\), \(\vec{e}_2 = \binom{0}{1}\) zeigen entlang der Achsen — jede Komponentendarstellung ist eine Linearkombination davon: \(\binom{3}{4} = 3\vec{e}_1 + 4\vec{e}_2\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Linearkombination — Vektoren zerlegen</div>
+  <p>Ein Vektor \(\vec{c}\) ist eine <strong>Linearkombination</strong> von \(\vec{a}\) und \(\vec{b}\), wenn</p>
+  \[ \vec{c} = s \cdot \vec{a} + t \cdot \vec{b} \]
+  <p>mit Skalaren \(s\), \(t\). Sind \(\vec{a}\) und \(\vec{b}\) nicht kollinear, lässt sich <strong>jeder</strong> ebene Vektor eindeutig so zerlegen — grafisch durch Parallelen zu den beiden Richtungen, rechnerisch über ein Gleichungssystem.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Zerlegung berechnen</div>
+  <p>Zerlege \(\vec{c} = \binom{5}{1}\) in die Richtungen \(\vec{a} = \binom{2}{1}\) und \(\vec{b} = \binom{1}{-1}\).</p>
+  <p><strong>Lösung:</strong> Ansatz \(s\binom{2}{1} + t\binom{1}{-1} = \binom{5}{1}\) — komponentenweise ein Gleichungssystem:</p>
+  \[ 2s + t = 5, \qquad s - t = 1 \]
+  <p>Addieren: \(3s = 6 \Rightarrow s = 2\), dann \(t = 1\). Kontrolle: \(2\binom{2}{1} + 1\binom{1}{-1} = \binom{5}{1}\) ✓</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Normieren</div>
+  <p>Bestimme den Einheitsvektor zu \(\vec{a} = \binom{3}{4}\).</p>
+  \[ |\vec{a}| = 5 \;\Rightarrow\; \vec{e}_a = \tfrac{1}{5}\binom{3}{4} = \binom{0.6}{0.8} \qquad \text{Kontrolle: } \sqrt{0.36 + 0.64} = 1 \ \checkmark \]
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Punkt und Vektor verwechseln</div>
+  <p>\(A(2 \mid 1)\) ist ein <strong>Ort</strong>, \(\binom{2}{1}\) eine <strong>Verschiebung</strong>. Punkte kann man nicht addieren — Ortsvektoren schon. Der Unterschied zeigt sich bei \(\vec{AB} = \vec{r}_B - \vec{r}_A\): Das Ergebnis ist ein Vektor, kein Punkt.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Mittelpunkt und Schwerpunkt vektoriell</div>
+  <p>Der Mittelpunkt der Strecke \(AB\) hat den Ortsvektor \(\vec{r}_M = \tfrac{1}{2}(\vec{r}_A + \vec{r}_B)\), der Schwerpunkt des Dreiecks \(ABC\) den Ortsvektor \(\vec{r}_S = \tfrac{1}{3}(\vec{r}_A + \vec{r}_B + \vec{r}_C)\) — Mittelwert der Ortsvektoren, komponentenweise gerechnet.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einheitsvektor und Zerlegung</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was bedeutet «einen Vektor normieren»?</p><ul class="mc-optionen"><li data-opt="A">ihn auf Länge 1 bringen (Richtung behalten)</li><li data-opt="B">ihn auf die x-Achse drehen</li><li data-opt="C">seine Komponenten runden</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(\vec{e}_a = \vec{a}/|\vec{a}|\) — gleiche Richtung, Betrag 1.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(\vec{c} = s\vec{a} + t\vec{b}\) heisst <span class="mc-luecke"></span> von \(\vec{a}\) und \(\vec{b}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Linearkombination.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Normiere \(\vec{a} = \begin{pmatrix} 2 \\ -1 \\ 2 \end{pmatrix}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(|\vec{a}| = 3\), also \(\vec{e}_a = \tfrac{1}{3}\begin{pmatrix} 2 \\ -1 \\ 2 \end{pmatrix}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum lässt sich \(\binom{5}{1}\) <em>nicht</em> in die Richtungen \(\binom{2}{1}\) und \(\binom{4}{2}\) zerlegen?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\binom{4}{2} = 2\binom{2}{1}\) — die beiden Richtungen sind <strong>kollinear</strong>. Alle Linearkombinationen bleiben auf derselben Geraden; \(\binom{5}{1}\) liegt nicht darauf (\(\tfrac{5}{2} \neq \tfrac{1}{1}\)).</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Komponenten am Pfeil ablesen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Pfeil — welcher Spaltenvektor beschreibt ihn?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welcher Vektor gehört zum angezeigten Pfeil?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Zeichnerisch operieren</span></div>
+  <p>Zeichne auf Häuschenpapier die Vektoren \(\vec{a} = \binom{3}{1}\) und \(\vec{b} = \binom{1}{2}\) und konstruiere zeichnerisch:</p>
+  <ol class="aufg-liste">
+    <li>\(\vec{a} + \vec{b}\) (Pfeilkette)</li>
+    <li>\(\vec{a} - \vec{b}\) (Gegenvektor anhängen)</li>
+    <li>\(2\vec{a}\) und \(-\vec{b}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2'); drawA2Sol();">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <div class="cv-wrap" style="margin-bottom:8px"><canvas id="a2-canvas" height="240"></canvas></div>
+      <ol class="aufg-liste">
+        <li><span style="color:#5b2d8e;font-weight:700">Violett:</span> \(\vec{a}+\vec{b} = \binom{4}{3}\) — vom Start von \(\vec{a}\) zur Spitze von \(\vec{b}\).</li>
+        <li><span style="color:#1f6b3a;font-weight:700">Grün:</span> \(\vec{a}-\vec{b} = \binom{2}{-1}\).</li>
+        <li>\(2\vec{a} = \binom{6}{2}\) (doppelt so lang, gleiche Richtung); \(-\vec{b} = \binom{-1}{-2}\) (umgedreht).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Komponenten</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Verbindungsvektor und Betrag</div>
+    <p>Gegeben sind \(A(2 \mid 1)\) und \(B(5 \mid 3)\). Berechne \(\vec{AB}\) und \(|\vec{AB}|\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>erste Komponente =&nbsp;</label><input type="text" id="a3a1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3a1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>|AB| ≈&nbsp;</label><input type="text" id="a3a2" placeholder="Betrag"><button class="btn-pruef" onclick="chkNum('a3a2', 3.61, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \vec{AB} = \binom{5-2}{3-1} = \binom{3}{2}, \qquad |\vec{AB}| = \sqrt{13} \approx 3.61 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Betrag im Raum</div>
+    <p>Berechne \(|\vec{a}|\) für \(\vec{a} = \begin{pmatrix} 2 \\ -1 \\ 2 \end{pmatrix}\).</p>
+    <div class="eingabe-row"><label>|a| =&nbsp;</label><input type="text" id="a3b1" placeholder="Betrag"><button class="btn-pruef" onclick="chkNum('a3b1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ |\vec{a}| = \sqrt{2^2 + (-1)^2 + 2^2} = \sqrt{9} = 3 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Polar → kartesisch</div>
+    <p>Ein Vektor hat die Polarform \(r = 6\), \(\varphi = 30°\). Berechne die Komponenten (drei Dezimalen).</p>
+    <div class="eingabe-row"><label>a₁ ≈&nbsp;</label><input type="text" id="a3c1" placeholder="a₁"><button class="btn-pruef" onclick="chkNum('a3c1', 5.196, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>a₂ =&nbsp;</label><input type="text" id="a3c2" placeholder="a₂"><button class="btn-pruef" onclick="chkNum('a3c2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ a_1 = 6\cos 30° = 3\sqrt{3} \approx 5.196, \qquad a_2 = 6\sin 30° = 3 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Kartesisch → polar</div>
+    <p>Gib \(\vec{a} = \binom{3}{4}\) in Polarform an (Winkel auf zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>r =&nbsp;</label><input type="text" id="a3d1" placeholder="r"><button class="btn-pruef" onclick="chkNum('a3d1', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>φ ≈&nbsp;</label><input type="text" id="a3d2" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a3d2', 53.13, 0.05, '°')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ r = \sqrt{9 + 16} = 5, \qquad \varphi = \arctan\tfrac{4}{3} \approx 53.13° \quad (1.\ \text{Quadrant}) \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Zerlegung in Richtungen</div>
+    <p>Zerlege \(\vec{c} = \binom{5}{1}\) in die Richtungen \(\vec{a} = \binom{2}{1}\) und \(\vec{b} = \binom{1}{-1}\): Bestimme \(s\) und \(t\) mit \(\vec{c} = s\vec{a} + t\vec{b}\).</p>
+    <div class="eingabe-row"><label>s =&nbsp;</label><input type="text" id="a3e1" placeholder="s"><button class="btn-pruef" onclick="chkNum('a3e1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>t =&nbsp;</label><input type="text" id="a3e2" placeholder="t"><button class="btn-pruef" onclick="chkNum('a3e2', 1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Gleichungssystem \(2s + t = 5\), \(s - t = 1\). Addieren: \(3s = 6 \Rightarrow s = 2\), \(t = 1\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Zwei Kräfte am Haken</span></div>
+  <p>An einem Haken ziehen zwei Kräfte: \(F_1 = 60\) N horizontal und \(F_2 = 25\) N vertikal.</p>
+  <ol class="aufg-liste">
+    <li>Berechne den Betrag der resultierenden Kraft.</li>
+    <li>Unter welchem Winkel zur Horizontalen wirkt sie?</li>
+  </ol>
+  <div class="eingabe-row"><label>|F| =&nbsp;</label><input type="text" id="a4-1" placeholder="N"><button class="btn-pruef" onclick="chkNum('a4-1', 65, 0.1, 'N')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Winkel ≈&nbsp;</label><input type="text" id="a4-2" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a4-2', 22.62, 0.05, '°')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(|\vec{F}| = \sqrt{60^2 + 25^2} = \sqrt{4225} = 65\) N.</li>
+        <li>\(\tan\alpha = \tfrac{25}{60} \Rightarrow \alpha \approx 22.62°\) — das ist genau die Umrechnung in die Polarform.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Flussüberquerung, exakt gerechnet</span></div>
+  <p>Zum Einstieg: Boot \(4\ \text{m/s}\) quer, Strömung \(3\ \text{m/s}\), Flussbreite \(60\) m.</p>
+  <ol class="aufg-liste">
+    <li>Wie lange dauert die Überquerung?</li>
+    <li>Wie weit wird das Boot abgetrieben, und wie lang ist der tatsächlich zurückgelegte Weg?</li>
+  </ol>
+  <div class="eingabe-row"><label>Abdrift =&nbsp;</label><input type="text" id="a5-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a5-1', 45, 0.1, 'm')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Weg =&nbsp;</label><input type="text" id="a5-2" placeholder="m"><button class="btn-pruef" onclick="chkNum('a5-2', 75, 0.1, 'm')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Nur die Querkomponente bringt das Boot ans Ufer: \(t = \tfrac{60}{4} = 15\) s.</li>
+        <li>Abdrift \(3 \cdot 15 = 45\) m; Weg \(= |\vec{v}| \cdot t = 5 \cdot 15 = 75\) m (oder \(\sqrt{60^2 + 45^2} = 75\) ✓).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Mittelpunkt und Schwerpunkt im Raum</span></div>
+  <p>Gegeben sind \(A(1 \mid 2 \mid 3)\), \(B(5 \mid 0 \mid 1)\) und \(C(0 \mid 4 \mid 2)\).</p>
+  <ol class="aufg-liste">
+    <li>Berechne den Mittelpunkt \(M\) der Strecke \(AB\).</li>
+    <li>Berechne den Schwerpunkt \(S\) des Dreiecks \(ABC\).</li>
+  </ol>
+  <div class="eingabe-row"><label>M: x-Koordinate =&nbsp;</label><input type="text" id="a6-1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a6-1', 3, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>S: y-Koordinate =&nbsp;</label><input type="text" id="a6-2" placeholder="y"><button class="btn-pruef" onclick="chkNum('a6-2', 2, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\vec{r}_M = \tfrac{1}{2}(\vec{r}_A + \vec{r}_B) \Rightarrow M(3 \mid 1 \mid 2)\).</li>
+        <li>\(\vec{r}_S = \tfrac{1}{3}(\vec{r}_A + \vec{r}_B + \vec{r}_C) \Rightarrow S(2 \mid 2 \mid 2)\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Kollinear oder nicht? <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Kollinearität heisst: Ein Vektor ist ein Vielfaches des anderen.</p>
+  <ol class="aufg-liste">
+    <li>Für welches \(k\) sind \(\binom{2}{3}\) und \(\binom{k}{6}\) kollinear?</li>
+    <li>Sind \(\begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}\) und \(\begin{pmatrix} 2 \\ 4 \\ 6 \end{pmatrix}\) kollinear? Und \(\begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}\) und \(\begin{pmatrix} 2 \\ 4 \\ 5 \end{pmatrix}\)?</li>
+    <li>Begründe: Zwei nicht kollineare Vektoren der Ebene können <em>jeden</em> ebenen Vektor als Linearkombination erzeugen.</li>
+  </ol>
+  <div class="eingabe-row"><label>k =&nbsp;</label><input type="text" id="a7-1" placeholder="k"><button class="btn-pruef" onclick="chkNum('a7-1', 4, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\binom{k}{6} = s\binom{2}{3}\): aus \(6 = 3s\) folgt \(s = 2\), also \(k = 4\).</li>
+        <li>Erste Paarung: ja, Faktor \(2\) in <em>allen</em> Komponenten. Zweite: nein — \(\tfrac{2}{1} = \tfrac{4}{2} = 2\), aber \(\tfrac{5}{3} \neq 2\).</li>
+        <li>Grafisch spannen zwei nicht parallele Richtungen ein «schiefes Gitter» auf: Durch die Spitze jedes Zielvektors lassen sich Parallelen zu beiden Richtungen legen — das liefert eindeutige Streckfaktoren \(s\) und \(t\) (rechnerisch: das Gleichungssystem hat genau eine Lösung).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Ein Vektor ist eine <strong>Verschiebung</strong> — Länge plus Richtung, ohne festen Ort. Gerechnet wird <strong>komponentenweise</strong>: addieren, subtrahieren, mit Skalaren strecken; der Betrag kommt von Pythagoras (\(\sqrt{a_1^2+a_2^2}\) bzw. mit \(a_3^2\) im Raum). Der <strong>Verbindungsvektor</strong> ist «Spitze minus Fuss» (\(\vec{AB} = \vec{r}_B - \vec{r}_A\)), <strong>Normieren</strong> teilt durch den Betrag, und die <strong>Polarform</strong> \((r;\ \varphi)\) beschreibt ebene Vektoren durch Betrag und Winkel (Quadrant prüfen!). Nicht kollineare Richtungen zerlegen jeden ebenen Vektor eindeutig als <strong>Linearkombination</strong>.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Begriff</th><th>Formel</th><th>Merkhilfe</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Verbindungsvektor</td><td>\(\vec{AB} = \vec{r}_B - \vec{r}_A\)</td><td style="text-align:left;font-family:var(--sans)">Spitze minus Fuss</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Betrag</td><td>\(|\vec{a}| = \sqrt{a_1^2 + a_2^2\ (+\ a_3^2)}\)</td><td style="text-align:left;font-family:var(--sans)">Pythagoras</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Einheitsvektor</td><td>\(\vec{e}_a = \vec{a}/|\vec{a}|\)</td><td style="text-align:left;font-family:var(--sans)">durch die Länge teilen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Polarform</td><td>\(a_1 = r\cos\varphi,\ a_2 = r\sin\varphi\)</td><td style="text-align:left;font-family:var(--sans)">Quadrant am Vorzeichen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Mittelpunkt</td><td>\(\vec{r}_M = \tfrac{1}{2}(\vec{r}_A + \vec{r}_B)\)</td><td style="text-align:left;font-family:var(--sans)">Mittelwert der Ortsvektoren</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kollinearität</td><td>\(\vec{b} = s \cdot \vec{a}\)</td><td style="text-align:left;font-family:var(--sans)">gleicher Faktor in allen Komponenten</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s4-3a-vektorbegriff-komponenten/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3a-vektorbegriff-komponenten/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3a-vektorbegriff-komponenten/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3a-vektorbegriff-komponenten/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3a-vektorbegriff-komponenten/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lUv5XsdfGTvuMZG0rX9tnR3" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über VEKTOREN — Playlist</div><div class="lk-s">MathemaTrick · 41 Videos · Vektorbegriff bis Linearkombination</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/31860/aufgaben-zur-berechnung-eines-vektors-zwischen-zwei-punkten" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Vektor zwischen zwei Punkten</div><div class="lk-s">Verbindungsvektoren und Beträge · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 4.3a Vektorbegriff und Komponenten</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s4-3a',
+  kapitelNr:'4.3a', kapitelTitel:'Vektorbegriff und Komponenten',
+  prev:{nr:'4.2',titel:'Stereometrie',url:'s4-2-stereometrie.html'},
+  next:{nr:'4.3b',titel:'Skalarprodukt',url:'s4-3b-skalarprodukt.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+// Pfeil mit Spitze zeichnen (Canvas-Pixel-Koordinaten)
+function drawArrow(ctx, x1, y1, x2, y2, color, lw){
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const ang = Math.atan2(y2 - y1, x2 - x1), L = 11;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - L * Math.cos(ang - 0.42), y2 - L * Math.sin(ang - 0.42));
+  ctx.lineTo(x2 - L * Math.cos(ang + 0.42), y2 - L * Math.sin(ang + 0.42));
+  ctx.closePath(); ctx.fill();
+}
+
+/* ══ EINSTIEG: Flussüberquerung ══ */
+function updateFL(){
+  const vb = parseFloat(document.getElementById('fl-vb').value);
+  const vs = parseFloat(document.getElementById('fl-vs').value);
+  document.getElementById('fl-vbv').textContent = vb.toFixed(1);
+  document.getElementById('fl-vsv').textContent = vs.toFixed(1);
+  const v = Math.hypot(vb, vs);
+  const w = Math.atan2(vs, vb) * 180 / Math.PI;
+  document.getElementById('fl-eq').innerHTML =
+    `|v| = √(${vs.toFixed(1)}² + ${vb.toFixed(1)}²) = ${v.toFixed(2)} m/s · ${w.toFixed(1)}° zur Querrichtung`;
+  const {ctx, W, H} = initCanvas('fl-canvas', 240, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // Ufer
+  ctx.fillStyle = '#eef4ea';
+  ctx.fillRect(0, 0, W, 22); ctx.fillRect(0, H - 22, W, 22);
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, 22); ctx.lineTo(W, 22); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, H - 22); ctx.lineTo(W, H - 22); ctx.stroke();
+  ctx.fillStyle = '#6b7280'; ctx.font = '12px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('anderes Ufer', 8, 15);
+  // Skala: 1 m/s = s Pixel
+  const s = (H - 60) / 5.5;
+  const x0 = W * 0.32, y0 = H - 26;
+  // Boot quer (blau, nach oben)
+  drawArrow(ctx, x0, y0, x0, y0 - vb * s, '#1a4f8a', 3);
+  // Strömung (orange, an der Spitze, nach rechts)
+  drawArrow(ctx, x0, y0 - vb * s, x0 + vs * s, y0 - vb * s, '#b85c00', 3);
+  // Resultierende (violett)
+  drawArrow(ctx, x0, y0, x0 + vs * s, y0 - vb * s, '#5b2d8e', 3);
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'right'; ctx.fillText('v_B', x0 - 8, y0 - vb * s / 2);
+  ctx.fillStyle = '#b85c00'; ctx.textAlign = 'center'; ctx.fillText('v_S', x0 + vs * s / 2, y0 - vb * s - 8);
+  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left'; ctx.fillText('v', x0 + vs * s / 2 + 12, y0 - vb * s / 2);
+}
+['fl-vb', 'fl-vs'].forEach(id => document.getElementById(id).addEventListener('input', updateFL));
+
+/* ══ ADDITIONS-LABOR ══ */
+function updateAD(){
+  const a1 = parseInt(document.getElementById('ad-a1').value);
+  const a2 = parseInt(document.getElementById('ad-a2').value);
+  const b1 = parseInt(document.getElementById('ad-b1').value);
+  const b2 = parseInt(document.getElementById('ad-b2').value);
+  document.getElementById('ad-a1v').textContent = String(a1).replace('-', '−');
+  document.getElementById('ad-a2v').textContent = String(a2).replace('-', '−');
+  document.getElementById('ad-b1v').textContent = String(b1).replace('-', '−');
+  document.getElementById('ad-b2v').textContent = String(b2).replace('-', '−');
+  const s1 = a1 + b1, s2 = a2 + b2;
+  const betrag = Math.hypot(s1, s2);
+  document.getElementById('ad-eq').innerHTML =
+    `a + b = (${String(s1).replace('-', '−')} | ${String(s2).replace('-', '−')}) · |a + b| = ${betrag.toFixed(2)}`;
+  const {ctx, W, H} = initCanvas('ad-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -8, 8, -6, 6);
+  // a (blau) ab Ursprung, b (orange) an der Spitze von a, Summe (violett)
+  drawArrow(ctx, cx(0), cy(0), cx(a1), cy(a2), '#1a4f8a', 2.5);
+  drawArrow(ctx, cx(a1), cy(a2), cx(s1), cy(s2), '#b85c00', 2.5);
+  if(s1 !== 0 || s2 !== 0) drawArrow(ctx, cx(0), cy(0), cx(s1), cy(s2), '#5b2d8e', 3);
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'center'; ctx.fillText('a', cx(a1 / 2) - 8, cy(a2 / 2) - 8);
+  ctx.fillStyle = '#b85c00'; ctx.fillText('b', cx(a1 + b1 / 2) + 10, cy(a2 + b2 / 2) - 8);
+  if(s1 !== 0 || s2 !== 0){ ctx.fillStyle = '#5b2d8e'; ctx.fillText('a+b', cx(s1 / 2) + 4, cy(s2 / 2) + 16); }
+}
+['ad-a1', 'ad-a2', 'ad-b1', 'ad-b2'].forEach(id => document.getElementById(id).addEventListener('input', updateAD));
+
+/* ══ A1: Komponenten ablesen ══ */
+const a1G = [
+  {label:'Pfeil 1', v: [3, 2],   eq:'(3 | 2)'},
+  {label:'Pfeil 2', v: [-2, 3],  eq:'(−2 | 3)'},
+  {label:'Pfeil 3', v: [4, -1],  eq:'(4 | −1)'},
+  {label:'Pfeil 4', v: [-3, -2], eq:'(−3 | −2)'},
+];
+const a1Opts = ['(3 | 2)', '(−2 | 3)', '(4 | −1)', '(−3 | −2)'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const g = a1G[a1Act];
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 4);
+  // Startpunkt bewusst nicht im Ursprung — der Vektor ist ortsunabhängig
+  const sx = -1, sy = -1;
+  drawArrow(ctx, cx(sx), cy(sy), cx(sx + g.v[0]), cy(sy + g.v[1]), '#1a4f8a', 3);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.eq){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.eq}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Zähle die Kästchen: erst horizontal (Vorzeichen!), dann vertikal — der Startpunkt spielt keine Rolle.';
+  }
+}
+
+/* ══ A2: Lösungs-Skizzen ══ */
+function drawA2Sol(){
+  const body = document.getElementById('l-a2');
+  if(!body.classList.contains('sichtbar')) return;
+  const {ctx, W, H} = initCanvas('a2-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -3, 7, -3, 5);
+  // a und b
+  drawArrow(ctx, cx(0), cy(0), cx(3), cy(1), '#1a4f8a', 2.5);
+  drawArrow(ctx, cx(3), cy(1), cx(4), cy(3), '#b85c00', 2.5);
+  // a+b und a−b
+  drawArrow(ctx, cx(0), cy(0), cx(4), cy(3), '#5b2d8e', 3);
+  drawArrow(ctx, cx(0), cy(0), cx(2), cy(-1), '#1f6b3a', 3);
+  ctx.font = 'bold 12px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'center'; ctx.fillText('a', cx(1.5), cy(0.5) + 16);
+  ctx.fillStyle = '#b85c00'; ctx.fillText('b', cx(3.7) + 10, cy(2));
+  ctx.fillStyle = '#5b2d8e'; ctx.fillText('a+b', cx(2), cy(1.7) - 8);
+  ctx.fillStyle = '#1f6b3a'; ctx.fillText('a−b', cx(1.2), cy(-0.6) + 14);
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Komponentenweise rechnen — und beim Betrag an Pythagoras denken.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateFL();
+  updateAD();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateFL(); updateAD(); drawA1(); drawA2Sol();
+});
+</script>
+</body>
+</html>

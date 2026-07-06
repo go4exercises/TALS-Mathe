@@ -309,6 +309,7 @@ Diese Tabelle wird mit jedem abgeschlossenen Thema erweitert. So muss eine berei
 | s2-2c Betrag/Polynom/Ungleichungen | — | — | — | — | — | — *(keine passende Playlist der bevorzugten Anbieter in der Map; Video-Sektion mit Platzhalter. Aufgaben: sos-mathe G35 + serlo-Sitemap 169291, 223589)* |
 | s2-1 Grundlagen (Gleichungs-Werkzeugkasten) | `PLF29x0idI4lWPWBvEXDrcCEZ54ZdtYazp` (siehe g1-1/g2-1 «Terme vereinfachen») | `PLa0u3J0uzAzmBhxJfVgJ9pTv2QeqJsbO_` (siehe g2-1 «Terme &amp; Gleichungen») | — | — | — | — *(Aufgaben: serlo-Sitemap 25103 gemischte Gleichungen, 26259 quadratische + sos-mathe G31)* |
 | s3-6 Betragsfunktionen (Ergänzung TALS) | — | — | — | — | — | — *(Discovery-Lauf 2026-07: keine Betragsfunktions-Playlist der bevorzugten Anbieter — 3 Kandidaten verifiziert, alle themenfremd; Video-Sektion mit Platzhalter. Aufgaben: serlo-Sitemap 26406 Betragsfunktion, 223589 Betrag einer Zahl)* |
+| s4-3a–d Vektorgeometrie (4 Sub-Seiten) | `PLF29x0idI4lUv5XsdfGTvuMZG0rX9tnR3` «Alles über VEKTOREN» (41 Videos, owner-verifiziert im s3-6-Discovery-Lauf 2026-07) — auf allen vier Seiten | — | — | — | — | — *(Aufgaben via serlo-Sitemap: 31860 Vektor zwischen Punkten, 107944/107945 Skalarprodukt 2D/3D, 30683 Winkel, 24573 Geraden im Raum, 30686 Lage zweier Geraden, 30687 Gerade–Ebene, 30688 zwei Ebenen — ohne neue Abrufe)* |
 
 *Diese Tabelle wird bei jedem neuen Recherche-Lauf erweitert. Bei Erweiterung: pro Thema eine Zeile, Playlist-IDs nur eintragen, wenn per `web_fetch` verifiziert. Wenn ein Anbieter zum Thema nichts hat: `—`.*
 

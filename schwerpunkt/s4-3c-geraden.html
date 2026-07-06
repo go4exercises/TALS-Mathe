@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.3c Geraden — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 4 · Geometrie · 70 Lektionen</div>
+  <h1 class="pt-h1">4.3c Geraden</h1>
+  <div class="pt-untertitel">RLP 4.3 · Teil 3 von 4</div>
+</div>
+
+<p class="lead">Eine Gerade wird vektoriell zum <strong>Fahrplan</strong>: Startpunkt plus \(t\)-mal Richtungsvektor — die <strong>Parametergleichung</strong>. Damit funktionieren Geraden in Ebene <em>und</em> Raum gleich: Punktproben, <strong>Schnittpunkte</strong>, Schnittwinkel und Abstände werden zu Vektorrechnungen. Neu im Raum: Geraden können aneinander <strong>vorbeilaufen</strong>, ohne sich zu schneiden — windschief.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.3</div>
+  <ul>
+    <li>Vektoren definieren, skalieren, addieren, subtrahieren und normieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>zweidimensionale Vektoren in kartesische Koordinaten und Polarkoordinaten darstellen, entsprechende Umrechnung durchführen</li>
+    <li>einen Vektor grafisch in vorgeschriebene Richtungen zerlegen und Linearkombinationen berechnen (als Übergang zur koordinatenbezogenen Vektorgeometrie) <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die Begriffe der koordinatenbezogenen Vektorrechnung (Richtung, Norm (Länge, Betrag), inverser Vektor (Gegenvektor), Ortsvektor, Einheitsvektor) erklären, anwenden und visualisieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die Operationen (Addition, Subtraktion, Multiplikation mit einem Skalar, Skalarprodukt) koordinatenbezogen ausführen und grafisch visualisieren — in numerisch einfachen Fällen ohne, in schwierigen mit Hilfsmitteln</li>
+    <li>die Parametergleichung einer Geraden aufstellen und die gegenseitige Lage von zwei Geraden bestimmen — in numerisch einfachen Fällen ohne, in schwierigen mit Hilfsmitteln</li>
+    <li>Längen-, Winkel- und Abstandsprobleme lösen — numerisch einfache Fälle und geometrisch einfache Lagen auch ohne Hilfsmittel, numerisch schwierige Fälle und geometrisch komplizierte Lagen mit Hilfsmitteln</li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt die Kompetenzen 6 und 7: Parametergleichung, gegenseitige Lage, Schnittwinkel und Abstände. Grundlagen in <a href="s4-3a-vektorbegriff-komponenten.html">Teil 1 (s4-3a)</a> und <a href="s4-3b-skalarprodukt.html">Teil 2 (s4-3b)</a>; als Ergänzung folgt <a href="s4-3d-ebenen.html">Teil 4: Ebenen (s4-3d)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Parametergleichung \(\vec{r} = \vec{r}_A + t \cdot \vec{u}\) aus einem Punkt und einer Richtung oder aus zwei Punkten aufstellen.</li>
+      <li>Ich kann mit der Punktprobe prüfen, ob ein Punkt auf einer Geraden liegt.</li>
+      <li>Ich kann die gegenseitige Lage zweier Geraden bestimmen: identisch, parallel, schneidend — im Raum auch windschief.</li>
+      <li>Ich kann Schnittpunkte über ein Gleichungssystem und Schnittwinkel über die Richtungsvektoren berechnen.</li>
+      <li>Ich kann den Abstand eines Punktes von einer Geraden über den Lotfusspunkt bestimmen.</li>
+      <li>Ich kann geradlinige Bewegungen (Drohnen, Fahrzeuge) mit Parametergleichungen modellieren — der Parameter als Zeit.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — die Gerade als Fahrplan</h2>
+
+<p>Eine Drohne startet am Punkt \(A(1 \mid 2)\) und fliegt mit konstanter Geschwindigkeit in Richtung \(\vec{u} = \binom{3}{1}\) (Einheiten pro Minute). Wo ist sie nach \(t\) Minuten?</p>
+
+\[ \vec{r}(t) = \binom{1}{2} + t \cdot \binom{3}{1} \]
+
+<p>Der Parameter \(t\) ist der «Fahrplan»: Jede Zeit liefert einen Ort — und alle Orte zusammen bilden eine <strong>Gerade</strong>.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🛸 Drohnenflug — \(\vec{r} = \vec{r}_A + t\,\vec{u}\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe \(t\) auch ins Negative: Wo war die Drohne <em>vor</em> dem Start? Und beobachte: Gleiche \(t\)-Schritte geben gleiche Wegstücke — der Richtungsvektor ist der «Schritt».</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schiebe t auch ins Negative: Wo war die Drohne vor dem Start? Und beobachte: Gleiche t-Schritte geben gleiche Wegstücke — der Richtungsvektor ist der Schritt.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Parametergleichung erzeugt die Gerade Punkt für Punkt: Stützpunkt \(A\) plus Vielfache des Richtungsvektors. Negative \(t\) laufen rückwärts — die Gerade ist in beide Richtungen unendlich.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Parametergleichung erzeugt die Gerade Punkt für Punkt: Stützpunkt A plus Vielfache des Richtungsvektors. Negative t laufen rückwärts — die Gerade ist in beide Richtungen unendlich.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Stützpunkt \(A(1 \mid 2)\) · Richtungsvektor \(\binom{3}{1}\) orange · Position violett</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Parameter <span class="var">\(t\)</span></label>
+      <input type="range" id="dr-t" min="-2" max="3" step="0.25" value="1">
+      <span class="sl-val" id="dr-tv">1.00</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Position</div>
+      <div class="fl-eq" id="dr-eq">r(1) = (1 | 2) + 1·(3 | 1) = (4 | 3)</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="dr-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Zwei Zutaten erzeugen die ganze Gerade:</p>
+  <ul style="margin-top:6px">
+    <li>Ein <strong>Stützpunkt</strong> \(A\) («wo starte ich?») und ein <strong>Richtungsvektor</strong> \(\vec{u}\) («wohin pro Schritt?»).</li>
+    <li>Der Parameter \(t\) durchläuft \(\mathbb{R}\) — bei Bewegungen ist er oft die <strong>Zeit</strong>.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Rolle spielt \(t\) in \(\vec{r} = \vec{r}_A + t\,\vec{u}\)?</p><ul class="mc-optionen"><li data-opt="A">die Steigung der Geraden</li><li data-opt="B">der Laufparameter — jedes \(t\) liefert einen Geradenpunkt</li><li data-opt="C">der Abstand zum Ursprung</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(t\) durchläuft alle reellen Zahlen und erzeugt so die ganze Gerade.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Parametergleichung braucht einen Stützpunkt und einen <span class="mc-luecke"></span>vektor.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Richtungs(vektor) — jedes Vielfache davon geht auch.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wo ist die Drohne bei \(t = 2\)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\binom{1}{2} + 2\binom{3}{1} = \binom{7}{4}\) — Punkt \((7 \mid 4)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Liegt \(Q(4 \mid 4)\) auf der Flugbahn? Prüfe mit der Punktprobe.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Erste Komponente: \(1 + 3t = 4 \Rightarrow t = 1\). Zweite: \(2 + t = 4 \Rightarrow t = 2\). Verschiedene \(t\) — <strong>Widerspruch</strong>, \(Q\) liegt nicht auf der Geraden.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definition — Parametergleichung und Punktprobe</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Parametergleichung der Geraden</div>
+  <p>Die Gerade \(g\) durch den Punkt \(A\) mit Richtungsvektor \(\vec{u} \neq \vec{0}\):</p>
+  \[ g:\ \vec{r} = \vec{r}_A + t \cdot \vec{u}, \qquad t \in \mathbb{R} \]
+  <p>Sie gilt wortgleich in Ebene und Raum. Aus <strong>zwei Punkten</strong> \(A\), \(B\): Richtungsvektor \(\vec{u} = \vec{AB}\) wählen. Stützpunkt und Richtungsvektor sind <strong>nicht eindeutig</strong> — jeder Geradenpunkt und jedes Vielfache der Richtung beschreiben dieselbe Gerade.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Punktprobe</div>
+  <p>Liegt \(P\) auf \(g\)? Ansatz \(\vec{r}_P = \vec{r}_A + t\,\vec{u}\) — <strong>komponentenweise</strong> nach \(t\) auflösen:</p>
+  <ul style="margin-top:4px">
+    <li>Alle Komponenten liefern <strong>dasselbe</strong> \(t\) → \(P\) liegt auf \(g\).</li>
+    <li>Verschiedene \(t\)-Werte → Widerspruch, \(P\) liegt nicht auf \(g\).</li>
+  </ul>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Gerade durch zwei Punkte</div>
+  <p>Stelle die Parametergleichung der Geraden durch \(A(1 \mid 2)\) und \(B(4 \mid 3)\) auf.</p>
+  \[ \vec{u} = \vec{AB} = \binom{3}{1} \;\Rightarrow\; g:\ \vec{r} = \binom{1}{2} + t\binom{3}{1} \]
+  <p>Ebenso richtig: Stützpunkt \(B\), oder Richtung \(\binom{6}{2}\) — die Gerade bleibt dieselbe.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Verbindung zur Funktionsgleichung</div>
+  <p>In der Ebene lässt sich \(t\) eliminieren: Aus \(x = 1 + 3t\) folgt \(t = \tfrac{x-1}{3}\), einsetzen in \(y = 2 + t\) gibt \(y = \tfrac{1}{3}x + \tfrac{5}{3}\) — die vertraute Form \(y = mx + b\) mit \(m = \tfrac{u_2}{u_1}\). Im <strong>Raum</strong> gibt es keine solche Funktionsgleichung — dort ist die Parameterform das einzige Werkzeug.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Parametergleichung</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Beschreiben \(\vec{r} = \binom{1}{2} + t\binom{3}{1}\) und \(\vec{r} = \binom{4}{3} + s\binom{6}{2}\) dieselbe Gerade?</p><ul class="mc-optionen"><li data-opt="A">Ja</li><li data-opt="B">Nein — andere Stützpunkte</li><li data-opt="C">Nein — andere Richtungsvektoren</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \((4 \mid 3)\) liegt auf der ersten Geraden (\(t = 1\)), und \(\binom{6}{2} = 2\binom{3}{1}\) ist kollinear.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei der Punktprobe muss <span class="mc-luecke"></span> Komponente denselben Parameterwert \(t\) liefern.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">jede.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Stelle die Gerade durch \(A(0 \mid 1 \mid 2)\) mit Richtung \(\begin{pmatrix} 2 \\ 0 \\ 1 \end{pmatrix}\) auf und gib den Punkt bei \(t = 3\) an.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\vec{r} = \begin{pmatrix} 0 \\ 1 \\ 2 \end{pmatrix} + t\begin{pmatrix} 2 \\ 0 \\ 1 \end{pmatrix}\); bei \(t = 3\): \((6 \mid 1 \mid 5)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum gibt es im Raum keine Funktionsgleichung \(y = mx + b\) für Geraden?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Eine Funktionsgleichung ordnet jedem \(x\) genau ein \(y\) zu — eine Raumgerade braucht aber <em>drei</em> Koordinaten, die alle vom selben Parameter abhängen. \(z = f(x, y)\) beschriebe eine Fläche, keine Linie: Die Parameterform ist im Raum unvermeidlich.</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Gegenseitige Lage zweier Geraden</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Der Lage-Fahrplan</div>
+  <p>Zuerst die <strong>Richtungsvektoren</strong> vergleichen, dann einen <strong>Punkt</strong> prüfen bzw. <strong>gleichsetzen</strong>:</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Richtungen kollinear?</th><th>Zusatztest</th><th>Lage</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">ja</td><td style="text-align:left;font-family:var(--sans)">Stützpunkt von \(h\) liegt auf \(g\)</td><td style="text-align:left;font-family:var(--sans)"><strong>identisch</strong></td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">ja</td><td style="text-align:left;font-family:var(--sans)">Stützpunkt von \(h\) liegt nicht auf \(g\)</td><td style="text-align:left;font-family:var(--sans)"><strong>echt parallel</strong></td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">nein</td><td style="text-align:left;font-family:var(--sans)">Gleichsetzen hat eine Lösung</td><td style="text-align:left;font-family:var(--sans)"><strong>schneidend</strong></td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">nein</td><td style="text-align:left;font-family:var(--sans)">Gleichsetzen hat keine Lösung (nur Raum!)</td><td style="text-align:left;font-family:var(--sans)"><strong>windschief</strong></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">In der <strong>Ebene</strong> schneiden sich nicht parallele Geraden immer; <strong>windschief</strong> gibt es nur im Raum. Beim Gleichsetzen unbedingt <strong>verschiedene Parameternamen</strong> (\(t\) und \(s\)) verwenden!</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Schnittpunkt berechnen</div>
+  <p>\(g:\ \vec{r} = \binom{1}{2} + t\binom{3}{1}\) und \(h:\ \vec{r} = \binom{0}{5} + s\binom{1}{-1}\).</p>
+  <p><strong>Lösung:</strong> Richtungen nicht kollinear (\(\tfrac{3}{1} \neq \tfrac{1}{-1}\)) — gleichsetzen, komponentenweise:</p>
+  \[ 1 + 3t = s, \qquad 2 + t = 5 - s \]
+  <p>Einsetzen: \(2 + t = 5 - (1 + 3t) \Rightarrow 4t = 2 \Rightarrow t = 0.5\), \(s = 2.5\). Schnittpunkt: \(\vec{r}(0.5) = \binom{2.5}{2.5}\) — Kontrolle in \(h\): \(\binom{0}{5} + 2.5\binom{1}{-1} = \binom{2.5}{2.5}\) ✓</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — windschief im Raum</div>
+  <p>\(g:\ \vec{r} = t\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\) (die \(x\)-Achse) und \(h:\ \vec{r} = \begin{pmatrix} 0 \\ 1 \\ 3 \end{pmatrix} + s\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\).</p>
+  <p><strong>Lösung:</strong> Richtungen \(\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\) und \(\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\) sind nicht kollinear. Gleichsetzen: \(x\): \(t = 0\); \(y\): \(0 = 1 + s \Rightarrow s = -1\); \(z\): \(0 = 3\) — <strong>Widerspruch</strong>. Kein Schnittpunkt, nicht parallel: <strong>windschief</strong> — die Geraden laufen in verschiedenen «Stockwerken» aneinander vorbei.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — gleicher Parametername für beide Geraden</div>
+  <p>Wer beim Gleichsetzen zweimal \(t\) schreibt, koppelt die beiden «Fahrpläne» fälschlich aneinander. Die Geraden dürfen den Schnittpunkt zu <strong>verschiedenen Parameterwerten</strong> erreichen — darum \(t\) für \(g\) und \(s\) für \(h\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Lagebeziehungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Lage können zwei Geraden nur im Raum haben?</p><ul class="mc-optionen"><li data-opt="A">parallel</li><li data-opt="B">windschief</li><li data-opt="C">identisch</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> In der Ebene müssen sich nicht parallele Geraden schneiden — im Raum können sie aneinander vorbeilaufen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Sind die Richtungsvektoren kollinear und liegt der Stützpunkt der einen auf der anderen, sind die Geraden <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">identisch.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Sind \(g\) mit \(\vec{u} = \binom{3}{1}\) und \(h\) mit \(\vec{v} = \binom{6}{2}\) parallel?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\binom{6}{2} = 2\binom{3}{1}\) — kollinear, also parallel (oder identisch; Punktprobe entscheidet).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Beim Gleichsetzen zweier Raumgeraden liefern die ersten beiden Komponenten \(t = 1\), \(s = 2\). Was ist noch zu tun?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Die <strong>dritte Komponente prüfen</strong>: Stimmt sie mit \(t = 1\), \(s = 2\) überein, gibt es einen Schnittpunkt — sonst sind die Geraden windschief. Zwei Gleichungen bestimmen \(t\) und \(s\), die dritte ist der Test.</div></details></div>
+</details>
+
+
+<!-- ══ 5. SCHNITTWINKEL ══ -->
+<h2 id="typen">Schnittwinkel</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Schnittwinkel zweier Geraden</div>
+  <p>Der Schnittwinkel ist der <strong>spitze</strong> Winkel zwischen den Richtungsvektoren — der Betrag im Zähler erzwingt ihn:</p>
+  \[ \cos\varphi = \frac{|\vec{u} \cdot \vec{v}|}{|\vec{u}| \cdot |\vec{v}|}, \qquad 0° \leq \varphi \leq 90° \]
+  <p>Senkrechte Geraden: \(\vec{u} \cdot \vec{v} = 0\) — der Orthogonalitätstest aus <a class="quer" href="s4-3b-skalarprodukt.html">↩ 4.3b</a>.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 4 — Schnittwinkel</div>
+  <p>Unter welchem Winkel schneiden sich \(g\) und \(h\) aus Beispiel 2 (\(\vec{u} = \binom{3}{1}\), \(\vec{v} = \binom{1}{-1}\))?</p>
+  \[ \cos\varphi = \frac{|3 - 1|}{\sqrt{10} \cdot \sqrt{2}} = \frac{2}{\sqrt{20}} \;\Rightarrow\; \varphi \approx 63.4° \]
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Schnittwinkel</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Warum steht im Zähler der Schnittwinkelformel ein Betrag?</p><ul class="mc-optionen"><li data-opt="A">damit der Winkel spitz (höchstens 90°) wird</li><li data-opt="B">weil Beträge immer nötig sind</li><li data-opt="C">damit das Ergebnis ein Vektor bleibt</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Richtungsvektoren dürfen umgedreht sein — als Schnittwinkel gilt vereinbarungsgemäss der spitze.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Zwei Geraden stehen senkrecht, wenn das Skalarprodukt ihrer <span class="mc-luecke"></span> null ist.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Richtungsvektoren.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Stehen die Geraden mit \(\vec{u} = \binom{2}{1}\) und \(\vec{v} = \binom{-1}{2}\) senkrecht?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(-2 + 2 = 0\) — ja.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Zwei windschiefe Geraden schneiden sich nicht — kann man trotzdem einen Winkel angeben?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ja: Der Winkel hängt nur von den <strong>Richtungen</strong> ab, nicht vom Schnittpunkt. Man verschiebt gedanklich eine Gerade parallel, bis sie die andere trifft — die Formel bleibt dieselbe.</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Abstand Punkt–Gerade: das Lot</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Abstand über den Lotfusspunkt</div>
+  <p>Der Abstand von \(P\) zur Geraden \(g\) ist die Länge des <strong>Lots</strong> — der kürzesten Verbindung. Rezept:</p>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li>Allgemeinen Geradenpunkt aufstellen: \(F = A + t\,\vec{u}\) (der «laufende Punkt»).</li>
+    <li><strong>Lotbedingung:</strong> \(\vec{PF} \perp \vec{u}\), also \(\vec{PF} \cdot \vec{u} = 0\) — eine Gleichung für \(t\).</li>
+    <li>\(t\) einsetzen: Lotfusspunkt \(F\); Abstand \(d = |\vec{PF}|\).</li>
+  </ol>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 5 — Abstand berechnen</div>
+  <p>Wie weit liegt \(P(4 \mid 0)\) von \(g:\ \vec{r} = \binom{0}{1} + t\binom{2}{1}\) entfernt?</p>
+  <p><strong>Lösung:</strong> \(F = (2t \mid 1 + t)\), also \(\vec{PF} = \binom{2t - 4}{1 + t}\). Lotbedingung:</p>
+  \[ \binom{2t-4}{1+t} \cdot \binom{2}{1} = 4t - 8 + 1 + t = 5t - 7 = 0 \;\Rightarrow\; t = 1.4 \]
+  <p>Lotfusspunkt \(F(2.8 \mid 2.4)\); Abstand \(d = \left|\binom{-1.2}{2.4}\right| = \sqrt{7.2} \approx 2.68\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Bewegungen modellieren — der Parameter als Zeit</div>
+  <p>Bewegt sich ein Objekt geradlinig mit konstanter Geschwindigkeit, ist seine Bahn</p>
+  \[ \vec{r}(t) = \vec{r}_0 + t \cdot \vec{v} \]
+  <p>mit Startort \(\vec{r}_0\) und Geschwindigkeitsvektor \(\vec{v}\). Der Betrag \(|\vec{v}|\) ist das Tempo; \(t\) ist echte Zeit. Treffen sich zwei Objekte, müssen Ort <strong>und</strong> Zeitpunkt übereinstimmen — gleiches \(t\) in beiden Gleichungen (anders als beim blossen Schnitt der Bahnen!).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Schnittpunkt der Bahnen ≠ Zusammenstoss</div>
+  <p>Kreuzen sich zwei Flugbahnen, heisst das noch nicht, dass die Objekte kollidieren — sie können den Kreuzungspunkt zu <strong>verschiedenen Zeiten</strong> passieren. Kollision verlangt gleichen Ort bei <strong>gleichem</strong> \(t\); Bahnschnitt erlaubt \(t \neq s\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Abstand und Bewegung</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Bedingung bestimmt den Lotfusspunkt \(F\)?</p><ul class="mc-optionen"><li data-opt="A">\(|\vec{PF}| = 1\)</li><li data-opt="B">\(\vec{PF} \cdot \vec{u} = 0\)</li><li data-opt="C">\(\vec{PF} = \vec{u}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Das Lot steht senkrecht auf der Richtung — Skalarprodukt null.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei Bewegungsaufgaben ist der Betrag des Richtungsvektors das <span class="mc-luecke"></span> des Objekts.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Tempo (die Geschwindigkeit als Zahl).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Eine Drohne fliegt \(\vec{r}(t) = \begin{pmatrix} 2 \\ 1 \\ 10 \end{pmatrix} + t\begin{pmatrix} 4 \\ 3 \\ 0 \end{pmatrix}\) (m, min). Wie schnell ist sie?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(|\vec{v}| = \sqrt{16 + 9} = 5\) m/min.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum ist der Lotfusspunkt der <em>nächste</em> Geradenpunkt zu \(P\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Jeder andere Geradenpunkt \(G\) bildet mit \(P\) und \(F\) ein rechtwinkliges Dreieck mit Hypotenuse \(PG\) — und die Hypotenuse ist immer länger als die Kathete \(PF\).</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Lage erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle ein Geradenpaar (in der Ebene) — welche gegenseitige Lage liegt vor?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Lage haben die beiden Geraden?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Parametergleichungen aufstellen</span></div>
+  <p>Stelle je eine Parametergleichung auf — und begründe, warum deine Antwort nicht die einzig richtige ist:</p>
+  <ol class="aufg-liste">
+    <li>Gerade durch \(A(2 \mid -1)\) mit Richtung \(\binom{1}{4}\)</li>
+    <li>Gerade durch \(P(3 \mid 0 \mid 1)\) und \(Q(5 \mid 2 \mid 1)\)</li>
+    <li>die \(y\)-Achse der Ebene</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\vec{r} = \binom{2}{-1} + t\binom{1}{4}\).</li>
+        <li>\(\vec{u} = \vec{PQ} = \begin{pmatrix} 2 \\ 2 \\ 0 \end{pmatrix}\): \(\vec{r} = \begin{pmatrix} 3 \\ 0 \\ 1 \end{pmatrix} + t\begin{pmatrix} 2 \\ 2 \\ 0 \end{pmatrix}\) (oder mit \(\begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}\)).</li>
+        <li>\(\vec{r} = t\binom{0}{1}\).</li>
+      </ol>
+      <p>Jeder Geradenpunkt taugt als Stützpunkt, jedes Vielfache \(\neq \vec{0}\) als Richtung — unendlich viele richtige Gleichungen für dieselbe Gerade.</p>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Geraden</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Punkt berechnen</div>
+    <p>\(g:\ \vec{r} = \binom{1}{2} + t\binom{3}{1}\). Berechne den Geradenpunkt bei \(t = 2\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3a1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3a1', 7, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>y =&nbsp;</label><input type="text" id="a3a2" placeholder="y"><button class="btn-pruef" onclick="chkNum('a3a2', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \binom{1}{2} + 2\binom{3}{1} = \binom{7}{4} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Punktprobe</div>
+    <p>Liegt \(P(7 \mid 4)\) auf \(g\)? Und \(Q(4 \mid 4)\)? Gib für \(P\) den Parameterwert an (für \(Q\): \(-99\) falls nicht auf \(g\)).</p>
+    <div class="eingabe-row"><label>t für P =&nbsp;</label><input type="text" id="a3b1" placeholder="t"><button class="btn-pruef" onclick="chkNum('a3b1', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>t für Q =&nbsp;</label><input type="text" id="a3b2" placeholder="t oder −99"><button class="btn-pruef" onclick="chkNum('a3b2', -99, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(P\): beide Komponenten geben \(t = 2\) ✓. \(Q\): erste Komponente \(t = 1\), zweite \(t = 2\) — Widerspruch, \(Q \notin g\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Schnittpunkt</div>
+    <p>Berechne den Schnittpunkt von \(g:\ \vec{r} = \binom{1}{2} + t\binom{3}{1}\) und \(h:\ \vec{r} = \binom{0}{5} + s\binom{1}{-1}\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3c1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3c1', 2.5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>y =&nbsp;</label><input type="text" id="a3c2" placeholder="y"><button class="btn-pruef" onclick="chkNum('a3c2', 2.5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Gleichsetzen: \(1 + 3t = s\) und \(2 + t = 5 - s\); einsetzen gibt \(4t = 2 \Rightarrow t = 0.5\): Schnittpunkt \((2.5 \mid 2.5)\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Schnittwinkel</div>
+    <p>Unter welchem Winkel schneiden sich \(g\) und \(h\) aus Teilaufgabe c (zwei Dezimalen)?</p>
+    <div class="eingabe-row"><label>φ ≈&nbsp;</label><input type="text" id="a3d1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a3d1', 63.43, 0.05, '°')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \cos\varphi = \frac{|3 \cdot 1 + 1 \cdot (-1)|}{\sqrt{10}\sqrt{2}} = \frac{2}{\sqrt{20}} \;\Rightarrow\; \varphi \approx 63.43° \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Abstand Punkt–Gerade</div>
+    <p>Berechne den Abstand von \(P(4 \mid 0)\) zu \(g:\ \vec{r} = \binom{0}{1} + t\binom{2}{1}\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>d ≈&nbsp;</label><input type="text" id="a3e1" placeholder="d"><button class="btn-pruef" onclick="chkNum('a3e1', 2.68, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Lotbedingung \(5t - 7 = 0 \Rightarrow t = 1.4\); \(F(2.8 \mid 2.4)\); \(d = \sqrt{1.2^2 + 2.4^2} = \sqrt{7.2} \approx 2.68\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Drohnenflug im Raum</span></div>
+  <p>Eine Drohne fliegt auf der Bahn \(\vec{r}(t) = \begin{pmatrix} 2 \\ 1 \\ 10 \end{pmatrix} + t \begin{pmatrix} 4 \\ 3 \\ 0 \end{pmatrix}\) (Koordinaten in m, \(t\) in Minuten).</p>
+  <ol class="aufg-liste">
+    <li>In welcher Höhe fliegt sie — und ändert sich diese?</li>
+    <li>Wo ist sie nach \(4\) Minuten?</li>
+    <li>Wie schnell fliegt sie (m/min)?</li>
+  </ol>
+  <div class="eingabe-row"><label>x nach 4 min =&nbsp;</label><input type="text" id="a4-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a4-1', 18, 0.01, 'm')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Tempo =&nbsp;</label><input type="text" id="a4-2" placeholder="m/min"><button class="btn-pruef" onclick="chkNum('a4-2', 5, 0.01, 'm/min')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Höhe konstant \(10\) m — die \(z\)-Komponente der Richtung ist null.</li>
+        <li>\(\vec{r}(4) = (18 \mid 13 \mid 10)\).</li>
+        <li>\(|\vec{v}| = \sqrt{16 + 9 + 0} = 5\) m/min.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Überholmanöver</span></div>
+  <p>Zwei Velos fahren auf derselben geraden Strasse: Velo 1 startet bei km \(0\) mit \(10\) km/h, Velo 2 bei km \(50\)? — nein: bei Position \(50\) (in hm ab Start) mit \(5\) Positions-Einheiten pro Stunde. Als Bahnen: \(x_1(t) = 10t\) und \(x_2(t) = 50 + 5t\).</p>
+  <ol class="aufg-liste">
+    <li>Wann holt Velo 1 das Velo 2 ein? (Gleicher Ort bei gleichem \(t\)!)</li>
+    <li>An welcher Position passiert das?</li>
+  </ol>
+  <div class="eingabe-row"><label>t =&nbsp;</label><input type="text" id="a5-1" placeholder="h"><button class="btn-pruef" onclick="chkNum('a5-1', 10, 0.01, 'h')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Position =&nbsp;</label><input type="text" id="a5-2" placeholder="Einheiten"><button class="btn-pruef" onclick="chkNum('a5-2', 100, 0.1, '')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Einholen heisst gleicher Ort zur gleichen Zeit: \(10t = 50 + 5t \Rightarrow 5t = 50 \Rightarrow t = 10\).</li>
+        <li>Position \(x = 10 \cdot 10 = 100\). Kontrolle: \(50 + 5 \cdot 10 = 100\) ✓</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Windschief oder Schnitt?</span></div>
+  <p>Gegeben sind \(g:\ \vec{r} = t\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\) und \(h:\ \vec{r} = \begin{pmatrix} 0 \\ 1 \\ 3 \end{pmatrix} + s\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\).</p>
+  <ol class="aufg-liste">
+    <li>Zeige, dass die Richtungen nicht kollinear sind.</li>
+    <li>Prüfe durch Gleichsetzen, ob es einen Schnittpunkt gibt — welche Komponente liefert den Widerspruch? (1, 2 oder 3)</li>
+  </ol>
+  <div class="eingabe-row"><label>Widerspruch in Komponente&nbsp;</label><input type="text" id="a6-1" placeholder="Nr."><button class="btn-pruef" onclick="chkNum('a6-1', 3, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\) und \(\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\) sind keine Vielfachen voneinander.</li>
+        <li>\(x\): \(t = 0\); \(y\): \(0 = 1 + s \Rightarrow s = -1\); \(z\): \(0 = 3\) — Widerspruch in der <strong>dritten</strong> Komponente: <strong>windschief</strong>.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Kollisionskurs? <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Zwei Modellboote fahren auf einem See: Boot 1 auf \(\vec{r}_1(t) = \binom{0}{0} + t\binom{2}{1}\), Boot 2 auf \(\vec{r}_2(t) = \binom{6}{-2} + t\binom{-1}{2}\) (Meter, Sekunden — <strong>gleiches</strong> \(t\)!).</p>
+  <ol class="aufg-liste">
+    <li>Schneiden sich die <em>Bahnen</em>? (Gleichsetzen mit verschiedenen Parametern \(t\), \(s\).)</li>
+    <li>Kollidieren die <em>Boote</em>? (Gleicher Ort bei gleichem \(t\).)</li>
+    <li>Formuliere den Unterschied der beiden Fragen in einem Satz.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(2t = 6 - s\) und \(t = -2 + 2s\): Einsetzen gibt \(2(-2 + 2s) = 6 - s \Rightarrow 5s = 10 \Rightarrow s = 2\), \(t = 2\) — die Bahnen schneiden sich in \((4 \mid 2)\).</li>
+        <li>Hier ist sogar \(t = s = 2\): Beide Boote sind zur <strong>selben Zeit</strong> am selben Ort — Kollision bei \((4 \mid 2)\) nach \(2\) s! Kontrolle: \(\vec{r}_1(2) = (4 \mid 2)\), \(\vec{r}_2(2) = (6-2 \mid -2+4) = (4 \mid 2)\) ✓</li>
+        <li>Bahnschnitt fragt nur nach dem <em>Ort</em> (Parameter dürfen verschieden sein) — Kollision verlangt Ort <em>und</em> Zeitpunkt gleich.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Die Parametergleichung \(\vec{r} = \vec{r}_A + t\,\vec{u}\) beschreibt Geraden in Ebene und Raum gleichermassen — Stützpunkt und Richtung sind frei wählbar. <strong>Punktprobe:</strong> alle Komponenten müssen dasselbe \(t\) liefern. <strong>Lage zweier Geraden:</strong> erst Richtungen vergleichen (kollinear → identisch/parallel), dann gleichsetzen mit <em>verschiedenen</em> Parametern (Lösung → Schnittpunkt; Widerspruch im Raum → windschief). <strong>Schnittwinkel</strong> über die Richtungsvektoren (Betrag im Zähler → spitzer Winkel), <strong>Abstand</strong> über das Lot (\(\vec{PF} \cdot \vec{u} = 0\)). Bei Bewegungen ist \(t\) die Zeit — Kollision braucht gleichen Ort <em>und</em> gleiches \(t\).</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Aufgabe</th><th>Werkzeug</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Gerade aufstellen</td><td style="text-align:left;font-family:var(--sans)">\(\vec{r} = \vec{r}_A + t\,\vec{u}\); aus zwei Punkten: \(\vec{u} = \vec{AB}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Punktprobe</td><td style="text-align:left;font-family:var(--sans)">komponentenweise nach \(t\) auflösen — überall gleich?</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Lage zweier Geraden</td><td style="text-align:left;font-family:var(--sans)">Richtungen kollinear? → Punktprobe · sonst gleichsetzen (\(t\), \(s\))</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Schnittwinkel</td><td>\(\cos\varphi = \dfrac{|\vec{u} \cdot \vec{v}|}{|\vec{u}||\vec{v}|}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Abstand Punkt–Gerade</td><td style="text-align:left;font-family:var(--sans)">Lot: \(\vec{PF} \cdot \vec{u} = 0\) → \(t\) → \(d = |\vec{PF}|\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Bewegung</td><td style="text-align:left;font-family:var(--sans)">\(\vec{r}(t) = \vec{r}_0 + t\,\vec{v}\); Tempo \(= |\vec{v}|\)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s4-3c-geraden/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3c-geraden/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3c-geraden/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3c-geraden/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3c-geraden/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lUv5XsdfGTvuMZG0rX9tnR3" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über VEKTOREN — Playlist</div><div class="lk-s">MathemaTrick · 41 Videos · inkl. Geradengleichungen und Lagebeziehungen</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/24573/aufgaben-zu-geradengleichungen-im-raum" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Geradengleichungen im Raum</div><div class="lk-s">Parameterform aufstellen und prüfen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/30686/aufgaben-zur-lagebeziehung-zweier-geraden" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Lagebeziehung zweier Geraden</div><div class="lk-s">identisch, parallel, schneidend, windschief · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 4.3c Geraden</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s4-3c',
+  kapitelNr:'4.3c', kapitelTitel:'Geraden',
+  prev:{nr:'4.3b',titel:'Skalarprodukt',url:'s4-3b-skalarprodukt.html'},
+  next:{nr:'4.3d',titel:'Ebenen',url:'s4-3d-ebenen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+function drawArrow(ctx, x1, y1, x2, y2, color, lw){
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const ang = Math.atan2(y2 - y1, x2 - x1), L = 11;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - L * Math.cos(ang - 0.42), y2 - L * Math.sin(ang - 0.42));
+  ctx.lineTo(x2 - L * Math.cos(ang + 0.42), y2 - L * Math.sin(ang + 0.42));
+  ctx.closePath(); ctx.fill();
+}
+
+// Gerade durch Punkt A mit Richtung u über den ganzen Canvas
+function drawLineFull(ctx, cx, cy, A, u, color, dash){
+  ctx.strokeStyle = color; ctx.lineWidth = 2;
+  if(dash) ctx.setLineDash([6, 4]); else ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.moveTo(cx(A[0] - 20 * u[0]), cy(A[1] - 20 * u[1]));
+  ctx.lineTo(cx(A[0] + 20 * u[0]), cy(A[1] + 20 * u[1]));
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+/* ══ EINSTIEG: Drohne ══ */
+function updateDR(){
+  const t = parseFloat(document.getElementById('dr-t').value);
+  document.getElementById('dr-tv').textContent = t.toFixed(2);
+  const x = 1 + 3 * t, y = 2 + t;
+  document.getElementById('dr-eq').innerHTML =
+    `r(${t.toFixed(2)}) = (1 | 2) + ${t.toFixed(2)}·(3 | 1) = (${fmt2(x)} | ${fmt2(y)})`;
+  const {ctx, W, H} = initCanvas('dr-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -6, 12, -2, 7);
+  // Gerade
+  drawLineFull(ctx, cx, cy, [1, 2], [3, 1], '#b8c4d4');
+  // Stützpunkt und Richtungsvektor
+  drawDot(ctx, cx, cy, 1, 2, '#1a4f8a', 6);
+  drawArrow(ctx, cx(1), cy(2), cx(4), cy(3), '#b85c00', 2.5);
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'right'; ctx.fillText('A', cx(1) - 8, cy(2) + 4);
+  ctx.fillStyle = '#b85c00'; ctx.textAlign = 'center'; ctx.fillText('u', cx(2.5), cy(2.5) - 10);
+  // Position
+  drawDot(ctx, cx, cy, x, y, '#5b2d8e', 7);
+  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left';
+  ctx.fillText(`(${fmt2(x)}|${fmt2(y)})`, cx(x) + 9, cy(y) - 8);
+}
+document.getElementById('dr-t').addEventListener('input', updateDR);
+
+/* ══ A1: Lage erkennen ══ */
+const a1G = [
+  {label:'Paar 1', g:{A:[0, 1], u:[2, 1]},  h:{A:[1, -2], u:[1, 1.5]}, sol:'schneidend'},
+  {label:'Paar 2', g:{A:[0, 1], u:[2, 1]},  h:{A:[0, 3],  u:[4, 2]},   sol:'echt parallel'},
+  {label:'Paar 3', g:{A:[0, 1], u:[2, 1]},  h:{A:[4, 3],  u:[-2, -1]}, sol:'identisch'},
+  {label:'Paar 4', g:{A:[-2, 3], u:[1, -1]}, h:{A:[2, 3], u:[1, 1]},   sol:'schneidend'},
+];
+const a1Opts = ['identisch', 'echt parallel', 'schneidend'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const g = a1G[a1Act];
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -6, 6, -4, 5);
+  drawLineFull(ctx, cx, cy, g.g.A, g.g.u, '#1a4f8a');
+  drawLineFull(ctx, cx, cy, g.h.A, g.h.u, '#b85c00', a1Act === 2);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! Die Geraden sind ${g.sol}.`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Prüfe zuerst die Richtungsvektoren auf Kollinearität, dann einen Stützpunkt.';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Komponentenweise ansetzen — und t und s auseinanderhalten.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateDR();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateDR(); drawA1();
+});
+</script>
+</body>
+</html>

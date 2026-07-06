@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.3b Skalarprodukt — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 4 · Geometrie · 70 Lektionen</div>
+  <h1 class="pt-h1">4.3b Skalarprodukt</h1>
+  <div class="pt-untertitel">RLP 4.3 · Teil 2 von 4</div>
+</div>
+
+<p class="lead">Das <strong>Skalarprodukt</strong> multipliziert zwei Vektoren zu einer <strong>Zahl</strong> — und diese Zahl steckt voller Geometrie: Sie verrät den <strong>Zwischenwinkel</strong>, entlarvt <strong>Orthogonalität</strong> auf einen Blick (\(\vec{a} \cdot \vec{b} = 0\)) und misst als <strong>Projektion</strong>, wie viel ein Vektor in Richtung eines anderen bewirkt. In der Physik heisst genau das: Arbeit.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.3</div>
+  <ul>
+    <li>Vektoren definieren, skalieren, addieren, subtrahieren und normieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>zweidimensionale Vektoren in kartesische Koordinaten und Polarkoordinaten darstellen, entsprechende Umrechnung durchführen</li>
+    <li>einen Vektor grafisch in vorgeschriebene Richtungen zerlegen und Linearkombinationen berechnen (als Übergang zur koordinatenbezogenen Vektorgeometrie) <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die Begriffe der koordinatenbezogenen Vektorrechnung (Richtung, Norm (Länge, Betrag), inverser Vektor (Gegenvektor), Ortsvektor, Einheitsvektor) erklären, anwenden und visualisieren <span class="ohm">auch ohne Hilfsmittel</span></li>
+    <li>die Operationen (Addition, Subtraktion, Multiplikation mit einem Skalar, Skalarprodukt) koordinatenbezogen ausführen und grafisch visualisieren — in numerisch einfachen Fällen ohne, in schwierigen mit Hilfsmitteln</li>
+    <li>die Parametergleichung einer Geraden aufstellen und die gegenseitige Lage von zwei Geraden bestimmen — in numerisch einfachen Fällen ohne, in schwierigen mit Hilfsmitteln</li>
+    <li>Längen-, Winkel- und Abstandsprobleme lösen — numerisch einfache Fälle und geometrisch einfache Lagen auch ohne Hilfsmittel, numerisch schwierige Fälle und geometrisch komplizierte Lagen mit Hilfsmitteln</li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt das Skalarprodukt (Kompetenz 5) und die Winkelprobleme aus Kompetenz 7. Grundlagen in <a href="s4-3a-vektorbegriff-komponenten.html">Teil 1 (s4-3a)</a>; es folgen <a href="s4-3c-geraden.html">Teil 3: Geraden (s4-3c)</a> und die Ergänzung <a href="s4-3d-ebenen.html">Teil 4: Ebenen (s4-3d)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann das Skalarprodukt geometrisch (\(|\vec{a}||\vec{b}|\cos\varphi\)) und komponentenweise (\(a_1b_1 + a_2b_2\ (+\ a_3b_3)\)) berechnen — und weiss, dass das Ergebnis eine Zahl ist.</li>
+      <li>Ich kann den Zwischenwinkel zweier Vektoren mit der Winkelformel bestimmen.</li>
+      <li>Ich kann Orthogonalität mit \(\vec{a} \cdot \vec{b} = 0\) prüfen und orthogonale Vektoren konstruieren.</li>
+      <li>Ich kann am Vorzeichen des Skalarprodukts erkennen, ob der Zwischenwinkel spitz, recht oder stumpf ist.</li>
+      <li>Ich kann die Normalprojektion eines Vektors auf einen anderen berechnen und als «Schattenwurf» deuten.</li>
+      <li>Ich kann Winkel in Figuren (Dreiecke, Körper) und die physikalische Arbeit \(W = \vec{F} \cdot \vec{s}\) berechnen.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — wie viel Kraft zählt wirklich?</h2>
+
+<p>Ein Schlitten wird mit der Kraft \(F = 50\) N über \(s = 8\) m gezogen — aber das Seil zeigt <strong>schräg nach oben</strong>, im Winkel \(\varphi\) zur Bewegungsrichtung. Für die geleistete <strong>Arbeit</strong> zählt nur der Kraftanteil <em>in</em> Bewegungsrichtung:</p>
+
+\[ W = |\vec{F}| \cdot |\vec{s}| \cdot \cos\varphi \]
+
+<p>Genau dieser Ausdruck bekommt einen Namen: das <strong>Skalarprodukt</strong> \(\vec{F} \cdot \vec{s}\).</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🛷 Arbeit am Schlitten — \(W = \vec{F} \cdot \vec{s}\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Ziehe den Winkel von \(0°\) auf \(90°\): Wie ändert sich die Arbeit? Beobachte den grünen «Schatten» der Kraft auf der Bewegungsrichtung — er ist der wirksame Anteil.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Ziehe den Winkel von null auf neunzig Grad: Wie ändert sich die Arbeit? Beobachte den grünen Schatten der Kraft auf der Bewegungsrichtung — er ist der wirksame Anteil.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Bei \(0°\) wirkt die volle Kraft (\(W = 400\) J), bei \(60°\) nur noch die Hälfte (\(\cos 60° = 0.5\)), bei \(90°\) gar nichts — senkrechte Kraft leistet keine Arbeit. Das Skalarprodukt misst das <strong>Zusammenwirken</strong> zweier Richtungen.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Bei null Grad wirkt die volle Kraft, bei sechzig Grad nur noch die Hälfte, bei neunzig Grad gar nichts — senkrechte Kraft leistet keine Arbeit. Das Skalarprodukt misst das Zusammenwirken zweier Richtungen.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>F = 50 N · s = 8 m · Projektion der Kraft grün</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Winkel <span class="var">\(\varphi\)</span> [°]</label>
+      <input type="range" id="ar-w" min="0" max="90" step="5" value="30">
+      <span class="sl-val"><span id="ar-wv">30</span>°</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Arbeit</div>
+      <div class="fl-eq" id="ar-eq">W = 50 · 8 · cos(30°) ≈ 346.4 J</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ar-canvas" height="200"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Zwei Vektoren, ein Produkt — und das Ergebnis ist eine <strong>Zahl</strong>, kein Vektor:</p>
+  <ul style="margin-top:6px">
+    <li>Der Faktor \(\cos\varphi\) bestraft schiefe Winkel: volle Wirkung bei \(0°\), keine bei \(90°\).</li>
+    <li>«Vektor mal Vektor gleich Zahl» — daher der Name <em>Skalar</em>produkt.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was für ein Objekt ist das Ergebnis von \(\vec{a} \cdot \vec{b}\)?</p><ul class="mc-optionen"><li data-opt="A">ein Vektor</li><li data-opt="B">eine reelle Zahl</li><li data-opt="C">ein Winkel</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> «Vektor · Vektor = reelle Zahl» — das unterscheidet das Skalarprodukt von allen bisherigen Operationen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Eine Kraft senkrecht zur Bewegungsrichtung leistet <span class="mc-luecke"></span> Arbeit.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">keine — \(\cos 90° = 0\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(W\) für \(F = 50\) N, \(s = 8\) m, \(\varphi = 60°\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(W = 50 \cdot 8 \cdot \cos 60° = 400 \cdot 0.5 = 200\) J.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Kann die Arbeit \(W = \vec{F} \cdot \vec{s}\) negativ sein? Was bedeutet das?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ja — für \(\varphi &gt; 90°\) ist \(\cos\varphi &lt; 0\): Die Kraft wirkt <em>gegen</em> die Bewegung (z.B. Bremskraft) und entzieht Energie.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definition — zwei Formeln, ein Produkt</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Skalarprodukt (geometrische Form)</div>
+  <p>Für zwei Vektoren \(\vec{a}\), \(\vec{b}\) mit Zwischenwinkel \(\varphi\):</p>
+  \[ \vec{a} \cdot \vec{b} = |\vec{a}| \cdot |\vec{b}| \cdot \cos\varphi \]
+  <p>Das Ergebnis ist ein <strong>Skalar</strong> (eine reelle Zahl), kein Vektor.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Skalarprodukt in Komponenten</div>
+  <p>Komponentenweise multiplizieren und <strong>summieren</strong>:</p>
+  \[ \binom{a_1}{a_2} \cdot \binom{b_1}{b_2} = a_1 b_1 + a_2 b_2 \qquad\quad \begin{pmatrix} a_1 \\ a_2 \\ a_3 \end{pmatrix} \cdot \begin{pmatrix} b_1 \\ b_2 \\ b_3 \end{pmatrix} = a_1 b_1 + a_2 b_2 + a_3 b_3 \]
+  <p>Beide Formeln liefern dieselbe Zahl — die geometrische zeigt die Bedeutung, die komponentenweise macht das Rechnen leicht. Spezialfall: \(\vec{a} \cdot \vec{a} = |\vec{a}|^2\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Winkelformel</div>
+  <p>Auflösen der Definition nach dem Winkel (\(\vec{a}, \vec{b} \neq \vec{0}\)):</p>
+  \[ \cos\varphi = \frac{\vec{a} \cdot \vec{b}}{|\vec{a}| \cdot |\vec{b}|} \]
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Winkel berechnen</div>
+  <p>Bestimme den Zwischenwinkel von \(\vec{a} = \binom{4}{3}\) und \(\vec{b} = \binom{5}{0}\).</p>
+  \[ \vec{a} \cdot \vec{b} = 4 \cdot 5 + 3 \cdot 0 = 20, \qquad |\vec{a}| = 5,\ |\vec{b}| = 5 \]
+  \[ \cos\varphi = \frac{20}{25} = 0.8 \;\Rightarrow\; \varphi \approx 36.87° \]
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie berechnet man \(\binom{2}{5} \cdot \binom{4}{-1}\)?</p><ul class="mc-optionen"><li data-opt="A">\(\binom{8}{-5}\)</li><li data-opt="B">\(2 \cdot 4 + 5 \cdot (-1) = 3\)</li><li data-opt="C">\(2 \cdot 4 - 5 \cdot (-1) = 13\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Produkte der Komponenten <em>summieren</em> — das Ergebnis ist die Zahl \(3\), kein Vektor.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Das Skalarprodukt eines Vektors mit sich selbst ergibt das Quadrat seines <span class="mc-luecke"></span>: \(\vec{a} \cdot \vec{a} = |\vec{a}|^2\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Betrags — denn \(\cos 0° = 1\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(\begin{pmatrix} 1 \\ 2 \\ 2 \end{pmatrix} \cdot \begin{pmatrix} 2 \\ -2 \\ 1 \end{pmatrix}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(2 - 4 + 2 = 0\) — die Vektoren stehen senkrecht!</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Bestimme den Zwischenwinkel von \(\binom{1}{2}\) und \(\binom{3}{1}\) exakt.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\vec{a} \cdot \vec{b} = 3 + 2 = 5\); \(|\vec{a}||\vec{b}| = \sqrt{5} \cdot \sqrt{10} = \sqrt{50}\). \(\cos\varphi = \tfrac{5}{\sqrt{50}} = \tfrac{1}{\sqrt{2}} \Rightarrow \varphi = 45°\).</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Das Vorzeichen erzählt die Geometrie</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Skalarprodukt und Zwischenwinkel</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Zwischenwinkel \(\varphi\)</th><th>Skalarprodukt</th><th>Bedeutung</th></tr></thead>
+    <tbody>
+      <tr><td>\(0° \leq \varphi &lt; 90°\)</td><td>\(\vec{a} \cdot \vec{b} &gt; 0\)</td><td style="text-align:left;font-family:var(--sans)">spitzer Winkel — Richtungen «arbeiten zusammen»</td></tr>
+      <tr><td>\(\varphi = 90°\)</td><td>\(\vec{a} \cdot \vec{b} = 0\)</td><td style="text-align:left;font-family:var(--sans)"><strong>orthogonal</strong> (senkrecht)</td></tr>
+      <tr><td>\(90° &lt; \varphi \leq 180°\)</td><td>\(\vec{a} \cdot \vec{b} &lt; 0\)</td><td style="text-align:left;font-family:var(--sans)">stumpfer Winkel — Richtungen «gegeneinander»</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Grenzfälle: \(\varphi = 0°\) gibt \(+|\vec{a}||\vec{b}|\), \(\varphi = 180°\) gibt \(-|\vec{a}||\vec{b}|\) — beides kollineare Vektoren.</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Winkel-Labor — Skalarprodukt live</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Drehe \(\vec{b}\) einmal ganz herum: Wo wird das Skalarprodukt null, wo negativ? Vergleiche das Vorzeichen mit dem angezeigten Winkel.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Drehe b einmal ganz herum: Wo wird das Skalarprodukt null, wo negativ? Vergleiche das Vorzeichen mit dem angezeigten Winkel.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Das Skalarprodukt wechselt genau bei \(90°\) das Vorzeichen — Orthogonalität ist der Nulldurchgang. Der Test \(\vec{a} \cdot \vec{b} = 0\) ersetzt jede Winkelmessung.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Das Skalarprodukt wechselt genau bei neunzig Grad das Vorzeichen — Orthogonalität ist der Nulldurchgang. Der Test Skalarprodukt gleich null ersetzt jede Winkelmessung.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>\(\vec{a} = \binom{4}{1}\) fest (blau) · \(\vec{b}\) drehbar mit \(|\vec{b}| = 3\) (orange)</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-orange">
+      <label>Richtung <span class="var">\(\vec{b}\)</span> [°]</label>
+      <input type="range" id="wl-w" min="0" max="360" step="5" value="60">
+      <span class="sl-val"><span id="wl-wv">60</span>°</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Skalarprodukt und Zwischenwinkel</div>
+      <div class="fl-eq" id="wl-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="wl-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Orthogonalität</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Woran erkennt man rechnerisch, dass zwei Vektoren senkrecht stehen?</p><ul class="mc-optionen"><li data-opt="A">gleiche Beträge</li><li data-opt="B">Skalarprodukt null</li><li data-opt="C">Skalarprodukt negativ</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(\vec{a} \perp \vec{b} \Leftrightarrow \vec{a} \cdot \vec{b} = 0\) (für \(\vec{a}, \vec{b} \neq \vec{0}\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Ist \(\vec{a} \cdot \vec{b} &lt; 0\), so ist der Zwischenwinkel <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">stumpf (grösser als \(90°\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Stehen \(\binom{2}{3}\) und \(\binom{-3}{2}\) senkrecht?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(2 \cdot (-3) + 3 \cdot 2 = 0\) — ja. (Trick: Komponenten tauschen, ein Vorzeichen drehen.)</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Für welches \(k\) steht \(\binom{3}{k}\) senkrecht auf \(\binom{2}{4}\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(3 \cdot 2 + k \cdot 4 = 0 \Rightarrow 4k = -6 \Rightarrow k = -1.5\).</div></details></div>
+</details>
+
+
+<!-- ══ 5. RECHENREGELN ══ -->
+<h2 id="typen">Rechenregeln und Projektion</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Rechenregeln</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left;width:35%">Kommutativgesetz</td><td>\(\vec{a} \cdot \vec{b} = \vec{b} \cdot \vec{a}\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Distributivgesetz</td><td>\(\vec{a} \cdot (\vec{b} + \vec{c}) = \vec{a} \cdot \vec{b} + \vec{a} \cdot \vec{c}\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Skalare herausziehen</td><td>\((s\vec{a}) \cdot \vec{b} = s\,(\vec{a} \cdot \vec{b})\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Betrag über Skalarprodukt</td><td>\(|\vec{a}| = \sqrt{\vec{a} \cdot \vec{a}}\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px"><strong>Achtung:</strong> Ein Assoziativgesetz gibt es nicht — \((\vec{a} \cdot \vec{b}) \cdot \vec{c}\) ist ein <em>Vektor</em> (Zahl mal \(\vec{c}\)), und «durch einen Vektor dividieren» ist sinnlos.</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Normalprojektion — der Schattenwurf</div>
+  <p>Die senkrechte Projektion von \(\vec{a}\) auf \(\vec{b}\) («Schatten von \(\vec{a}\) auf \(\vec{b}\) bei senkrechtem Licht»):</p>
+  \[ \vec{a}_b = \frac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2} \cdot \vec{b}, \qquad\quad |\vec{a}_b| = \frac{|\vec{a} \cdot \vec{b}|}{|\vec{b}|} \]
+  <p>Der Projektionsvektor ist kollinear zu \(\vec{b}\); sein Betrag ist der «wirksame Anteil» von \(\vec{a}\) in Richtung \(\vec{b}\) — genau der Anteil, der im Arbeits-Beispiel zählte.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Projektion berechnen</div>
+  <p>Projiziere \(\vec{a} = \binom{4}{2}\) auf \(\vec{b} = \binom{3}{0}\).</p>
+  \[ \vec{a} \cdot \vec{b} = 12, \quad |\vec{b}|^2 = 9 \;\Rightarrow\; \vec{a}_b = \tfrac{12}{9}\binom{3}{0} = \binom{4}{0}, \qquad |\vec{a}_b| = \tfrac{12}{3} = 4 \]
+  <p>Anschaulich: Der Schatten von \(\binom{4}{2}\) auf der \(x\)-Achse ist \(4\) lang. ✓</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — komponentenweise multiplizieren ohne Summe</div>
+  <p>\(\binom{2}{5} \cdot \binom{4}{-1}\) ist <strong>nicht</strong> \(\binom{8}{-5}\)! Das Skalarprodukt summiert die Produkte: \(8 + (-5) = 3\). Das Ergebnis ist immer eine <strong>Zahl</strong>.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Regeln und Projektion</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was für ein Objekt ist \((\vec{a} \cdot \vec{b}) \cdot \vec{c}\)?</p><ul class="mc-optionen"><li data-opt="A">eine Zahl</li><li data-opt="B">ein Vektor</li><li data-opt="C">nicht definiert</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(\vec{a} \cdot \vec{b}\) ist eine Zahl — mal \(\vec{c}\) gibt einen gestreckten Vektor. Darum gibt es kein Assoziativgesetz.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Normalprojektion \(\vec{a}_b\) ist stets <span class="mc-luecke"></span> zu \(\vec{b}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">kollinear — sie liegt auf der Trägergeraden von \(\vec{b}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(|\vec{a}|\) über das Skalarprodukt für \(\vec{a} = \binom{4}{3}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\vec{a} \cdot \vec{a} = 16 + 9 = 25 \Rightarrow |\vec{a}| = 5\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Was passiert mit der Projektion \(\vec{a}_b\), wenn \(\vec{a} \perp \vec{b}\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\vec{a} \cdot \vec{b} = 0 \Rightarrow \vec{a}_b = \vec{0}\) — ein senkrechter Vektor wirft keinen Schatten auf \(\vec{b}\); sein wirksamer Anteil ist null (vgl. Arbeit bei \(90°\)).</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Winkel in Figuren</h2>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — Winkel in einer Figur berechnen</div>
+  <p>Der Winkel bei einer Ecke \(A\) liegt zwischen den Vektoren <strong>von \(A\) weg</strong> zu den Nachbarecken: \(\vec{AB}\) und \(\vec{AC}\). Beide aufstellen («Spitze minus Fuss»), dann die Winkelformel anwenden. Falsche Pfeilrichtung liefert den Nebenwinkel \(180° - \varphi\)!</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Innenwinkel im Dreieck</div>
+  <p>Berechne den Innenwinkel \(\alpha\) bei \(A(1 \mid 1)\) im Dreieck mit \(B(5 \mid 2)\) und \(C(2 \mid 4)\).</p>
+  \[ \vec{AB} = \binom{4}{1}, \quad \vec{AC} = \binom{1}{3} \qquad \cos\alpha = \frac{4 + 3}{\sqrt{17}\sqrt{10}} = \frac{7}{\sqrt{170}} \;\Rightarrow\; \alpha \approx 57.5° \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 4 — Rechtwinkligkeit nachweisen</div>
+  <p>Ist das Dreieck \(A(0 \mid 0)\), \(B(4 \mid 2)\), \(C(3 \mid 4)\) rechtwinklig?</p>
+  <p><strong>Lösung:</strong> Die Seitenvektoren prüfen: \(\vec{AB} = \binom{4}{2}\), \(\vec{BC} = \binom{-1}{2}\):</p>
+  \[ \vec{AB} \cdot \vec{BC} = -4 + 4 = 0 \;\Rightarrow\; \text{rechter Winkel bei } B \]
+  <p>Fläche über die Katheten: \(F = \tfrac{1}{2} \cdot |\vec{AB}| \cdot |\vec{BC}| = \tfrac{1}{2}\sqrt{20}\sqrt{5} = 5\).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Pfeilrichtungen beim Winkel</div>
+  <p>Für den Winkel bei \(B\) braucht es \(\vec{BA}\) und \(\vec{BC}\) — beide <strong>von \(B\) weg</strong>. Wer versehentlich \(\vec{AB}\) (auf \(B\) zu) verwendet, erhält den Nebenwinkel. Kontrolle: Innenwinkelsumme \(180°\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Winkel in Figuren</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Vektoren braucht man für den Innenwinkel bei der Ecke \(C\)?</p><ul class="mc-optionen"><li data-opt="A">\(\vec{CA}\) und \(\vec{CB}\)</li><li data-opt="B">\(\vec{AC}\) und \(\vec{BC}\)</li><li data-opt="C">\(\vec{AB}\) und \(\vec{AC}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Beide Pfeile müssen von der Ecke <em>weg</em> zeigen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Verwendet man versehentlich einen umgedrehten Pfeil, erhält man statt \(\varphi\) den <span class="mc-luecke"></span> \(180° - \varphi\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Nebenwinkel.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Zeige mit dem Skalarprodukt, dass \(\binom{4}{2}\) und \(\binom{-1}{2}\) senkrecht stehen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(4 \cdot (-1) + 2 \cdot 2 = 0\) ✓</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum ist der Skalarprodukt-Test auf Rechtwinkligkeit bequemer als der Umweg über Seitenlängen und Pythagoras?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Er braucht keine Wurzeln: zwei Produkte, eine Summe, Vergleich mit null. Pythagoras verlangt drei quadrierte Längen und deren Vergleich — mehr Rechnung, mehr Rundungsfehler, und er sagt nicht direkt, <em>wo</em> der rechte Winkel liegt.</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Spitz, recht oder stumpf?</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle ein Vektorpaar — entscheide am Bild und im Kopf über das Vorzeichen des Skalarprodukts.</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="margin-bottom:10px"><canvas id="a1-canvas" height="220"></canvas></div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welches Vorzeichen hat \(\vec{a} \cdot \vec{b}\)?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Orthogonale Vektoren konstruieren</span></div>
+  <p>Zu \(\vec{a} = \binom{a_1}{a_2}\) ist \(\binom{-a_2}{a_1}\) stets orthogonal (Komponenten tauschen, ein Vorzeichen drehen).</p>
+  <ol class="aufg-liste">
+    <li>Weise das mit dem Skalarprodukt allgemein nach.</li>
+    <li>Gib zwei zu \(\binom{5}{2}\) orthogonale Vektoren an.</li>
+    <li>Warum funktioniert der Trick im Raum (3D) nicht mehr eindeutig?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\binom{a_1}{a_2} \cdot \binom{-a_2}{a_1} = -a_1 a_2 + a_2 a_1 = 0\) ✓</li>
+        <li>Z.B. \(\binom{-2}{5}\) und \(\binom{2}{-5}\) — jedes Vielfache davon.</li>
+        <li>Im Raum gibt es zu einem Vektor eine ganze <strong>Ebene</strong> orthogonaler Richtungen — nicht nur eine Gerade; der 2D-Trick wählt keine eindeutige Richtung mehr aus.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit dem Skalarprodukt</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Skalarprodukt berechnen</div>
+    <p>Berechne \(\binom{2}{5} \cdot \binom{4}{-1}\).</p>
+    <div class="eingabe-row"><label>a · b =&nbsp;</label><input type="text" id="a3a1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3a1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 2 \cdot 4 + 5 \cdot (-1) = 8 - 5 = 3 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Zwischenwinkel</div>
+    <p>Bestimme den Zwischenwinkel von \(\binom{1}{2}\) und \(\binom{3}{1}\) (in Grad).</p>
+    <div class="eingabe-row"><label>φ =&nbsp;</label><input type="text" id="a3b1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a3b1', 45, 0.1, '°')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \cos\varphi = \frac{5}{\sqrt{5}\sqrt{10}} = \frac{1}{\sqrt{2}} \;\Rightarrow\; \varphi = 45° \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Orthogonalität erzwingen</div>
+    <p>Für welches \(k\) steht \(\binom{3}{k}\) senkrecht auf \(\binom{2}{4}\)?</p>
+    <div class="eingabe-row"><label>k =&nbsp;</label><input type="text" id="a3c1" placeholder="k"><button class="btn-pruef" onclick="chkNum('a3c1', -1.5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 6 + 4k = 0 \;\Rightarrow\; k = -1.5 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Im Raum</div>
+    <p>Berechne \(\begin{pmatrix} 1 \\ 2 \\ 2 \end{pmatrix} \cdot \begin{pmatrix} 2 \\ -2 \\ 1 \end{pmatrix}\) und gib den Zwischenwinkel an.</p>
+    <div class="eingabe-row"><label>a · b =&nbsp;</label><input type="text" id="a3d1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3d1', 0, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>φ =&nbsp;</label><input type="text" id="a3d2" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a3d2', 90, 0.1, '°')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 2 - 4 + 2 = 0 \;\Rightarrow\; \varphi = 90° \text{ — die Raumvektoren stehen senkrecht.} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Projektion</div>
+    <p>Berechne den Betrag der Normalprojektion von \(\vec{a} = \binom{4}{2}\) auf \(\vec{b} = \binom{3}{0}\).</p>
+    <div class="eingabe-row"><label>|a_b| =&nbsp;</label><input type="text" id="a3e1" placeholder="Betrag"><button class="btn-pruef" onclick="chkNum('a3e1', 4, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ |\vec{a}_b| = \frac{\vec{a} \cdot \vec{b}}{|\vec{b}|} = \frac{12}{3} = 4 \]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Physikalische Arbeit</span></div>
+  <p>Eine Kiste wird mit \(F = 80\) N über \(s = 12\) m gezogen; das Seil bildet \(35°\) mit der Bewegungsrichtung.</p>
+  <ol class="aufg-liste">
+    <li>Berechne die geleistete Arbeit \(W = |\vec{F}||\vec{s}|\cos\varphi\).</li>
+    <li>Wie gross wäre \(W\) bei waagrechtem Seil — und wie viel Prozent gehen durch die Schräglage verloren?</li>
+  </ol>
+  <div class="eingabe-row"><label>W ≈&nbsp;</label><input type="text" id="a4-1" placeholder="J"><button class="btn-pruef" onclick="chkNum('a4-1', 786.4, 1, 'J')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(W = 80 \cdot 12 \cdot \cos 35° \approx 786.4\) J.</li>
+        <li>Waagrecht: \(W = 960\) J. Verlust: \(1 - \cos 35° \approx 18\) %.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Innenwinkel im Dreieck</span></div>
+  <p>Gegeben ist das Dreieck \(A(1 \mid 1)\), \(B(5 \mid 2)\), \(C(2 \mid 4)\).</p>
+  <ol class="aufg-liste">
+    <li>Stelle \(\vec{AB}\) und \(\vec{AC}\) auf.</li>
+    <li>Berechne den Innenwinkel \(\alpha\) bei \(A\) (zwei Dezimalen).</li>
+  </ol>
+  <div class="eingabe-row"><label>α ≈&nbsp;</label><input type="text" id="a5-1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a5-1', 57.53, 0.05, '°')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(\vec{AB} = \binom{4}{1}\), \(\vec{AC} = \binom{1}{3}\); \(\cos\alpha = \tfrac{7}{\sqrt{170}} \Rightarrow \alpha \approx 57.53°\).</p>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Rechtwinkligkeit und Fläche</span></div>
+  <p>Gegeben ist das Dreieck \(A(0 \mid 0)\), \(B(4 \mid 2)\), \(C(3 \mid 4)\).</p>
+  <ol class="aufg-liste">
+    <li>Zeige mit dem Skalarprodukt, dass das Dreieck rechtwinklig ist — bei welcher Ecke?</li>
+    <li>Berechne die Fläche über die Katheten.</li>
+  </ol>
+  <div class="eingabe-row"><label>Fläche =&nbsp;</label><input type="text" id="a6-1" placeholder="FE"><button class="btn-pruef" onclick="chkNum('a6-1', 5, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\vec{BA} = \binom{-4}{-2}\), \(\vec{BC} = \binom{-1}{2}\): \(\vec{BA} \cdot \vec{BC} = 4 - 4 = 0\) — rechter Winkel bei \(B\).</li>
+        <li>\(F = \tfrac{1}{2}|\vec{BA}||\vec{BC}| = \tfrac{1}{2}\sqrt{20}\sqrt{5} = \tfrac{1}{2} \cdot 10 = 5\) Flächeneinheiten.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Winkel im Würfel <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Ein Würfel mit Kantenlänge \(1\) liegt im Koordinatensystem: Ecke im Ursprung, Kanten entlang der Achsen. Die Raumdiagonale zeigt nach \(D(1 \mid 1 \mid 1)\).</p>
+  <ol class="aufg-liste">
+    <li>Stelle die Vektoren der Raumdiagonale und einer Kante (z.B. \(x\)-Achse) auf.</li>
+    <li>Berechne den Winkel zwischen Raumdiagonale und Kante (zwei Dezimalen).</li>
+    <li>Warum ist der Winkel für alle drei Kanten derselbe?</li>
+  </ol>
+  <div class="eingabe-row"><label>φ ≈&nbsp;</label><input type="text" id="a7-1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a7-1', 54.74, 0.05, '°')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\vec{d} = \begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix}\), Kante \(\vec{e}_1 = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\).</li>
+        <li>\(\cos\varphi = \dfrac{1}{\sqrt{3} \cdot 1} \Rightarrow \varphi \approx 54.74°\).</li>
+        <li>Die Diagonale behandelt alle drei Achsen symmetrisch — jedes Skalarprodukt mit einer Kante ergibt \(1\), jede Kantenlänge ist \(1\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Das Skalarprodukt \(\vec{a} \cdot \vec{b} = |\vec{a}||\vec{b}|\cos\varphi = a_1b_1 + a_2b_2\ (+\ a_3b_3)\) macht aus zwei Vektoren eine <strong>Zahl</strong>. Sein Vorzeichen klassiert den Zwischenwinkel (positiv: spitz, null: <strong>orthogonal</strong>, negativ: stumpf), die <strong>Winkelformel</strong> \(\cos\varphi = \tfrac{\vec{a} \cdot \vec{b}}{|\vec{a}||\vec{b}|}\) liefert ihn exakt, und die <strong>Projektion</strong> \(\vec{a}_b = \tfrac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2}\vec{b}\) misst den wirksamen Anteil — physikalisch die Arbeit \(W = \vec{F} \cdot \vec{s}\). Bei Winkeln in Figuren: beide Pfeile <strong>von der Ecke weg</strong>.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Aufgabe</th><th>Formel</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Skalarprodukt (Komponenten)</td><td>\(a_1b_1 + a_2b_2\ (+\ a_3b_3)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Zwischenwinkel</td><td>\(\cos\varphi = \dfrac{\vec{a} \cdot \vec{b}}{|\vec{a}|\,|\vec{b}|}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Orthogonalität</td><td>\(\vec{a} \perp \vec{b} \Leftrightarrow \vec{a} \cdot \vec{b} = 0\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Projektion auf \(\vec{b}\)</td><td>\(\vec{a}_b = \dfrac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2}\,\vec{b}\), \(\quad |\vec{a}_b| = \dfrac{|\vec{a} \cdot \vec{b}|}{|\vec{b}|}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Betrag</td><td>\(|\vec{a}| = \sqrt{\vec{a} \cdot \vec{a}}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Arbeit (Physik)</td><td>\(W = \vec{F} \cdot \vec{s}\)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s4-3b-skalarprodukt/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3b-skalarprodukt/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3b-skalarprodukt/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3b-skalarprodukt/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3b-skalarprodukt/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lUv5XsdfGTvuMZG0rX9tnR3" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über VEKTOREN — Playlist</div><div class="lk-s">MathemaTrick · 41 Videos · inkl. Skalarprodukt und Winkel</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/107944/aufgaben-zum-skalarprodukt-2d" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Skalarprodukt 2D</div><div class="lk-s">Berechnen, Winkel, Orthogonalität · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/107945/aufgaben-zum-skalarprodukt-3d" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Skalarprodukt 3D</div><div class="lk-s">Raumvektoren · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/30683/aufgaben-zu-winkeln-zwischen-vektoren" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Winkel zwischen Vektoren</div><div class="lk-s">Winkelformel anwenden · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 4.3b Skalarprodukt</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s4-3b',
+  kapitelNr:'4.3b', kapitelTitel:'Skalarprodukt',
+  prev:{nr:'4.3a',titel:'Vektorbegriff und Komponenten',url:'s4-3a-vektorbegriff-komponenten.html'},
+  next:{nr:'4.3c',titel:'Geraden',url:'s4-3c-geraden.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+function drawArrow(ctx, x1, y1, x2, y2, color, lw){
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
+  const ang = Math.atan2(y2 - y1, x2 - x1), L = 11;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - L * Math.cos(ang - 0.42), y2 - L * Math.sin(ang - 0.42));
+  ctx.lineTo(x2 - L * Math.cos(ang + 0.42), y2 - L * Math.sin(ang + 0.42));
+  ctx.closePath(); ctx.fill();
+}
+
+/* ══ EINSTIEG: Arbeit ══ */
+function updateAR(){
+  const w = parseInt(document.getElementById('ar-w').value);
+  document.getElementById('ar-wv').textContent = w;
+  const rad = w * Math.PI / 180;
+  const W = 50 * 8 * Math.cos(rad);
+  document.getElementById('ar-eq').innerHTML = `W = 50 · 8 · cos(${w}°) ≈ ${W.toFixed(1)} J`;
+  const {ctx, W: cw, H} = initCanvas('ar-canvas', 200, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cw, H);
+  const y0 = H - 45, x0 = cw * 0.18;
+  // Boden
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, y0 + 18); ctx.lineTo(cw, y0 + 18); ctx.stroke();
+  // Schlitten
+  ctx.fillStyle = '#d8dee9'; ctx.fillRect(x0 - 26, y0, 52, 16);
+  ctx.strokeStyle = '#374151'; ctx.strokeRect(x0 - 26, y0, 52, 16);
+  // Weg s (grau nach rechts)
+  drawArrow(ctx, x0, y0 + 8, x0 + cw * 0.55, y0 + 8, '#9ca3af', 2);
+  ctx.fillStyle = '#6b7280'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('s', x0 + cw * 0.3, y0 + 32);
+  // Kraft (blau, schräg) — Länge 110 px
+  const FL = 110;
+  const fx = x0 + FL * Math.cos(rad), fy = y0 + 8 - FL * Math.sin(rad);
+  drawArrow(ctx, x0, y0 + 8, fx, fy, '#1a4f8a', 3);
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'left'; ctx.fillText('F', fx + 6, fy);
+  // Projektion (grün auf dem Boden)
+  drawArrow(ctx, x0, y0 + 8, x0 + FL * Math.cos(rad), y0 + 8, '#1f6b3a', 3);
+  ctx.fillStyle = '#1f6b3a'; ctx.textAlign = 'center';
+  if(w < 88) ctx.fillText('F·cos φ', x0 + FL * Math.cos(rad) / 2, y0 - 6);
+  // Projektionslinie gestrichelt
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(x0 + FL * Math.cos(rad), y0 + 8); ctx.stroke();
+  ctx.setLineDash([]);
+}
+document.getElementById('ar-w').addEventListener('input', updateAR);
+
+/* ══ WINKEL-LABOR ══ */
+function updateWL(){
+  const w = parseInt(document.getElementById('wl-w').value);
+  document.getElementById('wl-wv').textContent = w;
+  const rad = w * Math.PI / 180;
+  const a = [4, 1];
+  const b = [3 * Math.cos(rad), 3 * Math.sin(rad)];
+  const sp = a[0] * b[0] + a[1] * b[1];
+  const cosphi = sp / (Math.hypot(a[0], a[1]) * 3);
+  const phi = Math.acos(Math.max(-1, Math.min(1, cosphi))) * 180 / Math.PI;
+  const vz = sp > 0.01 ? 'positiv (spitz)' : (sp < -0.01 ? 'negativ (stumpf)' : 'null — orthogonal!');
+  document.getElementById('wl-eq').innerHTML =
+    `a · b = ${sp.toFixed(2)} — ${vz} · Zwischenwinkel ${phi.toFixed(1)}°`;
+  const {ctx, W, H} = initCanvas('wl-canvas', 240, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 4);
+  drawArrow(ctx, cx(0), cy(0), cx(a[0]), cy(a[1]), '#1a4f8a', 3);
+  drawArrow(ctx, cx(0), cy(0), cx(b[0]), cy(b[1]), '#b85c00', 3);
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'left'; ctx.fillText('a', cx(a[0]) + 6, cy(a[1]) - 6);
+  ctx.fillStyle = '#b85c00'; ctx.fillText('b', cx(b[0]) + 6, cy(b[1]) - 6);
+}
+document.getElementById('wl-w').addEventListener('input', updateWL);
+
+/* ══ A1: Vorzeichen erkennen ══ */
+const a1G = [
+  {label:'Paar 1', a:[3, 1],  b:[2, 3],   sol:'positiv'},
+  {label:'Paar 2', a:[4, 2],  b:[-1, 2],  sol:'null'},
+  {label:'Paar 3', a:[3, 1],  b:[-3, -2], sol:'negativ'},
+  {label:'Paar 4', a:[2, 3],  b:[3, -2],  sol:'null'},
+];
+const a1Opts = ['positiv', 'null', 'negativ'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  const g = a1G[a1Act];
+  const {ctx, W, H} = initCanvas('a1-canvas', 220, false);
+  const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 4);
+  drawArrow(ctx, cx(0), cy(0), cx(g.a[0]), cy(g.a[1]), '#1a4f8a', 3);
+  drawArrow(ctx, cx(0), cy(0), cx(g.b[0]), cy(g.b[1]), '#b85c00', 3);
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'left'; ctx.fillText('a', cx(g.a[0]) + 6, cy(g.a[1]) - 6);
+  ctx.fillStyle = '#b85c00'; ctx.fillText('b', cx(g.b[0]) + 6, cy(g.b[1]) - 6);
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  const sp = g.a[0] * g.b[0] + g.a[1] * g.b[1];
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! a · b = ${sp}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Rechne nach: a·b = a₁b₁ + a₂b₂ — oder schätze den Winkel: unter 90° positiv, genau 90° null, darüber negativ.';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Produkte summieren — und beim Winkel den Taschenrechner auf DEG stellen.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateAR();
+  updateWL();
+  buildA1(); drawA1();
+});
+window.addEventListener('resize', () => {
+  updateAR(); updateWL(); drawA1();
+});
+</script>
+</body>
+</html>

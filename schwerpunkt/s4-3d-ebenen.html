@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.3d Ebenen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 4 · Geometrie · 70 Lektionen</div>
+  <h1 class="pt-h1">4.3d Ebenen</h1>
+  <div class="pt-untertitel">RLP 4.3 · Teil 4 von 4 · Ergänzung TALS — nicht Teil des RLP 2030</div>
+</div>
+
+<p class="lead">Was die Parametergleichung für Geraden leistet, leistet sie mit <strong>zwei</strong> Richtungsvektoren für <strong>Ebenen</strong>: Stützpunkt plus \(s\)-mal erste Richtung plus \(t\)-mal zweite Richtung. Damit werden Dachflächen, Rampen und Gelände rechnerisch fassbar — inklusive der Frage, <strong>wo eine Gerade eine Ebene durchstösst</strong>. Diese Seite baut die Werkzeuge aus 4.3a–c konsequent eine Dimension weiter.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen — Ergänzung TALS (über den RLP 2030 hinaus)</div>
+  <ul>
+    <li>die Parametergleichung einer Ebene aus einem Punkt und zwei Richtungen oder aus drei Punkten aufstellen</li>
+    <li>mit der Punktprobe prüfen, ob ein Punkt in einer Ebene liegt (lineares Gleichungssystem)</li>
+    <li>den Durchstosspunkt einer Geraden durch eine Ebene berechnen und Sonderfälle (parallel, in der Ebene) erkennen</li>
+    <li>die gegenseitige Lage von Gerade und Ebene sowie von zwei Ebenen beschreiben</li>
+    <li>ebene Flächen aus Technik und Architektur (Dächer, Rampen) vektoriell modellieren</li>
+  </ul>
+  <p class="rlp-hinweis">Dieses Teilgebiet ist eine <strong>Ergänzung des TALS-Lehrmittels</strong> und kein RLP-2030-Teilgebiet: Der RLP 4.3 endet bei den Geraden. Wer Gebäudegeometrie, technische Flächen oder später Hochschul-Mathematik vor sich hat, findet hier den natürlichen nächsten Schritt — mit denselben Werkzeugen wie in <a href="s4-3a-vektorbegriff-komponenten.html">4.3a</a>–<a href="s4-3c-geraden.html">4.3c</a>, nur eine Dimension reicher.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Parametergleichung \(\vec{r} = \vec{r}_A + s\,\vec{u} + t\,\vec{v}\) einer Ebene aufstellen — aus Punkt und zwei Richtungen oder aus drei Punkten.</li>
+      <li>Ich weiss, warum die beiden Richtungsvektoren nicht kollinear sein dürfen.</li>
+      <li>Ich kann mit der Punktprobe (drei Gleichungen, zwei Unbekannte) prüfen, ob ein Punkt in der Ebene liegt.</li>
+      <li>Ich kann den Durchstosspunkt einer Geraden durch eine Ebene über ein Gleichungssystem berechnen.</li>
+      <li>Ich kann die Lagen Gerade–Ebene (schneidend, parallel, enthalten) und Ebene–Ebene (schneidend, parallel, identisch) unterscheiden.</li>
+      <li>Ich kann geneigte Flächen (Dächer, Rampen) als Ebenen modellieren und Höhen an beliebigen Stellen berechnen.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — das Pultdach</h2>
+
+<p>Ein Pultdach beginnt an der Vorderkante auf \(4\) m Höhe und steigt nach hinten an. Zwei Vektoren spannen die Dachfläche auf: \(\vec{u} = \begin{pmatrix} 6 \\ 0 \\ 0 \end{pmatrix}\) der Vorderkante entlang und \(\vec{v} = \begin{pmatrix} 0 \\ 5 \\ 2 \end{pmatrix}\) die Schräge hinauf. Jeder Punkt des Dachs ist erreichbar als</p>
+
+\[ \vec{r} = \begin{pmatrix} 0 \\ 0 \\ 4 \end{pmatrix} + s \begin{pmatrix} 6 \\ 0 \\ 0 \end{pmatrix} + t \begin{pmatrix} 0 \\ 5 \\ 2 \end{pmatrix}, \qquad 0 \leq s, t \leq 1 \]
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🏠 Dachfläche — zwei Parameter, ein Punkt</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Bewege \(s\) bei festem \(t\): Der Punkt läuft der Dachbreite entlang, die Höhe bleibt. Bewege dann \(t\): Jetzt klettert der Punkt die Schräge hoch. Zwei Regler — zwei Freiheitsgrade.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Bewege s bei festem t: Der Punkt läuft der Dachbreite entlang, die Höhe bleibt. Bewege dann t: Jetzt klettert der Punkt die Schräge hoch. Zwei Regler — zwei Freiheitsgrade.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Eine Gerade braucht <strong>einen</strong> Parameter, eine Fläche <strong>zwei</strong> — darum zwei Richtungsvektoren. Die Höhe hängt hier nur von \(t\) ab: \(z = 4 + 2t\); bei \(t = 0.5\) also \(5\) m, unabhängig von \(s\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Eine Gerade braucht einen Parameter, eine Fläche zwei — darum zwei Richtungsvektoren. Die Höhe hängt hier nur von t ab; bei t gleich null Komma fünf also fünf Meter, unabhängig von s.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Grundriss-Ansicht von oben · Höhe farbcodiert im Wert · Dachpunkt violett</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>quer <span class="var">\(s\)</span></label><input type="range" id="da-s" min="0" max="1" step="0.05" value="0.5"><span class="sl-val" id="da-sv">0.50</span></div>
+      <div class="sl-grp akz-orange"><label>hinauf <span class="var">\(t\)</span></label><input type="range" id="da-t" min="0" max="1" step="0.05" value="0.5"><span class="sl-val" id="da-tv">0.50</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Dachpunkt</div>
+      <div class="fl-eq" id="da-eq">r = (3.0 | 2.5 | 5.0) — Höhe 5.0 m</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="da-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Schritt von der Geraden zur Ebene ist genau <strong>ein zusätzlicher Richtungsvektor</strong>:</p>
+  <ul style="margin-top:6px">
+    <li>Gerade: \(\vec{r}_A + t\,\vec{u}\) — ein Parameter, eine Linie.</li>
+    <li>Ebene: \(\vec{r}_A + s\,\vec{u} + t\,\vec{v}\) — zwei Parameter, eine Fläche.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie viele Parameter braucht die Parametergleichung einer Ebene?</p><ul class="mc-optionen"><li data-opt="A">einen</li><li data-opt="B">zwei</li><li data-opt="C">drei</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Eine Fläche hat zwei Freiheitsgrade — je einer pro Richtungsvektor.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Ebene wird von zwei nicht kollinearen <span class="mc-luecke"></span> aufgespannt.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Richtungsvektoren (Spannvektoren).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne den Dachpunkt für \(s = 1\), \(t = 1\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((0+6 \mid 0+5 \mid 4+2) = (6 \mid 5 \mid 6)\) — die hintere Dachecke.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum dürfen die beiden Spannvektoren nicht kollinear sein?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Wären sie Vielfache voneinander, zeigten beide «Regler» in dieselbe Richtung — alle Linearkombinationen blieben auf einer <em>Geraden</em>, es entstünde keine Fläche.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definition — Parametergleichung der Ebene</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Parametergleichung der Ebene</div>
+  <p>Die Ebene \(E\) durch den Punkt \(A\) mit den nicht kollinearen Richtungsvektoren \(\vec{u}\), \(\vec{v}\):</p>
+  \[ E:\ \vec{r} = \vec{r}_A + s \cdot \vec{u} + t \cdot \vec{v}, \qquad s, t \in \mathbb{R} \]
+  <p>Aus <strong>drei Punkten</strong> \(A\), \(B\), \(C\) (nicht auf einer Geraden): \(\vec{u} = \vec{AB}\), \(\vec{v} = \vec{AC}\). Wie bei Geraden sind Stützpunkt und Spannvektoren nicht eindeutig.</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Punktprobe in der Ebene</div>
+  <p>Liegt \(P\) in \(E\)? Der Ansatz \(\vec{r}_P = \vec{r}_A + s\,\vec{u} + t\,\vec{v}\) gibt <strong>drei Gleichungen</strong> für die <strong>zwei</strong> Unbekannten \(s\), \(t\): Zwei Gleichungen bestimmen \(s\) und \(t\), die dritte ist der <strong>Test</strong> — geht sie auf, liegt \(P\) in der Ebene.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Punktprobe</div>
+  <p>\(E:\ \vec{r} = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + s\begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 1 \\ 3 \end{pmatrix}\). Liegt \(P(2 \mid 3 \mid 3)\) in \(E\)?</p>
+  <p><strong>Lösung:</strong> Komponentenweise: \(1 + s = 2 \Rightarrow s = 1\); \(3t = 3 \Rightarrow t = 1\) (dritte Zeile). Test in der zweiten: \(2s + t = 2 + 1 = 3\) ✓ — \(P\) liegt in \(E\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie stellt man die Ebene durch drei Punkte \(A\), \(B\), \(C\) auf?</p><ul class="mc-optionen"><li data-opt="A">\(\vec{r}_A + s\,\vec{AB} + t\,\vec{AC}\)</li><li data-opt="B">\(\vec{r}_A + s\,\vec{AB}\)</li><li data-opt="C">\(\vec{r}_A + \vec{r}_B + \vec{r}_C\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Stützpunkt \(A\), Spannvektoren zu den beiden anderen Punkten.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei der Punktprobe bestimmen zwei Gleichungen \(s\) und \(t\) — die dritte ist der <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Test (die Kontrollgleichung).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne den Ebenenpunkt von \(E\) (Beispiel 1) für \(s = 2\), \(t = 1\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((1+2 \mid 4+1 \mid 3) = (3 \mid 5 \mid 3)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Drei Punkte liegen auf einer Geraden. Warum taugen sie nicht für eine Ebenengleichung?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Dann sind \(\vec{AB}\) und \(\vec{AC}\) kollinear — die «Spannvektoren» spannen nur die Gerade auf. Durch eine Gerade gehen unendlich viele Ebenen; drei Punkte legen nur dann genau eine fest, wenn sie ein echtes Dreieck bilden.</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Gerade trifft Ebene — der Durchstosspunkt</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Lage von Gerade und Ebene</div>
+  <p>Ansatz: Geradengleichung in die Ebenengleichung <strong>einsetzen bzw. gleichsetzen</strong> — drei Gleichungen für die drei Unbekannten \(r\) (Geraden-Parameter), \(s\), \(t\):</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Lösung des Systems</th><th>Lage</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">genau eine Lösung</td><td style="text-align:left;font-family:var(--sans)"><strong>Durchstosspunkt</strong> — die Gerade schneidet die Ebene</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">keine Lösung</td><td style="text-align:left;font-family:var(--sans)">Gerade <strong>echt parallel</strong> zur Ebene</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">unendlich viele Lösungen</td><td style="text-align:left;font-family:var(--sans)">Gerade <strong>liegt in</strong> der Ebene</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Durchstosspunkt berechnen</div>
+  <p>\(E:\ \vec{r} = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + s\begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 1 \\ 3 \end{pmatrix}\) und \(g:\ \vec{r} = \begin{pmatrix} 0 \\ 5 \\ 3 \end{pmatrix} + r\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\).</p>
+  <p><strong>Lösung:</strong> Gleichsetzen, komponentenweise:</p>
+  \[ 1 + s = r, \qquad 2s + t = 5, \qquad 3t = 3 \]
+  <p>Von hinten aufrollen: \(t = 1\), dann \(2s = 4 \Rightarrow s = 2\), dann \(r = 3\). Durchstosspunkt: \(\vec{r}_g(3) = (3 \mid 5 \mid 3)\) — Kontrolle über die Ebene: \(s = 2\), \(t = 1\) liefert denselben Punkt ✓</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Lage zweier Ebenen</div>
+  <p>Zwei Ebenen im Raum sind <strong>identisch</strong>, <strong>echt parallel</strong> oder sie schneiden sich in einer <strong>Geraden</strong> (wie zwei Buchseiten im Rücken). Parallel-Test: Beide Spannvektoren der einen Ebene lassen sich aus denen der anderen kombinieren; die Punktprobe entscheidet dann zwischen parallel und identisch.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Durchstosspunkt</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Das Gleichungssystem Gerade–Ebene hat keine Lösung. Was heisst das?</p><ul class="mc-optionen"><li data-opt="A">Die Gerade liegt in der Ebene.</li><li data-opt="B">Die Gerade ist echt parallel zur Ebene.</li><li data-opt="C">Rechenfehler — das kann nicht sein.</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Kein gemeinsamer Punkt, aber gleiche «Flugrichtung» — echt parallel.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Zwei nicht parallele Ebenen schneiden sich in einer <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Geraden (Schnittgeraden).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie viele Unbekannte hat das Gleichungssystem beim Schnitt Gerade–Ebene?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Drei: der Geraden-Parameter \(r\) und die Ebenen-Parameter \(s\), \(t\) — bei drei Gleichungen (eine pro Komponente).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Eine Bohrung verläuft entlang einer Geraden, das Werkstück endet an einer ebenen Fläche. Welche Rechnung liefert den Austrittspunkt?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Genau die Durchstosspunkt-Rechnung: Bohrgerade mit der Flächen-Ebene gleichsetzen, das \(3 \times 3\)-System lösen — der Geradenparameter sagt zusätzlich, <em>wie tief</em> im Material der Austritt liegt.</div></details></div>
+</details>
+
+
+<!-- ══ 5. LAGEN ══ -->
+<h2 id="typen">Die Lagen im Überblick</h2>
+
+<table class="ftb-tabelle" style="margin-top:10px">
+  <thead><tr><th>Paarung</th><th>mögliche Lagen</th><th>Entscheidung</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Punkt – Ebene</td><td style="text-align:left;font-family:var(--sans)">in der Ebene / ausserhalb</td><td style="text-align:left;font-family:var(--sans)">Punktprobe (2 bestimmen, 1 testet)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Gerade – Ebene</td><td style="text-align:left;font-family:var(--sans)">schneidend · echt parallel · enthalten</td><td style="text-align:left;font-family:var(--sans)">Gleichsetzen: 1 / 0 / ∞ Lösungen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Ebene – Ebene</td><td style="text-align:left;font-family:var(--sans)">Schnittgerade · echt parallel · identisch</td><td style="text-align:left;font-family:var(--sans)">Spannvektoren vergleichen + Punktprobe</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-fehler" style="margin-top:10px">
+  <div class="block-titel">⚠ Häufiger Fehler — Parameter über Gleichungen hinweg mischen</div>
+  <p>Beim Gleichsetzen von Gerade und Ebene leben <strong>drei</strong> Parameter (\(r\), \(s\), \(t\)) — jeder gehört zu seinem Objekt. Wer der Geraden und der Ebene denselben Buchstaben gibt, koppelt sie fälschlich. Ausserdem gilt wie immer: Das gefundene \(r\) in die <strong>Geraden</strong>gleichung einsetzen und mit \(s\), \(t\) in der <strong>Ebenen</strong>gleichung gegenprüfen.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Lagen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Lage können zwei Ebenen <em>nicht</em> haben?</p><ul class="mc-optionen"><li data-opt="A">genau einen gemeinsamen Punkt</li><li data-opt="B">eine gemeinsame Gerade</li><li data-opt="C">gar keinen gemeinsamen Punkt</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Schneiden sich zwei Ebenen überhaupt, dann gleich in einer ganzen Geraden.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Hat das System Gerade–Ebene unendlich viele Lösungen, so <span class="mc-luecke"></span> die Gerade in der Ebene.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">liegt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Die \(x\)-\(y\)-Ebene hat die Gleichung \(\vec{r} = s\,\vec{e}_1 + t\,\vec{e}_2\). Liegt \(P(3 \mid 7 \mid 0)\) darin?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ja: \(s = 3\), \(t = 7\), dritte Komponente \(0 = 0\) ✓ — alle Punkte mit \(z = 0\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum genügt es für «Gerade parallel zur Ebene» nicht, dass die Gerade keinen Ebenenpunkt trifft — welche zweite Sichtweise gibt es?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Gleichwertig ist der Richtungs-Blick: Die Gerade ist parallel, wenn ihr Richtungsvektor als Linearkombination der Spannvektoren darstellbar ist, der Stützpunkt aber ausserhalb liegt. Beide Sichtweisen führen zum selben Ergebnis — «keine Lösung» im System.</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Ebenen in der Praxis — Flächen modellieren</h2>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Rampenhöhe an beliebiger Stelle</div>
+  <p>Das Pultdach vom Einstieg: \(E:\ \vec{r} = \begin{pmatrix} 0 \\ 0 \\ 4 \end{pmatrix} + s\begin{pmatrix} 6 \\ 0 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 5 \\ 2 \end{pmatrix}\). Wie hoch ist das Dach über dem Grundriss-Punkt \((3 \mid 2.5)\)?</p>
+  <p><strong>Lösung:</strong> \(x = 6s = 3 \Rightarrow s = 0.5\); \(y = 5t = 2.5 \Rightarrow t = 0.5\). Höhe:</p>
+  \[ z = 4 + 2t = 4 + 1 = 5\ \text{m} \]
+  <p>Bemerkenswert: \(z\) hängt nur von \(t\) ab — alle Punkte gleicher «Tiefe» \(y\) liegen gleich hoch (Pultdach-Prinzip).</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Ausblick — die Normalenform</div>
+  <p>In der Hochschulmathematik beschreibt man Ebenen oft kompakter über einen <strong>Normalenvektor</strong> \(\vec{n}\) senkrecht zur Ebene: \(\vec{n} \cdot (\vec{r} - \vec{r}_A) = 0\). Das Skalarprodukt aus <a class="quer" href="s4-3b-skalarprodukt.html">↩ 4.3b</a> liefert das Werkzeug dazu — Abstände und Winkel werden damit noch schneller. Hier bleiben wir bei der Parameterform: Sie kommt ohne neue Theorie aus.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Modellieren</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Ein Grundriss-Punkt \((x \mid y)\) ist gegeben. Wie findet man die Dachhöhe darüber?</p><ul class="mc-optionen"><li data-opt="A">\(s\), \(t\) aus \(x\)- und \(y\)-Gleichung bestimmen, in die \(z\)-Gleichung einsetzen</li><li data-opt="B">den Betrag des Stützvektors berechnen</li><li data-opt="C">die Spannvektoren addieren</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Zwei Gleichungen legen die Parameter fest, die dritte liefert die Höhe.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Beim Dach mit \(\vec{v} = \begin{pmatrix} 0 \\ 5 \\ 2 \end{pmatrix}\) steigt die Fläche pro \(5\) m Tiefe um <span class="mc-luecke"></span> m.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(2\) — das Verhältnis \(2 : 5\) ist die Dachneigung.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie hoch ist das Dach über \((1 \mid 5)\)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(t = 1\): \(z = 4 + 2 = 6\) m — die Hinterkante (unabhängig von \(x\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Regensensor sitzt \(7\) m über dem Punkt \((3 \mid 2.5)\). Liegt er über oder unter dem Dach — und wie weit?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Dachhöhe dort ist \(5\) m (Beispiel 3): Der Sensor schwebt \(7 - 5 = 2\) m <strong>über</strong> der Dachfläche — die vertikale Differenz genügt hier, weil senkrecht gemessen wird.</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Gleichung der Ebene zuordnen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Beschreibung — welche Parametergleichung passt?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Beschreibung</div>
+    <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Gleichung gehört dazu?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Ebenengleichungen aufstellen</span></div>
+  <p>Stelle je eine Parametergleichung auf:</p>
+  <ol class="aufg-liste">
+    <li>Ebene durch \(A(1 \mid 0 \mid 2)\) mit den Spannvektoren \(\begin{pmatrix} 2 \\ 1 \\ 0 \end{pmatrix}\) und \(\begin{pmatrix} 0 \\ 3 \\ 1 \end{pmatrix}\)</li>
+    <li>Ebene durch die drei Punkte \(A(0 \mid 0 \mid 1)\), \(B(2 \mid 0 \mid 1)\), \(C(0 \mid 3 \mid 4)\)</li>
+    <li>die \(x\)-\(z\)-Ebene des Koordinatensystems</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\vec{r} = \begin{pmatrix} 1 \\ 0 \\ 2 \end{pmatrix} + s\begin{pmatrix} 2 \\ 1 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 3 \\ 1 \end{pmatrix}\).</li>
+        <li>\(\vec{u} = \vec{AB} = \begin{pmatrix} 2 \\ 0 \\ 0 \end{pmatrix}\), \(\vec{v} = \vec{AC} = \begin{pmatrix} 0 \\ 3 \\ 3 \end{pmatrix}\): \(\vec{r} = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} + s\begin{pmatrix} 2 \\ 0 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 3 \\ 3 \end{pmatrix}\).</li>
+        <li>\(\vec{r} = s\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}\) — alle Punkte mit \(y = 0\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Ebenen</span></div>
+  <p>Alle Teilaufgaben beziehen sich auf \(E:\ \vec{r} = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + s\begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 1 \\ 3 \end{pmatrix}\).</p>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Ebenenpunkt berechnen</div>
+    <p>Berechne den Punkt für \(s = 2\), \(t = 1\).</p>
+    <div class="eingabe-row"><label>x =&nbsp;</label><input type="text" id="a3a1" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3a1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>y =&nbsp;</label><input type="text" id="a3a2" placeholder="y"><button class="btn-pruef" onclick="chkNum('a3a2', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ (1 + 2 \mid 4 + 1 \mid 3) = (3 \mid 5 \mid 3) \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Punktprobe</div>
+    <p>Liegt \(P(2 \mid 3 \mid 3)\) in \(E\)? Bestimme \(s\) und \(t\) (oder \(-99\), falls \(P \notin E\)).</p>
+    <div class="eingabe-row"><label>s =&nbsp;</label><input type="text" id="a3b1" placeholder="s"><button class="btn-pruef" onclick="chkNum('a3b1', 1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>t =&nbsp;</label><input type="text" id="a3b2" placeholder="t"><button class="btn-pruef" onclick="chkNum('a3b2', 1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>\(1 + s = 2 \Rightarrow s = 1\); \(3t = 3 \Rightarrow t = 1\); Test: \(2 \cdot 1 + 1 = 3\) ✓ — \(P \in E\).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 c) Durchstosspunkt</div>
+    <p>\(g:\ \vec{r} = \begin{pmatrix} 0 \\ 5 \\ 3 \end{pmatrix} + r\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\). Berechne den Durchstosspunkt von \(g\) durch \(E\).</p>
+    <div class="eingabe-row"><label>r =&nbsp;</label><input type="text" id="a3c1" placeholder="r"><button class="btn-pruef" onclick="chkNum('a3c1', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x des Punktes =&nbsp;</label><input type="text" id="a3c2" placeholder="x"><button class="btn-pruef" onclick="chkNum('a3c2', 3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Gleichsetzen: \(3t = 3 \Rightarrow t = 1\); \(2s + t = 5 \Rightarrow s = 2\); \(1 + s = r \Rightarrow r = 3\). Durchstosspunkt \((3 \mid 5 \mid 3)\).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Dachhöhen</span></div>
+  <p>Das Pultdach: \(E:\ \vec{r} = \begin{pmatrix} 0 \\ 0 \\ 4 \end{pmatrix} + s\begin{pmatrix} 6 \\ 0 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 5 \\ 2 \end{pmatrix}\) mit \(0 \leq s, t \leq 1\).</p>
+  <ol class="aufg-liste">
+    <li>Wie hoch liegt das Dach über dem Grundriss-Punkt \((3 \mid 2.5)\)?</li>
+    <li>Und über \((1 \mid 5)\) (Hinterkante)?</li>
+  </ol>
+  <div class="eingabe-row"><label>Höhe über (3|2.5) =&nbsp;</label><input type="text" id="a4-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a4-1', 5, 0.01, 'm')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Höhe über (1|5) =&nbsp;</label><input type="text" id="a4-2" placeholder="m"><button class="btn-pruef" onclick="chkNum('a4-2', 6, 0.01, 'm')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(s = 0.5\), \(t = 0.5\): \(z = 4 + 2 \cdot 0.5 = 5\) m.</li>
+        <li>\(t = 1\): \(z = 6\) m — unabhängig von \(s\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Kaminrohr durchs Dach</span></div>
+  <p>Ein senkrechtes Kaminrohr steht über dem Grundriss-Punkt \((2 \mid 3)\): \(k:\ \vec{r} = \begin{pmatrix} 2 \\ 3 \\ 0 \end{pmatrix} + r\begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}\). In welcher Höhe durchstösst es das Pultdach aus A4?</p>
+  <div class="eingabe-row"><label>Höhe =&nbsp;</label><input type="text" id="a5-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a5-1', 5.2, 0.01, 'm')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p>\(x\): \(6s = 2 \Rightarrow s = \tfrac{1}{3}\); \(y\): \(5t = 3 \Rightarrow t = 0.6\); \(z\): \(r = 4 + 2 \cdot 0.6 = 5.2\) m — das Rohr tritt auf \(5.2\) m Höhe durch die Dachfläche.</p>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Parallel oder enthalten?</span></div>
+  <p>Gegeben ist die Gerade \(h:\ \vec{r} = \begin{pmatrix} 0 \\ 0 \\ 9 \end{pmatrix} + r\begin{pmatrix} 6 \\ 0 \\ 0 \end{pmatrix}\) und das Pultdach \(E\) aus A4 (als unbegrenzte Ebene).</p>
+  <ol class="aufg-liste">
+    <li>Zeige: Der Richtungsvektor von \(h\) ist ein Spannvektor von \(E\) — was heisst das für die Lage?</li>
+    <li>Prüfe mit dem Stützpunkt \((0 \mid 0 \mid 9)\), ob \(h\) in \(E\) liegt oder echt parallel ist. Welche Höhe hätte die Ebene bei \((0 \mid 0)\)?</li>
+  </ol>
+  <div class="eingabe-row"><label>Ebenen-Höhe bei (0|0) =&nbsp;</label><input type="text" id="a6-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a6-1', 4, 0.01, 'm')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\begin{pmatrix} 6 \\ 0 \\ 0 \end{pmatrix}\) ist genau der erste Spannvektor — \(h\) verläuft parallel zur Ebene (oder in ihr).</li>
+        <li>Über \((0 \mid 0)\) liegt die Ebene auf Höhe \(4\) m (\(s = t = 0\)), der Stützpunkt von \(h\) aber auf \(9\) m: \(h\) ist <strong>echt parallel</strong> — sie schwebt \(5\) m über der Vorderkante.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Drohne über dem Dach <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Eine Drohne fliegt auf \(g:\ \vec{r} = \begin{pmatrix} 0 \\ 0 \\ 7 \end{pmatrix} + r\begin{pmatrix} 2 \\ 2 \\ -1 \end{pmatrix}\) (Meter; \(r\) in Sekunden) schräg absteigend über das Pultdach aus A4.</p>
+  <ol class="aufg-liste">
+    <li>Stelle das Gleichungssystem für den Durchstosspunkt durch die Dach-Ebene auf.</li>
+    <li>Löse es und gib an, nach wie vielen Sekunden die Drohne die Dachfläche erreichen würde.</li>
+    <li>Prüfe, ob der Treffpunkt noch auf dem realen Dach liegt (\(0 \leq s, t \leq 1\)).</li>
+  </ol>
+  <div class="eingabe-row"><label>r ≈&nbsp;</label><input type="text" id="a7-1" placeholder="s"><button class="btn-pruef" onclick="chkNum('a7-1', 1.67, 0.01, 's')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(6s = 2r\); \(5t = 2r\); \(4 + 2t = 7 - r\).</li>
+        <li>Aus den ersten beiden: \(s = \tfrac{r}{3}\), \(t = \tfrac{2r}{5}\). In die dritte: \(4 + \tfrac{4r}{5} = 7 - r \Rightarrow \tfrac{9r}{5} = 3 \Rightarrow r = \tfrac{5}{3} \approx 1.67\) s. Kontrolle: Gerade \(z = 7 - \tfrac{5}{3} = \tfrac{16}{3}\), Ebene \(z = 4 + 2 \cdot \tfrac{2}{3} = \tfrac{16}{3}\) ✓</li>
+        <li>\(s = \tfrac{5}{9} \approx 0.56\), \(t = \tfrac{2}{3} \approx 0.67\) — beide in \([0;\ 1]\): Die Drohne träfe das reale Dach. Zeit auszuweichen!</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Die Ebene ist die Gerade mit einem <strong>zweiten Parameter</strong>: \(\vec{r} = \vec{r}_A + s\,\vec{u} + t\,\vec{v}\) mit nicht kollinearen Spannvektoren. <strong>Punktprobe:</strong> zwei Gleichungen bestimmen \(s\), \(t\) — die dritte testet. <strong>Durchstosspunkt</strong> Gerade–Ebene: gleichsetzen, \(3 \times 3\)-System lösen (eine Lösung: Schnitt; keine: parallel; unendlich viele: enthalten). Zwei Ebenen schneiden sich — wenn überhaupt — in einer <strong>Geraden</strong>. Und in der Praxis: Dächer und Rampen sind Ebenen; Höhen findet man, indem die Grundriss-Koordinaten die Parameter festlegen.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Aufgabe</th><th>Werkzeug</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Ebene aufstellen</td><td style="text-align:left;font-family:var(--sans)">\(\vec{r}_A + s\,\vec{u} + t\,\vec{v}\); aus 3 Punkten: \(\vec{u} = \vec{AB}\), \(\vec{v} = \vec{AC}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Punktprobe</td><td style="text-align:left;font-family:var(--sans)">2 Gleichungen bestimmen, 1 testet</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Durchstosspunkt</td><td style="text-align:left;font-family:var(--sans)">Gerade = Ebene setzen, System in \(r\), \(s\), \(t\) lösen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Lage Gerade–Ebene</td><td style="text-align:left;font-family:var(--sans)">1 / 0 / ∞ Lösungen → schneidend / parallel / enthalten</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Lage Ebene–Ebene</td><td style="text-align:left;font-family:var(--sans)">Schnittgerade · echt parallel · identisch</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s4-3d-ebenen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3d-ebenen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3d-ebenen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3d-ebenen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-3d-ebenen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lUv5XsdfGTvuMZG0rX9tnR3" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über VEKTOREN — Playlist</div><div class="lk-s">MathemaTrick · 41 Videos · inkl. Ebenengleichungen</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/30687/aufgaben-zur-lagebeziehung-von-geraden-und-ebenen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Lagebeziehung Gerade und Ebene</div><div class="lk-s">Durchstosspunkte und Sonderfälle · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/30688/aufgaben-zur-lagebeziehung-zweier-ebenen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Lagebeziehung zweier Ebenen</div><div class="lk-s">Schnittgerade, parallel, identisch · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 4.3d Ebenen (Ergänzung)</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s4-3d',
+  kapitelNr:'4.3d', kapitelTitel:'Ebenen',
+  prev:{nr:'4.3c',titel:'Geraden',url:'s4-3c-geraden.html'},
+  next:null
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+/* ══ EINSTIEG: Dachfläche (Grundriss von oben) ══ */
+function updateDA(){
+  const s = parseFloat(document.getElementById('da-s').value);
+  const t = parseFloat(document.getElementById('da-t').value);
+  document.getElementById('da-sv').textContent = s.toFixed(2);
+  document.getElementById('da-tv').textContent = t.toFixed(2);
+  const x = 6 * s, y = 5 * t, z = 4 + 2 * t;
+  document.getElementById('da-eq').innerHTML =
+    `r = (${x.toFixed(1)} | ${y.toFixed(1)} | ${z.toFixed(1)}) — Höhe ${z.toFixed(1)} m`;
+  const {ctx, W, H} = initCanvas('da-canvas', 240, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // Grundriss: x nach rechts (0..6), y nach oben (0..5)
+  const padL = 50, padB = 34, padT = 16, padR = 20;
+  const cx = v => padL + v / 6 * (W - padL - padR);
+  const cy = v => H - padB - v / 5 * (H - padB - padT);
+  // Dachfläche als Farbverlauf (heller = höher)
+  const grad = ctx.createLinearGradient(0, cy(0), 0, cy(5));
+  grad.addColorStop(0, '#dbe7f3'); grad.addColorStop(1, '#8fb3d9');
+  ctx.fillStyle = grad;
+  ctx.fillRect(cx(0), cy(5), cx(6) - cx(0), cy(0) - cy(5));
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(cx(0), cy(5), cx(6) - cx(0), cy(0) - cy(5));
+  // Beschriftung Kanten
+  ctx.fillStyle = '#374151'; ctx.font = '12px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('Vorderkante 4 m', (cx(0) + cx(6)) / 2, cy(0) + 16);
+  ctx.fillText('Hinterkante 6 m', (cx(0) + cx(6)) / 2, cy(5) - 6);
+  ctx.save();
+  ctx.translate(cx(0) - 28, (cy(0) + cy(5)) / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Tiefe y (0..5 m)', 0, 0);
+  ctx.restore();
+  // Punkt
+  ctx.fillStyle = '#5b2d8e';
+  ctx.beginPath(); ctx.arc(cx(x), cy(y), 8, 0, 2 * Math.PI); ctx.fill();
+  ctx.fillStyle = '#5b2d8e'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillText(`${z.toFixed(1)} m`, cx(x) + 11, cy(y) - 8);
+}
+['da-s', 'da-t'].forEach(id => document.getElementById(id).addEventListener('input', updateDA));
+
+/* ══ A1: Beschreibung → Gleichung ══ */
+const a1G = [
+  {label:'Beschreibung 1', desc:'Ebene durch den Ursprung, aufgespannt von e₁ und e₂ (die x-y-Ebene)',
+   sol:'r = s·(1|0|0) + t·(0|1|0)'},
+  {label:'Beschreibung 2', desc:'Ebene durch A(0|0|3), parallel zur x-y-Ebene («Decke auf 3 m»)',
+   sol:'r = (0|0|3) + s·(1|0|0) + t·(0|1|0)'},
+  {label:'Beschreibung 3', desc:'Ebene durch den Ursprung, enthält die z-Achse und die x-Achse',
+   sol:'r = s·(1|0|0) + t·(0|0|1)'},
+  {label:'Beschreibung 4', desc:'schräge Rampe: startet am Ursprung, steigt pro Einheit in y-Richtung um 1 in z',
+   sol:'r = s·(1|0|0) + t·(0|1|1)'},
+];
+const a1Opts = ['r = s·(1|0|0) + t·(0|1|0)', 'r = (0|0|3) + s·(1|0|0) + t·(0|1|0)', 'r = s·(1|0|0) + t·(0|0|1)', 'r = s·(1|0|0) + t·(0|1|1)'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o.replace(/'/g, '')}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.sol}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Prüfe Stützpunkt («wo verankert?») und Spannrichtungen («welche Bewegungen bleiben in der Fläche?»).';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. System von hinten aufrollen — oft legt eine Komponente einen Parameter direkt fest.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateDA();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  updateDA();
+});
+</script>
+</body>
+</html>

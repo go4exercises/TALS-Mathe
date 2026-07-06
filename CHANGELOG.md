@@ -4,6 +4,66 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [77] — 2026-07-06 · s4-3 Vektorgeometrie: Vollausbau als Vierer-Sub-Split (a/b/c/d)
+
+Teilgebiet 4.3 (Zwei- und dreidimensionale Vektorgeometrie) aus dem Stub zum
+vollständigen Vierer-Sub-Split ausgebaut — Quellen: FTB Kapitel 16–19 gemäss den
+sieben RLP-Kompetenzen, Kapitel 20 (Ebenen) auf Wunsch des Auftraggebers als
+deklarierte **Ergänzung TALS** (Muster 3.6). Alle Zahlenwerte in Python nachgerechnet.
+
+- **`schwerpunkt/s4-3a-vektorbegriff-komponenten.html`** *(neu, Kap. 16+17 · RLP 1–5
+  ohne Skalarprodukt)* — Einstieg Flussüberquerung (Slider-Widget für Boots- und
+  Strömungsgeschwindigkeit, 3-4-5-Dreieck); Definitionen Vektor/Betrag/Gegenvektor/
+  Kollinearität; Additions-Labor (Pfeilkette mit vier Slidern); Komponenten,
+  Ortsvektor, «Spitze minus Fuss»; Polarform inkl. Quadranten-Fehlerblock;
+  Einheitsvektor und Linearkombination; A1 Komponenten-Ablese-Quiz (Canvas),
+  A2 Zeichenaufgabe mit Canvas-Lösung, A3 a–e chkNum (Verbindungsvektor, 3D-Betrag,
+  polar↔kartesisch, Zerlegung), A4 Kräfte 60/25 N → 65 N, A5 Fluss exakt,
+  A6 Mittelpunkt/Schwerpunkt, A7 Kollinearität (Vertiefung).
+- **`schwerpunkt/s4-3b-skalarprodukt.html`** *(neu, Kap. 18 · RLP 5+7)* — Einstieg
+  Arbeit am Schlitten (Winkel-Slider mit Projektions-«Schatten»); geometrische und
+  Komponenten-Form, Winkelformel; Vorzeichen-Tabelle spitz/recht/stumpf mit
+  Winkel-Labor (drehbarer Vektor, Live-Skalarprodukt); Rechenregeln (kein
+  Assoziativgesetz), Normalprojektion; Winkel in Figuren (Pfeile von der Ecke weg,
+  Nebenwinkel-Fehlerblock); A1 Vorzeichen-Quiz, A3 a–e (Skalarprodukt, 45°-Winkel,
+  Orthogonalität erzwingen, 3D, Projektion), A4 Arbeit 786.4 J, A5 Innenwinkel 57.53°,
+  A6 Rechtwinkligkeit und Fläche, A7 Würfeldiagonale 54.74° (Vertiefung).
+- **`schwerpunkt/s4-3c-geraden.html`** *(neu, Kap. 19 · RLP 6+7)* — Einstieg
+  Drohnenflug (Parameter-Slider auf der Geraden, negatives \(t\)); Parametergleichung,
+  Punktprobe, Verbindung zur Funktionsgleichung; Lage-Fahrplan-Tabelle (identisch/
+  parallel/schneidend/windschief) mit Beispielen inkl. Widerspruch in der dritten
+  Komponente; Schnittwinkel (Betrag → spitzer Winkel); Lot-Rezept für den Abstand
+  Punkt–Gerade; Bewegungsmodelle (Kollision ≠ Bahnschnitt als Fehlerblock);
+  A1 Lage-Erkennungs-Quiz (Canvas-Geradenpaare), A3 a–e (Punkt, Punktprobe,
+  Schnittpunkt (2.5|2.5), Winkel 63.43°, Abstand 2.68), A4 Drohne 3D, A5 Einholen,
+  A6 windschief, A7 Kollisionskurs (Vertiefung).
+- **`schwerpunkt/s4-3d-ebenen.html`** *(neu, Kap. 20 · **Ergänzung TALS ausserhalb
+  RLP**, deklariert im pt-untertitel und in der Kompetenzen-Box nach Muster 3.6)* —
+  Einstieg Pultdach (zwei Parameter-Slider, Grundriss-Canvas mit Höhen-Gradient);
+  Parametergleichung der Ebene, Punktprobe (zwei bestimmen, eine testet);
+  Durchstosspunkt Gerade–Ebene (3×3-System, 1/0/∞-Tabelle); Lagen-Übersicht
+  Punkt/Gerade/Ebene–Ebene; Flächen-Modellierung (Dachhöhen, Neigung) und Ausblick
+  Normalenform; A1 Beschreibung→Gleichung-Quiz, A3 a–c (Ebenenpunkt, Punktprobe,
+  Durchstosspunkt), A4 Dachhöhen, A5 Kaminrohr 5.2 m, A6 parallel vs. enthalten,
+  A7 Drohne über dem Dach r = 5/3 s (Vertiefung).
+- **Infrastruktur:** Stub `s4-3-vektorgeometrie.html` entfernt; `nav.js` (SITE und
+  GROUPS Lerngebiet 4 → s4-3a–d); `index.html` (ksub-Block 4.3 mit vier fertig-Karten,
+  d mit «(Ergänzung)»-Vermerk; st-hint 41 → 44 Themenseiten); Kette s4-2 → 4.3a → …
+  → 4.3d (next:null, Ende des Schwerpunkt-Rundgangs); README-Naming-Beispiel auf
+  bestehende Datei umgestellt.
+- **Zusatzmaterial:** `scripts/build_print_s3.py` um die Blöcke M/N/O/P erweitert
+  (je Handout, Formelauszug, Teste-dich-selbst mit 12 Aufgaben, Aufgabenserie mit
+  6 Anwendungen inkl. Musterlösungen); bestehende Druckseiten blieben byte-identisch.
+  `scripts/build_apkg.py` um vier Decks à 20 Karten ergänzt (s43a/b/c/d), nur die
+  neuen apkg erzeugt.
+- **Ressourcen:** MathemaTrick-Playlist «Alles über VEKTOREN» (owner-verifiziert,
+  41 Videos) auf allen vier Seiten; Aufgaben ausschliesslich über die serlo-Sitemap
+  (31860, 107944/107945, 30683, 24573, 30686, 30687, 30688) — Durchgang ohne neue
+  externe Abrufe. Map §8 um die Zeile s4-3a–d erweitert.
+- Pre-Flight: alle vier Seiten `ALLE CHECKS BESTANDEN`.
+
+---
+
 ## [76] — 2026-07-06 · s3-6 Betragsfunktionen — neue Ergänzungsseite (ausserhalb RLP)
 
 Auf Wunsch des Auftraggebers ergänzt: ein **neues Teilgebiet 3.6**, das nicht Teil des

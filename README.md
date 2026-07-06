@@ -127,7 +127,7 @@ downloads/              ← Materialien pro Teilgebiet
 ```
 
 **Naming-Schema:** `<bereich><lerngebiet>-<teilgebiet>-<kurzname>.html`
-Beispiele: `g3-2-lineare-funktionen.html`, `s4-3-vektorgeometrie.html`
+Beispiele: `g3-2-lineare-funktionen.html`, `s4-3b-skalarprodukt.html`
 
 ---
 

@@ -3443,6 +3443,909 @@ L_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s4-3a  VEKTORBEGRIFF UND KOMPONENTEN
+# ═══════════════════════════════════════════════════════════════════
+
+M_HANDOUT = r'''
+  <h2>1. Vektorbegriff</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Vektor</div>
+    <p>Ein <strong>Vektor</strong> \( \vec{a} \) ist die Klasse aller Pfeile gleicher Länge und
+    Richtung — eine <strong>Verschiebung</strong> ohne festen Ort. Skalare Grössen (Masse, Zeit)
+    brauchen nur eine Zahl; vektorielle (Kraft, Geschwindigkeit) zusätzlich eine Richtung.</p>
+  </div>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Betrag (Norm)</td><td>\( |\vec{a}| \geq 0 \) — die Pfeillänge</td></tr>
+      <tr><td class="li">Nullvektor / Gegenvektor</td><td>\( \vec{0} \) (Länge 0) · \( -\vec{a} \) (umgedreht); \( \vec{a} + (-\vec{a}) = \vec{0} \)</td></tr>
+      <tr><td class="li">kollinear</td><td>\( \vec{b} = s\,\vec{a} \) — parallele Pfeile (gleicher Faktor in allen Komponenten)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Operationen</h2>
+  <p><strong>Addition:</strong> Pfeile aneinanderhängen (oder Parallelogramm) ·
+  <strong>Subtraktion:</strong> Gegenvektor addieren · <strong>skalare Multiplikation:</strong>
+  strecken (\( s < 0 \): umdrehen). Komponentenweise:</p>
+  \[ \binom{a_1}{a_2} \pm \binom{b_1}{b_2} = \binom{a_1 \pm b_1}{a_2 \pm b_2}, \qquad
+     s\binom{a_1}{a_2} = \binom{s a_1}{s a_2} \]
+
+  <h2>3. Komponenten, Ortsvektor, Betrag</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Ortsvektor</td><td>\( \vec{r}_A = \vec{OA} \) — Komponenten = Koordinaten von \(A\)</td></tr>
+      <tr><td class="li">Verbindungsvektor</td><td>\( \vec{AB} = \vec{r}_B - \vec{r}_A \) — «Spitze minus Fuss»</td></tr>
+      <tr><td class="li">Betrag (Ebene / Raum)</td><td>\( |\vec{a}| = \sqrt{a_1^2 + a_2^2} \) bzw. \( \sqrt{a_1^2 + a_2^2 + a_3^2} \)</td></tr>
+      <tr><td class="li">Mittelpunkt / Schwerpunkt</td><td>\( \vec{r}_M = \tfrac{1}{2}(\vec{r}_A + \vec{r}_B) \) · \( \vec{r}_S = \tfrac{1}{3}(\vec{r}_A + \vec{r}_B + \vec{r}_C) \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Polarform (nur Ebene)</h2>
+  <p>polar → kartesisch: \( a_1 = r\cos\varphi \), \( a_2 = r\sin\varphi \) ·
+  kartesisch → polar: \( r = \sqrt{a_1^2 + a_2^2} \), \( \tan\varphi = a_2/a_1 \) —
+  <strong>Quadrant an den Vorzeichen prüfen</strong> (2./3. Quadrant: \( 180° \) addieren).</p>
+
+  <h2>5. Einheitsvektor und Linearkombination</h2>
+  <p><strong>Normieren:</strong> \( \vec{e}_a = \vec{a}/|\vec{a}| \) (Betrag 1, gleiche Richtung).
+  <strong>Linearkombination:</strong> \( \vec{c} = s\,\vec{a} + t\,\vec{b} \) — bei nicht
+  kollinearen \( \vec{a}, \vec{b} \) ist jeder ebene Vektor eindeutig zerlegbar
+  (Gleichungssystem in \(s\), \(t\)).</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Komponentenweise rechnen, Betrag mit Pythagoras, Verbindungsvektor «Spitze minus Fuss»,
+    Normieren durch die Länge teilen — und bei der Polarform immer den Quadranten kontrollieren.</p>
+  </div>
+'''
+
+M_FORMELAUSZUG = r'''
+  <h2>1. Grundformeln</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Verbindungsvektor</td><td>\( \vec{AB} = \vec{r}_B - \vec{r}_A \)</td></tr>
+      <tr><td class="li">Betrag</td><td>\( |\vec{a}| = \sqrt{a_1^2 + a_2^2\ (+\,a_3^2)} \)</td></tr>
+      <tr><td class="li">Einheitsvektor</td><td>\( \vec{e}_a = \dfrac{\vec{a}}{|\vec{a}|} \)</td></tr>
+      <tr><td class="li">Kollinearität</td><td>\( \vec{b} = s\,\vec{a} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Operationen (komponentenweise)</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Addition / Subtraktion</td><td>\( (a_i \pm b_i) \) je Komponente</td></tr>
+      <tr><td class="li">skalare Multiplikation</td><td>\( (s\,a_i) \) je Komponente; \( s < 0 \) dreht die Richtung</td></tr>
+      <tr><td class="li">Linearkombination</td><td>\( \vec{c} = s\,\vec{a} + t\,\vec{b} \) — LGS für \(s\), \(t\)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Polarform (Ebene)</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">polar → kartesisch</td><td>\( a_1 = r\cos\varphi, \quad a_2 = r\sin\varphi \)</td></tr>
+      <tr><td class="li">kartesisch → polar</td><td>\( r = \sqrt{a_1^2+a_2^2}, \quad \tan\varphi = a_2/a_1 \) (Quadrant!)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Punkte aus Vektoren</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Mittelpunkt \(AB\)</td><td>\( \vec{r}_M = \tfrac{1}{2}(\vec{r}_A + \vec{r}_B) \)</td></tr>
+      <tr><td class="li">Schwerpunkt \(ABC\)</td><td>\( \vec{r}_S = \tfrac{1}{3}(\vec{r}_A + \vec{r}_B + \vec{r}_C) \)</td></tr>
+    </tbody>
+  </table>
+'''
+
+M_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Ein Vektor hat <span class="lueck"></span> und <span class="lueck"></span>,<br>
+      aber keinen festen Ort. Der Gegenvektor \( -\vec{a} \) ist gleich lang,<br>
+      aber <span class="lueck"></span> gerichtet.
+    </div>''')
+    + aufg(2, 'Skalar oder Vektor?', 1, r'''    <p>Entscheide: (a) Temperatur &nbsp; (b) Windgeschwindigkeit &nbsp; (c) Masse &nbsp;
+    (d) Kraft</p>
+''' + LINS)
+    + aufg(3, 'Komponenten ablesen', 1, r'''    <p>Ein Pfeil führt von \( A(1 \mid 3) \) nach \( B(4 \mid 1) \). Gib den Vektor
+    \( \vec{AB} \) an.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Operationen</div>\n'
+    + aufg(4, 'Komponentenweise rechnen', 1, r'''    <p>\( \vec{a} = \binom{3}{1} \), \( \vec{b} = \binom{1}{2} \). Berechne
+    \( \vec{a} + \vec{b} \), \( \vec{a} - \vec{b} \) und \( 2\vec{a} \).</p>
+''' + LINS)
+    + aufg(5, 'Beträge', 2, r'''    <p>Berechne \( \left|\binom{3}{4}\right| \) und
+    \( \left|\begin{pmatrix} 2 \\ -1 \\ 2 \end{pmatrix}\right| \).</p>
+''' + LINS)
+    + aufg(6, 'Kollinear?', 2, r'''    <p>Sind \( \binom{2}{3} \) und \( \binom{6}{9} \) kollinear? Und \( \binom{2}{3} \)
+    und \( \binom{6}{8} \)?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Polarform und Einheitsvektor</div>\n'
+    + aufg(7, 'Polar → kartesisch', 2, r'''    <p>\( r = 6 \), \( \varphi = 30° \). Berechne die Komponenten.</p>
+''' + LINS)
+    + aufg(8, 'Kartesisch → polar', 2, r'''    <p>Gib \( \binom{3}{4} \) in Polarform an.</p>
+''' + LINS)
+    + aufg(9, 'Quadranten-Falle', 3, r'''    <p>Bestimme die Polarform von \( \binom{-2}{2} \) — Vorsicht beim Winkel!</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Zerlegung und Punkte</div>\n'
+    + aufg(10, 'Normieren', 2, r'''    <p>Bestimme den Einheitsvektor zu \( \binom{3}{4} \).</p>
+''' + LINS)
+    + aufg(11, 'Linearkombination', 3, r'''    <p>Zerlege \( \vec{c} = \binom{5}{1} \) in die Richtungen \( \binom{2}{1} \) und
+    \( \binom{1}{-1} \).</p>
+''' + LINS)
+    + aufg(12, 'Mittelpunkt im Raum', 3, r'''    <p>Berechne den Mittelpunkt der Strecke von \( A(1 \mid 2 \mid 3) \) nach
+    \( B(5 \mid 0 \mid 1) \).</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Länge</strong> (Betrag) und <strong>Richtung</strong>;
+    <strong>entgegengesetzt</strong>.</p>''')
+    + loes(2, r'''    <p>(a) Skalar · (b) Vektor · (c) Skalar · (d) Vektor.</p>''')
+    + loes(3, r'''    <p>\( \vec{AB} = \binom{4-1}{1-3} = \binom{3}{-2} \).</p>''')
+    + loes(4, r'''    <p>\( \binom{4}{3} \), \( \binom{2}{-1} \), \( \binom{6}{2} \).</p>''')
+    + loes(5, r'''    <p>\( \sqrt{9+16} = 5 \) und \( \sqrt{4+1+4} = 3 \).</p>''')
+    + loes(6, r'''    <p>\( \binom{6}{9} = 3\binom{2}{3} \) — kollinear. \( \binom{6}{8} \): Faktor wäre 3
+    bzw. \( \tfrac{8}{3} \) — nicht kollinear.</p>''')
+    + loes(7, r'''    <p>\( a_1 = 6\cos 30° \approx 5.20 \), \( a_2 = 6\sin 30° = 3 \).</p>''')
+    + loes(8, r'''    <p>\( r = 5 \), \( \varphi = \arctan\tfrac{4}{3} \approx 53.1° \).</p>''')
+    + loes(9, r'''    <p>\( r = 2\sqrt{2} \approx 2.83 \); Rechner: \( \arctan(-1) = -45° \), aber
+    2. Quadrant: \( \varphi = 135° \).</p>''')
+    + loes(10, r'''    <p>\( |\vec{a}| = 5 \Rightarrow \vec{e}_a = \binom{0.6}{0.8} \).</p>''')
+    + loes(11, r'''    <p>\( 2s + t = 5 \), \( s - t = 1 \Rightarrow s = 2 \), \( t = 1 \).</p>''')
+    + loes(12, r'''    <p>\( M(3 \mid 1 \mid 2) \) — Mittelwert der Ortsvektoren.</p>''')
+)
+
+M_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Skizze mit Pfeilen gehört zu jeder Vektoraufgabe!</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Nautik</td><td>Flussüberquerung</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Mechanik</td><td>Zwei Kräfte am Haken</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Vermessung</td><td>Mittelpunkt und Schwerpunkt</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Aviatik</td><td>Wind und Kurs</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Statik</td><td>Kraft in zwei Stäbe zerlegen</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Robotik</td><td>Greifarm in Schritten</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Flussüberquerung', 2, r'''    <p>Ein Boot hält mit \( 4\ \text{m/s} \) quer auf das Ufer zu; die Strömung schiebt mit
+    \( 3\ \text{m/s} \) flussabwärts. Der Fluss ist \(60\) m breit.</p>
+    <p>(a) Berechne Betrag und Richtung der resultierenden Geschwindigkeit.</p>
+    <p>(b) Wie lange dauert die Überquerung, wie gross ist die Abdrift?</p>
+    <p>(c) Wie lang ist der tatsächlich gefahrene Weg?</p>
+''' + LINS4, tag='Nautik')
+    + aufg(2, 'Zwei Kräfte am Haken', 2, r'''    <p>An einem Haken ziehen \( F_1 = 60 \) N horizontal und \( F_2 = 25 \) N vertikal.</p>
+    <p>(a) Berechne den Betrag der resultierenden Kraft.</p>
+    <p>(b) Unter welchem Winkel zur Horizontalen wirkt sie?</p>
+    <p>(c) Welche dritte Kraft würde den Haken im Gleichgewicht halten?</p>
+''' + LINS4, tag='Mechanik')
+    + aufg(3, 'Mittelpunkt und Schwerpunkt', 2, r'''    <p>Drei Vermessungspunkte: \( A(1 \mid 2 \mid 3) \), \( B(5 \mid 0 \mid 1) \),
+    \( C(0 \mid 4 \mid 2) \) (Koordinaten in km).</p>
+    <p>(a) Berechne den Mittelpunkt der Strecke \(AB\).</p>
+    <p>(b) Berechne den Schwerpunkt des Dreiecks \(ABC\).</p>
+    <p>(c) Wie weit sind \(A\) und \(B\) voneinander entfernt?</p>
+''' + LINS4, tag='Vermessung')
+    + aufg(4, 'Wind und Kurs', 3, r'''    <p>Ein Flugzeug fliegt mit Eigengeschwindigkeit \( \binom{0}{200} \) km/h (nach Norden);
+    der Wind weht mit \( \binom{50}{0} \) km/h (nach Osten).</p>
+    <p>(a) Berechne den Geschwindigkeitsvektor über Grund und seinen Betrag.</p>
+    <p>(b) Um welchen Winkel weicht der Kurs von Norden ab?</p>
+    <p>(c) Wie weit kommt das Flugzeug in 1.5 Stunden?</p>
+''' + LINS4, tag='Aviatik')
+    + aufg(5, 'Kraft in zwei Stäbe zerlegen', 3, r'''    <p>Eine Kraft \( \vec{F} = \binom{5}{1} \) kN soll von zwei Stäben mit den Richtungen
+    \( \vec{a} = \binom{2}{1} \) und \( \vec{b} = \binom{1}{-1} \) aufgenommen werden:
+    \( \vec{F} = s\,\vec{a} + t\,\vec{b} \).</p>
+    <p>(a) Stelle das Gleichungssystem auf.</p>
+    <p>(b) Berechne \(s\) und \(t\).</p>
+    <p>(c) Welche Kraftbeträge tragen die Stäbe (\( |s\vec{a}| \), \( |t\vec{b}| \))?</p>
+''' + LINS4, tag='Statik')
+    + aufg(6, 'Greifarm in Schritten', 3, r'''    <p>Ein Greifarm fährt vom Ursprung nacheinander die Verschiebungen
+    \( \binom{3}{1} \), \( \binom{-1}{2} \) und \( \binom{2}{2} \) ab (in dm).</p>
+    <p>(a) Wo steht der Greifer am Schluss?</p>
+    <p>(b) Wie weit ist er (Luftlinie) vom Start entfernt?</p>
+    <p>(c) Welcher einzelne Verschiebungsvektor hätte denselben Effekt — und was sagt das
+    über die Vektoraddition?</p>
+''' + LINS4, tag='Robotik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( |\vec{v}| = \sqrt{3^2+4^2} = 5\ \text{m/s} \), \( \approx 36.9° \) zur Querrichtung.</p>
+    <p>(b) \( t = 60/4 = 15 \) s; Abdrift \( 3 \cdot 15 = 45 \) m.</p>
+    <p>(c) \( 5 \cdot 15 = 75 \) m (oder \( \sqrt{60^2 + 45^2} = 75 \) ✓).</p>''')
+    + loes(2, r'''    <p>(a) \( \sqrt{60^2 + 25^2} = 65 \) N.</p>
+    <p>(b) \( \arctan(25/60) \approx 22.6° \).</p>
+    <p>(c) Der Gegenvektor der Resultierenden: \(65\) N unter \( 22.6° \) in die
+    Gegenrichtung.</p>''')
+    + loes(3, r'''    <p>(a) \( M(3 \mid 1 \mid 2) \).</p>
+    <p>(b) \( S(2 \mid 2 \mid 2) \).</p>
+    <p>(c) \( |\vec{AB}| = |(4, -2, -2)| = \sqrt{24} \approx 4.9 \) km.</p>''')
+    + loes(4, r'''    <p>(a) \( \binom{50}{200} \), Betrag \( \sqrt{2500 + 40000} \approx 206.2 \) km/h.</p>
+    <p>(b) \( \arctan(50/200) \approx 14.0° \) nach Osten.</p>
+    <p>(c) \( 206.2 \cdot 1.5 \approx 309 \) km.</p>''')
+    + loes(5, r'''    <p>(a) \( 2s + t = 5 \), \( s - t = 1 \).</p>
+    <p>(b) \( s = 2 \), \( t = 1 \).</p>
+    <p>(c) \( |2\vec{a}| = 2\sqrt{5} \approx 4.47 \) kN, \( |1\,\vec{b}| = \sqrt{2} \approx 1.41 \) kN.</p>''')
+    + loes(6, r'''    <p>(a) Summe \( \binom{4}{5} \) — Punkt \( (4 \mid 5) \).</p>
+    <p>(b) \( \sqrt{16+25} = \sqrt{41} \approx 6.4 \) dm.</p>
+    <p>(c) Genau \( \binom{4}{5} \) — die Reihenfolge der Teilschritte ist egal:
+    Vektoraddition ist kommutativ und assoziativ.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s4-3b  SKALARPRODUKT
+# ═══════════════════════════════════════════════════════════════════
+
+N_HANDOUT = r'''
+  <h2>1. Definition</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Skalarprodukt</div>
+    <p>Geometrisch: \( \vec{a} \cdot \vec{b} = |\vec{a}|\,|\vec{b}|\cos\varphi \) (Zwischenwinkel
+    \(\varphi\)) — komponentenweise: \( a_1b_1 + a_2b_2\ (+\,a_3b_3) \). Das Ergebnis ist eine
+    <strong>Zahl</strong>: «Vektor · Vektor = Skalar». Spezialfall
+    \( \vec{a} \cdot \vec{a} = |\vec{a}|^2 \).</p>
+  </div>
+
+  <h2>2. Winkel und Orthogonalität</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Winkelformel</td><td>\( \cos\varphi = \dfrac{\vec{a} \cdot \vec{b}}{|\vec{a}|\,|\vec{b}|} \)</td></tr>
+      <tr><td class="li">Vorzeichen</td><td class="li">\( > 0 \): spitz · \( = 0 \): <strong>orthogonal</strong> · \( < 0 \): stumpf</td></tr>
+      <tr><td class="li">Grenzfälle</td><td>\( \varphi = 0°/180° \): kollinear, \( \pm|\vec{a}||\vec{b}| \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Rechenregeln</h2>
+  <p>Kommutativ (\( \vec{a} \cdot \vec{b} = \vec{b} \cdot \vec{a} \)), distributiv,
+  Skalare herausziehbar. <strong>Kein</strong> Assoziativgesetz — \( (\vec{a} \cdot \vec{b})\vec{c} \)
+  ist ein Vektor; Division durch Vektoren ist sinnlos.</p>
+
+  <h2>4. Normalprojektion</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Projektion («Schattenwurf»)</div>
+    <p>\( \vec{a}_b = \dfrac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2}\,\vec{b} \), Betrag
+    \( |\vec{a}_b| = \dfrac{|\vec{a} \cdot \vec{b}|}{|\vec{b}|} \) — der wirksame Anteil von
+    \( \vec{a} \) in Richtung \( \vec{b} \). Physik: Arbeit \( W = \vec{F} \cdot \vec{s} \).</p>
+  </div>
+
+  <h2>5. Winkel in Figuren</h2>
+  <p>Innenwinkel bei Ecke \(A\): Vektoren <strong>von \(A\) weg</strong> (\( \vec{AB} \),
+  \( \vec{AC} \)) in die Winkelformel. Falsche Pfeilrichtung liefert den Nebenwinkel
+  \( 180° - \varphi \). Rechtwinkligkeit: Skalarprodukt der anliegenden Seitenvektoren gleich null.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Produkte der Komponenten <strong>summieren</strong> — die Zahl verrät den Winkel:
+    positiv/null/negativ = spitz/senkrecht/stumpf. Projektion = wirksamer Anteil.
+    Bei Figuren: Pfeile von der Ecke weg.</p>
+  </div>
+'''
+
+N_FORMELAUSZUG = r'''
+  <h2>1. Skalarprodukt</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">geometrisch</td><td>\( \vec{a} \cdot \vec{b} = |\vec{a}|\,|\vec{b}|\cos\varphi \)</td></tr>
+      <tr><td class="li">komponentenweise</td><td>\( a_1b_1 + a_2b_2\ (+\,a_3b_3) \)</td></tr>
+      <tr><td class="li">mit sich selbst</td><td>\( \vec{a} \cdot \vec{a} = |\vec{a}|^2 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Winkel</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Winkelformel</td><td>\( \cos\varphi = \dfrac{\vec{a} \cdot \vec{b}}{|\vec{a}|\,|\vec{b}|} \)</td></tr>
+      <tr><td class="li">Orthogonalität</td><td>\( \vec{a} \perp \vec{b} \Leftrightarrow \vec{a} \cdot \vec{b} = 0 \)</td></tr>
+      <tr><td class="li">Vorzeichen-Klassierung</td><td class="li">\( > 0 \) spitz · \( = 0 \) recht · \( < 0 \) stumpf</td></tr>
+      <tr><td class="li">2D-Normalen-Trick</td><td>\( \binom{a_1}{a_2} \perp \binom{-a_2}{a_1} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Projektion und Arbeit</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Projektionsvektor</td><td>\( \vec{a}_b = \dfrac{\vec{a} \cdot \vec{b}}{|\vec{b}|^2}\,\vec{b} \)</td></tr>
+      <tr><td class="li">Projektionsbetrag</td><td>\( |\vec{a}_b| = \dfrac{|\vec{a} \cdot \vec{b}|}{|\vec{b}|} \)</td></tr>
+      <tr><td class="li">Arbeit (Physik)</td><td>\( W = \vec{F} \cdot \vec{s} = |\vec{F}|\,|\vec{s}|\cos\varphi \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Rechenregeln</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">kommutativ / distributiv</td><td>\( \vec{a} \cdot \vec{b} = \vec{b} \cdot \vec{a} \); \( \vec{a} \cdot (\vec{b}+\vec{c}) = \vec{a}\cdot\vec{b} + \vec{a}\cdot\vec{c} \)</td></tr>
+      <tr><td class="li">Skalar herausziehen</td><td>\( (s\vec{a}) \cdot \vec{b} = s(\vec{a} \cdot \vec{b}) \)</td></tr>
+      <tr><td class="li">kein Assoziativgesetz</td><td class="li">\( (\vec{a} \cdot \vec{b})\,\vec{c} \) ist ein Vektor!</td></tr>
+    </tbody>
+  </table>
+'''
+
+N_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Definition vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Das Skalarprodukt zweier Vektoren ist eine <span class="lueck"></span>, kein Vektor.<br>
+      Es ist null genau dann, wenn die Vektoren <span class="lueck"></span> stehen.<br>
+      Komponentenweise: Produkte bilden und <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Skalarprodukte berechnen', 1, r'''    <p>(a) \( \binom{2}{5} \cdot \binom{4}{-1} \) &nbsp;&nbsp;
+    (b) \( \binom{3}{0} \cdot \binom{0}{7} \) &nbsp;&nbsp;
+    (c) \( \begin{pmatrix} 1 \\ 2 \\ 2 \end{pmatrix} \cdot \begin{pmatrix} 2 \\ -2 \\ 1 \end{pmatrix} \)</p>
+''' + LINS)
+    + aufg(3, 'Vorzeichen deuten', 1, r'''    <p>Was sagt das Vorzeichen von \( \vec{a} \cdot \vec{b} \) über den Zwischenwinkel?
+    Gib alle drei Fälle an.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Winkel</div>\n'
+    + aufg(4, 'Winkelformel', 2, r'''    <p>Berechne den Zwischenwinkel von \( \binom{4}{3} \) und \( \binom{5}{0} \).</p>
+''' + LINS)
+    + aufg(5, 'Exakter Winkel', 2, r'''    <p>Zeige, dass \( \binom{1}{2} \) und \( \binom{3}{1} \) den Winkel \( 45° \)
+    einschliessen.</p>
+''' + LINS)
+    + aufg(6, 'Orthogonalität erzwingen', 2, r'''    <p>Für welches \(k\) steht \( \binom{3}{k} \) senkrecht auf \( \binom{2}{4} \)?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Projektion</div>\n'
+    + aufg(7, 'Projektion berechnen', 2, r'''    <p>Projiziere \( \binom{4}{2} \) auf \( \binom{3}{0} \): Projektionsvektor und Betrag.</p>
+''' + LINS)
+    + aufg(8, 'Arbeit', 2, r'''    <p>\( F = 50 \) N, \( s = 8 \) m, Winkel \( 60° \). Berechne die Arbeit.</p>
+''' + LINS)
+    + aufg(9, 'Projektion senkrecht', 2, r'''    <p>Was ist die Projektion von \( \vec{a} \) auf \( \vec{b} \), wenn
+    \( \vec{a} \perp \vec{b} \)?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Figuren</div>\n'
+    + aufg(10, 'Innenwinkel', 3, r'''    <p>Berechne den Innenwinkel bei \( A(1 \mid 1) \) im Dreieck mit \( B(5 \mid 2) \),
+    \( C(2 \mid 4) \).</p>
+''' + LINS)
+    + aufg(11, 'Rechtwinklig?', 3, r'''    <p>Zeige: Das Dreieck \( A(0 \mid 0) \), \( B(4 \mid 2) \), \( C(3 \mid 4) \) ist
+    rechtwinklig. Wo liegt der rechte Winkel?</p>
+''' + LINS)
+    + aufg(12, 'Würfeldiagonale', 3, r'''    <p>Berechne den Winkel zwischen der Raumdiagonale \( (1 \mid 1 \mid 1) \) eines
+    Einheitswürfels und einer Kante.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Zahl</strong> (Skalar) · <strong>senkrecht</strong> (orthogonal) ·
+    <strong>summieren</strong>.</p>''')
+    + loes(2, r'''    <p>(a) \( 8 - 5 = 3 \) · (b) \( 0 \) (Achsen stehen senkrecht) · (c) \( 2 - 4 + 2 = 0 \).</p>''')
+    + loes(3, r'''    <p>\( > 0 \): spitzer Winkel · \( = 0 \): rechter Winkel · \( < 0 \): stumpfer Winkel.</p>''')
+    + loes(4, r'''    <p>\( \cos\varphi = \tfrac{20}{5 \cdot 5} = 0.8 \Rightarrow \varphi \approx 36.9° \).</p>''')
+    + loes(5, r'''    <p>\( \cos\varphi = \tfrac{5}{\sqrt{5}\sqrt{10}} = \tfrac{1}{\sqrt{2}} \Rightarrow 45° \).</p>''')
+    + loes(6, r'''    <p>\( 6 + 4k = 0 \Rightarrow k = -1.5 \).</p>''')
+    + loes(7, r'''    <p>\( \vec{a}_b = \tfrac{12}{9}\binom{3}{0} = \binom{4}{0} \), Betrag \( 4 \).</p>''')
+    + loes(8, r'''    <p>\( W = 50 \cdot 8 \cdot 0.5 = 200 \) J.</p>''')
+    + loes(9, r'''    <p>\( \vec{a} \cdot \vec{b} = 0 \Rightarrow \vec{a}_b = \vec{0} \) — kein «Schatten».</p>''')
+    + loes(10, r'''    <p>\( \vec{AB} = \binom{4}{1} \), \( \vec{AC} = \binom{1}{3} \):
+    \( \cos\alpha = \tfrac{7}{\sqrt{170}} \Rightarrow \alpha \approx 57.5° \).</p>''')
+    + loes(11, r'''    <p>\( \vec{BA} \cdot \vec{BC} = \binom{-4}{-2} \cdot \binom{-1}{2} = 4 - 4 = 0 \) —
+    rechter Winkel bei \( B \).</p>''')
+    + loes(12, r'''    <p>\( \cos\varphi = \tfrac{1}{\sqrt{3}} \Rightarrow \varphi \approx 54.7° \) — für alle
+    drei Kanten gleich (Symmetrie).</p>''')
+)
+
+N_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Taschenrechner für Winkel auf DEG stellen.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Physik</td><td>Arbeit am Schlitten</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Konstruktion</td><td>Rechtwinklig-Kontrolle</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Vermessung</td><td>Winkel im Gelände-Dreieck</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Mechanik</td><td>Hangabtriebskraft als Projektion</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Bauwesen</td><td>Winkel im Dachstuhl (3D)</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Solartechnik</td><td>Einstrahlung auf ein Panel</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Arbeit am Schlitten', 2, r'''    <p>Ein Schlitten wird mit \( F = 80 \) N über \( s = 12 \) m gezogen; das Seil bildet
+    \( 35° \) mit dem Boden.</p>
+    <p>(a) Berechne die Arbeit \( W = |\vec{F}||\vec{s}|\cos\varphi \).</p>
+    <p>(b) Wie viel Arbeit ginge bei waagrechtem Seil?</p>
+    <p>(c) Warum leistet die Vertikalkomponente der Kraft keine Arbeit?</p>
+''' + LINS4, tag='Physik')
+    + aufg(2, 'Rechtwinklig-Kontrolle', 2, r'''    <p>Ein Metallwinkel hat die Schenkel \( \vec{a} = \binom{4}{2} \) und
+    \( \vec{b} = \binom{-1}{2} \) (in cm).</p>
+    <p>(a) Prüfe mit dem Skalarprodukt, ob der Winkel exakt \( 90° \) beträgt.</p>
+    <p>(b) Die Fertigung liefert stattdessen \( \vec{b}\,' = \binom{-1}{2.1} \).
+    Welcher Winkel entsteht?</p>
+''' + LINS4, tag='Konstruktion')
+    + aufg(3, 'Winkel im Gelände-Dreieck', 2, r'''    <p>Drei Messpunkte: \( A(1 \mid 1) \), \( B(5 \mid 2) \), \( C(2 \mid 4) \) (in hm).</p>
+    <p>(a) Berechne den Winkel bei \( A \).</p>
+    <p>(b) Berechne die Winkel bei \( B \) und \( C \) und prüfe die Winkelsumme.</p>
+''' + LINS4, tag='Vermessung')
+    + aufg(4, 'Hangabtriebskraft als Projektion', 3, r'''    <p>Auf einen Wagen wirkt die Gewichtskraft \( \vec{F}_G = \binom{0}{-800} \) N. Die
+    Rampe hat die Richtung \( \vec{u} = \binom{4}{-1} \).</p>
+    <p>(a) Berechne den Betrag der Projektion von \( \vec{F}_G \) auf \( \vec{u} \)
+    (Hangabtriebskraft).</p>
+    <p>(b) Wie ändert sich diese Kraft bei doppelt so steiler Rampe \( \binom{4}{-2} \)?</p>
+''' + LINS4, tag='Mechanik')
+    + aufg(5, 'Winkel im Dachstuhl (3D)', 3, r'''    <p>Zwei Sparren treffen sich im First: \( \vec{a} = \begin{pmatrix} 4 \\ 0 \\ -3 \end{pmatrix} \)
+    und \( \vec{b} = \begin{pmatrix} -4 \\ 0 \\ -3 \end{pmatrix} \) (in m, \(z\) nach oben).</p>
+    <p>(a) Berechne den Winkel zwischen den Sparren.</p>
+    <p>(b) Wie lang ist jeder Sparren?</p>
+''' + LINS4, tag='Bauwesen')
+    + aufg(6, 'Einstrahlung auf ein Panel', 3, r'''    <p>Sonnenstrahlen fallen in Richtung \( \vec{s} = \begin{pmatrix} 0 \\ 2 \\ -3 \end{pmatrix} \)
+    ein; die Panel-Normale (senkrecht zur Fläche) zeigt nach
+    \( \vec{n} = \begin{pmatrix} 0 \\ -1 \\ 2 \end{pmatrix} \).</p>
+    <p>(a) Berechne den Winkel zwischen \( -\vec{s} \) (Richtung <em>zur</em> Sonne) und
+    \( \vec{n} \).</p>
+    <p>(b) Ideal wäre \( 0° \). Wie gut ist die Ausrichtung (Anteil \( \cos\varphi \))?</p>
+''' + LINS4, tag='Solartechnik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( W = 80 \cdot 12 \cdot \cos 35° \approx 786 \) J.</p>
+    <p>(b) \( 960 \) J — rund 18 % mehr.</p>
+    <p>(c) Sie steht senkrecht zur Bewegung: \( \cos 90° = 0 \).</p>''')
+    + loes(2, r'''    <p>(a) \( -4 + 4 = 0 \) — exakt \( 90° \) ✓.</p>
+    <p>(b) \( \vec{a} \cdot \vec{b}\,' = -4 + 4.2 = 0.2 \);
+    \( \cos\varphi = \tfrac{0.2}{\sqrt{20}\sqrt{5.41}} \approx 0.0192 \Rightarrow
+    \varphi \approx 88.9° \) — knapp daneben.</p>''')
+    + loes(3, r'''    <p>(a) \( \alpha \approx 57.5° \) (siehe Theorie).</p>
+    <p>(b) \( \vec{BA} = \binom{-4}{-1} \), \( \vec{BC} = \binom{-3}{2} \):
+    \( \cos\beta = \tfrac{10}{\sqrt{17}\sqrt{13}} \Rightarrow \beta \approx 47.7° \);
+    \( \gamma \approx 180° - 57.5° - 47.7° = 74.8° \) — Summe \( 180° \) ✓.</p>''')
+    + loes(4, r'''    <p>(a) \( |\vec{F}_{G,u}| = \tfrac{|\vec{F}_G \cdot \vec{u}|}{|\vec{u}|}
+    = \tfrac{800}{\sqrt{17}} \approx 194 \) N.</p>
+    <p>(b) \( \tfrac{1600}{\sqrt{20}} \approx 358 \) N — fast doppelt.</p>''')
+    + loes(5, r'''    <p>(a) \( \vec{a} \cdot \vec{b} = -16 + 9 = -7 \); \( |\vec{a}| = |\vec{b}| = 5 \):
+    \( \cos\varphi = -\tfrac{7}{25} \Rightarrow \varphi \approx 106.3° \).</p>
+    <p>(b) je \( 5 \) m.</p>''')
+    + loes(6, r'''    <p>(a) \( -\vec{s} = \begin{pmatrix} 0 \\ -2 \\ 3 \end{pmatrix} \):
+    \( (-\vec{s}) \cdot \vec{n} = 2 + 6 = 8 \); Beträge \( \sqrt{13} \), \( \sqrt{5} \):
+    \( \cos\varphi = \tfrac{8}{\sqrt{65}} \approx 0.992 \Rightarrow \varphi \approx 7.1° \).</p>
+    <p>(b) Anteil \( \approx 99.2\ \% \) — sehr gut ausgerichtet.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s4-3c  GERADEN
+# ═══════════════════════════════════════════════════════════════════
+
+O_HANDOUT = r'''
+  <h2>1. Parametergleichung</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Gerade</div>
+    <p>\( g:\ \vec{r} = \vec{r}_A + t\,\vec{u} \), \( t \in \mathbb{R} \) — Stützpunkt \(A\),
+    Richtungsvektor \( \vec{u} \neq \vec{0} \); gilt in Ebene und Raum. Aus zwei Punkten:
+    \( \vec{u} = \vec{AB} \). Stützpunkt und Richtung sind nicht eindeutig.</p>
+  </div>
+  <p><strong>Punktprobe:</strong> komponentenweise nach \(t\) auflösen — alle Komponenten müssen
+  <strong>dasselbe</strong> \(t\) liefern.</p>
+
+  <h2>2. Gegenseitige Lage</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Richtungen kollinear?</th><th>Zusatztest</th><th>Lage</th></tr></thead>
+    <tbody>
+      <tr><td class="li">ja</td><td class="li">Stützpunkt auf der anderen Geraden</td><td class="li"><strong>identisch</strong></td></tr>
+      <tr><td class="li">ja</td><td class="li">Stützpunkt nicht darauf</td><td class="li"><strong>echt parallel</strong></td></tr>
+      <tr><td class="li">nein</td><td class="li">Gleichsetzen lösbar</td><td class="li"><strong>schneidend</strong></td></tr>
+      <tr><td class="li">nein</td><td class="li">Gleichsetzen unlösbar (nur Raum)</td><td class="li"><strong>windschief</strong></td></tr>
+    </tbody>
+  </table>
+  <p>Beim Gleichsetzen <strong>verschiedene Parameternamen</strong> (\(t\), \(s\)) verwenden!
+  Im Raum: Zwei Komponenten bestimmen \(t\), \(s\) — die dritte testet.</p>
+
+  <h2>3. Schnittwinkel</h2>
+  \[ \cos\varphi = \frac{|\vec{u} \cdot \vec{v}|}{|\vec{u}|\,|\vec{v}|}, \qquad 0° \leq \varphi \leq 90° \]
+  <p>Der Betrag erzwingt den spitzen Winkel. Senkrecht: \( \vec{u} \cdot \vec{v} = 0 \).</p>
+
+  <h2>4. Abstand Punkt–Gerade (Lot)</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Lot-Rezept</div>
+    <p>(1) Laufender Punkt \( F = A + t\,\vec{u} \) · (2) Lotbedingung
+    \( \vec{PF} \cdot \vec{u} = 0 \) → \(t\) · (3) Abstand \( d = |\vec{PF}| \).</p>
+  </div>
+
+  <h2>5. Bewegungen</h2>
+  <p>\( \vec{r}(t) = \vec{r}_0 + t\,\vec{v} \) mit \(t\) = Zeit; Tempo \( = |\vec{v}| \).
+  <strong>Kollision</strong> braucht gleichen Ort bei <strong>gleichem</strong> \(t\) —
+  Bahnschnitt erlaubt \( t \neq s \).</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Stützpunkt plus \(t\)-mal Richtung. Lage: erst Richtungen, dann Punkte. Winkel über
+    die Richtungsvektoren, Abstand über das Lot — und windschief gibt es nur im Raum.</p>
+  </div>
+'''
+
+O_FORMELAUSZUG = r'''
+  <h2>1. Parametergleichung</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Gerade</td><td>\( \vec{r} = \vec{r}_A + t\,\vec{u} \)</td></tr>
+      <tr><td class="li">aus zwei Punkten</td><td>\( \vec{u} = \vec{AB} = \vec{r}_B - \vec{r}_A \)</td></tr>
+      <tr><td class="li">Punktprobe</td><td class="li">alle Komponenten → dasselbe \(t\)</td></tr>
+      <tr><td class="li">Ebene: Umrechnung</td><td>\( m = u_2/u_1 \) → \( y = mx + b \) (im Raum unmöglich)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Lage zweier Geraden</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">identisch / parallel</td><td class="li">Richtungen kollinear; Punktprobe entscheidet</td></tr>
+      <tr><td class="li">schneidend</td><td class="li">gleichsetzen (\(t\), \(s\)!) — System lösbar</td></tr>
+      <tr><td class="li">windschief (nur Raum)</td><td class="li">nicht kollinear + System unlösbar</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Winkel und Abstand</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Schnittwinkel</td><td>\( \cos\varphi = \dfrac{|\vec{u} \cdot \vec{v}|}{|\vec{u}|\,|\vec{v}|} \) (spitz)</td></tr>
+      <tr><td class="li">senkrecht</td><td>\( \vec{u} \cdot \vec{v} = 0 \)</td></tr>
+      <tr><td class="li">Abstand Punkt–Gerade</td><td>\( \vec{PF} \cdot \vec{u} = 0 \) → \(t\) → \( d = |\vec{PF}| \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Bewegung</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Bahn</td><td>\( \vec{r}(t) = \vec{r}_0 + t\,\vec{v} \), \(t\) = Zeit</td></tr>
+      <tr><td class="li">Tempo</td><td>\( |\vec{v}| \)</td></tr>
+      <tr><td class="li">Kollision</td><td class="li">gleicher Ort bei gleichem \(t\) (Bahnschnitt: \(t\), \(s\) frei)</td></tr>
+    </tbody>
+  </table>
+'''
+
+O_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Die Parametergleichung braucht einen <span class="lueck"></span>punkt und einen<br>
+      <span class="lueck"></span>vektor. Windschiefe Geraden gibt es nur im <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Punkte erzeugen', 1, r'''    <p>\( g:\ \vec{r} = \binom{1}{2} + t\binom{3}{1} \). Berechne die Geradenpunkte für
+    \( t = 0, 1, 2 \) und \( t = -1 \).</p>
+''' + LINS)
+    + aufg(3, 'Gerade durch zwei Punkte', 1, r'''    <p>Stelle die Parametergleichung durch \( A(1 \mid 2) \) und \( B(4 \mid 3) \) auf.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Punktprobe und Lage</div>\n'
+    + aufg(4, 'Punktprobe', 2, r'''    <p>Liegt \( P(7 \mid 4) \) auf \(g\) aus Aufgabe 2? Und \( Q(4 \mid 4) \)?</p>
+''' + LINS)
+    + aufg(5, 'Parallel oder identisch?', 2, r'''    <p>\( g:\ \vec{r} = \binom{0}{1} + t\binom{2}{1} \) und
+    \( h:\ \vec{r} = \binom{4}{3} + s\binom{-2}{-1} \). Bestimme die Lage.</p>
+''' + LINS)
+    + aufg(6, 'Schnittpunkt', 2, r'''    <p>Berechne den Schnittpunkt von \( g:\ \vec{r} = \binom{1}{2} + t\binom{3}{1} \) und
+    \( h:\ \vec{r} = \binom{0}{5} + s\binom{1}{-1} \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Winkel und Abstand</div>\n'
+    + aufg(7, 'Schnittwinkel', 2, r'''    <p>Berechne den Schnittwinkel der Geraden aus Aufgabe 6.</p>
+''' + LINS)
+    + aufg(8, 'Senkrecht?', 2, r'''    <p>Stehen die Geraden mit \( \vec{u} = \binom{2}{1} \) und \( \vec{v} = \binom{-1}{2} \)
+    senkrecht?</p>
+''' + LINS)
+    + aufg(9, 'Abstand Punkt–Gerade', 3, r'''    <p>Berechne den Abstand von \( P(4 \mid 0) \) zu
+    \( g:\ \vec{r} = \binom{0}{1} + t\binom{2}{1} \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Raum und Bewegung</div>\n'
+    + aufg(10, 'Windschief', 3, r'''    <p>Zeige: Die \(x\)-Achse und
+    \( h:\ \vec{r} = \begin{pmatrix} 0 \\ 1 \\ 3 \end{pmatrix} + s\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix} \)
+    sind windschief.</p>
+''' + LINS)
+    + aufg(11, 'Bewegung', 2, r'''    <p>\( \vec{r}(t) = \begin{pmatrix} 2 \\ 1 \\ 10 \end{pmatrix} + t\begin{pmatrix} 4 \\ 3 \\ 0 \end{pmatrix} \)
+    (m, min). Bestimme Position nach 4 min und das Tempo.</p>
+''' + LINS)
+    + aufg(12, 'Einholen', 3, r'''    <p>Zwei Objekte auf einer Linie: \( x_1(t) = 10t \) und \( x_2(t) = 50 + 5t \).
+    Wann und wo trifft das erste das zweite?</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Stütz</strong>punkt · <strong>Richtungs</strong>vektor · <strong>Raum</strong>.</p>''')
+    + loes(2, r'''    <p>\( (1 \mid 2) \), \( (4 \mid 3) \), \( (7 \mid 4) \), \( (-2 \mid 1) \).</p>''')
+    + loes(3, r'''    <p>\( \vec{r} = \binom{1}{2} + t\binom{3}{1} \) (Richtung \( \vec{AB} \)).</p>''')
+    + loes(4, r'''    <p>\(P\): \( t = 2 \) in beiden Komponenten ✓. \(Q\): \( t = 1 \) vs. \( t = 2 \) —
+    nicht auf \(g\).</p>''')
+    + loes(5, r'''    <p>Richtungen kollinear (Faktor \(-1\)); Punktprobe \( (4 \mid 3) \): \( t = 2 \) in
+    beiden Komponenten — <strong>identisch</strong>.</p>''')
+    + loes(6, r'''    <p>\( 1 + 3t = s \), \( 2 + t = 5 - s \Rightarrow t = 0.5 \), \( s = 2.5 \):
+    Schnittpunkt \( (2.5 \mid 2.5) \).</p>''')
+    + loes(7, r'''    <p>\( \cos\varphi = \tfrac{2}{\sqrt{20}} \Rightarrow \varphi \approx 63.4° \).</p>''')
+    + loes(8, r'''    <p>\( -2 + 2 = 0 \) — ja.</p>''')
+    + loes(9, r'''    <p>\( 5t - 7 = 0 \Rightarrow t = 1.4 \); \( F(2.8 \mid 2.4) \);
+    \( d = \sqrt{7.2} \approx 2.68 \).</p>''')
+    + loes(10, r'''    <p>Richtungen nicht kollinear; Gleichsetzen: \( z \)-Komponente verlangt \( 0 = 3 \) —
+    Widerspruch: windschief.</p>''')
+    + loes(11, r'''    <p>\( (18 \mid 13 \mid 10) \); Tempo \( \sqrt{16+9} = 5 \) m/min.</p>''')
+    + loes(12, r'''    <p>\( 10t = 50 + 5t \Rightarrow t = 10 \); Ort \( x = 100 \).</p>''')
+)
+
+O_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Bei Bewegungen: Kollision heisst gleicher Ort bei gleichem \(t\)!</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Aviatik</td><td>Drohnenbahn</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Verkehr</td><td>Überholmanöver</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Vermessung</td><td>Leitungstrasse und Brunnen</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">4</td><td>Städtebau</td><td>Zwei Strassenachsen</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Nautik</td><td>Kollisionskurs?</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Bergbau</td><td>Zwei Stollen (windschief)</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Drohnenbahn', 2, r'''    <p>Eine Drohne fliegt auf
+    \( \vec{r}(t) = \begin{pmatrix} 2 \\ 1 \\ 10 \end{pmatrix} + t\begin{pmatrix} 4 \\ 3 \\ 0 \end{pmatrix} \)
+    (m, min).</p>
+    <p>(a) Bestimme Position nach 4 Minuten und das Tempo.</p>
+    <p>(b) Passiert die Drohne den Punkt \( (10 \mid 7 \mid 10) \)? Wann?</p>
+    <p>(c) Warum bleibt die Flughöhe konstant?</p>
+''' + LINS4, tag='Aviatik')
+    + aufg(2, 'Überholmanöver', 2, r'''    <p>Auf einer geraden Strasse: Velo A bei Position \( x_A(t) = 10t \), Velo B bei
+    \( x_B(t) = 50 + 5t \) (Einheiten und Stunden).</p>
+    <p>(a) Wann holt A das Velo B ein, und wo?</p>
+    <p>(b) Wie gross ist der Vorsprung von B nach einer halben Stunde?</p>
+''' + LINS4, tag='Verkehr')
+    + aufg(3, 'Leitungstrasse und Brunnen', 3, r'''    <p>Eine geplante Leitung folgt \( g:\ \vec{r} = \binom{0}{1} + t\binom{2}{1} \)
+    (Koordinaten in hm). Ein Brunnen steht bei \( P(4 \mid 0) \).</p>
+    <p>(a) Berechne den Lotfusspunkt der kürzesten Verbindung.</p>
+    <p>(b) Wie weit liegt der Brunnen von der Trasse entfernt?</p>
+''' + LINS4, tag='Vermessung')
+    + aufg(4, 'Zwei Strassenachsen', 3, r'''    <p>\( g:\ \vec{r} = \binom{1}{2} + t\binom{3}{1} \) und
+    \( h:\ \vec{r} = \binom{0}{5} + s\binom{1}{-1} \) beschreiben zwei Strassenachsen.</p>
+    <p>(a) Berechne den Kreuzungspunkt.</p>
+    <p>(b) Unter welchem Winkel kreuzen sich die Strassen?</p>
+''' + LINS4, tag='Städtebau')
+    + aufg(5, 'Kollisionskurs?', 3, r'''    <p>Zwei Boote (Meter, Sekunden, gleiches \(t\)):
+    \( \vec{r}_1(t) = t\binom{2}{1} \) und \( \vec{r}_2(t) = \binom{6}{-2} + t\binom{-1}{2} \).</p>
+    <p>(a) Schneiden sich die Bahnen? Wo?</p>
+    <p>(b) Kollidieren die Boote?</p>
+''' + LINS4, tag='Nautik')
+    + aufg(6, 'Zwei Stollen (windschief)', 3, r'''    <p>Stollen 1 folgt der \(x\)-Achse; Stollen 2 folgt
+    \( \vec{r} = \begin{pmatrix} 0 \\ 1 \\ 3 \end{pmatrix} + s\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix} \)
+    (Koordinaten in hm).</p>
+    <p>(a) Zeige, dass sich die Stollen nicht kreuzen.</p>
+    <p>(b) In welcher Tiefe unter Stollen 2 verläuft Stollen 1 (z-Differenz)?</p>
+''' + LINS4, tag='Bergbau')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( (18 \mid 13 \mid 10) \); Tempo \( 5 \) m/min.</p>
+    <p>(b) \( 2 + 4t = 10 \Rightarrow t = 2 \); Kontrolle: \( 1 + 3 \cdot 2 = 7 \) ✓,
+    \( z = 10 \) ✓ — ja, nach 2 Minuten.</p>
+    <p>(c) Die \(z\)-Komponente des Geschwindigkeitsvektors ist null.</p>''')
+    + loes(2, r'''    <p>(a) \( 10t = 50 + 5t \Rightarrow t = 10 \) h, Position \(100\).</p>
+    <p>(b) \( x_B(0.5) - x_A(0.5) = 52.5 - 5 = 47.5 \) Einheiten.</p>''')
+    + loes(3, r'''    <p>(a) \( 5t - 7 = 0 \Rightarrow t = 1.4 \): \( F(2.8 \mid 2.4) \).</p>
+    <p>(b) \( d = \sqrt{1.2^2 + 2.4^2} = \sqrt{7.2} \approx 2.68 \) hm.</p>''')
+    + loes(4, r'''    <p>(a) \( t = 0.5 \), \( s = 2.5 \): Kreuzung \( (2.5 \mid 2.5) \).</p>
+    <p>(b) \( \cos\varphi = \tfrac{2}{\sqrt{20}} \Rightarrow \varphi \approx 63.4° \).</p>''')
+    + loes(5, r'''    <p>(a) Mit Parametern \(t\), \(s\): \( s = 2 \), \( t = 2 \) — Schnitt in \( (4 \mid 2) \).</p>
+    <p>(b) Da sogar \( t = s = 2 \): gleicher Ort zur gleichen Zeit — <strong>Kollision</strong>
+    nach 2 s.</p>''')
+    + loes(6, r'''    <p>(a) Richtungen nicht kollinear; \(z\): \( 0 = 3 \) — Widerspruch: windschief.</p>
+    <p>(b) Stollen 1 liegt bei \( z = 0 \), Stollen 2 bei \( z = 3 \) — Differenz \(3\) hm.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s4-3d  EBENEN (ERGÄNZUNG TALS)
+# ═══════════════════════════════════════════════════════════════════
+
+P_HANDOUT = r'''
+  <h2>1. Parametergleichung der Ebene</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Ebene</div>
+    <p>\( E:\ \vec{r} = \vec{r}_A + s\,\vec{u} + t\,\vec{v} \), \( s, t \in \mathbb{R} \) —
+    Stützpunkt \(A\), zwei <strong>nicht kollineare</strong> Spannvektoren. Aus drei Punkten
+    (echtes Dreieck): \( \vec{u} = \vec{AB} \), \( \vec{v} = \vec{AC} \).</p>
+  </div>
+  <p><em>Hinweis: Teilgebiet 4.3d ist eine Ergänzung des TALS-Lehrmittels und kein
+  RLP-2030-Teilgebiet.</em></p>
+
+  <h2>2. Punktprobe</h2>
+  <p>Ansatz \( \vec{r}_P = \vec{r}_A + s\,\vec{u} + t\,\vec{v} \): <strong>drei</strong>
+  Gleichungen, <strong>zwei</strong> Unbekannte — zwei bestimmen \(s\), \(t\), die dritte
+  <strong>testet</strong>.</p>
+
+  <h2>3. Gerade und Ebene</h2>
+  <p>Gleichsetzen gibt ein \( 3 \times 3 \)-System in \(r\) (Geraden-Parameter), \(s\), \(t\):</p>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">genau eine Lösung</td><td class="li"><strong>Durchstosspunkt</strong></td></tr>
+      <tr><td class="li">keine Lösung</td><td class="li">Gerade <strong>echt parallel</strong></td></tr>
+      <tr><td class="li">unendlich viele</td><td class="li">Gerade <strong>liegt in</strong> der Ebene</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Zwei Ebenen</h2>
+  <p><strong>Identisch</strong>, <strong>echt parallel</strong> oder Schnitt in einer
+  <strong>Geraden</strong> — nie in nur einem Punkt. Test: Spannvektoren vergleichen, dann
+  Punktprobe.</p>
+
+  <h2>5. Flächen modellieren</h2>
+  <p>Dächer und Rampen sind Ebenen: Die Grundriss-Koordinaten legen \(s\), \(t\) fest; die
+  \(z\)-Gleichung liefert die Höhe. Beispiel Pultdach
+  \( \vec{r} = (0, 0, 4) + s\,(6, 0, 0) + t\,(0, 5, 2) \): Höhe \( z = 4 + 2t \) — die Neigung
+  steckt im Verhältnis der \(v\)-Komponenten.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Ebene = Gerade mit zweitem Parameter. Punktprobe: zwei bestimmen, eine testet.
+    Durchstosspunkt: \( 3 \times 3 \)-System — 1/0/∞ Lösungen entscheiden die Lage.
+    Zwei Ebenen schneiden sich, wenn überhaupt, in einer Geraden.</p>
+  </div>
+'''
+
+P_FORMELAUSZUG = r'''
+  <h2>1. Parametergleichung</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Ebene</td><td>\( \vec{r} = \vec{r}_A + s\,\vec{u} + t\,\vec{v} \) (\( \vec{u}, \vec{v} \) nicht kollinear)</td></tr>
+      <tr><td class="li">aus drei Punkten</td><td>\( \vec{u} = \vec{AB}, \quad \vec{v} = \vec{AC} \)</td></tr>
+      <tr><td class="li">Freiheitsgrade</td><td class="li">zwei Parameter — eine Fläche</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Punktprobe</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Ansatz</td><td>\( \vec{r}_P = \vec{r}_A + s\,\vec{u} + t\,\vec{v} \) — 3 Gleichungen, 2 Unbekannte</td></tr>
+      <tr><td class="li">Verfahren</td><td class="li">zwei Gleichungen bestimmen \(s\), \(t\) — die dritte testet</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Lagebeziehungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Gerade–Ebene</td><td class="li">gleichsetzen (\(r\), \(s\), \(t\)): 1 Lösung = Durchstosspunkt · 0 = parallel · ∞ = enthalten</td></tr>
+      <tr><td class="li">Ebene–Ebene</td><td class="li">Schnittgerade · echt parallel · identisch</td></tr>
+      <tr><td class="li">Punkt–Ebene</td><td class="li">Punktprobe</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Höhen über dem Grundriss</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Vorgehen</td><td class="li">\(x\)-, \(y\)-Gleichung → \(s\), \(t\) → in \(z\)-Gleichung einsetzen</td></tr>
+      <tr><td class="li">Neigung</td><td class="li">Verhältnis der Spannvektor-Komponenten (z.B. \( 2 : 5 \))</td></tr>
+    </tbody>
+  </table>
+'''
+
+P_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Eine Ebene braucht <span class="lueck"></span> Parameter und zwei nicht<br>
+      <span class="lueck"></span> Spannvektoren. Zwei Ebenen schneiden sich —<br>
+      wenn überhaupt — in einer <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Ebenenpunkte erzeugen', 1, r'''    <p>\( E:\ \vec{r} = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + s\begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 1 \\ 3 \end{pmatrix} \).
+    Berechne die Punkte für \( (s, t) = (0, 0) \), \( (1, 0) \) und \( (2, 1) \).</p>
+''' + LINS)
+    + aufg(3, 'Ebene aus drei Punkten', 2, r'''    <p>Stelle die Ebene durch \( A(0 \mid 0 \mid 1) \), \( B(2 \mid 0 \mid 1) \),
+    \( C(0 \mid 3 \mid 4) \) auf.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Punktprobe</div>\n'
+    + aufg(4, 'Punktprobe positiv', 2, r'''    <p>Liegt \( P(2 \mid 3 \mid 3) \) in \(E\) aus Aufgabe 2?</p>
+''' + LINS)
+    + aufg(5, 'Punktprobe negativ', 2, r'''    <p>Liegt \( Q(2 \mid 3 \mid 4) \) in \(E\) aus Aufgabe 2?</p>
+''' + LINS)
+    + aufg(6, 'Koordinatenebenen', 1, r'''    <p>Gib Parametergleichungen der \(x\)-\(y\)-Ebene und der \(x\)-\(z\)-Ebene an.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Gerade und Ebene</div>\n'
+    + aufg(7, 'Durchstosspunkt', 3, r'''    <p>\( g:\ \vec{r} = \begin{pmatrix} 0 \\ 5 \\ 3 \end{pmatrix} + r\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} \).
+    Berechne den Durchstosspunkt durch \(E\) aus Aufgabe 2.</p>
+''' + LINS)
+    + aufg(8, 'Lage deuten', 2, r'''    <p>Das System Gerade–Ebene hat keine Lösung. Was bedeutet das — und was bei unendlich
+    vielen Lösungen?</p>
+''' + LINS)
+    + aufg(9, 'Anzahl Unbekannte', 1, r'''    <p>Wie viele Gleichungen und Unbekannte hat das System beim Schnitt Gerade–Ebene?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Anwendung</div>\n'
+    + aufg(10, 'Dachhöhe', 2, r'''    <p>Pultdach \( \vec{r} = \begin{pmatrix} 0 \\ 0 \\ 4 \end{pmatrix} + s\begin{pmatrix} 6 \\ 0 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 5 \\ 2 \end{pmatrix} \).
+    Wie hoch liegt das Dach über dem Grundriss-Punkt \( (3 \mid 2.5) \)?</p>
+''' + LINS)
+    + aufg(11, 'Kamin', 3, r'''    <p>Ein senkrechtes Rohr steht über \( (2 \mid 3) \). In welcher Höhe durchstösst es
+    das Pultdach?</p>
+''' + LINS)
+    + aufg(12, 'Parallel oder enthalten?', 3, r'''    <p>\( h:\ \vec{r} = \begin{pmatrix} 0 \\ 0 \\ 9 \end{pmatrix} + r\begin{pmatrix} 6 \\ 0 \\ 0 \end{pmatrix} \)
+    und das Pultdach: Bestimme die Lage.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>zwei</strong> · <strong>kollineare(n)</strong> · <strong>Geraden</strong>.</p>''')
+    + loes(2, r'''    <p>\( (1 \mid 0 \mid 0) \), \( (2 \mid 2 \mid 0) \), \( (3 \mid 5 \mid 3) \).</p>''')
+    + loes(3, r'''    <p>\( \vec{r} = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix} + s\begin{pmatrix} 2 \\ 0 \\ 0 \end{pmatrix} + t\begin{pmatrix} 0 \\ 3 \\ 3 \end{pmatrix} \).</p>''')
+    + loes(4, r'''    <p>\( s = 1 \) (x), \( t = 1 \) (z); Test y: \( 2 + 1 = 3 \) ✓ — ja.</p>''')
+    + loes(5, r'''    <p>\( s = 1 \), \( z \): \( 3t = 4 \Rightarrow t = \tfrac{4}{3} \); Test y:
+    \( 2 + \tfrac{4}{3} = \tfrac{10}{3} \neq 3 \) — nein.</p>''')
+    + loes(6, r'''    <p>\( \vec{r} = s\,\vec{e}_1 + t\,\vec{e}_2 \) bzw. \( \vec{r} = s\,\vec{e}_1 + t\,\vec{e}_3 \).</p>''')
+    + loes(7, r'''    <p>\( 3t = 3 \Rightarrow t = 1 \); \( 2s + t = 5 \Rightarrow s = 2 \);
+    \( r = 1 + s = 3 \): Durchstosspunkt \( (3 \mid 5 \mid 3) \).</p>''')
+    + loes(8, r'''    <p>Keine Lösung: Gerade <strong>echt parallel</strong> zur Ebene. Unendlich viele:
+    Gerade <strong>liegt in</strong> der Ebene.</p>''')
+    + loes(9, r'''    <p>Drei Gleichungen (je Komponente), drei Unbekannte (\(r\), \(s\), \(t\)).</p>''')
+    + loes(10, r'''    <p>\( s = 0.5 \), \( t = 0.5 \): \( z = 4 + 1 = 5 \) m.</p>''')
+    + loes(11, r'''    <p>\( s = \tfrac{1}{3} \), \( t = 0.6 \): Höhe \( 4 + 1.2 = 5.2 \) m.</p>''')
+    + loes(12, r'''    <p>Richtung von \(h\) ist Spannvektor von \(E\); über \( (0 \mid 0) \) liegt \(E\) auf
+    \(4\) m, \(h\) auf \(9\) m — <strong>echt parallel</strong>.</p>''')
+)
+
+P_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Alle Aufgaben nutzen das Pultdach
+    \( E:\ \vec{r} = (0, 0, 4) + s\,(6, 0, 0) + t\,(0, 5, 2) \), \( 0 \leq s, t \leq 1 \)
+    (Koordinaten in m), sofern nichts anderes steht.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Architektur</td><td>Dachhöhen und Neigung</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Haustechnik</td><td>Kaminrohr</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Solartechnik</td><td>Panelfläche als Ebene</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Elektroinstallation</td><td>Leitung parallel zum Dach</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Aviatik</td><td>Drohne über dem Dach</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Geometrie</td><td>Rampe durch drei Punkte</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Dachhöhen und Neigung', 2, r'''    <p>(a) Berechne die Dachhöhe über den Grundriss-Punkten \( (3 \mid 2.5) \) und
+    \( (1 \mid 5) \).</p>
+    <p>(b) Welche Neigung hat das Dach (Steigung in \(y\)-Richtung)?</p>
+    <p>(c) Warum ist die Höhe unabhängig von \(x\)?</p>
+''' + LINS4, tag='Architektur')
+    + aufg(2, 'Kaminrohr', 2, r'''    <p>Ein senkrechtes Kaminrohr steht über dem Grundriss-Punkt \( (2 \mid 3) \):
+    \( k:\ \vec{r} = (2, 3, 0) + r\,(0, 0, 1) \).</p>
+    <p>(a) Stelle das Gleichungssystem für den Durchstosspunkt auf.</p>
+    <p>(b) In welcher Höhe tritt das Rohr durch die Dachfläche?</p>
+''' + LINS4, tag='Haustechnik')
+    + aufg(3, 'Panelfläche als Ebene', 2, r'''    <p>Ein Solarpanel liegt auf dem Dach: Es belegt den Bereich \( 0.2 \leq s \leq 0.8 \),
+    \( 0.4 \leq t \leq 0.9 \).</p>
+    <p>(a) Berechne die vier Eckpunkte des Panels (nur \(x\), \(y\)).</p>
+    <p>(b) Zwischen welchen Höhen liegt das Panel?</p>
+''' + LINS4, tag='Solartechnik')
+    + aufg(4, 'Leitung parallel zum Dach', 3, r'''    <p>Eine Leitung folgt \( h:\ \vec{r} = (0, 0, 9) + r\,(6, 0, 0) \).</p>
+    <p>(a) Zeige, dass die Leitung parallel zur Dachebene verläuft.</p>
+    <p>(b) Wie gross ist der Höhenunterschied zur Vorderkante des Dachs?</p>
+''' + LINS4, tag='Elektroinstallation')
+    + aufg(5, 'Drohne über dem Dach', 3, r'''    <p>Eine Drohne sinkt auf \( g:\ \vec{r} = (0, 0, 7) + r\,(2, 2, -1) \) (m; \(r\) in s).</p>
+    <p>(a) Stelle das Gleichungssystem für den Durchstosspunkt durch die Dachebene auf
+    und löse es.</p>
+    <p>(b) Liegt der Treffpunkt auf dem realen Dach (\( 0 \leq s, t \leq 1 \))?</p>
+''' + LINS4, tag='Aviatik')
+    + aufg(6, 'Rampe durch drei Punkte', 3, r'''    <p>Eine Rollstuhlrampe geht durch \( A(0 \mid 0 \mid 0) \), \( B(4 \mid 0 \mid 0) \)
+    und \( C(0 \mid 6 \mid 0.5) \) (Meter).</p>
+    <p>(a) Stelle die Parametergleichung der Rampenebene auf.</p>
+    <p>(b) Wie hoch liegt die Rampe nach \(3\) m in \(y\)-Richtung?</p>
+    <p>(c) Erfüllt die Rampe die Norm von höchstens \(6\) % Steigung?</p>
+''' + LINS4, tag='Geometrie')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( 5 \) m bzw. \( 6 \) m.</p>
+    <p>(b) \( 2 \) m auf \( 5 \) m — Steigung \( 40\ \% \).</p>
+    <p>(c) Der Spannvektor in \(x\)-Richtung hat \(z\)-Komponente null.</p>''')
+    + loes(2, r'''    <p>(a) \( 6s = 2 \), \( 5t = 3 \), \( r = 4 + 2t \).</p>
+    <p>(b) \( s = \tfrac{1}{3} \), \( t = 0.6 \): Höhe \( 5.2 \) m.</p>''')
+    + loes(3, r'''    <p>(a) \( x = 6s \in \{1.2, 4.8\} \), \( y = 5t \in \{2, 4.5\} \) — Ecken
+    \( (1.2 \mid 2) \), \( (4.8 \mid 2) \), \( (1.2 \mid 4.5) \), \( (4.8 \mid 4.5) \).</p>
+    <p>(b) \( z = 4 + 2t \): zwischen \( 4.8 \) m und \( 5.8 \) m.</p>''')
+    + loes(4, r'''    <p>(a) Die Richtung \( (6, 0, 0) \) ist Spannvektor der Dachebene — parallel;
+    Stützpunkt \( (0, 0, 9) \) liegt nicht in der Ebene (dort \( z = 4 \)).</p>
+    <p>(b) \( 9 - 4 = 5 \) m über der Vorderkante.</p>''')
+    + loes(5, r'''    <p>(a) \( 6s = 2r \), \( 5t = 2r \), \( 4 + 2t = 7 - r \Rightarrow r = \tfrac{5}{3} \approx 1.67 \) s.</p>
+    <p>(b) \( s = \tfrac{5}{9} \approx 0.56 \), \( t = \tfrac{2}{3} \approx 0.67 \) —
+    beide in \([0; 1]\): Treffer auf dem realen Dach.</p>''')
+    + loes(6, r'''    <p>(a) \( \vec{r} = s\,(4, 0, 0) + t\,(0, 6, 0.5) \).</p>
+    <p>(b) \( t = 0.5 \): \( z = 0.25 \) m.</p>
+    <p>(c) Steigung \( \tfrac{0.5}{6} \approx 8.3\ \% > 6\ \% \) — Norm nicht erfüllt,
+    die Rampe müsste länger werden.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -3545,6 +4448,38 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', L_TDS),
     ('s3-6-betragsfunktionen', 'Betragsfunktionen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Betragsfunktionen', STYLE_SERIE, '1.0', '', L_SERIE),
+    ('s4-3a-vektorbegriff-komponenten', 'Vektorbegriff und Komponenten', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', M_HANDOUT),
+    ('s4-3a-vektorbegriff-komponenten', 'Vektorbegriff und Komponenten', 'Formelauszug', 'formelauszug.html',
+     'Vektorbegriff und Komponenten — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, M_FORMELAUSZUG),
+    ('s4-3a-vektorbegriff-komponenten', 'Vektorbegriff und Komponenten', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', M_TDS),
+    ('s4-3a-vektorbegriff-komponenten', 'Vektorbegriff und Komponenten', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Vektorbegriff und Komponenten', STYLE_SERIE, '1.0', '', M_SERIE),
+    ('s4-3b-skalarprodukt', 'Skalarprodukt', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', N_HANDOUT),
+    ('s4-3b-skalarprodukt', 'Skalarprodukt', 'Formelauszug', 'formelauszug.html',
+     'Skalarprodukt — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, N_FORMELAUSZUG),
+    ('s4-3b-skalarprodukt', 'Skalarprodukt', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', N_TDS),
+    ('s4-3b-skalarprodukt', 'Skalarprodukt', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Skalarprodukt', STYLE_SERIE, '1.0', '', N_SERIE),
+    ('s4-3c-geraden', 'Geraden', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', O_HANDOUT),
+    ('s4-3c-geraden', 'Geraden', 'Formelauszug', 'formelauszug.html',
+     'Geraden — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, O_FORMELAUSZUG),
+    ('s4-3c-geraden', 'Geraden', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', O_TDS),
+    ('s4-3c-geraden', 'Geraden', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Geraden', STYLE_SERIE, '1.0', '', O_SERIE),
+    ('s4-3d-ebenen', 'Ebenen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', P_HANDOUT),
+    ('s4-3d-ebenen', 'Ebenen', 'Formelauszug', 'formelauszug.html',
+     'Ebenen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, P_FORMELAUSZUG),
+    ('s4-3d-ebenen', 'Ebenen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', P_TDS),
+    ('s4-3d-ebenen', 'Ebenen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Ebenen', STYLE_SERIE, '1.0', '', P_SERIE),
 ]
 
 
