@@ -4,6 +4,24 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [83] — 2026-07-06 · index.html: Status-Leiste bereinigt
+
+Die Stats-Chips über der Teilgebiets-Übersicht zeigten noch den alten Zwischenstand
+(«23 fertig · 0 in Arbeit · 13 geplant»). Da alle Themenseiten ausgebaut sind:
+
+- Die drei Chips durch einen einzigen grünen Chip **«46 Themenseiten fertig»** ersetzt
+  («in Arbeit»/«geplant» entfallen — es gibt nichts mehr zu zählen).
+- `st-hint` von «31 RLP-Teilgebiete · 46 Themenseiten · …» auf
+  **«31 RLP-Teilgebiete + 2 TALS-Ergänzungen · ▼ Lerngebiet anklicken zum Aufklappen»**
+  umgestellt (die Themenseiten-Zahl steht jetzt im Chip, die Ergänzungen 3.6/4.3d
+  sind ausgewiesen).
+- Die CSS-Konventionen für `karte geplant`/Stub-Badges bleiben unangetastet —
+  sie gelten weiterhin für künftige Erweiterungen (STYLEGUIDE §9).
+
+Kontrolle: 46 fertig-Karten, 0 geplant-Karten, div-Bilanz ausgeglichen.
+
+---
+
 ## [82] — 2026-07-06 · Dokumentations-Abgleich: alle md-Dateien auf «Schwerpunkt komplett»
 
 Nach dem Abschluss des Schwerpunkt-Ausbaus ([81]) alle Markdown-Dokumente auf den
