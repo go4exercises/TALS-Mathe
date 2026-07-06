@@ -178,7 +178,7 @@ Bei jeder Canvas-Animation, deren Inhalt von Schiebern abhängt, muss die Zeichn
 - **Originalfigur klein genug wählen**, damit das Bild auch bei \(k = -2\) noch reinpasst — bei zentraler Position bedeutet das: \(|\text{rel}_x|_{\max} \cdot |k|_{\max} + \text{Rand} \leq W/2\).
 - **Prüfung beim Schreiben** mit kurzem Python-Skript oder durch Bewegen des Schiebers in beide Extreme. Visuelle Inspektion „in der Mitte" reicht nicht — am Rand wird's eng.
 
-Verstöße in der Vergangenheit: Anim 1/2/3/4 in g5-2d hatten initial Werte gewählt, die bei Schieber-Extremen weit über die Canvas-Grenzen hinausragten. Korrektur in Iteration [26_7].
+Verstösse in der Vergangenheit: Anim 1/2/3/4 in g5-2d hatten initial Werte gewählt, die bei Schieber-Extremen weit über die Canvas-Grenzen hinausragten. Korrektur in Iteration [26_7].
 
 ---
 
@@ -924,6 +924,8 @@ Bevor eine Themenseite live geht, prüfe:
 ## 9. Stub-Seiten (in Vorbereitung)
 
 Eine **Stub-Seite** ist eine Themenseite, deren Struktur (RLP-Header, Master-Schema, Section-Headings, Footer, Nav) bereits steht, aber inhaltlich noch leer ist. Sie macht die Lehrplan-Abdeckung vollständig sichtbar, ohne 404-Links zu produzieren.
+
+*Status Juli 2026: Es gibt aktuell keine Stub-Seiten mehr — alle 31 RLP-Teilgebiete (Grundlagen- und Schwerpunktfach) sind ausgearbeitet. Die Konvention bleibt für künftige Erweiterungen verbindlich.*
 
 **Pflicht-Elemente einer Stub-Seite:**
 

@@ -35,4 +35,4 @@ downloads/
 
 ## Hinweis
 
-Solange ein Thema noch nicht „verfügbar" ist, gibt es im entsprechenden Themen-Ordner keine Materialien. Die Themenseite zeigt in diesem Fall nur den Hinweis „Wird ergänzt." statt einer Download-Kachel-Galerie — es entstehen also keine 404-Links.
+Seit Juli 2026 sind alle Themenseiten beider Bereiche verfügbar — jeder Themen-Ordner enthält den vollen Materialsatz. Die Regel für künftige neue Seiten bleibt: Solange ein Thema noch nicht „verfügbar" ist, gibt es im entsprechenden Themen-Ordner keine Materialien; die Themenseite zeigt dann nur den Hinweis „Wird ergänzt." statt einer Download-Kachel-Galerie — es entstehen also keine 404-Links.

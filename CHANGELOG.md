@@ -4,6 +4,33 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [82] — 2026-07-06 · Dokumentations-Abgleich: alle md-Dateien auf «Schwerpunkt komplett»
+
+Nach dem Abschluss des Schwerpunkt-Ausbaus ([81]) alle Markdown-Dokumente auf den
+aktuellen Stand gebracht:
+
+- **`README.md`** — Schwerpunkt-Tabelle von 13 × «🔜 geplant» auf 23 Zeilen
+  «✅ verfügbar» umgestellt (inkl. Sub-Splits 2.2a–c, 3.2a/b, 3.4a/b, 4.2a–c, 4.3a–d
+  und der Ergänzungen 3.6/4.3d mit Kennzeichnung); Projekt-Absatz («entsteht
+  schrittweise» → alle 31 Teilgebiete verfügbar); Sub-Split-Liste in den Zielen
+  vervollständigt; Dateistruktur-Zähler auf 23 + 23 HTML-Dateien korrigiert.
+- **`CLAUDE.md`** — Projektstruktur: Schwerpunkt von «13 Seiten» auf 23 Seiten mit
+  vollständiger Sub-Split-Liste; Hinweis «keine Stubs mehr».
+- **`STYLEGUIDE.md`** — §9 Stub-Seiten: Status-Notiz ergänzt (Konvention bleibt,
+  aktuell existieren keine Stubs).
+- **`HOWTO-neue-themenseite.md`** — Anwendungsfall-Satz und Generator-Empfehlung
+  aktualisiert (ein Generator `build_print_s3.py` mit Blöcken A–W statt
+  Pro-Lerngebiet-Skripten).
+- **`HOWTO-externe-ressourcen.md`** — Titel der Anbieter-Map §8 auf Stand Juli 2026.
+- **`downloads/README.md`** — Hinweis-Absatz: alle Themen-Ordner enthalten den vollen
+  Materialsatz; Regel für künftige Seiten bleibt dokumentiert.
+- **`BERICHT-konsistenz-2026-06-24.md`** — Kopfnotiz, dass Punkt C1 (13 Schwerpunkt-
+  Stubs) inzwischen erledigt ist; Bericht selbst bleibt als Momentaufnahme unverändert.
+
+Keine Änderungen an Themenseiten oder Skripten — reiner Dokumentations-Abgleich.
+
+---
+
 ## [81] — 2026-07-06 · s1-1 Grundlagen: Vollausbau — das Schwerpunktfach ist komplett
 
 Das letzte offene Teilgebiet ausgebaut: s1-1 Grundlagen (Arithmetik/Algebra), ohne

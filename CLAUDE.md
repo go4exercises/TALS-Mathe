@@ -27,8 +27,10 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 
 ## Projektstruktur
 
-- `grundlagen/` — Grundlagenfach: `g1-*` … `g5-*` (23 Seiten, inkl. Sub-Splits `g2-2a/b`).
-- `schwerpunkt/` — Schwerpunktfach: `s1-*` … `s4-*` (13 Seiten).
+- `grundlagen/` — Grundlagenfach: `g1-*` … `g5-*` (23 Seiten, inkl. Sub-Splits `g2-2a/b`, `g5-2a–d`).
+- `schwerpunkt/` — Schwerpunktfach: `s1-*` … `s4-*` (23 Seiten, inkl. Sub-Splits `s2-2a–c`,
+  `s3-2a/b`, `s3-4a/b`, `s4-2a–c`, `s4-3a–d` und Ergänzungen `s3-6`, `s4-3d`). Alle Teilgebiete
+  sind ausgebaut — es gibt keine Stubs mehr.
 - `mathlib.js` — Canvas-Bibliothek + globale Helfer (`toggleL` u.a.).
 - `minicheck.js` (Mini-Check-Akkordeon), `anim-hinweise.js` (👁/💡-Rollover, Pflicht bei
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.

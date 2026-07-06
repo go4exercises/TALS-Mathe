@@ -1,5 +1,7 @@
 # Technischer Konsistenz-Bericht — TALS Mathe
 
+> **Hinweis (Juli 2026):** Momentaufnahme vom 24.06.2026. Punkt C1 ist inzwischen erledigt — alle 13 Schwerpunkt-Teilgebiete wurden bis Juli 2026 vollständig ausgebaut (CHANGELOG [71]–[81]); es gibt keine Stub-Seiten mehr.
+
 **Datum:** 2026-06-24 · **Umfang:** `grundlagen/*.html` (23), `schwerpunkt/*.html` (13),
 geteilte Assets (`style.css`, `mathlib.js`, `nav.js`, `minicheck.js`, `anim-hinweise.js`),
 `TEMPLATE.html`, Nachschlag-Seiten. **Methode:** Pre-Flight (alle Seiten) + vier

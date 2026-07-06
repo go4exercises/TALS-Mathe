@@ -269,7 +269,7 @@ Schwerpunkt analog:
 
 ---
 
-## 8. Bisher recherchierte Anbieter-Map (Stand: Mai 2026)
+## 8. Bisher recherchierte Anbieter-Map (Stand: Juli 2026 — deckt alle Themenseiten beider Bereiche ab)
 
 Diese Tabelle wird mit jedem abgeschlossenen Thema erweitert. So muss eine bereits verifizierte Playlist nicht erneut recherchiert werden.
 

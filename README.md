@@ -11,14 +11,14 @@ Dieses Repository enthält ein vollständiges, interaktives Mathematik-Lehrmitte
 
 Die Inhalte richten sich an Lernende der Berufsmaturität sowie an Lehrpersonen, die ihr Unterrichtsmaterial ergänzen oder teilen möchten. Alle Seiten sind frei zugänglich, ohne Registrierung, ohne Werbung — direkt im Browser.
 
-Das Projekt entsteht schrittweise. Fertige Teilgebiete sind sofort verfügbar; weitere werden laufend ergänzt.
+Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TALS-Ergänzungen 3.6 Betragsfunktionen und 4.3d Ebenen (über den RLP hinaus). Das Material wird laufend gepflegt und erweitert.
 
 ---
 
 ## Ziele
 
 - Den gesamten TALS-Mathematikstoff **strukturiert, verständlich und interaktiv** aufbereiten
-- Die **Lehrplanstruktur des RLP 2030** (SBFI, 13. Juni 2025) **1:1 abbilden** — jedes der 31 Teilgebiete hat eine eigene Seite (umfangreiche Teilgebiete werden per Sub-Split auf mehrere Seiten aufgeteilt, siehe STYLEGUIDE §4.1; aktuell betrifft das Teilgebiet 2.2 → 2.2a + 2.2b und Teilgebiet 5.2 → 5.2a + 5.2b + 5.2c + 5.2d)
+- Die **Lehrplanstruktur des RLP 2030** (SBFI, 13. Juni 2025) **1:1 abbilden** — jedes der 31 Teilgebiete hat eine eigene Seite (umfangreiche Teilgebiete werden per Sub-Split auf mehrere Seiten aufgeteilt, siehe STYLEGUIDE §4.1; aktuell betrifft das im Grundlagenfach 2.2 → a/b und 5.2 → a–d, im Schwerpunktfach 2.2 → a/b/c, 3.2 → a/b, 3.4 → a/b, 4.2 → a/b/c und 4.3 → a–d)
 - **Notation und Symbolik** konsistent nach *Formeln, Tabellen, Begriffe* (Orell Füssli Lehrmittel) halten
 - Formeln in **echtem LaTeX** darstellen (via MathJax), wie aus gedruckten Lehrmitteln gewohnt
 - Ein **didaktisches Design-System** verwenden, das auf jeder Seite gleich funktioniert:
@@ -63,23 +63,33 @@ Das Projekt entsteht schrittweise. Fertige Teilgebiete sind sofort verfügbar; w
 | 5.4 | Einheitskreis  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
 | 5.5 | Trigonometrische Gleichungen | ✅ verfügbar |
 
-### Schwerpunktfach — RLP 2030, Kap. 7.4.4 (200 Lektionen, 13 Teilgebiete)
+### Schwerpunktfach — RLP 2030, Kap. 7.4.4 (200 Lektionen, 13 Teilgebiete + 2 Ergänzungen)
 
 | Nr. | Teilgebiet | Status |
 |-----|------------|--------|
-| 1.1 | Grundlagen | 🔜 geplant |
-| 1.2 | Potenzen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 1.3 | Logarithmen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 2.1 | Grundlagen | 🔜 geplant |
-| 2.2 | Gleichungstypen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 3.1 | Grundlagen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 3.2 | Potenz- und Wurzelfunktionen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 3.3 | Polynomfunktionen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 3.4 | Exponential- und Logarithmusfunktionen  *(auch ohne Hilfsmittel)* | 🔜 geplant |
-| 3.5 | Trigonometrische Funktionen | 🔜 geplant |
-| 4.1 | Grundlagen | 🔜 geplant |
-| 4.2 | Stereometrie | 🔜 geplant |
-| 4.3 | Zwei- und dreidimensionale Vektorgeometrie  *(auch ohne Hilfsmittel)* | 🔜 geplant |
+| 1.1 | Grundlagen | ✅ verfügbar |
+| 1.2 | Potenzen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 1.3 | Logarithmen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 2.1 | Grundlagen | ✅ verfügbar |
+| 2.2a | Potenz-, Wurzel- und rationale Gleichungen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 2.2b | Exponential- und logarithmische Gleichungen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 2.2c | Betrags- und Polynomgleichungen, Ungleichungen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 3.1 | Grundlagen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 3.2a | Potenzfunktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 3.2b | Wurzelfunktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 3.3 | Polynomfunktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 3.4a | Exponentialfunktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 3.4b | Logarithmusfunktionen  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 3.5 | Trigonometrische Funktionen | ✅ verfügbar |
+| 3.6 | Betragsfunktionen  *(Ergänzung TALS — über den RLP hinaus)* | ✅ verfügbar |
+| 4.1 | Grundlagen | ✅ verfügbar |
+| 4.2a | Prismen und Zylinder | ✅ verfügbar |
+| 4.2b | Pyramiden, Kegel und Stümpfe | ✅ verfügbar |
+| 4.2c | Kugel und zusammengesetzte Körper | ✅ verfügbar |
+| 4.3a | Vektorbegriff und Komponenten  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 4.3b | Skalarprodukt  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 4.3c | Geraden  *(auch ohne Hilfsmittel)* | ✅ verfügbar |
+| 4.3d | Ebenen  *(Ergänzung TALS — über den RLP hinaus)* | ✅ verfügbar |
 
 ---
 
@@ -116,8 +126,8 @@ nav.js                  ← Navigation (Header, Breadcrumb, ToC, Prev/Next)
 mathlib.js              ← Canvas-Helper, Term-Parser, Zahlen-Formatierer
 STYLEGUIDE.md           ← Verbindliche Konventionen für neue Themen
 TEMPLATE.html           ← Vorlage für neue Teilgebiete
-grundlagen/             ← 18 HTML-Dateien (g1-1, g1-2, ..., g5-5)
-schwerpunkt/            ← 13 HTML-Dateien (s1-1, s1-2, ..., s4-3)
+grundlagen/             ← 23 HTML-Dateien (g1-1 … g5-5, inkl. Sub-Splits)
+schwerpunkt/            ← 23 HTML-Dateien (s1-1 … s4-3d, inkl. Sub-Splits)
 downloads/              ← Materialien pro Teilgebiet
   README.md
   grundlagen/<datei-id>/  handout.pdf, aufgabenserie.pdf,

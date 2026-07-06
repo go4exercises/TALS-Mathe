@@ -1,6 +1,6 @@
 # HOWTO — Neue Themenseite ausarbeiten
 
-Dieser Leitfaden beschreibt den Workflow für **eine neue Themenseite plus Materialien** (4 Druckseiten + 1 Anki-Deck). Der typische Anwendungsfall ist das Ausarbeiten eines Schwerpunkt-Stubs, aber der Ablauf gilt auch für jede andere neu hinzukommende Seite.
+Dieser Leitfaden beschreibt den Workflow für **eine neue Themenseite plus Materialien** (4 Druckseiten + 1 Anki-Deck). Die Schwerpunkt-Stubs sind inzwischen alle ausgearbeitet (Stand Juli 2026); der Ablauf gilt für jede neu hinzukommende Seite — etwa weitere TALS-Ergänzungen nach dem Muster von 3.6/4.3d.
 
 Verwandte Dokumente: `STYLEGUIDE.md` (Pflicht-Konventionen), `COLLABORATION.md` (Arbeitsweise mit Claude), `CHANGELOG.md` (Versions-Historie).
 
@@ -198,7 +198,7 @@ Schlanker Stil: `downloads/grundlagen/g5-1-grundlagen/*.html`. Jede der 4 Drucks
 
 Für die g4-Reihe wurde `scripts/build_print_g4.py` als Generator genutzt: HTML-Skelett als Template, Inhalt pro Druckseite als Python-Triple-Quoted-String, Generation in einer Schleife. **Dieses Pattern ist gut für eine 3er- oder 4er-Themen-Serie** (gleicher Lerngebiet-Bereich), aber Overkill für eine einzelne Themenseite.
 
-Für die Schwerpunkt-Stub-Migration empfehle ich einen **angepassten Generator pro Lerngebiet**: `scripts/build_print_s1.py` für s1-1, s1-2, s1-3 usw. Das hält die Inhalte pro Lerngebiet zusammen und bleibt überschaubar. Vorlage ist `scripts/build_print_g4.py`.
+In der Praxis hat sich für den gesamten Schwerpunkt-Ausbau **ein einziger Generator** bewährt: `scripts/build_print_s3.py` enthält die Blöcke aller Schwerpunkt-Seiten (A–W, ein Buchstabe pro Seite) und reproduziert bestehende Ausgaben byte-identisch — neue Seiten werden dort als weiterer Block plus `SEITEN`-Einträge ergänzt.
 
 Alternativ: einzeln per Hand. Bei einer einzelnen Themenseite ist das genauso schnell.
 
