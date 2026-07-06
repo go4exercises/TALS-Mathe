@@ -5240,6 +5240,437 @@ T_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s1-2  POTENZEN
+# ═══════════════════════════════════════════════════════════════════
+
+U_HANDOUT = r'''
+  <h2>1. Definitionen</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Potenz</div>
+    <p>\( a^n = a \cdot a \cdot \ldots \cdot a \) (\(n\) Faktoren) — Basis \(a\), Exponent \(n\).
+    Fortsetzung nach unten (für \( a \neq 0 \)): <strong>\( a^0 = 1 \)</strong>,
+    <strong>\( a^{-n} = \tfrac{1}{a^n} \)</strong> (Divisions-Treppe: jeder Schritt teilt durch
+    die Basis). Rationale Exponenten (für \( a > 0 \)):
+    <strong>\( a^{1/n} = \sqrt[n]{a} \)</strong>, \( a^{m/n} = \sqrt[n]{a^m} \) —
+    Wurzeln sind Potenzen.</p>
+  </div>
+
+  <h2>2. Die fünf Potenzgesetze</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">gleiche Basis, Mal</td><td>\( a^m \cdot a^n = a^{m+n} \) — Exponenten addieren</td></tr>
+      <tr><td class="li">gleiche Basis, Geteilt</td><td>\( a^m : a^n = a^{m-n} \) — Exponenten subtrahieren</td></tr>
+      <tr><td class="li">Potenz der Potenz</td><td>\( (a^m)^n = a^{mn} \) — Exponenten multiplizieren</td></tr>
+      <tr><td class="li">gleicher Exponent, Mal</td><td>\( a^n b^n = (ab)^n \)</td></tr>
+      <tr><td class="li">gleicher Exponent, Geteilt</td><td>\( a^n : b^n = (a : b)^n \)</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Kein Gesetz für Summen:</strong> \( a^2 + a^3 \neq a^5 \) (Probe \( a = 2 \):
+  \( 12 \neq 32 \)) — Summen höchstens ausklammern.</p>
+
+  <h2>3. Hierarchie der Operationen</h2>
+  <p><strong>Klammern → Potenzen → Punkt → Strich.</strong> Potenztürme von oben:
+  \( 2^{3^2} = 2^9 = 512 \neq (2^3)^2 = 64 \). Vorzeichen nach der Potenz:
+  \( -3^2 = -9 \), aber \( (-3)^2 = 9 \).</p>
+
+  <h2>4. Exponentenschreibweise</h2>
+  <p>Jede Zahl als \( m \cdot 10^k \) mit Mantisse \( 1 \leq m < 10 \):
+  \( 5\,420\,000 = 5.42 \cdot 10^6 \). Beim Rechnen: Mantissen und Zehnerpotenzen getrennt
+  verarbeiten — die Potenzgesetze erledigen die Grössenordnung.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Mal bei gleicher Basis: addieren. Klammer-Potenz: multiplizieren. Bruchexponent:
+    Wurzel. Kein Gesetz für Summen — und Türme von oben.</p>
+  </div>
+'''
+
+U_FORMELAUSZUG = r'''
+  <h2>1. Definitionen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Nullexponent / negativ</td><td>\( a^0 = 1; \quad a^{-n} = \tfrac{1}{a^n} \) (\( a \neq 0 \))</td></tr>
+      <tr><td class="li">rationale Exponenten</td><td>\( a^{1/n} = \sqrt[n]{a}; \quad a^{m/n} = \sqrt[n]{a^m} \) (\( a > 0 \))</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Potenzgesetze</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">gleiche Basis</td><td>\( a^m a^n = a^{m+n}; \quad a^m : a^n = a^{m-n} \)</td></tr>
+      <tr><td class="li">Potenz der Potenz</td><td>\( (a^m)^n = a^{mn} \)</td></tr>
+      <tr><td class="li">gleicher Exponent</td><td>\( a^n b^n = (ab)^n; \quad a^n : b^n = (a:b)^n \)</td></tr>
+      <tr><td class="li">Summen</td><td class="li">kein Gesetz — nur ausklammern!</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Hierarchie</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Rangordnung</td><td class="li">Klammern → Potenzen → Punkt → Strich</td></tr>
+      <tr><td class="li">Potenztürme</td><td>von oben: \( a^{b^c} = a^{(b^c)} \)</td></tr>
+      <tr><td class="li">Vorzeichen</td><td>\( -3^2 = -9; \quad (-3)^2 = 9 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Zehnerpotenzen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Exponentenschreibweise</td><td>\( m \cdot 10^k \) mit \( 1 \leq m < 10 \)</td></tr>
+      <tr><td class="li">Faustregel Informatik</td><td>\( 2^{10} = 1024 \approx 10^3 \) (+2.4 %)</td></tr>
+    </tbody>
+  </table>
+'''
+
+U_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Bei \( a^m \cdot a^n \) werden die Exponenten <span class="lueck"></span>,<br>
+      bei \( (a^m)^n \) werden sie <span class="lueck"></span>.<br>
+      Für Summen von Potenzen gibt es <span class="lueck"></span> Gesetz.
+    </div>''')
+    + aufg(2, 'Treppe hinunter', 1, r'''    <p>Berechne \( 2^3, 2^2, 2^1, 2^0, 2^{-1}, 2^{-2} \) — was passiert bei jedem Schritt?</p>
+''' + LINS)
+    + aufg(3, 'Vorzeichen-Falle', 1, r'''    <p>Berechne \( -3^2 \), \( (-3)^2 \) und \( (-2)^3 \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Potenzgesetze</div>\n'
+    + aufg(4, 'Vereinfachen', 2, r'''    <p>Vereinfache: (a) \( x^4 \cdot x^{-7} \cdot x^5 \) &nbsp; (b) \( \dfrac{(a^3)^2 b}{a^4 b^{-2}} \)</p>
+''' + LINS)
+    + aufg(5, 'Gleicher Exponent', 2, r'''    <p>Berechne ohne Rechner: \( \dfrac{15^4}{5^4} \) und \( 5^3 \cdot 2^3 \).</p>
+''' + LINS)
+    + aufg(6, 'Falsch oder richtig?', 2, r'''    <p>Prüfe mit einer Probe: Gilt \( a^2 + a^2 = a^4 \)? Korrigiere gegebenenfalls.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Rationale Exponenten</div>\n'
+    + aufg(7, 'Auswerten', 2, r'''    <p>Berechne: (a) \( 8^{2/3} \) &nbsp; (b) \( 16^{-1/2} \) &nbsp; (c) \( 4^{3/2} \)</p>
+''' + LINS)
+    + aufg(8, 'Wurzeln als Potenzen', 2, r'''    <p>Schreibe \( \sqrt{x} \cdot \sqrt[4]{x} \) als eine Potenz und als eine Wurzel.</p>
+''' + LINS)
+    + aufg(9, 'Rückwärts', 3, r'''    <p>Für welchen Exponenten \(x\) gilt \( 27^x = 9 \)? (Beide Seiten als Dreierpotenzen!)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Hierarchie und Zehnerpotenzen</div>\n'
+    + aufg(10, 'Hierarchie', 2, r'''    <p>Berechne \( 5 + 3 \cdot 2^4 - (4 - 6)^2 \) Schritt für Schritt.</p>
+''' + LINS)
+    + aufg(11, 'Potenzturm', 3, r'''    <p>Berechne \( 2^{3^2} \) und \( (2^3)^2 \) — und erkläre den Unterschied.</p>
+''' + LINS)
+    + aufg(12, 'Exponentenschreibweise', 2, r'''    <p>Schreibe \( 0.00047 \) und \( 5\,420\,000 \) in Exponentenschreibweise und
+    überschlage ihr Produkt.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>addiert</strong> · <strong>multipliziert</strong> · <strong>kein</strong>.</p>''')
+    + loes(2, r'''    <p>\( 8, 4, 2, 1, \tfrac{1}{2}, \tfrac{1}{4} \) — jeder Schritt teilt durch die
+    Basis 2; darum \( 2^0 = 1 \).</p>''')
+    + loes(3, r'''    <p>\( -9 \) (Potenz vor Vorzeichen), \( +9 \), \( -8 \) (ungerader Exponent erhält
+    das Minus).</p>''')
+    + loes(4, r'''    <p>(a) \( x^{4-7+5} = x^2 \). (b) \( a^{6-4} b^{1+2} = a^2 b^3 \).</p>''')
+    + loes(5, r'''    <p>\( 3^4 = 81 \) und \( 10^3 = 1000 \) — Gesetz 5 bzw. 4.</p>''')
+    + loes(6, r'''    <p>\( a = 3 \): \( 9 + 9 = 18 \neq 81 \). Richtig: \( a^2 + a^2 = 2a^2 \).</p>''')
+    + loes(7, r'''    <p>(a) \( (\sqrt[3]{8})^2 = 4 \). (b) \( \tfrac{1}{\sqrt{16}} = 0.25 \).
+    (c) \( (\sqrt{4})^3 = 8 \).</p>''')
+    + loes(8, r'''    <p>\( x^{1/2+1/4} = x^{3/4} = \sqrt[4]{x^3} \).</p>''')
+    + loes(9, r'''    <p>\( (3^3)^x = 3^2 \Rightarrow 3x = 2 \Rightarrow x = \tfrac{2}{3} \).</p>''')
+    + loes(10, r'''    <p>\( 5 + 3 \cdot 16 - (-2)^2 = 5 + 48 - 4 = 49 \).</p>''')
+    + loes(11, r'''    <p>\( 2^9 = 512 \) vs. \( 8^2 = 64 \) — ohne Klammer von oben (Konvention);
+    Gesetz 3 gilt nur mit Klammer.</p>''')
+    + loes(12, r'''    <p>\( 4.7 \cdot 10^{-4} \) und \( 5.42 \cdot 10^6 \); Produkt
+    \( \approx 25 \cdot 10^2 = 2.5 \cdot 10^3 \).</p>''')
+)
+
+U_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Erst Potenzgesetze, dann Zahlen — nie umgekehrt!</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Klassiker</td><td>Papier bis zum Mond</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Finanzen</td><td>Zinseszins</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Informatik</td><td>Kilo oder Kibi?</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Biologie</td><td>Bakterien-Verdopplung</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Physik</td><td>Grössenordnungen im Universum</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Knobelei</td><td>Potenztürme im Vergleich</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Papier bis zum Mond', 2, r'''    <p>Ein Blatt (0.1 mm) wird wiederholt gefaltet; jede Faltung verdoppelt die Dicke.</p>
+    <p>(a) Wie dick ist der Stapel nach 10 Faltungen?</p>
+    <p>(b) Wie dick nach 42 Faltungen (in km)? Vergleiche mit der Monddistanz (384 400 km).</p>
+    <p>(c) Warum scheitert das reale Falten schon bei etwa 7–8 Faltungen?</p>
+''' + LINS4, tag='Klassiker')
+    + aufg(2, 'Zinseszins', 2, r'''    <p>5000 Fr. werden mit 2 % pro Jahr verzinst: \( K = 5000 \cdot 1.02^n \).</p>
+    <p>(a) Kontostand nach 10 Jahren?</p>
+    <p>(b) Zuwachs im 1. Jahr und im 10. Jahr — warum sind sie verschieden?</p>
+''' + LINS4, tag='Finanzen')
+    + aufg(3, 'Kilo oder Kibi?', 2, r'''    <p>1 KiB \( = 2^{10} \) Byte, 1 kB \( = 10^3 \) Byte.</p>
+    <p>(a) Berechne \( 2^{10} \) und die prozentuale Abweichung.</p>
+    <p>(b) Schätze \( 2^{30} \) mit der Faustregel \( 2^{10} \approx 10^3 \).</p>
+    <p>(c) Ein «500-GB»-Datenträger (\( 500 \cdot 10^9 \) Byte): Wie viele GiB
+    (\( 2^{30} \) Byte) zeigt das Betriebssystem an?</p>
+''' + LINS4, tag='Informatik')
+    + aufg(4, 'Bakterien-Verdopplung', 3, r'''    <p>Eine Kultur startet mit 100 Zellen und verdoppelt sich alle 20 Minuten.</p>
+    <p>(a) Wie viele Zellen nach 2 Stunden?</p>
+    <p>(b) Nach wie vielen Verdopplungen sind es über eine Million?
+    (Nutze \( 2^{10} \approx 10^3 \).)</p>
+''' + LINS4, tag='Biologie')
+    + aufg(5, 'Grössenordnungen im Universum', 3, r'''    <p>Wasserstoffatom \( \approx 10^{-10} \) m, Mensch \( \approx 2 \cdot 10^0 \) m,
+    beobachtbares Universum \( \approx 8.8 \cdot 10^{26} \) m.</p>
+    <p>(a) Wie viele Zehnerpotenzen liegen zwischen Atom und Mensch?</p>
+    <p>(b) Wie viele zwischen Mensch und Universum? Wo steht der Mensch «in der Mitte»?</p>
+''' + LINS4, tag='Physik')
+    + aufg(6, 'Potenztürme im Vergleich', 3, r'''    <p>(a) Berechne \( 2^{3^2} \) und \( (2^3)^2 \).</p>
+    <p>(b) Welcher Turm ist grösser: \( 3^{2^3} \) oder \( 2^{3^3} \)? Erst schätzen,
+    dann rechnen.</p>
+    <p>(c) Formuliere die Turm-Regel und grenze sie vom Potenzgesetz \( (a^m)^n \) ab.</p>
+''' + LINS4, tag='Knobelei')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( 0.1 \cdot 2^{10} = 102.4 \) mm.</p>
+    <p>(b) \( \approx 439\,805 \) km — am Mond vorbei.</p>
+    <p>(c) Die Fläche halbiert sich pro Faltung; nach 7–8 Faltungen ist das Blatt
+    dicker als breit.</p>''')
+    + loes(2, r'''    <p>(a) \( \approx 6094.97 \) Fr.</p>
+    <p>(b) 1. Jahr: 100 Fr.; 10. Jahr: \( 5000 \cdot 1.02^9 \cdot 0.02 \approx 119.51 \) Fr.
+    — der Zins wirkt auf den gewachsenen Betrag.</p>''')
+    + loes(3, r'''    <p>(a) 1024; +2.4 %.</p>
+    <p>(b) \( 2^{30} = (2^{10})^3 \approx 10^9 \).</p>
+    <p>(c) \( 500 \cdot 10^9 / 2^{30} \approx 465.7 \) GiB — daher die «fehlenden» GB.</p>''')
+    + loes(4, r'''    <p>(a) 2 h = 6 Verdopplungen: \( 100 \cdot 2^6 = 6400 \).</p>
+    <p>(b) \( 100 \cdot 2^n > 10^6 \Rightarrow 2^n > 10^4 \approx 2^{13.3} \):
+    ab 14 Verdopplungen (\( \approx 4.7 \) h).</p>''')
+    + loes(5, r'''    <p>(a) \( \lg(2 \cdot 10^0) - \lg(10^{-10}) \approx 10.3 \) Zehnerpotenzen.</p>
+    <p>(b) \( \approx 26.6 \) — der Mensch steht näher am Atom als am Universum,
+    aber «logarithmisch mittendrin».</p>''')
+    + loes(6, r'''    <p>(a) \( 512 \) und \( 64 \).</p>
+    <p>(b) \( 3^8 = 6561 \) vs. \( 2^{27} = 134\,217\,728 \) — der höhere Exponent schlägt
+    die grössere Basis.</p>
+    <p>(c) Türme ohne Klammer von oben auswerten (Konvention); \( (a^m)^n = a^{mn} \)
+    gilt nur mit Klammer.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s1-3  LOGARITHMEN
+# ═══════════════════════════════════════════════════════════════════
+
+V_HANDOUT = r'''
+  <h2>1. Definition</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Logarithmus</div>
+    <p style="text-align:center">\( a^x = b \;\Longleftrightarrow\; x = \log_a(b), \qquad
+    a, b \in \mathbb{R}^+,\ a \neq 1 \)</p>
+    <p>Die Umkehrfrage nach dem <strong>Exponenten</strong>: «\(a\) hoch was gibt \(b\)?»
+    Sofortwerte: \( \log_a 1 = 0 \), \( \log_a a = 1 \), \( \log_a a^k = k \),
+    \( a^{\log_a b} = b \).</p>
+  </div>
+  <p><strong>Spezialbasen:</strong> \( \lg = \log_{10} \) (dekadisch), \( \ln = \log_e \)
+  (natürlich), \( \log_2 \) (binär). Nur positive Argumente: \( \log_a(b) \) existiert
+  nicht für \( b \leq 0 \).</p>
+
+  <h2>2. Die drei Logarithmengesetze</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Produkt → Summe</td><td>\( \log_a(uv) = \log_a u + \log_a v \)</td></tr>
+      <tr><td class="li">Quotient → Differenz</td><td>\( \log_a(u/v) = \log_a u - \log_a v \)</td></tr>
+      <tr><td class="li">Potenz → Faktor</td><td>\( \log_a(u^k) = k \log_a u \)</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Kein Gesetz für Summen:</strong> \( \log_a(u + v) \neq \log_a u + \log_a v \)
+  (Probe: \( \lg 100 = 2 \), aber \( \lg 10 + \lg 90 \approx 2.95 \)).</p>
+
+  <h2>3. Basiswechsel</h2>
+  <p style="text-align:center">\( \log_a(b) = \dfrac{\lg b}{\lg a} = \dfrac{\ln b}{\ln a} \)</p>
+  <p>Damit rechnet der Taschenrechner jede Basis. Schöne Fälle exakt:
+  \( \log_4 8 = \tfrac{3 \lg 2}{2 \lg 2} = \tfrac{3}{2} \).</p>
+
+  <h2>4. Exponentialgleichungen</h2>
+  <p>Steht \(x\) im Exponenten: <strong>beide Seiten logarithmieren</strong>, Gesetz 3 holt
+  \(x\) herunter: \( a^x = b \Rightarrow x = \tfrac{\lg b}{\lg a} \). Beispiele:
+  \( 3^x = 20 \Rightarrow x \approx 2.73 \); Verdopplungszeit
+  \( 1.03^n = 2 \Rightarrow n \approx 23.45 \) Jahre.</p>
+
+  <h2>5. Logarithmische Skalen</h2>
+  <p>pH \( = -\lg[\text{H}^+] \), Dezibel, Richter: eine Stufe = Faktor 10.
+  Stellenzahl von \(N\): \( \lfloor \lg N \rfloor + 1 \) — so hat \( 2^{100} \)
+  genau 31 Stellen.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Der Logarithmus liefert den Exponenten. Produkt → Summe, Potenz → Faktor,
+    Basiswechsel: Basis in den Nenner. Für Summen gibt es kein Gesetz.</p>
+  </div>
+'''
+
+V_FORMELAUSZUG = r'''
+  <h2>1. Definition und Sofortwerte</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Definition</td><td>\( a^x = b \Leftrightarrow x = \log_a(b) \) (\( a, b > 0, a \neq 1 \))</td></tr>
+      <tr><td class="li">Sofortwerte</td><td>\( \log_a 1 = 0; \quad \log_a a = 1; \quad \log_a a^k = k \)</td></tr>
+      <tr><td class="li">Umkehrung</td><td>\( a^{\log_a b} = b \)</td></tr>
+      <tr><td class="li">Spezialbasen</td><td>\( \lg = \log_{10}; \quad \ln = \log_e; \quad \log_2 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Logarithmengesetze</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Produkt</td><td>\( \log_a(uv) = \log_a u + \log_a v \)</td></tr>
+      <tr><td class="li">Quotient</td><td>\( \log_a(u/v) = \log_a u - \log_a v \)</td></tr>
+      <tr><td class="li">Potenz</td><td>\( \log_a(u^k) = k \log_a u \)</td></tr>
+      <tr><td class="li">Summen</td><td class="li">kein Gesetz!</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Basiswechsel</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Formel</td><td>\( \log_a b = \dfrac{\lg b}{\lg a} = \dfrac{\ln b}{\ln a} \)</td></tr>
+      <tr><td class="li">Kehrwert-Beziehung</td><td>\( \log_a b \cdot \log_b a = 1 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Anwendungen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Exponentialgleichung</td><td>\( a^x = b \Rightarrow x = \lg b / \lg a \)</td></tr>
+      <tr><td class="li">Verdopplungszeit</td><td>\( q^n = 2 \Rightarrow n = \lg 2 / \lg q \)</td></tr>
+      <tr><td class="li">pH-Wert</td><td>\( \text{pH} = -\lg[\text{H}^+] \)</td></tr>
+      <tr><td class="li">Stellenzahl</td><td>\( \lfloor \lg N \rfloor + 1 \)</td></tr>
+    </tbody>
+  </table>
+'''
+
+V_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      \( \log_a(b) \) beantwortet die Frage: «\(a\) hoch was gibt <span class="lueck"></span>?»<br>
+      Es gilt \( \log_a(1) = \) <span class="lueck"></span> und \( \log_a(a) = \) <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Übersetzen', 1, r'''    <p>Übersetze in die jeweils andere Form: (a) \( 2^6 = 64 \) &nbsp;
+    (b) \( \log_3(x) = 4 \)</p>
+''' + LINS)
+    + aufg(3, 'Sofortwerte', 1, r'''    <p>Berechne ohne Rechner: \( \lg(100) \), \( \lg(1) \), \( \lg(0.001) \),
+    \( \ln(e^3) \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Logarithmen berechnen</div>\n'
+    + aufg(4, 'Zweierpotenzen', 2, r'''    <p>Berechne \( \log_2(32) \), \( \log_2(1) \) und \( \log_2\!\left(\tfrac{1}{8}\right) \).</p>
+''' + LINS)
+    + aufg(5, 'Negative Logarithmen', 2, r'''    <p>Berechne \( \log_5\!\left(\tfrac{1}{25}\right) \) — und erkläre, wann Logarithmen
+    negativ sind.</p>
+''' + LINS)
+    + aufg(6, 'Fenster angeben', 2, r'''    <p>Zwischen welchen ganzen Zahlen liegt \( \lg(7000) \)? Und \( \log_2(40) \)?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Gesetze</div>\n'
+    + aufg(7, 'Zerlegen', 2, r'''    <p>Zerlege \( \lg\!\left(\dfrac{1000\, a^2}{b}\right) \) so weit wie möglich.</p>
+''' + LINS)
+    + aufg(8, 'Zusammenfassen', 2, r'''    <p>Fasse zusammen: \( 3\ln(x) + \ln(y) - 2\ln(z) \) und \( \lg(4) + \lg(25) \).</p>
+''' + LINS)
+    + aufg(9, 'Falsch oder richtig?', 2, r'''    <p>Gilt \( \lg(u + v) = \lg(u) + \lg(v) \)? Prüfe mit \( u = v = 10 \).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Basiswechsel und Gleichungen</div>\n'
+    + aufg(10, 'Basiswechsel', 2, r'''    <p>Berechne \( \log_2(5) \) (zwei Dezimalen) und \( \log_4(8) \) exakt.</p>
+''' + LINS)
+    + aufg(11, 'Exponentialgleichung', 3, r'''    <p>Löse \( 3^x = 20 \) — mit Plausibilitäts-Fenster.</p>
+''' + LINS)
+    + aufg(12, 'Verdopplungszeit', 3, r'''    <p>Wie lange dauert die Verdopplung bei 3 % Wachstum pro Jahr?</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>\(b\)</strong> · <strong>0</strong> · <strong>1</strong>.</p>''')
+    + loes(2, r'''    <p>(a) \( \log_2(64) = 6 \). (b) \( x = 3^4 = 81 \).</p>''')
+    + loes(3, r'''    <p>\( 2 \), \( 0 \), \( -3 \), \( 3 \).</p>''')
+    + loes(4, r'''    <p>\( 5 \), \( 0 \), \( -3 \) (denn \( \tfrac{1}{8} = 2^{-3} \)).</p>''')
+    + loes(5, r'''    <p>\( -2 \) — negativ für Argumente zwischen 0 und 1.</p>''')
+    + loes(6, r'''    <p>\( 3 < \lg 7000 < 4 \); \( 5 < \log_2 40 < 6 \) (32 &lt; 40 &lt; 64).</p>''')
+    + loes(7, r'''    <p>\( 3 + 2\lg(a) - \lg(b) \).</p>''')
+    + loes(8, r'''    <p>\( \ln\!\left(\tfrac{x^3 y}{z^2}\right) \); \( \lg(100) = 2 \).</p>''')
+    + loes(9, r'''    <p>Nein: \( \lg 20 \approx 1.30 \neq 2 \) — kein Gesetz für Summen.</p>''')
+    + loes(10, r'''    <p>\( \tfrac{\lg 5}{\lg 2} \approx 2.32 \); \( \log_4 8 = \tfrac{3}{2} \).</p>''')
+    + loes(11, r'''    <p>\( 9 < 20 < 27 \Rightarrow 2 < x < 3 \); \( x = \tfrac{\lg 20}{\lg 3}
+    \approx 2.73 \) ✓.</p>''')
+    + loes(12, r'''    <p>\( n = \tfrac{\lg 2}{\lg 1.03} \approx 23.45 \) Jahre (70er-Regel:
+    \( 70/3 \approx 23 \)).</p>''')
+)
+
+V_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Vor jeder Rechnung: Plausibilitäts-Fenster mit ganzen
+    Potenzen notieren!</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Finanzen</td><td>Verdopplungszeit</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Chemie</td><td>pH-Werte</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Seismologie</td><td>Richter-Skala</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Biologie</td><td>Bakterien rückwärts</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Akustik</td><td>Dezibel</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Zahlentheorie</td><td>Stellen von Riesenzahlen</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Verdopplungszeit', 2, r'''    <p>Ein Kapital wächst mit 3 % pro Jahr.</p>
+    <p>(a) Stelle die Gleichung für die Verdopplung auf.</p>
+    <p>(b) Löse mit dem Logarithmus.</p>
+    <p>(c) Prüfe die 70er-Faustregel (70 : Prozentsatz).</p>
+''' + LINS4, tag='Finanzen')
+    + aufg(2, 'pH-Werte', 2, r'''    <p>Definition: \( \text{pH} = -\lg[\text{H}^+] \).</p>
+    <p>(a) Berechne den pH-Wert für \( [\text{H}^+] = 3.2 \cdot 10^{-5} \) mol/l.</p>
+    <p>(b) Welche Konzentration gehört zu pH 7 (neutral)?</p>
+    <p>(c) Um welchen Faktor unterscheiden sich pH 4 und pH 6?</p>
+''' + LINS4, tag='Chemie')
+    + aufg(3, 'Richter-Skala', 2, r'''    <p>Die Magnitude ist der Zehnerlogarithmus des (normierten) Ausschlags.</p>
+    <p>(a) Beben A: Magnitude 6, Beben B: Magnitude 4 — Faktor im Ausschlag?</p>
+    <p>(b) Ein Beben hat den 500-fachen Ausschlag eines Magnitude-3-Bebens.
+    Welche Magnitude?</p>
+''' + LINS4, tag='Seismologie')
+    + aufg(4, 'Bakterien rückwärts', 3, r'''    <p>Eine Kultur (100 Zellen) verdoppelt sich alle 20 Minuten:
+    \( N = 100 \cdot 2^{t/20} \) (\(t\) in Minuten).</p>
+    <p>(a) Nach welcher Zeit sind es 6400 Zellen?</p>
+    <p>(b) Nach welcher Zeit über eine Million? (Logarithmieren!)</p>
+''' + LINS4, tag='Biologie')
+    + aufg(5, 'Dezibel', 3, r'''    <p>Pegel: \( L = 10 \cdot \lg(I / I_0) \) dB (Intensität \(I\), Hörschwelle \(I_0\)).</p>
+    <p>(a) Ein Presslufthammer hat \( I = 10^{-2} \) W/m², \( I_0 = 10^{-12} \) W/m².
+    Berechne den Pegel.</p>
+    <p>(b) Um wie viele dB steigt der Pegel bei Verdopplung der Intensität
+    (\( \lg 2 \approx 0.301 \))?</p>
+''' + LINS4, tag='Akustik')
+    + aufg(6, 'Stellen von Riesenzahlen', 3, r'''    <p>Stellenzahl von \(N\): \( \lfloor \lg N \rfloor + 1 \); \( \lg 2 \approx 0.30103 \).</p>
+    <p>(a) Wie viele Stellen hat \( 2^{100} \)?</p>
+    <p>(b) Wie viele Stellen hat \( 2^{1000} \)?</p>
+    <p>(c) Begründe die Stellenformel.</p>
+''' + LINS4, tag='Zahlentheorie')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( 1.03^n = 2 \).</p>
+    <p>(b) \( n = \lg 2 / \lg 1.03 \approx 23.45 \) Jahre.</p>
+    <p>(c) \( 70/3 \approx 23.3 \) ✓ — die Regel steckt im Logarithmus.</p>''')
+    + loes(2, r'''    <p>(a) \( \approx 4.49 \).</p>
+    <p>(b) \( 10^{-7} \) mol/l.</p>
+    <p>(c) Faktor \( 10^2 = 100 \).</p>''')
+    + loes(3, r'''    <p>(a) Zwei Stufen: Faktor 100.</p>
+    <p>(b) \( 3 + \lg 500 \approx 3 + 2.7 = 5.7 \).</p>''')
+    + loes(4, r'''    <p>(a) \( 2^{t/20} = 64 \Rightarrow t/20 = 6 \Rightarrow t = 120 \) min.</p>
+    <p>(b) \( 2^{t/20} = 10^4 \Rightarrow t = 20 \cdot \tfrac{4}{\lg 2} \approx 266 \) min
+    (\( \approx 4.4 \) h).</p>''')
+    + loes(5, r'''    <p>(a) \( L = 10 \lg(10^{10}) = 100 \) dB.</p>
+    <p>(b) \( 10 \lg 2 \approx 3 \) dB — «+3 dB = doppelte Intensität».</p>''')
+    + loes(6, r'''    <p>(a) \( \lfloor 30.103 \rfloor + 1 = 31 \).</p>
+    <p>(b) \( \lfloor 301.03 \rfloor + 1 = 302 \).</p>
+    <p>(c) \(k\)-stellig heisst \( 10^{k-1} \leq N < 10^k \), also
+    \( k - 1 \leq \lg N < k \).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -5406,6 +5837,22 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', T_TDS),
     ('s4-1-grundlagen', 'Grundlagen Geometrie', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Grundlagen Geometrie', STYLE_SERIE, '1.0', '', T_SERIE),
+    ('s1-2-potenzen', 'Potenzen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', U_HANDOUT),
+    ('s1-2-potenzen', 'Potenzen', 'Formelauszug', 'formelauszug.html',
+     'Potenzen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, U_FORMELAUSZUG),
+    ('s1-2-potenzen', 'Potenzen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', U_TDS),
+    ('s1-2-potenzen', 'Potenzen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Potenzen', STYLE_SERIE, '1.0', '', U_SERIE),
+    ('s1-3-logarithmen', 'Logarithmen', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', V_HANDOUT),
+    ('s1-3-logarithmen', 'Logarithmen', 'Formelauszug', 'formelauszug.html',
+     'Logarithmen — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, V_FORMELAUSZUG),
+    ('s1-3-logarithmen', 'Logarithmen', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', V_TDS),
+    ('s1-3-logarithmen', 'Logarithmen', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Logarithmen', STYLE_SERIE, '1.0', '', V_SERIE),
 ]
 
 

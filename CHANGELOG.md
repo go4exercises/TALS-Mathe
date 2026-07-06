@@ -4,6 +4,46 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [80] — 2026-07-06 · s1-2 Potenzen und s1-3 Logarithmen: Vollausbau
+
+Zwei Teilgebiete aus Lerngebiet 1 in einem Durchgang ausgebaut — Quellen: die
+RLP-Kompetenzen und FTB Kapitel 04 (Potenzieren), 05 (Radizieren, für die rationalen
+Exponenten) und 06 (Logarithmieren). Alle Zahlenwerte in Python nachgerechnet.
+
+- **`schwerpunkt/s1-2-potenzen.html`** *(Stub → Vollausbau, Kap. 04+05)* — Einstieg
+  Falt-Labor «Papier bis zum Mond» (\(0.1\ \text{mm} \cdot 2^n\) auf logarithmischer
+  Leiter mit Vergleichsmarken: 42 Faltungen ≈ 440 000 km); Definitionen mit
+  Divisions-Treppe (\(a^0 = 1\), \(a^{-n}\)); die fünf Potenzgesetze als Tabelle mit
+  «kein Gesetz für Summen»-Fehlerblock; rationale Exponenten mit Exponenten-Treppen-Widget
+  (Basis 16, Viertelschritte — Wurzeln füllen die Lücken); Hierarchie der Operationen
+  (Türme von oben, \(-3^2 = -9\)) und Exponentenschreibweise; A1 Gesetz-Erkennungs-Quiz
+  (inkl. «kein Potenzgesetz»-Option), A2 Vereinfachen, A3 a–e chkNum (128, 0.25, 9, 49,
+  Vorzeichen-Falle 0), A4 Zinseszins 6094.97 Fr., A5 Mond-Faltung, A6 Kilo vs. Kibi
+  (+2.4 %), A7 Potenztürme (Vertiefung).
+- **`schwerpunkt/s1-3-logarithmen.html`** *(Stub → Vollausbau, Kap. 06)* — Einstieg
+  Zehnerpotenz-Leiter («10 hoch was gibt …?» mit Positions-Widget); Definition
+  \(a^x = b \Leftrightarrow x = \log_a(b)\) mit Sofortwerten und Spezialbasen
+  (lg/ln/log₂); die drei Logarithmengesetze mit Herleitung und
+  «kein Gesetz für Summen»-Fehlerblock; Basiswechsel mit Bogen-Widget
+  («wie viele a-Schritte bis b?» — \(\log_2 64 = 6\), \(\log_4 64 = 3\),
+  \(\log_8 64 = 2\)); Exponentialgleichungen, Verdopplungszeit (70er-Regel) und
+  logarithmische Skalen; A1 Übersetzungs-Quiz Potenz ↔ Logarithmus, A2 Zerlegen/
+  Zusammenfassen, A3 a–e chkNum (5, −2, 1, 1.5, 2.32), A4 \(3^x = 20\) mit Fenster,
+  A5 Verdopplungszeit 23.45 Jahre, A6 pH-Wert 4.49, A7 Stellenzahl von \(2^{100}\)
+  = 31 (Vertiefung).
+- **Infrastruktur:** Index-Karten 1.2 und 1.3 geplant → fertig (Zählung unverändert —
+  die Stubs zählten bereits); Ketten und nav.js waren korrekt.
+- **Zusatzmaterial:** Druckseiten-Blöcke U (Potenzen) und V (Logarithmen) mit je
+  Handout, Formelauszug, Teste-dich-selbst (12 Aufgaben) und Aufgabenserie
+  (6 Anwendungen); bestehende Druckseiten byte-identisch. Zwei Anki-Decks à 20 Karten,
+  nur die neuen apkg erzeugt.
+- **Ressourcen:** ohne neue Abrufe — MathemaTrick «Alles über WURZELN» (s1-2) und
+  «Alles über LOGARITHMUS» (s1-3) aus der Map; serlo-Links aus dem Sitemap-Cache
+  (23665, 78888 bzw. 23768, 26262). Map §8 um beide Zeilen erweitert.
+- Pre-Flight: beide Seiten `ALLE CHECKS BESTANDEN`.
+
+---
+
 ## [79] — 2026-07-06 · s4-1 Grundlagen Geometrie: Vollausbau — Lerngebiet 4 komplett
 
 Teilgebiet 4.1 (Grundlagen) aus dem Stub zur vollständigen Themenseite ausgebaut —

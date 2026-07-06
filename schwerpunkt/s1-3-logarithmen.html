@@ -19,7 +19,58 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -29,18 +80,11 @@ MathJax = {
 
 <!-- ══ 1. TITEL + RLP-HEADER ══ -->
 <div class="page-titel">
-  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 1 · Arithmetik/Algebra · 25 Lektionen</div>
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 1 · Arithmetik und Algebra · 25 Lektionen</div>
   <h1 class="pt-h1">1.3 Logarithmen</h1>
 </div>
 
-<!-- Stub-Banner: Seite ist noch in Vorbereitung -->
-<div class="stub-banner">
-  <strong>In Vorbereitung</strong>
-  Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: Mai 2026.
-</div>
-
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
-<p class="lead">Ein <strong>Logarithmus</strong> ist die Umkehrung der Potenz: \(\log_a b\) ist der Exponent, mit dem man \(a\) potenzieren muss, um \(b\) zu erhalten. Hier lernst du die Logarithmengesetze, rechnest mit Zehner- und natürlichem Logarithmus und nutzt sie, um Exponentialgleichungen aufzulösen.</p>
+<p class="lead">Der Logarithmus beantwortet die <strong>Umkehrfrage der Potenz</strong>: «\(a\) hoch <em>was</em> gibt \(b\)?» Aus \(a^x = b\) wird \(x = \log_a(b)\) — damit werden Exponenten greifbar. Die <strong>Logarithmengesetze</strong> verwandeln Produkte in Summen und Potenzen in Faktoren, der <strong>Basiswechsel</strong> macht jede Basis rechenbar. Vom pH-Wert bis zur Verdopplungszeit: Wo Exponenten stecken, rechnet der Logarithmus.</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 1.3</div>
@@ -51,49 +95,501 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann zwischen \(a^x = b\) und \(x = \log_a(b)\) in beide Richtungen übersetzen und die Bedingungen \(a, b &gt; 0\), \(a \neq 1\) begründen.</li>
+      <li>Ich kenne die Spezialbasen \(\lg = \log_{10}\), \(\ln = \log_e\) und \(\log_2\) und die Sofortwerte \(\log_a 1 = 0\), \(\log_a a = 1\), \(\log_a a^k = k\).</li>
+      <li>Ich kann die drei Logarithmengesetze anwenden: Produkt → Summe, Quotient → Differenz, Potenz → Faktor.</li>
+      <li>Ich kann Logarithmusterme zerlegen und zusammenfassen.</li>
+      <li>Ich kann mit dem Basiswechsel \(\log_a b = \tfrac{\lg b}{\lg a}\) Logarithmen zu beliebigen Basen berechnen.</li>
+      <li>Ich kann Anwendungen lösen: Exponentialgleichungen, Verdopplungszeiten, pH-Werte, Stellenzahlen.</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — «10 hoch was gibt …?»</h2>
+
+<p>Potenzieren kennt zwei Umkehrfragen. Bei \(10^3 = 1000\) kann man nach der <strong>Basis</strong> fragen (Wurzel: \(\sqrt[3]{1000} = 10\)) — oder nach dem <strong>Exponenten</strong>: «10 hoch <em>was</em> gibt 1000?» Diese zweite Frage beantwortet der <strong>Logarithmus</strong>:</p>
+
+\[ \log_{10}(1000) = 3 \]
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🔍 Logarithmus-Frage — die Zehnerpotenz-Leiter</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe \(b\) über die Leiter: Bei welchen Werten ist \(\lg(b)\) ganzzahlig? Und was zeigt der Logarithmus bei \(b = 500\) — zwischen welchen Ganzzahlen liegt er?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schiebe b über die Leiter: Bei welchen Werten ist der Zehnerlogarithmus ganzzahlig? Und was zeigt der Logarithmus bei fünfhundert — zwischen welchen Ganzzahlen liegt er?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">\(\lg(b)\) zählt, «wie viele Zehnerpotenzen in \(b\) stecken»: bei \(1000\) genau \(3\), bei \(500\) etwa \(2.7\) — zwischen \(10^2\) und \(10^3\). Der Logarithmus ist die <strong>Position auf der Potenz-Leiter</strong>.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Zehnerlogarithmus zählt, wie viele Zehnerpotenzen in b stecken: bei tausend genau drei, bei fünfhundert etwa zwei Komma sieben. Der Logarithmus ist die Position auf der Potenz-Leiter.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Wert \(b\) auf logarithmischer Leiter · \(\lg(b)\) als Position</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Zahl <span class="var">\(b\)</span></label>
+      <input type="range" id="lg-b" min="0" max="4" step="0.05" value="3">
+      <span class="sl-val" id="lg-bv">1000</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Die Logarithmus-Frage</div>
+      <div class="fl-eq" id="lg-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="lg-canvas" height="190"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Logarithmus misst Exponenten:</p>
+  <ul style="margin-top:6px">
+    <li>\(\lg(10^k) = k\) — ganze Leiterstufen bei Zehnerpotenzen.</li>
+    <li>Dazwischen interpoliert er: \(\lg(500) \approx 2.7\) heisst \(500 = 10^{2.7}\).</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Frage beantwortet \(\log_2(32)\)?</p><ul class="mc-optionen"><li data-opt="A">Was ist \(2 \cdot 32\)?</li><li data-opt="B">2 hoch was gibt 32?</li><li data-opt="C">Was ist \(\sqrt{32}\)?</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(2^5 = 32\), also \(\log_2(32) = 5\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Logarithmus ist die Umkehrfrage nach dem <span class="mc-luecke"></span>, die Wurzel die nach der Basis.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Exponenten.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme \(\lg(100)\), \(\lg(1)\) und \(\lg(0.001)\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(2\), \(0\) und \(-3\) — denn \(10^2\), \(10^0\), \(10^{-3}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Zwischen welchen ganzen Zahlen liegt \(\lg(7000)\) — ohne Taschenrechner?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(10^3 = 1000 &lt; 7000 &lt; 10000 = 10^4\), also \(3 &lt; \lg(7000) &lt; 4\) (genauer \(\approx 3.85\)).</div></details></div>
+</details>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Definition — Logarithmus und Spezialbasen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Logarithmus</div>
+  \[ a^x = b \;\Longleftrightarrow\; x = \log_a(b), \qquad a, b \in \mathbb{R}^+,\ a \neq 1 \]
+  <p>Gesprochen: «\(x\) ist der Logarithmus von \(b\) zur Basis \(a\)» — der Exponent, mit dem \(a\) potenziert werden muss, um \(b\) zu erhalten. Direkt aus der Definition:</p>
+  \[ \log_a(1) = 0, \qquad \log_a(a) = 1, \qquad \log_a\!\left(a^k\right) = k, \qquad a^{\log_a(b)} = b \]
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Spezielle Basen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Schreibweise</th><th>Basis</th><th>Name</th></tr></thead>
+    <tbody>
+      <tr><td>\(\lg(b) = \log_{10}(b)\)</td><td>\(10\)</td><td style="text-align:left;font-family:var(--sans)">Zehnerlogarithmus (dekadisch)</td></tr>
+      <tr><td>\(\ln(b) = \log_{e}(b)\)</td><td>\(e \approx 2.718\)</td><td style="text-align:left;font-family:var(--sans)">natürlicher Logarithmus</td></tr>
+      <tr><td>\(\log_2(b)\)</td><td>\(2\)</td><td style="text-align:left;font-family:var(--sans)">Zweierlogarithmus (binär, Informatik)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — verbotene Eingaben</div>
+  <p>\(\log_a(b)\) existiert nur für <strong>positive</strong> \(b\): «\(a\) hoch was gibt \(-5\)?» hat keine Antwort, denn Potenzen positiver Basen sind immer positiv. Ebenso braucht es \(a &gt; 0\), \(a \neq 1\) — mit Basis 1 gäbe \(1^x\) immer 1.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(\log_3(81) =\) ?</p><ul class="mc-optionen"><li data-opt="A">\(4\)</li><li data-opt="B">\(27\)</li><li data-opt="C">\(3\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(3^4 = 81\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Für jede zulässige Basis gilt \(\log_a(1) =\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(0\) — denn \(a^0 = 1\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Übersetze \(2^x = 64\) in eine Logarithmusgleichung und löse.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(x = \log_2(64) = 6\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Berechne \(\log_5\!\left(\tfrac{1}{25}\right)\) ohne Hilfsmittel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\tfrac{1}{25} = 5^{-2}\), also \(\log_5(5^{-2}) = -2\) — negative Logarithmen gehören zu Werten unter 1.</div></details></div>
+</details>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Die drei Logarithmengesetze</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Logarithmengesetze</div>
+  <p>Für \(a, u, v \in \mathbb{R}^+\) und \(k \in \mathbb{R}\):</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Nr.</th><th>Gesetz</th><th>Merkregel</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>\(\log_a(u \cdot v) = \log_a(u) + \log_a(v)\)</td><td style="text-align:left;font-family:var(--sans)">Produkt → <strong>Summe</strong></td></tr>
+      <tr><td>2</td><td>\(\log_a\!\left(\dfrac{u}{v}\right) = \log_a(u) - \log_a(v)\)</td><td style="text-align:left;font-family:var(--sans)">Quotient → <strong>Differenz</strong></td></tr>
+      <tr><td>3</td><td>\(\log_a\!\left(u^k\right) = k \cdot \log_a(u)\)</td><td style="text-align:left;font-family:var(--sans)">Potenz → <strong>Faktor</strong> (der Exponent «fällt herunter»)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Sie sind die Potenzgesetze in Logarithmus-Sprache: Weil sich Exponenten beim Multiplizieren <em>addieren</em>, wird aus dem Produkt eine Summe. Herleitung von Gesetz 1: \(u = a^x\), \(v = a^y\) → \(uv = a^{x+y}\) → \(\log_a(uv) = x + y\) ✓</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — zerlegen und zusammenfassen</div>
+  <p><strong>Zerlegen:</strong></p>
+  \[ \lg\!\left(\frac{100 x^3}{y}\right) = \lg(100) + 3\lg(x) - \lg(y) = 2 + 3\lg(x) - \lg(y) \]
+  <p><strong>Zusammenfassen:</strong></p>
+  \[ \lg(5) + \lg(2) = \lg(10) = 1, \qquad 2\ln(x) - \ln(y) = \ln\!\left(\frac{x^2}{y}\right) \]
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — den Logarithmus «verteilen»</div>
+  <p>\(\log_a(u + v)\) ist <strong>nicht</strong> \(\log_a(u) + \log_a(v)\)! Die Gesetze gelten für Produkte, Quotienten und Potenzen — <strong>für Summen gibt es kein Gesetz</strong>. Probe: \(\lg(10 + 90) = 2\), aber \(\lg 10 + \lg 90 \approx 2.95\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Logarithmengesetze</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(\log_a(u^k) =\) ?</p><ul class="mc-optionen"><li data-opt="A">\(k \cdot \log_a(u)\)</li><li data-opt="B">\(\left(\log_a u\right)^k\)</li><li data-opt="C">\(\log_a(k) \cdot u\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Der Exponent fällt als Faktor herunter.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Aus dem Produkt im Logarithmus wird eine <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Summe.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(\lg(5) + \lg(2)\) ohne Taschenrechner.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\lg(5 \cdot 2) = \lg(10) = 1\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Widerlege «\(\lg(u + v) = \lg u + \lg v\)» mit einem Zahlenbeispiel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(u = v = 10\): links \(\lg(20) \approx 1.30\), rechts \(1 + 1 = 2\) — für Summen gibt es kein Logarithmengesetz.</div></details></div>
+</details>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. BASISWECHSEL ══ -->
+<h2 id="typen">Basiswechsel — jede Basis wird rechenbar</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Basiswechselsatz</div>
+  \[ \log_a(b) = \frac{\log_c(b)}{\log_c(a)} \qquad \text{meist:} \quad \log_a(b) = \frac{\lg(b)}{\lg(a)} = \frac{\ln(b)}{\ln(a)} \]
+  <p>Der Taschenrechner kennt oft nur \(\lg\) und \(\ln\) — der Basiswechsel liefert alle anderen Basen. Herleitung: \(a^x = b\), logarithmieren mit Basis \(c\): \(x \cdot \log_c(a) = \log_c(b)\), auflösen nach \(x\).</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Basiswechsel anwenden</div>
+  \[ \log_2(5) = \frac{\lg(5)}{\lg(2)} \approx \frac{0.699}{0.301} \approx 2.32, \qquad \log_4(8) = \frac{\lg 8}{\lg 4} = \frac{3\lg 2}{2\lg 2} = \frac{3}{2} \]
+  <p>Das zweite Beispiel geht ohne Rechner: Beide Zahlen sind Zweierpotenzen — die Gesetze kürzen \(\lg 2\) weg.</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Basiswechsel-Labor — \(\log_a(b)\) live</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Stelle \(b = 64\) ein und wandere durch die Basen 2, 4, 8: Welche schönen Werte entstehen? Und was passiert mit \(\log_a(64)\), wenn die Basis wächst?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Stelle b gleich vierundsechzig ein und wandere durch die Basen zwei, vier, acht: Welche schönen Werte entstehen? Und was passiert mit dem Logarithmus, wenn die Basis wächst?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">\(\log_2(64) = 6\), \(\log_4(64) = 3\), \(\log_8(64) = 2\) — grössere Basis, kleinerer Logarithmus: Es braucht weniger «grosse Schritte». Der Quotient \(\lg b / \lg a\) rechnet alles auf einen Blick.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Grössere Basis, kleinerer Logarithmus: Es braucht weniger grosse Schritte. Der Quotient lg b durch lg a rechnet alles auf einen Blick.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Basis \(a\) und Wert \(b\) einstellen · Basiswechsel-Formel live</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Basis <span class="var">\(a\)</span></label><input type="range" id="bw-a" min="2" max="10" step="1" value="2"><span class="sl-val" id="bw-av">2</span></div>
+      <div class="sl-grp akz-orange"><label>Wert <span class="var">\(b\)</span></label><input type="range" id="bw-b" min="2" max="100" step="1" value="64"><span class="sl-val" id="bw-bv">64</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Basiswechsel</div>
+      <div class="fl-eq" id="bw-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="bw-canvas" height="180"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Basiswechsel</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(\log_3(7)\) berechnet man am Taschenrechner als…</p><ul class="mc-optionen"><li data-opt="A">\(\lg(7) / \lg(3)\)</li><li data-opt="B">\(\lg(7) \cdot \lg(3)\)</li><li data-opt="C">\(\lg(7 - 3)\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Basiswechsel: gewünschte Zahl oben, Basis unten.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Im Basiswechsel \(\log_a(b) = \lg(b) / \lg(a)\) steht die <span class="mc-luecke"></span> im Nenner.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Basis \(a\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(\log_4(8)\) exakt (Zweierpotenzen!).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\tfrac{3\lg 2}{2\lg 2} = \tfrac{3}{2}\) — Kontrolle: \(4^{3/2} = 8\) ✓</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Zeige mit dem Basiswechsel: \(\log_a(b) \cdot \log_b(a) = 1\).</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\tfrac{\lg b}{\lg a} \cdot \tfrac{\lg a}{\lg b} = 1\) — die beiden Logarithmen sind Kehrwerte voneinander.</div></details></div>
+</details>
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<h2 id="theorie">Exponentialgleichungen und Anwendungen</h2>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — der Logarithmus holt das \(x\) herunter</div>
+  <p>Steht die Unbekannte im Exponenten (\(a^x = b\)), logarithmiert man <strong>beide Seiten</strong> — Gesetz 3 holt \(x\) als Faktor herunter:</p>
+  \[ a^x = b \;\Rightarrow\; x \cdot \lg(a) = \lg(b) \;\Rightarrow\; x = \frac{\lg(b)}{\lg(a)} = \log_a(b) \]
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Exponentialgleichung</div>
+  <p>Löse \(3^x = 20\).</p>
+  \[ x = \log_3(20) = \frac{\lg(20)}{\lg(3)} \approx 2.73 \]
+  <p>Plausibilität: \(3^2 = 9 &lt; 20 &lt; 27 = 3^3\), also \(2 &lt; x &lt; 3\) ✓</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 4 — Verdopplungszeit</div>
+  <p>Ein Kapital wächst mit \(3\ \%\) pro Jahr. Wann hat es sich verdoppelt?</p>
+  \[ 1.03^n = 2 \;\Rightarrow\; n = \frac{\lg(2)}{\lg(1.03)} \approx 23.45\ \text{Jahre} \]
+  <p>(Faustregel «70er-Regel»: \(70 / 3 \approx 23\) — sie steckt im Logarithmus.)</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Logarithmische Skalen im Alltag</div>
+  <p>Wo Grössen über viele Zehnerpotenzen streuen, misst man logarithmisch: <strong>pH-Wert</strong> (\(\text{pH} = -\lg[\text{H}^+]\)), <strong>Dezibel</strong>, <strong>Richter-Magnitude</strong>. Eine Stufe bedeutet jeweils Faktor 10 — der Logarithmus macht Multiplikation zu Addition.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Anwendungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie löst man \(5^x = 17\)?</p><ul class="mc-optionen"><li data-opt="A">\(x = 17/5\)</li><li data-opt="B">\(x = \lg(17)/\lg(5)\)</li><li data-opt="C">\(x = \sqrt[5]{17}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Logarithmieren, Gesetz 3, auflösen — \(x = \log_5(17) \approx 1.76\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Auf einer logarithmischen Skala bedeutet eine Stufe den Faktor <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">10 (bei dekadischen Skalen wie pH und Richter).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Zwischen welchen ganzen Zahlen liegt die Lösung von \(2^x = 40\)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(2^5 = 32 &lt; 40 &lt; 64 = 2^6\): \(5 &lt; x &lt; 6\) (exakt \(\approx 5.32\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Erdbeben hat Magnitude 6, ein zweites Magnitude 4. Wievielmal grösser ist der Ausschlag des ersten?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Zwei Stufen auf der logarithmischen Skala: Faktor \(10^2 = 100\) — nicht «1.5-mal».</div></details></div>
+</details>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Übersetzen: Potenz ↔ Logarithmus</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Gleichung — welche Übersetzung ist richtig?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Gleichung</div>
+    <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Form ist äquivalent?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Zerlegen und zusammenfassen</span></div>
+  <p>Wende die Logarithmengesetze an:</p>
+  <ol class="aufg-liste">
+    <li>Zerlege \(\lg\!\left(\dfrac{1000\, a^2}{b}\right)\) so weit wie möglich.</li>
+    <li>Fasse \(3\ln(x) + \ln(y) - 2\ln(z)\) zu einem Logarithmus zusammen.</li>
+    <li>Berechne ohne Rechner: \(\lg(4) + \lg(25)\).</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\lg(1000) + 2\lg(a) - \lg(b) = 3 + 2\lg(a) - \lg(b)\).</li>
+        <li>\(\ln\!\left(\dfrac{x^3 y}{z^2}\right)\).</li>
+        <li>\(\lg(4 \cdot 25) = \lg(100) = 2\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen ohne Hilfsmittel</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Definition anwenden</div>
+    <p>Berechne \(\log_2(32)\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3a1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3a1', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 2^5 = 32 \;\Rightarrow\; \log_2(32) = 5 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Negativer Logarithmus</div>
+    <p>Berechne \(\log_5\!\left(\tfrac{1}{25}\right)\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3b1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3b1', -2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \tfrac{1}{25} = 5^{-2} \;\Rightarrow\; \log_5(5^{-2}) = -2 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Gesetze nutzen</div>
+    <p>Berechne \(\lg(5) + \lg(2)\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3c1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3c1', 1, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \lg(5 \cdot 2) = \lg(10) = 1 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Basiswechsel exakt</div>
+    <p>Berechne \(\log_4(8)\) exakt (als Dezimalzahl).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3d1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3d1', 1.5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \log_4(8) = \frac{3\lg 2}{2\lg 2} = \frac{3}{2} = 1.5 \qquad \left(4^{1.5} = 8\ \checkmark\right) \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Basiswechsel numerisch</div>
+    <p>Berechne \(\log_2(5)\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>Wert ≈&nbsp;</label><input type="text" id="a3e1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3e1', 2.32, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \log_2(5) = \frac{\lg 5}{\lg 2} \approx 2.32 \qquad \left(2^2 = 4 &lt; 5 &lt; 8 = 2^3\ \checkmark\right) \]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Exponentialgleichung</span></div>
+  <p>Löse \(3^x = 20\).</p>
+  <ol class="aufg-liste">
+    <li>Gib zuerst ein Plausibilitäts-Fenster mit Dreierpotenzen an.</li>
+    <li>Löse mit dem Logarithmus (drei Dezimalen).</li>
+  </ol>
+  <div class="eingabe-row"><label>x ≈&nbsp;</label><input type="text" id="a4-1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a4-1', 2.727, 0.005, '')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(3^2 = 9 &lt; 20 &lt; 27 = 3^3\): also \(2 &lt; x &lt; 3\).</li>
+        <li>\(x = \tfrac{\lg 20}{\lg 3} \approx 2.727\) ✓ im Fenster.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Verdopplungszeit</span></div>
+  <p>Ein Guthaben wächst mit \(3\ \%\) pro Jahr (\(K_n = K_0 \cdot 1.03^n\)).</p>
+  <ol class="aufg-liste">
+    <li>Nach wie vielen Jahren hat es sich verdoppelt (zwei Dezimalen)?</li>
+    <li>Prüfe die 70er-Faustregel (\(70 / \text{Prozentsatz}\)).</li>
+  </ol>
+  <div class="eingabe-row"><label>n ≈&nbsp;</label><input type="text" id="a5-1" placeholder="Jahre"><button class="btn-pruef" onclick="chkNum('a5-1', 23.45, 0.05, 'Jahre')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(1.03^n = 2 \Rightarrow n = \tfrac{\lg 2}{\lg 1.03} \approx 23.45\) Jahre.</li>
+        <li>\(70 / 3 \approx 23.3\) — die Faustregel trifft fast exakt.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">pH-Wert</span></div>
+  <p>Der pH-Wert ist definiert als \(\text{pH} = -\lg\!\left[\text{H}^+\right]\) (Konzentration in mol/l).</p>
+  <ol class="aufg-liste">
+    <li>Eine Lösung hat \(\left[\text{H}^+\right] = 3.2 \cdot 10^{-5}\) mol/l. Berechne den pH-Wert (zwei Dezimalen).</li>
+    <li>Um welchen Faktor unterscheidet sich die Konzentration zwischen pH 4 und pH 6?</li>
+  </ol>
+  <div class="eingabe-row"><label>pH ≈&nbsp;</label><input type="text" id="a6-1" placeholder="Wert"><button class="btn-pruef" onclick="chkNum('a6-1', 4.49, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Faktor =&nbsp;</label><input type="text" id="a6-2" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a6-2', 100, 0.1, '')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\text{pH} = -\lg(3.2 \cdot 10^{-5}) = -( \lg 3.2 - 5) \approx 4.49\).</li>
+        <li>Zwei pH-Stufen = Faktor \(10^2 = 100\) in der Konzentration.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Wie viele Stellen hat \(2^{100}\)? <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Die Stellenzahl einer natürlichen Zahl \(N\) ist \(\lfloor \lg N \rfloor + 1\) (abrunden, plus 1).</p>
+  <ol class="aufg-liste">
+    <li>Berechne \(\lg\!\left(2^{100}\right)\) mit Gesetz 3 (\(\lg 2 \approx 0.30103\)).</li>
+    <li>Wie viele Stellen hat \(2^{100}\) also?</li>
+    <li>Begründe die Stellenformel: Warum liegt jede \(k\)-stellige Zahl zwischen \(10^{k-1}\) und \(10^k\)?</li>
+  </ol>
+  <div class="eingabe-row"><label>Stellen =&nbsp;</label><input type="text" id="a7-1" placeholder="Anzahl"><button class="btn-pruef" onclick="chkNum('a7-1', 31, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\lg(2^{100}) = 100 \cdot \lg 2 \approx 30.103\).</li>
+        <li>\(\lfloor 30.103 \rfloor + 1 = \mathbf{31}\) Stellen — ohne die Riesenzahl je auszurechnen.</li>
+        <li>\(k\)-stellig heisst \(10^{k-1} \leq N &lt; 10^k\), also \(k - 1 \leq \lg N &lt; k\): Der abgerundete Logarithmus plus 1 ist genau \(k\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>\(\log_a(b)\) beantwortet «\(a\) hoch was gibt \(b\)?» — die Übersetzung \(a^x = b \Leftrightarrow x = \log_a(b)\) gilt in beide Richtungen (\(a, b &gt; 0\), \(a \neq 1\)). Sofortwerte: \(\log_a 1 = 0\), \(\log_a a = 1\), \(\log_a a^k = k\). Die drei <strong>Gesetze</strong>: Produkt → Summe, Quotient → Differenz, Potenz → Faktor — <strong>für Summen gibt es keines</strong>. Der <strong>Basiswechsel</strong> \(\log_a b = \tfrac{\lg b}{\lg a}\) macht jede Basis rechenbar, und bei Exponentialgleichungen holt das Logarithmieren die Unbekannte als Faktor herunter.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Regel</th><th>Formel</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Definition</td><td>\(a^x = b \Leftrightarrow x = \log_a(b)\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Sofortwerte</td><td>\(\log_a 1 = 0; \quad \log_a a = 1; \quad \log_a a^k = k\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Produkt / Quotient</td><td>\(\log_a(uv) = \log_a u + \log_a v; \quad \log_a\!\tfrac{u}{v} = \log_a u - \log_a v\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Potenz</td><td>\(\log_a(u^k) = k \log_a u\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Basiswechsel</td><td>\(\log_a b = \dfrac{\lg b}{\lg a} = \dfrac{\ln b}{\ln a}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Exponentialgleichung</td><td>\(a^x = b \Rightarrow x = \log_a b\)</td></tr>
+  </tbody>
+</table>
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s1-3-logarithmen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-3-logarithmen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-3-logarithmen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-3-logarithmen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-3-logarithmen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lXSN6xlwAQUjS71Tv-jdQ49" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über LOGARITHMEN — Playlist</div><div class="lk-s">MathemaTrick · Definition, Gesetze, Gleichungen</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/23768/aufgaben-zum-rechnen-mit-logarithmen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Rechnen mit Logarithmen</div><div class="lk-s">Definition und Gesetze · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/26262/aufgaben-zu-exponential-und-logarithmusgleichungen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Exponential- und Logarithmusgleichungen</div><div class="lk-s">mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -106,12 +602,149 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'schwerpunkt', id:'s1-3',
   kapitelNr:'1.3', kapitelTitel:'Logarithmen',
   prev:{nr:'1.2',titel:'Potenzen',url:'s1-2-potenzen.html'},
   next:{nr:'2.1',titel:'Grundlagen',url:'s2-1-grundlagen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+/* ══ EINSTIEG: Zehnerpotenz-Leiter ══ */
+function updateLG(){
+  const ex = parseFloat(document.getElementById('lg-b').value);   // Slider läuft im Exponenten
+  const b = Math.pow(10, ex);
+  const bTxt = b >= 100 ? Math.round(b).toLocaleString('de-CH') : (b >= 10 ? b.toFixed(1) : b.toFixed(2));
+  document.getElementById('lg-bv').textContent = bTxt;
+  document.getElementById('lg-eq').innerHTML =
+    `10 hoch was gibt ${bTxt}? → lg(${bTxt}) = ${ex.toFixed(2)}`;
+  const {ctx, W, H} = initCanvas('lg-canvas', 190, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const x0 = 40, x1 = W - 24, y = H / 2 + 8;
+  const lx = e => x0 + e / 4 * (x1 - x0);
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+  // Stufen 10^0 .. 10^4
+  ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center';
+  for(let e = 0; e <= 4; e++){
+    const x = lx(e);
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(x, y - 10); ctx.lineTo(x, y + 10); ctx.stroke();
+    ctx.fillStyle = '#1f6b3a';
+    ctx.fillText(Math.pow(10, e).toLocaleString('de-CH'), x, y - 18);
+    ctx.fillStyle = '#6b7280';
+    ctx.fillText('lg=' + e, x, y + 26);
+  }
+  // aktueller Punkt
+  const x = lx(ex);
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(x, y, 9, 0, 2 * Math.PI); ctx.fill();
+  ctx.font = 'bold 12px monospace'; ctx.fillStyle = '#1a4f8a';
+  ctx.fillText('b', x, y - 32);
+  ctx.fillStyle = '#6b7280'; ctx.font = '10px monospace';
+  ctx.fillText('Position auf der Leiter = lg(b)', W / 2, H - 8);
+}
+document.getElementById('lg-b').addEventListener('input', updateLG);
+
+/* ══ BASISWECHSEL-LABOR ══ */
+function updateBW(){
+  const a = parseInt(document.getElementById('bw-a').value);
+  const b = parseInt(document.getElementById('bw-b').value);
+  document.getElementById('bw-av').textContent = a;
+  document.getElementById('bw-bv').textContent = b;
+  const v = Math.log10(b) / Math.log10(a);
+  const schoen = Math.abs(v - Math.round(v)) < 1e-9 ? ` = ${Math.round(v)}` : ` ≈ ${v.toFixed(3)}`;
+  document.getElementById('bw-eq').innerHTML =
+    `log_${a}(${b}) = lg(${b}) / lg(${a}) = ${Math.log10(b).toFixed(3)} / ${Math.log10(a).toFixed(3)}${schoen}`;
+  const {ctx, W, H} = initCanvas('bw-canvas', 180, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // Balken: wie viele a-Schritte bis b?
+  const x0 = 40, x1 = W - 24, y = H / 2 + 10;
+  const maxSteps = Math.log(100) / Math.log(2);   // Skala: log2(100) ≈ 6.64 Schritte max
+  const lx = s => x0 + s / maxSteps * (x1 - x0);
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+  // a-Schritte (orange Bögen)
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2;
+  const step = Math.log(a) / Math.log(2);
+  for(let s = 0; s + 1e-9 < v * step && s < maxSteps; s += step){
+    const xA = lx(s), xB = lx(Math.min(s + step, v * step));
+    ctx.beginPath(); ctx.arc((xA + xB) / 2, y, (xB - xA) / 2, Math.PI, 0); ctx.stroke();
+  }
+  // Ziel b (blau)
+  const xb = lx(v * step);
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(xb, y, 8, 0, 2 * Math.PI); ctx.fill();
+  ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#1a4f8a'; ctx.fillText('b = ' + b, xb, y - 26);
+  ctx.fillStyle = '#374151'; ctx.fillText('1', x0, y + 20);
+  ctx.fillStyle = '#b85c00';
+  ctx.fillText(`jeder Bogen = ×${a} → ${v.toFixed(2)} Schritte`, W / 2, H - 8);
+}
+['bw-a', 'bw-b'].forEach(id => document.getElementById(id).addEventListener('input', updateBW));
+
+/* ══ A1: Übersetzen ══ */
+const a1G = [
+  {label:'Gleichung 1', desc:'2^x = 32', sol:'x = log₂(32) = 5'},
+  {label:'Gleichung 2', desc:'log₃(x) = 4', sol:'x = 3⁴ = 81'},
+  {label:'Gleichung 3', desc:'10^x = 0.01', sol:'x = lg(0.01) = −2'},
+  {label:'Gleichung 4', desc:'logₓ(49) = 2', sol:'x² = 49 → x = 7'},
+];
+const a1Opts = ['x = log₂(32) = 5', 'x = 3⁴ = 81', 'x = lg(0.01) = −2', 'x² = 49 → x = 7'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.desc} ⟺ ${g.sol}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Merke: Basis bleibt Basis — der Logarithmus liefert den Exponenten, die Potenz den Wert.';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()%]/g, '').replace(/\s/g, '');
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Frage stellen: «Basis hoch was gibt den Wert?» — und beim Basiswechsel steht die Basis im Nenner.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateLG();
+  updateBW();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  updateLG(); updateBW();
 });
 </script>
 </body>

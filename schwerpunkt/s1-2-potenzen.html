@@ -19,7 +19,58 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -29,18 +80,11 @@ MathJax = {
 
 <!-- ══ 1. TITEL + RLP-HEADER ══ -->
 <div class="page-titel">
-  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 1 · Arithmetik/Algebra · 25 Lektionen</div>
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 1 · Arithmetik und Algebra · 25 Lektionen</div>
   <h1 class="pt-h1">1.2 Potenzen</h1>
 </div>
 
-<!-- Stub-Banner: Seite ist noch in Vorbereitung -->
-<div class="stub-banner">
-  <strong>In Vorbereitung</strong>
-  Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: Mai 2026.
-</div>
-
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
-<p class="lead"><strong>Potenzen</strong> verallgemeinern die Multiplikation: \(a^n\) ist eine kurze Schreibweise für ein wiederholtes Produkt, später dann auch für gebrochene oder negative Exponenten. Hier rechnest du mit den Potenzgesetzen, vereinfachst zusammengesetzte Ausdrücke und bereitest den Übergang zu Wurzeln und Logarithmen vor.</p>
+<p class="lead">Eine Potenz ist eine <strong>abgekürzte Multiplikation</strong> — und aus dieser einen Idee folgen die fünf <strong>Potenzgesetze</strong>, die das halbe Schwerpunktfach tragen: von Zehnerpotenzen über <strong>rationale Exponenten</strong> (Wurzeln!) bis zu Exponentialfunktionen und Logarithmen. Dazu gehört die <strong>Hierarchie der Operationen</strong>: Wer zuerst potenziert und dann multipliziert, rechnet richtig.</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 1.2</div>
@@ -50,49 +94,501 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann Potenzen mit natürlichen, ganzzahligen und rationalen Exponenten deuten — inklusive \(a^0 = 1\) und \(a^{-n} = \tfrac{1}{a^n}\).</li>
+      <li>Ich kann die fünf Potenzgesetze anwenden: gleiche Basis (multiplizieren, dividieren, potenzieren) und gleicher Exponent (multiplizieren, dividieren).</li>
+      <li>Ich kann Wurzeln als Potenzen schreiben (\(a^{1/n} = \sqrt[n]{a}\), \(a^{m/n} = \sqrt[n]{a^m}\)) und damit rechnen.</li>
+      <li>Ich kann die Hierarchie der Operationen anwenden: Klammern → Potenzen → Punkt → Strich, und weiss, dass \(-3^2 \neq (-3)^2\).</li>
+      <li>Ich kann Zahlen in der Exponentenschreibweise \(m \cdot 10^k\) darstellen und damit überschlagen.</li>
+      <li>Ich kann exponentielles Wachstum von linearem unterscheiden — und seine Wucht abschätzen.</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — Papier bis zum Mond falten</h2>
+
+<p>Ein Blatt Papier ist \(0.1\) mm dünn. Bei jedem Falten <strong>verdoppelt</strong> sich die Dicke: nach einem Falten \(0.2\) mm, nach zweien \(0.4\) mm — nach \(n\) Faltungen</p>
+
+\[ d = 0.1\ \text{mm} \cdot 2^n \]
+
+<p>Wie oft musst du falten, bis der Stapel den <strong>Mond</strong> erreicht (\(384\,400\) km)? Schätze zuerst!</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>📄 Falt-Labor — die Wucht von \(2^n\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe \(n\) langsam hoch: Wann überschreitet der Stapel einen Meter, wann den Eiffelturm (300 m), wann den Mond? Beobachte, wie die Balkenanzeige «explodiert».</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schiebe n langsam hoch: Wann überschreitet der Stapel einen Meter, wann den Eiffelturm, wann den Mond? Beobachte, wie die Balkenanzeige explodiert.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Schon <strong>42 Faltungen</strong> reichen bis zum Mond (\(0.1\ \text{mm} \cdot 2^{42} \approx 440\,000\) km) — exponentielles Wachstum überholt jede Vorstellung. Genau deshalb braucht es Potenzgesetze statt Ausmultiplizieren.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schon zweiundvierzig Faltungen reichen bis zum Mond — exponentielles Wachstum überholt jede Vorstellung. Genau deshalb braucht es Potenzgesetze statt Ausmultiplizieren.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Dicke \(= 0.1\ \text{mm} \cdot 2^n\) · logarithmische Leiter mit Vergleichsmarken</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Faltungen <span class="var">\(n\)</span></label>
+      <input type="range" id="fa-n" min="0" max="45" step="1" value="10">
+      <span class="sl-val" id="fa-nv">10</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Stapeldicke</div>
+      <div class="fl-eq" id="fa-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="fa-canvas" height="200"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Die Potenz packt wiederholtes Multiplizieren in eine kompakte Schreibweise:</p>
+  <ul style="margin-top:6px">
+    <li>\(2^{42}\) heisst «42-mal den Faktor 2» — niemand will das ausschreiben.</li>
+    <li>Auf der logarithmischen Leiter wird aus der Explosion eine Gerade: Jede Faltung ein gleicher Schritt.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was bedeutet \(2^{5}\)?</p><ul class="mc-optionen"><li data-opt="A">\(2 \cdot 5\)</li><li data-opt="B">\(2 \cdot 2 \cdot 2 \cdot 2 \cdot 2\)</li><li data-opt="C">\(5 \cdot 5\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Basis 2, fünfmal als Faktor — \(2^5 = 32\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">In \(a^n\) heisst \(a\) die <span class="mc-luecke"></span> und \(n\) der Exponent.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Basis.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie dick ist der Papierstapel nach 10 Faltungen (\(0.1\) mm Ausgangsdicke)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(0.1 \cdot 2^{10} = 0.1 \cdot 1024 = 102.4\) mm — gut 10 cm.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum ist \(2^{10} \approx 10^3\) eine nützliche Faustregel (Informatik: Kibi vs. Kilo)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(2^{10} = 1024\), nur \(2.4\ \%\) über \(1000 = 10^3\). So schätzt man Binär-Grössen im Kopf: \(2^{20} \approx 10^6\) (Mega), \(2^{30} \approx 10^9\) (Giga).</div></details></div>
+</details>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Definition — vom natürlichen zum ganzzahligen Exponenten</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Potenzen mit natürlichen Exponenten</div>
+  \[ a^n = \underbrace{a \cdot a \cdot \ldots \cdot a}_{n\ \text{Faktoren}}, \qquad n \in \mathbb{N} \]
+  <p>\(a\) heisst <strong>Basis</strong>, \(n\) <strong>Exponent</strong>, \(a^n\) die Potenz. Spezialfälle: \(a^1 = a\); \(a^2\) «Quadrat», \(a^3\) «Kubik».</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Ganzzahlige Exponenten — die Fortsetzung nach unten</div>
+  <p>Damit die Potenzgesetze lückenlos gelten, definiert man (für \(a \neq 0\)):</p>
+  \[ a^0 = 1, \qquad a^{-n} = \frac{1}{a^n} \]
+  <p>Plausibel über die Divisions-Treppe: \(2^3 = 8 \to 2^2 = 4 \to 2^1 = 2 \to 2^0 = 1 \to 2^{-1} = \tfrac{1}{2}\) — jeder Schritt teilt durch die Basis.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — das Minus vor der Potenz</div>
+  <p>\(-3^2 = -(3^2) = -9\), aber \((-3)^2 = 9\): <strong>Potenzieren bindet stärker als das Vorzeichen.</strong> Ohne Klammer gehört das Minus nicht zur Basis. Ebenso: \(2a^3\) heisst \(2 \cdot (a^3)\), nicht \((2a)^3\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Definition</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was ist \(5^0\)?</p><ul class="mc-optionen"><li data-opt="A">\(0\)</li><li data-opt="B">\(1\)</li><li data-opt="C">\(5\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(a^0 = 1\) für jede Basis \(a \neq 0\) — die Divisions-Treppe erzwingt es.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">\(a^{-n}\) ist der <span class="mc-luecke"></span> von \(a^n\): \(a^{-n} = 1/a^n\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Kehrwert.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(10^{-3}\) und \(2^{-4}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(10^{-3} = 0.001\); \(2^{-4} = \tfrac{1}{16} = 0.0625\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Berechne \(-2^4\) und \((-2)^4\) — und erkläre den Unterschied.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(-2^4 = -16\) (erst potenzieren, dann Vorzeichen), \((-2)^4 = +16\) (die Klammer macht \(-2\) zur Basis; gerader Exponent frisst das Minus).</div></details></div>
+</details>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Die fünf Potenzgesetze</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Gleiche Basis · gleicher Exponent</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Nr.</th><th>Gesetz</th><th>Merkregel</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>\(a^m \cdot a^n = a^{m+n}\)</td><td style="text-align:left;font-family:var(--sans)">gleiche Basis: Exponenten <strong>addieren</strong></td></tr>
+      <tr><td>2</td><td>\(\dfrac{a^m}{a^n} = a^{m-n}\)</td><td style="text-align:left;font-family:var(--sans)">gleiche Basis: Exponenten <strong>subtrahieren</strong></td></tr>
+      <tr><td>3</td><td>\((a^m)^n = a^{m \cdot n}\)</td><td style="text-align:left;font-family:var(--sans)">Potenz der Potenz: Exponenten <strong>multiplizieren</strong></td></tr>
+      <tr><td>4</td><td>\(a^n \cdot b^n = (a b)^n\)</td><td style="text-align:left;font-family:var(--sans)">gleicher Exponent: Basen multiplizieren</td></tr>
+      <tr><td>5</td><td>\(\dfrac{a^n}{b^n} = \left(\dfrac{a}{b}\right)^{n}\)</td><td style="text-align:left;font-family:var(--sans)">gleicher Exponent: Basen dividieren</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Sie gelten für <strong>alle</strong> ganzzahligen und rationalen Exponenten. Kein Gesetz gibt es für \(a^m + a^n\) — Summen von Potenzen lassen sich höchstens <strong>ausklammern</strong>.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Gesetze im Einsatz</div>
+  \[ 2^3 \cdot 2^4 = 2^7 = 128, \qquad \frac{x^5}{x^2} = x^3, \qquad (x^2)^3 = x^6 \]
+  \[ 5^{3} \cdot 2^{3} = 10^3 = 1000, \qquad \frac{6^4}{3^4} = 2^4 = 16 \]
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Gesetz 1 und 3 verwechseln</div>
+  <p>\(a^2 \cdot a^3 = a^5\) (addieren!), aber \((a^2)^3 = a^6\) (multiplizieren!). Und: \(a^2 + a^3\) lässt sich <strong>nicht</strong> zu \(a^5\) zusammenfassen — Probe mit \(a = 2\): \(4 + 8 = 12 \neq 32\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Potenzgesetze</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(x^4 \cdot x^5 =\) ?</p><ul class="mc-optionen"><li data-opt="A">\(x^{20}\)</li><li data-opt="B">\(x^9\)</li><li data-opt="C">\(x^{45}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Gleiche Basis, Multiplikation → Exponenten addieren.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei \((a^m)^n\) werden die Exponenten <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">multipliziert: \(a^{mn}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Vereinfache \(\dfrac{a^3 b^2 \cdot a^{-1}}{b^{-1}}\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(a^{3-1} \cdot b^{2-(-1)} = a^2 b^3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Widerlege «\(a^2 + a^2 = a^4\)» mit einer Probe und korrigiere.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(a = 3\): \(9 + 9 = 18 \neq 81\). Richtig ist \(a^2 + a^2 = 2a^2\) — Summen werden ausgeklammert, nicht «exponentenverrechnet».</div></details></div>
+</details>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. RATIONALE EXPONENTEN ══ -->
+<h2 id="typen">Rationale Exponenten — Wurzeln als Potenzen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Potenzen mit rationalen Exponenten</div>
+  <p>Für \(a &gt; 0\) definiert man:</p>
+  \[ a^{\frac{1}{n}} = \sqrt[n]{a}, \qquad a^{\frac{m}{n}} = \sqrt[n]{a^m} = \left(\sqrt[n]{a}\right)^{m} \]
+  <p>Damit gelten die fünf Potenzgesetze <strong>unverändert</strong> auch für Brüche im Exponenten — Wurzelrechnung wird zur Potenzrechnung. Kontrolle der Definition mit Gesetz 3: \(\left(a^{1/n}\right)^n = a^{n/n} = a\) ✓ — genau die Wurzel-Eigenschaft.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — rationale Exponenten auswerten</div>
+  \[ 8^{\frac{2}{3}} = \left(\sqrt[3]{8}\right)^2 = 2^2 = 4, \qquad 16^{-\frac{1}{2}} = \frac{1}{\sqrt{16}} = 0.25, \qquad 27^{\frac{2}{3}} = 3^2 = 9 \]
+  <p><strong>Strategie:</strong> Erst die Wurzel (macht die Zahl klein), dann die Potenz — \(\left(\sqrt[3]{8}\right)^2\) ist leichter als \(\sqrt[3]{64}\).</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Exponenten-Treppe — von \(a^{-2}\) bis \(a^{2}\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wandere mit dem Exponenten in Viertelschritten von \(-2\) bis \(2\) (Basis 16): Welche vertrauten Werte tauchen bei \(-1\), \(-0.5\), \(0\), \(0.5\), \(1\) auf?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Wandere mit dem Exponenten in Viertelschritten von minus zwei bis zwei bei Basis sechzehn: Welche vertrauten Werte tauchen bei minus eins, minus null Komma fünf, null, null Komma fünf und eins auf?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Treppe ist lückenlos: \(16^{-1} = \tfrac{1}{16}\), \(16^{-0.5} = 0.25\), \(16^0 = 1\), \(16^{0.5} = 4\), \(16^1 = 16\). Rationale Exponenten füllen die Zwischenräume — die Wurzeln <em>sind</em> die halben Schritte.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Treppe ist lückenlos: Rationale Exponenten füllen die Zwischenräume — die Wurzeln sind die halben Schritte.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Basis 16 fest · Exponent in Viertelschritten · Wert live</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-orange">
+      <label>Exponent <span class="var">\(x\)</span></label>
+      <input type="range" id="ex-x" min="-2" max="2" step="0.25" value="0.5">
+      <span class="sl-val" id="ex-xv">0.50</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Potenzwert</div>
+      <div class="fl-eq" id="ex-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ex-canvas" height="210"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — rationale Exponenten</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(a^{1/2}\) ist dasselbe wie…</p><ul class="mc-optionen"><li data-opt="A">\(\tfrac{a}{2}\)</li><li data-opt="B">\(\sqrt{a}\)</li><li data-opt="C">\(\tfrac{1}{a^2}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der Bruchexponent \(\tfrac{1}{n}\) ist die \(n\)-te Wurzel.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">In \(a^{m/n}\) ist \(n\) der Wurzelexponent und \(m\) die <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Potenz (der Exponent unter/über der Wurzel): \(\sqrt[n]{a^m}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(4^{3/2}\) ohne Taschenrechner.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\left(\sqrt{4}\right)^3 = 2^3 = 8\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Schreibe \(\sqrt{a} \cdot \sqrt[3]{a}\) als eine einzige Potenz.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(a^{1/2} \cdot a^{1/3} = a^{1/2 + 1/3} = a^{5/6} = \sqrt[6]{a^5}\) — Potenzgesetz 1 mit Bruchrechnung.</div></details></div>
+</details>
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<h2 id="theorie">Hierarchie der Operationen und Zehnerpotenzen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Die Rangordnung</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li><strong>Klammern</strong> (von innen nach aussen)</li>
+    <li><strong>Potenzen</strong> (und Wurzeln)</li>
+    <li><strong>Punktrechnung</strong> (\(\cdot\), \(:\))</li>
+    <li><strong>Strichrechnung</strong> (\(+\), \(-\))</li>
+  </ol>
+  <p style="margin-top:6px">Potenztürme werden <strong>von oben</strong> ausgewertet: \(2^{3^2} = 2^{(3^2)} = 2^9 = 512\) — nicht \((2^3)^2 = 64\). Und das Vorzeichen kommt nach der Potenz: \(-3^2 = -9\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Exponentenschreibweise (Zehnerpotenzen)</div>
+  <p>Jede Zahl lässt sich als \(m \cdot 10^k\) schreiben mit Mantisse \(1 \leq m &lt; 10\):</p>
+  \[ 5\,420\,000 = 5.42 \cdot 10^6, \qquad 0.000\,000\,000\,125 = 1.25 \cdot 10^{-10} \]
+  <p>Beim Rechnen trennen sich Mantissen und Zehnerpotenzen — die Potenzgesetze erledigen die Grössenordnung: \(\left(2 \cdot 10^3\right) \cdot \left(3 \cdot 10^5\right) = 6 \cdot 10^8\).</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Hierarchie Schritt für Schritt</div>
+  \[ 5 + 3 \cdot 2^{4} - (4 - 6)^2 = 5 + 3 \cdot 16 - (-2)^2 = 5 + 48 - 4 = 49 \]
+  <p>Reihenfolge: Klammer \(\to\) Potenzen \(\to\) Mal \(\to\) Plus/Minus.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Hierarchie</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(2 \cdot 3^2 =\) ?</p><ul class="mc-optionen"><li data-opt="A">\(36\)</li><li data-opt="B">\(18\)</li><li data-opt="C">\(12\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Potenz vor Punkt: \(2 \cdot 9 = 18\) — nicht \((2 \cdot 3)^2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Potenztürme wie \(2^{3^2}\) wertet man von <span class="mc-luecke"></span> aus.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">oben: \(2^{(3^2)} = 2^9 = 512\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Schreibe \(0.00047\) in Exponentenschreibweise.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(4.7 \cdot 10^{-4}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Überschlage \(\left(3.1 \cdot 10^4\right) \cdot \left(2.9 \cdot 10^3\right)\) im Kopf.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Mantissen \(\approx 3 \cdot 3 = 9\), Zehnerpotenzen \(10^{4+3} = 10^7\): rund \(9 \cdot 10^7\) (exakt \(8.99 \cdot 10^7\)).</div></details></div>
+</details>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Welches Gesetz greift?</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Term — welches Potenzgesetz wendet man an?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Term</div>
+    <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Regel für die Exponenten?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Terme vereinfachen</span></div>
+  <p>Vereinfache ohne Taschenrechner (Ergebnis als eine Potenz bzw. Zahl):</p>
+  <ol class="aufg-liste">
+    <li>\(x^4 \cdot x^{-7} \cdot x^5\)</li>
+    <li>\(\dfrac{(a^3)^2 \cdot b}{a^4 \cdot b^{-2}}\)</li>
+    <li>\(\dfrac{15^4}{5^4}\)</li>
+    <li>\(\sqrt{x} \cdot \sqrt[4]{x}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(x^{4-7+5} = x^2\).</li>
+        <li>\(\dfrac{a^6 b}{a^4 b^{-2}} = a^2 b^3\).</li>
+        <li>\(\left(\tfrac{15}{5}\right)^4 = 3^4 = 81\) — Gesetz 5 spart alles Ausrechnen.</li>
+        <li>\(x^{1/2 + 1/4} = x^{3/4} = \sqrt[4]{x^3}\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen ohne Hilfsmittel</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Gleiche Basis</div>
+    <p>Berechne \(2^3 \cdot 2^4\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3a1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3a1', 128, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 2^{3+4} = 2^7 = 128 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Negativer Exponent</div>
+    <p>Berechne \(16^{-1/2}\) (als Dezimalzahl).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3b1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3b1', 0.25, 0.001, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 16^{-1/2} = \frac{1}{\sqrt{16}} = \frac{1}{4} = 0.25 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Rationaler Exponent</div>
+    <p>Berechne \(27^{2/3}\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3c1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3c1', 9, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \left(\sqrt[3]{27}\right)^2 = 3^2 = 9 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Hierarchie</div>
+    <p>Berechne \(5 + 3 \cdot 2^4 - (4 - 6)^2\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3d1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3d1', 49, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 5 + 3 \cdot 16 - (-2)^2 = 5 + 48 - 4 = 49 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Vorzeichen-Falle</div>
+    <p>Berechne \(-3^2 + (-3)^2\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3e1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3e1', 0, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ -9 + 9 = 0 \quad \text{— das Minus gehört ohne Klammer nicht zur Basis.} \]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Zinseszins</span></div>
+  <p>Ein Sparkonto mit \(5000\) Fr. wird mit \(2\ \%\) pro Jahr verzinst — der Kontostand nach \(n\) Jahren ist \(K = 5000 \cdot 1.02^n\).</p>
+  <ol class="aufg-liste">
+    <li>Berechne den Kontostand nach 10 Jahren (auf Rappen, zwei Dezimalen).</li>
+    <li>Warum ist der Zuwachs im 10. Jahr grösser als im 1. Jahr?</li>
+  </ol>
+  <div class="eingabe-row"><label>K ≈&nbsp;</label><input type="text" id="a4-1" placeholder="Fr."><button class="btn-pruef" onclick="chkNum('a4-1', 6094.97, 0.05, 'Fr.')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(K = 5000 \cdot 1.02^{10} \approx 6094.97\) Fr.</li>
+        <li>Der Zins wird jedes Jahr auf den <em>gewachsenen</em> Betrag gerechnet — exponentielles statt lineares Wachstum (Zinseszins-Effekt).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Papier bis zum Mond</span></div>
+  <p>Zurück zum Einstieg: Ausgangsdicke \(0.1\) mm, Mond-Distanz \(384\,400\) km.</p>
+  <ol class="aufg-liste">
+    <li>Wie dick ist der Stapel nach 42 Faltungen (in km, ganze Tausender)?</li>
+    <li>Reichen 41 Faltungen?</li>
+  </ol>
+  <div class="eingabe-row"><label>Dicke ≈&nbsp;</label><input type="text" id="a5-1" placeholder="km"><button class="btn-pruef" onclick="chkNum('a5-1', 439805, 1500, 'km')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(0.1\ \text{mm} \cdot 2^{42} \approx 4.4 \cdot 10^{11}\ \text{mm} \approx 439\,805\ \text{km}\) — am Mond vorbei.</li>
+        <li>Nein: \(2^{41}\) gibt die Hälfte, rund \(219\,902\) km — eine Faltung entscheidet über \(220\,000\) km!</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Kilo oder Kibi?</span></div>
+  <p>In der Informatik bedeutet «1 KiB» \(2^{10}\) Byte, während «1 kB» für \(10^3\) Byte steht.</p>
+  <ol class="aufg-liste">
+    <li>Berechne \(2^{10}\).</li>
+    <li>Um wie viel Prozent ist das Kibibyte grösser als das Kilobyte (eine Dezimale)?</li>
+    <li>Schätze mit der Faustregel \(2^{10} \approx 10^3\): Wie viele Byte sind \(2^{30}\) (1 GiB) ungefähr?</li>
+  </ol>
+  <div class="eingabe-row"><label>2¹⁰ =&nbsp;</label><input type="text" id="a6-1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a6-1', 1024, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Abweichung =&nbsp;</label><input type="text" id="a6-2" placeholder="%"><button class="btn-pruef" onclick="chkNum('a6-2', 2.4, 0.05, '%')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(2^{10} = 1024\).</li>
+        <li>\(\tfrac{24}{1000} = 2.4\ \%\).</li>
+        <li>\(2^{30} = (2^{10})^3 \approx (10^3)^3 = 10^9\) — rund eine Milliarde Byte (exakt \(1.07 \cdot 10^9\)).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Potenztürme <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Bei Potenztürmen entscheidet die Reihenfolge:</p>
+  <ol class="aufg-liste">
+    <li>Berechne \(2^{3^2}\) (von oben!) und \((2^3)^2\).</li>
+    <li>Formuliere den Unterschied als Regel: Wo greift Potenzgesetz 3, wo nicht?</li>
+    <li>Welcher Turm ist grösser: \(3^{2^3}\) oder \(2^{3^3}\)? (Erst überlegen, dann rechnen.)</li>
+  </ol>
+  <div class="eingabe-row"><label>2^(3²) =&nbsp;</label><input type="text" id="a7-1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a7-1', 512, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(2^{3^2} = 2^9 = 512\); \((2^3)^2 = 8^2 = 64\).</li>
+        <li>Gesetz 3 gilt nur mit Klammer: \((a^m)^n = a^{mn}\). Ohne Klammer wird der Turm von oben abgearbeitet — das ist Konvention, kein Potenzgesetz.</li>
+        <li>\(3^{2^3} = 3^8 = 6561\) und \(2^{3^3} = 2^{27} = 134\,217\,728\) — der höhere Exponent gewinnt deutlich gegen die grössere Basis.</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Die Potenz \(a^n\) kürzt Multiplikation ab; \(a^0 = 1\) und \(a^{-n} = \tfrac{1}{a^n}\) setzen die Treppe nach unten fort, \(a^{m/n} = \sqrt[n]{a^m}\) füllt die Lücken — <strong>Wurzeln sind Potenzen</strong>. Die fünf Gesetze: gleiche Basis → Exponenten addieren/subtrahieren, Potenz der Potenz → multiplizieren, gleicher Exponent → Basen verrechnen. <strong>Kein Gesetz für Summen!</strong> Hierarchie: Klammern → Potenzen → Punkt → Strich; Türme von oben, und \(-3^2 = -9\).</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Regel</th><th>Formel</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Definitionen</td><td>\(a^0 = 1; \quad a^{-n} = \tfrac{1}{a^n}; \quad a^{m/n} = \sqrt[n]{a^m}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">gleiche Basis</td><td>\(a^m a^n = a^{m+n}; \quad \tfrac{a^m}{a^n} = a^{m-n}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Potenz der Potenz</td><td>\((a^m)^n = a^{mn}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">gleicher Exponent</td><td>\(a^n b^n = (ab)^n; \quad \tfrac{a^n}{b^n} = \left(\tfrac{a}{b}\right)^n\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Hierarchie</td><td style="text-align:left;font-family:var(--sans)">Klammern → Potenzen → Punkt → Strich; Türme von oben</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Zehnerpotenzen</td><td>\(m \cdot 10^k\) mit \(1 \leq m &lt; 10\)</td></tr>
+  </tbody>
+</table>
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s1-2-potenzen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-2-potenzen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-2-potenzen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-2-potenzen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-2-potenzen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lXu1WcPP0oXEF_AnfOtYjkw" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Alles über WURZELN — Playlist</div><div class="lk-s">MathemaTrick · inkl. Potenzen mit rationalen Exponenten</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/23665/aufgaben-zu-den-potenzgesetzen" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu den Potenzgesetzen</div><div class="lk-s">alle fünf Gesetze · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/78888/aufgaben-zu-potenzen-mit-rationalen-und-reellen-exponenten" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Potenzen mit rationalen Exponenten</div><div class="lk-s">Bruchexponenten und Wurzeln · mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -105,12 +601,177 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'schwerpunkt', id:'s1-2',
   kapitelNr:'1.2', kapitelTitel:'Potenzen',
   prev:{nr:'1.1',titel:'Grundlagen',url:'s1-1-grundlagen.html'},
   next:{nr:'1.3',titel:'Logarithmen',url:'s1-3-logarithmen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+/* ══ EINSTIEG: Falt-Labor ══ */
+const MARKEN = [
+  {v: 1e-3,     txt: '1 mm'},
+  {v: 1,        txt: '1 m'},
+  {v: 300,      txt: 'Eiffelturm'},
+  {v: 8849,     txt: 'Everest'},
+  {v: 4e5,      txt: 'ISS-Bahn'},
+  {v: 3.844e8,  txt: 'Mond'},
+];
+function updateFA(){
+  const n = parseInt(document.getElementById('fa-n').value);
+  document.getElementById('fa-nv').textContent = n;
+  const d = 0.1e-3 * Math.pow(2, n);   // Meter
+  let txt;
+  if(d < 1) txt = (d * 1000).toFixed(d < 0.01 ? 3 : 1) + ' mm';
+  else if(d < 1000) txt = d.toFixed(2) + ' m';
+  else txt = Math.round(d / 1000).toLocaleString('de-CH') + ' km';
+  document.getElementById('fa-eq').innerHTML = `d = 0.1 mm · 2^${n} = ${txt}`;
+  const {ctx, W, H} = initCanvas('fa-canvas', 200, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // log-Leiter: 1e-4 m .. 1e9 m
+  const lmin = -4, lmax = 9;
+  const x0 = 30, x1 = W - 20, y = H / 2 + 10;
+  const lx = v => x0 + (Math.log10(v) - lmin) / (lmax - lmin) * (x1 - x0);
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+  // Dekaden-Ticks
+  ctx.font = '10px monospace'; ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+  for(let e = lmin; e <= lmax; e++){
+    const x = lx(Math.pow(10, e));
+    ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x, y + 4); ctx.stroke();
+  }
+  // Vergleichsmarken
+  ctx.font = 'bold 11px monospace';
+  MARKEN.forEach((m, i) => {
+    const x = lx(m.v);
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - 26 - (i % 2) * 22); ctx.stroke();
+    ctx.fillStyle = '#1f6b3a';
+    ctx.fillText(m.txt, x, y - 30 - (i % 2) * 22);
+  });
+  // aktueller Stapel (blauer Punkt)
+  const x = lx(Math.max(d, Math.pow(10, lmin)));
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(x, y, 9, 0, 2 * Math.PI); ctx.fill();
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'center'; ctx.font = 'bold 12px monospace';
+  ctx.fillText('Stapel', x, y + 26);
+  ctx.fillStyle = '#6b7280'; ctx.font = '10px monospace';
+  ctx.fillText('logarithmische Leiter (jede Marke = ×10)', W / 2, H - 6);
+}
+document.getElementById('fa-n').addEventListener('input', updateFA);
+
+/* ══ EXPONENTEN-TREPPE ══ */
+function updateEX(){
+  const x = parseFloat(document.getElementById('ex-x').value);
+  document.getElementById('ex-xv').textContent = x.toFixed(2);
+  const v = Math.pow(16, x);
+  const exakt = {'-2': '1/256', '-1': '1/16', '-0.5': '0.25', '0': '1', '0.5': '4', '1': '16', '2': '256', '1.5': '64', '-1.5': '1/64', '0.25': '2', '-0.25': '0.5', '0.75': '8', '1.25': '32', '1.75': '128', '-0.75': '1/8', '-1.25': '1/32', '-1.75': '1/128'};
+  const key = String(x);
+  const zusatz = exakt[key] ? ` = ${exakt[key]}` : '';
+  document.getElementById('ex-eq').innerHTML =
+    `16^${x.toFixed(2).replace('-', '−')} = ${v >= 1 ? v.toFixed(v % 1 === 0 ? 0 : 2) : v.toFixed(4)}${zusatz}`;
+  const {ctx, W, H} = initCanvas('ex-canvas', 210, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // Treppe: x-Achse Exponent -2..2, y log-skaliert 1/256..256
+  const x0 = 44, x1 = W - 20, y0 = H - 30, y1 = 16;
+  const px = e => x0 + (e + 2) / 4 * (x1 - x0);
+  const py = v2 => y0 - (Math.log2(v2) + 8) / 16 * (y0 - y1);
+  ctx.strokeStyle = '#e2e2e2'; ctx.lineWidth = 1;
+  [-8, -4, 0, 4, 8].forEach(l => {
+    const y = py(Math.pow(2, l));
+    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+    ctx.fillText(Math.pow(2, l) >= 1 ? String(Math.pow(2, l)) : '1/' + Math.pow(2, -l), x0 - 5, y + 3);
+  });
+  // Kurve 16^t
+  ctx.strokeStyle = '#b8c4d4'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  for(let t = -2; t <= 2.001; t += 0.05){
+    const X = px(t), Y = py(Math.pow(16, t));
+    if(t === -2) ctx.moveTo(X, Y); else ctx.lineTo(X, Y);
+  }
+  ctx.stroke();
+  // Viertel-Stufen als Punkte
+  ctx.fillStyle = '#b85c00';
+  for(let t = -2; t <= 2.001; t += 0.25){
+    ctx.beginPath(); ctx.arc(px(t), py(Math.pow(16, t)), 3, 0, 2 * Math.PI); ctx.fill();
+  }
+  // aktueller Punkt
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(px(x), py(v), 8, 0, 2 * Math.PI); ctx.fill();
+  // x-Achse
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+  ctx.fillStyle = '#6b7280'; ctx.font = '10px monospace'; ctx.textAlign = 'center';
+  [-2, -1, 0, 1, 2].forEach(e => ctx.fillText(String(e).replace('-', '−'), px(e), y0 + 14));
+  ctx.fillText('Exponent x (Wert-Achse logarithmisch)', (x0 + x1) / 2, H - 4);
+}
+document.getElementById('ex-x').addEventListener('input', updateEX);
+
+/* ══ A1: Gesetz erkennen ══ */
+const a1G = [
+  {label:'Term 1', desc:'x³ · x⁵', sol:'Exponenten addieren'},
+  {label:'Term 2', desc:'(x³)⁵', sol:'Exponenten multiplizieren'},
+  {label:'Term 3', desc:'x⁸ : x³', sol:'Exponenten subtrahieren'},
+  {label:'Term 4', desc:'x⁵ · y⁵', sol:'Basen multiplizieren'},
+  {label:'Term 5', desc:'x³ + x⁵', sol:'kein Potenzgesetz'},
+];
+const a1Opts = ['Exponenten addieren', 'Exponenten subtrahieren', 'Exponenten multiplizieren', 'Basen multiplizieren', 'kein Potenzgesetz'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.desc} → ${g.sol}.`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Mal-Zeichen zwischen gleichen Basen: addieren. Klammer-Potenz: multiplizieren. Plus: gar kein Gesetz!';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()%]/g, '').replace(/\s/g, '');
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Hierarchie beachtet (Potenz vor Punkt vor Strich) — und beim Bruchexponenten zuerst die Wurzel?';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateFA();
+  updateEX();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  updateFA(); updateEX();
 });
 </script>
 </body>
