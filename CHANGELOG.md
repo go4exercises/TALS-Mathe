@@ -4,6 +4,26 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [84] — 2026-07-06 · Vollaudit aller 46 Themenseiten (nur Bericht, keine Änderungen)
+
+Auftragsgemäss ein Audit über alle Themenseiten beider Bereiche erstellt — ohne
+Druckseiten und ohne Bewertung der externen Ressourcen, ohne jede Änderung an den
+Seiten. Ergebnis: **`BERICHT-audit-themenseiten-2026-07-06.md`** mit priorisierter
+TODO-Liste (T1–T54) zur Sichtung durch den Auftraggeber.
+
+- **Methode:** mechanischer Gesamtpass (Skelett, Zähler, Notation, Nav-Kette,
+  Terminologie-Statistik) plus sechs parallele Prüfgruppen, die jede Seite vollständig
+  gelesen und über 400 Zahlenwerte mit python3 nachgerechnet haben.
+- **Kernergebnis:** Schwerpunktfach fachlich fehlerfrei (0 falsche Werte);
+  16 Severity-A-Funde konzentrieren sich auf ältere GF-Seiten (v.a. Lerngebiet 5) und
+  sind überwiegend Beschriftungs-/Rendering-Fehler; 9 RLP-/Lernziel-Lücken;
+  3 systematische Konsistenz-Muster (fehlende 👁/💡-Rollover in g5, A7-Pillen/Kommentare,
+  Terminologie-Divergenzen inkl. Glossar); umfangreiche, priorisierte
+  Visualisierungs-Ideen (grösste Hebel: s3-5-Phasor, g5-4-Abwickler,
+  s4-3c/d-Schrägbilder, g2-2b-Parabel, g4-Reihe).
+
+---
+
 ## [83] — 2026-07-06 · index.html: Status-Leiste bereinigt
 
 Die Stats-Chips über der Teilgebiets-Übersicht zeigten noch den alten Zwischenstand
