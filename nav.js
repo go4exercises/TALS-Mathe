@@ -50,7 +50,9 @@ const SITE = {
     { id:'s3-5', nr:'3.5', titel:'Trigonometrische Funktionen', url:'schwerpunkt/s3-5-trigonometrische-funktionen.html' },
     { id:'s3-6', nr:'3.6', titel:'Betragsfunktionen', url:'schwerpunkt/s3-6-betragsfunktionen.html' },
     { id:'s4-1', nr:'4.1', titel:'Grundlagen', url:'schwerpunkt/s4-1-grundlagen.html' },
-    { id:'s4-2', nr:'4.2', titel:'Stereometrie', url:'schwerpunkt/s4-2-stereometrie.html' },
+    { id:'s4-2a', nr:'4.2a', titel:'Prismen und Zylinder', url:'schwerpunkt/s4-2a-prismen-zylinder.html' },
+    { id:'s4-2b', nr:'4.2b', titel:'Pyramiden, Kegel und Stümpfe', url:'schwerpunkt/s4-2b-pyramiden-kegel-stuempfe.html' },
+    { id:'s4-2c', nr:'4.2c', titel:'Kugel und zusammengesetzte Körper', url:'schwerpunkt/s4-2c-kugel.html' },
     { id:'s4-3a', nr:'4.3a', titel:'Vektorbegriff und Komponenten', url:'schwerpunkt/s4-3a-vektorbegriff-komponenten.html' },
     { id:'s4-3b', nr:'4.3b', titel:'Skalarprodukt', url:'schwerpunkt/s4-3b-skalarprodukt.html' },
     { id:'s4-3c', nr:'4.3c', titel:'Geraden', url:'schwerpunkt/s4-3c-geraden.html' },
@@ -71,7 +73,7 @@ const GROUPS = {
     { nr:'1', titel:'Arithmetik/Algebra', ids:['s1-1', 's1-2', 's1-3'] },
     { nr:'2', titel:'Gleichungen', ids:['s2-1', 's2-2a', 's2-2b', 's2-2c'] },
     { nr:'3', titel:'Funktionen', ids:['s3-1', 's3-2a', 's3-2b', 's3-3', 's3-4a', 's3-4b', 's3-5', 's3-6'] },
-    { nr:'4', titel:'Geometrie', ids:['s4-1', 's4-2', 's4-3a', 's4-3b', 's4-3c', 's4-3d'] }
+    { nr:'4', titel:'Geometrie', ids:['s4-1', 's4-2a', 's4-2b', 's4-2c', 's4-3a', 's4-3b', 's4-3c', 's4-3d'] }
   ]
 };
 

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.2b Pyramiden, Kegel und Stümpfe — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 4 · Geometrie · 70 Lektionen</div>
+  <h1 class="pt-h1">4.2b Pyramiden, Kegel und Stümpfe</h1>
+  <div class="pt-untertitel">RLP 4.2 · Teil 2 von 3</div>
+</div>
+
+<p class="lead">Von der Cheops-Pyramide zum Kirchturmdach: <strong>Spitze Körper</strong> laufen von der Grundfläche auf einen Punkt zu — und fassen genau <strong>ein Drittel</strong> des zugehörigen Prismas oder Zylinders. Dazu kommen ihre eigenen Elemente (Seitenhöhe, <strong>Mantellinie</strong>, <strong>Öffnungswinkel</strong>) und die <strong>Stümpfe</strong>: abgeschnittene Kegel und Pyramiden, die man am elegantesten mit der <strong>Ähnlichkeit im Raum</strong> knackt.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.2</div>
+  <ul>
+    <li>geometrische Sachverhalte von elementaren Objekten (Prisma, Pyramide, Pyramidenstumpf, Kreiszylinder, Kreiskegel, Kreiskegelstumpf, Kugel) beschreiben</li>
+    <li>deren Elemente (Körperdiagonale, Höhen, Öffnungswinkel, Mantellinie) und Zusammenhänge (Volumen, Oberfläche) berechnen</li>
+    <li>die Ähnlichkeit für Berechnungen im Raum nutzen</li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt Pyramide, Kreiskegel und die beiden Stümpfe — inklusive Ähnlichkeit im Raum. Grundkörper mit konstantem Querschnitt in <a href="s4-2a-prismen-zylinder.html">Teil 1 (s4-2a)</a>; es folgt <a href="s4-2c-kugel.html">Teil 3: Kugel und zusammengesetzte Körper (s4-2c)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann Volumen und Oberfläche gerader Pyramiden berechnen: \(V = \tfrac{1}{3} G h\), Mantel über die Seitenhöhe \(h_s\).</li>
+      <li>Ich kann am Kreiskegel Mantellinie \(m = \sqrt{r^2 + h^2}\), Mantel \(M = \pi r m\) und Öffnungswinkel berechnen.</li>
+      <li>Ich kann den abgerollten Kegelmantel als Kreissektor deuten und damit rückwärts rechnen.</li>
+      <li>Ich kann Volumen und Mantel von Pyramiden- und Kegelstumpf berechnen.</li>
+      <li>Ich kann die Ähnlichkeit im Raum nutzen: Längen skalieren mit \(k\), Flächen mit \(k^2\), Volumen mit \(k^3\).</li>
+      <li>Ich kann Höhen, Kanten und Winkel in spitzen Körpern mit Pythagoras und Trigonometrie bestimmen.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — warum ein Drittel?</h2>
+
+<p>Die Cheops-Pyramide: quadratische Grundfläche mit \(a = 230\) m, Höhe \(h = 146.6\) m. Ihr Volumen ist</p>
+
+\[ V = \frac{1}{3} \cdot 230^2 \cdot 146.6 \approx 2.59\ \text{Mio.}\ \text{m}^3 \]
+
+<p>Woher kommt der Faktor \(\tfrac{1}{3}\)? Füllt man eine Pyramide mit Wasser und giesst sie in ein Prisma mit <em>gleicher Grundfläche und Höhe</em>, braucht es <strong>genau drei Füllungen</strong>.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>⏳ Drei Pyramiden füllen ein Prisma</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Giesse mit dem Regler Pyramidenfüllungen ins Prisma: Nach wie vielen Füllungen ist es voll? Vergleiche die Volumenwerte in der Formelzeile.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Giesse mit dem Regler Pyramidenfüllungen ins Prisma: Nach wie vielen Füllungen ist es voll? Vergleiche die Volumenwerte in der Formelzeile.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Genau drei Pyramidenfüllungen — der Faktor \(\tfrac{1}{3}\) ist experimentell sichtbar und gilt für <strong>alle</strong> spitzen Körper: \(V = \tfrac{1}{3} G h\), beim Kegel \(\tfrac{1}{3}\pi r^2 h\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Genau drei Pyramidenfüllungen — der Faktor ein Drittel ist experimentell sichtbar und gilt für alle spitzen Körper: Volumen gleich ein Drittel Grundfläche mal Höhe.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Pyramide und Prisma mit gleicher Grundfläche und Höhe · Füllstand orange</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-orange">
+      <label>Füllungen</label>
+      <input type="range" id="fu-n" min="0" max="3" step="0.1" value="1">
+      <span class="sl-val" id="fu-nv">1.0</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Füllstand des Prismas</div>
+      <div class="fl-eq" id="fu-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="fu-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Drittel-Faktor ist kein Zufall, sondern System:</p>
+  <ul style="margin-top:6px">
+    <li>Spitze Körper: \(V = \tfrac{1}{3} G h\) — ein Drittel des «geraden» Partners.</li>
+    <li>Das gilt für <em>jede</em> Grundflächenform: Quadrat (Pyramide), Kreis (Kegel), Dreieck (Tetraeder).</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie verhält sich das Pyramidenvolumen zum Prisma mit gleicher Grundfläche und Höhe?</p><ul class="mc-optionen"><li data-opt="A">gleich gross</li><li data-opt="B">halb so gross</li><li data-opt="C">ein Drittel</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> Drei Pyramidenfüllungen füllen das Prisma.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Für alle spitzen Körper gilt \(V = \frac{1}{3} \cdot\) <span class="mc-luecke"></span> \(\cdot\ h\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Grundfläche \(G\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Pyramide mit \(G = 25\ \text{m}^2\) und \(h = 12\) m: Berechne das Volumen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = \tfrac{1}{3} \cdot 25 \cdot 12 = 100\ \text{m}^3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Trinkbecher-Kegel und eine Dose (Zylinder) haben gleichen Radius und gleiche Höhe. Wie oft musst du den Becher füllen, um die Dose zu füllen?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Dreimal — der Kegel ist der «spitze Zylinder»: \(V_{\text{Kegel}} = \tfrac{1}{3} V_{\text{Zylinder}}\).</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Die gerade Pyramide</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Pyramide — Volumen und Mantel</div>
+  <p>Eine <strong>gerade Pyramide</strong> hat ein Vieleck als Grundfläche; die Spitze liegt senkrecht über deren Mittelpunkt.</p>
+  \[ V = \frac{1}{3} \, G \, h \]
+  <p>Der Mantel besteht aus Dreiecken. Bei der <strong>quadratischen</strong> Pyramide (Kante \(a\)) ist die <strong>Seitenhöhe</strong> \(h_s\) die Höhe eines Manteldreiecks:</p>
+  \[ h_s = \sqrt{h^2 + \left(\tfrac{a}{2}\right)^2}, \qquad M = 4 \cdot \tfrac{a \, h_s}{2} = 2 a h_s, \qquad O = a^2 + M \]
+  <p>Die <strong>Seitenkante</strong> \(s\) läuft zur Ecke: \(s = \sqrt{h^2 + \left(\tfrac{a\sqrt{2}}{2}\right)^2}\) — halbe Diagonale statt halbe Kante.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — quadratische Pyramide komplett</div>
+  <p>Quadratische Pyramide mit \(a = 6\) cm und \(h = 4\) cm:</p>
+  \[ V = \tfrac{1}{3} \cdot 36 \cdot 4 = 48\ \text{cm}^3, \qquad h_s = \sqrt{16 + 9} = 5\ \text{cm} \]
+  \[ M = 2 \cdot 6 \cdot 5 = 60\ \text{cm}^2, \qquad O = 36 + 60 = 96\ \text{cm}^2 \]
+  <p>Seitenkante: \(s = \sqrt{16 + 18} = \sqrt{34} \approx 5.83\) cm.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Höhe, Seitenhöhe und Kante verwechseln</div>
+  <p>Drei verschiedene Strecken: Körperhöhe \(h\) (senkrecht zur Grundfläche), Seitenhöhe \(h_s\) (im Manteldreieck, zur Kanten<em>mitte</em>) und Seitenkante \(s\) (zur <em>Ecke</em>). Es gilt stets \(h &lt; h_s &lt; s\). Für den <strong>Mantel</strong> braucht es \(h_s\), nicht \(h\)!</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Pyramide</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Strecke braucht man für die Mantelfläche der quadratischen Pyramide?</p><ul class="mc-optionen"><li data-opt="A">die Körperhöhe \(h\)</li><li data-opt="B">die Seitenhöhe \(h_s\)</li><li data-opt="C">die Seitenkante \(s\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(h_s\) ist die Höhe der Manteldreiecke: \(M = 2 a h_s\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Für die drei Strecken der Pyramide gilt die Grössenordnung \(h &lt;\) <span class="mc-luecke"></span> \(&lt; s\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(h_s\) (Seitenhöhe).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Pyramide mit \(a = 6\), \(h = 4\): Berechne \(h_s\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(h_s = \sqrt{4^2 + 3^2} = 5\) — Pythagoras mit der halben Kante.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum steht in \(h_s\) die <em>halbe Kante</em>, in der Seitenkante \(s\) aber die <em>halbe Diagonale</em>?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(h_s\) endet in der Kantenmitte — Abstand \(\tfrac{a}{2}\) vom Zentrum. \(s\) endet in der Ecke — Abstand \(\tfrac{a\sqrt{2}}{2}\) (halbe Quadratdiagonale). Beide Male Pythagoras mit \(h\), nur die Grundkathete wechselt.</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Der gerade Kreiskegel</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Kegel — Mantellinie, Mantel, Öffnungswinkel</div>
+  <p>Der <strong>gerade Kreiskegel</strong>: Kreis-Grundfläche (Radius \(r\)), Spitze senkrecht über dem Zentrum in Höhe \(h\).</p>
+  \[ V = \frac{1}{3} \pi r^2 h, \qquad m = \sqrt{r^2 + h^2}, \qquad M = \pi r m, \qquad O = \pi r (r + m) \]
+  <p>Die <strong>Mantellinie</strong> \(m\) verbindet Spitze und Randpunkt. Der <strong>Öffnungswinkel</strong> \(w\) sitzt an der Spitze: \(\sin\tfrac{w}{2} = \tfrac{r}{m}\). Abgerollt wird der Mantel zum <strong>Kreissektor</strong> mit Radius \(m\) und Bogenwinkel \(\alpha = \tfrac{r}{m} \cdot 360°\).</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Kegel-Labor — \(r\), \(h\) und alles daraus</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Mache den Kegel erst flach und breit, dann hoch und schmal: Wie ändern sich Mantellinie und Öffnungswinkel? Bei welchem Verhältnis \(r : h\) ist der Öffnungswinkel \(90°\)?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Mache den Kegel erst flach und breit, dann hoch und schmal: Wie ändern sich Mantellinie und Öffnungswinkel? Bei welchem Verhältnis r zu h ist der Öffnungswinkel neunzig Grad?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Mantellinie ist die Hypotenuse über \(r\) und \(h\). Der Öffnungswinkel wird \(90°\), wenn \(r = h\) (dann ist \(\tan\tfrac{w}{2} = 1\)). Flache Kegel: grosser Winkel; schlanke Kegel: kleiner Winkel.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Mantellinie ist die Hypotenuse über r und h. Der Öffnungswinkel wird neunzig Grad, wenn r gleich h ist. Flache Kegel: grosser Winkel; schlanke Kegel: kleiner Winkel.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Querschnitt durch die Kegelachse · Mantellinie violett · Öffnungswinkel an der Spitze</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Radius <span class="var">\(r\)</span> [cm]</label><input type="range" id="ke-r" min="1" max="6" step="0.25" value="3"><span class="sl-val" id="ke-rv">3.00</span></div>
+      <div class="sl-grp akz-orange"><label>Höhe <span class="var">\(h\)</span> [cm]</label><input type="range" id="ke-h" min="1" max="8" step="0.25" value="4"><span class="sl-val" id="ke-hv">4.00</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Mantellinie · Volumen · Mantel · Öffnungswinkel</div>
+      <div class="fl-eq" id="ke-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ke-canvas" height="230"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — der 3-4-5-Kegel</div>
+  <p>Kegel mit \(r = 3\) cm, \(h = 4\) cm:</p>
+  \[ m = \sqrt{9 + 16} = 5\ \text{cm}, \qquad V = \tfrac{1}{3}\pi \cdot 9 \cdot 4 = 12\pi \approx 37.70\ \text{cm}^3 \]
+  \[ M = \pi \cdot 3 \cdot 5 = 15\pi \approx 47.12\ \text{cm}^2, \qquad w = 2\arcsin\tfrac{3}{5} \approx 73.74° \]
+  <p>Abgerollter Mantel: Sektor mit Radius \(5\) und Winkel \(\alpha = \tfrac{3}{5} \cdot 360° = 216°\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Kegel</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was ist die Mantellinie \(m\) des Kegels?</p><ul class="mc-optionen"><li data-opt="A">der Umfang der Grundfläche</li><li data-opt="B">die Strecke von der Spitze zum Kreisrand</li><li data-opt="C">die Höhe</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \(m = \sqrt{r^2 + h^2}\) — Hypotenuse im Achsenquerschnitt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der abgerollte Kegelmantel ist ein Kreis<span class="mc-luecke"></span> mit Radius \(m\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">sektor — Bogenwinkel \(\alpha = \tfrac{r}{m} \cdot 360°\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Kegel mit \(r = 3\), \(h = 4\): Berechne \(m\) und \(M\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(m = 5\); \(M = \pi \cdot 3 \cdot 5 = 15\pi \approx 47.12\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Für welchen Kegel ist der Öffnungswinkel genau \(90°\)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\tfrac{w}{2} = 45°\) heisst \(\tan 45° = \tfrac{r}{h} = 1\), also \(r = h\) — der Kegel, dessen Querschnitt ein gleichschenklig-rechtwinkliges Dreieck ist.</div></details></div>
+</details>
+
+
+<!-- ══ 5. STÜMPFE ══ -->
+<h2 id="typen">Stümpfe — abgeschnittene spitze Körper</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Pyramidenstumpf und Kegelstumpf</div>
+  <p>Schneidet man einen spitzen Körper <strong>parallel zur Grundfläche</strong>, entsteht ein Stumpf mit Grundfläche \(G_1\) (unten) und Deckfläche \(G_2\) (oben):</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Körper</th><th>Volumen</th><th>Mantel</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Pyramidenstumpf</td><td>\(V = \dfrac{h}{3}\left(G_1 + \sqrt{G_1 G_2} + G_2\right)\)</td><td style="text-align:left;font-family:var(--sans)">Trapeze, je Seite einzeln</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Kegelstumpf</td><td>\(V = \dfrac{\pi h}{3}\left(R^2 + R r + r^2\right)\)</td><td>\(M = \pi (R + r)\, m\), \(\ m = \sqrt{h^2 + (R - r)^2}\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">(\(R\) = unterer, \(r\) = oberer Radius.) Alternativ immer möglich: <strong>grosser spitzer Körper minus kleiner</strong> — dazu braucht es die Ähnlichkeit.</p>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Ähnlichkeit im Raum</div>
+  <p>Wird ein Körper mit dem Faktor \(k\) gestreckt, skalieren:</p>
+  \[ \text{Längen} \sim k, \qquad \text{Flächen} \sim k^2, \qquad \text{Volumen} \sim k^3 \]
+  <p>Beim Parallelschnitt eines Kegels in halber Höhe ist der obere Restkegel eine \(k = \tfrac{1}{2}\)-Kopie: Er hat nur \(\left(\tfrac{1}{2}\right)^3 = \tfrac{1}{8}\) des Volumens — der Stumpf trägt \(\tfrac{7}{8}\)!</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Stumpf über die Ähnlichkeit</div>
+  <p>Ein Kegel (\(r = 6\), \(h = 12\)) wird in halber Höhe geköpft.</p>
+  \[ V_{\text{ganz}} = \tfrac{1}{3}\pi \cdot 36 \cdot 12 = 144\pi \approx 452.39 \]
+  <p>Der obere Kegel ist ähnlich mit \(k = \tfrac{1}{2}\): \(V_{\text{klein}} = \tfrac{144\pi}{8} = 18\pi \approx 56.55\). Stumpf:</p>
+  \[ V_{\text{Stumpf}} = 144\pi - 18\pi = 126\pi \approx 395.84 \qquad \left(= \tfrac{7}{8}\ \text{des Ganzen}\right) \]
+  <p>Kontrolle mit der Stumpfformel (\(R = 6\), \(r = 3\), \(h = 6\)): \(\tfrac{6\pi}{3}(36 + 18 + 9) = 126\pi\) ✓</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — halbe Höhe heisst nicht halbes Volumen</div>
+  <p>Der obere Kegel bei halber Höhe hat <strong>ein Achtel</strong> des Volumens, nicht die Hälfte — Volumen skaliert mit \(k^3\). Wer «halbe Höhe → halbes Volumen» rechnet, unterschätzt den Stumpf massiv.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Stümpfe und Ähnlichkeit</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Ein Körper wird mit \(k = 3\) vergrössert. Was passiert mit dem Volumen?</p><ul class="mc-optionen"><li data-opt="A">×3</li><li data-opt="B">×9</li><li data-opt="C">×27</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(V \sim k^3 = 27\) — Flächen dagegen ×9.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Ein Stumpf entsteht durch einen Schnitt <span class="mc-luecke"></span> zur Grundfläche.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">parallel.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Pyramidenstumpf mit \(G_1 = 64\), \(G_2 = 16\), \(h = 6\): Berechne \(V\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = \tfrac{6}{3}(64 + \sqrt{1024} + 16) = 2 \cdot 112 = 224\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Kegel wird bei einem Drittel der Höhe (von der Spitze aus) geschnitten. Welchen Volumenanteil hat der kleine Kegel?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(k = \tfrac{1}{3}\) → \(V \sim \tfrac{1}{27}\) — knapp 4 % des Ganzen; der Stumpf trägt \(\tfrac{26}{27}\).</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Rückwärts rechnen — vom Mantel zum Körper</h2>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — der abgerollte Mantel als Bindeglied</div>
+  <p>Viele Aufgaben geben den <strong>Sektor</strong> (Radius \(m\), Winkel \(\alpha\)) und fragen nach dem Kegel — oder umgekehrt. Schlüsselgleichung: Der Sektorbogen ist der Grundkreisumfang:</p>
+  \[ 2\pi m \cdot \frac{\alpha}{360°} = 2\pi r \quad\Longrightarrow\quad r = m \cdot \frac{\alpha}{360°} \]
+  <p>Danach liefert Pythagoras die Höhe: \(h = \sqrt{m^2 - r^2}\).</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 4 — Kegel aus dem Sektor</div>
+  <p>Aus einem Kreissektor (Radius \(10\) cm, Winkel \(216°\)) wird ein Kegelmantel gerollt.</p>
+  \[ r = 10 \cdot \tfrac{216}{360} = 6\ \text{cm}, \qquad h = \sqrt{100 - 36} = 8\ \text{cm} \]
+  \[ V = \tfrac{1}{3}\pi \cdot 36 \cdot 8 = 96\pi \approx 301.59\ \text{cm}^3 \]
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Sektor und Kegel</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was wird beim Aufrollen des Sektors zum Grundkreisumfang?</p><ul class="mc-optionen"><li data-opt="A">der Sektorradius</li><li data-opt="B">der Sektorbogen</li><li data-opt="C">der Sektorwinkel</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Bogen \(= 2\pi r\) — daraus folgt \(r = m \cdot \alpha / 360°\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der Sektorradius wird beim Kegel zur <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Mantellinie \(m\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Sektor mit \(m = 10\), \(\alpha = 180°\): Welcher Kegelradius entsteht?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(r = 10 \cdot \tfrac{180}{360} = 5\) cm — der Halbkreis gibt den Kegel mit \(r = \tfrac{m}{2}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Kann ein Sektor mit \(\alpha = 360°\) einen Kegel bilden?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nein — dann wäre \(r = m\) und \(h = \sqrt{m^2 - m^2} = 0\): Der «Kegel» bleibt eine flache Kreisscheibe. Je kleiner \(\alpha\), desto spitzer der Kegel.</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Element erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Beschreibung — welches Körperelement ist gemeint?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Beschreibung</div>
+    <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welches Element ist das?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Cheops nachgerechnet</span></div>
+  <p>Die Cheops-Pyramide: quadratische Grundfläche \(a = 230\) m, Höhe \(h = 146.6\) m.</p>
+  <ol class="aufg-liste">
+    <li>Berechne das Volumen in Mio. m³ (zwei Dezimalen).</li>
+    <li>Berechne die Seitenhöhe \(h_s\) und die Mantelfläche.</li>
+    <li>Ein Baustein misst im Schnitt \(1\ \text{m}^3\). Wie viele Lastwagen à \(10\ \text{m}^3\) wären für den Abtransport nötig?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(V = \tfrac{1}{3} \cdot 230^2 \cdot 146.6 \approx 2585047\ \text{m}^3 \approx 2.59\) Mio. m³.</li>
+        <li>\(h_s = \sqrt{146.6^2 + 115^2} \approx 186.3\) m; \(M = 2 \cdot 230 \cdot 186.3 \approx 85\,700\ \text{m}^2\).</li>
+        <li>\(\approx 258\,505\) Lastwagen — gut eine Viertelmillion Fahrten.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen an spitzen Körpern und Stümpfen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Quadratische Pyramide</div>
+    <p>Pyramide mit \(a = 6\) cm, \(h = 4\) cm: Berechne \(V\) und \(O\).</p>
+    <div class="eingabe-row"><label>V =&nbsp;</label><input type="text" id="a3a1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3a1', 48, 0.01, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>O =&nbsp;</label><input type="text" id="a3a2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3a2', 96, 0.01, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ V = \tfrac{1}{3} \cdot 36 \cdot 4 = 48\ \text{cm}^3; \quad h_s = 5 \Rightarrow O = 36 + 2 \cdot 6 \cdot 5 = 96\ \text{cm}^2 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Kegel</div>
+    <p>Kegel mit \(r = 3\) cm, \(h = 4\) cm: Berechne \(V\) und \(M\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a3b1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3b1', 37.7, 0.05, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>M ≈&nbsp;</label><input type="text" id="a3b2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3b2', 47.12, 0.05, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3b2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ m = 5;\quad V = 12\pi \approx 37.70\ \text{cm}^3;\quad M = 15\pi \approx 47.12\ \text{cm}^2 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Öffnungswinkel</div>
+    <p>Berechne den Öffnungswinkel des Kegels aus Teilaufgabe b (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>w ≈&nbsp;</label><input type="text" id="a3c1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a3c1', 73.74, 0.05, '°')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \sin\tfrac{w}{2} = \tfrac{3}{5} \Rightarrow w = 2\arcsin(0.6) \approx 73.74° \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Kegelstumpf</div>
+    <p>Kegelstumpf mit \(R = 5\), \(r = 3\), \(h = 6\) cm: Berechne \(V\) und \(M\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a3d1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3d1', 307.88, 0.1, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>M ≈&nbsp;</label><input type="text" id="a3d2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3d2', 158.95, 0.1, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ V = \tfrac{6\pi}{3}(25 + 15 + 9) = 98\pi \approx 307.88;\quad m = \sqrt{36 + 4} \approx 6.32;\quad M = \pi \cdot 8 \cdot 6.32 \approx 158.95 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Pyramidenstumpf</div>
+    <p>Pyramidenstumpf mit quadratischen Flächen \(G_1 = 64\ \text{cm}^2\), \(G_2 = 16\ \text{cm}^2\) und \(h = 6\) cm: Berechne \(V\).</p>
+    <div class="eingabe-row"><label>V =&nbsp;</label><input type="text" id="a3e1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3e1', 224, 0.1, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ V = \tfrac{6}{3}\left(64 + \sqrt{64 \cdot 16} + 16\right) = 2(64 + 32 + 16) = 224\ \text{cm}^3 \]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Kirchturmdach</span></div>
+  <p>Ein kegelförmiges Turmdach hat den Radius \(4\) m und die Höhe \(6\) m.</p>
+  <ol class="aufg-liste">
+    <li>Berechne die Mantellinie und die Mantelfläche (zwei Dezimalen).</li>
+    <li>Für die Kupferdeckung rechnet man \(10\ \%\) Verschnitt. Wie viel Blech wird bestellt?</li>
+  </ol>
+  <div class="eingabe-row"><label>M ≈&nbsp;</label><input type="text" id="a4-1" placeholder="m²"><button class="btn-pruef" onclick="chkNum('a4-1', 90.62, 0.1, 'm²')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Bestellung ≈&nbsp;</label><input type="text" id="a4-2" placeholder="m²"><button class="btn-pruef" onclick="chkNum('a4-2', 99.68, 0.15, 'm²')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(m = \sqrt{16 + 36} \approx 7.21\) m; \(M = \pi \cdot 4 \cdot 7.21 \approx 90.62\ \text{m}^2\).</li>
+        <li>\(90.62 \cdot 1.1 \approx 99.68\ \text{m}^2\) — rund \(100\ \text{m}^2\) bestellen.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Kieshaufen</span></div>
+  <p>Geschütteter Kies bildet einen Kegel mit <strong>Schüttwinkel</strong> \(30°\) (Neigung der Mantellinie gegen den Boden). Der Haufen hat den Durchmesser \(8\) m.</p>
+  <ol class="aufg-liste">
+    <li>Berechne die Höhe des Haufens (zwei Dezimalen).</li>
+    <li>Berechne das Kiesvolumen (zwei Dezimalen).</li>
+  </ol>
+  <div class="eingabe-row"><label>h ≈&nbsp;</label><input type="text" id="a5-1" placeholder="m"><button class="btn-pruef" onclick="chkNum('a5-1', 2.31, 0.01, 'm')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>V ≈&nbsp;</label><input type="text" id="a5-2" placeholder="m³"><button class="btn-pruef" onclick="chkNum('a5-2', 38.69, 0.05, 'm³')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(r = 4\) m; \(h = r \tan 30° \approx 2.31\) m.</li>
+        <li>\(V = \tfrac{1}{3}\pi \cdot 16 \cdot 2.31 \approx 38.69\ \text{m}^3\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Geköpfter Kegel — mit Ähnlichkeit</span></div>
+  <p>Ein Kegel (\(r = 6\) cm, \(h = 12\) cm) wird in halber Höhe parallel zur Grundfläche geschnitten.</p>
+  <ol class="aufg-liste">
+    <li>Berechne das Volumen des ganzen Kegels (zwei Dezimalen).</li>
+    <li>Bestimme das Stumpf-Volumen <em>über die Ähnlichkeit</em> (\(k = \tfrac{1}{2}\)) — ohne Stumpfformel.</li>
+  </ol>
+  <div class="eingabe-row"><label>V ganz ≈&nbsp;</label><input type="text" id="a6-1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a6-1', 452.39, 0.1, 'cm³')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>V Stumpf ≈&nbsp;</label><input type="text" id="a6-2" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a6-2', 395.84, 0.1, 'cm³')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(V = 144\pi \approx 452.39\ \text{cm}^3\).</li>
+        <li>Oberer Kegel: \(k^3 = \tfrac{1}{8}\) → \(18\pi\); Stumpf \(= \tfrac{7}{8} \cdot 144\pi = 126\pi \approx 395.84\ \text{cm}^3\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Vom Sektor zum Kegel <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Aus einem Kreissektor mit Radius \(10\) cm und Winkel \(216°\) wird ein Kegelmantel gerollt.</p>
+  <ol class="aufg-liste">
+    <li>Berechne den Radius des entstehenden Kegels.</li>
+    <li>Berechne Höhe und Volumen (zwei Dezimalen).</li>
+    <li>Begründe: Je kleiner der Sektorwinkel, desto spitzer der Kegel.</li>
+  </ol>
+  <div class="eingabe-row"><label>r =&nbsp;</label><input type="text" id="a7-1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a7-1', 6, 0.01, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>V ≈&nbsp;</label><input type="text" id="a7-2" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a7-2', 301.59, 0.1, 'cm³')">Prüfen</button></div>
+  <div class="cr" id="a7-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(r = 10 \cdot \tfrac{216}{360} = 6\) cm (Sektorbogen = Grundkreisumfang).</li>
+        <li>\(h = \sqrt{100 - 36} = 8\) cm; \(V = 96\pi \approx 301.59\ \text{cm}^3\).</li>
+        <li>Kleinerer Winkel → kürzerer Bogen → kleinerer Grundkreis bei gleicher Mantellinie \(m\) → grössere Höhe \(h = \sqrt{m^2 - r^2}\): Der Kegel wird schlanker und spitzer.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Spitze Körper fassen <strong>ein Drittel</strong>: \(V = \tfrac{1}{3} G h\). Für Mäntel braucht es die richtigen Strecken: <strong>Seitenhöhe</strong> \(h_s\) bei der Pyramide (\(M = 2 a h_s\)), <strong>Mantellinie</strong> \(m = \sqrt{r^2 + h^2}\) beim Kegel (\(M = \pi r m\)); der abgerollte Kegelmantel ist ein Sektor mit \(\alpha = \tfrac{r}{m} \cdot 360°\). <strong>Stümpfe</strong>: Formel oder «grosser minus kleiner Körper» — und die <strong>Ähnlichkeit</strong> skaliert Längen mit \(k\), Flächen mit \(k^2\), <strong>Volumen mit \(k^3\)</strong>: Halbe Höhe heisst ein Achtel, nicht die Hälfte!</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Körper</th><th>Volumen</th><th>Mantel</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Pyramide (quadratisch)</td><td>\(V = \tfrac{1}{3} a^2 h\)</td><td>\(M = 2 a h_s\), \(h_s = \sqrt{h^2 + (a/2)^2}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kreiskegel</td><td>\(V = \tfrac{1}{3} \pi r^2 h\)</td><td>\(M = \pi r m\), \(m = \sqrt{r^2 + h^2}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Pyramidenstumpf</td><td>\(V = \tfrac{h}{3}(G_1 + \sqrt{G_1 G_2} + G_2)\)</td><td style="text-align:left;font-family:var(--sans)">Trapez-Seitenflächen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kegelstumpf</td><td>\(V = \tfrac{\pi h}{3}(R^2 + Rr + r^2)\)</td><td>\(M = \pi(R+r)m\), \(m = \sqrt{h^2 + (R-r)^2}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Ähnlichkeit (\(k\))</td><td>\(V \sim k^3\)</td><td>Flächen \(\sim k^2\), Längen \(\sim k\)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s4-2b-pyramiden-kegel-stuempfe/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2b-pyramiden-kegel-stuempfe/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2b-pyramiden-kegel-stuempfe/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2b-pyramiden-kegel-stuempfe/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2b-pyramiden-kegel-stuempfe/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzm2EWHP7iGUWq_WTR0TtuJz" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Körper — Oberfläche &amp; Volumen berechnen</div><div class="lk-s">Lehrerschmidt · 72 Videos · inkl. Pyramide, Kegel und Stümpfe</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHju4BlmGqAs9pC5HEPJ4V3F" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Körper und Stereometrie — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 20 Videos · kompakte Theorie-Clips</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/65267/aufgaben-zur-pyramide" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zur Pyramide</div><div class="lk-s">Volumen, Mantel, Höhen · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/62627/aufgaben-zum-kegel" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Kegel</div><div class="lk-s">Mantellinie, Sektor, Volumen · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 4.2b Pyramiden, Kegel und Stümpfe</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s4-2b',
+  kapitelNr:'4.2b', kapitelTitel:'Pyramiden, Kegel und Stümpfe',
+  prev:{nr:'4.2a',titel:'Prismen und Zylinder',url:'s4-2a-prismen-zylinder.html'},
+  next:{nr:'4.2c',titel:'Kugel und zusammengesetzte Körper',url:'s4-2c-kugel.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+/* ══ EINSTIEG: Füll-Experiment ══ */
+function updateFU(){
+  const n = parseFloat(document.getElementById('fu-n').value);
+  document.getElementById('fu-nv').textContent = n.toFixed(1);
+  const anteil = Math.min(1, n / 3);
+  document.getElementById('fu-eq').innerHTML =
+    `${n.toFixed(1)} Füllungen · Prisma zu ${(anteil * 100).toFixed(0)} % voll ${anteil >= 1 ? '— voll: V<sub>Prisma</sub> = 3·V<sub>Pyramide</sub>!' : ''}`;
+  const {ctx, W, H} = initCanvas('fu-canvas', 220, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const y0 = H - 26, bw = 90, bh = 140;
+  // Pyramide links (Dreieck als Querschnitt)
+  const px = W * 0.24;
+  ctx.strokeStyle = '#5b7fa6'; ctx.lineWidth = 2; ctx.fillStyle = '#dbe7f3';
+  ctx.beginPath();
+  ctx.moveTo(px - bw / 2, y0); ctx.lineTo(px + bw / 2, y0); ctx.lineTo(px, y0 - bh);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = '12px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('Pyramide (G, h)', px, y0 + 18);
+  // Prisma rechts mit Füllstand
+  const qx = W * 0.68;
+  ctx.strokeStyle = '#5b7fa6'; ctx.fillStyle = '#fff';
+  ctx.fillRect(qx - bw / 2, y0 - bh, bw, bh);
+  // Füllung
+  const fh = bh * anteil;
+  ctx.fillStyle = '#f5c78e';
+  ctx.fillRect(qx - bw / 2, y0 - fh, bw, fh);
+  ctx.strokeRect(qx - bw / 2, y0 - bh, bw, bh);
+  // Drittel-Markierungen
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  for(let i = 1; i < 3; i++){
+    ctx.beginPath();
+    ctx.moveTo(qx - bw / 2, y0 - bh * i / 3); ctx.lineTo(qx + bw / 2, y0 - bh * i / 3);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
+  ctx.fillText('Prisma (G, h)', qx, y0 + 18);
+  // Pfeil
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(px + bw / 2 + 12, y0 - bh / 2); ctx.lineTo(qx - bw / 2 - 14, y0 - bh / 2); ctx.stroke();
+  ctx.fillStyle = '#b85c00';
+  ctx.beginPath();
+  ctx.moveTo(qx - bw / 2 - 10, y0 - bh / 2);
+  ctx.lineTo(qx - bw / 2 - 20, y0 - bh / 2 - 6);
+  ctx.lineTo(qx - bw / 2 - 20, y0 - bh / 2 + 6);
+  ctx.closePath(); ctx.fill();
+}
+document.getElementById('fu-n').addEventListener('input', updateFU);
+
+/* ══ KEGEL-LABOR ══ */
+function updateKE(){
+  const r = parseFloat(document.getElementById('ke-r').value);
+  const h = parseFloat(document.getElementById('ke-h').value);
+  document.getElementById('ke-rv').textContent = r.toFixed(2);
+  document.getElementById('ke-hv').textContent = h.toFixed(2);
+  const m = Math.hypot(r, h);
+  const V = Math.PI * r * r * h / 3;
+  const M = Math.PI * r * m;
+  const w = 2 * Math.asin(r / m) * 180 / Math.PI;
+  document.getElementById('ke-eq').innerHTML =
+    `m = ${m.toFixed(2)} · V = ${V.toFixed(1)} cm³ · M = ${M.toFixed(1)} cm² · w = ${w.toFixed(1)}°`;
+  const {ctx, W, H} = initCanvas('ke-canvas', 230, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const sk = Math.min((H - 60) / 8, (W * 0.4) / 12);
+  const cx0 = W / 2, y0 = H - 32;
+  const rx = r * sk, hp = h * sk;
+  // Kegel-Querschnitt
+  ctx.strokeStyle = '#5b7fa6'; ctx.fillStyle = '#dbe7f3'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cx0 - rx, y0); ctx.lineTo(cx0 + rx, y0); ctx.lineTo(cx0, y0 - hp);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  // Höhe gestrichelt
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.6; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(cx0, y0); ctx.lineTo(cx0, y0 - hp); ctx.stroke();
+  ctx.setLineDash([]);
+  // Mantellinie violett (rechte Seite)
+  ctx.strokeStyle = '#5b2d8e'; ctx.lineWidth = 2.6;
+  ctx.beginPath(); ctx.moveTo(cx0 + rx, y0); ctx.lineTo(cx0, y0 - hp); ctx.stroke();
+  // Öffnungswinkel-Bogen an der Spitze
+  const ang = Math.atan2(rx, hp);
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx0, y0 - hp, 24, Math.PI / 2 - ang, Math.PI / 2 + ang); ctx.stroke();
+  // Labels
+  ctx.font = 'bold 12px monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'right'; ctx.fillText('h', cx0 - 7, y0 - hp / 2);
+  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left'; ctx.fillText('m', cx0 + rx / 2 + 7, y0 - hp / 2);
+  ctx.fillStyle = '#b85c00'; ctx.textAlign = 'center'; ctx.fillText('w', cx0, y0 - hp + 42);
+  ctx.fillStyle = '#374151'; ctx.fillText('r', cx0 + rx / 2, y0 + 16);
+}
+['ke-r', 'ke-h'].forEach(id => document.getElementById(id).addEventListener('input', updateKE));
+
+/* ══ A1: Element erkennen ══ */
+const a1G = [
+  {label:'Element 1', desc:'Strecke von der Kegelspitze zu einem Punkt des Grundkreises', sol:'Mantellinie m'},
+  {label:'Element 2', desc:'Höhe eines Manteldreiecks der quadratischen Pyramide', sol:'Seitenhöhe h_s'},
+  {label:'Element 3', desc:'Winkel an der Kegelspitze im Achsenquerschnitt', sol:'Öffnungswinkel w'},
+  {label:'Element 4', desc:'Strecke von der Pyramidenspitze zu einer Ecke der Grundfläche', sol:'Seitenkante s'},
+];
+const a1Opts = ['Mantellinie m', 'Seitenhöhe h_s', 'Öffnungswinkel w', 'Seitenkante s'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.sol}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Unterscheide: zur Kanten-Mitte (h_s), zur Ecke (s), zum Kreisrand (m) — und der Winkel sitzt an der Spitze.';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()%]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Faktor 1/3 gesetzt? Für den Mantel h_s bzw. m verwendet, nicht h?';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateFU();
+  updateKE();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  updateFU(); updateKE();
+});
+</script>
+</body>
+</html>

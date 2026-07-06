@@ -4,6 +4,58 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [78] — 2026-07-06 · s4-2 Stereometrie: Vollausbau als Dreier-Sub-Split (a/b/c)
+
+Teilgebiet 4.2 (Stereometrie) aus dem Stub zum Dreier-Sub-Split ausgebaut — Quellen:
+FTB Kapitel 11–15; Split vorab per Rückfrage abgestimmt (a: Kap. 11+12, b: Kap. 13+14,
+c: Kap. 15). Alle Zahlenwerte in Python nachgerechnet.
+
+- **`schwerpunkt/s4-2a-prismen-zylinder.html`** *(neu, Kap. 11+12)* — Einstieg
+  Münzstapel-Scherung (Cavalieri-Widget: Volumen konstant, Seitenlinie wächst);
+  Prisma \(V = G h\), Quader/Würfel mit Diagonalen (Quader-Labor: Schrägbild mit
+  Flächen- und Raumdiagonale live); Zylinder-Labor mit Schrägbild + Netz (Mantel-
+  Rechteck \(2\pi r \times h\)); Grundlagen Schrägbild/Netz/Lagebeziehungen;
+  Formeln umstellen und zusammengesetzte Körper; A1 Formel-Zuordnungs-Quiz,
+  A2 Netze skizzieren, A3 a–e chkNum (Quader, Würfeldiagonale, Zylinder, Radius
+  rückwärts, Dreiecksprisma), A4 Aquarium 112 l, A5 Regentonne (Durchmesser-Falle,
+  603 l, Anstieg 6.96 cm), A6 Halle mit Satteldach 225 m³, A7 optimale Dose
+  \(h = 2r\), \(r \approx 3.74\) cm (Vertiefung).
+- **`schwerpunkt/s4-2b-pyramiden-kegel-stuempfe.html`** *(neu, Kap. 13+14)* —
+  Einstieg «Drei Pyramiden füllen ein Prisma» (Füll-Widget für den Drittel-Faktor);
+  quadratische Pyramide mit \(h &lt; h_s &lt; s\)-Fehlerblock; Kegel-Labor
+  (Querschnitt mit Mantellinie und Öffnungswinkel live, \(w = 90°\) bei \(r = h\));
+  Stümpfe (beide Formeln) und Ähnlichkeit im Raum (\(k^3\)-Fehlerblock «halbe Höhe
+  ≠ halbes Volumen»); Sektor-Abwicklung mit Rückwärtsrechnung; A1 Element-Quiz
+  (m/h_s/w/s), A2 Cheops (2.59 Mio. m³), A3 a–e (Pyramide, Kegel, Öffnungswinkel
+  73.74°, Kegelstumpf 98π, Pyramidenstumpf 224), A4 Kirchturmdach mit Verschnitt,
+  A5 Kieshaufen Schüttwinkel, A6 geköpfter Kegel über Ähnlichkeit (7/8),
+  A7 Kegel aus Sektor 216° (Vertiefung).
+- **`schwerpunkt/s4-2c-kugel.html`** *(neu, Kap. 15)* — Einstieg Archimedes
+  (Kugel-im-Zylinder-Widget, konstantes 2:3); Kugelformeln mit Rückwärts-Wurzeln
+  und Dimensions-Fehlerblock (\(r^3\) vs. \(r^2\)); Kugelteile Kappe/Segment/Sektor
+  mit Grenzfall-Kontrollen; zusammengesetzte Körper (Silo-Beispiel mit
+  Nahtstellen-Regel); Ähnlichkeit und Dichte; A1 Kugelteil-Quiz, A2 Grenzfall-Tests
+  als Aufgabe, A3 a–e (Kugel, 1-Liter-Kugel r=6.20, O→r, Segment, Halbkugel),
+  A4 Heissluftballon 643 kg, A5 Eiskugel \(h = 4r\), A6 Silo 90π,
+  A7 Kugel im Würfel π/6 ≈ 52.36 % (Vertiefung).
+- **Infrastruktur:** Stub `s4-2-stereometrie.html` entfernt; `nav.js` (SITE und
+  GROUPS Lerngebiet 4 → s4-2a/b/c); `index.html` (ksub-Block 4.2 mit drei
+  fertig-Karten; st-hint 44 → 46 Themenseiten); Kette s4-1 → 4.2a → 4.2b → 4.2c
+  → 4.3a angepasst (s4-3a prev auf 4.2c).
+- **Zusatzmaterial:** `scripts/build_print_s3.py` um die Blöcke Q/R/S erweitert
+  (je Handout, Formelauszug, Teste-dich-selbst mit 12 Aufgaben, Aufgabenserie mit
+  6 Anwendungen inkl. Musterlösungen); bestehende Druckseiten blieben byte-identisch.
+  `scripts/build_apkg.py` um drei Decks à 20 Karten ergänzt (s42a/b/c), nur die
+  neuen apkg erzeugt.
+- **Ressourcen:** zwei neu verifizierte Playlists — Lehrerschmidt «Körper —
+  Oberfläche &amp; Volumen» (72 Videos) und Daniel Jung «Körper/Stereometrie»
+  (20 Videos), owner-verifiziert per Playlist-Abruf (5 Abrufe total); Aufgaben
+  über die serlo-Sitemap (50462, 174501, 65267, 62627, 62757, 58818).
+  Map §8 um die Zeile s4-2a–c erweitert.
+- Pre-Flight: alle drei Seiten `ALLE CHECKS BESTANDEN`.
+
+---
+
 ## [77] — 2026-07-06 · s4-3 Vektorgeometrie: Vollausbau als Vierer-Sub-Split (a/b/c/d)
 
 Teilgebiet 4.3 (Zwei- und dreidimensionale Vektorgeometrie) aus dem Stub zum

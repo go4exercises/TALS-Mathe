@@ -4346,6 +4346,656 @@ P_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s4-2a  PRISMEN UND ZYLINDER
+# ═══════════════════════════════════════════════════════════════════
+
+Q_HANDOUT = r'''
+  <h2>1. Prisma — konstanter Querschnitt</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Gerades Prisma</div>
+    <p>Vieleck-Grundfläche \(G\), senkrecht um \(h\) verschoben. Grund- und Deckfläche kongruent,
+    Mantel aus Rechtecken:</p>
+    <p style="text-align:center">\( V = G \cdot h, \qquad M = U \cdot h, \qquad O = 2G + M \)</p>
+  </div>
+  <p><strong>Satz von Cavalieri:</strong> Gleiche Querschnittsflächen in jeder Höhe → gleiches
+  Volumen. Darum gilt \( V = G \cdot h \) auch für <em>schiefe</em> Prismen und Zylinder — mit der
+  senkrechten Höhe (Münzstapel-Experiment).</p>
+
+  <h2>2. Quader und Würfel</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Quader</td><td>\( V = abc \); \( O = 2(ab + ac + bc) \); \( d = \sqrt{a^2 + b^2 + c^2} \)</td></tr>
+      <tr><td class="li">Würfel</td><td>\( V = a^3 \); \( O = 6a^2 \); \( d = a\sqrt{3} \); Flächendiagonale \( a\sqrt{2} \)</td></tr>
+    </tbody>
+  </table>
+  <p>Raumdiagonale = <strong>zweimal Pythagoras</strong>: erst in der Grundfläche, dann senkrecht dazu.</p>
+
+  <h2>3. Gerader Kreiszylinder</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Zylinder</div>
+    <p style="text-align:center">\( V = \pi r^2 h, \qquad M = 2\pi r h, \qquad O = 2\pi r (r + h) \)</p>
+    <p>Netz: zwei Kreise + Mantel-<strong>Rechteck</strong> der Breite \( 2\pi r \) (abgerollter
+    Umfang) und Höhe \(h\).</p>
+  </div>
+
+  <h2>4. Darstellung und Lage</h2>
+  <p><strong>Schrägbild:</strong> Front in wahrer Grösse, Tiefenkanten halbiert unter 45°.
+  <strong>Netz:</strong> alle Flächen aufgeklappt — Grundlage der Oberflächenrechnung.
+  Geraden im Raum können <strong>windschief</strong> sein.</p>
+
+  <h2>5. Rechenpraxis</h2>
+  <p>Formeln erst nach der gesuchten Grösse umstellen (\( r = \sqrt{V/(\pi h)} \)); Durchmesser
+  halbieren; \( 1\ \text{l} = 1000\ \text{cm}^3 \); zusammengesetzte Körper in Teilkörper zerlegen —
+  Berührungsflächen zählen nicht zur Oberfläche.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Konstanter Querschnitt heisst \( V = G \cdot h \) — gerade oder schief (Cavalieri).
+    Diagonalen mit zweimal Pythagoras, Zylindermantel als abgerolltes Rechteck.</p>
+  </div>
+'''
+
+Q_FORMELAUSZUG = r'''
+  <h2>1. Prisma und Zylinder</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">gerades Prisma</td><td>\( V = G h; \quad M = U h; \quad O = 2G + M \)</td></tr>
+      <tr><td class="li">Kreiszylinder</td><td>\( V = \pi r^2 h; \quad M = 2\pi r h; \quad O = 2\pi r(r + h) \)</td></tr>
+      <tr><td class="li">Cavalieri</td><td class="li">gleiche Querschnitte in jeder Höhe → gleiches Volumen</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Quader und Würfel</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Quader</td><td>\( V = abc; \quad O = 2(ab + ac + bc) \)</td></tr>
+      <tr><td class="li">Raumdiagonale</td><td>\( d = \sqrt{a^2 + b^2 + c^2} \)</td></tr>
+      <tr><td class="li">Würfel</td><td>\( V = a^3; \quad O = 6a^2; \quad d = a\sqrt{3} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Umstellen (Beispiele)</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Radius aus \(V\), \(h\)</td><td>\( r = \sqrt{V / (\pi h)} \)</td></tr>
+      <tr><td class="li">Kante aus \(O\) (Würfel)</td><td>\( a = \sqrt{O / 6} \)</td></tr>
+      <tr><td class="li">Höhe aus \(V\), \(G\)</td><td>\( h = V / G \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Praxis</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Einheiten</td><td>\( 1\ \text{l} = 1000\ \text{cm}^3; \quad 1\ \text{m}^3 = 1000\ \text{l} \)</td></tr>
+      <tr><td class="li">Durchmesser</td><td>\( r = d/2 \) — in allen Formeln steht \(r\)!</td></tr>
+      <tr><td class="li">zusammengesetzt</td><td class="li">Volumina addieren/subtrahieren; Nahtflächen keine Oberfläche</td></tr>
+    </tbody>
+  </table>
+'''
+
+Q_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Beim geraden Prisma gilt \( V = G \cdot h \) und der Mantel ist<br>
+      \( M = \) <span class="lueck"></span> \( \cdot\ h \). Nach dem Satz von <span class="lueck"></span><br>
+      gilt die Volumenformel auch für schiefe Körper.
+    </div>''')
+    + aufg(2, 'Netz des Zylinders', 1, r'''    <p>Aus welchen Teilflächen besteht das Netz eines Zylinders — und welche Breite hat
+    das Mantel-Rechteck?</p>
+''' + LINS)
+    + aufg(3, 'Würfel', 1, r'''    <p>Würfel mit \( a = 5 \) cm: Berechne \(V\), \(O\) und die Raumdiagonale.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Quader und Prisma</div>\n'
+    + aufg(4, 'Quader komplett', 2, r'''    <p>Quader \( 4 \times 3 \times 2 \) cm: Berechne \(V\), \(O\) und \(d\).</p>
+''' + LINS)
+    + aufg(5, 'Rückwärts', 2, r'''    <p>Ein Würfel hat die Oberfläche \( O = 96\ \text{cm}^2 \). Berechne Kante und Volumen.</p>
+''' + LINS)
+    + aufg(6, 'Dreiecksprisma', 2, r'''    <p>Gerades Prisma, Grundfläche gleichseitiges Dreieck (\( a = 6 \) cm), Höhe 10 cm:
+    Berechne \(V\) und \(O\).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Zylinder</div>\n'
+    + aufg(7, 'Zylinder komplett', 2, r'''    <p>Zylinder mit \( r = 3 \) cm, \( h = 8 \) cm: Berechne \(V\), \(M\) und \(O\).</p>
+''' + LINS)
+    + aufg(8, 'Radius gesucht', 2, r'''    <p>Ein Zylinder soll bei \( h = 10 \) cm genau \( 500\ \text{cm}^3 \) fassen.
+    Berechne \(r\).</p>
+''' + LINS)
+    + aufg(9, 'Durchmesser-Falle', 2, r'''    <p>Eine Tonne hat Durchmesser 80 cm und Höhe 120 cm. Wie viele Liter fasst sie?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Anwendungen</div>\n'
+    + aufg(10, 'Aquarium', 2, r'''    <p>Offener Glasquader \( 80 \times 35 \times 40 \) cm: Volumen in Litern und
+    Glasfläche (Boden + 4 Seiten)?</p>
+''' + LINS)
+    + aufg(11, 'Zusammengesetzt', 3, r'''    <p>Halle: Quader \( 10 \times 6 \times 3 \) m plus Satteldach (Dreiecksprisma, Basis 6 m,
+    Firsthöhe 1.5 m, Länge 10 m). Gesamtvolumen?</p>
+''' + LINS)
+    + aufg(12, 'Bohrung', 3, r'''    <p>Durch einen Würfel (\( a = 6 \) cm) wird senkrecht ein Zylinderloch (\( r = 1 \) cm)
+    gebohrt. Restvolumen?</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p>\( M = U \cdot h \) (<strong>Umfang</strong>) · Satz von <strong>Cavalieri</strong>.</p>''')
+    + loes(2, r'''    <p>Zwei Kreise + Mantel-Rechteck; Breite \( 2\pi r \) (abgerollter Umfang), Höhe \(h\).</p>''')
+    + loes(3, r'''    <p>\( V = 125\ \text{cm}^3 \); \( O = 150\ \text{cm}^2 \);
+    \( d = 5\sqrt{3} \approx 8.66 \) cm.</p>''')
+    + loes(4, r'''    <p>\( V = 24\ \text{cm}^3 \); \( O = 52\ \text{cm}^2 \);
+    \( d = \sqrt{29} \approx 5.39 \) cm.</p>''')
+    + loes(5, r'''    <p>\( a = \sqrt{96/6} = 4 \) cm; \( V = 64\ \text{cm}^3 \).</p>''')
+    + loes(6, r'''    <p>\( G = \tfrac{\sqrt{3}}{4} \cdot 36 \approx 15.59 \);
+    \( V \approx 155.88\ \text{cm}^3 \); \( O = 180 + 2 \cdot 15.59 \approx 211.18\ \text{cm}^2 \).</p>''')
+    + loes(7, r'''    <p>\( V = 72\pi \approx 226.19\ \text{cm}^3 \); \( M = 48\pi \approx 150.80 \);
+    \( O = 66\pi \approx 207.35\ \text{cm}^2 \).</p>''')
+    + loes(8, r'''    <p>\( r = \sqrt{500/(10\pi)} \approx 3.99 \) cm.</p>''')
+    + loes(9, r'''    <p>\( r = 40 \) cm! \( V = \pi \cdot 1600 \cdot 120 \approx 603\,186\ \text{cm}^3
+    \approx 603 \) l.</p>''')
+    + loes(10, r'''    <p>\( V = 112\,000\ \text{cm}^3 = 112 \) l; Glas \( 2800 + 6400 + 2800 = 12\,000\ \text{cm}^2 \).</p>''')
+    + loes(11, r'''    <p>\( 180 + \tfrac{1}{2} \cdot 6 \cdot 1.5 \cdot 10 = 180 + 45 = 225\ \text{m}^3 \).</p>''')
+    + loes(12, r'''    <p>\( 216 - \pi \cdot 1 \cdot 6 = 216 - 6\pi \approx 197.2\ \text{cm}^3 \).</p>''')
+)
+
+Q_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Erster Schritt jeder Zylinderaufgabe: \( r = d/2 \) notieren!</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Haustechnik</td><td>Regentonne</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Aquaristik</td><td>Aquarium</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Bauwesen</td><td>Halle mit Satteldach</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Verpackung</td><td>Die optimale Dose</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Maschinenbau</td><td>Werkstück mit Bohrung</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Logistik</td><td>Beton für ein Fundament</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Regentonne', 2, r'''    <p>Zylindrische Tonne: Durchmesser 80 cm, Höhe 120 cm.</p>
+    <p>(a) Wie viele Liter fasst sie?</p>
+    <p>(b) Ein Gewitter liefert 35 l. Um wie viele cm steigt der Spiegel?</p>
+    <p>(c) Bei welcher Füllhöhe ist die halbe Tonne voll — und warum ist das trivial?</p>
+''' + LINS4, tag='Haustechnik')
+    + aufg(2, 'Aquarium', 2, r'''    <p>Offener Glasquader, innen \( 80 \times 35 \times 40 \) cm.</p>
+    <p>(a) Volumen in Litern?</p>
+    <p>(b) Verbaute Glasfläche (Boden + 4 Seiten)?</p>
+    <p>(c) Der Wasserstand soll 5 cm unter dem Rand bleiben. Wie viele Liter passen hinein?</p>
+''' + LINS4, tag='Aquaristik')
+    + aufg(3, 'Halle mit Satteldach', 2, r'''    <p>Quader \( 10 \times 6 \times 3 \) m plus Satteldach-Prisma (Basis 6 m, Firsthöhe 1.5 m
+    über Traufe, Länge 10 m).</p>
+    <p>(a) Umbautes Gesamtvolumen?</p>
+    <p>(b) Volumenanteil des Dachs in Prozent?</p>
+''' + LINS4, tag='Bauwesen')
+    + aufg(4, 'Die optimale Dose', 3, r'''    <p>Eine Dose soll \( 330\ \text{cm}^3 \) fassen; materialoptimal ist \( h = 2r \).</p>
+    <p>(a) Setze \( h = 2r \) in \( V = \pi r^2 h \) ein und stelle nach \(r\) um.</p>
+    <p>(b) Berechne \(r\) und \(h\).</p>
+    <p>(c) Reale Dosen sind schlanker. Nenne zwei mögliche Gründe.</p>
+''' + LINS4, tag='Verpackung')
+    + aufg(5, 'Werkstück mit Bohrung', 3, r'''    <p>Stahlquader \( 8 \times 6 \times 4 \) cm mit durchgehender Zylinderbohrung
+    (\( r = 1.5 \) cm) senkrecht zur \( 8 \times 6 \)-Fläche. Dichte Stahl:
+    \( 7.85\ \text{g/cm}^3 \).</p>
+    <p>(a) Berechne das Restvolumen.</p>
+    <p>(b) Berechne die Masse des Werkstücks.</p>
+''' + LINS4, tag='Maschinenbau')
+    + aufg(6, 'Beton für ein Fundament', 3, r'''    <p>Ein Streifenfundament: L-förmiger Querschnitt aus zwei Rechtecken
+    (\( 0.8 \times 0.3 \) m und \( 0.3 \times 0.5 \) m), Länge 12 m. Beton wiegt
+    \( 2.4\ \text{t/m}^3 \).</p>
+    <p>(a) Berechne Querschnittsfläche und Volumen.</p>
+    <p>(b) Wie viele Tonnen Beton werden gebraucht?</p>
+''' + LINS4, tag='Logistik')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( r = 40 \): \( V \approx 603 \) l.</p>
+    <p>(b) \( \Delta h = 35000/(\pi \cdot 1600) \approx 6.96 \) cm.</p>
+    <p>(c) Bei 60 cm — das Volumen wächst beim Zylinder linear mit der Füllhöhe.</p>''')
+    + loes(2, r'''    <p>(a) 112 l.</p>
+    <p>(b) \( 12\,000\ \text{cm}^2 = 1.2\ \text{m}^2 \).</p>
+    <p>(c) Füllhöhe 35 cm: \( 80 \cdot 35 \cdot 35 = 98\,000\ \text{cm}^3 = 98 \) l.</p>''')
+    + loes(3, r'''    <p>(a) \( 180 + 45 = 225\ \text{m}^3 \).</p>
+    <p>(b) \( 45/225 = 20\ \% \).</p>''')
+    + loes(4, r'''    <p>(a) \( V = 2\pi r^3 \Rightarrow r = \sqrt[3]{V/(2\pi)} \).</p>
+    <p>(b) \( r \approx 3.74 \) cm, \( h \approx 7.49 \) cm.</p>
+    <p>(c) Z.B. Greifbarkeit/Trinkkomfort, Regalnormen, dickeres Material an Deckel und Boden.</p>''')
+    + loes(5, r'''    <p>(a) \( V = 192 - \pi \cdot 2.25 \cdot 4 \approx 192 - 28.27 \approx 163.73\ \text{cm}^3 \).</p>
+    <p>(b) \( m \approx 163.73 \cdot 7.85 \approx 1285 \) g \( \approx 1.29 \) kg.</p>''')
+    + loes(6, r'''    <p>(a) \( G = 0.24 + 0.15 = 0.39\ \text{m}^2 \); \( V = 0.39 \cdot 12 = 4.68\ \text{m}^3 \).</p>
+    <p>(b) \( 4.68 \cdot 2.4 \approx 11.2 \) t.</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s4-2b  PYRAMIDEN, KEGEL UND STÜMPFE
+# ═══════════════════════════════════════════════════════════════════
+
+R_HANDOUT = r'''
+  <h2>1. Spitze Körper — der Drittel-Faktor</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Grundprinzip</div>
+    <p>Alle spitzen Körper (Pyramide, Kegel) fassen ein <strong>Drittel</strong> des Prismas bzw.
+    Zylinders mit gleicher Grundfläche und Höhe:</p>
+    <p style="text-align:center">\( V = \tfrac{1}{3} \, G \, h \)</p>
+    <p>(Füll-Experiment: drei Pyramidenfüllungen füllen das Prisma.)</p>
+  </div>
+
+  <h2>2. Quadratische Pyramide</h2>
+  <p>Drei verschiedene Strecken — \( h < h_s < s \):</p>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Seitenhöhe (zur Kantenmitte)</td><td>\( h_s = \sqrt{h^2 + (a/2)^2} \) — für den Mantel!</td></tr>
+      <tr><td class="li">Seitenkante (zur Ecke)</td><td>\( s = \sqrt{h^2 + (a\sqrt{2}/2)^2} \) — halbe Diagonale</td></tr>
+      <tr><td class="li">Mantel / Oberfläche</td><td>\( M = 2 a h_s; \quad O = a^2 + M \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Gerader Kreiskegel</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Kegel</div>
+    <p style="text-align:center">\( V = \tfrac{1}{3}\pi r^2 h, \qquad m = \sqrt{r^2 + h^2}, \qquad
+    M = \pi r m, \qquad O = \pi r (r + m) \)</p>
+    <p>Öffnungswinkel: \( \sin\tfrac{w}{2} = \tfrac{r}{m} \). Abgerollter Mantel = Kreis<strong>sektor</strong>
+    mit Radius \(m\) und Winkel \( \alpha = \tfrac{r}{m} \cdot 360° \) — der Sektorbogen ist der
+    Grundkreisumfang.</p>
+  </div>
+
+  <h2>4. Stümpfe</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Pyramidenstumpf</td><td>\( V = \tfrac{h}{3}(G_1 + \sqrt{G_1 G_2} + G_2) \)</td></tr>
+      <tr><td class="li">Kegelstumpf</td><td>\( V = \tfrac{\pi h}{3}(R^2 + Rr + r^2); \quad M = \pi(R + r)m \), \( m = \sqrt{h^2 + (R-r)^2} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Ähnlichkeit im Raum</h2>
+  <p>Streckfaktor \(k\): Längen \( \sim k \), Flächen \( \sim k^2 \), <strong>Volumen \( \sim k^3 \)</strong>.
+  Kegel in halber Höhe geköpft: Restkegel \( \tfrac{1}{8} \), Stumpf \( \tfrac{7}{8} \) —
+  «grosser minus kleiner Körper» ersetzt jede Stumpfformel.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Spitz heisst ein Drittel. Mantel mit \( h_s \) bzw. \( m \) — nie mit \( h \).
+    Halbe Höhe heisst ein Achtel des Volumens, nicht die Hälfte!</p>
+  </div>
+'''
+
+R_FORMELAUSZUG = r'''
+  <h2>1. Pyramide</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Volumen</td><td>\( V = \tfrac{1}{3} G h \) (quadratisch: \( \tfrac{1}{3} a^2 h \))</td></tr>
+      <tr><td class="li">Seitenhöhe</td><td>\( h_s = \sqrt{h^2 + (a/2)^2} \)</td></tr>
+      <tr><td class="li">Seitenkante</td><td>\( s = \sqrt{h^2 + (a\sqrt{2}/2)^2} \)</td></tr>
+      <tr><td class="li">Mantel / Oberfläche</td><td>\( M = 2 a h_s; \quad O = a^2 + M \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Kreiskegel</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Volumen</td><td>\( V = \tfrac{1}{3} \pi r^2 h \)</td></tr>
+      <tr><td class="li">Mantellinie</td><td>\( m = \sqrt{r^2 + h^2} \)</td></tr>
+      <tr><td class="li">Mantel / Oberfläche</td><td>\( M = \pi r m; \quad O = \pi r (r + m) \)</td></tr>
+      <tr><td class="li">Öffnungswinkel</td><td>\( \sin\tfrac{w}{2} = \tfrac{r}{m} \)</td></tr>
+      <tr><td class="li">abgerollter Mantel</td><td>Sektor: Radius \(m\), \( \alpha = \tfrac{r}{m} \cdot 360° \); rückwärts \( r = m \cdot \tfrac{\alpha}{360°} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Stümpfe</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Pyramidenstumpf</td><td>\( V = \tfrac{h}{3}\left(G_1 + \sqrt{G_1 G_2} + G_2\right) \)</td></tr>
+      <tr><td class="li">Kegelstumpf</td><td>\( V = \tfrac{\pi h}{3}(R^2 + Rr + r^2) \)</td></tr>
+      <tr><td class="li">Kegelstumpf-Mantel</td><td>\( M = \pi (R + r) m; \quad m = \sqrt{h^2 + (R - r)^2} \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Ähnlichkeit im Raum</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Skalierung mit \(k\)</td><td>Längen \( \sim k \); Flächen \( \sim k^2 \); Volumen \( \sim k^3 \)</td></tr>
+      <tr><td class="li">Kegel, halbe Höhe</td><td class="li">Restkegel \( \tfrac{1}{8} \), Stumpf \( \tfrac{7}{8} \) des Ganzen</td></tr>
+    </tbody>
+  </table>
+'''
+
+R_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Spitze Körper fassen ein <span class="lueck"></span> des Prismas gleicher Grundfläche.<br>
+      Für den Pyramidenmantel braucht man die <span class="lueck"></span>höhe,<br>
+      für den Kegelmantel die <span class="lueck"></span>linie.
+    </div>''')
+    + aufg(2, 'Drei Strecken', 1, r'''    <p>Ordne der Grösse nach: Körperhöhe \(h\), Seitenkante \(s\), Seitenhöhe \(h_s\)
+    (quadratische Pyramide).</p>
+''' + LINS)
+    + aufg(3, 'Pyramidenvolumen', 1, r'''    <p>Pyramide mit \( G = 25\ \text{m}^2 \), \( h = 12 \) m: Berechne \(V\).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Pyramide und Kegel</div>\n'
+    + aufg(4, 'Pyramide komplett', 2, r'''    <p>Quadratische Pyramide, \( a = 6 \) cm, \( h = 4 \) cm: Berechne \( h_s \), \(V\)
+    und \(O\).</p>
+''' + LINS)
+    + aufg(5, 'Kegel komplett', 2, r'''    <p>Kegel mit \( r = 3 \) cm, \( h = 4 \) cm: Berechne \(m\), \(V\) und \(M\).</p>
+''' + LINS)
+    + aufg(6, 'Öffnungswinkel', 2, r'''    <p>Berechne den Öffnungswinkel des Kegels aus Aufgabe 5.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Stümpfe und Ähnlichkeit</div>\n'
+    + aufg(7, 'Kegelstumpf', 2, r'''    <p>Kegelstumpf mit \( R = 5 \), \( r = 3 \), \( h = 6 \) cm: Berechne \(V\).</p>
+''' + LINS)
+    + aufg(8, 'Pyramidenstumpf', 2, r'''    <p>Pyramidenstumpf mit \( G_1 = 64 \), \( G_2 = 16\ \text{cm}^2 \), \( h = 6 \) cm:
+    Berechne \(V\).</p>
+''' + LINS)
+    + aufg(9, 'Skalieren', 2, r'''    <p>Ein Körper wird mit \( k = 3 \) vergrössert. Um welche Faktoren wachsen Oberfläche
+    und Volumen?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Sektor und Anwendung</div>\n'
+    + aufg(10, 'Geköpfter Kegel', 3, r'''    <p>Kegel (\( r = 6 \), \( h = 12 \) cm), in halber Höhe geschnitten: Bestimme das
+    Stumpfvolumen über die Ähnlichkeit.</p>
+''' + LINS)
+    + aufg(11, 'Kegel aus Sektor', 3, r'''    <p>Aus einem Sektor (Radius 10 cm, Winkel 216°) wird ein Kegel gerollt: Berechne
+    \(r\), \(h\) und \(V\).</p>
+''' + LINS)
+    + aufg(12, 'Schüttkegel', 3, r'''    <p>Kies schüttet sich mit 30° Böschungswinkel zu einem Kegel mit Durchmesser 8 m.
+    Berechne Höhe und Volumen.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Drittel</strong> · <strong>Seiten</strong>höhe \( h_s \) ·
+    <strong>Mantel</strong>linie \(m\).</p>''')
+    + loes(2, r'''    <p>\( h < h_s < s \) — je weiter der Endpunkt vom Zentrum, desto länger.</p>''')
+    + loes(3, r'''    <p>\( V = \tfrac{1}{3} \cdot 25 \cdot 12 = 100\ \text{m}^3 \).</p>''')
+    + loes(4, r'''    <p>\( h_s = 5 \); \( V = 48\ \text{cm}^3 \); \( O = 36 + 60 = 96\ \text{cm}^2 \).</p>''')
+    + loes(5, r'''    <p>\( m = 5 \); \( V = 12\pi \approx 37.70\ \text{cm}^3 \);
+    \( M = 15\pi \approx 47.12\ \text{cm}^2 \).</p>''')
+    + loes(6, r'''    <p>\( w = 2\arcsin(3/5) \approx 73.74° \).</p>''')
+    + loes(7, r'''    <p>\( V = \tfrac{6\pi}{3}(25 + 15 + 9) = 98\pi \approx 307.88\ \text{cm}^3 \).</p>''')
+    + loes(8, r'''    <p>\( V = 2(64 + 32 + 16) = 224\ \text{cm}^3 \).</p>''')
+    + loes(9, r'''    <p>Oberfläche \( \times 9 \) (\( k^2 \)), Volumen \( \times 27 \) (\( k^3 \)).</p>''')
+    + loes(10, r'''    <p>\( V_{\text{ganz}} = 144\pi \); Restkegel \( \tfrac{1}{8} \):
+    Stumpf \( = \tfrac{7}{8} \cdot 144\pi = 126\pi \approx 395.84\ \text{cm}^3 \).</p>''')
+    + loes(11, r'''    <p>\( r = 10 \cdot \tfrac{216}{360} = 6 \); \( h = \sqrt{100 - 36} = 8 \);
+    \( V = 96\pi \approx 301.59\ \text{cm}^3 \).</p>''')
+    + loes(12, r'''    <p>\( h = 4\tan 30° \approx 2.31 \) m; \( V \approx 38.69\ \text{m}^3 \).</p>''')
+)
+
+R_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Für Mäntel immer \( h_s \) bzw. \( m \) verwenden — nie \(h\)!</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Geschichte</td><td>Cheops-Pyramide</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Bauwesen</td><td>Kirchturmdach</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Tiefbau</td><td>Kieshaufen</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Design</td><td>Lampenschirm (Kegelstumpf)</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Ähnlichkeit</td><td>Geköpfter Kegel</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Fertigung</td><td>Trichter aus Blech</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Cheops-Pyramide', 2, r'''    <p>Quadratische Grundfläche \( a = 230 \) m, Höhe \( h = 146.6 \) m.</p>
+    <p>(a) Berechne das Volumen in Mio. m³.</p>
+    <p>(b) Berechne Seitenhöhe und Mantelfläche.</p>
+    <p>(c) Wie viele Lastwagen à \( 10\ \text{m}^3 \) bräuchte der Abtransport?</p>
+''' + LINS4, tag='Geschichte')
+    + aufg(2, 'Kirchturmdach', 2, r'''    <p>Kegelförmiges Dach: \( r = 4 \) m, \( h = 6 \) m.</p>
+    <p>(a) Berechne Mantellinie und Mantelfläche.</p>
+    <p>(b) Mit 10 % Verschnitt: Wie viel Kupferblech wird bestellt?</p>
+''' + LINS4, tag='Bauwesen')
+    + aufg(3, 'Kieshaufen', 2, r'''    <p>Schüttkegel mit Böschungswinkel 30°, Durchmesser 8 m.</p>
+    <p>(a) Berechne die Höhe des Haufens.</p>
+    <p>(b) Berechne das Volumen.</p>
+    <p>(c) Ein Lastwagen fasst \( 8\ \text{m}^3 \). Wie viele Fuhren?</p>
+''' + LINS4, tag='Tiefbau')
+    + aufg(4, 'Lampenschirm (Kegelstumpf)', 3, r'''    <p>Ein Lampenschirm ist ein Kegelstumpf-Mantel: \( R = 5 \), \( r = 3 \), \( h = 6 \) dm
+    (ohne Deck- und Grundfläche).</p>
+    <p>(a) Berechne die Mantellinie des Stumpfs.</p>
+    <p>(b) Wie viel Stoff braucht der Schirm (Mantelfläche)?</p>
+''' + LINS4, tag='Design')
+    + aufg(5, 'Geköpfter Kegel', 3, r'''    <p>Ein Kegel (\( r = 6 \) cm, \( h = 12 \) cm) wird in halber Höhe parallel geschnitten.</p>
+    <p>(a) Volumen des ganzen Kegels?</p>
+    <p>(b) Stumpfvolumen über die Ähnlichkeit (ohne Stumpfformel)?</p>
+    <p>(c) In welcher Höhe müsste man schneiden, damit beide Teile gleich viel Volumen haben?</p>
+''' + LINS4, tag='Ähnlichkeit')
+    + aufg(6, 'Trichter aus Blech', 3, r'''    <p>Ein Trichter (Kegel ohne Grundfläche) soll \( r = 6 \) cm und \( h = 8 \) cm haben und
+    wird aus einem Kreissektor geschnitten.</p>
+    <p>(a) Berechne die Mantellinie und die Mantelfläche.</p>
+    <p>(b) Welchen Radius und welchen Winkel hat der Sektor?</p>
+''' + LINS4, tag='Fertigung')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( V \approx 2.59 \) Mio. m³.</p>
+    <p>(b) \( h_s = \sqrt{146.6^2 + 115^2} \approx 186.3 \) m;
+    \( M = 2 \cdot 230 \cdot 186.3 \approx 85\,700\ \text{m}^2 \).</p>
+    <p>(c) \( \approx 258\,500 \) Fahrten.</p>''')
+    + loes(2, r'''    <p>(a) \( m = \sqrt{52} \approx 7.21 \) m; \( M \approx 90.62\ \text{m}^2 \).</p>
+    <p>(b) \( \approx 99.7\ \text{m}^2 \) — rund 100 m².</p>''')
+    + loes(3, r'''    <p>(a) \( h = 4\tan 30° \approx 2.31 \) m.</p>
+    <p>(b) \( V \approx 38.69\ \text{m}^3 \).</p>
+    <p>(c) 5 Fuhren (4.84 aufgerundet).</p>''')
+    + loes(4, r'''    <p>(a) \( m = \sqrt{36 + 4} = \sqrt{40} \approx 6.32 \) dm.</p>
+    <p>(b) \( M = \pi \cdot 8 \cdot 6.32 \approx 158.95\ \text{dm}^2 \approx 1.6\ \text{m}^2 \).</p>''')
+    + loes(5, r'''    <p>(a) \( 144\pi \approx 452.39\ \text{cm}^3 \).</p>
+    <p>(b) \( \tfrac{7}{8} \cdot 144\pi = 126\pi \approx 395.84\ \text{cm}^3 \).</p>
+    <p>(c) Oberer Kegel = halbes Volumen heisst \( k^3 = 0.5 \):
+    \( k = \sqrt[3]{0.5} \approx 0.794 \) — Schnitt bei \( h' \approx 9.52 \) cm von der Spitze,
+    also \( \approx 2.48 \) cm über dem Boden.</p>''')
+    + loes(6, r'''    <p>(a) \( m = \sqrt{36 + 64} = 10 \) cm; \( M = \pi \cdot 6 \cdot 10 \approx 188.50\ \text{cm}^2 \).</p>
+    <p>(b) Sektorradius \( = m = 10 \) cm; \( \alpha = \tfrac{6}{10} \cdot 360° = 216° \).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
+#  s4-2c  KUGEL UND ZUSAMMENGESETZTE KÖRPER
+# ═══════════════════════════════════════════════════════════════════
+
+S_HANDOUT = r'''
+  <h2>1. Die Kugel</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Kugel</div>
+    <p style="text-align:center">\( V = \tfrac{4}{3} \pi r^3, \qquad O = 4 \pi r^2 \)</p>
+    <p>Merkhilfe: Oberfläche = <strong>viermal der Grosskreis</strong>. Rückwärts:
+    \( r = \sqrt[3]{3V/(4\pi)} \) bzw. \( r = \sqrt{O/(4\pi)} \).</p>
+  </div>
+  <p><strong>Archimedes:</strong> Kugel im engsten Zylinder (\( h = 2r \)):
+  \( V_K : V_Z = 2 : 3 \) — konstant für jede Grösse.</p>
+
+  <h2>2. Kugelteile</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Kugelkappe (Fläche)</td><td>\( A = 2\pi r h \) — nur \(r\) und Schichthöhe \(h\)</td></tr>
+      <tr><td class="li">Kugelsegment («Deckel»)</td><td>\( V = \tfrac{\pi h^2}{3}(3r - h) \)</td></tr>
+      <tr><td class="li">Kugelsektor («Glace-Kegel»)</td><td>\( V = \tfrac{2\pi r^2 h}{3} \)</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Grenzfall-Kontrolle:</strong> \( h = r \) → Halbkugel \( \tfrac{2}{3}\pi r^3 \);
+  \( h = 2r \) → ganze Kugel ✓</p>
+
+  <h2>3. Zusammengesetzte Körper</h2>
+  <p>Zerlegen (Silo = Zylinder + Halbkugel, Eistüte = Kegel + Halbkugel), Volumina
+  addieren/subtrahieren — bei Oberflächen die <strong>Nahtstellen weglassen</strong>. Freistehende
+  Halbkugel: \( O = 3\pi r^2 \) (gewölbt + Schnittkreis).</p>
+
+  <h2>4. Ähnlichkeit und Dichte</h2>
+  <p>Alle Kugeln sind ähnlich: \( O \sim r^2 \), \( V \sim r^3 \). Grosse Körper haben relativ wenig
+  Oberfläche (Auskühlung!). Masse: \( m = \rho \cdot V \) — Einheiten konsequent führen.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>\( r^3 \) beim Volumen, \( r^2 \) bei der Oberfläche. Kugelteile mit Grenzfällen prüfen.
+    Zusammengesetzt: Nahtstellen zählen nicht zur Oberfläche.</p>
+  </div>
+'''
+
+S_FORMELAUSZUG = r'''
+  <h2>1. Kugel</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Volumen</td><td>\( V = \tfrac{4}{3} \pi r^3; \qquad r = \sqrt[3]{3V/(4\pi)} \)</td></tr>
+      <tr><td class="li">Oberfläche</td><td>\( O = 4 \pi r^2; \qquad r = \sqrt{O/(4\pi)} \)</td></tr>
+      <tr><td class="li">Archimedes</td><td>\( V_{\text{Kugel}} : V_{\text{Zylinder}} = 2 : 3 \) (engster Zylinder)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Kugelteile (Schichthöhe \(h\))</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Kugelkappe (Fläche)</td><td>\( A = 2 \pi r h \)</td></tr>
+      <tr><td class="li">Kugelsegment</td><td>\( V = \tfrac{\pi h^2}{3}(3r - h) \)</td></tr>
+      <tr><td class="li">Kugelsektor</td><td>\( V = \tfrac{2 \pi r^2 h}{3} \)</td></tr>
+      <tr><td class="li">Halbkugel</td><td>\( V = \tfrac{2}{3}\pi r^3; \quad O_{\text{frei}} = 3\pi r^2 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Zusammengesetzte Körper</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Volumen</td><td class="li">Teilvolumina addieren; Bohrungen subtrahieren</td></tr>
+      <tr><td class="li">Oberfläche</td><td class="li">nur sichtbare Flächen; Nahtstellen weglassen</td></tr>
+      <tr><td class="li">Masse</td><td>\( m = \rho \cdot V \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Ähnlichkeit</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Skalierung \(k\)</td><td>\( O \sim k^2; \quad V \sim k^3 \)</td></tr>
+      <tr><td class="li">Kugel in Waffel (\(r\) gleich)</td><td>\( h_{\text{Kegel}} = 4r \) fasst die geschmolzene Kugel</td></tr>
+    </tbody>
+  </table>
+'''
+
+S_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Die Kugeloberfläche ist <span class="lueck"></span>-mal die Grosskreisfläche.<br>
+      Die Kugel füllt <span class="lueck"></span> Drittel des engsten Zylinders.<br>
+      Beim Volumen steht \( r \) hoch <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Kugel komplett', 1, r'''    <p>Kugel mit \( r = 6 \) cm: Berechne \(V\) und \(O\).</p>
+''' + LINS)
+    + aufg(3, 'Segment oder Sektor?', 1, r'''    <p>Erkläre den Unterschied zwischen Kugelsegment und Kugelsektor.</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Rückwärts rechnen</div>\n'
+    + aufg(4, 'Radius aus Volumen', 2, r'''    <p>Eine Kugel fasst 1 Liter. Berechne den Radius.</p>
+''' + LINS)
+    + aufg(5, 'Radius aus Oberfläche', 2, r'''    <p>Eine Kugel hat \( O = 100\ \text{cm}^2 \). Berechne den Radius.</p>
+''' + LINS)
+    + aufg(6, 'Grenzfall-Test', 2, r'''    <p>Setze \( h = 2r \) in die Segmentformel \( V = \tfrac{\pi h^2}{3}(3r - h) \) ein.
+    Was ergibt sich?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Kugelteile</div>\n'
+    + aufg(7, 'Segment und Kappe', 2, r'''    <p>Kugel \( r = 5 \) cm, Kappenhöhe \( h = 2 \) cm: Berechne Segment-Volumen und
+    Kappenfläche.</p>
+''' + LINS)
+    + aufg(8, 'Halbkugel', 2, r'''    <p>Halbkugel mit \( r = 4 \) cm: Berechne \(V\) und die vollständige Oberfläche.</p>
+''' + LINS)
+    + aufg(9, 'Skalieren', 2, r'''    <p>Aus einer Bleikugel (\( r = 6 \) cm) werden Kugeln mit \( r = 2 \) cm gegossen.
+    Wie viele?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Anwendungen</div>\n'
+    + aufg(10, 'Silo', 3, r'''    <p>Zylinder (\( r = 3 \) m, \( h = 8 \) m) mit aufgesetzter Halbkugel: Gesamtvolumen
+    und Aussenfläche ohne Boden?</p>
+''' + LINS)
+    + aufg(11, 'Eiskugel', 3, r'''    <p>Eine Eiskugel (\( r = 3 \) cm) schmilzt in eine Waffel (Kegel, \( r = 3 \) cm).
+    Wie hoch muss der Kegel mindestens sein?</p>
+''' + LINS)
+    + aufg(12, 'Stahlkugel', 3, r'''    <p>Stahlkugel mit \( r = 1 \) cm, Dichte \( 7.85\ \text{g/cm}^3 \): Berechne die Masse.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>vier</strong> · <strong>zwei</strong> · <strong>drei</strong>.</p>''')
+    + loes(2, r'''    <p>\( V = \tfrac{4}{3}\pi \cdot 216 \approx 904.78\ \text{cm}^3 \);
+    \( O = 4\pi \cdot 36 \approx 452.39\ \text{cm}^2 \).</p>''')
+    + loes(3, r'''    <p>Segment: eben abgeschnittener «Deckel». Sektor: Segment plus Kegel bis zum
+    Kugelzentrum («Glace-Kegel»).</p>''')
+    + loes(4, r'''    <p>\( r = \sqrt[3]{3000/(4\pi)} \approx 6.20 \) cm.</p>''')
+    + loes(5, r'''    <p>\( r = \sqrt{100/(4\pi)} \approx 2.82 \) cm.</p>''')
+    + loes(6, r'''    <p>\( \tfrac{\pi \cdot 4r^2}{3}(3r - 2r) = \tfrac{4}{3}\pi r^3 \) — die ganze Kugel;
+    die Formel besteht den Grenzfall-Test.</p>''')
+    + loes(7, r'''    <p>\( V = \tfrac{4\pi}{3} \cdot 13 \approx 54.45\ \text{cm}^3 \);
+    \( A = 20\pi \approx 62.83\ \text{cm}^2 \).</p>''')
+    + loes(8, r'''    <p>\( V = \tfrac{2}{3}\pi \cdot 64 \approx 134.04\ \text{cm}^3 \);
+    \( O = 3\pi \cdot 16 \approx 150.80\ \text{cm}^2 \).</p>''')
+    + loes(9, r'''    <p>\( k = 3 \Rightarrow k^3 = 27 \) Kugeln.</p>''')
+    + loes(10, r'''    <p>\( V = 90\pi \approx 282.74\ \text{m}^3 \);
+    \( A = 66\pi \approx 207.35\ \text{m}^2 \).</p>''')
+    + loes(11, r'''    <p>\( h = 4r = 12 \) cm.</p>''')
+    + loes(12, r'''    <p>\( V = \tfrac{4}{3}\pi \approx 4.19\ \text{cm}^3 \); \( m \approx 32.9 \) g.</p>''')
+)
+
+S_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Bei zusammengesetzten Körpern: erst zerlegen, dann bilanzieren.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Aviatik</td><td>Heissluftballon</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Landwirtschaft</td><td>Futtersilo</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Gastronomie</td><td>Eiskugel in der Waffel</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Astronomie</td><td>Erde und Mond</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Fertigung</td><td>Kugellager aus Stahl</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Architektur</td><td>Kuppel als Kugelsegment</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Heissluftballon', 2, r'''    <p>Kugelförmiger Ballon, Durchmesser 16 m; Tragkraft \( 0.3\ \text{kg} \) pro m³.</p>
+    <p>(a) Berechne das Volumen.</p>
+    <p>(b) Welche Last trägt der Ballon maximal?</p>
+    <p>(c) Wie ändert sich die Tragkraft bei doppeltem Durchmesser?</p>
+''' + LINS4, tag='Aviatik')
+    + aufg(2, 'Futtersilo', 2, r'''    <p>Zylinder (\( r = 3 \) m, \( h = 8 \) m) mit aufgesetzter Halbkugel.</p>
+    <p>(a) Gesamtvolumen?</p>
+    <p>(b) Aussenfläche ohne Boden (Anstrich)?</p>
+    <p>(c) Ein Liter Farbe deckt \( 8\ \text{m}^2 \). Wie viele Liter braucht ein Anstrich?</p>
+''' + LINS4, tag='Landwirtschaft')
+    + aufg(3, 'Eiskugel in der Waffel', 2, r'''    <p>Eiskugel (\( r = 3 \) cm) schmilzt in eine kegelförmige Waffel mit gleichem Radius.</p>
+    <p>(a) Wie hoch muss die Waffel mindestens sein?</p>
+    <p>(b) Zeige allgemein \( h = 4r \).</p>
+''' + LINS4, tag='Gastronomie')
+    + aufg(4, 'Erde und Mond', 3, r'''    <p>Erdradius \( \approx 6371 \) km, Mondradius \( \approx 1737 \) km.</p>
+    <p>(a) Berechne die Erdoberfläche in Mio. km².</p>
+    <p>(b) Wie oft passt das Mondvolumen in die Erde (Ähnlichkeit nutzen!)?</p>
+''' + LINS4, tag='Astronomie')
+    + aufg(5, 'Kugellager aus Stahl', 3, r'''    <p>Ein Kugellager enthält 12 Stahlkugeln mit \( d = 8 \) mm
+    (\( \rho = 7.85\ \text{g/cm}^3 \)).</p>
+    <p>(a) Berechne das Volumen einer Kugel in cm³.</p>
+    <p>(b) Berechne die Gesamtmasse der 12 Kugeln.</p>
+''' + LINS4, tag='Fertigung')
+    + aufg(6, 'Kuppel als Kugelsegment', 3, r'''    <p>Eine Kuppel ist ein Kugelsegment: Kugelradius \( r = 10 \) m, Kappenhöhe \( h = 4 \) m.</p>
+    <p>(a) Berechne das umbaute Volumen des Segments.</p>
+    <p>(b) Berechne die gewölbte Dachfläche (Kugelkappe).</p>
+''' + LINS4, tag='Architektur')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( r = 8 \): \( V \approx 2144.66\ \text{m}^3 \).</p>
+    <p>(b) \( \approx 643 \) kg.</p>
+    <p>(c) \( k = 2 \Rightarrow V \times 8 \): rund 5147 kg — Volumen wächst kubisch.</p>''')
+    + loes(2, r'''    <p>(a) \( 90\pi \approx 282.74\ \text{m}^3 \).</p>
+    <p>(b) \( 66\pi \approx 207.35\ \text{m}^2 \).</p>
+    <p>(c) \( 207.35 / 8 \approx 26 \) Liter.</p>''')
+    + loes(3, r'''    <p>(a) \( h = 12 \) cm.</p>
+    <p>(b) \( \tfrac{4}{3}\pi r^3 = \tfrac{1}{3}\pi r^2 h \Rightarrow h = 4r \) —
+    \( r^2 \) kürzt sich.</p>''')
+    + loes(4, r'''    <p>(a) \( O = 4\pi \cdot 6371^2 \approx 510 \) Mio. km².</p>
+    <p>(b) \( k = 6371/1737 \approx 3.668 \); \( k^3 \approx 49 \) — rund 49 Monde.</p>''')
+    + loes(5, r'''    <p>(a) \( r = 0.4 \) cm: \( V = \tfrac{4}{3}\pi \cdot 0.064 \approx 0.268\ \text{cm}^3 \).</p>
+    <p>(b) \( 12 \cdot 0.268 \cdot 7.85 \approx 25.3 \) g.</p>''')
+    + loes(6, r'''    <p>(a) \( V = \tfrac{\pi \cdot 16}{3}(30 - 4) = \tfrac{416\pi}{3} \approx 435.63\ \text{m}^3 \).</p>
+    <p>(b) \( A = 2\pi \cdot 10 \cdot 4 = 80\pi \approx 251.33\ \text{m}^2 \).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -4480,6 +5130,30 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', P_TDS),
     ('s4-3d-ebenen', 'Ebenen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Ebenen', STYLE_SERIE, '1.0', '', P_SERIE),
+    ('s4-2a-prismen-zylinder', 'Prismen und Zylinder', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', Q_HANDOUT),
+    ('s4-2a-prismen-zylinder', 'Prismen und Zylinder', 'Formelauszug', 'formelauszug.html',
+     'Prismen und Zylinder — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, Q_FORMELAUSZUG),
+    ('s4-2a-prismen-zylinder', 'Prismen und Zylinder', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', Q_TDS),
+    ('s4-2a-prismen-zylinder', 'Prismen und Zylinder', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Prismen und Zylinder', STYLE_SERIE, '1.0', '', Q_SERIE),
+    ('s4-2b-pyramiden-kegel-stuempfe', 'Pyramiden, Kegel und Stümpfe', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', R_HANDOUT),
+    ('s4-2b-pyramiden-kegel-stuempfe', 'Pyramiden, Kegel und Stümpfe', 'Formelauszug', 'formelauszug.html',
+     'Pyramiden, Kegel und Stümpfe — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, R_FORMELAUSZUG),
+    ('s4-2b-pyramiden-kegel-stuempfe', 'Pyramiden, Kegel und Stümpfe', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', R_TDS),
+    ('s4-2b-pyramiden-kegel-stuempfe', 'Pyramiden, Kegel und Stümpfe', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Pyramiden, Kegel und Stümpfe', STYLE_SERIE, '1.0', '', R_SERIE),
+    ('s4-2c-kugel', 'Kugel und zusammengesetzte Körper', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', S_HANDOUT),
+    ('s4-2c-kugel', 'Kugel und zusammengesetzte Körper', 'Formelauszug', 'formelauszug.html',
+     'Kugel — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, S_FORMELAUSZUG),
+    ('s4-2c-kugel', 'Kugel und zusammengesetzte Körper', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', S_TDS),
+    ('s4-2c-kugel', 'Kugel und zusammengesetzte Körper', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Kugel und zusammengesetzte Körper', STYLE_SERIE, '1.0', '', S_SERIE),
 ]
 
 

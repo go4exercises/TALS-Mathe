@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.2c Kugel und zusammengesetzte Körper — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 4 · Geometrie · 70 Lektionen</div>
+  <h1 class="pt-h1">4.2c Kugel und zusammengesetzte Körper</h1>
+  <div class="pt-untertitel">RLP 4.2 · Teil 3 von 3</div>
+</div>
+
+<p class="lead">Die <strong>Kugel</strong> ist der perfekteste Körper: kein Anfang, kein Ende — und das kleinste Verhältnis von Oberfläche zu Volumen überhaupt. Von \(V = \tfrac{4}{3}\pi r^3\) und \(O = 4\pi r^2\) über <strong>Kugelteile</strong> (Kappe, Segment, Sektor) bis zu <strong>zusammengesetzten Körpern</strong> aus Silo, Ballon und Eistüte: Hier läuft die Stereometrie zur Anwendung auf.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.2</div>
+  <ul>
+    <li>geometrische Sachverhalte von elementaren Objekten (Prisma, Pyramide, Pyramidenstumpf, Kreiszylinder, Kreiskegel, Kreiskegelstumpf, Kugel) beschreiben</li>
+    <li>deren Elemente (Körperdiagonale, Höhen, Öffnungswinkel, Mantellinie) und Zusammenhänge (Volumen, Oberfläche) berechnen</li>
+    <li>die Ähnlichkeit für Berechnungen im Raum nutzen</li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt die Kugel, ihre Teile und zusammengesetzte Körper als Anwendung. Prisma und Zylinder in <a href="s4-2a-prismen-zylinder.html">Teil 1 (s4-2a)</a>, spitze Körper und Stümpfe in <a href="s4-2b-pyramiden-kegel-stuempfe.html">Teil 2 (s4-2b)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann Volumen und Oberfläche der Kugel berechnen: \(V = \tfrac{4}{3}\pi r^3\), \(O = 4\pi r^2\).</li>
+      <li>Ich kann aus Volumen oder Oberfläche rückwärts den Radius bestimmen.</li>
+      <li>Ich kann Kugelkappe, Kugelsegment und Kugelsektor unterscheiden und berechnen.</li>
+      <li>Ich kann das Archimedes-Verhältnis (Kugel = \(\tfrac{2}{3}\) des umschriebenen Zylinders) erklären.</li>
+      <li>Ich kann zusammengesetzte Körper in Teilkörper zerlegen und Volumen wie Oberfläche korrekt bilanzieren.</li>
+      <li>Ich kann die Ähnlichkeit (\(V \sim k^3\)) auf Kugeln anwenden.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — Archimedes und der Zylinder</h2>
+
+<p>Archimedes fand die Kugelformeln über einen genialen Vergleich: Steckt man eine Kugel in den <strong>engsten Zylinder</strong>, der sie umschliesst (Radius \(r\), Höhe \(2r\)), dann füllt die Kugel exakt</p>
+
+\[ \frac{V_{\text{Kugel}}}{V_{\text{Zylinder}}} = \frac{\tfrac{4}{3}\pi r^3}{2\pi r^3} = \frac{2}{3} \]
+
+<p>Zwei Drittel — dieses Verhältnis liess sich Archimedes sogar auf den Grabstein meisseln.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🏛 Kugel im Zylinder — das 2:3-Verhältnis</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verändere den Radius: Beide Volumina wachsen — aber wie verhält sich ihr Quotient? Beobachte auch, wie schnell das Volumen im Vergleich zur Oberfläche wächst.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verändere den Radius: Beide Volumina wachsen — aber wie verhält sich ihr Quotient? Beobachte auch, wie schnell das Volumen im Vergleich zur Oberfläche wächst.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Quotient bleibt konstant \(\tfrac{2}{3}\) — er ist eine Eigenschaft der <em>Form</em>, nicht der Grösse. Nebenbei: \(V \sim r^3\), \(O \sim r^2\) — doppelter Radius heisst achtfaches Volumen, vierfache Oberfläche.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Quotient bleibt konstant zwei Drittel — er ist eine Eigenschaft der Form, nicht der Grösse. Nebenbei: Volumen wächst mit r hoch drei, Oberfläche mit r hoch zwei.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Querschnitt: Kugel (blau) im engsten Zylinder (orange) · Höhe = Durchmesser</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Radius <span class="var">\(r\)</span> [cm]</label>
+      <input type="range" id="ar-r" min="1" max="6" step="0.25" value="3">
+      <span class="sl-val" id="ar-rv">3.00</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Kugel · Zylinder · Verhältnis</div>
+      <div class="fl-eq" id="ar-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ar-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Zwei Beobachtungen tragen die ganze Seite:</p>
+  <ul style="margin-top:6px">
+    <li>Kugel : Zylinder = \(2 : 3\) — konstant für jede Grösse (Ähnlichkeit!).</li>
+    <li>\(V \sim r^3\), \(O \sim r^2\): Grosse Kugeln haben <em>relativ</em> wenig Oberfläche — darum kühlen grosse Körper langsamer aus.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welchen Anteil des engsten Zylinders füllt die Kugel?</p><ul class="mc-optionen"><li data-opt="A">die Hälfte</li><li data-opt="B">zwei Drittel</li><li data-opt="C">drei Viertel</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Das Archimedes-Verhältnis \(2 : 3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Verdoppelt man den Kugelradius, wächst das Volumen auf das <span class="mc-luecke"></span>-Fache.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Acht — \(V \sim r^3\) (Ähnlichkeit mit \(k = 2\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Kugel mit \(r = 6\) cm: Berechne \(V\) und \(O\) (zwei Dezimalen).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = \tfrac{4}{3}\pi \cdot 216 \approx 904.78\ \text{cm}^3\); \(O = 4\pi \cdot 36 \approx 452.39\ \text{cm}^2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum kühlt ein grosser Teekessel langsamer aus als eine kleine Tasse (bei gleicher Form)?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Wärmeinhalt \(\sim V \sim k^3\), Wärmeabgabe \(\sim O \sim k^2\): Das Verhältnis Oberfläche zu Volumen sinkt mit der Grösse — grosse Körper verlieren relativ weniger Wärme.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Die Kugel — Volumen und Oberfläche</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Kugel</div>
+  <p>Die <strong>Kugel</strong> ist die Menge aller Punkte im Raum mit Abstand \(\leq r\) vom Zentrum; die <strong>Sphäre</strong> ist ihre Oberfläche.</p>
+  \[ V = \frac{4}{3} \pi r^3, \qquad O = 4 \pi r^2 \]
+  <p>Merkhilfe: Die Oberfläche ist <strong>viermal</strong> die Fläche des Grosskreises \(\pi r^2\). Rückwärts:</p>
+  \[ r = \sqrt[3]{\frac{3V}{4\pi}}, \qquad r = \sqrt{\frac{O}{4\pi}} \]
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — die Erde als Kugel</div>
+  <p>Mit \(r \approx 6371\) km:</p>
+  \[ O = 4\pi \cdot 6371^2 \approx 510\ \text{Mio.}\ \text{km}^2, \qquad V \approx 1083\ \text{Mrd.}\ \text{km}^3 \]
+  <p>Die Schweiz (\(41\,285\ \text{km}^2\)) passt gut \(12\,000\)-mal auf die Erdoberfläche.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \(r^3\) vergessen oder Formeln mischen</div>
+  <p>\(V = \tfrac{4}{3}\pi r^3\) (mit <strong>hoch 3</strong>) und \(O = 4\pi r^2\) (mit <strong>hoch 2</strong>) werden gern verwechselt. Dimensionskontrolle hilft: Volumen braucht drei Längen (\(r^3\)), Fläche zwei (\(r^2\)).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Kugelformeln</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie hängt die Kugeloberfläche mit dem Grosskreis zusammen?</p><ul class="mc-optionen"><li data-opt="A">gleich gross</li><li data-opt="B">doppelt so gross</li><li data-opt="C">viermal so gross</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(O = 4\pi r^2 = 4 \cdot \pi r^2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Aus dem Volumen gewinnt man den Radius mit der <span class="mc-luecke"></span> Wurzel.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">dritten (Kubikwurzel): \(r = \sqrt[3]{3V/(4\pi)}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Eine Kugel hat \(V = 1000\ \text{cm}^3\) (ein Liter). Berechne \(r\) (zwei Dezimalen).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(r = \sqrt[3]{\tfrac{3000}{4\pi}} \approx 6.20\) cm.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Eine Kugel hat die Oberfläche \(100\ \text{cm}^2\). Wie gross ist ihr Radius — und warum braucht es hier nur die Quadratwurzel?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(r = \sqrt{\tfrac{100}{4\pi}} \approx 2.82\) cm. In \(O = 4\pi r^2\) steckt \(r\) nur im Quadrat — die Fläche ist zweidimensional.</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Kugelteile — Kappe, Segment, Sektor</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Die Kugelteile im Überblick</div>
+  <p>Ein ebener Schnitt in Höhe \(h\) (vom Pol gemessen) erzeugt die wichtigsten Teilkörper:</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Teil</th><th>Beschreibung</th><th>Formel</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Kugelkappe (Fläche)</td><td style="text-align:left;font-family:var(--sans)">gewölbte Fläche des abgeschnittenen Teils</td><td>\(A = 2\pi r h\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Kugelsegment (Körper)</td><td style="text-align:left;font-family:var(--sans)">abgeschnittener «Deckel»</td><td>\(V = \dfrac{\pi h^2}{3}(3r - h)\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Kugelsektor (Körper)</td><td style="text-align:left;font-family:var(--sans)">«Glace-Kegel»: Segment + Kegel bis zum Zentrum</td><td>\(V = \dfrac{2\pi r^2 h}{3}\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Kontrolle: Für \(h = r\) (halbe Kugel) gibt das Segment \(\tfrac{\pi r^2}{3} \cdot 2r = \tfrac{2}{3}\pi r^3\) — die Halbkugel ✓. Erstaunlich an der Kappenformel: \(A\) hängt nur von \(r\) und der <strong>Schichthöhe</strong> \(h\) ab.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Segment und Sektor</div>
+  <p>Kugel mit \(r = 5\) cm, Schnitt bei Kappenhöhe \(h = 2\) cm:</p>
+  \[ V_{\text{Segment}} = \frac{\pi \cdot 4}{3}(15 - 2) \approx 54.45\ \text{cm}^3, \qquad A_{\text{Kappe}} = 2\pi \cdot 5 \cdot 2 \approx 62.83\ \text{cm}^2 \]
+  <p>Der zugehörige Sektor: \(V = \tfrac{2\pi \cdot 25 \cdot 2}{3} \approx 104.72\ \text{cm}^3\) — Segment plus Kegel bis zum Zentrum.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Kugelteile</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was unterscheidet Segment und Sektor?</p><ul class="mc-optionen"><li data-opt="A">nichts — zwei Namen für dasselbe</li><li data-opt="B">der Sektor reicht bis zum Kugelzentrum (Segment + Kegel)</li><li data-opt="C">das Segment ist eine Fläche</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Segment = «Deckel» (eben abgeschnitten); Sektor = «Glace-Kegel» bis zum Zentrum.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Kugelkappen-Fläche \(A = 2\pi r h\) hängt neben \(r\) nur von der <span class="mc-luecke"></span> ab.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">(Kappen- bzw. Schicht-)Höhe \(h\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Kugel \(r = 5\), Kappe \(h = 2\): Berechne die Kappenfläche.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(A = 2\pi \cdot 5 \cdot 2 = 20\pi \approx 62.83\ \text{cm}^2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Setze \(h = 2r\) in die Segmentformel ein. Was kommt heraus — und warum ist das eine gute Kontrolle?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(V = \tfrac{\pi (2r)^2}{3}(3r - 2r) = \tfrac{4\pi r^3}{3}\) — die <strong>ganze Kugel</strong>. Grenzfälle einsetzen ist der schnellste Formel-Check.</div></details></div>
+</details>
+
+
+<!-- ══ 5. ZUSAMMENGESETZTE KÖRPER ══ -->
+<h2 id="typen">Zusammengesetzte Körper</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Strategie — zerlegen und bilanzieren</div>
+  <p>Reale Objekte sind Kombinationen der Grundkörper. Vorgehen:</p>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li><strong>Zerlegen:</strong> Silo = Zylinder + Halbkugel; Eistüte = Kegel + Halbkugel; Bleistift = Prisma + Kegel.</li>
+    <li><strong>Volumen:</strong> Teilvolumina addieren (Aussparungen/Bohrungen subtrahieren).</li>
+    <li><strong>Oberfläche:</strong> nur <em>sichtbare</em> Flächen zählen — Berührungsflächen (Deckel/Boden an der Nahtstelle) fallen weg!</li>
+  </ol>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Silo mit Kugelhaube</div>
+  <p>Ein Silo: Zylinder (\(r = 3\) m, \(h = 8\) m) mit aufgesetzter Halbkugel.</p>
+  \[ V = \pi \cdot 9 \cdot 8 + \tfrac{2}{3}\pi \cdot 27 = 72\pi + 18\pi = 90\pi \approx 282.74\ \text{m}^3 \]
+  <p>Aussenfläche (ohne Boden): Zylindermantel + Halbkugel: \(2\pi \cdot 3 \cdot 8 + 2\pi \cdot 9 = 48\pi + 18\pi = 66\pi \approx 207.35\ \text{m}^2\) — der Zylinderdeckel und der Halbkugel-«Boden» zählen nicht: Dort stossen die Körper zusammen.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Zusammensetzen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Fläche zählt beim Silo (Zylinder + Halbkugel) NICHT zur Aussenfläche?</p><ul class="mc-optionen"><li data-opt="A">der Zylindermantel</li><li data-opt="B">die Halbkugelfläche</li><li data-opt="C">die Kreisfläche an der Nahtstelle</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> Dort berühren sich die Teilkörper — die Fläche liegt im Innern.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bohrungen und Aussparungen werden beim Volumen <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">subtrahiert.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Halbkugel mit \(r = 4\) cm: Berechne das Volumen (zwei Dezimalen).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = \tfrac{2}{3}\pi \cdot 64 \approx 134.04\ \text{cm}^3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Die <em>vollständige</em> Oberfläche einer Halbkugel (\(r = 4\)) — gewölbter Teil plus Schnittkreis: Wie gross?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(O = 2\pi r^2 + \pi r^2 = 3\pi r^2 = 48\pi \approx 150.80\ \text{cm}^2\) — den ebenen «Deckel» nicht vergessen, wenn die Halbkugel allein steht.</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Ähnlichkeit und Dichte-Anwendungen</h2>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Ähnlichkeit bei Kugeln</div>
+  <p>Alle Kugeln sind ähnlich — der Radius ist der einzige Parameter. Deshalb überträgt sich \(k\)-Skalierung direkt: \(O \sim r^2\), \(V \sim r^3\). Eine Orange mit doppeltem Radius hat achtmal so viel Fruchtfleisch, aber nur viermal so viel Schale.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 4 — Eiskugel in der Waffel</div>
+  <p>Eine Eiskugel (\(r = 3\) cm) schmilzt vollständig in eine kegelförmige Waffel mit gleichem Radius. Wie hoch muss der Kegel mindestens sein?</p>
+  \[ \tfrac{4}{3}\pi \cdot 27 = \tfrac{1}{3}\pi \cdot 9 \cdot h \;\Rightarrow\; h = \frac{4 \cdot 27}{9} = 12\ \text{cm} \]
+  <p>Merkregel: Der Kegel braucht die <strong>vierfache</strong> Radiushöhe (\(h = 4r\)), um die Kugel zu fassen.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Von Volumen zu Masse</div>
+  <p>Techniknahe Aufgaben verketten Volumen mit der <strong>Dichte</strong>: \(m = \rho \cdot V\). Stahlkugel (\(\rho = 7.85\ \text{g/cm}^3\)), Beton (\(2.4\ \text{t/m}^3\)), Wasser (\(1\ \text{kg/l}\)) — Einheiten konsequent mitführen.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Ähnlichkeit und Dichte</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Kugel A hat den dreifachen Radius von Kugel B. Wie verhalten sich die Volumina?</p><ul class="mc-optionen"><li data-opt="A">3 : 1</li><li data-opt="B">9 : 1</li><li data-opt="C">27 : 1</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(V \sim k^3 = 27\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Masse = <span class="mc-luecke"></span> × Volumen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Dichte \(\rho\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Stahlkugel mit \(r = 1\) cm (\(\rho = 7.85\ \text{g/cm}^3\)): Berechne die Masse (eine Dezimale).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = \tfrac{4}{3}\pi \approx 4.19\ \text{cm}^3\); \(m \approx 32.9\) g.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Aus einer grossen Bleikugel (\(r = 6\) cm) werden kleine Kugeln mit \(r = 2\) cm gegossen. Wie viele?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(k = 3\), also \(k^3 = 27\) kleine Kugeln — das Volumen verteilt sich mit der dritten Potenz, das Material bleibt gleich.</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Kugelteil erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Beschreibung — welcher Begriff passt?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Beschreibung</div>
+    <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welcher Begriff ist das?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Formeln im Grenzfall testen</span></div>
+  <p>Grenzfälle entlarven falsche Formeln. Prüfe rechnerisch:</p>
+  <ol class="aufg-liste">
+    <li>Segmentformel mit \(h = r\): Kommt die Halbkugel heraus?</li>
+    <li>Segmentformel mit \(h = 2r\): Kommt die ganze Kugel heraus?</li>
+    <li>Sektorformel mit \(h = r\): Was ergibt sich — und warum <em>mehr</em> als die Halbkugel… oder doch nicht?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\tfrac{\pi r^2}{3}(3r - r) = \tfrac{2}{3}\pi r^3\) — die Halbkugel ✓</li>
+        <li>\(\tfrac{\pi \cdot 4r^2}{3}(3r - 2r) = \tfrac{4}{3}\pi r^3\) — die ganze Kugel ✓</li>
+        <li>\(\tfrac{2\pi r^2 \cdot r}{3} = \tfrac{2}{3}\pi r^3\) — ebenfalls die Halbkugel! Bei \(h = r\) verläuft der Schnitt durchs Zentrum: Der «Kegel» des Sektors hat Höhe null, Segment und Sektor fallen zusammen.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen an der Kugel</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Volumen und Oberfläche</div>
+    <p>Kugel mit \(r = 6\) cm: Berechne \(V\) und \(O\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a3a1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3a1', 904.78, 0.1, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>O ≈&nbsp;</label><input type="text" id="a3a2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3a2', 452.39, 0.1, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ V = \tfrac{4}{3}\pi \cdot 216 \approx 904.78\ \text{cm}^3, \qquad O = 4\pi \cdot 36 \approx 452.39\ \text{cm}^2 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Radius aus Volumen</div>
+    <p>Eine Kugel fasst genau \(1\) Liter (\(1000\ \text{cm}^3\)). Berechne \(r\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>r ≈&nbsp;</label><input type="text" id="a3b1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a3b1', 6.2, 0.01, 'cm')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ r = \sqrt[3]{\frac{3 \cdot 1000}{4\pi}} \approx 6.20\ \text{cm} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Radius aus Oberfläche</div>
+    <p>Eine Kugel hat \(O = 100\ \text{cm}^2\). Berechne \(r\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>r ≈&nbsp;</label><input type="text" id="a3c1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a3c1', 2.82, 0.01, 'cm')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ r = \sqrt{\frac{100}{4\pi}} \approx 2.82\ \text{cm} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Kugelsegment</div>
+    <p>Kugel mit \(r = 5\) cm, Kappenhöhe \(h = 2\) cm: Berechne das Segment-Volumen und die Kappenfläche (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a3d1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3d1', 54.45, 0.05, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>A ≈&nbsp;</label><input type="text" id="a3d2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3d2', 62.83, 0.05, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3d2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ V = \tfrac{\pi \cdot 4}{3}(15 - 2) \approx 54.45\ \text{cm}^3, \qquad A = 2\pi \cdot 5 \cdot 2 \approx 62.83\ \text{cm}^2 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Halbkugel komplett</div>
+    <p>Halbkugel mit \(r = 4\) cm: Berechne \(V\) und die <em>vollständige</em> Oberfläche (gewölbt + Schnittkreis, zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a3e1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3e1', 134.04, 0.05, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>O ≈&nbsp;</label><input type="text" id="a3e2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3e2', 150.8, 0.1, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3e2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ V = \tfrac{2}{3}\pi \cdot 64 \approx 134.04\ \text{cm}^3, \qquad O = 2\pi \cdot 16 + \pi \cdot 16 = 48\pi \approx 150.80\ \text{cm}^2 \]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Heissluftballon</span></div>
+  <p>Ein kugelförmiger Ballon hat den Durchmesser \(16\) m. Heisse Luft trägt in kühler Umgebung rund \(0.3\ \text{kg}\) pro m³ Ballonvolumen.</p>
+  <ol class="aufg-liste">
+    <li>Berechne das Ballonvolumen (zwei Dezimalen).</li>
+    <li>Wie viel Last (Hülle + Korb + Passagiere) kann der Ballon maximal tragen (ganze kg)?</li>
+  </ol>
+  <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a4-1" placeholder="m³"><button class="btn-pruef" onclick="chkNum('a4-1', 2144.66, 0.5, 'm³')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Last ≈&nbsp;</label><input type="text" id="a4-2" placeholder="kg"><button class="btn-pruef" onclick="chkNum('a4-2', 643, 2, 'kg')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(r = 8\) m: \(V = \tfrac{4}{3}\pi \cdot 512 \approx 2144.66\ \text{m}^3\).</li>
+        <li>\(2144.66 \cdot 0.3 \approx 643\) kg.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Eiskugel in der Waffel</span></div>
+  <p>Eine Eiskugel (\(r = 3\) cm) schmilzt vollständig in eine kegelförmige Waffel mit demselben Radius \(3\) cm.</p>
+  <ol class="aufg-liste">
+    <li>Wie hoch muss die Waffel mindestens sein, damit nichts überläuft?</li>
+    <li>Zeige allgemein: Es gilt \(h = 4r\), unabhängig vom Radius.</li>
+  </ol>
+  <div class="eingabe-row"><label>h =&nbsp;</label><input type="text" id="a5-1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a5-1', 12, 0.01, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(\tfrac{4}{3}\pi \cdot 27 = \tfrac{1}{3}\pi \cdot 9 \cdot h \Rightarrow h = 12\) cm.</li>
+        <li>Allgemein: \(\tfrac{4}{3}\pi r^3 = \tfrac{1}{3}\pi r^2 h \Rightarrow h = 4r\) — das \(r^2\) kürzt sich weg.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Silo mit Kugelhaube</span></div>
+  <p>Ein Futtersilo besteht aus einem Zylinder (\(r = 3\) m, \(h = 8\) m) mit aufgesetzter Halbkugel.</p>
+  <ol class="aufg-liste">
+    <li>Berechne das Gesamtvolumen (zwei Dezimalen).</li>
+    <li>Berechne die Aussenfläche ohne Boden (Zylindermantel + Halbkugel, zwei Dezimalen).</li>
+  </ol>
+  <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a6-1" placeholder="m³"><button class="btn-pruef" onclick="chkNum('a6-1', 282.74, 0.1, 'm³')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>A ≈&nbsp;</label><input type="text" id="a6-2" placeholder="m²"><button class="btn-pruef" onclick="chkNum('a6-2', 207.35, 0.1, 'm²')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(V = 72\pi + 18\pi = 90\pi \approx 282.74\ \text{m}^3\).</li>
+        <li>\(A = 48\pi + 18\pi = 66\pi \approx 207.35\ \text{m}^2\) — die Nahtstellen-Kreise zählen nicht.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Kugel im Würfel <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>In einen Würfel (Kante \(a\)) wird die grösstmögliche Kugel gelegt.</p>
+  <ol class="aufg-liste">
+    <li>Welchen Radius hat die Kugel?</li>
+    <li>Welchen Anteil des Würfelvolumens füllt sie? Berechne exakt und in Prozent (zwei Dezimalen).</li>
+    <li>Hängt der Anteil von \(a\) ab? Begründe mit der Ähnlichkeit.</li>
+  </ol>
+  <div class="eingabe-row"><label>Anteil ≈&nbsp;</label><input type="text" id="a7-1" placeholder="%"><button class="btn-pruef" onclick="chkNum('a7-1', 52.36, 0.05, '%')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(r = \tfrac{a}{2}\) — die Kugel berührt alle sechs Flächen.</li>
+        <li>\(\dfrac{V_K}{V_W} = \dfrac{\tfrac{4}{3}\pi (a/2)^3}{a^3} = \dfrac{\pi}{6} \approx 52.36\ \%\).</li>
+        <li>Nein — \(a\) kürzt sich weg. Alle Würfel-Kugel-Paare sind ähnlich; Volumen<em>verhältnisse</em> sind grösseninvariant.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Kugel: \(V = \tfrac{4}{3}\pi r^3\), \(O = 4\pi r^2\) (viermal der Grosskreis) — rückwärts mit Kubik- bzw. Quadratwurzel. <strong>Kugelteile:</strong> Kappe \(A = 2\pi r h\), Segment \(V = \tfrac{\pi h^2}{3}(3r - h)\), Sektor \(V = \tfrac{2\pi r^2 h}{3}\) — Grenzfälle (\(h = r\), \(h = 2r\)) als Formelkontrolle. <strong>Zusammengesetzte Körper:</strong> Volumina addieren/subtrahieren, bei Oberflächen die Nahtstellen weglassen. Und die <strong>Ähnlichkeit</strong> regelt alles Skalieren: \(O \sim r^2\), \(V \sim r^3\) — Archimedes' \(2:3\) gilt für jede Grösse.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Grösse</th><th>Formel</th><th>Bemerkung</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Kugelvolumen</td><td>\(V = \tfrac{4}{3}\pi r^3\)</td><td style="text-align:left;font-family:var(--sans)">\(r = \sqrt[3]{3V/(4\pi)}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kugeloberfläche</td><td>\(O = 4\pi r^2\)</td><td style="text-align:left;font-family:var(--sans)">viermal Grosskreis; \(r = \sqrt{O/(4\pi)}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kugelkappe (Fläche)</td><td>\(A = 2\pi r h\)</td><td style="text-align:left;font-family:var(--sans)">nur \(r\) und Schichthöhe \(h\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kugelsegment</td><td>\(V = \tfrac{\pi h^2}{3}(3r - h)\)</td><td style="text-align:left;font-family:var(--sans)">«Deckel»</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kugelsektor</td><td>\(V = \tfrac{2\pi r^2 h}{3}\)</td><td style="text-align:left;font-family:var(--sans)">«Glace-Kegel» bis zum Zentrum</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Archimedes</td><td>\(V_K : V_Z = 2 : 3\)</td><td style="text-align:left;font-family:var(--sans)">Kugel im engsten Zylinder</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s4-2c-kugel/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2c-kugel/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2c-kugel/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2c-kugel/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2c-kugel/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzm2EWHP7iGUWq_WTR0TtuJz" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Körper — Oberfläche &amp; Volumen berechnen</div><div class="lk-s">Lehrerschmidt · 72 Videos · inkl. Kugel und zusammengesetzte Körper</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHju4BlmGqAs9pC5HEPJ4V3F" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Körper und Stereometrie — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 20 Videos · kompakte Theorie-Clips</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/62757/aufgaben-zum-volumen-einer-kugel" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Volumen einer Kugel</div><div class="lk-s">mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/58818/aufgaben-zur-berechnung-des-volumens-zusammengesetzter-koerper" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Volumen zusammengesetzter Körper</div><div class="lk-s">Silo, Turm &amp; Co. · mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 4.2c Kugel und zusammengesetzte Körper</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s4-2c',
+  kapitelNr:'4.2c', kapitelTitel:'Kugel und zusammengesetzte Körper',
+  prev:{nr:'4.2b',titel:'Pyramiden, Kegel und Stümpfe',url:'s4-2b-pyramiden-kegel-stuempfe.html'},
+  next:{nr:'4.3a',titel:'Vektorbegriff und Komponenten',url:'s4-3a-vektorbegriff-komponenten.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+/* ══ EINSTIEG: Kugel im Zylinder ══ */
+function updateAR(){
+  const r = parseFloat(document.getElementById('ar-r').value);
+  document.getElementById('ar-rv').textContent = r.toFixed(2);
+  const VK = 4 / 3 * Math.PI * r ** 3;
+  const VZ = 2 * Math.PI * r ** 3;
+  document.getElementById('ar-eq').innerHTML =
+    `V_Kugel = ${VK.toFixed(1)} · V_Zylinder = ${VZ.toFixed(1)} · Verhältnis = ${(VK / VZ * 3).toFixed(0)} : 3`;
+  const {ctx, W, H} = initCanvas('ar-canvas', 220, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const sk = Math.min(14, (H - 44) / 12);
+  const cx0 = W / 2, cy0 = H / 2;
+  const rp = r * sk;
+  // Zylinder-Querschnitt (Rechteck, orange)
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2.2; ctx.fillStyle = '#fdf0e3';
+  ctx.fillRect(cx0 - rp, cy0 - rp, 2 * rp, 2 * rp);
+  ctx.strokeRect(cx0 - rp, cy0 - rp, 2 * rp, 2 * rp);
+  // Kugel-Querschnitt (Kreis, blau)
+  ctx.strokeStyle = '#1a4f8a'; ctx.fillStyle = 'rgba(26,79,138,0.15)'; ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.arc(cx0, cy0, rp, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  // Radius
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(cx0, cy0); ctx.lineTo(cx0 + rp, cy0); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('r', cx0 + rp / 2, cy0 - 6);
+  ctx.fillStyle = '#b85c00'; ctx.textAlign = 'left';
+  ctx.fillText('h = 2r', cx0 + rp + 10, cy0 + 4);
+}
+document.getElementById('ar-r').addEventListener('input', updateAR);
+
+/* ══ A1: Kugelteil erkennen ══ */
+const a1G = [
+  {label:'Begriff 1', desc:'die gewölbte Fläche des abgeschnittenen Kugelteils', sol:'Kugelkappe'},
+  {label:'Begriff 2', desc:'der eben abgeschnittene «Deckel» als Körper', sol:'Kugelsegment'},
+  {label:'Begriff 3', desc:'der «Glace-Kegel»: Kugelteil samt Kegel bis zum Zentrum', sol:'Kugelsektor'},
+  {label:'Begriff 4', desc:'die gesamte Kugeloberfläche als Punktmenge', sol:'Sphäre'},
+];
+const a1Opts = ['Kugelkappe', 'Kugelsegment', 'Kugelsektor', 'Sphäre'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.sol}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Kappe = Fläche, Segment = Deckel-Körper, Sektor = bis zum Zentrum, Sphäre = die ganze Oberfläche.';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()%]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. r³ beim Volumen, r² bei der Oberfläche — und Durchmesser halbieren!';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateAR();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  updateAR();
+});
+</script>
+</body>
+</html>

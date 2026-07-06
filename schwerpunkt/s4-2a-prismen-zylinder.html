@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.2a Prismen und Zylinder — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+
+<!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+<main class="content">
+
+<!-- ══ 1. TITEL + RLP-HEADER ══ -->
+<div class="page-titel">
+  <div class="pt-bereich">Schwerpunktfach · Lerngebiet 4 · Geometrie · 70 Lektionen</div>
+  <h1 class="pt-h1">4.2a Prismen und Zylinder</h1>
+  <div class="pt-untertitel">RLP 4.2 · Teil 1 von 3</div>
+</div>
+
+<p class="lead">Vom Aquarium bis zur Litfasssäule: <strong>Prismen</strong> und <strong>Zylinder</strong> sind die Körper mit konstantem Querschnitt — Grundfläche mal Höhe, fertig ist das Volumen. Auf dieser Seite lernst du Quader, Würfel, allgemeine Prismen und den Kreiszylinder kennen: Schrägbild und Netz, <strong>Volumen und Oberfläche</strong>, Flächen- und <strong>Raumdiagonalen</strong> — und mit dem Satz von Cavalieri das Prinzip dahinter.</p>
+
+<div class="rlp-kompetenzen">
+  <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.2</div>
+  <ul>
+    <li>geometrische Sachverhalte von elementaren Objekten (Prisma, Pyramide, Pyramidenstumpf, Kreiszylinder, Kreiskegel, Kreiskegelstumpf, Kugel) beschreiben</li>
+    <li>deren Elemente (Körperdiagonale, Höhen, Öffnungswinkel, Mantellinie) und Zusammenhänge (Volumen, Oberfläche) berechnen</li>
+    <li>die Ähnlichkeit für Berechnungen im Raum nutzen</li>
+  </ul>
+  <p class="rlp-hinweis">Diese Seite behandelt Prisma und Kreiszylinder (inkl. Grundlagen: Schrägbild, Netz, Lagebeziehungen, Cavalieri). Es folgen <a href="s4-2b-pyramiden-kegel-stuempfe.html">Teil 2: Pyramiden, Kegel und Stümpfe (s4-2b)</a> und <a href="s4-2c-kugel.html">Teil 3: Kugel und zusammengesetzte Körper (s4-2c)</a>.</p>
+</div>
+
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann Körper im Schrägbild darstellen und ihr Netz (die Abwicklung) zeichnen.</li>
+      <li>Ich kann Volumen und Oberfläche von Quader, Würfel und geradem Prisma berechnen: \(V = G \cdot h\), \(O = 2G + M\) mit \(M = U \cdot h\).</li>
+      <li>Ich kann Flächen- und Raumdiagonalen mit Pythagoras berechnen (\(d = \sqrt{a^2 + b^2 + c^2}\) im Quader).</li>
+      <li>Ich kann Volumen, Mantel und Oberfläche des geraden Kreiszylinders berechnen und sein Netz deuten.</li>
+      <li>Ich kann Formeln nach einer gesuchten Grösse umstellen (z.B. Radius aus Volumen und Höhe).</li>
+      <li>Ich kann mit dem Satz von Cavalieri begründen, warum schiefe Körper dasselbe Volumen haben wie gerade.</li>
+    </ul>
+  </div>
+</details>
+
+
+<!-- ══ 2. EINSTIEG ══ -->
+<h2 id="einstieg">Einstieg — der Münzstapel von Cavalieri</h2>
+
+<p>Ein Stapel Münzen steht senkrecht: ein Zylinder. Schiebt man ihn schräg, entsteht ein <strong>schiefer</strong> Zylinder — aber keine einzige Münze hat ihr Volumen geändert. Der Stapel enthält immer noch gleich viel Metall.</p>
+
+<p>Genau das ist die Kernidee der Stereometrie: <strong>Grundfläche × Höhe</strong> zählt — nicht, wie der Körper «lehnt».</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🪙 Münzstapel — Volumen unter Scherung</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verschiebe den Stapel mit dem Scherungs-Regler: Was passiert mit dem angezeigten Volumen? Und was ändert sich stattdessen — welche Strecke wird länger?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verschiebe den Stapel mit dem Scherungs-Regler: Was passiert mit dem angezeigten Volumen? Und was ändert sich stattdessen — welche Strecke wird länger?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Das Volumen bleibt exakt gleich — nur die Seitenlinie wird länger. <strong>Satz von Cavalieri:</strong> Körper mit gleichen Querschnittsflächen in jeder Höhe haben gleiches Volumen. Darum gilt \(V = G \cdot h\) auch für schiefe Prismen und Zylinder — mit der <em>senkrechten</em> Höhe.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Das Volumen bleibt exakt gleich — nur die Seitenlinie wird länger. Satz von Cavalieri: Körper mit gleichen Querschnittsflächen in jeder Höhe haben gleiches Volumen. Darum gilt Volumen gleich Grundfläche mal Höhe auch für schiefe Prismen und Zylinder — mit der senkrechten Höhe.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Stapel aus 12 «Münzen» · Radius 2 cm, Höhe 6 cm · Scherung verschiebt jede Schicht</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Scherung <span class="var">\(s\)</span> [cm]</label>
+      <input type="range" id="cv-s" min="0" max="4" step="0.25" value="0">
+      <span class="sl-val" id="cv-sv">0.00</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Volumen (Cavalieri)</div>
+      <div class="fl-eq" id="cv-eq">V = π · 2² · 6 ≈ 75.4 cm³ — unabhängig von s</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="cv-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Der Scherungs-Regler ändert die Form, nicht den Inhalt:</p>
+  <ul style="margin-top:6px">
+    <li>Jede Schicht behält ihre Fläche — also bleibt \(V = G \cdot h\) mit der <strong>senkrechten</strong> Höhe \(h\).</li>
+    <li>Länger wird nur die <em>Seitenlinie</em> — sie ist beim schiefen Körper keine Höhe mehr!</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was besagt der Satz von Cavalieri?</p><ul class="mc-optionen"><li data-opt="A">Alle Zylinder haben gleiches Volumen.</li><li data-opt="B">Gleiche Querschnittsflächen in jeder Höhe → gleiches Volumen.</li><li data-opt="C">Schiefe Körper haben kein berechenbares Volumen.</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Deshalb ändert die Scherung des Münzstapels nichts am Volumen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Beim schiefen Prisma gilt \(V = G \cdot h\) mit der <span class="mc-luecke"></span> Höhe, nicht mit der Seitenlinie.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">senkrechten.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Der Münzstapel hat \(r = 2\) cm und \(h = 6\) cm. Berechne sein Volumen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = \pi \cdot 4 \cdot 6 = 24\pi \approx 75.4\ \text{cm}^3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Zwei Bücherstapel: einer gerade, einer schräg verschoben — beide aus denselben 20 Büchern. Vergleiche Volumen und Höhe.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Gleiches Volumen (dieselben Bücher!). Auch die <em>senkrechte</em> Höhe ist gleich (20 Buchdicken) — nur die Seitenlinie des schiefen Stapels ist länger.</div></details></div>
+</details>
+
+
+<!-- ══ 3. DEFINITION ══ -->
+<h2 id="definition">Definitionen — Prisma, Quader, Würfel</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Gerades Prisma</div>
+  <p>Ein <strong>gerades Prisma</strong> entsteht, wenn ein Vieleck (die <strong>Grundfläche</strong> \(G\)) senkrecht um die Höhe \(h\) verschoben wird. Grund- und Deckfläche sind kongruent und parallel; die Seitenflächen sind Rechtecke und bilden zusammen den <strong>Mantel</strong> \(M\).</p>
+  \[ V = G \cdot h, \qquad M = U \cdot h, \qquad O = 2G + M \]
+  <p>(\(U\) = Umfang der Grundfläche.) Das <strong>Netz</strong> (die Abwicklung) zeigt alle Flächen aufgeklappt in der Ebene — der Mantel wird zum Rechteck \(U \times h\).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Quader und Würfel — die wichtigsten Spezialfälle</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Grösse</th><th>Quader (Kanten \(a, b, c\))</th><th>Würfel (Kante \(a\))</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Volumen</td><td>\(V = a b c\)</td><td>\(V = a^3\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Oberfläche</td><td>\(O = 2(ab + ac + bc)\)</td><td>\(O = 6a^2\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Flächendiagonale</td><td>z.B. \(d_{ab} = \sqrt{a^2 + b^2}\)</td><td>\(d_F = a\sqrt{2}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Raumdiagonale</td><td>\(d = \sqrt{a^2 + b^2 + c^2}\)</td><td>\(d = a\sqrt{3}\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Die Raumdiagonale kommt von <strong>zweimal Pythagoras</strong>: erst in der Grundfläche (\(\sqrt{a^2+b^2}\)), dann senkrecht dazu mit \(c\) — genau wie beim Betrag eines Raumvektors in <a class="quer" href="s4-3a-vektorbegriff-komponenten.html">↩ 4.3a</a>.</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Quader-Labor — Diagonalen live</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verändere die drei Kanten: Wie reagieren Flächendiagonale (grün) und Raumdiagonale (violett)? Stelle \(a = b = c\) — welcher Körper entsteht, und was zeigt die Formelzeile?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verändere die drei Kanten: Wie reagieren Flächendiagonale und Raumdiagonale? Stelle a gleich b gleich c — welcher Körper entsteht, und was zeigt die Formelzeile?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Raumdiagonale \(\sqrt{a^2+b^2+c^2}\) ist die Hypotenuse über der Flächendiagonale — zweimal Pythagoras. Beim Würfel (\(a = b = c\)) wird daraus \(a\sqrt{3} \approx 1.73a\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Raumdiagonale ist die Hypotenuse über der Flächendiagonale — zweimal Pythagoras. Beim Würfel wird daraus a mal Wurzel drei, ungefähr eins Komma sieben drei a.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Schrägbild · Flächendiagonale der Grundfläche grün · Raumdiagonale violett</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>\(a\) [cm]</label><input type="range" id="qd-a" min="1" max="8" step="0.5" value="4"><span class="sl-val" id="qd-av">4.0</span></div>
+      <div class="sl-grp akz-orange"><label>\(b\) [cm]</label><input type="range" id="qd-b" min="1" max="8" step="0.5" value="3"><span class="sl-val" id="qd-bv">3.0</span></div>
+      <div class="sl-grp akz-gruen"><label>\(c\) [cm]</label><input type="range" id="qd-c" min="1" max="8" step="0.5" value="2"><span class="sl-val" id="qd-cv">2.0</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Volumen · Oberfläche · Raumdiagonale</div>
+      <div class="fl-eq" id="qd-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="qd-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Quader und Prisma</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was ist der Mantel eines geraden Prismas, aufgeklappt im Netz?</p><ul class="mc-optionen"><li data-opt="A">ein Rechteck mit den Seiten \(U\) und \(h\)</li><li data-opt="B">ein Kreis</li><li data-opt="C">so viele Dreiecke wie Ecken</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Alle Seitenrechtecke nebeneinander ergeben \(U \times h\) — daher \(M = U \cdot h\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Raumdiagonale des Quaders entsteht durch <span class="mc-luecke"></span>-malige Anwendung des Satzes von Pythagoras.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">zwei(malige) — erst Flächendiagonale, dann Raumdiagonale.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Quader \(4 \times 3 \times 2\) cm: Berechne \(V\), \(O\) und die Raumdiagonale.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = 24\ \text{cm}^3\); \(O = 2(12+8+6) = 52\ \text{cm}^2\); \(d = \sqrt{16+9+4} = \sqrt{29} \approx 5.39\) cm.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Würfel hat Volumen \(64\ \text{cm}^3\). Wie lang ist seine Raumdiagonale?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(a = \sqrt[3]{64} = 4\) cm, also \(d = 4\sqrt{3} \approx 6.93\) cm — erst rückwärts zur Kante, dann die Würfelformel.</div></details></div>
+</details>
+
+
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Der gerade Kreiszylinder</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Zylinder — Volumen, Mantel, Oberfläche</div>
+  <p>Der <strong>gerade Kreiszylinder</strong> ist das «Prisma mit Kreis-Grundfläche»: Radius \(r\), Höhe \(h\).</p>
+  \[ V = \pi r^2 h, \qquad M = 2\pi r h, \qquad O = 2\pi r^2 + 2\pi r h = 2\pi r (r + h) \]
+  <p>Im <strong>Netz</strong> besteht der Zylinder aus zwei Kreisen und einem Rechteck: Der Mantel rollt sich ab zur Breite \(U = 2\pi r\) und Höhe \(h\) — daher \(M = 2\pi r h\).</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Zylinder-Labor — Netz und Formeln</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Vergrössere den Radius bei fester Höhe: Wie schnell wächst das Volumen im Vergleich zum Mantel? Und beobachte im Netz, wie das Mantel-Rechteck breiter wird.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Vergrössere den Radius bei fester Höhe: Wie schnell wächst das Volumen im Vergleich zum Mantel? Und beobachte im Netz, wie das Mantel-Rechteck breiter wird.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">\(V\) wächst mit \(r^2\) (quadratisch), \(M\) nur mit \(r\) (linear): Doppelter Radius heisst viermal so viel Volumen, aber nur doppelt so viel Mantel. Das Mantel-Rechteck hat immer die Breite \(2\pi r\) — den abgerollten Umfang.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Das Volumen wächst quadratisch mit dem Radius, der Mantel nur linear: Doppelter Radius heisst viermal so viel Volumen, aber nur doppelt so viel Mantel. Das Mantel-Rechteck hat immer die Breite zwei Pi r — den abgerollten Umfang.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>links Schrägbild · rechts Netz (zwei Kreise + Mantel-Rechteck)</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Radius <span class="var">\(r\)</span> [cm]</label><input type="range" id="zy-r" min="1" max="5" step="0.25" value="3"><span class="sl-val" id="zy-rv">3.00</span></div>
+      <div class="sl-grp akz-orange"><label>Höhe <span class="var">\(h\)</span> [cm]</label><input type="range" id="zy-h" min="2" max="10" step="0.5" value="8"><span class="sl-val" id="zy-hv">8.0</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Volumen · Mantel · Oberfläche</div>
+      <div class="fl-eq" id="zy-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="zy-canvas" height="230"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — Durchmesser statt Radius</div>
+  <p>Aufgaben nennen oft den <strong>Durchmesser</strong> («Tonne mit \(d = 80\) cm»). In allen Formeln steht aber der <strong>Radius</strong> \(r = d/2\). Wer \(d\) einsetzt, bekommt das Vierfache des Volumens. Erster Schritt jeder Zylinderaufgabe: \(r\) notieren.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Zylinder</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Breite hat das Mantel-Rechteck im Zylindernetz?</p><ul class="mc-optionen"><li data-opt="A">\(r\)</li><li data-opt="B">\(2\pi r\) (der Umfang)</li><li data-opt="C">\(\pi r^2\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der Mantel rollt den Kreisumfang ab — daher \(M = 2\pi r \cdot h\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Verdoppelt man den Radius, wächst das Zylindervolumen auf das <span class="mc-luecke"></span>-Fache.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Vier — \(V \sim r^2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Zylinder mit \(r = 5\) cm, \(h = 10\) cm: Berechne das Volumen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = \pi \cdot 25 \cdot 10 = 250\pi \approx 785.4\ \text{cm}^3\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ein Etikett soll eine Dose (\(r = 3\) cm, \(h = 11\) cm) genau einmal umwickeln. Welche Masse hat das Etikett?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Breite \(= 2\pi \cdot 3 \approx 18.85\) cm, Höhe \(11\) cm — das Etikett <em>ist</em> das Mantel-Rechteck.</div></details></div>
+</details>
+
+
+<!-- ══ 5. GRUNDLAGEN RAUM ══ -->
+<h2 id="typen">Grundlagen — Darstellung und Lage im Raum</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Schrägbild und Netz</div>
+  <p>Zwei Standard-Darstellungen räumlicher Körper:</p>
+  <ul style="margin-top:6px">
+    <li><strong>Schrägbild</strong> (schiefe Parallelprojektion): Frontflächen in wahrer Grösse; nach hinten laufende Kanten verkürzt (üblich: Faktor \(0.5\)) und unter \(45°\).</li>
+    <li><strong>Netz</strong> (Abwicklung): alle Begrenzungsflächen aufgeklappt in der Ebene — die Grundlage jeder Oberflächenberechnung.</li>
+  </ul>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Lagebeziehungen im Raum</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Paarung</th><th>mögliche Lagen</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gerade – Gerade</td><td style="text-align:left;font-family:var(--sans)">identisch · parallel · schneidend · <strong>windschief</strong></td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gerade – Ebene</td><td style="text-align:left;font-family:var(--sans)">in der Ebene · parallel · Durchstosspunkt</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Ebene – Ebene</td><td style="text-align:left;font-family:var(--sans)">identisch · parallel · Schnittgerade</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Diese Begriffe kennst du rechnerisch aus <a class="quer" href="s4-3c-geraden.html">↩ 4.3c</a> und <a class="quer" href="s4-3d-ebenen.html">↩ 4.3d</a> — hier brauchen wir sie anschaulich: Kanten eines Quaders können z.B. windschief sein.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Darstellung und Lage</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie erscheinen die nach hinten laufenden Kanten im üblichen Schrägbild?</p><ul class="mc-optionen"><li data-opt="A">in wahrer Länge, senkrecht</li><li data-opt="B">halbiert, unter 45°</li><li data-opt="C">gar nicht</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Faktor 0.5 und 45° — die Front bleibt in wahrer Grösse.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Zwei Geraden im Raum, die sich weder schneiden noch parallel sind, heissen <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">windschief.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie viele Flächen zeigt das Netz eines Quaders — und wie viele davon sind höchstens verschieden gross?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Sechs Flächen, paarweise kongruent — höchstens <strong>drei</strong> verschiedene Rechtecke.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Nenne am Quader \(ABCDEFGH\) ein Paar windschiefer Kanten und begründe.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Z.B. die Bodenkante \(AB\) und die senkrechte hintere Kante \(CG\): Sie schneiden sich nicht (verschiedene «Stockwerke»/Positionen) und sind nicht parallel (verschiedene Richtungen) — also windschief.</div></details></div>
+</details>
+
+
+<!-- ══ 6. WEITERE THEORIE ══ -->
+<h2 id="theorie">Formeln umstellen und zusammensetzen</h2>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Strategie — rückwärts rechnen</div>
+  <p>Oft ist das Volumen gegeben und eine Kante oder der Radius gesucht: Formel <strong>nach der gesuchten Grösse umstellen</strong>, erst dann Zahlen einsetzen. Beispiel: \(V = \pi r^2 h \Rightarrow r = \sqrt{\tfrac{V}{\pi h}}\).</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Radius aus Volumen</div>
+  <p>Ein zylindrisches Gefäss soll \(V = 500\ \text{cm}^3\) fassen bei \(h = 10\) cm. Welcher Radius ist nötig?</p>
+  \[ r = \sqrt{\frac{V}{\pi h}} = \sqrt{\frac{500}{10\pi}} \approx 3.99\ \text{cm} \]
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Prisma mit Dreiecks-Grundfläche</div>
+  <p>Ein gerades Prisma hat als Grundfläche ein gleichseitiges Dreieck mit \(a = 6\) cm; Höhe \(h = 10\) cm.</p>
+  \[ G = \frac{\sqrt{3}}{4} a^2 = \frac{\sqrt{3}}{4} \cdot 36 \approx 15.59\ \text{cm}^2 \;\Rightarrow\; V \approx 155.88\ \text{cm}^3 \]
+  <p>Mantel: \(M = U \cdot h = 18 \cdot 10 = 180\ \text{cm}^2\); Oberfläche \(O = M + 2G \approx 211.18\ \text{cm}^2\).</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Zusammengesetzte Körper</div>
+  <p>Reale Objekte (Halle mit Satteldach, Werkstück mit Bohrung) zerlegt man in <strong>Teilkörper</strong>: Volumina addieren — oder bei Bohrungen/Aussparungen <strong>subtrahieren</strong>. Bei Oberflächen aufpassen: Berührungsflächen zählen nicht mit!</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Umstellen und Zusammensetzen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Aus \(V = \pi r^2 h\) folgt \(r =\) ?</p><ul class="mc-optionen"><li data-opt="A">\(\sqrt{V / (\pi h)}\)</li><li data-opt="B">\(V / (\pi h)\)</li><li data-opt="C">\(\sqrt{V \pi h}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Erst durch \(\pi h\) teilen, dann die Wurzel ziehen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Bei zusammengesetzten Körpern zählen <span class="mc-luecke"></span>flächen nicht zur Oberfläche.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Berührungs(flächen) — sie liegen im Innern.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Ein Würfel hat Oberfläche \(O = 96\ \text{cm}^2\). Wie lang ist die Kante?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(6a^2 = 96 \Rightarrow a^2 = 16 \Rightarrow a = 4\) cm.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Durch einen Würfel (\(a = 6\) cm) wird ein zylindrisches Loch (\(r = 1\) cm) senkrecht durchgebohrt. Wie berechnet man das Restvolumen?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(V = a^3 - \pi r^2 a = 216 - 6\pi \approx 197.2\ \text{cm}^3\) — der Bohrzylinder hat die Würfelkante als Höhe und wird subtrahiert.</div></details></div>
+</details>
+
+
+<!-- ══ 7. AUFGABEN ══ -->
+<h2 id="aufgaben">Aufgaben</h2>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Körper und Formel zuordnen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle eine Beschreibung — welche Volumenformel passt?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Beschreibung</div>
+    <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Formel gehört dazu?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Netz skizzieren</span></div>
+  <p>Skizziere auf Papier die Netze und beschrifte alle Masse:</p>
+  <ol class="aufg-liste">
+    <li>Quader \(4 \times 3 \times 2\) cm</li>
+    <li>Zylinder mit \(r = 2\) cm und \(h = 5\) cm (Mantelbreite berechnen!)</li>
+    <li>gerades Prisma mit gleichseitigem Dreieck \(a = 3\) cm als Grundfläche, \(h = 6\) cm</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Sechs Rechtecke, paarweise: \(4{\times}3\) (2×), \(4{\times}2\) (2×), \(3{\times}2\) (2×) — kreuzförmig anordenbar.</li>
+        <li>Zwei Kreise (\(r = 2\)) + Mantel-Rechteck: Breite \(2\pi \cdot 2 \approx 12.57\) cm, Höhe \(5\) cm.</li>
+        <li>Zwei gleichseitige Dreiecke (\(a = 3\)) + drei Rechtecke \(3 \times 6\) cm nebeneinander (Mantel \(9 \times 6\)).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen an Prisma und Zylinder</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Quader komplett</div>
+    <p>Quader mit \(a = 4\), \(b = 3\), \(c = 2\) cm: Berechne \(O\) und die Raumdiagonale \(d\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>O =&nbsp;</label><input type="text" id="a3a1" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3a1', 52, 0.01, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>d ≈&nbsp;</label><input type="text" id="a3a2" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a3a2', 5.39, 0.01, 'cm')">Prüfen</button></div>
+    <div class="cr" id="a3a2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ O = 2(12 + 8 + 6) = 52\ \text{cm}^2, \qquad d = \sqrt{16+9+4} = \sqrt{29} \approx 5.39\ \text{cm} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Würfeldiagonale</div>
+    <p>Berechne die Raumdiagonale eines Würfels mit \(a = 5\) cm (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>d ≈&nbsp;</label><input type="text" id="a3b1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a3b1', 8.66, 0.01, 'cm')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ d = a\sqrt{3} = 5\sqrt{3} \approx 8.66\ \text{cm} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Zylinder komplett</div>
+    <p>Zylinder mit \(r = 3\) cm, \(h = 8\) cm: Berechne \(V\) und \(O\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a3c1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3c1', 226.19, 0.1, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>O ≈&nbsp;</label><input type="text" id="a3c2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3c2', 207.35, 0.1, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3c2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ V = \pi \cdot 9 \cdot 8 = 72\pi \approx 226.19\ \text{cm}^3, \qquad O = 2\pi \cdot 3 \cdot (3 + 8) = 66\pi \approx 207.35\ \text{cm}^2 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Rückwärts: Radius gesucht</div>
+    <p>Ein Zylinder soll bei \(h = 10\) cm genau \(V = 500\ \text{cm}^3\) fassen. Berechne \(r\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>r ≈&nbsp;</label><input type="text" id="a3d1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a3d1', 3.99, 0.01, 'cm')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ r = \sqrt{\frac{500}{10\pi}} \approx 3.99\ \text{cm} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Dreiecksprisma</div>
+    <p>Gerades Prisma, Grundfläche gleichseitiges Dreieck mit \(a = 6\) cm, Höhe \(h = 10\) cm: Berechne \(V\) und \(O\) (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a3e1" placeholder="cm³"><button class="btn-pruef" onclick="chkNum('a3e1', 155.88, 0.1, 'cm³')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>O ≈&nbsp;</label><input type="text" id="a3e2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a3e2', 211.18, 0.1, 'cm²')">Prüfen</button></div>
+    <div class="cr" id="a3e2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ G = \tfrac{\sqrt{3}}{4} \cdot 36 \approx 15.59\ \text{cm}^2;\quad V \approx 155.88\ \text{cm}^3;\quad O = 18 \cdot 10 + 2 \cdot 15.59 \approx 211.18\ \text{cm}^2 \]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Aquarium</span></div>
+  <p>Ein Aquarium (offener Quader, ohne Deckel) misst innen \(80 \times 35 \times 40\) cm (Länge × Breite × Höhe).</p>
+  <ol class="aufg-liste">
+    <li>Wie viele Liter fasst es randvoll?</li>
+    <li>Wie viel Glasfläche wurde verbaut (Boden + 4 Seiten)?</li>
+  </ol>
+  <div class="eingabe-row"><label>V =&nbsp;</label><input type="text" id="a4-1" placeholder="Liter"><button class="btn-pruef" onclick="chkNum('a4-1', 112, 0.1, 'l')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Glas =&nbsp;</label><input type="text" id="a4-2" placeholder="cm²"><button class="btn-pruef" onclick="chkNum('a4-2', 12000, 10, 'cm²')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(V = 80 \cdot 35 \cdot 40 = 112000\ \text{cm}^3 = 112\) Liter (\(1\ \text{l} = 1000\ \text{cm}^3\)).</li>
+        <li>Boden \(80 \cdot 35 = 2800\); Seiten \(2 \cdot 80 \cdot 40 + 2 \cdot 35 \cdot 40 = 9200\); total \(12000\ \text{cm}^2 = 1.2\ \text{m}^2\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Regentonne</span></div>
+  <p>Eine zylindrische Regentonne hat den <strong>Durchmesser</strong> \(80\) cm und die Höhe \(120\) cm.</p>
+  <ol class="aufg-liste">
+    <li>Wie viele Liter fasst sie (ganze Liter)?</li>
+    <li>Ein Sommergewitter liefert \(35\) l. Um wie viele cm steigt der Wasserspiegel?</li>
+  </ol>
+  <div class="eingabe-row"><label>V ≈&nbsp;</label><input type="text" id="a5-1" placeholder="Liter"><button class="btn-pruef" onclick="chkNum('a5-1', 603, 1, 'l')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Anstieg ≈&nbsp;</label><input type="text" id="a5-2" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a5-2', 6.96, 0.05, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Radius \(r = 40\) cm (nicht 80!): \(V = \pi \cdot 40^2 \cdot 120 \approx 603186\ \text{cm}^3 \approx 603\) l.</li>
+        <li>\(35\ \text{l} = 35000\ \text{cm}^3\): \(\Delta h = \tfrac{35000}{\pi \cdot 1600} \approx 6.96\) cm.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Halle mit Satteldach</span></div>
+  <p>Eine Werkhalle: Quader \(10 \times 6 \times 3\) m, darauf ein Satteldach — ein liegendes Prisma mit dreieckigem Querschnitt (Basis \(6\) m, Firsthöhe \(1.5\) m über der Traufe), Länge \(10\) m.</p>
+  <ol class="aufg-liste">
+    <li>Berechne das umbaute Volumen der ganzen Halle.</li>
+    <li>Welchen Anteil trägt das Dach bei (in Prozent, eine Dezimale)?</li>
+  </ol>
+  <div class="eingabe-row"><label>V =&nbsp;</label><input type="text" id="a6-1" placeholder="m³"><button class="btn-pruef" onclick="chkNum('a6-1', 225, 0.1, 'm³')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Anteil ≈&nbsp;</label><input type="text" id="a6-2" placeholder="%"><button class="btn-pruef" onclick="chkNum('a6-2', 20, 0.1, '%')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Quader \(180\ \text{m}^3\); Dachprisma \(G = \tfrac{1}{2} \cdot 6 \cdot 1.5 = 4.5\ \text{m}^2\), \(V = 4.5 \cdot 10 = 45\ \text{m}^3\); total \(\mathbf{225\ m^3}\).</li>
+        <li>\(\tfrac{45}{225} = 20.0\ \%\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Die optimale Dose <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Eine Getränkedose soll \(330\ \text{cm}^3\) fassen und möglichst wenig Blech brauchen. Die Materialtheorie zeigt: Optimal ist \(h = 2r\) (die Dose «passt in einen Würfel-Querschnitt»).</p>
+  <ol class="aufg-liste">
+    <li>Setze \(h = 2r\) in die Volumenformel ein und stelle nach \(r\) um.</li>
+    <li>Berechne \(r\) und \(h\) für \(V = 330\ \text{cm}^3\) (zwei Dezimalen).</li>
+    <li>Vergleiche mit einer realen Dose (\(r \approx 3.3\) cm, \(h \approx 11.5\) cm): Ist sie optimal? Vermute, warum nicht.</li>
+  </ol>
+  <div class="eingabe-row"><label>r ≈&nbsp;</label><input type="text" id="a7-1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a7-1', 3.74, 0.01, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(V = \pi r^2 \cdot 2r = 2\pi r^3 \Rightarrow r = \sqrt[3]{\tfrac{V}{2\pi}}\).</li>
+        <li>\(r = \sqrt[3]{\tfrac{330}{2\pi}} \approx 3.74\) cm, \(h = 2r \approx 7.49\) cm. Kontrolle: \(\pi \cdot 3.74^2 \cdot 7.49 \approx 330\) ✓</li>
+        <li>Die reale Dose ist schlanker als optimal — Gründe: Greifbarkeit, Trinkkomfort, Regalnormen und dickeres Material an Deckel/Boden (der reine Blechverbrauch ist nicht das einzige Kriterium).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ 8. ZUSAMMENFASSUNG ══ -->
+<h2 id="zusammenfassung">Zusammenfassung</h2>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Prisma und Zylinder sind die Körper mit <strong>konstantem Querschnitt</strong>: \(V = G \cdot h\), Mantel \(M = U \cdot h\) (beim Zylinder \(2\pi r h\)), Oberfläche \(O = 2G + M\). <strong>Diagonalen</strong> liefert zweimal Pythagoras (\(d = \sqrt{a^2+b^2+c^2}\), Würfel \(a\sqrt{3}\)). Nach <strong>Cavalieri</strong> gilt \(V = G \cdot h\) auch schief — mit der senkrechten Höhe. Bei Aufgaben: Durchmesser halbieren, Einheiten sauber (\(1\ \text{l} = 1000\ \text{cm}^3\)), zusammengesetzte Körper in Teilkörper zerlegen.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Körper</th><th>Volumen</th><th>Mantel / Oberfläche</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">gerades Prisma</td><td>\(V = G \cdot h\)</td><td>\(M = U h\); \(O = 2G + M\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Quader</td><td>\(V = abc\)</td><td>\(O = 2(ab+ac+bc)\); \(d = \sqrt{a^2+b^2+c^2}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Würfel</td><td>\(V = a^3\)</td><td>\(O = 6a^2\); \(d = a\sqrt{3}\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kreiszylinder</td><td>\(V = \pi r^2 h\)</td><td>\(M = 2\pi r h\); \(O = 2\pi r(r+h)\)</td></tr>
+  </tbody>
+</table>
+
+
+<!-- ══ 9. ZUSATZMATERIAL ══ -->
+<h2 id="downloads">Zusatzmaterial</h2>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s4-2a-prismen-zylinder/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2a-prismen-zylinder/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Formeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2a-prismen-zylinder/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2a-prismen-zylinder/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-2a-prismen-zylinder/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
+<!-- ══ 10. RESSOURCEN ══ -->
+<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzm2EWHP7iGUWq_WTR0TtuJz" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Körper — Oberfläche &amp; Volumen berechnen</div><div class="lk-s">Lehrerschmidt · 72 Videos · Quader bis Zylinder Schritt für Schritt</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHju4BlmGqAs9pC5HEPJ4V3F" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Körper und Stereometrie — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 20 Videos · kompakte Theorie-Clips</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/50462/aufgaben-zu-oberflaeche-und-volumen-von-wuerfel-und-quader" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Oberfläche und Volumen von Würfel und Quader</div><div class="lk-s">mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/174501/aufgaben-zu-volumenberechnung-bei-geraden-prismen-und-zylindern" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Volumen gerader Prismen und Zylinder</div><div class="lk-s">mit Lösungen</div></div></a>
+</div>
+
+</main>
+<aside class="toc-wrap"><div id="toc"></div></aside>
+</div>
+
+<footer class="site-footer">
+  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Schwerpunktfach 4.2a Prismen und Zylinder</p>
+</footer>
+
+<script src="../nav.js"></script>
+<script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
+<script>
+buildNav({
+  bereich:'schwerpunkt', id:'s4-2a',
+  kapitelNr:'4.2a', kapitelTitel:'Prismen und Zylinder',
+  prev:{nr:'4.1',titel:'Grundlagen',url:'s4-1-grundlagen.html'},
+  next:{nr:'4.2b',titel:'Pyramiden, Kegel und Stümpfe',url:'s4-2b-pyramiden-kegel-stuempfe.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+/* ══ EINSTIEG: Münzstapel (Cavalieri) ══ */
+function updateCV(){
+  const s = parseFloat(document.getElementById('cv-s').value);
+  document.getElementById('cv-sv').textContent = s.toFixed(2);
+  const V = Math.PI * 4 * 6;
+  document.getElementById('cv-eq').innerHTML = `V = π · 2² · 6 ≈ ${V.toFixed(1)} cm³ — unabhängig von s`;
+  const {ctx, W, H} = initCanvas('cv-canvas', 220, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const n = 12, mh = 13, mw = 110;
+  const x0 = W * 0.32 - mw / 2, y0 = H - 26;
+  const skala = 22;  // px pro cm Scherung total
+  for(let i = 0; i < n; i++){
+    const dx = s * skala * (i / (n - 1));
+    const y = y0 - (i + 1) * mh;
+    ctx.fillStyle = i % 2 ? '#dbe7f3' : '#c3d6ea';
+    ctx.strokeStyle = '#5b7fa6'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(x0 + dx, y, mw, mh - 2, 5); else ctx.rect(x0 + dx, y, mw, mh - 2);
+    ctx.fill(); ctx.stroke();
+  }
+  // Boden
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(12, y0); ctx.lineTo(W - 12, y0); ctx.stroke();
+  // Höhe (senkrecht, blau) + Seitenlinie (violett)
+  const hTop = y0 - n * mh;
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(x0 - 16, y0); ctx.lineTo(x0 - 16, hTop); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'right';
+  ctx.fillText('h', x0 - 22, (y0 + hTop) / 2 + 4);
+  const sPx = s * skala;
+  ctx.strokeStyle = '#5b2d8e'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x0 + mw + 8, y0); ctx.lineTo(x0 + mw + 8 + sPx, hTop); ctx.stroke();
+  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left';
+  const seite = Math.sqrt(36 + s * s);
+  ctx.fillText(`Seite ≈ ${seite.toFixed(2)} cm`, x0 + mw + 16 + sPx, (y0 + hTop) / 2 + 4);
+}
+document.getElementById('cv-s').addEventListener('input', updateCV);
+
+/* ══ QUADER-LABOR ══ */
+// Schrägbild-Projektion: x nach rechts, z nach oben, y (Tiefe) unter 45° halbiert
+function proj(cx0, cy0, sk, x, y, z){
+  return [cx0 + (x + 0.5 * y * 0.7071) * sk, cy0 - (z + 0.5 * y * 0.7071) * sk];
+}
+function updateQD(){
+  const a = parseFloat(document.getElementById('qd-a').value);
+  const b = parseFloat(document.getElementById('qd-b').value);
+  const c = parseFloat(document.getElementById('qd-c').value);
+  document.getElementById('qd-av').textContent = a.toFixed(1);
+  document.getElementById('qd-bv').textContent = b.toFixed(1);
+  document.getElementById('qd-cv').textContent = c.toFixed(1);
+  const V = a * b * c, O = 2 * (a * b + a * c + b * c), d = Math.sqrt(a * a + b * b + c * c);
+  document.getElementById('qd-eq').innerHTML =
+    `V = ${fmt2(V)} cm³ · O = ${fmt2(O)} cm² · d = ${d.toFixed(2)} cm`;
+  const {ctx, W, H} = initCanvas('qd-canvas', 240, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const sk = Math.min((W - 80) / (8 + 0.5 * 8 * 0.7071), (H - 50) / (8 + 0.5 * 8 * 0.7071));
+  const cx0 = 44, cy0 = H - 30;
+  const P = (x, y, z) => proj(cx0, cy0, sk, x, y, z);
+  // 8 Ecken
+  const E = [[0,0,0],[a,0,0],[a,b,0],[0,b,0],[0,0,c],[a,0,c],[a,b,c],[0,b,c]];
+  const K = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+  const hinten = new Set(['2-3','3-0','3-7']);
+  ctx.lineWidth = 1.8;
+  K.forEach(([i, j]) => {
+    const key = `${Math.min(i,j) === 3 || Math.max(i,j) === 3 ? [i,j].sort().join('-') : 'x'}`;
+    const dash = hinten.has([i, j].sort((p,q)=>p-q).join('-'));
+    ctx.strokeStyle = '#5b7fa6'; ctx.setLineDash(dash ? [5, 4] : []);
+    const [x1, y1] = P(...E[i]), [x2, y2] = P(...E[j]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  // Flächendiagonale (grün): (0,0,0)->(a,b,0); Raumdiagonale (violett): (0,0,0)->(a,b,c)
+  let [x1, y1] = P(0, 0, 0), [x2, y2] = P(a, b, 0);
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  [x2, y2] = P(a, b, c);
+  ctx.strokeStyle = '#5b2d8e'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.font = 'bold 12px monospace';
+  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left';
+  const [mx, my] = P(a * 0.55, b * 0.55, c * 0.55);
+  ctx.fillText('d', mx + 6, my - 4);
+  ctx.fillStyle = '#374151';
+  const [ax, ay] = P(a / 2, 0, 0); ctx.textAlign = 'center'; ctx.fillText('a', ax, ay + 16);
+  const [bx, by] = P(a, b / 2, 0); ctx.textAlign = 'left'; ctx.fillText('b', bx + 8, by + 10);
+  const [cxx, cyy] = P(0, 0, c / 2); ctx.textAlign = 'right'; ctx.fillText('c', cxx - 8, cyy);
+}
+['qd-a', 'qd-b', 'qd-c'].forEach(id => document.getElementById(id).addEventListener('input', updateQD));
+
+/* ══ ZYLINDER-LABOR ══ */
+function updateZY(){
+  const r = parseFloat(document.getElementById('zy-r').value);
+  const h = parseFloat(document.getElementById('zy-h').value);
+  document.getElementById('zy-rv').textContent = r.toFixed(2);
+  document.getElementById('zy-hv').textContent = h.toFixed(1);
+  const V = Math.PI * r * r * h, M = 2 * Math.PI * r * h, O = M + 2 * Math.PI * r * r;
+  document.getElementById('zy-eq').innerHTML =
+    `V = ${V.toFixed(1)} cm³ · M = ${M.toFixed(1)} cm² · O = ${O.toFixed(1)} cm²`;
+  const {ctx, W, H} = initCanvas('zy-canvas', 230, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const sk = Math.min(9, (H - 60) / 10);
+  // links: Schrägbild
+  const zx = W * 0.24, zy0 = H - 30;
+  const rx = r * sk, ry = r * sk * 0.32, hp = h * sk;
+  ctx.strokeStyle = '#5b7fa6'; ctx.fillStyle = '#dbe7f3'; ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  ctx.moveTo(zx - rx, zy0); ctx.lineTo(zx - rx, zy0 - hp);
+  ctx.ellipse(zx, zy0 - hp, rx, ry, 0, Math.PI, 0);
+  ctx.lineTo(zx + rx, zy0);
+  ctx.ellipse(zx, zy0, rx, ry, 0, 0, Math.PI);
+  ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(zx, zy0 - hp, rx, ry, 0, 0, 2 * Math.PI); ctx.stroke();
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.ellipse(zx, zy0, rx, ry, 0, Math.PI, 0); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('r', zx + rx / 2, zy0 - hp - 6);
+  ctx.textAlign = 'right'; ctx.fillText('h', zx - rx - 8, zy0 - hp / 2);
+  // rechts: Netz (Mantel-Rechteck + 2 Kreise) — Breite 2πr skaliert kleiner
+  const nsk = sk * 0.42;
+  const mw = 2 * Math.PI * r * nsk, mh = h * nsk;
+  const nx = W * 0.52, ny = H * 0.52 - mh / 2;
+  ctx.strokeStyle = '#b85c00'; ctx.fillStyle = '#fdf0e3'; ctx.lineWidth = 1.8;
+  ctx.fillRect(nx, ny, mw, mh); ctx.strokeRect(nx, ny, mw, mh);
+  const kr = r * nsk;
+  ctx.beginPath(); ctx.arc(nx + mw / 2, ny - kr - 5, kr, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.arc(nx + mw / 2, ny + mh + kr + 5, kr, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#b85c00'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('2πr', nx + mw / 2, ny + mh + 1 - mh / 2 + 4);
+}
+['zy-r', 'zy-h'].forEach(id => document.getElementById(id).addEventListener('input', updateZY));
+
+/* ══ A1: Formel zuordnen ══ */
+const a1G = [
+  {label:'Körper 1', desc:'gerades Prisma mit Grundfläche G und Höhe h', sol:'V = G·h'},
+  {label:'Körper 2', desc:'Kreiszylinder mit Radius r und Höhe h', sol:'V = πr²h'},
+  {label:'Körper 3', desc:'Würfel mit Kante a', sol:'V = a³'},
+  {label:'Körper 4', desc:'Quader mit Kanten a, b, c', sol:'V = a·b·c'},
+];
+const a1Opts = ['V = G·h', 'V = πr²h', 'V = a³', 'V = a·b·c'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.sol}`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Alle diese Körper folgen dem Muster «Grundfläche mal Höhe» — nur die Grundfläche wechselt.';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()%]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Durchmesser halbiert? Einheiten umgerechnet (1 l = 1000 cm³)?';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateCV();
+  updateQD();
+  updateZY();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  updateCV(); updateQD(); updateZY();
+});
+</script>
+</body>
+</html>
