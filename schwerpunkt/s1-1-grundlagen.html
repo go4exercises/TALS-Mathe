@@ -19,7 +19,58 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -31,16 +82,10 @@ MathJax = {
 <div class="page-titel">
   <div class="pt-bereich">Schwerpunktfach · Lerngebiet 1 · Arithmetik/Algebra · 25 Lektionen</div>
   <h1 class="pt-h1">1.1 Grundlagen</h1>
+  <div class="pt-untertitel">Der Struktur-Blick auf algebraische Ausdrücke</div>
 </div>
 
-<!-- Stub-Banner: Seite ist noch in Vorbereitung -->
-<div class="stub-banner">
-  <strong>In Vorbereitung</strong>
-  Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: Mai 2026.
-</div>
-
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
-<p class="lead">Im Schwerpunktfach wird die Algebra des Grundlagenfachs vertieft. Hier legst du die Werkzeuge bereit, die du in den folgenden Lerngebieten ständig brauchst — Termumformungen, Bruchrechnung mit Variablen, Polynome — und übst das saubere Umformen als Routine.</p>
+<p class="lead">Wer einen Term umformen will, muss ihn zuerst <strong>lesen</strong>: Ist \((a+b)^2\) eine Summe oder eine Potenz? Entscheidend ist der <strong>zuletzt ausgeführte Rechenschritt</strong> — er bestimmt die Struktur, und die Struktur bestimmt das erlaubte Werkzeug. Dieser <strong>Struktur-Blick</strong> ist die Grundkompetenz des ganzen Schwerpunktfachs: Er verhindert die klassischen Fehlumformungen und macht Kopfrechen-Tricks wie \(17 \cdot 23 = 400 - 9\) überhaupt erst sichtbar.</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 1.1</div>
@@ -49,49 +94,475 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann die Struktur eines Terms bestimmen: Summe, Differenz, Produkt, Quotient oder Potenz — nach dem zuletzt ausgeführten Rechenschritt.</li>
+      <li>Ich kenne die Umform-Werkzeuge und ihre Richtungen: Ausmultiplizieren ↔ Ausklammern/Faktorisieren, binomische Formeln in beide Richtungen.</li>
+      <li>Ich weiss, welche Operationen nur bei welcher Struktur erlaubt sind — Kürzen nur bei Faktoren, Wurzel-/Quadrat-Regeln nur bei Produkten.</li>
+      <li>Ich kann Termwerte strukturgerecht berechnen (Hierarchie der Operationen, Klammern zuerst).</li>
+      <li>Ich kann Umformungen mit Zahlenproben prüfen und typische Fehlumformungen entlarven.</li>
+      <li>Ich kann Strukturen für Rechenvorteile nutzen (dritte binomische Formel als Kopfrechen-Trick).</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — ist \((a+b)^2\) dasselbe wie \(a^2 + b^2\)?</h2>
+
+<p>Die verbreitetste Fehlumformung der Algebra lautet: \((a+b)^2 = a^2 + b^2\). Sie sieht harmlos aus — aber stimmt sie? Statt zu raten, machen wir die <strong>Zahlenprobe</strong>:</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>⚖️ Struktur-Waage — \((a+b)^2\) gegen \(a^2 + b^2\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verschiebe \(a\) und \(b\): Sind die beiden Seiten je gleich? Wie gross ist die Differenz — und bei welchen Werten verschwindet sie?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verschiebe a und b: Sind die beiden Seiten je gleich? Wie gross ist die Differenz — und bei welchen Werten verschwindet sie?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Differenz ist immer genau \(2ab\) — das fehlende Mittelglied der binomischen Formel \((a+b)^2 = a^2 + 2ab + b^2\). Nur wenn \(a\) oder \(b\) null ist, stimmen beide Seiten überein. <strong>Eine einzige Zahlenprobe widerlegt eine falsche Umformung.</strong></div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Differenz ist immer genau zwei a b — das fehlende Mittelglied der binomischen Formel. Nur wenn a oder b null ist, stimmen beide Seiten überein. Eine einzige Zahlenprobe widerlegt eine falsche Umformung.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Beide Seiten als Flächen: das Quadrat \((a+b)^2\) enthält zwei Rechtecke \(ab\) mehr</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>\(a\)</label><input type="range" id="sw-a" min="0" max="6" step="0.5" value="3"><span class="sl-val" id="sw-av">3.0</span></div>
+      <div class="sl-grp akz-orange"><label>\(b\)</label><input type="range" id="sw-b" min="0" max="6" step="0.5" value="4"><span class="sl-val" id="sw-bv">4.0</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Zahlenprobe</div>
+      <div class="fl-eq" id="sw-eq"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="sw-canvas" height="230"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Das Flächenbild macht die Struktur sichtbar:</p>
+  <ul style="margin-top:6px">
+    <li>\((a+b)^2\) ist das <strong>ganze</strong> Quadrat: \(a^2 + \mathbf{2ab} + b^2\) — die Potenz einer Summe.</li>
+    <li>\(a^2 + b^2\) sind nur die zwei Teilquadrate — die Summe zweier Potenzen. Verschiedene Strukturen, verschiedene Werte.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\((a+b)^2 =\) ?</p><ul class="mc-optionen"><li data-opt="A">\(a^2 + b^2\)</li><li data-opt="B">\(a^2 + 2ab + b^2\)</li><li data-opt="C">\(2a + 2b\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Erste binomische Formel — das Mittelglied \(2ab\) gehört dazu.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Eine einzige <span class="mc-luecke"></span> genügt, um eine falsche Umformung zu widerlegen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Zahlenprobe (Gegenbeispiel).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Prüfe mit \(a = 3\), \(b = 4\): \((a+b)^2\) und \(a^2 + b^2\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(7^2 = 49\) gegen \(9 + 16 = 25\) — Differenz \(24 = 2 \cdot 3 \cdot 4\) ✓</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Gilt \(\sqrt{a^2 + b^2} = a + b\)? Prüfe mit dem 3-4-5-Beispiel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(\sqrt{9 + 16} = 5\), aber \(3 + 4 = 7\) — falsch. Die Wurzel «verteilt» sich nicht auf Summanden, nur auf Faktoren.</div></details></div>
+</details>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Definition — die Struktur eines Terms</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Der zuletzt ausgeführte Rechenschritt bestimmt die Struktur</div>
+  <p>Wertet man einen Term nach der Hierarchie der Operationen aus, gibt es einen <strong>letzten</strong> Rechenschritt — er benennt die Struktur:</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Term</th><th>letzter Schritt</th><th>Struktur</th></tr></thead>
+    <tbody>
+      <tr><td>\(a^2 + 2ab + b^2\)</td><td style="text-align:left;font-family:var(--sans)">Addieren</td><td style="text-align:left;font-family:var(--sans)"><strong>Summe</strong></td></tr>
+      <tr><td>\(3x(x - 2)\)</td><td style="text-align:left;font-family:var(--sans)">Multiplizieren</td><td style="text-align:left;font-family:var(--sans)"><strong>Produkt</strong></td></tr>
+      <tr><td>\((a+b)^2\)</td><td style="text-align:left;font-family:var(--sans)">Potenzieren</td><td style="text-align:left;font-family:var(--sans)"><strong>Potenz</strong></td></tr>
+      <tr><td>\(\dfrac{x}{x+1}\)</td><td style="text-align:left;font-family:var(--sans)">Dividieren</td><td style="text-align:left;font-family:var(--sans)"><strong>Quotient</strong></td></tr>
+      <tr><td>\(a^2 - b^2\)</td><td style="text-align:left;font-family:var(--sans)">Subtrahieren</td><td style="text-align:left;font-family:var(--sans)"><strong>Differenz</strong></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">\((a+b)^2\) ist also <strong>keine Summe</strong>, sondern eine Potenz — obwohl innen ein Plus steht. Die Klammer wird zuerst berechnet; das Potenzieren kommt zuletzt.</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Warum das zählt</div>
+  <p>Jedes Umform-Werkzeug hat eine <strong>Zulassungsbedingung</strong>: Kürzen braucht ein Produkt in Zähler und Nenner, Wurzelgesetze brauchen Produkte, binomische Formeln brauchen genau die passende Bauart. Wer zuerst die Struktur bestimmt, greift automatisch zum richtigen Werkzeug.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Struktur bestimmen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Struktur hat \(3x(x-2)\)?</p><ul class="mc-optionen"><li data-opt="A">Summe</li><li data-opt="B">Produkt</li><li data-opt="C">Potenz</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der letzte Schritt ist das Multiplizieren der Faktoren \(3x\) und \((x-2)\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der <span class="mc-luecke"></span> ausgeführte Rechenschritt bestimmt die Struktur eines Terms.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">zuletzt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Bestimme die Struktur von \(\dfrac{a+b}{2}\) und von \(\left(\dfrac{a}{2}\right)^3\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Quotient (zuletzt wird geteilt) — Potenz (zuletzt wird potenziert).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum ist \(a^2 - b^2\) eine Differenz, \((a-b)^2\) aber eine Potenz — und warum lohnt der Unterschied?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Bei \(a^2 - b^2\) wird zuletzt subtrahiert, bei \((a-b)^2\) zuletzt potenziert. Der Unterschied entscheidet über das Werkzeug: Die Differenz zerfällt nach der 3. binomischen Formel in das Produkt \((a-b)(a+b)\) — die Potenz nicht.</div></details></div>
+</details>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Die Umform-Werkzeuge — und ihre Richtungen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Werkzeugkasten mit Richtungspfeilen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Summe → Produkt</th><th>Produkt → Summe</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)"><strong>Ausklammern:</strong> \(6x^2 + 9x = 3x(2x + 3)\)</td><td style="text-align:left;font-family:var(--sans)"><strong>Ausmultiplizieren:</strong> \(3x(2x+3) = 6x^2 + 9x\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)"><strong>Faktorisieren (Binome rückwärts):</strong> \(x^2 - 9 = (x-3)(x+3)\)</td><td style="text-align:left;font-family:var(--sans)"><strong>Binome vorwärts:</strong> \((x-3)(x+3) = x^2 - 9\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Die drei <strong>binomischen Formeln</strong> — in beide Richtungen lesbar:</p>
+  \[ (a+b)^2 = a^2 + 2ab + b^2, \qquad (a-b)^2 = a^2 - 2ab + b^2, \qquad (a+b)(a-b) = a^2 - b^2 \]
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — die Richtung wählen</div>
+  <p>Welche Richtung nützt wann?</p>
+  <ul style="margin-top:6px">
+    <li><strong>Zum Kürzen faktorisieren:</strong> \(\dfrac{x^2 - 9}{x + 3} = \dfrac{(x-3)(x+3)}{x+3} = x - 3\) — erst als Produkt ist Kürzen erlaubt.</li>
+    <li><strong>Zum Zusammenfassen ausmultiplizieren:</strong> \((x+1)^2 - x^2 = x^2 + 2x + 1 - x^2 = 2x + 1\).</li>
+  </ul>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — aus Summen kürzen</div>
+  <p>\(\dfrac{x + 6}{6} \neq x\)! Kürzen streicht gemeinsame <strong>Faktoren</strong>, nie Summanden. Probe mit \(x = 6\): \(\tfrac{12}{6} = 2 \neq 6\). Erst ausklammern macht kürzbar: \(\dfrac{6x + 9}{3} = \dfrac{3(2x + 3)}{3} = 2x + 3\) ✓</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Werkzeuge</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was macht Faktorisieren aus einer Summe?</p><ul class="mc-optionen"><li data-opt="A">eine grössere Summe</li><li data-opt="B">ein Produkt</li><li data-opt="C">einen Quotienten</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Faktorisieren = Struktur-Wechsel Summe → Produkt (Ausklammern oder Binome rückwärts).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Kürzen streicht gemeinsame <span class="mc-luecke"></span> — niemals Summanden.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Faktoren.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Faktorisiere \(x^2 - 25\) und \(4x^2 + 6x\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((x-5)(x+5)\) (3. Binom) und \(2x(2x + 3)\) (Ausklammern).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Vereinfache \(\dfrac{x^2 - 9}{x + 3}\) — und nenne den Struktur-Schritt, der das Kürzen erst erlaubt.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Faktorisieren: \(x^2 - 9 = (x-3)(x+3)\) macht den Zähler zum Produkt; dann kürzt der Faktor \((x+3)\): Ergebnis \(x - 3\) (für \(x \neq -3\)).</div></details></div>
+</details>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. STRUKTUR-REGELN ══ -->
+<h2 id="typen">Struktur-Regeln — was wann erlaubt ist</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Erlaubt bei Produkten — verboten bei Summen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Operation</th><th>bei Produkten ✓</th><th>bei Summen ✗</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Kürzen</td><td>\(\dfrac{a \cdot c}{b \cdot c} = \dfrac{a}{b}\)</td><td>\(\dfrac{a + c}{b + c} \neq \dfrac{a}{b}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Wurzel ziehen</td><td>\(\sqrt{a \cdot b} = \sqrt{a}\sqrt{b}\)</td><td>\(\sqrt{a + b} \neq \sqrt{a} + \sqrt{b}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Potenzieren</td><td>\((a b)^2 = a^2 b^2\)</td><td>\((a + b)^2 \neq a^2 + b^2\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Logarithmieren</td><td>\(\log(a b) = \log a + \log b\)</td><td>\(\log(a + b) \neq \log a + \log b\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Das Muster ist immer dasselbe: <strong>Multiplikative Strukturen verteilen sich, additive nicht.</strong> Die vierte Zeile kennst du aus <a class="quer" href="s1-3-logarithmen.html">↩ 1.3</a>, die dritte steckt hinter dem Einstiegs-Widget.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Struktur als Kopfrechen-Trick</div>
+  <p>Berechne \(17 \cdot 23\) im Kopf.</p>
+  <p><strong>Lösung:</strong> Struktur erkennen: \(17 \cdot 23 = (20 - 3)(20 + 3)\) — die dritte binomische Formel rückwärts:</p>
+  \[ (20-3)(20+3) = 20^2 - 3^2 = 400 - 9 = 391 \]
+  <p>Ebenso: \(99^2 = (100 - 1)^2 = 10000 - 200 + 1 = 9801\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Struktur-Regeln</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Umformung ist korrekt?</p><ul class="mc-optionen"><li data-opt="A">\(\sqrt{a+b} = \sqrt{a} + \sqrt{b}\)</li><li data-opt="B">\(\sqrt{a \cdot b} = \sqrt{a} \cdot \sqrt{b}\)</li><li data-opt="C">\((a+b)^2 = a^2 + b^2\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Nur multiplikative Strukturen verteilen sich (\(a, b \geq 0\)).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Multiplikative Strukturen verteilen sich — <span class="mc-luecke"></span> nicht.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">additive (Summen).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(51 \cdot 49\) im Kopf (3. Binom).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\((50+1)(50-1) = 2500 - 1 = 2499\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Widerlege \(\dfrac{a+c}{b+c} = \dfrac{a}{b}\) mit einer Zahlenprobe.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Z.B. \(a=1, b=2, c=2\): links \(\tfrac{3}{4}\), rechts \(\tfrac{1}{2}\) — das «Kürzen» von Summanden verändert den Wert.</div></details></div>
+</details>
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<h2 id="theorie">Strukturgerecht berechnen und prüfen</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Termwerte berechnen</div>
+  <p>Beim Einsetzen von Zahlen gilt die <strong>Hierarchie der Operationen</strong> (vgl. <a class="quer" href="s1-2-potenzen.html">↩ 1.2</a>): Klammern → Potenzen → Punkt → Strich. Negative Zahlen beim Einsetzen <strong>immer in Klammern</strong>:</p>
+  \[ 3x^2 - 2x + 1 \ \text{bei}\ x = -2: \qquad 3 \cdot (-2)^2 - 2 \cdot (-2) + 1 = 12 + 4 + 1 = 17 \]
+</div>
+
+<div class="block block-tipp" style="margin-top:10px">
+  <div class="block-titel">💡 Strategie — der Struktur-Fahrplan</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li><strong>Struktur bestimmen:</strong> Was ist der letzte Rechenschritt — Summe, Produkt, Potenz, Quotient?</li>
+    <li><strong>Werkzeug wählen:</strong> Kürzen? Erst faktorisieren. Zusammenfassen? Erst ausmultiplizieren.</li>
+    <li><strong>Umformen</strong> — jede Zeile eine Umformung.</li>
+    <li><strong>Zahlenprobe:</strong> Einen einfachen Wert in Original und Ergebnis einsetzen — stimmen beide überein?</li>
+  </ol>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Fahrplan am Doppelbruch</div>
+  <p>Vereinfache \(\dfrac{\tfrac{1}{2} + \tfrac{1}{3}}{\tfrac{1}{6}}\).</p>
+  <p><strong>Lösung:</strong> Struktur: Quotient, dessen Zähler eine Summe ist. Also erst den Zähler zusammenfassen: \(\tfrac{1}{2} + \tfrac{1}{3} = \tfrac{5}{6}\). Dann teilen:</p>
+  \[ \frac{5/6}{1/6} = \frac{5}{6} \cdot \frac{6}{1} = 5 \]
+  <p>Zahlenprobe überflüssig — aber die Struktur-Reihenfolge (innen vor aussen) war entscheidend.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Berechnen und Prüfen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie setzt man \(x = -3\) in \(x^2\) ein?</p><ul class="mc-optionen"><li data-opt="A">\(-3^2 = -9\)</li><li data-opt="B">\((-3)^2 = 9\)</li><li data-opt="C">beides gleich</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Negative Zahlen beim Einsetzen immer in Klammern — sonst ändert sich die Struktur.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Der letzte Schritt des Fahrplans ist die <span class="mc-luecke"></span> mit einem einfachen Wert.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Zahlenprobe.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Berechne \(25 \cdot 16 + 25 \cdot 4\) geschickt.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ausklammern: \(25 \cdot (16 + 4) = 25 \cdot 20 = 500\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Jemand hat \(x^2 + x\) zu \(x \cdot (x + 1)\) umgeformt. Prüfe mit \(x = 9\) — und erkläre, warum eine gelungene Probe die Umformung nicht <em>beweist</em>.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">\(81 + 9 = 90\) und \(9 \cdot 10 = 90\) ✓. Die Probe kann eine falsche Umformung <strong>widerlegen</strong>, aber eine richtige nie beweisen — zufällige Übereinstimmung bei einem Wert ist möglich. (Hier ist die Umformung tatsächlich allgemein richtig: Ausklammern.)</div></details></div>
+</details>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Struktur erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Wähle einen Term — welche Struktur hat er (letzter Rechenschritt)?</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Term</div>
+    <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">Welche Struktur?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Richtung wechseln</span></div>
+  <p>Forme um — und benenne jeweils die Richtung (Summe → Produkt oder umgekehrt):</p>
+  <ol class="aufg-liste">
+    <li>\(8x^2 - 12x\) (ausklammern)</li>
+    <li>\((2x + 5)^2\) (ausmultiplizieren)</li>
+    <li>\(x^2 - 49\) (faktorisieren)</li>
+    <li>\(9a^2 - 12ab + 4b^2\) (als Binom schreiben)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(4x(2x - 3)\) — Summe → Produkt.</li>
+        <li>\(4x^2 + 20x + 25\) — Potenz → Summe (1. Binom).</li>
+        <li>\((x - 7)(x + 7)\) — Differenz → Produkt (3. Binom).</li>
+        <li>\((3a - 2b)^2\) — Summe → Potenz (2. Binom rückwärts; Kontrolle des Mittelglieds: \(2 \cdot 3a \cdot 2b = 12ab\) ✓).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Strukturgerecht rechnen</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Termwert</div>
+    <p>Berechne \(3x^2 - 2x + 1\) für \(x = -2\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3a1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3a1', 17, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 3(-2)^2 - 2(-2) + 1 = 12 + 4 + 1 = 17 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Die fehlende Mitte</div>
+    <p>Berechne für \(a = 3\), \(b = 4\) die Differenz \((a+b)^2 - (a^2 + b^2)\).</p>
+    <div class="eingabe-row"><label>Differenz =&nbsp;</label><input type="text" id="a3b1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3b1', 24, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 49 - 25 = 24 = 2ab \quad \text{— das Mittelglied der binomischen Formel.} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Faktorisieren spart Arbeit</div>
+    <p>Berechne \(x^2 - 9\) für \(x = 13\) — über die faktorisierte Form.</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3c1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3c1', 160, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ (13-3)(13+3) = 10 \cdot 16 = 160 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Erst ausklammern, dann kürzen</div>
+    <p>Vereinfache \(\dfrac{6x + 9}{3}\) und berechne den Wert für \(x = 5\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3d1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3d1', 13, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \frac{3(2x + 3)}{3} = 2x + 3 \;\stackrel{x=5}{=}\; 13 \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Doppelbruch</div>
+    <p>Berechne \(\dfrac{\tfrac{1}{2} + \tfrac{1}{3}}{\tfrac{1}{6}}\).</p>
+    <div class="eingabe-row"><label>Wert =&nbsp;</label><input type="text" id="a3e1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a3e1', 5, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \frac{5/6}{1/6} = \frac{5}{6} \cdot 6 = 5 \quad \text{— innen (Zähler-Summe) vor aussen (Division).} \]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Kopfrechnen mit dem 3. Binom</span></div>
+  <p>Nutze \((a+b)(a-b) = a^2 - b^2\) rückwärts:</p>
+  <ol class="aufg-liste">
+    <li>\(17 \cdot 23\)</li>
+    <li>\(96 \cdot 104\)</li>
+  </ol>
+  <div class="eingabe-row"><label>17 · 23 =&nbsp;</label><input type="text" id="a4-1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a4-1', 391, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>96 · 104 =&nbsp;</label><input type="text" id="a4-2" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a4-2', 9984, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\((20-3)(20+3) = 400 - 9 = 391\).</li>
+        <li>\((100-4)(100+4) = 10000 - 16 = 9984\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Fehlumformungen entlarven</span></div>
+  <p>Alle vier Umformungen sind falsch. Widerlege jede mit einer Zahlenprobe und benenne den Struktur-Fehler:</p>
+  <ol class="aufg-liste">
+    <li>\(\dfrac{x + 6}{6} = x\)</li>
+    <li>\(\sqrt{a^2 + b^2} = a + b\)</li>
+    <li>\((2x)^3 = 2x^3\)</li>
+    <li>\(\dfrac{a + c}{b + c} = \dfrac{a}{b}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(x = 6\): \(\tfrac{12}{6} = 2 \neq 6\) — aus einer Summe gekürzt.</li>
+        <li>\(a = 3, b = 4\): \(\sqrt{25} = 5 \neq 7\) — Wurzel auf Summanden verteilt.</li>
+        <li>\(x = 1\): \(8 \neq 2\) — der Faktor 2 muss mitpotenziert werden: \((2x)^3 = 8x^3\).</li>
+        <li>\(a{=}1, b{=}2, c{=}2\): \(\tfrac{3}{4} \neq \tfrac{1}{2}\) — Summanden «gekürzt».</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Der quadratische Rahmen</span></div>
+  <p>Ein quadratischer Spiegel (Seite \(b = 0.8\) m) sitzt in einem quadratischen Rahmen (Aussenseite \(a = 1.2\) m). Gesucht ist die sichtbare Rahmenfläche \(a^2 - b^2\).</p>
+  <ol class="aufg-liste">
+    <li>Berechne die Rahmenfläche direkt.</li>
+    <li>Berechne sie über die faktorisierte Form \((a+b)(a-b)\) — welche Rechnung ist kopfrechenfreundlicher?</li>
+  </ol>
+  <div class="eingabe-row"><label>Fläche =&nbsp;</label><input type="text" id="a6-1" placeholder="m²"><button class="btn-pruef" onclick="chkNum('a6-1', 0.8, 0.01, 'm²')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(1.44 - 0.64 = 0.8\ \text{m}^2\).</li>
+        <li>\((1.2 + 0.8)(1.2 - 0.8) = 2 \cdot 0.4 = 0.8\ \text{m}^2\) — die faktorisierte Form ist reine Kopfrechnung: Die Struktur-Umformung <em>ist</em> der Rechenvorteil.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Nachbarzahlen-Trick <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Behauptung: «Das Produkt der Nachbarzahlen einer Zahl \(n\) ist immer \(n^2 - 1\).»</p>
+  <ol class="aufg-liste">
+    <li>Prüfe die Behauptung an \(n = 7\) und \(n = 20\).</li>
+    <li>Beweise sie allgemein mit einer binomischen Formel.</li>
+    <li>Berechne damit \(29 \cdot 31\) und \(199 \cdot 201\) im Kopf.</li>
+  </ol>
+  <div class="eingabe-row"><label>29 · 31 =&nbsp;</label><input type="text" id="a7-1" placeholder="Zahl"><button class="btn-pruef" onclick="chkNum('a7-1', 899, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>\(6 \cdot 8 = 48 = 49 - 1\) ✓; \(19 \cdot 21 = 399 = 400 - 1\) ✓.</li>
+        <li>\((n-1)(n+1) = n^2 - 1\) — die dritte binomische Formel, für <em>jedes</em> \(n\).</li>
+        <li>\(29 \cdot 31 = 900 - 1 = 899\); \(199 \cdot 201 = 40000 - 1 = 39999\) — der Beweis in Teil 2 macht aus zwei Proben eine Gewissheit: Genau das leistet Algebra gegenüber der Zahlenprobe.</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Der <strong>zuletzt ausgeführte Rechenschritt</strong> bestimmt die Struktur eines Terms (Summe, Produkt, Potenz, Quotient) — und die Struktur bestimmt das Werkzeug: <strong>Kürzen nur bei Faktoren</strong>, Wurzeln und Potenzen verteilen sich nur auf Produkte, für Summen gibt es keine Verteilregel. Die Umform-Werkzeuge arbeiten in zwei Richtungen (ausmultiplizieren ↔ faktorisieren); die dritte binomische Formel liefert Kopfrechen-Tricks. Und jede Umformung verträgt eine <strong>Zahlenprobe</strong>: Sie widerlegt Falsches sofort — beweisen kann nur die Algebra.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Frage</th><th>Antwort</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Welche Struktur?</td><td style="text-align:left;font-family:var(--sans)">zuletzt ausgeführter Rechenschritt</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Kürzen erlaubt?</td><td style="text-align:left;font-family:var(--sans)">nur gemeinsame Faktoren — vorher faktorisieren</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Binomische Formeln</td><td>\((a \pm b)^2 = a^2 \pm 2ab + b^2\); \((a+b)(a-b) = a^2 - b^2\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Verteilen erlaubt?</td><td style="text-align:left;font-family:var(--sans)">Wurzel/Potenz/Logarithmus nur über Produkte, nie über Summen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Negative einsetzen</td><td style="text-align:left;font-family:var(--sans)">immer in Klammern: \((-2)^2 = 4\)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Umformung prüfen</td><td style="text-align:left;font-family:var(--sans)">Zahlenprobe — widerlegt, beweist aber nicht</td></tr>
+  </tbody>
+</table>
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s1-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Regeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s1-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLF29x0idI4lWPWBvEXDrcCEZ54ZdtYazp" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme vereinfachen — Playlist</div><div class="lk-s">MathemaTrick · Ausklammern, Binome, Bruchterme</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzmBhxJfVgJ9pTv2QeqJsbO_" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Terme &amp; Gleichungen — Playlist</div><div class="lk-s">Lehrerschmidt · Schritt für Schritt</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/26312/aufgaben-zu-den-binomischen-formeln" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Binomische Formeln</div><div class="lk-s">vorwärts und rückwärts · mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/28874/aufgaben-zum-faktorisieren" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zum Faktorisieren</div><div class="lk-s">Ausklammern und Binome · mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -104,12 +575,132 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'schwerpunkt', id:'s1-1',
   kapitelNr:'1.1', kapitelTitel:'Grundlagen',
   prev:null,
   next:{nr:'1.2',titel:'Potenzen',url:'s1-2-potenzen.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+/* ══ EINSTIEG: Struktur-Waage ══ */
+function updateSW(){
+  const a = parseFloat(document.getElementById('sw-a').value);
+  const b = parseFloat(document.getElementById('sw-b').value);
+  document.getElementById('sw-av').textContent = a.toFixed(1);
+  document.getElementById('sw-bv').textContent = b.toFixed(1);
+  const links = (a + b) ** 2, rechts = a * a + b * b;
+  document.getElementById('sw-eq').innerHTML =
+    `(a+b)² = ${fmt2(links)} · a²+b² = ${fmt2(rechts)} · Differenz = ${fmt2(links - rechts)} = 2ab`;
+  const {ctx, W, H} = initCanvas('sw-canvas', 230, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const s = a + b;
+  const sk = s > 0 ? Math.min((H - 50) / s, (W / 2 - 50) / s) : 10;
+  const x0 = W * 0.28 - s * sk / 2, y0 = H - 26;
+  // Flächenbild (a+b)²: a² blau, b² orange, 2 Rechtecke ab grün
+  if(s > 0){
+    ctx.fillStyle = 'rgba(26,79,138,0.25)';
+    ctx.fillRect(x0, y0 - a * sk, a * sk, a * sk);
+    ctx.fillStyle = 'rgba(184,92,0,0.25)';
+    ctx.fillRect(x0 + a * sk, y0 - a * sk - b * sk, b * sk, b * sk);
+    ctx.fillStyle = 'rgba(31,107,58,0.3)';
+    ctx.fillRect(x0 + a * sk, y0 - a * sk, b * sk, a * sk);
+    ctx.fillRect(x0, y0 - a * sk - b * sk, a * sk, b * sk);
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.8;
+    ctx.strokeRect(x0, y0 - s * sk, s * sk, s * sk);
+    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0 + a * sk, y0); ctx.lineTo(x0 + a * sk, y0 - s * sk); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x0, y0 - a * sk); ctx.lineTo(x0 + s * sk, y0 - a * sk); ctx.stroke();
+    ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+    if(a > 0.6){ ctx.fillStyle = '#1a4f8a'; ctx.fillText('a²', x0 + a * sk / 2, y0 - a * sk / 2 + 4); }
+    if(b > 0.6){ ctx.fillStyle = '#b85c00'; ctx.fillText('b²', x0 + a * sk + b * sk / 2, y0 - a * sk - b * sk / 2 + 4); }
+    if(a > 0.6 && b > 0.6){
+      ctx.fillStyle = '#1f6b3a';
+      ctx.fillText('ab', x0 + a * sk + b * sk / 2, y0 - a * sk / 2 + 4);
+      ctx.fillText('ab', x0 + a * sk / 2, y0 - a * sk - b * sk / 2 + 4);
+    }
+  }
+  ctx.fillStyle = '#374151'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('(a+b)² — das ganze Quadrat', W * 0.28, H - 8);
+  // rechts: nur die zwei Teilquadrate
+  const x1 = W * 0.72 - s * sk / 2;
+  if(s > 0){
+    ctx.fillStyle = 'rgba(26,79,138,0.25)';
+    ctx.fillRect(x1, y0 - a * sk, a * sk, a * sk);
+    ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.6;
+    ctx.strokeRect(x1, y0 - a * sk, a * sk, a * sk);
+    ctx.fillStyle = 'rgba(184,92,0,0.25)';
+    ctx.fillRect(x1 + a * sk, y0 - a * sk - b * sk, b * sk, b * sk);
+    ctx.strokeStyle = '#b85c00';
+    ctx.strokeRect(x1 + a * sk, y0 - a * sk - b * sk, b * sk, b * sk);
+  }
+  ctx.fillStyle = '#374151';
+  ctx.fillText('a² + b² — nur die Teilquadrate', W * 0.72, H - 8);
+}
+['sw-a', 'sw-b'].forEach(id => document.getElementById(id).addEventListener('input', updateSW));
+
+/* ══ A1: Struktur erkennen ══ */
+const a1G = [
+  {label:'Term 1', desc:'3x(x − 2)', sol:'Produkt'},
+  {label:'Term 2', desc:'(a + b)²', sol:'Potenz'},
+  {label:'Term 3', desc:'a² + 2ab + b²', sol:'Summe'},
+  {label:'Term 4', desc:'x / (x + 1)', sol:'Quotient'},
+  {label:'Term 5', desc:'a² − b²', sol:'Differenz'},
+];
+const a1Opts = ['Summe', 'Differenz', 'Produkt', 'Quotient', 'Potenz'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! ${g.desc} ist ein(e) ${g.sol} — der letzte Rechenschritt entscheidet.`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Frage dich: Welcher Rechenschritt kommt beim Auswerten ganz zuletzt?';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()%]/g, '').replace(/\s/g, '');
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Struktur zuerst: Klammern vor Potenzen vor Punkt vor Strich — und negative Zahlen in Klammern einsetzen.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateSW();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  updateSW();
 });
 </script>
 </body>

@@ -4,6 +4,40 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [81] — 2026-07-06 · s1-1 Grundlagen: Vollausbau — das Schwerpunktfach ist komplett
+
+Das letzte offene Teilgebiet ausgebaut: s1-1 Grundlagen (Arithmetik/Algebra), ohne
+Quell-PDF entlang der einen RLP-Kompetenz («Strukturen von algebraischen Ausdrücken
+erkennen und beim Berechnen sowie Umformen entsprechend berücksichtigen»). Damit sind
+**alle 13 RLP-Teilgebiete des Schwerpunktfachs** (plus Ergänzungen 3.6 und 4.3d) als
+vollwertige Themenseiten verfügbar — im Index gibt es keine «geplant»-Karte mehr.
+
+- **`schwerpunkt/s1-1-grundlagen.html`** *(Stub → Vollausbau)* — Einstieg
+  Struktur-Waage «Ist \((a+b)^2 = a^2 + b^2\)?» (Slider-Widget mit Flächenbild:
+  das ganze Quadrat gegen die zwei Teilquadrate, Differenz \(2ab\) live);
+  Kernregel «der zuletzt ausgeführte Rechenschritt bestimmt die Struktur» mit
+  Struktur-Tabelle; Umform-Werkzeuge mit Richtungspfeilen (ausklammern ↔
+  ausmultiplizieren, Binome vorwärts/rückwärts); Struktur-Regeln-Tabelle
+  «Produkt ✓ / Summe ✗» (Kürzen, Wurzel, Potenz, Logarithmus — mit Querlinks
+  auf 1.2/1.3); strukturgerechtes Berechnen mit Struktur-Fahrplan und Zahlenprobe
+  («widerlegt, beweist nie»); A1 Struktur-Quiz (5 Terme), A2 Richtungs-Übungen,
+  A3 a–e chkNum (Termwert 17, Mittelglied 24, faktorisiert 160, gekürzt 13,
+  Doppelbruch 5), A4 Kopfrechnen mit dem 3. Binom (391, 9984), A5 vier
+  Fehlumformungen entlarven, A6 quadratischer Rahmen (0.8 m² auf zwei Wegen),
+  A7 Nachbarzahlen-Trick mit Beweis (Vertiefung).
+- **Infrastruktur:** Index-Karte 1.1 geplant → fertig — die letzte; Kette und nav.js
+  waren korrekt (s1-1 ist der Startpunkt des Schwerpunkt-Rundgangs, prev:null).
+- **Zusatzmaterial:** Druckseiten-Block W (Handout, Formelauszug, Teste-dich-selbst
+  mit 12 Aufgaben, Aufgabenserie mit 6 Anwendungen inkl. Linsen-Formel als
+  Struktur-Beispiel); bestehende Druckseiten byte-identisch. Anki-Deck mit
+  20 Karten, nur das neue apkg erzeugt.
+- **Ressourcen:** ohne neue Abrufe — MathemaTrick «Terme vereinfachen» und
+  Lehrerschmidt «Terme &amp; Gleichungen» aus der Map; serlo-Links aus dem
+  Sitemap-Cache (26312 binomische Formeln, 28874 Faktorisieren). Map §8 ergänzt.
+- Pre-Flight: `ALLE CHECKS BESTANDEN`.
+
+---
+
 ## [80] — 2026-07-06 · s1-2 Potenzen und s1-3 Logarithmen: Vollausbau
 
 Zwei Teilgebiete aus Lerngebiet 1 in einem Durchgang ausgebaut — Quellen: die

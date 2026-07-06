@@ -5671,6 +5671,223 @@ V_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s1-1  GRUNDLAGEN ARITHMETIK/ALGEBRA (STRUKTUR-BLICK)
+# ═══════════════════════════════════════════════════════════════════
+
+W_HANDOUT = r'''
+  <h2>1. Die Struktur eines Terms</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Grundregel</div>
+    <p>Der <strong>zuletzt ausgeführte Rechenschritt</strong> bestimmt die Struktur:
+    \( a^2 + 2ab + b^2 \) ist eine <strong>Summe</strong>, \( 3x(x-2) \) ein
+    <strong>Produkt</strong>, \( (a+b)^2 \) eine <strong>Potenz</strong>,
+    \( x/(x+1) \) ein <strong>Quotient</strong>. Die Struktur bestimmt das erlaubte
+    Werkzeug.</p>
+  </div>
+
+  <h2>2. Umform-Werkzeuge (beide Richtungen)</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Summe → Produkt</td><td class="li">Ausklammern (\( 6x^2 + 9x = 3x(2x+3) \)), Binome rückwärts</td></tr>
+      <tr><td class="li">Produkt → Summe</td><td class="li">Ausmultiplizieren, Binome vorwärts</td></tr>
+      <tr><td class="li">binomische Formeln</td><td>\( (a \pm b)^2 = a^2 \pm 2ab + b^2; \quad (a+b)(a-b) = a^2 - b^2 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Struktur-Regeln — Produkt ✓, Summe ✗</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Kürzen</td><td>\( \tfrac{ac}{bc} = \tfrac{a}{b} \), aber \( \tfrac{a+c}{b+c} \neq \tfrac{a}{b} \)</td></tr>
+      <tr><td class="li">Wurzel</td><td>\( \sqrt{ab} = \sqrt{a}\sqrt{b} \), aber \( \sqrt{a+b} \neq \sqrt{a} + \sqrt{b} \)</td></tr>
+      <tr><td class="li">Potenz</td><td>\( (ab)^2 = a^2 b^2 \), aber \( (a+b)^2 \neq a^2 + b^2 \)</td></tr>
+      <tr><td class="li">Logarithmus</td><td>\( \log(ab) = \log a + \log b \), aber nicht für Summen</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Merksatz:</strong> Multiplikative Strukturen verteilen sich — additive nicht.</p>
+
+  <h2>4. Strukturgerecht berechnen</h2>
+  <p>Hierarchie: Klammern → Potenzen → Punkt → Strich. Negative Zahlen beim Einsetzen
+  <strong>in Klammern</strong>: \( 3(-2)^2 - 2(-2) + 1 = 17 \). Struktur als Rechenvorteil:
+  \( 17 \cdot 23 = (20-3)(20+3) = 391 \); \( 99^2 = (100-1)^2 = 9801 \).</p>
+
+  <h2>5. Die Zahlenprobe</h2>
+  <p>Ein einfacher Wert, in Original und Ergebnis eingesetzt, <strong>widerlegt</strong> jede
+  falsche Umformung (z.B. \( (3+4)^2 = 49 \neq 25 \)) — beweisen kann nur die Algebra.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Erst die Struktur lesen (letzter Rechenschritt), dann das Werkzeug wählen:
+    Kürzen nur bei Faktoren, Verteilen nur über Produkte — und jede Umformung
+    verträgt eine Zahlenprobe.</p>
+  </div>
+'''
+
+W_FORMELAUSZUG = r'''
+  <h2>1. Struktur bestimmen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Grundregel</td><td class="li">zuletzt ausgeführter Rechenschritt = Struktur</td></tr>
+      <tr><td class="li">Beispiele</td><td class="li">\( (a+b)^2 \) Potenz · \( a^2 - b^2 \) Differenz · \( 3x(x-2) \) Produkt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Binomische Formeln</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">1. Binom</td><td>\( (a+b)^2 = a^2 + 2ab + b^2 \)</td></tr>
+      <tr><td class="li">2. Binom</td><td>\( (a-b)^2 = a^2 - 2ab + b^2 \)</td></tr>
+      <tr><td class="li">3. Binom</td><td>\( (a+b)(a-b) = a^2 - b^2 \)</td></tr>
+      <tr><td class="li">Kopfrechnen</td><td>\( 17 \cdot 23 = 400 - 9; \quad 99^2 = 10000 - 200 + 1 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Erlaubt / verboten</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Kürzen</td><td class="li">nur gemeinsame <strong>Faktoren</strong> — vorher faktorisieren</td></tr>
+      <tr><td class="li">Verteilen (√, Potenz, log)</td><td class="li">nur über Produkte/Quotienten, nie über Summen</td></tr>
+      <tr><td class="li">typische Fehler</td><td>\( \tfrac{x+6}{6} \neq x; \quad \sqrt{a^2+b^2} \neq a+b; \quad (2x)^3 = 8x^3 \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Berechnen und prüfen</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Hierarchie</td><td class="li">Klammern → Potenzen → Punkt → Strich</td></tr>
+      <tr><td class="li">negative Werte</td><td>immer in Klammern einsetzen: \( (-2)^2 = 4 \)</td></tr>
+      <tr><td class="li">Zahlenprobe</td><td class="li">widerlegt falsche Umformungen — beweist nie</td></tr>
+    </tbody>
+  </table>
+'''
+
+W_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Der <span class="lueck"></span> ausgeführte Rechenschritt bestimmt die Struktur.<br>
+      Kürzen streicht gemeinsame <span class="lueck"></span>, nie Summanden.<br>
+      Eine <span class="lueck"></span> widerlegt eine falsche Umformung.
+    </div>''')
+    + aufg(2, 'Struktur bestimmen', 1, r'''    <p>Bestimme die Struktur: (a) \( (a+b)^2 \) &nbsp; (b) \( 3x(x-2) \) &nbsp;
+    (c) \( a^2 - b^2 \) &nbsp; (d) \( \tfrac{x}{x+1} \)</p>
+''' + LINS)
+    + aufg(3, 'Termwert', 1, r'''    <p>Berechne \( 3x^2 - 2x + 1 \) für \( x = -2 \) (negative Werte in Klammern!).</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Umformen</div>\n'
+    + aufg(4, 'Ausklammern', 2, r'''    <p>Faktorisiere: (a) \( 8x^2 - 12x \) &nbsp; (b) \( 25 \cdot 16 + 25 \cdot 4 \)
+    (Rechenvorteil nutzen!)</p>
+''' + LINS)
+    + aufg(5, 'Binome vorwärts', 2, r'''    <p>Multipliziere aus: (a) \( (2x+5)^2 \) &nbsp; (b) \( (x-3)(x+3) \)</p>
+''' + LINS)
+    + aufg(6, 'Binome rückwärts', 2, r'''    <p>Faktorisiere: (a) \( x^2 - 49 \) &nbsp; (b) \( 9a^2 - 12ab + 4b^2 \)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Struktur-Regeln</div>\n'
+    + aufg(7, 'Kürzen', 2, r'''    <p>Vereinfache: (a) \( \dfrac{6x+9}{3} \) &nbsp; (b) \( \dfrac{x^2-9}{x+3} \)</p>
+''' + LINS)
+    + aufg(8, 'Fehler entlarven', 2, r'''    <p>Widerlege mit Zahlenproben: (a) \( \tfrac{x+6}{6} = x \) &nbsp;
+    (b) \( \sqrt{a^2+b^2} = a+b \)</p>
+''' + LINS)
+    + aufg(9, 'Doppelbruch', 3, r'''    <p>Berechne \( \dfrac{1/2 + 1/3}{1/6} \) — innen vor aussen!</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Struktur als Rechenvorteil</div>\n'
+    + aufg(10, 'Kopfrechnen', 2, r'''    <p>Berechne mit dem 3. Binom: (a) \( 17 \cdot 23 \) &nbsp; (b) \( 51 \cdot 49 \)</p>
+''' + LINS)
+    + aufg(11, 'Quadrat-Trick', 2, r'''    <p>Berechne \( 99^2 \) mit dem 2. Binom.</p>
+''' + LINS)
+    + aufg(12, 'Nachbarzahlen', 3, r'''    <p>Beweise: \( (n-1)(n+1) = n^2 - 1 \) — und berechne damit \( 29 \cdot 31 \).</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>zuletzt</strong> · <strong>Faktoren</strong> · <strong>Zahlenprobe</strong>.</p>''')
+    + loes(2, r'''    <p>(a) Potenz · (b) Produkt · (c) Differenz · (d) Quotient.</p>''')
+    + loes(3, r'''    <p>\( 3 \cdot 4 + 4 + 1 = 17 \).</p>''')
+    + loes(4, r'''    <p>(a) \( 4x(2x-3) \). (b) \( 25(16+4) = 500 \).</p>''')
+    + loes(5, r'''    <p>(a) \( 4x^2 + 20x + 25 \). (b) \( x^2 - 9 \).</p>''')
+    + loes(6, r'''    <p>(a) \( (x-7)(x+7) \). (b) \( (3a-2b)^2 \) — Mittelglied-Kontrolle
+    \( 2 \cdot 3a \cdot 2b = 12ab \) ✓.</p>''')
+    + loes(7, r'''    <p>(a) \( \tfrac{3(2x+3)}{3} = 2x+3 \). (b) \( \tfrac{(x-3)(x+3)}{x+3} = x-3 \)
+    (\( x \neq -3 \)).</p>''')
+    + loes(8, r'''    <p>(a) \( x=6 \): \( 2 \neq 6 \). (b) \( 3,4 \): \( 5 \neq 7 \).</p>''')
+    + loes(9, r'''    <p>\( \tfrac{5/6}{1/6} = 5 \).</p>''')
+    + loes(10, r'''    <p>(a) \( 400 - 9 = 391 \). (b) \( 2500 - 1 = 2499 \).</p>''')
+    + loes(11, r'''    <p>\( (100-1)^2 = 10000 - 200 + 1 = 9801 \).</p>''')
+    + loes(12, r'''    <p>3. Binom mit \( a = n, b = 1 \); \( 29 \cdot 31 = 900 - 1 = 899 \).</p>''')
+)
+
+W_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Immer zuerst die Struktur bestimmen — dann das Werkzeug wählen.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Kopfrechnen</td><td>Binom-Tricks an der Kasse</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Handwerk</td><td>Der quadratische Rahmen</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Fehleranalyse</td><td>Vier Fehlumformungen</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Geometrie</td><td>Flächenbeweis der Binome</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Technik</td><td>Formel strukturgerecht auswerten</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Zahlentheorie</td><td>Nachbarzahlen und Quadrate</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Binom-Tricks an der Kasse', 2, r'''    <p>Berechne im Kopf — mit der passenden binomischen Formel:</p>
+    <p>(a) \( 17 \cdot 23 \) &nbsp;&nbsp; (b) \( 96 \cdot 104 \) &nbsp;&nbsp;
+    (c) \( 99^2 \)</p>
+''' + LINS4, tag='Kopfrechnen')
+    + aufg(2, 'Der quadratische Rahmen', 2, r'''    <p>Ein quadratischer Spiegel (\( b = 0.8 \) m) sitzt in einem quadratischen Rahmen
+    (Aussenseite \( a = 1.2 \) m).</p>
+    <p>(a) Berechne die Rahmenfläche \( a^2 - b^2 \) direkt.</p>
+    <p>(b) Berechne sie über \( (a+b)(a-b) \) — welche Variante ist
+    kopfrechenfreundlicher?</p>
+''' + LINS4, tag='Handwerk')
+    + aufg(3, 'Vier Fehlumformungen', 2, r'''    <p>Widerlege jede Umformung mit einer Zahlenprobe und benenne den Struktur-Fehler:</p>
+    <p>(a) \( \tfrac{x+6}{6} = x \) &nbsp; (b) \( \sqrt{a^2+b^2} = a+b \) &nbsp;
+    (c) \( (2x)^3 = 2x^3 \) &nbsp; (d) \( \tfrac{a+c}{b+c} = \tfrac{a}{b} \)</p>
+''' + LINS4, tag='Fehleranalyse')
+    + aufg(4, 'Flächenbeweis der Binome', 3, r'''    <p>Ein Quadrat mit Seite \( a + b \) wird durch zwei Schnitte in vier Teilflächen
+    zerlegt.</p>
+    <p>(a) Skizziere die Zerlegung und beschrifte die vier Teilflächen.</p>
+    <p>(b) Lies daraus die erste binomische Formel ab.</p>
+    <p>(c) Warum «fehlt» im falschen \( a^2 + b^2 \) genau \( 2ab \)?</p>
+''' + LINS4, tag='Geometrie')
+    + aufg(5, 'Formel strukturgerecht auswerten', 3, r'''    <p>Die Brennweite einer Linse erfüllt \( \tfrac{1}{f} = \tfrac{1}{g} + \tfrac{1}{b} \)
+    mit \( g = 30 \) cm und \( b = 20 \) cm.</p>
+    <p>(a) Bestimme die Struktur der rechten Seite und fasse sie zusammen.</p>
+    <p>(b) Berechne \( f \) — warum wäre «\( f = g + b = 50 \)» ein Struktur-Fehler?</p>
+''' + LINS4, tag='Technik')
+    + aufg(6, 'Nachbarzahlen und Quadrate', 3, r'''    <p>(a) Beweise mit einer binomischen Formel: \( (n-1)(n+1) = n^2 - 1 \).</p>
+    <p>(b) Berechne damit \( 199 \cdot 201 \).</p>
+    <p>(c) Zeige umgekehrt: \( n^2 = (n-1)(n+1) + 1 \) — und nutze das für \( 41^2 \)
+    (über \( 40 \cdot 42 \)).</p>
+''' + LINS4, tag='Zahlentheorie')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( (20-3)(20+3) = 391 \). (b) \( (100-4)(100+4) = 9984 \).
+    (c) \( (100-1)^2 = 9801 \).</p>''')
+    + loes(2, r'''    <p>(a) \( 1.44 - 0.64 = 0.8\ \text{m}^2 \).</p>
+    <p>(b) \( 2 \cdot 0.4 = 0.8\ \text{m}^2 \) — die faktorisierte Form ist reine
+    Kopfrechnung.</p>''')
+    + loes(3, r'''    <p>(a) \( x=6 \): \( 2 \neq 6 \) — aus Summe gekürzt. (b) \( 3,4 \): \( 5 \neq 7 \)
+    — Wurzel verteilt. (c) \( x=1 \): \( 8 \neq 2 \) — Faktor nicht mitpotenziert.
+    (d) \( 1,2,2 \): \( \tfrac{3}{4} \neq \tfrac{1}{2} \) — Summanden «gekürzt».</p>''')
+    + loes(4, r'''    <p>(a) Teilflächen: \( a^2 \), \( b^2 \) und zwei Rechtecke \( ab \).</p>
+    <p>(b) Gesamtfläche \( (a+b)^2 = a^2 + 2ab + b^2 \).</p>
+    <p>(c) \( a^2 + b^2 \) zählt nur die zwei Quadrate — die beiden Rechtecke
+    \( 2ab \) fehlen.</p>''')
+    + loes(5, r'''    <p>(a) Summe von Quotienten: \( \tfrac{1}{30} + \tfrac{1}{20} = \tfrac{2+3}{60}
+    = \tfrac{5}{60} = \tfrac{1}{12} \).</p>
+    <p>(b) \( f = 12 \) cm. «\( g + b \)» addiert die Kehrwerte falsch — die Struktur
+    (Kehrwert einer Summe von Kehrwerten) lässt sich nicht «durchaddieren».</p>''')
+    + loes(6, r'''    <p>(a) 3. Binom mit \( b = 1 \).</p>
+    <p>(b) \( 200^2 - 1 = 39\,999 \).</p>
+    <p>(c) \( 41^2 = 40 \cdot 42 + 1 = 1680 + 1 = 1681 \).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -5853,6 +6070,14 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', V_TDS),
     ('s1-3-logarithmen', 'Logarithmen', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Logarithmen', STYLE_SERIE, '1.0', '', V_SERIE),
+    ('s1-1-grundlagen', 'Grundlagen Arithmetik/Algebra', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', W_HANDOUT),
+    ('s1-1-grundlagen', 'Grundlagen Arithmetik/Algebra', 'Formelauszug', 'formelauszug.html',
+     'Grundlagen Arithmetik/Algebra — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, W_FORMELAUSZUG),
+    ('s1-1-grundlagen', 'Grundlagen Arithmetik/Algebra', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', W_TDS),
+    ('s1-1-grundlagen', 'Grundlagen Arithmetik/Algebra', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Grundlagen Arithmetik/Algebra', STYLE_SERIE, '1.0', '', W_SERIE),
 ]
 
 

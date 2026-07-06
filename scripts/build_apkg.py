@@ -1950,6 +1950,50 @@ s13_cards = [
      '<b>1</b> — Basiswechsel: (lg b/lg a)·(lg a/lg b) = 1; die beiden sind Kehrwerte.'),
 ]
 
+# ─── s1-1 Grundlagen Arithmetik/Algebra (Schwerpunkt) ───
+s11_cards = [
+    ('Was bestimmt die Struktur eines Terms?',
+     'Der <b>zuletzt ausgeführte Rechenschritt</b>: (a+b)² ist eine Potenz, a²+b² eine Summe, 3x(x−2) ein Produkt.'),
+    ('Welche Struktur hat (a+b)²?',
+     '<b>Potenz</b> — die Klammer wird zuerst berechnet, das Potenzieren kommt zuletzt.'),
+    ('Welche Struktur hat x/(x+1)?',
+     '<b>Quotient</b> — zuletzt wird dividiert.'),
+    ('(a+b)² = a²+b²?',
+     '<b>Falsch!</b> (a+b)² = a² + <b>2ab</b> + b². Probe 3,4: 49 ≠ 25 — Differenz 2ab = 24.'),
+    ('Die drei binomischen Formeln?',
+     '<b>(a+b)² = a²+2ab+b²; (a−b)² = a²−2ab+b²; (a+b)(a−b) = a²−b²</b>.'),
+    ('Was heisst Faktorisieren?',
+     'Struktur-Wechsel <b>Summe → Produkt</b>: Ausklammern (6x²+9x = 3x(2x+3)) oder Binome rückwärts (x²−9 = (x−3)(x+3)).'),
+    ('Wann darf man kürzen?',
+     'Nur gemeinsame <b>Faktoren</b> — nie Summanden! (x+6)/6 ≠ x (Probe x=6: 2 ≠ 6). Erst faktorisieren, dann kürzen.'),
+    ('Vereinfache (x²−9)/(x+3).',
+     'Faktorisieren: (x−3)(x+3)/(x+3) = <b>x−3</b> (für x ≠ −3) — erst als Produkt ist Kürzen erlaubt.'),
+    ('√(a²+b²) = a+b?',
+     '<b>Falsch!</b> Probe 3,4: √25 = 5 ≠ 7. Die Wurzel verteilt sich nur auf <b>Produkte</b>: √(ab) = √a·√b.'),
+    ('Das grosse Struktur-Muster?',
+     '<b>Multiplikative Strukturen verteilen sich, additive nicht</b> — gilt für Kürzen, Wurzeln, Potenzen und Logarithmen.'),
+    ('(2x)³ = ?',
+     '<b>8x³</b> — der Faktor 2 wird mitpotenziert; 2x³ wäre ein Struktur-Fehler.'),
+    ('Wie setzt man negative Zahlen ein?',
+     '<b>Immer in Klammern</b>: x = −2 in x² gibt (−2)² = 4, nicht −2² = −4.'),
+    ('Termwert 3x² − 2x + 1 bei x = −2?',
+     '3·(−2)² − 2·(−2) + 1 = 12 + 4 + 1 = <b>17</b>.'),
+    ('Kopfrechen-Trick 17 · 23?',
+     '<b>(20−3)(20+3) = 400 − 9 = 391</b> — die 3. binomische Formel rückwärts.'),
+    ('Kopfrechen-Trick 99²?',
+     '<b>(100−1)² = 10000 − 200 + 1 = 9801</b> — das 2. Binom.'),
+    ('Nachbarzahlen-Regel?',
+     '<b>(n−1)(n+1) = n² − 1</b> — z.B. 29·31 = 900−1 = 899; umgekehrt 41² = 40·42+1.'),
+    ('Was leistet die Zahlenprobe?',
+     'Sie <b>widerlegt</b> falsche Umformungen sofort — <b>beweisen</b> kann sie nie (zufällige Treffer möglich); beweisen tut die Algebra.'),
+    ('Doppelbruch (1/2 + 1/3)/(1/6)?',
+     'Innen vor aussen: Zähler = 5/6; (5/6)/(1/6) = <b>5</b>.'),
+    ('Der Struktur-Fahrplan?',
+     '1. <b>Struktur bestimmen</b> · 2. Werkzeug wählen (kürzen → erst faktorisieren) · 3. umformen · 4. <b>Zahlenprobe</b>.'),
+    ('25·16 + 25·4 geschickt?',
+     '<b>Ausklammern:</b> 25·(16+4) = 25·20 = 500 — Struktur als Rechenvorteil.'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -2053,6 +2097,8 @@ SP_DECKS = [
      'Potenzgesetze mit ganzzahligen und rationalen Exponenten, Hierarchie der Operationen, Zehnerpotenzen.', s12_cards),
     ('s1-3-logarithmen', '1.3 Logarithmen',
      'Definition, Logarithmengesetze, Basiswechsel, Exponentialgleichungen, logarithmische Skalen.', s13_cards),
+    ('s1-1-grundlagen', '1.1 Grundlagen Arithmetik/Algebra',
+     'Struktur-Blick: letzter Rechenschritt, binomische Formeln, Kürzen nur bei Faktoren, Zahlenprobe.', s11_cards),
 ]
 
 for slug, deck_short, deck_desc, cards in SP_DECKS:
