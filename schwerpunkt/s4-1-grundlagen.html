@@ -19,7 +19,58 @@ MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
-/* Themen-spezifische Styles werden hier ergänzt, sobald das Kapitel ausgearbeitet ist. */
+/* ── Shared widget styles (Muster: g3-2) ── */
+.widget { background:var(--weiss); border:1px solid var(--linie); border-radius:14px; overflow:hidden; box-shadow:var(--s); margin:16px 0; }
+.widget-header { padding:16px 22px 14px; border-bottom:1px solid var(--linie); background:var(--papier); }
+.widget-header h3 { font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--tinte); margin-bottom:3px; }
+.widget-header p { font-size:0.8rem; color:var(--tinte-2); }
+.widget-body { padding:20px 22px; }
+
+/* ── Slider row ── */
+.sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+.sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+.sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+.sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+.sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+
+/* ── Formula display ── */
+.formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
+.formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:5px; }
+.formel-live .fl-eq { font-family:var(--mono); font-size:1.15rem; font-style:italic; color:var(--tinte); font-weight:700; }
+
+/* ── Two-col layout ── */
+.zwei-spalten { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .zwei-spalten { grid-template-columns:1fr; } }
+
+/* ── Canvas container ── */
+.cv-wrap { background:var(--weiss); border:1px solid var(--linie); border-radius:9px; overflow:hidden; max-width:420px; margin:0 auto; }
+.zwei-spalten .cv-wrap { max-width:none; }
+
+/* ── Table highlight ── */
+.ftb-tabelle tbody tr.aktiv-zeile td { background:var(--blau-hell) !important; font-weight:700; color:var(--blau); }
+
+/* ── Typ-Buttons ── */
+.typ-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.typ-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.typ-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.typ-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+
+/* ── Aufgaben ── */
+.graf-btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.graf-btn { font-family:var(--mono); font-size:0.72rem; font-weight:700; padding:5px 13px; border-radius:20px; border:1.5px solid var(--linie); background:var(--papier-2); cursor:pointer; color:var(--tinte-2); transition:all 0.15s; }
+.graf-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
+.graf-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.eingabe-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.eingabe-row input[type=text] { font-family:var(--mono); font-size:0.88rem; padding:6px 12px; border:1.5px solid var(--linie); border-radius:7px; background:var(--papier-2); color:var(--tinte); width:120px; outline:none; transition:border-color 0.15s; }
+.eingabe-row input:focus { border-color:var(--blau-rand); }
+.btn-pruef { background:var(--blau); color:#fff; border:none; border-radius:7px; padding:7px 16px; font-family:var(--sans); font-size:0.82rem; font-weight:700; cursor:pointer; }
+.btn-pruef:hover { background:#133d6e; }
+.cr { margin-top:9px; padding:9px 13px; border-radius:7px; font-size:0.85rem; display:none; }
+.cr.ok    { background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen-rand); }
+.cr.err   { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
+
+/* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
+   sind zentral in ../style.css definiert — hier NICHT überschreiben. */
 </style>
 </head>
 <body>
@@ -31,16 +82,10 @@ MathJax = {
 <div class="page-titel">
   <div class="pt-bereich">Schwerpunktfach · Lerngebiet 4 · Geometrie · 70 Lektionen</div>
   <h1 class="pt-h1">4.1 Grundlagen</h1>
+  <div class="pt-untertitel">Der Werkzeugkasten fürs Lerngebiet Geometrie</div>
 </div>
 
-<!-- Stub-Banner: Seite ist noch in Vorbereitung -->
-<div class="stub-banner">
-  <strong>In Vorbereitung</strong>
-  Diese Seite ist noch in Vorbereitung — die Themenstruktur und RLP-Kompetenzen stehen, der Inhalt folgt. Stand: Mai 2026.
-</div>
-
-<!-- RLP-Kompetenzen (1:1 aus RLP 2030 zitiert) -->
-<p class="lead">Die <strong>räumliche Geometrie</strong> baut auf der Planimetrie auf: aus Flächen werden Körper, aus Längen werden Volumen. Hier wiederholst du die Grundkonstruktionen im Raum, lernst die <strong>Parallelperspektive</strong> als Zeichenwerkzeug und bereitest den Übergang zu Stereometrie und Vektorgeometrie vor.</p>
+<p class="lead">Bevor gerechnet wird, wird <strong>gezeichnet</strong>: Eine gute Skizze macht räumliche Aufgaben erst greifbar — und verrät am Schluss, ob das Resultat überhaupt <strong>plausibel</strong> ist. Diese Seite liefert das Handwerkszeug fürs ganze Lerngebiet: <strong>Schrägbild</strong> und <strong>Netz</strong>, die Lagebeziehungen von Punkt, Gerade und Ebene im Raum, <strong>Winkel im Raum</strong> — und die Skizzen-Strategie mit Plausibilitäts-Check.</p>
 
 <div class="rlp-kompetenzen">
   <div class="rlp-titel">📋 Kompetenzen nach RLP 2030 — Teilgebiet 4.1</div>
@@ -49,49 +94,481 @@ MathJax = {
   </ul>
 </div>
 
+<details class="lernziele">
+  <summary>🎯 Lernziele — das kann ich nach dieser Seite</summary>
+  <div class="lz-body">
+    <ul>
+      <li>Ich kann Körper im Schrägbild darstellen: Frontflächen in wahrer Grösse, Tiefenkanten mit Verzerrungswinkel \(\alpha\) und Verkürzungsfaktor \(q\).</li>
+      <li>Ich kann das Netz (die Abwicklung) eines Körpers zeichnen und als Grundlage für Oberflächenberechnungen nutzen.</li>
+      <li>Ich kann die gegenseitigen Lagen von Geraden und Ebenen im Raum benennen — inklusive windschief.</li>
+      <li>Ich kann Winkel zwischen Gerade und Ebene (über die Projektion) sowie zwischen zwei Ebenen (senkrecht zur Schnittgeraden) bestimmen.</li>
+      <li>Ich kann die Begriffe Oberfläche und Volumen erklären und den Satz von Cavalieri anschaulich begründen.</li>
+      <li>Ich kann Resultate mit Skizze, Überschlag und Grenzfall-Denken auf Plausibilität prüfen.</li>
+    </ul>
+  </div>
+</details>
+
 
 <!-- ══ 2. EINSTIEG ══ -->
-<h2 id="einstieg">Einstieg</h2>
-<p><em>Wird mit konkretem Anwendungsbeispiel ausgearbeitet.</em></p>
+<h2 id="einstieg">Einstieg — drei Dimensionen auf zwei bringen</h2>
+
+<p>Papier ist flach, Körper sind es nicht. Das <strong>Schrägbild</strong> löst das Problem mit zwei Stellschrauben: Die nach hinten laufenden Kanten werden unter dem <strong>Verzerrungswinkel</strong> \(\alpha\) gezeichnet und um den <strong>Faktor</strong> \(q\) verkürzt. Üblich sind \(\alpha = 45°\) mit \(q = \tfrac{1}{2}\) — oder \(\alpha = 30°\) mit \(q = \tfrac{1}{3}\).</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>📐 Schrägbild-Labor — \(\alpha\) und \(q\) am Quader</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Stelle die Standardpaare \(45°/0.5\) und \(30°/0.33\) ein und vergleiche. Was passiert bei \(q = 1\) (keine Verkürzung) — wirkt der Quader noch echt? Und was bleibt bei jeder Einstellung unverändert?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Stelle die Standardpaare fünfundvierzig Grad mit Faktor null Komma fünf und dreissig Grad mit einem Drittel ein und vergleiche. Was passiert bei q gleich eins — wirkt der Quader noch echt? Und was bleibt bei jeder Einstellung unverändert?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die <strong>Frontfläche</strong> bleibt immer in wahrer Grösse — nur die Tiefenkanten werden verzerrt. Parallele Kanten bleiben parallel. Ohne Verkürzung (\(q = 1\)) wirkt der Körper zu tief: Das Auge erwartet die Verkürzung.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Frontfläche bleibt immer in wahrer Grösse — nur die Tiefenkanten werden verzerrt. Parallele Kanten bleiben parallel. Ohne Verkürzung wirkt der Körper zu tief: Das Auge erwartet die Verkürzung.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Quader 5 × 4 × 3 cm · Frontfläche blau in wahrer Grösse · Tiefenkanten orange verzerrt</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Winkel <span class="var">\(\alpha\)</span> [°]</label><input type="range" id="sb-a" min="15" max="75" step="5" value="45"><span class="sl-val" id="sb-av">45</span></div>
+      <div class="sl-grp akz-orange"><label>Faktor <span class="var">\(q\)</span></label><input type="range" id="sb-q" min="0.2" max="1" step="0.01" value="0.5"><span class="sl-val" id="sb-qv">0.50</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Tiefenkante 4 cm im Bild</div>
+      <div class="fl-eq" id="sb-eq">Bildlänge = 4 · 0.50 = 2.0 cm unter 45°</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="sb-canvas" height="240"></canvas></div>
+  </div>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Was sehen wir?</div>
+  <p>Das Schrägbild ist eine <strong>schiefe Parallelprojektion</strong> mit klaren Regeln:</p>
+  <ul style="margin-top:6px">
+    <li>Zur Bildebene parallele Strecken und Flächen erscheinen in <strong>wahrer Grösse</strong>.</li>
+    <li>Tiefenkanten: Winkel \(\alpha\), Länge mal \(q\) — am Original parallele Strecken bleiben parallel.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Einstieg</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Flächen erscheinen im Schrägbild in wahrer Grösse?</p><ul class="mc-optionen"><li data-opt="A">alle</li><li data-opt="B">die zur Bildebene parallelen</li><li data-opt="C">keine</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Nur Frontflächen — alles andere wird verzerrt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die üblichen Wertepaare sind \(\alpha = 45°\) mit \(q = \tfrac{1}{2}\) oder \(\alpha = 30°\) mit \(q =\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\tfrac{1}{3}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Eine Tiefenkante ist 6 cm lang. Wie lang erscheint sie im Schrägbild mit \(q = \tfrac{1}{2}\)?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(6 \cdot 0.5 = 3\) cm.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Im Schrägbild (\(q = \tfrac{1}{3}\)) misst du eine Tiefenkante von 2 cm. Wie lang ist sie am Körper wirklich?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Rückwärts: \(2 : \tfrac{1}{3} = 6\) cm — beim Ablesen aus Schrägbildern immer zuerst fragen, ob die Strecke verzerrt ist!</div></details></div>
+</details>
 
 
 <!-- ══ 3. DEFINITION ══ -->
-<h2 id="definition">Definition</h2>
-<p><em>Wird ausgearbeitet — formal nach FTB-Notation.</em></p>
+<h2 id="definition">Schrägbild und Netz</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Schrägbild (schiefe Parallelprojektion)</div>
+  <p>Projektionsvorschrift: Senkrecht zur Bildebene nach hinten laufende Strecken werden unter dem <strong>Verzerrungswinkel \(\alpha\)</strong> und um den <strong>Faktor \(q\)</strong> verkürzt abgetragen.</p>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <tbody>
+      <tr><td style="font-family:var(--sans);text-align:left;width:40%">Frontflächen</td><td style="text-align:left;font-family:var(--sans)">wahre Grösse</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Tiefenkanten</td><td style="text-align:left;font-family:var(--sans)">Winkel \(\alpha\), Länge \(\times\, q\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Parallelität</td><td style="text-align:left;font-family:var(--sans)">bleibt erhalten</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">übliche Paare</td><td>\(\alpha = 45°,\ q = \tfrac{1}{2}\) oder \(\alpha = 30°,\ q = \tfrac{1}{3}\)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Netz (Abwicklung)</div>
+  <p>Das <strong>Netz</strong> entsteht, wenn man den Körper gedanklich aufschneidet und alle Begrenzungsflächen in eine Ebene klappt oder abrollt. Es zeigt jede Fläche <strong>unverzerrt</strong> — deshalb ist es die Grundlage jeder Oberflächenberechnung (und jeder Bastelvorlage).</p>
+</div>
+
+<div class="block block-tipp">
+  <div class="block-titel">💡 Schrägbild oder Netz?</div>
+  <p><strong>Schrägbild</strong> für den Überblick und für Strecken/Winkel <em>im</em> Körper — <strong>Netz</strong> für Flächen. Wer die Oberfläche berechnet, zählt am Netz ab, welche Teilflächen es braucht; wer eine Diagonale sucht, zeichnet das Schrägbild und legt das rechtwinklige Dreieck hinein.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Darstellungen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wofür ist das Netz das richtige Werkzeug?</p><ul class="mc-optionen"><li data-opt="A">für Oberflächenberechnungen</li><li data-opt="B">für Volumenberechnungen</li><li data-opt="C">für Schnittwinkel im Raum</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Das Netz zeigt alle Begrenzungsflächen unverzerrt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Im Netz erscheint jede Fläche <span class="mc-luecke"></span>, im Schrägbild nur die Frontflächen.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">unverzerrt (in wahrer Grösse).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Aus wie vielen Flächen besteht das Netz eines Quaders — und wie viele Rechteck-Formate sind es höchstens?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Sechs Flächen, paarweise kongruent — höchstens drei Formate.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum kann man am Schrägbild keine Flächeninhalte «ausmessen»?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Alle nicht frontparallelen Flächen sind verzerrt: Winkel und Längen stimmen nicht (Tiefenkanten sind um \(q\) verkürzt). Messen darf man nur am Netz — oder rechnen.</div></details></div>
+</details>
 
 
-<!-- ══ 4. DARSTELLUNGEN / VERANSCHAULICHUNG ══ -->
-<h2 id="darstellungen">Darstellungen</h2>
-<p><em>Wird ausgearbeitet — Verknüpfung der Darstellungsformen, wo sinnvoll interaktiv.</em></p>
+<!-- ══ 4. DARSTELLUNGEN ══ -->
+<h2 id="darstellungen">Punkt, Gerade und Ebene im Raum</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Die Grundobjekte</div>
+  <p><strong>Punkte</strong> \(A, B, C, \dots\) — <strong>Geraden</strong> \(g = AB\) (durch zwei Punkte bestimmt) — <strong>Ebenen</strong> \(E = ABC\) (durch drei Punkte bestimmt, die nicht auf einer Geraden liegen).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Gegenseitige Lagen</div>
+  <table class="ftb-tabelle" style="margin:6px 0 0">
+    <thead><tr><th>Paarung</th><th>mögliche Lagen</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gerade – Gerade</td><td style="text-align:left;font-family:var(--sans)">identisch · parallel · schneidend · <strong>windschief</strong> (nur im Raum!)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Gerade – Ebene</td><td style="text-align:left;font-family:var(--sans)">in der Ebene · parallel · <strong>Durchstosspunkt</strong></td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Ebene – Ebene</td><td style="text-align:left;font-family:var(--sans)">identisch · parallel · <strong>Schnittgerade</strong></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:6px">Rechnerisch hast du diese Lagen in <a class="quer" href="s4-3c-geraden.html">↩ 4.3c</a> und <a class="quer" href="s4-3d-ebenen.html">↩ 4.3d</a> behandelt — hier geht es ums <strong>Sehen</strong> am Körper: Am Quader sind z.B. eine Bodenkante und eine versetzte senkrechte Kante windschief.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 1 — Lagen am geraden Prisma (FTB)</div>
+  <p>Im Dreiecksprisma \(ABCDEF\) (Grundfläche \(ABC\) unten, Deckfläche \(DEF\) oben):</p>
+  <ul style="margin-top:6px">
+    <li>\(AB\) und \(EF\) sind <strong>windschief</strong> — sie schneiden sich nicht und sind nicht parallel.</li>
+    <li>\(CF\) und \(AD\) sind <strong>parallel</strong> (beides senkrechte Kanten).</li>
+    <li>\(AB\) und \(BC\) <strong>schneiden</strong> sich in \(B\).</li>
+    <li>Die Ebenen \(ABC\) und \(DEF\) sind <strong>parallel</strong>; zwei Seitenflächen-Ebenen schneiden sich in einer Kanten-<strong>Geraden</strong>.</li>
+  </ul>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Lagen</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wodurch ist eine Ebene eindeutig bestimmt?</p><ul class="mc-optionen"><li data-opt="A">durch zwei Punkte</li><li data-opt="B">durch drei Punkte, die nicht auf einer Geraden liegen</li><li data-opt="C">durch eine Gerade</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Drei Punkte auf einer Geraden lassen unendlich viele Ebenen zu.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Zwei Ebenen, die nicht parallel und nicht identisch sind, schneiden sich in einer <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Schnittgeraden.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Wie viele Kanten eines Würfels sind zu einer gegebenen Kante windschief?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Vier — von den 11 übrigen Kanten sind 3 parallel und 4 schneidend.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum gibt es «windschief» in der Ebene nicht?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">In der Ebene müssen sich zwei nicht parallele Geraden schneiden — es fehlt die dritte Dimension zum «Aneinander-Vorbeilaufen» in verschiedenen Höhen.</div></details></div>
+</details>
 
 
-<!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
-<h2 id="typen">Typen / Spezialfälle</h2>
-<p><em>Wird ausgearbeitet — Übersichtstabelle und Klick-Visualisierung.</em></p>
+<!-- ══ 5. WINKEL IM RAUM ══ -->
+<h2 id="typen">Winkel im Raum</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Winkel zwischen Gerade und Ebene</div>
+  <p>Der Winkel \(\varphi \in \left]0°;\ 90°\right]\) zwischen einer Geraden \(g\) und einer Ebene \(E\) ist der Winkel zwischen \(g\) und ihrer <strong>senkrechten Projektion</strong> \(g'\) in die Ebene — dem «Schatten» von \(g\) bei senkrechtem Licht. Eine <strong>Lotgerade</strong> steht senkrecht auf der ganzen Ebene (\(\varphi = 90°\)).</p>
+</div>
+
+<div class="block block-def" style="margin-top:10px">
+  <div class="block-titel">📘 Winkel zwischen zwei Ebenen</div>
+  <p>Der Winkel zwischen \(E_1\) und \(E_2\) mit Schnittgerade \(s\): In einem Punkt \(P \in s\) errichtet man in <em>jeder</em> Ebene die Senkrechte zu \(s\) — der Winkel zwischen diesen beiden Geraden ist der Ebenenwinkel. Bei \(\varphi = 90°\) stehen die Ebenen <strong>normal</strong> (senkrecht) zueinander.</p>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 2 — Raumdiagonale gegen die Grundfläche</div>
+  <p>Wie steil steigt die Raumdiagonale eines Würfels (Kante \(a\)) gegen die Grundfläche an?</p>
+  <p><strong>Lösung:</strong> Die Projektion der Raumdiagonale in die Grundfläche ist die Flächendiagonale \(a\sqrt{2}\); die Gegenkathete ist die Kante \(a\):</p>
+  \[ \tan\varphi = \frac{a}{a\sqrt{2}} = \frac{1}{\sqrt{2}} \;\Rightarrow\; \varphi \approx 35.26° \]
+  <p>Skizze zuerst: Das rechtwinklige Dreieck aus Flächendiagonale, Kante und Raumdiagonale <em>sehen</em> — dann ist die Rechnung zweizeilig.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — irgendeinen Winkel statt des definierten nehmen</div>
+  <p>Beim Winkel Gerade–Ebene zählt der Winkel zur <strong>Projektion</strong> (der kleinste mögliche), beim Ebenenwinkel die Senkrechten zur <strong>Schnittgeraden</strong>. Wer stattdessen beliebige Hilfslinien verwendet, misst irgendetwas — die Skizze mit eingezeichnetem Lot schützt davor.</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Winkel im Raum</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie ist der Winkel zwischen Gerade und Ebene definiert?</p><ul class="mc-optionen"><li data-opt="A">zwischen der Geraden und ihrer senkrechten Projektion in die Ebene</li><li data-opt="B">zwischen der Geraden und einer beliebigen Ebenen-Geraden</li><li data-opt="C">immer 90°</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Die Projektion ist der «Schatten» — der Winkel dazu ist der kleinste mögliche.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Beim Winkel zwischen zwei Ebenen stehen beide Schenkel senkrecht auf der <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Schnittgeraden \(s\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Welchen Winkel bildet die Flächendiagonale einer Würfelseite mit der Kante?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(45°\) — das Quadrat halbiert seine Ecke.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Eine Leiter lehnt an der Wand: Welcher «Winkel im Raum» ist der Anstellwinkel — und wo liegt die Projektion?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Der Winkel Gerade–Ebene zwischen Leiter und Boden: Die Projektion der Leiter auf den Boden ist die Strecke vom Fusspunkt zur Wand — Skizze als rechtwinkliges Dreieck, dann Trigonometrie.</div></details></div>
+</details>
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Weitere Theorie</h2>
-<p><em>Wird ausgearbeitet.</em></p>
+<h2 id="theorie">Oberfläche, Volumen — und die Plausibilitäts-Strategie</h2>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Oberfläche und Volumen</div>
+  <p>Der <strong>Oberflächeninhalt</strong> \(O\) ist die Summe der Flächeninhalte aller Begrenzungsflächen; das <strong>Volumen</strong> \(V\) ist die Grösse des eingeschlossenen Raumes. <strong>Satz von Cavalieri:</strong> Stehen zwei Körper auf derselben Ebene und schneidet jede Parallelebene beide in flächengleichen Figuren, so haben sie dasselbe Volumen (Kartenstapel-Bild: verschobene Karten, gleicher Inhalt). Die Formeln für alle Körper folgen in <a class="quer" href="s4-2a-prismen-zylinder.html">↩ 4.2a</a>–<a class="quer" href="s4-2c-kugel.html">c</a>.</p>
+</div>
+
+<div class="block block-tipp" style="margin-top:14px">
+  <div class="block-titel">💡 Die Skizzen-Strategie (RLP-Kernkompetenz)</div>
+  <ol class="aufg-liste" style="margin-top:4px">
+    <li><strong>Skizzieren:</strong> Schrägbild oder Querschnitt — gesuchte Grösse einzeichnen und das rechtwinklige Hilfsdreieck suchen.</li>
+    <li><strong>Schätzen:</strong> Vor dem Rechnen einen Überschlag notieren («Diagonale ist länger als jede Kante, aber kürzer als ihre Summe»).</li>
+    <li><strong>Rechnen</strong> — und das Resultat gegen Skizze und Schätzung halten: Vorzeichen, Grössenordnung, Einheiten.</li>
+    <li><strong>Grenzfälle denken:</strong> Was müsste bei \(h \to 0\) oder \(r = h\) herauskommen? Formeln, die den Grenzfall verfehlen, sind falsch.</li>
+  </ol>
+</div>
+
+<div class="block block-bsp" style="margin-top:10px">
+  <div class="block-titel">🟢 Beispiel 3 — Plausibilität rettet die Note</div>
+  <p>Jemand berechnet für die Raumdiagonale eines Quaders \(4 \times 3 \times 2\) den Wert \(d = 29\).</p>
+  <p><strong>Skizzen-Check:</strong> Die Diagonale ist länger als die längste Kante (\(4\)), aber sicher kürzer als der Kantenweg \(4 + 3 + 2 = 9\). Also ist \(29\) unmöglich — vergessene Wurzel: \(d = \sqrt{29} \approx 5.39\) ✓ passt ins Fenster \(\left]4;\ 9\right[\).</p>
+</div>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Plausibilität</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was besagt der Satz von Cavalieri?</p><ul class="mc-optionen"><li data-opt="A">Alle Körper gleicher Höhe haben gleiches Volumen.</li><li data-opt="B">Flächengleiche Schnitte in jeder Höhe → gleiches Volumen.</li><li data-opt="C">Volumen ist immer Grundfläche mal Höhe.</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Das Kartenstapel-Argument: verschieben ändert nichts am Inhalt.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Die Raumdiagonale eines Quaders ist länger als jede Kante, aber kürzer als die <span class="mc-luecke"></span> der drei Kanten.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Summe — das gibt das Plausibilitäts-Fenster.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Ein Resultat behauptet: Würfel mit \(a = 2\) hat Volumen \(4\ \text{cm}^2\). Finde <em>zwei</em> Fehler.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(V = a^3 = 8\), nicht 4 — und Volumen misst sich in \(\text{cm}^3\), nicht \(\text{cm}^2\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Wie prüfst du die Kegelformel \(V = \tfrac{1}{3}\pi r^2 h\) mit einem Grenzfall?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Z.B. \(h \to 0\): Der Kegel wird flach, \(V \to 0\) ✓. Oder Vergleich: Der Kegel muss <em>weniger</em> fassen als der Zylinder \(\pi r^2 h\) — Faktor \(\tfrac{1}{3} &lt; 1\) ✓.</div></details></div>
+</details>
 
 
 <!-- ══ 7. AUFGABEN ══ -->
 <h2 id="aufgaben">Aufgaben</h2>
-<p><em>Wird ausgearbeitet — A1 bis A6 mit zunehmender Selbstständigkeit.</em></p>
+
+<!-- A1 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Lagen am Würfel erkennen</span></div>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Würfel \(ABCDEFGH\): Boden \(ABCD\), Decke \(EFGH\) (\(E\) über \(A\), \(F\) über \(B\), …). Wähle ein Geradenpaar:</p>
+  <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="formel-live" style="margin-bottom:10px">
+    <div class="fl-label">Geradenpaar</div>
+    <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
+  </div>
+  <p style="font-size:0.85rem;margin:8px 0 4px">In welcher Lage stehen die Geraden?</p>
+  <div class="graf-btn-row" id="a1-opts"></div>
+  <div class="cr" id="a1-cr"></div>
+</div>
+
+<!-- A2 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Schrägbild und Netz zeichnen</span></div>
+  <p>Zeichne auf Papier:</p>
+  <ol class="aufg-liste">
+    <li>das Schrägbild eines Würfels mit \(a = 4\) cm (\(\alpha = 45°\), \(q = \tfrac{1}{2}\)) — wie lang zeichnest du die Tiefenkanten?</li>
+    <li>das Netz desselben Würfels (eine von mehreren möglichen Anordnungen),</li>
+    <li>das Schrägbild eines Zylinders (\(r = 2\), \(h = 5\) cm) — welche Form haben Grund- und Deckfläche im Bild?</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-a2')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a2">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Front \(4 \times 4\) cm in wahrer Grösse; Tiefenkanten \(4 \cdot \tfrac{1}{2} = 2\) cm unter \(45°\).</li>
+        <li>Sechs Quadrate \(4 \times 4\), z.B. als Kreuz: vier in einer Reihe, je eines oben und unten am zweiten Quadrat.</li>
+        <li>Grund- und Deckkreis erscheinen als <strong>Ellipsen</strong> (verzerrte Kreise); der Umriss sind zwei senkrechte Mantellinien.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A3 -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A3</span><span class="aufg-titel-text">Rechnen mit Schrägbild und Raumwinkeln</span></div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 a) Bildlänge</div>
+    <p>Eine Tiefenkante von \(6\) cm wird mit \(q = \tfrac{1}{2}\) gezeichnet. Wie lang ist sie im Bild?</p>
+    <div class="eingabe-row"><label>Bild =&nbsp;</label><input type="text" id="a3a1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a3a1', 3, 0.01, 'cm')">Prüfen</button></div>
+    <div class="cr" id="a3a1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3a')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3a">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 6 \cdot \tfrac{1}{2} = 3\ \text{cm} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 b) Wahre Länge</div>
+    <p>Im Schrägbild (\(q = \tfrac{1}{3}\)) misst eine Tiefenkante \(2\) cm. Wie lang ist sie wirklich?</p>
+    <div class="eingabe-row"><label>wahr =&nbsp;</label><input type="text" id="a3b1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a3b1', 6, 0.01, 'cm')">Prüfen</button></div>
+    <div class="cr" id="a3b1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3b')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3b">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ 2 : \tfrac{1}{3} = 6\ \text{cm} \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 c) Raumdiagonale gegen Grundfläche</div>
+    <p>Berechne den Winkel zwischen der Raumdiagonale eines Würfels und seiner Grundfläche (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>φ ≈&nbsp;</label><input type="text" id="a3c1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a3c1', 35.26, 0.05, '°')">Prüfen</button></div>
+    <div class="cr" id="a3c1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3c')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3c">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \tan\varphi = \frac{a}{a\sqrt{2}} \;\Rightarrow\; \varphi = \arctan\tfrac{1}{\sqrt{2}} \approx 35.26° \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg" style="margin-bottom:10px">
+    <div class="block-titel">🟠 d) Flächendiagonale gegen Kante</div>
+    <p>Welchen Winkel bildet die Flächendiagonale eines Würfels mit der anliegenden Kante?</p>
+    <div class="eingabe-row"><label>φ =&nbsp;</label><input type="text" id="a3d1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a3d1', 45, 0.01, '°')">Prüfen</button></div>
+    <div class="cr" id="a3d1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3d')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3d">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        \[ \tan\varphi = \tfrac{a}{a} = 1 \;\Rightarrow\; \varphi = 45° \]
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 e) Plausibilitäts-Fenster</div>
+    <p>Quader \(4 \times 3 \times 2\): Zwischen welchen Zahlen muss die Raumdiagonale liegen (längste Kante und Kantensumme)? Berechne sie dann exakt (zwei Dezimalen).</p>
+    <div class="eingabe-row"><label>d ≈&nbsp;</label><input type="text" id="a3e1" placeholder="Wert"><button class="btn-pruef" onclick="chkNum('a3e1', 5.39, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3e1-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3e')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3e">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Fenster: \(4 &lt; d &lt; 4 + 3 + 2 = 9\). Exakt: \(d = \sqrt{29} \approx 5.39\) ✓ im Fenster.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A4 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A4</span><span class="aufg-titel-text">Schätzen, dann rechnen: das Klassenzimmer</span></div>
+  <p>Ein Klassenzimmer misst \(8 \times 7 \times 3\) m.</p>
+  <ol class="aufg-liste">
+    <li>Schätze zuerst ohne Rechnung: eher 50, 150 oder 500 m³ Luft?</li>
+    <li>Berechne das Volumen.</li>
+    <li>Als Faustregel braucht eine Person \(30\ \text{m}^3\) Luftraum (unbelüftet). Für wie viele Personen reicht der Raum (abrunden)?</li>
+  </ol>
+  <div class="eingabe-row"><label>V =&nbsp;</label><input type="text" id="a4-1" placeholder="m³"><button class="btn-pruef" onclick="chkNum('a4-1', 168, 0.1, 'm³')">Prüfen</button></div>
+  <div class="cr" id="a4-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Personen =&nbsp;</label><input type="text" id="a4-2" placeholder="Anzahl"><button class="btn-pruef" onclick="chkNum('a4-2', 5, 0.01, '')">Prüfen</button></div>
+  <div class="cr" id="a4-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a4')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a4">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Überschlag \(8 \cdot 7 \approx 56\), mal 3 → um 150 m³.</li>
+        <li>\(V = 168\ \text{m}^3\) — nahe an der Schätzung ✓</li>
+        <li>\(168 / 30 = 5.6\) → \(5\) Personen. (Real hilft die Lüftung — die Zahl zeigt die Denkweise, nicht die Baunorm.)</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A5 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Raumdiagonale im Quader — mit Skizze</span></div>
+  <p>Quader \(4 \times 3 \times 2\) cm. Gesucht: der Winkel zwischen der Raumdiagonale und der Grundfläche.</p>
+  <ol class="aufg-liste">
+    <li>Skizziere das Schrägbild und zeichne das rechtwinklige Hilfsdreieck ein (Bodendiagonale, Höhe, Raumdiagonale).</li>
+    <li>Berechne die Bodendiagonale.</li>
+    <li>Berechne den Winkel (zwei Dezimalen).</li>
+  </ol>
+  <div class="eingabe-row"><label>Bodendiagonale =&nbsp;</label><input type="text" id="a5-1" placeholder="cm"><button class="btn-pruef" onclick="chkNum('a5-1', 5, 0.01, 'cm')">Prüfen</button></div>
+  <div class="cr" id="a5-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>φ ≈&nbsp;</label><input type="text" id="a5-2" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a5-2', 21.8, 0.05, '°')">Prüfen</button></div>
+  <div class="cr" id="a5-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a5')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a5">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Hilfsdreieck: Bodendiagonale (Ankathete), Höhe 2 (Gegenkathete), Raumdiagonale (Hypotenuse).</li>
+        <li>\(\sqrt{16 + 9} = 5\) cm.</li>
+        <li>\(\tan\varphi = \tfrac{2}{5} \Rightarrow \varphi \approx 21.80°\) — flacher als beim Würfel (\(35.26°\)), plausibel: Der Quader ist niedrig und lang.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A6 -->
+<div class="block block-aufg" style="margin-bottom:10px">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A6</span><span class="aufg-titel-text">Ebenenwinkel am Satteldach</span></div>
+  <p>Ein Satteldach: Grundriss-Breite \(6\) m, First mittig \(1.5\) m über der Traufhöhe. Gesucht sind zwei Ebenenwinkel — beide über den Querschnitt (Skizze!).</p>
+  <ol class="aufg-liste">
+    <li>Neigungswinkel einer Dachfläche gegen die Horizontalebene (zwei Dezimalen).</li>
+    <li>Firstwinkel zwischen den beiden Dachflächen (zwei Dezimalen).</li>
+  </ol>
+  <div class="eingabe-row"><label>Neigung ≈&nbsp;</label><input type="text" id="a6-1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a6-1', 26.57, 0.05, '°')">Prüfen</button></div>
+  <div class="cr" id="a6-1-cr"></div>
+  <div class="eingabe-row" style="margin-top:6px"><label>Firstwinkel ≈&nbsp;</label><input type="text" id="a6-2" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a6-2', 126.87, 0.05, '°')">Prüfen</button></div>
+  <div class="cr" id="a6-2-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a6')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a6">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Im Querschnitt: \(\tan\varphi = \tfrac{1.5}{3} = 0.5 \Rightarrow \varphi \approx 26.57°\). (Beide Schenkel stehen senkrecht zur First-Schnittgeraden — genau die Ebenenwinkel-Definition.)</li>
+        <li>\(180° - 2 \cdot 26.57° \approx 126.87°\). Plausibel: stumpfer Winkel, flaches Dach.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- A7 (Vertiefung) -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Der 30°-Würfel (FTB) <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <p>Im Würfel \(ABCDEFGH\) (Boden \(ABCD\), \(E\) über \(A\)) sei die Diagonalebene \(ACE\) aufgespannt. Gesucht ist der Winkel \(\varphi\) zwischen dieser Ebene und der Flächendiagonale \(AF\) — das Beispiel aus dem FTB, ganz ohne Zahlen lösbar.</p>
+  <ol class="aufg-liste">
+    <li>Skizziere den Würfel; das Lot von \(F\) auf die Ebene trifft den Mittelpunkt \(M\) der Flächendiagonale \(FH\).</li>
+    <li>Begründe: \(FM = \tfrac{1}{2} FH = \tfrac{1}{2} AF\) (beide sind Flächendiagonalen, also gleich lang).</li>
+    <li>Berechne \(\varphi\) im rechtwinkligen Dreieck \(AFM\) mit \(\sin\varphi = \tfrac{FM}{AF}\).</li>
+  </ol>
+  <div class="eingabe-row"><label>φ =&nbsp;</label><input type="text" id="a7-1" placeholder="Grad"><button class="btn-pruef" onclick="chkNum('a7-1', 30, 0.01, '°')">Prüfen</button></div>
+  <div class="cr" id="a7-1-cr"></div>
+  <button class="loesung-toggle" onclick="toggleL('l-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <ol class="aufg-liste">
+        <li>Skizze: Würfel mit Diagonalebene und eingezeichnetem Lot \(FM\) — der Winkel liegt zwischen \(AF\) und der Projektion \(AM\).</li>
+        <li>\(AF\) und \(FH\) sind beide Flächendiagonalen (\(a\sqrt{2}\)); \(M\) halbiert \(FH\), also \(FM = \tfrac{1}{2} AF\).</li>
+        <li>\(\sin\varphi = \dfrac{FM}{AF} = \dfrac{1}{2} \Rightarrow \varphi = 30°\) — exakt, ohne einen einzigen Zahlenwert: Die Skizze trägt den ganzen Beweis.</li>
+      </ol>
+    </div>
+  </div>
+</div>
 
 
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
-<p><em>Wird ausgearbeitet — kompakte Tabelle und Merksatz.</em></p>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Erst die <strong>Skizze</strong>, dann die Rechnung: Das <strong>Schrägbild</strong> (Front wahr, Tiefenkanten mit \(\alpha\) und \(q\)) zeigt Strecken und Winkel im Körper, das <strong>Netz</strong> zeigt die Flächen unverzerrt. Im Raum gibt es neue Lagen (<strong>windschief</strong>, Durchstosspunkt, Schnittgerade) und definierte <strong>Raumwinkel</strong>: Gerade–Ebene über die Projektion, Ebene–Ebene senkrecht zur Schnittgeraden. Und jedes Resultat durchläuft den <strong>Plausibilitäts-Check</strong>: Überschlag, Grössenordnung, Einheiten, Grenzfälle — die Skizze liefert die Schranken.</p>
+</div>
+
+<table class="ftb-tabelle" style="margin-bottom:14px">
+  <thead><tr><th>Werkzeug</th><th>Kernregel</th></tr></thead>
+  <tbody>
+    <tr><td style="font-family:var(--sans);text-align:left">Schrägbild</td><td style="text-align:left;font-family:var(--sans)">Front wahr; Tiefenkanten \(\times\, q\) unter \(\alpha\) (\(45°/\tfrac{1}{2}\) oder \(30°/\tfrac{1}{3}\))</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Netz</td><td style="text-align:left;font-family:var(--sans)">alle Flächen unverzerrt — Basis der Oberflächenrechnung</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Lagen im Raum</td><td style="text-align:left;font-family:var(--sans)">Geraden: auch windschief · Ebenen: Schnittgerade</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Winkel Gerade–Ebene</td><td style="text-align:left;font-family:var(--sans)">zur senkrechten Projektion («Schatten»)</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Winkel Ebene–Ebene</td><td style="text-align:left;font-family:var(--sans)">Senkrechte zur Schnittgeraden in beiden Ebenen</td></tr>
+    <tr><td style="font-family:var(--sans);text-align:left">Plausibilität</td><td style="text-align:left;font-family:var(--sans)">Überschlag · Schranken aus der Skizze · Einheiten · Grenzfälle</td></tr>
+  </tbody>
+</table>
 
 
 <!-- ══ 9. ZUSATZMATERIAL ══ -->
 <h2 id="downloads">Zusatzmaterial</h2>
-<p><em>Wird ergänzt.</em></p>
+<p>Materialien zum Mitnehmen, Üben und Wiederholen. Druckseiten öffnen in neuem Tab.</p>
+<div class="dl-grid">
+  <a href="../downloads/schwerpunkt/s4-1-grundlagen/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-1-grundlagen/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">Alle Regeln auf einer Seite</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-1-grundlagen/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-1-grundlagen/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
+  <a href="../downloads/schwerpunkt/s4-1-grundlagen/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
+</div>
+
 <!-- ══ 10. RESSOURCEN ══ -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
-<p><em>Wird ergänzt.</em></p>
-
+<div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
+<div class="links-grid">
+  <a href="https://www.youtube.com/playlist?list=PLa0u3J0uzAzm2EWHP7iGUWq_WTR0TtuJz" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Körper — Oberfläche &amp; Volumen berechnen</div><div class="lk-s">Lehrerschmidt · 72 Videos · inkl. Schrägbilder und Netze</div></div></a>
+  <a href="https://www.youtube.com/playlist?list=PLLTAHuUj-zHju4BlmGqAs9pC5HEPJ4V3F" target="_blank" rel="noopener" class="lk"><span class="lk-ic">▶️</span><div><div class="lk-t">Körper und Stereometrie — Playlist</div><div class="lk-s">Mathe by Daniel Jung · 20 Videos · kompakte Theorie-Clips</div></div></a>
+</div>
+<div class="ressourcen-subtitel" style="margin-top:18px">📝 Aufgabensammlungen</div>
+<div class="links-grid">
+  <a href="https://de.serlo.org/mathe/177185/aufgaben-zum-zeichnen-von-schraegbildern" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Schrägbilder zeichnen</div><div class="lk-s">mit Lösungen</div></div></a>
+  <a href="https://de.serlo.org/mathe/60957/aufgaben-zu-den-grundkoerpern" target="_blank" rel="noopener" class="lk aufg"><span class="lk-ic">📝</span><div><div class="lk-t">serlo.org — Aufgaben zu den Grundkörpern</div><div class="lk-s">Körper erkennen und beschreiben · mit Lösungen</div></div></a>
+</div>
 
 </main>
 <aside class="toc-wrap"><div id="toc"></div></aside>
@@ -104,12 +581,117 @@ MathJax = {
 
 <script src="../nav.js"></script>
 <script src="../mathlib.js"></script>
+<script src="../minicheck.js"></script>
+<script src="../anim-hinweise.js"></script>
 <script>
 buildNav({
   bereich:'schwerpunkt', id:'s4-1',
   kapitelNr:'4.1', kapitelTitel:'Grundlagen',
   prev:{nr:'3.6',titel:'Betragsfunktionen',url:'s3-6-betragsfunktionen.html'},
   next:{nr:'4.2a',titel:'Prismen und Zylinder',url:'s4-2a-prismen-zylinder.html'}
+});
+
+/* ── Lokale Helfer ─────────────────────────────────────── */
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+
+/* ══ EINSTIEG: Schrägbild-Labor ══ */
+function updateSB(){
+  const a = parseInt(document.getElementById('sb-a').value);
+  const q = parseFloat(document.getElementById('sb-q').value);
+  document.getElementById('sb-av').textContent = a;
+  document.getElementById('sb-qv').textContent = q.toFixed(2);
+  document.getElementById('sb-eq').innerHTML =
+    `Bildlänge = 4 · ${q.toFixed(2)} = ${(4 * q).toFixed(1)} cm unter ${a}°`;
+  const {ctx, W, H} = initCanvas('sb-canvas', 240, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const rad = a * Math.PI / 180;
+  // Skala so, dass Worst Case (q=1, α=75°) hineinpasst: Breite 5+4·cosα, Höhe 3+4·sinα
+  const sk = Math.min((W - 100) / (5 + 4 * Math.cos(rad) * q + 1), (H - 70) / (3 + 4 * Math.sin(rad) * q + 0.5), 34);
+  const dx = 4 * q * sk * Math.cos(rad), dy = 4 * q * sk * Math.sin(rad);
+  const x0 = 46, y0 = H - 40;
+  const bw = 5 * sk, bh = 3 * sk;
+  // hintere Fläche gestrichelt
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 1.6; ctx.setLineDash([5, 4]);
+  ctx.strokeRect(x0 + dx, y0 - bh - dy, bw, bh);
+  ctx.setLineDash([]);
+  // Tiefenkanten
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2;
+  [[x0, y0], [x0 + bw, y0], [x0, y0 - bh], [x0 + bw, y0 - bh]].forEach(([x, y]) => {
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y - dy); ctx.stroke();
+  });
+  // Frontfläche (wahre Grösse, blau)
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.6; ctx.fillStyle = 'rgba(26,79,138,0.08)';
+  ctx.fillRect(x0, y0 - bh, bw, bh);
+  ctx.strokeRect(x0, y0 - bh, bw, bh);
+  // Winkel-Bogen an der rechten unteren Ecke
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.arc(x0 + bw, y0, 24, -rad, 0); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('α', x0 + bw + 27, y0 - 6);
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'center';
+  ctx.fillText('Front: wahre Grösse', x0 + bw / 2, y0 + 22);
+  ctx.fillStyle = '#b85c00'; ctx.textAlign = 'left';
+  ctx.fillText('Tiefe × q', x0 + bw + dx / 2 + 4, y0 - bh - dy / 2 - 4);
+}
+['sb-a', 'sb-q'].forEach(id => document.getElementById(id).addEventListener('input', updateSB));
+
+/* ══ A1: Lagen am Würfel ══ */
+const a1G = [
+  {label:'Paar 1', desc:'Bodenkante AB und Deckenkante EF (E über A, F über B)', sol:'parallel'},
+  {label:'Paar 2', desc:'Bodenkante AB und senkrechte Kante CG', sol:'windschief'},
+  {label:'Paar 3', desc:'Bodenkante AB und Bodenkante BC', sol:'schneidend'},
+  {label:'Paar 4', desc:'Bodenkante AB und Deckenkante GH (über DC)', sol:'parallel'},
+  {label:'Paar 5', desc:'Flächendiagonale AC (Boden) und Deckenkante FG', sol:'windschief'},
+];
+const a1Opts = ['parallel', 'schneidend', 'windschief', 'identisch'];
+let a1Act = 0;
+function buildA1(){
+  document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
+    `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
+  ).join('');
+  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+    `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
+  ).join('');
+  drawA1();
+}
+function setA1(i){
+  a1Act = i;
+  document.querySelectorAll('#a1-btns .graf-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
+  document.getElementById('a1-cr').style.display = 'none';
+  drawA1();
+}
+function drawA1(){
+  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+}
+function checkA1(ans){
+  const g = a1G[a1Act];
+  const r = document.getElementById('a1-cr'); r.style.display = 'block';
+  if(ans === g.sol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! Die Geraden sind ${g.sol}.`;
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Skizziere den Würfel: Schneiden sich die Geraden? Sind sie parallel? Wenn beides nein — windschief.';
+  }
+}
+
+/* ══ Zahlenwert-Prüfung ══ */
+function chkNum(id, target, tol, einheit){
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/|()%]/g, '').trim();
+  const v = parseFloat(raw);
+  const r = document.getElementById(id + '-cr'); r.style.display = 'block';
+  if(!isNaN(v) && Math.abs(v - target) <= tol){
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+  } else {
+    r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Skizze gemacht? Das rechtwinklige Hilfsdreieck liefert Katheten und Hypotenuse.';
+  }
+}
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  updateSB();
+  buildA1();
+});
+window.addEventListener('resize', () => {
+  updateSB();
 });
 </script>
 </body>

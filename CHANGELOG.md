@@ -4,6 +4,39 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [79] — 2026-07-06 · s4-1 Grundlagen Geometrie: Vollausbau — Lerngebiet 4 komplett
+
+Teilgebiet 4.1 (Grundlagen) aus dem Stub zur vollständigen Themenseite ausgebaut —
+Quellen: die eine RLP-Kompetenz (Skizzen + Plausibilität) und FTB Kapitel 11
+(Grundlagen Stereometrie). Damit ist **Lerngebiet 4 Geometrie vollständig**
+(4.1, 4.2a–c, 4.3a–d). Alle Zahlenwerte in Python nachgerechnet.
+
+- **`schwerpunkt/s4-1-grundlagen.html`** *(Stub → Vollausbau)* — Einstieg
+  Schrägbild-Labor (Slider für Verzerrungswinkel \(\alpha\) und Faktor \(q\);
+  Frontfläche wahr, Tiefenkanten live verzerrt, Standardpaare 45°/½ und 30°/⅓);
+  Definitionen Schrägbild + Netz mit «Schrägbild für Strecken, Netz für Flächen»-Tipp;
+  Punkt/Gerade/Ebene und Lagebeziehungen (inkl. FTB-Prisma-Beispiel und
+  Querlinks auf die rechnerische Behandlung in 4.3c/d); Winkel im Raum
+  (Gerade–Ebene über die Projektion, Ebene–Ebene senkrecht zur Schnittgeraden,
+  Beispiel Raumdiagonale 35.26°); Oberfläche/Volumen-Definition, Cavalieri und
+  die vierschrittige **Skizzen-/Plausibilitäts-Strategie** als RLP-Kernstück
+  (Beispiel «d = 29 ist unmöglich»); A1 Lagen-Quiz am Würfel (5 Geradenpaare),
+  A2 Schrägbild/Netz zeichnen, A3 a–e chkNum (Bildlänge, wahre Länge,
+  35.26°, 45°, Plausibilitäts-Fenster √29), A4 Klassenzimmer (Schätzen→Rechnen),
+  A5 Quader-Raumwinkel 21.80°, A6 Satteldach-Ebenenwinkel 26.57°/126.87°,
+  A7 der 30°-Würfel aus dem FTB — Beweis ganz ohne Zahlen (Vertiefung).
+- **Infrastruktur:** Index-Karte 4.1 geplant → fertig (Zählung unverändert
+  46 Themenseiten — der Stub zählte bereits); Kette und nav.js waren bereits korrekt.
+- **Zusatzmaterial:** Druckseiten-Block T (Handout, Formelauszug, Teste-dich-selbst
+  mit 12 Aufgaben, Aufgabenserie mit 6 Anwendungen); bestehende Druckseiten
+  byte-identisch. Anki-Deck s4-1 mit 20 Karten, nur das neue apkg erzeugt.
+- **Ressourcen:** ohne neue Abrufe — Lehrerschmidt- und Daniel-Jung-Playlists aus
+  der Map (s4-2-Verifikation), serlo-Links aus dem Sitemap-Cache (177185
+  Schrägbilder, 60957 Grundkörper). Map §8 um die Zeile s4-1 erweitert.
+- Pre-Flight: `ALLE CHECKS BESTANDEN`.
+
+---
+
 ## [78] — 2026-07-06 · s4-2 Stereometrie: Vollausbau als Dreier-Sub-Split (a/b/c)
 
 Teilgebiet 4.2 (Stereometrie) aus dem Stub zum Dreier-Sub-Split ausgebaut — Quellen:

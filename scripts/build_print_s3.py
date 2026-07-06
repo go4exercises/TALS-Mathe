@@ -4996,6 +4996,250 @@ S_SERIE = (
 )
 
 # ═══════════════════════════════════════════════════════════════════
+#  s4-1  GRUNDLAGEN GEOMETRIE
+# ═══════════════════════════════════════════════════════════════════
+
+T_HANDOUT = r'''
+  <h2>1. Schrägbild (schiefe Parallelprojektion)</h2>
+  <div class="block block-def">
+    <div class="block-titel">📘 Projektionsvorschrift</div>
+    <p>Nach hinten laufende Strecken unter dem <strong>Verzerrungswinkel \( \alpha \)</strong> und
+    um den <strong>Faktor \(q\)</strong> verkürzt abtragen. Übliche Paare:
+    \( \alpha = 45°, q = \tfrac{1}{2} \) oder \( \alpha = 30°, q = \tfrac{1}{3} \).</p>
+  </div>
+  <p>Frontparallele Strecken und Flächen erscheinen in <strong>wahrer Grösse</strong>; parallele
+  Strecken bleiben parallel. Rückwärts: wahre Länge = Bildlänge \( : q \).</p>
+
+  <h2>2. Netz (Abwicklung)</h2>
+  <p>Alle Begrenzungsflächen in die Ebene geklappt — jede Fläche <strong>unverzerrt</strong>.
+  Grundlage jeder Oberflächenberechnung. Schrägbild für Strecken/Winkel im Körper,
+  Netz für Flächen.</p>
+
+  <h2>3. Punkt, Gerade, Ebene — Lagen im Raum</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Gerade – Gerade</td><td class="li">identisch · parallel · schneidend · <strong>windschief</strong></td></tr>
+      <tr><td class="li">Gerade – Ebene</td><td class="li">in der Ebene · parallel · Durchstosspunkt</td></tr>
+      <tr><td class="li">Ebene – Ebene</td><td class="li">identisch · parallel · Schnittgerade</td></tr>
+    </tbody>
+  </table>
+  <p>Ebene: eindeutig durch <strong>drei Punkte</strong>, die nicht auf einer Geraden liegen.</p>
+
+  <h2>4. Winkel im Raum</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Gerade – Ebene</td><td class="li">Winkel zur <strong>senkrechten Projektion</strong> («Schatten»); Lotgerade: 90°</td></tr>
+      <tr><td class="li">Ebene – Ebene</td><td class="li">Senkrechte zur <strong>Schnittgeraden</strong> in beiden Ebenen</td></tr>
+      <tr><td class="li">Standardbeispiele</td><td class="li">Raumdiagonale–Grundfläche (Würfel): \( \approx 35.26° \) · Flächendiagonale–Kante: 45°</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Plausibilitäts-Strategie (RLP-Kernkompetenz)</h2>
+  <p><strong>Skizzieren</strong> (Hilfsdreieck suchen) → <strong>Schätzen</strong> (Überschlag,
+  Schranken) → <strong>Rechnen</strong> → <strong>Prüfen</strong> (Grössenordnung, Einheiten,
+  Grenzfälle). Beispiel: Raumdiagonale liegt zwischen längster Kante und Kantensumme.</p>
+
+  <div class="block block-merksatz">
+    <div class="block-titel">⭐ Merksatz</div>
+    <p>Erst die Skizze, dann die Rechnung — und am Schluss der Plausibilitäts-Check.
+    Schrägbild: Front wahr, Tiefe mal \(q\) unter \( \alpha \). Netz: alles unverzerrt.</p>
+  </div>
+'''
+
+T_FORMELAUSZUG = r'''
+  <h2>1. Schrägbild</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Tiefenkanten</td><td>Bildlänge = wahre Länge \( \cdot\ q \), unter Winkel \( \alpha \)</td></tr>
+      <tr><td class="li">übliche Paare</td><td>\( \alpha = 45°, q = \tfrac{1}{2} \) oder \( \alpha = 30°, q = \tfrac{1}{3} \)</td></tr>
+      <tr><td class="li">rückwärts</td><td>wahre Länge = Bildlänge \( : q \)</td></tr>
+      <tr><td class="li">invariant</td><td class="li">Frontflächen wahr; Parallelität bleibt</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Lagen im Raum</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Gerade – Gerade</td><td class="li">identisch / parallel / schneidend / windschief</td></tr>
+      <tr><td class="li">Gerade – Ebene</td><td class="li">enthalten / parallel / Durchstosspunkt</td></tr>
+      <tr><td class="li">Ebene – Ebene</td><td class="li">identisch / parallel / Schnittgerade</td></tr>
+      <tr><td class="li">Ebene bestimmt durch</td><td class="li">3 Punkte, nicht auf einer Geraden</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Winkel im Raum</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Gerade – Ebene</td><td class="li">Winkel zur senkrechten Projektion, \( \varphi \in\ ]0°; 90°] \)</td></tr>
+      <tr><td class="li">Ebene – Ebene</td><td class="li">Senkrechte zur Schnittgeraden in beiden Ebenen</td></tr>
+      <tr><td class="li">Raumdiagonale–Boden (Würfel)</td><td>\( \tan\varphi = \tfrac{1}{\sqrt{2}} \Rightarrow \varphi \approx 35.26° \)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Grundbegriffe und Plausibilität</h2>
+  <table class="ftb-tabelle">
+    <tbody>
+      <tr><td class="li" style="width:35%">Oberfläche / Volumen</td><td class="li">Summe der Begrenzungsflächen / eingeschlossener Raum</td></tr>
+      <tr><td class="li">Cavalieri</td><td class="li">flächengleiche Schnitte in jeder Höhe → gleiches Volumen</td></tr>
+      <tr><td class="li">Diagonalen-Fenster</td><td class="li">längste Kante \( < d < \) Kantensumme</td></tr>
+      <tr><td class="li">Check-Liste</td><td class="li">Überschlag · Einheiten · Grenzfälle</td></tr>
+    </tbody>
+  </table>
+'''
+
+T_TDS = (
+    A_TDS_INTRO
+    + '  <div class="gruppe-titel">Grundlagen &amp; Verständnis</div>\n'
+    + aufg(1, 'Begriffe vervollständigen', 1, r'''    <p>Vervollständige die Aussage und schreibe in die Lücken:</p>
+    <div class="lueckentext">
+      Im Schrägbild erscheinen <span class="lueck"></span>flächen in wahrer Grösse;<br>
+      Tiefenkanten werden mit dem Faktor <span class="lueck"></span> verkürzt.<br>
+      Das Netz zeigt alle Flächen <span class="lueck"></span>.
+    </div>''')
+    + aufg(2, 'Standardpaare', 1, r'''    <p>Nenne die beiden üblichen Wertepaare für Verzerrungswinkel \( \alpha \) und
+    Faktor \(q\).</p>
+''' + LINS)
+    + aufg(3, 'Bildlänge', 1, r'''    <p>Eine Tiefenkante von 6 cm wird mit \( q = \tfrac{1}{2} \) gezeichnet: Bildlänge?
+    Und wie lang ist eine Kante wirklich, die im Bild (\( q = \tfrac{1}{3} \)) 2 cm misst?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Lagen im Raum</div>\n'
+    + aufg(4, 'Lagen benennen', 2, r'''    <p>Welche vier Lagen können zwei Geraden im Raum haben — und welche davon gibt es
+    in der Ebene nicht?</p>
+''' + LINS)
+    + aufg(5, 'Windschiefe Kanten', 2, r'''    <p>Wie viele Kanten eines Würfels sind zu einer gegebenen Kante windschief?
+    Begründe kurz.</p>
+''' + LINS)
+    + aufg(6, 'Ebene festlegen', 1, r'''    <p>Wodurch ist eine Ebene eindeutig bestimmt — und warum reichen drei Punkte auf
+    einer Geraden nicht?</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Winkel im Raum</div>\n'
+    + aufg(7, 'Definitionen', 2, r'''    <p>Wie ist der Winkel zwischen (a) Gerade und Ebene, (b) zwei Ebenen definiert?</p>
+''' + LINS)
+    + aufg(8, 'Raumdiagonale', 2, r'''    <p>Berechne den Winkel zwischen der Raumdiagonale eines Würfels und der Grundfläche.</p>
+''' + LINS)
+    + aufg(9, 'Quader-Winkel', 3, r'''    <p>Quader \( 4 \times 3 \times 2 \): Winkel zwischen Raumdiagonale und Grundfläche?
+    (Erst Bodendiagonale!)</p>
+''' + LINS)
+    + '  <div class="gruppe-titel">Plausibilität</div>\n'
+    + aufg(10, 'Fenster-Check', 2, r'''    <p>Jemand erhält für die Raumdiagonale des Quaders \( 4 \times 3 \times 2 \) den Wert 29.
+    Zeige mit zwei Schranken, dass das unmöglich ist, und korrigiere.</p>
+''' + LINS)
+    + aufg(11, 'Fehler finden', 2, r'''    <p>Behauptung: «Würfel mit \( a = 2 \) hat \( V = 4\ \text{cm}^2 \).»
+    Finde beide Fehler.</p>
+''' + LINS)
+    + aufg(12, 'Grenzfall-Test', 3, r'''    <p>Prüfe die Kegelformel \( V = \tfrac{1}{3}\pi r^2 h \) mit zwei
+    Plausibilitäts-Argumenten.</p>
+''' + LINS)
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Lösungen</h2>\n\n'
+    + loes(1, r'''    <p><strong>Front</strong>flächen · Faktor <strong>\(q\)</strong> ·
+    <strong>unverzerrt</strong>.</p>''')
+    + loes(2, r'''    <p>\( \alpha = 45° \) mit \( q = \tfrac{1}{2} \) — oder \( \alpha = 30° \) mit
+    \( q = \tfrac{1}{3} \).</p>''')
+    + loes(3, r'''    <p>\( 6 \cdot \tfrac{1}{2} = 3 \) cm; \( 2 : \tfrac{1}{3} = 6 \) cm.</p>''')
+    + loes(4, r'''    <p>Identisch, parallel, schneidend, <strong>windschief</strong> — Letzteres gibt es
+    nur im Raum.</p>''')
+    + loes(5, r'''    <p>Vier — von den 11 übrigen sind 3 parallel und 4 schneidend.</p>''')
+    + loes(6, r'''    <p>Drei Punkte, die nicht auf einer Geraden liegen — durch eine Gerade gehen
+    unendlich viele Ebenen.</p>''')
+    + loes(7, r'''    <p>(a) Winkel zur senkrechten Projektion der Geraden in die Ebene.
+    (b) Winkel der beiden Senkrechten zur Schnittgeraden (je eine pro Ebene).</p>''')
+    + loes(8, r'''    <p>\( \tan\varphi = \tfrac{a}{a\sqrt{2}} \Rightarrow \varphi \approx 35.26° \).</p>''')
+    + loes(9, r'''    <p>Bodendiagonale \( \sqrt{16+9} = 5 \); \( \tan\varphi = \tfrac{2}{5}
+    \Rightarrow \varphi \approx 21.80° \).</p>''')
+    + loes(10, r'''    <p>\( d \) muss zwischen 4 (längste Kante) und 9 (Kantensumme) liegen — 29 ist
+    unmöglich; vergessene Wurzel: \( d = \sqrt{29} \approx 5.39 \) ✓.</p>''')
+    + loes(11, r'''    <p>\( V = a^3 = 8 \), nicht 4 — und die Einheit ist \( \text{cm}^3 \),
+    nicht \( \text{cm}^2 \).</p>''')
+    + loes(12, r'''    <p>Grenzfall \( h \to 0 \): \( V \to 0 \) ✓; Vergleich: Kegel &lt; Zylinder
+    \( \pi r^2 h \), Faktor \( \tfrac{1}{3} < 1 \) ✓.</p>''')
+)
+
+T_SERIE = (
+    r'''  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Zu jeder Aufgabe gehört eine Skizze — sie liefert das
+    rechtwinklige Hilfsdreieck und die Plausibilitäts-Schranken.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Technisches Zeichnen</td><td>Werkstück im Schrägbild</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Raumplanung</td><td>Klassenzimmer-Check</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Logistik</td><td>Passt die Stange in die Kiste?</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Bauwesen</td><td>Dachneigung und Firstwinkel</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Montage</td><td>Leiter an der Wand</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Geometrie</td><td>Der 30°-Würfel (FTB)</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+'''
+    + aufg(1, 'Werkstück im Schrägbild', 2, r'''    <p>Ein Quader-Werkstück \( 8 \times 6 \times 4 \) cm soll im Schrägbild
+    (\( \alpha = 45° \), \( q = \tfrac{1}{2} \)) gezeichnet werden; die 6-cm-Kante zeigt
+    nach hinten.</p>
+    <p>(a) Welche Masse hat die Frontfläche im Bild?</p>
+    <p>(b) Wie lang zeichnest du die Tiefenkanten?</p>
+    <p>(c) Ein Kollege misst im Bild eine Tiefenkante von 3 cm ab und notiert «3 cm».
+    Was ist falsch?</p>
+''' + LINS4, tag='Technisches Zeichnen')
+    + aufg(2, 'Klassenzimmer-Check', 2, r'''    <p>Ein Raum misst \( 8 \times 7 \times 3 \) m; Faustregel: \( 30\ \text{m}^3 \)
+    Luftraum pro Person (unbelüftet).</p>
+    <p>(a) Schätze das Volumen zuerst (Überschlag).</p>
+    <p>(b) Berechne exakt und vergleiche.</p>
+    <p>(c) Für wie viele Personen reicht der Raum nach der Faustregel?</p>
+''' + LINS4, tag='Raumplanung')
+    + aufg(3, 'Passt die Stange in die Kiste?', 2, r'''    <p>Eine Transportkiste misst innen \( 1.2 \times 0.8 \times 0.5 \) m. Eine Stange ist
+    1.5 m lang.</p>
+    <p>(a) Gib ohne Rechnung das Plausibilitäts-Fenster für die Raumdiagonale an.</p>
+    <p>(b) Berechne die Raumdiagonale.</p>
+    <p>(c) Passt die Stange hinein?</p>
+''' + LINS4, tag='Logistik')
+    + aufg(4, 'Dachneigung und Firstwinkel', 3, r'''    <p>Satteldach: Grundriss-Breite 6 m, First mittig 1.5 m über der Traufe.</p>
+    <p>(a) Skizziere den Querschnitt und begründe, warum er die Ebenenwinkel zeigt.</p>
+    <p>(b) Berechne den Neigungswinkel der Dachfläche.</p>
+    <p>(c) Berechne den Firstwinkel zwischen den Dachflächen.</p>
+''' + LINS4, tag='Bauwesen')
+    + aufg(5, 'Leiter an der Wand', 3, r'''    <p>Eine 6-m-Leiter lehnt an einer senkrechten Wand; ihr Fusspunkt steht 2 m von
+    der Wand entfernt.</p>
+    <p>(a) Welcher Raumwinkel ist der Anstellwinkel — und wo liegt die Projektion
+    der Leiter?</p>
+    <p>(b) Berechne den Anstellwinkel.</p>
+    <p>(c) Die Norm verlangt etwa 65° bis 75°. Steht die Leiter sicher?</p>
+''' + LINS4, tag='Montage')
+    + aufg(6, 'Der 30°-Würfel (FTB)', 3, r'''    <p>Im Würfel \(ABCDEFGH\) ist der Winkel zwischen der Diagonalebene und der
+    Flächendiagonale \(AF\) gesucht. Das Lot von \(F\) trifft den Mittelpunkt \(M\)
+    der Flächendiagonale \(FH\).</p>
+    <p>(a) Begründe \( FM = \tfrac{1}{2} AF \).</p>
+    <p>(b) Berechne den Winkel im Dreieck \(AFM\).</p>
+    <p>(c) Warum braucht die Rechnung keine Kantenlänge?</p>
+''' + LINS4, tag='Geometrie')
+    + '\n  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>\n\n'
+    + loes(1, r'''    <p>(a) \( 8 \times 4 \) cm in wahrer Grösse.</p>
+    <p>(b) \( 6 \cdot \tfrac{1}{2} = 3 \) cm unter 45°.</p>
+    <p>(c) Die Kante ist verzerrt — wahre Länge \( 3 : \tfrac{1}{2} = 6 \) cm.</p>''')
+    + loes(2, r'''    <p>(a) \( \approx 8 \cdot 7 \cdot 3 \approx 170\ \text{m}^3 \).</p>
+    <p>(b) \( 168\ \text{m}^3 \) — Schätzung bestätigt.</p>
+    <p>(c) \( 168/30 = 5.6 \to 5 \) Personen.</p>''')
+    + loes(3, r'''    <p>(a) Zwischen 1.2 (längste Kante) und \( 1.2 + 0.8 + 0.5 = 2.5 \) m.</p>
+    <p>(b) \( d = \sqrt{1.44 + 0.64 + 0.25} = \sqrt{2.33} \approx 1.53 \) m ✓ im Fenster.</p>
+    <p>(c) Ja — knapp: 1.5 m &lt; 1.53 m (diagonal eingelegt).</p>''')
+    + loes(4, r'''    <p>(a) Der Querschnitt steht senkrecht zur First-Schnittgeraden — seine Schenkel
+    sind genau die Ebenenwinkel-Schenkel.</p>
+    <p>(b) \( \tan\varphi = 1.5/3 \Rightarrow \varphi \approx 26.57° \).</p>
+    <p>(c) \( 180° - 2 \cdot 26.57° \approx 126.87° \).</p>''')
+    + loes(5, r'''    <p>(a) Winkel Gerade–Ebene; die Projektion ist die Bodenstrecke Fusspunkt–Wand (2 m).</p>
+    <p>(b) \( \cos\varphi = \tfrac{2}{6} \Rightarrow \varphi \approx 70.53° \).</p>
+    <p>(c) Ja — 70.5° liegt im Normbereich.</p>''')
+    + loes(6, r'''    <p>(a) \(AF\) und \(FH\) sind beide Flächendiagonalen (\( a\sqrt{2} \));
+    \(M\) halbiert \(FH\).</p>
+    <p>(b) \( \sin\varphi = \tfrac{FM}{AF} = \tfrac{1}{2} \Rightarrow \varphi = 30° \).</p>
+    <p>(c) Nur das <em>Verhältnis</em> der Strecken zählt — \(a\) kürzt sich weg
+    (Ähnlichkeit aller Würfel).</p>''')
+)
+
+# ═══════════════════════════════════════════════════════════════════
 
 QUELLE_FA = ('    <div class="quelle">Ergänzung zur Formelsammlung Promath (SBFI). '
              'Notation gemäss <em>Formeln, Tabellen, Begriffe</em> (FTB).</div>\n')
@@ -5154,6 +5398,14 @@ SEITEN = [
      'Teste dich selbst', STYLE_TDS, '1.0', '', S_TDS),
     ('s4-2c-kugel', 'Kugel und zusammengesetzte Körper', 'Aufgabenserie', 'aufgabenserie.html',
      'Anwendungsaufgaben — Kugel und zusammengesetzte Körper', STYLE_SERIE, '1.0', '', S_SERIE),
+    ('s4-1-grundlagen', 'Grundlagen Geometrie', 'Handout', 'handout.html',
+     'Handout — Theorie', '', '1.0', '', T_HANDOUT),
+    ('s4-1-grundlagen', 'Grundlagen Geometrie', 'Formelauszug', 'formelauszug.html',
+     'Grundlagen Geometrie — Formelauszug', STYLE_FORMELAUSZUG, '0.95', QUELLE_FA, T_FORMELAUSZUG),
+    ('s4-1-grundlagen', 'Grundlagen Geometrie', 'Teste dich selbst', 'teste-dich-selbst.html',
+     'Teste dich selbst', STYLE_TDS, '1.0', '', T_TDS),
+    ('s4-1-grundlagen', 'Grundlagen Geometrie', 'Aufgabenserie', 'aufgabenserie.html',
+     'Anwendungsaufgaben — Grundlagen Geometrie', STYLE_SERIE, '1.0', '', T_SERIE),
 ]
 
 

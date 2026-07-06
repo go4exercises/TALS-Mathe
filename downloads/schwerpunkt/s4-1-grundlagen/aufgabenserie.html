@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aufgabenserie · Grundlagen Geometrie — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  .aufg-rahmen { border: 1pt solid var(--linie); border-radius: 4px; padding: 4mm; margin: 3mm 0;
+                 page-break-inside: avoid; break-inside: avoid; }
+  .aufg-rahmen .aufg-kopf { margin-bottom: 2mm; align-items: baseline; }
+  .schwierig { font-family: var(--mono); font-size: 8pt; color: var(--tinte-2); margin-left: auto; letter-spacing: 0.5px; }
+  .schwierig .punkt { color: var(--blau); font-size: 9pt; }
+  .schwierig .punkt-leer { color: var(--linie); font-size: 9pt; }
+  .bereich-tag { font-family: var(--mono); font-size: 7.5pt; color: var(--blau); background: var(--blau-hell);
+                 padding: 0.5mm 2mm; border-radius: 3px; text-transform: uppercase; letter-spacing: 1px; margin-left: 3mm; }
+  .lin-mehr { margin-bottom: 2mm; }
+  .lin-mehr .lin { height: 7mm; }
+  .uebersicht { width: 100%; border-collapse: collapse; font-size: 9.2pt; margin: 3mm 0 5mm; }
+  .uebersicht th, .uebersicht td { border: 1px solid var(--linie); padding: 1.4mm 2.5mm; text-align: left; }
+  .uebersicht th { background: var(--papier-2); font-family: var(--sans); font-weight: 700; font-size: 9pt; }
+  .uebersicht td.nr { text-align: center; font-family: var(--mono); width: 10mm; }
+  .uebersicht td.s  { text-align: center; font-family: var(--mono); width: 18mm; color: var(--orange); letter-spacing: 1px; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.0 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../schwerpunkt/s4-1-grundlagen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Aufgabenserie · A4 · Bereit zum Drucken</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Schwerpunktfach · Grundlagen Geometrie</div>
+    <h1>Anwendungsaufgaben — Grundlagen Geometrie</h1>
+  </header>
+
+  <div class="block block-def" style="margin-bottom:4mm">
+    <div class="block-titel">📘 Hinweise</div>
+    <p>Sechs Anwendungsaufgaben, nach zunehmendem Schwierigkeitsgrad geordnet. Die Musterlösungen
+    folgen am Ende des Dokuments. Zu jeder Aufgabe gehört eine Skizze — sie liefert das
+    rechtwinklige Hilfsdreieck und die Plausibilitäts-Schranken.</p>
+  </div>
+
+  <h3 style="margin-top:4mm">Übersicht</h3>
+  <table class="uebersicht">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Titel</th><th style="text-align:center">Schwierigkeit</th></tr></thead>
+    <tbody>
+      <tr><td class="nr">1</td><td>Technisches Zeichnen</td><td>Werkstück im Schrägbild</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">2</td><td>Raumplanung</td><td>Klassenzimmer-Check</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">3</td><td>Logistik</td><td>Passt die Stange in die Kiste?</td><td class="s">●●○</td></tr>
+      <tr><td class="nr">4</td><td>Bauwesen</td><td>Dachneigung und Firstwinkel</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">5</td><td>Montage</td><td>Leiter an der Wand</td><td class="s">●●●</td></tr>
+      <tr><td class="nr">6</td><td>Geometrie</td><td>Der 30°-Würfel (FTB)</td><td class="s">●●●</td></tr>
+    </tbody>
+  </table>
+
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">1</span>
+      <span class="aufg-titel">Werkstück im Schrägbild</span><span class="bereich-tag">Technisches Zeichnen</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Ein Quader-Werkstück \( 8 \times 6 \times 4 \) cm soll im Schrägbild
+    (\( \alpha = 45° \), \( q = \tfrac{1}{2} \)) gezeichnet werden; die 6-cm-Kante zeigt
+    nach hinten.</p>
+    <p>(a) Welche Masse hat die Frontfläche im Bild?</p>
+    <p>(b) Wie lang zeichnest du die Tiefenkanten?</p>
+    <p>(c) Ein Kollege misst im Bild eine Tiefenkante von 3 cm ab und notiert «3 cm».
+    Was ist falsch?</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">2</span>
+      <span class="aufg-titel">Klassenzimmer-Check</span><span class="bereich-tag">Raumplanung</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Ein Raum misst \( 8 \times 7 \times 3 \) m; Faustregel: \( 30\ \text{m}^3 \)
+    Luftraum pro Person (unbelüftet).</p>
+    <p>(a) Schätze das Volumen zuerst (Überschlag).</p>
+    <p>(b) Berechne exakt und vergleiche.</p>
+    <p>(c) Für wie viele Personen reicht der Raum nach der Faustregel?</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">3</span>
+      <span class="aufg-titel">Passt die Stange in die Kiste?</span><span class="bereich-tag">Logistik</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt-leer">●</span></span>
+    </div>
+    <p>Eine Transportkiste misst innen \( 1.2 \times 0.8 \times 0.5 \) m. Eine Stange ist
+    1.5 m lang.</p>
+    <p>(a) Gib ohne Rechnung das Plausibilitäts-Fenster für die Raumdiagonale an.</p>
+    <p>(b) Berechne die Raumdiagonale.</p>
+    <p>(c) Passt die Stange hinein?</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">4</span>
+      <span class="aufg-titel">Dachneigung und Firstwinkel</span><span class="bereich-tag">Bauwesen</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Satteldach: Grundriss-Breite 6 m, First mittig 1.5 m über der Traufe.</p>
+    <p>(a) Skizziere den Querschnitt und begründe, warum er die Ebenenwinkel zeigt.</p>
+    <p>(b) Berechne den Neigungswinkel der Dachfläche.</p>
+    <p>(c) Berechne den Firstwinkel zwischen den Dachflächen.</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">5</span>
+      <span class="aufg-titel">Leiter an der Wand</span><span class="bereich-tag">Montage</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Eine 6-m-Leiter lehnt an einer senkrechten Wand; ihr Fusspunkt steht 2 m von
+    der Wand entfernt.</p>
+    <p>(a) Welcher Raumwinkel ist der Anstellwinkel — und wo liegt die Projektion
+    der Leiter?</p>
+    <p>(b) Berechne den Anstellwinkel.</p>
+    <p>(c) Die Norm verlangt etwa 65° bis 75°. Steht die Leiter sicher?</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+  <div class="aufg-rahmen">
+    <div class="aufg-kopf">
+      <span class="aufg-nr">6</span>
+      <span class="aufg-titel">Der 30°-Würfel (FTB)</span><span class="bereich-tag">Geometrie</span>
+      <span class="schwierig"><span class="punkt">●</span><span class="punkt">●</span><span class="punkt">●</span></span>
+    </div>
+    <p>Im Würfel \(ABCDEFGH\) ist der Winkel zwischen der Diagonalebene und der
+    Flächendiagonale \(AF\) gesucht. Das Lot von \(F\) trifft den Mittelpunkt \(M\)
+    der Flächendiagonale \(FH\).</p>
+    <p>(a) Begründe \( FM = \tfrac{1}{2} AF \).</p>
+    <p>(b) Berechne den Winkel im Dreieck \(AFM\).</p>
+    <p>(c) Warum braucht die Rechnung keine Kantenlänge?</p>
+<div class="lin-mehr"><div class="lin"></div><div class="lin"></div><div class="lin"></div><div class="lin"></div></div>
+  </div>
+
+  <h2 style="border-bottom:2px solid var(--gruen);color:var(--gruen)">Musterlösungen</h2>
+
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 1</div>
+    <p>(a) \( 8 \times 4 \) cm in wahrer Grösse.</p>
+    <p>(b) \( 6 \cdot \tfrac{1}{2} = 3 \) cm unter 45°.</p>
+    <p>(c) Die Kante ist verzerrt — wahre Länge \( 3 : \tfrac{1}{2} = 6 \) cm.</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 2</div>
+    <p>(a) \( \approx 8 \cdot 7 \cdot 3 \approx 170\ \text{m}^3 \).</p>
+    <p>(b) \( 168\ \text{m}^3 \) — Schätzung bestätigt.</p>
+    <p>(c) \( 168/30 = 5.6 \to 5 \) Personen.</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 3</div>
+    <p>(a) Zwischen 1.2 (längste Kante) und \( 1.2 + 0.8 + 0.5 = 2.5 \) m.</p>
+    <p>(b) \( d = \sqrt{1.44 + 0.64 + 0.25} = \sqrt{2.33} \approx 1.53 \) m ✓ im Fenster.</p>
+    <p>(c) Ja — knapp: 1.5 m &lt; 1.53 m (diagonal eingelegt).</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 4</div>
+    <p>(a) Der Querschnitt steht senkrecht zur First-Schnittgeraden — seine Schenkel
+    sind genau die Ebenenwinkel-Schenkel.</p>
+    <p>(b) \( \tan\varphi = 1.5/3 \Rightarrow \varphi \approx 26.57° \).</p>
+    <p>(c) \( 180° - 2 \cdot 26.57° \approx 126.87° \).</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 5</div>
+    <p>(a) Winkel Gerade–Ebene; die Projektion ist die Bodenstrecke Fusspunkt–Wand (2 m).</p>
+    <p>(b) \( \cos\varphi = \tfrac{2}{6} \Rightarrow \varphi \approx 70.53° \).</p>
+    <p>(c) Ja — 70.5° liegt im Normbereich.</p>
+  </div>
+  <div class="loes">
+    <div class="loes-titel">✓ Lösung 6</div>
+    <p>(a) \(AF\) und \(FH\) sind beide Flächendiagonalen (\( a\sqrt{2} \));
+    \(M\) halbiert \(FH\).</p>
+    <p>(b) \( \sin\varphi = \tfrac{FM}{AF} = \tfrac{1}{2} \Rightarrow \varphi = 30° \).</p>
+    <p>(c) Nur das <em>Verhältnis</em> der Strecken zählt — \(a\) kürzt sich weg
+    (Ähnlichkeit aller Würfel).</p>
+  </div>
+
+  <footer class="doc-fuss">
+    <span>TALS Mathematik · Schwerpunkt Grundlagen Geometrie</span>
+    <span>Aufgabenserie</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1818,6 +1818,50 @@ s42c_cards = [
      'Volumen: Teile <b>addieren/subtrahieren</b>. Oberfläche: nur sichtbare Flächen, <b>Nahtstellen weglassen</b>.'),
 ]
 
+# ─── s4-1 Grundlagen Geometrie (Schwerpunkt) ───
+s41_cards = [
+    ('Was ist die <i>Stereometrie</i>?',
+     'Das Teilgebiet der Geometrie im <b>dreidimensionalen Raum</b> (Raumgeometrie) — Hauptaufgabe: Oberflächen und Volumen von Körpern.'),
+    ('Wie entsteht das <i>Schrägbild</i>?',
+     'Durch <b>schiefe Parallelprojektion</b>: Tiefenkanten unter dem Verzerrungswinkel α und um den Faktor q verkürzt.'),
+    ('Die zwei üblichen (α, q)-Paare?',
+     '<b>α = 45° mit q = ½</b> — oder <b>α = 30° mit q = ⅓</b>.'),
+    ('Was bleibt im Schrägbild unverzerrt?',
+     '<b>Frontparallele</b> Strecken und Flächen (wahre Grösse); Parallelität bleibt immer erhalten.'),
+    ('Tiefenkante 6 cm bei q = ½: Bildlänge?',
+     '<b>3 cm</b>. Rückwärts: Bildlänge : q = wahre Länge.'),
+    ('Was ist das <i>Netz</i> (die Abwicklung)?',
+     'Alle Begrenzungsflächen in die Ebene geklappt/abgerollt — jede Fläche <b>unverzerrt</b>: Grundlage der Oberflächenberechnung.'),
+    ('Schrägbild oder Netz — wofür?',
+     '<b>Schrägbild</b> für Strecken und Winkel im Körper, <b>Netz</b> für Flächen.'),
+    ('Wodurch ist eine Ebene eindeutig bestimmt?',
+     'Durch <b>drei Punkte, die nicht auf einer Geraden liegen</b> (E = ABC).'),
+    ('Die vier Lagen zweier Geraden im Raum?',
+     'Identisch · parallel · schneidend · <b>windschief</b> (nur im Raum!).'),
+    ('Wann heissen Geraden <i>windschief</i>?',
+     'Wenn sie sich <b>weder schneiden noch parallel</b> sind — z.B. Bodenkante und versetzte senkrechte Kante am Quader.'),
+    ('Wie viele Würfelkanten sind zu einer Kante windschief?',
+     '<b>Vier</b> — von den 11 übrigen sind 3 parallel und 4 schneidend.'),
+    ('Die drei Lagen von Gerade und Ebene?',
+     'In der Ebene enthalten · parallel · <b>Durchstosspunkt</b>.'),
+    ('Die drei Lagen zweier Ebenen?',
+     'Identisch · parallel · <b>Schnittgerade</b> — nie nur ein Punkt.'),
+    ('Winkel zwischen Gerade und Ebene?',
+     'Der Winkel zwischen der Geraden und ihrer <b>senkrechten Projektion</b> («Schatten») in die Ebene; φ ∈ ]0°; 90°].'),
+    ('Winkel zwischen zwei Ebenen?',
+     'Winkel der beiden <b>Senkrechten zur Schnittgeraden</b> (je eine pro Ebene, gemeinsamer Punkt auf s).'),
+    ('Winkel Raumdiagonale–Grundfläche im Würfel?',
+     'tan φ = a/(a√2) = 1/√2 → <b>φ ≈ 35.26°</b>; Flächendiagonale–Kante: 45°.'),
+    ('Was ist eine <i>Lotgerade</i>?',
+     'Eine Gerade, die <b>senkrecht auf der ganzen Ebene</b> steht (mindestens zwei Ebenen-Geraden ⊥ zu ihr); Winkel 90°.'),
+    ('Der Satz von Cavalieri?',
+     '<b>Flächengleiche Schnitte in jeder Höhe → gleiches Volumen</b> — Kartenstapel-Bild: Verschieben ändert den Inhalt nicht.'),
+    ('Das Plausibilitäts-Fenster der Raumdiagonale?',
+     '<b>Längste Kante &lt; d &lt; Kantensumme</b> — z.B. 4×3×2: 4 &lt; d &lt; 9; d = √29 ≈ 5.39 ✓.'),
+    ('Die vier Schritte der Skizzen-Strategie?',
+     '<b>Skizzieren</b> (Hilfsdreieck) → <b>Schätzen</b> (Überschlag) → <b>Rechnen</b> → <b>Prüfen</b> (Grössenordnung, Einheiten, Grenzfälle).'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -1915,6 +1959,8 @@ SP_DECKS = [
      'Drittel-Faktor, Seitenhöhe/Mantellinie/Öffnungswinkel, Sektor-Abwicklung, Stümpfe, Ähnlichkeit k³.', s42b_cards),
     ('s4-2c-kugel', '4.2c Kugel und zusammengesetzte Körper',
      'Kugelformeln, Archimedes 2:3, Kappe/Segment/Sektor, zusammengesetzte Körper, Dichte.', s42c_cards),
+    ('s4-1-grundlagen', '4.1 Grundlagen Geometrie',
+     'Schrägbild und Netz, Lagebeziehungen im Raum, Winkel im Raum, Cavalieri, Skizzen- und Plausibilitäts-Strategie.', s41_cards),
 ]
 
 for slug, deck_short, deck_desc, cards in SP_DECKS:
