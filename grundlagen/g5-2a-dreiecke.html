@@ -850,7 +850,7 @@ MathJax = {
       <ol class="aufg-liste">
         <li>Pythagoras: \(s = \sqrt{(b/2)^2 + h^2} = \sqrt{16 + 12.25} = \sqrt{28.25} \approx \mathbf{5.32\,\text{m}}\).</li>
         <li>Neigungswinkel \(\varphi\) gegen Waagerechte: \(\tan\varphi = \dfrac{h}{b/2} = \dfrac{3.5}{4} = 0.875\). Daraus \(\varphi = \arctan(0.875) \approx \mathbf{41.2°}\).</li>
-        <li>Eine Dachfläche: \(A_1 = s \cdot L \approx 5.32 \cdot 12 \approx 63.85\,\text{m}^2\). Gesamtdachfläche: \(2 \cdot A_1 \approx \mathbf{127.7\,\text{m}^2}\).</li>
+        <li>Eine Dachfläche (mit ungerundetem \(s\)): \(A_1 = s \cdot L = \sqrt{28.25} \cdot 12 \approx 63.8\,\text{m}^2\). Gesamtdachfläche: \(2 \cdot A_1 \approx \mathbf{127.6\,\text{m}^2}\).</li>
       </ol>
 
     </div>
@@ -1470,7 +1470,7 @@ spezSld2.addEventListener('input', drawSpez);
 function updateSpezRegler() {
   if (spezTyp === 'gleichschenklig') {
     spezLbl1.textContent = 'Schenkellänge';
-    spezLbl2.textContent = 'Basiswinkel β = γ';
+    spezLbl2.textContent = 'Basiswinkel α = β';
     spezSld1.min = 80; spezSld1.max = 200; spezSld1.value = 140;
     spezSld2.min = 20; spezSld2.max = 85;  spezSld2.value = 55;
     spezReglerEl2.style.display = '';
@@ -3429,6 +3429,7 @@ window.addEventListener('load', () => {
   drawKong();
   drawPyth();
   drawAnw();
+  drawStativ();
 });
 window.addEventListener('resize', () => {
   drawAllg();

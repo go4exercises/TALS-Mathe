@@ -4,6 +4,40 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [85] — 2026-07-08 · Audit-Paket 1: alle Severity-A-Fehler behoben (T1–T11)
+
+Die 16 A-Funde aus dem Vollaudit ([84]) auf 11 Seiten korrigiert — alle Zahlen mit
+python3 nachgerechnet, Pre-Flight über alle geänderten Seiten `ALLE CHECKS BESTANDEN`:
+
+- **g1-1** — Paritäts-Behauptung in der A6-Lösung auf ganzzahlige \(b\) eingeschränkt (T1).
+- **g1-3** — widersprüchlichen Fehlerblock-Satz («−(−2) = −2») sauber umformuliert (T2).
+- **g2-2b** — Diskriminanten-Widget Fall D>0 auf das konsistente Beispiel
+  \(x^2-8x+12=0\) umgestellt (D=16, √16=4, x=6/2 — Anzeige, Info und Äste stimmen
+  jetzt überein); A6-Zwischenrundung 1.76/−2.24 → 1.75/−2.25 (T3).
+- **g4-2** — Balkendiagramm-Demo-SVG neu skaliert (4.5 px/Einheit): Balkenhöhen,
+  Wert-Labels und Achsen-Ticks stimmen jetzt mit den Werten 22/32/17/12 überein (T4).
+- **g5-2a** — Slider-Label «Basiswinkel α = β»; Dachflächen-Lösung 63.8/127.6 m²
+  (mit ungerundetem s); `drawStativ()` in den load-Handler — Einstiegs-Canvas
+  erscheint jetzt beim ersten Laden (T5).
+- **g5-2b** — A7-SVG repariert: verirrtes `<p>` entfernt, Drachen-Polygon ergänzt;
+  Ecken, Masse und Labels rendern wieder (T6).
+- **g5-2c** — Sehnen-Definition korrigiert («geht sie durch M, heisst sie
+  Durchmesser»); 377.79 → 377.78 m²; `\quad`-Literal durch `&nbsp;` ersetzt (T7).
+- **g5-2d** — Anim-5-Legende: Katheten-Beschriftungen («gegenüber α/β»),
+  Hypotenusen-Abschnitte («an a/b») und statische Startwerte an die korrekte
+  JS-Rechnung angeglichen (T8).
+- **g5-3** — vier LaTeX-Zeilen im Strategie-Flussdiagramm-SVG durch Unicode-Klartext
+  ersetzt (MathJax rendert nicht in SVG-`<text>`); A1-Klassifikation WWS → WSW (T9).
+- **g5-5** — Einstiegstext an den Code angeglichen (Mittelpunkt 22 m, Einstieg 2 m,
+  Slider-Default 22 m); Widget 1 und 2 deduplizieren die Lösungen bei c=±1
+  («einzige Lösung»); Fehlerblock um «(für −1 < c < 1)» präzisiert (T10).
+- **s2-2a** — Mini-Check-Transfer durch eine Gleichung mit echter Scheinlösung
+  ersetzt: \(6/(x-2) = 3x/(x-2)\) → Kandidat x=2 ∉ D, L = {} (T11).
+- **Bericht:** Paket 1 im `BERICHT-audit-themenseiten-2026-07-06.md` als erledigt
+  markiert (T1–T11 ✅).
+
+---
+
 ## [84] — 2026-07-06 · Vollaudit aller 46 Themenseiten (nur Bericht, keine Änderungen)
 
 Auftragsgemäss ein Audit über alle Themenseiten beider Bereiche erstellt — ohne

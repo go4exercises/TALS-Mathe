@@ -106,9 +106,9 @@ MathJax = {
 <!-- ══ 2. EINSTIEG ══ -->
 <h2 id="einstieg">Einstieg — Riesenrad: wann auf halber Höhe?</h2>
 
-<p>Ein Riesenrad mit Radius 20 m dreht sich gleichmässig und braucht 4 Minuten für eine volle Umdrehung. Die Gondel startet ganz unten (Einstieg auf Bodenhöhe) und fährt im Gegenuhrzeigersinn nach oben.</p>
+<p>Ein Riesenrad mit Radius 20 m dreht sich gleichmässig und braucht 4 Minuten für eine volle Umdrehung. Der Mittelpunkt liegt 22 m über dem Boden; die Gondel startet ganz unten auf der Einstiegsplattform (2 m über Boden) und fährt im Gegenuhrzeigersinn nach oben.</p>
 
-<p>Während der Fahrt fragt sich der Fahrgast: «Wann sitze ich genau auf <strong>halber Höhe</strong> — auf der Höhe des Riesenrad-Mittelpunkts, also 20 m über dem Boden?» Klingt nach einer einzigen Antwort, oder? Schau in der Animation, wie oft die Höhen-Kurve die 20-m-Linie kreuzt.</p>
+<p>Während der Fahrt fragt sich der Fahrgast: «Wann sitze ich genau auf <strong>halber Höhe</strong> — auf der Höhe des Riesenrad-Mittelpunkts, also 22 m über dem Boden?» Klingt nach einer einzigen Antwort, oder? Schau in der Animation, wie oft die Höhen-Kurve die 22-m-Linie kreuzt.</p>
 
 <div class="anim">
   <div class="widget-titelzeile">
@@ -142,9 +142,9 @@ MathJax = {
       <div class="regler">
         <div class="regler-label">
           <span>Zielhöhe</span>
-          <span class="wert" id="lbl-radZ">20 m</span>
+          <span class="wert" id="lbl-radZ">22 m</span>
         </div>
-        <input type="range" id="sld-radZ" min="5" max="35" step="1" value="20">
+        <input type="range" id="sld-radZ" min="5" max="35" step="1" value="22">
       </div>
 
       <div class="legende">
@@ -154,7 +154,7 @@ MathJax = {
       </div>
 
       <div class="erklaerung" id="erkl-rad">
-        Die Höhe der Gondel folgt einer Sinus-Kurve. Bei jeder vollen Umdrehung (240 s) erreicht sie zweimal die Höhe 20 m.
+        Die Höhe der Gondel folgt einer Sinus-Kurve. Bei jeder vollen Umdrehung (240 s) erreicht sie zweimal die Mittelpunkts-Höhe 22 m.
       </div>
     </div>
   </div>
@@ -435,7 +435,7 @@ MathJax = {
 <!-- ══ 9. AUFGABEN ══ -->
 <div class="block block-fehler">
   <div class="block-titel">⚠ Häufiger Fehler — nur eine Lösung im Hauptintervall</div>
-  <p>Die Gleichung \(\sin(\varphi) = 0.5\) hat im Hauptintervall \([0°; 360°[\) <strong>zwei</strong> Lösungen: \(\varphi_1 = 30°\) (Taschenrechner-Wert \(\arcsin(0.5)\)) und \(\varphi_2 = 180° - 30° = 150°\) (Symmetrie der Sinuskurve). Wer nur den Taschenrechner-Wert nimmt, übersieht die zweite. Analog hat \(\cos(\varphi) = c\) im selben Intervall zwei Lösungen \(\varphi\) und \(360° - \varphi\), \(\tan(\varphi) = t\) hat zwei Lösungen \(\varphi\) und \(\varphi + 180°\).</p>
+  <p>Die Gleichung \(\sin(\varphi) = 0.5\) hat im Hauptintervall \([0°; 360°[\) <strong>zwei</strong> Lösungen: \(\varphi_1 = 30°\) (Taschenrechner-Wert \(\arcsin(0.5)\)) und \(\varphi_2 = 180° - 30° = 150°\) (Symmetrie der Sinuskurve). Wer nur den Taschenrechner-Wert nimmt, übersieht die zweite. Analog hat \(\cos(\varphi) = c\) im selben Intervall zwei Lösungen \(\varphi\) und \(360° - \varphi\) (jeweils für \(-1 < c < 1\); bei \(c = \pm 1\) gibt es nur eine), \(\tan(\varphi) = t\) hat zwei Lösungen \(\varphi\) und \(\varphi + 180°\).</p>
 </div>
 
 <details class="minicheck">
@@ -747,10 +747,15 @@ buildNav({
       if (p2 < 0) p2 += 360;
       drawSolutions(p1, p2);
       lbl.textContent = 'Lösungen sin(φ) = ' + c.toFixed(2) + ' im Bereich 0° ≤ φ < 360°';
-      // Sortieren für saubere Anzeige
+      // Sortieren für saubere Anzeige; bei c = ±1 fallen beide Lösungen zusammen
       const arr = [p1, p2].sort((a,b) => a-b);
-      valOut.textContent = `φ₁ = ${fmt(arr[0])}  ·  φ₂ = ${fmt(arr[1])}`;
-      allgOut.textContent = `φ = ${fmt(arr[0])} + k·360°  oder  φ = ${fmt(arr[1])} + k·360°,  k ∈ ℤ`;
+      if (Math.abs(arr[1] - arr[0]) < 1e-9) {
+        valOut.textContent = `einzige Lösung: φ = ${fmt(arr[0])}`;
+        allgOut.textContent = `φ = ${fmt(arr[0])} + k·360°,  k ∈ ℤ`;
+      } else {
+        valOut.textContent = `φ₁ = ${fmt(arr[0])}  ·  φ₂ = ${fmt(arr[1])}`;
+        allgOut.textContent = `φ = ${fmt(arr[0])} + k·360°  oder  φ = ${fmt(arr[1])} + k·360°,  k ∈ ℤ`;
+      }
     }
     else if (typ === 'cos') {
       if (c < -1 || c > 1) {
@@ -890,8 +895,9 @@ buildNav({
     sols.push(a, b);
     // Plus Periode 360° für die zweite Periode
     sols.push(a + 360, b + 360);
-    // Sortieren und nur Bereich [0, 720)
-    const sorted = sols.filter(s => s >= 0 && s < 720).sort((x,y) => x-y);
+    // Sortieren, Bereich [0, 720), Duplikate entfernen (c = ±1: a und b fallen zusammen)
+    const sorted = [...new Set(sols.map(s => Math.round(s * 1e6) / 1e6))]
+      .filter(s => s >= 0 && s < 720).sort((x,y) => x-y);
 
     // Schnittpunkte zeichnen
     sorted.forEach(deg => {

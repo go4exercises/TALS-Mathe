@@ -135,19 +135,19 @@ Das Lehrmittel ist in bemerkenswert gutem Zustand:
 
 ## 5. TODO-Liste (zur Sichtung — bitte streichen/ergänzen, dann arbeite ich sie ab)
 
-### Paket 1 — Fehler beheben (Severity A, ~1 Durchgang)
+### Paket 1 — Fehler beheben (Severity A) — ✅ erledigt 2026-07-08 (CHANGELOG [85])
 
-- [ ] **T1** g1-1: Paritäts-Behauptung in A6-Lösung streichen/einschränken
-- [ ] **T2** g1-3: Fehlerblock-Satz «−(−2) = −2» korrigieren
-- [ ] **T3** g2-2b: Diskriminanten-Widget Fall D>0 — Zahlen auf D=1/√1/5±1 korrigieren (oder Beispiel x²−8x+12); zusätzlich A6-Rundung 1.75/−2.25
-- [ ] **T4** g4-2: Balkendiagramm-SVG auf die Achsenskala korrigieren (y=170−5·Wert)
-- [ ] **T5** g5-2a: Slider-Label «Basiswinkel α = β»; A6-Dachfläche 63.8/127.6 m²; `drawStativ()` in den load-Handler
-- [ ] **T6** g5-2b: A7-SVG reparieren (`<p>` raus, Drachen-Polygon rein)
-- [ ] **T7** g5-2c: Sehnen-Definition korrigieren; 377.79→377.78; `\quad`-Literal in Math-Block ziehen
-- [ ] **T8** g5-2d: Anim-5-Katheten-Labels und statische Startwerte korrigieren
-- [ ] **T9** g5-3: Flussdiagramm-SVG-Zeilen als Unicode-Klartext (LaTeX rendert in SVG-text nicht); A1-Klassifikation WWS→WSW
-- [ ] **T10** g5-5: Einstieg Text↔Code angleichen (Mitte/Start); Widget-Duplikate bei c=±1 dedupllizieren; Fehlerblock «(für −1<c<1)»
-- [ ] **T11** s2-2a: Mini-Check-Transfer Z.322 ersetzen (Gleichung mit echter Scheinlösung, z.B. 6/(x−2)=3x/(x−2))
+- [x] **T1** g1-1: Paritäts-Behauptung in A6-Lösung streichen/einschränken
+- [x] **T2** g1-3: Fehlerblock-Satz «−(−2) = −2» korrigieren
+- [x] **T3** g2-2b: Diskriminanten-Widget Fall D>0 — Zahlen auf D=1/√1/5±1 korrigieren (oder Beispiel x²−8x+12); zusätzlich A6-Rundung 1.75/−2.25
+- [x] **T4** g4-2: Balkendiagramm-SVG auf die Achsenskala korrigieren (y=170−5·Wert)
+- [x] **T5** g5-2a: Slider-Label «Basiswinkel α = β»; A6-Dachfläche 63.8/127.6 m²; `drawStativ()` in den load-Handler
+- [x] **T6** g5-2b: A7-SVG reparieren (`<p>` raus, Drachen-Polygon rein)
+- [x] **T7** g5-2c: Sehnen-Definition korrigieren; 377.79→377.78; `\quad`-Literal in Math-Block ziehen
+- [x] **T8** g5-2d: Anim-5-Katheten-Labels und statische Startwerte korrigieren
+- [x] **T9** g5-3: Flussdiagramm-SVG-Zeilen als Unicode-Klartext (LaTeX rendert in SVG-text nicht); A1-Klassifikation WWS→WSW
+- [x] **T10** g5-5: Einstieg Text↔Code angleichen (Mitte/Start); Widget-Duplikate bei c=±1 dedupllizieren; Fehlerblock «(für −1<c<1)»
+- [x] **T11** s2-2a: Mini-Check-Transfer Z.322 ersetzen (Gleichung mit echter Scheinlösung, z.B. 6/(x−2)=3x/(x−2))
 
 ### Paket 2 — Systematische Konsistenz (Sammel-Durchgänge)
 
