@@ -269,7 +269,7 @@ MathJax = {
         <input type="range" id="pz-n" min="2" max="12" step="1" value="8" style="max-width:none">
       </div>
       <dl class="pb-readout">
-        <dt>Sektorwinkel \(\zeta = 360°/n\)</dt>
+        <dt>Sektorwinkel \(\varphi = 360°/n\)</dt>
         <dd id="pz-zeta">45.0°</dd>
         <dt>Bogenlänge pro Stück</dt>
         <dd id="pz-bogen">11.78 cm</dd>
@@ -793,11 +793,11 @@ MathJax = {
 
 <div class="block block-tipp">
   <div class="block-titel">💡 Strategie — Kreis-Aufgaben über Verhältnisse lösen</div>
-  <p>Sektor und Segment lassen sich elegant über den <strong>Anteil am Vollkreis</strong> bestimmen — Mittelpunktswinkel \(\alpha\) geteilt durch \(360°\) ist der Anteil:</p>
+  <p>Sektor und Segment lassen sich elegant über den <strong>Anteil am Vollkreis</strong> bestimmen — Mittelpunktswinkel \(\varphi\) geteilt durch \(360°\) ist der Anteil:</p>
   <ul style="margin:5px 0 5px 20px">
-    <li>Bogenlänge: \(b = \dfrac{\alpha}{360°} \cdot 2\pi r\)</li>
-    <li>Sektorfläche: \(A_{\text{Sektor}} = \dfrac{\alpha}{360°} \cdot \pi r^2\)</li>
-    <li>Segmentfläche: \(A_{\text{Segment}} = A_{\text{Sektor}} - A_{\text{Dreieck}}\) (Dreieck mit Schenkeln \(r\) und eingeschlossenem Winkel \(\alpha\))</li>
+    <li>Bogenlänge: \(b = \dfrac{\varphi}{360°} \cdot 2\pi r\)</li>
+    <li>Sektorfläche: \(A_{\text{Sektor}} = \dfrac{\varphi}{360°} \cdot \pi r^2\)</li>
+    <li>Segmentfläche: \(A_{\text{Segment}} = A_{\text{Sektor}} - A_{\text{Dreieck}}\) (Dreieck mit Schenkeln \(r\) und eingeschlossenem Winkel \(\varphi\))</li>
   </ul>
   <p>Wer den Anteil zuerst berechnet, behält den Überblick — und kann das Resultat einfach plausibilisieren: ein Halbkreis hat den halben Umfang/Flächeninhalt, ein Viertelkreis ein Viertel davon.</p>
 </div>
@@ -975,7 +975,7 @@ MathJax = {
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <div class="block block-aufg">
   <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Sprinkler-Bewässerung</span></div>
-  <p>Ein Garten-Sprinkler steht auf einer Wiese und bewässert einen Kreissektor mit Radius \(r = 8\,\text{m}\) und Öffnungswinkel \(\zeta = 120°\).</p>
+  <p>Ein Garten-Sprinkler steht auf einer Wiese und bewässert einen Kreissektor mit Radius \(r = 8\,\text{m}\) und Öffnungswinkel \(\varphi = 120°\).</p>
 <ol class="aufg-liste">
   <li>Berechne die bewässerte Fläche exakt (als Ausdruck mit \(\pi\)) und gerundet auf zwei Nachkommastellen.</li>
   <li>Berechne die Länge der äusseren Bogenlinie (also den Rand, an dem das Wasser gerade noch ankommt).</li>
@@ -986,8 +986,8 @@ MathJax = {
     <div class="block block-bsp" style="margin:6px 0 0">
       <div class="block-titel">🟢 Lösung</div>
             <ol class="aufg-liste">
-        <li>Sektorfläche \(A = \tfrac{\zeta}{360°} \cdot \pi \cdot r^2 = \tfrac{120}{360} \cdot \pi \cdot 64 = \tfrac{64\pi}{3} \approx 67.02\,\text{m}^2\).</li>
-        <li>Bogenlänge \(b = \tfrac{\zeta}{360°} \cdot 2\pi r = \tfrac{120}{360} \cdot 16\pi = \tfrac{16\pi}{3} \approx 16.76\,\text{m}\).</li>
+        <li>Sektorfläche \(A = \tfrac{\varphi}{360°} \cdot \pi \cdot r^2 = \tfrac{120}{360} \cdot \pi \cdot 64 = \tfrac{64\pi}{3} \approx 67.02\,\text{m}^2\).</li>
+        <li>Bogenlänge \(b = \tfrac{\varphi}{360°} \cdot 2\pi r = \tfrac{120}{360} \cdot 16\pi = \tfrac{16\pi}{3} \approx 16.76\,\text{m}\).</li>
         <li>Vollkreis ist \(360°\), Sprinkler deckt pro Position \(120°\) ab. Also \(360° / 120° = 3\) Positionen sind nötig, wenn sie überlappungsfrei aneinander gesetzt werden (z. B. bei 0°, 120° und 240° Drehung).</li>
       </ol>
     </div>
@@ -2208,7 +2208,7 @@ function drawSegment() {
   // Vollkreis (Referenz, gestrichelt)
   dashedCircle(ctx, cxK, cyK, rpx, C.linie, 1, [3,3]);
 
-  // Symmetrische Anordnung: Sektor symmetrisch nach unten, Sehne waagerecht
+  // Symmetrische Anordnung: Sektor symmetrisch nach unten, Sehne waagrecht
   // a1 = -π/2 - phi/2 (oben links), a2 = -π/2 + phi/2 (oben rechts)
   // → Segmenthöhe h zeigt nach oben (M unten, Segment oben)
   // Anders: Wir wählen die untere Hälfte: M oben, Segment ragt nach unten.

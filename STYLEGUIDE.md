@@ -37,7 +37,7 @@ Dieser Styleguide ist die verbindliche Referenz für alle Themenseiten des Lehrm
 
 ```
 f(x) = m·x + b           ← Funktionsterm
-f : ℝ → ℝ, x ↦ m·x + b   ← Funktion mit Definitions-/Wertebereich
+f : ℝ → ℝ, x ↦ m·x + b   ← Funktion mit Definitions-/Wertemenge
 ```
 
 In LaTeX:
@@ -71,6 +71,17 @@ f : \mathbb{R} \longrightarrow \mathbb{R}, \quad x \longmapsto m \cdot x + b
 | Achsenabschnitt | Y-Achsenschnittpunkt |
 | Nullstelle | x-Wert wo y=0 |
 | kartesisches Koordinatensystem | XY-System |
+| Definitionsmenge \(D\) | Definitionsbereich |
+| Wertemenge \(W\) | Wertebereich |
+| Probe (Einsetzen in Ausgangsgleichung) | Kontrolle |
+| Streckfaktor \(k\) | Streckungsfaktor / Streckenfaktor / Ähnlichkeitsfaktor |
+| waagrecht | waagerecht |
+| CHF (Währung) | Fr. |
+
+Weitere verbindliche Festlegungen (Terminologie-Audit 2026-07):
+- Zentriwinkel/Sektorwinkel/Mittelpunktswinkel: durchgehend das Symbol \(\varphi\) (nicht \(\zeta\)/\(\alpha\)); Namen dürfen kontextpassend variieren.
+- Lerngebiet 1 SP heisst «Arithmetik und Algebra» (nicht «Arithmetik/Algebra»).
+- Richtungsvektoren einer Ebene = Spannvektoren (Synonyme; bei Erstnennung gleichsetzen).
 
 ### 2.6 LaTeX-Konventionen
 
