@@ -780,8 +780,8 @@ function checkA1(ans){
 
 /* ══ Zahlenwert-Prüfung ══ */
 function chkNum(id, target, tol, einheit){
-  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[a-zA-ZΩ°³²'/]/g, '').trim();
-  const v = parseFloat(raw);
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[^0-9.eE/+-]/g, '').trim();
+  const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
     r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();

@@ -922,8 +922,8 @@ function chk(id,correct,display){
 
 /* ══ A4–A6: Zahlenwert-Prüfung ══ */
 function chkVal(id, target, einheit){
-  const raw = document.getElementById(id).value.trim().replace(',', '.').replace(/[a-zA-Z°]/g, '').trim();
-  const v = parseFloat(raw);
+  const raw = document.getElementById(id).value.trim().replace(',', '.').replace('−', '-').replace(/[^0-9.eE/+-]/g, '').trim();
+  const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id+'-cr'); r.style.display='block';
   if (!isNaN(v) && Math.abs(v - target) < 0.05){
     r.className='cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit||''}`.trim();
