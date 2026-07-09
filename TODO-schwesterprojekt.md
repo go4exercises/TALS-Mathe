@@ -33,6 +33,17 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
   Fehler, `verify_js_runtime` ok. **Render-Check 1280/360 px steht noch aus** (kein
   Browser lokal) — in Physik vor dem Abschluss nachholen.
 
+- **Slider-Wert-Farbkopplung (CSS-Muster, aus Audit-Paket 4).**
+  Auf mehreren Seiten färbt die seiten-lokale Regel `.sl-val { color: var(--blau) }`
+  **alle** Slider-Werte blau — auch die von orange/grünen Reglern (akz-orange/-gruen).
+  Der Wert passt dann nicht zu Reglerfarbe und (falls vorhanden) zur farbcodierten
+  Live-Formel. **Massnahme (in Mathe umgesetzt auf g3-1, s1-2, s1-3, s2-2c, s3-5):**
+  je Seite zwei Regeln nachziehen —
+  `.sl-grp.akz-orange .sl-val, .sl-row.akz-orange .sl-val { color: var(--orange); }`
+  und analog für `.akz-gruen`. Farbneutral, kein JS. In Physik dort prüfen, wo ein
+  Widget mehrere Regler mit unterschiedlichen akz-Farben hat (Amber/Bernstein-Palette
+  entsprechend). Verwandt: Live-Formel-Werte via `.tx-…`-Spans an dieselben Farben koppeln.
+
 ## Erledigt / portiert
 
 - (noch leer)
