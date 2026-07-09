@@ -34,6 +34,9 @@ const WIDGETS = [
   { page: 'schwerpunkt/s4-3c-geraden.html', id: 'cv-ws', note: 'Windschief-Schraegbild' },
   { page: 'grundlagen/g4-2-diagramme.html', id: 'cv-manip', note: 'Manipulations-Demo' },
   { page: 'grundlagen/g5-4-einheitskreis.html', id: 'cv-symm', note: 'Symmetrie-Spiegel' },
+  // T53, Runde 2: groesste Hebel der Prio-2-Liste.
+  { page: 'schwerpunkt/s4-1-grundlagen.html', id: 'cv-raumwinkel', note: 'Raumwinkel-Wuerfel' },
+  { page: 'schwerpunkt/s4-1-grundlagen.html', id: 'cv-a1', note: 'A1-Wuerfel Lagen' },
 ];
 
 const VIEWPORTS = [

@@ -263,6 +263,36 @@ MathJax = {
   <p>Skizze zuerst: Das rechtwinklige Dreieck aus Flächendiagonale, Kante und Raumdiagonale <em>sehen</em> — dann ist die Rechnung zweizeilig.</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Zieh den Quader in die Höhe (Grundfläche fest, \(a = 4\)) — der Winkel \(\varphi\) misst immer zur Projektion:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Die blaue Flächendiagonale ist der <strong>Schatten</strong> der grünen Raumdiagonale auf dem Boden. Sie ändert ihre Länge nie, während du die Höhe verstellst — welche der drei Seiten des rechtwinkligen Dreiecks wächst mit?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Die blaue Flächendiagonale ist der Schatten der grünen Raumdiagonale auf dem Boden. Sie ändert ihre Länge nie, während du die Höhe verstellst — welche der drei Seiten des rechtwinkligen Dreiecks wächst mit?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Der Winkel Gerade–Ebene ist der Winkel zur Projektion — hier zur Flächendiagonale \(a\sqrt2\). Das rechtwinklige Dreieck liegt aufrecht im Raum: Ankathete \(a\sqrt2\), Gegenkathete \(h\), Hypotenuse Raumdiagonale. Beim <strong>Würfel</strong> (\(h = a\)) ergibt \(\tan\varphi = \tfrac{1}{\sqrt2}\) den bekannten Wert \(35.26°\) — unabhängig von der Kantenlänge.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Der Winkel Gerade–Ebene ist der Winkel zur Projektion — hier zur Flächendiagonale a mal Wurzel zwei. Das rechtwinklige Dreieck liegt aufrecht im Raum: Ankathete a mal Wurzel zwei, Gegenkathete h, Hypotenuse Raumdiagonale. Beim Würfel, wenn h gleich a ist, ergibt der Tangens von phi eins durch Wurzel zwei, also fünfunddreissig Komma sechsundzwanzig Grad — unabhängig von der Kantenlänge.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Höhe \(h\): <span class="sl-val" id="rw-hv">4.00</span></label>
+  <input type="range" id="rw-h" min="1" max="8" step="0.25" value="4">
+</div>
+<div class="typ-btns" style="margin-bottom:10px">
+  <button class="typ-btn" type="button" data-rwh="1">flach (\(h = 1\))</button>
+  <button class="typ-btn" type="button" data-rwh="4">Würfel (\(h = a\))</button>
+  <button class="typ-btn" type="button" data-rwh="8">hoch (\(h = 2a\))</button>
+</div>
+<div class="formel-live"><div class="fl-label">Winkel der Raumdiagonale zur Grundfläche</div><div class="fl-eq" id="rw-eq">tan φ = 4.00 / 5.66 → φ = 35.26°</div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-raumwinkel" height="300"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blau: Flächendiagonale \(a\sqrt2\) (die Projektion) · Grün: Raumdiagonale · Orange: die senkrechte Kante \(h\). Das rechtwinklige Dreieck steht aufrecht im Raum.</div>
+
 <div class="block block-fehler">
   <div class="block-titel">⚠ Häufiger Fehler — irgendeinen Winkel statt des definierten nehmen</div>
   <p>Beim Winkel Gerade–Ebene zählt der Winkel zur <strong>Projektion</strong> (der kleinste mögliche), beim Ebenenwinkel die Senkrechten zur <strong>Schnittgeraden</strong>. Wer stattdessen beliebige Hilfslinien verwendet, misst irgendetwas — die Skizze mit eingezeichnetem Lot schützt davor.</p>
@@ -318,6 +348,7 @@ MathJax = {
   <div class="block-titel">🟠 <span class="aufg-nr-tag">A1</span><span class="aufg-titel-text">Lagen am Würfel erkennen</span></div>
   <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Würfel \(ABCDEFGH\): Boden \(ABCD\), Decke \(EFGH\) (\(E\) über \(A\), \(F\) über \(B\), …). Wähle ein Geradenpaar:</p>
   <div class="graf-btn-row" id="a1-btns"></div>
+  <div class="cv-wrap" style="max-width:420px;margin-bottom:10px"><canvas id="cv-a1" height="260"></canvas></div>
   <div class="formel-live" style="margin-bottom:10px">
     <div class="fl-label">Geradenpaar</div>
     <div class="fl-eq" id="a1-eq" style="font-size:0.95rem"></div>
@@ -637,12 +668,20 @@ function updateSB(){
 
 /* ══ A1: Lagen am Würfel ══ */
 const a1G = [
-  {label:'Paar 1', desc:'Bodenkante AB und Deckenkante EF (E über A, F über B)', sol:'parallel'},
-  {label:'Paar 2', desc:'Bodenkante AB und senkrechte Kante CG', sol:'windschief'},
-  {label:'Paar 3', desc:'Bodenkante AB und Bodenkante BC', sol:'schneidend'},
-  {label:'Paar 4', desc:'Bodenkante AB und Deckenkante GH (über DC)', sol:'parallel'},
-  {label:'Paar 5', desc:'Flächendiagonale AC (Boden) und Deckenkante FG', sol:'windschief'},
+  {label:'Paar 1', desc:'Bodenkante AB und Deckenkante EF (E über A, F über B)', sol:'parallel',   g1:['A','B'], g2:['E','F']},
+  {label:'Paar 2', desc:'Bodenkante AB und senkrechte Kante CG', sol:'windschief',                 g1:['A','B'], g2:['C','G']},
+  {label:'Paar 3', desc:'Bodenkante AB und Bodenkante BC', sol:'schneidend',                       g1:['A','B'], g2:['B','C']},
+  {label:'Paar 4', desc:'Bodenkante AB und Deckenkante GH (über DC)', sol:'parallel',              g1:['A','B'], g2:['G','H']},
+  {label:'Paar 5', desc:'Flächendiagonale AC (Boden) und Deckenkante FG', sol:'windschief',        g1:['A','C'], g2:['F','G']},
 ];
+/* Würfel ABCDEFGH: Boden ABCD gegen den Uhrzeigersinn, Decke EFGH direkt darüber. */
+const A1_ECKEN = {
+  A:[0,0,0], B:[1,0,0], C:[1,1,0], D:[0,1,0],
+  E:[0,0,1], F:[1,0,1], G:[1,1,1], H:[0,1,1],
+};
+const A1_KANTEN = [['A','B'],['B','C'],['C','D'],['D','A'],
+                   ['E','F'],['F','G'],['G','H'],['H','E'],
+                   ['A','E'],['B','F'],['C','G'],['D','H']];
 const a1Opts = ['parallel', 'schneidend', 'windschief', 'identisch'];
 let a1Act = 0;
 function buildA1(){
@@ -661,8 +700,121 @@ function setA1(i){
   drawA1();
 }
 function drawA1(){
-  document.getElementById('a1-eq').textContent = a1G[a1Act].desc;
+  const g = a1G[a1Act];
+  document.getElementById('a1-eq').textContent = g.desc;
+
+  const { ctx, W, H } = initCanvas('cv-a1', 260, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const sc = Math.min(120, (W - 120) / 1.55), dep = 0.62;
+  const ca = Math.cos(Math.PI / 6), sa = Math.sin(Math.PI / 6);
+  const ox = Math.max(40, (W - (1 + dep * ca) * sc) / 2), oy = H - 46;
+  const proj = P => [ox + P[0] * sc + P[1] * dep * sc * ca, oy - P[2] * sc - P[1] * dep * sc * sa];
+  const seg = (n1, n2, col, lw, dash) => {
+    const p = proj(A1_ECKEN[n1]), q = proj(A1_ECKEN[n2]);
+    ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []);
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); ctx.setLineDash([]);
+  };
+  // verdeckte Kanten (alle an D) gestrichelt, übrige durchgezogen
+  const verdeckt = k => k.includes('D');
+  A1_KANTEN.forEach(k => seg(k[0], k[1], '#c8d0da', 1.4, verdeckt(k) ? [4, 3] : []));
+  // die beiden gewählten Geraden
+  seg(g.g1[0], g.g1[1], '#1a4f8a', 3.2);
+  seg(g.g2[0], g.g2[1], '#b85c00', 3.2);
+  // Eckpunkte beschriften
+  ctx.font = '12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  Object.entries(A1_ECKEN).forEach(([n, P]) => {
+    const p = proj(P), imPaar = g.g1.includes(n) || g.g2.includes(n);
+    ctx.fillStyle = imPaar ? '#374151' : '#9ca3af';
+    ctx.beginPath(); ctx.arc(p[0], p[1], imPaar ? 3.5 : 2, 0, Math.PI * 2); ctx.fill();
+    // Label nach aussen versetzen: von der Bildmitte weg
+    const m = proj([0.5, 0.5, 0.5]);
+    const dx = p[0] - m[0], dy = p[1] - m[1], L = Math.hypot(dx, dy) || 1;
+    ctx.fillText(n, p[0] + dx / L * 13, p[1] + dy / L * 13 + 4);
+  });
+  ctx.textAlign = 'left'; ctx.font = '11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a'; ctx.fillText(g.g1.join(''), 10, 18);
+  ctx.fillStyle = '#b85c00'; ctx.fillText(g.g2.join(''), 10, 34);
 }
+
+/* ══ Raumwinkel-Widget ══
+   Quader mit fester Grundfläche a = 4 und variabler Höhe h.
+   Projektion der Raumdiagonale AG in den Boden ist die Flächendiagonale AC = a√2.
+   tan φ = h / (a√2);  h = a (Würfel) → φ = 35.26°.                                */
+function drawRaumwinkel() {
+  const a = 4, h = parseFloat(document.getElementById('rw-h').value);
+  const d = a * Math.SQRT2, D = Math.sqrt(2 * a * a + h * h);
+  const phi = Math.atan(h / d) * 180 / Math.PI;
+  document.getElementById('rw-hv').textContent = h.toFixed(2);
+  document.getElementById('rw-eq').textContent =
+    `tan φ = ${h.toFixed(2)} / ${d.toFixed(2)} → φ = ${phi.toFixed(2)}°`;
+  document.querySelectorAll('[data-rwh]').forEach(b =>
+    b.classList.toggle('aktiv', parseFloat(b.dataset.rwh) === h));
+
+  const { ctx, W, H } = initCanvas('cv-raumwinkel', 300, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const dep = 0.62, ca = Math.cos(Math.PI / 6), sa = Math.sin(Math.PI / 6);
+  // Massstab fest an der maximalen Höhe (h = 8) ausrichten, damit das Bild beim
+  // Slidern nicht mitskaliert; danach den Körper waagrecht zentrieren.
+  const bw = a + a * dep * ca;                    // Breite des Quaders in Einheiten
+  const sc = Math.min(30, (W - 150) / bw, (H - 64) / (8 + a * dep * sa));
+  const ox = Math.max(40, (W - bw * sc) / 2 - 30), oy = H - 34;
+  const proj = P => [ox + P[0] * sc + P[1] * dep * sc * ca, oy - P[2] * sc - P[1] * dep * sc * sa];
+  const line = (P, Q, col, lw, dash) => {
+    const p = proj(P), q = proj(Q);
+    ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []);
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); ctx.setLineDash([]);
+  };
+  const Ae = [0,0,0], Be = [a,0,0], Ce = [a,a,0], De = [0,a,0];
+  const Ge = [a,a,h], Ee = [0,0,h], Fe = [a,0,h], He = [0,a,h];
+  // Quader-Drahtmodell (hintere Kanten an D gestrichelt)
+  [[Ae,Be],[Be,Ce],[Ee,Fe],[Fe,Ge],[Ge,He],[He,Ee],[Ae,Ee],[Be,Fe],[Ce,Ge]].forEach(k => line(k[0], k[1], '#c8d0da', 1.5));
+  [[Ce,De],[De,Ae],[De,He]].forEach(k => line(k[0], k[1], '#c8d0da', 1.2, [4, 3]));
+  // das rechtwinklige Dreieck A–C–G
+  ctx.fillStyle = 'rgba(26,79,138,0.07)';
+  ctx.beginPath();
+  [Ae, Ce, Ge].forEach((P, i) => { const p = proj(P); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); });
+  ctx.closePath(); ctx.fill();
+  line(Ae, Ce, '#1a4f8a', 3);      // Projektion (Flächendiagonale)
+  line(Ce, Ge, '#b85c00', 3);      // senkrechte Kante h
+  line(Ae, Ge, '#1f6b3a', 3);      // Raumdiagonale
+  // rechter Winkel bei C
+  const pc = proj(Ce), pa = proj(Ae), pg = proj(Ge);
+  const u = [(pa[0]-pc[0]), (pa[1]-pc[1])], v = [(pg[0]-pc[0]), (pg[1]-pc[1])];
+  const nu = Math.hypot(...u) || 1, nv = Math.hypot(...v) || 1, s = 11;
+  ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(pc[0] + u[0]/nu*s, pc[1] + u[1]/nu*s);
+  ctx.lineTo(pc[0] + u[0]/nu*s + v[0]/nv*s, pc[1] + u[1]/nu*s + v[1]/nv*s);
+  ctx.lineTo(pc[0] + v[0]/nv*s, pc[1] + v[1]/nv*s);
+  ctx.stroke();
+  // Winkelbogen φ bei A
+  const angC = Math.atan2(pc[1]-pa[1], pc[0]-pa[0]), angG = Math.atan2(pg[1]-pa[1], pg[0]-pa[0]);
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.arc(pa[0], pa[1], 34, angC, angG, true); ctx.stroke();
+  // φ in die Kopfzeile statt an den Bogen — bei flachem Winkel läge es sonst auf AC.
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 15px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('φ = ' + phi.toFixed(2) + '°', 14, 24);
+  ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#6b7280';
+  ctx.fillText(Math.abs(h - a) < 1e-9 ? 'Würfel: tan φ = 1/√2' : 'Quader: tan φ = h / (a√2)', 14, 42);
+  // Beschriftungen
+  ctx.font = '11px JetBrains Mono, monospace';
+  const mid = (P, Q) => [(proj(P)[0]+proj(Q)[0])/2, (proj(P)[1]+proj(Q)[1])/2];
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'center';
+  const mAC = mid(Ae, Ce); ctx.fillText('a√2 = ' + d.toFixed(2), mAC[0], mAC[1] + 16);
+  ctx.fillStyle = '#b85c00'; ctx.textAlign = 'left';
+  const mCG = mid(Ce, Ge); ctx.fillText('h = ' + h.toFixed(2), mCG[0] + 8, mCG[1] + 4);
+  ctx.fillStyle = '#1f6b3a'; ctx.textAlign = 'right';
+  const mAG = mid(Ae, Ge); ctx.fillText('D = ' + D.toFixed(2), mAG[0] - 6, mAG[1] - 6);
+  ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('A', proj(Ae)[0] - 14, proj(Ae)[1] + 6);
+  ctx.fillText('C', proj(Ce)[0] + 6, proj(Ce)[1] + 12);
+  ctx.fillText('G', proj(Ge)[0] + 6, proj(Ge)[1] - 4);
+}
+document.getElementById('rw-h').addEventListener('input', drawRaumwinkel);
+document.querySelectorAll('[data-rwh]').forEach(b => b.addEventListener('click', () => {
+  document.getElementById('rw-h').value = b.dataset.rwh;
+  drawRaumwinkel();
+}));
 function checkA1(ans){
   const g = a1G[a1Act];
   const r = document.getElementById('a1-cr'); r.style.display = 'block';
@@ -688,10 +840,13 @@ function chkNum(id, target, tol, einheit){
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateSB();
+  drawRaumwinkel();
   buildA1();
 });
 window.addEventListener('resize', () => {
   updateSB();
+  drawRaumwinkel();
+  drawA1();
 });
 </script>
 </body>
