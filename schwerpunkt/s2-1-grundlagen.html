@@ -214,6 +214,33 @@ MathJax = {
 <div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Kann eine Gleichung die Lösungsmenge \(L = \mathbb{R}\) haben? Gib ein Beispiel.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Ja — eine <em>allgemeingültige</em> Gleichung (Identität) wie \(2(x+1) = 2x + 2\): Jede reelle Zahl erfüllt sie. Das Gegenstück ist \(x = x + 1\) mit \(L = \{\,\}\).</div></details></div>
 </details>
 
+<h3 style="font-family:var(--serif);font-size:1.05rem;margin:16px 0 6px">Warum die Probe nötig ist — Scheinlösung grafisch</h3>
+
+<div class="widget-titelzeile" style="margin-bottom:8px">
+  <p style="margin:0">\(\sqrt{x} = x - 2\): Quadrieren liefert \(x = 1\) <em>und</em> \(x = 4\) — nur eine ist echt.</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Schiebe den Kandidaten auf \(x = 1\) und auf \(x = 4\): Bei welchem treffen sich die beiden Kurven wirklich — und wo klafft eine Lücke?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Schiebe den Kandidaten auf x gleich eins und auf x gleich vier: Bei welchem treffen sich die beiden Kurven wirklich, und wo klafft eine Lücke?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Nur bei \(x = 4\) schneiden sich \(\sqrt{x}\) und \(x-2\) — dort ist die echte Lösung. Bei \(x = 1\) ist \(\sqrt{1} = 1\), aber \(1 - 2 = -1\): keine echte Lösung. Das Quadrieren hat diese Scheinlösung eingeschleppt — darum die Probe.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Nur bei x gleich vier schneiden sich Wurzel x und x minus zwei — dort ist die echte Lösung. Bei x gleich eins ist Wurzel eins gleich eins, aber eins minus zwei gleich minus eins: keine echte Lösung. Das Quadrieren hat diese Scheinlösung eingeschleppt — darum die Probe.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Kandidat \(x\): <span class="sl-val" id="sl-candv">1.00</span></label>
+  <input type="range" id="sl-cand" min="0" max="5.5" step="0.25" value="1">
+</div>
+<div class="formel-live"><div class="fl-label">Probe in der Ausgangsgleichung</div><div class="fl-eq" id="sl-eq">√1.00 = 1.00, 1.00−2 = −1.00 → ✗ Scheinlösung</div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-sl" height="240"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blau: \(\sqrt{x}\) · orange: \(x-2\). Eine echte Lösung liegt nur am Schnittpunkt \((4 \mid 2)\).</div>
+
 
 <!-- ══ 4. DARSTELLUNGEN ══ -->
 <h2 id="darstellungen">Der Typen-Bestimmer — wo steht die Unbekannte?</h2>
@@ -799,13 +826,69 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* Scheinlösungs-Grafik: √x = x−2 — echte Lösung x=4, Scheinlösung x=1 (aus dem Quadrieren) */
+function drawSl() {
+  const xc = parseFloat(document.getElementById('sl-cand').value);
+  const lhs = Math.sqrt(Math.max(0, xc));
+  const rhs = xc - 2;
+  const eq = Math.abs(lhs - rhs) < 0.06;
+  const fmt = v => v.toFixed(2).replace('-', '−');
+  document.getElementById('sl-candv').textContent = xc.toFixed(2);
+  document.getElementById('sl-eq').innerHTML =
+    '√' + xc.toFixed(2) + ' = ' + fmt(lhs) + ', ' + xc.toFixed(2) + '−2 = ' + fmt(rhs) + ' → ' +
+    (eq ? '✓ Lösung' : '✗ Scheinlösung');
+  const { ctx, W, H } = initCanvas('cv-sl', 240, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const padL = 40, padR = 16, padT = 14, padB = 26;
+  const xMin = -0.5, xMax = 5.5, yMin = -2.5, yMax = 3.5;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => H - padB - (y - yMin) / (yMax - yMin) * (H - padB - padT);
+  ctx.font = '11px JetBrains Mono, monospace';
+  for (let gx = 0; gx <= 5; gx++) {
+    ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.4 : 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), H - padB); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center'; ctx.fillText(gx, cx(gx), H - padB + 14);
+  }
+  for (let gy = -2; gy <= 3; gy++) {
+    ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.4 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right'; ctx.fillText(gy, padL - 5, cy(gy) + 4);
+  }
+  // √x (blau)
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5; ctx.beginPath();
+  let first = true;
+  for (let x = 0; x <= xMax + 1e-9; x += 0.05) { const py = cy(Math.sqrt(x)); if (first) { ctx.moveTo(cx(x), py); first = false; } else ctx.lineTo(cx(x), py); }
+  ctx.stroke();
+  // x−2 (orange)
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(cx(xMin), cy(xMin - 2)); ctx.lineTo(cx(xMax), cy(xMax - 2)); ctx.stroke();
+  // echte Lösung (4 | 2)
+  ctx.fillStyle = '#1f6b3a'; ctx.beginPath(); ctx.arc(cx(4), cy(2), 6, 0, 2 * Math.PI); ctx.fill();
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Lösung (4 | 2)', cx(4) + 9, cy(2) - 7);
+  // Kandidat
+  ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(cx(xc), padT); ctx.lineTo(cx(xc), H - padB); ctx.stroke();
+  ctx.setLineDash([]);
+  const yL = cy(lhs), yR = cy(rhs);
+  if (!eq) {   // Lücke rot markieren
+    ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(cx(xc), yL); ctx.lineTo(cx(xc), yR); ctx.stroke();
+  }
+  ctx.fillStyle = '#1a4f8a'; ctx.beginPath(); ctx.arc(cx(xc), yL, 5, 0, 2 * Math.PI); ctx.fill();
+  ctx.fillStyle = '#b85c00'; ctx.beginPath(); ctx.arc(cx(xc), yR, 5, 0, 2 * Math.PI); ctx.fill();
+}
+document.getElementById('sl-cand').addEventListener('input', drawSl);
+
 document.addEventListener('DOMContentLoaded', () => {
   drawWA();
+  drawSl();
   buildTbBtns(); drawTb();
   buildA1();
 });
 window.addEventListener('resize', () => {
   drawWA();
+  drawSl();
 });
 </script>
 </body>
