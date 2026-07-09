@@ -822,11 +822,11 @@ function drawK3() {
   const bar = (y, frac, col, lab) => {
     ctx.textAlign = 'left'; ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#374151';
     ctx.fillText(lab, bx, y - 5);
-    ctx.textAlign = 'right'; ctx.fillText((frac * 100).toFixed(frac < 0.1 ? 1 : 0) + '%', bx + bw, y - 5);
+    ctx.textAlign = 'right'; ctx.fillText((frac * 100).toFixed(frac < 0.15 ? 1 : 0) + '%', bx + bw, y - 5);
     ctx.fillStyle = '#eef1f5'; ctx.fillRect(bx, y, bw, 18);
     ctx.fillStyle = col; ctx.fillRect(bx, y, bw * frac, 18);
   };
-  bar(72, k, '#1a4f8a', 'Höhe / Radius (×k)');
+  bar(72, k, '#1a4f8a', 'Höhe (×k)');
   bar(120, k * k, '#1f6b3a', 'Fläche (×k²)');
   bar(168, k * k * k, '#b85c00', 'Volumen (×k³)');
 }
