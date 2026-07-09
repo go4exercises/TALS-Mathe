@@ -4,6 +4,89 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [87] — 2026-07-09 · Audit-Paket 4: Einzel-Mängel B pro Seite behoben (T27–T51)
+
+Die Severity-B-Einzelfunde aus dem Vollaudit ([84]) auf 36 Seiten korrigiert — je
+T-Punkt/Seite ein Commit, alle Zahlen mit python3 nachgerechnet, Pre-Flight (inkl.
+echter MathJax-Render- und JS-Laufzeit-Prüfung) über alle geänderten Seiten
+`ALLE CHECKS BESTANDEN`:
+
+- **g1-3** — Dario-Startwert 650 → 1040, Wurzel-Querlink auf `#wurzeln`, unbelegten
+  (a+b)³-Verweis auf s1-1/s1-2 entfernt (T27).
+- **g1-4** — toten `#typen`-Anker → `#hierarchie`, «Komma» → «Dezimalpunkt», Zoom-Objekte
+  richtiggestellt (Milchstrasse n=21, Nachbargalaxien n=22 statt Universum) (T28).
+- **g2-1** — A2-Platzhalter neutralisiert; String- durch **numerischen** Gleichungs-/
+  Ungleichungs-Vergleich ersetzt (akzeptiert Term-Umstellungen); a≠0 in der Typen-Tabelle (T29).
+- **g2-2a** — Lösungsfall-Bezeichnung, Definition a≠0, Lead entrümpelt, «Buchstabengrösse»,
+  A7 «lukrativer»; totes `ohm-root`-Element aus g2-2a/2-2b/2-3 entfernt (T30).
+- **g2-2b** — `<em>einen</em>`, Wurfbewegungen statt Zerfallsprozesse, 𝕃 vereinheitlicht,
+  «Lernende», Velo-Caption «nacheinander» (Animation ist sequenziell) (T31).
+- **g2-3** — Geraden-Label `2x+y=7` in den sichtbaren Canvas-Bereich (war bei cy(9.4) über
+  yMax=8); Kino-Kontext (Reisegruppe, Beispielpaar 8/12 statt der Lösung 10/10) (T32).
+- **g3-1** — leeres `\(\)`-Fragment, b-Slider-Farbkopplung (orange), Vertikaltest-Gloss,
+  Zielmenge-vs-Wertemenge-Fussnote (T33).
+- **g3-2** — A3-Lösungswege ergänzt, U+2212 im m=−1-Zweig, `.merksatz` → `block-merksatz` (T34).
+- **g3-3** — **U+2212-Parser-Bug** im A2-Widget behoben («−0.5» wurde zu 1, Parabel öffnete
+  falsch); Wurfparabel auf die Flugbahn geclippt; Lösungsformel-Gloss (T35).
+- **g4-0/g4-3** — Grammatik, «8000 BM2-Lernende» neutralisiert, Boxplot-Whisker-Hinweis,
+  «(oben)»-Verweis; Standardabweichung als quadratisches Mittel statt «mittlere Abweichung» (T36).
+- **g4-1** — Anredebruch Sie → du (T37).
+- **g5-1** — totes `.skizze-grid`/`.skizze-box`-CSS entfernt (T38).
+- **g5-2b** — Drachen in die Live-Klassifikation aufgenommen (+Preset), Formeltabelle
+  a=Grundseite/Drachen-Seiten, NaN-Schutz in `angleAt` (koinzidente Ecken), «Ein Drachen»,
+  Mini-Check-Etikett auf echte Rechnung (T39).
+- **g5-2c** — Animations-Verweis, Tangenteneigenschaft statt «Tangentensatz», Bogenmass-
+  Merksatz reconciliert, Segment-Legende φ>180°, «Stern-Schluss»-Klammer, Drag-Texte Anim 1,
+  unbelegten Pi-Rekord «Nov. 2025» entfernt (T40).
+- **g5-2d** — Lernziele nach der RLP-Box, `block-def` für zentrische Streckung, Strahlensatz-
+  Fehlerblock auf S-Notation, Massstabs-Ticks beschriftet (T41).
+- **g5-3** — «Von einem», WWS im Merksatz/Tabelle, Sinussatz-Slider-Clamp (Min-Gap gegen
+  entartete Dreiecke), A2.1-Endwert (16.5 km), sin-Bereich 0..1 im rechtwinkligen Kontext (T42).
+- **g5-4** — `erkl-ek2`-Satzbau, Schiff-Quadrant an Achsenwinkeln («auf der Achse»),
+  π/2+kπ-Notation (T43).
+- **g5-5** — Fehlerblock-Satzbau, Intervallnotation vereinheitlicht (`;`), A4c-Rundungsvorgabe (T44).
+- **s1-2/s1-3** — Template-Reste-Anker → semantische IDs, toter `fmt2`, a>0-Voraussetzung,
+  A1 um Gesetz 5 + gemischte Optionen, A5-Text, sl-val-Farbkopplung, Widget-Emojis (T45).
+- **s2-1** — Waage-Geometrie (Pfannen tiefer, Stapel unter dem Balken), A3b neue Gleichung
+  (x²−7x+12), g2-2a/b-Links in der Typen-Tabelle, `waStep`-Feedback bei No-op-Klicks (T46).
+- **s2-2a** — Uetliberg «über Meer», «kann leer sein», D-Zeile in Beispiel 4/A7,
+  Substitution-Lernziel (T47).
+- **s2-2b** — A7-Toleranz gelockert (7.9 Mio zulässig), D-Herleitung in Beispiel 6,
+  A1-Distraktor `L={−2}` (T48).
+- **s2-2c** — Randfall r=0 bei Betragsungleichungen, `updateVZ` «x−0» → «x», Widget-Emoji,
+  toter `fmt2` (T49).
+- **s3-Serie** — s3-1/s3-6 Slider-Init a=1 (statt 0.5), «nicht lösbar»-Formulierung,
+  Scheitelform-Zwischenschritt; s3-2a Definitionsmenge statt f:ℝ→ℝ, n→k, Asymptoten-Def,
+  Slider-max 8.5, t³≈560; s3-2b ∛-Konventions-Tipp, «knapp zweieinhalb Tage», A6-Zwischenschritt;
+  s3-3 Sattelpunkt, A4–A7-Plot-Hinweise; s3-4a 0<a<1, A5/A6-Hinweis, 1.3-Querlink; s3-4b
+  Weber-Fechner in dB statt Phon, 0<a<1, Erkenntnis-Popup präzisiert; s3-5 b/v-Farbkopplung,
+  Symmetrieachsen-Erklärsatz (T50).
+- **s4-Serie** — s4-2a `hinten`-Set-Bug (0-3 statt 3-0), Wiederholungs-Kennzeichnung
+  Abschnitt 5, Mantellinie-Halbsatz, Körperdiagonale-Klammer; s4-3b Beispiel 4 auf BA·BC
+  (konsistent zum Fehlerblock); s4-3c A5-«Überholmanöver»-Text mit sauberen km-Einheiten (T51).
+- **Bericht:** Paket 4 im `BERICHT-audit-themenseiten-2026-07-06.md` als erledigt
+  markiert (T27–T51 ✅). Nicht angetastet, weil bereits konsistent bzw. via T14/T15 erledigt:
+  s3-1-Galerie «acht», `waagerecht`, `Wertebereich`, chkNum-Bruch-Eingabe.
+
+---
+
+## [86] — 2026-07-08 · Audit-Paket 2: systematische Konsistenz (T12–T16)
+
+Die drei wiederkehrenden Konsistenz-Themen aus dem Vollaudit ([84]) in Sammel-Durchgängen
+projektweit geglättet — Pre-Flight über alle geänderten Seiten `ALLE CHECKS BESTANDEN`:
+
+- **👁/💡-Rollover** bei allen interaktiven Animationen nachgerüstet, wo sie fehlten:
+  g5-1, g3-1, g5-2b, g5-2d, g5-3 (T12).
+- **A7-Vertiefungs-Pillen und Abschnitts-Kommentare** geglättet (Pille zu A7, A7-Blöcke vor
+  den Zusammenfassungs-Kommentar, verrutschte/doppelte Kommentare) (T13).
+- **Terminologie** projektweit vereinheitlicht (Definitionsmenge/Wertemenge, Probe/Kontrolle,
+  Streckfaktor, waagrecht, CHF u.a.) — inkl. Einträgen in `STYLEGUIDE.md` und Glossar (T14).
+- **chkNum/chkVal-Eingabe** projektweit gefixt: «/» im Strip-Regex geschont + Bruch-Parser,
+  «e» in Zahleneingaben (z.B. 4.4e11) geschont (T15).
+- **Verweis-Glyphen** korrigiert: `↩` nur für Rückverweise, Vorwärtsverweise umformuliert (T16).
+
+---
+
 ## [85] — 2026-07-08 · Audit-Paket 1: alle Severity-A-Fehler behoben (T1–T11)
 
 Die 16 A-Funde aus dem Vollaudit ([84]) auf 11 Seiten korrigiert — alle Zahlen mit

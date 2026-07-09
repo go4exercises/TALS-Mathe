@@ -149,13 +149,13 @@ Das Lehrmittel ist in bemerkenswert gutem Zustand:
 - [x] **T10** g5-5: Einstieg Text↔Code angleichen (Mitte/Start); Widget-Duplikate bei c=±1 dedupllizieren; Fehlerblock «(für −1<c<1)»
 - [x] **T11** s2-2a: Mini-Check-Transfer Z.322 ersetzen (Gleichung mit echter Scheinlösung, z.B. 6/(x−2)=3x/(x−2))
 
-### Paket 2 — Systematische Konsistenz (Sammel-Durchgänge)
+### Paket 2 — Systematische Konsistenz (Sammel-Durchgänge) — ✅ erledigt 2026-07-08
 
-- [ ] **T12** 👁/💡-Rollover nachrüsten: g5-1 (3), g5-2b (5), g5-2d (5), g5-3 (6), g3-1 (3) — je «Worauf achten?»/«Erkenntnis»
-- [ ] **T13** A7-Pillen + Abschnitts-Kommentare: Pille zu A7 (g5-1, g5-2a, g5-4, g5-5, g4-1), A7-Blöcke vor den Zusammenfassungs-Kommentar, verrutschte/doppelte Kommentare glätten (g1-2, g5-2b, g5-2c, g5-4), Button-Texte angleichen (g5-4)
-- [ ] **T14** Terminologie-Entscheid + Angleichung (inkl. STYLEGUIDE-Eintrag und Glossar): **(a)** Definitionsmenge/Wertemenge ODER -bereich? **(b)** Probe vs. Kontrolle (LG 2 SP) **(c)** Streckfaktor **(d)** waagrecht **(e)** CHF **(f)** «Arithmetik/Algebra» (s1-2/s1-3 pt-bereich) **(g)** Zentriwinkel-Symbol g5-2c **(h)** Spannvektoren s4-3d — *Bitte bei (a) und (b) deine Präferenz markieren.*
-- [ ] **T15** chkNum-Bruch-Eingabe projektweit: «/» im Strip-Regex schonen + a/b-Parser (betrifft alle neueren Seiten); «e» in Zahleneingaben (4.4e11) schonen
-- [ ] **T16** Verweis-Glyphen: ↩ nur für Rückverweise; Vorwärtsverweise s4-1/s4-2a («wirst du behandeln») umformulieren
+- [x] **T12** 👁/💡-Rollover nachrüsten: g5-1 (3), g5-2b (5), g5-2d (5), g5-3 (6), g3-1 (3) — je «Worauf achten?»/«Erkenntnis»
+- [x] **T13** A7-Pillen + Abschnitts-Kommentare: Pille zu A7 (g5-1, g5-2a, g5-4, g5-5, g4-1), A7-Blöcke vor den Zusammenfassungs-Kommentar, verrutschte/doppelte Kommentare glätten (g1-2, g5-2b, g5-2c, g5-4), Button-Texte angleichen (g5-4)
+- [x] **T14** Terminologie-Entscheid + Angleichung (inkl. STYLEGUIDE-Eintrag und Glossar): **(a)** Definitionsmenge/Wertemenge ODER -bereich? **(b)** Probe vs. Kontrolle (LG 2 SP) **(c)** Streckfaktor **(d)** waagrecht **(e)** CHF **(f)** «Arithmetik/Algebra» (s1-2/s1-3 pt-bereich) **(g)** Zentriwinkel-Symbol g5-2c **(h)** Spannvektoren s4-3d — *Bitte bei (a) und (b) deine Präferenz markieren.*
+- [x] **T15** chkNum-Bruch-Eingabe projektweit: «/» im Strip-Regex schonen + a/b-Parser (betrifft alle neueren Seiten); «e» in Zahleneingaben (4.4e11) schonen
+- [x] **T16** Verweis-Glyphen: ↩ nur für Rückverweise; Vorwärtsverweise s4-1/s4-2a («wirst du behandeln») umformulieren
 
 ### Paket 3 — RLP-/Lernziel-Lücken schliessen (je kleiner Inhaltsblock)
 
