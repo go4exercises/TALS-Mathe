@@ -230,6 +230,36 @@ MathJax = {
   <p>Der zugehörige Sektor: \(V = \tfrac{2\pi \cdot 25 \cdot 2}{3} \approx 104.72\ \text{cm}^3\) — Segment plus Kegel bis zum Zentrum.</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Schiebe die Schnittebene durch die Kugel (\(r = 5\) cm) — der Querschnitt zeigt Kappe, Segment und Sektor:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Beobachte die drei Balken: Zwei wachsen gleichmässig mit \(h\), einer nicht. Welcher fällt aus der Reihe — und warum gerade dieser?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Beobachte die drei Balken: Zwei wachsen gleichmässig mit h, einer nicht. Welcher fällt aus der Reihe — und warum gerade dieser?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Kappenfläche und Sektorvolumen wachsen beide <strong>linear</strong> mit \(h\) — kein Wunder, denn \(V_{\text{Sektor}} = \tfrac{1}{3}A_{\text{Kappe}} \cdot r\), genau wie beim Kegel. Nur das Segmentvolumen wächst krumm: Nahe am Pol ist die Kugel dünn, in der Mitte dick.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Kappenfläche und Sektorvolumen wachsen beide linear mit h — kein Wunder, denn das Sektorvolumen ist ein Drittel der Kappenfläche mal r, genau wie beim Kegel. Nur das Segmentvolumen wächst krumm: Nahe am Pol ist die Kugel dünn, in der Mitte dick.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Kappenhöhe \(h\) [cm]: <span class="sl-val" id="ku-hv">2.00</span></label>
+  <input type="range" id="ku-h" min="0" max="10" step="0.25" value="2">
+</div>
+<div class="typ-btns" style="margin-bottom:10px">
+  <button class="typ-btn" type="button" data-kuh="0">Grenzfall \(h = 0\)</button>
+  <button class="typ-btn" type="button" data-kuh="5">Grenzfall \(h = r\)</button>
+  <button class="typ-btn" type="button" data-kuh="10">Grenzfall \(h = 2r\)</button>
+</div>
+<div class="formel-live"><div class="fl-label">Kappe · Segment · Sektor</div><div class="fl-eq" id="ku-eq">A = 62.83 cm² · V_Segment = 54.45 cm³ · V_Sektor = 104.72 cm³</div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-kugelteil" height="270"></canvas></div>
+<div id="ku-hinw" style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Der Schnittkreis hat den Radius \(a = \sqrt{h(2r-h)}\) — am dicksten ist die Kugel genau in der Mitte.</div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Kugelteile</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Was unterscheidet Segment und Sektor?</p><ul class="mc-optionen"><li data-opt="A">nichts — zwei Namen für dasselbe</li><li data-opt="B">der Sektor reicht bis zum Kugelzentrum (Segment + Kegel)</li><li data-opt="C">das Segment ist eine Fläche</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Segment = «Deckel» (eben abgeschnitten); Sektor = «Glace-Kegel» bis zum Zentrum.</div></details></div>
@@ -661,13 +691,114 @@ function chkNum(id, target, tol, einheit){
   }
 }
 
+/* ══ Kugelteil-Querschnitt: h-Slider mit Grenzfall-Snaps ══
+   Kugel r = 5 cm. Schnittkreisradius a = √(h(2r−h)).
+   Kappenfläche A = 2πrh  (Anteil an O:  h/(2r)  — linear)
+   Sektor V = 2πr²h/3     (Anteil an V:  h/(2r)  — linear, denn V_Sek = A·r/3)
+   Segment V = πh²(3r−h)/3 (Anteil wächst krumm)                             */
+const KU_R = 5;
+function drawKugelteil() {
+  const h = parseFloat(document.getElementById('ku-h').value);
+  const r = KU_R, D = 2 * r;
+  const a = Math.sqrt(Math.max(0, h * (D - h)));
+  const Akap = 2 * Math.PI * r * h;
+  const Vseg = Math.PI * h * h / 3 * (3 * r - h);
+  const Vsek = 2 * Math.PI * r * r * h / 3;
+  const Vkug = 4 / 3 * Math.PI * r ** 3;
+
+  document.getElementById('ku-hv').textContent = h.toFixed(2);
+  document.getElementById('ku-eq').textContent =
+    `A = ${Akap.toFixed(2)} cm² · V_Segment = ${Vseg.toFixed(2)} cm³ · V_Sektor = ${Vsek.toFixed(2)} cm³`;
+
+  let hinw;
+  if (h === 0)       hinw = 'Grenzfall \\(h = 0\\): nichts abgeschnitten — alle drei Grössen sind null.';
+  else if (h === r)  hinw = 'Grenzfall \\(h = r\\): der Schnitt geht durch das Zentrum. Segment = Sektor = halbe Kugel, Kappe = halbe Oberfläche ✓';
+  else if (h === D)  hinw = 'Grenzfall \\(h = 2r\\): Segment und Sektor sind die <strong>ganze Kugel</strong>, die Kappe die ganze Oberfläche ✓';
+  else               hinw = 'Der Schnittkreis hat den Radius \\(a = \\sqrt{h(2r-h)}\\) — am dicksten ist die Kugel genau in der Mitte.';
+  const hEl = document.getElementById('ku-hinw');
+  if (hEl.dataset.txt !== hinw) { hEl.dataset.txt = hinw; hEl.innerHTML = hinw; mjTypeset([hEl]); }
+  document.querySelectorAll('[data-kuh]').forEach(b =>
+    b.classList.toggle('aktiv', parseFloat(b.dataset.kuh) === h));
+
+  const { ctx, W, H } = initCanvas('cv-kugelteil', 270, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // Radius responsiv: links muss neben dem Kreis die h-Skala Platz haben (schmale Viewports)
+  const hx = 16, R = Math.min(100, (W * 0.48 - 30) / 2), mx = hx + 14 + R, my = H / 2;
+  const sc = R / r;                                       // sc = px pro cm
+  const yCut = my - R + h * sc, ax = a * sc;
+
+  // Kappe/Segment (oberer Kreisabschnitt) füllen
+  ctx.fillStyle = 'rgba(184,92,0,0.20)';
+  ctx.beginPath();
+  if (h >= D)      { ctx.arc(mx, my, R, 0, Math.PI * 2); }
+  else if (h > 0)  {
+    const angR = Math.atan2(yCut - my, ax), angL = Math.atan2(yCut - my, -ax);
+    ctx.arc(mx, my, R, angR, angL, true); ctx.closePath();
+  }
+  ctx.fill();
+
+  // Sektor-Schenkel (Kegel bis zum Zentrum)
+  if (h > 0 && h < D) {
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.8; ctx.setLineDash([5, 3]);
+    ctx.beginPath(); ctx.moveTo(mx - ax, yCut); ctx.lineTo(mx, my); ctx.lineTo(mx + ax, yCut); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  // Kugelumriss + Zentrum
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(mx, my, R, 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.arc(mx, my, 3, 0, Math.PI * 2); ctx.fill();
+  ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('M', mx + 6, my + 13);
+
+  // Schnittebene + Schnittradius a
+  if (h > 0 && h < D) {
+    ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2; ctx.setLineDash([6, 3]);
+    ctx.beginPath(); ctx.moveTo(mx - ax - 10, yCut); ctx.lineTo(mx + ax + 10, yCut); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#b85c00'; ctx.textAlign = 'center';
+    ctx.fillText('a = ' + a.toFixed(2), mx, yCut - 6);
+  }
+  // Höhen-Massstab h am linken Rand
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(hx, my - R); ctx.lineTo(hx, yCut); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(hx - 4, my - R); ctx.lineTo(hx + 4, my - R); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(hx - 4, yCut);   ctx.lineTo(hx + 4, yCut);   ctx.stroke();
+  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'right';
+  ctx.fillText('h', hx - 6, (my - R + yCut) / 2 + 4);
+
+  // Balken-Vergleich
+  const bx = W * 0.55, bw = W * 0.38;
+  ctx.textAlign = 'center'; ctx.fillStyle = '#374151'; ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillText('Anteile an der ganzen Kugel', bx + bw / 2, 34);
+  const bar = (y, frac, col, lab) => {
+    ctx.textAlign = 'left'; ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#374151';
+    ctx.fillText(lab, bx, y - 5);
+    ctx.textAlign = 'right'; ctx.fillText((frac * 100).toFixed(frac > 0 && frac < 0.1 ? 1 : 0) + '%', bx + bw, y - 5);
+    ctx.fillStyle = '#eef1f5'; ctx.fillRect(bx, y, bw, 18);
+    ctx.fillStyle = col; ctx.fillRect(bx, y, bw * frac, 18);
+  };
+  bar(70,  Akap / (4 * Math.PI * r * r), '#1a4f8a', 'Kappe A (linear)');
+  bar(122, Vsek / Vkug,                  '#1f6b3a', 'Sektor V (linear)');
+  bar(174, Vseg / Vkug,                  '#b85c00', 'Segment V (krumm)');
+  ctx.textAlign = 'center'; ctx.fillStyle = '#6b7280'; ctx.font = 'italic 10px JetBrains Mono, monospace';
+  ctx.fillText('V_Sektor = A_Kappe · r / 3', bx + bw / 2, 212);
+}
+document.getElementById('ku-h').addEventListener('input', drawKugelteil);
+document.querySelectorAll('[data-kuh]').forEach(b => b.addEventListener('click', () => {
+  document.getElementById('ku-h').value = b.dataset.kuh;
+  drawKugelteil();
+}));
+
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateAR();
+  drawKugelteil();
   buildA1();
 });
 window.addEventListener('resize', () => {
   updateAR();
+  drawKugelteil();
 });
 </script>
 </body>

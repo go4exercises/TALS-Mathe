@@ -29,6 +29,8 @@ const WIDGETS = [
   { page: 'schwerpunkt/s4-3c-geraden.html', id: 'cv-lot', note: 'Lot-Widget' },
   { page: 'schwerpunkt/s4-2b-pyramiden-kegel-stuempfe.html', id: 'cv-k3', note: 'k-hoch-3-Slider' },
   { page: 'schwerpunkt/s4-3d-ebenen.html', id: 'cv-haus', note: 'Pultdach-Schraegbild' },
+  // T53 (Prio-2), Runde 1: die aus T52 verschobenen Sekundaer-Widgets.
+  { page: 'schwerpunkt/s4-2c-kugel.html', id: 'cv-kugelteil', note: 'Kugelteil-Querschnitt' },
 ];
 
 const VIEWPORTS = [
