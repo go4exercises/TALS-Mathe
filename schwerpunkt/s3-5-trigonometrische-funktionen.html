@@ -430,6 +430,40 @@ MathJax = {
   <p style="margin-top:6px">Die Einheit der Frequenz ist Hertz: \(1\ \text{Hz} = 1\ \text{s}^{-1}\). Da \(\omega\) und \(f\) dieselbe Einheit tragen, muss stets klar sein, mit welcher Grösse gerechnet wird.</p>
 </div>
 
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Zeiger und Schwingung — \(y = A\sin(\omega t)\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Der Zeiger (Länge \(A\)) dreht sich mit der Zeit; seine <em>Höhe</em> ist der aktuelle Wert der Schwingung. Verfolge, wie die gestrichelte Linie die Zeigerspitze mit dem Kurvenpunkt rechts verbindet.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Zeiger, Länge A, dreht sich mit der Zeit; seine Höhe ist der aktuelle Wert der Schwingung. Verfolge, wie die gestrichelte Linie die Zeigerspitze mit dem Kurvenpunkt rechts verbindet.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Sinuskurve ist die <strong>Höhe eines rotierenden Zeigers</strong> über der Zeit. Eine volle Umdrehung (\(2\pi\)) entspricht einer Periode; die Zeigerlänge \(A\) ist die Amplitude — der grösste Ausschlag.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Die Sinuskurve ist die Höhe eines rotierenden Zeigers über der Zeit. Eine volle Umdrehung entspricht einer Periode; die Zeigerlänge A ist die Amplitude, der grösste Ausschlag.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Links der rotierende Zeiger, rechts die entstehende Zeitspur \(y = A\sin(\omega t)\).</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Amplitude <span class="var">\(A\)</span></label><input type="range" id="ph-a" min="1" max="3" step="0.5" value="2"><span class="sl-val" id="ph-av">2</span></div>
+      <div class="sl-grp akz-orange"><label>Zeit / Winkel <span class="var">\(\omega t\)</span></label><input type="range" id="ph-t" min="0" max="720" step="5" value="200"><span class="sl-val" id="ph-tv">200°</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Momentanwert</div>
+      <div class="fl-eq" id="ph-eq">y = 2·sin(200°) ≈ −0.68</div>
+    </div>
+    <div class="cv-wrap" style="max-width:540px"><canvas id="cv-phasor" height="250"></canvas></div>
+  </div>
+</div>
+
 <div class="block block-fehler">
   <div class="block-titel">⚠ Häufiger Fehler — Taschenrechner im falschen Winkelmodus</div>
   <p>\(\sin 30\) ergibt im <strong>DEG</strong>-Modus \(0.5\), im <strong>RAD</strong>-Modus aber \(-0.988\). Bei Funktionsgraphen und Schwingungen wird <strong>immer im Bogenmass</strong> gerechnet — vor jeder Rechnung den Modus prüfen und Gradwerte zuerst umrechnen (\(x_{\text{rad}} = x° \cdot \tfrac{\pi}{180}\)).</p>
@@ -1062,15 +1096,74 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* Phasor: rotierender Zeiger (Länge A) → synchrone Zeitspur y = A·sin(ωt) */
+function drawPhasor() {
+  const A = parseFloat(document.getElementById('ph-a').value);
+  const tDeg = parseFloat(document.getElementById('ph-t').value);
+  const th = tDeg * Math.PI / 180;
+  document.getElementById('ph-av').textContent = A.toFixed(1);
+  document.getElementById('ph-tv').textContent = tDeg + '°';
+  const yv = A * Math.sin(th);
+  document.getElementById('ph-eq').textContent =
+    'y = ' + A.toFixed(1) + '·sin(' + tDeg + '°) ≈ ' + yv.toFixed(2).replace('-', '−');
+  const { ctx, W, H } = initCanvas('cv-phasor', 250, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const cy = 118, cxL = 100, ampPx = A * 32, R = ampPx;
+  const xW0 = 210, xW1 = W - 18;
+  const xOf = deg => xW0 + deg / 720 * (xW1 - xW0);
+  const waveY = deg => cy - ampPx * Math.sin(deg * Math.PI / 180);
+  // Zeit-/Nulllinie
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(Math.max(6, cxL - R - 6), cy); ctx.lineTo(xW1, cy); ctx.stroke();
+  // vertikale Kreisachse
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.beginPath(); ctx.moveTo(cxL, cy - R - 6); ctx.lineTo(cxL, cy + R + 6); ctx.stroke();
+  // Zeitachsen-Ticks (in π)
+  ctx.fillStyle = '#9ca3af'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  const piLbl = { 180: 'π', 360: '2π', 540: '3π', 720: '4π' };
+  for (const d of [180, 360, 540, 720]) {
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.beginPath(); ctx.moveTo(xOf(d), cy - 4); ctx.lineTo(xOf(d), cy + 4); ctx.stroke();
+    ctx.fillText(piLbl[d], xOf(d), cy + 16);
+  }
+  // volle Kurve (blass) + getracete Kurve 0..tDeg (blau)
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.2; ctx.beginPath();
+  for (let d = 0; d <= 720; d += 4) { const px = xOf(d), py = waveY(d); d === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
+  ctx.stroke();
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5; ctx.beginPath();
+  let first = true;
+  for (let d = 0; d <= tDeg + 0.001; d += 2) { const px = xOf(d), py = waveY(d); if (first) { ctx.moveTo(px, py); first = false; } else ctx.lineTo(px, py); }
+  ctx.stroke();
+  // Zeigerbahn (Kreis)
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.arc(cxL, cy, R, 0, 2 * Math.PI); ctx.stroke();
+  // Zeiger
+  const tipX = cxL + R * Math.cos(th), tipY = cy - R * Math.sin(th);
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(cxL, cy); ctx.lineTo(tipX, tipY); ctx.stroke();
+  ctx.fillStyle = '#1a4f8a'; ctx.beginPath(); ctx.arc(tipX, tipY, 5, 0, 2 * Math.PI); ctx.fill();
+  // Höhen-Verbindung Zeigerspitze → aktueller Kurvenpunkt
+  const curX = xOf(tDeg);
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(tipX, tipY); ctx.lineTo(curX, tipY); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#b85c00'; ctx.beginPath(); ctx.arc(curX, tipY, 5, 0, 2 * Math.PI); ctx.fill();
+  // Amplituden-Label
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('A = ' + A.toFixed(1), cxL + 6, Math.max(12, cy - R - 8));
+}
+['ph-a', 'ph-t'].forEach(id => document.getElementById(id).addEventListener('input', drawPhasor));
+
 document.addEventListener('DOMContentLoaded', () => {
   updateRR();
   updateEK();
   buildTyBtns(); drawTy();
   updateTR();
+  drawPhasor();
   buildA1(); drawA1();
 });
 window.addEventListener('resize', () => {
-  updateRR(); updateEK(); drawTy(); updateTR(); drawA1(); drawA2Sol();
+  updateRR(); updateEK(); drawTy(); updateTR(); drawPhasor(); drawA1(); drawA2Sol();
 });
 </script>
 </body>
