@@ -200,7 +200,7 @@ Das Lehrmittel ist in bemerkenswert gutem Zustand:
 
 ### Paket 5 — Visualisierungen (nach deiner Priorisierung; Aufwand je ~½ Durchgang)
 
-- [~] **T52** Prio-1-Widgets (§4, Punkte 1–10) — **4 von 10 gebaut** (2026-07-09, CHANGELOG [89]): g2-2b Diskriminanten-Parabel, g5-3 SSW-Fallunterscheidung, g4-3 Robustheits-Widget, s3-5 Phasor. Offen: §4 Nr. 2 (g5-4 Abwickler), 3 (s4-3d), 4 (s4-3c Lot), 6 (Scheinlösungs-Grafik), 8 (s3-3 Leitterm-Zoom), 9 (s4-2b/c) sowie die restlichen g4-Ideen.
+- [x] **T52** Prio-1-Widgets (§4, Punkte 1–10) — **alle 10 Kern-Widgets gebaut** (2026-07-09, CHANGELOG [89]/[90]). Runde 1: g2-2b Diskriminanten-Parabel (5), g5-3 SSW-Fallunterscheidung (7), g4-3 Robustheits-Widget (10), s3-5 Phasor (1). Runde 2: s3-3 Leitterm-Zoom (8), g5-4 Abwickler (2), s2-1 Scheinlösungs-Grafik (6), s4-3c Lot-Widget (4), s4-2b k³-Slider (9), s4-3d Pultdach-Schrägbild mit Durchstosspunkt (3). Sekundäre Zusatz-Ideen aus einzelnen Punkten (windschief-Schrägbild, s4-2c Kugelteil-Querschnitt, g4 Merkmalstyp-Zuordnungsspiel + Manipulations-Demo, g5-4 Symmetrie-Spiegel/Vorzeichen-Trainer) sind nach **T53** (Prio-2) verschoben.
 - [ ] **T53** Prio-2-Widgets (§4, Liste) — Auswahl nach Sichtung
 - [ ] **T54** s3-6 + s2-2a/c: Video-Platzhalter bei nächster Ressourcen-Session kuratieren (aus Audit-Nebenbefund)
 

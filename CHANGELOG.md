@@ -4,6 +4,39 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [90] — 2026-07-09 · Audit-Paket 5: die restlichen sechs Prio-1-Widgets (T52 abgeschlossen)
+
+Die übrigen sechs Kern-Widgets der Prio-1-Liste ([84], §4) gebaut — damit sind alle zehn
+nummerierten Punkte mit ihrem tragenden Widget versorgt. Gleiches Muster: selbstständiges
+Canvas mit Slider + Live-Anzeige + 👁/💡-Rollover, Geometrie/Zahlen vorab mit python3/node
+nachgerechnet, Pre-Flight (MathJax-Render + JS-Laufzeit in jsdom) `ALLE CHECKS BESTANDEN`.
+Browser-Rendercheck 1280/360 px weiterhin offen (lokal kein Browser):
+
+- **s3-3** (§4-8) — Leitterm-Zoom: \(f = x^3 - 4x\) gegen den Leitterm \(x^3\); mit dem
+  Fenster-Slider zoomt man heraus, das Verhältnis \(f/L\) am Rand strebt gegen 1 — «weit
+  draussen bestimmt der höchste Term den Globalverlauf».
+- **g5-4** (§4-2) — Abwickler: Punkt läuft auf dem Einheitskreis (Winkel-Slider bis 720°),
+  rechts wickelt sich synchron die Sinuskurve ab — Brücke Einheitskreis → Funktionsgraph (5.5).
+- **s2-1** (§4-6) — Scheinlösungs-Grafik: \(\sqrt{x}\) gegen \(x-2\); die echte Lösung
+  \((4 \mid 2)\) liegt auf beiden Ästen, der Kandidat \(x = 1\) (Slider) zeigt die rote Lücke
+  \(\sqrt1 = 1 \ne -1\) — warum Quadrieren Scheinlösungen erzeugt.
+- **s4-3c** (§4-4) — Lot-Widget: der Slider bewegt \(F = A + t\,\vec u\) auf \(g\), \(|PF|\)
+  läuft live mit; am Lotfusspunkt (\(t = 1.4\), \(d \approx 2.68\)) wird das Minimum erreicht
+  und der rechte Winkel markiert.
+- **s4-2b** (§4-9) — k³-Slider: den Kegel in der Höhe \(k\) köpfen; drei Balken zeigen
+  Höhe (\(\times k\)), Fläche (\(\times k^2\)) und Volumen (\(\times k^3\)) — «halbe Höhe →
+  \(\tfrac18\) Volumen, nicht \(\tfrac12\)».
+- **s4-3d** (§4-3) — Pultdach-Schrägbild: Haus-Drahtmodell mit geneigter Dach-Ebene; eine
+  senkrechte Drohnen-Gerade bei \((3 \mid y)\) durchstösst das Dach, der grüne
+  Durchstosspunkt \(D\) wandert mit dem y-Slider von \(z = 4\) (vorne) auf \(z = 6\) (hinten).
+
+Damit ist **T52 abgeschlossen**. Verschoben nach T53 (Prio-2): sekundäre Zusatz-Widgets
+einzelner Punkte (windschief-Schrägbild, s4-2c Kugelteil-Querschnitt, g4 Zuordnungsspiel +
+Manipulations-Demo, g5-4 Symmetrie-Spiegel/Vorzeichen-Trainer). Offen bleiben T53 (Prio-2)
+und die Video-Platzhalter s3-6/s2-2a/c (T54).
+
+---
+
 ## [89] — 2026-07-09 · Audit-Paket 5: vier Prio-1-Visualisierungen gebaut (T52, Auswahl)
 
 Auf Wunsch die vier höchstbewerteten Prio-1-Widgets aus dem Vollaudit ([84], §4) gebaut —
