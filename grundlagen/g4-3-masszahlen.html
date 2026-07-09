@@ -345,6 +345,15 @@ MathJax = {
   </div>
 </div>
 
+<div class="streu-box">
+  <div class="sl-row akz-orange">
+    <label>Lohn der Inhaberin: <span class="sl-val" id="rb-val">25’000</span> Fr.</label>
+    <input type="range" id="sl-robust" min="4600" max="30000" step="200" value="25000">
+  </div>
+  <canvas id="cv-robust" style="width:100%;height:170px;display:block" aria-label="Sieben Löhne auf dem Zahlenstrahl mit Mittelwert und Median"></canvas>
+  <div class="sl-cap">Zieh den Lohn der Inhaberin nach oben: Der <strong style="color:var(--rot)">Mittelwert</strong> \(\bar{x}\) (aktuell <span id="rb-mean">7’071</span> Fr.) läuft mit dem Ausreisser mit — der <strong style="color:var(--gruen)">Median</strong> \(\tilde{x} = 4\,200\) Fr. bleibt fest. Genau das heisst <em>robust</em>.</div>
+</div>
+
 <div class="block block-merksatz">
   <div class="block-titel">⭐ Merksatz — Robustheit</div>
   Der <strong>Median</strong> ist <em>robust</em>: einzelne Extremwerte verschieben ihn kaum.
@@ -769,6 +778,65 @@ function showLage(key, btn){
   document.getElementById('sl-streuung').addEventListener('input', slRender);
   slRender();
   window.addEventListener('resize', slRender);
+})();
+
+/* Robustheit interaktiv: Ausreisser-Lohn ziehen → Mittelwert läuft mit, Median bleibt */
+(function(){
+  const FIX = [3500, 3800, 4000, 4200, 4400, 4600];   // sechs Angestellte
+  const MEDIAN = 4200;                                 // 4. von 7 sortierten Werten (Ausreisser ≥ 4600)
+  const fmtFr = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '’');
+  function rbRender(){
+    const c = document.getElementById('cv-robust');
+    if (!c) return;
+    const X = parseFloat(document.getElementById('sl-robust').value);
+    document.getElementById('rb-val').textContent = fmtFr(X);
+    const werte = FIX.concat([X]);
+    const mean = werte.reduce((a, b) => a + b, 0) / werte.length;
+    document.getElementById('rb-mean').textContent = fmtFr(mean);
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.offsetWidth || 480, H = c.offsetHeight || 170;
+    c.width = W * dpr; c.height = H * dpr;
+    const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    const padL = 40, padR = 30, vMin = 3000, vMax = 31000;
+    const xPx = v => padL + (v - vMin) / (vMax - vMin) * (W - padL - padR);
+    const cl = x => Math.max(60, Math.min(W - 60, x));
+    const yAxis = H - 46;
+    // Achse + Ticks (Beschriftung in Tausend)
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(padL, yAxis); ctx.lineTo(W - padR, yAxis); ctx.stroke();
+    ctx.fillStyle = '#6b7280'; ctx.font = '12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    for (let v = 5000; v <= 30000; v += 5000){
+      ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(xPx(v), yAxis - 3); ctx.lineTo(xPx(v), yAxis + 3); ctx.stroke();
+      ctx.fillText(v / 1000, xPx(v), yAxis + 16);
+    }
+    ctx.textAlign = 'right'; ctx.fillText('Fr. (in Tausend)', W - padR, yAxis + 30);
+    // Löhne als Punkte (sechs grün, Ausreisser orange)
+    for (const v of FIX){
+      ctx.fillStyle = '#10b981';
+      ctx.beginPath(); ctx.arc(xPx(v), yAxis - 10, 4.5, 0, 2 * Math.PI); ctx.fill();
+    }
+    ctx.fillStyle = '#f59e0b';
+    ctx.beginPath(); ctx.arc(xPx(X), yAxis - 10, 5.5, 0, 2 * Math.PI); ctx.fill();
+    // Median-Marker (grün, fest)
+    ctx.strokeStyle = '#0f7a3a'; ctx.lineWidth = 2; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(xPx(MEDIAN), yAxis - 32); ctx.lineTo(xPx(MEDIAN), yAxis + 4); ctx.stroke();
+    ctx.fillStyle = '#0f7a3a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('Median 4200', cl(xPx(MEDIAN)), yAxis - 38);
+    // Mittelwert-Marker (rot, wandert)
+    ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2; ctx.setLineDash([5, 3]);
+    ctx.beginPath(); ctx.moveTo(xPx(mean), yAxis - 56); ctx.lineTo(xPx(mean), yAxis + 4); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#dc2626'; ctx.textAlign = 'center';
+    ctx.fillText('Mittelwert ' + fmtFr(mean), cl(xPx(mean)), yAxis - 62);
+  }
+  const slR = document.getElementById('sl-robust');
+  if (slR){
+    slR.addEventListener('input', rbRender);
+    rbRender();
+    window.addEventListener('resize', rbRender);
+  }
 })();
 </script>
 </body>
