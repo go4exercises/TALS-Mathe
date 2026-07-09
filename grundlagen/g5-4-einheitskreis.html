@@ -415,7 +415,7 @@ MathJax = {
       </div>
 
       <div class="erklaerung" id="erkl-ek2">
-        Der Strahl \(OP\) verlängert wird bis zur rechten Tangente bei \(x = 1\); der Schnittpunkt ist \(S = (1, \tan\varphi)\). Bei \(\varphi = 90°\) oder \(270°\) ist der Strahl parallel zur Tangente — \(\tan\varphi\) ist <strong>nicht definiert</strong>.
+        Der Strahl \(OP\) wird bis zur rechten Tangente bei \(x = 1\) verlängert; der Schnittpunkt ist \(S = (1, \tan\varphi)\). Bei \(\varphi = 90°\) oder \(270°\) ist der Strahl parallel zur Tangente — \(\tan\varphi\) ist <strong>nicht definiert</strong>.
       </div>
     </div>
   </div>
@@ -595,7 +595,7 @@ MathJax = {
   <p>\[\mathbb{D} = \mathbb{R}, \qquad \mathbb{W} = [-1; 1]\]</p>
   <p><strong>Tangens</strong></p>
   <p>\[\mathbb{D} = \mathbb{R} \setminus \left\{\frac{\pi}{2} + k\pi \,:\, k \in \mathbb{Z}\right\}, \qquad \mathbb{W} = \mathbb{R}\]</p>
-  <p style="margin-top:6px">Sinus und Cosinus sind für jeden Winkel definiert; ihre Werte liegen stets zwischen \(-1\) und \(+1\). Der Tangens ist überall definiert ausser bei \(\varphi = 90° + k\cdot 180°\) (\(= \pi/2 \pm k\pi\)), wo der Cosinus null wird — und nimmt jeden reellen Wert an.</p>
+  <p style="margin-top:6px">Sinus und Cosinus sind für jeden Winkel definiert; ihre Werte liegen stets zwischen \(-1\) und \(+1\). Der Tangens ist überall definiert ausser bei \(\varphi = 90° + k\cdot 180°\) (\(= \tfrac{\pi}{2} + k\pi,\ k \in \mathbb{Z}\)), wo der Cosinus null wird — und nimmt jeden reellen Wert an.</p>
 </div>
 
 <!-- ══ 10. AUFGABEN ══ -->
@@ -1654,12 +1654,15 @@ function drawSchiff() {
   ctx.textAlign = 'left';
   ctx.fillText(`${nordVersatz >= 0 ? '+' : ''}${nordVersatz.toFixed(2)}`, cx + 8, nordLblY + 4);
 
-  // Quadranten-Anzeige unten
+  // Quadranten-Anzeige unten — Achsenwinkel liegen auf keiner Quadranten-Fläche
+  const pd = ((phiDeg % 360) + 360) % 360;
+  const aufAchse = pd % 90 === 0;
+  const achsenLabel = { 0: 'Ost-Achse', 90: 'Nord-Achse', 180: 'West-Achse', 270: 'Süd-Achse' }[pd];
   const quadrant = phiDeg < 90 ? 'I' : phiDeg < 180 ? 'II' : phiDeg < 270 ? 'III' : 'IV';
   ctx.fillStyle = '#5a5040';
   ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'center';
-  ctx.fillText(`Quadrant ${quadrant}`, cx, H - 12);
+  ctx.fillText(aufAchse ? `auf der ${achsenLabel}` : `Quadrant ${quadrant}`, cx, H - 12);
 
   // Live-Anzeigen
   document.getElementById('leg-schiffX').textContent =
@@ -1667,8 +1670,18 @@ function drawSchiff() {
   document.getElementById('leg-schiffY').textContent =
     `${nordVersatz >= 0 ? '+' : ''}${nordVersatz.toFixed(3)}`;
 
-  // Erklärung je nach Quadrant
+  // Erklärung je nach Quadrant — Achsenwinkel gesondert behandeln
   let erkl;
+  if (aufAchse) {
+    const achsErkl = {
+      0:   'φ = 0°: Schiff genau <em>östlich</em> — Ost-Versatz = +1, Nord-Versatz = 0. Grenze zwischen Quadrant IV und I.',
+      90:  'φ = 90°: Schiff genau <em>nördlich</em> — Ost-Versatz = 0, Nord-Versatz = +1. Grenze zwischen Quadrant I und II.',
+      180: 'φ = 180°: Schiff genau <em>westlich</em> — Ost-Versatz = −1, Nord-Versatz = 0. Grenze zwischen Quadrant II und III.',
+      270: 'φ = 270°: Schiff genau <em>südlich</em> — Ost-Versatz = 0, Nord-Versatz = −1. Grenze zwischen Quadrant III und IV.'
+    }[pd];
+    document.getElementById('erkl-schiff').innerHTML = achsErkl;
+    return;
+  }
   if (quadrant === 'I') {
     erkl = 'Quadrant I (0°–90°): <em>beide</em> Versätze positiv. Schiff ist nordöstlich der Boje.';
   } else if (quadrant === 'II') {
