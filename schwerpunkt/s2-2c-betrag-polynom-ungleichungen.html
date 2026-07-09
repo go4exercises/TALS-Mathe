@@ -299,7 +299,7 @@ MathJax = {
 <div class="widget">
   <div class="widget-header">
     <div class="widget-titelzeile">
-      <h3>Vorzeichentabellen-Labor — \((x-a)(x-b) \gtrless 0\)</h3>
+      <h3>📊 Vorzeichentabellen-Labor — \((x-a)(x-b) \gtrless 0\)</h3>
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
@@ -381,7 +381,7 @@ MathJax = {
       <tr><td>\(|x - m| &gt; r\)</td><td style="text-align:left;font-family:var(--sans)">Abstand von \(m\) grösser als \(r\)</td><td>\(x &lt; m-r \ \vee\ x &gt; m+r\)</td></tr>
     </tbody>
   </table>
-  <p style="margin-top:6px">(\(r &gt; 0\); für \(r &lt; 0\) ist die \(\leq\)-Variante unlösbar und die \(&gt;\)-Variante immer wahr.)</p>
+  <p style="margin-top:6px">(\(r &gt; 0\); für \(r = 0\) schrumpft das Intervall \([m-r;\ m+r]\) auf den einen Punkt \(\{m\}\), und \(|x-m| &gt; 0\) gilt für alle \(x \neq m\); für \(r &lt; 0\) ist die \(\leq\)-Variante unlösbar und die \(&gt;\)-Variante immer wahr.)</p>
 </div>
 
 <div class="block block-bsp" style="margin-top:10px">
@@ -689,9 +689,6 @@ buildNav({
   next:{nr:'3.1',titel:'Grundlagen',url:'s3-1-grundlagen.html'}
 });
 
-/* ── Lokale Helfer ─────────────────────────────────────── */
-const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
-
 function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
   ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
   const N = 400;
@@ -747,7 +744,7 @@ function updateVZ(){
   const b = parseInt(document.getElementById('vz-b').value);
   document.getElementById('vz-av').textContent = String(a).replace('-', '−');
   document.getElementById('vz-bv').textContent = String(b).replace('-', '−');
-  const fT = v => v >= 0 ? `x − ${v}` : `x + ${-v}`;
+  const fT = v => v === 0 ? 'x' : (v > 0 ? `x − ${v}` : `x + ${-v}`);
   const t1 = fT(a), t2 = fT(b);
   const aD = String(a).replace('-', '−'), bD = String(b).replace('-', '−');
   document.getElementById('vz-eq').innerHTML =
