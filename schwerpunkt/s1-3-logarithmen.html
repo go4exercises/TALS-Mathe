@@ -225,6 +225,35 @@ MathJax = {
   <p style="margin-top:6px">Sie sind die Potenzgesetze in Logarithmus-Sprache: Weil sich Exponenten beim Multiplizieren <em>addieren</em>, wird aus dem Produkt eine Summe. Herleitung von Gesetz 1: \(u = a^x\), \(v = a^y\) → \(uv = a^{x+y}\) → \(\log_a(uv) = x + y\) ✓</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Der Rechenschieber macht Gesetz 1 sichtbar: Er <em>addiert Längen</em> und <em>multipliziert dabei Zahlen</em>.</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Die Zahlen stehen auf der Skala nicht in gleichen Abständen: Von \(1\) bis \(2\) ist es weit, von \(9\) bis \(10\) kurz. Welche Grösse ist auf dieser Skala gleichmässig aufgetragen?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Die Zahlen stehen auf der Skala nicht in gleichen Abständen: Von eins bis zwei ist es weit, von neun bis zehn kurz. Welche Grösse ist auf dieser Skala gleichmässig aufgetragen?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Gleichmässig aufgetragen ist der <strong>Logarithmus</strong>: Die Zahl \(z\) steht an der Stelle \(\lg z\). Legt man zwei Strecken \(\lg u\) und \(\lg v\) aneinander, liest man an der Gesamtlänge \(\lg u + \lg v = \lg(u\cdot v)\) das <em>Produkt</em> ab. Genau so haben Generationen vor dem Taschenrechner multipliziert — Gesetz 1 ist die Bauanleitung des Geräts.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Gleichmässig aufgetragen ist der Logarithmus: Die Zahl z steht an der Stelle lg z. Legt man zwei Strecken lg u und lg v aneinander, liest man an der Gesamtlänge lg u plus lg v, also lg von u mal v, das Produkt ab. Genau so haben Generationen vor dem Taschenrechner multipliziert — Gesetz eins ist die Bauanleitung des Geräts.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Faktor \(u\): <span class="sl-val" id="rs-uv">2.0</span></label>
+  <input type="range" id="rs-u" min="1" max="9.5" step="0.1" value="2">
+</div>
+<div class="sl-row">
+  <label>Faktor \(v\): <span class="sl-val" id="rs-vv">3.0</span></label>
+  <input type="range" id="rs-v" min="1" max="9.5" step="0.1" value="3">
+</div>
+<div class="formel-live"><div class="fl-label">Längen addieren = Zahlen multiplizieren</div><div class="fl-eq" id="rs-eq">lg 2.0 + lg 3.0 = 0.301 + 0.477 = 0.778 = lg 6.0</div></div>
+<div class="cv-wrap" style="max-width:560px"><canvas id="cv-rechenschieber" height="246"></canvas></div>
+<div id="rs-hinw" style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Die <strong>Zunge</strong> (obere Skala) wird so verschoben, dass ihre \(1\) über dem Faktor \(u\) steht. Unter \(v\) liest man dann \(u \cdot v\) ab.</div>
+
 <div class="block block-bsp" style="margin-top:10px">
   <div class="block-titel">🟢 Beispiel 1 — zerlegen und zusammenfassen</div>
   <p><strong>Zerlegen:</strong></p>
@@ -737,14 +766,125 @@ function chkNum(id, target, tol, einheit){
   }
 }
 
+/* ══ Rechenschieber: lg u + lg v = lg(u·v) ══
+   Untere Skala (fest) und Zunge (verschiebbar), beide logarithmisch von 1 bis 10.
+   Steht die 1 der Zunge über u, so steht v der Zunge über u·v der festen Skala.
+   Ist u·v > 10, liegt die Ablesestelle rechts ausserhalb — dann setzt man die 10
+   der Zunge über u an (Zehnerübertrag) und liest u·v/10 ab.                       */
+function drawRechenschieber() {
+  const u = parseFloat(document.getElementById('rs-u').value);
+  const v = parseFloat(document.getElementById('rs-v').value);
+  const p = u * v, ueber = p > 10;
+  const lg = Math.log10;
+  document.getElementById('rs-uv').textContent = u.toFixed(1);
+  document.getElementById('rs-vv').textContent = v.toFixed(1);
+  document.getElementById('rs-eq').textContent =
+    `lg ${u.toFixed(1)} + lg ${v.toFixed(1)} = ${lg(u).toFixed(3)} + ${lg(v).toFixed(3)} = ${(lg(u) + lg(v)).toFixed(3)} = lg ${p.toFixed(2)}`;
+
+  const hEl = document.getElementById('rs-hinw');
+  const hinw = ueber
+    ? `\\(u \\cdot v = ${p.toFixed(2)} > 10\\) — die Ablesestelle läge rechts neben der Skala. Trick der Rechenschieber-Praxis: die <strong>10</strong> der Zunge über \\(u\\) ansetzen, unter \\(v\\) die Ziffernfolge \\(${(p / 10).toFixed(2)}\\) ablesen und mit \\(10\\) multiplizieren.`
+    : 'Die <strong>Zunge</strong> (obere Skala) wird so verschoben, dass ihre \\(1\\) über dem Faktor \\(u\\) steht. Unter \\(v\\) liest man dann \\(u \\cdot v\\) ab.';
+  if (hEl.dataset.txt !== hinw) { hEl.dataset.txt = hinw; hEl.innerHTML = hinw; mjTypeset([hEl]); }
+
+  const { ctx, W, H } = initCanvas('cv-rechenschieber', 246, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const X0 = 26, L = W - 52;                    // Skalenanfang und -länge (1 → 10)
+  const yD = 168, yC = 92, hZ = 46;             // feste Skala, Zunge
+  const posD = z => X0 + lg(z) * L;
+  // Zungen-Versatz: normal lg(u), beim Zehnerübertrag lg(u) − 1 (die 10 über u)
+  const shift = (ueber ? lg(u) - 1 : lg(u)) * L;
+  const posC = z => X0 + shift + lg(z) * L;
+
+  const skala = (y, posFn, farbe, name) => {
+    ctx.strokeStyle = farbe; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(posFn(1), y); ctx.lineTo(posFn(10), y); ctx.stroke();
+    ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    for (let z = 1; z <= 10; z++) {
+      const x = posFn(z);
+      ctx.strokeStyle = farbe; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - 9); ctx.stroke();
+      ctx.fillStyle = farbe; ctx.fillText(z, x, y - 13);
+      if (z < 10) {                                  // Zwischenstrich bei z + 0.5
+        const xm = posFn(z + 0.5);
+        ctx.beginPath(); ctx.moveTo(xm, y); ctx.lineTo(xm, y - 5); ctx.stroke();
+      }
+    }
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, y - 8, 18, 16);
+    ctx.fillStyle = farbe; ctx.textAlign = 'left'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+    ctx.fillText(name, 4, y + 4);
+  };
+
+  // Zungen-Körper
+  ctx.fillStyle = '#f6f8fa'; ctx.strokeStyle = '#c8d0da'; ctx.lineWidth = 1;
+  ctx.fillRect(posC(1), yC - hZ + 22, posC(10) - posC(1), hZ);
+  ctx.strokeRect(posC(1), yC - hZ + 22, posC(10) - posC(1), hZ);
+
+  skala(yD, posD, '#374151', 'D');
+  skala(yC, posC, '#1a4f8a', 'C');
+
+  /* Ablese-Linien: senkrecht durch beide Skalen. Der Clou ist, dass v auf der
+     Zunge und u·v auf der festen Skala an derselben x-Position stehen — genau
+     das ist lg u + lg v = lg(u·v). */
+  const ablese = (x, col, labC, labD) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 1.8; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(x, yC); ctx.lineTo(x, yD); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = col;
+    ctx.beginPath(); ctx.arc(x, yC, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x, yD, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 11px JetBrains Mono, monospace';
+    if (labC) { ctx.textAlign = 'left';   ctx.fillText(labC, x + 8, yC + 18); }
+    if (labD) { ctx.textAlign = 'center'; ctx.fillText(labD, x, yD + 18); }
+  };
+  // Strecken lg u (blau) und lg v (orange) auf der festen Skala aneinandergelegt
+  const yBar = 196;
+  const bar = (x1, x2, col, lab) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x1, yBar); ctx.lineTo(x2, yBar); ctx.stroke(); ctx.lineCap = 'butt';
+    if (Math.abs(x2 - x1) > 34) {
+      ctx.fillStyle = col; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+      ctx.fillText(lab, (x1 + x2) / 2, yBar + 15);
+    }
+  };
+  bar(posD(1), posD(u), '#1a4f8a', 'lg u');
+  if (!ueber) {
+    bar(posD(u), posD(p), '#b85c00', 'lg v');
+  } else {
+    // lg v passt nicht mehr auf die Skala: erster Teil bis zum Ende (1 − lg u),
+    // zweiter Teil ab dem Skalenanfang (lg u + lg v − 1) — zusammen wieder lg v.
+    bar(posD(u), X0 + L, '#b85c00', 'lg v (Teil 1)');
+    ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 5; ctx.globalAlpha = 0.45;
+    ctx.beginPath(); ctx.moveTo(posD(1), yBar + 20); ctx.lineTo(posD(p / 10), yBar + 20); ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#b85c00'; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+    ctx.fillText('Teil 2 (Übertrag)', posD(p / 10) + 8, yBar + 24);
+  }
+
+  // Linie 1: der Skalenanfang der Zunge (bzw. deren 10) steht über u
+  ablese(posD(u), '#1a4f8a', ueber ? '10' : '1', 'u = ' + u.toFixed(1));
+  // Linie 2: unter v steht das Produkt
+  if (!ueber) {
+    ablese(posC(v), '#1f6b3a', 'v = ' + v.toFixed(1), 'u·v = ' + p.toFixed(2));
+  } else {
+    ablese(posC(v), '#1f6b3a', 'v = ' + v.toFixed(1), (p / 10).toFixed(2) + ' · 10 = ' + p.toFixed(2));
+    ctx.fillStyle = '#c8412c'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+    ctx.fillText('Zehnerübertrag: ×10', W - 6, 20);
+  }
+  ctx.fillStyle = '#6b7280'; ctx.font = 'italic 10px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Position der Zahl z auf der Skala: lg z', 6, 20);
+}
+document.getElementById('rs-u').addEventListener('input', drawRechenschieber);
+document.getElementById('rs-v').addEventListener('input', drawRechenschieber);
+
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateLG();
   updateBW();
+  drawRechenschieber();
   buildA1();
 });
 window.addEventListener('resize', () => {
-  updateLG(); updateBW();
+  updateLG(); updateBW(); drawRechenschieber();
 });
 </script>
 </body>
