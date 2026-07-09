@@ -306,6 +306,31 @@ MathJax = {
   <p>Der obere Kegel bei halber Höhe hat <strong>ein Achtel</strong> des Volumens, nicht die Hälfte — Volumen skaliert mit \(k^3\). Wer «halbe Höhe → halbes Volumen» rechnet, unterschätzt den Stumpf massiv.</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Köpfe den Kegel in der Höhe \(k\) (von der Spitze) — der kleine obere Kegel ist eine \(k\)-Kopie:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Stelle \(k = 0.5\) ein: Der obere Kegel ist halb so hoch — aber wie gross ist sein Volumenbalken im Vergleich zum Höhenbalken?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Stelle k gleich null Komma fünf ein: Der obere Kegel ist halb so hoch — aber wie gross ist sein Volumenbalken im Vergleich zum Höhenbalken?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Bei einer \(k\)-Kopie skalieren Längen mit \(k\), Flächen mit \(k^2\) und das Volumen mit \(k^3\). Bei halber Höhe (\(k = \tfrac12\)) hat der kleine Kegel nur \(\tfrac18\) des Volumens — der Stumpf trägt \(\tfrac78\).</div>
+      <button class="ah-speak" type="button" data-vorlesen="Bei einer k-Kopie skalieren Längen mit k, Flächen mit k Quadrat und das Volumen mit k hoch drei. Bei halber Höhe hat der kleine Kegel nur ein Achtel des Volumens — der Stumpf trägt sieben Achtel.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Schnitthöhe \(k\): <span class="sl-val" id="k3-kv">0.50</span></label>
+  <input type="range" id="k3-k" min="0.1" max="1" step="0.05" value="0.5">
+</div>
+<div class="formel-live"><div class="fl-label">Höhenanteil vs. Volumenanteil</div><div class="fl-eq" id="k3-eq">Höhenanteil k = 50%  →  Volumenanteil k³ = 12.5%</div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-k3" height="260"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Der schattierte obere Kegel ist eine \(k\)-Kopie: Höhe und Radius \(\times k\), Volumen aber nur \(\times k^3\).</div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Stümpfe und Ähnlichkeit</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Ein Körper wird mit \(k = 3\) vergrössert. Was passiert mit dem Volumen?</p><ul class="mc-optionen"><li data-opt="A">×3</li><li data-opt="B">×9</li><li data-opt="C">×27</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> \(V \sim k^3 = 27\) — Flächen dagegen ×9.</div></details></div>
@@ -769,13 +794,52 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* k³-Slider: Kegel in Höhe k köpfen → kleiner Kegel skaliert mit k³ («halbe Höhe ≠ halbes Volumen») */
+function drawK3() {
+  const k = parseFloat(document.getElementById('k3-k').value);
+  document.getElementById('k3-kv').textContent = k.toFixed(2);
+  document.getElementById('k3-eq').innerHTML =
+    'Höhenanteil k = ' + Math.round(k * 100) + '%  →  Volumenanteil k³ = ' + (k * k * k * 100).toFixed(1) + '%';
+  const { ctx, W, H } = initCanvas('cv-k3', 260, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const apexX = W * 0.25, apexY = 28, Hpx = 196, halfW = 74, baseY = apexY + Hpx;
+  const yCut = apexY + k * Hpx, cutHalf = k * halfW;
+  // grosser Kegel (Umriss)
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(apexX, apexY); ctx.lineTo(apexX - halfW, baseY); ctx.lineTo(apexX + halfW, baseY); ctx.closePath(); ctx.stroke();
+  // kleiner oberer Kegel (schattiert) + Schnittlinie
+  ctx.fillStyle = 'rgba(184,92,0,0.22)';
+  ctx.beginPath(); ctx.moveTo(apexX, apexY); ctx.lineTo(apexX - cutHalf, yCut); ctx.lineTo(apexX + cutHalf, yCut); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2; ctx.setLineDash([5, 3]);
+  ctx.beginPath(); ctx.moveTo(apexX - cutHalf, yCut); ctx.lineTo(apexX + cutHalf, yCut); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#b85c00'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('k·h', apexX + cutHalf + 5, (apexY + yCut) / 2 + 3);
+  // Balken-Vergleich k / k² / k³
+  const bx = W * 0.55, bw = W * 0.38;
+  ctx.textAlign = 'center'; ctx.fillStyle = '#374151'; ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillText('Anteile am Original', bx + bw / 2, 40);
+  const bar = (y, frac, col, lab) => {
+    ctx.textAlign = 'left'; ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#374151';
+    ctx.fillText(lab, bx, y - 5);
+    ctx.textAlign = 'right'; ctx.fillText((frac * 100).toFixed(frac < 0.1 ? 1 : 0) + '%', bx + bw, y - 5);
+    ctx.fillStyle = '#eef1f5'; ctx.fillRect(bx, y, bw, 18);
+    ctx.fillStyle = col; ctx.fillRect(bx, y, bw * frac, 18);
+  };
+  bar(72, k, '#1a4f8a', 'Höhe / Radius (×k)');
+  bar(120, k * k, '#1f6b3a', 'Fläche (×k²)');
+  bar(168, k * k * k, '#b85c00', 'Volumen (×k³)');
+}
+document.getElementById('k3-k').addEventListener('input', drawK3);
+
 document.addEventListener('DOMContentLoaded', () => {
   updateFU();
   updateKE();
+  drawK3();
   buildA1();
 });
 window.addEventListener('resize', () => {
-  updateFU(); updateKE();
+  updateFU(); updateKE(); drawK3();
 });
 </script>
 </body>
