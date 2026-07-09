@@ -502,7 +502,7 @@ beantwortet die Frage — sie wird selbst zu einer Funktion von <em>k</em>.</p>
         </div>
       </div>
     </div>
-    <p>Verschiebe den Schieber für <em>k</em> und beobachte den Diskriminanten-Wert auf dem Zahlenstrahl. Drei Bereiche, drei Lösungsfälle.</p>
+    <p>Verschiebe den Schieber für <em>k</em> und beobachte, wie die <strong>Parabel</strong> nach oben wandert und der <strong>Diskriminanten-Wert</strong> über den Zahlenstrahl läuft. Drei Bereiche, drei Lösungsfälle.</p>
   </div>
   <div class="widget-body">
     <div class="sl-row akz-blau">
@@ -510,6 +510,8 @@ beantwortet die Frage — sie wird selbst zu einer Funktion von <em>k</em>.</p>
       <input id="sl-k" type="range" min="-2" max="14" step="0.5" value="5">
       <span class="sl-val" id="sl-k-v">5</span>
     </div>
+    <div class="cv-wrap" style="max-width:520px;margin:10px auto 0"><canvas id="cv-pk-parabel"></canvas></div>
+    <p style="font-size:0.82rem;color:var(--tinte-2);margin:4px 0 0;text-align:center">Parabel \(y = x^2 - 6x + k\): der Scheitel steigt mit \(k\); die grünen Nullstellen rücken zusammen und verschwinden bei \(k = 9\).</p>
     <div class="zs-wrap">
       <div class="zs-info">
         <div class="zs-formel" id="pk-formel">D(<span class="tx-blau">k</span>) = 36 − 4·<span class="tx-blau">5</span> = 16.0</div>
@@ -1056,6 +1058,41 @@ function drawPK() {
   // Achsenbeschriftung links
   ctx.font = 'bold 13px monospace'; ctx.fillStyle = '#374151'; ctx.textAlign = 'left';
   ctx.fillText('D', 6, yAchse + 4);
+  // zweite Ansicht: die wandernde Parabel
+  drawPKParabel(k);
+}
+
+/* Parabel y = x² − 6x + k — Scheitel steigt mit k, Nullstellen verschmelzen bei k = 9 */
+function drawPKParabel(k) {
+  const { ctx, W, H } = initCanvas('cv-pk-parabel', 240);
+  const xMin = -2, xMax = 8, yMin = -12, yMax = 8;
+  const { cx, cy } = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+  const D = 36 - 4*k;
+  // Parabel nur im sichtbaren Bereich zeichnen
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+  ctx.beginPath();
+  let started = false;
+  const N = 240;
+  for (let i = 0; i <= N; i++) {
+    const x = xMin + (xMax - xMin) * i / N;
+    const y = x*x - 6*x + k;
+    if (y < yMin - 1 || y > yMax + 1) { started = false; continue; }
+    const px = cx(x), py = cy(y);
+    if (!started) { ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+  // Scheitel S(3 | k−9)
+  drawDot(ctx, cx, cy, 3, k - 9, '#9b1c1c', 5);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('S(3 | ' + (k - 9).toFixed(1) + ')', cx(3) + 9, cy(k - 9) - 6);
+  // Nullstellen auf der x-Achse
+  if (D > 0.001) {
+    const half = Math.sqrt(D) / 2;
+    drawDot(ctx, cx, cy, 3 - half, 0, '#0f7a3a', 6);
+    drawDot(ctx, cx, cy, 3 + half, 0, '#0f7a3a', 6);
+  } else if (D >= -0.001) {
+    drawDot(ctx, cx, cy, 3, 0, '#1a4f8a', 6);   // doppelte Nullstelle bei k = 9
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════
