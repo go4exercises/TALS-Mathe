@@ -4,6 +4,32 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [89] — 2026-07-09 · Audit-Paket 5: vier Prio-1-Visualisierungen gebaut (T52, Auswahl)
+
+Auf Wunsch die vier höchstbewerteten Prio-1-Widgets aus dem Vollaudit ([84], §4) gebaut —
+je selbstständiges Canvas-Widget mit Slidern, Live-Anzeige und (wo die Seite es nutzt)
+👁/💡-Rollover; Geometrie/Zahlen vorab mit python3/node nachgerechnet, Pre-Flight (inkl.
+MathJax-Render und JS-Laufzeit in jsdom) `ALLE CHECKS BESTANDEN`. Ein Browser-Rendercheck
+1280/360 px steht noch aus (lokal kein Browser):
+
+- **g2-2b** — Diskriminanten-Parabel: \(y = x^2 - 6x + k\) wandert mit dem k-Slider nach
+  oben, der Scheitel \(S(3 \mid k-9)\) steigt, die grünen Nullstellen verschmelzen bei
+  \(k = 9\) (\(D = 0\)) und verschwinden darüber — ergänzt die bisher parabellose Seite.
+- **g5-3** — SSW-Fallunterscheidung: Kreisbogen um \(B\) mit Radius \(a\) (Slider), live
+  0/1/2 Dreiecke; die Höhe \(h = c\sin\alpha\) markiert die Grenzfälle (\(a<h\): keins,
+  \(h<a<c\): zwei = mehrdeutiger SSW-Fall, \(a\ge c\): eines).
+- **g4-3** — interaktives Robustheits-Widget: den Ausreisser-Lohn ziehen — der Mittelwert
+  läuft mit (bis \(\approx 7\,071\) Fr.), der Median bleibt fest bei \(4\,200\) Fr. Schliesst
+  die grösste Interaktivitäts-Reserve (g4-Reihe hatte 0 Widgets).
+- **s3-5** — Phasor: rotierender Zeiger der Länge \(A\) links, synchrone Zeitspur
+  \(y = A\sin(\omega t)\) rechts; die gestrichelte Linie koppelt Zeigerspitze und
+  Kurvenpunkt — die Kernstelle «harmonische Schwingung».
+
+Offen in Paket 5: die übrigen sechs Prio-1-Widgets (§4 Nr. 1–10), die Prio-2-Liste (T53)
+und die Video-Platzhalter s3-6/s2-2a/c (T54, Ressourcen-Session).
+
+---
+
 ## [88] — 2026-07-09 · Audit-Paket 3: RLP-/Lernziel-Lücken geschlossen (T17–T26)
 
 Die neun punktuellen RLP-/Lernziel-Lücken aus dem Vollaudit ([84], §3.3) mit kleinen
