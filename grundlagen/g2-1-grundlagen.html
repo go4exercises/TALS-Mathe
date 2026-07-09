@@ -412,7 +412,7 @@ MathJax = {
   <table class="ftb-tabelle" style="margin-top:6px">
     <thead><tr><th>Typ</th><th>Form</th><th>Beispiel</th><th>Lösungen (in \(\mathbb{R}\))</th></tr></thead>
     <tbody>
-      <tr><td style="font-family:var(--sans);text-align:left">linear</td><td>\(a \cdot x + b = 0\)</td><td>\(3 \cdot x + 5 = 14\)</td><td>genau 1</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">linear</td><td>\(a \cdot x + b = 0\;(a \neq 0)\)</td><td>\(3 \cdot x + 5 = 14\)</td><td>genau 1</td></tr>
       <tr><td style="font-family:var(--sans);text-align:left">quadratisch</td><td>\(a \cdot x^2 + b \cdot x + c = 0\)</td><td>\(x^2 - 5 \cdot x + 6 = 0\)</td><td>0, 1 oder 2</td></tr>
       <tr><td style="font-family:var(--sans);text-align:left">Bruchgleichung</td><td>\(\dfrac{P(x)}{Q(x)} = R(x)\)</td><td>\(\dfrac{2}{x-1} = 4\)</td><td>je nach \(Q(x)\neq 0\)</td></tr>
       <tr><td style="font-family:var(--sans);text-align:left">Wurzelgleichung</td><td>\(\sqrt{P(x)} = R(x)\)</td><td>\(\sqrt{x+3} = x-1\)</td><td>nur Werte mit \(P(x)\ge 0\)</td></tr>
@@ -507,7 +507,7 @@ MathJax = {
     <li>
       <p><strong>Werkstatt-Pakete.</strong> Drei gleiche Pakete und 2 kg Werkzeug wiegen zusammen 14 kg. Stelle die Gleichung in \(x\) (Paketmasse in kg) auf.</p>
       <div class="eingabe-row">
-        <input type="text" id="a2a" placeholder="z.B. 3·x+2=14">
+        <input type="text" id="a2a" placeholder="z.B. 2·x + 1 = 9">
         <button class="btn-pruef" onclick="checkEq('a2a','3x+2=14','3·x + 2 = 14')">Prüfen</button>
       </div>
       <div class="cr" id="a2a-cr"></div>
@@ -516,7 +516,7 @@ MathJax = {
     <li>
       <p><strong>Mietgerät.</strong> Grundgebühr 60 CHF plus 8 CHF pro Tag. Nach wie vielen Tagen \(t\) sind die Kosten 132 CHF? Stelle die Gleichung auf.</p>
       <div class="eingabe-row">
-        <input type="text" id="a2b" placeholder="z.B. 8·t+60=132">
+        <input type="text" id="a2b" placeholder="z.B. 5·t + 20 = 45">
         <button class="btn-pruef" onclick="checkEq('a2b','8t+60=132','8·t + 60 = 132')">Prüfen</button>
       </div>
       <div class="cr" id="a2b-cr"></div>
@@ -525,7 +525,7 @@ MathJax = {
     <li>
       <p><strong>Aufzugsgrenze.</strong> Ein Aufzug darf höchstens 480 kg tragen. Pro Person rechnet man mit 80 kg. Wie viele Personen \(n\) dürfen maximal einsteigen? Stelle die <em>Ungleichung</em> auf.</p>
       <div class="eingabe-row">
-        <input type="text" id="a2c" placeholder="z.B. 80·n &lt;= 480">
+        <input type="text" id="a2c" placeholder="z.B. 20·n &lt;= 100">
         <button class="btn-pruef" onclick="checkIneq('a2c','80n&lt;=480','80·n ≤ 480')">Prüfen</button>
       </div>
       <div class="cr" id="a2c-cr"></div>
@@ -991,24 +991,60 @@ function checkA1(choice) {
 /* ════════════════════════════════════════════════════════════════
    7) AUFGABE A2 — Gleichung aus Sachverhalt
 ════════════════════════════════════════════════════════════════ */
-function normEq(s) {
-  return s.replace(/\s/g, '').replace(/,/g, '.').toLowerCase()
-          .replace(/−/g, '-').replace(/[·*×]/g, '');
+// Lineare Seite in {coef, konst} zerlegen (numerischer Vergleich statt Zeichenkette).
+// Akzeptiert Term-Umstellungen, verschiedene Mal-Zeichen, Komma/Punkt, Leerzeichen.
+function parseLin(s) {
+  s = s.replace(/\s/g, '').replace(/,/g, '.').replace(/−/g, '-')
+       .replace(/[·*×]/g, '').toLowerCase();
+  if (s === '' ) return { ok: false };
+  if (s[0] !== '+' && s[0] !== '-') s = '+' + s;
+  const terme = s.match(/[+-][^+-]+/g);
+  if (!terme) return { ok: false };
+  let coef = 0, konst = 0, ok = true;
+  for (const t of terme) {
+    const sign = t[0] === '-' ? -1 : 1;
+    const body = t.slice(1);
+    if (/[a-z]/.test(body)) {
+      const num = body.replace(/[a-z]/g, '');
+      const c = num === '' ? 1 : parseFloat(num);
+      if (isNaN(c)) { ok = false; } else { coef += sign * c; }
+    } else {
+      const c = parseFloat(body);
+      if (isNaN(c)) { ok = false; } else { konst += sign * c; }
+    }
+  }
+  return { ok, coef, konst };
+}
+// Gleichung/Ungleichung in kanonische Differenz L-R + Relation überführen.
+function parseRel(s) {
+  s = s.replace(/\s/g, '').replace(/≤/g, '<=').replace(/≥/g, '>=').replace(/=</g, '<=').replace(/=>/g, '>=');
+  let rel = '=', op = '=';
+  for (const o of ['<=', '>=', '<', '>', '=']) {
+    if (s.indexOf(o) !== -1) { op = o; break; }
+  }
+  const seiten = s.split(op);
+  if (seiten.length !== 2) return { ok: false };
+  let L = parseLin(seiten[0]), R = parseLin(seiten[1]);
+  if (!L.ok || !R.ok) return { ok: false };
+  // >= / > durch Seitentausch auf <= / < normieren (kein Vorzeichenwechsel nötig)
+  if (op === '>=') { [L, R] = [R, L]; rel = '<='; }
+  else if (op === '>') { [L, R] = [R, L]; rel = '<'; }
+  else if (op === '<=') rel = '<=';
+  else if (op === '<') rel = '<';
+  else rel = '=';
+  return { ok: true, rel, coef: L.coef - R.coef, konst: L.konst - R.konst };
+}
+function relGleich(a, b) {
+  if (!a.ok || !b.ok || a.rel !== b.rel) return false;
+  const eq = (x, y) => Math.abs(x - y) < 1e-9;
+  if (eq(a.coef, b.coef) && eq(a.konst, b.konst)) return true;
+  // Bei Gleichungen ist L-R nur bis aufs Vorzeichen bestimmt (z.B. "14 = 3x+2").
+  return a.rel === '=' && eq(a.coef, -b.coef) && eq(a.konst, -b.konst);
 }
 function checkEq(id, expected, displayCorrect) {
-  const inp = document.getElementById(id).value;
-  const u = normEq(inp);
-  const e = normEq(expected);
   const r = document.getElementById(id + '-cr');
   r.style.display = 'block';
-  // Akzeptiere auch Reihenfolgen-Tausch (z.B. "14 = 3x+2")
-  const parts = u.split('=');
-  const eparts = e.split('=');
-  let ok = false;
-  if (parts.length === 2 && eparts.length === 2) {
-    ok = (parts[0] === eparts[0] && parts[1] === eparts[1]) ||
-         (parts[0] === eparts[1] && parts[1] === eparts[0]);
-  }
+  const ok = relGleich(parseRel(document.getElementById(id).value), parseRel(expected));
   if (ok) {
     r.className = 'cr ok';
     r.textContent = `✓ Richtig — die Gleichung ist ${displayCorrect}.`;
@@ -1018,17 +1054,9 @@ function checkEq(id, expected, displayCorrect) {
   }
 }
 function checkIneq(id, expected, displayCorrect) {
-  const inp = document.getElementById(id).value;
-  // Normalisiere ≤, <=, =< zu '<='
-  let u = inp.replace(/\s/g, '').replace(/,/g, '.').toLowerCase().replace(/−/g, '-')
-             .replace(/[·*×]/g, '').replace(/≤/g, '<=').replace(/=</g, '<=');
-  const e = expected.replace(/\s/g, '').toLowerCase();
   const r = document.getElementById(id + '-cr');
   r.style.display = 'block';
-  const parts = u.split('<=');
-  const eparts = e.split('<=');
-  const ok = parts.length === 2 && eparts.length === 2 &&
-             parts[0] === eparts[0] && parts[1] === eparts[1];
+  const ok = relGleich(parseRel(document.getElementById(id).value), parseRel(expected));
   if (ok) {
     r.className = 'cr ok';
     r.textContent = `✓ Richtig — die Ungleichung ist ${displayCorrect}.`;
