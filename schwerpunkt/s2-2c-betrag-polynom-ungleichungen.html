@@ -219,6 +219,36 @@ MathJax = {
   <p>Wer bei \(|x - 3| = 5\) nur \(x - 3 = 5\) löst, verliert die halbe Lösungsmenge. Der Betrag versteckt <strong>zwei</strong> Gleichungen: \(x - 3 = 5\) <em>und</em> \(x - 3 = -5\), also \(L = \{-2;\ 8\}\). Probe am Abstandsbild: Welche Zahlen haben Abstand \(5\) von der \(3\)?</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Schiebe die Höhe \(c\) durch die V-Kurve \(y = |2x + 1|\) — die drei Fälle der Tabelle werden sichtbar:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Zähle die Schnittpunkte, während \(c\) von oben nach unten wandert. Bei welchem \(c\) verschwindet der zweite Schnittpunkt — und wo liegt der letzte verbleibende?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Zähle die Schnittpunkte, während c von oben nach unten wandert. Bei welchem c verschwindet der zweite Schnittpunkt — und wo liegt der letzte verbleibende?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Die Fallunterscheidung ist keine Regel zum Auswendiglernen, sondern die Zahl der Schnittpunkte: Für \(c > 0\) trifft die Waagrechte beide Äste der V-Kurve (<strong>zwei</strong> Lösungen), für \(c = 0\) genau die Spitze (<strong>eine</strong>), für \(c < 0\) liegt sie unter der Kurve (<strong>keine</strong>) — denn ein Betrag ist nie negativ. Die Spitze liegt dort, wo der Term im Betrag null wird: \(2x + 1 = 0\).</div>
+      <button class="ah-speak" type="button" data-vorlesen="Die Fallunterscheidung ist keine Regel zum Auswendiglernen, sondern die Zahl der Schnittpunkte: Für c grösser null trifft die Waagrechte beide Äste der V-Kurve, das gibt zwei Lösungen; für c gleich null genau die Spitze, das gibt eine; für c kleiner null liegt sie unter der Kurve, das gibt keine — denn ein Betrag ist nie negativ. Die Spitze liegt dort, wo der Term im Betrag null wird.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Höhe \(c\): <span class="sl-val" id="be-cv">7.0</span></label>
+  <input type="range" id="be-c" min="-3" max="10" step="0.5" value="7">
+</div>
+<div class="typ-btns" style="margin-bottom:10px">
+  <button class="typ-btn" type="button" data-bec="7">\(c &gt; 0\): zwei Lösungen</button>
+  <button class="typ-btn" type="button" data-bec="0">\(c = 0\): eine Lösung</button>
+  <button class="typ-btn" type="button" data-bec="-2">\(c &lt; 0\): keine Lösung</button>
+</div>
+<div class="formel-live"><div class="fl-label">Betragsgleichung</div><div class="fl-eq" id="be-eq">|2x + 1| = 7 → L = {−4; 3}</div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-betrag" height="280"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Der linke Ast gehört zum Fall \(2x + 1 &lt; 0\) (der Term wird gespiegelt), der rechte zu \(2x + 1 \geq 0\). Genau das sind die beiden Gleichungen, die der Betrag versteckt.</div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Betragsgleichungen</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie viele Lösungen hat \(|x - 2| = -3\)?</p><ul class="mc-optionen"><li data-opt="A">zwei</li><li data-opt="B">eine</li><li data-opt="C">keine</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> Ein Betrag ist nie negativ — \(L = \{\,\}\).</div></details></div>
@@ -825,14 +855,81 @@ function chkNum(id, target, tol, einheit){
   }
 }
 
+/* ══ Betrags-Explorer: V-Kurve y = |2x+1| gegen y = c ══
+   c > 0 → zwei Schnittpunkte  x = (c−1)/2  und  x = (−c−1)/2
+   c = 0 → einer (die Spitze bei x = −0.5)
+   c < 0 → keiner (Betrag ist nie negativ)                        */
+function drawBetrag() {
+  const c = parseFloat(document.getElementById('be-c').value);
+  document.getElementById('be-cv').textContent = c.toFixed(1);
+  document.querySelectorAll('[data-bec]').forEach(b =>
+    b.classList.toggle('aktiv', parseFloat(b.dataset.bec) === c));
+  const nf = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(v % 1 === 0 ? 0 : 1);
+  let sol = [];
+  if (c > 0)       sol = [(-c - 1) / 2, (c - 1) / 2];
+  else if (c === 0) sol = [-0.5];
+  document.getElementById('be-eq').textContent =
+    `|2x + 1| = ${nf(c)}  →  L = ` + (sol.length ? `{${sol.map(nf).join('; ')}}` : '{ }');
+
+  const { ctx, W, H } = initCanvas('cv-betrag', 280, false);
+  const xMin = -6, xMax = 5, yMin = -3.5, yMax = 10.5;
+  const { cx, cy } = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+
+  // V-Kurve y = |2x + 1|
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(cx(xMin), cy(Math.abs(2 * xMin + 1)));
+  ctx.lineTo(cx(-0.5), cy(0));
+  ctx.lineTo(cx(xMax), cy(Math.abs(2 * xMax + 1)));
+  ctx.stroke();
+  // Kurven-Label in die freie obere linke Ecke — im Feld kreuzt es je nach c die Lote.
+  ctx.font = 'italic 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#fff'; ctx.fillRect(4, 6, ctx.measureText('y = |2x + 1|').width + 8, 18);
+  ctx.fillStyle = '#1a4f8a'; ctx.fillText('y = |2x + 1|', 8, 19);
+
+  // Waagrechte y = c
+  ctx.strokeStyle = '#c8412c'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(xMin), cy(c)); ctx.lineTo(cx(xMax), cy(c)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#c8412c'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('y = ' + nf(c), cx(xMin) + 6, cy(c) - 7);
+
+  // Schnittpunkte + Lote auf die x-Achse
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.4;
+  sol.forEach(x => {
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(cx(x), cy(c)); ctx.lineTo(cx(x), cy(0)); ctx.stroke();
+    ctx.setLineDash([]);
+    drawDot(ctx, cx, cy, x, c, '#1f6b3a', 5.5);
+    drawDot(ctx, cx, cy, x, 0, '#1f6b3a', 4);
+    ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('x = ' + nf(x), cx(x), cy(0) + 22);
+  });
+
+  // Status — mit weissem Grund, damit der Kurvenast nicht durch den Text läuft
+  const status = c > 0 ? ['zwei Lösungen', '#1f6b3a']
+               : c === 0 ? ['eine Lösung (Spitze)', '#b85c00']
+                         : ['keine Lösung: |T| ≥ 0', '#c8412c'];
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+  const tw = ctx.measureText(status[0]).width;
+  ctx.fillStyle = '#fff'; ctx.fillRect(W - 12 - tw, 6, tw + 8, 18);
+  ctx.fillStyle = status[1]; ctx.fillText(status[0], W - 8, 19);
+}
+document.getElementById('be-c').addEventListener('input', drawBetrag);
+document.querySelectorAll('[data-bec]').forEach(b => b.addEventListener('click', () => {
+  document.getElementById('be-c').value = b.dataset.bec;
+  drawBetrag();
+}));
+
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateTO();
   updateVZ();
+  drawBetrag();
   buildA1(); drawA1();
 });
 window.addEventListener('resize', () => {
-  updateTO(); updateVZ(); drawA1();
+  updateTO(); updateVZ(); drawBetrag(); drawA1();
 });
 </script>
 </body>

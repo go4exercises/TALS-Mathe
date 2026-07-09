@@ -40,6 +40,7 @@ const WIDGETS = [
   { page: 'grundlagen/g5-5-trigonometrische-gleichungen.html', id: 'cv-kk', note: 'Kreis-Kurve-Kopplung' },
   { page: 'grundlagen/g1-1-grundlagen.html', id: 'cv-distrib', note: 'Distributiv-Flaechenmodell' },
   { page: 'schwerpunkt/s1-3-logarithmen.html', id: 'cv-rechenschieber', note: 'Rechenschieber' },
+  { page: 'schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html', id: 'cv-betrag', note: 'Betrags-Explorer' },
 ];
 
 const VIEWPORTS = [

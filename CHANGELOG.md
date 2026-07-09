@@ -4,6 +4,43 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [92] — 2026-07-09 · Audit-Paket 5 / T53, Runde 2: die grössten Hebel der Prio-2-Liste
+
+Fünf Widgets, ausgewählt nach drei Kriterien: wie arm die Seite bisher an Interaktion war,
+ob das Konzept ohne Bild überhaupt zugänglich ist, und ob dort eine dokumentierte
+Fehlerquelle sitzt. Alle Zahlenwerte vorab mit `python3` nachgerechnet, Pre-Flight
+`ALLE CHECKS BESTANDEN`, Browser-Rendercheck bei 1280 px und 360 px:
+
+- **s4-1** (ärmste Seite im Repo, bisher eine einzige Grafik) — **Raumwinkel-Widget**: Quader
+  mit fester Grundfläche \(a = 4\) und variabler Höhe. Die Projektion der Raumdiagonale in den
+  Boden ist die Flächendiagonale \(a\sqrt2\); \(\varphi\) läuft von \(10.02°\) (flach) über
+  \(35.26°\) (Würfel-Snap, \(\tan\varphi = 1/\sqrt2\)) bis \(54.74°\). Dazu ein **Würfel-Canvas
+  für A1**: das gewählte Geradenpaar wird am Drahtmodell farbig hervorgehoben (verdeckte Kanten
+  gestrichelt), sodass parallel/schneidend/windschief sichtbar statt nur beschrieben ist.
+- **g5-5** — **Kreis-Kurve-Kopplung**: Einheitskreis und Kurve nebeneinander, beide Lösungen von
+  \(\sin\varphi = c\) bzw. \(\cos\varphi = c\) simultan markiert. Adressiert den häufigsten
+  Fehler des Kapitels (zweite Lösung vergessen), inklusive der Grenzfälle \(|c| = 1\) (beide
+  Lösungen fallen zusammen) und \(|c| > 1\) (die Gerade verfehlt den Kreis). Dazu ein
+  **Lösungs-Trainer**: Der Rechner-Hauptwert ist gegeben, gesucht ist \(\varphi_2\) — wer
+  \(\varphi_1\) eingibt, bekommt genau das gesagt.
+- **g1-1** — **Distributiv-Flächenmodell**: \(a \cdot (b+c)\) als zerschnittenes Rechteck
+  (zwei Teilflächen), umschaltbar auf \((a+b)(c+d)\) mit vier Teilflächen — die Brücke zu den
+  binomischen Formeln und zum Faktorisieren in 1.3.
+- **s1-3** — **Rechenschieber**: Zwei logarithmische Skalen; steht die \(1\) der Zunge über \(u\),
+  so steht \(v\) über \(u \cdot v\), weil \(\lg u + \lg v = \lg(u v)\). Bei \(u \cdot v > 10\)
+  greift der klassische **Zehnerübertrag** (die \(10\) der Zunge über \(u\) ansetzen); die
+  Streckenzerlegung \(\lg v = (1 - \lg u) + (\lg u + \lg v - 1)\) wird mitgezeichnet.
+- **s2-2c** — **Betrags-Explorer**: \(y = |2x+1|\) gegen \(y = c\). Die Fallunterscheidung der
+  Definitionstabelle wird zur Zahl der Schnittpunkte: \(c > 0\) zwei (\(L = \{-4;\ 3\}\) bei
+  \(c = 7\), passend zu Beispiel 1), \(c = 0\) einer (die Spitze), \(c < 0\) keiner.
+
+**Nebenbefund (nicht behoben, nicht Teil des Auftrags):** Auf schmalen Viewports (360 px) ist
+`main` breiter als das Fenster — Ursache sind einzelne abgesetzte MathJax-Formeln (bis 800 px),
+die keinen eigenen horizontalen Scroll-Container haben; die Canvases erben die Überbreite nur.
+Betrifft bestehende Seiten unabhängig von diesen Widgets (geprüft am Commit-Stand vor Runde 2).
+
+---
+
 ## [91] — 2026-07-09 · Audit-Paket 5 / T53, Runde 1: die fünf aus T52 verschobenen Sekundär-Widgets
 
 Die vier Punkte, die beim Abschluss von T52 ([90]) explizit nach T53 verschoben wurden, sind
