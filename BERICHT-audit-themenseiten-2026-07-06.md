@@ -170,33 +170,33 @@ Das Lehrmittel ist in bemerkenswert gutem Zustand:
 - [ ] **T25** s3-4a: Abschnitt/Aufgabe Sättigungsprozesse (beschränktes Wachstum)
 - [ ] **T26** s3-2b: Umkehrung x⁻ⁿ ergänzen oder im rlp-hinweis deklarieren
 
-### Paket 4 — Einzel-Mängel B (pro Seite, nach Sichtung)
+### Paket 4 — Einzel-Mängel B (pro Seite, nach Sichtung) — ✅ erledigt 2026-07-09
 
-- [ ] **T27** g1-3: Startwert 650→1040; Querlink-Anker; (a+b)³-Verweis prüfen (s1-1/s1-2 existieren jetzt — ggf. präzise verlinken)
-- [ ] **T28** g1-4: toter Anker #typen→#hierarchie; «Komma verschieben»→«Dezimalpunkt verschieben»; Zoom-Objekte n:20/22
-- [ ] **T29** g2-1: A2-Platzhalter neutralisieren + numerischer Gleichungs-Vergleich statt String; a≠0-Zusatz
-- [ ] **T30** g2-2a: Lösungsfall-Nummerierung; Definition↔Mini-Check a≠0; Lead; ohm-root-Element (auch 2-2b/2-3); «Buchstaben-grösse»; A7 «lukrativer»
-- [ ] **T31** g2-2b: *einen*-Sternchen; «Zerfallsprozesse»-Beispiel ersetzen; 𝕃 vereinheitlichen; «Studierende»→«Lernende»; Velo-Caption
-- [ ] **T32** g2-3: Geraden-Label ins Canvas; Kino-Kontext
-- [ ] **T33** g3-1: \(\)-Fragment; b-Slider-Farbkopplung; Vertikaltest-Begriff; Ziel- vs. Wertebereich-Fussnote
-- [ ] **T34** g3-2: A3-Lösungswege; U+2212 im m=−1-Zweig; merksatz-Klasse
-- [ ] **T35** g3-3: **U+2212-Parser-Bug A2-Widget**; Wurfparabel clippen; «(auch: Lösungsformel)»
-- [ ] **T36** g4-0: Grammatik Z.781; 8000-Zahl neutralisieren; Boxplot-Ausreisser-Hinweis; «(oben)»; s-Formulierung (auch g4-3)
-- [ ] **T37** g4-1: Sie→du
-- [ ] **T38** g5-1: totes CSS (bauen oder entfernen — Vorschlag: Gut/Schlecht-Skizzen bauen, siehe T44)
-- [ ] **T39** g5-2b: Formeltabelle a=Grundseite/Drachen-Grössen; Drachen in Live-Klassifikation; NaN-Schutz Sehnenviereck; «Ein Drache»; Mini-Check-Etikett
-- [ ] **T40** g5-2c: «Wie aus der Animation oben»; Tangenteneigenschaft; Bogenmass-Merksatz; Segment-Legende φ>180°; «Stern-Schluss»-Klammer; Drag-Text Anim 1; Pi-Rekord-Halbsatz
-- [ ] **T41** g5-2d: Lernziele-Position; block-def zentrische Streckung; Strahlensatz-Fehlerblock auf S-Notation; Tick-Beschriftung
-- [ ] **T42** g5-3: «Vom einem»; WWS im Merksatz; Sinussatz-Slider-Clamp; A2.1-Endwert; sin-Bereich-Formulierung
-- [ ] **T43** g5-4: erkl-ek2-Satzbau; Schiff-Quadrant-Sonderfälle; ±kπ-Notation
-- [ ] **T44** g5-5: Fehlerblock-Satzbau; Intervallnotation; waagerecht; A4c-Rundungsvorgabe
-- [ ] **T45** s1-2/s1-3: h2-Anker-IDs; A1-Optionen mischen + Gesetz 5; fmt2 entfernen; a>0-Halbsatz; A5-Text/Target; sl-grp-Markup; Widget-Emoji
-- [ ] **T46** s2-1: Waage-Canvas-Geometrie (+ Rendercheck); A3b neue Gleichung; g2-2a/b-Links in Typen-Tabelle; waStep-Feedback
-- [ ] **T47** s2-2a: Uetliberg-Kontext; D-Zeile Beispiel 4/A7; «kann leer sein»; Substitution-Lernziel
-- [ ] **T48** s2-2b: A7-Toleranz; D-Herleitung Bsp. 6; A1-Distraktor
-- [ ] **T49** s2-2c: Randfall r=0; updateVZ x−0; Widget-Emoji; fmt2
-- [ ] **T50** s3-Serie Einzelpunkte: s3-1 Slider-Init (value 3→4, auch s3-6) + Galerie «acht»↔9 + Scheitelform-Zwischenschritt + «nicht lösbar»-Formulierung; s3-2a f:ℝ→ℝ + n-Symbolwechsel + Asymptoten-Def + Slider-max 8.5 + ≈560; s3-2b Konventions-Tipp ∛ + «knapp zweieinhalb Tage» + A6-Zwischenschritt; s3-3 «Sattel» + A4–A7-Plot-Hinweise; s3-4a A5/A6-Hinweis «grafisch/Probieren» + 1.3-Querlink + 0<a<1 + chkNum-1/5-Hinweis; s3-4b Phon→dB + Erkenntnis-Popup-Präzisierung + 0<a<1; s3-5 b/v-Farbkopplung + Wertebereich→Wertemenge + Symmetrieachsen-Erklärsatz
-- [ ] **T51** s4-Serie Einzelpunkte: s4-2a hinten-Set-Bug + Wiederholungs-Kennzeichnung Abschnitt 5 + Mantellinie-Halbsatz + Körperdiagonale-Klammer; s4-3b Beispiel 4 auf BA·BC; s4-3c A5-Text neu
+- [x] **T27** g1-3: Startwert 650→1040; Querlink-Anker; (a+b)³-Verweis prüfen (s1-1/s1-2 existieren jetzt — ggf. präzise verlinken)
+- [x] **T28** g1-4: toter Anker #typen→#hierarchie; «Komma verschieben»→«Dezimalpunkt verschieben»; Zoom-Objekte n:20/22
+- [x] **T29** g2-1: A2-Platzhalter neutralisieren + numerischer Gleichungs-Vergleich statt String; a≠0-Zusatz
+- [x] **T30** g2-2a: Lösungsfall-Nummerierung; Definition↔Mini-Check a≠0; Lead; ohm-root-Element (auch 2-2b/2-3); «Buchstaben-grösse»; A7 «lukrativer»
+- [x] **T31** g2-2b: *einen*-Sternchen; «Zerfallsprozesse»-Beispiel ersetzen; 𝕃 vereinheitlichen; «Studierende»→«Lernende»; Velo-Caption
+- [x] **T32** g2-3: Geraden-Label ins Canvas; Kino-Kontext
+- [x] **T33** g3-1: \(\)-Fragment; b-Slider-Farbkopplung; Vertikaltest-Begriff; Ziel- vs. Wertebereich-Fussnote
+- [x] **T34** g3-2: A3-Lösungswege; U+2212 im m=−1-Zweig; merksatz-Klasse
+- [x] **T35** g3-3: **U+2212-Parser-Bug A2-Widget**; Wurfparabel clippen; «(auch: Lösungsformel)»
+- [x] **T36** g4-0: Grammatik Z.781; 8000-Zahl neutralisieren; Boxplot-Ausreisser-Hinweis; «(oben)»; s-Formulierung (auch g4-3)
+- [x] **T37** g4-1: Sie→du
+- [x] **T38** g5-1: totes CSS (bauen oder entfernen — Vorschlag: Gut/Schlecht-Skizzen bauen, siehe T44)
+- [x] **T39** g5-2b: Formeltabelle a=Grundseite/Drachen-Grössen; Drachen in Live-Klassifikation; NaN-Schutz Sehnenviereck; «Ein Drache»; Mini-Check-Etikett
+- [x] **T40** g5-2c: «Wie aus der Animation oben»; Tangenteneigenschaft; Bogenmass-Merksatz; Segment-Legende φ>180°; «Stern-Schluss»-Klammer; Drag-Text Anim 1; Pi-Rekord-Halbsatz
+- [x] **T41** g5-2d: Lernziele-Position; block-def zentrische Streckung; Strahlensatz-Fehlerblock auf S-Notation; Tick-Beschriftung
+- [x] **T42** g5-3: «Vom einem»; WWS im Merksatz; Sinussatz-Slider-Clamp; A2.1-Endwert; sin-Bereich-Formulierung
+- [x] **T43** g5-4: erkl-ek2-Satzbau; Schiff-Quadrant-Sonderfälle; ±kπ-Notation
+- [x] **T44** g5-5: Fehlerblock-Satzbau; Intervallnotation; waagerecht; A4c-Rundungsvorgabe
+- [x] **T45** s1-2/s1-3: h2-Anker-IDs; A1-Optionen mischen + Gesetz 5; fmt2 entfernen; a>0-Halbsatz; A5-Text/Target; sl-grp-Markup; Widget-Emoji
+- [x] **T46** s2-1: Waage-Canvas-Geometrie (+ Rendercheck); A3b neue Gleichung; g2-2a/b-Links in Typen-Tabelle; waStep-Feedback
+- [x] **T47** s2-2a: Uetliberg-Kontext; D-Zeile Beispiel 4/A7; «kann leer sein»; Substitution-Lernziel
+- [x] **T48** s2-2b: A7-Toleranz; D-Herleitung Bsp. 6; A1-Distraktor
+- [x] **T49** s2-2c: Randfall r=0; updateVZ x−0; Widget-Emoji; fmt2
+- [x] **T50** s3-Serie Einzelpunkte: s3-1 Slider-Init (value 3→4, auch s3-6) + Galerie «acht»↔9 + Scheitelform-Zwischenschritt + «nicht lösbar»-Formulierung; s3-2a f:ℝ→ℝ + n-Symbolwechsel + Asymptoten-Def + Slider-max 8.5 + ≈560; s3-2b Konventions-Tipp ∛ + «knapp zweieinhalb Tage» + A6-Zwischenschritt; s3-3 «Sattel» + A4–A7-Plot-Hinweise; s3-4a A5/A6-Hinweis «grafisch/Probieren» + 1.3-Querlink + 0<a<1 + chkNum-1/5-Hinweis; s3-4b Phon→dB + Erkenntnis-Popup-Präzisierung + 0<a<1; s3-5 b/v-Farbkopplung + Wertebereich→Wertemenge + Symmetrieachsen-Erklärsatz
+- [x] **T51** s4-Serie Einzelpunkte: s4-2a hinten-Set-Bug + Wiederholungs-Kennzeichnung Abschnitt 5 + Mantellinie-Halbsatz + Körperdiagonale-Klammer; s4-3b Beispiel 4 auf BA·BC; s4-3c A5-Text neu
 
 ### Paket 5 — Visualisierungen (nach deiner Priorisierung; Aufwand je ~½ Durchgang)
 
