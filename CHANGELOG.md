@@ -4,6 +4,43 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [88] — 2026-07-09 · Audit-Paket 3: RLP-/Lernziel-Lücken geschlossen (T17–T26)
+
+Die neun punktuellen RLP-/Lernziel-Lücken aus dem Vollaudit ([84], §3.3) mit kleinen
+Inhaltsblöcken gefüllt — je Lücke Verfahren/Definition, Beispiel und wo sinnvoll eine
+Teilaufgabe; alle Zahlenwerte mit python3 nachgerechnet, Pre-Flight (inkl. MathJax-Render-
+und JS-Laufzeit-Prüfung) über alle geänderten Seiten `ALLE CHECKS BESTANDEN`:
+
+- **g1-2** — Theorieblock «Grundoperationen mit Brüchen» (Addieren/Subtrahieren über den
+  Hauptnenner, Multiplizieren, Dividieren mit dem Kehrwert, Kürzen) vor A3 ergänzt (T17).
+- **g4-1** — Theorieblock «nominal vs. ordinal» (die Lernziel/Mini-Check schon voraussetzen)
+  plus vierter Mini-Check zur Tabellenkalkulation (T18).
+- **g4-2** — Theorie-/Fehlerblock «Manipulative Diagramme» (abgeschnittene Achse, fehlende
+  Einheit, Flächen-/3D-Verzerrung, Rosinenpickerei) ergänzt (T19).
+- **g4-3** — Definitionsblock «Spannweite \(R = x_\max - x_\min\)» + Zeile in der
+  Zusammenfassungstabelle (Standardabweichungs-Zeile dabei auf «quadratisches Mittel»
+  angeglichen) (T20).
+- **g5-1** — Theorieblock «Stufen- und Wechselwinkel an Parallelen» mit Skizze (F-/Z-Lage)
+  ergänzt (Widget deckte nur Komplement-/Supplement-/Scheitel-Nebenwinkel ab) (T21).
+- **g5-2a** — Umfang \(U = a+b+c\): Merksatz-Block, Zeile in der Formeltabelle und
+  Teilaufgabe in A3 (5-12-13-Dreieck → \(U = 30\) cm) (T22).
+- **g5-4** — Kurzabschnitt «Umkehroperationen» (arcsin/arccos/arctan mit Hauptwert-Bereichen,
+  Brücke zu 5.5), Komplement-Zeile \(90°-\alpha\) in der Symmetrie-Tabelle, Bogenmass-
+  Querverweis auf 5.1 (T23).
+- **s3-3** — Linearfaktor-Abspaltung per Polynomdivision (Verfahren + Beispiel
+  \(x^3-2x^2-5x+6\) + Teilaufgabe A3f); exakte Grad-2-Extrema über die Scheitelform
+  (\(x_S = -b/2a\)); Ausblick auf die Differentialrechnung für höhere Grade deklariert (T24).
+- **s3-4a/b** — Sättigungsprozesse (beschränktes Wachstum): in 3.4a Modell
+  \(f(t) = S-(S-A)e^{-kt}\) + Abkühlungs-Beispiel; in 3.4b das Gegenstück — den Prozess mit
+  dem Logarithmus nach der Zeit auflösen (T25).
+- **s3-2b** — Umkehrung der Potenzfunktion mit negativem Exponenten ergänzt: \(y = x^{-n}\)
+  hat die Umkehrung \(y = x^{-1/n}\) (Beispiel \(x^{-2} \to 1/\sqrt{x}\)) (T26).
+
+Offene Vorentscheide (aus §5): g5-1 → Theorieblock statt Lernziel-Kürzung; s3-2b → Satz mit
+Beispiel statt blosser rlp-hinweis-Deklaration.
+
+---
+
 ## [87] — 2026-07-09 · Audit-Paket 4: Einzel-Mängel B pro Seite behoben (T27–T51)
 
 Die Severity-B-Einzelfunde aus dem Vollaudit ([84]) auf 36 Seiten korrigiert — je

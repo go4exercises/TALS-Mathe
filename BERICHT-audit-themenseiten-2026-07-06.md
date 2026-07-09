@@ -157,18 +157,18 @@ Das Lehrmittel ist in bemerkenswert gutem Zustand:
 - [x] **T15** chkNum-Bruch-Eingabe projektweit: «/» im Strip-Regex schonen + a/b-Parser (betrifft alle neueren Seiten); «e» in Zahleneingaben (4.4e11) schonen
 - [x] **T16** Verweis-Glyphen: ↩ nur für Rückverweise; Vorwärtsverweise s4-1/s4-2a («wirst du behandeln») umformulieren
 
-### Paket 3 — RLP-/Lernziel-Lücken schliessen (je kleiner Inhaltsblock)
+### Paket 3 — RLP-/Lernziel-Lücken schliessen (je kleiner Inhaltsblock) — ✅ erledigt 2026-07-09
 
-- [ ] **T17** g1-2: Theorieblock Bruch-Grundoperationen
-- [ ] **T18** g4-1: nominal vs. ordinal + 4. Mini-Check
-- [ ] **T19** g4-2: Theorieblock manipulative Diagramme
-- [ ] **T20** g4-3: Spannweite-Definition + Zusammenfassungs-Zeile
-- [ ] **T21** g5-1: Stufen-/Wechselwinkel-Tab (oder Lernziel kürzen — bitte wählen)
-- [ ] **T22** g5-2a: Umfang U=a+b+c (Formel, Tabelle, Teilaufgabe)
-- [ ] **T23** g5-4: Kurzabschnitt Umkehroperationen (arcsin/arccos/arctan, Brücke 5.5) + Komplement-Zeile in Symmetrie-Tabelle + Bogenmass-Querverweis
-- [ ] **T24** s3-3: Linearfaktor-Abspaltung (Polynomdivision oder Horner) + rechnerische Extrema Grad 2 + Ausblick-Deklaration
-- [ ] **T25** s3-4a: Abschnitt/Aufgabe Sättigungsprozesse (beschränktes Wachstum)
-- [ ] **T26** s3-2b: Umkehrung x⁻ⁿ ergänzen oder im rlp-hinweis deklarieren
+- [x] **T17** g1-2: Theorieblock Bruch-Grundoperationen
+- [x] **T18** g4-1: nominal vs. ordinal + 4. Mini-Check
+- [x] **T19** g4-2: Theorieblock manipulative Diagramme
+- [x] **T20** g4-3: Spannweite-Definition + Zusammenfassungs-Zeile
+- [x] **T21** g5-1: Stufen-/Wechselwinkel-Tab (oder Lernziel kürzen — bitte wählen)
+- [x] **T22** g5-2a: Umfang U=a+b+c (Formel, Tabelle, Teilaufgabe)
+- [x] **T23** g5-4: Kurzabschnitt Umkehroperationen (arcsin/arccos/arctan, Brücke 5.5) + Komplement-Zeile in Symmetrie-Tabelle + Bogenmass-Querverweis
+- [x] **T24** s3-3: Linearfaktor-Abspaltung (Polynomdivision oder Horner) + rechnerische Extrema Grad 2 + Ausblick-Deklaration
+- [x] **T25** s3-4a: Abschnitt/Aufgabe Sättigungsprozesse (beschränktes Wachstum)
+- [x] **T26** s3-2b: Umkehrung x⁻ⁿ ergänzen oder im rlp-hinweis deklarieren
 
 ### Paket 4 — Einzel-Mängel B (pro Seite, nach Sichtung) — ✅ erledigt 2026-07-09
 
