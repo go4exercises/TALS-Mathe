@@ -190,7 +190,7 @@ MathJax = {
       <tr><td style="text-align:left;font-family:var(--sans)">Volumen</td><td>\(V = a b c\)</td><td>\(V = a^3\)</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Oberfläche</td><td>\(O = 2(ab + ac + bc)\)</td><td>\(O = 6a^2\)</td></tr>
       <tr><td style="text-align:left;font-family:var(--sans)">Flächendiagonale</td><td>z.B. \(d_{ab} = \sqrt{a^2 + b^2}\)</td><td>\(d_F = a\sqrt{2}\)</td></tr>
-      <tr><td style="text-align:left;font-family:var(--sans)">Raumdiagonale</td><td>\(d = \sqrt{a^2 + b^2 + c^2}\)</td><td>\(d = a\sqrt{3}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Raumdiagonale (auch Körperdiagonale)</td><td>\(d = \sqrt{a^2 + b^2 + c^2}\)</td><td>\(d = a\sqrt{3}\)</td></tr>
     </tbody>
   </table>
   <p style="margin-top:6px">Die Raumdiagonale kommt von <strong>zweimal Pythagoras</strong>: erst in der Grundfläche (\(\sqrt{a^2+b^2}\)), dann senkrecht dazu mit \(c\) — genau wie beim Betrag eines Raumvektors in <a class="quer" href="s4-3a-vektorbegriff-komponenten.html">↗ 4.3a</a>.</p>
@@ -247,7 +247,7 @@ MathJax = {
   <div class="block-titel">📘 Zylinder — Volumen, Mantel, Oberfläche</div>
   <p>Der <strong>gerade Kreiszylinder</strong> ist das «Prisma mit Kreis-Grundfläche»: Radius \(r\), Höhe \(h\).</p>
   \[ V = \pi r^2 h, \qquad M = 2\pi r h, \qquad O = 2\pi r^2 + 2\pi r h = 2\pi r (r + h) \]
-  <p>Im <strong>Netz</strong> besteht der Zylinder aus zwei Kreisen und einem Rechteck: Der Mantel rollt sich ab zur Breite \(U = 2\pi r\) und Höhe \(h\) — daher \(M = 2\pi r h\).</p>
+  <p>Im <strong>Netz</strong> besteht der Zylinder aus zwei Kreisen und einem Rechteck: Der Mantel rollt sich ab zur Breite \(U = 2\pi r\) und Höhe \(h\) — daher \(M = 2\pi r h\). Die geraden Strecken auf der Mantelfläche parallel zur Achse heissen <strong>Mantellinien</strong>; beim geraden Zylinder sind sie gerade so lang wie die Höhe \(h\).</p>
 </div>
 
 <div class="widget">
@@ -300,6 +300,8 @@ MathJax = {
 
 <!-- ══ 5. GRUNDLAGEN RAUM ══ -->
 <h2 id="typen">Grundlagen — Darstellung und Lage im Raum</h2>
+
+<p>Dieser Abschnitt fasst die räumliche Darstellung aus <a class="quer" href="s4-1-grundlagen.html">4.1 (Grundlagen)</a> als <strong>Wiederholung</strong> zusammen — hier angewendet auf Prismen und Zylinder.</p>
 
 <div class="block block-def">
   <div class="block-titel">📘 Schrägbild und Netz</div>
@@ -713,7 +715,7 @@ function updateQD(){
   // 8 Ecken
   const E = [[0,0,0],[a,0,0],[a,b,0],[0,b,0],[0,0,c],[a,0,c],[a,b,c],[0,b,c]];
   const K = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
-  const hinten = new Set(['2-3','3-0','3-7']);
+  const hinten = new Set(['2-3','0-3','3-7']);
   ctx.lineWidth = 1.8;
   K.forEach(([i, j]) => {
     const key = `${Math.min(i,j) === 3 || Math.max(i,j) === 3 ? [i,j].sort().join('-') : 'x'}`;
