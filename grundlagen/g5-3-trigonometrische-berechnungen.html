@@ -638,6 +638,46 @@ MathJax = {
   <p>Den Sinussatz können wir verwenden, wenn wir <strong>zwei Winkel und eine Seite</strong> kennen (Fälle wsw und wws) — oder wenn <strong>zwei Seiten und der einer Seite gegenüberliegende Winkel</strong> gegeben sind (Fall ssw).</p>
 </div>
 
+<div class="anim">
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Anim · SSW — 0, 1 oder 2 Dreiecke?</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Fest sind der Winkel \(\alpha\) bei \(A\) und die Seite \(c = AB\). Ziehe die Seite \(a\) (Kreisbogen um \(B\)): Wie oft trifft der Bogen den Schenkel des Winkels — bei welchen \(a\) gibt es zwei, ein oder gar kein Dreieck?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Fest sind der Winkel alpha bei A und die Seite c gleich A B. Ziehe die Seite a, den Kreisbogen um B: Wie oft trifft der Bogen den Schenkel des Winkels — bei welchen a gibt es zwei, ein oder gar kein Dreieck?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Entscheidend ist die Höhe \(h = c\sin\alpha\): Für \(a < h\) kein Dreieck, für \(a = h\) genau eines (rechtwinklig), für \(h < a < c\) zwei Dreiecke (der mehrdeutige SSW-Fall), für \(a \ge c\) wieder genau eines.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Entscheidend ist die Höhe h gleich c mal Sinus alpha: Für a kleiner als h kein Dreieck, für a gleich h genau eines, rechtwinklig, für h kleiner a kleiner c zwei Dreiecke, der mehrdeutige S S W Fall, für a grösser oder gleich c wieder genau eines.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
+  <div class="anim-layout">
+    <canvas id="cv-ssw" width="460" height="320"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label">
+          <span>Seite \(a\) (Gegenseite zu \(\alpha\))</span>
+          <span class="wert" id="lbl-ssw-a">4.5</span>
+        </div>
+        <input type="range" id="sld-ssw-a" min="0" max="9" step="0.5" value="4.5">
+      </div>
+      <div class="formel">fest: \(\alpha = 35°\),\; \(c = AB = 6\)</div>
+      <div class="legende">
+        <div class="legende-titel">Fallunterscheidung</div>
+        <div class="legende-zeile"><span class="lab">Höhe \(h = c\sin\alpha\)</span><span class="val">3.44</span></div>
+        <div class="legende-zeile"><span class="lab">Seite \(a\)</span><span class="val" id="leg-ssw-a">4.5</span></div>
+        <div class="legende-zeile"><span class="lab">Anzahl Dreiecke</span><span class="val" id="leg-ssw-n">2</span></div>
+      </div>
+      <div class="erklaerung" id="erkl-ssw">Zwei Dreiecke: der mehrdeutige SSW-Fall (\(h < a < c\)).</div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ 9. COSINUSSATZ ══ -->
 <h3 id="cosinussatz">Cosinussatz <a class="quer" href="g5-2a-dreiecke.html#pythagoras">↩ 5.2a</a></h3>
 
@@ -2134,11 +2174,76 @@ togFlHoehe.addEventListener('change', drawFlaeche);
 /* ============================================================
  *  INITIAL RENDER
  * ============================================================ */
+/* ============================================================
+ *  SSW-FALLUNTERSCHEIDUNG — Kreisbogen um B, Slider a → 0/1/2 Dreiecke
+ * ============================================================ */
+function drawSSW() {
+  const r = initCv('cv-ssw'); if (!r) return;
+  const { ctx } = r;
+  const a = parseFloat(document.getElementById('sld-ssw-a').value);
+  document.getElementById('lbl-ssw-a').textContent = a.toFixed(1);
+  document.getElementById('leg-ssw-a').textContent = a.toFixed(1);
+  const alpha = 35 * Math.PI / 180;
+  const cSide = 6, s = 22;
+  const A = [70, 250];
+  const dir = [Math.cos(alpha), -Math.sin(alpha)];
+  const B = [A[0] + cSide * s, A[1]];
+  const h = cSide * Math.sin(alpha);          // Höhe (Einheiten)
+  const tFoot = cSide * Math.cos(alpha);      // Lotfusspunkt-Parameter
+  const F = [A[0] + tFoot * s * dir[0], A[1] + tFoot * s * dir[1]];
+  // Basislinie + Schenkel (Strahl von A)
+  seg(ctx, [A[0] - 12, A[1]], [B[0] + 46, B[1]], C.tinte, 2);
+  seg(ctx, A, [A[0] + 15 * s * dir[0], A[1] + 15 * s * dir[1]], C.tinte, 1.6);
+  // Winkelbogen α bei A
+  drawAngleArc(ctx, A, B, [A[0] + 60 * dir[0], A[1] + 60 * dir[1]], 30, C.rot, 'α');
+  // Kreisbogen um B mit Radius a
+  ctx.save();
+  ctx.strokeStyle = C.orange; ctx.lineWidth = 1.6; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.arc(B[0], B[1], a * s, 0, 2 * Math.PI); ctx.stroke();
+  ctx.restore();
+  // Höhe h als Lot von B auf den Schenkel
+  dashedSeg(ctx, B, F, C.tinte2, 1.4);
+  txt(ctx, (B[0] + F[0]) / 2 + 6, (B[1] + F[1]) / 2 - 6, 'h', C.tinte2, 12, 'left');
+  // Schnittpunkte des Bogens mit dem Schenkel
+  const disc = a * a - h * h;
+  let ts = [];
+  if (disc > 1e-9) {
+    const rt = Math.sqrt(disc);
+    ts = [tFoot + rt, tFoot - rt].filter(t => t > 1e-6);
+  } else if (disc > -1e-9 && tFoot > 1e-6) {
+    ts = [tFoot];
+  }
+  const labels = ['C₁', 'C₂'];
+  ts.forEach((t, i) => {
+    const Cpt = [A[0] + t * s * dir[0], A[1] + t * s * dir[1]];
+    fillTriangle(ctx, A, B, Cpt, GRUEN_FILL, C.gruen, 2);
+    dot(ctx, Cpt, C.gruen, 5);
+    txt(ctx, Cpt[0] + 8, Cpt[1] - 8, labels[i] || 'C', C.gruen, 13, 'left');
+  });
+  dot(ctx, A, C.tinte, 4); dot(ctx, B, C.tinte, 4);
+  txt(ctx, A[0] - 6, A[1] + 17, 'A', C.tinte, 14);
+  txt(ctx, B[0] + 4, B[1] + 17, 'B', C.tinte, 14);
+  txt(ctx, (A[0] + B[0]) / 2, A[1] + 17, 'c', C.blau, 12);
+  // Legende / Erklärung
+  const n = ts.length;
+  const nEl = document.getElementById('leg-ssw-n');
+  nEl.textContent = n;
+  nEl.style.color = n === 0 ? C.rot : (n === 1 ? C.blau : C.gruen);
+  let msg;
+  if (n === 0) msg = 'Kein Dreieck: der Bogen erreicht den Schenkel nicht (a < h).';
+  else if (n === 2) msg = 'Zwei Dreiecke: der mehrdeutige SSW-Fall (h < a < c).';
+  else if (a <= h + 1e-6) msg = 'Genau ein (rechtwinkliges) Dreieck: der Bogen berührt den Schenkel (a = h).';
+  else msg = 'Genau ein Dreieck (a ≥ c): der zweite Schnittpunkt läge hinter A.';
+  document.getElementById('erkl-ssw').textContent = msg;
+}
+document.getElementById('sld-ssw-a').addEventListener('input', drawSSW);
+
 window.addEventListener('load', () => {
   drawAehnl();
   drawDefWF();
   drawSpez();
   drawSinussatz();
+  drawSSW();
   drawCosSatz();
   drawFlaeche();
 });
@@ -2147,6 +2252,7 @@ window.addEventListener('resize', () => {
   drawDefWF();
   drawSpez();
   drawSinussatz();
+  drawSSW();
   drawCosSatz();
   drawFlaeche();
 });
