@@ -332,7 +332,7 @@ MathJax = {
 <div class="block block-bsp">
   <div class="block-titel">🟢 Beispiel 6 — Scheinlösung bei logarithmischen Gleichungen</div>
   <p>Löse \(\lg(x-3) = 1 - \lg x\).</p>
-  <p><strong>Lösung:</strong> \(D: x &gt; 3\). Zusammenfassen und entlogarithmieren:</p>
+  <p><strong>Lösung:</strong> Beide Logarithmus-Argumente müssen positiv sein: \(x-3 &gt; 0\) <em>und</em> \(x &gt; 0\), zusammen also \(D: x &gt; 3\). Zusammenfassen und entlogarithmieren:</p>
   \[ \lg\bigl((x-3) \cdot x\bigr) = 1 \;\Rightarrow\; x^2 - 3x = 10 \;\Rightarrow\; (x-5)(x+2) = 0 \]
   <p>Kandidaten \(x_1 = 5\) und \(x_2 = -2\). Probe: \(x_1 = 5\) passt (\(\lg 2 = 1 - \lg 5\) ✓); bei \(x_2 = -2\) wäre \(\lg(-5)\) nicht definiert — <strong>Scheinlösung</strong>. Also \(L = \{5\}\).</p>
 </div>
@@ -571,7 +571,7 @@ MathJax = {
     <li>Welcher Energie entspricht das Basler Beben von 1356 (\(M = 6.6\))?</li>
     <li>Um welchen Faktor wächst \(W\), wenn \(M\) um \(1\) steigt?</li>
   </ol>
-  <div class="eingabe-row"><label>W(6.6) ≈&nbsp;</label><input type="text" id="a7-1" placeholder="t TNT"><button class="btn-pruef" onclick="chkNum('a7-1', 7943282, 20000, 't TNT')">Prüfen</button></div>
+  <div class="eingabe-row"><label>W(6.6) ≈&nbsp;</label><input type="text" id="a7-1" placeholder="t TNT"><button class="btn-pruef" onclick="chkNum('a7-1', 7943282, 100000, 't TNT')">Prüfen</button></div>
   <div class="cr" id="a7-1-cr"></div>
   <div class="eingabe-row" style="margin-top:6px"><label>Faktor ≈&nbsp;</label><input type="text" id="a7-2" placeholder="Faktor"><button class="btn-pruef" onclick="chkNum('a7-2', 31.6, 0.2, '')">Prüfen</button></div>
   <div class="cr" id="a7-2-cr"></div>
@@ -757,7 +757,7 @@ const a1G = [
   {label:'10ˣ = 100', lhs: x => Math.pow(10, x),               rhs: x => 100,  sol:'L = {2}',   dots:[[2, 100]]},
   {label:'lg x = −1', lhs: x => x > 0 ? Math.log10(x) : NaN,   rhs: x => -1,   sol:'L = {0.1}', dots:[[0.1, -1]]},
 ];
-const a1Opts = ['L = {3}', 'L = { }', 'L = {2}', 'L = {0.1}'];
+const a1Opts = ['L = {3}', 'L = { }', 'L = {2}', 'L = {0.1}', 'L = {−2}'];
 let a1Act = 0;
 function buildA1(){
   document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
