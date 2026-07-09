@@ -310,6 +310,31 @@ MathJax = {
   <p>Lotfusspunkt \(F(2.8 \mid 2.4)\); Abstand \(d = \left|\binom{-1.2}{2.4}\right| = \sqrt{7.2} \approx 2.68\).</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Schiebe den Punkt \(F = A + t\,\vec u\) auf \(g\) — bei welchem \(t\) wird \(|\vec{PF}|\) am kleinsten?</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Fahre \(t\) langsam durch: Der Abstand \(|\vec{PF}|\) wird erst kleiner, dann wieder grösser. Wann steht \(\vec{PF}\) senkrecht auf der Geraden?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Fahre t langsam durch: Der Abstand von P zu F wird erst kleiner, dann wieder grösser. Wann steht der Verbindungsvektor senkrecht auf der Geraden?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Der kürzeste Abstand liegt genau dort, wo \(\vec{PF} \perp \vec u\) — der <strong>Lotfusspunkt</strong> (\(t = 1.4\), \(d \approx 2.68\)). Jeder andere Geradenpunkt bildet mit \(P\) und \(F\) ein rechtwinkliges Dreieck; die Hypotenuse ist stets länger als die Kathete \(PF\).</div>
+      <button class="ah-speak" type="button" data-vorlesen="Der kürzeste Abstand liegt genau dort, wo der Verbindungsvektor senkrecht auf der Richtung steht — der Lotfusspunkt bei t gleich eins Komma vier, Abstand rund zwei Komma sieben. Jeder andere Geradenpunkt bildet mit P und F ein rechtwinkliges Dreieck; die Hypotenuse ist stets länger als die Kathete P F.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Parameter \(t\): <span class="sl-val" id="lo-tv">0.5</span></label>
+  <input type="range" id="lo-t" min="-1" max="4" step="0.1" value="0.5">
+</div>
+<div class="formel-live"><div class="fl-label">Abstand P zu F</div><div class="fl-eq" id="lo-eq">|PF| = 3.35</div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-lot" height="260"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blau: Gerade \(g\), rot: Punkt \(P(4\mid 0)\). \(|\vec{PF}|\) ist minimal, wenn \(\vec{PF}\perp g\) (bei \(t=1.4\)).</div>
+
 <div class="block block-def" style="margin-top:14px">
   <div class="block-titel">📘 Bewegungen modellieren — der Parameter als Zeit</div>
   <p>Bewegt sich ein Objekt geradlinig mit konstanter Geschwindigkeit, ist seine Bahn</p>
@@ -710,13 +735,52 @@ function chkNum(id, target, tol, einheit){
   }
 }
 
+/* Lot-Widget: F = A + t·u auf g, |PF| live, Minimum am Lotfusspunkt (t = 1.4) */
+function drawLot() {
+  const t = parseFloat(document.getElementById('lo-t').value);
+  const A = [0, 1], u = [2, 1], P = [4, 0];
+  const F = [A[0] + t * u[0], A[1] + t * u[1]];
+  const d = Math.hypot(F[0] - P[0], F[1] - P[1]);
+  const atMin = Math.abs(t - 1.4) < 0.06;
+  document.getElementById('lo-tv').textContent = t.toFixed(1);
+  document.getElementById('lo-eq').innerHTML = '|PF| = ' + d.toFixed(2) + (atMin ? '  →  Minimum! Lot ⊥ g, d ≈ 2.68' : '');
+  const { ctx, W, H } = initCanvas('cv-lot', 260, false);
+  const { cx, cy } = drawGrid(ctx, W, H, -2, 9, -2, 6);
+  drawLineFull(ctx, cx, cy, A, u, '#1a4f8a', false);
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('g', cx(A[0] + 3.2 * u[0]) + 4, cy(A[1] + 3.2 * u[1]) - 4);
+  // Strecke PF
+  ctx.strokeStyle = atMin ? '#1f6b3a' : '#b85c00'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(cx(P[0]), cy(P[1])); ctx.lineTo(cx(F[0]), cy(F[1])); ctx.stroke();
+  // Rechtwinkel-Markierung am Lotfusspunkt
+  if (atMin) {
+    const Fp = [cx(F[0]), cy(F[1])];
+    let uD = [cx(F[0] + u[0]) - Fp[0], cy(F[1] + u[1]) - Fp[1]]; const un = Math.hypot(uD[0], uD[1]); uD = [uD[0] / un, uD[1] / un];
+    let pD = [cx(P[0]) - Fp[0], cy(P[1]) - Fp[1]]; const pn = Math.hypot(pD[0], pD[1]); pD = [pD[0] / pn, pD[1] / pn];
+    const q = 11;
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(Fp[0] + q * uD[0], Fp[1] + q * uD[1]);
+    ctx.lineTo(Fp[0] + q * uD[0] + q * pD[0], Fp[1] + q * uD[1] + q * pD[1]);
+    ctx.lineTo(Fp[0] + q * pD[0], Fp[1] + q * pD[1]);
+    ctx.stroke();
+  }
+  const dotp = (pt, col, r) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(cx(pt[0]), cy(pt[1]), r, 0, 2 * Math.PI); ctx.fill(); };
+  dotp(A, '#374151', 4); dotp(P, '#9b1c1c', 6); dotp(F, atMin ? '#1f6b3a' : '#b85c00', 6);
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#9b1c1c'; ctx.fillText('P', cx(P[0]) + 8, cy(P[1]) + 4);
+  ctx.fillStyle = atMin ? '#1f6b3a' : '#b85c00'; ctx.fillText('F', cx(F[0]) + 8, cy(F[1]) + 4);
+}
+document.getElementById('lo-t').addEventListener('input', drawLot);
+
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateDR();
+  drawLot();
   buildA1(); drawA1();
 });
 window.addEventListener('resize', () => {
-  updateDR(); drawA1();
+  updateDR(); drawLot(); drawA1();
 });
 </script>
 </body>
