@@ -197,17 +197,17 @@ MathJax = {
     <button id="velo-play">▶ Fahrt starten</button>
     <button id="velo-reset">↺ Reset</button>
   </div>
-  <div class="vb-cap">Probiere verschiedene Werte für \(v\). Klick „Fahrt starten", um Hin- und Rückweg parallel als Animation laufen zu lassen — die Geschwindigkeiten sind dabei massstäblich. Ziel: Gesamtzeit möglichst nahe an 90 min.</div>
+  <div class="vb-cap">Probiere verschiedene Werte für \(v\). Klick „Fahrt starten", um Hin- und Rückweg nacheinander als Animation laufen zu lassen — die Geschwindigkeiten sind dabei massstäblich. Ziel: Gesamtzeit möglichst nahe an 90 min.</div>
 </div>
 
-<p>Du siehst: Die Gesamtzeit hängt empfindlich vom Wert von \(v\) ab — und nur für *einen* bestimmten Wert kommt genau 90 Minuten heraus. Wie findet man diesen Wert <strong>ohne</strong> Probieren? Schreibt man die Aufgabe als Gleichung mit „Zeit = Strecke / Geschwindigkeit":</p>
+<p>Du siehst: Die Gesamtzeit hängt empfindlich vom Wert von \(v\) ab — und nur für <em>einen</em> bestimmten Wert kommt genau 90 Minuten heraus. Wie findet man diesen Wert <strong>ohne</strong> Probieren? Schreibt man die Aufgabe als Gleichung mit „Zeit = Strecke / Geschwindigkeit":</p>
 
 \[ \underbrace{\frac{12}{v}}_{\text{Hinweg}} + \underbrace{\frac{12}{v - 4}}_{\text{Rückweg}} = \tfrac{3}{2}. \]
 
 <p>Das ist eine <strong>Bruchgleichung</strong> — sie dient hier nur als Lieferantin: Multipliziert man sie mit dem Hauptnenner und vereinfacht, entsteht eine <strong>quadratische Gleichung</strong> in \(v\) — genau die Sorte Gleichung, die dieses Kapitel behandelt. (Bruchgleichungen als eigener Typ werden systematisch erst im Schwerpunktfach 2.2 behandelt.) Sie hat im Allgemeinen zwei Lösungen; eine davon wird Annas Geschwindigkeit sein, die andere passt zwar zur Gleichung, ergibt aber im Sachzusammenhang keinen Sinn (z. B. negative Rückweg-Geschwindigkeit).</p>
 
 <p>Quadratische Gleichungen tauchen überall auf, wo zwei Faktoren in einem Produkt vorkommen:
-Flächenberechnungen, Bewegungsaufgaben, Zerfallsprozesse. In diesem Kapitel lernst du, sie
+Flächenberechnungen, Bewegungsaufgaben, Wurfbewegungen. In diesem Kapitel lernst du, sie
 systematisch zu lösen — mit Faktorisieren, der pq-Formel und der Mitternachtsformel.</p>
 
 <!-- ════════════════════════════════════════════════════════════════
@@ -828,12 +828,12 @@ function fmtQ(q) {
 }
 function loesungstext(p, q) {
   const D = p*p - 4*q;
-  if (D < 0)  return 'L = ∅  (D = ' + D + ' < 0)';
-  if (D === 0) return 'L = { ' + (-p/2) + ' }  (doppelte Lösung)';
+  if (D < 0)  return '𝕃 = ∅  (D = ' + D + ' < 0)';
+  if (D === 0) return '𝕃 = { ' + (-p/2) + ' }  (doppelte Lösung)';
   const w = Math.sqrt(D);
   const x1 = (-p + w) / 2, x2 = (-p - w) / 2;
   const fmt = x => Number.isInteger(x) ? x.toString() : x.toFixed(2);
-  return 'L = { ' + fmt(x1) + ',  ' + fmt(x2) + ' }';
+  return '𝕃 = { ' + fmt(x1) + ',  ' + fmt(x2) + ' }';
 }
 function updateThree() {
   const p = parseInt(document.getElementById('sl-p').value);
@@ -867,7 +867,7 @@ const FAK_INFO = {
   vieta: '<strong>Zweiklammersatz / Vieta-Faktorisierung.</strong> Suche zwei Zahlen, deren Summe \\(-p\\) und deren Produkt \\(q\\) ist. Sie sind direkt die Lösungen.'
 };
 const FAK_STOLPER = {
-  cnull: '<strong>Stolperstein.</strong> Vergiss x = 0 nicht! Studierende kürzen oft ungewollt durch x — und verlieren damit eine Lösung. Niemals durch eine Variable dividieren, ohne den Fall x = 0 separat zu prüfen.',
+  cnull: '<strong>Stolperstein.</strong> Vergiss x = 0 nicht! Lernende kürzen oft ungewollt durch x — und verlieren damit eine Lösung. Niemals durch eine Variable dividieren, ohne den Fall x = 0 separat zu prüfen.',
   binom: '<strong>Stolperstein.</strong> Das mittlere Glied muss <em>genau</em> \\(2 \\cdot a \\cdot b\\) sein. Bei \\(x^2 - 6x + 9\\) prüfst du: \\(2 \\cdot 1 \\cdot 3 = 6\\) ✓. Bei \\(x^2 - 6x + 8\\) wäre es kein Binom — das Mittelstück passt nicht zum Quadrat von 8.',
   vieta: '<strong>Stolperstein.</strong> Vieta-Faktorisierung gelingt nur sicher, wenn die Lösungen ganzzahlig (oder einfache Brüche) sind. Wenn du keine zwei passenden Teiler von <em>q</em> findest, sind die Lösungen wahrscheinlich nicht ganz — dann ist die Mitternachtsformel der schnellere Weg.'
 };
