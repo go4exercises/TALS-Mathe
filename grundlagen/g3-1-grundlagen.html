@@ -30,6 +30,10 @@ MathJax = {
   .slider-box label { display: block; margin-bottom: 6px; }
   .slider-box input[type=range] { width: 100%; max-width: 300px; }
   .slider-val { font-weight: 700; color: var(--blau, #1a4f8a); }
+  /* Slider-Wert an die akz-Farbe des Reglers koppeln (blau = a/u, orange = b/v) */
+  .slider-box .sl-grp.akz-orange .slider-val { color: var(--orange, #b85c00); }
+  .slider-box .sl-grp.akz-gruen  .slider-val { color: var(--gruen, #1f6b3a); }
+  .slider-box .fx-live { font-weight: 700; }
   .slider-box .sl-row { margin-bottom: 10px; }
   .slider-box .sl-row:last-of-type { margin-bottom: 4px; }
 
@@ -218,7 +222,7 @@ Genau diese Eindeutigkeit ist das Kernstück des Funktionsbegriffs.</p>
 <div class="slider-box">
   <label>Zeit \(t\) [s]: <span class="slider-val" id="einstieg-t-val">3</span></label>
   <input type="range" id="einstieg-t" min="0" max="10" step="0.5" value="3">
-  <div style="margin-top:8px">Wassermenge: \(V(\)<span class="slider-val" id="einstieg-t-out">3</span>\() = 3 \cdot \)<span class="slider-val" id="einstieg-t-out2">3</span>\( = \)<span class="slider-val" id="einstieg-v-out">9</span>\(\) dl</div>
+  <div style="margin-top:8px">Wassermenge: \(V(\)<span class="slider-val" id="einstieg-t-out">3</span>\() = 3 \cdot \)<span class="slider-val" id="einstieg-t-out2">3</span>\( = \)<span class="slider-val" id="einstieg-v-out">9</span> dl</div>
 </div>
 
 <div class="einstieg-grid">
@@ -358,10 +362,11 @@ muss die Vollform-Schreibweise mit Definitions- und Wertemenge beherrscht werden
     <tr>
       <td class="li">Vollform mit \(D, W\)</td>
       <td>\(f : \mathbb{R} \longrightarrow \mathbb{R}, \; x \longmapsto 2 \cdot x + 1\)</td>
-      <td class="li">vollständig — inkl. Definitions- und Zielbereich</td>
+      <td class="li">vollständig — inkl. Definitions- und Zielmenge*</td>
     </tr>
   </tbody>
 </table>
+<p style="font-size:0.85rem;color:var(--tinte-2);margin-top:6px">* Die Menge <em>hinter</em> dem Pfeil (\(\mathbb{R}\)) ist die <strong>Zielmenge</strong> — der Vorrat an \(y\)-Werten, aus dem die Funktion schöpfen <em>darf</em>. Die <strong>Wertemenge</strong> \(W\) ist die Teilmenge davon, die tatsächlich angenommen wird. Für \(f(x)=2x+1\) fallen beide zusammen (\(W = \mathbb{R}\)); im Allgemeinen ist \(W\) echt kleiner als die Zielmenge.</p>
 
 
 <!-- ══ 6. DEFINITIONS- UND WERTEBEREICH ══ -->
@@ -408,7 +413,7 @@ muss die Vollform-Schreibweise mit Definitions- und Wertemenge beherrscht werden
 <h2 id="funktion-nicht">Funktion oder keine Funktion?</h2>
 
 <p>Der Schlüssel ist die <strong>Eindeutigkeit</strong>: jedes \(x \in D\) hat <em>genau einen</em>
-\(y\)-Wert. Geometrisch lässt sich das mit dem <strong>Vertikaltest</strong> prüfen: schiebt man
+\(y\)-Wert. Geometrisch lässt sich das mit dem <strong>Vertikaltest</strong> (auch Senkrechten- oder Vertikallinientest genannt) prüfen: schiebt man
 gedanklich eine senkrechte Gerade über den Graphen, darf sie ihn an jeder Stelle <em>höchstens
 einmal</em> schneiden.</p>
 
@@ -553,8 +558,8 @@ und die Schnitte mit der \(x\)-Achse. Wir betrachten zwei Beispiele unterschiedl
     <input type="range" id="lin-b" min="-6" max="6" step="0.5" value="-4"></div>
     </div>
   <div style="margin-top:8px">
-    \(f(x) = \)<span class="slider-val" id="lin-fx">2·x − 4</span>
-    &nbsp;·&nbsp; y-Achsenabschnitt: <span class="slider-val" id="lin-y0">−4</span>
+    \(f(x) = \)<span class="fx-live" id="lin-fx"><span class="tx-blau">2</span>·x − <span class="tx-orange">4</span></span>
+    &nbsp;·&nbsp; y-Achsenabschnitt: <span id="lin-y0"><span class="tx-orange">−4</span></span>
     &nbsp;·&nbsp; Nullstelle \(x_0\): <span class="slider-val" id="lin-x0">2</span>
   </div>
 </div>
@@ -1391,6 +1396,14 @@ function fmtLin(a, b) {
   const bAbs = fmtNum(Math.abs(b));
   return aStr + (b > 0 ? ' + ' : ' \u2212 ') + bAbs;
 }
+// Farbgekoppelte Variante f\u00FCrs Live-HTML: a-Wert blau, b-Wert orange, Rest neutral.
+function fmtLinHTML(a, b) {
+  const aStr = (a === 1) ? 'x' : (a === -1) ? '\u2212x'
+             : '<span class="tx-blau">' + fmtNum(a) + '</span>\u00B7x';
+  if (b === 0) return aStr;
+  const bAbs = '<span class="tx-orange">' + fmtNum(Math.abs(b)) + '</span>';
+  return aStr + (b > 0 ? ' + ' : ' \u2212 ') + bAbs;
+}
 
 /* Widget A — Lineare Funktion: a, b -> Live-Nullstelle */
 function linRender() {
@@ -1398,8 +1411,8 @@ function linRender() {
   const b = parseFloat(document.getElementById('lin-b').value);
   document.getElementById('lin-a-val').textContent = fmtNum(a);
   document.getElementById('lin-b-val').textContent = fmtNum(b);
-  document.getElementById('lin-fx').textContent = fmtLin(a, b);
-  document.getElementById('lin-y0').textContent = fmtNum(b);
+  document.getElementById('lin-fx').innerHTML = fmtLinHTML(a, b);
+  document.getElementById('lin-y0').innerHTML = '<span class="tx-orange">' + fmtNum(b) + '</span>';
   const x0el = document.getElementById('lin-x0');
   // Nullstelle: a·x + b = 0 -> x = -b/a, Sonderfälle
   if (Math.abs(a) < 1e-9) {
