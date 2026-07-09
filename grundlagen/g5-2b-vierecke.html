@@ -290,6 +290,7 @@ MathJax = {
         <button data-fam="raute">Raute</button>
         <button data-fam="par">Parallelogr.</button>
         <button data-fam="trap">Trapez</button>
+        <button data-fam="drachen">Drachen</button>
         <button data-fam="allg">allgemein</button>
       </div>
     </div>
@@ -455,7 +456,7 @@ MathJax = {
 <summary class="mc-kopf">✏️ Mini-Check — Vierecks-Hierarchie</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Jedes Quadrat ist zugleich …</p><ul class="mc-optionen"><li data-opt="A">ein Rechteck und eine Raute</li><li data-opt="B">nur ein Rechteck</li><li data-opt="C">keines von beiden</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Es erfüllt beide Bedingungen: vier rechte Winkel und vier gleiche Seiten.</div></details></div>
 <div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Ein Parallelogramm mit einem rechten Winkel ist ein <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Rechteck — aus einem rechten Winkel folgen im Parallelogramm alle vier.</div></details></div>
-<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Ist jedes Rechteck ein Parallelogramm? Und umgekehrt?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Ja — gegenüberliegende Seiten sind parallel. Umgekehrt nein: ein Parallelogramm braucht keine rechten Winkel.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Ein Parallelogramm hat einen Innenwinkel von \(70°\). Wie gross sind die drei übrigen Winkel?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(110°,\ 70°,\ 110°\) — gegenüberliegende Winkel sind gleich, benachbarte ergänzen sich zu \(180°\).</div></details></div>
 <div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum stehen die «spezielleren» Figuren in der Hierarchie unten?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Jede Stufe nach unten fügt eine Bedingung hinzu (Parallelität, rechte Winkel, gleiche Seiten) — die Eigenschaften der Oberklasse werden geerbt. Das Quadrat erfüllt alle Bedingungen und steht zuunterst.</div></details></div>
 </details>
 
@@ -468,10 +469,10 @@ MathJax = {
   <tbody>
     <tr><td>Quadrat (Seite \(a\))</td><td>\(U = 4a\)</td><td>\(A = a^2\)</td></tr>
     <tr><td>Rechteck (Seiten \(a, b\))</td><td>\(U = 2(a + b)\)</td><td>\(A = a \cdot b\)</td></tr>
-    <tr><td>Parallelogramm (\(a, b\) = Schenkel, \(h\) = Höhe)</td><td>\(U = 2(a + b)\)</td><td>\(A = a \cdot h\)</td></tr>
+    <tr><td>Parallelogramm (\(a\) = Grundseite, \(b\) = zweite Seite, \(h\) = Höhe zu \(a\))</td><td>\(U = 2(a + b)\)</td><td>\(A = a \cdot h\)</td></tr>
     <tr><td>Trapez (Parallelseiten \(a, c\), Höhe \(h\))</td><td>\(U = a + b + c + d\)</td><td>\(A = \tfrac{1}{2}(a+c) \cdot h\)</td></tr>
     <tr><td>Rhombus (Seite \(a\), Diagonalen \(e, f\))</td><td>\(U = 4a\)</td><td>\(A = \tfrac{1}{2}\, e \cdot f\)</td></tr>
-    <tr><td>Drachen (Diagonalen \(e, f\))</td><td>\(U = 2(a + b)\)</td><td>\(A = \tfrac{1}{2}\, e \cdot f\)</td></tr>
+    <tr><td>Drachen (Seitenpaare \(a, b\); Diagonalen \(e, f\))</td><td>\(U = 2(a + b)\)</td><td>\(A = \tfrac{1}{2}\, e \cdot f\)</td></tr>
   </tbody>
 </table>
 
@@ -913,7 +914,7 @@ MathJax = {
 <!-- ══ 8. ZUSAMMENFASSUNG ══ -->
 <div class="block block-aufg">
   <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Drachenkonstruktion aus Diagonalen</span></div>
-  <p>Ein Drache (Viereck mit zwei Paaren gleicher benachbarter Seiten) wird durch zwei senkrechte Diagonalen aufgebaut. Die horizontale Diagonale ist 60 cm lang, die vertikale 80 cm lang. Der Schnittpunkt der Diagonalen teilt die vertikale Diagonale im Verhältnis \(1:3\) (von oben).</p>
+  <p>Ein Drachen (Viereck mit zwei Paaren gleicher benachbarter Seiten) wird durch zwei senkrechte Diagonalen aufgebaut. Die horizontale Diagonale ist 60 cm lang, die vertikale 80 cm lang. Der Schnittpunkt der Diagonalen teilt die vertikale Diagonale im Verhältnis \(1:3\) (von oben).</p>
   <div style="text-align:center;margin:10px 0">
     <svg viewBox="0 0 200 240" width="160" height="190" style="border:1px solid var(--linie);border-radius:6px;background:var(--papier-2)" role="img" aria-label="Drachen mit senkrechten Diagonalen, vertikale Diagonale im Verhältnis 1:3 geteilt">
       <!-- Diagonalen (Hilfslinien) -->
@@ -1156,7 +1157,9 @@ function dist(p, q) { return Math.hypot(p[0]-q[0], p[1]-q[1]); }
 function angleAt(P, Q, R) {
   const v1 = [Q[0]-P[0], Q[1]-P[1]];
   const v2 = [R[0]-P[0], R[1]-P[1]];
-  const cv = (v1[0]*v2[0] + v1[1]*v2[1]) / (Math.hypot(...v1) * Math.hypot(...v2));
+  const n1 = Math.hypot(...v1), n2 = Math.hypot(...v2);
+  if (n1 < 1e-9 || n2 < 1e-9) return 0;   // koinzidente Punkte → sonst NaN (0/0 → acos(NaN))
+  const cv = (v1[0]*v2[0] + v1[1]*v2[1]) / (n1 * n2);
   return Math.acos(clamp(cv, -1, 1));
 }
 
@@ -2326,6 +2329,7 @@ window.addEventListener('resize', () => {
     raute:[{x:5.0,y:1.8},{x:8.2,y:5.0},{x:5.0,y:8.2},{x:1.8,y:5.0}],
     par:  [{x:1.5,y:2.5},{x:6.5,y:2.5},{x:8.5,y:7.5},{x:3.5,y:7.5}],
     trap: [{x:1.5,y:2.5},{x:8.5,y:2.5},{x:6.5,y:7.5},{x:3.5,y:7.5}],
+    drachen:[{x:5.0,y:8.5},{x:8.0,y:5.5},{x:5.0,y:1.5},{x:2.0,y:5.5}],
     allg: [{x:2.0,y:2.5},{x:7.5,y:1.8},{x:8.5,y:7.0},{x:2.5,y:8.5}]
   };
 
@@ -2368,6 +2372,10 @@ window.addEventListener('resize', () => {
     const TOL_LEN = 0.06;
     const alleGleich = [lAB, lBC, lCD, lDA].every(l => Math.abs(l - avg)/avg < TOL_LEN);
 
+    // Drachen: zwei Paare benachbarter gleich langer Seiten (Symmetrieachse durch eine Diagonale)
+    const glS = (p, q) => Math.abs(p - q)/avg < TOL_LEN;
+    const drache = (glS(lAB, lDA) && glS(lBC, lCD)) || (glS(lAB, lBC) && glS(lCD, lDA));
+
     // Rechtwinklig: alle 4 Winkel ~90°
     const TOL_RW = 0.06;
     const ecks = [
@@ -2383,9 +2391,10 @@ window.addEventListener('resize', () => {
     else if (alleRecht && par1 && par2) typ = 'Rechteck';
     else if (alleGleich && par1 && par2) typ = 'Raute';
     else if (par1 && par2) typ = 'Parallelogramm';
+    else if (drache) typ = 'Drachen';
     else if (par1 || par2) typ = 'Trapez';
 
-    return {typ, par1, par2, alleGleich, alleRecht, lAB, lBC, lCD, lDA};
+    return {typ, par1, par2, alleGleich, alleRecht, drache, lAB, lBC, lCD, lDA};
   }
 
   function render(){
