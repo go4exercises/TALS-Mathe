@@ -31,6 +31,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s4-3d-ebenen.html', id: 'cv-haus', note: 'Pultdach-Schraegbild' },
   // T53 (Prio-2), Runde 1: die aus T52 verschobenen Sekundaer-Widgets.
   { page: 'schwerpunkt/s4-2c-kugel.html', id: 'cv-kugelteil', note: 'Kugelteil-Querschnitt' },
+  { page: 'schwerpunkt/s4-3c-geraden.html', id: 'cv-ws', note: 'Windschief-Schraegbild' },
 ];
 
 const VIEWPORTS = [

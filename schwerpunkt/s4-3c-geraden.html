@@ -250,6 +250,31 @@ MathJax = {
   <p><strong>Lösung:</strong> Richtungen \(\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\) und \(\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\) sind nicht kollinear. Gleichsetzen: \(x\): \(t = 0\); \(y\): \(0 = 1 + s \Rightarrow s = -1\); \(z\): \(0 = 3\) — <strong>Widerspruch</strong>. Kein Schnittpunkt, nicht parallel: <strong>windschief</strong> — die Geraden laufen in verschiedenen «Stockwerken» aneinander vorbei.</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Hebe die Gerade \(h\) ins obere «Stockwerk» — nur die Höhe \(c\) entscheidet über schneidend oder windschief:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Der graue <strong>Schatten</strong> von \(h\) auf dem Boden kreuzt \(g\) bei jedem \(c\) an derselben Stelle. Warum ist das trotzdem kein Schnittpunkt, sobald \(c > 0\) ist?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Der graue Schatten von h auf dem Boden kreuzt g bei jedem c an derselben Stelle. Warum ist das trotzdem kein Schnittpunkt, sobald c grösser als null ist?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Von oben betrachtet sehen schneidende und windschiefe Geraden gleich aus — die ersten beiden Komponenten liefern immer ein Paar \((t, s)\). Erst die <strong>dritte Komponente</strong> entscheidet: Stimmt sie, gibt es einen Schnittpunkt; ergibt sie einen Widerspruch, laufen die Geraden in verschiedenen Höhen aneinander vorbei.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Von oben betrachtet sehen schneidende und windschiefe Geraden gleich aus — die ersten beiden Komponenten liefern immer ein Paar t und s. Erst die dritte Komponente entscheidet: Stimmt sie, gibt es einen Schnittpunkt; ergibt sie einen Widerspruch, laufen die Geraden in verschiedenen Höhen aneinander vorbei.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Höhe \(c\) von \(h\): <span class="sl-val" id="ws-cv">2.00</span></label>
+  <input type="range" id="ws-c" min="0" max="4" step="0.25" value="2">
+</div>
+<div class="formel-live"><div class="fl-label">Dritte Komponente beim Gleichsetzen</div><div class="fl-eq" id="ws-eq">0 = 2 — Widerspruch: windschief</div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-ws" height="280"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">\(g:\ \vec{r} = \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix} + t\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}\) im Boden, \(h:\ \vec{r} = \begin{pmatrix} 3 \\ 0 \\ c \end{pmatrix} + s\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}\) im Stockwerk \(z = c\). Die Richtungen sind nie kollinear — nur \(c\) entscheidet.</div>
+
 <div class="block block-fehler">
   <div class="block-titel">⚠ Häufiger Fehler — gleicher Parametername für beide Geraden</div>
   <p>Wer beim Gleichsetzen zweimal \(t\) schreibt, koppelt die beiden «Fahrpläne» fälschlich aneinander. Die Geraden dürfen den Schnittpunkt zu <strong>verschiedenen Parameterwerten</strong> erreichen — darum \(t\) für \(g\) und \(s\) für \(h\).</p>
@@ -773,14 +798,83 @@ function drawLot() {
 }
 document.getElementById('lo-t').addEventListener('input', drawLot);
 
+/* ══ Windschief-Schrägbild: zwei «Stockwerke» ══
+   g: (0|1|0) + t·(1|0|0)   im Boden        h: (3|0|c) + s·(0|1|0)   in der Höhe c
+   Gleichsetzen: x → t = 3, y → s = 1, z → 0 = c.
+   c = 0: Schnittpunkt S(3|1|0). c > 0: dritte Komponente widersprüchlich → windschief. */
+function drawWs() {
+  const c = parseFloat(document.getElementById('ws-c').value);
+  document.getElementById('ws-cv').textContent = c.toFixed(2);
+  document.getElementById('ws-eq').textContent = c === 0
+    ? '0 = 0 ✓ — die Geraden schneiden sich in S(3 | 1 | 0)'
+    : `0 = ${c.toFixed(2)} — Widerspruch: windschief`;
+
+  const { ctx, W, H } = initCanvas('cv-ws', 280, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const sc = Math.min(42, (W - 40) / 9.2), dep = 0.62;
+  const ca = Math.cos(Math.PI / 6), sa = Math.sin(Math.PI / 6);
+  const ox = 24, oy = H - 42;
+  const proj = P => [ox + P[0] * sc + P[1] * dep * sc * ca, oy - P[2] * sc - P[1] * dep * sc * sa];
+  const line = (A, B, col, lw, dash) => {
+    const a = proj(A), b = proj(B);
+    ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []);
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.setLineDash([]);
+  };
+  const face = (pts, fill) => {
+    ctx.fillStyle = fill; ctx.beginPath();
+    pts.forEach((P, i) => { const p = proj(P); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); });
+    ctx.closePath(); ctx.fill();
+  };
+  const dot = (P, col, r) => { const p = proj(P); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p[0], p[1], r || 5, 0, Math.PI * 2); ctx.fill(); };
+  const txt = (P, s, col, dx, dy) => { const p = proj(P); ctx.fillStyle = col; ctx.fillText(s, p[0] + (dx || 0), p[1] + (dy || 0)); };
+  ctx.font = '12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+
+  // Boden (z = 0) und oberes Stockwerk (z = c)
+  face([[0, 0, 0], [6, 0, 0], [6, 5, 0], [0, 5, 0]], '#f4f6f9');
+  [[0, 0, 0], [6, 0, 0], [6, 5, 0], [0, 5, 0]].forEach((P, i, A) => line(P, A[(i + 1) % 4], '#c8d0da', 1));
+  if (c > 0) {
+    face([[0, 0, c], [6, 0, c], [6, 5, c], [0, 5, c]], 'rgba(26,79,138,0.06)');
+    [[0, 0, c], [6, 0, c], [6, 5, c], [0, 5, c]].forEach((P, i, A) => line(P, A[(i + 1) % 4], '#b8c4d4', 1, [4, 3]));
+  }
+  // Schatten von h auf dem Boden — kreuzt g immer bei (3|1|0)
+  line([3, 0, 0], [3, 5, 0], '#9ca3af', 1.5, [3, 3]);
+  // g im Boden (blau)
+  line([0, 1, 0], [6, 1, 0], '#1a4f8a', 2.8);
+  txt([6, 1, 0], 'g', '#1a4f8a', 6, 4);
+  // h in der Höhe c (orange)
+  line([3, 0, c], [3, 5, c], '#b85c00', 2.8);
+  txt([3, 5, c], 'h', '#b85c00', 6, -2);
+  // senkrechte Lücke zwischen den Kreuzungspunkten
+  const Pg = [3, 1, 0], Ph = [3, 1, c];
+  if (c > 0) {
+    line(Pg, Ph, '#374151', 1.5, [4, 3]);
+    dot(Pg, '#1a4f8a'); dot(Ph, '#b85c00');
+    const pg = proj(Pg), ph = proj(Ph);
+    ctx.fillStyle = '#374151'; ctx.textAlign = 'right';
+    ctx.fillText('c = ' + c.toFixed(2), pg[0] - 8, (pg[1] + ph[1]) / 2 + 4);
+    ctx.textAlign = 'left';
+  } else {
+    dot(Pg, '#1f6b3a', 6);
+    ctx.textAlign = 'right'; txt(Pg, 'S(3 | 1 | 0)', '#1f6b3a', -9, -6); ctx.textAlign = 'left';
+  }
+  // Status
+  ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+  ctx.fillStyle = c === 0 ? '#1f6b3a' : '#b85c00';
+  ctx.fillText(c === 0 ? 'schneidend' : 'windschief', W - 12, 22);
+  ctx.font = 'italic 10px JetBrains Mono, monospace'; ctx.fillStyle = '#6b7280';
+  ctx.fillText('grau gestrichelt: Schatten von h', W - 12, 38);
+}
+document.getElementById('ws-c').addEventListener('input', drawWs);
+
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateDR();
   drawLot();
+  drawWs();
   buildA1(); drawA1();
 });
 window.addEventListener('resize', () => {
-  updateDR(); drawLot(); drawA1();
+  updateDR(); drawLot(); drawWs(); drawA1();
 });
 </script>
 </body>
