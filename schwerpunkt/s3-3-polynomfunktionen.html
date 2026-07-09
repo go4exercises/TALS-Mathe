@@ -307,6 +307,33 @@ MathJax = {
 <div class="cv-wrap"><canvas id="gv-canvas" height="220"></canvas></div>
 <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="gv-desc"></div>
 
+<h3 style="font-family:var(--serif);font-size:1.05rem;margin:18px 0 6px">Herauszoomen — der Leitterm gewinnt</h3>
+
+<div class="widget-titelzeile" style="margin-bottom:8px">
+  <p style="margin:0">Weite das Fenster mit dem Zoom-Regler — \(f\) und sein Leitterm nähern sich an:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Bei kleinem Fenster wackelt \(f(x) = x^3 - 4x\) sichtbar um den Leitterm \(x^3\). Vergrössere das Fenster: Wie verhalten sich die beiden Kurven zueinander?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Bei kleinem Fenster wackelt f von x gleich x hoch drei minus vier x sichtbar um den Leitterm x hoch drei. Vergrössere das Fenster: Wie verhalten sich die beiden Kurven zueinander?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Für grosse \(|x|\) fallen \(f\) und der Leitterm zusammen: Der Zusatz \(-4x\) ist gegenüber \(x^3\) vernachlässigbar. Darum bestimmt allein der Leitterm den Globalverlauf.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Für grosse Beträge von x fallen f und der Leitterm zusammen: Der Zusatz minus vier x ist gegenüber x hoch drei vernachlässigbar. Darum bestimmt allein der Leitterm den Globalverlauf.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <div class="sl-grp akz-blau"><label>Zoom (Fenster \(\pm z\))</label><input type="range" id="lt-z" min="2" max="12" step="1" value="3"><span class="sl-val" id="lt-zv">3</span></div>
+  <div class="sl-grp akz-orange"><label>Ablese-Stelle \(x\)</label><input type="range" id="lt-p" min="-100" max="100" step="5" value="60"><span class="sl-val" id="lt-pv">1.8</span></div>
+</div>
+<div class="formel-live"><div class="fl-label">Wert an der Ablese-Stelle</div><div class="fl-eq" id="lt-eq">f(1.8) ≈ −1.37</div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-lt" height="260"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blau: \(f(x) = x^3 - 4x\) · orange gestrichelt: Leitterm \(x^3\). Grünes Trace-Lot: der abgelesene Funktionswert.</div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Globalverlauf</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Wie verläuft der Graph von \(f(x) = -2x^5 + 7x^2 - 1\) global?</p><ul class="mc-optionen"><li data-opt="A">von links unten nach rechts oben</li><li data-opt="B">von links oben nach rechts unten</li><li data-opt="C">beide Enden nach unten</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Grad 5 (ungerade) und \(a_5 = -2 &lt; 0\): links oben, rechts unten. Die übrigen Terme spielen für den Globalverlauf keine Rolle.</div></details></div>
@@ -983,16 +1010,60 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* Leitterm-Zoom: f(x)=x³−4x und der Leitterm x³ fallen beim Herauszoomen zusammen */
+function drawLt() {
+  const z = parseFloat(document.getElementById('lt-z').value);
+  const p = parseFloat(document.getElementById('lt-p').value);
+  const tx = (p / 100) * z;
+  document.getElementById('lt-zv').textContent = z;
+  document.getElementById('lt-pv').textContent = tx.toFixed(1);
+  const f = x => x*x*x - 4*x;
+  const fx = f(tx);
+  document.getElementById('lt-eq').innerHTML =
+    'f(' + tx.toFixed(1) + ') = ' + tx.toFixed(1) + '³ − 4·' + tx.toFixed(1) + ' ≈ ' + fx.toFixed(2).replace('-', '−');
+  const { ctx, W, H } = initCanvas('cv-lt', 260, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const padL = 46, padR = 16, padT = 14, padB = 26;
+  const yR = z*z*z;   // Leitterm-Wert am Fensterrand
+  const cx = x => padL + (x + z)/(2*z) * (W - padL - padR);
+  const cy = y => H - padB - (y + yR)/(2*yR) * (H - padB - padT);
+  // Achsen
+  ctx.strokeStyle = '#b8c4d4'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(padL, cy(0)); ctx.lineTo(W - padR, cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), padT); ctx.lineTo(cx(0), H - padB); ctx.stroke();
+  ctx.fillStyle = '#9ca3af'; ctx.font = '12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillText(z, cx(z) - 8, cy(0) + 15);
+  ctx.fillText('−' + z, cx(-z) + 12, cy(0) + 15);
+  ctx.textAlign = 'left';
+  ctx.fillText('y: ±' + yR, cx(0) + 5, padT + 10);
+  // Leitterm x³ (orange gestrichelt)
+  ctx.setLineDash([6, 4]);
+  plotFx(ctx, cx, cy, x => x*x*x, -z, z, '#b85c00', 2, yR * 1.4);
+  ctx.setLineDash([]);
+  // f (blau)
+  plotFx(ctx, cx, cy, f, -z, z, '#1a4f8a', 2.5, yR * 1.4);
+  // Trace-Punkt mit Lot
+  if (Math.abs(fx) <= yR * 1.02 && Math.abs(tx) <= z) {
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(cx(tx), cy(fx)); ctx.lineTo(cx(tx), cy(0)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#1f6b3a';
+    ctx.beginPath(); ctx.arc(cx(tx), cy(fx), 5, 0, 2 * Math.PI); ctx.fill();
+  }
+}
+['lt-z', 'lt-p'].forEach(id => document.getElementById(id).addEventListener('input', drawLt));
+
 document.addEventListener('DOMContentLoaded', () => {
   updateSC();
   updateLF();
   buildGvBtns(); drawGv();
+  drawLt();
   drawEX();
   buildA1();
   buildA2(); drawA2();
 });
 window.addEventListener('resize', () => {
-  updateSC(); updateLF(); drawGv(); drawEX(); drawA2();
+  updateSC(); updateLF(); drawGv(); drawLt(); drawEX(); drawA2();
 });
 </script>
 </body>
