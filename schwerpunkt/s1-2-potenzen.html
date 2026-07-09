@@ -32,6 +32,8 @@ MathJax = {
 .sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
 .sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
 .sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:44px; text-align:right; }
+.sl-row.akz-orange .sl-val { color:var(--orange); }
+.sl-row.akz-gruen  .sl-val { color:var(--gruen); }
 
 /* ── Formula display ── */
 .formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:12px 18px; text-align:center; margin:12px 0; }
@@ -202,7 +204,7 @@ MathJax = {
 
 
 <!-- ══ 4. DARSTELLUNGEN ══ -->
-<h2 id="darstellungen">Die fünf Potenzgesetze</h2>
+<h2 id="potenzgesetze">Die fünf Potenzgesetze</h2>
 
 <div class="block block-def">
   <div class="block-titel">📘 Gleiche Basis · gleicher Exponent</div>
@@ -216,7 +218,7 @@ MathJax = {
       <tr><td>5</td><td>\(\dfrac{a^n}{b^n} = \left(\dfrac{a}{b}\right)^{n}\)</td><td style="text-align:left;font-family:var(--sans)">gleicher Exponent: Basen dividieren</td></tr>
     </tbody>
   </table>
-  <p style="margin-top:6px">Sie gelten für <strong>alle</strong> ganzzahligen und rationalen Exponenten. Kein Gesetz gibt es für \(a^m + a^n\) — Summen von Potenzen lassen sich höchstens <strong>ausklammern</strong>.</p>
+  <p style="margin-top:6px">Sie gelten für <strong>alle</strong> ganzzahligen Exponenten (Basis \(a \neq 0\)) und — für <strong>rationale</strong> Exponenten (Wurzeln) — sofern die Basis \(a > 0\) ist. Kein Gesetz gibt es für \(a^m + a^n\) — Summen von Potenzen lassen sich höchstens <strong>ausklammern</strong>.</p>
 </div>
 
 <div class="block block-bsp" style="margin-top:10px">
@@ -240,7 +242,7 @@ MathJax = {
 
 
 <!-- ══ 5. RATIONALE EXPONENTEN ══ -->
-<h2 id="typen">Rationale Exponenten — Wurzeln als Potenzen</h2>
+<h2 id="rationale-exponenten">Rationale Exponenten — Wurzeln als Potenzen</h2>
 
 <div class="block block-def">
   <div class="block-titel">📘 Definition — Potenzen mit rationalen Exponenten</div>
@@ -258,7 +260,7 @@ MathJax = {
 <div class="widget">
   <div class="widget-header">
     <div class="widget-titelzeile">
-      <h3>Exponenten-Treppe — von \(a^{-2}\) bis \(a^{2}\)</h3>
+      <h3>📈 Exponenten-Treppe — von \(a^{-2}\) bis \(a^{2}\)</h3>
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
@@ -300,7 +302,7 @@ MathJax = {
 
 
 <!-- ══ 6. WEITERE THEORIE ══ -->
-<h2 id="theorie">Hierarchie der Operationen und Zehnerpotenzen</h2>
+<h2 id="hierarchie">Hierarchie der Operationen und Zehnerpotenzen</h2>
 
 <div class="block block-def">
   <div class="block-titel">📘 Die Rangordnung</div>
@@ -478,7 +480,7 @@ MathJax = {
   <div class="block-titel">🟠 <span class="aufg-nr-tag">A5</span><span class="aufg-titel-text">Papier bis zum Mond</span></div>
   <p>Zurück zum Einstieg: Ausgangsdicke \(0.1\) mm, Mond-Distanz \(384\,400\) km.</p>
   <ol class="aufg-liste">
-    <li>Wie dick ist der Stapel nach 42 Faltungen (in km, ganze Tausender)?</li>
+    <li>Wie dick ist der Stapel nach 42 Faltungen (in km, gerundet)?</li>
     <li>Reichen 41 Faltungen?</li>
   </ol>
   <div class="eingabe-row"><label>Dicke ≈&nbsp;</label><input type="text" id="a5-1" placeholder="km"><button class="btn-pruef" onclick="chkNum('a5-1', 439805, 1500, 'km')">Prüfen</button></div>
@@ -611,9 +613,6 @@ buildNav({
   next:{nr:'1.3',titel:'Logarithmen',url:'s1-3-logarithmen.html'}
 });
 
-/* ── Lokale Helfer ─────────────────────────────────────── */
-const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
-
 /* ══ EINSTIEG: Falt-Labor ══ */
 const MARKEN = [
   {v: 1e-3,     txt: '1 mm'},
@@ -720,15 +719,22 @@ const a1G = [
   {label:'Term 2', desc:'(x³)⁵', sol:'Exponenten multiplizieren'},
   {label:'Term 3', desc:'x⁸ : x³', sol:'Exponenten subtrahieren'},
   {label:'Term 4', desc:'x⁵ · y⁵', sol:'Basen multiplizieren'},
-  {label:'Term 5', desc:'x³ + x⁵', sol:'kein Potenzgesetz'},
+  {label:'Term 5', desc:'x⁶ : y⁶', sol:'Basen dividieren'},
+  {label:'Term 6', desc:'x³ + x⁵', sol:'kein Potenzgesetz'},
 ];
-const a1Opts = ['Exponenten addieren', 'Exponenten subtrahieren', 'Exponenten multiplizieren', 'Basen multiplizieren', 'kein Potenzgesetz'];
+const a1Opts = ['Exponenten addieren', 'Exponenten subtrahieren', 'Exponenten multiplizieren', 'Basen multiplizieren', 'Basen dividieren', 'kein Potenzgesetz'];
 let a1Act = 0;
 function buildA1(){
   document.getElementById('a1-btns').innerHTML = a1G.map((g, i) =>
     `<button class="graf-btn${i === 0 ? ' aktiv' : ''}" onclick="setA1(${i})">${g.label}</button>`
   ).join('');
-  document.getElementById('a1-opts').innerHTML = a1Opts.map(o =>
+  // Optionen mischen, damit die Reihenfolge nicht zur Termreihenfolge passt (kein Positions-Matching)
+  const opts = a1Opts.slice();
+  for (let i = opts.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [opts[i], opts[j]] = [opts[j], opts[i]];
+  }
+  document.getElementById('a1-opts').innerHTML = opts.map(o =>
     `<button class="graf-btn" onclick="checkA1('${o}')">${o}</button>`
   ).join('');
   drawA1();
