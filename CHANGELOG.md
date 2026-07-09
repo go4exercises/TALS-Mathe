@@ -9,8 +9,7 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 Die übrigen sechs Kern-Widgets der Prio-1-Liste ([84], §4) gebaut — damit sind alle zehn
 nummerierten Punkte mit ihrem tragenden Widget versorgt. Gleiches Muster: selbstständiges
 Canvas mit Slider + Live-Anzeige + 👁/💡-Rollover, Geometrie/Zahlen vorab mit python3/node
-nachgerechnet, Pre-Flight (MathJax-Render + JS-Laufzeit in jsdom) `ALLE CHECKS BESTANDEN`.
-Browser-Rendercheck 1280/360 px weiterhin offen (lokal kein Browser):
+nachgerechnet, Pre-Flight (MathJax-Render + JS-Laufzeit in jsdom) `ALLE CHECKS BESTANDEN`:
 
 - **s3-3** (§4-8) — Leitterm-Zoom: \(f = x^3 - 4x\) gegen den Leitterm \(x^3\); mit dem
   Fenster-Slider zoomt man heraus, das Verhältnis \(f/L\) am Rand strebt gegen 1 — «weit
@@ -30,6 +29,13 @@ Browser-Rendercheck 1280/360 px weiterhin offen (lokal kein Browser):
   senkrechte Drohnen-Gerade bei \((3 \mid y)\) durchstösst das Dach, der grüne
   Durchstosspunkt \(D\) wandert mit dem y-Slider von \(z = 4\) (vorne) auf \(z = 6\) (hinten).
 
+**Browser-Rendercheck durchgeführt** (neu einrichtbar: Playwright + Chromium lokal, Skript
+`.claude/tools/screenshot-widgets.mjs` bzw. `npm run shots`): alle zehn Widgets (Runde 1 + 2)
+bei 1280 px **und** 360 px gerendert, jedes Canvas per Pixel-Scan als gezeichnet bestätigt,
+Screenshots gesichtet. Dabei **eine Politur an s4-2b**: der Volumen-Balken zeigt bei \(k = 0.5\)
+jetzt `12.5%` (⅛) statt gerundet `13%`, und das Balken-Label ist auf «Höhe (×k)» gekürzt,
+damit es mobil nicht mit der Prozentzahl kollidiert.
+
 Damit ist **T52 abgeschlossen**. Verschoben nach T53 (Prio-2): sekundäre Zusatz-Widgets
 einzelner Punkte (windschief-Schrägbild, s4-2c Kugelteil-Querschnitt, g4 Zuordnungsspiel +
 Manipulations-Demo, g5-4 Symmetrie-Spiegel/Vorzeichen-Trainer). Offen bleiben T53 (Prio-2)
@@ -42,8 +48,8 @@ und die Video-Platzhalter s3-6/s2-2a/c (T54).
 Auf Wunsch die vier höchstbewerteten Prio-1-Widgets aus dem Vollaudit ([84], §4) gebaut —
 je selbstständiges Canvas-Widget mit Slidern, Live-Anzeige und (wo die Seite es nutzt)
 👁/💡-Rollover; Geometrie/Zahlen vorab mit python3/node nachgerechnet, Pre-Flight (inkl.
-MathJax-Render und JS-Laufzeit in jsdom) `ALLE CHECKS BESTANDEN`. Ein Browser-Rendercheck
-1280/360 px steht noch aus (lokal kein Browser):
+MathJax-Render und JS-Laufzeit in jsdom) `ALLE CHECKS BESTANDEN`. (Der damals noch offene
+Browser-Rendercheck 1280/360 px wurde in [90] nachgeholt — alle vier Widgets bestätigt.):
 
 - **g2-2b** — Diskriminanten-Parabel: \(y = x^2 - 6x + k\) wandert mit dem k-Slider nach
   oben, der Scheitel \(S(3 \mid k-9)\) steigt, die grünen Nullstellen verschmelzen bei
