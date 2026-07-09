@@ -393,7 +393,7 @@ MathJax = {
 <!-- ══ 4. DISKRIMINANTE ══ -->
 <h2 id="diskriminante">Die Diskriminante — wie viele Nullstellen?</h2>
 
-<p>Aus der allgemeinen Form \(f(x) = ax^2 + bx + c\) bekommt man die Nullstellen mit der <strong>Mitternachtsformel</strong>:</p>
+<p>Aus der allgemeinen Form \(f(x) = ax^2 + bx + c\) bekommt man die Nullstellen mit der <strong>Mitternachtsformel</strong> (auch <em>Lösungsformel</em> oder abc-Formel genannt):</p>
 
 \[ x_{1,2} = \frac{-b \pm \sqrt{\bbox[#fde9c7, 3px]{\,b^2 - 4ac\,}}}{2a} \]
 
@@ -1032,8 +1032,10 @@ function updateWS(){
   for(let gx=1; gx<=9; gx++) ctx.fillText(gx, cx(gx), cy(0)+13);
   ctx.textAlign='right';
   for(let gy=1; gy<=5; gy++) ctx.fillText(gy, cx(0)-4, cy(gy)+4);
-  // Parabel
-  drawParabel(ctx, cx, cy, WS.a, -2*WS.a*WS.u, WS.a*WS.u*WS.u+WS.v, 0, 9, '#1a4f8a', 2.5);
+  // Parabel — auf die physikalische Flugbahn (Abwurf bis Aufschlag) beschränken,
+  // damit sie nicht unter die Grundlinie h = 0 taucht.
+  const xLand = WS.u + Math.sqrt(-WS.v / WS.a);   // 4 + √20 ≈ 8.47
+  drawParabel(ctx, cx, cy, WS.a, -2*WS.a*WS.u, WS.a*WS.u*WS.u+WS.v, 0, xLand, '#1a4f8a', 2.5);
   // Alle Stützpunkte schwach
   WS.xs.forEach(xi=>{ const yi = wsY(xi); if(yi>=0) drawDot(ctx,cx,cy,xi,yi,'#b8c4d4',4); });
   // Aktiver Punkt
@@ -1423,12 +1425,15 @@ function drawA2(){
   // Bestimme Parabel aus aktuellem Scheitelpunkt — mit a aus der gewählten Funktion abgeleitet
   // Für Visualisierung verwenden wir den korrekten a-Wert aus der Aufgabe
   const it = a2Items[a2Act];
-  const aMatch = it.eq.match(/f\(x\)\s*=\s*(-?[\d.]*)\s*[·*]?\s*\(/) || it.eq.match(/f\(x\)\s*=\s*(-)\(/);
+  // U+2212-Minus zuerst auf ASCII-Minus normieren — sonst matcht der Parser
+  // «−0.5·(…)» nicht und aVal fällt fälschlich auf 1 zurück.
+  const eqN = it.eq.replace(/−/g, '-');
+  const aMatch = eqN.match(/f\(x\)\s*=\s*(-?[\d.]*)\s*[·*]?\s*\(/) || eqN.match(/f\(x\)\s*=\s*(-)\(/);
   let aVal = 1;
   if(aMatch && aMatch[1]){
     if(aMatch[1] === '-') aVal = -1;
     else aVal = parseFloat(aMatch[1]);
-  } else if(it.eq.includes('−(') || it.eq.includes('-(')){
+  } else if(eqN.includes('-(')){
     aVal = -1;
   }
   // Parabel aus aktuellem (verschiebbarem) S
