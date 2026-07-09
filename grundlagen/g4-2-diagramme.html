@@ -63,6 +63,18 @@ MathJax = {
 .einstieg-anim .ea-play:disabled { background: var(--tinte-2); border-color: var(--tinte-2); cursor: not-allowed; }
 .einstieg-anim canvas { width: 100%; height: 200px; display: block; background: var(--weiss); border-radius: 6px; }
 .einstieg-anim .ea-cap { font-size: 0.85rem; color: var(--tinte-2); margin-top: 6px; font-style: italic; text-align: center; }
+
+/* ── Manipulations-Demo (abgeschnittene y-Achse) ── */
+.manip-box { background: var(--papier-2, #f3eedf); border-radius: 8px; padding: 14px 16px; margin: 12px 0; }
+.manip-box .mp-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.manip-box .mp-row label { font-family: var(--mono); font-size: 0.8rem; color: var(--tinte-2); white-space: nowrap; }
+.manip-box .mp-row input[type=range] { flex: 1 1 160px; accent-color: var(--orange); min-width: 120px; }
+.manip-box .mp-val { font-family: var(--mono); font-weight: 700; font-size: 0.95rem; color: var(--orange); min-width: 46px; text-align: right; }
+.manip-box .mp-btn { padding: 5px 11px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.76rem; color: var(--tinte-2); transition: 0.12s; }
+.manip-box .mp-btn:hover { border-color: var(--blau); color: var(--blau); }
+.manip-box .mp-eq { font-family: var(--mono); font-size: 0.85rem; color: var(--tinte); background: var(--weiss); border: 1px solid var(--linie); border-radius: 6px; padding: 8px 12px; margin-bottom: 10px; text-align: center; }
+.manip-box canvas { width: 100%; max-width: 520px; display: block; margin: 0 auto; background: var(--weiss); border-radius: 6px; }
+.manip-box .mp-cap { font-size: 0.82rem; color: var(--tinte-2); margin-top: 8px; font-style: italic; }
 </style>
 </head>
 <body>
@@ -413,6 +425,36 @@ MathJax = {
     <li><strong>Rosinenpickerei.</strong> Ein bewusst gewählter Zeit- oder Datenausschnitt erzeugt einen Trend, den die Gesamtdaten nicht hergeben.</li>
   </ul>
   <p style="margin-top:6px"><strong>Gegenmittel:</strong> Achsen prüfen (Nulllinie? Einheit?), Skala prüfen, und im Zweifel die Rohdaten oder das Verhältnis der Zahlen selbst nachrechnen.</p>
+</div>
+
+<div class="widget-titelzeile" style="margin:16px 0 8px">
+  <p style="margin:0">Schneide die \(y\)-Achse selbst ab — die vier Umsatzzahlen bleiben dabei unverändert:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Die Zahlen über den Säulen ändern sich nie. Achte nur darauf, wie stark das <em>Bild</em> das Wachstum von Q1 nach Q4 übertreibt, während du den Achsenstart hochschiebst.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Die Zahlen über den Säulen ändern sich nie. Achte nur darauf, wie stark das Bild das Wachstum von Q1 nach Q4 übertreibt, während du den Achsenstart hochschiebst.">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Beim Balken- und Säulendiagramm liest das Auge die <strong>Länge</strong> als Wert. Nur wenn die Achse bei \(0\) beginnt, ist die Länge proportional zur Zahl. Ab einem abgeschnittenen Nullpunkt vergleicht man Differenzen zum Achsenstart — und der ist frei wählbar. Deshalb ist der erste Blick immer der auf die Nulllinie.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Beim Balken- und Säulendiagramm liest das Auge die Länge als Wert. Nur wenn die Achse bei null beginnt, ist die Länge proportional zur Zahl. Ab einem abgeschnittenen Nullpunkt vergleicht man Differenzen zum Achsenstart — und der ist frei wählbar. Deshalb ist der erste Blick immer der auf die Nulllinie.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="manip-box">
+  <div class="mp-row">
+    <label>\(y\)-Achse beginnt bei</label>
+    <input type="range" id="mp-start" min="0" max="4.7" step="0.1" value="0">
+    <span class="mp-val" id="mp-startv">0.0</span>
+    <button class="mp-btn" type="button" data-mp="0">ehrlich (ab 0)</button>
+    <button class="mp-btn" type="button" data-mp="4.7">Trick (ab 4.7)</button>
+  </div>
+  <div class="mp-eq" id="mp-eq">Q4 wirkt 1.13-mal so hoch wie Q1 — real ist der Faktor 1.13.</div>
+  <canvas id="cv-manip" aria-label="Säulendiagramm mit verschiebbarem y-Achsen-Start"></canvas>
+  <div class="mp-cap">Quartalsumsatz eines Betriebs in Mio. CHF. Dieselben vier Zahlen, dieselben Säulen — nur der Achsenstart wandert.</div>
 </div>
 
 
@@ -1244,6 +1286,86 @@ function showDia(key, btn){
   // Initial: leeres Achsensystem zeichnen
   render();
   window.addEventListener('resize', render);
+})();
+
+/* ══ Manipulations-Demo: abgeschnittene y-Achse ══
+   Vier feste Quartalswerte. Der Slider verschiebt nur den Achsenstart s.
+   Wirkfaktor = (Q4 − s)/(Q1 − s) läuft von 1.13 (s = 0) bis 7.0 (s = 4.7);
+   der reale Faktor 5.4/4.8 = 1.125 bleibt konstant.                        */
+(function () {
+  const Q = [{ l: 'Q1', v: 4.8 }, { l: 'Q2', v: 5.0 }, { l: 'Q3', v: 5.1 }, { l: 'Q4', v: 5.4 }];
+  const YMAX = 5.6, REAL = Q[3].v / Q[0].v;
+
+  function drawManip() {
+    const s = parseFloat(document.getElementById('mp-start').value);
+    document.getElementById('mp-startv').textContent = s.toFixed(1);
+    const wirk = (Q[3].v - s) / (Q[0].v - s);
+    document.getElementById('mp-eq').textContent =
+      `Q4 wirkt ${wirk.toFixed(2)}-mal so hoch wie Q1 — real ist der Faktor ${REAL.toFixed(2)}.`;
+
+    const { ctx, W, H } = initCanvas('cv-manip', 260, false);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    const L = 52, R = 14, T = 46, B = 42;          // Ränder
+    const pw = W - L - R, ph = H - T - B;
+    const range = YMAX - s;
+    const yPx = v => T + ph - (v - s) / range * ph;
+
+    // Gitter + y-Ticks auf glatten Werten (höchstens 6 Schritte)
+    const step = [0.05, 0.1, 0.2, 0.25, 0.5, 1, 2].find(k => range / k <= 6) || 2;
+    ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+    for (let v = Math.ceil(s / step - 1e-9) * step; v <= YMAX + 1e-9; v += step) {
+      const y = yPx(v);
+      ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(L + pw, y); ctx.stroke();
+      ctx.fillStyle = '#9ca3af'; ctx.fillText(v.toFixed(step < 0.1 ? 2 : 1), L - 7, y + 4);
+    }
+    // Achsenstart selbst beschriften — er ist der entscheidende Wert
+    if (s > 0) {
+      ctx.fillStyle = '#c0392b'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+      ctx.fillText(s.toFixed(1), L - 7, T + ph + 4);
+    }
+    // Achsen
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(L, T); ctx.lineTo(L, T + ph); ctx.lineTo(L + pw, T + ph); ctx.stroke();
+
+    // Säulen
+    const bw = pw / (Q.length * 2);
+    Q.forEach((q, i) => {
+      const x = L + pw * (i + 0.5) / Q.length - bw / 2;
+      const y = yPx(q.v), h = Math.max(0, T + ph - y);
+      ctx.fillStyle = s > 0 ? '#b85c00' : '#1a4f8a';
+      ctx.fillRect(x, y, bw, h);
+      ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
+      ctx.font = 'bold 12px JetBrains Mono, monospace';
+      ctx.fillText(q.v.toFixed(1), x + bw / 2, y - 6);
+      ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#6b7280';
+      ctx.fillText(q.l, x + bw / 2, T + ph + 16);
+    });
+    ctx.textAlign = 'left'; ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#374151';
+    ctx.fillText('Umsatz [Mio. CHF]', L - 44, T - 12);
+
+    // Achsenbruch-Zickzack + Warnung, sobald die Nulllinie fehlt
+    if (s > 0) {
+      const yb = T + ph;
+      ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(L - 7, yb - 4); ctx.lineTo(L + 1, yb - 9);
+      ctx.moveTo(L - 7, yb + 2); ctx.lineTo(L + 1, yb - 3);
+      ctx.stroke();
+      ctx.fillStyle = '#c0392b'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+      ctx.fillText('⚠ Nulllinie fehlt', W - R, T - 12);
+    } else {
+      ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+      ctx.fillText('✓ Achse beginnt bei 0', W - R, T - 12);
+    }
+  }
+  document.getElementById('mp-start').addEventListener('input', drawManip);
+  document.querySelectorAll('[data-mp]').forEach(b => b.addEventListener('click', () => {
+    document.getElementById('mp-start').value = b.dataset.mp;
+    drawManip();
+  }));
+  drawManip();
+  window.addEventListener('resize', drawManip);
 })();
 </script>
 </body>

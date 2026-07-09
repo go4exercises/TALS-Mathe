@@ -32,6 +32,7 @@ const WIDGETS = [
   // T53 (Prio-2), Runde 1: die aus T52 verschobenen Sekundaer-Widgets.
   { page: 'schwerpunkt/s4-2c-kugel.html', id: 'cv-kugelteil', note: 'Kugelteil-Querschnitt' },
   { page: 'schwerpunkt/s4-3c-geraden.html', id: 'cv-ws', note: 'Windschief-Schraegbild' },
+  { page: 'grundlagen/g4-2-diagramme.html', id: 'cv-manip', note: 'Manipulations-Demo' },
 ];
 
 const VIEWPORTS = [
