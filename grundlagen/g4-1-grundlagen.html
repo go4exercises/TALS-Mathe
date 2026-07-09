@@ -67,6 +67,27 @@ MathJax = {
 .sammel-box .sb-reset { background: none; border: none; color: var(--tinte-2); text-decoration: underline; cursor: pointer; font-size: 0.82rem; font-family: var(--mono); margin-left: 8px; }
 .sammel-box canvas { width: 100%; height: 180px; display: block; margin-top: 6px; }
 .sammel-box .sb-hint { font-size: 0.85rem; color: var(--tinte-2); margin-top: 8px; font-style: italic; }
+
+/* ── Merkmalstyp-Zuordnungsspiel ── */
+.mt-spiel { background: var(--weiss); border: 1px solid var(--linie); border-radius: 9px; padding: 14px 16px; margin: 12px 0; }
+.mt-kopf { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 0.75rem; color: var(--tinte-2); }
+.mt-kopf .mt-score { color: var(--blau); font-weight: 700; }
+.mt-karte { text-align: center; font-size: 1.25rem; font-weight: 600; color: var(--tinte); padding: 18px 10px 6px; }
+.mt-karte .mt-einheit { font-family: var(--mono); font-size: 0.85rem; color: var(--tinte-2); font-weight: 400; }
+.mt-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px; }
+@media (max-width: 560px) { .mt-btns { grid-template-columns: repeat(2, 1fr); } }
+.mt-btn { padding: 9px 6px; border: 1px solid var(--linie); background: var(--papier-2); border-radius: 7px; cursor: pointer; font-family: var(--mono); font-size: 0.8rem; color: var(--tinte); transition: 0.12s; }
+.mt-btn:hover:not(:disabled) { border-color: var(--blau); background: var(--blau-hell); color: var(--blau); }
+.mt-btn:disabled { cursor: not-allowed; }
+.mt-btn.richtig { background: var(--gruen-hell); border-color: var(--gruen); color: var(--gruen); font-weight: 700; }
+.mt-btn.falsch  { background: var(--rot-hell);   border-color: var(--rot);   color: var(--rot);   font-weight: 700; }
+.mt-fb { display: none; margin-top: 10px; padding: 9px 13px; border-radius: 7px; font-size: 0.85rem; }
+.mt-fb.ok  { display: block; background: var(--gruen-hell); color: var(--gruen); border: 1px solid var(--gruen); }
+.mt-fb.err { display: block; background: var(--rot-hell);   color: var(--rot);   border: 1px solid var(--rot); }
+.mt-foot { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+.mt-next { padding: 7px 14px; border: 1px solid var(--blau); background: var(--blau); color: var(--weiss); border-radius: 7px; cursor: pointer; font-family: var(--mono); font-size: 0.8rem; }
+.mt-next:disabled { opacity: 0.4; cursor: not-allowed; }
+.mt-reset { background: none; border: none; color: var(--tinte-2); text-decoration: underline; cursor: pointer; font-size: 0.8rem; font-family: var(--mono); }
 </style>
 </head>
 <body>
@@ -240,6 +261,39 @@ MathJax = {
     <li><strong>Ordinal</strong> — Kategorien <em>mit</em> natürlicher Reihenfolge, aber ohne gleiche Abstände. Man darf ordnen und den Median bestimmen, aber nicht mitteln. Beispiele: Schulnoten, T-Shirt-Grösse (S/M/L), Zufriedenheit (schlecht/mittel/gut).</li>
   </ul>
   <p style="margin-top:6px">Beide zusammen bilden die <strong>kategorialen</strong> Merkmale; erst bei <em>quantitativen</em> (diskret/stetig) darf man auch den Mittelwert bilden.</p>
+</div>
+
+<div class="widget-titelzeile" style="margin:16px 0 8px">
+  <p style="margin:0">Ordne jedes Merkmal seinem Typ zu — zwölf Karten, ein paar davon mit Stolperstein:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Lass dich nicht davon täuschen, <em>dass</em> ein Merkmal mit Zahlen notiert wird. Frage stattdessen: Darf ich mit diesen Zahlen rechnen — und sind Zwischenwerte real möglich?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Lass dich nicht davon täuschen, dass ein Merkmal mit Zahlen notiert wird. Frage stattdessen: Darf ich mit diesen Zahlen rechnen — und sind Zwischenwerte real möglich?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Postleitzahl und Schulnote sind Zahlen und trotzdem kategorial: Bei der PLZ ist die Zahl ein reines Etikett (nominal), bei der Note ein Rang mit ungleichen Abständen (ordinal). Der Merkmalstyp hängt an der <strong>Bedeutung</strong> der Werte, nicht an ihrer Schreibweise.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Postleitzahl und Schulnote sind Zahlen und trotzdem kategorial: Bei der Postleitzahl ist die Zahl ein reines Etikett, also nominal, bei der Note ein Rang mit ungleichen Abständen, also ordinal. Der Merkmalstyp hängt an der Bedeutung der Werte, nicht an ihrer Schreibweise.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="mt-spiel">
+  <div class="mt-kopf"><span id="mt-nr">Merkmal 1 von 12</span><span class="mt-score" id="mt-score">0 richtig</span></div>
+  <div class="mt-karte" id="mt-karte">Augenfarbe</div>
+  <div class="mt-btns">
+    <button class="mt-btn" type="button" data-typ="nominal">nominal</button>
+    <button class="mt-btn" type="button" data-typ="ordinal">ordinal</button>
+    <button class="mt-btn" type="button" data-typ="diskret">diskret</button>
+    <button class="mt-btn" type="button" data-typ="stetig">stetig</button>
+  </div>
+  <div class="mt-fb" id="mt-fb"></div>
+  <div class="mt-foot">
+    <button class="mt-next" type="button" id="mt-next" disabled>▶ Nächstes Merkmal</button>
+    <button class="mt-reset" type="button" id="mt-reset">⟲ neu starten</button>
+  </div>
 </div>
 
 
@@ -711,6 +765,85 @@ function showMerkmal(key, btn){
   // Initial-Render + Reaktion auf Resize
   sbRender();
   window.addEventListener('resize', sbRender);
+})();
+
+/* ══ Merkmalstyp-Zuordnungsspiel ══
+   Zwölf Karten, darunter die klassischen Stolpersteine (PLZ und Schulnote sind
+   Zahlen, aber kategorial; Würfelaugen sind diskret, nicht ordinal).           */
+(function () {
+  const KARTEN = [
+    { m: 'Augenfarbe',            typ: 'nominal', wa: 'Kategorien ohne Rangordnung — nur auszählen.' },
+    { m: 'Postleitzahl',          typ: 'nominal', wa: 'Eine Zahl, aber ein reines Etikett: 8000 ist nicht «mehr» als 4000.' },
+    { m: 'Wohnkanton',            typ: 'nominal', wa: 'Reine Etiketten, keine natürliche Reihenfolge.' },
+    { m: 'Schulnote (1–6)',       typ: 'ordinal', wa: 'Geordnet, aber die Abstände sind nicht gleich — Rang, keine Messgrösse.' },
+    { m: 'T-Shirt-Grösse (S/M/L)', typ: 'ordinal', wa: 'Geordnete Kategorien ohne definierte Abstände.' },
+    { m: 'Zufriedenheit (schlecht/mittel/gut)', typ: 'ordinal', wa: 'Natürliche Reihenfolge, aber kein sinnvoller Mittelwert.' },
+    { m: 'Anzahl Geschwister',    typ: 'diskret', wa: 'Abzählbar, Zwischenwerte gibt es real nicht.' },
+    { m: 'Würfelaugen',           typ: 'diskret', wa: 'Zählbare ganze Zahlen — 3.5 Augen kann kein Wurf zeigen.' },
+    { m: 'Anzahl Tore in einem Spiel', typ: 'diskret', wa: 'Wird gezählt; ein halbes Tor gibt es nicht.' },
+    { m: 'Körpergrösse', e: '[cm]',  typ: 'stetig', wa: 'Beliebig genau messbar — Zwischenwerte sind real.' },
+    { m: 'Wartezeit',    e: '[min]', typ: 'stetig', wa: 'Auf einem kontinuierlichen Skalenstrahl, nur vom Messgerät begrenzt.' },
+    { m: 'Temperatur',   e: '[°C]',  typ: 'stetig', wa: 'Zwischenwerte sind sinnvoll — gemessen, nicht gezählt.' },
+  ];
+  const NAME = { nominal: 'nominal (kategorial)', ordinal: 'ordinal (kategorial)', diskret: 'quantitativ diskret', stetig: 'quantitativ stetig' };
+  const btns = () => document.querySelectorAll('.mt-btn');
+  const el = id => document.getElementById(id);
+  let reihe = [], i = 0, punkte = 0;
+
+  function mische() {
+    reihe = KARTEN.slice();
+    for (let k = reihe.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [reihe[k], reihe[j]] = [reihe[j], reihe[k]];
+    }
+  }
+  function zeige() {
+    const k = reihe[i];
+    el('mt-nr').textContent = `Merkmal ${i + 1} von ${reihe.length}`;
+    el('mt-score').textContent = `${punkte} richtig`;
+    el('mt-karte').innerHTML = k.e ? `${k.m} <span class="mt-einheit">${k.e}</span>` : k.m;
+    el('mt-fb').className = 'mt-fb'; el('mt-fb').textContent = '';
+    btns().forEach(b => { b.disabled = false; b.classList.remove('richtig', 'falsch'); });
+    el('mt-next').disabled = true;
+    el('mt-next').textContent = i === reihe.length - 1 ? '▶ Auswertung' : '▶ Nächstes Merkmal';
+  }
+  function antwort(typ) {
+    const k = reihe[i], fb = el('mt-fb');
+    btns().forEach(b => {
+      b.disabled = true;
+      if (b.dataset.typ === k.typ) b.classList.add('richtig');
+      else if (b.dataset.typ === typ) b.classList.add('falsch');
+    });
+    if (typ === k.typ) {
+      punkte++;
+      fb.className = 'mt-fb ok';
+      fb.textContent = `✓ Richtig — ${NAME[k.typ]}. ${k.wa}`;
+    } else {
+      fb.className = 'mt-fb err';
+      fb.textContent = `✗ Nicht ganz: ${k.m} ist ${NAME[k.typ]}. ${k.wa}`;
+    }
+    el('mt-score').textContent = `${punkte} richtig`;
+    el('mt-next').disabled = false;
+  }
+  function weiter() {
+    if (i < reihe.length - 1) { i++; zeige(); return; }
+    // Auswertung
+    el('mt-nr').textContent = 'Durchgang beendet';
+    el('mt-karte').textContent = `${punkte} von ${reihe.length} richtig`;
+    const fb = el('mt-fb');
+    fb.className = punkte >= reihe.length - 2 ? 'mt-fb ok' : 'mt-fb err';
+    fb.textContent = punkte >= reihe.length - 2
+      ? 'Stark — du unterscheidest die vier Typen sicher, auch bei den Zahlen-Fallen.'
+      : 'Geh die Karten nochmals durch: Zahlen allein machen ein Merkmal nicht quantitativ.';
+    btns().forEach(b => { b.disabled = true; b.classList.remove('richtig', 'falsch'); });
+    el('mt-next').disabled = true;
+  }
+  function neustart() { mische(); i = 0; punkte = 0; zeige(); }
+
+  btns().forEach(b => b.addEventListener('click', () => antwort(b.dataset.typ)));
+  el('mt-next').addEventListener('click', weiter);
+  el('mt-reset').addEventListener('click', neustart);
+  neustart();
 })();
 </script>
 </body>
