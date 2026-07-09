@@ -165,6 +165,32 @@ MathJax = {
   font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--blau); font-weight: 700; margin-bottom: 8px;
 }
+
+/* ── Vorzeichen-Trainer ── */
+.vz-trainer { background: var(--papier); border: 1px solid var(--linie); border-radius: 8px; padding: 16px 18px; margin: 14px 0 22px; }
+.vz-kopf { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 0.74rem; color: var(--tinte-2); }
+.vz-kopf .vz-score { color: var(--blau); font-weight: 700; }
+.vz-frage { font-size: 0.95rem; color: var(--tinte); margin: 10px 0 4px; }
+.vz-frage .vz-winkel { font-family: var(--mono); font-weight: 700; font-size: 1.15rem; color: var(--blau); }
+.vz-gitter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+@media (max-width: 560px) { .vz-gitter { grid-template-columns: 1fr; } }
+.vz-fn { background: var(--papier-2); border: 1px solid var(--linie); border-radius: 7px; padding: 9px 10px; text-align: center; }
+.vz-fn .vz-lab { display: block; font-size: 0.9rem; color: var(--tinte); margin-bottom: 7px; }
+.vz-wahl { display: flex; gap: 6px; justify-content: center; }
+.vz-btn { width: 46px; padding: 6px 0; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 1rem; font-weight: 700; color: var(--tinte-2); transition: 0.12s; }
+.vz-btn:hover:not(:disabled) { border-color: var(--blau); color: var(--blau); }
+.vz-btn.gewaehlt { background: var(--blau); border-color: var(--blau); color: var(--weiss); }
+.vz-btn.richtig  { background: var(--gruen-hell); border-color: var(--gruen); color: var(--gruen); }
+.vz-btn.falsch   { background: var(--rot-hell);   border-color: var(--rot);   color: var(--rot); }
+.vz-btn:disabled { cursor: not-allowed; }
+.vz-fb { display: none; margin-top: 10px; padding: 9px 13px; border-radius: 7px; font-size: 0.85rem; }
+.vz-fb.ok  { display: block; background: var(--gruen-hell); color: var(--gruen); border: 1px solid var(--gruen); }
+.vz-fb.err { display: block; background: var(--rot-hell);   color: var(--rot);   border: 1px solid var(--rot); }
+.vz-foot { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+.vz-pruef, .vz-next { padding: 7px 14px; border: 1px solid var(--blau); background: var(--blau); color: var(--weiss); border-radius: 7px; cursor: pointer; font-family: var(--mono); font-size: 0.8rem; }
+.vz-next { background: var(--weiss); color: var(--blau); }
+.vz-pruef:disabled, .vz-next:disabled { opacity: 0.4; cursor: not-allowed; }
+.vz-reset { background: none; border: none; color: var(--tinte-2); text-decoration: underline; cursor: pointer; font-size: 0.8rem; font-family: var(--mono); }
 </style>
 </head>
 <body>
@@ -583,6 +609,22 @@ MathJax = {
   <p style="margin-top:6px">Merkregel „<em>All Students Take Calculus</em>": in Quadrant I sind <em>A</em>lle positiv, in II nur <em>S</em>inus, in III nur <em>T</em>angens, in IV nur <em>C</em>osinus.</p>
 </div>
 
+<div class="vz-trainer">
+  <div class="vz-kopf"><span id="vz-nr">Aufgabe 1</span><span class="vz-score" id="vz-score">0 richtig</span></div>
+  <div class="vz-frage">Welche Vorzeichen haben die drei Funktionswerte für <span class="vz-winkel" id="vz-winkel">214°</span>?</div>
+  <div class="vz-gitter" id="vz-gitter">
+    <div class="vz-fn"><span class="vz-lab">\(\sin\varphi\)</span><div class="vz-wahl"><button class="vz-btn" type="button" data-fn="sin" data-vz="+">+</button><button class="vz-btn" type="button" data-fn="sin" data-vz="-">−</button></div></div>
+    <div class="vz-fn"><span class="vz-lab">\(\cos\varphi\)</span><div class="vz-wahl"><button class="vz-btn" type="button" data-fn="cos" data-vz="+">+</button><button class="vz-btn" type="button" data-fn="cos" data-vz="-">−</button></div></div>
+    <div class="vz-fn"><span class="vz-lab">\(\tan\varphi\)</span><div class="vz-wahl"><button class="vz-btn" type="button" data-fn="tan" data-vz="+">+</button><button class="vz-btn" type="button" data-fn="tan" data-vz="-">−</button></div></div>
+  </div>
+  <div class="vz-fb" id="vz-fb"></div>
+  <div class="vz-foot">
+    <button class="vz-pruef" type="button" id="vz-pruef" disabled>Prüfen</button>
+    <button class="vz-next" type="button" id="vz-next" disabled>▶ Nächster Winkel</button>
+    <button class="vz-reset" type="button" id="vz-reset">⟲ neu starten</button>
+  </div>
+</div>
+
 <!-- ══ 8. SYMMETRIEEIGENSCHAFTEN ══ -->
 <h3 id="symmetrie">Symmetrieeigenschaften</h3>
 
@@ -626,6 +668,51 @@ MathJax = {
     </tbody>
   </table>
   <p style="margin-top:6px">Die <em>(\(-\alpha\))-Zeile</em> ist die kürzeste Form der Q-IV-Spiegelung (\(-\alpha\) und \(360° - \alpha\) bezeichnen denselben Punkt am Einheitskreis). \(\cos\) ist eine <em>gerade</em> Funktion (\(\cos(-\alpha) = \cos\alpha\)), \(\sin\) und \(\tan\) sind <em>ungerade</em>. Diese Beziehungen kombiniert mit der Periodizität (\(\sin\) und \(\cos\) haben Periode \(360°\), \(\tan\) hat Periode \(180°\)) lassen alle Werte auf das Intervall \([0°; 90°]\) zurückführen.</p>
+</div>
+
+<div class="anim">
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Anim · Symmetrie-Spiegel — Winkel zurückführen</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Vergleiche die beiden gestrichelten Strecken: Welche Koordinate des Spiegelpunkts hat denselben <em>Betrag</em> wie beim Original — und welche wechselt bloss das <em>Vorzeichen</em>?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Vergleiche die beiden gestrichelten Strecken: Welche Koordinate des Spiegelpunkts hat denselben Betrag wie beim Original — und welche wechselt bloss das Vorzeichen?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Jede Symmetrie-Regel ist nur die Spiegelung des Kreispunkts: An der \(y\)-Achse (\(180° - \alpha\)) kippt \(x\), also der Cosinus. An der \(x\)-Achse (\(360° - \alpha\)) kippt \(y\), also der Sinus. Am Ursprung (\(180° + \alpha\)) kippen beide — der Tangens als Quotient behält deshalb sein Vorzeichen. Man muss die Tabelle nicht auswendig lernen, wenn man den Kreis vor Augen hat.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Jede Symmetrie-Regel ist nur die Spiegelung des Kreispunkts: An der y-Achse kippt x, also der Cosinus. An der x-Achse kippt y, also der Sinus. Am Ursprung kippen beide — der Tangens als Quotient behält deshalb sein Vorzeichen. Man muss die Tabelle nicht auswendig lernen, wenn man den Kreis vor Augen hat.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
+  <div class="anim-layout">
+    <canvas id="cv-symm" width="560" height="360"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label"><span>Grundwinkel \(\alpha\)</span><span class="wert" id="lbl-syAlpha">30°</span></div>
+        <input type="range" id="sld-syAlpha" min="5" max="85" step="5" value="30">
+      </div>
+      <div>
+        <div class="feld-titel">Spiegelung</div>
+        <div class="chips" id="sy-chips">
+          <button class="chip aktiv" data-sy="180-">180° − α</button>
+          <button class="chip" data-sy="180+">180° + α</button>
+          <button class="chip" data-sy="360-">360° − α</button>
+        </div>
+      </div>
+      <div class="formel" id="sy-formel">\(\sin(180° - \alpha) = \sin\alpha\)</div>
+      <div class="legende">
+        <div class="legende-titel">Vergleich der Koordinaten</div>
+        <div class="legende-zeile"><span class="lab">\(\cos\alpha\) / \(\cos\beta\)</span><span class="val" id="leg-syCos">0.87 / −0.87</span></div>
+        <div class="legende-zeile"><span class="lab">\(\sin\alpha\) / \(\sin\beta\)</span><span class="val" id="leg-sySin">0.50 / 0.50</span></div>
+        <div class="legende-zeile"><span class="lab">gespiegelt an</span><span class="val" id="leg-syAchse">\(y\)-Achse</span></div>
+      </div>
+      <div class="erklaerung" id="sy-erkl">Der Spiegelpunkt \(B\) liegt gleich hoch wie \(A\), aber links: Der Sinus bleibt, der Cosinus kippt.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ══ 9. DEFINITIONS- UND WERTEMENGE ══ -->
@@ -1584,12 +1671,191 @@ function drawAbw() {
 }
 document.getElementById('sld-abwPhi').addEventListener('input', drawAbw);
 
+/* ════════════════════════════════════════════════════════════════
+ *  SYMMETRIE-SPIEGEL
+ *  A(α) und der Spiegelpunkt B(β) am Einheitskreis:
+ *    β = 180° − α  → Spiegelung an der y-Achse   (cos kippt, sin bleibt)
+ *    β = 180° + α  → Punktspiegelung am Ursprung (beide kippen, tan bleibt)
+ *    β = 360° − α  → Spiegelung an der x-Achse   (sin kippt, cos bleibt)
+ * ════════════════════════════════════════════════════════════════ */
+const SY_MODI = {
+  '180-': {
+    beta: a => 180 - a, achse: 'y-Achse',
+    formel: '\\(\\sin(180° - \\alpha) = \\sin\\alpha,\\quad \\cos(180° - \\alpha) = -\\cos\\alpha\\)',
+    erkl: 'Der Spiegelpunkt \\(B\\) liegt gleich hoch wie \\(A\\), aber links: Der Sinus bleibt, der Cosinus kippt. Der Tangens kippt mit.',
+  },
+  '180+': {
+    beta: a => 180 + a, achse: 'Ursprung (Punktspiegelung)',
+    formel: '\\(\\sin(180° + \\alpha) = -\\sin\\alpha,\\quad \\cos(180° + \\alpha) = -\\cos\\alpha\\)',
+    erkl: 'Beide Koordinaten kippen. Weil \\(\\tan = \\sin/\\cos\\) zweimal das Vorzeichen wechselt, bleibt der Tangens gleich — Periode \\(180°\\).',
+  },
+  '360-': {
+    beta: a => 360 - a, achse: 'x-Achse',
+    formel: '\\(\\sin(360° - \\alpha) = -\\sin\\alpha,\\quad \\cos(360° - \\alpha) = \\cos\\alpha\\)',
+    erkl: 'Gleicher Punkt wie bei \\(-\\alpha\\): Der Cosinus bleibt (gerade Funktion), der Sinus kippt (ungerade Funktion).',
+  },
+};
+let syModus = '180-';
+function drawSymm() {
+  const r = initCv('cv-symm'); if (!r) return;
+  const { ctx, W, H } = r;
+  const alpha = parseFloat(document.getElementById('sld-syAlpha').value);
+  const M = SY_MODI[syModus], beta = M.beta(alpha);
+  const ar = alpha * Math.PI / 180, br = beta * Math.PI / 180;
+  const cosA = Math.cos(ar), sinA = Math.sin(ar), cosB = Math.cos(br), sinB = Math.sin(br);
+
+  document.getElementById('lbl-syAlpha').textContent = alpha + '°';
+  const nf = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(2);
+  document.getElementById('leg-syCos').textContent = `${nf(cosA)} / ${nf(cosB)}`;
+  document.getElementById('leg-sySin').textContent = `${nf(sinA)} / ${nf(sinB)}`;
+  const achseEl = document.getElementById('leg-syAchse');
+  achseEl.innerHTML = M.achse === 'y-Achse' ? '\\(y\\)-Achse' : (M.achse === 'x-Achse' ? '\\(x\\)-Achse' : M.achse);
+  document.getElementById('sy-formel').innerHTML = M.formel;
+  document.getElementById('sy-erkl').innerHTML = M.erkl;
+  mjTypeset([document.getElementById('sy-formel'), document.getElementById('sy-erkl'), achseEl]);
+
+  const cx = W / 2, cy = H / 2 + 6, R = 128;
+  const P = (c, s) => [cx + c * R, cy - s * R];
+  // Achsen
+  seg(ctx, [cx - R - 26, cy], [cx + R + 26, cy], C.linie, 1.5);
+  seg(ctx, [cx, cy - R - 26], [cx, cy + R + 26], C.linie, 1.5);
+  txt(ctx, cx + R + 34, cy, 'x', C.tinte2, 13);
+  txt(ctx, cx, cy - R - 34, 'y', C.tinte2, 13);
+  // Einheitskreis
+  ctx.save(); ctx.strokeStyle = C.linie; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  // Spiegelachse hervorheben
+  ctx.save(); ctx.strokeStyle = C.lila; ctx.lineWidth = 2.5; ctx.setLineDash([7, 5]);
+  ctx.beginPath();
+  if (syModus === '180-')      { ctx.moveTo(cx, cy - R - 20); ctx.lineTo(cx, cy + R + 20); }
+  else if (syModus === '360-') { ctx.moveTo(cx - R - 20, cy); ctx.lineTo(cx + R + 20, cy); }
+  ctx.stroke(); ctx.restore();
+  if (syModus === '180+') dot(ctx, [cx, cy], C.lila, 5);
+
+  // Radien + Punkte
+  const A = P(cosA, sinA), B = P(cosB, sinB);
+  seg(ctx, [cx, cy], A, C.gruen, 2.5);
+  seg(ctx, [cx, cy], B, C.orange, 2.5);
+  // Koordinaten-Strecken: Sinus senkrecht, Cosinus waagrecht
+  dashedSeg(ctx, A, [A[0], cy], C.gruen, 1.5);
+  dashedSeg(ctx, A, [cx, A[1]], C.gruen, 1.5);
+  dashedSeg(ctx, B, [B[0], cy], C.orange, 1.5);
+  dashedSeg(ctx, B, [cx, B[1]], C.orange, 1.5);
+  dot(ctx, A, C.gruen, 6);
+  dot(ctx, B, C.orange, 6);
+  txt(ctx, A[0] + (cosA >= 0 ? 20 : -20), A[1] - 12, 'A', C.gruen, 14);
+  txt(ctx, B[0] + (cosB >= 0 ? 20 : -20), B[1] + (sinB >= 0 ? -12 : 14), 'B', C.orange, 14);
+  // Winkelbögen
+  drawAngleArc(ctx, [cx, cy], 42, 0, ar, C.gruen, 'α');
+  drawAngleArc(ctx, [cx, cy], 62, 0, br, C.orange, 'β');
+  // Kopfzeile
+  txt(ctx, 12, 18, `α = ${alpha}°`, C.gruen, 14, 'left');
+  txt(ctx, W - 12, 18, `β = ${beta}°`, C.orange, 14, 'right');
+  txt(ctx, W / 2, H - 10, `gespiegelt an: ${M.achse}`, C.lila, 12, 'center');
+}
+document.getElementById('sld-syAlpha').addEventListener('input', drawSymm);
+document.querySelectorAll('#sy-chips .chip').forEach(ch => ch.addEventListener('click', () => {
+  syModus = ch.dataset.sy;
+  document.querySelectorAll('#sy-chips .chip').forEach(c => c.classList.toggle('aktiv', c === ch));
+  drawSymm();
+}));
+
+/* ════════════════════════════════════════════════════════════════
+ *  VORZEICHEN-TRAINER
+ *  Zwölf Winkel, keiner ein Vielfaches von 90° — Vorzeichen aus den
+ *  Koordinaten des Kreispunkts, tan aus sin/cos.
+ * ════════════════════════════════════════════════════════════════ */
+(function () {
+  const WINKEL = [30, 100, 120, 135, 190, 200, 214, 250, 300, 340, 405, -60];
+  const QUAD = w => { const n = ((w % 360) + 360) % 360; return n < 90 ? 'I' : n < 180 ? 'II' : n < 270 ? 'III' : 'IV'; };
+  const VZ = (w, fn) => {
+    const r = w * Math.PI / 180;
+    const v = fn === 'sin' ? Math.sin(r) : fn === 'cos' ? Math.cos(r) : Math.tan(r);
+    return v >= 0 ? '+' : '-';
+  };
+  const el = id => document.getElementById(id);
+  let reihe = [], i = 0, punkte = 0, wahl = {};
+
+  function mische() {
+    reihe = WINKEL.slice();
+    for (let k = reihe.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [reihe[k], reihe[j]] = [reihe[j], reihe[k]];
+    }
+  }
+  function zeige() {
+    const w = reihe[i];
+    wahl = {};
+    el('vz-nr').textContent = `Aufgabe ${i + 1} von ${reihe.length}`;
+    el('vz-score').textContent = `${punkte} richtig`;
+    el('vz-winkel').textContent = (w < 0 ? '−' + Math.abs(w) : w) + '°';
+    el('vz-fb').className = 'vz-fb'; el('vz-fb').textContent = '';
+    document.querySelectorAll('.vz-btn').forEach(b => { b.disabled = false; b.classList.remove('gewaehlt', 'richtig', 'falsch'); });
+    el('vz-pruef').disabled = true;
+    el('vz-next').disabled = true;
+    el('vz-next').textContent = i === reihe.length - 1 ? '▶ Auswertung' : '▶ Nächster Winkel';
+  }
+  function waehle(b) {
+    wahl[b.dataset.fn] = b.dataset.vz;
+    document.querySelectorAll(`.vz-btn[data-fn="${b.dataset.fn}"]`).forEach(o => o.classList.toggle('gewaehlt', o === b));
+    el('vz-pruef').disabled = Object.keys(wahl).length < 3;
+  }
+  function pruefe() {
+    const w = reihe[i];
+    let alle = true;
+    ['sin', 'cos', 'tan'].forEach(fn => {
+      const soll = VZ(w, fn);
+      if (wahl[fn] !== soll) alle = false;
+      document.querySelectorAll(`.vz-btn[data-fn="${fn}"]`).forEach(b => {
+        b.disabled = true; b.classList.remove('gewaehlt');
+        if (b.dataset.vz === soll) b.classList.add('richtig');
+        else if (b.dataset.vz === wahl[fn]) b.classList.add('falsch');
+      });
+    });
+    const q = QUAD(w), norm = ((w % 360) + 360) % 360;
+    const wStr = (w < 0 ? '−' + Math.abs(w) : w) + '°';
+    const zusatz = norm === w ? '' : ` (entspricht ${norm}°)`;
+    const z = fn => VZ(w, fn).replace('-', '−');   // Unicode-Minus für die Anzeige
+    const fb = el('vz-fb');
+    if (alle) {
+      punkte++;
+      fb.className = 'vz-fb ok';
+      fb.textContent = `✓ Richtig — ${wStr} liegt in Quadrant ${q}${zusatz}: sin ${z('sin')}, cos ${z('cos')}, tan ${z('tan')}.`;
+    } else {
+      fb.className = 'vz-fb err';
+      fb.textContent = `✗ ${wStr} liegt in Quadrant ${q}${zusatz}: sin ${z('sin')}, cos ${z('cos')}, tan ${z('tan')}. Das Vorzeichen von tan ist das Produkt der beiden anderen.`;
+    }
+    el('vz-score').textContent = `${punkte} richtig`;
+    el('vz-pruef').disabled = true;
+    el('vz-next').disabled = false;
+  }
+  function weiter() {
+    if (i < reihe.length - 1) { i++; zeige(); return; }
+    el('vz-nr').textContent = 'Durchgang beendet';
+    el('vz-winkel').textContent = `${punkte}/${reihe.length}`;
+    const fb = el('vz-fb');
+    fb.className = punkte >= reihe.length - 2 ? 'vz-fb ok' : 'vz-fb err';
+    fb.textContent = punkte >= reihe.length - 2
+      ? 'Sitzt — du findest den Quadranten auch bei Winkeln über 360° und bei negativen Winkeln.'
+      : 'Rechne den Winkel zuerst auf das Intervall 0° bis 360° zurück, bestimme dann den Quadranten.';
+    el('vz-next').disabled = true;
+  }
+  function neustart() { mische(); i = 0; punkte = 0; zeige(); }
+
+  document.querySelectorAll('.vz-btn').forEach(b => b.addEventListener('click', () => waehle(b)));
+  el('vz-pruef').addEventListener('click', pruefe);
+  el('vz-next').addEventListener('click', weiter);
+  el('vz-reset').addEventListener('click', neustart);
+  neustart();
+})();
+
 window.addEventListener('load', () => {
   drawSchiff();
   drawSinCos();
   drawAbw();
   drawTan();
   drawBez();
+  drawSymm();
 });
 window.addEventListener('resize', () => {
   drawSchiff();
@@ -1597,6 +1863,7 @@ window.addEventListener('resize', () => {
   drawAbw();
   drawTan();
   drawBez();
+  drawSymm();
 });
 
 /* ════════════════════════════════════════════════════════════════

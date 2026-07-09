@@ -4,6 +4,40 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [91] — 2026-07-09 · Audit-Paket 5 / T53, Runde 1: die fünf aus T52 verschobenen Sekundär-Widgets
+
+Die vier Punkte, die beim Abschluss von T52 ([90]) explizit nach T53 verschoben wurden, sind
+gebaut (g5-4 bringt deren zwei). Gleiches Muster wie in T52: Slider bzw. Klick-Interaktion,
+Live-Anzeige, 👁/💡-Rollover, Zahlen vorab mit `python3` nachgerechnet, Pre-Flight
+`ALLE CHECKS BESTANDEN`, Browser-Rendercheck bei 1280 px und 360 px:
+
+- **s4-2c** — Kugelteil-Querschnitt: Der \(h\)-Slider schiebt die Schnittebene durch die Kugel
+  (\(r = 5\)); drei Balken zeigen, dass Kappenfläche und Sektorvolumen **linear** mit \(h\)
+  wachsen (denn \(V_{\text{Sektor}} = \tfrac13 A_{\text{Kappe}} \cdot r\)), das Segmentvolumen
+  dagegen krumm. Grenzfall-Snaps \(h = 0\), \(h = r\) (Halbkugel), \(h = 2r\) (Vollkugel) mit
+  je eigener Kontroll-Meldung.
+- **s4-3c** — windschief-Schrägbild: Zwei «Stockwerke»; der \(c\)-Slider hebt \(h\) über den
+  Boden. Bei \(c = 0\) schneiden sich die Geraden in \(S(3 \mid 1 \mid 0)\), bei \(c > 0\) sind
+  sie windschief — der graue Schatten von \(h\) kreuzt \(g\) aber immer an derselben Stelle:
+  Erst die dritte Komponente entscheidet.
+- **g4-1** — Merkmalstyp-Zuordnungsspiel: zwölf Karten in zufälliger Reihenfolge, vier Typen
+  (nominal/ordinal/diskret/stetig), Feedback mit Begründung, Score und Auswertung. Bewusst mit
+  den Zahlen-Fallen Postleitzahl (nominal), Schulnote (ordinal) und Würfelaugen (diskret).
+- **g4-2** — Manipulations-Demo: Der Slider verschiebt den \(y\)-Achsenstart eines
+  Säulendiagramms. Die vier Umsatzzahlen bleiben gleich, der Wirkfaktor «Q4 gegen Q1» läuft von
+  \(1.13\) (Achse ab 0) auf \(7.00\) (Achse ab 4.7). Ab abgeschnittener Achse erscheinen
+  Achsenbruch-Marker und die Warnung «Nulllinie fehlt»; die Tick-Schritte werden auf glatte
+  Werte gerundet, damit die Demo nicht selbst krumm beschriftet ist.
+- **g5-4** — Symmetrie-Spiegel: \(\alpha\)-Slider plus drei Chips (\(180° - \alpha\),
+  \(180° + \alpha\), \(360° - \alpha\)); der Spiegelpunkt \(B\) und die Spiegelachse werden
+  eingezeichnet, die Legende stellt \(\cos\alpha/\cos\beta\) und \(\sin\alpha/\sin\beta\)
+  gegenüber. Dazu der **Vorzeichen-Trainer**: zwölf Winkel (auch \(> 360°\) und negative), für
+  \(\sin\), \(\cos\), \(\tan\) je \(+\)/\(-\) wählen, Feedback mit Quadrant und Rückführung.
+
+Offen bleiben der Rest von T53 (Prio-2-Liste, §4) und die Video-Platzhalter s3-6/s2-2a/c (T54).
+
+---
+
 ## [90] — 2026-07-09 · Audit-Paket 5: die restlichen sechs Prio-1-Widgets (T52 abgeschlossen)
 
 Die übrigen sechs Kern-Widgets der Prio-1-Liste ([84], §4) gebaut — damit sind alle zehn

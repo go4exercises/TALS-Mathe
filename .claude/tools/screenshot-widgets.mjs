@@ -33,6 +33,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s4-2c-kugel.html', id: 'cv-kugelteil', note: 'Kugelteil-Querschnitt' },
   { page: 'schwerpunkt/s4-3c-geraden.html', id: 'cv-ws', note: 'Windschief-Schraegbild' },
   { page: 'grundlagen/g4-2-diagramme.html', id: 'cv-manip', note: 'Manipulations-Demo' },
+  { page: 'grundlagen/g5-4-einheitskreis.html', id: 'cv-symm', note: 'Symmetrie-Spiegel' },
 ];
 
 const VIEWPORTS = [
