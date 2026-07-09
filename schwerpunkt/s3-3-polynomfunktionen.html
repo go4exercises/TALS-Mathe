@@ -245,6 +245,19 @@ MathJax = {
   </div>
 </div>
 
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Linearfaktor abspalten — Polynomdivision</div>
+  <p>Meist ist die Linearfaktordarstellung <em>nicht</em> gegeben. Kennt man aber <strong>eine</strong> Nullstelle \(x_1\) (oft durch Raten ganzzahliger Teiler des konstanten Glieds gefunden), so lässt sich der Linearfaktor \((x - x_1)\) durch <strong>Polynomdivision</strong> abspalten: Der Rest ist \(0\), der Quotient ist ein Polynom <em>kleineren</em> Grades, dessen Nullstellen man weiter bestimmt.</p>
+  <p style="margin-top:4px">So läuft die Division: höchste Potenzen dividieren, das Ergebnis mit dem Divisor zurückmultiplizieren, subtrahieren, den nächsten Term herunterholen — bis der Rest \(0\) ist.</p>
+  <div class="block block-bsp" style="margin-top:8px">
+    <div class="block-titel">🟢 Beispiel — \(f(x) = x^3 - 2x^2 - 5x + 6\)</div>
+    <p>Raten: \(f(1) = 1 - 2 - 5 + 6 = 0\), also ist \(x_1 = 1\) eine Nullstelle. Division durch \((x - 1)\):</p>
+    \[ (x^3 - 2x^2 - 5x + 6) : (x - 1) = x^2 - x - 6 \]
+    <p>Der Quotient \(x^2 - x - 6\) faktorisiert zu \((x - 3)(x + 2)\). Damit sind alle Nullstellen gefunden:</p>
+    \[ f(x) = (x - 1)(x - 3)(x + 2), \qquad x_1 = 1,\; x_2 = 3,\; x_3 = -2. \]
+  </div>
+</div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Definition und Linearfaktoren</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welchen Grad hat die Polynomfunktion \(f(x) = \dfrac{-4x^3 + x^2 - x}{10}\)?</p><ul class="mc-optionen"><li data-opt="A">Grad 10</li><li data-opt="B">Grad 3</li><li data-opt="C">keinen — das ist keine Polynomfunktion</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Der Bruch ist nur eine Schreibweise für \(-0.4x^3 + 0.1x^2 - 0.1x\) — eine Polynomfunktion dritten Grades mit Leitkoeffizient \(-0.4\).</div></details></div>
@@ -342,6 +355,18 @@ MathJax = {
     <li><strong>Tiefpunkt</strong> \(T(1.22 \mid -1.11)\) — lokales Minimum</li>
     <li>Kein absolutes Maximum oder Minimum: Für \(x \to \pm\infty\) wächst bzw. fällt \(f\) unbeschränkt</li>
   </ul>
+</div>
+
+<div class="block block-def" style="margin-top:14px">
+  <div class="block-titel">📘 Extremum berechnen — beim Grad 2 exakt über die Scheitelform</div>
+  <p>Bei einer Polynomfunktion <strong>zweiten Grades</strong> \(f(x) = ax^2 + bx + c\) lässt sich der einzige Extrempunkt (der Scheitel) <em>exakt</em> berechnen — über die <strong>quadratische Ergänzung</strong> bzw. die Scheitelform (siehe <a class="quer" href="../grundlagen/g3-3-quadratische-funktionen.html">↩ GF 3.3</a>). Die Extremstelle liegt bei</p>
+  \[ x_S = -\frac{b}{2a}, \qquad y_S = f(x_S). \]
+  <p>Bei \(a &gt; 0\) ist es ein Tiefpunkt, bei \(a &lt; 0\) ein Hochpunkt.</p>
+  <div class="block block-bsp" style="margin-top:8px">
+    <div class="block-titel">🟢 Beispiel — \(f(x) = 2x^2 + 2x - 24\) (aus Beispiel 1)</div>
+    <p>\(x_S = -\dfrac{2}{2 \cdot 2} = -0.5\); \(\; y_S = f(-0.5) = 2 \cdot 0.25 - 1 - 24 = -24.5\). Wegen \(a = 2 &gt; 0\) ist \(T(-0.5 \mid -24.5)\) ein Tiefpunkt.</p>
+  </div>
+  <p style="margin-top:8px"><strong>Ausblick.</strong> Für Polynomfunktionen <em>höheren</em> Grades lassen sich Hoch- und Tiefpunkte nicht mehr so einfach exakt bestimmen — dafür braucht es die <strong>Differentialrechnung</strong> (Ableitung null setzen), die in der Analysis behandelt wird. Bis dahin liest man die Extrema höheren Grades <strong>grafisch</strong> ab (wie in Beispiel 2).</p>
 </div>
 
 <div class="block block-def" style="margin-top:14px">
@@ -504,6 +529,23 @@ MathJax = {
           <li>Nur gerade Exponenten (6, 4, 2) → <strong>gerade</strong>, achsensymmetrisch zur \(y\)-Achse.</li>
           <li>Gemischt — das konstante Glied \(+1\) ist ein gerader Anteil (\(x^0\)) neben ungeraden → <strong>weder noch</strong>.</li>
         </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-aufg">
+    <div class="block-titel">🟠 f) Linearfaktor abspalten (Polynomdivision)</div>
+    <p>Von \(f(x) = x^3 - 7x + 6\) ist \(x_1 = 1\) eine Nullstelle. Spalte \((x - 1)\) ab und bestimme die beiden übrigen Nullstellen (kleinere zuerst).</p>
+    <div class="eingabe-row"><label>x₂ =&nbsp;</label><input type="text" id="a3f1" placeholder="x₂"><button class="btn-pruef" onclick="chkNum('a3f1', -3, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3f1-cr"></div>
+    <div class="eingabe-row" style="margin-top:6px"><label>x₃ =&nbsp;</label><input type="text" id="a3f2" placeholder="x₃"><button class="btn-pruef" onclick="chkNum('a3f2', 2, 0.01, '')">Prüfen</button></div>
+    <div class="cr" id="a3f2-cr"></div>
+    <button class="loesung-toggle" onclick="toggleL('l-a3f')">▶ Lösung</button>
+    <div class="loesung-body" id="l-a3f">
+      <div class="block block-bsp" style="margin:6px 0 0">
+        <div class="block-titel">🟢 Lösung</div>
+        <p>Polynomdivision: \((x^3 - 7x + 6) : (x - 1) = x^2 + x - 6\). Faktorisieren: \(x^2 + x - 6 = (x + 3)(x - 2)\).</p>
+        \[ f(x) = (x - 1)(x + 3)(x - 2), \qquad x_2 = -3,\; x_3 = 2. \]
       </div>
     </div>
   </div>
