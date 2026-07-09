@@ -479,7 +479,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
       <th class="kz" data-kz="mw" onclick="oeffneKzDetail('mw')">\(\bar{x}\)<span class="kz-tip">Mittelwert (Arithmetisches Mittel)</span></th>
       <th class="kz" data-kz="med" onclick="oeffneKzDetail('med')">\(\tilde{x}\)<span class="kz-tip">Median — Wert in der Mitte der sortierten Liste</span></th>
       <th class="kz" data-kz="mod" onclick="oeffneKzDetail('mod')">\(\hat{x}\)<span class="kz-tip">Modus — häufigster Wert</span></th>
-      <th class="kz" data-kz="s" onclick="oeffneKzDetail('s')"><em>s</em><span class="kz-tip">Standardabweichung — mittlere Abweichung vom Mittelwert</span></th>
+      <th class="kz" data-kz="s" onclick="oeffneKzDetail('s')"><em>s</em><span class="kz-tip">Standardabweichung — typische Streuung um den Mittelwert (quadratisches Mittel der Abweichungen)</span></th>
       <th class="kz" data-kz="q1" onclick="oeffneKzDetail('q1')">\(Q_1\)<span class="kz-tip">unteres Quartil — 25 % der Werte sind \(\le Q_1\)</span></th>
       <th class="kz" data-kz="q3" onclick="oeffneKzDetail('q3')">\(Q_3\)<span class="kz-tip">oberes Quartil — 75 % der Werte sind \(\le Q_3\)</span></th>
       <th class="kz" data-kz="qd" onclick="oeffneKzDetail('qd')">QD<span class="kz-tip">Quartilsdifferenz \(Q_3 - Q_1\)</span></th>
@@ -616,7 +616,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
   </div>
   <div class="dia-wrap">
     <div class="dw-titel">Grösse — Boxplot</div>
-    <div class="dw-sub">5-Zahlen-Zusammenfassung: min, Q₁, Median, Q₃, max. Die Box umfasst die mittleren 50%.</div>
+    <div class="dw-sub">5-Zahlen-Zusammenfassung: min, Q₁, Median, Q₃, max. Die Box umfasst die mittleren 50%. Die Whisker reichen hier bis zum kleinsten und grössten Wert — ein Ausreisser verlängert also den Whisker, statt (wie bei der Tukey-Konvention mit 1.5·QD) als einzelner Punkt zu erscheinen.</div>
     <svg id="svg-gr-box" viewBox="0 0 460 160" preserveAspectRatio="xMidYMid meet"></svg>
     <div class="diag-aussage" id="diag-gr-box-aussage"><div class="da-tit">📊 Aussage zur Klasse</div><div class="da-text">…</div></div>
     <div class="diag-charakter" id="diag-gr-box-charakter"><div class="dc-tit">🔍 Diagramm-Charakter</div><div class="dc-text">…</div></div>
@@ -695,7 +695,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
     <button class="preset-btn" onclick="neueStichprobe()">⟲ neu ziehen</button>
   </div>
   <div class="stich-werte" id="stich-werte"></div>
-  <div class="sw-hint">Beobachte den Mittelwert der Grösse in der Stichprobe (oben) und vergleiche mit dem wahren Klassen-Mittelwert. Bei kleinem n schwanken die Schätzungen stark.</div>
+  <div class="sw-hint">Beobachte im Feld oben den Grösse-Mittelwert der Stichprobe und seine Abweichung vom wahren Klassen-Mittelwert. Bei kleinem n schwanken die Schätzungen stark.</div>
 </div>
 
 
@@ -778,8 +778,8 @@ const PRESETS = {
 
 const SCOPE_TEXTE = {
   klasse: '<strong>Bezugsrahmen Klasse:</strong> Die Klasse selbst ist die <em>Grundgesamtheit</em>. Wir haben <em>alle 26</em> Personen befragt — das ist eine <strong>Gesamterhebung</strong> (Volldatenerhebung). Es gibt keinen Stichprobenfehler.',
-  schule: '<strong>Bezugsrahmen Schule:</strong> Wenn uns „alle BM2-Lernenden der Schule" interessieren, ist <em>diese</em> sind die Grundgesamtheit (typisch 150–300 Personen). Die 26 Befragten sind eine <strong>Stichprobe</strong> mit <em>n = 26</em>. Wenn die Klasse zufällig zusammengewürfelt wäre, hätten wir eine repräsentative Stichprobe — in Wirklichkeit ist sie ein Klumpen (eine Klasse), und ggf. nicht repräsentativ.',
-  schweiz: '<strong>Bezugsrahmen Schweiz:</strong> Die Grundgesamtheit umfasst rund 8000 BM2-Lernende in der Schweiz. Unsere 26 sind eine <em>sehr kleine</em> Stichprobe (~0.3 %), und zudem ein <em>Klumpen</em> aus <em>einer</em> Klasse — Berufsfeld, Region und Kohorte sind verzerrt. Eine seriöse Aussage über alle Schweizer BM2-Lernenden lässt sich daraus nicht ableiten.'
+  schule: '<strong>Bezugsrahmen Schule:</strong> Wenn uns „alle BM2-Lernenden der Schule" interessieren, sind <em>diese</em> die Grundgesamtheit (typisch 150–300 Personen). Die 26 Befragten sind eine <strong>Stichprobe</strong> mit <em>n = 26</em>. Wenn die Klasse zufällig zusammengewürfelt wäre, hätten wir eine repräsentative Stichprobe — in Wirklichkeit ist sie ein Klumpen (eine Klasse), und ggf. nicht repräsentativ.',
+  schweiz: '<strong>Bezugsrahmen Schweiz:</strong> Die Grundgesamtheit umfasst alle BM2-Lernenden der Schweiz — mehrere Tausend. Unsere 26 sind eine <em>sehr kleine</em> Stichprobe (deutlich unter 1 %), und zudem ein <em>Klumpen</em> aus <em>einer</em> Klasse — Berufsfeld, Region und Kohorte sind verzerrt. Eine seriöse Aussage über alle Schweizer BM2-Lernenden lässt sich daraus nicht ableiten.'
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -821,7 +821,7 @@ const KZ_DETAILS = {
          formel: '\\[ \\hat{x} = \\arg\\max_{x} \\; h(x) \\]',
          bsp: 'Häufigkeiten zählen, Wert mit höchster Häufigkeit wählen. Es kann mehrere Modi geben (bimodal, multimodal).' },
   s:   { titel: 's — Standardabweichung',
-         erkl: 'Die mittlere Abweichung der Werte vom Mittelwert. Quadrieren sorgt dafür, dass positive und negative Abweichungen sich nicht aufheben.',
+         erkl: 'Die typische Streuung der Werte um den Mittelwert — genauer die Wurzel aus dem Mittel der quadrierten Abweichungen. Das Quadrieren sorgt dafür, dass positive und negative Abweichungen sich nicht aufheben.',
          formel: '\\[ s = \\sqrt{\\frac{1}{n-1}\\sum_{i=1}^{n}(x_i - \\bar{x})^2} \\]',
          bsp: 'Division durch (n−1) statt n bei einer Stichprobe (Excel: <code>STABW.S</code>).' },
   q1:  { titel: 'Q₁ — unteres Quartil',
