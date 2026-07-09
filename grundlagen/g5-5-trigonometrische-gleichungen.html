@@ -67,6 +67,21 @@ MathJax = {
 /* Hero-SVG */
 .hero-svg { display:flex; justify-content:center; margin:14px 0; }
 .hero-svg svg { width:100%; max-width:520px; height:auto; }
+
+/* Lösungs-Trainer */
+.lt-kopf { display:flex; justify-content:space-between; align-items:baseline; font-family:var(--mono); font-size:0.74rem; color:var(--tinte-2); }
+.lt-kopf .lt-score { color:var(--blau); font-weight:700; }
+.lt-frage { font-family:var(--mono); font-size:0.95rem; color:var(--tinte); background:var(--papier-2); border:1px solid var(--linie); border-radius:7px; padding:10px 13px; margin:10px 0; }
+.lt-eingabe { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.lt-eingabe label { font-family:var(--mono); font-size:0.9rem; color:var(--tinte-2); }
+.lt-eingabe input { width:110px; padding:7px 10px; border:1.5px solid var(--linie); border-radius:7px; font-family:var(--mono); font-size:0.9rem; }
+.lt-eingabe input:focus { outline:none; border-color:var(--blau); }
+.lt-eingabe .lt-einheit { font-family:var(--mono); color:var(--tinte-2); margin-left:-4px; }
+.lt-eingabe .tab-btn:disabled { opacity:0.4; cursor:not-allowed; }
+.lt-reset { background:none; border:none; color:var(--tinte-2); text-decoration:underline; cursor:pointer; font-size:0.8rem; font-family:var(--mono); }
+.lt-fb { display:none; margin-top:10px; padding:9px 13px; border-radius:7px; font-size:0.85rem; }
+.lt-fb.ok  { display:block; background:var(--gruen-hell); color:var(--gruen); border:1px solid var(--gruen); }
+.lt-fb.err { display:block; background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot); }
 </style>
 </head>
 <body>
@@ -359,6 +374,69 @@ MathJax = {
       <div class="ll-label">Lösungen im Bereich 0° ≤ φ &lt; 720°</div>
       <div class="ll-val" id="kr-lsg">30°, 150°, 390°, 510°</div>
     </div>
+  </div>
+</div>
+
+<h3 id="kopplung">Kreis und Kurve nebeneinander — wo die zweite Lösung sitzt</h3>
+
+<p>Der Taschenrechner liefert immer nur <em>einen</em> Winkel. Warum es im Intervall \([0°;\ 360°[\) fast immer <strong>zwei</strong> sind, zeigt sich am besten, wenn man Kreis und Kurve gleichzeitig ansieht: Dieselbe Höhe \(c\) trifft den Kreis an zwei Stellen — und die Kurve genau darum ebenfalls zweimal.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Gekoppelt: Einheitskreis ↔ Kurve</h3>
+    <p>Verschiebe \(c\) und beobachte beide Lösungspunkte gleichzeitig links im Kreis und rechts auf der Kurve.</p>
+  </div>
+  <div class="widget-body">
+    <div class="widget-titelzeile" style="margin-bottom:8px">
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe \(c\) langsam gegen \(1\) (bzw. \(-1\)). Die beiden Lösungspunkte wandern aufeinander zu — wo genau fallen sie zusammen, und was passiert danach?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schiebe c langsam gegen eins oder minus eins. Die beiden Lösungspunkte wandern aufeinander zu — wo genau fallen sie zusammen, und was passiert danach?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Rechner gibt nur den <strong>Hauptwert</strong> zurück — bei \(\arcsin\) einen Winkel zwischen \(-90°\) und \(90°\). Die zweite Lösung liest man am Kreis ab: Bei \(\sin\) liegt sie spiegelbildlich zur senkrechten Achse (\(180° - \varphi_1\)), bei \(\cos\) spiegelbildlich zur waagrechten (\(360° - \varphi_1\)). Nur in den Scheitelpunkten \(c = \pm 1\) fallen beide zu einer einzigen Lösung zusammen.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Rechner gibt nur den Hauptwert zurück — bei arcsin einen Winkel zwischen minus neunzig und neunzig Grad. Die zweite Lösung liest man am Kreis ab: Bei Sinus liegt sie spiegelbildlich zur senkrechten Achse, also hundertachtzig Grad minus phi eins, bei Cosinus spiegelbildlich zur waagrechten, also dreihundertsechzig Grad minus phi eins. Nur in den Scheitelpunkten, wenn c gleich plus oder minus eins ist, fallen beide zu einer einzigen Lösung zusammen.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <div class="tabs-row" id="kk-tabs">
+      <button class="tab-btn aktiv" type="button" data-kk="sin">sin(φ) = c</button>
+      <button class="tab-btn" type="button" data-kk="cos">cos(φ) = c</button>
+    </div>
+    <div class="sl-row">
+      <label for="kk-c">Wert c:</label>
+      <input id="kk-c" type="range" min="-1.2" max="1.2" value="0.5" step="0.05">
+      <span class="sl-val" id="kk-cv">0.50</span>
+    </div>
+    <canvas id="cv-kk" width="640" height="300" style="width:100%;max-width:640px;height:auto;display:block;margin:0 auto"></canvas>
+    <div class="lsg-live">
+      <div class="ll-label" id="kk-lbl">Lösungen im Bereich 0° ≤ φ &lt; 360°</div>
+      <div class="ll-val" id="kk-val">φ₁ = 30°  ·  φ₂ = 150°  (= 180° − φ₁)</div>
+    </div>
+  </div>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <h3>Lösungs-Trainer — die zweite Lösung</h3>
+    <p>Der Taschenrechner hat schon geantwortet. Ergänze die fehlende Lösung im Bereich \(0° \leq \varphi &lt; 360°\) (auf \(0.1°\) genau).</p>
+  </div>
+  <div class="widget-body">
+    <div class="lt-kopf"><span id="lt-nr">Aufgabe 1 von 6</span><span class="lt-score" id="lt-score">0 richtig</span></div>
+    <div class="lt-frage" id="lt-frage">Gleichung: sin φ = 0.5 · Rechner: φ₁ = 30°</div>
+    <div class="lt-eingabe">
+      <label for="lt-in">φ₂ =</label>
+      <input id="lt-in" type="text" inputmode="decimal" placeholder="z.B. 150" autocomplete="off">
+      <span class="lt-einheit">°</span>
+      <button class="tab-btn" type="button" id="lt-pruef">Prüfen</button>
+      <button class="tab-btn" type="button" id="lt-next" disabled>▶ Nächste</button>
+      <button class="lt-reset" type="button" id="lt-reset">⟲ neu starten</button>
+    </div>
+    <div class="lt-fb" id="lt-fb"></div>
   </div>
 </div>
 
@@ -1197,6 +1275,221 @@ document.addEventListener('DOMContentLoaded', () => {
     drawRad();
   }
 });
+
+/* ══════════════════════════════════════════════════════════════
+ *  KREIS-KURVE-KOPPLUNG
+ *  Beide Lösungen von sin φ = c bzw. cos φ = c gleichzeitig am
+ *  Einheitskreis und auf der Kurve. sin: φ₂ = 180° − φ₁ (Spiegelung
+ *  an der senkrechten Achse). cos: φ₂ = 360° − φ₁ (waagrechte Achse).
+ * ══════════════════════════════════════════════════════════════ */
+let kkTyp = 'sin';
+/* Logische Zeichenfläche 640×300, proportional auf die CSS-Breite skaliert. */
+function initKK() {
+  const cv = document.getElementById('cv-kk');
+  const LW = 640, LH = 300, dpr = window.devicePixelRatio || 1;
+  const cssW = cv.getBoundingClientRect().width || LW, cssH = cssW * LH / LW;
+  cv.style.height = cssH + 'px';
+  cv.width = Math.max(1, Math.round(cssW * dpr));
+  cv.height = Math.max(1, Math.round(cssH * dpr));
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(cv.width / LW, cv.height / LH);
+  ctx.clearRect(0, 0, LW, LH);
+  return { ctx, W: LW, H: LH };
+}
+function kkLoesungen(typ, c) {
+  if (Math.abs(c) > 1) return [];
+  if (typ === 'sin') {
+    const a = Math.asin(c) * 180 / Math.PI;
+    const p1 = (a % 360 + 360) % 360, p2 = ((180 - a) % 360 + 360) % 360;
+    return Math.abs(p1 - p2) < 0.05 ? [p1] : [p1, p2].sort((u, v) => u - v);
+  }
+  const a = Math.acos(c) * 180 / Math.PI;
+  const p1 = a, p2 = (360 - a) % 360;
+  return Math.abs(p1 - p2) < 0.05 ? [p1] : [p1, p2];
+}
+function drawKK() {
+  const c = parseFloat(document.getElementById('kk-c').value);
+  document.getElementById('kk-cv').textContent = c.toFixed(2);
+  const sol = kkLoesungen(kkTyp, c);
+  const { ctx, W, H } = initKK();
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+  const cx = 120, cy = 156, R = 95;                    // Kreis
+  const x0 = 268, x1 = 620, my = 156, amp = 95;        // Kurve
+  const xOf = phi => x0 + phi / 360 * (x1 - x0);
+  const yOf = v => my - v * amp;
+  const kp = phi => [cx + Math.cos(phi * Math.PI / 180) * R, cy - Math.sin(phi * Math.PI / 180) * R];
+  const dash = (p, q, col, lw) => {
+    ctx.strokeStyle = col; ctx.lineWidth = lw || 1.5; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); ctx.setLineDash([]);
+  };
+  const dot = (p, col, r) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p[0], p[1], r || 5.5, 0, Math.PI * 2); ctx.fill(); };
+
+  // ── Kreis-Panel
+  ctx.strokeStyle = '#c8d0da'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(cx - R - 18, cy); ctx.lineTo(cx + R + 18, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy - R - 18); ctx.lineTo(cx, cy + R + 18); ctx.stroke();
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+
+  // ── Kurven-Panel: Achsen + Ticks
+  ctx.strokeStyle = '#c8d0da'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(x0, my); ctx.lineTo(x1 + 12, my); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x0, my - amp - 16); ctx.lineTo(x0, my + amp + 16); ctx.stroke();
+  ctx.font = '10px JetBrains Mono, monospace'; ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+  for (let g = 0; g <= 360; g += 90) {
+    ctx.strokeStyle = '#c8d0da';
+    ctx.beginPath(); ctx.moveTo(xOf(g), my - 4); ctx.lineTo(xOf(g), my + 4); ctx.stroke();
+    ctx.fillText(g + '°', xOf(g), my + 17);
+  }
+  ctx.textAlign = 'right';
+  ctx.fillText('1', x0 - 6, my - amp + 4); ctx.fillText('−1', x0 - 6, my + amp + 4);
+  // Kurve
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let g = 0; g <= 360; g += 2) {
+    const v = kkTyp === 'sin' ? Math.sin(g * Math.PI / 180) : Math.cos(g * Math.PI / 180);
+    const X = xOf(g), Y = yOf(v);
+    g ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'italic 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('y = ' + kkTyp + ' φ', x0 + 6, my - amp - 6);
+
+  // ── Niveaulinie y = c (rot) in beiden Panels
+  const rot = '#c8412c';
+  if (kkTyp === 'sin') dash([cx - R - 14, cy - c * R], [cx + R + 14, cy - c * R], rot, 1.8);
+  else                 dash([cx + c * R, cy - R - 14], [cx + c * R, cy + R + 14], rot, 1.8);
+  dash([x0, yOf(c)], [x1 + 8, yOf(c)], rot, 1.8);
+  // c-Label in die Statuszeile: an der Niveaulinie kollidiert es je nach c mit φ₁ oder φ₂.
+  ctx.fillStyle = rot; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+  ctx.fillText('c = ' + c.toFixed(2).replace('-', '−'), W - 14, 20);
+
+  // ── Lösungspunkte
+  const gruen = '#1f6b3a';
+  sol.forEach((phi, i) => {
+    const P = kp(phi), Q = [xOf(phi), yOf(c)];
+    ctx.strokeStyle = gruen; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(P[0], P[1]); ctx.stroke();
+    if (kkTyp === 'sin') dash(P, [x0, P[1]], '#a7c4b0', 1.2);   // gleiche Höhe → Brücke zur Kurve
+    dash(Q, [Q[0], my], '#a7c4b0', 1.2);
+    dot(P, gruen); dot(Q, gruen);
+    ctx.fillStyle = gruen; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    const lbl = sol.length === 1 ? 'φ' : 'φ' + (i === 0 ? '₁' : '₂');
+    ctx.fillText(lbl, P[0] + (P[0] >= cx ? 14 : -14), P[1] - 9);
+    // bei negativem c liegt der Kurvenpunkt unter der φ-Achse — Label dann darunter,
+    // sonst überdeckt es die Grad-Beschriftung.
+    ctx.fillText(lbl, Q[0], c < 0 ? Q[1] + 17 : Q[1] - 10);
+  });
+
+  // ── Status + Live-Text
+  const lbl = document.getElementById('kk-lbl'), val = document.getElementById('kk-val');
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  if (sol.length === 0) {
+    ctx.fillStyle = rot; ctx.fillText('keine Lösung: |c| > 1', 14, 20);
+    lbl.textContent = 'Keine Lösung';
+    val.textContent = `|c| = ${Math.abs(c).toFixed(2)} > 1 — die Gerade verfehlt den Kreis. 𝕃 = { }`;
+  } else if (sol.length === 1) {
+    ctx.fillStyle = gruen; ctx.fillText('genau eine Lösung (Scheitelpunkt)', 14, 20);
+    lbl.textContent = 'Genau eine Lösung im Bereich 0° ≤ φ < 360°';
+    val.textContent = `φ = ${sol[0].toFixed(1)}° — die beiden Lösungen sind zusammengefallen.`;
+  } else {
+    ctx.fillStyle = gruen; ctx.fillText('zwei Lösungen pro Umlauf', 14, 20);
+    lbl.textContent = 'Lösungen im Bereich 0° ≤ φ < 360°';
+    const achse = kkTyp === 'sin' ? 'senkrechten' : 'waagrechten';
+    val.textContent = `φ₁ = ${sol[0].toFixed(1)}°  ·  φ₂ = ${sol[1].toFixed(1)}°  — spiegelbildlich zur ${achse} Achse`;
+  }
+}
+document.getElementById('kk-c').addEventListener('input', drawKK);
+document.querySelectorAll('#kk-tabs .tab-btn').forEach(t => t.addEventListener('click', () => {
+  kkTyp = t.dataset.kk;
+  document.querySelectorAll('#kk-tabs .tab-btn').forEach(o => o.classList.toggle('aktiv', o === t));
+  drawKK();
+}));
+
+/* ══════════════════════════════════════════════════════════════
+ *  LÖSUNGS-TRAINER — die zweite Lösung im Intervall [0°; 360°[
+ * ══════════════════════════════════════════════════════════════ */
+(function () {
+  const AUF = [
+    { typ: 'sin', c: 0.5,   tr: 30,     p1: 30,     p2: 150 },
+    { typ: 'cos', c: 0.5,   tr: 60,     p1: 60,     p2: 300 },
+    { typ: 'sin', c: -0.4,  tr: -23.58, p1: 336.42, p2: 203.58 },
+    { typ: 'cos', c: -0.8,  tr: 143.13, p1: 143.13, p2: 216.87 },
+    { typ: 'sin', c: 0.9,   tr: 64.16,  p1: 64.16,  p2: 115.84 },
+    { typ: 'cos', c: 0.25,  tr: 75.52,  p1: 75.52,  p2: 284.48 },
+  ];
+  const el = id => document.getElementById(id);
+  const nz = v => v.toFixed(2).replace('-', '−');      // Unicode-Minus für die Anzeige
+  let reihe = [], i = 0, punkte = 0;
+
+  function mische() {
+    reihe = AUF.slice();
+    for (let k = reihe.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [reihe[k], reihe[j]] = [reihe[j], reihe[k]];
+    }
+  }
+  function zeige() {
+    const a = reihe[i];
+    el('lt-nr').textContent = `Aufgabe ${i + 1} von ${reihe.length}`;
+    el('lt-score').textContent = `${punkte} richtig`;
+    const hinweis = a.tr < 0
+      ? ` (negativ — zuerst +360° rechnen: φ₁ = ${a.p1.toFixed(2)}°)`
+      : '';
+    el('lt-frage').textContent =
+      `Gleichung: ${a.typ} φ = ${nz(a.c)} · Rechner: ${a.typ === 'sin' ? 'arcsin' : 'arccos'}(${nz(a.c)}) = ${nz(a.tr)}°${hinweis}`;
+    el('lt-in').value = ''; el('lt-in').disabled = false;
+    el('lt-fb').className = 'lt-fb'; el('lt-fb').textContent = '';
+    el('lt-pruef').disabled = false;
+    el('lt-next').disabled = true;
+    el('lt-next').textContent = i === reihe.length - 1 ? '▶ Auswertung' : '▶ Nächste';
+  }
+  function pruefe() {
+    const a = reihe[i], fb = el('lt-fb');
+    const roh = el('lt-in').value.trim().replace(',', '.').replace('−', '-').replace('°', '');
+    const v = parseFloat(roh);
+    const regel = a.typ === 'sin'
+      ? `180° − (${nz(a.tr)}°)`
+      : `360° − ${nz(a.tr)}°`;
+    if (isNaN(v)) { fb.className = 'lt-fb err'; fb.textContent = '✗ Bitte eine Zahl eingeben.'; return; }
+    el('lt-in').disabled = true; el('lt-pruef').disabled = true; el('lt-next').disabled = false;
+    if (Math.abs(v - a.p2) <= 0.5) {
+      punkte++;
+      fb.className = 'lt-fb ok';
+      fb.textContent = `✓ Richtig: φ₂ = ${a.p2.toFixed(2)}° = ${regel}.`;
+    } else if (Math.abs(v - a.p1) <= 0.5) {
+      fb.className = 'lt-fb err';
+      fb.textContent = `✗ Das ist φ₁ — die Lösung, die der Rechner schon geliefert hat. Gesucht war die zweite: φ₂ = ${regel} = ${a.p2.toFixed(2)}°.`;
+    } else {
+      fb.className = 'lt-fb err';
+      fb.textContent = `✗ Nicht korrekt. Bei ${a.typ} spiegelt man an der ${a.typ === 'sin' ? 'senkrechten' : 'waagrechten'} Achse: φ₂ = ${regel} = ${a.p2.toFixed(2)}°.`;
+    }
+    el('lt-score').textContent = `${punkte} richtig`;
+  }
+  function weiter() {
+    if (i < reihe.length - 1) { i++; zeige(); return; }
+    el('lt-nr').textContent = 'Durchgang beendet';
+    el('lt-frage').textContent = `${punkte} von ${reihe.length} richtig`;
+    const fb = el('lt-fb');
+    fb.className = punkte >= reihe.length - 1 ? 'lt-fb ok' : 'lt-fb err';
+    fb.textContent = punkte >= reihe.length - 1
+      ? 'Sitzt — du denkst die zweite Lösung mit, auch wenn der Rechner schweigt.'
+      : 'Merke: sin spiegelt an der senkrechten Achse (180° − φ₁), cos an der waagrechten (360° − φ₁).';
+    el('lt-in').disabled = true; el('lt-pruef').disabled = true; el('lt-next').disabled = true;
+  }
+  function neustart() { mische(); i = 0; punkte = 0; zeige(); }
+
+  el('lt-pruef').addEventListener('click', pruefe);
+  el('lt-in').addEventListener('keydown', e => { if (e.key === 'Enter' && !el('lt-pruef').disabled) pruefe(); });
+  el('lt-next').addEventListener('click', weiter);
+  el('lt-reset').addEventListener('click', neustart);
+  neustart();
+})();
+
+document.addEventListener('DOMContentLoaded', drawKK);
+window.addEventListener('resize', drawKK);
 </script>
 </body>
 </html>
