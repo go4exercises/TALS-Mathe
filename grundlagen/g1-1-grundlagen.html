@@ -579,6 +579,61 @@ MathJax = {
   <div class="wuerfel-bsp" id="wb-d-bsp"><!-- wird per JS gefüllt --></div>
 </div>
 
+<div class="anim">
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Anim · Flächenmodell — warum das Distributivgesetz stimmt</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Das grosse Rechteck ändert seinen Flächeninhalt nicht, wenn du es zerschneidest. Zähle nach: Wie viele Teilrechtecke entstehen bei <em>einer</em> Klammer — und wie viele bei <em>zwei</em>?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Das grosse Rechteck ändert seinen Flächeninhalt nicht, wenn du es zerschneidest. Zähle nach: Wie viele Teilrechtecke entstehen bei einer Klammer — und wie viele bei zwei?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Das Distributivgesetz ist die Flächenformel für ein zerschnittenes Rechteck: \(a \cdot (b + c)\) ist derselbe Inhalt wie \(a \cdot b + a \cdot c\). Bei <strong>zwei</strong> Klammern entstehen \(2 \cdot 2 = 4\) Teilflächen — jeder Summand der einen Klammer trifft jeden der anderen. Genau daraus werden später die binomischen Formeln.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Das Distributivgesetz ist die Flächenformel für ein zerschnittenes Rechteck: a mal Klammer b plus c ist derselbe Inhalt wie a mal b plus a mal c. Bei zwei Klammern entstehen vier Teilflächen — jeder Summand der einen Klammer trifft jeden der anderen. Genau daraus werden später die binomischen Formeln.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
+  <div class="anim-layout">
+    <canvas id="cv-distrib" width="560" height="340"></canvas>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Anzahl Klammern</div>
+        <div class="chips" id="dm-chips">
+          <button class="chip aktiv" type="button" data-dm="1">\(a \cdot (b + c)\)</button>
+          <button class="chip" type="button" data-dm="2">\((a + b)(c + d)\)</button>
+        </div>
+      </div>
+      <div class="regler">
+        <div class="regler-label"><span>\(a\)</span><span class="wert" id="lbl-dmA">3</span></div>
+        <input type="range" id="sld-dmA" min="1" max="5" step="1" value="3">
+      </div>
+      <div class="regler">
+        <div class="regler-label"><span>\(b\)</span><span class="wert" id="lbl-dmB">4</span></div>
+        <input type="range" id="sld-dmB" min="1" max="5" step="1" value="4">
+      </div>
+      <div class="regler">
+        <div class="regler-label"><span>\(c\)</span><span class="wert" id="lbl-dmC">2</span></div>
+        <input type="range" id="sld-dmC" min="1" max="5" step="1" value="2">
+      </div>
+      <div class="regler" id="dm-reglerD" style="display:none">
+        <div class="regler-label"><span>\(d\)</span><span class="wert" id="lbl-dmD">3</span></div>
+        <input type="range" id="sld-dmD" min="1" max="5" step="1" value="3">
+      </div>
+      <div class="formel" id="dm-formel">3 · (4 + 2) = 3·4 + 3·2 = 18</div>
+      <div class="legende">
+        <div class="legende-titel">Flächen-Bilanz</div>
+        <div class="legende-zeile"><span class="lab">grosses Rechteck</span><span class="val" id="leg-dmGanz">18</span></div>
+        <div class="legende-zeile"><span class="lab">Summe der Teile</span><span class="val" id="leg-dmTeile">18</span></div>
+      </div>
+      <div class="erklaerung" id="dm-erkl">Ein Rechteck, zwei Schnitte — der Inhalt bleibt gleich. Das ist das Distributivgesetz.</div>
+    </div>
+  </div>
+</div>
+
 <div class="block block-fehler">
   <div class="block-titel">⚠ Wichtig — Kommutativ und Assoziativ nur für Addition und Multiplikation</div>
   <p>Diese beiden Gesetze gelten <em>nur</em> für Addition und Multiplikation, <em>nicht</em> für Subtraktion und Division. Die Subtraktion ist nicht kommutativ (\(5 - 2 = 3\), aber \(2 - 5 = -3\)) und nicht assoziativ.</p>
@@ -1400,10 +1455,103 @@ function drawHauptop() {
   erklEl.innerHTML = erkl;
   mjTypeset([erklEl]);
 }
+/* ══════════════════════════════════════════════════════════════
+ *  FLÄCHENMODELL zum Distributivgesetz
+ *  Modus 1: a·(b+c)      → 2 Teilflächen  (a·b und a·c)
+ *  Modus 2: (a+b)·(c+d)  → 4 Teilflächen  (jeder Summand trifft jeden)
+ *  Die Skala ist fest (12 Einheiten), damit das Rechteck beim Slidern
+ *  wächst statt zu springen.
+ * ══════════════════════════════════════════════════════════════ */
+let dmModus = 1;
+const DM_FARBEN = { ac: '#1a4f8a', ad: '#b85c00', bc: '#1f6b3a', bd: '#6b21a8' };
+function drawDistrib() {
+  const a = +document.getElementById('sld-dmA').value;
+  const b = +document.getElementById('sld-dmB').value;
+  const c = +document.getElementById('sld-dmC').value;
+  const d = +document.getElementById('sld-dmD').value;
+  ['A','B','C'].forEach(k => document.getElementById('lbl-dm' + k).textContent =
+    document.getElementById('sld-dm' + k).value);
+  document.getElementById('lbl-dmD').textContent = d;
+  document.getElementById('dm-reglerD').style.display = dmModus === 2 ? '' : 'none';
+
+  const { ctx, W, H } = initCanvas('cv-distrib', 340);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  // Feste Skala je Modus (Maximum aller Slider = 5), damit das Rechteck beim
+  // Slidern wächst, statt sich auf die Zeichenfläche zurückzuskalieren.
+  const MAXW = 10, MAXH = dmModus === 1 ? 5 : 10;
+  const px = Math.min((W - 140) / MAXW, (H - 80) / MAXH);
+  const bwU = dmModus === 1 ? b + c : c + d;         // Breite in Einheiten
+  const ox = Math.max(58, (W - bwU * px) / 2), oy = H - 44;
+  const rect = (ux, uy, uw, uh, col, lab) => {
+    const x = ox + ux * px, y = oy - (uy + uh) * px, w = uw * px, h = uh * px;
+    ctx.fillStyle = col + '2b'; ctx.fillRect(x, y, w, h);
+    ctx.strokeStyle = col; ctx.lineWidth = 1.6; ctx.strokeRect(x, y, w, h);
+    if (w > 30 && h > 20) {
+      ctx.fillStyle = col; ctx.font = 'bold 12px JetBrains Mono, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(lab, x + w / 2, y + h / 2);
+      ctx.textBaseline = 'alphabetic';
+    }
+  };
+  const kante = (text, x, y, col, align) => {
+    ctx.fillStyle = col; ctx.font = 'bold 12px JetBrains Mono, monospace';
+    ctx.textAlign = align || 'center'; ctx.fillText(text, x, y);
+  };
+
+  let ganz, teile, formel, erkl;
+  if (dmModus === 1) {
+    rect(0, 0, b, a, DM_FARBEN.ac, `${a}·${b}`);
+    rect(b, 0, c, a, DM_FARBEN.ad, `${a}·${c}`);
+    // Kantenbeschriftung
+    kante('b = ' + b, ox + b / 2 * px, oy + 18, DM_FARBEN.ac);
+    kante('c = ' + c, ox + (b + c / 2) * px, oy + 18, DM_FARBEN.ad);
+    kante('a = ' + a, ox - 10, oy - a / 2 * px + 4, '#374151', 'right');
+    ganz = a * (b + c); teile = a * b + a * c;
+    formel = `<span class="tx-blau">${a}</span> · (${b} + ${c}) = ` +
+             `<span class="tx-blau">${a}·${b}</span> + <span class="tx-orange">${a}·${c}</span> = ${a*b} + ${a*c} = ${ganz}`;
+    erkl = 'Ein Schnitt teilt das Rechteck in <strong>zwei</strong> Streifen gleicher Höhe \\(a\\). Die Gesamtfläche \\(a \\cdot (b+c)\\) ist die Summe der Teilflächen — das ist das Distributivgesetz.';
+  } else {
+    rect(0, 0, c, a, DM_FARBEN.ac, `${a}·${c}`);
+    rect(c, 0, d, a, DM_FARBEN.ad, `${a}·${d}`);
+    rect(0, a, c, b, DM_FARBEN.bc, `${b}·${c}`);
+    rect(c, a, d, b, DM_FARBEN.bd, `${b}·${d}`);
+    kante('c = ' + c, ox + c / 2 * px, oy + 18, DM_FARBEN.ac);
+    kante('d = ' + d, ox + (c + d / 2) * px, oy + 18, DM_FARBEN.ad);
+    kante('a = ' + a, ox - 10, oy - a / 2 * px + 4, DM_FARBEN.ac, 'right');
+    kante('b = ' + b, ox - 10, oy - (a + b / 2) * px + 4, DM_FARBEN.bc, 'right');
+    ganz = (a + b) * (c + d); teile = a*c + a*d + b*c + b*d;
+    formel = `(${a} + ${b})(${c} + ${d}) = ` +
+             `<span class="tx-blau">${a}·${c}</span> + <span class="tx-orange">${a}·${d}</span> + ` +
+             `<span class="tx-gruen">${b}·${c}</span> + <span style="color:var(--lila)">${b}·${d}</span> = ${ganz}`;
+    erkl = 'Zwei Schnitte, <strong>vier</strong> Teilflächen: Jeder Summand der ersten Klammer trifft jeden der zweiten. Für \\(a = c\\) und \\(b = d\\) liest man die erste binomische Formel direkt ab.';
+  }
+  // Aussenmass des ganzen Rechtecks
+  const bw = bwU, bh = dmModus === 1 ? a : a + b;
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+  ctx.strokeRect(ox, oy - bh * px, bw * px, bh * px);
+  ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText(`Fläche = ${bh} · ${bw} = ${ganz}`, ox, oy - bh * px - 10);
+
+  document.getElementById('leg-dmGanz').textContent = ganz;
+  document.getElementById('leg-dmTeile').textContent = teile;
+  const fEl = document.getElementById('dm-formel'), eEl = document.getElementById('dm-erkl');
+  fEl.innerHTML = formel; eEl.innerHTML = erkl;
+  mjTypeset([eEl]);
+}
 document.addEventListener('DOMContentLoaded', () => {
   const sld = document.getElementById('sld-hauptopX');
   if (sld) sld.addEventListener('input', drawHauptop);
+
+  ['A','B','C','D'].forEach(k =>
+    document.getElementById('sld-dm' + k).addEventListener('input', drawDistrib));
+  document.querySelectorAll('#dm-chips .chip').forEach(ch => ch.addEventListener('click', () => {
+    dmModus = +ch.dataset.dm;
+    document.querySelectorAll('#dm-chips .chip').forEach(o => o.classList.toggle('aktiv', o === ch));
+    drawDistrib();
+  }));
+  drawDistrib();
 });
+window.addEventListener('resize', () => { if (document.getElementById('cv-distrib')) drawDistrib(); });
 </script>
 </body>
 </html>

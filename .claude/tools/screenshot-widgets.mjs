@@ -38,6 +38,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s4-1-grundlagen.html', id: 'cv-raumwinkel', note: 'Raumwinkel-Wuerfel' },
   { page: 'schwerpunkt/s4-1-grundlagen.html', id: 'cv-a1', note: 'A1-Wuerfel Lagen' },
   { page: 'grundlagen/g5-5-trigonometrische-gleichungen.html', id: 'cv-kk', note: 'Kreis-Kurve-Kopplung' },
+  { page: 'grundlagen/g1-1-grundlagen.html', id: 'cv-distrib', note: 'Distributiv-Flaechenmodell' },
 ];
 
 const VIEWPORTS = [
