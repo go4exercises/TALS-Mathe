@@ -66,6 +66,9 @@ const WIDGETS = [
   { page: 'grundlagen/g5-2b-vierecke.html', id: 'cv-drachen', note: 'Drachen-Diagonalen' },
   { page: 'grundlagen/g5-2c-kreis-und-kreisteile.html', id: 'cv-ringroll', note: 'Kreisring aufrollen' },
   { page: 'grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html', id: 'cv-strlabor', note: 'Strahlensatz-Labor (Drag)' },
+  // T53, Runde 8.
+  { page: 'schwerpunkt/s3-1-grundlagen.html', id: 'ug-canvas', note: 'Ungleichungs-Labor' },
+  { page: 'schwerpunkt/s3-1-grundlagen.html', id: 'we-graph', note: 'Weide-Doppelcanvas' },
 ];
 
 const VIEWPORTS = [
