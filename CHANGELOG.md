@@ -4,6 +4,46 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [98] — 2026-07-10 · Paket 5 / T53 Runde 7: die vier Geometrie-Widgets aus LG 5
+
+Vier Prio-2-Visualisierungen aus §4 des Audit-Berichts, je ein Commit pro Seite. Alle Zahlen
+vorab in `python3` nachgerechnet, alle Canvases per Playwright bei 1280 px und 360 px gesichtet.
+
+**g5-1 — Zufallswinkel-Trainer + Skizzen-Gegenüberstellung.** Der Trainer zieht einen zufälligen
+Winkel aus den Vielfachen von \(15°\) (alle ergeben einen sauberen Bruch von \(\pi\)) und prüft
+beide Richtungen. Bei „Grad → Radiant" wird das **Kürzen mitgeprüft**: \(\tfrac{60\pi}{180}\) gilt
+als richtig gerechnet, aber nicht gekürzt — Kürzen ist Darstellung, nicht Rechnung. Dazu ein
+Canvas, das dieselbe Aufgabe (Leiter \(5.0\) m, Wandabstand \(3.0\) m, \(h = 4.0\) m) als
+unbeschriftete Rohskizze und als schrittweise nach dem Workflow aufgebaute Skizze nebeneinander
+stellt. Unter 560 px stehen die zwei Panels untereinander statt nebeneinander.
+
+**g5-2b — Trapez-Scherung und Drachen-Diagonalen.** Die Scherung verschiebt die obere Parallelseite:
+\(a\), \(c\) und \(h\) bleiben, also bleibt \(A = \tfrac{1}{2}(a+c)h\) — der Umfang dagegen wächst und
+ist genau in der symmetrischen Lage \(d = \tfrac{a-c}{2}\) minimal (gleichschenkliges Trapez).
+Das Drachen-Widget verschiebt den Diagonalen-Schnittpunkt: die Fläche \(\tfrac{1}{2}ef\) bleibt
+davon **unberührt** (zwei Dreiecke mit gemeinsamer Grundseite \(f\) und den Höhen \(e_1, e_2\)),
+die Seitenlängen ändern sich. Bei \(p = 0.5\) entsteht der Rhombus, bei \(p = 0.25\) genau der
+Drachen aus Aufgabe A7. Neue Anims 4 und 5; die bisherigen 4 und 5 wurden zu 6 und 7.
+
+**g5-2c — Kreisring-Morphing.** Der Ring wird unten aufgeschnitten und öffnet sich zum **Trapez**
+mit den Parallelseiten \(2\pi r\) und \(2\pi R\) und der Höhe \(b\). Die Trapezformel liefert dann
+\(A = \tfrac{1}{2}(2\pi r + 2\pi R)\,b = 2\pi r_m b = \pi(R^2 - r^2)\) — die grüne Mittellinie ist
+genau \(2\pi r_m\). Die Parametrisierung ist so gewählt, dass der äussere Rand während der
+ganzen Bewegung oberhalb des inneren bleibt (am Scheitel exakt um \(b\)); ein naiver Blend
+klemmt den Ring gegenüber dem Schnitt auf null Breite zu. Neue Anim 6; die bisherigen 6 und 7
+wurden zu 7 und 8.
+
+**g5-2d — Strahlensatz-Labor.** \(S\), \(A\) und \(B\) sind frei ziehbar, \(k\) stellt \(A'\) und \(B'\)
+ein. Die drei Streckenverhältnisse bleiben in jeder Lage \(|k|\), der Flächenfaktor ist \(k^2\).
+Für \(k < 0\) springt die Parallele in die Scheitel-Lage (X-Figur) — die Sätze gelten dort
+unverändert. Ein zweiter Regler legt das kleine Dreieck mit seinen Seitenlängen neben das grosse.
+Neue Anim 3; die bisherigen 3, 4 und 5 wurden zu 4, 5 und 6.
+
+Rendercheck-Liste in `.claude/tools/screenshot-widgets.mjs` um die vier neuen Canvases ergänzt
+(40 Widgets × 2 Viewports, alle gezeichnet).
+
+---
+
 ## [97] — 2026-07-10 · Mobile: horizontaler Overflow auf allen Seiten behoben
 
 Auf schmalen Viewports (360 px) war der Seiteninhalt breiter als das Fenster — **47 von 49
