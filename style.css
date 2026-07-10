@@ -296,7 +296,7 @@ a:hover { text-decoration: underline; }
   align-items: start;
 }
 @media (max-width: 900px) {
-  .page-wrap { grid-template-columns: 1fr; grid-template-areas: "content"; }
+  .page-wrap { grid-template-columns: minmax(0, 1fr); grid-template-areas: "content"; }
   .toc-wrap { display: none; }
 }
 
@@ -812,7 +812,7 @@ canvas { display: block; width: 100%; }
   align-items: start;
 }
 @media (max-width: 820px) {
-  .anim-layout { grid-template-columns: 1fr; }
+  .anim-layout { grid-template-columns: minmax(0, 1fr); }
 }
 .anim canvas {
   width: 100%;
@@ -1082,3 +1082,53 @@ canvas { display: block; width: 100%; }
 }
 .fs-quer:hover { text-decoration: underline; }
 @media (max-width: 640px) { .fs-name { flex-basis: 100%; } }
+
+
+/* ══════════════════════════════════════════════════════════════════════
+   Kein horizontaler Overflow auf schmalen Viewports
+   ──────────────────────────────────────────────────────────────────────
+   Ursache war nicht ein einzelnes Element, sondern die min-content-Breite
+   nicht umbrechbarer Inhalte (MathJax-Formeln, Canvas mit width-Attribut,
+   breite Tabellen). Ein Grid-Track «1fr» = minmax(auto, 1fr) übernimmt diese
+   min-content-Breite als Minimum und zieht die ganze Seite auf — deshalb
+   oben minmax(0, 1fr) und hier die Begrenzung der Inhalte selbst.
+   Breite Formeln und Tabellen scrollen ab jetzt in sich selbst, statt die
+   Seite zu sprengen.
+   ══════════════════════════════════════════════════════════════════════ */
+mjx-container { max-width: 100%; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; }
+/* Lange Inline-Formeln (z.B. Mengenschreibweisen) dürfen ebenfalls scrollen. */
+mjx-container:not([display="true"]) { overflow-x: auto; overflow-y: hidden; vertical-align: middle; }
+canvas, svg, img { max-width: 100%; }
+table { max-width: 100%; }
+
+/* MathJax legt für Screenreader eine unsichtbare MathML-Kopie ab (position:absolute).
+   Sie ist visuell geclippt, zählt aber zur Scrollbreite und schob die Seite auf.
+   Sie bleibt im DOM (und damit für Screenreader lesbar), nimmt aber keinen Platz mehr.
+   MathJax setzt selbst «width: 100% !important» und injiziert sein Stylesheet nach
+   diesem — deshalb braucht es hier die höhere Spezifität über «body». */
+body mjx-assistive-mml,
+body mjx-assistive-mml[display="block"] {
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+/* Auf schmalen Viewports scrollen breite Tabellen und mehrspaltige Info-Raster
+   in sich selbst. overflow-x != visible setzt ihre min-content-Breite auf 0 und
+   nimmt damit den Zug von der Seite. Auf dem Desktop bleibt alles unverändert. */
+@media (max-width: 900px) {
+  /* Viele Seiten geben ihren Tabellen eigene Klassen mit «overflow: hidden»
+     (für den Radius); die stünden sonst über dieser Regel und würden den Inhalt
+     abschneiden statt ihn scrollen zu lassen. Deshalb hier !important. */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+  .anw-tabelle-wrap, .daten-wrap, .dia-wrap, .iv-tabelle,
+  .pot-vis, .sb-eigen, .fak-uebung, .entscheid, .workflow-grid,
+  .qual-grid, .formen-grid, .diag-grid, .urliste-demo, .tk-demo {
+    overflow-x: auto;
+  }
+}

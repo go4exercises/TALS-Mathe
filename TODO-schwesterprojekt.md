@@ -47,3 +47,20 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 ## Erledigt / portiert
 
 - (noch leer)
+
+## Mobile-Overflow-Fix (TALS Mathe [97], 2026-07-10) — auch für Physik prüfen
+
+**Was:** Auf 360 px war `body.scrollWidth` auf fast allen Seiten grösser als der Viewport.
+**Wo:** `style.css` (Ende) + `.page-wrap`/`.anim-layout`-Media-Queries.
+**Warum:** Drei Ursachen, die in TALS Physik sehr wahrscheinlich identisch vorliegen:
+
+1. `mjx-assistive-mml` (MathJax-Screenreader-Kopie, `position:absolute`) zählt zur Scrollbreite.
+   Gegenregel braucht `body mjx-assistive-mml { width:1px !important; … }` — MathJax setzt selbst
+   `width:100% !important` und injiziert sein CSS nach `style.css`.
+2. Grid-Tracks `1fr` (= `minmax(auto,1fr)`) übernehmen die min-content-Breite des Canvas
+   (dessen `width`-Attribut die Canvas-Helfer auf Buffer-Pixel setzen) → `minmax(0,1fr)`.
+3. Tabellen/Canvas/Formeln brauchen `max-width:100%` bzw. eigenen horizontalen Scroll.
+   Achtung: seitenlokale Tabellenklassen mit `overflow:hidden` würden sonst Inhalt abschneiden.
+
+**Prüfbefehl** (Playwright, 360 px): `document.body.scrollWidth` gegen `clientWidth` je Seite;
+zusätzlich prüfen, dass keine Tabelle `scrollWidth > clientWidth` bei `overflow-x: hidden` hat.

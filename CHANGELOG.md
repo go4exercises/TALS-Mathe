@@ -4,6 +4,42 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [97] — 2026-07-10 · Mobile: horizontaler Overflow auf allen Seiten behoben
+
+Auf schmalen Viewports (360 px) war der Seiteninhalt breiter als das Fenster — **47 von 49
+Seiten** liessen sich seitlich wegschieben, auf g5-4 bis zu 814 px statt 360 px. Der Befund
+stammt aus [92]; hier ist die Ursache.
+
+**Es war nicht die eine Formel.** Drei Dinge griffen ineinander, gemessen mit `width: min-content`
+pro Element im Browser:
+
+1. **`mjx-assistive-mml`** — die unsichtbare MathML-Kopie, die MathJax für Screenreader ablegt.
+   Sie ist zwar geclippt, ist aber `position: absolute` mit voller Formelbreite und zählte zur
+   Scrollbreite. Sie bleibt im DOM (Screenreader lesen sie weiter), belegt jetzt aber \(1\)&nbsp;px.
+   MathJax setzt dafür selbst `width: 100% !important` und injiziert sein Stylesheet <em>nach</em>
+   `style.css` — die Gegenregel braucht darum die höhere Spezifität über `body`.
+2. **Grid-Tracks `1fr`** in `.page-wrap` und `.anim-layout`. Ein `1fr`-Track ist `minmax(auto, 1fr)`
+   und übernimmt die **min-content-Breite** seines Inhalts als Minimum — bei einem Canvas mit
+   `width`-Attribut (das `initCanvas`/`initCv` selbst auf Buffer-Pixel hochsetzt) waren das bis zu
+   760 px. Jetzt `minmax(0, 1fr)`.
+3. **Nicht umbrechbare Inhalte**: breite Tabellen, Canvas, lange Formeln. Sie bekommen
+   `max-width: 100%` bzw. auf schmalen Viewports einen eigenen horizontalen Scroll — der Inhalt
+   bleibt vollständig erreichbar, statt die Seite zu sprengen.
+
+Dazu zwei seitenlokale Fälle: das Tooltip `.hi-bsp` in g1-1 (`white-space: nowrap`) und die
+Button-Zeile `.sw-control` in g4-0 (`flex-wrap: nowrap`).
+
+**Sorgfalt bei den Tabellen:** Viele Seiten geben ihren Tabellen eigene Klassen mit
+`overflow: hidden` (für den Radius). Ohne Gegenmassnahme hätten sie den Inhalt auf dem Handy
+<em>abgeschnitten</em> statt ihn scrollen zu lassen — die Mobil-Regel setzt darum `!important`.
+Verifiziert: keine Tabelle und keine Formel ist abgeschnitten, alle scrollen.
+
+Geprüft über alle 49 Seiten: bei 360 px `body.scrollWidth == 360` (vorher 47 Seiten überbreit),
+bei 1280 px keine Regression (Tabellen weiterhin `display: table`, TOC sichtbar, Widget-Canvases
+unverzerrt). Pre-Flight über alle Themenseiten `ALLE CHECKS BESTANDEN`.
+
+---
+
 ## [96] — 2026-07-10 · Audit-Paket 5 / T53, Runde 6: Vertikaltest, Steigungsdreieck, Dreiecksungleichung, e-Grenzwert
 
 Zahlen vorab mit `python3` nachgerechnet, Pre-Flight `ALLE CHECKS BESTANDEN`, Browser-Rendercheck
