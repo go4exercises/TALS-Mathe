@@ -51,6 +51,8 @@ const WIDGETS = [
   { page: 'grundlagen/g2-1-grundlagen.html', id: 'cv-ungl', note: 'Ungleichungs-Zahlenstrahl' },
   { page: 'grundlagen/g2-2a-lineare-gleichungen.html', id: 'cv-vkipp', note: 'Vorzeichenkipp' },
   { page: 'schwerpunkt/s1-2-potenzen.html', id: 'cv-zehnerpot', note: 'Zehnerpotenzen-Umwandler' },
+  // T53, Runde 5.
+  { page: 'grundlagen/g3-3-quadratische-funktionen.html', id: 'cv-extrem', note: 'Extremwert-Zaun' },
 ];
 
 const VIEWPORTS = [
