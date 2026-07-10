@@ -65,6 +65,7 @@ const WIDGETS = [
   { page: 'grundlagen/g5-2b-vierecke.html', id: 'cv-scher', note: 'Trapez-Scherung' },
   { page: 'grundlagen/g5-2b-vierecke.html', id: 'cv-drachen', note: 'Drachen-Diagonalen' },
   { page: 'grundlagen/g5-2c-kreis-und-kreisteile.html', id: 'cv-ringroll', note: 'Kreisring aufrollen' },
+  { page: 'grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html', id: 'cv-strlabor', note: 'Strahlensatz-Labor (Drag)' },
 ];
 
 const VIEWPORTS = [
