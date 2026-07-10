@@ -4,6 +4,41 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [99] — 2026-07-10 · Paket 5 / T53 Runde 8: die Funktions-Seiten des Schwerpunkts (s3)
+
+Sechs Prio-2-Visualisierungen auf den vier Funktions-Seiten s3-1, s3-2a, s3-2b und s3-4b,
+ein Commit je Seite. Alle Zahlen in `python3` nachgerechnet, alle Canvases per Playwright
+bei 1280 px und 360 px gesichtet.
+
+**s3-1 — Ungleichungs-Labor und Weide-Doppelcanvas.** Das Ungleichungs-Labor schiebt die
+Parabel \(f(x)=x^2+c\) mit \(c\) gegen die Gerade \(g(x)=x+1\) und färbt die Lösungsmenge von
+\(f>g\) bzw. \(f<g\) als grüne Bänder auf der \(x\)-Achse. Die Schnittstellen zerlegen die Achse;
+bei \(c=1.25\) berühren sich die Kurven (\(L=\mathbb{R}\setminus\{0.5\}\)), darüber verschwindet
+der Schnitt (\(L=\mathbb{R}\)). Das Weide-Doppelcanvas koppelt links das Rechteck am Fluss an
+rechts die Zielfunktion \(A(x)=-2x^2+60x\); ihr Scheitel \((15\mid450)\) ist markiert.
+
+**s3-2a — Paritäts-Explorer.** Ein \(n\)-Slider und ein Stützwert \(x_0\) zeigen live
+\(f(-x_0)=(-1)^n f(x_0)\): bei geradem \(n\) spiegelt der Punkt an der (grün hervorgehobenen)
+\(y\)-Achse, bei ungeradem am Ursprung. So wird die Symmetrie zur direkten Folge der
+Exponenten-Parität — für positive wie negative \(n\).
+
+**s3-2b — Transformations-Labor.** \(y=a\cdot\sqrt[n]{x-u}+v\) mit umschaltbarem Wurzelgrad
+(\(n=2\) bzw. \(3\)), Slidern für \(a,u,v\), gestrichelter Grundkurve, grünem Startpunkt
+\((u\mid v)\) und — bei der Quadratwurzel — dem roten Verbotsband \(x<u\) für die
+Definitionsmenge.
+
+**s3-4b — log-Leiter und C-14-Datierung.** Die log-Leiter stellt dieselben Zahlen auf einer
+linearen (0…1000) und einer logarithmischen Achse (\(10^0\)…\(10^3\)) gegenüber: jede
+Verzehnfachung ist auf der log-Achse ein gleich langer Schritt, der Abstand ist \(\lg x\). Das
+C-14-Widget löst \(\tfrac{N}{N_0}=(\tfrac12)^{t/T}\) nach der Zeit auf
+(\(t=T\cdot\log_{1/2}\tfrac{N}{N_0}\), \(T=5730\) a), zeichnet die Zerfallskurve mit dem
+\(k\cdot T\)-Raster und hat Schnellwahl-Knöpfe inklusive Ötzi (\(\approx 5248\) a).
+
+Rendercheck-Liste in `.claude/tools/screenshot-widgets.mjs` um die sechs neuen Canvases
+ergänzt (46 Widgets × 2 Viewports, alle gezeichnet).
+
+---
+
 ## [98] — 2026-07-10 · Paket 5 / T53 Runde 7: die vier Geometrie-Widgets aus LG 5
 
 Vier Prio-2-Visualisierungen aus §4 des Audit-Berichts, je ein Commit pro Seite. Alle Zahlen
