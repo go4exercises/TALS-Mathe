@@ -60,6 +60,8 @@ const WIDGETS = [
   { page: 'grundlagen/g3-2-lineare-funktionen.html', id: 'cv-steig', note: 'Steigungsdreieck (Drag)' },
   { page: 'grundlagen/g5-2a-dreiecke.html', id: 'cv-dreiungl', note: 'Dreiecksungleichung' },
   { page: 'schwerpunkt/s3-4a-exponentialfunktionen.html', id: 'cv-egrenz', note: 'e-Grenzwert' },
+  // T53, Runde 7.
+  { page: 'grundlagen/g5-1-grundlagen.html', id: 'sk-canvas', note: 'Skizzen-Gegenueberstellung' },
 ];
 
 const VIEWPORTS = [

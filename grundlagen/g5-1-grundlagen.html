@@ -288,6 +288,98 @@ MathJax = {
   Jeder wissenschaftliche Taschenrechner hat einen Modus-Schalter <strong>DEG</strong> (Grad) / <strong>RAD</strong> (Radiant). Ein falsch eingestellter Modus liefert <em>plausibel aussehende</em>, aber <em>komplett falsche</em> Werte. Erste Kontrolle bei jedem trigonometrischen Resultat: Stimmt der Modus zur Aufgabe?
 </div>
 
+<h3 id="trainer">Umrechnen üben — mit Zufallswinkel</h3>
+
+<p>Die Tabelle der Standardwinkel auswendig zu können hilft, ersetzt aber das Rechnen nicht. Der Trainer wirft dir einen zufälligen Winkel zu — mal in Grad, mal im Bogenmass. Rechne selbst, tippe dein Resultat ein und lass es prüfen.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+    <h3>🎲 Zufallswinkel-Trainer</h3>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Gib bei „Grad → Radiant" absichtlich einmal einen ungekürzten Bruch ein, etwa \(\tfrac{60\pi}{180}\) statt \(\tfrac{\pi}{3}\). Was meldet der Trainer — und warum ist das kein Rechenfehler?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Gib bei Grad nach Radiant absichtlich einmal einen ungekürzten Bruch ein, etwa sechzig pi durch hundertachtzig statt pi durch drei. Was meldet der Trainer — und warum ist das kein Rechenfehler?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Beide Richtungen sind derselbe Dreisatz mit \(180° \;\widehat{=}\; \pi\). Ungekürzt ist richtig gerechnet, aber nicht fertig: \(\tfrac{60\pi}{180}\) und \(\tfrac{\pi}{3}\) bezeichnen denselben Winkel. Kürzen ist Darstellung, nicht Rechnung.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Beide Richtungen sind derselbe Dreisatz mit hundertachtzig Grad entspricht pi. Ungekürzt ist richtig gerechnet, aber nicht fertig: sechzig pi durch hundertachtzig und pi durch drei bezeichnen denselben Winkel. Kürzen ist Darstellung, nicht Rechnung.">🔊 vorlesen</button>
+      </div>
+    </div>
+    </div>
+    <p>Zufälliger Winkel · beide Richtungen · das Kürzen wird mitgeprüft</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row" style="justify-content:space-between;flex-wrap:wrap">
+      <div class="zt-modus">
+        <button class="kl-btn zt-mode aktiv" data-mode="deg2rad">Grad → Radiant</button>
+        <button class="kl-btn zt-mode" data-mode="rad2deg">Radiant → Grad</button>
+      </div>
+      <button class="kl-btn" id="zt-neu">🎲 Neuer Winkel</button>
+    </div>
+    <div class="zwei-spalten">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Der gezogene Winkel</div>
+        <svg id="zt-svg" viewBox="0 0 200 200" style="width:100%;max-width:240px;display:block;margin:0 auto;background:#fff;border:1px solid #d8d0c4;border-radius:9px">
+          <circle cx="100" cy="100" r="78" fill="none" stroke="#d8d0c4" stroke-width="1"/>
+          <line x1="100" y1="100" x2="178" y2="100" stroke="#1c1a17" stroke-width="2"/>
+          <line id="zt-arm" x1="100" y1="100" x2="178" y2="100" stroke="#1c1a17" stroke-width="2"/>
+          <path id="zt-arc" d="" fill="#ddeaf8" fill-opacity="0.7" stroke="#1a4f8a" stroke-width="2"/>
+          <circle cx="100" cy="100" r="2.5" fill="#1c1a17"/>
+          <text id="zt-label" x="135" y="92" font-size="13" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
+        </svg>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tinte-2);margin-bottom:8px">Aufgabe</div>
+        <div class="formel-live">
+          <div class="fl-label" id="zt-richtung">Wandle in Radiant um</div>
+          <div class="fl-eq" id="zt-frage" style="font-size:1.3rem">60°</div>
+        </div>
+
+        <div id="zt-eing-deg2rad" class="zt-eingabe">
+          <span class="zt-hint">Antwort als Bruch von π:</span>
+          <div class="zt-bruch">
+            <div>
+              <input type="number" id="zt-z" step="1" value="" aria-label="Zähler">
+              <div class="zt-bruchstrich"></div>
+              <input type="number" id="zt-n" step="1" min="1" value="" aria-label="Nenner">
+            </div>
+            <span class="zt-pi">· π</span>
+          </div>
+        </div>
+
+        <div id="zt-eing-rad2deg" class="zt-eingabe" style="display:none">
+          <span class="zt-hint">Antwort in Grad:</span>
+          <div class="zt-bruch">
+            <input type="number" id="zt-d" step="any" value="" aria-label="Winkel in Grad" style="width:110px">
+            <span class="zt-pi">°</span>
+          </div>
+        </div>
+
+        <button class="kl-btn" id="zt-check" style="width:100%;margin-top:10px">Prüfen</button>
+        <div id="zt-feedback" class="cr" style="display:block;margin-top:12px;background:var(--papier-2);color:var(--tinte-2);border:1px solid var(--linie)">Rechne den Winkel um und tippe dein Resultat ein.</div>
+        <div id="zt-score" style="font-family:var(--mono);font-size:0.78rem;color:var(--tinte-2);text-align:center;margin-top:8px">0 von 0 richtig</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.zt-modus { display:flex; gap:6px; flex-wrap:wrap; }
+.zt-mode.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
+.zt-mode.aktiv:hover { background:var(--blau); color:#fff; }
+.zt-eingabe { display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:6px; }
+.zt-hint { font-family:var(--mono); font-size:0.72rem; color:var(--tinte-2); }
+.zt-bruch { display:flex; align-items:center; gap:8px; }
+.zt-bruch input[type=number] { font-family:var(--mono); font-size:0.95rem; font-weight:700; color:var(--blau); width:70px; padding:5px 6px; text-align:center; border:1.5px solid var(--linie); border-radius:6px; background:var(--weiss); }
+.zt-bruchstrich { height:2px; background:var(--tinte-2); margin:4px 0; }
+.zt-pi { font-family:var(--mono); font-size:1rem; font-weight:700; color:var(--tinte); }
+</style>
+
 <!-- ══ 5. TYPEN / SPEZIALFÄLLE ══ -->
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Winkel und Umrechnung</summary>
@@ -611,6 +703,33 @@ MathJax = {
     <div class="ws-titel">Prüfen</div>
     <div class="ws-text">Resultat plausibel? Mit der Skizze vergleichen.</div>
   </div>
+</div>
+
+<h3 id="skizzen-vergleich">Zwei Skizzen zur selben Aufgabe</h3>
+
+<p>Links steht eine Skizze, wie sie unter Zeitdruck entsteht: hingeworfen, unbeschriftet, der rechte Winkel nirgends vermerkt. Rechts entsteht dieselbe Skizze Schritt für Schritt nach dem Workflow. Schiebe den Regler durch die vier Schritte.</p>
+
+<div class="diag-box">
+  <div class="dg-row">
+    <label>Schritt: <span class="dg-val" id="sk-schritt-name">1 · Lesen</span></label>
+    <input type="range" id="sk-schritt" min="1" max="4" step="1" value="1">
+  </div>
+  <div class="anim-hinweis links" style="margin:4px 0 0 0">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Ab welchem Schritt könntest du die Aufgabe an jemanden weitergeben, der den Aufgabentext nicht kennt? Vergleiche dazu jederzeit mit der linken Rohskizze.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Ab welchem Schritt könntest du die Aufgabe an jemanden weitergeben, der den Aufgabentext nicht kennt? Vergleiche dazu jederzeit mit der linken Rohskizze.">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts" style="margin:4px 0 0 0">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Erst Schritt 3 macht die Skizze lesbar: Ohne Beschriftung und ohne den markierten rechten Winkel ist die linke Zeichnung nur ein Dreieck — sie „rechnet" nicht mit. Die Beschriftung, nicht die saubere Linie, trägt die Information.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Erst Schritt drei macht die Skizze lesbar: Ohne Beschriftung und ohne den markierten rechten Winkel ist die linke Zeichnung nur ein Dreieck — sie rechnet nicht mit. Die Beschriftung, nicht die saubere Linie, trägt die Information.">🔊 vorlesen</button>
+    </div>
+  </div>
+  <canvas id="sk-canvas" aria-label="Rohskizze und schrittweise aufgebaute Skizze im Vergleich"></canvas>
+  <div class="dg-cap">Aufgabe: Eine \(5.0\) m lange Leiter lehnt an einer senkrechten Wand; ihr Fuss steht \(3.0\) m von der Wand entfernt. Wie hoch reicht die Leiter?</div>
 </div>
 
 <h3>Plausibilitätsprüfung — drei Strategien</h3>
@@ -1352,6 +1471,254 @@ updateKL();
 
   sL.addEventListener('input', render);
   sB.addEventListener('input', render);
+  window.addEventListener('resize', render);
+  render();
+})();
+
+/* ══════════════════════════════════════════════════════════
+   WIDGET 4: Zufallswinkel-Trainer (Grad ↔ Radiant)
+   ══════════════════════════════════════════════════════════ */
+(function(){
+  const $ = id => document.getElementById(id);
+  if(!$('zt-frage')) return;
+
+  // Vielfache von 15° — alle ergeben einen sauberen Bruch von π
+  const POOL = [15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345];
+  let deg = 60, mode = 'deg2rad', richtig = 0, versuche = 0;
+
+  function fb(text, art){
+    const el = $('zt-feedback');
+    el.textContent = text;
+    if(art === 'ok'){
+      el.style.background = 'var(--gruen-hell)'; el.style.color = 'var(--gruen)'; el.style.border = '1px solid var(--gruen-rand)';
+    } else if(art === 'err'){
+      el.style.background = 'var(--rot-hell)'; el.style.color = 'var(--rot)'; el.style.border = '1px solid var(--rot-rand)';
+    } else {
+      el.style.background = 'var(--papier-2)'; el.style.color = 'var(--tinte-2)'; el.style.border = '1px solid var(--linie)';
+    }
+  }
+  function score(){ $('zt-score').textContent = `${richtig} von ${versuche} richtig`; }
+
+  function zeichne(){
+    const cx = 100, cy = 100, rArm = 78, rArc = 28;
+    const a = -deg * Math.PI / 180;
+    $('zt-arm').setAttribute('x2', (cx + rArm * Math.cos(a)).toFixed(1));
+    $('zt-arm').setAttribute('y2', (cy + rArm * Math.sin(a)).toFixed(1));
+    const aex = cx + rArc * Math.cos(a), aey = cy + rArc * Math.sin(a);
+    const large = deg > 180 ? 1 : 0;
+    $('zt-arc').setAttribute('d', `M ${cx+rArc} ${cy} A ${rArc} ${rArc} 0 ${large} 0 ${aex.toFixed(1)} ${aey.toFixed(1)} L ${cx} ${cy} Z`);
+    const m = a / 2;
+    $('zt-label').setAttribute('x', (cx + 18 * Math.cos(m)).toFixed(1));
+    $('zt-label').setAttribute('y', (cy + 18 * Math.sin(m) + 5).toFixed(1));
+  }
+
+  function stelleFrage(){
+    if(mode === 'deg2rad'){
+      $('zt-richtung').textContent = 'Wandle in Radiant um';
+      $('zt-frage').textContent = deg + '°';
+    } else {
+      $('zt-richtung').textContent = 'Wandle in Grad um';
+      $('zt-frage').textContent = radExakt(deg) + ' rad';
+    }
+    $('zt-eing-deg2rad').style.display = mode === 'deg2rad' ? 'flex' : 'none';
+    $('zt-eing-rad2deg').style.display = mode === 'rad2deg' ? 'flex' : 'none';
+    $('zt-z').value = ''; $('zt-n').value = ''; $('zt-d').value = '';
+    zeichne();
+    fb('Rechne den Winkel um und tippe dein Resultat ein.', 'neutral');
+  }
+
+  function neuerWinkel(){
+    let d;
+    do { d = POOL[Math.floor(Math.random() * POOL.length)]; } while(d === deg);
+    deg = d;
+    stelleFrage();
+  }
+
+  function pruefe(){
+    const radDez = (deg * Math.PI / 180).toFixed(3);
+    if(mode === 'deg2rad'){
+      let z = parseInt($('zt-z').value, 10);
+      let n = parseInt($('zt-n').value, 10);
+      if(!Number.isFinite(z) || !Number.isFinite(n) || n === 0){
+        fb('Bitte Zähler und Nenner eintragen — der Nenner darf nicht 0 sein.', 'neutral');
+        return;
+      }
+      if(n < 0){ z = -z; n = -n; }
+      versuche++;
+      if(z * 180 === deg * n){
+        richtig++;
+        const g = gcd(z, n);
+        if(g > 1){
+          fb(`✓ Richtig gerechnet — aber noch nicht gekürzt: ${z}π/${n} = ${radExakt(deg)}.`, 'ok');
+        } else {
+          fb(`✓ Richtig: ${deg}° · π/180° = ${radExakt(deg)} ≈ ${radDez} rad.`, 'ok');
+        }
+      } else {
+        fb(`✗ Nein. ${deg}° · π/180° = ${radExakt(deg)} ≈ ${radDez} rad.`, 'err');
+      }
+    } else {
+      const d = parseFloat($('zt-d').value);
+      if(!Number.isFinite(d)){
+        fb('Bitte einen Winkel in Grad eintragen.', 'neutral');
+        return;
+      }
+      versuche++;
+      if(Math.abs(d - deg) < 1e-9){
+        richtig++;
+        fb(`✓ Richtig: ${radExakt(deg)} · 180°/π = ${deg}°.`, 'ok');
+      } else {
+        fb(`✗ Nein. ${radExakt(deg)} · 180°/π = ${deg}° (das sind ≈ ${radDez} rad).`, 'err');
+      }
+    }
+    score();
+  }
+
+  document.querySelectorAll('.zt-mode').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.zt-mode').forEach(b => b.classList.remove('aktiv'));
+      btn.classList.add('aktiv');
+      mode = btn.dataset.mode;
+      stelleFrage();
+    });
+  });
+  $('zt-neu').addEventListener('click', neuerWinkel);
+  $('zt-check').addEventListener('click', pruefe);
+  ['zt-z','zt-n','zt-d'].forEach(id => {
+    $(id).addEventListener('keydown', e => { if(e.key === 'Enter') pruefe(); });
+  });
+  stelleFrage();
+  score();
+})();
+
+/* ══════════════════════════════════════════════════════════
+   WIDGET 5: Skizzen-Gegenüberstellung (Workflow in 4 Schritten)
+   Aufgabe: Leiter 5.0 m, Wandabstand 3.0 m  →  h = √(5² − 3²) = 4.0 m
+   ══════════════════════════════════════════════════════════ */
+(function(){
+  const sl = document.getElementById('sk-schritt');
+  if(!sl) return;
+  const NAMEN = ['1 · Lesen', '2 · Skizzieren', '3 · Beschriften', '4 · Prüfen'];
+  const LEITER = 5.0, ABSTAND = 3.0;
+  const HOEHE = Math.sqrt(LEITER*LEITER - ABSTAND*ABSTAND);   // = 4.0
+
+  function text(ctx, x, y, s, farbe, size, align, weight){
+    ctx.fillStyle = farbe;
+    ctx.font = `${weight || 'normal'} ${size || 12}px "JetBrains Mono", monospace`;
+    ctx.textAlign = align || 'center';
+    ctx.fillText(s, x, y);
+  }
+
+  // Zeichnet Wand + Boden + Leiter in ein Panel; gibt die Eckpunkte zurück
+  function geruest(ctx, px, py, pw, ph){
+    // Bodenlinie hoch genug, dass die Schluss-Zeilen aus Schritt 4 darunter Platz haben
+    const gy = py + ph - 78;
+    // 30 px pro Meter, auf engen Panels so weit herunterskaliert,
+    // dass Leiterfuss (3 m links der Wand) und Wandhöhe (5.2 m) Platz haben
+    const S = Math.min(30, (pw - 80) / (ABSTAND + 1.2), (gy - py - 52) / 5.2);
+    const wx = px + pw * 0.66;           // Wand
+    const fuss = [wx - ABSTAND*S, gy];
+    const oben = [wx, gy - HOEHE*S];
+    // Boden
+    ctx.strokeStyle = '#8a8378'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(px + 22, gy); ctx.lineTo(px + pw - 22, gy); ctx.stroke();
+    // Wand
+    ctx.beginPath(); ctx.moveTo(wx, gy); ctx.lineTo(wx, gy - 5.2*S); ctx.stroke();
+    // Leiter
+    ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(fuss[0], fuss[1]); ctx.lineTo(oben[0], oben[1]); ctx.stroke();
+    return { S, gy, wx, fuss, oben };
+  }
+
+  function rohSkizze(ctx, px, py, pw, ph){
+    const g = geruest(ctx, px, py, pw, ph);
+    text(ctx, px + pw/2, py + 22, 'Rohskizze', '#9b1c1c', 13, 'center', 'bold');
+    text(ctx, px + pw/2, py + 38, 'ohne Beschriftung', '#9b1c1c', 11, 'center');
+    // Fragezeichen statt Werten
+    text(ctx, (g.fuss[0] + g.oben[0])/2 - 16, (g.fuss[1] + g.oben[1])/2 - 8, '?', '#9b1c1c', 16, 'center', 'bold');
+    text(ctx, (g.fuss[0] + g.wx)/2, g.gy + 16, '?', '#9b1c1c', 16, 'center', 'bold');
+    text(ctx, g.wx + 12, (g.gy + g.oben[1])/2, '?', '#9b1c1c', 16, 'left', 'bold');
+    text(ctx, px + pw/2, py + ph - 12, 'Was ist gegeben, was gesucht?', '#9b1c1c', 11, 'center');
+  }
+
+  function gutSkizze(ctx, px, py, pw, ph, s){
+    text(ctx, px + pw/2, py + 22, 'Nach Workflow', '#1f6b3a', 13, 'center', 'bold');
+    text(ctx, px + pw/2, py + 38, NAMEN[s-1], '#1f6b3a', 11, 'center');
+
+    if(s === 1){
+      // Schritt 1: nur die gelesenen Angaben, noch keine Zeichnung
+      const x = px + 24;
+      let y = py + 76;
+      text(ctx, x, y, 'gegeben:', '#374151', 12, 'left', 'bold'); y += 20;
+      text(ctx, x + 10, y, '· Leiter  = 5.0 m', '#1a4f8a', 12, 'left'); y += 18;
+      text(ctx, x + 10, y, '· Abstand = 3.0 m', '#b85c00', 12, 'left'); y += 26;
+      text(ctx, x, y, 'gesucht:', '#374151', 12, 'left', 'bold'); y += 20;
+      text(ctx, x + 10, y, '· Höhe h an der Wand', '#9b1c1c', 12, 'left'); y += 26;
+      text(ctx, x, y, 'Beziehung: rechter Winkel', '#374151', 11, 'left');
+      text(ctx, x, y + 16, 'zwischen Wand und Boden', '#374151', 11, 'left');
+      return;
+    }
+
+    const g = geruest(ctx, px, py, pw, ph);
+
+    if(s >= 3){
+      // Rechter Winkel am Wandfuss
+      const w = 12;
+      ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.5;
+      ctx.strokeRect(g.wx - w, g.gy - w, w, w);
+      // Beschriftung
+      text(ctx, (g.fuss[0] + g.oben[0])/2 - 24, (g.fuss[1] + g.oben[1])/2 - 6, '5.0 m', '#1a4f8a', 12, 'center', 'bold');
+      text(ctx, (g.fuss[0] + g.wx)/2, g.gy + 17, '3.0 m', '#b85c00', 12, 'center', 'bold');
+      ctx.save();
+      ctx.translate(g.wx + 15, (g.gy + g.oben[1])/2);
+      ctx.rotate(-Math.PI/2);
+      text(ctx, 0, 0, s >= 4 ? 'h = 4.0 m' : 'h = ?', '#9b1c1c', 12, 'center', 'bold');
+      ctx.restore();
+      // Eckpunkte
+      ctx.fillStyle = '#1c1a17';
+      [g.fuss, g.oben, [g.wx, g.gy]].forEach(p => { ctx.beginPath(); ctx.arc(p[0], p[1], 3, 0, 2*Math.PI); ctx.fill(); });
+    }
+
+    if(s >= 4){
+      text(ctx, px + pw/2, py + ph - 28, 'Schranke: h < 5.0 m (Kathete < Hypotenuse)', '#374151', 10.5, 'center');
+      text(ctx, px + pw/2, py + ph - 10, '√(5.0² − 3.0²) = √16 = 4.0 m  ✓', '#1f6b3a', 12, 'center', 'bold');
+    }
+  }
+
+  function render(){
+    const s = parseInt(sl.value, 10);
+    document.getElementById('sk-schritt-name').textContent = NAMEN[s-1];
+    const c = document.getElementById('sk-canvas');
+    if(!c) return;
+    const W = c.offsetWidth || 640;
+    // Schmale Viewports bekommen ein doppelt so hohes Canvas — die Panels stehen dort untereinander
+    const nebeneinander = W >= 560;
+    c.style.height = (nebeneinander ? 280 : 560) + 'px';
+    const H = nebeneinander ? 280 : 560;
+    const dpr = window.devicePixelRatio || 1;
+    c.width = W*dpr; c.height = H*dpr;
+    const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+    ctx.strokeStyle = '#d8d0c4'; ctx.lineWidth = 1;
+    ctx.setLineDash([4,4]);
+    if(nebeneinander){
+      // breit: Panels nebeneinander
+      const half = W/2;
+      ctx.beginPath(); ctx.moveTo(half, 12); ctx.lineTo(half, H-12); ctx.stroke();
+      ctx.setLineDash([]);
+      rohSkizze(ctx, 0, 0, half, H);
+      gutSkizze(ctx, half, 0, half, H, s);
+    } else {
+      // schmal: Panels untereinander (das Canvas ist dort doppelt so hoch)
+      const halfH = H/2;
+      ctx.beginPath(); ctx.moveTo(12, halfH); ctx.lineTo(W-12, halfH); ctx.stroke();
+      ctx.setLineDash([]);
+      rohSkizze(ctx, 0, 0, W, halfH);
+      gutSkizze(ctx, 0, halfH, W, halfH, s);
+    }
+  }
+
+  sl.addEventListener('input', render);
   window.addEventListener('resize', render);
   render();
 })();
