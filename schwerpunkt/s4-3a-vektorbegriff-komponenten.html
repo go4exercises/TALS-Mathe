@@ -315,6 +315,35 @@ MathJax = {
   <p>\(\tan\varphi = \tfrac{a_2}{a_1}\) liefert am Taschenrechner nur Winkel zwischen \(-90°\) und \(90°\). Für \(\binom{-2}{2}\) ergibt \(\arctan(-1) = -45°\) — richtig ist aber \(\varphi = 135°\) (2. Quadrant). <strong>Immer die Vorzeichen der Komponenten anschauen</strong> und nötigenfalls \(180°\) addieren.</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Verschiebe die Komponenten durch alle vier Quadranten und vergleiche Rechnerwert mit dem wahren Winkel:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Vergleiche \(\binom{3}{4}\) mit \(\binom{-3}{-4}\): Der Taschenrechner zeigt beide Male denselben \(\arctan\)-Wert. Wie kann das sein — und wie unterscheidet man die beiden Vektoren dann?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Vergleiche den Vektor drei vier mit dem Vektor minus drei minus vier: Der Taschenrechner zeigt beide Male denselben Arcustangens-Wert. Wie kann das sein — und wie unterscheidet man die beiden Vektoren dann?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">\(\tan\) hat die Periode \(180°\) — der Quotient \(a_2/a_1\) ist für \(\vec{a}\) und \(-\vec{a}\) identisch. Deshalb kann \(\arctan\) den Quadranten gar nicht kennen und liefert stets einen Wert zwischen \(-90°\) und \(90°\). Die Vorzeichen der Komponenten entscheiden: bei \(a_1 < 0\) addiert man \(180°\), bei \(a_1 > 0\) und \(a_2 < 0\) addiert man \(360°\). Für \(a_1 = 0\) versagt der Quotient ganz — dort ist \(\varphi = 90°\) oder \(270°\).</div>
+      <button class="ah-speak" type="button" data-vorlesen="Der Tangens hat die Periode hundertachtzig Grad — der Quotient a zwei durch a eins ist für einen Vektor und seinen Gegenvektor identisch. Deshalb kann der Arcustangens den Quadranten gar nicht kennen und liefert stets einen Wert zwischen minus neunzig und neunzig Grad. Die Vorzeichen der Komponenten entscheiden: bei negativem a eins addiert man hundertachtzig Grad, bei positivem a eins und negativem a zwei addiert man dreihundertsechzig Grad. Für a eins gleich null versagt der Quotient ganz.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Komponente \(a_1\): <span class="sl-val" id="pk-a1v">3</span></label>
+  <input type="range" id="pk-a1" min="-6" max="6" step="1" value="3">
+</div>
+<div class="sl-row">
+  <label>Komponente \(a_2\): <span class="sl-val" id="pk-a2v">4</span></label>
+  <input type="range" id="pk-a2" min="-6" max="6" step="1" value="4">
+</div>
+<div class="formel-live"><div class="fl-label">Rechnerwert · Korrektur · Richtungswinkel</div><div class="fl-eq" id="pk-eq" style="font-size:0.95rem"></div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-polar" height="300"></canvas></div>
+<div id="pk-hinw" style="font-size:0.8rem;margin-top:8px"></div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Polarform</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Angaben legen einen ebenen Vektor in Polarform fest?</p><ul class="mc-optionen"><li data-opt="A">zwei Komponenten</li><li data-opt="B">Betrag und Richtungswinkel</li><li data-opt="C">Start- und Endpunkt</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> \((r;\ \varphi)\) — gleichwertig zur Komponentendarstellung.</div></details></div>
@@ -805,14 +834,91 @@ function chkNum(id, target, tol, einheit){
   }
 }
 
+/* ══ Polar-Widget: der Quadrant beim Richtungswinkel ══
+   arctan(a2/a1) liefert nur Werte in (−90°; 90°) — tan hat Periode 180°.
+   Korrektur: a1 < 0 → +180° · a1 > 0 und a2 < 0 → +360° · a1 = 0 → 90°/270° */
+function drawPolar() {
+  const a1 = parseInt(document.getElementById('pk-a1').value, 10);
+  const a2 = parseInt(document.getElementById('pk-a2').value, 10);
+  document.getElementById('pk-a1v').textContent = a1;
+  document.getElementById('pk-a2v').textContent = a2;
+  const r = Math.hypot(a1, a2);
+  const nz = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(2);
+  const eqEl = document.getElementById('pk-eq'), hEl = document.getElementById('pk-hinw');
+
+  let phi = null, tr = null, korr = 0, quadrant = '';
+  if (a1 !== 0 || a2 !== 0) {
+    phi = ((Math.atan2(a2, a1) * 180 / Math.PI) % 360 + 360) % 360;
+    if (a1 !== 0) {
+      tr = Math.atan(a2 / a1) * 180 / Math.PI;
+      korr = a1 < 0 ? 180 : (a2 < 0 ? 360 : 0);
+    }
+    quadrant = a1 > 0 && a2 >= 0 ? 'I' : (a1 < 0 && a2 >= 0 ? 'II' : (a1 < 0 && a2 < 0 ? 'III' : (a1 > 0 && a2 < 0 ? 'IV' : 'auf einer Achse')));
+  }
+
+  if (phi === null) {
+    eqEl.innerHTML = 'Nullvektor — kein Richtungswinkel definiert';
+    hEl.innerHTML = 'Der Nullvektor hat keine Richtung; nur sein Betrag ist definiert (r = 0).';
+    hEl.style.color = 'var(--tinte-2)';
+  } else if (tr === null) {
+    eqEl.innerHTML = `r = ${nz(r)} &nbsp;·&nbsp; a₁ = 0: der Quotient a₂/a₁ ist <strong>nicht definiert</strong> &nbsp;→&nbsp; φ = <strong>${nz(phi)}°</strong>`;
+    hEl.innerHTML = `Der Vektor zeigt senkrecht: Ohne Rechnung liest man φ = ${a2 > 0 ? '90°' : '270°'} direkt ab.`;
+    hEl.style.color = 'var(--orange)';
+  } else {
+    // negative Komponenten im Bruch klammern und Unicode-Minus setzen
+    const kl = v => (v < 0 ? '(−' + Math.abs(v) + ')' : '' + v);
+    eqEl.innerHTML = `r = ${nz(r)} &nbsp;·&nbsp; arctan(${kl(a2)}/${kl(a1)}) = <span class="tx-orange">${nz(tr)}°</span>` +
+      (korr ? ` &nbsp;+ ${korr}° &nbsp;→&nbsp; ` : ` &nbsp;→&nbsp; `) +
+      `φ = <strong>${nz(phi)}°</strong>`;
+    hEl.innerHTML = korr
+      ? `Quadrant ${quadrant}: Der Rechnerwert ${nz(tr)}° liegt <strong>falsch</strong> — er zeigt in die Gegenrichtung bzw. unter die x-Achse. Korrektur: + ${korr}°.`
+      : `Quadrant ${quadrant}: Der Rechnerwert stimmt bereits — hier ist <strong>keine Korrektur</strong> nötig.`;
+    hEl.style.color = korr ? 'var(--rot)' : 'var(--gruen)';
+  }
+
+  const { ctx, W, H } = initCanvas('cv-polar', 300, false);
+  const { cx, cy } = drawGrid(ctx, W, H, -7, 7, -7, 7);
+  // Quadranten-Beschriftung
+  ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.fillStyle = '#d5dce5'; ctx.textAlign = 'center';
+  [['I', 5.6, 5.6], ['II', -5.6, 5.6], ['III', -5.6, -5.6], ['IV', 5.6, -5.6]].forEach(([n, x, y]) =>
+    ctx.fillText(n, cx(x), cy(y)));
+
+  if (phi !== null) {
+    // falscher Rechner-Strahl (nur wenn Korrektur nötig)
+    if (korr) {
+      const rad = tr * Math.PI / 180;
+      ctx.strokeStyle = '#c8412c'; ctx.lineWidth = 1.8; ctx.setLineDash([5, 4]);
+      ctx.beginPath(); ctx.moveTo(cx(0), cy(0));
+      ctx.lineTo(cx(r * Math.cos(rad)), cy(r * Math.sin(rad)));
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = '#c8412c'; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+      ctx.fillText('Rechner', cx(r * Math.cos(rad) * 0.62), cy(r * Math.sin(rad) * 0.62) - 8);
+    }
+    // Winkelbogen
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(cx(0), cy(0), 30, 0, -phi * Math.PI / 180, true); ctx.stroke();
+    // Vektor
+    drawArrow(ctx, cx(0), cy(0), cx(a1), cy(a2), '#1a4f8a', 3);
+    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+    ctx.fillText(`a(${a1} | ${a2})`.replace(/-/g, '−'), cx(a1) + 8, cy(a2) - 8);
+    ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+    ctx.fillText('φ = ' + phi.toFixed(1) + '°', cx(0) + 36, cy(0) - 12);
+  } else {
+    drawDot(ctx, cx, cy, 0, 0, '#1a4f8a', 5);
+  }
+}
+
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateFL();
   updateAD();
+  document.getElementById('pk-a1').addEventListener('input', drawPolar);
+  document.getElementById('pk-a2').addEventListener('input', drawPolar);
+  drawPolar();
   buildA1(); drawA1();
 });
 window.addEventListener('resize', () => {
-  updateFL(); updateAD(); drawA1(); drawA2Sol();
+  updateFL(); updateAD(); drawPolar(); drawA1(); drawA2Sol();
 });
 </script>
 </body>

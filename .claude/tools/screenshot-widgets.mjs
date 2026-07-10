@@ -54,6 +54,7 @@ const WIDGETS = [
   // T53, Runde 5.
   { page: 'grundlagen/g3-3-quadratische-funktionen.html', id: 'cv-extrem', note: 'Extremwert-Zaun' },
   { page: 'schwerpunkt/s4-2a-prismen-zylinder.html', id: 'cv-canvas', note: 'Cavalieri-Muenzstapel' },
+  { page: 'schwerpunkt/s4-3a-vektorbegriff-komponenten.html', id: 'cv-polar', note: 'Polar-Quadranten' },
 ];
 
 const VIEWPORTS = [

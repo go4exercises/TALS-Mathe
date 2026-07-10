@@ -4,6 +4,34 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [95] — 2026-07-10 · Audit-Paket 5 / T53, Runde 5: vier Widgets nach didaktischem Hebel
+
+Diesmal nicht nach «arme Seite» ausgewählt (die verbleibenden Seiten sind alle passabel
+bestückt), sondern nach Hebel. Zahlen vorab mit `python3` nachgerechnet, Pre-Flight
+`ALLE CHECKS BESTANDEN`, Browser-Rendercheck bei 1280 px und 360 px:
+
+- **g1-3** — **Zweiklammersatz-Teilerpaare**: Für \(x^2 + px + q\) werden alle Teilerpaare von
+  \(q\) mit ihrer Summe aufgelistet; das passende Paar leuchtet grün. Passt keines, sagt das
+  Widget warum — mit der Diskriminante \(D = p^2 - 4q\) als Kontrolle (ganzzahliges Paar
+  existiert genau dann, wenn \(D\) eine Quadratzahl ist). Im Browser über alle 1176
+  Kombinationen (\(p \in [-12; 12]\), \(q \in [-24; 24]\setminus\{0\}\)) gegen dieses Kriterium
+  geprüft — keine Abweichung.
+- **g3-3** — **Extremwert-Widget**: 40 m Zaun, Seite \(x\), Fläche \(A(x) = x(20-x)\). Links
+  wandert das Rechteck, rechts der Punkt auf der Parabel. Das Maximum liegt im Scheitel
+  \((10 \mid 100)\) — das flächengrösste Rechteck bei festem Umfang ist das Quadrat; an den
+  Rändern entartet es zur Strecke (die Nullstellen der Parabel).
+- **s4-2a** — der Cavalieri-**Münzstapel** wird zum Schrägbild: Jede Münze ist jetzt eine
+  Kreisscheibe mit Deckel-Ellipse und Mantel statt eines flachen Rechtecks, gezeichnet von
+  unten nach oben. Der Stapel sieht aus wie ein Stapel; Volumen und Seitenlinie rechnen
+  unverändert.
+- **s4-3a** — **Polar-Widget mit Quadrantenfalle**: Der rote Strahl zeigt, wohin der
+  \(\arctan\)-Wert des Taschenrechners <em>zeigen würde</em>, der blaue Pfeil den wahren Vektor.
+  Weil \(\tan\) die Periode \(180°\) hat, liefert \(\arctan\) für \(\vec{a}\) und \(-\vec{a}\)
+  denselben Wert. Das Widget nennt die nötige Korrektur (\(+180°\) für \(a_1 < 0\), \(+360°\)
+  für \(a_1 > 0, a_2 < 0\)) und behandelt \(a_1 = 0\) sowie den Nullvektor als eigene Fälle.
+
+---
+
 ## [94] — 2026-07-10 · Audit-Paket 5 / T53, Runde 4: vier Widgets aus der g2-Reihe und s1-2
 
 Zahlen vorab mit `python3` nachgerechnet, Pre-Flight `ALLE CHECKS BESTANDEN`, Browser-Rendercheck
