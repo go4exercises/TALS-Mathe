@@ -71,6 +71,8 @@ const WIDGETS = [
   { page: 'schwerpunkt/s3-1-grundlagen.html', id: 'we-graph', note: 'Weide-Doppelcanvas' },
   { page: 'schwerpunkt/s3-2a-potenzfunktionen.html', id: 'pa-canvas', note: 'Paritaets-Explorer' },
   { page: 'schwerpunkt/s3-2b-wurzelfunktionen.html', id: 'tf-canvas', note: 'Wurzel-Transformationslabor' },
+  { page: 'schwerpunkt/s3-4b-logarithmusfunktionen.html', id: 'll-canvas', note: 'log-Leiter' },
+  { page: 'schwerpunkt/s3-4b-logarithmusfunktionen.html', id: 'c14-canvas', note: 'C-14-Datierung' },
 ];
 
 const VIEWPORTS = [

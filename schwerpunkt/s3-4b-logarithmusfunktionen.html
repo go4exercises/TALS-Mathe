@@ -283,6 +283,51 @@ MathJax = {
 <div class="cv-wrap"><canvas id="ty-canvas" height="240"></canvas></div>
 <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="ty-desc"></div>
 
+<h3 id="log-leiter">Die log-Leiter — warum der Logarithmus Grössenordnungen misst</h3>
+
+<p>Der Logarithmus verwandelt <em>Multiplizieren</em> in <em>Addieren</em>: gleiche Faktoren werden zu gleichen Abständen. Deshalb tragen Skalen für Erdbeben (Richter), Lautstärke (Dezibel) oder Säuregrad (pH) den Logarithmus schon eingebaut. Schiebe den Wert \(x\) und vergleiche seine Lage auf der gewöhnlichen und auf der logarithmischen Achse.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>log-Leiter — lineare gegen logarithmische Achse</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verzehnfache \(x\) mehrmals (1 → 10 → 100 → 1000): Wie weit springt der Zeiger jedes Mal auf der oberen linearen Achse, wie weit auf der unteren log-Achse? Bei welcher Achse sind die Sprünge alle gleich lang?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verzehnfache x mehrmals von eins auf zehn auf hundert auf tausend: Wie weit springt der Zeiger jedes Mal auf der oberen linearen Achse, wie weit auf der unteren log-Achse? Bei welcher Achse sind die Sprünge alle gleich lang?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Auf der linearen Achse drängen sich die kleinen Zahlen zusammen, während \(1000\) ganz aussen sitzt. Auf der log-Achse liegt jede Verzehnfachung gleich weit auseinander — der Abstand ist \(\lg x\). Multiplizieren mit \(10\) heisst dort: einen festen Schritt nach rechts. So macht der Logarithmus Grössenordnungen sichtbar.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Auf der linearen Achse drängen sich die kleinen Zahlen zusammen, während tausend ganz aussen sitzt. Auf der log-Achse liegt jede Verzehnfachung gleich weit auseinander — der Abstand ist der Zehnerlogarithmus von x. Multiplizieren mit zehn heisst dort: einen festen Schritt nach rechts.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Oben lineare Achse (0…1000) · unten log-Achse (10⁰…10³) · Zeiger bei \(x\) · \(\lg x\) als Abstand</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-blau">
+      <label>Wert <span class="var">\(x\)</span></label>
+      <input type="range" id="ll-x" min="0" max="3" step="0.01" value="2">
+      <span class="sl-val" id="ll-xv">100</span>
+    </div>
+    <div class="typ-btns" id="ll-snap-btns">
+      <button class="typ-btn" onclick="setLlX(1)">1</button>
+      <button class="typ-btn" onclick="setLlX(10)">10</button>
+      <button class="typ-btn aktiv" onclick="setLlX(100)">100</button>
+      <button class="typ-btn" onclick="setLlX(1000)">1000</button>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Ablesen</div>
+      <div class="fl-eq" id="ll-eq">x = 100 · lg(100) = 2</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ll-canvas" height="220"></canvas></div>
+  </div>
+</div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Eigenschaften</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Aussage trifft auf <em>alle</em> Logarithmusfunktionen \(y = \log_a x\) zu?</p><ul class="mc-optionen"><li data-opt="A">Sie haben die Nullstelle \(x_0 = 1\).</li><li data-opt="B">Sie haben den Ordinatenabschnitt \(y_0 = 1\).</li><li data-opt="C">Die \(x\)-Achse ist Asymptote.</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(\log_a 1 = 0\) für jede Basis. Einen Ordinatenabschnitt gibt es nicht (bei \(x = 0\) nicht definiert), und die Asymptote ist die \(y\)-Achse.</div></details></div>
@@ -403,6 +448,47 @@ MathJax = {
   <p><strong>Lösung:</strong> Die Unbekannte steht im Exponenten — nach dem Isolieren der e-Potenz hilft der natürliche Logarithmus:</p>
   \[ 30 = 20 + 60\,e^{-kt} \;\Rightarrow\; e^{-kt} = \tfrac{1}{6} \;\Rightarrow\; -kt = \ln\tfrac{1}{6} = -\ln 6 \;\Rightarrow\; t = \frac{\ln 6}{k} = \frac{10\ln 6}{\ln 2} \approx 25.8\ \text{min} \]
   <p>So löst der Logarithmus die <strong>Sättigungsprozesse</strong> aus 3.4a nach der Zeit auf.</p>
+</div>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Radiokarbon-Datierung — vom Restanteil zum Alter</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Halbiere den Restanteil schrittweise (100 % → 50 % → 25 %): Um wie viele Jahre wächst das Alter jedes Mal? Und wie viel Zeit vergeht von \(50\,\%\) auf \(25\,\%\) verglichen mit \(100\,\%\) auf \(50\,\%\)?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Halbiere den Restanteil schrittweise von hundert auf fünfzig auf fünfundzwanzig Prozent: Um wie viele Jahre wächst das Alter jedes Mal? Und wie viel Zeit vergeht von fünfzig auf fünfundzwanzig Prozent verglichen mit hundert auf fünfzig Prozent?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Zerfall folgt \(\tfrac{N}{N_0} = \left(\tfrac{1}{2}\right)^{t/T}\) mit der Halbwertszeit \(T = 5730\) Jahren. Nach der Zeit aufgelöst: \(t = T\cdot\log_{1/2}\!\tfrac{N}{N_0} = T\cdot\dfrac{\ln(N/N_0)}{\ln(1/2)}\). Jede Halbierung kostet gleich viel Zeit — \(T\) —, egal bei welchem Ausgangswert. Genau darum ist der Logarithmus das Werkzeug für Zerfallsalter.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Zerfall folgt N durch N null gleich ein halb hoch t durch T mit der Halbwertszeit T gleich fünftausendsiebenhundertdreissig Jahren. Nach der Zeit aufgelöst: t gleich T mal Logarithmus zur Basis ein halb von N durch N null. Jede Halbierung kostet gleich viel Zeit, nämlich T, egal bei welchem Ausgangswert.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Restanteil \(N/N_0\) einstellen · Zerfallskurve mit abgelesenem Alter · Halbwertszeit \(T = 5730\) a</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-orange">
+      <label>Restanteil <span class="var">\(N/N_0\)</span></label>
+      <input type="range" id="c14-r" min="0.06" max="1" step="0.01" value="0.5">
+      <span class="sl-val" id="c14-rv">50%</span>
+    </div>
+    <div class="typ-btns" id="c14-snap-btns">
+      <button class="typ-btn" onclick="setC14(1)">100 %</button>
+      <button class="typ-btn aktiv" onclick="setC14(0.5)">50 %</button>
+      <button class="typ-btn" onclick="setC14(0.25)">25 %</button>
+      <button class="typ-btn" onclick="setC14(0.527)">Ötzi</button>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Alter der Probe</div>
+      <div class="fl-eq" id="c14-eq">t = 5730 · log(1/2)(0.50) = 5730 a</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="c14-canvas" height="240"></canvas></div>
+  </div>
 </div>
 
 <div class="block block-fehler">
@@ -969,15 +1055,134 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* ══ LOG-LEITER: lineare vs. logarithmische Achse ══ */
+function setLlX(x){
+  document.getElementById('ll-x').value = Math.log10(x);
+  drawLl();
+}
+function drawLl(){
+  const L = parseFloat(document.getElementById('ll-x').value);   // Slider trägt lg(x)
+  const x = Math.pow(10, L);
+  document.getElementById('ll-xv').textContent = x >= 100 ? Math.round(x) : x.toFixed(x < 10 ? 2 : 1);
+  document.getElementById('ll-eq').innerHTML =
+    `x = ${x >= 100 ? Math.round(x) : x.toFixed(2)} · lg(x) = ${L.toFixed(2)}`;
+  document.querySelectorAll('#ll-snap-btns .typ-btn').forEach(b =>
+    b.classList.toggle('aktiv', Math.abs(Math.log10(parseFloat(b.textContent)) - L) < 1e-6));
+
+  const {ctx, W, H} = initCanvas('ll-canvas', 220, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const padL = 20, padR = 20;
+  const x0 = padL, x1 = W - padR, span = x1 - x0;
+  const yLin = 58, yLog = 150;
+
+  // Achse zeichnen mit Ticks
+  function achse(y, farbe, titel){
+    ctx.strokeStyle = farbe; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+    ctx.fillStyle = farbe; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
+    ctx.fillText(titel, x0, y - 24);
+  }
+  achse(yLin, '#374151', 'linear: 0 … 1000');
+  achse(yLog, '#5b2d8e', 'logarithmisch: 10⁰ … 10³');
+
+  // Position auf linearer Achse: x/1000; auf log-Achse: lg(x)/3
+  const posLin = v => x0 + (v / 1000) * span;
+  const posLog = v => x0 + (Math.log10(v) / 3) * span;
+
+  // Ticks linear bei 0,200,...,1000 und Zehnerpotenzen markiert
+  ctx.font = '11px monospace'; ctx.textAlign = 'center';
+  [0, 200, 400, 600, 800, 1000].forEach(v => {
+    const px = posLin(v);
+    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px, yLin - 5); ctx.lineTo(px, yLin + 5); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.fillText(v, px, yLin + 18);
+  });
+  // Zehnerpotenzen auf beiden Achsen hervorheben (gleiche Zahlen, andere Lage)
+  [1, 10, 100, 1000].forEach(v => {
+    const pxL = posLin(v), pxG = posLog(v);
+    ctx.fillStyle = '#1a4f8a';
+    ctx.beginPath(); ctx.arc(pxL, yLin, 3, 0, 2 * Math.PI); ctx.fill();
+    ctx.strokeStyle = '#5b2d8e'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pxG, yLog - 5); ctx.lineTo(pxG, yLog + 5); ctx.stroke();
+    ctx.fillStyle = '#5b2d8e'; ctx.font = '11px monospace';
+    ctx.fillText(v, pxG, yLog + 18);
+  });
+
+  // Verbindungslinien 10er-Potenzen (zeigt die Umskalierung)
+  ctx.strokeStyle = 'rgba(91,45,142,0.25)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  [1, 10, 100, 1000].forEach(v => {
+    ctx.beginPath(); ctx.moveTo(posLin(v), yLin + 6); ctx.lineTo(posLog(v), yLog - 6); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Zeiger bei x
+  const zx = x >= 1 ? x : 1;
+  ctx.fillStyle = '#b85c00';
+  [[posLin(zx), yLin], [posLog(zx), yLog]].forEach(([px, py]) => {
+    ctx.beginPath(); ctx.moveTo(px, py - 9); ctx.lineTo(px - 5, py - 18); ctx.lineTo(px + 5, py - 18); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(px, py, 4, 0, 2 * Math.PI); ctx.fill();
+  });
+  // lg(x)-Abstand auf der log-Achse markieren
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(posLog(1), yLog + 30); ctx.lineTo(posLog(zx), yLog + 30); ctx.stroke();
+  ctx.fillStyle = '#b85c00'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('lg(x) = ' + L.toFixed(2), (posLog(1) + posLog(zx)) / 2, yLog + 45);
+}
+document.getElementById('ll-x').addEventListener('input', drawLl);
+
+/* ══ C-14 RADIOKARBON-DATIERUNG ══ */
+const C14_T = 5730;   // Halbwertszeit in Jahren
+function setC14(r){
+  document.getElementById('c14-r').value = r;
+  drawC14();
+}
+function drawC14(){
+  const r = parseFloat(document.getElementById('c14-r').value);   // Restanteil N/N0
+  const t = C14_T * Math.log(r) / Math.log(0.5);                   // Alter in Jahren
+  document.getElementById('c14-rv').textContent = Math.round(r * 100) + '%';
+  document.getElementById('c14-eq').innerHTML =
+    `t = 5730 · log(1/2)(${r.toFixed(2)}) = ${Math.round(t).toLocaleString('de-CH')} a`;
+  document.querySelectorAll('#c14-snap-btns .typ-btn').forEach(b => b.classList.remove('aktiv'));
+
+  const tMax = 24000;   // knapp über 4 Halbwertszeiten
+  const {ctx, W, H, cx, cy} = gridApp('c14-canvas', 240, 0, tMax, 0, 100, 5730, 20, 't [a]', 'N/N₀ [%]');
+  // Zerfallskurve N/N0 = (1/2)^(t/T) in Prozent
+  plotFx(ctx, cx, cy, tt => 100 * Math.pow(0.5, tt / C14_T), 0, tMax, '#1a4f8a', 2.6, 1e6);
+  // Halbwertszeit-Raster: bei T, 2T, 3T, 4T die Werte 50,25,12.5,6.25
+  ctx.font = '11px monospace';
+  for(let k = 1; k <= 3; k++){   // 4·T läge am rechten Rand über dem Achsen-Label
+    const tk = k * C14_T, yk = 100 * Math.pow(0.5, k);
+    ctx.strokeStyle = 'rgba(31,107,58,0.5)'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(cx(tk), cy(0)); ctx.lineTo(cx(tk), cy(yk)); ctx.lineTo(cx(0), cy(yk)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#1f6b3a'; ctx.textAlign = 'left';
+    ctx.fillText(k + '·T', cx(tk) + 3, cy(0) - 4);
+  }
+  // Aktueller Punkt + Projektion
+  ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 1.6; ctx.setLineDash([5, 3]);
+  ctx.beginPath(); ctx.moveTo(cx(0), cy(r * 100)); ctx.lineTo(cx(t), cy(r * 100)); ctx.lineTo(cx(t), cy(0)); ctx.stroke();
+  ctx.setLineDash([]);
+  drawDot(ctx, cx, cy, t, r * 100, '#b85c00', 6);
+  // Label nach links kippen, sobald der Punkt in der rechten Bildhälfte liegt
+  ctx.fillStyle = '#b85c00'; ctx.font = 'bold 12px monospace';
+  const rechts = t > tMax * 0.5;
+  ctx.textAlign = rechts ? 'right' : 'left';
+  ctx.fillText(Math.round(t).toLocaleString('de-CH') + ' a', cx(t) + (rechts ? -9 : 9), cy(r * 100) - 6);
+}
+document.getElementById('c14-r').addEventListener('input', drawC14);
+
+/* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateEK();
   drawSp();
   buildTyBtns(); drawTy();
   updateTR();
   buildA1(); drawA1();
+  drawLl(); drawC14();
 });
 window.addEventListener('resize', () => {
   updateEK(); drawSp(); drawTy(); updateTR(); drawA1(); drawA2Sol();
+  drawLl(); drawC14();
 });
 </script>
 </body>
