@@ -50,6 +50,7 @@ const WIDGETS = [
   { page: 'grundlagen/g2-3-lineare-gleichungssysteme.html', id: 'cv-lbuschel', note: 'LGS-Loesungsfaelle' },
   { page: 'grundlagen/g2-1-grundlagen.html', id: 'cv-ungl', note: 'Ungleichungs-Zahlenstrahl' },
   { page: 'grundlagen/g2-2a-lineare-gleichungen.html', id: 'cv-vkipp', note: 'Vorzeichenkipp' },
+  { page: 'schwerpunkt/s1-2-potenzen.html', id: 'cv-zehnerpot', note: 'Zehnerpotenzen-Umwandler' },
 ];
 
 const VIEWPORTS = [

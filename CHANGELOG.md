@@ -4,6 +4,31 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [94] — 2026-07-10 · Audit-Paket 5 / T53, Runde 4: vier Widgets aus der g2-Reihe und s1-2
+
+Zahlen vorab mit `python3` nachgerechnet, Pre-Flight `ALLE CHECKS BESTANDEN`, Browser-Rendercheck
+bei 1280 px und 360 px:
+
+- **g2-3** — **Lösungsfall-Slider mit Geradenbüschel**: \(g_1: 2x + y = 4\) fest, \(g_2: m x + y = c\)
+  regelbar. Die Determinante \(D = 2 - m\) steuert alles: \(D \neq 0\) gibt genau eine Lösung, und
+  der Schnittpunkt flieht sichtbar ins Unendliche, je näher \(m\) an \(2\) rückt. Bei \(D = 0\)
+  entscheidet erst \(c\) zwischen «keine Lösung» (\(0 = 2\)) und «unendlich viele» (\(0 = 0\)).
+  Blass mitgezeichnet ist die Schar paralleler Büschelgeraden.
+- **g2-1** — **Ungleichungs-Zahlenstrahl**: Signalwort («höchstens», «mehr als», …) → Zeichen →
+  Lösungsmenge. Der Randpunkt ist gefüllt oder offen, der Lösungspfeil läuft mit Spitze ins
+  Unendliche, und die Intervallschreibweise steht daneben.
+- **g2-2a** — **Vorzeichenkipp**: Die wahre Aussage \(2 < 5\) wird mit \(k\) multipliziert. Für
+  \(k < 0\) spiegelt die Zahlengerade am Nullpunkt, die Abbildungspfeile kreuzen sich und das
+  Zeichen kippt. Der Grenzfall \(k = 0\) lässt beide Bildpunkte auf die Null fallen — sichtbar,
+  warum Multiplikation mit \(0\) keine Äquivalenzumformung ist.
+- **s1-2** — **Zehnerpotenzen-Umwandler**: \(m \cdot 10^k\) ausgeschrieben, mit der Ziffernfolge
+  der Mantisse in Blau und den aufgefüllten Nullen in Grau; der Bogen zeigt, um wie viele Stellen
+  der Dezimalpunkt wandert. Bei ganzzahligem Ergebnis wird der implizite Punkt am Ende angedeutet.
+  Die Umrechnung ist im Browser über alle 125 Kombinationen (5 Mantissen × \(k \in [-12; 12]\))
+  gegen \(m \cdot 10^k\) geprüft.
+
+---
+
 ## [93] — 2026-07-10 · Audit-Paket 5 / T53, Runde 3: vier weitere Prio-2-Widgets
 
 Auswahl nach demselben Raster wie Runde 2 (arme Seite × Konzept braucht ein Bild). Zahlen
