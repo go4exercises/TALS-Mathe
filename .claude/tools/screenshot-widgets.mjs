@@ -58,6 +58,7 @@ const WIDGETS = [
   // T53, Runde 6.
   { page: 'grundlagen/g3-1-grundlagen.html', id: 'cv-vertikal', note: 'Vertikaltest' },
   { page: 'grundlagen/g3-2-lineare-funktionen.html', id: 'cv-steig', note: 'Steigungsdreieck (Drag)' },
+  { page: 'grundlagen/g5-2a-dreiecke.html', id: 'cv-dreiungl', note: 'Dreiecksungleichung' },
 ];
 
 const VIEWPORTS = [

@@ -279,6 +279,57 @@ MathJax = {
   </ul>
 </div>
 
+<div class="block block-merksatz" style="margin-top:12px">
+  <div class="block-titel">⭐ Dreiecksungleichung</div>
+  <p>Drei Strecken bilden genau dann ein Dreieck, wenn <strong>jede</strong> Seite kürzer ist als die Summe der beiden anderen:</p>
+  \[ a < b + c, \qquad b < a + c, \qquad c < a + b \]
+  <p style="margin-top:6px">Es genügt, die <em>längste</em> Seite zu prüfen — bei ihr ist die Bedingung am schärfsten. Gilt Gleichheit (z.B. \(c = a + b\)), so liegen die drei Punkte auf einer Geraden: ein «entartetes» Dreieck ohne Fläche.</p>
+</div>
+
+<div class="anim">
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Anim · Dreiecksungleichung — wann schliesst sich das Dreieck?</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Stelle \(a = 3\), \(b = 4\) ein und vergrössere \(c\) langsam von \(6\) auf \(8\). Bei welchem Wert klappt das Dreieck flach — und was passiert danach?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Stelle a gleich drei und b gleich vier ein und vergrössere c langsam von sechs auf acht. Bei welchem Wert klappt das Dreieck flach — und was passiert danach?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Bei \(c = a + b = 7\) liegen die beiden kurzen Seiten gestreckt aneinander — die Höhe wird null, das Dreieck entartet zur Strecke. Für \(c > 7\) reichen \(a\) und \(b\) zusammen nicht mehr von \(A\) nach \(B\): Die beiden Kreise um \(A\) und \(B\) schneiden sich nicht mehr, es gibt <strong>kein</strong> Dreieck. Die Dreiecksungleichung ist genau die Bedingung dafür, dass sich diese Kreise schneiden.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Bei c gleich a plus b gleich sieben liegen die beiden kurzen Seiten gestreckt aneinander — die Höhe wird null, das Dreieck entartet zur Strecke. Für c grösser sieben reichen a und b zusammen nicht mehr von A nach B: Die beiden Kreise um A und B schneiden sich nicht mehr, es gibt kein Dreieck.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
+  <div class="anim-layout">
+    <canvas id="cv-dreiungl" width="520" height="300"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label"><span>Seite \(a\)</span><span class="wert" id="lbl-duA">3.0</span></div>
+        <input type="range" id="sld-duA" min="1" max="10" step="0.5" value="3">
+      </div>
+      <div class="regler">
+        <div class="regler-label"><span>Seite \(b\)</span><span class="wert" id="lbl-duB">4.0</span></div>
+        <input type="range" id="sld-duB" min="1" max="10" step="0.5" value="4">
+      </div>
+      <div class="regler">
+        <div class="regler-label"><span>Seite \(c\)</span><span class="wert" id="lbl-duC">6.0</span></div>
+        <input type="range" id="sld-duC" min="1" max="10" step="0.5" value="6">
+      </div>
+      <div class="legende">
+        <div class="legende-titel">Die drei Bedingungen</div>
+        <div class="legende-zeile"><span class="lab">a &lt; b + c</span><span class="val" id="leg-du1">✓</span></div>
+        <div class="legende-zeile"><span class="lab">b &lt; a + c</span><span class="val" id="leg-du2">✓</span></div>
+        <div class="legende-zeile"><span class="lab">c &lt; a + b</span><span class="val" id="leg-du3">✓</span></div>
+      </div>
+      <div class="erklaerung" id="du-erkl"></div>
+    </div>
+  </div>
+</div>
+
 <h3>Allgemeines Dreieck — interaktiv</h3>
 
 <div class="anim">
@@ -3432,7 +3483,103 @@ function pythRechnung(typ, gegSeite, wert) {
 /* ============================================================
  *  INITIAL DRAW
  * ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════
+ *  DREIECKSUNGLEICHUNG
+ *  SSS-Konstruktion: A(0|0), B(c|0), C = Schnitt der Kreise
+ *  k(A, b) und k(B, a):  x = (b² + c² − a²)/(2c),  y = √(b² − x²).
+ *  Reell genau dann, wenn jede Seite kürzer ist als die Summe der anderen.
+ * ══════════════════════════════════════════════════════════════ */
+function drawDreiUngl() {
+  const a = parseFloat(document.getElementById('sld-duA').value);
+  const b = parseFloat(document.getElementById('sld-duB').value);
+  const c = parseFloat(document.getElementById('sld-duC').value);
+  document.getElementById('lbl-duA').textContent = a.toFixed(1);
+  document.getElementById('lbl-duB').textContent = b.toFixed(1);
+  document.getElementById('lbl-duC').textContent = c.toFixed(1);
+  const b1 = a < b + c, b2 = b < a + c, b3 = c < a + b;
+  const entartet = Math.abs(a + b - c) < 1e-9 || Math.abs(a + c - b) < 1e-9 || Math.abs(b + c - a) < 1e-9;
+  const ok = b1 && b2 && b3;
+  [['leg-du1', b1], ['leg-du2', b2], ['leg-du3', b3]].forEach(([id, v]) => {
+    const el = document.getElementById(id);
+    el.textContent = v ? '✓' : '✗';
+    el.style.color = v ? 'var(--gruen)' : 'var(--rot)';
+  });
+  const eEl = document.getElementById('du-erkl');
+  if (ok) {
+    eEl.innerHTML = 'Alle drei Bedingungen erfüllt — das Dreieck existiert und ist durch \\(a\\), \\(b\\), \\(c\\) eindeutig bestimmt (Kongruenzsatz SSS).';
+    eEl.style.borderLeftColor = 'var(--gruen)';
+  } else if (entartet) {
+    eEl.innerHTML = 'Grenzfall: Eine Seite ist genau so lang wie die Summe der beiden anderen — die drei Punkte liegen auf einer Geraden, die Fläche ist null.';
+    eEl.style.borderLeftColor = 'var(--orange)';
+  } else {
+    eEl.innerHTML = 'Die beiden kürzeren Seiten reichen nicht bis zueinander: Die Kreise um \\(A\\) und \\(B\\) schneiden sich nicht — <strong>kein Dreieck</strong>.';
+    eEl.style.borderLeftColor = 'var(--rot)';
+  }
+  mjTypeset([eEl]);
+
+  const r = initCv('cv-dreiungl'); if (!r) return;
+  const { ctx, W, H } = r;
+  // sk so, dass auch das höchste Dreieck (Höhe ≤ b ≤ 10) ins Bild passt
+  const sk = 20, ox = W / 2 - c * sk / 2, oy = H - 52;
+  const A = [ox, oy], B = [ox + c * sk, oy];
+
+  // Kreise um A (Radius b) und B (Radius a)
+  ctx.strokeStyle = '#c8d0da'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.arc(A[0], A[1], b * sk, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(B[0], B[1], a * sk, 0, Math.PI * 2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Grundseite c
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.stroke();
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillText('c = ' + c.toFixed(1), (A[0] + B[0]) / 2, oy + 20);
+
+  if (ok || entartet) {
+    const xC = (b * b + c * c - a * a) / (2 * c);
+    const yC = Math.sqrt(Math.max(0, b * b - xC * xC));
+    const C = [ox + xC * sk, oy - yC * sk];
+    ctx.fillStyle = 'rgba(26,79,138,0.10)';
+    ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.lineTo(C[0], C[1]); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(C[0], C[1]); ctx.stroke();
+    ctx.strokeStyle = '#b85c00';
+    ctx.beginPath(); ctx.moveTo(B[0], B[1]); ctx.lineTo(C[0], C[1]); ctx.stroke();
+    ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'right';
+    ctx.fillText('b = ' + b.toFixed(1), (A[0] + C[0]) / 2 - 6, (A[1] + C[1]) / 2);
+    ctx.fillStyle = '#b85c00'; ctx.textAlign = 'left';
+    ctx.fillText('a = ' + a.toFixed(1), (B[0] + C[0]) / 2 + 6, (B[1] + C[1]) / 2);
+    ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
+    ctx.beginPath(); ctx.arc(C[0], C[1], 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText('C', C[0], C[1] - 10);
+  } else {
+    // b und a von A bzw. B aus waagrecht aneinandergelegt — sie erreichen sich nicht
+    const gap = ox + b * sk, gap2 = ox + c * sk - a * sk;
+    ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(A[0], A[1] - 34); ctx.lineTo(gap, A[1] - 34); ctx.stroke();
+    ctx.strokeStyle = '#b85c00';
+    ctx.beginPath(); ctx.moveTo(B[0], A[1] - 34); ctx.lineTo(gap2, A[1] - 34); ctx.stroke();
+    ctx.strokeStyle = '#c8412c'; ctx.lineWidth = 1.6; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(gap, A[1] - 34); ctx.lineTo(gap2, A[1] - 34); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#c8412c'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('Lücke', (gap + gap2) / 2, A[1] - 44);
+  }
+  // Eckpunkte A, B
+  ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
+  [[A, 'A'], [B, 'B']].forEach(([P, n]) => {
+    ctx.beginPath(); ctx.arc(P[0], P[1], 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText(n, P[0], P[1] + 20);
+  });
+  ctx.fillStyle = ok ? '#1f6b3a' : (entartet ? '#b85c00' : '#c8412c');
+  ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+  ctx.fillText(ok ? 'Dreieck existiert' : (entartet ? 'entartet: Fläche 0' : 'kein Dreieck'), W - 10, 22);
+}
+
 window.addEventListener('load', () => {
+  ['A', 'B', 'C'].forEach(k => document.getElementById('sld-du' + k).addEventListener('input', drawDreiUngl));
+  drawDreiUngl();
   drawAllg();
   drawBeweis();
   drawSpez();
@@ -3444,6 +3591,7 @@ window.addEventListener('load', () => {
   drawStativ();
 });
 window.addEventListener('resize', () => {
+  drawDreiUngl();
   drawAllg();
   drawBeweis();
   drawSpez();
