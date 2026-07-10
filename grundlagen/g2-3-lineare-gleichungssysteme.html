@@ -364,6 +364,40 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
   </div>
 </div>
 
+<div class="widget-titelzeile" style="margin:16px 0 8px">
+  <p style="margin:0">Die drei Fälle sind keine getrennten Welten — kippe die zweite Gerade stetig und beobachte den Schnittpunkt:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Schiebe \(m\) langsam gegen \(2\), während \(c \neq 4\) bleibt. Wohin wandert der Schnittpunkt — und was passiert genau im Moment \(m = 2\)?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Schiebe m langsam gegen zwei, während c ungleich vier bleibt. Wohin wandert der Schnittpunkt — und was passiert genau im Moment m gleich zwei?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Der Schnittpunkt flieht ins Unendliche, je näher die Steigungen zusammenrücken. Bei \(m = 2\) sind die Geraden parallel: Entweder liegen sie übereinander (\(c = 4\), unendlich viele Lösungen) oder nebeneinander (\(c \neq 4\), keine). Rechnerisch ist das dieselbe Grösse — die <strong>Determinante</strong> \(2 - m\). Ist sie null, entscheidet erst \(c\) zwischen «keine» und «unendlich viele».</div>
+      <button class="ah-speak" type="button" data-vorlesen="Der Schnittpunkt flieht ins Unendliche, je näher die Steigungen zusammenrücken. Bei m gleich zwei sind die Geraden parallel: Entweder liegen sie übereinander, dann unendlich viele Lösungen, oder nebeneinander, dann keine. Rechnerisch ist das dieselbe Grösse — die Determinante zwei minus m. Ist sie null, entscheidet erst c zwischen keine und unendlich viele.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Steigungsparameter \(m\): <span class="sl-val" id="lb-mv">1.00</span></label>
+  <input type="range" id="lb-m" min="0" max="4" step="0.25" value="1">
+</div>
+<div class="sl-row">
+  <label>Konstante \(c\): <span class="sl-val" id="lb-cv">4.0</span></label>
+  <input type="range" id="lb-c" min="0" max="8" step="0.5" value="4">
+</div>
+<div class="meth-btns">
+  <button class="meth-btn" type="button" data-lb="1|6">eindeutig</button>
+  <button class="meth-btn" type="button" data-lb="2|6">parallel (keine)</button>
+  <button class="meth-btn" type="button" data-lb="2|4">identisch (unendlich)</button>
+</div>
+<div class="formel-live"><div class="fl-label">System und Determinante</div><div class="fl-eq" id="lb-eq" style="font-size:0.95rem"></div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-lbuschel" height="300"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blass gezeichnet ist das <strong>Geradenbüschel</strong>: dieselbe Gerade \(g_2\) für andere Werte von \(c\). Alle Büschelgeraden sind parallel zueinander — \(c\) verschiebt nur, \(m\) kippt.</div>
+
 <table class="ftb-tabelle">
   <thead><tr><th>Lösungsfall</th><th>Was passiert beim Rechnen</th><th>Lösungsmenge</th></tr></thead>
   <tbody>
@@ -1090,7 +1124,106 @@ document.addEventListener('DOMContentLoaded', () => {
   rendDd();
   // Aufgabe 1 Graph
   drawA1();
+  // Lösungsfall-Slider
+  ['lb-m', 'lb-c'].forEach(id => document.getElementById(id).addEventListener('input', drawBuschel));
+  document.querySelectorAll('[data-lb]').forEach(btn => btn.addEventListener('click', () => {
+    const [m, c] = btn.dataset.lb.split('|');
+    document.getElementById('lb-m').value = m;
+    document.getElementById('lb-c').value = c;
+    drawBuschel();
+  }));
+  drawBuschel();
 });
+
+/* ══════════════════════════════════════════════════════════════
+ *  LÖSUNGSFALL-SLIDER + GERADENBÜSCHEL
+ *  g₁: 2x + y = 4      g₂: m·x + y = c
+ *  Determinante D = 2 − m.  D ≠ 0 → S((4−c)/D | 4 − 2x_S)
+ *  D = 0: c = 4 → identisch (unendlich viele) · c ≠ 4 → parallel (keine)
+ * ══════════════════════════════════════════════════════════════ */
+function drawBuschel() {
+  const m = parseFloat(document.getElementById('lb-m').value);
+  const c = parseFloat(document.getElementById('lb-c').value);
+  const D = 2 - m;
+  document.getElementById('lb-mv').textContent = m.toFixed(2);
+  document.getElementById('lb-cv').textContent = c.toFixed(1);
+  document.querySelectorAll('[data-lb]').forEach(b => {
+    const [bm, bc] = b.dataset.lb.split('|').map(Number);
+    b.classList.toggle('aktiv', bm === m && bc === c);
+  });
+
+  const eqEl = document.getElementById('lb-eq');
+  // linke Seite von g₂ sauber setzen: m = 1 → «x», m = 0 → nur «y».
+  // Nicht fmtMx() verwenden — das rundet auf eine Dezimale (1.75 → «1.8·x»).
+  const g2links = m === 0 ? 'y' : (m === 1 ? 'x + y' : `${m}·x + y`);
+  let fall, farbe, S = null;
+  if (Math.abs(D) > 1e-9) {
+    const xs = (4 - c) / D, ys = 4 - 2 * xs;
+    S = [xs, ys];
+    fall = 'eindeutig';
+    eqEl.innerHTML = `2·x + y = 4 &nbsp;·&nbsp; ${g2links} = ${c} &nbsp; → &nbsp; D = 2 − ${m} = ${D.toFixed(2)} ≠ 0 → ` +
+      `<strong>genau eine Lösung</strong> S(${xs.toFixed(2)} | ${ys.toFixed(2)})`.replace(/-/g, '−');
+    farbe = '#1f6b3a';
+  } else if (Math.abs(c - 4) < 1e-9) {
+    fall = 'identisch';
+    eqEl.innerHTML = `2·x + y = 4 &nbsp;·&nbsp; 2·x + y = 4 &nbsp; → &nbsp; D = 0 und beide Gleichungen sind gleich: ` +
+      `0 = 0 → <strong>unendlich viele Lösungen</strong> (die ganze Gerade)`;
+    farbe = '#1a4f8a';
+  } else {
+    fall = 'parallel';
+    eqEl.innerHTML = `2·x + y = 4 &nbsp;·&nbsp; 2·x + y = ${c} &nbsp; → &nbsp; D = 0, Subtraktion ergibt ` +
+      `0 = ${(c - 4).toFixed(1)} → <strong>keine Lösung</strong>, 𝕃 = { }`.replace(/= -/g, '= −');
+    farbe = '#c8412c';
+  }
+
+  const { ctx, W, H } = initCanvas('cv-lbuschel', 300, false);
+  const xMin = -6, xMax = 6, yMin = -4, yMax = 10;
+  const { cx, cy } = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+
+  // Geradenbüschel: g₂ für andere c (parallel zueinander)
+  for (let cc = 0; cc <= 8; cc += 2) {
+    if (Math.abs(cc - c) < 1e-9) continue;
+    drawLine(ctx, cx, cy, -m, cc, xMin, xMax, 'rgba(184,92,0,0.18)', 1.5);
+  }
+  drawLine(ctx, cx, cy, -2, 4, xMin, xMax, '#1a4f8a', 2.8);       // g₁: y = 4 − 2x
+  drawLine(ctx, cx, cy, -m, c, xMin, xMax, '#b85c00', 2.8);       // g₂: y = c − m·x
+
+  // Labels dort setzen, wo die Gerade tatsächlich im Fenster liegt
+  const labelAn = (steig, achs, farbe, name) => {
+    for (let x = xMax - 0.8; x > xMin; x -= 0.4) {
+      const y = steig * x + achs;
+      if (y > yMin + 0.8 && y < yMax - 0.8) {
+        ctx.fillStyle = farbe; ctx.textAlign = 'left';
+        ctx.fillText(name, cx(x) + 4, cy(y) - 8);
+        return;
+      }
+    }
+  };
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  labelAn(-2, 4, '#1a4f8a', 'g₁');
+  labelAn(-m, c, '#b85c00', 'g₂');
+
+  if (S) {
+    const drin = S[0] > xMin && S[0] < xMax && S[1] > yMin && S[1] < yMax;
+    if (drin) {
+      drawDot(ctx, cx, cy, S[0], S[1], '#1f6b3a', 6);
+      ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+      ctx.fillText(`S(${S[0].toFixed(2)} | ${S[1].toFixed(2)})`.replace(/-/g, '−'), cx(S[0]), cy(S[1]) - 12);
+    } else {
+      ctx.font = 'italic 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+      const hw = ctx.measureText('Schnittpunkt ausserhalb des Fensters — er flieht, wenn m → 2').width;
+      ctx.fillStyle = '#fff'; ctx.fillRect(W / 2 - hw / 2 - 5, H - 24, hw + 10, 18);
+      ctx.fillStyle = '#6b7280';
+      ctx.fillText('Schnittpunkt ausserhalb des Fensters — er flieht, wenn m → 2', W / 2, H - 11);
+    }
+  }
+  // Statuszeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+  const txt = fall === 'eindeutig' ? 'genau eine Lösung' : (fall === 'parallel' ? 'keine Lösung' : 'unendlich viele Lösungen');
+  const tw = ctx.measureText(txt).width;
+  ctx.fillStyle = '#fff'; ctx.fillRect(W - 12 - tw, 6, tw + 8, 18);
+  ctx.fillStyle = farbe; ctx.fillText(txt, W - 8, 19);
+}
 </script>
 </body>
 </html>
