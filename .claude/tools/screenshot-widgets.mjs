@@ -57,6 +57,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s4-3a-vektorbegriff-komponenten.html', id: 'cv-polar', note: 'Polar-Quadranten' },
   // T53, Runde 6.
   { page: 'grundlagen/g3-1-grundlagen.html', id: 'cv-vertikal', note: 'Vertikaltest' },
+  { page: 'grundlagen/g3-2-lineare-funktionen.html', id: 'cv-steig', note: 'Steigungsdreieck (Drag)' },
 ];
 
 const VIEWPORTS = [

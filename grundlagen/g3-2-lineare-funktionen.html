@@ -26,6 +26,7 @@ MathJax = {
 
 /* ── Slider row ── */
 .sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+#cv-steig { width:100%; height:auto; display:block; }
 .sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
 .sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
 .sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
@@ -281,6 +282,27 @@ MathJax = {
   <div class="block-titel">📘 Nullstelle</div>
   \[ 0 = mx_0+b \quad\Longrightarrow\quad x_0 = -\frac{b}{m} \quad(m\neq 0) \]
 </div>
+
+<div class="widget-titelzeile" style="margin:16px 0 8px">
+  <p style="margin:0">Zieh die beiden Punkte — das Steigungsdreieck und \(m\) passen sich sofort an:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Verschiebe \(Q\) entlang der Geraden, ohne ihre Richtung zu ändern: Das Dreieck wird grösser, aber was passiert mit dem Quotienten \(\Delta y / \Delta x\)? Und was, wenn beide Punkte dieselbe \(x\)-Koordinate haben?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Verschiebe Q entlang der Geraden, ohne ihre Richtung zu ändern: Das Dreieck wird grösser, aber was passiert mit dem Quotienten delta y durch delta x? Und was, wenn beide Punkte dieselbe x-Koordinate haben?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Die Steigung ist ein <strong>Verhältnis</strong>, kein Abstand: Jedes Steigungsdreieck derselben Geraden liefert denselben Wert \(m\), egal wie gross es ist — die Dreiecke sind ähnlich. Fallen die \(x\)-Koordinaten zusammen, ist \(\Delta x = 0\): Die Gerade steht senkrecht, \(m\) ist <em>nicht definiert</em>, und der Graph ist gar keine Funktion (Vertikaltest!).</div>
+      <button class="ah-speak" type="button" data-vorlesen="Die Steigung ist ein Verhältnis, kein Abstand: Jedes Steigungsdreieck derselben Geraden liefert denselben Wert m, egal wie gross es ist — die Dreiecke sind ähnlich. Fallen die x-Koordinaten zusammen, ist delta x gleich null: Die Gerade steht senkrecht, m ist nicht definiert, und der Graph ist gar keine Funktion.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="formel-live"><div class="fl-label">Steigung aus zwei Punkten</div><div class="fl-eq" id="sd-eq" style="font-size:0.95rem"></div></div>
+<div class="cv-wrap" style="max-width:460px"><canvas id="cv-steig" style="touch-action:none;cursor:grab"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic;text-align:center">Punkte mit Maus oder Finger ziehen — sie rasten auf halbe Einheiten ein.</div>
 
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Steigung, Achsenabschnitt, Nullstelle</summary>
@@ -948,15 +970,117 @@ function chkVal(id, target, einheit){
 }
 
 /* ══ INIT ══ */
+/* ══════════════════════════════════════════════════════════════
+ *  STEIGUNGSDREIECK mit ziehbaren Punkten
+ *  m = Δy/Δx. Jedes Dreieck derselben Geraden liefert dasselbe m
+ *  (ähnliche Dreiecke). Δx = 0 → senkrechte Gerade, m nicht definiert.
+ * ══════════════════════════════════════════════════════════════ */
+const SD = { P: [-2, -1], Q: [3, 3], greif: null };
+const SD_MIN = -6, SD_MAX = 6, SD_LW = 460;
+function sdCoord(e) {
+  const cv = document.getElementById('cv-steig');
+  const r = cv.getBoundingClientRect();
+  const px = (e.clientX - r.left) / r.width * SD_LW;
+  const py = (e.clientY - r.top) / r.height * SD_LW;
+  const x = SD_MIN + px / SD_LW * (SD_MAX - SD_MIN);
+  const y = SD_MAX - py / SD_LW * (SD_MAX - SD_MIN);
+  const snap = v => Math.max(SD_MIN + 0.5, Math.min(SD_MAX - 0.5, Math.round(v * 2) / 2));
+  return [snap(x), snap(y)];
+}
+function drawSteig() {
+  const cv = document.getElementById('cv-steig');
+  if (!cv) return;
+  const [x1, y1] = SD.P, [x2, y2] = SD.Q;
+  const dx = x2 - x1, dy = y2 - y1;
+  const senkrecht = Math.abs(dx) < 1e-9;
+  const m = senkrecht ? null : dy / dx;
+  const eqEl = document.getElementById('sd-eq');
+  const nz = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(v % 1 === 0 ? 0 : 1);
+  if (senkrecht) {
+    eqEl.innerHTML = `P(${nz(x1)} | ${nz(y1)}), Q(${nz(x2)} | ${nz(y2)}) &nbsp;·&nbsp; Δx = 0 → ` +
+      `<strong style="color:var(--rot)">m nicht definiert</strong> (senkrechte Gerade, keine Funktion)`;
+  } else {
+    const b = y1 - m * x1;
+    // «≈», sobald m oder b bei zwei Dezimalen gerundet werden müssen
+    const rund = v => Math.abs(v * 100 - Math.round(v * 100)) > 1e-9;
+    const ungefaehr = rund(m) || rund(b);
+    eqEl.innerHTML = `P(${nz(x1)} | ${nz(y1)}), Q(${nz(x2)} | ${nz(y2)}) &nbsp;·&nbsp; ` +
+      `m = Δy/Δx = <span class="tx-orange">${nz(dy)}</span>/<span class="tx-blau">${nz(dx)}</span> = <strong>${ungefaehr ? '≈ ' : ''}${m.toFixed(2).replace('-', '−')}</strong>` +
+      ` &nbsp;·&nbsp; y ${ungefaehr ? '≈' : '='} ${m.toFixed(2).replace('-', '−')}·x ${b >= 0 ? '+' : '−'} ${Math.abs(b).toFixed(2)}`;
+  }
+
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = cv.getBoundingClientRect().width || SD_LW;
+  cv.style.height = cssW + 'px';
+  cv.width = Math.max(1, Math.round(cssW * dpr));
+  cv.height = Math.max(1, Math.round(cssW * dpr));
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(cv.width / SD_LW, cv.height / SD_LW);
+  const { cx, cy } = drawGrid(ctx, SD_LW, SD_LW, SD_MIN, SD_MAX, SD_MIN, SD_MAX);
+
+  // Gerade durch P und Q
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.4;
+  ctx.beginPath();
+  if (senkrecht) { ctx.moveTo(cx(x1), cy(SD_MIN)); ctx.lineTo(cx(x1), cy(SD_MAX)); }
+  else { const m2 = m, b2 = y1 - m * x1; ctx.moveTo(cx(SD_MIN), cy(m2 * SD_MIN + b2)); ctx.lineTo(cx(SD_MAX), cy(m2 * SD_MAX + b2)); }
+  ctx.stroke();
+
+  // Steigungsdreieck
+  if (!senkrecht && Math.abs(dy) > 1e-9) {
+    ctx.fillStyle = 'rgba(184,92,0,0.10)';
+    ctx.beginPath(); ctx.moveTo(cx(x1), cy(y1)); ctx.lineTo(cx(x2), cy(y1)); ctx.lineTo(cx(x2), cy(y2)); ctx.closePath(); ctx.fill();
+  }
+  if (!senkrecht) {
+    ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx(x1), cy(y1)); ctx.lineTo(cx(x2), cy(y1)); ctx.stroke();
+    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('Δx = ' + nz(dx), (cx(x1) + cx(x2)) / 2, cy(y1) + (dy > 0 ? 18 : -8));
+  }
+  if (Math.abs(dy) > 1e-9) {
+    ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx(x2), cy(y1)); ctx.lineTo(cx(x2), cy(y2)); ctx.stroke();
+    ctx.fillStyle = '#b85c00'; ctx.textAlign = 'left';
+    ctx.fillText('Δy = ' + nz(dy), cx(x2) + 8, (cy(y1) + cy(y2)) / 2 + 4);
+  }
+  // Punkte
+  drawDot(ctx, cx, cy, x1, y1, '#1f6b3a', 7);
+  drawDot(ctx, cx, cy, x2, y2, '#1f6b3a', 7);
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('P', cx(x1) + 10, cy(y1) - 8);
+  ctx.fillText('Q', cx(x2) + 10, cy(y2) - 8);
+}
+function sdInit() {
+  const cv = document.getElementById('cv-steig');
+  if (!cv) return;
+  const nah = (pt, c) => Math.hypot(pt[0] - c[0], pt[1] - c[1]) < 0.7;
+  cv.addEventListener('pointerdown', e => {
+    const c = sdCoord(e);
+    SD.greif = nah(SD.P, c) ? 'P' : (nah(SD.Q, c) ? 'Q' : null);
+    if (SD.greif) { cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; }
+  });
+  cv.addEventListener('pointermove', e => {
+    if (!SD.greif) return;
+    SD[SD.greif] = sdCoord(e);
+    drawSteig();
+  });
+  const los = () => { SD.greif = null; cv.style.cursor = 'grab'; };
+  cv.addEventListener('pointerup', los);
+  cv.addEventListener('pointercancel', los);
+  drawSteig();
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   updateKS();
   updateDR();
   buildTypBtns(); drawTyp();
   buildA1(); drawA1();
   buildA2(); initA2(); drawA2();
+  sdInit();
 });
 window.addEventListener('resize',()=>{
   updateKS(); updateDR(); drawTyp(); drawA1(); drawA2();
+  drawSteig();
 });
 </script>
 </body>
