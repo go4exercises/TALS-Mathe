@@ -247,24 +247,34 @@ MathJax = {
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">Das Skalarprodukt wechselt genau bei \(90°\) das Vorzeichen — Orthogonalität ist der Nulldurchgang. Der Test \(\vec{a} \cdot \vec{b} = 0\) ersetzt jede Winkelmessung.</div>
-          <button class="ah-speak" type="button" data-vorlesen="Das Skalarprodukt wechselt genau bei neunzig Grad das Vorzeichen — Orthogonalität ist der Nulldurchgang. Der Test Skalarprodukt gleich null ersetzt jede Winkelmessung.">🔊 vorlesen</button>
+          <div class="ah-text">Das Skalarprodukt wechselt genau bei \(90°\) das Vorzeichen — Orthogonalität ist der Nulldurchgang. Der Test \(\vec{a} \cdot \vec{b} = 0\) ersetzt jede Winkelmessung. Der grüne <strong>Schatten</strong> \(\vec{b}_a\) macht das Vorzeichen sichtbar: Bei spitzem Winkel zeigt er in Richtung \(\vec{a}\), bei stumpfem dagegen — und bei \(90°\) schrumpft er auf den Nullvektor.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Das Skalarprodukt wechselt genau bei neunzig Grad das Vorzeichen — Orthogonalität ist der Nulldurchgang. Der Test Skalarprodukt gleich null ersetzt jede Winkelmessung. Der grüne Schatten b auf a macht das Vorzeichen sichtbar: Bei spitzem Winkel zeigt er in Richtung a, bei stumpfem dagegen — und bei neunzig Grad schrumpft er auf den Nullvektor.">🔊 vorlesen</button>
         </div>
       </div>
     </div>
-    <p>\(\vec{a} = \binom{4}{1}\) fest (blau) · \(\vec{b}\) drehbar mit \(|\vec{b}| = 3\) (orange)</p>
+    <p>\(\vec{a} = \binom{4}{1}\) fest (blau) · \(\vec{b}\) drehbar mit \(|\vec{b}| = 3\) (orange) · Projektion \(\vec{b}_a\) (grün)</p>
   </div>
   <div class="widget-body">
     <div class="sl-row akz-orange">
       <label>Richtung <span class="var">\(\vec{b}\)</span> [°]</label>
-      <input type="range" id="wl-w" min="0" max="360" step="5" value="60">
+      <input type="range" id="wl-w" min="0" max="360" step="1" value="60">
       <span class="sl-val"><span id="wl-wv">60</span>°</span>
+    </div>
+    <div class="graf-btn-row" style="margin-bottom:10px">
+      <button class="graf-btn" type="button" data-wlw="0">\(\varphi\) spitz</button>
+      <button class="graf-btn" type="button" data-wlw="104">\(\vec{a} \cdot \vec{b} = 0\): orthogonal</button>
+      <button class="graf-btn" type="button" data-wlw="180">\(\varphi\) stumpf</button>
     </div>
     <div class="formel-live">
       <div class="fl-label">Skalarprodukt und Zwischenwinkel</div>
       <div class="fl-eq" id="wl-eq"></div>
     </div>
+    <div class="formel-live" style="margin-top:-4px">
+      <div class="fl-label">Normalprojektion (Schatten von b auf a)</div>
+      <div class="fl-eq" id="wl-proj" style="font-size:0.95rem"></div>
+    </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="wl-canvas" height="240"></canvas></div>
+    <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Das gestrichelte Lot fällt von der Spitze von \(\vec{b}\) auf die Trägergerade von \(\vec{a}\). Der grüne Vektor vom Ursprung zum Lotfusspunkt ist \(\vec{b}_a = \frac{\vec{a} \cdot \vec{b}}{|\vec{a}|^2}\,\vec{a}\).</div>
   </div>
 </div>
 
@@ -685,17 +695,55 @@ function updateWL(){
   const cosphi = sp / (Math.hypot(a[0], a[1]) * 3);
   const phi = Math.acos(Math.max(-1, Math.min(1, cosphi))) * 180 / Math.PI;
   const vz = sp > 0.01 ? 'positiv (spitz)' : (sp < -0.01 ? 'negativ (stumpf)' : 'null — orthogonal!');
+  // Unicode-Minus und saubere Null (|sp| < 0.01 gilt als orthogonal)
+  const nz = v => (Math.abs(v) < 0.01 ? (0).toFixed(2) : v.toFixed(2)).replace('-', '−');
   document.getElementById('wl-eq').innerHTML =
-    `a · b = ${sp.toFixed(2)} — ${vz} · Zwischenwinkel ${phi.toFixed(1)}°`;
+    `a · b = ${nz(sp)} — ${vz} · Zwischenwinkel ${phi.toFixed(1)}°`;
+  /* Normalprojektion von b auf a: b_a = (a·b)/|a|² · a  (|a|² = 17).
+     Vorzeichen von a·b = Richtung des Schattens; a·b = 0 → Nullvektor. */
+  const A2 = a[0] * a[0] + a[1] * a[1], s = sp / A2;
+  const ba = [s * a[0], s * a[1]];
+  const laenge = Math.abs(sp) / Math.hypot(a[0], a[1]);
+  document.getElementById('wl-proj').innerHTML = Math.abs(sp) < 0.01
+    ? 'b_a = 0 — b wirft keinen Schatten auf a'
+    : `b_a = (${nz(sp)} / ${A2}) · a = (${nz(ba[0])} | ${nz(ba[1])}), ` +
+      `|b_a| = ${laenge.toFixed(2)} — zeigt ${sp > 0 ? 'in Richtung a' : 'gegen a'}`;
+
   const {ctx, W, H} = initCanvas('wl-canvas', 240, false);
   const {cx, cy} = drawGrid(ctx, W, H, -5, 5, -4, 4);
+  // Trägergerade von a
+  ctx.strokeStyle = '#b8c4d4'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath();
+  ctx.moveTo(cx(-5), cy(-5 * a[1] / a[0])); ctx.lineTo(cx(5), cy(5 * a[1] / a[0]));
+  ctx.stroke(); ctx.setLineDash([]);
+  // Lot von der Spitze von b auf die Trägergerade
+  ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.4; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(cx(b[0]), cy(b[1])); ctx.lineTo(cx(ba[0]), cy(ba[1])); ctx.stroke();
+  ctx.setLineDash([]);
+  // Projektionsvektor (grün), dann a und b darüber
+  if (Math.abs(sp) > 0.01) drawArrow(ctx, cx(0), cy(0), cx(ba[0]), cy(ba[1]), '#1f6b3a', 4);
+  else drawDot(ctx, cx, cy, 0, 0, '#1f6b3a', 5);
   drawArrow(ctx, cx(0), cy(0), cx(a[0]), cy(a[1]), '#1a4f8a', 3);
   drawArrow(ctx, cx(0), cy(0), cx(b[0]), cy(b[1]), '#b85c00', 3);
   ctx.font = 'bold 13px monospace';
   ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'left'; ctx.fillText('a', cx(a[0]) + 6, cy(a[1]) - 6);
   ctx.fillStyle = '#b85c00'; ctx.fillText('b', cx(b[0]) + 6, cy(b[1]) - 6);
+  ctx.fillStyle = '#1f6b3a';
+  if (Math.abs(sp) > 0.01) ctx.fillText('b_a', cx(ba[0]) + 5, cy(ba[1]) + 16);
+  // Statuszeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+  ctx.fillStyle = sp > 0.01 ? '#1f6b3a' : (sp < -0.01 ? '#c8412c' : '#b85c00');
+  const txt = sp > 0.01 ? 'Schatten zeigt in Richtung a' : (sp < -0.01 ? 'Schatten zeigt gegen a' : 'kein Schatten: a ⊥ b');
+  const tw = ctx.measureText(txt).width;
+  ctx.save(); ctx.fillStyle = '#fff'; ctx.fillRect(W - 12 - tw, 6, tw + 8, 18); ctx.restore();
+  ctx.fillText(txt, W - 8, 19);
 }
 document.getElementById('wl-w').addEventListener('input', updateWL);
+document.querySelectorAll('[data-wlw]').forEach(btn => btn.addEventListener('click', () => {
+  document.getElementById('wl-w').value = btn.dataset.wlw;
+  document.querySelectorAll('[data-wlw]').forEach(o => o.classList.toggle('aktiv', o === btn));
+  updateWL();
+}));
 
 /* ══ A1: Vorzeichen erkennen ══ */
 const a1G = [

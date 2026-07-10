@@ -41,6 +41,8 @@ const WIDGETS = [
   { page: 'grundlagen/g1-1-grundlagen.html', id: 'cv-distrib', note: 'Distributiv-Flaechenmodell' },
   { page: 'schwerpunkt/s1-3-logarithmen.html', id: 'cv-rechenschieber', note: 'Rechenschieber' },
   { page: 'schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html', id: 'cv-betrag', note: 'Betrags-Explorer' },
+  // T53, Runde 3.
+  { page: 'schwerpunkt/s4-3b-skalarprodukt.html', id: 'wl-canvas', note: 'Winkel-Labor mit Projektion' },
 ];
 
 const VIEWPORTS = [
