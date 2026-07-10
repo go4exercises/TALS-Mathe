@@ -457,6 +457,45 @@ Erscheinungsformen, die im Folgenden ständig verwendet werden — auch in <a cl
   <p>Der Betrag ist nie negativ. Beispiele: \(|7| = 7\), \(|-3| = 3\), \(|0| = 0\).</p>
 </div>
 
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Betrag als Abstand auf der Zahlengeraden</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe \(a\) über die Null hinweg: Der grüne Balken für \(|a|\) wird kurz null und wächst dann wieder — obwohl \(a\) immer weiter fällt. Und vertausche \(a\) und \(b\): Ändert sich der Abstand \(|a - b|\)?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Schiebe a über die Null hinweg: Der grüne Balken für den Betrag von a wird kurz null und wächst dann wieder — obwohl a immer weiter fällt. Und vertausche a und b: Ändert sich der Abstand zwischen ihnen?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Betrag misst eine <strong>Länge</strong>, keine Richtung — deshalb ist er nie negativ. \(|a|\) ist der Abstand von \(a\) zur Null, und \(|a - b|\) der Abstand von \(a\) zu \(b\). Weil ein Abstand nicht von der Reihenfolge abhängt, gilt \(|a - b| = |b - a|\). Auf diesem Abstandsbild beruhen später alle Betragsgleichungen und Toleranzangaben.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Betrag misst eine Länge, keine Richtung — deshalb ist er nie negativ. Der Betrag von a ist der Abstand von a zur Null, und der Betrag von a minus b der Abstand von a zu b. Weil ein Abstand nicht von der Reihenfolge abhängt, gilt: Betrag von a minus b gleich Betrag von b minus a.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Verschiebe die beiden Punkte und lies die Abstände ab.</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Punkt <span class="var">\(a\)</span></label>
+      <input type="range" id="bt-a" min="-9" max="9" step="0.5" value="-3">
+      <span class="sl-val" id="bt-av">−3</span></div>
+      <div class="sl-grp akz-orange"><label>Punkt <span class="var">\(b\)</span></label>
+      <input type="range" id="bt-b" min="-9" max="9" step="0.5" value="2">
+      <span class="sl-val" id="bt-bv">2</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Betrag und Abstand</div>
+      <div class="fl-eq" id="bt-eq"></div>
+    </div>
+    <canvas id="cv-betrag-zg" width="560" height="200" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto"></canvas>
+    <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic">Grün: \(|a|\), der Abstand von \(a\) zur Null. Violett: \(|a - b|\), der Abstand der beiden Punkte — er ist symmetrisch, also gleich \(|b - a|\).</div>
+  </div>
+</div>
+
 <h3 style="font-family:var(--serif);font-size:1.05rem;margin:14px 0 6px">Ordnungsrelationen</h3>
 
 <p>Auf der Zahlengeraden liegen kleinere Zahlen weiter <em>links</em>. Die Ordnungsrelationen \(<,\; \leq,\; >,\; \geq\) erlauben Vergleiche:</p>
@@ -1385,6 +1424,92 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+/* ══════════════════════════════════════════════════════════════
+ *  BETRAG ALS ABSTAND
+ *  |a| = Abstand von a zur Null · |a − b| = Abstand von a zu b (symmetrisch)
+ * ══════════════════════════════════════════════════════════════ */
+function drawBetragZG() {
+  const a = parseFloat(document.getElementById('bt-a').value);
+  const b = parseFloat(document.getElementById('bt-b').value);
+  const nz = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(v % 1 === 0 ? 0 : 1);
+  document.getElementById('bt-av').textContent = nz(a);
+  document.getElementById('bt-bv').textContent = nz(b);
+  // Negativer Subtrahend braucht Klammern — sonst stünde dort «2 − −3».
+  const sub = (v, cls) => `<span class="${cls}">${v < 0 ? '(' + nz(v) + ')' : nz(v)}</span>`;
+  document.getElementById('bt-eq').innerHTML =
+    `|<span class="tx-blau">${nz(a)}</span>| = ${nz(Math.abs(a))} &nbsp;·&nbsp; ` +
+    `|<span class="tx-blau">${nz(a)}</span> − ${sub(b, 'tx-orange')}| = ${nz(Math.abs(a - b))} = ` +
+    `|<span class="tx-orange">${nz(b)}</span> − ${sub(a, 'tx-blau')}|`;
+
+  const cv = document.getElementById('cv-betrag-zg');
+  const LW = 560, LH = 200, dpr = window.devicePixelRatio || 1;
+  const cssW = cv.getBoundingClientRect().width || LW, cssH = cssW * LH / LW;
+  cv.style.height = cssH + 'px';
+  cv.width = Math.max(1, Math.round(cssW * dpr));
+  cv.height = Math.max(1, Math.round(cssH * dpr));
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(cv.width / LW, cv.height / LH);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, LW, LH);
+
+  const X0 = 30, L = LW - 60, y = 118;
+  const px = z => X0 + (z + 10) / 20 * L;      // Zahlengerade von −10 bis 10
+
+  // Achse + Ticks
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(X0, y); ctx.lineTo(X0 + L, y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(X0 + L - 8, y - 4); ctx.lineTo(X0 + L, y); ctx.lineTo(X0 + L - 8, y + 4); ctx.fill();
+  ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  for (let z = -10; z <= 10; z++) {
+    const gross = z % 5 === 0;
+    ctx.strokeStyle = z === 0 ? '#374151' : '#c8d0da'; ctx.lineWidth = z === 0 ? 1.8 : 1;
+    ctx.beginPath(); ctx.moveTo(px(z), y - (gross ? 7 : 4)); ctx.lineTo(px(z), y + (gross ? 7 : 4)); ctx.stroke();
+    if (gross) { ctx.fillStyle = '#9ca3af'; ctx.fillText(z < 0 ? '−' + Math.abs(z) : z, px(z), y + 22); }
+  }
+
+  // |a| — Abstand a zur Null (grün, unterhalb)
+  const yA = y + 42;
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(px(0), yA); ctx.lineTo(px(a), yA); ctx.stroke(); ctx.lineCap = 'butt';
+  ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(px(a), y); ctx.lineTo(px(a), yA); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(px(0), y); ctx.lineTo(px(0), yA); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillText('|a| = ' + nz(Math.abs(a)), (px(0) + px(a)) / 2, yA + 17);
+
+  // |a − b| — Abstand der Punkte (violett, oberhalb)
+  const yB = y - 46;
+  ctx.strokeStyle = '#6b21a8'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(px(a), yB); ctx.lineTo(px(b), yB); ctx.stroke(); ctx.lineCap = 'butt';
+  ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(px(a), y); ctx.lineTo(px(a), yB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(px(b), y); ctx.lineTo(px(b), yB); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#6b21a8'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillText('|a − b| = ' + nz(Math.abs(a - b)), (px(a) + px(b)) / 2, yB - 9);
+
+  // Punkte
+  const punkt = (z, col, lab) => {
+    ctx.fillStyle = col;
+    ctx.beginPath(); ctx.arc(px(z), y, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText(lab, px(z), y - 14);
+  };
+  punkt(b, '#b85c00', 'b');
+  punkt(a, '#1a4f8a', 'a');
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.arc(px(0), y, 3, 0, Math.PI * 2); ctx.fill();
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const sa = document.getElementById('bt-a');
+  if (!sa) return;
+  sa.addEventListener('input', drawBetragZG);
+  document.getElementById('bt-b').addEventListener('input', drawBetragZG);
+  drawBetragZG();
+});
+window.addEventListener('resize', () => { if (document.getElementById('cv-betrag-zg')) drawBetragZG(); });
 </script>
 </body>
 </html>
