@@ -323,6 +323,45 @@ MathJax = {
   \[ x - 1 \geq 0 \;\Longrightarrow\; x \geq 1 \;\Longrightarrow\; D = [1;\, +\infty[ , \qquad W = \mathbb{R}_0^+ \]
 </div>
 
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Transformations-Labor — \(y = a\cdot\sqrt[n]{x-u} + v\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verstelle \(u\) und \(v\) und verfolge den grünen Startpunkt der Kurve. Stelle dann \(a\) negativ: In welche Richtung öffnet sich die Kurve? Und wie verschiebt sich bei der Quadratwurzel die Definitionsmenge (das rote Verbotsband) mit \(u\)?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Verstelle u und v und verfolge den grünen Startpunkt der Kurve. Stelle dann a negativ: In welche Richtung öffnet sich die Kurve? Und wie verschiebt sich bei der Quadratwurzel die Definitionsmenge mit u?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Startpunkt liegt immer bei \((u \mid v)\): \(u\) schiebt horizontal, \(v\) vertikal. \(|a|\) streckt in \(y\)-Richtung, negatives \(a\) klappt die Kurve an der Waagrechten durch den Startpunkt um. Bei der Quadratwurzel (\(n=2\)) verlangt \(x-u\ge 0\) die Definitionsmenge \([u;\infty[\) — das rote Band links von \(u\) ist verboten. Die Kubikwurzel (\(n=3\)) ist für alle \(x\) definiert.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Startpunkt liegt immer bei u senkrecht v: u schiebt horizontal, v vertikal. Der Betrag von a streckt in y-Richtung, negatives a klappt die Kurve um. Bei der Quadratwurzel verlangt x minus u grösser gleich null die Definitionsmenge von u bis unendlich — das rote Band links von u ist verboten. Die Kubikwurzel ist für alle x definiert.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Grundkurve grau gestrichelt · transformierte Kurve violett · Startpunkt \((u\mid v)\) grün</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="tf-n-btns">
+      <button class="typ-btn aktiv" onclick="setTfN(2)">\(\sqrt{\;}\) (n = 2)</button>
+      <button class="typ-btn" onclick="setTfN(3)">\(\sqrt[3]{\;}\) (n = 3)</button>
+    </div>
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label>Faktor <span class="var">\(a\)</span></label><input type="range" id="tf-a" min="-2" max="2" step="0.5" value="1"><span class="sl-val" id="tf-av">1</span></div>
+      <div class="sl-grp akz-orange"><label>Verschiebung <span class="var">\(u\)</span></label><input type="range" id="tf-u" min="-3" max="3" step="0.5" value="0"><span class="sl-val" id="tf-uv">0</span></div>
+      <div class="sl-grp akz-gruen"><label>Verschiebung <span class="var">\(v\)</span></label><input type="range" id="tf-v" min="-3" max="3" step="0.5" value="0"><span class="sl-val" id="tf-vv">0</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Funktionsgleichung und Definitionsmenge</div>
+      <div class="fl-eq" id="tf-eq">y = √x · D = [0; ∞[</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="tf-canvas" height="260"></canvas></div>
+  </div>
+</div>
+
 <div class="block block-def" style="margin-top:14px">
   <div class="block-titel">📘 Grafische Lösung von Wurzelgleichungen</div>
   <p>Beide Seiten einer Wurzelgleichung werden als Funktionsterme aufgefasst. Die \(x\)-Koordinate des Schnittpunkts \(P\) der beiden Graphen liefert die Lösung — näherungsweise beim Ablesen, exakt nach algebraischer Kontrolle.</p>
@@ -950,15 +989,74 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* ══ TRANSFORMATIONS-LABOR: y = a·ⁿ√(x−u) + v ══ */
+let tfN = 2;
+function setTfN(n){
+  tfN = n;
+  document.querySelectorAll('#tf-n-btns .typ-btn').forEach((b, j) =>
+    b.classList.toggle('aktiv', (j === 0) === (n === 2)));
+  drawTf();
+}
+// Kubikwurzel mit korrektem Vorzeichen für negative Argumente
+function cbrt(t){ return t >= 0 ? Math.pow(t, 1/3) : -Math.pow(-t, 1/3); }
+function drawTf(){
+  const a = parseFloat(document.getElementById('tf-a').value);
+  const u = parseFloat(document.getElementById('tf-u').value);
+  const v = parseFloat(document.getElementById('tf-v').value);
+  document.getElementById('tf-av').textContent = fmt2(a);
+  document.getElementById('tf-uv').textContent = fmt2(u);
+  document.getElementById('tf-vv').textContent = fmt2(v);
+
+  const wurzel = tfN === 2 ? (t => t >= 0 ? Math.sqrt(t) : NaN) : cbrt;
+  const base = x => wurzel(x);
+  const f    = x => { const w = wurzel(x - u); return isNaN(w) ? NaN : a * w + v; };
+
+  const xMin = -4, xMax = 6, yMin = -4, yMax = 4;
+  const {ctx, W, H} = initCanvas('tf-canvas', 260, false);
+  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+
+  // Verbotenes Definitionsband für n = 2: x < u
+  if(tfN === 2 && u > xMin){
+    ctx.fillStyle = 'rgba(155,28,28,0.08)';
+    ctx.fillRect(0, 0, cx(u), H);
+    ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(cx(u), 0); ctx.lineTo(cx(u), H); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Grundkurve grau gestrichelt
+  ctx.setLineDash([6, 5]);
+  plotFx(ctx, cx, cy, base, xMin, xMax, '#9ca3af', 2, 1e4);
+  ctx.setLineDash([]);
+  // Transformierte Kurve
+  plotFx(ctx, cx, cy, f, xMin, xMax, '#5b2d8e', 3, 1e4);
+
+  // Startpunkt (u | v)
+  drawDot(ctx, cx, cy, u, v, '#1f6b3a', 6);
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
+  ctx.fillText(`(${fmt2(u)} | ${fmt2(v)})`, cx(u) + 9, cy(v) - 7);
+
+  const wSym = tfN === 2 ? '√' : '∛';
+  const aStr = a === 1 ? '' : (a === -1 ? '−' : fmt2(a) + '·');
+  const arg = u === 0 ? 'x' : (u > 0 ? `(x − ${fmt2(u)})` : `(x + ${fmt2(-u)})`);
+  const vStr = v === 0 ? '' : (v > 0 ? ` + ${fmt2(v)}` : ` − ${fmt2(-v)}`);
+  const dom = tfN === 2 ? `D = [${fmt2(u)}; ∞[` : 'D = ℝ';
+  document.getElementById('tf-eq').innerHTML = `y = ${aStr}${wSym}${arg}${vStr} · ${dom}`;
+}
+['tf-a', 'tf-u', 'tf-v'].forEach(id => document.getElementById(id).addEventListener('input', drawTf));
+
+/* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updatePE();
   updateUM();
   buildWzBtns(); drawWz();
   updateWG();
   buildA1(); drawA1();
+  drawTf();
 });
 window.addEventListener('resize', () => {
   updatePE(); updateUM(); drawWz(); updateWG(); drawA1(); drawA2Sol();
+  drawTf();
 });
 </script>
 </body>

@@ -70,6 +70,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s3-1-grundlagen.html', id: 'ug-canvas', note: 'Ungleichungs-Labor' },
   { page: 'schwerpunkt/s3-1-grundlagen.html', id: 'we-graph', note: 'Weide-Doppelcanvas' },
   { page: 'schwerpunkt/s3-2a-potenzfunktionen.html', id: 'pa-canvas', note: 'Paritaets-Explorer' },
+  { page: 'schwerpunkt/s3-2b-wurzelfunktionen.html', id: 'tf-canvas', note: 'Wurzel-Transformationslabor' },
 ];
 
 const VIEWPORTS = [
