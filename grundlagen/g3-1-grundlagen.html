@@ -167,6 +167,11 @@ MathJax = {
   .bsp-panel.aktiv { display: block; }
   .bsp-panel canvas { width: 100%; height: auto; max-width: 480px; display: block; margin: 8px auto; }
   #lin-canvas, #par-canvas, #schn-canvas { width: 100%; height: auto; max-width: 480px; display: block; margin: 8px auto; }
+  #cv-vertikal { width: 100%; height: auto; max-width: 460px; display: block; margin: 8px auto; }
+  .vt-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; justify-content: center; }
+  .vt-chip { font-family: var(--mono); font-size: 0.74rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--linie); background: var(--papier-2); cursor: pointer; color: var(--tinte-2); transition: all 0.15s; }
+  .vt-chip:hover { border-color: var(--blau-rand); color: var(--blau); }
+  .vt-chip.aktiv { border-color: var(--blau); background: var(--blau); color: #fff; }
 </style>
 </head>
 <body>
@@ -422,6 +427,39 @@ einmal</em> schneiden.</p>
   <p>Eine Kurve im Koordinatensystem ist genau dann der Graph einer Funktion, wenn jede zur
   \(y\)-Achse parallele Gerade die Kurve <strong>höchstens in einem Punkt</strong> schneidet.</p>
 </div>
+
+<div class="widget-titelzeile" style="margin:16px 0 8px">
+  <p style="margin:0">Schiebe die senkrechte Testgerade über die Kurve und zähle die Schnittpunkte:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Beim Kreis genügt <em>eine einzige</em> Stelle mit zwei Schnittpunkten. Findest du beim Kreis auch Stellen, an denen die Testgerade nur einmal oder gar nicht trifft? Reicht das zur Rettung?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Beim Kreis genügt eine einzige Stelle mit zwei Schnittpunkten. Findest du beim Kreis auch Stellen, an denen die Testgerade nur einmal oder gar nicht trifft? Reicht das zur Rettung?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Nein — für eine Funktion muss <strong>jede</strong> Testgerade höchstens einen Schnittpunkt liefern. Ein <em>einziges</em> \(x\) mit zwei \(y\)-Werten zerstört die Eindeutigkeit und damit die Funktionseigenschaft. Umgekehrt ist <em>kein</em> Schnittpunkt harmlos: Dort gehört \(x\) einfach nicht zur Definitionsmenge.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Nein — für eine Funktion muss jede Testgerade höchstens einen Schnittpunkt liefern. Ein einziges x mit zwei y-Werten zerstört die Eindeutigkeit und damit die Funktionseigenschaft. Umgekehrt ist kein Schnittpunkt harmlos: Dort gehört x einfach nicht zur Definitionsmenge.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="vt-chips" id="vt-chips">
+  <button class="vt-chip aktiv" type="button" data-vt="0">Gerade</button>
+  <button class="vt-chip" type="button" data-vt="1">Parabel</button>
+  <button class="vt-chip" type="button" data-vt="2">Kreis</button>
+  <button class="vt-chip" type="button" data-vt="3">liegende Parabel</button>
+</div>
+<div class="slider-box">
+  <div class="sl-row">
+    <div class="sl-grp akz-blau"><label>Testgerade bei \(x =\) <span class="slider-val" id="vt-xv">1.0</span></label>
+    <input type="range" id="vt-x" min="-5" max="5" step="0.25" value="1"></div>
+  </div>
+  <div style="margin-top:8px" id="vt-eq"></div>
+</div>
+<canvas id="cv-vertikal"></canvas>
+<div id="vt-fazit" style="font-size:0.82rem;margin-top:8px;text-align:center"></div>
 
 <p>Die folgenden vier Kurven sollst du als Funktion oder Nicht-Funktion einordnen. Klicke unter
 jedem Bild auf den Knopf, der deine Vermutung trägt.</p>
@@ -1617,6 +1655,13 @@ window.addEventListener('load', () => {
   linRender();
   parRender();
   schnRender();
+  document.getElementById('vt-x').addEventListener('input', vtRender);
+  document.querySelectorAll('#vt-chips .vt-chip').forEach(c => c.addEventListener('click', () => {
+    vtAkt = +c.dataset.vt;
+    document.querySelectorAll('#vt-chips .vt-chip').forEach(o => o.classList.toggle('aktiv', o === c));
+    vtRender();
+  }));
+  vtRender();
 });
 window.addEventListener('resize', () => {
   einstiegRender();
@@ -1626,7 +1671,87 @@ window.addEventListener('resize', () => {
   linRender();
   parRender();
   schnRender();
+  vtRender();
 });
+
+/* ══════════════════════════════════════════════════════════════
+ *  VERTIKALTEST — senkrechte Gerade zählt die y-Werte über x.
+ *  Zwei Werte an nur einer Stelle genügen: dann keine Funktion.
+ * ══════════════════════════════════════════════════════════════ */
+const VT_KURVEN = [
+  { name: 'Gerade', term: 'y = 0.5·x + 1', funktion: true,
+    ys: x => [0.5 * x + 1] },
+  { name: 'Parabel', term: 'y = 0.4·x² − 2', funktion: true,
+    ys: x => [0.4 * x * x - 2] },
+  { name: 'Kreis', term: 'x² + y² = 9', funktion: false,
+    ys: x => { const d = 9 - x * x; if (d < -1e-9) return []; if (d < 1e-9) return [0]; const w = Math.sqrt(d); return [w, -w]; } },
+  { name: 'liegende Parabel', term: 'x = 0.5·y² − 3', funktion: false,
+    ys: x => { const d = 2 * (x + 3); if (d < -1e-9) return []; if (d < 1e-9) return [0]; const w = Math.sqrt(d); return [w, -w]; } },
+];
+let vtAkt = 0;
+function vtRender() {
+  const cv = document.getElementById('cv-vertikal');
+  if (!cv) return;
+  const x = parseFloat(document.getElementById('vt-x').value);
+  const K = VT_KURVEN[vtAkt];
+  const treffer = K.ys(x).filter(y => y >= -5.5 && y <= 5.5);
+  document.getElementById('vt-xv').textContent = x.toFixed(1);
+  const wort = treffer.length === 0 ? 'kein Schnittpunkt'
+             : (treffer.length === 1 ? 'genau ein Schnittpunkt' : treffer.length + ' Schnittpunkte');
+  document.getElementById('vt-eq').innerHTML =
+    `<strong>${K.term}</strong> &nbsp;·&nbsp; Testgerade und Kurve: <span class="slider-val">${wort}</span>` +
+    (treffer.length ? ` (y = ${treffer.map(v => v.toFixed(2).replace('-', '−')).join(', ')})` : '');
+
+  const fz = document.getElementById('vt-fazit');
+  if (treffer.length > 1) {
+    fz.innerHTML = 'Zwei y-Werte über demselben x — <strong>keine Funktion</strong>.';
+    fz.style.color = 'var(--rot)';
+  } else if (!K.funktion) {
+    fz.innerHTML = 'Hier trifft die Gerade höchstens einmal — aber es gibt <em>andere</em> Stellen mit zwei Treffern. Eine Ausnahme genügt: <strong>keine Funktion</strong>.';
+    fz.style.color = 'var(--orange)';
+  } else {
+    fz.innerHTML = 'Jede Testgerade trifft höchstens einmal — <strong>Funktion</strong>.';
+    fz.style.color = 'var(--gruen)';
+  }
+
+  // eigene, quadratische Zeichenfläche (logisch 460×460)
+  const LW = 460, dpr = window.devicePixelRatio || 1;
+  const cssW = cv.getBoundingClientRect().width || LW;
+  cv.style.height = cssW + 'px';
+  cv.width = Math.max(1, Math.round(cssW * dpr));
+  cv.height = Math.max(1, Math.round(cssW * dpr));
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(cv.width / LW, cv.height / LW);
+  const { cx, cy } = drawGrid(ctx, LW, LW, -5.5, 5.5, -5.5, 5.5);
+
+  // Kurve: beide Zweige punktweise
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.4;
+  const zweig = idx => {
+    ctx.beginPath(); let auf = false;
+    for (let t = -5.5; t <= 5.5; t += 0.02) {
+      const arr = K.ys(t);
+      if (arr.length <= idx) { auf = false; continue; }
+      const y = arr[idx];
+      if (y < -5.5 || y > 5.5) { auf = false; continue; }
+      auf ? ctx.lineTo(cx(t), cy(y)) : ctx.moveTo(cx(t), cy(y));
+      auf = true;
+    }
+    ctx.stroke();
+  };
+  zweig(0); zweig(1);
+
+  // Testgerade + Schnittpunkte
+  const rot = treffer.length > 1;
+  ctx.strokeStyle = rot ? '#c8412c' : '#1f6b3a';
+  ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(x), cy(-5.5)); ctx.lineTo(cx(x), cy(5.5)); ctx.stroke();
+  ctx.setLineDash([]);
+  treffer.forEach(y => drawDot(ctx, cx, cy, x, y, rot ? '#c8412c' : '#1f6b3a', 6));
+  ctx.fillStyle = rot ? '#c8412c' : '#1f6b3a';
+  ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText(treffer.length + '×', cx(x) + 8, 22);
+}
 </script>
 </body>
 </html>
