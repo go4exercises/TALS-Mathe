@@ -64,6 +64,7 @@ const WIDGETS = [
   { page: 'grundlagen/g5-1-grundlagen.html', id: 'sk-canvas', note: 'Skizzen-Gegenueberstellung' },
   { page: 'grundlagen/g5-2b-vierecke.html', id: 'cv-scher', note: 'Trapez-Scherung' },
   { page: 'grundlagen/g5-2b-vierecke.html', id: 'cv-drachen', note: 'Drachen-Diagonalen' },
+  { page: 'grundlagen/g5-2c-kreis-und-kreisteile.html', id: 'cv-ringroll', note: 'Kreisring aufrollen' },
 ];
 
 const VIEWPORTS = [
