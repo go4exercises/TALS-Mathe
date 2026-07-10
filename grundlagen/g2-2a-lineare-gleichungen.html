@@ -470,6 +470,31 @@ neben der Unbekannten \(x\), von dem man wissen will, wie die Lösung von ihm ab
   <p style="text-align:center;margin:6px 0">\(-x \le 5 \;\;\mid\, \cdot(-1) \;\;\Longleftrightarrow\;\; x \ge -5\)</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Multipliziere die wahre Aussage \(2 < 5\) mit \(k\) und beobachte, was mit der Reihenfolge geschieht:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Fahre \(k\) von \(+3\) langsam nach \(-3\). Die beiden Bildpunkte rücken zusammen, treffen sich bei \(k = 0\) — und tauschen danach die Plätze. Was heisst das für das Zeichen?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Fahre k von plus drei langsam nach minus drei. Die beiden Bildpunkte rücken zusammen, treffen sich bei k gleich null — und tauschen danach die Plätze. Was heisst das für das Zeichen?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Ein negatives \(k\) <strong>spiegelt die Zahlengerade am Nullpunkt</strong>. Dabei kehrt sich jede Reihenfolge um — deshalb muss das Ungleichheitszeichen mitkippen. Für \(k = 0\) fällt alles auf die Null: Aus \(2 < 5\) wird \(0 = 0\). Multiplikation mit \(0\) ist darum <em>keine</em> Äquivalenzumformung; sie zerstört die Information.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Ein negatives k spiegelt die Zahlengerade am Nullpunkt. Dabei kehrt sich jede Reihenfolge um — deshalb muss das Ungleichheitszeichen mitkippen. Für k gleich null fällt alles auf die Null: Aus zwei kleiner fünf wird null gleich null. Multiplikation mit null ist darum keine Äquivalenzumformung; sie zerstört die Information.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Faktor \(k\): <span class="sl-val" id="vk-kv">2.0</span></label>
+  <input type="range" id="vk-k" min="-3" max="3" step="0.5" value="2">
+</div>
+<div class="formel-live"><div class="fl-label">Multiplikation beider Seiten mit k</div><div class="fl-eq" id="vk-eq" style="font-size:1rem"></div></div>
+<div class="cv-wrap" style="max-width:560px"><canvas id="cv-vkipp" height="210"></canvas></div>
+<div id="vk-hinw" style="font-size:0.8rem;margin-top:8px"></div>
+
 <div class="block block-bsp">
   <div class="block-titel">🟢 Beispiel — Mietkosten als Ungleichung</div>
   <p>Ab welcher gefahrenen Strecke übersteigen die Kosten \(K(x) = 30 + 0.45 \cdot x\) das Budget von 75 CHF?</p>
@@ -1107,10 +1132,87 @@ function checkA4() {
 /* ════════════════════════════════════════════════════════════════
    INIT
    ════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+ *  VORZEICHENKIPP
+ *  Ausgangsaussage 2 < 5. Multiplikation mit k bildet beide Seiten ab.
+ *  k > 0: Reihenfolge bleibt · k < 0: Spiegelung an 0, Reihenfolge kippt
+ *  k = 0: beide Bilder fallen auf 0 — keine Äquivalenzumformung.
+ * ══════════════════════════════════════════════════════════════ */
+const VK_A = 2, VK_B = 5;
+function drawVkipp() {
+  const k = parseFloat(document.getElementById('vk-k').value);
+  const ak = VK_A * k, bk = VK_B * k;
+  const nz = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(v % 1 === 0 ? 0 : 1);
+  document.getElementById('vk-kv').textContent = k.toFixed(1);
+
+  const rel = k > 0 ? '<' : (k < 0 ? '>' : '=');
+  document.getElementById('vk-eq').innerHTML =
+    `2 &lt; 5 &nbsp;|&nbsp; · ${k < 0 ? '(' + nz(k) + ')' : nz(k)} &nbsp; → &nbsp; ` +
+    `<strong>${nz(ak)} ${rel === '<' ? '&lt;' : rel} ${nz(bk)}</strong>`;
+
+  const hEl = document.getElementById('vk-hinw');
+  if (k > 0)      { hEl.innerHTML = 'Positives \\(k\\): Beide Seiten werden gleichsinnig gestreckt — das Zeichen <strong>bleibt</strong> \\(<\\).'; hEl.style.color = 'var(--gruen)'; }
+  else if (k < 0) { hEl.innerHTML = 'Negatives \\(k\\): Die Zahlengerade wird am Nullpunkt gespiegelt — das Zeichen <strong>kippt</strong> zu \\(>\\).'; hEl.style.color = 'var(--orange)'; }
+  else            { hEl.innerHTML = '\\(k = 0\\): Beide Seiten werden null. Aus einer wahren Ungleichung wird \\(0 = 0\\) — die Multiplikation mit \\(0\\) ist <strong>keine Äquivalenzumformung</strong>.'; hEl.style.color = 'var(--rot)'; }
+  mjTypeset([hEl]);
+
+  const { ctx, W, H } = initCanvas('cv-vkipp', 210, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const X0 = 30, L = W - 60, xMin = -16, xMax = 16;
+  const px = z => X0 + (z - xMin) / (xMax - xMin) * L;
+  const achse = (y, beschriften) => {
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(X0, y); ctx.lineTo(X0 + L, y); ctx.stroke();
+    ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    for (let z = -15; z <= 15; z += 5) {
+      ctx.strokeStyle = z === 0 ? '#374151' : '#c8d0da'; ctx.lineWidth = z === 0 ? 1.8 : 1;
+      ctx.beginPath(); ctx.moveTo(px(z), y - 5); ctx.lineTo(px(z), y + 5); ctx.stroke();
+      if (beschriften) { ctx.fillStyle = '#9ca3af'; ctx.fillText(z < 0 ? '−' + Math.abs(z) : z, px(z), y + 18); }
+    }
+  };
+  const yO = 58, yU = 152;
+  achse(yO, false); achse(yU, true);
+  ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#6b7280';
+  ctx.fillText('vorher', 6, yO - 22);
+  ctx.fillText('nach · k', 6, yU - 30);
+
+  const punkt = (x, y, col, lab) => {
+    ctx.fillStyle = col;
+    ctx.beginPath(); ctx.arc(px(x), y, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText(lab, px(x), y - 12);
+  };
+  // Abbildungspfeile
+  const pfeil = (x1, x2, col) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 1.4; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(px(x1), yO + 10); ctx.lineTo(px(x2), yU - 22); ctx.stroke();
+    ctx.setLineDash([]);
+  };
+  pfeil(VK_A, ak, '#1a4f8a');
+  pfeil(VK_B, bk, '#b85c00');
+  punkt(VK_A, yO, '#1a4f8a', 'a = 2');
+  punkt(VK_B, yO, '#b85c00', 'b = 5');
+  punkt(ak, yU, '#1a4f8a', nz(ak));
+  punkt(bk, yU, '#b85c00', nz(bk));
+
+  // Statuszeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+  const txt = k > 0 ? 'Reihenfolge bleibt: a·k < b·k' : (k < 0 ? 'Reihenfolge kippt: a·k > b·k' : 'k = 0: beide Bilder fallen auf 0');
+  ctx.fillStyle = k > 0 ? '#1f6b3a' : (k < 0 ? '#b85c00' : '#c8412c');
+  const tw = ctx.measureText(txt).width;
+  ctx.save(); ctx.fillStyle = '#fff'; ctx.fillRect(W - 12 - tw, 6, tw + 8, 18); ctx.restore();
+  ctx.fillText(txt, W - 8, 19);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Einstieg
   document.getElementById('sl-budget').addEventListener('input', drawBudget);
   drawBudget();
+
+  // Vorzeichenkipp
+  document.getElementById('vk-k').addEventListener('input', drawVkipp);
+  drawVkipp();
 
   // Drei Darstellungen
   document.getElementById('sl-three').addEventListener('input', drawThree);
@@ -1140,6 +1242,7 @@ window.addEventListener('resize', () => {
   drawBudget();
   drawThree();
   drawFaelle();
+  drawVkipp();
 });
 </script>
 </body>
