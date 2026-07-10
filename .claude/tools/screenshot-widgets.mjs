@@ -62,6 +62,8 @@ const WIDGETS = [
   { page: 'schwerpunkt/s3-4a-exponentialfunktionen.html', id: 'cv-egrenz', note: 'e-Grenzwert' },
   // T53, Runde 7.
   { page: 'grundlagen/g5-1-grundlagen.html', id: 'sk-canvas', note: 'Skizzen-Gegenueberstellung' },
+  { page: 'grundlagen/g5-2b-vierecke.html', id: 'cv-scher', note: 'Trapez-Scherung' },
+  { page: 'grundlagen/g5-2b-vierecke.html', id: 'cv-drachen', note: 'Drachen-Diagonalen' },
 ];
 
 const VIEWPORTS = [
