@@ -395,6 +395,31 @@ MathJax = {
   <p>Darum beschränkt man sich in Anwendungen häufig auf die e-Funktion.</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:14px 0 8px">
+  <p style="margin:0">Woher kommt \(e\)? Aus dem Zinseszins bei immer feinerer Verzinsung:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Ein Kapital von 1 wird mit 100 % Zins verzinst, aber in \(n\) Teilschritten zu je \(\tfrac{100}{n}\,\%\). Wächst das Endkapital unbegrenzt, wenn man \(n\) immer weiter erhöht?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Ein Kapital von eins wird mit hundert Prozent Zins verzinst, aber in n Teilschritten zu je hundert durch n Prozent. Wächst das Endkapital unbegrenzt, wenn man n immer weiter erhöht?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Nein — die Folge \(\left(1 + \tfrac{1}{n}\right)^n\) wächst zwar monoton, bleibt aber unter \(3\) und strebt gegen die <strong>Eulersche Zahl</strong> \(e = 2.71828\ldots\). Auch bei stetiger (unendlich feiner) Verzinsung verdoppelt sich das Kapital also nicht einmal ganz auf das Dreifache. Die Annäherung ist langsam: Zehnmal mehr Schritte gewinnen nur eine Dezimalstelle.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Nein — die Folge eins plus eins durch n, hoch n, wächst zwar monoton, bleibt aber unter drei und strebt gegen die Eulersche Zahl, zwei Komma sieben eins acht zwei acht. Auch bei stetiger Verzinsung wächst das Kapital also nicht einmal ganz auf das Dreifache. Die Annäherung ist langsam: Zehnmal mehr Schritte gewinnen nur eine Dezimalstelle.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="sl-row">
+  <label>Schritte \(n = 10^{k}\), \(k =\) <span class="sl-val" id="eg-kv">1.00</span></label>
+  <input type="range" id="eg-k" min="0" max="6" step="0.25" value="1">
+</div>
+<div class="formel-live"><div class="fl-label">Zinseszins in n Schritten</div><div class="fl-eq" id="eg-eq" style="font-size:0.95rem"></div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-egrenz" height="260"></canvas></div>
+<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Die \(n\)-Achse ist <strong>logarithmisch</strong> skaliert — sonst wären die grossen \(n\) nicht darstellbar.</div>
+
 <div class="block block-bsp" style="margin-top:14px">
   <div class="block-titel">🟢 Beispiel 1 — Streckung durch Verschiebung ersetzen</div>
   <p>Der Graph \(G_g\) geht durch Streckung mit \(k = \tfrac{1}{8}\) in \(y\)-Richtung aus dem Graphen von \(f(x) = 2^x\) hervor. (a) Wie lautet \(g(x)\)? (b) Welche Verschiebung führt \(G_f\) ebenfalls in \(G_g\) über?</p>
@@ -1021,16 +1046,81 @@ function chkNum(id, target, tol, einheit){
   }
 }
 
+/* ══ e als Grenzwert von (1 + 1/n)^n ══
+   Monoton wachsend, beschränkt durch 3; Grenzwert e = 2.718281828…
+   Konvergenz ist langsam: n → 10·n bringt nur eine weitere Dezimalstelle. */
+function drawEGrenz() {
+  const k = parseFloat(document.getElementById('eg-k').value);
+  const n = Math.max(1, Math.round(Math.pow(10, k)));
+  const wert = Math.pow(1 + 1 / n, n);
+  const e = Math.E;
+  document.getElementById('eg-kv').textContent = k.toFixed(2);
+  document.getElementById('eg-eq').innerHTML =
+    `n = ${n.toLocaleString('de-CH')} &nbsp;·&nbsp; (1 + 1/n)<sup>n</sup> = <strong>${wert.toFixed(6)}</strong>` +
+    ` &nbsp;·&nbsp; e − Wert = ${(e - wert).toExponential(2).replace('-', '−')}`;
+
+  const { ctx, W, H } = initCanvas('cv-egrenz', 260, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const X0 = 46, L = W - 70, yB = H - 40, yT = 30;
+  const yMin = 1.9, yMax = 2.85;
+  const px = kk => X0 + kk / 6 * L;                 // k = log10(n) von 0 bis 6
+  const py = v => yB - (v - yMin) / (yMax - yMin) * (yB - yT);
+
+  // Achsen + Ticks
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(X0, yB); ctx.lineTo(X0 + L, yB); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(X0, yB); ctx.lineTo(X0, yT); ctx.stroke();
+  ctx.font = '10px JetBrains Mono, monospace'; ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+  for (let i = 0; i <= 6; i++) {
+    ctx.strokeStyle = '#eff1f5';
+    ctx.beginPath(); ctx.moveTo(px(i), yB); ctx.lineTo(px(i), yT); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.fillText('10' + ['⁰','¹','²','³','⁴','⁵','⁶'][i], px(i), yB + 15);
+  }
+  ctx.textAlign = 'right';
+  [2.0, 2.2, 2.4, 2.6, 2.8].forEach(v => { ctx.fillStyle = '#9ca3af'; ctx.fillText(v.toFixed(1), X0 - 6, py(v) + 3); });
+
+  // Asymptote y = e
+  ctx.strokeStyle = '#c8412c'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(X0, py(e)); ctx.lineTo(X0 + L, py(e)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#c8412c'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('e = 2.718282', X0 + 6, py(e) - 6);
+
+  // Folge
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.4;
+  ctx.beginPath();
+  for (let kk = 0; kk <= 6; kk += 0.02) {
+    const nn = Math.pow(10, kk);
+    const v = Math.pow(1 + 1 / nn, nn);
+    kk === 0 ? ctx.moveTo(px(kk), py(v)) : ctx.lineTo(px(kk), py(v));
+  }
+  ctx.stroke();
+
+  // aktueller Punkt
+  ctx.fillStyle = '#1f6b3a';
+  ctx.beginPath(); ctx.arc(px(k), py(wert), 5.5, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.2; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(px(k), py(wert)); ctx.lineTo(px(k), yB); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillText(wert.toFixed(4), px(k), py(wert) - 12);
+  ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('(1 + 1/n)ⁿ', X0 + 6, yT - 12);
+}
+document.getElementById('eg-k').addEventListener('input', drawEGrenz);
+
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateBK();
   updateDR();
   buildTyBtns(); drawTy();
   updateTR();
+  drawEGrenz();
   buildA1(); drawA1();
 });
 window.addEventListener('resize', () => {
   updateBK(); updateDR(); drawTy(); updateTR(); drawA1(); drawA2Sol();
+  drawEGrenz();
 });
 </script>
 </body>

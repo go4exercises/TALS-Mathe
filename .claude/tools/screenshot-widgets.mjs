@@ -59,6 +59,7 @@ const WIDGETS = [
   { page: 'grundlagen/g3-1-grundlagen.html', id: 'cv-vertikal', note: 'Vertikaltest' },
   { page: 'grundlagen/g3-2-lineare-funktionen.html', id: 'cv-steig', note: 'Steigungsdreieck (Drag)' },
   { page: 'grundlagen/g5-2a-dreiecke.html', id: 'cv-dreiungl', note: 'Dreiecksungleichung' },
+  { page: 'schwerpunkt/s3-4a-exponentialfunktionen.html', id: 'cv-egrenz', note: 'e-Grenzwert' },
 ];
 
 const VIEWPORTS = [

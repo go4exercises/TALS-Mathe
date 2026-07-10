@@ -4,6 +4,33 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [96] — 2026-07-10 · Audit-Paket 5 / T53, Runde 6: Vertikaltest, Steigungsdreieck, Dreiecksungleichung, e-Grenzwert
+
+Zahlen vorab mit `python3` nachgerechnet, Pre-Flight `ALLE CHECKS BESTANDEN`, Browser-Rendercheck
+bei 1280 px und 360 px:
+
+- **g3-1** — **Vertikaltest**: Eine senkrechte Testgerade wandert über vier Kurven und zählt die
+  Schnittpunkte. Gerade und Parabel bestehen den Test; Kreis und liegende Parabel liefern an
+  passenden Stellen zwei \(y\)-Werte. Das Widget benennt ausdrücklich, dass eine <em>einzige</em>
+  solche Stelle genügt — und dass gar kein Schnittpunkt harmlos ist (dort fehlt \(x\) nur in der
+  Definitionsmenge). Tangentialfall (\(x = 3\) am Kreis) und Aussenbereich sind eigene Zustände.
+- **g3-2** — **Steigungsdreieck mit ziehbaren Punkten**: \(P\) und \(Q\) lassen sich mit Maus oder
+  Finger verschieben (Pointer-Events, Snap auf halbe Einheiten). \(\Delta x\), \(\Delta y\) und
+  \(m\) laufen mit; fallen die \(x\)-Koordinaten zusammen, meldet das Widget die senkrechte Gerade
+  als Fall ohne definierte Steigung. Muss \(m\) oder \(b\) gerundet werden, steht ein \(\approx\)
+  statt eines Gleichheitszeichens.
+- **g5-2a** — **Dreiecksungleichung**: Die Seite führte sie bisher nur beiläufig; jetzt gibt es
+  Merksatz und Widget. Das Dreieck wird per SSS aus dem Schnitt der Kreise \(k(A, b)\) und
+  \(k(B, a)\) konstruiert. Die drei Bedingungen werden einzeln abgehakt; bei \(c = a + b\)
+  entartet das Dreieck zur Strecke, darüber hinaus zeigt das Bild die «Lücke» zwischen den
+  beiden zu kurzen Seiten.
+- **s3-4a** — **e als Grenzwert**: \(\left(1 + \tfrac1n\right)^n\) über logarithmischer
+  \(n\)-Achse, mit der Asymptote \(y = e\). Die Zinseszins-Deutung (100 % Zins in \(n\) Schritten)
+  macht klar, warum das Kapital eben <em>nicht</em> unbegrenzt wächst. Die Konvergenz ist sichtbar
+  langsam: \(n = 10^6\) liefert erst \(2.718280\), also \(1.36 \cdot 10^{-6}\) unter \(e\).
+
+---
+
 ## [95] — 2026-07-10 · Audit-Paket 5 / T53, Runde 5: vier Widgets nach didaktischem Hebel
 
 Diesmal nicht nach «arme Seite» ausgewählt (die verbleibenden Seiten sind alle passabel
