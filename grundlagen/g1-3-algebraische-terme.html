@@ -211,6 +211,24 @@ MathJax = {
     color: var(--blau); margin-top: 8px; text-align: center;
     min-height: 1.2em;
   }
+
+  /* Slider-Zeile (Basisstile wie auf den Nachbarseiten) */
+  .sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+  .sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; }
+  .sl-row input[type=range] { flex:1; accent-color:var(--blau); min-width:80px; }
+  .sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); }
+
+  /* Zweiklammersatz — Teilerpaare */
+  .tp-box { background: var(--weiss); border: 1px solid var(--linie); border-radius: 9px; padding: 14px 16px; margin: 12px 0; }
+  .tp-term { text-align: center; font-family: var(--mono); font-size: 1.15rem; font-weight: 700; color: var(--tinte); margin-bottom: 10px; }
+  .tp-tab { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.85rem; }
+  .tp-tab th { background: var(--papier-2); color: var(--tinte-2); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px; border-bottom: 1px solid var(--linie); }
+  .tp-tab td { padding: 5px 8px; border-bottom: 1px solid var(--linie); text-align: center; }
+  .tp-tab tr.treffer td { background: var(--gruen-hell); color: var(--gruen); font-weight: 700; }
+  .tp-tab tr.daneben td { color: var(--tinte-2); }
+  .tp-fazit { margin-top: 10px; padding: 9px 13px; border-radius: 7px; font-size: 0.85rem; }
+  .tp-fazit.ok  { background: var(--gruen-hell); color: var(--gruen); border: 1px solid var(--gruen); }
+  .tp-fazit.err { background: var(--rot-hell);   color: var(--rot);   border: 1px solid var(--rot); }
 </style>
 </head>
 <body>
@@ -710,6 +728,40 @@ nur wenige Teilerpaare hat.</p>
     <li>\(x^2 + 2x - 15\): Produkt \(-15\), Summe \(+2\). Eine positiv, eine negativ: \(+5\) und \(-3\).
         Also \((x + 5)(x - 3)\).</li>
   </ul>
+</div>
+
+<div class="widget-titelzeile" style="margin:16px 0 8px">
+  <p style="margin:0">Alle Teilerpaare von \(q\) auf einen Blick — nur eines hat die Summe \(p\):</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Stelle \(q &gt; 0\) und dann \(q &lt; 0\) ein: Wie verändert sich die Vorzeichen-Struktur der Teilerpaare? Und finde ein \(p\), zu dem gar kein Paar passt.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Stelle q grösser null und dann q kleiner null ein: Wie verändert sich die Vorzeichen-Struktur der Teilerpaare? Und finde ein p, zu dem gar kein Paar passt.">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Der Zweiklammersatz ist eine <strong>endliche Suche</strong>: Es gibt nur so viele Kandidaten, wie \(q\) Teilerpaare hat. Passt keine Summe zu \(p\), lässt sich der Term nicht über den ganzen Zahlen zerlegen. Die Kontrolle liefert die Diskriminante \(p^2 - 4q\): Nur wenn sie eine <em>Quadratzahl</em> ist, existiert ein ganzzahliges Paar.</div>
+      <button class="ah-speak" type="button" data-vorlesen="Der Zweiklammersatz ist eine endliche Suche: Es gibt nur so viele Kandidaten, wie q Teilerpaare hat. Passt keine Summe zu p, lässt sich der Term nicht über den ganzen Zahlen zerlegen. Die Kontrolle liefert die Diskriminante p Quadrat minus vier q: Nur wenn sie eine Quadratzahl ist, existiert ein ganzzahliges Paar.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="tp-box">
+  <div class="sl-row">
+    <label>\(p\) (mittlerer Koeffizient): <span class="sl-val" id="tp-pv">5</span></label>
+    <input type="range" id="tp-p" min="-12" max="12" step="1" value="5">
+  </div>
+  <div class="sl-row">
+    <label>\(q\) (konstantes Glied): <span class="sl-val" id="tp-qv">6</span></label>
+    <input type="range" id="tp-q" min="-24" max="24" step="1" value="6">
+  </div>
+  <div class="tp-term" id="tp-term"></div>
+  <table class="tp-tab">
+    <thead><tr><th>r</th><th>s</th><th>r · s</th><th>r + s</th><th>passt?</th></tr></thead>
+    <tbody id="tp-body"></tbody>
+  </table>
+  <div class="tp-fazit" id="tp-fazit"></div>
 </div>
 
 <div class="block block-tipp">
@@ -2349,6 +2401,74 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sS) sS.addEventListener('input', drawBinomi);
     drawBinomi();
   }
+});
+
+/* ══════════════════════════════════════════════════════════════
+ *  ZWEIKLAMMERSATZ — Teilerpaare von q
+ *  x² + p·x + q = (x + r)(x + s)  mit  r·s = q  und  r + s = p.
+ *  Ein ganzzahliges Paar existiert genau dann, wenn die Diskriminante
+ *  p² − 4q eine Quadratzahl ist.
+ * ══════════════════════════════════════════════════════════════ */
+function tpPaare(q) {
+  const out = [];
+  for (let r = -Math.abs(q); r <= Math.abs(q); r++) {
+    if (r === 0) continue;
+    if (q % r === 0) { const s = q / r; if (r <= s) out.push([r, s]); }
+  }
+  return out;
+}
+function tpRender() {
+  const p = parseInt(document.getElementById('tp-p').value, 10);
+  const q = parseInt(document.getElementById('tp-q').value, 10);
+  document.getElementById('tp-pv').textContent = p;
+  document.getElementById('tp-qv').textContent = q;
+  const vz = v => (v < 0 ? '− ' + Math.abs(v) : '+ ' + v);
+  const nz = v => (v < 0 ? '−' + Math.abs(v) : '' + v);
+  document.getElementById('tp-term').innerHTML =
+    q === 0 ? 'x² ' + vz(p) + '·x' : 'x² ' + vz(p) + '·x ' + vz(q);
+
+  const body = document.getElementById('tp-body'), fazit = document.getElementById('tp-fazit');
+  if (q === 0) {
+    body.innerHTML = '<tr><td colspan="5">—</td></tr>';
+    fazit.className = 'tp-fazit ok';
+    fazit.innerHTML = p === 0
+      ? 'Für p = q = 0 bleibt nur x² = x·x — nichts zu suchen.'
+      : `Für q = 0 klammert man einfach x aus: x² ${vz(p)}·x = x·(x ${vz(p)}).`;
+    return;
+  }
+  const paare = tpPaare(q);
+  const treffer = paare.filter(([r, s]) => r + s === p);
+  body.innerHTML = paare.map(([r, s]) => {
+    const ok = r + s === p;
+    return `<tr class="${ok ? 'treffer' : 'daneben'}"><td>${nz(r)}</td><td>${nz(s)}</td>` +
+           `<td>${nz(r * s)}</td><td>${nz(r + s)}</td><td>${ok ? '✓' : '—'}</td></tr>`;
+  }).join('');
+
+  const D = p * p - 4 * q;
+  const w = Math.round(Math.sqrt(Math.abs(D)));
+  const istQuadrat = D >= 0 && w * w === D;
+  // Text in Unicode statt LaTeX: die Zeile wird bei jedem Slider-Schritt neu gesetzt,
+  // ein Re-Typeset pro Regler-Tick wäre unnötig teuer.
+  if (treffer.length) {
+    const [r, s] = treffer[0];
+    fazit.className = 'tp-fazit ok';
+    fazit.innerHTML = `✓ Paar gefunden: r = ${nz(r)}, s = ${nz(s)} → ` +
+      `x² ${vz(p)}·x ${vz(q)} = (x ${vz(r)})(x ${vz(s)}). ` +
+      `Kontrolle: D = p² − 4q = ${nz(D)} ist die Quadratzahl ${w}².`;
+  } else {
+    fazit.className = 'tp-fazit err';
+    fazit.innerHTML = `✗ Kein Teilerpaar hat die Summe ${nz(p)} — über den ganzen Zahlen nicht zerlegbar. ` +
+      (D < 0
+        ? `Die Diskriminante D = ${nz(D)} ist negativ: Der Term hat gar keine reellen Nullstellen.`
+        : `Die Diskriminante D = ${nz(D)} ist zwar nicht negativ, aber keine Quadratzahl — die Nullstellen sind irrational.`);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const sp = document.getElementById('tp-p');
+  if (!sp) return;
+  sp.addEventListener('input', tpRender);
+  document.getElementById('tp-q').addEventListener('input', tpRender);
+  tpRender();
 });
 </script>
 
