@@ -308,6 +308,37 @@ MathJax = {
   <p>„Mindestens" und „höchstens" schliessen die Grenze <em>ein</em> (\(\ge\), \(\le\)). „Mehr als" und „weniger als" schliessen die Grenze <em>aus</em> (\(>\), \(<\)). Das ist nicht Pingeligkeit — ein Auto, das „weniger als 30 km/h" fährt, fährt nicht 30. Eines, das „höchstens 30 km/h" fährt, darf 30. Bei Sicherheits-Schranken (Tragfähigkeiten, Druck-Maxima) lohnt es sich, das ganz genau zu lesen.</p>
 </div>
 
+<div class="widget-titelzeile" style="margin:16px 0 8px">
+  <p style="margin:0">Vom Signalwort zum Zahlenstrahl — achte auf den Randpunkt:</p>
+  <div class="anim-hinweis links">
+    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+      <div class="ah-text">Wechsle zwischen «höchstens» und «weniger als» bei gleicher Grenze. Der schattierte Bereich sieht fast gleich aus — nur ein winziger Kreis ändert sich. Was bedeutet er?</div>
+      <button class="ah-speak" type="button" data-vorlesen="Wechsle zwischen höchstens und weniger als bei gleicher Grenze. Der schattierte Bereich sieht fast gleich aus — nur ein winziger Kreis ändert sich. Was bedeutet er?">🔊 vorlesen</button>
+    </div>
+  </div>
+  <div class="anim-hinweis rechts">
+    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+      <div class="ah-text">Der <strong>gefüllte</strong> Kreis heisst: Die Grenze gehört zur Lösungsmenge (\(\leq\), \(\geq\)). Der <strong>offene</strong> Kreis heisst: Sie gehört nicht dazu (\(<\), \(>\)). In der Intervallschreibweise zeigt die Klammer entsprechend nach innen (\([g;\ \infty[\)) oder nach aussen (\(]g;\ \infty[\)). Bei einer Tragfähigkeit ist das der Unterschied zwischen «450 kg sind erlaubt» und «450 kg sind bereits zu viel».</div>
+      <button class="ah-speak" type="button" data-vorlesen="Der gefüllte Kreis heisst: Die Grenze gehört zur Lösungsmenge. Der offene Kreis heisst: Sie gehört nicht dazu. In der Intervallschreibweise zeigt die Klammer entsprechend nach innen oder nach aussen. Bei einer Tragfähigkeit ist das der Unterschied zwischen vierhundertfünfzig Kilogramm sind erlaubt und vierhundertfünfzig Kilogramm sind bereits zu viel.">🔊 vorlesen</button>
+    </div>
+  </div>
+</div>
+<div class="typ-btns" id="uz-chips">
+  <button class="typ-btn aktiv" type="button" data-uz="le">höchstens / maximal</button>
+  <button class="typ-btn" type="button" data-uz="ge">mindestens / wenigstens</button>
+  <button class="typ-btn" type="button" data-uz="lt">weniger als / unter</button>
+  <button class="typ-btn" type="button" data-uz="gt">mehr als / über</button>
+</div>
+<div class="sl-row">
+  <label>Grenze \(g\): <span class="sl-val" id="uz-gv">30</span></label>
+  <input type="range" id="uz-g" min="5" max="45" step="1" value="30">
+</div>
+<div class="formel-live"><div class="fl-label">Ungleichung · Lösungsmenge · Intervall</div><div class="fl-eq" id="uz-eq" style="font-size:1rem"></div></div>
+<div class="cv-wrap" style="max-width:520px"><canvas id="cv-ungl" height="150"></canvas></div>
+<div id="uz-rand" style="font-size:0.8rem;margin-top:8px"></div>
+
 <!-- ══ 5. ÄQUIVALENZUMFORMUNGEN (animiert) ══ -->
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Formulieren</summary>
@@ -1109,11 +1140,96 @@ document.addEventListener('DOMContentLoaded', () => {
   updatePR();
   buildA1();
   buildA3();
+  // Ungleichungs-Zahlenstrahl
+  document.getElementById('uz-g').addEventListener('input', drawUngl);
+  document.querySelectorAll('#uz-chips .typ-btn').forEach(b => b.addEventListener('click', () => {
+    uzTyp = b.dataset.uz;
+    document.querySelectorAll('#uz-chips .typ-btn').forEach(o => o.classList.toggle('aktiv', o === b));
+    drawUngl();
+  }));
+  drawUngl();
 });
 window.addEventListener('resize', () => {
   updateWG();
   renderUf();
+  if (document.getElementById('cv-ungl')) drawUngl();
 });
+
+/* ══════════════════════════════════════════════════════════════
+ *  UNGLEICHUNGS-ZAHLENSTRAHL
+ *  Signalwort → Relationszeichen → Lösungsmenge mit offenem oder
+ *  gefülltem Randpunkt (Grenze gehört dazu oder nicht).
+ * ══════════════════════════════════════════════════════════════ */
+const UZ = {
+  le: { zeichen: '≤', rechts: false, geschlossen: true,  iv: g => `]−∞; ${g}]`,  wort: 'höchstens' },
+  ge: { zeichen: '≥', rechts: true,  geschlossen: true,  iv: g => `[${g}; ∞[`,  wort: 'mindestens' },
+  lt: { zeichen: '<', rechts: false, geschlossen: false, iv: g => `]−∞; ${g}[`,  wort: 'weniger als' },
+  gt: { zeichen: '>', rechts: true,  geschlossen: false, iv: g => `]${g}; ∞[`,  wort: 'mehr als' },
+};
+let uzTyp = 'le';
+function drawUngl() {
+  const g = parseInt(document.getElementById('uz-g').value, 10);
+  const u = UZ[uzTyp];
+  document.getElementById('uz-gv').textContent = g;
+  document.getElementById('uz-eq').innerHTML =
+    `«${u.wort} ${g}» &nbsp;→&nbsp; <strong>x ${u.zeichen} ${g}</strong> &nbsp;→&nbsp; ` +
+    `𝕃 = {x ∈ ℝ | x ${u.zeichen} ${g}} = ${u.iv(g)}`;
+  const rEl = document.getElementById('uz-rand');
+  // Franz. Intervallnotation: die Klammer zeigt nach innen, wenn die Grenze dazugehört.
+  rEl.innerHTML = u.geschlossen
+    ? `Randpunkt <strong>gefüllt</strong>: \\(x = ${g}\\) gehört zur Lösungsmenge — die Klammer zeigt nach innen.`
+    : `Randpunkt <strong>offen</strong>: \\(x = ${g}\\) gehört <em>nicht</em> zur Lösungsmenge — die Klammer zeigt nach aussen.`;
+  rEl.style.color = u.geschlossen ? 'var(--gruen)' : 'var(--rot)';
+  mjTypeset([rEl]);
+
+  const { ctx, W, H } = initCanvas('cv-ungl', 150, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const X0 = 34, L = W - 68, y = 84, xMin = 0, xMax = 50;
+  const px = z => X0 + (z - xMin) / (xMax - xMin) * L;
+
+  // schattierter Lösungsbereich
+  ctx.fillStyle = 'rgba(26,79,138,0.14)';
+  if (u.rechts) ctx.fillRect(px(g), y - 22, X0 + L - px(g), 44);
+  else          ctx.fillRect(X0, y - 22, px(g) - X0, 44);
+
+  // Achse + Ticks
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(X0 - 12, y); ctx.lineTo(X0 + L + 12, y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(X0 + L + 4, y - 4); ctx.lineTo(X0 + L + 12, y); ctx.lineTo(X0 + L + 4, y + 4); ctx.fill();
+  ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  for (let z = 0; z <= 50; z += 5) {
+    ctx.strokeStyle = '#c8d0da'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px(z), y - 5); ctx.lineTo(px(z), y + 5); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.fillText(z, px(z), y + 20);
+  }
+
+  // Lösungspfeil samt Spitze — die Lösungsmenge läuft ins Unendliche weiter
+  ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  const ende = u.rechts ? X0 + L + 6 : X0 - 6;
+  ctx.moveTo(px(g), y); ctx.lineTo(ende, y); ctx.stroke();
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath();
+  if (u.rechts) { ctx.moveTo(ende + 9, y); ctx.lineTo(ende, y - 5); ctx.lineTo(ende, y + 5); }
+  else          { ctx.moveTo(ende - 9, y); ctx.lineTo(ende, y - 5); ctx.lineTo(ende, y + 5); }
+  ctx.fill();
+
+  // Randpunkt: gefüllt (Grenze gehört dazu) oder offen
+  ctx.lineWidth = 2.5; ctx.strokeStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(px(g), y, 7, 0, Math.PI * 2);
+  if (u.geschlossen) { ctx.fillStyle = '#1a4f8a'; ctx.fill(); }
+  else               { ctx.fillStyle = '#fff'; ctx.fill(); ctx.stroke(); }
+
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillText('x ' + u.zeichen + ' ' + g, px(g) + (u.rechts ? 42 : -42), y - 30);
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillText('g = ' + g, px(g), y + 38);
+
+  // Prüfpunkt genau auf der Grenze
+  ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillStyle = u.geschlossen ? '#1f6b3a' : '#c8412c';
+  ctx.fillText(u.geschlossen ? `x = ${g} ist erlaubt ✓` : `x = ${g} ist nicht erlaubt ✗`, 8, 20);
+}
 </script>
 </body>
 </html>

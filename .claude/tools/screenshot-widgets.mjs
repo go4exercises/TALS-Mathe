@@ -48,6 +48,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s1-1-grundlagen.html', id: 'cv-pruefstand', note: 'Regel-Pruefstand' },
   // T53, Runde 4.
   { page: 'grundlagen/g2-3-lineare-gleichungssysteme.html', id: 'cv-lbuschel', note: 'LGS-Loesungsfaelle' },
+  { page: 'grundlagen/g2-1-grundlagen.html', id: 'cv-ungl', note: 'Ungleichungs-Zahlenstrahl' },
 ];
 
 const VIEWPORTS = [
