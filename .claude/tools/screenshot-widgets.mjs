@@ -45,6 +45,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s4-3b-skalarprodukt.html', id: 'wl-canvas', note: 'Winkel-Labor mit Projektion' },
   { page: 'grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html', id: 'cv-einschachtel', note: 'Wurzel-Einschachtelung' },
   { page: 'grundlagen/g1-2-zahlen-grundoperationen.html', id: 'cv-betrag-zg', note: 'Betrag als Abstand' },
+  { page: 'schwerpunkt/s1-1-grundlagen.html', id: 'cv-pruefstand', note: 'Regel-Pruefstand' },
 ];
 
 const VIEWPORTS = [

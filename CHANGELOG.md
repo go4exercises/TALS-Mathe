@@ -4,6 +4,35 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [93] — 2026-07-10 · Audit-Paket 5 / T53, Runde 3: vier weitere Prio-2-Widgets
+
+Auswahl nach demselben Raster wie Runde 2 (arme Seite × Konzept braucht ein Bild). Zahlen
+vorab mit `python3` nachgerechnet, Pre-Flight `ALLE CHECKS BESTANDEN`, Browser-Rendercheck
+bei 1280 px und 360 px:
+
+- **s4-3b** — das bestehende Winkel-Labor um den **Projektionsvektor** \(\vec{b}_a\) erweitert:
+  Trägergerade von \(\vec{a}\), gestricheltes Lot von der Spitze von \(\vec{b}\), grüner
+  Schattenvektor. Das Vorzeichen des Skalarprodukts wird zur Richtung des Schattens (bei
+  \(\varphi > 90°\) zeigt er gegen \(\vec{a}\)), bei Orthogonalität schrumpft er auf den
+  Nullvektor. Neuer Snap-Button trifft den Nulldurchgang exakt (\(104°\), Slider jetzt
+  \(1°\)-Schritte).
+- **g1-4** — **\(\sqrt{n}\) einschachteln**: zwei gekoppelte Zahlenstrahlen (Radikanden mit den
+  benachbarten Quadratzahlen, Wurzeln mit dem schrumpfenden Intervall). Der Schritt-Knopf testet
+  die Intervallmitte \(m\) gegen \(n\) und zieht die passende Schranke nach; für \(n = 30\)
+  ergibt das \([5;\ 6] \to [5.4375;\ 5.5]\) nach vier Schritten. Quadratzahlen werden als
+  Sonderfall erkannt (\(\sqrt{25} = 5\) exakt).
+- **g1-2** — **Betrag als Abstand**: \(|a|\) als Strecke zur Null, \(|a - b|\) als Strecke
+  zwischen den Punkten, mit der Symmetrie \(|a - b| = |b - a|\) in der Live-Zeile. Negative
+  Subtrahenden werden geklammert (\(|2 - (-3)|\)) — auf der Seite mit der Doppelminus-Regel
+  wäre alles andere schlechte Notation.
+- **s1-1** — **Regel-Prüfstand**: sechs «Regeln», vier davon falsch. Einsetzen zeigt Balken für
+  beide Seiten und die Differenz. Der Clou sind die Zufallstreffer, in denen eine falsche Regel
+  zufällig aufgeht — \(a = 0\) bei \((a+b)^2\), \(a = b\) beim Summen-Kürzen und \(a = b = 2\)
+  bei \(\log(a+b)\), weil dort \(a + b = a \cdot b\) gilt. Das Widget benennt sie explizit als
+  «zufällig gleich, trotzdem keine Regel»: Einsetzen kann widerlegen, aber nicht beweisen.
+
+---
+
 ## [92] — 2026-07-09 · Audit-Paket 5 / T53, Runde 2: die grössten Hebel der Prio-2-Liste
 
 Fünf Widgets, ausgewählt nach drei Kriterien: wie arm die Seite bisher an Interaktion war,

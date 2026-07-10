@@ -255,6 +255,57 @@ MathJax = {
   <p style="margin-top:6px">Das Muster ist immer dasselbe: <strong>Multiplikative Strukturen verteilen sich, additive nicht.</strong> Die vierte Zeile kennst du aus <a class="quer" href="s1-3-logarithmen.html">↩ 1.3</a>, die dritte steckt hinter dem Einstiegs-Widget.</p>
 </div>
 
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Regel-Prüfstand — mit Zahlen widerlegen</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle die falsche Regel \(\log(a+b) = \log a + \log b\) und stelle \(a = b = 2\) ein. Beide Seiten sind gleich! Heisst das, die Regel stimmt doch?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Wähle die falsche Regel Logarithmus von a plus b gleich log a plus log b und stelle a gleich b gleich zwei ein. Beide Seiten sind gleich! Heisst das, die Regel stimmt doch?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Nein. Eine Regel muss für <strong>alle</strong> zulässigen Werte gelten — ein einziges Gegenbeispiel widerlegt sie. Dass \(a = b = 2\) zufällig passt (dort ist \(a + b = a\cdot b\)), beweist gar nichts. Umgekehrt reicht keine noch so lange Liste passender Zahlen als <em>Beweis</em>: Die richtigen Regeln erkennt man daran, dass sie die multiplikative Struktur respektieren.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Nein. Eine Regel muss für alle zulässigen Werte gelten — ein einziges Gegenbeispiel widerlegt sie. Dass a gleich b gleich zwei zufällig passt, beweist gar nichts. Umgekehrt reicht keine noch so lange Liste passender Zahlen als Beweis: Die richtigen Regeln erkennt man daran, dass sie die multiplikative Struktur respektieren.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Setze Zahlen ein und vergleiche linke und rechte Seite. Vier der sechs «Regeln» sind falsch.</p>
+  </div>
+  <div class="widget-body">
+    <div class="typ-btns" id="rp-chips">
+      <button class="typ-btn aktiv" type="button" data-rp="0">\((a+b)^2 = a^2 + b^2\)</button>
+      <button class="typ-btn" type="button" data-rp="1">\(\sqrt{a+b} = \sqrt{a} + \sqrt{b}\)</button>
+      <button class="typ-btn" type="button" data-rp="2">\(\frac{a+c}{b+c} = \frac{a}{b}\)</button>
+      <button class="typ-btn" type="button" data-rp="3">\(\log(a+b) = \log a + \log b\)</button>
+      <button class="typ-btn" type="button" data-rp="4">\((a \cdot b)^2 = a^2 b^2\)</button>
+      <button class="typ-btn" type="button" data-rp="5">\(\sqrt{a \cdot b} = \sqrt{a}\sqrt{b}\)</button>
+    </div>
+    <div class="sl-row">
+      <label>\(a\): <span class="sl-val" id="rp-av">2</span></label>
+      <input type="range" id="rp-a" min="0" max="10" step="0.5" value="2">
+    </div>
+    <div class="sl-row">
+      <label>\(b\): <span class="sl-val" id="rp-bv">3</span></label>
+      <input type="range" id="rp-b" min="0.5" max="10" step="0.5" value="3">
+    </div>
+    <div class="sl-row" id="rp-crow">
+      <label>\(c\): <span class="sl-val" id="rp-cv">2</span></label>
+      <input type="range" id="rp-c" min="0.5" max="10" step="0.5" value="2">
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Zahlenprobe</div>
+      <div class="fl-eq" id="rp-eq" style="font-size:1rem"></div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="cv-pruefstand" height="170"></canvas></div>
+    <div id="rp-fazit" style="font-size:0.82rem;margin-top:8px"></div>
+  </div>
+</div>
+
 <div class="block block-bsp" style="margin-top:10px">
   <div class="block-titel">🟢 Beispiel 2 — Struktur als Kopfrechen-Trick</div>
   <p>Berechne \(17 \cdot 23\) im Kopf.</p>
@@ -698,10 +749,118 @@ function chkNum(id, target, tol, einheit){
 document.addEventListener('DOMContentLoaded', () => {
   updateSW();
   buildA1();
+  drawPruefstand();
 });
 window.addEventListener('resize', () => {
   updateSW();
+  drawPruefstand();
 });
+
+/* ══ Regel-Prüfstand ══
+   Vier falsche und zwei richtige «Regeln». Bei den falschen gibt es Sonderfälle,
+   in denen beide Seiten zufällig übereinstimmen (z.B. log: a + b = a·b für a = b = 2)
+   — genau daran zeigt sich, dass Einsetzen widerlegen, aber nicht beweisen kann. */
+const RP_REGELN = [
+  { t: '(a+b)² = a² + b²', ok: false, c: false,
+    L: (a, b) => (a + b) ** 2,        R: (a, b) => a * a + b * b,
+    lt: (a, b) => `(${a} + ${b})² = ${((a + b) ** 2).toFixed(2)}`,
+    rt: (a, b) => `${a}² + ${b}² = ${(a * a + b * b).toFixed(2)}`,
+    warum: 'Es fehlt der gemischte Term \\(2ab\\) — beide Seiten stimmen nur, wenn \\(a = 0\\) oder \\(b = 0\\) ist.' },
+  { t: '√(a+b) = √a + √b', ok: false, c: false,
+    L: (a, b) => Math.sqrt(a + b),    R: (a, b) => Math.sqrt(a) + Math.sqrt(b),
+    lt: (a, b) => `√(${a} + ${b}) = ${Math.sqrt(a + b).toFixed(4)}`,
+    rt: (a, b) => `√${a} + √${b} = ${(Math.sqrt(a) + Math.sqrt(b)).toFixed(4)}`,
+    warum: 'Die Wurzel verteilt sich nur über Produkte. Gleichheit gilt nur für \\(a \\cdot b = 0\\).' },
+  { t: '(a+c)/(b+c) = a/b', ok: false, c: true,
+    L: (a, b, c) => (a + c) / (b + c),  R: (a, b) => a / b,
+    lt: (a, b, c) => `(${a} + ${c}) / (${b} + ${c}) = ${((a + c) / (b + c)).toFixed(4)}`,
+    rt: (a, b) => `${a} / ${b} = ${(a / b).toFixed(4)}`,
+    warum: 'Kürzen darf man nur Faktoren, nie Summanden. Gleichheit gilt nur für \\(a = b\\) (oder \\(c = 0\\)).' },
+  { t: 'log(a+b) = log a + log b', ok: false, c: false,
+    L: (a, b) => Math.log10(a + b),   R: (a, b) => Math.log10(a) + Math.log10(b),
+    lt: (a, b) => `lg(${a} + ${b}) = ${Math.log10(a + b).toFixed(4)}`,
+    rt: (a, b) => `lg ${a} + lg ${b} = ${(Math.log10(a) + Math.log10(b)).toFixed(4)}`,
+    warum: 'Richtig wäre \\(\\log(a \\cdot b) = \\log a + \\log b\\). Zufällige Gleichheit tritt ein, wenn \\(a + b = a \\cdot b\\) ist — etwa bei \\(a = b = 2\\).',
+    bedingung: (a, b) => a > 0 && b > 0,
+    fehlt: 'Für \\(a = 0\\) ist \\(\\log a\\) nicht definiert — stelle \\(a > 0\\) ein.' },
+  { t: '(a·b)² = a²·b²', ok: true, c: false,
+    L: (a, b) => (a * b) ** 2,        R: (a, b) => a * a * b * b,
+    lt: (a, b) => `(${a} · ${b})² = ${((a * b) ** 2).toFixed(2)}`,
+    rt: (a, b) => `${a}² · ${b}² = ${(a * a * b * b).toFixed(2)}`,
+    warum: 'Das Potenzieren verteilt sich über ein <strong>Produkt</strong> — diese Regel gilt für alle \\(a, b\\).' },
+  { t: '√(a·b) = √a · √b', ok: true, c: false,
+    L: (a, b) => Math.sqrt(a * b),    R: (a, b) => Math.sqrt(a) * Math.sqrt(b),
+    lt: (a, b) => `√(${a} · ${b}) = ${Math.sqrt(a * b).toFixed(4)}`,
+    rt: (a, b) => `√${a} · √${b} = ${(Math.sqrt(a) * Math.sqrt(b)).toFixed(4)}`,
+    warum: 'Die Wurzel verteilt sich über ein <strong>Produkt</strong> — gültig für alle \\(a, b \\geq 0\\).' },
+];
+let rpAkt = 0;
+function drawPruefstand() {
+  const a = parseFloat(document.getElementById('rp-a').value);
+  const b = parseFloat(document.getElementById('rp-b').value);
+  const c = parseFloat(document.getElementById('rp-c').value);
+  const r = RP_REGELN[rpAkt];
+  document.getElementById('rp-av').textContent = a;
+  document.getElementById('rp-bv').textContent = b;
+  document.getElementById('rp-cv').textContent = c;
+  document.getElementById('rp-crow').style.display = r.c ? '' : 'none';
+
+  const eqEl = document.getElementById('rp-eq'), fzEl = document.getElementById('rp-fazit');
+  const definiert = r.bedingung ? r.bedingung(a, b) : true;
+  let li = 0, re = 0, gleich = false;
+  if (definiert) {
+    li = r.L(a, b, c); re = r.R(a, b, c);
+    gleich = Math.abs(li - re) < 1e-9;
+    eqEl.innerHTML = `<span class="tx-blau">${r.lt(a, b, c)}</span> &nbsp;${gleich ? '=' : '≠'}&nbsp; <span class="tx-orange">${r.rt(a, b, c)}</span>`;
+  } else {
+    eqEl.innerHTML = '— nicht definiert —';
+  }
+
+  // Fazit-Zeile
+  let fz, farbe;
+  if (!definiert)        { fz = r.fehlt; farbe = 'var(--tinte-2)'; }
+  else if (r.ok)         { fz = '✓ <strong>Gültige Regel.</strong> ' + r.warum; farbe = 'var(--gruen)'; }
+  else if (!gleich)      { fz = '✗ <strong>Gegenbeispiel gefunden — die Regel ist falsch.</strong> ' + r.warum; farbe = 'var(--rot)'; }
+  else                   { fz = '⚠ <strong>Hier zufällig gleich — trotzdem keine Regel.</strong> Ein passender Wert beweist nichts; verschiebe die Regler und du findest ein Gegenbeispiel. ' + r.warum; farbe = 'var(--orange)'; }
+  fzEl.innerHTML = fz;
+  fzEl.style.color = farbe;
+  mjTypeset([fzEl]);
+
+  // Balkenvergleich
+  const { ctx, W, H } = initCanvas('cv-pruefstand', 170, false);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  if (!definiert) {
+    ctx.fillStyle = '#9ca3af'; ctx.font = 'italic 13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('für a = 0 ist lg a nicht definiert', W / 2, H / 2);
+    return;
+  }
+  const max = Math.max(Math.abs(li), Math.abs(re), 1e-9);
+  const bx = 118, bw = W - 150;
+  const bar = (y, v, col, lab) => {
+    ctx.fillStyle = '#374151'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+    ctx.fillText(lab, bx - 10, y + 14);
+    ctx.fillStyle = '#eef1f5'; ctx.fillRect(bx, y, bw, 20);
+    const w = bw * (Math.abs(v) / max);
+    ctx.fillStyle = col; ctx.fillRect(bx, y, w, 20);
+    // Zahl neben den Balken — bei fast vollem Balken hinein, sonst liefe sie aus dem Bild
+    ctx.font = '11px JetBrains Mono, monospace';
+    if (w > bw - 60) { ctx.fillStyle = '#fff'; ctx.textAlign = 'right'; ctx.fillText(v.toFixed(4), bx + w - 8, y + 14); }
+    else             { ctx.fillStyle = '#374151'; ctx.textAlign = 'left'; ctx.fillText(v.toFixed(4), bx + w + 6, y + 14); }
+  };
+  bar(42, li, '#1a4f8a', 'linke Seite');
+  bar(90, re, '#b85c00', 'rechte Seite');
+  ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillStyle = gleich ? (r.ok ? '#1f6b3a' : '#b85c00') : '#c8412c';
+  ctx.fillText(gleich ? 'beide Seiten gleich' : `Differenz ${(li - re).toFixed(4)}`.replace('-', '−'), W / 2, 24);
+  ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#6b7280';
+  ctx.fillText(r.t, W / 2, H - 14);
+}
+document.querySelectorAll('#rp-chips .typ-btn').forEach(btn => btn.addEventListener('click', () => {
+  rpAkt = +btn.dataset.rp;
+  document.querySelectorAll('#rp-chips .typ-btn').forEach(o => o.classList.toggle('aktiv', o === btn));
+  drawPruefstand();
+}));
+['rp-a', 'rp-b', 'rp-c'].forEach(id => document.getElementById(id).addEventListener('input', drawPruefstand));
 </script>
 </body>
 </html>
