@@ -661,34 +661,56 @@ function updateCV(){
   document.getElementById('cv-eq').innerHTML = `V = π · 2² · 6 ≈ ${V.toFixed(1)} cm³ — unabhängig von s`;
   const {ctx, W, H} = initCanvas('cv-canvas', 220, false);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
-  const n = 12, mh = 13, mw = 110;
-  const x0 = W * 0.32 - mw / 2, y0 = H - 26;
-  const skala = 22;  // px pro cm Scherung total
-  for(let i = 0; i < n; i++){
-    const dx = s * skala * (i / (n - 1));
-    const y = y0 - (i + 1) * mh;
-    ctx.fillStyle = i % 2 ? '#dbe7f3' : '#c3d6ea';
-    ctx.strokeStyle = '#5b7fa6'; ctx.lineWidth = 1;
-    ctx.beginPath();
-    if(ctx.roundRect) ctx.roundRect(x0 + dx, y, mw, mh - 2, 5); else ctx.rect(x0 + dx, y, mw, mh - 2);
-    ctx.fill(); ctx.stroke();
-  }
-  // Boden
+
+  /* Münzen im Schrägbild: jede Schicht ist eine Kreisscheibe, die als Ellipse
+     erscheint (rx breit, ry flach). Von unten nach oben zeichnen, damit die
+     obere Münze den Mantel der darunterliegenden sauber überdeckt. */
+  const n = 12, mh = 12, rx = 54, ry = 14;
+  const cx0 = W * 0.34, y0 = H - 30;
+  const skala = 22;                       // px pro cm Scherung (gesamt)
+
+  // Standfläche andeuten
   ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(12, y0); ctx.lineTo(W - 12, y0); ctx.stroke();
+  ctx.strokeStyle = '#c8d0da'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.ellipse(cx0, y0, rx, ry, 0, 0, Math.PI * 2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  for(let i = 0; i < n; i++){
+    const dx = s * skala * (i / (n - 1));
+    const yBot = y0 - i * mh, yTop = yBot - mh;
+    const cx = cx0 + dx;
+    // Mantel (vordere Hälfte)
+    ctx.fillStyle = i % 2 ? '#b9cee4' : '#a9c2dd';
+    ctx.strokeStyle = '#5b7fa6'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(cx, yBot, rx, ry, 0, 0, Math.PI);
+    ctx.lineTo(cx - rx, yTop);
+    ctx.lineTo(cx + rx, yTop);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // Deckel-Ellipse
+    ctx.fillStyle = i % 2 ? '#dbe7f3' : '#c3d6ea';
+    ctx.beginPath(); ctx.ellipse(cx, yTop, rx, ry, 0, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+  }
+
   // Höhe (senkrecht, blau) + Seitenlinie (violett)
   const hTop = y0 - n * mh;
   ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
-  ctx.beginPath(); ctx.moveTo(x0 - 16, y0); ctx.lineTo(x0 - 16, hTop); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx0 - rx - 22, y0); ctx.lineTo(cx0 - rx - 22, hTop); ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'right';
-  ctx.fillText('h', x0 - 22, (y0 + hTop) / 2 + 4);
+  ctx.fillText('h', cx0 - rx - 28, (y0 + hTop) / 2 + 4);
   const sPx = s * skala;
   ctx.strokeStyle = '#5b2d8e'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(x0 + mw + 8, y0); ctx.lineTo(x0 + mw + 8 + sPx, hTop); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx0 + rx + 6, y0); ctx.lineTo(cx0 + rx + 6 + sPx, hTop); ctx.stroke();
   ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left';
   const seite = Math.sqrt(36 + s * s);
-  ctx.fillText(`Seite ≈ ${seite.toFixed(2)} cm`, x0 + mw + 16 + sPx, (y0 + hTop) / 2 + 4);
+  ctx.fillText(`Seite ≈ ${seite.toFixed(2)} cm`, cx0 + rx + 14 + sPx, (y0 + hTop) / 2 + 4);
+  // Hinweis: jede Münze behält ihre Querschnittsfläche
+  ctx.fillStyle = '#6b7280'; ctx.font = 'italic 10px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Jede Münze: Querschnitt π·2² — unverändert', 10, 18);
 }
 document.getElementById('cv-s').addEventListener('input', updateCV);
 

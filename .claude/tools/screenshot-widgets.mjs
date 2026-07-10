@@ -53,6 +53,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s1-2-potenzen.html', id: 'cv-zehnerpot', note: 'Zehnerpotenzen-Umwandler' },
   // T53, Runde 5.
   { page: 'grundlagen/g3-3-quadratische-funktionen.html', id: 'cv-extrem', note: 'Extremwert-Zaun' },
+  { page: 'schwerpunkt/s4-2a-prismen-zylinder.html', id: 'cv-canvas', note: 'Cavalieri-Muenzstapel' },
 ];
 
 const VIEWPORTS = [
