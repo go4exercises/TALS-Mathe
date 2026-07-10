@@ -333,6 +333,44 @@ MathJax = {
 <div class="cv-wrap"><canvas id="typ-canvas" height="220"></canvas></div>
 <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:8px;font-style:italic" id="typ-desc"></div>
 
+<h3 id="paritaet">Paritäts-Explorer — gerade oder ungerade?</h3>
+
+<p>Ob eine Potenzfunktion \(y = x^n\) achsensymmetrisch oder punktsymmetrisch ist, entscheidet allein die <strong>Parität des Exponenten</strong>. Wähle \(n\) und einen Stützwert \(x_0\): das Widget spiegelt den Punkt und prüft, welche Spiegelung wieder auf der Kurve landet.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Symmetrie-Checker — \(f(-x) = (-1)^n\,f(x)\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Stelle \(n = 2\) und dann \(n = 3\) ein. Bei welchem Exponenten liegt der an der \(y\)-Achse gespiegelte Punkt wieder auf der Kurve, bei welchem der am Ursprung gespiegelte?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Stelle n gleich zwei und dann n gleich drei ein. Bei welchem Exponenten liegt der an der y-Achse gespiegelte Punkt wieder auf der Kurve, bei welchem der am Ursprung gespiegelte?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">\(f(-x_0) = (-x_0)^n = (-1)^n x_0^n\). Bei geradem \(n\) ist \((-1)^n = +1\): \(f(-x_0) = f(x_0)\), der Punkt spiegelt sich an der \(y\)-Achse — die Funktion ist gerade (achsensymmetrisch). Bei ungeradem \(n\) ist \((-1)^n = -1\): \(f(-x_0) = -f(x_0)\), der Punkt spiegelt sich am Ursprung — die Funktion ist ungerade (punktsymmetrisch).</div>
+          <button class="ah-speak" type="button" data-vorlesen="f von minus x null ist gleich Klammer minus x null hoch n gleich minus eins hoch n mal x null hoch n. Bei geradem n ist minus eins hoch n gleich plus eins: der Punkt spiegelt sich an der y-Achse, die Funktion ist gerade. Bei ungeradem n ist es minus eins: der Punkt spiegelt sich am Ursprung, die Funktion ist ungerade.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>Stützpunkt \(P\) blau · gespiegelter Kurvenpunkt \(Q=(-x_0 \mid f(-x_0))\) rot · Spiegel-Element grün</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-orange"><label>Exponent <span class="var">\(n\)</span></label><input type="range" id="pa-n" min="-3" max="4" step="1" value="2"><span class="sl-val" id="pa-nv">2</span></div>
+      <div class="sl-grp akz-gruen"><label>Stützwert <span class="var">\(x_0\)</span></label><input type="range" id="pa-x" min="0.4" max="1.5" step="0.05" value="1.2"><span class="sl-val" id="pa-xv">1.20</span></div>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Symmetrie</div>
+      <div class="fl-eq" id="pa-eq">gerade · f(−x) = +f(x) · achsensymmetrisch zur y-Achse</div>
+    </div>
+    <div class="cv-wrap" style="max-width:420px"><canvas id="pa-canvas" height="300"></canvas></div>
+  </div>
+</div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Parabeln und Hyperbeln</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Punkte haben <em>alle</em> Potenzfunktionen \(y = x^{2n}\) mit geraden, natürlichen Exponenten gemeinsam?</p><ul class="mc-optionen"><li data-opt="A">\((0 \mid 0)\), \((1 \mid 1)\), \((-1 \mid 1)\)</li><li data-opt="B">\((0 \mid 0)\), \((1 \mid 1)\), \((-1 \mid -1)\)</li><li data-opt="C">\((0 \mid 1)\), \((1 \mid 1)\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(0^{2n} = 0\), \(1^{2n} = 1\) und \((-1)^{2n} = 1\) für jedes gerade \(2n\).</div></details></div>
@@ -1038,15 +1076,70 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* ══ PARITÄTS-EXPLORER / SYMMETRIE-CHECKER ══ */
+function drawPa(){
+  const n = parseInt(document.getElementById('pa-n').value);
+  const x0 = parseFloat(document.getElementById('pa-x').value);
+  document.getElementById('pa-nv').textContent = n;
+  document.getElementById('pa-xv').textContent = x0.toFixed(2);
+  const gerade = (n % 2 === 0);
+  const f = x => Math.pow(x, n);   // n ganzzahlig; für x<0 und ungerades n liefert pow das korrekte Vorzeichen
+
+  const {ctx, W, H} = initCanvas('pa-canvas', 300, false);
+  // Achsen-Fenster: quadratisch um den Ursprung, damit die Spiegelung erkennbar bleibt
+  const S = 2.6;
+  const {cx, cy} = drawGrid(ctx, W, H, -S, S, -S, S);
+
+  const y0 = f(x0);
+  const yQ = f(-x0);   // = (-1)^n * y0
+
+  // Spiegel-Element grün hervorheben
+  if(gerade){
+    // y-Achse als Spiegelachse
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(cx(0), 0); ctx.lineTo(cx(0), H); ctx.stroke();
+    // horizontale Verbindung P—Q auf gleicher Höhe
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(cx(-x0), cy(yQ)); ctx.lineTo(cx(x0), cy(y0)); ctx.stroke();
+    ctx.setLineDash([]);
+  } else {
+    // Ursprung als Spiegelzentrum
+    ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(cx(-x0), cy(yQ)); ctx.lineTo(cx(x0), cy(y0)); ctx.stroke();
+    ctx.setLineDash([]);
+    drawDot(ctx, cx, cy, 0, 0, '#1f6b3a', 5);
+  }
+
+  // Kurve
+  plotFx(ctx, cx, cy, f, -S, S, '#5b2d8e', 3, 30);
+
+  // Punkte P (blau) und Q (rot)
+  if(Math.abs(y0) <= S){ drawDot(ctx, cx, cy, x0, y0, '#1a4f8a', 6); }
+  if(Math.abs(yQ) <= S){ drawDot(ctx, cx, cy, -x0, yQ, '#9b1c1c', 6); }
+  ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#1a4f8a'; if(Math.abs(y0) <= S) ctx.fillText('P', cx(x0) + 9, cy(y0) - 4);
+  ctx.fillStyle = '#9b1c1c'; if(Math.abs(yQ) <= S) ctx.fillText('Q', cx(-x0) - 18, cy(yQ) - 4);
+
+  const eq = document.getElementById('pa-eq');
+  eq.textContent = gerade
+    ? `gerade · f(−x) = +f(x) · achsensymmetrisch zur y-Achse`
+    : `ungerade · f(−x) = −f(x) · punktsymmetrisch zum Ursprung`;
+  eq.style.color = gerade ? '#1f6b3a' : '#5b2d8e';
+}
+['pa-n', 'pa-x'].forEach(id => document.getElementById(id).addEventListener('input', drawPa));
+
+/* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateBA();
   updateDR();
   buildTypBtns(); drawTyp();
   updateHY();
   buildA1(); drawA1();
+  drawPa();
 });
 window.addEventListener('resize', () => {
   updateBA(); updateDR(); drawTyp(); updateHY(); drawA1(); drawA2Sol();
+  drawPa();
 });
 </script>
 </body>

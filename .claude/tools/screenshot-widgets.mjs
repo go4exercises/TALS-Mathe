@@ -69,6 +69,7 @@ const WIDGETS = [
   // T53, Runde 8.
   { page: 'schwerpunkt/s3-1-grundlagen.html', id: 'ug-canvas', note: 'Ungleichungs-Labor' },
   { page: 'schwerpunkt/s3-1-grundlagen.html', id: 'we-graph', note: 'Weide-Doppelcanvas' },
+  { page: 'schwerpunkt/s3-2a-potenzfunktionen.html', id: 'pa-canvas', note: 'Paritaets-Explorer' },
 ];
 
 const VIEWPORTS = [
