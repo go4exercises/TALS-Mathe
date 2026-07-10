@@ -43,6 +43,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html', id: 'cv-betrag', note: 'Betrags-Explorer' },
   // T53, Runde 3.
   { page: 'schwerpunkt/s4-3b-skalarprodukt.html', id: 'wl-canvas', note: 'Winkel-Labor mit Projektion' },
+  { page: 'grundlagen/g1-4-zehnerpotenzen-quadratwurzeln.html', id: 'cv-einschachtel', note: 'Wurzel-Einschachtelung' },
 ];
 
 const VIEWPORTS = [

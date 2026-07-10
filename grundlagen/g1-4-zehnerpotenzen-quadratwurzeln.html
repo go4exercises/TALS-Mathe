@@ -492,6 +492,54 @@ ungefähr im Kopf zu haben:</p>
 <p>Solche Wurzeln werden in exakten Rechnungen <em>nicht ausgewertet</em> — man rechnet symbolisch
 weiter und wertet erst am Schluss numerisch aus, falls nötig.</p>
 
+<p>Ohne Taschenrechner schätzt man sie durch <strong>Einschachteln</strong>: Man sucht die beiden
+benachbarten Quadratzahlen und halbiert das Intervall so lange, bis die Genauigkeit reicht.</p>
+
+<div class="anim">
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Anim · \(\sqrt{n}\) einschachteln — ohne Taschenrechner</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Halbiere das Intervall mehrmals und beobachte seine Breite: Wie viele Schritte brauchst du, bis die erste Nachkommastelle feststeht? Und was passiert, wenn \(n\) selbst eine Quadratzahl ist?</div>
+        <button class="ah-speak" type="button" data-vorlesen="Halbiere das Intervall mehrmals und beobachte seine Breite: Wie viele Schritte brauchst du, bis die erste Nachkommastelle feststeht? Und was passiert, wenn n selbst eine Quadratzahl ist?">🔊 vorlesen</button>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Nur die Quadratzahlen haben ganzzahlige Wurzeln; alles dazwischen liegt <em>zwischen</em> zwei ganzen Zahlen. Statt zu raten, testet man die Intervallmitte \(m\): Ist \(m^2 > n\), liegt \(\sqrt{n}\) links davon, sonst rechts. Jeder Schritt halbiert die Unsicherheit — nach zehn Schritten ist sie unter \(0.001\). Genau so rechnet auch der Taschenrechner, nur schneller.</div>
+        <button class="ah-speak" type="button" data-vorlesen="Nur die Quadratzahlen haben ganzzahlige Wurzeln; alles dazwischen liegt zwischen zwei ganzen Zahlen. Statt zu raten, testet man die Intervallmitte m: Ist m Quadrat grösser als n, liegt die Wurzel links davon, sonst rechts. Jeder Schritt halbiert die Unsicherheit — nach zehn Schritten ist sie unter null Komma null null eins.">🔊 vorlesen</button>
+      </div>
+    </div>
+  </div>
+  <div class="anim-layout">
+    <canvas id="cv-einschachtel" width="560" height="250"></canvas>
+    <div class="bedien">
+      <div class="regler">
+        <div class="regler-label"><span>Radikand \(n\)</span><span class="wert" id="lbl-esN">30</span></div>
+        <input type="range" id="sld-esN" min="2" max="150" step="1" value="30">
+      </div>
+      <div>
+        <div class="feld-titel">Intervall halbieren</div>
+        <div class="chips">
+          <button class="chip" type="button" id="es-schritt">▶ ein Schritt</button>
+          <button class="chip" type="button" id="es-reset">⟲ zurück</button>
+        </div>
+      </div>
+      <div class="formel" id="es-formel">\(5 &lt; \sqrt{30} &lt; 6\)</div>
+      <div class="legende">
+        <div class="legende-titel">Aktuelles Intervall</div>
+        <div class="legende-zeile"><span class="lab">untere Schranke</span><span class="val" id="leg-esLo">5</span></div>
+        <div class="legende-zeile"><span class="lab">obere Schranke</span><span class="val" id="leg-esHi">6</span></div>
+        <div class="legende-zeile"><span class="lab">Breite</span><span class="val" id="leg-esBr">1</span></div>
+        <div class="legende-zeile"><span class="lab">Schritte</span><span class="val" id="leg-esS">0</span></div>
+      </div>
+      <div class="erklaerung" id="es-erkl">Start: die beiden benachbarten Quadratzahlen. \(5^2 = 25 \leq 30 < 36 = 6^2\).</div>
+    </div>
+  </div>
+</div>
+
 <!-- ──────────────────────── 6. WURZELGESETZE ──────────────────────── -->
 <h2 id="wurzelgesetze">Wurzelgesetze</h2>
 
@@ -1092,6 +1140,124 @@ document.addEventListener('DOMContentLoaded', () => {
     drawZoom();
   }
 });
+
+/* ══════════════════════════════════════════════════════════════
+ *  √n EINSCHACHTELN (Bisektion)
+ *  Start: k² ≤ n < (k+1)² mit k = ⌊√n⌋  →  k ≤ √n < k+1
+ *  Schritt: Mitte m testen — m² > n ⇒ obere Schranke, sonst untere.
+ * ══════════════════════════════════════════════════════════════ */
+let esN = 30, esLo = 5, esHi = 6, esS = 0, esM = null;
+function esReset() {
+  esN = +document.getElementById('sld-esN').value;
+  const k = Math.floor(Math.sqrt(esN));
+  esLo = k; esHi = k + 1; esS = 0; esM = null;
+  drawEinschachtel();
+}
+function esSchritt() {
+  if (esHi - esLo < 1e-6) return;
+  const m = (esLo + esHi) / 2;
+  esM = m;
+  if (m * m > esN) esHi = m; else esLo = m;
+  esS++;
+  drawEinschachtel();
+}
+function drawEinschachtel() {
+  const n = esN, k = Math.floor(Math.sqrt(n)), exakt = Math.sqrt(n);
+  const istQuadrat = k * k === n;
+  document.getElementById('lbl-esN').textContent = n;
+  document.getElementById('leg-esLo').textContent = esLo.toFixed(4);
+  document.getElementById('leg-esHi').textContent = esHi.toFixed(4);
+  document.getElementById('leg-esBr').textContent = (esHi - esLo).toFixed(4);
+  document.getElementById('leg-esS').textContent = esS;
+
+  const fEl = document.getElementById('es-formel'), eEl = document.getElementById('es-erkl');
+  // Invariante: lo² ≤ n ≤ hi². Beim Start gilt sogar k ≤ √n < k+1 (strikt rechts).
+  fEl.innerHTML = (istQuadrat && esS === 0)
+    ? `\\(\\sqrt{${n}} = ${k}\\)`
+    : (esS === 0
+        ? `\\(${k} \\leq \\sqrt{${n}} < ${k + 1}\\)`
+        : `\\(${esLo.toFixed(4)} \\leq \\sqrt{${n}} \\leq ${esHi.toFixed(4)}\\)`);
+  if (istQuadrat && esS === 0) {
+    eEl.innerHTML = `\\(${n}\\) ist selbst eine Quadratzahl: \\(\\sqrt{${n}} = ${k}\\) — die untere Schranke ist bereits exakt, Einschachteln erübrigt sich.`;
+  } else if (esS === 0) {
+    eEl.innerHTML = `Start: die beiden benachbarten Quadratzahlen. \\(${k}^2 = ${k * k} \\leq ${n} < ${(k + 1) * (k + 1)} = ${k + 1}^2\\).`;
+  } else {
+    const m2 = esM * esM;
+    eEl.innerHTML = `Test der Mitte: \\(${esM.toFixed(4)}^2 = ${m2.toFixed(4)}\\) ist ${m2 > n ? 'grösser' : 'kleiner'} als \\(${n}\\) — also wird die ${m2 > n ? 'obere' : 'untere'} Schranke nachgezogen. Breite jetzt \\(${(esHi - esLo).toFixed(4)}\\).`;
+  }
+  mjTypeset([fEl, eEl]);
+
+  const { ctx, W, H } = initCanvas('cv-einschachtel', 250);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const X0 = 46, L = W - 92;
+
+  /* Obere Achse: Radikanden von k² bis (k+1)² — hier liegt n */
+  const q1 = k * k, q2 = (k + 1) * (k + 1);
+  const px1 = z => X0 + (z - q1) / (q2 - q1) * L;
+  const yR = 62;
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(X0, yR); ctx.lineTo(X0 + L, yR); ctx.stroke();
+  [[q1, k], [q2, k + 1]].forEach(([q, w]) => {
+    ctx.strokeStyle = '#374151';
+    ctx.beginPath(); ctx.moveTo(px1(q), yR - 7); ctx.lineTo(px1(q), yR + 7); ctx.stroke();
+    ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText(`${w}² = ${q}`, px1(q), yR + 21);
+  });
+  ctx.fillStyle = '#b85c00';
+  ctx.beginPath(); ctx.arc(px1(n), yR, 5, 0, Math.PI * 2); ctx.fill();
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  ctx.fillText('n = ' + n, px1(n), yR - 14);
+  ctx.fillStyle = '#6b7280'; ctx.font = 'italic 11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Radikanden', 6, yR - 26);
+
+  /* Untere Achse: Wurzeln von k bis k+1 — hier wird eingeschachtelt */
+  const px2 = z => X0 + (z - k) / 1 * L;
+  const yW = 176;
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(X0, yW); ctx.lineTo(X0 + L, yW); ctx.stroke();
+  [k, k + 1].forEach(w => {
+    ctx.beginPath(); ctx.moveTo(px2(w), yW - 7); ctx.lineTo(px2(w), yW + 7); ctx.stroke();
+    ctx.fillStyle = '#374151'; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText(w, px2(w), yW + 22);
+  });
+  // aktuelles Intervall als Band
+  ctx.fillStyle = 'rgba(31,107,58,0.18)';
+  ctx.fillRect(px2(esLo), yW - 13, Math.max(1.5, px2(esHi) - px2(esLo)), 26);
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 2;
+  [esLo, esHi].forEach(z => { ctx.beginPath(); ctx.moveTo(px2(z), yW - 13); ctx.lineTo(px2(z), yW + 13); ctx.stroke(); });
+  // getestete Mitte
+  if (esM !== null) {
+    ctx.strokeStyle = '#c8412c'; ctx.lineWidth = 1.6; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(px2(esM), yW - 30); ctx.lineTo(px2(esM), yW + 13); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#c8412c'; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('m² = ' + (esM * esM).toFixed(2), px2(esM), yW - 35);
+  }
+  // exakter Wert
+  ctx.fillStyle = '#1a4f8a';
+  ctx.beginPath(); ctx.arc(px2(exakt), yW, 4.5, 0, Math.PI * 2); ctx.fill();
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  // Label am Rand nicht abschneiden; bei Quadratzahlen ist die Wurzel exakt
+  const lblW = istQuadrat ? `√${n} = ${k}` : `√${n} ≈ ${exakt.toFixed(4)}`;
+  const px = px2(exakt);
+  ctx.textAlign = px < X0 + 40 ? 'left' : (px > X0 + L - 40 ? 'right' : 'center');
+  ctx.fillText(lblW, px + (px < X0 + 40 ? -8 : (px > X0 + L - 40 ? 8 : 0)), yW + 38);
+  ctx.fillStyle = '#6b7280'; ctx.font = 'italic 11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Wurzeln', 6, yW - 26);
+
+  // Kopfzeile
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+  ctx.fillText(istQuadrat && esS === 0 ? 'Quadratzahl — Wurzel exakt' : `Breite ${(esHi - esLo).toFixed(4)} nach ${esS} Schritt${esS === 1 ? '' : 'en'}`, W - 8, 20);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const sld = document.getElementById('sld-esN');
+  if (!sld) return;
+  sld.addEventListener('input', esReset);
+  document.getElementById('es-schritt').addEventListener('click', esSchritt);
+  document.getElementById('es-reset').addEventListener('click', esReset);
+  esReset();
+});
+window.addEventListener('resize', () => { if (document.getElementById('cv-einschachtel')) drawEinschachtel(); });
 </script>
 
 <script>
