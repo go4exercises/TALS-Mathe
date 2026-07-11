@@ -116,6 +116,13 @@ Das Lehrmittel ist in bemerkenswert gutem Zustand:
 
 ## 4. Severity C — Visualisierungs-Ideen (grösste Hebel zuerst)
 
+> **Nachtrag (Stand 2026-07-11): vollständig umgesetzt.** Alle Prio-1-Ideen (T52,
+> CHANGELOG [89]/[90]) und die gesamte Prio-2-Liste (T53, CHANGELOG [91]–[100],
+> neun Runden) sind gebaut, je mit Browser-Rendercheck bei 1280 px und 360 px.
+> Die folgende Liste ist damit die historische Vorlage; der aktuelle Bau-Stand
+> steht in §5 (Pakete/T52/T53 abgehakt). Offen aus Paket 5 bleibt nur noch T54
+> (Video-Platzhalter, eigene Ressourcen-Session).
+
 **Priorität 1 — Kernkonzept der Seite ohne tragendes Widget:**
 
 1. **s3-5 Phasor:** rotierender Zeiger + synchrone Zeitspur y=A·sin(ωt+φ) — Kernstelle «harmonische Schwingung».
@@ -207,6 +214,11 @@ Das Lehrmittel ist in bemerkenswert gutem Zustand:
 ---
 
 ## 6. Anhang — Kennzahlen
+
+> Werte zum **Audit-Zeitpunkt (6. Juli 2026)**. Die Interaktivitäts-Zahlen sind
+> durch T52/T53 überholt: jede genannte Reserve wurde ausgebaut (u.a. g4-Reihe
+> hat jetzt je ≥1 tragendes Widget), insgesamt 50 Widgets in der Rendercheck-Liste
+> (`.claude/tools/screenshot-widgets.mjs`). Aktueller Stand: §5 + CHANGELOG [89]–[100].
 
 - 46 Seiten, ~57 000 Zeilen HTML; 23 GF (g1-1…g5-5), 23 SP (s1-1…s4-3d).
 - Interaktivität: SP durchgehend 1–3 `widget`-Blöcke + 1–8 Canvases pro Seite; GF LG5 canvasreich (4–9), aber mit eigenem Anim-Muster; g4-Reihe nahezu ohne Interaktivität (0 Widgets, je 1 Canvas) — grösste Visualisierungs-Reserve.

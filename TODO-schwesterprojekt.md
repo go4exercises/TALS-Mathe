@@ -30,8 +30,9 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
   Doku-Stellen, die in Physik analog nachzuziehen sind: `TEMPLATE.html` (Helfer-Liste)
   und `HOWTO-neue-themenseite.md` (Troubleshooting „Formeln rendern sporadisch leer").
   Verifikation in Mathe: Pre-Flight-Tiefencheck `verify_mathjax` 5698 Ausdrücke / 0
-  Fehler, `verify_js_runtime` ok. **Render-Check 1280/360 px steht noch aus** (kein
-  Browser lokal) — in Physik vor dem Abschluss nachholen.
+  Fehler, `verify_js_runtime` ok. Render-Check 1280/360 px ist in Mathe seither
+  laufend erfolgt (Playwright lokal, `npm run shots`); in Physik vor dem Abschluss
+  analog nachholen.
 
 - **Slider-Wert-Farbkopplung (CSS-Muster, aus Audit-Paket 4).**
   Auf mehreren Seiten färbt die seiten-lokale Regel `.sl-val { color: var(--blau) }`

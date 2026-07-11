@@ -312,6 +312,14 @@ Erwartung: `Broken: 0`.
 
 Im Browser öffnen, durchscrollen, Sticky-ToC prüfen, Tabs (falls vorhanden) klicken, Druckseiten-Links auf der Themenseite ausprobieren.
 
+Für **Canvas-Widgets** zusätzlich der automatisierte Rendercheck: das eigene Canvas in
+`.claude/tools/screenshot-widgets.mjs` (Liste `WIDGETS`) eintragen und `npm run shots`
+laufen lassen. Das Skript schiesst je Widget zwei PNGs (1280 px Desktop + 360 px Mobil)
+nach `widget-shots/` und meldet leere/nicht gezeichnete Canvases (stiller JS-Fehler).
+Beide Screenshots sichten — auf 360 px kollidieren Beschriftungen sonst leicht
+(Label-Grössen an die Canvas-Breite koppeln, vgl. STYLEGUIDE). Playwright ist lokal
+installiert, kein Setup nötig.
+
 ---
 
 ## Häufige Stolpersteine

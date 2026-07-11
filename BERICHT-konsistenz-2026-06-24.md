@@ -103,6 +103,14 @@ Durchgang angleichen. *(Dieser Punkt stammt aus der vorherigen Diskussion.)*
 
 ## TODO
 
+> **Nachtrag (Stand 2026-07-11):** Dieser Bericht ist der Vorläufer des umfassenderen
+> `BERICHT-audit-themenseiten-2026-07-06.md`, in dessen Paketen 1–5 die hier gesammelten
+> Konsistenz-Punkte aufgegangen sind. **C1** (13 Schwerpunkt-Stubs) ist erledigt — alle
+> Teilgebiete sind ausgebaut, es gibt keine Stubs mehr (siehe CLAUDE.md/README). Die
+> übrigen A/B-Punkte wurden im Rahmen von Audit-Paket 2 (systematische Konsistenz) und
+> Paket 4 (Einzel-Mängel je Seite) mitbehandelt; für den tagesaktuellen Stand gilt das
+> §5-TODO des Juli-Audits. Die folgende Liste bleibt als historischer Ausgangspunkt stehen.
+
 Priorisiert. Nach jeder Code-Änderung: Pre-Flight, dann Commit (siehe CLAUDE.md).
 
 - [ ] **A1** `g1-3` + `g1-4` an Standard-Template angleichen: Skripte ans Body-Ende,
