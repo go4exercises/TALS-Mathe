@@ -4,6 +4,29 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [101] — 2026-07-11 · Paket 5 / T54: Video-Platzhalter kuratiert — Paket 5 abgeschlossen
+
+Die zwei verbliebenen „In Vorbereitung"-Video-Platzhalter (aus dem Audit-Nebenbefund T54)
+ersetzt. Beide betreffen das Thema **Betrag**, für das die bevorzugten Playlist-Anbieter
+(HOWTO §1.1) keine passende Playlist führen — der Juli-Discovery-Lauf hatte drei Kandidaten
+als themenfremd verworfen. Nach dem Einzelvideo-Fallback (HOWTO §2.1) je ein owner-verifiziertes
+Video von **Mathe by Daniel Jung** (Anbieter #6) eingesetzt:
+
+- **s3-6 Betragsfunktionen:** „Betragsfunktionen, -gleichungen, -ungleichungen, Übersicht grob"
+  (`watch?v=vaASPgrhO2o`) — deckt alle drei Betrags-Aspekte der Seite ab.
+- **s2-2c Betrags-/Polynomgleichungen, Ungleichungen:** „Betragsungleichungen, Fälle bestimmt,
+  jetzt lösen" (`watch?v=XjEOu4nzpyo`) — lösungsfokussiert, passend zum Gleichungs-Schwerpunkt.
+
+Owner beider Videos per `web_fetch` bestätigt (4 Abrufe gesamt, im Budget nach
+[[ressourcen-verifikation-lean]]). Anbieter-Map in `HOWTO-externe-ressourcen.md` §8
+entsprechend nachgeführt. s2-2a war kein Platzhalter (hatte bereits zwei verifizierte
+Wurzel-Playlists) und blieb unverändert.
+
+**Damit ist Audit-Paket 5 (T52 + T53 + T54) vollständig abgeschlossen** — und mit ihm die
+gesamte TODO-Liste des Audits vom 6. Juli 2026 (Pakete 1–5).
+
+---
+
 ## [100] — 2026-07-11 · Paket 5 / T53 Runde 9: die letzten drei Seiten — T53 abgeschlossen
 
 Vier Prio-2-Visualisierungen auf den drei verbliebenen Seiten s2-2a, s2-2b und s3-6,
