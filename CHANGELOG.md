@@ -4,6 +4,40 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [100] — 2026-07-11 · Paket 5 / T53 Runde 9: die letzten drei Seiten — T53 abgeschlossen
+
+Vier Prio-2-Visualisierungen auf den drei verbliebenen Seiten s2-2a, s2-2b und s3-6,
+ein Commit je Seite. Damit ist die gesamte Prio-2-Liste aus §4 des Audit-Berichts gebaut.
+Alle Zahlen in `python3` nachgerechnet, alle Canvases per Playwright bei 1280 px und 360 px
+gesichtet.
+
+**s2-2a — Pol-Falle bei Bruchgleichungen.** Zur bestehenden Wurzel-Scheinlösungs-Grafik kommt
+der Bruch-Fall mit **D-Strahl**: Ein Pol-Slider verschiebt die Definitionslücke \(x=n\) der
+Gleichung \(\tfrac{6}{x-n}=\tfrac{3x}{x-n}\). Der Hauptnenner liefert stets den Kandidaten
+\(x=2\); solange \(n\neq2\) schneiden sich die Kurven dort (\(L=\{2\}\)), fällt der Pol auf
+\(n=2\), liegt der Kandidat auf der Lücke und der Schnittpunkt flieht ins Unendliche —
+Scheinlösung, \(L=\{\}\). Der D-Strahl darunter zeigt den Ausschluss als offenen Kreis.
+
+**s2-2b — Definitionsmenge entlarvt die Scheinlösung.** Für \(\lg(x-u)=1-\lg x\) (Beispiel 6)
+zeigt ein \(u\)-Slider beide Log-Kurven, den grün hinterlegten Definitionsbereich \(x>u\) und
+den zugehörigen D-Strahl. Die Ersatzgleichung \(x^2-ux-10=0\) hat immer eine positive Wurzel
+(gültig, \(>u\)) und eine negative (Scheinlösung, links des D-Strahls) — der Grund, warum genau
+ein Kandidat wegfällt, wird sichtbar statt nur behauptet.
+
+**s3-6 — c-Slider am W und Wannen-Labor.** Der c-Slider fährt die Waagrechte \(y=c\) durch das
+W von \(|x^2-4|\) und zählt die Schnittpunkte live: keine für \(c<0\), zwei bei \(c=0\), vier für
+\(0<c<4\), drei bei \(c=4\) (Berührung im Buckel), zwei für \(c>4\) — genau die Fallunterscheidung
+der Transfer-Aufgabe. Das Wannen-Labor zeichnet \(y=|x-a|+|x-b|\) mit dem flachen Boden \([a;b]\)
+auf der Höhe \(|a-b|\) (die Summe der Abstände, konstant zwischen den Stellen); fallen \(a\) und
+\(b\) zusammen, wird aus der Wanne wieder ein V.
+
+Rendercheck-Liste in `.claude/tools/screenshot-widgets.mjs` um die vier neuen Canvases ergänzt
+(50 Widgets × 2 Viewports, alle gezeichnet). **Damit ist T53 (Prio-2-Visualisierungen)
+vollständig** — offen im Audit-Paket 5 bleibt nur noch T54 (Video-Platzhalter, eigene
+Ressourcen-Session).
+
+---
+
 ## [99] — 2026-07-10 · Paket 5 / T53 Runde 8: die Funktions-Seiten des Schwerpunkts (s3)
 
 Sechs Prio-2-Visualisierungen auf den vier Funktions-Seiten s3-1, s3-2a, s3-2b und s3-4b,
