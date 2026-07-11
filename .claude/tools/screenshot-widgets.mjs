@@ -73,6 +73,8 @@ const WIDGETS = [
   { page: 'schwerpunkt/s3-2b-wurzelfunktionen.html', id: 'tf-canvas', note: 'Wurzel-Transformationslabor' },
   { page: 'schwerpunkt/s3-4b-logarithmusfunktionen.html', id: 'll-canvas', note: 'log-Leiter' },
   { page: 'schwerpunkt/s3-4b-logarithmusfunktionen.html', id: 'c14-canvas', note: 'C-14-Datierung' },
+  // T53, Runde 9.
+  { page: 'schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html', id: 'br-canvas', note: 'Pol-Falle Bruchgleichung' },
 ];
 
 const VIEWPORTS = [

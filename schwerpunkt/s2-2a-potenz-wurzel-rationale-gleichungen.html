@@ -254,6 +254,47 @@ MathJax = {
   </div>
 </div>
 
+<p style="margin-top:14px">Bei <strong>Bruchgleichungen</strong> entsteht die Scheinlösung anders: Der Hauptnenner-Trick kann genau den Wert liefern, der einen Nenner null macht. Verschiebe den <strong>Pol</strong> \(x = n\) und beobachte den Kandidaten \(x = 2\) auf dem D-Strahl darunter.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Pol-Falle bei Bruchgleichungen — \(\dfrac{6}{x-n} = \dfrac{3x}{x-n}\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Der Hauptnenner liefert immer \(6 = 3x\), also den Kandidaten \(x = 2\). Schiebe den Pol \(n\) auf \(2\): Was passiert mit dem Schnittpunkt der beiden Kurven — und mit dem offenen Kreis auf dem D-Strahl?</div>
+          <button class="ah-speak" type="button" data-vorlesen="Der Hauptnenner liefert immer sechs gleich drei x, also den Kandidaten x gleich zwei. Schiebe den Pol n auf zwei: Was passiert mit dem Schnittpunkt der beiden Kurven — und mit dem offenen Kreis auf dem D-Strahl?">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Solange der Pol \(n \neq 2\) ist, schneiden sich die Kurven bei \(x = 2\) und die Lösung ist gültig: \(L = \{2\}\). Fällt der Pol auf \(n = 2\), so liegt der Kandidat genau auf der Definitionslücke — beide Kurven haben dort ihren senkrechten Ast, es gibt keinen Schnittpunkt. \(x = 2\) ist dann eine <strong>Scheinlösung</strong>, \(L = \{\,\}\).</div>
+          <button class="ah-speak" type="button" data-vorlesen="Solange der Pol n ungleich zwei ist, schneiden sich die Kurven bei x gleich zwei und die Lösung ist gültig. Fällt der Pol auf n gleich zwei, liegt der Kandidat genau auf der Definitionslücke — es gibt keinen Schnittpunkt. x gleich zwei ist dann eine Scheinlösung, die Lösungsmenge ist leer.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>linke Seite blau · rechte Seite orange · Pol \(x=n\) gestrichelt · D-Strahl mit Ausschluss unten</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-gruen">
+      <label>Pol <span class="var">\(n\)</span></label>
+      <input type="range" id="br-n" min="1" max="3" step="0.1" value="3">
+      <span class="sl-val" id="br-nv">3.0</span>
+    </div>
+    <div class="typ-btns" id="br-snap-btns">
+      <button class="typ-btn aktiv" onclick="setBrN(3)">n = 3</button>
+      <button class="typ-btn" onclick="setBrN(2)">n = 2 (Falle)</button>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Kandidat und Definitionsmenge</div>
+      <div class="fl-eq" id="br-eq">D = ℝ \ {3} · Kandidat x = 2 ∈ D ⇒ L = {2}</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="br-canvas" height="280"></canvas></div>
+  </div>
+</div>
+
 <div class="block block-def" style="margin-top:14px">
   <div class="block-titel">📘 Lösungsmethode für Wurzelgleichungen</div>
   <ol class="aufg-liste" style="margin-top:4px">
@@ -805,13 +846,121 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* ══ POL-FALLE BEI BRUCHGLEICHUNGEN ══ */
+function setBrN(n){
+  document.getElementById('br-n').value = n;
+  drawBr();
+}
+function drawBr(){
+  const n = parseFloat(document.getElementById('br-n').value);
+  document.getElementById('br-nv').textContent = n.toFixed(1);
+  const falle = Math.abs(n - 2) < 0.05;
+  document.querySelectorAll('#br-snap-btns .typ-btn').forEach(b => {
+    const bn = parseFloat(b.textContent.match(/[0-9.]+/)[0]);
+    b.classList.toggle('aktiv', Math.abs(bn - n) < 0.05);
+  });
+  document.getElementById('br-eq').innerHTML = falle
+    ? `D = ℝ \\ {2} · Kandidat x = 2 ∉ D (Pol!) ⇒ <span class="tx-orange">L = { }</span>`
+    : `D = ℝ \\ {${n.toFixed(1)}} · Kandidat x = 2 ∈ D ⇒ L = {2}`;
+
+  const f = x => 6 / (x - n);        // linke Seite
+  const g = x => 3 * x / (x - n);    // rechte Seite
+  const xMin = -1, xMax = 5, yMin = -10, yMax = 10;
+
+  const {ctx, W, H} = initCanvas('br-canvas', 280, false);
+  // Graph oben (75 %), D-Strahl unten
+  const gH = Math.round(H * 0.74);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+  // eigenes Gitter im oberen Bereich
+  const padL = 40, padR = 14, padT = 12;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => padT + (yMax - y) / (yMax - yMin) * (gH - padT - 10);
+  // Gitter
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for(let gx = xMin; gx <= xMax; gx++){ ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), gH - 10); ctx.stroke(); }
+  for(let gy = yMin; gy <= yMax; gy += 2){ ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke(); }
+  // Achsen
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, cy(0)); ctx.lineTo(W - padR, cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), padT); ctx.lineTo(cx(0), gH - 10); ctx.stroke();
+  ctx.fillStyle = '#9ca3af'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+  for(let gx = xMin; gx <= xMax; gx++){ if(gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 13); }
+
+  // Pol als senkrechte gestrichelte Linie
+  ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(n), padT); ctx.lineTo(cx(n), gH - 10); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Pol x = ' + n.toFixed(1), cx(n) + 4, padT + 12);
+
+  // Kurven segmentweise (Pol aussparen)
+  function plot(fn, color){
+    ctx.strokeStyle = color; ctx.lineWidth = 2.4;
+    for(const [lo, hi] of [[xMin, n - 0.02], [n + 0.02, xMax]]){
+      ctx.beginPath(); let started = false;
+      for(let i = 0; i <= 200; i++){
+        const x = lo + (hi - lo) * i / 200, y = fn(x);
+        if(y < yMin || y > yMax){ started = false; continue; }
+        const px = cx(x), py = cy(y);
+        if(!started){ ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+  }
+  plot(f, '#1a4f8a');
+  plot(g, '#b85c00');
+
+  // Schnittpunkt bei x = 2 (nur wenn kein Pol dort)
+  if(!falle){
+    const y2 = f(2);
+    if(y2 >= yMin && y2 <= yMax){
+      ctx.fillStyle = '#1f6b3a';
+      ctx.beginPath(); ctx.arc(cx(2), cy(y2), 6, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px monospace';
+      const links = n > 2;
+      ctx.textAlign = links ? 'right' : 'left';
+      ctx.fillText('(2 | ' + y2.toFixed(1) + ')', cx(2) + (links ? -9 : 9), cy(y2) - 4);
+    }
+  }
+
+  // ── D-Strahl unten ──
+  const yStrahl = gH + Math.round((H - gH) * 0.5);
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(padL, yStrahl); ctx.lineTo(W - padR, yStrahl); ctx.stroke();
+  // Pfeil rechts
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.moveTo(W - padR, yStrahl); ctx.lineTo(W - padR - 8, yStrahl - 4); ctx.lineTo(W - padR - 8, yStrahl + 4); ctx.fill();
+  ctx.font = '11px monospace'; ctx.textAlign = 'center';
+  for(let gx = xMin; gx <= xMax; gx++){
+    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), yStrahl - 4); ctx.lineTo(cx(gx), yStrahl + 4); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.fillText(gx, cx(gx), yStrahl + 17);
+  }
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('D-Strahl', padL, yStrahl - 12);
+  // offener Kreis am Pol (Ausschluss)
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx(n), yStrahl, 6, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  // Kandidat x = 2
+  const kandFarbe = falle ? '#9b1c1c' : '#1f6b3a';
+  ctx.fillStyle = kandFarbe;
+  ctx.beginPath(); ctx.moveTo(cx(2), yStrahl - 20); ctx.lineTo(cx(2) - 5, yStrahl - 29); ctx.lineTo(cx(2) + 5, yStrahl - 29); ctx.closePath(); ctx.fill();
+  ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center';
+  ctx.fillText(falle ? 'x=2 ausgeschlossen' : 'Kandidat x=2', cx(2), yStrahl - 33);
+}
+document.getElementById('br-n').addEventListener('input', drawBr);
+
+/* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateSW();
   drawSc();
   buildA1(); drawA1();
+  drawBr();
 });
 window.addEventListener('resize', () => {
   updateSW(); drawSc(); drawA1();
+  drawBr();
 });
 </script>
 </body>
