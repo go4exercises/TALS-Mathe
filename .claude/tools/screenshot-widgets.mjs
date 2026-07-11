@@ -75,6 +75,7 @@ const WIDGETS = [
   { page: 'schwerpunkt/s3-4b-logarithmusfunktionen.html', id: 'c14-canvas', note: 'C-14-Datierung' },
   // T53, Runde 9.
   { page: 'schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html', id: 'br-canvas', note: 'Pol-Falle Bruchgleichung' },
+  { page: 'schwerpunkt/s2-2b-exponential-logarithmische-gleichungen.html', id: 'ld-canvas', note: 'Log-Definitionsmenge D-Strahl' },
 ];
 
 const VIEWPORTS = [

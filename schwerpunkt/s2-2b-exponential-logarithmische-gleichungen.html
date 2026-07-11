@@ -337,6 +337,43 @@ MathJax = {
   <p>Kandidaten \(x_1 = 5\) und \(x_2 = -2\). Probe: \(x_1 = 5\) passt (\(\lg 2 = 1 - \lg 5\) ✓); bei \(x_2 = -2\) wäre \(\lg(-5)\) nicht definiert — <strong>Scheinlösung</strong>. Also \(L = \{5\}\).</p>
 </div>
 
+<p style="margin-top:14px">Warum verschwindet der zweite Kandidat? Beide Seiten von \(\lg(x-u) = 1 - \lg x\) sind nur rechts der Definitionsgrenze \(x = u\) überhaupt gezeichnet. Verschiebe \(u\) und beobachte, wie der negative Kandidat immer <em>links</em> des D-Strahls liegt — ausserhalb der Definitionsmenge.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Definitionsmenge entlarvt die Scheinlösung — \(\lg(x-u) = 1 - \lg x\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Das Zusammenfassen führt auf \(x^2 - ux - 10 = 0\) mit zwei Kandidaten. Welcher der beiden liegt im grün markierten Bereich \(x > u\), welcher links davon? Verschiebe \(u\) und verfolge beide.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Das Zusammenfassen führt auf x Quadrat minus u x minus zehn gleich null mit zwei Kandidaten. Welcher der beiden liegt im grün markierten Bereich x grösser u, welcher links davon? Verschiebe u und verfolge beide.">🔊 vorlesen</button>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Beide Logarithmus-Argumente müssen positiv sein: \(x - u > 0\) und \(x > 0\), zusammen \(D: x > u\). Die quadratische Ersatzgleichung hat immer eine positive Wurzel (\(> u\), gültig) und eine negative (\(< 0\), ausserhalb \(D\)). Der negative Kandidat ist <strong>keine</strong> Lösung der Ausgangsgleichung — er entstand erst durch das Entlogarithmieren.</div>
+          <button class="ah-speak" type="button" data-vorlesen="Beide Logarithmus-Argumente müssen positiv sein: x minus u grösser null und x grösser null, zusammen D: x grösser u. Die quadratische Ersatzgleichung hat immer eine positive Wurzel, gültig, und eine negative, ausserhalb D. Der negative Kandidat ist keine Lösung — er entstand erst durch das Entlogarithmieren.">🔊 vorlesen</button>
+        </div>
+      </div>
+    </div>
+    <p>\(\lg(x-u)\) blau · \(1-\lg x\) orange · Definitionsbereich \(x>u\) grün · gültige Lösung / Scheinlösung markiert</p>
+  </div>
+  <div class="widget-body">
+    <div class="sl-row akz-gruen">
+      <label>Grenze <span class="var">\(u\)</span></label>
+      <input type="range" id="ld-u" min="1" max="5" step="0.5" value="3">
+      <span class="sl-val" id="ld-uv">3</span>
+    </div>
+    <div class="formel-live">
+      <div class="fl-label">Kandidaten und Lösungsmenge</div>
+      <div class="fl-eq" id="ld-eq">D: x &gt; 3 · x₁ = 5 ∈ D ✓ · x₂ = −2 ∉ D (Scheinlösung) · L = {5}</div>
+    </div>
+    <div class="cv-wrap" style="max-width:520px"><canvas id="ld-canvas" height="280"></canvas></div>
+  </div>
+</div>
+
 <div class="block block-bsp">
   <div class="block-titel">🟢 Beispiel 7 — Verlorene Lösung bei ungeschicktem Weg</div>
   <p>Löse \(3\lg x^2 + 7 = 13\).</p>
@@ -807,13 +844,114 @@ function chkNum(id, target, tol, einheit){
 }
 
 /* ══ INIT ══ */
+/* ══ DEFINITIONSMENGE ENTLARVT DIE SCHEINLÖSUNG (log) ══ */
+function drawLd(){
+  const u = parseFloat(document.getElementById('ld-u').value);
+  document.getElementById('ld-uv').textContent = u % 1 === 0 ? u : u.toFixed(1);
+  // x² - u x - 10 = 0
+  const disk = Math.sqrt(u * u + 40);
+  const xg = (u + disk) / 2;    // gültige Lösung (> u)
+  const xs = (u - disk) / 2;    // Scheinlösung (< 0)
+  const fmtU = u % 1 === 0 ? u : u.toFixed(1);
+  document.getElementById('ld-eq').innerHTML =
+    `D: x &gt; ${fmtU} · x₁ = ${xg.toFixed(2)} ∈ D ✓ · x₂ = ${xs.toFixed(2)} ∉ D (Scheinlösung) · L = {${xg.toFixed(2)}}`;
+
+  const L = x => x > u ? Math.log10(x - u) : NaN;   // linke Seite lg(x-u)
+  const R = x => x > 0 ? 1 - Math.log10(x) : NaN;   // rechte Seite 1 - lg x
+  const xMin = -4, xMax = 12, yMin = -2, yMax = 3;
+
+  const {ctx, W, H} = initCanvas('ld-canvas', 280, false);
+  const gH = Math.round(H * 0.74);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  const padL = 34, padR = 14, padT = 12;
+  const cx = x => padL + (x - xMin) / (xMax - xMin) * (W - padL - padR);
+  const cy = y => padT + (yMax - y) / (yMax - yMin) * (gH - padT - 10);
+
+  // Definitionsbereich x > u grün hinterlegen
+  ctx.fillStyle = 'rgba(31,107,58,0.08)';
+  ctx.fillRect(cx(u), padT, cx(xMax) - cx(u), (gH - 10) - padT);
+
+  // Gitter + Achsen
+  ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+  for(let gx = -4; gx <= xMax; gx += 2){ ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), gH - 10); ctx.stroke(); }
+  for(let gy = yMin; gy <= yMax; gy++){ ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke(); }
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(padL, cy(0)); ctx.lineTo(W - padR, cy(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), padT); ctx.lineTo(cx(0), gH - 10); ctx.stroke();
+  ctx.fillStyle = '#9ca3af'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+  for(let gx = -4; gx <= xMax; gx += 2){ if(gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 13); }
+
+  // Definitionsgrenze x = u
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(cx(u), padT); ctx.lineTo(cx(u), gH - 10); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('D: x > ' + fmtU, cx(u) + 4, padT + 12);
+
+  // Kurven
+  function plot(fn, color, from){
+    ctx.strokeStyle = color; ctx.lineWidth = 2.4;
+    ctx.beginPath(); let started = false;
+    for(let i = 0; i <= 300; i++){
+      const x = from + (xMax - from) * i / 300, y = fn(x);
+      if(isNaN(y) || y < yMin || y > yMax){ started = false; continue; }
+      const px = cx(x), py = cy(y);
+      if(!started){ ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+  }
+  plot(L, '#1a4f8a', u + 0.001);
+  plot(R, '#b85c00', 0.001);
+
+  // Gültige Lösung
+  const yg = R(xg);
+  ctx.fillStyle = '#1f6b3a';
+  ctx.beginPath(); ctx.arc(cx(xg), cy(yg), 6, 0, 2 * Math.PI); ctx.fill();
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('x₁ = ' + xg.toFixed(2), cx(xg), cy(yg) - 10);
+
+  // ── D-Strahl unten ──
+  const yS = gH + Math.round((H - gH) * 0.5);
+  ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(padL, yS); ctx.lineTo(W - padR, yS); ctx.stroke();
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.moveTo(W - padR, yS); ctx.lineTo(W - padR - 8, yS - 4); ctx.lineTo(W - padR - 8, yS + 4); ctx.fill();
+  ctx.font = '11px monospace'; ctx.textAlign = 'center';
+  for(let gx = -4; gx <= xMax; gx += 2){
+    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx(gx), yS - 4); ctx.lineTo(cx(gx), yS + 4); ctx.stroke();
+    ctx.fillStyle = '#9ca3af'; ctx.fillText(gx, cx(gx), yS + 17);
+  }
+  // Definitionsbereich als grüner Strahl ab u
+  ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(cx(u), yS); ctx.lineTo(W - padR - 2, yS); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx(u), yS, 5, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('D-Strahl', padL, yS - 12);
+  // gültige Lösung (grün) und Scheinlösung (rot) auf dem Strahl
+  ctx.fillStyle = '#1f6b3a';
+  ctx.beginPath(); ctx.arc(cx(xg), yS, 5, 0, 2 * Math.PI); ctx.fill();
+  ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('x₁ ✓', cx(xg), yS - 10);
+  if(xs >= xMin){
+    ctx.fillStyle = '#9b1c1c';
+    ctx.beginPath(); ctx.moveTo(cx(xs), yS - 9); ctx.lineTo(cx(xs) - 5, yS - 18); ctx.lineTo(cx(xs) + 5, yS - 18); ctx.closePath(); ctx.fill();
+    ctx.fillText('x₂ ✗', cx(xs), yS - 22);
+  }
+}
+document.getElementById('ld-u').addEventListener('input', drawLd);
+
+/* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
   updateAL();
   drawGl();
   buildA1(); drawA1();
+  drawLd();
 });
 window.addEventListener('resize', () => {
   updateAL(); drawGl(); drawA1();
+  drawLd();
 });
 </script>
 </body>
