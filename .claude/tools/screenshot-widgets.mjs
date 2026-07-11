@@ -76,6 +76,8 @@ const WIDGETS = [
   // T53, Runde 9.
   { page: 'schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html', id: 'br-canvas', note: 'Pol-Falle Bruchgleichung' },
   { page: 'schwerpunkt/s2-2b-exponential-logarithmische-gleichungen.html', id: 'ld-canvas', note: 'Log-Definitionsmenge D-Strahl' },
+  { page: 'schwerpunkt/s3-6-betragsfunktionen.html', id: 'cw-canvas', note: 'c-Slider am W' },
+  { page: 'schwerpunkt/s3-6-betragsfunktionen.html', id: 'wa-canvas', note: 'Wannen-Labor' },
 ];
 
 const VIEWPORTS = [
