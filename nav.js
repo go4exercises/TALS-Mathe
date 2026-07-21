@@ -117,8 +117,8 @@ function buildNav(cfg) {
     }).join('');
   }
 
-  // ── META-DROPDOWN-INHALTE (Autor, Ausblick, Feedback, Lizenz) ──
-  // Vier kleine Info-Panels rechts im Header, auf jeder Seite identisch.
+  // ── META-DROPDOWN-INHALTE (Autor, Ausblick, Lizenz) ──
+  // Drei kleine Info-Panels rechts im Header, auf jeder Seite identisch.
   const metaAutorHTML = `
     <div class="meta-titel">Autor &amp; Intention</div>
     <p>Erstellt von einem Elektroingenieur mit über 30 Jahren Unterrichtserfahrung,
@@ -147,15 +147,6 @@ function buildNav(cfg) {
       <li>Physik analog aufbereiten</li>
       <li>Mathematik für Passerelle und Gymnasium ergänzen</li>
     </ul>`;
-
-  const metaFeedbackHTML = `
-    <div class="meta-titel">Feedback</div>
-    <p>Fehler gefunden? Verbesserungsvorschlag? Fehlendes Thema?
-       Bitte über den GitHub-Issue-Tracker melden — so geht keine Rückmeldung verloren
-       und alle anderen profitieren von der Diskussion.</p>
-    <p><a href="https://github.com/go4exercises/TALS-Mathe/issues/new" target="_blank" rel="noopener" class="meta-link">
-       → Issue auf GitHub erstellen</a></p>
-    <p><em>Feedbackformular folgt.</em></p>`;
 
   const metaLizenzHTML = `
     <div class="meta-titel">Lizenz</div>
@@ -224,17 +215,16 @@ function buildNav(cfg) {
         <div class="ueber-tabs" role="tablist">
           <button class="ueber-tab aktiv" role="tab" data-target="ueber-autor">Autor &amp; Intention</button>
           <button class="ueber-tab"        role="tab" data-target="ueber-ausblick">Ausblick</button>
-          <button class="ueber-tab"        role="tab" data-target="ueber-feedback">Feedback</button>
           <button class="ueber-tab"        role="tab" data-target="ueber-lizenz">Lizenz</button>
         </div>
         <div class="ueber-panels">
           <div class="ueber-panel aktiv" id="ueber-autor"   role="tabpanel">${metaAutorHTML}</div>
           <div class="ueber-panel"        id="ueber-ausblick" role="tabpanel">${metaAusblickHTML}</div>
-          <div class="ueber-panel"        id="ueber-feedback" role="tabpanel">${metaFeedbackHTML}</div>
           <div class="ueber-panel"        id="ueber-lizenz"   role="tabpanel">${metaLizenzHTML}</div>
         </div>
       </div>
     </div>
+    <a href="${prefix}feedback.html" class="nav-btn nav-meta${cfg.id==='feedback' ? ' aktiv':''}">FEEDBACK</a>
   </nav>
   <button class="burger" onclick="toggleMobileNav()" aria-label="Navigation">☰</button>
 </header>
@@ -252,8 +242,8 @@ function buildNav(cfg) {
   <div class="mn-gruppe">Über dieses Lehrmittel</div>
   <details class="mn-meta"><summary>Autor &amp; Intention</summary><div class="mn-meta-body">${metaAutorHTML}</div></details>
   <details class="mn-meta"><summary>Ausblick</summary><div class="mn-meta-body">${metaAusblickHTML}</div></details>
-  <details class="mn-meta"><summary>Feedback</summary><div class="mn-meta-body">${metaFeedbackHTML}</div></details>
   <details class="mn-meta"><summary>Lizenz</summary><div class="mn-meta-body">${metaLizenzHTML}</div></details>
+  <a href="${prefix}feedback.html">FEEDBACK</a>
 </div>`;
 
   // ── INJECT ───────────────────────────────────────────────────
@@ -274,7 +264,7 @@ function toggleDD(id) {
   if (!wasOpen) el.classList.add('open');
 }
 
-// Tabs innerhalb des "Über"-Dropdowns (Autor / Ausblick / Feedback / Lizenz)
+// Tabs innerhalb des "Über"-Dropdowns (Autor / Ausblick / Lizenz)
 document.addEventListener('click', e => {
   const tab = e.target.closest('.ueber-tab');
   if (!tab) return;
