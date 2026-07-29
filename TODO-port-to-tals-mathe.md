@@ -365,26 +365,39 @@ Untertitel sind zu einer Zeile zusammengefasst; Chip-Reihe, Statuszeile („16 f
 Arbeit") und die Bereichs-Kopfzeile samt Fachbereichs-Zeile sind ersatzlos entfernt.
 Die Kapitelliste steht damit ohne Scrollen im ersten Bildschirm.
 
-**Mathe-Stand:** Die Startseite ist **anders aufgebaut** — `.hero-ew`, `.kap-hdr`, `.k-lek`
-und `.ds-grid` gibt es dort nicht. Der Port ist also keine CSS-Übernahme, sondern die
-Frage: Was steht auf der Mathe-Startseite über der ersten Kapitelzeile, und wie viel davon
-liest tatsächlich jemand? Zahlen-Kacheln und Fortschrittszeilen sind die üblichen
-Kandidaten.
+**Mathe-Stand (29.07.2026 im Repo nachgesehen — KORREKTUR zur Absenderliste):**
+Die Behauptung „`.hero-ew`, `.kap-hdr`, `.k-lek` und `.ds-grid` gibt es dort nicht" ist
+**falsch**. Alle vier existieren in `index.html`: `.hero-ew` 3 ×, `.kap-hdr` 15 ×,
+`.k-lek` 10 ×, `.ds-grid` 2 ×. Was zutrifft: keine davon steht in `style.css` — die
+Startseite bringt ihr CSS in einem eigenen `<style>`-Block mit (Zeilen 9–125).
+Daher stimmt nur die Schlussfolgerung, nicht die Begründung: es ist kein Port *nach
+`style.css`*, sondern eine Änderung *in `index.html`* — und dort sind die Selektoren
+dieselben wie in Physik.
 
-**Mitgehende Kleinigkeiten aus demselben Durchgang** (nur, wenn die Struktur existiert):
+Die eigentliche Frage bleibt: Was steht über der ersten Kapitelzeile, und wie viel davon
+liest tatsächlich jemand?
 
-- Lange Statuszeilen in Kapitelköpfen unter 600 px umbrechen lassen
-  (`white-space: normal; text-align: right`) — sonst laufen sie rechts aus dem Bild.
-- Legenden-Kacheln auf feste Spaltenzahl statt `auto-fill`, damit alle in eine Reihe
-  passen und die Wortbeispiele umbrechen dürfen.
+**Mitgehende Kleinigkeiten aus demselben Durchgang** — beide Strukturen existieren in
+Mathe, darum nachgemessen statt geschätzt:
+
+- **Lange Statuszeilen in Kapitelköpfen** (`.k-lek`, `white-space: nowrap` +
+  `margin-left: auto`): **trifft zu und ist ein echter Defekt.** Bei 360 px laufen
+  **5 von 9** Kapitelköpfen rechts aus dem Bild, am schlimmsten „20 Lektionen ·
+  3 Teilgebiete + Praxisbeispiel" mit 112 px Überstand. Bei 600 px und 1280 px passt alles.
+  Gegenregel wie in Physik, im `<style>`-Block von `index.html`:
+  `@media (max-width: 600px) { .k-lek { white-space: normal; text-align: right; } }`
+- **Legenden-Kacheln auf feste Spaltenzahl statt `auto-fill`** (`.ds-grid`):
+  **entfällt für Mathe.** `repeat(auto-fill, minmax(170px, 1fr))` ergibt gemessen
+  5 Spalten für 5 Kacheln bei 1280 px (also bereits eine Reihe), 3 bei 600 px, 1 bei
+  360 px — und in keiner Breite wird ein Wortbeispiel abgeschnitten. Nichts zu tun.
 
 - [x] Startseite gesichtet (Playwright, gemessene Höhen bis zur ersten Kapitelzeile):
   **1280 px: 543 px** (Viewport 900) · **360 px: 715 px** (Viewport 740) — auf dem Handy
   ist damit von der Kapitelliste nichts zu sehen. Aufschlüsselung 1280 / 360 px:
   `.hero` 276 / 279 (davon `.chips` 27 / 97), `.stats` 49 / 105,
   `.bereich.b-gl` samt `.b-desc` 92 / 219.
-  Die Physik-Klassen `.hero-ew`, `.kap-hdr`, `.k-lek`, `.ds-grid` gibt es hier nicht —
-  die Mathe-Kandidaten heissen `.chips`, `.stats` und `.bereich.b-gl`.
+  Die Kandidaten heissen `.chips`, `.stats` und `.bereich.b-gl`; sie stehen im
+  `<style>`-Block von `index.html`, nicht in `style.css`.
 - [~] **Entscheid: noch offen, bewusst nicht automatisch umgesetzt.** Empfehlung für den
   nächsten Durchgang, nach erwartetem Gewinn geordnet:
   1. `.bereich.b-gl` samt `.b-desc` (−92 / −219 px) — die Zeile „Mathematik —
@@ -396,6 +409,9 @@ Kandidaten.
      zugeklappt) und muss bleiben, sonst findet niemand die Liste.
   Zusammen wären das rund **170 px auf dem Desktop und 420 px auf dem Handy** — genug,
   damit die Kapitelliste auf beiden Breiten ohne Scrollen beginnt.
+  4. **Unabhängig vom Straffen und ohne Entscheidungsbedarf:** die `.k-lek`-Regel oben
+     (5 von 9 Kapitelköpfen laufen bei 360 px rechts aus dem Bild). Das ist ein Fehler,
+     keine Geschmacksfrage — steht hier nur, weil §9 als „nur Entscheid" beauftragt war.
 
 ---
 
