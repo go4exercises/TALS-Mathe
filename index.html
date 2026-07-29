@@ -8,8 +8,9 @@
 <link rel="stylesheet" href="style.css">
 <style>
   /* ── Index-spezifisch ── */
-  .hero { background: var(--weiss); border-bottom: 1px solid var(--linie); padding: 50px 40px 42px; text-align: center; }
-  .hero-ew { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--blau); margin-bottom: 14px; }
+  .hero { background: var(--weiss); border-bottom: 1px solid var(--linie); padding: 16px 40px 28px; text-align: center; }
+  .hero-ew { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 1px; color: var(--tinte-2); margin-bottom: 14px; }
+  .hero-ew strong { font-weight: 700; color: var(--blau); }
   .hero-ew::before, .hero-ew::after { content:''; display:block; width:22px; height:1.5px; background:var(--blau-rand); }
   .hero h1 { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.15; margin-bottom: 12px; }
   .hero h1 span { color: var(--blau); }
@@ -108,7 +109,8 @@
   .ds { background: var(--weiss); border: 1px solid var(--linie); border-radius: 10px; padding: 18px 22px; margin-top: 44px; box-shadow: var(--s); }
   .ds-t { font-family: var(--serif); font-size: 0.88rem; font-weight: 700; margin-bottom: 12px; padding-bottom: 9px; border-bottom: 1px solid var(--linie); display: flex; align-items: center; gap: 10px; }
   .ds-t span { font-family: var(--mono); font-size: 0.6rem; background: var(--papier-2); color: var(--tinte-2); padding: 2px 7px; border-radius: 4px; }
-  .ds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+  /* feste Spaltenzahl statt auto-fill — Mathe hat FÜNF Kacheln, Physik sechs */
+  .ds-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
   .ds-i { display: flex; align-items: center; gap: 9px; font-size: 0.78rem; padding: 8px 10px; border-radius: 7px; border-left: 4px solid; }
   .ds-i.def    { background: var(--blau-hell);   border-color: var(--blau); }
   .ds-i.bsp    { background: var(--gruen-hell);  border-color: var(--gruen); }
@@ -119,8 +121,14 @@
   .ds-lb { font-weight: 700; font-size: 0.72rem; color: var(--tinte); }
   .ds-wn { font-size: 0.67rem; color: var(--tinte-2); font-style: italic; }
 
+  @media (max-width: 900px) { .ds-grid { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 600px) {
-    .hero { padding: 28px 16px 24px; } .page { padding: 18px 12px 60px; }
+    .hero { padding: 16px 16px 22px; } .page { padding: 18px 12px 60px; }
+    .ds-grid { grid-template-columns: repeat(2, 1fr); }
+    /* Lektionsangabe darf umbrechen, sonst läuft die Kapitelzeile rechts aus dem Bild */
+    .kap-hdr { align-items: flex-start; }
+    .k-lek   { white-space: normal; text-align: right; line-height: 1.4; }
+    .k-nr, .k-name { padding-top: 1px; }
   }
 </style>
 </head>
@@ -129,23 +137,15 @@
 <div id="nav-root"></div>
 
 <div class="hero">
-  <div class="hero-ew">Berufsmaturität Technik, Architektur, Life Sciences</div>
-  <h1>Mathematik<br><span>1:1 nach BM RLP 2030</span></h1>
-  <div class="chips">
-    <span class="chip c-bl">Grundlagenfach · 18 Teilgebiete</span>
-    <span class="chip c-li">Schwerpunktfach · 13 Teilgebiete</span>
-    <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf"
-       target="_blank" rel="noopener" class="chip c-gr" style="text-decoration:none">📄 Formelsammlung SBFI</a>
-  </div>
+  <!-- Text in EIN span: .hero-ew ist ein Flex-Container mit gap — einzelne <strong>
+       würden sonst zu eigenen Flex-Items mit Lücken davor und danach. -->
+  <div class="hero-ew"><span>Berufsmaturität <strong>T</strong>echnik,
+    <strong>A</strong>rchitektur, <strong>L</strong>ife <strong>S</strong>ciences —
+    <strong>TALS</strong></span></div>
+  <h1>Mathematik <span>nach BM RLP 2030</span></h1>
 </div>
 
 <main class="page">
-
-  <div class="stats">
-    <div class="st"><div class="st-dot" style="background:var(--gruen)"></div><span class="st-n">46</span><span>Themenseiten fertig</span></div>
-    <span class="st-hint">31 RLP-Teilgebiete + 2 TALS-Ergänzungen · ▼ Lerngebiet anklicken zum Aufklappen</span>
-  </div>
-
 
   <!-- ══════════════════════════════════════════
        GRUNDLAGENFACH · RLP 6.4.4.1 Gruppe 1 · 200 Lektionen
@@ -155,7 +155,6 @@
       <span class="b-badge">Grundlagenfach</span>
       <span class="b-titel">Mathematik — Grundlagenbereich</span>
     </div>
-    <div class="b-desc">FH-Fachbereiche: Technik und Informationstechnologie · Architektur, Bau- und Planungswesen · Chemie und Life Sciences. 5 Lerngebiete, 18 Teilgebiete, 200 Lektionen.</div>
   </div>
 
   <!-- G1: Arithmetik/Algebra · 45L -->
@@ -359,7 +358,6 @@
       <span class="b-badge">Schwerpunktfach</span>
       <span class="b-titel">Mathematik — Schwerpunktbereich TALS</span>
     </div>
-    <div class="b-desc">Nur für TALS: Technik und Informationstechnologie · Architektur, Bau- und Planungswesen · Chemie und Life Sciences. Nach Abschluss des Grundlagenfachs. 4 Lerngebiete, 13 Teilgebiete, 200 Lektionen.</div>
   </div>
 
   <!-- S1: Arithmetik/Algebra · 25L -->

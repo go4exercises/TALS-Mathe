@@ -355,63 +355,106 @@ sie muss zur tatsächlichen Praxis im Apps Script und im Postfach passen.
 
 ---
 
-## 9. Startseite straffen  — nur als Muster, nicht 1:1
+## 9. Startseite straffen  (korrigiert 29.07.2026 — jetzt mechanisch)
 
-**Was in Physik gemacht wurde:** Der Kopfbereich der Startseite hat rund 380 px verloren.
-Die Kopfzeile rückt direkt unter den Header und schreibt sich gemischt
-(„Berufsmaturität **T**echnik, **A**rchitektur, **L**ife **S**ciences — **TALS**", die
-Anfangsbuchstaben und das abschliessende TALS in der Leitfarbe und fett); Titel und
-Untertitel sind zu einer Zeile zusammengefasst; Chip-Reihe, Statuszeile („16 fertig · 0 in
-Arbeit") und die Bereichs-Kopfzeile samt Fachbereichs-Zeile sind ersatzlos entfernt.
-Die Kapitelliste steht damit ohne Scrollen im ersten Bildschirm.
+> **Korrektur.** Die erste Fassung dieses Abschnitts behauptete, Mathe sei anders
+> aufgebaut und ein CSS-Port sei nicht möglich. Das war falsch: gesucht wurde in
+> `style.css`, die Startseiten-Regeln stehen aber in **beiden** Projekten im
+> `<style>`-Block **innerhalb von `index.html`**. Mathes Startseite hat dieselbe
+> Struktur wie Physik vor dem Umbau. Darum hier die konkreten Schritte.
 
-**Mathe-Stand (29.07.2026 im Repo nachgesehen — KORREKTUR zur Absenderliste):**
-Die Behauptung „`.hero-ew`, `.kap-hdr`, `.k-lek` und `.ds-grid` gibt es dort nicht" ist
-**falsch**. Alle vier existieren in `index.html`: `.hero-ew` 3 ×, `.kap-hdr` 15 ×,
-`.k-lek` 10 ×, `.ds-grid` 2 ×. Was zutrifft: keine davon steht in `style.css` — die
-Startseite bringt ihr CSS in einem eigenen `<style>`-Block mit (Zeilen 9–125).
-Daher stimmt nur die Schlussfolgerung, nicht die Begründung: es ist kein Port *nach
-`style.css`*, sondern eine Änderung *in `index.html`* — und dort sind die Selektoren
-dieselben wie in Physik.
+**Ziel:** Die Kapitelliste beginnt im ersten Bildschirm. Gemessen bei 1280 px vor dem
+Umbau: erste `.kap`-Zeile bei **y = 543 px** (Hero bis 330, `.stats` bei 362,
+erster `.bereich` bei 451). Erwartung danach: rund 260–280 px.
 
-Die eigentliche Frage bleibt: Was steht über der ersten Kapitelzeile, und wie viel davon
-liest tatsächlich jemand?
+**1 · Hero** (`index.html`, `<style>` und Markup)
 
-**Mitgehende Kleinigkeiten aus demselben Durchgang** — beide Strukturen existieren in
-Mathe, darum nachgemessen statt geschätzt:
+```css
+.hero    { padding: 16px 40px 28px; }        /* vorher 50px 40px 42px */
+.hero-ew { letter-spacing: 1px; color: var(--tinte-2); }   /* text-transform: uppercase ENTFERNEN */
+.hero-ew strong { font-weight: 700; color: var(--blau); }
+```
 
-- **Lange Statuszeilen in Kapitelköpfen** (`.k-lek`, `white-space: nowrap` +
-  `margin-left: auto`): **trifft zu und ist ein echter Defekt.** Bei 360 px laufen
-  **5 von 9** Kapitelköpfen rechts aus dem Bild, am schlimmsten „20 Lektionen ·
-  3 Teilgebiete + Praxisbeispiel" mit 112 px Überstand. Bei 600 px und 1280 px passt alles.
-  Gegenregel wie in Physik, im `<style>`-Block von `index.html`:
-  `@media (max-width: 600px) { .k-lek { white-space: normal; text-align: right; } }`
-- **Legenden-Kacheln auf feste Spaltenzahl statt `auto-fill`** (`.ds-grid`):
-  **entfällt für Mathe.** `repeat(auto-fill, minmax(170px, 1fr))` ergibt gemessen
-  5 Spalten für 5 Kacheln bei 1280 px (also bereits eine Reihe), 3 bei 600 px, 1 bei
-  360 px — und in keiner Breite wird ein Wortbeispiel abgeschnitten. Nichts zu tun.
+```html
+<!-- Text in EIN span: .hero-ew ist ein Flex-Container mit gap — einzelne <strong>
+     würden sonst zu eigenen Flex-Items mit Lücken davor und danach. -->
+<div class="hero-ew"><span>Berufsmaturität <strong>T</strong>echnik,
+  <strong>A</strong>rchitektur, <strong>L</strong>ife <strong>S</strong>ciences —
+  <strong>TALS</strong></span></div>
+<h1>Mathematik <span>nach BM RLP 2030</span></h1>   <!-- vorher zwei Zeilen mit <br> -->
+```
 
-- [x] Startseite gesichtet (Playwright, gemessene Höhen bis zur ersten Kapitelzeile):
-  **1280 px: 543 px** (Viewport 900) · **360 px: 715 px** (Viewport 740) — auf dem Handy
-  ist damit von der Kapitelliste nichts zu sehen. Aufschlüsselung 1280 / 360 px:
-  `.hero` 276 / 279 (davon `.chips` 27 / 97), `.stats` 49 / 105,
-  `.bereich.b-gl` samt `.b-desc` 92 / 219.
-  Die Kandidaten heissen `.chips`, `.stats` und `.bereich.b-gl`; sie stehen im
-  `<style>`-Block von `index.html`, nicht in `style.css`.
-- [~] **Entscheid: noch offen, bewusst nicht automatisch umgesetzt.** Empfehlung für den
-  nächsten Durchgang, nach erwartetem Gewinn geordnet:
-  1. `.bereich.b-gl` samt `.b-desc` (−92 / −219 px) — die Zeile „Mathematik —
-     Grundlagenbereich" wiederholt, was das Kapitel-Badge daneben schon sagt.
-  2. `.chips` (−27 / −97 px) — „18 Teilgebiete" / „13 Teilgebiete" steht redundant zur
-     Statuszeile; der SBFI-Link gehört ins Dropdown „Nachschlagen", wo er bereits steht.
-  3. `.stats` (−49 / −105 px) — **nur die Zahlenkachel.** Der Hinweis „▼ Lerngebiet
-     anklicken zum Aufklappen" ist eine echte Bedienanleitung (die Kapitel sind
-     zugeklappt) und muss bleiben, sonst findet niemand die Liste.
-  Zusammen wären das rund **170 px auf dem Desktop und 420 px auf dem Handy** — genug,
-  damit die Kapitelliste auf beiden Breiten ohne Scrollen beginnt.
-  4. **Unabhängig vom Straffen und ohne Entscheidungsbedarf:** die `.k-lek`-Regel oben
-     (5 von 9 Kapitelköpfen laufen bei 360 px rechts aus dem Bild). Das ist ein Fehler,
-     keine Geschmacksfrage — steht hier nur, weil §9 als „nur Entscheid" beauftragt war.
+**2 · Ersatzlos löschen**
+
+- `<div class="chips">…</div>` (drei Chips: „Grundlagenfach · 18 Teilgebiete",
+  „Schwerpunktfach · 13 Teilgebiete", „📄 Formelsammlung SBFI"). Die ersten beiden
+  wiederholen die Bereichsköpfe, der dritte doppelt den Menüpunkt.
+- `<div class="stats">…</div>` (Zählzeile „46 Themenseiten fertig · 31 RLP-Teilgebiete
+  + 2 TALS-Ergänzungen · ▼ Lerngebiet anklicken zum Aufklappen").
+- die **beiden** `<div class="b-desc">…</div>` (lange FH-Fachbereichs-Sätze in
+  `#gl` und `#sp`).
+
+**Nicht löschen:** die beiden `.bereich`-Köpfe selbst (`.bh` mit `.b-badge` und
+`.b-titel`). Sie trennen Grundlagen- und Schwerpunktfach — das ist Inhalt, keine Deko.
+Weil sie bleiben, entfällt der Physik-Zusatz `.kap:first-of-type { border-top … }`:
+die Bereichsköpfe tragen den oberen Rahmen weiter.
+
+**3 · Farbcode-Legende und Kapitelzeilen** (dieselbe Datei)
+
+```css
+/* feste Spaltenzahl statt auto-fill — Mathe hat FÜNF Kacheln, Physik sechs */
+.ds-grid { grid-template-columns: repeat(5, 1fr); }
+
+@media (max-width: 900px) { .ds-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) {
+  .hero { padding: 16px 16px 22px; }          /* vorher 28px 16px 24px */
+  .ds-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Lektionsangabe darf umbrechen, sonst läuft die Kapitelzeile rechts aus dem Bild */
+  .kap-hdr { align-items: flex-start; }
+  .k-lek   { white-space: normal; text-align: right; line-height: 1.4; }
+  .k-nr, .k-name { padding-top: 1px; }
+}
+```
+
+**Prüfen:** bei 1280 px die Position der ersten `.kap`-Zeile vorher/nachher vergleichen,
+bei 360 px `document.body.scrollWidth === document.documentElement.clientWidth`
+(kein Horizontalscroll) und die fett gesetzten T·A·L·S auf Lesbarkeit sichten.
+
+- [x] Hero gestrafft (`padding: 16px 40px 28px`, unter 600 px `16px 16px 22px`),
+  Kopfzeile gemischt in **einem** `<span>` mit `<strong>`-Initialen und abschliessendem
+  **TALS**, `text-transform: uppercase` entfernt, Titel einzeilig
+  („Mathematik nach BM RLP 2030" statt zwei Zeilen mit `<br>`).
+  Hero-Höhe 1280 px: **330 → 149 px**.
+- [x] `.chips`, `.stats` und **beide** `.b-desc` aus dem Markup entfernt; die zwei
+  `.bereich`-Köpfe (`#gl`, `#sp`) stehen unverändert. Der Physik-Zusatz
+  `.kap:first-of-type { border-top … }` wurde wie vorgesehen **nicht** übernommen —
+  gemessen sitzt die erste `.kap`-Zeile nahtlos unter dem Bereichskopf, kein doppelter
+  Rahmen und keine Lücke. Die verwaisten CSS-Regeln (`.chips`, `.chip`, `.c-*`, `.stats`,
+  `.st*`, `.b-desc`) bleiben stehen — in Physik ebenso, damit die Dateien vergleichbar
+  bleiben.
+- [x] `.ds-grid` auf `repeat(5, 1fr)`, gestuft 3 Spalten ab 900 px und 2 ab 600 px.
+  Gemessen 1280/900/600/360 px: 5/3/2/2 Spalten, in keiner Breite abgeschnittener Text.
+- [x] `.k-lek` bricht unter 600 px um (`white-space: normal; text-align: right;
+  line-height: 1.4`, dazu `.kap-hdr { align-items: flex-start }` und
+  `.k-nr, .k-name { padding-top: 1px }`). Vorher liefen bei 360 px **5 von 9**
+  Kapitelköpfen rechts aus dem Bild (bis 112 px Überstand), jetzt **0 von 9**.
+- [x] Render-Check 1280 / 900 / 600 / 360 px: kein Horizontalscroll
+  (`body.scrollWidth − documentElement.clientWidth = 0` auf allen vier Breiten),
+  keine JS-Fehler, T·A·L·S in der Kopfzeile lesbar.
+
+> **Zielwert nicht ganz erreicht — und das ist rechnerisch so angelegt.** Die erste
+> `.kap`-Zeile liegt bei 1280 px jetzt bei **y = 340 px** (vorher 543), erwartet waren
+> 260–280. Die Differenz steckt vollständig im Bereichskopf, den Mathe im Unterschied
+> zu Physik **behält**: `.bereich` kostet `margin-top: 40px` + 65 px Eigenhöhe = **105 px**.
+> Ohne ihn läge die Zeile bei 235 px — Physik misst dort 231 px, also derselbe Wert.
+> Der Zielkorridor 260–280 stammt aus der Physik-Messung und verrechnet die beibehaltenen
+> Köpfe nicht mit. Mit ihnen ist 340 px das Minimum, das §9 wie geschrieben hergibt.
+>
+> Wer näher an den Korridor will, hat genau eine Stellschraube, die den Kopf nicht
+> antastet: `.bereich:first-of-type { margin-top: 0; }` — der 40-px-Abstand ist ein
+> Trenner zwischen den Fachbereichen und über dem ersten überflüssig, weil `main.page`
+> schon 32 px `padding-top` mitbringt. Das ergäbe **300 px**. Nicht gesetzt, weil §9 es
+> nicht vorsieht — das ist eine redaktionelle Entscheidung.
 
 ---
 
