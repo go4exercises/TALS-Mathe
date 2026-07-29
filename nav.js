@@ -121,42 +121,51 @@ function buildNav(cfg) {
   // Drei kleine Info-Panels rechts im Header, auf jeder Seite identisch.
   const metaAutorHTML = `
     <div class="meta-titel">Autor &amp; Intention</div>
-    <p>Erstellt von einem Elektroingenieur mit über 30 Jahren Unterrichtserfahrung,
-       der gerne Mathematik und Physik erklärt — seinen Schülerinnen und Schülern
-       genauso wie seinen Kindern. Begeistert von dem, was sich mit KI im
-       Bildungsbereich machen lässt.</p>
-    <p>Dieses Lehrmittel <strong>ersetzt weder Lehrperson noch klassisches Lehrbuch</strong>.
-       Es will eine niederschwellige, animierte und animierende Ergänzung sein, die der
-       Lehrperson didaktischen Freiraum schafft — zum Beispiel für Methoden wie
-       <em>Flipped Classroom</em>.</p>`;
+    <p><strong>Autor:</strong> Raphael Arnold Kohler, Elektroingenieur und BM-Fachlehrperson
+       für Mathematik und Physik mit über 30 Jahren Unterrichtserfahrung.</p>
+    <p>TALS Mathematik ist ein unabhängiges, kostenlos zugängliches Lernangebot für die Sek II,
+       ausgerichtet auf den Rahmenlehrplan der Berufsmaturität Gruppe Technik, Architektur,
+       Life Sciences (RLP-BM 2030, TALS). Es ergänzt Unterricht und Lehrmittel, ersetzt sie
+       aber nicht. Das Angebot ist <strong>keine offizielle Publikation</strong> des SBFI,
+       eines Kantons, einer Schule oder einer Prüfungsorganisation.</p>
+    <p>Bei der Erstellung und technischen Umsetzung wurden KI-Werkzeuge eingesetzt.
+       Alle veröffentlichten Inhalte werden redaktionell geprüft; die Verantwortung
+       für die Veröffentlichung liegt bei Raphael Arnold Kohler.</p>`;
 
   const metaAusblickHTML = `
     <div class="meta-titel">Ausblick</div>
     <div class="meta-sub">Erstellt</div>
     <ul>
-      <li>Inhalte für das Grundlagenfach (23 Themenseiten)</li>
+      <li>Grundlagenfach vollständig (23 Themenseiten, Lerngebiete 1–5)</li>
+      <li>Schwerpunktfach vollständig (23 Themenseiten, Lerngebiete 1–4, inkl. Ergänzungen 3.6 und 4.3d)</li>
+      <li>Je Themenseite: interaktive Animationen, Aufgaben, Zusammenfassung, Druckseiten, Anki-Deck und externe Ressourcen</li>
+      <li>Nachschlagen: Glossar und Formelsammlung</li>
+      <li>Schwesterprojekt: <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener" class="meta-link">TALS Physik</a> — gleicher Aufbau für das Fach Physik</li>
     </ul>
-    <div class="meta-sub">Geplant</div>
-    <ul>
-      <li>Grundlagenfach verfeinern</li>
-      <li>Schwerpunktfach erstellen</li>
-    </ul>
-    <div class="meta-sub">Ideen</div>
+    <div class="meta-sub">Ideen für den Ausbau</div>
     <ul>
       <li>Englische Übersetzung für Immersionsunterricht</li>
-      <li>Physik analog aufbereiten</li>
-      <li>Mathematik für Passerelle und Gymnasium ergänzen</li>
+      <li>Kapitelweise Moodle-Fragesammlungen</li>
+      <li>Animierte Lösungen zu alten BM-Abschlussprüfungen</li>
+      <li>Erweiterung für die Vorbereitung auf die Passerelle und die eidgenössische Maturitätsprüfung</li>
+      <li>Kombinatorik für die Gruppe GS ergänzen</li>
     </ul>`;
 
   const metaLizenzHTML = `
     <div class="meta-titel">Lizenz</div>
-    <p>Inhalte erstellt mit Unterstützung von <strong>Claude Opus 4.7</strong> (Anthropic).</p>
-    <p>Veröffentlicht unter <strong>Creative Commons BY-NC 4.0</strong>:
-       Inhalte sind frei nutzbar für nicht-kommerzielle Zwecke, dürfen verändert
-       und weitergegeben werden — bei Kopien und Weiterverarbeitung bitte auf die
-       Herkunft verweisen. Die Inhalte sind frei und sollen frei bleiben.</p>
+    <p><strong>Autor:</strong> Raphael Arnold Kohler. Soweit nicht anders angegeben, stehen
+       die von ihm erstellten Lerninhalte unter der Lizenz <strong>Creative Commons
+       Namensnennung – Nicht kommerziell 4.0 International (CC BY-NC 4.0)</strong>.</p>
+    <p>Die Inhalte dürfen für nicht-kommerzielle Zwecke geteilt und bearbeitet werden.
+       Dabei sind Raphael Arnold Kohler als Urheber zu nennen, die Lizenz zu verlinken
+       und Änderungen kenntlich zu machen. Inhalte Dritter und verlinkte externe
+       Angebote unterliegen ihren eigenen Rechten und Nutzungsbedingungen.</p>
+    <p><em>Empfohlene Namensnennung:</em> Raphael Arnold Kohler, TALS Mathematik,
+       https://go4exercises.github.io/TALS-Mathe/, CC BY-NC 4.0.</p>
     <p><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener" class="meta-link">
-       → Lizenztext (CC BY-NC 4.0)</a></p>`;
+       → Lizenztext (CC BY-NC 4.0)</a></p>
+    <p><a href="https://github.com/go4exercises/TALS-Mathe" target="_blank" rel="noopener" class="meta-link">
+       → Quelltext und Inhalte des Lehrmittels (GitHub)</a></p>`;
 
   // ── HEADER ──────────────────────────────────────────────────
   const headerHTML = `
@@ -224,8 +233,14 @@ function buildNav(cfg) {
         </div>
       </div>
     </div>
-    <a href="${prefix}feedback.html" class="nav-btn nav-meta${cfg.id==='feedback' ? ' aktiv':''}">FEEDBACK</a>
+    <a href="${prefix}feedback.html" class="nav-btn nav-meta${cfg.id==='feedback' ? ' aktiv':''}">Kontakt &amp; Feedback</a>
   </nav>
+  <div class="suche" id="suche">
+    <button class="such-lupe" id="such-lupe" aria-label="Suche öffnen">🔍</button>
+    <input type="search" class="such-feld" id="such-feld" autocomplete="off" spellcheck="false"
+           placeholder="Suchen …  /" aria-label="Lehrmittel durchsuchen">
+    <div class="such-panel" id="such-panel" role="listbox"></div>
+  </div>
   <button class="burger" onclick="toggleMobileNav()" aria-label="Navigation">☰</button>
 </header>
 <div class="mobile-nav" id="mobile-nav">
@@ -243,7 +258,7 @@ function buildNav(cfg) {
   <details class="mn-meta"><summary>Autor &amp; Intention</summary><div class="mn-meta-body">${metaAutorHTML}</div></details>
   <details class="mn-meta"><summary>Ausblick</summary><div class="mn-meta-body">${metaAusblickHTML}</div></details>
   <details class="mn-meta"><summary>Lizenz</summary><div class="mn-meta-body">${metaLizenzHTML}</div></details>
-  <a href="${prefix}feedback.html">FEEDBACK</a>
+  <a href="${prefix}feedback.html">Kontakt &amp; Feedback</a>
 </div>`;
 
   // ── INJECT ───────────────────────────────────────────────────
@@ -293,7 +308,16 @@ const TOC_KURZ = {
   aufgaben:       'Aufgaben',
   zusammenfassung:'Zusammenfassung',
   downloads:      'Zusatzmaterial',
-  ressourcen:     'Externe V&AS'
+  ressourcen:     'Externe V&AS',
+  // rechtliches.html
+  'datenschutz-aufruf':   'DS Seitenaufruf',
+  'datenschutz-feedback': 'DS Feedback',
+  // formelsammlung.html — sonst schneidet das ToC „Lerngebiet 1 · Arith…" ab
+  lg1:            '1 Arithmetik/Algebra',
+  lg2:            '2 Gleichungen',
+  lg3:            '3 Funktionen',
+  lg4:            '4 Datenanalyse',
+  lg5:            '5 Geometrie'
 };
 
 function buildToC() {

@@ -65,3 +65,16 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 
 **Prüfbefehl** (Playwright, 360 px): `document.body.scrollWidth` gegen `clientWidth` je Seite;
 zusätzlich prüfen, dass keine Tabelle `scrollWidth > clientWidth` bei `overflow-x: hidden` hat.
+
+## TEMPLATE.html: relative Footer-Links (Rückmeldung aus dem §§6–10-Port, 2026-07-29)
+
+**Was:** In `tals-physik/TEMPLATE.html` zeigt der neue Footer auf `feedback.html` und
+`rechtliches.html` **ohne** `../`.
+
+**Warum das nicht stimmt:** Die Vorlage ist das Skelett für Themenseiten in `themen/`
+und bindet konsequenterweise selbst `../nav.js` und `../style.css` ein. Wer sie kopiert,
+erbt zwei Footer-Links, die von `themen/` aus ins Leere zeigen (`themen/feedback.html`).
+
+**Massnahme in Physik:** Im Footer von `TEMPLATE.html` auf `../feedback.html` und
+`../rechtliches.html` ändern — die 14 bestehenden Themenseiten sind korrekt, nur die
+Vorlage nicht. In Mathe ist das beim Port bereits so gesetzt.
