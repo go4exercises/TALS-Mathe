@@ -1057,7 +1057,8 @@ function updateWS(){
   const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax, {achsenLabels:false, zahlen:false});
   // Nullpunkt in der Ecke: Zahlen innen an der Achse und freigestellt.
   ctx.font='13px monospace'; ctx.fillStyle='#9ca3af';
-  for(let gx=1; gx<=9; gx++) beschriftung(ctx, gx, cx(gx), cy(0)-6, {align:'center', W, H});
+  // Die 9 entfaellt: dort steht die Achsenbeschriftung x [m].
+  for(let gx=1; gx<=8; gx++) beschriftung(ctx, gx, cx(gx), cy(0)-6, {align:'center', W, H});
   for(let gy=1; gy<=5; gy++) beschriftung(ctx, gy, cx(0)+5, cy(gy)+4, {align:'left', W, H});
   // Achsenbeschriftung zuletzt: ihre Freistellung liegt damit ueber allem.
   ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
@@ -1074,7 +1075,7 @@ function updateWS(){
     drawDot(ctx, cx, cy, x, y, '#1a4f8a', 7);
     ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace';
     const lx = x>7 ? cx(x)-70 : cx(x)+8;
-    ctx.textAlign='left'; ctx.fillText(`(${x} | ${fmtNum(y)})`, lx, cy(y)-8);
+    beschriftung(ctx, `(${x} | ${fmtNum(y)})`, cx(x) + 11, cy(y) + 17, {align:'left', W, H});
     // gestrichelte Linien
     ctx.strokeStyle='#1a4f8a55'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
@@ -1084,7 +1085,7 @@ function updateWS(){
   // Scheitelpunkt markieren
   drawDot(ctx, cx, cy, WS.u, WS.v, '#9b1c1c', 5);
   ctx.fillStyle='#9b1c1c'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
-  ctx.fillText(`S(${WS.u} | ${WS.v})`, cx(WS.u)+8, cy(WS.v)-8);
+  beschriftung(ctx, `S(${WS.u} | ${WS.v})`, cx(WS.u) + 11, cy(WS.v) + 17, {align:'left', W, H});
 }
 document.getElementById('ws-x').addEventListener('input', updateWS);
 
@@ -1184,13 +1185,13 @@ function drawDR(){
   if(Math.abs(u)<=rng && Math.abs(v)<=rng){
     drawDot(ctx, cx, cy, u, v, '#1a4f8a', 7);
     ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
-    beschriftung(ctx, `S(${fmtNum(u)} | ${fmtNum(v)})`, cx(u)+8, cy(v)-8, {align:'left', W, H});
+    beschriftung(ctx, `S(${fmtNum(u)} | ${fmtNum(v)})`, cx(u)+12, cy(v)+20, {align:'left', W, H});
   }
   // y-Achsenabschnitt (grün)
   if(Math.abs(C)<=rng){
     drawDot(ctx, cx, cy, 0, C, '#1f6b3a', 6);
     ctx.fillStyle='#1f6b3a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
-    beschriftung(ctx, `(0 | ${fmtNum(C)})`, cx(0)+8, cy(C)+24, {align:'left', W, H});
+    beschriftung(ctx, `(0 | ${fmtNum(C)})`, cx(0)+12, cy(C)+4, {align:'left', W, H});
   }
   // Nullstellen (orange)
   if(Math.abs(a) > 1e-9){

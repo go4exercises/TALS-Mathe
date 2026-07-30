@@ -884,7 +884,11 @@ function updateBA(){
     ctx.setLineDash([]);
     ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace';
     ctx.textAlign = t > 6.5 ? 'right' : 'left';
-    ctx.fillText(`(${t.toFixed(1)}|${V.toFixed(1)})`, cx(t) + (t > 6.5 ? -8 : 8), cy(V) - 8);
+    // Rechts unterhalb des Punktes; nahe am rechten Rand nach links kippen.
+    const rechtsBA = t <= 6.5;
+    beschriftung(ctx, `(${t.toFixed(1)}|${V.toFixed(1)})`,
+                 cx(t) + (rechtsBA ? 11 : -11), cy(V) + 18,
+                 {align: rechtsBA ? 'left' : 'right', W, H});
   }
 }
 document.getElementById('ba-t').addEventListener('input', updateBA);

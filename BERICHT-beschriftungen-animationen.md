@@ -17,6 +17,29 @@ vollständig lesbar. Details in §4.
 
 ---
 
+## 0. Nachbesserung 30.07.2026 (nach Durchsicht)
+
+Elf Rückmeldungen aus der Sichtprüfung sind eingearbeitet:
+
+- **Ruckeln beim Reglerziehen behoben.** Die Freistellung hatte die Hintergrundfarbe
+  pixelweise abgetastet — vier `getImageData` je Beschriftung, also 16 GPU-Readbacks
+  pro Neuzeichnung. Neu kommt die Farbe aus dem Stylesheet des Canvas, einmal gelesen
+  und am Element gemerkt. Abtasten gibt es nur noch auf ausdrücklichen Wunsch
+  (`bgAuto`). Messung: `drawElem` in g5-2a **0.50 → 0.17 ms**, Readbacks **16 → 0**.
+- **Punktbeschriftungen** sitzen jetzt rechts bzw. rechts unterhalb des Punktes statt
+  darüber: `ks-canvas`, `ws-canvas`, `ba-canvas`, `dr-canvas`, `cv-lbuschel`.
+- **Winkelbeschriftungen im Dreieck** (`cv-cossatz`, `cv-flaeche`): `drawAngleArc()`
+  bildet die Richtung neu aus den beiden normierten Schenkeln. Die frühere Mittelung
+  der Winkel landete je nach `ccw`-Fall in der Gegenrichtung — die Beschriftung stand
+  ausserhalb der Figur, bei `cv-cossatz` sogar ausserhalb des Canvas.
+- **`einstieg-glas`**: das Glas ist 24 px schmaler, dadurch stehen die Skalenzahlen
+  rechts neben ihren Strichen statt an den Rand geklemmt auf ihnen.
+- **`sw-canvas`**: „100 km" ans rechte Ende der Marke. **`cv-equiv`**: die zwei
+  Vermerkzeilen wieder unterhalb des Ergebniskastens statt hineingeschoben.
+- **`ws-canvas`**: die letzte x-Zahl entfällt, dort steht die Achsenbeschriftung.
+
+---
+
 ## 1. Was geändert wurde
 
 ### 1.1 Neuer Helfer `beschriftung()` in `mathlib.js`

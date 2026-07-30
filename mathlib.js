@@ -82,10 +82,13 @@ function parseL(s) {
      halo:true       statt eines Kastens eine Kontur entlang der Buchstaben.
                      Richtig überall, wo der Untergrund nicht einfarbig ist —
                      Geometriefiguren mit Füllung, farbige Bereiche, Fotos.
-     bg              Farbe der Freistellung. Fehlt sie, wird der Untergrund an
-                     den vier Ecken des Textfelds abgetastet und die häufigste
-                     Farbe genommen; das passt sich Papier, Weiss und Füllungen
-                     von selbst an.
+     bg              Farbe der Freistellung. Fehlt sie, gilt die
+                     Hintergrundfarbe des Canvas aus dem Stylesheet (bei
+                     durchsichtigem Canvas Weiss).
+     bgAuto:true     Untergrund stattdessen an den vier Ecken des Textfelds
+                     abtasten. Kostet je Beschriftung vier getImageData —
+                     nur wo es wirklich nötig ist, nicht im Zeichenpfad einer
+                     Animation.
      pad             Luft um den Text (Standard 2 px)
      W, H            Canvasmasse; nur mit ihnen kann geklemmt werden
    Rückgabe: die tatsächlich benutzte Position {x, y}.
@@ -109,10 +112,26 @@ function _helligkeit(farbe) {
   return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
 }
 
-/* Untergrund an den vier Ecken des Textfelds abtasten. Genommen wird die
-   häufigste Farbe — aber nur, wenn sie zur Textfarbe kontrastiert. An einem
-   Eckpunkt, wo zwei dunkle Figurenkanten zusammenlaufen, würden sonst alle
-   vier Proben dunkel ausfallen und der Halo den Buchstaben zum Klumpen machen. */
+/* Hintergrundfarbe eines Canvas aus dem Stylesheet, einmal gelesen und am
+   Element gemerkt. Ersetzt das frühere Abtasten der Pixel: jede Probe war ein
+   getImageData und damit ein GPU-Readback — bei 16 Proben je Neuzeichnung war
+   das beim Ziehen eines Reglers als Ruckeln zu sehen. Ist der Canvas
+   durchsichtig, gilt Weiss (so füllen ihn drawGrid und die Plot-Helfer). */
+function canvasHintergrund(ctx) {
+  const cv = ctx.canvas;
+  if (cv.__bgCache) return cv.__bgCache;
+  let f = '#fff';
+  try {
+    const c = getComputedStyle(cv).backgroundColor;
+    if (c && !/rgba\(0, 0, 0, 0\)|transparent/.test(c)) f = c;
+  } catch (e) { /* Standard bleibt */ }
+  cv.__bgCache = f;
+  return f;
+}
+
+/* Untergrund an den vier Ecken des Textfelds abtasten — NUR auf ausdrücklichen
+   Wunsch (bgAuto), weil jede Probe ein getImageData kostet. Genommen wird die
+   häufigste Farbe, und nur bei klarer Mehrheit und Kontrast zur Textfarbe. */
 function _bgTasten(ctx, x0, y0, x1, y1, textFarbe) {
   const stellen = [[x0 - 2, y0 - 2], [x1 + 2, y0 - 2], [x0 - 2, y1 + 2], [x1 + 2, y1 + 2]];
   const zahl = new Map();
@@ -154,12 +173,14 @@ function beschriftung(ctx, txt, x, y, opt) {
     if (y + d + pad > opt.H) y = opt.H - d - pad;
   }
   if (opt.frei !== false) {
-    // Ohne brauchbare Probe die zur Textfarbe passende Notfarbe: heller Text
-    // bekommt einen dunklen Halo, dunkler Text einen hellen.
-    // Schwelle bewusst hoch: mittelgraue Beschriftungen (#9ca3af ≈ 0.62)
-    // sind noch „dunkler Text" und brauchen einen hellen Halo.
+    // Reihenfolge: ausdrückliche Farbe → optionales Abtasten → Canvas-Hintergrund
+    // aus dem Stylesheet. Ohne all das die zur Textfarbe passende Notfarbe;
+    // Schwelle bewusst hoch, damit mittelgraue Beschriftungen (#9ca3af ≈ 0.62)
+    // noch als „dunkler Text" gelten und einen hellen Halo bekommen.
     const hell = (_helligkeit(altFill) || 0) > 0.75;
-    const bg = opt.bg || _bgTasten(ctx, x - l, y - a, x + r, y + d, altFill)
+    const bg = opt.bg
+               || (opt.bgAuto ? _bgTasten(ctx, x - l, y - a, x + r, y + d, altFill) : null)
+               || canvasHintergrund(ctx)
                || (hell ? '#1c1a17' : '#fff');
     if (opt.halo) {
       const altStroke = ctx.strokeStyle, altLw = ctx.lineWidth, altJoin = ctx.lineJoin;

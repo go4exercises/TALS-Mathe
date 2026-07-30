@@ -1212,7 +1212,8 @@ function drawBuschel() {
     if (drin) {
       drawDot(ctx, cx, cy, S[0], S[1], '#1f6b3a', 6);
       ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-      ctx.fillText(`S(${S[0].toFixed(2)} | ${S[1].toFixed(2)})`.replace(/-/g, '−'), cx(S[0]), cy(S[1]) - 12);
+      beschriftung(ctx, `S(${S[0].toFixed(2)} | ${S[1].toFixed(2)})`.replace(/-/g, '−'),
+               cx(S[0]) + 12, cy(S[1]) + 4, {align:'left', W, H});
     } else {
       ctx.font = 'italic 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
       const hw = ctx.measureText('Schnittpunkt ausserhalb des Fensters — er flieht, wenn m → 2').width;

@@ -1124,10 +1124,12 @@ function glasRender() {
   const fill = Math.min(V / Vmax, 1);
 
   // Glas-Geometrie (leicht konisch, oben offen)
+  // Rechts bleibt Platz fuer die Skalenzahlen (zweistellig, ~20 px).
   const glasMargin = 10;
+  const skalaBreite = 24;
   const topY = 14;
   const botY = H - 18;
-  const topHalfW = (W - 2 * glasMargin) / 2;          // halbe Breite oben
+  const topHalfW = (W - 2 * glasMargin - skalaBreite) / 2;   // halbe Breite oben
   const botHalfW = topHalfW * 0.78;                   // halbe Breite unten (konisch)
   const cxG = W / 2;
 
@@ -1178,13 +1180,14 @@ function glasRender() {
     const ratioBot = (botY - yMark) / (botY - topY);
     const xMark = cxG + botHalfW + (topHalfW - botHalfW) * ratioBot;
     ctx.beginPath(); ctx.moveTo(xMark - 4, yMark); ctx.lineTo(xMark + 1, yMark); ctx.stroke();
-    beschriftung(ctx, v, xMark + 3, yMark + 3, {align:'left', W, H});
+    // Rechts vom Strich mit spuerbarem Abstand, sonst klebt die Zahl daran.
+    beschriftung(ctx, v, xMark + 6, yMark + 3, {align:'left', W, H});
   }
 
   // Aktuelle Wassermenge als Label oben (falls Platz)
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono,monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('V = ' + V.toFixed(1) + ' dl', cxG, H - 4);
+  beschriftung(ctx, 'V = ' + V.toFixed(1) + ' dl', cxG, H - 4, {align:'center', W, H});
 }
 
 /* Mini-Graph für Vier-Darstellungen */

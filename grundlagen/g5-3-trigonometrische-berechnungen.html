@@ -1481,10 +1481,19 @@ function drawAngleArc(ctx, vert, p1, p2, radius, color, label) {
   ctx.arc(vert[0], vert[1], radius, a1, a2, ccw);
   ctx.stroke();
   ctx.restore();
-  let mid = ccw ? (a1 + a2)/2 + Math.PI : (a1 + a2)/2;
-  mid = Math.atan2(Math.sin(mid), Math.cos(mid));
-  const lx = vert[0] + Math.cos(mid)*(radius+14);
-  const ly = vert[1] + Math.sin(mid)*(radius+14);
+  // Winkelhalbierende aus den normierten Schenkeln: sie zeigt immer INS
+  // Innere des Winkels. Die frueher benutzte Mittelung der beiden Winkel
+  // landete je nach ccw-Fall in der Gegenrichtung — die Beschriftung stand
+  // dann ausserhalb der Figur, bei cv-cossatz sogar ausserhalb des Canvas.
+  const e1x = (p1[0]-vert[0]), e1y = (p1[1]-vert[1]);
+  const e2x = (p2[0]-vert[0]), e2y = (p2[1]-vert[1]);
+  const l1 = Math.hypot(e1x, e1y) || 1, l2 = Math.hypot(e2x, e2y) || 1;
+  let bx = e1x/l1 + e2x/l2, by = e1y/l1 + e2y/l2;
+  const bl = Math.hypot(bx, by);
+  if (bl < 1e-9) { bx = -e1y/l1; by = e1x/l1; }   // gestreckter Winkel
+  else { bx /= bl; by /= bl; }
+  const lx = vert[0] + bx*(radius+14);
+  const ly = vert[1] + by*(radius+14);
   if (label) txt(ctx, lx, ly, label, color, 13);
 }
 

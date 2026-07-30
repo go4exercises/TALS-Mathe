@@ -702,8 +702,10 @@ function updateKS(){
   // Active dot
   drawDot(ctx,cx,cy,x,y,'#1a4f8a',7);
   ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace';
-  const lx=x>11?cx(x)-60:cx(x)+8;
-  ctx.textAlign='left'; ctx.fillText(`(${x}|${y})`,lx,cy(y)-8);
+  // Rechts unterhalb des Punktes; nahe am rechten Rand nach links kippen.
+  const rechts = x <= 11;
+  beschriftung(ctx, `(${x}|${y})`, cx(x) + (rechts ? 11 : -11), cy(y) + 17,
+               {align: rechts ? 'left' : 'right', W, H});
   // Dashed lines
   ctx.strokeStyle='#1a4f8a55'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
   ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
