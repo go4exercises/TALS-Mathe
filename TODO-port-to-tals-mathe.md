@@ -416,45 +416,89 @@ die Bereichsköpfe tragen den oberen Rahmen weiter.
 }
 ```
 
+**4 · Abstände unter dem Titel** (nachgezogen 30.07.2026)
+
+Nach dem Entfernen der Chips steht der Titel als letztes Element im Hero — seine
+`margin-bottom` ist dann toter Raum, und die alten Polsterwerte sind auf einen Hero mit
+drei Elementen ausgelegt. Vier Werte, in Physik gemessen und übernommen:
+
+```css
+.hero    { padding: 16px 40px 18px; }   /* Unterkante 28 → 18 */
+.hero h1 { margin-bottom: 0; }          /* vorher 12px — nur richtig, wenn .chips weg ist */
+.page    { padding: 18px 22px 80px; }   /* Oberkante 32 → 18 */
+
+@media (max-width: 600px) {
+  .hero { padding: 16px 16px 14px; }    /* Unterkante 22 → 14 */
+  .page { padding: 12px 12px 60px; }    /* Oberkante 18 → 12 */
+}
+```
+
+**Mathe-Stand (30.07.2026 nachgesehen):** `.hero { padding: 16px 40px 28px }`,
+`.hero h1 { margin-bottom: 12px }`, `.page { padding: 32px 22px 80px }` und mobil
+`16px 16px 22px` / `18px 12px 60px` — also genau die Physik-Werte vor dieser Änderung.
+Der Diff passt damit wörtlich, sobald Schritt 2 (`.chips` entfernt) erledigt ist.
+
+**Wirkung in Physik**, gemessen als Abstand von der Titel-Unterkante bis zur ersten
+Kapitelzeile:
+
+| Breite | vorher | nachher |
+|---|---:|---:|
+| 1280 px | 73 px | **37 px** |
+| 360 px | 53 px | **27 px** |
+
 **Prüfen:** bei 1280 px die Position der ersten `.kap`-Zeile vorher/nachher vergleichen,
 bei 360 px `document.body.scrollWidth === document.documentElement.clientWidth`
 (kein Horizontalscroll) und die fett gesetzten T·A·L·S auf Lesbarkeit sichten.
 
-- [x] Hero gestrafft (`padding: 16px 40px 28px`, unter 600 px `16px 16px 22px`),
-  Kopfzeile gemischt in **einem** `<span>` mit `<strong>`-Initialen und abschliessendem
-  **TALS**, `text-transform: uppercase` entfernt, Titel einzeilig
-  („Mathematik nach BM RLP 2030" statt zwei Zeilen mit `<br>`).
-  Hero-Höhe 1280 px: **330 → 149 px**.
+- [x] Hero gestrafft, Kopfzeile gemischt in **einem** `<span>` mit `<strong>`-Initialen
+  und abschliessendem **TALS**, `text-transform: uppercase` entfernt, Titel einzeilig.
 - [x] `.chips`, `.stats` und **beide** `.b-desc` aus dem Markup entfernt; die zwei
-  `.bereich`-Köpfe (`#gl`, `#sp`) stehen unverändert. Der Physik-Zusatz
-  `.kap:first-of-type { border-top … }` wurde wie vorgesehen **nicht** übernommen —
-  gemessen sitzt die erste `.kap`-Zeile nahtlos unter dem Bereichskopf, kein doppelter
-  Rahmen und keine Lücke. Die verwaisten CSS-Regeln (`.chips`, `.chip`, `.c-*`, `.stats`,
-  `.st*`, `.b-desc`) bleiben stehen — in Physik ebenso, damit die Dateien vergleichbar
-  bleiben.
+  `.bereich`-Köpfe (`#gl`, `#sp`) stehen unverändert, `.kap:first-of-type` daher **nicht**
+  übernommen — gemessen sitzt die erste `.kap`-Zeile nahtlos unter dem Kopf, kein
+  doppelter Rahmen und keine Lücke. Die verwaisten CSS-Regeln (`.chips`, `.chip`, `.c-*`,
+  `.stats`, `.st*`, `.b-desc`) bleiben stehen — in Physik ebenso, damit die Dateien
+  vergleichbar bleiben.
 - [x] `.ds-grid` auf `repeat(5, 1fr)`, gestuft 3 Spalten ab 900 px und 2 ab 600 px.
-  Gemessen 1280/900/600/360 px: 5/3/2/2 Spalten, in keiner Breite abgeschnittener Text.
-- [x] `.k-lek` bricht unter 600 px um (`white-space: normal; text-align: right;
-  line-height: 1.4`, dazu `.kap-hdr { align-items: flex-start }` und
-  `.k-nr, .k-name { padding-top: 1px }`). Vorher liefen bei 360 px **5 von 9**
-  Kapitelköpfen rechts aus dem Bild (bis 112 px Überstand), jetzt **0 von 9**.
-- [x] Render-Check 1280 / 900 / 600 / 360 px: kein Horizontalscroll
-  (`body.scrollWidth − documentElement.clientWidth = 0` auf allen vier Breiten),
-  keine JS-Fehler, T·A·L·S in der Kopfzeile lesbar.
+  Gemessen 1280/900/600/360 px: 5/3/2/2 Spalten, nirgends abgeschnittener Text.
+- [x] `.k-lek` bricht unter 600 px um. Vorher liefen bei 360 px **5 von 9** Kapitelköpfen
+  rechts aus dem Bild (bis 112 px Überstand), jetzt **0 von 9**.
+- [x] Abstände unter dem Titel nach Schritt 4 — die vier Werte passten wörtlich:
+  `.hero` 28 → 18, `.hero h1` `margin-bottom` 12 → 0, `.page` 32 → 18, mobil `.hero`
+  22 → 14 und `.page` 18 → 12.
+  **Ein fünfter Wert kam dazu, der in §9 fehlt:** `.hero-ew { margin-bottom }` stand in
+  Mathe auf **14 px**, in Physik schon vor Schritt 4 auf **10 px**. Die Aussage
+  „Mathes Startseite steht heute genau auf den Physik-Werten vor dieser Änderung" trifft
+  also für die vier Werte zu, für `.hero-ew` nicht. Mit den 10 px ist die Hero-Höhe bei
+  1280 px in beiden Projekten identisch: **123 px**.
+- [x] Render-Check 1280 / 900 / 600 / 360 px: kein Horizontalscroll auf allen Breiten
+  (`body.scrollWidth − documentElement.clientWidth = 0`), keine JS-Fehler,
+  T·A·L·S lesbar, `.k-lek` überall im Rahmen.
 
-> **Zielwert nicht ganz erreicht — und das ist rechnerisch so angelegt.** Die erste
-> `.kap`-Zeile liegt bei 1280 px jetzt bei **y = 340 px** (vorher 543), erwartet waren
-> 260–280. Die Differenz steckt vollständig im Bereichskopf, den Mathe im Unterschied
-> zu Physik **behält**: `.bereich` kostet `margin-top: 40px` + 65 px Eigenhöhe = **105 px**.
-> Ohne ihn läge die Zeile bei 235 px — Physik misst dort 231 px, also derselbe Wert.
-> Der Zielkorridor 260–280 stammt aus der Physik-Messung und verrechnet die beibehaltenen
-> Köpfe nicht mit. Mit ihnen ist 340 px das Minimum, das §9 wie geschrieben hergibt.
+> **Messung Mathe gegen Physik**, beide am 30.07.2026:
 >
-> Wer näher an den Korridor will, hat genau eine Stellschraube, die den Kopf nicht
-> antastet: `.bereich:first-of-type { margin-top: 0; }` — der 40-px-Abstand ist ein
-> Trenner zwischen den Fachbereichen und über dem ersten überflüssig, weil `main.page`
-> schon 32 px `padding-top` mitbringt. Das ergäbe **300 px**. Nicht gesetzt, weil §9 es
-> nicht vorsieht — das ist eine redaktionelle Entscheidung.
+> | | Mathe 1280 | Physik 1280 | Mathe 360 | Physik 360 |
+> |---|---:|---:|---:|---:|
+> | Hero-Höhe | **123** | **123** | 144 | 111 |
+> | Titel-Unterkante → erste `.kap` | 142 | 37 | 195 | 27 |
+> | erste `.kap` bei y | 300 | 195 | 379 | 177 |
+>
+> Die Hero-Höhe ist bei 1280 px auf das Pixel gleich — die Abstände sind vollständig
+> übertragen. Die beiden verbleibenden Unterschiede sind **kein** Abstandsproblem:
+>
+> 1. **105 px** Titel→`.kap` gehen auf den Bereichskopf, den Mathe absichtlich behält
+>    (`margin-top: 40px` + 65 px Eigenhöhe). Physik hat ihn gelöscht. Zieht man ihn ab,
+>    bleiben 37 px — genau der Physik-Wert.
+> 2. Bei 360 px ist Mathes Hero 33 px höher, weil „Mathematik nach BM RLP 2030" dort auf
+>    zwei Zeilen umbricht und „Physik nach BM RLP 2030" nicht. Das ist die Wortlänge des
+>    Fachnamens, keine Polsterung.
+>
+> Verglichen mit dem Stand vor §9 liegt die erste `.kap`-Zeile bei 1280 px damit bei
+> **300 statt 543 px** (−243 px).
+>
+> **Eine Abweichung bleibt bewusst offen:** `.ds` (Kasten der Farbcode-Legende, *unter*
+> der Kapitelliste) — Physik `margin-top: 50px; padding: 14px 18px`, Mathe
+> `margin-top: 44px; padding: 18px 22px`. Betrifft den ersten Bildschirm nicht und steht
+> in keinem §9-Schritt; angleichen wäre eine reine Geschmacksentscheidung.
 
 ---
 
