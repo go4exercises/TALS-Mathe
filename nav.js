@@ -207,7 +207,7 @@ function buildNav(cfg) {
         <div class="dd-gruppe">
           <div class="dd-gruppe-titel">Extern</div>
           <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">
-            <span class="dd-nr">PDF</span><span class="dd-tit">SBFI-Formelsammlung (Prüfung)</span>
+            <span class="dd-nr">PDF</span><span class="dd-tit">SBFI-Formelsammlung</span>
           </a>
         </div>
       </div>
