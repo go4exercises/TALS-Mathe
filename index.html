@@ -29,7 +29,7 @@
   .st-n { font-family: var(--mono); font-weight: 700; font-size: 0.86rem; color: var(--tinte); }
   .st-hint { margin-left: auto; font-size: 0.72rem; font-style: italic; color: var(--tinte-2); }
 
-  .bereich { margin-top: 40px; padding: 17px 20px 15px; border-radius: 10px 10px 0 0; border-bottom: none; }
+  .bereich { margin-top: 40px; padding: 11px 18px 10px; border-radius: 10px 10px 0 0; border-bottom: none; }
   /* Die 40px trennen Grundlagen- von Schwerpunktfach. Über dem ersten Block gibt es
      nichts zu trennen, und .page bringt schon 18px padding-top mit: der Bereichskopf
      startet damit auf derselben Höhe wie in Physik die Kapitelliste ohne Kopf. */
@@ -40,7 +40,7 @@
   .b-badge { font-family: var(--mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; }
   .b-gl .b-badge { background: var(--blau); color: #fff; }
   .b-sp .b-badge { background: var(--lila); color: #fff; }
-  .b-titel { font-family: var(--serif); font-size: 1.18rem; font-weight: 700; }
+  .b-titel { font-family: var(--serif); font-size: 1.06rem; font-weight: 700; }
   .b-gl .b-titel { color: var(--blau); }
   .b-sp .b-titel { color: var(--lila); }
   .b-desc { margin-top: 6px; font-size: 0.78rem; color: var(--tinte-2); font-weight: 300; }
@@ -134,6 +134,46 @@
     .k-lek   { white-space: normal; text-align: right; line-height: 1.4; }
     .k-nr, .k-name { padding-top: 1px; }
   }
+  /* ══════════════════════════════════════════════════════════════
+     Die beiden Fachbereiche stehen nebeneinander. Grundlagen- und
+     Schwerpunktfach sind unabhängige Listen — nebeneinander passen beide
+     samt Farbcode-Legende ohne Scrollen in den ersten Bildschirm.
+     ══════════════════════════════════════════════════════════════ */
+  .spalten { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  /* Kein Trenner-Abstand über dem Bereichskopf: er ist erstes Element seiner Spalte.
+     Ersetzt die Regel `.page > .bereich:first-child` der Produktivseite. */
+  .spalte > .bereich { margin-top: 0; }
+
+  /* Kapitelzeile: Lektionsangabe links unter dem Titel statt rechts aussen.
+     Polsterung 12 -> 9px und knappe line-heights halten die Zeilenhöhe fast
+     auf dem alten Wert, obwohl jetzt zwei Textzeilen darin stehen. */
+  .kap-hdr { padding: 9px 16px; align-items: center; gap: 10px; }
+  .k-txt   { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+  .k-name  { line-height: 1.2; }
+  .k-lek   { margin-left: 0; font-size: 0.6rem; line-height: 1.25; white-space: normal; }
+
+  /* Die §9-Regel richtet .k-lek unter 600px rechts aus — richtig, solange die Angabe
+     am rechten Zeilenende sitzt. Hier steht sie unter dem Titel und muss mit ihm
+     linksbündig sein. Dasselbe gilt für das dortige align-items/padding-Gefummel. */
+  @media (max-width: 600px) {
+    .kap-hdr { align-items: center; }
+    .k-lek   { text-align: left; }
+    .k-nr, .k-name { padding-top: 0; }
+  }
+
+  /* Halbe Breite: Karten in 2 Spalten, Sub-Split-Container nie breiter als 2.
+     Ohne das würde `span-3`/`span-4` im schmalen Spaltengrid gestaucht. */
+  .spalte .tc { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); padding: 12px; }
+  .spalte .ksub.span-3, .spalte .ksub.span-4 { grid-column: span 2; }
+  .spalte .ksub.span-3 .ksub-grid,
+  .spalte .ksub.span-4 .ksub-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Unter 900px lohnt das Nebeneinander nicht mehr — zurück auf untereinander,
+     mit dem Trenner-Abstand über dem zweiten Bereich. */
+  @media (max-width: 900px) {
+    .spalten { grid-template-columns: 1fr; gap: 0; }
+    .spalte + .spalte > .bereich { margin-top: 40px; }
+  }
 </style>
 </head>
 <body>
@@ -154,10 +194,11 @@
   <!-- ══════════════════════════════════════════
        GRUNDLAGENFACH · RLP 6.4.4.1 Gruppe 1 · 200 Lektionen
   ══════════════════════════════════════════ -->
+  <div class="spalten">
+    <div class="spalte">
   <div class="bereich b-gl" id="gl">
     <div class="bh">
-      <span class="b-badge">Grundlagenfach</span>
-      <span class="b-titel">Mathematik — Grundlagenbereich</span>
+      <span class="b-titel">Grundlagenfach</span>
     </div>
   </div>
 
@@ -165,8 +206,10 @@
   <div class="kap gl-kap">
     <div class="kap-hdr" onclick="tog('g1')">
       <span class="k-nr">1</span>
-      <span class="k-name">Arithmetik/Algebra</span>
-      <span class="k-lek">45 Lektionen · 4 Teilgebiete</span>
+      <span class="k-txt">
+        <span class="k-name">Arithmetik/Algebra</span>
+        <span class="k-lek">45 Lektionen · 4 Teilgebiete</span>
+      </span>
       <span class="k-tog" id="tg-g1">▼</span>
     </div>
     <div class="tc" id="tc-g1">
@@ -198,8 +241,10 @@
   <div class="kap gl-kap">
     <div class="kap-hdr" onclick="tog('g2')">
       <span class="k-nr">2</span>
-      <span class="k-name">Gleichungen, Ungleichungen und Gleichungssysteme</span>
-      <span class="k-lek">35 Lektionen · 3 Teilgebiete</span>
+      <span class="k-txt">
+        <span class="k-name">Gleichungen, Ungleichungen und Gleichungssysteme</span>
+        <span class="k-lek">35 Lektionen · 3 Teilgebiete</span>
+      </span>
       <span class="k-tog" id="tg-g2">▼</span>
     </div>
     <div class="tc" id="tc-g2">
@@ -238,8 +283,10 @@
   <div class="kap gl-kap">
     <div class="kap-hdr" onclick="tog('g3')">
       <span class="k-nr">3</span>
-      <span class="k-name">Funktionen</span>
-      <span class="k-lek">50 Lektionen · 3 Teilgebiete</span>
+      <span class="k-txt">
+        <span class="k-name">Funktionen</span>
+        <span class="k-lek">50 Lektionen · 3 Teilgebiete</span>
+      </span>
       <span class="k-tog" id="tg-g3">▼</span>
     </div>
     <div class="tc" id="tc-g3">
@@ -266,8 +313,10 @@
   <div class="kap gl-kap">
     <div class="kap-hdr" onclick="tog('g4')">
       <span class="k-nr">4</span>
-      <span class="k-name">Datenanalyse</span>
-      <span class="k-lek">20 Lektionen · 3 Teilgebiete + Praxisbeispiel</span>
+      <span class="k-txt">
+        <span class="k-name">Datenanalyse</span>
+        <span class="k-lek">20 Lektionen · 3 Teilgebiete + Praxisbeispiel</span>
+      </span>
       <span class="k-tog" id="tg-g4">▼</span>
     </div>
     <div class="tc" id="tc-g4">
@@ -299,8 +348,10 @@
   <div class="kap gl-kap">
     <div class="kap-hdr" onclick="tog('g5')">
       <span class="k-nr">5</span>
-      <span class="k-name">Geometrie</span>
-      <span class="k-lek">50 Lektionen · 5 Teilgebiete</span>
+      <span class="k-txt">
+        <span class="k-name">Geometrie</span>
+        <span class="k-lek">50 Lektionen · 5 Teilgebiete</span>
+      </span>
       <span class="k-tog" id="tg-g5">▼</span>
     </div>
     <div class="tc" id="tc-g5">
@@ -352,15 +403,14 @@
 
     </div>
   </div>
-
-
+    </div>
+    <div class="spalte">
   <!-- ══════════════════════════════════════════
        SCHWERPUNKTFACH · RLP 7.4.4 · 200 Lektionen
   ══════════════════════════════════════════ -->
   <div class="bereich b-sp" id="sp">
     <div class="bh">
-      <span class="b-badge">Schwerpunktfach</span>
-      <span class="b-titel">Mathematik — Schwerpunktbereich TALS</span>
+      <span class="b-titel">Schwerpunktfach</span>
     </div>
   </div>
 
@@ -368,8 +418,10 @@
   <div class="kap sp-kap">
     <div class="kap-hdr" onclick="tog('s1')">
       <span class="k-nr">1</span>
-      <span class="k-name">Arithmetik/Algebra</span>
-      <span class="k-lek">25 Lektionen · 3 Teilgebiete</span>
+      <span class="k-txt">
+        <span class="k-name">Arithmetik/Algebra</span>
+        <span class="k-lek">25 Lektionen · 3 Teilgebiete</span>
+      </span>
       <span class="k-tog" id="tg-s1">▼</span>
     </div>
     <div class="tc" id="tc-s1">
@@ -396,8 +448,10 @@
   <div class="kap sp-kap">
     <div class="kap-hdr" onclick="tog('s2')">
       <span class="k-nr">2</span>
-      <span class="k-name">Gleichungen</span>
-      <span class="k-lek">50 Lektionen · 2 Teilgebiete</span>
+      <span class="k-txt">
+        <span class="k-name">Gleichungen</span>
+        <span class="k-lek">50 Lektionen · 2 Teilgebiete</span>
+      </span>
       <span class="k-tog" id="tg-s2">▼</span>
     </div>
     <div class="tc" id="tc-s2">
@@ -435,8 +489,10 @@
   <div class="kap sp-kap">
     <div class="kap-hdr" onclick="tog('s3')">
       <span class="k-nr">3</span>
-      <span class="k-name">Funktionen</span>
-      <span class="k-lek">55 Lektionen · 5 Teilgebiete</span>
+      <span class="k-txt">
+        <span class="k-name">Funktionen</span>
+        <span class="k-lek">55 Lektionen · 5 Teilgebiete</span>
+      </span>
       <span class="k-tog" id="tg-s3">▼</span>
     </div>
     <div class="tc" id="tc-s3">
@@ -502,8 +558,10 @@
   <div class="kap sp-kap">
     <div class="kap-hdr" onclick="tog('s4')">
       <span class="k-nr">4</span>
-      <span class="k-name">Geometrie</span>
-      <span class="k-lek">70 Lektionen · 3 Teilgebiete</span>
+      <span class="k-txt">
+        <span class="k-name">Geometrie</span>
+        <span class="k-lek">70 Lektionen · 3 Teilgebiete</span>
+      </span>
       <span class="k-tog" id="tg-s4">▼</span>
     </div>
     <div class="tc" id="tc-s4">
@@ -564,6 +622,9 @@
 
 
   <!-- ── DESIGN-SYSTEM LEGENDE ── -->
+    </div>
+  </div>
+
   <div class="ds">
     <div class="ds-t">Farbcode — auf jeder Seite gleich <span>konsistent für alle Kapitel</span></div>
     <div class="ds-grid">

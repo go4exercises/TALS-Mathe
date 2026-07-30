@@ -78,3 +78,88 @@ erbt zwei Footer-Links, die von `themen/` aus ins Leere zeigen (`themen/feedback
 **Massnahme in Physik:** Im Footer von `TEMPLATE.html` auf `../feedback.html` und
 `../rechtliches.html` ändern — die 14 bestehenden Themenseiten sind korrekt, nur die
 Vorlage nicht. In Mathe ist das beim Port bereits so gesetzt.
+
+## Startseite: Lektionsangabe unter den Titel (TALS Mathe, 2026-07-30) — für Physik empfohlen
+
+**Was in Mathe gemacht wurde** (`index.html`, eigener `<style>`-Block — nicht `style.css`):
+drei Änderungen an der Startseite. Für Physik ist **eine davon** relevant, die zwei
+anderen entfallen. Farben spielen keine Rolle: alle drei Änderungen sind reine
+Layout-Eigenschaften, es gibt nichts von `--blau`/`--lila` auf `--bernstein*` umzustellen.
+
+### 1. Lektionsangabe von rechts nach links unter den Titel — **portieren**
+
+Bisher steht `.k-lek` per `margin-left: auto` am rechten Zeilenende und konkurriert dort
+mit dem Titel um die Breite. Neu sitzt sie linksbündig unter dem Titel.
+
+**Markup** — `.k-name` und `.k-lek` in einen gemeinsamen Block packen:
+
+```html
+<div class="kap-hdr" onclick="tog('p4')">
+  <span class="k-nr">4</span>
+  <span class="k-txt">
+    <span class="k-name">Mechanik</span>
+    <span class="k-lek">100 Lektionen · 5 Teilgebiete</span>
+  </span>
+  <span class="k-tog" id="tg-p4">▼</span>
+</div>
+```
+
+**CSS** — die Zeilenhöhe bleibt gleich, weil die Polsterung sinkt und die
+`line-height`-Werte knapp gesetzt sind:
+
+```css
+.kap-hdr { padding: 9px 16px; align-items: center; gap: 10px; }   /* vorher 12px 18px */
+.k-txt   { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+.k-name  { line-height: 1.2; }
+.k-lek   { margin-left: 0; font-size: 0.6rem; line-height: 1.25; white-space: normal; }
+
+/* Die Regel aus §9 richtet .k-lek unter 600px rechts aus — richtig, solange die
+   Angabe am rechten Zeilenende sitzt. Unter dem Titel muss sie mit ihm
+   linksbündig sein, und align-items/padding-top von dort werden hinfällig. */
+@media (max-width: 600px) {
+  .kap-hdr { align-items: center; }
+  .k-lek   { text-align: left; }
+  .k-nr, .k-name { padding-top: 0; }
+}
+```
+
+**Warum es sich in Physik besonders lohnt** — Physiks `.k-lek`-Texte sind lang
+(„Sek-I-Auffrischung · 3 Seiten · kein RLP-Lerngebiet", „30 Lektionen · 2 Teilgebiete
++ 1 Vertiefung"). Gemessen am 30.07.2026 im Physik-Repo:
+
+| Breite | Zeilenhöhen | `.k-lek` bricht um |
+|---|---|---|
+| 1280 px | 51 px durchgehend | 1 Zeile |
+| 600 px | 52 / 52 / 52 / **78** px | bis 2 Zeilen |
+| 360 px | **67** / 53 / 53 / **104** px | bis 3 Zeilen |
+
+Bei 360 px ist die Zeile „Einführung in andere Bereiche der Physik" doppelt so hoch wie
+die anderen. Unter dem Titel bekommt die Angabe die volle Zeilenbreite. In Mathe sind
+die Kapitelzeilen nach dem Umbau **50 px** hoch, also 1 px flacher als vorher (51 px),
+und bei 360 px bleiben 50–69 px statt vorher 53–104 px.
+
+### 2. Bereichskopf auf ein Wort kürzen — **entfällt**
+
+Mathe hatte zwei `.bereich`-Köpfe mit Badge + langem Titel („Mathematik —
+Grundlagenbereich"), jetzt nur noch „Grundlagenfach" / „Schwerpunktfach", Polsterung
+`17px 20px 15px` → `11px 18px 10px`, Kopfhöhe 65 → 51 px. **Physik hat kein `.bereich`**
+(nachgesehen: 0 Vorkommen) — der Kopf wurde dort in §9 ersatzlos gelöscht. Nichts zu tun.
+
+### 3. Bereiche nebeneinander — **nicht empfohlen**
+
+In Mathe stehen Grundlagen- und Schwerpunktfach nebeneinander
+(`.spalten { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start }`,
+unter 900 px zurück auf eine Spalte). Das trägt, weil es **zwei unabhängige Fachbereiche**
+mit eigener Farbe und eigener Nummerierung sind.
+
+Physik hat **eine** flache Liste aus vier Lerngebieten (0, 4, 5, 6). Zwei Spalten hätten
+dort kein Gegenstück in der Sache, sondern wären eine willkürliche 2+2-Teilung. Dazu
+kommt: die vier `.kap`-Zeilen teilen sich ihren Rahmen über
+`.kap:first-of-type { border-top … }` und `.kap:last-of-type { border-radius … }` — die
+Regeln müssten pro Spalte neu greifen. Und der Gewinn wäre gering: Physiks Liste endet
+bei 1280 px schon bei y = 404 px, steht also längst im ersten Bildschirm.
+**Empfehlung: einspaltig lassen.**
+
+**Prüfen nach dem Port:** Zeilenhöhen bei 1280 / 600 / 360 px vergleichen,
+`.k-lek` linksbündig zum Titel (Versatz 0 px), `document.body.scrollWidth ===
+document.documentElement.clientWidth`.
