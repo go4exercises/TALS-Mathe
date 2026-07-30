@@ -488,12 +488,22 @@ bei 360 px `document.body.scrollWidth === document.documentElement.clientWidth`
 > 1. **105 px** Titel→`.kap` gehen auf den Bereichskopf, den Mathe absichtlich behält
 >    (`margin-top: 40px` + 65 px Eigenhöhe). Physik hat ihn gelöscht. Zieht man ihn ab,
 >    bleiben 37 px — genau der Physik-Wert.
+>    **Nachtrag 30.07.2026:** Davon sind 40 px zurückgeholt. Der Bereichskopf startet
+>    jetzt auf **derselben Höhe wie in Physik die Kapitelliste** — beide bei y = 195 px
+>    (1280 px). Dazu eine Zeile:
+>    `.page > .bereich:first-child { margin-top: 0; }`
+>    Die 40 px trennen Grundlagen- von Schwerpunktfach; über dem ersten Block gibt es
+>    nichts zu trennen, und `.page` bringt schon 18 px `padding-top` mit. `#sp` behält
+>    seine 40 px, der Trenner zwischen den Fächern bleibt also unangetastet.
+>    Damit liegt die erste `.kap`-Zeile bei **260 px** — im Zielkorridor 260–280 aus §9.
+>    Gemessen 1280/900/600/360 px: Bereichskopf startet exakt am Inhaltsanfang von
+>    `.page` (195/185/167/210), `margin-top` `#gl` = 0, `#sp` = 40 px.
 > 2. Bei 360 px ist Mathes Hero 33 px höher, weil „Mathematik nach BM RLP 2030" dort auf
 >    zwei Zeilen umbricht und „Physik nach BM RLP 2030" nicht. Das ist die Wortlänge des
 >    Fachnamens, keine Polsterung.
 >
 > Verglichen mit dem Stand vor §9 liegt die erste `.kap`-Zeile bei 1280 px damit bei
-> **300 statt 543 px** (−243 px).
+> **260 statt 543 px** (−283 px).
 >
 > **Eine Abweichung bleibt bewusst offen:** `.ds` (Kasten der Farbcode-Legende, *unter*
 > der Kapitelliste) — Physik `margin-top: 50px; padding: 14px 18px`, Mathe
