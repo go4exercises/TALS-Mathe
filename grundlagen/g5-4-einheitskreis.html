@@ -1132,10 +1132,21 @@ function initCv(id) {
 function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='middle', weight='600') {
   ctx.save();
   ctx.fillStyle = color;
-  ctx.textAlign = align;
-  ctx.textBaseline = base;
   ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
-  ctx.fillText(s, x, y);
+  // Halo in der lokalen Hintergrundfarbe (beschriftung() aus mathlib.js): die
+  // Beschriftungen liegen hier auf Figurenkanten und Fuellungen und waeren
+  // sonst schlecht zu lesen. Zusaetzlich in den Canvas geklemmt, damit keine
+  // Beschriftung ueber den Rand hinauslaeuft — aber nur, wenn die aktive
+  // Transformation eine reine dpr-Skalierung ist (sonst stimmten W/H nicht).
+  let W, H;
+  const tf = ctx.getTransform ? ctx.getTransform() : null;
+  // Reine Skalierung genuegt — sie darf in x und y verschieden sein (initCv
+  // skaliert Buffer/logische Flaeche getrennt). Nur Drehung oder Verschiebung
+  // machen die Umrechnung unbrauchbar.
+  if (tf && tf.b === 0 && tf.c === 0 && tf.e === 0 && tf.f === 0 && tf.a > 0 && tf.d > 0) {
+    W = ctx.canvas.width / tf.a; H = ctx.canvas.height / tf.d;
+  }
+  beschriftung(ctx, s, x, y, { align, baseline: base, halo: true, W, H });
   ctx.restore();
 }
 function seg(ctx, p1, p2, color, lw = 2) {
@@ -1304,7 +1315,6 @@ function drawSinCos() {
   const dx = Px-cx, dy = Py-cy;
   const len = Math.hypot(dx, dy) || 1;
   const nx = -dy/len * 14, ny = dx/len * 14;
-  txt(ctx, radMid[0] + nx, radMid[1] + ny, 'r = 1', C.tinte2, 12);
 
   // sin: senkrecht von Q nach P (rot)
   seg(ctx, [Qx, Qy], [Px, Py], C.rot, 3);
@@ -1312,6 +1322,8 @@ function drawSinCos() {
   seg(ctx, [cx, cy], [Qx, Qy], C.gruen, 3);
 
   fillTriangle(ctx, [cx, cy], [Qx, Qy], [Px, Py], BLAU_FILL, null);
+  // „r = 1" nach der Dreiecksflaeche: davor lag es unter der Fuellung.
+  txt(ctx, radMid[0] + nx, radMid[1] + ny, 'r = 1', C.tinte2, 12);
   rightAngleMarker(ctx, [Qx, Qy], [cx, cy], [Px, Py], 8, C.tinte2);
   drawAngleArc(ctx, [cx, cy], 28, 0, phiR, C.lila, 'φ');
 
@@ -1911,7 +1923,8 @@ function drawSchiff() {
   ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'center';
   ctx.fillText('N', cx, cy - R * 1.30);
-  ctx.fillText('S', cx, cy + R * 1.30 + 4);
+  // Etwas naeher an den Kreis: am alten Platz lag das S auf der Quadranten-Zeile.
+  ctx.fillText('S', cx, cy + R * 1.18 + 4);
   ctx.fillText('O', cx + R * 1.30 + 6, cy + 4);
   ctx.fillText('W', cx - R * 1.30 - 6, cy + 4);
 
@@ -2033,7 +2046,8 @@ function drawSchiff() {
   ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'center';
   const ostLblX = cx + Math.cos(phiRad) * R / 2;
-  ctx.fillText(`${ostVersatz >= 0 ? '+' : ''}${ostVersatz.toFixed(2)}`, ostLblX, cy - 8);
+  // Tiefer gesetzt: auf Hoehe cy-8 kollidierte die Zahl mit dem Winkel-Label φ.
+  ctx.fillText(`${ostVersatz >= 0 ? '+' : ''}${ostVersatz.toFixed(2)}`, ostLblX, cy + 18);
   ctx.fillStyle = '#1f6b3a';
   const nordLblY = cy - Math.sin(phiRad) * R / 2;
   ctx.textAlign = 'left';

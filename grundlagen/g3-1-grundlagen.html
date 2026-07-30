@@ -1089,9 +1089,10 @@ function einstiegRender() {
   ctx.textAlign = 'left'; ctx.fillText('V [dl]', cx(0)+5, cy(VMax)-2);
   ctx.font = '13px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
   ctx.textAlign = 'center';
-  for (let i = 2; i <= 10; i += 2) ctx.fillText(i, cx(i), cy(0)+14);
+  // Die 10 entfaellt: dort steht die Achsenbeschriftung t [s].
+  for (let i = 2; i <= 8;  i += 2) beschriftung(ctx, i, cx(i), cy(0)+14, {align:'center', W, H});
   ctx.textAlign = 'right';
-  for (let i = 5; i <= 30; i += 5) ctx.fillText(i, cx(0)-5, cy(i)+4);
+  for (let i = 5; i <= 30; i += 5) beschriftung(ctx, i, cx(0)-5, cy(i)+4, {align:'right', W, H});
   // Gerade
   ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5;
   ctx.beginPath(); ctx.moveTo(cx(0), cy(0)); ctx.lineTo(cx(tMax), cy(3*tMax)); ctx.stroke();
@@ -1177,7 +1178,7 @@ function glasRender() {
     const ratioBot = (botY - yMark) / (botY - topY);
     const xMark = cxG + botHalfW + (topHalfW - botHalfW) * ratioBot;
     ctx.beginPath(); ctx.moveTo(xMark - 4, yMark); ctx.lineTo(xMark + 1, yMark); ctx.stroke();
-    ctx.fillText(v, xMark + 3, yMark + 3);
+    beschriftung(ctx, v, xMark + 3, yMark + 3, {align:'left', W, H});
   }
 
   // Aktuelle Wassermenge als Label oben (falls Platz)
@@ -1324,16 +1325,20 @@ function plotChart(cfg) {
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(cx(xMin), cy(0)); ctx.lineTo(cx(xMax), cy(0)); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cx(0), cy(yMin)); ctx.lineTo(cx(0), cy(yMax)); ctx.stroke();
-  // Tick-Beschriftungen
+  // Tick-Beschriftungen. Freigestellt und in den Canvas geklemmt, damit sie auf
+  // Gitter und Kurven lesbar bleiben (beschriftung() aus mathlib.js).
   ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace';
-  ctx.textAlign = 'center';
-  for (let g = Math.ceil(xMin); g <= Math.floor(xMax); g++) { if (g !== 0) ctx.fillText(g, cx(g), cy(0)+12); }
-  ctx.textAlign = 'right';
-  for (let g = Math.ceil(yMin); g <= Math.floor(yMax); g++) { if (g !== 0) ctx.fillText(g, cx(0)-4, cy(g)+3); }
-  // Achsen-Labels
-  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px JetBrains Mono,monospace';
-  ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax)-4, cy(0)-5);
-  ctx.textAlign = 'left'; ctx.fillText('y', cx(0)+5, cy(yMax)+10);
+  const tickX = [], tickY = [];
+  for (let g = Math.ceil(xMin); g <= Math.floor(xMax); g++) if (g !== 0) tickX.push(g);
+  for (let g = Math.ceil(yMin); g <= Math.floor(yMax); g++) if (g !== 0) tickY.push(g);
+  // Achsen-Zahlen erst nach den Kurven setzen -> siehe zahlenOben() unten
+  const zahlenOben = () => {
+    const f = ctx.font, s = ctx.fillStyle;
+    ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace';
+    tickX.forEach(g => beschriftung(ctx, g, cx(g), cy(0)+12, {align:'center', bg:'#fff', W:Wpx, H:Hpx}));
+    tickY.forEach(g => beschriftung(ctx, g, cx(0)-4, cy(g)+3, {align:'right', bg:'#fff', W:Wpx, H:Hpx}));
+    ctx.font = f; ctx.fillStyle = s;
+  };
 
   // Kurven zeichnen
   (cfg.curves || []).forEach(cv => {
@@ -1355,10 +1360,21 @@ function plotChart(cfg) {
       const ly = cv.fn(lx);
       ctx.fillStyle = cv.color; ctx.font = '13px JetBrains Mono,monospace';
       ctx.textAlign = 'right';
-      const yPx = (ly >= yMin && ly <= yMax) ? cy(ly) - 6 : cy(yMax) + 14;
-      ctx.fillText(cv.label, cx(lx) - 2, yPx);
+      // + 26 statt + 14: bei Kurven, die oben aus dem Bild laufen, sass das
+      // Label sonst auf der y-Achsenbeschriftung.
+      const yPx = (ly >= yMin && ly <= yMax) ? cy(ly) - 6 : cy(yMax) + 26;
+      beschriftung(ctx, cv.label, cx(lx) - 2, yPx, {align:'right', W:Wpx, H:Hpx});
     }
   });
+
+
+  // Achsen-Zahlen und -Labels nach den Kurven, aber VOR den Punkten: Kurven
+  // sollen die Zahlen nicht kreuzen, die Punkt-Beschriftungen dagegen duerfen
+  // sie ueberdecken — sie sind die eigentliche Aussage der Grafik.
+  zahlenOben();
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 13px JetBrains Mono,monospace';
+  beschriftung(ctx, 'x', cx(xMax)-4, cy(0)-5, {align:'right', bg:'#fff', W:Wpx, H:Hpx});
+  beschriftung(ctx, 'y', cx(0)+5, cy(yMax)+10, {align:'left', bg:'#fff', W:Wpx, H:Hpx});
 
   // Punkte
   (cfg.points || []).forEach(p => {
@@ -1369,9 +1385,11 @@ function plotChart(cfg) {
       ctx.textAlign = (p.labelPos === 'l') ? 'right' : 'left';
       const dx = (p.labelPos === 'l') ? -8 : 8;
       const dy = (p.labelPos === 'b') ? 14 : -7;
-      ctx.fillText(p.label, cx(p.x) + dx, cy(p.y) + dy);
+      beschriftung(ctx, p.label, cx(p.x) + dx, cy(p.y) + dy,
+                   {align: (p.labelPos === 'l') ? 'right' : 'left', W:Wpx, H:Hpx});
     }
   });
+
 }
 
 /* Konfigurationen für die vier Beispiel-Diagramme */

@@ -725,15 +725,15 @@ function showLage(key, btn){
       ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(xPx(v), yA-3); ctx.lineTo(xPx(v), yA+3); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(xPx(v), yB-3); ctx.lineTo(xPx(v), yB+3); ctx.stroke();
-      ctx.fillText(v, xPx(v), yB+14);
+      beschriftung(ctx, v, xPx(v), yB+14, {align:'center', W, H});
     }
-    ctx.textAlign = 'right'; ctx.fillStyle = '#6b7280';
-    ctx.fillText('Note', W-padR, yB+24);
+    ctx.fillStyle = '#6b7280';
+    beschriftung(ctx, 'Note', W-padR, yB+24, {align:'right', W, H});
 
     // Klassen-Labels links
     ctx.fillStyle = '#374151'; ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.textAlign = 'right';
-    ctx.fillText('Klasse A', padL - 10, yA + 4);
-    ctx.fillText('Klasse B', padL - 10, yB + 4);
+    beschriftung(ctx, 'Klasse A', padL - 10, yA + 4, {align:'right', W, H});
+    beschriftung(ctx, 'Klasse B', padL - 10, yB + 4, {align:'right', W, H});
 
     // Mittelwert-Linie (rot, durch beide Achsen)
     ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2; ctx.setLineDash([5,3]);
@@ -773,10 +773,15 @@ function showLage(key, btn){
     // Spreizung in „Bereich" anzeigen (Max minus Min) als zweite Aussage
     const spanA = Math.max(...klasseA) - Math.min(...klasseA);
     const spanB = Math.max(...klasseBaktuell) - Math.min(...klasseBaktuell);
-    ctx.fillStyle = '#10b981'; ctx.font = '13px JetBrains Mono, monospace'; ctx.textAlign = 'left';
-    ctx.fillText('MW = ' + meanA.toFixed(2) + '  ·  Spannweite = ' + spanA.toFixed(1), W - padR - 200, yA + 22);
+    // Rechtsbuendig am Plotrand statt auf fester Breite: die Zeilen sind je nach
+    // Zahlenwert unterschiedlich lang und liefen sonst rechts aus dem Bild.
+    // Die B-Zeile liegt tiefer, damit sie nicht auf der Achsenbeschriftung „Note" sitzt.
+    ctx.fillStyle = '#10b981'; ctx.font = '13px JetBrains Mono, monospace';
+    beschriftung(ctx, 'MW = ' + meanA.toFixed(2) + '  ·  Spannweite = ' + spanA.toFixed(1),
+                 W - padR, yA + 22, {align:'right', W, H});
     ctx.fillStyle = '#f59e0b';
-    ctx.fillText('MW = ' + meanB.toFixed(2) + '  ·  Spannweite = ' + spanB.toFixed(1), W - padR - 200, yB + 28);
+    beschriftung(ctx, 'MW = ' + meanB.toFixed(2) + '  ·  Spannweite = ' + spanB.toFixed(1),
+                 W - padR, yB + 44, {align:'right', W, H});
   }
 
   document.getElementById('sl-streuung').addEventListener('input', slRender);

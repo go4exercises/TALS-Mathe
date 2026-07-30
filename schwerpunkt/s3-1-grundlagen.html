@@ -1008,7 +1008,7 @@ function drawUg(){
   const g = x => x + 1;          // Gerade
   const xMin = -3.5, xMax = 3.5, yMin = -3, yMax = 7;
   const {ctx, W, H} = initCanvas('ug-canvas', 260, false);
-  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+  const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax, {zahlen:false});
 
   // Schnittstellen: x² + c = x + 1  →  x² - x + (c-1) = 0
   const D = 1 - 4 * (c - 1);     // = 5 - 4c
@@ -1051,6 +1051,8 @@ function drawUg(){
   roots.forEach(r => { if(r >= xMin && r <= xMax) drawDot(ctx, cx, cy, r, g(r), '#9b1c1c', 5); });
 
   document.getElementById('ug-eq').textContent = eqText;
+  // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
+  zahlenOben();
 }
 document.getElementById('ug-c').addEventListener('input', drawUg);
 

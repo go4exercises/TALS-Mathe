@@ -1017,13 +1017,13 @@ function drawFaelle() {
 
   // Tick-Labels
   ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace'; ctx.textAlign = 'center';
-  for (let gx = -2; gx <= 6; gx += 2) if (gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 13);
+  for (let gx = -2; gx <= 6; gx += 2) if (gx !== 0) beschriftung(ctx, gx, cx(gx), cy(0) + 13, {align:'center', W, H});
   ctx.textAlign = 'right';
-  for (let gy = 2; gy <= 14; gy += 4) ctx.fillText(gy, cx(0) - 5, cy(gy) + 3);
+  for (let gy = 2; gy <= 14; gy += 4) beschriftung(ctx, gy, cx(0) - 5, cy(gy) + 3, {align:'right', W, H});
 
   ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
-  ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax) - 4, cy(0) - 6);
-  ctx.textAlign = 'left';  ctx.fillText('y', cx(0) + 5, padT + 10);
+  beschriftung(ctx, 'x', cx(xMax) - 4, cy(0) - 6, {align:'right', W, H});
+  beschriftung(ctx, 'y', cx(0) + 5, padT + 10, {align:'left', W, H});
 
   const f = FAELLE[faIdx];
   // Bei identischen Geraden: nur eine zeichnen, dafür dicker
@@ -1037,7 +1037,7 @@ function drawFaelle() {
     const labelX = xMax - 0.5, labelY = g.m * labelX + g.b;
     if (labelY >= yMin && labelY <= yMax - 1) {
       ctx.fillStyle = g.color; ctx.font = 'bold 13px monospace';
-      ctx.textAlign = 'right'; ctx.fillText(g.label, cx(labelX), cy(labelY) - 5);
+      beschriftung(ctx, g.label, cx(labelX), cy(labelY) - 5, {align:'right', W, H});
     }
   });
 
@@ -1046,7 +1046,7 @@ function drawFaelle() {
     ctx.fillStyle = '#b85a00';
     ctx.beginPath(); ctx.arc(cx(f.schnitt.x), cy(f.schnitt.y), 6, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#b85a00'; ctx.font = 'bold 13px JetBrains Mono,monospace';
-    ctx.textAlign = 'left'; ctx.fillText(`S(${f.schnitt.x} | ${f.schnitt.y})`, cx(f.schnitt.x) + 9, cy(f.schnitt.y) + 4);
+    beschriftung(ctx, `S(${f.schnitt.x} | ${f.schnitt.y})`, cx(f.schnitt.x) + 9, cy(f.schnitt.y) - 8, {align:'left', W, H});
   }
 }
 

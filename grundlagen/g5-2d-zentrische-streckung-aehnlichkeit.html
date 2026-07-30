@@ -1060,10 +1060,21 @@ function initCv(id) {
 function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='middle', weight='600') {
   ctx.save();
   ctx.fillStyle = color;
-  ctx.textAlign = align;
-  ctx.textBaseline = base;
   ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
-  ctx.fillText(s, x, y);
+  // Halo in der lokalen Hintergrundfarbe (beschriftung() aus mathlib.js): die
+  // Beschriftungen liegen hier auf Figurenkanten und Fuellungen und waeren
+  // sonst schlecht zu lesen. Zusaetzlich in den Canvas geklemmt, damit keine
+  // Beschriftung ueber den Rand hinauslaeuft — aber nur, wenn die aktive
+  // Transformation eine reine dpr-Skalierung ist (sonst stimmten W/H nicht).
+  let W, H;
+  const tf = ctx.getTransform ? ctx.getTransform() : null;
+  // Reine Skalierung genuegt — sie darf in x und y verschieden sein (initCv
+  // skaliert Buffer/logische Flaeche getrennt). Nur Drehung oder Verschiebung
+  // machen die Umrechnung unbrauchbar.
+  if (tf && tf.b === 0 && tf.c === 0 && tf.e === 0 && tf.f === 0 && tf.a > 0 && tf.d > 0) {
+    W = ctx.canvas.width / tf.a; H = ctx.canvas.height / tf.d;
+  }
+  beschriftung(ctx, s, x, y, { align, baseline: base, halo: true, W, H });
   ctx.restore();
 }
 function seg(ctx, p1, p2, color, lw = 2) {

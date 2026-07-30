@@ -797,8 +797,8 @@ function drawLot() {
   const dotp = (pt, col, r) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(cx(pt[0]), cy(pt[1]), r, 0, 2 * Math.PI); ctx.fill(); };
   dotp(A, '#374151', 4); dotp(P, '#9b1c1c', 6); dotp(F, atMin ? '#1f6b3a' : '#b85c00', 6);
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#9b1c1c'; ctx.fillText('P', cx(P[0]) + 8, cy(P[1]) + 4);
-  ctx.fillStyle = atMin ? '#1f6b3a' : '#b85c00'; ctx.fillText('F', cx(F[0]) + 8, cy(F[1]) + 4);
+  ctx.fillStyle = '#9b1c1c'; beschriftung(ctx, 'P', cx(P[0]) + 8, cy(P[1]) + 4, {align:'left', halo:true, W, H});
+  ctx.fillStyle = atMin ? '#1f6b3a' : '#b85c00'; beschriftung(ctx, 'F', cx(F[0]) + 8, cy(F[1]) + 4, {align:'left', halo:true, W, H});
 }
 document.getElementById('lo-t').addEventListener('input', drawLot);
 

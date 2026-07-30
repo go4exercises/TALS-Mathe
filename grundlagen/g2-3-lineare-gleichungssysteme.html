@@ -791,26 +791,26 @@ function drawKino() {
   // Geldgerade:          15x + 9y = 240 →  y = (240 - 15x)/9
   const {ctx, W, H} = initCanvas('cv-kino', 280);
   const xMin=0, xMax=22, yMin=0, yMax=28;
-  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
-  // Achsenbeschriftung Anwendung mit Einheit überschreiben
-  ctx.fillStyle='#fff';
-  ctx.fillRect(W-32, cy(0)-22, 32, 18);
-  ctx.fillRect(cx(0)+4, 0, 50, 18);
-  ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
-  ctx.textAlign='right'; ctx.fillText('x [Erw.]', W-2, cy(0)-7);
-  ctx.textAlign='left';  ctx.fillText('y [Kinder]', cx(0)+5, 11);
+  // Anwendungsgraph: keine generischen x/y-Labels, wir schreiben eigene mit Einheit.
+  // Zahlen erst nach den Geraden setzen, sonst kreuzt die rote Gerade die 21.
+  const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax,
+                                        {achsenLabels:false, zahlen:false});
   // Geraden (begrenzt auf den jeweils sinnvollen Bereich)
   drawLine(ctx, cx, cy, -1, 20, 0, 20, '#a0392c', 2.5);            // y = 20 - x
   drawLine(ctx, cx, cy, -15/9, 240/9, 0, 16, '#1a4f8a', 2.5);      // y = (240-15x)/9
+  zahlenOben();
+  ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
+  beschriftung(ctx,'x [Erw.]', W-2, cy(0)-7, {align:'right', W, H});
+  beschriftung(ctx,'y [Kinder]', cx(0)+5, 11, {align:'left', W, H});
   // Schnittpunkt (10 | 10)
   drawDot(ctx, cx, cy, 10, 10, '#0f7a3a', 7);
   ctx.fillStyle='#0f7a3a'; ctx.font='bold 13px monospace';
-  ctx.textAlign='left'; ctx.fillText('(10 | 10)', cx(10)+9, cy(10)-6);
+  beschriftung(ctx, '(10 | 10)', cx(10)+9, cy(10)-6, {align:'left', W, H});
   // Linien-Beschriftungen
-  ctx.fillStyle='#a0392c'; ctx.textAlign='left';
-  ctx.fillText('x + y = 20', cx(2)+2, cy(18)-3);
+  ctx.fillStyle='#a0392c';
+  beschriftung(ctx, 'x + y = 20', cx(2)+2, cy(18)-3, {align:'left', W, H});
   ctx.fillStyle='#1a4f8a';
-  ctx.fillText('15x + 9y = 240', cx(12), cy(7)+12);
+  beschriftung(ctx, '15x + 9y = 240', cx(12), cy(7)+12, {align:'left', W, H});
 }
 
 /* ══════════════════════════════════════════════════════════════

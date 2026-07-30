@@ -1017,7 +1017,7 @@ function drawTf(){
 
   const xMin = -4, xMax = 6, yMin = -4, yMax = 4;
   const {ctx, W, H} = initCanvas('tf-canvas', 260, false);
-  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+  const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax, {zahlen:false});
 
   // Verbotenes Definitionsband für n = 2: x < u
   if(tfN === 2 && u > xMin){
@@ -1046,6 +1046,8 @@ function drawTf(){
   const vStr = v === 0 ? '' : (v > 0 ? ` + ${fmt2(v)}` : ` − ${fmt2(-v)}`);
   const dom = tfN === 2 ? `D = [${fmt2(u)}; ∞[` : 'D = ℝ';
   document.getElementById('tf-eq').innerHTML = `y = ${aStr}${wSym}${arg}${vStr} · ${dom}`;
+  // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
+  zahlenOben();
 }
 ['tf-a', 'tf-u', 'tf-v'].forEach(id => document.getElementById(id).addEventListener('input', drawTf));
 

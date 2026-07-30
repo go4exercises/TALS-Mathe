@@ -1112,9 +1112,20 @@ function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='mid
   ctx.save();
   ctx.fillStyle = color;
   ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
-  ctx.textAlign = align;
-  ctx.textBaseline = base;
-  ctx.fillText(s, x, y);
+  // Halo in der lokalen Hintergrundfarbe (beschriftung() aus mathlib.js): die
+  // Beschriftungen liegen hier auf Figurenkanten und Fuellungen und waeren
+  // sonst schlecht zu lesen. Zusaetzlich in den Canvas geklemmt, damit keine
+  // Beschriftung ueber den Rand hinauslaeuft — aber nur, wenn die aktive
+  // Transformation eine reine dpr-Skalierung ist (sonst stimmten W/H nicht).
+  let W, H;
+  const tf = ctx.getTransform ? ctx.getTransform() : null;
+  // Reine Skalierung genuegt — sie darf in x und y verschieden sein (initCv
+  // skaliert Buffer/logische Flaeche getrennt). Nur Drehung oder Verschiebung
+  // machen die Umrechnung unbrauchbar.
+  if (tf && tf.b === 0 && tf.c === 0 && tf.e === 0 && tf.f === 0 && tf.a > 0 && tf.d > 0) {
+    W = ctx.canvas.width / tf.a; H = ctx.canvas.height / tf.d;
+  }
+  beschriftung(ctx, s, x, y, { align, baseline: base, halo: true, W, H });
   ctx.restore();
 }
 function dot(ctx, p, color = C.blau, r = 5) {
@@ -2863,15 +2874,18 @@ function drawPythKath(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
   // Original-Quadrate IMMER sichtbar (etwas blasser, im Hintergrund)
   fillPoly(ctx, Z0_a, COL_A_LIGHT, COL_A_LINE, 1.5);
   const aSqMid = [(Z0_a[0][0]+Z0_a[2][0])/2, (Z0_a[0][1]+Z0_a[2][1])/2];
-  txt(ctx, aSqMid[0], aSqMid[1], 'a²', COL_A_LINE, 14, 'center', 'middle', '700');
 
   fillPoly(ctx, Z0_b, COL_B_LIGHT, COL_B_LINE, 1.5);
   const bSqMid = [(Z0_b[0][0]+Z0_b[2][0])/2, (Z0_b[0][1]+Z0_b[2][1])/2];
-  txt(ctx, bSqMid[0], bSqMid[1], 'b²', COL_B_LINE, 14, 'center', 'middle', '700');
 
   // Animierte Kopien
   fillPoly(ctx, aPoly, COL_A_FILL, COL_A_LINE, 2);
   fillPoly(ctx, bPoly, COL_B_FILL, COL_B_LINE, 2);
+
+  // a² und b² NACH den animierten Kopien: in der Startposition liegt die Kopie
+  // deckungsgleich auf dem Original und hat die Beschriftung sonst zugedeckt.
+  txt(ctx, aSqMid[0], aSqMid[1], 'a²', COL_A_LINE, 14, 'center', 'middle', '700');
+  txt(ctx, bSqMid[0], bSqMid[1], 'b²', COL_B_LINE, 14, 'center', 'middle', '700');
   
   // Labels in den animierten Polygonen
   const aPolyMid = [(aPoly[0][0]+aPoly[2][0])/2, (aPoly[0][1]+aPoly[2][1])/2];

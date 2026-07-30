@@ -1240,9 +1240,20 @@ function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='mid
   ctx.save();
   ctx.fillStyle = color;
   ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
-  ctx.textAlign = align;
-  ctx.textBaseline = base;
-  ctx.fillText(s, x, y);
+  // Halo in der lokalen Hintergrundfarbe (beschriftung() aus mathlib.js): die
+  // Beschriftungen liegen hier auf Figurenkanten und Fuellungen und waeren
+  // sonst schlecht zu lesen. Zusaetzlich in den Canvas geklemmt, damit keine
+  // Beschriftung ueber den Rand hinauslaeuft — aber nur, wenn die aktive
+  // Transformation eine reine dpr-Skalierung ist (sonst stimmten W/H nicht).
+  let W, H;
+  const tf = ctx.getTransform ? ctx.getTransform() : null;
+  // Reine Skalierung genuegt — sie darf in x und y verschieden sein (initCv
+  // skaliert Buffer/logische Flaeche getrennt). Nur Drehung oder Verschiebung
+  // machen die Umrechnung unbrauchbar.
+  if (tf && tf.b === 0 && tf.c === 0 && tf.e === 0 && tf.f === 0 && tf.a > 0 && tf.d > 0) {
+    W = ctx.canvas.width / tf.a; H = ctx.canvas.height / tf.d;
+  }
+  beschriftung(ctx, s, x, y, { align, baseline: base, halo: true, W, H });
   ctx.restore();
 }
 function dot(ctx, p, color = C.blau, r = 5) {
@@ -1760,7 +1771,9 @@ function drawUmfang() {
     ctx.lineTo(xPi, yBasis + 12);
     ctx.stroke();
     ctx.restore();
-    txt(ctx, xPi, yBasis + 22, `π·d`, C.gruen, 14, 'center', 'middle', '700');
+    // 16 px tiefer als die 3·d-Marke, sonst liegen die beiden Beschriftungen
+    // bei d-Werten nahe der Ganzzahl uebereinander.
+    txt(ctx, xPi, yBasis + 38, `π·d`, C.gruen, 14, 'center', 'middle', '700');
   }
 
   // ── Achsen-Beschriftung 2: Meter-Skala (grau, unterhalb der d-Skala) ──
@@ -2545,7 +2558,7 @@ window.addEventListener('resize', () => {
     const rL_y = cy + (r_px/2)*Math.sin(a_mid);
     ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono, monospace';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.fillText('r = 15 cm', rL_x, rL_y);
+    beschriftung(ctx, 'r = 15 cm', rL_x, rL_y, {align:'center', halo:true, W, H});
     ctx.textBaseline = 'alphabetic';
   }
 

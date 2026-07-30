@@ -824,8 +824,8 @@ function drawWaage(canvasId, leftMass, rightMass, leftLabel, rightLabel) {
 
   // Beschriftungen
   ctx.font = 'bold 13px monospace'; ctx.textAlign = 'center';
-  ctx.fillStyle = '#1a4f8a'; ctx.fillText(leftLabel, lbx, lby - 4);
-  ctx.fillStyle = '#b85c00'; ctx.fillText(rightLabel, rbx, rby - 4);
+  ctx.fillStyle = '#1a4f8a'; beschriftung(ctx, leftLabel, lbx, lby - 4, {align:'center', halo:true, W, H});
+  ctx.fillStyle = '#b85c00'; beschriftung(ctx, rightLabel, rbx, rby - 4, {align:'center', halo:true, W, H});
 
   // Status-Anzeige
   ctx.font = 'bold 13px sans-serif';
@@ -1204,7 +1204,7 @@ function drawUngl() {
   for (let z = 0; z <= 50; z += 5) {
     ctx.strokeStyle = '#c8d0da'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(px(z), y - 5); ctx.lineTo(px(z), y + 5); ctx.stroke();
-    ctx.fillStyle = '#9ca3af'; ctx.fillText(z, px(z), y + 20);
+    ctx.fillStyle = '#9ca3af'; beschriftung(ctx, z, px(z), y + 20, {align:'center', W, H});
   }
 
   // Lösungspfeil samt Spitze — die Lösungsmenge läuft ins Unendliche weiter

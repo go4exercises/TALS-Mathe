@@ -1039,7 +1039,7 @@ function drawPK() {
   ctx.fillStyle = '#374151'; ctx.font = '13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
   for (const t of [-20, 0, 20, 40]) {
     ctx.beginPath(); ctx.moveTo(cx(t), yAchse - 4); ctx.lineTo(cx(t), yAchse + 4); ctx.stroke();
-    ctx.fillText(t, cx(t), yAchse + 17);
+    beschriftung(ctx, t, cx(t), yAchse + 17, {align:'center', W, H});
   }
   // 0-Linie hervorheben (Grenzfall)
   ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
@@ -1088,7 +1088,7 @@ function drawPKParabel(k) {
   // Scheitel S(3 | k−9)
   drawDot(ctx, cx, cy, 3, k - 9, '#9b1c1c', 5);
   ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
-  ctx.fillText('S(3 | ' + (k - 9).toFixed(1) + ')', cx(3) + 9, cy(k - 9) - 6);
+  beschriftung(ctx, 'S(3 | ' + (k - 9).toFixed(1) + ')', cx(3) + 9, cy(k - 9) - 6, {align:'left', W, H});
   // Nullstellen auf der x-Achse
   if (D > 0.001) {
     const half = Math.sqrt(D) / 2;
@@ -1283,8 +1283,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Labels für die Wege
     ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono, monospace';
     ctx.textAlign = 'right';
-    ctx.fillText('Hinweg →', padL - 14, yHin + 4);
-    ctx.fillText('← Rückweg', padL - 14, yRueck + 4);
+    beschriftung(ctx, 'Hinweg →', padL - 14, yHin + 4, {align:'right', W, H});
+    beschriftung(ctx, '← Rückweg', padL - 14, yRueck + 4, {align:'right', W, H});
     ctx.textAlign = 'left';
 
     // Velo Hinweg (Bewegung von links nach rechts)

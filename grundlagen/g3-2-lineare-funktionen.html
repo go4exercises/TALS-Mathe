@@ -683,21 +683,18 @@ function updateKS(){
   // Graph
   const {ctx,W,H}=initCanvas('ks-canvas',180);
   const xMin=0,xMax=15,yMin=0,yMax=35;
-  const {cx,cy}=drawGrid(ctx,W,H,xMin,xMax,yMin,yMax);
-  // Achsenbeschriftung der Anwendung mit Einheit überschreiben (vom drawGrid kommt nur x, y)
-  // Erst alten generischen Pfeil-Label-Bereich abdecken (wir malen einfach unsere drüber)
-  ctx.fillStyle='#fff';
-  ctx.fillRect(W-30, cy(0)-22, 30, 18);   // alter "x"-Bereich rechts oben am Pfeil
-  ctx.fillRect(cx(0)+4, 0, 22, 18);       // alter "y"-Bereich links oben am Pfeil
-  // Neue Labels mit Einheit
+  // Anwendungsgraph: keine generischen x/y-Labels, wir schreiben eigene mit Einheit.
+  const {cx,cy}=drawGrid(ctx,W,H,xMin,xMax,yMin,yMax,{achsenLabels:false,zahlen:false});
+  // Eigene Zahlenteilung (alle 2 kg bzw. 5 CHF). Nullpunkt liegt in der Ecke,
+  // darum innen an der Achse und freigestellt — sonst fallen die Zahlen heraus.
+  // Die letzte x-Zahl (14) entfaellt: dort steht die Achsenbeschriftung.
+  ctx.font='13px monospace'; ctx.fillStyle='#9ca3af';
+  for(let gx=2;gx<=12;gx+=2) beschriftung(ctx,gx,cx(gx),cy(0)-6,{align:'center', W, H});
+  for(let gy=5;gy<=30;gy+=5) beschriftung(ctx,gy,cx(0)+5,cy(gy)+4,{align:'left', W, H});
+  // Achsenbeschriftung zuletzt: ihre Freistellung liegt damit ueber allem.
   ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
-  ctx.textAlign='right'; ctx.fillText('x [kg]', W-2, cy(0)-7);
-  ctx.textAlign='left';  ctx.fillText('K [CHF]', cx(0)+5, 11);
-  // x-axis number labels override (Zahlen alle 2 kg)
-  ctx.font='13px monospace'; ctx.fillStyle='#9ca3af'; ctx.textAlign='center';
-  for(let gx=0;gx<=14;gx+=2) ctx.fillText(gx,cx(gx),cy(0)+13);
-  ctx.textAlign='right';
-  for(let gy=0;gy<=30;gy+=5) ctx.fillText(gy,cx(0)-4,cy(gy)+4);
+  beschriftung(ctx,'x [kg]', W-2, cy(0)-7, {align:'right', W, H});
+  beschriftung(ctx,'K [CHF]', cx(0)+5, 11, {align:'left', W, H});
   // Line
   drawLine(ctx,cx,cy,KS.m,KS.b,xMin,xMax,'#1a4f8a',2.5);
   // All dots faint
@@ -888,7 +885,7 @@ function a2IY(py){return Math.round((a2S.H-py)/a2S.H*12-6);}
 function drawA2(){
   const {ctx,W,H}=initCanvas('a2-canvas',240,true);
   a2S={W,H};
-  const {cx,cy}=drawGrid(ctx,W,H,-6,6,-6,6);
+  const {cx,cy,zahlenOben}=drawGrid(ctx,W,H,-6,6,-6,6, {zahlen:false});
   // user line
   const p1=a2Pts[0],p2=a2Pts[1];
   if(p1.x!==p2.x){
@@ -907,6 +904,8 @@ function drawA2(){
   });
   document.getElementById('a2-p1c').textContent=`(${a2Pts[0].x}|${a2Pts[0].y})`;
   document.getElementById('a2-p2c').textContent=`(${a2Pts[1].x}|${a2Pts[1].y})`;
+  // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
+  zahlenOben();
 }
 function a2Pos(e,c){
   const r=c.getBoundingClientRect(),sc=c.width/(window.devicePixelRatio||1)/r.width;
@@ -1051,8 +1050,8 @@ function drawSteig() {
   drawDot(ctx, cx, cy, x1, y1, '#1f6b3a', 7);
   drawDot(ctx, cx, cy, x2, y2, '#1f6b3a', 7);
   ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
-  ctx.fillText('P', cx(x1) + 10, cy(y1) - 8);
-  ctx.fillText('Q', cx(x2) + 10, cy(y2) - 8);
+  beschriftung(ctx, 'P', cx(x1) + 10, cy(y1) - 8, {align:'left', halo:true, W: SD_LW, H: SD_LW});
+  beschriftung(ctx, 'Q', cx(x2) + 10, cy(y2) - 8, {align:'left', halo:true, W: SD_LW, H: SD_LW});
 }
 function sdInit() {
   const cv = document.getElementById('cv-steig');

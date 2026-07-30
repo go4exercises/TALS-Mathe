@@ -808,7 +808,13 @@ function drawRechenschieber() {
       const x = posFn(z);
       ctx.strokeStyle = farbe; ctx.lineWidth = 1.2;
       ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - 9); ctx.stroke();
-      ctx.fillStyle = farbe; ctx.fillText(z, x, y - 13);
+      // Kontur statt Kasten: am oberen Ende der Log-Skala stehen die Zahlen so
+      // dicht, dass Freistellungs-Kaesten die Nachbarzahl anschneiden wuerden.
+      // Nur zeichnen, was im Bild liegt: die C-Skala verschiebt sich und ihre
+      // oberen Zahlen wandern hinaus. Geklemmt wuerden sie am Rand aufeinander liegen.
+      if (x > 10 && x < W - 10) {
+        ctx.fillStyle = farbe; beschriftung(ctx, z, x, y - 13, {align:'center', halo:true});
+      }
       if (z < 10) {                                  // Zwischenstrich bei z + 0.5
         const xm = posFn(z + 0.5);
         ctx.beginPath(); ctx.moveTo(xm, y); ctx.lineTo(xm, y - 5); ctx.stroke();

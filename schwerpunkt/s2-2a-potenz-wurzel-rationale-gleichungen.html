@@ -750,13 +750,13 @@ function updateSW(){
   const s = 3.57 * Math.sqrt(h);
   const hB = `<span class="tx-blau">${h}</span>`;
   document.getElementById('sw-eq').innerHTML = `s(${hB}) = 3.57·√${hB} ≈ ${s.toFixed(1)} km`;
-  const {ctx, cx, cy} = gridApp('sw-canvas', 240, 0, 900, 0, 110, 100, 10, 'h [m]', 's [km]');
+  const {ctx, cx, cy, W, H} = gridApp('sw-canvas', 240, 0, 900, 0, 110, 100, 10, 'h [m]', 's [km]');
   // 100-km-Marke
   ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
   ctx.beginPath(); ctx.moveTo(cx(0), cy(100)); ctx.lineTo(cx(900), cy(100)); ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
-  ctx.fillText('100 km', cx(15), cy(100) - 6);
+  beschriftung(ctx, '100 km', cx(15), cy(100) + 16, {align:'center', W, H});
   plotFx(ctx, cx, cy, x => 3.57 * Math.sqrt(x), 0, 900, '#1a4f8a', 2.5, 1e6);
   drawDot(ctx, cx, cy, h, s, '#1a4f8a', 7);
 }

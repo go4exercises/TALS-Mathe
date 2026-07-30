@@ -1264,9 +1264,20 @@ function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='mid
   ctx.save();
   ctx.fillStyle = color;
   ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
-  ctx.textAlign = align;
-  ctx.textBaseline = base;
-  ctx.fillText(s, x, y);
+  // Halo in der lokalen Hintergrundfarbe (beschriftung() aus mathlib.js): die
+  // Beschriftungen liegen hier auf Figurenkanten und Fuellungen und waeren
+  // sonst schlecht zu lesen. Zusaetzlich in den Canvas geklemmt, damit keine
+  // Beschriftung ueber den Rand hinauslaeuft — aber nur, wenn die aktive
+  // Transformation eine reine dpr-Skalierung ist (sonst stimmten W/H nicht).
+  let W, H;
+  const tf = ctx.getTransform ? ctx.getTransform() : null;
+  // Reine Skalierung genuegt — sie darf in x und y verschieden sein (initCv
+  // skaliert Buffer/logische Flaeche getrennt). Nur Drehung oder Verschiebung
+  // machen die Umrechnung unbrauchbar.
+  if (tf && tf.b === 0 && tf.c === 0 && tf.e === 0 && tf.f === 0 && tf.a > 0 && tf.d > 0) {
+    W = ctx.canvas.width / tf.a; H = ctx.canvas.height / tf.d;
+  }
+  beschriftung(ctx, s, x, y, { align, baseline: base, halo: true, W, H });
   ctx.restore();
 }
 function dot(ctx, p, color = C.blau, r = 5) {
@@ -2408,12 +2419,14 @@ function drawReg() {
 
   // Mittelpunkt
   dot(ctx, [cx, cy], C.tinte2, 4);
-  txt(ctx, cx + 10, cy - 4, 'M', C.tinte2, 12);
 
   // Eckpunkte als kleine Punkte
   for (let i = 0; i < n; i++) {
     dot(ctx, pts[i], C.blau, n <= 8 ? 4 : 3);
   }
+
+  // M zuletzt: davor wurde es von Radiuslinie und Eckpunkten angeschnitten.
+  txt(ctx, cx + 14, cy - 10, 'M', C.tinte2, 12);
 
   // Erklärung
   const erklMap = {

@@ -847,7 +847,7 @@ function updateTR(){
   document.getElementById('tr-info').innerHTML =
     `Knick (${T('orange', String(u).replace('-', '−'))}|${T('gruen', String(v).replace('-', '−'))}) · Ast-Steigungen ±${fmt(Math.abs(a))}`;
   const {ctx, W, H} = initCanvas('tr-canvas', 240, false);
-  const {cx, cy} = drawGrid(ctx, W, H, -6, 6, -5, 5);
+  const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -6, 6, -5, 5, {zahlen:false});
   // Grundfunktion gestrichelt grau
   ctx.setLineDash([5, 4]);
   plotFx(ctx, cx, cy, x => Math.abs(x), -6, 6, '#9ca3af', 1.5, 25);
@@ -856,7 +856,10 @@ function updateTR(){
   // Knickpunkt
   drawDot(ctx, cx, cy, u, v, '#1f6b3a', 6);
   ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
-  ctx.fillText(`(${String(u).replace('-', '−')}|${String(v).replace('-', '−')})`, cx(u) + 8, cy(v) + (a > 0 ? 16 : -10));
+  beschriftung(ctx, `(${String(u).replace('-', '−')}|${String(v).replace('-', '−')})`,
+               cx(u) + 12, cy(v) + (a > 0 ? 26 : -18), {align:'left', W, H});
+  // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
+  zahlenOben();
 }
 ['tr-a', 'tr-u', 'tr-v'].forEach(id => document.getElementById(id).addEventListener('input', updateTR));
 
@@ -978,7 +981,7 @@ function drawCw(){
     `c = ${c.toFixed(1)} ${lage} ⇒ <strong>${xs.length}</strong> Lösung${xs.length === 1 ? '' : 'en'}`;
 
   const {ctx, W, H} = initCanvas('cw-canvas', 240, false);
-  const {cx, cy} = drawGrid(ctx, W, H, -4, 4, -1, 8);
+  const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -4, 4, -1, 8, {zahlen:false});
   // W-Kurve |x²-4|
   plotFx(ctx, cx, cy, x => Math.abs(x * x - 4), -4, 4, '#5b2d8e', 3, 1e4);
   // Waagrechte y = c (nur wenn im Bild)
@@ -990,6 +993,8 @@ function drawCw(){
   }
   // Schnittpunkte
   xs.forEach(x => drawDot(ctx, cx, cy, x, c, '#9b1c1c', 5));
+  // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
+  zahlenOben();
 }
 document.getElementById('cw-c').addEventListener('input', drawCw);
 
@@ -1023,7 +1028,8 @@ function drawWa(){
   // Minimum-Beschriftung
   if(boden > 1e-9){
     ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
-    ctx.fillText('Boden = ' + boden, cx((lo + hi) / 2), cy(boden) - 10);
+    // Kontur statt Kasten: der Kasten schnitt die y-Achsenzahl 6 an.
+  beschriftung(ctx, 'Boden = ' + boden, cx((lo + hi) / 2), cy(boden) - 10, {align:'center', halo:true, W, H});
   }
 }
 ['wa-a', 'wa-b'].forEach(id => document.getElementById(id).addEventListener('input', drawWa));
