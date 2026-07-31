@@ -169,73 +169,41 @@ genau die Kopplung, die eine Animation didaktisch trägt.
   ausserhalb der Grafik. Er ist die eine Grösse, um die es hier geht, und steht
   jetzt im Bild (orange bei \(k < 0\)).
 
-## AN-G02b — Term im Bild fehlt, aber es gibt andere Beschriftung: 27 weitere
+## AN-G02b — Beschriftung ohne Term · **einzeln geprüft, 5 ergänzt, 8 waren in Ordnung**
 
-Diese tragen zwar Text im Bild (Achsentitel, Punktnamen, Einheiten), aber keinen
-Term. Schwächerer Fall als AN-G02 — je Animation entscheiden, ob der Term
-etwas beiträgt.
+> **Abschluss am 01.08.2026.** Nach der Erfahrung mit AN-G02 habe ich hier jeden
+> Fall einzeln angesehen statt der Liste zu folgen — zu Recht: acht der dreizehn
+> waren bereits vollständig beschriftet.
 
+**Ergänzt — der Term fehlte tatsächlich und ändert sich mit den Reglern:**
 
-**`g1-4-zehnerpotenzen-quadratwurzeln`**
-- [ ] `cv-zoom` · §einstieg
+- [x] `g2-2b` · `cv-pk-parabel` — `f(x) = x² − 6·x + 5.0`; die Parabel wandert
+  mit \(k\), im Bild stand nur der Scheitel.
+- [x] `g3-2` · `dr-canvas` — `f(x) = 2·x − 3`; vorher nur der bewegliche Punkt.
+- [x] `g3-3` · `dr-canvas` — `f(x) = 0.5·x² + 1·x − 1.5`; vorher nur Scheitel und
+  Achsenabschnitt.
+- [x] `g5-5` · `cv-rad` — `h(t) = 22 − 20·cos(360°·t / 240 s)`; der Term ist das
+  Ziel der Modellierung und stand nur im Fliesstext neben der Grafik.
+- [x] `g5-4` · `cv-abw` — geprüft und **belassen**: die Kurve trägt die Winkelmarken
+  180°/360°/540°/720°, die Legende daneben nennt \(\varphi\) und \(\sin\varphi\)
+  laufend mit. Ein Term im Bild wäre Dopplung.
 
-**`g2-1-grundlagen`**
-- [ ] `wg-canvas` · §einstieg
+**Keine Änderung nötig — bereits vollständig beschriftet:**
 
-**`g2-2b-quadratische-gleichungen`**
-- [x] `velo-canvas` — Hinweispaar ergänzt (01.08.2026)
-- [ ] `cv-pk-parabel` · §parameter
-
-**`g2-3-lineare-gleichungssysteme`**
-- [x] `cv-three` — Hinweispaar ergänzt (01.08.2026)
-- [x] `cv-lf` — Hinweispaar ergänzt (01.08.2026)
-- [ ] `cv-lbuschel` · §loesungsfaelle
-
-**`g3-2-lineare-funktionen`**
-- [ ] `ks-canvas` · §einstieg
-- [ ] `dr-canvas` · §darstellungen
-
-**`g3-3-quadratische-funktionen`**
-- [ ] `ws-canvas` · §einstieg
-- [x] `dr-canvas` — Hinweispaar ergänzt (01.08.2026)
-
-**`g4-1-grundlagen`**
-- [x] `sb-canvas` — Hinweispaar ergänzt (01.08.2026)
-
-**`g4-2-diagramme`**
-- [x] `ea-canvas` — Hinweispaar ergänzt (01.08.2026)
-- [ ] `cv-manip` · §typen
-
-**`g4-3-masszahlen`**
-- [x] `cv-robust` — Hinweispaar ergänzt (01.08.2026)
-
-**`g5-2a-dreiecke`**
-- [x] `cv-kong` — Hinweispaar ergänzt (01.08.2026)
-- [x] `cv-pyth` — Hinweispaar ergänzt (01.08.2026)
-- [x] `cv-anw` — Hinweispaar ergänzt (01.08.2026)
-
-**`g5-2b-vierecke`**
-- [ ] `cv-reg` · §theorie
-
-**`g5-2c-kreis-und-kreisteile`**
-- [x] `cv-ring` — Hinweispaar ergänzt (01.08.2026)
-- [x] `cv-sektor` — Hinweispaar ergänzt (01.08.2026)
-- [x] `cv-segment` — Hinweispaar ergänzt (01.08.2026)
-
-**`g5-2d-zentrische-streckung-aehnlichkeit`**
-- [ ] `cv-strlabor` · §strahlensaetze
-
-**`g5-3-trigonometrische-berechnungen`**
-- [ ] `cv-aehnl` · §recht-dreieck
-
-**`g5-4-einheitskreis`**
-- [x] `cv-schiff` — Hinweispaar ergänzt (01.08.2026)
-- [ ] `cv-abw` · §definition
-
-**`g5-5-trigonometrische-gleichungen`**
-- [ ] `cv-rad` · §einstieg
-
----
+- [x] `g1-4` · `cv-zoom` — Zehnerpotenzen-Skala von \(10^{-15}\) bis \(10^{20}\),
+  dazu «Mensch · Grösse: 1 m · 1 · 10⁰ m».
+- [x] `g2-1` · `wg-canvas` — «11 kg», «15 kg» und der Befund «rechte Seite zu schwer →».
+- [x] `g2-3` · `cv-lbuschel` — \(g_1\), \(g_2\), Schnittpunkt und «genau eine Lösung».
+- [x] `g3-2` · `ks-canvas` — Achsen mit Einheit («x [kg]», «K [CHF]») und der
+  bewegliche Punkt; im Anwendungskontext trägt die Achsenbeschriftung die Bedeutung.
+- [x] `g3-3` · `ws-canvas` — dito («x [m]», «h [m]»), plus Punkt und Scheitel.
+- [x] `g4-2` · `cv-manip` — Quartale, «Umsatz [Mio. CHF]» und der Statushinweis
+  «✓ Achse beginnt bei 0» — genau die Aussage des Widgets.
+- [x] `g5-2b` · `cv-reg` — Zentriwinkel 60°, \(R\), \(r\), \(s\), \(M\).
+- [x] `g5-2d` · `cv-strlabor` — \(A, A', B, B', S\) und die Lagebezeichnung
+  «Strahlen-Lage (V-Figur)».
+- [x] `g5-3` · `cv-aehnl` — alle Seiten der drei ähnlichen Dreiecke
+  (\(a, b, c\), \(a', b', c'\), \(a'', b'', c''\)) plus \(\alpha\).
 
 ## AN-G03 — Tote Bedienelemente: **keine** · geprüft, nichts zu tun
 

@@ -772,6 +772,9 @@ function updateDR(){
   const {ctx,W,H}=initCanvas('dr-canvas',220,true);
   const rng=7;
   const {cx,cy}=drawGrid(ctx,W,H,-rng,rng,-rng,rng);
+  // Funktionsterm ins Bild — bisher stand dort nur der bewegliche Punkt.
+  ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px JetBrains Mono,monospace';
+  beschriftung(ctx, `f(x) = ${fmtAffine(m,b)}`, 10, 19, {align:'left', bg:'#fff', W, H});
   if(m!==0||b!==0) drawLine(ctx,cx,cy,m,b,-rng,rng,'#1a4f8a',2.5);
   else { ctx.strokeStyle='#1a4f8a'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(0,cy(b)); ctx.lineTo(W,cy(b)); ctx.stroke(); }
   // b dot

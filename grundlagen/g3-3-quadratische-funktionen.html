@@ -1218,6 +1218,14 @@ function drawDR(){
   const {ctx, W, H} = initCanvas('dr-canvas', 260, true);
   const rng = 8;
   const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -rng, rng, -rng, rng, {zahlen:false});
+  // Funktionsterm ins Bild — bisher standen dort nur Scheitel und Achsenabschnitt.
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono,monospace';
+  {
+    const aT = A === 1 ? '' : (A === -1 ? '−' : `${fmtNum(A)}·`);
+    const bT = Math.abs(B) < 1e-9 ? '' : (B > 0 ? ` + ${fmtNum(B)}·x` : ` − ${fmtNum(-B)}·x`);
+    const cT = Math.abs(C) < 1e-9 ? '' : (C > 0 ? ` + ${fmtNum(C)}` : ` − ${fmtNum(-C)}`);
+    beschriftung(ctx, `f(x) = ${aT}x²${bT}${cT}`, 10, 19, {align:'left', bg:'#fff', W, H});
+  }
   if(Math.abs(a) > 1e-9) drawParabel(ctx, cx, cy, A, B, C, -rng, rng, '#1a4f8a', 2.8);
   // Scheitelpunkt (blau)
   if(Math.abs(u)<=rng && Math.abs(v)<=rng){
