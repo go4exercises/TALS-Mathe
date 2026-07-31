@@ -9,16 +9,31 @@
 //   B  Dauer-Animationen: 1.5 s lang die Abstände zwischen requestAnimationFrame
 //      messen und die langen Bilder zählen.
 //
-// Aufruf vom Repo-Root, Server auf 8001:
+// Aufruf vom Mathe-Repo-Root, Server auf 8001:
 //   node scripts/audit-beschriftungen/audit-ruckeln.mjs
+//
+// Gegen ein anderes TALS-Repo (rein lesend, es wird dort nichts geschrieben):
+//   cd /pfad/zum/anderen/repo && python3 -m http.server 8002 &
+//   node scripts/audit-beschriftungen/audit-ruckeln.mjs \
+//        --root /pfad/zum/anderen/repo --basis http://localhost:8002/
+// Die Seitenordner werden erkannt (themen/ in Physik, grundlagen/+schwerpunkt/
+// in Mathe); Playwright wird aus dem Mathe-Repo aufgeloest.
 import { chromium } from 'playwright';
 import fs from 'node:fs';
+import path from 'node:path';
 
-const BASIS = 'http://localhost:8001/';
-const seiten = [
-  ...fs.readdirSync('grundlagen').filter(f => f.endsWith('.html')).map(f => 'grundlagen/' + f),
-  ...fs.readdirSync('schwerpunkt').filter(f => f.endsWith('.html')).map(f => 'schwerpunkt/' + f),
-].sort();
+const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
+const ROOT = arg('--root') || '.';
+const BASIS = arg('--basis') || 'http://localhost:8001/';
+const AUSGABE = arg('--out') ||
+  '/tmp/claude-1000/-home-paps-tals-mathe/cd6adf82-99f0-45f1-be4d-37f8d51362a9/scratchpad/ruckeln.json';
+
+const ORDNER = ['themen', 'grundlagen', 'schwerpunkt']
+  .filter(d => fs.existsSync(path.join(ROOT, d)));
+if (!ORDNER.length) { console.error('[FEHLER] keine Seitenordner in ' + ROOT); process.exit(2); }
+const seiten = ORDNER.flatMap(d =>
+  fs.readdirSync(path.join(ROOT, d)).filter(f => f.endsWith('.html')).map(f => d + '/' + f)).sort();
+console.log(`${seiten.length} Seiten aus ${ORDNER.join(', ')} unter ${BASIS}\n`);
 
 const MESSER = () => {
   window.__M = { readbacks: 0, mathjax: 0, resizes: 0 };
@@ -124,6 +139,5 @@ for (const [i, rel] of seiten.entries()) {
   await ctx.close();
 }
 await browser.close();
-fs.writeFileSync('/tmp/claude-1000/-home-paps-tals-mathe/cd6adf82-99f0-45f1-be4d-37f8d51362a9/scratchpad/ruckeln.json',
-                 JSON.stringify(ergebnis, null, 1));
-console.log('\nRohdaten: scratchpad/ruckeln.json');
+fs.writeFileSync(AUSGABE, JSON.stringify(ergebnis, null, 1));
+console.log('\nRohdaten: ' + AUSGABE);
