@@ -56,22 +56,22 @@ genau die Kopplung, die eine Animation didaktisch trägt.
 
 
 **`g1-2-zahlen-grundoperationen`**
-- [ ] `cv-iv`
+- [x] `cv-iv` — Hinweispaar ergänzt (01.08.2026)
 
 **`g1-3-algebraische-terme`**
-- [ ] `cv-binomi-rechts`
+- [x] `cv-binomi-rechts` — teilt sich das Paar mit `cv-binomi` (dasselbe Widget, zwei Ansichten)
 
 **`g2-2a-lineare-gleichungen`**
-- [ ] `cv-three`
+- [x] `cv-three` — Hinweispaar ergänzt (01.08.2026)
 
 **`g2-2b-quadratische-gleichungen`**
-- [ ] `velo-canvas`
-- [ ] `cv-pk`
+- [x] `velo-canvas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-pk` — Hinweispaar ergänzt (01.08.2026)
 
 **`g2-3-lineare-gleichungssysteme`**
-- [ ] `cv-three`
-- [ ] `cv-lf`
-- [ ] `cv-a1`
+- [x] `cv-three` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-lf` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-a1` — Hinweispaar ergänzt (01.08.2026)
 
 **`g3-1-grundlagen`**
 - [x] `einstieg-glas` — Hinweispaar ergänzt (01.08.2026)
@@ -82,26 +82,26 @@ genau die Kopplung, die eine Animation didaktisch trägt.
 - [x] `schn2-canvas` — teilt sich das Paar mit `schn1-canvas` (dasselbe Widget, zwei Ansichten)
 
 **`g3-2-lineare-funktionen`**
-- [ ] `a1-canvas`
-- [ ] `a2-canvas`
+- [x] `a1-canvas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `a2-canvas` — Hinweispaar ergänzt (01.08.2026)
 
 **`g3-3-quadratische-funktionen`**
-- [ ] `dr-canvas`
-- [ ] `typ-canvas`
-- [ ] `a2-canvas`
+- [x] `dr-canvas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `typ-canvas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `a2-canvas` — Hinweispaar ergänzt (01.08.2026)
 
 **`g4-1-grundlagen`**
-- [ ] `sb-canvas`
+- [x] `sb-canvas` — Hinweispaar ergänzt (01.08.2026)
 
 **`g4-2-diagramme`**
-- [ ] `ea-canvas`
+- [x] `ea-canvas` — Hinweispaar ergänzt (01.08.2026)
 
 **`g4-3-masszahlen`**
-- [ ] `sl-canvas`
-- [ ] `cv-robust`
+- [x] `sl-canvas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-robust` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-1-grundlagen`**
-- [ ] `dg-canvas`
+- [x] `dg-canvas` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-2a-dreiecke`**
 - [x] `cv-stativ` — Hinweispaar ergänzt (01.08.2026)
@@ -127,6 +127,16 @@ genau die Kopplung, die eine Animation didaktisch trägt.
 - [x] `cv-tan` — Hinweispaar ergänzt (01.08.2026)
 - [x] `cv-bez` — Hinweispaar ergänzt (01.08.2026)
 
+> **AN-G01 abgeschlossen am 01.08.2026.** Alle 42 interaktiven Animationen des
+> Grundlagenfachs haben jetzt ein Hinweispaar. Von 106 Canvas tragen 101 eines;
+> die fünf ohne sind jeweils die **zweite Ansicht** eines Widgets, das sein Paar
+> schon hat (`cv-binomi-rechts`, `einstieg-canvas`, `ach2-canvas`, `schn2-canvas`)
+> oder eine reine Miniatur ohne Bedienung (`darst-graph`). Dort wäre ein zweites
+> Paar eine Dopplung, keine Verbesserung.
+>
+> Geprüft: Pre-Flight über alle Seiten bestanden; im Browser bei 1280 px **und**
+> 360 px keine JS-Fehler, kein Horizontalscroll, keine unvollständige Titelzeile.
+
 ## AN-G02 — Kurve ohne Term im Bild: 18 Animationen im Lehrteil · **P2**
 
 Diese Animationen zeigen im Canvas **gar keinen** Inhaltstext — nur Achsenzahlen.
@@ -150,7 +160,7 @@ Aufgabe entscheiden.
 
 **`g3-3-quadratische-funktionen`**
 - [ ] `disk-canvas` · §diskriminante
-- [ ] `typ-canvas` · §typen
+- [x] `typ-canvas` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-2a-dreiecke`**
 - [x] `cv-allg` — Hinweispaar ergänzt (01.08.2026)
@@ -193,12 +203,12 @@ etwas beiträgt.
 - [ ] `wg-canvas` · §einstieg
 
 **`g2-2b-quadratische-gleichungen`**
-- [ ] `velo-canvas` · §einstieg
+- [x] `velo-canvas` — Hinweispaar ergänzt (01.08.2026)
 - [ ] `cv-pk-parabel` · §parameter
 
 **`g2-3-lineare-gleichungssysteme`**
-- [ ] `cv-three` · §darstellungen
-- [ ] `cv-lf` · §loesungsfaelle
+- [x] `cv-three` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-lf` — Hinweispaar ergänzt (01.08.2026)
 - [ ] `cv-lbuschel` · §loesungsfaelle
 
 **`g3-2-lineare-funktionen`**
@@ -207,17 +217,17 @@ etwas beiträgt.
 
 **`g3-3-quadratische-funktionen`**
 - [ ] `ws-canvas` · §einstieg
-- [ ] `dr-canvas` · §darstellungen
+- [x] `dr-canvas` — Hinweispaar ergänzt (01.08.2026)
 
 **`g4-1-grundlagen`**
-- [ ] `sb-canvas` · §einstieg
+- [x] `sb-canvas` — Hinweispaar ergänzt (01.08.2026)
 
 **`g4-2-diagramme`**
-- [ ] `ea-canvas` · §einstieg
+- [x] `ea-canvas` — Hinweispaar ergänzt (01.08.2026)
 - [ ] `cv-manip` · §typen
 
 **`g4-3-masszahlen`**
-- [ ] `cv-robust` · §theorie
+- [x] `cv-robust` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-2a-dreiecke`**
 - [x] `cv-kong` — Hinweispaar ergänzt (01.08.2026)
