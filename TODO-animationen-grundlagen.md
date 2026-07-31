@@ -137,57 +137,37 @@ genau die Kopplung, die eine Animation didaktisch trägt.
 > Geprüft: Pre-Flight über alle Seiten bestanden; im Browser bei 1280 px **und**
 > 360 px keine JS-Fehler, kein Horizontalscroll, keine unvollständige Titelzeile.
 
-## AN-G02 — Kurve ohne Term im Bild: 18 Animationen im Lehrteil · **P2**
+## AN-G02 — Kurve ohne Term im Bild · **weitgehend Messartefakt, 4 echte Fälle behoben**
 
-Diese Animationen zeigen im Canvas **gar keinen** Inhaltstext — nur Achsenzahlen.
-Man sieht eine Kurve oder Figur, erfährt im Bild aber nicht, welche. Der Term steht
-jeweils daneben im Fliesstext oder in der Reglerzeile; im Bild fehlt die Kopplung
-«Parameter → Darstellung → Formel», die der STYLEGUIDE als Kern der Widgets nennt.
+> **Korrektur und Abschluss am 01.08.2026.** Diese Liste war grösstenteils falsch.
+> Das Mass zählte nur Beschriftungen mit **mehr als zwei Zeichen** — und Geometrie-
+> figuren sind genau mit Einzelbuchstaben beschriftet. `cv-allg` trägt \(A, B, C,
+> a, b, c, \alpha, \beta, \gamma\), `cv-sinussatz` alle neun Stücke plus \(M\) und \(r\),
+> `cv-elem` die Ecken und den Höhenschnittpunkt \(H\). Dort war nichts zu tun.
+>
+> Mit korrektem Filter (alles ausser reinen Achsenzahlen und den Achsennamen
+> \(x\)/\(y\)) bleiben **10** statt 18 — und davon sind **6 Aufgaben- oder
+> Quizfiguren**, bei denen der fehlende Term die gesuchte Antwort ist: `cv-a1`
+> (g2-3), `a1-canvas` (g3-2) und die vier Funktionsquiz-Miniaturen auf g3-1.
+> `cv-strecken` (g5-2c) war ebenfalls ein Fehlalarm: es beschriftet jedes Element
+> mit seinem Buchstaben, in der Startstellung ist nur eines eingeblendet.
+>
+> **Vier echte Fälle, alle behoben:**
 
-Vorschlag je Fall: den aktuellen Term als Beschriftung an die Kurve setzen
-(`beschriftung()`, §2.9) — dieselbe Farbe wie die Kurve, am rechten Kurvenende.
+- [x] `g3-2` · `typ-canvas` — Funktionsterm des gewählten Typs oben links im Bild
+  (aus `t.desc`, in der Typfarbe). Vorher sah man eine Gerade, ohne zu wissen welche.
+- [x] `g3-3` · `typ-canvas` — dito für die Parabeltypen.
+- [x] `g3-3` · `disk-canvas` — Term **und** Diskriminante im Bild
+  (`f(x) = x² − 2·x − 3`, `D = 16`). Die Rechnung stand nur unterhalb der Grafik.
+- [x] `g5-2a` · `cv-stativ` — die Grafik war vollständig unbeschriftet. Neu steht
+  der gemessene Befund darin: «3 Beine · 3 von 3 berühren den Boden / steht stabil»,
+  grün bei Stabilität, rot beim Kippeln.
 
-**Nicht** in dieser Liste: 4 Aufgaben-Grafiken ohne Term. Dort ist das
-Weglassen oft gewollt — der Term ist die gesuchte Antwort. Vor einer Änderung je
-Aufgabe entscheiden.
+**Zusätzlich**, nicht aus der Liste, sondern bei der Bildsichtung aufgefallen:
 
-
-**`g3-1-grundlagen`**
-- [ ] `cv-vertikal` · §funktion-nicht
-
-**`g3-2-lineare-funktionen`**
-- [ ] `typ-canvas` · §typen
-
-**`g3-3-quadratische-funktionen`**
-- [ ] `disk-canvas` · §diskriminante
-- [x] `typ-canvas` — Hinweispaar ergänzt (01.08.2026)
-
-**`g5-2a-dreiecke`**
-- [x] `cv-allg` — Hinweispaar ergänzt (01.08.2026)
-- [ ] `cv-beweis` · §darstellungen
-- [x] `cv-spez` — Hinweispaar ergänzt (01.08.2026)
-- [x] `cv-elem` — Hinweispaar ergänzt (01.08.2026)
-- [x] `cv-flaeche` — Hinweispaar ergänzt (01.08.2026)
-- [x] `cv-stativ` — Hinweispaar ergänzt (01.08.2026)
-
-**`g5-2b-vierecke`**
-- [ ] `fam-canvas` · §einstieg
-- [ ] `cv-flaeche` · §theorie
-
-**`g5-2c-kreis-und-kreisteile`**
-- [x] `cv-strecken` — Hinweispaar ergänzt (01.08.2026)
-
-**`g5-2d-zentrische-streckung-aehnlichkeit`**
-- [ ] `cv-streck` · §darstellungen
-- [ ] `cv-figur` · §aehnlichkeit
-- [ ] `cv-aehnSatz` · §aehnlichkeitssaetze
-
-**`g5-3-trigonometrische-berechnungen`**
-- [ ] `cv-sinussatz` · §schief-dreieck
-- [ ] `cv-ssw` · §schief-dreieck
-
-
----
+- [x] `g5-2d` · `cv-figur` — der Streckfaktor \(k\) stand nur in der Reglerzeile
+  ausserhalb der Grafik. Er ist die eine Grösse, um die es hier geht, und steht
+  jetzt im Bild (orange bei \(k < 0\)).
 
 ## AN-G02b — Term im Bild fehlt, aber es gibt andere Beschriftung: 27 weitere
 

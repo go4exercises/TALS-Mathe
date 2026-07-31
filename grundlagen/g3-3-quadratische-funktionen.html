@@ -1329,6 +1329,12 @@ function updateDisk(){
   const rng = 6;
   const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -rng, rng, -rng, rng, {zahlen:false});
   drawParabel(ctx, cx, cy, a, b, c, -rng, rng, f.farbe, 2.8);
+  // Term und Diskriminante ins Bild — die Rechnung steht zwar darunter, im
+  // Graphen selbst blieb bisher offen, welche Parabel man sieht.
+  ctx.fillStyle = f.farbe; ctx.font = 'bold 13px JetBrains Mono,monospace';
+  beschriftung(ctx, `f(x) = ${aPart}x²${bPart}${cPart}`, 10, 19, {align:'left', bg:'#fff', W, H});
+  ctx.font = '13px JetBrains Mono,monospace';
+  beschriftung(ctx, `D = ${fmtNum(D)}`, 10, 36, {align:'left', bg:'#fff', W, H});
   // Scheitelpunkt
   const us = -b/(2*a), vs = c - b*b/(4*a);
   if(Math.abs(us)<=rng && Math.abs(vs)<=rng){
@@ -1394,6 +1400,9 @@ function drawTypQ(){
   if(Math.abs(u)<=rng && Math.abs(v)<=rng){
     drawDot(ctx, cx, cy, u, v, t.color, 6);
   }
+  // Funktionsterm ins Bild — sonst bleibt offen, welche Parabel gezeigt wird.
+  ctx.fillStyle = t.color; ctx.font = 'bold 14px JetBrains Mono,monospace';
+  beschriftung(ctx, t.desc.split('  ·  ')[0], 10, 20, {align:'left', bg:'#fff', W, H});
   document.getElementById('typ-desc').textContent = t.desc;
 }
 
