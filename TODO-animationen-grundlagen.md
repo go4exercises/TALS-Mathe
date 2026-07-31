@@ -74,12 +74,12 @@ genau die Kopplung, die eine Animation didaktisch trägt.
 - [ ] `cv-a1`
 
 **`g3-1-grundlagen`**
-- [ ] `einstieg-glas`
-- [ ] `einstieg-canvas`
-- [ ] `ach1-canvas`
-- [ ] `ach2-canvas`
-- [ ] `schn1-canvas`
-- [ ] `schn2-canvas`
+- [x] `einstieg-glas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `einstieg-canvas` — teilt sich das Paar mit `einstieg-glas` (dasselbe Widget, zwei Ansichten)
+- [x] `ach1-canvas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `ach2-canvas` — teilt sich das Paar mit `ach1-canvas` (dasselbe Widget, zwei Ansichten)
+- [x] `schn1-canvas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `schn2-canvas` — teilt sich das Paar mit `schn1-canvas` (dasselbe Widget, zwei Ansichten)
 
 **`g3-2-lineare-funktionen`**
 - [ ] `a1-canvas`
@@ -104,28 +104,28 @@ genau die Kopplung, die eine Animation didaktisch trägt.
 - [ ] `dg-canvas`
 
 **`g5-2a-dreiecke`**
-- [ ] `cv-stativ`
-- [ ] `cv-allg`
-- [ ] `cv-spez`
-- [ ] `cv-elem`
-- [ ] `cv-flaeche`
-- [ ] `cv-kong`
-- [ ] `cv-pyth`
-- [ ] `cv-anw`
+- [x] `cv-stativ` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-allg` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-spez` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-elem` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-flaeche` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-kong` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-pyth` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-anw` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-2c-kreis-und-kreisteile`**
-- [ ] `pizza-canvas`
-- [ ] `cv-strecken`
-- [ ] `cv-pi`
-- [ ] `cv-umfang`
-- [ ] `cv-ring`
-- [ ] `cv-sektor`
-- [ ] `cv-segment`
+- [x] `pizza-canvas` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-strecken` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-pi` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-umfang` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-ring` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-sektor` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-segment` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-4-einheitskreis`**
-- [ ] `cv-schiff`
-- [ ] `cv-tan`
-- [ ] `cv-bez`
+- [x] `cv-schiff` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-tan` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-bez` — Hinweispaar ergänzt (01.08.2026)
 
 ## AN-G02 — Kurve ohne Term im Bild: 18 Animationen im Lehrteil · **P2**
 
@@ -153,19 +153,19 @@ Aufgabe entscheiden.
 - [ ] `typ-canvas` · §typen
 
 **`g5-2a-dreiecke`**
-- [ ] `cv-allg` · §definition
+- [x] `cv-allg` — Hinweispaar ergänzt (01.08.2026)
 - [ ] `cv-beweis` · §darstellungen
-- [ ] `cv-spez` · §typen
-- [ ] `cv-elem` · §typen
-- [ ] `cv-flaeche` · §theorie
-- [ ] `cv-stativ` · §einstieg
+- [x] `cv-spez` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-elem` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-flaeche` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-stativ` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-2b-vierecke`**
 - [ ] `fam-canvas` · §einstieg
 - [ ] `cv-flaeche` · §theorie
 
 **`g5-2c-kreis-und-kreisteile`**
-- [ ] `cv-strecken` · §darstellungen
+- [x] `cv-strecken` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-2d-zentrische-streckung-aehnlichkeit`**
 - [ ] `cv-streck` · §darstellungen
@@ -220,17 +220,17 @@ etwas beiträgt.
 - [ ] `cv-robust` · §theorie
 
 **`g5-2a-dreiecke`**
-- [ ] `cv-kong` · §theorie
-- [ ] `cv-pyth` · §theorie
-- [ ] `cv-anw` · §theorie
+- [x] `cv-kong` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-pyth` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-anw` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-2b-vierecke`**
 - [ ] `cv-reg` · §theorie
 
 **`g5-2c-kreis-und-kreisteile`**
-- [ ] `cv-ring` · §theorie
-- [ ] `cv-sektor` · §theorie
-- [ ] `cv-segment` · §theorie
+- [x] `cv-ring` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-sektor` — Hinweispaar ergänzt (01.08.2026)
+- [x] `cv-segment` — Hinweispaar ergänzt (01.08.2026)
 
 **`g5-2d-zentrische-streckung-aehnlichkeit`**
 - [ ] `cv-strlabor` · §strahlensaetze
@@ -239,7 +239,7 @@ etwas beiträgt.
 - [ ] `cv-aehnl` · §recht-dreieck
 
 **`g5-4-einheitskreis`**
-- [ ] `cv-schiff` · §einstieg
+- [x] `cv-schiff` — Hinweispaar ergänzt (01.08.2026)
 - [ ] `cv-abw` · §definition
 
 **`g5-5-trigonometrische-gleichungen`**
@@ -260,4 +260,3 @@ niemand erneut verfolgt:
   nicht in der Startstellung. Bedingt, nicht tot.
 - Knöpfe, die als aktives Preset erneut geklickt werden, ändern erwartungsgemäss
   nichts. Der Test meldet sie, es ist kein Defekt.
-
