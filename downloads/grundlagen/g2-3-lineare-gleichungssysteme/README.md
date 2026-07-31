@@ -8,7 +8,6 @@ Reihenfolge und Datei-Naming gemäss STYLEGUIDE.md (Kapitel 4 und 6).
 | Reihenfolge | Datei | Typ | Inhalt | Status |
 |---|---|---|---|---|
 | 1 | `handout.html`           | Druckseite (HTML, A4) | Theorie zu Definition, vier Verfahren bei 2×2 (grafisch, Einsetzen, Gleichsetzen, Addition), Lösungsfällen, 3×3 mit Addition und Einsetzen, Probe | ✅ |
-| 2 | `formelauszug.html`      | Druckseite (HTML, A4) | Kompakte Formelsammlung mit Verfahren, Lösungsfällen 2×2 und 3×3, Strategie für 3×3 | ✅ |
 | 3 | `ankideck.apkg`          | Anki-Karteikarten     | Karten zu Definition, vier Verfahren, geometrischer Bedeutung, 3×3-Strategie, Anwendungen | ✅ |
 | 4 | `teste-dich-selbst.html` | Druckseite (HTML, A4) | 10 Aufgaben (Verfahren · Lösungsfälle · 3×3 · Anwendungen) mit Lösungen | ✅ |
 | 5 | `aufgabenserie.html`     | Druckseite (HTML, A4) | 6 technische Anwendungen (Mobilität, Mischung, Elektrotechnik, Architektur, Life Sciences, Logistik) mit Musterlösungen und Skizzen | ✅ |

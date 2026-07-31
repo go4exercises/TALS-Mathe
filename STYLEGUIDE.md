@@ -1,6 +1,6 @@
 # TALS-Mathematik · Styleguide
 
-**Version 1.13 · Stand: Juni 2026** · (1.13: §11 Nachschlagen-Seiten Glossar/Formelsammlung; 1.12: §10.4 verbindliche Färbe-Regel präzisiert; 1.11: §10 Didaktische Module aus TALS-Physik — Lernziele, Mini-Checks, Animations-Hinweise, Slider-Gruppierung mit akz-Farbkopplung)
+**Version 1.14 · Stand: 1. August 2026** · (1.14: Zusatzmaterial ohne Formelauszug, Animations-Hinweise ohne Vorlese-Knopf, neuer Beschriftungs-Helfer `beschriftung()` und `drawGrid`-Optionen §2.9; 1.13: §11 Nachschlagen-Seiten Glossar/Formelsammlung; 1.12: §10.4 verbindliche Färbe-Regel präzisiert)
 
 Dieser Styleguide ist die verbindliche Referenz für alle Themenseiten des Lehrmittels „TALS-Mathematik". Er sichert Konsistenz in Notation, Aufbau, Sprache und visuellem Design — kapitelübergreifend und chatübergreifend.
 
@@ -149,6 +149,50 @@ Das Lehrmittel verwendet die **deutsche Intervallnotation** (ISO 31-11), nicht d
 
 ---
 
+## 2.9 Canvas-Beschriftungen (verbindlich seit Version 1.0)
+
+Jede Beschriftung auf einem Canvas wird über `beschriftung()` aus `mathlib.js`
+gesetzt, **nicht** über `ctx.fillText`. Der Helfer stellt den Text frei und klemmt
+ihn in die Zeichenfläche — beides war vorher die häufigste Fehlerquelle: Achsenzahlen
+lagen ausserhalb des Canvas, Punktnamen auf Kurven, Captions übereinander.
+
+```js
+beschriftung(ctx, txt, x, y, { align, baseline, frei, halo, bg, pad, W, H })
+```
+
+| Option | Wirkung |
+|---|---|
+| `align` / `baseline` | wie `ctx.textAlign` / `ctx.textBaseline` |
+| `W`, `H` | Canvasmasse — **immer mitgeben**, nur damit wird geklemmt |
+| `halo: true` | Kontur entlang der Buchstaben statt Kasten. Für ungleichmässigen Untergrund: Geometriefüllungen, farbige Bereiche |
+| `bg` | Farbe der Freistellung. Fehlt sie, gilt die CSS-Hintergrundfarbe des Canvas |
+| `frei: false` | keine Freistellung, nur Klemmen |
+
+**Nicht** `bgAuto` im Zeichenpfad einer Animation verwenden — es tastet den Untergrund
+pixelweise ab und kostet vier `getImageData` je Beschriftung. Beim Ziehen eines Reglers
+sind das GPU-Readbacks im Bildtakt und als Ruckeln sichtbar.
+
+**Punktbeschriftungen** stehen rechts bzw. rechts unterhalb des Punktes, nicht darüber;
+nahe am rechten Rand nach links kippen.
+
+**`drawGrid()`** nimmt ein Options-Objekt:
+
+| Option | wann |
+|---|---|
+| `{ achsenLabels: false }` | Die Seite schreibt eigene Achsenbeschriftungen mit Einheit („x [kg]"). Die generischen `x`/`y` werden dann gar nicht erst gezeichnet — **nicht** mit `fillRect` übermalen, das liess je nach Skalierung einen Strichrest stehen |
+| `{ zahlen: false }` | Die Seite bringt eine eigene Zahlenteilung mit; sonst liegen zwei Reihen übereinander |
+| Rückgabe `zahlenOben()` | Achsenzahlen nach den Kurven noch einmal obenauf setzen, wenn eine Kurve sie sonst kreuzt |
+
+`drawGrid` wählt die Schrittweite der Zahlenteilung selbst nach verfügbarem Platz
+(1-2-5-10) und legt die Zahlen innen an die Achse, wenn der Nullpunkt am Canvasrand
+liegt (`xMin = 0` / `yMin = 0`).
+
+**Prüfen:** `node scripts/audit-beschriftungen/audit-run.mjs` (Server auf 8001) misst
+Überlappungen, Text auf Grafik und Beschriftungen ausserhalb des Canvas;
+`audit-ruckeln.mjs` misst Reglerlast und Bildabstände.
+
+---
+
 ## 3. Achsenskalierung (verbindlich)
 
 > **Diese Regel kommt direkt aus den Projekt-Instructions und gilt unbedingt.**
@@ -210,9 +254,8 @@ Jede Themenseite folgt diesem Schema in genau dieser Reihenfolge:
       • A3: Rechnen (mehrere Teilaufgaben)
       • A4–A6: Anwendung in Realsituation
 8. Zusammenfassung        — kompakte Tabelle, Merksatz
-9. Zusatzmaterial         — fünf Einträge in fester Reihenfolge:
+9. Zusatzmaterial         — vier Einträge in fester Reihenfolge:
       • Handout (HTML-Druckseite, neuer Tab) — Theorie ohne Beispiele und ohne Aufgaben
-      • Formelauszug (HTML-Druckseite, neuer Tab) — kompakte Formelsammlung, FTB-konform
       • Anki-Deck erstellen zu automatisieren der Grundlagen (Download `.apkg`)
       • Teste dich selbst (HTML-Druckseite, neuer Tab) — Grundlagenaufgaben mit Lösungen
       • Aufgabenserie (HTML-Druckseite, neuer Tab) — Anwendungsaufgaben mit Lösungen
@@ -274,7 +317,7 @@ g2-2b-quadratische-gleichungen.html  ← Teil 2 von 2
 
 - Jede Sub-Seite folgt **vollständig** dem Master-Schema (Abschnitte 1–10): eigener Einstieg, eigene Definition, eigene A1–A6 (plus optional A7 Vertiefung), eigene Zusammenfassung — keine Verweise auf die Schwesterseite für fehlende Inhalte.
 - Im **RLP-Header** wird auf die Aufteilung hingewiesen: „Teil 1 von 2" bzw. „Teil 2 von 2". Die genannten RLP-Kompetenzen sind diejenigen, die auf der jeweiligen Sub-Seite tatsächlich abgedeckt werden (anteilig, nicht das ganze Bündel).
-- **Zusatzmaterial getrennt pro Sub-Seite**: jede Sub-Seite hat ihren eigenen Ordner unter `downloads/<bereich>/<id>/` mit den fünf Standard-Dateien (Handout, Formelauszug, Anki-Deck, Teste dich selbst, Aufgabenserie). Damit bleibt jede Sub-Seite als eigene Lerneinheit selbsttragend.
+- **Zusatzmaterial getrennt pro Sub-Seite**: jede Sub-Seite hat ihren eigenen Ordner unter `downloads/<bereich>/<id>/` mit den vier Standard-Dateien (Handout, Anki-Deck, Teste dich selbst, Aufgabenserie). Damit bleibt jede Sub-Seite als eigene Lerneinheit selbsttragend.
 - **Externe Ressourcen ebenfalls getrennt** und auf den Inhalt der Sub-Seite zugeschnitten.
 - **Footer pro Sub-Seite** nennt den Sub-Themennamen (nicht den RLP-Sammeltitel): „Grundlagenfach 2.2a Lineare Gleichungen" für `g2-2a`, „Grundlagenfach 2.2b Quadratische Gleichungen" für `g2-2b` (Format gemäss §7).
 - **Hinweis im RLP-Header (zwischen Themen-Titel und RLP-Kompetenz-Box)** explizit setzen: „RLP 2.2 · Teil 1 von 2" bzw. „RLP 2.2 · Teil 2 von 2". Bei nicht-gesplitteten Themenseiten erscheint dieser Hinweis **nicht**.
@@ -470,7 +513,6 @@ TALS-Mathe/
     ├── grundlagen/
     │   ├── g3-2-lineare-funktionen/
     │   │   ├── handout.html                   ← Druckseite (Theorie, ohne Beispiele/Aufgaben)
-    │   │   ├── formelauszug.html              ← Druckseite (Formelsammlung)
     │   │   ├── ankideck.apkg                  ← Anki-Karteikarten (Download)
     │   │   ├── teste-dich-selbst.html         ← Druckseite (Grundlagenaufgaben + Lösungen)
     │   │   └── aufgabenserie.html             ← Druckseite (Anwendungsaufgaben + Lösungen)
@@ -484,7 +526,7 @@ TALS-Mathe/
 - Lerngebiet-Nummer: `g3-2` = Grundlagen, Lerngebiet 3 (Funktionen), Thema 2 (Lineare)
 - **Sub-Split** (siehe 4.1): Buchstaben-Suffixe `a`, `b`, `c` direkt an die RLP-Nummer angehängt — `g2-2a`, `g2-2b`. Die Schwesterseiten teilen das gemeinsame Numerik-Präfix (`g2-2`), unterscheiden sich nur im Suffix.
 - Dateinamen kleingeschrieben, mit Bindestrichen, ohne Umlaute (`-funktionen.html`, nicht `_Funktionen.html`)
-- **Druckseiten-Dateinamen** sind über alle Themen hinweg identisch: `handout.html`, `formelauszug.html`, `teste-dich-selbst.html`, `aufgabenserie.html` (plus `ankideck.apkg`). Das erleichtert Verlinkung, Kopiervorlagen und Suche.
+- **Druckseiten-Dateinamen** sind über alle Themen hinweg identisch: `handout.html`, `teste-dich-selbst.html`, `aufgabenserie.html` (plus `ankideck.apkg`). Das erleichtert Verlinkung, Kopiervorlagen und Suche.
 
 ---
 
@@ -580,14 +622,13 @@ buildNav({
 
 <div class="dl-grid">
   <a href="../downloads/grundlagen/⟪slug⟫/handout.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📄</span><div><div class="dl-t">Handout</div><div class="dl-s">Theorie-Zusammenfassung</div><div class="dl-fmt">Druckseite</div></div></a>
-  <a href="../downloads/grundlagen/⟪slug⟫/formelauszug.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">📐</span><div><div class="dl-t">Formelauszug</div><div class="dl-s">…</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/⟪slug⟫/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/⟪slug⟫/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/⟪slug⟫/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
 </div>
 ```
 
-Container ist `.dl-grid` (nicht `dl-box`, das existiert nicht). Jede Karte ist `<a class="dl">` mit Icon-Span, Titel-Div und Sub-Div. Reihenfolge ist fix: Handout → Formelauszug → Teste dich selbst → Aufgabenserie → Anki-Deck. Optionale 6. Karte für „Zusatz: …" über RLP hinaus erlaubt — sie steht am Ende des Grids (nach dem Anki-Deck).
+Container ist `.dl-grid` (nicht `dl-box`, das existiert nicht). Jede Karte ist `<a class="dl">` mit Icon-Span, Titel-Div und Sub-Div. Reihenfolge ist fix: Handout → Teste dich selbst → Aufgabenserie → Anki-Deck. Optionale 6. Karte für „Zusatz: …" über RLP hinaus erlaubt — sie steht am Ende des Grids (nach dem Anki-Deck).
 
 **Externe-Ressourcen-Sektion (Pflicht-Konvention):**
 
@@ -776,7 +817,7 @@ Erwartet im sauberen Repo: keine Ausgabe. Eine `⛔`-Meldung blockiert die betro
 
 ## 6.3 Werkzeug-Skripte für Konventions-Erzwingung
 
-Unter `scripts/` liegen mehrere Python-Skripte, die bei der Massen-Bereinigung des Lehrmittels nach Konventions-Updates **wiederverwendbar** sind. Besonders relevant bei der Schwerpunktfach-Ausarbeitung (s1–s4), wenn neue Inhalte aus externen Vorlagen übernommen werden, die typische deutsche Konventionen mitbringen (Dezimalkomma, ß, „Kosinus").
+Unter `scripts/_archiv/` liegen mehrere Python-Skripte, die bei der Massen-Bereinigung des Lehrmittels nach Konventions-Updates **wiederverwendbar** sind. Sie haben ihren Zweck erfüllt und liegen darum im Archiv — für einen erneuten Migrationslauf sind sie unverändert brauchbar. Besonders relevant bei der Schwerpunktfach-Ausarbeitung (s1–s4), wenn neue Inhalte aus externen Vorlagen übernommen werden, die typische deutsche Konventionen mitbringen (Dezimalkomma, ß, „Kosinus").
 
 Alle vier `convert_*.py`-Skripte folgen dem gleichen Aufbau:
 - Schutzlogik (protect_regions): URLs, `<script>`, `<style>`, `<svg>`, SVG-Attribute werden vor der Ersetzung ausmaskiert
@@ -784,7 +825,7 @@ Alle vier `convert_*.py`-Skripte folgen dem gleichen Aufbau:
 - Diff-Ausgabe pro veränderte Datei (zur Inspektion)
 - Verifikations-Funktion `verify_no_residuals(filepath)` für nachgelagerte Checks
 
-### 6.3.1 `scripts/convert_decimals.py` — Dezimalkomma → Dezimalpunkt
+### 6.3.1 `scripts/_archiv/convert_decimals.py` — Dezimalkomma → Dezimalpunkt
 
 **Zweck:** Massenkonversion aller Klartext- und MathJax-Dezimalkommas auf Dezimalpunkte (gemäss §2.4 dieses Styleguides).
 
@@ -793,11 +834,11 @@ Alle vier `convert_*.py`-Skripte folgen dem gleichen Aufbau:
 **Bietet auch:** `verify_no_residuals(filepath)` — liefert ein Dictionary mit eventuellen Rest-Funden (für Verifikations-Loops nach Massenpatches).
 
 ```bash
-python3 scripts/convert_decimals.py            # echte Konversion
-python3 scripts/convert_decimals.py --dry-run  # nur Diff anzeigen
+python3 scripts/_archiv/convert_decimals.py            # echte Konversion
+python3 scripts/_archiv/convert_decimals.py --dry-run  # nur Diff anzeigen
 ```
 
-### 6.3.2 `scripts/convert_eszett.py` — ß → ss
+### 6.3.2 `scripts/_archiv/convert_eszett.py` — ß → ss
 
 **Zweck:** Schweizer Hochdeutsch ohne ß (gemäss §2.5). Variante A: auch Eigennamen (`Gauß-Algorithmus → Gauss-Algorithmus`).
 
@@ -805,13 +846,13 @@ python3 scripts/convert_decimals.py --dry-run  # nur Diff anzeigen
 
 **Schutz:** ß-Vorkommen in `<style>`, `<svg>`, SVG-Attributen werden nicht angetastet (defensiv — kommt in der Praxis nicht vor).
 
-### 6.3.3 `scripts/convert_cosinus.py` — Kosinus → Cosinus
+### 6.3.3 `scripts/_archiv/convert_cosinus.py` — Kosinus → Cosinus
 
 **Zweck:** Schweizer Konvention (gemäss §2.5). Ersetzt case-erhaltend (`Kosinus` → `Cosinus`, `kosinus` → `cosinus`).
 
 **Schutz:** URLs (`href`/`src`), `<script>`, `<style>`, `<svg>`, SVG-Attribute werden ausmaskiert. Externe Serlo-Links mit `kosinus` im URL-Pfad bleiben so erhalten.
 
-### 6.3.4 `scripts/convert_punktkoord.py` — Punkt-Koordinaten `(x, y)` → `(x | y)`
+### 6.3.4 `scripts/_archiv/convert_punktkoord.py` — Punkt-Koordinaten `(x, y)` → `(x | y)`
 
 **Zweck:** FTB-Notation für Punkt-Koordinaten (gemäss §2.4: `P(x \mid y)`).
 
@@ -822,9 +863,9 @@ python3 scripts/convert_decimals.py --dry-run  # nur Diff anzeigen
 Nach Erstellung der neuen Themenseiten und vor Pre-Flight-Check:
 
 ```bash
-python3 scripts/convert_eszett.py        # ß → ss
-python3 scripts/convert_cosinus.py       # Kosinus → Cosinus
-python3 scripts/convert_decimals.py      # Dezimalkomma → Dezimalpunkt
+python3 scripts/_archiv/convert_eszett.py        # ß → ss
+python3 scripts/_archiv/convert_cosinus.py       # Kosinus → Cosinus
+python3 scripts/_archiv/convert_decimals.py      # Dezimalkomma → Dezimalpunkt
 # convert_punktkoord.py NUR ausführen, wenn die REPLACEMENTS-Liste für die neuen
 # Seiten manuell ergänzt wurde (sonst sinnlos, da hartkodiert).
 python3 scripts/check_identifier_collisions.py
@@ -893,9 +934,9 @@ Bevor eine Themenseite live geht, prüfe:
 
 **Struktur & Konventionen**
 - [ ] Zusatzmaterial-Sektion vor externen Ressourcen
-- [ ] Alle 5 Einträge in fester Reihenfolge: Handout · Formelauszug · Teste dich selbst · Aufgabenserie · Anki-Deck (optionale Zusatz-Karte am Ende)
+- [ ] Alle 4 Einträge in fester Reihenfolge: Handout · Teste dich selbst · Aufgabenserie · Anki-Deck (optionale Zusatz-Karte am Ende)
 - [ ] Druckseiten öffnen in neuem Tab (`target="_blank" rel="noopener"`)
-- [ ] Anki-Deck als Download verlinkt (`.apkg`), die anderen vier als HTML-Druckseiten
+- [ ] Anki-Deck als Download verlinkt (`.apkg`), die anderen drei als HTML-Druckseiten
 - [ ] **Footer korrekt im Format „⟪Bereich⟫ ⟪RLP-Nr⟫ ⟪Themenname⟫"** — z.B. „Grundlagenfach 3.2 Lineare Funktionen" (siehe §7)
 - [ ] **Titel-Präfix in `<h1 class="pt-h1">`** enthält die RLP-Nummer — z.B. „3.2 Lineare Funktionen", bei Sub-Split „2.2a Lineare Gleichungen"
 - [ ] **Externe-Ressourcen-Sektion: `<h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>`** (genauer Wortlaut, siehe §4)
@@ -994,7 +1035,6 @@ Einklappbare Verständnisfragen **vor jeder Sektionsgrenze** (vor dem nächsten 
 Rollover-Paar «👁 Worauf achten?» (links) / «💡 Erkenntnis» (rechts) pro interaktiver Animation, Blau-Familie, Logik in `anim-hinweise.js` (Pflicht-Einbindung). Container ist eine `.widget-titelzeile`:
 - **Widgets:** das `<h3>` im `widget-header` in die Titelzeile fassen, Untertitel-`<p>` bleibt darunter.
 - **`.anim`-Blöcke:** den bestehenden `.anim-titel` in die Titelzeile fassen (Trigger stehen ausserhalb des uppercase-Titels und bleiben gemischt geschrieben).
-- Vorlese-Knopf: `data-vorlesen` enthält den **Klartext** (kein LaTeX, Symbole ausgeschrieben: «x gleich null», «Wurzel zwei»).
 
 ```html
 <div class="widget-titelzeile">
@@ -1003,7 +1043,6 @@ Rollover-Paar «👁 Worauf achten?» (links) / «💡 Erkenntnis» (rechts) pro
     <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
     <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
       <div class="ah-text">…</div>
-      <button class="ah-speak" type="button" data-vorlesen="…">🔊 vorlesen</button>
     </div>
   </div>
   <div class="anim-hinweis rechts">…analog mit «💡 Erkenntnis»…</div>
@@ -1041,7 +1080,7 @@ Mehrere Regler **einer** Animation stehen in EINER `.sl-row`, jeder Regler als `
 Zwei zentrale Referenzseiten im Repo-Root, übernommen aus TALS-Physik:
 
 - **`glossar.html`** (`buildNav({ id:'glossar', homepage:true })`): A–Z-Sprungleiste (`.glossar-az`), Einträge als `.glossar-eintrag` mit `.ge-begriff`, optional `.ge-formel`, Definition (`<p>`) und `.ge-quer`-Themenverweis. Begriffe knapp und einheitlich; Herleitung bleibt auf der Themenseite.
-- **`formelsammlung.html`** (`buildNav({ id:'formeln', homepage:true })`): pro Lerngebiet ein `.fs-block` mit `<h3>`, `.fs-thema`-Label und `.fs-zeile`-Einträgen (`.fs-name` / `.fs-formel` / `.fs-quer`-Themenlink). Inhalte aus den thematischen `formelauszug.html` aggregiert; die offizielle SBFI-Prüfungs-Formelsammlung bleibt separat verlinkt.
+- **`formelsammlung.html`** (`buildNav({ id:'formeln', homepage:true })`): pro Lerngebiet ein `.fs-block` mit `<h3>`, `.fs-thema`-Label und `.fs-zeile`-Einträgen (`.fs-name` / `.fs-formel` / `.fs-quer`-Themenlink). Die Formelsammlung ist die zentrale Formelübersicht des Lehrmittels (thematische Formelauszüge gab es bis Version 1.0, sie sind darin aufgegangen); die offizielle SBFI-Prüfungs-Formelsammlung bleibt separat verlinkt.
 
 **Navigation:** Header-Dropdown «Nachschlagen ▾» (Gruppen «In diesem Lehrmittel» / «Extern») plus Mobile-Nav-Gruppe; aktiv bei `cfg.id==='glossar'||cfg.id==='formeln'`. Der Physik-Querlink ist relativ (`${prefix}../tals-physik/…`), funktioniert von Root- (`prefix=''`) und Themenseiten (`prefix='../'`) gleichermassen.
 

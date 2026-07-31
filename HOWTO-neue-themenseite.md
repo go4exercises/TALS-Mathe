@@ -14,7 +14,6 @@ Eine vollständig ausgearbeitete Themenseite besteht aus:
 grundlagen/<slug>.html                            ← die Themenseite (ca. 400–900 Zeilen HTML)
 downloads/grundlagen/<slug>/
   ├── handout.html                                ← Theorie kompakt
-  ├── formelauszug.html                           ← eine Seite Referenz
   ├── teste-dich-selbst.html                      ← 12–15 Grundlagenaufgaben mit Lösungen
   ├── aufgabenserie.html                          ← 6 Anwendungsaufgaben mit Lösungen
   └── ankideck.apkg                               ← 15–30 Karten, Anki-kompatibel
@@ -190,7 +189,6 @@ Schlanker Stil: `downloads/grundlagen/g5-1-grundlagen/*.html`. Jede der 4 Drucks
 | Datei | Umfang | Stil | Zweck |
 |---|---|---|---|
 | `handout.html` | ~150–250 Zeilen | Theorie mit didaktischen Block-Klassen (block-def, block-tipp, block-fehler) und FTB-Tabellen | Lesetext: was muss man wissen? |
-| `formelauszug.html` | ~80–120 Zeilen, mit `extra_style` für kompaktere Typografie und MathJax-scale 0.95 | Tabellen-lastig, am Fuß Quellenhinweis „Anlehnung an Formeln, Tabellen, Begriffe (Orell Füssli)" | eine Seite zum Mitnehmen in die Prüfung |
 | `teste-dich-selbst.html` | ~100–150 Zeilen, 12–15 Aufgaben | nummerierte Liste oben, Lösungen unten in derselben Datei | Selbstkontrolle der Grundlagen |
 | `aufgabenserie.html` | ~200–300 Zeilen, 6 Aufgaben | Aufgaben in `block-aufg`-Boxen, Lösungen in `block-bsp`-Boxen darunter | Anwendungsaufgaben mit Lebensbezug |
 
@@ -262,12 +260,12 @@ Vor dem Commit folgende Bash-Schnipsel laufen lassen:
 
 ### Konventions-Check (Massenpatches falls nötig)
 
-Wenn neue Inhalte aus externer Vorlage übernommen wurden (z.B. bei Schwerpunktfach-Migration), kommen typische deutsche Konventionen mit (Dezimalkomma, ß, „Kosinus"). Die `scripts/convert_*.py`-Skripte beseitigen das in Massen-Operation — Details siehe **STYLEGUIDE §6.3**:
+Wenn neue Inhalte aus externer Vorlage übernommen wurden (z.B. bei Schwerpunktfach-Migration), kommen typische deutsche Konventionen mit (Dezimalkomma, ß, „Kosinus"). Die `scripts/_archiv/convert_*.py`-Skripte beseitigen das in Massen-Operation — Details siehe **STYLEGUIDE §6.3**:
 
 ```bash
-python3 scripts/convert_eszett.py        # ß → ss
-python3 scripts/convert_cosinus.py       # Kosinus → Cosinus
-python3 scripts/convert_decimals.py      # Dezimalkomma → Dezimalpunkt
+python3 scripts/_archiv/convert_eszett.py        # ß → ss
+python3 scripts/_archiv/convert_cosinus.py       # Kosinus → Cosinus
+python3 scripts/_archiv/convert_decimals.py      # Dezimalkomma → Dezimalpunkt
 python3 scripts/check_identifier_collisions.py
 ```
 
@@ -358,7 +356,7 @@ installiert, kein Setup nötig.
 - **`COLLABORATION.md`** — liegt im Project-Knowledge des Claude-Projekts, nicht im Repo. Regelt die Arbeitsweise zwischen Auftraggeber und Claude (Iterationsmodus, Effizienz-Regeln, Default-Verhalten). Für den Aufbau einer Themenseite nicht erforderlich, aber bei der Zusammenarbeit mit Claude die operative Referenz.
 - **`scripts/build_apkg.py`** — Anki-Build-Skript, parametrisiert über `NEW_DECKS`-Liste
 - **`scripts/build_print_g4.py`** — Druckseiten-Generator für die g4-Reihe (Vorlage für analoge Generatoren)
-- **`scripts/convert_*.py`** — Massenpatch-Skripte für Konventions-Erzwingung: `convert_eszett.py` (ß→ss), `convert_cosinus.py` (Kosinus→Cosinus), `convert_decimals.py` (Komma→Punkt, plus `verify_no_residuals`-Helper), `convert_punktkoord.py` (Punkt-Koord-Notation, Template-Pattern). Details: STYLEGUIDE §6.3.
+- **`scripts/_archiv/convert_*.py`** — Massenpatch-Skripte für Konventions-Erzwingung: `convert_eszett.py` (ß→ss), `convert_cosinus.py` (Kosinus→Cosinus), `convert_decimals.py` (Komma→Punkt, plus `verify_no_residuals`-Helper), `convert_punktkoord.py` (Punkt-Koord-Notation, Template-Pattern). Details: STYLEGUIDE §6.3.
 - **`scripts/check_identifier_collisions.py`** — prüft Top-Level-JS-Identifier auf Kollisionen mit `nav.js` / `mathlib.js`. Details: STYLEGUIDE §6.2.
 - **`CHANGELOG.md`** — was wurde wann geändert
 - **RLP 2030 (SBFI)** — Quelldokument für die Kompetenz-Wortlaute. Lerngebiete 1–5 Grundlagen TALS auf Seiten 41–44, Schwerpunkt TALS auf Seiten 90 ff.

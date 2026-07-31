@@ -4,6 +4,82 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [1.0] — 2026-08-01 · **Erste öffentliche Version**
+
+Das Lehrmittel geht als Version 1.0 online. Alle 31 RLP-Teilgebiete plus die zwei
+TALS-Ergänzungen (3.6 Betragsfunktionen, 4.3d Ebenen) sind ausgearbeitet — 46 Themenseiten,
+dazu Glossar, Formelsammlung, Rechtliches und ein Feedbackformular.
+
+### Neu
+
+- **Volltextsuche über die ganze Site** (`suche.js` + generierter `suchindex.js`).
+  Suchfeld oben rechts im Header, Lupe ab 640 px, Tastenkürzel `/` und `Strg/Cmd+K`.
+  Der Index umfasst 398 Abschnitte aus 48 Seiten; Aufgaben, Mini-Checks und Bedienelemente
+  bleiben bewusst draussen. Neu bauen mit `python3 scripts/build-suchindex.py`;
+  der Pre-Flight meldet einen veralteten Index als `[WARN]`.
+- **`rechtliches.html`** — Verantwortlichkeit, Haftung, Datenschutz beim Seitenaufruf
+  und beim Feedback, Betroffenenrechte. Verlinkt aus Footer und Formular.
+- **Einheitlicher Footer** auf allen Seiten: Copyright, „Kontakt & Feedback ·
+  Rechtliches & Datenschutz", „Keine Cookies · Kein Tracking · Version 1.0 · Stand …".
+- **`beschriftung()` in `mathlib.js`** — Canvas-Beschriftungen mit Freistellung (Kasten
+  oder Kontur) und Klemmung in die Zeichenfläche. Verbindlich für neue Animationen,
+  siehe STYLEGUIDE §2.9.
+
+### Geändert
+
+- **Startseite zweispaltig.** Grundlagen- und Schwerpunktfach stehen nebeneinander, der
+  Bereichskopf trägt nur noch „Grundlagenfach" bzw. „Schwerpunktfach", die Lektionsangabe
+  sitzt links unter dem Kapiteltitel. Hero gestrafft, Chips- und Statuszeile entfallen.
+  Die erste Kapitelzeile liegt bei 1280 px nun bei y = 260 statt 543 px; die ganze Seite
+  samt Farbcode-Legende steht ohne Scrollen im ersten Bildschirm.
+- **Klebender Header.** `#nav-root` ist selbst `sticky` — vorher scrollte der Header trotz
+  `position: sticky` weg, weil sein Container nur 54 px hoch war. Das Burger-Menü bekam
+  eine Höhenbegrenzung mit eigenem Scrolling, Sprungziele ein `scroll-margin-top`.
+- **`drawGrid()`** bestimmt die Seite der Achsenzahlen statt sie anzunehmen, wählt die
+  Schrittweite nach verfügbarem Platz und kennt `{achsenLabels:false}` / `{zahlen:false}`.
+- **Header:** „FEEDBACK" heisst jetzt „Kontakt & Feedback"; Über-Panel mit Autor,
+  Unabhängigkeitshinweis, KI-Hinweis und Lizenz samt empfohlener Namensnennung.
+
+### Behoben
+
+- **Beschriftungen in allen 205 Canvas-Animationen überarbeitet** — von 228 gemessenen
+  Konflikten auf 4. Schwerster Befund: fünf Anwendungsgraphen mit Nullpunkt in der Ecke
+  hatten **gar keine** Achsenzahlen mehr, weil `drawGrid` sie ausserhalb der Zeichenfläche
+  platzierte (`ks-canvas`: 24 von 29 Beschriftungen draussen). Dazu Zahlenbänder, die zu
+  einem unlesbaren Streifen verschmolzen, abgeschnittene Beschriftungen am Canvasrand,
+  Punktnamen auf Kurven und Winkelbeschriftungen ausserhalb ihres Dreiecks.
+- **Ruckeln beim Reglerziehen.** Die Freistellung tastete die Hintergrundfarbe pixelweise
+  ab — vier `getImageData` je Beschriftung, also GPU-Readbacks im Bildtakt. Ersetzt durch
+  die einmal gelesene CSS-Hintergrundfarbe. Gemessen über alle 46 Seiten und 236 Regler:
+  Handler-Median 0.4 ms, keine Readbacks, keine langen Bilder.
+
+### Entfernt
+
+- **Formelauszug** — Kachel unter Zusatzmaterial auf allen Seiten **und** die 46 Dateien
+  `downloads/*/formelauszug.html`. Die Formelsammlung des Lehrmittels bleibt die zentrale
+  Formelübersicht. Zusatzmaterial umfasst neu vier Einträge.
+- **Vorlese-Knopf** in „Worauf achten?" und „Erkenntnis" — 306 Schaltflächen samt der
+  Sprachausgabe-Logik in `anim-hinweise.js`. Die Rollover selbst bleiben unverändert.
+- GitHub-Link aus dem Footer (er steht genau einmal, im Über-Panel unter Lizenz),
+  „(Prüfung)" beim SBFI-Formelsammlungs-Eintrag, das ⓘ-Zeichen beim Menüpunkt „Über".
+- Aufgeräumt: Archivordner `_archiv_g5-2-planimetrie`, Render-Kontrollbilder aus der
+  Versionierung, interne Arbeitsberichte nach `_intern/` (gitignored),
+  Migrations-Einmalskripte nach `scripts/_archiv/`.
+
+### Werkzeug
+
+- `scripts/build-suchindex.py` — Suchindex-Generator, projektübergreifend mit TALS Physik.
+- `scripts/audit-beschriftungen/` — misst Beschriftungs-Konflikte (`audit-run.mjs`,
+  `audit-analyse.py`, `audit-crops.mjs`, `audit-orte.py`) und Reglerlast (`audit-ruckeln.mjs`).
+
+### Bekannte offene Punkte
+
+- `TODO-animationen-grundlagen.md`: 90 didaktische Befunde aus dem Animations-Audit vom
+  25.07., davon 7 fachliche Fehler (P1). Stichprobenweise verifiziert: die Punkte sind
+  tatsächlich offen, nicht bloss nicht abgehakt.
+
+---
+
 ## [101] — 2026-07-11 · Paket 5 / T54: Video-Platzhalter kuratiert — Paket 5 abgeschlossen
 
 Die zwei verbliebenen „In Vorbereitung"-Video-Platzhalter (aus dem Audit-Nebenbefund T54)

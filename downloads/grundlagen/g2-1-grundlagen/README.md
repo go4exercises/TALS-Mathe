@@ -8,7 +8,6 @@ Reihenfolge und Datei-Naming gemäss STYLEGUIDE.md (Kapitel 4 und 6).
 | Reihenfolge | Datei | Typ | Inhalt | Status |
 |---|---|---|---|---|
 | 1 | `handout.html`           | Druckseite (HTML, A4) | Theorie ohne Beispiele/Aufgaben, 9 Abschnitte | ✅ |
-| 2 | `formelauszug.html`      | Druckseite (HTML, A4) | Kompakte Formelsammlung, 8 Abschnitte | ✅ |
 | 3 | `ankideck.apkg`          | Anki-Karteikarten     | 25 Karten zu Begriffen, Äquivalenzumformungen, Gleichungstypen, Probe | ✅ |
 | 4 | `teste-dich-selbst.html` | Druckseite (HTML, A4) | 12 Aufgaben (Begriffe · Modellieren · Umformungen · Typ & Probe) mit Lösungen | ✅ |
 | 5 | `aufgabenserie.html`     | Druckseite (HTML, A4) | 6 technische Anwendungen (Bauwesen, Mechanik, Elektrotechnik, Architektur, Logistik, Life Sciences) mit Musterlösungen | ✅ |

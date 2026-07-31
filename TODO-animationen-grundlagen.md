@@ -10,6 +10,14 @@ Muster taugen: g1-2 `cv-zahlmenge`, g2-2a `cv-vkipp`, g2-2b `cv-pk`, g2-3 `cv-lb
 g3-2 `cv-steig`, g4-2 `cv-manip`, g4-3 `cv-robust`, g5-2a `cv-dreiungl`, g5-2c `cv-ringroll`,
 g5-4 `cv-symm`, g5-5 `gl-svg`.
 
+> **Stand-Prüfung 01.08.2026 (vor Version 1.0):** Die Punkte sind **tatsächlich offen**,
+> nicht bloss nicht abgehakt. Stichprobe im Quelltext und im Browser:
+> **AN-01** (`cv-defWF`) — der Code kommentiert das Problem selbst („wir zeichnen das gleiche
+> Dreieck … tauschen a und b nicht"); **AN-02** (`par-canvas`) — die Live-Formel zeigt
+> weiterhin «(x − 1)² + −2»; **AN-03** (`ws-canvas`) — der Slider läuft unverändert bis
+> `max="9"`. Die Beschriftungs-Überarbeitung vom 30.07. hat Lesbarkeit und Platzierung
+> behoben, **keinen** der hier gelisteten fachlich-didaktischen Punkte.
+
 Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
 **P2** = didaktisch hoch (Kernaussage kommt nicht an) · **P3** = mittel · **P4** = niedrig (Feinschliff).
 

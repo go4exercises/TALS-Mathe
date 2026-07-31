@@ -10,7 +10,6 @@ von 2 des RLP-Punkts 2.2; Teil 2 (quadratische Gleichungen) hat eigenes Zusatzma
 | Reihenfolge | Datei | Typ | Inhalt | Status |
 |---|---|---|---|---|
 | 1 | `handout.html`           | Druckseite (HTML, A4) | Theorie zu Normalform, Lösungsfällen, Ungleichungen und Parameter, 8 Abschnitte | ✅ |
-| 2 | `formelauszug.html`      | Druckseite (HTML, A4) | Kompakte Formelsammlung in 7 Tabellen | ✅ |
 | 3 | `ankideck.apkg`          | Anki-Karteikarten     | 25 Karten zu Definition, Lösungsfällen, Ungleichungen, Parameterdiskussion | ✅ |
 | 4 | `teste-dich-selbst.html` | Druckseite (HTML, A4) | 12 Aufgaben (Lösen · Sonderfälle · Ungleichungen · Anwendungen · Parameter) mit Lösungen | ✅ |
 | 5 | `aufgabenserie.html`     | Druckseite (HTML, A4) | 6 technische Anwendungen (Elektrotechnik, Mobilität, Bauwesen, Logistik, Architektur, Life Sciences) mit Musterlösungen | ✅ |

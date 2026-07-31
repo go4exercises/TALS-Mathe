@@ -10,7 +10,6 @@ von 2 des RLP-Punkts 2.2; Teil 1 (lineare Gleichungen) hat eigenes Zusatzmateria
 | Reihenfolge | Datei | Typ | Inhalt | Status |
 |---|---|---|---|---|
 | 1 | `handout.html`           | Druckseite (HTML, A4) | Theorie zu allgemeiner Form, vier Lösungsverfahren, Diskriminante, Vieta und Geometrie, 8 Abschnitte | ✅ |
-| 2 | `formelauszug.html`      | Druckseite (HTML, A4) | Kompakte Formelsammlung (Mitternachtsformel, pq-Formel, Vieta) | ✅ |
 | 3 | `ankideck.apkg`          | Anki-Karteikarten     | 25 Karten zu Verfahren, Diskriminante, Vieta, Parameterdiskussion und Anwendungen | ✅ |
 | 4 | `teste-dich-selbst.html` | Druckseite (HTML, A4) | 12 Aufgaben (Verfahren · Vieta · Diskriminante · Anwendungen · Parameter) mit Lösungen | ✅ |
 | 5 | `aufgabenserie.html`     | Druckseite (HTML, A4) | 6 technische Anwendungen (Mechanik, Mobilität, Verpackung, Elektrotechnik, Life Sciences, Architektur) mit Musterlösungen | ✅ |

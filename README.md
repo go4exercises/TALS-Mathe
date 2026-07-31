@@ -3,6 +3,8 @@
 > **Freies, interaktives Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences (TALS)**
 > Struktur 1:1 nach RLP 2030 · Notation nach *Formeln, Tabellen, Begriffe* (Orell Füssli) · GitHub Pages
 
+**Version 1.0 · Stand 1. August 2026** · [Online-Ausgabe](https://go4exercises.github.io/TALS-Mathe/)
+
 ---
 
 ## Über dieses Projekt
@@ -12,6 +14,19 @@ Dieses Repository enthält ein vollständiges, interaktives Mathematik-Lehrmitte
 Die Inhalte richten sich an Lernende der Berufsmaturität sowie an Lehrpersonen, die ihr Unterrichtsmaterial ergänzen oder teilen möchten. Alle Seiten sind frei zugänglich, ohne Registrierung, ohne Werbung — direkt im Browser.
 
 Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TALS-Ergänzungen 3.6 Betragsfunktionen und 4.3d Ebenen (über den RLP hinaus). Das Material wird laufend gepflegt und erweitert.
+
+---
+
+## Was Version 1.0 enthält
+
+- **46 Themenseiten** — alle 31 RLP-Teilgebiete plus die TALS-Ergänzungen 3.6 und 4.3d
+- **Interaktive Canvas-Animationen** auf jeder Seite, mit Rollover-Hinweisen
+  „Worauf achten?" und „Erkenntnis"
+- **Volltextsuche** über alle Seiten, Glossar und Formelsammlung (Tastenkürzel `/`)
+- **Zusatzmaterial je Thema**: Handout, Teste dich selbst, Aufgabenserie (Druckseiten)
+  und ein Anki-Deck
+- **Nachschlagen**: Glossar und Formelsammlung
+- **Rechtliches & Datenschutz** — keine Cookies, kein Tracking
 
 ---
 
@@ -123,16 +138,19 @@ funktioniert direkt im Browser. Hosting via GitHub Pages.
 index.html              ← Homepage (Übersicht aller Teilgebiete)
 style.css               ← Gemeinsames Stylesheet (Design-System)
 nav.js                  ← Navigation (Header, Breadcrumb, ToC, Prev/Next)
-mathlib.js              ← Canvas-Helper, Term-Parser, Zahlen-Formatierer
+suche.js                ← Volltextsuche über die ganze Site
+suchindex.js            ← GENERIERT — `python3 scripts/build-suchindex.py`
+mathlib.js              ← Canvas-Helper, Beschriftungen, Term-Parser, Zahlen-Formatierer
+rechtliches.html        ← Verantwortlich, Haftung, Datenschutz
+feedback.html           ← Kontakt & Feedback (Formular)
 STYLEGUIDE.md           ← Verbindliche Konventionen für neue Themen
 TEMPLATE.html           ← Vorlage für neue Teilgebiete
 grundlagen/             ← 23 HTML-Dateien (g1-1 … g5-5, inkl. Sub-Splits)
 schwerpunkt/            ← 23 HTML-Dateien (s1-1 … s4-3d, inkl. Sub-Splits)
 downloads/              ← Materialien pro Teilgebiet
   README.md
-  grundlagen/<datei-id>/  handout.pdf, aufgabenserie.pdf,
-                          teste-dich-selbst.pdf, ankideck.apkg,
-                          formelauszug.pdf
+  grundlagen/<datei-id>/  handout.html, aufgabenserie.html,
+                          teste-dich-selbst.html, ankideck.apkg
   schwerpunkt/<datei-id>/  …
 ```
 
@@ -195,4 +213,4 @@ Dieses Lernmaterial steht unter der Lizenz
 
 ---
 
-*Zürich, 2026*
+*Zürich, 1. August 2026 · Version 1.0*
