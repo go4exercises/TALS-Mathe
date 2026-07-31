@@ -20,8 +20,11 @@ Ergebnis und Restbestand stehen in `_intern/BERICHT-beschriftungen-animationen.m
 
 **Grenzen:** Die Sichtung erfasst die **Startposition** bei 1280 px. Was erst beim
 Ziehen eines Reglers oder in einer anderen Preset-Stellung sichtbar wird, ist nur
-stichprobenweise geprüft. Die Messungen sind vollständig, die didaktische Bewertung
-der Einzelfälle ist es nicht — sie ist als Leseliste gedacht, nicht als Urteil.
+stichprobenweise geprüft.
+
+**Stand 01.08.2026: die Sichtung ist vollständig.** Alle 98 sichtbaren Animationen
+sind einzeln im Bild beurteilt (AN-S04 für s1-1…s3-2b, AN-S05 für den Rest).
+Acht weitere Canvas liegen in zugeklappten Bereichen und wurden nicht erfasst.
 
 ---
 
@@ -304,9 +307,68 @@ Rest an Arbeit.
   letzte Achsenzahl (30). Dasselbe Muster wie auf den bereits korrigierten Seiten:
   letzte Zahl weglassen, dort steht die Achsenbeschriftung.
 
-### Noch nicht einzeln gesichtet
+### AN-S05 — Befunde aus der vollständigen Bildsichtung (01.08.2026)
 
-Die Animationen der Seiten **s3-2b bis s4-3d** (Blätter 4–9 des Kontaktabzugs,
-rund 70 Stück) sind über die Messungen oben erfasst, aber im Bild noch nicht
-einzeln beurteilt. Der Kontaktabzug liegt bereit — die Fortsetzung ist ein
-eigener Durchgang.
+Alle **98 sichtbaren Animationen** sind jetzt im Bild einzeln beurteilt (neun
+Kontaktabzüge, Startposition, 1280 px). Die Sichtung von Blatt 1 und 3 steht oben
+unter AN-S04; hier die Blätter 2 und 4–9.
+
+#### Fehlende Zuordnung — man sieht etwas, weiss aber nicht was · **P2**
+
+- [ ] **AN-S05a** `s2-2c` · `vz-canvas` — Die Parabel steht über einer x-Achse, auf der
+  Bereiche **rot** und **grün** markiert sind. Was die zwei Farben bedeuten, steht
+  nirgends im Bild. Bei einer Vorzeichentabelle ist genau das die Aussage —
+  Legende «f(x) > 0» / «f(x) < 0» oder Beschriftung direkt an den Abschnitten.
+- [ ] **AN-S05b** `s3-3` · `cv-lt` — Zwei Kurven (blau und orange) ohne jede
+  Zuordnung. Nur «y: ±27» steht dabei. Welche Kurve ist die Funktion, welche die
+  Vergleichskurve? Beide benennen.
+- [ ] **AN-S05c** `s3-4b` · `sp-canvas` — Spiegelung an \(y = x\) mit zwei Kurven,
+  von denen keine benannt ist. Gerade hier ist die Zuordnung Exponential- ↔
+  Logarithmusfunktion die ganze Aussage. Vorbild: `s3-2b` · `um-canvas`, das
+  «y=x²» und «y=√x» direkt an die Kurven schreibt.
+- [ ] **AN-S05d** `s3-5` · `ek-canvas`, `ty-canvas`, `tr-canvas` — Sinus- bzw.
+  Kosinuskurven ohne Angabe, welche der beiden gezeigt wird. Bei \(\sin\) und
+  \(\cos\) ist die Kurvenform allein kein Unterscheidungsmerkmal, solange man den
+  Startwert nicht abliest.
+- [ ] **AN-S05e** `s4-2a` · `qd-canvas` — Der Quader trägt \(a, b, c, d\), aber
+  weder Zahlenwerte noch die Formel für die Raumdiagonale — obwohl das Widget
+  genau davon handelt. Vergleich: `s4-1` · `cv-raumwinkel` macht es vorbildlich
+  («D = 6.93», «a√2 = 5.66», «Würfel: tan φ = 1/√2»).
+
+#### Beschriftungen, die sich berühren · **P3**
+
+Diese Fälle liegen unterhalb der Schwelle des Beschriftungs-Audits vom 30.07.
+oder entstehen erst in dieser Preset-Stellung — im Bild sind sie sichtbar:
+
+- [ ] **AN-S05f** `s3-3` · `sc-canvas` — «(2.0|352)» und «H» überlagern sich am
+  Hochpunkt.
+- [ ] **AN-S05g** `s4-3d` · `cv-haus` — «Dach» und «D» liegen übereinander.
+- [ ] **AN-S05h** `s4-1` · `sb-canvas` — «Tiefe × q» sitzt auf der Würfelkante.
+- [ ] **AN-S05i** `s3-6` · `ab-canvas` — «Bahnhof» berührt die gestrichelte Linie.
+- [ ] **AN-S05j** `s4-3a` · `ad-canvas` — «a» und «a+b» stehen sehr eng beieinander.
+
+#### Term fehlt, wäre aber der Kern · **P4**
+
+- [ ] **AN-S05k** `s3-5` · `rr-canvas` — Riesenrad-Graph ohne \(h(t)\). Das direkte
+  Gegenstück auf `g5-5` · `cv-rad` hat den Term am 01.08. bekommen; hier fehlt er noch.
+- [ ] **AN-S05l** `s3-2b` · `pe-canvas` — Pendelgraph ohne \(T = 2\pi\sqrt{l/g}\).
+- [ ] **AN-S05m** `s4-2b` · `fu-canvas` — «Pyramide (G, h)» → «Prisma (G, h)», aber
+  der Faktor \(\tfrac{1}{3}\) — die eigentliche Aussage — steht nicht im Bild.
+- [ ] **AN-S05n** `s3-6` · `cw-canvas` — die Schnittgerade «y = 3.0» ist benannt,
+  die Betragsfunktion selbst nicht.
+
+#### Referenz-Widgets — als Muster brauchbar
+
+Bei der Sichtung positiv aufgefallen; wer eines der obigen Widgets nachbessert,
+findet hier die Vorlage: `s4-1 cv-raumwinkel` (Winkel, Diagonale und Rechenweg im
+Bild) · `s4-2a cv-canvas` (Cavalieri mit «Querschnitt π·2² — unverändert») ·
+`s4-2b cv-k3` (Anteile ×k, ×k², ×k³ als Balken) · `s4-2c cv-kugelteil` ·
+`s4-3b wl-canvas` («Schatten zeigt in Richtung a») · `s4-3c cv-ws` («windschief»,
+«grau gestrichelt: Schatten von h») · `s3-4b ll-canvas` (lineare und logarithmische
+Skala nebeneinander) · `s3-4a cv-egrenz` · `s2-2c cv-betrag` · `s3-2b um-canvas`.
+
+#### Was die Sichtung nicht ergab
+
+Kein Widget ist streichwürdig, keine Figur fachlich falsch gezeichnet. Die
+Aufgaben-Grafiken ohne Term (`a1-canvas`/`a2-canvas` auf fast jeder Seite) sind
+durchgehend so gewollt — dort ist der Term die gesuchte Antwort.
