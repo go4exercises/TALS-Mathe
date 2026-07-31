@@ -38,7 +38,7 @@ der Einzelfälle ist es nicht — sie ist als Leseliste gedacht, nicht als Urtei
 
 ---
 
-## AN-G01 — Hinweispaar fehlt auf 44 interaktiven Animationen · **P2**
+## AN-G01 — Hinweispaar fehlt auf 42 interaktiven Animationen · **P2**
 
 Der STYLEGUIDE führt das Paar «Worauf achten?» / «Erkenntnis» als Pflicht je
 interaktiver Animation. Tatsächlich hat es nur ein Teil. Ohne den Hinweis bleibt
@@ -46,87 +46,86 @@ offen, *worauf* beim Schieben zu achten ist und *was* dabei herauskommen soll �
 genau die Kopplung, die eine Animation didaktisch trägt.
 
 
+> **Liste korrigiert am 01.08.2026.** Die erste Fassung ordnete die Hinweispaare
+> über die Bildschirmnähe zu und lag bei einem Teil daneben. Neu wird die Zuordnung
+> am Quelltext bestimmt (jede `.widget-titelzeile` gehört zum nächsten `<canvas>`
+> darunter) und gegen die DOM-Messung geprüft — beide Verfahren stimmen bei 61 von
+> 62 Zuordnungen überein. Die Gesamtzahl blieb gleich, die Namen haben sich geändert:
+> `lin-canvas`, `par-canvas`, `schn-canvas`, `cv-vertikal`, `sch-canvas`, `bm-canvas`
+> und `cv-kk` **haben** ein Hinweispaar und sind hier zu Unrecht gestanden.
+
 
 **`g1-2-zahlen-grundoperationen`**
-- [ ] `cv-iv` · §theorie
+- [ ] `cv-iv`
+
+**`g1-3-algebraische-terme`**
+- [ ] `cv-binomi-rechts`
 
 **`g2-2a-lineare-gleichungen`**
-- [ ] `cv-three` · §darstellungen
+- [ ] `cv-three`
 
 **`g2-2b-quadratische-gleichungen`**
-- [ ] `velo-canvas` · §einstieg
+- [ ] `velo-canvas`
+- [ ] `cv-pk`
 
 **`g2-3-lineare-gleichungssysteme`**
-- [ ] `cv-three` · §darstellungen
-- [ ] `cv-lf` · §loesungsfaelle
-- [ ] `cv-a1` · §aufgaben
+- [ ] `cv-three`
+- [ ] `cv-lf`
+- [ ] `cv-a1`
 
 **`g3-1-grundlagen`**
-- [ ] `einstieg-glas` · §einstieg
-- [ ] `ach1-canvas` · §ach-1
-- [ ] `lin-canvas` · §achsenschnitte
-- [ ] `par-canvas` · §achsenschnitte
-- [ ] `schn-canvas` · §schnittpunkte
-- [ ] `cv-vertikal` · §funktion-nicht
+- [ ] `einstieg-glas`
+- [ ] `einstieg-canvas`
+- [ ] `ach1-canvas`
+- [ ] `ach2-canvas`
+- [ ] `schn1-canvas`
+- [ ] `schn2-canvas`
 
 **`g3-2-lineare-funktionen`**
-- [ ] `a1-canvas` · §aufgaben
-- [ ] `a2-canvas` · §aufgaben
+- [ ] `a1-canvas`
+- [ ] `a2-canvas`
 
 **`g3-3-quadratische-funktionen`**
-- [ ] `dr-canvas` · §darstellungen
-- [ ] `typ-canvas` · §typen
-- [ ] `a2-canvas` · §aufgaben
+- [ ] `dr-canvas`
+- [ ] `typ-canvas`
+- [ ] `a2-canvas`
 
 **`g4-1-grundlagen`**
-- [ ] `sb-canvas` · §einstieg
+- [ ] `sb-canvas`
 
 **`g4-2-diagramme`**
-- [ ] `ea-canvas` · §einstieg
+- [ ] `ea-canvas`
 
 **`g4-3-masszahlen`**
-- [ ] `sl-canvas` · §einstieg
-- [ ] `cv-robust` · §theorie
+- [ ] `sl-canvas`
+- [ ] `cv-robust`
 
 **`g5-1-grundlagen`**
-- [ ] `dg-canvas` · §einstieg
-- [ ] `sk-canvas` · §theorie
+- [ ] `dg-canvas`
 
 **`g5-2a-dreiecke`**
-- [ ] `cv-allg` · §definition
-- [ ] `cv-spez` · §typen
-- [ ] `cv-elem` · §typen
-- [ ] `cv-flaeche` · §theorie
-- [ ] `cv-kong` · §theorie
-- [ ] `cv-pyth` · §theorie
-- [ ] `cv-anw` · §theorie
-- [ ] `cv-stativ` · §einstieg
+- [ ] `cv-stativ`
+- [ ] `cv-allg`
+- [ ] `cv-spez`
+- [ ] `cv-elem`
+- [ ] `cv-flaeche`
+- [ ] `cv-kong`
+- [ ] `cv-pyth`
+- [ ] `cv-anw`
 
 **`g5-2c-kreis-und-kreisteile`**
-- [ ] `pizza-canvas` · §einstieg
-- [ ] `cv-strecken` · §darstellungen
-- [ ] `cv-pi` · §typen
-- [ ] `cv-umfang` · §theorie
-- [ ] `cv-ring` · §theorie
-- [ ] `cv-sektor` · §theorie
-- [ ] `cv-segment` · §theorie
-
-**`g5-2d-zentrische-streckung-aehnlichkeit`**
-- [ ] `sch-canvas` · §einstieg
-
-**`g5-3-trigonometrische-berechnungen`**
-- [ ] `bm-canvas` · §einstieg
+- [ ] `pizza-canvas`
+- [ ] `cv-strecken`
+- [ ] `cv-pi`
+- [ ] `cv-umfang`
+- [ ] `cv-ring`
+- [ ] `cv-sektor`
+- [ ] `cv-segment`
 
 **`g5-4-einheitskreis`**
-- [ ] `cv-schiff` · §einstieg
-- [ ] `cv-tan` · §tangens
-- [ ] `cv-bez` · §beziehungen
-
-**`g5-5-trigonometrische-gleichungen`**
-- [ ] `cv-kk` · §kurve
-
-
----
+- [ ] `cv-schiff`
+- [ ] `cv-tan`
+- [ ] `cv-bez`
 
 ## AN-G02 — Kurve ohne Term im Bild: 18 Animationen im Lehrteil · **P2**
 
