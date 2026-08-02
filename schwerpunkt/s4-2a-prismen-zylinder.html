@@ -810,6 +810,12 @@ function updateZY(){
   ctx.beginPath(); ctx.arc(nx + mw / 2, ny + mh + kr + 5, kr, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
   ctx.fillStyle = '#b85c00'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center';
   ctx.fillText('2πr', nx + mw / 2, ny + mh + 1 - mh / 2 + 4);
+  // Die zwei Formeln, um die es geht — Mantel als abgerolltes Rechteck
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1f6b3a';
+  beschriftung(ctx, 'V = π·r²·h', 8, 17, {align:'left', halo:true, W, H});
+  ctx.fillStyle = '#b85c00';
+  beschriftung(ctx, 'M = 2π·r·h', 8, 33, {align:'left', halo:true, W, H});
 }
 ['zy-r', 'zy-h'].forEach(id => document.getElementById(id).addEventListener('input', updateZY));
 

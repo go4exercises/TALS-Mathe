@@ -874,7 +874,10 @@ function updateEK(){
   const t = Math.log2(y);
   const yB = `<span class="tx-blau">${y}</span>`;
   document.getElementById('ek-eq').innerHTML = `t = log₂(${yB}) = ${t.toFixed(2)} h`;
-  const {ctx, cx, cy} = gridApp('ek-canvas', 240, 0, 1050, 0, 11, 100, 1, 'y [Tausend]', 't [h]');
+  const {ctx, W, H, cx, cy} = gridApp('ek-canvas', 240, 0, 1050, 0, 11, 100, 1, 'y [Tausend]', 't [h]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, 't(y) = log₂(y)', 53, 36, {align:'left', halo:true, W: W, H: H});
   // Kurve t = log2(y) ab y = 1
   plotFx(ctx, cx, cy, x => Math.log2(x), 1, 1050, '#5b2d8e', 2.5, 1e6);
   // Punkt mit Hilfslinien
@@ -961,6 +964,8 @@ function drawTy(){
   drawDot(ctx, cx, cy, 1, 0, '#9b1c1c', 5);
   ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
   ctx.fillText('(1|0)', cx(1) + 7, cy(0) - 8);
+  ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.fillStyle = t.color;
+  beschriftung(ctx, 'y = ' + t.label, 8, 19, {align:'left', halo:true, W, H});
   document.getElementById('ty-desc').textContent = t.desc;
 }
 
@@ -1169,6 +1174,9 @@ function drawC14(){
 
   const tMax = 24000;   // knapp über 4 Halbwertszeiten
   const {ctx, W, H, cx, cy} = gridApp('c14-canvas', 240, 0, tMax, 0, 100, 5730, 20, 't [a]', 'N/N₀ [%]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'N/N₀ = (1/2)^(t/5730)', W - 8, 19, {align:'right', halo:true, W: W, H: H});
   // Zerfallskurve N/N0 = (1/2)^(t/T) in Prozent
   plotFx(ctx, cx, cy, tt => 100 * Math.pow(0.5, tt / C14_T), 0, tMax, '#1a4f8a', 2.6, 1e6);
   // Halbwertszeit-Raster: bei T, 2T, 3T, 4T die Werte 50,25,12.5,6.25

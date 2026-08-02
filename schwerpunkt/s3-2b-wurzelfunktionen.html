@@ -909,6 +909,11 @@ function drawWz(){
   ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
   ctx.fillText('(1|1)', cx(1) + 7, cy(1) + 16);
   // Labels am rechten Rand
+  if(k.n !== 0){
+    ctx.textAlign = 'left'; ctx.font = 'bold 13px JetBrains Mono, monospace';
+    ctx.fillStyle = k.color;
+    beschriftung(ctx, 'y = ' + k.label, 8, 19, {align:'left', halo:true, W, H});
+  }
   if(k.n === 0){
     ctx.textAlign = 'left'; ctx.font = 'bold 13px monospace';
     ctx.fillStyle = '#1a4f8a'; ctx.fillText('√x',  cx(4.05), cy(Math.sqrt(4.05)) - 6);
@@ -1059,6 +1064,17 @@ function drawTf(){
   // Transformierte Kurve
   plotFx(ctx, cx, cy, f, xMin, xMax, '#5b2d8e', 3, 1e4);
 
+  // Aktueller Term im Bild — die Reglerzeile allein koppelt ihn nicht ans Bild
+  const aP = a === 1 ? '' : (a === -1 ? '−' : fmt2(a).replace('-', '−') + '·');
+  const uP = u === 0 ? 'x' : (u > 0 ? `x − ${fmt2(u)}` : `x + ${fmt2(-u)}`);
+  const vP = v === 0 ? '' : (v > 0 ? ` + ${fmt2(v)}` : ` − ${fmt2(-v)}`);
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';
+  const wP = tfN === 2 ? '√' : '∛';
+  beschriftung(ctx, `y = ${aP}${u === 0 ? wP + 'x' : `${wP}(${uP})`}${vP}`, W - 8, 19,
+               {align:'right', halo:true, W, H});
+  ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+  beschriftung(ctx, `gestrichelt: y = ${tfN === 2 ? '√x' : '∛x'}`, W - 8, 35,
+               {align:'right', halo:true, W, H});
   // Startpunkt (u | v)
   drawDot(ctx, cx, cy, u, v, '#1f6b3a', 6);
   ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';

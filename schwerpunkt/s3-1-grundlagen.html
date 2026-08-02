@@ -825,7 +825,10 @@ function updateDN(){
   const lage = h > 16 ? 'oberhalb der Leitung!' : (h === 16 ? 'exakt auf Leitungshöhe' : 'unterhalb der Leitung');
   const tB = `<span class="tx-blau">${t.toFixed(1)}</span>`;
   document.getElementById('dn-eq').innerHTML = `h(${tB}) = ${h.toFixed(2)} m — ${lage}`;
-  const {ctx, cx, cy} = gridApp('dn-canvas', 240, 0, 12, 0, 20, 1, 2, 't [min]', 'h [m]');
+  const {ctx, W, H, cx, cy} = gridApp('dn-canvas', 240, 0, 12, 0, 20, 1, 2, 't [min]', 'h [m]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, 'h(t) = −0.5·t² + 6·t', W - 8, 19, {align:'right', halo:true, W: W, H: H});
   // Leitungshöhe
   ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
   ctx.beginPath(); ctx.moveTo(cx(0), cy(16)); ctx.lineTo(cx(12), cy(16)); ctx.stroke();
@@ -934,6 +937,21 @@ function updateTR(){
   ctx.setLineDash([]);
   // Transformierte Kurve
   plotFx(ctx, cx, cy, x => a * F.f(x - u) + v, -6, 6, '#5b2d8e', 2.5, 25);
+  // Aktueller Term im Bild — dieselbe Zusammensetzung wie in der Reglerzeile,
+  // nur ohne Farb-Markup (Canvas kennt kein <span>).
+  const argP = u === 0 ? 'x' : (u > 0 ? `x − ${u}` : `x + ${Math.abs(u)}`);
+  const kernP = u === 0 ? F.label
+              : F.label === 'x²'  ? `(${argP})²`
+              : F.label === '√x'  ? `√(${argP})`
+              : F.label === '1/x' ? `1/(${argP})`
+              : F.label === '2ˣ'  ? `2^(${argP})`
+              :                     `sin(${argP})`;
+  const aP = a === 1 ? '' : (a === -1 ? '−' : fmt(a).replace('-', '−') + '·');
+  const vP = v === 0 ? '' : (v > 0 ? ` + ${v}` : ` − ${Math.abs(v)}`);
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, `y = ${aP}${kernP}${vP}`, 8, 19, {align:'left', halo:true, W, H});
+  ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+  beschriftung(ctx, `gestrichelt: y = ${F.label}`, 8, 35, {align:'left', halo:true, W, H});
   // Ankerpunkt der Grundfunktion mitverschoben
   const ax = F.anker[0] + u, ay = a * F.anker[1] + v;
   if(ax >= -6 && ax <= 6 && ay >= -5 && ay <= 5){

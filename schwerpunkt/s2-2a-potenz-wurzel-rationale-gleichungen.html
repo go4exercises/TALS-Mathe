@@ -759,6 +759,9 @@ function updateSW(){
   const hB = `<span class="tx-blau">${h}</span>`;
   document.getElementById('sw-eq').innerHTML = `s(${hB}) = 3.57·√${hB} ≈ ${s.toFixed(1)} km`;
   const {ctx, cx, cy, W, H} = gridApp('sw-canvas', 240, 0, 900, 0, 110, 100, 10, 'h [m]', 's [km]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 's(h) = 3.57·√h', W - 8, H - 70, {align:'right', halo:true, W: W, H: H});
   // 100-km-Marke
   ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
   ctx.beginPath(); ctx.moveTo(cx(0), cy(100)); ctx.lineTo(cx(900), cy(100)); ctx.stroke();
@@ -792,6 +795,13 @@ function drawSc(){
   ctx.setLineDash([]);
   // Wurzelkurve (blau), D: x >= -7/6
   plotFx(ctx, cx, cy, x => x >= -7/6 ? Math.sqrt(6*x + 7) : NaN, -3, 6, '#1a4f8a', 2.5, 30);
+  // Beide Seiten der Gleichung benennen — sonst sind es Kurve und Linie ohne Namen
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'y = √(6x + 7)', 8, 19, {align:'left', halo:true, W, H});
+  ctx.fillStyle = '#b85c00';
+  beschriftung(ctx, `y = ${String(v.c).replace('-', '−')}`, W - 8, cy(v.c) - 8,
+               {align:'right', halo:true, W, H});
   if(scActive === 0){
     drawDot(ctx, cx, cy, 3, 5, '#1f6b3a', 6);
     ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';

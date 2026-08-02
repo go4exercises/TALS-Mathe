@@ -824,6 +824,9 @@ function updateSC(){
   document.getElementById('sc-eq').innerHTML =
     `V(${xB}) = ${xB} · ${b.toFixed(1)} · ${t.toFixed(1)} = ${V.toFixed(1)} cm³`;
   const {ctx, W, H, cx, cy} = gridApp('sc-canvas', 240, 0, 7.5, 0, 400, 1, 50, 'x [cm]', 'V [cm³]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'V(x) = x·(20−2x)·(15−2x)', W - 8, 19, {align:'right', halo:true, W: W, H: H});
   plotFx(ctx, cx, cy, u => u*(20-2*u)*(15-2*u), 0, 7.5, '#1a4f8a', 2.5, 1e6);
   // Hochpunkt-Markierung
   const xm = 2.8287, Vm = xm*(20-2*xm)*(15-2*xm);

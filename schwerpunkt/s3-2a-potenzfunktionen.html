@@ -871,6 +871,9 @@ function updateBA(){
   const tB = `<span class="tx-blau">${t.toFixed(1)}</span>`;
   document.getElementById('ba-eq').innerHTML = `V(${tB}) = 0.268·${tB}³ = ${V.toFixed(2)} dm³`;
   const {ctx, cx, cy, W, H} = gridApp('ba-canvas', 240, 0, 9, 0, 160, 1, 20, 't [s]', 'V [dm³]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'V(t) = 0.268·t³', 53, H - 56, {align:'left', halo:true, W: W, H: H});
   // Platzgrenze
   ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
   ctx.beginPath(); ctx.moveTo(cx(0), cy(150)); ctx.lineTo(cx(9), cy(150)); ctx.stroke();
@@ -988,6 +991,8 @@ function drawTyp(){
   drawDot(ctx, cx, cy, -1, yM1, '#9b1c1c', 5);
   ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
   ctx.fillText('(1|1)', cx(1) + 7, cy(1) - 7);
+  ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.fillStyle = t.color;
+  beschriftung(ctx, 'y = ' + t.label, 8, 19, {align:'left', halo:true, W, H});
   document.getElementById('typ-desc').textContent = t.desc;
 }
 

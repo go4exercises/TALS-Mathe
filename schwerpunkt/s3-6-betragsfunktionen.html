@@ -823,6 +823,9 @@ function updateAB(){
   const xB = `<span class="tx-blau">${x.toFixed(1)}</span>`;
   document.getElementById('ab-eq').innerHTML = `a(${xB}) = |${xB} − 6| = ${a.toFixed(1)} km`;
   const {ctx, W, H, cx, cy} = gridApp('ab-canvas', 220, 0, 12, 0, 8, 1, 1, 'x [km]', 'a [km]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'a(x) = |x − 6|', 53, 36, {align:'left', halo:true, W: W, H: H});
   // Bahnhof markieren
   ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
   // Linie unterhalb der Beschriftung enden lassen, sonst beruehren sie sich
@@ -858,6 +861,14 @@ function updateTR(){
   plotFx(ctx, cx, cy, x => Math.abs(x), -6, 6, '#9ca3af', 1.5, 25);
   ctx.setLineDash([]);
   plotFx(ctx, cx, cy, x => a * Math.abs(x - u) + v, -6, 6, '#5b2d8e', 2.5, 25);
+  // Aktueller Term im Bild
+  const aP = a === 1 ? '' : (a === -1 ? '−' : fmt(a).replace('-', '−') + '·');
+  const uP = u === 0 ? 'x' : (u > 0 ? `x − ${u}` : `x + ${Math.abs(u)}`);
+  const vP = v === 0 ? '' : (v > 0 ? ` + ${v}` : ` − ${Math.abs(v)}`);
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, `y = ${aP}|${uP}|${vP}`, 8, 19, {align:'left', halo:true, W, H});
+  ctx.fillStyle = '#9ca3af'; ctx.font = 'bold 11px JetBrains Mono, monospace';
+  beschriftung(ctx, 'gestrichelt: y = |x|', 8, 35, {align:'left', halo:true, W, H});
   // Knickpunkt
   drawDot(ctx, cx, cy, u, v, '#1f6b3a', 6);
   ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';

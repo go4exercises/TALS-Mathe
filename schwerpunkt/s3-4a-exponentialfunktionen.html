@@ -864,7 +864,10 @@ function updateBK(){
   const abs = Math.round(1000 * N);               // absolute Bakterienzahl
   const tB = `<span class="tx-blau">${t.toFixed(1)}</span>`;
   document.getElementById('bk-eq').innerHTML = `N(${tB}) = 1000·2<sup class="tx-blau">${t.toFixed(1)}</sup> ≈ ${abs} Bakterien`;
-  const {ctx, cx, cy} = gridApp('bk-canvas', 240, 0, 10.5, 0, 1100, 1, 100, 't [h]', 'N [Tausend]');
+  const {ctx, W, H, cx, cy} = gridApp('bk-canvas', 240, 0, 10.5, 0, 1100, 1, 100, 't [h]', 'N [Tausend]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'N(t) = 1000·2^t', 53, H - 56, {align:'left', halo:true, W: W, H: H});
   // Millionengrenze
   ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
   ctx.beginPath(); ctx.moveTo(cx(0), cy(1000)); ctx.lineTo(cx(10.5), cy(1000)); ctx.stroke();
@@ -958,6 +961,8 @@ function drawTy(){
   drawDot(ctx, cx, cy, 0, 1, '#9b1c1c', 5);
   ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
   ctx.fillText('(0|1)', cx(0) + 8, cy(1) - 8);
+  ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.fillStyle = t.color;
+  beschriftung(ctx, 'y = ' + t.label, 8, 19, {align:'left', halo:true, W, H});
   document.getElementById('ty-desc').textContent = t.desc;
 }
 

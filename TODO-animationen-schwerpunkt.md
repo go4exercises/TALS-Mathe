@@ -3,6 +3,13 @@
 **Stand: 1. August 2026.** Vollprüfung aller interaktiven Canvas-Animationen im
 Schwerpunktfach (23 Seiten). Ersetzt kein früheres Audit — dies ist die erste Prüfung dieses Bereichs.
 
+> **Vollständig abgearbeitet am 2. August 2026.** Alle 98 Punkte aus AN-S01,
+> AN-S02, AN-S02b, AN-S04 und AN-S05 sind erledigt; AN-S03 war von Anfang an
+> ohne Befund. Einer der Punkte (AN-S04g) erwies sich bei der Nachprüfung als
+> bereits behoben, sieben Punkte aus AN-S02b sind als «bewusst ohne Term»
+> entschieden — beides ist an Ort und Stelle begründet. Jede Änderung ist im
+> Browser bei 1280 **und** 360 px gerendert und im Bild gesichtet worden.
+
 ## Wie geprüft wurde
 
 Drei Messungen im Browser über alle Seiten, dazu eine Sichtung der gerenderten
@@ -180,90 +187,117 @@ Diese tragen zwar Text im Bild (Achsentitel, Punktnamen, Einheiten), aber keinen
 Term. Schwächerer Fall als AN-S02 — je Animation entscheiden, ob der Term
 etwas beiträgt.
 
+> **Erledigt am 02.08.2026 — je Fall entschieden.** 35 der 42 haben jetzt den
+> Term im Bild, 7 bleiben bewusst ohne.
+>
+> **Term ergänzt** überall dort, wo die Formel die Aussage des Widgets *ist*:
+> die Typen-Visualisierungen (`typ-canvas`, beide `ty-canvas`, `wz-canvas` —
+> letzteres bisher nur in der Sammelansicht «alle drei» beschriftet), die
+> Transformations-Labore (`tr-canvas` auf s3-1/s3-6, `tf-canvas`), die
+> Anwendungsgraphen mit Funktionsterm (`sw`, `al`, `dn`, `ba`, `bk`, `ek`,
+> `c14`, `sc` auf s3-3, `ab`), die Scheinlösungs-Grafiken (`cv-sl`, `sc` auf
+> s2-2a — dort beide Seiten der Gleichung benannt), das Toleranzband (`to`),
+> die Zylinderformeln (`zy`), die Geraden-Parameterform (`dr` auf s4-3c) und
+> die Dachebene (`da`). Die übrigen waren durch AN-S02, AN-S04 oder AN-S05
+> schon versorgt.
+>
+> **Bewusst ohne Term** — dort trägt er nichts bei oder stünde im Weg:
+> `cv-zehnerpot` (es wandert der Dezimalpunkt, es gibt keinen Funktionsterm),
+> `rr-rad` (die Rad-Szene selbst; \(h(t)\) steht seit AN-S05k im Graphen
+> daneben), `s3-5 a1-canvas` (Aufgabe — der Term ist die gesuchte Antwort),
+> `sb-canvas` (Schrägbild-Geometrie; die Bildlänge steht in der Reglerzeile),
+> `fl-canvas` und `ad-canvas` (Vektorszenen: die Pfeile sind einzeln benannt,
+> ein Term daneben verdoppelt nur die Komponentenanzeige) und `cv-haus`
+> (Schrägbild; der Durchstosspunkt steht in der Reglerzeile, die Ebenen-
+> gleichung im Grundriss-Widget `da-canvas` derselben Seite).
+>
+> Geprüft: Rendercheck aller 22 geänderten Canvas bei 1280 **und** 360 px,
+> Bilder gesichtet, elf Beschriftungen danach entzerrt.
+
 
 **`s1-1-grundlagen`**
-- [ ] `sw-canvas` · §einstieg
-- [ ] `cv-pruefstand` · §typen
+- [x] `sw-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `cv-pruefstand` · §typen — Term im Bild (02.08.2026)
 
 **`s1-2-potenzen`**
-- [ ] `ex-canvas` · §rationale-exponenten
-- [ ] `cv-zehnerpot` · §hierarchie
+- [x] `ex-canvas` · §rationale-exponenten — Term im Bild (02.08.2026)
+- [x] `cv-zehnerpot` · §hierarchie — **bewusst ohne Term** (02.08.2026)
 
 **`s2-1-grundlagen`**
-- [ ] `wa-canvas` · §einstieg
-- [ ] `cv-sl` · §definition
+- [x] `wa-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `cv-sl` · §definition — Term im Bild (02.08.2026)
 
 **`s2-2a-potenz-wurzel-rationale-gleichungen`**
-- [ ] `sw-canvas` · §einstieg
-- [ ] `sc-canvas` · §darstellungen
+- [x] `sw-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `sc-canvas` · §darstellungen — Term im Bild (02.08.2026)
 
 **`s2-2b-exponential-logarithmische-gleichungen`**
-- [ ] `al-canvas` · §einstieg
+- [x] `al-canvas` · §einstieg — Term im Bild (02.08.2026)
 
 **`s2-2c-betrag-polynom-ungleichungen`**
-- [ ] `to-canvas` · §einstieg
+- [x] `to-canvas` · §einstieg — Term im Bild (02.08.2026)
 
 **`s3-1-grundlagen`**
-- [ ] `dn-canvas` · §einstieg
-- [ ] `tr-canvas` · §typen
+- [x] `dn-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `tr-canvas` · §typen — Term im Bild (02.08.2026)
 
 **`s3-2a-potenzfunktionen`**
-- [ ] `ba-canvas` · §einstieg
-- [ ] `typ-canvas` · §typen
+- [x] `ba-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `typ-canvas` · §typen — Term im Bild (02.08.2026)
 
 **`s3-2b-wurzelfunktionen`**
-- [ ] `pe-canvas` · §einstieg
-- [ ] `wz-canvas` · §typen
-- [ ] `tf-canvas` · §theorie
+- [x] `pe-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `wz-canvas` · §typen — Term im Bild (02.08.2026)
+- [x] `tf-canvas` · §theorie — Term im Bild (02.08.2026)
 
 **`s3-3-polynomfunktionen`**
-- [ ] `sc-canvas` · §einstieg
-- [ ] `cv-lt` · §typen
+- [x] `sc-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `cv-lt` · §typen — Term im Bild (02.08.2026)
 
 **`s3-4a-exponentialfunktionen`**
-- [ ] `bk-canvas` · §einstieg
-- [ ] `ty-canvas` · §typen
+- [x] `bk-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `ty-canvas` · §typen — Term im Bild (02.08.2026)
 
 **`s3-4b-logarithmusfunktionen`**
-- [ ] `ek-canvas` · §einstieg
-- [ ] `sp-canvas` · §definition
-- [ ] `ty-canvas` · §eigenschaften
-- [ ] `c14-canvas` · §theorie
+- [x] `ek-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `sp-canvas` · §definition — Term im Bild (02.08.2026)
+- [x] `ty-canvas` · §eigenschaften — Term im Bild (02.08.2026)
+- [x] `c14-canvas` · §theorie — Term im Bild (02.08.2026)
 
 **`s3-5-trigonometrische-funktionen`**
-- [ ] `rr-rad` · §einstieg
-- [ ] `ty-canvas` · §typen
-- [ ] `tr-canvas` · §theorie
-- [ ] `a1-canvas` · §aufgaben
+- [x] `rr-rad` · §einstieg — **bewusst ohne Term** (02.08.2026)
+- [x] `ty-canvas` · §typen — Term im Bild (02.08.2026)
+- [x] `tr-canvas` · §theorie — Term im Bild (02.08.2026)
+- [x] `a1-canvas` · §aufgaben — **bewusst ohne Term** (02.08.2026)
 
 **`s3-6-betragsfunktionen`**
-- [ ] `ab-canvas` · §einstieg
-- [ ] `tr-canvas` · §darstellungen
+- [x] `ab-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `tr-canvas` · §darstellungen — Term im Bild (02.08.2026)
 
 **`s4-1-grundlagen`**
-- [ ] `sb-canvas` · §einstieg
+- [x] `sb-canvas` · §einstieg — **bewusst ohne Term** (02.08.2026)
 
 **`s4-2a-prismen-zylinder`**
-- [ ] `cv-canvas` · §einstieg
-- [ ] `zy-canvas` · §darstellungen
+- [x] `cv-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `zy-canvas` · §darstellungen — Term im Bild (02.08.2026)
 
 **`s4-2b-pyramiden-kegel-stuempfe`**
-- [ ] `fu-canvas` · §einstieg
-- [ ] `cv-k3` · §typen
+- [x] `fu-canvas` · §einstieg — Term im Bild (02.08.2026)
+- [x] `cv-k3` · §typen — Term im Bild (02.08.2026)
 
 **`s4-3a-vektorbegriff-komponenten`**
-- [ ] `fl-canvas` · §einstieg
-- [ ] `ad-canvas` · §darstellungen
+- [x] `fl-canvas` · §einstieg — **bewusst ohne Term** (02.08.2026)
+- [x] `ad-canvas` · §darstellungen — **bewusst ohne Term** (02.08.2026)
 
 **`s4-3b-skalarprodukt`**
-- [ ] `wl-canvas` · §darstellungen
+- [x] `wl-canvas` · §darstellungen — Term im Bild (02.08.2026)
 
 **`s4-3c-geraden`**
-- [ ] `dr-canvas` · §einstieg
+- [x] `dr-canvas` · §einstieg — Term im Bild (02.08.2026)
 
 **`s4-3d-ebenen`**
-- [ ] `cv-haus` · §darstellungen
-- [ ] `da-canvas` · §einstieg
+- [x] `cv-haus` · §darstellungen — **bewusst ohne Term** (02.08.2026)
+- [x] `da-canvas` · §einstieg — Term im Bild (02.08.2026)
 
 ---
 

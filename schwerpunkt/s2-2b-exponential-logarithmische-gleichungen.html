@@ -757,7 +757,10 @@ function updateAL(){
   const A = Math.min(100, 2.5 * Math.pow(2, t / 4));
   document.getElementById('al-eq').innerHTML =
     `A(<span class="tx-blau">${t.toFixed(1)}</span>) = ${A.toFixed(1)} %${A >= 100 ? ' — vollständig bedeckt!' : ''}`;
-  const {ctx, cx, cy} = gridApp('al-canvas', 240, 0, 24, 0, 110, 2, 10, 't [d]', 'A [%]');
+  const {ctx, W, H, cx, cy} = gridApp('al-canvas', 240, 0, 24, 0, 110, 2, 10, 't [d]', 'A [%]');
+  // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'A(t) = 2.5·2^(t/4)', W - 8, H - 70, {align:'right', halo:true, W: W, H: H});
   ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
   ctx.beginPath(); ctx.moveTo(cx(0), cy(100)); ctx.lineTo(cx(24), cy(100)); ctx.stroke();
   ctx.setLineDash([]);
