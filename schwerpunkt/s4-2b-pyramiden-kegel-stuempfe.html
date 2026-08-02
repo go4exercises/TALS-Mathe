@@ -732,12 +732,22 @@ function updateKE(){
   const ang = Math.atan2(rx, hp);
   ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(cx0, y0 - hp, 24, Math.PI / 2 - ang, Math.PI / 2 + ang); ctx.stroke();
-  // Labels
-  ctx.font = 'bold 12px monospace';
-  ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'right'; ctx.fillText('h', cx0 - 7, y0 - hp / 2);
-  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left'; ctx.fillText('m', cx0 + rx / 2 + 7, y0 - hp / 2);
-  ctx.fillStyle = '#b85c00'; ctx.textAlign = 'center'; ctx.fillText('w', cx0, y0 - hp + 42);
-  ctx.fillStyle = '#374151'; ctx.fillText('r', cx0 + rx / 2, y0 + 16);
+  // Labels mit Zahlenwert
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'h', cx0 - 8, y0 - hp * 0.45, {align:'right', halo:true, W, H});
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, `m = ${m.toFixed(2)}`, cx0 + rx / 2 + 8, y0 - hp / 2, {align:'left', halo:true, W, H});
+  ctx.fillStyle = '#b85c00';
+  beschriftung(ctx, 'w', cx0, y0 - hp + Math.min(44, hp * 0.55), {align:'center', halo:true, W, H});
+  ctx.fillStyle = '#374151';
+  beschriftung(ctx, `r = ${r.toFixed(2)}`, cx0 + rx / 2, y0 + 17, {align:'center', halo:true, W, H});
+  // Die beiden Formeln, um die es geht — Mantellinie aus Pythagoras, Volumen mit Drittel
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, 'm = √(r² + h²)', 8, 17, {align:'left', halo:true, W, H});
+  ctx.fillStyle = '#1f6b3a';
+  beschriftung(ctx, 'V = ⅓·π·r²·h', 8, 33, {align:'left', halo:true, W, H});
 }
 ['ke-r', 'ke-h'].forEach(id => document.getElementById(id).addEventListener('input', updateKE));
 

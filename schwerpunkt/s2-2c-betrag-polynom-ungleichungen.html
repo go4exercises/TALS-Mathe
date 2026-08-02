@@ -814,6 +814,15 @@ function updateVZ(){
   plotFx(ctx, cx, cy, x => (x - a) * (x - b), -6, 6, '#5b2d8e', 2.5, 40);
   drawDot(ctx, cx, cy, a, 0, '#374151', 5);
   drawDot(ctx, cx, cy, b, 0, '#374151', 5);
+  // Term zur Kurve und Bedeutung der beiden Achsenfarben
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, `f(x) = (${t1})(${t2})`, 8, 18, {align:'left', halo:true, W, H});
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1f6b3a';
+  beschriftung(ctx, 'f(x) > 0', cx((-6 + a) / 2), cy(0) + 34, {align:'center', halo:true, W, H});
+  ctx.fillStyle = '#9b1c1c';
+  beschriftung(ctx, 'f(x) < 0', cx((a + b) / 2), cy(0) - 9, {align:'center', halo:true, W, H});
 }
 ['vz-a', 'vz-b'].forEach(id => document.getElementById(id).addEventListener('input', updateVZ));
 

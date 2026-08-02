@@ -785,6 +785,7 @@ function drawLot() {
   const { cx, cy } = drawGrid(ctx, W, H, -2, 9, -2, 6);
   drawLineFull(ctx, cx, cy, A, u, '#1a4f8a', false);
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  beschriftung(ctx, 'g: X = (0|1) + t·(2|1)', 8, H - 9, {align:'left', halo:true, W, H});
   ctx.fillText('g', cx(A[0] + 3.2 * u[0]) + 4, cy(A[1] + 3.2 * u[1]) - 4);
   // Strecke PF
   ctx.strokeStyle = atMin ? '#1f6b3a' : '#b85c00'; ctx.lineWidth = 2.5;
@@ -807,6 +808,11 @@ function drawLot() {
   ctx.textAlign = 'left';
   ctx.fillStyle = '#9b1c1c'; beschriftung(ctx, 'P', cx(P[0]) + 8, cy(P[1]) + 4, {align:'left', halo:true, W, H});
   ctx.fillStyle = atMin ? '#1f6b3a' : '#b85c00'; beschriftung(ctx, 'F', cx(F[0]) + 8, cy(F[1]) + 4, {align:'left', halo:true, W, H});
+  // Der Abstand, um den es geht, direkt an der Strecke
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = atMin ? '#1f6b3a' : '#b85c00';
+  beschriftung(ctx, `|PF| = ${d.toFixed(2)}`, (cx(P[0]) + cx(F[0])) / 2 + 6, (cy(P[1]) + cy(F[1])) / 2,
+               {align:'left', halo:true, W, H});
 }
 document.getElementById('lo-t').addEventListener('input', drawLot);
 

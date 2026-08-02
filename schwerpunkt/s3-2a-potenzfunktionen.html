@@ -944,6 +944,11 @@ function updateDR(){
       drawDot(ctx, cx, cy, x, y, '#1f6b3a', 6);
     }
   }
+  // Aktueller Term im Bild — dritte Darstellung neben Tabelle und Gleichungszeile
+  const aTxt = a === 1 ? '' : (a === -1 ? '−' : fmt(a).replace('-', '−') + '·');
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, `y = ${aTxt}x${SUP[String(n)]}`, 8, 19, {align:'left', halo:true, W, H});
 }
 ['dr-a', 'dr-n', 'dr-x'].forEach(id => document.getElementById(id).addEventListener('input', updateDR));
 
@@ -1016,6 +1021,13 @@ function updateHY(){
   ctx.beginPath(); ctx.moveTo(0, cy(v)); ctx.lineTo(W, cy(v)); ctx.stroke();
   ctx.setLineDash([]);
   plotFx(ctx, cx, cy, x => 1 / Math.pow(x - u, hyP) + v, -rng, rng, '#5b2d8e', 2.5, rng * 4);
+  // Term im Bild, Asymptotenwerte in den Farben der gestrichelten Linien
+  const uP = u === 0 ? 'x' : (u > 0 ? `x − ${u}` : `x + ${Math.abs(u)}`);
+  const vP = v === 0 ? '' : (v > 0 ? ` + ${v}` : ` − ${Math.abs(v)}`);
+  const pP = hyP === 1 ? '' : SUP[String(hyP)];
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, `y = 1/(${uP})${pP}${vP}`, 8, 19, {align:'left', halo:true, W, H});
 }
 ['hy-u', 'hy-v'].forEach(id => document.getElementById(id).addEventListener('input', updateHY));
 
@@ -1131,6 +1143,10 @@ function drawPa(){
   ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
   ctx.fillStyle = '#1a4f8a'; if(Math.abs(y0) <= S) ctx.fillText('P', cx(x0) + 9, cy(y0) - 4);
   ctx.fillStyle = '#9b1c1c'; if(Math.abs(yQ) <= S) ctx.fillText('Q', cx(-x0) - 18, cy(yQ) - 4);
+  // Welche Kurve gerade auf Symmetrie geprüft wird
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, `f(x) = x${SUP[String(n)] || '⁰'}`, 8, 19, {align:'left', halo:true, W, H});
 
   const eq = document.getElementById('pa-eq');
   eq.textContent = gerade

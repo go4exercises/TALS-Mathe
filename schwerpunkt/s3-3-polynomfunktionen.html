@@ -890,15 +890,21 @@ function updateLF(){
   const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
   plotFx(ctx, cx, cy, x => a*(x-n1)*(x-n2)*(x-n3), -rng, rng, '#1a4f8a', 2.5, rng * 5);
   [...new Set(roots)].forEach(r => drawDot(ctx, cx, cy, r, 0, '#9b1c1c', 5));
+  // Produktform im Bild — sie macht die Nullstellen direkt ablesbar
+  const facP = n => n === 0 ? 'x' : (n > 0 ? `(x−${n})` : `(x+${Math.abs(n)})`);
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, `f(x) = ${aStr}${facP(n1)}${facP(n2)}${facP(n3)}`,
+               8, 18, {align:'left', halo:true, W, H});
 }
 ['lf-n1','lf-n2','lf-n3','lf-a'].forEach(id => document.getElementById(id).addEventListener('input', updateLF));
 
 /* ══ GLOBALVERLAUF-VISUALISIERUNG ══ */
 const gvFaelle = [
-  {label:'n ungerade, a>0', f: x => 0.5*x*x*x - 2*x,      color:'#1a4f8a', desc:'f(x) = 0.5x³ − 2x  ·  Grad 3, a₃ > 0: von links unten nach rechts oben ↗'},
-  {label:'n ungerade, a<0', f: x => -0.5*x*x*x + 2*x,     color:'#9b1c1c', desc:'f(x) = −0.5x³ + 2x  ·  Grad 3, a₃ < 0: von links oben nach rechts unten ↘'},
-  {label:'n gerade, a>0',   f: x => 0.25*x*x*x*x - 2*x*x, color:'#1f6b3a', desc:'f(x) = 0.25x⁴ − 2x²  ·  Grad 4, a₄ > 0: beide Enden nach oben ∪ (W-Form)'},
-  {label:'n gerade, a<0',   f: x => -0.25*x*x*x*x + 2*x*x,color:'#b85c00', desc:'f(x) = −0.25x⁴ + 2x²  ·  Grad 4, a₄ < 0: beide Enden nach unten ∩ (M-Form)'},
+  {label:'n ungerade, a>0', f: x => 0.5*x*x*x - 2*x,      color:'#1a4f8a', eq:'f(x) = 0.5x³ − 2x',    desc:'f(x) = 0.5x³ − 2x  ·  Grad 3, a₃ > 0: von links unten nach rechts oben ↗'},
+  {label:'n ungerade, a<0', f: x => -0.5*x*x*x + 2*x,     color:'#9b1c1c', eq:'f(x) = −0.5x³ + 2x',   desc:'f(x) = −0.5x³ + 2x  ·  Grad 3, a₃ < 0: von links oben nach rechts unten ↘'},
+  {label:'n gerade, a>0',   f: x => 0.25*x*x*x*x - 2*x*x, color:'#1f6b3a', eq:'f(x) = 0.25x⁴ − 2x²',  desc:'f(x) = 0.25x⁴ − 2x²  ·  Grad 4, a₄ > 0: beide Enden nach oben ∪ (W-Form)'},
+  {label:'n gerade, a<0',   f: x => -0.25*x*x*x*x + 2*x*x,color:'#b85c00', eq:'f(x) = −0.25x⁴ + 2x²', desc:'f(x) = −0.25x⁴ + 2x²  ·  Grad 4, a₄ < 0: beide Enden nach unten ∩ (M-Form)'},
 ];
 let gvActive = 0;
 function buildGvBtns(){
@@ -917,6 +923,9 @@ function drawGv(){
   const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
   const t = gvFaelle[gvActive];
   plotFx(ctx, cx, cy, t.f, -rng, rng, t.color, 3, rng * 5);
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillStyle = t.color;
+  beschriftung(ctx, t.eq, 8, 18, {align:'left', halo:true, W, H});
   document.getElementById('gv-desc').textContent = t.desc;
 }
 

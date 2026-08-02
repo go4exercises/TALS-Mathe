@@ -751,14 +751,22 @@ function updateQD(){
   [x2, y2] = P(a, b, c);
   ctx.strokeStyle = '#5b2d8e'; ctx.lineWidth = 2.5;
   ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
-  ctx.font = 'bold 12px monospace';
-  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left';
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
   const [mx, my] = P(a * 0.55, b * 0.55, c * 0.55);
-  ctx.fillText('d', mx + 6, my - 4);
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, 'd', mx + 7, my - 4, {align:'left', halo:true, W, H});
   ctx.fillStyle = '#374151';
-  const [ax, ay] = P(a / 2, 0, 0); ctx.textAlign = 'center'; ctx.fillText('a', ax, ay + 16);
-  const [bx, by] = P(a, b / 2, 0); ctx.textAlign = 'left'; ctx.fillText('b', bx + 8, by + 10);
-  const [cxx, cyy] = P(0, 0, c / 2); ctx.textAlign = 'right'; ctx.fillText('c', cxx - 8, cyy);
+  const [ax, ay] = P(a / 2, 0, 0);
+  beschriftung(ctx, `a = ${a.toFixed(1)}`, ax, ay + 17, {align:'center', halo:true, W, H});
+  const [bx, by] = P(a, b / 2, 0);
+  beschriftung(ctx, `b = ${b.toFixed(1)}`, bx + 9, by + 11, {align:'left', halo:true, W, H});
+  const [cxx, cyy] = P(0, 0, c / 2);
+  beschriftung(ctx, `c = ${c.toFixed(1)}`, cxx - 9, cyy, {align:'right', halo:true, W, H});
+  // Worum es hier geht: die Raumdiagonale und ihre Formel
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, 'd = √(a² + b² + c²)', 8, 17, {align:'left', halo:true, W, H});
+  beschriftung(ctx, `d = ${d.toFixed(2)} cm`, 8, 33, {align:'left', halo:true, W, H});
 }
 ['qd-a', 'qd-b', 'qd-c'].forEach(id => document.getElementById(id).addEventListener('input', updateQD));
 

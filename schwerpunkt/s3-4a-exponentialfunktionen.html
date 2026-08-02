@@ -919,6 +919,13 @@ function updateDR(){
   if(y <= 10 && y >= -2){
     drawDot(ctx, cx, cy, x, y, '#1f6b3a', 6);
   }
+  // Term und der allen gemeinsame Punkt (0|1) im Bild
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, `f(x) = ${aStr}ˣ`, 8, 19, {align:'left', halo:true, W, H});
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#9b1c1c';
+  beschriftung(ctx, '(0|1)', cx(0) + 8, cy(1) - 7, {align:'left', halo:true, W, H});
 }
 ['dr-a', 'dr-x'].forEach(id => document.getElementById(id).addEventListener('input', updateDR));
 
@@ -986,6 +993,16 @@ function updateTR(){
   // Ordinatenabschnitt markieren
   const y0 = b.f(-u) + v;
   if(y0 >= -4 && y0 <= 8) drawDot(ctx, cx, cy, 0, y0, '#1f6b3a', 5);
+  // Term und Asymptotenwert im Bild
+  const expoP = u === 0 ? 'x' : (u > 0 ? `x − ${u}` : `x + ${Math.abs(u)}`);
+  const vP    = v === 0 ? '' : (v > 0 ? ` + ${v}` : ` − ${Math.abs(v)}`);
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
+  ctx.fillStyle = '#5b2d8e';
+  const potP = u === 0 ? `${bStr}ˣ` : `${bStr}^(${expoP})`;
+  beschriftung(ctx, `y = ${potP}${vP}`, 8, 19, {align:'left', halo:true, W, H});
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#b85c00';
+  beschriftung(ctx, `y = ${String(v).replace('-', '−')}`, W - 6, cy(v) - 6, {align:'right', halo:true, W, H});
 }
 ['tr-u', 'tr-v'].forEach(id => document.getElementById(id).addEventListener('input', updateTR));
 

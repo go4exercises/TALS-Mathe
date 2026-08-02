@@ -771,10 +771,13 @@ document.getElementById('al-t').addEventListener('input', updateAL);
 /* ══ GLEICHUNG ALS SCHNITTPUNKT-FRAGE ══ */
 const GL = [
   {lhs: x => Math.pow(3, x),                    rhs: x => 8,                       eq: 'x = log₃(8) = ln 8 / ln 3 ≈ 1.89 · L = {1.89}',
+   lhsLab: '3ˣ',        rhsLab: '8',
    dots: [[Math.log(8)/Math.log(3), 8]]},
   {lhs: x => Math.pow(3, 2*x) + 9,              rhs: x => 10 * Math.pow(3, x),     eq: 'Substitution u = 3ˣ: u² − 10u + 9 = 0 ⇒ u = 1, 9 ⇒ L = {0; 2}',
+   lhsLab: '3²ˣ + 9',   rhsLab: '10·3ˣ',
    dots: [[0, 10], [2, 90]]},
   {lhs: x => Math.pow(2, x),                    rhs: x => -4,                      eq: '2ˣ > 0 für alle x ⇒ kein Schnittpunkt ⇒ L = { }',
+   lhsLab: '2ˣ',        rhsLab: '−4',
    dots: []},
 ];
 let glActive = 0;
@@ -797,6 +800,12 @@ function drawGl(){
   v.dots.forEach(([dx, dy]) => {
     if(dy <= yMax && dy >= yMin) drawDot(ctx, cx, cy, dx, dy, '#1f6b3a', 6);
   });
+  // Welche Kurve ist welche Seite der Gleichung — Farben wie im Bild
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'links: ' + v.lhsLab, 8, 18, {align:'left', halo:true, W, H});
+  ctx.fillStyle = '#b85c00';
+  beschriftung(ctx, 'rechts: ' + v.rhsLab, 8, 34, {align:'left', halo:true, W, H});
 }
 
 /* ══ A1: Lösungsmenge erkennen ══ */

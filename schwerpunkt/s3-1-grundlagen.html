@@ -871,6 +871,10 @@ function drawSt(){
   s.pts.forEach(([px, py]) => {
     if(px >= -4 && px <= 4 && py >= -3 && py <= 3) drawDot(ctx, cx, cy, px, py, '#9b1c1c', 5);
   });
+  // Welche Kurve gezeigt wird, steht im Bild — in der Kurvenfarbe
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
+  ctx.fillStyle = s.color;
+  beschriftung(ctx, 'y = ' + s.label, 8, 19, {align:'left', halo:true, W, H});
   document.getElementById('st-d').innerHTML = s.d;
   document.getElementById('st-w').innerHTML = s.w;
   document.getElementById('st-p').innerHTML = s.p;
@@ -1047,9 +1051,12 @@ function drawUg(){
   // Kurven
   plotFx(ctx, cx, cy, f, xMin, xMax, '#5b2d8e', 3, 1e6);
   plotFx(ctx, cx, cy, g, xMin, xMax, '#1a4f8a', 2.5, 1e6);
-  ctx.font = 'bold 13px monospace';
-  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left'; ctx.fillText('f', cx(-2.6), cy(f(-2.6)) - 6);
-  ctx.fillStyle = '#1a4f8a'; ctx.fillText('g', cx(2.7), cy(g(2.7)) - 6);
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  const cT = c < 0 ? ' − ' + fmt2(-c) : ' + ' + fmt2(c);
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, 'f(x) = x²' + cT, cx(-2.6), cy(f(-2.6)) - 8, {align:'center', halo:true, W, H});
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'g(x) = x + 1', W - 6, cy(g(3.3)) - 14, {align:'right', halo:true, W, H});
 
   // Schnittpunkte
   roots.forEach(r => { if(r >= xMin && r <= xMax) drawDot(ctx, cx, cy, r, g(r), '#9b1c1c', 5); });

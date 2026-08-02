@@ -992,6 +992,15 @@ function updateTR(){
   plotFx(ctx, cx, cy, x => x > u ? b.f(x - u) + v : NaN, u + 0.001, 8, '#5b2d8e', 2.5, 60);
   // Nullstelle markieren
   if(x0 >= -4 && x0 <= 8) drawDot(ctx, cx, cy, x0, 0, '#1f6b3a', 5);
+  // Term und Lage der senkrechten Asymptote im Bild
+  const argP = u === 0 ? 'x' : (u > 0 ? `x − ${u}` : `x + ${Math.abs(u)}`);
+  const vP   = v === 0 ? '' : (v > 0 ? ` + ${v}` : ` − ${Math.abs(v)}`);
+  ctx.font = 'bold 13px JetBrains Mono, monospace';
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, `y = ${b.lab}(${argP})${vP}`, 8, 19, {align:'left', halo:true, W, H});
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, `x = ${String(u).replace('-', '−')}`, cx(u) + 6, H - 8, {align:'left', halo:true, W, H});
 }
 ['tr-u', 'tr-v'].forEach(id => document.getElementById(id).addEventListener('input', updateTR));
 

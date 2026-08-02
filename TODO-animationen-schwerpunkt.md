@@ -36,7 +36,7 @@ Acht weitere Canvas liegen in zugeklappten Bereichen und wurden nicht erfasst.
 | davon interaktiv (mit Bedienelement) | 94 |
 | **ohne Hinweispaar** | **16** → **0** (erledigt 02.08.) |
 | **ohne Term/Formel im Bild** | **73** |
-| davon ganz ohne Inhaltstext (nur Achsenzahlen) | 31 — 17 im Lehrteil, 14 in Aufgaben |
+| davon ganz ohne Inhaltstext (nur Achsenzahlen) | 31 — 17 im Lehrteil (erledigt 02.08.), 14 in Aufgaben |
 | tote Regler | **0** |
 
 ---
@@ -113,51 +113,63 @@ jeweils daneben im Fliesstext oder in der Reglerzeile; im Bild fehlt die Kopplun
 Vorschlag je Fall: den aktuellen Term als Beschriftung an die Kurve setzen
 (`beschriftung()`, §2.9) — dieselbe Farbe wie die Kurve, am rechten Kurvenende.
 
+> **Erledigt am 02.08.2026.** Alle 17 haben jetzt den Term im Bild, in der Farbe
+> der zugehörigen Kurve und mit `beschriftung(… halo:true, W, H)` gesetzt. Das
+> rechte Kurvenende taugte nur selten als Ort — bei Exponential-, Logarithmus-
+> und Hyperbelkurven verlässt es das Bild. Regelfall wurde deshalb die freie
+> obere linke Ecke; wo die Kurve dort liegt (`cv-lot`), steht der Term unten links.
+> Drei Widgets haben mehr als den Term bekommen: `vz-canvas` die Legende
+> «f(x) > 0» / «f(x) < 0» direkt an den gefärbten Achsenabschnitten (das war
+> zugleich AN-S05a), `qd-canvas` die Raumdiagonalformel samt Wert und die
+> Kantenmasse (AN-S05e), `ke-canvas` die Formeln für Mantellinie und Volumen.
+> Geprüft: Rendercheck aller 17 Canvas bei 1280 **und** 360 px, Bilder gesichtet,
+> Beschriftungskollisionen in sechs Fällen nachträglich entzerrt.
+
 **Nicht** in dieser Liste: 14 Aufgaben-Grafiken ohne Term. Dort ist das
 Weglassen oft gewollt — der Term ist die gesuchte Antwort. Vor einer Änderung je
 Aufgabe entscheiden.
 
 
 **`s2-2b-exponential-logarithmische-gleichungen`**
-- [ ] `gl-canvas` · §darstellungen
+- [x] `gl-canvas` · §darstellungen — Term ergänzt (02.08.2026)
 
 **`s2-2c-betrag-polynom-ungleichungen`**
-- [ ] `vz-canvas` · §typen
+- [x] `vz-canvas` · §typen — Term ergänzt (02.08.2026)
 
 **`s3-1-grundlagen`**
-- [ ] `st-canvas` · §darstellungen
-- [ ] `ug-canvas` · §theorie
+- [x] `st-canvas` · §darstellungen — Term ergänzt (02.08.2026)
+- [x] `ug-canvas` · §theorie — Term ergänzt (02.08.2026)
 
 **`s3-2a-potenzfunktionen`**
-- [ ] `dr-canvas` · §darstellungen
-- [ ] `hy-canvas` · §theorie
-- [ ] `pa-canvas` · §typen
+- [x] `dr-canvas` · §darstellungen — Term ergänzt (02.08.2026)
+- [x] `hy-canvas` · §theorie — Term ergänzt (02.08.2026)
+- [x] `pa-canvas` · §typen — Term ergänzt (02.08.2026)
 
 **`s3-3-polynomfunktionen`**
-- [ ] `lf-canvas` · §darstellungen
-- [ ] `gv-canvas` · §typen
+- [x] `lf-canvas` · §darstellungen — Term ergänzt (02.08.2026)
+- [x] `gv-canvas` · §typen — Term ergänzt (02.08.2026)
 
 **`s3-4a-exponentialfunktionen`**
-- [ ] `dr-canvas` · §darstellungen
-- [ ] `tr-canvas` · §theorie
+- [x] `dr-canvas` · §darstellungen — Term ergänzt (02.08.2026)
+- [x] `tr-canvas` · §theorie — Term ergänzt (02.08.2026)
 
 **`s3-4b-logarithmusfunktionen`**
-- [ ] `tr-canvas` · §theorie
+- [x] `tr-canvas` · §theorie — Term ergänzt (02.08.2026)
 
 **`s3-5-trigonometrische-funktionen`**
-- [ ] `ek-kreis` · §darstellungen
+- [x] `ek-kreis` · §darstellungen — Term ergänzt (02.08.2026)
 
 **`s3-6-betragsfunktionen`**
-- [ ] `uk-canvas` · §typen
+- [x] `uk-canvas` · §typen — Term ergänzt (02.08.2026)
 
 **`s4-2a-prismen-zylinder`**
-- [ ] `qd-canvas` · §definition
+- [x] `qd-canvas` · §definition — Term ergänzt (02.08.2026)
 
 **`s4-2b-pyramiden-kegel-stuempfe`**
-- [ ] `ke-canvas` · §darstellungen
+- [x] `ke-canvas` · §darstellungen — Term ergänzt (02.08.2026)
 
 **`s4-3c-geraden`**
-- [ ] `cv-lot` · §theorie
+- [x] `cv-lot` · §theorie — Term ergänzt (02.08.2026)
 
 
 ---
@@ -319,7 +331,7 @@ unter AN-S04; hier die Blätter 2 und 4–9.
 
 #### Fehlende Zuordnung — man sieht etwas, weiss aber nicht was · **P2**
 
-- [ ] **AN-S05a** `s2-2c` · `vz-canvas` — Die Parabel steht über einer x-Achse, auf der
+- [x] **AN-S05a** *(erledigt 02.08.2026 mit AN-S02)* `s2-2c` · `vz-canvas` — Die Parabel steht über einer x-Achse, auf der
   Bereiche **rot** und **grün** markiert sind. Was die zwei Farben bedeuten, steht
   nirgends im Bild. Bei einer Vorzeichentabelle ist genau das die Aussage —
   Legende «f(x) > 0» / «f(x) < 0» oder Beschriftung direkt an den Abschnitten.
@@ -334,7 +346,7 @@ unter AN-S04; hier die Blätter 2 und 4–9.
   Kosinuskurven ohne Angabe, welche der beiden gezeigt wird. Bei \(\sin\) und
   \(\cos\) ist die Kurvenform allein kein Unterscheidungsmerkmal, solange man den
   Startwert nicht abliest.
-- [ ] **AN-S05e** `s4-2a` · `qd-canvas` — Der Quader trägt \(a, b, c, d\), aber
+- [x] **AN-S05e** *(erledigt 02.08.2026 mit AN-S02)* `s4-2a` · `qd-canvas` — Der Quader trägt \(a, b, c, d\), aber
   weder Zahlenwerte noch die Formel für die Raumdiagonale — obwohl das Widget
   genau davon handelt. Vergleich: `s4-1` · `cv-raumwinkel` macht es vorbildlich
   («D = 6.93», «a√2 = 5.66», «Würfel: tan φ = 1/√2»).
