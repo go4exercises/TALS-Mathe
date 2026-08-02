@@ -309,6 +309,40 @@ function drawDot(ctx, cx, cy, x, y, color, r) {
   ctx.beginPath(); ctx.arc(cx(x), cy(y), r || 6, 0, Math.PI * 2); ctx.fill();
 }
 
+/* ── Intervallgrenze auf einer Zahlengeraden ─────────────────
+   Zeichnet die Grenze als Klammer — dieselbe Notation wie in der
+   Intervallschreibweise, damit Bild und Schreibweise zusammenpassen.
+   Gefüllte bzw. hohle Punkte werden dafür NICHT mehr verwendet.
+
+     oeffnetRechts = true   →  «[»  (öffnet nach rechts)
+     oeffnetRechts = false  →  «]»  (öffnet nach links)
+
+   Merksatz für die Aufrufstelle: die Klammer öffnet zur Menge hin, wenn
+   die Grenze dazugehört, und von ihr weg, wenn sie nicht dazugehört.
+   Linker Rand:  oeffnetRechts = «gehört dazu».
+   Rechter Rand: oeffnetRechts = «gehört NICHT dazu».
+
+   x, y sind Pixel (nicht Datenkoordinaten). opt: {h, serif, farbe, lw}. */
+function intervallKlammer(ctx, x, y, oeffnetRechts, opt) {
+  opt = opt || {};
+  const h = opt.h === undefined ? 11 : opt.h;
+  const serif = opt.serif === undefined ? 6 : opt.serif;
+  const dx = oeffnetRechts ? serif : -serif;
+  const altCap = ctx.lineCap, altJoin = ctx.lineJoin;
+  ctx.strokeStyle = opt.farbe || '#374151';
+  ctx.lineWidth = opt.lw === undefined ? 2.6 : opt.lw;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.moveTo(x + dx, y - h);
+  ctx.lineTo(x, y - h);
+  ctx.lineTo(x, y + h);
+  ctx.lineTo(x + dx, y + h);
+  ctx.stroke();
+  ctx.lineCap = altCap; ctx.lineJoin = altJoin;
+}
+
 /* ── Lösungs-Toggle ──────────────────────────────────────── */
 function toggleL(id) {
   const b = document.getElementById(id);

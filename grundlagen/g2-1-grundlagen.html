@@ -443,13 +443,13 @@ MathJax = {
   <div class="anim-hinweis links">
     <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
     <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-      <div class="ah-text">Wechsle zwischen «höchstens» und «weniger als» bei gleicher Grenze. Der schattierte Bereich sieht fast gleich aus — nur ein winziger Kreis ändert sich. Was bedeutet er?</div>
+      <div class="ah-text">Wechsle zwischen «höchstens» und «weniger als» bei gleicher Grenze. Der schattierte Bereich sieht fast gleich aus — nur die Klammer am Rand dreht sich um. Was bedeutet das?</div>
     </div>
   </div>
   <div class="anim-hinweis rechts">
     <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
     <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-      <div class="ah-text">Der <strong>gefüllte</strong> Kreis heisst: Die Grenze gehört zur Lösungsmenge (\(\leq\), \(\geq\)). Der <strong>offene</strong> Kreis heisst: Sie gehört nicht dazu (\(<\), \(>\)). In der Intervallschreibweise zeigt die Klammer entsprechend nach innen (\([g;\ \infty[\)) oder nach aussen (\(]g;\ \infty[\)). Bei einer Tragfähigkeit ist das der Unterschied zwischen «450 kg sind erlaubt» und «450 kg sind bereits zu viel».</div>
+      <div class="ah-text">Die Klammer <strong>nach innen</strong> heisst: Die Grenze gehört zur Lösungsmenge (\(\leq\), \(\geq\)). Die Klammer <strong>nach aussen</strong> heisst: Sie gehört nicht dazu (\(<\), \(>\)). Am Zahlenstrahl steht damit dieselbe Klammer wie in der Intervallschreibweise — \([g;\ \infty[\) gegenüber \(]g;\ \infty[\). Bei einer Tragfähigkeit ist das der Unterschied zwischen «450 kg sind erlaubt» und «450 kg sind bereits zu viel».</div>
     </div>
   </div>
 </div>
@@ -1306,8 +1306,8 @@ function drawUngl() {
   const rEl = document.getElementById('uz-rand');
   // Franz. Intervallnotation: die Klammer zeigt nach innen, wenn die Grenze dazugehört.
   rEl.innerHTML = u.geschlossen
-    ? `Randpunkt <strong>gefüllt</strong>: \\(x = ${g}\\) gehört zur Lösungsmenge — die Klammer zeigt nach innen.`
-    : `Randpunkt <strong>offen</strong>: \\(x = ${g}\\) gehört <em>nicht</em> zur Lösungsmenge — die Klammer zeigt nach aussen.`;
+    ? `Klammer <strong>nach innen</strong>: \\(x = ${g}\\) gehört zur Lösungsmenge.`
+    : `Klammer <strong>nach aussen</strong>: \\(x = ${g}\\) gehört <em>nicht</em> zur Lösungsmenge.`;
   rEl.style.color = u.geschlossen ? 'var(--gruen)' : 'var(--rot)';
   mjTypeset([rEl]);
 
@@ -1343,11 +1343,11 @@ function drawUngl() {
   else          { ctx.moveTo(ende - 9, y); ctx.lineTo(ende, y - 5); ctx.lineTo(ende, y + 5); }
   ctx.fill();
 
-  // Randpunkt: gefüllt (Grenze gehört dazu) oder offen
-  ctx.lineWidth = 2.5; ctx.strokeStyle = '#1a4f8a';
-  ctx.beginPath(); ctx.arc(px(g), y, 7, 0, Math.PI * 2);
-  if (u.geschlossen) { ctx.fillStyle = '#1a4f8a'; ctx.fill(); }
-  else               { ctx.fillStyle = '#fff'; ctx.fill(); ctx.stroke(); }
+  // Rand als Klammer — dieselbe Notation wie in der Intervallschreibweise
+  // daneben. Die Klammer öffnet zur Lösungsmenge hin, wenn die Grenze
+  // dazugehört, und von ihr weg, wenn nicht: bei einem Strahl nach rechts
+  // heisst das «[» für ≥ und «]» für >, links spiegelbildlich.
+  intervallKlammer(ctx, px(g), y, u.rechts === u.geschlossen, {farbe:'#1a4f8a', h:13});
 
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
   ctx.fillText('x ' + u.zeichen + ' ' + g, px(g) + (u.rechts ? 42 : -42), y - 30);

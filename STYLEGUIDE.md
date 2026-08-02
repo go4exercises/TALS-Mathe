@@ -145,6 +145,28 @@ Das Lehrmittel verwendet die **deutsche Intervallnotation** (ISO 31-11), nicht d
 - Schreib nicht „runde Klammer für offen" — die offene Intervall-Klammer ist eckig nach aussen geöffnet, nicht rund. Sag stattdessen „Klammer nach aussen geöffnet" oder „Klammer weist vom Intervall weg".
 - Im Zweifel an die Tabelle in g1-2 §5 (Intervalle — Teilmengen von ℝ) anlehnen.
 
+**Am Zahlenstrahl steht dieselbe Klammer wie in der Schreibweise (verbindlich seit 02.08.2026).**
+Wo ein Canvas eine Intervall- oder Lösungsmengengrenze markiert, wird sie als
+**Klammer** gezeichnet — nicht mehr als gefüllter bzw. hohler Punkt. Der Helfer
+dafür ist `intervallKlammer(ctx, x, y, oeffnetRechts, opt)` aus `mathlib.js`:
+
+```js
+intervallKlammer(ctx, px(g), y, true,  {farbe:'#1a4f8a'});   // «[»  öffnet nach rechts
+intervallKlammer(ctx, px(g), y, false, {farbe:'#1a4f8a'});   // «]»  öffnet nach links
+```
+
+Merksatz für die Aufrufstelle: **die Klammer öffnet zur Menge hin, wenn die Grenze
+dazugehört, und von ihr weg, wenn sie nicht dazugehört.** Am linken Rand heisst das
+`oeffnetRechts = «gehört dazu»`, am rechten Rand `oeffnetRechts = «gehört NICHT dazu»`.
+
+Der gefüllte/hohle **Punkt bleibt richtig**, wo es nicht um eine Intervallgrenze geht:
+für einen einzelnen ausgeschlossenen Wert (Polstelle, `\(\mathbb{R} \setminus \{2\}\)` —
+so etwa `s2-2a` · `br-canvas`), für Lösungspunkte und für Wertemarken auf einer Achse.
+
+Umgesetzt in `g1-2` · `cv-iv`, `g2-1` · `cv-ungl` und `s2-2b` · `ld-canvas`. Die
+Begleittexte dürfen dann nicht mehr von „gefülltem" oder „hohlem Punkt" sprechen —
+bei einer Umstellung immer mitprüfen (Erklärzeilen, Hinweispaare 👁/💡).
+
 **Diese Konvention gilt auch in Zusammenfassungs- und Kurzform-Tabellen.** Restfunde des M1-Patches (Mai 2026) zeigten, dass Zusammenfassungstabellen leicht übersehen werden — bei Migrationen jede Tabelle einzeln prüfen, die das Wort „Intervall", „Klammer" oder den Begriff „offen/geschlossen" enthält.
 
 ---
@@ -727,6 +749,7 @@ Themenseiten binden `nav.js` und `mathlib.js` als geteilte Bibliotheken ein. Bei
 | `drawGrid` | `function` | Achsenraster zeichnen |
 | `drawLine` | `function` | Linie mit logischen Koordinaten |
 | `drawDot` | `function` | Punkt mit logischen Koordinaten |
+| `intervallKlammer` | `function` | Intervallgrenze als Klammer (§2.7) |
 
 **Aus `nav.js` reserviert:**
 

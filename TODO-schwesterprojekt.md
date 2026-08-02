@@ -9,6 +9,22 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 
 ## Offen
 
+- **2026-08-02 · Intervallgrenzen am Zahlenstrahl als Klammer statt als Punkt ·
+  `physiklib.js` + betroffene Themenseiten · warum:** In Mathe markieren Canvas
+  eine Intervall- oder Lösungsmengengrenze neu mit derselben Klammer wie die
+  Intervallschreibweise daneben (`[`, `]`) statt mit gefülltem/hohlem Punkt —
+  Bild und Schreibweise sagen damit dasselbe. Neuer Helfer `intervallKlammer(ctx,
+  x, y, oeffnetRechts, opt)` in `mathlib.js`, dokumentiert in STYLEGUIDE §2.7.
+  **Massnahme in Physik:** Helfer 1:1 nach `physiklib.js` übernehmen (farbneutral,
+  Standardfarbe `#374151`), dann die Seiten prüfen, die eine Grenze auf einer
+  Achse zeichnen — in Mathe waren es drei (`g1-2 cv-iv`, `g2-1 cv-ungl`,
+  `s2-2b ld-canvas`), gefunden über `.arc(` im Umfeld von «Strahl / Zahlengerade /
+  Lösungsmenge / Randpunkt / Grenze».
+  **Nicht umstellen**, wo es keine Intervallgrenze ist: einzelner ausgeschlossener
+  Wert (Polstelle), Lösungspunkte, Wertemarken — dort bleibt der Punkt richtig.
+  **Begleittexte mitziehen:** Erklärzeilen und Hinweispaare, die von «gefülltem»
+  oder «hohlem Punkt» sprechen, werden sonst falsch.
+
 - **2026-08-02 · Drei Verbesserungen am SEO-Generator zurück nach Physik ·
   `scripts/build-seo.py` · warum:** Mathe hat den Generator aus Physik (Commit
   `fc4ed40`) übernommen und dabei drei Dinge nachgebessert, die in Physik

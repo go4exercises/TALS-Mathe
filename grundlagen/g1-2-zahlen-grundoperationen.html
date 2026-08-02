@@ -1195,23 +1195,9 @@ function drawIntervall() {
   }
 
   // Endpunkte zeichnen — als Klammer, in derselben Notation wie in der
-  // Intervallschreibweise darüber: nach innen geöffnet heisst «gehört dazu»,
-  // nach aussen geöffnet heisst «gehört nicht dazu».
-  function klammer(x, nachRechtsGeoeffnet) {
-    const h = 11, serif = 6;
-    const dx = nachRechtsGeoeffnet ? serif : -serif;
-    ctx.strokeStyle = '#b85c00';
-    ctx.lineWidth = 2.6;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    ctx.moveTo(x + dx, axisY - h);
-    ctx.lineTo(x, axisY - h);
-    ctx.lineTo(x, axisY + h);
-    ctx.lineTo(x + dx, axisY + h);
-    ctx.stroke();
-    ctx.lineCap = 'butt';
-  }
+  // Intervallschreibweise darüber (Helfer intervallKlammer aus mathlib.js).
+  const klammer = (x, nachRechtsGeoeffnet) =>
+    intervallKlammer(ctx, x, axisY, nachRechtsGeoeffnet, {farbe:'#b85c00'});
   function pfeilOffen(richtungLinks) {
     // Gestrichelter dicker Pfeil nach links bzw. rechts vom Balken weg
     const y = axisY;
