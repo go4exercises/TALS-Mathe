@@ -34,7 +34,7 @@ Acht weitere Canvas liegen in zugeklappten Bereichen und wurden nicht erfasst.
 |---|---:|
 | Canvas gesamt | 98 |
 | davon interaktiv (mit Bedienelement) | 94 |
-| **ohne Hinweispaar** | **16** |
+| **ohne Hinweispaar** | **16** → **0** (erledigt 02.08.) |
 | **ohne Term/Formel im Bild** | **73** |
 | davon ganz ohne Inhaltstext (nur Achsenzahlen) | 31 — 17 im Lehrteil, 14 in Aufgaben |
 | tote Regler | **0** |
@@ -48,53 +48,57 @@ interaktiver Animation. Tatsächlich hat es nur ein Teil. Ohne den Hinweis bleib
 offen, *worauf* beim Schieben zu achten ist und *was* dabei herauskommen soll —
 genau die Kopplung, die eine Animation didaktisch trägt.
 
+> **Erledigt am 02.08.2026.** Alle 16 Paare sind ergänzt. Die Liste wurde vorher am
+> Quelltext gegengeprüft (jede `.widget-titelzeile` gehört zum nächsten `<canvas>`
+> darunter): alle 16 Einträge waren korrekt, kein Fehlbefund.
+
 
 
 **`s2-2a-potenz-wurzel-rationale-gleichungen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s2-2b-exponential-logarithmische-gleichungen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s2-2c-betrag-polynom-ungleichungen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s3-1-grundlagen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s3-2a-potenzfunktionen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s3-2b-wurzelfunktionen`**
-- [ ] `wz-canvas` · §typen
-- [ ] `a1-canvas` · §aufgaben
+- [x] `wz-canvas` · §typen — Hinweispaar ergänzt (02.08.2026)
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s3-3-polynomfunktionen`**
-- [ ] `a2-canvas` · §aufgaben
+- [x] `a2-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s3-4a-exponentialfunktionen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s3-4b-logarithmusfunktionen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s3-5-trigonometrische-funktionen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s3-6-betragsfunktionen`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s4-1-grundlagen`**
-- [ ] `cv-a1` · §aufgaben
+- [x] `cv-a1` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s4-3a-vektorbegriff-komponenten`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s4-3b-skalarprodukt`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 **`s4-3c-geraden`**
-- [ ] `a1-canvas` · §aufgaben
+- [x] `a1-canvas` · §aufgaben — Hinweispaar ergänzt (02.08.2026)
 
 
 ---
