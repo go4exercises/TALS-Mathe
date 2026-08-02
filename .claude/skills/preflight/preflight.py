@@ -9,6 +9,7 @@ Zwei Stufen:
    - verify_mathjax.js        (echte MathJax-Render-Prüfung; braucht node_modules/mathjax-full)
    - verify_js_runtime.js     (JS-Laufzeit in jsdom; braucht node_modules/jsdom)
    - build-suchindex.py --check (Suchindex aktuell? veraltet = WARN, kein Blocker)
+   - build-seo.py --check      (Metadaten/sitemap aktuell? veraltet = WARN, kein Blocker)
    - check_identifier_collisions.py (Symbol-Kollisionen mit mathlib/nav; ohne npm)
    Fehlt ein npm-Modul, wird der betreffende Tiefen-Check sauber als WARN übersprungen.
 
@@ -210,6 +211,12 @@ def run_deep(file_args, rep):
         r = subprocess.run(["python3", str(si), "--check"], capture_output=True, text=True)
         if r.returncode != 0:
             rep.warn("suchindex", "Suchindex veraltet — `python3 scripts/build-suchindex.py`")
+
+    seo = scripts / "build-seo.py"
+    if seo.is_file():
+        r = subprocess.run(["python3", str(seo), "--check"], capture_output=True, text=True)
+        if r.returncode != 0:
+            rep.warn("seo", "Metadaten/sitemap veraltet — `python3 scripts/build-seo.py`")
 
     ic = scripts / "check_identifier_collisions.py"
     if ic.is_file():

@@ -532,6 +532,13 @@ TALS-Mathe/
 
 ## 6.1 HTML-Skelett für Themenseiten (verbindlich)
 
+Direkt nach dem `<title>` steht der **generierte** SEO-Block, begrenzt von den
+Marken `SEO:ANFANG` und `SEO:ENDE` (Beschreibung, `canonical`, Favicons, Open
+Graph, JSON-LD nach schema.org/LearningResource). Er wird nie von Hand bearbeitet,
+sondern von `scripts/build-seo.py` geschrieben; eine neue Seite muss dort in der
+Tabelle `SEITEN` eingetragen werden, sonst bleibt sie ohne Beschreibung und ohne
+Sitemap-Eintrag.
+
 Jede Themenseite verwendet **exakt** die folgende Body-Struktur. Abweichungen (eigene Wrapper-Klassen, hardcoded TOC, semantische `<section>`-Tags um die h2-Sektionen, abweichende `buildNav`-Signatur) brechen das CSS-Grid-Layout `.page-wrap` und/oder die Navigation und sind verboten.
 
 ```html

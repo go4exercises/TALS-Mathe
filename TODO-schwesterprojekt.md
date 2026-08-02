@@ -9,6 +9,26 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 
 ## Offen
 
+- **2026-08-02 · Drei Verbesserungen am SEO-Generator zurück nach Physik ·
+  `scripts/build-seo.py` · warum:** Mathe hat den Generator aus Physik (Commit
+  `fc4ed40`) übernommen und dabei drei Dinge nachgebessert, die in Physik
+  ebenfalls greifen würden:
+  1. **`tex_weg` verstümmelt Formeln in der `teaches`-Liste.** Die alte Fassung
+     löscht `^` und `_` mit weg, aus `a^x` wird «ax» und aus `\log_a(b)` wird
+     «a(b)» — in Metadaten schlicht falsch. Mathe entfernt jetzt nur `{}$` und
+     den Backslash und lässt `^`/`_` stehen; dazu die Makros `log`, `ln`, `lg`,
+     `sin`, `cos`, `tan`, `setminus`. In Physik betrifft das u.a. die
+     Kompetenzen mit Formelanteil (`v = \Delta s / \Delta t` u.ä.) — nachprüfen.
+  2. **Breadcrumb vierstufig.** Mathe hat zwei Fachbereiche, deshalb
+     Site → Fach → Lerngebiet → Teilgebiet. Für Physik reicht dreistufig wie
+     bisher — nur übernehmen, falls dort je eine zweite Ebene dazukommt.
+  3. **Bild-Assets reproduzierbar.** `.claude/tools/build-bilder.mjs` erzeugt
+     `favicon-32.png`, `apple-touch-icon.png` und `og-bild.png` aus `favicon.svg`
+     bzw. einer HTML-Vorlage (Playwright, Google Fonts). In Physik entstanden
+     die PNGs von Hand; mit dem Skript liessen sie sich nach einer Farb- oder
+     Wortlautänderung ohne Handarbeit neu bauen. Vorlage 1:1 übernehmen, nur
+     Farbe (`#1a4f8a` → Bernstein) und Wortlaut tauschen.
+
 - **2026-06-24 · MathJax-Re-Typeset serialisieren (zentraler Helfer `mjTypeset`) ·
   `physiklib.js` + alle Themenseiten · warum:** Einzelne Formeln rendern sporadisch
   leer — aber nur beim **Hard-Refresh**, nicht beim Zurückblättern aus dem bfcache.

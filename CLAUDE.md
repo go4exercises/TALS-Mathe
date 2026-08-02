@@ -35,6 +35,15 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - `minicheck.js` (Mini-Check-Akkordeon), `anim-hinweise.js` (👁/💡-Rollover, Pflicht bei
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
 - `formelsammlung.html`, `glossar.html` — zwei Nachschlag-Seiten im Repo-Root.
+- `scripts/build-seo.py` — erzeugt Seiten-Metadaten (Beschreibung, canonical, Open
+  Graph, JSON-LD nach schema.org/LearningResource), `sitemap.xml` und `robots.txt`.
+  Der Kopfblock zwischen `<!-- SEO:ANFANG -->` und `<!-- SEO:ENDE -->` ist
+  **generiert** — gepflegt wird die Tabelle `SEITEN` im Skript. Neue Seite = dort
+  eintragen, sonst fehlen ihr Beschreibung und Sitemap-Eintrag. Der Pre-Flight
+  warnt, wenn die Metadaten veraltet sind.
+- `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`, `og-bild.png` — Bild-Assets
+  der Auffindbarkeit, erzeugt von `.claude/tools/build-bilder.mjs` (braucht einmalig
+  Netz für die Google Fonts). Nur neu bauen, wenn Farben oder Wortlaut ändern.
 - Skelett-Quelle: `TEMPLATE.html` + `HOWTO-neue-themenseite.md`.
 
 ## Inhaltliche Regeln (STYLEGUIDE §4)

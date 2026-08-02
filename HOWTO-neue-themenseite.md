@@ -125,6 +125,21 @@ Wenn die Seite neu ist, muss sie ins SITE-Array in `nav.js` eingetragen werden:
 
 Die `id` ist die Kurzform (`s1-1`, nicht `s1-1-grundlagen`). Sie wird im `buildNav`-Aufruf der Seite referenziert für das Dropdown-Highlight.
 
+### 1f-2. Metadaten eintragen (Auffindbarkeit)
+
+Neue Seite in der Tabelle `SEITEN` von `scripts/build-seo.py` eintragen —
+`beschreibung` (140–165 Zeichen, mit den Begriffen, die jemand tatsächlich sucht),
+`themen` (Stichworte) und `tg` (Teilgebiet für `educationalAlignment`; weglassen,
+wenn die Seite keine RLP-Kompetenzbox trägt). Dann:
+
+```bash
+python3 scripts/build-seo.py
+```
+
+Das schreibt den Kopfblock in die Seite und führt `sitemap.xml` nach. Ohne diesen
+Schritt hat die Seite keine Beschreibung, keine Link-Vorschau und steht in keiner
+Sitemap — der Pre-Flight meldet das als Warnung.
+
 ### 1g. Pre-Flight-Check
 
 Nach dem Editieren auf der Konsole im Repo-Root:

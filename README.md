@@ -121,6 +121,24 @@ Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TA
 
 ---
 
+## Auffindbarkeit
+
+Jede Seite trägt eine eigene Beschreibung, `canonical`, Open-Graph-Daten für
+Link-Vorschauen und strukturierte Daten nach `schema.org/LearningResource` (LRMI) —
+inklusive Lizenz, Bildungsstufe, Zielgruppe und der RLP-Kompetenzen, die direkt aus
+der Seite gelesen werden. Dazu `sitemap.xml` und `robots.txt`.
+
+```bash
+python3 scripts/build-seo.py            # Metadaten, sitemap.xml, robots.txt schreiben
+python3 scripts/build-seo.py --check    # prüft, ob sie zum Stand passen
+```
+
+Gepflegt wird die Tabelle `SEITEN` im Skript; der Block in den Seiten selbst ist
+generiert. Die Suche nimmt `?q=…` entgegen (`…/index.html?q=parabel`), darauf stützt
+sich die `SearchAction` in den strukturierten Daten.
+
+---
+
 ## Technologie
 
 ```
@@ -140,6 +158,10 @@ style.css               ← Gemeinsames Stylesheet (Design-System)
 nav.js                  ← Navigation (Header, Breadcrumb, ToC, Prev/Next)
 suche.js                ← Volltextsuche über die ganze Site
 suchindex.js            ← GENERIERT — `python3 scripts/build-suchindex.py`
+sitemap.xml             ← GENERIERT — `python3 scripts/build-seo.py`
+robots.txt              ← GENERIERT — `python3 scripts/build-seo.py`
+favicon.svg             ← Favicon (blaue Kachel mit M), dazu favicon-32.png,
+                          apple-touch-icon.png und og-bild.png (Link-Vorschau)
 mathlib.js              ← Canvas-Helper, Beschriftungen, Term-Parser, Zahlen-Formatierer
 rechtliches.html        ← Verantwortlich, Haftung, Datenschutz
 feedback.html           ← Kontakt & Feedback (Formular)
