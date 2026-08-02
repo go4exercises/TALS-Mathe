@@ -19,6 +19,11 @@
 #  Aufruf vom Repo-Root:
 #      python3 scripts/build-seo.py            # schreiben
 #      python3 scripts/build-seo.py --check    # nur pruefen (Exit 1 = veraltet)
+#
+#  Achtung, zwei Laeufe: dateModified und lastmod kommen aus dem Git-Datum der
+#  jeweiligen Datei. Ein Commit, der eine Seite anfasst, macht damit deren
+#  eigenen Block um eine Generation veraltet. Nach dem Commit also noch einmal
+#  laufen lassen und die Datumsaenderung mitcommitten — danach ist es stabil.
 # ─────────────────────────────────────────────────────────────
 
 import html
