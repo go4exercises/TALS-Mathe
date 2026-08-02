@@ -730,18 +730,18 @@ Erscheinungsformen, die im Folgenden ständig verwendet werden — auch in <a cl
           <div class="anim-hinweis links">
             <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
             <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-              <div class="ah-text">Klicke die Zeilen der Tabelle durch und vergleiche jedes Mal drei Dinge: die Klammern in der Schreibweise, die Zeichen \(<\) oder \(\leq\) in der Mengenschreibweise und die Punkte am Zahlenstrahl — gefüllt oder offen?</div>
+              <div class="ah-text">Klicke die Zeilen der Tabelle durch und vergleiche jedes Mal drei Dinge: die Klammern in der Schreibweise, die Zeichen \(<\) oder \(\leq\) in der Mengenschreibweise und die Klammern am Zahlenstrahl — öffnen sie nach innen oder nach aussen?</div>
             </div>
           </div>
           <div class="anim-hinweis rechts">
             <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
             <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-              <div class="ah-text">Die drei Schreibweisen sagen dasselbe. Eckige Klammer, \(\leq\) und gefüllter Punkt gehören zusammen (Rand gehört dazu), runde bzw. nach aussen geöffnete Klammer, \(<\) und offener Punkt ebenso (Rand gehört nicht dazu). Bei \(\infty\) ist die Klammer immer offen — unendlich ist keine Zahl und kann nie dabei sein.</div>
+              <div class="ah-text">Die drei Schreibweisen sagen dasselbe — deshalb steht am Zahlenstrahl dieselbe Klammer wie in der Schreibweise darüber. Nach innen geöffnete Klammer und \(\leq\) gehören zusammen (Rand gehört dazu), nach aussen geöffnete Klammer und \(<\) ebenso (Rand gehört nicht dazu). Bei \(\infty\) ist die Klammer immer offen — unendlich ist keine Zahl und kann nie dabei sein.</div>
             </div>
           </div>
         </div>
     <canvas id="cv-iv" width="520" height="120"></canvas>
-    <div class="iv-erkl" id="iv-erkl">Beide Endpunkte gehören dazu — eckige Klammern, gefüllte Punkte.</div>
+    <div class="iv-erkl" id="iv-erkl">Beide Endpunkte gehören dazu — eckige Klammern, am Zahlenstrahl nach innen geöffnet.</div>
   </div>
 </div>
 
@@ -1127,13 +1127,13 @@ function checkA4() {
 const IV_BEISPIELE = [
   { typ:'geschlossen',  a: 2,    b: 5,    linksZu:true,  rechtsZu:true,
     formal:'[2;\\, 5]', mengen:'\\{x \\in \\mathbb{R} \\mid 2 \\leq x \\leq 5\\}',
-    erkl:'Beide Endpunkte gehören dazu — eckige Klammern, gefüllte Punkte.' },
+    erkl:'Beide Endpunkte gehören dazu — eckige Klammern, am Zahlenstrahl nach innen geöffnet.' },
   { typ:'offen',        a: -1,   b: 3,    linksZu:false, rechtsZu:false,
     formal:']{-1};\\, 3[', mengen:'\\{x \\in \\mathbb{R} \\mid -1 < x < 3\\}',
-    erkl:'Beide Endpunkte gehören <em>nicht</em> dazu — Klammern nach aussen, hohle Punkte.' },
+    erkl:'Beide Endpunkte gehören <em>nicht</em> dazu — die Klammern öffnen nach aussen, auch am Zahlenstrahl.' },
   { typ:'halboffen',    a: 0,    b: 4,    linksZu:true,  rechtsZu:false,
     formal:'[0;\\, 4[', mengen:'\\{x \\in \\mathbb{R} \\mid 0 \\leq x < 4\\}',
-    erkl:'Linker Endpunkt dabei (gefüllt), rechter Endpunkt nicht (hohl).' },
+    erkl:'Linker Endpunkt dabei (Klammer nach innen), rechter Endpunkt nicht (Klammer nach aussen).' },
   { typ:'links unbeschränkt',  a: null, b: 2,    linksZu:false, rechtsZu:true,
     formal:']-\\infty;\\, 2]', mengen:'\\{x \\in \\mathbb{R} \\mid x \\leq 2\\}',
     erkl:'Nach links unbeschränkt — Pfeil ohne Endpunkt. Rechts gehört die 2 dazu.' },
@@ -1194,23 +1194,23 @@ function drawIntervall() {
     ctx.fillText(String(v), xPx(v), axisY + 18);
   }
 
-  // Endpunkte zeichnen
-  function endpunktVoll(x, gefuellt) {
+  // Endpunkte zeichnen — als Klammer, in derselben Notation wie in der
+  // Intervallschreibweise darüber: nach innen geöffnet heisst «gehört dazu»,
+  // nach aussen geöffnet heisst «gehört nicht dazu».
+  function klammer(x, nachRechtsGeoeffnet) {
+    const h = 11, serif = 6;
+    const dx = nachRechtsGeoeffnet ? serif : -serif;
+    ctx.strokeStyle = '#b85c00';
+    ctx.lineWidth = 2.6;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     ctx.beginPath();
-    ctx.arc(x, axisY, 5.5, 0, 2 * Math.PI);
-    if (gefuellt) {
-      ctx.fillStyle = '#b85c00';
-      ctx.fill();
-      ctx.strokeStyle = '#b85c00';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    } else {
-      ctx.fillStyle = '#fff';
-      ctx.fill();
-      ctx.strokeStyle = '#b85c00';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
+    ctx.moveTo(x + dx, axisY - h);
+    ctx.lineTo(x, axisY - h);
+    ctx.lineTo(x, axisY + h);
+    ctx.lineTo(x + dx, axisY + h);
+    ctx.stroke();
+    ctx.lineCap = 'butt';
   }
   function pfeilOffen(richtungLinks) {
     // Gestrichelter dicker Pfeil nach links bzw. rechts vom Balken weg
@@ -1244,25 +1244,28 @@ function drawIntervall() {
     ctx.fill();
   }
 
-  // Linker Rand
+  // Linker Rand: «[» wenn geschlossen (öffnet nach rechts, ins Intervall),
+  // «]» wenn offen (öffnet nach links, vom Intervall weg).
   if (iv.a === null) {
     pfeilOffen(true);
   } else {
-    endpunktVoll(pxL, iv.linksZu);
+    klammer(pxL, iv.linksZu);
   }
-  // Rechter Rand
+  // Rechter Rand: spiegelbildlich — «]» wenn geschlossen, «[» wenn offen.
   if (iv.b === null) {
     pfeilOffen(false);
   } else {
-    endpunktVoll(pxR, iv.rechtsZu);
+    klammer(pxR, !iv.rechtsZu);
   }
 
   // Labels (a / b) unter den Endpunkten — etwas tiefer als die Skala
   ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'center';
   ctx.fillStyle = '#b85c00';
-  if (iv.a !== null) ctx.fillText('a = ' + iv.a, pxL, axisY + 36);
-  if (iv.b !== null) ctx.fillText('b = ' + iv.b, pxR, axisY + 36);
+  // Minuszeichen wie in der Schreibweise darüber (−), nicht der Bindestrich
+  const zahl = v => String(v).replace('-', '−');
+  if (iv.a !== null) ctx.fillText('a = ' + zahl(iv.a), pxL, axisY + 36);
+  if (iv.b !== null) ctx.fillText('b = ' + zahl(iv.b), pxR, axisY + 36);
 
   // Die Texte oberhalb (formal + mengen + Erklärung) sind separate DOM-Elemente
   // und werden NICHT hier, sondern in updateIvText() aktualisiert — drawIntervall()
