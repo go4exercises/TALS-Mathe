@@ -814,8 +814,11 @@ function updatePE(){
   const T = 2 * Math.PI * Math.sqrt(l / PE.g);
   const lB = `<span class="tx-blau">${l.toFixed(1)}</span>`;
   document.getElementById('pe-eq').innerHTML = `T(${lB}) = ${T.toFixed(2)} s`;
-  const {ctx, cx, cy} = gridApp('pe-canvas', 240, 0, 11, 0, 7, 1, 1, 'l [m]', 'T [s]');
+  const {ctx, W, H, cx, cy} = gridApp('pe-canvas', 240, 0, 11, 0, 7, 1, 1, 'l [m]', 'T [s]');
   plotFx(ctx, cx, cy, x => 2 * Math.PI * Math.sqrt(x / PE.g), 0, 11, '#1a4f8a', 2.5, 1e6);
+  // Der Term, den die Kurve zeigt
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'T = 2π·√(l/g)', W - 8, 20, {align:'right', halo:true, W, H});
   drawDot(ctx, cx, cy, l, T, '#1a4f8a', 7);
   ctx.strokeStyle = '#1a4f8a55'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
   ctx.beginPath(); ctx.moveTo(cx(l), cy(T)); ctx.lineTo(cx(l), cy(0)); ctx.stroke();

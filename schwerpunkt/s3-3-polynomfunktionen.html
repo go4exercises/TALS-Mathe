@@ -823,13 +823,14 @@ function updateSC(){
   const xB = `<span class="tx-blau">${x.toFixed(2)}</span>`;
   document.getElementById('sc-eq').innerHTML =
     `V(${xB}) = ${xB} · ${b.toFixed(1)} · ${t.toFixed(1)} = ${V.toFixed(1)} cm³`;
-  const {ctx, cx, cy} = gridApp('sc-canvas', 240, 0, 7.5, 0, 400, 1, 50, 'x [cm]', 'V [cm³]');
+  const {ctx, W, H, cx, cy} = gridApp('sc-canvas', 240, 0, 7.5, 0, 400, 1, 50, 'x [cm]', 'V [cm³]');
   plotFx(ctx, cx, cy, u => u*(20-2*u)*(15-2*u), 0, 7.5, '#1a4f8a', 2.5, 1e6);
   // Hochpunkt-Markierung
   const xm = 2.8287, Vm = xm*(20-2*xm)*(15-2*xm);
   drawDot(ctx, cx, cy, xm, Vm, '#1f6b3a', 5);
-  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
-  ctx.fillText('H', cx(xm) + 7, cy(Vm) - 5);
+  // H ueber den Hochpunkt statt daneben — sonst liegt es auf dem Trace-Label
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 13px monospace';
+  beschriftung(ctx, 'H', cx(xm), cy(Vm) - 16, {align:'center', halo:true, W, H});
   // aktueller Punkt
   drawDot(ctx, cx, cy, x, V, '#1a4f8a', 7);
   ctx.strokeStyle = '#1a4f8a55'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
@@ -837,8 +838,9 @@ function updateSC(){
   ctx.beginPath(); ctx.moveTo(cx(x), cy(V)); ctx.lineTo(cx(0), cy(V)); ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace';
-  ctx.textAlign = x > 5.5 ? 'right' : 'left';
-  ctx.fillText(`(${x.toFixed(2)}|${V.toFixed(0)})`, cx(x) + (x > 5.5 ? -8 : 8), cy(V) - 8);
+  // Trace-Label unter den Punkt: ueber ihm steht bei kleinem x das H des Hochpunkts
+  beschriftung(ctx, `(${x.toFixed(2)}|${V.toFixed(0)})`, cx(x) + (x > 5.5 ? -8 : 8), cy(V) + 20,
+               {align: x > 5.5 ? 'right' : 'left', halo:true, W, H});
 }
 document.getElementById('sc-x').addEventListener('input', updateSC);
 
@@ -1055,6 +1057,12 @@ function drawLt() {
   ctx.fillText('−' + z, cx(-z) + 12, cy(0) + 15);
   ctx.textAlign = 'left';
   ctx.fillText('y: ±' + yR, cx(0) + 5, padT + 10);
+  // Welche Kurve welche ist — sonst sind es zwei namenlose Linien
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'f(x) = x³ − 4x', padL + 4, padT + 12, {align:'left', halo:true, W, H});
+  ctx.fillStyle = '#b85c00';
+  beschriftung(ctx, 'Leitterm x³ (gestrichelt)', padL + 4, padT + 28, {align:'left', halo:true, W, H});
   // Leitterm x³ (orange gestrichelt)
   ctx.setLineDash([6, 4]);
   plotFx(ctx, cx, cy, x => x*x*x, -z, z, '#b85c00', 2, yR * 1.4);

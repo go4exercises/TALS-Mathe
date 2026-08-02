@@ -735,7 +735,10 @@ function updateEX(){
   ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
   ctx.fillStyle = '#6b7280'; ctx.font = '10px monospace'; ctx.textAlign = 'center';
   [-2, -1, 0, 1, 2].forEach(e => ctx.fillText(String(e).replace('-', '−'), px(e), y0 + 14));
-  ctx.fillText('Exponent x (Wert-Achse logarithmisch)', (x0 + x1) / 2, H - 4);
+  ctx.fillText('Exponent x', (x0 + x1) / 2, H - 4);
+  // Die senkrechte Achse traegt Werte, keine Exponenten — und sie ist log-skaliert.
+  ctx.fillStyle = '#6b7280'; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  beschriftung(ctx, 'Wert 16ˣ (log. Skala)', x0 + 6, py(90), {align:'left', halo:true, W, H});
 }
 document.getElementById('ex-x').addEventListener('input', updateEX);
 

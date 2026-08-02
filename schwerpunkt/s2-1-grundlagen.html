@@ -733,10 +733,16 @@ function drawWA(){
     ctx.fillStyle = '#b85c00';
     ctx.beginPath(); ctx.arc(rx - 30 + spalte * 20, schaleY - 12 - reihe * 18, 8, 0, 2 * Math.PI); ctx.fill();
   }
-  // Beschriftung
-  ctx.fillStyle = '#374151'; ctx.font = '12px monospace';
-  ctx.fillText('linke Seite', lx, H - 4);
-  ctx.fillText('rechte Seite', rx, H - 4);
+  // Beschriftung: was in der Schale liegt — und warum der Balken waagrecht steht
+  const xTerm = s.links.x === 1 ? 'x' : `${s.links.x}x`;
+  const lTerm = s.links.g ? `${xTerm} + ${s.links.g}` : xTerm;
+  const lWert = s.links.x * 3 + s.links.g;
+  ctx.fillStyle = '#374151'; ctx.font = '12px JetBrains Mono, monospace';
+  beschriftung(ctx, `links: ${lTerm}`, lx, H - 4, {align:'center', halo:true, W, H});
+  beschriftung(ctx, `rechts: ${s.rechts}`, rx, H - 4, {align:'center', halo:true, W, H});
+  ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px JetBrains Mono, monospace';
+  beschriftung(ctx, `mit x = 3:  ${lWert} = ${s.rechts}  ✓ im Gleichgewicht`, midX, beamY - 16,
+               {align:'center', halo:true, W, H});
 }
 
 /* ══ TYPEN-BESTIMMER ══ */

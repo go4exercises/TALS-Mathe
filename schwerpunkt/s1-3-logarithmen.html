@@ -825,6 +825,16 @@ function drawRechenschieber() {
 
   skala(yD, posD, '#374151', 'D');
   skala(yC, posC, '#1a4f8a', 'C');
+  // Die verschobene Zunge laeuft rechts aus dem Bild. Ohne Andeutung verschwinden
+  // ihre Zahlen wortlos — Verlauf plus «…» zeigen, dass die Skala weitergeht.
+  if (posC(10) > W - 6) {
+    const gr = ctx.createLinearGradient(W - 34, 0, W, 0);
+    gr.addColorStop(0, 'rgba(255,255,255,0)');
+    gr.addColorStop(1, 'rgba(255,255,255,0.95)');
+    ctx.fillStyle = gr; ctx.fillRect(W - 34, yC - hZ + 20, 34, hZ + 8);
+    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 14px JetBrains Mono, monospace'; ctx.textAlign = 'right';
+    ctx.fillText('…', W - 4, yC + 5);
+  }
 
   /* Ablese-Linien: senkrecht durch beide Skalen. Der Clou ist, dass v auf der
      Zunge und u·v auf der festen Skala an derselben x-Position stehen — genau

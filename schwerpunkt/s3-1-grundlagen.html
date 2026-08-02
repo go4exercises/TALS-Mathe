@@ -793,8 +793,12 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
   for(let gx = xMin; gx <= xMax + 1e-9; gx += stepX){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
-    ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    // Am rechten Ende steht die Achsenbeschriftung — die letzte Zahl wuerde
+    // sie beruehren und wird deshalb weggelassen.
+    if(!(labX && gx + stepX > xMax + 1e-9)){
+      ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
+      ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    }
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;

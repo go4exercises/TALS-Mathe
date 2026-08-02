@@ -919,6 +919,12 @@ function updateRR(){
   const g = gridApp('rr-canvas', 220, 0, 24, 0, 75, 2, 10, 't [min]', 'h [m]');
   plotFx(g.ctx, g.cx, g.cy, x => RR.m - RR.r * Math.cos(2 * PI * x / RR.T), 0, 24, '#1a4f8a', 2.5, 1e6);
   drawDot(g.ctx, g.cx, g.cy, t, h, '#1a4f8a', 6);
+  // Der Term, den die Kurve zeigt — Gegenstueck zu g5-5 cv-rad
+  // Zweizeilig und rechtsbuendig: einzeilig stiess der Term auf 360 px an «h [m]»
+  g.ctx.font = 'bold 11px JetBrains Mono, monospace'; g.ctx.fillStyle = '#1a4f8a';
+  beschriftung(g.ctx, 'h(t) =', g.W - 8, 18, {align:'right', halo:true, W: g.W, H: g.H});
+  beschriftung(g.ctx, `${RR.m} − ${RR.r}·cos(2πt/${RR.T})`, g.W - 8, 32,
+               {align:'right', halo:true, W: g.W, H: g.H});
 }
 document.getElementById('rr-t').addEventListener('input', updateRR);
 
@@ -985,15 +991,18 @@ function updateEK(){
   const g = gridTrig('ek-canvas', 220, -0.4, 2 * PI + 0.4, -2.4, 2.4);
   plotFx(g.ctx, g.cx, g.cy, F.f, 0, 2 * PI, '#5b2d8e', 2.5, 10);
   if(Math.abs(y) <= 2.4) drawDot(g.ctx, g.cx, g.cy, x, y, '#9b1c1c', 6);
+  // Sinus- und Kosinuskurve sehen gleich aus — welche gezeigt wird, muss dastehen
+  g.ctx.font = 'bold 12px JetBrains Mono, monospace'; g.ctx.fillStyle = '#5b2d8e';
+  beschriftung(g.ctx, `y = ${F.lab} x`, g.W - 8, 18, {align:'right', halo:true, W: g.W, H: g.H});
 }
 document.getElementById('ek-x').addEventListener('input', updateEK);
 
 /* ══ TYPEN-VISUALISIERUNG ══ */
 const typen = [
-  {label:'sin x',     desc:'y = sin x  ·  Periode 2π  ·  Nullstellen bei kπ  ·  ungerade (punktsymmetrisch)', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.sin, -2*PI, 2*PI, '#1a4f8a', 3, 10)},
-  {label:'cos x',     desc:'y = cos x  ·  Periode 2π  ·  Nullstellen bei π/2 + kπ  ·  gerade (achsensymmetrisch)', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.cos, -2*PI, 2*PI, '#1f6b3a', 3, 10)},
-  {label:'tan x',     desc:'y = tan x  ·  Periode π  ·  Pole bei π/2 + kπ  ·  Wertemenge ℝ', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.tan, -2*PI, 2*PI, '#b85c00', 3, 8)},
-  {label:'sin & cos', desc:'cos x (grün) ist die um π/2 nach links verschobene Sinuskurve (blau) — kongruent!', draw: g => { plotFx(g.ctx, g.cx, g.cy, Math.sin, -2*PI, 2*PI, '#1a4f8a', 2.5, 10); plotFx(g.ctx, g.cx, g.cy, Math.cos, -2*PI, 2*PI, '#1f6b3a', 2.5, 10); }},
+  {label:'sin x',     lab:[['y = sin x', '#1a4f8a']], desc:'y = sin x  ·  Periode 2π  ·  Nullstellen bei kπ  ·  ungerade (punktsymmetrisch)', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.sin, -2*PI, 2*PI, '#1a4f8a', 3, 10)},
+  {label:'cos x',     lab:[['y = cos x', '#1f6b3a']], desc:'y = cos x  ·  Periode 2π  ·  Nullstellen bei π/2 + kπ  ·  gerade (achsensymmetrisch)', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.cos, -2*PI, 2*PI, '#1f6b3a', 3, 10)},
+  {label:'tan x',     lab:[['y = tan x', '#b85c00']], desc:'y = tan x  ·  Periode π  ·  Pole bei π/2 + kπ  ·  Wertemenge ℝ', draw: g => plotFx(g.ctx, g.cx, g.cy, Math.tan, -2*PI, 2*PI, '#b85c00', 3, 8)},
+  {label:'sin & cos', lab:[['y = sin x', '#1a4f8a'], ['y = cos x', '#1f6b3a']], desc:'cos x (grün) ist die um π/2 nach links verschobene Sinuskurve (blau) — kongruent!', draw: g => { plotFx(g.ctx, g.cx, g.cy, Math.sin, -2*PI, 2*PI, '#1a4f8a', 2.5, 10); plotFx(g.ctx, g.cx, g.cy, Math.cos, -2*PI, 2*PI, '#1f6b3a', 2.5, 10); }},
 ];
 let tyActive = 0;
 function buildTyBtns(){
@@ -1009,6 +1018,12 @@ function setTy(i){
 function drawTy(){
   const g = gridTrig('ty-canvas', 220, -2 * PI - 0.4, 2 * PI + 0.4, -2.6, 2.6);
   typen[tyActive].draw(g);
+  // Kurvennamen im Bild — in der Farbe der jeweiligen Kurve
+  g.ctx.font = 'bold 12px JetBrains Mono, monospace';
+  typen[tyActive].lab.forEach(([txt, col], i) => {
+    g.ctx.fillStyle = col;
+    beschriftung(g.ctx, txt, 8, 18 + i * 16, {align:'left', halo:true, W: g.W, H: g.H});
+  });
   document.getElementById('ty-desc').textContent = typen[tyActive].desc;
 }
 
@@ -1045,6 +1060,16 @@ function updateTR(){
   g.ctx.beginPath(); g.ctx.moveTo(0, g.cy(v)); g.ctx.lineTo(g.W, g.cy(v)); g.ctx.stroke();
   g.ctx.setLineDash([]);
   plotFx(g.ctx, g.cx, g.cy, x => a * Math.sin(b * (x - u)) + v, -2*PI, 2*PI, '#5b2d8e', 2.5, 20);
+  // Grundkurve und transformierte Kurve im Bild benennen
+  const aP = a === 1 ? '' : `${fmt(a)}·`;
+  const bP = b === 1 ? '' : `${fmt(b)}·`;
+  const argP = uk === 0 ? `${bP}x` : `${bP}(x ${uk > 0 ? '−' : '+'} ${piFrac(Math.abs(uk), 4)})`;
+  const vP = v === 0 ? '' : (v > 0 ? ` + ${v}` : ` − ${Math.abs(v)}`);
+  g.ctx.font = 'bold 12px JetBrains Mono, monospace';
+  g.ctx.fillStyle = '#5b2d8e';
+  beschriftung(g.ctx, `y = ${aP}sin(${argP})${vP}`, 8, 18, {align:'left', halo:true, W: g.W, H: g.H});
+  g.ctx.fillStyle = '#9ca3af'; g.ctx.font = 'bold 11px JetBrains Mono, monospace';
+  beschriftung(g.ctx, 'gestrichelt: y = sin x', 8, 34, {align:'left', halo:true, W: g.W, H: g.H});
 }
 ['tr-a', 'tr-b', 'tr-u', 'tr-v'].forEach(id => document.getElementById(id).addEventListener('input', updateTR));
 

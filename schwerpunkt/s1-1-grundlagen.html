@@ -833,6 +833,12 @@ function drawPruefstand() {
     ctx.fillText('für a = 0 ist lg a nicht definiert', W / 2, H / 2);
     return;
   }
+  // Ganze Zahlen ohne Nachkommastellen, sonst so viele wie noetig — vier feste
+  // Stellen liessen «12.0000» wie eine Maschinenausgabe aussehen.
+  const zahl = v => {
+    const s = Math.abs(v) >= 1 ? v.toFixed(2) : v.toFixed(4);
+    return s.replace(/\.?0+$/, '').replace('-', '−');
+  };
   const max = Math.max(Math.abs(li), Math.abs(re), 1e-9);
   const bx = 118, bw = W - 150;
   const bar = (y, v, col, lab) => {
@@ -843,16 +849,27 @@ function drawPruefstand() {
     ctx.fillStyle = col; ctx.fillRect(bx, y, w, 20);
     // Zahl neben den Balken — bei fast vollem Balken hinein, sonst liefe sie aus dem Bild
     ctx.font = '11px JetBrains Mono, monospace';
-    if (w > bw - 60) { ctx.fillStyle = '#fff'; ctx.textAlign = 'right'; ctx.fillText(v.toFixed(4), bx + w - 8, y + 14); }
-    else             { ctx.fillStyle = '#374151'; ctx.textAlign = 'left'; ctx.fillText(v.toFixed(4), bx + w + 6, y + 14); }
+    if (w > bw - 60) { ctx.fillStyle = '#fff'; ctx.textAlign = 'right'; ctx.fillText(zahl(v), bx + w - 8, y + 14); }
+    else             { ctx.fillStyle = '#374151'; ctx.textAlign = 'left'; ctx.fillText(zahl(v), bx + w + 6, y + 14); }
   };
   bar(42, li, '#1a4f8a', 'linke Seite');
   bar(90, re, '#b85c00', 'rechte Seite');
   ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
   ctx.fillStyle = gleich ? (r.ok ? '#1f6b3a' : '#b85c00') : '#c8412c';
-  ctx.fillText(gleich ? 'beide Seiten gleich' : `Differenz ${(li - re).toFixed(4)}`.replace('-', '−'), W / 2, 24);
-  ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#6b7280';
-  ctx.fillText(r.t, W / 2, H - 14);
+  ctx.fillText(gleich ? 'beide Seiten gleich' : `Differenz ${zahl(li - re)}`, W / 2, 24);
+  // Die Regel darunter ist eine Behauptung, keine Merkformel: falsche Regeln
+  // werden rot durchgestrichen, gueltige gruen bestaetigt.
+  ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+  const pre = r.ok ? '✓ gilt immer:  ' : '✗ gilt nicht:  ';
+  const wPre = ctx.measureText(pre).width, wReg = ctx.measureText(r.t).width;
+  const xReg = Math.max(4, W / 2 - (wPre + wReg) / 2);
+  ctx.fillStyle = r.ok ? '#1f6b3a' : '#c8412c';
+  ctx.fillText(pre, xReg, H - 14);
+  ctx.fillText(r.t, xReg + wPre, H - 14);
+  if (!r.ok) {
+    ctx.strokeStyle = '#c8412c'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(xReg + wPre, H - 18); ctx.lineTo(xReg + wPre + wReg, H - 18); ctx.stroke();
+  }
 }
 document.querySelectorAll('#rp-chips .typ-btn').forEach(btn => btn.addEventListener('click', () => {
   rpAkt = +btn.dataset.rp;

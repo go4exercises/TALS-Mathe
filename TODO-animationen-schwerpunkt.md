@@ -291,37 +291,49 @@ sichtbaren Animationen habe ich rund ein Viertel im Bild einzeln beurteilt
 Messungen oben erfasst, aber nicht einzeln angesehen — hier liegt der grösste
 Rest an Arbeit.
 
-- [ ] **AN-S04a** `s1-1` · `cv-pruefstand` · **P3** — Die Werte stehen mit vier
+- [x] **AN-S04a** `s1-1` · `cv-pruefstand` · **P3** — Die Werte stehen mit vier
   Nachkommastellen da («Differenz 12.0000», «25.0000», «13.0000»), obwohl es
   ganze Zahlen sind. Wirkt nach Maschine, nicht nach Mathematik. Auf ganzzahlige
   Anzeige umstellen, Nachkommastellen nur wo nötig.
-- [ ] **AN-S04b** `s1-1` · `cv-pruefstand` · **P2** — Unter den Balken steht
+  **Erledigt 02.08.2026:** behoben — ganzzahlige Werte ohne Nachkommastellen, Bruchteile nur wo nötig.
+- [x] **AN-S04b** `s1-1` · `cv-pruefstand` · **P2** — Unter den Balken steht
   «(a+b)² = a² + b²» ohne Kennzeichnung. Das ist genau die **falsche** Gleichung,
   die das Widget widerlegen soll. Ohne Markierung (durchgestrichen, rot, «≠»)
   liest sie sich wie eine Merkformel.
-- [ ] **AN-S04c** `s1-2` · `ex-canvas` · **P4** — Die y-Achse ist logarithmisch
+  **Erledigt 02.08.2026:** behoben — die Regel steht jetzt als Behauptung da: «✗ gilt nicht» und rot durchgestrichen, gültige Regeln grün mit ✓.
+- [x] **AN-S04c** `s1-2` · `ex-canvas` · **P4** — Die y-Achse ist logarithmisch
   (1/256 … 256), aber nur die x-Achse ist beschriftet («Exponent x»). Der y-Achse
   fehlt die Angabe, was sie zeigt.
-- [ ] **AN-S04d** `s1-3` · `cv-rechenschieber` · **P3** — Die verschiebbare
+  **Erledigt 02.08.2026:** behoben — die y-Achse trägt jetzt «Wert 16ˣ (log. Skala)», die x-Achse nur noch «Exponent x».
+- [x] **AN-S04d** `s1-3` · `cv-rechenschieber` · **P3** — Die verschiebbare
   C-Skala läuft rechts aus dem Bild, ohne dass das angedeutet wird. Beim Schieben
   verschwinden Zahlen wortlos. Entweder Skala kürzen oder den Rand andeuten.
-- [ ] **AN-S04e** `s2-1` · `wa-canvas` · **P2** — Die Waage steht waagrecht, obwohl
+  **Erledigt 02.08.2026:** behoben — Verlauf nach Weiss plus «…» am rechten Rand, sobald die Zunge hinausläuft.
+- [x] **AN-S04e** `s2-1` · `wa-canvas` · **P2** — Die Waage steht waagrecht, obwohl
   links «x x x + 2» und rechts 12 Kugeln liegen. Ohne Zahlenanzeige ist nicht
   ablesbar, ob die Seiten gleich sind — dasselbe Muster wie AN-11 im
   Grundlagen-Audit (`g2-1` · `uf-canvas`, dort als «faktisch tot» notiert).
   Beide zusammen anschauen.
-- [ ] **AN-S04f** `s2-2a` · `a1-canvas` · **P3** — x-Achse von −25 bis 25, die
+  **Erledigt 02.08.2026:** behoben — «links: 3x + 2» / «rechts: 11» an den Schalen und darüber die Probe «mit x = 3: 11 = 11 ✓ im Gleichgewicht».
+- [x] **AN-S04f** `s2-2a` · `a1-canvas` · **P3** — x-Achse von −25 bis 25, die
   Kurve liegt vollständig im rechten Viertel. Drei Viertel der Fläche sind leer.
   Skalierung an den dargestellten Bereich anpassen (STYLEGUIDE §3: aufgabenbezogen).
-- [ ] **AN-S04g** `s3-1` · `ug-canvas` · **P3** — Die x-Achsenzahlen liegen in den
+  **Erledigt 02.08.2026:** behoben — Fenster je Fall (−4…30 bzw. −16…4 bei √(−x)) statt fest −28…28.
+- [x] **AN-S04g** `s3-1` · `ug-canvas` · **P3** — Die x-Achsenzahlen liegen in den
   grün hinterlegten Lösungsbereichen und sind dort schlecht lesbar. Die Zahlen
   nach der Flächenfüllung setzen (`zahlenOben()` aus `drawGrid`).
-- [ ] **AN-S04h** `s3-2a` · `hy-canvas` · **P4** — Die Hyperbeläste laufen oben und
+  **Nachgeprüft 02.08.2026: war bereits behoben.** `drawUg` ruft `drawGrid` mit
+  `{zahlen:false}` und setzt am Schluss `zahlenOben()` — seit dem Beschriftungs-
+  Durchgang vom 30.07. (Commit 070b84a). Im Rendercheck stehen die Zahlen mit
+  weisser Freistellung über der grünen Fläche. Kein Handlungsbedarf.
+- [x] **AN-S04h** `s3-2a` · `hy-canvas` · **P4** — Die Hyperbeläste laufen oben und
   unten ohne Andeutung aus dem Bild; es sieht nach abgeschnitten statt nach
   «geht weiter» aus.
-- [ ] **AN-S04i** `s3-1` · `we-graph` · **P4** — «x [m]» am rechten Rand berührt die
+  **Erledigt 02.08.2026:** behoben — Pfeilspitzen am oberen und unteren Bildrand, Austrittsstelle in geschlossener Form berechnet.
+- [x] **AN-S04i** `s3-1` · `we-graph` · **P4** — «x [m]» am rechten Rand berührt die
   letzte Achsenzahl (30). Dasselbe Muster wie auf den bereits korrigierten Seiten:
   letzte Zahl weglassen, dort steht die Achsenbeschriftung.
+  **Erledigt 02.08.2026:** behoben — `gridApp` lässt die letzte x-Zahl weg, wenn dort die Achsenbeschriftung steht.
 
 ### AN-S05 — Befunde aus der vollständigen Bildsichtung (01.08.2026)
 
@@ -335,17 +347,20 @@ unter AN-S04; hier die Blätter 2 und 4–9.
   Bereiche **rot** und **grün** markiert sind. Was die zwei Farben bedeuten, steht
   nirgends im Bild. Bei einer Vorzeichentabelle ist genau das die Aussage —
   Legende «f(x) > 0» / «f(x) < 0» oder Beschriftung direkt an den Abschnitten.
-- [ ] **AN-S05b** `s3-3` · `cv-lt` — Zwei Kurven (blau und orange) ohne jede
+- [x] **AN-S05b** `s3-3` · `cv-lt` — Zwei Kurven (blau und orange) ohne jede
   Zuordnung. Nur «y: ±27» steht dabei. Welche Kurve ist die Funktion, welche die
   Vergleichskurve? Beide benennen.
-- [ ] **AN-S05c** `s3-4b` · `sp-canvas` — Spiegelung an \(y = x\) mit zwei Kurven,
+  **Erledigt 02.08.2026:** behoben — «f(x) = x³ − 4x» und «Leitterm x³ (gestrichelt)» in den Kurvenfarben.
+- [x] **AN-S05c** `s3-4b` · `sp-canvas` — Spiegelung an \(y = x\) mit zwei Kurven,
   von denen keine benannt ist. Gerade hier ist die Zuordnung Exponential- ↔
   Logarithmusfunktion die ganze Aussage. Vorbild: `s3-2b` · `um-canvas`, das
   «y=x²» und «y=√x» direkt an die Kurven schreibt.
-- [ ] **AN-S05d** `s3-5` · `ek-canvas`, `ty-canvas`, `tr-canvas` — Sinus- bzw.
+  **Erledigt 02.08.2026:** behoben — beide Kurventerme oben links, dazu «y = x» an der Winkelhalbierenden.
+- [x] **AN-S05d** `s3-5` · `ek-canvas`, `ty-canvas`, `tr-canvas` — Sinus- bzw.
   Kosinuskurven ohne Angabe, welche der beiden gezeigt wird. Bei \(\sin\) und
   \(\cos\) ist die Kurvenform allein kein Unterscheidungsmerkmal, solange man den
   Startwert nicht abliest.
+  **Erledigt 02.08.2026:** behoben — ek-canvas nennt die gewählte Funktion, ty-canvas beschriftet jede Kurve einzeln (bei «sin & cos» beide), tr-canvas den transformierten Term plus «gestrichelt: y = sin x».
 - [x] **AN-S05e** *(erledigt 02.08.2026 mit AN-S02)* `s4-2a` · `qd-canvas` — Der Quader trägt \(a, b, c, d\), aber
   weder Zahlenwerte noch die Formel für die Raumdiagonale — obwohl das Widget
   genau davon handelt. Vergleich: `s4-1` · `cv-raumwinkel` macht es vorbildlich
@@ -356,22 +371,31 @@ unter AN-S04; hier die Blätter 2 und 4–9.
 Diese Fälle liegen unterhalb der Schwelle des Beschriftungs-Audits vom 30.07.
 oder entstehen erst in dieser Preset-Stellung — im Bild sind sie sichtbar:
 
-- [ ] **AN-S05f** `s3-3` · `sc-canvas` — «(2.0|352)» und «H» überlagern sich am
+- [x] **AN-S05f** `s3-3` · `sc-canvas` — «(2.0|352)» und «H» überlagern sich am
   Hochpunkt.
-- [ ] **AN-S05g** `s4-3d` · `cv-haus` — «Dach» und «D» liegen übereinander.
-- [ ] **AN-S05h** `s4-1` · `sb-canvas` — «Tiefe × q» sitzt auf der Würfelkante.
-- [ ] **AN-S05i** `s3-6` · `ab-canvas` — «Bahnhof» berührt die gestrichelte Linie.
-- [ ] **AN-S05j** `s4-3a` · `ad-canvas` — «a» und «a+b» stehen sehr eng beieinander.
+  **Erledigt 02.08.2026:** behoben — «H» über den Hochpunkt, das Trace-Label unter den Punkt.
+- [x] **AN-S05g** `s4-3d` · `cv-haus` — «Dach» und «D» liegen übereinander.
+  **Erledigt 02.08.2026:** behoben — «Dach» nach links versetzt, weg von der Drohnengeraden.
+- [x] **AN-S05h** `s4-1` · `sb-canvas` — «Tiefe × q» sitzt auf der Würfelkante.
+  **Erledigt 02.08.2026:** behoben — «Tiefe × q» rechts neben die hintere Fläche gesetzt.
+- [x] **AN-S05i** `s3-6` · `ab-canvas` — «Bahnhof» berührt die gestrichelte Linie.
+  **Erledigt 02.08.2026:** behoben — gestrichelte Linie endet unterhalb der Beschriftung.
+- [x] **AN-S05j** `s4-3a` · `ad-canvas` — «a» und «a+b» stehen sehr eng beieinander.
+  **Erledigt 02.08.2026:** behoben — Abstände vergrössert, «b» aus der Pfeilspitze heraus.
 
 #### Term fehlt, wäre aber der Kern · **P4**
 
-- [ ] **AN-S05k** `s3-5` · `rr-canvas` — Riesenrad-Graph ohne \(h(t)\). Das direkte
+- [x] **AN-S05k** `s3-5` · `rr-canvas` — Riesenrad-Graph ohne \(h(t)\). Das direkte
   Gegenstück auf `g5-5` · `cv-rad` hat den Term am 01.08. bekommen; hier fehlt er noch.
-- [ ] **AN-S05l** `s3-2b` · `pe-canvas` — Pendelgraph ohne \(T = 2\pi\sqrt{l/g}\).
-- [ ] **AN-S05m** `s4-2b` · `fu-canvas` — «Pyramide (G, h)» → «Prisma (G, h)», aber
+  **Erledigt 02.08.2026:** behoben — «h(t) = 35 − 30·cos(2πt/12)» im Graphen.
+- [x] **AN-S05l** `s3-2b` · `pe-canvas` — Pendelgraph ohne \(T = 2\pi\sqrt{l/g}\).
+  **Erledigt 02.08.2026:** behoben — «T = 2π·√(l/g)» im Graphen.
+- [x] **AN-S05m** `s4-2b` · `fu-canvas` — «Pyramide (G, h)» → «Prisma (G, h)», aber
   der Faktor \(\tfrac{1}{3}\) — die eigentliche Aussage — steht nicht im Bild.
-- [ ] **AN-S05n** `s3-6` · `cw-canvas` — die Schnittgerade «y = 3.0» ist benannt,
+  **Erledigt 02.08.2026:** behoben — «V(Pyramide) = ⅓ · V(Prisma)» über der Figur.
+- [x] **AN-S05n** `s3-6` · `cw-canvas` — die Schnittgerade «y = 3.0» ist benannt,
   die Betragsfunktion selbst nicht.
+  **Erledigt 02.08.2026:** behoben — «y = |x² − 4|» an der W-Kurve.
 
 #### Referenz-Widgets — als Muster brauchbar
 

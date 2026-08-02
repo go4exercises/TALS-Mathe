@@ -822,13 +822,14 @@ function updateAB(){
   const a = Math.abs(x - 6);
   const xB = `<span class="tx-blau">${x.toFixed(1)}</span>`;
   document.getElementById('ab-eq').innerHTML = `a(${xB}) = |${xB} − 6| = ${a.toFixed(1)} km`;
-  const {ctx, cx, cy} = gridApp('ab-canvas', 220, 0, 12, 0, 8, 1, 1, 'x [km]', 'a [km]');
+  const {ctx, W, H, cx, cy} = gridApp('ab-canvas', 220, 0, 12, 0, 8, 1, 1, 'x [km]', 'a [km]');
   // Bahnhof markieren
   ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
-  ctx.beginPath(); ctx.moveTo(cx(6), cy(0)); ctx.lineTo(cx(6), cy(8)); ctx.stroke();
+  // Linie unterhalb der Beschriftung enden lassen, sonst beruehren sie sich
+  ctx.beginPath(); ctx.moveTo(cx(6), cy(0)); ctx.lineTo(cx(6), cy(7.4)); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'center';
-  ctx.fillText('Bahnhof', cx(6), cy(8) + 12);
+  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace';
+  beschriftung(ctx, 'Bahnhof', cx(6), cy(7.8), {align:'center', halo:true, W, H});
   plotFx(ctx, cx, cy, t => Math.abs(t - 6), 0, 12, '#1a4f8a', 2.5, 1e6);
   drawDot(ctx, cx, cy, x, a, '#1a4f8a', 7);
 }
@@ -992,8 +993,10 @@ function drawCw(){
 
   const {ctx, W, H} = initCanvas('cw-canvas', 240, false);
   const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -4, 4, -1, 8, {zahlen:false});
-  // W-Kurve |x²-4|
+  // W-Kurve |x²-4| — die Schnittgerade ist benannt, die Kurve muss es auch sein
   plotFx(ctx, cx, cy, x => Math.abs(x * x - 4), -4, 4, '#5b2d8e', 3, 1e4);
+  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, 'y = |x² − 4|', W - 8, 18, {align:'right', halo:true, W, H});
   // Waagrechte y = c (nur wenn im Bild)
   if(c >= -1 && c <= 8){
     ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2.4;

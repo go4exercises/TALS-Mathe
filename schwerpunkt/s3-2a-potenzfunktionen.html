@@ -1024,6 +1024,18 @@ function updateHY(){
   // Term im Bild, Asymptotenwerte in den Farben der gestrichelten Linien
   const uP = u === 0 ? 'x' : (u > 0 ? `x − ${u}` : `x + ${Math.abs(u)}`);
   const vP = v === 0 ? '' : (v > 0 ? ` + ${v}` : ` − ${Math.abs(v)}`);
+  // Pfeilspitzen am oberen/unteren Rand: die Aeste sind nicht abgeschnitten,
+  // sie laufen weiter. Austrittsstelle in geschlossener Form: |x−u| = (1/(rng∓v))^(1/p).
+  const spitze = (px, oben) => {
+    ctx.fillStyle = '#5b2d8e';
+    ctx.beginPath();
+    if(oben){ ctx.moveTo(px, 1); ctx.lineTo(px - 5, 11); ctx.lineTo(px + 5, 11); }
+    else    { ctx.moveTo(px, H - 1); ctx.lineTo(px - 5, H - 11); ctx.lineTo(px + 5, H - 11); }
+    ctx.closePath(); ctx.fill();
+  };
+  const dxO = Math.pow(1 / (rng - v), 1 / hyP);
+  if(hyP % 2 === 0){ spitze(cx(u - dxO), true); spitze(cx(u + dxO), true); }
+  else { spitze(cx(u + dxO), true); spitze(cx(u - Math.pow(1 / (rng + v), 1 / hyP)), false); }
   const pP = hyP === 1 ? '' : SUP[String(hyP)];
   ctx.font = 'bold 13px JetBrains Mono, monospace';
   ctx.fillStyle = '#5b2d8e';
