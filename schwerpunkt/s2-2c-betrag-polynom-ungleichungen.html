@@ -210,6 +210,10 @@ MathJax = {
 .vz-tabelle th { background:var(--papier-2); font-family:var(--sans); font-weight:700; }
 .vz-tabelle td.plus  { color:var(--gruen); font-weight:700; }
 .vz-tabelle td.minus { color:var(--rot); font-weight:700; }
+.vz-tabelle td.nullw { color:var(--tinte-2); font-weight:700; }
+.vz-tabelle tr.vz-loes td { background:var(--papier-2); }
+.vz-tabelle td.ja   { color:var(--gruen); font-weight:700; }
+.vz-tabelle td.nein { color:var(--tinte-2); }
 
 /* Klassen .dl, .dl-grid, .lk, .links-grid, .ressourcen-subtitel
    sind zentral in ../style.css definiert — hier NICHT überschreiben. */
@@ -455,7 +459,7 @@ MathJax = {
   <p style="margin-top:6px">Alternative: die grafische Lösung — Kurve oberhalb/unterhalb, siehe <a class="quer" href="s3-1-grundlagen.html">↩ 3.1 Grundlagen Funktionen</a>.</p>
 </div>
 
-<p style="margin-top:14px">Stelle das Produkt ein und lies die Tabelle ab — grün heisst positiv, rot negativ:</p>
+<p style="margin-top:14px">Stelle das Produkt und die Relation ein. Die Tabelle zeigt das <strong>Vorzeichen</strong> je Abschnitt (grün positiv, rot negativ, grau null), der Graph die <strong>Lösungsmenge</strong> grün auf der \(x\)-Achse:</p>
 
 <div class="widget">
   <div class="widget-header">
@@ -464,27 +468,33 @@ MathJax = {
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Verfolge einen Abschnitt in der Tabelle: Wo sind beide Faktoren negativ — und welches Vorzeichen hat dann das Produkt? Vergleiche mit dem Graphen: Wo liegt die Parabel unterhalb der Achse?</div>
+          <div class="ah-text">Verfolge einen Abschnitt in der Tabelle: Wo sind beide Faktoren negativ — und welches Vorzeichen hat dann das Produkt? Vergleiche mit dem Graphen: Wo liegt die Parabel unterhalb der Achse? Wechsle danach zwischen \(>\) und \(\geq\) und achte auf die zwei Spalten \(x = a\) und \(x = b\).</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">Zwischen den Nullstellen haben die Faktoren verschiedene Vorzeichen — das Produkt ist negativ, die Parabel liegt unter der Achse. Aussen sind beide gleich — Produkt positiv. Tabelle und Graph sagen dasselbe.</div>
+          <div class="ah-text">Zwischen den Nullstellen haben die Faktoren verschiedene Vorzeichen — das Produkt ist negativ, die Parabel liegt unter der Achse. Aussen sind beide gleich — Produkt positiv. Tabelle und Graph sagen dasselbe. An den Nullstellen selbst ist das Produkt <em>null</em>: Sie gehören zur Lösung bei \(\geq\) und \(\leq\), aber nicht bei \(>\) und \(<\) — im Graphen dreht sich dort nur die Klammer.</div>
         </div>
       </div>
     </div>
-    <p>Nullstellen \(a\), \(b\) verschiebbar · Lösungsmenge für beide Relationen live</p>
+    <p>Nullstellen \(a\), \(b\) verschiebbar · Relation wählbar · Lösungsmenge live, im Graphen bemasst mit ihrer Intervallschreibweise</p>
   </div>
   <div class="widget-body">
     <div class="sl-row">
       <div class="sl-grp akz-blau"><label>Nullstelle <span class="var">\(a\)</span></label><input type="range" id="vz-a" min="-4" max="0" step="1" value="-2"><span class="sl-val" id="vz-av">−2</span></div>
       <div class="sl-grp akz-orange"><label>Nullstelle <span class="var">\(b\)</span></label><input type="range" id="vz-b" min="1" max="4" step="1" value="1"><span class="sl-val" id="vz-bv">1</span></div>
     </div>
+    <div class="typ-btns" id="vz-rel-btns">
+      <button class="typ-btn aktiv" data-rel="gt" onclick="setVzRel('gt')">f &gt; 0</button>
+      <button class="typ-btn" data-rel="ge" onclick="setVzRel('ge')">f ≥ 0</button>
+      <button class="typ-btn" data-rel="lt" onclick="setVzRel('lt')">f &lt; 0</button>
+      <button class="typ-btn" data-rel="le" onclick="setVzRel('le')">f ≤ 0</button>
+    </div>
     <div class="formel-live">
-      <div class="fl-label">Produkt und Lösungsmengen</div>
-      <div class="fl-eq" id="vz-eq">(x + 2)(x − 1) &gt; 0: L = {x | x &lt; −2 ∨ x &gt; 1}</div>
-      <div class="fl-eq" id="vz-eq2" style="font-size:0.95rem;margin-top:4px">(x + 2)(x − 1) &lt; 0: L = {x | −2 &lt; x &lt; 1}</div>
+      <div class="fl-label">Produkt und Lösungsmenge</div>
+      <div class="fl-eq" id="vz-eq">(x + 2)(x − 1) &gt; 0</div>
+      <div class="fl-eq" id="vz-eq2" style="font-size:0.95rem;margin-top:4px">L = {x | x &lt; −2 ∨ x &gt; 1}</div>
     </div>
     <table class="vz-tabelle" id="vz-tabelle">
       <thead><tr id="vz-kopf"></tr></thead>
@@ -492,6 +502,7 @@ MathJax = {
         <tr id="vz-f1"></tr>
         <tr id="vz-f2"></tr>
         <tr id="vz-prod"></tr>
+        <tr id="vz-loes" class="vz-loes"></tr>
       </tbody>
     </table>
     <div class="cv-wrap" style="max-width:520px;margin-top:12px"><canvas id="vz-canvas" height="200"></canvas></div>
@@ -919,6 +930,13 @@ function updateTO(){
 document.getElementById('to-d').addEventListener('input', updateTO);
 
 /* ══ VORZEICHENTABELLEN-LABOR ══ */
+let vzRel = 'gt';
+function setVzRel(r){
+  vzRel = r;
+  document.querySelectorAll('#vz-rel-btns .typ-btn').forEach(btn =>
+    btn.classList.toggle('aktiv', btn.dataset.rel === r));
+  updateVZ();
+}
 function updateVZ(){
   const a = parseInt(document.getElementById('vz-a').value);
   const b = parseInt(document.getElementById('vz-b').value);
@@ -927,40 +945,82 @@ function updateVZ(){
   const fT = v => v === 0 ? 'x' : (v > 0 ? `x − ${v}` : `x + ${-v}`);
   const t1 = fT(a), t2 = fT(b);
   const aD = String(a).replace('-', '−'), bD = String(b).replace('-', '−');
-  document.getElementById('vz-eq').innerHTML =
-    `(${t1})(${t2}) &gt; 0: L = {x | x &lt; ${aD} ∨ x &gt; ${bD}}`;
-  document.getElementById('vz-eq2').innerHTML =
-    `(${t1})(${t2}) &lt; 0: L = {x | ${aD} &lt; x &lt; ${bD}}`;
-  // Tabelle
+
+  // Relation zerlegen: Richtung und ob die Nullstellen dazugehören.
+  // a < b ist durch die Reglerbereiche garantiert (a ≤ 0 < 1 ≤ b) — es gibt
+  // hier also immer zwei verschiedene Nullstellen, keinen Berührfall.
+  const gross = (vzRel === 'gt' || vzRel === 'ge');   // Produkt positiv?
+  const zu    = (vzRel === 'ge' || vzRel === 'le');   // Nullstellen dabei?
+  const relZ  = vzRel === 'gt' ? '&gt;' : vzRel === 'ge' ? '≥' : vzRel === 'lt' ? '&lt;' : '≤';
+
+  // Lösungsmenge als Intervalle {a, b, aZu, bZu}; null heisst unbeschränkt
+  const iv = (u, v, uZu, vZu) => ({a: u, b: v, aZu: uZu, bZu: vZu});
+  const intervalle = gross ? [iv(null, a, false, zu), iv(b, null, zu, false)]
+                           : [iv(a, b, zu, zu)];
+  const ivText = i =>
+    `${i.aZu ? '[' : ']'}${i.a === null ? '−∞' : String(i.a).replace('-', '−')}; ` +
+    `${i.b === null ? '+∞' : String(i.b).replace('-', '−')}${i.bZu ? ']' : '['}`;
+  const mengenText = gross
+    ? `L = {x | x ${zu ? '≤' : '&lt;'} ${aD} ∨ x ${zu ? '≥' : '&gt;'} ${bD}}`
+    : `L = {x | ${aD} ${zu ? '≤' : '&lt;'} x ${zu ? '≤' : '&lt;'} ${bD}}`;
+  document.getElementById('vz-eq').innerHTML  = `(${t1})(${t2}) ${relZ} 0`;
+  document.getElementById('vz-eq2').innerHTML = `${mengenText}  =  ${intervalle.map(ivText).join(' ∪ ')}`;
+
+  // Tabelle — mit den zwei Nullstellen-Spalten, denn genau dort entscheidet
+  // sich der Unterschied zwischen > und ≥ bzw. < und ≤.
+  const z = (kl, w) => `<td class="${kl}">${w}</td>`;
   document.getElementById('vz-kopf').innerHTML =
-    `<th></th><th>x &lt; ${aD}</th><th>${aD} &lt; x &lt; ${bD}</th><th>x &gt; ${bD}</th>`;
+    `<th></th><th>x &lt; ${aD}</th><th>x = ${aD}</th><th>${aD} &lt; x &lt; ${bD}</th><th>x = ${bD}</th><th>x &gt; ${bD}</th>`;
   document.getElementById('vz-f1').innerHTML =
-    `<td>${t1}</td><td class="minus">−</td><td class="plus">+</td><td class="plus">+</td>`;
+    `<td>${t1}</td>` + z('minus','−') + z('nullw','0') + z('plus','+')  + z('plus','+')  + z('plus','+');
   document.getElementById('vz-f2').innerHTML =
-    `<td>${t2}</td><td class="minus">−</td><td class="minus">−</td><td class="plus">+</td>`;
+    `<td>${t2}</td>` + z('minus','−') + z('minus','−') + z('minus','−') + z('nullw','0') + z('plus','+');
   document.getElementById('vz-prod').innerHTML =
-    `<td><strong>Produkt</strong></td><td class="plus">+</td><td class="minus">−</td><td class="plus">+</td>`;
+    `<td><strong>Produkt</strong></td>` + z('plus','+') + z('nullw','0') + z('minus','−') + z('nullw','0') + z('plus','+');
+  // Gehört der Abschnitt zur Lösung? Reihenfolge wie oben: <a, =a, zwischen, =b, >b
+  const vzProd = ['+', '0', '−', '0', '+'];
+  const drin = v => gross ? (v === '+' || (zu && v === '0'))
+                          : (v === '−' || (zu && v === '0'));
+  document.getElementById('vz-loes').innerHTML =
+    `<td><strong>Lösung?</strong></td>` +
+    vzProd.map(v => drin(v) ? z('ja','✓') : z('nein','✗')).join('');
+
   // Graph
   const {ctx, W, H} = initCanvas('vz-canvas', 200, false);
   const {cx, cy} = drawGrid(ctx, W, H, -6, 6, -8, 10);
-  // Lösungsbereiche auf der Achse einfärben
+  // Lösungsmenge grün auf der x-Achse (die Vorzeichen stehen in der Tabelle)
+  const links  = i => (i.a === null ? -6 : i.a);
+  const rechts = i => (i.b === null ?  6 : i.b);
   ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 5;
-  ctx.beginPath(); ctx.moveTo(0, cy(0)); ctx.lineTo(cx(a), cy(0)); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(cx(b), cy(0)); ctx.lineTo(W, cy(0)); ctx.stroke();
-  ctx.strokeStyle = '#9b1c1c';
-  ctx.beginPath(); ctx.moveTo(cx(a), cy(0)); ctx.lineTo(cx(b), cy(0)); ctx.stroke();
+  intervalle.forEach(i => {
+    ctx.beginPath(); ctx.moveTo(cx(links(i)), cy(0)); ctx.lineTo(cx(rechts(i)), cy(0)); ctx.stroke();
+  });
   plotFx(ctx, cx, cy, x => (x - a) * (x - b), -6, 6, '#5b2d8e', 2.5, 40);
   drawDot(ctx, cx, cy, a, 0, '#374151', 5);
   drawDot(ctx, cx, cy, b, 0, '#374151', 5);
-  // Term zur Kurve und Bedeutung der beiden Achsenfarben
+  // Term samt Relation — grün ist genau die Menge, wo sie erfüllt ist
   ctx.font = 'bold 12px JetBrains Mono, monospace';
   ctx.fillStyle = '#5b2d8e';
-  beschriftung(ctx, `f(x) = (${t1})(${t2})`, 8, 18, {align:'left', halo:true, W, H});
-  ctx.font = 'bold 11px JetBrains Mono, monospace';
-  ctx.fillStyle = '#1f6b3a';
-  beschriftung(ctx, 'f(x) > 0', cx((-6 + a) / 2), cy(0) + 34, {align:'center', halo:true, W, H});
-  ctx.fillStyle = '#9b1c1c';
-  beschriftung(ctx, 'f(x) < 0', cx((a + b) / 2), cy(0) - 9, {align:'center', halo:true, W, H});
+  const relTxt = vzRel === 'gt' ? '> 0' : vzRel === 'ge' ? '≥ 0' : vzRel === 'lt' ? '< 0' : '≤ 0';
+  // Zwei Zeilen und kompakte Faktoren: einzeilig stiess die Zeile auf 360 px an
+  // das Achsenlabel «y». Zeile 2 in Grün — das ist die Farbe der Lösungsmenge.
+  const k1 = t1.replace(/ /g, ''), k2 = t2.replace(/ /g, '');
+  beschriftung(ctx, `f(x) = (${k1})(${k2})`, 8, 18, {align:'left', halo:true, W, H});
+  ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.fillStyle = '#1f6b3a';
+  beschriftung(ctx, `gesucht: f(x) ${relTxt}`, 8, 34, {align:'left', halo:true, W, H});
+  // Ränder der Lösungsintervalle als Klammer (STYLEGUIDE §2.7); unten kurz,
+  // weil dicht darunter die freigestellten Achsenzahlen stehen.
+  const kl = {farbe:'#1f6b3a', h:14, hUnten:2};
+  intervalle.forEach(i => {
+    if(i.a !== null) intervallKlammer(ctx, cx(i.a), cy(0), i.aZu,  kl);
+    if(i.b !== null) intervallKlammer(ctx, cx(i.b), cy(0), !i.bZu, kl);
+  });
+  // Bemassung: jedes Lösungsintervall traegt seine Schreibweise
+  ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.fillStyle = '#1f6b3a';
+  intervalle.forEach(i => {
+    const mitte = (cx(links(i)) + cx(rechts(i))) / 2;
+    beschriftung(ctx, ivText(i), mitte, cy(0) + 34, {align:'center', halo:true, W, H});
+  });
 }
 ['vz-a', 'vz-b'].forEach(id => document.getElementById(id).addEventListener('input', updateVZ));
 
