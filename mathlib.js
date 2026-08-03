@@ -322,10 +322,15 @@ function drawDot(ctx, cx, cy, x, y, color, r) {
    Linker Rand:  oeffnetRechts = «gehört dazu».
    Rechter Rand: oeffnetRechts = «gehört NICHT dazu».
 
-   x, y sind Pixel (nicht Datenkoordinaten). opt: {h, serif, farbe, lw}. */
+   x, y sind Pixel (nicht Datenkoordinaten).
+   opt: {h, hUnten, serif, farbe, lw}. hUnten setzt die Höhe unterhalb von y
+   getrennt — nötig, wo dicht unter der Achse die freigestellten Achsenzahlen
+   stehen (drawGrid setzt sie auf y + 14) und eine symmetrische Klammer sie
+   überdecken würde. */
 function intervallKlammer(ctx, x, y, oeffnetRechts, opt) {
   opt = opt || {};
   const h = opt.h === undefined ? 11 : opt.h;
+  const hU = opt.hUnten === undefined ? h : opt.hUnten;
   const serif = opt.serif === undefined ? 6 : opt.serif;
   const dx = oeffnetRechts ? serif : -serif;
   const altCap = ctx.lineCap, altJoin = ctx.lineJoin;
@@ -337,8 +342,8 @@ function intervallKlammer(ctx, x, y, oeffnetRechts, opt) {
   ctx.beginPath();
   ctx.moveTo(x + dx, y - h);
   ctx.lineTo(x, y - h);
-  ctx.lineTo(x, y + h);
-  ctx.lineTo(x + dx, y + h);
+  ctx.lineTo(x, y + hU);
+  ctx.lineTo(x + dx, y + hU);
   ctx.stroke();
   ctx.lineCap = altCap; ctx.lineJoin = altJoin;
 }

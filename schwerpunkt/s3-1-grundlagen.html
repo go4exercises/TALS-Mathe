@@ -490,17 +490,17 @@ MathJax = {
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Schiebe die Parabel mit \(c\) nach oben, bis sie die Gerade nur noch berührt und dann ganz über ihr liegt. Wie viele Schnittstellen hat die Gleichung dann — und wie ändert sich die grüne Lösungsmenge der Ungleichung \(f > g\)?</div>
+          <div class="ah-text">Schiebe die Parabel mit \(c\) nach oben, bis sie die Gerade nur noch berührt und dann ganz über ihr liegt. Wie viele Schnittstellen hat die Gleichung dann — und wie ändert sich die grüne Lösungsmenge? Wechsle bei jeder Stellung zusätzlich zwischen \(>\) und \(\geq\): Am Bild ändert sich nur die Klammer am Rand — was heisst das?</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">Die Schnittstellen zerlegen die \(x\)-Achse. Weil die Parabel nach oben öffnet, liegt sie <em>ausserhalb</em> der beiden Schnittstellen oberhalb der Geraden — dort ist \(f > g\). Verschwinden die Schnittstellen (Parabel ganz oben), gilt \(f > g\) für <em>alle</em> \(x\); im Berührfall für alle ausser dem einen Punkt.</div>
+          <div class="ah-text">Die Schnittstellen zerlegen die \(x\)-Achse. Weil die Parabel nach oben öffnet, liegt sie <em>ausserhalb</em> der beiden Schnittstellen oberhalb der Geraden — dort ist \(f > g\). Verschwinden die Schnittstellen (Parabel ganz oben), gilt \(f > g\) für <em>alle</em> \(x\); im Berührfall für alle ausser dem einen Punkt. Das Gleichheitszeichen ändert nur die Ränder: bei \(\geq\) und \(\leq\) gehören die Schnittstellen dazu, die Klammer dreht sich nach innen. Im Berührfall macht genau das den Unterschied zwischen \(L = \mathbb{R}\) (bei \(\geq\)) und \(L = \{0.5\}\) (bei \(\leq\)).</div>
         </div>
       </div>
     </div>
-    <p>Parabel \(f(x)=x^2+c\) violett · Gerade \(g(x)=x+1\) blau · Schnittstellen rot · Lösung grün auf der \(x\)-Achse</p>
+    <p>Parabel \(f(x)=x^2+c\) violett · Gerade \(g(x)=x+1\) blau · Schnittstellen rot · Lösung grün auf der \(x\)-Achse, bemasst mit ihrer Intervallschreibweise</p>
   </div>
   <div class="widget-body">
     <div class="sl-row">
@@ -509,8 +509,10 @@ MathJax = {
       <span class="sl-val" id="ug-cv">-1.00</span>
     </div>
     <div class="typ-btns" id="ug-rel-btns">
-      <button class="typ-btn aktiv" onclick="setUgRel('gt')">f &gt; g</button>
-      <button class="typ-btn" onclick="setUgRel('lt')">f &lt; g</button>
+      <button class="typ-btn aktiv" data-rel="gt" onclick="setUgRel('gt')">f &gt; g</button>
+      <button class="typ-btn" data-rel="ge" onclick="setUgRel('ge')">f ≥ g</button>
+      <button class="typ-btn" data-rel="lt" onclick="setUgRel('lt')">f &lt; g</button>
+      <button class="typ-btn" data-rel="le" onclick="setUgRel('le')">f ≤ g</button>
     </div>
     <div class="formel-live">
       <div class="fl-label">Lösungsmenge</div>
@@ -1161,8 +1163,8 @@ function chkNum(id, target, tol, einheit){
 let ugRel = 'gt';
 function setUgRel(r){
   ugRel = r;
-  document.querySelectorAll('#ug-rel-btns .typ-btn').forEach((b, j) =>
-    b.classList.toggle('aktiv', (j === 0) === (r === 'gt')));
+  document.querySelectorAll('#ug-rel-btns .typ-btn').forEach(b =>
+    b.classList.toggle('aktiv', b.dataset.rel === r));
   drawUg();
 }
 function drawUg(){
@@ -1180,28 +1182,54 @@ function drawUg(){
   if(D > 1e-9){ roots = [(1 - Math.sqrt(D)) / 2, (1 + Math.sqrt(D)) / 2]; }
   else if(Math.abs(D) <= 1e-9){ roots = [0.5]; }
 
-  // Lösungsmenge der aktuellen Relation als x-Intervalle bestimmen (offen, da strikt)
+  // Lösungsmenge der aktuellen Relation bestimmen. Ein Intervall ist
+  // {a, b, aZu, bZu}; a bzw. b === null heisst unbeschränkt. Das Gleichheits-
+  // zeichen ändert nur die Ränder (aZu/bZu), nicht die Lage der Intervalle.
   // f > g  ⇔  x²-x+(c-1) > 0 : ausserhalb der Wurzeln (Parabel öffnet nach oben)
-  const gt = ugRel === 'gt';
-  let intervalle = [], eqText;
+  const gross = (ugRel === 'gt' || ugRel === 'ge');   // f grösser als g?
+  const zu    = (ugRel === 'ge' || ugRel === 'le');   // Rand gehört dazu?
+  let intervalle = [], eqText, punkt = null, lochPunkt = null;
+  const iv = (a, b, aZu, bZu) => ({a, b, aZu, bZu});
+  const mz = v => fmt2(v).replace('-', '−');   // Minuszeichen, kein Bindestrich
   if(roots.length === 2){
     const [x1, x2] = roots;
-    if(gt){ intervalle = [[xMin, x1], [x2, xMax]]; eqText = `L = { x | x < ${fmt2(x1)} ∨ x > ${fmt2(x2)} }`; }
-    else  { intervalle = [[x1, x2]];               eqText = `L = { x | ${fmt2(x1)} < x < ${fmt2(x2)} }`; }
+    if(gross){
+      intervalle = [iv(null, x1, false, zu), iv(x2, null, zu, false)];
+      eqText = `L = { x | x ${zu ? '≤' : '<'} ${mz(x1)} ∨ x ${zu ? '≥' : '>'} ${mz(x2)} }`;
+    } else {
+      intervalle = [iv(x1, x2, zu, zu)];
+      eqText = `L = { x | ${mz(x1)} ${zu ? '≤' : '<'} x ${zu ? '≤' : '<'} ${mz(x2)} }`;
+    }
   } else if(roots.length === 1){
-    if(gt){ intervalle = [[xMin, roots[0]], [roots[0], xMax]]; eqText = `L = ℝ \\ { ${fmt2(roots[0])} }`; }
-    else  { intervalle = [];                                    eqText = 'L = { }  (leer)'; }
+    const x0 = roots[0];
+    if(gross && zu){                       // f ≥ g im Berührfall: alle x
+      intervalle = [iv(null, null, false, false)]; eqText = 'L = ℝ';
+    } else if(gross){                      // f > g: alle ausser der Berührstelle
+      intervalle = [iv(null, x0, false, false), iv(x0, null, false, false)];
+      lochPunkt = x0; eqText = `L = ℝ \\ { ${mz(x0)} }`;
+    } else if(zu){                         // f ≤ g: nur die Berührstelle selbst
+      punkt = x0; eqText = `L = { ${mz(x0)} }  (ein einziger Punkt)`;
+    } else {                               // f < g: leer
+      eqText = 'L = { }  (leer)';
+    }
   } else { // keine Schnittstelle: Parabel liegt ganz oberhalb der Geraden
-    if(gt){ intervalle = [[xMin, xMax]]; eqText = 'L = ℝ  (alle x)'; }
-    else  { intervalle = [];             eqText = 'L = { }  (leer)'; }
+    if(gross){ intervalle = [iv(null, null, false, false)]; eqText = 'L = ℝ'; }
+    else     { eqText = 'L = { }  (leer)'; }
   }
+  // Intervallschreibweise der Lösung — dieselbe Notation wie die Klammern im Bild
+  const ivText = i =>
+    `${i.aZu ? '[' : ']'}${i.a === null ? '−∞' : mz(i.a)}; ${i.b === null ? '+∞' : mz(i.b)}${i.bZu ? ']' : '['}`;
+  if(intervalle.length) eqText += '  =  ' + intervalle.map(ivText).join(' ∪ ');
+  if(eqText.startsWith('L = ℝ  =')) eqText += '  (alle x)';
 
   // Grüne Lösungsbänder auf der x-Achse (schmaler Streifen um y = 0)
+  const links  = i => (i.a === null ? xMin : i.a);
+  const rechts = i => (i.b === null ? xMax : i.b);
   ctx.fillStyle = 'rgba(31,107,58,0.16)';
-  intervalle.forEach(([a, b]) => { ctx.fillRect(cx(a), 0, cx(b) - cx(a), H); });
+  intervalle.forEach(i => { ctx.fillRect(cx(links(i)), 0, cx(rechts(i)) - cx(links(i)), H); });
   ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 4;
-  intervalle.forEach(([a, b]) => {
-    ctx.beginPath(); ctx.moveTo(cx(Math.max(a, xMin)), cy(0)); ctx.lineTo(cx(Math.min(b, xMax)), cy(0)); ctx.stroke();
+  intervalle.forEach(i => {
+    ctx.beginPath(); ctx.moveTo(cx(links(i)), cy(0)); ctx.lineTo(cx(rechts(i)), cy(0)); ctx.stroke();
   });
 
   // Kurven
@@ -1220,6 +1248,34 @@ function drawUg(){
   document.getElementById('ug-eq').textContent = eqText;
   // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
   zahlenOben();
+
+  // Ränder der Lösungsintervalle als Klammer (STYLEGUIDE §2.7) — nach innen
+  // geöffnet heisst «Rand gehört dazu». An ±∞ steht keine Klammer.
+  // Bewusst NACH zahlenOben(): die freigestellte Achsenzahl schnitt der Klammer
+  // sonst die untere Serife ab.
+  // An der herausgenommenen Stelle steht nur der hohle Punkt: dort stossen zwei
+  // Intervalle aneinander, «][» plus Punkt waere dieselbe Aussage dreimal.
+  const randOk = x => lochPunkt === null || Math.abs(x - lochPunkt) > 1e-9;
+  intervalle.forEach(i => {
+    const kl = {farbe:'#1f6b3a', h:15, hUnten:2};   // unten kurz: dort stehen die Achsenzahlen
+    if(i.a !== null && randOk(i.a)) intervallKlammer(ctx, cx(i.a), cy(0), i.aZu,  kl);
+    if(i.b !== null && randOk(i.b)) intervallKlammer(ctx, cx(i.b), cy(0), !i.bZu, kl);
+  });
+  // Einzelne Punkte sind keine Intervallgrenzen und bleiben Punkte:
+  // gefüllt für L = {x0}, hohl für die herausgenommene Stelle bei ℝ \ {x0}.
+  if(punkt !== null) drawDot(ctx, cx, cy, punkt, 0, '#1f6b3a', 6);
+  if(lochPunkt !== null){
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.arc(cx(lochPunkt), cy(0), 5.5, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  }
+
+  // Bemassung: jedes Lösungsintervall trägt seine Schreibweise unter der Achse
+  ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.fillStyle = '#1f6b3a';
+  intervalle.forEach(i => {
+    const mitte = (cx(links(i)) + cx(rechts(i))) / 2;
+    beschriftung(ctx, ivText(i), mitte, cy(0) + 36, {align:'center', halo:true, W, H});
+  });
+  if(punkt !== null) beschriftung(ctx, `{${mz(punkt)}}`, cx(punkt), cy(0) + 36, {align:'center', halo:true, W, H});
 }
 document.getElementById('ug-c').addEventListener('input', drawUg);
 
