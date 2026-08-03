@@ -9,6 +9,20 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 
 ## Offen
 
+> **Empfohlene Reihenfolge für eine Physik-Portiersitzung** (die Einträge stehen
+> darunter neuestes zuerst, die Abhängigkeiten laufen aber andersherum):
+> 1. **`.widget` zentralisieren** — Fundament; ohne das greift die Einbettungsregel nicht.
+> 2. **Einbettung vereinheitlichen** nach demselben Verfahren (Klasse als Namensraum
+>    behalten, Karten-Optik abgeben, in `.widget` wickeln). `.anim` NICHT entfernen.
+> 3. **Gedankenstrich vor Formeln in Titeln** — unabhängig, rein textlich, schnell.
+> 4. **Intervallgrenzen als Klammer** — braucht den Helfer in `physiklib.js`.
+> 5. **SEO-Generator nachbessern** (`tex_weg`) — unabhängig, betrifft nur Metadaten.
+> 6. **`mjTypeset`** — der älteste Eintrag, unabhängig von allem oberen.
+>
+> Für jeden Punkt gilt: nach dem Umbau im Browser nachmessen, nicht nur den Pre-Flight
+> laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
+> Bedienspalte besteht alle Checks.
+
 - **2026-08-03 · Animations-Karte `.widget` zentralisieren und Einbettung
   vereinheitlichen · `style.css` + Themenseiten · warum:** In Mathe lagen
   `.widget`, `.widget-header`, `.widget-header h3/p` und `.widget-body` als

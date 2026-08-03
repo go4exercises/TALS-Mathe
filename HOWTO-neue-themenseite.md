@@ -125,6 +125,14 @@ Wenn die Seite neu ist, muss sie ins SITE-Array in `nav.js` eingetragen werden:
 
 Die `id` ist die Kurzform (`s1-1`, nicht `s1-1-grundlagen`). Sie wird im `buildNav`-Aufruf der Seite referenziert für das Dropdown-Highlight.
 
+### 1f-1. Animationen einbetten
+
+Jede eigenständige Animation steht in einem `.widget` (Kopfzeile mit
+`.widget-titelzeile` und Hinweispaar, darunter `.widget-body`) — die Klassen kommen
+aus `style.css`, **nie in der Seite neu definieren**. Ohne Rahmen bleiben nur
+Grafiken innerhalb eines `.block` und die zweite Ansicht einer bereits betitelten
+Grafik. Verbindlich: STYLEGUIDE §2.10.
+
 ### 1f-2. Metadaten eintragen (Auffindbarkeit)
 
 Neue Seite in der Tabelle `SEITEN` von `scripts/build-seo.py` eintragen —

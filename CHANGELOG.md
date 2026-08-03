@@ -4,6 +4,59 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 2./3. August 2026
+
+Nacharbeit nach Version 1.0: das Animations-Audit des Schwerpunktfachs abgeschlossen,
+die Auffindbarkeit eingerichtet und die Einbettung der Animationen vereinheitlicht.
+
+### Neu
+
+- **Auffindbarkeit** (`scripts/build-seo.py`). Je Seite eigene Beschreibung, `canonical`,
+  Open Graph für Link-Vorschauen und strukturierte Daten nach
+  `schema.org/LearningResource` (LRMI) — mit Lizenz, Bildungsstufe, Zielgruppe und den
+  RLP-Kompetenzen, die direkt aus der Seite gelesen werden. Dazu `sitemap.xml` (51 Einträge),
+  `robots.txt`, Favicon-Satz und `og-bild.png`. Die Suche nimmt `?q=…` entgegen, worauf sich
+  die `SearchAction` stützt. Gepflegt wird die Tabelle `SEITEN` im Skript; der Pre-Flight
+  meldet veraltete Metadaten als `[WARN]`. **Zwei Läufe nötig:** `dateModified` kommt aus
+  dem Git-Datum, ein Commit macht den eigenen Block um eine Generation veraltet.
+- **`intervallKlammer()` in `mathlib.js`** — Intervallgrenzen auf Zahlengeraden werden als
+  Klammer gezeichnet, in derselben Notation wie die Intervallschreibweise daneben, nicht
+  mehr als gefüllter/hohler Punkt. Immer symmetrisch zur Achse, mit weisser Unterlegung.
+  Siehe STYLEGUIDE §2.7.
+- **`.claude/tools/build-bilder.mjs`** — erzeugt Favicon-Varianten und das OG-Bild
+  reproduzierbar aus `favicon.svg` bzw. einer HTML-Vorlage.
+
+### Geändert
+
+- **Animations-Audit Schwerpunktfach abgeschlossen** (`TODO-animationen-schwerpunkt.md`,
+  98 von 98 Punkten): 16 fehlende Hinweispaare ergänzt, 17 Lehrteil-Animationen mit dem
+  Term im Bild versehen, 21 Einzelbefunde aus der Bildsichtung behoben, 42 weitere Fälle
+  je einzeln entschieden (35 mit Term, 7 begründet ohne).
+- **Animations-Karte `.widget` zentralisiert.** Die fünf Regeln lagen als wortgleiche Kopie
+  in 35 von 45 Themenseiten und fehlten in `style.css` — `TEMPLATE.html` benutzte die
+  Klassen, ohne sie zu definieren. Jetzt stehen sie einmal zentral.
+- **Einbettung der Animationen vereinheitlicht** (STYLEGUIDE §2.10). 34 freistehende
+  Animationen haben den Widget-Rahmen bekommen; die gemischten Seiten sind von 27 auf 5
+  gesunken, und diese fünf sind regelkonform gemischt. Restarbeit in
+  `TODO-animationen-einbettung.md`.
+- **Kein Gedankenstrich mehr unmittelbar vor einer Formel in Titeln** (STYLEGUIDE §2.8).
+  Gerendert klebte er an der Formel und las sich als führendes Minus; 75 Titel auf
+  32 Seiten auf Doppelpunkt umgestellt. Im Fliesstext bleibt er — dort ist er ein
+  Satzzeichen mit grammatischer Funktion.
+- **`s3-1 ug-canvas` und `s2-2c vz-canvas`** kennen neu alle vier Relationen (`>`, `≥`,
+  `<`, `≤`); Lösungsintervalle sind im Bild beklammert und mit ihrer Schreibweise bemasst.
+  Die Vorzeichentabelle hat zwei Spalten für die Nullstellen und eine Zeile «Lösung?».
+
+### Behoben
+
+- **`g3-1` Einstieg «Wasser im Becher»** — die Titelzeile stand als Kind im zweispaltigen
+  Raster und wurde selbst zur Rasterzelle: Titel vierzeilig in der 130-px-Spalte, Graph
+  rechts abgeschnitten.
+- **`g1-2` Intervall-Widget** — Zahlenstrahl und Schreibweise verwendeten verschiedene
+  Notationen; dazu Bindestrich statt Minuszeichen in den Grenzenlabels.
+
+---
+
 ## [1.0] — 2026-08-01 · **Erste öffentliche Version**
 
 Das Lehrmittel geht als Version 1.0 online. Alle 31 RLP-Teilgebiete plus die zwei
