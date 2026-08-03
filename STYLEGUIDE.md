@@ -177,20 +177,37 @@ bei einer Umstellung immer mitprüfen (Erklärzeilen, Hinweispaare 👁/💡).
 
 ---
 
-## 2.8 Kein Gedankenstrich unmittelbar vor einer Formel (verbindlich seit 03.08.2026)
+## 2.8 Kein Gedankenstrich unmittelbar an einer Formel (verbindlich seit 03.08.2026)
 
 In **Titeln** (`<h2>`, `<h3>`, `.anim-titel`, `.block-titel`, `.aufg-titel-text`)
 trennt kein Gedankenstrich den Text von der Formel. Gerendert steht der Strich
-direkt an der Formel und liest sich als **führendes Minus**:
+direkt an der Formel und liest sich als **Vorzeichen**. Das gilt in **beide
+Richtungen** — der Strich darf weder unmittelbar vor `\(` noch unmittelbar nach
+`\)` stehen:
 
 | falsch | wird gelesen als | richtig |
 |---|---|---|
 | `Ungleichungs-Labor — \(x^2 + c\)` | \(-x^2 + c\) | `Ungleichungs-Labor: \(x^2 + c\)` |
 | `Häufiger Fehler — \((-x)^n\)` | \(-(-x)^n\) | `Häufiger Fehler: \((-x)^n\)` |
+| `Gerade \(f(x) = a x + b\) — Achsenschnitte erkunden` | \(b-\) …, Minus am Formelende | `Achsenschnitte erkunden: Gerade \(f(x) = a x + b\)` |
+| `Bereich \([0°; 720°[\) — mehrere Perioden` | Strich klebt an der Klammer | `Mehrere Perioden: Bereich \([0°; 720°[\)` |
 
-Trenner ist der **Doppelpunkt**. Nach einem Frage- oder Ausrufezeichen entfällt er
-ersatzlos (`Welches Werkzeug? \(\sin/\cos/\tan\)`). Kein Mittepunkt `·` als
-Ersatz — der wird als Malpunkt gelesen und schafft dasselbe Problem.
+**Vor** der Formel ist der Ersatz der **Doppelpunkt**; nach einem Frage- oder
+Ausrufezeichen entfällt er ersatzlos (`Welches Werkzeug? \(\sin/\cos/\tan\)`).
+Kein Mittepunkt `·` als Ersatz — der wird als Malpunkt gelesen und schafft
+dasselbe Problem.
+
+**Nach** der Formel hilft kein Ersatzzeichen: dort wird umgestellt. Der Teil nach
+dem Strich ist fast immer die Tätigkeit («… erkunden», «… zählen») und gehört an
+den Anfang, die Formel ans Ende — dann steht neben ihr überhaupt nichts mehr.
+Ist der erste Teil dagegen ein blosses Etikett (`⚠ Wichtig`, `🟢 Beispiel 2`,
+`💡 Strategie`), wird nicht umgestellt, sondern der Strich durch den Doppelpunkt
+ersetzt.
+
+**Text dazwischen entschärft den Strich.** Kritisch ist nur der direkte Kontakt
+mit `\(` oder `\)`. Steht zwischen Formel und Strich noch ein Wort, klärt es die
+Lesart, und der Titel bleibt: `Warum \(A = 2\pi r_m \cdot b\) gilt — den Ring
+aufrollen` ist in Ordnung.
 
 **Nicht betroffen ist der Fliesstext.** Dort ist der Gedankenstrich ein
 Satzzeichen mit grammatischer Funktion («Der Ausdruck unter der Wurzel — \(D =

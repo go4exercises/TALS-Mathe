@@ -47,15 +47,24 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
   Hinweispaar **in einem Panel eines Tab-Umschalters**, verschwindet das Paar beim
   Umschalten. Titelzeile über den Umschalter heben, nicht in ein Panel.
 
-- **2026-08-03 · Gedankenstrich vor Formeln in Titeln durch Doppelpunkt ersetzen ·
+- **2026-08-03 · Gedankenstrich an Formeln in Titeln beseitigen ·
   alle Themenseiten · warum:** Gerendert klebt der Gedankenstrich an der Formel und
-  liest sich als führendes Minus — aus «Labor — \(x^2 + c\)» wird optisch
+  liest sich als Vorzeichen — aus «Labor — \(x^2 + c\)» wird optisch
   \(-x^2 + c\). In Mathe in 75 Titeln ersetzt (h2, h3, `.anim-titel`,
   `.block-titel`, `.aufg-titel-text`), Regel in STYLEGUIDE §2.8.
   **Massnahme in Physik:** dasselbe Muster suchen und ersetzen —
   `[—–]\s*\\(` in Titel-Zeilen, Ersatz `: \(`; nach `?`/`!` entfällt der
   Strich ersatzlos. **Fliesstext nicht anfassen:** dort ist der Strich ein
   Satzzeichen mit grammatischer Funktion.
+  **Nachtrag 2026-08-03:** Die Regel deckte anfangs nur den Strich *vor* der Formel
+  ab. Der umgekehrte Fall `\\)\s*[—–]` wirkt genauso und hängt das Minus ans
+  Formelende — in Physik **beide** Muster suchen. Dort hilft kein Ersatzzeichen:
+  die Tätigkeit wandert an den Anfang, die Formel ans Ende («Gerade \(f(x)=ax+b\)
+  — Achsenschnitte erkunden» → «Achsenschnitte erkunden: Gerade \(f(x)=ax+b\)»).
+  Ist der erste Teil nur ein Etikett (`⚠ Wichtig`, `🟢 Beispiel 2`), nicht
+  umstellen, sondern Doppelpunkt. **Nur direkter Kontakt zählt:** steht zwischen
+  Formel und Strich noch ein Wort, klärt es die Lesart und der Titel bleibt —
+  ein weiter gefasster Suchlauf produziert Fehltreffer.
 
 - **2026-08-02 · Intervallgrenzen am Zahlenstrahl als Klammer statt als Punkt ·
   `physiklib.js` + betroffene Themenseiten · warum:** In Mathe markieren Canvas

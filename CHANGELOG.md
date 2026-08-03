@@ -48,10 +48,18 @@ die Auffindbarkeit eingerichtet und die Einbettung der Animationen vereinheitlic
   und bei den zwei Widgets auf `g1-3`, die bisher keines hatten. Die Panel-Umschalter auf
   `g3-1` teilen ihr Paar zwischen beiden Ansichten — dafür musste die Titelzeile aus
   Panel 1 heraus über den Umschalter wandern.
-- **Kein Gedankenstrich mehr unmittelbar vor einer Formel in Titeln** (STYLEGUIDE §2.8).
+- **Kein Gedankenstrich mehr unmittelbar an einer Formel in Titeln** (STYLEGUIDE §2.8).
   Gerendert klebte er an der Formel und las sich als führendes Minus; 75 Titel auf
   32 Seiten auf Doppelpunkt umgestellt. Im Fliesstext bleibt er — dort ist er ein
   Satzzeichen mit grammatischer Funktion.
+  **Nachtrag:** Die Regel galt zuerst nur für den Strich *vor* der Formel. Der
+  umgekehrte Fall — Formel, dann Strich (`… + b\) — Achsenschnitte erkunden`) — wirkt
+  genauso, hängt das Minus aber ans Formelende. §2.8 deckt jetzt beide Richtungen ab.
+  Dort hilft kein Ersatzzeichen: die Tätigkeit wandert an den Anfang, die Formel ans
+  Ende. Ist der erste Teil nur ein Etikett (`⚠ Wichtig`, `🟢 Beispiel 2`), bleibt es
+  beim Doppelpunkt. Steht zwischen Formel und Strich noch ein Wort, klärt es die
+  Lesart und der Titel bleibt. Betroffen waren `g3-1` (drei Widget-Titel) und
+  `g5-5 A5`; repo-weit sind jetzt null Titel in direktem Kontakt.
 - **`s3-1 ug-canvas` und `s2-2c vz-canvas`** kennen neu alle vier Relationen (`>`, `≥`,
   `<`, `≤`); Lösungsintervalle sind im Bild beklammert und mit ihrer Schreibweise bemasst.
   Die Vorzeichentabelle hat zwei Spalten für die Nullstellen und eine Zeile «Lösung?».
