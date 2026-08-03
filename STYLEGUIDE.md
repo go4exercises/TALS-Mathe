@@ -177,6 +177,28 @@ bei einer Umstellung immer mitprüfen (Erklärzeilen, Hinweispaare 👁/💡).
 
 ---
 
+## 2.8 Kein Gedankenstrich unmittelbar vor einer Formel (verbindlich seit 03.08.2026)
+
+In **Titeln** (`<h2>`, `<h3>`, `.anim-titel`, `.block-titel`, `.aufg-titel-text`)
+trennt kein Gedankenstrich den Text von der Formel. Gerendert steht der Strich
+direkt an der Formel und liest sich als **führendes Minus**:
+
+| falsch | wird gelesen als | richtig |
+|---|---|---|
+| `Ungleichungs-Labor — \(x^2 + c\)` | \(-x^2 + c\) | `Ungleichungs-Labor: \(x^2 + c\)` |
+| `Häufiger Fehler — \((-x)^n\)` | \(-(-x)^n\) | `Häufiger Fehler: \((-x)^n\)` |
+
+Trenner ist der **Doppelpunkt**. Nach einem Frage- oder Ausrufezeichen entfällt er
+ersatzlos (`Welches Werkzeug? \(\sin/\cos/\tan\)`). Kein Mittepunkt `·` als
+Ersatz — der wird als Malpunkt gelesen und schafft dasselbe Problem.
+
+**Nicht betroffen ist der Fliesstext.** Dort ist der Gedankenstrich ein
+Satzzeichen mit grammatischer Funktion («Der Ausdruck unter der Wurzel — \(D =
+b^2 - 4ac\) — heisst Diskriminante»); er steht in einem Satzzusammenhang, der die
+Lesart klärt, und bleibt.
+
+---
+
 ## 2.9 Canvas-Beschriftungen (verbindlich seit Version 1.0)
 
 Jede Beschriftung auf einem Canvas wird über `beschriftung()` aus `mathlib.js`

@@ -9,6 +9,16 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 
 ## Offen
 
+- **2026-08-03 · Gedankenstrich vor Formeln in Titeln durch Doppelpunkt ersetzen ·
+  alle Themenseiten · warum:** Gerendert klebt der Gedankenstrich an der Formel und
+  liest sich als führendes Minus — aus «Labor — \(x^2 + c\)» wird optisch
+  \(-x^2 + c\). In Mathe in 75 Titeln ersetzt (h2, h3, `.anim-titel`,
+  `.block-titel`, `.aufg-titel-text`), Regel in STYLEGUIDE §2.8.
+  **Massnahme in Physik:** dasselbe Muster suchen und ersetzen —
+  `[—–]\s*\\(` in Titel-Zeilen, Ersatz `: \(`; nach `?`/`!` entfällt der
+  Strich ersatzlos. **Fliesstext nicht anfassen:** dort ist der Strich ein
+  Satzzeichen mit grammatischer Funktion.
+
 - **2026-08-02 · Intervallgrenzen am Zahlenstrahl als Klammer statt als Punkt ·
   `physiklib.js` + betroffene Themenseiten · warum:** In Mathe markieren Canvas
   eine Intervall- oder Lösungsmengengrenze neu mit derselben Klammer wie die
