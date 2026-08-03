@@ -35,10 +35,19 @@ die Auffindbarkeit eingerichtet und die Einbettung der Animationen vereinheitlic
 - **Animations-Karte `.widget` zentralisiert.** Die fünf Regeln lagen als wortgleiche Kopie
   in 35 von 45 Themenseiten und fehlten in `style.css` — `TEMPLATE.html` benutzte die
   Klassen, ohne sie zu definieren. Jetzt stehen sie einmal zentral.
-- **Einbettung der Animationen vereinheitlicht** (STYLEGUIDE §2.10). 34 freistehende
-  Animationen haben den Widget-Rahmen bekommen; die gemischten Seiten sind von 27 auf 5
-  gesunken, und diese fünf sind regelkonform gemischt. Restarbeit in
-  `TODO-animationen-einbettung.md`.
+- **Einbettung der Animationen vereinheitlicht** (STYLEGUIDE §2.10) — **abgeschlossen**.
+  34 freistehende Animationen haben den Widget-Rahmen bekommen; danach die letzten fünf
+  gemischten Seiten aufgelöst. `g1-2`, `g1-3` und `g5-5` stehen nun ganz auf der
+  Widget-Form (je 5 Widgets, keine freistehende `.anim`-Karte mehr): `.anim` bleibt dort
+  Namensraum für seine 22 Nachfahren-Regeln und gibt im `.widget-body` nur die
+  Karten-Optik ab — dafür eine neue zentrale Regel `.widget-body > .anim` in `style.css`.
+  `g3-1` und `s3-3` bleiben regelkonform gemischt: ihre Grafiken gehören zu einem `.block`
+  und stehen nach §2.10 zu Recht ohne Rahmen.
+- **Alle Animationen der fünf Seiten tragen das Hinweispaar** (👁/💡). Neu bei den vier
+  Darstellungsformen und beim Funktions-Quiz auf `g3-1`, beim Beispielgraphen auf `s3-3`
+  und bei den zwei Widgets auf `g1-3`, die bisher keines hatten. Die Panel-Umschalter auf
+  `g3-1` teilen ihr Paar zwischen beiden Ansichten — dafür musste die Titelzeile aus
+  Panel 1 heraus über den Umschalter wandern.
 - **Kein Gedankenstrich mehr unmittelbar vor einer Formel in Titeln** (STYLEGUIDE §2.8).
   Gerendert klebte er an der Formel und las sich als führendes Minus; 75 Titel auf
   32 Seiten auf Doppelpunkt umgestellt. Im Fliesstext bleibt er — dort ist er ein
@@ -54,6 +63,10 @@ die Auffindbarkeit eingerichtet und die Einbettung der Animationen vereinheitlic
   rechts abgeschnitten.
 - **`g1-2` Intervall-Widget** — Zahlenstrahl und Schreibweise verwendeten verschiedene
   Notationen; dazu Bindestrich statt Minuszeichen in den Grenzenlabels.
+- **`g3-1` Beispiel-Umschalter** — das Hinweispaar der Achsenschnitte und der
+  Schnittpunkte lag jeweils in Panel 1 und verschwand mit ihm, sobald auf Beispiel 2
+  geschaltet wurde. Die Titelzeile steht jetzt über dem Umschalter und gilt für beide
+  Ansichten.
 
 ---
 

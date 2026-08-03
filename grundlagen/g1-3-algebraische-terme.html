@@ -351,7 +351,6 @@ MathJax = {
   .sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); }
 
   /* Zweiklammersatz — Teilerpaare */
-  .tp-box { background: var(--weiss); border: 1px solid var(--linie); border-radius: 9px; padding: 14px 16px; margin: 12px 0; }
   .tp-term { text-align: center; font-family: var(--mono); font-size: 1.15rem; font-weight: 700; color: var(--tinte); margin-bottom: 10px; }
   .tp-tab { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.85rem; }
   .tp-tab th { background: var(--papier-2); color: var(--tinte-2); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px; border-bottom: 1px solid var(--linie); }
@@ -427,46 +426,52 @@ Ausklammern, ausmultipliziert zum Sortieren.</p>
 
 <p>In der Animation kannst du die Verkaufszahlen \(x\) (Sorte A) und \(y\) (Sorte B) ändern und siehst, dass die drei Terme von Anna, Bruno und Cinzia immer denselben Wert liefern — sie sind <strong>algebraisch äquivalent</strong>. Dario versucht, das auch zu zeigen. Sein Term sieht aus, als sei er bloss „anders ausgeklammert" — doch er liefert <em>nicht</em> denselben Wert. Eine plausibel aussehende Umformung ist nicht automatisch eine richtige.</p>
 
-<div class="anim">
-  <div class="widget-titelzeile">
-    <div class="anim-titel">Drei äquivalente Terme — und ein vierter, der nicht passt</div>
-    <div class="anim-hinweis links">
-      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Verändere \(x\) und \(y\) unabhängig: Bleiben Anna, Bruno und Cinzia wirklich <em>immer</em> gleich? Und gibt es Wertepaare, bei denen Darios Term zufällig auch stimmt?</div>
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Drei äquivalente Terme — und ein vierter, der nicht passt</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verändere \(x\) und \(y\) unabhängig: Bleiben Anna, Bruno und Cinzia wirklich <em>immer</em> gleich? Und gibt es Wertepaare, bei denen Darios Term zufällig auch stimmt?</div>
+        </div>
       </div>
-    </div>
-    <div class="anim-hinweis rechts">
-      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Äquivalent heisst: gleicher Wert für <strong>jede</strong> Belegung. Dass Darios Term bei einzelnen Wertepaaren zufällig passt, genügt nicht — ein einziges abweichendes Paar widerlegt die Äquivalenz.</div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Äquivalent heisst: gleicher Wert für <strong>jede</strong> Belegung. Dass Darios Term bei einzelnen Wertepaaren zufällig passt, genügt nicht — ein einziges abweichendes Paar widerlegt die Äquivalenz.</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="anim-layout">
-    <canvas id="cv-equiv" width="560" height="260"></canvas>
-    <div class="bedien">
-      <div class="regler">
-        <div class="regler-label">
-          <span>Sorte A: \(x\)</span>
-          <span class="wert" id="lbl-equivX">5</span>
-        </div>
-        <input type="range" id="sld-equivX" min="0" max="20" step="1" value="5">
-      </div>
-      <div class="regler">
-        <div class="regler-label">
-          <span>Sorte B: \(y\)</span>
-          <span class="wert" id="lbl-equivY">3</span>
-        </div>
-        <input type="range" id="sld-equivY" min="0" max="20" step="1" value="3">
-      </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="anim-layout">
+        <canvas id="cv-equiv" width="560" height="260"></canvas>
+        <div class="bedien">
+          <div class="regler">
+            <div class="regler-label">
+              <span>Sorte A: \(x\)</span>
+              <span class="wert" id="lbl-equivX">5</span>
+            </div>
+            <input type="range" id="sld-equivX" min="0" max="20" step="1" value="5">
+          </div>
+          <div class="regler">
+            <div class="regler-label">
+              <span>Sorte B: \(y\)</span>
+              <span class="wert" id="lbl-equivY">3</span>
+            </div>
+            <input type="range" id="sld-equivY" min="0" max="20" step="1" value="3">
+          </div>
 
-      <div class="legende">
-        <div class="legende-titel">Werte der vier Terme</div>
-        <div class="legende-zeile"><span class="lab">Anna</span><span class="val" id="leg-equivA">550</span></div>
-        <div class="legende-zeile"><span class="lab">Bruno</span><span class="val" id="leg-equivB">550</span></div>
-        <div class="legende-zeile"><span class="lab">Cinzia</span><span class="val" id="leg-equivC">550</span></div>
-        <div class="legende-zeile"><span class="lab">Dario (?)</span><span class="val" id="leg-equivD">1040</span></div>
+          <div class="legende">
+            <div class="legende-titel">Werte der vier Terme</div>
+            <div class="legende-zeile"><span class="lab">Anna</span><span class="val" id="leg-equivA">550</span></div>
+            <div class="legende-zeile"><span class="lab">Bruno</span><span class="val" id="leg-equivB">550</span></div>
+            <div class="legende-zeile"><span class="lab">Cinzia</span><span class="val" id="leg-equivC">550</span></div>
+            <div class="legende-zeile"><span class="lab">Dario (?)</span><span class="val" id="leg-equivD">1040</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -502,24 +507,44 @@ Polynome vom Grad 1 heissen <em>linear</em>, vom Grad 2 <em>quadratisch</em>, vo
 
 <p>Die folgenden Begriffe sind das Vokabular, mit dem du jedes Polynom beschreiben kannst. Wähle ein Polynom, klick einen Begriff an, und sieh sofort, welche Teile des Terms gemeint sind:</p>
 
-<div class="anim">
-  <div class="anim-titel">Begriffe am Polynom — interaktiv</div>
-  <div class="anim-layout">
-    <div>
-      <div class="feld-titel">Polynom wählen</div>
-      <div class="chips" id="begr-poly-chips"></div>
-      <div id="begr-display" class="begr-display"></div>
-      <div id="begr-erkl" class="begr-erkl"></div>
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Begriffe am Polynom — interaktiv</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Klick am selben Polynom nacheinander «Grad eines Glieds» und «Grad des Polynoms» an — wird jedes Mal gleich viel hervorgehoben? Und sieh beim konstanten Glied nach, welchen Exponenten die Variable dort trägt.</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">«Grad eines Glieds» beschreibt ein einzelnes Glied, «Grad des Polynoms» das ganze Polynom — er ist der grösste der Gliedgrade. Das konstante Glied hat Grad \(0\), denn \(x^0 = 1\); es sieht nur deshalb variablenfrei aus.</div>
+        </div>
+      </div>
     </div>
-    <div class="bedien">
-      <div>
-        <div class="feld-titel">Begriff hervorheben</div>
-        <div class="chips begr-chips" id="begr-begriff-chips">
-          <button class="chip begr-chip" data-begriff="glied">Glied</button>
-          <button class="chip begr-chip" data-begriff="koeff">Koeffizient</button>
-          <button class="chip begr-chip" data-begriff="gradGlied">Grad eines Glieds</button>
-          <button class="chip begr-chip" data-begriff="gradPoly">Grad des Polynoms</button>
-          <button class="chip begr-chip" data-begriff="konst">Konstantes Glied</button>
+  </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="anim-layout">
+        <div>
+          <div class="feld-titel">Polynom wählen</div>
+          <div class="chips" id="begr-poly-chips"></div>
+          <div id="begr-display" class="begr-display"></div>
+          <div id="begr-erkl" class="begr-erkl"></div>
+        </div>
+        <div class="bedien">
+          <div>
+            <div class="feld-titel">Begriff hervorheben</div>
+            <div class="chips begr-chips" id="begr-begriff-chips">
+              <button class="chip begr-chip" data-begriff="glied">Glied</button>
+              <button class="chip begr-chip" data-begriff="koeff">Koeffizient</button>
+              <button class="chip begr-chip" data-begriff="gradGlied">Grad eines Glieds</button>
+              <button class="chip begr-chip" data-begriff="gradPoly">Grad des Polynoms</button>
+              <button class="chip begr-chip" data-begriff="konst">Konstantes Glied</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -549,38 +574,44 @@ Variablen-Anteil bleibt unverändert (Distributivgesetz, rückwärts gelesen):</
 
 <p>Die Animation zeigt das in vier Schritten: aus einem unsortierten Polynom werden gleichartige Glieder gleich eingefärbt, sortiert und verrechnet. Probier es an verschiedenen Polynomen aus:</p>
 
-<div class="anim">
-  <div class="widget-titelzeile">
-    <div class="anim-titel">Gleichartige Glieder zusammenfassen — Schritt für Schritt</div>
-    <div class="anim-hinweis links">
-      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Achte in Schritt 1 auf die Farben: Welche Glieder bekommen dieselbe Farbe — und woran entscheidet sich das? Schau genau bei \(x\) und \(x^2\) hin.</div>
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Gleichartige Glieder zusammenfassen — Schritt für Schritt</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Achte in Schritt 1 auf die Farben: Welche Glieder bekommen dieselbe Farbe — und woran entscheidet sich das? Schau genau bei \(x\) und \(x^2\) hin.</div>
+        </div>
       </div>
-    </div>
-    <div class="anim-hinweis rechts">
-      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Gleichartig heisst: identischer Variablenteil, nur der Koeffizient darf sich unterscheiden. \(x\) und \(x^2\) sind deshalb <strong>nicht</strong> gleichartig — zusammengefasst werden nur die Koeffizienten gleichfarbiger Glieder.</div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Gleichartig heisst: identischer Variablenteil, nur der Koeffizient darf sich unterscheiden. \(x\) und \(x^2\) sind deshalb <strong>nicht</strong> gleichartig — zusammengefasst werden nur die Koeffizienten gleichfarbiger Glieder.</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="anim-layout">
-    <div>
-      <div class="feld-titel">Polynom wählen</div>
-      <div class="chips" id="zus-poly-chips"></div>
-      <div id="zus-display" class="zus-display"></div>
-    </div>
-    <div class="bedien">
-      <div class="regler">
-        <div class="regler-label">
-          <span>Schritt</span>
-          <span class="wert" id="lbl-zus-schritt">0</span>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="anim-layout">
+        <div>
+          <div class="feld-titel">Polynom wählen</div>
+          <div class="chips" id="zus-poly-chips"></div>
+          <div id="zus-display" class="zus-display"></div>
         </div>
-        <input type="range" id="sld-zus" min="0" max="3" step="1" value="0">
-      </div>
-      <div class="erklaerung" id="zus-erkl">
-        Beobachte, wie sich die gleichartigen Glieder zuerst farblich gruppieren, dann zueinander rücken und schliesslich zu einem einzigen Glied zusammenschmelzen.
+        <div class="bedien">
+          <div class="regler">
+            <div class="regler-label">
+              <span>Schritt</span>
+              <span class="wert" id="lbl-zus-schritt">0</span>
+            </div>
+            <input type="range" id="sld-zus" min="0" max="3" step="1" value="0">
+          </div>
+          <div class="erklaerung" id="zus-erkl">
+            Beobachte, wie sich die gleichartigen Glieder zuerst farblich gruppieren, dann zueinander rücken und schliesslich zu einem einzigen Glied zusammenschmelzen.
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -715,62 +746,68 @@ oft auf, dass man sie auswendig kennen sollte:</p>
 
 <p>Mit der Animation kannst du die binomischen Formeln <em>geometrisch sehen</em>: jede Formel beschreibt die Fläche eines Quadrats, das aus Teilflächen zusammengesetzt ist. Wähle die Formel, stell <em>a</em> und <em>b</em> ein, und sieh, wie die Teilflächen ihre Werte bekommen:</p>
 
-<div class="anim">
-  <div class="widget-titelzeile">
-    <div class="anim-titel">Binomische Formeln — geometrisch</div>
-    <div class="anim-hinweis links">
-      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Wähle das 1. Binom und verändere \(a\) und \(b\): Aus welchen vier Teilflächen besteht das grosse Quadrat? Wo steckt das doppelte Produkt \(2ab\)?</div>
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Binomische Formeln — geometrisch</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle das 1. Binom und verändere \(a\) und \(b\): Aus welchen vier Teilflächen besteht das grosse Quadrat? Wo steckt das doppelte Produkt \(2ab\)?</div>
+        </div>
       </div>
-    </div>
-    <div class="anim-hinweis rechts">
-      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Das Quadrat über \(a + b\) zerfällt in \(a^2\), \(b^2\) und <strong>zwei</strong> Rechtecke \(a \cdot b\) — geometrisch sichtbar, warum \((a+b)^2 = a^2 + 2ab + b^2\) gilt und der Mittelterm nicht fehlen darf.</div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Das Quadrat über \(a + b\) zerfällt in \(a^2\), \(b^2\) und <strong>zwei</strong> Rechtecke \(a \cdot b\) — geometrisch sichtbar, warum \((a+b)^2 = a^2 + 2ab + b^2\) gilt und der Mittelterm nicht fehlen darf.</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="anim-layout">
-    <div>
-      <div class="feld-titel">Binom wählen</div>
-      <div class="chips" id="bin-chips">
-        <button class="chip aktiv" data-bin="1">1. Binom (a+b)²</button>
-        <button class="chip" data-bin="2">2. Binom (a−b)²</button>
-        <button class="chip" data-bin="3">3. Binom (a+b)(a−b)</button>
-      </div>
-      <div class="bin-canvas-paar" id="bin-canvas-paar">
-        <canvas id="cv-binomi" width="300" height="340"></canvas>
-        <canvas id="cv-binomi-rechts" width="300" height="340"></canvas>
-      </div>
-      <div class="bin-schritt-titel" id="bin-schritt-titel"></div>
-    </div>
-    <div class="bedien">
-      <div class="regler">
-        <div class="regler-label">
-          <span>\(a\)</span>
-          <span class="wert" id="lbl-bin-a">5</span>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="anim-layout">
+        <div>
+          <div class="feld-titel">Binom wählen</div>
+          <div class="chips" id="bin-chips">
+            <button class="chip aktiv" data-bin="1">1. Binom (a+b)²</button>
+            <button class="chip" data-bin="2">2. Binom (a−b)²</button>
+            <button class="chip" data-bin="3">3. Binom (a+b)(a−b)</button>
+          </div>
+          <div class="bin-canvas-paar" id="bin-canvas-paar">
+            <canvas id="cv-binomi" width="300" height="340"></canvas>
+            <canvas id="cv-binomi-rechts" width="300" height="340"></canvas>
+          </div>
+          <div class="bin-schritt-titel" id="bin-schritt-titel"></div>
         </div>
-        <input type="range" id="sld-bin-a" min="4" max="6" step="1" value="5">
-      </div>
-      <div class="regler">
-        <div class="regler-label">
-          <span>\(b\)</span>
-          <span class="wert" id="lbl-bin-b">2</span>
-        </div>
-        <input type="range" id="sld-bin-b" min="1" max="3" step="1" value="2">
-      </div>
+        <div class="bedien">
+          <div class="regler">
+            <div class="regler-label">
+              <span>\(a\)</span>
+              <span class="wert" id="lbl-bin-a">5</span>
+            </div>
+            <input type="range" id="sld-bin-a" min="4" max="6" step="1" value="5">
+          </div>
+          <div class="regler">
+            <div class="regler-label">
+              <span>\(b\)</span>
+              <span class="wert" id="lbl-bin-b">2</span>
+            </div>
+            <input type="range" id="sld-bin-b" min="1" max="3" step="1" value="2">
+          </div>
 
-      <div class="bin-rechnung" id="bin-rechnung">
-        <!-- wird per JS gefüllt -->
-      </div>
+          <div class="bin-rechnung" id="bin-rechnung">
+            <!-- wird per JS gefüllt -->
+          </div>
 
-      <div class="regler bin-schritt-regler" id="bin-schritt-regler">
-        <div class="regler-label">
-          <span>Schritt (Herleitung)</span>
-          <span class="wert" id="lbl-bin-schritt">0</span>
+          <div class="regler bin-schritt-regler" id="bin-schritt-regler">
+            <div class="regler-label">
+              <span>Schritt (Herleitung)</span>
+              <span class="wert" id="lbl-bin-schritt">0</span>
+            </div>
+            <input type="range" id="sld-bin-schritt" min="0" max="3" step="1" value="0">
+          </div>
         </div>
-        <input type="range" id="sld-bin-schritt" min="0" max="3" step="1" value="0">
       </div>
     </div>
   </div>
@@ -856,36 +893,41 @@ nur wenige Teilerpaare hat.</p>
   </ul>
 </div>
 
-<div class="widget-titelzeile" style="margin:16px 0 8px">
-  <p style="margin:0">Alle Teilerpaare von \(q\) auf einen Blick — nur eines hat die Summe \(p\):</p>
-  <div class="anim-hinweis links">
-    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-      <div class="ah-text">Stelle \(q &gt; 0\) und dann \(q &lt; 0\) ein: Wie verändert sich die Vorzeichen-Struktur der Teilerpaare? Und finde ein \(p\), zu dem gar kein Paar passt.</div>
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Zweiklammersatz — Teilerpaare durchprobieren</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Stelle \(q &gt; 0\) und dann \(q &lt; 0\) ein: Wie verändert sich die Vorzeichen-Struktur der Teilerpaare? Und finde ein \(p\), zu dem gar kein Paar passt.</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Der Zweiklammersatz ist eine <strong>endliche Suche</strong>: Es gibt nur so viele Kandidaten, wie \(q\) Teilerpaare hat. Passt keine Summe zu \(p\), lässt sich der Term nicht über den ganzen Zahlen zerlegen. Die Kontrolle liefert die Diskriminante \(p^2 - 4q\): Nur wenn sie eine <em>Quadratzahl</em> ist, existiert ein ganzzahliges Paar.</div>
+        </div>
+      </div>
     </div>
+    <p>Alle Teilerpaare von \(q\) auf einen Blick — nur eines hat die Summe \(p\).</p>
   </div>
-  <div class="anim-hinweis rechts">
-    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-      <div class="ah-text">Der Zweiklammersatz ist eine <strong>endliche Suche</strong>: Es gibt nur so viele Kandidaten, wie \(q\) Teilerpaare hat. Passt keine Summe zu \(p\), lässt sich der Term nicht über den ganzen Zahlen zerlegen. Die Kontrolle liefert die Diskriminante \(p^2 - 4q\): Nur wenn sie eine <em>Quadratzahl</em> ist, existiert ein ganzzahliges Paar.</div>
+  <div class="widget-body">
+    <div class="sl-row">
+      <label>\(p\) (mittlerer Koeffizient): <span class="sl-val" id="tp-pv">5</span></label>
+      <input type="range" id="tp-p" min="-12" max="12" step="1" value="5">
     </div>
+    <div class="sl-row">
+      <label>\(q\) (konstantes Glied): <span class="sl-val" id="tp-qv">6</span></label>
+      <input type="range" id="tp-q" min="-24" max="24" step="1" value="6">
+    </div>
+    <div class="tp-term" id="tp-term"></div>
+    <table class="tp-tab">
+      <thead><tr><th>r</th><th>s</th><th>r · s</th><th>r + s</th><th>passt?</th></tr></thead>
+      <tbody id="tp-body"></tbody>
+    </table>
+    <div class="tp-fazit" id="tp-fazit"></div>
   </div>
-</div>
-<div class="tp-box">
-  <div class="sl-row">
-    <label>\(p\) (mittlerer Koeffizient): <span class="sl-val" id="tp-pv">5</span></label>
-    <input type="range" id="tp-p" min="-12" max="12" step="1" value="5">
-  </div>
-  <div class="sl-row">
-    <label>\(q\) (konstantes Glied): <span class="sl-val" id="tp-qv">6</span></label>
-    <input type="range" id="tp-q" min="-24" max="24" step="1" value="6">
-  </div>
-  <div class="tp-term" id="tp-term"></div>
-  <table class="tp-tab">
-    <thead><tr><th>r</th><th>s</th><th>r · s</th><th>r + s</th><th>passt?</th></tr></thead>
-    <tbody id="tp-body"></tbody>
-  </table>
-  <div class="tp-fazit" id="tp-fazit"></div>
 </div>
 
 <div class="block block-tipp">

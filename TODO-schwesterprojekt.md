@@ -37,6 +37,15 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
   `.widget-titelzeile h3 { margin:0 }`; zentral gewinnt die Titelzeilen-Regel, was
   die Kopfzeile um 3 px kürzt (richtig so). Danach freistehende Animationen in die
   Widget-Form bringen. Regel dazu in STYLEGUIDE §2.10 (Mathe).
+  **Nachtrag 2026-08-03 (Mathe fertig):** Statt die Karten-Optik je Behälterklasse
+  einzeln zurückzunehmen, steht in Mathe jetzt eine zentrale Regel in `style.css`:
+  `.widget-body > .anim { background:none; border:0; border-radius:0; padding:0;
+  margin:0; box-shadow:none; }`. Sie löst das Rahmen-im-Rahmen-Problem für alle
+  `.anim`-Karten auf einmal, ohne `.anim` und seine Nachfahren-Regeln anzutasten —
+  in Physik dieselbe Regel setzen, bevor die erste `.anim`-Karte gewickelt wird.
+  Zweiter Fallstrick aus dem Mathe-Durchgang: liegt die Titelzeile mit dem
+  Hinweispaar **in einem Panel eines Tab-Umschalters**, verschwindet das Paar beim
+  Umschalten. Titelzeile über den Umschalter heben, nicht in ein Panel.
 
 - **2026-08-03 · Gedankenstrich vor Formeln in Titeln durch Doppelpunkt ersetzen ·
   alle Themenseiten · warum:** Gerendert klebt der Gedankenstrich an der Formel und
