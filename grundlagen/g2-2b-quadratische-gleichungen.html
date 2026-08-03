@@ -236,7 +236,8 @@ MathJax = {
 .zs-info .zs-fall.keine     { background:var(--rot-hell);   color:var(--rot);   border:1px solid var(--rot-rand); }
 
 /* Einstiegs-Animation: Anna fährt Velo */
-.velo-box{background:var(--papier-2,#f3eedf);border-radius:8px;padding:14px 16px;margin:12px 0}
+/* .velo-box ist nur noch Namensraum fuer die Detailregeln — Rahmen macht .widget */
+.velo-box{margin:0}
 .velo-box .vb-row{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:0.9rem;margin-bottom:10px;flex-wrap:wrap}
 .velo-box .vb-row label{min-width:170px}
 .velo-box .vb-row input[type=range]{flex:1 1 220px;max-width:340px}
@@ -305,39 +306,46 @@ MathJax = {
 
 <p>Stell den Schieber so ein, dass Annas Gesamtzeit möglichst nahe an 1 h 30 min herankommt:</p>
 
-<div class="velo-box">
-  <div class="vb-row">
-    <label>Hinweg-Geschwindigkeit \(v\): <span class="vb-val" id="velo-vv">15.0</span> km/h</label>
-    <input type="range" id="velo-v" min="5" max="30" step="0.1" value="15">
-  </div>
-  <div class="widget-titelzeile">
-      <div class="anim-titel">Einstieg · Annas Velofahrt — warum hier eine quadratische Gleichung entsteht</div>
-        <div class="anim-hinweis links">
-          <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-          <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Stell verschiedene Hinweg-Geschwindigkeiten ein und lass die Fahrt laufen. Wie verändert sich die Gesamtzeit — gleichmässig, oder wird der Effekt bei kleinen \(v\) plötzlich gross?</div>
+<div class="widget">
+  <div class="widget-header">
+      <div class="widget-titelzeile">
+        <h3>🚲 Annas Velofahrt</h3>
+          <div class="anim-hinweis links">
+            <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+            <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+              <div class="ah-text">Stell verschiedene Hinweg-Geschwindigkeiten ein und lass die Fahrt laufen. Wie verändert sich die Gesamtzeit — gleichmässig, oder wird der Effekt bei kleinen \(v\) plötzlich gross?</div>
+            </div>
+          </div>
+          <div class="anim-hinweis rechts">
+            <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+            <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+              <div class="ah-text">Zeit ist Weg durch Geschwindigkeit, also \(t = \frac{s}{v}\) — und \(v\) steht im Nenner. Deshalb wirkt sich eine Änderung bei kleinem \(v\) viel stärker aus als bei grossem. Setzt man Hin- und Rückweg zusammen und verlangt eine feste Gesamtzeit, entsteht nach dem Beseitigen der Nenner eine <strong>quadratische</strong> Gleichung — daher das Thema dieses Kapitels.</div>
+            </div>
           </div>
         </div>
-        <div class="anim-hinweis rechts">
-          <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-          <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Zeit ist Weg durch Geschwindigkeit, also \(t = \frac{s}{v}\) — und \(v\) steht im Nenner. Deshalb wirkt sich eine Änderung bei kleinem \(v\) viel stärker aus als bei grossem. Setzt man Hin- und Rückweg zusammen und verlangt eine feste Gesamtzeit, entsteht nach dem Beseitigen der Nenner eine <strong>quadratische</strong> Gleichung — daher das Thema dieses Kapitels.</div>
-          </div>
-        </div>
-      </div>
-  <canvas id="velo-canvas" aria-label="Annas Hin- und Rückweg mit Geschwindigkeitsregler"></canvas>
-  <div class="vb-readout">
-    <div class="rb-item"><span class="rb-lab">Hinweg \(v\)</span><span class="rb-val" id="velo-vh">15.0 km/h</span></div>
-    <div class="rb-item"><span class="rb-lab">Rückweg \(v\!-\!4\)</span><span class="rb-val" id="velo-vr">11.0 km/h</span></div>
-    <div class="rb-item"><span class="rb-lab">Zeit hin</span><span class="rb-val" id="velo-th">48 min</span></div>
-    <div class="rb-item"><span class="rb-lab">Zeit zurück</span><span class="rb-val" id="velo-tr">65 min</span></div>
-    <div class="rb-summe nah" id="velo-summe">Σ = 113 min</div>
+    <p>Einstieg · warum hier eine quadratische Gleichung entsteht</p>
   </div>
-  <div class="vb-buttons">
-    <button id="velo-play">▶ Fahrt starten</button>
-    <button id="velo-reset">↺ Reset</button>
+  <div class="widget-body">
+    <div class="velo-box">
+    <div class="vb-row">
+      <label>Hinweg-Geschwindigkeit \(v\): <span class="vb-val" id="velo-vv">15.0</span> km/h</label>
+      <input type="range" id="velo-v" min="5" max="30" step="0.1" value="15">
+    </div>
+    <canvas id="velo-canvas" aria-label="Annas Hin- und Rückweg mit Geschwindigkeitsregler"></canvas>
+    <div class="vb-readout">
+      <div class="rb-item"><span class="rb-lab">Hinweg \(v\)</span><span class="rb-val" id="velo-vh">15.0 km/h</span></div>
+      <div class="rb-item"><span class="rb-lab">Rückweg \(v\!-\!4\)</span><span class="rb-val" id="velo-vr">11.0 km/h</span></div>
+      <div class="rb-item"><span class="rb-lab">Zeit hin</span><span class="rb-val" id="velo-th">48 min</span></div>
+      <div class="rb-item"><span class="rb-lab">Zeit zurück</span><span class="rb-val" id="velo-tr">65 min</span></div>
+      <div class="rb-summe nah" id="velo-summe">Σ = 113 min</div>
+    </div>
+    <div class="vb-buttons">
+      <button id="velo-play">▶ Fahrt starten</button>
+      <button id="velo-reset">↺ Reset</button>
+    </div>
+    <div class="vb-cap">Probiere verschiedene Werte für \(v\). Klick „Fahrt starten", um Hin- und Rückweg nacheinander als Animation laufen zu lassen — die Geschwindigkeiten sind dabei massstäblich. Ziel: Gesamtzeit möglichst nahe an 90 min.</div>
+    </div>
   </div>
-  <div class="vb-cap">Probiere verschiedene Werte für \(v\). Klick „Fahrt starten", um Hin- und Rückweg nacheinander als Animation laufen zu lassen — die Geschwindigkeiten sind dabei massstäblich. Ziel: Gesamtzeit möglichst nahe an 90 min.</div>
 </div>
 
 <p>Du siehst: Die Gesamtzeit hängt empfindlich vom Wert von \(v\) ab — und nur für <em>einen</em> bestimmten Wert kommt genau 90 Minuten heraus. Wie findet man diesen Wert <strong>ohne</strong> Probieren? Schreibt man die Aufgabe als Gleichung mit „Zeit = Strecke / Geschwindigkeit":</p>

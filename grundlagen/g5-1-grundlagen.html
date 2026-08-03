@@ -195,7 +195,8 @@ MathJax = {
 .ws-step .ws-text{font-size:0.82rem;color:var(--tinte-2);line-height:1.4}
 
 /* Einstiegs-Animation: Diagonalen-Skizze */
-.diag-box{background:var(--papier-2,#f3eedf);border-radius:8px;padding:14px 16px;margin:12px 0}
+/* .diag-box ist nur noch Namensraum fuer die Detailregeln — Rahmen macht .widget */
+.diag-box{margin:0}
 .diag-box .diag-sliders{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px}
 @media(max-width:640px){.diag-box .diag-sliders{grid-template-columns:1fr}}
 .diag-box .dg-row{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:0.88rem;flex-wrap:wrap}
@@ -253,34 +254,41 @@ MathJax = {
 
 <p>Nur aus dem Text musst du dir die Situation im Kopf zusammenbauen. Mit einer kleinen Skizze ist alles auf einen Blick klar — und das Beste: die Skizze rechnet mit:</p>
 
-<div class="diag-box">
-  <div class="diag-sliders">
-    <div class="dg-row">
-      <label>Länge \(l\): <span class="dg-val" id="dg-vl">24</span> m</label>
-      <input type="range" id="dg-l" min="6" max="40" step="1" value="24">
+<div class="widget">
+  <div class="widget-header">
+      <div class="widget-titelzeile">
+        <h3>📐 Grundstück und Diagonale</h3>
+          <div class="anim-hinweis links">
+            <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+            <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+              <div class="ah-text">Verändere Länge und Breite und beobachte die Skizze. Welche Grössen kannst du direkt ablesen, und welche musst du erst berechnen?</div>
+            </div>
+          </div>
+          <div class="anim-hinweis rechts">
+            <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+            <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+              <div class="ah-text">Eine Skizze macht die Angaben sichtbar und zeigt sofort, welche Grösse gesucht ist. Sie ersetzt keine Rechnung, aber sie verhindert den häufigsten Fehler: die falsche Grösse zu berechnen. Bei rechteckigen Flächen gilt \(A = l \cdot b\), die Diagonale folgt aus dem Satz des Pythagoras.</div>
+            </div>
+          </div>
+      </div>
+    <p>Einstieg · warum eine Skizze die halbe Lösung ist</p>
+  </div>
+  <div class="widget-body">
+    <div class="diag-box">
+    <div class="diag-sliders">
+      <div class="dg-row">
+        <label>Länge \(l\): <span class="dg-val" id="dg-vl">24</span> m</label>
+        <input type="range" id="dg-l" min="6" max="40" step="1" value="24">
+      </div>
+      <div class="dg-row">
+        <label>Breite \(b\): <span class="dg-val" id="dg-vb">18</span> m</label>
+        <input type="range" id="dg-b" min="4" max="30" step="1" value="18">
+      </div>
     </div>
-    <div class="dg-row">
-      <label>Breite \(b\): <span class="dg-val" id="dg-vb">18</span> m</label>
-      <input type="range" id="dg-b" min="4" max="30" step="1" value="18">
+    <canvas id="dg-canvas" aria-label="Grundstück mit Diagonale"></canvas>
+    <div class="dg-cap">Verschiebe die Regler und beobachte, wie sich die Diagonale \(d\) ändert. Die Skizze zeigt das Grundstück massstabsgetreu — du kannst die Diagonale direkt am Bild ablesen.</div>
     </div>
   </div>
-  <div class="widget-titelzeile">
-      <div class="anim-titel">Einstieg · warum eine Skizze die halbe Lösung ist</div>
-        <div class="anim-hinweis links">
-          <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-          <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Verändere Länge und Breite und beobachte die Skizze. Welche Grössen kannst du direkt ablesen, und welche musst du erst berechnen?</div>
-          </div>
-        </div>
-        <div class="anim-hinweis rechts">
-          <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-          <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Eine Skizze macht die Angaben sichtbar und zeigt sofort, welche Grösse gesucht ist. Sie ersetzt keine Rechnung, aber sie verhindert den häufigsten Fehler: die falsche Grösse zu berechnen. Bei rechteckigen Flächen gilt \(A = l \cdot b\), die Diagonale folgt aus dem Satz des Pythagoras.</div>
-          </div>
-        </div>
-      </div>
-  <canvas id="dg-canvas" aria-label="Grundstück mit Diagonale"></canvas>
-  <div class="dg-cap">Verschiebe die Regler und beobachte, wie sich die Diagonale \(d\) ändert. Die Skizze zeigt das Grundstück massstabsgetreu — du kannst die Diagonale direkt am Bild ablesen.</div>
 </div>
 
 <p>Was du beobachtest: \(d\) ist immer <em>länger als die längere Seite</em>, aber <em>kürzer als die Summe</em> der beiden Seiten. Bei gleicher Länge und Breite (Quadrat) ist \(d\) etwa \(1.41\)-mal so lang wie die Seite. <strong>Wie genau berechnet man die Diagonale</strong>, ohne sie auf der Skizze abzumessen? Das ist eine der zentralen Fragen der Geometrie und wird im Kapitel über Dreiecke beantwortet <a class="quer" href="g5-2a-dreiecke.html#pythagoras">↗ 5.2a</a>. Was wir jetzt schon sehen: eine Skizze <em>strukturiert</em> die Aufgabe, <em>schlägt</em> einen Lösungsansatz vor und <em>kontrolliert</em> das Resultat auf Plausibilität.</p>
@@ -842,25 +850,34 @@ MathJax = {
 
 <p>Links steht eine Skizze, wie sie unter Zeitdruck entsteht: hingeworfen, unbeschriftet, der rechte Winkel nirgends vermerkt. Rechts entsteht dieselbe Skizze Schritt für Schritt nach dem Workflow. Schiebe den Regler durch die vier Schritte.</p>
 
-<div class="diag-box">
-  <div class="dg-row">
-    <label>Schritt: <span class="dg-val" id="sk-schritt-name">1 · Lesen</span></label>
-    <input type="range" id="sk-schritt" min="1" max="4" step="1" value="1">
+<div class="widget">
+  <div class="widget-header">
+      <div class="widget-titelzeile">
+        <h3>📐 Skizzieren in vier Schritten</h3>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Ab welchem Schritt könntest du die Aufgabe an jemanden weitergeben, der den Aufgabentext nicht kennt? Vergleiche dazu jederzeit mit der linken Rohskizze.</div>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Erst Schritt 3 macht die Skizze lesbar: Ohne Beschriftung und ohne den markierten rechten Winkel ist die linke Zeichnung nur ein Dreieck — sie „rechnet" nicht mit. Die Beschriftung, nicht die saubere Linie, trägt die Information.</div>
+      </div>
+    </div>
+      </div>
   </div>
-  <div class="anim-hinweis links" style="margin:4px 0 0 0">
-    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-      <div class="ah-text">Ab welchem Schritt könntest du die Aufgabe an jemanden weitergeben, der den Aufgabentext nicht kennt? Vergleiche dazu jederzeit mit der linken Rohskizze.</div>
+  <div class="widget-body">
+    <div class="diag-box">
+    <div class="dg-row">
+      <label>Schritt: <span class="dg-val" id="sk-schritt-name">1 · Lesen</span></label>
+      <input type="range" id="sk-schritt" min="1" max="4" step="1" value="1">
+    </div>
+    <canvas id="sk-canvas" aria-label="Rohskizze und schrittweise aufgebaute Skizze im Vergleich"></canvas>
+    <div class="dg-cap">Aufgabe: Eine \(5.0\) m lange Leiter lehnt an einer senkrechten Wand; ihr Fuss steht \(3.0\) m von der Wand entfernt. Wie hoch reicht die Leiter?</div>
     </div>
   </div>
-  <div class="anim-hinweis rechts" style="margin:4px 0 0 0">
-    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-      <div class="ah-text">Erst Schritt 3 macht die Skizze lesbar: Ohne Beschriftung und ohne den markierten rechten Winkel ist die linke Zeichnung nur ein Dreieck — sie „rechnet" nicht mit. Die Beschriftung, nicht die saubere Linie, trägt die Information.</div>
-    </div>
-  </div>
-  <canvas id="sk-canvas" aria-label="Rohskizze und schrittweise aufgebaute Skizze im Vergleich"></canvas>
-  <div class="dg-cap">Aufgabe: Eine \(5.0\) m lange Leiter lehnt an einer senkrechten Wand; ihr Fuss steht \(3.0\) m von der Wand entfernt. Wie hoch reicht die Leiter?</div>
 </div>
 
 <h3>Plausibilitätsprüfung — drei Strategien</h3>
