@@ -40,7 +40,7 @@
     "@type": "Person",
     "name": "Raphael Arnold Kohler"
    },
-   "dateModified": "2026-08-02",
+   "dateModified": "2026-08-03",
    "isPartOf": {
     "@id": "https://go4exercises.github.io/TALS-Mathe/#website"
    },
@@ -127,13 +127,11 @@
   .b-titel { font-family: var(--serif); font-size: 1.06rem; font-weight: 700; }
   .b-gl .b-titel { color: var(--blau); }
   .b-sp .b-titel { color: var(--lila); }
-  /* Verweis auf den Rahmenlehrplan, direkt hinter dem Bereichstitel. Nimmt die
-     Bereichsfarbe über currentColor auf, damit beide Bereiche dieselbe Regel teilen. */
-  .b-rlp { font-size: 0.72rem; font-weight: 600; text-decoration: none; white-space: nowrap;
-           padding: 2px 9px; border-radius: 20px; border: 1px solid currentColor; opacity: 0.75; }
-  .b-rlp:hover, .b-rlp:focus-visible { opacity: 1; text-decoration: none; }
-  .b-gl .b-rlp { color: var(--blau); }
-  .b-sp .b-rlp { color: var(--lila); }
+  /* Der Bereichstitel ist selbst der Verweis auf den Rahmenlehrplan. Farbe kommt
+     unveraendert aus .b-gl/.b-sp oben; der Pfeil markiert das externe Ziel. */
+  a.b-titel { text-decoration: none; }
+  a.b-titel:hover, a.b-titel:focus-visible { text-decoration: underline; }
+  .b-ext { font-size: 0.7em; margin-left: 4px; vertical-align: 1px; opacity: 0.7; }
 
   .kap { border: 1.5px solid; border-top: none; overflow: hidden; }
   .kap:last-of-type { border-radius: 0 0 10px 10px; }
@@ -288,10 +286,9 @@
     <div class="spalte">
   <div class="bereich b-gl" id="gl">
     <div class="bh">
-      <span class="b-titel">Grundlagenfach</span>
-      <a class="b-rlp" href="https://www.sbfi.admin.ch/dam/de/sd-web/umUlonTbNY5o/Rahmenlehrplan_de_web.pdf#page=47"
+      <a class="b-titel" href="https://www.sbfi.admin.ch/dam/de/sd-web/umUlonTbNY5o/Rahmenlehrplan_de_web.pdf#page=47"
          target="_blank" rel="noopener"
-         title="Rahmenlehrplan Berufsmaturität 2030, Kapitel 6.4.4 «Lerngebiete und fachliche Kompetenzen» (SBFI, PDF)">↗ RLP-BM 2030 · Kompetenzen</a>
+         title="Rahmenlehrplan Berufsmaturität 2030, Kapitel 6.4.4 «Lerngebiete und fachliche Kompetenzen» (SBFI, PDF)">Grundlagenfach<span class="b-ext">↗</span></a>
     </div>
   </div>
 
@@ -503,7 +500,9 @@
   ══════════════════════════════════════════ -->
   <div class="bereich b-sp" id="sp">
     <div class="bh">
-      <span class="b-titel">Schwerpunktfach</span>
+      <a class="b-titel" href="https://www.sbfi.admin.ch/dam/de/sd-web/umUlonTbNY5o/Rahmenlehrplan_de_web.pdf#page=84"
+         target="_blank" rel="noopener"
+         title="Rahmenlehrplan Berufsmaturität 2030, Kapitel 7.4 «Mathematik» im Schwerpunktbereich (SBFI, PDF)">Schwerpunktfach<span class="b-ext">↗</span></a>
     </div>
   </div>
 
