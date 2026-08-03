@@ -199,6 +199,29 @@ Lesart klärt, und bleibt.
 
 ---
 
+## 2.10 Einbettung von Canvas-Animationen (verbindlich seit 03.08.2026)
+
+Eine Themenseite verwendet für ihre Animationen **eine** Einbettung, nicht zwei
+nebeneinander. Es gibt drei Formen, und die Wahl folgt der Rolle der Grafik:
+
+| Form | wofür | Markup |
+|---|---|---|
+| **`.widget`** | eigenständige interaktive Animation mit Reglern, Live-Formel und Canvas — der Regelfall | `.widget > .widget-header > .widget-titelzeile` + optionaler Untertitel-`<p>`, darunter `.widget-body` mit allem übrigen |
+| **`.anim`** | ältere Karte mit Canvas links und Bedienfeld rechts (`.anim-layout`) | bleibt, wo sie steht — **für Neues nicht mehr verwenden** |
+| **ohne Rahmen** | Grafik, die zu einem `.block` gehört (Beispiel, Definition) oder zweite Ansicht einer bereits betitelten Grafik | `.cv-wrap` direkt im Block |
+
+Die Klassen `.widget`, `.widget-header`, `.widget-body` stehen **zentral in
+`style.css`** (seit 03.08.2026). Sie werden in einer Themenseite **nie erneut
+definiert** — seiten-eigene Abwandlungen nur als Modifier daneben, wie
+`.widget-kompakt` in `g3-3`.
+
+**Nicht zulässig:** eine freistehende `.widget-titelzeile` mit Reglern und Canvas
+direkt im Textfluss. Das ergibt eine Animation ohne Rahmen neben gerahmten auf
+derselben Seite; ausserdem bricht das Hinweispaar dort auf eine zweite Zeile um,
+weil der Titel oft ein langer Fliesstext-`<p>` ist statt eines `<h3>`.
+
+---
+
 ## 2.9 Canvas-Beschriftungen (verbindlich seit Version 1.0)
 
 Jede Beschriftung auf einem Canvas wird über `beschriftung()` aus `mathlib.js`

@@ -386,33 +386,40 @@ MathJax = {
   <p>Skizze zuerst: Das rechtwinklige Dreieck aus Flächendiagonale, Kante und Raumdiagonale <em>sehen</em> — dann ist die Rechnung zweizeilig.</p>
 </div>
 
-<div class="widget-titelzeile" style="margin:14px 0 8px">
-  <p style="margin:0">Zieh den Quader in die Höhe (Grundfläche fest, \(a = 4\)) — der Winkel \(\varphi\) misst immer zur Projektion:</p>
-  <div class="anim-hinweis links">
-    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-      <div class="ah-text">Die blaue Flächendiagonale ist der <strong>Schatten</strong> der grünen Raumdiagonale auf dem Boden. Sie ändert ihre Länge nie, während du die Höhe verstellst — welche der drei Seiten des rechtwinkligen Dreiecks wächst mit?</div>
+<div class="widget">
+  <div class="widget-header">
+  <div class="widget-titelzeile">
+    <h3>Raumwinkel am Würfel</h3>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Die blaue Flächendiagonale ist der <strong>Schatten</strong> der grünen Raumdiagonale auf dem Boden. Sie ändert ihre Länge nie, während du die Höhe verstellst — welche der drei Seiten des rechtwinkligen Dreiecks wächst mit?</div>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Der Winkel Gerade–Ebene ist der Winkel zur Projektion — hier zur Flächendiagonale \(a\sqrt2\). Das rechtwinklige Dreieck liegt aufrecht im Raum: Ankathete \(a\sqrt2\), Gegenkathete \(h\), Hypotenuse Raumdiagonale. Beim <strong>Würfel</strong> (\(h = a\)) ergibt \(\tan\varphi = \tfrac{1}{\sqrt2}\) den bekannten Wert \(35.26°\) — unabhängig von der Kantenlänge.</div>
+      </div>
     </div>
   </div>
-  <div class="anim-hinweis rechts">
-    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-      <div class="ah-text">Der Winkel Gerade–Ebene ist der Winkel zur Projektion — hier zur Flächendiagonale \(a\sqrt2\). Das rechtwinklige Dreieck liegt aufrecht im Raum: Ankathete \(a\sqrt2\), Gegenkathete \(h\), Hypotenuse Raumdiagonale. Beim <strong>Würfel</strong> (\(h = a\)) ergibt \(\tan\varphi = \tfrac{1}{\sqrt2}\) den bekannten Wert \(35.26°\) — unabhängig von der Kantenlänge.</div>
-    </div>
+    <p>Zieh den Quader in die Höhe (Grundfläche fest, \(a = 4\)) — der Winkel \(\varphi\) misst immer zur Projektion:</p>
+  </div>
+  <div class="widget-body">
+  <div class="sl-row">
+    <label>Höhe \(h\): <span class="sl-val" id="rw-hv">4.00</span></label>
+    <input type="range" id="rw-h" min="1" max="8" step="0.25" value="4">
+  </div>
+  <div class="typ-btns" style="margin-bottom:10px">
+    <button class="typ-btn" type="button" data-rwh="1">flach (\(h = 1\))</button>
+    <button class="typ-btn" type="button" data-rwh="4">Würfel (\(h = a\))</button>
+    <button class="typ-btn" type="button" data-rwh="8">hoch (\(h = 2a\))</button>
+  </div>
+  <div class="formel-live"><div class="fl-label">Winkel der Raumdiagonale zur Grundfläche</div><div class="fl-eq" id="rw-eq">tan φ = 4.00 / 5.66 → φ = 35.26°</div></div>
+  <div class="cv-wrap" style="max-width:520px"><canvas id="cv-raumwinkel" height="300"></canvas></div>
+  <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blau: Flächendiagonale \(a\sqrt2\) (die Projektion) · Grün: Raumdiagonale · Orange: die senkrechte Kante \(h\). Das rechtwinklige Dreieck steht aufrecht im Raum.</div>
   </div>
 </div>
-<div class="sl-row">
-  <label>Höhe \(h\): <span class="sl-val" id="rw-hv">4.00</span></label>
-  <input type="range" id="rw-h" min="1" max="8" step="0.25" value="4">
-</div>
-<div class="typ-btns" style="margin-bottom:10px">
-  <button class="typ-btn" type="button" data-rwh="1">flach (\(h = 1\))</button>
-  <button class="typ-btn" type="button" data-rwh="4">Würfel (\(h = a\))</button>
-  <button class="typ-btn" type="button" data-rwh="8">hoch (\(h = 2a\))</button>
-</div>
-<div class="formel-live"><div class="fl-label">Winkel der Raumdiagonale zur Grundfläche</div><div class="fl-eq" id="rw-eq">tan φ = 4.00 / 5.66 → φ = 35.26°</div></div>
-<div class="cv-wrap" style="max-width:520px"><canvas id="cv-raumwinkel" height="300"></canvas></div>
-<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blau: Flächendiagonale \(a\sqrt2\) (die Projektion) · Grün: Raumdiagonale · Orange: die senkrechte Kante \(h\). Das rechtwinklige Dreieck steht aufrecht im Raum.</div>
 
 <div class="block block-fehler">
   <div class="block-titel">⚠ Häufiger Fehler — irgendeinen Winkel statt des definierten nehmen</div>

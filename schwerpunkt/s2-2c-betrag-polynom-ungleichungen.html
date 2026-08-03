@@ -351,33 +351,40 @@ MathJax = {
   <p>Wer bei \(|x - 3| = 5\) nur \(x - 3 = 5\) löst, verliert die halbe Lösungsmenge. Der Betrag versteckt <strong>zwei</strong> Gleichungen: \(x - 3 = 5\) <em>und</em> \(x - 3 = -5\), also \(L = \{-2;\ 8\}\). Probe am Abstandsbild: Welche Zahlen haben Abstand \(5\) von der \(3\)?</p>
 </div>
 
-<div class="widget-titelzeile" style="margin:14px 0 8px">
-  <p style="margin:0">Schiebe die Höhe \(c\) durch die V-Kurve \(y = |2x + 1|\) — die drei Fälle der Tabelle werden sichtbar:</p>
-  <div class="anim-hinweis links">
-    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-      <div class="ah-text">Zähle die Schnittpunkte, während \(c\) von oben nach unten wandert. Bei welchem \(c\) verschwindet der zweite Schnittpunkt — und wo liegt der letzte verbleibende?</div>
+<div class="widget">
+  <div class="widget-header">
+  <div class="widget-titelzeile">
+    <h3>Betrags-Explorer</h3>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Zähle die Schnittpunkte, während \(c\) von oben nach unten wandert. Bei welchem \(c\) verschwindet der zweite Schnittpunkt — und wo liegt der letzte verbleibende?</div>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Die Fallunterscheidung ist keine Regel zum Auswendiglernen, sondern die Zahl der Schnittpunkte: Für \(c > 0\) trifft die Waagrechte beide Äste der V-Kurve (<strong>zwei</strong> Lösungen), für \(c = 0\) genau die Spitze (<strong>eine</strong>), für \(c < 0\) liegt sie unter der Kurve (<strong>keine</strong>) — denn ein Betrag ist nie negativ. Die Spitze liegt dort, wo der Term im Betrag null wird: \(2x + 1 = 0\).</div>
+      </div>
     </div>
   </div>
-  <div class="anim-hinweis rechts">
-    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-      <div class="ah-text">Die Fallunterscheidung ist keine Regel zum Auswendiglernen, sondern die Zahl der Schnittpunkte: Für \(c > 0\) trifft die Waagrechte beide Äste der V-Kurve (<strong>zwei</strong> Lösungen), für \(c = 0\) genau die Spitze (<strong>eine</strong>), für \(c < 0\) liegt sie unter der Kurve (<strong>keine</strong>) — denn ein Betrag ist nie negativ. Die Spitze liegt dort, wo der Term im Betrag null wird: \(2x + 1 = 0\).</div>
-    </div>
+    <p>Schiebe die Höhe \(c\) durch die V-Kurve \(y = |2x + 1|\) — die drei Fälle der Tabelle werden sichtbar:</p>
+  </div>
+  <div class="widget-body">
+  <div class="sl-row">
+    <label>Höhe \(c\): <span class="sl-val" id="be-cv">7.0</span></label>
+    <input type="range" id="be-c" min="-3" max="10" step="0.5" value="7">
+  </div>
+  <div class="typ-btns" style="margin-bottom:10px">
+    <button class="typ-btn" type="button" data-bec="7">\(c &gt; 0\): zwei Lösungen</button>
+    <button class="typ-btn" type="button" data-bec="0">\(c = 0\): eine Lösung</button>
+    <button class="typ-btn" type="button" data-bec="-2">\(c &lt; 0\): keine Lösung</button>
+  </div>
+  <div class="formel-live"><div class="fl-label">Betragsgleichung</div><div class="fl-eq" id="be-eq">|2x + 1| = 7 → L = {−4; 3}</div></div>
+  <div class="cv-wrap" style="max-width:520px"><canvas id="cv-betrag" height="280"></canvas></div>
+  <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Der linke Ast gehört zum Fall \(2x + 1 &lt; 0\) (der Term wird gespiegelt), der rechte zu \(2x + 1 \geq 0\). Genau das sind die beiden Gleichungen, die der Betrag versteckt.</div>
   </div>
 </div>
-<div class="sl-row">
-  <label>Höhe \(c\): <span class="sl-val" id="be-cv">7.0</span></label>
-  <input type="range" id="be-c" min="-3" max="10" step="0.5" value="7">
-</div>
-<div class="typ-btns" style="margin-bottom:10px">
-  <button class="typ-btn" type="button" data-bec="7">\(c &gt; 0\): zwei Lösungen</button>
-  <button class="typ-btn" type="button" data-bec="0">\(c = 0\): eine Lösung</button>
-  <button class="typ-btn" type="button" data-bec="-2">\(c &lt; 0\): keine Lösung</button>
-</div>
-<div class="formel-live"><div class="fl-label">Betragsgleichung</div><div class="fl-eq" id="be-eq">|2x + 1| = 7 → L = {−4; 3}</div></div>
-<div class="cv-wrap" style="max-width:520px"><canvas id="cv-betrag" height="280"></canvas></div>
-<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Der linke Ast gehört zum Fall \(2x + 1 &lt; 0\) (der Term wird gespiegelt), der rechte zu \(2x + 1 \geq 0\). Genau das sind die beiden Gleichungen, die der Betrag versteckt.</div>
 
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Betragsgleichungen</summary>

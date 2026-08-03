@@ -516,37 +516,44 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
   </div>
 </div>
 
-<div class="widget-titelzeile" style="margin:16px 0 8px">
-  <p style="margin:0">Die drei Fälle sind keine getrennten Welten — kippe die zweite Gerade stetig und beobachte den Schnittpunkt:</p>
-  <div class="anim-hinweis links">
-    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-      <div class="ah-text">Schiebe \(m\) langsam gegen \(2\), während \(c \neq 4\) bleibt. Wohin wandert der Schnittpunkt — und was passiert genau im Moment \(m = 2\)?</div>
+<div class="widget">
+  <div class="widget-header">
+  <div class="widget-titelzeile">
+    <h3>Die drei Lösungsfälle im Geradenbüschel</h3>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Schiebe \(m\) langsam gegen \(2\), während \(c \neq 4\) bleibt. Wohin wandert der Schnittpunkt — und was passiert genau im Moment \(m = 2\)?</div>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Der Schnittpunkt flieht ins Unendliche, je näher die Steigungen zusammenrücken. Bei \(m = 2\) sind die Geraden parallel: Entweder liegen sie übereinander (\(c = 4\), unendlich viele Lösungen) oder nebeneinander (\(c \neq 4\), keine). Rechnerisch ist das dieselbe Grösse — die <strong>Determinante</strong> \(2 - m\). Ist sie null, entscheidet erst \(c\) zwischen «keine» und «unendlich viele».</div>
+      </div>
     </div>
   </div>
-  <div class="anim-hinweis rechts">
-    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-      <div class="ah-text">Der Schnittpunkt flieht ins Unendliche, je näher die Steigungen zusammenrücken. Bei \(m = 2\) sind die Geraden parallel: Entweder liegen sie übereinander (\(c = 4\), unendlich viele Lösungen) oder nebeneinander (\(c \neq 4\), keine). Rechnerisch ist das dieselbe Grösse — die <strong>Determinante</strong> \(2 - m\). Ist sie null, entscheidet erst \(c\) zwischen «keine» und «unendlich viele».</div>
-    </div>
+    <p>Die drei Fälle sind keine getrennten Welten — kippe die zweite Gerade stetig und beobachte den Schnittpunkt:</p>
+  </div>
+  <div class="widget-body">
+  <div class="sl-row">
+    <label>Steigungsparameter \(m\): <span class="sl-val" id="lb-mv">1.00</span></label>
+    <input type="range" id="lb-m" min="0" max="4" step="0.25" value="1">
+  </div>
+  <div class="sl-row">
+    <label>Konstante \(c\): <span class="sl-val" id="lb-cv">4.0</span></label>
+    <input type="range" id="lb-c" min="0" max="8" step="0.5" value="4">
+  </div>
+  <div class="meth-btns">
+    <button class="meth-btn" type="button" data-lb="1|6">eindeutig</button>
+    <button class="meth-btn" type="button" data-lb="2|6">parallel (keine)</button>
+    <button class="meth-btn" type="button" data-lb="2|4">identisch (unendlich)</button>
+  </div>
+  <div class="formel-live"><div class="fl-label">System und Determinante</div><div class="fl-eq" id="lb-eq" style="font-size:0.95rem"></div></div>
+  <div class="cv-wrap" style="max-width:520px"><canvas id="cv-lbuschel" height="300"></canvas></div>
+  <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blass gezeichnet ist das <strong>Geradenbüschel</strong>: dieselbe Gerade \(g_2\) für andere Werte von \(c\). Alle Büschelgeraden sind parallel zueinander — \(c\) verschiebt nur, \(m\) kippt.</div>
   </div>
 </div>
-<div class="sl-row">
-  <label>Steigungsparameter \(m\): <span class="sl-val" id="lb-mv">1.00</span></label>
-  <input type="range" id="lb-m" min="0" max="4" step="0.25" value="1">
-</div>
-<div class="sl-row">
-  <label>Konstante \(c\): <span class="sl-val" id="lb-cv">4.0</span></label>
-  <input type="range" id="lb-c" min="0" max="8" step="0.5" value="4">
-</div>
-<div class="meth-btns">
-  <button class="meth-btn" type="button" data-lb="1|6">eindeutig</button>
-  <button class="meth-btn" type="button" data-lb="2|6">parallel (keine)</button>
-  <button class="meth-btn" type="button" data-lb="2|4">identisch (unendlich)</button>
-</div>
-<div class="formel-live"><div class="fl-label">System und Determinante</div><div class="fl-eq" id="lb-eq" style="font-size:0.95rem"></div></div>
-<div class="cv-wrap" style="max-width:520px"><canvas id="cv-lbuschel" height="300"></canvas></div>
-<div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blass gezeichnet ist das <strong>Geradenbüschel</strong>: dieselbe Gerade \(g_2\) für andere Werte von \(c\). Alle Büschelgeraden sind parallel zueinander — \(c\) verschiebt nur, \(m\) kippt.</div>
 
 <table class="ftb-tabelle">
   <thead><tr><th>Lösungsfall</th><th>Was passiert beim Rechnen</th><th>Lösungsmenge</th></tr></thead>

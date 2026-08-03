@@ -9,6 +9,21 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 
 ## Offen
 
+- **2026-08-03 · Animations-Karte `.widget` zentralisieren und Einbettung
+  vereinheitlichen · `style.css` + Themenseiten · warum:** In Mathe lagen
+  `.widget`, `.widget-header`, `.widget-header h3/p` und `.widget-body` als
+  wortgleiche Kopie in 35 von 45 Themenseiten statt in `style.css` — `TEMPLATE.html`
+  benutzte die Klassen, ohne sie zu definieren. Dazu standen 26 Animationen ganz
+  ohne Rahmen im Textfluss, mit einer freistehenden `.widget-titelzeile`; auf
+  Seiten mit gerahmten Nachbarn fiel das als Stilbruch auf, und das Hinweispaar
+  brach dort auf eine zweite Zeile um.
+  **Massnahme in Physik:** prüfen, ob `.widget` dort ebenfalls lokal kopiert ist
+  (`grep -c '^\.widget {' themen/*.html`), zentralisieren und die lokalen Kopien
+  entfernen. Achtung auf die Kaskade: die lokale Kopie überstimmt
+  `.widget-titelzeile h3 { margin:0 }`; zentral gewinnt die Titelzeilen-Regel, was
+  die Kopfzeile um 3 px kürzt (richtig so). Danach freistehende Animationen in die
+  Widget-Form bringen. Regel dazu in STYLEGUIDE §2.10 (Mathe).
+
 - **2026-08-03 · Gedankenstrich vor Formeln in Titeln durch Doppelpunkt ersetzen ·
   alle Themenseiten · warum:** Gerendert klebt der Gedankenstrich an der Formel und
   liest sich als führendes Minus — aus «Labor — \(x^2 + c\)» wird optisch

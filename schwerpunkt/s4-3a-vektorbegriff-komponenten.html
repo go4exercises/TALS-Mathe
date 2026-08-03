@@ -446,32 +446,39 @@ MathJax = {
   <p>\(\tan\varphi = \tfrac{a_2}{a_1}\) liefert am Taschenrechner nur Winkel zwischen \(-90°\) und \(90°\). Für \(\binom{-2}{2}\) ergibt \(\arctan(-1) = -45°\) — richtig ist aber \(\varphi = 135°\) (2. Quadrant). <strong>Immer die Vorzeichen der Komponenten anschauen</strong> und nötigenfalls \(180°\) addieren.</p>
 </div>
 
-<div class="widget-titelzeile" style="margin:14px 0 8px">
-  <p style="margin:0">Verschiebe die Komponenten durch alle vier Quadranten und vergleiche Rechnerwert mit dem wahren Winkel:</p>
-  <div class="anim-hinweis links">
-    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-      <div class="ah-text">Vergleiche \(\binom{3}{4}\) mit \(\binom{-3}{-4}\): Der Taschenrechner zeigt beide Male denselben \(\arctan\)-Wert. Wie kann das sein — und wie unterscheidet man die beiden Vektoren dann?</div>
+<div class="widget">
+  <div class="widget-header">
+  <div class="widget-titelzeile">
+    <h3>Polarform in allen vier Quadranten</h3>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Vergleiche \(\binom{3}{4}\) mit \(\binom{-3}{-4}\): Der Taschenrechner zeigt beide Male denselben \(\arctan\)-Wert. Wie kann das sein — und wie unterscheidet man die beiden Vektoren dann?</div>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">\(\tan\) hat die Periode \(180°\) — der Quotient \(a_2/a_1\) ist für \(\vec{a}\) und \(-\vec{a}\) identisch. Deshalb kann \(\arctan\) den Quadranten gar nicht kennen und liefert stets einen Wert zwischen \(-90°\) und \(90°\). Die Vorzeichen der Komponenten entscheiden: bei \(a_1 < 0\) addiert man \(180°\), bei \(a_1 > 0\) und \(a_2 < 0\) addiert man \(360°\). Für \(a_1 = 0\) versagt der Quotient ganz — dort ist \(\varphi = 90°\) oder \(270°\).</div>
+      </div>
     </div>
   </div>
-  <div class="anim-hinweis rechts">
-    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-      <div class="ah-text">\(\tan\) hat die Periode \(180°\) — der Quotient \(a_2/a_1\) ist für \(\vec{a}\) und \(-\vec{a}\) identisch. Deshalb kann \(\arctan\) den Quadranten gar nicht kennen und liefert stets einen Wert zwischen \(-90°\) und \(90°\). Die Vorzeichen der Komponenten entscheiden: bei \(a_1 < 0\) addiert man \(180°\), bei \(a_1 > 0\) und \(a_2 < 0\) addiert man \(360°\). Für \(a_1 = 0\) versagt der Quotient ganz — dort ist \(\varphi = 90°\) oder \(270°\).</div>
-    </div>
+    <p>Verschiebe die Komponenten durch alle vier Quadranten und vergleiche Rechnerwert mit dem wahren Winkel:</p>
+  </div>
+  <div class="widget-body">
+  <div class="sl-row">
+    <label>Komponente \(a_1\): <span class="sl-val" id="pk-a1v">3</span></label>
+    <input type="range" id="pk-a1" min="-6" max="6" step="1" value="3">
+  </div>
+  <div class="sl-row">
+    <label>Komponente \(a_2\): <span class="sl-val" id="pk-a2v">4</span></label>
+    <input type="range" id="pk-a2" min="-6" max="6" step="1" value="4">
+  </div>
+  <div class="formel-live"><div class="fl-label">Rechnerwert · Korrektur · Richtungswinkel</div><div class="fl-eq" id="pk-eq" style="font-size:0.95rem"></div></div>
+  <div class="cv-wrap" style="max-width:520px"><canvas id="cv-polar" height="300"></canvas></div>
+  <div id="pk-hinw" style="font-size:0.8rem;margin-top:8px"></div>
   </div>
 </div>
-<div class="sl-row">
-  <label>Komponente \(a_1\): <span class="sl-val" id="pk-a1v">3</span></label>
-  <input type="range" id="pk-a1" min="-6" max="6" step="1" value="3">
-</div>
-<div class="sl-row">
-  <label>Komponente \(a_2\): <span class="sl-val" id="pk-a2v">4</span></label>
-  <input type="range" id="pk-a2" min="-6" max="6" step="1" value="4">
-</div>
-<div class="formel-live"><div class="fl-label">Rechnerwert · Korrektur · Richtungswinkel</div><div class="fl-eq" id="pk-eq" style="font-size:0.95rem"></div></div>
-<div class="cv-wrap" style="max-width:520px"><canvas id="cv-polar" height="300"></canvas></div>
-<div id="pk-hinw" style="font-size:0.8rem;margin-top:8px"></div>
 
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Polarform</summary>
