@@ -15,6 +15,8 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
   Intervallschreibweise daneben (`[`, `]`) statt mit gefülltem/hohlem Punkt —
   Bild und Schreibweise sagen damit dasselbe. Neuer Helfer `intervallKlammer(ctx,
   x, y, oeffnetRechts, opt)` in `mathlib.js`, dokumentiert in STYLEGUIDE §2.7.
+  Die Klammer steht immer symmetrisch zur Achse und wird weiss unterlegt; wo
+  `drawGrid` Achsenzahlen setzt, gehört sie **nach** die Zahlen gezeichnet.
   **Massnahme in Physik:** Helfer 1:1 nach `physiklib.js` übernehmen (farbneutral,
   Standardfarbe `#374151`), dann die Seiten prüfen, die eine Grenze auf einer
   Achse zeichnen — in Mathe waren es drei (`g1-2 cv-iv`, `g2-1 cv-ungl`,

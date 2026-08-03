@@ -159,6 +159,12 @@ Merksatz für die Aufrufstelle: **die Klammer öffnet zur Menge hin, wenn die Gr
 dazugehört, und von ihr weg, wenn sie nicht dazugehört.** Am linken Rand heisst das
 `oeffnetRechts = «gehört dazu»`, am rechten Rand `oeffnetRechts = «gehört NICHT dazu»`.
 
+Die Klammer steht **immer symmetrisch zur Achse**, gleich weit nach oben wie nach
+unten. Wo dicht darunter die freigestellten Achsenzahlen von `drawGrid` stehen
+(auf `y + 14`), wird sie **nach** den Zahlen gezeichnet — die weisse Unterlegung
+des Helfers trennt sie dann von der Zahl. Nicht stattdessen die Klammer
+verkürzen: die Symmetrie ist Teil der Notation.
+
 Der gefüllte/hohle **Punkt bleibt richtig**, wo es nicht um eine Intervallgrenze geht:
 für einen einzelnen ausgeschlossenen Wert (Polstelle, `\(\mathbb{R} \setminus \{2\}\)` —
 so etwa `s2-2a` · `br-canvas`), für Lösungspunkte und für Wertemarken auf einer Achse.

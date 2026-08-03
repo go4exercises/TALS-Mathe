@@ -322,29 +322,40 @@ function drawDot(ctx, cx, cy, x, y, color, r) {
    Linker Rand:  oeffnetRechts = «gehört dazu».
    Rechter Rand: oeffnetRechts = «gehört NICHT dazu».
 
+   Die Klammer steht IMMER symmetrisch zur Achse — gleich weit nach oben wie
+   nach unten. Damit sie dort lesbar bleibt, wo dicht unter der Achse die
+   freigestellten Achsenzahlen stehen (drawGrid setzt sie auf y + 14), wird sie
+   standardmässig weiss unterlegt (opt.halo). In dem Fall die Klammer NACH den
+   Zahlen zeichnen, sonst deckt die Freistellung der Zahl sie wieder zu.
+
    x, y sind Pixel (nicht Datenkoordinaten).
-   opt: {h, hUnten, serif, farbe, lw}. hUnten setzt die Höhe unterhalb von y
-   getrennt — nötig, wo dicht unter der Achse die freigestellten Achsenzahlen
-   stehen (drawGrid setzt sie auf y + 14) und eine symmetrische Klammer sie
-   überdecken würde. */
+   opt: {h, serif, farbe, lw, halo, haloFarbe}. */
 function intervallKlammer(ctx, x, y, oeffnetRechts, opt) {
   opt = opt || {};
   const h = opt.h === undefined ? 11 : opt.h;
-  const hU = opt.hUnten === undefined ? h : opt.hUnten;
   const serif = opt.serif === undefined ? 6 : opt.serif;
+  const lw = opt.lw === undefined ? 2.6 : opt.lw;
   const dx = oeffnetRechts ? serif : -serif;
   const altCap = ctx.lineCap, altJoin = ctx.lineJoin;
-  ctx.strokeStyle = opt.farbe || '#374151';
-  ctx.lineWidth = opt.lw === undefined ? 2.6 : opt.lw;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   ctx.setLineDash([]);
-  ctx.beginPath();
-  ctx.moveTo(x + dx, y - h);
-  ctx.lineTo(x, y - h);
-  ctx.lineTo(x, y + hU);
-  ctx.lineTo(x + dx, y + hU);
-  ctx.stroke();
+  const pfad = () => {
+    ctx.beginPath();
+    ctx.moveTo(x + dx, y - h);
+    ctx.lineTo(x, y - h);
+    ctx.lineTo(x, y + h);
+    ctx.lineTo(x + dx, y + h);
+    ctx.stroke();
+  };
+  if (opt.halo !== false) {
+    ctx.strokeStyle = opt.haloFarbe || canvasHintergrund(ctx) || '#fff';
+    ctx.lineWidth = lw + 3.2;
+    pfad();
+  }
+  ctx.strokeStyle = opt.farbe || '#374151';
+  ctx.lineWidth = lw;
+  pfad();
   ctx.lineCap = altCap; ctx.lineJoin = altJoin;
 }
 
