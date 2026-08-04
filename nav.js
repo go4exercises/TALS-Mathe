@@ -121,13 +121,13 @@ function buildNav(cfg) {
     }).join('');
   }
 
-  // Welche Sektion beim Öffnen aufgeklappt ist: der Bereich der aktuellen
-  // Seite, auf Glossar/Formelsammlung «Nachschlagen», sonst Grundlagenfach.
-  // (Die Startseite ruft buildNav mit bereich:'index' — daher die Abgrenzung
-  // gegen 'schwerpunkt' statt eine Prüfung auf fehlendes cfg.bereich.)
+  // Welche Sektion beim Öffnen aufgeklappt ist: genau der Bereich der aktuellen
+  // Seite, auf Glossar/Formelsammlung «Nachschlagen». Beide Bereiche werden
+  // gleich behandelt — auf der Startseite und den übrigen Seiten bleibt alles
+  // zu und wird erst per Klick geöffnet.
   const refAktiv = (cfg.id === 'glossar' || cfg.id === 'formeln');
   const spOffen  = (cfg.bereich === 'schwerpunkt');
-  const glOffen  = !spOffen && !refAktiv;
+  const glOffen  = (cfg.bereich === 'grundlagen');
 
   // ── META-DROPDOWN-INHALTE (Autor, Ausblick, Lizenz) ──
   // Drei kleine Info-Panels rechts im Header, auf jeder Seite identisch.
