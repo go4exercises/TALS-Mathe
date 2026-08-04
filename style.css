@@ -245,11 +245,43 @@ a:hover { text-decoration: underline; }
   padding: 7px 10px; border-radius: 6px;
 }
 .mobile-nav a:hover, .mobile-nav a.mn-aktiv { background: var(--blau-hell); color: var(--blau); }
-.mn-gruppe {
-  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--tinte-2);
-  padding: 10px 10px 4px; margin-top: 4px;
+/* Das Mobilmenü spiegelt die Kopfzeile: Übersicht · Grundlagenfach ·
+   Schwerpunktfach · Nachschlagen · Physik · Über · Kontakt. Die Sektionen
+   klappen, damit nicht wie früher 55 Zeilen gleichzeitig offen stehen.
+   Direktlinks tragen .mn-direkt und stehen optisch auf derselben Stufe
+   wie eine Sektions-Summary. */
+.mobile-nav .mn-direkt { font-size: 0.9rem; font-weight: 700; color: var(--tinte); padding: 10px; }
+.mobile-nav .mn-sektion { margin: 0 4px; border-top: 1px solid var(--linie); }
+.mobile-nav .mn-sektion > summary {
+  list-style: none; cursor: pointer;
+  font-size: 0.9rem; font-weight: 700; color: var(--tinte);
+  padding: 10px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: space-between;
 }
+.mobile-nav .mn-sektion > summary::-webkit-details-marker { display: none; }
+.mobile-nav .mn-sektion > summary::after {
+  content: '▾'; font-size: 0.7rem; color: var(--tinte-2);
+  transition: transform 0.2s;
+}
+.mobile-nav .mn-sektion[open] > summary::after { transform: rotate(180deg); }
+.mobile-nav .mn-sektion > summary:hover { background: var(--papier); }
+.mobile-nav .mn-sektion-body { display: flex; flex-direction: column; gap: 2px; padding: 0 0 8px 6px; }
+
+/* Zweite Ebene: die Lerngebiete innerhalb eines Bereichs. */
+.mobile-nav .mn-lg > summary {
+  list-style: none; cursor: pointer;
+  font-size: 0.78rem; font-weight: 700; color: var(--blau);
+  padding: 8px 10px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.mobile-nav .mn-lg > summary::-webkit-details-marker { display: none; }
+.mobile-nav .mn-lg > summary::after {
+  content: '▾'; font-size: 0.65rem; color: var(--blau);
+  transition: transform 0.2s;
+}
+.mobile-nav .mn-lg[open] > summary::after { transform: rotate(180deg); }
+.mobile-nav .mn-lg > summary:hover { background: var(--blau-hell); }
+.mobile-nav .mn-lg-body { display: flex; flex-direction: column; gap: 1px; padding-left: 8px; }
 
 /* Mobile-Nav: Meta-Aufklapper (Autor, Ausblick, Feedback, Lizenz) */
 .mobile-nav .mn-meta { margin: 0 4px; border-top: 1px solid var(--linie); }
@@ -279,12 +311,6 @@ a:hover { text-decoration: underline; }
 .mobile-nav .mn-meta-body p { margin: 0 0 6px; }
 .mobile-nav .mn-meta-body ul { margin: 0 0 4px; padding-left: 18px; }
 .mobile-nav .mn-meta-body .meta-link { color: var(--blau); font-weight: 600; text-decoration: none; }
-.mn-untergruppe {
-  font-family: var(--mono); font-size: 0.58rem; letter-spacing: 1px;
-  text-transform: uppercase; color: var(--blau);
-  padding: 8px 10px 2px; margin-top: 2px;
-}
-
 /* ── SEITEN-LAYOUT ──────────────────────────────────────────── */
 .page-wrap {
   max-width: 1400px; margin: 0 auto;

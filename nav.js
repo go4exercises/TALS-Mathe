@@ -105,7 +105,8 @@ function buildNav(cfg) {
     }).join('');
   }
 
-  // Mobile-Nav: gruppiert mit Lerngebiet-Headern
+  // Mobile-Nav: je Lerngebiet eine Klappe — nur die des aktuellen Kapitels
+  // startet offen, damit das Menü nicht wieder als 55-zeilige Liste aufgeht.
   function renderMobileGroup(bereich) {
     const groups = GROUPS[bereich];
     return groups.map(g => {
@@ -113,9 +114,20 @@ function buildNav(cfg) {
         const p = pageById[id];
         return `<a href="${prefix}${p.url}" class="${p.id===cfg.id?'mn-aktiv':''}">${p.nr} · ${p.titel}</a>`;
       }).join('');
-      return `<div class="mn-untergruppe">${g.nr} · ${g.titel}</div>${items}`;
+      return `<details class="mn-lg"${g.ids.indexOf(cfg.id) !== -1 ? ' open' : ''}>
+        <summary>${g.nr} · ${g.titel}</summary>
+        <div class="mn-lg-body">${items}</div>
+      </details>`;
     }).join('');
   }
+
+  // Welche Sektion beim Öffnen aufgeklappt ist: der Bereich der aktuellen
+  // Seite, auf Glossar/Formelsammlung «Nachschlagen», sonst Grundlagenfach.
+  // (Die Startseite ruft buildNav mit bereich:'index' — daher die Abgrenzung
+  // gegen 'schwerpunkt' statt eine Prüfung auf fehlendes cfg.bereich.)
+  const refAktiv = (cfg.id === 'glossar' || cfg.id === 'formeln');
+  const spOffen  = (cfg.bereich === 'schwerpunkt');
+  const glOffen  = !spOffen && !refAktiv;
 
   // ── META-DROPDOWN-INHALTE (Autor, Ausblick, Lizenz) ──
   // Drei kleine Info-Panels rechts im Header, auf jeder Seite identisch.
@@ -244,21 +256,33 @@ function buildNav(cfg) {
   <button class="burger" onclick="toggleMobileNav()" aria-label="Navigation">☰</button>
 </header>
 <div class="mobile-nav" id="mobile-nav">
-  <a href="${indexHref}">← Übersicht</a>
-  <div class="mn-gruppe">Grundlagenfach</div>
-  ${renderMobileGroup('grundlagen')}
-  <div class="mn-gruppe">Schwerpunktfach</div>
-  ${renderMobileGroup('schwerpunkt')}
-  <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener">Physik ↗</a>
-  <div class="mn-gruppe">Nachschlagen</div>
-  <a href="${prefix}glossar.html" class="${cfg.id==='glossar'?'mn-aktiv':''}">A–Z · Glossar</a>
-  <a href="${prefix}formelsammlung.html" class="${cfg.id==='formeln'?'mn-aktiv':''}">∑ · Formelsammlung</a>
-  <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">PDF · SBFI-Formelsammlung</a>
-  <div class="mn-gruppe">Über dieses Lehrmittel</div>
-  <details class="mn-meta"><summary>Autor &amp; Intention</summary><div class="mn-meta-body">${metaAutorHTML}</div></details>
-  <details class="mn-meta"><summary>Ausblick</summary><div class="mn-meta-body">${metaAusblickHTML}</div></details>
-  <details class="mn-meta"><summary>Lizenz</summary><div class="mn-meta-body">${metaLizenzHTML}</div></details>
-  <a href="${prefix}feedback.html">Kontakt &amp; Feedback</a>
+  <a href="${indexHref}" class="mn-direkt">← Übersicht</a>
+  <details class="mn-sektion"${glOffen ? ' open' : ''}>
+    <summary>Grundlagenfach</summary>
+    <div class="mn-sektion-body">${renderMobileGroup('grundlagen')}</div>
+  </details>
+  <details class="mn-sektion"${spOffen ? ' open' : ''}>
+    <summary>Schwerpunktfach</summary>
+    <div class="mn-sektion-body">${renderMobileGroup('schwerpunkt')}</div>
+  </details>
+  <details class="mn-sektion"${refAktiv ? ' open' : ''}>
+    <summary>Nachschlagen</summary>
+    <div class="mn-sektion-body">
+      <a href="${prefix}glossar.html" class="${cfg.id==='glossar'?'mn-aktiv':''}">A–Z · Glossar</a>
+      <a href="${prefix}formelsammlung.html" class="${cfg.id==='formeln'?'mn-aktiv':''}">∑ · Formelsammlung</a>
+      <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">PDF · SBFI-Formelsammlung</a>
+    </div>
+  </details>
+  <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener" class="mn-direkt">Physik ↗</a>
+  <details class="mn-sektion">
+    <summary>Über dieses Lehrmittel</summary>
+    <div class="mn-sektion-body">
+      <details class="mn-meta"><summary>Autor &amp; Intention</summary><div class="mn-meta-body">${metaAutorHTML}</div></details>
+      <details class="mn-meta"><summary>Ausblick</summary><div class="mn-meta-body">${metaAusblickHTML}</div></details>
+      <details class="mn-meta"><summary>Lizenz</summary><div class="mn-meta-body">${metaLizenzHTML}</div></details>
+    </div>
+  </details>
+  <a href="${prefix}feedback.html" class="mn-direkt">Kontakt &amp; Feedback</a>
 </div>`;
 
   // ── INJECT ───────────────────────────────────────────────────

@@ -536,3 +536,123 @@ bereits (Zeile 1099).
 3. Render-Check 1280 px + 360 px — in Mathe mit `.claude/tools/screenshot-widgets.mjs`,
    in Physik mit einem Playwright-Skript (Chromium liegt unter `~/.cache/ms-playwright/`).
 4. CSS-Klammerbilanz: `python3 -c "s=open('style.css').read(); print(s.count('{')==s.count('}'))"`.
+
+---
+
+## 11. Mobilmenü als Spiegel der Kopfzeile  (`nav.js` + `style.css`, 04.08.2026)
+
+Quelle: Physik-Commit `f592eb8`. Anlass: bei starkem Browser-Zoom klappt die Kopfzeile
+in den Burger — und das Burger-Menü war die schwächste Stelle des ganzen Lehrmittels.
+
+**Was:** Das Mobilmenü listet nicht mehr alle Seiten flach untereinander, sondern
+spiegelt die Kopfzeile als Klapp-Sektionen: *← Übersicht · Grundlagenfach ·
+Schwerpunktfach · Nachschlagen · Physik ↗ · Über dieses Lehrmittel · Kontakt & Feedback*.
+Zweite Klappebene sind die Lerngebiete je Bereich. Beim Öffnen ist genau der Bereich der
+aktuellen Seite offen und darin ihr Lerngebiet.
+
+**Warum:** In Mathe stehen 55 Links und 2641 px Inhalt in einem 745 px hohen Fenster —
+dreieinhalb Bildschirme Scrollen, ohne erkennbare Hierarchie (Lerngebiets-Überschriften
+0.58 rem Mono gegen 0.85 rem Links). Genau dieses Menü braucht man bei starkem Zoom.
+Gemessen nach dem Umbau (Playwright, 360 px, auf einer Kopie des Repos gefahren):
+
+| Seite | vorher | nachher | offen beim Öffnen |
+|---|---|---|---|
+| `index.html` | 2641 px | 575 px | Grundlagenfach |
+| `grundlagen/g5-2a-dreiecke.html` | 2641 px | 879 px | Grundlagenfach › 5 · Geometrie |
+| `schwerpunkt/s3-1-grundlagen.html` | 2641 px | 818 px | Schwerpunktfach › 3 · Funktionen |
+| `glossar.html` | 2641 px | 475 px | Nachschlagen |
+
+Sichtbare Links beim Öffnen: 3 auf der Startseite, 11 auf einer Kapitelseite (vorher 55).
+
+**Nicht übertragen — bewusst:** Physik hat im selben Commit den Burger-Breakpoint von
+1024 px auf 880 px gesenkt und das «Über»-Dropdown ab 1000 px auf die Spaltenvariante
+gestellt. **Beides gehört nicht nach Mathe.** Die Mathe-Kopfzeile hat sechs statt fünf
+Einträge mit längeren Labels und braucht real 1009 px (Logo 94 + Nav 633 + Suche 190 +
+Polsterung/Gaps 112); der erste Überlauf wurde bei 1009 px gemessen. Die dortigen 1024 px
+sind also bereits die richtige Kante — auch mit gekürzten Buttons («Grundlagen» /
+«Schwerpunkt») läge sie erst bei 961 px. Und Mathes `.dd-menu-ueber` öffnet mit
+`right: 0` rechtsbündig, ragt also nirgends hinaus; die Physik-Korrektur war dort nur
+nötig, weil das Menü mit `left: 0` am Button klebt.
+
+**Wie:** Ein fertiges Skript liegt unter
+`_intern/uebertrag-physik-nav/transfer-mathe-mobilnav.py` (gitignoriert, mit `--dry-run`;
+es prüft jeden Ankertext auf genau ein Vorkommen und bricht sonst ab):
+
+```bash
+python3 _intern/uebertrag-physik-nav/transfer-mathe-mobilnav.py --root . --dry-run
+python3 _intern/uebertrag-physik-nav/transfer-mathe-mobilnav.py --root .
+```
+
+Fehlt das Skript, sind es vier Ersetzungen von Hand:
+
+**(a) `nav.js` — `renderMobileGroup(bereich)`:** statt `<div class="mn-untergruppe">`
+je Lerngebiet ein `<details class="mn-lg">`; offen ist es, wenn es die aktuelle Seite
+enthält. Die Lerngebietsnummern wiederholen sich zwischen den Bereichen, darum
+entscheidet die ID-Liste, nicht `g.nr`:
+
+```js
+      return `<details class="mn-lg"${g.ids.indexOf(cfg.id) !== -1 ? ' open' : ''}>
+        <summary>${g.nr} · ${g.titel}</summary>
+        <div class="mn-lg-body">${items}</div>
+      </details>`;
+```
+
+**(b) `nav.js` — direkt darunter die Aufklapp-Logik.** Achtung: die Startseite ruft
+`buildNav({ bereich:'index', homepage:true })`, deshalb wird gegen `'schwerpunkt'`
+geprüft und nicht auf ein fehlendes `cfg.bereich` — sonst bleibt auf `index.html`
+alles zu:
+
+```js
+  const refAktiv = (cfg.id === 'glossar' || cfg.id === 'formeln');
+  const spOffen  = (cfg.bereich === 'schwerpunkt');
+  const glOffen  = !spOffen && !refAktiv;
+```
+
+**(c) `nav.js` — das `<div class="mobile-nav">`-Markup** in Sektionen fassen (Reihenfolge
+wie in der Kopfzeile, „Physik ↗" rückt dabei hinter „Nachschlagen"):
+
+```html
+<div class="mobile-nav" id="mobile-nav">
+  <a href="${indexHref}" class="mn-direkt">← Übersicht</a>
+  <details class="mn-sektion"${glOffen ? ' open' : ''}>
+    <summary>Grundlagenfach</summary>
+    <div class="mn-sektion-body">${renderMobileGroup('grundlagen')}</div>
+  </details>
+  <details class="mn-sektion"${spOffen ? ' open' : ''}>
+    <summary>Schwerpunktfach</summary>
+    <div class="mn-sektion-body">${renderMobileGroup('schwerpunkt')}</div>
+  </details>
+  <details class="mn-sektion"${refAktiv ? ' open' : ''}>
+    <summary>Nachschlagen</summary>
+    <div class="mn-sektion-body">… die drei bisherigen Nachschlage-Links …</div>
+  </details>
+  <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener" class="mn-direkt">Physik ↗</a>
+  <details class="mn-sektion">
+    <summary>Über dieses Lehrmittel</summary>
+    <div class="mn-sektion-body">… die drei bisherigen &lt;details class="mn-meta"&gt; …</div>
+  </details>
+  <a href="${prefix}feedback.html" class="mn-direkt">Kontakt &amp; Feedback</a>
+</div>
+```
+
+**(d) `style.css` — `.mn-gruppe` und `.mn-untergruppe` ersetzen** (beide werden danach
+nirgends mehr benutzt) durch `.mn-direkt`, `.mn-sektion`(+`-body`) und `.mn-lg`(+`-body`).
+Der vollständige Block steht im Skript; Farbe ist `--blau` (in Physik `--bernstein`),
+Schriftgrössen bewusst grösser als die alten Mono-Versalien — 0.9 rem für die Sektionen,
+0.78 rem für die Lerngebiete statt 0.58 rem —, weil das Menü gerade bei starkem Zoom
+gebraucht wird.
+
+**Verifikation:** zusätzlich zur Liste oben den Burger bei 360 px auf `index.html`, je
+einer Grundlagen- und einer Schwerpunktseite sowie auf `glossar.html` öffnen und prüfen,
+welche Sektion aufgeklappt ist.
+
+**Commit-Message:**
+`Nav: Mobilmenue als Spiegel der Kopfzeile mit Klapp-Sektionen (Uebertrag aus Physik f592eb8)`
+
+**[x] Umgesetzt am 04.08.2026** — per Skript (alle vier Ankertexte genau 1× gefunden).
+`node --check nav.js` sauber, CSS-Klammerbilanz ausgeglichen, keine Restvorkommen von
+`.mn-gruppe`/`.mn-untergruppe` mehr im Repo. Pre-Flight über alle 46 Themenseiten:
+`ALLE CHECKS BESTANDEN`. Gegenprobe im Repo selbst (Playwright, 360 px, Burger geöffnet)
+reproduziert die Tabelle oben exakt — 575 / 879 / 818 / 475 px, offen jeweils
+Grundlagenfach · Grundlagenfach › 5 · Geometrie · Schwerpunktfach › 3 · Funktionen ·
+Nachschlagen; sichtbare Links 3 / 11 / 11 / 6 (`checkVisibility`), kein Querüberlauf.
