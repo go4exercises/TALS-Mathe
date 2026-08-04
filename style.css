@@ -212,9 +212,21 @@ a:hover { text-decoration: underline; }
 .ueber-panel .meta-link { color: var(--blau); font-weight: 600; text-decoration: none; }
 .ueber-panel .meta-link:hover { text-decoration: underline; }
 
+/* Autorenbild im Ueber-Panel: rund wie ein Benutzerbild, aber rund zehnmal so
+   viel Flaeche (112px Durchmesser gegen die ueblichen ~36px). Der Text laeuft
+   um das Bild herum; auf schmalen Menues faellt es auf 88px zurueck. */
+.meta-portrait {
+  float: left; width: 112px; height: 112px;
+  margin: 2px 14px 6px 0;
+  border-radius: 50%; object-fit: cover;
+  border: 1.5px solid var(--blau-rand);
+  box-shadow: var(--s);
+}
+
 /* Schmaler Viewport: Tab-Spalte oben, Inhalt unten */
 @media (max-width: 720px) {
   .dd-menu-ueber { min-width: 320px; max-width: 90vw; flex-direction: column; }
+  .meta-portrait { width: 88px; height: 88px; margin-right: 11px; }
   .ueber-tabs {
     flex: none; flex-direction: row; flex-wrap: wrap;
     border-right: none; border-bottom: 1px solid var(--linie);

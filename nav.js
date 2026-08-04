@@ -132,7 +132,9 @@ function buildNav(cfg) {
   // ── META-DROPDOWN-INHALTE (Autor, Ausblick, Lizenz) ──
   // Drei kleine Info-Panels rechts im Header, auf jeder Seite identisch.
   const metaAutorHTML = `
-    <div class="meta-titel">Autor &amp; Intention</div>
+    <div class="meta-titel">Autor</div>
+    <img class="meta-portrait" src="${prefix}autor.jpg" width="112" height="112" loading="lazy"
+         alt="Porträt von Raphael Arnold Kohler (Aquarell)">
     <p><strong>Autor:</strong> Raphael Arnold Kohler, Elektroingenieur und BM-Fachlehrperson
        für Mathematik und Physik mit über 30 Jahren Unterrichtserfahrung.</p>
     <p>TALS Mathematik ist ein unabhängiges, kostenlos zugängliches Lernangebot für die Sek II,
@@ -234,7 +236,7 @@ function buildNav(cfg) {
       </button>
       <div class="dd-menu dd-menu-ueber" id="dd-ueber">
         <div class="ueber-tabs" role="tablist">
-          <button class="ueber-tab aktiv" role="tab" data-target="ueber-autor">Autor &amp; Intention</button>
+          <button class="ueber-tab aktiv" role="tab" data-target="ueber-autor">Autor</button>
           <button class="ueber-tab"        role="tab" data-target="ueber-ausblick">Ausblick</button>
           <button class="ueber-tab"        role="tab" data-target="ueber-lizenz">Lizenz</button>
         </div>
@@ -277,7 +279,7 @@ function buildNav(cfg) {
   <details class="mn-sektion">
     <summary>Über dieses Lehrmittel</summary>
     <div class="mn-sektion-body">
-      <details class="mn-meta"><summary>Autor &amp; Intention</summary><div class="mn-meta-body">${metaAutorHTML}</div></details>
+      <details class="mn-meta"><summary>Autor</summary><div class="mn-meta-body">${metaAutorHTML}</div></details>
       <details class="mn-meta"><summary>Ausblick</summary><div class="mn-meta-body">${metaAusblickHTML}</div></details>
       <details class="mn-meta"><summary>Lizenz</summary><div class="mn-meta-body">${metaLizenzHTML}</div></details>
     </div>

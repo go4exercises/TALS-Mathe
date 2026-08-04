@@ -656,3 +656,101 @@ welche Sektion aufgeklappt ist.
 reproduziert die Tabelle oben exakt — 575 / 879 / 818 / 475 px, offen jeweils
 Grundlagenfach · Grundlagenfach › 5 · Geometrie · Schwerpunktfach › 3 · Funktionen ·
 Nachschlagen; sichtbare Links 3 / 11 / 11 / 6 (`checkVisibility`), kein Querüberlauf.
+
+---
+
+## 12. Über-Panel: Autorenbild und kürzerer Reiter  (`nav.js` + `style.css` + 1 Bild, 04.08.2026)
+
+Quelle: Physik-Commits `640a52a` (Bild) und `2dddb9d` (Reiter). Betrifft dasselbe
+Über-Panel wie Punkt 11 und ist unabhängig davon anwendbar.
+
+### 12a — Rundes Autorenbild
+
+**Was:** Im Über-Panel steht links oben ein rundes Porträt, um das der Text herumläuft —
+Optik eines Benutzerbildes, aber rund zehnmal so viel Fläche (112 px Durchmesser gegen
+die üblichen ~36 px; 9852 px² gegen 1018 px²). Auf schmalen Menüs fällt es auf 88 px.
+
+**Warum:** Das Panel war reiner Fliesstext; ein Gesicht macht die Autorenangabe
+persönlicher, ohne Platz zu kosten. Es ist derselbe Autor wie in Physik, das Bild
+lässt sich also unverändert übernehmen.
+
+**Bild:** `autor.jpg` aus dem Physik-Repo-Root kopieren — 256 × 256 px, 12 KB, JPEG
+Qualität 82, **ohne Exif**. Wichtig: nicht das Originalfoto einchecken; das Original
+war 2323 × 3001 px, 1.09 MB und trug GPS-Koordinaten sowie Aufnahmedatum im Exif — das
+Repo ist die veröffentlichte Website. Der Zuschnitt entstand mit Pillow aus dem
+Original (`crop((150, 60, 2250, 2160))`, danach `resize((256,256), LANCZOS)` und
+`save(..., quality=82, optimize=True, progressive=True)`; das Neuspeichern wirft die
+Exif-Daten weg).
+
+```bash
+cp /home/paps/tals-physik/autor.jpg .
+```
+
+**`nav.js` — in `metaAutorHTML` direkt nach der `meta-titel`-Zeile einfügen:**
+
+```js
+    <img class="meta-portrait" src="${prefix}autor.jpg" width="112" height="112" loading="lazy"
+         alt="Porträt von Raphael Arnold Kohler (Aquarell)">
+```
+
+**`style.css` — neuer Block, sinnvoll direkt nach `.ueber-panel .meta-link:hover`:**
+
+```css
+/* Autorenbild im Ueber-Panel: rund wie ein Benutzerbild, aber rund zehnmal so
+   viel Flaeche (112px Durchmesser gegen die ueblichen ~36px). Der Text laeuft
+   um das Bild herum; auf schmalen Menues faellt es auf 88px zurueck. */
+.meta-portrait {
+  float: left; width: 112px; height: 112px;
+  margin: 2px 14px 6px 0;
+  border-radius: 50%; object-fit: cover;
+  border: 1.5px solid var(--blau-rand);      /* Physik: --bernstein-rand */
+  box-shadow: var(--s);
+}
+```
+
+**Und die Verkleinerung in den bestehenden `@media (max-width: 720px)`-Block**
+(`style.css:216`) — **nicht** in einen 1000-px-Block wie in Physik: dort war die Grenze
+wegen des tieferen Burger-Breakpoints hochgezogen worden, den Mathe nicht übernimmt
+(siehe Punkt 11). In Mathe deckt die 720-px-Kante den relevanten Fall ab, weil das
+Desktop-Dropdown mit 400 px Panelbreite für 112 px reicht und das Burger-Menü ohnehin
+schmaler als 720 px ist:
+
+```css
+  .meta-portrait { width: 88px; height: 88px; margin-right: 11px; }
+```
+
+### 12b — Reiter heisst nur noch «Autor»
+
+**Was:** «Autor & Intention» → «Autor», an drei Stellen in `nav.js`. Die Tab-ID
+`ueber-autor` und das `data-target` bleiben unverändert.
+
+**Wie:**
+
+```bash
+python3 - <<'PY'
+import pathlib
+p = pathlib.Path('nav.js'); s = p.read_text(encoding='utf-8')
+print(s.count('Autor &amp; Intention'), 'Stellen')      # erwartet: 3
+p.write_text(s.replace('Autor &amp; Intention', 'Autor'), encoding='utf-8')
+PY
+```
+
+Betroffen sind in Mathes `nav.js` die Panel-Überschrift (Zeile 135), der Reiter-Button
+(237) und die Klappe im Burger-Menü (280).
+
+**Verifikation:** `node --check nav.js`; Über-Panel bei 1280 px öffnen (Bild rund,
+112 px, Text läuft herum, Reiter «Autor») und bei 360 px im Burger unter
+«Über dieses Lehrmittel → Autor» (Bild 88 px).
+
+**Commit-Message:**
+`Ueber-Panel: rundes Autorenbild und Reiter «Autor» (Uebertrag aus Physik 640a52a, 2dddb9d)`
+
+**[x] Umgesetzt am 04.08.2026** — `autor.jpg` übernommen (256 × 256, 12 KB, 0 Exif-Bytes
+gegengeprüft), `.meta-portrait` in `metaAutorHTML`, CSS-Block nach
+`.ueber-panel .meta-link:hover` und die 88-px-Regel im bestehenden 720-px-Block.
+«Autor &amp; Intention» an genau 3 Stellen ersetzt (Panel-Überschrift, Reiter-Button,
+Burger-Klappe); `ueber-autor`/`data-target` unverändert. `node --check nav.js` sauber,
+CSS-Klammerbilanz ausgeglichen, Pre-Flight über alle 46 Themenseiten bestanden.
+Gemessen (Playwright): 1280 px → 112 × 112 px, `border-radius: 50%`, `float: left`,
+Text läuft herum, Reiter «Autor · Ausblick · Lizenz»; 360 px im Burger → 88 × 88 px,
+innerhalb der Menübreite. Screenshots beider Breiten gesichtet.
