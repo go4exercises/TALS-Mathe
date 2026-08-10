@@ -4,6 +4,34 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 10. August 2026 · Umzug auf `mathe.begreifbar.ch`
+
+Das Lehrmittel liegt jetzt unter einer eigenen Domain. `begreifbar.ch` ist registriert
+(Auto-Renew aktiv), die DNS-Einträge stehen — vier A- und vier AAAA-Records am Apex,
+CNAMEs für `mathe`, `physik` und `www`, alle mit TTL 300 —, `CNAME` im Repo-Root nennt
+`mathe.begreifbar.ch`, Enforce HTTPS ist gesetzt und die Domain auf GitHub verifiziert.
+
+### Geändert
+
+- **Alle URLs im Repo** auf `https://mathe.begreifbar.ch/`. `BASIS` in
+  `scripts/build-seo.py` gesetzt und den Generator laufen lassen: 51 Seiten-Kopfblöcke
+  (`canonical`, Open Graph, JSON-LD), `sitemap.xml` und `robots.txt` neu geschrieben.
+- **Querlinks zur Physik** auf `https://physik.begreifbar.ch/` — drei Stellen in
+  `nav.js` (Über-Panel, Kopfzeile, Mobilmenü) sowie je eine in `glossar.html` und
+  `formelsammlung.html`. Diese Adresse liefert erst aus, wenn Phase 5 im Physik-Repo
+  gemacht ist.
+- **Empfohlene Namensnennung** im Lizenzblock von `nav.js` auf die neue Adresse.
+- `README.md` auf die neue Adresse; der Hinweis, dass die alte weiterhin umleitet,
+  bleibt bewusst stehen.
+
+**Nicht angefasst:** `og-bild.png` und die Metadaten tragen weiterhin den Namen
+«TALS Mathematik» und die alte Adresse im Bild — das gehört zur Markenfrage und wird
+separat entschieden (`DOMAIN-UMZUG.md`, Phase 6). Ebenso bleiben ältere Einträge in
+diesem Changelog bei den Adressen, die damals galten; sie dokumentieren den
+historischen Stand.
+
+---
+
 ## [Unveröffentlicht] — 2./3. August 2026
 
 Nacharbeit nach Version 1.0: das Animations-Audit des Schwerpunktfachs abgeschlossen,

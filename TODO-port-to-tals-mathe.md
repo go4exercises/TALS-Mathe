@@ -317,7 +317,10 @@ veröffentlichte E-Mail-Adresse.
    **Kein GitHub-Link im Footer.** Er steht genau einmal, im Über-Panel unter „Lizenz"
    („→ Quelltext und Inhalte des Lehrmittels (GitHub)"). Begründung: für Lernende ist
    „GitHub" Fachjargon und eine Dateiliste wirkt wie ein Fehler; wer das Repo sucht, liest
-   es ohnehin aus der Domain `go4exercises.github.io/…`. Mathes heutiger Footer nennt
+   es ohnehin aus der Domain `go4exercises.github.io/…`.
+   *(Nachtrag 10.8.2026: seit dem Umzug auf `mathe.begreifbar.ch` traegt die Domain
+   den Repo-Namen nicht mehr — das Argument stuetzt den Verzicht auf den Footer-Link
+   also nicht mehr. Der Link im Ueber-Panel bleibt davon unberuehrt.)* Mathes heutiger Footer nennt
    „GitHub Pages" in Zeile 2 — der fällt weg.
 
 **Vor dem Behaupten prüfen:** Die Aussage „keine Cookies" gilt nur, solange nichts im
@@ -626,7 +629,7 @@ wie in der Kopfzeile, „Physik ↗" rückt dabei hinter „Nachschlagen"):
     <summary>Nachschlagen</summary>
     <div class="mn-sektion-body">… die drei bisherigen Nachschlage-Links …</div>
   </details>
-  <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener" class="mn-direkt">Physik ↗</a>
+  <a href="https://physik.begreifbar.ch/" target="_blank" rel="noopener" class="mn-direkt">Physik ↗</a>
   <details class="mn-sektion">
     <summary>Über dieses Lehrmittel</summary>
     <div class="mn-sektion-body">… die drei bisherigen &lt;details class="mn-meta"&gt; …</div>

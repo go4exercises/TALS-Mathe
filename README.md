@@ -3,7 +3,7 @@
 > **Freies, interaktives Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences (TALS)**
 > Struktur 1:1 nach RLP 2030 · Notation nach *Formeln, Tabellen, Begriffe* (Orell Füssli) · GitHub Pages
 
-**Version 1.0 · Stand 1. August 2026** · [Online-Ausgabe](https://go4exercises.github.io/TALS-Mathe/)
+**Version 1.0 · Stand 1. August 2026** · [Online-Ausgabe](https://mathe.begreifbar.ch/)
 
 ---
 
@@ -195,9 +195,9 @@ cd tals-mathe
 
 ## Online ansehen
 
-👉 **[go4exercises.github.io/tals-mathe](https://go4exercises.github.io/tals-mathe)**
+👉 **[mathe.begreifbar.ch](https://mathe.begreifbar.ch/)**
 
-*(URL nach dem Hochladen hier eintragen)*
+*(Die alte Adresse `go4exercises.github.io/TALS-Mathe/` leitet weiterhin hierher um.)*
 
 ---
 
