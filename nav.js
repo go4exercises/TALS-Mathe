@@ -154,7 +154,7 @@ function buildNav(cfg) {
       <li>Schwerpunktfach vollständig (23 Themenseiten, Lerngebiete 1–4, inkl. Ergänzungen 3.6 und 4.3d)</li>
       <li>Je Themenseite: interaktive Animationen, Aufgaben, Zusammenfassung, Druckseiten, Anki-Deck und externe Ressourcen</li>
       <li>Nachschlagen: Glossar und Formelsammlung</li>
-      <li>Schwesterprojekt: <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener" class="meta-link">TALS Physik</a> — gleicher Aufbau für das Fach Physik</li>
+      <li>Schwesterprojekt: <a href="https://physik.begreifbar.ch/" target="_blank" rel="noopener" class="meta-link">TALS Physik</a> — gleicher Aufbau für das Fach Physik</li>
     </ul>
     <div class="meta-sub">Ideen für den Ausbau</div>
     <ul>
@@ -175,7 +175,7 @@ function buildNav(cfg) {
        und Änderungen kenntlich zu machen. Inhalte Dritter und verlinkte externe
        Angebote unterliegen ihren eigenen Rechten und Nutzungsbedingungen.</p>
     <p><em>Empfohlene Namensnennung:</em> Raphael Arnold Kohler, TALS Mathematik,
-       https://go4exercises.github.io/TALS-Mathe/, CC BY-NC 4.0.</p>
+       https://mathe.begreifbar.ch/, CC BY-NC 4.0.</p>
     <p><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener" class="meta-link">
        → Lizenztext (CC BY-NC 4.0)</a></p>
     <p><a href="https://github.com/go4exercises/TALS-Mathe" target="_blank" rel="noopener" class="meta-link">
@@ -226,7 +226,7 @@ function buildNav(cfg) {
         </div>
       </div>
     </div>
-    <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener">Physik ↗</a>
+    <a href="https://physik.begreifbar.ch/" target="_blank" rel="noopener">Physik ↗</a>
 
     <span class="nav-sep" aria-hidden="true"></span>
 
@@ -275,7 +275,7 @@ function buildNav(cfg) {
       <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">PDF · SBFI-Formelsammlung</a>
     </div>
   </details>
-  <a href="https://go4exercises.github.io/TALS-Physik/" target="_blank" rel="noopener" class="mn-direkt">Physik ↗</a>
+  <a href="https://physik.begreifbar.ch/" target="_blank" rel="noopener" class="mn-direkt">Physik ↗</a>
   <details class="mn-sektion">
     <summary>Über dieses Lehrmittel</summary>
     <div class="mn-sektion-body">
