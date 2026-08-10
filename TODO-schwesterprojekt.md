@@ -23,6 +23,24 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
+- **2026-08-10 · ToC markiert den aktiven Abschnitt sofort · `nav.js`,
+  `buildToC()` · warum:** Die Markierung lief allein über einen
+  `IntersectionObserver` mit `rootMargin: '-20% 0px -70% 0px'`. Der meldet nur,
+  wenn eine Überschrift dieses schmale Band durchquert — beim Laden, nach einer
+  Sprungmarke und nach schnellem Scrollen blieb im ToC darum gar nichts markiert.
+  In Physik steht dieselbe Konstruktion (gleicher `rootMargin`), der Fehler ist
+  also derselbe.
+  **Massnahme in Physik:** Observer ersetzen durch `markiereTocAktiv()` — die
+  letzte Überschrift, deren `getBoundingClientRect().top` unter 30 % der
+  Fensterhöhe liegt, sonst die erste — und diese Funktion am Ende von
+  `buildToC()`, bei `scroll` (auf `requestAnimationFrame` gedrosselt) und bei
+  `hashchange` aufrufen. Die Horcher vor dem Binden je einmal abmelden, damit ein
+  zweiter `buildToC()`-Aufruf sie nicht doppelt registriert. Die bestehende
+  Klick-Markierung auf den `.toc-link` bleibt unverändert.
+  **Prüfen nach dem Port:** beim Laden ist ein Eintrag markiert; Sprung auf einen
+  Anker markiert dessen Abschnitt; beim Rollen wandert die Markierung lückenlos
+  durch alle Überschriften. Seiten ohne ToC (Startseite) dürfen nicht brechen.
+
 - **2026-08-03 · Animations-Karte `.widget` zentralisieren und Einbettung
   vereinheitlichen · `style.css` + Themenseiten · warum:** In Mathe lagen
   `.widget`, `.widget-header`, `.widget-header h3/p` und `.widget-body` als
