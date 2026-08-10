@@ -346,6 +346,27 @@ const TOC_KURZ = {
   lg5:            '5 Geometrie'
 };
 
+// Aktive Überschrift rein aus den Positionen bestimmen: die letzte, die oberhalb
+// des oberen Fensterdrittels steht. Robust auch bei Sprungmarken und schnellem
+// Scrollen, wo ein IntersectionObserver keine Meldung liefert.
+function markiereTocAktiv() {
+  const toc = document.getElementById('toc');
+  if (!toc) return;
+  const headings = [...document.querySelectorAll('.content h2[id]')];
+  if (!headings.length) return;
+  const grenze = window.innerHeight * 0.3;
+  let aktiv = headings[0];
+  headings.forEach(h => { if (h.getBoundingClientRect().top <= grenze) aktiv = h; });
+  toc.querySelectorAll('.toc-link').forEach(l => l.classList.remove('toc-aktiv'));
+  toc.querySelector(`[href="#${aktiv.id}"]`)?.classList.add('toc-aktiv');
+}
+let tocFrame = 0;
+function tocScrollHorcher() {
+  if (tocFrame) return;                       // höchstens einmal je Bild
+  tocFrame = requestAnimationFrame(() => { tocFrame = 0; markiereTocAktiv(); });
+}
+function tocHashHorcher() { markiereTocAktiv(); }
+
 function buildToC() {
   const toc = document.getElementById('toc');
   if (!toc) return;
@@ -376,19 +397,17 @@ function buildToC() {
     }).join('') +
     (nextLink ? `<div class="toc-nav toc-nav-unten">${nextLink}</div>` : '');
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('toc-aktiv'));
-        const link = toc.querySelector(`[href="#${e.target.id}"]`);
-        if (link) link.classList.add('toc-aktiv');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
+  // Markierung sofort setzen und beim Scrollen nachführen. Früher lief das über
+  // einen IntersectionObserver mit dem Band 20–30 % der Fensterhöhe: der meldet
+  // nur, wenn eine Überschrift dieses Band durchquert — beim Laden, nach einem
+  // Ansichtswechsel und nach Sprungmarken blieb darum gar nichts markiert.
+  markiereTocAktiv();
+  window.removeEventListener('scroll', tocScrollHorcher);
+  window.addEventListener('scroll', tocScrollHorcher, { passive: true });
+  window.removeEventListener('hashchange', tocHashHorcher);
+  window.addEventListener('hashchange', tocHashHorcher);
 
-  headings.forEach(h => observer.observe(h));
-
-  // Sofortige, konsistente Markierung beim Klick (ohne auf den Observer zu warten);
+  // Sofortige, konsistente Markierung beim Klick;
   // Sprünge sind instant (kein Smooth-Scroll), wie bei der Titelwahl.
   toc.querySelectorAll('.toc-link').forEach(link => {
     link.addEventListener('click', () => {
