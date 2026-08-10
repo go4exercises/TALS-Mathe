@@ -24,10 +24,32 @@ CNAMEs für `mathe`, `physik` und `www`, alle mit TTL 300 —, `CNAME` im Repo-R
 - `README.md` auf die neue Adresse; der Hinweis, dass die alte weiterhin umleitet,
   bleibt bewusst stehen.
 
-**Nicht angefasst:** `og-bild.png` und die Metadaten tragen weiterhin den Namen
-«TALS Mathematik» und die alte Adresse im Bild — das gehört zur Markenfrage und wird
-separat entschieden (`DOMAIN-UMZUG.md`, Phase 6). Ebenso bleiben ältere Einträge in
-diesem Changelog bei den Adressen, die damals galten; sie dokumentieren den
+- **Marke heisst neu «Mathe begreifbar»** (vorher «TALS Mathematik») — sie liest sich
+  jetzt wie die Domain. 891 Stellen umbenannt: Seitentitel, Fusszeilen, `og:site_name`,
+  JSON-LD, die Kopfzeilen aller Druckseiten unter `downloads/`, dazu `nav.js`, `style.css`,
+  `mathlib.js`, `suche.js`, `TEMPLATE.html`, STYLEGUIDE, HOWTO, README, LICENSE und das
+  `aria-label` in `favicon.svg`. **«TALS» bleibt**, wo es die Zielgruppe benennt und
+  nicht die Marke: Fusszeile («Berufsmaturität Technik, Architektur, Life Sciences»),
+  Vorspann des OG-Bilds, «Ergänzung TALS» in 3.6 und 4.3d, die gemeinsame Feedback-Seite
+  beider Fächer und der RLP-Bezug. Die Repository-Namen `TALS-Mathe` und `TALS-Physik`
+  bleiben ebenfalls — sie sind die tatsächlichen Repo-Namen.
+- **Schwesterprojekt heisst im sichtbaren Text «Physik begreifbar»** (`nav.js`,
+  `glossar.html`, `formelsammlung.html`).
+- **`og-bild.png` neu gebaut** — Titel «Mathe begreifbar», Zusatz «nach BM RLP 2030» auf
+  eigener Zeile, Adresszeile `mathe.begreifbar.ch`. Favicons unverändert, dort steckt
+  der Name nicht im Bild.
+
+### Behoben
+
+- `formelsammlung.html` versprach an zwei Stellen den druckbaren Formelauszug «im
+  Zusatzmaterial der jeweiligen Seite». Die Kacheln dorthin sind seit dem Entfernen des
+  Formelauszug-Eintrags weg; die Aussage führte ins Leere und ist entfernt.
+
+**Nicht angefasst:** Die 45 Anki-Decks und `scripts/build_apkg.py` behalten den
+Decknamen `TALS Mathematik::…`. Die Notiz-GUIDs werden aus dem Decknamen geseedet — ein
+Neubau unter neuem Namen erzeugte beim Import Dubletten statt einer Umbenennung.
+Begründung und sauberer Weg stehen in `DOMAIN-UMZUG.md`. Ebenso bleiben ältere Einträge
+in diesem Changelog bei den Adressen und Namen, die damals galten; sie dokumentieren den
 historischen Stand.
 
 ---

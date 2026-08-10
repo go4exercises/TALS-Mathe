@@ -135,15 +135,18 @@ Die Bestandsaufnahme (gemessen, nicht geschätzt): 567 Vorkommen von
 plus 51 in `sitemap.xml` und 1 in `robots.txt`. Die entstehen alle neu, sobald
 eine einzige Zeile stimmt. Von Hand bleiben 13 Stellen.
 
-- [ ] 🤖 `scripts/build-seo.py`, Zeile 37: `BASIS` auf `https://mathe.begreifbar.ch/`.
-- [ ] 🤖 `python3 scripts/build-seo.py` — schreibt 51 Seiten-Kopfblöcke,
+- [x] 🤖 `scripts/build-seo.py`, Zeile 37: `BASIS` auf `https://mathe.begreifbar.ch/`.
+- [x] 🤖 `python3 scripts/build-seo.py` — schreibt 51 Seiten-Kopfblöcke,
       `sitemap.xml` und `robots.txt` neu.
-- [ ] 🤖 `nav.js`: die drei Querlinks auf `https://physik.begreifbar.ch/` und den
-      Lizenz-Hinweis (Zeile 164) auf die neue Adresse.
-- [ ] 🤖 Fliesstext-Erwähnungen in `glossar.html` und `formelsammlung.html`.
-- [ ] 🤖 `README.md` (3×), `CHANGELOG.md` (2×), `TODO-port-to-tals-mathe.md` (1×).
-- [ ] 🤖 Eintrag in `TODO-schwesterprojekt.md`: Physik braucht dieselbe Umstellung.
-- [ ] 🤖 Pre-Flight über alle 46 Themenseiten, dazu ein Link-Check: keine
+- [x] 🤖 `nav.js`: die drei Querlinks auf `https://physik.begreifbar.ch/` und den
+      Lizenz-Hinweis auf die neue Adresse.
+- [x] 🤖 Fliesstext-Erwähnungen in `glossar.html` und `formelsammlung.html`.
+- [x] 🤖 `README.md` (3×), `TODO-port-to-tals-mathe.md`. **Abweichung:** Die zwei
+      Nennungen in `CHANGELOG.md` stehen im Eintrag `[66]` vom 13.06.2026 und
+      halten fest, worauf die Querlinks *damals* gesetzt wurden — sie bleiben
+      stehen, stattdessen gibt es einen neuen Changelog-Eintrag zum Umzug.
+- [x] 🤖 Eintrag in `TODO-schwesterprojekt.md`: Physik braucht dieselbe Umstellung.
+- [x] 🤖 Pre-Flight über alle 46 Themenseiten, dazu ein Link-Check: keine
       `github.io`-Reste ausserhalb der Doku-Historie.
 - [ ] 🔑 Pushen.
 - [ ] 🤝 Nach dem Deploy messe ich nach: HTTPS greift, `canonical` zeigt auf die
@@ -189,9 +192,31 @@ zurück auf `mathe.begreifbar.ch`. Ich lege den Eintrag dafür in
       die Weiterleitung allein.
 - [ ] 🔑 Neue Adresse dort nachführen, wo du sie gestreut hast — Schul-Intranet,
       Klassen-Handout, QR-Codes auf Unterlagen.
-- [ ] 🤖 `og-bild.png` und die Metadaten tragen den Namen «Mathe begreifbar».
-      Wenn die Marke künftig `begreifbar` heisst, gehört das angepasst — sag mir,
-      ob und wann, ich baue die Bilder mit `.claude/tools/build-bilder.mjs` neu.
+- [x] 🤖 `og-bild.png` und die Metadaten trugen den Namen «TALS Mathematik».
+      **Erledigt am 10.8.2026:** Die Marke heisst jetzt **«Mathe begreifbar»** —
+      891 Stellen umbenannt, `og-bild.png` mit neuem Namen und neuer Adresse
+      gebaut. «TALS» bleibt, wo es die Zielgruppe benennt. Offen bleibt nur
+      `scripts/build_apkg.py` samt den 45 Anki-Decks, siehe unten.
+
+---
+
+## Offener Rest: Anki-Decks
+
+Die 45 Decks unter `downloads/*/*/ankideck.apkg` tragen den Decknamen
+`TALS Mathematik::Grundlagen::…`. Er wurde **absichtlich nicht** umbenannt:
+`scripts/build_apkg.py` erzeugt die Notiz-GUIDs mit `random.seed(hash(deck_name))`,
+die GUIDs hängen also am Decknamen. Ein Neubau unter neuem Namen erzeugt neue
+GUIDs — wer das Deck schon benutzt, bekommt beim Import **Dubletten statt einer
+Umbenennung** und verliert die Zuordnung seines Lernfortschritts.
+
+Dazu kommt: `hash()` auf Zeichenketten ist in Python pro Prozess zufällig
+gesalzen (`PYTHONHASHSEED`), der Seed ist also ohnehin nicht reproduzierbar —
+schon ein Neubau *ohne* Umbenennung erzeugte neue GUIDs.
+
+**Sauberer Weg, wenn du es willst:** erst die GUID-Erzeugung auf einen stabilen
+Wert umstellen (z. B. `hashlib.sha1` über Deckname und Kartenvorderseite), dann
+umbenennen und alle 45 Decks neu bauen. Solange das offen ist, bleiben Skript
+und ausgelieferte Decks konsistent beim alten Namen.
 
 ---
 
