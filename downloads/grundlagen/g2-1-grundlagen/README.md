@@ -32,4 +32,4 @@ Alle vier HTML-Druckseiten teilen sich das Stylesheet `../../print.css` (im Verz
 ## Anki-Deck
 
 Das `ankideck.apkg` enthält 25 Front/Back-Karten in der Vorlage „TALS Basic". Es importiert sich
-in Anki 2.x unter der Deck-Hierarchie `TALS Mathematik::Grundlagen::2.1 Grundlagen Gleichungen`.
+in Anki 2.x unter der Deck-Hierarchie `Mathe begreifbar::Grundlagen::2.1 Grundlagen Gleichungen`.

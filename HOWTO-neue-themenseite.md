@@ -41,7 +41,7 @@ Das Pflicht-Skelett (laut STYLEGUIDE §6.1):
     <aside class="toc-wrap"><div id="toc"></div></aside>
   </div>
   <footer class="site-footer">
-    <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität …</p>
+    <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität …</p>
     <p>Grundlagenfach <RLP-Nr> <Themenname></p>
   </footer>
   <script src="../nav.js"></script>
@@ -185,7 +185,7 @@ Schlanker Stil: `downloads/grundlagen/g5-1-grundlagen/*.html`. Jede der 4 Drucks
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{Rolle} · {Thema} — TALS Mathematik</title>
+  <title>{Rolle} · {Thema} — Mathe begreifbar</title>
   <link rel="stylesheet" href="../../print.css">
   <script>MathJax = {…};</script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -198,7 +198,7 @@ Schlanker Stil: `downloads/grundlagen/g5-1-grundlagen/*.html`. Jede der 4 Drucks
   </div>
   <div class="druck-wrapper">
     <header class="doc-kopf">
-      <div class="dk-bereich">TALS Mathematik · Grundlagenfach · {RLP-Nr} {Thema}</div>
+      <div class="dk-bereich">Mathe begreifbar · Grundlagenfach · {RLP-Nr} {Thema}</div>
       <h1>{Rolle-H1}</h1>
     </header>
     <!-- Inhalt -->

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-TALS Mathematik — Identifier-Kollisions-Check
+Mathe begreifbar — Identifier-Kollisions-Check
 
 Findet Top-Level-Symbole in Inline-Skripten der Themenseiten, die mit
 Symbolen aus mathlib.js oder nav.js kollidieren.

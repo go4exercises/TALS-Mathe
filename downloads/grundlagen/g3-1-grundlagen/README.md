@@ -18,4 +18,4 @@ Begleitmaterial zum Kapitel **3.1 Grundlagen** des TALS-Mathematik-Lehrmittels f
 
 ## Lizenz und Quellen
 
-Erstellt für TALS Mathematik. Externe Aufgabenquellen bleiben Eigentum der jeweiligen Plattformen (siehe Verweise auf der Themenseite).
+Erstellt für Mathe begreifbar. Externe Aufgabenquellen bleiben Eigentum der jeweiligen Plattformen (siehe Verweise auf der Themenseite).

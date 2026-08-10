@@ -13,7 +13,7 @@ HEAD_FULL = '''<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{druck_titel} · {thema_titel} — TALS Mathematik</title>
+<title>{druck_titel} · {thema_titel} — Mathe begreifbar</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../print.css">
 {extra_style}<script>
@@ -36,7 +36,7 @@ MathJax = {{
 <div class="druck-wrapper">
 
   <header class="doc-kopf">
-    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · {nr} {thema_titel}</div>
+    <div class="dk-bereich">Mathe begreifbar · Grundlagenfach · {nr} {thema_titel}</div>
     <h1>{druck_titel_h1}</h1>{subtitle}
   </header>
 

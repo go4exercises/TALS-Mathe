@@ -1,4 +1,4 @@
-# TALS Mathematik — Interaktives Lernmaterial
+# Mathe begreifbar — Interaktives Lernmaterial
 
 > **Freies, interaktives Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences (TALS)**
 > Struktur 1:1 nach RLP 2030 · Notation nach *Formeln, Tabellen, Begriffe* (Orell Füssli) · GitHub Pages

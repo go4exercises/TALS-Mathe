@@ -35,7 +35,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASIS = 'https://mathe.begreifbar.ch/'
-SEITENNAME = 'TALS Mathematik'
+SEITENNAME = 'Mathe begreifbar'
 AUTOR = 'Raphael Arnold Kohler'
 LIZENZ = 'https://creativecommons.org/licenses/by-nc/4.0/deed.de'
 RLP = ('Rahmenlehrplan für die Berufsmaturität RLP-BM 2030, '
@@ -66,7 +66,7 @@ LG_S = {'1': 'Lerngebiet 1 Arithmetik/Algebra',
 SEITEN = {
  'index.html': dict(
    typ='website',
-   titel='TALS Mathematik — interaktives Lehrmittel für die Berufsmaturität',
+   titel='Mathe begreifbar — interaktives Lehrmittel für die Berufsmaturität',
    beschreibung='Kostenloses interaktives Mathematik-Lehrmittel für die Berufsmaturität TALS nach RLP-BM 2030: Algebra, Gleichungen, Funktionen, Geometrie und Datenanalyse.',
    themen=['Mathematik', 'Berufsmaturität', 'RLP-BM 2030', 'Lehrmittel', 'Algebra', 'Funktionen', 'Geometrie']),
  'glossar.html': dict(
@@ -82,17 +82,17 @@ SEITEN = {
  'rechtliches.html': dict(
    typ='website',
    titel='Rechtliches & Datenschutz',
-   beschreibung='Verantwortlichkeit, Haftung, Lizenz und Datenschutz von TALS Mathematik — ohne Cookies, ohne Tracking, alle Inhalte unter CC BY-NC 4.0.',
+   beschreibung='Verantwortlichkeit, Haftung, Lizenz und Datenschutz von Mathe begreifbar — ohne Cookies, ohne Tracking, alle Inhalte unter CC BY-NC 4.0.',
    themen=['Impressum', 'Datenschutz', 'Lizenz']),
  'feedback.html': dict(
    typ='website',
    titel='Kontakt & Feedback',
-   beschreibung='Fehler melden, Verbesserungen vorschlagen oder Rückmeldung geben zu TALS Mathematik — ohne Anmeldung, Name und E-Mail freiwillig.',
+   beschreibung='Fehler melden, Verbesserungen vorschlagen oder Rückmeldung geben zu Mathe begreifbar — ohne Anmeldung, Name und E-Mail freiwillig.',
    themen=['Kontakt', 'Feedback']),
 
  # ── Grundlagenfach ────────────────────────────────────────────────
  'grundlagen/g1-1-grundlagen.html': dict(
-   titel='1.1 Grundlagen der Termstruktur — Grundlagenfach — TALS Mathematik',
+   titel='1.1 Grundlagen der Termstruktur — Grundlagenfach — Mathe begreifbar',
    beschreibung='Struktur algebraischer Terme: Hauptoperation erkennen, Strukturbaum lesen, Hierarchie der Operationen und die Rechengesetze für sicheres Umformen.',
    themen=['Term', 'Variable', 'Hauptoperation', 'Hierarchie der Operationen', 'Rechengesetze'],
    tg='1.1 Grundlagen'),
@@ -109,7 +109,7 @@ SEITEN = {
    themen=['Zehnerpotenzen', 'Wissenschaftliche Notation', 'Potenzgesetze', 'Quadratwurzel', 'Wurzelgesetze'],
    tg='1.4 Zehnerpotenzen und Quadratwurzeln'),
  'grundlagen/g2-1-grundlagen.html': dict(
-   titel='2.1 Grundlagen der Gleichungslehre — Grundlagenfach — TALS Mathematik',
+   titel='2.1 Grundlagen der Gleichungslehre — Grundlagenfach — Mathe begreifbar',
    beschreibung='Die Waage als Modell: Sachverhalte als Gleichung oder Ungleichung formulieren, algebraische Äquivalenz, Gleichungstypen erkennen, lösen und Probe machen.',
    themen=['Gleichung', 'Ungleichung', 'Äquivalenzumformung', 'Lösungsmenge', 'Probe'],
    tg='2.1 Grundlagen'),
@@ -126,7 +126,7 @@ SEITEN = {
    themen=['Lineares Gleichungssystem', 'Einsetzungsverfahren', 'Additionsverfahren', 'Gauss-Verfahren', 'Lösungsfälle'],
    tg='2.3 Lineare Gleichungssysteme'),
  'grundlagen/g3-1-grundlagen.html': dict(
-   titel='3.1 Grundlagen der Funktionenlehre — Grundlagenfach — TALS Mathematik',
+   titel='3.1 Grundlagen der Funktionenlehre — Grundlagenfach — Mathe begreifbar',
    beschreibung='Was eine Funktion ist: vier Darstellungsformen, Schreibweisen, Definitions- und Wertemenge, Vertikaltest sowie Schnittpunkte mit den Achsen und untereinander.',
    themen=['Funktion', 'Definitionsmenge', 'Wertemenge', 'Funktionsgraph', 'Nullstelle', 'Schnittpunkt'],
    tg='3.1 Grundlagen'),
@@ -143,7 +143,7 @@ SEITEN = {
    themen=['Datenanalyse', 'Urliste', 'Stichprobe', 'Kennzahlen', 'Diagramme', 'Datenqualität']),
    # kein tg: die Seite ist eine TALS-Ergaenzung und traegt keine RLP-Kompetenzbox
  'grundlagen/g4-1-grundlagen.html': dict(
-   titel='4.1 Grundlagen der Datenanalyse — Grundlagenfach — TALS Mathematik',
+   titel='4.1 Grundlagen der Datenanalyse — Grundlagenfach — Mathe begreifbar',
    beschreibung='Grundbegriffe der Datenanalyse: Grundgesamtheit, Urliste, Stichprobe und Rang, Merkmalstypen, Tabellenkalkulation als Werkzeug und die Frage der Datenqualität.',
    themen=['Datenanalyse', 'Grundgesamtheit', 'Stichprobe', 'Merkmalstypen', 'Tabellenkalkulation'],
    tg='4.1 Grundlagen'),
@@ -156,7 +156,7 @@ SEITEN = {
    themen=['Mittelwert', 'Median', 'Modus', 'Standardabweichung', 'Quartilsdifferenz', 'Robustheit'],
    tg='4.3 Masszahlen'),
  'grundlagen/g5-1-grundlagen.html': dict(
-   titel='5.1 Grundlagen der Geometrie — Grundlagenfach — TALS Mathematik',
+   titel='5.1 Grundlagen der Geometrie — Grundlagenfach — Mathe begreifbar',
    beschreibung='Geometrische Grundlagen: Winkeltypen und Winkelpaare, Grad und Radiant ineinander umrechnen sowie Skizzieren als Workflow zur Plausibilitätsprüfung.',
    themen=['Winkel', 'Radiant', 'Gradmass', 'Skizze', 'Plausibilität'],
    tg='5.1 Grundlagen'),
@@ -191,7 +191,7 @@ SEITEN = {
 
  # ── Schwerpunktfach ───────────────────────────────────────────────
  'schwerpunkt/s1-1-grundlagen.html': dict(
-   titel='1.1 Struktur algebraischer Ausdrücke — Schwerpunktfach — TALS Mathematik',
+   titel='1.1 Struktur algebraischer Ausdrücke — Schwerpunktfach — Mathe begreifbar',
    beschreibung='Struktur statt Rezept: warum (a+b)² nicht a²+b² ist, welche Umform-Werkzeuge in welche Richtung wirken und welche Struktur-Regeln wann erlaubt sind.',
    themen=['Termstruktur', 'Umformen', 'Binomische Formeln', 'Rechengesetze', 'Gegenbeispiel'],
    tg='1.1 Grundlagen'),
@@ -204,7 +204,7 @@ SEITEN = {
    themen=['Logarithmus', 'Logarithmengesetze', 'Basiswechsel', 'Natürlicher Logarithmus', 'Exponentialgleichung'],
    tg='1.3 Logarithmen'),
  'schwerpunkt/s2-1-grundlagen.html': dict(
-   titel='2.1 Gleichungstypen bestimmen — Schwerpunktfach — TALS Mathematik',
+   titel='2.1 Gleichungstypen bestimmen — Schwerpunktfach — Mathe begreifbar',
    beschreibung='Den Typ einer Gleichung am Ort der Unbekannten erkennen — Landkarte aller Typen, passende Lösungsmethode wählen und das Ergebnis mit der Probe absichern.',
    themen=['Gleichungstypen', 'Unbekannte', 'Lösungsmethode', 'Probe', 'Scheinlösung'],
    tg='2.1 Grundlagen'),
@@ -221,7 +221,7 @@ SEITEN = {
    themen=['Betragsgleichung', 'Polynomgleichung', 'Ungleichung', 'Vorzeichentabelle', 'Nullprodukt'],
    tg='2.2 Gleichungen und Ungleichungen'),
  'schwerpunkt/s3-1-grundlagen.html': dict(
-   titel='3.1 Elementare Funktionen und Transformationen — Schwerpunktfach — TALS Mathematik',
+   titel='3.1 Elementare Funktionen und Transformationen — Schwerpunktfach — Mathe begreifbar',
    beschreibung='Die Grundgraphen im Steckbrief und ein Transformationsschema für alle Funktionen — dazu Schnittpunkte, Ungleichungen grafisch und Extremwertaufgaben.',
    themen=['Elementare Funktionen', 'Funktionstransformation', 'Verschiebung', 'Streckung', 'Extremwertaufgabe'],
    tg='3.1 Grundlagen'),
@@ -254,7 +254,7 @@ SEITEN = {
    themen=['Betragsfunktion', 'Umklapp-Prinzip', 'Knickpunkt', 'Abschnittsweise Definition', 'Betragsungleichung'],
    tg='3.6 Betragsfunktionen (Ergänzung TALS)'),
  'schwerpunkt/s4-1-grundlagen.html': dict(
-   titel='4.1 Grundlagen der Raumgeometrie — Schwerpunktfach — TALS Mathematik',
+   titel='4.1 Grundlagen der Raumgeometrie — Schwerpunktfach — Mathe begreifbar',
    beschreibung='Raumgeometrie in zwei Dimensionen darstellen: Schrägbild und Netz, Lage von Punkt, Gerade und Ebene, Winkel im Raum und die Plausibilitäts-Strategie.',
    themen=['Raumgeometrie', 'Schrägbild', 'Körpernetz', 'Windschief', 'Raumwinkel'],
    tg='4.1 Grundlagen'),

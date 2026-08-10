@@ -38,9 +38,9 @@ const OG = `<!doctype html><html><head><meta charset="utf-8">
 <div class="balken"></div>
 <div class="inhalt">
   <div class="ew">Berufsmaturität <b>T</b>echnik, <b>A</b>rchitektur, <b>L</b>ife <b>S</b>ciences — <b>TALS</b></div>
-  <h1>Mathematik <span>nach BM RLP 2030</span></h1>
+  <h1>Mathe begreifbar <span>nach BM RLP 2030</span></h1>
   <div class="ut">Interaktives Lehrmittel mit Animationen, Aufgaben und Formelsammlung</div>
-  <div class="url">go4exercises.github.io/TALS-Mathe · CC BY-NC 4.0</div>
+  <div class="url">mathe.begreifbar.ch · CC BY-NC 4.0</div>
 </div>
 </body></html>`;
 

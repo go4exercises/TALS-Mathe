@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-//  TALS Mathematik — Shared Navigation (nav.js)
+//  Mathe begreifbar — Shared Navigation (nav.js)
 //  Version 2.0 · RLP-2030-Struktur 1:1 (31 Teilgebiete)
 //
 //  Einbindung: <script src="../nav.js"></script> (von Themenseiten)
@@ -137,7 +137,7 @@ function buildNav(cfg) {
          alt="Porträt von Raphael Arnold Kohler (Aquarell)">
     <p><strong>Autor:</strong> Raphael Arnold Kohler, Elektroingenieur und BM-Fachlehrperson
        für Mathematik und Physik mit über 30 Jahren Unterrichtserfahrung.</p>
-    <p>TALS Mathematik ist ein unabhängiges, kostenlos zugängliches Lernangebot für die Sek II,
+    <p>Mathe begreifbar ist ein unabhängiges, kostenlos zugängliches Lernangebot für die Sek II,
        ausgerichtet auf den Rahmenlehrplan der Berufsmaturität Gruppe Technik, Architektur,
        Life Sciences (RLP-BM 2030, TALS). Es ergänzt Unterricht und Lehrmittel, ersetzt sie
        aber nicht. Das Angebot ist <strong>keine offizielle Publikation</strong> des SBFI,
@@ -154,7 +154,7 @@ function buildNav(cfg) {
       <li>Schwerpunktfach vollständig (23 Themenseiten, Lerngebiete 1–4, inkl. Ergänzungen 3.6 und 4.3d)</li>
       <li>Je Themenseite: interaktive Animationen, Aufgaben, Zusammenfassung, Druckseiten, Anki-Deck und externe Ressourcen</li>
       <li>Nachschlagen: Glossar und Formelsammlung</li>
-      <li>Schwesterprojekt: <a href="https://physik.begreifbar.ch/" target="_blank" rel="noopener" class="meta-link">TALS Physik</a> — gleicher Aufbau für das Fach Physik</li>
+      <li>Schwesterprojekt: <a href="https://physik.begreifbar.ch/" target="_blank" rel="noopener" class="meta-link">Physik begreifbar</a> — gleicher Aufbau für das Fach Physik</li>
     </ul>
     <div class="meta-sub">Ideen für den Ausbau</div>
     <ul>
@@ -174,7 +174,7 @@ function buildNav(cfg) {
        Dabei sind Raphael Arnold Kohler als Urheber zu nennen, die Lizenz zu verlinken
        und Änderungen kenntlich zu machen. Inhalte Dritter und verlinkte externe
        Angebote unterliegen ihren eigenen Rechten und Nutzungsbedingungen.</p>
-    <p><em>Empfohlene Namensnennung:</em> Raphael Arnold Kohler, TALS Mathematik,
+    <p><em>Empfohlene Namensnennung:</em> Raphael Arnold Kohler, Mathe begreifbar,
        https://mathe.begreifbar.ch/, CC BY-NC 4.0.</p>
     <p><a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener" class="meta-link">
        → Lizenztext (CC BY-NC 4.0)</a></p>

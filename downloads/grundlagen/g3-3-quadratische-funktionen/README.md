@@ -21,7 +21,7 @@ Seitenwechsel.
 Das Deck `ankideck.apkg` enthält 25 Karten zu Definition, drei Darstellungsformen, Mitternachtsformel
 und Diskriminante, Umwandlungen, Aufstellen der Funktionsgleichung, Spezialfälle und typischen
 Anwendungen. Es importiert sauber als Unter-Deck unter
-`TALS Mathematik :: Grundlagen :: 3.3 Quadratische Funktionen` und folgt dem gleichen Karten-Modell
+`Mathe begreifbar :: Grundlagen :: 3.3 Quadratische Funktionen` und folgt dem gleichen Karten-Modell
 wie die anderen TALS-Decks (Schriftart Source Sans 3, helle Hintergrundfarbe).
 
 ## Diagramme in den Druckseiten

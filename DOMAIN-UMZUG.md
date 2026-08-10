@@ -189,7 +189,7 @@ zurück auf `mathe.begreifbar.ch`. Ich lege den Eintrag dafür in
       die Weiterleitung allein.
 - [ ] 🔑 Neue Adresse dort nachführen, wo du sie gestreut hast — Schul-Intranet,
       Klassen-Handout, QR-Codes auf Unterlagen.
-- [ ] 🤖 `og-bild.png` und die Metadaten tragen den Namen «TALS Mathematik».
+- [ ] 🤖 `og-bild.png` und die Metadaten tragen den Namen «Mathe begreifbar».
       Wenn die Marke künftig `begreifbar` heisst, gehört das angepasst — sag mir,
       ob und wann, ich baue die Bilder mit `.claude/tools/build-bilder.mjs` neu.
 

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-//  TALS Mathematik — Shared Math/Canvas Library (mathlib.js)
+//  Mathe begreifbar — Shared Math/Canvas Library (mathlib.js)
 //
 //  Single Source of Truth für alle Themenseiten:
 //    - Canvas-Helper (initCanvas, drawGrid, drawLine, drawDot)

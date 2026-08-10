@@ -637,7 +637,7 @@ Jede Themenseite verwendet **exakt** die folgende Body-Struktur. Abweichungen (e
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>⟪RLP-Nr⟫ ⟪Themenname⟫ — TALS Mathematik</title>
+  <title>⟪RLP-Nr⟫ ⟪Themenname⟫ — Mathe begreifbar</title>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:..." rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <script>
@@ -678,7 +678,7 @@ Jede Themenseite verwendet **exakt** die folgende Body-Struktur. Abweichungen (e
 </div>
 
 <footer class="site-footer">
-  <p><strong>TALS Mathematik</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
   <p>⟪Bereich⟫ ⟪RLP-Nr⟫ ⟪Themenname⟫</p>
 </footer>
 
@@ -997,8 +997,8 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 | Seite | Footer-Inhalt |
 |---|---|
-| **`index.html`** | Zeile 1: „**TALS Mathematik** — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences"<br>Zeile 2: GitHub Pages-Link zum Repo (`https://github.com/go4exercises/tals-mathe`) |
-| **Themenseiten** | Zeile 1: „**TALS Mathematik** — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences"<br>Zeile 2: „⟪Bereich⟫ ⟪RLP-Nr⟫ ⟪Themenname⟫" — z.B. „Grundlagenfach 3.2 Lineare Funktionen", „Schwerpunktfach 3.4 Exponential- und Logarithmusfunktionen" |
+| **`index.html`** | Zeile 1: „**Mathe begreifbar** — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences"<br>Zeile 2: GitHub Pages-Link zum Repo (`https://github.com/go4exercises/tals-mathe`) |
+| **Themenseiten** | Zeile 1: „**Mathe begreifbar** — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences"<br>Zeile 2: „⟪Bereich⟫ ⟪RLP-Nr⟫ ⟪Themenname⟫" — z.B. „Grundlagenfach 3.2 Lineare Funktionen", „Schwerpunktfach 3.4 Exponential- und Logarithmusfunktionen" |
 
 **Format Bereich/Nr/Thema:** Vollständige Bereichsbezeichnung („Grundlagenfach" oder „Schwerpunktfach", **mit** „-fach"-Suffix), Leerzeichen, RLP-Teilgebiet-Nummer (z.B. `3.2`, bei Sub-Split mit Suffix `2.2a`), Leerzeichen, Themenname (= Sub-Themenname bei Sub-Split, also „Lineare Gleichungen", nicht „Lineare und quadratische Gleichungen"). Keine zusätzlichen Wörter, kein Lerngebiets-Name.
 

@@ -19,7 +19,7 @@ HEAD = r'''<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{rolle} · {thema} — TALS Mathematik</title>
+<title>{rolle} · {thema} — Mathe begreifbar</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../print.css">
 {extra_style}<script>
@@ -42,7 +42,7 @@ MathJax = {{
 <div class="druck-wrapper">
 
   <header class="doc-kopf">
-    <div class="dk-bereich">TALS Mathematik · Schwerpunktfach · {thema}</div>
+    <div class="dk-bereich">Mathe begreifbar · Schwerpunktfach · {thema}</div>
     <h1>{h1}</h1>
 {quelle}  </header>
 
@@ -50,7 +50,7 @@ MathJax = {{
 
 FOOT = r'''
   <footer class="doc-fuss">
-    <span>TALS Mathematik · Schwerpunkt {thema}</span>
+    <span>Mathe begreifbar · Schwerpunkt {thema}</span>
     <span>{rolle}</span>
   </footer>
 
