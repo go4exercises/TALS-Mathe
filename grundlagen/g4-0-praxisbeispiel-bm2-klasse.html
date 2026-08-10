@@ -148,6 +148,15 @@ MathJax = {
 .preset-btn:hover { border-color: var(--blau); }
 .preset-btn.aktiv { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
 
+/* === Umfang-Regler + Export === */
+.n-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 10px; padding: 12px 14px; background: var(--papier-2); border-radius: 8px; border: 1px solid var(--linie); }
+.n-bar .nb-label { font-family: var(--mono); font-size: 0.82rem; color: var(--tinte-2); }
+.n-bar input[type="range"] { flex: 1 1 160px; min-width: 140px; max-width: 300px; accent-color: var(--blau); }
+.n-bar .nb-wert { font-family: var(--mono); font-weight: 700; color: var(--blau); min-width: 62px; }
+.n-bar .nb-luecke { flex: 1 1 0; min-width: 0; }
+.exp-btn { padding: 6px 12px; border: 1px solid var(--blau); background: var(--blau-hell); color: var(--blau); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.82rem; font-weight: 600; transition: 0.12s; }
+.exp-btn:hover { background: var(--blau); color: var(--weiss); }
+
 /* === Bezugsrahmen-Pille === */
 .scope-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 10px 0 14px; font-size: 0.92rem; }
 .scope-bar .sb-lbl { font-family: var(--mono); font-size: 0.82rem; color: var(--tinte-2); }
@@ -497,7 +506,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
 <!-- ══ Preset-Bar + Tabelle ══ -->
 <h2 id="urliste">Urliste — die Rohdaten in der Tabellenkalkulation</h2>
 
-<p>Die folgende Tabelle ist die <strong>Urliste</strong> der Erhebung — eingesammelt in der Reihenfolge, wie die 26 Lernenden geantwortet haben. Sie ist editierbar: ändere einen Wert, und alle Diagramme und Masszahlen weiter unten reagieren sofort. Mit den fünf Knöpfen lädst du verschiedene typische Verteilungen.</p>
+<p>Die folgende Tabelle ist die <strong>Urliste</strong> der Erhebung — eingesammelt in der Reihenfolge, wie die <span id="n-text-1">26</span> Lernenden geantwortet haben. Sie ist editierbar: ändere einen Wert, und alle Diagramme und Masszahlen weiter unten reagieren sofort. Mit den fünf Knöpfen lädst du verschiedene typische Verteilungen, mit dem Regler wählst du, wie viele der 26 erhobenen Personen ausgewertet werden (10 bis 26). Die aktuelle Urliste lässt sich als <code>.csv</code> oder <code>.xlsx</code> herunterladen und in einer Tabellenkalkulation weiterverarbeiten.</p>
 
 <div class="preset-bar">
   <span class="pb-label">Datensatz wählen:</span>
@@ -506,6 +515,16 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
   <button class="preset-btn" data-preset="homogen" onclick="ladePreset('homogen')">Homogen</button>
   <button class="preset-btn" data-preset="bimodal" onclick="ladePreset('bimodal')">Bimodal</button>
   <button class="preset-btn" data-preset="rechtsschief" onclick="ladePreset('rechtsschief')">Rechtsschief (Masse)</button>
+</div>
+
+<div class="n-bar">
+  <span class="nb-label">Länge der Urliste:</span>
+  <input type="range" id="urliste-n" min="10" max="26" step="1" value="26" oninput="setUrlisteN(+this.value)">
+  <span class="nb-wert">n = <span id="urliste-n-anz">26</span></span>
+  <span class="nb-luecke"></span>
+  <span class="nb-label">Export:</span>
+  <button class="exp-btn" onclick="exportCSV()">⬇ CSV</button>
+  <button class="exp-btn" onclick="exportXLSX()">⬇ XLSX</button>
 </div>
 
 <div class="daten-wrap">
@@ -807,7 +826,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
 <!-- ══ 6. STICHPROBE — Schul-Stichprobe aus der Klasse ziehen ══ -->
 <h2 id="stichprobe">Stichprobe — eine Auswahl ziehen</h2>
 
-<p>Wenn wir die Klasse als <em>Stichprobe</em> für „alle BM2-Klassen der Schule" betrachten, ist <code>n = 26</code> der <strong>Stichprobenumfang</strong>. Manchmal interessiert uns aber auch eine <em>noch kleinere</em> Auswahl — etwa eine Zufallsstichprobe von 8 Personen aus unserer Klasse, mit der wir die Klassenkennzahlen schätzen wollen.</p>
+<p>Wenn wir die Klasse als <em>Stichprobe</em> für „alle BM2-Klassen der Schule" betrachten, ist <code>n = <span id="n-text-2">26</span></code> der <strong>Stichprobenumfang</strong>. Manchmal interessiert uns aber auch eine <em>noch kleinere</em> Auswahl — etwa eine Zufallsstichprobe von 8 Personen aus unserer Klasse, mit der wir die Klassenkennzahlen schätzen wollen.</p>
 
 <div class="stich-wrap">
   <div class="sw-label">Zufallsstichprobe ziehen (ohne Zurücklegen):</div>
@@ -904,15 +923,21 @@ const PRESETS = {
 };
 
 const SCOPE_TEXTE = {
-  klasse: '<strong>Bezugsrahmen Klasse:</strong> Die Klasse selbst ist die <em>Grundgesamtheit</em>. Wir haben <em>alle 26</em> Personen befragt — das ist eine <strong>Gesamterhebung</strong> (Volldatenerhebung). Es gibt keinen Stichprobenfehler.',
-  schule: '<strong>Bezugsrahmen Schule:</strong> Wenn uns „alle BM2-Lernenden der Schule" interessieren, sind <em>diese</em> die Grundgesamtheit (typisch 150–300 Personen). Die 26 Befragten sind eine <strong>Stichprobe</strong> mit <em>n = 26</em>. Wenn die Klasse zufällig zusammengewürfelt wäre, hätten wir eine repräsentative Stichprobe — in Wirklichkeit ist sie ein Klumpen (eine Klasse), und ggf. nicht repräsentativ.',
-  schweiz: '<strong>Bezugsrahmen Schweiz:</strong> Die Grundgesamtheit umfasst alle BM2-Lernenden der Schweiz — mehrere Tausend. Unsere 26 sind eine <em>sehr kleine</em> Stichprobe (deutlich unter 1 %), und zudem ein <em>Klumpen</em> aus <em>einer</em> Klasse — Berufsfeld, Region und Kohorte sind verzerrt. Eine seriöse Aussage über alle Schweizer BM2-Lernenden lässt sich daraus nicht ableiten.'
+  klasse: '<strong>Bezugsrahmen Klasse:</strong> Die Klasse selbst ist die <em>Grundgesamtheit</em>. Wir haben <em>alle {n}</em> Personen befragt — das ist eine <strong>Gesamterhebung</strong> (Volldatenerhebung). Es gibt keinen Stichprobenfehler.',
+  schule: '<strong>Bezugsrahmen Schule:</strong> Wenn uns „alle BM2-Lernenden der Schule" interessieren, sind <em>diese</em> die Grundgesamtheit (typisch 150–300 Personen). Die {n} Befragten sind eine <strong>Stichprobe</strong> mit <em>n = {n}</em>. Wenn die Klasse zufällig zusammengewürfelt wäre, hätten wir eine repräsentative Stichprobe — in Wirklichkeit ist sie ein Klumpen (eine Klasse), und ggf. nicht repräsentativ.',
+  schweiz: '<strong>Bezugsrahmen Schweiz:</strong> Die Grundgesamtheit umfasst alle BM2-Lernenden der Schweiz — mehrere Tausend. Unsere {n} sind eine <em>sehr kleine</em> Stichprobe (deutlich unter 1 %), und zudem ein <em>Klumpen</em> aus <em>einer</em> Klasse — Berufsfeld, Region und Kohorte sind verzerrt. Eine seriöse Aussage über alle Schweizer BM2-Lernenden lässt sich daraus nicht ableiten.'
 };
 
 /* ═══════════════════════════════════════════════════════════════
    STATE — die aktuelle Klasse
 ═══════════════════════════════════════════════════════════════ */
-let DATEN = JSON.parse(JSON.stringify(PRESETS.realistisch));
+/* VOLLDATEN hält immer alle 26 erhobenen Zeilen; DATEN ist der ausgewertete
+   Anfangsabschnitt der Länge aktuellesN (10 ≤ n ≤ 26). slice() ist flach — die
+   Zeilen-Arrays sind dieselben Objekte, Zellen-Edits bleiben darum erhalten,
+   auch wenn n zwischendurch verkleinert und wieder vergrössert wird. */
+let VOLLDATEN = JSON.parse(JSON.stringify(PRESETS.realistisch));
+let aktuellesN = 26;
+let DATEN = VOLLDATEN.slice(0, aktuellesN);
 let aktiverScope = 'klasse';
 let stichprobeIndices = null;
 let aktivesPreset = 'realistisch';
@@ -926,7 +951,7 @@ const KZ_DETAILS = {
   n:   { titel: 'n — Stichprobenumfang',
          erkl: 'Die Anzahl der Werte in der Stichprobe.',
          formel: '\\[ n = \\text{Anzahl Werte in der Urliste} \\]',
-         bsp: 'In unserer Klasse: n = 26.' },
+         bsp: 'In unserer Klasse: n = 26, wenn die ganze Urliste ausgewertet wird — mit dem Regler über der Tabelle lässt sich n verkleinern.' },
   min: { titel: 'Minimum',
          erkl: 'Der kleinste Wert in der sortierten Liste — Rang 1.',
          formel: '\\[ \\min = x_{(1)} \\]',
@@ -1113,6 +1138,7 @@ function fmtN(x, d=1) {
 function renderTabelle() {
   const tbody = document.getElementById('daten-body');
   tbody.innerHTML = '';
+  const schonGebunden = tbody.dataset.gebunden === 'ja';
   DATEN.forEach((row, i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -1124,7 +1150,9 @@ function renderTabelle() {
     `;
     tbody.appendChild(tr);
   });
-  // Event-Listener für alle Inputs (delegiert)
+  // Event-Listener für alle Inputs (delegiert) — nur einmal binden
+  if (schonGebunden) return;
+  tbody.dataset.gebunden = 'ja';
   tbody.addEventListener('change', e => {
     const t = e.target;
     if (t.tagName !== 'INPUT') return;
@@ -1147,11 +1175,230 @@ function setActivePresetButton(name) {
 }
 
 function ladePreset(name) {
-  DATEN = JSON.parse(JSON.stringify(PRESETS[name]));
+  VOLLDATEN = JSON.parse(JSON.stringify(PRESETS[name]));
+  DATEN = VOLLDATEN.slice(0, aktuellesN);
   setActivePresetButton(name);
   stichprobeIndices = null;
   renderTabelle();
+  syncStichSlider();
   aktualisiereAlles();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LÄNGE DER URLISTE — 10 ≤ n ≤ 26
+═══════════════════════════════════════════════════════════════ */
+function setUrlisteN(n) {
+  aktuellesN = Math.max(10, Math.min(26, Math.round(n)));
+  DATEN = VOLLDATEN.slice(0, aktuellesN);
+  document.getElementById('urliste-n-anz').textContent = aktuellesN;
+  const sl = document.getElementById('urliste-n');
+  if (+sl.value !== aktuellesN) sl.value = aktuellesN;
+  renderTabelle();
+  syncStichSlider();
+  if (stichprobeIndices) neueStichprobe();   // alte Indizes können ausserhalb liegen
+  aktualisiereAlles();
+}
+
+/* Der Stichproben-Regler darf nie mehr Personen ziehen, als die Urliste hat. */
+function syncStichSlider() {
+  const el = document.getElementById('stich-n');
+  if (!el) return;
+  el.max = DATEN.length;
+  if (+el.value > DATEN.length) {
+    el.value = DATEN.length;
+    document.getElementById('stich-n-anz').textContent = el.value;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EXPORT DER URLISTE — CSV und XLSX
+   Beide Dateien enthalten genau die aktuell ausgewerteten n Zeilen,
+   inklusive der von Hand geänderten Werte.
+═══════════════════════════════════════════════════════════════ */
+const EXPORT_KOPF = ['Nr.', 'Grösse [cm]', 'Masse [kg]', 'Jahrgang', 'Lieblingssport'];
+
+function exportDateiname(endung) {
+  return `urliste-bm2-${aktivesPreset || 'eigen'}-n${DATEN.length}.${endung}`;
+}
+
+function ladeDateiHerunter(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+/* ── CSV ──────────────────────────────────────────────────────
+   Trennzeichen Semikolon, Dezimaltrennzeichen Punkt (de-CH) — so öffnet
+   Excel/LibreOffice die Datei ohne Import-Dialog richtig. BOM voran, damit
+   Umlaute erhalten bleiben. */
+function csvFeld(v) {
+  const s = String(v);
+  return /[";\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+function exportCSV() {
+  const zeilen = [EXPORT_KOPF, ...DATEN.map(r => [r[0], r[1], r[2], r[3], r[4]])];
+  const txt = zeilen.map(z => z.map(csvFeld).join(';')).join('\r\n') + '\r\n';
+  ladeDateiHerunter(new Blob(['﻿' + txt], { type: 'text/csv;charset=utf-8' }),
+                    exportDateiname('csv'));
+}
+
+/* ── XLSX ─────────────────────────────────────────────────────
+   Minimales Office-Open-XML-Paket, von Hand gepackt: ein ZIP ohne Kompression
+   (Methode 0 «stored»), das Excel, LibreOffice und Numbers akzeptieren.
+   Zahlen werden als echte Zahlen geschrieben, Text als inlineStr. */
+const CRC_TAB = (function () {
+  const t = new Uint32Array(256);
+  for (let i = 0; i < 256; i++) {
+    let c = i;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[i] = c >>> 0;
+  }
+  return t;
+})();
+function crc32(bytes) {
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < bytes.length; i++) c = CRC_TAB[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+
+function zipStore(dateien) {
+  const enc = new TextEncoder();
+  const teile = [];          // lokale Header + Daten, in Reihenfolge
+  const zentral = [];        // Central-Directory-Einträge
+  const ZEIT = 0, DATUM = 33;   // fix 1980-01-01 00:00 -> reproduzierbare Datei
+  let offset = 0;
+  dateien.forEach(f => {
+    const nameB = enc.encode(f.name);
+    const daten = enc.encode(f.inhalt);
+    const crc = crc32(daten), len = daten.length;
+
+    const lh = new Uint8Array(30 + nameB.length);
+    const lv = new DataView(lh.buffer);
+    lv.setUint32(0, 0x04034b50, true);
+    lv.setUint16(4, 20, true);
+    lv.setUint16(6, 0, true);
+    lv.setUint16(8, 0, true);            // Methode 0 = unkomprimiert
+    lv.setUint16(10, ZEIT, true);
+    lv.setUint16(12, DATUM, true);
+    lv.setUint32(14, crc, true);
+    lv.setUint32(18, len, true);
+    lv.setUint32(22, len, true);
+    lv.setUint16(26, nameB.length, true);
+    lv.setUint16(28, 0, true);
+    lh.set(nameB, 30);
+    teile.push(lh, daten);
+
+    const ch = new Uint8Array(46 + nameB.length);
+    const cv = new DataView(ch.buffer);
+    cv.setUint32(0, 0x02014b50, true);
+    cv.setUint16(4, 20, true);
+    cv.setUint16(6, 20, true);
+    cv.setUint16(8, 0, true);
+    cv.setUint16(10, 0, true);
+    cv.setUint16(12, ZEIT, true);
+    cv.setUint16(14, DATUM, true);
+    cv.setUint32(16, crc, true);
+    cv.setUint32(20, len, true);
+    cv.setUint32(24, len, true);
+    cv.setUint16(28, nameB.length, true);
+    cv.setUint16(30, 0, true);
+    cv.setUint16(32, 0, true);
+    cv.setUint16(34, 0, true);
+    cv.setUint16(36, 0, true);
+    cv.setUint32(38, 0, true);
+    cv.setUint32(42, offset, true);
+    ch.set(nameB, 46);
+    zentral.push(ch);
+
+    offset += lh.length + len;
+  });
+
+  const cdGroesse = zentral.reduce((s, c) => s + c.length, 0);
+  const eocd = new Uint8Array(22);
+  const ev = new DataView(eocd.buffer);
+  ev.setUint32(0, 0x06054b50, true);
+  ev.setUint16(4, 0, true);
+  ev.setUint16(6, 0, true);
+  ev.setUint16(8, dateien.length, true);
+  ev.setUint16(10, dateien.length, true);
+  ev.setUint32(12, cdGroesse, true);
+  ev.setUint32(16, offset, true);
+  ev.setUint16(20, 0, true);
+
+  return new Blob([...teile, ...zentral, eocd],
+                  { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+
+function xmlEsc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function spaltenBuchstabe(i) { return String.fromCharCode(65 + i); }
+
+function exportXLSX() {
+  const zeilen = [EXPORT_KOPF, ...DATEN.map(r => [r[0], r[1], r[2], r[3], r[4]])];
+  const rows = zeilen.map((z, ri) => {
+    const kopf = ri === 0;
+    const zellen = z.map((w, ci) => {
+      const ref = spaltenBuchstabe(ci) + (ri + 1);
+      const stil = kopf ? ' s="1"' : '';
+      if (!kopf && typeof w === 'number' && isFinite(w)) {
+        return `<c r="${ref}"${stil}><v>${w}</v></c>`;
+      }
+      return `<c r="${ref}"${stil} t="inlineStr"><is><t xml:space="preserve">${xmlEsc(w)}</t></is></c>`;
+    }).join('');
+    return `<row r="${ri + 1}">${zellen}</row>`;
+  }).join('');
+
+  const kopfXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  const NS = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+
+  const sheet = `${kopfXml}<worksheet xmlns="${NS}">`
+    + '<cols><col min="1" max="1" width="6"/><col min="2" max="2" width="13"/>'
+    + '<col min="3" max="3" width="13"/><col min="4" max="4" width="11"/>'
+    + '<col min="5" max="5" width="18"/></cols>'
+    + `<sheetData>${rows}</sheetData></worksheet>`;
+
+  const styles = `${kopfXml}<styleSheet xmlns="${NS}">`
+    + '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font>'
+    + '<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>'
+    + '<fills count="2"><fill><patternFill patternType="none"/></fill>'
+    + '<fill><patternFill patternType="gray125"/></fill></fills>'
+    + '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'
+    + '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
+    + '<cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
+    + '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs>'
+    + '<cellStyles count="1"><cellStyle name="Standard" xfId="0" builtinId="0"/></cellStyles>'
+    + '</styleSheet>';
+
+  const RELS = 'http://schemas.openxmlformats.org/package/2006/relationships';
+  const DOCREL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+
+  const dateien = [
+    { name: '[Content_Types].xml', inhalt: `${kopfXml}<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">`
+      + '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+      + '<Default Extension="xml" ContentType="application/xml"/>'
+      + '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+      + '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+      + '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
+      + '</Types>' },
+    { name: '_rels/.rels', inhalt: `${kopfXml}<Relationships xmlns="${RELS}">`
+      + `<Relationship Id="rId1" Type="${DOCREL}/officeDocument" Target="xl/workbook.xml"/></Relationships>` },
+    { name: 'xl/workbook.xml', inhalt: `${kopfXml}<workbook xmlns="${NS}" xmlns:r="${DOCREL}">`
+      + '<sheets><sheet name="Urliste" sheetId="1" r:id="rId1"/></sheets></workbook>' },
+    { name: 'xl/_rels/workbook.xml.rels', inhalt: `${kopfXml}<Relationships xmlns="${RELS}">`
+      + `<Relationship Id="rId1" Type="${DOCREL}/worksheet" Target="worksheets/sheet1.xml"/>`
+      + `<Relationship Id="rId2" Type="${DOCREL}/styles" Target="styles.xml"/></Relationships>` },
+    { name: 'xl/styles.xml', inhalt: styles },
+    { name: 'xl/worksheets/sheet1.xml', inhalt: sheet }
+  ];
+
+  ladeDateiHerunter(zipStore(dateien), exportDateiname('xlsx'));
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1162,7 +1409,12 @@ function setScope(s) {
   document.querySelectorAll('.scope-pill').forEach(p => {
     p.classList.toggle('aktiv', p.dataset.scope === s);
   });
-  document.getElementById('scope-erklaerung').innerHTML = SCOPE_TEXTE[s];
+  zeigeScopeText();
+}
+/* {n} in den Bezugsrahmen-Texten wird durch die aktuelle Urlisten-Länge ersetzt. */
+function zeigeScopeText() {
+  document.getElementById('scope-erklaerung').innerHTML =
+    SCOPE_TEXTE[aktiverScope].replace(/\{n\}/g, DATEN.length);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2125,6 +2377,9 @@ function aktualisierePlausibilitaet() {
 }
 function aktualisiereAlles() {
   document.getElementById('n-anzeige').textContent = DATEN.length;
+  document.getElementById('n-text-1').textContent = DATEN.length;
+  document.getElementById('n-text-2').textContent = DATEN.length;
+  zeigeScopeText();
   aktualisiereUrliste();
   aktualisiereKennzahlen();
   aktualisiereHaeufTab();
@@ -2165,7 +2420,10 @@ function aktualisiereAlles() {
 ═══════════════════════════════════════════════════════════════ */
 (function init() {
   setScope('klasse');
+  document.getElementById('urliste-n').value = aktuellesN;
+  document.getElementById('urliste-n-anz').textContent = aktuellesN;
   renderTabelle();
+  syncStichSlider();
   aktualisiereAlles();
   document.getElementById('stich-n').addEventListener('input', e => {
     document.getElementById('stich-n-anz').textContent = e.target.value;
