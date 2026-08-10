@@ -34,7 +34,7 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASIS = 'https://go4exercises.github.io/TALS-Mathe/'
+BASIS = 'https://mathe.begreifbar.ch/'
 SEITENNAME = 'TALS Mathematik'
 AUTOR = 'Raphael Arnold Kohler'
 LIZENZ = 'https://creativecommons.org/licenses/by-nc/4.0/deed.de'
