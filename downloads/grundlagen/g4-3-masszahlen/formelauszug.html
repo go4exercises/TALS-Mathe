@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formelauszug · Masszahlen — TALS Mathematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  body { font-size: 10pt; }
+  .druck-wrapper h2 { font-size: 12pt; margin-top: 4mm; }
+  .druck-wrapper p { margin: 0 0 1.5mm; font-size: 9.5pt; }
+  .druck-wrapper table.ftb-tabelle { font-size: 9.2pt; margin: 2mm 0; }
+  .druck-wrapper table.ftb-tabelle th,
+  .druck-wrapper table.ftb-tabelle td { padding: 1.2mm 2mm; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 0.95 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g4-3-masszahlen.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Formelauszug · A4 · Bereit zum Drucken</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">TALS Mathematik · Grundlagenfach · 4.3 Masszahlen</div>
+    <h1>Formelauszug</h1>
+  </header>
+
+  <h2>Lagemasse</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Mass</th><th>Symbol</th><th>Berechnung</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Mittelwert</td><td>\(\bar{x}\)</td><td>\(\bar{x} = \dfrac{1}{n}\sum x_i\)</td></tr>
+      <tr><td class="li">Median (n ungerade)</td><td>\(\tilde{x}\)</td><td>Wert an Position \(\frac{n+1}{2}\) der sortierten Liste</td></tr>
+      <tr><td class="li">Median (n gerade)</td><td>\(\tilde{x}\)</td><td>Mittelwert der Werte an Positionen \(\frac{n}{2}\) und \(\frac{n}{2}+1\)</td></tr>
+      <tr><td class="li">Modus</td><td>\(\hat{x}\)</td><td>häufigster Wert (mehrere mit gleicher Maximalhäufigkeit: <em>multimodal</em>)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Streumasse</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Mass</th><th>Symbol</th><th>Formel</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Varianz</td><td>\(s^2\)</td><td>\(s^2 = \dfrac{1}{n-1}\sum (x_i - \bar{x})^2\)</td></tr>
+      <tr><td class="li">Standardabweichung</td><td>\(s\)</td><td>\(s = \sqrt{s^2}\)</td></tr>
+      <tr><td class="li">Quartilsdifferenz (IQR)</td><td>QD</td><td>\(\text{QD} = Q_3 - Q_1\)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Tabellenkalkulation</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Mass</th><th>deutsch</th><th>englisch</th></tr></thead>
+    <tbody>
+      <tr><td class="li">Mittelwert</td><td>=MITTELWERT(A:A)</td><td>=AVERAGE(A:A)</td></tr>
+      <tr><td class="li">Median</td><td>=MEDIAN(A:A)</td><td>=MEDIAN(A:A)</td></tr>
+      <tr><td class="li">Modus</td><td>=MODUS.EINF(A:A)</td><td>=MODE(A:A)</td></tr>
+      <tr><td class="li">Standardabw. (Stichprobe)</td><td>=STABW.S(A:A)</td><td>=STDEV.S(A:A)</td></tr>
+      <tr><td class="li">1. Quartil</td><td>=QUARTILE.INKL(A:A;1)</td><td>=QUARTILE.INC(A:A;1)</td></tr>
+      <tr><td class="li">3. Quartil</td><td>=QUARTILE.INKL(A:A;3)</td><td>=QUARTILE.INC(A:A;3)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Faustregel zur Lagemass-Wahl</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Verteilung</th><th>Lagemass</th><th>passendes Streumass</th></tr></thead>
+    <tbody>
+      <tr><td class="li">symmetrisch, ohne Ausreisser</td><td>Mittelwert \(\bar{x}\)</td><td>Standardabweichung \(s\)</td></tr>
+      <tr><td class="li">schief oder mit Ausreissern</td><td>Median \(\tilde{x}\)</td><td>Quartilsdifferenz QD</td></tr>
+      <tr><td class="li">kategorial</td><td>Modus \(\hat{x}\)</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Boxplot — die fünf Zahlen</h2>
+  <p>min · \(Q_1\) · \(\tilde{x}\) · \(Q_3\) · max</p>
+
+  <p style="font-size:8.5pt;color:var(--tinte-2);font-style:italic;margin-top:5mm">Quelle: Anlehnung an „Formeln, Tabellen, Begriffe", Orell Füssli Lehrmittel.</p>
+
+
+</div>
+
+</body>
+</html>
