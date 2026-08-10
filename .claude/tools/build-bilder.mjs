@@ -31,7 +31,7 @@ const OG = `<!doctype html><html><head><meta charset="utf-8">
          color:#5c5850; margin-bottom:26px; }
   .ew b { color:#1a4f8a; font-weight:700; }
   h1   { font-size:92px; font-weight:700; line-height:1.06; color:#1c1a17; letter-spacing:-1px; }
-  h1 span { color:#1a4f8a; }
+  h1 span { color:#1a4f8a; display:block; }   /* Zusatz auf eigene Zeile — «Mathe begreifbar» ist laenger als «Mathematik» */
   .ut  { font-size:38px; color:#3d3a35; margin-top:34px; line-height:1.3; }
   .url { font-family:'JetBrains Mono',monospace; font-size:22px; color:#5c5850; margin-top:30px; }
 </style></head><body>
