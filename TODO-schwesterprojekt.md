@@ -23,6 +23,25 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
+- **2026-08-10 · Umzug auf `physik.begreifbar.ch` · ganzes Physik-Repo · warum:**
+  Mathe liegt seit dem 10.8.2026 auf `mathe.begreifbar.ch`. Die DNS-Seite ist für
+  Physik **bereits erledigt**: `physik` steht als CNAME auf `go4exercises.github.io.`
+  (TTL 300), und die Domain ist auf GitHub verifiziert — der TXT-Record
+  `_github-pages-challenge-go4exercises` deckt die Subdomains mit ab. Es fehlt nur
+  noch die Repo-Seite. **Bis dahin zeigen die drei Physik-Querlinks aus Mathe
+  (`nav.js`) sowie die Verweise in Mathes `glossar.html` und `formelsammlung.html`
+  auf eine Adresse, die noch nicht ausliefert.**
+  **Massnahme in Physik:** `CNAME` im Repo-Root mit `physik.begreifbar.ch` (eine
+  Zeile, LF, kein BOM), pushen, Settings → Pages prüfen, **Enforce HTTPS** setzen.
+  Danach die Basis-URL im dortigen SEO-Skript umstellen und den Generator laufen
+  lassen, die Rück-Querlinks auf `https://mathe.begreifbar.ch/` setzen (Kopfzeile,
+  Mobilmenü, Über-Panel, Glossar, Formelsammlung) und die Namensnennung im
+  Lizenzblock nachziehen. Reihenfolge und Begründung stehen in Mathes
+  `DOMAIN-UMZUG.md`, Phase 5.
+  **Prüfen nach dem Port:** `https://physik.begreifbar.ch/` liefert über HTTPS aus,
+  `canonical` zeigt auf die neue Domain, `sitemap.xml` erreichbar, und die
+  Querlinks in **beide** Richtungen landen auf einer Seite statt auf einem 404.
+
 - **2026-08-10 · ToC markiert den aktiven Abschnitt sofort · `nav.js`,
   `buildToC()` · warum:** Die Markierung lief allein über einen
   `IntersectionObserver` mit `rootMargin: '-20% 0px -70% 0px'`. Der meldet nur,
