@@ -3,7 +3,7 @@
 //  Neu bauen:  python3 scripts/build-suchindex.py
 // ─────────────────────────────────────────────────────────────
 window.SUCHINDEX = {
-  fp: "70e1d45fc2c69bae",
+  fp: "f9d4b44397d6b87f",
   seiten: [
     {u:"grundlagen/g1-1-grundlagen.html", nr:"1.1", t:"Grundlagen"},
     {u:"grundlagen/g1-2-zahlen-grundoperationen.html", nr:"1.2", t:"Zahlen und zugehörige Grundoperationen"},
@@ -422,6 +422,7 @@ window.SUCHINDEX = {
     {p:46, a:"g-m", t:"Median", x:"Median x Mittlerer Wert der geordneten Datenliste; teilt sie in zwei gleich grosse Hälften. Robust gegen Ausreisser."},
     {p:46, a:"g-m", t:"Mittelwert", x:"Mittelwert x Arithmetisches Mittel: Summe aller Werte geteilt durch ihre Anzahl. Empfindlich gegenüber Ausreissern."},
     {p:46, a:"g-m", t:"Mitternachtsformel", x:"Mitternachtsformel x 1,2 = -b± sqrt b 2-4ac 2a Lösungsformel der allgemeinen quadratischen Gleichung ax 2+bx+c=0 ."},
+    {p:46, a:"g-m", t:"Modus", x:"Modus x Häufigster Wert einer Datenreihe (auch Modalwert). Haben mehrere Werte dieselbe Höchsthäufigkeit, heisst die Verteilung multimodal. Einziges Lagemass, das auch für kategoriale Merkmale wie den Lieblingssport funktioniert."},
     {p:46, a:"g-n", t:"Nullstelle", x:"Nullstelle Eingabewert, bei dem eine Funktion den Wert 0 annimmt: f(x)=0 . Im Graph der Schnittpunkt mit der x -Achse."},
     {p:46, a:"g-p", t:"Parameter", x:"Parameter Veränderlicher Koeffizient in einer Gleichung oder Funktion (z.B. k ). Die Parameterdiskussion bestimmt die Lösungsfälle in Abhängigkeit von ihm."},
     {p:46, a:"g-p", t:"Pi", x:"Pi pi ≈ 3.14159 Kreiszahl: Verhältnis von Umfang zu Durchmesser jedes Kreises. Irrational."},
