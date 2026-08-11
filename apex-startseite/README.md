@@ -59,6 +59,33 @@ Aufsetzen einmal `curl -I https://www.begreifbar.ch/` prüfen.
   gestaltetes Zeichen. Es funktioniert bei 16 px und passt ins Farbsystem, mehr
   nicht.
 
+## Ein Fach dazunehmen
+
+`scripts/neue-subdomain.py` im Mathe-Repo macht den ganzen Weg von der ZIP-Datei
+bis zur fertigen Kachel:
+
+```bash
+python3 scripts/neue-subdomain.py chemie ~/Downloads/chemie.zip \
+    --titel Chemie --marke Grundlagenfach --farbe gruen \
+    --text "Stoffe, Reaktionen und Stöchiometrie — mit Rechenweg."
+```
+
+Es packt das ZIP aus, legt `CNAME` und `.nojekyll` an, wartet auf den
+DNS-Eintrag, erstellt das Repository, schaltet Pages ein, erzwingt HTTPS, hängt
+die Kachel hier ein und pusht das Apex-Repo. Mit `--nur-pruefen` läuft alles bis
+zum Auspacken, ohne etwas anzulegen.
+
+Die Kacheln stehen zwischen `<!-- FAECHER:ANFANG -->` und `<!-- FAECHER:ENDE -->`,
+die Fachfarben zwischen `<!-- FACHFARBEN:ANFANG -->` und `<!-- FACHFARBEN:ENDE -->` —
+das Skript schreibt genau dorthin. Von Hand geht es genauso: eine Kachel kopieren,
+Klasse `f-<fach>` vergeben und eine Farbzeile ergänzen.
+
+Das Raster ist auf `repeat(auto-fit, minmax(320px, 1fr))` gestellt und trägt zwei
+Fächer so gut wie fünf. **Was nicht mitwächst, ist die Prosa:** Überschrift,
+Seitentitel und Beschreibung nennen Mathematik und Physik namentlich und sprechen
+von «zwei Lehrmitteln». Ab dem dritten Fach gehört das nachgezogen — das Skript
+listet beim Einfügen die betroffenen Zeilen auf.
+
 ## Pflege
 
 Die Seite nennt beide Fächer, aber keine Kapitel — sie muss also nicht
