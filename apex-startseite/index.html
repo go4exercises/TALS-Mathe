@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>begreifbar — Mathematik und Physik für die Berufsmaturität</title>
+<meta name="description" content="Zwei kostenlose, interaktive Lehrmittel für die Berufsmaturität TALS nach RLP-BM 2030: Mathematik und Physik, mit Animationen, Aufgaben und Formelsammlung.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://begreifbar.ch/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="begreifbar — Mathematik und Physik für die Berufsmaturität">
+<meta property="og:description" content="Zwei kostenlose, interaktive Lehrmittel für die Berufsmaturität TALS nach RLP-BM 2030: Mathematik und Physik, mit Animationen, Aufgaben und Formelsammlung.">
+<meta property="og:url" content="https://begreifbar.ch/">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* Farben, Schriften und Abstände sind mit den beiden Lehrmitteln identisch —
+   Blau ist Mathematik, Bernstein ist Physik. Die Seite steht allein, darum
+   liegt das CSS hier und nicht in einer style.css. */
+:root {
+  --papier:     #f8f6f1;
+  --papier-2:   #efeade;
+  --weiss:      #ffffff;
+  --tinte:      #1c1a17;
+  --tinte-2:    #5a5040;
+  --linie:      #d8d0c4;
+
+  --blau:       #1a4f8a;   /* Mathematik */
+  --blau-hell:  #ddeaf8;
+  --blau-rand:  #5b8fc9;
+  --bernstein:      #8a4a0e;   /* Physik */
+  --bernstein-hell: #fbecd2;
+  --bernstein-rand: #c98028;
+
+  --serif: 'Source Serif 4', Georgia, serif;
+  --sans:  'Source Sans 3', system-ui, sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+  --sl: 0 4px 22px rgba(28,26,23,0.13);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--sans); background: var(--papier); color: var(--tinte);
+  line-height: 1.65; display: flex; flex-direction: column; min-height: 100vh;
+}
+
+/* ── Kopf ───────────────────────────────────────────────────── */
+.hero {
+  background: var(--weiss); border-bottom: 1px solid var(--linie);
+  padding: 40px 24px 34px; text-align: center;
+}
+.hero-ew {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 1px;
+  color: var(--tinte-2); margin-bottom: 14px;
+}
+.hero-ew strong { font-weight: 700; color: var(--blau); }
+.hero-ew::before, .hero-ew::after {
+  content: ''; display: block; width: 22px; height: 1.5px; background: var(--blau-rand);
+}
+.hero h1 {
+  font-family: var(--serif); font-weight: 700; line-height: 1.15;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+}
+.hero h1 .m { color: var(--blau); }
+.hero h1 .p { color: var(--bernstein); }
+.hero-satz {
+  max-width: 700px; margin: 16px auto 0; text-wrap: pretty;
+  font-size: 1.02rem; color: var(--tinte-2);
+}
+
+/* ── Kacheln ────────────────────────────────────────────────── */
+main { flex: 1; width: 100%; max-width: 940px; margin: 0 auto; padding: 38px 22px 70px; }
+.faecher { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 700px) { .faecher { grid-template-columns: 1fr; } }
+
+.fach {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--weiss); border: 1.5px solid var(--linie); border-left-width: 5px;
+  border-radius: 10px; padding: 26px 26px 22px;
+  transition: transform 0.14s, box-shadow 0.14s, border-color 0.14s;
+}
+.fach:hover, .fach:focus-visible { transform: translateY(-3px); box-shadow: var(--sl); }
+.fach:focus-visible { outline: 2px solid var(--tinte); outline-offset: 3px; }
+.f-mathe  { border-left-color: var(--blau); }
+.f-physik { border-left-color: var(--bernstein); }
+.f-mathe:hover,  .f-mathe:focus-visible  { border-color: var(--blau-rand);      border-left-color: var(--blau); }
+.f-physik:hover, .f-physik:focus-visible { border-color: var(--bernstein-rand); border-left-color: var(--bernstein); }
+
+.f-marke {
+  display: inline-block; font-family: var(--mono); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; padding: 3px 9px; border-radius: 4px;
+  margin-bottom: 12px;
+}
+.f-mathe  .f-marke { background: var(--blau-hell);      color: var(--blau); }
+.f-physik .f-marke { background: var(--bernstein-hell); color: var(--bernstein); }
+
+.f-titel { font-family: var(--serif); font-size: 1.7rem; font-weight: 700; line-height: 1.2; }
+.f-mathe  .f-titel { color: var(--blau); }
+.f-physik .f-titel { color: var(--bernstein); }
+.f-text { margin-top: 10px; font-size: 0.95rem; color: var(--tinte-2); }
+.f-adresse {
+  display: flex; align-items: center; gap: 7px;
+  margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--linie);
+  font-family: var(--mono); font-size: 0.8rem; font-weight: 700;
+}
+.f-mathe  .f-adresse { color: var(--blau); }
+.f-physik .f-adresse { color: var(--bernstein); }
+.f-pfeil { transition: transform 0.14s; }
+.fach:hover .f-pfeil, .fach:focus-visible .f-pfeil { transform: translateX(4px); }
+
+.hinweis {
+  margin-top: 34px; padding: 16px 20px;
+  background: var(--papier-2); border: 1px solid var(--linie); border-radius: 8px;
+  font-size: 0.9rem; color: var(--tinte-2);
+}
+.hinweis strong { color: var(--tinte); }
+
+/* ── Fuss ───────────────────────────────────────────────────── */
+.site-footer {
+  background: var(--tinte); color: rgba(255,255,255,0.45);
+  padding: 24px 40px; text-align: center;
+  font-size: 0.74rem; line-height: 1.8;
+}
+.site-footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+.site-footer a:hover { color: #fff; }
+.site-footer strong { color: rgba(255,255,255,0.82); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <!-- Text in EIN span: .hero-ew ist ein Flex-Container mit gap — einzelne <strong>
+       würden sonst zu eigenen Flex-Items mit Lücken davor und danach. -->
+  <div class="hero-ew"><span>Berufsmaturität <strong>T</strong>echnik,
+    <strong>A</strong>rchitektur, <strong>L</strong>ife <strong>S</strong>ciences —
+    <strong>TALS</strong></span></div>
+  <h1><span class="m">Mathematik</span> und <span class="p">Physik</span> begreifbar</h1>
+  <p class="hero-satz">Zwei kostenlose Lehrmittel für die Berufsmaturität nach RLP-BM 2030 —
+    mit Animationen zum Ausprobieren, Aufgaben mit Lösungsweg und Formelsammlung.
+    Ohne Anmeldung, ohne Cookies.</p>
+</header>
+
+<main>
+  <div class="faecher">
+
+    <a class="fach f-mathe" href="https://mathe.begreifbar.ch/">
+      <span class="f-marke">Grundlagen- und Schwerpunktfach</span>
+      <div class="f-titel">Mathematik</div>
+      <p class="f-text">Arithmetik und Algebra, Gleichungen, Funktionen, Datenanalyse
+        und Geometrie — von der Termstruktur bis zur Vektorgeometrie.</p>
+      <div class="f-adresse">mathe.begreifbar.ch <span class="f-pfeil" aria-hidden="true">→</span></div>
+    </a>
+
+    <a class="fach f-physik" href="https://physik.begreifbar.ch/">
+      <span class="f-marke">Grundlagenfach</span>
+      <div class="f-titel">Physik</div>
+      <p class="f-text">Mechanik, Thermodynamik, Wellen und Elektrizität — dieselbe
+        Machart, dieselben Werkzeuge, dasselbe Vorgehen beim Lösen.</p>
+      <div class="f-adresse">physik.begreifbar.ch <span class="f-pfeil" aria-hidden="true">→</span></div>
+    </a>
+
+  </div>
+
+  <p class="hinweis"><strong>Für wen das gemacht ist:</strong> Lernende der Berufsmaturität
+    TALS, die den Stoff nicht nur nachlesen, sondern damit herumprobieren wollen — und
+    Lehrpersonen, die einzelne Seiten im Unterricht einsetzen. Alles ist frei nutzbar
+    unter CC BY-NC 4.0.</p>
+</main>
+
+<footer class="site-footer">
+  <p><strong>begreifbar.ch</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="https://mathe.begreifbar.ch/feedback.html">Kontakt &amp; Feedback</a> · <a href="https://mathe.begreifbar.ch/rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking</p>
+</footer>
+
+</body>
+</html>
