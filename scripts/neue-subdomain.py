@@ -4,7 +4,7 @@
 #  veroeffentlichen und als Kachel in begreifbar.ch einhaengen.
 #
 #  Aufruf vom Repo-Wurzelverzeichnis:
-#      python3 scripts/neue-subdomain.py <subdomain> <website.zip> [Optionen]
+#      python3 scripts/neue-subdomain.py <subdomain> <website.zip|seite.html> [Optionen]
 #
 #  Beispiel:
 #      python3 scripts/neue-subdomain.py chemie ~/Downloads/chemie.zip \
@@ -14,11 +14,14 @@
 #
 #  Was passiert, in dieser Reihenfolge:
 #    1. Vorpruefungen (gh angemeldet, Repo-Name frei, ZIP lesbar, Kachel neu)
-#    2. ZIP auspacken, Wurzel normalisieren, CNAME und .nojekyll schreiben
+#    2. ZIP auspacken (oder die einzelne Seite als index.html hinlegen),
+#       Wurzel normalisieren, CNAME und .nojekyll schreiben
 #    3. WARTEN auf den DNS-Eintrag — den muss der Mensch beim Registrar setzen
 #    4. Repo anlegen und pushen (gh repo create --public --source=. --push)
 #    5. Pages einschalten, auf «built» warten, HTTPS erzwingen
 #    6. Kachel in apex-startseite/index.html einfuegen und lokal committen
+#       (entfaellt mit --ohne-kachel — fuer Einzelseiten, die nicht ins
+#       Faecher-Verzeichnis gehoeren)
 #    7. Apex-Repo klonen, Inhalt uebernehmen, pushen — die Kachel geht live
 #    8. Abschlussmessung ueber HTTPS
 #
@@ -150,6 +153,23 @@ def pruefe_subdomain(name):
         raise Abbruch(f'«{name}» ist bereits vergeben.')
 
 
+def pruefe_alleinstehend(html_pfad):
+    """Eine einzelne Seite muss ohne Nachbardateien auskommen — sonst fehlen sie
+    im Repo. Relative Bezuege sind darum ein Grund zur Warnung, kein Abbruch:
+    vielleicht sind sie Absicht."""
+    t = html_pfad.read_text(encoding='utf-8', errors='replace')
+    bezuege = sorted(set(re.findall(
+        r'(?:src|href)="(?!https?://|data:|mailto:|tel:|#|/)([^"]+)"', t)))
+    if bezuege:
+        warn(f'Die Seite verweist auf {len(bezuege)} Datei(en) daneben — die kommen '
+             'nicht mit, weil nur diese eine Datei hochgeladen wird:')
+        for b in bezuege[:8]:
+            info(f'  {b}')
+        if len(bezuege) > 8:
+            info(f'  … und {len(bezuege) - 8} weitere')
+        info('Entweder alles in die HTML einbetten oder ein ZIP mit allen Dateien übergeben.')
+
+
 def vorpruefungen(args, repo):
     schritt(1, 'Vorprüfungen')
     for werkzeug in ('git', 'gh'):
@@ -160,11 +180,15 @@ def vorpruefungen(args, repo):
         raise Abbruch('gh ist nicht angemeldet — «gh auth login» ausführen.')
     ok('git und gh vorhanden, gh angemeldet')
 
-    if not args.zip.is_file():
-        raise Abbruch(f'ZIP nicht gefunden: {args.zip}')
-    if not zipfile.is_zipfile(args.zip):
-        raise Abbruch(f'{args.zip} ist keine ZIP-Datei.')
-    ok(f'ZIP lesbar: {args.zip.name}')
+    if not args.quelle.is_file():
+        raise Abbruch(f'Datei nicht gefunden: {args.quelle}')
+    if args.quelle.suffix.lower() in ('.html', '.htm'):
+        ok(f'Einzelne Seite: {args.quelle.name}')
+        pruefe_alleinstehend(args.quelle)
+    elif zipfile.is_zipfile(args.quelle):
+        ok(f'ZIP lesbar: {args.quelle.name}')
+    else:
+        raise Abbruch(f'{args.quelle.name} ist weder eine .html-Datei noch ein ZIP.')
 
     rc, _ = gh_api(f'repos/{repo}', pruefen=False)
     if rc == 0:
@@ -172,10 +196,14 @@ def vorpruefungen(args, repo):
                       '--repo wählen oder das bestehende Repo aufräumen.')
     ok(f'Repository-Name frei: {repo}')
 
+    if args.ohne_kachel:
+        ok('ohne Kachel — begreifbar.ch wird nicht angefasst')
+        return
+
     if not (APEX_QUELLE / 'index.html').is_file():
         raise Abbruch(f'{APEX_QUELLE}/index.html fehlt — läuft das Skript im Repo-Wurzelverzeichnis?')
     apex = (APEX_QUELLE / 'index.html').read_text(encoding='utf-8')
-    if f'https://{args.subdomain}.{DOMAIN}/' in apex:
+    if not args.ohne_kachel and f'https://{args.subdomain}.{DOMAIN}/' in apex:
         raise Abbruch(f'In apex-startseite/index.html gibt es bereits eine Kachel für '
                       f'{args.subdomain}.{DOMAIN}.')
     for marke in ('FAECHER:ANFANG', 'FAECHER:ENDE', 'FACHFARBEN:ANFANG', 'FACHFARBEN:ENDE'):
@@ -193,9 +221,20 @@ def vorpruefungen(args, repo):
 
 # ── 2. ZIP auspacken ─────────────────────────────────────────────────────────
 
-def auspacken(zip_pfad, ziel):
+def bereitstellen(quelle, ziel):
+    """Legt den auszuliefernden Ordner an — aus einem ZIP oder aus einer Seite."""
+    if quelle.suffix.lower() in ('.html', '.htm'):
+        schritt(2, 'Einzelne Seite bereitstellen')
+        ziel.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(quelle, ziel / 'index.html')
+        if quelle.name != 'index.html':
+            ok(f'{quelle.name} → index.html (nur dieser Name wird als Startseite ausgeliefert)')
+        else:
+            ok('index.html übernommen')
+        return ziel
+
     schritt(2, 'ZIP auspacken und Wurzel bestimmen')
-    with zipfile.ZipFile(zip_pfad) as z:
+    with zipfile.ZipFile(quelle) as z:
         for eintrag in z.namelist():
             p = Path(eintrag)
             # Zip-Slip: absolute Pfade und »..« wuerden ausserhalb von ziel schreiben.
@@ -389,9 +428,10 @@ def apex_veroeffentlichen(arbeitsordner):
 
 # ── 8. Messung ───────────────────────────────────────────────────────────────
 
-def messen(host):
+def messen(host, mit_apex=True):
     schritt(8, 'Abschlussmessung')
-    for url in (f'https://{host}/', f'https://{DOMAIN}/'):
+    ziele = (f'https://{host}/', f'https://{DOMAIN}/') if mit_apex else (f'https://{host}/',)
+    for url in ziele:
         for versuch in range(6):
             try:
                 with urllib.request.urlopen(url, timeout=20) as a:
@@ -416,7 +456,9 @@ def main():
                     'und als Kachel in begreifbar.ch einhängen.',
         formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('subdomain', help='z. B. chemie  →  chemie.begreifbar.ch')
-    p.add_argument('zip', type=Path, help='ZIP-Datei mit der Website (index.html im Wurzelverzeichnis)')
+    p.add_argument('quelle', type=Path,
+                   help='ZIP mit der Website (index.html im Wurzelverzeichnis) '
+                        'ODER eine einzelne .html-Datei')
     p.add_argument('--titel', help='Titel auf der Kachel (Vorgabe: Subdomain gross geschrieben)')
     p.add_argument('--marke', default='Grundlagenfach', help='Pille über dem Titel')
     p.add_argument('--text', default='', help='Ein Satz zum Inhalt, erscheint auf der Kachel')
@@ -425,6 +467,9 @@ def main():
     p.add_argument('--repo', help='Repository-Name (Vorgabe: die Subdomain)')
     p.add_argument('--ohne-dns-warten', action='store_true',
                    help='nicht auf den DNS-Eintrag warten (nur sinnvoll, wenn er schon steht)')
+    p.add_argument('--ohne-kachel', action='store_true',
+                   help='keine Kachel auf begreifbar.ch — für einzelne Seiten, die '
+                        'nicht ins Fächer-Verzeichnis gehören')
     p.add_argument('--nur-pruefen', action='store_true',
                    help='nur Schritte 1 und 2 — nichts anlegen, nichts pushen')
     args = p.parse_args()
@@ -433,20 +478,20 @@ def main():
     args.text = args.text or f'{args.titel} für die Berufsmaturität.'
     repo = f'{KONTO}/{args.repo or args.subdomain}'
     host = f'{args.subdomain}.{DOMAIN}'
-    args.zip = args.zip.expanduser().resolve()
+    args.quelle = args.quelle.expanduser().resolve()
 
     arbeit = Path(tempfile.mkdtemp(prefix='neue-subdomain-'))
     repo_angelegt = False
     try:
         pruefe_subdomain(args.subdomain)     # vor der Kopfzeile, damit kein
-        print(f'\n\033[1m{host}\033[0m  ←  {args.zip.name}  ·  Repository {repo}')
+        print(f'\n\033[1m{host}\033[0m  ←  {args.quelle.name}  ·  Repository {repo}')
         if args.nur_pruefen:                 # unsinniger Name gedruckt wird
             print('   \033[1mProbelauf\033[0m — es wird nichts angelegt und nichts gepusht.')
         vorpruefungen(args, repo)
-        seite = auspacken(args.zip, arbeit / 'seite')
+        seite = bereitstellen(args.quelle, arbeit / 'seite')
         if args.nur_pruefen:
             beigaben(seite, host)
-            print(f'\n   Probelauf in Ordnung. Ausgepackt unter: {seite}')
+            print(f'\n   Probelauf in Ordnung. Bereitgestellt unter: {seite}')
             print('   Für den echten Lauf dieselbe Zeile ohne --nur-pruefen.')
             return 0
         beigaben(seite, host)
@@ -454,11 +499,17 @@ def main():
         repo_anlegen(seite, repo, host)
         repo_angelegt = True
         pages_einschalten(repo, host)
-        kachel_einfuegen(args, host)
-        apex_veroeffentlichen(arbeit)
-        messen(host)
-        print(f'\n\033[1mFertig.\033[0m  https://{host}/  ·  Kachel auf https://{DOMAIN}/')
-        print(f'   Offen: «git push» in {ROOT} — der Kachel-Commit liegt lokal.')
+        if args.ohne_kachel:
+            schritt(6, 'Kachel übersprungen (--ohne-kachel)')
+            info(f'https://{DOMAIN}/ bleibt unverändert.')
+        else:
+            kachel_einfuegen(args, host)
+            apex_veroeffentlichen(arbeit)
+        messen(host, mit_apex=not args.ohne_kachel)
+        print(f'\n\033[1mFertig.\033[0m  https://{host}/'
+              + ('' if args.ohne_kachel else f'  ·  Kachel auf https://{DOMAIN}/'))
+        if not args.ohne_kachel:
+            print(f'   Offen: «git push» in {ROOT} — der Kachel-Commit liegt lokal.')
         return 0
     except Abbruch as e:
         print(f'\n\033[1mAbbruch:\033[0m {e}', file=sys.stderr)

@@ -75,6 +75,16 @@ DNS-Eintrag, erstellt das Repository, schaltet Pages ein, erzwingt HTTPS, hängt
 die Kachel hier ein und pusht das Apex-Repo. Mit `--nur-pruefen` läuft alles bis
 zum Auspacken, ohne etwas anzulegen.
 
+Eine **einzelne Seite** geht genauso — dann ohne Kachel, weil sie nicht ins
+Fächer-Verzeichnis gehört:
+
+```bash
+python3 scripts/neue-subdomain.py sonnenfinsternis ~/sonnenfinsternis.html --ohne-kachel
+```
+
+Die Datei wird zu `index.html`; verweist sie auf Bilder oder CSS daneben, meldet
+das Skript die Fundstellen — dann entweder alles einbetten oder ein ZIP übergeben.
+
 Die Kacheln stehen zwischen `<!-- FAECHER:ANFANG -->` und `<!-- FAECHER:ENDE -->`,
 die Fachfarben zwischen `<!-- FACHFARBEN:ANFANG -->` und `<!-- FACHFARBEN:ENDE -->` —
 das Skript schreibt genau dorthin. Von Hand geht es genauso: eine Kachel kopieren,
