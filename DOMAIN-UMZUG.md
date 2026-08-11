@@ -176,9 +176,13 @@ Der Apex braucht ein eigenes Repository — er kann nicht auf dasselbe Repo zeig
 wie `mathe.`.
 
 - [ ] 🔑 Neues Repo anlegen, z. B. `go4exercises/begreifbar`.
-- [ ] 🤖 Ich schreibe die Startseite (eine einzige HTML-Datei im Stil der beiden
+- [x] 🤖 Ich schreibe die Startseite (eine einzige HTML-Datei im Stil der beiden
       Lehrmittel: Titel, ein Satz zum Angebot, zwei grosse Kacheln Mathe/Physik,
       Footer mit Lizenz) und lege sie hier unter `apex-startseite/` ab.
+      **Erledigt am 11.8.2026.** Der Ordner enthält alles, was ins neue Repo
+      gehört: `index.html` (CSS inline, keine Abhängigkeit ins Mathe-Repo),
+      `CNAME`, `favicon.svg`, `.nojekyll` — dazu eine `README.md` mit den
+      Aufsetz-Schritten, die im neuen Repo nicht mitmuss.
 - [ ] 🔑 Ordnerinhalt ins neue Repo kopieren, `CNAME` mit `begreifbar.ch`,
       Pages aktivieren, Enforce HTTPS.
 
@@ -201,6 +205,15 @@ und geht sofort — du verlierst nur die gemeinsame Eingangsseite, und wer
 ---
 
 ## Phase 5 · Physik nachziehen
+
+> **Teilweise erledigt (gemessen am 11.8.2026):** `https://physik.begreifbar.ch/`
+> antwortet mit **200**, und `go4exercises.github.io/TALS-Physik/` leitet mit **301**
+> dorthin um — `CNAME`, Pages-Einstellung und die Basis-URL im dortigen SEO-Skript
+> sind also gemacht (`canonical` und `og:url` zeigen auf die neue Domain, im Quelltext
+> steht kein `go4exercises.github.io` mehr). **Offen ist dort nur noch der Markenname:**
+> Titel und `og:site_name` lauten weiterhin «TALS Physik», während Mathe seit dem
+> 10.8. «Mathe begreifbar» heisst und in Mathes Menü bereits «Physik begreifbar»
+> steht. Details im Eintrag in `TODO-schwesterprojekt.md`.
 
 🔑 **Komplett bei dir** — ich fasse das Physik-Repo grundsätzlich nicht an
 (`CLAUDE.md`). Dort dieselben Schritte: `CNAME` mit `physik.begreifbar.ch`,
