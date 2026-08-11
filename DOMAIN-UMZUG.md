@@ -148,9 +148,25 @@ eine einzige Zeile stimmt. Von Hand bleiben 13 Stellen.
 - [x] 🤖 Eintrag in `TODO-schwesterprojekt.md`: Physik braucht dieselbe Umstellung.
 - [x] 🤖 Pre-Flight über alle 46 Themenseiten, dazu ein Link-Check: keine
       `github.io`-Reste ausserhalb der Doku-Historie.
-- [ ] 🔑 Pushen.
-- [ ] 🤝 Nach dem Deploy messe ich nach: HTTPS greift, `canonical` zeigt auf die
+- [x] 🔑 Pushen.
+- [x] 🤝 Nach dem Deploy messe ich nach: HTTPS greift, `canonical` zeigt auf die
       neue Domain, `sitemap.xml` erreichbar, keine gemischten Inhalte.
+
+> **Nachmessung am 11. August 2026** (Deploy vom 10.8., 20:01 UTC):
+>
+> - `http://mathe.begreifbar.ch/` antwortet **301** auf `https://` — Enforce HTTPS greift.
+> - `go4exercises.github.io/TALS-Mathe/` antwortet **301** auf `https://mathe.begreifbar.ch/` —
+>   alte Links, Lesezeichen und Suchtreffer laufen weiter.
+> - `canonical`, `og:url` und `og:image` über **alle 233 HTML-Dateien** geprüft: 51 Seiten
+>   tragen die Felder, keine einzige zeigt auf eine andere Domain. Live gegengeprüft an
+>   Startseite, Glossar, Formelsammlung, Rechtliches, Feedback, 5.2c und 4.3d.
+> - `og-bild.png` liefert **200 / image/png / 57 kB**, `sitemap.xml` erreichbar mit 51 Einträgen.
+> - **Keine gemischten Inhalte:** in HTML, JS und CSS gibt es keine einzige `http://`-Einbindung.
+>
+> Ein Audit-Bericht vom 11.8. meldete die alte Adresse im `canonical` der Startseite. Das
+> war ein Abzug von **vor** dem Deploy: `last-modified` ist für Startseite und Unterseiten
+> derselbe Zeitstempel, die Fastly-Cache-Zeit beträgt 600 s. Wer die Startseite vor 20:01
+> und die Unterseiten danach erfasst, sieht genau dieses gemischte Bild.
 
 ---
 
@@ -165,6 +181,17 @@ wie `mathe.`.
       Footer mit Lizenz) und lege sie hier unter `apex-startseite/` ab.
 - [ ] 🔑 Ordnerinhalt ins neue Repo kopieren, `CNAME` mit `begreifbar.ch`,
       Pages aktivieren, Enforce HTTPS.
+
+> ⚠️ **Bis dahin zeigen Apex und `www` auf eine Zertifikatswarnung.** Gemessen am
+> 11.8.2026: `begreifbar.ch` und `www.begreifbar.ch` lösen bereits auf GitHub Pages auf
+> (die DNS-Einträge aus Phase 1 stehen), aber **kein Repository beansprucht sie** — also
+> stellt GitHub kein Zertifikat aus. Ausgeliefert wird das Platzhalter-Zertifikat
+> `CN=*.github.io`, das auf `begreifbar.ch` nicht passt: Der Browser zeigt eine
+> Sicherheitswarnung, und wer sie wegklickt, landet auf einer 404-Seite.
+>
+> Wer `begreifbar.ch` eintippt — und das ist die Adresse, die man sich merkt —, sieht
+> also aktuell eine Warnung. Das ist der wichtigste offene Punkt des Umzugs. Phase 4
+> behebt ihn; bis dahin ist die Weiterleitungs-Variante unten die schnelle Lösung.
 
 **Alternative, falls dir das dritte Repo zu viel ist:** Apex und `www` per
 Weiterleitung des Registrars auf `mathe.begreifbar.ch` schicken. Kostet nichts
