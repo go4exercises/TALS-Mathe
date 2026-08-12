@@ -347,7 +347,9 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
 <div class="dia-panel" id="dp-balken">
   <h4>Balkendiagramm</h4>
   <p>Für <strong>kategoriale</strong> oder <strong>diskrete</strong> Daten. Jede Kategorie wird zu einem Rechteck, dessen Höhe die Häufigkeit darstellt. Die Balken berühren sich <em>nicht</em> — die Lücken signalisieren: zwischen den Kategorien gibt es nichts.</p>
-  <svg viewBox="0 0 460 200" preserveAspectRatio="xMidYMid meet">
+  <!-- negative viewBox-Obergrenze: 20 px Kopfraum fuer den Titel, ohne alle Koordinaten zu verschieben -->
+  <svg viewBox="0 -20 460 220" preserveAspectRatio="xMidYMid meet">
+    <text x="245" y="-6" font-size="12.5" text-anchor="middle" font-weight="600" fill="#1c1a17">Lieblingsfach von 83 Lernenden</text>
     <line x1="50" y1="170" x2="440" y2="170" stroke="#1f2937" stroke-width="1.5"/>
     <line x1="50" y1="170" x2="50" y2="20" stroke="#1f2937" stroke-width="1.5"/>
     <rect x="80"  y="71"   width="50" height="99"   fill="#3b82f6"/>
@@ -376,7 +378,8 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
   <h4>Kuchendiagramm (Kreisdiagramm)</h4>
   <p>Für <strong>kategoriale</strong> Daten, wenn die <em>Anteile am Ganzen</em> betont werden sollen. Jede Kategorie wird zu einem Kreissektor, dessen Winkel zur relativen Häufigkeit proportional ist:</p>
   \[ \alpha_i = \frac{h_i}{n} \cdot 360° \]
-  <svg viewBox="0 0 460 220" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 -20 460 240" preserveAspectRatio="xMidYMid meet">
+    <text x="230" y="-6" font-size="12.5" text-anchor="middle" font-weight="600" fill="#1c1a17">Verkehrsmittel auf dem Schulweg — Anteile am Ganzen</text>
     <g transform="translate(160, 110)">
       <!-- 40%, 30%, 20%, 10% -->
       <path d="M 0,0 L 90,0 A 90,90 0 0,1 -27.81,85.59 Z" fill="#3b82f6"/>
@@ -400,9 +403,24 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
 <div class="dia-panel" id="dp-histo" style="display:none">
   <h4>Histogramm</h4>
   <p>Für <strong>stetige</strong> Daten nach Klasseneinteilung. Sieht aus wie ein Balkendiagramm, aber die Balken berühren sich — denn auf der x-Achse ist eine durchgehende Skala (z.B. cm, kg, Sekunden), keine getrennten Kategorien.</p>
-  <svg viewBox="0 0 460 220" preserveAspectRatio="xMidYMid meet">
-    <line x1="50" y1="180" x2="440" y2="180" stroke="#1f2937" stroke-width="1.5"/>
+  <!-- negative viewBox-Obergrenze: 20 px Kopfraum fuer den Titel, ohne alle Koordinaten zu verschieben -->
+  <svg viewBox="0 -20 460 260" preserveAspectRatio="xMidYMid meet">
+    <text x="245" y="-6" font-size="12.5" text-anchor="middle" font-weight="600" fill="#1c1a17">Körpergrösse von 94 Lernenden — Klassenbreite 5 cm</text>
+    <line x1="50" y1="180" x2="435" y2="180" stroke="#1f2937" stroke-width="1.5"/>
     <line x1="50" y1="180" x2="50" y2="20" stroke="#1f2937" stroke-width="1.5"/>
+    <!-- y-Achse: 5 px je Einheit, Teilung alle 5 Lernende -->
+    <line x1="47" y1="180" x2="50" y2="180" stroke="#1f2937" stroke-width="1"/>
+    <text x="44" y="183.5" font-size="10" text-anchor="end" fill="#5a5040">0</text>
+    <line x1="47" y1="155" x2="50" y2="155" stroke="#1f2937" stroke-width="1"/>
+    <text x="44" y="158.5" font-size="10" text-anchor="end" fill="#5a5040">5</text>
+    <line x1="47" y1="130" x2="50" y2="130" stroke="#1f2937" stroke-width="1"/>
+    <text x="44" y="133.5" font-size="10" text-anchor="end" fill="#5a5040">10</text>
+    <line x1="47" y1="105" x2="50" y2="105" stroke="#1f2937" stroke-width="1"/>
+    <text x="44" y="108.5" font-size="10" text-anchor="end" fill="#5a5040">15</text>
+    <line x1="47" y1="80" x2="50" y2="80" stroke="#1f2937" stroke-width="1"/>
+    <text x="44" y="83.5" font-size="10" text-anchor="end" fill="#5a5040">20</text>
+    <line x1="47" y1="55" x2="50" y2="55" stroke="#1f2937" stroke-width="1"/>
+    <text x="44" y="58.5" font-size="10" text-anchor="end" fill="#5a5040">25</text>
     <rect x="50"  y="155" width="55" height="25"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
     <rect x="105" y="120" width="55" height="60"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
     <rect x="160" y="60"  width="55" height="120" fill="#3b82f6" stroke="#fff" stroke-width="1"/>
@@ -410,26 +428,54 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
     <rect x="270" y="105" width="55" height="75"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
     <rect x="325" y="135" width="55" height="45"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
     <rect x="380" y="165" width="55" height="15"  fill="#3b82f6" stroke="#fff" stroke-width="1"/>
-    <text x="50"  y="197" font-size="10" text-anchor="middle">155</text>
-    <text x="105" y="197" font-size="10" text-anchor="middle">160</text>
-    <text x="160" y="197" font-size="10" text-anchor="middle">165</text>
-    <text x="215" y="197" font-size="10" text-anchor="middle">170</text>
-    <text x="270" y="197" font-size="10" text-anchor="middle">175</text>
-    <text x="325" y="197" font-size="10" text-anchor="middle">180</text>
-    <text x="380" y="197" font-size="10" text-anchor="middle">185</text>
-    <text x="435" y="197" font-size="10" text-anchor="middle">190</text>
-    <text x="245" y="213" font-size="11" text-anchor="middle">Körpergrösse [cm]</text>
+    <!-- Klassengrenzen: Teilstrich, Intervallklammern und Wert.
+         Konvention [a, b): die linke Grenze gehoert zur Klasse, die rechte nicht.
+         An jeder inneren Grenze steht darum ")" fuer die linke und "[" fuer die rechte Klasse. -->
+    <line x1="50" y1="180" x2="50" y2="186" stroke="#1f2937" stroke-width="1"/>
+    <text x="52" y="197" font-size="13" text-anchor="start" fill="#b85c00" font-weight="700">[</text>
+    <text x="50" y="211" font-size="10" text-anchor="middle">155</text>
+    <line x1="105" y1="180" x2="105" y2="186" stroke="#1f2937" stroke-width="1"/>
+    <text x="103" y="197" font-size="13" text-anchor="end" fill="#b85c00" font-weight="700">)</text>
+    <text x="107" y="197" font-size="13" text-anchor="start" fill="#b85c00" font-weight="700">[</text>
+    <text x="105" y="211" font-size="10" text-anchor="middle">160</text>
+    <line x1="160" y1="180" x2="160" y2="186" stroke="#1f2937" stroke-width="1"/>
+    <text x="158" y="197" font-size="13" text-anchor="end" fill="#b85c00" font-weight="700">)</text>
+    <text x="162" y="197" font-size="13" text-anchor="start" fill="#b85c00" font-weight="700">[</text>
+    <text x="160" y="211" font-size="10" text-anchor="middle">165</text>
+    <line x1="215" y1="180" x2="215" y2="186" stroke="#1f2937" stroke-width="1"/>
+    <text x="213" y="197" font-size="13" text-anchor="end" fill="#b85c00" font-weight="700">)</text>
+    <text x="217" y="197" font-size="13" text-anchor="start" fill="#b85c00" font-weight="700">[</text>
+    <text x="215" y="211" font-size="10" text-anchor="middle">170</text>
+    <line x1="270" y1="180" x2="270" y2="186" stroke="#1f2937" stroke-width="1"/>
+    <text x="268" y="197" font-size="13" text-anchor="end" fill="#b85c00" font-weight="700">)</text>
+    <text x="272" y="197" font-size="13" text-anchor="start" fill="#b85c00" font-weight="700">[</text>
+    <text x="270" y="211" font-size="10" text-anchor="middle">175</text>
+    <line x1="325" y1="180" x2="325" y2="186" stroke="#1f2937" stroke-width="1"/>
+    <text x="323" y="197" font-size="13" text-anchor="end" fill="#b85c00" font-weight="700">)</text>
+    <text x="327" y="197" font-size="13" text-anchor="start" fill="#b85c00" font-weight="700">[</text>
+    <text x="325" y="211" font-size="10" text-anchor="middle">180</text>
+    <line x1="380" y1="180" x2="380" y2="186" stroke="#1f2937" stroke-width="1"/>
+    <text x="378" y="197" font-size="13" text-anchor="end" fill="#b85c00" font-weight="700">)</text>
+    <text x="382" y="197" font-size="13" text-anchor="start" fill="#b85c00" font-weight="700">[</text>
+    <text x="380" y="211" font-size="10" text-anchor="middle">185</text>
+    <line x1="435" y1="180" x2="435" y2="186" stroke="#1f2937" stroke-width="1"/>
+    <text x="433" y="197" font-size="13" text-anchor="end" fill="#b85c00" font-weight="700">)</text>
+    <text x="435" y="211" font-size="10" text-anchor="middle">190</text>
+    <text x="245" y="231" font-size="11" text-anchor="middle">Körpergrösse [cm]</text>
     <text x="20" y="100" font-size="11" text-anchor="middle" transform="rotate(-90, 20, 100)">Häufigkeit</text>
   </svg>
-  <div class="dp-bsp">Wichtig: Die Klassenbreite ist konstant; sonst wird das Bild verzerrt. Die Höhe ist die Häufigkeit, die Breite das Klassenintervall.</div>
+  <div class="dp-bsp">Wichtig: Die Klassenbreite ist konstant; sonst wird das Bild verzerrt. Die Höhe ist die Häufigkeit, die Breite das Klassenintervall. Die orangen Klammern an den Klassengrenzen zeigen, wohin ein Wert genau auf der Grenze gehört: <strong>\([a, b)\)</strong> — die linke Grenze zählt zur Klasse, die rechte nicht. Eine Person mit exakt 170 cm liegt also in der Klasse \([170, 175)\), nicht in \([165, 170)\).</div>
 </div>
 
 <!-- BOX -->
 <div class="dia-panel" id="dp-box" style="display:none">
   <h4>Boxplot (Kastendiagramm)</h4>
   <p>Eine kompakte 5-Zahlen-Zusammenfassung für <strong>numerische</strong> Daten: Minimum \(x_{\min} = Q_0\), unteres Quartil \(Q_1\), Median, oberes Quartil \(Q_3\), Maximum \(x_{\max} = Q_4\). Die Box umfasst die <em>mittleren</em> 50% der Daten.</p>
-  <svg viewBox="0 0 460 180" preserveAspectRatio="xMidYMid meet">
-    <line x1="40" y1="100" x2="430" y2="100" stroke="#1f2937" stroke-width="1.5"/>
+  <!-- negative viewBox-Obergrenze: 20 px Kopfraum fuer den Titel, ohne alle Koordinaten zu verschieben.
+       Skala: 48 px je Stunde, x = 40 + 48 * Wert; die Achse endet buendig beim Maximum bei x = 424. -->
+  <svg viewBox="0 -20 460 220" preserveAspectRatio="xMidYMid meet">
+    <text x="232" y="-6" font-size="12.5" text-anchor="middle" font-weight="600" fill="#1c1a17">Lernzeit für Mathe — 22 Lernende</text>
+    <line x1="40" y1="100" x2="424" y2="100" stroke="#1f2937" stroke-width="1.5"/>
     <!-- Werte: min=0, Q1=3, Med=4, Q3=5, max=8 in [0..8]·48px -->
     <line x1="40"  y1="80"  x2="40"  y2="120" stroke="#1f2937" stroke-width="2"/>
     <line x1="40"  y1="100" x2="184" y2="100" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="4,3"/>
@@ -443,6 +489,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
     <text x="280" y="160" font-size="11" text-anchor="middle">Q₃ = 5</text>
     <text x="422" y="160" font-size="11" text-anchor="middle">x<tspan font-size="8" dy="2.5">max</tspan><tspan font-size="11" dy="-2.5"> = Q</tspan><tspan font-size="8" dy="2.5">4</tspan><tspan font-size="11" dy="-2.5"> = 8</tspan></text>
     <text x="232" y="35" font-size="11" text-anchor="middle" fill="#1d4ed8">mittlere 50% in der Box</text>
+    <text x="232" y="178" font-size="11" text-anchor="middle">Lernzeit [h]</text>
   </svg>
   <div class="dp-bsp">Box = Q₃ − Q₁ ist die <em>Quartilsdifferenz</em> (siehe Kapitel 4.3). Boxplots eignen sich besonders zum <em>Vergleich mehrerer Gruppen</em> in einem Bild.</div>
 </div>
