@@ -577,11 +577,11 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
     <svg id="svg-punkt-groesse" viewBox="0 0 460 180" preserveAspectRatio="xMidYMid meet"></svg>
     <div class="marker-tabs">
       <span style="font-family:var(--mono);font-size:0.78rem;color:var(--tinte-2);align-self:center;margin-right:4px">Markierung:</span>
-      <button class="marker-btn" data-marker="min" onclick="toggleMarker('min')">Min</button>
+      <button class="marker-btn" data-marker="min" onclick="toggleMarker('min')">Min \(Q_0\)</button>
       <button class="marker-btn" data-marker="q1" onclick="toggleMarker('q1')">\(Q_1\)</button>
       <button class="marker-btn" data-marker="median" onclick="toggleMarker('median')">Median \(\tilde{x}\)</button>
       <button class="marker-btn" data-marker="q3" onclick="toggleMarker('q3')">\(Q_3\)</button>
-      <button class="marker-btn" data-marker="max" onclick="toggleMarker('max')">Max</button>
+      <button class="marker-btn" data-marker="max" onclick="toggleMarker('max')">Max \(Q_4\)</button>
       <button class="marker-btn" data-marker="modus" onclick="toggleMarker('modus')">Modus \(\hat{x}\)</button>
       <button class="marker-btn" style="margin-left:auto;background:none" onclick="resetMarker()">⟲ alle aus</button>
     </div>
@@ -1736,11 +1736,11 @@ function zeichnePunktdiagramm() {
   const mw = getMarkerWerte();
   /* Welche Marker sind aktiv? Sammle als (name, wert, label, labelUnten) */
   const aktiveListe = [];
-  if (aktiveMarker.has('min'))    aktiveListe.push({name:'min',    v: mw.min,    label: `Min = ${fmtN(mw.min,1)}`,    unten: false});
+  if (aktiveMarker.has('min'))    aktiveListe.push({name:'min',    v: mw.min,    label: `Q\u2080 = ${fmtN(mw.min,1)}`,    unten: false});
   if (aktiveMarker.has('q1'))     aktiveListe.push({name:'q1',     v: mw.q1,     label: `Q\u2081 = ${fmtN(mw.q1,1)}`,  unten: false});
   if (aktiveMarker.has('median')) aktiveListe.push({name:'median', v: mw.median, label: `Median = ${fmtN(mw.median,1)}`, unten: false});
   if (aktiveMarker.has('q3'))     aktiveListe.push({name:'q3',     v: mw.q3,     label: `Q\u2083 = ${fmtN(mw.q3,1)}`,  unten: false});
-  if (aktiveMarker.has('max'))    aktiveListe.push({name:'max',    v: mw.max,    label: `Max = ${fmtN(mw.max,1)}`,    unten: false});
+  if (aktiveMarker.has('max'))    aktiveListe.push({name:'max',    v: mw.max,    label: `Q\u2084 = ${fmtN(mw.max,1)}`,    unten: false});
   if (aktiveMarker.has('modus') && mw.modus.length > 0) {
     mw.modus.forEach(m => aktiveListe.push({name:'modus', v: m, label: `Modus = ${m}`, unten: true}));
   }
