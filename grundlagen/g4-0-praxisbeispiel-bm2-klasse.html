@@ -156,6 +156,9 @@ MathJax = {
 .n-bar .nb-luecke { flex: 1 1 0; min-width: 0; }
 .exp-btn { padding: 6px 12px; border: 1px solid var(--blau); background: var(--blau-hell); color: var(--blau); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.82rem; font-weight: 600; transition: 0.12s; }
 .exp-btn:hover { background: var(--blau); color: var(--weiss); }
+.imp-status { font-family: var(--mono); font-size: 0.8rem; padding: 8px 12px; border-radius: 6px; margin: -4px 0 12px; border: 1px solid; }
+.imp-status.ok { background: var(--blau-hell); border-color: var(--blau); color: var(--blau); }
+.imp-status.fehler { background: var(--rot-hell); border-color: var(--rot-rand); color: var(--rot); }
 
 /* === Bezugsrahmen-Pille === */
 .scope-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 10px 0 14px; font-size: 0.92rem; }
@@ -506,7 +509,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
 <!-- ══ Preset-Bar + Tabelle ══ -->
 <h2 id="urliste">Urliste — die Rohdaten in der Tabellenkalkulation</h2>
 
-<p>Die folgende Tabelle ist die <strong>Urliste</strong> der Erhebung — eingesammelt in der Reihenfolge, wie die <span id="n-text-1">26</span> Lernenden geantwortet haben. Sie ist editierbar: ändere einen Wert, und alle Diagramme und Masszahlen weiter unten reagieren sofort. Mit den fünf Knöpfen lädst du verschiedene typische Verteilungen, mit dem Regler wählst du, wie viele der 26 erhobenen Personen ausgewertet werden (10 bis 26). Die aktuelle Urliste lässt sich als <code>.csv</code> oder <code>.xlsx</code> herunterladen und in einer Tabellenkalkulation weiterverarbeiten.</p>
+<p>Die folgende Tabelle ist die <strong>Urliste</strong> der Erhebung — eingesammelt in der Reihenfolge, wie die <span id="n-text-1">26</span> Lernenden geantwortet haben. Sie ist editierbar: ändere einen Wert, und alle Diagramme und Masszahlen weiter unten reagieren sofort. Mit den fünf Knöpfen lädst du verschiedene typische Verteilungen, mit dem Regler wählst du, wie viele der 26 erhobenen Personen ausgewertet werden (10 bis 26). Die aktuelle Urliste lässt sich als <code>.csv</code> oder <code>.xlsx</code> herunterladen und in einer Tabellenkalkulation weiterverarbeiten. Umgekehrt liest <strong>⬆ CSV</strong> eine solche Datei wieder ein: So stellst du eine vorher gesicherte Ausgangs&shy;situation wieder her oder wertest die Daten <em>deiner eigenen</em> Klasse aus. Erwartet werden fünf Spalten (Nr., Grösse, Masse, Jahrgang, Sport) und 10 bis 26 Datenzeilen; die Kopfzeile darf fehlen. Ein Klick auf einen der fünf Datensatz-Knöpfe stellt jederzeit das Original wieder her.</p>
 
 <div class="preset-bar">
   <span class="pb-label">Datensatz wählen:</span>
@@ -525,7 +528,12 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
   <span class="nb-label">Export:</span>
   <button class="exp-btn" onclick="exportCSV()">⬇ CSV</button>
   <button class="exp-btn" onclick="exportXLSX()">⬇ XLSX</button>
+  <span class="nb-label">Import:</span>
+  <button class="exp-btn" onclick="starteImport()" title="Eine CSV-Datei mit 5 Spalten einlesen (Nr., Grösse, Masse, Jahrgang, Sport)">⬆ CSV</button>
+  <input type="file" id="import-datei" accept=".csv,text/csv,text/plain" hidden onchange="importCSVDatei(this)">
 </div>
+
+<p class="imp-status" id="imp-status" hidden></p>
 
 <div class="daten-wrap">
   <table class="daten-tab" id="daten-tab">
@@ -1142,11 +1150,11 @@ function renderTabelle() {
   DATEN.forEach((row, i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="col-nr">${row[0]}</td>
-      <td class="col-gr"><input type="number" min="120" max="220" step="1" value="${row[1]}" data-row="${i}" data-col="1"></td>
-      <td class="col-ma"><input type="number" min="20" max="200" step="0.1" value="${row[2]}" data-row="${i}" data-col="2"></td>
-      <td class="col-jg"><input type="number" min="1990" max="2015" step="1" value="${row[3]}" data-row="${i}" data-col="3"></td>
-      <td class="col-sp"><input type="text" value="${row[4]}" data-row="${i}" data-col="4"></td>
+      <td class="col-nr">${svgEscape(row[0])}</td>
+      <td class="col-gr"><input type="number" min="120" max="220" step="1" value="${svgEscape(row[1])}" data-row="${i}" data-col="1"></td>
+      <td class="col-ma"><input type="number" min="20" max="200" step="0.1" value="${svgEscape(row[2])}" data-row="${i}" data-col="2"></td>
+      <td class="col-jg"><input type="number" min="1990" max="2015" step="1" value="${svgEscape(row[3])}" data-row="${i}" data-col="3"></td>
+      <td class="col-sp"><input type="text" value="${svgEscape(row[4])}" data-row="${i}" data-col="4"></td>
     `;
     tbody.appendChild(tr);
   });
@@ -1176,9 +1184,11 @@ function setActivePresetButton(name) {
 
 function ladePreset(name) {
   VOLLDATEN = JSON.parse(JSON.stringify(PRESETS[name]));
+  syncUrlisteSlider();          // Regler-Maximum zurück auf die volle Preset-Länge
   DATEN = VOLLDATEN.slice(0, aktuellesN);
   setActivePresetButton(name);
   stichprobeIndices = null;
+  verbergeImportStatus();
   renderTabelle();
   syncStichSlider();
   aktualisiereAlles();
@@ -1188,7 +1198,7 @@ function ladePreset(name) {
    LÄNGE DER URLISTE — 10 ≤ n ≤ 26
 ═══════════════════════════════════════════════════════════════ */
 function setUrlisteN(n) {
-  aktuellesN = Math.max(10, Math.min(26, Math.round(n)));
+  aktuellesN = Math.max(10, Math.min(VOLLDATEN.length, Math.round(n)));
   DATEN = VOLLDATEN.slice(0, aktuellesN);
   document.getElementById('urliste-n-anz').textContent = aktuellesN;
   const sl = document.getElementById('urliste-n');
@@ -1197,6 +1207,16 @@ function setUrlisteN(n) {
   syncStichSlider();
   if (stichprobeIndices) neueStichprobe();   // alte Indizes können ausserhalb liegen
   aktualisiereAlles();
+}
+
+/* Der Längen-Regler darf nie über die Anzahl vorhandener Zeilen hinausgehen —
+   nach einem Import mit weniger als 26 Zeilen sinkt sein Maximum entsprechend. */
+function syncUrlisteSlider() {
+  const sl = document.getElementById('urliste-n');
+  sl.max = VOLLDATEN.length;
+  aktuellesN = Math.max(10, Math.min(VOLLDATEN.length, aktuellesN));
+  sl.value = aktuellesN;
+  document.getElementById('urliste-n-anz').textContent = aktuellesN;
 }
 
 /* Der Stichproben-Regler darf nie mehr Personen ziehen, als die Urliste hat. */
@@ -1399,6 +1419,143 @@ function exportXLSX() {
   ];
 
   ladeDateiHerunter(zipStore(dateien), exportDateiname('xlsx'));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   IMPORT DER URLISTE — eine CSV-Datei zurücklesen
+   Gelesen wird genau das Format, das exportCSV() schreibt (Semikolon,
+   Kopfzeile, Dezimalpunkt) — zusätzlich tolerant gegenüber dem, was
+   Tabellenkalkulationen sonst noch liefern: Tabulator oder Komma als
+   Trennzeichen, Dezimalkomma, Apostroph als Tausendertrennzeichen,
+   fehlende Kopfzeile, Anführungszeichen um Textfelder.
+   Alles läuft im Browser — es wird nichts hochgeladen.
+═══════════════════════════════════════════════════════════════ */
+const IMPORT_GRENZEN = {
+  gr: { name: 'Grösse',   einheit: 'cm', lo: 100,  hi: 250  },
+  ma: { name: 'Masse',    einheit: 'kg', lo: 20,   hi: 250  },
+  jg: { name: 'Jahrgang', einheit: '',   lo: 1900, hi: 2100 }
+};
+
+function starteImport() {
+  const inp = document.getElementById('import-datei');
+  inp.value = '';          // damit dieselbe Datei zweimal gewählt werden kann
+  inp.click();
+}
+
+function zeigeImportStatus(text, ok) {
+  const el = document.getElementById('imp-status');
+  el.textContent = text;
+  el.className = 'imp-status ' + (ok ? 'ok' : 'fehler');
+  el.hidden = false;
+}
+
+function verbergeImportStatus() {
+  const el = document.getElementById('imp-status');
+  if (el) el.hidden = true;
+}
+
+/* Eine CSV-Zeile in Felder zerlegen — mit "…"-Quoting und "" als Escape. */
+function csvZeileFelder(zeile, sep) {
+  const felder = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < zeile.length; i++) {
+    const c = zeile[i];
+    if (inQ) {
+      if (c !== '"') cur += c;
+      else if (zeile[i + 1] === '"') { cur += '"'; i++; }
+      else inQ = false;
+    }
+    else if (c === '"') inQ = true;
+    else if (c === sep) { felder.push(cur); cur = ''; }
+    else cur += c;
+  }
+  felder.push(cur);
+  return felder.map(f => f.trim());
+}
+
+/* Zahl aus einem CSV-Feld: 62.5 · 62,5 · 1'234 werden alle verstanden. */
+function zahlAusFeld(s) {
+  const t = String(s == null ? '' : s).replace(/['\s]/g, '').replace(',', '.');
+  return /^[+-]?\d+(\.\d+)?$/.test(t) ? parseFloat(t) : NaN;
+}
+
+function pruefeWert(spez, wert, zeilenNr) {
+  if (!isFinite(wert))
+    throw new Error(`Zeile ${zeilenNr}: „${spez.name}" ist keine Zahl.`);
+  if (wert < spez.lo || wert > spez.hi)
+    throw new Error(`Zeile ${zeilenNr}: ${spez.name} = ${wert} ${spez.einheit}`.trim()
+      + ` liegt ausserhalb des erlaubten Bereichs ${spez.lo}–${spez.hi} ${spez.einheit}`.trimEnd() + '.');
+  return wert;
+}
+
+/* Liefert die Zeilen im internen Format [Nr, Grösse, Masse, Jahrgang, Sport]
+   oder wirft einen Fehler mit einer für Lernende lesbaren Meldung. */
+function parseUrlisteCSV(text) {
+  const roh = text.replace(/^\uFEFF/, '').split(/\r\n|\n|\r/).filter(z => z.trim() !== '');
+  if (!roh.length) throw new Error('die Datei enthält keine Zeilen.');
+
+  /* Trennzeichen raten: das, welches die erste Zeile am stärksten teilt. */
+  const sep = [';', '\t', ','].map(s => ({ s, n: roh[0].split(s).length }))
+                              .sort((a, b) => b.n - a.n)[0].s;
+  let zeilen = roh.map(z => csvZeileFelder(z, sep));
+
+  /* Kopfzeile weglassen, wenn in der zweiten Spalte keine Zahl steht. */
+  if (!isFinite(zahlAusFeld(zeilen[0][1]))) zeilen = zeilen.slice(1);
+
+  if (zeilen.length < 10)
+    throw new Error(`nur ${zeilen.length} Datenzeile(n) gefunden — die Urliste braucht mindestens 10.`);
+  if (zeilen.length > 26)
+    throw new Error(`${zeilen.length} Datenzeilen gefunden — die Urliste fasst höchstens 26.`);
+
+  return zeilen.map((f, i) => {
+    const nr = i + 1;
+    if (f.length < 5)
+      throw new Error(`Zeile ${nr}: nur ${f.length} Spalte(n) — erwartet werden 5 `
+        + '(Nr., Grösse, Masse, Jahrgang, Sport).');
+    const gr = pruefeWert(IMPORT_GRENZEN.gr, zahlAusFeld(f[1]), nr);
+    const ma = pruefeWert(IMPORT_GRENZEN.ma, zahlAusFeld(f[2]), nr);
+    const jg = pruefeWert(IMPORT_GRENZEN.jg, zahlAusFeld(f[3]), nr);
+    let sport = f[4].replace(/\s+/g, ' ').trim();
+    if (!sport) sport = 'keiner';
+    if (sport.length > 24) sport = sport.slice(0, 24);
+    /* Auf das Raster der Tabellenfelder runden: Grösse ganzzahlig, Masse 0.1 kg */
+    return [nr, Math.round(gr), Math.round(ma * 10) / 10, Math.round(jg), sport];
+  });
+}
+
+function importCSVDatei(input) {
+  const datei = input.files && input.files[0];
+  if (!datei) return;
+  const leser = new FileReader();
+  leser.onerror = () => zeigeImportStatus('Import abgebrochen — die Datei liess sich nicht lesen.', false);
+  leser.onload = () => {
+    let zeilen;
+    try {
+      zeilen = parseUrlisteCSV(String(leser.result));
+    } catch (e) {
+      zeigeImportStatus('Import abgebrochen — ' + e.message, false);
+      return;
+    }
+    uebernehmeUrliste(zeilen, datei.name);
+  };
+  leser.readAsText(datei, 'utf-8');
+}
+
+/* Importierte Zeilen werden zur neuen Urliste: sie ersetzen die Preset-Daten
+   vollständig, der Längen-Regler richtet sich neu aus, und alle Diagramme
+   und Masszahlen werden neu berechnet. */
+function uebernehmeUrliste(zeilen, dateiname) {
+  VOLLDATEN = zeilen;
+  aktuellesN = zeilen.length;
+  syncUrlisteSlider();
+  DATEN = VOLLDATEN.slice(0, aktuellesN);
+  setActivePresetButton(null);      // kein Preset mehr aktiv → Export heisst „eigen"
+  stichprobeIndices = null;
+  renderTabelle();
+  syncStichSlider();
+  aktualisiereAlles();
+  zeigeImportStatus(`✓ ${zeilen.length} Zeilen aus „${dateiname}" übernommen — Tabelle, `
+    + 'Diagramme und Masszahlen sind aktualisiert. Die Nummerierung wurde neu von 1 an vergeben.', true);
 }
 
 /* ═══════════════════════════════════════════════════════════════
