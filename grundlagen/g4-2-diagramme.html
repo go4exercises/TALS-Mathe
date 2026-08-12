@@ -454,7 +454,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Häufigkeiten eines kategorialen Merkmals zeigt …</p><ul class="mc-optionen"><li data-opt="A">das Säulendiagramm</li><li data-opt="B">das Streudiagramm</li><li data-opt="C">der Boxplot</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> Eine Säule pro Kategorie; das Histogramm wäre für klassierte stetige Daten.</div></details></div>
 <div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Das Histogramm stellt <span class="mc-luecke"></span> Daten dar.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">klassierte (stetige) — die Säulen stehen lückenlos aneinander.</div></details></div>
 <div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">6 von 24 Nennungen: relative Häufigkeit und Kreissektor?</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\tfrac{6}{24} = 25\%\) → Sektor \(0.25 \cdot 360° = 90°\).</div></details></div>
-<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Welche fünf Kennwerte zeigt ein Boxplot — und wofür eignet er sich besonders?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Minimum, \(Q_1\), Median, \(Q_3\), Maximum. Er eignet sich besonders zum Vergleich mehrerer Verteilungen nebeneinander — Lage und Streuung auf einen Blick.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Welche fünf Kennwerte zeigt ein Boxplot — und wofür eignet er sich besonders?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Minimum \(x_{\min} = Q_0\), \(Q_1\), Median \(Q_2\), \(Q_3\), Maximum \(x_{\max} = Q_4\). Er eignet sich besonders zum Vergleich mehrerer Verteilungen nebeneinander — Lage und Streuung auf einen Blick.</div></details></div>
 </details>
 
 <h2 id="typen">Diagramme charakterisieren</h2>
@@ -1099,7 +1099,7 @@ function showDia(key, btn){
     balken: { total: 100, frage: 'Welches Schulfach mögen 100 Lernende am liebsten?', cap: 'Balkendiagramm — Höhe der Balken zeigt die Häufigkeit jeder Kategorie.', punkte: balkenPunkte },
     kuchen: { total: 100, frage: 'Womit kommen 100 Lernende zur Schule?', cap: 'Kuchendiagramm — Sektorgrösse zeigt den Anteil am Ganzen (100 %).', punkte: kuchenAnt },
     histo:  { total: 60,  frage: 'Wie verteilt sich die Körpergrösse von 60 Personen?', cap: 'Histogramm — Balken zeigen, wie viele Werte in jede Klasse fallen.', punkte: histoPunkte },
-    box:    { total: 22,  frage: 'Wie viel haben 22 Lernende für Mathe gelernt?', cap: 'Boxplot — fünf Kennzahlen min, Q₁, Median, Q₃, max fassen alle Werte zusammen.', punkte: boxPunkte }
+    box:    { total: 22,  frage: 'Wie viel haben 22 Lernende für Mathe gelernt?', cap: 'Boxplot — fünf Kennzahlen min = Q₀, Q₁, Median, Q₃, max = Q₄ fassen alle Werte zusammen.', punkte: boxPunkte }
   };
 
   // ── State ─────────────────────────────────────────────────────
@@ -1336,8 +1336,8 @@ function showDia(key, btn){
         ctx.beginPath(); ctx.moveTo(xPx(min), boxY - 4); ctx.lineTo(xPx(min), boxY + boxH + 4); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(xPx(max), boxY - 4); ctx.lineTo(xPx(max), boxY + boxH + 4); ctx.stroke();
         ctx.fillStyle = '#1f2937'; ctx.font = '13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-        ctx.fillText('min', xPx(min), boxY - 8);
-        ctx.fillText('max', xPx(max), boxY - 8);
+        ctx.fillText('Q₀', xPx(min), boxY - 8);
+        ctx.fillText('Q₄', xPx(max), boxY - 8);
       }
       // (2) Q1 + Q3 Box
       if (phase >= 2){
