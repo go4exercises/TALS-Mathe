@@ -373,7 +373,7 @@ MathJax = {
 </div>
 
 <p class="lead">Algebraische Terme sind die Sprache der Mathematik. Wer sie sicher umformt — Klammern
-auflösen, gleichartige Glieder zusammenfassen, ausklammern — kann jede Gleichung knacken und jede
+auflösen, gleichartige Glieder zusammenfassen, ausklammern, Bruchterme kürzen — kann jede Gleichung knacken und jede
 Formel umstellen. In diesem Kapitel erwirbst du die Werkzeuge, mit denen Terme nicht ihren Wert,
 aber ihre Form ändern.</p>
 
@@ -394,6 +394,7 @@ aber ihre Form ändern.</p>
       <li>Ich kann Klammern nach den vier Regeln auflösen — insbesondere Minusklammern mit kippenden Vorzeichen.</li>
       <li>Ich kann die drei binomischen Formeln anwenden und geometrisch begründen.</li>
       <li>Ich kann Terme faktorisieren: gemeinsamen Faktor ausklammern, binomische Formeln rückwärts, Zweiklammersatz.</li>
+      <li>Ich kann Bruchterme kürzen, multiplizieren, dividieren, addieren und subtrahieren — und ihre Definitionsmenge bestimmen.</li>
     </ul>
   </div>
 </details>
@@ -1062,7 +1063,6 @@ Zweiklammersatz.</p>
   </ol>
 </div>
 
-<!-- ──────────────────────── 7. AUFGABEN ──────────────────────── -->
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Faktorisieren</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">\(x^2 - 9\) faktorisiert?</p><ul class="mc-optionen"><li data-opt="A">\((x - 3)^2\)</li><li data-opt="B">\((x + 3)(x - 3)\)</li><li data-opt="C">nicht faktorisierbar</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Differenz zweier Quadrate → drittes Binom rückwärts.</div></details></div>
@@ -1071,6 +1071,298 @@ Zweiklammersatz.</p>
 <div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Faktorisiere \(x^2 + 7x + 12\) mit dem Zweiklammersatz.</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Gesucht: \(r + s = 7\) und \(r \cdot s = 12\) → \(r = 3\), \(s = 4\). Also \(x^2 + 7x + 12 = (x + 3)(x + 4)\). Probe durch Ausmultiplizieren bestätigt.</div></details></div>
 </details>
 
+<!-- ──────────────────────── 7. BRUCHTERME ──────────────────────── -->
+<h2 id="bruchterme">Bruchterme — Terme mit Variablen im Nenner <a class="quer" href="g1-2-zahlen-grundoperationen.html#theorie">↩ 1.2</a></h2>
+
+<p>Steht ein Term im Nenner eines Bruchs, heisst das Ganze <strong>Bruchterm</strong>. Gerechnet wird
+genau wie mit Zahlenbrüchen — kürzen, erweitern, gleichnamig machen, Kehrwert. Neu ist nur:
+<em>Zähler und Nenner sind Terme</em>, und deshalb geht jeder Rechnung ein Schritt voraus, den es beim
+Zahlenbruch nicht braucht — das <strong>Faktorisieren</strong> aus Abschnitt 6.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Definition — Bruchterm und Definitionsmenge</div>
+  <p>Ein <strong>Bruchterm</strong> ist ein Quotient zweier Terme:
+  \(\dfrac{Z(x)}{N(x)}\), wobei im Nenner \(N(x)\) mindestens eine Variable vorkommt.</p>
+  <p>Weil die Division durch \(0\) nicht definiert ist, muss der Nenner ausgeschlossen werden, wo er
+  \(0\) wird. Die Menge der erlaubten Werte heisst <strong>Definitionsmenge</strong> \(D\):</p>
+  \[ N(x) \neq 0. \]
+  <p style="margin-top:6px">Beispiel: \(\dfrac{x + 2}{x - 3}\) ist für \(x = 3\) nicht definiert, also
+  \(D = \mathbb{R} \setminus \{3\}\).</p>
+</div>
+
+<h3>7.1 Definitionsmenge bestimmen — Nenner faktorisieren</h3>
+
+<p>Der Nenner wird faktorisiert; dann liest man die verbotenen Werte direkt ab, denn ein Produkt ist
+genau dann \(0\), wenn <em>einer</em> seiner Faktoren \(0\) ist.</p>
+
+<table class="bin-tab">
+  <thead><tr><th style="width:26%">Bruchterm</th><th style="width:36%">Nenner faktorisiert</th><th>Definitionsmenge</th></tr></thead>
+  <tbody>
+    <tr><td class="formel">\(\dfrac{5}{2x}\)</td>
+        <td class="formel">\(2 \cdot x\)</td>
+        <td class="formel">\(D = \mathbb{R} \setminus \{0\}\)</td></tr>
+    <tr><td class="formel">\(\dfrac{x + 2}{x^2 - 9}\)</td>
+        <td class="formel">\((x + 3)(x - 3)\)</td>
+        <td class="formel">\(D = \mathbb{R} \setminus \{-3;\, 3\}\)</td></tr>
+    <tr><td class="formel">\(\dfrac{4}{x^2 + 4x + 4}\)</td>
+        <td class="formel">\((x + 2)^2\)</td>
+        <td class="formel">\(D = \mathbb{R} \setminus \{-2\}\)</td></tr>
+    <tr><td class="formel">\(\dfrac{1}{x^2 - x}\)</td>
+        <td class="formel">\(x(x - 1)\)</td>
+        <td class="formel">\(D = \mathbb{R} \setminus \{0;\, 1\}\)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — \(D\) wird nach dem Kürzen bestimmt</div>
+  <p>Die Definitionsmenge wird <strong>immer am ursprünglichen Term</strong> abgelesen, <em>bevor</em>
+  gekürzt wird. \(\dfrac{x(x-1)}{x} = x - 1\) sieht nach dem Kürzen harmlos aus — der Ausgangsterm ist
+  für \(x = 0\) aber nicht definiert. Also bleibt \(D = \mathbb{R} \setminus \{0\}\).</p>
+</div>
+
+<h3>7.2 Kürzen — die Grundoperation</h3>
+
+<p>Kürzen heisst: Zähler und Nenner durch <em>denselben Faktor</em> dividieren. Genau deshalb muss
+vorher faktorisiert werden — <strong>gekürzt werden dürfen nur Faktoren, niemals Summanden</strong>.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Ablauf — kürzen</div>
+  <ol style="margin:0">
+    <li>Zähler und Nenner <strong>faktorisieren</strong> (Abschnitt 6).</li>
+    <li>Definitionsmenge aus dem faktorisierten Nenner ablesen.</li>
+    <li>Gemeinsame <strong>Faktoren</strong> streichen.</li>
+  </ol>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiele</div>
+  \[ \frac{3x^2 - 12}{x^2 + 4x + 4} \;=\; \frac{3(x + 2)(x - 2)}{(x + 2)^2} \;=\; \frac{3(x - 2)}{x + 2},
+     \qquad D = \mathbb{R} \setminus \{-2\}. \]
+  \[ \frac{x^2 - 9}{x^2 + 6x + 9} \;=\; \frac{(x + 3)(x - 3)}{(x + 3)^2} \;=\; \frac{x - 3}{x + 3},
+     \qquad D = \mathbb{R} \setminus \{-3\}. \]
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler — aus Summen kürzen</div>
+  <p>Falsch: \(\dfrac{x^2 + 2x}{x} = x^2 + 2\). Hier wurde ein \(x\) aus einem <em>Summanden</em>
+  gestrichen — das ändert den Wert des Terms.</p>
+  <p>Richtig: erst faktorisieren, dann kürzen:
+  \(\;\dfrac{x^2 + 2x}{x} = \dfrac{x(x + 2)}{x} = x + 2\), \(\;D = \mathbb{R} \setminus \{0\}\).</p>
+  <p style="margin-top:4px"><em>Merksatz:</em> „Aus Summen kürzen nur die Dummen." Erst wenn Zähler
+  <strong>und</strong> Nenner reine Produkte sind, darf gestrichen werden.</p>
+</div>
+
+<h3>7.3 Punktoperationen — multiplizieren und dividieren</h3>
+
+<p>Die Punktoperationen sind die einfacheren: kein Hauptnenner nötig.</p>
+
+<table class="ftb-tabelle">
+  <thead><tr><th style="width:24%">Operation</th><th>Regel</th></tr></thead>
+  <tbody>
+    <tr><td class="li"><strong>Multiplizieren</strong></td>
+        <td class="li">Zähler mal Zähler, Nenner mal Nenner: \(\dfrac{a}{b} \cdot \dfrac{c}{d} = \dfrac{a \cdot c}{b \cdot d}\)</td></tr>
+    <tr><td class="li"><strong>Dividieren</strong></td>
+        <td class="li">mit dem <strong>Kehrwert</strong> multiplizieren: \(\dfrac{a}{b} : \dfrac{c}{d} = \dfrac{a}{b} \cdot \dfrac{d}{c}\)</td></tr>
+  </tbody>
+</table>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Ablauf — Punktoperation</div>
+  <ol style="margin:0">
+    <li>Bei \(:\) zuerst in eine Multiplikation mit dem <strong>Kehrwert</strong> umschreiben.</li>
+    <li>Alle Zähler und Nenner <strong>faktorisieren</strong>.</li>
+    <li><strong>Punktoperation</strong> ausführen — alle Faktoren nebeneinanderschreiben, nicht ausmultiplizieren.</li>
+    <li><strong>Kürzen</strong>.</li>
+  </ol>
+  <p style="margin-top:6px">Schritt 3 <em>vor</em> Schritt 4: das Ausmultiplizieren würde die Faktoren
+  gerade wieder zerstören, die man zum Kürzen braucht.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 1 — Multiplikation</div>
+  \[ \begin{aligned}
+     \frac{x^2 - 4}{3x} \cdot \frac{6x^2}{x + 2}
+       &= \frac{(x + 2)(x - 2)}{3x} \cdot \frac{6x^2}{x + 2} &&\text{faktorisieren} \\
+       &= \frac{(x + 2)(x - 2) \cdot 6x^2}{3x \cdot (x + 2)}  &&\text{Punktoperation} \\
+       &= 2x(x - 2)                                          &&\text{kürzen: } (x+2) \text{ und } \tfrac{6x^2}{3x} = 2x
+  \end{aligned} \]
+  <p style="margin-top:6px">\(D = \mathbb{R} \setminus \{-2;\, 0\}\) — abgelesen an den
+  <em>ursprünglichen</em> Nennern \(3x\) und \(x + 2\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — Division</div>
+  \[ \begin{aligned}
+     \frac{x^2 - 9}{x^2 + x} : \frac{x - 3}{x + 1}
+       &= \frac{x^2 - 9}{x^2 + x} \cdot \frac{x + 1}{x - 3}      &&\text{Kehrwert} \\
+       &= \frac{(x + 3)(x - 3)}{x(x + 1)} \cdot \frac{x + 1}{x - 3} &&\text{faktorisieren} \\
+       &= \frac{(x + 3)(x - 3)(x + 1)}{x(x + 1)(x - 3)}          &&\text{Punktoperation} \\
+       &= \frac{x + 3}{x}                                        &&\text{kürzen}
+  \end{aligned} \]
+  <p style="margin-top:6px">\(D = \mathbb{R} \setminus \{-1;\, 0;\, 3\}\): ausgeschlossen sind die
+  Nullstellen beider Nenner <em>und</em> die des Zählers \(x - 3\), durch den dividiert wird.</p>
+</div>
+
+<p>Ein <strong>Doppelbruch</strong> ist nichts anderes als eine Division: der Hauptbruchstrich trennt
+Dividend und Divisor, also \(\;\dfrac{\;\tfrac{a}{b}\;}{\tfrac{c}{d}} = \dfrac{a}{b} : \dfrac{c}{d}
+= \dfrac{a}{b} \cdot \dfrac{d}{c}\).</p>
+
+<h3>7.4 Strichoperationen — addieren und subtrahieren</h3>
+
+<p>Addieren und subtrahieren lassen sich nur <strong>gleichnamige</strong> Brüche, also solche mit
+demselben Nenner. Ungleichnamige Brüche werden vorher durch <strong>Erweitern</strong> gleichnamig
+gemacht — Zähler und Nenner mit demselben Term multiplizieren ändert den Wert nicht.</p>
+
+<p>Der gemeinsame Nenner (<strong>Hauptnenner</strong>) ist das kgV der faktorisierten Nenner:
+<em>jeder</em> vorkommende Faktor, jeweils mit dem <em>höchsten</em> Exponenten. Beispiel: zu
+\(x(x-1)\) und \((x-1)^2\) gehört der Hauptnenner \(x(x-1)^2\).</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Ablauf — Strichoperation</div>
+  <ol style="margin:0">
+    <li>Alle Nenner <strong>faktorisieren</strong>, Definitionsmenge notieren.</li>
+    <li><strong>Hauptnenner</strong> bestimmen und jeden Bruch durch <strong>Erweitern</strong> gleichnamig machen.</li>
+    <li><strong>Zähler addieren</strong> bzw. subtrahieren, Nenner bleibt stehen; Zähler zusammenfassen.</li>
+    <li>Zähler <strong>faktorisieren</strong>.</li>
+    <li><strong>Kürzen</strong>.</li>
+  </ol>
+  <p style="margin-top:6px">Bei einer Subtraktion wird der ganze Zähler des zweiten Bruchs abgezogen —
+  also in Klammern setzen und die Minusklammer nach der Regel aus Abschnitt 4 auflösen.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 1 — ungleichnamig, Zähler nicht weiter zerlegbar</div>
+  \[ \begin{aligned}
+     \frac{3}{x - 2} + \frac{2}{x + 2}
+       &= \frac{3(x + 2)}{(x - 2)(x + 2)} + \frac{2(x - 2)}{(x - 2)(x + 2)} &&\text{erweitern} \\
+       &= \frac{3x + 6 + 2x - 4}{(x - 2)(x + 2)}                            &&\text{Zähler addieren} \\
+       &= \frac{5x + 2}{x^2 - 4}
+  \end{aligned} \]
+  <p style="margin-top:6px">\(5x + 2\) hat mit \((x-2)\) und \((x+2)\) keinen Faktor gemeinsam — es
+  lässt sich nichts kürzen, der Term ist fertig. \(D = \mathbb{R} \setminus \{-2;\, 2\}\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2 — mit Faktorisieren und Kürzen am Schluss</div>
+  \[ \begin{aligned}
+     \frac{4}{x^2 - 4} + \frac{1}{x + 2}
+       &= \frac{4}{(x + 2)(x - 2)} + \frac{1}{x + 2}          &&\text{Nenner faktorisieren} \\
+       &= \frac{4}{(x + 2)(x - 2)} + \frac{x - 2}{(x + 2)(x - 2)} &&\text{erweitern mit } (x - 2) \\
+       &= \frac{4 + x - 2}{(x + 2)(x - 2)}                    &&\text{Zähler addieren} \\
+       &= \frac{x + 2}{(x + 2)(x - 2)}                        &&\text{Zähler faktorisieren (hier: zusammenfassen)} \\
+       &= \frac{1}{x - 2}                                     &&\text{kürzen}
+  \end{aligned} \]
+  <p style="margin-top:6px">\(D = \mathbb{R} \setminus \{-2;\, 2\}\) — auch \(x = -2\) bleibt
+  ausgeschlossen, obwohl das Endergebnis \(\tfrac{1}{x-2}\) dort einen Wert hätte.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 3 — Subtraktion, Minusklammer beachten</div>
+  \[ \begin{aligned}
+     \frac{2x}{x^2 - 4} - \frac{1}{x - 2}
+       &= \frac{2x}{(x + 2)(x - 2)} - \frac{x + 2}{(x + 2)(x - 2)} &&\text{erweitern mit } (x + 2) \\
+       &= \frac{2x - (x + 2)}{(x + 2)(x - 2)} \;=\; \frac{x - 2}{(x + 2)(x - 2)} &&\text{Minusklammer auflösen} \\
+       &= \frac{1}{x + 2}                                          &&\text{kürzen}
+  \end{aligned} \]
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Die zwei Ablaufketten</div>
+  <p style="margin:0 0 6px">Vor jeder Rechnung: <strong>faktorisieren</strong> — und die
+  Definitionsmenge am ursprünglichen Term ablesen.</p>
+  <ul style="margin:0">
+    <li><strong>Punkt (\(\cdot\), \(:\)):</strong> Kehrwert bei der Division → faktorisieren →
+        Punktoperation → <strong>kürzen</strong>.</li>
+    <li><strong>Strich (\(+\), \(-\)):</strong> faktorisieren → durch Erweitern gleichnamig machen →
+        Zähler addieren/subtrahieren → faktorisieren → <strong>kürzen</strong>.</li>
+  </ul>
+  <p style="margin:6px 0 0">Beide Ketten enden beim Kürzen — und keine von beiden multipliziert die
+  Nenner je aus. Das Ergebnis bleibt in Faktoren stehen.</p>
+</div>
+
+<h3 style="margin-top:18px">Übung — Bruchterme vereinfachen</h3>
+
+<div class="fak-uebung">
+  <div class="fak-row">
+    <div class="fak-formel">\(\dfrac{x^2 - 16}{x^2 + 8x + 16} = \;\square\)</div>
+    <div class="fak-eingabe"><input id="bt1" placeholder="z. B. (x-1)/(x+1)"></div>
+    <div class="fak-feedback" id="bfb1"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(\dfrac{2x + 6}{x^2 - 9} = \;\square\)</div>
+    <div class="fak-eingabe"><input id="bt2" placeholder="erst faktorisieren"></div>
+    <div class="fak-feedback" id="bfb2"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(\dfrac{x^2 - 1}{x} \cdot \dfrac{3x}{x + 1} = \;\square\)</div>
+    <div class="fak-eingabe"><input id="bt3" placeholder="Punktoperation, dann kürzen"></div>
+    <div class="fak-feedback" id="bfb3"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(\dfrac{x^2 + 3x}{x^2 - 9} : \dfrac{x}{x - 3} = \;\square\)</div>
+    <div class="fak-eingabe"><input id="bt4" placeholder="Kehrwert nicht vergessen"></div>
+    <div class="fak-feedback" id="bfb4"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(\dfrac{1}{x - 2} + \dfrac{1}{x + 2} = \;\square\)</div>
+    <div class="fak-eingabe"><input id="bt5" placeholder="gleichnamig machen"></div>
+    <div class="fak-feedback" id="bfb5"></div>
+  </div>
+  <div class="fak-row">
+    <div class="fak-formel">\(\dfrac{2x}{x^2 - 4} - \dfrac{1}{x - 2} = \;\square\)</div>
+    <div class="fak-eingabe"><input id="bt6" placeholder="Minusklammer beachten"></div>
+    <div class="fak-feedback" id="bfb6"></div>
+  </div>
+  <p style="margin-top:10px;font-size:9.5pt;color:var(--tinte-2);font-style:italic">
+    Brüche als <code>(Zähler)/(Nenner)</code> eintippen, so weit gekürzt wie möglich — Leerzeichen
+    und Reihenfolge der Faktoren sind egal. Beispiele für gültige Eingaben:
+    <code>(x-4)/(x+4)</code>, <code>2/(x-3)</code>, <code>3(x-1)</code>.</p>
+</div>
+
+<script>
+(function() {
+  function norm(s) {
+    return s.replace(/\s+/g, '')
+            .replace(/[*·]/g, '')
+            .replace(/[−–—]/g, '-')
+            .replace(/²/g, '^2')
+            .replace(/:/g, '/')
+            .toLowerCase();
+  }
+  function check(id, fbId, alternativen) {
+    const inp = document.getElementById(id);
+    const fb = document.getElementById(fbId);
+    if (!inp) return;
+    inp.addEventListener('input', () => {
+      const v = norm(inp.value);
+      if (!v) { fb.textContent = ''; fb.className = 'fak-feedback'; return; }
+      if (alternativen.some(a => norm(a) === v)) {
+        fb.textContent = '✓ richtig';
+        fb.className = 'fak-feedback ok';
+      } else {
+        fb.textContent = '… probier nochmal';
+        fb.className = 'fak-feedback fehl';
+      }
+    });
+  }
+  check('bt1', 'bfb1', ['(x-4)/(x+4)']);
+  check('bt2', 'bfb2', ['2/(x-3)']);
+  check('bt3', 'bfb3', ['3(x-1)', '(x-1)3', '3x-3']);
+  check('bt4', 'bfb4', ['1', '1/1']);
+  check('bt5', 'bfb5', ['2x/((x-2)(x+2))', '2x/((x+2)(x-2))', '2x/(x^2-4)']);
+  check('bt6', 'bfb6', ['1/(x+2)']);
+})();
+</script>
+
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Bruchterme</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welche Definitionsmenge hat \(\dfrac{x + 1}{x^2 - 4}\)?</p><ul class="mc-optionen"><li data-opt="A">\(D = \mathbb{R} \setminus \{-1\}\)</li><li data-opt="B">\(D = \mathbb{R} \setminus \{2\}\)</li><li data-opt="C">\(D = \mathbb{R} \setminus \{-2;\, 2\}\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>C.</strong> Nenner faktorisieren: \(x^2 - 4 = (x + 2)(x - 2)\) — beide Faktoren dürfen nicht \(0\) werden.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Gekürzt werden dürfen nur <span class="mc-luecke"></span>, niemals Summanden.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Faktoren — deshalb steht das Faktorisieren vor jedem Kürzen.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Vereinfache \(\dfrac{x^2 - 25}{x + 5}\) und gib \(D\) an.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(\dfrac{(x + 5)(x - 5)}{x + 5} = x - 5\), \(\;D = \mathbb{R} \setminus \{-5\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Warum wird beim Addieren zweier Bruchterme erst erweitert und erst am Schluss gekürzt?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Addieren geht nur bei gleichem Nenner — den stellt das Erweitern her. Erst nach dem Zusammenfassen des Zählers kann ein gemeinsamer Faktor mit dem Nenner entstehen; deshalb wird der Zähler zum Schluss nochmals faktorisiert und dann gekürzt. Beispiel: \(\tfrac{4}{x^2-4} + \tfrac{1}{x+2} = \tfrac{x+2}{(x+2)(x-2)} = \tfrac{1}{x-2}\).</div></details></div>
+</details>
+
+<!-- ──────────────────────── 8. AUFGABEN ──────────────────────── -->
 <h2 id="aufgaben">Aufgaben</h2>
 
 <div class="block block-aufg">
@@ -1223,17 +1515,48 @@ Zweiklammersatz.</p>
   </div>
 </div>
 
-<!-- ──────────────────────── 8. ZUSAMMENFASSUNG ──────────────────────── -->
 <div class="block block-aufg">
-  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Werbeslogan auf algebraische Korrektheit prüfen <span class="aufg-vertiefung">Vertiefung</span></span></div>
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A7</span><span class="aufg-titel-text">Bruchterme — kürzen, Punkt- und Strichoperation</span></div>
+  <p>Vereinfache so weit wie möglich und gib jeweils die Definitionsmenge an.</p>
+    <ol class="aufg-liste">
+    <li>\(\;\dfrac{5x^2 - 20}{x^2 - 4x + 4}\)</li>
+    <li>\(\;\dfrac{x^2 + 2x}{x^2 - 9} \cdot \dfrac{x - 3}{x}\)</li>
+    <li>\(\;\dfrac{x^2 - 25}{4x} : \dfrac{x + 5}{2x^2}\)</li>
+    <li>\(\;\dfrac{3}{x + 1} - \dfrac{3}{x - 1}\)</li>
+    <li>\(\;\dfrac{2x}{x^2 - 4} - \dfrac{1}{x - 2}\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a7')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a7">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+            <ol class="aufg-liste">
+        <li>\(\dfrac{5(x + 2)(x - 2)}{(x - 2)^2} = \dfrac{5(x + 2)}{x - 2}\), \(\;D = \mathbb{R} \setminus \{2\}\).</li>
+        <li>\(\dfrac{x(x + 2)}{(x + 3)(x - 3)} \cdot \dfrac{x - 3}{x} = \dfrac{x + 2}{x + 3}\),
+            \(\;D = \mathbb{R} \setminus \{-3;\, 0;\, 3\}\).</li>
+        <li>Kehrwert: \(\dfrac{(x + 5)(x - 5)}{4x} \cdot \dfrac{2x^2}{x + 5} = \dfrac{x(x - 5)}{2}\),
+            \(\;D = \mathbb{R} \setminus \{-5;\, 0\}\).</li>
+        <li>Hauptnenner \((x + 1)(x - 1)\):
+            \(\dfrac{3(x - 1) - 3(x + 1)}{(x + 1)(x - 1)} = \dfrac{3x - 3 - 3x - 3}{x^2 - 1} = \dfrac{-6}{x^2 - 1}\),
+            \(\;D = \mathbb{R} \setminus \{-1;\, 1\}\). Der Zähler \(-6\) hat keinen Faktor mit dem Nenner
+            gemeinsam — nichts zu kürzen.</li>
+        <li>Hauptnenner \((x + 2)(x - 2)\):
+            \(\dfrac{2x - (x + 2)}{(x + 2)(x - 2)} = \dfrac{x - 2}{(x + 2)(x - 2)} = \dfrac{1}{x + 2}\),
+            \(\;D = \mathbb{R} \setminus \{-2;\, 2\}\).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A8</span><span class="aufg-titel-text">Werbeslogan auf algebraische Korrektheit prüfen <span class="aufg-vertiefung">Vertiefung</span></span></div>
   <p>Auf einer Verpackung steht: „Mit unserer neuen Formel \((a + b)^2 = a^2 + b^2\) sparst du Zeit beim Rechnen!" Ein anderer Slogan bei einer Konkurrenzmarke: „Wir wissen: \(2 \cdot (x + y) = 2x + 2y\) — das ist Mathematik, der man trauen kann." Auf einer Bauwerkstattbroschüre wirbt jemand: „Diagonale aus zwei Schenkeln? Wir nehmen einfach \(\sqrt{a^2 + b^2} = a + b\) und sparen den Wurzeltaster!" Und in einem Mathematik-Comic prahlt eine Figur: „Quadrieren? Kubieren? Beides geht gleich: \((a + b)^3 = a^3 + b^3\)!"</p>
 <ol class="aufg-liste">
   <li>Welche der vier Slogans sind algebraisch korrekt, welche falsch?</li>
   <li>Gib bei jedem falschen Slogan eine Wertekombination an, mit der man ihn widerlegen kann.</li>
   <li>Wie könnten die falschen Slogans algebraisch korrekt formuliert werden, ohne ihre „Einfachheit" zu verlieren?</li>
 </ol>
-  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a7')">▶ Lösung</button>
-  <div class="loesung-body" id="l-g1-3-a7">
+  <button class="loesung-toggle" onclick="toggleL('l-g1-3-a8')">▶ Lösung</button>
+  <div class="loesung-body" id="l-g1-3-a8">
     <div class="block block-bsp" style="margin:6px 0 0">
       <div class="block-titel">🟢 Lösung</div>
             <ol class="aufg-liste">
@@ -1260,6 +1583,7 @@ Zweiklammersatz.</p>
   </div>
 </div>
 
+<!-- ──────────────────────── 9. ZUSAMMENFASSUNG ──────────────────────── -->
 <h2 id="zusammenfassung">Zusammenfassung</h2>
 
 <div class="block block-merksatz">
@@ -1275,6 +1599,11 @@ Zweiklammersatz.</p>
         \((a + b)(a - b) = a^2 - b^2\) — auswendig.</li>
     <li><strong>Faktorisieren in zwei Schritten:</strong> erst gemeinsamen Faktor ausklammern,
         dann auf binomische Formeln prüfen.</li>
+    <li><strong>Bruchterme:</strong> immer zuerst faktorisieren — dann bei Punktoperationen
+        (\(\cdot\), \(:\)) Kehrwert, Punktoperation, kürzen; bei Strichoperationen (\(+\), \(-\))
+        gleichnamig erweitern, Zähler zusammenfassen, faktorisieren, kürzen.
+        Gekürzt werden nur <em>Faktoren</em>, und die Definitionsmenge liest man am
+        <em>ursprünglichen</em> Nenner ab.</li>
   </ol>
 </div>
 
@@ -1290,10 +1619,14 @@ Zweiklammersatz.</p>
     <tr><td>2. binomische Formel</td><td>\((a-b)^2\)</td><td>\(a^2 - 2ab + b^2\)</td></tr>
     <tr><td>3. binomische Formel</td><td>\((a+b)(a-b)\)</td><td>\(a^2 - b^2\)</td></tr>
     <tr><td>Ausklammern</td><td>gemeinsamen Faktor heraus</td><td>\(6x^2 + 4x = 2x(3x + 2)\)</td></tr>
+    <tr><td>Bruchterm kürzen</td><td>nur gemeinsame <em>Faktoren</em></td><td>\(\dfrac{x(x+2)}{x} = x + 2\)</td></tr>
+    <tr><td>Bruchterme mal / geteilt</td><td>Kehrwert bei \(:\), dann Zähler mal Zähler</td><td>\(\dfrac{a}{b} : \dfrac{c}{d} = \dfrac{a\,d}{b\,c}\)</td></tr>
+    <tr><td>Bruchterme plus / minus</td><td>gleichnamig erweitern, Zähler addieren</td><td>\(\dfrac{4}{x^2-4} + \dfrac{1}{x+2} = \dfrac{1}{x-2}\)</td></tr>
+    <tr><td>Definitionsmenge</td><td>Nenner \(\neq 0\), am Ausgangsterm</td><td>zu \(\dfrac{1}{x^2-9}\) gehört \(D = \mathbb{R} \setminus \{-3;\, 3\}\)</td></tr>
   </tbody>
 </table>
 
-<!-- ──────────────────────── 9. DOWNLOADS ──────────────────────── -->
+<!-- ──────────────────────── 10. DOWNLOADS ──────────────────────── -->
 <h2 id="downloads">Zusatzmaterial</h2>
 
 <p>Zu diesem Thema gehören fünf Standardmaterialien — Theorie zum Mitnehmen, Karteikarten zum
@@ -1306,7 +1639,7 @@ Auswendiglernen, Aufgabenserien zum Üben:</p>
   <a href="../downloads/grundlagen/g1-3-algebraische-terme/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
 </div>
 
-<!-- ──────────────────────── 10. EXTERNE RESSOURCEN ──────────────────────── -->
+<!-- ──────────────────────── 11. EXTERNE RESSOURCEN ──────────────────────── -->
 <h2 id="ressourcen">Externe Videos &amp; Aufgabensammlungen</h2>
 
 <div class="ressourcen-subtitel">🎬 Erklärvideos (Playlists)</div>
