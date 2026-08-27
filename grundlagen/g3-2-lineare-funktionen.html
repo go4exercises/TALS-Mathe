@@ -936,8 +936,8 @@ function updateDR(){
 const typen=[
   {label:'Allgemein',   desc:'f(x) = 2·x − 1  ·  allgemeine lineare Funktion: m ≠ 0  ·  schiefe Gerade', m:2, b:-1, vert:false, color:'#1a4f8a', lines:null},
   {label:'Proportional',desc:'f(x) = 1.5·x  ·  proportionale Funktion: b = 0  ·  Gerade durch Ursprung', m:1.5,b:0, vert:false, color:'#1f6b3a', lines:null},
-  {label:'Identität',     desc:'f(x) = x  ·  Identität: m = 1, b = 0  ·  45°-Gerade durch Ursprung', m:1, b:0, vert:false, color:'#5b2d8e', lines:null},
-  {label:'Konstant',      desc:'f(x) = 2  ·  Konstante Funktion: m = 0  ·  waagrechte Gerade', m:0, b:2, vert:false, color:'#b85c00', lines:null},
+  {label:'Identität',     desc:'f(x) = x;  Identität: m = 1, b = 0;  45°-Gerade durch Ursprung', m:1, b:0, vert:false, color:'#5b2d8e', lines:null},
+  {label:'Konstant',      desc:'f(x) = 2;  Konstante Funktion: m = 0;  waagrechte Gerade', m:0, b:2, vert:false, color:'#b85c00', lines:null},
   {label:'Senkrecht x=k', desc:'x = 3  ·  Senkrechte Gerade: kein Steigungswinkel definierbar  ·  ⚠ Keine Funktion!', m:0, b:3, vert:true, color:'#9b1c1c', lines:null},
   {label:'Parallel',      desc:'Zwei parallele Geraden: m₁ = m₂ = 2, aber b₁ ≠ b₂  ·  kein Schnittpunkt', m:null, b:null, vert:false, color:'#1a4f8a',
     lines:[{m:2,b:2,col:'#1a4f8a'},{m:2,b:-2,col:'#3b82f6'}]},
@@ -1169,16 +1169,16 @@ function drawSteig() {
   const eqEl = document.getElementById('sd-eq');
   const nz = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(v % 1 === 0 ? 0 : 1);
   if (senkrecht) {
-    eqEl.innerHTML = `P(${nz(x1)} | ${nz(y1)}), Q(${nz(x2)} | ${nz(y2)}) &nbsp;·&nbsp; Δx = 0 → ` +
+    eqEl.innerHTML = `P(${nz(x1)} | ${nz(y1)}), Q(${nz(x2)} | ${nz(y2)});&nbsp;&nbsp; Δx = 0 → ` +
       `<strong style="color:var(--rot)">m nicht definiert</strong> (senkrechte Gerade, keine Funktion)`;
   } else {
     const b = y1 - m * x1;
     // «≈», sobald m oder b bei zwei Dezimalen gerundet werden müssen
     const rund = v => Math.abs(v * 100 - Math.round(v * 100)) > 1e-9;
     const ungefaehr = rund(m) || rund(b);
-    eqEl.innerHTML = `P(${nz(x1)} | ${nz(y1)}), Q(${nz(x2)} | ${nz(y2)}) &nbsp;·&nbsp; ` +
+    eqEl.innerHTML = `P(${nz(x1)} | ${nz(y1)}), Q(${nz(x2)} | ${nz(y2)});&nbsp;&nbsp; ` +
       `m = Δy/Δx = <span class="tx-orange">${nz(dy)}</span>/<span class="tx-blau">${nz(dx)}</span> = <strong>${ungefaehr ? '≈ ' : ''}${m.toFixed(2).replace('-', '−')}</strong>` +
-      ` &nbsp;·&nbsp; y ${ungefaehr ? '≈' : '='} ${m.toFixed(2).replace('-', '−')}·x ${b >= 0 ? '+' : '−'} ${Math.abs(b).toFixed(2)}`;
+      `;&nbsp;&nbsp; y ${ungefaehr ? '≈' : '='} ${m.toFixed(2).replace('-', '−')}·x ${b >= 0 ? '+' : '−'} ${Math.abs(b).toFixed(2)}`;
   }
 
   const dpr = window.devicePixelRatio || 1;

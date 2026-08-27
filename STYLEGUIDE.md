@@ -1,6 +1,6 @@
 # TALS-Mathematik · Styleguide
 
-**Version 1.14 · Stand: 1. August 2026** · (1.14: Zusatzmaterial ohne Formelauszug, Animations-Hinweise ohne Vorlese-Knopf, neuer Beschriftungs-Helfer `beschriftung()` und `drawGrid`-Optionen §2.9; 1.13: §11 Nachschlagen-Seiten Glossar/Formelsammlung; 1.12: §10.4 verbindliche Färbe-Regel präzisiert)
+**Version 1.15 · Stand: 27. August 2026** · (1.15: §2.1 `·` nur als Multiplikationszeichen, nie als Trennzeichen; 1.14: Zusatzmaterial ohne Formelauszug, Animations-Hinweise ohne Vorlese-Knopf, neuer Beschriftungs-Helfer `beschriftung()` und `drawGrid`-Optionen §2.9; 1.13: §11 Nachschlagen-Seiten Glossar/Formelsammlung; 1.12: §10.4 verbindliche Färbe-Regel präzisiert)
 
 Dieser Styleguide ist die verbindliche Referenz für alle Themenseiten des Lehrmittels „TALS-Mathematik". Er sichert Konsistenz in Notation, Aufbau, Sprache und visuellem Design — kapitelübergreifend und chatübergreifend.
 
@@ -31,6 +31,22 @@ Dieser Styleguide ist die verbindliche Referenz für alle Themenseiten des Lehrm
   `f(x) = 2·x + 5` ✓
 - **Ohne Punkt** in zusammengesetzten Termen ist toleriert, aber in Live-Anzeigen (interaktive Widgets) immer mit Punkt zur Eindeutigkeit.
 - **In LaTeX:** `\cdot` für den Multiplikationspunkt; `*` ist verboten.
+- **`·` ist ausschliesslich Multiplikationszeichen — nie Trennzeichen.** Zwischen zwei
+  Aussagen, Werten oder Formeln darf kein `·` stehen; es wird sonst als Produkt gelesen
+  (`|−3| = 3 · |−3 − 2| = 5` liest sich als «mal 3»). Ersatz je nach Kontext:
+
+  | Situation | Ersatz |
+  |---|---|
+  | Zwei/drei gleichrangige Ergebnisse in einer Live-Anzeige | Strichpunkt `;` |
+  | Zwei aufeinanderfolgende Rechenschritte | Pfeil `→` |
+  | Aufzählung von Fällen in Tabelle oder Prosa | Strichpunkt `;` oder echte Liste |
+  | Label-Wert-Paare («Amplitude 1 · Periode p = 2π») | Strichpunkt `;` |
+
+  Als reiner **Prosa**-Trenner ohne Mathematik daneben bleibt `·` erlaubt (Fusszeile,
+  Link-Untertitel, «Handout · A4 · Bereit zum Drucken», `pt-bereich`-Zeile).
+  Geprüft wird das zur Laufzeit mit `node .claude/tools/scan-live.mjs <seiten>` — das
+  Skript liest alle Live-Anzeigen im Browser aus, auch die erst beim Reglerziehen
+  erzeugten Zweige. Der statische Blick in den Quelltext genügt nicht.
 - **LaTeX-Display-Konvention:** Im LaTeX-Display ohne Punkt schreiben (z.B. `f(x) = 3x - 1`), weil MathJax `3x` ohnehin satztechnisch als Multiplikation rendert. Nur dort `\cdot` setzen, wo der Punkt didaktisch nötig ist (z.B. `m_1 \cdot m_2 = -1` bei senkrechten Geraden, oder bei Zahl-mal-Zahl wie `2 \cdot 3 = 6`). In Live-JS-Anzeigen dagegen IMMER mit `·` (siehe oben).
 
 ### 2.2 Funktionsschreibweise

@@ -489,7 +489,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Symmetrie</div>
-      <div class="fl-eq" id="pa-eq">gerade · f(−x) = +f(x) · achsensymmetrisch zur y-Achse</div>
+      <div class="fl-eq" id="pa-eq">gerade;  f(−x) = +f(x);  achsensymmetrisch zur y-Achse</div>
     </div>
     <div class="cv-wrap" style="max-width:420px"><canvas id="pa-canvas" height="300"></canvas></div>
   </div>
@@ -562,7 +562,7 @@ MathJax = {
     <div class="formel-live">
       <div class="fl-label">Funktionsgleichung und Asymptoten</div>
       <div class="fl-eq" id="hy-eq">y = 1/(x − <span class="tx-blau">1</span>)¹ − <span class="tx-orange">1</span></div>
-      <div class="fl-eq" id="hy-asym" style="font-size:0.95rem;margin-top:4px">Polgerade: x = <span class="tx-blau">1</span> · Asymptote: y = <span class="tx-orange">−1</span></div>
+      <div class="fl-eq" id="hy-asym" style="font-size:0.95rem;margin-top:4px">Polgerade: x = <span class="tx-blau">1</span>;  Asymptote: y = <span class="tx-orange">−1</span></div>
     </div>
     <div class="cv-wrap"><canvas id="hy-canvas" height="220"></canvas></div>
   </div>
@@ -1146,7 +1146,7 @@ function updateHY(){
   const vTerm = v === 0 ? '' : (v > 0 ? ` + ${T('orange', v)}` : ` − ${T('orange', Math.abs(v))}`);
   document.getElementById('hy-eq').innerHTML = `y = 1/(${uTerm})${SUP[String(hyP)]}${vTerm}`;
   document.getElementById('hy-asym').innerHTML =
-    `Polgerade: x = ${T('blau', uD)} · Asymptote: y = ${T('orange', vD)}`;
+    `Polgerade: x = ${T('blau', uD)};  Asymptote: y = ${T('orange', vD)}`;
   const {ctx, W, H} = initCanvas('hy-canvas', 220, true);
   const rng = 6;
   const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
@@ -1299,8 +1299,8 @@ function drawPa(){
 
   const eq = document.getElementById('pa-eq');
   eq.textContent = gerade
-    ? `gerade · f(−x) = +f(x) · achsensymmetrisch zur y-Achse`
-    : `ungerade · f(−x) = −f(x) · punktsymmetrisch zum Ursprung`;
+    ? `gerade;  f(−x) = +f(x);  achsensymmetrisch zur y-Achse`
+    : `ungerade;  f(−x) = −f(x);  punktsymmetrisch zum Ursprung`;
   eq.style.color = gerade ? '#1f6b3a' : '#5b2d8e';
 }
 ['pa-n', 'pa-x'].forEach(id => document.getElementById(id).addEventListener('input', drawPa));

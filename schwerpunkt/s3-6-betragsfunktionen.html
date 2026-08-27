@@ -384,7 +384,7 @@ MathJax = {
     <div class="formel-live">
       <div class="fl-label">Funktionsgleichung und Knickpunkt</div>
       <div class="fl-eq" id="tr-eq">y = |x|</div>
-      <div class="fl-eq" id="tr-info" style="font-size:0.95rem;margin-top:4px">Knick (0|0) · Ast-Steigungen ±1</div>
+      <div class="fl-eq" id="tr-info" style="font-size:0.95rem;margin-top:4px">Knick (0|0);  Ast-Steigungen ±1</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="tr-canvas" height="240"></canvas></div>
   </div>
@@ -559,7 +559,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Boden und Minimum</div>
-      <div class="fl-eq" id="wa-eq">Boden [−2; 3] · Minimum |a−b| = 5</div>
+      <div class="fl-eq" id="wa-eq">Boden [−2; 3];  Minimum |a−b| = 5</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="wa-canvas" height="240"></canvas></div>
   </div>
@@ -982,7 +982,7 @@ function updateTR(){
   const vTerm = v === 0 ? '' : (v > 0 ? ` + ${T('gruen', v)}` : ` − ${T('gruen', Math.abs(v))}`);
   document.getElementById('tr-eq').innerHTML = `y = ${aStr}|${arg}|${vTerm}`;
   document.getElementById('tr-info').innerHTML =
-    `Knick (${T('orange', String(u).replace('-', '−'))}|${T('gruen', String(v).replace('-', '−'))}) · Ast-Steigungen ±${fmt(Math.abs(a))}`;
+    `Knick (${T('orange', String(u).replace('-', '−'))}|${T('gruen', String(v).replace('-', '−'))});  Ast-Steigungen ±${fmt(Math.abs(a))}`;
   const {ctx, W, H} = initCanvas('tr-canvas', 240, false);
   const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -6, 6, -5, 5, {zahlen:false});
   // Grundfunktion gestrichelt grau
@@ -1159,8 +1159,8 @@ function drawWa(){
   document.getElementById('wa-bv').textContent = b;
   const lo = Math.min(a, b), hi = Math.max(a, b), boden = hi - lo;
   document.getElementById('wa-eq').innerHTML = boden < 1e-9
-    ? `Boden zu einem Punkt · Minimum = 0 · reines V bei x = ${a}`
-    : `Boden [${lo}; ${hi}] · Minimum |a−b| = ${boden}`;
+    ? `Boden zu einem Punkt;  Minimum = 0;  reines V bei x = ${a}`
+    : `Boden [${lo}; ${hi}];  Minimum |a−b| = ${boden}`;
 
   const f = x => Math.abs(x - a) + Math.abs(x - b);
   const {ctx, W, H} = initCanvas('wa-canvas', 240, false);

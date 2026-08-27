@@ -1314,7 +1314,7 @@ document.addEventListener('DOMContentLoaded', () => {
  *  LÖSUNGSFALL-SLIDER + GERADENBÜSCHEL
  *  g₁: 2x + y = 4      g₂: m·x + y = c
  *  Determinante D = 2 − m.  D ≠ 0 → S((4−c)/D | 4 − 2x_S)
- *  D = 0: c = 4 → identisch (unendlich viele) · c ≠ 4 → parallel (keine)
+ *  D = 0: c = 4 → identisch (unendlich viele);  c ≠ 4 → parallel (keine)
  * ══════════════════════════════════════════════════════════════ */
 function drawBuschel() {
   const m = parseFloat(document.getElementById('lb-m').value);
@@ -1336,17 +1336,17 @@ function drawBuschel() {
     const xs = (4 - c) / D, ys = 4 - 2 * xs;
     S = [xs, ys];
     fall = 'eindeutig';
-    eqEl.innerHTML = `2·x + y = 4 &nbsp;·&nbsp; ${g2links} = ${c} &nbsp; → &nbsp; D = 2 − ${m} = ${D.toFixed(2)} ≠ 0 → ` +
+    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${c} &nbsp; → &nbsp; D = 2 − ${m} = ${D.toFixed(2)} ≠ 0 → ` +
       `<strong>genau eine Lösung</strong> S(${xs.toFixed(2)} | ${ys.toFixed(2)})`.replace(/-/g, '−');
     farbe = '#1f6b3a';
   } else if (Math.abs(c - 4) < 1e-9) {
     fall = 'identisch';
-    eqEl.innerHTML = `2·x + y = 4 &nbsp;·&nbsp; 2·x + y = 4 &nbsp; → &nbsp; D = 0 und beide Gleichungen sind gleich: ` +
+    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; 2·x + y = 4 &nbsp; → &nbsp; D = 0 und beide Gleichungen sind gleich: ` +
       `0 = 0 → <strong>unendlich viele Lösungen</strong> (die ganze Gerade)`;
     farbe = '#1a4f8a';
   } else {
     fall = 'parallel';
-    eqEl.innerHTML = `2·x + y = 4 &nbsp;·&nbsp; 2·x + y = ${c} &nbsp; → &nbsp; D = 0, Subtraktion ergibt ` +
+    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; 2·x + y = ${c} &nbsp; → &nbsp; D = 0, Subtraktion ergibt ` +
       `0 = ${(c - 4).toFixed(1)} → <strong>keine Lösung</strong>, 𝕃 = { }`.replace(/= -/g, '= −');
     farbe = '#c8412c';
   }

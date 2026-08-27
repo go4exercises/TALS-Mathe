@@ -353,7 +353,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Auswertung</div>
-      <div class="fl-eq" id="ek-eq">sin(7π/12) ≈ 0.97 · x ≈ 105°</div>
+      <div class="fl-eq" id="ek-eq">sin(7π/12) ≈ 0.97;  x ≈ 105°</div>
     </div>
     <div class="zwei-spalten">
       <div class="cv-wrap"><canvas id="ek-kreis" height="220"></canvas></div>
@@ -491,7 +491,7 @@ MathJax = {
     <div class="formel-live">
       <div class="fl-label">Funktionsgleichung und Kenngrössen</div>
       <div class="fl-eq" id="tr-eq">y = sin(x)</div>
-      <div class="fl-eq" id="tr-info" style="font-size:0.95rem;margin-top:4px">Amplitude 1 · Periode p = 2π · Mittellinie y = 0</div>
+      <div class="fl-eq" id="tr-info" style="font-size:0.95rem;margin-top:4px">Amplitude 1;  Periode p = 2π;  Mittellinie y = 0</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="tr-canvas" height="240"></canvas></div>
   </div>
@@ -1086,7 +1086,7 @@ function updateEK(){
   const grad = k * 15;
   const yTxt = Math.abs(y) > 100 ? 'nicht definiert (Pol!)' : `≈ ${y.toFixed(2)}`;
   document.getElementById('ek-eq').innerHTML =
-    `${F.lab}(<span class="tx-blau">${xLab}</span>) ${yTxt} · x = ${grad}°`;
+    `${F.lab}(<span class="tx-blau">${xLab}</span>) ${yTxt};  x = ${grad}°`;
   // Einheitskreis (1:1)
   const {ctx, W, H} = initCanvas('ek-kreis', 220, true);
   const rng = 1.6;
@@ -1185,7 +1185,7 @@ function updateTR(){
   // Periode als π-Bruch: p = 2π/b -> b=0.5:4π, 1:2π, 2:π, 3:2π/3
   const pStr = {0.5:'4π', 1:'2π', 2:'π', 3:'2π/3'}[b];
   document.getElementById('tr-info').innerHTML =
-    `Amplitude ${T('blau', fmt(a))} · Periode p = ${T('orange', pStr)} · Mittellinie y = ${T('orange', String(v).replace('-', '−'))}`;
+    `Amplitude ${T('blau', fmt(a))};  Periode p = ${T('orange', pStr)};  Mittellinie y = ${T('orange', String(v).replace('-', '−'))}`;
   const g = gridTrig('tr-canvas', 240, -2 * PI - 0.4, 2 * PI + 0.4, -4.4, 4.4);
   // Grundfunktion gestrichelt grau
   g.ctx.setLineDash([5, 4]);

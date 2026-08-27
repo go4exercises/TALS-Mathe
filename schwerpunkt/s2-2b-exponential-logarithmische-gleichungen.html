@@ -386,7 +386,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Lösung</div>
-      <div class="fl-eq" id="gl-eq">x = log₃(8) = ln 8 / ln 3 ≈ 1.89 · L = {1.89}</div>
+      <div class="fl-eq" id="gl-eq">x = log₃(8) = ln 8 / ln 3 ≈ 1.89;  L = {1.89}</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="gl-canvas" height="220"></canvas></div>
   </div>
@@ -492,7 +492,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Kandidaten und Lösungsmenge</div>
-      <div class="fl-eq" id="ld-eq">D: x &gt; 3 · x₁ = 5 ∈ D ✓ · x₂ = −2 ∉ D (Scheinlösung) · L = {5}</div>
+      <div class="fl-eq" id="ld-eq">D: x &gt; 3;  x₁ = 5 ∈ D ✓;  x₂ = −2 ∉ D (Scheinlösung);  L = {5}</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="ld-canvas" height="280"></canvas></div>
   </div>
@@ -903,7 +903,7 @@ document.getElementById('al-t').addEventListener('input', updateAL);
 
 /* ══ GLEICHUNG ALS SCHNITTPUNKT-FRAGE ══ */
 const GL = [
-  {lhs: x => Math.pow(3, x),                    rhs: x => 8,                       eq: 'x = log₃(8) = ln 8 / ln 3 ≈ 1.89 · L = {1.89}',
+  {lhs: x => Math.pow(3, x),                    rhs: x => 8,                       eq: 'x = log₃(8) = ln 8 / ln 3 ≈ 1.89;  L = {1.89}',
    lhsLab: '3ˣ',        rhsLab: '8',
    dots: [[Math.log(8)/Math.log(3), 8]]},
   {lhs: x => Math.pow(3, 2*x) + 9,              rhs: x => 10 * Math.pow(3, x),     eq: 'Substitution u = 3ˣ: u² − 10u + 9 = 0 ⇒ u = 1, 9 ⇒ L = {0; 2}',
@@ -1008,7 +1008,7 @@ function drawLd(){
   const xs = (u - disk) / 2;    // Scheinlösung (< 0)
   const fmtU = u % 1 === 0 ? u : u.toFixed(1);
   document.getElementById('ld-eq').innerHTML =
-    `D: x &gt; ${fmtU} · x₁ = ${xg.toFixed(2)} ∈ D ✓ · x₂ = ${xs.toFixed(2)} ∉ D (Scheinlösung) · L = {${xg.toFixed(2)}}`;
+    `D: x &gt; ${fmtU};  x₁ = ${xg.toFixed(2)} ∈ D ✓;  x₂ = ${xs.toFixed(2)} ∉ D (Scheinlösung);  L = {${xg.toFixed(2)}}`;
 
   const L = x => x > u ? Math.log10(x - u) : NaN;   // linke Seite lg(x-u)
   const R = x => x > 0 ? 1 - Math.log10(x) : NaN;   // rechte Seite 1 - lg x

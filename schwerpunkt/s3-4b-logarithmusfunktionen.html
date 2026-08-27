@@ -353,7 +353,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Funktion und Umkehrfunktion</div>
-      <div class="fl-eq" id="sp-eq"><span class="tx-blau">y = 2ˣ</span>  ·  <span style="color:#5b2d8e">y = log₂(x)</span></div>
+      <div class="fl-eq" id="sp-eq"><span class="tx-blau">y = 2ˣ</span>;  <span style="color:#5b2d8e">y = log₂(x)</span></div>
     </div>
     <div class="cv-wrap"><canvas id="sp-canvas" height="240"></canvas></div>
   </div>
@@ -433,7 +433,7 @@ MathJax = {
         </div>
       </div>
     </div>
-    <p>Oben lineare Achse (0…1000) · unten log-Achse (10⁰…10³) · Zeiger bei \(x\) · \(\lg x\) als Abstand</p>
+    <p>Oben lineare Achse (0…1000); unten log-Achse (10⁰…10³); Zeiger bei \(x\); \(\lg x\) als Abstand</p>
   </div>
   <div class="widget-body">
     <div class="sl-row akz-blau">
@@ -449,7 +449,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Ablesen</div>
-      <div class="fl-eq" id="ll-eq">x = 100 · lg(100) = 2</div>
+      <div class="fl-eq" id="ll-eq">x = 100;  lg(100) = 2</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="ll-canvas" height="220"></canvas></div>
   </div>
@@ -527,7 +527,7 @@ MathJax = {
     <div class="formel-live">
       <div class="fl-label">Funktionsgleichung, Asymptote und Nullstelle</div>
       <div class="fl-eq" id="tr-eq">y = log₂(x) + <span class="tx-orange">1</span></div>
-      <div class="fl-eq" id="tr-info" style="font-size:0.95rem;margin-top:4px">Asymptote: x = <span class="tx-blau">0</span> · Nullstelle: x₀ = 0.5</div>
+      <div class="fl-eq" id="tr-info" style="font-size:0.95rem;margin-top:4px">Asymptote: x = <span class="tx-blau">0</span>;  Nullstelle: x₀ = 0.5</div>
     </div>
     <div class="cv-wrap"><canvas id="tr-canvas" height="240"></canvas></div>
   </div>
@@ -1043,7 +1043,7 @@ function setSp(i){
 function drawSp(){
   const b = SP_B[spActive];
   document.getElementById('sp-eq').innerHTML =
-    `<span class="tx-blau">${b.eqE}</span>  ·  <span style="color:#5b2d8e">${b.eqL}</span>`;
+    `<span class="tx-blau">${b.eqE}</span>;  <span style="color:#5b2d8e">${b.eqL}</span>`;
   const {ctx, W, H} = initCanvas('sp-canvas', 240, true);
   const rng = 5;
   const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng);
@@ -1075,7 +1075,7 @@ const typen = [
   {label:'log₂(x)',  f: x => Math.log2(x),                     desc:'y = log₂(x)  ·  steigend (a > 1)  ·  Umkehrfunktion von 2ˣ', color:'#1a4f8a'},
   {label:'log₃(x)',  f: x => Math.log(x)/Math.log(3),          desc:'y = log₃(x)  ·  steigend, flacher als log₂(x)', color:'#1f6b3a'},
   {label:'log₅(x)',  f: x => Math.log(x)/Math.log(5),          desc:'y = log₅(x)  ·  steigend, noch flacher — grosse Basis heisst langsamer Anstieg', color:'#5b2d8e'},
-  {label:'ln(x)',    f: x => Math.log(x),                      desc:'y = ln(x)  ·  natürlicher Logarithmus, Basis e ≈ 2.718 — zwischen log₂ und log₃', color:'#b85c00'},
+  {label:'ln(x)',    f: x => Math.log(x),                      desc:'y = ln(x);  natürlicher Logarithmus, Basis e ≈ 2.718 — zwischen log₂ und log₃', color:'#b85c00'},
   {label:'lg(x)',    f: x => Math.log10(x),                    desc:'y = lg(x)  ·  Zehnerlogarithmus, Basis 10 — die flachste der gezeigten Kurven', color:'#9b1c1c'},
   {label:'log½(x)',  f: x => Math.log(x)/Math.log(0.5),        desc:'y = log½(x)  ·  fallend (0 < a < 1)  ·  identisch mit −log₂(x)', color:'#1a4f8a'},
 ];
@@ -1129,7 +1129,7 @@ function updateTR(){
   // Nullstelle x0 = u + a^(−v)
   const x0 = u + Math.pow(b.base, -v);
   document.getElementById('tr-info').innerHTML =
-    `Asymptote: x = ${T('blau', String(u).replace('-', '−'))} · Nullstelle: x₀ = ${fmt2(x0).replace('-', '−')}`;
+    `Asymptote: x = ${T('blau', String(u).replace('-', '−'))};  Nullstelle: x₀ = ${fmt2(x0).replace('-', '−')}`;
   const {ctx, W, H} = initCanvas('tr-canvas', 240, false);
   const {cx, cy} = drawGrid(ctx, W, H, -4, 8, -4, 4);
   // Vertikale Asymptote gestrichelt (blau)
@@ -1228,7 +1228,7 @@ function drawLl(){
   const x = Math.pow(10, L);
   document.getElementById('ll-xv').textContent = x >= 100 ? Math.round(x) : x.toFixed(x < 10 ? 2 : 1);
   document.getElementById('ll-eq').innerHTML =
-    `x = ${x >= 100 ? Math.round(x) : x.toFixed(2)} · lg(x) = ${L.toFixed(2)}`;
+    `x = ${x >= 100 ? Math.round(x) : x.toFixed(2)};  lg(x) = ${L.toFixed(2)}`;
   document.querySelectorAll('#ll-snap-btns .typ-btn').forEach(b =>
     b.classList.toggle('aktiv', Math.abs(Math.log10(parseFloat(b.textContent)) - L) < 1e-6));
 
