@@ -1,31 +1,41 @@
+// Liest den GESAMTEN sichtbaren Text jeder Seite aus — im Startzustand, nach dem
+// Ziehen aller Regler und nach dem Klick auf jeden Umschalt-Knopf — und meldet
+// jede Zeile mit einem '·'. So werden auch Anzeigen erfasst, die erst beim
+// Bedienen entstehen (Preset-Beschreibungen, Sonderfall-Zweige).
+//   node .claude/tools/scan-live.mjs grundlagen/*.html schwerpunkt/*.html
 import { chromium } from 'playwright';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
-const SEL = '.fl-eq, .ll-val, .lt-frage, .zs-formel, .fl-eval, .cr, .lt-antwort, [id$="-eq"], [id$="-val"], [id$="-info"], [id$="-formel"], [id$="-asym"]';
+
+const BTN = '.typ-btn, .preset-btn, .zs-btn, .fall-btn, .btn-typ, [data-kuh], .kk-btn, .lt-weiter';
 const browser = await chromium.launch();
 const treffer = new Map();
 for (const seite of process.argv.slice(2)) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  page.on('pageerror', e => console.log(`!! ${seite}: ${e.message}`));
   await page.goto(pathToFileURL(resolve(seite)).href, { waitUntil: 'load' });
   await page.waitForTimeout(300);
-  for (let runde = 0; runde < 3; runde++) {
-    const texte = await page.$$eval(SEL, els => els.map(e => e.innerText.replace(/\s+/g,' ').trim()));
-    for (const t of texte) if (t.includes('·')) {
-      const k = seite + ' :: ' + t.slice(0, 150);
-      if (!treffer.has(k)) treffer.set(k, true);
+  const anzahlBtn = await page.$$eval(BTN, b => b.length);
+  for (let runde = 0; runde <= Math.min(anzahlBtn, 12); runde++) {
+    const text = await page.evaluate(() => document.body.innerText);
+    for (const z of text.split('\n')) {
+      const t = z.replace(/\s+/g, ' ').trim();
+      if (t.includes('·')) treffer.set(seite + ' :: ' + t.slice(0, 160), true);
     }
-    await page.evaluate(r => {
+    await page.evaluate(([r, sel]) => {
       document.querySelectorAll('input[type=range]').forEach(x => {
-        const min=+x.min||0, max=+x.max||100, st=+x.step||1;
-        x.value = String(Math.min(max, Math.max(min, min + (max-min)*(r+1)/4)));
-        x.dispatchEvent(new Event('input',{bubbles:true})); x.dispatchEvent(new Event('change',{bubbles:true}));
+        const mi = +x.min || 0, ma = +x.max || 100;
+        x.value = String(mi + (ma - mi) * ((r % 4) + 1) / 5);
+        x.dispatchEvent(new Event('input', { bubbles: true }));
+        x.dispatchEvent(new Event('change', { bubbles: true }));
       });
-      document.querySelectorAll('.typ-btn, .preset-btn, button[data-kuh], .zs-btn').forEach((b,i)=>{ if(i===r) b.click(); });
-    }, runde);
-    await page.waitForTimeout(250);
+      const btns = document.querySelectorAll(sel);
+      if (btns[r]) btns[r].click();
+    }, [runde, BTN]);
+    await page.waitForTimeout(200);
   }
   await page.close();
 }
 await browser.close();
 for (const k of [...treffer.keys()].sort()) console.log(k);
-console.log('\n' + treffer.size + ' Anzeigen mit ·');
+console.log(`\n${treffer.size} sichtbare Zeilen mit ·`);
