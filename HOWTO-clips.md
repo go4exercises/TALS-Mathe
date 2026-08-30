@@ -262,18 +262,29 @@ Dazu kommt eine Konsistenzprüfung der Ablage, die immer läuft:
 
 ---
 
-## Ton (Versuchsstand, bisher ein Clip)
+## Ton
 
-`g2-2a-parametergleichung-drei-faelle` hat eine gesprochene Tonspur. Das Verfahren steht,
-die übrigen Clips haben noch keine.
+Alle vier Clips haben eine gesprochene Tonspur, lokal erzeugt.
 
 ### Warum es überhaupt passt
 
 Der Sprechertext steht schon je Szene im Drehbuch. Bisher wurde daraus die Szenendauer nur
 **geschätzt** (`Wörter / sprechtempo`). `scripts/build-clip-ton.py` misst stattdessen die
 echte Länge und schreibt sie als Feld `dauer` ins Drehbuch zurück — danach stimmt Bild zu
-Sprache exakt statt ungefähr. Beim ersten Lauf wurde der Clip dadurch von 55 s auf 48 s
-kürzer: die Schätzung war zu grosszügig.
+Sprache exakt statt ungefähr.
+
+### Und darum gehört `nachlauf` ins Drehbuch
+
+Die alte Schätzung veranschlagte rund 1.5 s mehr, als die Stimme wirklich braucht. Diese
+Dehnung war ein Fehler — aber sie leistete unbeabsichtigt etwas: Sie liess die letzte Zeile
+einer Szene länger stehen. Als die Messung den Fehler entfernte, fiel die Standzeit überall
+auf den Standard `nachlauf = 2.6 s` zusammen, im Merkbild von 5.3 s herunter.
+
+**Darum setzen alle Clips `nachlauf: 4.0`.** Damit steht jede letzte Zeile vier Sekunden,
+und der Wert ist eine Entscheidung statt ein Nebenprodukt einer Schätzformel. Wer einen
+neuen Clip anlegt, setzt ihn mit — sonst läuft dieser eine schneller als die anderen.
+Kontrollieren lässt sich das mit `dauer − letzte Einblendung` je Szene; bei allen vier
+Clips ergibt das durchgehend 4.0 s.
 
 ### Einrichten
 
@@ -315,7 +326,8 @@ lokalen Testen einen Server mit Range nehmen, sonst jagt man ein Phantom.
 
 ### Grösse und Qualität
 
-48 s Sprache als MP3 mono bei rund 50 kbit/s sind **174 kB**. `--qualitaet` steuert das
+Sprache als MP3 mono bei rund 50 kbit/s kostet etwa 3.3 kB je Sekunde — die vier Clips
+zusammen **912 kB**. `--qualitaet` steuert das
 (0.0 gross bis 1.0 klein). Die Spur bekommt Kopfraum auf 0.95, sonst übersteuert der
 Encoder — Piper steuert einzelne Sätze bis an die Grenze aus.
 
@@ -350,9 +362,9 @@ Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
   Referenz dafür, wie ein Drehbuch aussieht: `g2-2b-bruchgleichungen` für eine
   Schritt-für-Schritt-Herleitung, `g2-2a-parametergleichung` für eine mit Bedingung,
   `g2-2a-parametergleichung-drei-faelle` für eine Fallunterscheidung.
-- **Ton für die übrigen Clips**, sobald du entschieden hast, ob die synthetische Stimme
-  trägt oder ob du selbst sprichst. Der Wechsel ist dann nur ein Dateiaustausch — das
-  Verfahren bleibt dasselbe.
+- **Urteil über die Stimme.** Alle vier Clips sind synthetisch vertont. Ob die Stimme im
+  Unterricht trägt, ist noch nicht entschieden; falls nicht, ist der Wechsel auf eine
+  eigene Aufnahme nur ein Dateiaustausch — das Verfahren bleibt dasselbe.
 - **Untertitel.** Text und Zeitmarken liegen vor; eine WebVTT-Spur wäre fast geschenkt und
   funktioniert im Schulzimmer besser als Ton: lautlos abspielbar, an der Wand mitlesbar.
 - **Übertrag nach TALS Physik** — vermerkt in `TODO-schwesterprojekt.md`.
