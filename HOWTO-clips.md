@@ -151,6 +151,25 @@ den ersten Lauf steht in der Seite die alte Dauer und der alte Kurzbeschrieb.
 **`build-seo.py` danach**, damit `dateModified` und die Sitemap stimmen. Der Pre-Flight
 warnt, wenn es fehlt.
 
+**Brüche funktionieren nur in Formel-Elementen, nicht in Prosa.** `formel`, `karte` und
+`box` schicken ihren ganzen Text durch `formel()` — dort wird `[a|b]` zum Bruch. Die
+Prosa-Typen `text`, `notiz`, `titel`, `untertitel`, `aussage` und `liste` gehen dagegen
+durch `text_html`, und das ersetzt `|` **zuerst** durch einen Zeilenumbruch, bevor es die
+`@…@`-Abschnitte auswertet. Aus `@x = [b|a]@` wird darum kein Bruch, sondern eine
+umgebrochene eckige Klammer — ohne Fehlermeldung, es sieht nur falsch aus. Wer in einer
+Merkzeile einen Bruch braucht, macht daraus ein eigenes `formel`-Element.
+
+**`liste` wird nicht zentriert.** Der Typ bekommt die Klassen `l sans`, aber kein `mitte`
+— der Block läuft über die volle Bühnenbreite und beginnt am linken Rand, auch im Layout
+`zentriert`. In einer sonst mittigen Szene wirkt das wie ein Versehen. Für aufgezählte
+Merkpunkte in der Mitte drei `formel`-Zeilen nehmen; die tragen `row` und sitzen zentriert.
+
+**Eine gehaltene Ankerzeile belegt die oberste Zeile — Folgeszenen müssen tiefer
+beginnen.** Steht auf einem Element `halten`, bleibt es über die folgenden Szenen stehen.
+Deren `oben` muss dann unter der Ankerzeile liegen, sonst rendern beide übereinander und
+die Formeln stehen ineinander. Bewährt: die einführende Szene auf `oben: 178`, alle
+Folgeszenen auf `oben: 348`. Beide bestehenden Clips machen es so.
+
 ---
 
 ## Bibliotheksseite `clips.html`
