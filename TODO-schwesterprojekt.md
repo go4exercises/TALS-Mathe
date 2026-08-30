@@ -41,7 +41,11 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
      `loader: { load:['[tex]/boldsymbol'] }` setzen, muss
      `vendor/mathjax/input/tex/extensions/boldsymbol.js` daneben liegen — MathJax lädt
      Erweiterungen relativ zum Pfad der Startdatei nach, sonst bricht der Formelsatz
-     dort, wo `\boldsymbol` steht.
+     dort, wo `\boldsymbol` steht. Dasselbe gilt fuer die Sprachausgabe im
+     Kontextmenue: sie braucht `input/mml.js` samt `input/mml/`, `a11y/` und
+     `sre/mathmaps/`. Beides faellt weder beim Laden noch im Pre-Flight auf — in
+     Mathe kam es erst heraus, als der Explorer im Browser wirklich angestossen
+     wurde und `input/mml.js` mit 404 antwortete.
   3. **Die Datenschutzseite nachziehen.** In Mathe nennt `rechtliches.html` die beiden
      Anbieter ausdrücklich beim Namen; nach der Umstellung ist der Absatz falsch. Dazu
      ein Abschnitt „Verwendete Fremdsoftware" mit OFL und Apache 2.0.

@@ -492,9 +492,13 @@ sagt es ausdrücklich zu. Jede fremde Ressource überträgt die IP-Adresse der B
 
 Zwei Fallstricke:
 
-- **MathJax-Erweiterungen** werden relativ zum Pfad der Startdatei nachgeladen. Alle
-  Seiten setzen `loader: { load:['[tex]/boldsymbol'] }`, darum muss
-  `vendor/mathjax/input/tex/extensions/boldsymbol.js` bestehen bleiben.
+- **MathJax-Erweiterungen** werden relativ zum Pfad der Startdatei nachgeladen, und
+  zwar erst beim Gebrauch. Ein fehlendes Stück fällt darum weder beim Laden noch im
+  Pre-Flight auf — nur im Netzwerk-Tab als 404. Was dort liegen muss:
+  `input/tex/extensions/boldsymbol.js` (alle Seiten setzen
+  `loader: { load:['[tex]/boldsymbol'] }`) sowie `input/mml.js` mit `input/mml/`,
+  `a11y/` und `sre/mathmaps/` für die Sprachausgabe im Kontextmenü — der Explorer
+  zieht den MathML-Eingang nach. Geprüft wird das nur im Browser, nicht statisch.
 - **Vorlagen kopieren.** Eine alte Seite als Muster zu nehmen holt den CDN-Aufruf
   zurück. `TEMPLATE.html` ist umgestellt — von dort kopieren.
 
