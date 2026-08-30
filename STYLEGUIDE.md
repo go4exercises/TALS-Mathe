@@ -464,6 +464,49 @@ Die Farben sind kapitelübergreifend identisch — das schafft ein konsistentes 
 - **Sans** (`Source Sans 3`): Fliesstext
 - **Mono** (`JetBrains Mono`): Code, Formeln in Live-Anzeigen, Slider-Werte, Chip-Labels
 
+**Schriften werden lokal ausgeliefert (verbindlich seit 30.08.2026).** Jede Seite bindet
+`schriften.css` relativ zur eigenen Tiefe ein, nie `fonts.googleapis.com`:
+
+```html
+<link rel="stylesheet" href="../schriften.css">   <!-- grundlagen/, schwerpunkt/ -->
+<link rel="stylesheet" href="schriften.css">      <!-- Repo-Wurzel -->
+```
+
+Die Dateien liegen in `schriften/` (Fontsource 5.3.0, variable Schnitte, getrennt nach
+latin / latin-ext / greek per `unicode-range`). Griechisch ist nötig: α, β, π, Σ, Ω
+kommen ausserhalb von MathJax in SVG-Beschriftungen und Legenden vor. Neue Schriftschnitte
+nur als vollständige Fontsource-Datei dazulegen, samt OFL-Lizenz.
+
+### 5.3.1 Keine Drittanbieter (verbindlich seit 30.08.2026)
+
+Eine Seite darf **keine Ressource von einem fremden Host laden**. Das betrifft heute
+genau zwei Dinge, beide sind lokal:
+
+| Ressource | lokal | früher |
+|---|---|---|
+| Schriften | `schriften.css` + `schriften/` | `fonts.googleapis.com` |
+| Formelsatz | `vendor/mathjax/tex-svg.js` | `cdn.jsdelivr.net` |
+
+Grund: Der Fussbereich sagt „Keine Cookies · Kein Tracking", und `rechtliches.html`
+sagt es ausdrücklich zu. Jede fremde Ressource überträgt die IP-Adresse der Besucherin.
+
+Zwei Fallstricke:
+
+- **MathJax-Erweiterungen** werden relativ zum Pfad der Startdatei nachgeladen. Alle
+  Seiten setzen `loader: { load:['[tex]/boldsymbol'] }`, darum muss
+  `vendor/mathjax/input/tex/extensions/boldsymbol.js` bestehen bleiben.
+- **Vorlagen kopieren.** Eine alte Seite als Muster zu nehmen holt den CDN-Aufruf
+  zurück. `TEMPLATE.html` ist umgestellt — von dort kopieren.
+
+Der Pre-Flight prüft das (`check_keine_fremdhosts`) und meldet einen Treffer als
+`[FEHLER]`. Verlinkte Videos und Aufgabensammlungen sind davon nicht betroffen: ein
+`<a href>` lädt nichts, bevor jemand klickt. Eingebettete `<iframe>` zu fremden Hosts
+sind nicht erlaubt.
+
+Ausnahme: `apex-startseite/` wird aus einem eigenen Repo ausgeliefert und trägt darum
+eine eigene, kleinere Schriftkopie. Die beiden Umstell-Skripte
+(`scripts/schriften-lokal.py`, `scripts/mathjax-lokal.py`) lassen den Ordner aus.
+
 ### 5.4 Aufgaben-Nummerierung (verbindlich)
 
 Zwei Stellen, an denen Aufgabennummern in Themenseiten erscheinen. Beide nutzen ausschliesslich Klassen aus `style.css`, **nicht** lokal in der Themenseite definieren.

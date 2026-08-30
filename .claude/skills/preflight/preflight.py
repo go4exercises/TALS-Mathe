@@ -137,6 +137,21 @@ def check_resources_section(text, fname, rep):
             rep.err(fname, f'Ressourcen: {a_open} <a class="lk">, {a_close} </a>')
 
 
+# Drittanbieter-Hosts, die seit dem 30.08.2026 nicht mehr vorkommen duerfen:
+# Schriften und MathJax werden lokal ausgeliefert (schriften/, vendor/mathjax/).
+# Ein CDN-Aufruf schleicht sich am leichtesten dadurch ein, dass eine aeltere
+# Seite als Vorlage kopiert wird.
+FREMDHOSTS = ("fonts.googleapis.com", "fonts.gstatic.com", "cdn.jsdelivr.net")
+
+
+def check_keine_fremdhosts(text, fname, rep):
+    for host in FREMDHOSTS:
+        n = text.count(host)
+        if n:
+            rep.err(fname, f"{n}x {host} — lokal einbinden "
+                           f"(schriften.css bzw. vendor/mathjax/tex-svg.js)")
+
+
 def run_light(path, rep):
     fname = path.name
     try:
@@ -151,6 +166,7 @@ def run_light(path, rep):
     check_skeleton(text, fname, rep)
     check_lib_dep(text, fname, rep)
     check_resources_section(text, fname, rep)
+    check_keine_fremdhosts(text, fname, rep)
 
 
 # ---------- Stufe 2: vorhandene Repo-Skripte orchestrieren ----------

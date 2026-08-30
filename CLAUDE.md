@@ -35,6 +35,10 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - `minicheck.js` (Mini-Check-Akkordeon), `anim-hinweise.js` (👁/💡-Rollover, Pflicht bei
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
 - `formelsammlung.html`, `glossar.html` — zwei Nachschlag-Seiten im Repo-Root.
+- `schriften.css` + `schriften/` — lokal ausgelieferte Schriften (Fontsource 5.3.0,
+  OFL). `vendor/mathjax/` — MathJax 3.2.2 (Apache 2.0). **Keine Seite lädt etwas von
+  einem fremden Host**; Details und Fallstricke in STYLEGUIDE §5.3.1. Umgestellt wird
+  mit `scripts/schriften-lokal.py` und `scripts/mathjax-lokal.py`.
 - `scripts/build-seo.py` — erzeugt Seiten-Metadaten (Beschreibung, canonical, Open
   Graph, JSON-LD nach schema.org/LearningResource), `sitemap.xml` und `robots.txt`.
   Der Kopfblock zwischen `<!-- SEO:ANFANG -->` und `<!-- SEO:ENDE -->` ist

@@ -23,6 +23,37 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
+- **2026-08-30 · Drittanbieter entfernen: Schriften und MathJax lokal ausliefern ·
+  alle Physik-Seiten + `apex-startseite`-Pendant · warum:** In Mathe geht seit dem
+  30.8.2026 keine Anfrage mehr aus dem Haus. Physik hat exakt dasselbe Muster —
+  `fonts.googleapis.com` im Kopf jeder Seite und `cdn.jsdelivr.net/npm/mathjax@3` auf
+  jeder Themenseite — und denselben Fussbereich, der „Keine Cookies · Kein Tracking"
+  verspricht. Solange das CDN drinsteht, stimmt die Aussage dort nicht.
+  **Massnahme in Physik:** die beiden Skripte `scripts/schriften-lokal.py` und
+  `scripts/mathjax-lokal.py` aus Mathe übernehmen (sie sind repo-agnostisch, sie
+  leiten die Wurzel aus dem eigenen Pfad ab), dazu den Ordner `schriften/` und
+  `vendor/mathjax/`. Vier Punkte, an denen es in Mathe geklemmt hätte:
+  1. **Griechisch mitnehmen.** Fontsource liefert latin/latin-ext getrennt vom
+     Greek-Subset. In Physik steht ausserhalb von MathJax noch mehr Griechisch als in
+     Mathe (ω, λ, ρ, μ, Ω in Canvas- und SVG-Beschriftungen), sonst fällt das auf eine
+     Systemschrift zurück. Vorher einmal zählen, wie in Mathe geschehen.
+  2. **`boldsymbol` mitkopieren.** Wenn die Physik-Seiten ebenfalls
+     `loader: { load:['[tex]/boldsymbol'] }` setzen, muss
+     `vendor/mathjax/input/tex/extensions/boldsymbol.js` daneben liegen — MathJax lädt
+     Erweiterungen relativ zum Pfad der Startdatei nach, sonst bricht der Formelsatz
+     dort, wo `\boldsymbol` steht.
+  3. **Die Datenschutzseite nachziehen.** In Mathe nennt `rechtliches.html` die beiden
+     Anbieter ausdrücklich beim Namen; nach der Umstellung ist der Absatz falsch. Dazu
+     ein Abschnitt „Verwendete Fremdsoftware" mit OFL und Apache 2.0.
+  4. **Eigenständige Ordner ausnehmen.** In Mathe ist das `apex-startseite/`, das aus
+     einem eigenen Repo ausgeliefert wird und darum eine eigene Schriftkopie trägt.
+     Falls Physik so etwas hat, im Skript ausschliessen.
+  Absicherung: der Mathe-Pre-Flight hat neu `check_keine_fremdhosts` — ein
+  wiedereingeschleppter CDN-Aufruf ist ein `[FEHLER]`. Denselben Check in den
+  Physik-Pre-Flight übernehmen, sonst kommt es beim nächsten Kopieren einer alten
+  Vorlage zurück. Umfang in Mathe zum Vergleich: 233 Dateien Schriften, 230 Dateien
+  MathJax, Repo +4 MB, ausgeliefert gleich viel wie vorher.
+
 - **2026-08-10 · Umzug auf `physik.begreifbar.ch` · ganzes Physik-Repo · warum:**
   Mathe liegt seit dem 10.8.2026 auf `mathe.begreifbar.ch`. Die DNS-Seite ist für
   Physik **bereits erledigt**: `physik` steht als CNAME auf `go4exercises.github.io.`
