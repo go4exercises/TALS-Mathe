@@ -390,3 +390,30 @@ function mjTypeset(els) {
     .catch(err => console.error('mjTypeset:', err));
   return _mjTypesetQueue;
 }
+
+/* ── Clip starten ─────────────────────────────────────────────────────────────
+   Ein Clip wird bewusst nicht beim Seitenaufruf geladen. In der Seite steht nur
+   die Startkarte; erst der Klick ersetzt sie durch das <iframe>. Zwei Gruende:
+   auf einer Seite mit mehreren Clips darf keiner von selbst loslaufen, und die
+   Seite soll nicht N zusaetzliche Dokumente mitladen. Der Clip startet dann von
+   selbst — er ist frisch eingesetzt, sein Autostart ist genau richtig.
+   Markup erzeugt scripts/build-clips-einbau.py. */
+function clipStart(btn) {
+  const karte = btn.closest('.clip');
+  if (!karte) return;
+  const quelle = karte.dataset.clip;
+  const titel  = karte.dataset.titel || 'Clip';
+  if (!quelle) return;
+
+  const rahmen = document.createElement('div');
+  rahmen.className = 'clip-rahmen';
+  const f = document.createElement('iframe');
+  f.src = quelle;
+  f.title = 'Clip: ' + titel;
+  f.setAttribute('allowfullscreen', '');
+  f.loading = 'eager';
+  rahmen.appendChild(f);
+
+  karte.replaceChild(rahmen, btn);
+  f.focus({ preventScroll: true });
+}

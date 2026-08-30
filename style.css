@@ -829,6 +829,100 @@ canvas { display: block; width: 100%; }
 .ressourcen-subtitel + .links-grid { margin-top: 8px; }
 .links-grid + .ressourcen-subtitel { margin-top: 14px; }
 
+/* ── Clips ─────────────────────────────────────────────────────
+   Eigene Erklaerclips (clips/*.html). Der Clip wird NICHT beim
+   Seitenaufruf geladen: sichtbar ist zuerst nur die Startkarte,
+   erst der Klick setzt das <iframe> ein (clipStart in mathlib.js).
+   So laeuft bei mehreren Clips auf einer Seite keiner von selbst
+   los, und die Seite laedt nicht N zusaetzliche Dokumente mit. */
+.clip-grid { display: grid; gap: 14px; margin-top: 12px; }
+
+.clip-start {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  background: var(--weiss);
+  border: 1px solid var(--linie);
+  border-left: 4px solid var(--blau);
+  border-radius: 9px;
+  padding: 13px 15px;
+  color: inherit;
+  box-shadow: var(--s);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.clip-start:hover  { border-color: var(--blau-rand); transform: translateY(-1px); }
+.clip-start:focus-visible { outline: 2px solid var(--blau); outline-offset: 2px; }
+
+.clip-play {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--blau-hell);
+  color: var(--blau);
+  font-size: 0.95rem;
+  padding-left: 3px;            /* das Dreieck sitzt sonst links aussermittig */
+}
+.clip-start:hover .clip-play { background: var(--blau); color: #fff; }
+.clip-titel { display: block; font-weight: 700; font-size: 0.87rem; }
+.clip-text  { display: block; font-size: 0.73rem; color: var(--tinte-2); margin-top: 2px; }
+.clip-meta  {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--blau);
+  margin-top: 3px;
+}
+
+/* Buehne 16:9 plus 60 px Bedienleiste — die Hoehe der Leiste im Clip.
+   padding-bottom statt aspect-ratio, damit die Summe exakt aufgeht. */
+.clip-rahmen {
+  position: relative;
+  width: 100%;
+  padding-bottom: calc(56.25% + 60px);
+  border: 1px solid var(--linie);
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: var(--s);
+  background: var(--papier);
+}
+.clip-rahmen iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* Transkript: der einzige Text, den Suchmaschine und Volltextsuche vom
+   Clip sehen. Klasse darf NICHT in SKIP_CLASSES von build-suchindex.py. */
+.clip-transkript { margin-top: 10px; }
+.clip-transkript > summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--tinte-2);
+  padding: 4px 0;
+}
+.clip-transkript > summary:hover { color: var(--blau); }
+.clip-transkript ol { margin: 8px 0 0; padding-left: 0; list-style: none; }
+.clip-transkript li {
+  display: flex;
+  gap: 12px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  padding: 3px 0;
+}
+.clip-transkript .tk-zeit {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--tinte-2);
+  min-width: 44px;
+}
+
 /* ════════════════════════════════════════════════════════════════
  *  Animations-Karte (.anim)
  *  Wird seitenübergreifend für interaktive Canvas-Animationen
