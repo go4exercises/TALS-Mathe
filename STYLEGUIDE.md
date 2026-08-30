@@ -496,9 +496,18 @@ Zwei Fallstricke:
   zwar erst beim Gebrauch. Ein fehlendes Stück fällt darum weder beim Laden noch im
   Pre-Flight auf — nur im Netzwerk-Tab als 404. Was dort liegen muss:
   `input/tex/extensions/boldsymbol.js` (alle Seiten setzen
-  `loader: { load:['[tex]/boldsymbol'] }`) sowie `input/mml.js` mit `input/mml/`,
-  `a11y/` und `sre/mathmaps/` für die Sprachausgabe im Kontextmenü — der Explorer
-  zieht den MathML-Eingang nach. Geprüft wird das nur im Browser, nicht statisch.
+  `loader: { load:['[tex]/boldsymbol'] }`), `input/mml.js` mit `input/mml/`, `a11y/`
+  und `sre/mathmaps/` für die Sprachausgabe (der Explorer zieht den MathML-Eingang
+  nach) und `output/chtml.js` mit `output/chtml/` für den Renderer-Wechsel. Geprüft
+  wird das nur im Browser, nicht statisch.
+- **Der Renderer-Wechsel muss funktionieren, nicht nur nicht abstürzen.** Rechtsklick
+  auf eine Formel → *Math Settings → Math Renderer → CHTML*. Fehlt `output/chtml.js`,
+  scheitert der Wechsel still — aber MathJax merkt sich die Wahl in `localStorage`
+  (`MathJax-Menu-Settings`). Ab dem nächsten Seitenaufruf steht dann auf **allen**
+  Seiten roher LaTeX-Quelltext statt Formeln, und weil es keine gerenderte Formel
+  mehr gibt, kommt die Besucherin nicht einmal mehr ans Kontextmenü, um es
+  zurückzustellen. Nur Site-Daten löschen hilft. Darum liegt CHTML bei: 610 kB im
+  Repo, 0 Byte für alle, die nichts umstellen.
 - **Vorlagen kopieren.** Eine alte Seite als Muster zu nehmen holt den CDN-Aufruf
   zurück. `TEMPLATE.html` ist umgestellt — von dort kopieren.
 

@@ -43,9 +43,13 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
      Erweiterungen relativ zum Pfad der Startdatei nach, sonst bricht der Formelsatz
      dort, wo `\boldsymbol` steht. Dasselbe gilt fuer die Sprachausgabe im
      Kontextmenue: sie braucht `input/mml.js` samt `input/mml/`, `a11y/` und
-     `sre/mathmaps/`. Beides faellt weder beim Laden noch im Pre-Flight auf — in
-     Mathe kam es erst heraus, als der Explorer im Browser wirklich angestossen
-     wurde und `input/mml.js` mit 404 antwortete.
+     `sre/mathmaps/`. Und `output/chtml.js` samt `output/chtml/` — sonst wird der
+     Renderer-Wechsel im Kontextmenue zur Falle: MathJax merkt die Wahl in
+     `localStorage`, der Wechsel scheitert still, und ab dem naechsten Aufruf steht
+     auf allen Seiten roher LaTeX-Quelltext; ohne gerenderte Formel gibt es auch kein
+     Kontextmenue mehr, um es zurueckzustellen. Nichts davon faellt beim Laden oder im
+     Pre-Flight auf — in Mathe kam beides erst heraus, als die Menuepunkte im Browser
+     wirklich angestossen wurden.
   3. **Die Datenschutzseite nachziehen.** In Mathe nennt `rechtliches.html` die beiden
      Anbieter ausdrücklich beim Namen; nach der Umstellung ist der Absatz falsch. Dazu
      ein Abschnitt „Verwendete Fremdsoftware" mit OFL und Apache 2.0.
