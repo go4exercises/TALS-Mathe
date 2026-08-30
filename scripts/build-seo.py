@@ -74,6 +74,11 @@ SEITEN = {
    titel='Glossar — mathematische Begriffe von A bis Z',
    beschreibung='Mathematik-Glossar der Berufsmaturität: die zentralen Begriffe von A bis Z kurz erklärt, jeweils mit Formel und Verweis auf die passende Themenseite.',
    themen=['Mathematik', 'Glossar', 'Fachbegriffe', 'Berufsmaturität']),
+ 'clips.html': dict(
+   typ='article', lrt='Erklärclip',
+   titel='Clips — kurze Animationen zu den Rechenwegen',
+   beschreibung='Kurze Animationen der BM-Mathematik: Ein Clip baut einen Rechenweg Zeile für Zeile auf, mit Farbführung und Text zum Mitlesen. Nach Lerngebieten geordnet.',
+   themen=['Mathematik', 'Erklärclip', 'Animation', 'Berufsmaturität', 'Rechenweg']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',

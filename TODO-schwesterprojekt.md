@@ -23,6 +23,41 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
+- **2026-08-30 · Clips: Verfahren uebernehmen, sobald Physik welche hat · `clips/`,
+  `scripts/build-clips*.py`, `style.css`, `physiklib.js`, `nav.js`, `clips.html` ·
+  warum:** In Mathe steht seit dem 30.8.2026 die vollstaendige Mechanik fuer kurze,
+  stumme HTML-Animationen. Sie ist projektunabhaengig gebaut und laesst sich uebernehmen,
+  ohne etwas neu zu erfinden. Physik hat derzeit keine Clips — der Eintrag ist eine
+  Vorlage fuer den Tag, an dem der erste entsteht, kein offener Rueckstand.
+  **Was zu uebertragen waere:** `clips/` samt `themes/` und `vorlage.json`,
+  `scripts/build-clips.py` (Drehbuch → Clip) und `scripts/build-clips-einbau.py`
+  (Clip → Lektionsseite und Bibliothek), die Abschnitte `.clip-*` aus `style.css`, der
+  Helfer `clipStart` (in Mathe in `mathlib.js`, in Physik nach `physiklib.js`), der
+  Nav-Eintrag im Menue *Nachschlagen*, je eine Zeile in `build-seo.py` und
+  `build-suchindex.py`, sowie die Clip-Checks im Pre-Flight. Dazu `HOWTO-clips.md` und
+  STYLEGUIDE §6.4.
+  Fuenf Punkte, die in Mathe Arbeit gekostet haben:
+  1. **`clips/` muss genau eine Ebene unter der Wurzel liegen.** Die Clips ziehen die
+     Schriften per `@import url("../schriften.css")`. Tiefer verschoben faellt die Buehne
+     still auf Georgia zurueck, ohne dass etwas bricht.
+  2. **`lektion` ist eine Liste.** Ein Clip gehoert oft auf mehrere Seiten. Der erste
+     Mathe-Clip steht auf `g2-2b` und `s2-2a`. Mit Einzelwert muesste man ihn
+     duplizieren, und zwei Kopien laufen auseinander.
+  3. **Kein `<iframe>` beim Seitenaufruf** — nur eine Startkarte, der Klick setzt den
+     Rahmen ein. Sonst laufen bei mehreren Clips alle gleichzeitig los. Der Rahmen
+     braucht `padding-bottom: calc(56.25% + 60px)`: 16:9 plus die 60 px hohe
+     Bedienleiste des Clips, sonst schrumpft die Buehne.
+  4. **Das Transkript entscheidet ueber die Auffindbarkeit.** Von einer Animation sieht
+     eine Suchmaschine gar nichts. Die Klasse `clip-transkript` darf nicht in
+     `SKIP_CLASSES` von `build-suchindex.py` landen — in Mathe nachgeprueft: danach ist
+     der Sprechertext ueber die Volltextsuche auffindbar.
+  5. **`verify_js_runtime.js` verträgt keine Wurzelseiten.** Es ersetzt
+     Bibliotheks-Einbindungen der Form `src="../nav.js"`, rechnet also mit Seiten genau
+     eine Ebene tief. `clips.html` — und uebrigens auch `glossar.html` und
+     `formelsammlung.html` — erzeugen dort einen falschen `[FEHLER]`. In Mathe bekommt
+     das Skript darum nur noch Themenseiten zu sehen; derselbe Filter gehoert in Physiks
+     Pre-Flight. Ebenso die Erkennung von `src="nav.js"` ohne `../` im Skelett-Check.
+
 - **2026-08-30 · Drittanbieter entfernen: Schriften und MathJax lokal ausliefern ·
   alle Physik-Seiten · warum:** In Mathe geht seit dem 30.8.2026 keine Anfrage mehr aus
   dem Haus. Physik hat exakt dasselbe Muster und denselben Fussbereich, der

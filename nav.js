@@ -125,7 +125,7 @@ function buildNav(cfg) {
   // Seite, auf Glossar/Formelsammlung «Nachschlagen». Beide Bereiche werden
   // gleich behandelt — auf der Startseite und den übrigen Seiten bleibt alles
   // zu und wird erst per Klick geöffnet.
-  const refAktiv = (cfg.id === 'glossar' || cfg.id === 'formeln');
+  const refAktiv = (cfg.id === 'glossar' || cfg.id === 'formeln' || cfg.id === 'clips');
   const spOffen  = (cfg.bereich === 'schwerpunkt');
   const glOffen  = (cfg.bereich === 'grundlagen');
 
@@ -205,7 +205,7 @@ function buildNav(cfg) {
       </div>
     </div>
     <div class="dropdown">
-      <button class="nav-btn${(cfg.id==='glossar'||cfg.id==='formeln') ? ' aktiv':''}" onclick="toggleDD('dd-ref')">
+      <button class="nav-btn${(cfg.id==='glossar'||cfg.id==='formeln'||cfg.id==='clips') ? ' aktiv':''}" onclick="toggleDD('dd-ref')">
         Nachschlagen ▾
       </button>
       <div class="dd-menu" id="dd-ref">
@@ -216,6 +216,9 @@ function buildNav(cfg) {
           </a>
           <a href="${prefix}formelsammlung.html" class="${cfg.id==='formeln'?'dd-aktiv':''}">
             <span class="dd-nr">∑</span><span class="dd-tit">Formelsammlung</span>
+          </a>
+          <a href="${prefix}clips.html" class="${cfg.id==='clips'?'dd-aktiv':''}">
+            <span class="dd-nr">▶</span><span class="dd-tit">Clips</span>
           </a>
         </div>
         <div class="dd-gruppe">
@@ -272,6 +275,7 @@ function buildNav(cfg) {
     <div class="mn-sektion-body">
       <a href="${prefix}glossar.html" class="${cfg.id==='glossar'?'mn-aktiv':''}">A–Z · Glossar</a>
       <a href="${prefix}formelsammlung.html" class="${cfg.id==='formeln'?'mn-aktiv':''}">∑ · Formelsammlung</a>
+      <a href="${prefix}clips.html" class="${cfg.id==='clips'?'mn-aktiv':''}">▶ · Clips</a>
       <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">PDF · SBFI-Formelsammlung</a>
     </div>
   </details>

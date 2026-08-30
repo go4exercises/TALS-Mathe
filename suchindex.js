@@ -3,7 +3,7 @@
 //  Neu bauen:  python3 scripts/build-suchindex.py
 // ─────────────────────────────────────────────────────────────
 window.SUCHINDEX = {
-  fp: "fade0d995079dd5d",
+  fp: "cc9077d0169595df",
   seiten: [
     {u:"grundlagen/g1-1-grundlagen.html", nr:"1.1", t:"Grundlagen"},
     {u:"grundlagen/g1-2-zahlen-grundoperationen.html", nr:"1.2", t:"Zahlen und zugehörige Grundoperationen"},
@@ -53,6 +53,7 @@ window.SUCHINDEX = {
     {u:"schwerpunkt/s4-3d-ebenen.html", nr:"4.3d", t:"Ebenen"},
     {u:"glossar.html", nr:"A–Z", t:"Glossar"},
     {u:"formelsammlung.html", nr:"∑", t:"Formelsammlung"},
+    {u:"clips.html", nr:"▶", t:"Clips"},
   ],
   eintraege: [
     {p:0, a:"", t:"1.1 Grundlagen", x:"1.1 Grundlagen In diesem Teilgebiet geht es um Struktur : einen algebraischen Ausdruck als Ganzes lesen, seine Bausteine erkennen und entscheiden, welche Umformung erlaubt ist. Wer Strukturen sieht, rechnet schneller — und macht weniger Vorzeichenfehler. 📋 Kompetenzen nach RLP 2030 — Teilgebiet 1.1 Strukturen von algebraischen Ausdrücken erkennen und beim Berechnen sowie Umformen entsprechend berücksichtigen 🎯 Lernziele — das kann ich nach dieser Seite Ich kann erklären, was ein algebraischer Term ist und woraus er besteht (Zahlen, Variablen, Operationen). Ich kann die Hauptoperation eines Terms bestimmen und damit seine Struktur beschreiben. Ich kann die Hierarchie der Operationen («Klammer vor Potenz vor Punkt vor Strich», innerhalb einer Stufe von links nach rechts) sicher anwenden. Ich kann einen Strukturbaum lesen und zu einem Term aufstellen. Ich kann Rechengesetze (Kommutativ-, Assoziativ-, Distributivgesetz) erkennen und für Umformungen nutzen."},
@@ -457,5 +458,7 @@ window.SUCHINDEX = {
     {p:47, a:"lg4", t:"Lage- und Streumasse", x:"Lage- und Streumasse Masszahlen · Diagramme Arithmetisches Mittel x = 1 n i=1 n x i → 4.3 Median mittlerer Wert der geordneten Liste (robust) → 4.3 Spannweite R=x -x → 4.3 Quartilsdifferenz IQR =Q 3-Q 1 → 4.3 Standardabweichung s= sqrt 1 n (x i- x ) 2 → 4.3 Boxplot Minimum · Q 1 · Median · Q 3 · Maximum → 4.2"},
     {p:47, a:"lg5", t:"Flächen und Kreis", x:"Flächen und Kreis Planimetrie Dreiecksfläche A= g· h 2 → 5.2a Innenwinkelsumme n -Eck (n-2)· 180 ° → 5.2b Trapezfläche A= a+c 2 · h → 5.2b Kreisumfang / -fläche U=2 pi r , A= pi r 2 → 5.2c Satz des Pythagoras a 2+b 2=c 2 (rechtwinklig) → 5.2a Ähnlichkeit Längen k , Flächen k 2 → 5.2d"},
     {p:47, a:"lg5", t:"Trigonometrie", x:"Trigonometrie Rechtwinkliges schiefwinkliges Dreieck · Einheitskreis Definitionen (GAGA) sin alpha = GK Hyp , cos alpha = AK Hyp , tan alpha = GK AK → 5.3 Sinussatz a sin alpha = b sin beta = c sin gamma → 5.3 Cosinussatz c 2=a 2+b 2-2ab cos gamma → 5.3 Trigonometrischer Pythagoras sin 2 alpha + cos 2 alpha =1 → 5.4 Tangens-Beziehung tan alpha = sin alpha cos alpha → 5.4 Spezialwinkel sin 30 °= 12 , sin 45 °= sqrt 2 2 , sin 60 °= sqrt 3 2 → 5.4 Grad ↔ Bogenmass 180 ° = pi → 5.1 Trig. Grundgleichung sin x=c⇒ x 1, x 2=180 °-x 1 (+ k· 360 °) → 5.5 Diese Sammlung bündelt die Formeln dieses Lehrmittels. Begriffe werden im Glossar erklärt. Für das physikalische Pendant siehe die Formelsammlung von Physik begreifbar ."},
+    {p:48, a:"", t:"Clips", x:"Clips Kurze Animationen, die einen einzelnen Gedankengang Zeile für Zeile aufbauen. Ein Clip dauert etwa eine Minute und läuft erst, wenn du ihn startest. Unter jedem Clip steht der Text zum Mitlesen."},
+    {p:48, a:"grundlagenfach", t:"Grundlagenfach", x:"Grundlagenfach 2 · Gleichungen, Ungleichungen und Gleichungssysteme Im Zusammenhang: 2.2b Quadratische Gleichungen · 2.2a Potenz-, Wurzel- und rationale Gleichungen Transkript · Bruchgleichungen 0:00 Eine Bruchgleichung: das x steht im Nenner. 0:08 Ein Nenner darf nie null werden. 0:16 Schritt eins: die Definitionsmenge. Der dritte Nenner zerfällt in genau die beiden anderen. 0:26 Schritt zwei: mit dem Hauptnenner multiplizieren. Jeder Nenner kürzt sich gegen seinen eigenen Faktor. 0:38 Schritt drei: ausmultiplizieren und ordnen. Wir erhalten zwei Kandidaten. 0:49 Schritt vier: prüfen. Minus zwei war der verbotene Wert des zweiten Nenners. Es ist eine Scheinlösung. 1:01 Zuerst die Definitionsmenge. Zuletzt prüfen. Jeder Clip steht auch auf der Themenseite, zu der er gehört — dort im Zusammenhang mit Theorie und Aufgaben. Die Formeln gesammelt findest du in der Formelsammlung , die Begriffe im Glossar ."},
   ]
 };

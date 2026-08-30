@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Schreibt den Clip-Block in die Lektionsseiten.
+Schreibt die Clips dorthin, wo sie erscheinen sollen: in die Lektionsseiten
+und in die Bibliotheksseite clips.html.
 
-Verfahren wie bei scripts/build-seo.py: Du setzt einmal pro Seite die beiden
-Kommentarzeilen
+Verfahren wie bei scripts/build-seo.py — der Inhalt zwischen zwei
+Kommentarzeilen ist generiert, alles andere bleibt von Hand gepflegt.
 
-    <!-- CLIPS:ANFANG — generiert von scripts/build-clips-einbau.py, nicht von Hand ändern -->
-    <!-- CLIPS:ENDE -->
+    Lektionsseite:  <!-- CLIPS:ANFANG … -->  …  <!-- CLIPS:ENDE -->
+    clips.html:     <!-- CLIPS-BIBLIOTHEK:ANFANG … -->  …  <!-- CLIPS-BIBLIOTHEK:ENDE -->
 
-danach pflegt sich der Block selbst. Welche Clips auf welche Seite gehoeren,
-steht ausschliesslich im Drehbuch unter `lektion` (eine Liste von Codes aus
-nav.js) — nicht in der Seite. Ein Clip kann so auf mehreren Seiten stehen,
-ohne dass er dupliziert wird.
+Welche Clips auf welche Seite gehoeren, steht ausschliesslich im Drehbuch
+unter `lektion` (Liste von Codes aus nav.js) — nicht in der Seite. Ein Clip
+kann so auf mehreren Seiten stehen, ohne dass er dupliziert wird.
 
 Der Block enthaelt eine Startkarte je Clip und darunter das Transkript aus
 clips/sprechertext-*.txt. Das Transkript ist nicht Beiwerk: Von einem
@@ -42,17 +42,32 @@ MARKE_AUF = ('<!-- CLIPS:ANFANG — generiert von scripts/build-clips-einbau.py,
 MARKE_ZU = '<!-- CLIPS:ENDE -->'
 BLOCK = re.compile(re.escape(MARKE_AUF) + r'.*?' + re.escape(MARKE_ZU), re.DOTALL)
 
+BIB_AUF = ('<!-- CLIPS-BIBLIOTHEK:ANFANG — generiert von scripts/build-clips-einbau.py, '
+           'nicht von Hand ändern -->')
+BIB_ZU = '<!-- CLIPS-BIBLIOTHEK:ENDE -->'
+BIB = re.compile(re.escape(BIB_AUF) + r'.*?' + re.escape(BIB_ZU), re.DOTALL)
+
+BIBLIOTHEK = "clips.html"
+FAECHER = ["Grundlagenfach", "Schwerpunktfach"]
+
 
 def lektionsseiten():
-    """Code -> Seitenpfad, gelesen aus nav.js. Das ist die einzige Liste,
-    die weiss, welche Lektion auf welcher Datei liegt."""
+    """Code -> {nr, titel, url}, gelesen aus nav.js. Das ist die einzige
+    Liste, die weiss, welche Lektion auf welcher Datei liegt."""
     quelle = open(os.path.join(WURZEL, "nav.js"), encoding="utf-8").read()
-    paare = re.findall(r"id:\s*'([^']+)'.*?url:\s*'([^']+)'", quelle)
-    return dict(paare)
+    treffer = re.findall(
+        r"id:\s*'([^']+)'\s*,\s*nr:\s*'([^']*)'\s*,\s*titel:\s*'([^']*)'\s*,\s*url:\s*'([^']+)'",
+        quelle)
+    return {i: dict(nr=nr, titel=ti, url=u) for i, nr, ti, u in treffer}
 
 
 def mmss(sekunden):
     return f"{int(sekunden) // 60}:{int(sekunden) % 60:02d}"
+
+
+def codes(clip):
+    v = clip.get("lektion") or []
+    return [v] if isinstance(v, str) else list(v)
 
 
 def transkript(datei):
@@ -73,37 +88,74 @@ def transkript(datei):
     return zeilen or None
 
 
-def block_bauen(clips, tiefe):
-    """tiefe = Ebenen unter der Wurzel, daraus wird der ../-Praefix."""
+def karte(clip, vor):
+    titel = html.escape(clip["titel"])
+    return [
+        f'<div class="clip" data-clip="{vor}clips/{clip["datei"]}" data-titel="{titel}">',
+        '  <button class="clip-start" type="button" onclick="clipStart(this)">',
+        '    <span class="clip-play" aria-hidden="true">▶</span>',
+        '    <span>',
+        f'      <span class="clip-titel">{titel} abspielen</span>',
+        f'      <span class="clip-text">{html.escape(clip.get("kurzbeschrieb", ""))}</span>',
+        f'      <span class="clip-meta">{mmss(clip.get("dauer_s", 0))} · CLIP</span>',
+        '    </span>',
+        '  </button>',
+        '</div>',
+    ]
+
+
+def transkript_block(clip):
+    tk = transkript(clip["datei"])
+    if not tk:
+        print(f"  [WARN] kein Sprechertext zu {clip['datei']}")
+        return []
+    aus = ['<details class="clip-transkript">',
+           f'<summary>Transkript · {html.escape(clip["titel"])}</summary>', '<ol>']
+    for zeit, txt in tk:
+        aus.append(f'<li><span class="tk-zeit">{zeit}</span>'
+                   f'<span>{html.escape(txt)}</span></li>')
+    aus += ['</ol>', '</details>']
+    return aus
+
+
+def block_lektion(clips, tiefe):
+    """Der Block auf einer Lektionsseite. tiefe = Ebenen unter der Wurzel."""
     vor = "../" * tiefe
     aus = [MARKE_AUF, '<h2 id="clips">Clips</h2>', '<div class="clip-grid">']
     for c in clips:
-        titel = html.escape(c["titel"])
-        aus += [
-            f'<div class="clip" data-clip="{vor}clips/{c["datei"]}" data-titel="{titel}">',
-            '  <button class="clip-start" type="button" onclick="clipStart(this)">',
-            '    <span class="clip-play" aria-hidden="true">▶</span>',
-            '    <span>',
-            f'      <span class="clip-titel">{titel} abspielen</span>',
-            f'      <span class="clip-text">{html.escape(c.get("kurzbeschrieb", ""))}</span>',
-            f'      <span class="clip-meta">{mmss(c.get("dauer_s", 0))} · CLIP</span>',
-            '    </span>',
-            '  </button>',
-            '</div>',
-        ]
-        tk = transkript(c["datei"])
-        if tk:
-            aus.append('<details class="clip-transkript">')
-            aus.append(f'<summary>Transkript · {titel}</summary>')
-            aus.append('<ol>')
-            for zeit, txt in tk:
-                aus.append(f'<li><span class="tk-zeit">{zeit}</span>'
-                           f'<span>{html.escape(txt)}</span></li>')
-            aus.append('</ol>')
-            aus.append('</details>')
-        else:
-            print(f"  [WARN] kein Sprechertext zu {c['datei']}")
+        aus += karte(c, vor) + transkript_block(c)
     aus += ['</div>', MARKE_ZU]
+    return "\n".join(aus)
+
+
+def block_bibliothek(alle, seiten):
+    """clips.html — nach Fach, darin nach Lerngebiet, in der Reihenfolge
+    der Startseite."""
+    aus = [BIB_AUF]
+    faecher = FAECHER + sorted({c.get("fach", "") for c in alle} - set(FAECHER) - {""})
+    for fach in faecher:
+        drin = [c for c in alle if c.get("fach") == fach]
+        if not drin:
+            continue
+        anker = fach.lower().replace("ü", "ue")
+        aus.append(f'<h2 id="{anker}">{html.escape(fach)}</h2>')
+        for lg in sorted({c.get("lerngebiet", "") for c in drin}):
+            aus.append(f'<h3 class="clip-lg">{html.escape(lg)}</h3>')
+            aus.append('<div class="clip-grid">')
+            for c in sorted((x for x in drin if x.get("lerngebiet") == lg),
+                            key=lambda x: x["titel"]):
+                aus += karte(c, "")
+                verweise = []
+                for code in codes(c):
+                    s = seiten.get(code)
+                    if s:
+                        verweise.append(f'<a href="{s["url"]}">{s["nr"]} {html.escape(s["titel"])}</a>')
+                if verweise:
+                    aus.append('<p class="clip-lektionen">Im Zusammenhang: '
+                               + ' · '.join(verweise) + '</p>')
+                aus += transkript_block(c)
+            aus.append('</div>')
+    aus.append(BIB_ZU)
     return "\n".join(aus)
 
 
@@ -116,50 +168,63 @@ def main():
     if not os.path.exists(index):
         sys.exit("clips/clips.json fehlt — erst `python3 scripts/build-clips.py` laufen lassen.")
     alle = json.load(open(index, encoding="utf-8"))["clips"]
-
     seiten = lektionsseiten()
+
     nach_lektion = {}
     for c in alle:
-        codes = c.get("lektion") or []
-        if isinstance(codes, str):
-            codes = [codes]
-        for code in codes:
+        for code in codes(c):
             if code not in seiten:
                 print(f"  [FEHLER] {c['datei']}: Lektion '{code}' steht nicht in nav.js")
                 continue
             nach_lektion.setdefault(code, []).append(c)
 
-    geaendert, gleich, ohne_marker = [], 0, []
+    aufgaben = []          # (pfad, neuer Text)
+    gleich, ohne_marker = 0, []
+
     for code, clips in sorted(nach_lektion.items()):
-        pfad = os.path.join(WURZEL, seiten[code])
+        pfad = os.path.join(WURZEL, seiten[code]["url"])
         if not os.path.exists(pfad):
-            print(f"  [FEHLER] {code}: {seiten[code]} existiert nicht")
+            print(f"  [FEHLER] {code}: {seiten[code]['url']} existiert nicht")
             continue
         text = open(pfad, encoding="utf-8").read()
         if not BLOCK.search(text):
-            ohne_marker.append((code, seiten[code], len(clips)))
+            ohne_marker.append((code, seiten[code]["url"], len(clips)))
             continue
-        tiefe = seiten[code].count("/")
-        neu = BLOCK.sub(lambda _m: block_bauen(clips, tiefe), text, count=1)
+        tiefe = seiten[code]["url"].count("/")
+        neu = BLOCK.sub(lambda _m: block_lektion(clips, tiefe), text, count=1)
         if neu == text:
             gleich += 1
         else:
-            geaendert.append((pfad, neu))
+            aufgaben.append((pfad, neu))
 
-    print(f"{len(geaendert)} Seiten zu aktualisieren, {gleich} bereits aktuell")
+    bib = os.path.join(WURZEL, BIBLIOTHEK)
+    if not os.path.exists(bib):
+        print(f"  [WARN] {BIBLIOTHEK} fehlt — Bibliothek wird nicht geschrieben")
+    else:
+        text = open(bib, encoding="utf-8").read()
+        if not BIB.search(text):
+            print(f"  [WARN] {BIBLIOTHEK} hat keine CLIPS-BIBLIOTHEK-Marker")
+        else:
+            neu = BIB.sub(lambda _m: block_bibliothek(alle, seiten), text, count=1)
+            if neu == text:
+                gleich += 1
+            else:
+                aufgaben.append((bib, neu))
+
+    print(f"{len(aufgaben)} Seiten zu aktualisieren, {gleich} bereits aktuell")
     for code, url, n in ohne_marker:
         print(f"  [WARN] {code} hat {n} Clip(s), aber keine CLIPS-Marker in {url}")
-    for pfad, _ in geaendert:
+    for pfad, _ in aufgaben:
         print("   ", os.path.relpath(pfad, WURZEL))
 
-    if not geaendert:
+    if not aufgaben:
         return
     if not a.schreiben:
         print("\nProbelauf. Mit --schreiben werden die Änderungen gespeichert.")
         return
-    for pfad, neu in geaendert:
+    for pfad, neu in aufgaben:
         open(pfad, "w", encoding="utf-8").write(neu)
-    print(f"\n{len(geaendert)} Seiten geschrieben.")
+    print(f"\n{len(aufgaben)} Seiten geschrieben.")
 
 
 if __name__ == "__main__":

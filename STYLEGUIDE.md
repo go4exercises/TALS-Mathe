@@ -1065,6 +1065,34 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 ---
 
+## 6.4 Clips (verbindlich seit 30.08.2026)
+
+Ein Clip ist eine stumme HTML-Animation in `clips/`, kein Video. Ausführlich in
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist.
+
+- **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
+  `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass
+  etwas bricht — die Bühne fällt still auf Georgia zurück.
+- **Dateiname `<lektion>-<kurzname>`**, passend zum Schema der Themenseiten.
+- **Von Hand geschrieben wird nur das Drehbuch** (`clips/<name>.json`). `.html`,
+  `sprechertext-*.txt` und `clips.json` erzeugt `scripts/build-clips.py` und werden
+  mitversioniert — GitHub Pages baut nichts.
+- **`lektion` ist eine Liste**, auch bei einem Eintrag. Ein Clip gehört oft auf mehrere
+  Seiten; ohne Liste müsste man ihn duplizieren, und zwei Kopien laufen auseinander.
+  Jeder Code muss einer `id` in `nav.js` entsprechen — der Pre-Flight prüft das.
+- **Kein `<iframe>` beim Seitenaufruf.** In der Seite steht nur die Startkarte, erst der
+  Klick setzt den Rahmen ein (`clipStart` in `mathlib.js`). Sonst laufen bei mehreren
+  Clips alle gleichzeitig los und die Seite lädt N zusätzliche Dokumente mit.
+- **Transkript ist Pflicht.** Von einer Animation sieht eine Suchmaschine nichts, und die
+  Volltextsuche ebenso wenig. Klasse `clip-transkript` — die darf **nicht** in
+  `SKIP_CLASSES` von `scripts/build-suchindex.py` landen.
+- **Farbe im Clip bedeutet etwas anderes als auf der Seite.** `{1:…}` bis `{4:…}` verfolgen
+  einen *Term* über mehrere Zeilen, nicht einen Blocktyp. Dass Orange auf den Seiten
+  „Aufgabe" markiert (§5.1), gilt hier nicht — anderer Kontext. 1 und 2 (Blau/Orange) sind
+  das Paar, das auch bei Rotgrünschwäche unterscheidbar bleibt. Sparsam einsetzen.
+- **Reihenfolge nach jedem Drehbuch-Edit:** `build-clips.py`, dann
+  `build-clips-einbau.py`, dann `build-seo.py` und `build-suchindex.py`.
+
 ## 7. Footer-Konvention
 
 | Seite | Footer-Inhalt |

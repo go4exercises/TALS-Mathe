@@ -102,8 +102,9 @@ def check_decimal_comma_in_math(text, fname, rep):
 def check_skeleton(text, fname, rep):
     pw = len(re.findall(r"page-wrap", text))
     mc = len(re.findall(r'main class="content"', text))
-    nav_defer = len(re.findall(r'src="\.\./nav\.js" defer', text))
-    nav_any = len(re.findall(r'src="\.\./nav\.js"', text))
+    # Themenseiten binden ../nav.js ein, Wurzelseiten nav.js — beides gilt.
+    nav_defer = len(re.findall(r'src="(?:\.\./)?nav\.js" defer', text))
+    nav_any = len(re.findall(r'src="(?:\.\./)?nav\.js"', text))
     if pw != 1:
         rep.err(fname, f'Skelett: page-wrap {pw}× (erwartet 1)')
     if mc != 1:
@@ -163,10 +164,16 @@ def run_light(path, rep):
     check_duplicate_ids(text, fname, rep)
     check_no_eszett(text, fname, rep)
     check_decimal_comma_in_math(text, fname, rep)
+    check_keine_fremdhosts(text, fname, rep)
+
+    # Clips sind eigenstaendige Buehnen ohne Seitengeruest — Skelett-, nav-
+    # und Ressourcen-Checks gelten fuer sie nicht.
+    if "clips" in path.parts:
+        return
+
     check_skeleton(text, fname, rep)
     check_lib_dep(text, fname, rep)
     check_resources_section(text, fname, rep)
-    check_keine_fremdhosts(text, fname, rep)
 
 
 # ---------- Stufe 2: vorhandene Repo-Skripte orchestrieren ----------
@@ -178,6 +185,50 @@ def _dep_present(name):
 def _run_node(script, file_args, env):
     return subprocess.run(["node", script, *file_args],
                           capture_output=True, text=True, env=env)
+
+
+def check_clips(wurzel, rep):
+    """Konsistenz der Clip-Ablage. Faellt sonst nirgends auf: ein Clip ohne
+    Eintrag fehlt lautlos in der Bibliothek, ein Eintrag ohne Datei liefert
+    dort einen toten Knopf, und ein `lektion`-Code, den nav.js nicht kennt,
+    landet auf keiner Seite."""
+    import json as _json
+    clips = wurzel / "clips"
+    index = clips / "clips.json"
+    if not clips.is_dir() or not index.is_file():
+        return
+
+    try:
+        eintraege = _json.loads(index.read_text(encoding="utf-8")).get("clips", [])
+    except ValueError as e:
+        rep.err("clips.json", f"nicht lesbar: {e}")
+        return
+
+    dateien = {f.name for f in clips.glob("*.html")}
+    gelistet = {e.get("datei", "") for e in eintraege}
+    for fehlt in sorted(gelistet - dateien):
+        rep.err("clips.json", f"Eintrag '{fehlt}' hat keine Datei")
+    for fehlt in sorted(dateien - gelistet):
+        rep.err("clips/", f"{fehlt} steht nicht in clips.json — "
+                          "`python3 scripts/build-clips.py`")
+
+    nav = wurzel / "nav.js"
+    bekannt = set(re.findall(r"id:\s*'([^']+)'", nav.read_text(encoding="utf-8"))) \
+        if nav.is_file() else set()
+    for e in eintraege:
+        codes = e.get("lektion") or []
+        if isinstance(codes, str):
+            codes = [codes]
+        if not codes:
+            rep.err("clips.json", f"{e.get('datei')}: Feld 'lektion' ist leer")
+        for c in codes:
+            if bekannt and c not in bekannt:
+                rep.err("clips.json", f"{e.get('datei')}: Lektion '{c}' "
+                                      "steht nicht in nav.js")
+        stamm = e.get("datei", "").replace(".html", "")
+        if stamm and not (clips / f"sprechertext-{stamm}.txt").is_file():
+            rep.warn("clips/", f"kein Sprechertext zu {e.get('datei')} — "
+                               "die Seite bekommt kein Transkript")
 
 
 def run_deep(file_args, rep):
@@ -206,11 +257,21 @@ def run_deep(file_args, rep):
                 rep.warn("verify_mathjax.js", "Summenzeile nicht erkannt")
 
     js = scripts / "verify_js_runtime.js"
-    if js.is_file():
+    # Das Skript ersetzt Bibliotheks-Einbindungen der Form src="../nav.js" —
+    # es rechnet also mit Seiten genau eine Ebene tief. Wurzelseiten
+    # (glossar, formelsammlung, clips) und die Clip-Buehnen selbst wuerden
+    # dort einen falschen [FEHLER] erzeugen, darum bekommt es nur
+    # Themenseiten zu sehen.
+    themenseiten = [f for f in file_args
+                    if f.replace("\\", "/").split("/")[0] in ("grundlagen", "schwerpunkt")]
+    if js.is_file() and not themenseiten:
+        print("---- verify_js_runtime.js ----")
+        print("keine Themenseiten uebergeben — uebersprungen")
+    elif js.is_file():
         if not _dep_present("jsdom"):
             rep.warn("verify_js_runtime.js", "node_modules/jsdom fehlt — `npm install jsdom`")
         else:
-            r = _run_node(str(js), file_args, env)
+            r = _run_node(str(js), themenseiten, env)
             out = (r.stdout or "") + (r.stderr or "")
             print("---- verify_js_runtime.js ----")
             print(out.rstrip())
@@ -233,6 +294,8 @@ def run_deep(file_args, rep):
         r = subprocess.run(["python3", str(seo), "--check"], capture_output=True, text=True)
         if r.returncode != 0:
             rep.warn("seo", "Metadaten/sitemap veraltet — `python3 scripts/build-seo.py`")
+
+    check_clips(scripts.parent, rep)
 
     ic = scripts / "check_identifier_collisions.py"
     if ic.is_file():

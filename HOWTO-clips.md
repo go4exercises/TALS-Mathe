@@ -153,19 +153,61 @@ warnt, wenn es fehlt.
 
 ---
 
+## Bibliotheksseite `clips.html`
+
+Die Übersicht über alle Clips, gruppiert nach Fach und darin nach Lerngebiet. Sie ist
+**nicht** von Hand gepflegt: `build-clips-einbau.py` füllt auch dort einen Block,
+
+```html
+<!-- CLIPS-BIBLIOTHEK:ANFANG — generiert von scripts/build-clips-einbau.py, nicht von Hand ändern -->
+<!-- CLIPS-BIBLIOTHEK:ENDE -->
+```
+
+und schreibt je Clip dieselbe Startkarte wie auf der Lektionsseite, dazu die Verweise
+„Im Zusammenhang" auf alle Seiten aus `lektion` (Nummer und Titel kommen aus `nav.js`)
+und das Transkript. Ein neuer Clip erscheint dort also automatisch, sobald sein Drehbuch
+gebaut ist.
+
+Angebunden ist die Seite an drei Stellen — die sind schon gesetzt und müssen für neue
+Clips nicht angefasst werden:
+
+| Datei | was |
+|---|---|
+| `nav.js` | Eintrag `▶ Clips` im Menü *Nachschlagen*, in der Kopfzeile und im Mobilmenü |
+| `scripts/build-seo.py` | Zeile in der `SEITEN`-Tabelle — Beschreibung, canonical, Sitemap |
+| `scripts/build-suchindex.py` | `clips.html` in der Liste der Nachschlagewerke |
+
+Die Clip-Dateien selbst stehen bewusst **nicht** in der Sitemap: ohne Seitengerüst,
+Navigation und Fussbereich wären sie als Landeseite aus einer Suche eine Sackgasse.
+Indexiert werden `clips.html` und die Lektionsseite — beide tragen das Transkript.
+
+---
+
+## Pre-Flight
+
+Clips werden mitgeprüft, wenn man sie übergibt:
+
+```sh
+python3 .claude/skills/preflight/preflight.py grundlagen/*.html schwerpunkt/*.html clips/*.html clips.html
+```
+
+Auf den Clip-Bühnen laufen nur die allgemeinen Checks (Tag-Bilanz, doppelte IDs, kein ß,
+Dezimalpunkt, keine Fremdhosts) — Skelett-, nav- und Ressourcen-Checks gelten für sie
+nicht, sie haben kein Seitengerüst.
+
+Dazu kommt eine Konsistenzprüfung der Ablage, die immer läuft:
+
+- jeder `clips.json`-Eintrag hat eine Datei → sonst `[FEHLER]` (toter Knopf in der Bibliothek)
+- jede Datei steht in `clips.json` → sonst `[FEHLER]` (fehlt lautlos in der Bibliothek)
+- jedes `lektion`-Kürzel existiert in `nav.js` → sonst `[FEHLER]` (landet auf keiner Seite)
+- Sprechertext vorhanden → sonst `[WARN]` (die Seite bekommt kein Transkript)
+
+---
+
 ## Noch offen
 
-Diese Punkte stehen aus und sind bewusst nicht gebaut:
+Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
 
-- **Bibliotheksseite `clips.html`** aus `clips.json`, gruppiert nach Fach und Lerngebiet,
-  mit den bestehenden `.karte`-Kacheln. Dazu ein Eintrag in `nav.js` im `dd-ref`-Menü
-  neben Glossar und Formelsammlung und eine Zeile in der `SEITEN`-Tabelle von
-  `build-seo.py`. Die Clip-Dateien selbst gehören **nicht** in die Sitemap: ohne
-  Seitengerüst, Navigation und Fussbereich wären sie als Landeseite aus einer Suche eine
-  Sackgasse. Indexiert werden `clips.html` und die Lektionsseite mit dem Transkript.
-- **Eigener Pre-Flight-Check für `clips/`.** Die Clip-Dateien sind keine Themenseiten;
-  die Skelett- und Nav-Checks schlagen auf ihnen an. Statt dessen ein kleiner eigener
-  Check: jeder `clips.json`-Eintrag hat eine Datei und umgekehrt, jedes `lektion`-Kürzel
-  existiert in `nav.js`, Sprechertext vorhanden, kein ß, Dezimalpunkt, Malpunkt.
-- **Übertrag nach TALS Physik**, sobald das Verfahren steht — Eintrag in
-  `TODO-schwesterprojekt.md`.
+- **Mehr Clips.** Bisher gibt es genau einen. Er ist zugleich die Referenz dafür, wie ein
+  Drehbuch aussieht.
+- **Übertrag nach TALS Physik** — vermerkt in `TODO-schwesterprojekt.md`.

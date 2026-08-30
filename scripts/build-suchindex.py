@@ -295,7 +295,8 @@ def seiten_aus_navjs(root):
 
     # Nachschlagewerke, sofern vorhanden (beide Projekte haben sie im Root)
     for url, nr, titel, mode in [('glossar.html', 'A–Z', 'Glossar', 'glossar'),
-                                 ('formelsammlung.html', '∑', 'Formelsammlung', 'formeln')]:
+                                 ('formelsammlung.html', '∑', 'Formelsammlung', 'formeln'),
+                                 ('clips.html', '▶', 'Clips', 'thema')]:
         if os.path.exists(os.path.join(root, url)):
             seiten.append({'nr': nr, 'titel': titel, 'url': url, 'mode': mode})
     return seiten
