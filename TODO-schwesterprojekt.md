@@ -24,43 +24,72 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > Bedienspalte besteht alle Checks.
 
 - **2026-08-30 · Drittanbieter entfernen: Schriften und MathJax lokal ausliefern ·
-  alle Physik-Seiten + `apex-startseite`-Pendant · warum:** In Mathe geht seit dem
-  30.8.2026 keine Anfrage mehr aus dem Haus. Physik hat exakt dasselbe Muster —
-  `fonts.googleapis.com` im Kopf jeder Seite und `cdn.jsdelivr.net/npm/mathjax@3` auf
-  jeder Themenseite — und denselben Fussbereich, der „Keine Cookies · Kein Tracking"
-  verspricht. Solange das CDN drinsteht, stimmt die Aussage dort nicht.
-  **Massnahme in Physik:** die beiden Skripte `scripts/schriften-lokal.py` und
-  `scripts/mathjax-lokal.py` aus Mathe übernehmen (sie sind repo-agnostisch, sie
-  leiten die Wurzel aus dem eigenen Pfad ab), dazu den Ordner `schriften/` und
-  `vendor/mathjax/`. Vier Punkte, an denen es in Mathe geklemmt hätte:
-  1. **Griechisch mitnehmen.** Fontsource liefert latin/latin-ext getrennt vom
-     Greek-Subset. In Physik steht ausserhalb von MathJax noch mehr Griechisch als in
-     Mathe (ω, λ, ρ, μ, Ω in Canvas- und SVG-Beschriftungen), sonst fällt das auf eine
-     Systemschrift zurück. Vorher einmal zählen, wie in Mathe geschehen.
-  2. **`boldsymbol` mitkopieren.** Wenn die Physik-Seiten ebenfalls
-     `loader: { load:['[tex]/boldsymbol'] }` setzen, muss
-     `vendor/mathjax/input/tex/extensions/boldsymbol.js` daneben liegen — MathJax lädt
-     Erweiterungen relativ zum Pfad der Startdatei nach, sonst bricht der Formelsatz
-     dort, wo `\boldsymbol` steht. Dasselbe gilt fuer die Sprachausgabe im
-     Kontextmenue: sie braucht `input/mml.js` samt `input/mml/`, `a11y/` und
-     `sre/mathmaps/`. Und `output/chtml.js` samt `output/chtml/` — sonst wird der
-     Renderer-Wechsel im Kontextmenue zur Falle: MathJax merkt die Wahl in
-     `localStorage`, der Wechsel scheitert still, und ab dem naechsten Aufruf steht
-     auf allen Seiten roher LaTeX-Quelltext; ohne gerenderte Formel gibt es auch kein
-     Kontextmenue mehr, um es zurueckzustellen. Nichts davon faellt beim Laden oder im
-     Pre-Flight auf — in Mathe kam beides erst heraus, als die Menuepunkte im Browser
+  alle Physik-Seiten · warum:** In Mathe geht seit dem 30.8.2026 keine Anfrage mehr aus
+  dem Haus. Physik hat exakt dasselbe Muster und denselben Fussbereich, der
+  «Keine Cookies · Kein Tracking» verspricht. Solange Google Fonts und das MathJax-CDN
+  drinstehen, stimmt die Aussage dort nicht.
+
+  **Umfang, im Physik-Repo nachgezaehlt (nur gelesen, nichts angefasst):** 54 HTML-Dateien,
+  davon **53 mit `fonts.googleapis.com`** (17 `themen/`, 31 `downloads/`, 5 im Wurzel-
+  verzeichnis) und **50 mit `cdn.jsdelivr.net/npm/mathjax@3`**. Die Schriftanforderung ist
+  zeichengleich mit der in Mathe: dieselben drei Familien, dieselben Schnitte, dieselben
+  drei Varianten der Link-Zeile. `node_modules/mathjax-full` liegt dort in **3.2.2** —
+  dieselbe Version, die das CDN liefert, `vendor/mathjax/` laesst sich also genauso
+  aus node_modules bauen.
+
+  **Massnahme:** `schriften/`, `schriften.css`, `vendor/mathjax/` sowie
+  `scripts/schriften-lokal.py` und `scripts/mathjax-lokal.py` aus Mathe uebernehmen. Die
+  beiden Skripte sind repo-agnostisch, sie leiten die Wurzel aus dem eigenen Pfad ab.
+  Fuenf Punkte, an denen es sonst klemmt:
+
+  1. **Griechisch mitnehmen.** Im Physik-Repo stehen **105 griechische Zeichen ausserhalb
+     von MathJax** in 18 Dateien: Ω 27x, Δ 21x, ϑ 11x, α 11x, λ 9x, π 9x, ρ 4x, μ 4x, dazu
+     φ, γ, ω, η, Π, ν. Alle im Grundblock U+0370–03FF — der `greek`-Subset von Fontsource
+     reicht, `greek-ext` (polytonisch) kommt nicht vor, kyrillisch auch nicht. Ohne den
+     Subset fallen die 105 Stellen auf eine Systemschrift zurueck.
+  2. **`boldsymbol` mitkopieren.** **20 der 50 Seiten** setzen
+     `loader: { load:['[tex]/boldsymbol'] }`. MathJax laedt Erweiterungen relativ zum Pfad
+     der Startdatei nach, also muss `vendor/mathjax/input/tex/extensions/boldsymbol.js`
+     daneben liegen, sonst bricht der Formelsatz auf diesen 20 Seiten.
+  3. **Das Kontextmenue vollstaendig bedienen.** Rechtsklick auf eine Formel bietet
+     *Math Settings → Math Renderer → CHTML* und *Accessibility*. Fehlt `output/chtml.js`
+     samt `output/chtml/`, scheitert der Wechsel still — aber MathJax merkt sich die Wahl
+     in `localStorage`, und ab dem naechsten Aufruf steht auf **allen** Seiten roher
+     LaTeX-Quelltext; ohne gerenderte Formel gibt es dann auch kein Kontextmenue mehr, um
+     es zurueckzustellen. Fuer die Sprachausgabe braucht es zusaetzlich `input/mml.js` samt
+     `input/mml/`, `a11y/` und `sre/mathmaps/` (in Mathe `base`, `de`, `en`). Zusammen
+     rund 2.3 MB, die fuer normale Besucher 0 Byte kosten — sie werden nur geholt, wenn
+     jemand im Menue wirklich etwas umstellt. **Nichts davon faellt beim Laden oder im
+     Pre-Flight auf**; in Mathe kam beides erst heraus, als die Menuepunkte im Browser
      wirklich angestossen wurden.
-  3. **Die Datenschutzseite nachziehen.** In Mathe nennt `rechtliches.html` die beiden
-     Anbieter ausdrücklich beim Namen; nach der Umstellung ist der Absatz falsch. Dazu
-     ein Abschnitt „Verwendete Fremdsoftware" mit OFL und Apache 2.0.
-  4. **Eigenständige Ordner ausnehmen.** In Mathe ist das `apex-startseite/`, das aus
-     einem eigenen Repo ausgeliefert wird und darum eine eigene Schriftkopie trägt.
-     Falls Physik so etwas hat, im Skript ausschliessen.
-  Absicherung: der Mathe-Pre-Flight hat neu `check_keine_fremdhosts` — ein
-  wiedereingeschleppter CDN-Aufruf ist ein `[FEHLER]`. Denselben Check in den
-  Physik-Pre-Flight übernehmen, sonst kommt es beim nächsten Kopieren einer alten
-  Vorlage zurück. Umfang in Mathe zum Vergleich: 233 Dateien Schriften, 230 Dateien
-  MathJax, Repo +4 MB, ausgeliefert gleich viel wie vorher.
+  4. **`downloads/wellenexperimente-standalone.html` von Hand anschauen.** Die Datei liegt
+     eine Ebene tief, heisst «standalone» und haengt an genau drei externen Dingen:
+     Google Fonts, dem MathJax-CDN und `src="physiklib.js"` — wobei `downloads/physiklib.js`
+     gar nicht existiert und die Datei von keiner Themenseite verlinkt ist. Sie ist also
+     schon heute halb kaputt. Bevor ein Skript blind `../schriften.css` hineinschreibt:
+     klaeren, ob sie ueberhaupt bleiben soll und ob sie je einzeln weitergegeben wird
+     (dann muessten die Schriften eingebettet werden statt verlinkt). In Mathe war
+     `apex-startseite/` der vergleichbare Fall; dort war die Loesung eine eigene, kleine
+     Schriftkopie im Ordner. Ein Apex-Pendant hat Physik nicht.
+  5. **Die Datenschutzseite nachziehen.** `rechtliches.html` nennt in
+     «Datenschutz beim Seitenaufruf» Google Fonts und jsDelivr ausdruecklich beim Namen;
+     nach der Umstellung ist der Absatz falsch. Dazu einen Abschnitt
+     «Verwendete Fremdsoftware» mit OFL 1.1 fuer die Schriften und Apache 2.0 fuer MathJax.
+     Der Cookie-Absatz ist in Physik guenstiger formuliert als er es in Mathe war
+     («setzt keine Cookies und uebermittelt keine Nutzungsdaten»), und die
+     «Ausnahme im Browser» fuer den Einheitentrainer steht schon da — dort laesst sich der
+     Satz zu den MathJax-Menueeinstellungen mit einem Halbsatz anhaengen.
+
+  **Absicherung:** Der Mathe-Pre-Flight hat neu `check_keine_fremdhosts` (meldet
+  `fonts.googleapis.com`, `fonts.gstatic.com`, `cdn.jsdelivr.net` in einer HTML-Datei als
+  `[FEHLER]`). Physiks `preflight.py` hat denselben Aufbau — Funktion daneben stellen und
+  in `run_light` aufrufen, fertig. Ohne das kommt der CDN-Aufruf beim naechsten Kopieren
+  einer alten Vorlage zurueck.
+
+  **Pruefen wie in Mathe:** Playwright bei 1280 und 360 px ueber Seiten aller Typen, dabei
+  auf Fremdhosts, HTTP-Fehler und JS-Fehler achten — und die Menuepunkte einmal von Hand
+  ausloesen. Zum Vergleich Mathe: 233 Dateien Schriften, 230 MathJax, Repo +4.5 MB,
+  ausgeliefert gleich viel wie vorher.
 
 - **2026-08-10 · Umzug auf `physik.begreifbar.ch` · ganzes Physik-Repo · warum:**
   Mathe liegt seit dem 10.8.2026 auf `mathe.begreifbar.ch`. Die DNS-Seite ist für
