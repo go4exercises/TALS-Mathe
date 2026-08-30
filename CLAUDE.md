@@ -108,11 +108,26 @@ im Repo-Root; fehlen die Module, werden diese Checks als `[WARN]` übersprungen.
 
 ## Schwesterprojekt TALS Physik — Übertrag per Todo, nicht direkt
 
-- Claude Code editiert **nur dieses Repo**. Es fasst das Physik-Repo nicht an.
+- **Lesen ja, schreiben nie.** Claude Code darf `../tals-physik` jederzeit *lesen* —
+  zählen, vergleichen, Zahlen für einen Übertrag holen. Geschrieben wird ausschliesslich
+  in diesem Repo. Kein Edit, kein `git`-Befehl, kein Skriptlauf, der dort hineinschreibt.
+- **Warum die Trennung nicht Vorsicht, sondern Struktur ist:** Der Harness lädt
+  `CLAUDE.md` und `.claude/settings.json` des *primären* Arbeitsverzeichnisses. Aus einer
+  Mathe-Session heraus gälten in Physik also Mathes Konventionen, während Physiks eigene
+  `CLAUDE.md` und `STYLEGUIDE.md` stumm blieben — und Physiks bewusst enge Allowlist
+  (nur `preflight.py` und ein paar `git`-Unterbefehle, **kein** freies `python3`/`sed`)
+  wäre umgangen. Dazu kommt: die Werkzeugskripte hier leiten ihr Wurzelverzeichnis aus
+  dem eigenen Dateipfad ab und schreiben rekursiv — aus dem falschen Ordner aufgerufen
+  patchen sie das falsche Repo, in `acceptEdits` ohne Rückfrage.
 - Änderungen, die auch ins Schwesterprojekt gehören (gemeinsame CSS-Muster, didaktische
   Module, `mathlib`/`physiklib`-Helfer, Nav-Logik), werden **nicht** quer-editiert,
   sondern als Eintrag in **`TODO-schwesterprojekt.md`** vermerkt (was, wo, warum) und
   später in einer Physik-Session von Hand portiert. So bleibt jedes Repo sauber.
+- **Ein guter Eintrag ist nachgezählt, nicht geschätzt.** Vor dem Schreiben im Physik-Repo
+  nachsehen und die konkreten Zahlen aufnehmen: wie viele Dateien betroffen sind, welche
+  Sonderfälle es dort gibt, was dort anders heisst. Ein Eintrag, aus dem sich die
+  Portiersitzung direkt abarbeiten lässt, ist die halbe Arbeit; einer aus Vermutungen
+  kostet sie doppelt.
 
 ## Externe Ressourcen
 
