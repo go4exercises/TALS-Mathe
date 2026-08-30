@@ -1,7 +1,7 @@
 # Startseite für `begreifbar.ch`
 
-Der Ordnerinhalt ist die **komplette** Website für den Apex — eine einzelne
-HTML-Datei ohne Abhängigkeiten ins Mathe-Repo. Er gehört in ein **eigenes**
+Der Ordnerinhalt ist die **komplette** Website für den Apex — ohne
+Abhängigkeiten ins Mathe-Repo und ohne Drittanbieter. Er gehört in ein **eigenes**
 Repository, weil GitHub Pages eine Domain an genau ein Repo bindet und
 `mathe.begreifbar.ch` bereits an *TALS-Mathe* hängt.
 
@@ -12,7 +12,8 @@ dem neuen Repo. Siehe `DOMAIN-UMZUG.md`, Phase 4.
 
 | Datei | Zweck |
 |---|---|
-| `index.html` | die Startseite, CSS inline, keine externen Dateien ausser Google Fonts |
+| `index.html` | die Startseite, CSS inline |
+| `schriften.css` + `schriften/` | die drei Schriften, lokal ausgeliefert — eigene Kopie, weil dieser Ordner nicht auf die Wurzel des Mathe-Repos zugreifen kann |
 | `CNAME` | `begreifbar.ch` — eine Zeile, LF, kein BOM |
 | `favicon.svg` | Platzhalter-Zeichen: zwei Balken in Mathe-Blau und Physik-Bernstein |
 | `.nojekyll` | schaltet die Jekyll-Verarbeitung ab, wie im Mathe-Repo |
@@ -20,8 +21,8 @@ dem neuen Repo. Siehe `DOMAIN-UMZUG.md`, Phase 4.
 ## Aufsetzen
 
 1. Repository anlegen, z. B. `go4exercises/begreifbar`, öffentlich.
-2. Den **Inhalt** dieses Ordners ins Repo-Wurzelverzeichnis kopieren — nicht den
-   Ordner selbst, sonst liegt `index.html` eine Ebene zu tief und Pages liefert 404.
+2. Den **Inhalt** dieses Ordners ins Repo-Wurzelverzeichnis kopieren, `schriften/`
+   eingeschlossen — nicht den Ordner selbst, sonst liegt `index.html` eine Ebene zu tief und Pages liefert 404.
    Diese `README.md` braucht es dort nicht.
 3. Pushen.
 4. **Settings → Pages**: Source auf `Deploy from a branch`, Branch `main`, Ordner `/ (root)`.
