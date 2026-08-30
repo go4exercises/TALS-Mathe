@@ -107,13 +107,33 @@ python3 scripts/build-clips-einbau.py --schreiben
 
 Das Skript liest `clips/clips.json`, holt die Zuordnung Lektion → Datei aus `nav.js` und
 schreibt zwischen die Marker: eine `<h2 id="clips">`-Überschrift (die Seiten-Navigation
-nimmt sie automatisch auf), je Clip eine Startkarte und darunter das Transkript.
+nimmt sie automatisch auf) und dann je Clip
 
-**Der Clip wird nicht beim Seitenaufruf geladen.** Sichtbar ist zuerst nur die
-Startkarte; erst der Klick setzt das `<iframe>` ein (`clipStart` in `mathlib.js`). So
-läuft bei mehreren Clips auf einer Seite keiner von selbst los, und die Seite lädt nicht
-N zusätzliche Dokumente mit. Der Clip startet dann von selbst — er ist frisch eingesetzt,
+```html
+<h3 id="clip-<dateiname>" class="clip-h">Titel</h3>
+<p class="clip-text">Kurzbeschrieb</p>
+<div class="clip" data-clip="…" data-titel="…">
+  <button class="clip-start" …>▶ 1:21</button>
+</div>
+<details class="clip-transkript">…</details>
+```
+
+**Die eigene `h3` je Clip ist nicht Schmuck.** `scripts/build-suchindex.py` schneidet an
+`h3.clip-h[id]` einen eigenen Abschnitt. Ohne sie heisst in den Suchergebnissen jeder
+Clip einer Seite „Clips" und alle führen auf dasselbe Sprungziel. Weil der Titel damit in
+der Überschrift steht, trägt der Knopf nur noch das Dreieck und die Dauer — er ist rund
+67 × 29 px gross statt einer Karte über die volle Breite. Im Inhaltsverzeichnis der Seite
+taucht er nicht auf: `buildToC` nimmt nur `h2`.
+
+**Der Clip wird nicht beim Seitenaufruf geladen.** Sichtbar ist zuerst nur der Knopf;
+erst der Klick setzt das `<iframe>` ein (`clipStart` in `mathlib.js`). So läuft bei
+mehreren Clips auf einer Seite keiner von selbst los, und die Seite lädt nicht N
+zusätzliche Dokumente mit. Der Clip startet dann von selbst — er ist frisch eingesetzt,
 sein Autostart ist genau richtig.
+
+**Und er lässt sich wieder einklappen.** Über dem Rahmen steht „✕ Clip schliessen"
+(`clipStop`); das entfernt das `<iframe>`, der Clip hält an, gibt den Platz frei, und der
+Knopf kommt zurück. Ein zweiter Klick startet ihn von vorn.
 
 Jede Seite mit einem Clip-Block **muss `mathlib.js` einbinden.** Themenseiten tun das
 ohnehin.
@@ -227,18 +247,8 @@ Dazu kommt eine Konsistenzprüfung der Ablage, die immer läuft:
 
 Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
 
-- **Mehr Clips.** Bisher gibt es genau einen. Er ist zugleich die Referenz dafür, wie ein
-  Drehbuch aussieht.
-- **Eigene Überschrift je Clip, sobald mehrere auf einer Seite stehen.** Heute umschliesst
-  ein einziges `<h2 id="clips">Clips</h2>` den ganzen Block, und der Suchindex macht daraus
-  genau einen Abschnitt. In den Suchergebnissen heisst der Treffer darum schlicht „Clips";
-  der Name des Clips steht nur im Textausschnitt. Bei einem Clip pro Seite ist das
-  belanglos — stünden acht darunter, hiessen alle acht Treffer gleich und führten auf
-  dasselbe Sprungziel `#clips`.
-  **Abhilfe, wenn es so weit ist:** in `block_lektion()` je Clip ein
-  `<h3 id="clip-<dateiname>">` setzen. Der Suchindex schneidet dann pro Clip einen eigenen
-  Abschnitt mit eigenem Titel und eigenem Anker; die Seiten-Navigation nimmt nur `h2`, das
-  Inhaltsverzeichnis bleibt also unverändert schlank. Nachgemessen am Stand vom 30.08.2026:
-  die Suche nach „Bruchgleichung" liefert den Clip dreimal (beide Lektionsseiten und die
-  Bibliothek), jedes Mal unter dem Titel „Clips".
+- **Mehr Clips.** Bisher gibt es drei, alle im Lerngebiet 2. Sie sind zugleich die
+  Referenz dafür, wie ein Drehbuch aussieht: `g2-2b-bruchgleichungen` für eine
+  Schritt-für-Schritt-Herleitung, `g2-2a-parametergleichung` für eine mit Bedingung,
+  `g2-2a-parametergleichung-drei-faelle` für eine Fallunterscheidung.
 - **Übertrag nach TALS Physik** — vermerkt in `TODO-schwesterprojekt.md`.

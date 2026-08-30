@@ -831,53 +831,74 @@ canvas { display: block; width: 100%; }
 
 /* ── Clips ─────────────────────────────────────────────────────
    Eigene Erklaerclips (clips/*.html). Der Clip wird NICHT beim
-   Seitenaufruf geladen: sichtbar ist zuerst nur die Startkarte,
-   erst der Klick setzt das <iframe> ein (clipStart in mathlib.js).
-   So laeuft bei mehreren Clips auf einer Seite keiner von selbst
-   los, und die Seite laedt nicht N zusaetzliche Dokumente mit. */
-.clip-grid { display: grid; gap: 14px; margin-top: 12px; }
+   Seitenaufruf geladen: sichtbar ist zuerst nur der kleine Startknopf,
+   erst der Klick setzt das <iframe> ein (clipStart in mathlib.js),
+   «Clip schliessen» nimmt es wieder heraus (clipStop). So laeuft bei
+   mehreren Clips auf einer Seite keiner von selbst los, und die Seite
+   laedt nicht N zusaetzliche Dokumente mit. */
+.clip-grid { margin-top: 12px; }
 
+/* Eigene Ueberschrift je Clip — build-suchindex.py schneidet daran einen
+   eigenen Abschnitt, sonst heissen alle Treffer einer Seite «Clips». */
+.clip-h {
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  font-weight: 700;
+  margin: 20px 0 3px;
+}
+.clip-grid > .clip-h:first-child { margin-top: 4px; }
+.clip-text {
+  font-size: 0.78rem;
+  color: var(--tinte-2);
+  margin: 0 0 9px;
+  max-width: 62ch;
+}
+
+/* Startknopf: bewusst klein — der Titel steht schon in der Ueberschrift,
+   also bleibt nur ▶ und die Dauer. */
 .clip-start {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 14px;
-  width: 100%;
-  text-align: left;
+  gap: 7px;
   font: inherit;
   cursor: pointer;
   background: var(--weiss);
   border: 1px solid var(--linie);
-  border-left: 4px solid var(--blau);
-  border-radius: 9px;
-  padding: 13px 15px;
-  color: inherit;
-  box-shadow: var(--s);
-  transition: border-color 0.15s, transform 0.15s;
-}
-.clip-start:hover  { border-color: var(--blau-rand); transform: translateY(-1px); }
-.clip-start:focus-visible { outline: 2px solid var(--blau); outline-offset: 2px; }
-
-.clip-play {
-  flex-shrink: 0;
-  width: 38px; height: 38px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: var(--blau-hell);
+  border-left: 3px solid var(--blau);
+  border-radius: 7px;
+  padding: 5px 12px 5px 9px;
   color: var(--blau);
-  font-size: 0.95rem;
-  padding-left: 3px;            /* das Dreieck sitzt sonst links aussermittig */
+  box-shadow: var(--s);
+  transition: background 0.15s, border-color 0.15s;
 }
-.clip-start:hover .clip-play { background: var(--blau); color: #fff; }
-.clip-titel { display: block; font-weight: 700; font-size: 0.87rem; }
-.clip-text  { display: block; font-size: 0.73rem; color: var(--tinte-2); margin-top: 2px; }
-.clip-meta  {
-  display: block;
+.clip-start[hidden] { display: none; }   /* schlaegt das display:inline-flex */
+.clip-start:hover { background: var(--blau-hell); border-color: var(--blau-rand); }
+.clip-start:focus-visible { outline: 2px solid var(--blau); outline-offset: 2px; }
+.clip-play { font-size: 0.7rem; line-height: 1; }
+.clip-meta {
   font-family: var(--mono);
   font-size: 0.62rem;
   font-weight: 700;
-  color: var(--blau);
-  margin-top: 3px;
+  letter-spacing: 0.5px;
 }
+
+.clip-ansicht { margin-top: 10px; }
+.clip-zu {
+  display: block;
+  margin: 0 0 6px auto;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--tinte-2);
+  background: none;
+  border: 0;
+  padding: 3px 2px;
+  cursor: pointer;
+}
+.clip-zu:hover { color: var(--blau); }
+.clip-zu:focus-visible { outline: 2px solid var(--blau); outline-offset: 2px; }
 
 /* Buehne 16:9 plus 60 px Bedienleiste — die Hoehe der Leiste im Clip.
    padding-bottom statt aspect-ratio, damit die Summe exakt aufgeht. */

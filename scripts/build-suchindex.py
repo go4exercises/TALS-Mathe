@@ -201,6 +201,14 @@ class Extractor(HTMLParser):
             return
 
         # Untereintraege
+        # Jeder Clip bekommt einen eigenen Abschnitt. Ohne das heisst in den
+        # Suchergebnissen jeder Clip einer Seite «Clips» und alle fuehren auf
+        # dasselbe Sprungziel. Gilt in jedem Modus, nicht nur 'thema'.
+        if tag == 'h3' and eid and 'clip-h' in cls:
+            self._start(eid)
+            self._grab_start('h3')
+            return
+
         if self.mode == 'glossar' and 'glossar-eintrag' in cls:
             self._start(self.cur_anchor)
             return

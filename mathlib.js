@@ -391,19 +391,30 @@ function mjTypeset(els) {
   return _mjTypesetQueue;
 }
 
-/* ── Clip starten ─────────────────────────────────────────────────────────────
+/* ── Clip starten und wieder schliessen ───────────────────────────────────────
    Ein Clip wird bewusst nicht beim Seitenaufruf geladen. In der Seite steht nur
-   die Startkarte; erst der Klick ersetzt sie durch das <iframe>. Zwei Gruende:
+   der kleine Startknopf; erst der Klick setzt das <iframe> ein. Zwei Gruende:
    auf einer Seite mit mehreren Clips darf keiner von selbst loslaufen, und die
    Seite soll nicht N zusaetzliche Dokumente mitladen. Der Clip startet dann von
    selbst — er ist frisch eingesetzt, sein Autostart ist genau richtig.
-   Markup erzeugt scripts/build-clips-einbau.py. */
+   Schliessen entfernt das <iframe> wieder: der Clip haelt an, gibt den Platz
+   frei, und der Knopf kommt zurueck. Markup erzeugt
+   scripts/build-clips-einbau.py. */
 function clipStart(btn) {
   const karte = btn.closest('.clip');
-  if (!karte) return;
+  if (!karte || karte.querySelector('.clip-ansicht')) return;
   const quelle = karte.dataset.clip;
   const titel  = karte.dataset.titel || 'Clip';
   if (!quelle) return;
+
+  const ansicht = document.createElement('div');
+  ansicht.className = 'clip-ansicht';
+
+  const zu = document.createElement('button');
+  zu.type = 'button';
+  zu.className = 'clip-zu';
+  zu.textContent = '✕ Clip schliessen';
+  zu.setAttribute('onclick', 'clipStop(this)');
 
   const rahmen = document.createElement('div');
   rahmen.className = 'clip-rahmen';
@@ -411,9 +422,20 @@ function clipStart(btn) {
   f.src = quelle;
   f.title = 'Clip: ' + titel;
   f.setAttribute('allowfullscreen', '');
-  f.loading = 'eager';
   rahmen.appendChild(f);
 
-  karte.replaceChild(rahmen, btn);
+  ansicht.appendChild(zu);
+  ansicht.appendChild(rahmen);
+  btn.hidden = true;
+  karte.appendChild(ansicht);
   f.focus({ preventScroll: true });
+}
+
+function clipStop(zu) {
+  const karte = zu.closest('.clip');
+  if (!karte) return;
+  const ansicht = karte.querySelector('.clip-ansicht');
+  if (ansicht) ansicht.remove();          // entfernt das iframe, der Clip haelt an
+  const btn = karte.querySelector('.clip-start');
+  if (btn) { btn.hidden = false; btn.focus({ preventScroll: true }); }
 }

@@ -89,19 +89,29 @@ def transkript(datei):
 
 
 def karte(clip, vor):
+    """Ueberschrift, Kurzbeschrieb und der kleine Startknopf.
+
+    Die eigene h3 je Clip ist nicht Schmuck: build-suchindex.py schneidet an
+    `h3.clip-h[id]` einen eigenen Abschnitt. Ohne sie heisst in den
+    Suchergebnissen jeder Clip einer Seite «Clips» und alle fuehren auf
+    dasselbe Sprungziel. Weil der Titel jetzt in der Ueberschrift steht,
+    bleibt fuer den Knopf nur noch die Dauer — er darf klein sein."""
     titel = html.escape(clip["titel"])
-    return [
+    stamm = clip["datei"].replace(".html", "")
+    beschrieb = html.escape(clip.get("kurzbeschrieb", ""))
+    aus = [f'<h3 id="clip-{stamm}" class="clip-h">{titel}</h3>']
+    if beschrieb:
+        aus.append(f'<p class="clip-text">{beschrieb}</p>')
+    aus += [
         f'<div class="clip" data-clip="{vor}clips/{clip["datei"]}" data-titel="{titel}">',
-        '  <button class="clip-start" type="button" onclick="clipStart(this)">',
+        f'  <button class="clip-start" type="button" onclick="clipStart(this)"'
+        f' aria-label="Clip abspielen: {titel}">',
         '    <span class="clip-play" aria-hidden="true">▶</span>',
-        '    <span>',
-        f'      <span class="clip-titel">{titel} abspielen</span>',
-        f'      <span class="clip-text">{html.escape(clip.get("kurzbeschrieb", ""))}</span>',
-        f'      <span class="clip-meta">{mmss(clip.get("dauer_s", 0))} · CLIP</span>',
-        '    </span>',
+        f'    <span class="clip-meta">{mmss(clip.get("dauer_s", 0))}</span>',
         '  </button>',
         '</div>',
     ]
+    return aus
 
 
 def transkript_block(clip):
