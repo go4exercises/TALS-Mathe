@@ -184,6 +184,25 @@ Merkzeile einen Bruch braucht, macht daraus ein eigenes `formel`-Element.
 `zentriert`. In einer sonst mittigen Szene wirkt das wie ein Versehen. Für aufgezählte
 Merkpunkte in der Mitte drei `formel`-Zeilen nehmen; die tragen `row` und sitzen zentriert.
 
+**`<` und `>` werden in Formel und Prosa genau umgekehrt geschrieben.** `formel()`
+escapt nicht — ein nacktes `<` landet roh im HTML. In `formel`, `karte` und `box` gehört
+darum `&lt;` und `&gt;` hin. Die Prosa-Typen escapen dagegen selbst, dort schreibt man das
+Zeichen direkt; ein `&lt;` würde als sichtbarer Text „&lt;" erscheinen:
+
+| | `formel` / `karte` / `box` | `text` / `notiz` / `titel` / `untertitel` / `aussage` / `liste` |
+|---|---|---|
+| kleiner als | `x &lt; 3` | `Aus @x < 3@ folgt …` |
+| grösser als | `x &gt; 3` | `Aus @x > 3@ folgt …` |
+
+Für `≤` und `≥` gibt es keine Falle: `<=` und `>=` werden in beiden Fällen ersetzt.
+
+**Vor `inf` braucht es ein echtes Minuszeichen.** `-inf` ergibt `-∞` mit ASCII-Bindestrich
+statt `−∞`. Grund: Die Wortersetzung `inf` → `∞` läuft **vor** den Minus-Regeln, und `∞`
+ist kein Wortzeichen — danach greift keine der Regeln mehr, die aus `-` ein `−` machen. Im
+Drehbuch also `]−inf; -3[` schreiben, mit `−` (U+2212) an der ersten Stelle und dem
+normalen `-` an der zweiten, wo die Ersetzung greift. Ergibt `]−∞; −3[`, wie es
+STYLEGUIDE §2.7 verlangt.
+
 **Eine gehaltene Ankerzeile belegt die oberste Zeile — Folgeszenen müssen tiefer
 beginnen.** Steht auf einem Element `halten`, bleibt es über die folgenden Szenen stehen.
 Deren `oben` muss dann unter der Ankerzeile liegen, sonst rendern beide übereinander und
