@@ -210,4 +210,16 @@ Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
 
 - **Mehr Clips.** Bisher gibt es genau einen. Er ist zugleich die Referenz dafür, wie ein
   Drehbuch aussieht.
+- **Eigene Überschrift je Clip, sobald mehrere auf einer Seite stehen.** Heute umschliesst
+  ein einziges `<h2 id="clips">Clips</h2>` den ganzen Block, und der Suchindex macht daraus
+  genau einen Abschnitt. In den Suchergebnissen heisst der Treffer darum schlicht „Clips";
+  der Name des Clips steht nur im Textausschnitt. Bei einem Clip pro Seite ist das
+  belanglos — stünden acht darunter, hiessen alle acht Treffer gleich und führten auf
+  dasselbe Sprungziel `#clips`.
+  **Abhilfe, wenn es so weit ist:** in `block_lektion()` je Clip ein
+  `<h3 id="clip-<dateiname>">` setzen. Der Suchindex schneidet dann pro Clip einen eigenen
+  Abschnitt mit eigenem Titel und eigenem Anker; die Seiten-Navigation nimmt nur `h2`, das
+  Inhaltsverzeichnis bleibt also unverändert schlank. Nachgemessen am Stand vom 30.08.2026:
+  die Suche nach „Bruchgleichung" liefert den Clip dreimal (beide Lektionsseiten und die
+  Bibliothek), jedes Mal unter dem Titel „Clips".
 - **Übertrag nach TALS Physik** — vermerkt in `TODO-schwesterprojekt.md`.
