@@ -262,6 +262,86 @@ Dazu kommt eine Konsistenzprüfung der Ablage, die immer läuft:
 
 ---
 
+## Ton (Versuchsstand, bisher ein Clip)
+
+`g2-2a-parametergleichung-drei-faelle` hat eine gesprochene Tonspur. Das Verfahren steht,
+die übrigen Clips haben noch keine.
+
+### Warum es überhaupt passt
+
+Der Sprechertext steht schon je Szene im Drehbuch. Bisher wurde daraus die Szenendauer nur
+**geschätzt** (`Wörter / sprechtempo`). `scripts/build-clip-ton.py` misst stattdessen die
+echte Länge und schreibt sie als Feld `dauer` ins Drehbuch zurück — danach stimmt Bild zu
+Sprache exakt statt ungefähr. Beim ersten Lauf wurde der Clip dadurch von 55 s auf 48 s
+kürzer: die Schätzung war zu grosszügig.
+
+### Einrichten
+
+```sh
+pip install piper-tts soundfile
+# Stimme laden: rhasspy/piper-voices → de/de_DE/thorsten/high (rund 109 MB)
+export PIPER_MODELL=/pfad/de_DE-thorsten-high.onnx
+```
+
+Beides gehört **nicht ins Repo** — nur die fertige MP3 wird versioniert.
+
+### Bauen
+
+```sh
+python3 scripts/build-clip-ton.py <clip>     # spricht, misst, schreibt dauer + ton/<clip>.mp3
+python3 scripts/build-clips.py    <clip>     # baut den Clip mit den neuen Dauern
+```
+
+Die Reihenfolge ist zwingend: Das erste Skript ändert nur das Drehbuch und legt den Ton ab.
+
+### Wie es im Clip läuft
+
+- **Eine Spur je Clip**, nicht eine je Szene. Die Sprache sitzt an `Szenenstart + 0.4 s`,
+  dazwischen ist Stille. Mit einer einzigen Spur gibt es nichts zu verketten und kein
+  Stolpern an den Szenengrenzen. Rund die Hälfte der Spur ist Stille, das kostet fast nichts.
+- **Der Ton startet stumm** und läuft mit. Stummes Abspielen erlauben die Browser ohne
+  Nutzergeste; der Klick auf „🔇 Ton an" ist die Geste, die ihn hörbar macht.
+- **Sobald der Ton läuft, führt er die Uhr** (`t = ton.currentTime`). Tondrift fällt auf,
+  Bilddrift nicht. Läuft kein Ton, zählt wie bisher `requestAnimationFrame`.
+- Pause, Spulen, Neustart nehmen den Ton mit. Gemessene Abweichung Ton/Bild: 0.01–0.06 s.
+- Ohne Tonspur ändert sich am Clip **nichts** — der Ton ist eine Zutat, keine Voraussetzung.
+
+### Stolperstein beim lokalen Prüfen
+
+**`python3 -m http.server` beherrscht keine Range-Requests.** Ohne die kann der Browser in
+einer MP3 nicht springen: Der Klick auf den Fortschrittsbalken wirft den Ton an den Anfang
+zurück, und es sieht nach einem Fehler im Clip aus. GitHub Pages beherrscht sie. Zum
+lokalen Testen einen Server mit Range nehmen, sonst jagt man ein Phantom.
+
+### Grösse und Qualität
+
+48 s Sprache als MP3 mono bei rund 50 kbit/s sind **174 kB**. `--qualitaet` steuert das
+(0.0 gross bis 1.0 klein). Die Spur bekommt Kopfraum auf 0.95, sonst übersteuert der
+Encoder — Piper steuert einzelne Sätze bis an die Grenze aus.
+
+Opus wäre kleiner, scheidet aber vorerst aus: libsndfile schreibt Opus nur bei 8/12/16/24/48 kHz,
+Piper liefert 22.05 kHz. Ohne Resampling bleibt MP3 — das dafür überall abspielbar ist.
+
+### Lizenzlage (geprüft am 30.08.2026)
+
+| | |
+|---|---|
+| Piper, aktuell (`OHF-Voice/piper1-gpl`) | **GPL-3.0** |
+| Piper, alt (`rhasspy/piper`) | MIT, am 06.10.2025 archiviert |
+| Stimme `de_DE-thorsten` (Datensatz Thorsten-Voice) | **CC0-1.0** |
+
+Die GPL regelt die Weitergabe des **Programms**, nicht das, was es erzeugt — und Piper
+kommt ohnehin nicht ins Repo. Die Stimme steht unter CC0: keine Einschränkung auf
+nicht-kommerzielle Nutzung, keine Namensnennung nötig. Der Autor Thorsten Müller freut
+sich über eine Nennung.
+
+**Nicht geprüft:** Die deutsche Thorsten-Stimme wurde nicht von Grund auf trainiert,
+sondern aus der englischen Lessac-Stimme feinabgestimmt. Ob deren Herkunftsdaten
+Bedingungen mitbringen, die ins abgeleitete Modell hineinreichen, ist offen. Ebenso
+ungeprüft: die Lizenzen der übrigen sieben deutschen Stimmen.
+
+---
+
 ## Noch offen
 
 Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
@@ -270,4 +350,9 @@ Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
   Referenz dafür, wie ein Drehbuch aussieht: `g2-2b-bruchgleichungen` für eine
   Schritt-für-Schritt-Herleitung, `g2-2a-parametergleichung` für eine mit Bedingung,
   `g2-2a-parametergleichung-drei-faelle` für eine Fallunterscheidung.
+- **Ton für die übrigen Clips**, sobald du entschieden hast, ob die synthetische Stimme
+  trägt oder ob du selbst sprichst. Der Wechsel ist dann nur ein Dateiaustausch — das
+  Verfahren bleibt dasselbe.
+- **Untertitel.** Text und Zeitmarken liegen vor; eine WebVTT-Spur wäre fast geschenkt und
+  funktioniert im Schulzimmer besser als Ton: lautlos abspielbar, an der Wand mitlesbar.
 - **Übertrag nach TALS Physik** — vermerkt in `TODO-schwesterprojekt.md`.

@@ -259,6 +259,22 @@ def bauen(quelle, eigenstaendig=False):
     plan, gesamt = szenen_planen(dreh)
     schiene = dreh.get("schiene", [])
 
+    # Tonspur, falls scripts/build-clip-ton.py eine erzeugt hat. Der Clip
+    # laeuft ohne genauso; der Ton ist eine Zutat, keine Voraussetzung.
+    tonname = (dreh.get("dateiname") or
+               os.path.splitext(os.path.basename(quelle))[0]) + ".mp3"
+    tonpfad = os.path.join(CLIPS, "ton", tonname)
+    if not os.path.exists(tonpfad):
+        ton_html = ""
+    elif eigenstaendig:
+        import base64
+        roh = base64.b64encode(open(tonpfad, "rb").read()).decode("ascii")
+        ton_html = ('<audio id="ton" preload="auto" '
+                    'src="data:audio/mpeg;base64,%s"></audio>' % roh)
+    else:
+        ton_html = ('<audio id="ton" preload="auto" src="ton/%s"></audio>'
+                    % tonname)
+
     teile = []          # HTML-Schnipsel
     sprecher = []       # Sprechertexte mit Zeitpunkt
 
@@ -376,7 +392,7 @@ def bauen(quelle, eigenstaendig=False):
         karte_bg=theme.get("karte", "rgba(255,255,255,.66)"),
         box_bg=theme.get("box", "rgba(255,255,255,.6)"),
         vignette=theme.get("vignette", "rgba(90,70,40,.10)"),
-        karo=karo, rand=rand,
+        karo=karo, rand=rand, ton=ton_html,
         dauer=round(gesamt, 2),
         inhalt="\n".join(teile),
         sprecher=json.dumps(sprecher, ensure_ascii=False),
@@ -478,8 +494,10 @@ body.render #ui{{display:none}}
 {rand}
 {inhalt}
 </div></div>
+{ton}
 <div id="ui">
   <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
   <div id="bar"><div id="barf"></div></div>
   <span id="tt">0.0 s</span>
   <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
@@ -520,26 +538,50 @@ if (!location.search.includes('render')) {{
   window.addEventListener('resize', fit);
   document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
   fit();
+  // Der Ton startet stumm mit — stummes Abspielen erlauben die Browser
+  // ohne Nutzergeste. Der Klick auf «Ton an» ist die Geste, die ihn
+  // hoerbar macht; ab dann fuehrt die Tonspur die Uhr, weil Tondrift
+  // auffaellt und Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  if (ton) {{
+    ts.hidden = false;
+    ton.muted = true;
+    ton.play().catch(() => {{}});
+    ts.onclick = () => {{
+      ton.muted = !ton.muted;
+      ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
+      if (!ton.muted) {{ ton.currentTime = t; if (playing) ton.play().catch(() => {{}}); }}
+    }};
+  }}
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
   function loop(now) {{
-    if (playing) {{ t += (now - t0) / 1000; if (t > DUR) t = DUR; }}
+    if (playing) {{
+      if (tonLaeuft()) t = ton.currentTime;
+      else {{ t += (now - t0) / 1000; if (t > DUR) t = DUR; }}
+    }}
     t0 = now; seek(t);
     barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
     requestAnimationFrame(loop);
   }}
   requestAnimationFrame(loop);
-  const toggle = () => {{ playing = !playing; pp.textContent = playing ? 'Pause' : 'Play'; }};
+  const tonAn = () => {{ if (ton) {{ ton.currentTime = t; if (playing) ton.play().catch(() => {{}}); }} }};
+  const toggle = () => {{
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) {{ if (playing) ton.play().catch(() => {{}}); else ton.pause(); }}
+  }};
   pp.onclick = toggle;
   document.addEventListener('keydown', e => {{
     if (e.code === 'Space') {{ e.preventDefault(); toggle(); }}
-    if (e.code === 'ArrowRight') t = Math.min(DUR, t + 5);
-    if (e.code === 'ArrowLeft') t = Math.max(0, t - 5);
+    if (e.code === 'ArrowRight') {{ t = Math.min(DUR, t + 5); tonAn(); }}
+    if (e.code === 'ArrowLeft') {{ t = Math.max(0, t - 5); tonAn(); }}
     const k = e.key.toLowerCase();
-    if (k === 'r') {{ t = 0; playing = true; pp.textContent = 'Pause'; }}
+    if (k === 'r') {{ t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }}
     if (k === 'f') document.documentElement.requestFullscreen?.();
   }});
   document.getElementById('bar').onclick = e => {{
     const r = e.currentTarget.getBoundingClientRect();
-    t = (e.clientX - r.left) / r.width * DUR;
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
   }};
 }} else {{ document.body.classList.add('render'); seek(0); }}
 </script></body></html>
