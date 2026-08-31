@@ -498,3 +498,20 @@ function clipStop(knopf) {
   const btn = karte.querySelector('.clip-start');
   if (btn) { btn.hidden = false; btn.focus({ preventScroll: true }); }
 }
+
+/* Ein Sprungziel in einem zugeklappten <details> waere sonst unerreichbar:
+   Die Suche fuehrt auf #clip-…, das steht im Transkript-Aufklapper. */
+(function () {
+  function oeffneZiel() {
+    if (!location.hash) return;
+    const ziel = document.getElementById(location.hash.slice(1));
+    if (!ziel) return;
+    let d = ziel.closest('details');
+    while (d) { d.open = true; d = d.parentElement && d.parentElement.closest('details'); }
+    ziel.scrollIntoView();
+  }
+  window.addEventListener('hashchange', oeffneZiel);
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', oeffneZiel);
+  else oeffneZiel();
+})();

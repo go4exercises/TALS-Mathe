@@ -116,66 +116,17 @@ def transkript(datei):
     return zeilen or None
 
 
-def karte(clip, vor):
-    """Ueberschrift, Kurzbeschrieb und der kleine Startknopf.
-
-    Die eigene h3 je Clip ist nicht Schmuck: build-suchindex.py schneidet an
-    `h3.clip-h[id]` einen eigenen Abschnitt. Ohne sie heisst in den
-    Suchergebnissen jeder Clip einer Seite «Clips» und alle fuehren auf
-    dasselbe Sprungziel. Weil der Titel jetzt in der Ueberschrift steht,
-    bleibt fuer den Knopf nur noch die Dauer — er darf klein sein."""
-    titel = html.escape(clip["titel"])
-    stamm = clip["datei"].replace(".html", "")
-    beschrieb = html.escape(clip.get("kurzbeschrieb", ""))
-    aus = [f'<h3 id="clip-{stamm}" class="clip-h">{titel}</h3>']
-    if beschrieb:
-        aus.append(f'<p class="clip-text">{beschrieb}</p>')
-    aus += [
-        f'<div class="clip" data-clip="{vor}clips/{clip["datei"]}" data-titel="{titel}">',
-        f'  <button class="clip-start" type="button" onclick="clipStart(this)"'
-        f' aria-label="Clip abspielen: {titel}">',
-        '    <span class="clip-play" aria-hidden="true">▶</span>',
-        f'    <span class="clip-meta">{mmss(clip.get("dauer_s", 0))}</span>',
-        '  </button>',
-        '</div>',
-    ]
-    return aus
-
-
-def transkript_block(clip):
-    tk = transkript(clip["datei"])
-    if not tk:
-        print(f"  [WARN] kein Sprechertext zu {clip['datei']}")
-        return []
-    aus = ['<details class="clip-transkript">',
-           f'<summary>Transkript · {html.escape(clip["titel"])}</summary>', '<ol>']
-    for zeit, txt in tk:
-        aus.append(f'<li><span class="tk-zeit">{zeit}</span>'
-                   f'<span>{html.escape(txt)}</span></li>')
-    aus += ['</ol>', '</details>']
-    return aus
-
-
-def block_lektion(clips, tiefe):
-    """Der Block auf einer Lektionsseite. tiefe = Ebenen unter der Wurzel."""
-    vor = "../" * tiefe
-    aus = [MARKE_AUF, '<h2 id="clips">Clips</h2>', '<div class="clip-grid">']
-    for c in clips:
-        aus += karte(c, vor) + transkript_block(c)
-    aus += ['</div>', MARKE_ZU]
-    return "\n".join(aus)
-
-
 def zeile(clip, vor=""):
-    """Eine Clip-Zeile in der Bibliothek: Nummer, Titel, Laufzeit. Sonst nichts.
+    """Eine Clip-Zeile: Nummer, Titel, Laufzeit. Sonst nichts.
 
-    Die Nummer ist der Platz des Clips in seiner Reihe (Feld `folge`), nicht
-    eine laufende Nummer der Seite — sie sagt, in welcher Reihenfolge die
-    Clips einer Reihe gedacht sind. Clips ohne `folge` sind Ergaenzungen und
-    stehen hinter den nummerierten.
+    Dieselbe Zeile in der Bibliothek und auf der Lektionsseite — es ist
+    dieselbe Aufgabe, also dieselbe Form. Die Nummer ist der Platz des
+    Clips in seiner Reihe (Feld `folge`), nicht eine laufende Nummer der
+    Seite. Clips ohne `folge` sind Ergaenzungen und stehen dahinter.
 
-    Die Klasse `clip-start` bleibt am Knopf, damit clipStart/clipStop aus
-    mathlib.js unveraendert greifen; `cl-clip` traegt nur das Aussehen.
+    `data-modus="gross"` heisst: der Clip laeuft ueber dem Fenster, nicht
+    in der Zeile. Die Klasse `clip-start` bleibt am Knopf, damit
+    clipStart/clipStop aus mathlib.js unveraendert greifen.
     """
     titel = html.escape(clip["titel"])
     folge = clip.get("folge")
@@ -192,6 +143,51 @@ def zeile(clip, vor=""):
         '  </button>',
         '</div>',
     ]
+
+
+
+def block_lektion(clips, tiefe):
+    """Der Block auf einer Lektionsseite — dieselbe Darstellung wie in der
+    Bibliothek: eine zweispaltige Auswahl aus Nummer, Titel und Laufzeit,
+    und der Clip laeuft gross ueber dem Fenster.
+
+    Die Transkripte stehen gesammelt darunter in einem Aufklapper. Sie
+    muessen im HTML bleiben: Von einem animierten Clip sieht die Suche
+    sonst nichts, und die Ueberschrift `h3.clip-h[id]` je Clip ist das,
+    woran build-suchindex.py seine Abschnitte schneidet.
+
+    tiefe = Ebenen unter der Wurzel, daraus wird der ../-Praefix.
+    """
+    vor = "../" * tiefe
+    # Dieselbe didaktische Ordnung wie in der Bibliothek: Reihen
+    # alphabetisch, darin nach `folge`, Ergaenzungen ans Ende der Reihe.
+    clips = sorted(clips, key=lambda c: (c.get("reihe") or c["titel"],
+                                         c.get("folge") if c.get("folge") else 99,
+                                         c["titel"]))
+    aus = [MARKE_AUF, '<h2 id="clips">Clips</h2>',
+           f'<div class="cl-body clip-auswahl"'
+           f' style="grid-template-rows: repeat({-(-len(clips) // 2)}, auto)">']
+    for c in clips:
+        aus += ["  " + z for z in zeile(c, vor)]
+    aus.append('</div>')
+
+    tk = [(c, transkript(c["datei"])) for c in clips]
+    if any(t for _, t in tk):
+        aus.append('<details class="clip-transkripte">')
+        aus.append('<summary>Transkripte — der gesprochene Text zum Mitlesen</summary>')
+        for c, zeilen in tk:
+            if not zeilen:
+                continue
+            stamm = c["datei"].replace(".html", "")
+            aus.append(f'<h3 id="clip-{stamm}" class="clip-h">{html.escape(c["titel"])}</h3>')
+            aus.append('<ol>')
+            for zeit, txt in zeilen:
+                aus.append(f'<li><span class="tk-zeit">{zeit}</span>'
+                           f'<span>{html.escape(txt)}</span></li>')
+            aus.append('</ol>')
+        aus.append('</details>')
+    aus.append(MARKE_ZU)
+    return "\n".join(aus)
 
 
 

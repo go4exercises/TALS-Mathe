@@ -957,7 +957,7 @@ canvas { display: block; width: 100%; }
    eine nummerierte Reihe ueber beide Spalten zickzacken (1 links, 2 rechts,
    3 wieder links). Die Zeilenzahl setzt der Generator je Gruppe als
    Inline-Stil — sie haengt an der Anzahl Clips. */
-.cl-body {
+.cl-body, .clip-auswahl {
   background: var(--papier); border-top: 1px solid var(--linie);
   padding: 6px 8px;
   display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: column;
@@ -966,7 +966,11 @@ canvas { display: block; width: 100%; }
 /* Muss sein: das display oben schlaegt sonst das hidden-Attribut, und
    alle Gruppen stuenden offen. Dieselbe Falle wie bei .clip-start. */
 .cl-body[hidden] { display: none; }
+/* Auf der Lektionsseite steht die Auswahl frei, ohne Aufklapper darum. */
+.clip-auswahl { border: 1px solid var(--linie); border-radius: 9px;
+  border-top: 1px solid var(--linie); margin-top: 12px; box-shadow: var(--s); }
 @media (max-width: 720px) {
+  .clip-auswahl { grid-template-columns: 1fr; grid-auto-flow: row; grid-template-rows: none !important; }
   /* einspaltig: Zeilenvorgabe des Generators zuruecknehmen, sonst
      quetscht das Raster alle Clips in die halbe Anzahl Zeilen. */
   .cl-body { grid-template-columns: 1fr; grid-auto-flow: row; grid-template-rows: none !important; }
@@ -1045,10 +1049,12 @@ canvas { display: block; width: 100%; }
 .cl-sp .cl-hdr:focus-visible,
 .cl-sp .cl-clip:focus-visible { outline-color: var(--lila); }
 
-/* Transkript: der einzige Text, den Suchmaschine und Volltextsuche vom
+/* Transkripte: der einzige Text, den Suchmaschine und Volltextsuche vom
    Clip sehen. Klasse darf NICHT in SKIP_CLASSES von build-suchindex.py. */
-.clip-transkript { margin-top: 10px; }
-.clip-transkript > summary {
+.clip-transkript, .clip-transkripte { margin-top: 12px; }
+.clip-transkripte .clip-h { margin: 16px 0 2px; font-size: 0.95rem; }
+.clip-transkripte .clip-h:first-of-type { margin-top: 8px; }
+.clip-transkript > summary, .clip-transkripte > summary {
   cursor: pointer;
   font-family: var(--mono);
   font-size: 0.62rem;
@@ -1058,9 +1064,9 @@ canvas { display: block; width: 100%; }
   color: var(--tinte-2);
   padding: 4px 0;
 }
-.clip-transkript > summary:hover { color: var(--blau); }
-.clip-transkript ol { margin: 8px 0 0; padding-left: 0; list-style: none; }
-.clip-transkript li {
+.clip-transkript > summary:hover, .clip-transkripte > summary:hover { color: var(--blau); }
+.clip-transkript ol, .clip-transkripte ol { margin: 8px 0 0; padding-left: 0; list-style: none; }
+.clip-transkript li, .clip-transkripte li {
   display: flex;
   gap: 12px;
   font-size: 0.8rem;
@@ -1068,7 +1074,7 @@ canvas { display: block; width: 100%; }
   padding: 3px 0;
 }
 
-.clip-transkript .tk-zeit {
+.clip-transkript .tk-zeit, .clip-transkripte .tk-zeit {
   flex-shrink: 0;
   font-family: var(--mono);
   font-size: 0.68rem;

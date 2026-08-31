@@ -130,7 +130,23 @@ python3 scripts/build-clips-einbau.py --schreiben
 
 Das Skript liest `clips/clips.json`, holt die Zuordnung Lektion → Datei aus `nav.js` und
 schreibt zwischen die Marker: eine `<h2 id="clips">`-Überschrift (die Seiten-Navigation
-nimmt sie automatisch auf) und dann je Clip
+nimmt sie automatisch auf), darunter **dieselbe zweispaltige Auswahl wie in der
+Bibliothek** und darunter die Transkripte in einem Aufklapper.
+
+Es ist dieselbe Aufgabe wie dort, also dieselbe Form: eine Zeile aus Nummer, Titel und
+Laufzeit; der Clip läuft **gross über dem Fenster**, nicht in der Zeile. Auch die Ordnung
+ist dieselbe — Reihen alphabetisch, darin nach `folge`.
+
+Die Transkripte stehen gesammelt unter der Auswahl, jedes mit seiner eigenen
+`<h3 id="clip-…" class="clip-h">`. Diese Überschrift ist nicht Schmuck: An ihr schneidet
+`build-suchindex.py` seine Abschnitte, und der Transkripttext ist das Einzige, was Suche
+und Suchmaschine von einem animierten Clip überhaupt sehen. Wer den Aufklapper entfernt,
+nimmt den Clips ihre Auffindbarkeit.
+
+Damit ein Suchtreffer nicht in einem zugeklappten `<details>` verschwindet, öffnet
+`mathlib.js` beim Laden alle `<details>` über dem Sprungziel aus `location.hash`.
+
+Früher stand hier je Clip
 
 ```html
 <h3 id="clip-<dateiname>" class="clip-h">Titel</h3>
