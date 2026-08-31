@@ -27,7 +27,9 @@ Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TA
 - **Volltextsuche** über alle Seiten, Glossar und Formelsammlung (Tastenkürzel `/`)
 - **Zusatzmaterial je Thema**: Handout, Teste dich selbst, Aufgabenserie (Druckseiten)
   und ein Anki-Deck
-- **Nachschlagen**: Glossar und Formelsammlung
+- **Leitprogramme** — ein Thema zum selbstständigen Durcharbeiten, mit Vorwissenstest,
+  Kapiteln und Gesamttest; erstes: *Potenzen*
+- **Nachschlagen**: Glossar, Formelsammlung, Clips und Leitprogramme
 - **Rechtliches & Datenschutz** — keine Cookies, kein Tracking
 
 ---

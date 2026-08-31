@@ -173,7 +173,9 @@ def run_light(path, rep):
     # Buehnen ohne Seitengeruest; index.html und feedback.html haben ein eigenes
     # Layout ohne .page-wrap und ohne <main class="content">. Fuer sie gelten
     # Skelett-, nav- und Ressourcen-Checks nicht — die allgemeinen oben schon.
-    if "clips" in path.parts or path.name in EIGENES_SKELETT:
+    # clips/ und leitprogramme/ sind eigene Dokumente mit eigenem <style>:
+    # kein page-wrap, keine nav.js, und ihre Klassen stehen nicht in style.css.
+    if {"clips", "leitprogramme"} & set(path.parts) or path.name in EIGENES_SKELETT:
         return
 
     check_skeleton(text, fname, rep)

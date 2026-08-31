@@ -34,7 +34,14 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - `mathlib.js` — Canvas-Bibliothek + globale Helfer (`toggleL` u.a.).
 - `minicheck.js` (Mini-Check-Akkordeon), `anim-hinweise.js` (👁/💡-Rollover, Pflicht bei
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
-- `formelsammlung.html`, `glossar.html`, `clips.html` — drei Nachschlag-Seiten im Repo-Root.
+- `formelsammlung.html`, `glossar.html`, `clips.html`, `leitprogramme.html` — vier
+  Nachschlag-Seiten im Repo-Root.
+- `leitprogramme/` — Leitprogramme zum selbstständigen Durcharbeiten, je eine
+  eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
+  ausgenommen). Schriften über `../schriften.css`, MathJax über
+  `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Die Übersicht
+  `leitprogramme.html` wird von Hand gepflegt; der Marker in der Datei sagt, was ein
+  neuer Eintrag braucht.
 - `clips/` — 50 vertonte Animationen (52:54 min). Von Hand geschrieben wird nur das
   Drehbuch `clips/<name>.json`; `.html`, `sprechertext-*.txt`, `clips.json` und die
   Blöcke auf den Lektionsseiten sind **generiert**. Formeln stehen in LaTeX.

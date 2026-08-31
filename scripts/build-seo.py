@@ -79,6 +79,16 @@ SEITEN = {
    titel='Clips — kurze Animationen zu den Rechenwegen',
    beschreibung='Kurze Animationen der BM-Mathematik: Ein Clip baut einen Rechenweg Zeile für Zeile auf, mit Farbführung und Text zum Mitlesen. Nach Lerngebieten geordnet.',
    themen=['Mathematik', 'Erklärclip', 'Animation', 'Berufsmaturität', 'Rechenweg']),
+ 'leitprogramme.html': dict(
+   typ='article', lrt='Leitprogramm',
+   titel='Leitprogramme — selbstständig durch ein Thema',
+   beschreibung='Leitprogramme der BM-Mathematik: Ein Thema in Kapiteln zum selbstständigen Durcharbeiten, mit Vorwissenstest, Beispielen, Aufgaben und Gesamttest.',
+   themen=['Mathematik', 'Leitprogramm', 'Selbststudium', 'Berufsmaturität']),
+ 'leitprogramme/potenzen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   titel='Leitprogramm Potenzen — von ℕ über ℤ zu ℚ',
+   beschreibung='Leitprogramm Potenzen: die Potenzregeln erst mit natürlichen, dann mit ganzen, dann mit rationalen Exponenten — und Wurzeln ganz ohne Wurzelgesetze.',
+   themen=['Mathematik', 'Potenzen', 'Potenzgesetze', 'Wurzeln', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',
