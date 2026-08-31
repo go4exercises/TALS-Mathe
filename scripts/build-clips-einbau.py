@@ -68,6 +68,8 @@ def zweig(clip):
 # Reihen, deren Ordnung didaktisch ist und nicht alphabetisch. Was hier
 # nicht steht, kommt danach in alphabetischer Folge.
 REIHEN = ["Lineare Gleichungen", "Ungleichungen", "Parametergleichung",
+          "Quadratische Gleichungen", "Quadratische Ungleichungen",
+          "Quadratische Parametergleichungen", "Quadratische Gleichungssysteme",
           "Bruchgleichungen", "Gleichungssysteme"]
 
 

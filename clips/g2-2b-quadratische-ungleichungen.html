@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Quadratische Ungleichungen: erst die Nullstellen, dann die Skizze</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · Quadratische Ungleichungen</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>31.08.2026</span></div>
+<div class="l" data-at="10.71" data-out="41.10" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="11.01" data-anim="rise" data-dim="10.71,18.97"><div class="num">1</div><div class="stxt">Nullstellen berechnen</div></div><div class="step l flow" data-at="19.27" data-anim="rise" data-dim="18.97,29.23"><div class="num">2</div><div class="stxt">Öffnung und Skizze<br><span class="dim">innen oder aussen?</span></div></div><div class="step l flow" data-at="29.53" data-anim="rise" data-dim="29.23,41.10"><div class="num">3</div><div class="stxt">Bereiche ablesen</div></div></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="10.71" data-anim="rise" style="left:0;right:0;text-align:center;top:244px;font-size:92px;font-weight:600;color:var(--tinte)">Wo ist die Parabel oben?</div>
+<div class="l sans mitte mitte" data-at="2.10" data-out="10.71" data-anim="rise" style="left:0;right:0;text-align:center;top:429px;font-size:48px;color:var(--blau)">Nullstellen allein genügen nicht</div>
+<div class="l m row mitte" data-at="3.80" data-out="10.71" data-anim="pop" style="left:0;right:0;text-align:center;top:619px;font-size:80px"><span>\(x^2 - 5x + 6 &gt; 0\)</span></div>
+<div class="l hand mitte" data-at="5.50" data-out="10.71" data-anim="rise" style="left:0;right:0;text-align:center;top:834px;font-size:54px;color:var(--blau)">Gesucht ist nicht, wo der Term null ist, sondern wo er positiv ist.</div>
+<div class="l m row" data-at="11.11" data-out="18.97" data-anim="rise" style="left:680px;top:225px;font-size:58px"><span>\(x^2 - 5x + 6 = (x-2)(x-3) = 0\)</span></div>
+<div class="l m row" data-at="12.81" data-out="18.97" data-anim="pop" style="left:680px;top:400px;font-size:62px"><span>\(x = \fa{2} \qquad \text{und} \qquad x = \fb{3}\)</span></div>
+<div class="l hand" data-at="14.51" data-out="18.97" data-anim="rise" style="left:680px;top:570px;font-size:52px;color:var(--blau)">Das sind die Stellen, an denen die Parabel die x-Achse schneidet.</div>
+<div class="l m row" data-at="19.37" data-out="29.23" data-anim="rise" style="left:680px;top:150px;font-size:50px"><span>\(a = 1 &gt; 0 \;\longrightarrow\; \text{nach oben geöffnet}\)</span></div>
+<div class="l graf" data-at="21.07" data-out="29.23" data-anim="rise" style="left:690px;top:270px"><svg width="700" height="520" viewBox="0 0 700 520"><line x1="8.0" y1="0" x2="8.0" y2="520" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="122.0" y1="0" x2="122.0" y2="520" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="236.0" y1="0" x2="236.0" y2="520" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="350.0" y1="0" x2="350.0" y2="520" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="464.0" y1="0" x2="464.0" y2="520" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="578.0" y1="0" x2="578.0" y2="520" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="692.0" y1="0" x2="692.0" y2="520" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="512.0" x2="700" y2="512.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="456.0" x2="700" y2="456.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="400.0" x2="700" y2="400.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="344.0" x2="700" y2="344.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="288.0" x2="700" y2="288.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="232.0" x2="700" y2="232.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="176.0" x2="700" y2="176.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="120.0" x2="700" y2="120.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="64.0" x2="700" y2="64.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="700" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="400.0" x2="700" y2="400.0" stroke="#1c1a17" stroke-width="3"/><line x1="122.0" y1="520" x2="122.0" y2="0" stroke="#1c1a17" stroke-width="3"/><text x="674.0" y="386.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="136.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="8.0" y1="393.0" x2="8.0" y2="407.0" stroke="#1c1a17" stroke-width="2.5"/><text x="8.0" y="432.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="236.0" y1="393.0" x2="236.0" y2="407.0" stroke="#1c1a17" stroke-width="2.5"/><text x="236.0" y="432.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="350.0" y1="393.0" x2="350.0" y2="407.0" stroke="#1c1a17" stroke-width="2.5"/><text x="350.0" y="432.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="464.0" y1="393.0" x2="464.0" y2="407.0" stroke="#1c1a17" stroke-width="2.5"/><text x="464.0" y="432.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="578.0" y1="393.0" x2="578.0" y2="407.0" stroke="#1c1a17" stroke-width="2.5"/><text x="578.0" y="432.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">4</text><line x1="692.0" y1="393.0" x2="692.0" y2="407.0" stroke="#1c1a17" stroke-width="2.5"/><text x="692.0" y="432.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">5</text><line x1="115.0" y1="512.0" x2="129.0" y2="512.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="520.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="115.0" y1="456.0" x2="129.0" y2="456.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="464.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="115.0" y1="344.0" x2="129.0" y2="344.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="352.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="115.0" y1="288.0" x2="129.0" y2="288.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="296.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="115.0" y1="232.0" x2="129.0" y2="232.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="240.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">3</text><line x1="115.0" y1="176.0" x2="129.0" y2="176.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="184.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="115.0" y1="120.0" x2="129.0" y2="120.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="128.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">5</text><line x1="115.0" y1="64.0" x2="129.0" y2="64.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="72.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><line x1="115.0" y1="8.0" x2="129.0" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="109.0" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">7</text><polyline points="102.0,13.3 104.9,20.7 107.8,28.1 110.6,35.4 113.5,42.7 116.3,49.9 119.2,57.0 122.0,64.0 124.8,71.0 127.7,77.9 130.6,84.7 133.4,91.4 136.2,98.1 139.1,104.7 141.9,111.3 144.8,117.8 147.7,124.2 150.5,130.5 153.3,136.8 156.2,143.0 159.0,149.1 161.9,155.1 164.8,161.1 167.6,167.0 170.5,172.9 173.3,178.7 176.2,184.4 179.0,190.0 181.8,195.6 184.7,201.1 187.6,206.5 190.4,211.8 193.2,217.1 196.1,222.3 199.0,227.5 201.8,232.6 204.7,237.6 207.5,242.5 210.3,247.4 213.2,252.2 216.0,256.9 218.9,261.5 221.8,266.1 224.6,270.6 227.5,275.1 230.3,279.5 233.2,283.8 236.0,288.0 238.8,292.2 241.7,296.3 244.6,300.3 247.4,304.2 250.2,308.1 253.1,311.9 255.9,315.7 258.8,319.4 261.6,323.0 264.5,326.5 267.3,330.0 270.2,333.4 273.1,336.7 275.9,339.9 278.8,343.1 281.6,346.2 284.4,349.3 287.3,352.3 290.2,355.2 293.0,358.0 295.9,360.8 298.7,363.5 301.6,366.1 304.4,368.6 307.2,371.1 310.1,373.5 312.9,375.9 315.8,378.2 318.6,380.4 321.5,382.5 324.3,384.6 327.2,386.6 330.1,388.5 332.9,390.3 335.8,392.1 338.6,393.8 341.4,395.5 344.3,397.1 347.2,398.6 350.0,400.0 352.8,401.4 355.7,402.7 358.6,403.9 361.4,405.0 364.2,406.1 367.1,407.1 369.9,408.1 372.8,409.0 375.6,409.8 378.5,410.5 381.3,411.2 384.2,411.8 387.1,412.3 389.9,412.7 392.8,413.1 395.6,413.4 398.4,413.7 401.3,413.9 404.2,414.0 407.0,414.0 409.9,414.0 412.7,413.9 415.6,413.7 418.4,413.4 421.2,413.1 424.1,412.7 426.9,412.3 429.8,411.8 432.7,411.2 435.5,410.5 438.3,409.8 441.2,409.0 444.1,408.1 446.9,407.1 449.8,406.1 452.6,405.0 455.4,403.9 458.3,402.7 461.1,401.4 464.0,400.0 466.9,398.6 469.7,397.1 472.6,395.5 475.4,393.8 478.2,392.1 481.1,390.3 483.9,388.5 486.8,386.6 489.6,384.6 492.5,382.5 495.4,380.4 498.2,378.2 501.1,375.9 503.9,373.5 506.8,371.1 509.6,368.6 512.4,366.1 515.3,363.5 518.1,360.8 521.0,358.0 523.9,355.2 526.7,352.3 529.6,349.3 532.4,346.2 535.2,343.1 538.1,339.9 541.0,336.7 543.8,333.4 546.6,330.0 549.5,326.5 552.4,323.0 555.2,319.4 558.1,315.7 560.9,311.9 563.8,308.1 566.6,304.2 569.4,300.3 572.3,296.3 575.1,292.2 578.0,288.0 580.9,283.8 583.7,279.5 586.5,275.1 589.4,270.6 592.2,266.1 595.1,261.5 597.9,256.9 600.8,252.2 603.6,247.4 606.5,242.5 609.4,237.6 612.2,232.6 615.1,227.5 617.9,222.3 620.8,217.1 623.6,211.8 626.5,206.5 629.3,201.1 632.1,195.6 635.0,190.0 637.9,184.4 640.7,178.7 643.6,172.9 646.4,167.0 649.2,161.1 652.1,155.1 654.9,149.1 657.8,143.0 660.6,136.8 663.5,130.5 666.4,124.2 669.2,117.8 672.0,111.3 674.9,104.7 677.8,98.1 680.6,91.4 683.4,84.7 686.3,77.9 689.1,71.0 692.0,64.0" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><circle cx="350.0" cy="400.0" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="350.0" cy="400.0" r="5" fill="#1f6b3a"/><text x="368.0" y="384.0" font-size="29" font-weight="600" fill="#1f6b3a">2</text><circle cx="464.0" cy="400.0" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="464.0" cy="400.0" r="5" fill="#1f6b3a"/><text x="482.0" y="384.0" font-size="29" font-weight="600" fill="#1f6b3a">3</text></svg></div>
+<div class="l hand" data-at="22.77" data-out="29.23" data-anim="rise" style="left:680px;top:820px;font-size:50px;color:var(--blau)">Zwischen 2 und 3 liegt die Parabel unter der Achse — dort ist der Term negativ.</div>
+<div class="l m mitte" data-at="29.63" data-out="41.10" data-anim="pop" style="left:680px;top:215px;font-size:60px;font-weight:600">Grösser null heisst: ausserhalb</div>
+<div class="l m row" data-at="31.33" data-out="41.10" data-anim="rise" style="left:680px;top:395px;font-size:44px"><span>\(x^2 - 5x + 6 &gt; 0 \quad \longrightarrow \quad L = \left]-\infty;\, 2\right[ \;\cup\; \left]3;\, +\infty\right[\)</span></div>
+<div class="l m row" data-at="33.03" data-out="41.10" data-anim="pop" style="left:680px;top:570px;font-size:44px"><span>\(x^2 - 5x + 6 &lt; 0 \quad \longrightarrow \quad L = \left]2;\, 3\right[\)</span></div>
+<div class="l hand" data-at="34.73" data-out="41.10" data-anim="rise" style="left:680px;top:735px;font-size:44px;color:var(--rot)">Offene Klammern, weil an den Nullstellen der Term null ist — also weder grösser noch kleiner.</div>
+<div class="l m mitte mitte" data-at="41.50" data-out="54.32" data-anim="pop" style="left:0;right:0;text-align:center;top:215px;font-size:74px;font-weight:600">Eine Zahl je Bereich</div>
+<div class="l m row mitte" data-at="43.20" data-out="54.32" data-anim="pop" style="left:0;right:0;text-align:center;top:400px;font-size:52px"><span>\(x = 0: \; \fc{6} \qquad x = 2.5: \; \fd{-0.25} \qquad x = 4: \; \fc{2}\)</span></div>
+<div class="l hand mitte" data-at="44.90" data-out="54.32" data-anim="rise" style="left:0;right:0;text-align:center;top:580px;font-size:52px;color:var(--blau)">Drei Einsetzproben ersetzen die Skizze — sie sind nur langsamer.</div>
+<div class="l hand mitte" data-at="46.60" data-out="54.32" data-anim="rise" style="left:0;right:0;text-align:center;top:730px;font-size:52px;color:var(--blau)">Das Vorzeichen kann nur an einer Nullstelle wechseln.</div>
+<div class="l m mitte mitte" data-at="54.72" data-out="68.89" data-anim="pop" style="left:0;right:0;text-align:center;top:190px;font-size:78px;font-weight:600">Innen und aussen</div>
+<div class="l sans mitte" data-at="56.42" data-out="68.89" data-anim="rise" style="left:0;right:0;text-align:center;top:370px;font-size:46px"><div class="lz"><span class="ln">1</span>\(a &gt; 0\): innen negativ, aussen positiv</div><div class="lz"><span class="ln">2</span>\(a &lt; 0\): innen positiv, aussen negativ</div><div class="lz"><span class="ln">3</span>\(\leq\) oder \(\geq\): Nullstellen gehören dazu, eckige Klammer</div></div>
+<div class="l hand mitte" data-at="58.12" data-out="68.89" data-anim="rise" style="left:0;right:0;text-align:center;top:660px;font-size:48px;color:var(--blau)">Ohne Nullstellen behält der Term überall dasselbe Vorzeichen — dann ist L leer oder ganz ℝ.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-2b-quadratische-ungleichungen.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 68.89;
+const SPRECHER = [{"bei": 0.4, "text": "Bei einer quadratischen Ungleichung genügt es nicht, die Nullstellen zu kennen. Man muss auch wissen, wo der Term positiv ist und wo negativ — und das sagt am schnellsten eine Skizze."}, {"bei": 11.11, "text": "Die linke Seite steht schon allein. Die Nullstellen findet man durch Faktorisieren: Produkt sechs, Summe fünf — also zwei und drei."}, {"bei": 19.37, "text": "Jetzt die Skizze. Der Faktor vor x hoch zwei ist positiv, die Parabel ist also nach oben geöffnet. Zwischen den Nullstellen liegt sie unter der Achse, ausserhalb darüber."}, {"bei": 29.63, "text": "Gesucht war grösser null, also die Bereiche über der Achse: alles links von zwei und alles rechts von drei. Die Nullstellen selbst gehören nicht dazu, denn dort ist der Term null und nicht grösser null."}, {"bei": 41.5, "text": "Wer der Skizze nicht traut, macht die Stichprobe: Man setzt aus jedem Bereich eine Zahl ein. Null gibt sechs, positiv. Zweieinhalb gibt minus null Komma zwei fünf, negativ. Vier gibt zwei, wieder positiv."}, {"bei": 54.72, "text": "Zum Mitnehmen: auf null bringen, Nullstellen suchen, Öffnung prüfen, ablesen. Bei nach oben geöffneter Parabel ist der Term zwischen den Nullstellen negativ und ausserhalb positiv — bei nach unten geöffneter genau umgekehrt."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton startet stumm mit — stummes Abspielen erlauben die Browser
+  // ohne Nutzergeste. Der Klick auf «Ton an» ist die Geste, die ihn
+  // hoerbar macht; ab dann fuehrt die Tonspur die Uhr, weil Tondrift
+  // auffaellt und Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = true;
+    ton.play().catch(() => {});
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

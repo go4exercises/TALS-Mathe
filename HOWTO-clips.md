@@ -127,9 +127,17 @@ Punkte. Gezeichnet wird als SVG in den Theme-Farben.
  "punkte":  [{"x": 2, "y": 3, "farbe": 3, "beschriftung": "S(2 | 3)"}]}
 ```
 
+Parabeln gehen genauso, als `parabeln` mit `a`, `b`, `c` für \(y = ax^2+bx+c\) —
+gezeichnet als Streckenzug, der ausserhalb des Fensters abbricht und danach wieder
+einsetzt.
+
 Die Geraden werden **am Fenster** abgeschnitten, nicht an ihren Endpunkten — eine
 Gerade, die aus dem Bild läuft, hört am Rand auf statt an einer willkürlichen Stelle
 davor. `farbe` ist 1 bis 4 wie bei den Farbgruppen.
+
+**Der senkrechte Strich `|` bricht im Fliesstext die Zeile.** Wer in einer Notiz
+\(2|a|\) schreiben will, packt es in `@…@` — dort ist der Strich geschützt. Sonst steht
+die Hälfte des Satzes auf einer neuen Zeile und die Betragsstriche sind weg.
 
 **`abstand` von Hand setzen**, sonst überschreibt die nächste Zeile das Bild: Der
 senkrechte Fluss nimmt ohne Angabe `hoehe` als Abstand, und dann beginnt die nächste

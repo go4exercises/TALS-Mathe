@@ -326,6 +326,35 @@ def graf_svg(el, theme):
                          % (px(bx_), py(by_), farbe, g.get("anker", "start"),
                             entschaerfen(g["beschriftung"])))
 
+    # Parabeln y = a x^2 + b x + c, als Streckenzug im Fenster
+    for pa in el.get("parabeln", []):
+        a_, b_, c_ = pa["a"], pa.get("b", 0), pa.get("c", 0)
+        stuecke, lauf = [], []
+        n = 240
+        for i in range(n + 1):
+            x = x0 + (x1 - x0) * i / n
+            y = a_ * x * x + b_ * x + c_
+            if y0 <= y <= y1:
+                lauf.append("%.1f,%.1f" % (px(x), py(y)))
+            elif lauf:
+                stuecke.append(lauf); lauf = []
+        if lauf:
+            stuecke.append(lauf)
+        farbe = fv[pa.get("farbe", 1) - 1]
+        for st in stuecke:
+            if len(st) > 1:
+                teile.append('<polyline points="%s" fill="none" stroke="%s" '
+                             'stroke-width="%s" stroke-linecap="round" '
+                             'stroke-linejoin="round" %s/>'
+                             % (" ".join(st), farbe, pa.get("dicke", 5),
+                                'stroke-dasharray="14 10"' if pa.get("gestrichelt") else ""))
+        if pa.get("beschriftung"):
+            bx_, by_ = pa["beschriftung_bei"]
+            teile.append('<text x="%.1f" y="%.1f" font-size="27" fill="%s" '
+                         'text-anchor="%s">%s</text>'
+                         % (px(bx_), py(by_), farbe, pa.get("anker", "start"),
+                            entschaerfen(pa["beschriftung"])))
+
     # Punkte
     for pt in el.get("punkte", []):
         farbe = fv[pt.get("farbe", 3) - 1]

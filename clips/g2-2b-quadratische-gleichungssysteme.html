@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Quadratische Gleichungssysteme: Gerade trifft Parabel</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · Quadratische Systeme</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>31.08.2026</span></div>
+<div class="l" data-at="10.70" data-out="39.94" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="11.00" data-anim="rise" data-dim="10.70,19.78"><div class="num">1</div><div class="stxt">Gleichsetzen<br><span class="dim">beide sind dasselbe y</span></div></div><div class="step l flow" data-at="20.08" data-anim="rise" data-dim="19.78,27.69"><div class="num">2</div><div class="stxt">Quadratische Gleichung lösen</div></div><div class="step l flow" data-at="27.99" data-anim="rise" data-dim="27.69,39.94"><div class="num">3</div><div class="stxt">y-Werte holen<br><span class="dim">Punkte hinschreiben</span></div></div></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="10.70" data-anim="rise" style="left:0;right:0;text-align:center;top:238px;font-size:98px;font-weight:600;color:var(--tinte)">Gerade trifft Parabel</div>
+<div class="l sans mitte mitte" data-at="2.10" data-out="10.70" data-anim="rise" style="left:0;right:0;text-align:center;top:418px;font-size:48px;color:var(--blau)">Dasselbe Verfahren, eine andere Gleichung</div>
+<div class="l m row mitte" data-at="3.80" data-out="10.70" data-anim="pop" style="left:0;right:0;text-align:center;top:608px;font-size:60px"><span>\(\begin{cases} y = x^2 \\ y = x + 2 \end{cases}\)</span></div>
+<div class="l hand mitte" data-at="5.50" data-out="10.70" data-anim="rise" style="left:0;right:0;text-align:center;top:858px;font-size:54px;color:var(--blau)">Beide Gleichungen sind schon nach y aufgelöst — also gleichsetzen.</div>
+<div class="l m row" data-at="11.10" data-out="19.78" data-anim="rise" style="left:680px;top:225px;font-size:66px"><span>\(x^2 = x + 2\)</span></div>
+<div class="l m row" data-at="12.80" data-out="27.69" data-anim="pop" style="left:680px;top:400px;font-size:66px"><span>\(x^2 - x - 2 = 0\)</span></div>
+<div class="l hand" data-at="14.50" data-out="19.78" data-anim="rise" style="left:680px;top:575px;font-size:54px;color:var(--blau)">Erst auf null bringen — sonst greift kein Lösungsverfahren.</div>
+<div class="l m row" data-at="20.18" data-out="27.69" data-anim="pop" style="left:680px;top:580px;font-size:52px"><span>\((x-2)(x+1) = 0 \;\longrightarrow\; x = \fc{2} \;\text{ oder }\; x = \fc{-1}\)</span></div>
+<div class="l hand" data-at="21.88" data-out="27.69" data-anim="rise" style="left:680px;top:740px;font-size:52px;color:var(--blau)">Zwei x-Werte — also zwei Schnittpunkte.</div>
+<div class="l m row" data-at="28.09" data-out="39.94" data-anim="rise" style="left:680px;top:150px;font-size:52px"><span>\(y = 2^2 = 4 \qquad y = (-1)^2 = 1\)</span></div>
+<div class="l graf" data-at="29.79" data-out="39.94" data-anim="rise" style="left:690px;top:265px"><svg width="680" height="500" viewBox="0 0 680 500"><line x1="8.0" y1="0" x2="8.0" y2="500" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="140.8" y1="0" x2="140.8" y2="500" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="273.6" y1="0" x2="273.6" y2="500" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="406.4" y1="0" x2="406.4" y2="500" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="539.2" y1="0" x2="539.2" y2="500" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="672.0" y1="0" x2="672.0" y2="500" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="492.0" x2="680" y2="492.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="422.9" x2="680" y2="422.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="353.7" x2="680" y2="353.7" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="284.6" x2="680" y2="284.6" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="215.4" x2="680" y2="215.4" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="146.3" x2="680" y2="146.3" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="77.1" x2="680" y2="77.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="680" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="422.9" x2="680" y2="422.9" stroke="#1c1a17" stroke-width="3"/><line x1="273.6" y1="500" x2="273.6" y2="0" stroke="#1c1a17" stroke-width="3"/><text x="654.0" y="408.9" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="287.6" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="8.0" y1="415.9" x2="8.0" y2="429.9" stroke="#1c1a17" stroke-width="2.5"/><text x="8.0" y="454.9" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="140.8" y1="415.9" x2="140.8" y2="429.9" stroke="#1c1a17" stroke-width="2.5"/><text x="140.8" y="454.9" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="406.4" y1="415.9" x2="406.4" y2="429.9" stroke="#1c1a17" stroke-width="2.5"/><text x="406.4" y="454.9" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="539.2" y1="415.9" x2="539.2" y2="429.9" stroke="#1c1a17" stroke-width="2.5"/><text x="539.2" y="454.9" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="672.0" y1="415.9" x2="672.0" y2="429.9" stroke="#1c1a17" stroke-width="2.5"/><text x="672.0" y="454.9" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="266.6" y1="492.0" x2="280.6" y2="492.0" stroke="#1c1a17" stroke-width="2.5"/><text x="260.6" y="500.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="266.6" y1="353.7" x2="280.6" y2="353.7" stroke="#1c1a17" stroke-width="2.5"/><text x="260.6" y="361.7" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="266.6" y1="284.6" x2="280.6" y2="284.6" stroke="#1c1a17" stroke-width="2.5"/><text x="260.6" y="292.6" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="266.6" y1="215.4" x2="280.6" y2="215.4" stroke="#1c1a17" stroke-width="2.5"/><text x="260.6" y="223.4" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">3</text><line x1="266.6" y1="146.3" x2="280.6" y2="146.3" stroke="#1c1a17" stroke-width="2.5"/><text x="260.6" y="154.3" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="266.6" y1="77.1" x2="280.6" y2="77.1" stroke="#1c1a17" stroke-width="2.5"/><text x="260.6" y="85.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">5</text><line x1="266.6" y1="8.0" x2="280.6" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="260.6" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><line x1="8.0" y1="422.9" x2="672.0" y2="77.1" stroke="#b85c00" stroke-width="5" stroke-linecap="round" /><polyline points="8.0,146.3 10.8,152.0 13.5,157.7 16.3,163.3 19.1,168.9 21.8,174.3 24.6,179.8 27.4,185.1 30.1,190.5 32.9,195.7 35.7,200.9 38.4,206.0 41.2,211.1 44.0,216.1 46.7,221.1 49.5,226.0 52.3,230.8 55.0,235.6 57.8,240.3 60.6,244.9 63.3,249.5 66.1,254.1 68.9,258.5 71.6,262.9 74.4,267.3 77.2,271.6 79.9,275.8 82.7,280.0 85.5,284.1 88.2,288.1 91.0,292.1 93.8,296.1 96.5,299.9 99.3,303.7 102.1,307.5 104.8,311.2 107.6,314.8 110.4,318.4 113.1,321.9 115.9,325.4 118.7,328.7 121.4,332.1 124.2,335.3 127.0,338.6 129.7,341.7 132.5,344.8 135.3,347.8 138.0,350.8 140.8,353.7 143.6,356.6 146.3,359.4 149.1,362.1 151.9,364.8 154.6,367.4 157.4,369.9 160.2,372.4 162.9,374.8 165.7,377.2 168.5,379.5 171.2,381.8 174.0,384.0 176.8,386.1 179.5,388.2 182.3,390.2 185.1,392.1 187.8,394.0 190.6,395.8 193.4,397.6 196.1,399.3 198.9,401.0 201.7,402.6 204.4,404.1 207.2,405.6 210.0,407.0 212.7,408.3 215.5,409.6 218.3,410.9 221.0,412.0 223.8,413.1 226.6,414.2 229.3,415.2 232.1,416.1 234.9,417.0 237.6,417.8 240.4,418.5 243.2,419.2 245.9,419.9 248.7,420.4 251.5,420.9 254.2,421.4 257.0,421.8 259.8,422.1 262.5,422.4 265.3,422.6 268.1,422.7 270.8,422.8 273.6,422.9 276.4,422.8 279.1,422.7 281.9,422.6 284.7,422.4 287.4,422.1 290.2,421.8 293.0,421.4 295.7,420.9 298.5,420.4 301.3,419.9 304.0,419.2 306.8,418.5 309.6,417.8 312.3,417.0 315.1,416.1 317.9,415.2 320.6,414.2 323.4,413.1 326.2,412.0 328.9,410.9 331.7,409.6 334.5,408.3 337.2,407.0 340.0,405.6 342.8,404.1 345.5,402.6 348.3,401.0 351.1,399.3 353.8,397.6 356.6,395.8 359.4,394.0 362.1,392.1 364.9,390.2 367.7,388.2 370.4,386.1 373.2,384.0 376.0,381.8 378.7,379.5 381.5,377.2 384.3,374.8 387.0,372.4 389.8,369.9 392.6,367.4 395.3,364.8 398.1,362.1 400.9,359.4 403.6,356.6 406.4,353.7 409.2,350.8 411.9,347.8 414.7,344.8 417.5,341.7 420.2,338.6 423.0,335.3 425.8,332.1 428.5,328.7 431.3,325.4 434.1,321.9 436.8,318.4 439.6,314.8 442.4,311.2 445.1,307.5 447.9,303.7 450.7,299.9 453.4,296.1 456.2,292.1 459.0,288.1 461.7,284.1 464.5,280.0 467.3,275.8 470.0,271.6 472.8,267.3 475.6,262.9 478.3,258.5 481.1,254.1 483.9,249.5 486.6,244.9 489.4,240.3 492.2,235.6 494.9,230.8 497.7,226.0 500.5,221.1 503.2,216.1 506.0,211.1 508.8,206.0 511.5,200.9 514.3,195.7 517.1,190.5 519.8,185.1 522.6,179.8 525.4,174.3 528.1,168.9 530.9,163.3 533.7,157.7 536.4,152.0 539.2,146.3 542.0,140.5 544.7,134.6 547.5,128.7 550.3,122.8 553.0,116.7 555.8,110.6 558.6,104.5 561.3,98.3 564.1,92.0 566.9,85.7 569.6,79.3 572.4,72.8 575.2,66.3 577.9,59.7 580.7,53.1 583.5,46.4 586.2,39.7 589.0,32.8 591.8,26.0 594.5,19.0 597.3,12.1" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><circle cx="539.2" cy="146.3" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="539.2" cy="146.3" r="5" fill="#1f6b3a"/><text x="557.2" y="130.3" font-size="29" font-weight="600" fill="#1f6b3a">(2 | 4)</text><circle cx="140.8" cy="353.7" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="140.8" cy="353.7" r="5" fill="#1f6b3a"/><text x="158.8" y="337.7" font-size="29" font-weight="600" fill="#1f6b3a">(−1 | 1)</text></svg></div>
+<div class="l m row" data-at="31.49" data-out="39.94" data-anim="pop" style="left:680px;top:795px;font-size:50px"><span>\(L = \{(-1 \mid 1);\; (2 \mid 4)\}\)</span></div>
+<div class="l m mitte mitte" data-at="40.34" data-out="52.52" data-anim="pop" style="left:0;right:0;text-align:center;top:180px;font-size:74px;font-weight:600">Zwei, einer oder keiner</div>
+<div class="l sans mitte" data-at="42.04" data-out="52.52" data-anim="rise" style="left:0;right:0;text-align:center;top:355px;font-size:46px"><div class="lz"><span class="ln">1</span>\(y = x + 2\): \(D = 9 &gt; 0\) \(\longrightarrow\) zwei Schnittpunkte</div><div class="lz"><span class="ln">2</span>\(y = 2x - 1\): \(D = 0\) \(\longrightarrow\) Berührpunkt, die Gerade ist Tangente</div><div class="lz"><span class="ln">3</span>\(y = x - 2\): \(D = -7 &lt; 0\) \(\longrightarrow\) kein Schnittpunkt</div></div>
+<div class="l hand mitte" data-at="43.74" data-out="52.52" data-anim="rise" style="left:0;right:0;text-align:center;top:655px;font-size:50px;color:var(--blau)">Die Diskriminante der Gleichsetzungs-Gleichung zählt die Schnittpunkte.</div>
+<div class="l m mitte mitte" data-at="52.92" data-out="62.21" data-anim="pop" style="left:0;right:0;text-align:center;top:205px;font-size:62px;font-weight:600">Gleiches Verfahren, andere Gleichung</div>
+<div class="l m huelle mitte" data-at="54.62" data-out="62.21" data-anim="pop" style="left:0;right:0;text-align:center;top:385px;font-size:46px;font-weight:600"><span class="box row boxg"><span>\(\text{Tangente} \;\Longleftrightarrow\; D = 0 \;\Longleftrightarrow\; \text{doppelte Lösung}\)</span></span></div>
+<div class="l hand mitte" data-at="56.32" data-out="62.21" data-anim="rise" style="left:0;right:0;text-align:center;top:575px;font-size:50px;color:var(--rot)">Vergiss die y-Werte nicht: Die Lösung eines Systems ist ein Punkt, keine Zahl.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-2b-quadratische-gleichungssysteme.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 62.21;
+const SPRECHER = [{"bei": 0.4, "text": "Ein Gleichungssystem muss nicht aus zwei Geraden bestehen. Trifft eine Gerade auf eine Parabel, ist der Weg derselbe wie beim Gleichsetzverfahren — nur entsteht dabei eine quadratische Gleichung."}, {"bei": 11.1, "text": "Gleichsetzen: x hoch zwei gleich x plus zwei. Alles auf eine Seite bringen gibt x hoch zwei minus x minus zwei gleich null."}, {"bei": 20.18, "text": "Produkt minus zwei, Summe eins: minus eins und zwei. Also x gleich zwei oder x gleich minus eins."}, {"bei": 28.09, "text": "Zu jedem x gehört noch ein y. Einsetzen in die einfachere Gleichung: zwei hoch zwei ist vier, minus eins hoch zwei ist eins. Die Schnittpunkte sind zwei, vier und minus eins, eins."}, {"bei": 40.34, "text": "Wie bei zwei Geraden gibt es drei Möglichkeiten — nur heissen sie hier anders. Zwei Schnittpunkte, ein Berührpunkt, oder gar keiner. Und wieder entscheidet die Diskriminante: positiv, null oder negativ."}, {"bei": 52.92, "text": "Zum Mitnehmen: Das Verfahren ändert sich nicht, nur die Gleichung, die dabei entsteht. Und ein Berührpunkt ist rechnerisch nichts anderes als eine doppelte Lösung."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton startet stumm mit — stummes Abspielen erlauben die Browser
+  // ohne Nutzergeste. Der Klick auf «Ton an» ist die Geste, die ihn
+  // hoerbar macht; ab dann fuehrt die Tonspur die Uhr, weil Tondrift
+  // auffaellt und Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = true;
+    ton.play().catch(() => {});
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>
