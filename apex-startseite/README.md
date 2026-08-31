@@ -32,12 +32,16 @@ Einmalig einen Klon anlegen, danach je Änderung drei Zeilen:
 ```sh
 gh repo clone go4exercises/begreifbar ~/begreifbar        # einmalig
 cd ~/begreifbar
-rsync -a --delete --exclude README.md ~/tals-mathe/apex-startseite/ .
+rsync -a --delete --exclude '.git' --exclude 'README.md' ~/tals-mathe/apex-startseite/ .
 git add -A && git commit -m "…" && git push
 ```
 
-`--delete` räumt weg, was hier nicht mehr steht; `--exclude README.md` lässt diese
+`--delete` räumt weg, was hier nicht mehr steht; `--exclude 'README.md'` lässt diese
 Anleitung im Mathe-Repo, sie gehört nicht auf die Website.
+
+**`--exclude '.git'` ist nicht optional.** Ohne den Ausschluss löscht `--delete` das
+Verzeichnis `.git` im Klon — es kommt in der Quelle ja nicht vor. Der Klon wäre damit
+kein Repository mehr, und der Commit ginge verloren.
 
 **Danach prüfen:** `curl -s https://begreifbar.ch/ | grep -c googleapis` muss `0`
 ergeben, und im Netzwerk-Tab darf keine Anfrage an einen fremden Host stehen.

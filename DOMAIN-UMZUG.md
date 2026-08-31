@@ -220,12 +220,14 @@ Einmalig einen Klon anlegen, danach ist es ein Dreizeiler:
 ```sh
 gh repo clone go4exercises/begreifbar ~/begreifbar        # einmalig
 cd ~/begreifbar
-rsync -a --delete --exclude README.md ~/tals-mathe/apex-startseite/ .
+rsync -a --delete --exclude '.git' --exclude 'README.md' ~/tals-mathe/apex-startseite/ .
 git add -A && git commit -m "Schriften lokal, Kachel-Layout" && git push
 ```
 
-`--delete` räumt auch weg, was im Ordner nicht mehr steht; `--exclude README.md` lässt die
-Aufsetz-Anleitung im Mathe-Repo. Ohne `rsync`: `cp -r` und die Reste von Hand entfernen.
+`--delete` räumt auch weg, was im Ordner nicht mehr steht; `--exclude 'README.md'` lässt
+die Aufsetz-Anleitung im Mathe-Repo. **`--exclude '.git'` ist Pflicht** — ohne den
+Ausschluss löscht `--delete` das `.git`-Verzeichnis des Klons, weil es in der Quelle nicht
+vorkommt. Ohne `rsync`: `cp -r` und die Reste von Hand entfernen.
 
 **Alternative, falls dir das dritte Repo je zu viel wird:** Apex und `www` per
 Weiterleitung des Registrars auf `mathe.begreifbar.ch` schicken. Du verlierst dann die
