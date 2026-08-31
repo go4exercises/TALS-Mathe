@@ -7,10 +7,26 @@ Besucherin an einen Dritten — auf 230 Seiten, also praktisch ueberall. Mit
 vendor/mathjax/ stimmt «Keine Cookies · Kein Tracking» vollstaendig, und die
 Seite laeuft ohne Netz.
 
-Wichtig: Die Seiten setzen `loader: { load:['[tex]/boldsymbol'] }`. MathJax
-laedt Erweiterungen relativ zum Pfad der Startdatei nach, darum muss
-vendor/mathjax/input/tex/extensions/boldsymbol.js daneben liegen — sonst
-bricht der Formelsatz ueberall dort, wo \\boldsymbol vorkommt.
+Wichtig: MathJax laedt TeX-Erweiterungen erst bei Bedarf nach, relativ zum
+Pfad der Startdatei. Es reicht darum nicht, die eine Erweiterung mitzuliefern,
+die eine Seite ausdruecklich anfordert (`loader: { load:['[tex]/boldsymbol'] }`):
+Auch \\textcolor, \\cancel, \\bbox, \\class, \\enclose, \\unicode und ein Dutzend
+weiterer Befehle ziehen sich ihre Erweiterung selbst nach (autoload).
+
+**Faellt eine davon aus, bleibt die ganze Seite ohne Formelsatz** — nicht nur
+der eine Ausdruck. Genau das passierte g1-2: ein einziges \\textcolor liess
+alle 329 Ausdruecke als roher LaTeX-Text stehen, ohne Fehlermeldung im Bild.
+
+Darum liegt der komplette Ordner input/tex/extensions/ im Repo (34 Dateien,
+340 kB, nur bei Bedarf geladen). Ausgenommen ist all-packages.js: das ist ein
+Sammelbuendel, das der Autoload nie anfordert. Der Aufwand von 340 kB im Repo
+steht gegen den Ausfall einer ganzen Seite — die Rechnung ist eindeutig.
+
+Geprueft wird das nicht vom Pre-Flight, sondern im Browser:
+
+    node .claude/tools/pruef-mathjax.mjs http://localhost:8899/<seite>
+
+Das meldet 404 auf nachgeladene Bausteine und zaehlt die gesetzten Ausdruecke.
 
 Voraussetzung: vendor/mathjax/tex-svg.js liegt im Repo (aus
 node_modules/mathjax-full/es5, Version 3.2.2 — genau das, was

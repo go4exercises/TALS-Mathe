@@ -14,6 +14,10 @@ const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 1920, height: 1080 } });
 const fehler = [];
 await p.goto('file://' + fs.realpathSync(datei) + '?render');
+// Setzt der Clip mit MathJax (Drehbuch "latex": true), stehen die Formeln
+// erst nach dem Satz an ihrem Platz — vorher misst man den Rohtext.
+await p.evaluate(() => window.MathJax?.startup?.promise ?? null);
+await p.waitForTimeout(200);
 for (const t of marken) {
   await p.evaluate(s => window.__seek(s), t);
   await p.waitForTimeout(60);

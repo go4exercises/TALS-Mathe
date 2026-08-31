@@ -45,6 +45,18 @@ STD = {
 
 
 # ---------------------------------------------------------------- Formelsatz
+# Versuchsschalter: setzt ein Drehbuch "latex": true, geht der Formelsatz
+# nicht durch die eigene Schreibweise, sondern als LaTeX an MathJax. Siehe
+# clips/versuch-latex.json und den Vergleich in HOWTO-clips.md.
+LATEX = False
+
+
+def tex(text):
+    """Rohes LaTeX fuer MathJax verpacken — nur HTML-Zeichen entschaerfen."""
+    t = (text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
+    return "\\(" + t + "\\)"
+
+
 def formel(text):
     """Kompakte Formelschreibweise in HTML.
 
@@ -58,6 +70,8 @@ def formel(text):
 
     Einzelne lateinische Buchstaben werden kursiv gesetzt (Variablen).
     """
+    if LATEX:
+        return tex(text)
     t = text
 
     def zeichen(s):
@@ -326,6 +340,8 @@ def schriften_einbetten():
 
 def bauen(quelle, eigenstaendig=False):
     dreh = json.load(open(quelle, encoding="utf-8"))
+    global LATEX
+    LATEX = bool(dreh.get("latex"))
     theme_name = dreh.get("theme", STD["theme"])
     theme = json.load(open(os.path.join(CLIPS, "themes", theme_name + ".json"), encoding="utf-8"))
     if eigenstaendig:
@@ -460,7 +476,27 @@ def bauen(quelle, eigenstaendig=False):
     didaktik = ";".join("--f%d:%s;--f%dw:%s" % (i + 1, fv[i], i + 1, fl[i])
                         for i in range(4))
 
+    # Im LaTeX-Versuch setzt MathJax. Die vier Farbmakros bilden die
+    # Farbgruppen der eigenen Schreibweise nach — gleiche Werte, damit der
+    # Vergleich der beiden Fassungen einer ueber die Gestaltung ist und
+    # nicht einer ueber die Palette.
+    mathjax = ""
+    if LATEX:
+        # Das Doppelkreuz einer Farbe muss verdoppelt werden: In einer
+        # Makrodefinition ist #1 der Parameter, und «#1a4f8a» liest TeX
+        # als «Parameter 1, dann a4f8a» — Fehlermeldung statt Formel.
+        makros = ",".join(
+            "%s:['\\\\bbox[%s,3px]{\\\\textcolor{%s}{#1}}',1]"
+            % (n, fl[i].replace("#", "##"), fv[i].replace("#", "##"))
+            for i, n in enumerate(["fa", "fb", "fc", "fd"]))
+        mathjax = (
+            "<script>window.MathJax={tex:{inlineMath:[['\\\\(','\\\\)']],"
+            "displayMath:[],macros:{%s}},svg:{fontCache:'global'},"
+            "options:{enableMenu:false}};</script>"
+            "<script src=\"../vendor/mathjax/tex-svg.js\"></script>" % makros)
+
     html = VORLAGE.format(
+        mathjax=mathjax,
         didaktik=didaktik,
         titel=entschaerfen(dreh.get("titel", "Clip")),
         fonts=fonts_css,
@@ -567,7 +603,7 @@ body.render #ui{{display:none}}
    waere dort nur Text, der die 60px hohe Leiste sprengt. */
 @media (max-width:700px){{#ui{{gap:11px;padding:0 12px}} #tip{{display:none}}}}
 @media (prefers-reduced-motion:reduce){{*{{transition:none!important}}}}
-</style></head><body>
+</style>{mathjax}</head><body>
 <div id="wrap"><div id="stage">
 {rand}
 {inhalt}
@@ -732,7 +768,10 @@ if __name__ == "__main__":
     eintraege = []
     for q in quellen:
         ziel, dreh, dauer = bauen(q, a.eigenstaendig)
-        if not a.eigenstaendig:
+        # "probe": true — ein Versuchsclip. Er wird gebaut, aber nicht in
+        # clips.json aufgenommen und erscheint darum weder in der Bibliothek
+        # noch auf einer Lektionsseite.
+        if not a.eigenstaendig and not dreh.get("probe"):
             eintraege.append({
                 "datei": os.path.basename(ziel),
                 "titel": dreh.get("titel", ""),

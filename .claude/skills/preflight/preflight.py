@@ -209,7 +209,21 @@ def check_clips(wurzel, rep):
         rep.err("clips.json", f"nicht lesbar: {e}")
         return
 
-    dateien = {f.name for f in clips.glob("*.html")}
+    # Drehbuecher mit "probe": true sind Versuche. Sie werden gebaut, aber
+    # bewusst nicht ins Verzeichnis aufgenommen — sonst stuenden sie in der
+    # Bibliothek und auf den Lektionsseiten.
+    proben = set()
+    for d in clips.glob("*.json"):
+        if d.name == "clips.json":
+            continue
+        try:
+            dreh = _json.loads(d.read_text(encoding="utf-8"))
+            if dreh.get("probe"):
+                proben.add((dreh.get("dateiname") or d.stem) + ".html")
+        except ValueError:
+            pass
+
+    dateien = {f.name for f in clips.glob("*.html")} - proben
     gelistet = {e.get("datei", "") for e in eintraege}
     for fehlt in sorted(gelistet - dateien):
         rep.err("clips.json", f"Eintrag '{fehlt}' hat keine Datei")

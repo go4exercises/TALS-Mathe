@@ -459,6 +459,54 @@ ungeprüft: die Lizenzen der übrigen sieben deutschen Stimmen.
 
 ---
 
+## Versuch: Formelsatz mit LaTeX
+
+`clips/versuch-latex.json` ist derselbe Clip wie `g1-2-periode-in-bruch`, nur setzt dort
+MathJax statt der eigenen Schreibweise. Zwei Felder im Drehbuch steuern das:
+
+| Feld | Wirkung |
+|---|---|
+| `"latex": true` | Jeder Formeltext geht als LaTeX an MathJax, nicht durch `formel()` |
+| `"probe": true` | Der Clip wird gebaut, kommt aber nicht in `clips.json` — er taucht weder in der Bibliothek noch auf einer Lektionsseite auf |
+
+Die vier Farbgruppen `{1:…}` heissen dort `\fa{…}` bis `\fd{…}` und sind als Makros in
+der MathJax-Konfiguration definiert, mit denselben Farbwerten wie im Theme.
+
+### Was der Versuch zeigt
+
+**Dafür:** Der Satz ist der bessere. TeX setzt die Abstände um Relationszeichen richtig,
+`\overline` und `\dfrac` sind das Original statt eines Nachbaus. Und: **eine Formel lässt
+sich aus der Lektionsseite unverändert ins Drehbuch kopieren.** Die Seiten sind in LaTeX
+geschrieben — bisher muss jede Formel für den Clip von Hand übersetzt werden, und jede
+Übersetzung ist eine Gelegenheit für einen Fehler.
+
+**Dagegen:** Zwei Serifenschriften in einem Bild. Die Prosa steht in der Schrift des
+Clips, die Formeln in der TeX-Schrift; nebeneinander sieht man es. Ändern lässt sich das
+nicht sinnvoll — MathJax bringt seine eigenen Glyphen mit.
+
+**Kosten, gemessen:**
+
+| | eigener Satz | LaTeX |
+|---|---|---|
+| geladen | 531 kB | 2190 kB |
+| bis fertig | 119 ms | 191 ms |
+
+Die 2 MB sind `tex-svg.js`. Wer den Clip **von einer Lektionsseite aus** öffnet, hat die
+Datei längst im Cache — dort kostet es fast nichts. Wer den Clip direkt aufruft, lädt sie
+neu.
+
+### Stolpersteine, die dabei aufgefallen sind
+
+**`\textcolor{#1a4f8a}` in einer Makrodefinition ergibt «Illegal macro parameter
+reference».** In einer Definition ist `#1` der Parameter — TeX liest «Parameter 1, dann
+a4f8a». Das Doppelkreuz muss verdoppelt werden: `##1a4f8a`.
+
+**Wer die Bühne vermisst, muss auf den Satz warten.** `MathJax.startup.promise` abwarten,
+sonst misst man den rohen LaTeX-Text und hält das Ergebnis für ein Layout.
+`.claude/tools/pruef-clip.mjs` tut das.
+
+---
+
 ## Noch offen
 
 Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
