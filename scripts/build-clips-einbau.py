@@ -65,12 +65,32 @@ def zweig(clip):
     return (clip.get("themenbereich") or "").split(" ·")[0].strip()
 
 
+# Reihen, deren Ordnung didaktisch ist und nicht alphabetisch. Was hier
+# nicht steht, kommt danach in alphabetischer Folge.
+REIHEN = ["Lineare Gleichungen", "Ungleichungen", "Parametergleichung",
+          "Bruchgleichungen", "Gleichungssysteme"]
+
+
+def lektionsnummer(code):
+    """g2-2a -> 2.2a — die Nummer, unter der die Seite im Lehrplan steht."""
+    return code[1:].replace("-", ".", 1)
+
+
 def ordnung(clip):
-    """Sortierschluessel: erst der Zweig, dann die Reihe, dann der Platz darin."""
+    """Sortierschluessel: Zweig, dann Lektion, dann Reihe, dann Platz darin.
+
+    Die Lektion steht bewusst *nach* dem Zweig: In Lerngebiet 1 sollen die
+    Arithmetik-Clips vor den Algebra-Clips stehen, auch wenn sie aus zwei
+    verschiedenen Lektionen kommen. Innerhalb eines Zweiges ordnet dann die
+    Lektionsnummer — so stehen 2.2a, 2.2b und 2.3 beieinander.
+    """
     z = zweig(clip)
+    r = clip.get("reihe") or clip["titel"]
     return (ZWEIGE.index(z) if z in ZWEIGE else len(ZWEIGE),
             z,
-            clip.get("reihe") or clip["titel"],
+            (codes(clip) or [""])[0],
+            REIHEN.index(r) if r in REIHEN else len(REIHEN),
+            r,
             clip.get("folge") if clip.get("folge") else 99,
             clip["titel"])
 
@@ -286,14 +306,28 @@ def block_bibliothek(alle, seiten):
             f'{"Clip" if len(drin) == 1 else "Clips"} · {mmss(dauer)}</span>',
             '    <span class="cl-tog" aria-hidden="true">▼</span>',
             '  </button>',
-            # Zeilenzahl fuer die spaltenweise Fuellung: die Haelfte,
-            # aufgerundet. Steht inline, weil sie je Gruppe anders ist.
-            f'  <div class="cl-body" id="cl-{kid}" hidden'
-            f' style="grid-template-rows: repeat({-(-len(drin) // 2)}, auto)">',
+            f'  <div class="cl-body" id="cl-{kid}" hidden>',
         ]
+        # Untertitel je Lektion und Reihe. Ein Lerngebiet hat schnell
+        # zwanzig Clips; ohne Zwischenueberschrift ist das eine Liste, durch
+        # die man liest, statt einer, in der man etwas findet.
+        letzte = None
         for c in drin:
-            aus += ["    " + z for z in
+            eigene = [x for x in codes(c) if x in ids]
+            schlue = (eigene[0] if eigene else "", c.get("reihe") or c["titel"])
+            if schlue != letzte:
+                if letzte is not None:
+                    aus.append('    </div>')
+                aus.append('    <div class="cl-gruppe">')
+                marke = lektionsnummer(schlue[0]) if schlue[0] else ""
+                aus.append('      <h3 class="cl-gt">'
+                           + (f'<span class="cl-gnr">{marke}</span>' if marke else "")
+                           + html.escape(schlue[1]) + '</h3>')
+                letzte = schlue
+            aus += ["      " + z for z in
                     zeile(c, "", nuance[c.get("reihe") or c["titel"]])]
+        if letzte is not None:
+            aus.append('    </div>')
         aus += ['  </div>', '</div>']
     if offen is not None:
         aus.append("</div>")

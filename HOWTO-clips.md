@@ -338,6 +338,24 @@ Folgeszenen auf `oben: 348`. Beide bestehenden Clips machen es so.
 
 ## Bibliotheksseite `clips.html`
 
+**Unterteilt nach Lektion und Reihe.** Innerhalb eines Lerngebiets bekommt jede Reihe
+eine Zwischenüberschrift mit der Lektionsnummer davor — `2.2a · Ungleichungen`. Ein
+Lerngebiet hat schnell zwanzig Clips; ohne die Überschriften ist das eine Liste, durch
+die man liest, statt einer, in der man etwas findet.
+
+Die Reihenfolge macht `ordnung()` in `scripts/build-clips-einbau.py`: erst der Zweig
+(Arithmetik vor Algebra, `ZWEIGE`), dann die Lektionsnummer, dann die Reihe. Reihen,
+deren Folge didaktisch und nicht alphabetisch ist, stehen in `REIHEN` — dort steht
+etwa, dass in 2.2a die Ungleichungen vor die Parametergleichungen gehören.
+
+**Die Bibliothek setzt mehrspaltig, die Lektionsseiten rastern.** `.cl-body` benutzt
+`columns: 2`, `.clip-auswahl` ein Raster. Mit einem Raster ginge die Unterteilung nicht:
+Eine Zwischenüberschrift müsste dort wissen, in welcher Spalte sie steht. Mehrspaltiger
+Satz lässt die Gruppen der Reihe nach in die Spalten laufen, `break-inside: avoid` hält
+jede zusammen.
+
+
+
 Die Übersicht über alle Clips, gruppiert nach Fach und darin nach Lerngebiet. Sie ist
 **nicht** von Hand gepflegt: `build-clips-einbau.py` füllt auch dort einen Block,
 
