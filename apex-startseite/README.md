@@ -6,7 +6,14 @@ Repository, weil GitHub Pages eine Domain an genau ein Repo bindet und
 `mathe.begreifbar.ch` bereits an *TALS-Mathe* hängt.
 
 Hier liegt er nur zur Aufbewahrung und Versionierung; ausgeliefert wird er aus
-dem neuen Repo. Siehe `DOMAIN-UMZUG.md`, Phase 4.
+**`go4exercises/begreifbar`**. Das Repo steht, Pages baut aus `main` / Wurzel,
+`CNAME` = `begreifbar.ch`, Enforce HTTPS ist an. Siehe `DOMAIN-UMZUG.md`, Phase 4.
+
+> ⚠️ **Dieser Ordner ist die Quelle, nicht die Auslieferung — und die beiden laufen
+> auseinander.** Es gibt keinen Automatismus und keinen lokalen Klon des Apex-Repos.
+> Wer hier etwas ändert, muss es von Hand hinüberbringen, sonst bleibt live der alte
+> Stand. Stand 31.8.2026 hinkt die Live-Seite zwei Änderungen hinterher: lokale
+> Schriften und das neue Kachel-Layout.
 
 ## Inhalt
 
@@ -18,7 +25,24 @@ dem neuen Repo. Siehe `DOMAIN-UMZUG.md`, Phase 4.
 | `favicon.svg` | Platzhalter-Zeichen: zwei Balken in Mathe-Blau und Physik-Bernstein |
 | `.nojekyll` | schaltet die Jekyll-Verarbeitung ab, wie im Mathe-Repo |
 
-## Aufsetzen
+## Aktualisieren (der Normalfall)
+
+Einmalig einen Klon anlegen, danach je Änderung drei Zeilen:
+
+```sh
+gh repo clone go4exercises/begreifbar ~/begreifbar        # einmalig
+cd ~/begreifbar
+rsync -a --delete --exclude README.md ~/tals-mathe/apex-startseite/ .
+git add -A && git commit -m "…" && git push
+```
+
+`--delete` räumt weg, was hier nicht mehr steht; `--exclude README.md` lässt diese
+Anleitung im Mathe-Repo, sie gehört nicht auf die Website.
+
+**Danach prüfen:** `curl -s https://begreifbar.ch/ | grep -c googleapis` muss `0`
+ergeben, und im Netzwerk-Tab darf keine Anfrage an einen fremden Host stehen.
+
+## Aufsetzen (erledigt, zur Dokumentation)
 
 1. Repository anlegen, z. B. `go4exercises/begreifbar`, öffentlich.
 2. Den **Inhalt** dieses Ordners ins Repo-Wurzelverzeichnis kopieren, `schriften/`
@@ -103,3 +127,8 @@ Die Seite nennt beide Fächer, aber keine Kapitel — sie muss also nicht
 mitwachsen, wenn in Mathe oder Physik Teilgebiete dazukommen. Zu ändern ist sie
 nur, wenn ein Fach dazukommt, eine Adresse wechselt oder die Fachbeschreibung
 nicht mehr stimmt.
+
+Genau darum ist der Auslieferungs-Schritt die eigentliche Fehlerquelle: Weil hier
+selten etwas passiert, ist beim nächsten Mal vergessen, dass es ihn überhaupt gibt.
+Wer diesen Ordner anfasst, hat erst die Hälfte getan — der Abschnitt
+**Aktualisieren** oben ist die andere.

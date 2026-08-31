@@ -175,32 +175,62 @@ eine einzige Zeile stimmt. Von Hand bleiben 13 Stellen.
 Der Apex braucht ein eigenes Repository — er kann nicht auf dasselbe Repo zeigen
 wie `mathe.`.
 
-- [ ] 🔑 Neues Repo anlegen, z. B. `go4exercises/begreifbar`.
+- [x] 🔑 Neues Repo anlegen, z. B. `go4exercises/begreifbar`. **Erledigt.**
 - [x] 🤖 Ich schreibe die Startseite (eine einzige HTML-Datei im Stil der beiden
       Lehrmittel: Titel, ein Satz zum Angebot, zwei grosse Kacheln Mathe/Physik,
       Footer mit Lizenz) und lege sie hier unter `apex-startseite/` ab.
-      **Erledigt am 11.8.2026.** Der Ordner enthält alles, was ins neue Repo
-      gehört: `index.html` (CSS inline, keine Abhängigkeit ins Mathe-Repo),
-      `CNAME`, `favicon.svg`, `.nojekyll` — dazu eine `README.md` mit den
-      Aufsetz-Schritten, die im neuen Repo nicht mitmuss.
-- [ ] 🔑 Ordnerinhalt ins neue Repo kopieren, `CNAME` mit `begreifbar.ch`,
-      Pages aktivieren, Enforce HTTPS.
+      **Erledigt am 11.8.2026.**
+- [x] 🔑 Ordnerinhalt ins neue Repo kopieren, `CNAME` mit `begreifbar.ch`,
+      Pages aktivieren, Enforce HTTPS. **Erledigt.**
 
-> ⚠️ **Bis dahin zeigen Apex und `www` auf eine Zertifikatswarnung.** Gemessen am
-> 11.8.2026: `begreifbar.ch` und `www.begreifbar.ch` lösen bereits auf GitHub Pages auf
-> (die DNS-Einträge aus Phase 1 stehen), aber **kein Repository beansprucht sie** — also
-> stellt GitHub kein Zertifikat aus. Ausgeliefert wird das Platzhalter-Zertifikat
-> `CN=*.github.io`, das auf `begreifbar.ch` nicht passt: Der Browser zeigt eine
-> Sicherheitswarnung, und wer sie wegklickt, landet auf einer 404-Seite.
->
-> Wer `begreifbar.ch` eintippt — und das ist die Adresse, die man sich merkt —, sieht
-> also aktuell eine Warnung. Das ist der wichtigste offene Punkt des Umzugs. Phase 4
-> behebt ihn; bis dahin ist die Weiterleitungs-Variante unten die schnelle Lösung.
+> ✅ **Phase 4 läuft. Gemessen am 31.8.2026:** `go4exercises.github.io/begreifbar/`
+> leitet mit **301** auf `https://begreifbar.ch/` um, die Seite antwortet, Pages baut
+> aus `main` / Wurzel, `CNAME` = `begreifbar.ch`, **Enforce HTTPS aktiv**. Die
+> Zertifikatswarnung von früher gibt es nicht mehr. Das Repo enthält vier Dateien
+> (`.nojekyll`, `CNAME`, `favicon.svg`, `index.html`) aus einem einzigen Commit vom
+> 11.8.2026.
 
-**Alternative, falls dir das dritte Repo zu viel ist:** Apex und `www` per
-Weiterleitung des Registrars auf `mathe.begreifbar.ch` schicken. Kostet nichts
-und geht sofort — du verlierst nur die gemeinsame Eingangsseite, und wer
-`begreifbar.ch` eintippt, landet in Mathe statt vor der Wahl.
+### ⚠️ Der ausgelieferte Stand hinkt dem Ordner hinterher
+
+`apex-startseite/index.html` ist seither **zweimal geändert** worden, live ist noch die
+Fassung vom 11.8.:
+
+1. **Schriften lokal** (30.8.2026). Live hängt die Seite weiterhin an
+   `fonts.googleapis.com` — als einzige Seite der ganzen Domain. Mathe liefert seit
+   dem 30.8. alles vom eigenen Server, `mathe.begreifbar.ch/rechtliches.html` sagt das
+   ausdrücklich zu, und die Apex-Seite verlinkt genau dorthin. Solange sie nicht
+   nachgezogen ist, widerspricht die Eingangsseite der Zusage, auf die sie selbst zeigt.
+2. **Kachel-Layout** (`grid-template-columns: repeat(auto-fit, minmax(320px, 1fr))`
+   statt fester zwei Spalten, plus `border-left-color` und `:focus-visible`).
+
+Der Ordner ist also **vorne**, nicht hinten — beim Kopieren geht nichts verloren.
+**Wichtig:** Neu gehören `schriften.css` und der Ordner `schriften/` mit dazu; ohne sie
+fällt die Seite still auf Georgia zurück, ohne Fehlermeldung.
+
+### Wie dieser Bereich gepusht wird — nämlich gar nicht automatisch
+
+Es gibt **keinen lokalen Klon** von `go4exercises/begreifbar` auf dem Arbeitsrechner
+(gesucht am 31.8.2026), und **kein Automatismus verbindet** `apex-startseite/` mit dem
+Apex-Repo. Der eine Commit vom 11.8. wurde offenbar von Hand eingespielt, vermutlich über
+die GitHub-Weboberfläche. `apex-startseite/` ist die gepflegte Quelle, das Apex-Repo die
+Auslieferung — die Brücke dazwischen muss jedes Mal von Hand geschlagen werden.
+
+Einmalig einen Klon anlegen, danach ist es ein Dreizeiler:
+
+```sh
+gh repo clone go4exercises/begreifbar ~/begreifbar        # einmalig
+cd ~/begreifbar
+rsync -a --delete --exclude README.md ~/tals-mathe/apex-startseite/ .
+git add -A && git commit -m "Schriften lokal, Kachel-Layout" && git push
+```
+
+`--delete` räumt auch weg, was im Ordner nicht mehr steht; `--exclude README.md` lässt die
+Aufsetz-Anleitung im Mathe-Repo. Ohne `rsync`: `cp -r` und die Reste von Hand entfernen.
+
+**Alternative, falls dir das dritte Repo je zu viel wird:** Apex und `www` per
+Weiterleitung des Registrars auf `mathe.begreifbar.ch` schicken. Du verlierst dann die
+gemeinsame Eingangsseite, und wer `begreifbar.ch` eintippt, landet in Mathe statt vor der
+Wahl.
 
 ---
 
