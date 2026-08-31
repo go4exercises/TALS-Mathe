@@ -48,6 +48,42 @@ BIB_ZU = '<!-- CLIPS-BIBLIOTHEK:ENDE -->'
 BIB = re.compile(re.escape(BIB_AUF) + r'.*?' + re.escape(BIB_ZU), re.DOTALL)
 
 BIBLIOTHEK = "clips.html"
+
+# Reihenfolge der Zweige innerhalb eines Lerngebiets. Im Lerngebiet 1
+# stehen die Clips zur Arithmetik vor denen zur Algebra — man rechnet mit
+# Zahlen, bevor man mit Buchstaben rechnet. Was hier nicht steht, kommt
+# alphabetisch dahinter.
+ZWEIGE = ["Arithmetik", "Grössen", "Algebra", "Funktionen", "Datenanalyse", "Geometrie"]
+
+# So viele Farbnuancen stehen fuer die Nummernplaketten bereit. Jede Reihe
+# bekommt eine, bei der naechsten Reihe wird weitergeschaltet — dadurch
+# gruppiert die Farbe, was zusammengehoert.
+NUANCEN = 8
+
+
+def zweig(clip):
+    return (clip.get("themenbereich") or "").split(" ·")[0].strip()
+
+
+def ordnung(clip):
+    """Sortierschluessel: erst der Zweig, dann die Reihe, dann der Platz darin."""
+    z = zweig(clip)
+    return (ZWEIGE.index(z) if z in ZWEIGE else len(ZWEIGE),
+            z,
+            clip.get("reihe") or clip["titel"],
+            clip.get("folge") if clip.get("folge") else 99,
+            clip["titel"])
+
+
+def nuancen_zuteilen(clips):
+    """Je Reihe eine Nuance, in der Reihenfolge ihres Auftretens."""
+    zu, naechste = {}, 0
+    for c in clips:
+        r = c.get("reihe") or c["titel"]
+        if r not in zu:
+            zu[r] = naechste % NUANCEN + 1
+            naechste += 1
+    return zu
 FAECHER = ["Grundlagenfach", "Schwerpunktfach"]
 
 
@@ -116,7 +152,7 @@ def transkript(datei):
     return zeilen or None
 
 
-def zeile(clip, vor=""):
+def zeile(clip, vor="", nuance=1):
     """Eine Clip-Zeile: Nummer, Titel, Laufzeit. Sonst nichts.
 
     Dieselbe Zeile in der Bibliothek und auf der Lektionsseite — es ist
@@ -133,8 +169,8 @@ def zeile(clip, vor=""):
     nr = (f'<span class="cl-folge">{folge}</span>' if folge
           else '<span class="cl-folge cl-ohne" aria-hidden="true">·</span>')
     return [
-        f'<div class="clip" data-clip="{vor}clips/{clip["datei"]}" data-titel="{titel}"'
-        f' data-modus="gross">',
+        f'<div class="clip cl-r{nuance}" data-clip="{vor}clips/{clip["datei"]}"'
+        f' data-titel="{titel}" data-modus="gross">',
         '  <button class="clip-start cl-clip" type="button" onclick="clipStart(this)"'
         f' aria-label="Clip abspielen: {titel}">',
         '    ' + nr,
@@ -161,14 +197,14 @@ def block_lektion(clips, tiefe):
     vor = "../" * tiefe
     # Dieselbe didaktische Ordnung wie in der Bibliothek: Reihen
     # alphabetisch, darin nach `folge`, Ergaenzungen ans Ende der Reihe.
-    clips = sorted(clips, key=lambda c: (c.get("reihe") or c["titel"],
-                                         c.get("folge") if c.get("folge") else 99,
-                                         c["titel"]))
+    clips = sorted(clips, key=ordnung)
+    nuance = nuancen_zuteilen(clips)
     aus = [MARKE_AUF, '<h2 id="clips">Clips</h2>',
            f'<div class="cl-body clip-auswahl"'
            f' style="grid-template-rows: repeat({-(-len(clips) // 2)}, auto)">']
     for c in clips:
-        aus += ["  " + z for z in zeile(c, vor)]
+        aus += ["  " + z for z in
+                zeile(c, vor, nuance[c.get("reihe") or c["titel"]])]
     aus.append('</div>')
 
     tk = [(c, transkript(c["datei"])) for c in clips]
@@ -235,9 +271,8 @@ def block_bibliothek(alle, seiten):
             offen = bereich
         # Didaktische Ordnung: Reihen alphabetisch, darin nach `folge`.
         # Clips ohne `folge` sind Ergaenzungen und kommen ans Ende ihrer Reihe.
-        drin.sort(key=lambda c: (c.get("reihe") or c["titel"],
-                                c.get("folge") if c.get("folge") else 99,
-                                c["titel"]))
+        drin.sort(key=ordnung)
+        nuance = nuancen_zuteilen(drin)
         dauer = sum(c.get("dauer_s", 0) for c in drin)
         gesamt += len(drin)
         kid = f"{bereich[0]}{nr}"
@@ -257,7 +292,8 @@ def block_bibliothek(alle, seiten):
             f' style="grid-template-rows: repeat({-(-len(drin) // 2)}, auto)">',
         ]
         for c in drin:
-            aus += ["    " + z for z in zeile(c)]
+            aus += ["    " + z for z in
+                    zeile(c, "", nuance[c.get("reihe") or c["titel"]])]
         aus += ['  </div>', '</div>']
     if offen is not None:
         aus.append("</div>")

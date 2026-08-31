@@ -712,6 +712,7 @@ if __name__ == "__main__":
                 "fach": dreh.get("fach", ""),
                 "lerngebiet": dreh.get("lerngebiet", ""),
                 "lektion": lektionen(dreh),
+                "themenbereich": dreh.get("themenbereich", ""),
                 "reihe": dreh.get("reihe", ""),
                 "folge": dreh.get("folge"),
                 "stufe": dreh.get("stufe", []),

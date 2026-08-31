@@ -993,6 +993,35 @@ canvas { display: block; width: 100%; }
   font-family: var(--mono); font-size: 0.58rem; font-weight: 700;
 }
 .cl-folge.cl-ohne { background: none; color: var(--tinte-2); font-size: 0.7rem; }
+
+/* Farbnuancen je Reihe: Jede Reihe bekommt eine eigene, bei der naechsten
+   wird weitergeschaltet. Die Farbe sitzt an der Zeile — Plakette UND linke
+   Kante —, weil ein 19-px-Kreis allein zu schwach gruppiert; aufeinander
+   folgende Clips einer Reihe bilden so einen durchgehenden Balken.
+   Bewusst nur Nuancen der Bereichsfarbe: Die didaktischen Farben aus
+   STYLEGUIDE 5.1 bedeuten etwas (blau Definition, gruen Beispiel, orange
+   Aufgabe, rot Fehler, lila Beweis) — sie hier fuer eine Gruppierung zu
+   verwenden hiesse, sie umzudeuten. Alle Nuancen tragen weisse Schrift mit
+   mindestens 4.6 Kontrast, und ihre Helligkeiten sind gespreizt, damit sie
+   sich auch in klein unterscheiden. */
+.cl-clip { border-left: 3px solid transparent; }
+.cl-r1 .cl-folge { background: #0f3a5c; }  .cl-r1 .cl-clip { border-left-color: #0f3a5c; }
+.cl-r2 .cl-folge { background: #26709b; }  .cl-r2 .cl-clip { border-left-color: #26709b; }
+.cl-r3 .cl-folge { background: #0f5f6e; }  .cl-r3 .cl-clip { border-left-color: #0f5f6e; }
+.cl-r4 .cl-folge { background: #42759c; }  .cl-r4 .cl-clip { border-left-color: #42759c; }
+.cl-r5 .cl-folge { background: #1a4f8a; }  .cl-r5 .cl-clip { border-left-color: #1a4f8a; }
+.cl-r6 .cl-folge { background: #3d6b90; }  .cl-r6 .cl-clip { border-left-color: #3d6b90; }
+.cl-r7 .cl-folge { background: #14496e; }  .cl-r7 .cl-clip { border-left-color: #14496e; }
+.cl-r8 .cl-folge { background: #3a5aa0; }  .cl-r8 .cl-clip { border-left-color: #3a5aa0; }
+
+.cl-sp .cl-r1 .cl-folge { background: #3c1c63; }  .cl-sp .cl-r1 .cl-clip { border-left-color: #3c1c63; }
+.cl-sp .cl-r2 .cl-folge { background: #7d5a9e; }  .cl-sp .cl-r2 .cl-clip { border-left-color: #7d5a9e; }
+.cl-sp .cl-r3 .cl-folge { background: #5b2d8e; }  .cl-sp .cl-r3 .cl-clip { border-left-color: #5b2d8e; }
+.cl-sp .cl-r4 .cl-folge { background: #8a4a8a; }  .cl-sp .cl-r4 .cl-clip { border-left-color: #8a4a8a; }
+.cl-sp .cl-r5 .cl-folge { background: #6d4fa8; }  .cl-sp .cl-r5 .cl-clip { border-left-color: #6d4fa8; }
+.cl-sp .cl-r6 .cl-folge { background: #46256e; }  .cl-sp .cl-r6 .cl-clip { border-left-color: #46256e; }
+.cl-sp .cl-r7 .cl-folge { background: #7a3f9e; }  .cl-sp .cl-r7 .cl-clip { border-left-color: #7a3f9e; }
+.cl-sp .cl-r8 .cl-folge { background: #5a4bb0; }  .cl-sp .cl-r8 .cl-clip { border-left-color: #5a4bb0; }
 .cl-titel { font-size: 0.85rem; }
 .cl-zeit {
   margin-left: auto; flex-shrink: 0;
@@ -1043,7 +1072,6 @@ canvas { display: block; width: 100%; }
 
 /* Schwerpunktfach violett — Bereichsfarben nach STYLEGUIDE 5.2 */
 .cl-sp .cl-nr   { background: var(--lila-hell); color: var(--lila); }
-.cl-sp .cl-folge { background: var(--lila); }
 .cl-sp .cl-folge.cl-ohne { background: none; color: var(--tinte-2); }
 .cl-sp .cl-clip:hover { background: var(--lila-hell); }
 .cl-sp .cl-hdr:focus-visible,

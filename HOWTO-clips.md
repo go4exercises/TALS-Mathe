@@ -56,7 +56,22 @@ Lineare Gleichungen: Minus vor der Klammer   folge 1
 
 Der Teil vor dem Doppelpunkt ist die `reihe`, der Teil danach der Fokus. In der
 Bibliothek stehen Clips derselben Reihe beieinander und in der Reihenfolge ihrer
-`folge` — die Nummer steht als Plakette vor dem Titel. Clips ohne `folge` sind
+`folge` — die Nummer steht als Plakette vor dem Titel.
+
+**Jede Reihe bekommt eine eigene Farbnuance**, in der Reihenfolge ihres Auftretens; bei
+der nächsten Reihe wird weitergeschaltet, nach acht beginnt der Zyklus von vorn. Die Farbe
+sitzt an der Plakette **und** an der linken Kante der Zeile — ein 19-px-Kreis allein
+gruppiert zu schwach, die Kanten aufeinanderfolgender Clips bilden dagegen einen
+durchgehenden Balken. Es sind bewusst nur Nuancen der Bereichsfarbe (blau im
+Grundlagenfach, violett im Schwerpunktfach): Die didaktischen Farben aus §5.1 bedeuten
+etwas, und sie für eine Gruppierung zu verwenden hiesse, sie umzudeuten. Alle Nuancen
+tragen weisse Schrift mit mindestens 4.9 Kontrast, nachgerechnet.
+
+**Innerhalb eines Lerngebiets steht zuerst der eine Zweig, dann der nächste** — im
+Lerngebiet 1 also erst die Clips zur Arithmetik, dann die zur Algebra: Man rechnet mit
+Zahlen, bevor man mit Buchstaben rechnet. Die Reihenfolge steht als Liste `ZWEIGE` in
+`scripts/build-clips-einbau.py` und liest den Zweig aus dem Feld `themenbereich`. Was
+dort nicht aufgeführt ist, kommt alphabetisch dahinter. Clips ohne `folge` sind
 Ergänzungen und rutschen ans Ende ihrer Reihe; sie tragen einen Punkt statt einer Zahl.
 
 Warum so und nicht «ein Clip für den ganzen Ablauf, dann Beispiel 1, Beispiel 2»: Eine
