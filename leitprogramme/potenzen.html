@@ -91,6 +91,10 @@
 <!-- SEO:ENDE -->
 
 <link rel="stylesheet" href="../schriften.css">
+<!-- Die Seite erbt Farben, Karten und die Clip-Buehne von der Site.
+     Reihenfolge zaehlt: der eigene <style> unten gewinnt bei gleichem
+     Gewicht, das Leitprogramm behaelt also sein Layout. -->
+<link rel="stylesheet" href="../style.css">
 <style>
 :root{
   --papier:#f8f6f1; --papier-2:#efeade; --karte:#ffffff;
@@ -227,30 +231,7 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
 .clip-titel{font-weight:600;font-size:.97rem;line-height:1.32}
 .clip-quelle{font-size:.75rem;color:var(--tinte-2);letter-spacing:.03em}
 .clip-zeit{font-family:var(--mono);font-size:.8rem;color:var(--tinte-2);flex:none}
-/* Clip-Buehne — Markup, Klassen und Masse wie auf mathe.begreifbar.ch */
-.clip-buehne{position:fixed;inset:0;z-index:200;background:rgba(14,20,24,.88);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px}
-.cb-kopf{display:flex;align-items:center;gap:16px;
-  width:min(96vw, calc(177.778vh - 266.667px));color:#eef2f5}
-.cb-titel{font-family:var(--serif);font-size:.95rem;font-weight:700}
-.cb-tab,.cb-zu{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:1px;
-  text-transform:uppercase;color:#eef2f5;background:none;border:0;cursor:pointer;
-  padding:4px 6px;text-decoration:none;white-space:nowrap}
-.cb-tab{margin-left:auto;opacity:.72}
-.cb-tab:hover,.cb-zu:hover{opacity:1;text-decoration:underline}
-.cb-zu{border:1px solid rgba(255,255,255,.35);border-radius:6px}
-.cb-rahmen{position:relative;width:min(96vw, calc(177.778vh - 266.667px));
-  padding-bottom:min(calc(60px + 54vw), calc(100vh - 150px));
-  border-radius:9px;overflow:hidden;background:#f8f6f1}
-.cb-rahmen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.cb-hinweis{width:min(96vw, calc(177.778vh - 266.667px));padding:12px 16px;border-radius:8px;
-  font-family:var(--sans);font-size:.86rem;background:var(--orange-hell);
-  color:var(--tinte);border:1px solid var(--orange-rand)}
-.cb-hinweis a{color:var(--orange)}
 @media(max-width:720px){
-  .clip-buehne{padding:8px}
-  .cb-kopf,.cb-rahmen,.cb-hinweis{width:100%}
-  .cb-rahmen{padding-bottom:calc(60px + 56.25vw)}
 }
 
 /* ---------- Merkkasten, Beispiele, Warnung ---------- */
@@ -345,9 +326,38 @@ details.loes .inhaltbox p:last-child{margin-bottom:0}
   body{background:#fff}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── Kopf und Fuss der Site im Dunkelmodus ───────────────────────
+   style.css kennt keinen Dunkelmodus — die Site hat keinen. Hier
+   bekommen die geerbten Bausteine darum eigene Werte, damit die Leiste
+   nicht weiss ueber einer dunklen Seite steht. Nur Flaechen und
+   Linien; Schrift und Abstaende bleiben, wie style.css sie setzt. */
+:root[data-theme="dark"] .site-hdr,
+:root[data-theme="dark"] .such-panel,
+:root[data-theme="dark"] .ueber-tab,
+:root[data-theme="dark"] .site-nav,
+:root[data-theme="dark"] .dd-menu,
+:root[data-theme="dark"] .mobile-nav{
+  background:var(--karte); border-color:var(--linie); color:var(--tinte);
+}
+:root[data-theme="dark"] .site-nav a,
+:root[data-theme="dark"] .dd-menu a,
+:root[data-theme="dark"] .mobile-nav a,
+:root[data-theme="dark"] .nav-btn,
+:root[data-theme="dark"] .logo{ color:var(--tinte); }
+:root[data-theme="dark"] .dd-menu a:hover,
+:root[data-theme="dark"] .site-nav a:hover{ background:var(--papier-2); }
+:root[data-theme="dark"] .suche input{
+  background:var(--papier); border-color:var(--linie); color:var(--tinte);
+}
+:root[data-theme="dark"] .site-footer{
+  background:var(--papier-2); border-color:var(--linie); color:var(--tinte-2);
+}
+:root[data-theme="dark"] .site-footer a{ color:var(--blau); }
 </style>
 </head>
 <body>
+<div id="nav-root"></div>
 <header class="kopf">
   <div class="kopf-innen">
     <div>
@@ -1014,80 +1024,15 @@ details.loes .inhaltbox p:last-child{margin-bottom:0}
   });
 
   /* ---- Clip-Buehne (nach clipBuehne/clipZu von mathe.begreifbar.ch) ---- */
-  var rueckkehr = null;
 
-  function clipEscape(e){ if (e.key === 'Escape') clipZu(); }
-
-  function clipZu(){
-    var buehne = document.querySelector('.clip-buehne');
-    if (!buehne) return;
-    buehne.remove();                       // entfernt das iframe, der Clip haelt an
-    document.removeEventListener('keydown', clipEscape);
-    document.body.style.overflow = '';
-    if (rueckkehr) rueckkehr.focus({ preventScroll: true });
-  }
-
-  function clipBuehne(quelle, titel){
-    var buehne = document.createElement('div');
-    buehne.className = 'clip-buehne';
-    buehne.setAttribute('role','dialog');
-    buehne.setAttribute('aria-modal','true');
-    buehne.setAttribute('aria-label','Clip: ' + titel);
-
-    var kopf = document.createElement('div');
-    kopf.className = 'cb-kopf';
-    var t = document.createElement('span');
-    t.className = 'cb-titel';
-    t.textContent = titel;
-    var tab = document.createElement('a');
-    tab.className = 'cb-tab';
-    tab.href = quelle; tab.target = '_blank'; tab.rel = 'noopener';
-    tab.textContent = 'eigener Tab ↗';
-    var zu = document.createElement('button');
-    zu.type = 'button'; zu.className = 'cb-zu'; zu.textContent = '✕ Schliessen';
-    zu.addEventListener('click', clipZu);
-    kopf.appendChild(t); kopf.appendChild(tab); kopf.appendChild(zu);
-
-    var rahmen = document.createElement('div');
-    rahmen.className = 'cb-rahmen';
-    var f = document.createElement('iframe');
-    f.src = quelle;
-    f.title = 'Clip: ' + titel;
-    f.setAttribute('allowfullscreen','');
-    f.setAttribute('allow','autoplay; fullscreen');
-    rahmen.appendChild(f);
-
-    buehne.appendChild(kopf);
-    buehne.appendChild(rahmen);
-
-    // Klick auf den dunklen Rand schliesst, Klick auf den Clip nicht.
-    buehne.addEventListener('click', function(e){ if (e.target === buehne) clipZu(); });
-    document.addEventListener('keydown', clipEscape);
-    document.body.appendChild(buehne);
-    document.body.style.overflow = 'hidden';
-    zu.focus({ preventScroll: true });
-
-    // Nur falls die Einbettung von der Umgebung blockiert wird (z. B. Vorschau-Sandbox).
-    var geladen = false;
-    f.addEventListener('load', function(){
-      geladen = true;
-      try { f.contentWindow.focus(); } catch(err){}
-    });
-    setTimeout(function(){
-      if (geladen || !buehne.isConnected) return;
-      var hinweis = document.createElement('div');
-      hinweis.className = 'cb-hinweis';
-      hinweis.innerHTML = 'Diese Umgebung blockiert eingebettete Seiten. Auf mathe.begreifbar.ch läuft der Clip hier im Fenster — ' +
-        '<a href="' + quelle + '" target="_blank" rel="noopener">ersatzweise in einem eigenen Tab öffnen ↗</a>';
-      buehne.appendChild(hinweis);
-    }, 3500);
-  }
+  /* Clip-Buehne kommt aus ../mathlib.js — clipBuehne(quelle, titel).
+     Vorher stand hier eine Kopie; Scrollsperre und Fokusrueckgabe
+     sind dabei nach mathlib.js gewandert und gelten jetzt ueberall. */
 
   document.querySelectorAll('.clipkarte').forEach(function(karte){
     var knopf = karte.querySelector('.clip-start');
     knopf.addEventListener('click', function(){
       if (document.querySelector('.clip-buehne')) return;
-      rueckkehr = knopf;
       clipBuehne(BASIS + karte.dataset.clip, karte.dataset.titel || 'Clip');
     });
   });
@@ -1148,5 +1093,16 @@ details.loes .inhaltbox p:last-child{margin-bottom:0}
   }
 })();
 </script>
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Leitprogramm · Potenzen</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../leitprogramme.html">Alle Leitprogramme</a> · <a href="../clips.html">Clips</a> · <a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 1.0 · Stand 31. August 2026</p>
+</footer>
+
+<script src="../mathlib.js"></script>
+<script src="../nav.js"></script>
+<script>buildNav({ id: 'leitprogramme' });</script>
 </body>
 </html>
