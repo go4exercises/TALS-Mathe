@@ -40,7 +40,30 @@ Drei Felder entscheiden über den Einbau:
 |---|---|
 | `dateiname` | ohne Endung, ohne Umlaute — daraus werden `.html` und Sprechertext |
 | `lektion` | **Liste** von Codes aus `nav.js`, z.B. `["g2-2b", "s2-2a"]` |
+| `reihe` | didaktische Familie, z.B. `Parametergleichung` |
+| `folge` | Platz in dieser Reihe: 1, 2, 3 … — weglassen bei Ergänzungen |
 | `theme` | `begreifbar` ist Standard und übernimmt die Farben aus `style.css` |
+
+### Titel: «Reihe: Fokus»
+
+Ein Clip beantwortet **eine** Frage, und der Titel sagt welche:
+
+```
+Parametergleichung: nach x auflösen          folge 1
+Parametergleichung: Bedingung für Lösung     folge 2
+Lineare Gleichungen: Minus vor der Klammer   folge 1
+```
+
+Der Teil vor dem Doppelpunkt ist die `reihe`, der Teil danach der Fokus. In der
+Bibliothek stehen Clips derselben Reihe beieinander und in der Reihenfolge ihrer
+`folge` — die Nummer steht als Plakette vor dem Titel. Clips ohne `folge` sind
+Ergänzungen und rutschen ans Ende ihrer Reihe; sie tragen einen Punkt statt einer Zahl.
+
+Warum so und nicht «ein Clip für den ganzen Ablauf, dann Beispiel 1, Beispiel 2»: Eine
+Minute reicht für einen Gedanken, nicht für ein Verfahren mit vier Schritten und drei
+Fällen. Und «Beispiel 2» sagt niemandem, was darin zu holen ist, während «Bedingung für
+Lösung» genau das sagt. Wer später doch einen Überblicks-Clip je Reihe will: `folge: 0`
+ist frei und sortiert sich von selbst nach vorn.
 
 **`lektion` ist eine Liste, auch bei nur einem Eintrag.** Ein Clip gehört oft auf mehrere
 Seiten: die Bruchgleichung steht im Grundlagenfach unter `g2-2b` und im Schwerpunktfach
@@ -225,6 +248,10 @@ und baut daraus eine **aufklappbare Übersicht, nach Fach und Lerngebiet** — d
 Gliederung wie die Startseite. Die Gruppen kommen aus dem Block `GROUPS` in `nav.js`, nicht
 aus dem Freitextfeld `lerngebiet` im Drehbuch: Sonst ergäbe ein Tippfehler dort eine neue
 Gruppe. Lerngebiete ohne Clips werden weggelassen.
+
+Ab 860 px stehen die Lerngebiete **zweispurig** nebeneinander; die Clips innerhalb einer
+Gruppe bleiben einspurig — sie sind nummeriert, und eine Nummernfolge liest man nicht über
+zwei Spalten.
 
 Jede Gruppe ist beim Laden **zu** und nennt in der Kopfzeile Anzahl und Gesamtlaufzeit;
 darin steht je Clip eine Zeile mit **nur Titel und Laufzeit**. Kurzbeschrieb, Verweise und

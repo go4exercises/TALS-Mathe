@@ -920,14 +920,24 @@ canvas { display: block; width: 100%; }
    Kapitelbloecke der Startseite — sonst wird die Seite bei hundert
    Clips eine Liste, durch die man scrollt. Je Zeile nur Titel und
    Laufzeit; Kurzbeschrieb und Transkript stehen auf der Lektionsseite. */
+/* Zweispurig unter der Fachueberschrift: Die Lerngebiete stehen
+   nebeneinander, die Clips einer Gruppe darin aber untereinander — sie
+   sind nummeriert, und eine Nummernfolge liest man nicht ueber zwei
+   Spalten. Unter 860 px fallen die Spalten zusammen. */
 .cl-liste {
   margin: 10px 0 26px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+@media (max-width: 860px) { .cl-liste { grid-template-columns: 1fr; } }
+.cl-kap {
   border: 1px solid var(--linie);
   border-radius: 9px;
   overflow: hidden;
   box-shadow: var(--s);
 }
-.cl-kap + .cl-kap { border-top: 1px solid var(--linie); }
 
 .cl-hdr {
   display: flex; align-items: center; gap: 12px;
@@ -960,11 +970,15 @@ canvas { display: block; width: 100%; }
 .cl-clip:hover { background: var(--blau-hell); }
 .cl-clip[hidden] { display: none; }
 .cl-clip:focus-visible { outline: 2px solid var(--blau); outline-offset: -2px; }
-.cl-play {
+/* Platz des Clips in seiner Reihe. Sagt, in welcher Reihenfolge die Clips
+   einer Reihe gedacht sind — Ergaenzungen ohne Nummer stehen dahinter. */
+.cl-folge {
   flex-shrink: 0; width: 19px; height: 19px;
   display: grid; place-items: center; border-radius: 50%;
-  background: var(--blau); color: #fff; font-size: 0.48rem; padding-left: 2px;
+  background: var(--blau); color: #fff;
+  font-family: var(--mono); font-size: 0.58rem; font-weight: 700;
 }
+.cl-folge.cl-ohne { background: none; color: var(--tinte-2); font-size: 0.7rem; }
 .cl-titel { font-size: 0.85rem; }
 .cl-zeit {
   margin-left: auto; flex-shrink: 0;
@@ -975,7 +989,8 @@ canvas { display: block; width: 100%; }
 
 /* Schwerpunktfach violett — Bereichsfarben nach STYLEGUIDE 5.2 */
 .cl-sp .cl-nr   { background: var(--lila-hell); color: var(--lila); }
-.cl-sp .cl-play { background: var(--lila); }
+.cl-sp .cl-folge { background: var(--lila); }
+.cl-sp .cl-folge.cl-ohne { background: none; color: var(--tinte-2); }
 .cl-sp .cl-clip:hover { background: var(--lila-hell); }
 .cl-sp .cl-hdr:focus-visible,
 .cl-sp .cl-clip:focus-visible { outline-color: var(--lila); }

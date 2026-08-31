@@ -167,22 +167,31 @@ def block_lektion(clips, tiefe):
 
 
 def zeile(clip, vor=""):
-    """Eine Clip-Zeile in der Bibliothek: Dreieck, Titel, Laufzeit. Sonst nichts.
+    """Eine Clip-Zeile in der Bibliothek: Nummer, Titel, Laufzeit. Sonst nichts.
+
+    Die Nummer ist der Platz des Clips in seiner Reihe (Feld `folge`), nicht
+    eine laufende Nummer der Seite — sie sagt, in welcher Reihenfolge die
+    Clips einer Reihe gedacht sind. Clips ohne `folge` sind Ergaenzungen und
+    stehen hinter den nummerierten.
 
     Die Klasse `clip-start` bleibt am Knopf, damit clipStart/clipStop aus
     mathlib.js unveraendert greifen; `cl-clip` traegt nur das Aussehen.
     """
     titel = html.escape(clip["titel"])
+    folge = clip.get("folge")
+    nr = (f'<span class="cl-folge">{folge}</span>' if folge
+          else '<span class="cl-folge cl-ohne" aria-hidden="true">·</span>')
     return [
         f'<div class="clip" data-clip="{vor}clips/{clip["datei"]}" data-titel="{titel}">',
         '  <button class="clip-start cl-clip" type="button" onclick="clipStart(this)"'
         f' aria-label="Clip abspielen: {titel}">',
-        '    <span class="cl-play" aria-hidden="true">▶</span>',
+        '    ' + nr,
         f'    <span class="cl-titel">{titel}</span>',
         f'    <span class="cl-zeit">{mmss(clip.get("dauer_s", 0))}</span>',
         '  </button>',
         '</div>',
     ]
+
 
 
 def block_bibliothek(alle, seiten):
@@ -227,7 +236,11 @@ def block_bibliothek(alle, seiten):
             kl = "cl-liste" + (" cl-sp" if bereich == "schwerpunkt" else "")
             aus.append(f'<div class="{kl}">')
             offen = bereich
-        drin.sort(key=lambda c: c["titel"])
+        # Didaktische Ordnung: Reihen alphabetisch, darin nach `folge`.
+        # Clips ohne `folge` sind Ergaenzungen und kommen ans Ende ihrer Reihe.
+        drin.sort(key=lambda c: (c.get("reihe") or c["titel"],
+                                c.get("folge") if c.get("folge") else 99,
+                                c["titel"]))
         dauer = sum(c.get("dauer_s", 0) for c in drin)
         gesamt += len(drin)
         kid = f"{bereich[0]}{nr}"
