@@ -198,24 +198,24 @@
   .karte.geplant .k-tit { color: var(--tinte-2); }
   .karte.geplant::after { content: 'in Vorbereitung'; position: absolute; right: 8px; top: 7px; font-family: var(--mono); font-size: 0.55rem; color: var(--tinte-2); background: var(--papier-2); padding: 1px 5px; border-radius: 3px; letter-spacing: 0.3px; }
 
-  /* Clip-Hinweis: Weisse Karte mit blauem Balken — bewusst NICHT im Stil von
-     .b-gl/.b-sp, die lesen sich als Bereichsköpfe. Hier ist es ein Weg zu etwas
-     anderem, kein weiterer Themenbereich. */
-  .clip-hinweis { display: flex; align-items: center; gap: 18px; margin-top: 30px;
-    background: var(--weiss); border: 1px solid var(--linie); border-left: 5px solid var(--blau);
-    border-radius: 10px; padding: 17px 22px; text-decoration: none; color: inherit;
+  /* Kleiner Weg zu den Clips — letztes Element der rechten Spalte.
+     Die .kap-Bloecke stossen bündig aneinander (0 px), darum genuegen 8 px,
+     damit die Karte sichtbar abgesetzt ist.
+     ACHTUNG: 8 px margin plus 43 px Hoehe sind genau die 51 px, um die die
+     rechte Spalte kuerzer war — beide Spalten enden dadurch im eingeklappten
+     Zustand auf derselben Linie. Das haengt am aktuellen Inhalt beider
+     Spalten: Kommt links oder rechts ein Teilgebiet dazu, stimmt es nicht
+     mehr und der Wert muss nachgemessen werden. */
+  .clip-hinweis { display: flex; align-items: center; gap: 10px; margin-top: 8px;
+    background: var(--weiss); border: 1px solid var(--linie); border-left: 4px solid var(--blau);
+    border-radius: 8px; padding: 8px 13px; text-decoration: none; color: inherit;
     box-shadow: var(--s); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-  .clip-hinweis:hover { transform: translateY(-2px); box-shadow: var(--sl); border-color: var(--blau-rand); border-left-color: var(--blau); }
-  .clip-hinweis:focus-visible { outline: 2px solid var(--blau); outline-offset: 3px; }
-  .ch-ic { flex-shrink: 0; width: 44px; height: 44px; display: grid; place-items: center;
-    border-radius: 50%; background: var(--blau); color: #fff; font-size: 1.05rem; padding-left: 4px; }
-  .ch-t { display: block; font-family: var(--serif); font-size: 1.04rem; font-weight: 700; color: var(--blau); }
-  .ch-s { display: block; font-size: 0.83rem; color: var(--tinte-2); margin-top: 3px; }
-  .ch-pfeil { margin-left: auto; flex-shrink: 0; font-family: var(--mono); font-size: 0.66rem;
-    font-weight: 700; letter-spacing: 1px; color: var(--blau); white-space: nowrap; }
-  /* schmal: Symbol oben statt mittig — sonst schwebt es neben einem hohen Textblock */
-  @media (max-width: 620px) { .clip-hinweis { gap: 13px; padding: 14px 16px; align-items: flex-start; }
-    .ch-ic { width: 38px; height: 38px; font-size: 0.95rem; margin-top: 2px; } .ch-pfeil { display: none; } }
+  .clip-hinweis:hover { transform: translateY(-1px); box-shadow: var(--sl); border-color: var(--blau-rand); }
+  .clip-hinweis:focus-visible { outline: 2px solid var(--blau); outline-offset: 2px; }
+  .ch-ic { flex-shrink: 0; width: 24px; height: 24px; display: grid; place-items: center;
+    border-radius: 50%; background: var(--blau); color: #fff; font-size: 0.6rem; padding-left: 2px; }
+  .ch-t { font-family: var(--serif); font-size: 0.93rem; font-weight: 700; color: var(--blau); }
+  .ch-pfeil { margin-left: auto; font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--blau); }
 
   .ds { background: var(--weiss); border: 1px solid var(--linie); border-radius: 10px; padding: 18px 22px; margin-top: 44px; box-shadow: var(--s); }
   .ds-t { font-family: var(--serif); font-size: 0.88rem; font-weight: 700; margin-bottom: 12px; padding-bottom: 9px; border-bottom: 1px solid var(--linie); display: flex; align-items: center; gap: 10px; }
@@ -732,18 +732,14 @@
   </div>
 
   <!-- ── DESIGN-SYSTEM LEGENDE ── -->
+
+      <a href="clips.html" class="clip-hinweis">
+        <span class="ch-ic" aria-hidden="true">▶</span>
+        <span class="ch-t">Clips</span>
+        <span class="ch-pfeil">→</span>
+      </a>
     </div>
   </div>
-
-  <!-- ── CLIPS ── -->
-  <a href="clips.html" class="clip-hinweis">
-    <span class="ch-ic" aria-hidden="true">▶</span>
-    <span>
-      <span class="ch-t">Clips — Rechenwege als kurze Animationen</span>
-      <span class="ch-s">Rund eine Minute pro Clip: Der Weg entsteht Zeile für Zeile, gleiche Farbe heisst derselbe Term. Mit gesprochenem Ton und Text zum Mitlesen.</span>
-    </span>
-    <span class="ch-pfeil">Alle Clips →</span>
-  </a>
 
   <div class="ds">
     <div class="ds-t">Farbcode — auf jeder Seite gleich</div>
