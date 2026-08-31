@@ -144,6 +144,9 @@ def check_resources_section(text, fname, rep):
 # Seite als Vorlage kopiert wird.
 FREMDHOSTS = ("fonts.googleapis.com", "fonts.gstatic.com", "cdn.jsdelivr.net")
 
+# Seiten mit eigenem Aufbau — kein .page-wrap, kein <main class="content">.
+EIGENES_SKELETT = {"index.html", "feedback.html"}
+
 
 def check_keine_fremdhosts(text, fname, rep):
     for host in FREMDHOSTS:
@@ -166,9 +169,11 @@ def run_light(path, rep):
     check_decimal_comma_in_math(text, fname, rep)
     check_keine_fremdhosts(text, fname, rep)
 
-    # Clips sind eigenstaendige Buehnen ohne Seitengeruest — Skelett-, nav-
-    # und Ressourcen-Checks gelten fuer sie nicht.
-    if "clips" in path.parts:
+    # Nicht jede Seite traegt das Themenseiten-Skelett. Clips sind eigenstaendige
+    # Buehnen ohne Seitengeruest; index.html und feedback.html haben ein eigenes
+    # Layout ohne .page-wrap und ohne <main class="content">. Fuer sie gelten
+    # Skelett-, nav- und Ressourcen-Checks nicht — die allgemeinen oben schon.
+    if "clips" in path.parts or path.name in EIGENES_SKELETT:
         return
 
     check_skeleton(text, fname, rep)
