@@ -45,10 +45,12 @@ STD = {
 
 
 # ---------------------------------------------------------------- Formelsatz
-# Versuchsschalter: setzt ein Drehbuch "latex": true, geht der Formelsatz
-# nicht durch die eigene Schreibweise, sondern als LaTeX an MathJax. Siehe
-# clips/versuch-latex.json und den Vergleich in HOWTO-clips.md.
-LATEX = False
+# Formelsatz. Seit dem 31.08.2026 setzt MathJax alle Clips: eine Formel
+# lässt sich damit unverändert von einer Lektionsseite ins Drehbuch
+# kopieren, statt in eine zweite Schreibweise übersetzt zu werden. Die
+# eigene Schreibweise unten bleibt erreichbar über "latex": false — die
+# 28 umgestellten Drehbücher brauchen sie nicht mehr.
+LATEX = True
 
 
 def tex(text):
@@ -341,7 +343,7 @@ def schriften_einbetten():
 def bauen(quelle, eigenstaendig=False):
     dreh = json.load(open(quelle, encoding="utf-8"))
     global LATEX
-    LATEX = bool(dreh.get("latex"))
+    LATEX = bool(dreh.get("latex", True))
     theme_name = dreh.get("theme", STD["theme"])
     theme = json.load(open(os.path.join(CLIPS, "themes", theme_name + ".json"), encoding="utf-8"))
     if eigenstaendig:

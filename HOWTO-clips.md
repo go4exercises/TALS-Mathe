@@ -86,19 +86,31 @@ unter `s2-2a`. Ohne Liste müsste man ihn duplizieren, und zwei Kopien laufen au
 Jeder Code muss zu einer `id` in `nav.js` passen — `build-clips-einbau.py` meldet einen
 Tippfehler als `[FEHLER]`.
 
-### Formelschreibweise
+### Formelschreibweise — LaTeX
 
-Kein LaTeX, kein MathJax — der Generator setzt selbst. `[a|b]` ist der Bruch, `x^2` und
-`x_1` hoch- und tiefgestellt, `*` wird zum Malpunkt, `-` zum echten Minus, `\R` zu ℝ,
-`!=` `<=` `>=` zu ≠ ≤ ≥, `->` `=>` zu ⟶ ⟹. Zwei Leerzeichen bleiben als Abstand stehen.
-`"36"` setzt einen Überstrich — die Periode einer Dezimalzahl: `0."36"` ist 0.363636…
+**Formeln stehen in LaTeX**, gesetzt von MathJax, genau wie auf den Lektionsseiten. Der
+Grund ist nicht Schönheit, sondern Wegfall einer Übersetzung: Eine Formel lässt sich von
+einer Seite ins Drehbuch kopieren, ohne sie in eine zweite Schreibweise zu übertragen —
+und jede Übertragung war eine Gelegenheit für einen Fehler.
 
-Hochgestellt wird `{…}`, ein Vorzeichen mit Ziffern, eine Farbgruppe oder ein einzelnes
-Zeichen: `10^-6`, `10^{3:4}` und `10^24` stehen alle richtig. Bis August 2026 konnte
-das Dach nur ein einzelnes Wortzeichen hochziehen — `10^-6` und `10^{3:4}` blieben
-darum als roher Text mit Dach stehen, und im Zehnerpotenzen-Clip fiel es niemandem auf,
-weil `10^3` daneben stimmte. Wer die Schreibweise erweitert, prüft die Ausgabe an einem
-Beispiel je Form, nicht am Augenschein einer Zeile.
+```
+\dfrac{4}{11}          Bruch — \dfrac, nicht \frac: \frac wird in der Zeile klein
+x^2   x_{1,2}          hoch- und tiefgestellt
+\cdot \pm \neq \leq \geq \longrightarrow \Longrightarrow
+\in \notin \setminus \cap \cup  \mathbb{R}  \sqrt{x}  \overline{36}
+\quad                  sichtbarer Abstand innerhalb einer Zeile
+```
+
+**Zwei Dinge, die LaTeX anders will als die frühere eigene Schreibweise:**
+
+**Prosa braucht `\text{…}`.** Die alte Schreibweise kursivierte nur *einzelne* Buchstaben,
+darum durfte «es entstehen Faktoren» unmarkiert mitten in einer Formelzeile stehen. In
+LaTeX wären das zwanzig kursive Variablen mit falschen Abständen. Also
+`\text{es entstehen Faktoren}` — und **ein** `\text{}` um den ganzen Satz, nicht eines je
+Wort, sonst setzt LaTeX zwischen die Wörter Mathe-Abstände.
+
+**Einheiten gehören in `\mathrm{}`, mit `\,` davor.** `1.2\,\mathrm{m}` — ohne das `\,`
+klebt die Einheit an der Zahl, weil LaTeX ein gewöhnliches Leerzeichen ignoriert.
 
 ### Farbführung
 
@@ -459,51 +471,62 @@ ungeprüft: die Lizenzen der übrigen sieben deutschen Stimmen.
 
 ---
 
-## Versuch: Formelsatz mit LaTeX
+## Die Umstellung auf LaTeX (31.08.2026)
 
-`clips/versuch-latex.json` ist derselbe Clip wie `g1-2-periode-in-bruch`, nur setzt dort
-MathJax statt der eigenen Schreibweise. Zwei Felder im Drehbuch steuern das:
+Alle 28 Drehbücher wurden umgestellt — 371 Formelzeilen. `scripts/clip-nach-latex.py`
+hat das gemacht und bleibt im Repo: als Beleg, was mit den Zeilen geschehen ist, und
+falls irgendwo noch ein Drehbuch in der alten Schreibweise auftaucht.
 
-| Feld | Wirkung |
+`"latex": false` schaltet ein einzelnes Drehbuch auf die alte Schreibweise zurück;
+`formel()` in `scripts/build-clips.py` ist unangetastet.
+
+### Was die Umstellung gekostet hat
+
+| | |
 |---|---|
-| `"latex": true` | Jeder Formeltext geht als LaTeX an MathJax, nicht durch `formel()` |
-| `"probe": true` | Der Clip wird gebaut, kommt aber nicht in `clips.json` — er taucht weder in der Bibliothek noch auf einer Lektionsseite auf |
+| Drehbücher | 28 |
+| übersetzte Zeilen | 371 |
+| davon rein mechanisch | 279 |
+| davon mit Prosa dazwischen | 102 — hier musste die Grenze Mathematik/Text gezogen werden |
+| Ton | **unverändert.** Es wurde kein Wort neu gesprochen: der Umbau betraf die Formeln, nicht den Sprechertext, und damit auch keine Dauer |
+| Lektionsseiten, `clips.json`, Suchindex | **unverändert** — Titel und Längen sind dieselben |
+| Layout | eine einzige Kollision (`g1-2-zahlformen`, 5 px), behoben mit 40 px mehr `abstand` |
 
-Die vier Farbgruppen `{1:…}` heissen dort `\fa{…}` bis `\fd{…}` und sind als Makros in
-der MathJax-Konfiguration definiert, mit denselben Farbwerten wie im Theme.
+### Fehler, die der Umbau selbst produziert hat
 
-### Was der Versuch zeigt
+Alle vier fielen erst in der Prüfung auf, keiner im Augenschein:
 
-**Dafür:** Der Satz ist der bessere. TeX setzt die Abstände um Relationszeichen richtig,
-`\overline` und `\dfrac` sind das Original statt eines Nachbaus. Und: **eine Formel lässt
-sich aus der Lektionsseite unverändert ins Drehbuch kopieren.** Die Seiten sind in LaTeX
-geschrieben — bisher muss jede Formel für den Clip von Hand übersetzt werden, und jede
-Übersetzung ist eine Gelegenheit für einen Fehler.
+1. **`A \ B` verlor das Zeichen.** Der Backslash der Mengendifferenz wurde in LaTeX zu
+   einem Abstandsbefehl — die Differenz sah aus wie ein Produkt. 6 Zeilen.
+2. **`\%` wurde zur Mengendifferenz.** Dieselbe Regel, eine Rekursion zu spät angewandt:
+   sie traf den Backslash eines schon gesetzten `\%`.
+3. **`x_{1,2}` und `\tan^{-1}`** bekamen Mengenklammern: die geschweiften Klammern einer
+   Hoch- oder Tiefstellung wurden escaped wie die einer Menge.
+4. **`√(1+8)`** verlor die Wurzel: der Radikand steht in der alten Schreibweise *neben*
+   dem Zeichen, in LaTeX gehört er *hinein*.
 
-**Dagegen:** Zwei Serifenschriften in einem Bild. Die Prosa steht in der Schrift des
-Clips, die Formeln in der TeX-Schrift; nebeneinander sieht man es. Ändern lässt sich das
-nicht sinnvoll — MathJax bringt seine eigenen Glyphen mit.
+### Wie geprüft wurde
 
-**Kosten, gemessen:**
+Nicht durch Ansehen — 28 Clips mit rund 150 Szenen sieht niemand vollständig durch.
 
-| | eigener Satz | LaTeX |
-|---|---|---|
-| geladen | 531 kB | 2190 kB |
-| bis fertig | 119 ms | 191 ms |
+**Textvergleich.** `.claude/tools/clip-text.mjs` liest den sichtbaren Text jeder Zeile.
+Einmal vor dem Umbau, einmal danach, dann Zeile gegen Zeile. Von 719 Zeilen blieben 31
+Abweichungen übrig, alle derselben Art: MathJax zählt bei ä, ö, ü, ✓, ✗, ‰ und µ eine
+Ersatzglyphe doppelt in die Textauslese — **im Bild steht sie nicht**, an drei Stellen
+mit Screenshots bestätigt.
 
-Die 2 MB sind `tex-svg.js`. Wer den Clip **von einer Lektionsseite aus** öffnet, hat die
-Datei längst im Cache — dort kostet es fast nichts. Wer den Clip direkt aufruft, lädt sie
-neu.
+**Layoutvergleich.** `.claude/tools/pruef-clip.mjs` zum Ende jeder Szene über alle 28
+Clips: Überlappungen und Überlauf. LaTeX setzt Brüche etwas höher als der alte Satz —
+darum war das der eigentliche Risikopunkt, und es blieb bei der einen Kollision.
 
-### Stolpersteine, die dabei aufgefallen sind
+### Was bleibt
 
-**`\textcolor{#1a4f8a}` in einer Makrodefinition ergibt «Illegal macro parameter
-reference».** In einer Definition ist `#1` der Parameter — TeX liest «Parameter 1, dann
-a4f8a». Das Doppelkreuz muss verdoppelt werden: `##1a4f8a`.
+**Zwei Serifenschriften in einem Bild.** Die Prosa steht in der Schrift des Clips, die
+Formeln in der TeX-Schrift. Am deutlichsten in den roten Handnotizen, wenn dort ein
+Formelstück steht. Ändern lässt sich das nicht: MathJax bringt eigene Glyphen mit.
 
-**Wer die Bühne vermisst, muss auf den Satz warten.** `MathJax.startup.promise` abwarten,
-sonst misst man den rohen LaTeX-Text und hält das Ergebnis für ein Layout.
-`.claude/tools/pruef-clip.mjs` tut das.
+**2 MB `tex-svg.js`.** Wer den Clip von einer Lektionsseite aus öffnet, hat die Datei im
+Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 statt 119 ms.
 
 ---
 
