@@ -60,17 +60,25 @@ def formel(text):
     t = text
 
     def zeichen(s):
-        for a, b in [("!=", "≠"), ("<=", "≤"), (">=", "≥"),
+        # <=> muss vor <= stehen, sonst wird daraus ein «≤>».
+        for a, b in [("<=>", "⟺"), ("!=", "≠"), ("<=", "≤"), (">=", "≥"),
                      ("=>", "⟹"), ("->", "⟶"), ("\\R", "ℝ"),
                      ("*", "·"), ("+-", "±")]:
             s = s.replace(a, b)
+        # Was jetzt noch an < und > dasteht, ist gemeint — «2 < 3». Hier
+        # maskieren, solange noch keine Tags im Text sind; sonst hält der
+        # Browser ein «a <b» für den Anfang eines Elements und verschluckt es.
+        s = s.replace("<", "&lt;").replace(">", "&gt;")
         # Wortzeichen nur als eigenständiges Wort ersetzen, sonst wird
         # aus «Scheinlösung» ein «Sche∈lösung».
         for a, b in [("notin", "∉"), ("in", "∈"), ("sqrt", "√"), ("inf", "∞")]:
             s = re.sub(r"(?<![A-Za-zÄÖÜäöü])" + a + r"(?![A-Za-zÄÖÜäöü])", b, s)
-        s = re.sub(r"(?<=[\w\)\]\s])-(?=[\w\(\[\s])", "−", s)
+        # - sind die Platzhalter für Farb- und Kursivgruppen.
+        # Sie müssen hier wie Zeichen zählen, sonst bleibt ein «-» davor
+        # oder dahinter ein Bindestrich statt eines Minuszeichens.
+        s = re.sub(r"(?<=[\w\)\]\s-])-(?=[\w\(\[\s-])", "−", s)
         s = re.sub(r"^-", "−", s)
-        s = re.sub(r"(?<=[\s\(\{\[=,;])-(?=\d|[a-zA-Z])", "−", s)
+        s = re.sub(r"(?<=[\s\(\{\[=,;])-(?=[\d-]|[a-zA-Z])", "−", s)
         s = re.sub(r"  +", lambda m: "\u00a0" * len(m.group()), s)
         return s
 
@@ -91,6 +99,27 @@ def formel(text):
 
     def stueck(s):
         return variablen(hoch_tief(zeichen(s)))
+
+    # `ax` — zusammengeschriebenes Variablenprodukt kursiv setzen. Die
+    # Automatik unten erwischt nur einzelne Buchstaben, sonst würde aus
+    # «kgV» ein «kgV» in Kursiv und aus «wahre Aussage» ein Buchstabensalat.
+    kursiv = []
+
+    def merken_kursiv(m):
+        kursiv.append(m.group(1))
+        return chr(0xE080 + len(kursiv) - 1)
+
+    t = re.sub(r"`([^`]*)`", merken_kursiv, t)
+
+    # #m# — aufrecht stehen lassen. Einheiten sind keine Variablen: «1 m»
+    # und «20 a» gehören aufrecht, das a einer Seitenlänge kursiv.
+    aufrecht = []
+
+    def merken_aufrecht(m):
+        aufrecht.append(m.group(1))
+        return chr(0xE0C0 + len(aufrecht) - 1)
+
+    t = re.sub(r"#([^#]*)#", merken_aufrecht, t)
 
     # Didaktische Einfärbung {1:...} zuerst herausnehmen, damit die
     # Zeichenersetzung sie nicht zerlegt. Platzhalter aus der privaten
@@ -123,6 +152,11 @@ def formel(text):
     for i, (nr, inhalt) in enumerate(farbig):
         ergebnis = ergebnis.replace(
             chr(0xE000 + i), '<span class="f%s">%s</span>' % (nr, formel(inhalt)))
+    for i, inhalt in enumerate(kursiv):
+        ergebnis = ergebnis.replace(chr(0xE080 + i), "<i>" + formel(inhalt) + "</i>")
+    for i, inhalt in enumerate(aufrecht):
+        # bewusst ohne variablen(): genau darum geht es hier
+        ergebnis = ergebnis.replace(chr(0xE0C0 + i), hoch_tief(zeichen(inhalt)))
     return ergebnis
 
 
@@ -131,12 +165,28 @@ def entschaerfen(s):
 
 
 def text_html(s):
-    """Fliesstext: Zeilenumbruch mit |, Formelteile in @...@ ."""
+    """Fliesstext: Zeilenumbruch mit |, Formelteile in @...@ .
+
+    Die Formelteile werden zuerst herausgenommen. Täte man es später, hätte
+    die HTML-Maskierung aus «<=» längst ein «&lt;=» gemacht, und der
+    Formelsatz erkennt das Zeichen nicht mehr. Nebenbei darf so auch ein
+    senkrechter Strich in einer eingebetteten Formel stehen, ohne dass er
+    zum Zeilenumbruch wird.
+    """
+    formeln = []
+
+    def merken(m):
+        formeln.append(m.group(1))
+        return chr(0xE100 + len(formeln) - 1)
+
+    s = re.sub(r"@([^@]*)@", merken, s)
     s = entschaerfen(s).replace("|", "<br>")
     s = re.sub(r"~([^~]*)~", r'<span class="dim">\1</span>', s)
-    s = re.sub(r"@([^@]*)@", lambda m: formel(m.group(1)), s)
-    return re.sub(r"\{([1-4]):([^{}]*)\}",
-                  lambda m: '<span class="f%s">%s</span>' % (m.group(1), m.group(2)), s)
+    s = re.sub(r"\{([1-4]):([^{}]*)\}",
+               lambda m: '<span class="f%s">%s</span>' % (m.group(1), m.group(2)), s)
+    for i, f in enumerate(formeln):
+        s = s.replace(chr(0xE100 + i), formel(f))
+    return s
 
 
 # ---------------------------------------------------------------- Elemente
