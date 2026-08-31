@@ -97,21 +97,14 @@
 <link rel="stylesheet" href="../style.css">
 <style>
 :root{
-  --papier:#f8f6f1; --papier-2:#efeade; --karte:#ffffff;
-  --tinte:#1c1a17; --tinte-2:#5a5040; --linie:#d8d0c4;
-  --blau:#1a4f8a; --blau-hell:#ddeaf8; --blau-rand:#5b8fc9;
-  --gruen:#1f6b3a; --gruen-hell:#d8f0e2; --gruen-rand:#52a872;
-  --lila:#5b2d8e; --lila-hell:#ede6f8; --lila-rand:#9b6bd4;
-  --orange:#b85c00; --orange-hell:#fdefd8; --orange-rand:#e08030;
-  --rot:#9b1c1c; --rot-hell:#fde8e8; --rot-rand:#d05050;
-  --s:0 2px 10px rgba(28,26,23,.08); --sl:0 4px 22px rgba(28,26,23,.13);
-  --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
-  --sans:'Source Sans 3',system-ui,-apple-system,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+  /* Die Palette kommt aus ../style.css — 20 Tokens, Wert fuer Wert dieselben.
+     Hier steht nur, was dort anders heisst oder fehlt. Damit kann sie nicht
+     mehr auseinanderlaufen. */
+  --karte:var(--weiss);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --papier:#171512; --papier-2:#1f1c17; --karte:#211e19;
+    --papier:#171512; --papier-2:#1f1c17; --karte:#211e19; --weiss:#211e19;
     --tinte:#f1ece1; --tinte-2:#b6ab97; --linie:#3a342a;
     --blau:#8ab6e8; --blau-hell:#1b2a3d; --blau-rand:#3f6da3;
     --gruen:#79c894; --gruen-hell:#162c1f; --gruen-rand:#3f8058;
@@ -122,7 +115,7 @@
   }
 }
 :root[data-theme="dark"]{
-  --papier:#171512; --papier-2:#1f1c17; --karte:#211e19;
+  --papier:#171512; --papier-2:#1f1c17; --karte:#211e19; --weiss:#211e19;
   --tinte:#f1ece1; --tinte-2:#b6ab97; --linie:#3a342a;
   --blau:#8ab6e8; --blau-hell:#1b2a3d; --blau-rand:#3f6da3;
   --gruen:#79c894; --gruen-hell:#162c1f; --gruen-rand:#3f8058;
@@ -327,31 +320,15 @@ details.loes .inhaltbox p:last-child{margin-bottom:0}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-/* ── Kopf und Fuss der Site im Dunkelmodus ───────────────────────
-   style.css kennt keinen Dunkelmodus — die Site hat keinen. Hier
-   bekommen die geerbten Bausteine darum eigene Werte, damit die Leiste
-   nicht weiss ueber einer dunklen Seite steht. Nur Flaechen und
-   Linien; Schrift und Abstaende bleiben, wie style.css sie setzt. */
-:root[data-theme="dark"] .site-hdr,
-:root[data-theme="dark"] .such-panel,
-:root[data-theme="dark"] .ueber-tab,
-:root[data-theme="dark"] .site-nav,
-:root[data-theme="dark"] .dd-menu,
-:root[data-theme="dark"] .mobile-nav{
-  background:var(--karte); border-color:var(--linie); color:var(--tinte);
-}
-:root[data-theme="dark"] .site-nav a,
-:root[data-theme="dark"] .dd-menu a,
-:root[data-theme="dark"] .mobile-nav a,
-:root[data-theme="dark"] .nav-btn,
-:root[data-theme="dark"] .logo{ color:var(--tinte); }
-:root[data-theme="dark"] .dd-menu a:hover,
-:root[data-theme="dark"] .site-nav a:hover{ background:var(--papier-2); }
-:root[data-theme="dark"] .suche input{
-  background:var(--papier); border-color:var(--linie); color:var(--tinte);
-}
+
+/* ── Fuss im Dunkelmodus ─────────────────────────────────────────
+   Kopf und Menue kommen ohne Nachhilfe aus: style.css faerbt seine
+   Flaechen mit --weiss, und das ist oben dunkel gesetzt. Nur der Fuss
+   braucht eine Regel — er benutzt --tinte als *Flaeche*, und die kippt
+   im Dunkelmodus mit dem Text nach hell. */
 :root[data-theme="dark"] .site-footer{
-  background:var(--papier-2); border-color:var(--linie); color:var(--tinte-2);
+  background:var(--papier-2); color:var(--tinte-2);
+  border-top:1px solid var(--linie);
 }
 :root[data-theme="dark"] .site-footer a{ color:var(--blau); }
 </style>
