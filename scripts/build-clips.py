@@ -54,6 +54,7 @@ def formel(text):
         *       Malpunkt
         !=      Ungleichheitszeichen,  <=  >=  ->  =>  in  notin  R  D
         _1      Tiefstellung
+        "36"    Überstrich — die Periode einer Dezimalzahl
 
     Einzelne lateinische Buchstaben werden kursiv gesetzt (Variablen).
     """
@@ -83,8 +84,20 @@ def formel(text):
         return s
 
     def hoch_tief(s):
-        s = re.sub(r"\^(\{[^}]*\}|\w)", lambda m: "<sup>" + m.group(1).strip("{}") + "</sup>", s)
-        s = re.sub(r"_(\{[^}]*\}|\w)", lambda m: "<sub>" + m.group(1).strip("{}") + "</sub>", s)
+        # Was hochgestellt werden darf: {…} · ein Vorzeichen mit Ziffern ·
+        # ein Platzhalter (dort steckt eine Farbgruppe) · ein einzelnes
+        # Zeichen. Ohne die mittleren beiden blieb «10^-6» und «10^{3:4}»
+        # als roher Text mit Dach stehen.
+        stelle = r"(\{[^}]*\}|[-\u2212]?\d+|[\uE000-\uE1FF]|\w)"
+
+        def setzen(tag):
+            def f(m):
+                inhalt = m.group(1).strip("{}").replace("-", "\u2212")
+                return "<%s>%s</%s>" % (tag, inhalt, tag)
+            return f
+
+        s = re.sub(r"\^" + stelle, setzen("sup"), s)
+        s = re.sub(r"_" + stelle, setzen("sub"), s)
         return s
 
     def variablen(s):
@@ -121,6 +134,17 @@ def formel(text):
 
     t = re.sub(r"#([^#]*)#", merken_aufrecht, t)
 
+    # "36" — Überstrich über der Periode: 0."36" ist 0.363636…  Bewusst
+    # nicht ~…~: das Zeichen heisst im Fliesstext schon «gedämpft», und
+    # zwei Bedeutungen für dasselbe Zeichen sind eine Falle.
+    strich = []
+
+    def merken_strich(m):
+        strich.append(m.group(1))
+        return chr(0xE140 + len(strich) - 1)
+
+    t = re.sub(r'"([^"]*)"', merken_strich, t)
+
     # Didaktische Einfärbung {1:...} zuerst herausnehmen, damit die
     # Zeichenersetzung sie nicht zerlegt. Platzhalter aus der privaten
     # Unicode-Zone werden von keiner der folgenden Regeln angefasst.
@@ -154,6 +178,9 @@ def formel(text):
             chr(0xE000 + i), '<span class="f%s">%s</span>' % (nr, formel(inhalt)))
     for i, inhalt in enumerate(kursiv):
         ergebnis = ergebnis.replace(chr(0xE080 + i), "<i>" + formel(inhalt) + "</i>")
+    for i, inhalt in enumerate(strich):
+        ergebnis = ergebnis.replace(
+            chr(0xE140 + i), '<span class="ov">' + formel(inhalt) + "</span>")
     for i, inhalt in enumerate(aufrecht):
         # bewusst ohne variablen(): genau darum geht es hier
         ergebnis = ergebnis.replace(chr(0xE0C0 + i), hoch_tief(zeichen(inhalt)))
@@ -509,6 +536,7 @@ body.render #wrap{{bottom:0}} body.render #stage{{left:0;top:0;transform:none!im
 .f3{{color:var(--f3);background:var(--f3w)}}
 .f4{{color:var(--f4);background:var(--f4w)}}
 .dim{{opacity:.62}}
+.ov{{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}}
 .row{{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}}
 .mitte.row{{justify-content:center}}
 .fr{{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;

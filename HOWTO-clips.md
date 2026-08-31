@@ -91,6 +91,14 @@ Tippfehler als `[FEHLER]`.
 Kein LaTeX, kein MathJax — der Generator setzt selbst. `[a|b]` ist der Bruch, `x^2` und
 `x_1` hoch- und tiefgestellt, `*` wird zum Malpunkt, `-` zum echten Minus, `\R` zu ℝ,
 `!=` `<=` `>=` zu ≠ ≤ ≥, `->` `=>` zu ⟶ ⟹. Zwei Leerzeichen bleiben als Abstand stehen.
+`"36"` setzt einen Überstrich — die Periode einer Dezimalzahl: `0."36"` ist 0.363636…
+
+Hochgestellt wird `{…}`, ein Vorzeichen mit Ziffern, eine Farbgruppe oder ein einzelnes
+Zeichen: `10^-6`, `10^{3:4}` und `10^24` stehen alle richtig. Bis August 2026 konnte
+das Dach nur ein einzelnes Wortzeichen hochziehen — `10^-6` und `10^{3:4}` blieben
+darum als roher Text mit Dach stehen, und im Zehnerpotenzen-Clip fiel es niemandem auf,
+weil `10^3` daneben stimmte. Wer die Schreibweise erweitert, prüft die Ausgabe an einem
+Beispiel je Form, nicht am Augenschein einer Zeile.
 
 ### Farbführung
 
@@ -209,6 +217,11 @@ ohnehin.
 
 ## Schritt 4 — Verifikation
 
+0. **Layout prüfen** — `node .claude/tools/pruef-clip.mjs clips/<name>.html 10 22 34 …`
+   springt in die genannten Sekunden, meldet überlappende Zeilen und alles, was über die
+   Bühne hinausragt, und legt je Zeitpunkt ein Bild ab. **Die Bilder trotzdem ansehen:**
+   Der Prüfer sieht Überlappung, nicht Gestaltung. Ein Bruchstrich macht eine Zeile
+   doppelt hoch — Zeilen mit `[a|b]` brauchen `abstand` ≥ 200.
 1. **Pre-Flight** über die geänderten Lektionsseiten, wie immer vor dem Commit.
 2. **Im Browser bei 1280 und 360 px**: Karte sichtbar, Klick lädt den Clip, Rahmen im
    richtigen Verhältnis, Bedienleiste ohne Überlauf. Auf schmalen Schirmen blendet der
@@ -450,10 +463,10 @@ ungeprüft: die Lizenzen der übrigen sieben deutschen Stimmen.
 
 Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
 
-- **Mehr Clips.** Bisher gibt es drei, alle im Lerngebiet 2. Sie sind zugleich die
-  Referenz dafür, wie ein Drehbuch aussieht: `g2-2b-bruchgleichungen` für eine
-  Schritt-für-Schritt-Herleitung, `g2-2a-parametergleichung` für eine mit Bedingung,
-  `g2-2a-parametergleichung-drei-faelle` für eine Fallunterscheidung.
+- **Mehr Clips.** Es sind 28, fast alle im Grundlagenfach; das Schwerpunktfach ist bis
+  auf den geteilten Bruchgleichungs-Clip noch leer. Als Referenz für ein Drehbuch:
+  `g2-2b-bruchgleichungen` für eine Schritt-für-Schritt-Herleitung, `g2-2a-warum-a-ungleich-5`
+  für eine mit Bedingung, `g2-2a-drei-ausgaenge` für eine Fallunterscheidung.
 - **Urteil über die Stimme.** Alle vier Clips sind synthetisch vertont. Ob die Stimme im
   Unterricht trägt, ist noch nicht entschieden; falls nicht, ist der Wechsel auf eine
   eigene Aufnahme nur ein Dateiaustausch — das Verfahren bleibt dasselbe.
