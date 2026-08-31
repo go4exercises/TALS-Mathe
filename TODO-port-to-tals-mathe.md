@@ -353,6 +353,12 @@ sie muss zur tatsächlichen Praxis im Apps Script und im Postfach passen.
   `indexedDB` kommen im ganzen Repo **nicht** vor. Extern geladen werden nur Google Fonts
   (49 ×) und MathJax über jsDelivr (48 ×); YouTube/Serlo/sos-mathe sind reine Links,
   **kein einziges `<iframe>`** — das steht so auch im Datenschutztext.
+  > **Überholt seit 30.8.2026:** Schriften und MathJax werden seither vom eigenen Server
+  > ausgeliefert, extern geladen wird gar nichts mehr. Der Satz bleibt als Momentaufnahme
+  > stehen, weil dieses Dokument ein Protokoll ist. Aktueller Stand: STYLEGUIDE §5.3.1.
+  > Zwei Nachträge: Clips stehen inzwischen doch in `<iframe>`s — aber in eigenen,
+  > gleicher Herkunft; und `localStorage` kann seit den Clips vorkommen, wenn jemand im
+  > MathJax-Menü etwas umstellt (siehe `rechtliches.html`).
   Die Löschfrist (12 Monate) ist aus Physik übernommen und muss vom Auftraggeber gegen
   die tatsächliche Praxis im Apps Script und im Postfach gehalten werden.
 

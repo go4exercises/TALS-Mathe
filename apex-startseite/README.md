@@ -61,10 +61,13 @@ ergeben, und im Netzwerk-Tab darf keine Anfrage an einen fremden Host stehen.
 Die DNS-Einträge stehen schon (Phase 1): vier A- und vier AAAA-Records am Apex,
 `www` als CNAME. Es fehlt ausschliesslich das Repo, das die Domain beansprucht.
 
-**Solange das nicht gemacht ist, zeigen `begreifbar.ch` und `www.begreifbar.ch`
+~~**Solange das nicht gemacht ist, zeigen `begreifbar.ch` und `www.begreifbar.ch`
 eine Zertifikatswarnung** — die Namen lösen bereits auf GitHub Pages auf, aber
 kein Repo beansprucht sie, also liefert GitHub das Platzhalter-Zertifikat
-`CN=*.github.io` aus und dahinter eine 404.
+`CN=*.github.io` aus und dahinter eine 404.~~
+
+**Erledigt.** Gemessen am 31.8.2026: Zertifikat gültig, Enforce HTTPS aktiv, keine
+Warnung mehr.
 
 ### `www` mitnehmen
 

@@ -246,6 +246,12 @@ Wahl.
 > Titel und `og:site_name` lauten weiterhin «TALS Physik», während Mathe seit dem
 > 10.8. «Mathe begreifbar» heisst und in Mathes Menü bereits «Physik begreifbar»
 > steht. Details im Eintrag in `TODO-schwesterprojekt.md`.
+>
+> **Nachgemessen am 31.8.2026:** Der Markenname ist weiterhin offen — `<title>` lautet
+> «TALS Physik — RLP-BM 2030», `og:site_name` «TALS Physik». Alles andere an Phase 5 ist
+> erledigt, auch die Drittanbieter-Freiheit: `physik.begreifbar.ch` liefert `schriften.css`
+> aus, kein `googleapis`, kein `jsdelivr`. Damit ist der Markenname der **einzige** offene
+> Punkt des ganzen Umzugs.
 
 🔑 **Komplett bei dir** — ich fasse das Physik-Repo grundsätzlich nicht an
 (`CLAUDE.md`). Dort dieselben Schritte: `CNAME` mit `physik.begreifbar.ch`,

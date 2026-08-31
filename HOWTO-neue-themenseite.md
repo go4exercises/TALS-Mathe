@@ -82,9 +82,16 @@ Kompetenz-Wortlaut: **1:1 aus dem RLP-PDF.** Nicht umformulieren, nicht zusammen
 
 Die Pill ist **nur** für exakt „auch ohne Hilfsmittel" zu setzen. Differenzierte RLP-Formulierungen (z.B. „mit und ohne Hilfsmittel" in s3-5 oder „kleine Stichproben auch ohne Hilfsmittel und grosse Stichproben mit Hilfsmitteln" in g4-3) bleiben Inline-Klammertext im Bullet, nicht Pill.
 
-### 1d. MathJax-Konfig (Pflicht-Standard)
+### 1d. Schriften und MathJax (Pflicht-Standard)
+
+**Beides kommt aus dem Repo, nie von einem fremden Host** — siehe STYLEGUIDE §5.3.1. Der
+Pre-Flight meldet `fonts.googleapis.com`, `fonts.gstatic.com` und `cdn.jsdelivr.net` als
+`[FEHLER]`. Die Pfade sind relativ zur Tiefe der Seite; für `grundlagen/` und
+`schwerpunkt/` also ein `../`:
 
 ```html
+<link rel="stylesheet" href="../schriften.css">
+<link rel="stylesheet" href="../style.css">
 <script>
 MathJax = {
   tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
@@ -93,8 +100,12 @@ MathJax = {
   options: { skipHtmlTags:['script','noscript','style','textarea'] }
 };
 </script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
 ```
+
+`loader: { load:['[tex]/boldsymbol'] }` lädt die Erweiterung **relativ zum Pfad der
+Startdatei** nach — darum muss `vendor/mathjax/input/tex/extensions/boldsymbol.js`
+bestehen bleiben. Das fällt weder beim Laden noch im Pre-Flight auf, nur im Netzwerk-Tab.
 
 **Nicht** `tex-chtml.js` (anderer Renderer, andere Optik). **Nicht** `window.MathJax = …` (das ist Legacy-Syntax, die manche Konfig-Pfade nicht annimmt).
 
@@ -186,9 +197,10 @@ Schlanker Stil: `downloads/grundlagen/g5-1-grundlagen/*.html`. Jede der 4 Drucks
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{Rolle} · {Thema} — Mathe begreifbar</title>
+  <link rel="stylesheet" href="../../../schriften.css">
   <link rel="stylesheet" href="../../print.css">
   <script>MathJax = {…};</script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script src="../../../vendor/mathjax/tex-svg.js"></script>
 </head>
 <body>
   <div class="druck-bar no-print">
