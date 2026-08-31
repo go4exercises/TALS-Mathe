@@ -104,8 +104,16 @@ MathJax = {
 ```
 
 `loader: { load:['[tex]/boldsymbol'] }` lädt die Erweiterung **relativ zum Pfad der
-Startdatei** nach — darum muss `vendor/mathjax/input/tex/extensions/boldsymbol.js`
-bestehen bleiben. Das fällt weder beim Laden noch im Pre-Flight auf, nur im Netzwerk-Tab.
+Startdatei** nach. Nicht nur diese eine: Auch `\textcolor`, `\cancel`, `\bbox`, `\class`,
+`\enclose` und ein Dutzend weitere Befehle ziehen sich ihre Erweiterung selbst nach.
+Darum liegt der Ordner `vendor/mathjax/input/tex/extensions/` **vollständig** im Repo.
+
+**Fällt eine davon aus, bleibt die ganze Seite ohne Formelsatz** — nicht nur der eine
+Ausdruck, und ohne Fehlermeldung im Bild. Genau das passierte am 31.8.2026 auf `g1-2`:
+ein einziges `\textcolor`, dessen `color.js` fehlte, und alle 329 Ausdrücke standen als
+roher LaTeX-Text da. Der Pre-Flight sieht das nicht — `verify_mathjax.js` setzt mit
+`mathjax-full` aus `node_modules` und schaut nie in `vendor/`. Sichtbar wird es im
+Netzwerk-Tab oder mit `node .claude/tools/pruef-mathjax.mjs <url>`.
 
 **Nicht** `tex-chtml.js` (anderer Renderer, andere Optik). **Nicht** `window.MathJax = …` (das ist Legacy-Syntax, die manche Konfig-Pfade nicht annimmt).
 

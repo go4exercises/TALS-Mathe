@@ -34,7 +34,11 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - `mathlib.js` — Canvas-Bibliothek + globale Helfer (`toggleL` u.a.).
 - `minicheck.js` (Mini-Check-Akkordeon), `anim-hinweise.js` (👁/💡-Rollover, Pflicht bei
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
-- `formelsammlung.html`, `glossar.html` — zwei Nachschlag-Seiten im Repo-Root.
+- `formelsammlung.html`, `glossar.html`, `clips.html` — drei Nachschlag-Seiten im Repo-Root.
+- `clips/` — 50 vertonte Animationen (52:54 min). Von Hand geschrieben wird nur das
+  Drehbuch `clips/<name>.json`; `.html`, `sprechertext-*.txt`, `clips.json` und die
+  Blöcke auf den Lektionsseiten sind **generiert**. Formeln stehen in LaTeX.
+  Vollständig in `HOWTO-clips.md`, das Verbindliche in STYLEGUIDE §6.4.
 - `schriften.css` + `schriften/` — lokal ausgelieferte Schriften (Fontsource 5.3.0,
   OFL). `vendor/mathjax/` — MathJax 3.2.2 (Apache 2.0). **Keine Seite lädt etwas von
   einem fremden Host**; Details und Fallstricke in STYLEGUIDE §5.3.1. Umgestellt wird
@@ -103,6 +107,16 @@ im Repo-Root; fehlen die Module, werden diese Checks als `[WARN]` übersprungen.
 - `node --check` auf jedem Script-Block (der Pre-Flight macht das mit).
 - Render-Check bei Graph-Änderungen, wenn ein Browser verfügbar ist: Playwright headless
   bei 1280 px **und** 360 px, Screenshots der Canvases sichten.
+- **Clips: Layout vor dem Commit prüfen** — `node .claude/tools/pruef-clip.mjs
+  clips/<name>.html <sekunden…>` meldet überlappende Zeilen und Überlauf und legt je
+  Zeitpunkt ein Bild ab. **Die Bilder trotzdem ansehen**: Der Prüfer sieht Überlappung,
+  nicht Gestaltung.
+- **MathJax im Browser prüfen, wenn an `vendor/mathjax/` etwas ändert** —
+  `node .claude/tools/pruef-mathjax.mjs http://localhost:8899/<seite>` zählt die
+  gesetzten Ausdrücke und meldet 404 auf nachgeladene Bausteine. `verify_mathjax.js`
+  im Pre-Flight setzt mit `mathjax-full` aus `node_modules` und sieht nicht, ob unter
+  `vendor/` etwas fehlt — ein fehlender Baustein lässt eine *ganze* Seite ohne
+  Formelsatz, ohne Fehlermeldung im Bild.
 - **Keine erfundenen Quellen, Zitate oder Lehrplan-Stellen.** Im Zweifel: „muss
   verifiziert werden" schreiben, nicht raten.
 

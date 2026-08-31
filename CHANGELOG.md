@@ -4,6 +4,65 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 30./31. August 2026 · Clips: von 3 auf 50, alles in LaTeX
+
+Aus dem Versuch mit ein paar Animationen ist ein eigenes Format geworden: 50 vertonte
+Clips, zusammen **52:54 min**, 14.3 MB Ton. Dazu die Bibliothek `clips.html`, ein Block auf
+jeder Lektionsseite und ein Eintrag je Clip im Suchindex.
+
+### Hinzugefügt
+
+- **50 Clips.** Schwerpunkte: die Reihe *Potenzen* (6 Folgen, von der Quadratwurzel über
+  die Potenzgesetze und die negativen und gebrochenen Exponenten bis zu «die
+  Wurzelgesetze braucht man nicht»), *Gleichungssysteme* (5 Folgen: grafisch, Einsetzen,
+  Gleichsetzen, Addition, Anzahl Lösungen), *Quadratische Gleichungen* (6 Folgen von den
+  Spezialfällen b = 0 und c = 0 über das Faktorisieren und die quadratische Ergänzung bis
+  zur Mitternachtsformel und ihrer Herleitung) und *Bruchgleichungen* (5 Folgen mit den
+  drei Ausgängen). Dazu quadratische Ungleichungen, Systeme und Parametergleichungen.
+- **Elementtyp `graf`** im Clip-Generator: Koordinatensystem mit Achsenteilung, Geraden
+  (Steigung/Achsenabschnitt), Parabeln und markierten Punkten, als SVG in den
+  Theme-Farben. Ohne ihn wären der grafische Lösungsclip und die Ungleichungsclips
+  bildlos geblieben.
+- **`.claude/tools/pruef-clip.mjs`** — springt in gegebene Sekunden eines Clips, meldet
+  überlappende Zeilen und Überlauf, legt je Zeitpunkt ein Bild ab.
+- **`.claude/tools/pruef-mathjax.mjs`** — prüft eine ausgelieferte Seite im Browser auf
+  gesetzte Ausdrücke und fehlgeschlagene Nachladungen.
+- **`.claude/tools/clip-text.mjs`** — liest den sichtbaren Text jeder Clipzeile; damit
+  wurde die LaTeX-Umstellung Zeile gegen Zeile verglichen.
+- **Drehbuchfeld `probe`** — baut einen Versuchsclip, hält ihn aber aus `clips.json`
+  heraus. Der Pre-Flight kennt die Ausnahme.
+
+### Geändert
+
+- **Alle Clips setzen Formeln in LaTeX** (MathJax) statt in der eigenen Schreibweise.
+  371 Zeilen in 28 Drehbüchern umgestellt, `scripts/clip-nach-latex.py` bleibt als Beleg
+  im Repo. Der Gewinn ist eine weggefallene Übersetzung: Eine Formel lässt sich von einer
+  Lektionsseite unverändert ins Drehbuch kopieren.
+- **`clips.html` unterteilt nach Lektion und Reihe** — «2.2a · Ungleichungen». Dafür
+  sortiert `ordnung()` nach Zweig, Lektionsnummer und Reihe, und die Bibliothek setzt
+  mehrspaltig statt im Raster.
+- **Geteilte Clips**: Der erste Eintrag in `lektion` ist die Heimatlektion; auf den
+  übrigen Seiten hängt der Clip als Gast hinten an.
+- **`grundlagen/g1-2`** hatte trotz fünf Clips keine `CLIPS`-Marker — die Clips waren nur
+  über die Bibliothek erreichbar. Marker gesetzt.
+
+### Behoben
+
+- **MathJax setzte auf `g1-2` überhaupt keine Formel.** MathJax lädt TeX-Erweiterungen
+  erst bei Bedarf nach; im Repo lag nur `boldsymbol.js`. Ein einziges `\textcolor` forderte
+  `color.js` an, das fehlte — und daran scheiterte der Satz der *ganzen* Seite: 329
+  Ausdrücke blieben als roher LaTeX-Text stehen, ohne Fehlermeldung im Bild. Jetzt liegt
+  `vendor/mathjax/input/tex/extensions/` vollständig im Repo (34 Dateien, 340 kB, nur bei
+  Bedarf geladen).
+- **Hochstellung im Clip-Generator**: `10^-6` und `10^{3:4}` blieben als roher Text mit
+  Dach stehen, weil nur ein einzelnes Wortzeichen hochgezogen wurde. Betroffen war der
+  Zehnerpotenzen-Clip an fünf Stellen.
+- **Mengen-Clip**: `M = {2; 4; 6; 8}` war gleichgesetzt mit `{x ∈ ℕ | x gerade, x ≤ 8}` —
+  auf dieser Site enthält ℕ die Null, die beschriebene Menge war also eine andere als die
+  aufgezählte. Jetzt ℕ\*, mit Begründung im Bild.
+
+---
+
 ## [Unveröffentlicht] — 10. August 2026 · Umzug auf `mathe.begreifbar.ch`
 
 Das Lehrmittel liegt jetzt unter einer eigenen Domain. `begreifbar.ch` ist registriert

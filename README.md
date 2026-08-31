@@ -3,7 +3,7 @@
 > **Freies, interaktives Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences (TALS)**
 > Struktur 1:1 nach RLP 2030 · Notation nach *Formeln, Tabellen, Begriffe* (Orell Füssli) · GitHub Pages
 
-**Version 1.0 · Stand 1. August 2026** · [Online-Ausgabe](https://mathe.begreifbar.ch/)
+**Version 1.0 · Stand 31. August 2026** · [Online-Ausgabe](https://mathe.begreifbar.ch/)
 
 ---
 
@@ -22,6 +22,8 @@ Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TA
 - **46 Themenseiten** — alle 31 RLP-Teilgebiete plus die TALS-Ergänzungen 3.6 und 4.3d
 - **Interaktive Canvas-Animationen** auf jeder Seite, mit Rollover-Hinweisen
   „Worauf achten?" und „Erkenntnis"
+- **50 Clips** — kurze, vertonte Animationen, die einen Gedankengang Zeile für Zeile
+  aufbauen (zusammen 52:54 min); auf der Themenseite und gesammelt unter *Nachschlagen → Clips*
 - **Volltextsuche** über alle Seiten, Glossar und Formelsammlung (Tastenkürzel `/`)
 - **Zusatzmaterial je Thema**: Handout, Teste dich selbst, Aufgabenserie (Druckseiten)
   und ein Anki-Deck
@@ -112,6 +114,7 @@ Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TA
 
 - **Interaktive Grafiken** — Schieberegler, Canvas-Koordinatensysteme, Steigungsdreiecke
 - **LaTeX-Formeln** via MathJax SVG — identische Darstellung wie gedruckte Lehrmittel
+- **Vertonte Clips** — eine Animation je Gedankengang, mit Sprecherton und Transkript
 - **Aufklappbare Lösungen** — Aufgaben mit Musterlösung, die erst auf Wunsch sichtbar wird
 - **Sticky Inhaltsverzeichnis** — auf Desktop immer sichtbar, auf Mobile als Dropdown
 - **Breadcrumb-Navigation** — jederzeit weiss man, wo man ist
@@ -142,11 +145,15 @@ sich die `SearchAction` in den strukturierten Daten.
 ## Technologie
 
 ```
-HTML5 · CSS3 · JavaScript (vanilla) · MathJax 3 (CDN)
+HTML5 · CSS3 · JavaScript (vanilla) · MathJax 3.2.2 (lokal) · Schriften lokal
 ```
 
 Kein Framework, kein Build-Schritt, keine Abhängigkeiten — jede `.html`-Datei
 funktioniert direkt im Browser. Hosting via GitHub Pages.
+
+**Keine Seite lädt etwas von einem fremden Host.** MathJax liegt unter
+`vendor/mathjax/`, die Schriften unter `schriften/` — damit stimmt «keine Cookies,
+kein Tracking» vollständig, und die Seiten laufen auch ohne Netz.
 
 ---
 
@@ -231,8 +238,10 @@ Dieses Lernmaterial steht unter der Lizenz
 
 - **Rahmenlehrplan Berufsmaturität 2030** (RLP 2030, SBFI, 13. Juni 2025) — Lehrplanstruktur
 - **Formeln, Tabellen, Begriffe** (Orell Füssli Lehrmittel) — Notation und Symbolik
-- **MathJax** (mathjax.org) — LaTeX-Rendering im Browser
+- **MathJax** (mathjax.org, Apache 2.0) — LaTeX-Rendering im Browser, lokal ausgeliefert
+- **Source Serif 4 / Source Sans 3 / Caveat / JetBrains Mono** (Fontsource, SIL OFL 1.1) — lokal ausgeliefert
+- **Piper** (OHF-Voice, GPL-3.0) mit der Stimme *de_DE-thorsten* (Datensatz CC0) — Sprecherton der Clips
 
 ---
 
-*Zürich, 1. August 2026 · Version 1.0*
+*Zürich, 31. August 2026 · Version 1.0*

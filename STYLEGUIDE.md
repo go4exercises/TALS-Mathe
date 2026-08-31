@@ -1067,8 +1067,10 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 ## 6.4 Clips (verbindlich seit 30.08.2026)
 
-Ein Clip ist eine stumme HTML-Animation in `clips/`, kein Video. Ausführlich in
-`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist.
+Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
+Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 31.08.2026: 50 Clips,
+52:54 min.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass
@@ -1077,9 +1079,21 @@ Ein Clip ist eine stumme HTML-Animation in `clips/`, kein Video. Ausführlich in
 - **Von Hand geschrieben wird nur das Drehbuch** (`clips/<name>.json`). `.html`,
   `sprechertext-*.txt` und `clips.json` erzeugt `scripts/build-clips.py` und werden
   mitversioniert — GitHub Pages baut nichts.
+- **Formeln stehen in LaTeX**, gesetzt von MathJax — dieselbe Schreibweise wie auf den
+  Seiten. Damit lässt sich eine Formel von der Lektionsseite ins Drehbuch kopieren,
+  statt sie in eine zweite Schreibweise zu übersetzen; jede Übersetzung war eine
+  Gelegenheit für einen Fehler. Prosa in einer Formelzeile braucht `\text{…}`, und
+  zwar **ein** `\text{}` um den ganzen Satz.
+- **Der Ton ist eine Zutat, keine Voraussetzung.** Ohne Tonspur läuft der Clip
+  unverändert. Gesprochen wird der Sprechertext des Drehbuchs; er wird nicht
+  nachträglich umgeschrieben, ohne die Spur neu zu bauen — sonst sagen Bild und Ton
+  Verschiedenes. Die Dauern im Drehbuch stammen aus der Messung
+  (`scripts/build-clip-ton.py` **vor** `build-clips.py`).
 - **`lektion` ist eine Liste**, auch bei einem Eintrag. Ein Clip gehört oft auf mehrere
   Seiten; ohne Liste müsste man ihn duplizieren, und zwei Kopien laufen auseinander.
   Jeder Code muss einer `id` in `nav.js` entsprechen — der Pre-Flight prüft das.
+  **Der erste Code ist die Heimatlektion:** Dort steht der Clip in seiner Reihe, auf den
+  übrigen Seiten hängt er als Gast hinten an.
 - **Kein `<iframe>` beim Seitenaufruf.** In der Seite steht nur die Startkarte, erst der
   Klick setzt den Rahmen ein (`clipStart` in `mathlib.js`). Sonst laufen bei mehreren
   Clips alle gleichzeitig los und die Seite lädt N zusätzliche Dokumente mit.
@@ -1090,8 +1104,16 @@ Ein Clip ist eine stumme HTML-Animation in `clips/`, kein Video. Ausführlich in
   einen *Term* über mehrere Zeilen, nicht einen Blocktyp. Dass Orange auf den Seiten
   „Aufgabe" markiert (§5.1), gilt hier nicht — anderer Kontext. 1 und 2 (Blau/Orange) sind
   das Paar, das auch bei Rotgrünschwäche unterscheidbar bleibt. Sparsam einsetzen.
-- **Reihenfolge nach jedem Drehbuch-Edit:** `build-clips.py`, dann
-  `build-clips-einbau.py`, dann `build-seo.py` und `build-suchindex.py`.
+- **Die Bibliothek `clips.html` unterteilt nach Lektion und Reihe** — `2.2a ·
+  Ungleichungen`. Die Ordnung macht `ordnung()` in `build-clips-einbau.py`: erst der
+  Zweig (`ZWEIGE`, Arithmetik vor Algebra), dann die Lektionsnummer, dann die Reihe
+  (`REIHEN`, wo die Folge didaktisch statt alphabetisch ist).
+- **Reihenfolge nach jedem Drehbuch-Edit:** `build-clip-ton.py` (falls der Sprechertext
+  geändert hat), `build-clips.py`, `build-clips-einbau.py`, dann `build-seo.py` und
+  `build-suchindex.py`.
+- **Vor dem Commit das Layout prüfen:** `node .claude/tools/pruef-clip.mjs
+  clips/<name>.html <sekunden…>` meldet überlappende Zeilen und Überlauf. Die Bilder
+  trotzdem ansehen — der Prüfer sieht Überlappung, nicht Gestaltung.
 
 ## 7. Footer-Konvention
 

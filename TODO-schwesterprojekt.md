@@ -23,10 +23,44 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
+- **2026-08-31 · MathJax-Erweiterungen vollstaendig mitliefern · `vendor/mathjax/input/tex/extensions/`
+  · warum:** In Physik liegt dort **genau eine** Datei (`boldsymbol.js`) — dieselbe Luecke,
+  die in Mathe eine ganze Seite lahmgelegt hat. MathJax laedt TeX-Erweiterungen erst bei
+  Bedarf nach; faellt eine aus, bleibt **die komplette Seite** ohne Formelsatz, ohne
+  Fehlermeldung im Bild. In Mathe traf es `g1-2`: ein einziges `\textcolor` forderte
+  `color.js` an, das fehlte, und alle 329 Ausdruecke der Seite standen als roher
+  LaTeX-Text da.
+  **Nachgezaehlt am 31.8.2026:** Physik hat 23 Seiten, und **keine einzige** benutzt
+  derzeit `\textcolor`, `\cancel`, `\bbox`, `\class`, `\enclose`, `\unicode` oder `\ce`.
+  Der Fehler ist dort also **noch nicht aktiv** — aber ein einziges `\textcolor` in einer
+  Live-Anzeige genuegt, und die Seite ist stumm. In Mathe stand die Farbkopplung per
+  `\textcolor` sogar in der CLAUDE.md als Empfehlung.
+  **So beheben** (aus dem Mathe-Repo heraus, aber im Physik-Repo ausfuehren):
+  `cp node_modules/mathjax-full/es5/input/tex/extensions/*.js vendor/mathjax/input/tex/extensions/`
+  und `all-packages.js` wieder loeschen — das ist ein Sammelbuendel von 212 kB, das der
+  Autoload nie anfordert. Es bleiben 34 Dateien, 340 kB, alle nur bei Bedarf geladen.
+  **Pruefen** mit `.claude/tools/pruef-mathjax.mjs` (siehe naechster Eintrag): Die Zahl
+  der `mjx-container` muss zur Zahl der Ausdruecke passen und es darf keine 404 geben.
+  `verify_mathjax.js` im Pre-Flight sieht das **nicht** — es setzt mit `mathjax-full` aus
+  `node_modules` und schaut nie in `vendor/`.
+
+- **2026-08-31 · Zwei Pruefwerkzeuge mitnehmen · `.claude/tools/pruef-mathjax.mjs`,
+  `.claude/tools/pruef-clip.mjs` · warum:** Beide sind projektunabhaengig.
+  `pruef-mathjax.mjs` laedt eine ausgelieferte Seite im Browser, zaehlt die gesetzten
+  Ausdruecke und meldet jede fehlgeschlagene Anfrage — genau die Luecke, die der
+  Pre-Flight strukturell nicht sehen kann. `pruef-clip.mjs` ist nur noetig, wenn Physik
+  Clips bekommt. Beide brauchen Playwright, das in Mathe schon installiert ist.
+
+- **2026-08-31 · Clip-Eintrag unten aktualisiert sich mit:** Die Mechanik ist seit dem
+  30.8. deutlich gewachsen — 50 Clips (52:54 min), Formelsatz in LaTeX statt eigener
+  Schreibweise, Elementtyp `graf` fuer Koordinatenbilder, Bibliothek nach Lektion und
+  Reihe unterteilt, Vertonung mit Piper. Wer portiert, nimmt den Stand von heute, nicht
+  den vom 30.8.
+
 - **2026-08-30 · Clips: Verfahren uebernehmen, sobald Physik welche hat · `clips/`,
   `scripts/build-clips*.py`, `style.css`, `physiklib.js`, `nav.js`, `clips.html` ·
   warum:** In Mathe steht seit dem 30.8.2026 die vollstaendige Mechanik fuer kurze,
-  stumme HTML-Animationen. Sie ist projektunabhaengig gebaut und laesst sich uebernehmen,
+  HTML-Animationen (inzwischen vertont). Sie ist projektunabhaengig gebaut und laesst sich uebernehmen,
   ohne etwas neu zu erfinden. Physik hat derzeit keine Clips — der Eintrag ist eine
   Vorlage fuer den Tag, an dem der erste entsteht, kein offener Rueckstand.
   **Was zu uebertragen waere:** `clips/` samt `themes/` und `vorlage.json`,

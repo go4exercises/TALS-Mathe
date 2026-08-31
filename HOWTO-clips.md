@@ -560,7 +560,7 @@ Alle vier fielen erst in der Prüfung auf, keiner im Augenschein:
 
 ### Wie geprüft wurde
 
-Nicht durch Ansehen — 28 Clips mit rund 150 Szenen sieht niemand vollständig durch.
+Nicht durch Ansehen — 28 Clips mit rund 150 Szenen sah damals niemand vollständig durch, und heute sind es 50.
 
 **Textvergleich.** `.claude/tools/clip-text.mjs` liest den sichtbaren Text jeder Zeile.
 Einmal vor dem Umbau, einmal danach, dann Zeile gegen Zeile. Von 719 Zeilen blieben 31
@@ -587,11 +587,13 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
 
-- **Mehr Clips.** Es sind 28, fast alle im Grundlagenfach; das Schwerpunktfach ist bis
-  auf den geteilten Bruchgleichungs-Clip noch leer. Als Referenz für ein Drehbuch:
-  `g2-2b-bruchgleichungen` für eine Schritt-für-Schritt-Herleitung, `g2-2a-warum-a-ungleich-5`
-  für eine mit Bedingung, `g2-2a-drei-ausgaenge` für eine Fallunterscheidung.
-- **Urteil über die Stimme.** Alle vier Clips sind synthetisch vertont. Ob die Stimme im
+- **Mehr Clips.** Es sind 50 (52:54 min), alle im Grundlagenfach; das Schwerpunktfach hat
+  bis auf den geteilten Bruchgleichungs-Clip noch keine eigenen. Am dichtesten sind
+  Lerngebiet 1 und 2, in 3, 4 und 5 steht je einer. Als Referenz für ein Drehbuch:
+  `g2-2b-mitternachtsformel-herleitung` für eine Herleitung Schritt für Schritt,
+  `g2-2a-warum-a-ungleich-5` für eine Rechnung mit Bedingung, `g2-3-anzahl-loesungen`
+  für eine Fallunterscheidung mit Bild.
+- **Urteil über die Stimme.** Alle Clips sind synthetisch vertont. Ob die Stimme im
   Unterricht trägt, ist noch nicht entschieden; falls nicht, ist der Wechsel auf eine
   eigene Aufnahme nur ein Dateiaustausch — das Verfahren bleibt dasselbe.
 - **Untertitel.** Text und Zeitmarken liegen vor; eine WebVTT-Spur wäre fast geschenkt und
