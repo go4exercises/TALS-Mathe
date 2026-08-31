@@ -39,7 +39,7 @@ Drei Felder entscheiden über den Einbau:
 | Feld | Bedeutung |
 |---|---|
 | `dateiname` | ohne Endung, ohne Umlaute — daraus werden `.html` und Sprechertext |
-| `lektion` | **Liste** von Codes aus `nav.js`, z.B. `["g2-2b", "s2-2a"]` |
+| `lektion` | **Liste** von Codes aus `nav.js`, z.B. `["g2-2b", "s2-2a"]`. Der **erste** Code ist die Heimatlektion: Dort steht der Clip in der Reihe, auf den übrigen Seiten hängt er als Gast hinten an. |
 | `reihe` | didaktische Familie, z.B. `Parametergleichung` |
 | `folge` | Platz in dieser Reihe: 1, 2, 3 … — weglassen bei Ergänzungen |
 | `theme` | `begreifbar` ist Standard und übernimmt die Farben aus `style.css` |

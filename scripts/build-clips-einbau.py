@@ -204,7 +204,7 @@ def zeile(clip, vor="", nuance=1):
 
 
 
-def block_lektion(clips, tiefe):
+def block_lektion(clips, tiefe, code=None):
     """Der Block auf einer Lektionsseite — dieselbe Darstellung wie in der
     Bibliothek: eine zweispaltige Auswahl aus Nummer, Titel und Laufzeit,
     und der Clip laeuft gross ueber dem Fenster.
@@ -217,9 +217,16 @@ def block_lektion(clips, tiefe):
     tiefe = Ebenen unter der Wurzel, daraus wird der ../-Praefix.
     """
     vor = "../" * tiefe
-    # Dieselbe didaktische Ordnung wie in der Bibliothek: Reihen
-    # alphabetisch, darin nach `folge`, Ergaenzungen ans Ende der Reihe.
-    clips = sorted(clips, key=ordnung)
+    # Dieselbe didaktische Ordnung wie in der Bibliothek — mit einem Zusatz:
+    # Ein Clip kann zu mehreren Lektionen gehoeren. Auf einer Seite stehen
+    # zuerst die Clips, deren *erste* Lektion diese Seite ist, danach die
+    # Gaeste aus anderen Lektionen. Sonst koennte ein Gast die eigene Reihe
+    # der Seite anfuehren, nur weil sein Zweig alphabetisch frueher kommt.
+    def platz(c):
+        gast = 0 if (code is None or (codes(c) or [""])[0] == code) else 1
+        return (gast,) + ordnung(c)
+
+    clips = sorted(clips, key=platz)
     nuance = nuancen_zuteilen(clips)
     aus = [MARKE_AUF, '<h2 id="clips">Clips</h2>',
            f'<div class="cl-body clip-auswahl"'
@@ -372,7 +379,7 @@ def main():
             ohne_marker.append((code, seiten[code]["url"], len(clips)))
             continue
         tiefe = seiten[code]["url"].count("/")
-        neu = BLOCK.sub(lambda _m: block_lektion(clips, tiefe), text, count=1)
+        neu = BLOCK.sub(lambda _m: block_lektion(clips, tiefe, code), text, count=1)
         if neu == text:
             gleich += 1
         else:
