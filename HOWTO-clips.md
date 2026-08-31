@@ -221,10 +221,22 @@ Die Übersicht über alle Clips, gruppiert nach Fach und darin nach Lerngebiet. 
 <!-- CLIPS-BIBLIOTHEK:ENDE -->
 ```
 
-und schreibt je Clip dieselbe Startkarte wie auf der Lektionsseite, dazu die Verweise
-„Im Zusammenhang" auf alle Seiten aus `lektion` (Nummer und Titel kommen aus `nav.js`)
-und das Transkript. Ein neuer Clip erscheint dort also automatisch, sobald sein Drehbuch
-gebaut ist.
+und baut daraus eine **aufklappbare Übersicht, nach Fach und Lerngebiet** — dieselbe
+Gliederung wie die Startseite. Die Gruppen kommen aus dem Block `GROUPS` in `nav.js`, nicht
+aus dem Freitextfeld `lerngebiet` im Drehbuch: Sonst ergäbe ein Tippfehler dort eine neue
+Gruppe. Lerngebiete ohne Clips werden weggelassen.
+
+Jede Gruppe ist beim Laden **zu** und nennt in der Kopfzeile Anzahl und Gesamtlaufzeit;
+darin steht je Clip eine Zeile mit **nur Titel und Laufzeit**. Kurzbeschrieb, Verweise und
+Transkript stehen bewusst nicht dort — sie gehören auf die Lektionsseite, wo der Clip im
+Zusammenhang steht. Bei hundert Clips wären hundert Transkripte auf einer Seite das Ende
+der Übersicht, und für die Suche zählen sie ohnehin schon dort.
+
+Ein Clip mit mehreren `lektion`-Codes erscheint in jeder Gruppe, zu der er gehört — man
+findet ihn dort, wo man sucht. Innerhalb einer Gruppe wird er nur einmal gezeigt, auch
+wenn zwei seiner Lektionen darin liegen.
+
+Ein neuer Clip erscheint automatisch, sobald sein Drehbuch gebaut ist.
 
 Angebunden ist die Seite an drei Stellen — die sind schon gesetzt und müssen für neue
 Clips nicht angefasst werden:

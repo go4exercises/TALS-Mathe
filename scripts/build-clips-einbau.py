@@ -61,6 +61,34 @@ def lektionsseiten():
     return {i: dict(nr=nr, titel=ti, url=u) for i, nr, ti, u in treffer}
 
 
+def lerngebiete():
+    """Die Lerngebiets-Gruppen aus dem Block GROUPS in nav.js.
+
+    Warum von dort: Das ist die Struktur, nach der Startseite und Menues
+    gebaut sind. Wuerde die Bibliothek nach dem Freitextfeld `lerngebiet`
+    im Drehbuch gruppieren, liefe sie frueher oder spaeter auseinander —
+    ein Tippfehler dort ergaebe eine neue Gruppe.
+
+    Rueckgabe: Liste von (bereich, nr, titel, [lektions-ids]), in der
+    Reihenfolge, in der sie auch auf der Startseite stehen.
+    """
+    quelle = open(os.path.join(WURZEL, "nav.js"), encoding="utf-8").read()
+    m = re.search(r"const GROUPS = \{(.*?)\n\};", quelle, re.S)
+    if not m:
+        return []
+    # Am Schluesselwort teilen statt die Klammern zu zaehlen: die inneren
+    # ids:[...] machen jeden Klammer-Regex unbrauchbar.
+    teile = re.split(r"\n\s*schwerpunkt:\s*\[", m.group(1))
+    aus = []
+    for bereich, text in zip(("grundlagen", "schwerpunkt"), teile):
+        for g in re.finditer(
+                r"\{\s*nr:'([^']*)',\s*titel:'([^']*)',\s*ids:\[([^\]]*)\]", text):
+            aus.append((bereich, g.group(1), g.group(2),
+                        re.findall(r"'([^']+)'", g.group(3))))
+    return aus
+
+
+
 def mmss(sekunden):
     return f"{int(sekunden) // 60}:{int(sekunden) % 60:02d}"
 
@@ -138,35 +166,93 @@ def block_lektion(clips, tiefe):
     return "\n".join(aus)
 
 
+def zeile(clip, vor=""):
+    """Eine Clip-Zeile in der Bibliothek: Dreieck, Titel, Laufzeit. Sonst nichts.
+
+    Die Klasse `clip-start` bleibt am Knopf, damit clipStart/clipStop aus
+    mathlib.js unveraendert greifen; `cl-clip` traegt nur das Aussehen.
+    """
+    titel = html.escape(clip["titel"])
+    return [
+        f'<div class="clip" data-clip="{vor}clips/{clip["datei"]}" data-titel="{titel}">',
+        '  <button class="clip-start cl-clip" type="button" onclick="clipStart(this)"'
+        f' aria-label="Clip abspielen: {titel}">',
+        '    <span class="cl-play" aria-hidden="true">▶</span>',
+        f'    <span class="cl-titel">{titel}</span>',
+        f'    <span class="cl-zeit">{mmss(clip.get("dauer_s", 0))}</span>',
+        '  </button>',
+        '</div>',
+    ]
+
+
 def block_bibliothek(alle, seiten):
-    """clips.html — nach Fach, darin nach Lerngebiet, in der Reihenfolge
-    der Startseite."""
+    """clips.html — nach Fach, darin nach Lerngebiet, jede Gruppe aufklappbar.
+
+    Auf ~100 Clips ausgelegt: Die Gruppen sind zu, ihre Kopfzeile nennt
+    Anzahl und Gesamtlaufzeit. So bleibt die Seite eine Uebersicht und
+    keine Liste, durch die man scrollt. Dasselbe Verfahren wie die
+    Kapitelbloecke der Startseite.
+
+    Kein Transkript und kein Kurzbeschrieb: Die stehen auf der
+    Lektionsseite, wo der Clip im Zusammenhang steht. Hier wuerden 100
+    Transkripte die Seite unbrauchbar machen — und fuer die Suche zaehlen
+    sie ohnehin schon dort.
+    """
+    gruppen = lerngebiete()
+    nach_lektion = {}
+    for c in alle:
+        for code in codes(c):
+            nach_lektion.setdefault(code, []).append(c)
+
     aus = [BIB_AUF]
-    faecher = FAECHER + sorted({c.get("fach", "") for c in alle} - set(FAECHER) - {""})
-    for fach in faecher:
-        drin = [c for c in alle if c.get("fach") == fach]
+    fach_titel = {"grundlagen": "Grundlagenfach", "schwerpunkt": "Schwerpunktfach"}
+    offen = None
+    gesamt = 0
+    for bereich, nr, titel, ids in gruppen:
+        drin, gesehen = [], set()
+        for code in ids:
+            for c in nach_lektion.get(code, []):
+                if c["datei"] not in gesehen:      # ein Clip auf zwei Lektionen
+                    gesehen.add(c["datei"])        # derselben Gruppe nur einmal
+                    drin.append(c)
         if not drin:
-            continue
-        anker = fach.lower().replace("ü", "ue")
-        aus.append(f'<h2 id="{anker}">{html.escape(fach)}</h2>')
-        for lg in sorted({c.get("lerngebiet", "") for c in drin}):
-            aus.append(f'<h3 class="clip-lg">{html.escape(lg)}</h3>')
-            aus.append('<div class="clip-grid">')
-            for c in sorted((x for x in drin if x.get("lerngebiet") == lg),
-                            key=lambda x: x["titel"]):
-                aus += karte(c, "")
-                verweise = []
-                for code in codes(c):
-                    s = seiten.get(code)
-                    if s:
-                        verweise.append(f'<a href="{s["url"]}">{s["nr"]} {html.escape(s["titel"])}</a>')
-                if verweise:
-                    aus.append('<p class="clip-lektionen">Im Zusammenhang: '
-                               + ' · '.join(verweise) + '</p>')
-                aus += transkript_block(c)
-            aus.append('</div>')
+            continue                               # leere Lerngebiete weglassen
+        if offen != bereich:
+            if offen is not None:
+                aus.append("</div>")
+            anker = fach_titel[bereich].lower().replace("ü", "ue")
+            aus.append(f'<h2 id="{anker}">{fach_titel[bereich]}</h2>')
+            # Bereichsfarbe nach STYLEGUIDE 5: Grundlagenfach blau,
+            # Schwerpunktfach violett.
+            kl = "cl-liste" + (" cl-sp" if bereich == "schwerpunkt" else "")
+            aus.append(f'<div class="{kl}">')
+            offen = bereich
+        drin.sort(key=lambda c: c["titel"])
+        dauer = sum(c.get("dauer_s", 0) for c in drin)
+        gesamt += len(drin)
+        kid = f"{bereich[0]}{nr}"
+        aus += [
+            '<div class="cl-kap">',
+            f'  <button class="cl-hdr" type="button" aria-expanded="false"'
+            f' aria-controls="cl-{kid}" onclick="togClips(\'{kid}\')">',
+            f'    <span class="cl-nr">{nr}</span>',
+            f'    <span class="cl-name">{html.escape(titel)}</span>',
+            f'    <span class="cl-anz">{len(drin)} '
+            f'{"Clip" if len(drin) == 1 else "Clips"} · {mmss(dauer)}</span>',
+            '    <span class="cl-tog" aria-hidden="true">▼</span>',
+            '  </button>',
+            f'  <div class="cl-body" id="cl-{kid}" hidden>',
+        ]
+        for c in drin:
+            aus += ["    " + z for z in zeile(c)]
+        aus += ['  </div>', '</div>']
+    if offen is not None:
+        aus.append("</div>")
+    if not gesamt:
+        aus.append('<p class="cl-leer">Noch keine Clips.</p>')
     aus.append(BIB_ZU)
     return "\n".join(aus)
+
 
 
 def main():

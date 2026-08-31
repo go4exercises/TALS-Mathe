@@ -914,6 +914,72 @@ canvas { display: block; width: 100%; }
 }
 .clip-rahmen iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
+/* ── Clip-Bibliothek (clips.html) ──────────────────────────────
+   Auf viele Clips ausgelegt: Die Lerngebiete sind zugeklappt, ihre
+   Kopfzeile nennt Anzahl und Gesamtlaufzeit. Dasselbe Prinzip wie die
+   Kapitelbloecke der Startseite — sonst wird die Seite bei hundert
+   Clips eine Liste, durch die man scrollt. Je Zeile nur Titel und
+   Laufzeit; Kurzbeschrieb und Transkript stehen auf der Lektionsseite. */
+.cl-liste {
+  margin: 10px 0 26px;
+  border: 1px solid var(--linie);
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: var(--s);
+}
+.cl-kap + .cl-kap { border-top: 1px solid var(--linie); }
+
+.cl-hdr {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 10px 14px;
+  background: var(--weiss); border: 0; cursor: pointer;
+  font: inherit; text-align: left; color: inherit;
+}
+.cl-hdr:hover { background: var(--papier-2); }
+.cl-hdr:focus-visible { outline: 2px solid var(--blau); outline-offset: -2px; }
+.cl-nr {
+  flex-shrink: 0; width: 22px; height: 22px;
+  display: grid; place-items: center; border-radius: 5px;
+  background: var(--blau-hell); color: var(--blau);
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 700;
+}
+.cl-name { font-family: var(--serif); font-size: 0.92rem; font-weight: 700; }
+.cl-anz {
+  margin-left: auto; flex-shrink: 0;
+  font-family: var(--mono); font-size: 0.6rem; color: var(--tinte-2); white-space: nowrap;
+}
+.cl-tog { flex-shrink: 0; font-size: 0.6rem; color: var(--tinte-2); }
+
+.cl-body { background: var(--papier); border-top: 1px solid var(--linie); padding: 5px 0; }
+.cl-clip {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 6px 14px 6px 22px;
+  background: none; border: 0; cursor: pointer;
+  font: inherit; text-align: left; color: inherit;
+}
+.cl-clip:hover { background: var(--blau-hell); }
+.cl-clip[hidden] { display: none; }
+.cl-clip:focus-visible { outline: 2px solid var(--blau); outline-offset: -2px; }
+.cl-play {
+  flex-shrink: 0; width: 19px; height: 19px;
+  display: grid; place-items: center; border-radius: 50%;
+  background: var(--blau); color: #fff; font-size: 0.48rem; padding-left: 2px;
+}
+.cl-titel { font-size: 0.85rem; }
+.cl-zeit {
+  margin-left: auto; flex-shrink: 0;
+  font-family: var(--mono); font-size: 0.62rem; color: var(--tinte-2);
+}
+.cl-body .clip-ansicht { padding: 6px 14px 12px 22px; }
+.cl-leer { color: var(--tinte-2); font-size: 0.85rem; }
+
+/* Schwerpunktfach violett — Bereichsfarben nach STYLEGUIDE 5.2 */
+.cl-sp .cl-nr   { background: var(--lila-hell); color: var(--lila); }
+.cl-sp .cl-play { background: var(--lila); }
+.cl-sp .cl-clip:hover { background: var(--lila-hell); }
+.cl-sp .cl-hdr:focus-visible,
+.cl-sp .cl-clip:focus-visible { outline-color: var(--lila); }
+
 /* Transkript: der einzige Text, den Suchmaschine und Volltextsuche vom
    Clip sehen. Klasse darf NICHT in SKIP_CLASSES von build-suchindex.py. */
 .clip-transkript { margin-top: 10px; }
@@ -936,19 +1002,6 @@ canvas { display: block; width: 100%; }
   line-height: 1.55;
   padding: 3px 0;
 }
-.clip-lg {
-  font-family: var(--sans);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--tinte-2);
-  margin: 18px 0 -2px;
-}
-.clip-lektionen {
-  font-size: 0.75rem;
-  color: var(--tinte-2);
-  margin: -4px 0 0 2px;
-}
-.clip-lektionen a { color: var(--blau); }
 
 .clip-transkript .tk-zeit {
   flex-shrink: 0;
