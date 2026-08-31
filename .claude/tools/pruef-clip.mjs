@@ -28,6 +28,10 @@ for (const t of marken) {
     const sichtbar = [...document.querySelectorAll('.l:not(.step)')]
       .filter(el => parseFloat(getComputedStyle(el).opacity) > 0.5)
       .filter(el => !el.closest('.step'))
+      // Der Kasten *um* die Schiene traegt keine eigene Klasse, nur .l. Er
+      // ist 470px breit und ragt damit in jede zentrierte Zeile hinein,
+      // ohne dass sich im Bild etwas beruehrt.
+      .filter(el => !el.querySelector('.step'))
       .map(el => ({ t: el.textContent.trim().slice(0, 42), r: el.getBoundingClientRect() }));
     const t = [];
     for (let i = 0; i < sichtbar.length; i++)
