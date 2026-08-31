@@ -182,7 +182,8 @@ def zeile(clip, vor=""):
     nr = (f'<span class="cl-folge">{folge}</span>' if folge
           else '<span class="cl-folge cl-ohne" aria-hidden="true">·</span>')
     return [
-        f'<div class="clip" data-clip="{vor}clips/{clip["datei"]}" data-titel="{titel}">',
+        f'<div class="clip" data-clip="{vor}clips/{clip["datei"]}" data-titel="{titel}"'
+        f' data-modus="gross">',
         '  <button class="clip-start cl-clip" type="button" onclick="clipStart(this)"'
         f' aria-label="Clip abspielen: {titel}">',
         '    ' + nr,
@@ -254,7 +255,10 @@ def block_bibliothek(alle, seiten):
             f'{"Clip" if len(drin) == 1 else "Clips"} · {mmss(dauer)}</span>',
             '    <span class="cl-tog" aria-hidden="true">▼</span>',
             '  </button>',
-            f'  <div class="cl-body" id="cl-{kid}" hidden>',
+            # Zeilenzahl fuer die spaltenweise Fuellung: die Haelfte,
+            # aufgerundet. Steht inline, weil sie je Gruppe anders ist.
+            f'  <div class="cl-body" id="cl-{kid}" hidden'
+            f' style="grid-template-rows: repeat({-(-len(drin) // 2)}, auto)">',
         ]
         for c in drin:
             aus += ["    " + z for z in zeile(c)]

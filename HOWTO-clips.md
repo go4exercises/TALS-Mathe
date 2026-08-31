@@ -154,6 +154,19 @@ mehreren Clips auf einer Seite keiner von selbst los, und die Seite lädt nicht 
 zusätzliche Dokumente mit. Der Clip startet dann von selbst — er ist frisch eingesetzt,
 sein Autostart ist genau richtig.
 
+**In der Bibliothek läuft er gross.** Dort trägt die Karte `data-modus="gross"`, und
+`clipStart` legt statt des Rahmens in der Zeile eine Bühne über das Fenster — rund 80 %
+der Fensterfläche statt einer schmalen Spalte. Escape oder ein Klick auf den dunklen Rand
+schliesst sie, der Clip hält an.
+
+Warum kein neuer Tab: Er verlässt die Liste, und ein vergessener Tab spielt weiter. Fürs
+Projizieren oder Verschicken führt im Kopf der Bühne trotzdem ein Link **eigener Tab ↗**
+auf die Clipdatei.
+
+**Auf der Lektionsseite läuft er weiterhin an Ort und Stelle** — dort gehört er zwischen
+Theorie und Aufgaben, nicht über die Seite gelegt. Gesteuert wird das allein über
+`data-modus`; ohne das Attribut bleibt es beim Rahmen in der Zeile.
+
 **Und er lässt sich wieder einklappen.** Über dem Rahmen steht „✕ Clip schliessen"
 (`clipStop`); das entfernt das `<iframe>`, der Clip hält an, gibt den Platz frei, und der
 Knopf kommt zurück. Ein zweiter Klick startet ihn von vorn.
@@ -202,6 +215,12 @@ durch `text_html`, und das ersetzt `|` **zuerst** durch einen Zeilenumbruch, bev
 umgebrochene eckige Klammer — ohne Fehlermeldung, es sieht nur falsch aus. Wer in einer
 Merkzeile einen Bruch braucht, macht daraus ein eigenes `formel`-Element.
 
+**Ein `display` in der Regel schlägt das `hidden`-Attribut.** Sobald eine Klasse
+`display: grid` oder `display: flex` setzt, hört `hidden` auf zu wirken — die Gruppen
+standen alle offen, ohne dass etwas gemeldet wurde. Es braucht dann ausdrücklich
+`.klasse[hidden] { display: none; }`. Betrifft in diesem Projekt `.cl-body` und
+`.clip-start`.
+
 **`liste` wird nicht zentriert.** Der Typ bekommt die Klassen `l sans`, aber kein `mitte`
 — der Block läuft über die volle Bühnenbreite und beginnt am linken Rand, auch im Layout
 `zentriert`. In einer sonst mittigen Szene wirkt das wie ein Versehen. Für aufgezählte
@@ -249,9 +268,12 @@ Gliederung wie die Startseite. Die Gruppen kommen aus dem Block `GROUPS` in `nav
 aus dem Freitextfeld `lerngebiet` im Drehbuch: Sonst ergäbe ein Tippfehler dort eine neue
 Gruppe. Lerngebiete ohne Clips werden weggelassen.
 
-Ab 860 px stehen die Lerngebiete **zweispurig** nebeneinander; die Clips innerhalb einer
-Gruppe bleiben einspurig — sie sind nummeriert, und eine Nummernfolge liest man nicht über
-zwei Spalten.
+Die Lerngebiete stehen über die ganze Breite untereinander. **Zweispaltig ist erst die
+Clipauswahl darin** — und zwar spaltenweise gefüllt: erst die linke Spalte von oben nach
+unten, dann die rechte. Zeilenweise gefüllt würde eine nummerierte Reihe über beide
+Spalten zickzacken (1 links, 2 rechts, 3 wieder links). Die Zeilenzahl setzt der Generator
+je Gruppe als Inline-Stil, weil sie an der Anzahl Clips hängt; unter 720 px wird sie
+zurückgenommen und alles steht untereinander.
 
 Jede Gruppe ist beim Laden **zu** und nennt in der Kopfzeile Anzahl und Gesamtlaufzeit;
 darin steht je Clip eine Zeile mit **nur Titel und Laufzeit**. Kurzbeschrieb, Verweise und
