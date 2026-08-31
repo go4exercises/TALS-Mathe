@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Gleichungssysteme: wie viele Lösungen? Drei Fälle</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · BM1</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>31.08.2026</span></div>
+<div class="l" data-at="9.77" data-out="48.76" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="10.07" data-anim="rise"><div class="num">1</div><div class="stxt">Beide nach y auflösen<br><span class="dim">Steigung sichtbar machen</span></div></div><div class="step l flow" data-at="10.07" data-anim="rise" data-dim="9.77,19.05"><div class="num">2</div><div class="stxt">Steigungen vergleichen<br><span class="dim">verschieden oder gleich</span></div></div><div class="step l flow" data-at="19.35" data-anim="rise" data-dim="19.05,48.76"><div class="num">3</div><div class="stxt">Bei gleicher Steigung: q<br><span class="dim">nebeneinander oder aufeinander</span></div></div></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="9.77" data-anim="rise" style="left:0;right:0;text-align:center;top:244px;font-size:104px;font-weight:600;color:var(--tinte)">Drei Fälle, mehr nicht</div>
+<div class="l sans mitte mitte" data-at="2.10" data-out="9.77" data-anim="rise" style="left:0;right:0;text-align:center;top:434px;font-size:48px;color:var(--blau)">Zwei Geraden können nur auf drei Arten zueinander liegen</div>
+<div class="l m row mitte" data-at="3.80" data-out="9.77" data-anim="pop" style="left:0;right:0;text-align:center;top:624px;font-size:56px"><span>\(\fa{\text{genau eine}} \qquad \fd{\text{keine}} \qquad \fc{\text{unendlich viele}}\)</span></div>
+<div class="l hand mitte" data-at="5.50" data-out="9.77" data-anim="rise" style="left:0;right:0;text-align:center;top:824px;font-size:56px;color:var(--blau)">Schneidend, parallel, identisch — dazwischen gibt es nichts.</div>
+<div class="l m row" data-at="10.17" data-out="19.05" data-anim="rise" style="left:680px;top:150px;font-size:52px"><span>\(y = \fa{2}x + 1 \qquad y = \fb{-1}x + 4\)</span></div>
+<div class="l graf" data-at="11.87" data-out="19.05" data-anim="rise" style="left:690px;top:265px"><svg width="620" height="440" viewBox="0 0 620 440"><line x1="8.0" y1="0" x2="8.0" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="128.8" y1="0" x2="128.8" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="249.6" y1="0" x2="249.6" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="370.4" y1="0" x2="370.4" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="491.2" y1="0" x2="491.2" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="612.0" y1="0" x2="612.0" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="432.0" x2="620" y2="432.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="379.0" x2="620" y2="379.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="326.0" x2="620" y2="326.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="273.0" x2="620" y2="273.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="220.0" x2="620" y2="220.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="167.0" x2="620" y2="167.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="114.0" x2="620" y2="114.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="61.0" x2="620" y2="61.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="620" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="379.0" x2="620" y2="379.0" stroke="#1c1a17" stroke-width="3"/><line x1="128.8" y1="440" x2="128.8" y2="0" stroke="#1c1a17" stroke-width="3"/><text x="594.0" y="365.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="142.8" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="8.0" y1="372.0" x2="8.0" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="8.0" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="249.6" y1="372.0" x2="249.6" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="249.6" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="370.4" y1="372.0" x2="370.4" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="370.4" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="491.2" y1="372.0" x2="491.2" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="491.2" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="612.0" y1="372.0" x2="612.0" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="612.0" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">4</text><line x1="121.8" y1="432.0" x2="135.8" y2="432.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="440.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="121.8" y1="326.0" x2="135.8" y2="326.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="334.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="121.8" y1="273.0" x2="135.8" y2="273.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="281.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="121.8" y1="220.0" x2="135.8" y2="220.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="228.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">3</text><line x1="121.8" y1="167.0" x2="135.8" y2="167.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="175.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="121.8" y1="114.0" x2="135.8" y2="114.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="122.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">5</text><line x1="121.8" y1="61.0" x2="135.8" y2="61.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="69.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><line x1="121.8" y1="8.0" x2="135.8" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">7</text><line x1="8.0" y1="432.0" x2="491.2" y2="8.0" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" /><line x1="8.0" y1="114.0" x2="612.0" y2="379.0" stroke="#b85c00" stroke-width="5" stroke-linecap="round" /><circle cx="249.6" cy="220.0" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="249.6" cy="220.0" r="5" fill="#1f6b3a"/><text x="267.6" y="204.0" font-size="29" font-weight="600" fill="#1f6b3a">(1 | 3)</text></svg></div>
+<div class="l m row" data-at="13.57" data-out="19.05" data-anim="pop" style="left:680px;top:735px;font-size:48px"><span>\(\fa{2} \neq \fb{-1} \quad \longrightarrow \quad \fc{\text{genau eine Lösung}}\)</span></div>
+<div class="l m row" data-at="19.45" data-out="31.33" data-anim="rise" style="left:680px;top:150px;font-size:52px"><span>\(y = \fa{2}x + \fb{1} \qquad y = \fa{2}x + \fb{4}\)</span></div>
+<div class="l graf" data-at="21.15" data-out="31.33" data-anim="rise" style="left:690px;top:265px"><svg width="620" height="440" viewBox="0 0 620 440"><line x1="8.0" y1="0" x2="8.0" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="128.8" y1="0" x2="128.8" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="249.6" y1="0" x2="249.6" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="370.4" y1="0" x2="370.4" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="491.2" y1="0" x2="491.2" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="612.0" y1="0" x2="612.0" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="432.0" x2="620" y2="432.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="379.0" x2="620" y2="379.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="326.0" x2="620" y2="326.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="273.0" x2="620" y2="273.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="220.0" x2="620" y2="220.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="167.0" x2="620" y2="167.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="114.0" x2="620" y2="114.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="61.0" x2="620" y2="61.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="620" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="379.0" x2="620" y2="379.0" stroke="#1c1a17" stroke-width="3"/><line x1="128.8" y1="440" x2="128.8" y2="0" stroke="#1c1a17" stroke-width="3"/><text x="594.0" y="365.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="142.8" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="8.0" y1="372.0" x2="8.0" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="8.0" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="249.6" y1="372.0" x2="249.6" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="249.6" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="370.4" y1="372.0" x2="370.4" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="370.4" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="491.2" y1="372.0" x2="491.2" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="491.2" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="612.0" y1="372.0" x2="612.0" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="612.0" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">4</text><line x1="121.8" y1="432.0" x2="135.8" y2="432.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="440.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="121.8" y1="326.0" x2="135.8" y2="326.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="334.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="121.8" y1="273.0" x2="135.8" y2="273.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="281.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="121.8" y1="220.0" x2="135.8" y2="220.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="228.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">3</text><line x1="121.8" y1="167.0" x2="135.8" y2="167.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="175.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="121.8" y1="114.0" x2="135.8" y2="114.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="122.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">5</text><line x1="121.8" y1="61.0" x2="135.8" y2="61.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="69.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><line x1="121.8" y1="8.0" x2="135.8" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">7</text><line x1="8.0" y1="432.0" x2="491.2" y2="8.0" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" /><line x1="8.0" y1="273.0" x2="310.0" y2="8.0" stroke="#b85c00" stroke-width="5" stroke-linecap="round" /></svg></div>
+<div class="l m row" data-at="22.85" data-out="31.33" data-anim="pop" style="left:680px;top:735px;font-size:48px"><span>\(2x + 1 = 2x + 4 \quad \longrightarrow \quad \fd{1 = 4} \;\text{ falsch}\)</span></div>
+<div class="l m row" data-at="31.73" data-out="48.76" data-anim="rise" style="left:680px;top:150px;font-size:48px"><span>\(y = 2x + 1 \qquad 4x - 2y = -2 \;\longrightarrow\; y = 2x + 1\)</span></div>
+<div class="l graf" data-at="33.43" data-out="48.76" data-anim="rise" style="left:690px;top:265px"><svg width="620" height="440" viewBox="0 0 620 440"><line x1="8.0" y1="0" x2="8.0" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="128.8" y1="0" x2="128.8" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="249.6" y1="0" x2="249.6" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="370.4" y1="0" x2="370.4" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="491.2" y1="0" x2="491.2" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="612.0" y1="0" x2="612.0" y2="440" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="432.0" x2="620" y2="432.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="379.0" x2="620" y2="379.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="326.0" x2="620" y2="326.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="273.0" x2="620" y2="273.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="220.0" x2="620" y2="220.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="167.0" x2="620" y2="167.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="114.0" x2="620" y2="114.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="61.0" x2="620" y2="61.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="620" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="379.0" x2="620" y2="379.0" stroke="#1c1a17" stroke-width="3"/><line x1="128.8" y1="440" x2="128.8" y2="0" stroke="#1c1a17" stroke-width="3"/><text x="594.0" y="365.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="142.8" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="8.0" y1="372.0" x2="8.0" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="8.0" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="249.6" y1="372.0" x2="249.6" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="249.6" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="370.4" y1="372.0" x2="370.4" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="370.4" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="491.2" y1="372.0" x2="491.2" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="491.2" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="612.0" y1="372.0" x2="612.0" y2="386.0" stroke="#1c1a17" stroke-width="2.5"/><text x="612.0" y="411.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">4</text><line x1="121.8" y1="432.0" x2="135.8" y2="432.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="440.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="121.8" y1="326.0" x2="135.8" y2="326.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="334.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="121.8" y1="273.0" x2="135.8" y2="273.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="281.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="121.8" y1="220.0" x2="135.8" y2="220.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="228.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">3</text><line x1="121.8" y1="167.0" x2="135.8" y2="167.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="175.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="121.8" y1="114.0" x2="135.8" y2="114.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="122.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">5</text><line x1="121.8" y1="61.0" x2="135.8" y2="61.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="69.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><line x1="121.8" y1="8.0" x2="135.8" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="115.8" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">7</text><line x1="8.0" y1="432.0" x2="491.2" y2="8.0" stroke="#1a4f8a" stroke-width="9" stroke-linecap="round" /><line x1="8.0" y1="432.0" x2="491.2" y2="8.0" stroke="#b85c00" stroke-width="5" stroke-linecap="round" stroke-dasharray="14 10"/></svg></div>
+<div class="l m row" data-at="35.13" data-out="48.76" data-anim="pop" style="left:680px;top:735px;font-size:48px"><span>\(2x + 1 = 2x + 1 \quad \longrightarrow \quad \fc{0 = 0} \;\text{ wahr}\)</span></div>
+<div class="l m mitte mitte" data-at="49.16" data-out="64.21" data-anim="pop" style="left:0;right:0;text-align:center;top:190px;font-size:76px;font-weight:600">Zuerst die Steigungen</div>
+<div class="l sans mitte" data-at="50.86" data-out="64.21" data-anim="rise" style="left:0;right:0;text-align:center;top:370px;font-size:48px"><div class="lz"><span class="ln">1</span>Steigungen verschieden \(\longrightarrow\) genau eine Lösung</div><div class="lz"><span class="ln">2</span>Steigungen gleich, \(q\) verschieden \(\longrightarrow\) keine Lösung</div><div class="lz"><span class="ln">3</span>Steigungen gleich, \(q\) gleich \(\longrightarrow\) unendlich viele</div></div>
+<div class="l hand mitte" data-at="52.56" data-out="64.21" data-anim="rise" style="left:0;right:0;text-align:center;top:670px;font-size:54px;color:var(--blau)">Der Achsenabschnitt wird nur gefragt, wenn die Steigungen gleich sind.</div>
+<div class="l m mitte mitte" data-at="64.61" data-out="80.00" data-anim="pop" style="left:0;right:0;text-align:center;top:200px;font-size:76px;font-weight:600">Was das Ergebnis verrät</div>
+<div class="l m row mitte" data-at="66.31" data-out="80.00" data-anim="rise" style="left:0;right:0;text-align:center;top:385px;font-size:48px"><span>\(\fd{1 = 4} \;\longrightarrow\; \text{keine} \qquad \fc{0 = 0} \;\longrightarrow\; \text{unendlich viele}\)</span></div>
+<div class="l m huelle mitte" data-at="68.01" data-out="80.00" data-anim="pop" style="left:0;right:0;text-align:center;top:560px;font-size:44px;font-weight:600"><span class="box row"><span>\(\text{falsche Aussage} \Rightarrow \text{parallel} \qquad \text{wahre Aussage} \Rightarrow \text{identisch}\)</span></span></div>
+<div class="l hand mitte" data-at="69.71" data-out="80.00" data-anim="rise" style="left:0;right:0;text-align:center;top:740px;font-size:52px;color:var(--blau)">Verschwinden beide Unbekannten, ist die Antwort der Wahrheitswert der Restaussage.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-3-anzahl-loesungen.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 80.0;
+const SPRECHER = [{"bei": 0.4, "text": "Ein Gleichungssystem aus zwei Geraden hat genau drei mögliche Ausgänge. Man muss es nicht ausrechnen, um zu wissen welcher — ein Blick auf die Steigungen genügt."}, {"bei": 10.17, "text": "Erster Fall: verschiedene Steigungen. Zwei und minus eins. Solche Geraden schneiden sich immer, und zwar genau einmal — das System hat genau eine Lösung."}, {"bei": 19.45, "text": "Zweiter Fall: gleiche Steigung, verschiedener Achsenabschnitt. Die Geraden sind parallel und treffen sich nie. Rechnerisch merkt man es daran, dass am Ende eine falsche Aussage steht: eins gleich vier."}, {"bei": 31.73, "text": "Dritter Fall: Die zweite Gleichung ist die erste, nur anders geschrieben. Vier x minus zwei y gleich minus zwei ist dieselbe Gerade. Jeder Punkt darauf löst beide Gleichungen — unendlich viele Lösungen. Rechnerisch bleibt null gleich null stehen: eine wahre Aussage, die nichts einschränkt."}, {"bei": 49.16, "text": "Das Vorgehen ist damit immer dasselbe: beide nach y auflösen, dann die Steigungen vergleichen. Sind sie verschieden, gibt es genau eine Lösung, ohne weitere Prüfung. Nur wenn sie gleich sind, entscheidet der Achsenabschnitt zwischen keiner und unendlich vielen."}, {"bei": 64.61, "text": "Und wenn man doch losgerechnet hat, sagt das Ergebnis selbst, welcher Fall vorliegt. Fallen beide Unbekannten weg und es bleibt eine falsche Aussage, gibt es keine Lösung. Bleibt eine wahre Aussage, sind es unendlich viele. Bleibt eine Zahl für x, ist es die eine."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton startet stumm mit — stummes Abspielen erlauben die Browser
+  // ohne Nutzergeste. Der Klick auf «Ton an» ist die Geste, die ihn
+  // hoerbar macht; ab dann fuehrt die Tonspur die Uhr, weil Tondrift
+  // auffaellt und Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = true;
+    ton.play().catch(() => {});
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

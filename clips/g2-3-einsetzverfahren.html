@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de-CH"><head><meta charset="utf-8"><title>Lagemasse: Median gegen Mittelwert</title><style>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Gleichungssysteme: Einsetzverfahren</title><style>
 @import url("../schriften.css");
 :root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -71,30 +71,27 @@ body.render #ui{display:none}
 </style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
 <div id="wrap"><div id="stage">
 <div id="rand" style="background:rgba(155,28,28,.24)"></div>
-<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Datenanalyse · BM1</span></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · BM1</span></div>
 <div id="fuss"><span>Raphael Arnold Kohler</span><span>31.08.2026</span></div>
-<div class="l" data-at="9.50" data-out="39.00" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="9.80" data-anim="rise" data-dim="9.50,19.00"><div class="num">1</div><div class="stxt">Beide gleich<br><span class="dim">ohne Ausreisser</span></div></div><div class="step l flow" data-at="19.30" data-anim="rise" data-dim="19.00,25.10"><div class="num">2</div><div class="stxt">Ein Wert ändert sich</div></div><div class="step l flow" data-at="25.40" data-anim="rise" data-dim="25.10,31.20"><div class="num">3</div><div class="stxt">Mittelwert wandert</div></div><div class="step l flow" data-at="31.50" data-anim="rise" data-dim="31.20,39.00"><div class="num">4</div><div class="stxt">Median bleibt</div></div></div>
-<div class="l hand mitte mitte" data-at="0.40" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:244px;font-size:124px;font-weight:600;color:var(--tinte)">Mitte</div>
-<div class="l sans mitte mitte" data-at="2.10" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:434px;font-size:48px;color:var(--blau)">Mittelwert und Median — und wann sie auseinandergehen</div>
-<div class="l m row mitte" data-at="3.80" data-out="9.50" data-anim="pop" style="left:0;right:0;text-align:center;top:614px;font-size:76px"><span>\(3\quad 4\quad 5\quad 6\quad 7\)</span></div>
-<div class="l hand mitte" data-at="5.50" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:834px;font-size:56px;color:var(--blau)">Fünf Werte, schon der Grösse nach geordnet.</div>
-<div class="l m row" data-at="9.90" data-out="39.00" data-anim="rise" style="left:680px;top:178px;font-size:58px"><span>\(3\quad 4\quad \fc{5}\quad 6\quad 7\)</span></div>
-<div class="l m row" data-at="11.60" data-out="19.00" data-anim="rise" style="left:680px;top:348px;font-size:54px"><span>\(\text{Mittelwert}\; = \dfrac{3 + 4 + 5 + 6 + 7}{5} = \dfrac{25}{5} = \fc{5}\)</span></div>
-<div class="l m row" data-at="13.30" data-out="19.00" data-anim="rise" style="left:680px;top:548px;font-size:54px"><span>\(\text{Median}\; =\; \text{der mittlere Wert}\; = \fc{5}\)</span></div>
-<div class="l hand" data-at="15.00" data-out="19.00" data-anim="rise" style="left:680px;top:688px;font-size:54px;color:var(--blau)">Kein Unterschied. Deshalb fällt der Unterschied selten auf.</div>
-<div class="l m row" data-at="19.40" data-out="25.10" data-anim="pop" style="left:680px;top:420px;font-size:66px"><span>\(3\quad 4\quad 5\quad 6\quad \fd{47}\)</span></div>
-<div class="l hand" data-at="21.10" data-out="25.10" data-anim="rise" style="left:680px;top:590px;font-size:54px;color:var(--rot)">Nur der letzte Wert ist ein anderer. Die übrigen vier stehen unverändert da.</div>
-<div class="l m row" data-at="25.50" data-out="31.20" data-anim="rise" style="left:680px;top:420px;font-size:58px"><span>\(\dfrac{3 + 4 + 5 + 6 + \fd{47}}{5} = \dfrac{65}{5} = \fd{13}\)</span></div>
-<div class="l hand" data-at="27.20" data-out="31.20" data-anim="rise" style="left:680px;top:620px;font-size:54px;color:var(--rot)">Dreizehn ist grösser als vier der fünf Werte. Als «Mitte» taugt das nicht.</div>
-<div class="l m row" data-at="31.60" data-out="39.00" data-anim="rise" style="left:680px;top:420px;font-size:58px"><span>\(3\quad 4\quad \fc{5}\quad 6\quad \fd{47}\)</span></div>
-<div class="l m huelle" data-at="33.30" data-out="39.00" data-anim="pop" style="left:680px;top:580px;font-size:62px;font-weight:600"><span class="box row boxg"><span>\(\text{Median}\; = \fc{5}\)</span></span></div>
-<div class="l hand" data-at="35.00" data-out="39.00" data-anim="rise" style="left:680px;top:720px;font-size:54px;color:var(--blau)">Er sieht nur, dass 47 der grösste Wert ist — nicht, wie gross.</div>
-<div class="l sans mitte mitte" data-at="39.40" data-out="48.50" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:54px;color:var(--blau)">Welches Mass wann?</div>
-<div class="l m row mitte" data-at="41.10" data-out="48.50" data-anim="rise" style="left:0;right:0;text-align:center;top:426px;font-size:54px"><span>\(\fd{\text{Ausreisser}}\; \text{vorhanden}\quad \longrightarrow \quad \text{Median}\)</span></div>
-<div class="l m row mitte" data-at="42.80" data-out="48.50" data-anim="rise" style="left:0;right:0;text-align:center;top:550px;font-size:54px"><span>\(\fc{\text{symmetrisch}}\; \text{verteilt}\quad \longrightarrow \quad \text{Mittelwert}\)</span></div>
-<div class="l hand mitte" data-at="44.50" data-out="48.50" data-anim="rise" style="left:0;right:0;text-align:center;top:730px;font-size:56px;color:var(--blau)">Löhne und Mieten: fast immer der Median.</div>
+<div class="l" data-at="12.08" data-out="41.49" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="12.38" data-anim="rise" data-dim="12.08,21.55"><div class="num">1</div><div class="stxt">Nach einer Variablen auflösen<br><span class="dim">die bequemste Gleichung nehmen</span></div></div><div class="step l flow" data-at="21.85" data-anim="rise" data-dim="21.55,34.19"><div class="num">2</div><div class="stxt">In die andere einsetzen<br><span class="dim">eine Unbekannte fällt weg</span></div></div><div class="step l flow" data-at="34.49" data-anim="rise" data-dim="34.19,41.49"><div class="num">3</div><div class="stxt">Rückwärts einsetzen<br><span class="dim">die zweite Unbekannte holen</span></div></div></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="12.08" data-anim="rise" style="left:0;right:0;text-align:center;top:248px;font-size:112px;font-weight:600;color:var(--tinte)">Einsetzen</div>
+<div class="l sans mitte mitte" data-at="2.10" data-out="12.08" data-anim="rise" style="left:0;right:0;text-align:center;top:433px;font-size:48px;color:var(--blau)">Eine Unbekannte durch einen Ausdruck ersetzen</div>
+<div class="l m row mitte" data-at="3.80" data-out="12.08" data-anim="pop" style="left:0;right:0;text-align:center;top:628px;font-size:62px"><span>\(\begin{cases} 2x + y = 7 \\ x - y = -1 \end{cases}\)</span></div>
+<div class="l hand mitte" data-at="5.50" data-out="12.08" data-anim="rise" style="left:0;right:0;text-align:center;top:863px;font-size:56px;color:var(--blau)">Ziel ist immer dasselbe: eine Gleichung mit nur noch einer Unbekannten.</div>
+<div class="l m row" data-at="12.48" data-out="41.49" data-anim="rise" style="left:680px;top:225px;font-size:58px"><span>\(x - y = -1 \quad \longrightarrow \quad \fa{x = y - 1}\)</span></div>
+<div class="l hand" data-at="14.18" data-out="21.55" data-anim="rise" style="left:680px;top:415px;font-size:54px;color:var(--blau)">Bequem ist eine Variable mit dem Faktor 1 — dann entstehen keine Brüche.</div>
+<div class="l hand" data-at="15.88" data-out="21.55" data-anim="rise" style="left:680px;top:570px;font-size:54px;color:var(--blau)">Hier ginge auch y — x ist nur die kürzere Rechnung.</div>
+<div class="l m row" data-at="21.95" data-out="34.19" data-anim="pop" style="left:680px;top:480px;font-size:62px"><span>\(2 \cdot \fa{(y-1)} + y = 7\)</span></div>
+<div class="l m row" data-at="23.65" data-out="41.49" data-anim="rise" style="left:680px;top:640px;font-size:54px"><span>\(2y - 2 + y = 7 \quad \longrightarrow \quad 3y = 9 \quad \longrightarrow \quad \fc{y = 3}\)</span></div>
+<div class="l hand" data-at="25.35" data-out="34.19" data-anim="rise" style="left:680px;top:790px;font-size:52px;color:var(--rot)">Unbedingt in die ANDERE Gleichung — in dieselbe eingesetzt käme nur 0 = 0 heraus.</div>
+<div class="l m row" data-at="34.59" data-out="41.49" data-anim="pop" style="left:680px;top:740px;font-size:58px"><span>\(\fa{x = y - 1} = \fc{3} - 1 = \fc{2}\)</span></div>
+<div class="l m huelle" data-at="36.29" data-out="41.49" data-anim="pop" style="left:680px;top:890px;font-size:54px;font-weight:600"><span class="box row boxg"><span>\(L = \{(2 \mid 3)\}\)</span></span></div>
+<div class="l m mitte mitte" data-at="41.89" data-out="54.28" data-anim="pop" style="left:0;right:0;text-align:center;top:195px;font-size:66px;font-weight:600">Probe — und wann man einsetzt</div>
+<div class="l m row mitte" data-at="43.59" data-out="54.28" data-anim="rise" style="left:0;right:0;text-align:center;top:375px;font-size:54px"><span>\(2 \cdot 2 + 3 = 7 \quad \checkmark \qquad 2 - 3 = -1 \quad \checkmark\)</span></div>
+<div class="l m huelle mitte" data-at="45.29" data-out="54.28" data-anim="pop" style="left:0;right:0;text-align:center;top:555px;font-size:48px;font-weight:600"><span class="box row"><span>\(\text{Einsetzen lohnt, wenn eine Variable den Faktor } 1 \text{ hat}\)</span></span></div>
+<div class="l hand mitte" data-at="46.99" data-out="54.28" data-anim="rise" style="left:0;right:0;text-align:center;top:730px;font-size:52px;color:var(--blau)">Sonst entstehen Brüche — dann ist Addition oder Gleichsetzen bequemer.</div>
 </div></div>
-<audio id="ton" preload="auto" src="ton/g4-3-median-mittelwert.mp3"></audio>
+<audio id="ton" preload="auto" src="ton/g2-3-einsetzverfahren.mp3"></audio>
 <div id="ui">
   <button id="pp">Pause</button>
   <button id="ts" hidden>🔇 Ton an</button>
@@ -103,8 +100,8 @@ body.render #ui{display:none}
   <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
 </div>
 <script>
-const DUR = 48.5;
-const SPRECHER = [{"bei": 0.4, "text": "Zwei Masse für die Mitte. Meistens sagen sie dasselbe."}, {"bei": 9.9, "text": "Ohne Ausreisser sagen beide dasselbe: fünf."}, {"bei": 19.4, "text": "Jetzt wird aus der Sieben eine Siebenundvierzig. Ein Tippfehler, ein Ausreisser."}, {"bei": 25.5, "text": "Der Mittelwert springt von fünf auf dreizehn — über jeden einzelnen Wert hinaus."}, {"bei": 31.6, "text": "Der Median steht immer noch bei fünf. Er zählt Plätze, nicht Grössen."}, {"bei": 39.4, "text": "Bei Ausreissern der Median, bei symmetrischen Daten der Mittelwert."}];
+const DUR = 54.28;
+const SPRECHER = [{"bei": 0.4, "text": "Alle Lösungsverfahren tun dasselbe: Sie machen aus zwei Gleichungen mit zwei Unbekannten eine Gleichung mit einer. Beim Einsetzverfahren geschieht das, indem eine Variable durch einen Ausdruck ersetzt wird."}, {"bei": 12.48, "text": "Zuerst sucht man die bequemste Stelle. In der zweiten Gleichung steht x mit dem Faktor eins — also nach x auflösen: x ist y minus eins."}, {"bei": 21.95, "text": "Jetzt kommt der namensgebende Schritt: Der Ausdruck wandert in die andere Gleichung. Zwei mal Klammer y minus eins, plus y, gleich sieben. Nur noch ein y — das lässt sich lösen: y ist drei."}, {"bei": 34.59, "text": "Zum Schluss rückwärts: y gleich drei in den Ausdruck von vorhin. x ist drei minus eins, also zwei."}, {"bei": 41.89, "text": "Probe in beide Gleichungen: zwei mal zwei plus drei ist sieben, zwei minus drei ist minus eins. Und die Regel für die Wahl des Verfahrens: Einsetzen lohnt sich, wenn irgendwo eine Variable schon allein steht oder den Faktor eins hat."}];
 const stage = document.getElementById('stage');
 const layers = [...document.querySelectorAll('.l')].map(el => ({
   el, at: parseFloat(el.dataset.at || '0'),

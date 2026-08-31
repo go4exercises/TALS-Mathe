@@ -112,6 +112,33 @@ Wort, sonst setzt LaTeX zwischen die Wörter Mathe-Abstände.
 **Einheiten gehören in `\mathrm{}`, mit `\,` davor.** `1.2\,\mathrm{m}` — ohne das `\,`
 klebt die Einheit an der Zahl, weil LaTeX ein gewöhnliches Leerzeichen ignoriert.
 
+### Koordinatenbild — `typ: "graf"`
+
+Für Clips, die eine Gerade zeigen müssen. Kein Diagrammwerkzeug, nur so viel, wie ein
+Clip braucht: Achsen mit Teilung, Geraden über Steigung und Achsenabschnitt, markierte
+Punkte. Gezeichnet wird als SVG in den Theme-Farben.
+
+```json
+{"typ": "graf", "breite": 800, "hoehe": 620, "abstand": 650,
+ "xbereich": [-1, 5], "ybereich": [-1, 8],
+ "geraden": [{"m": -2, "q": 7, "farbe": 1, "beschriftung": "y = −2x + 7",
+              "beschriftung_bei": [3.55, 1.15]},
+             {"m": 2, "q": 1, "farbe": 2, "gestrichelt": true, "dicke": 9}],
+ "punkte":  [{"x": 2, "y": 3, "farbe": 3, "beschriftung": "S(2 | 3)"}]}
+```
+
+Die Geraden werden **am Fenster** abgeschnitten, nicht an ihren Endpunkten — eine
+Gerade, die aus dem Bild läuft, hört am Rand auf statt an einer willkürlichen Stelle
+davor. `farbe` ist 1 bis 4 wie bei den Farbgruppen.
+
+**`abstand` von Hand setzen**, sonst überschreibt die nächste Zeile das Bild: Der
+senkrechte Fluss nimmt ohne Angabe `hoehe` als Abstand, und dann beginnt die nächste
+Zeile genau an der Unterkante. Faustregel: `hoehe` plus 30.
+
+In einer Szene mit Merkschiene ist das Bild **nicht** zentriert (dort ist nichts
+zentriert) — es steht bei `x`, standardmässig 680. Ein eigenes `x` richtet es an den
+Formelzeilen darüber aus.
+
 ### Farbführung
 
 `{1:x-2}` färbt einen Term ein — Text und weiche Fläche. Zweck ist ausschliesslich,

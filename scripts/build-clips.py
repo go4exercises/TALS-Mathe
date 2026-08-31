@@ -25,6 +25,7 @@ Drehbuch-Aufbau: siehe clips/vorlage.json und todo.md.
 import argparse
 import glob
 import json
+import math
 import os
 import re
 import subprocess
@@ -232,6 +233,114 @@ def text_html(s):
     return s
 
 
+# ---------------------------------------------------------------- Koordinatenbild
+def graf_svg(el, theme):
+    """Kleines Koordinatensystem mit Geraden und Punkten, als SVG.
+
+    Nur so viel, wie ein Clip braucht: Achsen mit Teilung, Geraden ueber
+    Steigung und Achsenabschnitt (oder zwei Punkte) und markierte Punkte
+    mit Beschriftung. Kein Diagrammwerkzeug — wer mehr will, zeichnet die
+    Figur wie auf den Themenseiten in mathlib.js.
+
+    Die Geraden werden am Fenster abgeschnitten, nicht an ihren Endpunkten:
+    eine Gerade, die aus dem Bild laeuft, soll am Rand aufhoeren und nicht
+    an einer willkuerlichen Stelle davor.
+    """
+    b = el.get("breite", 760)
+    h = el.get("hoehe", 560)
+    x0, x1 = el.get("xbereich", [-1, 6])
+    y0, y1 = el.get("ybereich", [-1, 8])
+    fv = theme.get("farben", ["#1F6FB2", "#C2621C", "#2C7A58", "#8A4BA0"])
+    tinte, papier = theme["tinte"], theme["papier"]
+    rand = 8
+
+    def px(x):
+        return rand + (x - x0) / (x1 - x0) * (b - 2 * rand)
+
+    def py(y):
+        return h - rand - (y - y0) / (y1 - y0) * (h - 2 * rand)
+
+    teile = ['<svg width="%d" height="%d" viewBox="0 0 %d %d">' % (b, h, b, h)]
+
+    # Karo
+    if el.get("raster", True):
+        for x in range(int(math.ceil(x0)), int(math.floor(x1)) + 1):
+            teile.append('<line x1="%.1f" y1="0" x2="%.1f" y2="%d" stroke="%s" '
+                         'stroke-opacity=".13" stroke-width="1.5"/>' % (px(x), px(x), h, tinte))
+        for y in range(int(math.ceil(y0)), int(math.floor(y1)) + 1):
+            teile.append('<line x1="0" y1="%.1f" x2="%d" y2="%.1f" stroke="%s" '
+                         'stroke-opacity=".13" stroke-width="1.5"/>' % (py(y), b, py(y), tinte))
+
+    # Achsen mit Pfeil und Beschriftung
+    teile.append('<line x1="0" y1="%.1f" x2="%d" y2="%.1f" stroke="%s" stroke-width="3"/>'
+                 % (py(0), b, py(0), tinte))
+    teile.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="0" stroke="%s" stroke-width="3"/>'
+                 % (px(0), h, px(0), tinte))
+    teile.append('<text x="%.1f" y="%.1f" font-size="26" font-style="italic" fill="%s">x</text>'
+                 % (b - 26, py(0) - 14, tinte))
+    teile.append('<text x="%.1f" y="26" font-size="26" font-style="italic" fill="%s">y</text>'
+                 % (px(0) + 14, tinte))
+    for x in range(int(math.ceil(x0)), int(math.floor(x1)) + 1):
+        if x == 0:
+            continue
+        teile.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2.5"/>'
+                     % (px(x), py(0) - 7, px(x), py(0) + 7, tinte))
+        teile.append('<text x="%.1f" y="%.1f" font-size="22" text-anchor="middle" fill="%s" '
+                     'fill-opacity=".75">%s</text>'
+                     % (px(x), py(0) + 32, tinte, str(x).replace("-", "\u2212")))
+    for y in range(int(math.ceil(y0)), int(math.floor(y1)) + 1):
+        if y == 0:
+            continue
+        teile.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2.5"/>'
+                     % (px(0) - 7, py(y), px(0) + 7, py(y), tinte))
+        teile.append('<text x="%.1f" y="%.1f" font-size="22" text-anchor="end" fill="%s" '
+                     'fill-opacity=".75">%s</text>'
+                     % (px(0) - 13, py(y) + 8, tinte, str(y).replace("-", "\u2212")))
+
+    # Geraden y = m x + q, am Fenster abgeschnitten
+    for g in el.get("geraden", []):
+        m, q = g["m"], g["q"]
+        punkte = []
+        for x in (x0, x1):
+            y = m * x + q
+            if y0 - 1e-9 <= y <= y1 + 1e-9:
+                punkte.append((x, y))
+        if abs(m) > 1e-9:
+            for y in (y0, y1):
+                x = (y - q) / m
+                if x0 - 1e-9 <= x <= x1 + 1e-9:
+                    punkte.append((x, y))
+        if len(punkte) < 2:
+            continue
+        punkte.sort()
+        (ax, ay), (bx, by) = punkte[0], punkte[-1]
+        farbe = fv[g.get("farbe", 1) - 1]
+        teile.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" '
+                     'stroke-width="%s" stroke-linecap="round" %s/>'
+                     % (px(ax), py(ay), px(bx), py(by), farbe, g.get("dicke", 5),
+                        'stroke-dasharray="14 10"' if g.get("gestrichelt") else ""))
+        if g.get("beschriftung"):
+            bx_, by_ = g.get("beschriftung_bei", [bx, by])
+            teile.append('<text x="%.1f" y="%.1f" font-size="27" fill="%s" '
+                         'text-anchor="%s">%s</text>'
+                         % (px(bx_), py(by_), farbe, g.get("anker", "start"),
+                            entschaerfen(g["beschriftung"])))
+
+    # Punkte
+    for pt in el.get("punkte", []):
+        farbe = fv[pt.get("farbe", 3) - 1]
+        teile.append('<circle cx="%.1f" cy="%.1f" r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
+                     % (px(pt["x"]), py(pt["y"]), papier, farbe))
+        teile.append('<circle cx="%.1f" cy="%.1f" r="5" fill="%s"/>'
+                     % (px(pt["x"]), py(pt["y"]), farbe))
+        if pt.get("beschriftung"):
+            teile.append('<text x="%.1f" y="%.1f" font-size="29" font-weight="600" fill="%s">%s</text>'
+                         % (px(pt["x"]) + 18, py(pt["y"]) - 16, farbe,
+                            entschaerfen(pt["beschriftung"])))
+    teile.append("</svg>")
+    return "".join(teile)
+
+
 # ---------------------------------------------------------------- Elemente
 def element_html(el, theme):
     typ = el.get("typ", "text")
@@ -283,6 +392,9 @@ def element_html(el, theme):
             zeilen.append('<div class="lz"><span class="ln">%d</span>%s</div>'
                           % (i, text_html(z)))
         inhalt = "".join(zeilen)
+    elif typ == "graf":
+        klassen += ["graf"]
+        inhalt = graf_svg(el, theme)
     elif typ == "strich":
         klassen += ["strich"]
         stil.append("width:%dpx" % el.get("breite", 760))
@@ -574,6 +686,8 @@ body.render #wrap{{bottom:0}} body.render #stage{{left:0;top:0;transform:none!im
 .f3{{color:var(--f3);background:var(--f3w)}}
 .f4{{color:var(--f4);background:var(--f4w)}}
 .dim{{opacity:.62}}
+.graf{{line-height:0}}
+.graf svg{{display:inline-block;vertical-align:top}}
 .ov{{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}}
 .row{{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}}
 .mitte.row{{justify-content:center}}
