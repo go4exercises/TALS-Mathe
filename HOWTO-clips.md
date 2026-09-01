@@ -344,6 +344,17 @@ Folgeszenen auf `oben: 348`. Beide bestehenden Clips machen es so.
 
 ---
 
+## Die Bühne ist geteilt
+
+`clipBuehne(quelle, titel)` in `mathlib.js` ist nicht nur für Lektionsseiten da — die
+Leitprogramme unter `leitprogramme/` binden dieselbe Funktion ein. Wer an ihr etwas
+ändert, ändert es dort mit.
+
+Seit dem 01.09.2026 tut sie zwei Dinge mehr, die vorher nur die Kopie im Leitprogramm
+konnte: Sie **sperrt das Scrollen**, solange sie offen ist (sonst wandert die Seite
+darunter weg, und beim Schliessen ist man woanders), und sie **gibt den Fokus zurück**
+an den Knopf, der sie geöffnet hat (sonst landet er am Seitenanfang).
+
 ## Bibliotheksseite `clips.html`
 
 **Unterteilt nach Lektion und Reihe.** Innerhalb eines Lerngebiets bekommt jede Reihe

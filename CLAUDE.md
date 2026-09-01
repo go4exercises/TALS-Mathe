@@ -39,9 +39,10 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - `leitprogramme/` — Leitprogramme zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
-  `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Die Übersicht
-  `leitprogramme.html` wird von Hand gepflegt; der Marker in der Datei sagt, was ein
-  neuer Eintrag braucht.
+  `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
+  Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
+  `leitprogramme.html` wird von Hand gepflegt. **Extern gebaute Datei hereinholen:
+  `HOWTO-leitprogramme.md` Punkt für Punkt** — das Verbindliche in STYLEGUIDE §6.5.
 - `clips/` — 50 vertonte Animationen (52:54 min). Von Hand geschrieben wird nur das
   Drehbuch `clips/<name>.json`; `.html`, `sprechertext-*.txt`, `clips.json` und die
   Blöcke auf den Lektionsseiten sind **generiert**. Formeln stehen in LaTeX.

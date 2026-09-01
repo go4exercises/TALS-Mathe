@@ -4,6 +4,48 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 31. August / 1. September 2026 · Leitprogramme
+
+Ein zweites Format neben den Clips: Ein Leitprogramm führt allein durch ein Thema —
+Vorwissenstest, Kapitel mit Beispielen und Aufgaben, eingebettete Clips, Gesamttest mit
+Punkteschlüssel.
+
+### Hinzugefügt
+
+- **`leitprogramme.html`** — Nachschlag-Seite parallel zu `clips.html`, mit Eintrag im
+  Menü (Desktop und mobil), in `build-seo.py` und im Suchindex. Der Block wird von Hand
+  gepflegt; der Marker in der Datei sagt, was ein neuer Eintrag braucht.
+- **`leitprogramme/potenzen.html`** — das erste: die Potenzregeln erst mit natürlichen,
+  dann mit ganzen, dann mit rationalen Exponenten, dazu Wurzeln ohne Wurzelgesetze. Vier
+  Kapitel, neun Suchabschnitte, mit den sechs *Potenzen*-Clips darin.
+- **`HOWTO-leitprogramme.md`** — die Übertragsliste für extern gebaute Dateien, neun
+  Punkte. Jeder steht für ein Problem aus dem ersten Übertrag.
+- **STYLEGUIDE §6.5** — was an einem Leitprogramm nicht verhandelbar ist.
+
+### Geändert
+
+- **`mathlib.js`: Die Clip-Bühne sperrt das Scrollen und gibt den Fokus zurück.** Beides
+  konnte vorher nur die Kopie im Leitprogramm; beim Zusammenlegen ist die bessere
+  Fassung nach oben gewandert und gilt jetzt auf allen 46 Themenseiten mit.
+- **Der Pre-Flight kennt `leitprogramme/` als eigenes Skelett**, wie `clips/`.
+
+### Behoben (am übertragenen Leitprogramm)
+
+- **Drei fremde Hosts** — Schriften von Google, MathJax von cdnjs. Jetzt lokal.
+- **Kein Zeichensatz, kein Dokumentrahmen.** Die Datei begann mit `<title>`; über HTTP
+  riet der Browser die Kodierung falsch, und die ganze Seite las sich als «natÃ¼rlichen».
+- **Clips kamen vom Live-Stand.** `BASIS` war absolut; eine lokale Vorschau zeigte den
+  alten Clip, ohne Netz gar keinen.
+- **Kapitel ohne Anker** — die ganze Seite war *ein* Suchtreffer, jetzt neun.
+- **Doppelte Kopie von Bühne und Palette.** 14 CSS-Regeln, drei JS-Funktionen und 25 von
+  26 Farbtokens waren Duplikate. Nach dem Löschen: 4 von 2 816 000 Pixel anders (hell),
+  0 (dunkel) — nachgemessen, nicht behauptet.
+- **Weisse Kopfleiste im Dunkelmodus.** Gelöst über ein Token statt über eine Liste von
+  Klassen: `--weiss` wird im Dunkelblock mitgesetzt, damit färben sich die 20 Stellen,
+  an denen `style.css` es für Flächen benutzt, von selbst.
+
+---
+
 ## [Unveröffentlicht] — 30./31. August 2026 · Clips: von 3 auf 50, alles in LaTeX
 
 Aus dem Versuch mit ein paar Animationen ist ein eigenes Format geworden: 50 vertonte

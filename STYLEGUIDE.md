@@ -1115,6 +1115,40 @@ Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführli
   clips/<name>.html <sekunden…>` meldet überlappende Zeilen und Überlauf. Die Bilder
   trotzdem ansehen — der Prüfer sieht Überlappung, nicht Gestaltung.
 
+## 6.5 Leitprogramme (verbindlich seit 01.09.2026)
+
+Ein Leitprogramm ist eine eigenständige Seite unter `leitprogramme/`: ein Thema zum
+selbstständigen Durcharbeiten, mit Vorwissenstest, Kapiteln und Gesamttest. Es ist
+**keine Themenseite** und folgt darum nicht dem Skelett aus §6.1. Der vollständige
+Weg — besonders für extern gebaute Dateien — steht in `HOWTO-leitprogramme.md`; hier
+nur, was nicht verhandelbar ist.
+
+- **`leitprogramme/` liegt genau eine Ebene unter der Wurzel**, wie `clips/`. Alle
+  relativen Pfade setzen das voraus.
+- **Kein fremder Host.** Schriften über `../schriften.css`, MathJax über
+  `../vendor/mathjax/tex-svg.js` — wie überall sonst (§5.3.1).
+- **Vollständiger Dokumentrahmen.** `<!DOCTYPE html>`, `<html lang="de-CH">`,
+  `<meta charset="UTF-8">`, Viewport. Ohne Zeichensatz rät der Browser falsch, und die
+  Umlaute zerfallen — sichtbar erst im Browser, in keiner Prüfung.
+- **Kopf und Fuss der Site gehören dazu.** `<div id="nav-root">` mit
+  `buildNav({ id: 'leitprogramme' })` und ein `.site-footer` nach §7. Ohne sie ist die
+  Seite eine Sackgasse.
+- **Geerbt wird, nicht kopiert.** `../style.css` **vor** dem eigenen `<style>` einbinden
+  (dann gewinnt das eigene Layout bei gleichem Gewicht), Farbtokens aus `style.css`
+  nehmen, die Clip-Bühne aus `mathlib.js`. Eine mitgelieferte Kopie der Bühne oder der
+  Palette wird gelöscht — sie stimmt heute und läuft morgen auseinander.
+- **Eigenes Layout ist erlaubt und erwünscht.** Ablaufspalte, Fortschrittszähler,
+  Testköpfe stehen im eigenen `<style>`. Das Leitprogramm wird *nicht* in `page-wrap` +
+  `main.content` gepresst.
+- **Ein Dunkelmodus ist erlaubt** (man liest ein Leitprogramm am Stück), muss dann aber
+  `--weiss` mitsetzen — `style.css` färbt seine Flächen damit — und `.site-footer`
+  eigens behandeln, weil der `--tinte` als Fläche benutzt.
+- **Kapitelüberschriften brauchen `id`.** Die Suche schneidet an `h2[id]`; ohne Anker
+  ist die ganze Seite ein einziger Treffer.
+- **Eintragen in `leitprogramme.html`, `build-seo.py` und `build-suchindex.py`.** Der
+  Block in `leitprogramme.html` wird von Hand gepflegt; ab etwa einem Dutzend lohnt sich
+  ein Generator wie bei den Clips.
+
 ## 7. Footer-Konvention
 
 | Seite | Footer-Inhalt |

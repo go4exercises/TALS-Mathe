@@ -23,6 +23,29 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
+- **2026-09-01 · Leitprogramme als zweites Format · `leitprogramme/`,
+  `leitprogramme.html`, `HOWTO-leitprogramme.md`, STYLEGUIDE §6.5 · warum:** Mathe hat
+  seit dem 1.9.2026 neben den Clips ein zweites Format: eine eigenstaendige Seite zum
+  selbstaendigen Durcharbeiten, mit Vorwissenstest, Kapiteln, eingebetteten Clips und
+  Gesamttest. Die Mechanik ist duenn — eine Uebersichtsseite, ein Ordner, drei
+  Eintraege in Generatoren — und darum billig zu uebernehmen, sobald Physik ein
+  Leitprogramm hat. **Der Wert liegt nicht im Code, sondern in
+  `HOWTO-leitprogramme.md`:** neun Punkte, die beim ersten Uebertrag noetig waren, mit
+  je der Beobachtung, woran man merkt, dass der Punkt fehlt. Drei davon fielen erst im
+  Browser auf und in keiner Pruefung — zerfallene Umlaute wegen fehlendem
+  `<meta charset>`, eine weisse Kopfleiste ueber dunkler Seite, ein Clip, der vom
+  Live-Stand kam statt aus dem Arbeitsverzeichnis. Wer in Physik dasselbe tut, spart
+  sich diese drei Runden.
+
+- **2026-09-01 · Clip-Buehne: Scrollsperre und Fokusrueckgabe · `physiklib.js`
+  (`clipBuehne`/`clipZu`) · warum:** In Mathe scrollte die Seite unter dem offenen
+  Overlay weiter — beim Schliessen war man an einer anderen Stelle als vorher —, und der
+  Fokus landete am Seitenanfang statt auf dem Knopf, der die Buehne geoeffnet hat. Zwei
+  kleine Ergaenzungen: `document.body.style.overflow = 'hidden'` beim Oeffnen und
+  zuruecksetzen beim Schliessen, dazu `document.activeElement` merken und wieder
+  fokussieren. **Nur relevant, sobald Physik Clips hat** — dort gibt es die Buehne
+  heute nicht.
+
 - **2026-08-31 · MathJax-Erweiterungen vollstaendig mitliefern · `vendor/mathjax/input/tex/extensions/`
   · warum:** In Physik liegt dort **genau eine** Datei (`boldsymbol.js`) — dieselbe Luecke,
   die in Mathe eine ganze Seite lahmgelegt hat. MathJax laedt TeX-Erweiterungen erst bei
