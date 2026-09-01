@@ -511,30 +511,6 @@ def bauen(quelle, eigenstaendig=False):
         ton_html = ('<audio id="ton" preload="auto" src="ton/%s"></audio>'
                     % tonname)
 
-    # Weitere Stimmen: ton/<name>-<stimme>.mp3. Sie sind von
-    # build-clip-ton.py --zweitstimme auf dieselbe Zeitspur und dieselbe
-    # Lautheit gebracht worden, das Umschalten aendert also nur den Klang.
-    stamm = tonname[:-4]
-    weitere = []
-    if os.path.exists(tonpfad) and not eigenstaendig:
-        for f in sorted(glob.glob(os.path.join(CLIPS, "ton", stamm + "-*.mp3"))):
-            suffix = os.path.basename(f)[len(stamm) + 1:-4]
-            name = " ".join(w[:1].upper() + w[1:] for w in suffix.split("-"))
-            # Beipackzettel: Spuren mit langsamerer Stimme sind laenger als
-            # die Szene. Der Player laesst die Animation dann gedehnt laufen.
-            dehnung = 1.0
-            bei = f[:-4] + ".json"
-            if os.path.exists(bei):
-                dehnung = json.load(open(bei, encoding="utf-8")).get("dehnung", 1.0)
-            weitere.append((name, "ton/" + os.path.basename(f), dehnung))
-        # Von der langsamsten zur schnellsten Fassung — so hoert man beim
-        # Durchklicken eine Reihe und nicht eine Namensliste.
-        weitere.sort(key=lambda x: -x[2])
-    stimmen_js = "[" + ",".join(
-        ['{n:"%s",s:"%s",d:%s}' % (n, q, round(d, 4)) for n, q, d in
-         ([(dreh.get("stimme", "Thorsten"), "ton/" + tonname, 1.0)] + weitere)]) + "]" \
-        if weitere else "[]"
-
     teile = []          # HTML-Schnipsel
     sprecher = []       # Sprechertexte mit Zeitpunkt
 
@@ -672,7 +648,7 @@ def bauen(quelle, eigenstaendig=False):
         karte_bg=theme.get("karte", "rgba(255,255,255,.66)"),
         box_bg=theme.get("box", "rgba(255,255,255,.6)"),
         vignette=theme.get("vignette", "rgba(90,70,40,.10)"),
-        karo=karo, rand=rand, ton=ton_html, stimmen=stimmen_js,
+        karo=karo, rand=rand, ton=ton_html,
         dauer=round(gesamt, 2),
         inhalt="\n".join(teile),
         sprecher=json.dumps(sprecher, ensure_ascii=False),
@@ -781,7 +757,6 @@ body.render #ui{{display:none}}
 <div id="ui">
   <button id="pp">Pause</button>
   <button id="ts" hidden>🔇 Ton an</button>
-  <button id="sw" hidden></button>
   <div id="bar"><div id="barf"></div></div>
   <span id="tt">0.0 s</span>
   <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
@@ -834,40 +809,13 @@ if (!location.search.includes('render')) {{
     ts.onclick = () => {{
       ton.muted = !ton.muted;
       ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
-      if (!ton.muted) {{ ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {{}}); }}
-    }};
-  }}
-  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
-  // Wechsel behaelt darum Zeit und Zustand einfach bei.
-  const STIMMEN = {stimmen};
-  // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
-  // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
-  // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
-  let dehnung = 1;
-  if (ton && STIMMEN.length > 1) {{
-    let stimme = 0;
-    const sw = document.getElementById('sw');
-    sw.hidden = false;
-    const beschriften = () => {{
-      const v = STIMMEN[stimme];
-      sw.textContent = '🗣 ' + v.n + (v.d > 1.005 ? ' (' + v.d.toFixed(2) + '\u00d7)' : '');
-      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + v.n);
-    }};
-    beschriften();
-    sw.onclick = () => {{
-      stimme = (stimme + 1) % STIMMEN.length;
-      const wo = t, lief = !ton.paused;
-      dehnung = STIMMEN[stimme].d || 1;
-      ton.src = STIMMEN[stimme].s;
-      ton.currentTime = wo * dehnung;
-      if (lief) ton.play().catch(() => {{}});
-      beschriften();
+      if (!ton.muted) {{ ton.currentTime = t; if (playing) ton.play().catch(() => {{}}); }}
     }};
   }}
   const tonLaeuft = () => ton && !ton.paused && !ton.ended;
   function loop(now) {{
     if (playing) {{
-      if (tonLaeuft()) t = ton.currentTime / dehnung;
+      if (tonLaeuft()) t = ton.currentTime;
       else {{ t += (now - t0) / 1000; if (t > DUR) t = DUR; }}
     }}
     t0 = now; seek(t);
@@ -875,7 +823,7 @@ if (!location.search.includes('render')) {{
     requestAnimationFrame(loop);
   }}
   requestAnimationFrame(loop);
-  const tonAn = () => {{ if (ton) {{ ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {{}}); }} }};
+  const tonAn = () => {{ if (ton) {{ ton.currentTime = t; if (playing) ton.play().catch(() => {{}}); }} }};
   const toggle = () => {{
     playing = !playing;
     pp.textContent = playing ? 'Pause' : 'Play';
