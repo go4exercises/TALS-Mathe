@@ -542,15 +542,44 @@ daneben. Der zweite rechnet den Rest heraus, danach liegt die Abweichung unter 0
 klingen verschieden laut. Angeglichen wird der RMS der Sprachanteile (alles über 0.01),
 danach greift der Kopfraum.
 
-**Der Preis steht in der Ausgabe.** Beim ersten Versuch mit `de_CH-kohler-medium` lag
-das nötige Tempo bei **0.58 bis 0.62** — die Stimme spricht von Haus aus rund die
-Hälfte langsamer als Thorsten und wird zum Anpassen um das 1.6-Fache beschleunigt. Die
-Tonhöhe bleibt dabei, das Sprechen wird schneller. Ob das noch trägt, entscheidet das
-Ohr; die Zahlen stehen in der Ausgabe von `build-clip-ton.py`, Zeile für Zeile.
+### Wenn die Stimme dafür zu schnell wird
 
-Klingt es gehetzt, gibt es zwei Auswege: den Sprechertext kürzen (dann passt er beiden
-Stimmen bequemer) oder für diese Stimme eigene Szenendauern bauen — dann ist es aber
-kein Umschalten mehr, sondern ein zweiter Clip.
+`de_CH-kohler-medium` spricht von Haus aus rund die Hälfte langsamer als Thorsten. Um
+in dessen Zeitspur zu passen, bräuchte sie Tempo 0.58 bis 0.62 — 1.6-fach beschleunigt.
+Das trägt nicht.
+
+Darum gibt es `--tempo`: Die Stimme spricht in ihrem eigenen Tempo, und **die Animation
+läuft entsprechend langsamer**, während diese Spur spielt.
+
+```sh
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler-normal --tempo 1.0
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler-mittel --tempo 0.80
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler-schnell
+```
+
+Das Skript misst dabei, um wie viel länger die Spur wird, und legt den Faktor als
+`ton/<name>-<stimme>.json` daneben. Der Generator schreibt ihn in die Stimmenliste, und
+der Player rechnet `Szenenzeit = Tonzeit ÷ Dehnung`. Die Einsätze werden mit demselben
+Faktor gedehnt platziert — deshalb stimmt es nicht nur am Anfang, sondern überall.
+
+**Nachgemessen** am Testclip (Sprachanfänge, zurückgerechnet auf die Szenenzeit):
+
+| Szene | soll | Thorsten | Normal ÷1.55 | Mittel ÷1.37 | Schnell |
+|---|---|---|---|---|---|
+| 1 | 0.40 | 0.64 | 0.53 | 0.54 | 0.56 |
+| 2 | 9.90 | 9.96 | 9.95 | 10.03 | 10.04 |
+| 3 | 17.70 | 17.76 | 17.75 | 17.74 | 17.72 |
+| 4 | 26.95 | 27.02 | 27.02 | 27.07 | 27.10 |
+| 5 | 39.97 | 39.98 | 40.09 | 40.09 | 40.08 |
+
+Alle vier Spuren liegen innerhalb von 0.15 s auf derselben Zeitspur. Der Knopf zeigt die
+Dehnung mit an: `🗣 Kohler Normal (1.55×)`.
+
+Die Spuren stehen in der Leiste von der langsamsten zur schnellsten — beim Durchklicken
+hört man eine Reihe und nicht eine Namensliste.
+
+Der dritte Weg bleibt: den Sprechertext kürzen. Dann passt er beiden Stimmen bequem, und
+es braucht gar keine Dehnung.
 
 **Das Stimmmodell gehört nicht ins Repo.** Auf der Modellkarte von
 `de_CH-kohler-medium` steht: «Nicht weitergeben: wer diese Datei hat, spricht mit dieser

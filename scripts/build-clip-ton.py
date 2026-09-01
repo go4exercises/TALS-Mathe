@@ -85,6 +85,12 @@ def main():
                          "Das Drehbuch bleibt dabei unveraendert.")
     ap.add_argument("--modell2", default=os.environ.get("PIPER_MODELL2", ""),
                     help="Stimme fuer --zweitstimme (oder Umgebung PIPER_MODELL2)")
+    ap.add_argument("--tempo", type=float, default=None, metavar="L",
+                    help="festes Sprechtempo der zweiten Stimme (Phonemlaenge; "
+                         "1.0 = wie das Modell spricht, kleiner = schneller). "
+                         "Ohne Angabe wird auf die Satzdauern der ersten Stimme "
+                         "gepasst. Ist die Spur dadurch laenger, laeuft die "
+                         "Animation beim Abspielen entsprechend langsamer.")
     a = ap.parse_args()
 
     if not a.modell or not os.path.exists(a.modell):
@@ -104,6 +110,7 @@ def main():
 
     # ---- Schritt 1: sprechen und messen ------------------------------
     stuecke = {}
+    dehnungen = []      # nur bei festem --tempo: wie viel laenger je Satz
     with tempfile.TemporaryDirectory() as tmp:
         for i, sz in enumerate(dreh["szenen"]):
             text = (sz.get("sprecher") or "").strip()
@@ -122,6 +129,16 @@ def main():
                 sprich(piper, a.modell2, text, w2)
                 probe, sr2 = sf.read(w2, dtype="float32")
                 ziel_s = len(daten) / sr
+                if a.tempo is not None:
+                    # Festes Tempo: nicht anpassen, sondern messen, wie viel
+                    # laenger es wird. Die Dehnung geht spaeter an den Player.
+                    sprich(piper, a.modell2, text, w2, tempo=a.tempo)
+                    zweit, sr2 = sf.read(w2, dtype="float32")
+                    dehnungen.append((len(zweit) / sr2) / ziel_s)
+                    print(f"  Szene {i+1}: {ziel_s:6.2f} s  →  {len(zweit)/sr2:5.2f} s"
+                          f"   (x{dehnungen[-1]:.2f})   {text[:34]}")
+                    stuecke[i] = (zweit, sr2)
+                    continue
                 tempo = ziel_s / (len(probe) / sr2)
                 # Zwei Durchgaenge: --length-scale streckt die Phoneme, nicht
                 # die feste Satzpause davor und dahinter. Der erste Schuss
@@ -167,12 +184,18 @@ def main():
 
         # ---- Schritt 3: eine Spur, Sprache an die Szenenstarts --------
         plan, gesamt = bc.szenen_planen(dreh)
-        spur = np.zeros(int(round(gesamt * rate)) + rate, dtype="float32")
+        # Bei festem Tempo dauert die Spur laenger als die Szene. Alle
+        # Einsaetze werden mit demselben Faktor gedehnt; der Player laesst
+        # die Animation dann entsprechend langsamer laufen, damit Bild und
+        # Wort beieinander bleiben.
+        dehnung = max(dehnungen) if dehnungen else 1.0
+        laenge = gesamt * dehnung
+        spur = np.zeros(int(round(laenge * rate)) + rate, dtype="float32")
         for i, p in enumerate(plan):
             if i not in stuecke:
                 continue
             daten, _ = stuecke[i]
-            ab = int(round((p["start"] + vorlauf) * rate))
+            ab = int(round((p["start"] + vorlauf) * dehnung * rate))
             spur[ab:ab + len(daten)] += daten
 
         # Lautheit: Zwei Stimmen mit gleicher Spitze klingen nicht gleich
@@ -202,11 +225,17 @@ def main():
         os.makedirs(TON, exist_ok=True)
         ziel = os.path.join(TON, dreh["dateiname"]
                             + (("-" + a.zweitstimme) if a.zweitstimme else "") + ".mp3")
-        sf.write(ziel, spur[:int(round(gesamt * rate))], rate,
+        sf.write(ziel, spur[:int(round(laenge * rate))], rate,
                  format="MP3", compression_level=a.qualitaet)
+        if a.zweitstimme:
+            # Beipackzettel fuer den Generator: um wie viel diese Spur
+            # gedehnt ist. 1.0 heisst «passt auf die Zeitspur der ersten».
+            json.dump({"dehnung": round(dehnung, 4), "tempo": a.tempo},
+                      open(ziel[:-4] + ".json", "w", encoding="utf-8"), indent=1)
 
     kb = os.path.getsize(ziel) / 1024
-    print(f"\n  {os.path.relpath(ziel, WURZEL)}  —  {gesamt:.1f} s, {kb:.0f} kB")
+    print(f"\n  {os.path.relpath(ziel, WURZEL)}  —  {laenge:.1f} s, {kb:.0f} kB"
+          + (f", gedehnt x{dehnung:.2f}" if dehnung > 1.005 else ""))
     if a.zweitstimme:
         print(f"  Zweite Spur — Drehbuch unveraendert. Jetzt: "
               f"python3 scripts/build-clips.py {dreh['dateiname']}")
