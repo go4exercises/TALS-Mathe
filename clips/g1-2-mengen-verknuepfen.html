@@ -96,6 +96,7 @@ body.render #ui{display:none}
 <div id="ui">
   <button id="pp">Pause</button>
   <button id="ts" hidden>🔇 Ton an</button>
+  <button id="sw" hidden></button>
   <div id="bar"><div id="barf"></div></div>
   <span id="tt">0.0 s</span>
   <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
@@ -136,25 +137,61 @@ if (!location.search.includes('render')) {
   window.addEventListener('resize', fit);
   document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
   fit();
-  // Der Ton startet stumm mit — stummes Abspielen erlauben die Browser
-  // ohne Nutzergeste. Der Klick auf «Ton an» ist die Geste, die ihn
-  // hoerbar macht; ab dann fuehrt die Tonspur die Uhr, weil Tondrift
-  // auffaellt und Bilddrift nicht.
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
   const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
   if (ton) {
     ts.hidden = false;
-    ton.muted = true;
-    ton.play().catch(() => {});
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
     ts.onclick = () => {
       ton.muted = !ton.muted;
-      ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
-      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
+  // Wechsel behaelt darum Zeit und Zustand einfach bei.
+  const STIMMEN = [];
+  // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
+  // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
+  // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
+  if (ton && STIMMEN.length > 1) {
+    let stimme = 0;
+    const sw = document.getElementById('sw');
+    sw.hidden = false;
+    const beschriften = () => {
+      const v = STIMMEN[stimme];
+      sw.textContent = '🗣 ' + v.n + (v.d > 1.005 ? ' (' + v.d.toFixed(2) + '\u00d7)' : '');
+      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + v.n);
+    };
+    beschriften();
+    sw.onclick = () => {
+      stimme = (stimme + 1) % STIMMEN.length;
+      const wo = t, lief = !ton.paused;
+      dehnung = STIMMEN[stimme].d || 1;
+      ton.src = STIMMEN[stimme].s;
+      ton.currentTime = wo * dehnung;
+      if (lief) ton.play().catch(() => {});
+      beschriften();
     };
   }
   const tonLaeuft = () => ton && !ton.paused && !ton.ended;
   function loop(now) {
     if (playing) {
-      if (tonLaeuft()) t = ton.currentTime;
+      if (tonLaeuft()) t = ton.currentTime / dehnung;
       else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
     }
     t0 = now; seek(t);
@@ -162,7 +199,7 @@ if (!location.search.includes('render')) {
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
-  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const tonAn = () => { if (ton) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); } };
   const toggle = () => {
     playing = !playing;
     pp.textContent = playing ? 'Pause' : 'Play';

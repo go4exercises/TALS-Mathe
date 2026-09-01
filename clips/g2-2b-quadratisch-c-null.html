@@ -92,7 +92,7 @@ body.render #ui{display:none}
 <div class="l m huelle mitte" data-at="41.67" data-out="48.49" data-anim="pop" style="left:0;right:0;text-align:center;top:400px;font-size:44px;font-weight:600"><span class="box row boxg"><span>\(ax^2 + bx = 0 \;\longrightarrow\; x(ax + b) = 0 \;\longrightarrow\; x = 0 \;\text{ oder }\; x = -\dfrac{b}{a}\)</span></span></div>
 <div class="l hand mitte" data-at="43.37" data-out="48.49" data-anim="rise" style="left:0;right:0;text-align:center;top:650px;font-size:52px;color:var(--blau)">Setzt man 0 ein, wird jedes Glied null — darum liegt sie immer in der Lösungsmenge.</div>
 </div></div>
-<audio id="ton" preload="auto" src="ton/g2-2b-quadratisch-c-null.mp3"></audio>
+<audio id="ton" preload="auto" src="ton/g2-2b-quadratisch-c-null-kohler.mp3"></audio>
 <div id="ui">
   <button id="pp">Pause</button>
   <button id="ts" hidden>🔇 Ton an</button>
@@ -137,28 +137,37 @@ if (!location.search.includes('render')) {
   window.addEventListener('resize', fit);
   document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
   fit();
-  // Der Ton startet stumm mit — stummes Abspielen erlauben die Browser
-  // ohne Nutzergeste. Der Klick auf «Ton an» ist die Geste, die ihn
-  // hoerbar macht; ab dann fuehrt die Tonspur die Uhr, weil Tondrift
-  // auffaellt und Bilddrift nicht.
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
   const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
   if (ton) {
     ts.hidden = false;
-    ton.muted = true;
-    ton.play().catch(() => {});
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
     ts.onclick = () => {
       ton.muted = !ton.muted;
-      ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
+      tonBeschriften();
       if (!ton.muted) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); }
     };
   }
   // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
   // Wechsel behaelt darum Zeit und Zustand einfach bei.
-  const STIMMEN = [{n:"Thorsten",s:"ton/g2-2b-quadratisch-c-null.mp3",d:1.0},{n:"Kohler",s:"ton/g2-2b-quadratisch-c-null-kohler.mp3",d:1.2372}];
+  const STIMMEN = [{n:"Kohler",s:"ton/g2-2b-quadratisch-c-null-kohler.mp3",d:1.2372},{n:"Thorsten",s:"ton/g2-2b-quadratisch-c-null.mp3",d:1.0}];
   // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
   // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
   // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
-  let dehnung = 1;
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
   if (ton && STIMMEN.length > 1) {
     let stimme = 0;
     const sw = document.getElementById('sw');

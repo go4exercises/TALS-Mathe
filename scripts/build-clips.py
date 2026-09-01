@@ -53,6 +53,11 @@ STD = {
 # 28 umgestellten Drehbücher brauchen sie nicht mehr.
 LATEX = True
 
+# Welche Zweitstimme beim Oeffnen eines Clips laufen soll, sofern es eine
+# Spur mit diesem Namenszusatz gibt (ton/<clip>-<name>.mp3). Leerer String
+# heisst: die erste Spur.
+STANDARDSTIMME = "kohler"
+
 
 def tex(text):
     """Rohes LaTeX fuer MathJax verpacken — nur HTML-Zeichen entschaerfen."""
@@ -530,10 +535,18 @@ def bauen(quelle, eigenstaendig=False):
         # Von der langsamsten zur schnellsten Fassung — so hoert man beim
         # Durchklicken eine Reihe und nicht eine Namensliste.
         weitere.sort(key=lambda x: -x[2])
+    liste = [(dreh.get("stimme", "Thorsten"), "ton/" + tonname, 1.0)] + weitere
+    # Welche Stimme beim Oeffnen laeuft. Steht STANDARDSTIMME in der Liste,
+    # kommt sie nach vorn; sonst bleibt die erste Spur die erste.
+    for k, eintrag in enumerate(liste):
+        if os.path.basename(eintrag[1])[:-4].endswith("-" + STANDARDSTIMME):
+            liste.insert(0, liste.pop(k))
+            break
     stimmen_js = "[" + ",".join(
-        ['{n:"%s",s:"%s",d:%s}' % (n, q, round(d, 4)) for n, q, d in
-         ([(dreh.get("stimme", "Thorsten"), "ton/" + tonname, 1.0)] + weitere)]) + "]" \
+        ['{n:"%s",s:"%s",d:%s}' % (n, q, round(d, 4)) for n, q, d in liste]) + "]" \
         if weitere else "[]"
+    if weitere:
+        ton_html = ton_html.replace('src="ton/%s"' % tonname, 'src="%s"' % liste[0][1])
 
     teile = []          # HTML-Schnipsel
     sprecher = []       # Sprechertexte mit Zeitpunkt
@@ -822,18 +835,27 @@ if (!location.search.includes('render')) {{
   window.addEventListener('resize', fit);
   document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
   fit();
-  // Der Ton startet stumm mit — stummes Abspielen erlauben die Browser
-  // ohne Nutzergeste. Der Klick auf «Ton an» ist die Geste, die ihn
-  // hoerbar macht; ab dann fuehrt die Tonspur die Uhr, weil Tondrift
-  // auffaellt und Bilddrift nicht.
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
   const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {{
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  }};
   if (ton) {{
     ts.hidden = false;
-    ton.muted = true;
-    ton.play().catch(() => {{}});
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {{
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {{}});
+    }});
+    tonBeschriften();
     ts.onclick = () => {{
       ton.muted = !ton.muted;
-      ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
+      tonBeschriften();
       if (!ton.muted) {{ ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {{}}); }}
     }};
   }}
@@ -843,7 +865,7 @@ if (!location.search.includes('render')) {{
   // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
   // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
   // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
-  let dehnung = 1;
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
   if (ton && STIMMEN.length > 1) {{
     let stimme = 0;
     const sw = document.getElementById('sw');

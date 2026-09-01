@@ -491,8 +491,11 @@ Die Reihenfolge ist zwingend: Das erste Skript ändert nur das Drehbuch und legt
 - **Eine Spur je Clip**, nicht eine je Szene. Die Sprache sitzt an `Szenenstart + 0.4 s`,
   dazwischen ist Stille. Mit einer einzigen Spur gibt es nichts zu verketten und kein
   Stolpern an den Szenengrenzen. Rund die Hälfte der Spur ist Stille, das kostet fast nichts.
-- **Der Ton startet stumm** und läuft mit. Stummes Abspielen erlauben die Browser ohne
-  Nutzergeste; der Klick auf „🔇 Ton an" ist die Geste, die ihn hörbar macht.
+- **Der Ton versucht hörbar zu starten.** Der Clip wird durch einen Klick geöffnet,
+  darum lässt der Browser das meist zu; das `<iframe>` bekommt dafür `allow="autoplay"`.
+  Wehrt der Browser sich, fällt es lautlos auf stumm zurück und der Knopf „🔇 Ton an"
+  macht daraus die nötige Geste. Nie stumm *und* ohne Knopf — sonst wäre der Ton
+  unerreichbar.
 - **Sobald der Ton läuft, führt er die Uhr** (`t = ton.currentTime`). Tondrift fällt auf,
   Bilddrift nicht. Läuft kein Ton, zählt wie bisher `requestAnimationFrame`.
 - Pause, Spulen, Neustart nehmen den Ton mit. Gemessene Abweichung Ton/Bild: 0.01–0.06 s.
@@ -541,6 +544,16 @@ daneben. Der zweite rechnet den Rest heraus, danach liegt die Abweichung unter 0
 **Lautheit heisst Effektivwert, nicht Spitze.** Zwei Stimmen, beide auf 0.95 begrenzt,
 klingen verschieden laut. Angeglichen wird der RMS der Sprachanteile (alles über 0.01),
 danach greift der Kopfraum.
+
+### Welche Stimme beim Öffnen läuft
+
+`STANDARDSTIMME` in `scripts/build-clips.py` nennt den Namenszusatz, der beim Öffnen
+laufen soll — aktuell `"kohler"`. Gibt es zu einem Clip die Spur
+`ton/<clip>-kohler.mp3`, startet der Clip mit ihr; sonst mit der ersten. Ein leerer
+String heisst: immer die erste. Eine Zeile, keine Änderung an den Drehbüchern.
+
+Die Dehnung der Standardstimme gilt dabei von Anfang an — sonst liefe die Animation die
+ersten Sekunden im falschen Tempo.
 
 ### Die eingestellte Zweitstimme
 
