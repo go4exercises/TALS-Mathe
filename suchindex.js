@@ -3,7 +3,7 @@
 //  Neu bauen:  python3 scripts/build-suchindex.py
 // ─────────────────────────────────────────────────────────────
 window.SUCHINDEX = {
-  fp: "731e1311ad18beab",
+  fp: "c0b57f44162fe098",
   seiten: [
     {u:"grundlagen/g1-1-grundlagen.html", nr:"1.1", t:"Grundlagen"},
     {u:"grundlagen/g1-2-zahlen-grundoperationen.html", nr:"1.2", t:"Zahlen und zugehörige Grundoperationen"},
@@ -522,7 +522,6 @@ window.SUCHINDEX = {
     {p:47, a:"lg5", t:"Trigonometrie", x:"Trigonometrie Rechtwinkliges schiefwinkliges Dreieck · Einheitskreis Definitionen (GAGA) sin alpha = GK Hyp , cos alpha = AK Hyp , tan alpha = GK AK → 5.3 Sinussatz a sin alpha = b sin beta = c sin gamma → 5.3 Cosinussatz c 2=a 2+b 2-2ab cos gamma → 5.3 Trigonometrischer Pythagoras sin 2 alpha + cos 2 alpha =1 → 5.4 Tangens-Beziehung tan alpha = sin alpha cos alpha → 5.4 Spezialwinkel sin 30 °= 12 , sin 45 °= sqrt 2 2 , sin 60 °= sqrt 3 2 → 5.4 Grad ↔ Bogenmass 180 ° = pi → 5.1 Trig. Grundgleichung sin x=c⇒ x 1, x 2=180 °-x 1 (+ k· 360 °) → 5.5 Diese Sammlung bündelt die Formeln dieses Lehrmittels. Begriffe werden im Glossar erklärt. Für das physikalische Pendant siehe die Formelsammlung von Physik begreifbar ."},
     {p:48, a:"", t:"Clips", x:"Clips Kurze Animationen, die einen einzelnen Gedankengang Zeile für Zeile aufbauen. Ein Clip dauert etwa eine Minute und läuft erst, wenn du ihn startest. Geordnet wie die Startseite — nach Fach und Lerngebiet; ein Klick auf ein Lerngebiet öffnet seine Clips."},
     {p:48, a:"grundlagenfach", t:"Grundlagenfach", x:"Grundlagenfach 1.2 Mengen 1.2 Prozent 1.2 Zahlenbrüche 1.2 Zahlformen 1.4 Potenzen 1.4 Runden 1.4 Zehnerpotenzen 1.4 Einheiten 1.3 Binome 1.3 Bruchterme 1.3 Faktorisieren 1.3 Klammern 2.2a Lineare Gleichungen 2.2a Ungleichungen 2.2a Parametergleichung 2.2b Quadratische Gleichungen 2.2b Quadratische Ungleichungen 2.2b Quadratische Parametergleichungen 2.2b Quadratische Gleichungssysteme 2.2b Bruchgleichungen 2.3 Gleichungssysteme 3.2 Lineare Funktionen 4.3 Lagemasse 5.3 Trigonometrie"},
-    {p:48, a:"schwerpunktfach", t:"Schwerpunktfach", x:"Schwerpunktfach 2.2a Bruchgleichungen Jeder Clip steht auch auf der Themenseite, zu der er gehört — dort im Zusammenhang mit Theorie und Aufgaben, und dort findest du auch den gesprochenen Text zum Mitlesen. Die Formeln gesammelt sind in der Formelsammlung , die Begriffe im Glossar ."},
     {p:49, a:"", t:"Leitprogramme", x:"Leitprogramme Ein Leitprogramm führt dich allein durch ein Thema: Vorwissenstest am Anfang, dann Kapitel für Kapitel mit Beispielen und Aufgaben, am Schluss ein Gesamttest mit Punkteschlüssel. Du bestimmst das Tempo — jedes Kapitel sagt dir, was du danach können sollst."},
     {p:50, a:"", t:"Potenzen", x:"Potenzen Vom natürlichen über den ganzzahligen zum rationalen Exponenten — in fünf Kapiteln, mit Clips und Selbsttests. Angelegt für zwei Lektionen. Grundlagenfach 1.4 → Schwerpunktfach 1.2"},
     {p:50, a:"ablauf", t:"Ablauf", x:"Ablauf Lektion 1 0 Vorwissen 1 Exponent aus ℕ 2 Exponent aus ℤ Lektion 2 3 Exponent aus ℚ 4 Wurzeln ohne Wurzelgesetze ✓ Gesamttest 0 von 5 Selbsttests erledigt"},
