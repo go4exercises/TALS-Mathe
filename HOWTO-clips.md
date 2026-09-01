@@ -515,6 +515,101 @@ Encoder — Piper steuert einzelne Sätze bis an die Grenze aus.
 Opus wäre kleiner, scheidet aber vorerst aus: libsndfile schreibt Opus nur bei 8/12/16/24/48 kHz,
 Piper liefert 22.05 kHz. Ohne Resampling bleibt MP3 — das dafür überall abspielbar ist.
 
+### Zweite Stimme
+
+Ein Clip kann mehrere Tonspuren tragen; in der Bedienleiste erscheint dann ein Knopf
+`🗣 <Name>`, der umschaltet. Die Spuren liegen als `ton/<name>-<stimme>.mp3` neben der
+ersten, und der Generator findet sie von selbst — im Drehbuch ist nichts einzutragen.
+
+```sh
+export PIPER_MODELL=/pfad/de_DE-thorsten-high.onnx      # die erste, als Referenz
+export PIPER_MODELL2=/pfad/eigene-stimme.onnx
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler
+python3 scripts/build-clips.py    <clip>
+```
+
+**Die zweite Spur richtet sich nach der ersten, nicht umgekehrt.** Das Drehbuch und die
+Animation stehen schon; also wird jeder Satz auf die Länge gebracht, die der Satz der
+ersten Stimme hat, und die Lautheit auf deren Effektivwert gezogen. `--zweitstimme`
+fasst das Drehbuch darum **nicht** an. Das Umschalten ändert nur den Klang — Zeit und
+Zustand laufen weiter.
+
+**Zwei Durchgänge je Satz, nicht einer.** `--length-scale` streckt die Phoneme, nicht die
+feste Satzpause davor und dahinter; der erste Schuss liegt um fünf bis zehn Prozent
+daneben. Der zweite rechnet den Rest heraus, danach liegt die Abweichung unter 0.2 s.
+
+**Lautheit heisst Effektivwert, nicht Spitze.** Zwei Stimmen, beide auf 0.95 begrenzt,
+klingen verschieden laut. Angeglichen wird der RMS der Sprachanteile (alles über 0.01),
+danach greift der Kopfraum.
+
+### Die eingestellte Zweitstimme
+
+Für `de_CH-kohler-medium` sind die Werte in drei Hörtests festgelegt worden
+(31.08./01.09.2026, `stimmtest.py`, `stimmklang.py`, `stimmtempo.py` im Home):
+
+```sh
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler \
+        --noise-scale 0.30 --noise-w 0.25 --tempo 0.80 --klang
+```
+
+| Regler | Wert | warum |
+|---|---|---|
+| `--noise-w` | 0.25 | Streuung der Phonemlängen — **der Regler gegen das Zittern** |
+| `--noise-scale` | 0.30 | Streuung im Klang; zusammen mit dem obigen die Fassung «E» aus dem ersten Hörtest |
+| `--klang` | an | gleicht das mittlere Spektrum an die erste Stimme an: **+6 dB** unter 300 Hz, **−6 dB** um 3 kHz, **−9 dB** bei 6–8 kHz. Die Stimme hatte zu wenig Körper und zu viel Zischeln |
+| `--tempo` | 0.80 | das Sprechtempo, das im dritten Hörtest getragen hat. Voll angeglichen (0.62) klang es gehetzt |
+
+**`--klang` misst, statt zu raten.** Die Kurve entsteht aus den mittleren Spektren
+beider Stimmen über *alle* Sätze des Clips, in Terzen geglättet, auf ±9 dB begrenzt,
+unter 80 Hz unangetastet. Sie steht nirgends als Zahlenreihe — sie wird bei jedem Bau
+neu gerechnet und passt sich damit auch einer neu trainierten Stimme an.
+
+### Wenn die Stimme dafür zu schnell wird
+
+`de_CH-kohler-medium` spricht von Haus aus rund die Hälfte langsamer als Thorsten. Um
+in dessen Zeitspur zu passen, bräuchte sie Tempo 0.58 bis 0.62 — 1.6-fach beschleunigt.
+Das trägt nicht.
+
+Darum gibt es `--tempo`: Die Stimme spricht in ihrem eigenen Tempo, und **die Animation
+läuft entsprechend langsamer**, während diese Spur spielt.
+
+```sh
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler-normal --tempo 1.0
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler-mittel --tempo 0.80
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler-schnell
+```
+
+Das Skript misst dabei, um wie viel länger die Spur wird, und legt den Faktor als
+`ton/<name>-<stimme>.json` daneben. **Gemessen wird an den Szenendauern, nicht an den
+Sätzen der ersten Stimme:** Ein Satz hat das k-Fache seiner Szene Zeit, nicht das
+k-Fache des Referenzsatzes. Am Satzverhältnis gemessen fiele der Faktor unnötig gross
+aus, weil die Referenzstimme von Lauf zu Lauf schwankt — im Testclip 1.40 statt 1.24. Der Generator schreibt ihn in die Stimmenliste, und
+der Player rechnet `Szenenzeit = Tonzeit ÷ Dehnung`. Die Einsätze werden mit demselben
+Faktor gedehnt platziert — deshalb stimmt es nicht nur am Anfang, sondern überall.
+
+**Nachgemessen** am Testclip (Sprachanfänge, zurückgerechnet auf die Szenenzeit):
+
+| Szene | soll | Thorsten | Normal ÷1.55 | Mittel ÷1.37 | Schnell |
+|---|---|---|---|---|---|
+| 1 | 0.40 | 0.64 | 0.53 | 0.54 | 0.56 |
+| 2 | 9.90 | 9.96 | 9.95 | 10.03 | 10.04 |
+| 3 | 17.70 | 17.76 | 17.75 | 17.74 | 17.72 |
+| 4 | 26.95 | 27.02 | 27.02 | 27.07 | 27.10 |
+| 5 | 39.97 | 39.98 | 40.09 | 40.09 | 40.08 |
+
+Alle vier Spuren liegen innerhalb von 0.15 s auf derselben Zeitspur. Der Knopf zeigt die
+Dehnung mit an: `🗣 Kohler Normal (1.55×)`.
+
+Die Spuren stehen in der Leiste von der langsamsten zur schnellsten — beim Durchklicken
+hört man eine Reihe und nicht eine Namensliste.
+
+Der dritte Weg bleibt: den Sprechertext kürzen. Dann passt er beiden Stimmen bequem, und
+es braucht gar keine Dehnung.
+
+**Das Stimmmodell gehört nicht ins Repo.** Auf der Modellkarte von
+`de_CH-kohler-medium` steht: «Nicht weitergeben: wer diese Datei hat, spricht mit dieser
+Stimme.» Versioniert wird nur die fertige MP3.
+
 ### Lizenzlage (geprüft am 30.08.2026)
 
 | | |
