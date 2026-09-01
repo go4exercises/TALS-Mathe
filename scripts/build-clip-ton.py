@@ -52,14 +52,18 @@ def lade_generator():
     return m
 
 
-def sprich(piper, modell, text, ziel):
+def sprich(piper, modell, text, ziel, tempo=None):
+    """tempo = Phonemlaenge. Kleiner heisst schneller gesprochen; ohne
+    Angabe gilt die Voreinstellung des Modells."""
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False,
                                      encoding="utf-8") as f:
         f.write(text)
         quelle = f.name
+    befehl = piper + ["-m", modell, "-i", quelle, "-f", ziel]
+    if tempo is not None:
+        befehl += ["--length-scale", "%.4f" % tempo]
     try:
-        r = subprocess.run(piper + ["-m", modell, "-i", quelle, "-f", ziel],
-                           capture_output=True, text=True)
+        r = subprocess.run(befehl, capture_output=True, text=True)
         if r.returncode != 0:
             sys.exit(f"piper ist gescheitert:\n{r.stderr[-800:]}")
     finally:
@@ -75,6 +79,12 @@ def main():
                     help="Aufruf von piper (oder Umgebung PIPER_CMD)")
     ap.add_argument("--qualitaet", type=float, default=0.5,
                     help="MP3-Kompression 0.0 (gross) bis 1.0 (klein)")
+    ap.add_argument("--zweitstimme", metavar="NAME",
+                    help="zweite Spur <dateiname>-NAME.mp3 bauen, angepasst an "
+                         "die erste: gleiche Satzdauern, gleiche Lautheit. "
+                         "Das Drehbuch bleibt dabei unveraendert.")
+    ap.add_argument("--modell2", default=os.environ.get("PIPER_MODELL2", ""),
+                    help="Stimme fuer --zweitstimme (oder Umgebung PIPER_MODELL2)")
     a = ap.parse_args()
 
     if not a.modell or not os.path.exists(a.modell):
@@ -102,6 +112,34 @@ def main():
             w = os.path.join(tmp, f"{i}.wav")
             sprich(piper, a.modell, text, w)
             daten, sr = sf.read(w, dtype="float32")
+
+            if a.zweitstimme:
+                # Die zweite Stimme muss in dieselbe Zeitspur passen: Das
+                # Drehbuch und die Animation stehen schon. Also erst mit
+                # Normaltempo messen, dann mit dem Faktor neu sprechen, der
+                # den Satz genau so lang macht wie den der ersten Stimme.
+                w2 = os.path.join(tmp, f"{i}-2.wav")
+                sprich(piper, a.modell2, text, w2)
+                probe, sr2 = sf.read(w2, dtype="float32")
+                ziel_s = len(daten) / sr
+                tempo = ziel_s / (len(probe) / sr2)
+                # Zwei Durchgaenge: --length-scale streckt die Phoneme, nicht
+                # die feste Satzpause davor und dahinter. Der erste Schuss
+                # liegt darum um fuenf bis zehn Prozent daneben; der zweite
+                # rechnet den Rest heraus.
+                for _ in range(2):
+                    sprich(piper, a.modell2, text, w2, tempo=tempo)
+                    zweit, sr2 = sf.read(w2, dtype="float32")
+                    ist = len(zweit) / sr2
+                    if abs(ist - ziel_s) < 0.05:
+                        break
+                    tempo *= ziel_s / ist
+                print(f"  Szene {i+1}: {ziel_s:6.2f} s   Tempo {tempo:.3f}"
+                      f"  →  {len(zweit)/sr2:5.2f} s  ({len(zweit)/sr2-ziel_s:+.2f})"
+                      f"   {text[:32]}")
+                stuecke[i] = (zweit, sr2)
+                continue
+
             stuecke[i] = (daten, sr)
             print(f"  Szene {i+1}: {len(daten)/sr:6.2f} s   {text[:52]}")
 
@@ -114,6 +152,8 @@ def main():
         takt = dreh.get("takt", bc.STD["takt"])
         nachlauf = dreh.get("nachlauf", bc.STD["nachlauf"])
         for i, sz in enumerate(dreh["szenen"]):
+            if a.zweitstimme:
+                break            # die Zeitspur gehoert der ersten Stimme
             letzte = max([el.get("ein", vorlauf + k * takt)
                           for k, el in enumerate(sz.get("elemente", []))] or [0.0])
             noetig = letzte + nachlauf
@@ -121,8 +161,9 @@ def main():
                 daten, sr = stuecke[i]
                 noetig = max(noetig, vorlauf + len(daten) / sr + 0.8)
             sz["dauer"] = round(max(noetig, 3.0), 2)
-        json.dump(dreh, open(pfad, "w", encoding="utf-8"),
-                  ensure_ascii=False, indent=1)
+        if not a.zweitstimme:
+            json.dump(dreh, open(pfad, "w", encoding="utf-8"),
+                      ensure_ascii=False, indent=1)
 
         # ---- Schritt 3: eine Spur, Sprache an die Szenenstarts --------
         plan, gesamt = bc.szenen_planen(dreh)
@@ -134,6 +175,24 @@ def main():
             ab = int(round((p["start"] + vorlauf) * rate))
             spur[ab:ab + len(daten)] += daten
 
+        # Lautheit: Zwei Stimmen mit gleicher Spitze klingen nicht gleich
+        # laut — dafuer zaehlt der Effektivwert. Die zweite Spur wird auf
+        # den der ersten gezogen, damit das Umschalten nicht auffaellt.
+        if a.zweitstimme:
+            erste = os.path.join(TON, dreh["dateiname"] + ".mp3")
+            if os.path.exists(erste):
+                ref, _ = sf.read(erste, dtype="float32", always_2d=False)
+                if ref.ndim > 1:
+                    ref = ref.mean(axis=1)
+                laut = lambda y: float(np.sqrt(np.mean(y[np.abs(y) > 0.01] ** 2))) if (np.abs(y) > 0.01).any() else 0.0
+                z, r = laut(spur), laut(ref)
+                if z > 0 and r > 0:
+                    print(f"  Lautheit {20*np.log10(z/r):+.1f} dB gegenueber der ersten "
+                          f"Spur — angeglichen.")
+                    spur *= r / z
+            else:
+                print("  [WARN] erste Spur fehlt — keine Lautheitsangleichung.")
+
         # Kopfraum: Piper steuert einzelne Saetze bis an die Grenze aus,
         # und der MP3-Encoder ueberschwingt leicht. Ohne das zerrt es.
         spitze = float(np.abs(spur).max())
@@ -141,14 +200,19 @@ def main():
             spur *= 0.95 / spitze
 
         os.makedirs(TON, exist_ok=True)
-        ziel = os.path.join(TON, dreh["dateiname"] + ".mp3")
+        ziel = os.path.join(TON, dreh["dateiname"]
+                            + (("-" + a.zweitstimme) if a.zweitstimme else "") + ".mp3")
         sf.write(ziel, spur[:int(round(gesamt * rate))], rate,
                  format="MP3", compression_level=a.qualitaet)
 
     kb = os.path.getsize(ziel) / 1024
     print(f"\n  {os.path.relpath(ziel, WURZEL)}  —  {gesamt:.1f} s, {kb:.0f} kB")
-    print(f"  Dauern im Drehbuch aktualisiert. Jetzt: "
-          f"python3 scripts/build-clips.py {dreh['dateiname']}")
+    if a.zweitstimme:
+        print(f"  Zweite Spur — Drehbuch unveraendert. Jetzt: "
+              f"python3 scripts/build-clips.py {dreh['dateiname']}")
+    else:
+        print(f"  Dauern im Drehbuch aktualisiert. Jetzt: "
+              f"python3 scripts/build-clips.py {dreh['dateiname']}")
 
 
 if __name__ == "__main__":

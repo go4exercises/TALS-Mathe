@@ -511,6 +511,20 @@ def bauen(quelle, eigenstaendig=False):
         ton_html = ('<audio id="ton" preload="auto" src="ton/%s"></audio>'
                     % tonname)
 
+    # Weitere Stimmen: ton/<name>-<stimme>.mp3. Sie sind von
+    # build-clip-ton.py --zweitstimme auf dieselbe Zeitspur und dieselbe
+    # Lautheit gebracht worden, das Umschalten aendert also nur den Klang.
+    stamm = tonname[:-4]
+    weitere = []
+    if os.path.exists(tonpfad) and not eigenstaendig:
+        for f in sorted(glob.glob(os.path.join(CLIPS, "ton", stamm + "-*.mp3"))):
+            suffix = os.path.basename(f)[len(stamm) + 1:-4]
+            weitere.append((suffix[:1].upper() + suffix[1:], "ton/" + os.path.basename(f)))
+    stimmen_js = "[" + ",".join(
+        ['{n:"%s",s:"%s"}' % (n, q) for n, q in
+         ([(dreh.get("stimme", "Thorsten"), "ton/" + tonname)] + weitere)]) + "]" \
+        if weitere else "[]"
+
     teile = []          # HTML-Schnipsel
     sprecher = []       # Sprechertexte mit Zeitpunkt
 
@@ -648,7 +662,7 @@ def bauen(quelle, eigenstaendig=False):
         karte_bg=theme.get("karte", "rgba(255,255,255,.66)"),
         box_bg=theme.get("box", "rgba(255,255,255,.6)"),
         vignette=theme.get("vignette", "rgba(90,70,40,.10)"),
-        karo=karo, rand=rand, ton=ton_html,
+        karo=karo, rand=rand, ton=ton_html, stimmen=stimmen_js,
         dauer=round(gesamt, 2),
         inhalt="\n".join(teile),
         sprecher=json.dumps(sprecher, ensure_ascii=False),
@@ -757,6 +771,7 @@ body.render #ui{{display:none}}
 <div id="ui">
   <button id="pp">Pause</button>
   <button id="ts" hidden>🔇 Ton an</button>
+  <button id="sw" hidden></button>
   <div id="bar"><div id="barf"></div></div>
   <span id="tt">0.0 s</span>
   <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
@@ -810,6 +825,27 @@ if (!location.search.includes('render')) {{
       ton.muted = !ton.muted;
       ts.textContent = ton.muted ? '🔇 Ton an' : '🔊 Ton aus';
       if (!ton.muted) {{ ton.currentTime = t; if (playing) ton.play().catch(() => {{}}); }}
+    }};
+  }}
+  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
+  // Wechsel behaelt darum Zeit und Zustand einfach bei.
+  const STIMMEN = {stimmen};
+  if (ton && STIMMEN.length > 1) {{
+    let stimme = 0;
+    const sw = document.getElementById('sw');
+    sw.hidden = false;
+    const beschriften = () => {{
+      sw.textContent = '🗣 ' + STIMMEN[stimme].n;
+      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + STIMMEN[stimme].n);
+    }};
+    beschriften();
+    sw.onclick = () => {{
+      stimme = (stimme + 1) % STIMMEN.length;
+      const wo = ton.currentTime, lief = !ton.paused;
+      ton.src = STIMMEN[stimme].s;
+      ton.currentTime = wo;
+      if (lief) ton.play().catch(() => {{}});
+      beschriften();
     }};
   }}
   const tonLaeuft = () => ton && !ton.paused && !ton.ended;

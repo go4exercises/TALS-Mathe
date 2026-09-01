@@ -515,6 +515,47 @@ Encoder — Piper steuert einzelne Sätze bis an die Grenze aus.
 Opus wäre kleiner, scheidet aber vorerst aus: libsndfile schreibt Opus nur bei 8/12/16/24/48 kHz,
 Piper liefert 22.05 kHz. Ohne Resampling bleibt MP3 — das dafür überall abspielbar ist.
 
+### Zweite Stimme
+
+Ein Clip kann mehrere Tonspuren tragen; in der Bedienleiste erscheint dann ein Knopf
+`🗣 <Name>`, der umschaltet. Die Spuren liegen als `ton/<name>-<stimme>.mp3` neben der
+ersten, und der Generator findet sie von selbst — im Drehbuch ist nichts einzutragen.
+
+```sh
+export PIPER_MODELL=/pfad/de_DE-thorsten-high.onnx      # die erste, als Referenz
+export PIPER_MODELL2=/pfad/eigene-stimme.onnx
+python3 scripts/build-clip-ton.py <clip> --zweitstimme kohler
+python3 scripts/build-clips.py    <clip>
+```
+
+**Die zweite Spur richtet sich nach der ersten, nicht umgekehrt.** Das Drehbuch und die
+Animation stehen schon; also wird jeder Satz auf die Länge gebracht, die der Satz der
+ersten Stimme hat, und die Lautheit auf deren Effektivwert gezogen. `--zweitstimme`
+fasst das Drehbuch darum **nicht** an. Das Umschalten ändert nur den Klang — Zeit und
+Zustand laufen weiter.
+
+**Zwei Durchgänge je Satz, nicht einer.** `--length-scale` streckt die Phoneme, nicht die
+feste Satzpause davor und dahinter; der erste Schuss liegt um fünf bis zehn Prozent
+daneben. Der zweite rechnet den Rest heraus, danach liegt die Abweichung unter 0.2 s.
+
+**Lautheit heisst Effektivwert, nicht Spitze.** Zwei Stimmen, beide auf 0.95 begrenzt,
+klingen verschieden laut. Angeglichen wird der RMS der Sprachanteile (alles über 0.01),
+danach greift der Kopfraum.
+
+**Der Preis steht in der Ausgabe.** Beim ersten Versuch mit `de_CH-kohler-medium` lag
+das nötige Tempo bei **0.58 bis 0.62** — die Stimme spricht von Haus aus rund die
+Hälfte langsamer als Thorsten und wird zum Anpassen um das 1.6-Fache beschleunigt. Die
+Tonhöhe bleibt dabei, das Sprechen wird schneller. Ob das noch trägt, entscheidet das
+Ohr; die Zahlen stehen in der Ausgabe von `build-clip-ton.py`, Zeile für Zeile.
+
+Klingt es gehetzt, gibt es zwei Auswege: den Sprechertext kürzen (dann passt er beiden
+Stimmen bequemer) oder für diese Stimme eigene Szenendauern bauen — dann ist es aber
+kein Umschalten mehr, sondern ein zweiter Clip.
+
+**Das Stimmmodell gehört nicht ins Repo.** Auf der Modellkarte von
+`de_CH-kohler-medium` steht: «Nicht weitergeben: wer diese Datei hat, spricht mit dieser
+Stimme.» Versioniert wird nur die fertige MP3.
+
 ### Lizenzlage (geprüft am 30.08.2026)
 
 | | |
