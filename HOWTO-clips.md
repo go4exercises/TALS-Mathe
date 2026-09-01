@@ -706,7 +706,7 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
 
-- **Mehr Clips.** Es sind 50 (52:54 min), alle im Grundlagenfach; das Schwerpunktfach hat
+- **Mehr Clips.** Es sind 51 (54:21 min), alle im Grundlagenfach; das Schwerpunktfach hat
   bis auf den geteilten Bruchgleichungs-Clip noch keine eigenen. Am dichtesten sind
   Lerngebiet 1 und 2, in 3, 4 und 5 steht je einer. Als Referenz für ein Drehbuch:
   `g2-2b-mitternachtsformel-herleitung` für eine Herleitung Schritt für Schritt,

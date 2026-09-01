@@ -70,7 +70,8 @@ def zweig(clip):
 REIHEN = ["Lineare Gleichungen", "Ungleichungen", "Parametergleichung",
           "Quadratische Gleichungen", "Quadratische Ungleichungen",
           "Quadratische Parametergleichungen", "Quadratische Gleichungssysteme",
-          "Bruchgleichungen", "Gleichungssysteme"]
+          "Bruchgleichungen", "Bruchgleichungen → linear",
+          "Bruchgleichungen → quadratisch", "Gleichungssysteme"]
 
 
 def lektionsnummer(code):
