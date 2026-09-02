@@ -1026,7 +1026,13 @@ canvas { display: block; width: 100%; }
    Aufgabe, rot Fehler, lila Beweis) — sie hier fuer eine Gruppierung zu
    verwenden hiesse, sie umzudeuten. Alle Nuancen tragen weisse Schrift mit
    mindestens 4.6 Kontrast, und ihre Helligkeiten sind gespreizt, damit sie
-   sich auch in klein unterscheiden. */
+   sich auch in klein unterscheiden.
+   Eine Ausnahme: .cl-tr. Die Taschenrechner-Clips zeigen nicht den Stoff,
+   sondern ein Werkzeug dazu, und stehen darum am Schluss ihrer Themenseite.
+   Sie tragen als einzige Orange — nicht als didaktische Farbe, sondern als
+   Absetzung von der ganzen Nuancenfamilie ihres Bereichs. Damit die Zeile
+   nicht wie eine Aufgabe aussieht, bleibt der Rest der Zeile unveraendert:
+   gefaerbt sind nur Plakette und linke Kante, wie bei jeder Reihe. */
 .cl-clip { border-left: 3px solid transparent; }
 .cl-r1 .cl-folge { background: #0f3a5c; }  .cl-r1 .cl-clip { border-left-color: #0f3a5c; }
 .cl-r2 .cl-folge { background: #26709b; }  .cl-r2 .cl-clip { border-left-color: #26709b; }
@@ -1045,6 +1051,15 @@ canvas { display: block; width: 100%; }
 .cl-sp .cl-r6 .cl-folge { background: #46256e; }  .cl-sp .cl-r6 .cl-clip { border-left-color: #46256e; }
 .cl-sp .cl-r7 .cl-folge { background: #7a3f9e; }  .cl-sp .cl-r7 .cl-clip { border-left-color: #7a3f9e; }
 .cl-sp .cl-r8 .cl-folge { background: #5a4bb0; }  .cl-sp .cl-r8 .cl-clip { border-left-color: #5a4bb0; }
+
+/* Werkzeug-Reihe (Taschenrechner): in beiden Bereichen dieselbe Farbe —
+   sie soll gerade *nicht* zum Bereich gehoeren. */
+.cl-tr .cl-folge, .cl-sp .cl-tr .cl-folge { background: var(--orange); }
+.cl-tr .cl-clip,  .cl-sp .cl-tr .cl-clip  { border-left-color: var(--orange); }
+.cl-tr .cl-clip:hover { background: var(--orange-hell); }
+.cl-tr .cl-folge.cl-ohne, .cl-sp .cl-tr .cl-folge.cl-ohne {
+  background: none; color: var(--orange);
+}
 .cl-titel { font-size: 0.85rem; }
 .cl-zeit {
   margin-left: auto; flex-shrink: 0;

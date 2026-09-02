@@ -49,20 +49,15 @@ BIB = re.compile(re.escape(BIB_AUF) + r'.*?' + re.escape(BIB_ZU), re.DOTALL)
 
 BIBLIOTHEK = "clips.html"
 
-# Reihenfolge der Zweige innerhalb eines Lerngebiets. Im Lerngebiet 1
-# stehen die Clips zur Arithmetik vor denen zur Algebra — man rechnet mit
-# Zahlen, bevor man mit Buchstaben rechnet. Was hier nicht steht, kommt
-# alphabetisch dahinter.
-ZWEIGE = ["Arithmetik", "Grössen", "Algebra", "Funktionen", "Datenanalyse", "Geometrie"]
+# Die Bibliothek folgt der Struktur der Site: Lerngebiet, dann Themenseite,
+# dann Reihe. Der Zweig ("Arithmetik", "Algebra", …) ordnet nicht mehr mit —
+# er wuerde die Seitenfolge zerreissen, sobald eine Lektion Clips aus zwei
+# Zweigen hat (die Taschenrechner-Clips sind genau dieser Fall).
 
 # So viele Farbnuancen stehen fuer die Nummernplaketten bereit. Jede Reihe
 # bekommt eine, bei der naechsten Reihe wird weitergeschaltet — dadurch
 # gruppiert die Farbe, was zusammengehoert.
 NUANCEN = 8
-
-
-def zweig(clip):
-    return (clip.get("themenbereich") or "").split(" ·")[0].strip()
 
 
 # Reihen, deren Ordnung didaktisch ist und nicht alphabetisch. Was hier
@@ -79,19 +74,50 @@ def lektionsnummer(code):
     return code[1:].replace("-", ".", 1)
 
 
-def ordnung(clip):
-    """Sortierschluessel: Zweig, dann Lektion, dann Reihe, dann Platz darin.
+# Reihen, die ans Ende ihrer Themenseite gehoeren: Sie zeigen nicht den Stoff,
+# sondern ein Werkzeug dazu. Wer die Seite durcharbeitet, will zuerst wissen,
+# wie es geht, und erst danach, wie der Rechner es abkuerzt.
+REIHEN_ZULETZT = ["Taschenrechner"]
 
-    Die Lektion steht bewusst *nach* dem Zweig: In Lerngebiet 1 sollen die
-    Arithmetik-Clips vor den Algebra-Clips stehen, auch wenn sie aus zwei
-    verschiedenen Lektionen kommen. Innerhalb eines Zweiges ordnet dann die
-    Lektionsnummer — so stehen 2.2a, 2.2b und 2.3 beieinander.
+
+def _lektionsrang():
+    """Code -> Platz in der Seitenfolge der Site, gelesen aus nav.js.
+
+    Das ist die einzige Stelle, an der die Reihenfolge der Themenseiten
+    steht. Sie hier abzuleiten statt zu wiederholen heisst: verschiebt sich
+    eine Seite im Menue, verschiebt sie sich auch in der Bibliothek.
     """
-    z = zweig(clip)
+    rang = {}
+    for _bereich, _nr, _titel, ids in lerngebiete():
+        for code in ids:
+            rang.setdefault(code, len(rang))
+    return rang
+
+
+_RANG = None
+
+
+def lektionsrang(code):
+    global _RANG
+    if _RANG is None:
+        _RANG = _lektionsrang()
+    return _RANG.get(code, len(_RANG))
+
+
+def ordnung(clip):
+    """Sortierschluessel: Themenseite, dann Reihe, dann Platz in der Reihe.
+
+    Die Themenseite fuehrt, weil die Bibliothek dieselbe Struktur zeigen
+    soll wie Menue und Startseite: Lerngebiet 1 laeuft von 1.2 ueber 1.3
+    nach 1.4, nicht nach Zweigen sortiert. Innerhalb einer Seite ordnen die
+    Reihen didaktisch (Liste REIHEN), die Werkzeug-Reihen aus
+    REIHEN_ZULETZT stehen am Schluss.
+    """
+    code = (codes(clip) or [""])[0]
     r = clip.get("reihe") or clip["titel"]
-    return (ZWEIGE.index(z) if z in ZWEIGE else len(ZWEIGE),
-            z,
-            (codes(clip) or [""])[0],
+    return (lektionsrang(code),
+            code,
+            1 if r in REIHEN_ZULETZT else 0,
             REIHEN.index(r) if r in REIHEN else len(REIHEN),
             r,
             clip.get("folge") if clip.get("folge") else 99,
@@ -103,6 +129,8 @@ def nuancen_zuteilen(clips):
     zu, naechste = {}, 0
     for c in clips:
         r = c.get("reihe") or c["titel"]
+        if r in REIHEN_ZULETZT:      # traegt eine eigene Farbe, siehe zeile()
+            continue
         if r not in zu:
             zu[r] = naechste % NUANCEN + 1
             naechste += 1
@@ -188,11 +216,13 @@ def zeile(clip, vor="", nuance=1):
     clipStart/clipStop aus mathlib.js unveraendert greifen.
     """
     titel = html.escape(clip["titel"])
+    reihe = clip.get("reihe") or clip["titel"]
+    kl = "cl-tr" if reihe in REIHEN_ZULETZT else f"cl-r{nuance}"
     folge = clip.get("folge")
     nr = (f'<span class="cl-folge">{folge}</span>' if folge
           else '<span class="cl-folge cl-ohne" aria-hidden="true">·</span>')
     return [
-        f'<div class="clip cl-r{nuance}" data-clip="{vor}clips/{clip["datei"]}"'
+        f'<div class="clip {kl}" data-clip="{vor}clips/{clip["datei"]}"'
         f' data-titel="{titel}" data-modus="gross">',
         '  <button class="clip-start cl-clip" type="button" onclick="clipStart(this)"'
         f' aria-label="Clip abspielen: {titel}">',
@@ -234,7 +264,7 @@ def block_lektion(clips, tiefe, code=None):
            f' style="grid-template-rows: repeat({-(-len(clips) // 2)}, auto)">']
     for c in clips:
         aus += ["  " + z for z in
-                zeile(c, vor, nuance[c.get("reihe") or c["titel"]])]
+                zeile(c, vor, nuance.get(c.get("reihe") or c["titel"], 1))]
     aus.append('</div>')
 
     tk = [(c, transkript(c["datei"])) for c in clips]
@@ -335,7 +365,7 @@ def block_bibliothek(alle, seiten):
                            + html.escape(schlue[1]) + '</h3>')
                 letzte = schlue
             aus += ["      " + z for z in
-                    zeile(c, "", nuance[c.get("reihe") or c["titel"]])]
+                    zeile(c, "", nuance.get(c.get("reihe") or c["titel"], 1))]
         if letzte is not None:
             aus.append('    </div>')
         aus += ['  </div>', '</div>']

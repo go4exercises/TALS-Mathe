@@ -1104,9 +1104,20 @@ Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführli
   „Aufgabe" markiert (§5.1), gilt hier nicht — anderer Kontext. 1 und 2 (Blau/Orange) sind
   das Paar, das auch bei Rotgrünschwäche unterscheidbar bleibt. Sparsam einsetzen.
 - **Die Bibliothek `clips.html` unterteilt nach Lektion und Reihe** — `2.2a ·
-  Ungleichungen`. Die Ordnung macht `ordnung()` in `build-clips-einbau.py`: erst der
-  Zweig (`ZWEIGE`, Arithmetik vor Algebra), dann die Lektionsnummer, dann die Reihe
-  (`REIHEN`, wo die Folge didaktisch statt alphabetisch ist).
+  Ungleichungen`. Die Ordnung macht `ordnung()` in `build-clips-einbau.py` und sie
+  folgt der Struktur der Site: erst die **Themenseite** in der Reihenfolge, in der sie
+  im Menü steht (aus `nav.js` gelesen, nicht wiederholt), dann die Reihe (`REIHEN`, wo
+  die Folge didaktisch statt alphabetisch ist), dann `folge`. Der Zweig ordnet **nicht**
+  mit — er zerreisst die Seitenfolge, sobald eine Lektion Clips aus zwei Zweigen hat.
+- **Werkzeug-Reihen stehen am Schluss ihrer Themenseite und tragen Orange.** In
+  `REIHEN_ZULETZT` steht, welche Reihe das betrifft (heute nur `Taschenrechner`). Sie
+  zeigen nicht den Stoff, sondern ein Werkzeug dazu — man will zuerst wissen, wie es
+  geht, und erst danach, wie der Rechner es abkürzt. Die Zeile bekommt `cl-tr` statt
+  `cl-r1…8`, in beiden Bereichen dieselbe Farbe: Sie soll gerade *nicht* zur
+  Bereichsfamilie gehören. Das ist die einzige Ausnahme von §5.1 in der Bibliothek und
+  in `style.css` als solche vermerkt. `folge` läuft dabei über die ganze Reihe durch,
+  auch über Lektionsgrenzen hinweg — sonst zählen die Plaketten die Seite hinunter
+  mehrfach von 1 an.
 - **Reihenfolge nach jedem Drehbuch-Edit:** `build-clip-ton.py` (falls der Sprechertext
   geändert hat), `build-clips.py`, `build-clips-einbau.py`, dann `build-seo.py` und
   `build-suchindex.py`.
