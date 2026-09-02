@@ -42,6 +42,7 @@ Drei Felder entscheiden über den Einbau:
 | `lektion` | **Liste** von Codes aus `nav.js`, z.B. `["g2-2b", "s2-2a"]`. Der **erste** Code ist die Heimatlektion: Dort steht der Clip in der Reihe, auf den übrigen Seiten hängt er als Gast hinten an. |
 | `reihe` | didaktische Familie, z.B. `Parametergleichung` |
 | `folge` | Platz in dieser Reihe: 1, 2, 3 … — weglassen bei Ergänzungen |
+| `werkzeug` | `true` bei Rechner-Clips: ans Ende der eigenen Reihe, Zeile orange |
 | `theme` | `begreifbar` ist Standard und übernimmt die Farben aus `style.css` |
 
 ### Titel: «Reihe: Fokus»
@@ -67,12 +68,22 @@ Grundlagenfach, violett im Schwerpunktfach): Die didaktischen Farben aus §5.1 b
 etwas, und sie für eine Gruppierung zu verwenden hiesse, sie umzudeuten. Alle Nuancen
 tragen weisse Schrift mit mindestens 4.9 Kontrast, nachgerechnet.
 
-**Innerhalb eines Lerngebiets steht zuerst der eine Zweig, dann der nächste** — im
-Lerngebiet 1 also erst die Clips zur Arithmetik, dann die zur Algebra: Man rechnet mit
-Zahlen, bevor man mit Buchstaben rechnet. Die Reihenfolge steht als Liste `ZWEIGE` in
-`scripts/build-clips-einbau.py` und liest den Zweig aus dem Feld `themenbereich`. Was
-dort nicht aufgeführt ist, kommt alphabetisch dahinter. Clips ohne `folge` sind
-Ergänzungen und rutschen ans Ende ihrer Reihe; sie tragen einen Punkt statt einer Zahl.
+**Innerhalb eines Lerngebiets ordnet die Themenseite** — 1.2, dann 1.3, dann 1.4, in
+genau der Folge, in der die Seiten im Menü stehen. `build-clips-einbau.py` liest diese
+Folge aus `nav.js`, statt sie zu wiederholen: Verschiebt sich eine Seite im Menü,
+verschiebt sie sich auch in der Bibliothek. Innerhalb einer Seite ordnen die Reihen nach
+der Liste `REIHEN` (wo die Folge didaktisch statt alphabetisch ist), innerhalb einer
+Reihe die `folge`. Clips ohne `folge` sind Ergänzungen und rutschen ans Ende ihrer
+Reihe; sie tragen einen Punkt statt einer Zahl.
+
+**Rechner-Clips bekommen keine eigene Reihe.** Ein Clip zum Taschenrechner gehört
+thematisch dorthin, wo sein Stoff steht — als letzter seiner Reihe: «Quadratische
+Gleichungen: mit poly-solv lösen» ist Folge 7 der `Quadratische Gleichungen`, nicht
+Folge 1 einer Reihe `Taschenrechner`. Dafür ist das Feld `werkzeug` da. Es sortiert den
+Clip ans Ende seiner Reihe und färbt die Zeile orange — als einzige, in beiden
+Bereichen gleich, denn sie soll gerade *nicht* zur Bereichsfamilie gehören. Auch der
+Titel wiederholt das Werkzeug nicht: Sonst steht in der Bibliothek eine Spalte gleich
+anfangender Titel, die nichts über den Stoff sagt.
 
 Warum so und nicht «ein Clip für den ganzen Ablauf, dann Beispiel 1, Beispiel 2»: Eine
 Minute reicht für einen Gedanken, nicht für ein Verfahren mit vier Schritten und drei

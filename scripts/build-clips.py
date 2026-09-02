@@ -1144,6 +1144,9 @@ if __name__ == "__main__":
                 "themenbereich": dreh.get("themenbereich", ""),
                 "reihe": dreh.get("reihe", ""),
                 "folge": dreh.get("folge"),
+                # Werkzeug-Clip: zeigt nicht den Stoff, sondern wie ein
+                # Geraet ihn abkuerzt. Steht am Schluss seiner Reihe.
+                "werkzeug": bool(dreh.get("werkzeug")),
                 "stufe": dreh.get("stufe", []),
                 "schlagworte": dreh.get("schlagworte", []),
                 "dauer_s": round(dauer),

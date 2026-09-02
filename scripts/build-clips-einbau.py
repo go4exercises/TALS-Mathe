@@ -74,12 +74,6 @@ def lektionsnummer(code):
     return code[1:].replace("-", ".", 1)
 
 
-# Reihen, die ans Ende ihrer Themenseite gehoeren: Sie zeigen nicht den Stoff,
-# sondern ein Werkzeug dazu. Wer die Seite durcharbeitet, will zuerst wissen,
-# wie es geht, und erst danach, wie der Rechner es abkuerzt.
-REIHEN_ZULETZT = ["Taschenrechner"]
-
-
 def _lektionsrang():
     """Code -> Platz in der Seitenfolge der Site, gelesen aus nav.js.
 
@@ -110,16 +104,19 @@ def ordnung(clip):
     Die Themenseite fuehrt, weil die Bibliothek dieselbe Struktur zeigen
     soll wie Menue und Startseite: Lerngebiet 1 laeuft von 1.2 ueber 1.3
     nach 1.4, nicht nach Zweigen sortiert. Innerhalb einer Seite ordnen die
-    Reihen didaktisch (Liste REIHEN), die Werkzeug-Reihen aus
-    REIHEN_ZULETZT stehen am Schluss.
+    Reihen didaktisch (Liste REIHEN), innerhalb einer Reihe `folge` — mit
+    einem Vorzug: Clips mit `werkzeug` stehen am Schluss ihrer Reihe. Sie
+    zeigen nicht den Stoff, sondern wie ein Geraet ihn abkuerzt, und das
+    kommt, nachdem man es von Hand kann. Eine eigene Reihe bekommen sie
+    nicht — ein Rechner-Clip gehoert thematisch dorthin, wo sein Stoff ist.
     """
     code = (codes(clip) or [""])[0]
     r = clip.get("reihe") or clip["titel"]
     return (lektionsrang(code),
             code,
-            1 if r in REIHEN_ZULETZT else 0,
             REIHEN.index(r) if r in REIHEN else len(REIHEN),
             r,
+            1 if clip.get("werkzeug") else 0,
             clip.get("folge") if clip.get("folge") else 99,
             clip["titel"])
 
@@ -129,8 +126,6 @@ def nuancen_zuteilen(clips):
     zu, naechste = {}, 0
     for c in clips:
         r = c.get("reihe") or c["titel"]
-        if r in REIHEN_ZULETZT:      # traegt eine eigene Farbe, siehe zeile()
-            continue
         if r not in zu:
             zu[r] = naechste % NUANCEN + 1
             naechste += 1
@@ -216,8 +211,7 @@ def zeile(clip, vor="", nuance=1):
     clipStart/clipStop aus mathlib.js unveraendert greifen.
     """
     titel = html.escape(clip["titel"])
-    reihe = clip.get("reihe") or clip["titel"]
-    kl = "cl-tr" if reihe in REIHEN_ZULETZT else f"cl-r{nuance}"
+    kl = "cl-tr" if clip.get("werkzeug") else f"cl-r{nuance}"
     folge = clip.get("folge")
     nr = (f'<span class="cl-folge">{folge}</span>' if folge
           else '<span class="cl-folge cl-ohne" aria-hidden="true">·</span>')
@@ -264,7 +258,7 @@ def block_lektion(clips, tiefe, code=None):
            f' style="grid-template-rows: repeat({-(-len(clips) // 2)}, auto)">']
     for c in clips:
         aus += ["  " + z for z in
-                zeile(c, vor, nuance.get(c.get("reihe") or c["titel"], 1))]
+                zeile(c, vor, nuance[c.get("reihe") or c["titel"]])]
     aus.append('</div>')
 
     tk = [(c, transkript(c["datei"])) for c in clips]
@@ -365,7 +359,7 @@ def block_bibliothek(alle, seiten):
                            + html.escape(schlue[1]) + '</h3>')
                 letzte = schlue
             aus += ["      " + z for z in
-                    zeile(c, "", nuance.get(c.get("reihe") or c["titel"], 1))]
+                    zeile(c, "", nuance[c.get("reihe") or c["titel"]])]
         if letzte is not None:
             aus.append('    </div>')
         aus += ['  </div>', '</div>']

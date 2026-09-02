@@ -1109,15 +1109,18 @@ Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführli
   im Menü steht (aus `nav.js` gelesen, nicht wiederholt), dann die Reihe (`REIHEN`, wo
   die Folge didaktisch statt alphabetisch ist), dann `folge`. Der Zweig ordnet **nicht**
   mit — er zerreisst die Seitenfolge, sobald eine Lektion Clips aus zwei Zweigen hat.
-- **Werkzeug-Reihen stehen am Schluss ihrer Themenseite und tragen Orange.** In
-  `REIHEN_ZULETZT` steht, welche Reihe das betrifft (heute nur `Taschenrechner`). Sie
-  zeigen nicht den Stoff, sondern ein Werkzeug dazu — man will zuerst wissen, wie es
-  geht, und erst danach, wie der Rechner es abkürzt. Die Zeile bekommt `cl-tr` statt
-  `cl-r1…8`, in beiden Bereichen dieselbe Farbe: Sie soll gerade *nicht* zur
-  Bereichsfamilie gehören. Das ist die einzige Ausnahme von §5.1 in der Bibliothek und
-  in `style.css` als solche vermerkt. `folge` läuft dabei über die ganze Reihe durch,
-  auch über Lektionsgrenzen hinweg — sonst zählen die Plaketten die Seite hinunter
-  mehrfach von 1 an.
+- **Werkzeug-Clips: `"werkzeug": true` im Drehbuch, sonst nichts Besonderes.** Ein
+  Taschenrechner-Clip bekommt **keine eigene Reihe** — er steht in der Reihe seines
+  Stoffs, als deren letzter: der poly-solv-Clip als Folge 7 der `Quadratische
+  Gleichungen`, der sys-solv-Clip als Folge 6 der `Gleichungssysteme`. Das Flag macht
+  genau zwei Dinge: Es sortiert den Clip ans Ende seiner Reihe (`ordnung()`) und gibt
+  der Zeile `cl-tr` statt `cl-r1…8` — Orange, in beiden Bereichen dieselbe Farbe, weil
+  sie gerade *nicht* zur Bereichsfamilie gehören soll. Das ist die einzige Ausnahme von
+  §5.1 in der Bibliothek und in `style.css` als solche vermerkt.
+- **Auch der Titel wiederholt das Werkzeug nicht.** Er beginnt wie jeder Clip mit seiner
+  Reihe: «Quadratische Gleichungen: mit poly-solv lösen», nicht «Taschenrechner: …».
+  Sonst steht in der Bibliothek eine Spalte gleich anfangender Titel, die nichts über
+  den Stoff sagt.
 - **Reihenfolge nach jedem Drehbuch-Edit:** `build-clip-ton.py` (falls der Sprechertext
   geändert hat), `build-clips.py`, `build-clips-einbau.py`, dann `build-seo.py` und
   `build-suchindex.py`.
