@@ -147,6 +147,30 @@ In einer Szene mit Merkschiene ist das Bild **nicht** zentriert (dort ist nichts
 zentriert) — es steht bei `x`, standardmässig 680. Ein eigenes `x` richtet es an den
 Formelzeilen darüber aus.
 
+### Rechneranzeige — `typ: "rechner"`
+
+Für Clips über den Taschenrechner. Nachgebaut wird **die Anzeige, nicht das Tastenfeld**:
+
+```json
+{"typ": "rechner", "breite": 700,
+ "zeilen": ["[3|4]+[1|6]"], "ergebnis": "[11|12]", "taste": "n/d"}
+```
+
+`[a|b]` wird zweistöckig gesetzt, wie MathPrint es tut. `ergebnis` steht rechtsbündig
+unter der Eingabe, `taste` zeigt darunter die gedrückte Taste als Kappe. Höhe und
+Abstand rechnet der Generator selbst — Zeilen mit Bruch bekommen die anderthalbfache
+Höhe, sonst schneidet der Rand Zähler und Nenner ab.
+
+**Warum kein Tastenfeld:** Wo eine Taste auf dem Gerät liegt, ist nicht nachgeprüft.
+Eine erfundene Anordnung wäre schlimmer als keine — wer sie lernt, greift am Gerät
+daneben. Gezeigt wird darum nur, *welche* Taste gedrückt wird.
+
+**Was am TI-30X Pro MathPrint belegt ist** (Handbuch von Texas Instruments): vier Zeilen
+zu 16 Zeichen, Eingabe oben, Ergebnis rechtsbündig, getrennte Tasten für Subtraktion
+`−` und negatives Vorzeichen `(−)`, Berechnen mit `=`, Brüche über `n/d`, `del` löscht
+ein Zeichen, `clear` die Eingabe. Was darüber hinausgeht, gehört nachgeschlagen, bevor
+es in einen Clip kommt.
+
 ### Farbführung
 
 `{1:x-2}` färbt einen Term ein — Text und weiche Fläche. Zweck ist ausschliesslich,

@@ -375,6 +375,110 @@ def graf_svg(el, theme):
     return "".join(teile)
 
 
+# ---------------------------------------------------------------- Rechneranzeige
+def rechner_svg(el, theme):
+    """Die Anzeige des TI-30X Pro MathPrint, so weit sie nachpruefbar ist.
+
+    Belegt sind: vier Zeilen zu 16 Zeichen, Eingabe oben, Ergebnis
+    rechtsbuendig, getrennte Tasten fuer Subtraktion (−) und negatives
+    Vorzeichen ((−)), Berechnen mit =, Brueche ueber n/d. Quelle ist das
+    Handbuch von Texas Instruments.
+
+    **Nachgebaut wird die Anzeige, nicht das Tastenfeld.** Wo die Tasten
+    auf dem Geraet liegen, steht hier nicht — es wird nur gezeigt, welche
+    gedrueckt wird. Eine erfundene Tastenanordnung waere schlimmer als
+    keine: Wer sie lernt, greift am Geraet daneben.
+
+    Bruchdarstellung im Text: [a|b] wird zweistoeckig gesetzt, wie es
+    MathPrint tut.
+    """
+    b = el.get("breite", 700)
+    zeilen = el.get("zeilen", [])
+    # Die Hoehe ergibt sich aus der Breite: 16 Zeichen, vier Zeilen. Sie
+    # wird ins Element geschrieben, damit der senkrechte Fluss sie kennt
+    # und die naechste Zeile nicht in die Anzeige laeuft.
+    # Das Geraet hat vier Zeilen. Gezeigt werden nur die benutzten plus
+    # die Ergebniszeile — ein zu drei Vierteln leeres Feld sieht nach
+    # Fehler aus, nicht nach Anzeige.
+    benutzt = min(4, max(2, len(el.get("zeilen", []))
+                         + (1 if el.get("ergebnis") is not None else 0)))
+    el["_zeilen"] = benutzt
+    # Ein Bruch ist zweistoeckig und braucht rund die anderthalbfache
+    # Zeilenhoehe — sonst schneidet der Rand Zaehler und Nenner ab.
+    bruch = any("[" in z for z in list(el.get("zeilen", []))
+                + ([el["ergebnis"]] if el.get("ergebnis") else []))
+    el["_hoch"] = 1.55 if bruch else 1.0
+    el.setdefault("hoehe", int(benutzt * ((b - 60) / 16 * 1.85 * el["_hoch"]) + 46
+                               + (74 if el.get("taste") else 0)))
+    ergebnis = el.get("ergebnis")
+    taste = el.get("taste")
+    tinte = theme["tinte"]
+    lcd = el.get("lcd", "#c9d4c4")          # gruenlich, wie ein LCD
+    rahmen = el.get("rahmen", "#2b2b2b")
+
+    zeichen = 16
+    zb = (b - 60) / zeichen                  # Zeichenbreite
+    zh = zb * 1.85 * el.get("_hoch", 1.0)    # Zeilenhoehe
+    reihen = el.get("_zeilen", 4)
+    h_disp = reihen * zh + 46
+    h = h_disp + (74 if taste else 0)
+    t = ['<svg width="%d" height="%d" viewBox="0 0 %d %d">' % (b, h, b, h)]
+    t.append('<rect x="0" y="0" width="%d" height="%.0f" rx="14" fill="%s"/>'
+             % (b, h_disp, rahmen))
+    t.append('<rect x="18" y="16" width="%d" height="%.0f" rx="5" fill="%s"/>'
+             % (b - 36, h_disp - 32, lcd))
+
+    def setzen(text, y, rechts=False):
+        """Eine Displayzeile. [a|b] wird zum Bruch."""
+        teile = re.split(r"(\[[^\[\]|]*\|[^\[\]|]*\])", text)
+        breite = 0
+        for st in teile:
+            breite += (len(st) - 3) * zb if st.startswith("[") else len(st) * zb
+        x = (b - 30 - breite) if rechts else 30
+        for st in teile:
+            if st.startswith("["):
+                oben, unten = st[1:-1].split("|")
+                w = max(len(oben), len(unten)) * zb
+                mitte = y - zb * 0.55            # Strich etwa auf halber Zeichenhoehe
+                t.append('<text x="%.1f" y="%.1f" font-family="%s" font-size="%.1f" '
+                         'text-anchor="middle" fill="%s">%s</text>'
+                         % (x + w / 2, mitte - zb * 0.22, "monospace", zb * 1.25, tinte,
+                            entschaerfen(oben)))
+                t.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" '
+                         'stroke-width="2.5"/>' % (x, mitte, x + w, mitte, tinte))
+                t.append('<text x="%.1f" y="%.1f" font-family="%s" font-size="%.1f" '
+                         'text-anchor="middle" fill="%s">%s</text>'
+                         % (x + w / 2, mitte + zb * 1.15, "monospace", zb * 1.25, tinte,
+                            entschaerfen(unten)))
+                x += w
+            elif st:
+                t.append('<text x="%.1f" y="%.1f" font-family="%s" font-size="%.1f" '
+                         'fill="%s" xml:space="preserve">%s</text>'
+                         % (x, y, "monospace", zb * 1.7, tinte, entschaerfen(st)))
+                x += len(st) * zb
+
+    # Grundlinie der ersten Zeile: so weit unter der Oberkante, dass die
+    # Oberlaengen im Feld bleiben.
+    y0 = 22 + zh * 0.78
+    for i, z in enumerate(zeilen[:reihen]):
+        setzen(z, y0 + i * zh)
+    if ergebnis is not None:
+        setzen(ergebnis, y0 + min(len(zeilen), reihen - 1) * zh, rechts=True)
+
+    if taste:
+        breite_t = max(58, 30 + len(taste) * 22)
+        x = (b - breite_t) / 2
+        y = h_disp + 12
+        t.append('<rect x="%.1f" y="%.1f" width="%.1f" height="46" rx="9" fill="%s" '
+                 'stroke="%s" stroke-width="2.5"/>'
+                 % (x, y, breite_t, theme.get("karte", "#fff"), tinte))
+        t.append('<text x="%.1f" y="%.1f" font-family="%s" font-size="24" '
+                 'text-anchor="middle" font-weight="600" fill="%s">%s</text>'
+                 % (b / 2, y + 31, "monospace", tinte, entschaerfen(taste)))
+    t.append("</svg>")
+    return "".join(t)
+
+
 # ---------------------------------------------------------------- Elemente
 def element_html(el, theme):
     typ = el.get("typ", "text")
@@ -429,6 +533,9 @@ def element_html(el, theme):
     elif typ == "graf":
         klassen += ["graf"]
         inhalt = graf_svg(el, theme)
+    elif typ == "rechner":
+        klassen += ["graf"]
+        inhalt = rechner_svg(el, theme)
     elif typ == "strich":
         klassen += ["strich"]
         stil.append("width:%dpx" % el.get("breite", 760))
