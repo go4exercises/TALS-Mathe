@@ -39,7 +39,12 @@ for (const t of marken) {
         const a = sichtbar[i].r, c = sichtbar[j].r;
         const ux = Math.min(a.right, c.right) - Math.max(a.left, c.left);
         const uy = Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top);
-        if (ux > 2 && uy > 2) t.push([sichtbar[i].t, sichtbar[j].t, Math.round(uy)]);
+        // Deckungsgleiche Kaesten sind kein Zusammenstoss, sondern ein
+        // Stapel: So wird eine Tastenfolge gebaut — jede neue Anzeige legt
+        // sich ueber die vorige, die alte bleibt darunter stehen.
+        const stapel = Math.abs(a.left - c.left) < 3 && Math.abs(a.top - c.top) < 3
+                    && Math.abs(a.width - c.width) < 3;
+        if (ux > 2 && uy > 2 && !stapel) t.push([sichtbar[i].t, sichtbar[j].t, Math.round(uy)]);
       }
     const raus = sichtbar.filter(s => s.r.bottom > 1080 || s.r.top < 0
                                    || s.r.left < 0 || s.r.right > 1920)

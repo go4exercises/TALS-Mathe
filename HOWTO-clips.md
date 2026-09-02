@@ -161,6 +161,20 @@ unter der Eingabe, `taste` zeigt darunter die gedrückte Taste als Kappe. Höhe 
 Abstand rechnet der Generator selbst — Zeilen mit Bruch bekommen die anderthalbfache
 Höhe, sonst schneidet der Rand Zähler und Nenner ab.
 
+**Tastenfolge — Taste für Taste.** Mehrere Anzeigen an *derselben* Stelle mit
+gestaffeltem `ein` ergeben einen Stapel: Jede neue legt sich über die vorige, die alte
+bleibt darunter stehen. Das braucht keine neue Mechanik, nur drei Felder:
+
+```json
+{"typ":"rechner", "zeilen":["2+"],  "taste":"+", "y":190, "ein":1.55, "anim":"fade", "abstand":0}
+{"typ":"rechner", "zeilen":["2+3"], "taste":"3", "y":190, "ein":2.50, "anim":"fade", "abstand":0}
+```
+
+Gleiches `y`, gleiche `breite`, `anim: "fade"` (sonst wackelt es beim Einblenden) und
+`abstand: 0` bei allen ausser der letzten — sonst schiebt der Fluss die folgende Zeile
+um die Höhe jeder einzelnen Anzeige nach unten. `pruef-clip.mjs` erkennt
+deckungsgleiche Kästen als Stapel und meldet sie nicht als Zusammenstoss.
+
 **Warum kein Tastenfeld:** Wo eine Taste auf dem Gerät liegt, ist nicht nachgeprüft.
 Eine erfundene Anordnung wäre schlimmer als keine — wer sie lernt, greift am Gerät
 daneben. Gezeigt wird darum nur, *welche* Taste gedrückt wird.

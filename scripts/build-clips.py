@@ -409,7 +409,7 @@ def rechner_svg(el, theme):
                 + ([el["ergebnis"]] if el.get("ergebnis") else []))
     el["_hoch"] = 1.55 if bruch else 1.0
     el.setdefault("hoehe", int(benutzt * ((b - 60) / 16 * 1.85 * el["_hoch"]) + 46
-                               + (74 if el.get("taste") else 0)))
+                               + (82 if el.get("taste") else 0)))
     ergebnis = el.get("ergebnis")
     taste = el.get("taste")
     tinte = theme["tinte"]
@@ -466,15 +466,15 @@ def rechner_svg(el, theme):
         setzen(ergebnis, y0 + min(len(zeilen), reihen - 1) * zh, rechts=True)
 
     if taste:
-        breite_t = max(58, 30 + len(taste) * 22)
+        breite_t = max(72, 34 + len(taste) * 26)
         x = (b - breite_t) / 2
         y = h_disp + 12
-        t.append('<rect x="%.1f" y="%.1f" width="%.1f" height="46" rx="9" fill="%s" '
+        t.append('<rect x="%.1f" y="%.1f" width="%.1f" height="54" rx="10" fill="%s" '
                  'stroke="%s" stroke-width="2.5"/>'
                  % (x, y, breite_t, theme.get("karte", "#fff"), tinte))
-        t.append('<text x="%.1f" y="%.1f" font-family="%s" font-size="24" '
+        t.append('<text x="%.1f" y="%.1f" font-family="%s" font-size="30" '
                  'text-anchor="middle" font-weight="600" fill="%s">%s</text>'
-                 % (b / 2, y + 31, "monospace", tinte, entschaerfen(taste)))
+                 % (b / 2, y + 37, "monospace", tinte, entschaerfen(taste)))
     t.append("</svg>")
     return "".join(t)
 
