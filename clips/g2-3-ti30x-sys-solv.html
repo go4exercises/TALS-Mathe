@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Taschenrechner: 2×2-System mit sys-solv</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Arithmetik · Taschenrechner</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>02.09.2026</span></div>
+<div class="l" data-at="10.33" data-out="53.58" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="10.63" data-anim="rise" data-dim="10.33,21.33"><div class="num">1</div><div class="stxt">Nach x und y ordnen<br><span class="dim">jede Zeile a, b, c</span></div></div><div class="step l flow" data-at="21.63" data-anim="rise" data-dim="21.33,28.45"><div class="num">2</div><div class="stxt">sys-solv aufrufen<br><span class="dim">2×2 wählen</span></div></div><div class="step l flow" data-at="28.75" data-anim="rise" data-dim="28.45,43.05"><div class="num">3</div><div class="stxt">Zeile für Zeile eingeben</div></div><div class="step l flow" data-at="43.35" data-anim="rise" data-dim="43.05,53.58"><div class="num">4</div><div class="stxt">Lösung lesen<br><span class="dim">x und y</span></div></div></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="10.33" data-anim="rise" style="left:0;right:0;text-align:center;top:230px;font-size:88px;font-weight:600;color:var(--tinte)">Zwei Zeilen, sechs Zahlen</div>
+<div class="l m row mitte" data-at="2.10" data-out="10.33" data-anim="pop" style="left:0;right:0;text-align:center;top:410px;font-size:62px"><span>\(\begin{cases} 2x + y = 7 \\ x - y = -1 \end{cases}\)</span></div>
+<div class="l hand mitte" data-at="3.80" data-out="10.33" data-anim="rise" style="left:0;right:0;text-align:center;top:655px;font-size:52px;color:var(--blau)">Dasselbe System wie in der Reihe «Gleichungssysteme» — dort von Hand, hier per Taste.</div>
+<div class="l m row" data-at="10.73" data-out="21.33" data-anim="rise" style="left:680px;top:215px;font-size:62px"><span>\(\fa{2}x + \fb{1}y = \fc{7}\)</span></div>
+<div class="l m row" data-at="12.43" data-out="21.33" data-anim="pop" style="left:680px;top:385px;font-size:62px"><span>\(\fa{1}x \;\fb{-\,1}y = \fc{-1}\)</span></div>
+<div class="l hand" data-at="14.13" data-out="21.33" data-anim="rise" style="left:680px;top:555px;font-size:52px;color:var(--rot)">Steht kein Koeffizient da, ist es eine 1 — nicht eine 0.</div>
+<div class="l graf" data-at="21.93" data-out="28.45" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">sys-solv</text><rect x="338.5" y="219.9" width="83.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="380.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >2nd</text></svg></div>
+<div class="l graf" data-at="22.93" data-out="28.45" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">1: 2x2</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">2: 3x3</text><rect x="245.0" y="219.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="286.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="337.0" y="219.9" width="178.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="426.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >sys-solv</text></svg></div>
+<div class="l graf" data-at="23.93" data-out="28.45" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">a1x+b1y=c1</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">a2x+b2y=c2</text><rect x="180.0" y="219.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="221.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="272.0" y="219.9" width="178.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="361.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">sys-solv</text><rect x="459.0" y="219.9" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="519.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="29.05" data-out="43.05" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">2x +  y =  7</text><rect x="145.5" y="219.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="187.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="237.5" y="219.9" width="178.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="326.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">sys-solv</text><rect x="424.5" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="485.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="554.5" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="584.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >2</text></svg></div>
+<div class="l graf" data-at="30.05" data-out="43.05" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">2x + 1y =  7</text><rect x="111.0" y="219.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="152.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="203.0" y="219.9" width="178.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="292.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">sys-solv</text><rect x="390.0" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="450.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="520.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="550.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="589.0" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="619.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >1</text></svg></div>
+<div class="l graf" data-at="31.05" data-out="43.05" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">2x + 1y =  7</text><rect x="76.5" y="219.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="118.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="168.5" y="219.9" width="178.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="257.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">sys-solv</text><rect x="355.5" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="416.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="485.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="515.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="554.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="584.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1</text><rect x="623.5" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="653.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >7</text></svg></div>
+<div class="l graf" data-at="32.05" data-out="43.05" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">2x + 1y =  7</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">1x</text><rect x="42.0" y="219.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="83.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="134.0" y="219.9" width="178.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="223.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">sys-solv</text><rect x="321.0" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="381.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="451.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="481.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="520.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="550.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1</text><rect x="589.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="619.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">7</text><rect x="658.0" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="688.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >1</text></svg></div>
+<div class="l graf" data-at="33.05" data-out="43.05" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">2x + 1y =  7</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">1x - 1y</text><rect x="25.5" y="219.9" width="40.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="45.5" y="255.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">…</text><rect x="74.5" y="219.9" width="168.3" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="158.6" y="255.9" font-family="monospace" font-size="18" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">sys-solv</text><rect x="251.8" y="219.9" width="114.4" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="309.0" y="255.9" font-family="monospace" font-size="18" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="375.2" y="219.9" width="56.7" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="403.5" y="255.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="440.9" y="219.9" width="56.7" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="469.3" y="255.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1</text><rect x="506.6" y="219.9" width="56.7" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="535.0" y="255.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">7</text><rect x="572.3" y="219.9" width="56.7" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="600.7" y="255.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1</text><rect x="638.1" y="219.9" width="96.4" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="686.3" y="255.9" font-family="monospace" font-size="18" text-anchor="middle" font-weight="600" fill="#f8f6f1" >(−)1</text></svg></div>
+<div class="l graf" data-at="34.05" data-out="43.05" data-anim="fade" style="left:680px;top:180px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">2x + 1y =  7</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">1x - 1y = -1</text><rect x="16.2" y="219.9" width="40.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="36.2" y="255.9" font-family="monospace" font-size="21" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">…</text><rect x="65.2" y="219.9" width="147.5" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="138.9" y="255.9" font-family="monospace" font-size="16" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">sys-solv</text><rect x="221.7" y="219.9" width="100.2" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="271.8" y="255.9" font-family="monospace" font-size="16" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="330.9" y="219.9" width="49.7" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="355.8" y="255.9" font-family="monospace" font-size="21" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="389.6" y="219.9" width="49.7" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="414.5" y="255.9" font-family="monospace" font-size="21" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1</text><rect x="448.4" y="219.9" width="49.7" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="473.2" y="255.9" font-family="monospace" font-size="21" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">7</text><rect x="507.1" y="219.9" width="49.7" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="531.9" y="255.9" font-family="monospace" font-size="21" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1</text><rect x="565.8" y="219.9" width="84.5" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="608.0" y="255.9" font-family="monospace" font-size="16" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">(−)1</text><rect x="659.3" y="219.9" width="84.5" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="701.5" y="255.9" font-family="monospace" font-size="16" text-anchor="middle" font-weight="600" fill="#f8f6f1" >(−)1</text></svg></div>
+<div class="l hand" data-at="39.05" data-out="43.05" data-anim="rise" style="left:680px;top:550px;font-size:46px;color:var(--rot)">Die Menüzeilen stehen sinngemäss — die genaue Beschriftung zeigt das Gerät.</div>
+<div class="l graf" data-at="43.85" data-out="53.58" data-anim="fade" style="left:680px;top:200px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">x=2</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">y=3</text><rect x="319.5" y="219.9" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="380.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l m row" data-at="45.15" data-out="53.58" data-anim="pop" style="left:680px;top:550px;font-size:58px"><span>\(L = \{(2 \mid 3)\}\)</span></div>
+<div class="l hand" data-at="46.85" data-out="53.58" data-anim="rise" style="left:680px;top:730px;font-size:50px;color:var(--blau)">Probe: 2·2 + 3 = 7 und 2 − 3 = −1.</div>
+<div class="l m mitte mitte" data-at="53.98" data-out="70.30" data-anim="pop" style="left:0;right:0;text-align:center;top:195px;font-size:66px;font-weight:600">Drei Antworten, wie von Hand</div>
+<div class="l sans mitte" data-at="55.68" data-out="70.30" data-anim="rise" style="left:0;right:0;text-align:center;top:375px;font-size:46px"><div class="lz"><span class="ln">1</span>genau eine Lösung \(\longrightarrow\) \(x\) und \(y\) stehen da</div><div class="lz"><span class="ln">2</span>unendlich viele \(\longrightarrow\) der Rechner meldet es</div><div class="lz"><span class="ln">3</span>keine \(\longrightarrow\) der Rechner meldet auch das</div></div>
+<div class="l hand mitte" data-at="57.38" data-out="70.30" data-anim="rise" style="left:0;right:0;text-align:center;top:665px;font-size:50px;color:var(--blau)">Was die Meldung bedeutet, steht im Clip «wie viele Lösungen? Drei Fälle».</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-3-ti30x-sys-solv.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <button id="sw" hidden></button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 70.3;
+const SPRECHER = [{"bei": 0.4, "text": "Auch ein Gleichungssystem kann der Rechner. Er will die Koeffizienten — also muss das System vorher geordnet sein: in jeder Zeile erst x, dann y, dann die Zahl rechts."}, {"bei": 10.73, "text": "Zuerst ablesen, was der Rechner braucht. Erste Zeile: zwei, eins, sieben. Zweite Zeile: eins, minus eins, minus eins. Die Vorzeichen gehören dazu."}, {"bei": 21.73, "text": "Zweit-Taste, sys-solv. Der Rechner fragt, ob zwei mal zwei oder drei mal drei — hier zwei mal zwei."}, {"bei": 28.85, "text": "Dann die sechs Zahlen der Reihe nach, jede mit enter bestätigt. Erst die obere Zeile, dann die untere."}, {"bei": 43.45, "text": "Enter rechnet. Der Rechner zeigt x gleich zwei und y gleich drei — und legt die beiden Werte gleich in den Variablen x und y ab, man kann also direkt weiterrechnen."}, {"bei": 53.98, "text": "Und wenn es keine eindeutige Lösung gibt? Dann sagt der Rechner es: Entweder meldet er unendlich viele Lösungen in geschlossener Form, oder er meldet, dass es keine gibt. Das ist genau die Dreiteilung aus der Reihe Gleichungssysteme — der Rechner nimmt dir das Denken nicht ab, aber er verschweigt den Fall nicht."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
+  // Wechsel behaelt darum Zeit und Zustand einfach bei.
+  const STIMMEN = [];
+  // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
+  // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
+  // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
+  if (ton && STIMMEN.length > 1) {
+    let stimme = 0;
+    const sw = document.getElementById('sw');
+    sw.hidden = false;
+    const beschriften = () => {
+      const v = STIMMEN[stimme];
+      sw.textContent = '🗣 ' + v.n + (v.d > 1.005 ? ' (' + v.d.toFixed(2) + '\u00d7)' : '');
+      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + v.n);
+    };
+    beschriften();
+    sw.onclick = () => {
+      stimme = (stimme + 1) % STIMMEN.length;
+      const wo = t, lief = !ton.paused;
+      dehnung = STIMMEN[stimme].d || 1;
+      ton.src = STIMMEN[stimme].s;
+      ton.currentTime = wo * dehnung;
+      if (lief) ton.play().catch(() => {});
+      beschriften();
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime / dehnung;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

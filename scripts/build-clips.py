@@ -409,9 +409,13 @@ def rechner_svg(el, theme):
                 + ([el["ergebnis"]] if el.get("ergebnis") else []))
     el["_hoch"] = 1.55 if bruch else 1.0
     el.setdefault("hoehe", int(benutzt * ((b - 60) / 16 * 1.85 * el["_hoch"]) + 46
-                               + (82 if el.get("taste") else 0)))
+                               + (82 if (el.get("taste") or el.get("tasten")) else 0)))
     ergebnis = el.get("ergebnis")
-    taste = el.get("taste")
+    # Eine Taste oder eine Reihe: gedrueckte Tasten bleiben stehen, die
+    # zuletzt gedrueckte ist gefuellt. So sieht man die ganze Folge, nicht
+    # nur den letzten Anschlag.
+    reihe = el.get("tasten") or ([el["taste"]] if el.get("taste") else [])
+    taste = reihe[-1] if reihe else None
     tinte = theme["tinte"]
     lcd = el.get("lcd", "#c9d4c4")          # gruenlich, wie ein LCD
     rahmen = el.get("rahmen", "#2b2b2b")
@@ -423,6 +427,12 @@ def rechner_svg(el, theme):
     h_disp = reihen * zh + 46
     h = h_disp + (74 if taste else 0)
     t = ['<svg width="%d" height="%d" viewBox="0 0 %d %d">' % (b, h, b, h)]
+    # Deckende Flaeche ueber das ganze Element. Eine Tastenfolge wird als
+    # Stapel gebaut: Jede neue Anzeige muss die vorige vollstaendig
+    # verdecken, auch im Tastenband — sonst schauen aeltere Kappen zwischen
+    # den neuen hervor.
+    t.append('<rect x="0" y="0" width="%d" height="%d" fill="%s"/>'
+             % (b, h, theme["papier"]))
     t.append('<rect x="0" y="0" width="%d" height="%.0f" rx="14" fill="%s"/>'
              % (b, h_disp, rahmen))
     t.append('<rect x="18" y="16" width="%d" height="%.0f" rx="5" fill="%s"/>'
@@ -466,15 +476,41 @@ def rechner_svg(el, theme):
         setzen(ergebnis, y0 + min(len(zeilen), reihen - 1) * zh, rechts=True)
 
     if taste:
-        breite_t = max(72, 34 + len(taste) * 26)
-        x = (b - breite_t) / 2
+        kappen = [(k, max(60, 26 + len(k) * 19)) for k in reihe]
+        luecke = 9
+        platz = b - 16
+
+        def gesamtbreite(ks, f=1.0):
+            return sum(w * f for _, w in ks) + luecke * (len(ks) - 1)
+
+        # Passt die Reihe nicht, wird sie erst schmaler gesetzt und, wenn das
+        # nicht reicht, vorn gekuerzt: Die letzten Anschlaege sind die, auf
+        # die es ankommt.
+        skala = 1.0
+        if gesamtbreite(kappen) > platz:
+            skala = max(0.62, platz / gesamtbreite(kappen))
+        while len(kappen) > 1 and gesamtbreite(kappen, skala) > platz:
+            kappen = kappen[1:]
+            if kappen and kappen[0][0] != "…":
+                kappen = [("…", 40 / skala)] + kappen
+        kappen = [(k, w * skala) for k, w in kappen]
+        gesamt = sum(w for _, w in kappen) + luecke * (len(kappen) - 1)
+        x = max(8, (b - gesamt) / 2)
         y = h_disp + 12
-        t.append('<rect x="%.1f" y="%.1f" width="%.1f" height="54" rx="10" fill="%s" '
-                 'stroke="%s" stroke-width="2.5"/>'
-                 % (x, y, breite_t, theme.get("karte", "#fff"), tinte))
-        t.append('<text x="%.1f" y="%.1f" font-family="%s" font-size="30" '
-                 'text-anchor="middle" font-weight="600" fill="%s">%s</text>'
-                 % (b / 2, y + 37, "monospace", tinte, entschaerfen(taste)))
+        for i, (k, w) in enumerate(kappen):
+            jetzt = (i == len(kappen) - 1)
+            t.append('<rect x="%.1f" y="%.1f" width="%.1f" height="54" rx="10" fill="%s" '
+                     'stroke="%s" stroke-width="%s" %s/>'
+                     % (x, y, w, tinte if jetzt else theme.get("karte", "#fff"),
+                        tinte, "2.5" if jetzt else "2",
+                        "" if jetzt else 'stroke-opacity=".45"'))
+            t.append('<text x="%.1f" y="%.1f" font-family="%s" font-size="%d" '
+                     'text-anchor="middle" font-weight="600" fill="%s" %s>%s</text>'
+                     % (x + w / 2, y + 36, "monospace",
+                        max(14, int((26 if len(k) < 4 else 20) * skala)),
+                        theme["papier"] if jetzt else tinte,
+                        "" if jetzt else 'fill-opacity=".5"', entschaerfen(k)))
+            x += w + luecke
     t.append("</svg>")
     return "".join(t)
 

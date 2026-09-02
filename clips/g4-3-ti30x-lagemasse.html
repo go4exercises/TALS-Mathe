@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Taschenrechner: Lagemasse aus einer Datenreihe</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Arithmetik · Taschenrechner</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>02.09.2026</span></div>
+<div class="l" data-at="8.61" data-out="53.97" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="8.91" data-anim="rise" data-dim="8.61,28.31"><div class="num">1</div><div class="stxt">Werte in L1 eintippen</div></div><div class="step l flow" data-at="28.61" data-anim="rise" data-dim="28.31,39.51"><div class="num">2</div><div class="stxt">rechnen lassen<br><span class="dim">eine Variable</span></div></div><div class="step l flow" data-at="39.81" data-anim="rise" data-dim="39.51,53.97"><div class="num">3</div><div class="stxt">von Hand prüfen<br><span class="dim">Grössenordnung</span></div></div></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="8.61" data-anim="rise" style="left:0;right:0;text-align:center;top:225px;font-size:88px;font-weight:600;color:var(--tinte)">Lagemasse per Taste</div>
+<div class="l m row mitte" data-at="2.10" data-out="8.61" data-anim="pop" style="left:0;right:0;text-align:center;top:405px;font-size:66px"><span>\(3;\; 4;\; 4;\; 5;\; 5;\; 6;\; 9\)</span></div>
+<div class="l hand mitte" data-at="3.80" data-out="8.61" data-anim="rise" style="left:0;right:0;text-align:center;top:630px;font-size:52px;color:var(--blau)">Der Listen-Editor fasst bis zu 50 Werte je Liste.</div>
+<div class="l graf" data-at="9.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1    L2    L3</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">----</text><rect x="329.0" y="219.9" width="102.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="380.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >data</text></svg></div>
+<div class="l graf" data-at="10.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(1)=3</text><rect x="294.5" y="219.9" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="345.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">data</text><rect x="405.5" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="435.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >3</text></svg></div>
+<div class="l graf" data-at="11.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(1)=3</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(2)=</text><rect x="229.5" y="219.9" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="280.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">data</text><rect x="340.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="370.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">3</text><rect x="409.5" y="219.9" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="470.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="12.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(2)=4</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(3)=</text><rect x="195.0" y="219.9" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="246.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">data</text><rect x="306.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="336.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">3</text><rect x="375.0" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="435.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="505.0" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="535.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >4</text></svg></div>
+<div class="l graf" data-at="13.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(3)=4</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(4)=</text><rect x="160.5" y="219.9" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="211.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">data</text><rect x="271.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="301.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">3</text><rect x="340.5" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="401.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="470.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="500.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="539.5" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="569.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >4</text></svg></div>
+<div class="l graf" data-at="14.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(4)=5</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(5)=</text><rect x="126.0" y="219.9" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="177.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">data</text><rect x="237.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="267.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">3</text><rect x="306.0" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="366.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="436.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="466.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="505.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="535.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="574.0" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="604.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >5</text></svg></div>
+<div class="l graf" data-at="15.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(5)=5</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(6)=</text><rect x="91.5" y="219.9" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="142.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">data</text><rect x="202.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="232.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">3</text><rect x="271.5" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="332.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="401.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="431.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="470.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="500.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="539.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="569.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">5</text><rect x="608.5" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="638.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >5</text></svg></div>
+<div class="l graf" data-at="16.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(6)=6</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(7)=</text><rect x="57.0" y="219.9" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="108.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">data</text><rect x="168.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="198.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">3</text><rect x="237.0" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="297.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="367.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="397.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="436.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="466.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="505.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="535.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">5</text><rect x="574.0" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="604.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">5</text><rect x="643.0" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="673.0" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >6</text></svg></div>
+<div class="l graf" data-at="17.21" data-out="28.31" data-anim="fade" style="left:680px;top:170px"><svg width="760" height="281" viewBox="0 0 760 281"><rect x="0" y="0" width="760" height="281" fill="#f8f6f1"/><rect x="0" y="0" width="760" height="208" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="724" height="176" rx="5" fill="#c9d4c4"/><text x="30.0" y="85.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(7)=9</text><text x="30.0" y="166.1" font-family="monospace" font-size="74.4" fill="#1c1a17" xml:space="preserve">L1(8)=</text><rect x="22.5" y="219.9" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="73.5" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">data</text><rect x="133.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="163.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">3</text><rect x="202.5" y="219.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="263.0" y="255.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="332.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="362.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="401.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="431.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">4</text><rect x="470.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="500.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">5</text><rect x="539.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="569.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">5</text><rect x="608.5" y="219.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="638.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">6</text><rect x="677.5" y="219.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="707.5" y="255.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >9</text></svg></div>
+<div class="l hand" data-at="24.31" data-out="28.31" data-anim="rise" style="left:680px;top:510px;font-size:48px;color:var(--blau)">Reihenfolge egal — Mittelwert und Median hängen nicht davon ab, wie du eintippst.</div>
+<div class="l graf" data-at="29.01" data-out="39.51" data-anim="fade" style="left:680px;top:180px"><svg width="800" height="291" viewBox="0 0 800 291"><rect x="0" y="0" width="800" height="291" fill="#f8f6f1"/><rect x="0" y="0" width="800" height="217" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="764" height="185" rx="5" fill="#c9d4c4"/><text x="30.0" y="88.7" font-family="monospace" font-size="78.6" fill="#1c1a17" xml:space="preserve">1-Var  2-Var</text><rect x="349.0" y="229.1" width="102.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="400.0" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >stat</text></svg></div>
+<div class="l graf" data-at="30.01" data-out="39.51" data-anim="fade" style="left:680px;top:180px"><svg width="800" height="291" viewBox="0 0 800 291"><rect x="0" y="0" width="800" height="291" fill="#f8f6f1"/><rect x="0" y="0" width="800" height="217" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="764" height="185" rx="5" fill="#c9d4c4"/><text x="30.0" y="88.7" font-family="monospace" font-size="78.6" fill="#1c1a17" xml:space="preserve">DATA:L1</text><text x="30.0" y="174.3" font-family="monospace" font-size="78.6" fill="#1c1a17" xml:space="preserve">FRQ:ONE</text><rect x="284.0" y="229.1" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="335.0" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">stat</text><rect x="395.0" y="229.1" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="455.5" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >1-Var</text></svg></div>
+<div class="l graf" data-at="31.01" data-out="39.51" data-anim="fade" style="left:680px;top:180px"><svg width="800" height="291" viewBox="0 0 800 291"><rect x="0" y="0" width="800" height="291" fill="#f8f6f1"/><rect x="0" y="0" width="800" height="217" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="764" height="185" rx="5" fill="#c9d4c4"/><text x="30.0" y="88.7" font-family="monospace" font-size="78.6" fill="#1c1a17" xml:space="preserve">n=7</text><text x="30.0" y="174.3" font-family="monospace" font-size="78.6" fill="#1c1a17" xml:space="preserve">x̄=5.142857143</text><rect x="219.0" y="229.1" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="270.0" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">stat</text><rect x="330.0" y="229.1" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="390.5" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1-Var</text><rect x="460.0" y="229.1" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="520.5" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="32.01" data-out="39.51" data-anim="fade" style="left:680px;top:180px"><svg width="800" height="291" viewBox="0 0 800 291"><rect x="0" y="0" width="800" height="291" fill="#f8f6f1"/><rect x="0" y="0" width="800" height="217" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="764" height="185" rx="5" fill="#c9d4c4"/><text x="30.0" y="88.7" font-family="monospace" font-size="78.6" fill="#1c1a17" xml:space="preserve">x̄=5.142857143</text><text x="30.0" y="174.3" font-family="monospace" font-size="78.6" fill="#1c1a17" xml:space="preserve">Med=5</text><rect x="184.5" y="229.1" width="102.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="235.5" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">stat</text><rect x="295.5" y="229.1" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="356.0" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1-Var</text><rect x="425.5" y="229.1" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="486.0" y="265.1" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="555.5" y="229.1" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="585.5" y="265.1" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >▼</text></svg></div>
+<div class="l hand" data-at="35.51" data-out="39.51" data-anim="rise" style="left:680px;top:530px;font-size:46px;color:var(--rot)">Die Menü-Beschriftung zeigt das Gerät — die Grössen selbst heissen überall gleich.</div>
+<div class="l m mitte" data-at="39.91" data-out="53.97" data-anim="pop" style="left:680px;top:210px;font-size:58px;font-weight:600">Mittelwert</div>
+<div class="l m row" data-at="41.61" data-out="53.97" data-anim="rise" style="left:680px;top:340px;font-size:42px"><span>\(\bar{x} = \frac{3+4+4+5+5+6+9}{7} = \frac{36}{7} \approx 5.14\)</span></div>
+<div class="l m mitte" data-at="43.31" data-out="53.97" data-anim="pop" style="left:680px;top:540px;font-size:58px;font-weight:600">Median</div>
+<div class="l m row" data-at="45.01" data-out="53.97" data-anim="rise" style="left:680px;top:670px;font-size:42px"><span>\(3\;4\;4\;\fa{5}\;5\;6\;9 \quad\Rightarrow\quad \tilde{x} = 5\)</span></div>
+<div class="l m mitte mitte" data-at="54.37" data-out="62.41" data-anim="pop" style="left:0;right:0;text-align:center;top:250px;font-size:56px;font-weight:600">Der Mittelwert liegt immer zwischen kleinstem und grösstem Wert. Tut er es nicht, ist ein Tippfehler drin.</div>
+<div class="l hand mitte" data-at="56.07" data-out="62.41" data-anim="rise" style="left:0;right:0;text-align:center;top:490px;font-size:52px;color:var(--gruen)">Hier: 3 ≤ 5.14 ≤ 9 ✓</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g4-3-ti30x-lagemasse.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <button id="sw" hidden></button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 62.41;
+const SPRECHER = [{"bei": 0.4, "text": "Sieben Werte, Mittelwert und Median gesucht. Von Hand geht das — mit dem Rechner geht es schneller, und bei fünfzig Werten geht es nur noch so."}, {"bei": 9.01, "text": "Die data-Taste öffnet den Listen-Editor mit den drei Listen L1, L2 und L3. Die Werte kommen in L1, jeder mit enter bestätigt."}, {"bei": 28.71, "text": "Dann das Statistik-Menü aufrufen, eine Variable wählen, Liste eins bestätigen. Der Rechner zeigt die Anzahl, den Mittelwert und — eine Zeile tiefer — den Median."}, {"bei": 39.91, "text": "Und jetzt der Teil, den kein Rechner ersetzt: nachschauen, ob es stimmen kann. Die Summe ist sechsunddreissig, geteilt durch sieben gibt fünf Komma eins vier. Der mittlere von sieben geordneten Werten ist der vierte — eine Fünf. Beides passt."}, {"bei": 54.37, "text": "Der Rechner nimmt dir das Tippen ab, nicht das Urteilen. Ein Mittelwert weit ausserhalb der Daten heisst fast immer: ein Wert ist falsch eingetippt."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
+  // Wechsel behaelt darum Zeit und Zustand einfach bei.
+  const STIMMEN = [];
+  // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
+  // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
+  // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
+  if (ton && STIMMEN.length > 1) {
+    let stimme = 0;
+    const sw = document.getElementById('sw');
+    sw.hidden = false;
+    const beschriften = () => {
+      const v = STIMMEN[stimme];
+      sw.textContent = '🗣 ' + v.n + (v.d > 1.005 ? ' (' + v.d.toFixed(2) + '\u00d7)' : '');
+      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + v.n);
+    };
+    beschriften();
+    sw.onclick = () => {
+      stimme = (stimme + 1) % STIMMEN.length;
+      const wo = t, lief = !ton.paused;
+      dehnung = STIMMEN[stimme].d || 1;
+      ton.src = STIMMEN[stimme].s;
+      ton.currentTime = wo * dehnung;
+      if (lief) ton.play().catch(() => {});
+      beschriften();
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime / dehnung;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

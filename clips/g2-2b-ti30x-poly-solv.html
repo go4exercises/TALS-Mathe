@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Taschenrechner: quadratische Gleichung mit poly-solv</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Arithmetik · Taschenrechner</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>02.09.2026</span></div>
+<div class="l" data-at="8.48" data-out="53.79" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="8.78" data-anim="rise" data-dim="8.48,22.03"><div class="num">1</div><div class="stxt">Vorbereiten<br><span class="dim">auf ax²+bx+c = 0 bringen</span></div></div><div class="step l flow" data-at="22.33" data-anim="rise"><div class="num">2</div><div class="stxt">a, b, c ablesen<br><span class="dim">mit Vorzeichen</span></div></div><div class="step l flow" data-at="22.33" data-anim="rise"><div class="num">3</div><div class="stxt">poly-solv aufrufen</div></div><div class="step l flow" data-at="22.33" data-anim="rise" data-dim="22.03,41.73"><div class="num">4</div><div class="stxt">Koeffizienten eingeben</div></div><div class="step l flow" data-at="42.03" data-anim="rise" data-dim="41.73,53.79"><div class="num">5</div><div class="stxt">Lösungen lesen<br><span class="dim">x1 und x2</span></div></div></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="8.48" data-anim="rise" style="left:0;right:0;text-align:center;top:230px;font-size:88px;font-weight:600;color:var(--tinte)">Erst umformen, dann tippen</div>
+<div class="l m row mitte" data-at="2.10" data-out="8.48" data-anim="pop" style="left:0;right:0;text-align:center;top:410px;font-size:80px"><span>\(2x^2 + 5 = 7x\)</span></div>
+<div class="l hand mitte" data-at="3.80" data-out="8.48" data-anim="rise" style="left:0;right:0;text-align:center;top:605px;font-size:54px;color:var(--rot)">So kann der Rechner damit nichts anfangen — er will a, b und c.</div>
+<div class="l m row" data-at="8.88" data-out="22.03" data-anim="rise" style="left:680px;top:210px;font-size:58px"><span>\(2x^2 + 5 = 7x \quad \mid -7x\)</span></div>
+<div class="l m row" data-at="10.58" data-out="22.03" data-anim="pop" style="left:680px;top:385px;font-size:66px"><span>\(\fa{2}x^2 \;\fb{-\,7}x \;\fc{+\,5} = 0\)</span></div>
+<div class="l m row" data-at="12.28" data-out="22.03" data-anim="rise" style="left:680px;top:560px;font-size:56px"><span>\(a = \fa{2} \qquad b = \fb{-7} \qquad c = \fc{5}\)</span></div>
+<div class="l hand" data-at="13.98" data-out="22.03" data-anim="rise" style="left:680px;top:715px;font-size:50px;color:var(--rot)">Das Minus gehört zum b. Wer es vergisst, rechnet eine andere Gleichung.</div>
+<div class="l graf" data-at="22.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="277" viewBox="0 0 740 277"><rect x="0" y="0" width="740" height="277" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="203" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="171" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">poly-solv</text><rect x="328.5" y="215.2" width="83.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="370.0" y="251.2" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >2nd</text></svg></div>
+<div class="l graf" data-at="23.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="277" viewBox="0 0 740 277"><rect x="0" y="0" width="740" height="277" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="203" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="171" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">1: ax²+bx+c=0</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">2: ax³+…</text><rect x="225.5" y="215.2" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="267.0" y="251.2" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="317.5" y="215.2" width="197.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="416.0" y="251.2" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >poly-solv</text></svg></div>
+<div class="l graf" data-at="24.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="355" viewBox="0 0 740 355"><rect x="0" y="0" width="740" height="355" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="282" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="250" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">a=</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">b=</text><text x="30.0" y="240.6" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">c=</text><rect x="160.5" y="293.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="202.0" y="329.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="252.5" y="293.9" width="197.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="351.0" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">poly-solv</text><rect x="458.5" y="293.9" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="519.0" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="25.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="355" viewBox="0 0 740 355"><rect x="0" y="0" width="740" height="355" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="282" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="250" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">a=2</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">b=</text><text x="30.0" y="240.6" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">c=</text><rect x="126.0" y="293.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="167.5" y="329.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="218.0" y="293.9" width="197.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="316.5" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">poly-solv</text><rect x="424.0" y="293.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="484.5" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="554.0" y="293.9" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="584.0" y="329.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >2</text></svg></div>
+<div class="l graf" data-at="26.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="355" viewBox="0 0 740 355"><rect x="0" y="0" width="740" height="355" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="282" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="250" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">a=2</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">b=</text><text x="30.0" y="240.6" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">c=</text><rect x="61.0" y="293.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="102.5" y="329.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="153.0" y="293.9" width="197.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="251.5" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">poly-solv</text><rect x="359.0" y="293.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="419.5" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="489.0" y="293.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="519.0" y="329.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="558.0" y="293.9" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="618.5" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="27.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="355" viewBox="0 0 740 355"><rect x="0" y="0" width="740" height="355" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="282" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="250" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">a=2</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">b=-</text><text x="30.0" y="240.6" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">c=</text><rect x="15.0" y="293.9" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="56.5" y="329.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="107.0" y="293.9" width="197.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="205.5" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">poly-solv</text><rect x="313.0" y="293.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="373.5" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="443.0" y="293.9" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="473.0" y="329.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="512.0" y="293.9" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="572.5" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="642.0" y="293.9" width="83.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="683.5" y="329.9" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >(−)</text></svg></div>
+<div class="l graf" data-at="28.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="355" viewBox="0 0 740 355"><rect x="0" y="0" width="740" height="355" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="282" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="250" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">a=2</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">b=-7</text><text x="30.0" y="240.6" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">c=</text><rect x="24.7" y="293.9" width="40.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="44.7" y="329.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">…</text><rect x="73.7" y="293.9" width="183.1" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="165.2" y="329.9" font-family="monospace" font-size="18" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">poly-solv</text><rect x="265.8" y="293.9" width="112.5" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="322.0" y="329.9" font-family="monospace" font-size="18" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="387.2" y="293.9" width="55.8" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="415.1" y="329.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="452.0" y="293.9" width="112.5" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="508.2" y="329.9" font-family="monospace" font-size="18" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="573.4" y="293.9" width="77.1" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="612.0" y="329.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">(−)</text><rect x="659.6" y="293.9" width="55.8" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="687.5" y="329.9" font-family="monospace" font-size="24" text-anchor="middle" font-weight="600" fill="#f8f6f1" >7</text></svg></div>
+<div class="l graf" data-at="29.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="355" viewBox="0 0 740 355"><rect x="0" y="0" width="740" height="355" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="282" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="250" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">a=2</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">b=-7</text><text x="30.0" y="240.6" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">c=</text><rect x="14.6" y="293.9" width="40.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="34.6" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">…</text><rect x="63.6" y="293.9" width="156.9" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="142.1" y="329.9" font-family="monospace" font-size="15" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">poly-solv</text><rect x="229.5" y="293.9" width="96.4" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="277.7" y="329.9" font-family="monospace" font-size="15" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="334.9" y="293.9" width="47.8" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="358.8" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="391.7" y="293.9" width="96.4" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="439.9" y="329.9" font-family="monospace" font-size="15" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="497.1" y="293.9" width="66.1" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="530.1" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">(−)</text><rect x="572.2" y="293.9" width="47.8" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="596.1" y="329.9" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">7</text><rect x="629.0" y="293.9" width="96.4" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="677.2" y="329.9" font-family="monospace" font-size="15" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="30.63" data-out="41.73" data-anim="fade" style="left:680px;top:175px"><svg width="740" height="355" viewBox="0 0 740 355"><rect x="0" y="0" width="740" height="355" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="282" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="250" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">a=2</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">b=-7</text><text x="30.0" y="240.6" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">c=5</text><rect x="9.4" y="293.9" width="40.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="29.4" y="329.9" font-family="monospace" font-size="19" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">…</text><rect x="58.4" y="293.9" width="145.8" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="131.3" y="329.9" font-family="monospace" font-size="14" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">poly-solv</text><rect x="213.2" y="293.9" width="89.6" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="258.0" y="329.9" font-family="monospace" font-size="14" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="311.8" y="293.9" width="44.4" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="334.0" y="329.9" font-family="monospace" font-size="19" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="365.2" y="293.9" width="89.6" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="410.0" y="329.9" font-family="monospace" font-size="14" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="463.8" y="293.9" width="61.4" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="494.5" y="329.9" font-family="monospace" font-size="19" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">(−)</text><rect x="534.2" y="293.9" width="44.4" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="556.4" y="329.9" font-family="monospace" font-size="19" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">7</text><rect x="587.6" y="293.9" width="89.6" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="632.4" y="329.9" font-family="monospace" font-size="14" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="686.2" y="293.9" width="44.4" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="708.4" y="329.9" font-family="monospace" font-size="19" text-anchor="middle" font-weight="600" fill="#f8f6f1" >5</text></svg></div>
+<div class="l hand" data-at="37.73" data-out="41.73" data-anim="rise" style="left:680px;top:535px;font-size:46px;color:var(--rot)">Die Menüzeilen stehen hier sinngemäss — die genaue Beschriftung zeigt das Gerät.</div>
+<div class="l graf" data-at="42.53" data-out="53.79" data-anim="fade" style="left:680px;top:200px"><svg width="740" height="277" viewBox="0 0 740 277"><rect x="0" y="0" width="740" height="277" fill="#f8f6f1"/><rect x="0" y="0" width="740" height="203" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="704" height="171" rx="5" fill="#c9d4c4"/><text x="30.0" y="83.3" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">x1=5/2</text><text x="30.0" y="162.0" font-family="monospace" font-size="72.2" fill="#1c1a17" xml:space="preserve">x2=1</text><rect x="309.5" y="215.2" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="370.0" y="251.2" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l m row" data-at="43.83" data-out="53.79" data-anim="pop" style="left:680px;top:540px;font-size:56px"><span>\(L = \left\{1;\; \dfrac{5}{2}\right\}\)</span></div>
+<div class="l hand" data-at="45.53" data-out="53.79" data-anim="rise" style="left:680px;top:780px;font-size:50px;color:var(--blau)">Probe: 2·(5/2)² − 7·(5/2) + 5 = 0 und 2 − 7 + 5 = 0.</div>
+<div class="l m mitte mitte" data-at="54.19" data-out="64.82" data-anim="pop" style="left:0;right:0;text-align:center;top:205px;font-size:78px;font-weight:600">Die Arbeit davor</div>
+<div class="l sans mitte" data-at="55.89" data-out="64.82" data-anim="rise" style="left:0;right:0;text-align:center;top:390px;font-size:48px"><div class="lz"><span class="ln">1</span>alles auf eine Seite: \(ax^2+bx+c=0\)</div><div class="lz"><span class="ln">2</span>\(a\), \(b\), \(c\) mit Vorzeichen ablesen</div><div class="lz"><span class="ln">3</span>erst dann poly-solv</div></div>
+<div class="l hand mitte" data-at="57.59" data-out="64.82" data-anim="rise" style="left:0;right:0;text-align:center;top:680px;font-size:52px;color:var(--rot)">Der Rechner prüft nicht, ob du richtig umgeformt hast.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g2-2b-ti30x-poly-solv.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <button id="sw" hidden></button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 64.82;
+const SPRECHER = [{"bei": 0.4, "text": "Der Rechner kann quadratische Gleichungen exakt lösen. Er verlangt dafür aber eine bestimmte Form — und die herzustellen ist Handarbeit."}, {"bei": 8.88, "text": "Zuerst alles auf eine Seite: sieben x abziehen. Es steht zwei x Quadrat minus sieben x plus fünf gleich null. Erst jetzt lassen sich a, b und c ablesen — und zwar mit ihren Vorzeichen: a ist zwei, b ist minus sieben, c ist fünf."}, {"bei": 22.43, "text": "Jetzt der Rechner. Zweit-Taste, poly-solv, die quadratische Form wählen. Dann die drei Zahlen der Reihe nach: zwei, enter. Minus sieben — mit der Vorzeichentaste — enter. Fünf, enter."}, {"bei": 42.13, "text": "Enter löst. Der Rechner zeigt beide Lösungen: x eins gleich zweieinhalb, x zwei gleich eins. Bei einer quadratischen Gleichung sind es immer zwei — auch wenn sie zusammenfallen oder nicht reell sind."}, {"bei": 54.19, "text": "Zum Mitnehmen: Der Rechner löst, aber er formt nicht um. Die Gleichung auf null zu bringen und a, b, c mit Vorzeichen abzulesen, bleibt deine Arbeit — und genau dort passieren die Fehler."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
+  // Wechsel behaelt darum Zeit und Zustand einfach bei.
+  const STIMMEN = [];
+  // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
+  // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
+  // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
+  if (ton && STIMMEN.length > 1) {
+    let stimme = 0;
+    const sw = document.getElementById('sw');
+    sw.hidden = false;
+    const beschriften = () => {
+      const v = STIMMEN[stimme];
+      sw.textContent = '🗣 ' + v.n + (v.d > 1.005 ? ' (' + v.d.toFixed(2) + '\u00d7)' : '');
+      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + v.n);
+    };
+    beschriften();
+    sw.onclick = () => {
+      stimme = (stimme + 1) % STIMMEN.length;
+      const wo = t, lief = !ton.paused;
+      dehnung = STIMMEN[stimme].d || 1;
+      ton.src = STIMMEN[stimme].s;
+      ton.currentTime = wo * dehnung;
+      if (lief) ton.play().catch(() => {});
+      beschriften();
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime / dehnung;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>
