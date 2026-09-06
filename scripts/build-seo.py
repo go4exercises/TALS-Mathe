@@ -89,6 +89,11 @@ SEITEN = {
    titel='Leitprogramm Potenzen — von ℕ über ℤ zu ℚ',
    beschreibung='Leitprogramm Potenzen: die Potenzregeln erst mit natürlichen, dann mit ganzen, dann mit rationalen Exponenten — und Wurzeln ganz ohne Wurzelgesetze.',
    themen=['Mathematik', 'Potenzen', 'Potenzgesetze', 'Wurzeln', 'Leitprogramm']),
+ 'leitprogramme/uebungspruefung-1.html': dict(
+   typ='article', lrt='Leitprogramm',
+   titel='Übungsprüfung 1 — Arithmetik, Algebra, Gleichungen',
+   beschreibung='Eine vollständige BM2-Übungsprüfung zu Arithmetik, Algebra und linearen Gleichungen: Prüfungsbogen, Musterlösung mit Punkteschlüssel und zu jeder der 26 Teilaufgaben ein vertonter Clip.',
+   themen=['Mathematik', 'Übungsprüfung', 'Arithmetik', 'Algebra', 'Lineare Gleichungen', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',

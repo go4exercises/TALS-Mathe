@@ -366,15 +366,27 @@ standen alle offen, ohne dass etwas gemeldet wurde. Es braucht dann ausdrücklic
 `zentriert`. In einer sonst mittigen Szene wirkt das wie ein Versehen. Für aufgezählte
 Merkpunkte in der Mitte drei `formel`-Zeilen nehmen; die tragen `row` und sitzen zentriert.
 
-**`<` und `>` werden in Formel und Prosa genau umgekehrt geschrieben.** `formel()`
-escapt nicht — ein nacktes `<` landet roh im HTML. In `formel`, `karte` und `box` gehört
-darum `&lt;` und `&gt;` hin. Die Prosa-Typen escapen dagegen selbst, dort schreibt man das
-Zeichen direkt; ein `&lt;` würde als sichtbarer Text „&lt;" erscheinen:
+**`<` und `>`: in LaTeX-Drehbüchern `\lt` und `\gt` schreiben.** Seit der Umstellung
+auf LaTeX (Standard, `"latex": true`) geht **jede** Formel durch `tex()` — auch die in
+`@…@` eingebettete Prosa-Formel — und `tex()` maskiert selbst: aus `&lt;` wird `&amp;lt;`,
+und im Bild steht dann der sichtbare Text „&lt;". MathJax bricht daran ab, `verify_mathjax.js`
+meldet **Misplaced &** und der Pre-Flight blockiert den Commit.
 
-| | `formel` / `karte` / `box` | `text` / `notiz` / `titel` / `untertitel` / `aussage` / `liste` |
+Die LaTeX-Makros `\lt` und `\gt` enthalten kein HTML-Sonderzeichen und sind darum unter
+beiden Pfaden richtig — sie sind der Weg, den man nimmt:
+
+| | `formel` / `karte` / `box` / `@…@` | `text` / `notiz` / `titel` / `untertitel` / `aussage` / `liste` |
 |---|---|---|
-| kleiner als | `x &lt; 3` | `Aus @x < 3@ folgt …` |
-| grösser als | `x &gt; 3` | `Aus @x > 3@ folgt …` |
+| kleiner als | `x \lt 3` | `Aus @x \lt 3@ folgt …` |
+| grösser als | `x \gt 3` | `Aus @x \gt 3@ folgt …` |
+
+Nur ausserhalb von `@…@` schreibt die Prosa das Zeichen direkt (`Aus x < 3 folgt …`); dort
+escapt `text_html()` selbst, und ein `&lt;` erschiene als sichtbarer Text „&lt;".
+
+Die alte Regel `&lt;` / `&gt;` galt der eigenen Schreibweise (`"latex": false`), wo
+`formel()` nicht maskiert. Nachgemessen am 06.09.2026 an den 26 Drehbüchern der
+Übungsprüfung: 8 Ausdrücke in 6 Dateien fielen als **Misplaced &** durch, nach der
+Umstellung auf `\lt` / `\gt` waren es 0 von 765.
 
 Für `≤` und `≥` gibt es keine Falle: `<=` und `>=` werden in beiden Fällen ersetzt.
 

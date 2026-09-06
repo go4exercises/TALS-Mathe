@@ -486,3 +486,37 @@ bei 1280 px schon bei y = 404 px, steht also längst im ersten Bildschirm.
 **Prüfen nach dem Port:** Zeilenhöhen bei 1280 / 600 / 360 px vergleichen,
 `.k-lek` linksbündig zum Titel (Versatz 0 px), `document.body.scrollWidth ===
 document.documentElement.clientWidth`.
+
+## Clip-Drehbücher: `\lt` / `\gt` statt `&lt;` / `&gt;` (TALS Mathe, 2026-09-06) — Falle, noch nicht ausgelöst
+
+**Was.** In einem LaTeX-Drehbuch (`"latex": true`, Standard) darf ein Kleiner- oder
+Grösserzeichen **nicht** als HTML-Entität geschrieben werden. `tex()` in
+`scripts/build-clips.py` maskiert selbst — aus `&lt;` wird `&amp;lt;`, im Bild steht der
+sichtbare Text „&lt;", MathJax bricht ab, und `verify_mathjax.js` meldet **Misplaced &**.
+Richtig sind die LaTeX-Makros `\lt` und `\gt`; sie enthalten kein HTML-Sonderzeichen und
+sind unter beiden Schreibweisen korrekt. Betrifft auch Formeln in `@…@` innerhalb von
+Prosa-Elementen — die gehen ebenfalls durch `tex()`.
+
+**Wo in Physik.** Nachgesehen am 06.09.2026, nicht geschätzt:
+
+| | |
+|---|---|
+| `scripts/build-clips.py` | dieselbe Mechanik — `LATEX = True` (Z. 54), `dreh.get("latex", True)` (Z. 487) |
+| Drehbücher in `clips/` | 13 (ohne `clips.json`, `vorlage.json`) |
+| davon heute betroffen | **0** — kein Drehbuch verwendet `&lt;` oder `&gt;` |
+| `HOWTO-clips.md` | **existiert dort nicht** — die falsche Regel steht also gar nicht erst im Repo |
+
+**Also: nichts zu patchen, nur zu wissen.** Die Falle schlägt beim *nächsten* Physik-Clip
+zu, der ein `<` oder `>` in einer Formel braucht (Ungleichungen, Bedingungen wie
+`T \gt 0`, Fallunterscheidungen). Wer dort einen Drehbuch-Leitfaden anlegt oder
+`clips/vorlage.json` ergänzt, nimmt die Regel gleich mit auf.
+
+**In Mathe erledigt:** `HOWTO-clips.md`, Abschnitt „Häufige Stolpersteine" — die alte
+Regel `&lt;` / `&gt;` stammte aus der eigenen Schreibweise (`"latex": false`) und war
+seit der LaTeX-Umstellung vom 31.08.2026 falsch. Nachgemessen an den 26 Drehbüchern der
+Übungsprüfung: 8 Ausdrücke in 6 Dateien fielen als **Misplaced &** durch, nach der
+Umstellung auf `\lt` / `\gt` 0 von 765.
+
+**Prüfen nach dem Port:** ein Testdrehbuch mit `T \gt 0` bauen und
+`python3 .claude/skills/preflight/preflight.py clips/<name>.html` laufen lassen —
+`fehler=0` erwartet.
