@@ -1121,6 +1121,14 @@ Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführli
   Reihe: «Quadratische Gleichungen: mit poly-solv lösen», nicht «Taschenrechner: …».
   Sonst steht in der Bibliothek eine Spalte gleich anfangender Titel, die nichts über
   den Stoff sagt.
+- **`"probe": true` hält einen Clip aus der Bibliothek heraus.** Er wird gebaut und
+  ausgeliefert, kommt aber nicht in `clips.json`, nicht in `clips.html` und auf keine
+  Lektionsseite; der Pre-Flight nimmt ihn von der Ablage-Prüfung aus. Zwei Fälle: ein
+  Versuchsclip — und ein Clip, der **zu einer bestimmten Seite gehört und nirgends
+  sonst**, wie die Prüfungsclips eines Leitprogramms nach §6.5. Weil das Feld dann
+  etwas anderes heisst als «Versuch», gehört ein `"_probe"` mit der Begründung daneben.
+  `lektion`, `reihe` und `folge` trotzdem ausfüllen: Wer den Clip später doch in die
+  Bibliothek hebt, soll nur ein Feld löschen müssen.
 - **Reihenfolge nach jedem Drehbuch-Edit:** `build-clip-ton.py` (falls der Sprechertext
   geändert hat), `build-clips.py`, `build-clips-einbau.py`, dann `build-seo.py` und
   `build-suchindex.py`.
@@ -1130,11 +1138,17 @@ Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführli
 
 ## 6.5 Leitprogramme (verbindlich seit 01.09.2026)
 
-Ein Leitprogramm ist eine eigenständige Seite unter `leitprogramme/`: ein Thema zum
-selbstständigen Durcharbeiten, mit Vorwissenstest, Kapiteln und Gesamttest. Es ist
-**keine Themenseite** und folgt darum nicht dem Skelett aus §6.1. Der vollständige
-Weg — besonders für extern gebaute Dateien — steht in `HOWTO-leitprogramme.md`; hier
-nur, was nicht verhandelbar ist.
+Ein Leitprogramm ist eine eigenständige Seite unter `leitprogramme/` zum
+selbstständigen Durcharbeiten. Es ist **keine Themenseite** und folgt darum nicht dem
+Skelett aus §6.1. Es gibt zwei Arten, mit **identischem Layout** und verschiedener
+Gliederung:
+
+| | gegliedert nach | Anleitung |
+|---|---|---|
+| **Thema** | dem Stoff: Vorwissenstest, Kapitel, Gesamttest | `HOWTO-leitprogramme.md` |
+| **Übungsprüfung** | dem Prüfungsbogen: je Teilaufgabe ein Clip, Musterlösung, Punktezeile | `HOWTO-uebungspruefung.md` |
+
+Hier nur, was für beide nicht verhandelbar ist.
 
 - **`leitprogramme/` liegt genau eine Ebene unter der Wurzel**, wie `clips/`. Alle
   relativen Pfade setzen das voraus.
@@ -1161,6 +1175,28 @@ nur, was nicht verhandelbar ist.
 - **Eintragen in `leitprogramme.html`, `build-seo.py` und `build-suchindex.py`.** Der
   Block in `leitprogramme.html` wird von Hand gepflegt; ab etwa einem Dutzend lohnt sich
   ein Generator wie bei den Clips.
+- **Unverlinkt veröffentlichen ist erlaubt — aber nur vollständig.** Soll eine Seite
+  ausgeliefert, jedoch nicht gefunden werden (etwa eine Übungsprüfung, die eine Klasse
+  per Link bekommt), dann **alle drei Stellen zusammen**: keine Karte in
+  `leitprogramme.html`, kein Eintrag in `build-suchindex.py`, und in `build-seo.py` ein
+  Eintrag **mit `noindex=True`** (nicht das Weglassen — sonst fehlen Beschreibung und
+  canonical). `noindex=True` nimmt die Seite aus der Sitemap *und* setzt
+  `<meta name="robots" content="noindex, nofollow">`; die Sitemap allein hält keine
+  Suchmaschine ab, die die URL anderswoher kennt. **Kein `Disallow` in `robots.txt`** —
+  die Datei ist öffentlich lesbar und würde die URL gerade bekanntmachen. Und es bleibt
+  Unauffindbarkeit, keine Zugangskontrolle: Wer den Link hat, kommt hinein.
+
+### Nur bei der Art «Übungsprüfung»
+
+- **Die Aufgabentexte stehen wörtlich da**, samt Punktzahl — geglättete Formulierungen
+  erklären eine andere Prüfung als die, die geschrieben wurde.
+- **Der Prüfungsbogen steht am Anfang, vollständig und ohne Lösungen.** Er ist der Grund,
+  dass die Aufgabentexte zweimal auf der Seite stehen; das ist Absicht.
+- **Je Teilaufgabe ein Clip**, und die Clips tragen `"probe": true` (§6.4) — sie gehören
+  zur Seite, nicht in die Bibliothek und nicht auf eine Lektionsseite.
+- **Die Punktezeile unter jeder Lösung ist orange** (`.pkt-hinweis`) und damit nach §5.1
+  „Aufgabe/Übung": Sie sagt, was in der Prüfung zählt. Sie kommt aus der Musterlösung —
+  steht dort keine Aufteilung, wird keine erfunden.
 
 ## 7. Footer-Konvention
 

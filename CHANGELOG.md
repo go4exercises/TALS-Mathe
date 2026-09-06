@@ -4,6 +4,65 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 6. September 2026 · Übungsprüfung als Leitprogramm
+
+Eine zweite Art Leitprogramm: nicht nach dem Stoff gegliedert, sondern nach einem
+Prüfungsbogen. Jede Teilaufgabe bekommt ihren eigenen vertonten Clip.
+
+### Hinzugefügt
+
+- **`leitprogramme/uebungspruefung-1.html`** — die BM2-Übungsprüfung zu Arithmetik,
+  Algebra und linearen Gleichungen, vollständig erklärt. Zuoberst der Prüfungsbogen am
+  Stück (70 min, 23 Punkte, ohne Rechner), darunter 15 Aufgabenblöcke mit 26
+  Teilaufgaben: Frage → Clip → Musterlösung → Punktezeile, dazu Kästen mit typischen
+  Fehlern. Für Teil C eine Tabelle zu \(k \cdot x = m\) mit drei Ausgängen, die fünf der
+  sieben Aufgaben vorwegnimmt. Am Schluss Punkteschlüssel und Selbsteinschätzung.
+- **26 Clips** (`clips/pruefung1-*`), zusammen 20:28 min, mit Thorsten vertont. Sie
+  tragen `"probe": true` und stehen darum nur in dieser Seite — `clips.json` blieb
+  unverändert bei 62 Einträgen, die acht betroffenen Lektionsseiten unangetastet.
+- **`HOWTO-uebungspruefung.md`** — der ganze Weg vom PDF zur Seite, in sieben Schritten.
+  Mit dem, was der erste Durchgang gekostet hat, und dem, was schiefging.
+- **STYLEGUIDE §6.5**: die zwei Arten Leitprogramm, was nur für die Prüfungsart gilt,
+  und die Regel fürs unverlinkte Veröffentlichen. **§6.4**: `"probe": true`.
+
+### Geändert
+
+- **`build-seo.py`: `noindex` setzt jetzt auch ein robots-Meta.** Bisher steuerte das
+  Feld nur die Sitemap. Das genügt nicht — eine Suchmaschine, die die URL anderswoher
+  kennt (geteilter Link, Referrer), indexiert die Seite trotzdem. `block()` schreibt bei
+  `noindex` nun `<meta name="robots" content="noindex, nofollow">` in den generierten
+  Kopfblock. Bewusst **kein** `Disallow` in `robots.txt`: die Datei ist öffentlich
+  lesbar und würde die URL gerade bekanntmachen.
+- **Die Übungsprüfung ist unverlinkt.** Keine Karte in `leitprogramme.html`, kein
+  Eintrag im Suchindex, `noindex=True` in `build-seo.py` — erreichbar nur über den
+  Direktlink. Das ist Unauffindbarkeit, keine Zugangskontrolle.
+
+### Behoben
+
+- **`HOWTO-clips.md`: die Regel zu `<` und `>` war seit der LaTeX-Umstellung falsch.**
+  Sie verlangte `&lt;` / `&gt;` in Formeln — das stammt aus der eigenen Schreibweise.
+  Im LaTeX-Pfad maskiert `tex()` selbst, aus `&lt;` wird `&amp;lt;`, MathJax bricht mit
+  *Misplaced &* ab und der Pre-Flight blockiert den Commit. Richtig sind `\lt` und
+  `\gt`. Gemessen: 8 Fehler in 6 Dateien vorher, 0 von 765 nachher.
+- **Veraltete Bestandszahlen.** `CLAUDE.md` nannte 50 Clips, `HOWTO-clips.md` 51 — beide
+  seit `c79eccf` überholt. Tatsächlich: 88 Drehbücher, davon 62 in der Bibliothek
+  (68:29 min) und 26 unverlinkte Prüfungsclips.
+- **Am neuen Leitprogramm, alles erst im Browser sichtbar:** 61 px waagrechter Überlauf
+  bei 360 px (eine Tabelle erbte `white-space:nowrap` aus `.bewertung`, ein `.band`
+  konnte nicht umbrechen); 22 Formeln unter 82 % verkleinert, die schlimmste auf 51 %,
+  behoben durch Zerlegen der Ketten in Zwischenschritte statt durch eine Stiländerung;
+  Schlusspunkte, die nach einer breiten Formel allein auf die nächste Zeile rutschten.
+
+### Aus der Quelle
+
+Zwei der 26 Teilaufgaben waren im Textextrakt des PDF verfälscht — die Extraktion
+verliert Hoch- und Überstriche stumm. `0.6` ist gedruckt \(0.\overline{6}\) (Strich bei
+x 387.8–393.3, y 497.9, 5.5 pt breit, genau über der 6), `32 ·` ist \(3^2 \cdot\).
+Aufgefallen ist beides daran, dass die mitgelieferte Musterlösung der Nachrechnung
+widersprach. Die Regel steht jetzt im Verifikations-Standard von `CLAUDE.md`.
+
+---
+
 ## [Unveröffentlicht] — 31. August / 1. September 2026 · Leitprogramme
 
 Ein zweites Format neben den Clips: Ein Leitprogramm führt allein durch ein Thema —

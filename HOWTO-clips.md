@@ -228,6 +228,33 @@ Die eigenständige Fassung (rund 480 kB) bettet die Schriften ein und läuft ohn
 Site — für Moodle, zum Verschicken, fürs Archiv. Nicht routinemässig bauen und **nicht
 committen**; die Web-Fassung ist die gepflegte.
 
+### `"probe": true` — gebaut, aber nicht in der Bibliothek
+
+Ein Drehbuch mit `"probe": true` wird ganz normal gebaut und ausgeliefert, aber
+
+- es kommt **nicht** in `clips/clips.json`,
+- es erscheint **nicht** in der Bibliothek `clips.html`,
+- `build-clips-einbau.py` baut es auf **keine** Lektionsseite ein,
+- der Pre-Flight nimmt es von der Ablage-Konsistenzprüfung aus (sonst meldete er die
+  HTML-Datei als «fehlt in clips.json»).
+
+Gedacht war das Feld für Versuchsclips. Es trägt inzwischen einen zweiten, dauerhaften
+Fall: **Clips, die zu einer bestimmten Seite gehören und nirgends sonst.** Die 26
+Prüfungsclips des Leitprogramms `uebungspruefung-1` sind so eingebunden — sie stehen in
+der Seite, aber die Bibliothek bleibt bei 62 Einträgen, und die acht betroffenen
+Lektionsseiten bleiben unverändert. Ohne das Feld wären beide ungefragt mitgewachsen.
+
+Weil «probe» dann etwas anderes heisst als «Versuch», gehört eine Begründung daneben:
+
+```json
+"probe": true,
+"_probe": "Prueferklaerung — gehoert zum Leitprogramm uebungspruefung-1, nicht in die Clip-Bibliothek."
+```
+
+`lektion`, `reihe` und `folge` trotzdem ausfüllen: Sie werden bei `probe` nicht
+ausgewertet, aber wer den Clip später in die Bibliothek heben will, soll nur ein Feld
+löschen müssen. Der ganze Ablauf für Prüfungsclips steht in `HOWTO-uebungspruefung.md`.
+
 ---
 
 ## Schritt 3 — In die Lektionsseite einbauen
@@ -740,7 +767,7 @@ Alle vier fielen erst in der Prüfung auf, keiner im Augenschein:
 
 ### Wie geprüft wurde
 
-Nicht durch Ansehen — 28 Clips mit rund 150 Szenen sah damals niemand vollständig durch, und heute sind es 50.
+Nicht durch Ansehen — 28 Clips mit rund 150 Szenen sah damals niemand vollständig durch, und heute sind es 88.
 
 **Textvergleich.** `.claude/tools/clip-text.mjs` liest den sichtbaren Text jeder Zeile.
 Einmal vor dem Umbau, einmal danach, dann Zeile gegen Zeile. Von 719 Zeilen blieben 31
@@ -767,9 +794,11 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
 
-- **Mehr Clips.** Es sind 51 (54:21 min), alle im Grundlagenfach; das Schwerpunktfach hat
-  bis auf den geteilten Bruchgleichungs-Clip noch keine eigenen. Am dichtesten sind
-  Lerngebiet 1 und 2, in 3, 4 und 5 steht je einer. Als Referenz für ein Drehbuch:
+- **Mehr Clips.** Stand 06.09.2026: **88 Drehbücher**, alle vertont — davon 62 in der
+  Bibliothek (68:29 min; 55 Grundlagenfach, 7 Schwerpunktfach) und 26 unverlinkte
+  Prüfungsclips mit `"probe": true` (20:28 min), die nur im Leitprogramm
+  `uebungspruefung-1` stehen. Das Schwerpunktfach ist weiterhin dünn. Als Referenz für
+  ein Drehbuch:
   `g2-2b-mitternachtsformel-herleitung` für eine Herleitung Schritt für Schritt,
   `g2-2a-warum-a-ungleich-5` für eine Rechnung mit Bedingung, `g2-3-anzahl-loesungen`
   für eine Fallunterscheidung mit Bild.

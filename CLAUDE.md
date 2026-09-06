@@ -36,17 +36,28 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
 - `formelsammlung.html`, `glossar.html`, `clips.html`, `leitprogramme.html` — vier
   Nachschlag-Seiten im Repo-Root.
-- `leitprogramme/` — Leitprogramme zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 2 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
-  `leitprogramme.html` wird von Hand gepflegt. **Extern gebaute Datei hereinholen:
-  `HOWTO-leitprogramme.md` Punkt für Punkt** — das Verbindliche in STYLEGUIDE §6.5.
-- `clips/` — 50 vertonte Animationen (52:54 min). Von Hand geschrieben wird nur das
-  Drehbuch `clips/<name>.json`; `.html`, `sprechertext-*.txt`, `clips.json` und die
-  Blöcke auf den Lektionsseiten sind **generiert**. Formeln stehen in LaTeX.
-  Vollständig in `HOWTO-clips.md`, das Verbindliche in STYLEGUIDE §6.4.
+  `leitprogramme.html` wird von Hand gepflegt. Es gibt **zwei Arten**:
+  - *nach Thema* (`potenzen.html`) — Vorwissenstest, Kapitel, Gesamttest.
+    Extern gebaute Datei hereinholen: **`HOWTO-leitprogramme.md` Punkt für Punkt**.
+  - *nach Prüfungsbogen* (`uebungspruefung-1.html`) — jede Teilaufgabe mit eigenem
+    Clip, Musterlösung und Punktezeile. Der ganze Weg vom PDF zur Seite steht in
+    **`HOWTO-uebungspruefung.md`**; er hat eigene Fallstricke (verlorene Hoch- und
+    Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).
+
+  Das Verbindliche für beide: STYLEGUIDE §6.5.
+- `clips/` — 88 Drehbücher, alle vertont: **62 in der Bibliothek** (68:29 min) und
+  **26 unverlinkte** Prüfungsclips mit `"probe": true`, die nur im zugehörigen
+  Leitprogramm stehen und weder in `clips.json` noch auf einer Lektionsseite
+  auftauchen. Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
+  `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
+  sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,
+  nicht als HTML-Entität. Vollständig in `HOWTO-clips.md`, das Verbindliche in
+  STYLEGUIDE §6.4.
 - `schriften.css` + `schriften/` — lokal ausgelieferte Schriften (Fontsource 5.3.0,
   OFL). `vendor/mathjax/` — MathJax 3.2.2 (Apache 2.0). **Keine Seite lädt etwas von
   einem fremden Host**; Details und Fallstricke in STYLEGUIDE §5.3.1. Umgestellt wird
@@ -125,6 +136,13 @@ im Repo-Root; fehlen die Module, werden diese Checks als `[WARN]` übersprungen.
   im Pre-Flight setzt mit `mathjax-full` aus `node_modules` und sieht nicht, ob unter
   `vendor/` etwas fehlt — ein fehlender Baustein lässt eine *ganze* Seite ohne
   Formelsatz, ohne Fehlermeldung im Bild.
+- **Text aus einem PDF ist nicht der Text im PDF.** Die Extraktion verliert stumm
+  Hoch- und Überstriche: aus \(3^2\) wird `32`, aus \(0.\overline{6}\) wird `0.6` — beides
+  plausibel und falsch. Wo eine mitgelieferte Musterlösung der eigenen Rechnung
+  widerspricht, ist meist die Extraktion schuld. Nachweisen lässt sich ein Überstrich
+  am Inhaltsstrom (waagrechte Linie genau über der Ziffer), eine Hochstellung an der
+  kleineren Schriftgrösse im `visitor_text`-Rückruf. Rezept in
+  `HOWTO-uebungspruefung.md` Schritt 0.
 - **Keine erfundenen Quellen, Zitate oder Lehrplan-Stellen.** Im Zweifel: „muss
   verifiziert werden" schreiben, nicht raten.
 

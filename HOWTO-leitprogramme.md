@@ -11,6 +11,18 @@ Sie ist aus dem ersten Übertrag entstanden (`leitprogramm-potenzen_4.html` →
 `leitprogramme/potenzen.html`, 31.08./01.09.2026) und listet, was dabei nötig war —
 jeder Punkt stand für ein Problem, das erst im Browser sichtbar wurde.
 
+## Zwei Arten von Leitprogramm
+
+| | gegliedert nach | Beispiel | Anleitung |
+|---|---|---|---|
+| **Thema** | dem Stoff: Vorwissenstest, Kapitel, Gesamttest | `potenzen.html` | diese Datei |
+| **Übungsprüfung** | dem Prüfungsbogen: je Teilaufgabe ein Clip, Musterlösung, Punktezeile | `uebungspruefung-1.html` | **`HOWTO-uebungspruefung.md`** |
+
+Layout, Kopf, Fuss, Farbtokens und Clip-Bühne sind bei beiden dieselben — der
+`<style>`-Block der zweiten Art ist aus `potenzen.html` übernommen. Die Übertragsliste
+unten gilt darum für beide. Was nur die Prüfungsart betrifft (PDF auslesen, `"probe"`
+an den Clips, Punktezeile, unverlinkt veröffentlichen), steht in der eigenen Datei.
+
 ---
 
 ## Die Übertragsliste
@@ -166,6 +178,37 @@ kippt `--tinte` mit dem Text nach hell — der Fuss würde weiss. Drei Zeilen da
 
 Danach `python3 scripts/build-seo.py --schreiben` und
 `python3 scripts/build-suchindex.py`.
+
+#### Oder bewusst *nicht* eintragen — unverlinkt veröffentlichen
+
+Manches soll ausgeliefert, aber nicht gefunden werden: eine Übungsprüfung, die eine
+Klasse per Link bekommt. Dann **alle drei Stellen zusammen**, sonst wirkt es nicht:
+
+| Datei | |
+|---|---|
+| `leitprogramme.html` | **keine** Karte |
+| `scripts/build-suchindex.py` | **kein** Eintrag — sonst steht die Seite in der Volltextsuche |
+| `scripts/build-seo.py` | Eintrag **mit `noindex=True`** — nicht weglassen, sonst fehlen Beschreibung und canonical |
+
+`noindex=True` nimmt die Seite aus `sitemap.xml` **und** lässt `block()` ein
+`<meta name="robots" content="noindex, nofollow">` in den generierten Kopfblock setzen.
+Beides zusammen ist nötig: Die Sitemap allein hält keine Suchmaschine ab, die die URL
+anderswoher kennt — aus einem geteilten Link, einem Referrer, einer Browserleiste. Das
+`nofollow` hält von der Seite aus auch die eingebetteten Clipdateien aus dem Index.
+
+**Kein `Disallow` in `robots.txt`.** Die Datei ist öffentlich lesbar; ein Eintrag dort
+würde die URL gerade bekanntmachen, statt sie zu verbergen.
+
+**Und die Grenze aussprechen:** Das ist Unauffindbarkeit, keine Zugangskontrolle. Wer den
+Link hat, kommt hinein, und wer ihn weitergibt, gibt den Zugang weiter. Für echten Schutz
+bräuchte es etwas anderes als GitHub Pages.
+
+Prüfen lässt es sich in drei Griffen:
+
+```sh
+grep -c "<dateiname>" sitemap.xml suchindex.js leitprogramme.html   # dreimal 0
+grep 'name="robots"' leitprogramme/<name>.html                      # noindex, nofollow
+```
 
 ---
 

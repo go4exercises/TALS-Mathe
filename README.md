@@ -22,13 +22,15 @@ Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TA
 - **46 Themenseiten** — alle 31 RLP-Teilgebiete plus die TALS-Ergänzungen 3.6 und 4.3d
 - **Interaktive Canvas-Animationen** auf jeder Seite, mit Rollover-Hinweisen
   „Worauf achten?" und „Erkenntnis"
-- **50 Clips** — kurze, vertonte Animationen, die einen Gedankengang Zeile für Zeile
-  aufbauen (zusammen 52:54 min); auf der Themenseite und gesammelt unter *Nachschlagen → Clips*
+- **62 Clips** — kurze, vertonte Animationen, die einen Gedankengang Zeile für Zeile
+  aufbauen (zusammen 68:29 min); auf der Themenseite und gesammelt unter *Nachschlagen → Clips*
 - **Volltextsuche** über alle Seiten, Glossar und Formelsammlung (Tastenkürzel `/`)
 - **Zusatzmaterial je Thema**: Handout, Teste dich selbst, Aufgabenserie (Druckseiten)
   und ein Anki-Deck
-- **Leitprogramme** — ein Thema zum selbstständigen Durcharbeiten, mit Vorwissenstest,
-  Kapiteln, eingebetteten Clips und Gesamttest; erstes: *Potenzen*
+- **Leitprogramme** — zum selbstständigen Durcharbeiten, in zwei Arten: *nach Thema*
+  mit Vorwissenstest, Kapiteln und Gesamttest (*Potenzen*), und *nach Prüfungsbogen*,
+  wo jede Teilaufgabe einer Übungsprüfung ihren eigenen Clip, ihre Musterlösung und
+  ihre Punktezeile bekommt
 - **Nachschlagen**: Glossar, Formelsammlung, Clips und Leitprogramme
 - **Rechtliches & Datenschutz** — keine Cookies, kein Tracking
 
