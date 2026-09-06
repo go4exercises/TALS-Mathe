@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Musterlösung Trigonometrie</title>
+<link rel="stylesheet" href="../schriften.css">
+<!-- Die Seite erbt Farben, Karten und die Clip-Buehne von der Site.
+     Reihenfolge zaehlt: der eigene <style> unten gewinnt bei gleichem
+     Gewicht, das Leitprogramm behaelt also sein Layout. -->
+<link rel="stylesheet" href="../style.css">
+<style>
+:root{
+  /* Die Palette kommt aus ../style.css — 20 Tokens, Wert fuer Wert dieselben.
+     Hier steht nur, was dort anders heisst oder fehlt. Damit kann sie nicht
+     mehr auseinanderlaufen. */
+  --karte:var(--weiss);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --papier:#171512; --papier-2:#1f1c17; --karte:#211e19; --weiss:#211e19;
+    --tinte:#f1ece1; --tinte-2:#b6ab97; --linie:#3a342a;
+    --blau:#8ab6e8; --blau-hell:#1b2a3d; --blau-rand:#3f6da3;
+    --gruen:#79c894; --gruen-hell:#162c1f; --gruen-rand:#3f8058;
+    --lila:#c3a0ec; --lila-hell:#251b33; --lila-rand:#7d5cae;
+    --orange:#e9a25e; --orange-hell:#33240f; --orange-rand:#9c6a2c;
+    --rot:#ef9393; --rot-hell:#331a1a; --rot-rand:#a35050;
+    --s:0 2px 10px rgba(0,0,0,.35); --sl:0 4px 22px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --papier:#171512; --papier-2:#1f1c17; --karte:#211e19; --weiss:#211e19;
+  --tinte:#f1ece1; --tinte-2:#b6ab97; --linie:#3a342a;
+  --blau:#8ab6e8; --blau-hell:#1b2a3d; --blau-rand:#3f6da3;
+  --gruen:#79c894; --gruen-hell:#162c1f; --gruen-rand:#3f8058;
+  --lila:#c3a0ec; --lila-hell:#251b33; --lila-rand:#7d5cae;
+  --orange:#e9a25e; --orange-hell:#33240f; --orange-rand:#9c6a2c;
+  --rot:#ef9393; --rot-hell:#331a1a; --rot-rand:#a35050;
+  --s:0 2px 10px rgba(0,0,0,.35); --sl:0 4px 22px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--papier);color:var(--tinte);
+  font-family:var(--serif);font-size:17px;line-height:1.62;
+  -webkit-text-size-adjust:100%}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.22;margin:0}
+a{color:var(--blau)}
+:focus-visible{outline:2.5px solid var(--lila-rand);outline-offset:2px;border-radius:3px}
+mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
+
+/* ---------- Gerüst ---------- */
+.huelle{max-width:1180px;margin:0 auto;padding:0 20px 100px}
+.raster{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:1000px){
+  .raster{grid-template-columns:236px minmax(0,1fr);gap:52px;align-items:start}
+}
+.inhalt{min-width:0;max-width:70ch}
+
+/* ---------- Kopf ---------- */
+.kopf{border-bottom:1px solid var(--linie);background:var(--papier-2);
+  margin-bottom:44px;padding:0 20px}
+.kopf-innen{max-width:1180px;margin:0 auto;padding:30px 0 34px;
+  display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between}
+.marke{font-family:var(--sans);font-size:.76rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tinte-2);margin:0 0 10px}
+.kopf h1{font-size:clamp(2rem,5.2vw,2.9rem);font-weight:700;letter-spacing:-.015em}
+.kopf .unter{font-family:var(--sans);color:var(--tinte-2);margin:10px 0 0;font-size:1rem;max-width:52ch}
+.kopf-rechts{font-family:var(--sans);font-size:.82rem;color:var(--tinte-2);text-align:right;
+  display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.themenschalter{font-family:var(--sans);font-size:.78rem;font-weight:600;color:var(--tinte-2);
+  background:var(--karte);border:1px solid var(--linie);border-radius:999px;
+  padding:6px 13px;cursor:pointer}
+.themenschalter:hover{color:var(--tinte);border-color:var(--tinte-2)}
+
+/* ---------- Seitenschiene ---------- */
+.schiene{font-family:var(--sans);font-size:.87rem;margin-bottom:40px}
+@media(min-width:1000px){.schiene{position:sticky;top:22px;margin-bottom:0}}
+.schiene h2{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tinte-2);margin-bottom:12px}
+.schiene ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.schiene a{display:flex;gap:9px;align-items:baseline;padding:6px 8px;border-radius:5px;
+  text-decoration:none;color:var(--tinte);border-left:2.5px solid transparent}
+.schiene a:hover{background:var(--papier-2)}
+.schiene a.aktiv{border-left-color:var(--lila-rand);background:var(--papier-2);font-weight:600}
+.schiene .nr{font-family:var(--mono);font-size:.76rem;color:var(--tinte-2);min-width:1.6em}
+.schiene .lekt{font-family:var(--sans);font-size:.68rem;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tinte-2);margin:16px 0 5px;padding-left:8px}
+.fortschritt{margin-top:22px;padding-top:16px;border-top:1px solid var(--linie)}
+.balken{height:6px;background:var(--papier-2);border:1px solid var(--linie);border-radius:99px;overflow:hidden}
+.balken i{display:block;height:100%;background:var(--gruen-rand);width:0;transition:width .35s ease}
+.fortschritt p{margin:9px 0 0;font-size:.79rem;color:var(--tinte-2)}
+.fortschritt button{margin-top:10px;font-family:var(--sans);font-size:.75rem;color:var(--tinte-2);
+  background:none;border:none;padding:0;cursor:pointer;text-decoration:underline}
+
+/* ---------- Anleitung ---------- */
+.anleitung{background:var(--karte);border:1px solid var(--linie);border-radius:10px;
+  padding:22px 26px;margin-bottom:46px;box-shadow:var(--s)}
+.anleitung h2{font-size:1.12rem;margin-bottom:12px}
+.anleitung ol{margin:0;padding-left:1.25em;font-family:var(--sans);font-size:.94rem;color:var(--tinte-2)}
+.anleitung li{margin:6px 0}
+.anleitung li b{color:var(--tinte)}
+
+/* ---------- Lektionsband ---------- */
+.band{display:flex;align-items:center;gap:14px;margin:56px 0 30px}
+.band:first-of-type{margin-top:8px}
+.band .strich{flex:1;height:1px;background:var(--linie)}
+.band span{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--tinte-2);white-space:nowrap}
+
+/* ---------- Kapitel ---------- */
+.kap{margin-bottom:52px;scroll-margin-top:20px}
+.kap-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.marker{font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.04em;
+  padding:3px 8px;border-radius:4px;background:var(--papier-2);color:var(--tinte-2)}
+.abz{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.05em;
+  padding:3px 9px;border-radius:999px;border:1px solid}
+.abz-gf{color:var(--blau);border-color:var(--blau-rand);background:var(--blau-hell)}
+.abz-sf{color:var(--lila);border-color:var(--lila-rand);background:var(--lila-hell)}
+.zeit{font-family:var(--sans);font-size:.78rem;color:var(--tinte-2)}
+.kap h2{font-size:1.62rem;font-weight:700;letter-spacing:-.01em}
+.ziel{font-family:var(--sans);font-size:.95rem;color:var(--tinte-2);
+  border-left:2.5px solid var(--linie);padding-left:13px;margin:12px 0 22px}
+.kap h3{font-family:var(--sans);font-size:1rem;font-weight:700;margin:30px 0 10px}
+.kap p{margin:0 0 14px}
+
+/* ---------- Clipkarte ---------- */
+.clipkarte{margin:22px 0 26px}
+.clip-start{display:flex;width:100%;align-items:center;gap:15px;text-align:left;cursor:pointer;
+  background:var(--lila-hell);border:1px solid var(--lila-rand);border-radius:10px;
+  padding:14px 17px;font-family:var(--sans);color:var(--tinte)}
+.clip-start:hover{box-shadow:var(--sl)}
+.clip-play{flex:none;width:38px;height:38px;border-radius:50%;background:var(--lila);color:#fff;
+  display:grid;place-items:center;font-size:.9rem;padding-left:3px}
+:root[data-theme="dark"] .clip-play,
+:root:not([data-theme="light"]) .clip-play{color:#171512}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .clip-play{color:#fff}}
+.clip-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.clip-titel{font-weight:600;font-size:.97rem;line-height:1.32}
+.clip-quelle{font-size:.75rem;color:var(--tinte-2);letter-spacing:.03em}
+.clip-zeit{font-family:var(--mono);font-size:.8rem;color:var(--tinte-2);flex:none}
+@media(max-width:720px){
+}
+
+/* ---------- Merkkasten, Beispiele, Warnung ---------- */
+.merk{background:var(--blau-hell);border:1px solid var(--blau-rand);border-left-width:4px;
+  border-radius:8px;padding:16px 20px;margin:20px 0}
+.merk .titel{font-family:var(--sans);font-size:.73rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--blau);margin-bottom:8px}
+.merk p:last-child{margin-bottom:0}
+.warn{background:var(--orange-hell);border:1px solid var(--orange-rand);border-left-width:4px;
+  border-radius:8px;padding:16px 20px;margin:20px 0}
+.warn .titel{font-family:var(--sans);font-size:.73rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+.warn p:last-child{margin-bottom:0}
+
+table.gesetze{width:100%;border-collapse:collapse;margin:18px 0;font-size:.97rem}
+.tabhuelle{overflow-x:auto}
+table.gesetze th,table.gesetze td{border-bottom:1px solid var(--linie);padding:9px 10px;text-align:left;vertical-align:middle}
+table.gesetze th{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--tinte-2)}
+table.gesetze td:first-child{font-family:var(--mono);font-size:.82rem;color:var(--tinte-2);white-space:nowrap;width:1%}
+table.gesetze td.wort{font-family:var(--sans);font-size:.88rem;color:var(--tinte-2)}
+
+.beisp{margin:18px 0;border:1px solid var(--linie);border-radius:8px;background:var(--karte);overflow:hidden}
+.beisp .kopfz{font-family:var(--sans);font-size:.73rem;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--tinte-2);background:var(--papier-2);
+  padding:7px 16px;border-bottom:1px solid var(--linie)}
+.beisp ul{list-style:none;margin:0;padding:12px 16px;display:flex;flex-direction:column;gap:9px}
+.beisp li{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.beisp .schritt{font-family:var(--sans);font-size:.82rem;color:var(--tinte-2)}
+
+/* ---------- Selbsttest ---------- */
+.test{border:1.5px solid var(--gruen-rand);border-radius:11px;background:var(--karte);
+  margin:30px 0 0;overflow:hidden}
+.test-kopf{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;
+  background:var(--gruen-hell);padding:11px 18px;border-bottom:1px solid var(--gruen-rand)}
+.test-kopf h3{font-family:var(--sans);font-size:.94rem;font-weight:700;color:var(--gruen);margin:0}
+.test-kopf .werkz{display:flex;gap:14px;align-items:center;font-family:var(--sans);font-size:.78rem}
+.test-kopf button{font-family:var(--sans);font-size:.78rem;background:none;border:none;
+  color:var(--gruen);cursor:pointer;text-decoration:underline;padding:0}
+.test-kopf label{display:flex;gap:6px;align-items:center;color:var(--tinte-2);cursor:pointer}
+.aufg{list-style:none;margin:0;padding:6px 18px 18px}
+.aufg>li{border-bottom:1px dotted var(--linie);padding:11px 0}
+.aufg>li:last-child{border-bottom:none;padding-bottom:2px}
+.frage{display:flex;gap:11px;align-items:baseline}
+.frage .nr{font-family:var(--mono);font-size:.83rem;font-weight:700;color:var(--gruen);
+  flex:none;min-width:2.4em}
+.frage .pkt{font-family:var(--mono);font-size:.72rem;color:var(--tinte-2);
+  flex:none;min-width:3.4em;margin-left:-4px}
+.frage .txt{flex:1;min-width:0}
+details.loes{margin:7px 0 0 calc(5.8em + 11px)}
+details.loes summary{font-family:var(--sans);font-size:.79rem;color:var(--tinte-2);
+  cursor:pointer;list-style:none;display:inline-flex;gap:6px;align-items:center;
+  border:1px solid var(--linie);border-radius:999px;padding:2px 11px}
+details.loes summary::-webkit-details-marker{display:none}
+details.loes summary:hover{border-color:var(--gruen-rand);color:var(--gruen)}
+details.loes[open] summary{color:var(--gruen);border-color:var(--gruen-rand)}
+details.loes .inhaltbox{border-left:2.5px solid var(--gruen-rand);padding:6px 0 2px 13px;margin-top:9px}
+details.loes .inhaltbox p{margin:0 0 7px}
+details.loes .inhaltbox p:last-child{margin-bottom:0}
+.komm{font-family:var(--sans);font-size:.87rem;color:var(--tinte-2)}
+
+/* ---------- Gesamttest ---------- */
+.gesamt{border:2px solid var(--tinte-2);border-radius:12px;background:var(--karte);
+  padding:0;overflow:hidden;margin-top:20px}
+.gesamt-kopf{background:var(--papier-2);padding:16px 20px;border-bottom:1px solid var(--linie)}
+.gesamt-kopf h2{font-size:1.4rem}
+.gesamt-kopf p{font-family:var(--sans);font-size:.88rem;color:var(--tinte-2);margin:7px 0 0}
+.gesamt-teil{font-family:var(--sans);font-size:.75rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--tinte-2);padding:18px 20px 0}
+.gesamt .aufg{padding:6px 20px 16px}
+.summe{font-family:var(--mono);font-size:.76rem;color:var(--tinte-2);white-space:nowrap}
+.bewertung{margin:0;padding:16px 20px 20px;border-top:1px solid var(--linie);
+  font-family:var(--sans);font-size:.88rem;color:var(--tinte-2)}
+.bewertung table{width:100%;border-collapse:collapse;margin-top:8px}
+.bewertung td{padding:5px 8px;border-bottom:1px solid var(--linie)}
+.bewertung td:first-child{font-family:var(--mono);white-space:nowrap;width:1%;color:var(--tinte)}
+
+/* ---------- Fuss ---------- */
+.fuss{margin-top:64px;padding-top:20px;border-top:1px solid var(--linie);
+  font-family:var(--sans);font-size:.8rem;color:var(--tinte-2);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+
+@media(max-width:600px){
+  body{font-size:16px}
+  .huelle{padding:0 15px 70px}
+  details.loes{margin-left:0}
+}
+@media print{
+  .schiene,.themenschalter,.clip-buehne,.test-kopf .werkz{display:none}
+  .kap{break-inside:avoid}
+  details.loes{display:none}
+  body{background:#fff}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+/* Die Dunkelmodus-Regeln fuer .site-footer aus dem Skelett entfallen:
+   diese Seite traegt keinen Site-Fuss. */
+
+/* ── Zusätze dieser Seite ─────────────────────────────────────────
+   Layout unverändert aus dem Leitprogramm-Skelett. Neu ist nur, dass
+   zu jeder Teilaufgabe ein Clip gehört; er sitzt zwischen Frage und
+   Lösung, eingerückt wie der Aufklapper. */
+.clipkarte.zu-aufg{margin:9px 0 0 calc(5.8em + 11px)}
+.clipkarte.zu-aufg .clip-start{padding:10px 14px;gap:12px}
+.clipkarte.zu-aufg .clip-play{width:31px;height:31px;font-size:.78rem}
+.clipkarte.zu-aufg .clip-titel{font-size:.9rem}
+@media(max-width:600px){ .clipkarte.zu-aufg{margin-left:0} }
+
+/* Punktezeile unter einer Lösung: was der Korrektor zählt. */
+.pkt-hinweis{font-family:var(--sans);font-size:.83rem;color:var(--tinte-2);
+  border-left:2.5px solid var(--orange-rand);padding-left:11px;margin:9px 0 0}
+
+.bogen-hinweis{font-family:var(--sans);font-size:.88rem;color:var(--tinte-2);
+  margin:0;padding:14px 20px 18px;border-top:1px solid var(--linie)}
+.gesamt .aufg>li{border-bottom:1px dotted var(--linie)}
+
+table.bilanz{width:100%;border-collapse:collapse;margin:14px 0;font-family:var(--sans);font-size:.92rem}
+table.bilanz th,table.bilanz td{border-bottom:1px solid var(--linie);padding:8px 10px;text-align:left}
+table.bilanz th{font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tinte-2)}
+table.bilanz td:last-child,table.bilanz th:last-child{text-align:right;font-family:var(--mono);white-space:nowrap}
+table.bilanz td:first-child{white-space:normal;width:auto}
+@media(max-width:600px){ .band span{white-space:normal} }
+
+/* ── Abbildungen ──────────────────────────────────────────────────
+   Als SVG statt als Bild: skaliert scharf, färbt im Dunkelmodus mit
+   und braucht keine zusätzliche Datei. Alle Koordinaten sind vorab
+   gerechnet — die Tiefenwinkel der Ballonskizze messen 40.00 und
+   25.00 Grad nach. */
+figure.bild{margin:20px 0;padding:16px;border:1px solid var(--linie);
+  border-radius:9px;background:var(--karte);overflow-x:auto}
+figure.bild svg{display:block;margin:0 auto;max-width:100%;height:auto}
+figure.bild figcaption{font-family:var(--sans);font-size:.82rem;color:var(--tinte-2);
+  margin-top:10px;text-align:center}
+.sv-linie{stroke:var(--tinte);stroke-width:2.4;fill:none}
+.sv-hilf{stroke:var(--tinte-2);stroke-width:1.6;fill:none;stroke-dasharray:6 5}
+.sv-akz{stroke:var(--blau-rand);stroke-width:2.6;fill:none}
+.sv-akz2{stroke:var(--orange-rand);stroke-width:2.6;fill:none}
+.sv-flaeche{fill:var(--gruen-hell);stroke:var(--gruen-rand);stroke-width:1.6}
+.sv-txt{font-family:var(--serif);font-style:italic;font-size:20px;fill:var(--tinte)}
+.sv-klein{font-family:var(--sans);font-size:14px;fill:var(--tinte-2);font-style:normal}
+.sv-blau{fill:var(--blau);font-style:normal;font-family:var(--sans);font-size:15px;font-weight:600}
+.sv-orange{fill:var(--orange);font-style:normal;font-family:var(--sans);font-size:15px;font-weight:600}
+.sv-pkt{fill:var(--lila-rand)}
+
+/* Eigener Fuss — diese Seite steht für sich und verweist nirgends hin. */
+.fuss-eigen{margin-top:64px;padding-top:20px;border-top:1px solid var(--linie);
+  font-family:var(--sans);font-size:.8rem;color:var(--tinte-2);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+</style>
+</head>
+<body>
+<header class="kopf">
+  <div class="kopf-innen">
+    <div>
+      <p class="marke">Musterlösung</p>
+      <h1>Trigonometrie</h1>
+      <p class="unter">Eine alte Probe, Teilaufgabe für Teilaufgabe erklärt — jede mit einem eigenen Clip von rund einer Minute.</p>
+    </div>
+    <div class="kopf-rechts">
+      <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>
+      <span>9 Teilaufgaben · 18 Punkte</span>
+    </div>
+  </div>
+</header>
+
+<div class="huelle">
+<div class="raster">
+
+  <nav class="schiene" aria-label="Aufgabennavigation">
+    <h2 id="ablauf">Ablauf</h2>
+    <ol>
+      <li><a href="#bogen"><span class="nr">✎</span><span>Aufgabenblatt</span></a></li>
+    </ol>
+    <p class="lekt">Aufgabe 1 · Am Dreieck</p>
+    <ol>
+      <li><a href="#a1"><span class="nr">1</span><span>Definitionen, Kofunktion, Identität</span></a></li>
+    </ol>
+    <p class="lekt">Aufgabe 2 · Richtig oder falsch</p>
+    <ol>
+      <li><a href="#a2"><span class="nr">2</span><span>Drei Aussagen prüfen</span></a></li>
+    </ol>
+    <p class="lekt">Aufgabe 3 · Fehlersuche</p>
+    <ol>
+      <li><a href="#a3"><span class="nr">3</span><span>Der Ballon und die zwei Schiffe</span></a></li>
+    </ol>
+    <p class="lekt">Aufgabe 4 · Einheitskreis</p>
+    <ol>
+      <li><a href="#a4"><span class="nr">4</span><span>Punkt und Periode</span></a></li>
+      <li><a href="#auswertung"><span class="nr">✓</span><span>Auswertung</span></a></li>
+    </ol>
+    <div class="fortschritt">
+      <div class="balken"><i id="balken-fuellung"></i></div>
+      <p id="fortschritt-text">0 von 4 Aufgaben erledigt</p>
+      <button type="button" id="fortschritt-reset">zurücksetzen</button>
+    </div>
+  </nav>
+
+  <main class="inhalt">
+
+    <div class="anleitung">
+      <h2 id="so-arbeitest-du-mit-dieser-loesung">So arbeitest du mit dieser Lösung</h2>
+      <ol>
+        <li><b>Zuerst rechnen, dann lesen.</b> Das Aufgabenblatt steht gleich unten, vollständig und ohne Lösungen. Nimm ein Blatt und arbeite es durch, bevor du weiterscrollst.</li>
+        <li><b>Erst danach hierher zurück.</b> Wer die Lösung vorher liest, verwechselt Verstehen mit Wiedererkennen. Das gilt für die Clips genauso.</li>
+        <li><b>Zu jeder Teilaufgabe ein Clip.</b> Neun Teilaufgaben, neun Clips. Der Clip zeigt den Gedankengang, die Lösung darunter macht ihn vollständig.</li>
+        <li><b>Der orange Balken sagt, was zählt.</b> Unter jeder Lösung steht, wofür es die Punkte gibt — daran siehst du, ob dein Rechenweg gereicht hätte.</li>
+        <li><b>Hakenfeld setzen.</b> Sitzt eine Aufgabe, hakst du sie oben rechts im Aufgabenkopf ab. Der Balken links zeigt, wo du stehst.</li>
+      </ol>
+    </div>
+
+    <!-- ================= AUFGABENBLATT ================= -->
+    <section class="kap" id="bogen">
+      <div class="gesamt">
+        <div class="gesamt-kopf">
+          <div class="kap-meta"><span class="marker">Blatt</span><span class="zeit">9 Teilaufgaben · 18 Punkte</span></div>
+          <h2 id="aufgabenblatt">Aufgabenblatt</h2>
+          <p>Alle Teilaufgaben am Stück, ohne Lösungen und ohne Clips.</p>
+        </div>
+
+        <p class="gesamt-teil">Aufgabe 1 · Am rechtwinkligen Dreieck (6 Punkte)</p>
+        <ol class="aufg">
+          <li><div class="frage"><span class="nr">1a</span><span class="pkt">(3 P)</span><span class="txt">Vervollständigen Sie die Definitionen: \(\cos(\alpha) = \ldots\), \(\sin(\alpha) = \ldots\), \(\tan(\alpha) = \ldots\) — am Dreieck unten.</span></div></li>
+          <li><div class="frage"><span class="nr">1b</span><span class="pkt">(1 P)</span><span class="txt">Nehmen wir an, dass der dritte Winkel \(\beta\) ist. Erklären Sie, warum \(\sin(\beta) = \cos(\alpha)\) gilt.</span></div></li>
+          <li><div class="frage"><span class="nr">1c</span><span class="pkt">(2 P)</span><span class="txt">Zeigen Sie durch Umformung, dass \(\ 1 + \tan^2(\alpha) = \dfrac{1}{\cos^2(\alpha)}\)</span></div></li>
+        </ol>
+
+        <p class="gesamt-teil">Aufgabe 2 · Richtig oder falsch (4 Punkte)</p>
+        <p class="bogen-hinweis">Sind die folgenden Aussagen RICHTIG oder FALSCH? Falls eine Aussage falsch ist, erklären Sie warum.</p>
+        <ol class="aufg">
+          <li><div class="frage"><span class="nr">2a</span><span class="pkt">(2 P)</span><span class="txt">Wenn man in einem rechtwinkligen Dreieck mit \(\gamma = 90^\circ\) die Ankathete von \(\alpha\) halbiert und die Gegenkathete von \(\alpha\) verdoppelt, so vervierfacht sich \(\tan(\alpha)\)</span></div></li>
+          <li><div class="frage"><span class="nr">2b</span><span class="pkt">(1 P)</span><span class="txt">\(\dfrac{4}{3}\pi\ \text{rad} = 240^\circ\)</span></div></li>
+          <li><div class="frage"><span class="nr">2c</span><span class="pkt">(1 P)</span><span class="txt">\(\tan(\alpha) = \dfrac{1}{\tan(90^\circ - \alpha)}\)</span></div></li>
+        </ol>
+
+        <p class="gesamt-teil">Aufgabe 3 · Fehlersuche (4 Punkte)</p>
+        <ol class="aufg">
+          <li><div class="frage"><span class="nr">3</span><span class="pkt">(4 P)</span><span class="txt">Ein Ballonfahrer entdeckt in 3000 m Höhe über dem Meer fliegend zwei Schiffe. Beide fahren direkt hintereinander. Das dem Ballon nähere Schiff erblickt er unter einem Tiefenwinkel von \(40^\circ\), das dahinter herfahrende unter \(25^\circ\). Bestimmen Sie den Abstand der Schiffe. — Die Aufgabe wurde auf die falsche Weise gelöst (Rechnung unten). Identifizieren Sie die zwei Fehler und korrigieren Sie diese.</span></div></li>
+        </ol>
+
+        <p class="gesamt-teil">Aufgabe 4 · Einheitskreis (4 Punkte)</p>
+        <ol class="aufg">
+          <li><div class="frage"><span class="nr">4a</span><span class="pkt">(2 P)</span><span class="txt">Zeichnen Sie einen Punkt \(P\) im zweiten Quadranten auf dem Einheitskreis und beschreiben Sie die \(x\)- und \(y\)-Koordinaten von \(P\) mit Hilfe trigonometrischer Funktionen.</span></div></li>
+          <li><div class="frage"><span class="nr">4b</span><span class="pkt">(2 P)</span><span class="txt">Bestimmen Sie alle Winkel \(\alpha\), für die \(\sin(\alpha) = 1\) gilt. Geben Sie die Lösung sowohl in Grad als auch in Radianten an.</span></div></li>
+        </ol>
+        <p class="bogen-hinweis">Durchgerechnet? Dann geht es unten weiter — Teilaufgabe für Teilaufgabe, jede mit Clip und Musterlösung.</p>
+      </div>
+    </section>
+
+    <!-- ================= AUFGABE 1 ================= -->
+    <div class="band"><span>Aufgabe 1</span><span class="strich"></span><span>Am rechtwinkligen Dreieck · 6 Punkte</span></div>
+
+    <section class="kap" id="a1">
+      <div class="kap-meta">
+        <span class="marker">Aufgabe 1</span>
+        <span class="zeit">6 Punkte</span>
+      </div>
+      <h2 id="a1-am-dreieck">1 — Definitionen, Kofunktion, Identität</h2>
+      <p class="ziel">Alle drei Teilaufgaben hängen an demselben Bild. Wer die Seiten einmal sauber von \(\alpha\) aus benennt, hat a) geschenkt, b) fast geschenkt und für c) die halbe Arbeit getan.</p>
+
+      <figure class="bild">
+        <svg viewBox="0 0 480 310" role="img" aria-label="Rechtwinkliges Dreieck mit rechtem Winkel gamma unten links, Winkel alpha unten rechts, Kathete a links, Kathete b unten, Hypotenuse c">
+          <path class="sv-flaeche" d="M 70 250 h 26 v -26 h -26 Z"/>
+          <path class="sv-linie" d="M 70 250 L 410 250 L 70 70 Z"/>
+          <path class="sv-akz" d="M 366 250 A 44 44 0 0 1 371.1 229.4"/>
+          <text class="sv-txt" x="44" y="166">a</text>
+          <text class="sv-txt" x="236" y="280">b</text>
+          <text class="sv-txt" x="252" y="142">c</text>
+          <text class="sv-blau" x="336" y="238" text-anchor="middle">α</text>
+          <text class="sv-klein" x="104" y="268">γ = 90°</text>
+          <text class="sv-klein" x="70" y="58" text-anchor="middle">β</text>
+        </svg>
+        <figcaption>Von <i>α</i> aus gesehen: <i>a</i> ist die Gegenkathete, <i>b</i> die Ankathete, <i>c</i> die Hypotenuse</figcaption>
+      </figure>
+
+      <div class="test" data-test="a1">
+        <div class="test-kopf">
+          <h3>Aufgabe 1 <span class="summe">· 6 P</span></h3>
+          <span class="werkz">
+            <button type="button" class="alle-loesungen">alle Lösungen</button>
+            <label><input type="checkbox" class="erledigt"> erledigt</label>
+          </span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">1a</span><span class="pkt">(3 P)</span><span class="txt">Vervollständigen Sie die Definitionen: \(\cos(\alpha) = \ldots\), \(\sin(\alpha) = \ldots\), \(\tan(\alpha) = \ldots\)</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-1a-definitionen-am-dreieck.html" data-titel="1a — Gegenkathete, Ankathete, Hypotenuse">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">1a — Gegenkathete, Ankathete, Hypotenuse</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-1a-definitionen-am-dreieck">0:48</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p>Von \(\alpha\) aus: Gegenkathete \(a\), Ankathete \(b\), Hypotenuse \(c\)</p>
+              <p>\(\cos(\alpha) = \dfrac{\text{Ankathete}}{\text{Hypotenuse}} = \dfrac{b}{c}\)</p>
+              <p>\(\sin(\alpha) = \dfrac{\text{Gegenkathete}}{\text{Hypotenuse}} = \dfrac{a}{c}\)</p>
+              <p>\(\tan(\alpha) = \dfrac{\text{Gegenkathete}}{\text{Ankathete}} = \dfrac{a}{b}\)</p>
+              <p class="komm">Probe im Kopf: \(\dfrac{\sin(\alpha)}{\cos(\alpha)} = \dfrac{a/c}{b/c} = \dfrac{a}{b} = \tan(\alpha)\) — die Hypotenuse kürzt sich weg. Wer eine Definition vergisst, holt sie sich so zurück.</p>
+              <p class="pkt-hinweis">Je 1 P für die drei Definitionen. Die Benennung muss von \(\alpha\) aus stimmen — bei \(\beta\) wären Gegen- und Ankathete vertauscht.</p>
+            </div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">1b</span><span class="pkt">(1 P)</span><span class="txt">Erklären Sie, warum \(\sin(\beta) = \cos(\alpha)\) gilt.</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-1b-kofunktion.html" data-titel="1b — warum sin(β) gleich cos(α) ist">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">1b — warum sin(β) gleich cos(α) ist</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-1b-kofunktion">0:44</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p>Im Dreieck ist \(\alpha + \beta + \gamma = 180^\circ\) und \(\gamma = 90^\circ\), also \(\beta = 90^\circ - \alpha\)</p>
+              <p>Entscheidend ist der Rollentausch der Seiten: Was von \(\alpha\) aus die <em>Ankathete</em> ist, nämlich \(b\), ist von \(\beta\) aus die <em>Gegenkathete</em>. Die Hypotenuse \(c\) bleibt für beide dieselbe.</p>
+              <p>\(\sin(\beta) = \dfrac{\text{Gegenkathete von } \beta}{c} = \dfrac{b}{c} \qquad \cos(\alpha) = \dfrac{\text{Ankathete von } \alpha}{c} = \dfrac{b}{c}\)</p>
+              <p>Beides ist derselbe Bruch, also \(\sin(\beta) = \cos(\alpha)\)</p>
+              <p class="komm">Allgemein: \(\sin(90^\circ - \alpha) = \cos(\alpha)\) und \(\cos(90^\circ - \alpha) = \sin(\alpha)\). Daher der Name Kosinus — der Sinus des Ergänzungswinkels.</p>
+              <p class="pkt-hinweis">1 P. Die blosse Formel \(\sin(90^\circ-\alpha) = \cos(\alpha)\) hinzuschreiben ist keine Erklärung — gefragt ist das <em>Warum</em>, also der Rollentausch der Seiten.</p>
+            </div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">1c</span><span class="pkt">(2 P)</span><span class="txt">Zeigen Sie durch Umformung, dass \(\ 1 + \tan^2(\alpha) = \dfrac{1}{\cos^2(\alpha)}\)</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-1c-pythagoras-identitaet.html" data-titel="1c — 1 + tan² durch Umformen">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">1c — 1 + tan² durch Umformen</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-1c-pythagoras-identitaet">0:47</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p>Zwei Bausteine: \(\tan(\alpha) = \dfrac{\sin(\alpha)}{\cos(\alpha)}\) und der trigonometrische Pythagoras \(\sin^2(\alpha) + \cos^2(\alpha) = 1\)</p>
+              <p>\(1 + \tan^2(\alpha) = 1 + \dfrac{\sin^2(\alpha)}{\cos^2(\alpha)}\)</p>
+              <p>\(= \dfrac{\cos^2(\alpha)}{\cos^2(\alpha)} + \dfrac{\sin^2(\alpha)}{\cos^2(\alpha)} = \dfrac{\cos^2(\alpha) + \sin^2(\alpha)}{\cos^2(\alpha)}\)</p>
+              <p>\(= \dfrac{1}{\cos^2(\alpha)}\)</p>
+              <p class="komm">Alternativ direkt am Dreieck: \(1 + \dfrac{a^2}{b^2} = \dfrac{b^2+a^2}{b^2} = \dfrac{c^2}{b^2} = \dfrac{1}{\cos^2(\alpha)}\) — hier ist es der gewöhnliche Satz des Pythagoras. Beide Wege gelten für \(\cos(\alpha) \neq 0\)</p>
+              <p class="pkt-hinweis">1 P für den Ansatz (Tangens als Quotient, gleichnamig machen), 1 P für das Einsetzen des Pythagoras. Von <em>einer</em> Seite ausgehen und zur anderen kommen — nicht auf beiden Seiten gleichzeitig umformen.</p>
+            </div></details>
+          </li>
+        </ol>
+      </div>
+
+      <div class="merk">
+        <div class="titel">Der rote Faden</div>
+        <p>Alle drei Teilaufgaben sind dieselbe Sache aus drei Blickwinkeln. In a) benennt man die Seiten von einem Winkel aus. In b) sieht man, dass dieselbe Seite von <em>beiden</em> Winkeln aus einen anderen Namen trägt. Und in c) genügt es, alles auf Sinus und Kosinus zurückzuführen und den Pythagoras einzusetzen.</p>
+      </div>
+    </section>
+
+    <!-- ================= AUFGABE 2 ================= -->
+    <div class="band"><span>Aufgabe 2</span><span class="strich"></span><span>Richtig oder falsch · 4 Punkte</span></div>
+
+    <section class="kap" id="a2">
+      <div class="kap-meta">
+        <span class="marker">Aufgabe 2</span>
+        <span class="zeit">4 Punkte</span>
+      </div>
+      <h2 id="a2-drei-aussagen">2 — Drei Aussagen prüfen</h2>
+      <p class="ziel">Hier ist <b>alle drei Male «richtig»</b> die Antwort. Das ist die eigentliche Falle der Aufgabe: Wer aus dem Aufbau schliesst, dass mindestens eine falsch sein müsse, sucht einen Fehler, den es nicht gibt. Geprüft wird jede Aussage einzeln, durch Nachrechnen.</p>
+
+      <div class="test" data-test="a2">
+        <div class="test-kopf">
+          <h3>Aufgabe 2 <span class="summe">· 4 P</span></h3>
+          <span class="werkz">
+            <button type="button" class="alle-loesungen">alle Lösungen</button>
+            <label><input type="checkbox" class="erledigt"> erledigt</label>
+          </span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">2a</span><span class="pkt">(2 P)</span><span class="txt">Ankathete von \(\alpha\) halbieren, Gegenkathete verdoppeln — vervierfacht sich \(\tan(\alpha)\)?</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-2a-tangens-vervierfacht.html" data-titel="2a — halbe Ankathete, doppelte Gegenkathete">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">2a — halbe Ankathete, doppelte Gegenkathete</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-2a-tangens-vervierfacht">0:40</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p><b>RICHTIG.</b></p>
+              <p>Mit Gegenkathete \(g\) und Ankathete \(a\) ist \(\tan(\alpha) = \dfrac{g}{a}\). Nach der Änderung:</p>
+              <p>\(\dfrac{2g}{a/2} = 2g \cdot \dfrac{2}{a} = \dfrac{4g}{a} = 4 \cdot \dfrac{g}{a} = 4\tan(\alpha)\)</p>
+              <p>Beide Änderungen wirken im selben Sinn — der Zähler wird doppelt so gross, der Nenner halb so gross. Zusammen ergibt das den Faktor \(4\)</p>
+              <p class="komm">Zahlenprobe: aus \(\tfrac{3}{4} = 0.75\) wird \(\tfrac{6}{2} = 3\), und \(3 = 4 \cdot 0.75\). — Genau genommen ändert sich mit den Seiten auch der Winkel selbst; gemeint ist der Tangens des <em>neuen</em> Winkels an dieser Ecke.</p>
+              <p class="pkt-hinweis">2 P für die Antwort mit Rechnung. Ein blosses «richtig» ohne den Bruch gibt keine volle Punktzahl.</p>
+            </div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">2b</span><span class="pkt">(1 P)</span><span class="txt">\(\dfrac{4}{3}\pi\ \text{rad} = 240^\circ\)</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-2b-bogenmass-in-grad.html" data-titel="2b — vom Bogenmass ins Gradmass">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">2b — vom Bogenmass ins Gradmass</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-2b-bogenmass-in-grad">0:38</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p><b>RICHTIG.</b></p>
+              <p>Die ganze Umrechnung hängt an \(\pi\ \text{rad} = 180^\circ\). Also \(\pi\) durch \(180^\circ\) ersetzen:</p>
+              <p>\(\dfrac{4}{3}\pi = \dfrac{4}{3} \cdot 180^\circ = 4 \cdot 60^\circ = 240^\circ\)</p>
+              <p class="komm">Gegenprobe: \(240^\circ\) sind zwei Drittel von \(360^\circ\), und zwei Drittel von \(2\pi\) sind \(\tfrac{4}{3}\pi\)</p>
+              <p class="pkt-hinweis">1 P. Erst durch drei, dann mal vier — so bleibt es im Kopf rechenbar.</p>
+            </div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">2c</span><span class="pkt">(1 P)</span><span class="txt">\(\tan(\alpha) = \dfrac{1}{\tan(90^\circ - \alpha)}\)</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-2c-tangens-kehrwert.html" data-titel="2c — der Tangens des Ergänzungswinkels">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">2c — der Tangens des Ergänzungswinkels</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-2c-tangens-kehrwert">0:40</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p><b>RICHTIG.</b></p>
+              <p>Mit den Kofunktions-Regeln aus 1b: \(\sin(90^\circ - \alpha) = \cos(\alpha)\) und \(\cos(90^\circ - \alpha) = \sin(\alpha)\). Also</p>
+              <p>\(\tan(90^\circ - \alpha) = \dfrac{\sin(90^\circ - \alpha)}{\cos(90^\circ - \alpha)} = \dfrac{\cos(\alpha)}{\sin(\alpha)} = \dfrac{1}{\tan(\alpha)}\)</p>
+              <p>und damit \(\dfrac{1}{\tan(90^\circ - \alpha)} = \tan(\alpha)\)</p>
+              <p class="komm">Am Dreieck sieht man dasselbe sofort: Was für \(\alpha\) die Gegenkathete ist, ist für \(\beta = 90^\circ - \alpha\) die Ankathete — der Bruch kippt. Zahlenprobe: \(\tan(30^\circ) \cdot \tan(60^\circ) = 0.577 \cdot 1.732 = 1\). Bedingung: \(0^\circ &lt; \alpha &lt; 90^\circ\), sonst ist ein Tangens null oder undefiniert.</p>
+              <p class="pkt-hinweis">1 P. Die Begründung darf über die Kofunktion oder über das Dreieck laufen — beides zählt.</p>
+            </div></details>
+          </li>
+        </ol>
+      </div>
+
+      <div class="warn">
+        <div class="titel">Typischer Fehler</div>
+        <p><b>Bei 2a den Winkel mit dem Tangenswert verwechseln.</b> Der Tangens vervierfacht sich — der <em>Winkel</em> tut das nicht. Aus \(\alpha \approx 36.9^\circ\) (mit \(\tan = 0.75\)) wird \(\alpha \approx 71.6^\circ\) (mit \(\tan = 3\)), nicht \(147.6^\circ\). Nichts an der Aufgabe behauptet etwas über den Winkel.</p>
+      </div>
+    </section>
+
+    <!-- ================= AUFGABE 3 ================= -->
+    <div class="band"><span>Aufgabe 3</span><span class="strich"></span><span>Fehlersuche · 4 Punkte</span></div>
+
+    <section class="kap" id="a3">
+      <div class="kap-meta">
+        <span class="marker">Aufgabe 3</span>
+        <span class="zeit">4 Punkte</span>
+      </div>
+      <h2 id="a3-ballon">3 — Der Ballon und die zwei Schiffe</h2>
+      <p class="ziel">Nicht selber rechnen, sondern eine fremde Rechnung prüfen. Der Ansatz der vorgelegten Lösung ist richtig — der Abstand ist die Differenz zweier waagrechter Strecken. Beide Strecken sind aber falsch bestimmt.</p>
+
+      <figure class="bild">
+        <svg viewBox="0 0 760 400" role="img" aria-label="Ballon in 3000 m Hoehe, Sichtlinien mit Tiefenwinkeln 40 Grad zum naeheren und 25 Grad zum ferneren Schiff, waagrechte Strecken y und z">
+          <line class="sv-hilf" x1="90" y1="60" x2="720" y2="60"/>
+          <line class="sv-linie" x1="40" y1="330" x2="740" y2="330"/>
+          <line class="sv-hilf" x1="90" y1="60" x2="90" y2="330"/>
+          <line class="sv-akz" x1="90" y1="60" x2="411.8" y2="330"/>
+          <line class="sv-akz2" x1="90" y1="60" x2="669.0" y2="330"/>
+          <path class="sv-akz" d="M 160 60 A 70 70 0 0 1 143.6 104.1"/>
+          <path class="sv-akz2" d="M 200 60 A 110 110 0 0 1 189.7 106.5"/>
+          <circle class="sv-pkt" cx="90" cy="60" r="6"/>
+          <circle class="sv-pkt" cx="411.8" cy="330" r="6"/>
+          <circle class="sv-pkt" cx="669" cy="330" r="6"/>
+          <text class="sv-blau" x="152" y="122">40°</text>
+          <text class="sv-orange" x="208" y="126">25°</text>
+          <text class="sv-klein" x="98" y="200">3000 m</text>
+          <text class="sv-klein" x="380" y="352">nahes Schiff</text>
+          <text class="sv-klein" x="640" y="352">fernes Schiff</text>
+          <line class="sv-akz" x1="90" y1="378" x2="411.8" y2="378"/>
+          <line class="sv-akz2" x1="90" y1="394" x2="669" y2="394"/>
+          <text class="sv-blau" x="240" y="372" text-anchor="middle">y ≈ 3575 m</text>
+          <text class="sv-orange" x="560" y="390" text-anchor="middle">z ≈ 6434 m</text>
+          <text class="sv-klein" x="700" y="52" text-anchor="end">Waagrechte auf Ballonhöhe</text>
+        </svg>
+        <figcaption>Die Tiefenwinkel werden von der <em>Waagrechten</em> aus gemessen. Massstabsgetreu gezeichnet — nachgemessen 40.00° und 25.00°</figcaption>
+      </figure>
+
+      <div class="test" data-test="a3">
+        <div class="test-kopf">
+          <h3>Aufgabe 3 <span class="summe">· 4 P</span></h3>
+          <span class="werkz">
+            <button type="button" class="alle-loesungen">alle Lösungen</button>
+            <label><input type="checkbox" class="erledigt"> erledigt</label>
+          </span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">3</span><span class="pkt">(4 P)</span><span class="txt">Identifizieren Sie die zwei Fehler in der vorgelegten Lösung und korrigieren Sie diese.</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-3-ballon-zwei-fehler.html" data-titel="3 — die zwei Fehler in der Ballon-Lösung">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">3 — die zwei Fehler in der Ballon-Lösung</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-3-ballon-zwei-fehler">1:13</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p><b>Was vorgelegt wurde:</b></p>
+              <p>\(\cos(25^\circ) = \dfrac{3000}{z} \ \Longrightarrow \ z = \dfrac{3000}{\cos(25^\circ)}\)</p>
+              <p>\(\tan(25^\circ) = \dfrac{y}{3000} \ \Longrightarrow \ y = \dfrac{3000}{\tan(25^\circ)}\)</p>
+              <p>\(\text{Abstand} = z - y\)</p>
+              <p>Der <em>Ansatz</em> \(z - y\) ist richtig: Der Abstand der Schiffe ist die Differenz ihrer waagrechten Entfernungen vom Ballon.</p>
+
+              <p><b>Fehler 1 — falsche Winkelfunktion.</b> Die Höhe \(3000\) und die waagrechte Strecke \(z\) sind <em>beide Katheten</em>: die Gegenkathete und die Ankathete zum Tiefenwinkel. Zwischen zwei Katheten steht der Tangens; der Kosinus bräuchte die Hypotenuse.</p>
+              <p>\(\tan(25^\circ) = \dfrac{3000}{z} \ \Longrightarrow \ z = \dfrac{3000}{\tan(25^\circ)} \approx 6434\ \mathrm{m}\)</p>
+
+              <p><b>Fehler 2 — falscher Winkel.</b> Für \(y\) wurde noch einmal \(25^\circ\) verwendet. Das nähere Schiff erscheint aber unter \(40^\circ\); diese Angabe kommt in der ganzen Lösung nicht vor.</p>
+              <p>\(\tan(40^\circ) = \dfrac{3000}{y} \ \Longrightarrow \ y = \dfrac{3000}{\tan(40^\circ)} \approx 3575\ \mathrm{m}\)</p>
+
+              <p><b>Ergebnis:</b></p>
+              <p>\(\text{Abstand} = z - y \approx 6434 - 3575 \approx 2858\ \mathrm{m}\)</p>
+
+              <p class="komm">In der Skizze der vorgelegten Lösung ist der Winkel zwischen der <em>Senkrechten</em> und der Sichtlinie zum näheren Schiff mit \(25^\circ\) angeschrieben. Dort gehören \(90^\circ - 40^\circ = 50^\circ\) hin — und über diesen Weg käme \(y = 3000 \cdot \tan(50^\circ) \approx 3575\ \mathrm{m}\), dasselbe Ergebnis.</p>
+              <p class="pkt-hinweis">Je 2 P für einen erkannten und korrigierten Fehler. Erkennen allein genügt nicht — die Aufgabe verlangt ausdrücklich auch die Korrektur.</p>
+            </div></details>
+          </li>
+        </ol>
+      </div>
+
+      <div class="warn">
+        <div class="titel">Noch ein dritter Fehler — und warum er hier nicht zählt</div>
+        <p>Die Zeile \(\tan(25^\circ) = \dfrac{y}{3000}\) wird zu \(y = \dfrac{3000}{\tan(25^\circ)}\) umgeformt. Richtig wäre \(y = 3000 \cdot \tan(25^\circ)\) — die Umformung selbst ist also ebenfalls falsch.</p>
+        <p>Gefragt sind zwei Fehler, und die beiden oben sind die inhaltlichen: die falsche Winkelfunktion und der ungenutzte \(40^\circ\)-Winkel. Der Umformungsfehler ist ein Rechenversehen in einer ohnehin falschen Zeile. Wer ihn zusätzlich nennt, hat mehr gesehen, nicht weniger — schreib ihn ruhig dazu.</p>
+      </div>
+
+      <div class="merk">
+        <div class="titel">Die Regel für Tiefen- und Höhenwinkel</div>
+        <p>Der Winkel wird immer von der <b>Waagrechten</b> aus gemessen. Damit liegt die Höhe dem Winkel gegenüber und die waagrechte Strecke an ihm an — zwei Katheten, also Tangens:</p>
+        <p>\[ \text{waagrechte Strecke} = \dfrac{\text{Höhe}}{\tan(\text{Tiefenwinkel})} \]</p>
+        <p>Und jedes anvisierte Objekt bringt seinen <em>eigenen</em> Winkel mit. Wer den Winkel stattdessen von der Senkrechten aus misst, rechnet mit \(90^\circ\) minus dem Tiefenwinkel — und dann mit \(\tan\) mal statt geteilt.</p>
+      </div>
+    </section>
+
+    <!-- ================= AUFGABE 4 ================= -->
+    <div class="band"><span>Aufgabe 4</span><span class="strich"></span><span>Einheitskreis · 4 Punkte</span></div>
+
+    <section class="kap" id="a4">
+      <div class="kap-meta">
+        <span class="marker">Aufgabe 4</span>
+        <span class="zeit">4 Punkte</span>
+      </div>
+      <h2 id="a4-einheitskreis">4 — Punkt und Periode</h2>
+      <p class="ziel">Auf dem Einheitskreis hören Sinus und Kosinus auf, Brüche zu sein: Sie <em>sind</em> die Koordinaten. Erst dadurch werden Winkel jenseits von 90° überhaupt möglich — im Dreieck gibt es sie nicht.</p>
+
+      <figure class="bild">
+        <svg viewBox="0 0 400 400" role="img" aria-label="Einheitskreis mit Punkt P bei 135 Grad im zweiten Quadranten, Koordinaten cos alpha und sin alpha">
+          <line class="sv-hilf" x1="30" y1="200" x2="370" y2="200"/>
+          <line class="sv-hilf" x1="200" y1="370" x2="200" y2="30"/>
+          <circle class="sv-linie" cx="200" cy="200" r="140"/>
+          <line class="sv-akz" x1="200" y1="200" x2="101" y2="101"/>
+          <line class="sv-akz2" x1="101" y1="200" x2="101" y2="101"/>
+          <line class="sv-akz2" x1="200" y1="200" x2="101" y2="200"/>
+          <path class="sv-hilf" d="M 101 101 L 200 101" stroke-dasharray="4 4"/>
+          <path class="sv-akz" d="M 245 200 A 45 45 0 0 0 168.2 168.2"/>
+          <circle class="sv-pkt" cx="101" cy="101" r="6"/>
+          <circle class="sv-pkt" cx="101" cy="200" r="3.5"/>
+          <text class="sv-txt" x="72" y="92">P</text>
+          <text class="sv-blau" x="223" y="144" text-anchor="middle">α</text>
+          <text class="sv-orange" x="150" y="222" text-anchor="middle">cos(α)</text>
+          <text class="sv-orange" x="92" y="156" text-anchor="end">sin(α)</text>
+          <text class="sv-klein" x="360" y="192" text-anchor="end">x</text>
+          <text class="sv-klein" x="208" y="44">y</text>
+          <text class="sv-klein" x="207" y="219">O</text>
+          <text class="sv-klein" x="118" y="66" text-anchor="middle">2. Quadrant</text>
+        </svg>
+        <figcaption>Radius 1: Die <i>x</i>-Koordinate <em>ist</em> cos(<i>α</i>), die <i>y</i>-Koordinate <em>ist</em> sin(<i>α</i>) — gezeichnet für <i>α</i> = 135°</figcaption>
+      </figure>
+
+      <div class="test" data-test="a4">
+        <div class="test-kopf">
+          <h3>Aufgabe 4 <span class="summe">· 4 P</span></h3>
+          <span class="werkz">
+            <button type="button" class="alle-loesungen">alle Lösungen</button>
+            <label><input type="checkbox" class="erledigt"> erledigt</label>
+          </span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">4a</span><span class="pkt">(2 P)</span><span class="txt">Zeichnen Sie \(P\) im zweiten Quadranten auf dem Einheitskreis und beschreiben Sie seine \(x\)- und \(y\)-Koordinaten mit trigonometrischen Funktionen.</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-4a-punkt-im-zweiten-quadranten.html" data-titel="4a — der Punkt auf dem Einheitskreis">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">4a — der Punkt auf dem Einheitskreis</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-4a-punkt-im-zweiten-quadranten">0:51</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p>Der Winkel \(\alpha\) wird von der positiven \(x\)-Achse aus gegen den Uhrzeigersinn gemessen. Dann gilt</p>
+              <p>\[ P = (\cos(\alpha) \mid \sin(\alpha)) \]</p>
+              <p><b>Warum:</b> Am rechtwinkligen Dreieck ist \(\cos(\alpha) = \dfrac{x}{r}\) und \(\sin(\alpha) = \dfrac{y}{r}\). Auf dem Einheitskreis ist \(r = 1\), also bleibt \(x = \cos(\alpha)\) und \(y = \sin(\alpha)\)</p>
+              <p><b>Im zweiten Quadranten</b> liegt \(90^\circ &lt; \alpha &lt; 180^\circ\), also \(\cos(\alpha) &lt; 0\) und \(\sin(\alpha) &gt; 0\) — der Punkt liegt links oben.</p>
+              <p class="komm">Beispiel \(\alpha = 135^\circ\): \(P = (-0.71 \mid 0.71)\), wie oben gezeichnet.</p>
+              <p class="pkt-hinweis">1 P für die Zeichnung im richtigen Quadranten, 1 P für \(P = (\cos\alpha \mid \sin\alpha)\). Die Vorzeichen sollten erwähnt sein — sie zeigen, dass der Quadrant verstanden ist.</p>
+            </div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">4b</span><span class="pkt">(2 P)</span><span class="txt">Bestimmen Sie alle Winkel \(\alpha\) mit \(\sin(\alpha) = 1\), in Grad und in Radianten.</span></div>
+            <div class="clipkarte zu-aufg" data-clip="clips/trigo2-4b-alle-winkel-mit-sinus-eins.html" data-titel="4b — alle Winkel mit Sinus gleich eins">
+              <button class="clip-start" type="button">
+                <span class="clip-play" aria-hidden="true">▶</span>
+                <span class="clip-txt"><span class="clip-titel">4b — alle Winkel mit Sinus gleich eins</span></span>
+                <span class="clip-zeit" data-zeit="trigo2-4b-alle-winkel-mit-sinus-eins">0:53</span>
+              </button>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox">
+              <p>Der Sinus ist die \(y\)-Koordinate. Gesucht sind also die Punkte des Einheitskreises mit \(y = 1\) — und das ist genau <em>ein</em> Punkt, der höchste: \(P = (0 \mid 1)\)</p>
+              <p>Er gehört zum Winkel \(\alpha = 90^\circ = \dfrac{\pi}{2}\)</p>
+              <p>Nach jeder vollen Umdrehung steht man wieder auf demselben Punkt. Also:</p>
+              <p>\[ \alpha = 90^\circ + k \cdot 360^\circ \qquad \alpha = \dfrac{\pi}{2} + k \cdot 2\pi \qquad k \in \mathbb{Z} \]</p>
+              <p class="komm">Ohne das \(k \in \mathbb{Z}\) ist die Antwort unvollständig — gefragt sind <em>alle</em> Winkel, nicht einer. Probe: \(450^\circ\) und \(-270^\circ\) haben ebenfalls den Sinus \(1\)</p>
+              <p class="pkt-hinweis">1 P für \(90^\circ\) beziehungsweise \(\tfrac{\pi}{2}\), 1 P für die Periode in beiden Massen. Nur \(90^\circ\) anzugeben gibt die Hälfte.</p>
+            </div></details>
+          </li>
+        </ol>
+      </div>
+
+      <div class="merk">
+        <div class="titel">Nach «alle» gefragt? Periode dazuschreiben.</div>
+        <p>Sinus und Kosinus wiederholen sich alle \(360^\circ = 2\pi\), der Tangens dagegen schon alle \(180^\circ = \pi\). Wer nach <em>allen</em> Lösungen gefragt wird, schreibt \(+\,k \cdot 360^\circ\) beziehungsweise \(+\,k \cdot 180^\circ\) dazu — mit \(k \in \mathbb{Z}\)</p>
+        <p>Ein zweiter Punkt: \(\sin(\alpha) = 1\) hat nur <em>eine</em> Lösung je Umlauf, weil \(1\) der grösste Wert des Sinus ist. Bei \(\sin(\alpha) = 0.5\) gäbe es dagegen zwei je Umlauf — \(30^\circ\) und \(150^\circ\)</p>
+      </div>
+    </section>
+
+    <!-- ================= AUSWERTUNG ================= -->
+    <section class="kap" id="auswertung">
+      <div class="gesamt">
+        <div class="gesamt-kopf">
+          <div class="kap-meta"><span class="marker">Abschluss</span><span class="zeit">18 Punkte</span></div>
+          <h2 id="auswertung-titel">Auswertung</h2>
+          <p>Zähl die Punkte deiner eigenen Lösung zusammen — nach den orangen Zeilen unter den Musterlösungen.</p>
+        </div>
+
+        <div class="bewertung">
+          <b>Punkte je Aufgabe</b>
+          <div class="tabhuelle">
+          <table class="bilanz">
+            <thead><tr><th>Aufgabe</th><th>Inhalt</th><th>Punkte</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Definitionen, Kofunktion, Identität</td><td>6</td></tr>
+              <tr><td>2</td><td>Drei Aussagen prüfen</td><td>4</td></tr>
+              <tr><td>3</td><td>Fehlersuche am Ballon</td><td>4</td></tr>
+              <tr><td>4</td><td>Einheitskreis</td><td>4</td></tr>
+              <tr><td><b>Total</b></td><td>9 Teilaufgaben</td><td><b>18</b></td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+
+        <div class="bewertung">
+          <b>Selbsteinschätzung</b>
+          <table>
+            <tr><td>16 – 18 P</td><td>Sitzt. Die Definitionen und der Einheitskreis sind beieinander.</td></tr>
+            <tr><td>12 – 15 P</td><td>Gut. Schau die ein, zwei Stellen an, bei denen es geharzt hat, und rechne sie mit anderen Zahlen nach.</td></tr>
+            <tr><td>8 – 11 P</td><td>Die Definitionen sitzen, der Einheitskreis noch nicht. Aufgabe 4 und Aufgabe 1b noch einmal — es ist zweimal dieselbe Idee.</td></tr>
+            <tr><td>0 – 7 P</td><td>Zurück zu Aufgabe 1a: die Seiten von einem Winkel aus benennen. Ohne das ist der Rest nicht zu retten.</td></tr>
+          </table>
+        </div>
+
+        <div class="bewertung">
+          <b>Die vier Stellen, die am meisten kosten</b>
+          <table>
+            <tr><td>1a</td><td>Gegen- und Ankathete vom falschen Winkel aus benannt.</td></tr>
+            <tr><td>2</td><td>Einen Fehler suchen, weil «alle drei richtig» unwahrscheinlich wirkt.</td></tr>
+            <tr><td>3</td><td>Nur erkennen, nicht korrigieren — die Aufgabe verlangt beides.</td></tr>
+            <tr><td>4b</td><td>Die Periode vergessen: \(90^\circ\) statt \(90^\circ + k \cdot 360^\circ\).</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="fuss-eigen">
+      <span>Musterlösung Trigonometrie · 9 Clips</span>
+      <span>Raphael Arnold Kohler</span>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+  };
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+
+<script>
+(function(){
+  'use strict';
+  var BASIS = '../';
+
+  var schalter = document.getElementById('themenschalter');
+  function themaLesen(){ try { return localStorage.getItem('lp-trigo2-thema'); } catch(e){ return null; } }
+  var gespeichert = themaLesen();
+  if (gespeichert === 'dark' || gespeichert === 'light') document.documentElement.setAttribute('data-theme', gespeichert);
+  schalter.addEventListener('click', function(){
+    var jetzt = document.documentElement.getAttribute('data-theme');
+    if (!jetzt) jetzt = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var neu = jetzt === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', neu);
+    try { localStorage.setItem('lp-trigo2-thema', neu); } catch(e){}
+  });
+
+  document.querySelectorAll('.clipkarte').forEach(function(karte){
+    var knopf = karte.querySelector('.clip-start');
+    knopf.addEventListener('click', function(){
+      if (document.querySelector('.clip-buehne')) return;
+      clipBuehne(BASIS + karte.dataset.clip, karte.dataset.titel || 'Clip');
+    });
+  });
+
+  document.querySelectorAll('.alle-loesungen').forEach(function(knopf){
+    knopf.addEventListener('click', function(){
+      var test = knopf.closest('.test') || knopf.closest('.gesamt');
+      var alle = test.querySelectorAll('details.loes');
+      var oeffnen = Array.prototype.some.call(alle, function(d){ return !d.open; });
+      alle.forEach(function(d){ d.open = oeffnen; });
+      knopf.textContent = oeffnen ? 'Lösungen zuklappen' : 'alle Lösungen';
+    });
+  });
+
+  var tests = Array.prototype.slice.call(document.querySelectorAll('.test'));
+  var fuellung = document.getElementById('balken-fuellung');
+  var text = document.getElementById('fortschritt-text');
+  function standLesen(){
+    try { return JSON.parse(localStorage.getItem('lp-trigo2-stand') || '{}'); } catch(e){ return {}; }
+  }
+  function standSchreiben(s){ try { localStorage.setItem('lp-trigo2-stand', JSON.stringify(s)); } catch(e){} }
+  function zeichnen(){
+    var fertig = tests.filter(function(t){ return t.querySelector('.erledigt').checked; }).length;
+    fuellung.style.width = (fertig / tests.length * 100) + '%';
+    text.textContent = fertig + ' von ' + tests.length + ' Aufgaben erledigt';
+  }
+  var stand = standLesen();
+  tests.forEach(function(t){
+    var box = t.querySelector('.erledigt');
+    if (stand[t.dataset.test]) box.checked = true;
+    box.addEventListener('change', function(){
+      var s = standLesen(); s[t.dataset.test] = box.checked;
+      standSchreiben(s); zeichnen();
+    });
+  });
+  zeichnen();
+  document.getElementById('fortschritt-reset').addEventListener('click', function(){
+    tests.forEach(function(t){ t.querySelector('.erledigt').checked = false; });
+    standSchreiben({}); zeichnen();
+  });
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('.schiene a'));
+  var ziele = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if ('IntersectionObserver' in window && ziele.length){
+    var beobachter = new IntersectionObserver(function(eintraege){
+      eintraege.forEach(function(e){
+        if (!e.isIntersecting) return;
+        links.forEach(function(a){ a.classList.toggle('aktiv', a.getAttribute('href') === '#' + e.target.id); });
+      });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    ziele.forEach(function(z){ beobachter.observe(z); });
+  }
+})();
+</script>
+<script src="../mathlib.js"></script>
+</body>
+</html>
