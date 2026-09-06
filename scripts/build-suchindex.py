@@ -307,9 +307,12 @@ def seiten_aus_navjs(root):
                                  ('clips.html', '▶', 'Clips', 'thema'),
                                  ('leitprogramme.html', '▤', 'Leitprogramme', 'thema'),
                                  ('leitprogramme/potenzen.html', '▤',
-                                  'Leitprogramm Potenzen', 'thema'),
-                                 ('leitprogramme/uebungspruefung-1.html', '▤',
-                                  'Leitprogramm Übungsprüfung 1', 'thema')]:
+                                  'Leitprogramm Potenzen', 'thema')]:
+        # leitprogramme/uebungspruefung-1.html steht bewusst NICHT hier:
+        # unverlinkte Seite, nur ueber den Direktlink erreichbar. Sie ist
+        # ebenso aus der Sitemap genommen (noindex in build-seo.py) und hat
+        # kein Kaertchen in leitprogramme.html. Wer sie oeffentlich machen
+        # will, setzt alle drei Stellen zusammen zurueck.
         if os.path.exists(os.path.join(root, url)):
             seiten.append({'nr': nr, 'titel': titel, 'url': url, 'mode': mode})
     return seiten

@@ -90,7 +90,7 @@ SEITEN = {
    beschreibung='Leitprogramm Potenzen: die Potenzregeln erst mit natürlichen, dann mit ganzen, dann mit rationalen Exponenten — und Wurzeln ganz ohne Wurzelgesetze.',
    themen=['Mathematik', 'Potenzen', 'Potenzgesetze', 'Wurzeln', 'Leitprogramm']),
  'leitprogramme/uebungspruefung-1.html': dict(
-   typ='article', lrt='Leitprogramm',
+   typ='article', lrt='Leitprogramm', noindex=True,
    titel='Übungsprüfung 1 — Arithmetik, Algebra, Gleichungen',
    beschreibung='Eine vollständige BM2-Übungsprüfung zu Arithmetik, Algebra und linearen Gleichungen: Prüfungsbogen, Musterlösung mit Punkteschlüssel und zu jeder der 26 Teilaufgaben ein vertonter Clip.',
    themen=['Mathematik', 'Übungsprüfung', 'Arithmetik', 'Algebra', 'Lineare Gleichungen', 'Leitprogramm']),
@@ -442,7 +442,16 @@ def block(datei, cfg, seite_html):
     b = cfg['beschreibung']
     z = [MARKE_AUF,
          f'<meta name="description" content="{html.escape(b, quote=True)}">',
-         f'<meta name="author" content="{AUTOR}">',
+         f'<meta name="author" content="{AUTOR}">']
+    # Unverlinkte Seite: nur ueber den Direktlink erreichbar. Das Weglassen aus
+    # der Sitemap allein genuegt dafuer nicht — eine Suchmaschine, die die URL
+    # anderswoher kennt (geteilter Link, Referrer, Browserleiste), indexiert sie
+    # trotzdem. Erst das robots-Meta haelt sie draussen. "nofollow" dazu, damit
+    # von hier aus auch die eingebetteten Clipdateien nicht aufgenommen werden;
+    # die stehen aus demselben Grund nicht in der Sitemap.
+    if cfg.get('noindex'):
+        z.append('<meta name="robots" content="noindex, nofollow">')
+    z += [
          f'<link rel="canonical" href="{url}">',
          f'<link rel="icon" href="{auf}favicon.svg" type="image/svg+xml">',
          f'<link rel="icon" href="{auf}favicon-32.png" sizes="32x32" type="image/png">',
