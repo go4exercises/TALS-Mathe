@@ -4,6 +4,54 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · s1-2 Potenzen: sechs Gäste, zwei Neue
+
+Die Seite hatte keinen einzigen Clip — obwohl das Grundlagenfach zu Potenzen eine ganze
+Reihe besitzt und die Seite denselben Stoff behandelt. **Fünf der sechs Lernziele waren
+längst vertont, nur nicht zugeordnet.**
+
+### Zugeordnet statt produziert
+
+Sechs Clips aus `g1-4` stehen jetzt auch auf `s1-2` — je ein zusätzlicher Eintrag in der
+`lektion`-Liste, keine Vertonung, kein Drehbuch:
+
+`potenzgesetze` · `negative-exponenten` · `gebrochene-exponenten` ·
+`wurzelgesetze-unnoetig` · `zahldarstellung` · `potenzterme-punkt-strich`
+
+Geprüft wurde vorher beides: dass alle sechs `stufe: ["BM1", "BM2"]` tragen, und dass
+die SF-Seite den Stoff auf derselben Höhe behandelt — sie nummeriert die fünf
+Potenzgesetze sogar gleich. **Das ist die erste fachübergreifende Zuordnung ausserhalb
+der Bruchgleichungen**; die `lektion`-Liste konnte das von Anfang an, nur benutzt hatte
+es niemand.
+
+### Neu gebaut, weil SF-eigen
+
+- **`s1-2-hierarchie-potenzturm`** — Rangordnung, \(2^{3^2} = 512\) statt \(64\)
+  (der Turm wird von oben abgebaut), und \(-3^2 = -9\) gegen \((-3)^2 = +9\).
+- **`s1-2-exponentiell-linear`** — der Papierstapel vom Seiteneinstieg: 42 Faltungen
+  reichen zum Mond (439 800 km), 41 nicht (219 900 km). Linear gedacht wären es 4 mm.
+
+### Farbfehler, den nur das Bild zeigte
+
+Im Hierarchie-Clip stand \(-9\) rot — die Farbe für «Fehler». Aber \(-3^2 = -9\) **ist**
+das richtige Ergebnis; falsch ist nur die Erwartung. Beide Ergebnisse stehen jetzt grün,
+den Unterschied tragen die Klammern. Dazu: die vierzeilige Liste brauchte `abstand` 415
+statt 350.
+
+### Fallstrick beim Zuordnen
+
+Nach dem Ändern der `lektion`-Liste **muss jeder betroffene Clip einzeln neu gebaut
+werden**. Sonst steht die alte Zuordnung weiter in `clips.json`, und
+`build-clips-einbau.py` schreibt nichts — die Seite blieb im ersten Anlauf leer.
+
+### Bestand
+
+186 Drehbücher, Bibliothek **151 Clips (143:41 min)**, 162 Zuordnungen. `s1-2` trägt
+8 Clips (9:37 min). **39 der 46** Themenseiten tragen Clips; ohne bleiben `s1-1`,
+`s2-1`, `s3-1`, `s4-1` sowie `g1-1`, `g4-0`, `g5-2b`.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Trigonometrische Funktionen: sieben Clips
 
 `s3-5` war die grösste inhaltliche Lücke des Schwerpunktfachs — die einzige Seite mit

@@ -50,10 +50,10 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
     Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 184 Drehbücher, alle vertont: **149 in der Bibliothek** (141:52 min,
-  53 Reihen, 114 Grundlagenfach / 35 Schwerpunktfach) und **35 unverlinkte**
+- `clips/` — 186 Drehbücher, alle vertont: **151 in der Bibliothek** (143:41 min,
+  54 Reihen, 114 Grundlagenfach / 37 Schwerpunktfach) und **35 unverlinkte**
   Prüfungsclips mit `"probe": true`, die nur im zugehörigen Leitprogramm stehen und
-  weder in `clips.json` noch auf einer Lektionsseite auftauchen. **38 der 46
+  weder in `clips.json` noch auf einer Lektionsseite auftauchen. **39 der 46
   Themenseiten tragen Clips**; 44 tragen den Marker, sieben davon leer. Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
   `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,

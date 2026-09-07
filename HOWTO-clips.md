@@ -940,15 +940,26 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 
-- **Der Bestand ist beisammen.** Stand 07.09.2026: **184 Drehbücher**, alle vertont —
-  149 in der Bibliothek (141:52 min, 53 Reihen) und 35 unverlinkte Prüfungsclips mit
+- **Der Bestand ist beisammen.** Stand 07.09.2026: **186 Drehbücher**, alle vertont —
+  151 in der Bibliothek (143:41 min, 54 Reihen) und 35 unverlinkte Prüfungsclips mit
   `"probe": true` (28:04 min). Alle fünf Lerngebiete des Grundlagenfachs und alle vier
   des Schwerpunktfachs sind angefangen — abgedeckt ist damit nicht dasselbe:
-  **38 der 46 Themenseiten tragen Clips**, 44 tragen den Marker (sieben davon leer).
-  Das Schwerpunktfach ist dabei deutlich duenner besetzt als das Grundlagenfach:
-  119 Clips auf 23 GF-Seiten (Median 4 je Seite) gegen 28 auf 23 SF-Seiten (Median 1).
-  Ohne Clip sind `s1-1`, `s1-2`, `s2-1`, `s3-1`, `s3-5` und `s4-1` — dazu `g1-1`,
-  `g4-0` und `g5-2b`. Zwoelf der siebzehn belegten SF-Seiten haben genau einen Clip.
+  **39 der 46 Themenseiten tragen Clips**, 44 tragen den Marker (fünf davon leer).
+  Das Schwerpunktfach ist dabei deutlich dünner besetzt als das Grundlagenfach:
+  119 Zuordnungen auf 23 GF-Seiten (Median 4 je Seite) gegen 43 auf 23 SF-Seiten
+  (Median 1). Ohne Clip sind `s1-1`, `s2-1`, `s3-1` und `s4-1` — dazu `g1-1`, `g4-0`
+  und `g5-2b`. Zwölf der belegten SF-Seiten haben genau einen Clip.
+
+- **Ein Clip kann auf mehreren Seiten stehen — auch fachübergreifend.** `lektion` ist
+  eine Liste; ein zweiter Eintrag kostet eine Zeile und keine Produktion. Am 07.09.2026
+  hat `s1-2-potenzen` auf diesem Weg sechs Clips aus `g1-4` bekommen, weil die Seite
+  denselben Stoff behandelt und die Clips ohnehin `stufe: ["BM1", "BM2"]` tragen.
+  Acht Clips stehen heute auf Seiten beider Fächer.
+  **Zwei Dinge vorher prüfen:** ob die `stufe` passt, und ob die Zielseite den Stoff
+  wirklich auf derselben Höhe behandelt — sonst schickt man BM1-Material in eine
+  BM2-Lektion. **Und nach dem Ändern der `lektion`-Liste muss jeder betroffene Clip
+  einzeln neu gebaut werden**, sonst steht die alte Zuordnung weiter in `clips.json`
+  und `build-clips-einbau.py` schreibt nichts.
 
   Verteilung: Lerngebiet 1 mit 32 Clips, 2 mit 29, 3 mit 20, 4 mit 19, 5 mit 18 —
   im Schwerpunktfach 1.x mit 2, 2.x mit 12, 3.x mit 6, 4.x mit 8.
