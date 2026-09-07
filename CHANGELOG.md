@@ -4,6 +4,78 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Prioritäten A bis C abgeschlossen
+
+Die neunzehn Punkte aus «Priorität A, B und C» einzeln am Repo nachgeprüft statt aus
+dem Gedächtnis abgehakt. **Siebzehn waren erledigt, zwei nicht.**
+
+### Behoben
+
+- **B1 · Titel ohne absolute Behauptung.** «Potenzen: die Wurzelgesetze braucht man
+  nicht» → **«Potenzen: Wurzelgesetze mit Potenzgesetzen verstehen»**. Der Dateiname
+  bleibt `g1-4-wurzelgesetze-unnoetig`, sonst brechen die Links in `clips.json`, auf der
+  Lektionsseite und im Suchindex. Der Inhalt war nie das Problem — er sagt «man braucht
+  sie nicht zu *lernen*», was stimmt; nur die Überschrift las sich wie «sie sind
+  überflüssig». Damit ist die Entscheidung vom 31.08. (siehe unten) aufgehoben.
+- **B3 · periodische Dezimalzahl ist nicht gerundet** (`g1-2-zahlformen`, Szene «Wenn es
+  nicht aufgeht»). Bisher hiess es, bei nicht aufgehenden Brüchen sei «die Dezimalform
+  gerundet, der Bruch nicht». Das stimmt so nicht: \(\tfrac13 = 0.\overline{3}\) ist
+  mit Periodenstrich **exakt**; gerundet ist erst, was das Gerät anzeigt. Die Szene
+  stellt beides nebeneinander — *exakt* gegen *bricht ab*. Neu vertont; das Merkbild zog
+  mit, sonst hätte der Clip sich selbst widersprochen.
+
+**Keine feste Ziffernzahl behauptet.** Was ein Gerät anzeigt, hängt vom Gerät ab;
+`g1-2-ti30x-brueche` hält es genauso («Die Anzeige bricht irgendwo ab, die Zahl nicht»).
+
+### Layout
+
+Bruchzeile `abstand` 150 → 210. **Der Prüfer meldete nichts, das Bild schon:** Die
+doppelt hohe Bruchzeile stand zu eng über der Rechnerzeile. Genau der Fall, für den die
+Regel «die Bilder trotzdem ansehen» da ist.
+
+### Nachgeprüft, nichts zu tun
+
+| Punkt | Befund |
+|---|---|
+| A1 | \(\sqrt{4a^2}=2\lvert a\rvert\) steht in der Herleitung |
+| A2 | poly-solv nennt \(D=0\) und \(D\lt 0\) ausdrücklich |
+| A3 | «Mittelwert 13 — über **vier der fünf** Werte» |
+| A4 | P1/P2 verlangen gleiche Basis, P4/P5 gleichen Exponenten; beides steht da |
+| A5–A7 | \(a \neq 0\) bzw. \(a \geq 0\); A7 trägt die Bedingung als **Bedingungsleiste** |
+| B2, B4, B5 | erledigt, B4 und B5 ebenfalls über die Bedingungsleiste |
+| B6 | Audit vom 07.09. — 188 absolute Formulierungen gelesen, keine falsche |
+| C1–C3, C6 | die `lektion`-Liste **ist** das Tag-System; zwei Bruchgleichungsclips hängen an `s2-2a` und `g2-2b` zugleich; gezählt wird nach einzigartigen Clips |
+| C4 | die Überschneidung der beiden Rechner-Clips ist Absicht und angesagt: «Dieselben Rechnungen wie in Folge 2 — diesmal beim Tippen zugesehen» |
+| C5 | die drei SF-Clips tragen den Transfer im Text («dieselbe Regel wie bei den Gleichungssystemen», «alle drei Ausgänge beisammen») und in der Reihe «Bruchgleichungen → linear» |
+
+---
+
+## [Unveröffentlicht] — 7. September 2026 · Zweitstimme entfernt
+
+`g2-2b-quadratisch-c-null` war der **einzige** Clip mit zwei Tonspuren. Die
+Kohler-Fassung ist auf Wunsch des Autors gelöscht; alle 177 Clips laufen jetzt auf
+Thorsten.
+
+### Entfernt
+
+`clips/ton/g2-2b-quadratisch-c-null-kohler.mp3` samt Beipackzettel `-kohler.json`
+(`dehnung 1.2372`, `tempo 0.8`).
+
+### Kein Eingriff am Code nötig
+
+Der Generator entdeckt Zweitstimmen über das Dateimuster `ton/<name>-<stimme>.mp3` — im
+Drehbuch stand nichts davon. Ohne die Datei fällt der Umschalter von selbst weg.
+**Nachgeprüft:** `STIMMEN` ist jetzt leer — was «kein Umschalter» heisst, nicht «kein
+Ton» — und das `<audio>`-Element zeigt auf die Thorsten-Spur; Element für Element
+identisch mit `g2-2b-quadratisch-b-null`, einem gewöhnlichen Einstimmen-Clip. Die
+Szenendauern hängen ohnehin an der Thorsten-Spur.
+
+`STANDARDSTIMME = "kohler"` in `scripts/build-clips.py` bleibt stehen und läuft ins
+Leere — wirkungslos, aber richtig eingestellt für den Tag, an dem wieder eine
+Zweitstimme entsteht.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Prüfwerkzeug misst den Inhalt
 
 Rückübertrag aus TALS Physik — zum ersten Mal in dieser Richtung.
@@ -341,9 +413,12 @@ waren 9 offene Mängel, 8 bereits erledigt und 3 keine.
 
 ### Nicht geändert, zur Entscheidung
 
-- Der Titel **«die Wurzelgesetze braucht man nicht»** ist eine bewusste Zuspitzung,
+- ~~Der Titel **«die Wurzelgesetze braucht man nicht»** ist eine bewusste Zuspitzung,
   die der Clip einlöst — er endet mit «Die Gesetze kann man vergessen. Die Bedingung
-  nicht.» Ein neutraler Titel verlöre mehr, als er gewönne.
+  nicht.» Ein neutraler Titel verlöre mehr, als er gewönne.~~
+  **Überholt am 07.09.2026:** Der Punkt stand als B1 auf der TODO-Liste, und der Autor
+  hat ihn zur Erledigung freigegeben. Neuer Titel: «Potenzen: Wurzelgesetze mit
+  Potenzgesetzen verstehen».
 - **Bruchgleichungs-Clips im Schwerpunktfach stärker als Transfer kennzeichnen**
   wäre eine Änderung an der Darstellung der Gast-Clips auf der Lektionsseite, nicht
   am Clip.

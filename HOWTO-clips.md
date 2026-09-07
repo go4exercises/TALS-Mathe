@@ -689,9 +689,19 @@ Piper liefert 22.05 kHz. Ohne Resampling bleibt MP3 — das dafür überall absp
 
 ### Zweite Stimme
 
+> **Stand 07.09.2026: Es gibt im Repo keine zweite Stimme mehr.** Alle 177 Clips laufen
+> auf Thorsten. Die letzte Kohler-Spur (`g2-2b-quadratisch-c-null`) ist auf Wunsch des
+> Autors gelöscht worden. Der Abschnitt bleibt stehen, weil die Mechanik im Generator
+> steht und jederzeit wieder greift — er beschreibt aber nichts, was gerade ausgeliefert
+> wird.
+
 Ein Clip kann mehrere Tonspuren tragen; in der Bedienleiste erscheint dann ein Knopf
 `🗣 <Name>`, der umschaltet. Die Spuren liegen als `ton/<name>-<stimme>.mp3` neben der
 ersten, und der Generator findet sie von selbst — im Drehbuch ist nichts einzutragen.
+**Umgekehrt gilt dasselbe:** Wer die Datei löscht, ist die Stimme los; der Umschalter
+verschwindet von allein, weil `STIMMEN` dann leer bleibt. Eine leere Liste heisst
+**kein Umschalter**, nicht kein Ton — die erste Spur hängt weiterhin am
+`<audio>`-Element.
 
 ```sh
 export PIPER_MODELL=/pfad/de_DE-thorsten-high.onnx      # die erste, als Referenz
@@ -717,9 +727,12 @@ danach greift der Kopfraum.
 ### Welche Stimme beim Öffnen läuft
 
 `STANDARDSTIMME` in `scripts/build-clips.py` nennt den Namenszusatz, der beim Öffnen
-laufen soll — aktuell `"kohler"`. Gibt es zu einem Clip die Spur
+laufen soll — er steht auf `"kohler"`. Gibt es zu einem Clip die Spur
 `ton/<clip>-kohler.mp3`, startet der Clip mit ihr; sonst mit der ersten. Ein leerer
 String heisst: immer die erste. Eine Zeile, keine Änderung an den Drehbüchern.
+**Die Einstellung läuft derzeit ins Leere**, weil es keine Kohler-Spur mehr gibt — sie
+ist damit wirkungslos, aber auch harmlos, und richtig eingestellt für den Tag, an dem
+wieder eine Zweitstimme entsteht.
 
 Die Dehnung der Standardstimme gilt dabei von Anfang an — sonst liefe die Animation die
 ersten Sekunden im falschen Tempo.
@@ -876,7 +889,7 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 
 - **Der Bestand ist beisammen.** Stand 07.09.2026: **177 Drehbücher**, alle vertont —
-  142 in der Bibliothek (135:33 min, 52 Reihen) und 35 unverlinkte Prüfungsclips mit
+  142 in der Bibliothek (135:38 min, 52 Reihen) und 35 unverlinkte Prüfungsclips mit
   `"probe": true` (28:04 min). Alle fünf Lerngebiete des Grundlagenfachs und alle vier
   des Schwerpunktfachs sind abgedeckt; 44 der 46 Themenseiten tragen einen Clip-Block.
 

@@ -50,7 +50,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
     Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 177 Drehbücher, alle vertont: **142 in der Bibliothek** (135:33 min,
+- `clips/` — 177 Drehbücher, alle vertont: **142 in der Bibliothek** (135:38 min,
   52 Reihen, 114 Grundlagenfach / 28 Schwerpunktfach) und **35 unverlinkte**
   Prüfungsclips mit `"probe": true`, die nur im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. 44 der 46
