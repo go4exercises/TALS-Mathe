@@ -21,6 +21,21 @@ body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!impor
 #kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
 #fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
 
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
 .l{position:absolute;will-change:opacity,transform}
 .l.flow{position:relative}
 .m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
@@ -77,17 +92,20 @@ body.render #ui{display:none}
 <div class="l m row mitte" data-at="2.10" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:420px;font-size:52px"><span>\(\text{Ankathete} \ \rightarrow \ \tfrac{1}{2} \qquad \text{Gegenkathete} \ \rightarrow \ 2\times\)</span></div>
 <div class="l m row mitte" data-at="3.80" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:620px;font-size:64px"><span>\(\tan \ \rightarrow \ 4\times \ ?\)</span></div>
 <div class="l hand mitte" data-at="5.50" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:810px;font-size:54px;color:var(--rot)">Nicht raten — hinschreiben.</div>
-<div class="l m row mitte" data-at="9.90" data-out="17.58" data-anim="rise" style="left:0;right:0;text-align:center;top:210px;font-size:64px"><span>\(\tan(\alpha) = \dfrac{\fa{g}}{\fb{a}}\)</span></div>
-<div class="l m row mitte" data-at="11.60" data-out="17.58" data-anim="rise" style="left:0;right:0;text-align:center;top:460px;font-size:64px"><span>\(\tan(\alpha_{\text{neu}}) = \dfrac{\fa{2g}}{\fb{a/2}}\)</span></div>
-<div class="l hand mitte" data-at="13.30" data-out="17.58" data-anim="rise" style="left:0;right:0;text-align:center;top:690px;font-size:52px;color:var(--blau)">Beide Änderungen wirken im selben Sinn:<br>oben grösser, unten kleiner — der Bruch wächst zweimal.</div>
-<div class="l m row mitte" data-at="17.98" data-out="25.38" data-anim="rise" style="left:0;right:0;text-align:center;top:230px;font-size:60px"><span>\(\dfrac{2g}{a/2} = 2g \cdot \dfrac{2}{a} = \dfrac{4g}{a}\)</span></div>
-<div class="l m row mitte" data-at="19.68" data-out="25.38" data-anim="rise" style="left:0;right:0;text-align:center;top:480px;font-size:60px"><span>\(= 4 \cdot \dfrac{\fa{g}}{\fb{a}} = 4\,\tan(\alpha)\)</span></div>
-<div class="l hand mitte" data-at="21.38" data-out="25.38" data-anim="rise" style="left:0;right:0;text-align:center;top:700px;font-size:52px;color:var(--blau)">Faktor zwei oben, Faktor zwei unten — zusammen vier.</div>
-<div class="l m huelle mitte" data-at="25.78" data-out="31.48" data-anim="pop" style="left:0;right:0;text-align:center;top:300px;font-size:86px;font-weight:600"><span class="box row boxg"><span>\(\text{RICHTIG}\)</span></span></div>
-<div class="l hand mitte" data-at="27.48" data-out="31.48" data-anim="rise" style="left:0;right:0;text-align:center;top:550px;font-size:54px;color:var(--blau)">Zur Probe mit Zahlen: aus \(\tfrac{3}{4} = 0.75\) wird \(\tfrac{6}{2} = 3\) —<br>und \(3 = 4 \cdot 0.75\).</div>
-<div class="l hand mitte" data-at="31.88" data-out="40.24" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:56px;color:var(--rot)">Mit den Seiten ändert sich auch der Winkel selbst.</div>
-<div class="l hand mitte" data-at="33.58" data-out="40.24" data-anim="rise" style="left:0;right:0;text-align:center;top:440px;font-size:54px;color:var(--blau)">Gemeint ist der Tangens des <span class="f1">neuen</span> Winkels an dieser Ecke.<br>Der alte \(\alpha\) bleibt natürlich, was er war.</div>
-<div class="l m row mitte" data-at="35.28" data-out="40.24" data-anim="rise" style="left:0;right:0;text-align:center;top:630px;font-size:58px"><span>\(\tan(\alpha_{\text{neu}}) = 4\,\tan(\alpha_{\text{alt}})\)</span></div>
+<div class="l m row mitte" data-at="9.90" data-out="17.35" data-anim="rise" style="left:0;right:0;text-align:center;top:210px;font-size:64px"><span>\(\tan(\alpha) = \dfrac{\fa{g}}{\fb{a}}\)</span></div>
+<div class="l m row mitte" data-at="11.60" data-out="17.35" data-anim="rise" style="left:0;right:0;text-align:center;top:460px;font-size:64px"><span>\(\tan(\alpha_{\text{neu}}) = \dfrac{\fa{2g}}{\fb{a/2}}\)</span></div>
+<div class="l hand mitte" data-at="13.30" data-out="17.35" data-anim="rise" style="left:0;right:0;text-align:center;top:690px;font-size:52px;color:var(--blau)">Beide Änderungen wirken im selben Sinn:<br>oben grösser, unten kleiner — der Bruch wächst zweimal.</div>
+<div class="l m row mitte" data-at="17.75" data-out="25.15" data-anim="rise" style="left:0;right:0;text-align:center;top:230px;font-size:60px"><span>\(\dfrac{2g}{a/2} = 2g \cdot \dfrac{2}{a} = \dfrac{4g}{a}\)</span></div>
+<div class="l m row mitte" data-at="19.45" data-out="25.15" data-anim="rise" style="left:0;right:0;text-align:center;top:480px;font-size:60px"><span>\(= 4 \cdot \dfrac{\fa{g}}{\fb{a}} = 4\,\tan(\alpha)\)</span></div>
+<div class="l hand mitte" data-at="21.15" data-out="25.15" data-anim="rise" style="left:0;right:0;text-align:center;top:700px;font-size:52px;color:var(--blau)">Faktor zwei oben, Faktor zwei unten — zusammen vier.</div>
+<div class="l m huelle mitte" data-at="25.55" data-out="31.25" data-anim="pop" style="left:0;right:0;text-align:center;top:300px;font-size:86px;font-weight:600"><span class="box row boxg"><span>\(\text{RICHTIG}\)</span></span></div>
+<div class="l hand mitte" data-at="27.25" data-out="31.25" data-anim="rise" style="left:0;right:0;text-align:center;top:550px;font-size:54px;color:var(--blau)">Zur Probe mit Zahlen: aus \(\tfrac{3}{4} = 0.75\) wird \(\tfrac{6}{2} = 3\) —<br>und \(3 = 4 \cdot 0.75\).</div>
+<div class="l hand mitte" data-at="31.65" data-out="40.32" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:56px;color:var(--rot)">Mit den Seiten ändert sich auch der Winkel selbst.</div>
+<div class="l hand mitte" data-at="33.35" data-out="40.32" data-anim="rise" style="left:0;right:0;text-align:center;top:440px;font-size:54px;color:var(--blau)">Gemeint ist der Tangens des <span class="f1">neuen</span> Winkels an dieser Ecke.<br>Der alte \(\alpha\) bleibt natürlich, was er war.</div>
+<div class="l m row mitte" data-at="35.05" data-out="40.32" data-anim="rise" style="left:0;right:0;text-align:center;top:630px;font-size:58px"><span>\(\tan(\alpha_{\text{neu}}) = 4\,\tan(\alpha_{\text{alt}})\)</span></div>
+<div class="l hand mitte mitte" data-at="40.72" data-out="48.45" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:82px;font-weight:600;color:var(--tinte)">Beide Änderungen<br>wirken gleichsinnig.</div>
+<div class="l m row mitte" data-at="42.42" data-out="48.45" data-anim="rise" style="left:0;right:0;text-align:center;top:510px;font-size:62px"><span>\(\dfrac{2g}{a/2} = 4 \cdot \dfrac{g}{a}\)</span></div>
+<div class="l hand mitte" data-at="44.12" data-out="48.45" data-anim="rise" style="left:0;right:0;text-align:center;top:710px;font-size:54px;color:var(--blau)">Bei einem Bruch zählt nicht nur, was oben passiert.</div>
 </div></div>
 <audio id="ton" preload="auto" src="ton/trigo2-2a-tangens-vervierfacht.mp3"></audio>
 <div id="ui">
@@ -99,8 +117,8 @@ body.render #ui{display:none}
   <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
 </div>
 <script>
-const DUR = 40.24;
-const SPRECHER = [{"bei": 0.4, "text": "Richtig oder falsch: Halbiert man die Ankathete und verdoppelt die Gegenkathete, so vervierfacht sich der Tangens."}, {"bei": 9.9, "text": "Der Tangens ist Gegenkathete durch Ankathete. Also beide Änderungen einsetzen: oben mal zwei, unten geteilt durch zwei."}, {"bei": 17.98, "text": "Durch a halbe teilen heisst mit zwei durch a malnehmen. Zusammen also vier mal g durch a."}, {"bei": 25.78, "text": "Die Aussage ist also richtig: Der Tangens vervierfacht sich."}, {"bei": 31.88, "text": "Eine Feinheit noch: Ändert man die Seiten, ändert sich auch der Winkel. Gemeint ist der Tangens des neuen Winkels an dieser Ecke, nicht der des alten."}];
+const DUR = 48.45;
+const SPRECHER = [{"bei": 0.4, "text": "Richtig oder falsch: Halbiert man die Ankathete und verdoppelt die Gegenkathete, so vervierfacht sich der Tangens."}, {"bei": 9.9, "text": "Der Tangens ist Gegenkathete durch Ankathete. Also beide Änderungen einsetzen: oben mal zwei, unten geteilt durch zwei."}, {"bei": 17.75, "text": "Durch a halbe teilen heisst mit zwei durch a malnehmen. Zusammen also vier mal g durch a."}, {"bei": 25.55, "text": "Die Aussage ist also richtig: Der Tangens vervierfacht sich."}, {"bei": 31.65, "text": "Eine Feinheit noch: Ändert man die Seiten, ändert sich auch der Winkel. Gemeint ist der Tangens des neuen Winkels an dieser Ecke, nicht der des alten."}, {"bei": 40.72, "text": "Zum Mitnehmen: Der Tangens ist ein Bruch. Oben mal zwei und unten geteilt durch zwei wirken im selben Sinn — zusammen ergibt das vier."}];
 const stage = document.getElementById('stage');
 const layers = [...document.querySelectorAll('.l')].map(el => ({
   el, at: parseFloat(el.dataset.at || '0'),

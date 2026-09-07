@@ -21,6 +21,21 @@ body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!impor
 #kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
 #fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
 
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
 .l{position:absolute;will-change:opacity,transform}
 .l.flow{position:relative}
 .m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
@@ -90,6 +105,9 @@ body.render #ui{display:none}
 <div class="l m row mitte" data-at="33.46" data-out="40.86" data-anim="rise" style="left:0;right:0;text-align:center;top:412px;font-size:56px"><span>\(0.000 022\, \mathrm{F} = \fa{2.2} \cdot 10^-5\, \mathrm{F}\)</span></div>
 <div class="l m row mitte" data-at="35.16" data-out="40.86" data-anim="pop" style="left:0;right:0;text-align:center;top:530px;font-size:56px"><span>\(= \fa{22} \cdot 10^\fc{-6}\, \mathrm{F} = \fc{22 \mu F}\)</span></div>
 <div class="l hand mitte" data-at="36.86" data-out="40.86" data-anim="rise" style="left:0;right:0;text-align:center;top:702px;font-size:54px;color:var(--rot)">Der Exponent −5 hat keine Vorsilbe. Der Exponent −6 hat eine.</div>
+<div class="l hand mitte mitte" data-at="41.26" data-out="51.51" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:78px;font-weight:600;color:var(--tinte)">Eine Zahl, drei Schreibweisen.</div>
+<div class="l m row mitte" data-at="42.96" data-out="51.51" data-anim="rise" style="left:0;right:0;text-align:center;top:510px;font-size:52px"><span>\(\text{wissenschaftlich} \quad \text{technisch} \quad \text{Vorsilbe}\)</span></div>
+<div class="l hand mitte" data-at="44.66" data-out="51.51" data-anim="rise" style="left:0;right:0;text-align:center;top:710px;font-size:54px;color:var(--blau)">Die Vorsilbe gibt es nur zu Exponenten aus der Dreierreihe.</div>
 </div></div>
 <audio id="ton" preload="auto" src="ton/g1-4-zahldarstellung.mp3"></audio>
 <div id="ui">
@@ -101,8 +119,8 @@ body.render #ui{display:none}
   <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
 </div>
 <script>
-const DUR = 40.86;
-const SPRECHER = [{"bei": 0.4, "text": "Ein Widerstand von siebenundvierzigtausend Ohm. Drei Arten, das zu schreiben."}, {"bei": 9.9, "text": "Wissenschaftlich: genau eine Ziffer vor dem Punkt."}, {"bei": 17.7, "text": "Technisch: der Exponent muss durch drei teilbar sein. Dafür stehen vorn ein bis drei Ziffern."}, {"bei": 23.96, "text": "Und die Vorsilbe ist nur ein anderer Name für dieselbe Zehnerpotenz."}, {"bei": 31.76, "text": "Dasselbe nach unten: zweiundzwanzig Mikrofarad."}];
+const DUR = 51.51;
+const SPRECHER = [{"bei": 0.4, "text": "Ein Widerstand von siebenundvierzigtausend Ohm. Drei Arten, das zu schreiben."}, {"bei": 9.9, "text": "Wissenschaftlich: genau eine Ziffer vor dem Punkt."}, {"bei": 17.7, "text": "Technisch: der Exponent muss durch drei teilbar sein. Dafür stehen vorn ein bis drei Ziffern."}, {"bei": 23.96, "text": "Und die Vorsilbe ist nur ein anderer Name für dieselbe Zehnerpotenz."}, {"bei": 31.76, "text": "Dasselbe nach unten: zweiundzwanzig Mikrofarad."}, {"bei": 41.26, "text": "Zum Mitnehmen: Dieselbe Zahl, drei Schreibweisen. Die wissenschaftliche normiert die Mantisse, die technische wählt den Exponenten aus der Dreierreihe — und nur die trägt eine Vorsilbe."}];
 const stage = document.getElementById('stage');
 const layers = [...document.querySelectorAll('.l')].map(el => ({
   el, at: parseFloat(el.dataset.at || '0'),

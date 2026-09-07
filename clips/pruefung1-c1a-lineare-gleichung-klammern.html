@@ -21,6 +21,21 @@ body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!impor
 #kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
 #fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
 
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
 .l{position:absolute;will-change:opacity,transform}
 .l.flow{position:relative}
 .m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
@@ -76,21 +91,24 @@ body.render #ui{display:none}
 <div class="l hand mitte mitte" data-at="0.40" data-out="7.80" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:96px;font-weight:600;color:var(--tinte)">C1 a)</div>
 <div class="l m row mitte" data-at="2.10" data-out="7.80" data-anim="rise" style="left:0;right:0;text-align:center;top:430px;font-size:58px"><span>\(6(x-2) - 2(2x+1) = 3(2x-4) - 2(x+1)\)</span></div>
 <div class="l hand mitte" data-at="3.80" data-out="7.80" data-anim="rise" style="left:0;right:0;text-align:center;top:660px;font-size:54px;color:var(--rot)">Vor jeder Klammer steht ein Faktor — auch das Minus gehört dazu.</div>
-<div class="l m row mitte" data-at="8.20" data-out="18.00" data-anim="rise" style="left:0;right:0;text-align:center;top:220px;font-size:60px"><span>\(6(x-2) = 6x-12\)</span></div>
-<div class="l m row mitte" data-at="9.90" data-out="18.00" data-anim="rise" style="left:0;right:0;text-align:center;top:400px;font-size:60px"><span>\(-2(2x+1) = \fd{-4x-2}\)</span></div>
-<div class="l m row mitte" data-at="11.60" data-out="18.00" data-anim="rise" style="left:0;right:0;text-align:center;top:590px;font-size:56px"><span>\(\text{links:} \quad 6x-12-4x-2 = \fa{2x-14}\)</span></div>
-<div class="l hand mitte" data-at="13.30" data-out="18.00" data-anim="rise" style="left:0;right:0;text-align:center;top:770px;font-size:52px;color:var(--rot)">Das Minus trifft beide Glieder der Klammer.<br>Aus \(+1\) wird \(-2\), nicht \(+2\).</div>
-<div class="l m row mitte" data-at="18.40" data-out="28.55" data-anim="rise" style="left:0;right:0;text-align:center;top:220px;font-size:60px"><span>\(3(2x-4) = 6x-12\)</span></div>
-<div class="l m row mitte" data-at="20.10" data-out="28.55" data-anim="rise" style="left:0;right:0;text-align:center;top:400px;font-size:60px"><span>\(-2(x+1) = \fd{-2x-2}\)</span></div>
-<div class="l m row mitte" data-at="21.80" data-out="28.55" data-anim="rise" style="left:0;right:0;text-align:center;top:590px;font-size:56px"><span>\(\text{rechts:} \quad 6x-12-2x-2 = \fb{4x-14}\)</span></div>
-<div class="l hand mitte" data-at="23.50" data-out="28.55" data-anim="rise" style="left:0;right:0;text-align:center;top:770px;font-size:52px;color:var(--blau)">Beide Seiten enden auf \(-14\) — das fällt gleich weg.</div>
-<div class="l m row mitte" data-at="28.95" data-out="38.05" data-anim="rise" style="left:0;right:0;text-align:center;top:240px;font-size:58px"><span>\(\fa{2x-14} = \fb{4x-14} \quad \mid +14\)</span></div>
-<div class="l m row mitte" data-at="30.65" data-out="38.05" data-anim="rise" style="left:0;right:0;text-align:center;top:430px;font-size:60px"><span>\(2x = 4x \quad \mid -4x\)</span></div>
-<div class="l m row mitte" data-at="32.35" data-out="38.05" data-anim="rise" style="left:0;right:0;text-align:center;top:620px;font-size:60px"><span>\(-2x = 0 \quad \mid : (-2)\)</span></div>
-<div class="l hand mitte" data-at="34.05" data-out="38.05" data-anim="rise" style="left:0;right:0;text-align:center;top:810px;font-size:52px;color:var(--rot)">Null geteilt durch minus zwei ist null — nicht undefiniert.</div>
-<div class="l m huelle mitte" data-at="38.45" data-out="45.85" data-anim="pop" style="left:0;right:0;text-align:center;top:260px;font-size:86px;font-weight:600"><span class="box row boxg"><span>\(L = \{0\}\)</span></span></div>
-<div class="l hand mitte" data-at="40.15" data-out="45.85" data-anim="rise" style="left:0;right:0;text-align:center;top:500px;font-size:56px;color:var(--rot)">Die Aufgabe verlangt die Lösungsmenge —<br>geschweifte Klammern, nicht bloss \(x = 0\).</div>
-<div class="l hand mitte" data-at="41.85" data-out="45.85" data-anim="rise" style="left:0;right:0;text-align:center;top:690px;font-size:52px;color:var(--blau)">Probe: links \(-12-2 = -14\), rechts \(-12-2 = -14\). Stimmt.</div>
+<div class="l m row mitte" data-at="8.20" data-out="17.64" data-anim="rise" style="left:0;right:0;text-align:center;top:220px;font-size:60px"><span>\(6(x-2) = 6x-12\)</span></div>
+<div class="l m row mitte" data-at="9.90" data-out="17.64" data-anim="rise" style="left:0;right:0;text-align:center;top:400px;font-size:60px"><span>\(-2(2x+1) = \fd{-4x-2}\)</span></div>
+<div class="l m row mitte" data-at="11.60" data-out="17.64" data-anim="rise" style="left:0;right:0;text-align:center;top:590px;font-size:56px"><span>\(\text{links:} \quad 6x-12-4x-2 = \fa{2x-14}\)</span></div>
+<div class="l hand mitte" data-at="13.30" data-out="17.64" data-anim="rise" style="left:0;right:0;text-align:center;top:770px;font-size:52px;color:var(--rot)">Das Minus trifft beide Glieder der Klammer.<br>Aus \(+1\) wird \(-2\), nicht \(+2\).</div>
+<div class="l m row mitte" data-at="18.04" data-out="28.07" data-anim="rise" style="left:0;right:0;text-align:center;top:220px;font-size:60px"><span>\(3(2x-4) = 6x-12\)</span></div>
+<div class="l m row mitte" data-at="19.74" data-out="28.07" data-anim="rise" style="left:0;right:0;text-align:center;top:400px;font-size:60px"><span>\(-2(x+1) = \fd{-2x-2}\)</span></div>
+<div class="l m row mitte" data-at="21.44" data-out="28.07" data-anim="rise" style="left:0;right:0;text-align:center;top:590px;font-size:56px"><span>\(\text{rechts:} \quad 6x-12-2x-2 = \fb{4x-14}\)</span></div>
+<div class="l hand mitte" data-at="23.14" data-out="28.07" data-anim="rise" style="left:0;right:0;text-align:center;top:770px;font-size:52px;color:var(--blau)">Beide Seiten enden auf \(-14\) — das fällt gleich weg.</div>
+<div class="l m row mitte" data-at="28.47" data-out="37.57" data-anim="rise" style="left:0;right:0;text-align:center;top:240px;font-size:58px"><span>\(\fa{2x-14} = \fb{4x-14} \quad \mid +14\)</span></div>
+<div class="l m row mitte" data-at="30.17" data-out="37.57" data-anim="rise" style="left:0;right:0;text-align:center;top:430px;font-size:60px"><span>\(2x = 4x \quad \mid -4x\)</span></div>
+<div class="l m row mitte" data-at="31.87" data-out="37.57" data-anim="rise" style="left:0;right:0;text-align:center;top:620px;font-size:60px"><span>\(-2x = 0 \quad \mid : (-2)\)</span></div>
+<div class="l hand mitte" data-at="33.57" data-out="37.57" data-anim="rise" style="left:0;right:0;text-align:center;top:810px;font-size:52px;color:var(--rot)">Null geteilt durch minus zwei ist null — nicht undefiniert.</div>
+<div class="l m huelle mitte" data-at="37.97" data-out="45.37" data-anim="pop" style="left:0;right:0;text-align:center;top:260px;font-size:86px;font-weight:600"><span class="box row boxg"><span>\(L = \{0\}\)</span></span></div>
+<div class="l hand mitte" data-at="39.67" data-out="45.37" data-anim="rise" style="left:0;right:0;text-align:center;top:500px;font-size:56px;color:var(--rot)">Die Aufgabe verlangt die Lösungsmenge —<br>geschweifte Klammern, nicht bloss \(x = 0\).</div>
+<div class="l hand mitte" data-at="41.37" data-out="45.37" data-anim="rise" style="left:0;right:0;text-align:center;top:690px;font-size:52px;color:var(--blau)">Probe: links \(-12-2 = -14\), rechts \(-12-2 = -14\). Stimmt.</div>
+<div class="l hand mitte mitte" data-at="45.77" data-out="53.17" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:88px;font-weight:600;color:var(--tinte)">Das Minus ist ein Faktor.</div>
+<div class="l m row mitte" data-at="47.47" data-out="53.17" data-anim="rise" style="left:0;right:0;text-align:center;top:500px;font-size:52px"><span>\(-2(2x+1) = -4x - 2 \qquad \fd{\text{nicht}} \ -4x + 2\)</span></div>
+<div class="l hand mitte" data-at="49.17" data-out="53.17" data-anim="rise" style="left:0;right:0;text-align:center;top:700px;font-size:54px;color:var(--rot)">Und die Antwort heisst \(L = \{0\}\), nicht \(x = 0\).</div>
 </div></div>
 <audio id="ton" preload="auto" src="ton/pruefung1-c1a-lineare-gleichung-klammern.mp3"></audio>
 <div id="ui">
@@ -102,8 +120,8 @@ body.render #ui{display:none}
   <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
 </div>
 <script>
-const DUR = 45.85;
-const SPRECHER = [{"bei": 0.4, "text": "Vier Klammern, und vor zweien steht ein Minus. Genau dort passieren die Fehler."}, {"bei": 8.2, "text": "Links: sechs mal x minus zwei ist sechs x minus zwölf. Und minus zwei mal zwei x plus eins ist minus vier x minus zwei — beide Vorzeichen drehen."}, {"bei": 18.4, "text": "Rechts genauso: drei mal zwei x minus vier ist sechs x minus zwölf, und minus zwei mal x plus eins ist minus zwei x minus zwei. Zusammen vier x minus vierzehn."}, {"bei": 28.95, "text": "Jetzt gleichsetzen. Die minus vierzehn steht auf beiden Seiten und fällt weg. Bleibt zwei x gleich vier x, also minus zwei x gleich null."}, {"bei": 38.45, "text": "x ist null. Und die Antwort ist nicht x gleich null, sondern die Lösungsmenge: L ist die Menge mit der Null."}];
+const DUR = 53.17;
+const SPRECHER = [{"bei": 0.4, "text": "Vier Klammern, und vor zweien steht ein Minus. Genau dort passieren die Fehler."}, {"bei": 8.2, "text": "Links: sechs mal x minus zwei ist sechs x minus zwölf. Und minus zwei mal zwei x plus eins ist minus vier x minus zwei — beide Vorzeichen drehen."}, {"bei": 18.04, "text": "Rechts genauso: drei mal zwei x minus vier ist sechs x minus zwölf, und minus zwei mal x plus eins ist minus zwei x minus zwei. Zusammen vier x minus vierzehn."}, {"bei": 28.47, "text": "Jetzt gleichsetzen. Die minus vierzehn steht auf beiden Seiten und fällt weg. Bleibt zwei x gleich vier x, also minus zwei x gleich null."}, {"bei": 37.97, "text": "x ist null. Und die Antwort ist nicht x gleich null, sondern die Lösungsmenge: L ist die Menge mit der Null."}, {"bei": 45.77, "text": "Zum Mitnehmen: Vor jeder Klammer steht ein Faktor — auch das Minus. Und gefragt ist die Lösungsmenge, nicht die Zahl."}];
 const stage = document.getElementById('stage');
 const layers = [...document.querySelectorAll('.l')].map(el => ({
   el, at: parseFloat(el.dataset.at || '0'),

@@ -4,6 +4,43 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Audit gegen den didaktischen Standard
+
+Die zwölf Punkte aus «Priorität I» über alle **177 Drehbücher** geprüft. Der Bericht
+steht in `BERICHT-clip-audit-2026-09-07.md`.
+
+### Behoben
+
+- **Definitionsbedingungen (2).** `g1-4-potenzgesetze` zeigte P2 und P5 ohne \(a \neq 0\)
+  beziehungsweise \(b \neq 0\); `g1-4-potenzterme-punkt-strich` teilt durch \(4x^5\), ohne
+  \(x \neq 0\) zu nennen.
+- **Merksatz am Schluss (5).** `g1-2-zahlformen` endete auf einem Vorbehalt,
+  `g1-4-zahldarstellung` auf einem weiteren Beispiel; dazu `pruefung1-c1a`,
+  `pruefung1-c2a` und `trigo2-2a`, die auf dem Resultat statt auf einer Erkenntnis
+  endeten. Alle fünf haben jetzt ein Merkbild und sind neu vertont.
+
+### Geprüft, keine Beanstandung
+
+- **188 absolute Formulierungen einzeln gelesen — keine falsche.** Alle sind wahre
+  Allaussagen oder Handlungsanweisungen. In den 80 Clips der Runden D bis H: keine.
+- **Rechnerbedienung:** kein einziger Clip zeigt eine Rechneranzeige ohne
+  `werkzeug`-Flag.
+- **Die fünf Clips über 90 s** einzeln durchgelesen — jeder trägt ein Lernziel, nur
+  gründlich.
+
+### Festgehalten
+
+Zwei Kriterien sind **nicht mechanisch prüfbar**: «genau ein Lernziel» und «zuerst
+Problem, dann Lösung». Ein erster Versuch meldete beim zweiten 106 von 177 Clips; beim
+Nachlesen eröffneten fast alle mit einer Spannung, die kein Muster erfasst. Der Bericht
+teilt die zwölf Punkte darum in messbare, halbmessbare und nur lesbare — das spart beim
+nächsten Durchgang die Arbeit, die hier zweimal gemacht wurde.
+
+**Dauerverteilung:** Median 52 s, 128 Clips im Band 45–90 s, 44 darunter, 5 darüber.
+Die kurzen sind Ein-Gedanken-Clips; sie zu strecken wäre Füllmaterial.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Schwerpunktfach: 21 neue Clips
 
 Die Liste «Priorität H» abgearbeitet — und damit alle Ausbaulisten D bis H. Das

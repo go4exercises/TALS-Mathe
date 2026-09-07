@@ -21,6 +21,21 @@ body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!impor
 #kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
 #fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
 
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
 .l{position:absolute;will-change:opacity,transform}
 .l.flow{position:relative}
 .m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
@@ -85,7 +100,7 @@ body.render #ui{display:none}
 <div class="l m row" data-at="19.60" data-out="28.70" data-anim="rise" style="left:680px;top:210px;font-size:66px"><span>\(\dfrac{2^7}{2^3}\)</span></div>
 <div class="l m row" data-at="21.30" data-out="28.70" data-anim="pop" style="left:680px;top:440px;font-size:62px"><span>\(= 2^{\fa{7}-\fb{3}} = 2^4 = 16\)</span></div>
 <div class="l hand" data-at="23.00" data-out="28.70" data-anim="rise" style="left:680px;top:610px;font-size:54px;color:var(--blau)">Drei der sieben Faktoren kürzen sich weg.</div>
-<div class="l m huelle" data-at="24.70" data-out="28.70" data-anim="pop" style="left:680px;top:770px;font-size:54px;font-weight:600"><span class="box row boxg"><span>\(\dfrac{a^n}{a^m} = a^{n-m}\)</span></span></div>
+<div class="l m huelle" data-at="24.70" data-out="28.70" data-anim="pop" style="left:680px;top:770px;font-size:54px;font-weight:600"><span class="box row boxg"><span>\(\dfrac{a^n}{a^m} = a^{n-m} \qquad (a \neq 0)\)</span></span></div>
 <div class="l m row" data-at="29.10" data-out="38.20" data-anim="rise" style="left:680px;top:215px;font-size:66px"><span>\((10^3)^2\)</span></div>
 <div class="l m row" data-at="30.80" data-out="38.20" data-anim="rise" style="left:680px;top:365px;font-size:58px"><span>\(= \fa{10^3} \cdot \fa{10^3}\)</span></div>
 <div class="l m row" data-at="32.50" data-out="38.20" data-anim="pop" style="left:680px;top:515px;font-size:62px"><span>\(= 10^{\fa{3} \cdot \fb{2}} = 10^6\)</span></div>
@@ -93,7 +108,7 @@ body.render #ui{display:none}
 <div class="l m row" data-at="38.60" data-out="49.86" data-anim="rise" style="left:680px;top:180px;font-size:54px"><span>\((2 \cdot 3)^4 = \fa{2^4} \cdot \fb{3^4} = 16 \cdot 81 = 1296\)</span></div>
 <div class="l hand" data-at="40.30" data-out="49.86" data-anim="rise" style="left:680px;top:335px;font-size:50px;color:var(--blau)">Vier Klammern ausmultipliziert — die Zweien und die Dreien lassen sich umsortieren.</div>
 <div class="l m row" data-at="42.00" data-out="49.86" data-anim="pop" style="left:680px;top:510px;font-size:54px"><span>\(\left(\dfrac{3}{4}\right)^2 = \dfrac{\fa{3^2}}{\fb{4^2}} = \dfrac{9}{16}\)</span></div>
-<div class="l m huelle" data-at="43.70" data-out="49.86" data-anim="pop" style="left:680px;top:760px;font-size:48px;font-weight:600"><span class="box row boxg"><span>\((a \cdot b)^n = a^n b^n \qquad \left(\dfrac{a}{b}\right)^n = \dfrac{a^n}{b^n}\)</span></span></div>
+<div class="l m huelle" data-at="43.70" data-out="49.86" data-anim="pop" style="left:680px;top:760px;font-size:48px;font-weight:600"><span class="box row boxg"><span>\((a \cdot b)^n = a^n b^n \qquad \left(\dfrac{a}{b}\right)^n = \dfrac{a^n}{b^n} \ \ (b \neq 0)\)</span></span></div>
 <div class="l m mitte mitte" data-at="50.26" data-out="61.57" data-anim="pop" style="left:0;right:0;text-align:center;top:200px;font-size:78px;font-weight:600">Nur bei gleicher Basis</div>
 <div class="l m row mitte" data-at="51.96" data-out="61.57" data-anim="rise" style="left:0;right:0;text-align:center;top:375px;font-size:66px"><span>\(2^3 \cdot 5^4 \;\fd{\neq}\; 10^7\)</span></div>
 <div class="l m row mitte" data-at="53.66" data-out="61.57" data-anim="pop" style="left:0;right:0;text-align:center;top:535px;font-size:54px"><span>\(8 \cdot 625 = \fc{5000} \qquad 10^7 = \fd{10\,000\,000}\)</span></div>
