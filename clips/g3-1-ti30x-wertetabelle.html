@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Funktionen: die Wertetabelle vom Rechner füllen lassen</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Funktionen · Darstellungen</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>07.09.2026</span></div>
+<div class="l" data-at="10.15" data-out="73.28" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="10.45" data-anim="rise" data-dim="10.15,21.01"><div class="num">1</div><div class="stxt">Funktion eintippen<br><span class="dim">table, Add/Edit Func</span></div></div><div class="step l flow" data-at="21.31" data-anim="rise" data-dim="21.01,35.86"><div class="num">2</div><div class="stxt">Start und Step setzen</div></div><div class="step l flow" data-at="36.16" data-anim="rise" data-dim="35.86,49.16"><div class="num">3</div><div class="stxt">zwei Funktionen nebeneinander</div></div><div class="step l flow" data-at="49.46" data-anim="rise" data-dim="49.16,73.28"><div class="num">4</div><div class="stxt">ask-x und f( für Einzelwerte</div></div></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="10.15" data-anim="rise" style="left:0;right:0;text-align:center;top:215px;font-size:80px;font-weight:600;color:var(--tinte)">Die Tabelle füllt der Rechner</div>
+<div class="l m row mitte" data-at="2.10" data-out="10.15" data-anim="pop" style="left:0;right:0;text-align:center;top:390px;font-size:70px"><span>\(f(x) = 2x - 1\)</span></div>
+<div class="l hand mitte" data-at="3.80" data-out="10.15" data-anim="rise" style="left:0;right:0;text-align:center;top:595px;font-size:50px;color:var(--blau)">Einmal eintippen — und die Tabelle steht, so weit du willst, in jeder Schrittweite.</div>
+<div class="l graf" data-at="10.75" data-out="21.01" data-anim="fade" style="left:680px;top:178px"><svg width="820" height="383" viewBox="0 0 820 383"><rect x="0" y="0" width="820" height="383" fill="#f8f6f1"/><rect x="0" y="0" width="820" height="310" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="784" height="278" rx="5" fill="#c9d4c4"/><text x="30.0" y="90.5" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">1:Add/Edit Func</text><text x="30.0" y="178.4" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">2:f(</text><text x="30.0" y="266.3" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">3:g(</text><rect x="349.5" y="321.6" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="410.0" y="357.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >table</text></svg></div>
+<div class="l graf" data-at="12.15" data-out="21.01" data-anim="fade" style="left:680px;top:178px"><svg width="820" height="383" viewBox="0 0 820 383"><rect x="0" y="0" width="820" height="383" fill="#f8f6f1"/><rect x="0" y="0" width="820" height="310" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="784" height="278" rx="5" fill="#c9d4c4"/><text x="30.0" y="90.5" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">f(x)=</text><text x="30.0" y="178.4" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">g(x)=</text><rect x="315.0" y="321.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="375.5" y="357.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">table</text><rect x="445.0" y="321.6" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="475.0" y="357.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >1</text></svg></div>
+<div class="l graf" data-at="13.55" data-out="21.01" data-anim="fade" style="left:680px;top:178px"><svg width="820" height="383" viewBox="0 0 820 383"><rect x="0" y="0" width="820" height="383" fill="#f8f6f1"/><rect x="0" y="0" width="820" height="310" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="784" height="278" rx="5" fill="#c9d4c4"/><text x="30.0" y="90.5" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">f(x)=2x-1</text><text x="30.0" y="178.4" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">g(x)=</text><rect x="259.5" y="321.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="320.0" y="357.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">table</text><rect x="389.5" y="321.6" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="419.5" y="357.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">1</text><rect x="458.5" y="321.6" width="102.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="509.5" y="357.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >2x-1</text></svg></div>
+<div class="l hand" data-at="15.65" data-out="21.01" data-anim="rise" style="left:680px;top:588px;font-size:48px;color:var(--blau)">Zwei Funktionen gehen gleichzeitig: \(f\) und \(g\). Die zweite bleibt hier vorerst leer.</div>
+<div class="l graf" data-at="21.81" data-out="35.86" data-anim="fade" style="left:680px;top:178px"><svg width="820" height="383" viewBox="0 0 820 383"><rect x="0" y="0" width="820" height="383" fill="#f8f6f1"/><rect x="0" y="0" width="820" height="310" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="784" height="278" rx="5" fill="#c9d4c4"/><text x="30.0" y="90.5" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">Start=-1</text><text x="30.0" y="178.4" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">Step=1</text><text x="30.0" y="266.3" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">Auto   ask-x</text><rect x="349.5" y="321.6" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="410.0" y="357.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l graf" data-at="24.61" data-out="35.86" data-anim="fade" style="left:680px;top:178px"><svg width="820" height="471" viewBox="0 0 820 471"><rect x="0" y="0" width="820" height="471" fill="#f8f6f1"/><rect x="0" y="0" width="820" height="398" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="784" height="366" rx="5" fill="#c9d4c4"/><text x="30.0" y="90.5" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">   x   f(x)</text><text x="30.0" y="178.4" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">  -1     -3</text><text x="30.0" y="266.3" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">   0     -1</text><text x="30.0" y="354.2" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">   1      1</text><rect x="284.5" y="409.5" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="345.0" y="445.5" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">enter</text><rect x="414.5" y="409.5" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="475.0" y="445.5" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >enter</text></svg></div>
+<div class="l hand" data-at="24.81" data-out="35.86" data-anim="rise" style="left:680px;top:648px;font-size:48px;color:var(--blau)">Step darf krumm sein und darf negativ sein — dann läuft die Tabelle rückwärts.</div>
+<div class="l m row" data-at="36.26" data-out="49.16" data-anim="rise" style="left:680px;top:178px;font-size:52px"><span>\(f(x) = 2x - 1 \qquad g(x) = x^2 - 4x + 3\)</span></div>
+<div class="l graf" data-at="37.86" data-out="49.16" data-anim="fade" style="left:680px;top:340px"><svg width="880" height="425" viewBox="0 0 880 425"><rect x="0" y="0" width="880" height="425" fill="#f8f6f1"/><rect x="0" y="0" width="880" height="425" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="844" height="393" rx="5" fill="#c9d4c4"/><text x="30.0" y="96.0" font-family="monospace" font-size="87.1" fill="#1c1a17" xml:space="preserve">  x  f(x)  g(x)</text><text x="30.0" y="190.8" font-family="monospace" font-size="87.1" fill="#1c1a17" xml:space="preserve"> -1    -3     8</text><text x="30.0" y="285.6" font-family="monospace" font-size="87.1" fill="#1c1a17" xml:space="preserve">  0    -1     3</text><text x="30.0" y="380.4" font-family="monospace" font-size="87.1" fill="#1c1a17" xml:space="preserve">  1     1     0</text></svg></div>
+<div class="l hand" data-at="39.66" data-out="49.16" data-anim="rise" style="left:680px;top:820px;font-size:48px;color:var(--blau)">Eine Null in der Spalte ist eine Nullstelle. Zwei gleiche Werte in einer Zeile sind ein Schnittpunkt.</div>
+<div class="l graf" data-at="49.96" data-out="62.14" data-anim="fade" style="left:680px;top:178px"><svg width="820" height="383" viewBox="0 0 820 383"><rect x="0" y="0" width="820" height="383" fill="#f8f6f1"/><rect x="0" y="0" width="820" height="310" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="784" height="278" rx="5" fill="#c9d4c4"/><text x="30.0" y="90.5" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">Start=-1</text><text x="30.0" y="178.4" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">Step=1</text><text x="30.0" y="266.3" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">Auto   ask-x</text><rect x="349.5" y="321.6" width="121.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="410.0" y="357.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >ask-x</text></svg></div>
+<div class="l graf" data-at="52.36" data-out="62.14" data-anim="fade" style="left:680px;top:178px"><svg width="820" height="383" viewBox="0 0 820 383"><rect x="0" y="0" width="820" height="383" fill="#f8f6f1"/><rect x="0" y="0" width="820" height="310" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="784" height="278" rx="5" fill="#c9d4c4"/><text x="30.0" y="90.5" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve">   x   f(x)</text><text x="30.0" y="178.4" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve"> 0.5      0</text><text x="30.0" y="266.3" font-family="monospace" font-size="80.8" fill="#1c1a17" xml:space="preserve"> 100    199</text><rect x="257.5" y="321.6" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="318.0" y="357.6" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">ask-x</text><rect x="387.5" y="321.6" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="429.0" y="357.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">0.5</text><rect x="479.5" y="321.6" width="83.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="521.0" y="357.6" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >100</text></svg></div>
+<div class="l hand" data-at="52.96" data-out="62.14" data-anim="rise" style="left:680px;top:588px;font-size:48px;color:var(--blau)">Genau dafür ist ask-x da: einzelne krumme Stellen, ohne die halbe Tabelle drumherum.</div>
+<div class="l graf" data-at="63.14" data-out="73.28" data-anim="fade" style="left:680px;top:180px"><svg width="700" height="268" viewBox="0 0 700 268"><rect x="0" y="0" width="700" height="268" fill="#f8f6f1"/><rect x="0" y="0" width="700" height="194" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="664" height="162" rx="5" fill="#c9d4c4"/><text x="30.0" y="79.7" font-family="monospace" font-size="68.0" fill="#1c1a17" xml:space="preserve">f(7)</text><text x="590.0" y="153.7" font-family="monospace" font-size="68.0" fill="#1c1a17" xml:space="preserve">13</text><rect x="220.5" y="206.0" width="121.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="281.0" y="242.0" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">table</text><rect x="350.5" y="206.0" width="60.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="380.5" y="242.0" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2</text><rect x="419.5" y="206.0" width="60.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="449.5" y="242.0" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >7</text></svg></div>
+<div class="l hand" data-at="64.24" data-out="73.28" data-anim="rise" style="left:680px;top:510px;font-size:46px;color:var(--rot)">Ein Tabellenwert ist gerundet dargestellt, gerechnet wird mit dem vollen Wert. Für eine Weiterrechnung darum lieber \(f(7)\) als die Zahl aus der Tabelle abschreiben.</div>
+<div class="l m mitte mitte" data-at="73.68" data-out="83.08" data-anim="pop" style="left:0;right:0;text-align:center;top:210px;font-size:60px;font-weight:600">Eine Tabelle zeigt Werte, keine Kurve</div>
+<div class="l m row mitte" data-at="75.38" data-out="83.08" data-anim="rise" style="left:0;right:0;text-align:center;top:400px;font-size:52px"><span>\(\text{Term} \longrightarrow \text{Tabelle} \longrightarrow \text{Graph}\)</span></div>
+<div class="l hand mitte" data-at="77.08" data-out="83.08" data-anim="rise" style="left:0;right:0;text-align:center;top:575px;font-size:50px;color:var(--gruen)">Der Rechner nimmt dir den mittleren Pfeil ab. Die beiden äusseren bleiben deine Arbeit.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g3-1-ti30x-wertetabelle.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <button id="sw" hidden></button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 83.08;
+const SPRECHER = [{"bei": 0.4, "text": "Die Tabelle aus dem Dreieck Term, Tabelle, Graph — bisher hast du sie Zeile für Zeile ausgerechnet. Der Rechner füllt sie in einem Zug, wenn du ihm die Funktion einmal gibst."}, {"bei": 10.55, "text": "Die Taste table öffnet ein Menü mit drei Zeilen. Die erste, Add slash Edit Func, ist die Eingabe: Dort steht f von x gleich, und du tippst den Term hin — zwei x minus eins."}, {"bei": 21.41, "text": "Danach fragt der Rechner drei Dinge: Start ist die erste Zeile der Tabelle, Step der Abstand zur nächsten, und Auto heisst, dass er von selbst weiterzählt. Start minus eins, Step eins — und da steht genau die Tabelle, die du sonst von Hand gerechnet hast."}, {"bei": 36.26, "text": "Trägst du bei g auch etwas ein, stehen beide Spalten nebeneinander. Bei x gleich eins steht in der g-Spalte eine Null — dort hat g eine Nullstelle. Und wo beide Spalten denselben Wert tragen, schneiden sich die zwei Graphen."}, {"bei": 49.56, "text": "Nicht jede Stelle liegt auf einem Raster. Stellst du statt Auto auf ask-x, tippst du die x-Werte selber ein und der Rechner ergänzt nur die Funktionswerte — null Komma fünf gibt genau null, hundert gibt hundertneunundneunzig."}, {"bei": 62.54, "text": "Und wenn du mitten in einer Rechnung nur einen einzelnen Wert brauchst: table, dann zwei — das setzt f Klammer auf in die Zeile. F von sieben ist dreizehn, ohne den Term ein zweites Mal zu tippen."}, {"bei": 73.68, "text": "Die Tabelle zeigt Werte, keine Kurve. Zwischen zwei Zeilen kann alles passieren — die Nullstelle, der Scheitel, der Sprung. Was dazwischen liegt, holt die Rechnung."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
+  // Wechsel behaelt darum Zeit und Zustand einfach bei.
+  const STIMMEN = [];
+  // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
+  // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
+  // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
+  if (ton && STIMMEN.length > 1) {
+    let stimme = 0;
+    const sw = document.getElementById('sw');
+    sw.hidden = false;
+    const beschriften = () => {
+      const v = STIMMEN[stimme];
+      sw.textContent = '🗣 ' + v.n + (v.d > 1.005 ? ' (' + v.d.toFixed(2) + '\u00d7)' : '');
+      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + v.n);
+    };
+    beschriften();
+    sw.onclick = () => {
+      stimme = (stimme + 1) % STIMMEN.length;
+      const wo = t, lief = !ton.paused;
+      dehnung = STIMMEN[stimme].d || 1;
+      ton.src = STIMMEN[stimme].s;
+      ton.currentTime = wo * dehnung;
+      if (lief) ton.play().catch(() => {});
+      beschriften();
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime / dehnung;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>
