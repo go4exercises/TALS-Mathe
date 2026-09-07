@@ -4,6 +4,42 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Prüfwerkzeug misst den Inhalt
+
+Rückübertrag aus TALS Physik — zum ersten Mal in dieser Richtung.
+
+### Geändert
+
+- **`.claude/tools/pruef-clip.mjs` misst den Inhalt statt des Containers.** Eine
+  zentrierte Zeile spannt sich über die ganze Bühne, ihr Text trägt `white-space: nowrap`
+  und kann darüber hinauslaufen, ohne dass der Container breiter wird. Physik hatte den
+  blinden Fleck am selben Tag entdeckt; dort kamen beim Umstellen zehn abgeschnittene
+  Zeilen in fünf Clips zum Vorschein.
+
+### Behoben
+
+- **`s2-2c-ti30x-num-solv`,** 38 px Überlappung bei t = 28 s zwischen der dreizeiligen
+  Liste und der Schlussnotiz. `abstand` von 300 auf 370. Der Fehler war vorbestehend und
+  in beiden Messungen sichtbar — er war schlicht übersehen worden.
+
+### Nachgemessen
+
+Alle **177 Clips** einmal mit der alten und einmal mit der neuen Messung, an jeder
+Szenenmitte: **0 zusätzliche Funde.** Mathes Zeilen laufen nicht über, weil sie schmaler
+gesetzt sind. Die Umstellung ist damit Vorsorge, keine Reparatur, und die
+Layout-Freigaben der bisherigen Durchgänge bleiben gültig.
+
+### Dokumentiert
+
+`HOWTO-clips.md` Schritt 4.0, STYLEGUIDE §6.4 und drei neue Einträge in
+`TODO-schwesterprojekt.md`: die Bedingungsleiste `voraussetzung` (in Physik am
+wertvollsten — 77 von 79 Drehbüchern greifen dort zu `halten`), `typ: "boxplot"` (dort
+ohne Anwendung, nur bei Bedarf portieren) und `beschriftung_bei` (dort bereits
+vorhanden). Der alte Eintrag zu `\lt` / `\gt` ist **geschlossen**: Physik hat die Regel
+unabhängig selbst gefunden und im eigenen `HOWTO-clips.md` festgehalten.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Audit gegen den didaktischen Standard
 
 Die zwölf Punkte aus «Priorität I» über alle **177 Drehbücher** geprüft. Der Bericht

@@ -146,6 +146,22 @@ Die Geraden werden **am Fenster** abgeschnitten, nicht an ihren Endpunkten — e
 Gerade, die aus dem Bild läuft, hört am Rand auf statt an einer willkürlichen Stelle
 davor. `farbe` ist 1 bis 4 wie bei den Farbgruppen.
 
+**`beschriftung_bei` gibt es für alle drei** — Geraden, Parabeln und Punkte. Ohne die
+Angabe steht die Beschriftung eines Punktes rechts über ihm, und genau dort liegt am
+Scheitel einer Parabel die Achsenbeschriftung. Die Koordinaten sind Datenkoordinaten,
+nicht Pixel:
+
+```json
+"punkte": [{"x": 2, "y": -1, "farbe": 3,
+            "beschriftung": "S(2 | −1)", "beschriftung_bei": [2.35, -1.35],
+            "anker": "start"}]
+```
+
+**Die freie Stelle ausrechnen, nicht schätzen.** Vor dem Setzen kurz prüfen, wo die
+Kurve an dieser Stelle verläuft — bei `y = x²` liegt die Kurve an `x = 1.35` auf `1.82`,
+ein Label bei `7.6` ist also frei. Vier Kollisionen sind auf diese Weise entstanden und
+erst im Bild aufgefallen, nicht in der Prüfung.
+
 **Der senkrechte Strich `|` bricht im Fliesstext die Zeile.** Wer in einer Notiz
 \(2|a|\) schreiben will, packt es in `@…@` — dort ist der Strich geschützt. Sonst steht
 die Hälfte des Satzes auf einer neuen Zeile und die Betragsstriche sind weg.
@@ -400,6 +416,16 @@ ohnehin.
    Bühne hinausragt, und legt je Zeitpunkt ein Bild ab. **Die Bilder trotzdem ansehen:**
    Der Prüfer sieht Überlappung, nicht Gestaltung. Ein Bruchstrich macht eine Zeile
    doppelt hoch — Zeilen mit `[a|b]` brauchen `abstand` ≥ 200.
+   **Seit dem 07.09.2026 misst der Prüfer den Inhalt, nicht den Container.** Eine
+   zentrierte Zeile spannt sich über die ganze Bühne (`left:0;right:0`), ihr Text trägt
+   aber `white-space: nowrap`: Er kann über den Rand hinauslaufen, ohne dass der
+   Container breiter wird — die alte Messung sah davon nichts. Die Regel stammt aus TALS
+   Physik, wo sie beim Umstellen zehn abgeschnittene Zeilen in fünf Clips aufdeckte.
+   In Mathe brachte die Umstellung **0 zusätzliche Funde über alle 177 Clips**; die
+   Zeilen sind hier schmaler gesetzt. Vorsorge also, keine Reparatur — aber wer eine
+   lange Formelzeile ohne `|` schreibt, verlässt sich jetzt zu Recht auf den Prüfer.
+   **Deckungsgleiche Kästen meldet er nicht**: Die Rechner-Clips stapeln die
+   Display-Zustände absichtlich an derselben Stelle.
 1. **Pre-Flight** über die geänderten Lektionsseiten, wie immer vor dem Commit.
 2. **Im Browser bei 1280 und 360 px**: Karte sichtbar, Klick lädt den Clip, Rahmen im
    richtigen Verhältnis, Bedienleiste ohne Überlauf. Auf schmalen Schirmen blendet der
@@ -845,18 +871,36 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 ---
 
-## Noch offen
+## Stand und was offen bleibt
 
-Die Mechanik steht. Was noch fehlt, ist Inhalt und der Übertrag:
+Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 
-- **Mehr Clips.** Stand 06.09.2026: **88 Drehbücher**, alle vertont — davon 62 in der
-  Bibliothek (68:29 min; 55 Grundlagenfach, 7 Schwerpunktfach) und 26 unverlinkte
-  Prüfungsclips mit `"probe": true` (20:28 min), die nur im Leitprogramm
-  `uebungspruefung-1` stehen. Das Schwerpunktfach ist weiterhin dünn. Als Referenz für
-  ein Drehbuch:
-  `g2-2b-mitternachtsformel-herleitung` für eine Herleitung Schritt für Schritt,
-  `g2-2a-warum-a-ungleich-5` für eine Rechnung mit Bedingung, `g2-3-anzahl-loesungen`
-  für eine Fallunterscheidung mit Bild.
+- **Der Bestand ist beisammen.** Stand 07.09.2026: **177 Drehbücher**, alle vertont —
+  142 in der Bibliothek (135:33 min, 52 Reihen) und 35 unverlinkte Prüfungsclips mit
+  `"probe": true` (28:04 min). Alle fünf Lerngebiete des Grundlagenfachs und alle vier
+  des Schwerpunktfachs sind abgedeckt; 44 der 46 Themenseiten tragen einen Clip-Block.
+
+  Verteilung: Lerngebiet 1 mit 32 Clips, 2 mit 29, 3 mit 20, 4 mit 19, 5 mit 18 —
+  im Schwerpunktfach 1.x mit 2, 2.x mit 12, 3.x mit 6, 4.x mit 8.
+
+  **Als Referenz für ein neues Drehbuch:**
+
+  | Form | Clip |
+  |---|---|
+  | Herleitung Schritt für Schritt | `g2-2b-mitternachtsformel-herleitung` |
+  | Rechnung mit Bedingung | `g2-2a-warum-a-ungleich-5` |
+  | Fallunterscheidung mit Bild | `g2-3-anzahl-loesungen` |
+  | durchgehende Bedingungsleiste | `g5-3-cosinussatz` |
+  | Koordinatenbild | `g3-1-schnittpunkte` |
+  | Boxplot | `g4-2-boxplot-lesen` |
+  | Entscheidungsclip («welches Verfahren?») | `g5-3-welcher-satz` |
+  | Gegenüberstellung robust/empfindlich | `g4-3-robust-oder-empfindlich` |
+
+  **Ein durchgehendes Beispiel trägt eine ganze Reihe.** Bei den Parabeln ist es
+  \(x^2-4x+3\) durch neun Clips, bei den Sätzen der Trigonometrie das Dreieck
+  \(a=7,\ b=8,\ c=5,\ \alpha=60^\circ\) durch fünf, bei der Datenanalyse der Satz
+  \(2,4,4,5,6,7,8,12\) durch fünfzehn. Wer eine neue Reihe anlegt, sucht zuerst dieses
+  eine Beispiel — es spart in jedem Folgeclip die Einführung.
 - **Urteil über die Stimme.** Alle Clips sind synthetisch vertont. Ob die Stimme im
   Unterricht trägt, ist noch nicht entschieden; falls nicht, ist der Wechsel auf eine
   eigene Aufnahme nur ein Dateiaustausch — das Verfahren bleibt dasselbe.

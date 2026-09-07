@@ -21,6 +21,21 @@ body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!impor
 #kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
 #fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
 
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
 .l{position:absolute;will-change:opacity,transform}
 .l.flow{position:relative}
 .m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
@@ -78,7 +93,7 @@ body.render #ui{display:none}
 <div class="l m row mitte" data-at="2.10" data-out="12.36" data-anim="pop" style="left:0;right:0;text-align:center;top:385px;font-size:58px"><span>\(x^4 - 3x + 1 = 0 \qquad 2^x = x + 3\)</span></div>
 <div class="l hand mitte" data-at="3.80" data-out="12.36" data-anim="rise" style="left:0;right:0;text-align:center;top:600px;font-size:52px;color:var(--blau)">Beides lässt sich nicht nach x auflösen — es gibt keine Formel dafür.</div>
 <div class="l sans" data-at="12.76" data-out="29.02" data-anim="rise" style="left:680px;top:175px;font-size:46px"><div class="lz"><span class="ln">1</span>Grad 2, Grad 3 \(\longrightarrow\) poly-solv, \(\textbf{alle}\) Lösungen</div><div class="lz"><span class="ln">2</span>Grad \(\geq\) 4 \(\longrightarrow\) num-solv, \(\textbf{eine}\) Lösung je Durchgang</div><div class="lz"><span class="ln">3</span>\(2^x\), \(\ln x\), \(\sin x\) \(\longrightarrow\) num-solv, \(\textbf{eine}\) Lösung je Durchgang</div></div>
-<div class="l hand" data-at="14.46" data-out="29.02" data-anim="rise" style="left:680px;top:475px;font-size:50px;color:var(--rot)">Den falschen Weg zu nehmen kostet nicht Genauigkeit, sondern Lösungen.</div>
+<div class="l hand" data-at="14.46" data-out="29.02" data-anim="rise" style="left:680px;top:545px;font-size:50px;color:var(--rot)">Den falschen Weg zu nehmen kostet nicht Genauigkeit, sondern Lösungen.</div>
 <div class="l graf" data-at="29.62" data-out="43.62" data-anim="fade" style="left:680px;top:180px"><svg width="780" height="286" viewBox="0 0 780 286"><rect x="0" y="0" width="780" height="286" fill="#f8f6f1"/><rect x="0" y="0" width="780" height="212" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="744" height="180" rx="5" fill="#c9d4c4"/><text x="30.0" y="86.9" font-family="monospace" font-size="76.5" fill="#1c1a17" xml:space="preserve">LEFT=</text><text x="30.0" y="170.2" font-family="monospace" font-size="76.5" fill="#1c1a17" xml:space="preserve">RIGHT=</text><rect x="348.5" y="224.5" width="83.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="390.0" y="260.5" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#f8f6f1" >2nd</text></svg></div>
 <div class="l graf" data-at="30.62" data-out="43.62" data-anim="fade" style="left:680px;top:180px"><svg width="780" height="286" viewBox="0 0 780 286"><rect x="0" y="0" width="780" height="286" fill="#f8f6f1"/><rect x="0" y="0" width="780" height="212" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="744" height="180" rx="5" fill="#c9d4c4"/><text x="30.0" y="86.9" font-family="monospace" font-size="76.5" fill="#1c1a17" xml:space="preserve">LEFT=</text><text x="30.0" y="170.2" font-family="monospace" font-size="76.5" fill="#1c1a17" xml:space="preserve">RIGHT=</text><rect x="255.0" y="224.5" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="296.5" y="260.5" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="347.0" y="224.5" width="178.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="436.0" y="260.5" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >num-solv</text></svg></div>
 <div class="l graf" data-at="31.62" data-out="43.62" data-anim="fade" style="left:680px;top:180px"><svg width="780" height="286" viewBox="0 0 780 286"><rect x="0" y="0" width="780" height="286" fill="#f8f6f1"/><rect x="0" y="0" width="780" height="212" rx="14" fill="#2b2b2b"/><rect x="18" y="16" width="744" height="180" rx="5" fill="#c9d4c4"/><text x="30.0" y="86.9" font-family="monospace" font-size="76.5" fill="#1c1a17" xml:space="preserve">LEFT=x^4-3x+1</text><text x="30.0" y="170.2" font-family="monospace" font-size="76.5" fill="#1c1a17" xml:space="preserve">RIGHT=</text><rect x="161.5" y="224.5" width="83.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="203.0" y="260.5" font-family="monospace" font-size="26" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">2nd</text><rect x="253.5" y="224.5" width="178.0" height="54" rx="10" fill="rgba(255,255,255,.70)" stroke="#1c1a17" stroke-width="2" stroke-opacity=".45"/><text x="342.5" y="260.5" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#1c1a17" fill-opacity=".5">num-solv</text><rect x="440.5" y="224.5" width="178.0" height="54" rx="10" fill="#1c1a17" stroke="#1c1a17" stroke-width="2.5" /><text x="529.5" y="260.5" font-family="monospace" font-size="20" text-anchor="middle" font-weight="600" fill="#f8f6f1" >x^4-3x+1</text></svg></div>

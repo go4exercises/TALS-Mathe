@@ -1069,7 +1069,8 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
 Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
-`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 01.09.2026: 51 Clips, 54:21 min.
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 07.09.2026: 142 Clips in der
+Bibliothek (135:33 min), dazu 35 unverlinkte Prüfungsclips.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass
@@ -1139,7 +1140,10 @@ Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführli
   `build-suchindex.py`.
 - **Vor dem Commit das Layout prüfen:** `node .claude/tools/pruef-clip.mjs
   clips/<name>.html <sekunden…>` meldet überlappende Zeilen und Überlauf. Die Bilder
-  trotzdem ansehen — der Prüfer sieht Überlappung, nicht Gestaltung.
+  trotzdem ansehen — der Prüfer sieht Überlappung, nicht Gestaltung. Er misst seit dem
+  07.09.2026 den **Inhalt**, nicht den Container: Eine `nowrap`-Zeile kann über ihren
+  Container hinauslaufen, ohne dass dieser breiter wird. Deckungsgleiche Kästen gelten
+  als Stapel und werden nicht gemeldet (Rechner-Clips).
 
 ## 6.5 Leitprogramme (verbindlich seit 01.09.2026)
 

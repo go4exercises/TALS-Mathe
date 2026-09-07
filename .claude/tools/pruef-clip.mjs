@@ -32,7 +32,24 @@ for (const t of marken) {
       // ist 470px breit und ragt damit in jede zentrierte Zeile hinein,
       // ohne dass sich im Bild etwas beruehrt.
       .filter(el => !el.querySelector('.step'))
-      .map(el => ({ t: el.textContent.trim().slice(0, 42), r: el.getBoundingClientRect() }));
+      // Gemessen wird nicht der Container, sondern was tatsaechlich im Bild
+      // steht. Eine zentrierte Zeile spannt sich ueber die ganze Buehne
+      // (left:0;right:0), ihr Inhalt traegt aber `white-space:nowrap`: Er
+      // laeuft im Zweifel ueber den Rand hinaus, ohne dass der Container
+      // breiter wird. Die Pruefung sah davon bis zum 07.09.2026 nichts.
+      // Uebernommen aus TALS Physik, wo derselbe blinde Fleck zehn
+      // abgeschnittene Zeilen in fuenf Clips verdeckt hatte.
+      .map(el => {
+        const k = el.children.length ? [...el.children] : [el];
+        const rr = [el.getBoundingClientRect(), ...k.map(x => x.getBoundingClientRect())];
+        return { t: el.textContent.trim().slice(0, 42), r: {
+          left:   Math.min(...rr.map(x => x.left)),
+          right:  Math.max(...rr.map(x => x.right)),
+          top:    Math.min(...rr.map(x => x.top)),
+          bottom: Math.max(...rr.map(x => x.bottom)),
+          get width()  { return this.right - this.left; },
+        } };
+      });
     const t = [];
     for (let i = 0; i < sichtbar.length; i++)
       for (let j = i + 1; j < sichtbar.length; j++) {

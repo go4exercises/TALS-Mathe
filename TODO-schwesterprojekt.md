@@ -79,13 +79,19 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
   Schreibweise, Elementtyp `graf` fuer Koordinatenbilder, Bibliothek nach Lektion und
   Reihe unterteilt, Vertonung mit Piper. Wer portiert, nimmt den Stand von heute, nicht
   den vom 30.8.
+  **Nachtrag 07.09.2026 — beide Clip-Eintraege sind ueberholt.** Physik hat inzwischen
+  **79 Drehbuecher**, ein eigenes `HOWTO-clips.md` und einen eigenen `pruef-clip.mjs`,
+  der Mathes Fassung an einer Stelle *voraus* war (siehe „Rueckuebertrag" unten). Der
+  Port ist also nicht mehr die Frage; was bleibt, sind einzelne Bausteine, die nur eine
+  Seite hat. Die stehen unten im Abschnitt „Clip-Generator: drei Bausteine".
 
 - **2026-08-30 · Clips: Verfahren uebernehmen, sobald Physik welche hat · `clips/`,
   `scripts/build-clips*.py`, `style.css`, `physiklib.js`, `nav.js`, `clips.html` ·
   warum:** In Mathe steht seit dem 30.8.2026 die vollstaendige Mechanik fuer kurze,
   HTML-Animationen (inzwischen vertont). Sie ist projektunabhaengig gebaut und laesst sich uebernehmen,
-  ohne etwas neu zu erfinden. Physik hat derzeit keine Clips — der Eintrag ist eine
-  Vorlage fuer den Tag, an dem der erste entsteht, kein offener Rueckstand.
+  ohne etwas neu zu erfinden. ~~Physik hat derzeit keine Clips~~ — **ueberholt: am
+  07.09.2026 sind es dort 79 Drehbuecher.** Der Eintrag ist damit Geschichte, kein
+  offener Rueckstand; die fuenf Punkte darunter bleiben als Fallstrick-Liste lesenswert.
   **Was zu uebertragen waere:** `clips/` samt `themes/` und `vorlage.json`,
   `scripts/build-clips.py` (Drehbuch → Clip) und `scripts/build-clips-einbau.py`
   (Clip → Lektionsseite und Bibliothek), die Abschnitte `.clip-*` aus `style.css`, der
@@ -487,7 +493,7 @@ bei 1280 px schon bei y = 404 px, steht also längst im ersten Bildschirm.
 `.k-lek` linksbündig zum Titel (Versatz 0 px), `document.body.scrollWidth ===
 document.documentElement.clientWidth`.
 
-## Clip-Drehbücher: `\lt` / `\gt` statt `&lt;` / `&gt;` (TALS Mathe, 2026-09-06) — Falle, noch nicht ausgelöst
+## ~~Clip-Drehbücher: `\lt` / `\gt` statt `&lt;` / `&gt;`~~ (TALS Mathe, 2026-09-06) — **erledigt am 07.09.2026, nichts zu tun**
 
 **Was.** In einem LaTeX-Drehbuch (`"latex": true`, Standard) darf ein Kleiner- oder
 Grösserzeichen **nicht** als HTML-Entität geschrieben werden. `tex()` in
@@ -497,19 +503,23 @@ Richtig sind die LaTeX-Makros `\lt` und `\gt`; sie enthalten kein HTML-Sonderzei
 sind unter beiden Schreibweisen korrekt. Betrifft auch Formeln in `@…@` innerhalb von
 Prosa-Elementen — die gehen ebenfalls durch `tex()`.
 
-**Wo in Physik.** Nachgesehen am 06.09.2026, nicht geschätzt:
+**Wo in Physik.** Zweimal nachgesehen — und der zweite Blick hat den Eintrag erledigt:
 
-| | |
-|---|---|
-| `scripts/build-clips.py` | dieselbe Mechanik — `LATEX = True` (Z. 54), `dreh.get("latex", True)` (Z. 487) |
-| Drehbücher in `clips/` | 13 (ohne `clips.json`, `vorlage.json`) |
-| davon heute betroffen | **0** — kein Drehbuch verwendet `&lt;` oder `&gt;` |
-| `HOWTO-clips.md` | **existiert dort nicht** — die falsche Regel steht also gar nicht erst im Repo |
+| | Stand 06.09.2026 | Stand 07.09.2026 |
+|---|---|---|
+| Drehbücher in `clips/` | 13 | **79** |
+| davon mit `&lt;` / `&gt;` | 0 | **0** |
+| `HOWTO-clips.md` | existiert dort nicht | **existiert, Z. 281** |
 
-**Also: nichts zu patchen, nur zu wissen.** Die Falle schlägt beim *nächsten* Physik-Clip
-zu, der ein `<` oder `>` in einer Formel braucht (Ungleichungen, Bedingungen wie
-`T \gt 0`, Fallunterscheidungen). Wer dort einen Drehbuch-Leitfaden anlegt oder
-`clips/vorlage.json` ergänzt, nimmt die Regel gleich mit auf.
+**Physik hat die Regel unabhängig selbst gefunden.** In `HOWTO-clips.md` steht dort
+wörtlich: „**`<` und `>` gehören als `\lt` und `\gt` ins Drehbuch.**" — mit derselben
+Begründung (der Formelsatz maskiert selbst) und dem Zusatz, den Mathe nicht notiert
+hatte: für `≤` und `≥` schreibt man `\le` und `\ge`. Kein Drehbuch ist betroffen.
+**Nichts zu portieren, nichts zu patchen, Eintrag geschlossen.**
+
+Die Lehre daraus für diese Datei: Zahlen in einem Eintrag altern. Zwischen den beiden
+Blicken lagen 24 Stunden und 66 neue Drehbücher. Wer einen Eintrag abarbeitet, zählt
+zuerst nach, statt der Tabelle zu glauben.
 
 **In Mathe erledigt:** `HOWTO-clips.md`, Abschnitt „Häufige Stolpersteine" — die alte
 Regel `&lt;` / `&gt;` stammte aus der eigenen Schreibweise (`"latex": false`) und war
@@ -520,3 +530,96 @@ Umstellung auf `\lt` / `\gt` 0 von 765.
 **Prüfen nach dem Port:** ein Testdrehbuch mit `T \gt 0` bauen und
 `python3 .claude/skills/preflight/preflight.py clips/<name>.html` laufen lassen —
 `fehler=0` erwartet.
+
+## Clip-Generator: drei Bausteine, die nur Mathe hat (2026-09-07)
+
+Gezählt im Physik-Repo am 07.09.2026, nicht geschätzt. Physiks
+`scripts/build-clips.py` kennt die Elementtypen `aussage`, `box`, `formel`, `graf`,
+`karte`, `liste`, `notiz`, `strich`, `text`, `titel`, `untertitel` — und **79
+Drehbücher** stehen dort. Die drei Bausteine unten fehlen ihm.
+
+### 1. Bedingungsleiste — `"voraussetzung"` im Drehbuchkopf · **lohnt sich dort am meisten**
+
+**Was.** Ein Drehbuch bekommt neben `titel` ein Feld `voraussetzung`. Der Generator
+legt daraus eine schmale Leiste unter den Kopf, die **den ganzen Clip über stehen
+bleibt** — dort steht die Bedingung, auf der alles Folgende ruht (`a \neq 0`,
+`x \gt 0`, „nur im rechtwinkligen Dreieck"). Sie ist keine Szene, sie verschwindet nie.
+
+**Warum das didaktisch zählt.** Der Anlass war eine Beobachtung des Autors: Im Verlauf
+eines Clips wird oft auf eine Voraussetzung aufgebaut, die längst aus dem Bild gescrollt
+ist. Wer bei Minute zwei einsteigt, sieht die Rechnung, aber nicht, wofür sie gilt.
+
+**Abgrenzung, damit sie nicht verwässert.** Die Leiste trägt nur, was **von Anfang an
+gilt**. Was der Clip erst *herleitet*, gehört nicht hinein — sonst steht die Antwort
+schon in der Kopfzeile, bevor die Frage gestellt ist.
+
+**Wo in Physik.** `voraussetzung` kommt in `scripts/build-clips.py` **0-mal** vor.
+Dafür benutzen dort **77 von 79 Drehbüchern** `halten`, und das HOWTO warnt: „Eine
+gehaltene Zeile belegt das Band oben." `halten` und `voraussetzung` lösen **verwandte,
+aber verschiedene** Probleme — `halten` trägt eine Zeile *aus einer Szene* weiter,
+`voraussetzung` steht über dem *ganzen* Clip. Dass 77 von 79 Clips zum Halten greifen,
+ist der beste Beleg dafür, dass der Bedarf in Physik gross ist.
+
+**Was zu übertragen ist.** Die Emission nach dem Fussbereich in `build-clips.py`, das
+CSS `#vorleiste` / `.vor`, und die Schutzregel — Mathe bricht den Bau ab, wenn eine
+Szene mit `oben < 170` in die Leiste liefe:
+
+```python
+if dreh.get("voraussetzung") and sz.get("oben", oben) < 170:
+    raise SystemExit("Szene %r beginnt bei oben=%d und liefe in die Bedingungsleiste …")
+```
+
+Physik braucht dort eine **eigene Zahl**, weil das Band von `halten` bereits Platz
+belegt: dort beginnen Folgeszenen laut HOWTO bei `oben: 430`. Wer beides kombiniert,
+prüft die Schwelle im Browser nach, statt 170 zu übernehmen.
+
+### 2. `typ: "boxplot"` · **in Physik vermutlich ohne Anwendung**
+
+Zeichnet Minimum, Q1, Median, Q3, Maximum nach der Konvention der Mathe-Themenseite 4.3
+(Antennen bis zu den Extremwerten, **keine** Ausreisser-Regel; Quartile nach Tukey).
+`boxplot_svg` kommt in Physiks `build-clips.py` 0-mal vor — und **kein** Physik-Drehbuch
+enthält das Wort. Ehrlich gesagt: Physik hat keine Datenanalyse im Lehrplan, der
+Baustein läuft dort wahrscheinlich leer. **Nur portieren, wenn Messreihen-Auswertung
+tatsächlich Thema wird** — sonst ist es toter Code.
+
+### 3. `beschriftung_bei` für `punkte` im `graf` · **dort schon vorhanden, nichts zu tun**
+
+Setzt die Beschriftung eines Punktes an eine frei gewählte Stelle statt an den
+Standardversatz `(+18|−16)`, damit sie nicht auf einer Achsenzahl landet.
+**Nachgesehen:** Physiks `build-clips.py` kennt `beschriftung_bei` bereits — Z. 323 für
+`graf`, Z. 352 für Pfeile. Der Mathe-Zusatz betrifft nur den Zweig `punkte`. Ob der dort
+fehlt, entscheidet sich am Tag, an dem Physik den ersten `graf` baut: **0 von 79
+Drehbüchern** benutzen ihn heute. Bis dahin: nichts zu tun.
+
+**Die Lehre, die unabhängig vom Code gilt:** Die vier Kollisionen, die den Zusatz nötig
+machten, hat **kein Prüfskript** gefunden — sie standen nur in den Bildern. Wer Punkte
+beschriftet, rechnet die freie Stelle aus und schaut sie an.
+
+## Rückübertrag Physik → Mathe: `pruef-clip.mjs` misst den Inhalt (2026-09-07) — **erledigt**
+
+Zum ersten Mal lief der Übertrag in die andere Richtung.
+
+**Was Physik gefunden hat.** Bis zum 07.09.2026 mass `pruef-clip.mjs` in beiden Repos
+nur den *Container* einer Zeile. Eine Formelzeile trägt aber `white-space: nowrap`: Sie
+bricht nicht um, sondern läuft über ihren Container hinaus — und der bleibt dabei
+unverändert breit. Die Prüfung sah davon nichts. Physik hat auf Inhaltsmessung
+umgestellt, und dabei kamen **zehn abgeschnittene Zeilen in fünf Clips** zum Vorschein.
+
+**In Mathe übernommen** — dieselbe `.map()`, die Container *und* Kinder misst.
+
+**Und dann nachgemessen, statt es zu glauben:** Alle 177 Mathe-Clips einmal mit der alten
+und einmal mit der neuen Messung durchgefahren, an jeder Szenenmitte.
+
+| | |
+|---|---|
+| Zusätzliche Funde durch die neue Messung | **0 von 177 Clips** |
+| Echter Fund (beide Messungen, vorher übersehen) | 1 — `s2-2c-ti30x-num-solv`, 38 px bei t=28 s, behoben mit `abstand: 370` |
+
+**Warum Mathe verschont blieb** — das ist die eigentlich interessante Zahl: Mathes Clips
+laufen nicht über, weil die Zeilen dort schmaler gesetzt sind. Der blinde Fleck war
+trotzdem echt; er hatte in Mathe nur nichts zu verdecken. **Die Umstellung ist damit
+Vorsorge, keine Reparatur** — und die Layout-Freigaben der 177 Clips bleiben gültig.
+
+**Was das für diese Datei heisst.** Der Übertrag ist keine Einbahnstrasse mehr. Wer hier
+einen Eintrag schreibt, schaut auch, ob das Schwesterprojekt inzwischen etwas hat, das
+hier fehlt.
