@@ -891,7 +891,12 @@ Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 - **Der Bestand ist beisammen.** Stand 07.09.2026: **177 Drehbücher**, alle vertont —
   142 in der Bibliothek (135:38 min, 52 Reihen) und 35 unverlinkte Prüfungsclips mit
   `"probe": true` (28:04 min). Alle fünf Lerngebiete des Grundlagenfachs und alle vier
-  des Schwerpunktfachs sind abgedeckt; 44 der 46 Themenseiten tragen einen Clip-Block.
+  des Schwerpunktfachs sind angefangen — abgedeckt ist damit nicht dasselbe:
+  **37 der 46 Themenseiten tragen Clips**, 44 tragen den Marker (sieben davon leer).
+  Das Schwerpunktfach ist dabei deutlich duenner besetzt als das Grundlagenfach:
+  119 Clips auf 23 GF-Seiten (Median 4 je Seite) gegen 28 auf 23 SF-Seiten (Median 1).
+  Ohne Clip sind `s1-1`, `s1-2`, `s2-1`, `s3-1`, `s3-5` und `s4-1` — dazu `g1-1`,
+  `g4-0` und `g5-2b`. Zwoelf der siebzehn belegten SF-Seiten haben genau einen Clip.
 
   Verteilung: Lerngebiet 1 mit 32 Clips, 2 mit 29, 3 mit 20, 4 mit 19, 5 mit 18 —
   im Schwerpunktfach 1.x mit 2, 2.x mit 12, 3.x mit 6, 4.x mit 8.
