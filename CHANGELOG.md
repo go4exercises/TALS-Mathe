@@ -4,6 +4,40 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Geometrie: 16 neue Clips
+
+Die Liste «Priorität E» abgearbeitet. Lerngebiet 5 hatte zwei Clips, jetzt sind es
+achtzehn. Die Bibliothek wächst von 81 auf **97 Clips (97:30 min)**.
+
+### Hinzugefügt
+
+- **Winkel (1):** Winkelarten, Neben- und Scheitelwinkel, Stufen- und Wechselwinkel.
+- **Dreieck (2):** Kathete und Hypotenuse sicher erkennen · Satz des Pythagoras.
+- **Kreis (1):** Umfang, Fläche und der Sektor.
+- **Ähnlichkeit (2):** Streckfaktor, und warum Flächen mit \(k^2\) wachsen ·
+  die Strahlensätze.
+- **Trigonometrie (5):** Sinus, Cosinus, Tangens am Dreieck · den Winkel
+  zurückrechnen · Sinussatz · Cosinussatz · welcher Satz wann.
+- **Einheitskreis (4):** Sinus und Cosinus als Koordinaten · Gradmass und Bogenmass ·
+  die Spezialwinkel · der trigonometrische Pythagoras.
+- **Trigonometrische Gleichungen (1):** alle Lösungen finden.
+
+**Ein Dreieck trägt die fünf Trigonometrie-Clips:** \(a=7\), \(b=8\), \(c=5\),
+\(\alpha = 60^\circ\) — der Cosinussatz liefert die 7 exakt, der Sinussatz bestätigt
+sie, und die Bedingungsleiste hält das Dreieck während der ganzen Rechnung sichtbar.
+
+**Nicht gebaut wurde «Welche trigonometrische Funktion nehme ich?»** — der Clip
+`g5-3-welche-winkelfunktion` deckt das bereits ab. Er ist stattdessen von Folge 1 auf
+Folge 2 gerückt, weil die Definitionen jetzt davor stehen.
+
+### Geändert
+
+- **Sieben `g5`-Seiten haben jetzt Clip-Marker** und damit erstmals einen Clip-Block.
+  `g5-2b-vierecke.html` bekam ihn ebenfalls, obwohl es dort noch keinen Clip gibt —
+  sonst meldet das Einbau-Skript beim ersten Vierecke-Clip eine fehlende Marke.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Funktionen: 19 neue Clips
 
 Lerngebiet 3 hatte einen einzigen Clip. Jetzt sind es zwanzig — die Liste
