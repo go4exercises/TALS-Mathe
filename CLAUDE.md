@@ -36,15 +36,17 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
 - `formelsammlung.html`, `glossar.html`, `clips.html`, `leitprogramme.html` — vier
   Nachschlag-Seiten im Repo-Root.
-- `leitprogramme/` — 2 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 5 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt. Es gibt **zwei Arten**:
-  - *nach Thema* (`potenzen.html`) — Vorwissenstest, Kapitel, Gesamttest.
+  - *nach Thema* (3: `potenzen.html`, `quadratische-gleichungen.html`,
+    `gleichungssysteme.html`) — Vorwissenstest, Kapitel, Gesamttest.
     Extern gebaute Datei hereinholen: **`HOWTO-leitprogramme.md` Punkt für Punkt**.
-  - *nach Prüfungsbogen* (`uebungspruefung-1.html`) — jede Teilaufgabe mit eigenem
+  - *nach Prüfungsbogen* (2: `uebungspruefung-1.html`, `trigo2.html`, beide
+    unverlinkt) — jede Teilaufgabe mit eigenem
     Clip, Musterlösung und Punktezeile. Der ganze Weg vom PDF zur Seite steht in
     **`HOWTO-uebungspruefung.md`**; er hat eigene Fallstricke (verlorene Hoch- und
     Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).

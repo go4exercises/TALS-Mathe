@@ -7,6 +7,15 @@ Fortschrittszähler, Testköpfe) und darum auch seinen eigenen `<style>`.
 
 Diese Datei ist die Anleitung für den häufigen Fall: Das Leitprogramm entsteht
 **ausserhalb** des Repos, als einzelne HTML-Datei, und wird danach hereingeholt.
+
+**Entsteht es im Repo, ist der Weg kürzer und sicherer:** eine bestehende Seite
+kopieren und nur den Inhalt ersetzen — Kopf, Schiene, Anleitung, Kapitel, Fuss und die
+`localStorage`-Schlüssel. Dann entfallen die Punkte 2, 3, 5, 6, 7 und 8 der Liste unten
+von selbst, weil sie im Skelett schon richtig stehen. So sind
+`quadratische-gleichungen.html` (aus `potenzen.html`) und `gleichungssysteme.html`
+(aus der vorigen) entstanden. **Was dabei zu ersetzen ist, ohne es zu vergessen:** die
+`localStorage`-Schlüssel — sonst teilen sich zwei Leitprogramme einen Fortschrittsstand,
+und das Häkchen im einen erscheint im anderen.
 Sie ist aus dem ersten Übertrag entstanden (`leitprogramm-potenzen_4.html` →
 `leitprogramme/potenzen.html`, 31.08./01.09.2026) und listet, was dabei nötig war —
 jeder Punkt stand für ein Problem, das erst im Browser sichtbar wurde.
@@ -15,7 +24,7 @@ jeder Punkt stand für ein Problem, das erst im Browser sichtbar wurde.
 
 | | gegliedert nach | Beispiel | Anleitung |
 |---|---|---|---|
-| **Thema** | dem Stoff: Vorwissenstest, Kapitel, Gesamttest | `potenzen.html` | diese Datei |
+| **Thema** | dem Stoff: Vorwissenstest, Kapitel, Gesamttest | `potenzen.html`, `quadratische-gleichungen.html`, `gleichungssysteme.html` | diese Datei |
 | **Übungsprüfung** | dem Prüfungsbogen: je Teilaufgabe ein Clip, Musterlösung, Punktezeile | `uebungspruefung-1.html` | **`HOWTO-uebungspruefung.md`** |
 
 Layout, Kopf, Fuss, Farbtokens und Clip-Bühne sind bei beiden dieselben — der

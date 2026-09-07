@@ -309,7 +309,9 @@ def seiten_aus_navjs(root):
                                  ('leitprogramme/potenzen.html', '▤',
                                   'Leitprogramm Potenzen', 'thema'),
                                  ('leitprogramme/quadratische-gleichungen.html', '▤',
-                                  'Leitprogramm Quadratische Gleichungen', 'thema')]:
+                                  'Leitprogramm Quadratische Gleichungen', 'thema'),
+                                 ('leitprogramme/gleichungssysteme.html', '▤',
+                                  'Leitprogramm Gleichungssysteme', 'thema')]:
         # leitprogramme/uebungspruefung-1.html steht bewusst NICHT hier:
         # unverlinkte Seite, nur ueber den Direktlink erreichbar. Sie ist
         # ebenso aus der Sitemap genommen (noindex in build-seo.py) und hat

@@ -4,6 +4,62 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Zwei Leitprogramme zu den Gleichungen
+
+Die Lerngebiete 1 und 2 hatten zwei Leitprogramme — `potenzen.html` und die unverlinkte
+Übungsprüfung. Beide zusammen berührten **quadratische Gleichungen und
+Gleichungssysteme mit keinem Wort**, obwohl dort neunzehn fertige Clips lagen.
+
+### Hinzugefügt
+
+**`leitprogramme/quadratische-gleichungen.html`** — 5 Kapitel, 11 Clips (12:17 min),
+5 Selbsttests (62 P), Gesamttest (24 P). Vorwissen · die drei Sonderfälle · der
+allgemeine Fall · der Rechner · Vertiefung.
+
+**`leitprogramme/gleichungssysteme.html`** — 5 Kapitel, 9 Clips (9:33 min),
+5 Selbsttests (60 P), Gesamttest (24 P). Vorwissen · die vier Wege · wie viele
+Lösungen? · mehr als zwei · Gerade trifft Parabel.
+
+### Zwei statt eines — nachgemessen, nicht gefühlt
+
+Der erste Vorschlag war **ein** Leitprogramm über beides: 19 Clips, 21 min. Der Autor
+fragte nach, ob das nicht zwei sein müssten. Die Gegenprobe gab ihm recht:
+`potenzen.html`, das einzige bestehende Themen-Leitprogramm, trägt **6 Clips und
+8:11 min**. Das Dreifache wäre kein Leitprogramm mehr gewesen. Die 26 Clips der
+Übungsprüfung sind kein Gegenbeispiel — dort diktiert der Prüfungsbogen die Länge.
+
+**Was die Trennung gewinnt:** je ein eigener Vorwissenstest und Gesamttest — und genau
+dafür ist die Form da. Ein gemeinsamer Vortest hätte zwei unverbundene Hälften prüfen
+müssen: Faktorisieren für den einen Teil, lineare Gleichungen für den anderen.
+
+**Was sie nicht verliert:** «Gerade trifft Parabel» steht als Schlusskapitel im zweiten
+Programm, weil es beides braucht. Aus zwei Nachbarschaften wird so eine Folge.
+
+### Didaktische Entscheidungen, die in den Seiten stehen
+
+- **Die Mitternachtsformel kommt erst in Kapitel 2.** Drei von vier Gleichungen brauchen
+  sie nicht; wer sie zuerst lernt, benutzt sie überall.
+- **Der Vorwissensclip des zweiten Programms ist «Lineare Gleichungen: drei Ausgänge».**
+  Dieselben drei Ausgänge kehren in Kapitel 2 wieder, dann für ein ganzes System — der
+  Clip trägt damit doppelt.
+- **Beide Programme sagen, wofür der Rechner nicht taugt**, nicht nur, wie er bedient
+  wird: keine exakten Werte, keine Parameter, und bei parallelen Geraden entscheidet
+  `sys-solv` nicht, welcher Sonderfall vorliegt.
+
+### Geprüft
+
+Alle Aufgabenwerte vorab in Python nachgerechnet — Diskriminanten, 2×2- und
+3×3-Systeme, Schnittpunkte von Gerade und Parabel, dazu jede Punktesumme gegen ihre
+Kopfzeile. Pre-Flight bestanden. MathJax im Browser: 260 bzw. 237 Ausdrücke, 0 Fehler.
+Kein fremder Host; die Clip-Bühne öffnet mit relativer Quelle. Dunkelmodus samt
+Kopfleiste und Fuss wie bei `potenzen.html`.
+
+**Nur das Bild zeigte es:** 7 px waagrechter Überlauf bei 360 px im ersten Programm —
+das Lektionsband trägt `white-space:nowrap`. Derselbe Fall wie seinerzeit in der
+Übungsprüfung, mit derselben Zeile behoben.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · s1-2 Potenzen: sechs Gäste, zwei Neue
 
 Die Seite hatte keinen einzigen Clip — obwohl das Grundlagenfach zu Potenzen eine ganze

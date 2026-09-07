@@ -94,6 +94,11 @@ SEITEN = {
    titel='Leitprogramm Quadratische Gleichungen — erst die Sonderfälle, dann die Formel',
    beschreibung='Leitprogramm zu den quadratischen Gleichungen: die drei Sonderfälle ohne Formel, quadratische Ergänzung und Mitternachtsformel, Diskriminante, Ungleichungen und Parameter — mit Clips, Selbsttests und Gesamttest.',
    themen=['Mathematik', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Diskriminante', 'Leitprogramm']),
+ 'leitprogramme/gleichungssysteme.html': dict(
+   typ='article', lrt='Leitprogramm',
+   titel='Leitprogramm Gleichungssysteme — vier Wege zum Schnittpunkt',
+   beschreibung='Leitprogramm zu den linearen Gleichungssystemen: grafisch, Einsetzen, Gleichsetzen und Addition, dazu die drei möglichen Lösungsanzahlen, drei Variablen und der Schnitt von Gerade und Parabel — mit Clips, Selbsttests und Gesamttest.',
+   themen=['Mathematik', 'Gleichungssysteme', 'Additionsverfahren', 'Einsetzverfahren', 'Leitprogramm']),
  'leitprogramme/uebungspruefung-1.html': dict(
    typ='article', lrt='Leitprogramm', noindex=True,
    titel='Übungsprüfung 1 — Arithmetik, Algebra, Gleichungen',
