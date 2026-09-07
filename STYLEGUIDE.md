@@ -1158,10 +1158,21 @@ selbstständigen Durcharbeiten. Es ist **keine Themenseite** und folgt darum nic
 Skelett aus §6.1. Es gibt zwei Arten, mit **identischem Layout** und verschiedener
 Gliederung:
 
-| | gegliedert nach | Anleitung |
-|---|---|---|
-| **Thema** | dem Stoff: Vorwissenstest, Kapitel, Gesamttest | `HOWTO-leitprogramme.md` |
-| **Übungsprüfung** | dem Prüfungsbogen: je Teilaufgabe ein Clip, Musterlösung, Punktezeile | `HOWTO-uebungspruefung.md` |
+| | gegliedert nach | Beispiele (Stand 07.09.2026) | Anleitung |
+|---|---|---|---|
+| **Thema** | dem Stoff: Vorwissenstest, Kapitel, Gesamttest | `potenzen`, `quadratische-gleichungen`, `gleichungssysteme` | `HOWTO-leitprogramme.md` |
+| **Übungsprüfung** | dem Prüfungsbogen: je Teilaufgabe ein Clip, Musterlösung, Punktezeile | `uebungspruefung-1`, `trigo2` (beide unverlinkt) | `HOWTO-uebungspruefung.md` |
+
+**Umfang eines Themen-Leitprogramms:** rund **6 bis 11 Clips** und **8 bis 12 Minuten**
+Clipzeit, aufgeteilt auf vier bis fünf Kapitel mit je einem Selbsttest, dazu ein
+Gesamttest von etwa 24 Punkten. Wird ein Thema deutlich grösser, gehört es geteilt —
+zwei Programme mit je eigenem Vorwissenstest und Gesamttest tragen mehr als eines mit
+zwei unverbundenen Hälften. Am 07.09.2026 wurde ein Entwurf mit 19 Clips aus genau
+diesem Grund in *Quadratische Gleichungen* und *Gleichungssysteme* zerlegt.
+
+**Die `localStorage`-Schlüssel sind je Seite eigen** (`lp-<name>-thema`,
+`lp-<name>-stand`). Wer eine Seite als Vorlage kopiert und sie vergisst, lässt zwei
+Leitprogramme denselben Fortschritt teilen: Das Häkchen im einen erscheint im anderen.
 
 Hier nur, was für beide nicht verhandelbar ist.
 

@@ -23,8 +23,19 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
-- **2026-09-01 · Leitprogramme als zweites Format · `leitprogramme/`,
-  `leitprogramme.html`, `HOWTO-leitprogramme.md`, STYLEGUIDE §6.5 · warum:** Mathe hat
+- **2026-09-01 · ~~Leitprogramme als zweites Format~~ — ERLEDIGT, nachgesehen am
+  07.09.2026:** Physik hat inzwischen **fünf eigene Leitprogramme**
+  (`leitprogramm-heizen`, `-ideale-gase`, `-vorwissen`, `-waermeausdehnung`,
+  `-waermemenge`), eine eigene `leitprogramme.html`, ein eigenes
+  `HOWTO-leitprogramme.md` und sechs Einträge in `build-seo.py`. Der Umfang deckt sich
+  mit Mathes Erfahrungswert: dort 7 bis 10 Clips je Programm, hier 6 bis 11. **Nichts
+  mehr zu portieren** — der Eintrag unten ist Geschichte und bleibt nur als Beleg
+  stehen. Was noch fehlt, steht im nächsten Punkt.
+  Zwei Unterschiede, die beim Übertragen einzelner Bausteine zählen: Physik benennt die
+  Dateien `leitprogramm-<thema>.html`, Mathe `<thema>.html`; und Physiks Programme haben
+  keine `.kap`-Sektionen mit `data-test`, sondern eine flachere Gliederung.
+
+  Ursprünglicher Eintrag: Mathe hat
   seit dem 1.9.2026 neben den Clips ein zweites Format: eine eigenstaendige Seite zum
   selbstaendigen Durcharbeiten, mit Vorwissenstest, Kapiteln, eingebetteten Clips und
   Gesamttest. Die Mechanik ist duenn — eine Uebersichtsseite, ein Ordner, drei
@@ -530,6 +541,49 @@ Umstellung auf `\lt` / `\gt` 0 von 765.
 **Prüfen nach dem Port:** ein Testdrehbuch mit `T \gt 0` bauen und
 `python3 .claude/skills/preflight/preflight.py clips/<name>.html` laufen lassen —
 `fehler=0` erwartet.
+
+## Leitprogramme: Selbsttest je Kapitel und Fortschrittsbalken (2026-09-07)
+
+**Was Physik hat** — nachgezählt in den fünf Leitprogrammen am 07.09.2026: Vortest,
+Gesamttest und aufklappbare Lösungen (`<details>`) in allen fünf. Die Didaktik steht
+also.
+
+**Was fehlt:** ein **Selbsttest nach jedem Kapitel** mit Hakenfeld und ein
+**Fortschrittsbalken** in der Seitenschiene. Die Zählung ist eindeutig:
+
+| in Physiks Leitprogrammen | |
+|---|---|
+| `Gesamttest` | 4 von 5 |
+| `<details>` / «Lösung» | 5 von 5 |
+| `Selbsttest` | **0** |
+| `fortschritt` | **0** |
+| `erledigt` (Hakenfeld) | **0** |
+
+**Warum das mehr ist als Zierrat.** Der Gesamttest kommt am Schluss — wer dort scheitert,
+weiss nicht, wo es gekippt ist. Der Selbsttest je Kapitel fängt das ab, und das Hakenfeld
+gibt dem selbstständigen Durcharbeiten einen sichtbaren Stand. In Mathes drei
+Themen-Leitprogrammen trägt jedes **fünf** Selbsttests.
+
+**Was zu übertragen ist:** die Blöcke `.test`, `.test-kopf`, `.aufg`, `details.loes` und
+`.fortschritt` aus dem `<style>` einer Mathe-Seite, dazu die Abschnitte «Lösungen: alle
+auf/zu» und «Fortschritt» aus dem Seitenskript. **Nachgemessen an
+`quadratische-gleichungen.html`: 30 Zeilen CSS für den Testblock, 5 weitere für Balken
+und Zähler, 54 Zeilen JS** — ohne Abhängigkeit ausserhalb der Seite. Das aktive Kapitel
+in der Schiene (`IntersectionObserver`) hängt im selben Skript und kommt gratis mit.
+
+**Der Fallstrick, in den Mathe getreten ist:** Die `localStorage`-Schlüssel
+(`lp-<name>-thema`, `lp-<name>-stand`) **müssen je Seite eigen sein**. Wer eine Seite als
+Vorlage kopiert und sie vergisst, lässt zwei Leitprogramme denselben Fortschritt teilen —
+das Häkchen im einen erscheint im anderen. In Physik kommt `localStorage` in den
+Leitprogrammen bisher **gar nicht** vor; wer die Mechanik holt, vergibt die Schlüssel
+also von Anfang an sauber.
+
+**Und eine Leitplanke, die Mathe teuer gelernt hat:** Wird ein Thema deutlich grösser als
+rund elf Clips, gehört es geteilt. Am 07.09.2026 wurde ein Entwurf mit 19 Clips in zwei
+Programme zerlegt, jedes mit eigenem Vorwissenstest und Gesamttest. Physiks Programme
+liegen mit 7 bis 10 Clips genau im richtigen Band — das ist keine Warnung, sondern eine
+Bestätigung von beiden Seiten.
+
 
 ## Clip-Generator: drei Bausteine, die nur Mathe hat (2026-09-07)
 

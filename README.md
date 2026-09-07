@@ -28,9 +28,9 @@ Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TA
 - **Zusatzmaterial je Thema**: Handout, Teste dich selbst, Aufgabenserie (Druckseiten)
   und ein Anki-Deck
 - **Leitprogramme** — zum selbstständigen Durcharbeiten, in zwei Arten: *nach Thema*
-  mit Vorwissenstest, Kapiteln und Gesamttest (*Potenzen*), und *nach Prüfungsbogen*,
-  wo jede Teilaufgabe einer Übungsprüfung ihren eigenen Clip, ihre Musterlösung und
-  ihre Punktezeile bekommt
+  mit Vorwissenstest, Kapiteln und Gesamttest (*Potenzen*, *Quadratische Gleichungen*,
+  *Gleichungssysteme*), und *nach Prüfungsbogen*, wo jede Teilaufgabe einer
+  Übungsprüfung ihren eigenen Clip, ihre Musterlösung und ihre Punktezeile bekommt
 - **Nachschlagen**: Glossar, Formelsammlung, Clips und Leitprogramme
 - **Rechtliches & Datenschutz** — keine Cookies, kein Tracking
 
