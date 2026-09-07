@@ -4,6 +4,74 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Clips fachlich nachgeschärft
+
+Durchgang durch eine Prüfliste zu den bestehenden Clips (Prioritäten A, B und C).
+Jeder Punkt wurde am Drehbuch nachgeprüft, statt ihn zu glauben — von 20 Punkten
+waren 9 offene Mängel, 8 bereits erledigt und 3 keine.
+
+### Behoben — fachlich
+
+- **Lagemasse (`g4-3-median-mittelwert`):** Der gesprochene Satz «der Mittelwert
+  springt über jeden einzelnen Wert hinaus» war falsch — der Ausreisser 47 liegt
+  über dem Mittelwert 13. Er widersprach sogar der eingeblendeten Notiz. Jetzt:
+  «über vier der fünf Werte hinaus».
+- **poly-solv (`g2-2b-ti30x-poly-solv`):** «Bei einer quadratischen Gleichung sind
+  es immer zwei» — über \(\mathbb{R}\) können es auch eine oder keine sein. Ersetzt,
+  dazu eine Notiz zu \(D = 0\) und \(D &lt; 0\).
+- **Potenzgesetze (`g1-4-potenzgesetze`):** «Die ersten drei Gesetze gelten nur bei
+  gleicher Basis» — P3 hat nur *eine* Basis, da gibt es nichts zu vergleichen. Jetzt
+  «die ersten beiden», mit Notiz zu P3 und zu P4/P5. Dieselbe Ungenauigkeit stand
+  auch im **Leitprogramm Potenzen** und ist dort mitkorrigiert.
+- **Gebrochene Exponenten (`g1-4-gebrochene-exponenten`):** Die Bedingung
+  \(a \geq 0\) stand nur bei \(a^{1/2}\), nicht bei den allgemeinen Formen
+  \(a^{1/n}\) und \(a^{m/n}\). Ergänzt, und im Merkbild ausgesprochen.
+
+### Behoben — Formulierung
+
+- **Mengenschreibweisen:** «Sie sind nicht gleichwertig» konnte heissen, die
+  Schreibweisen bezeichneten verschiedene Mengen. Jetzt: «Sie bezeichnen dieselbe
+  Menge, sind aber nicht gleich zweckmässig».
+- **Zweiklammersatz:** Der Clip rechnet durchgehend mit Leitkoeffizient 1, sagte es
+  aber nie. Ergänzt — in der Einstiegsszene und im Merkbild.
+- **Quadratische Ergänzung:** setzt \(a = 1\) voraus; bei \(a \neq 1\) wird zuerst
+  geteilt. Stand nirgends, steht jetzt im Merkbild.
+- **Brüche am Rechner:** «null Komma neun eins sechs periodisch» war mehrdeutig
+  (\(\tfrac{11}{12} = 0.91\overline{6}\)). Jetzt «null Komma neun eins, Periode sechs»,
+  dazu der Unterschied zwischen abbrechender Anzeige und exaktem Wert.
+- **Falscher Querverweis:** Der Kurzbeschrieb von `g1-2-ti30x-tastenfolge` verwies auf
+  «Folge 1»; die wiederholten Rechnungen stammen aus Folge 2. Betrifft nur die
+  Metadaten in `clips.json` — der Kurzbeschrieb erscheint auf keiner Seite.
+
+### Geprüft, kein Mangel
+
+- **\(\sqrt{4a^2} = 2|a|\)** steht bereits so in der Mitternachtsformel-Herleitung.
+- **\(a^0 = 1\ (a \neq 0)\)** und **\(a^{-n} = \tfrac{1}{a^n}\ (a \neq 0)\)** stehen
+  bereits mit Bedingung in `g1-4-negative-exponenten`.
+- **Periode gegen gerundete Anzeige** ist an drei Stellen behandelt
+  (`g1-2-zahlformen`, `g1-2-ti30x-ans-protokoll`, `g1-4-ti30x-modus`).
+- **Absolute Formulierungen:** 92 Stellen mit «immer», «nie», «nur so»,
+  «grundsätzlich» einzeln durchgesehen. Genau eine war sachlich falsch — die bei
+  poly-solv, oben behoben. Die übrigen sind entweder wahr (der Mittelwert liegt
+  wirklich immer zwischen kleinstem und grösstem Wert) oder Handlungsanweisungen
+  («immer beim Produkt anfangen»). Kein Bedarf für einen Rundumschlag.
+- **Doppelspurigkeiten:** Clips werden bereits *einmal* gespeichert und über die
+  Liste `lektion` mehrfach zugeordnet — 62 Einträge, 66 Zuordnungen, vier Clips auf
+  zwei Lektionen. Ein Tag-System ist damit vorhanden. Die Bibliothek zeigt 65 Zeilen,
+  weil ein Clip in jeder Gruppe erscheint, zu der er gehört; das ist gewollt. Die
+  Bestandszahlen in der Doku zählen einzigartige Clips.
+
+### Nicht geändert, zur Entscheidung
+
+- Der Titel **«die Wurzelgesetze braucht man nicht»** ist eine bewusste Zuspitzung,
+  die der Clip einlöst — er endet mit «Die Gesetze kann man vergessen. Die Bedingung
+  nicht.» Ein neutraler Titel verlöre mehr, als er gewönne.
+- **Bruchgleichungs-Clips im Schwerpunktfach stärker als Transfer kennzeichnen**
+  wäre eine Änderung an der Darstellung der Gast-Clips auf der Lektionsseite, nicht
+  am Clip.
+
+---
+
 ## [Unveröffentlicht] — 6. September 2026 · Übungsprüfung als Leitprogramm
 
 Eine zweite Art Leitprogramm: nicht nach dem Stoff gegliedert, sondern nach einem
