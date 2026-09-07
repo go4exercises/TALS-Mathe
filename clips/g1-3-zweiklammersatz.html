@@ -21,6 +21,21 @@ body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!impor
 #kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
 #fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
 
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
 .l{position:absolute;will-change:opacity,transform}
 .l.flow{position:relative}
 .m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
@@ -73,11 +88,12 @@ body.render #ui{display:none}
 <div id="rand" style="background:rgba(155,28,28,.24)"></div>
 <div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · BM1</span></div>
 <div id="fuss"><span>Raphael Arnold Kohler</span><span>31.08.2026</span></div>
+<div id="vorleiste"><div class="l vorzeile" data-at="0.60" data-anim="fade" style="position:relative"><span class="vor"><span class="vor-tag">gilt für</span><span class="vor-txt">\(x^2 + px + q \quad\text{— vor } x^2 \text{ steht eine } 1\)</span></span></div></div>
 <div class="l" data-at="9.50" data-out="34.60" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="9.80" data-anim="rise" data-dim="9.50,17.30"><div class="num">1</div><div class="stxt">Was gesucht ist</div></div><div class="step l flow" data-at="17.60" data-anim="rise" data-dim="17.30,25.10"><div class="num">2</div><div class="stxt">Der einfache Fall</div></div><div class="step l flow" data-at="25.40" data-anim="rise" data-dim="25.10,34.60"><div class="num">3</div><div class="stxt">Mit Minus</div></div></div>
 <div class="l hand mitte mitte" data-at="0.40" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:244px;font-size:114px;font-weight:600;color:var(--tinte)">Zwei Klammern</div>
 <div class="l sans mitte mitte" data-at="2.10" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:434px;font-size:48px;color:var(--blau)">zwei Zahlen, zwei Bedingungen</div>
 <div class="l m row mitte" data-at="3.80" data-out="9.50" data-anim="pop" style="left:0;right:0;text-align:center;top:616px;font-size:64px"><span>\(x^2 + 5x + 6 = (x + p)(x + q)\)</span></div>
-<div class="l hand mitte" data-at="5.50" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:838px;font-size:56px;color:var(--rot)">Welche \(p\) und \(q\) passen?<br>Voraussetzung: vor \(x^2\) steht eine 1.</div>
+<div class="l hand mitte" data-at="5.50" data-out="9.50" data-anim="rise" style="left:0;right:0;text-align:center;top:838px;font-size:56px;color:var(--rot)">Welche \(p\) und \(q\) passen?</div>
 <div class="l m row" data-at="9.90" data-out="34.60" data-anim="rise" style="left:680px;top:178px;font-size:54px"><span>\((x + p)(x + q) = x^2 + (\fa{p + q})x + \fb{pq}\)</span></div>
 <div class="l m row" data-at="11.60" data-out="17.30" data-anim="pop" style="left:680px;top:348px;font-size:60px"><span>\(\fa{p + q} = \fa{5}\quad \fb{pq} = \fb{6}\)</span></div>
 <div class="l hand" data-at="13.30" data-out="17.30" data-anim="rise" style="left:680px;top:498px;font-size:52px;color:var(--blau)">Zwei Bedingungen, zwei Unbekannte — aber man rät nicht, man probiert die Teiler.</div>
@@ -92,7 +108,7 @@ body.render #ui{display:none}
 <div class="l m row mitte" data-at="36.70" data-out="45.80" data-anim="rise" style="left:0;right:0;text-align:center;top:406px;font-size:52px"><span>\(\fb{pq}\; \text{positiv}\quad \longrightarrow \quad \text{beide gleich gerichtet}\)</span></div>
 <div class="l m row mitte" data-at="38.40" data-out="45.80" data-anim="rise" style="left:0;right:0;text-align:center;top:518px;font-size:52px"><span>\(\fb{pq}\; \text{negativ}\quad \longrightarrow \quad \text{eine positiv, eine negativ}\)</span></div>
 <div class="l m row mitte" data-at="40.10" data-out="45.80" data-anim="rise" style="left:0;right:0;text-align:center;top:630px;font-size:52px"><span>\(\text{dann entscheidet}\; \fa{p + q},\; \text{welche die grössere ist}\)</span></div>
-<div class="l hand mitte" data-at="41.80" data-out="45.80" data-anim="rise" style="left:0;right:0;text-align:center;top:802px;font-size:54px;color:var(--blau)">Immer beim Produkt anfangen. Die Summe prüft nur noch.<br>Steht vor \(x^2\) etwas anderes als 1: zuerst ausklammern oder dividieren.</div>
+<div class="l hand mitte" data-at="41.80" data-out="45.80" data-anim="rise" style="left:0;right:0;text-align:center;top:802px;font-size:54px;color:var(--blau)">Immer beim Produkt anfangen. Die Summe prüft nur noch.<br>Steht vor \(x^2\) etwas anderes: zuerst ausklammern.</div>
 </div></div>
 <audio id="ton" preload="auto" src="ton/g1-3-zweiklammersatz.mp3"></audio>
 <div id="ui">

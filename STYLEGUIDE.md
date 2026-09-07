@@ -1121,6 +1121,11 @@ Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführli
   Reihe: «Quadratische Gleichungen: mit poly-solv lösen», nicht «Taschenrechner: …».
   Sonst steht in der Bibliothek eine Spalte gleich anfangender Titel, die nichts über
   den Stoff sagt.
+- **Was die Rechnung voraussetzt, bleibt sichtbar.** Wird eine Bedingung genannt und
+  später gebraucht — Definitionsmenge, \(a \neq 0\), Leitkoeffizient 1 —, gehört sie in die
+  Bedingungsleiste (`voraussetzung` im Drehbuch). Sie steht ausserhalb des Szenenflusses
+  und kostet keine Zeile. Nicht in die Leiste gehört eine Bedingung, die das *Ergebnis*
+  des Clips ist: Sie nähme die Frage vorweg.
 - **`"probe": true` hält einen Clip aus der Bibliothek heraus.** Er wird gebaut und
   ausgeliefert, kommt aber nicht in `clips.json`, nicht in `clips.html` und auf keine
   Lektionsseite; der Pre-Flight nimmt ihn von der Ablage-Prüfung aus. Zwei Fälle: ein

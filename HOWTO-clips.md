@@ -196,6 +196,41 @@ zu 16 Zeichen, Eingabe oben, Ergebnis rechtsbündig, getrennte Tasten für Subtr
 ein Zeichen, `clear` die Eingabe. Was darüber hinausgeht, gehört nachgeschlagen, bevor
 es in einen Clip kommt.
 
+### Die Bedingungsleiste — `voraussetzung`
+
+Der häufigste didaktische Mangel in einem mehrszenigen Clip: In Szene 2 wird eine
+Voraussetzung genannt — die Definitionsmenge, `a ≠ 0`, «vor `x²` steht eine 1» — und in
+Szene 6 rechnet der Clip darauf weiter, während sie längst vom Bild verschwunden ist.
+Wer erst dort einsteigt, sieht eine Rechnung ohne Grundlage.
+
+`halten` löst das nur halb: Ein gehaltenes Element behält die Position **seiner** Szene
+und blockiert damit den Fluss aller folgenden — deshalb steht in dieser Datei die Regel,
+dass Folgeszenen dann tiefer beginnen müssen. Für eine Bedingung ist das ein hoher Preis.
+
+Die Bedingungsleiste steht **ausserhalb des Flusses** und kostet darum keine Zeile:
+
+```json
+"voraussetzung": "a \\neq 0"
+"voraussetzung": {"text": "D = \\mathbb{R} \\setminus \\{2\\}", "tag": "gilt", "ab": "Schritt 1 · D"}
+"voraussetzung": [ {…}, {…} ]
+```
+
+| Feld | |
+|---|---|
+| `text` | LaTeX, wie jede Formel |
+| `tag` | die Beschriftung links, Standard `Voraussetzung`. Bewährt: `gilt`, `gilt für`, `Bedingung` |
+| `ab` | Szenenname — erst ab dort sichtbar. Ohne Angabe von Anfang an |
+| `bis` | Szenenname — bis dorthin sichtbar. Ohne Angabe bis zum Schluss |
+
+Sie sitzt bei `top: 96px` und endet bei `y = 150`. **Mit einer Leiste beginnen alle Szenen
+bei `oben ≥ 170`** — der Generator bricht sonst mit einer Meldung ab, statt es im Bild
+verstecken zu lassen. `pruef-clip.mjs` prüft die Leiste wie jede andere Zeile mit.
+
+**Wofür sie nicht da ist.** Wenn die Bedingung das *Ergebnis* des Clips ist, gehört sie
+nicht von Anfang an ins Bild — sie nähme die Frage vorweg. `g2-2a-warum-a-ungleich-5`
+heisst «Warum \(a \neq 5\)?»; dort wäre eine stehende Leiste die Antwort vor der Frage.
+Entweder `ab` auf die Szene setzen, in der sie hergeleitet ist, oder ganz weglassen.
+
 ### Farbführung
 
 `{1:x-2}` färbt einen Term ein — Text und weiche Fläche. Zweck ist ausschliesslich,
