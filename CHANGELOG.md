@@ -4,6 +4,46 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Funktionen: 19 neue Clips
+
+Lerngebiet 3 hatte einen einzigen Clip. Jetzt sind es zwanzig — die Liste
+«Priorität D» der Clip-Todos, abgearbeitet.
+
+### Hinzugefügt
+
+- **`g3-1` · Reihe *Funktionen* (6):** Funktionsbegriff und Eindeutigkeit ·
+  Definitions- und Wertemenge · Tabelle, Term und Graph · Funktionswert berechnen ·
+  Nullstellen · Schnittpunkte.
+- **`g3-2` · Reihe *Lineare Funktionen* (4):** was die Steigung bedeutet ·
+  der \(y\)-Achsenabschnitt · Gerade aus Punkt und Steigung · parallel und senkrecht.
+- **`g3-3` · Reihe *Quadratische Funktionen* (9):** woran man sie erkennt ·
+  Normalparabel · verschieben und strecken · Scheitelpunktform · Produktform ·
+  allgemeine Form · zwischen den Formen wechseln · Nullstellen · Scheitelpunkt.
+
+Alle vertont, zwischen 0:39 und 1:00 lang — im Band, das der didaktische Standard
+vorgibt. Die Bibliothek wächst damit von 62 auf 81 Clips (83:17 min).
+
+**Ein durchgehendes Beispiel trägt die ganze Reihe zu den Parabeln:**
+\(x^2-4x+3 = (x-1)(x-3) = (x-2)^2-1\), mit den Nullstellen 1 und 3 und dem Scheitel
+\((2 \mid -1)\). Neun Clips, dieselbe Kurve — wer die Formen wechseln lernt, wechselt
+sie an einer Parabel, die er schon kennt.
+
+**Nicht gebaut wurde «Gerade aus zwei Punkten».** Der Standard verlangt zu prüfen, ob
+schon ein Clip mit demselben Lernziel existiert — `g3-2-steigung-ablesen` macht genau
+das, vom Steigungsdreieck bis zur Probe. Statt einer Dublette bekamen \(m\) und \(b\)
+je einen eigenen Clip über ihre *Bedeutung*.
+
+### Geändert
+
+- **`punkte` im Koordinatenbild kennt jetzt `beschriftung_bei`** — wie `geraden` und
+  `parabeln` es längst konnten. Ohne die Angabe steht die Beschriftung rechts über dem
+  Punkt, und genau dort liegt am Scheitel einer Parabel die Achsenbeschriftung. Vier
+  solche Kollisionen sind so behoben worden; gefunden hat sie keine Prüfung, sondern
+  der Blick aufs Bild.
+- **`g3-1` und `g3-3` haben jetzt Clip-Marker** und damit erstmals einen Clip-Block.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Clips fachlich nachgeschärft
 
 Durchgang durch eine Prüfliste zu den bestehenden Clips (Prioritäten A, B und C).

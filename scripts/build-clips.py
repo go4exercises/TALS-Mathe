@@ -368,8 +368,17 @@ def graf_svg(el, theme):
         teile.append('<circle cx="%.1f" cy="%.1f" r="5" fill="%s"/>'
                      % (px(pt["x"]), py(pt["y"]), farbe))
         if pt.get("beschriftung"):
-            teile.append('<text x="%.1f" y="%.1f" font-size="29" font-weight="600" fill="%s">%s</text>'
-                         % (px(pt["x"]) + 18, py(pt["y"]) - 16, farbe,
+            # Ohne Angabe steht die Beschriftung rechts ueber dem Punkt. Das
+            # trifft am Scheitel einer Parabel die Achsenbeschriftung — darum
+            # kann man sie wie bei Geraden und Parabeln frei setzen.
+            if pt.get("beschriftung_bei"):
+                bx_, by_ = pt["beschriftung_bei"]
+                tx, ty = px(bx_), py(by_)
+            else:
+                tx, ty = px(pt["x"]) + 18, py(pt["y"]) - 16
+            teile.append('<text x="%.1f" y="%.1f" font-size="29" font-weight="600" fill="%s" '
+                         'text-anchor="%s">%s</text>'
+                         % (tx, ty, farbe, pt.get("anker", "start"),
                             entschaerfen(pt["beschriftung"])))
     teile.append("</svg>")
     return "".join(teile)
