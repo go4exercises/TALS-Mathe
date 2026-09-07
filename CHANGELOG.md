@@ -4,6 +4,49 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Grundlagenfach: die letzten Lücken
+
+Die Liste «Priorität G» — zehn Einzelthemen des Grundlagenfachs, die zwischen den
+Lerngebieten durchgefallen sind. **Jeder Punkt zuerst am Drehbuch und am Lehrplan
+geprüft**: sieben waren offen, zwei bereits abgedeckt, einer gehört gar nicht ins
+Grundlagenfach. Die Bibliothek wächst von 114 auf **121 Clips (117:31 min)**.
+
+### Hinzugefügt
+
+- **Reihe *Zahlenmengen* (4), Lerngebiet 1.2:** \(\mathbb N, \mathbb Z, \mathbb Q, \mathbb R\)
+  und warum jede Erweiterung nötig war · die kleinste Menge finden · ordnen und
+  vergleichen · der Betrag als Abstand.
+- **Reihe *Gleichungen verstehen* (2), Lerngebiet 2.1:** was die Lösungsmenge erhält
+  (Äquivalenzumformungen) · von der Textaufgabe zur Gleichung.
+- **Gleichungssysteme (1):** drei Variablen auf zwei zurückführen.
+
+### Geprüft — und deshalb nicht gebaut
+
+- **Intervalle:** deckt `g2-2a-loesungsmenge-intervall` bereits ab (Mengen- gegen
+  Intervallschreibweise, offen/geschlossen, Sonderfälle), dazu Szene 5 von
+  `g1-2-mengen-schreibweisen`.
+- **Definitionsmenge systematisch:** deckt `g3-1-definitions-und-wertemenge` ab — Nenner
+  null, Wurzel aus Negativem, dazu die Wertemenge. Statt eines zweiten Clips ist seine
+  Zuordnung um `g2-1` erweitert; er erscheint jetzt auch dort, wo die Frage aufkommt.
+  Genau dafür ist `lektion` eine Liste.
+- **Wurzelgleichungen gehören nicht ins Grundlagenfach.** `g2-1-grundlagen.html` nennt
+  den Typ nur in der Übersichtstabelle, mit dem ausdrücklichen Hinweis, im GF würden in
+  2.2 lineare und quadratische Gleichungen vertieft. Die Kompetenz «Wurzelgleichungen
+  lösen» steht allein auf `s2-2a` — **der Punkt gehört zu Priorität H.**
+
+Umgekehrt bestätigt der Lehrplan drei Punkte, die man hätte streichen können:
+`g1-2` nennt «Vorzeichen, **Betrag**, Rundung, **Ordnungsrelationen**» und
+«**Zahlenmengen** klassifizieren» ausdrücklich als Kompetenzen, und `g2-3` führt
+«Ich kann **3×3-Systeme** durch schrittweises Eliminieren auf 2×2 zurückführen»
+als Lernziel.
+
+### Geändert
+
+- `g2-3-ti30x-sys-solv` rückt von Folge 6 auf 7, damit das neue 3×3 davor steht.
+- `g2-1-grundlagen.html` hat jetzt Clip-Marker.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Datenanalyse: 17 neue Clips
 
 Die Liste «Priorität F» abgearbeitet. Lerngebiet 4 hatte zwei Clips, jetzt sind es
