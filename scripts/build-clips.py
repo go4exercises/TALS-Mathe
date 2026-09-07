@@ -238,6 +238,74 @@ def text_html(s):
     return s
 
 
+# ---------------------------------------------------------------- Boxplot
+def boxplot_svg(el, theme):
+    """Ein Boxplot aus den fuenf Kennzahlen.
+
+    Die Konvention ist die der Themenseite 4.3: Box von Q1 bis Q3, Strich
+    beim Median, Antennen bis zum kleinsten und groessten Wert. Keine
+    Ausreisserregel — die Seite kennt keine, und ein Clip soll keine
+    einfuehren, die dort nicht steht.
+    """
+    b = el.get("breite", 1180)
+    h = el.get("hoehe", 300)
+    fv = theme.get("farben", ["#1F6FB2", "#C2621C", "#2C7A58", "#8A4BA0"])
+    tinte = theme.get("tinte", "#20303a")
+    papier = theme.get("papier", "#f7f5ef")
+    kf = fv[el.get("farbe", 1) - 1]
+    fl = theme.get("flaechen", ["rgba(31,111,178,.12)"] * 4)[el.get("farbe", 1) - 1]
+
+    lo, hi = el["min"], el["max"]
+    x0 = el.get("von", lo - (hi - lo) * 0.12)
+    x1 = el.get("bis", hi + (hi - lo) * 0.12)
+    rl, rr = 70, b - 70
+    def px(v):
+        return rl + (rr - rl) * (v - x0) / (x1 - x0)
+
+    achse_y = h - 62
+    box_o, box_u = 44, achse_y - 58
+    mitte = (box_o + box_u) / 2
+
+    t = ['<svg width="%d" height="%d" viewBox="0 0 %d %d" '
+         'xmlns="http://www.w3.org/2000/svg" font-family="Source Sans 3,sans-serif">'
+         % (b, h, b, h)]
+    # Achse mit Teilung
+    t.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="3"/>'
+             % (rl - 20, achse_y, rr + 20, achse_y, tinte))
+    for v in el.get("teilung", []):
+        t.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2.5"/>'
+                 % (px(v), achse_y - 9, px(v), achse_y + 9, tinte))
+        t.append('<text x="%.1f" y="%.1f" font-size="26" fill="%s" text-anchor="middle" '
+                 'opacity=".72">%s</text>' % (px(v), achse_y + 42, tinte, formel_zahl(v)))
+    # Antennen
+    for a_, e_ in ((lo, el["q1"]), (el["q3"], hi)):
+        t.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="4"/>'
+                 % (px(a_), mitte, px(e_), mitte, kf))
+    for v in (lo, hi):
+        t.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="5" '
+                 'stroke-linecap="round"/>' % (px(v), box_o + 12, px(v), box_u - 12, kf))
+    # Box und Median
+    t.append('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="%s" stroke="%s" '
+             'stroke-width="5" rx="4"/>'
+             % (px(el["q1"]), box_o, px(el["q3"]) - px(el["q1"]), box_u - box_o, fl, kf))
+    t.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="7"/>'
+             % (px(el["med"]), box_o, px(el["med"]), box_u, tinte))
+    # Beschriftung der fuenf Zahlen
+    if el.get("marken", True):
+        namen = [(lo, "min"), (el["q1"], "Q1"), (el["med"], "Median"),
+                 (el["q3"], "Q3"), (hi, "max")]
+        for v, nm in namen:
+            t.append('<text x="%.1f" y="%.1f" font-size="25" font-weight="600" fill="%s" '
+                     'text-anchor="middle">%s</text>' % (px(v), box_o - 14, kf, nm))
+    t.append("</svg>")
+    return "".join(t)
+
+
+def formel_zahl(v):
+    """Zahl fuer eine Achsenbeschriftung — Punkt als Trennzeichen, ohne .0."""
+    return ("%g" % v)
+
+
 # ---------------------------------------------------------------- Koordinatenbild
 def graf_svg(el, theme):
     """Kleines Koordinatensystem mit Geraden und Punkten, als SVG.
@@ -578,6 +646,9 @@ def element_html(el, theme):
     elif typ == "graf":
         klassen += ["graf"]
         inhalt = graf_svg(el, theme)
+    elif typ == "boxplot":
+        klassen += ["graf"]
+        inhalt = boxplot_svg(el, theme)
     elif typ == "rechner":
         klassen += ["graf"]
         inhalt = rechner_svg(el, theme)

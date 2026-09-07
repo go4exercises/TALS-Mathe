@@ -158,6 +158,26 @@ In einer Szene mit Merkschiene ist das Bild **nicht** zentriert (dort ist nichts
 zentriert) — es steht bei `x`, standardmässig 680. Ein eigenes `x` richtet es an den
 Formelzeilen darüber aus.
 
+### Boxplot — `typ: "boxplot"`
+
+Für die Datenanalyse. Gezeichnet werden die fünf Kennzahlen, sonst nichts:
+
+```json
+{"typ": "boxplot", "min": 2, "q1": 4, "med": 5.5, "q3": 7.5, "max": 12,
+ "breite": 1250, "hoehe": 290, "abstand": 330,
+ "teilung": [2, 4, 6, 8, 10, 12], "farbe": 1}
+```
+
+`teilung` setzt die Achsenteilung — ohne sie ist das Bild nicht ablesbar.
+`marken: false` lässt die Beschriftung *min · Q1 · Median · Q3 · max* weg, wenn sie
+schon im Text steht. `abstand` wie beim Koordinatenbild von Hand setzen: `hoehe` plus 30.
+
+**Die Konvention ist die der Themenseite 4.3**: Box von \(Q_1\) bis \(Q_3\), Strich beim
+Median, Antennen bis zum kleinsten und grössten Wert. **Keine Ausreisserregel** — die
+Seite kennt keine, und ein Clip führt keine ein, die dort nicht steht. Wer die
+Quartile rechnet, nimmt die Median-der-Hälften-Methode; bei ungeradem \(n\) bleibt der
+Median selbst aussen vor.
+
 ### Rechneranzeige — `typ: "rechner"`
 
 Für Clips über den Taschenrechner. Nachgebaut wird **die Anzeige, nicht das Tastenfeld**:

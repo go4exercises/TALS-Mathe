@@ -4,6 +4,47 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Datenanalyse: 17 neue Clips
+
+Die Liste «Priorität F» abgearbeitet. Lerngebiet 4 hatte zwei Clips, jetzt sind es
+neunzehn. Die Bibliothek wächst von 97 auf **114 Clips (111:10 min)**.
+
+### Hinzugefügt
+
+- **Daten (4):** Grundgesamtheit und Stichprobe · qualitativ oder quantitativ ·
+  diskret oder stetig · absolute und relative Häufigkeit.
+- **Diagramme (4):** Histogramm · Boxplot lesen · Boxplot erstellen · Streudiagramm.
+- **Lagemasse (3):** Mittelwert · Median · Modus.
+- **Streumasse (6):** Spannweite · Quartile · Quartilsdifferenz · Varianz ·
+  Standardabweichung · was ein Ausreisser anrichtet.
+
+**Ein Datensatz trägt fünfzehn der siebzehn Clips:** \(2, 4, 4, 5, 6, 7, 8, 12\) mit
+Mittelwert \(6\), Median \(5.5\), Modus \(4\), \(Q_1 = 4\), \(Q_3 = 7.5\),
+\(\mathrm{QD} = 3.5\), Spannweite \(10\). Für Varianz und Standardabweichung ein
+kleinerer: \(4, 4, 6, 8, 8\) — dort ist \(s^2 = 4\) und \(s = 2\) exakt.
+
+Der Robustheits-Clip lebt von der Gegenüberstellung: Wird aus der \(12\) eine \(20\),
+steigt der Mittelwert von \(6\) auf \(7\), die Spannweite von \(10\) auf \(18\), die
+Standardabweichung von \(3.07\) auf \(5.58\) — Median und Quartilsdifferenz bewegen
+sich **überhaupt nicht**.
+
+**Nicht gebaut wurde «geeignetes Lagemass auswählen».** Der bestehende Clip
+`g4-3-median-mittelwert` beantwortet das in seinem Merkbild, und der neue
+Robustheits-Clip führt es aus. Er ist von Folge 1 auf Folge 4 gerückt, weil die
+Definitionen jetzt davor stehen.
+
+### Geändert
+
+- **Neuer Elementtyp `boxplot`** in `scripts/build-clips.py`. Ohne ihn wären die beiden
+  Boxplot-Clips ein Text über ein Bild, das nicht da ist. Er zeichnet die fünf
+  Kennzahlen nach der Konvention der Themenseite 4.3 — Antennen bis zu den
+  Extremwerten, **keine Ausreisserregel**, weil die Seite keine kennt.
+- **Zwei `g4`-Seiten haben jetzt Clip-Marker.** `g4-0-praxisbeispiel-bm2-klasse.html`
+  hat keinen eindeutigen `<h2 id="ressourcen">` und blieb darum aussen vor — sie hat
+  auch keine Clips.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Geometrie: 16 neue Clips
 
 Die Liste «Priorität E» abgearbeitet. Lerngebiet 5 hatte zwei Clips, jetzt sind es
