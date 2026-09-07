@@ -48,6 +48,51 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
   Live-Stand kam statt aus dem Arbeitsverzeichnis. Wer in Physik dasselbe tut, spart
   sich diese drei Runden.
 
+- **2026-09-07 · Rechner-Clips als eigener Strang · `scripts/build-clips.py`
+  (`rechner_svg`, Feld `werkzeug`) + Drehbuecher · warum:** Mathe hat inzwischen
+  **19 Clips zum TI-30X Pro MathPrint**; Physik hat **null** — im Physik-Repo trägt
+  keiner der 88 Drehbuecher `werkzeug: true`, und `scripts/build-clips.py` kennt
+  weder den Elementtyp `rechner` noch das Feld. Nachgezählt am 07.09.2026:
+  `grep -c rechner_svg scripts/build-clips.py` gibt 0 Treffer im Code (der eine
+  Treffer auf «werkzeug» ist das Wort «Diagrammwerkzeug» in einem Kommentar).
+
+  **Zwei Generator-Bausteine sind die Voraussetzung**, beide in Mathes
+  `scripts/build-clips.py`:
+  1. `rechner_svg(el, theme)` — zeichnet die Anzeige (vier Zeilen à 16 Zeichen,
+     Ergebnis rechtsbuendig, `[a|b]` zweistoeckig, Tastenband unten). Rund 90 Zeilen,
+     haengt nur an `theme` und `entschaerfen`, also ohne Anpassung uebertragbar.
+     Plus der `elif typ == "rechner"`-Zweig im Element-Dispatch.
+  2. Feld `werkzeug: true` — sortiert den Clip ans Ende seiner Reihe und faerbt die
+     Zeile orange. Betrifft `build-clips.py` und `build-clips-einbau.py`.
+
+  **Wofuer es sich in Physik lohnt** (aus Mathes 19 Clips uebertragbar, mit Zielseite):
+  - **Konstanten-Menue** (`2nd constants`, 20 Werte, NIST 2018) — Mathe hat den Clip
+    auf `g1-4` gebaut, weil dort die Zehnerpotenzen stehen. In Physik gehoert er
+    inhaltlich hin: `g = 9.80665` fuer `p4-2`/`p4-3`, `R` und `k` und `atm` fuer
+    `p5-1`/`p5-2`, `e` und `c` fuer `p6-2`. **Dort ist er mehr wert als in Mathe.**
+  - **num-solv fuer Sachaufgaben** (Mathe `g2-1`): das Beispiel ist bereits eine
+    Waermebilanz (Mischtemperatur, Startwert zwischen den beiden Temperaturen). Es
+    gehoert eigentlich auf `p5-2-waerme` — in Mathe steht es nur, weil es dort um das
+    Aufstellen von Gleichungen geht.
+  - **`Expr=` / Auswerten von Ausdruecken** (Mathe `s4-2a`): eine Formel einmal
+    eintippen, der Rechner fragt nach `x, y, z, …`. Fuer Physik der naheliegendste
+    Griff ueberhaupt — jede Aufgabenserie rechnet dieselbe Formel mit anderen Zahlen.
+  - **mode-Menue, EE/ENG, signifikante Stellen** (Mathe `g1-4`): Physik hat mit
+    `p0-2-vorsilben-ee` schon einen Clip zum selben Stoff, aber ohne Rechneranzeige —
+    er nennt die EE-Taste im Text und zeigt sie nicht. Der waere der erste Kandidat
+    zum Nachruesten, sobald `rechner_svg` steht.
+
+  **Nicht uebertragen:** die rein mathematischen (poly-solv, sys-solv, logBASE,
+  Funktionstabelle, ggT/kgV, DMS, Haeufigkeiten, op1/op2) — die haben in Physik
+  keine Seite.
+
+  **Belegquelle fuer jede Rechnerangabe** ist das deutsche TI-Handbuch (68 Seiten,
+  Text mit `pypdf`); Mathes `CLAUDE.md`-Regel «nichts erfinden, was am Geraet
+  nachgeschlagen gehoert» gilt dort genauso. Was das Handbuch **nicht** hergibt und
+  darum in keinen Clip kam: die Bildschirmmaske des numerischen Loesers mit unterer
+  und oberer Grenze, die Kurzbezeichnungen im NAMES-Menue, die Einheiten-Glyphen im
+  UNITS-Menue, und ob dieses Modell ueberhaupt Matrix und Vektor kann.
+
 - **2026-09-01 · Clip-Buehne: Scrollsperre und Fokusrueckgabe · `physiklib.js`
   (`clipBuehne`/`clipZu`) · warum:** In Mathe scrollte die Seite unter dem offenen
   Overlay weiter — beim Schliessen war man an einer anderen Stelle als vorher —, und der
