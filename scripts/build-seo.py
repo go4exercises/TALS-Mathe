@@ -89,6 +89,11 @@ SEITEN = {
    titel='Leitprogramm Potenzen — von ℕ über ℤ zu ℚ',
    beschreibung='Leitprogramm Potenzen: die Potenzregeln erst mit natürlichen, dann mit ganzen, dann mit rationalen Exponenten — und Wurzeln ganz ohne Wurzelgesetze.',
    themen=['Mathematik', 'Potenzen', 'Potenzgesetze', 'Wurzeln', 'Leitprogramm']),
+ 'leitprogramme/quadratische-gleichungen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   titel='Leitprogramm Quadratische Gleichungen — erst die Sonderfälle, dann die Formel',
+   beschreibung='Leitprogramm zu den quadratischen Gleichungen: die drei Sonderfälle ohne Formel, quadratische Ergänzung und Mitternachtsformel, Diskriminante, Ungleichungen und Parameter — mit Clips, Selbsttests und Gesamttest.',
+   themen=['Mathematik', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Diskriminante', 'Leitprogramm']),
  'leitprogramme/uebungspruefung-1.html': dict(
    typ='article', lrt='Leitprogramm', noindex=True,
    titel='Übungsprüfung 1 — Arithmetik, Algebra, Gleichungen',
