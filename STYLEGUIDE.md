@@ -1069,8 +1069,8 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
 Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
-`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 07.09.2026: 142 Clips in der
-Bibliothek (135:38 min), dazu 35 unverlinkte Prüfungsclips.
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 07.09.2026: 149 Clips in der
+Bibliothek (141:52 min), dazu 35 unverlinkte Prüfungsclips.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass
@@ -1138,6 +1138,12 @@ Bibliothek (135:38 min), dazu 35 unverlinkte Prüfungsclips.
 - **Reihenfolge nach jedem Drehbuch-Edit:** `build-clip-ton.py` (falls der Sprechertext
   geändert hat), `build-clips.py`, `build-clips-einbau.py`, dann `build-seo.py` und
   `build-suchindex.py`.
+- **Kurven im `graf`:** `kurven` mit einer `formel` (erlaubt: `sin cos tan asin acos atan
+  sqrt exp log abs`, `pi`, `e`), `xteilung`/`yteilung` für eine Achsenteilung in
+  Vielfachen von \(\pi\), `von`/`bis` für Kurvenstücke. **`abstand` eines `graf` ist die
+  Bildhöhe plus rund 30**, kein Zeilenabstand — sonst überlappt die nächste Zeile.
+  **Farbkopplung ist Pflicht:** `farbe: n` im Bild und `\fa`…`\fd` im Text greifen auf
+  dieselbe Themenfarbliste zu (1 blau, 2 orange, 3 grün, 4 rot).
 - **Vor dem Commit das Layout prüfen:** `node .claude/tools/pruef-clip.mjs
   clips/<name>.html <sekunden…>` meldet überlappende Zeilen und Überlauf. Die Bilder
   trotzdem ansehen — der Prüfer sieht Überlappung, nicht Gestaltung. Er misst seit dem

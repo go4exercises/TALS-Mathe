@@ -4,6 +4,62 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Trigonometrische Funktionen: sieben Clips
+
+`s3-5` war die grösste inhaltliche Lücke des Schwerpunktfachs — die einzige Seite mit
+SF-eigenem Stoff ohne einen einzigen Clip. Jetzt trägt sie eine ganze Reihe.
+
+### Hinzugefügt
+
+Reihe **«Trigonometrische Funktionen»**, 7 Folgen, 6:14 min:
+
+1. **Vom Kreis zur Kurve** — die Höhe am Einheitskreis über dem Winkel aufgetragen.
+2. **Die Tangenskurve und ihre Pole** — Tangens ist ein Bruch; wo der Nenner null wird,
+   reisst die Kurve.
+3. **Periode, Nullstellen, Symmetrie** — die drei Steckbriefe nebeneinander.
+4. **Dieselbe Kurve, um π/2 versetzt** — \(\cos x = \sin(x + \tfrac{\pi}{2})\), mit Probe.
+5. **Was a, b, u und v bewirken** — vier Parameter, vier Wirkungen.
+6. **Allgemeine Sinusfunktion** — \(p = \tfrac{2\pi}{b}\), \(x_0 = -\tfrac{c}{b}\), auch
+   rückwärts aus dem Graphen.
+7. **Harmonische Schwingung** — Periodendauer, Frequenz, Phase am Riesenrad der Seite.
+
+**Der Massstab waren die sechs RLP-Lernziele der Seite**, nicht die Abschnittsfolge.
+Jedes Lernziel trägt mindestens ein Clip; Lernziel 6 (Schwingungen) trägt zwei.
+Bewusst *nicht* wiederholt wird, was das Grundlagenfach schon hat — Einheitskreis,
+Bogenmass, Spezialwinkel und trigonometrischer Pythagoras stehen in `g5-4`.
+
+### Generator: `graf` kann Kurven
+
+Für diese Reihe brauchte es drei Erweiterungen in `scripts/build-clips.py`:
+
+- **`kurven`** — \(y = f(x)\) als Streckenzug aus einer Formel. Die Lücken der
+  Tangenskurve entstehen von selbst: Wo kein Wert existiert oder er aus dem Fenster
+  läuft, bricht der Zug ab. Im Drehbuch steht kein Wort über Polstellen.
+- **`xteilung` / `yteilung`** — Achsenteilung in Vielfachen von \(\pi\) statt in ganzen
+  Zahlen. Das Karo folgt mit.
+- **`von` / `bis`** — Kurvenstücke, damit eine Mittellinie nicht über die
+  Achsenbeschriftung läuft.
+
+### Zwei Fehler, die nur das Bild zeigte
+
+- **Grafik-Abstand**: `abstand` unter einem `graf` ist die Bildhöhe plus rund 30, kein
+  Zeilenabstand. Mit 120 überlappte die Folgezeile um 62 px — in fünf Szenen.
+- **Farbkopplung**: In Folge 5 stand `v` im Text rot, die gezeichnete Mittellinie war
+  grün. `u` und `v` getauscht, damit die gezeichnete Grösse grün ist. Der Prüfer meldet
+  so etwas nicht.
+
+Dazu zwei Kleinigkeiten aus den Bildern: Der letzte Tangens-Ast lief durch die
+Achsenbeschriftung «x» (Fenster beschnitten), und «Hochpunkt» klebte an der
+y-Achsenzahl.
+
+### Bestand
+
+Bibliothek **149 Clips (141:52 min)**, Schwerpunktfach von 28 auf **35**. Damit tragen
+**38 der 46** Themenseiten Clips. Ohne Clip bleiben `s1-1`, `s1-2`, `s2-1`, `s3-1` und
+`s4-1` — dazu `g1-1`, `g4-0` und `g5-2b`.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Prioritäten A bis C abgeschlossen
 
 Die neunzehn Punkte aus «Priorität A, B und C» einzeln am Repo nachgeprüft statt aus

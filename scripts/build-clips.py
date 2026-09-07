@@ -307,6 +307,27 @@ def formel_zahl(v):
 
 
 # ---------------------------------------------------------------- Koordinatenbild
+# Was in der Formel eines "kurven"-Eintrags stehen darf. Bewusst knapp:
+# Ein Drehbuch beschreibt eine Kurve, es rechnet nicht.
+_KURVE_NS = {"sin": math.sin, "cos": math.cos, "tan": math.tan,
+             "asin": math.asin, "acos": math.acos, "atan": math.atan,
+             "sqrt": math.sqrt, "exp": math.exp, "log": math.log,
+             "abs": abs, "pi": math.pi, "e": math.e}
+
+
+def kurve_wert(formel, x):
+    """Wert einer Drehbuch-Formel an der Stelle x, oder None.
+
+    None heisst: hier gibt es keinen Punkt. Der Streckenzug bricht dann ab
+    und faengt danach neu an — genau das braucht die Tangenskurve an ihren
+    Polstellen, ohne dass im Drehbuch etwas ueber Pole stehen muss.
+    """
+    try:
+        return float(eval(formel, {"__builtins__": {}}, dict(_KURVE_NS, x=x)))
+    except Exception:
+        return None
+
+
 def graf_svg(el, theme):
     """Kleines Koordinatensystem mit Geraden und Punkten, als SVG.
 
@@ -335,12 +356,26 @@ def graf_svg(el, theme):
 
     teile = ['<svg width="%d" height="%d" viewBox="0 0 %d %d">' % (b, h, b, h)]
 
+    # Wo die Achse geteilt wird. Ganze Zahlen sind der Normalfall; wo die
+    # x-Achse ein Winkel ist, taugen sie nicht — eine Sinuskurve gehoert bei
+    # pi/2 geteilt und nicht bei 1, 2, 3. Darum "xteilung"/"yteilung":
+    # Paare [Stelle, Beschriftung], die die ganzen Zahlen ersetzen.
+    def teilung(schluessel, a, e):
+        eigen = el.get(schluessel)
+        if eigen:
+            return [(float(w), str(t)) for w, t in eigen]
+        return [(float(k), str(k).replace("-", "\u2212"))
+                for k in range(int(math.ceil(a)), int(math.floor(e)) + 1)]
+
+    xt = teilung("xteilung", x0, x1)
+    yt = teilung("yteilung", y0, y1)
+
     # Karo
     if el.get("raster", True):
-        for x in range(int(math.ceil(x0)), int(math.floor(x1)) + 1):
+        for x, _ in xt:
             teile.append('<line x1="%.1f" y1="0" x2="%.1f" y2="%d" stroke="%s" '
                          'stroke-opacity=".13" stroke-width="1.5"/>' % (px(x), px(x), h, tinte))
-        for y in range(int(math.ceil(y0)), int(math.floor(y1)) + 1):
+        for y, _ in yt:
             teile.append('<line x1="0" y1="%.1f" x2="%d" y2="%.1f" stroke="%s" '
                          'stroke-opacity=".13" stroke-width="1.5"/>' % (py(y), b, py(y), tinte))
 
@@ -353,22 +388,22 @@ def graf_svg(el, theme):
                  % (b - 26, py(0) - 14, tinte))
     teile.append('<text x="%.1f" y="26" font-size="26" font-style="italic" fill="%s">y</text>'
                  % (px(0) + 14, tinte))
-    for x in range(int(math.ceil(x0)), int(math.floor(x1)) + 1):
-        if x == 0:
+    for x, mark in xt:
+        if abs(x) < 1e-9:
             continue
         teile.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2.5"/>'
                      % (px(x), py(0) - 7, px(x), py(0) + 7, tinte))
         teile.append('<text x="%.1f" y="%.1f" font-size="22" text-anchor="middle" fill="%s" '
                      'fill-opacity=".75">%s</text>'
-                     % (px(x), py(0) + 32, tinte, str(x).replace("-", "\u2212")))
-    for y in range(int(math.ceil(y0)), int(math.floor(y1)) + 1):
-        if y == 0:
+                     % (px(x), py(0) + 32, tinte, entschaerfen(mark)))
+    for y, mark in yt:
+        if abs(y) < 1e-9:
             continue
         teile.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2.5"/>'
                      % (px(0) - 7, py(y), px(0) + 7, py(y), tinte))
         teile.append('<text x="%.1f" y="%.1f" font-size="22" text-anchor="end" fill="%s" '
                      'fill-opacity=".75">%s</text>'
-                     % (px(0) - 13, py(y) + 8, tinte, str(y).replace("-", "\u2212")))
+                     % (px(0) - 13, py(y) + 8, tinte, entschaerfen(mark)))
 
     # Geraden y = m x + q, am Fenster abgeschnitten
     for g in el.get("geraden", []):
@@ -427,6 +462,43 @@ def graf_svg(el, theme):
                          'text-anchor="%s">%s</text>'
                          % (px(bx_), py(by_), farbe, pa.get("anker", "start"),
                             entschaerfen(pa["beschriftung"])))
+
+    # Kurven y = f(x), als Streckenzug im Fenster. Wie die Parabeln, nur
+    # mit freier Formel — und mit dem Zusatz, dass ein Stueck auch dann
+    # abbricht, wenn f an einer Stelle gar nicht definiert ist. Genau daran
+    # entstehen die Luecken der Tangenskurve an ihren Polstellen.
+    for kv in el.get("kurven", []):
+        n = kv.get("n", 480)
+        # Eine Kurve darf auch nur ein Stueck des Fensters belegen. Gebraucht
+        # wird das fuer Hilfslinien wie die Mittellinie einer Schwingung: Ohne
+        # Grenze laeuft sie ueber die Achsenbeschriftung am linken Rand.
+        a_ = kv.get("von", x0)
+        e_ = kv.get("bis", x1)
+        stuecke, lauf = [], []
+        for i in range(n + 1):
+            x = a_ + (e_ - a_) * i / n
+            y = kurve_wert(kv["formel"], x)
+            if y is not None and y0 <= y <= y1:
+                lauf.append("%.1f,%.1f" % (px(x), py(y)))
+            elif lauf:
+                stuecke.append(lauf)
+                lauf = []
+        if lauf:
+            stuecke.append(lauf)
+        farbe = fv[kv.get("farbe", 1) - 1]
+        for st in stuecke:
+            if len(st) > 1:
+                teile.append('<polyline points="%s" fill="none" stroke="%s" '
+                             'stroke-width="%s" stroke-linecap="round" '
+                             'stroke-linejoin="round" %s/>'
+                             % (" ".join(st), farbe, kv.get("dicke", 5),
+                                'stroke-dasharray="14 10"' if kv.get("gestrichelt") else ""))
+        if kv.get("beschriftung"):
+            bx_, by_ = kv["beschriftung_bei"]
+            teile.append('<text x="%.1f" y="%.1f" font-size="27" fill="%s" '
+                         'text-anchor="%s">%s</text>'
+                         % (px(bx_), py(by_), farbe, kv.get("anker", "start"),
+                            entschaerfen(kv["beschriftung"])))
 
     # Punkte
     for pt in el.get("punkte", []):

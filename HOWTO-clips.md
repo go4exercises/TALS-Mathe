@@ -162,6 +162,58 @@ Kurve an dieser Stelle verläuft — bei `y = x²` liegt die Kurve an `x = 1.35`
 ein Label bei `7.6` ist also frei. Vier Kollisionen sind auf diese Weise entstanden und
 erst im Bild aufgefallen, nicht in der Prüfung.
 
+### Kurven im `graf`: `kurven`, `xteilung`/`yteilung`, `von`/`bis`
+
+Bis zum 07.09.2026 konnte ein `graf` nur Geraden, Parabeln und Punkte. Für die Reihe zu
+den trigonometrischen Funktionen kamen drei Dinge dazu.
+
+**`kurven` zeichnet \(y = f(x)\) als Streckenzug.** Im Drehbuch steht die Formel, keine
+Punktliste:
+
+```json
+{"typ": "graf", "kurven": [
+  {"formel": "sin(x)", "farbe": 1, "beschriftung": "y = sin x", "beschriftung_bei": [1.8, 1.35]},
+  {"formel": "3*sin(2*x-pi/2)", "farbe": 2}
+]}
+```
+
+Erlaubt sind `sin cos tan asin acos atan sqrt exp log abs` sowie `pi` und `e` — mehr
+nicht. Ein Drehbuch beschreibt eine Kurve, es rechnet nicht.
+
+**Lücken entstehen von selbst.** Wo die Formel keinen Wert liefert oder der Wert aus dem
+Fenster läuft, bricht der Streckenzug ab und beginnt danach neu. Genau daran entstehen
+die Polstellen der Tangenskurve — im Drehbuch steht kein Wort über Pole.
+
+**`xteilung` / `yteilung` ersetzen die ganzen Zahlen an der Achse.** Eine Sinuskurve
+gehört bei \(\pi/2\) geteilt, nicht bei 1, 2, 3. Paare aus Stelle und Beschriftung; die
+Beschriftung ist Text, denn das SVG kennt kein LaTeX — also `π/2`, nicht `\tfrac{\pi}{2}`:
+
+```json
+"xteilung": [[0, "0"], [1.5708, "π/2"], [3.1416, "π"]]
+```
+
+Das Karo folgt der Teilung mit; sonst stünde das Raster bei ganzen Zahlen und die Striche
+bei Vielfachen von \(\pi\).
+
+**`von` / `bis` begrenzen eine Kurve auf ein Stück des Fensters.** Gebraucht für
+Hilfslinien: Eine Mittellinie `{"formel": "35", "von": 0, "bis": 24.6}` läuft sonst über
+die Achsenbeschriftung am linken Rand — im Bild sichtbar, für den Prüfer unsichtbar.
+
+**Zwei Fallstricke, beide beim Bau dieser Reihe bezahlt:**
+
+1. **`abstand` bei einem `graf` ist die Bildhöhe plus rund 30**, kein Zeilenabstand. Mit
+   `abstand: 120` unter einem 560 px hohen Bild überlappt die nächste Zeile um 62 px.
+   Die Konvention der bestehenden Clips: `hoehe + 30`.
+2. **Farbkopplung prüfen.** `farbe: 3` im `graf` und `\fc{…}` im Text sind dieselbe
+   Farbe — beide greifen auf `farben` des Themes zu (1 blau, 2 orange, 3 grün, 4 rot).
+   Wer im Text `\fd{v}` schreibt und die zugehörige Linie mit `farbe: 3` zeichnet,
+   koppelt falsch. Der Prüfer sieht das nicht; im Bild fällt es sofort auf.
+
+**Und: die Bedingungsleiste verträgt keine hohe Szene.** Trägt das Drehbuch eine
+`voraussetzung`, bricht der Bau ab, wenn eine Szene mit `oben < 170` beginnt. Bei einer
+Szene mit grossem Bild ist die Versuchung gross, `oben` klein zu setzen — dann lieber die
+Bildhöhe verkleinern.
+
 **Der senkrechte Strich `|` bricht im Fliesstext die Zeile.** Wer in einer Notiz
 \(2|a|\) schreiben will, packt es in `@…@` — dort ist der Strich geschützt. Sonst steht
 die Hälfte des Satzes auf einer neuen Zeile und die Betragsstriche sind weg.
@@ -888,11 +940,11 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 
-- **Der Bestand ist beisammen.** Stand 07.09.2026: **177 Drehbücher**, alle vertont —
-  142 in der Bibliothek (135:38 min, 52 Reihen) und 35 unverlinkte Prüfungsclips mit
+- **Der Bestand ist beisammen.** Stand 07.09.2026: **184 Drehbücher**, alle vertont —
+  149 in der Bibliothek (141:52 min, 53 Reihen) und 35 unverlinkte Prüfungsclips mit
   `"probe": true` (28:04 min). Alle fünf Lerngebiete des Grundlagenfachs und alle vier
   des Schwerpunktfachs sind angefangen — abgedeckt ist damit nicht dasselbe:
-  **37 der 46 Themenseiten tragen Clips**, 44 tragen den Marker (sieben davon leer).
+  **38 der 46 Themenseiten tragen Clips**, 44 tragen den Marker (sieben davon leer).
   Das Schwerpunktfach ist dabei deutlich duenner besetzt als das Grundlagenfach:
   119 Clips auf 23 GF-Seiten (Median 4 je Seite) gegen 28 auf 23 SF-Seiten (Median 1).
   Ohne Clip sind `s1-1`, `s1-2`, `s2-1`, `s3-1`, `s3-5` und `s4-1` — dazu `g1-1`,

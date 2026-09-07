@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Trigonometrische Funktionen: die Tangenskurve und ihre Pole</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Funktionen · Trigonometrie</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>07.09.2026</span></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="7.80" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:92px;font-weight:600;color:var(--tinte)">Warum hat der Tangens Lücken?</div>
+<div class="l m row mitte" data-at="2.10" data-out="7.80" data-anim="rise" style="left:0;right:0;text-align:center;top:470px;font-size:70px"><span>\(\tan x = \dfrac{\fa{\sin x}}{\fb{\cos x}}\)</span></div>
+<div class="l hand mitte" data-at="3.80" data-out="7.80" data-anim="rise" style="left:0;right:0;text-align:center;top:700px;font-size:56px;color:var(--rot)">Ein Bruch. Was ist die erste Frage bei einem Bruch?</div>
+<div class="l m row mitte" data-at="8.20" data-out="18.16" data-anim="rise" style="left:0;right:0;text-align:center;top:200px;font-size:58px"><span>\(\fb{\cos x} = 0 \quad \Longleftrightarrow \quad x = \tfrac{\pi}{2} + k\pi\)</span></div>
+<div class="l m row mitte" data-at="9.90" data-out="18.16" data-anim="rise" style="left:0;right:0;text-align:center;top:390px;font-size:54px"><span>\(D = \mathbb{R} \setminus \left\{ \tfrac{\pi}{2} + k\pi \ \big| \ k \in \mathbb{Z} \right\}\)</span></div>
+<div class="l hand mitte" data-at="11.60" data-out="18.16" data-anim="rise" style="left:0;right:0;text-align:center;top:575px;font-size:52px;color:var(--rot)">Keine Nullstelle des Nenners kürzt sich weg — es bleibt eine Lücke.</div>
+<div class="l hand mitte" data-at="13.30" data-out="18.16" data-anim="rise" style="left:0;right:0;text-align:center;top:695px;font-size:52px;color:var(--blau)">An der Lücke steht eine senkrechte Asymptote.</div>
+<div class="l graf mitte" data-at="18.56" data-out="26.21" data-anim="rise" style="left:0;right:0;text-align:center;top:150px"><svg width="1180" height="560" viewBox="0 0 1180 560"><line x1="65.7" y1="0" x2="65.7" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="266.9" y1="0" x2="266.9" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="468.2" y1="0" x2="468.2" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="669.5" y1="0" x2="669.5" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="870.8" y1="0" x2="870.8" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="1072.1" y1="0" x2="1072.1" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="520.0" x2="1180" y2="520.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="360.0" x2="1180" y2="360.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="200.0" x2="1180" y2="200.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="40.0" x2="1180" y2="40.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="280.0" x2="1180" y2="280.0" stroke="#1c1a17" stroke-width="3"/><line x1="468.2" y1="560" x2="468.2" y2="0" stroke="#1c1a17" stroke-width="3"/><text x="1154.0" y="266.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="482.2" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="65.7" y1="273.0" x2="65.7" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="65.7" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−π</text><line x1="266.9" y1="273.0" x2="266.9" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="266.9" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−π/2</text><line x1="669.5" y1="273.0" x2="669.5" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="669.5" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">π/2</text><line x1="870.8" y1="273.0" x2="870.8" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="870.8" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">π</text><line x1="1072.1" y1="273.0" x2="1072.1" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="1072.1" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3π/2</text><line x1="461.2" y1="520.0" x2="475.2" y2="520.0" stroke="#1c1a17" stroke-width="2.5"/><text x="455.2" y="528.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−3</text><line x1="461.2" y1="360.0" x2="475.2" y2="360.0" stroke="#1c1a17" stroke-width="2.5"/><text x="455.2" y="368.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="461.2" y1="200.0" x2="475.2" y2="200.0" stroke="#1c1a17" stroke-width="2.5"/><text x="455.2" y="208.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="461.2" y1="40.0" x2="475.2" y2="40.0" stroke="#1c1a17" stroke-width="2.5"/><text x="455.2" y="48.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">3</text><polyline points="8.0,318.6 10.4,316.8 12.8,315.0 15.3,313.2 17.7,311.4 20.1,309.7 22.5,308.0 25.0,306.3 27.4,304.6 29.8,303.0 32.2,301.3 34.7,299.7 37.1,298.1 39.5,296.5 41.9,295.0 44.4,293.4 46.8,291.9 49.2,290.3 51.6,288.8 54.1,287.3 56.5,285.7 58.9,284.2 61.3,282.7 63.8,281.2 66.2,279.7 68.6,278.1 71.0,276.6 73.5,275.1 75.9,273.6 78.3,272.1 80.7,270.5 83.2,269.0 85.6,267.5 88.0,265.9 90.4,264.3 92.9,262.7 95.3,261.2 97.7,259.6 100.1,257.9 102.6,256.3 105.0,254.6 107.4,253.0 109.8,251.3 112.3,249.5 114.7,247.8 117.1,246.0 119.5,244.2 122.0,242.4 124.4,240.5 126.8,238.6 129.2,236.7 131.7,234.7 134.1,232.7 136.5,230.6 139.0,228.5 141.4,226.3 143.8,224.1 146.2,221.8 148.7,219.5 151.1,217.1 153.5,214.6 155.9,212.0 158.4,209.4 160.8,206.6 163.2,203.8 165.6,200.8 168.1,197.8 170.5,194.6 172.9,191.3 175.3,187.9 177.7,184.3 180.2,180.5 182.6,176.5 185.0,172.4 187.5,168.0 189.9,163.4 192.3,158.6 194.7,153.4 197.2,147.9 199.6,142.1 202.0,135.9 204.4,129.2 206.8,122.1 209.3,114.4 211.7,106.1 214.1,97.0 216.6,87.2 219.0,76.4 221.4,64.5 223.8,51.3 226.2,36.6 228.7,20.1" fill="none" stroke="#9b1c1c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><polyline points="303.8,550.0 306.3,532.4 308.7,516.7 311.1,502.7 313.5,490.1 316.0,478.7 318.4,468.4 320.8,458.9 323.3,450.2 325.7,442.1 328.1,434.7 330.5,427.8 332.9,421.3 335.4,415.3 337.8,409.6 340.2,404.3 342.6,399.3 345.1,394.5 347.5,390.0 349.9,385.8 352.4,381.7 354.8,377.8 357.2,374.1 359.6,370.6 362.0,367.2 364.5,364.0 366.9,360.9 369.3,357.8 371.8,355.0 374.2,352.2 376.6,349.5 379.0,346.8 381.5,344.3 383.9,341.9 386.3,339.5 388.7,337.2 391.2,334.9 393.6,332.7 396.0,330.6 398.4,328.5 400.8,326.4 403.3,324.4 405.7,322.5 408.1,320.5 410.6,318.6 413.0,316.8 415.4,315.0 417.8,313.2 420.2,311.4 422.7,309.7 425.1,308.0 427.5,306.3 429.9,304.6 432.4,303.0 434.8,301.4 437.2,299.7 439.7,298.1 442.1,296.6 444.5,295.0 446.9,293.4 449.3,291.9 451.8,290.3 454.2,288.8 456.6,287.3 459.1,285.7 461.5,284.2 463.9,282.7 466.3,281.2 468.8,279.7 471.2,278.2 473.6,276.6 476.0,275.1 478.4,273.6 480.9,272.1 483.3,270.5 485.7,269.0 488.2,267.5 490.6,265.9 493.0,264.3 495.4,262.8 497.8,261.2 500.3,259.6 502.7,257.9 505.1,256.3 507.6,254.6 510.0,253.0 512.4,251.3 514.8,249.5 517.2,247.8 519.7,246.0 522.1,244.2 524.5,242.4 527.0,240.5 529.4,238.6 531.8,236.7 534.2,234.7 536.6,232.7 539.1,230.6 541.5,228.5 543.9,226.3 546.4,224.1 548.8,221.8 551.2,219.5 553.6,217.1 556.1,214.6 558.5,212.0 560.9,209.4 563.3,206.6 565.8,203.8 568.2,200.8 570.6,197.8 573.0,194.6 575.4,191.3 577.9,187.9 580.3,184.3 582.7,180.5 585.1,176.5 587.6,172.4 590.0,168.0 592.4,163.4 594.9,158.6 597.3,153.4 599.7,148.0 602.1,142.1 604.6,135.9 607.0,129.3 609.4,122.1 611.8,114.4 614.2,106.1 616.7,97.0 619.1,87.2 621.5,76.4 624.0,64.5 626.4,51.3 628.8,36.6 631.2,20.2" fill="none" stroke="#9b1c1c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><polyline points="706.4,550.1 708.8,532.4 711.2,516.8 713.7,502.8 716.1,490.2 718.5,478.8 720.9,468.4 723.4,458.9 725.8,450.2 728.2,442.2 730.6,434.7 733.1,427.8 735.5,421.3 737.9,415.3 740.4,409.6 742.8,404.3 745.2,399.3 747.6,394.5 750.0,390.0 752.5,385.8 754.9,381.7 757.3,377.8 759.8,374.1 762.2,370.6 764.6,367.2 767.0,364.0 769.5,360.9 771.9,357.9 774.3,355.0 776.7,352.2 779.1,349.5 781.6,346.9 784.0,344.3 786.4,341.9 788.9,339.5 791.3,337.2 793.7,334.9 796.1,332.7 798.5,330.6 801.0,328.5 803.4,326.4 805.8,324.4 808.2,322.5 810.7,320.5 813.1,318.7 815.5,316.8 817.9,315.0 820.4,313.2 822.8,311.4 825.2,309.7 827.7,308.0 830.1,306.3 832.5,304.6 834.9,303.0 837.4,301.4 839.8,299.7 842.2,298.1 844.6,296.6 847.0,295.0 849.5,293.4 851.9,291.9 854.3,290.3 856.8,288.8 859.2,287.3 861.6,285.7 864.0,284.2 866.5,282.7 868.9,281.2 871.3,279.7 873.7,278.2 876.2,276.6 878.6,275.1 881.0,273.6 883.4,272.1 885.8,270.5 888.3,269.0 890.7,267.5 893.1,265.9 895.5,264.3 898.0,262.8 900.4,261.2 902.8,259.6 905.2,257.9 907.7,256.3 910.1,254.6 912.5,253.0 915.0,251.3 917.4,249.6 919.8,247.8 922.2,246.0 924.6,244.2 927.1,242.4 929.5,240.5 931.9,238.6 934.3,236.7 936.8,234.7 939.2,232.7 941.6,230.6 944.1,228.5 946.5,226.3 948.9,224.1 951.3,221.8 953.8,219.5 956.2,217.1 958.6,214.6 961.0,212.0 963.5,209.4 965.9,206.6 968.3,203.8 970.7,200.9 973.2,197.8 975.6,194.6 978.0,191.3 980.4,187.9 982.8,184.3 985.3,180.5 987.7,176.6 990.1,172.4 992.5,168.0 995.0,163.4 997.4,158.6 999.8,153.4 1002.2,148.0 1004.7,142.1 1007.1,135.9 1009.5,129.3 1012.0,122.1 1014.4,114.4 1016.8,106.1 1019.2,97.1 1021.6,87.2 1024.1,76.4 1026.5,64.5 1028.9,51.4 1031.3,36.7 1033.8,20.2" fill="none" stroke="#9b1c1c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><polyline points="1109.0,550.1 1111.4,532.5 1113.8,516.8 1116.2,502.8 1118.6,490.2 1121.1,478.8 1123.5,468.4 1125.9,458.9 1128.3,450.2 1130.8,442.2 1133.2,434.7 1135.6,427.8 1138.1,421.3 1140.5,415.3 1142.9,409.6 1145.3,404.3 1147.8,399.3 1150.2,394.5 1152.6,390.0 1155.0,385.8 1157.4,381.7 1159.9,377.8 1162.3,374.2 1164.7,370.6 1167.2,367.2 1169.6,364.0 1172.0,360.9" fill="none" stroke="#9b1c1c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><text x="873.4" y="36.0" font-size="27" fill="#9b1c1c" text-anchor="start">y = tan x</text><circle cx="568.9" cy="200.0" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="568.9" cy="200.0" r="5" fill="#1f6b3a"/><text x="594.5" y="128.0" font-size="29" font-weight="600" fill="#1f6b3a" text-anchor="start">tan(π/4) = 1</text></svg></div>
+<div class="l hand mitte" data-at="20.26" data-out="26.21" data-anim="rise" style="left:0;right:0;text-align:center;top:742px;font-size:50px;color:var(--blau)">Jeder Ast läuft einmal ganz durch — von unten nach oben.</div>
+<div class="l m row mitte" data-at="26.61" data-out="35.71" data-anim="rise" style="left:0;right:0;text-align:center;top:220px;font-size:58px"><span>\(\sin,\ \cos: \quad p = \fa{2\pi}\)</span></div>
+<div class="l m row mitte" data-at="28.31" data-out="35.71" data-anim="rise" style="left:0;right:0;text-align:center;top:385px;font-size:58px"><span>\(\tan: \quad p = \fd{\pi}\)</span></div>
+<div class="l m mitte mitte" data-at="30.01" data-out="35.71" data-anim="pop" style="left:0;right:0;text-align:center;top:570px;font-size:64px;font-weight:600">\(\tan(x + \pi) = \tan x\)</div>
+<div class="l hand mitte" data-at="31.71" data-out="35.71" data-anim="rise" style="left:0;right:0;text-align:center;top:760px;font-size:54px;color:var(--blau)">Wertemenge dafür ohne Schranken: \(W = \mathbb{R}\).</div>
+<div class="l hand mitte mitte" data-at="36.11" data-out="43.66" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:88px;font-weight:600;color:var(--tinte)">Nenner null,<br>Kurve zerrissen.</div>
+<div class="l m row mitte" data-at="37.81" data-out="43.66" data-anim="rise" style="left:0;right:0;text-align:center;top:520px;font-size:52px"><span>\(\tan x = \dfrac{\sin x}{\fb{\cos x}} \qquad \fb{\cos x} = 0 \ \longrightarrow \ \text{Pol}\)</span></div>
+<div class="l hand mitte" data-at="39.51" data-out="43.66" data-anim="rise" style="left:0;right:0;text-align:center;top:710px;font-size:54px;color:var(--rot)">Dieselbe Frage wie bei jeder Bruchfunktion.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/s3-5-tangenskurve.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <button id="sw" hidden></button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 43.66;
+const SPRECHER = [{"bei": 0.4, "text": "Der Tangens ist kein neuer Baustein. Er ist Sinus durch Cosinus. Und genau das entscheidet, wie seine Kurve aussieht."}, {"bei": 8.2, "text": "Die erste Frage bei einem Bruch: Wann wird der Nenner null? Der Cosinus ist null bei pi halbe, und dann wieder nach jedem pi. Genau dort ist der Tangens nicht definiert."}, {"bei": 18.56, "text": "So sieht sie aus. Zwischen zwei Polen steigt sie von minus unendlich bis plus unendlich — und dann fängt derselbe Ast wieder an."}, {"bei": 26.61, "text": "Und noch ein Unterschied. Sinus und Cosinus wiederholen sich nach zwei pi. Der Tangens schon nach pi — halb so früh."}, {"bei": 36.11, "text": "Zum Mitnehmen: Der Tangens ist ein Bruch. Wo sein Nenner null wird, hat er eine Lücke — und zwischen zwei Lücken liegt genau eine Periode."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
+  // Wechsel behaelt darum Zeit und Zustand einfach bei.
+  const STIMMEN = [];
+  // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
+  // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
+  // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
+  if (ton && STIMMEN.length > 1) {
+    let stimme = 0;
+    const sw = document.getElementById('sw');
+    sw.hidden = false;
+    const beschriften = () => {
+      const v = STIMMEN[stimme];
+      sw.textContent = '🗣 ' + v.n + (v.d > 1.005 ? ' (' + v.d.toFixed(2) + '\u00d7)' : '');
+      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + v.n);
+    };
+    beschriften();
+    sw.onclick = () => {
+      stimme = (stimme + 1) % STIMMEN.length;
+      const wo = t, lief = !ton.paused;
+      dehnung = STIMMEN[stimme].d || 1;
+      ton.src = STIMMEN[stimme].s;
+      ton.currentTime = wo * dehnung;
+      if (lief) ton.play().catch(() => {});
+      beschriften();
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime / dehnung;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

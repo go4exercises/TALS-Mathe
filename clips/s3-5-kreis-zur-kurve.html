@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Trigonometrische Funktionen: vom Kreis zur Kurve</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px),repeating-linear-gradient(to bottom,rgba(26,79,138,.10) 0 1.5px,transparent 1.5px 60px);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+<div id="rand" style="background:rgba(155,28,28,.24)"></div>
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Funktionen · Trigonometrie</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>07.09.2026</span></div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="10.60" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:104px;font-weight:600;color:var(--tinte)">Vom Kreis zur Kurve</div>
+<div class="l m row mitte" data-at="2.10" data-out="10.60" data-anim="rise" style="left:0;right:0;text-align:center;top:460px;font-size:56px"><span>\(\sin x = \text{H\ddot{o}he am Einheitskreis}\)</span></div>
+<div class="l hand mitte" data-at="3.80" data-out="10.60" data-anim="rise" style="left:0;right:0;text-align:center;top:640px;font-size:56px;color:var(--rot)">Was passiert, wenn wir die Höhe über dem Winkel auftragen?</div>
+<div class="l hand mitte" data-at="11.00" data-out="24.44" data-anim="rise" style="left:0;right:0;text-align:center;top:170px;font-size:54px;color:var(--blau)">Die Höhe an vier Stellen — mehr braucht es nicht.</div>
+<div class="l m row mitte" data-at="12.70" data-out="24.44" data-anim="rise" style="left:0;right:0;text-align:center;top:320px;font-size:50px"><span>\(\sin 0 = \fc{0} \qquad \sin \tfrac{\pi}{2} = \fa{1} \qquad \sin \pi = \fc{0} \qquad \sin \tfrac{3\pi}{2} = \fd{-1}\)</span></div>
+<div class="l m row mitte" data-at="14.40" data-out="24.44" data-anim="rise" style="left:0;right:0;text-align:center;top:490px;font-size:50px"><span>\(\sin 2\pi = \fc{0} \quad \longrightarrow \quad \text{alles beginnt von vorn}\)</span></div>
+<div class="l hand mitte" data-at="16.10" data-out="24.44" data-anim="rise" style="left:0;right:0;text-align:center;top:640px;font-size:52px;color:var(--blau)">Nach einem vollen Umlauf wiederholt sich jeder Wert.</div>
+<div class="l graf mitte" data-at="24.84" data-out="32.48" data-anim="rise" style="left:0;right:0;text-align:center;top:150px"><svg width="1180" height="560" viewBox="0 0 1180 560"><line x1="50.2" y1="0" x2="50.2" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="251.5" y1="0" x2="251.5" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="452.8" y1="0" x2="452.8" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="654.1" y1="0" x2="654.1" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="855.4" y1="0" x2="855.4" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="1056.7" y1="0" x2="1056.7" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="440.0" x2="1180" y2="440.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="120.0" x2="1180" y2="120.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="280.0" x2="1180" y2="280.0" stroke="#1c1a17" stroke-width="3"/><line x1="251.5" y1="560" x2="251.5" y2="0" stroke="#1c1a17" stroke-width="3"/><text x="1154.0" y="266.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="265.5" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="50.2" y1="273.0" x2="50.2" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="50.2" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−π/2</text><line x1="452.8" y1="273.0" x2="452.8" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="452.8" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">π/2</text><line x1="654.1" y1="273.0" x2="654.1" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="654.1" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">π</text><line x1="855.4" y1="273.0" x2="855.4" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="855.4" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3π/2</text><line x1="1056.7" y1="273.0" x2="1056.7" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="1056.7" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2π</text><line x1="244.5" y1="440.0" x2="258.5" y2="440.0" stroke="#1c1a17" stroke-width="2.5"/><text x="238.5" y="448.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="244.5" y1="120.0" x2="258.5" y2="120.0" stroke="#1c1a17" stroke-width="2.5"/><text x="238.5" y="128.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><polyline points="8.0,431.4 10.4,432.4 12.8,433.3 15.3,434.1 17.7,434.9 20.1,435.6 22.5,436.3 25.0,436.9 27.4,437.5 29.8,438.0 32.3,438.4 34.7,438.8 37.1,439.2 39.5,439.4 42.0,439.7 44.4,439.8 46.8,439.9 49.2,440.0 51.6,440.0 54.1,439.9 56.5,439.8 58.9,439.6 61.3,439.4 63.8,439.1 66.2,438.8 68.6,438.3 71.1,437.9 73.5,437.4 75.9,436.8 78.3,436.2 80.8,435.5 83.2,434.7 85.6,433.9 88.0,433.1 90.5,432.2 92.9,431.2 95.3,430.2 97.7,429.1 100.2,428.0 102.6,426.8 105.0,425.6 107.4,424.3 109.9,423.0 112.3,421.6 114.7,420.1 117.1,418.7 119.5,417.1 122.0,415.5 124.4,413.9 126.8,412.2 129.2,410.5 131.7,408.7 134.1,406.9 136.5,405.0 139.0,403.1 141.4,401.2 143.8,399.2 146.2,397.1 148.6,395.0 151.1,392.9 153.5,390.8 155.9,388.6 158.3,386.3 160.8,384.0 163.2,381.7 165.6,379.4 168.0,377.0 170.5,374.5 172.9,372.1 175.3,369.6 177.8,367.1 180.2,364.5 182.6,361.9 185.0,359.3 187.5,356.7 189.9,354.0 192.3,351.3 194.7,348.6 197.2,345.8 199.6,343.1 202.0,340.3 204.4,337.4 206.8,334.6 209.3,331.8 211.7,328.9 214.1,326.0 216.6,323.1 219.0,320.2 221.4,317.2 223.8,314.3 226.2,311.3 228.7,308.3 231.1,305.3 233.5,302.3 235.9,299.3 238.4,296.3 240.8,293.3 243.2,290.3 245.7,287.3 248.1,284.3 250.5,281.2 252.9,278.2 255.3,275.2 257.8,272.1 260.2,269.1 262.6,266.1 265.1,263.1 267.5,260.1 269.9,257.1 272.3,254.1 274.8,251.1 277.2,248.1 279.6,245.2 282.0,242.2 284.4,239.3 286.9,236.4 289.3,233.5 291.7,230.6 294.1,227.7 296.6,224.9 299.0,222.0 301.4,219.2 303.8,216.4 306.3,213.7 308.7,210.9 311.1,208.2 313.5,205.5 316.0,202.8 318.4,200.2 320.8,197.6 323.2,195.0 325.7,192.5 328.1,189.9 330.5,187.5 332.9,185.0 335.4,182.6 337.8,180.2 340.2,177.8 342.6,175.5 345.1,173.3 347.5,171.0 349.9,168.8 352.4,166.7 354.8,164.6 357.2,162.5 359.6,160.4 362.0,158.5 364.5,156.5 366.9,154.6 369.3,152.7 371.8,150.9 374.2,149.2 376.6,147.4 379.0,145.8 381.5,144.2 383.9,142.6 386.3,141.1 388.7,139.6 391.1,138.1 393.6,136.8 396.0,135.4 398.4,134.2 400.9,133.0 403.3,131.8 405.7,130.7 408.1,129.6 410.6,128.6 413.0,127.7 415.4,126.8 417.8,125.9 420.2,125.1 422.7,124.4 425.1,123.7 427.5,123.1 430.0,122.5 432.4,122.0 434.8,121.6 437.2,121.2 439.7,120.8 442.1,120.6 444.5,120.3 446.9,120.2 449.4,120.1 451.8,120.0 454.2,120.0 456.6,120.1 459.0,120.2 461.5,120.4 463.9,120.6 466.3,120.9 468.8,121.2 471.2,121.6 473.6,122.1 476.0,122.6 478.4,123.2 480.9,123.8 483.3,124.5 485.7,125.3 488.1,126.1 490.6,126.9 493.0,127.8 495.4,128.8 497.9,129.8 500.3,130.9 502.7,132.0 505.1,133.2 507.5,134.4 510.0,135.7 512.4,137.0 514.8,138.4 517.2,139.8 519.7,141.3 522.1,142.8 524.5,144.4 527.0,146.1 529.4,147.7 531.8,149.5 534.2,151.2 536.7,153.1 539.1,154.9 541.5,156.8 543.9,158.8 546.4,160.8 548.8,162.8 551.2,164.9 553.6,167.0 556.1,169.2 558.5,171.4 560.9,173.6 563.3,175.9 565.8,178.2 568.2,180.6 570.6,183.0 573.0,185.4 575.5,187.9 577.9,190.4 580.3,192.9 582.7,195.4 585.1,198.0 587.6,200.6 590.0,203.3 592.4,206.0 594.9,208.7 597.3,211.4 599.7,214.1 602.1,216.9 604.6,219.7 607.0,222.5 609.4,225.3 611.8,228.2 614.2,231.1 616.7,234.0 619.1,236.9 621.5,239.8 624.0,242.7 626.4,245.7 628.8,248.6 631.2,251.6 633.6,254.6 636.1,257.6 638.5,260.6 640.9,263.6 643.4,266.6 645.8,269.6 648.2,272.7 650.6,275.7 653.1,278.7 655.5,281.7 657.9,284.8 660.3,287.8 662.8,290.8 665.2,293.8 667.6,296.9 670.0,299.9 672.5,302.9 674.9,305.9 677.3,308.8 679.7,311.8 682.2,314.8 684.6,317.7 687.0,320.7 689.4,323.6 691.9,326.5 694.3,329.4 696.7,332.2 699.1,335.1 701.5,337.9 704.0,340.7 706.4,343.5 708.8,346.3 711.3,349.0 713.7,351.8 716.1,354.5 718.5,357.1 721.0,359.8 723.4,362.4 725.8,364.9 728.2,367.5 730.6,370.0 733.1,372.5 735.5,375.0 737.9,377.4 740.4,379.8 742.8,382.1 745.2,384.4 747.6,386.7 750.0,388.9 752.5,391.1 754.9,393.3 757.3,395.4 759.7,397.5 762.2,399.5 764.6,401.5 767.0,403.5 769.5,405.4 771.9,407.2 774.3,409.0 776.7,410.8 779.2,412.5 781.6,414.2 784.0,415.8 786.4,417.4 788.9,418.9 791.3,420.4 793.7,421.8 796.1,423.2 798.5,424.5 801.0,425.8 803.4,427.0 805.8,428.2 808.2,429.3 810.7,430.4 813.1,431.4 815.5,432.3 817.9,433.2 820.4,434.1 822.8,434.9 825.2,435.6 827.7,436.3 830.1,436.9 832.5,437.5 834.9,438.0 837.4,438.4 839.8,438.8 842.2,439.2 844.6,439.4 847.0,439.7 849.5,439.8 851.9,439.9 854.3,440.0 856.8,440.0 859.2,439.9 861.6,439.8 864.0,439.6 866.5,439.4 868.9,439.1 871.3,438.8 873.7,438.4 876.2,437.9 878.6,437.4 881.0,436.8 883.4,436.2 885.9,435.5 888.3,434.8 890.7,434.0 893.1,433.1 895.5,432.2 898.0,431.2 900.4,430.2 902.8,429.2 905.2,428.0 907.7,426.9 910.1,425.6 912.5,424.3 915.0,423.0 917.4,421.6 919.8,420.2 922.2,418.7 924.7,417.2 927.1,415.6 929.5,414.0 931.9,412.3 934.4,410.6 936.8,408.8 939.2,407.0 941.6,405.1 944.1,403.2 946.5,401.2 948.9,399.2 951.3,397.2 953.8,395.1 956.2,393.0 958.6,390.8 961.0,388.6 963.5,386.4 965.9,384.1 968.3,381.8 970.7,379.4 973.2,377.0 975.6,374.6 978.0,372.2 980.4,369.7 982.9,367.2 985.3,364.6 987.7,362.0 990.1,359.4 992.5,356.8 995.0,354.1 997.4,351.4 999.8,348.7 1002.3,345.9 1004.7,343.1 1007.1,340.4 1009.5,337.5 1012.0,334.7 1014.4,331.8 1016.8,329.0 1019.2,326.1 1021.7,323.2 1024.1,320.3 1026.5,317.3 1028.9,314.4 1031.4,311.4 1033.8,308.4 1036.2,305.4 1038.6,302.5 1041.1,299.4 1043.5,296.4 1045.9,293.4 1048.3,290.4 1050.8,287.4 1053.2,284.4 1055.6,281.3 1058.0,278.3 1060.4,275.3 1062.9,272.3 1065.3,269.2 1067.7,266.2 1070.1,263.2 1072.6,260.2 1075.0,257.2 1077.4,254.2 1079.8,251.2 1082.3,248.2 1084.7,245.3 1087.1,242.3 1089.5,239.4 1092.0,236.5 1094.4,233.6 1096.8,230.7 1099.3,227.8 1101.7,225.0 1104.1,222.1 1106.5,219.3 1109.0,216.5 1111.4,213.7 1113.8,211.0 1116.2,208.3 1118.6,205.6 1121.1,202.9 1123.5,200.3 1125.9,197.7 1128.4,195.1 1130.8,192.5 1133.2,190.0 1135.6,187.5 1138.0,185.1 1140.5,182.7 1142.9,180.3 1145.3,177.9 1147.8,175.6 1150.2,173.3 1152.6,171.1 1155.0,168.9 1157.4,166.7 1159.9,164.6 1162.3,162.5 1164.7,160.5 1167.2,158.5 1169.6,156.6 1172.0,154.7" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><text x="478.4" y="64.0" font-size="27" fill="#1a4f8a" text-anchor="start">y = sin x</text><circle cx="452.8" cy="120.0" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="452.8" cy="120.0" r="5" fill="#1f6b3a"/><text x="296.3" y="116.8" font-size="29" font-weight="600" fill="#1f6b3a" text-anchor="start">Hochpunkt</text><circle cx="855.4" cy="440.0" r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle cx="855.4" cy="440.0" r="5" fill="#1f6b3a"/><text x="874.6" y="464.0" font-size="29" font-weight="600" fill="#1f6b3a" text-anchor="start">Tiefpunkt</text></svg></div>
+<div class="l hand mitte" data-at="26.54" data-out="32.48" data-anim="rise" style="left:0;right:0;text-align:center;top:742px;font-size:50px;color:var(--blau)">Zwischen \(-1\) und \(1\) — und nach \(2\pi\) von vorn.</div>
+<div class="l graf mitte" data-at="32.88" data-out="39.62" data-anim="rise" style="left:0;right:0;text-align:center;top:150px"><svg width="1180" height="560" viewBox="0 0 1180 560"><line x1="50.2" y1="0" x2="50.2" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="251.5" y1="0" x2="251.5" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="452.8" y1="0" x2="452.8" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="654.1" y1="0" x2="654.1" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="855.4" y1="0" x2="855.4" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="1056.7" y1="0" x2="1056.7" y2="560" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="440.0" x2="1180" y2="440.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="120.0" x2="1180" y2="120.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="280.0" x2="1180" y2="280.0" stroke="#1c1a17" stroke-width="3"/><line x1="251.5" y1="560" x2="251.5" y2="0" stroke="#1c1a17" stroke-width="3"/><text x="1154.0" y="266.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="265.5" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="50.2" y1="273.0" x2="50.2" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="50.2" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−π/2</text><line x1="452.8" y1="273.0" x2="452.8" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="452.8" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">π/2</text><line x1="654.1" y1="273.0" x2="654.1" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="654.1" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">π</text><line x1="855.4" y1="273.0" x2="855.4" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="855.4" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3π/2</text><line x1="1056.7" y1="273.0" x2="1056.7" y2="287.0" stroke="#1c1a17" stroke-width="2.5"/><text x="1056.7" y="312.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2π</text><line x1="244.5" y1="440.0" x2="258.5" y2="440.0" stroke="#1c1a17" stroke-width="2.5"/><text x="238.5" y="448.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="244.5" y1="120.0" x2="258.5" y2="120.0" stroke="#1c1a17" stroke-width="2.5"/><text x="238.5" y="128.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><polyline points="8.0,431.4 10.4,432.4 12.8,433.3 15.3,434.1 17.7,434.9 20.1,435.6 22.5,436.3 25.0,436.9 27.4,437.5 29.8,438.0 32.3,438.4 34.7,438.8 37.1,439.2 39.5,439.4 42.0,439.7 44.4,439.8 46.8,439.9 49.2,440.0 51.6,440.0 54.1,439.9 56.5,439.8 58.9,439.6 61.3,439.4 63.8,439.1 66.2,438.8 68.6,438.3 71.1,437.9 73.5,437.4 75.9,436.8 78.3,436.2 80.8,435.5 83.2,434.7 85.6,433.9 88.0,433.1 90.5,432.2 92.9,431.2 95.3,430.2 97.7,429.1 100.2,428.0 102.6,426.8 105.0,425.6 107.4,424.3 109.9,423.0 112.3,421.6 114.7,420.1 117.1,418.7 119.5,417.1 122.0,415.5 124.4,413.9 126.8,412.2 129.2,410.5 131.7,408.7 134.1,406.9 136.5,405.0 139.0,403.1 141.4,401.2 143.8,399.2 146.2,397.1 148.6,395.0 151.1,392.9 153.5,390.8 155.9,388.6 158.3,386.3 160.8,384.0 163.2,381.7 165.6,379.4 168.0,377.0 170.5,374.5 172.9,372.1 175.3,369.6 177.8,367.1 180.2,364.5 182.6,361.9 185.0,359.3 187.5,356.7 189.9,354.0 192.3,351.3 194.7,348.6 197.2,345.8 199.6,343.1 202.0,340.3 204.4,337.4 206.8,334.6 209.3,331.8 211.7,328.9 214.1,326.0 216.6,323.1 219.0,320.2 221.4,317.2 223.8,314.3 226.2,311.3 228.7,308.3 231.1,305.3 233.5,302.3 235.9,299.3 238.4,296.3 240.8,293.3 243.2,290.3 245.7,287.3 248.1,284.3 250.5,281.2 252.9,278.2 255.3,275.2 257.8,272.1 260.2,269.1 262.6,266.1 265.1,263.1 267.5,260.1 269.9,257.1 272.3,254.1 274.8,251.1 277.2,248.1 279.6,245.2 282.0,242.2 284.4,239.3 286.9,236.4 289.3,233.5 291.7,230.6 294.1,227.7 296.6,224.9 299.0,222.0 301.4,219.2 303.8,216.4 306.3,213.7 308.7,210.9 311.1,208.2 313.5,205.5 316.0,202.8 318.4,200.2 320.8,197.6 323.2,195.0 325.7,192.5 328.1,189.9 330.5,187.5 332.9,185.0 335.4,182.6 337.8,180.2 340.2,177.8 342.6,175.5 345.1,173.3 347.5,171.0 349.9,168.8 352.4,166.7 354.8,164.6 357.2,162.5 359.6,160.4 362.0,158.5 364.5,156.5 366.9,154.6 369.3,152.7 371.8,150.9 374.2,149.2 376.6,147.4 379.0,145.8 381.5,144.2 383.9,142.6 386.3,141.1 388.7,139.6 391.1,138.1 393.6,136.8 396.0,135.4 398.4,134.2 400.9,133.0 403.3,131.8 405.7,130.7 408.1,129.6 410.6,128.6 413.0,127.7 415.4,126.8 417.8,125.9 420.2,125.1 422.7,124.4 425.1,123.7 427.5,123.1 430.0,122.5 432.4,122.0 434.8,121.6 437.2,121.2 439.7,120.8 442.1,120.6 444.5,120.3 446.9,120.2 449.4,120.1 451.8,120.0 454.2,120.0 456.6,120.1 459.0,120.2 461.5,120.4 463.9,120.6 466.3,120.9 468.8,121.2 471.2,121.6 473.6,122.1 476.0,122.6 478.4,123.2 480.9,123.8 483.3,124.5 485.7,125.3 488.1,126.1 490.6,126.9 493.0,127.8 495.4,128.8 497.9,129.8 500.3,130.9 502.7,132.0 505.1,133.2 507.5,134.4 510.0,135.7 512.4,137.0 514.8,138.4 517.2,139.8 519.7,141.3 522.1,142.8 524.5,144.4 527.0,146.1 529.4,147.7 531.8,149.5 534.2,151.2 536.7,153.1 539.1,154.9 541.5,156.8 543.9,158.8 546.4,160.8 548.8,162.8 551.2,164.9 553.6,167.0 556.1,169.2 558.5,171.4 560.9,173.6 563.3,175.9 565.8,178.2 568.2,180.6 570.6,183.0 573.0,185.4 575.5,187.9 577.9,190.4 580.3,192.9 582.7,195.4 585.1,198.0 587.6,200.6 590.0,203.3 592.4,206.0 594.9,208.7 597.3,211.4 599.7,214.1 602.1,216.9 604.6,219.7 607.0,222.5 609.4,225.3 611.8,228.2 614.2,231.1 616.7,234.0 619.1,236.9 621.5,239.8 624.0,242.7 626.4,245.7 628.8,248.6 631.2,251.6 633.6,254.6 636.1,257.6 638.5,260.6 640.9,263.6 643.4,266.6 645.8,269.6 648.2,272.7 650.6,275.7 653.1,278.7 655.5,281.7 657.9,284.8 660.3,287.8 662.8,290.8 665.2,293.8 667.6,296.9 670.0,299.9 672.5,302.9 674.9,305.9 677.3,308.8 679.7,311.8 682.2,314.8 684.6,317.7 687.0,320.7 689.4,323.6 691.9,326.5 694.3,329.4 696.7,332.2 699.1,335.1 701.5,337.9 704.0,340.7 706.4,343.5 708.8,346.3 711.3,349.0 713.7,351.8 716.1,354.5 718.5,357.1 721.0,359.8 723.4,362.4 725.8,364.9 728.2,367.5 730.6,370.0 733.1,372.5 735.5,375.0 737.9,377.4 740.4,379.8 742.8,382.1 745.2,384.4 747.6,386.7 750.0,388.9 752.5,391.1 754.9,393.3 757.3,395.4 759.7,397.5 762.2,399.5 764.6,401.5 767.0,403.5 769.5,405.4 771.9,407.2 774.3,409.0 776.7,410.8 779.2,412.5 781.6,414.2 784.0,415.8 786.4,417.4 788.9,418.9 791.3,420.4 793.7,421.8 796.1,423.2 798.5,424.5 801.0,425.8 803.4,427.0 805.8,428.2 808.2,429.3 810.7,430.4 813.1,431.4 815.5,432.3 817.9,433.2 820.4,434.1 822.8,434.9 825.2,435.6 827.7,436.3 830.1,436.9 832.5,437.5 834.9,438.0 837.4,438.4 839.8,438.8 842.2,439.2 844.6,439.4 847.0,439.7 849.5,439.8 851.9,439.9 854.3,440.0 856.8,440.0 859.2,439.9 861.6,439.8 864.0,439.6 866.5,439.4 868.9,439.1 871.3,438.8 873.7,438.4 876.2,437.9 878.6,437.4 881.0,436.8 883.4,436.2 885.9,435.5 888.3,434.8 890.7,434.0 893.1,433.1 895.5,432.2 898.0,431.2 900.4,430.2 902.8,429.2 905.2,428.0 907.7,426.9 910.1,425.6 912.5,424.3 915.0,423.0 917.4,421.6 919.8,420.2 922.2,418.7 924.7,417.2 927.1,415.6 929.5,414.0 931.9,412.3 934.4,410.6 936.8,408.8 939.2,407.0 941.6,405.1 944.1,403.2 946.5,401.2 948.9,399.2 951.3,397.2 953.8,395.1 956.2,393.0 958.6,390.8 961.0,388.6 963.5,386.4 965.9,384.1 968.3,381.8 970.7,379.4 973.2,377.0 975.6,374.6 978.0,372.2 980.4,369.7 982.9,367.2 985.3,364.6 987.7,362.0 990.1,359.4 992.5,356.8 995.0,354.1 997.4,351.4 999.8,348.7 1002.3,345.9 1004.7,343.1 1007.1,340.4 1009.5,337.5 1012.0,334.7 1014.4,331.8 1016.8,329.0 1019.2,326.1 1021.7,323.2 1024.1,320.3 1026.5,317.3 1028.9,314.4 1031.4,311.4 1033.8,308.4 1036.2,305.4 1038.6,302.5 1041.1,299.4 1043.5,296.4 1045.9,293.4 1048.3,290.4 1050.8,287.4 1053.2,284.4 1055.6,281.3 1058.0,278.3 1060.4,275.3 1062.9,272.3 1065.3,269.2 1067.7,266.2 1070.1,263.2 1072.6,260.2 1075.0,257.2 1077.4,254.2 1079.8,251.2 1082.3,248.2 1084.7,245.3 1087.1,242.3 1089.5,239.4 1092.0,236.5 1094.4,233.6 1096.8,230.7 1099.3,227.8 1101.7,225.0 1104.1,222.1 1106.5,219.3 1109.0,216.5 1111.4,213.7 1113.8,211.0 1116.2,208.3 1118.6,205.6 1121.1,202.9 1123.5,200.3 1125.9,197.7 1128.4,195.1 1130.8,192.5 1133.2,190.0 1135.6,187.5 1138.0,185.1 1140.5,182.7 1142.9,180.3 1145.3,177.9 1147.8,175.6 1150.2,173.3 1152.6,171.1 1155.0,168.9 1157.4,166.7 1159.9,164.6 1162.3,162.5 1164.7,160.5 1167.2,158.5 1169.6,156.6 1172.0,154.7" fill="none" stroke="#1a4f8a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="14 10"/><text x="478.4" y="68.8" font-size="27" fill="#1a4f8a" text-anchor="start">sin x</text><polyline points="8.0,331.7 10.4,328.9 12.8,326.0 15.3,323.1 17.7,320.1 20.1,317.2 22.5,314.2 25.0,311.3 27.4,308.3 29.8,305.3 32.3,302.3 34.7,299.3 37.1,296.3 39.5,293.3 42.0,290.3 44.4,287.3 46.8,284.2 49.2,281.2 51.6,278.2 54.1,275.1 56.5,272.1 58.9,269.1 61.3,266.1 63.8,263.1 66.2,260.1 68.6,257.1 71.1,254.1 73.5,251.1 75.9,248.1 78.3,245.2 80.8,242.2 83.2,239.3 85.6,236.3 88.0,233.4 90.5,230.6 92.9,227.7 95.3,224.8 97.7,222.0 100.2,219.2 102.6,216.4 105.0,213.6 107.4,210.9 109.9,208.2 112.3,205.5 114.7,202.8 117.1,200.2 119.5,197.6 122.0,195.0 124.4,192.4 126.8,189.9 129.2,187.4 131.7,185.0 134.1,182.6 136.5,180.2 139.0,177.8 141.4,175.5 143.8,173.2 146.2,171.0 148.6,168.8 151.1,166.7 153.5,164.5 155.9,162.5 158.3,160.4 160.8,158.4 163.2,156.5 165.6,154.6 168.0,152.7 170.5,150.9 172.9,149.2 175.3,147.4 177.8,145.8 180.2,144.1 182.6,142.6 185.0,141.0 187.5,139.6 189.9,138.1 192.3,136.8 194.7,135.4 197.2,134.2 199.6,132.9 202.0,131.8 204.4,130.7 206.8,129.6 209.3,128.6 211.7,127.6 214.1,126.8 216.6,125.9 219.0,125.1 221.4,124.4 223.8,123.7 226.2,123.1 228.7,122.5 231.1,122.0 233.5,121.6 235.9,121.2 238.4,120.8 240.8,120.6 243.2,120.3 245.7,120.2 248.1,120.1 250.5,120.0 252.9,120.0 255.3,120.1 257.8,120.2 260.2,120.4 262.6,120.6 265.1,120.9 267.5,121.2 269.9,121.6 272.3,122.1 274.8,122.6 277.2,123.2 279.6,123.8 282.0,124.5 284.4,125.3 286.9,126.1 289.3,126.9 291.7,127.8 294.1,128.8 296.6,129.8 299.0,130.9 301.4,132.0 303.8,133.2 306.3,134.4 308.7,135.7 311.1,137.0 313.5,138.4 316.0,139.8 318.4,141.3 320.8,142.9 323.2,144.4 325.7,146.1 328.1,147.8 330.5,149.5 332.9,151.3 335.4,153.1 337.8,154.9 340.2,156.9 342.6,158.8 345.1,160.8 347.5,162.8 349.9,164.9 352.4,167.1 354.8,169.2 357.2,171.4 359.6,173.7 362.0,176.0 364.5,178.3 366.9,180.6 369.3,183.0 371.8,185.4 374.2,187.9 376.6,190.4 379.0,192.9 381.5,195.5 383.9,198.1 386.3,200.7 388.7,203.3 391.1,206.0 393.6,208.7 396.0,211.4 398.4,214.2 400.9,216.9 403.3,219.7 405.7,222.5 408.1,225.4 410.6,228.2 413.0,231.1 415.4,234.0 417.8,236.9 420.2,239.8 422.7,242.8 425.1,245.7 427.5,248.7 430.0,251.6 432.4,254.6 434.8,257.6 437.2,260.6 439.7,263.6 442.1,266.7 444.5,269.7 446.9,272.7 449.4,275.7 451.8,278.7 454.2,281.8 456.6,284.8 459.0,287.8 461.5,290.8 463.9,293.9 466.3,296.9 468.8,299.9 471.2,302.9 473.6,305.9 476.0,308.9 478.4,311.8 480.9,314.8 483.3,317.7 485.7,320.7 488.1,323.6 490.6,326.5 493.0,329.4 495.4,332.3 497.9,335.1 500.3,338.0 502.7,340.8 505.1,343.6 507.5,346.3 510.0,349.1 512.4,351.8 514.8,354.5 517.2,357.1 519.7,359.8 522.1,362.4 524.5,365.0 527.0,367.5 529.4,370.0 531.8,372.5 534.2,375.0 536.7,377.4 539.1,379.8 541.5,382.1 543.9,384.4 546.4,386.7 548.8,389.0 551.2,391.2 553.6,393.3 556.1,395.4 558.5,397.5 560.9,399.5 563.3,401.5 565.8,403.5 568.2,405.4 570.6,407.2 573.0,409.1 575.5,410.8 577.9,412.5 580.3,414.2 582.7,415.8 585.1,417.4 587.6,418.9 590.0,420.4 592.4,421.8 594.9,423.2 597.3,424.5 599.7,425.8 602.1,427.0 604.6,428.2 607.0,429.3 609.4,430.4 611.8,431.4 614.2,432.3 616.7,433.2 619.1,434.1 621.5,434.9 624.0,435.6 626.4,436.3 628.8,436.9 631.2,437.5 633.6,438.0 636.1,438.4 638.5,438.8 640.9,439.2 643.4,439.4 645.8,439.7 648.2,439.8 650.6,439.9 653.1,440.0 655.5,440.0 657.9,439.9 660.3,439.8 662.8,439.6 665.2,439.4 667.6,439.1 670.0,438.8 672.5,438.4 674.9,437.9 677.3,437.4 679.7,436.8 682.2,436.2 684.6,435.5 687.0,434.7 689.4,434.0 691.9,433.1 694.3,432.2 696.7,431.2 699.1,430.2 701.5,429.1 704.0,428.0 706.4,426.8 708.8,425.6 711.3,424.3 713.7,423.0 716.1,421.6 718.5,420.2 721.0,418.7 723.4,417.2 725.8,415.6 728.2,414.0 730.6,412.3 733.1,410.5 735.5,408.8 737.9,407.0 740.4,405.1 742.8,403.2 745.2,401.2 747.6,399.2 750.0,397.2 752.5,395.1 754.9,393.0 757.3,390.8 759.7,388.6 762.2,386.4 764.6,384.1 767.0,381.8 769.5,379.4 771.9,377.0 774.3,374.6 776.7,372.1 779.2,369.7 781.6,367.1 784.0,364.6 786.4,362.0 788.9,359.4 791.3,356.7 793.7,354.1 796.1,351.4 798.5,348.6 801.0,345.9 803.4,343.1 805.8,340.3 808.2,337.5 810.7,334.7 813.1,331.8 815.5,329.0 817.9,326.1 820.4,323.2 822.8,320.2 825.2,317.3 827.7,314.3 830.1,311.4 832.5,308.4 834.9,305.4 837.4,302.4 839.8,299.4 842.2,296.4 844.6,293.4 847.0,290.4 849.5,287.4 851.9,284.3 854.3,281.3 856.8,278.3 859.2,275.3 861.6,272.2 864.0,269.2 866.5,266.2 868.9,263.2 871.3,260.2 873.7,257.2 876.2,254.2 878.6,251.2 881.0,248.2 883.4,245.3 885.9,242.3 888.3,239.4 890.7,236.4 893.1,233.5 895.5,230.7 898.0,227.8 900.4,224.9 902.8,222.1 905.2,219.3 907.7,216.5 910.1,213.7 912.5,211.0 915.0,208.3 917.4,205.6 919.8,202.9 922.2,200.3 924.7,197.7 927.1,195.1 929.5,192.5 931.9,190.0 934.4,187.5 936.8,185.1 939.2,182.6 941.6,180.3 944.1,177.9 946.5,175.6 948.9,173.3 951.3,171.1 953.8,168.9 956.2,166.7 958.6,164.6 961.0,162.5 963.5,160.5 965.9,158.5 968.3,156.6 970.7,154.7 973.2,152.8 975.6,151.0 978.0,149.2 980.4,147.5 982.9,145.8 985.3,144.2 987.7,142.6 990.1,141.1 992.5,139.6 995.0,138.2 997.4,136.8 999.8,135.5 1002.3,134.2 1004.7,133.0 1007.1,131.8 1009.5,130.7 1012.0,129.6 1014.4,128.6 1016.8,127.7 1019.2,126.8 1021.7,125.9 1024.1,125.1 1026.5,124.4 1028.9,123.7 1031.4,123.1 1033.8,122.5 1036.2,122.0 1038.6,121.6 1041.1,121.2 1043.5,120.8 1045.9,120.6 1048.3,120.3 1050.8,120.2 1053.2,120.1 1055.6,120.0 1058.0,120.0 1060.4,120.1 1062.9,120.2 1065.3,120.4 1067.7,120.6 1070.1,120.9 1072.6,121.2 1075.0,121.6 1077.4,122.1 1079.8,122.6 1082.3,123.2 1084.7,123.8 1087.1,124.5 1089.5,125.2 1092.0,126.0 1094.4,126.9 1096.8,127.8 1099.3,128.8 1101.7,129.8 1104.1,130.8 1106.5,132.0 1109.0,133.1 1111.4,134.4 1113.8,135.6 1116.2,137.0 1118.6,138.4 1121.1,139.8 1123.5,141.3 1125.9,142.8 1128.4,144.4 1130.8,146.0 1133.2,147.7 1135.6,149.4 1138.0,151.2 1140.5,153.0 1142.9,154.9 1145.3,156.8 1147.8,158.7 1150.2,160.7 1152.6,162.8 1155.0,164.9 1157.4,167.0 1159.9,169.1 1162.3,171.3 1164.7,173.6 1167.2,175.9 1169.6,178.2 1172.0,180.5" fill="none" stroke="#b85c00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><text x="14.4" y="68.8" font-size="27" fill="#b85c00" text-anchor="start">y = cos x</text></svg></div>
+<div class="l hand mitte" data-at="34.58" data-out="39.62" data-anim="rise" style="left:0;right:0;text-align:center;top:742px;font-size:50px;color:var(--blau)">Dieselbe Wellenform — nur an einer anderen Stelle begonnen.</div>
+<div class="l hand mitte mitte" data-at="40.02" data-out="47.42" data-anim="rise" style="left:0;right:0;text-align:center;top:250px;font-size:96px;font-weight:600;color:var(--tinte)">Der Kreis, abgerollt.</div>
+<div class="l m row mitte" data-at="41.72" data-out="47.42" data-anim="rise" style="left:0;right:0;text-align:center;top:500px;font-size:52px"><span>\(\text{Winkel} \longrightarrow \text{nach rechts} \qquad \text{H\ddot{o}he} \longrightarrow \text{nach oben}\)</span></div>
+<div class="l hand mitte" data-at="43.42" data-out="47.42" data-anim="rise" style="left:0;right:0;text-align:center;top:690px;font-size:54px;color:var(--rot)">Darum wiederholt sich die Kurve nach \(2\pi\): Dann ist der Kreis herum.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/s3-5-kreis-zur-kurve.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <button id="sw" hidden></button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 47.42;
+const SPRECHER = [{"bei": 0.4, "text": "Am Einheitskreis gehört zu jedem Winkel eine Höhe. Bisher war das ein Wert zu einem Winkel. Jetzt tragen wir alle diese Werte nebeneinander auf — und aus dem Kreis wird eine Kurve."}, {"bei": 11.0, "text": "Vier Stellen genügen, um die Kurve zu legen. Bei null ist die Höhe null. Bei einem viertel Umlauf, also pi halbe, ist sie eins. Bei pi wieder null, bei drei pi halbe minus eins — und bei zwei pi sind wir zurück am Anfang."}, {"bei": 24.84, "text": "Trägt man alle Werte auf, entsteht diese Welle. Sie schwingt zwischen minus eins und eins und wiederholt sich nach zwei pi."}, {"bei": 32.88, "text": "Der Cosinus ist die Breite statt der Höhe. Seine Kurve sieht gleich aus, startet aber oben statt in der Mitte."}, {"bei": 40.02, "text": "Zum Mitnehmen: Die Sinuskurve ist der abgerollte Einheitskreis. Der Winkel läuft nach rechts, die Höhe nach oben."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  // Stimmen umschalten. Die Spuren sind gleich lang und gleich laut, der
+  // Wechsel behaelt darum Zeit und Zustand einfach bei.
+  const STIMMEN = [];
+  // Dehnung: um wie viel diese Spur laenger ist als die Szene. Eine
+  // langsamer sprechende Stimme braucht mehr Zeit; statt sie zu hetzen,
+  // laeuft die Animation entsprechend langsamer. Tonzeit = Szenenzeit x d.
+  let dehnung = (STIMMEN[0] && STIMMEN[0].d) || 1;
+  if (ton && STIMMEN.length > 1) {
+    let stimme = 0;
+    const sw = document.getElementById('sw');
+    sw.hidden = false;
+    const beschriften = () => {
+      const v = STIMMEN[stimme];
+      sw.textContent = '🗣 ' + v.n + (v.d > 1.005 ? ' (' + v.d.toFixed(2) + '\u00d7)' : '');
+      sw.setAttribute('aria-label', 'Stimme wechseln, aktuell ' + v.n);
+    };
+    beschriften();
+    sw.onclick = () => {
+      stimme = (stimme + 1) % STIMMEN.length;
+      const wo = t, lief = !ton.paused;
+      dehnung = STIMMEN[stimme].d || 1;
+      ton.src = STIMMEN[stimme].s;
+      ton.currentTime = wo * dehnung;
+      if (lief) ton.play().catch(() => {});
+      beschriften();
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime / dehnung;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t * dehnung; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>
