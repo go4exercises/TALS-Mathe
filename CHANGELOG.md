@@ -4,6 +4,53 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 7. September 2026 · Schwerpunktfach: 21 neue Clips
+
+Die Liste «Priorität H» abgearbeitet — und damit alle Ausbaulisten D bis H. Das
+Schwerpunktfach hatte sieben Clips, alle zu Bruchgleichungen; jetzt sind es
+achtundzwanzig. Die Bibliothek wächst von 121 auf **142 Clips (135:14 min)**.
+
+### Hinzugefügt
+
+- **Logarithmen (2), `s1-3`:** der gesuchte Exponent · die drei Gesetze mit Basiswechsel.
+- **Gleichungen (5):** Potenzgleichungen · Wurzelgleichungen · Exponentialgleichungen ·
+  Logarithmusgleichungen · Betragsgleichungen.
+- **Funktionstypen (6):** Potenz- · Wurzel- · Polynom- · Betrags- · Exponential- ·
+  Logarithmusfunktionen.
+- **Stereometrie (3):** Prisma und Zylinder · Pyramide und Kegel · Kugel.
+- **Vektorgeometrie (5):** Vektorbegriff · Rechnen mit Vektoren · Skalarprodukt ·
+  Gerade im Raum · Ebene.
+
+**Ein roter Faden verbindet fünf der Gleichungsclips:** Wurzel-, Logarithmus- und
+Betragsgleichungen sind alle Fälle, in denen die naive Umformung die Lösungsmenge
+verändert. Sie greifen die Äquivalenzumformungen aus Priorität G auf und zeigen je
+eine andere Konsequenz — Scheinlösung beim Quadrieren, Definitionsmenge beim
+Logarithmus, zwei Fälle beim Betrag.
+
+Der Punkt **«Ebenen, falls Bestandteil des Lehrplans»** ist geklärt: `s4-3d` existiert
+als eigene Lektionsseite, der Clip ist gebaut.
+
+### Geändert
+
+- **21 Schwerpunktfach-Seiten haben jetzt Clip-Marker** und damit erstmals einen
+  Clip-Block. Vorher hatte keine einzige einen.
+
+### Damit sind alle Ausbaulisten abgearbeitet
+
+| Liste | Thema | neue Clips |
+|---|---|---|
+| D | Funktionen | 19 |
+| E | Geometrie und Trigonometrie | 16 |
+| F | Datenanalyse | 17 |
+| G | Grundlagenfach-Lücken | 7 |
+| H | Schwerpunktfach | 21 |
+
+Von 62 auf 142 Clips, von 68:29 auf 135:14 Minuten. Vier Punkte der Listen wurden nach
+Prüfung **nicht** gebaut, weil ein bestehender Clip dasselbe Lernziel abdeckte, und einer
+wurde von G nach H verschoben, weil er nicht ins Grundlagenfach gehört.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Grundlagenfach: die letzten Lücken
 
 Die Liste «Priorität G» — zehn Einzelthemen des Grundlagenfachs, die zwischen den
