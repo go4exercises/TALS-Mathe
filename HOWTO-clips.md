@@ -284,6 +284,38 @@ zu 16 Zeichen, Eingabe oben, Ergebnis rechtsbündig, getrennte Tasten für Subtr
 ein Zeichen, `clear` die Eingabe. Was darüber hinausgeht, gehört nachgeschlagen, bevor
 es in einen Clip kommt.
 
+**Die Quelle, jedes Mal dieselbe.** Das deutsche Handbuch von Texas Instruments,
+68 Seiten:
+
+```
+https://education.ti.com/download/de/ed-tech/4AF74FB5F81C45348BF24C0BFD52ECA7/B5FC5D6EE7194B27B631854AE04188D5/TI-30X_Pro_MathPrint_Guidebook_DE.pdf
+```
+
+`WebFetch` scheitert am Binär-PDF, legt es aber lokal ab; den Text danach mit `pypdf`
+herausziehen und `grep`en — rund 62 kB. Die Extraktion verschluckt die Leerzeichen
+(`TastenmitMehrfachbelegung`), also nach Wortteilen suchen, nicht nach Wortgruppen.
+
+**Zeilenlänge vorher zählen.** Sechzehn Zeichen sind sechzehn Zeichen — `"LEFT=3(x-15)"`
+passt, `"RIGHT=.7168(200-x)"` nicht. Der Prüfer meldet das *nicht*: Der SVG-Text läuft
+still über den Rand des Displays hinaus. Zahlenspalten mit `"%4s%7s" % (x, wert)`
+formatieren, dann stehen sie auch untereinander.
+
+**Ergebnisse mit zehn Stellen.** Das Gerät zeigt bis zu zehn signifikante Stellen —
+`6.666666667E-8`, nicht `6.67E-8`. Exponent als `E`, Malzeichen als `×`, Divisions­zeichen
+als `÷`, so wie es die bestehenden Clips halten.
+
+**Ein Tastenstapel muss gleich hoch sein.** Mehrere Anzeigen an derselben `y`-Position
+mit gestaffeltem `ein` bilden einen Stapel — und jede neue muss die vorige **vollständig
+verdecken**. Hat der spätere Schirm *weniger* Zeilen als der frühere, schaut unten ein
+schwarzer Balken samt alter Tastenkappe hervor. Der Prüfer erkennt deckungsgleiche
+Kästen als Stapel und schweigt dazu; sichtbar wird es erst im Bild. Also: alle `zeilen`-
+Listen eines Stapels auf dieselbe Länge bringen, notfalls mit einer leeren Zeile `""`.
+
+**Was das Handbuch nicht hergibt, steht in `TODO-ti30x-am-geraet.md`** — drei Fragen,
+die nur das Gerät beantwortet (Grenzen-Maske des numerischen Lösers, Beschriftungen im
+Konstanten-Menü, Matrix und Vektor). Wer eine davon klärt, trägt sie dort ein und
+ergänzt die Liste oben.
+
 ### Die Bedingungsleiste — `voraussetzung`
 
 Der häufigste didaktische Mangel in einem mehrszenigen Clip: In Szene 2 wird eine
@@ -490,6 +522,15 @@ ohnehin.
 ---
 
 ## Häufige Stolpersteine
+
+**Jeder Eintrag der `schiene` braucht eine Szene mit passendem `schritt`.** Der Merkweg
+blendet Eintrag *i* ein, sobald die erste Szene mit `schritt ≥ i` beginnt. Gibt es zu
+einem Eintrag gar keine solche Szene, fällt er auf den Startzeitpunkt der ganzen Schiene
+zurück — er steht dann **von Anfang an** da, während die Einträge davor noch fehlen, und
+reisst eine Lücke in die Nummerierung: 1, 2, … 4. Vier Einträge in der `schiene` heissen
+also vier Szenen mit `schritt` 1 bis 4; mehrere Szenen dürfen sich denselben `schritt`
+teilen, aber keine Nummer darf fehlen. Der Prüfer sieht das nicht — es ist kein Überlauf
+und keine Überlappung, nur eine falsche Liste.
 
 **Der Clip liegt eine Ebene unter der Wurzel — und das ist nicht frei wählbar.** Er zieht
 die Schriften per `@import url("../schriften.css")`. Verschiebt man `clips/` tiefer, sind
@@ -940,15 +981,22 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 
-- **Der Bestand ist beisammen.** Stand 07.09.2026: **186 Drehbücher**, alle vertont —
-  151 in der Bibliothek (143:41 min, 54 Reihen) und 35 unverlinkte Prüfungsclips mit
+- **Der Bestand ist beisammen.** Stand 08.09.2026: **197 Drehbücher**, alle vertont —
+  162 in der Bibliothek (160:41 min, 54 Reihen) und 35 unverlinkte Prüfungsclips mit
   `"probe": true` (28:04 min). Alle fünf Lerngebiete des Grundlagenfachs und alle vier
   des Schwerpunktfachs sind angefangen — abgedeckt ist damit nicht dasselbe:
   **39 der 46 Themenseiten tragen Clips**, 44 tragen den Marker (fünf davon leer).
   Das Schwerpunktfach ist dabei deutlich dünner besetzt als das Grundlagenfach:
-  119 Zuordnungen auf 23 GF-Seiten (Median 4 je Seite) gegen 43 auf 23 SF-Seiten
-  (Median 1). Ohne Clip sind `s1-1`, `s2-1`, `s3-1` und `s4-1` — dazu `g1-1`, `g4-0`
-  und `g5-2b`. Zwölf der belegten SF-Seiten haben genau einen Clip.
+  128 Zuordnungen auf den 20 GF-Seiten mit Clips (Median 6 je Seite) gegen 46 auf den
+  19 SF-Seiten mit Clips (Median 1). Ohne Clip sind `s1-1`, `s2-1`, `s3-1` und `s4-1` —
+  dazu `g1-1`, `g4-0` und `g5-2b`. Elf der belegten SF-Seiten haben genau einen Clip.
+
+- **Der Rechner ist ein eigener Strang.** 22 der 162 Clips tragen `werkzeug: true`
+  (31:12 min) und liegen auf 14 Seiten — von `g1-2` (Brüche, ggT und kgV) bis `s4-2a`
+  (Formeln mehrfach auswerten). Sie bilden keine eigene Reihe, sondern hängen als
+  letzter Clip an der Reihe, deren Stoff sie bedienen. Die Belegquelle und die drei
+  offenen Gerätefragen stehen oben unter «Rechneranzeige» und in
+  `TODO-ti30x-am-geraet.md`.
 
 - **Ein Clip kann auf mehreren Seiten stehen — auch fachübergreifend.** `lektion` ist
   eine Liste; ein zweiter Eintrag kostet eine Zeile und keine Produktion. Am 07.09.2026

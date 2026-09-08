@@ -4,6 +4,96 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 8. September 2026 · Elf Clips zum Taschenrechner
+
+Der TI-30X Pro MathPrint war mit **11 Clips** vertreten — Modus, EE/ENG, Brüche,
+Potenzen, `ans`, `poly-solv`, `sys-solv`, Lagemasse, `num-solv`. Ein Abgleich mit dem
+deutschen Handbuch (68 Seiten) zeigte, was fehlte: **das ganze Funktionen-Kapitel**
+(g3-\*, s3-\*), die Geometrie und die Logarithmen trugen keinen einzigen Rechner-Clip.
+
+### Hinzugefügt — 11 Clips, alle mit `werkzeug: true`
+
+| Clip | Seite | Folge | Dauer |
+|---|---|---|---|
+| vom Ansatz direkt zur Lösung (`num-solv` bei Sachaufgaben) | `g2-1` | 3 | 1:32 |
+| die Wertetabelle vom Rechner füllen lassen (`table`) | `g3-1` | 7 | 1:23 |
+| den Scheitel in der Tabelle einkreisen | `g3-3` | 10 | 1:28 |
+| jede Basis direkt eintippen (`logBASE`) | `s1-3` | 3 | 1:36 |
+| Naturkonstanten aus dem Rechner holen | `g1-4` | 3 | 1:48 |
+| wenn der Rechner `Domain` meldet (REAL gegen a+bi) | `g2-2b` | 8 | 1:29 |
+| eine Formel einmal eintippen, mehrfach auswerten (`Expr=`) | `s4-2a` | 2 | 1:35 |
+| aus einer Häufigkeitstabelle statt aus der Urliste (FRQ) | `g4-3` | 5 | 1:23 |
+| ggT, kgV und die Primfaktoren auf Tastendruck | `g1-2` (Gast `g1-3`) | 6 | 1:37 |
+| Grad, Minuten und Sekunden eintippen (DMS) | `g5-3` | 7 | 1:37 |
+| Wachstum Schritt für Schritt durchdrücken (`set op`) | `s1-2` | 3 | 1:32 |
+
+Die Bibliothek wächst damit von **151 auf 162 Clips** (143:41 → 160:41 min); 22 davon
+sind Rechner-Clips (31:12 min) auf 14 Seiten. Die Seitenabdeckung bleibt bei **39 von
+46** — alle elf landeten auf Seiten, die schon Clips trugen.
+
+### Was die Clips didaktisch tragen sollen
+
+Ein Rechner-Clip, der nur Tastenfolgen zeigt, ist ein Handbuch mit Ton. Jeder der elf
+hat darum eine Aussage, die über die Bedienung hinausgeht:
+
+- **`g2-1`** — der numerische Löser braucht laut Handbuch einen **Vorzeichenwechsel**
+  («No sign change found. Try new guess.»). Zwischen den beiden Anfangstemperaturen
+  einer Mischung ist der garantiert: Die Physik der Aufgabe liefert den Startwert.
+- **`g3-3`** — zwei gleiche Werte in der Tabelle verraten den Scheitel dazwischen; die
+  Tabelle zeigt die Gegend, den Punkt gibt \(-b/2a\).
+- **`s1-3`** — in \(\log_2 8\) steht die Basis zuerst, im Rechner zuletzt. Vertauscht
+  kommt \(\log_8 2 = 0.3333\) heraus: plausibel und falsch.
+- **`g1-4`** — angezeigt gerundet, gerechnet genau: Die abgetippte Avogadro-Zahl weicht
+  ab der fünften Stelle ab.
+- **`g2-2b`** — `Domain` ist keine Panne, sondern die Antwort. Ein `i` im Ergebnis ist
+  eine verstellte Einstellung, kein Rechenfehler.
+- **`g4-3`** — ohne FRQ-Spalte mittelt der Rechner fünf Notenstufen zu glatt 5 statt
+  22 Daten zu 4.93.
+- **`g5-3`** — der Winkelindikator schlägt den Modus: `sin(30°)` gibt 0.5 auch im
+  RADIAN-Modus.
+- **`s1-2`** — die op-Taste ist zum Sehen da, nicht zum Lösen; die Verdopplungszeit
+  holt der Logarithmus.
+
+### Geändert
+
+**`HOWTO-clips.md`** — der Abschnitt «Rechneranzeige» führt jetzt die Belegquelle
+(Handbuch-Link plus `pypdf`-Rezept) und drei Fallstricke, die beim Bauen Geld gekostet
+haben: 16 Zeichen sind wirklich 16 (der Prüfer meldet Überlauf im Display **nicht**),
+Ergebnisse haben zehn signifikante Stellen, und **ein Tastenstapel muss gleich hoch
+sein** — ein späterer Schirm mit weniger Zeilen deckt den vorigen nicht ab und lässt
+einen schwarzen Balken samt alter Tastenkappe stehen. Unter «Häufige Stolpersteine»
+neu: **jeder `schiene`-Eintrag braucht eine Szene mit passendem `schritt`**, sonst
+rutscht er an den Anfang und reisst eine Lücke in die Nummerierung.
+
+**`CLAUDE.md`, `README.md`, `STYLEGUIDE.md` §6.4** — Zählstände nachgezogen. Dabei fiel
+auf, dass `CLAUDE.md` «sieben leere Marker» nannte, wo es fünf sind.
+
+### Nicht gebaut — und warum
+
+`nDeriv`, `fnInt`, `sum`, `prod` (keine Analysis auf der Site), Regressionen und
+Verteilungen (kommen in `g4` nirgends vor), `nPr`/`nCr`/`rand` (keine
+Kombinatorik-Seite), Hyperbelfunktionen, Basis n und die logischen Operatoren.
+
+### Offen — `TODO-ti30x-am-geraet.md` (neu)
+
+Drei Angaben stehen **nicht** im Handbuch und wurden darum in keinem Clip erfunden: die
+Eingabemaske des numerischen Lösers mit unterer und oberer Grenze (dass es sie gibt,
+belegen zwei Fehlermeldungen), die Kurzbezeichnungen im NAMES-Menü samt
+Einheiten-Schreibweise in UNITS, und ob dieses Modell überhaupt Matrix und Vektor kann
+— beides kommt im PDF nur in Sammelaufzählungen vor, ohne eigenes Kapitel. Die neue
+Datei nennt zu jeder Frage, was belegt ist, wie sie am Gerät zu prüfen ist und welcher
+Clip danach besser würde.
+
+### Übertrag nach Physik
+
+`TODO-schwesterprojekt.md` bekam einen Eintrag: Physik hat **88 Clips, davon 0 mit
+`werkzeug`**, und `scripts/build-clips.py` kennt dort weder den Elementtyp `rechner`
+noch das Feld. Der Eintrag nennt die zwei nötigen Generator-Bausteine und die vier
+Clips, die inhaltlich nach Physik gehören — allen voran das Konstanten-Menü und der
+`num-solv`-Clip, dessen Beispiel schon eine Wärmebilanz ist.
+
+---
+
 ## [Unveröffentlicht] — 7. September 2026 · Zwei Leitprogramme zu den Gleichungen
 
 Die Lerngebiete 1 und 2 hatten zwei Leitprogramme — `potenzen.html` und die unverlinkte

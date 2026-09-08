@@ -52,15 +52,20 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
     Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 186 Drehbücher, alle vertont: **151 in der Bibliothek** (143:41 min,
-  54 Reihen, 114 Grundlagenfach / 37 Schwerpunktfach) und **35 unverlinkte**
+- `clips/` — 197 Drehbücher, alle vertont: **162 in der Bibliothek** (160:41 min,
+  54 Reihen, 122 Grundlagenfach / 40 Schwerpunktfach) und **35 unverlinkte**
   Prüfungsclips mit `"probe": true`, die nur im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. **39 der 46
-  Themenseiten tragen Clips**; 44 tragen den Marker, sieben davon leer. Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
+  Themenseiten tragen Clips**; 44 tragen den Marker, fünf davon leer. Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
   `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,
   nicht als HTML-Entität. Vollständig in `HOWTO-clips.md`, das Verbindliche in
   STYLEGUIDE §6.4.
+  **Rechner-Clips** (`werkzeug: true`, 22 Stück auf 14 Seiten) sind ein eigener Strang:
+  keine eigene Reihe, sondern letzter Clip der Reihe, deren Stoff sie bedienen. **Jede
+  Angabe zum TI-30X Pro MathPrint gehört im Handbuch nachgeschlagen** — Link und
+  Extraktionsrezept in `HOWTO-clips.md` («Rechneranzeige»). Was dort nicht steht, kommt
+  nicht in einen Clip, sondern nach `TODO-ti30x-am-geraet.md`.
 - `schriften.css` + `schriften/` — lokal ausgelieferte Schriften (Fontsource 5.3.0,
   OFL). `vendor/mathjax/` — MathJax 3.2.2 (Apache 2.0). **Keine Seite lädt etwas von
   einem fremden Host**; Details und Fallstricke in STYLEGUIDE §5.3.1. Umgestellt wird

@@ -1069,8 +1069,8 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
 Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
-`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 07.09.2026: 151 Clips in der
-Bibliothek (143:41 min), dazu 35 unverlinkte Prüfungsclips.
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 08.09.2026: 162 Clips in der
+Bibliothek (160:41 min), dazu 35 unverlinkte Prüfungsclips.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass
