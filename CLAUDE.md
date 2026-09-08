@@ -41,15 +41,21 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
-  `leitprogramme.html` wird von Hand gepflegt. Es gibt **zwei Arten**:
+  `leitprogramme.html` wird von Hand gepflegt und ist seit dem 08.09.2026 in **zwei
+  Abschnitte** gegliedert, einen je Art — alle fünf sind verlinkt:
   - *nach Thema* (3: `potenzen.html`, `quadratische-gleichungen.html`,
-    `gleichungssysteme.html`) — Vorwissenstest, Kapitel, Gesamttest.
+    `gleichungssysteme.html`) — Vorwissenstest, 4 Kapitel, Gesamttest.
     Extern gebaute Datei hereinholen: **`HOWTO-leitprogramme.md` Punkt für Punkt**.
-  - *nach Prüfungsbogen* (2: `uebungspruefung-1.html`, `trigo2.html`, beide
-    unverlinkt) — jede Teilaufgabe mit eigenem
+  - *nach Prüfungsbogen* (2: `uebungspruefung-1.html`, `trigo2.html`) — jede
+    Teilaufgabe mit eigenem
     Clip, Musterlösung und Punktezeile. Der ganze Weg vom PDF zur Seite steht in
     **`HOWTO-uebungspruefung.md`**; er hat eigene Fallstricke (verlorene Hoch- und
     Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).
+  **Ein Leitprogramm hängt an drei Stellen**: Kärtchen in `leitprogramme.html`, Eintrag
+  in `scripts/build-seo.py` (Sitemap) und in `scripts/build-suchindex.py` (Volltext­suche).
+  Fehlt eine, ist die Seite entweder unsichtbar oder unauffindbar. Die `"probe": true`
+  an den Prüfungsclips bleibt davon unberührt — sie hält die Clips aus der Bibliothek,
+  nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
 - `clips/` — 197 Drehbücher, alle vertont: **162 in der Bibliothek** (160:41 min,

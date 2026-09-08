@@ -311,12 +311,19 @@ def seiten_aus_navjs(root):
                                  ('leitprogramme/quadratische-gleichungen.html', '▤',
                                   'Leitprogramm Quadratische Gleichungen', 'thema'),
                                  ('leitprogramme/gleichungssysteme.html', '▤',
-                                  'Leitprogramm Gleichungssysteme', 'thema')]:
-        # leitprogramme/uebungspruefung-1.html steht bewusst NICHT hier:
-        # unverlinkte Seite, nur ueber den Direktlink erreichbar. Sie ist
-        # ebenso aus der Sitemap genommen (noindex in build-seo.py) und hat
-        # kein Kaertchen in leitprogramme.html. Wer sie oeffentlich machen
-        # will, setzt alle drei Stellen zusammen zurueck.
+                                  'Leitprogramm Gleichungssysteme', 'thema'),
+                                 ('leitprogramme/uebungspruefung-1.html', '▤',
+                                  'Übungsprüfung 1', 'thema'),
+                                 ('leitprogramme/trigo2.html', '▤',
+                                  'Übungsprüfung Trigonometrie', 'thema')]:
+        # Seit dem 08.09.2026 sind auch die beiden Leitprogramme nach
+        # Pruefungsbogen oeffentlich. Sie haengen an drei Stellen zusammen:
+        # Kaertchen in leitprogramme.html, Eintrag in build-seo.py (ohne
+        # noindex, damit sie in die Sitemap kommen) und diese Liste. Wer eines
+        # wieder verstecken will, nimmt es an allen dreien heraus.
+        # Die zugehoerigen Clips bleiben davon unberuehrt: Sie tragen
+        # "probe": true und stehen weiterhin weder in clips.json noch auf
+        # einer Lektionsseite.
         if os.path.exists(os.path.join(root, url)):
             seiten.append({'nr': nr, 'titel': titel, 'url': url, 'mode': mode})
     return seiten

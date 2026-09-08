@@ -307,9 +307,17 @@ Eine Übungsprüfung ist oft **nicht** für die ganze Welt gedacht. Zwei Wege:
 
 ### a) Öffentlich, wie jedes Leitprogramm
 
-`leitprogramme.html` (Karte), `scripts/build-seo.py` (`SEITEN`),
+`leitprogramme.html` (Karte im Abschnitt **Nach Prüfungsbogen**),
+`scripts/build-seo.py` (`SEITEN`, ohne `noindex`),
 `scripts/build-suchindex.py` (Liste der Nachschlagewerke) — siehe
 `HOWTO-leitprogramme.md` Punkt 9.
+
+**Beide bestehenden Übungsprüfungen stehen seit dem 08.09.2026 auf diesem Weg**
+(`uebungspruefung-1`, `trigo2`). Beim Umstellen von b) auf a) ist eine vierte Stelle zu
+prüfen, die nicht generiert ist: ein **von Hand gesetztes**
+`<meta name="robots" content="noindex, nofollow">` im Kopf der Seite. `trigo2.html` trug
+eines; es überlebt jeden `build-seo.py`-Lauf, weil es ausserhalb des Kopfblocks steht,
+und hätte die Seite trotz Sitemap-Eintrag aus dem Index gehalten.
 
 ### b) Unverlinkt, nur über den Direktlink
 

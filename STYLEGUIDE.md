@@ -1161,7 +1161,7 @@ Gliederung:
 | | gegliedert nach | Beispiele (Stand 07.09.2026) | Anleitung |
 |---|---|---|---|
 | **Thema** | dem Stoff: Vorwissenstest, Kapitel, Gesamttest | `potenzen`, `quadratische-gleichungen`, `gleichungssysteme` | `HOWTO-leitprogramme.md` |
-| **Übungsprüfung** | dem Prüfungsbogen: je Teilaufgabe ein Clip, Musterlösung, Punktezeile | `uebungspruefung-1`, `trigo2` (beide unverlinkt) | `HOWTO-uebungspruefung.md` |
+| **Übungsprüfung** | dem Prüfungsbogen: je Teilaufgabe ein Clip, Musterlösung, Punktezeile | `uebungspruefung-1`, `trigo2` | `HOWTO-uebungspruefung.md` |
 
 **Umfang eines Themen-Leitprogramms:** rund **6 bis 11 Clips** und **8 bis 12 Minuten**
 Clipzeit, aufgeteilt auf vier bis fünf Kapitel mit je einem Selbsttest, dazu ein

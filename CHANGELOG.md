@@ -4,6 +4,58 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 8. September 2026 · Alle fünf Leitprogramme sichtbar
+
+`leitprogramme.html` zeigte drei von fünf Programmen. Die beiden nach Prüfungsbogen —
+`uebungspruefung-1` und `trigo2` — waren bewusst unverlinkt und damit nur über den
+Direktlink erreichbar. Sie sind jetzt öffentlich, und die Seite ist nach den zwei Arten
+gegliedert.
+
+### Geändert
+
+**`leitprogramme.html`** — zwei Abschnitte statt einer Liste:
+
+- **Nach Thema** (3) — Vorwissenstest, vier Kapitel mit Selbsttest, Gesamttest:
+  *Potenzen* (6 Clips, 8:11 min), *Quadratische Gleichungen* (11 Clips, 12:16 min),
+  *Gleichungssysteme* (9 Clips, 9:34 min).
+- **Nach Prüfungsbogen** (2) — ganzer Bogen, danach je Teilaufgabe Musterlösung, Clip
+  und Punktezeile: *Übungsprüfung 1* (26 Teilaufgaben, 23 P, 26 Clips, 20:43 min),
+  *Übungsprüfung Trigonometrie* (9 Teilaufgaben, 18 P, 9 Clips, 7:21 min).
+
+Jeder Abschnitt hat einen Absatz, der sagt, wie diese Art funktioniert — die beiden
+Arten unterscheiden sich im Ablauf so stark, dass eine gemeinsame Liste sie verwischt
+hätte. Die Kärtchen tragen neu die Clipzahl und die Laufzeit.
+
+Dabei zwei Zählfehler korrigiert: *Quadratische Gleichungen* und *Gleichungssysteme*
+waren mit «5 Kapitel» ausgeschrieben. Alle drei Themenprogramme haben dieselbe Struktur
+— `k0` als Vortest, `k1`–`k4` als Kapitel, dazu der Gesamttest —, also **4 Kapitel**,
+wie *Potenzen* es schon richtig auswies.
+
+**`scripts/build-seo.py`** — `noindex=True` bei `uebungspruefung-1` entfernt, Eintrag
+für `trigo2.html` ergänzt. Letzterer fehlte ganz: Die Seite hatte bis jetzt **keinen
+SEO-Kopfblock**, also weder Beschreibung noch canonical noch Open-Graph-Daten.
+
+**`scripts/build-suchindex.py`** — beide aufgenommen. Der Suchindex wächst von 644 auf
+675 Abschnitte.
+
+**`leitprogramme/trigo2.html`** — ein **von Hand gesetztes**
+`<meta name="robots" content="noindex, nofollow">` entfernt. Es stand ausserhalb des
+generierten Kopfblocks und hätte jeden `build-seo.py`-Lauf überlebt: Die Seite wäre in
+der Sitemap gestanden und trotzdem nicht indexiert worden.
+
+**`CLAUDE.md`, `STYLEGUIDE.md`, `HOWTO-uebungspruefung.md`** — nachgezogen, samt der
+Regel, dass ein Leitprogramm an **drei** Stellen hängt (Kärtchen, `build-seo.py`,
+`build-suchindex.py`) und beim Sichtbarmachen einer vierten, nicht generierten: dem
+robots-Meta im Seitenkopf.
+
+### Unverändert
+
+Die 35 Clips der beiden Übungsprüfungen tragen weiterhin `"probe": true`. Sie bleiben
+aus `clips.json`, aus der Bibliothek und von allen Lektionsseiten heraus — das Feld hält
+die *Clips* aus der Bibliothek, nicht die *Seite* aus der Site.
+
+---
+
 ## [Unveröffentlicht] — 8. September 2026 · Elf Clips zum Taschenrechner
 
 Der TI-30X Pro MathPrint war mit **11 Clips** vertreten — Modus, EE/ENG, Brüche,
