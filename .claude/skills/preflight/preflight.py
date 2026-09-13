@@ -100,6 +100,23 @@ def check_decimal_comma_in_math(text, fname, rep):
         rep.err(fname, "Dezimalkomma in Math: " + "; ".join(hits[:5]))
 
 
+def check_html_in_math(text, fname, rep):
+    r"""HTML-Element innerhalb eines LaTeX-Ausdrucks.
+
+    MathJax bricht daran ab und zeigt die Formel als Rohtext — sichtbar oft
+    erst, wenn ein Akkordeon geöffnet wird. Typischer Fall: eine Lücke
+    <span class="mc-luecke"> im Index einer Formel.
+    Das Kleiner-Zeichen in \(a < b\) ist erlaubt: gesucht wird ein echtes Tag.
+    """
+    body = _strip_scripts(text)
+    spans = re.findall(r"\\\((.*?)\\\)", body, re.DOTALL) + \
+            re.findall(r"\\\[(.*?)\\\]", body, re.DOTALL)
+    tag = re.compile(r"</?[a-zA-Z][a-zA-Z0-9]*[^<>]*>")
+    hits = [s.strip()[:70] for s in spans if tag.search(s)]
+    if hits:
+        rep.err(fname, "HTML im LaTeX-Ausdruck (MathJax rendert nicht): " + "; ".join(hits[:3]))
+
+
 def check_skeleton(text, fname, rep):
     pw = len(re.findall(r"page-wrap", text))
     mc = len(re.findall(r'main class="content"', text))
@@ -168,6 +185,7 @@ def run_light(path, rep):
     check_duplicate_ids(text, fname, rep)
     check_no_eszett(text, fname, rep)
     check_decimal_comma_in_math(text, fname, rep)
+    check_html_in_math(text, fname, rep)
     check_keine_fremdhosts(text, fname, rep)
 
     # Nicht jede Seite traegt das Themenseiten-Skelett. Clips sind eigenstaendige

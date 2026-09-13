@@ -137,7 +137,7 @@ python3 .claude/skills/preflight/preflight.py grundlagen/<datei>.html
 
 Erwartete Ausgabe: `ALLE CHECKS BESTANDEN`. Jede `[FEHLER]`-Meldung wird vor dem Commit
 behoben (`[WARN]` ist kein Blocker). Zweistufig: (1) schnelle Eigen-Checks — div/details-
-Bilanz, doppelte IDs, kein ß, Dezimalkomma in Body-Math, Skelett, Phantom-Klassen,
+Bilanz, doppelte IDs, kein ß, Dezimalkomma in Body-Math, HTML im LaTeX, Skelett, Phantom-Klassen,
 mathlib-Einbindung, Ressourcen-Marker; (2) Aufruf der vorhandenen Repo-Skripte
 `verify_mathjax.js` (echte Render-Prüfung), `verify_js_runtime.js` (JS-Laufzeit) und
 `check_identifier_collisions.py`. Stufe 2 braucht einmalig `npm install mathjax-full jsdom`
@@ -151,7 +151,10 @@ im Repo-Root; fehlen die Module, werden diese Checks als `[WARN]` übersprungen.
   (Stützpunkte, Schnittpunkte, Label-Positionen), bevor der Zeichencode geändert wird.
 - `node --check` auf jedem Script-Block (der Pre-Flight macht das mit).
 - Render-Check bei Graph-Änderungen, wenn ein Browser verfügbar ist: Playwright headless
-  bei 1280 px **und** 360 px, Screenshots der Canvases sichten.
+  bei 1280 px **und** 360 px, Screenshots der Canvases sichten. `npm run render-check`
+  (oder `node .claude/tools/render-check.mjs <seiten>`) meldet seitliches Scrollen und
+  Formeln/Tabellen, die ein `overflow:hidden` abschneidet. Ob eine *Live-Anzeige* aus
+  ihrem eigenen Kasten läuft, sieht er nicht — dafür bleibt `check-breite.mjs`.
 - **Clips: Layout vor dem Commit prüfen** — `node .claude/tools/pruef-clip.mjs
   clips/<name>.html <sekunden…>` meldet überlappende Zeilen und Überlauf und legt je
   Zeitpunkt ein Bild ab. **Die Bilder trotzdem ansehen**: Der Prüfer sieht Überlappung,
@@ -185,6 +188,16 @@ im Repo-Root; fehlen die Module, werden diese Checks als `[WARN]` übersprungen.
   wäre umgangen. Dazu kommt: die Werkzeugskripte hier leiten ihr Wurzelverzeichnis aus
   dem eigenen Dateipfad ab und schreiben rekursiv — aus dem falschen Ordner aufgerufen
   patchen sie das falsche Repo, in `acceptEdits` ohne Rückfrage.
+- **Auch `--root PFAD` ist Schreiben.** `build-suchindex.py` nimmt den Schalter und
+  schreibt damit ins andere Repo. Erlaubt ist er nur zusammen mit `--dry-run`
+  beziehungsweise `--check`.
+- **`scripts/abgleich.py` liest nur** und ist darum ausdrücklich erlaubt. Sein `[WARN]`
+  im Pre-Flight ist der Anlass für einen Eintrag in der Warteschlange `OFFEN` (Liste in
+  derselben Datei), nicht für einen Quer-Edit. Die Datei ist in beiden Repos gleich und
+  steht in ihrer eigenen KERN-Liste mit Grundlinie `1.000`: Wer einen Eintrag hinzufügt
+  oder streicht, macht sie ungleich, und das Schwesterrepo sieht es beim nächsten
+  Pre-Flight. `--diff scripts/abgleich.py` zeigt, was drüben neu ist; übernommen wird
+  die ganze Datei, erst nachdem die eigenen Einträge darin abgearbeitet sind.
 - Änderungen, die auch ins Schwesterprojekt gehören (gemeinsame CSS-Muster, didaktische
   Module, `mathlib`/`physiklib`-Helfer, Nav-Logik), werden **nicht** quer-editiert,
   sondern als Eintrag in **`TODO-schwesterprojekt.md`** vermerkt (was, wo, warum) und
