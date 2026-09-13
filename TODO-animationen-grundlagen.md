@@ -1,7 +1,7 @@
 # TODO — Animations-Audit Grundlagenfach
 
 **Stand: 1. August 2026.** Vollprüfung aller interaktiven Canvas-Animationen im
-Grundlagenfach (23 Seiten). Ersetzt das Audit vom 25.07.2026 — dessen 90 Punkte sind am 01.08. gegengeprüft und weiterhin offen; sie stehen in `TODO-animationen-grundlagen-2026-07-25.md`. Die sieben P1-Punkte AN-01 bis AN-07 sind seit dem 13.09.2026 erledigt.
+Grundlagenfach (23 Seiten). Ersetzt das Audit vom 25.07.2026 — dessen 90 Punkte sind am 01.08. gegengeprüft und weiterhin offen; sie stehen in `TODO-animationen-grundlagen-2026-07-25.md`. Die sieben P1-Punkte AN-01 bis AN-07 und die vierzehn P2-Punkte AN-08 bis AN-21 sind seit dem 13.09.2026 erledigt.
 
 ## Wie geprüft wurde
 

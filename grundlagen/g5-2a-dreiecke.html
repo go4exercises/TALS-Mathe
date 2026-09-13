@@ -925,7 +925,7 @@ MathJax = {
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Wechsle zwischen den beiden Figuren und lies jeweils die drei Seiten ab. Kürze die Verhältnisse: Welche Wurzeln bleiben stehen, und bei welchen Winkeln treten sie auf?</div>
+            <div class="ah-text">Wechsle zwischen den beiden Figuren und lies jeweils die drei Seiten ab: Die gegebene Seite ist grün, die gesuchten sind orange gestrichelt. Wähle einmal \(1\) und einmal \(g\) als Wert. Kürze die Verhältnisse: Welche Wurzeln bleiben stehen, und bei welchen Winkeln treten sie auf?</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
@@ -3513,152 +3513,6 @@ anwWertTabs.querySelectorAll('.chip').forEach(btn => {
 
 function drawAnw() {
   const { ctx, W, H } = initCv('cv-anw');
-  const cx = W / 2, cy = H / 2 + 10;
-
-  // ----------------------------------------------------------
-  // Geometrie der Vollform und Halbierung
-  //   Gleichseitig: Vollform = gleichseitiges Δ mit Seite s_voll
-  //                 Halbierung: Lot von Spitze auf Grundseite,
-  //                 ergibt rechtwinkliges Δ mit
-  //                   a (kurze Kathete) = s_voll / 2
-  //                   b (lange Kathete) = s_voll · √3/2
-  //                   c (Hypotenuse)    = s_voll
-  //   Quadrat:      Vollform = Quadrat mit Seite s_voll
-  //                 Halbierung: Diagonale teilt das Quadrat,
-  //                   a = b = s_voll
-  //                   c (Hypotenuse) = s_voll · √2
-  // ----------------------------------------------------------
-
-  // Anzeige-Skala: das Vollformbild soll ca. 240 px breit/hoch sein
-  let s_voll_px;   // Pixel-Länge der Vollformseite (Volldreieck-Seitenlänge / Quadrat-Seitenlänge)
-  if (anwTyp === 'gleichseitig') s_voll_px = 240;
-  else                            s_voll_px = 200;
-
-  // ----------------------------------------------------------
-  // Zeichne die Volldarstellung (gestrichelter Schenkel/Quadrat-Linie)
-  // mit hervorgehobener Halbierung.
-  // ----------------------------------------------------------
-  if (anwTyp === 'gleichseitig') {
-    // Gleichseitiges Dreieck: Eckpunkte unten links (UL), unten rechts (UR), Spitze oben
-    const s = s_voll_px;
-    const h = s * Math.sqrt(3) / 2;
-    const UL = [cx - s/2, cy + h/2];
-    const UR = [cx + s/2, cy + h/2];
-    const SP = [cx,       cy - h/2];     // Spitze oben
-    const MM = [cx,       cy + h/2];     // Lotfusspunkt (Mitte UL-UR)
-
-    // Gestricheltes Volldreieck (linke Hälfte) — die rechte Hälfte wird unten durchgezogen gezeichnet
-    dashedSeg(ctx, UL, SP, C.tinte2, 1.5);
-    dashedSeg(ctx, UL, MM, C.tinte2, 1.5);
-    // Mittellinie (Höhe von Spitze) gestrichelt
-    dashedSeg(ctx, SP, MM, C.tinte2, 1.5);
-
-    // Rechte Hälfte: das hervorgehobene Halbdreieck
-    fillPoly(ctx, [MM, UR, SP], BLAU_FILL, C.blau, 2);
-
-    // Rechtwinkel-Marker bei MM
-    const rwSize = 12;
-    ctx.save();
-    ctx.strokeStyle = C.tinte; ctx.lineWidth = 1.3;
-    ctx.beginPath();
-    ctx.moveTo(MM[0] + rwSize, MM[1]);
-    ctx.lineTo(MM[0] + rwSize, MM[1] - rwSize);
-    ctx.lineTo(MM[0],          MM[1] - rwSize);
-    ctx.stroke();
-    ctx.restore();
-
-    // Winkel-Bögen und -Labels
-    // Im Halbdreieck: A = UR (unten rechts, Winkel α = 60°),
-    //                  B = SP (oben, Winkel β = 30°),
-    //                  C = MM (Lotfuss, γ = 90°)
-    const A_h = UR, B_h = SP, C_h = MM;
-    drawAngleSector(ctx, A_h, B_h, C_h, 28, 'rgba(30,58,138,0.18)', C.blau);
-    drawAngleSector(ctx, B_h, C_h, A_h, 28, 'rgba(30,58,138,0.18)', C.blau);
-
-    // Labels für die Winkel
-    // 60° bei A_h: irgendwo links-oberhalb von A_h
-    txt(ctx, A_h[0] - 30, A_h[1] - 12, '60°', C.blau, 14, 'center', 'middle', '700');
-    // 30° bei B_h: rechts-unterhalb von B_h
-    txt(ctx, B_h[0] + 18, B_h[1] + 28, '30°', C.blau, 14, 'center', 'middle', '700');
-    // 90° bei C_h: in der Innenecke (rechts oberhalb von MM)
-    txt(ctx, C_h[0] + 18, C_h[1] - 18, '90°', C.tinte, 13, 'center', 'middle', '600');
-
-    // Eckpunkte beschriften
-    txt(ctx, A_h[0] + 14, A_h[1] + 14, 'A', C.tinte, 14, 'center', 'middle', '700');
-    txt(ctx, B_h[0],      B_h[1] - 16, 'B', C.tinte, 14, 'center', 'middle', '700');
-    txt(ctx, C_h[0] - 14, C_h[1] + 14, 'C', C.tinte, 14, 'center', 'middle', '700');
-
-    // Vollform-Spitze links (Spiegelung von A_h) als Punkt sichtbar
-    txt(ctx, UL[0] - 14, UL[1] + 14, "A'", C.tinte2, 14, 'center', 'middle', '600');
-
-    // Seitenbeschriftungen (Halbdreieck): a = C-A (unten), b = C-B (vertikal), c = A-B (Schenkel)
-    txt(ctx, (C_h[0] + A_h[0]) / 2,            C_h[1] + 16,                'a', C.tinte, 14, 'center', 'middle', '700');
-    txt(ctx, C_h[0] + 12,                       (C_h[1] + B_h[1]) / 2,      'b', C.tinte, 14, 'left',   'middle', '700');
-    txt(ctx, (A_h[0] + B_h[0]) / 2 + 18,        (A_h[1] + B_h[1]) / 2,      'c', C.tinte, 14, 'left',   'middle', '700');
-
-    // Bildunterzeile: Erklärung der Halbierung
-    txt(ctx, cx, UR[1] + 38,
-        'Das gleichseitige Dreieck wird durch die Höhe in zwei deckungsgleiche 30°-60°-90°-Dreiecke geteilt.',
-        C.tinte2, 13, 'center', 'middle', '500');
-  }
-  else {
-    // Halbes Quadrat: Quadrat mit Diagonale, untere rechtwinklige Hälfte hervorgehoben
-    const s = s_voll_px;
-    const UL = [cx - s/2, cy - s/2];
-    const UR = [cx + s/2, cy - s/2];
-    const DR = [cx + s/2, cy + s/2];
-    const DL = [cx - s/2, cy + s/2];
-
-    // Obere Hälfte (Dreieck UL, UR, DL) gestrichelt
-    dashedSeg(ctx, UL, UR, C.tinte2, 1.5);
-    dashedSeg(ctx, UL, DL, C.tinte2, 1.5);
-    // Diagonale (durchgezogen — sie ist sowohl Quadrat-Diagonale als auch Hypotenuse des Halbdreiecks)
-    // Wird gleich nochmal durch das fillPoly gezeichnet — Reihenfolge egal
-
-    // Untere Hälfte (Dreieck UR, DR, DL) hervorgehoben
-    fillPoly(ctx, [UR, DR, DL], BLAU_FILL, C.blau, 2);
-
-    // Rechtwinkel-Marker bei DR
-    const rwSize = 12;
-    ctx.save();
-    ctx.strokeStyle = C.tinte; ctx.lineWidth = 1.3;
-    ctx.beginPath();
-    ctx.moveTo(DR[0] - rwSize, DR[1]);
-    ctx.lineTo(DR[0] - rwSize, DR[1] - rwSize);
-    ctx.lineTo(DR[0],          DR[1] - rwSize);
-    ctx.stroke();
-    ctx.restore();
-
-    // Winkel-Bögen und -Labels
-    // Halbdreieck: A = DL (Winkel α = 45°), B = UR (Winkel β = 45°), C = DR (γ = 90°)
-    const A_h = DL, B_h = UR, C_h = DR;
-    drawAngleSector(ctx, A_h, B_h, C_h, 28, 'rgba(30,58,138,0.18)', C.blau);
-    drawAngleSector(ctx, B_h, C_h, A_h, 28, 'rgba(30,58,138,0.18)', C.blau);
-
-    txt(ctx, A_h[0] + 36, A_h[1] - 14, '45°', C.blau, 14, 'center', 'middle', '700');
-    txt(ctx, B_h[0] - 14, B_h[1] + 36, '45°', C.blau, 14, 'center', 'middle', '700');
-    txt(ctx, C_h[0] - 18, C_h[1] - 18, '90°', C.tinte, 13, 'center', 'middle', '600');
-
-    // Eckpunkte beschriften
-    txt(ctx, A_h[0] - 14, A_h[1] + 14, 'A', C.tinte, 14, 'center', 'middle', '700');
-    txt(ctx, B_h[0] + 14, B_h[1] - 14, 'B', C.tinte, 14, 'center', 'middle', '700');
-    txt(ctx, C_h[0] + 14, C_h[1] + 14, 'C', C.tinte, 14, 'center', 'middle', '700');
-
-    // Vierter (gespiegelter) Eckpunkt
-    txt(ctx, UL[0] - 14, UL[1] - 14, "C'", C.tinte2, 14, 'center', 'middle', '600');
-
-    // Seitenbeschriftungen (Halbdreieck): a = C-A (unten), b = C-B (rechts), c = A-B (Diagonale)
-    txt(ctx, (C_h[0] + A_h[0]) / 2,            C_h[1] + 16,                'a', C.tinte, 14, 'center', 'middle', '700');
-    txt(ctx, C_h[0] + 14,                       (C_h[1] + B_h[1]) / 2,      'b', C.tinte, 14, 'left',   'middle', '700');
-    // c auf der Hypotenuse — Mittelpunkt versetzt nach rechts-unten (in die hervorgehobene Hälfte)
-    txt(ctx, (A_h[0] + B_h[0]) / 2 + 12,        (A_h[1] + B_h[1]) / 2 + 12, 'c', C.tinte, 14, 'left',   'middle', '700');
-
-    // Bildunterzeile
-    txt(ctx, cx, DR[1] + 38,
-        'Das Quadrat wird durch die Diagonale in zwei deckungsgleiche 45°-45°-90°-Dreiecke geteilt.',
-        C.tinte2, 13, 'center', 'middle', '500');
-  }
-
   // ----------------------------------------------------------
   // Werte-Legende rechts:
   //   zeigt für a, b, c die symbolischen Werte (in Variable g oder Zahlen).
@@ -3697,6 +3551,203 @@ function drawAnw() {
       bTxt = (w === '1') ? '1/√2 ≈ 0.707'       : 'g / √2 = g·√2 / 2';
       cTxt = w;
     }
+  }
+
+  // Seitenbeschriftung im Bild: gegebene Seite grün und dick, gesuchte Seiten
+  // orange gestrichelt (Farben wie in der Werte-Legende), Wert in exakter Form
+  // direkt an der Seite — Mittelpunkt plus Versatz nach aussen.
+  const kurz = (t) => t.split(' ≈ ')[0].split(' = ')[0].replace(/ /g, '');
+  const werteTxt = { a: aTxt, b: bTxt, c: cTxt };
+  function anwSeiteZeichnen(s, P, Q) {
+    if (anwSeite === s) seg(ctx, P, Q, C.gruen, 4);
+    else                dashedSeg(ctx, P, Q, C.orange, 2.5, [7, 5]);
+  }
+  function anwSeiteLabel(s, P, Q, innen, t = 0.5) {
+    const lab = s + ' = ' + kurz(werteTxt[s]);
+    ctx.save();
+    ctx.font = '700 14px "Source Sans 3", sans-serif';
+    const w = ctx.measureText(lab).width;
+    ctx.restore();
+    const h = 15;
+    const mx = P[0] + t * (Q[0] - P[0]), my = P[1] + t * (Q[1] - P[1]);
+    const L = Math.hypot(Q[0] - P[0], Q[1] - P[1]);
+    let nx = (Q[1] - P[1]) / L, ny = -(Q[0] - P[0]) / L;
+    if ((innen[0] - mx) * nx + (innen[1] - my) * ny > 0) { nx = -nx; ny = -ny; }
+    const d = 8 + Math.abs(nx) * w / 2 + Math.abs(ny) * h / 2;
+    txt(ctx, mx + nx * d, my + ny * d, lab, farbeOf(s), 14, 'center', 'middle', '700');
+  }
+  // Bildunterzeile: bei schmaler Zeichenfläche zweizeilig
+  const schmal = W < 600;
+  function anwUnterzeile(y, z1, z2) {
+    if (schmal) {
+      txt(ctx, W / 2, y - 4,  z1, C.tinte2, 12, 'center', 'middle', '500');
+      txt(ctx, W / 2, y + 12, z2, C.tinte2, 12, 'center', 'middle', '500');
+    } else {
+      txt(ctx, W / 2, y, z1 + ' ' + z2, C.tinte2, 13, 'center', 'middle', '500');
+    }
+  }
+
+  // ----------------------------------------------------------
+  // Geometrie der Vollform und Halbierung
+  //   Gleichseitig: Vollform = gleichseitiges Δ mit Seite s_voll
+  //                 Halbierung: Lot von Spitze auf Grundseite,
+  //                 ergibt rechtwinkliges Δ mit
+  //                   a (kurze Kathete) = s_voll / 2
+  //                   b (lange Kathete) = s_voll · √3/2
+  //                   c (Hypotenuse)    = s_voll
+  //   Quadrat:      Vollform = Quadrat mit Seite s_voll
+  //                 Halbierung: Diagonale teilt das Quadrat,
+  //                   a = b = s_voll
+  //                   c (Hypotenuse) = s_voll · √2
+  // ----------------------------------------------------------
+
+  // Anzeige-Skala: das Vollformbild soll ca. 240 px breit/hoch sein
+  let s_voll_px;   // Pixel-Länge der Vollformseite (Volldreieck-Seitenlänge / Quadrat-Seitenlänge)
+  if (anwTyp === 'gleichseitig') s_voll_px = 240;
+  else                            s_voll_px = 200;
+  // Auf schmalen Zeichenflächen verkleinern, damit Figur, Seitenwerte und
+  // Bildunterzeile im Bild bleiben (Rand oben für die Ecke, unten für die Zeile).
+  const randO = (anwTyp === 'gleichseitig') ? 30 : 28;
+  const randU = schmal ? 58 : 45;
+  const figFaktor = (anwTyp === 'gleichseitig') ? Math.sqrt(3) / 2 : 1;
+  s_voll_px *= Math.min(1, (W - 120) / s_voll_px, (H - randO - randU) / (s_voll_px * figFaktor));
+  const figH = s_voll_px * figFaktor;
+  const cx = W / 2;
+  const cy = Math.min(Math.max(H / 2 + 10, randO + figH / 2), H - randU - figH / 2);
+
+  // ----------------------------------------------------------
+  // Zeichne die Volldarstellung (gestrichelter Schenkel/Quadrat-Linie)
+  // mit hervorgehobener Halbierung.
+  // ----------------------------------------------------------
+  if (anwTyp === 'gleichseitig') {
+    // Gleichseitiges Dreieck: Eckpunkte unten links (UL), unten rechts (UR), Spitze oben
+    const s = s_voll_px;
+    const h = s * Math.sqrt(3) / 2;
+    const UL = [cx - s/2, cy + h/2];
+    const UR = [cx + s/2, cy + h/2];
+    const SP = [cx,       cy - h/2];     // Spitze oben
+    const MM = [cx,       cy + h/2];     // Lotfusspunkt (Mitte UL-UR)
+
+    // Gestricheltes Volldreieck (linke Hälfte) — die rechte Hälfte wird unten durchgezogen gezeichnet
+    dashedSeg(ctx, UL, SP, C.tinte2, 1.5);
+    dashedSeg(ctx, UL, MM, C.tinte2, 1.5);
+    // Die Höhe (Mittellinie) ist zugleich Seite b des Halbdreiecks und wird unten mit ihm gezeichnet.
+
+    // Rechte Hälfte: das hervorgehobene Halbdreieck — Seiten einzeln nach gegeben/gesucht
+    fillPoly(ctx, [MM, UR, SP], BLAU_FILL, null);
+    anwSeiteZeichnen('a', MM, UR);
+    anwSeiteZeichnen('b', MM, SP);
+    anwSeiteZeichnen('c', UR, SP);
+
+    // Rechtwinkel-Marker bei MM
+    const rwSize = 12;
+    ctx.save();
+    ctx.strokeStyle = C.tinte; ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.moveTo(MM[0] + rwSize, MM[1]);
+    ctx.lineTo(MM[0] + rwSize, MM[1] - rwSize);
+    ctx.lineTo(MM[0],          MM[1] - rwSize);
+    ctx.stroke();
+    ctx.restore();
+
+    // Winkel-Bögen und -Labels
+    // Im Halbdreieck: A = UR (unten rechts, Winkel α = 60°),
+    //                  B = SP (oben, Winkel β = 30°),
+    //                  C = MM (Lotfuss, γ = 90°)
+    const A_h = UR, B_h = SP, C_h = MM;
+    drawAngleSector(ctx, A_h, B_h, C_h, 28, 'rgba(30,58,138,0.18)', C.blau);
+    drawAngleSector(ctx, B_h, C_h, A_h, 28, 'rgba(30,58,138,0.18)', C.blau);
+
+    // Labels für die Winkel
+    // 60° bei A_h: irgendwo links-oberhalb von A_h
+    txt(ctx, A_h[0] - 30, A_h[1] - 12, '60°', C.blau, 14, 'center', 'middle', '700');
+    // 30° bei B_h: rechts-unterhalb von B_h
+    txt(ctx, B_h[0] + 18, B_h[1] + 28, '30°', C.blau, 14, 'center', 'middle', '700');
+    // 90° bei C_h: in der Innenecke (rechts oberhalb von MM)
+    txt(ctx, C_h[0] + 18, C_h[1] - 18, '90°', C.tinte, 13, 'center', 'middle', '600');
+
+    // Eckpunkte beschriften
+    txt(ctx, A_h[0] + 14, A_h[1] + 14, 'A', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B_h[0],      B_h[1] - 16, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C_h[0] - 14, C_h[1] + 14, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+    // Vollform-Spitze links (Spiegelung von A_h) als Punkt sichtbar
+    txt(ctx, UL[0] - 14, UL[1] + 14, "A'", C.tinte2, 14, 'center', 'middle', '600');
+
+    // Seitenbeschriftungen (Halbdreieck): a = C-A (unten), b = C-B (vertikal), c = A-B (Schenkel)
+    const innenG = [(A_h[0] + B_h[0] + C_h[0]) / 3, (A_h[1] + B_h[1] + C_h[1]) / 3];
+    anwSeiteLabel('a', C_h, A_h, innenG);
+    anwSeiteLabel('c', A_h, B_h, innenG);
+    // b links der Höhe: so tief ansetzen, dass der Wert zwischen Höhe und
+    // gestrichelter Vollform-Kante Platz findet (höchstens Seitenmitte)
+    ctx.save();
+    ctx.font = '700 14px "Source Sans 3", sans-serif';
+    const wB = ctx.measureText('b = ' + kurz(bTxt)).width;
+    ctx.restore();
+    anwSeiteLabel('b', C_h, B_h, innenG, clamp(1 - (wB + 12) / (s / 2), 0.15, 0.5));
+
+    // Bildunterzeile: Erklärung der Halbierung
+    anwUnterzeile(UR[1] + 38,
+        'Das gleichseitige Dreieck wird durch die Höhe', 'in zwei deckungsgleiche 30°-60°-90°-Dreiecke geteilt.');
+  }
+  else {
+    // Halbes Quadrat: Quadrat mit Diagonale, untere rechtwinklige Hälfte hervorgehoben
+    const s = s_voll_px;
+    const UL = [cx - s/2, cy - s/2];
+    const UR = [cx + s/2, cy - s/2];
+    const DR = [cx + s/2, cy + s/2];
+    const DL = [cx - s/2, cy + s/2];
+
+    // Obere Hälfte (Dreieck UL, UR, DL) gestrichelt
+    dashedSeg(ctx, UL, UR, C.tinte2, 1.5);
+    dashedSeg(ctx, UL, DL, C.tinte2, 1.5);
+    // Diagonale (durchgezogen — sie ist sowohl Quadrat-Diagonale als auch Hypotenuse des Halbdreiecks)
+    // Wird unten mit den übrigen Seiten des Halbdreiecks gezeichnet (anwSeiteZeichnen)
+
+    // Untere Hälfte (Dreieck UR, DR, DL) hervorgehoben — Seiten einzeln nach gegeben/gesucht
+    fillPoly(ctx, [UR, DR, DL], BLAU_FILL, null);
+    anwSeiteZeichnen('a', DR, DL);
+    anwSeiteZeichnen('b', DR, UR);
+    anwSeiteZeichnen('c', DL, UR);
+
+    // Rechtwinkel-Marker bei DR
+    const rwSize = 12;
+    ctx.save();
+    ctx.strokeStyle = C.tinte; ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.moveTo(DR[0] - rwSize, DR[1]);
+    ctx.lineTo(DR[0] - rwSize, DR[1] - rwSize);
+    ctx.lineTo(DR[0],          DR[1] - rwSize);
+    ctx.stroke();
+    ctx.restore();
+
+    // Winkel-Bögen und -Labels
+    // Halbdreieck: A = DL (Winkel α = 45°), B = UR (Winkel β = 45°), C = DR (γ = 90°)
+    const A_h = DL, B_h = UR, C_h = DR;
+    drawAngleSector(ctx, A_h, B_h, C_h, 28, 'rgba(30,58,138,0.18)', C.blau);
+    drawAngleSector(ctx, B_h, C_h, A_h, 28, 'rgba(30,58,138,0.18)', C.blau);
+
+    txt(ctx, A_h[0] + 36, A_h[1] - 14, '45°', C.blau, 14, 'center', 'middle', '700');
+    txt(ctx, B_h[0] - 14, B_h[1] + 36, '45°', C.blau, 14, 'center', 'middle', '700');
+    txt(ctx, C_h[0] - 18, C_h[1] - 18, '90°', C.tinte, 13, 'center', 'middle', '600');
+
+    // Eckpunkte beschriften
+    txt(ctx, A_h[0] - 14, A_h[1] + 14, 'A', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B_h[0] + 14, B_h[1] - 14, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, C_h[0] + 14, C_h[1] + 14, 'C', C.tinte, 14, 'center', 'middle', '700');
+
+    // Vierter (gespiegelter) Eckpunkt
+    txt(ctx, UL[0] - 14, UL[1] - 14, "C'", C.tinte2, 14, 'center', 'middle', '600');
+
+    // Seitenbeschriftungen (Halbdreieck): a = C-A (unten), b = C-B (rechts), c = A-B (Diagonale, nach aussen in die gestrichelte Hälfte)
+    const innenQ = [(A_h[0] + B_h[0] + C_h[0]) / 3, (A_h[1] + B_h[1] + C_h[1]) / 3];
+    anwSeiteLabel('a', C_h, A_h, innenQ);
+    anwSeiteLabel('b', C_h, B_h, innenQ);
+    anwSeiteLabel('c', A_h, B_h, innenQ);
+
+    // Bildunterzeile
+    anwUnterzeile(DR[1] + 38,
+        'Das Quadrat wird durch die Diagonale', 'in zwei deckungsgleiche 45°-45°-90°-Dreiecke geteilt.');
   }
 
   anwLegende.innerHTML = `

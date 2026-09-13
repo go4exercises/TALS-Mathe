@@ -395,6 +395,7 @@ MathJax = {
     <div class="rb-item"><span class="rb-lab">Lampenhöhe \(H\)</span><span class="rb-val">6.0 m</span></div>
     <div class="rb-item"><span class="rb-lab">Schattenlänge \(s\)</span><span class="rb-val" id="sch-s">2.57 m</span></div>
     <div class="rb-item"><span class="rb-lab">Mast → Schattenende</span><span class="rb-val" id="sch-ende">8.57 m</span></div>
+    <div class="rb-item"><span class="rb-lab">Mast → Schattenende : Mast → Person</span><span class="rb-val" id="sch-verh">8.57 m : 6.0 m = <span class="tx-gruen">1.43</span></span></div>
   </div>
   <div class="sb-cap">Verschiebe die Person mit dem Regler. Beobachte: Was bleibt gleich, was verändert sich?</div>
 </div>
@@ -2449,6 +2450,9 @@ window.addEventListener('resize', () => {
     const ende = d + schatten_laenge;  // Distanz Mast → Schattenende
     document.getElementById('sch-s').textContent = schatten_laenge.toFixed(2) + ' m';
     document.getElementById('sch-ende').textContent = ende.toFixed(2) + ' m';
+    // Konstantes Verhältnis Mast→Schattenende : Mast→Person = H/(H−h) (Strahlensatz)
+    document.getElementById('sch-verh').innerHTML = ende.toFixed(2) + ' m : ' + d.toFixed(1)
+      + ' m = <span class="tx-gruen">' + (ende / d).toFixed(2) + '</span>';
 
     const dpr = window.devicePixelRatio || 1;
     const W = canvas.offsetWidth || 720, He = canvas.offsetHeight || 280;

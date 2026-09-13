@@ -67,6 +67,8 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
 
 ## P2 — Didaktisch hoch (Kernaussage kommt nicht an)
 
+> **Stand 13.09.2026: alle vierzehn P2-Punkte erledigt** — Prüfverfahren wie bei P1.
+
 - [x] **AN-08** `g1-1` · Strukturbaum-Widget: Implizite Multiplikation wird nicht geparst —
   «2x+3» oder «3(x+2)» (genau die Schreibweise, die BM-Lernende zuerst tippen) scheitern mit
   kryptischer Meldung («Unerwartetes Token: {"t":"var"…}»). Tokenizer erweitern (Zahl vor
@@ -106,32 +108,39 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
   ergänzen: Punkt wandert auf der roten Geraden, Live-Doppel-Check Personen ✓ / Geld ✓|✗ —
   macht «eine Gleichung = ganze Gerade von Lösungen, beide = ein Punkt» erlebbar.
   **Erledigt 13.09.2026:** Schieber «Anzahl Erwachsene x», Punkt auf der Personen-Geraden, Doppel-Check Personen ✓ / Geld ✓|✗ mit eingesetzten Zahlen.
-- [ ] **AN-15** `g5-1` · Winkelpaare-Widget (`wp-*`): Als «interaktiv» betitelt, aber nur
+- [x] **AN-15** `g5-1` · Winkelpaare-Widget (`wp-*`): Als «interaktiv» betitelt, aber nur
   Reiter sind klickbar — die Kern-Invarianz («α wächst, β schrumpft, Summe bleibt 90°/180°»)
   ist nicht erlebbar. Gemeinsamen α-Slider ergänzen, der alle drei Panels nachführt, mit
   Live-Summenanzeige «α + β = 90° ✓».
-- [ ] **AN-16** `g5-2a` · `cv-anw` (Pythagoras-Anwendung): Chips «Gegebene Seite»/«Wert»
+  **Erledigt 13.09.2026:** Gemeinsamer α-Regler führt alle drei Reiter nach (Bereich je Reiter begrenzt), Skizzen live, Anzeige «α + β = … = 90° ✓» bzw. Gleichheit bei Scheitelwinkeln; β einheitlich blau.
+- [x] **AN-16** `g5-2a` · `cv-anw` (Pythagoras-Anwendung): Chips «Gegebene Seite»/«Wert»
   verändern die Zeichnung nicht — Kopplung Parameter → Bild gebrochen. Gewählte Seite im
   Canvas grün/dick zeichnen, gesuchte gestrichelt, Wert «1» bzw. «g» direkt an die Seite.
-- [ ] **AN-17** `g5-2d` · `sch-canvas` (Schatten-Einstieg): Das per 👁-Hinweis zu beobachtende
+  **Erledigt 13.09.2026:** Gegebene Seite grün und dick, gesuchte orange gestrichelt, Werte («a = 1», «b = g·√3/2») an den Seiten; Figur und Bildzeile bei 360 px skaliert.
+- [x] **AN-17** `g5-2d` · `sch-canvas` (Schatten-Einstieg): Das per 👁-Hinweis zu beobachtende
   konstante Verhältnis (Mast→Schattenende : Mast→Person = 1.43) wird nirgends angezeigt —
   Readout-Zelle ergänzen, farblich hervorgehoben. Optional: zweiter Slider Personenhöhe h.
-- [ ] **AN-18** `g5-3` · `cv-aehnl` (ähnliche Dreiecke → konstante Verhältnisse): Die
+  **Erledigt 13.09.2026:** Readout «Mast → Schattenende : Mast → Person = … = 1.43» live; Quotient = H : (H − h) = 6 : 4.2, grün hervorgehoben.
+- [x] **AN-18** `g5-3` · `cv-aehnl` (ähnliche Dreiecke → konstante Verhältnisse): Die
   Legendenwerte werden alle direkt als sin(α) gesetzt statt aus Längen gemessen — beim
   Schieben von k ändert sich keine einzige Zahl, die Invarianz wirkt behauptet statt gezeigt.
   Pro Dreieck Seitenlängen anzeigen (a = 2.9, c = 5.0 / a' = 4.6, c' = 8.0 …) und die
   Quotienten daraus rechnen; b/c und a/b als Ausblick auf cos/tan vorbereiten.
-- [ ] **AN-19** `g5-3` · `cv-ssw` (SSW 0/1/2 Dreiecke): Der didaktisch wichtigste Berührfall
+  **Erledigt 13.09.2026:** Legende mit gemessenen Seitenlängen aller drei Dreiecke und daraus gerechneten Quotienten a/c, b/c, a/b (2 Dezimalen, damit Nachrechnen aus der Anzeige aufgeht).
+- [x] **AN-19** `g5-3` · `cv-ssw` (SSW 0/1/2 Dreiecke): Der didaktisch wichtigste Berührfall
   a = h = 3.44 ist mit Schrittweite 0.5 unerreichbar. Chips «a = h» und «a = c» ergänzen,
   die den Slider exakt setzen (oder Schrittweite 0.01).
-- [ ] **AN-20** `g5-5` · `cv-rad` (Riesenrad-Einstieg): Die Textzweige «keine Lösung»
+  **Erledigt 13.09.2026:** Knöpfe «a = h» und «a = c» setzen den Grenzwert exakt (h = 6·sin 35° ≈ 3.44); Meldungen für Berührfall und a = c korrigiert.
+- [x] **AN-20** `g5-5` · `cv-rad` (Riesenrad-Einstieg): Die Textzweige «keine Lösung»
   (< 2 m / > 42 m) und «Berührfall» (= 2/42 m) sind mit Slider-Bereich 5–35 m unerreichbar —
   genau die Analoga zu «sin x = 1.5 unlösbar» und «c = ±1». Zielhöhen-Slider auf 0–45 m
   erweitern (Grenzfälle aufs Raster). Zusatz (P3): Play/Pause-Button für die Fahrt.
-- [ ] **AN-21** `g1-4` · **Neue Animation Potenzgesetze** (grösste Lücke des Audits): P1–P7
+  **Erledigt 13.09.2026:** Zielhöhe 0–45 m (2 m und 42 m auf dem Raster); dabei Doppelzählung zusammenfallender Lösungen im Berührfall behoben.
+- [x] **AN-21** `g1-4` · **Neue Animation Potenzgesetze** (grösste Lücke des Audits): P1–P7
   sind Kernkompetenz laut RLP, haben aber null Interaktivität. Faktor-Kachel-Animation für
   P1/P2: Slider n, m; 2ⁿ·2ᵐ als zwei Kachelreihen, die zu n+m Kacheln verschmelzen;
   Divisions-Modus streicht Kacheln; Fehlerfall 2³·5⁴ ≠ 10⁷ («Kacheln passen nicht zusammen»).
+  **Erledigt 13.09.2026:** Neues Widget «Faktor-Kacheln» im Abschnitt Potenzgesetze: Multiplizieren (P1), Dividieren (P2, bis 2⁻ᵏ und 2⁰), Fehlerfall 2³ · 5⁴ ≠ 10⁷ mit Paaren 2 · 5 = 10; MathJax-Paket color fest vorgeladen.
 
 ## P3 — Mittel
 

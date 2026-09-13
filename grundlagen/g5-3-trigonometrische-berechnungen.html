@@ -402,13 +402,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Vergrössere mit dem Streckfaktor \(k\) die Dreiecke und vergleiche die drei Werte \(a/c\), \(a'/c'\) und \(a''/c''\) in der Legende. Ändere dann den Winkel \(\alpha\).</div>
+        <div class="ah-text">Vergrössere mit dem Streckfaktor \(k\) die Dreiecke: Die gemessenen Seitenlängen in der Legende wachsen mit. Vergleiche dann die daraus gerechneten Quotienten \(a/c\), \(a'/c'\) und \(a''/c''\) (ebenso \(b/c\) und \(a/b\)). Ändere zuletzt den Winkel \(\alpha\).</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Bei festem \(\alpha\) sind alle drei Verhältnisse identisch — die Grösse des Dreiecks spielt keine Rolle. Genau dieses konstante Verhältnis \(a/c\) ist \(\sin\alpha\).</div>
+        <div class="ah-text">Bei festem \(\alpha\) ändern sich mit \(k\) alle Längen, die Quotienten aber nicht — die Grösse des Dreiecks spielt keine Rolle. Genau dieses konstante Verhältnis \(a/c\) ist \(\sin\alpha\); die ebenso konstanten \(b/c\) und \(a/b\) werden zu \(\cos\alpha\) und \(\tan\alpha\).</div>
       </div>
     </div>
   </div>
@@ -435,12 +435,31 @@ MathJax = {
         \(\dfrac{a}{c} = \dfrac{a'}{c'} = \dfrac{a''}{c''} = \sin\alpha\)
       </div>
 
-      <div class="legende">
-        <div class="legende-titel">Seitenverhältnisse</div>
-        <div class="legende-zeile"><span class="lab">\(a/c\)</span><span class="val" id="leg-aehn-ac">0.574</span></div>
-        <div class="legende-zeile"><span class="lab">\(a'/c'\)</span><span class="val" id="leg-aehn-acp">0.574</span></div>
-        <div class="legende-zeile"><span class="lab">\(a''/c''\)</span><span class="val" id="leg-aehn-acpp">0.574</span></div>
-        <div class="legende-zeile"><span class="lab">\(\sin\alpha\)</span><span class="val" id="leg-aehn-sin">0.574</span></div>
+      <div class="legende" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:8px">
+        <div class="legende-titel" style="grid-column:1/-1">Seitenlängen (gemessen)</div>
+        <div class="legende-zeile"><span class="lab">\(a\)</span><span class="val" id="leg-aehn-a">3.50</span></div>
+        <div class="legende-zeile"><span class="lab">\(a'\)</span><span class="val" id="leg-aehn-ap" style="color:var(--gruen)">5.60</span></div>
+        <div class="legende-zeile"><span class="lab">\(a''\)</span><span class="val" id="leg-aehn-app" style="color:var(--orange)">8.96</span></div>
+        <div class="legende-zeile"><span class="lab">\(b\)</span><span class="val" id="leg-aehn-b">5.00</span></div>
+        <div class="legende-zeile"><span class="lab">\(b'\)</span><span class="val" id="leg-aehn-bp" style="color:var(--gruen)">8.00</span></div>
+        <div class="legende-zeile"><span class="lab">\(b''\)</span><span class="val" id="leg-aehn-bpp" style="color:var(--orange)">12.80</span></div>
+        <div class="legende-zeile"><span class="lab">\(c\)</span><span class="val" id="leg-aehn-c">6.10</span></div>
+        <div class="legende-zeile"><span class="lab">\(c'\)</span><span class="val" id="leg-aehn-cp" style="color:var(--gruen)">9.77</span></div>
+        <div class="legende-zeile"><span class="lab">\(c''\)</span><span class="val" id="leg-aehn-cpp" style="color:var(--orange)">15.63</span></div>
+      </div>
+
+      <div class="legende" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:8px">
+        <div class="legende-titel" style="grid-column:1/-1">Seitenverhältnisse (aus den Längen)</div>
+        <div class="legende-zeile"><span class="lab">\(a/c\)</span><span class="val" id="leg-aehn-ac">0.57</span></div>
+        <div class="legende-zeile"><span class="lab">\(a'/c'\)</span><span class="val" id="leg-aehn-acp" style="color:var(--gruen)">0.57</span></div>
+        <div class="legende-zeile"><span class="lab">\(a''/c''\)</span><span class="val" id="leg-aehn-acpp" style="color:var(--orange)">0.57</span></div>
+        <div class="legende-zeile"><span class="lab">\(b/c\)</span><span class="val" id="leg-aehn-bc">0.82</span></div>
+        <div class="legende-zeile"><span class="lab">\(b'/c'\)</span><span class="val" id="leg-aehn-bcp" style="color:var(--gruen)">0.82</span></div>
+        <div class="legende-zeile"><span class="lab">\(b''/c''\)</span><span class="val" id="leg-aehn-bcpp" style="color:var(--orange)">0.82</span></div>
+        <div class="legende-zeile"><span class="lab">\(a/b\)</span><span class="val" id="leg-aehn-ab">0.70</span></div>
+        <div class="legende-zeile"><span class="lab">\(a'/b'\)</span><span class="val" id="leg-aehn-abp" style="color:var(--gruen)">0.70</span></div>
+        <div class="legende-zeile"><span class="lab">\(a''/b''\)</span><span class="val" id="leg-aehn-abpp" style="color:var(--orange)">0.70</span></div>
+        <div class="legende-zeile" style="grid-column:1/-1"><span class="lab">zum Vergleich: \(\sin\alpha\)</span><span class="val" id="leg-aehn-sin">0.57</span></div>
       </div>
 
       <div class="erklaerung">
@@ -763,13 +782,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Fest sind der Winkel \(\alpha\) bei \(A\) und die Seite \(c = AB\). Ziehe die Seite \(a\) (Kreisbogen um \(B\)): Wie oft trifft der Bogen den Schenkel des Winkels — bei welchen \(a\) gibt es zwei, ein oder gar kein Dreieck?</div>
+        <div class="ah-text">Fest sind der Winkel \(\alpha\) bei \(A\) und die Seite \(c = AB\). Ziehe die Seite \(a\) (Kreisbogen um \(B\)): Wie oft trifft der Bogen den Schenkel des Winkels — bei welchen \(a\) gibt es zwei, ein oder gar kein Dreieck? Die Grenzfälle \(a = h\) und \(a = c\) liegen nicht auf dem Raster des Reglers — die Knöpfe darunter stellen sie genau ein.</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Entscheidend ist die Höhe \(h = c\sin\alpha\): Für \(a < h\) kein Dreieck, für \(a = h\) genau eines (rechtwinklig), für \(h < a < c\) zwei Dreiecke (der mehrdeutige SSW-Fall), für \(a \ge c\) wieder genau eines.</div>
+        <div class="ah-text">Entscheidend ist die Höhe \(h = c\sin\alpha\): Für \(a < h\) kein Dreieck, für \(a = h\) genau eines (rechtwinklig), für \(h < a < c\) zwei Dreiecke (der mehrdeutige SSW-Fall), für \(a \ge c\) wieder genau eines — bei \(a = c\) fällt der zweite Schnittpunkt genau auf \(A\).</div>
       </div>
     </div>
   </div>
@@ -782,6 +801,13 @@ MathJax = {
           <span class="wert" id="lbl-ssw-a">4.5</span>
         </div>
         <input type="range" id="sld-ssw-a" min="0" max="9" step="0.5" value="4.5">
+      </div>
+      <div>
+        <div class="feld-titel">Grenzfall genau einstellen</div>
+        <div class="chips" id="ssw-chips">
+          <button class="chip" data-ssw="h">a = h</button>
+          <button class="chip" data-ssw="c">a = c</button>
+        </div>
       </div>
       <div class="formel">fest: \(\alpha = 35°\),\; \(c = AB = 6\)</div>
       <div class="legende">
@@ -1753,10 +1779,16 @@ const sldAehnK1 = document.getElementById('sld-aehnK1');
 const lblAehnK1 = document.getElementById('lbl-aehnK1');
 const sldAehnA  = document.getElementById('sld-aehnA');
 const lblAehnA  = document.getElementById('lbl-aehnA');
-const legAehnAC   = document.getElementById('leg-aehn-ac');
-const legAehnACp  = document.getElementById('leg-aehn-acp');
-const legAehnACpp = document.getElementById('leg-aehn-acpp');
 const legAehnSin  = document.getElementById('leg-aehn-sin');
+// Legendenzellen je Dreieck (Index 0/1/2 = ungestrichen/'/''): Längen und Quotienten
+const legAehnL = ['', 'p', 'pp'].map(s => ({
+  a:  document.getElementById('leg-aehn-a' + s),
+  b:  document.getElementById('leg-aehn-b' + s),
+  c:  document.getElementById('leg-aehn-c' + s),
+  ac: document.getElementById('leg-aehn-ac' + s),
+  bc: document.getElementById('leg-aehn-bc' + s),
+  ab: document.getElementById('leg-aehn-ab' + s),
+}));
 
 function drawAehnl() {
   const r = initCv('cv-aehnl'); if (!r) return;
@@ -1836,12 +1868,24 @@ function drawAehnl() {
   dot(ctx, [Ax, Ay], C.tinte, 4);
   txt(ctx, Ax - 12, Ay + 12, 'A', C.tinte, 14);
 
-  // Werte in Legende: alle a/c sollten gleich sin α sein
-  const sinA_val = sinA;
-  legAehnAC.textContent   = sinA_val.toFixed(3);
-  legAehnACp.textContent  = sinA_val.toFixed(3);
-  legAehnACpp.textContent = sinA_val.toFixed(3);
-  legAehnSin.textContent  = sinA_val.toFixed(3);
+  // Legende: Seitenlängen aus der Zeichnung messen (1 Einheit = 15 px, also b = 5)
+  // und die Quotienten aus den UNgerundeten Längen bilden, erst dann runden.
+  // Längen und Quotienten mit 2 Dezimalen: so ergibt auch das Nachrechnen aus den
+  // angezeigten Längen denselben gerundeten Quotienten.
+  const EINHEIT = 15;
+  for (let i = 0; i < 3; i++) {
+    const b = b0 * factors[i];
+    const aLen = b * tanA;
+    const c = Math.hypot(b, aLen);
+    const z = legAehnL[i];
+    z.a.textContent  = (aLen / EINHEIT).toFixed(2);
+    z.b.textContent  = (b / EINHEIT).toFixed(2);
+    z.c.textContent  = (c / EINHEIT).toFixed(2);
+    z.ac.textContent = (aLen / c).toFixed(2);
+    z.bc.textContent = (b / c).toFixed(2);
+    z.ab.textContent = (aLen / b).toFixed(2);
+  }
+  legAehnSin.textContent = sinA.toFixed(2);
 }
 sldAehnK1.addEventListener('input', drawAehnl);
 sldAehnA.addEventListener('input', drawAehnl);
@@ -2449,18 +2493,31 @@ togFlHoehe.addEventListener('change', drawFlaeche);
 /* ============================================================
  *  SSW-FALLUNTERSCHEIDUNG — Kreisbogen um B, Slider a → 0/1/2 Dreiecke
  * ============================================================ */
+const SSW_ALPHA = 35 * Math.PI / 180;
+const SSW_C = 6;
+const SSW_H = SSW_C * Math.sin(SSW_ALPHA);    // 3.4414…, liegt nicht auf dem 0.5-Raster
+const SSW_TOL = 1e-9;
+const sldSSW = document.getElementById('sld-ssw-a');
+const sswChips = document.getElementById('ssw-chips');
 function drawSSW() {
   const r = initCv('cv-ssw'); if (!r) return;
   const { ctx } = r;
-  const a = parseFloat(document.getElementById('sld-ssw-a').value);
-  document.getElementById('lbl-ssw-a').textContent = a.toFixed(1);
-  document.getElementById('leg-ssw-a').textContent = a.toFixed(1);
-  const alpha = 35 * Math.PI / 180;
-  const cSide = 6, s = 22;
+  let a = parseFloat(sldSSW.value);
+  const h = SSW_H;                            // Höhe (Einheiten)
+  const cSide = SSW_C, s = 22;
+  // Grenzfälle mit Toleranz erkennen und auf den exakten Wert setzen
+  const beiH = Math.abs(a - h) < SSW_TOL;
+  const beiC = Math.abs(a - cSide) < SSW_TOL;
+  if (beiH) a = h;
+  if (beiC) a = cSide;
+  // Werte auf dem 0.5-Raster mit 1 Dezimale, Grenzfall a = h mit 2 (wie h in der Legende)
+  const aTxt = Number.isInteger(a * 2) ? a.toFixed(1) : a.toFixed(2);
+  document.getElementById('lbl-ssw-a').textContent = aTxt;
+  document.getElementById('leg-ssw-a').textContent = aTxt;
+  const alpha = SSW_ALPHA;
   const A = [70, 250];
   const dir = [Math.cos(alpha), -Math.sin(alpha)];
   const B = [A[0] + cSide * s, A[1]];
-  const h = cSide * Math.sin(alpha);          // Höhe (Einheiten)
   const tFoot = cSide * Math.cos(alpha);      // Lotfusspunkt-Parameter
   const F = [A[0] + tFoot * s * dir[0], A[1] + tFoot * s * dir[1]];
   // Basislinie + Schenkel (Strahl von A)
@@ -2479,11 +2536,12 @@ function drawSSW() {
   // Schnittpunkte des Bogens mit dem Schenkel
   const disc = a * a - h * h;
   let ts = [];
-  if (disc > 1e-9) {
+  if (beiH) {
+    ts = [tFoot];                             // Berührpunkt = Lotfusspunkt
+  } else if (disc > 0) {
     const rt = Math.sqrt(disc);
+    // bei a = c läge der zweite Schnittpunkt genau auf A (t = 0): kein Dreieck
     ts = [tFoot + rt, tFoot - rt].filter(t => t > 1e-6);
-  } else if (disc > -1e-9 && tFoot > 1e-6) {
-    ts = [tFoot];
   }
   const labels = ['C₁', 'C₂'];
   ts.forEach((t, i) => {
@@ -2504,11 +2562,35 @@ function drawSSW() {
   let msg;
   if (n === 0) msg = 'Kein Dreieck: der Bogen erreicht den Schenkel nicht (a < h).';
   else if (n === 2) msg = 'Zwei Dreiecke: der mehrdeutige SSW-Fall (h < a < c).';
-  else if (a <= h + 1e-6) msg = 'Genau ein (rechtwinkliges) Dreieck: der Bogen berührt den Schenkel (a = h).';
-  else msg = 'Genau ein Dreieck (a ≥ c): der zweite Schnittpunkt läge hinter A.';
+  else if (beiH) msg = 'Genau ein (rechtwinkliges) Dreieck: der Bogen berührt den Schenkel (a = h).';
+  else if (beiC) msg = 'Genau ein (gleichschenkliges) Dreieck (a = c): der zweite Schnittpunkt fällt genau auf A.';
+  else msg = 'Genau ein Dreieck (a > c): der zweite Schnittpunkt läge hinter A.';
   document.getElementById('erkl-ssw').textContent = msg;
 }
-document.getElementById('sld-ssw-a').addEventListener('input', drawSSW);
+sldSSW.addEventListener('input', () => {
+  sswChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+  drawSSW();
+});
+// Ziehen und Pfeiltasten wieder auf dem 0.5-Raster (ein Chip hat step="any" gesetzt)
+['pointerdown', 'keydown'].forEach(ev => sldSSW.addEventListener(ev, () => {
+  if (sldSSW.step === '0.5') return;
+  const vorher = sldSSW.value;
+  sldSSW.step = '0.5';
+  if (sldSSW.value !== vorher) {              // Browser hat auf das Raster gerundet
+    sswChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    drawSSW();
+  }
+}));
+sswChips.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    sswChips.querySelectorAll('.chip').forEach(x => x.classList.remove('aktiv'));
+    chip.classList.add('aktiv');
+    // Exakter Wert: step="any", sonst rundet der Browser auf das 0.5-Raster
+    sldSSW.step = 'any';
+    sldSSW.value = String(chip.dataset.ssw === 'h' ? SSW_H : SSW_C);
+    drawSSW();
+  });
+});
 
 window.addEventListener('load', () => {
   drawAehnl();

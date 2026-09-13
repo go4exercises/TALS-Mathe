@@ -285,7 +285,7 @@ MathJax = {
               <span>Zielhöhe</span>
               <span class="wert" id="lbl-radZ">22 m</span>
             </div>
-            <input type="range" id="sld-radZ" min="5" max="35" step="1" value="22">
+            <input type="range" id="sld-radZ" min="0" max="45" step="1" value="22">
           </div>
 
           <div class="legende">
@@ -1341,7 +1341,8 @@ function drawRad() {
   ctx.fillStyle = '#a83a3a';
   ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'left';
-  ctx.fillText(`${zielhoehe} m`, padL + 4, yZ - 4);
+  // Ganz oben (ab 43 m) unter die Linie, sonst trifft das Label den Funktionsterm.
+  ctx.fillText(`${zielhoehe} m`, padL + 4, yZ - 4 < padT + 16 ? yZ + 14 : yZ - 4);
 
   // Sinus-Kurve (bis aktuelle Zeit)
   ctx.strokeStyle = '#1a4f8a';
@@ -1390,11 +1391,13 @@ function drawRad() {
     for (let k = 0; k < 5; k++) {
       const t1 = (hauptlsg + k * 2 * Math.PI) / omega;
       const t2 = (-hauptlsg + k * 2 * Math.PI) / omega;
-      if (t1 >= 0 && t1 <= t) schnittpunkte.push(t1);
-      if (t2 >= 0 && t2 <= t) schnittpunkte.push(t2);
+      if (t1 >= -1e-9 && t1 <= t + 1e-9) schnittpunkte.push(t1);
+      if (t2 >= -1e-9 && t2 <= t + 1e-9) schnittpunkte.push(t2);
     }
   }
-  schnittpunkte = schnittpunkte.filter(x => x >= 0 && x <= t).sort((a, b) => a - b);
+  // Berührfall (c = ±1): t1 und t2 fallen zusammen — nur einmal zählen.
+  schnittpunkte = schnittpunkte.sort((a, b) => a - b)
+    .filter((x, i, arr) => i === 0 || x - arr[i - 1] > 1e-6);
 
   // Schnittpunkte als gelbe Marker
   ctx.fillStyle = '#d4a017';

@@ -139,8 +139,9 @@
 <link rel="stylesheet" href="../style.css">
 <script>
 MathJax = {
-  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']], packages: {'[+]': ['color']} },
   svg: { fontCache: 'global', scale: 1.0 },
+  loader: { load: ['[tex]/color'] },
   options: { skipHtmlTags: ['script','noscript','style','textarea'] }
 };
 </script>
@@ -192,6 +193,15 @@ MathJax = {
   .wurzel-gesetze th:nth-child(4), .wurzel-gesetze td:nth-child(4) { width: 12%; }
   .wurzel-gesetze th:nth-child(5), .wurzel-gesetze td:nth-child(5) { width: 18%; }
   .wurzel-gesetze th:nth-child(6), .wurzel-gesetze td:nth-child(6) { width: 18%; }
+  /* Schieber-Zeile und Live-Formel (Basisstile wie auf den Nachbarseiten, 1:1 aus g1-2) */
+  .sl-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; background:var(--papier-2); border-radius:9px; padding:10px 14px; border:1px solid var(--linie); }
+  .sl-row label { font-family:var(--mono); font-size:0.78rem; color:var(--tinte-2); white-space:nowrap; min-width:90px; }
+  .sl-row input[type=range] { flex:1; accent-color:var(--blau); height:4px; -webkit-appearance:none; background:var(--linie); border-radius:2px; }
+  .sl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; background:var(--blau); border-radius:50%; cursor:pointer; border:3px solid var(--blau-hell); }
+  .sl-val { font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--blau); min-width:60px; text-align:right; }
+  .formel-live { background:var(--papier-2); border:1.5px solid var(--linie); border-radius:9px; padding:14px 18px; text-align:center; margin:12px 0; }
+  .formel-live .fl-label { font-family:var(--mono); font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--tinte-2); margin-bottom:8px; }
+  .formel-live .fl-eq { font-family:var(--mono); font-size:1.1rem; color:var(--tinte); font-weight:700; line-height:1.4; }
 </style>
 </head>
 <body>
@@ -551,6 +561,343 @@ oder negative Exponenten auftreten) und ganzzahlige Exponenten \(n, m\):</p>
         <td class="formel">\(x^{-2} = \dfrac{1}{x^2}\)</td></tr>
   </tbody>
 </table>
+
+<p>Warum P1 und P2 gelten, sieht man, wenn man jeden Faktor als eigene Kachel legt: Der Exponent zählt nur, wie viele Kacheln in einer Reihe liegen. Schiebe \(n\) und \(m\) und wechsle zwischen den drei Modi.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Faktor-Kacheln: Potenzgesetze P1 und P2</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Zähle beim Multiplizieren die Kacheln der unteren Reihe: Wie hängt ihre Zahl mit \(n\) und \(m\) zusammen? Stelle beim Dividieren unten mehr Kacheln ein als oben — was bleibt nach dem Kürzen stehen? Und im Fehlerfall: Wird aus einer «2» und einer «5» je eine gemeinsame Kachel?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Ein Exponent zählt Faktoren derselben Basis: Beim Multiplizieren werden sie aneinandergereiht, die Exponenten also addiert (\(a^n \cdot a^m = a^{n+m}\)), beim Dividieren paarweise gekürzt, die Exponenten also subtrahiert (\(\tfrac{a^n}{a^m} = a^{n-m}\)); bei verschiedenen Basen gibt es nichts zu zählen, darum ist \(2^3 \cdot 5^4 \neq 10^7\).</div>
+        </div>
+      </div>
+    </div>
+    <p>Jede Kachel ist ein Faktor. Blau gehört zu \(n\), Orange zu \(m\).</p>
+  </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="feld-titel">Modus</div>
+      <div class="chips" id="pg-modi" style="margin-bottom:12px">
+        <button class="chip aktiv" type="button" data-modus="mul" aria-pressed="true">Multiplizieren</button>
+        <button class="chip" type="button" data-modus="div" aria-pressed="false">Dividieren</button>
+        <button class="chip" type="button" data-modus="fehl" aria-pressed="false">Fehlerfall: verschiedene Basen</button>
+        <button class="chip" type="button" id="pg-play">▶ nochmals zeigen</button>
+      </div>
+      <div class="sl-row">
+        <div class="sl-grp akz-blau"><label>Exponent <span class="var">\(n\)</span></label>
+        <input type="range" id="pg-n" min="1" max="6" step="1" value="3">
+        <span class="sl-val" id="pg-nv">3</span></div>
+        <div class="sl-grp akz-orange"><label>Exponent <span class="var">\(m\)</span></label>
+        <input type="range" id="pg-m" min="1" max="6" step="1" value="4">
+        <span class="sl-val" id="pg-mv">4</span></div>
+      </div>
+      <div class="formel-live">
+        <div class="fl-label" id="pg-fl-label">P1 — gleiche Basis multiplizieren</div>
+        <div class="fl-eq" id="pg-eq1">\(2^{\textcolor{#1a4f8a}{3}} \cdot 2^{\textcolor{#b85c00}{4}} = 2^{\textcolor{#1a4f8a}{3}+\textcolor{#b85c00}{4}} = 2^{7}\)</div>
+        <div class="fl-eq" id="pg-eq2" style="font-size:0.92rem;margin-top:4px">\(8 \cdot 16 = 128\)</div>
+        <div class="fl-eq" id="pg-eq3" style="font-size:0.92rem;margin-top:4px;display:none"></div>
+      </div>
+      <canvas id="cv-pg" width="560" height="242"></canvas>
+      <div class="erklaerung" id="pg-erkl" style="margin-top:12px">Jede Kachel ist ein Faktor \(2\). Zusammengeschoben liegen \(\textcolor{#1a4f8a}{3} + \textcolor{#b85c00}{4} = 7\) Faktoren in einer Reihe: Beim Multiplizieren gleicher Basen werden die Exponenten addiert.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+ *  POTENZGESETZE · Faktor-Kacheln (AN-21)
+ *  Jede Kachel = ein Faktor. Modus «mul»: zwei Reihen (n, m) werden zu
+ *  einer Reihe aus n + m Kacheln (P1). «div»: Zähler- und Nennerkacheln
+ *  stehen spaltenweise übereinander, gleiche Paare werden gekürzt (P2;
+ *  n = m → P6, n < m → P7). «fehl»: 2ⁿ · 5ᵐ — nur Paare 2 · 5 ergeben 10.
+ *  Layout aus der Canvasbreite; nachgerechnet in Python (Kachelgrösse,
+ *  Zeilenumbruch bei schmaler Breite, Höhe = Maximum über alle Modi).
+ * ════════════════════════════════════════════════════════════════ */
+(function () {
+  const cv = document.getElementById('cv-pg');
+  if (!cv) return;
+  const sN = document.getElementById('pg-n'), sM = document.getElementById('pg-m');
+  const vN = document.getElementById('pg-nv'), vM = document.getElementById('pg-mv');
+  const flLab = document.getElementById('pg-fl-label');
+  const eq1 = document.getElementById('pg-eq1'), eq2 = document.getElementById('pg-eq2'), eq3 = document.getElementById('pg-eq3');
+  const erkl = document.getElementById('pg-erkl');
+  const knoepfe = document.querySelectorAll('#pg-modi [data-modus]');
+  const BL = '#1a4f8a', OR = '#b85c00', GR = '#1f6b3a', ROT = '#9b1c1c', TI = '#1c1a17', T2 = '#5a5040';
+  const BL_H = '#ddeaf8', OR_H = '#fdefd8', GR_H = '#d8f0e2';
+  const MONO = "'JetBrains Mono', monospace";
+  const cB = z => `\\textcolor{${BL}}{${z}}`, cO = z => `\\textcolor{${OR}}{${z}}`;
+  let modus = 'mul', t = 1, raf = null;
+
+  // Tausendertrennung wie im Seitentext: 5\,000
+  const tsd = v => String(v).replace(/\B(?=(\d{3})+(?!\d))/g, '\\,');
+  const minus = k => String(k).replace('-', '−');
+  const clamp01 = x => Math.max(0, Math.min(1, x));
+  const glatt = x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+
+  function lay(W) {
+    const eng = W < 520;
+    const P = { PAD: 12, G: eng ? 4 : 6, LW: eng ? 60 : 76, FL: eng ? 15 : 17, FS: eng ? 12 : 13,
+                FT: 14, TMAX: eng ? 36 : 46, TMIN: 30, RG: 12, AZ: 40, BG: 8, CZ: 42, FM: 3, EQ: eng ? 20 : 24 };
+    const A = W - 2 * P.PAD - P.LW;
+    P.L = (12 * P.TMIN + 11 * P.G <= A) ? 12 : 6;
+    P.sM = Math.min(P.TMAX, Math.floor((A - (P.L - 1) * P.G) / P.L));
+    P.cg = P.G + 4;
+    P.s6 = Math.min(P.TMAX, Math.floor((A - 5 * P.cg) / 6));
+    const zeilen = P.L === 12 ? 1 : 2;
+    P.hM = P.sM + P.RG + P.sM + P.AZ + zeilen * P.sM + (zeilen - 1) * (P.G + 4);
+    P.hD = P.s6 + 2 * P.BG + P.s6 + P.CZ + 22 + P.s6;
+    P.hF = P.s6 + P.RG + P.s6 + P.FM + 20 + 8 + 40;
+    P.H = Math.max(P.hM, P.hD, P.hF) + 2 * P.PAD;
+    return P;
+  }
+
+  function rr(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+  }
+
+  function kachel(ctx, x, y, s, zif, farbe, hell, W, H) {
+    rr(ctx, x, y, s, s, Math.max(3, s * 0.14));
+    ctx.fillStyle = hell; ctx.fill();
+    ctx.strokeStyle = farbe; ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.fillStyle = farbe;
+    ctx.font = `700 ${Math.max(13, Math.round(s * 0.46))}px ${MONO}`;
+    beschriftung(ctx, zif, x + s / 2, y + s / 2 + 1, { align: 'center', baseline: 'middle', frei: false, W, H });
+  }
+
+  // Text mit hochgestellten Teilen; parts = [[text, hoch?, farbe], …]
+  function reich(ctx, parts, x, yBase, align, fBase, fHoch, gewicht, W, H) {
+    const breite = parts.map(([s, hoch]) => { ctx.font = `${gewicht} ${hoch ? fHoch : fBase}px ${MONO}`; return ctx.measureText(s).width; });
+    let xx = align === 'right' ? x - breite.reduce((a, b) => a + b, 0) : x;
+    parts.forEach(([s, hoch, farbe], i) => {
+      ctx.font = `${gewicht} ${hoch ? fHoch : fBase}px ${MONO}`;
+      ctx.fillStyle = farbe;
+      beschriftung(ctx, s, xx, hoch ? yBase - 0.42 * fBase : yBase, { align: 'left', bg: '#fff', pad: 0, W, H });
+      xx += breite[i];
+    });
+  }
+  const etikett = (ctx, P, parts, xr, yc, W, H) => reich(ctx, parts, xr, yc + 0.35 * P.FL, 'right', P.FL, P.FS, 700, W, H);
+  const zeile = (ctx, P, parts, x, base, W, H) => reich(ctx, parts, x, base, 'left', P.FT, 12, 500, W, H);
+
+  function streich(ctx, x, y, s, anteil) {
+    if (anteil <= 0) return;
+    ctx.strokeStyle = T2; ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x + 5, y + s - 5);
+    ctx.lineTo(x + 5 + (s - 10) * anteil, y + s - 5 - (s - 10) * anteil); ctx.stroke();
+    ctx.lineCap = 'butt';
+  }
+
+  function zeichne() {
+    const n = +sN.value, m = +sM.value;
+    cv.style.width = '';
+    const P = lay(cv.offsetWidth || 560);
+    const { ctx, W, H } = initCanvas('cv-pg', P.H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    const ab = von => t >= 1 ? 1 : clamp01((t - von) / (1 - von));   // Einblenden ab Anteil «von»
+    const spaet = ab(0.7);
+
+    if (modus === 'mul') {
+      const s = P.sM, G = P.G;
+      const x0 = Math.floor((W - (P.LW + P.L * s + (P.L - 1) * G)) / 2), xT = x0 + P.LW;
+      const yA = Math.floor((H - P.hM) / 2), yB = yA + s + P.RG, yC = yB + s + P.AZ;
+      for (let i = 0; i < n; i++) kachel(ctx, xT + i * (s + G), yA, s, '2', BL, BL_H, W, H);
+      for (let j = 0; j < m; j++) kachel(ctx, xT + j * (s + G), yB, s, '2', OR, OR_H, W, H);
+      etikett(ctx, P, [['2', false, TI], [String(n), true, BL]], xT - 8, yA + s / 2, W, H);
+      etikett(ctx, P, [['· 2', false, TI], [String(m), true, OR]], xT - 8, yB + s / 2, W, H);
+      const a = ab(0.55);
+      if (a > 0) {
+        ctx.globalAlpha = a;
+        const xp = x0 + P.LW / 2, ya = yB + s + 8, yb = yC - 8;
+        ctx.strokeStyle = T2; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(xp, ya); ctx.lineTo(xp, yb); ctx.stroke();
+        ctx.fillStyle = T2;
+        ctx.beginPath(); ctx.moveTo(xp, yb + 4); ctx.lineTo(xp - 5, yb - 4); ctx.lineTo(xp + 5, yb - 4); ctx.closePath(); ctx.fill();
+        zeile(ctx, P, [[String(n), false, BL], [' + ', false, TI], [String(m), false, OR], [` = ${n + m} Faktoren`, false, TI]],
+              xT + 2, yB + s + P.AZ / 2 + 5, W, H);
+        etikett(ctx, P, [['= 2', false, TI], [String(n + m), true, TI]], xT - 8, yC + s / 2, W, H);
+        ctx.globalAlpha = 1;
+      }
+      const tot = n + m, verz = Math.min(0.05, 0.5 / tot);
+      for (let q = 0; q < tot; q++) {
+        const p = glatt(clamp01((t - q * verz) / (1 - (tot - 1) * verz)));
+        if (p <= 0) continue;
+        const xs = xT + (q < n ? q : q - n) * (s + G), ys = q < n ? yA : yB;
+        const xz = xT + (q % P.L) * (s + G), yz = yC + Math.floor(q / P.L) * (s + G + 4);
+        kachel(ctx, xs + (xz - xs) * p, ys + (yz - ys) * p, s, '2', q < n ? BL : OR, q < n ? BL_H : OR_H, W, H);
+      }
+    } else {
+      const s = P.s6, G = P.cg;
+      const x0 = Math.floor((W - (P.LW + 6 * s + 5 * G)) / 2), xT = x0 + P.LW;
+      const k = Math.min(n, m);
+      if (modus === 'div') {
+        const yN = Math.floor((H - P.hD) / 2), yBar = yN + s + P.BG, yD = yBar + P.BG;
+        for (let i = 0; i < n; i++) {
+          const an = clamp01(t / 0.7 * k - i);
+          ctx.globalAlpha = i < k ? 1 - 0.55 * an : 1;
+          kachel(ctx, xT + i * (s + G), yN, s, '2', BL, BL_H, W, H);
+          ctx.globalAlpha = 1;
+          if (i < k) streich(ctx, xT + i * (s + G), yN, s, an);
+        }
+        for (let j = 0; j < m; j++) {
+          const an = clamp01(t / 0.7 * k - j);
+          ctx.globalAlpha = j < k ? 1 - 0.55 * an : 1;
+          kachel(ctx, xT + j * (s + G), yD, s, '2', OR, OR_H, W, H);
+          ctx.globalAlpha = 1;
+          if (j < k) streich(ctx, xT + j * (s + G), yD, s, an);
+        }
+        ctx.strokeStyle = TI; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x0 + 6, yBar); ctx.lineTo(xT + Math.max(n, m) * (s + G) - G + 4, yBar); ctx.stroke();
+        etikett(ctx, P, [['2', false, TI], [String(n), true, BL]], xT - 8, yN + s / 2, W, H);
+        etikett(ctx, P, [['2', false, TI], [String(m), true, OR]], xT - 8, yD + s / 2, W, H);
+        if (spaet > 0) {
+          ctx.globalAlpha = spaet;
+          zeile(ctx, P, [[`${k} Paar${k > 1 ? 'e' : ''} gekürzt (je 2 : 2 = 1)`, false, T2]], x0, yD + s + P.CZ / 2 + 5, W, H);
+          const yR = yD + s + P.CZ, d = n - m, xR = xT + P.EQ;
+          let yc;
+          if (d > 0) {
+            yc = yR + 22 + s / 2;
+            for (let j = 0; j < d; j++) kachel(ctx, xR + j * (s + G), yR + 22, s, '2', BL, BL_H, W, H);
+          } else if (d === 0) {
+            yc = yR + 22 + s / 2;
+            reich(ctx, [['1', false, TI]], xR, yc + 0.35 * P.FL, 'left', P.FL, P.FS, 700, W, H);
+          } else {
+            yc = yR + 17;
+            const wb = -d * s + (-d - 1) * G;
+            ctx.font = `700 ${P.FL}px ${MONO}`;
+            const w1 = ctx.measureText('1').width;
+            reich(ctx, [['1', false, TI]], xR + wb / 2 - w1 / 2, yR + 5 + 0.35 * P.FL, 'left', P.FL, P.FS, 700, W, H);
+            ctx.strokeStyle = TI; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(xR - 2, yc); ctx.lineTo(xR + wb + 2, yc); ctx.stroke();
+            for (let j = 0; j < -d; j++) kachel(ctx, xR + j * (s + G), yR + 22, s, '2', OR, OR_H, W, H);
+          }
+          reich(ctx, [['=', false, TI]], xT + 2, yc + 0.35 * P.FL, 'left', P.FL, P.FS, 700, W, H);
+          etikett(ctx, P, [['= 2', false, TI], [minus(d), true, TI]], xT - 8, yc, W, H);
+          ctx.globalAlpha = 1;
+        }
+      } else {
+        const yA = Math.floor((H - P.hF) / 2), yB = yA + s + P.RG;
+        for (let i = 0; i < k; i++) {
+          const an = clamp01(t / 0.7 * k - i);
+          if (an <= 0) continue;
+          ctx.globalAlpha = an;
+          const x = xT + i * (s + G);
+          rr(ctx, x - P.FM, yA - P.FM, s + 2 * P.FM, yB + s - yA + 2 * P.FM, 6);
+          ctx.fillStyle = GR_H; ctx.fill();
+          ctx.strokeStyle = GR; ctx.lineWidth = 2; ctx.stroke();
+          ctx.fillStyle = GR; ctx.font = `700 13px ${MONO}`;
+          beschriftung(ctx, '10', x + s / 2, yB + s + P.FM + 15, { align: 'center', bg: '#fff', pad: 1, W, H });
+          ctx.globalAlpha = 1;
+        }
+        for (let i = 0; i < n; i++) kachel(ctx, xT + i * (s + G), yA, s, '2', BL, BL_H, W, H);
+        for (let j = 0; j < m; j++) kachel(ctx, xT + j * (s + G), yB, s, '5', OR, OR_H, W, H);
+        etikett(ctx, P, [['2', false, TI], [String(n), true, BL]], xT - 8, yA + s / 2, W, H);
+        etikett(ctx, P, [['· 5', false, TI], [String(m), true, OR]], xT - 8, yB + s / 2, W, H);
+        if (spaet > 0) {
+          ctx.globalAlpha = spaet;
+          const y1 = yB + s + P.FM + 20 + 8 + 14, r = Math.abs(n - m);
+          const paar = `${k} Paar${k > 1 ? 'e' : ''} (2 · 5 = 10)`;
+          const p1 = r === 0 ? [[`${paar}, kein Rest`, false, GR]]
+                             : [[`${paar}, übrig: ${n > m ? 2 : 5}`, false, T2]].concat(r > 1 ? [[String(r), true, T2]] : []);
+          zeile(ctx, P, p1, x0, y1, W, H);
+          zeile(ctx, P, [['10', false, ROT], [String(n + m), true, ROT], [` bräuchte ${n + m} Paare`, false, ROT]], x0, y1 + 20, W, H);
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+  }
+
+  // Formelsatz bündeln: Solange MathJax noch setzt, wird nicht erneut in dieselben
+  // Elemente geschrieben (sonst greift der laufende Satz auf entfernte Knoten);
+  // der letzte Reglerstand wird danach nachgeholt.
+  let satzLaeuft = false, satzOffen = false;
+  function texte() {
+    const n = +sN.value, m = +sM.value, d = n - m;
+    vN.textContent = n; vM.textContent = m;
+    if (satzLaeuft) { satzOffen = true; return; }
+    const N = cB(n), M = cO(m);
+    eq3.style.display = modus === 'fehl' ? '' : 'none';
+    if (modus === 'mul') {
+      flLab.textContent = 'P1 — gleiche Basis multiplizieren';
+      eq1.innerHTML = `\\(2^{${N}} \\cdot 2^{${M}} = 2^{${N}+${M}} = 2^{${n + m}}\\)`;
+      eq2.innerHTML = `\\(${tsd(2 ** n)} \\cdot ${tsd(2 ** m)} = ${tsd(2 ** (n + m))}\\)`;
+      erkl.innerHTML = `Jede Kachel ist ein Faktor \\(2\\). Zusammengeschoben liegen \\(${N} + ${M} = ${n + m}\\) Faktoren in einer Reihe: Beim Multiplizieren gleicher Basen werden die Exponenten addiert.`;
+    } else if (modus === 'div') {
+      flLab.textContent = 'P2 — gleiche Basis dividieren';
+      eq1.innerHTML = `\\(\\dfrac{2^{${N}}}{2^{${M}}} = 2^{${N}-${M}} = 2^{${d}}\\)`;
+      const bruch = `\\dfrac{${tsd(2 ** n)}}{${tsd(2 ** m)}}`;
+      eq2.innerHTML = d > 0 ? `\\(${bruch} = ${tsd(2 ** d)}\\)`
+                    : d === 0 ? `\\(${bruch} = 1 = 2^{0}\\)`
+                    : `\\(${bruch} = \\dfrac{1}{${tsd(2 ** -d)}}${-d > 1 ? ` = \\dfrac{1}{2^{${-d}}}` : ''}\\)`;
+      const kz = Math.min(n, m);
+      const paare = `Jede Spalte aus einer \\(2\\) oben und einer \\(2\\) unten ergibt \\(\\tfrac{2}{2} = 1\\) und fällt weg — hier ${kz === 1 ? 'ein Paar' : kz + ' Paare'}.`;
+      erkl.innerHTML = d > 0 ? `${paare} Oben ${d === 1 ? 'bleibt ein Faktor' : 'bleiben ' + d + ' Faktoren'} übrig: Die Exponenten werden subtrahiert.`
+                     : d === 0 ? `${paare} Alles kürzt sich weg, übrig bleibt \\(1\\). Darum gilt \\(2^0 = 1\\) (P6).`
+                     : `${paare} Unten ${-d === 1 ? 'bleibt ein Faktor' : 'bleiben ' + (-d) + ' Faktoren'} übrig, oben nur \\(1\\): \\(\\dfrac{1}{2^{${-d}}} = 2^{${d}}\\). So entsteht der negative Exponent (P7).`;
+    } else {
+      flLab.textContent = 'Häufiger Fehler — verschiedene Basen';
+      if (d === 0) {
+        eq1.innerHTML = `\\(2^{${N}} \\cdot 5^{${M}} = (2 \\cdot 5)^{${n}} = 10^{${n}}\\)`;
+        eq2.innerHTML = `\\(${tsd(2 ** n)} \\cdot ${tsd(5 ** m)} = ${tsd(10 ** n)}\\)`;
+        eq3.innerHTML = `\\(10^{${N}+${M}} = 10^{${n + m}} \\neq 10^{${n}}\\)`;
+        erkl.innerHTML = `Gleiche Exponenten: Jede \\(2\\) findet ihre \\(5\\), und jedes Paar ergibt \\(10\\). Das ist P4 rückwärts gelesen, \\(2^{${N}} \\cdot 5^{${M}} = (2 \\cdot 5)^{${n}} = 10^{${n}}\\); die Exponenten werden dabei nicht addiert.`;
+      } else {
+        const k = Math.min(n, m), r = Math.abs(d), rb = d > 0 ? 2 : 5;
+        eq1.innerHTML = `\\(2^{${N}} \\cdot 5^{${M}} \\neq 10^{${N}+${M}}\\)`;
+        eq2.innerHTML = `\\(${tsd(2 ** n)} \\cdot ${tsd(5 ** m)} = ${tsd(2 ** n * 5 ** m)}\\)`;
+        eq3.innerHTML = `\\(10^{${n + m}} = ${tsd(10 ** (n + m))}\\)`;
+        erkl.innerHTML = `Eine «2» und eine «5» verschmelzen nicht zu einer Kachel. Nur ein Paar \\(2 \\cdot 5\\) ergibt \\(10\\): hier ${k === 1 ? 'ein Paar' : k + ' Paare'}, übrig bleibt ${r === 1 ? 'eine ' : ''}\\(${rb}${r > 1 ? '^{' + r + '}' : ''}\\), also \\(10^{${k}} \\cdot ${rb}${r > 1 ? '^{' + r + '}' : ''} = ${tsd(2 ** n * 5 ** m)}\\). Stell \\(m = n\\) ein, dann geht es auf: \\(2^{${N}} \\cdot 5^{${N}} = (2 \\cdot 5)^{${n}} = 10^{${n}}\\) (P4).`;
+      }
+    }
+    satzLaeuft = true;
+    mjTypeset([eq1, eq2, eq3, erkl]).then(() => {
+      satzLaeuft = false;
+      if (satzOffen) { satzOffen = false; texte(); }
+    });
+  }
+
+  function abspielen() {
+    if (raf) cancelAnimationFrame(raf);
+    const ruhig = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (ruhig) { t = 1; zeichne(); return; }
+    const t0 = performance.now();
+    const schritt = jetzt => {
+      t = Math.min(1, (jetzt - t0) / 1300);
+      zeichne();
+      raf = t < 1 ? requestAnimationFrame(schritt) : null;
+    };
+    raf = requestAnimationFrame(schritt);
+  }
+
+  function regler() {
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+    t = 1; texte(); zeichne();
+  }
+
+  knoepfe.forEach(b => b.addEventListener('click', () => {
+    modus = b.dataset.modus;
+    knoepfe.forEach(o => { o.classList.toggle('aktiv', o === b); o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+    texte(); abspielen();
+  }));
+  document.getElementById('pg-play').addEventListener('click', abspielen);
+  sN.addEventListener('input', regler);
+  sM.addEventListener('input', regler);
+  window.addEventListener('resize', () => { if (!raf) zeichne(); });
+  document.addEventListener('DOMContentLoaded', () => { texte(); zeichne(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!raf) zeichne(); });
+})();
+</script>
 
 <div class="block block-fehler">
   <div class="block-titel">⚠ Häufiger Fehler — verschiedene Basen</div>
