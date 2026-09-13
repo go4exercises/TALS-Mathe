@@ -424,6 +424,50 @@ MathJax = {
   <strong>\(x_{\min} = Q_0\), \(Q_1\), Median \(Q_2\), \(Q_3\), \(x_{\max} = Q_4\)</strong>. Die <em>Box</em> reicht von Q<sub>1</sub> bis Q<sub>3</sub>, ihre Breite ist die Quartilsdifferenz. Die <em>Whisker</em> reichen zum kleinsten und grössten Wert. Wer die Quartile berechnet, kann den Boxplot zeichnen — und umgekehrt.</p>
 </div>
 
+<p>Woher die fünf Zahlen kommen, zeigt das Widget am Datensatz von Klasse B: Wähle eine Kennzahl, und sie wird in der sortierten Liste und im Boxplot gleichzeitig markiert. Zum Vergleich steht das Median-Beispiel mit ungeradem \(n\) bereit.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Quartile in der sortierten Liste und im Boxplot</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Wähle nacheinander \(Q_1\), Median und \(Q_3\): Liegt die Markierung in der Liste <em>auf</em> einer Position oder <em>zwischen</em> zwei Positionen? Wo landet dieselbe Zahl im Boxplot? Wechsle dann zum Datensatz mit \(n = 7\) und wähle \(Q_1\): Was geschieht mit dem mittleren Wert der Liste?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Alle fünf Zahlen des Boxplots stammen aus der sortierten Liste: \(Q_0\) und \(Q_4\) sind die Randwerte, der Median \(Q_2\) ist die Mitte, \(Q_1\) und \(Q_3\) sind die Mitten der unteren und der oberen Hälfte. Hat ein Teil eine gerade Anzahl Werte, liegt seine Mitte zwischen zwei Positionen, und die beiden Werte werden gemittelt. Bei ungeradem \(n\) bleibt der Median aus beiden Hälften draussen. Die Box von \(Q_1\) bis \(Q_3\) ist die Quartilsdifferenz.</div>
+        </div>
+      </div>
+    </div>
+    <p>Oben die sortierte Liste (kleine graue Zahlen: Positionen), unten der Boxplot derselben Werte. Die gewählte Kennzahl ist an beiden Stellen blau.</p>
+  </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="feld-titel">Datensatz</div>
+      <div class="chips" id="qb-saetze" style="margin-bottom:10px">
+        <button class="chip aktiv" type="button" data-satz="b" aria-pressed="true">Klasse B (n = 8)</button>
+        <button class="chip" type="button" data-satz="ung" aria-pressed="false">Median-Beispiel (n = 7)</button>
+      </div>
+      <div class="feld-titel">Kennzahl</div>
+      <div class="chips" id="qb-kennzahlen" style="margin-bottom:12px">
+        <button class="chip" type="button" data-kz="min" aria-pressed="false">Min</button>
+        <button class="chip" type="button" data-kz="q1" aria-pressed="false">Q<sub>1</sub></button>
+        <button class="chip aktiv" type="button" data-kz="med" aria-pressed="true">Median</button>
+        <button class="chip" type="button" data-kz="q3" aria-pressed="false">Q<sub>3</sub></button>
+        <button class="chip" type="button" data-kz="max" aria-pressed="false">Max</button>
+        <button class="chip" type="button" data-kz="qd" aria-pressed="false">QD</button>
+      </div>
+      <canvas id="cv-qbox" style="height:252px" aria-label="Sortierte Liste mit Markern für Minimum, Quartile und Maximum, darunter der Boxplot derselben Werte"></canvas>
+      <div class="formel" id="qb-rechenweg" style="margin-top:12px"><strong>Median \(Q_2\):</strong> \(n = 8\) ist gerade → Mittel der Werte an den Positionen \(\tfrac{n}{2} = 4\) und \(\tfrac{n}{2} + 1 = 5\): \(Q_2 = \tilde{x} = \frac{4.5 + 4.5}{2} = 4.5\)</div>
+      <div class="erklaerung" id="qb-erkl" style="margin-top:8px">Im Boxplot ist der Median der Strich in der Box. Er teilt die sortierte Liste in eine untere und eine obere Hälfte; aus diesen beiden Hälften entstehen \(Q_1\) und \(Q_3\).</div>
+    </div>
+  </div>
+</div>
+
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Streumasse</summary>
 <div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Die Spannweite der Werte 2 bis 14 ist …</p><ul class="mc-optionen"><li data-opt="A">\(12\)</li><li data-opt="B">\(14\)</li><li data-opt="C">\(16\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>A.</strong> \(R = x_{\max} - x_{\min} = Q_4 - Q_0 = 14 - 2 = 12\).</div></details></div>
@@ -1205,6 +1249,254 @@ function showLage(key, btn){
     rbRender();
     window.addEventListener('resize', rbRender);
   }
+})();
+
+/* ════════════════════════════════════════════════════════════════
+ *  QUARTILE · sortierte Liste ↔ Boxplot (AN-31)
+ *  Oben die sortierte Liste als Zellen mit Positionen und Markern für
+ *  Q₀ … Q₄, unten der Boxplot derselben Werte. Die gewählte Kennzahl
+ *  ist in Liste und Boxplot blau, eine gestrichelte Linie verbindet
+ *  beide. Quartile nach der Median-der-Hälften-Methode wie in der
+ *  Definition oben: bei ungeradem n bleibt der Median aus den Hälften
+ *  draussen. Werte und Layout nachgerechnet in Python (Klasse B:
+ *  Q₁ = 3.4, Median 4.5, Q₃ = 5.6, QD = 2.2 wie im Beispiel oben).
+ * ════════════════════════════════════════════════════════════════ */
+(function () {
+  const cv = document.getElementById('cv-qbox');
+  if (!cv) return;
+  const rechenwegEl = document.getElementById('qb-rechenweg');
+  const erklEl = document.getElementById('qb-erkl');
+  const SAETZE = {
+    b:   { werte: [2.5, 3.0, 3.8, 4.5, 4.5, 5.2, 6.0, 6.5], dez: 1, von: 2, bis: 7, tick: 0.5 },
+    ung: { werte: [2, 4, 5, 7, 8, 9, 10], dez: 0, von: 1, bis: 11, tick: 1 }
+  };
+  const BL = '#1a4f8a', BL_H = '#ddeaf8', TI = '#1c1a17', T2 = '#5a5040', LI = '#d8d0c4', BLASS = '#9a9080', WEISS = '#ffffff';
+  const MONO = "'JetBrains Mono', monospace", SERIF = "'Source Serif 4', serif";
+  const H = 252;
+  // Senkrechte Lage (logische Pixel)
+  const Y = { klTxt: 15, klLinie: 22, zelle: 30, zelleH: 32, pos: 76, marke: 81, name: 105, wert: 121,
+              verbA: 127, verbB: 146, bxName: 162, box: 170, boxH: 40, achse: 228, zahl: 244 };
+  let satz = 'b', kz = 'med';
+
+  // Zahl mit mindestens «dez» Nachkommastellen, höchstens zwei, Dezimalpunkt
+  function fmt(v, dez) {
+    let t = (Math.round(v * 100) / 100).toFixed(2);
+    while (t.split('.')[1].length > dez && t.endsWith('0')) t = t.slice(0, -1);
+    if (t.endsWith('.')) t = t.slice(0, -1);
+    return t;
+  }
+
+  // Kennzahlen der sortierten Liste s. pos = Lage des Markers in Zellbreiten ab dem linken Listenrand.
+  function kennzahlen(s) {
+    const n = s.length, h = Math.floor(n / 2);
+    const unten = { von: 0, bis: h - 1 };
+    const oben = { von: n % 2 ? h + 1 : h, bis: n - 1 };
+    const mitte = (a, b) => {
+      const m = b - a + 1;
+      return m % 2 ? { idx: [a + (m - 1) / 2], pos: a + (m - 1) / 2 + 0.5 }
+                   : { idx: [a + m / 2 - 1, a + m / 2], pos: a + m / 2 };
+    };
+    const mitWert = t => Object.assign(t, { w: t.idx.reduce((x, i) => x + s[i], 0) / t.idx.length });
+    return { n, unten, oben,
+      min: { idx: [0], pos: 0.5, w: s[0] },
+      q1: mitWert(mitte(unten.von, unten.bis)),
+      med: mitWert(mitte(0, n - 1)),
+      q3: mitWert(mitte(oben.von, oben.bis)),
+      max: { idx: [n - 1], pos: n - 0.5, w: s[n - 1] } };
+  }
+
+  function texte(s, dez, K) {
+    const n = K.n, f = v => fmt(v, dez);
+    const mittelTex = t => t.idx.length === 2
+      ? `\\frac{${f(s[t.idx[0]])} + ${f(s[t.idx[1]])}}{2} = ${f(t.w)}` : f(t.w);
+    const lage = t => t.idx.length === 2
+      ? `deren Mitte liegt zwischen Position ${t.idx[0] + 1} und ${t.idx[1] + 1}`
+      : `deren Mitte ist Position ${t.idx[0] + 1}`;
+    const vorHaelfte = n % 2
+      ? `\\(n = ${n}\\) ist ungerade → der Median an Position ${(n + 1) / 2} gehört zu keiner Hälfte.`
+      : `\\(n = ${n}\\) ist gerade → zwei Hälften mit je ${n / 2} Werten.`;
+    const haelfte = (titel, name, hf, t, q) =>
+      `<strong>${titel} \\(${q}\\):</strong> ${vorHaelfte} ${name} Hälfte: Positionen ${hf.von + 1} bis ${hf.bis + 1}; ${lage(t)}: \\(${q} = ${mittelTex(t)}\\)`;
+    const draussen = n % 2 ? ' Weil \\(n\\) ungerade ist, bleibt der Median an Position ' + (n + 1) / 2 + ' aus beiden Hälften draussen.' : '';
+    const paar = t => t.idx.length === 2 ? ' Die Hälfte hat eine gerade Anzahl Werte, darum werden die zwei mittleren gemittelt.' : '';
+    return {
+      min: [`<strong>Minimum \\(Q_0\\):</strong> Position 1 der sortierten Liste: \\(Q_0 = x_{\\min} = ${f(K.min.w)}\\)`,
+            'Im Boxplot ist \\(Q_0\\) das linke Ende des Whiskers. In der sortierten Liste steht der kleinste Wert immer an Position 1.'],
+      q1:  [haelfte('Unteres Quartil', 'Untere', K.unten, K.q1, 'Q_1'),
+            'Im Boxplot ist \\(Q_1\\) der linke Rand der Box.' + paar(K.q1) + draussen],
+      med: [n % 2
+              ? `<strong>Median \\(Q_2\\):</strong> \\(n = ${n}\\) ist ungerade → Wert an Position \\(\\tfrac{n+1}{2} = ${(n + 1) / 2}\\): \\(Q_2 = \\tilde{x} = ${f(K.med.w)}\\)`
+              : `<strong>Median \\(Q_2\\):</strong> \\(n = ${n}\\) ist gerade → Mittel der Werte an den Positionen \\(\\tfrac{n}{2} = ${n / 2}\\) und \\(\\tfrac{n}{2} + 1 = ${n / 2 + 1}\\): \\(Q_2 = \\tilde{x} = ${mittelTex(K.med)}\\)`,
+            'Im Boxplot ist der Median der Strich in der Box. Er teilt die sortierte Liste in eine untere und eine obere Hälfte; aus diesen beiden Hälften entstehen \\(Q_1\\) und \\(Q_3\\).'],
+      q3:  [haelfte('Oberes Quartil', 'Obere', K.oben, K.q3, 'Q_3'),
+            'Im Boxplot ist \\(Q_3\\) der rechte Rand der Box.' + paar(K.q3) + draussen],
+      max: [`<strong>Maximum \\(Q_4\\):</strong> Position ${n} der sortierten Liste: \\(Q_4 = x_{\\max} = ${f(K.max.w)}\\)`,
+            `Im Boxplot ist \\(Q_4\\) das rechte Ende des Whiskers. In der sortierten Liste steht der grösste Wert immer an der letzten Position, hier Position ${n}.`],
+      qd:  [`<strong>Quartilsdifferenz:</strong> \\(\\text{QD} = Q_3 - Q_1 = ${f(K.q3.w)} - ${f(K.q1.w)} = ${f(K.q3.w - K.q1.w)}\\)`,
+            'Die Quartilsdifferenz ist die Breite der Box. Sie misst die Breite der mittleren 50 % der Daten; Minimum und Maximum spielen dafür keine Rolle.']
+    };
+  }
+
+  // «Q» mit tiefgestellter Ziffer, als Ganzes um x zentriert und in die Zeichenfläche geklemmt
+  // (Serifenschrift wie der Formelsatz; die Null der Monospace-Schrift sähe tiefgestellt wie θ aus)
+  function qName(ctx, ziffer, x, y, farbe, fett, W) {
+    const fQ = `italic ${fett ? 700 : 500} 15px ${SERIF}`, fZ = `${fett ? 700 : 500} 11px ${SERIF}`;
+    ctx.font = fQ;
+    const wQ = ctx.measureText('Q').width + 1;
+    ctx.font = fZ;
+    const wZ = ctx.measureText(String(ziffer)).width;
+    const x0 = Math.max(3, Math.min(W - 3 - wQ - wZ, x - (wQ + wZ) / 2));
+    ctx.fillStyle = farbe;
+    ctx.font = fQ;
+    beschriftung(ctx, 'Q', x0, y, { align: 'left', halo: true, W, H });
+    ctx.font = fZ;
+    beschriftung(ctx, String(ziffer), x0 + wQ, y + 4, { align: 'left', halo: true, W, H });
+  }
+
+  function klammer(ctx, xa, xb, txt, W) {
+    ctx.strokeStyle = BL; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(xa, Y.klLinie + 6); ctx.lineTo(xa, Y.klLinie); ctx.lineTo(xb, Y.klLinie); ctx.lineTo(xb, Y.klLinie + 6);
+    ctx.stroke();
+    ctx.fillStyle = BL; ctx.font = `600 12px ${MONO}`;
+    beschriftung(ctx, txt, (xa + xb) / 2, Y.klTxt, { align: 'center', W, H });
+  }
+
+  function rr(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+  }
+
+  function zeichne() {
+    const dpr = window.devicePixelRatio || 1;
+    const W = Math.round(cv.getBoundingClientRect().width) || 560;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    const ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    const S = SAETZE[satz], s = S.werte, n = s.length, K = kennzahlen(s);
+    const PAD = 12;
+    const p = Math.min(72, (W - 2 * PAD) / n);
+    const x0 = (W - n * p) / 2;
+    const xL = pos => x0 + pos * p;
+    const bx0 = PAD + 8, bx1 = W - PAD - 8;
+    const xB = v => bx0 + (v - S.von) / (S.bis - S.von) * (bx1 - bx0);
+    const f = v => fmt(v, S.dez);
+    const aktiv = k => kz === k || (kz === 'qd' && (k === 'q1' || k === 'q3'));
+
+    // Klammern über der Liste
+    if (kz === 'q1' || kz === 'med') klammer(ctx, xL(K.unten.von) + 2, xL(K.unten.bis + 1) - 2, 'untere Hälfte', W);
+    if (kz === 'q3' || kz === 'med') klammer(ctx, xL(K.oben.von) + 2, xL(K.oben.bis + 1) - 2, 'obere Hälfte', W);
+    if (kz === 'qd') klammer(ctx, xL(K.q1.pos), xL(K.q3.pos), 'mittlere Hälfte', W);
+
+    // Zellen der sortierten Liste
+    const hell = new Set(kz === 'qd' ? [] : K[kz].idx);
+    const H_ = kz === 'q1' ? K.unten : kz === 'q3' ? K.oben : null;
+    const fs = p < 36 ? 12 : 13;
+    for (let i = 0; i < n; i++) {
+      const blass = H_ ? (i < H_.von || i > H_.bis) : false;
+      const x = xL(i) + 2, w = p - 4;
+      rr(ctx, x, Y.zelle, w, Y.zelleH, 4);
+      if (hell.has(i)) { ctx.fillStyle = BL_H; ctx.fill(); ctx.strokeStyle = BL; ctx.lineWidth = 2; ctx.setLineDash([]); }
+      else if (blass) { ctx.strokeStyle = LI; ctx.lineWidth = 1.2; ctx.setLineDash([3, 3]); }
+      else { ctx.fillStyle = WEISS; ctx.fill(); ctx.strokeStyle = LI; ctx.lineWidth = 1.2; ctx.setLineDash([]); }
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = hell.has(i) ? BL : blass ? BLASS : TI;
+      ctx.font = `${hell.has(i) ? 700 : 500} ${fs}px ${MONO}`;
+      beschriftung(ctx, f(s[i]), x + w / 2, Y.zelle + Y.zelleH / 2 + 1, { align: 'center', baseline: 'middle', frei: false, W, H });
+      ctx.fillStyle = hell.has(i) ? BL : T2;
+      ctx.font = `${hell.has(i) ? 700 : 400} 11px ${MONO}`;
+      beschriftung(ctx, String(i + 1), x + w / 2, Y.pos, { align: 'center', frei: false, W, H });
+    }
+
+    // Marker unter der Liste
+    const KEYS = ['min', 'q1', 'med', 'q3', 'max'];
+    KEYS.forEach((k, j) => {
+      const x = xL(K[k].pos), an = aktiv(k), farbe = an ? BL : BLASS;
+      ctx.fillStyle = farbe;
+      ctx.beginPath(); ctx.moveTo(x, Y.marke); ctx.lineTo(x - 5, Y.marke + 8); ctx.lineTo(x + 5, Y.marke + 8); ctx.closePath(); ctx.fill();
+      qName(ctx, j, x, Y.name, an ? BL : T2, an, W);
+      ctx.fillStyle = an ? BL : T2;
+      ctx.font = `${an ? 700 : 400} 12px ${MONO}`;
+      beschriftung(ctx, f(K[k].w), x, Y.wert, { align: 'center', halo: true, W, H });
+    });
+
+    // Verbindungslinien Liste → Boxplot
+    ctx.strokeStyle = BL; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+    KEYS.filter(aktiv).forEach(k => {
+      ctx.beginPath(); ctx.moveTo(xL(K[k].pos), Y.verbA); ctx.lineTo(xB(K[k].w), Y.verbB); ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    // Boxplot
+    const yM = Y.box + Y.boxH / 2, xs = KEYS.map(k => xB(K[k].w));
+    const strich = (xa, ya, xb, yb, an, dick) => {
+      ctx.strokeStyle = an ? BL : T2; ctx.lineWidth = an ? 3.5 : dick;
+      ctx.beginPath(); ctx.moveTo(xa, ya); ctx.lineTo(xb, yb); ctx.stroke();
+    };
+    strich(xs[0], yM, xs[1], yM, kz === 'min', 1.6);
+    strich(xs[0], yM - 12, xs[0], yM + 12, kz === 'min', 2);
+    strich(xs[3], yM, xs[4], yM, kz === 'max', 1.6);
+    strich(xs[4], yM - 12, xs[4], yM + 12, kz === 'max', 2);
+    ctx.fillStyle = kz === 'qd' ? BL_H : WEISS;
+    ctx.fillRect(xs[1], Y.box, xs[3] - xs[1], Y.boxH);
+    ctx.strokeStyle = kz === 'qd' ? BL : T2; ctx.lineWidth = kz === 'qd' ? 3 : 1.6;
+    ctx.strokeRect(xs[1], Y.box, xs[3] - xs[1], Y.boxH);
+    if (kz === 'q1') strich(xs[1], Y.box, xs[1], Y.box + Y.boxH, true, 1.6);
+    if (kz === 'q3') strich(xs[3], Y.box, xs[3], Y.box + Y.boxH, true, 1.6);
+    strich(xs[2], Y.box, xs[2], Y.box + Y.boxH, kz === 'med', 2.5);
+    if (kz === 'qd') {
+      const yP = Y.box + Y.boxH - 9;
+      ctx.strokeStyle = BL; ctx.fillStyle = BL; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(xs[1] + 3, yP); ctx.lineTo(xs[3] - 3, yP); ctx.stroke();
+      [[xs[1] + 3, 1], [xs[3] - 3, -1]].forEach(([x, r]) => {
+        ctx.beginPath(); ctx.moveTo(x, yP); ctx.lineTo(x + 7 * r, yP - 4); ctx.lineTo(x + 7 * r, yP + 4); ctx.closePath(); ctx.fill();
+      });
+      ctx.font = `700 12px ${MONO}`;
+      beschriftung(ctx, 'QD = ' + f(K.q3.w - K.q1.w), (xs[1] + xs[3]) / 2, Y.box + 15, { align: 'center', bg: BL_H, pad: 3, W, H });
+    }
+    KEYS.forEach((k, j) => qName(ctx, j, xs[j], Y.bxName, aktiv(k) ? BL : T2, aktiv(k), W));
+
+    // Zahlengerade
+    ctx.strokeStyle = T2; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(bx0, Y.achse); ctx.lineTo(bx1, Y.achse); ctx.stroke();
+    ctx.font = `400 11px ${MONO}`; ctx.fillStyle = T2;
+    const schritte = Math.round((S.bis - S.von) / S.tick);
+    for (let i = 0; i <= schritte; i++) {
+      const v = S.von + i * S.tick, x = xB(v), ganz = Math.abs(v - Math.round(v)) < 1e-9;
+      ctx.beginPath(); ctx.moveTo(x, Y.achse - (ganz ? 4 : 2)); ctx.lineTo(x, Y.achse + (ganz ? 4 : 2)); ctx.stroke();
+      if (ganz) beschriftung(ctx, String(Math.round(v)), x, Y.zahl, { align: 'center', frei: false, W, H });
+    }
+  }
+
+  function setzeTexte() {
+    const S = SAETZE[satz], t = texte(S.werte, S.dez, kennzahlen(S.werte))[kz];
+    rechenwegEl.innerHTML = t[0];
+    erklEl.innerHTML = t[1];
+    mjTypeset([rechenwegEl, erklEl]);
+  }
+
+  function waehle(gruppe, attr, wert) {
+    document.querySelectorAll(`#${gruppe} .chip`).forEach(ch => {
+      const an = ch.dataset[attr] === wert;
+      ch.classList.toggle('aktiv', an);
+      ch.setAttribute('aria-pressed', an ? 'true' : 'false');
+    });
+  }
+
+  document.querySelectorAll('#qb-saetze .chip').forEach(ch => ch.addEventListener('click', () => {
+    satz = ch.dataset.satz; waehle('qb-saetze', 'satz', satz); zeichne(); setzeTexte();
+  }));
+  document.querySelectorAll('#qb-kennzahlen .chip').forEach(ch => ch.addEventListener('click', () => {
+    kz = ch.dataset.kz; waehle('qb-kennzahlen', 'kz', kz); zeichne(); setzeTexte();
+  }));
+  zeichne();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(zeichne);
+  window.addEventListener('resize', zeichne);
 })();
 </script>
 </body>

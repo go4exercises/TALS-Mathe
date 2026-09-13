@@ -144,6 +144,8 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
 
 ## P3 — Mittel
 
+> **Stand 13.09.2026: AN-22 bis AN-40 erledigt** — Prüfverfahren wie bei P1/P2.
+
 ### Neue Animationen / Ergänzungen
 - [x] **AN-22** `g2-2b`: Quadratische Ergänzung geometrisch — Flächenmodell (Quadrat x² +
   zwei Rechtecke (p/2)·x → fehlendes Eckquadrat (p/2)²) als schrittgesteuertes Canvas;
@@ -158,25 +160,32 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
   jeweils nächste Operation hervor, letzte = Hauptoperation) — verbindet Hierarchie,
   Strukturbaum und Klassifizier-Übung.
   **Erledigt 13.09.2026:** Neues Widget «Auswertungs-Reihenfolge» (IDs aw-): Schritt-Regler hebt die nächste Operation hervor, letzte als Hauptoperation; drei Beispielterme.
-- [ ] **AN-25** `g3-1`: Fehler-Box «Wertetabelle legt Funktion nicht eindeutig fest» um
+- [x] **AN-25** `g3-1`: Fehler-Box «Wertetabelle legt Funktion nicht eindeutig fest» um
   einen Graphen ergänzen: f(x) = x² und h(x) durch dieselben vier Punkte — der Aha-Moment
   ist visuell, nicht rechnerisch.
-- [ ] **AN-26** `g5-1`: Stufen-/Wechselwinkel an Parallelen animieren (Slider Neigung der
+  **Erledigt 13.09.2026:** Graph in der Fehler-Box: f(x) = x² und h(x) = x² + x·(x − 1)·(x − 2)·(x − 3) durch dieselben vier Tabellenpunkte, dazwischen bis 1 Abweichung.
+- [x] **AN-26** `g5-1`: Stufen-/Wechselwinkel an Parallelen animieren (Slider Neigung der
   Schneidenden, F-/Z-Winkel laufen synchron; Parallelität aufhebbar → Winkel ungleich) —
   trägt in 5.2a den Innenwinkelsummen-Beweis.
-- [ ] **AN-27** `g5-4` · `cv-abw` (Sinus-Abwickler): Chip «sin/cos» zum Umschalten — der
+  **Erledigt 13.09.2026:** Neues Widget (IDs sw-): Neigung von s, Umschalter Stufen-/Wechselwinkel mit F-/Z-Figur, Kippung von h → α′ = α + δ mit gestrichelter Parallele.
+- [x] **AN-27** `g5-4` · `cv-abw` (Sinus-Abwickler): Chip «sin/cos» zum Umschalten — der
   cos-Abwickler erklärt nebenbei, warum die cos-Kurve bei 1 startet (tragend für 5.5).
-- [ ] **AN-28** `g5-5` · `kr-svg` (Kurven-Ansicht): Tabs sin/cos/tan ergänzen; beim tan
+  **Erledigt 13.09.2026:** Chip sin/cos im Abwickler; cos: x-Koordinate per Viertelkreis auf die senkrechte Achse gedreht und abgewickelt.
+- [x] **AN-28** `g5-5` · `kr-svg` (Kurven-Ansicht): Tabs sin/cos/tan ergänzen; beim tan
   Polstellen-Asymptoten strichliert — zeigt unmittelbar, warum k·180° genügt
   (tan-Periodizität ist der Fehlerbrennpunkt der Seite).
-- [ ] **AN-29** `g5-5` · Lösungs-Trainer: 2–3 tan-Aufgaben ergänzen (φ₂ = φ₁ + 180° wird
+  **Erledigt 13.09.2026:** Tabs sin/cos/tan; tan mit gestrichelten Asymptoten, Ästen je Pol getrennt und «+180°»-Klammern zwischen den Lösungen.
+- [x] **AN-29** `g5-5` · Lösungs-Trainer: 2–3 tan-Aufgaben ergänzen (φ₂ = φ₁ + 180° wird
   bisher nicht trainiert); optional Aufgaben aus Zufallswerten generieren.
-- [ ] **AN-30** `g4-2`: Klassieren-Abschnitt (√n-Faustregel) — Klassenbreiten-Widget am
+  **Erledigt 13.09.2026:** Drei tan-Aufgaben (tan φ = 1, −√3, 0.5), negativer Hauptwert über +180°.
+- [x] **AN-30** `g4-2`: Klassieren-Abschnitt (√n-Faustregel) — Klassenbreiten-Widget am
   60er-Datensatz ergänzen oder (billiger, P4) prominenter Querverweis auf das
   Histogramm-Widget in 4.0.
-- [ ] **AN-31** `g4-3`: Quartile/Boxplot ohne interaktive Stütze — das passende Widget
+  **Erledigt 13.09.2026:** Eigenes Klassenbreiten-Widget (IDs kb-) mit √n-Faustregel, Histogramm und Tabelle; Rohwerte konstruiert, bei 5 cm exakt die Tabelle des Beispiels.
+- [x] **AN-31** `g4-3`: Quartile/Boxplot ohne interaktive Stütze — das passende Widget
   existiert auf g4-0: prominent verlinken oder kompakt wiederverwenden (sortierte Liste mit
   Q₁/Median/Q₃-Markern + Boxplot am Klasse-B-Datensatz).
+  **Erledigt 13.09.2026:** Eigenes Widget (IDs qb-): sortierte Liste und Boxplot mit gemeinsam markierten Kennzahlen (Min, Q₁, Median, Q₃, Max, QD), Tukey-Konvention der Seite, zwei Datensätze.
 
 ### Zusammenlegung
 - [x] **AN-32** `g2-3` · `cv-lf` ↔ Büschel-Widget: Zwei Chips-Leisten mit gleicher Semantik

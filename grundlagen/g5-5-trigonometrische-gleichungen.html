@@ -457,26 +457,56 @@ MathJax = {
 
 <div class="widget">
   <div class="widget-header">
-    <h3>Sinus-Funktion und Lösungen <a class="quer" href="g5-4-einheitskreis.html#symmetrie">↩ 5.4</a></h3>
-    <p>Stelle \(c\) ein und beobachte alle Schnittpunkte im Bereich \(0° \leq \varphi \leq 720°\).</p>
+    <h3>sin-, cos- und tan-Kurve mit Lösungen <a class="quer" href="g5-4-einheitskreis.html#symmetrie">↩ 5.4</a></h3>
+    <p>Wähle die Funktion, stelle \(c\) ein und beobachte alle Schnittpunkte im Bereich \(0° \leq \varphi \leq 720°\).</p>
   </div>
   <div class="widget-body">
+    <div class="widget-titelzeile" style="margin-bottom:8px">
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Zähle bei sin und cos die Schnittpunkte pro \(360°\). Wechsle dann zu tan: Wie viele Schnittpunkte liegen zwischen zwei gestrichelten Polstellen — und wie weit sind zwei benachbarte Lösungen voneinander entfernt?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">sin und cos haben die Periode \(360°\) und treffen jede Höhe \(-1 &lt; c &lt; 1\) zweimal pro Periode — darum braucht es zwei Lösungen, je \(+ k \cdot 360°\). Der tan hat die Periode \(180°\): Zwischen zwei Polstellen \(90° + k \cdot 180°\) nimmt er jeden Wert \(c\) genau einmal an. Eine Lösung genügt: \(\varphi = \varphi_1 + k \cdot 180°\), also \(\varphi_2 = \varphi_1 + 180°\).</div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs-row" id="kr-tabs">
+      <button class="tab-btn aktiv" type="button" data-kr="sin">sin(φ) = c</button>
+      <button class="tab-btn" type="button" data-kr="cos">cos(φ) = c</button>
+      <button class="tab-btn" type="button" data-kr="tan">tan(φ) = c</button>
+    </div>
     <div class="sl-row">
       <label for="kr-c">Wert c:</label>
       <input id="kr-c" type="range" min="-1.2" max="1.2" value="0.5" step="0.05">
       <span class="sl-val" id="kr-c-v">0.50</span>
     </div>
-    <svg id="kr-svg" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;height:auto;display:block;margin:0 auto" aria-label="Sinus-Kurve mit Lösungen">
+    <svg id="kr-svg" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;height:auto;display:block;margin:0 auto" aria-label="sin-Kurve mit Lösungen">
       <!-- Achsen -->
       <line x1="40" y1="140" x2="580" y2="140" stroke="#1a1a1a" stroke-width="1.2"/>
       <line x1="40" y1="260" x2="40" y2="20" stroke="#1a1a1a" stroke-width="1.2"/>
       <text x="585" y="155" font-family="serif" font-style="italic" font-size="13">φ</text>
       <text x="50" y="22" font-family="serif" font-style="italic" font-size="13">y</text>
-      <!-- y-Achs-Markierungen -->
+      <!-- y-Achs-Markierungen sin/cos (1 Einheit = 100 px) -->
+      <g id="kr-y-sc">
       <line x1="36" y1="40" x2="44" y2="40" stroke="#1a1a1a"/>
       <text x="32" y="44" font-family="monospace" font-size="10" text-anchor="end">1</text>
       <line x1="36" y1="240" x2="44" y2="240" stroke="#1a1a1a"/>
       <text x="32" y="244" font-family="monospace" font-size="10" text-anchor="end">−1</text>
+      </g>
+      <!-- y-Achs-Markierungen tan (1 Einheit = 36 px) -->
+      <g id="kr-y-tan" display="none" font-family="monospace" font-size="10" text-anchor="end">
+        <line x1="36" y1="32" x2="44" y2="32" stroke="#1a1a1a"/><text x="32" y="36">3</text>
+        <line x1="36" y1="68" x2="44" y2="68" stroke="#1a1a1a"/><text x="32" y="72">2</text>
+        <line x1="36" y1="104" x2="44" y2="104" stroke="#1a1a1a"/><text x="32" y="108">1</text>
+        <line x1="36" y1="176" x2="44" y2="176" stroke="#1a1a1a"/><text x="32" y="180">−1</text>
+        <line x1="36" y1="212" x2="44" y2="212" stroke="#1a1a1a"/><text x="32" y="216">−2</text>
+        <line x1="36" y1="248" x2="44" y2="248" stroke="#1a1a1a"/><text x="32" y="252">−3</text>
+      </g>
       <!-- φ-Achs-Markierungen: 0°, 90°, 180°, ..., 720° (Schritte 90°) -->
       <!-- Skala: 0° bei x=40, 720° bei x=580. Also 1° = 0.75/180 = 540/720 px -->
       <g font-family="monospace" font-size="10" text-anchor="middle">
@@ -490,7 +520,14 @@ MathJax = {
         <line x1="512.5" y1="136" x2="512.5" y2="144" stroke="#1a1a1a"/><text x="512.5" y="158">630°</text>
         <line x1="580" y1="136" x2="580" y2="144" stroke="#1a1a1a"/><text x="580" y="158">720°</text>
       </g>
-      <!-- Sinus-Kurve (statisch) -->
+      <!-- tan: Polstellen-Asymptoten bei 90° + k·180° -->
+      <g id="kr-asym" display="none" stroke="#8a8a8a" stroke-width="1.2" stroke-dasharray="4 4">
+        <line x1="107.5" y1="20" x2="107.5" y2="260"/>
+        <line x1="242.5" y1="20" x2="242.5" y2="260"/>
+        <line x1="377.5" y1="20" x2="377.5" y2="260"/>
+        <line x1="512.5" y1="20" x2="512.5" y2="260"/>
+      </g>
+      <!-- Funktionskurve (je Tab neu gezeichnet) -->
       <path id="kr-curve" d="" fill="none" stroke="#1a4f8a" stroke-width="2"/>
       <!-- Niveaulinie y=c -->
       <line id="kr-niv" x1="40" y1="100" x2="580" y2="100" stroke="#c8412c" stroke-width="1.5" stroke-dasharray="5 4"/>
@@ -552,7 +589,7 @@ MathJax = {
     <p>Der Taschenrechner hat schon geantwortet. Ergänze die fehlende Lösung im Bereich \(0° \leq \varphi &lt; 360°\) (auf \(0.1°\) genau).</p>
   </div>
   <div class="widget-body">
-    <div class="lt-kopf"><span id="lt-nr">Aufgabe 1 von 6</span><span class="lt-score" id="lt-score">0 richtig</span></div>
+    <div class="lt-kopf"><span id="lt-nr">Aufgabe 1 von 9</span><span class="lt-score" id="lt-score">0 richtig</span></div>
     <div class="lt-frage" id="lt-frage">Gleichung: sin φ = 0.5;  Rechner: φ₁ = 30°</div>
     <div class="lt-eingabe">
       <label for="lt-in">φ₂ =</label>
@@ -927,7 +964,7 @@ buildNav({
 (function(){
   const sl = document.getElementById('gl-c');
   const slV = document.getElementById('gl-c-v');
-  const tabs = document.querySelectorAll('.tabs-row .tab-btn');
+  const tabs = document.querySelectorAll('.tabs-row .tab-btn[data-typ]');
   const niv = document.getElementById('gl-niv');
   const rad1 = document.getElementById('gl-rad1');
   const rad2 = document.getElementById('gl-rad2');
@@ -1076,7 +1113,7 @@ buildNav({
 })();
 
 /* ══════════════════════════════════════════════════════════
-   WIDGET 2: Sinus-Kurve mit Lösungen
+   WIDGET 2: sin-/cos-/tan-Kurve mit Lösungen
    ══════════════════════════════════════════════════════════ */
 (function(){
   const sl = document.getElementById('kr-c');
@@ -1086,76 +1123,142 @@ buildNav({
   const lsg = document.getElementById('kr-lsg');
   const points = document.getElementById('kr-points');
   const curve = document.getElementById('kr-curve');
+  const svg = document.getElementById('kr-svg');
+  const yTicksSC = document.getElementById('kr-y-sc');
+  const yTicksTan = document.getElementById('kr-y-tan');
+  const asym = document.getElementById('kr-asym');
+  const tabs = document.querySelectorAll('#kr-tabs .tab-btn');
+  const NS = 'http://www.w3.org/2000/svg';
+  let typ = 'sin';
 
   // Skala: x: 0° bei 40px, 720° bei 580px → 0.75 px/°
   const x0 = 40, xPerDeg = (580 - 40) / 720;
-  const yMid = 140, yAmp = 100; // y=1 bei 40, y=-1 bei 240
+  const yMid = 140;
+  // sin/cos: y=1 bei 40, y=-1 bei 240 (100 px pro Einheit)
+  // tan: 36 px pro Einheit, Kurve bis |y| = 120/36 ≈ 3.33 (Achsenende 20 bzw. 260)
+  const Y_SC = 100, Y_TAN = 36, TAN_MAX = 120 / Y_TAN;
+  const yUnit = () => typ === 'tan' ? Y_TAN : Y_SC;
+  const rad = deg => deg * Math.PI / 180;
+  const pt = (deg, y, u) => (x0 + deg * xPerDeg).toFixed(2) + ' ' + (yMid - u * y).toFixed(2) + ' ';
 
-  // Sinus-Kurve einmal zeichnen (statisch)
-  let d = '';
-  for (let deg = 0; deg <= 720; deg += 2) {
-    const x = x0 + deg * xPerDeg;
-    const y = yMid - yAmp * Math.sin(deg * Math.PI / 180);
-    d += (deg === 0 ? 'M ' : 'L ') + x.toFixed(2) + ' ' + y.toFixed(2) + ' ';
+  function zeichneKurve(){
+    let d = '';
+    if (typ === 'tan') {
+      // Ein Teilpfad je Ast zwischen zwei Polstellen, abgeschnitten bei |tan| = TAN_MAX
+      const rand = Math.atan(TAN_MAX) * 180 / Math.PI;
+      for (let k = 0; k <= 4; k++) {
+        const lo = Math.max(0, k * 180 - rand), hi = Math.min(720, k * 180 + rand);
+        const n = Math.ceil(hi - lo);            // Schrittweite ≤ 1°
+        for (let j = 0; j <= n; j++) {
+          const deg = lo + (hi - lo) * j / n;
+          d += (j === 0 ? 'M ' : 'L ') + pt(deg, Math.tan(rad(deg)), Y_TAN);
+        }
+      }
+    } else {
+      const f = typ === 'sin' ? Math.sin : Math.cos;
+      for (let deg = 0; deg <= 720; deg += 2) {
+        d += (deg === 0 ? 'M ' : 'L ') + pt(deg, f(rad(deg)), Y_SC);
+      }
+    }
+    curve.setAttribute('d', d.trim());
+    yTicksSC.setAttribute('display', typ === 'tan' ? 'none' : 'inline');
+    yTicksTan.setAttribute('display', typ === 'tan' ? 'inline' : 'none');
+    asym.setAttribute('display', typ === 'tan' ? 'inline' : 'none');
+    svg.setAttribute('aria-label', typ + '-Kurve mit Lösungen');
   }
-  curve.setAttribute('d', d);
 
   function fmt(d){ return (Math.round(d*10)/10).toFixed(1) + '°'; }
+  function svgEl(name, attrs){
+    const e = document.createElementNS(NS, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
 
   function update(){
     const c = +sl.value;
     slV.textContent = c.toFixed(2);
     // Niveaulinie
-    const yLine = yMid - yAmp * c;
+    const yLine = yMid - yUnit() * c;
     niv.setAttribute('y1', yLine); niv.setAttribute('y2', yLine);
     nivLbl.setAttribute('y', yLine + 4);
     nivLbl.textContent = 'y = ' + c.toFixed(2);
 
     points.innerHTML = '';
-    if (c < -1 || c > 1) {
-      lsg.textContent = 'Keine Lösung — sin(φ) liegt zwischen −1 und 1.';
+    if (typ !== 'tan' && (c < -1 || c > 1)) {
+      lsg.textContent = `Keine Lösung — ${typ}(φ) liegt zwischen −1 und 1.`;
       return;
     }
-    // Lösungen im Bereich [0°, 720°): jede Periode hat 2 Lösungen (sin)
-    const phi1 = Math.asin(c) * 180 / Math.PI;
     const sols = [];
-    // Im 1. Periodenintervall [0°, 360°): φ1 (in Q I oder IV) und 180-φ1 (Q I oder II)
-    // φ1 könnte negativ sein, dann + 360
-    let a = phi1, b = 180 - phi1;
-    if (a < 0) a += 360;
-    if (b < 0) b += 360;
-    sols.push(a, b);
-    // Plus Periode 360° für die zweite Periode
-    sols.push(a + 360, b + 360);
+    if (typ === 'tan') {
+      // Hauptwert arctan liegt in (−90°, 90°); eine Lösung pro 180°
+      let a = Math.atan(c) * 180 / Math.PI;
+      if (a < 0) a += 180;
+      for (let k = 0; k < 4; k++) sols.push(a + k * 180);
+    } else {
+      // Im 1. Periodenintervall [0°, 360°) je zwei Lösungen:
+      // sin: φ1 = arcsin(c) und 180° − φ1;  cos: φ1 = arccos(c) und 360° − φ1
+      let a, b;
+      if (typ === 'sin') { a = Math.asin(c) * 180 / Math.PI; b = 180 - a; }
+      else               { a = Math.acos(c) * 180 / Math.PI; b = 360 - a; }
+      if (a < 0) a += 360;
+      if (b < 0) b += 360;
+      sols.push(a, b);
+      // Plus Periode 360° für die zweite Periode
+      sols.push(a + 360, b + 360);
+    }
     // Sortieren, Bereich [0, 720), Duplikate entfernen (c = ±1: a und b fallen zusammen)
     const sorted = [...new Set(sols.map(s => Math.round(s * 1e6) / 1e6))]
       .filter(s => s >= 0 && s < 720).sort((x,y) => x-y);
 
+    // tan nahe der φ-Achse (|c| < 1.25): Beschriftung und Klammern auf die achsenferne Seite
+    const nahAchse = typ === 'tan' && Math.abs(c) < 1.25;
+    const aussen = c >= 0 ? -1 : 1;
+    const yLbl = nahAchse ? yLine + (c >= 0 ? -10 : 22) : yLine + (c >= 0 ? 22 : -10);
+
     // Schnittpunkte zeichnen
     sorted.forEach(deg => {
       const x = x0 + deg * xPerDeg;
-      const circ = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circ.setAttribute('cx', x);
-      circ.setAttribute('cy', yLine);
-      circ.setAttribute('r', 5);
-      circ.setAttribute('fill', '#2d9d5e');
-      points.appendChild(circ);
+      points.appendChild(svgEl('circle', { cx: x, cy: yLine, r: 5, fill: '#2d9d5e' }));
       // φ-Wert darunter
-      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      t.setAttribute('x', x);
-      t.setAttribute('y', yLine + (c >= 0 ? 22 : -10));
-      t.setAttribute('font-family', 'monospace');
-      t.setAttribute('font-size', '10');
-      t.setAttribute('fill', '#2d9d5e');
-      t.setAttribute('font-weight', '700');
-      t.setAttribute('text-anchor', 'middle');
+      const t = svgEl('text', { x: x, y: yLbl, 'font-family': 'monospace',
+        'font-size': '10', fill: '#2d9d5e', 'font-weight': '700', 'text-anchor': 'middle' });
       t.textContent = fmt(deg);
       points.appendChild(t);
     });
 
-    lsg.textContent = sorted.map(fmt).join(', ');
+    if (typ === 'tan') {
+      // Abstand benachbarter Lösungen: je +180° (Klammer achsenfern, ausserhalb der Beschriftung)
+      const yK = yLine + aussen * (nahAchse ? (c >= 0 ? 26 : 34) : 12);
+      const yT = yK + (c >= 0 ? -4 : 12);
+      for (let k = 0; k + 1 < sorted.length; k++) {
+        const xa = x0 + sorted[k] * xPerDeg + 7, xb = x0 + sorted[k + 1] * xPerDeg - 7;
+        const g = svgEl('g', { 'data-span': '180', stroke: '#2d9d5e', 'stroke-width': '1.2' });
+        g.appendChild(svgEl('line', { x1: xa, y1: yK, x2: xb, y2: yK }));
+        g.appendChild(svgEl('line', { x1: xa, y1: yK - 4, x2: xa, y2: yK + 4 }));
+        g.appendChild(svgEl('line', { x1: xb, y1: yK - 4, x2: xb, y2: yK + 4 }));
+        points.appendChild(g);
+        const t = svgEl('text', { x: (xa + xb) / 2, y: yT, 'font-family': 'monospace', 'font-size': '10',
+          fill: '#2d9d5e', 'font-weight': '700', 'text-anchor': 'middle' });
+        t.textContent = '+180°';
+        points.appendChild(t);
+      }
+      lsg.textContent = sorted.map(fmt).join(', ') + '  — Abstand je 180°';
+    } else {
+      lsg.textContent = sorted.map(fmt).join(', ');
+    }
   }
+
+  tabs.forEach(t => t.addEventListener('click', () => {
+    typ = t.dataset.kr;
+    tabs.forEach(o => o.classList.toggle('aktiv', o === t));
+    // Slider-Bereich an Typ anpassen (tan ist für jedes c lösbar)
+    if (typ === 'tan') { sl.min = -3;   sl.max = 3; }
+    else               { sl.min = -1.2; sl.max = 1.2; }
+    zeichneKurve();
+    update();
+  }));
   sl.addEventListener('input', update);
+  zeichneKurve();
   update();
 })();
 
@@ -1581,9 +1684,15 @@ document.querySelectorAll('#kk-tabs .tab-btn').forEach(t => t.addEventListener('
     { typ: 'cos', c: -0.8,  tr: 143.13, p1: 143.13, p2: 216.87 },
     { typ: 'sin', c: 0.9,   tr: 64.16,  p1: 64.16,  p2: 115.84 },
     { typ: 'cos', c: 0.25,  tr: 75.52,  p1: 75.52,  p2: 284.48 },
+    // tan: Periode 180° → φ₂ = φ₁ + 180°; negativer Hauptwert zuerst +180° (φ₁ in [0°; 180°[)
+    { typ: 'tan', c: 1,     tr: 45,     p1: 45,     p2: 225 },
+    { typ: 'tan', c: -Math.sqrt(3), ct: '−√3', tr: -60, p1: 120, p2: 300 },
+    { typ: 'tan', c: 0.5,   tr: 26.57,  p1: 26.57,  p2: 206.57 },
   ];
   const el = id => document.getElementById(id);
   const nz = v => v.toFixed(2).replace('-', '−');      // Unicode-Minus für die Anzeige
+  const cTxt = a => a.ct || nz(a.c);                    // exakter Wert (z.B. −√3), falls angegeben
+  const ARC = { sin: 'arcsin', cos: 'arccos', tan: 'arctan' };
   let reihe = [], i = 0, punkte = 0;
 
   function mische() {
@@ -1598,10 +1707,10 @@ document.querySelectorAll('#kk-tabs .tab-btn').forEach(t => t.addEventListener('
     el('lt-nr').textContent = `Aufgabe ${i + 1} von ${reihe.length}`;
     el('lt-score').textContent = `${punkte} richtig`;
     const hinweis = a.tr < 0
-      ? ` (negativ — zuerst +360° rechnen: φ₁ = ${a.p1.toFixed(2)}°)`
+      ? ` (negativ — zuerst +${a.typ === 'tan' ? 180 : 360}° rechnen: φ₁ = ${a.p1.toFixed(2)}°)`
       : '';
     el('lt-frage').textContent =
-      `Gleichung: ${a.typ} φ = ${nz(a.c)};  Rechner: ${a.typ === 'sin' ? 'arcsin' : 'arccos'}(${nz(a.c)}) = ${nz(a.tr)}°${hinweis}`;
+      `Gleichung: ${a.typ} φ = ${cTxt(a)};  Rechner: ${ARC[a.typ]}(${cTxt(a)}) = ${nz(a.tr)}°${hinweis}`;
     el('lt-in').value = ''; el('lt-in').disabled = false;
     el('lt-fb').className = 'lt-fb'; el('lt-fb').textContent = '';
     el('lt-pruef').disabled = false;
@@ -1614,7 +1723,13 @@ document.querySelectorAll('#kk-tabs .tab-btn').forEach(t => t.addEventListener('
     const v = parseFloat(roh);
     const regel = a.typ === 'sin'
       ? `180° − (${nz(a.tr)}°)`
-      : `360° − ${nz(a.tr)}°`;
+      : a.typ === 'cos'
+        ? `360° − ${nz(a.tr)}°`
+        : `${a.p1.toFixed(2)}° + 180°`;
+    // tan mit negativem Hauptwert: Überführung nach [0°; 360°[ im Hinweis zeigen
+    const weg = a.typ === 'tan' && a.tr < 0
+      ? ` (Hauptwert ${nz(a.tr)}° liegt nicht in [0°; 360°[ → φ₁ = ${nz(a.tr)}° + 180° = ${a.p1.toFixed(2)}°)`
+      : '';
     if (isNaN(v)) { fb.className = 'lt-fb err'; fb.textContent = '✗ Bitte eine Zahl eingeben.'; return; }
     el('lt-in').disabled = true; el('lt-pruef').disabled = true; el('lt-next').disabled = false;
     if (Math.abs(v - a.p2) <= 0.5) {
@@ -1623,10 +1738,12 @@ document.querySelectorAll('#kk-tabs .tab-btn').forEach(t => t.addEventListener('
       fb.textContent = `✓ Richtig: φ₂ = ${a.p2.toFixed(2)}° = ${regel}.`;
     } else if (Math.abs(v - a.p1) <= 0.5) {
       fb.className = 'lt-fb err';
-      fb.textContent = `✗ Das ist φ₁ — die Lösung, die der Rechner schon geliefert hat. Gesucht war die zweite: φ₂ = ${regel} = ${a.p2.toFixed(2)}°.`;
+      fb.textContent = `✗ Das ist φ₁ — die Lösung, die der Rechner schon geliefert hat. Gesucht war die zweite: φ₂ = ${regel} = ${a.p2.toFixed(2)}°${weg}.`;
     } else {
       fb.className = 'lt-fb err';
-      fb.textContent = `✗ Nicht korrekt. Bei ${a.typ} spiegelt man an der ${a.typ === 'sin' ? 'senkrechten' : 'waagrechten'} Achse: φ₂ = ${regel} = ${a.p2.toFixed(2)}°.`;
+      fb.textContent = a.typ === 'tan'
+        ? `✗ Nicht korrekt. Bei tan wiederholt sich jeder Wert nach 180°: φ₂ = ${regel} = ${a.p2.toFixed(2)}°${weg}.`
+        : `✗ Nicht korrekt. Bei ${a.typ} spiegelt man an der ${a.typ === 'sin' ? 'senkrechten' : 'waagrechten'} Achse: φ₂ = ${regel} = ${a.p2.toFixed(2)}°.`;
     }
     el('lt-score').textContent = `${punkte} richtig`;
   }
@@ -1638,7 +1755,7 @@ document.querySelectorAll('#kk-tabs .tab-btn').forEach(t => t.addEventListener('
     fb.className = punkte >= reihe.length - 1 ? 'lt-fb ok' : 'lt-fb err';
     fb.textContent = punkte >= reihe.length - 1
       ? 'Sitzt — du denkst die zweite Lösung mit, auch wenn der Rechner schweigt.'
-      : 'Merke: sin spiegelt an der senkrechten Achse (180° − φ₁), cos an der waagrechten (360° − φ₁).';
+      : 'Merke: sin spiegelt an der senkrechten Achse (180° − φ₁), cos an der waagrechten (360° − φ₁), tan wiederholt sich nach 180° (φ₁ + 180°).';
     el('lt-in').disabled = true; el('lt-pruef').disabled = true; el('lt-next').disabled = true;
   }
   function neustart() { mische(); i = 0; punkte = 0; zeige(); }

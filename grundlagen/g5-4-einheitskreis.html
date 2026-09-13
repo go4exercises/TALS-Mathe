@@ -507,17 +507,17 @@ MathJax = {
 
 <div class="anim">
   <div class="widget-titelzeile">
-    <div class="anim-titel">Anim · Abwickler — vom Kreispunkt zur Sinuskurve</div>
+    <div class="anim-titel">Anim · Abwickler — vom Kreispunkt zur Sinus- und Cosinuskurve</div>
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Fahre den Winkel \(\varphi\) hoch: Die <em>Höhe</em> des Kreispunkts (grün) wird rechts synchron zur Kurve abgewickelt. Was passiert nach einer vollen Runde (\(360°\))?</div>
+        <div class="ah-text">Fahre den Winkel \(\varphi\) hoch: Bei «sin» wird die <em>Höhe</em> des Kreispunkts (grün) rechts synchron zur Kurve abgewickelt. Schalte auf «cos»: Jetzt wird die \(x\)-Koordinate (orange) um \(90°\) auf die senkrechte Achse gedreht und abgewickelt. Wo startet die Kurve bei \(\varphi = 0°\)? Was passiert nach einer vollen Runde (\(360°\))?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Die abgewickelte Höhe ist die <strong>Sinuskurve</strong>: eine Funktion des Winkels. Nach \(360°\) wiederholt sie sich (Periodizität). Genau diese Kurve untersuchst du in 5.5.</div>
+        <div class="ah-text">Die abgewickelte Höhe ist die <strong>Sinuskurve</strong>, die abgewickelte \(x\)-Koordinate die <strong>Cosinuskurve</strong>: beides Funktionen des Winkels. Die Cosinuskurve startet bei \(1\), weil der Kreispunkt bei \(\varphi = 0°\) in \((1 \mid 0)\) liegt. Nach \(360°\) wiederholen sich beide (Periodizität). Genau diese Kurven untersuchst du in 5.5.</div>
       </div>
     </div>
   </div>
@@ -528,13 +528,20 @@ MathJax = {
         <div class="regler-label"><span>Winkel \(\varphi\)</span><span class="wert" id="lbl-abwPhi">60°</span></div>
         <input type="range" id="sld-abwPhi" min="0" max="720" step="5" value="60">
       </div>
-      <div class="formel">\(y = \sin\varphi\) — die Höhe des Kreispunkts</div>
+      <div>
+        <div class="feld-titel">Funktion</div>
+        <div class="chips" id="abw-modus">
+          <button class="chip aktiv" data-m="sin">sin</button>
+          <button class="chip" data-m="cos">cos</button>
+        </div>
+      </div>
+      <div class="formel" id="formel-abw"><span class="tx-gruen">\(y = \sin\varphi\)</span> — die Höhe des Kreispunkts</div>
       <div class="legende">
         <div class="legende-titel">Momentanwert</div>
         <div class="legende-zeile"><span class="lab">\(\varphi\)</span><span class="val" id="leg-abwPhi">60°</span></div>
-        <div class="legende-zeile"><span class="lab">\(\sin\varphi\)</span><span class="val" id="leg-abwSin">0.87</span></div>
+        <div class="legende-zeile"><span class="lab" id="lab-abwWert">\(\sin\varphi\)</span><span class="val" id="leg-abwWert">0.87</span></div>
       </div>
-      <div class="erklaerung">Der Punkt läuft auf dem Einheitskreis; seine Höhe \(\sin\varphi\) wird rechts zur <strong>Sinuskurve</strong> abgewickelt — der Brückenschlag zur Funktion in <a class="quer" href="g5-5-trigonometrische-gleichungen.html">↗ 5.5</a>.</div>
+      <div class="erklaerung" id="erkl-abw">Der Punkt läuft auf dem Einheitskreis; seine Höhe \(\sin\varphi\) wird rechts zur <strong>Sinuskurve</strong> abgewickelt — der Brückenschlag zur Funktion in <a class="quer" href="g5-5-trigonometrische-gleichungen.html">↗ 5.5</a>.</div>
     </div>
   </div>
 </div>
@@ -1353,9 +1360,11 @@ function initCv(id) {
   const H = +cv.dataset.logicalH;
   // Buffer-Auflösung an Display-Pixel-Ratio anpassen (HiDPI / Retina).
   const dpr = window.devicePixelRatio || 1;
-  const rect = cv.getBoundingClientRect();
-  const cssW = rect.width  || W;
-  const cssH = rect.height || H;
+  // Breite ohne Rahmen messen (getBoundingClientRect zaehlt den 1-px-Rahmen
+  // mit, dann waechst die Canvas bei jedem Neuzeichnen um 2 px und ein Kreis
+  // wird zur Ellipse). Die Hoehe folgt dem logischen Seitenverhaeltnis.
+  const cssW = cv.clientWidth || W;
+  const cssH = cssW * H / W;
   const bufW = Math.max(1, Math.round(cssW * dpr));
   const bufH = Math.max(1, Math.round(cssH * dpr));
   if (cv.width !== bufW || cv.height !== bufH) {
@@ -1872,20 +1881,39 @@ sldBezPhi.addEventListener('input', drawBez);
 /* ============================================================
  *  INITIAL RENDER
  * ============================================================ */
-/* Abwickler: Kreispunkt-Höhe sin φ synchron zur Sinuskurve abwickeln (Brücke zu 5.5) */
+/* Abwickler: Kreispunkt-Höhe sin φ bzw. x-Koordinate cos φ synchron zur Kurve
+ * abwickeln (Brücke zu 5.5). Im cos-Modus wird die Strecke O→Q (x-Koordinate)
+ * um 90° um O gedreht (Q(x|0) → T(0|x)) und von T aus waagrecht abgewickelt. */
+const ABW_MODI = {
+  sin: {
+    formel: '<span class="tx-gruen">\\(y = \\sin\\varphi\\)</span> — die Höhe des Kreispunkts',
+    lab: '\\(\\sin\\varphi\\)',
+    erkl: 'Der Punkt läuft auf dem Einheitskreis; seine Höhe \\(\\sin\\varphi\\) wird rechts zur <strong>Sinuskurve</strong> abgewickelt — der Brückenschlag zur Funktion in <a class="quer" href="g5-5-trigonometrische-gleichungen.html">↗ 5.5</a>.'
+  },
+  cos: {
+    formel: '<span class="tx-orange">\\(x = \\cos\\varphi\\)</span> — die \\(x\\)-Koordinate des Kreispunkts',
+    lab: '\\(\\cos\\varphi\\)',
+    erkl: 'Die \\(x\\)-Koordinate \\(\\cos\\varphi\\) wird um \\(90°\\) auf die senkrechte Achse gedreht (Viertelkreis) und rechts zur <strong>Cosinuskurve</strong> abgewickelt. Bei \\(\\varphi = 0°\\) liegt der Punkt in \\((1 \\mid 0)\\) — darum startet die Kurve bei \\(1\\). Weiter in <a class="quer" href="g5-5-trigonometrische-gleichungen.html">↗ 5.5</a>.'
+  }
+};
+let abwModus = 'sin';
 function drawAbw() {
   const r = initCv('cv-abw'); if (!r) return;
   const { ctx, W, H } = r;
   const phi = parseFloat(document.getElementById('sld-abwPhi').value);
   const thMod = (((phi % 360) + 360) % 360) * Math.PI / 180;
-  const sinv = Math.sin(thMod);
+  const sinv = Math.sin(thMod), cosv = Math.cos(thMod);
+  const istCos = abwModus === 'cos';
+  const fn = istCos ? Math.cos : Math.sin;
+  const wert = Math.abs(fn(thMod)) < 0.005 ? 0 : fn(thMod);   // kein «−0.00»
+  const farbe = istCos ? C.orange : C.gruen;
   document.getElementById('lbl-abwPhi').textContent = phi + '°';
   document.getElementById('leg-abwPhi').textContent = phi + '°';
-  document.getElementById('leg-abwSin').textContent = sinv.toFixed(2).replace('-', '−');
+  document.getElementById('leg-abwWert').textContent = wert.toFixed(2).replace('-', '−');
   const cy = 120, cxL = 95, R = 75;
   const xW0 = 200, xW1 = W - 16;
   const xOf = deg => xW0 + deg / 720 * (xW1 - xW0);
-  const waveY = deg => cy - R * Math.sin(deg * Math.PI / 180);
+  const waveY = deg => cy - R * fn(deg * Math.PI / 180);
   const fillDot = (x, y, col, rr) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, rr, 0, 2 * Math.PI); ctx.fill(); };
   // Nulllinie / Zeitachse
   ctx.strokeStyle = C.linie; ctx.lineWidth = 1;
@@ -1906,25 +1934,68 @@ function drawAbw() {
   ctx.strokeStyle = C.linie; ctx.lineWidth = 1.2; ctx.beginPath();
   for (let d = 0; d <= 720; d += 3) { const px = xOf(d), py = waveY(d); d === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
   ctx.stroke();
-  ctx.strokeStyle = C.gruen; ctx.lineWidth = 2.5; ctx.beginPath();
+  ctx.strokeStyle = farbe; ctx.lineWidth = 2.5; ctx.beginPath();
   let first = true;
   for (let d = 0; d <= phi + 0.001; d += 2) { const px = xOf(d), py = waveY(d); if (first) { ctx.moveTo(px, py); first = false; } else ctx.lineTo(px, py); }
   ctx.stroke();
-  // Kreispunkt + Radius + Höhen-Projektion
-  const Px = cxL + R * Math.cos(thMod), Py = cy - R * sinv;
+  txt(ctx, xW1, 16, istCos ? 'cos φ' : 'sin φ', farbe, 13, 'right');
+  // Kreispunkt + Radius
+  const Px = cxL + R * cosv, Py = cy - R * sinv;
+  let startY;
+  if (!istCos) {
+    // Höhen-Projektion: senkrechte Strecke Q→P
+    ctx.strokeStyle = C.gruen; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(Px, cy); ctx.lineTo(Px, Py); ctx.stroke();
+    startY = Py;
+  } else {
+    // Lot von P auf die x-Achse (Q), x-Koordinate O→Q
+    ctx.strokeStyle = C.tinte2; ctx.lineWidth = 1; ctx.setLineDash([2, 3]);
+    ctx.beginPath(); ctx.moveTo(Px, Py); ctx.lineTo(Px, cy); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = C.orange; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(cxL, cy); ctx.lineTo(Px, cy); ctx.stroke();
+    // Drehung um 90° um O: Q(x|0) → T(0|x) — Viertelkreis mit Radius |x|
+    const rq = R * Math.abs(cosv), Ty = cy - R * cosv;
+    if (rq > 0.5) {
+      const a0 = cosv >= 0 ? 0 : Math.PI;
+      ctx.strokeStyle = C.orange; ctx.lineWidth = 1.2; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.arc(cxL, cy, rq, a0, a0 - Math.PI / 2, true); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    // gedrehte Strecke O→T auf der senkrechten Achse
+    ctx.strokeStyle = C.orange; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(cxL, cy); ctx.lineTo(cxL, Ty); ctx.stroke();
+    startY = Ty;
+  }
   ctx.strokeStyle = C.blau; ctx.lineWidth = 1.6;
   ctx.beginPath(); ctx.moveTo(cxL, cy); ctx.lineTo(Px, Py); ctx.stroke();
-  ctx.strokeStyle = C.gruen; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(Px, cy); ctx.lineTo(Px, Py); ctx.stroke();
   fillDot(Px, Py, C.blau, 5);
-  // Höhen-Verbindung Kreispunkt → Kurvenpunkt
+  if (istCos) fillDot(cxL, startY, C.orange, 3.5);
+  // Beschriftung der abgewickelten Strecke (nur, wenn sie nicht verschwindend kurz ist)
+  if (Math.abs(wert) >= 0.15) {
+    if (istCos) txt(ctx, (cxL + Px) / 2, cy + (cosv >= 0 ? 13 : -13), 'x', C.orange, 13);
+    else txt(ctx, Px + (cosv >= 0 ? 9 : -9), (cy + Py) / 2, 'y', C.gruen, 13, cosv >= 0 ? 'left' : 'right');
+  }
+  // Verbindung zum Kurvenpunkt
   const curX = xOf(phi);
-  ctx.strokeStyle = C.gruen; ctx.lineWidth = 1.3; ctx.setLineDash([5, 4]);
-  ctx.beginPath(); ctx.moveTo(Px, Py); ctx.lineTo(curX, Py); ctx.stroke();
+  ctx.strokeStyle = farbe; ctx.lineWidth = 1.3; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(istCos ? cxL : Px, startY); ctx.lineTo(curX, startY); ctx.stroke();
   ctx.setLineDash([]);
-  fillDot(curX, Py, C.gruen, 5);
+  fillDot(curX, startY, farbe, 5);
 }
 document.getElementById('sld-abwPhi').addEventListener('input', drawAbw);
+document.querySelectorAll('#abw-modus .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('#abw-modus .chip').forEach(x => x.classList.remove('aktiv'));
+    c.classList.add('aktiv');
+    abwModus = c.dataset.m;
+    const m = ABW_MODI[abwModus];
+    const fEl = document.getElementById('formel-abw'), lEl = document.getElementById('lab-abwWert'), eEl = document.getElementById('erkl-abw');
+    fEl.innerHTML = m.formel; lEl.innerHTML = m.lab; eEl.innerHTML = m.erkl;
+    drawAbw();
+    mjTypeset([fEl, lEl, eEl]);
+  });
+});
 
 /* ════════════════════════════════════════════════════════════════
  *  SYMMETRIE-SPIEGEL

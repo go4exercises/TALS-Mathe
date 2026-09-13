@@ -308,6 +308,7 @@ MathJax = {
   .bsp-panel canvas { width: 100%; height: auto; max-width: 480px; display: block; margin: 8px auto; }
   #lin-canvas, #par-canvas, #schn-canvas { width: 100%; height: auto; max-width: 480px; display: block; margin: 8px auto; }
   #cv-vertikal { width: 100%; height: auto; max-width: 460px; display: block; margin: 8px auto; }
+  #wt-canvas { width: 100%; height: auto; max-width: 480px; display: block; margin: 10px auto 4px; }
   .vt-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; justify-content: center; }
   .vt-chip { font-family: var(--mono); font-size: 0.74rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--linie); background: var(--papier-2); cursor: pointer; color: var(--tinte-2); transition: all 0.15s; }
   .vt-chip:hover { border-color: var(--blau-rand); color: var(--blau); }
@@ -518,6 +519,8 @@ genügt das im Allgemeinen <em>nicht</em> — sie zeigt nur einzelne Punkte).</p
     <tr><td style="border:1pt solid var(--linie);padding:3px 10px">\(f(x)\)</td><td style="border:1pt solid var(--linie);padding:3px 10px">0</td><td style="border:1pt solid var(--linie);padding:3px 10px">1</td><td style="border:1pt solid var(--linie);padding:3px 10px">4</td><td style="border:1pt solid var(--linie);padding:3px 10px">9</td></tr>
   </table>
   <p>Die Werte passen zu \(f(x) = x^2\). Sie passen aber auch zu \(h(x) = x^2 + x \cdot (x-1) \cdot (x-2) \cdot (x-3)\) — denn der zusätzliche Term verschwindet an genau \(x = 0, 1, 2, 3\). Probe: \(h(0)=0\), \(h(1)=1\), \(h(2)=4\), \(h(3)=9\) ✓. Trotzdem ist \(h\) keineswegs \(f\): an \(x = 4\) liefert \(f\) den Wert 16, \(h\) hingegen 40. Es gibt <em>unendlich viele</em> Funktionen mit derselben Wertetabelle — man kann beliebige Terme hinzufügen, die an den Tabellenstellen verschwinden.</p>
+  <canvas id="wt-canvas" aria-label="Graphen von f und h durch dieselben vier Tabellenpunkte"></canvas>
+  <p style="font-size:0.85rem;color:var(--tinte-2);text-align:center;margin-top:0">Beide Graphen gehen durch die vier Tabellenpunkte (rot). Dazwischen weicht \(h\) um bis zu 1 von \(f\) ab, ausserhalb der Tabelle immer stärker.</p>
   <p><strong>Konsequenz:</strong> Eine Wertetabelle allein bestimmt eine Funktion nur, wenn der Funktionstyp (z.B. „lineare Funktion") vorgegeben ist. Verbale Vorschrift, Graph und Funktionsterm sind in dem Sinn vollständiger — sie legen den Wert für <em>jedes</em> \(x\) im Definitionsmenge fest.</p>
 </div>
 
@@ -1582,6 +1585,68 @@ function darstGraphRender() {
   ctx.fillStyle = '#b85a00';
   for (let i = 0; i <= 4; i++) { ctx.beginPath(); ctx.arc(cx(i), cy(3*i), 2.5, 0, 2*Math.PI); ctx.fill(); }
 }
+
+/* Fehler-Box «Wertetabelle»: f(x) = x² und h(x) = x² + x·(x−1)·(x−2)·(x−3)
+   durch dieselben vier Punkte (0|0), (1|1), (2|4), (3|9). Statischer Graph. */
+(function () {
+  const xMin = -1, xMax = 4, yMin = -1.5, yMax = 10.5;
+  const f = x => x * x;
+  const h = x => x * x + x * (x - 1) * (x - 2) * (x - 3);
+  const BLAU = '#1a4f8a', ORANGE = '#b85c00', ROT = '#9b1c1c';
+  function render() {
+    const c = document.getElementById('wt-canvas');
+    if (!c) return;
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.offsetWidth || 480;
+    const H = Math.max(250, Math.round(W * 0.72));
+    c.width = W * dpr; c.height = H * dpr;
+    c.style.height = H + 'px';
+    const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+    const { cx, cy, zahlenOben } = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
+    // Kurven, auf die Zeichenfläche beschnitten
+    const kurve = (fn, farbe, strich) => {
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.clip();
+      ctx.strokeStyle = farbe; ctx.lineWidth = 2.4; ctx.setLineDash(strich);
+      ctx.beginPath();
+      const N = 400;
+      for (let k = 0; k <= N; k++) {
+        const x = xMin + (xMax - xMin) * k / N;
+        const y = Math.max(yMin - 2, Math.min(yMax + 2, fn(x)));
+        if (k === 0) ctx.moveTo(cx(x), cy(y)); else ctx.lineTo(cx(x), cy(y));
+      }
+      ctx.stroke();
+      ctx.restore();
+    };
+    kurve(f, BLAU, []);
+    kurve(h, ORANGE, [7, 5]);
+    zahlenOben();
+    // Tabellenpunkte
+    [0, 1, 2, 3].forEach(x => {
+      ctx.beginPath(); ctx.arc(cx(x), cy(f(x)), 5.5, 0, 2 * Math.PI);
+      ctx.fillStyle = ROT; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.setLineDash([]); ctx.stroke();
+    });
+    // Legende oben rechts der y-Achse, im freien Feld zwischen den Kurven
+    ctx.font = '13px JetBrains Mono,monospace';
+    const zeilen = [['f(x) = x²', BLAU, []], ['h(x)', ORANGE, [7, 5]]];
+    const tw = Math.max(...zeilen.map(z => ctx.measureText(z[0]).width));
+    const lx = cx(0) + 30, ly = 8, lb = 34 + tw + 8, lh = 2 * 18 + 8;
+    ctx.fillStyle = '#fff'; ctx.fillRect(lx, ly, lb, lh);
+    ctx.strokeStyle = '#d8d2c4'; ctx.lineWidth = 1; ctx.setLineDash([]);
+    ctx.strokeRect(lx + 0.5, ly + 0.5, lb - 1, lh - 1);
+    zeilen.forEach((z, i) => {
+      const y = ly + 4 + 9 + i * 18;
+      ctx.strokeStyle = z[1]; ctx.lineWidth = 2.4; ctx.setLineDash(z[2]);
+      ctx.beginPath(); ctx.moveTo(lx + 8, y); ctx.lineTo(lx + 28, y); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = z[1];
+      beschriftung(ctx, z[0], lx + 34, y, { align: 'left', baseline: 'middle', bg: '#fff', W, H });
+    });
+  }
+  window.addEventListener('load', render);
+  window.addEventListener('resize', render);
+})();
 
 /* Funktion-Quiz */
 function fqDraw(canvas, kind) {

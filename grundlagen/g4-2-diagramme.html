@@ -213,6 +213,9 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
 .manip-box .mp-eq { font-family: var(--mono); font-size: 0.85rem; color: var(--tinte); background: var(--weiss); border: 1px solid var(--linie); border-radius: 6px; padding: 8px 12px; margin-bottom: 10px; text-align: center; }
 .manip-box canvas { width: 100%; max-width: 520px; display: block; margin: 0 auto; background: var(--weiss); border-radius: 6px; }
 .manip-box .mp-cap { font-size: 0.82rem; color: var(--tinte-2); margin-top: 8px; font-style: italic; }
+
+/* ── Klassenbreiten-Widget: Häufigkeitstabelle kompakt, damit bis 10 Klassen ohne Scrollen passen ── */
+#kb-tab td { padding: 4px 10px; }
 </style>
 </head>
 <body>
@@ -302,6 +305,58 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
   <p style="margin-top:8px">Faustregel für die Anzahl Klassen bei \(n\) Werten:</p>
   \[ k \approx \sqrt{n} \]
   <p>Bei \(n = 60\) also etwa 8 Klassen, bei \(n = 200\) etwa 14.</p>
+</div>
+
+<p>Wie stark die Klassenbreite das Bild verändert, probierst du am besten selbst aus. Das Widget klassiert die 60 Körpergrössen aus dem Beispiel darunter:</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Klassenbreite wählen: wie viele Klassen passen zu 60 Werten?</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Klicke dich von 1 cm bis 15 cm durch. Bei welcher Klassenbreite wird das Histogramm zackig und löchrig, bei welcher verschwindet die Form in wenigen breiten Balken? Schau dabei auch auf die Summe in der Tabelle.</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Die Daten bleiben dieselben 60 Werte, die Summe ist immer 60 — nur das Bild ändert sich. Zu viele Klassen zeigen Zufallszacken und leere Klassen, zu wenige verschmieren die Form. Die Faustregel \(k \approx \sqrt{n}\) liefert einen guten Startwert: bei \(n = 60\) etwa 8 Klassen, hier also 4 cm breit. Auch 6 oder 10 Klassen sind noch gut lesbar; die Faustregel ist ein Richtwert, keine exakte Vorschrift.</div>
+        </div>
+      </div>
+    </div>
+    <p>60 Körpergrössen in ganzen cm, Klassen halboffen: die linke Grenze zählt zur Klasse, die rechte nicht. Bei 5 cm entsteht genau die Tabelle aus dem Beispiel.</p>
+  </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="feld-titel">Klassenbreite</div>
+      <div class="chips" id="kb-chips">
+        <button class="chip" type="button" data-kb="1">1 cm</button>
+        <button class="chip" type="button" data-kb="2">2 cm</button>
+        <button class="chip" type="button" data-kb="3">3 cm</button>
+        <button class="chip aktiv" type="button" data-kb="4">4 cm ★</button>
+        <button class="chip" type="button" data-kb="5">5 cm</button>
+        <button class="chip" type="button" data-kb="10">10 cm</button>
+        <button class="chip" type="button" data-kb="15">15 cm</button>
+      </div>
+      <div class="formel" style="margin-top:10px">Faustregel: \(k \approx \sqrt{60} \approx 7.7\) → etwa 8 Klassen. Spannweite <span style="white-space:nowrap">\(184 - 156 = 28\)&nbsp;cm,</span> \(28 : 8 = 3.5\) → Klassenbreite 4&nbsp;cm&nbsp;★</div>
+      <div class="anim-layout" style="margin-top:12px">
+        <div>
+          <canvas id="kb-cv" aria-label="Histogramm der 60 Körpergrössen mit wählbarer Klassenbreite"></canvas>
+          <div class="erklaerung" id="kb-erkl" style="margin-top:10px">Klassenbreite 4 cm → 8 Klassen.</div>
+        </div>
+        <div class="bedien">
+          <div style="max-height:25rem;overflow-y:auto">
+            <table class="ftb-tabelle" style="margin:0">
+              <thead><tr><th>Klasse [cm]</th><th>\(h_i\)</th><th>\(h_i/n\)</th></tr></thead>
+              <tbody id="kb-tab"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="block block-bsp" style="margin-top:10px">
@@ -1633,6 +1688,167 @@ function showDia(key, btn){
   }));
   drawManip();
   window.addEventListener('resize', drawManip);
+})();
+
+/* ══ Klassenbreiten-Widget (Klassieren, Faustregel k ≈ √n) ══
+   60 Körpergrössen in ganzen cm, passend zum Beispiel «Körpergrössen klassieren»:
+   min 156, max 184; bei 5 cm Klassenbreite genau 5, 12, 18, 14, 8, 3.
+   Klasseneinteilung übernommen aus zeichneHistogramm/baueHaeufTab in g4-0
+   (Konvention [a; b[): Start = floor(min/b)*b, so dass min in der ersten Klasse liegt.
+   Nachgerechnet (Python): 1 cm → 29 Klassen, 2 → 15, 3 → 10, 4 → 8, 5 → 6, 10 → 4, 15 → 3. */
+(function () {
+  const DATEN = [156, 158, 158, 159, 159, 160, 161, 161, 161, 161, 162, 163, 163, 163, 164,
+                 164, 164, 165, 165, 166, 166, 166, 166, 166, 167, 167, 167, 168, 168, 168,
+                 168, 168, 168, 169, 169, 170, 170, 170, 170, 171, 172, 172, 172, 172, 172,
+                 173, 174, 174, 174, 175, 176, 176, 176, 177, 178, 178, 179, 181, 182, 184];
+  const N = DATEN.length;               // 60
+  const WURZEL = Math.sqrt(N);          // 7.746
+  const K_REGEL = Math.round(WURZEL);   // 8
+  let breite = 4;
+
+  function klassieren(daten, kb) {
+    daten = daten.filter(v => isFinite(v));
+    const min = Math.min(...daten), max = Math.max(...daten);
+    const start = Math.floor(min / kb) * kb;
+    let end = Math.ceil((max + 1e-9) / kb) * kb;
+    if (end === Math.floor(max / kb) * kb) end += kb;
+    const klassen = [];
+    for (let g = start; g < end - 1e-9; g += kb) {
+      const lower = g, upper = g + kb;
+      klassen.push({ lower, upper, h: daten.filter(v => v >= lower && v < upper).length });
+    }
+    // Randwert: max gehört formal nicht in [.., upper[ → in die letzte Klasse nehmen
+    if (klassen.length > 0) {
+      const last = klassen[klassen.length - 1];
+      last.h = daten.filter(v => v >= last.lower && v <= last.upper).length;
+    }
+    while (klassen.length > 1 && klassen[klassen.length - 1].h === 0) klassen.pop();
+    while (klassen.length > 1 && klassen[0].h === 0) klassen.shift();
+    return klassen;
+  }
+
+  function einstufung(k) {
+    if (k === K_REGEL) return 'regel';
+    if (Math.abs(k - WURZEL) <= 2.5) return 'nahe';
+    return k > WURZEL ? 'viele' : 'wenige';
+  }
+  const FARBE  = { regel: '#1f6b3a', nahe: '#b85c00', viele: '#c0392b', wenige: '#c0392b' };
+  const STATUS = { regel: '★ Faustregel', nahe: 'nahe Faustregel', viele: 'zu viele Klassen', wenige: 'zu wenige Klassen' };
+  const SCHRIFT = '11px "JetBrains Mono", monospace';
+  const SCHRIFT_FETT = 'bold 11px "JetBrains Mono", monospace';
+
+  function zeichne() {
+    const klassen = klassieren(DATEN, breite);
+    const k = klassen.length;
+    const maxH = Math.max(...klassen.map(x => x.h), 1);
+    const art = einstufung(k);
+
+    const cv = document.getElementById('kb-cv');
+    cv.style.width = '';                                  // Breite neu aus dem Layout lesen
+    const { ctx, W, H } = initCanvas('kb-cv', (cv.offsetWidth || 600) < 400 ? 250 : 300);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    const opt = (align, extra) => Object.assign({ align, W, H, bg: '#fff' }, extra);
+
+    const L = 34, R = 12, T = 62, B = 42;
+    const pw = W - L - R, ph = H - T - B;
+    const yStep = [1, 2, 5, 10].find(s => Math.ceil(maxH / s) <= 6) || 10;
+    const yMax = Math.ceil(maxH / yStep) * yStep;
+    const yPx = v => T + ph - v / yMax * ph;
+    const bw = pw / k;
+
+    // Gitter und y-Zahlen
+    ctx.font = SCHRIFT;
+    for (let v = 0; v <= yMax; v += yStep) {
+      const y = yPx(v);
+      if (v > 0) {
+        ctx.strokeStyle = '#eff1f5'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(L + pw, y); ctx.stroke();
+      }
+      ctx.fillStyle = '#6b7280';
+      beschriftung(ctx, String(v), L - 6, y + 4, opt('right'));
+    }
+
+    // Balken ohne Lücke
+    klassen.forEach((kl, i) => {
+      if (kl.h === 0) return;
+      const x = L + i * bw, y = yPx(kl.h);
+      ctx.fillStyle = '#3b82f6'; ctx.fillRect(x, y, bw, T + ph - y);
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.strokeRect(x, y, bw, T + ph - y);
+    });
+
+    // Häufigkeit über dem Balken, sofern der Balken breit genug ist
+    ctx.font = SCHRIFT_FETT;
+    if (bw >= ctx.measureText(String(maxH)).width + 4) {
+      ctx.fillStyle = '#1a4f8a';
+      klassen.forEach((kl, i) => {
+        if (kl.h > 0) beschriftung(ctx, String(kl.h), L + (i + 0.5) * bw, yPx(kl.h) - 5, opt('center'));
+      });
+    }
+
+    // Achsen
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(L, T - 6); ctx.lineTo(L, T + ph); ctx.lineTo(L + pw, T + ph); ctx.stroke();
+
+    // Klassengrenzen: Teilstrich an jeder Grenze, Zahl ausgedünnt, wenn es eng wird
+    ctx.font = SCHRIFT;
+    const zahlW = ctx.measureText(String(klassen[k - 1].upper)).width;
+    const jede = [1, 2, 3, 4, 5, 10].find(s => s * bw >= zahlW + 8) || 10;
+    for (let i = 0; i <= k; i++) {
+      const x = L + i * bw;
+      ctx.strokeStyle = '#374151'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x, T + ph); ctx.lineTo(x, T + ph + 4); ctx.stroke();
+      if (i % jede === 0) {
+        const wert = i < k ? klassen[i].lower : klassen[k - 1].upper;
+        ctx.fillStyle = '#374151';
+        beschriftung(ctx, String(wert), x, T + ph + 16, opt('center'));
+      }
+    }
+    ctx.fillStyle = '#374151';
+    beschriftung(ctx, 'Körpergrösse [cm]', W - 4, H - 6, opt('right'));
+    beschriftung(ctx, 'Häufigkeit', 4, 38, opt('left'));
+
+    // Kopfzeile: Klassenzahl links, Einstufung rechts (bei Platzmangel eine Zeile tiefer)
+    ctx.font = SCHRIFT_FETT;
+    const kopf = `k = ${k} Klassen à ${breite} cm`;
+    ctx.fillStyle = '#1c1a17';
+    beschriftung(ctx, kopf, 4, 16, opt('left'));
+    const kopfW = ctx.measureText(kopf).width, stW = ctx.measureText(STATUS[art]).width;
+    ctx.fillStyle = FARBE[art];
+    beschriftung(ctx, STATUS[art], W - 4, kopfW + stW + 24 <= W ? 16 : 38, opt('right'));
+
+    // Erklärung
+    let txt = `Klassenbreite <span class="tx-blau">${breite}</span> cm → ${k} Klassen. `;
+    if (art === 'regel') {
+      txt += '★ Das entspricht der Faustregel. Die Form ist gut zu erkennen: ein Gipfel in der Mitte, nach rechts etwas länger auslaufend.';
+    } else if (art === 'nahe') {
+      txt += 'Nahe an der Faustregel und noch gut lesbar.';
+      if (breite === 5) txt += ' Das ist die Einteilung aus dem Beispiel.';
+    } else if (art === 'viele') {
+      const duenn = klassen.filter(x => x.h <= 1).length;
+      txt += `Zu viele Klassen: ${duenn} von ${k} Klassen enthalten höchstens einen Wert. Die Zacken im Bild sind Zufall, keine Form.`;
+    } else {
+      txt += `Zu wenige Klassen: ${maxH} von ${N} Werten liegen in einer einzigen Klasse. Die Form der Verteilung verschmiert.`;
+    }
+    document.getElementById('kb-erkl').innerHTML = txt;
+
+    // Häufigkeitstabelle
+    let zeilen = '', summe = 0;
+    klassen.forEach(kl => {
+      summe += kl.h;
+      zeilen += `<tr><td>[${kl.lower};&nbsp;${kl.upper}[</td><td>${kl.h}</td><td>${(kl.h / N).toFixed(3)}</td></tr>`;
+    });
+    zeilen += `<tr><td>Summe</td><td>${summe}</td><td>${(summe / N).toFixed(3)}</td></tr>`;
+    document.getElementById('kb-tab').innerHTML = zeilen;
+  }
+
+  document.querySelectorAll('#kb-chips .chip').forEach(ch => ch.addEventListener('click', () => {
+    breite = +ch.dataset.kb;
+    document.querySelectorAll('#kb-chips .chip').forEach(o => o.classList.toggle('aktiv', o === ch));
+    zeichne();
+  }));
+  zeichne();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(zeichne);
+  window.addEventListener('resize', zeichne);
 })();
 </script>
 </body>

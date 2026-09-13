@@ -835,6 +835,52 @@ MathJax = {
   <p style="margin-top:6px">Beides gilt <strong>nur bei parallelen</strong> Geraden. Umgekehrt beweist die Gleichheit solcher Winkel, dass die beiden Geraden parallel sein müssen.</p>
 </div>
 
+<p>Probiere es aus: Die beiden markierten Winkel bleiben gleich gross, wie auch immer du die Schneidende \(s\) drehst, bis \(h\) nicht mehr parallel zu \(g\) liegt. Genau diese Eigenschaft trägt später den Beweis der Innenwinkelsumme im Dreieck <a class="quer" href="g5-2a-dreiecke.html#darstellungen">↗ 5.2a</a>.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>🔬 Stufen- und Wechselwinkel an Parallelen</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Drehe zuerst nur die Schneidende \(s\) und vergleiche die beiden markierten Winkel in der Live-Anzeige. Schalte dann zwischen Stufen- und Wechselwinkeln um. Kippe zum Schluss \(h\) mit dem orangen Regler: Welcher der beiden Winkel ändert sich, welcher bleibt stehen?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">An Parallelen sind Stufenwinkel (F-Figur) und Wechselwinkel (Z-Figur) bei jeder Neigung von \(s\) gleich gross. Ist \(h\) um \(\delta\) gekippt, gilt \(\alpha' = \alpha + \delta\), und die Gleichheit bricht. Umgekehrt: Sind die Winkel gleich, müssen \(g\) und \(h\) parallel sein.</div>
+        </div>
+      </div>
+    </div>
+    <p>Drehe die Schneidende \(s\), wechsle zwischen F- und Z-Figur und kippe \(h\) aus der Parallelen.</p>
+  </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="feld-titel">Winkelpaar</div>
+      <div class="chips" id="sw-modus" style="margin-bottom:12px">
+        <button class="chip aktiv" type="button" data-modus="F" aria-pressed="true">Stufenwinkel (F)</button>
+        <button class="chip" type="button" data-modus="Z" aria-pressed="false">Wechselwinkel (Z)</button>
+      </div>
+      <div class="sl-row">
+        <div class="sl-grp akz-gruen"><label>Neigung von \(s\) <span class="var">\(\alpha\)</span></label>
+        <input type="range" id="sw-phi" min="30" max="150" step="1" value="50">
+        <span class="sl-val"><span id="sw-phi-v">50</span>°</span></div>
+        <div class="sl-grp akz-orange"><label>Kippung von \(h\) <span class="var">\(\delta\)</span></label>
+        <input type="range" id="sw-delta" min="0" max="12" step="1" value="0">
+        <span class="sl-val"><span id="sw-delta-v">0</span>°</span></div>
+      </div>
+      <canvas id="sw-cv" width="560" height="304" aria-label="Zwei Geraden g und h, geschnitten von s, mit markierten Stufen- oder Wechselwinkeln"></canvas>
+      <div class="formel-live">
+        <div class="fl-label" id="sw-eq-titel">Stufenwinkel (F-Figur)</div>
+        <div class="fl-eq" id="sw-eq">α&nbsp;=&nbsp;α′&nbsp;=&nbsp;<span class="tx-gruen">50°</span>&nbsp;✓</div>
+      </div>
+      <div class="erklaerung" id="sw-erkl">Stufenwinkel liegen an beiden Schnittpunkten an der gleichen Stelle: über der Geraden und rechts von s. Die blaue F-Figur verbindet sie. Weil g ∥ h, sind beide gleich gross, egal wie s geneigt ist.</div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ 6. WEITERE THEORIE: Workflow + Plausibilität ══ -->
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Winkeltypen und Winkelpaare</summary>
@@ -2002,6 +2048,172 @@ updateKL();
   sl.addEventListener('input', render);
   window.addEventListener('resize', render);
   render();
+})();
+
+/* ══════════════════════════════════════════════════════════════
+ *  STUFEN- UND WECHSELWINKEL an Parallelen (AN-26)
+ *  g waagrecht (oben), h darunter im Abstand d, s dreht um die Mitte M
+ *  zwischen g und h (Neigung φ ∈ [30°; 150°]). h dreht um ihren
+ *  Schnittpunkt S2 mit s um δ ∈ [0°; 12°] im Uhrzeigersinn → S2 bleibt
+ *  fest, α' = α + δ ∈ [30°; 162°], nie ein Schleifschnitt.
+ *  Angezeigte Winkel werden aus den gezeichneten Richtungsvektoren
+ *  berechnet, nicht vom Regler übernommen. Masse (d, Lh, H) und alle
+ *  Beschriftungen in Python für W = 260 … 946 px, alle φ, δ und beide
+ *  Modi nachgerechnet: alles im Bild, keine Überlappung.
+ * ══════════════════════════════════════════════════════════════ */
+(function () {
+  const cv = document.getElementById('sw-cv');
+  if (!cv) return;
+  const sPhi = document.getElementById('sw-phi'), sDel = document.getElementById('sw-delta');
+  const vPhi = document.getElementById('sw-phi-v'), vDel = document.getElementById('sw-delta-v');
+  const eq = document.getElementById('sw-eq'), eqTitel = document.getElementById('sw-eq-titel');
+  const erkl = document.getElementById('sw-erkl');
+  const knoepfe = document.querySelectorAll('#sw-modus [data-modus]');
+  const GR = '#1f6b3a', OR = '#b85c00', TI = '#1c1a17', T2 = '#5a5040';
+  const MONO = "'JetBrains Mono', monospace";
+  const D2R = Math.PI / 180;
+  const PAD = 6, T = 50, R = 26, EXT = 38, ARM = 70, DMAX = 12;
+  const TAN30 = Math.tan(30 * D2R);
+  // Beschriftungs-Boxen (Breite, Höhe) für den Abstand zum Winkelscheitel — grosszügig,
+  // im Browser per measureText bestätigt
+  const BOX = { 'α': [9, 11], 'α′': [17, 12] };
+  let modus = 'F';
+
+  function masse(W) {
+    const d = Math.min(150, Math.max(80, (W / 2 - 54) / Math.cos(30 * D2R)));
+    const Lh = Math.min(W / 2 - PAD, d / 2 / TAN30 + 180);
+    const H = Math.ceil(T + d + Math.max(EXT, (Lh + d / 2 / TAN30) * Math.tan(DMAX * D2R)) + 10);
+    return { d, Lh, H };
+  }
+  // Richtungswinkel eines Bildschirmvektors im mathematischen Sinn (y nach oben)
+  const richtung = (v) => Math.atan2(-v.y, v.x) / D2R;
+  const norm360 = (w) => ((w % 360) + 360) % 360;
+  function winkelAbstand(b, psi) { const x = ((b - psi) % 180 + 180) % 180; return Math.min(x, 180 - x); }
+  // Beschriftung auf der Winkelhalbierenden, so weit draussen, dass sie keinen Schenkel berührt
+  function labelPos(txt, V, t1, t2, linien) {
+    const b = (t1 + t2) / 2, c = Math.hypot(BOX[txt][0] / 2, BOX[txt][1] / 2) + 3;
+    const gam = Math.min(...linien.map(p => winkelAbstand(b, p)));
+    const rho = Math.max(R + c, c / Math.sin(gam * D2R));
+    return { x: V.x + rho * Math.cos(b * D2R), y: V.y - rho * Math.sin(b * D2R) };
+  }
+  function sektor(ctx, V, t1, t2, fuellung) {
+    ctx.beginPath(); ctx.moveTo(V.x, V.y);
+    ctx.arc(V.x, V.y, R, -t1 * D2R, -t2 * D2R, true);
+    ctx.closePath(); ctx.fillStyle = fuellung; ctx.fill();
+  }
+  function bogen(ctx, V, t1, t2, farbe) {
+    ctx.beginPath(); ctx.arc(V.x, V.y, R, -t1 * D2R, -t2 * D2R, true);
+    ctx.strokeStyle = farbe; ctx.lineWidth = 2; ctx.stroke();
+  }
+  function strecke(ctx, P, Q, farbe, breite, strich) {
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite; ctx.setLineDash(strich || []);
+    ctx.beginPath(); ctx.moveTo(P.x, P.y); ctx.lineTo(Q.x, Q.y); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function zeichne() {
+    const phi = +sPhi.value, delta = +sDel.value;
+    cv.style.width = '';
+    const { d, Lh, H: HOEHE } = masse(cv.offsetWidth || 600);
+    const { ctx, W, H } = initCanvas('sw-cv', HOEHE);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+    const cx = W / 2, gy = T, hy = T + d;
+    const off = (d / 2) / Math.tan(phi * D2R);
+    const S1 = { x: cx + off, y: gy }, S2 = { x: cx - off, y: hy };
+    const u = { x: Math.cos(phi * D2R), y: -Math.sin(phi * D2R) };
+    const td = Math.tan(delta * D2R);
+    const hAn = (x) => ({ x, y: hy + (x - S2.x) * td });
+    const G0 = { x: cx - Lh, y: gy }, G1 = { x: cx + Lh, y: gy };
+    const H0 = hAn(cx - Lh), H1 = hAn(cx + Lh);
+    const s0 = { x: S2.x - EXT * u.x, y: S2.y - EXT * u.y }, s1 = { x: S1.x + EXT * u.x, y: S1.y + EXT * u.y };
+
+    // Winkel exakt aus den gezeichneten Geraden
+    const rG = richtung({ x: G1.x - G0.x, y: G1.y - G0.y });
+    const rH = richtung({ x: H1.x - H0.x, y: H1.y - H0.y });
+    const rS = richtung({ x: S1.x - S2.x, y: S1.y - S2.y });
+    const alpha = modus === 'F' ? norm360(rS - rG) : norm360((rS + 180) - (rG + 180));
+    const alpha2 = norm360(rS - rH);
+
+    // F- bzw. Z-Figur als breites, blasses Band unter den Linien
+    const hRechts = { x: Math.cos(delta * D2R), y: Math.sin(delta * D2R) };
+    const armG = Math.min(ARM, modus === 'F' ? G1.x - S1.x : S1.x - G0.x);
+    const armH = Math.min(ARM, (H1.x - S2.x) / hRechts.x);
+    ctx.lineCap = 'round';
+    const BAND = 'rgba(26, 79, 138, 0.16)';
+    if (modus === 'F') {
+      strecke(ctx, S2, s1, BAND, 11);
+      strecke(ctx, S1, { x: S1.x + armG, y: gy }, BAND, 11);
+    } else {
+      strecke(ctx, S1, S2, BAND, 11);
+      strecke(ctx, S1, { x: S1.x - armG, y: gy }, BAND, 11);
+    }
+    strecke(ctx, S2, { x: S2.x + armH * hRechts.x, y: S2.y + armH * hRechts.y }, BAND, 11);
+    ctx.lineCap = 'butt';
+
+    // Winkelflächen
+    const a1 = modus === 'F' ? [0, phi] : [180, 180 + phi];
+    sektor(ctx, S1, a1[0], a1[1], 'rgba(31, 107, 58, 0.18)');
+    sektor(ctx, S2, 0, phi, 'rgba(31, 107, 58, 0.18)');
+    if (delta > 0) sektor(ctx, S2, -delta, 0, 'rgba(184, 92, 0, 0.45)');
+
+    // Geraden
+    // Parallele zu g durch S2, rechts knapp über den Bogen hinaus (dort steht α′)
+    if (delta > 0) strecke(ctx, { x: S2.x - R - 14, y: hy }, { x: S2.x + R + 2, y: hy }, '#9ca3af', 1.2, [4, 3]);
+    strecke(ctx, G0, G1, TI, 2);
+    strecke(ctx, H0, H1, TI, 2);
+    strecke(ctx, s0, s1, T2, 2);
+
+    // Winkelbögen: α grün, α' = grüner Teil (wie α) + oranger Keil δ
+    bogen(ctx, S1, a1[0], a1[1], GR);
+    bogen(ctx, S2, 0, phi, GR);
+    if (delta > 0) bogen(ctx, S2, -delta, 0, OR);
+    ctx.fillStyle = TI;
+    [S1, S2].forEach(P => { ctx.beginPath(); ctx.arc(P.x, P.y, 3, 0, 2 * Math.PI); ctx.fill(); });
+
+    // Beschriftungen zuletzt
+    const lab = (txt, P, farbe, font) => {
+      ctx.fillStyle = farbe; ctx.font = font;
+      beschriftung(ctx, txt, P.x, P.y, { align: 'center', baseline: 'middle', halo: true, bg: '#fff', W, H });
+    };
+    const WINKEL_FONT = `700 14px ${MONO}`, LINIEN_FONT = `600 13px ${MONO}`;
+    lab('α', labelPos('α', S1, a1[0], a1[1], [0, phi]), GR, WINKEL_FONT);
+    lab('α′', labelPos('α′', S2, -delta, phi, [-delta, phi]), TI, WINKEL_FONT);
+    // g und h je am Ende, das von ihrem Schnittpunkt abgewandt liegt
+    const gLinks = S1.x >= cx - 1e-9;
+    lab('g', { x: gLinks ? G0.x + 10 : G1.x - 10, y: gy - 11 }, TI, LINIEN_FONT);
+    const hx = gLinks ? H1.x - 10 : H0.x + 10;
+    lab('h', { x: hx, y: hAn(hx).y - 11 }, TI, LINIEN_FONT);
+    let n = { x: -Math.sin(phi * D2R), y: Math.cos(phi * D2R) };
+    if (n.y < 0) n = { x: -n.x, y: -n.y };
+    lab('s', { x: S1.x + (EXT - 4) * u.x + 11 * n.x, y: S1.y + (EXT - 4) * u.y - 11 * n.y }, T2, LINIEN_FONT);
+
+    // Live-Anzeige (nur die Reglerwerte gefärbt)
+    const A = Math.round(alpha), A2 = Math.round(alpha2);
+    vPhi.textContent = phi; vDel.textContent = delta;
+    eqTitel.textContent = modus === 'F' ? 'Stufenwinkel (F-Figur)' : 'Wechselwinkel (Z-Figur)';
+    const gleich = Math.abs(alpha - alpha2) < 0.5;
+    eq.innerHTML = gleich
+      ? `α&nbsp;=&nbsp;α′&nbsp;=&nbsp;<span class="tx-gruen">${A}°</span>&nbsp;✓`
+      : `α&nbsp;=&nbsp;<span class="tx-gruen">${A}°</span>&nbsp;≠&nbsp;α′&nbsp;=&nbsp;${A2}°&nbsp;✗`;
+    const lage = modus === 'F'
+      ? 'Stufenwinkel liegen an beiden Schnittpunkten an der gleichen Stelle: über der Geraden und rechts von s. Die blaue F-Figur verbindet sie.'
+      : 'Wechselwinkel liegen zwischen g und h auf verschiedenen Seiten von s: an g unten links, an h oben rechts. Die blaue Z-Figur verbindet sie.';
+    erkl.innerHTML = lage + (gleich
+      ? ' Weil g ∥ h, sind beide gleich gross, egal wie s geneigt ist.'
+      : ` Jetzt ist h um δ = <span class="tx-orange">${delta}°</span> gekippt. Gestrichelt ist die Parallele zu g durch den unteren Schnittpunkt: An ihr wäre der Winkel wieder α. Der orange Keil kommt dazu, also α′ = α + δ = ${A2}°.`);
+  }
+
+  knoepfe.forEach(k => k.addEventListener('click', () => {
+    modus = k.dataset.modus;
+    knoepfe.forEach(b => { const an = b === k; b.classList.toggle('aktiv', an); b.setAttribute('aria-pressed', an ? 'true' : 'false'); });
+    zeichne();
+  }));
+  sPhi.addEventListener('input', zeichne);
+  sDel.addEventListener('input', zeichne);
+  let resizeTimer = null;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(zeichne, 120); });
+  zeichne();
 })();
 </script>
 </body>

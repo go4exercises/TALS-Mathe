@@ -1647,9 +1647,11 @@ function initCv(id) {
   const H = +cv.dataset.logicalH;
   // Buffer-Auflösung an Display-Pixel-Ratio anpassen (HiDPI / Retina).
   const dpr = window.devicePixelRatio || 1;
-  const rect = cv.getBoundingClientRect();
-  const cssW = rect.width  || W;
-  const cssH = rect.height || H;
+  // Breite ohne Rahmen messen (getBoundingClientRect zaehlt den 1-px-Rahmen
+  // mit, dann waechst die Canvas bei jedem Neuzeichnen um 2 px und ein Kreis
+  // wird zur Ellipse). Die Hoehe folgt dem logischen Seitenverhaeltnis.
+  const cssW = cv.clientWidth || W;
+  const cssH = cssW * H / W;
   const bufW = Math.max(1, Math.round(cssW * dpr));
   const bufH = Math.max(1, Math.round(cssH * dpr));
   if (cv.width !== bufW || cv.height !== bufH) {
