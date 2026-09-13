@@ -25,35 +25,45 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
 
 ## P1 — Fachliche Fehler und faktische Defekte
 
-- [ ] **AN-01** `g5-3` · `cv-defWF` (Definition sin/cos/tan): Position «bei B» liefert
+> **Stand 13.09.2026: alle sieben P1-Punkte erledigt** — je Punkt Python-Nachrechnung,
+> Browserprüfung bei 1280 und 360 px mit Screenshots, `scan-live.mjs` ohne JS-Fehler.
+
+- [x] **AN-01** `g5-3` · `cv-defWF` (Definition sin/cos/tan): Position «bei B» liefert
   **mathematisch falsche Werte** — das Dreieck wird stets mit Winkel x bei A konstruiert,
   bei «bei B» werden nur die Beschriftungen getauscht. Anzeige behauptet z.B.
   «sin 35° = 0.819» (korrekt: 0.574; 0.819 = sin 55°). Fix: bei Position B das Dreieck mit
   Winkel x bei B konstruieren (a = c·cos x, b = c·sin x) — gleicher Winkel, andere Ecke,
   andere Seiten heissen GK/AK.
-- [ ] **AN-02** `g3-1` · `par-canvas` (Parabel-Scheitelform): Live-Formel zeigt fehlerhafte
+  **Erledigt 13.09.2026:** Dreieck wird bei «bei B» mit Winkel x an B konstruiert (a = c·cos x, b = c·sin x); 60 Kombinationen Position × Winkel × Funktion im Browser gegen Python geprüft.
+- [x] **AN-02** `g3-1` · `par-canvas` (Parabel-Scheitelform): Live-Formel zeigt fehlerhafte
   Notation «(x − −3)² + −2» statt «(x + 3)² − 2» — ausgerechnet beim Vorzeichen-Ablesen,
   dem dokumentierten Standardfehler. Vorzeichenlogik aus g3-3 (`fmtKlammer`/`vPart`) übernehmen.
-- [ ] **AN-03** `g3-3` · `ws-canvas` (schiefer Wurf): Slider läuft bis x = 9, Tabelle endet
+  **Erledigt 13.09.2026:** `fmtScheitel()` nach dem Muster aus g3-3, in Live-Formel und Canvas-Label; «(x + 3)² − 2», «x² − 2», «(x − 2)²»; Farben an die Regler gekoppelt.
+- [x] **AN-03** `g3-3` · `ws-canvas` (schiefer Wurf): Slider läuft bis x = 9, Tabelle endet
   bei 8; bei x = 9 wird «h(9) = −1.25 m» (negative Höhe) angezeigt. Fix: bei x > 8.47
   «Ball ist gelandet (x ≈ 8.47 m)» anzeigen (macht den Definitionsbereich erlebbar) —
   oder schlicht Slider-Max auf 8.
-- [ ] **AN-04** `g2-2a` · `cv-faelle` (drei Lösungsfälle): Geradenlabels werden in **allen
+  **Erledigt 13.09.2026:** Jenseits der Landestelle 4 + √20 ≈ 8.47 m steht «Ball ist gelandet (x ≈ 8.47 m)», der Punkt liegt am Landepunkt; Slider unverändert.
+- [x] **AN-04** `g2-2a` · `cv-faelle` (drei Lösungsfälle): Geradenlabels werden in **allen
   drei Fällen** unterdrückt (Bedingung labelY ≤ 14 bei festem labelX = 5.5 schlägt immer
   fehl); in Fall 3 trägt die Gerade gar kein Label, obwohl «y = 4x + 8 (beide Seiten)» die
   Pointe ist. Fix: Labelposition dort setzen, wo die Gerade im Fenster liegt (Muster
   `labelAn()` aus g2-3).
-- [ ] **AN-05** `g5-2c` · `cv-flaecheKr` (Sektoren → Quasi-Rechteck): Das Ziel-Rechteck
+  **Erledigt 13.09.2026:** `labelAn()` sucht je Gerade eine freie Stelle im Fenster (Kollision mit Achsen, Ticks, Geraden, S); Fall 3 mit «y = 4x + 8 (beide Seiten)», bei schmalem Canvas zweizeilig.
+- [x] **AN-05** `g5-2c` · `cv-flaecheKr` (Sektoren → Quasi-Rechteck): Das Ziel-Rechteck
   endet rechnerisch bei ≈ 1.15·W — **ca. 15 % des Rechtecks samt Beschriftung «Breite = π·r»
   liegen bei jeder Canvasbreite ausserhalb des Bilds**. Layout skalieren:
   Rpx ≤ (W − rectStartX − 20)/π.
-- [ ] **AN-06** `g5-2c` · `cv-umfang` (Rad abrollen): Fester Massstab 50 px/m — bei d ≥ 2.5–3.0 m
+  **Erledigt 13.09.2026:** Radius zusätzlich durch (W − rectStartX − 14)/(π + 0.16) begrenzt; Rechteck, Überstand der Randsektoren und «Breite = π·r» bei 1280 und 360 px im Bild.
+- [x] **AN-06** `g5-2c` · `cv-umfang` (Rad abrollen): Fester Massstab 50 px/m — bei d ≥ 2.5–3.0 m
   laufen Streckenende und π·d-Marke aus dem Bild; genau der Zielzustand «volle Umdrehung = π·d»
   ist abgeschnitten. PX_PER_M dynamisch aus der Canvasbreite berechnen.
-- [ ] **AN-07** `g5-2b` · `fam-canvas` (Vierecks-Familie): Preset «Drachen» meldet Typ
+  **Erledigt 13.09.2026:** Massstab aus Canvasbreite und Regler-Maximum (springt beim Ziehen nicht), Start mit 20 px Rand; d = 3 m bei 1280 und 360 px vollständig im Bild.
+- [x] **AN-07** `g5-2b` · `fam-canvas` (Vierecks-Familie): Preset «Drachen» meldet Typ
   «Drachen», aber alle vier Eigenschafts-Häkchen zeigen ✗ — das Drachen-Kriterium (zwei
   Paare benachbart gleicher Seiten) fehlt in der Checkliste. Fünfte Häkchen-Zeile ergänzen;
   optional Seitenlängen klein an die Kanten schreiben, damit die Häkchen begründet sind.
+  **Erledigt 13.09.2026:** Fünfte Zeile «2 Paar Nachbarseiten gleich»; Kriterium schliesst «alle Seiten gleich» ein (Rhombus ist Drachen); Seitenlängen an den Kanten; Hinweistexte «vier» → «fünf» Häkchen.
 
 ## P2 — Didaktisch hoch (Kernaussage kommt nicht an)
 

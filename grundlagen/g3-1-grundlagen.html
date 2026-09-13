@@ -855,7 +855,7 @@ und die Schnitte mit der \(x\)-Achse. Wir betrachten zwei Beispiele unterschiedl
       <input type="range" id="par-v" min="-5" max="5" step="0.5" value="-2"></div>
       </div>
     <div style="margin-top:8px">
-      \(g(x) = (x - \)<span class="slider-val" id="par-u-eq">1</span>\()^2 + \)<span class="slider-val" id="par-v-eq">−2</span>
+      \(g(x) = \)<span class="fx-live" id="par-fx">(x − <span class="tx-blau">1</span>)² − <span class="tx-orange">2</span></span>
       ;&nbsp;&nbsp; Scheitel: <span class="slider-val" id="par-S">S(1 | −2)</span>
       ;&nbsp;&nbsp; <span class="slider-val" id="par-anzahl">2 Nullstellen</span> <span id="par-nst" style="color:var(--tinte-2);font-weight:400">(x ≈ −0.41 und x ≈ 2.41)</span>
     </div>
@@ -1833,6 +1833,19 @@ function fmtLinHTML(a, b) {
   return aStr + (b > 0 ? ' + ' : ' \u2212 ') + bAbs;
 }
 
+/* Scheitelform "(x − u)² + v" mit Vorzeichen-Logik (Muster fmtKlammer/vPart aus g3-3):
+   u < 0 -> (x + |u|), u = 0 -> x², v < 0 -> − |v|, v = 0 -> entfällt.
+   html = true: u-Betrag blau, v-Betrag orange (Farbkopplung zu den Reglern). */
+function fmtScheitel(u, v, html) {
+  const blau = s => html ? '<span class="tx-blau">' + s + '</span>' : s;
+  const orange = s => html ? '<span class="tx-orange">' + s + '</span>' : s;
+  const uPart = Math.abs(u) < 1e-9 ? 'x\u00B2'
+    : '(x' + (u > 0 ? ' \u2212 ' : ' + ') + blau(fmtNum(Math.abs(u))) + ')\u00B2';
+  const vPart = Math.abs(v) < 1e-9 ? ''
+    : (v > 0 ? ' + ' : ' \u2212 ') + orange(fmtNum(Math.abs(v)));
+  return uPart + vPart;
+}
+
 /* Widget A — Lineare Funktion: a, b -> Live-Nullstelle */
 function linRender() {
   const a = parseFloat(document.getElementById('lin-a').value);
@@ -1870,8 +1883,7 @@ function parRender() {
   const v = parseFloat(document.getElementById('par-v').value);
   document.getElementById('par-u-val').textContent = fmtNum(u);
   document.getElementById('par-v-val').textContent = fmtNum(v);
-  document.getElementById('par-u-eq').textContent = fmtNum(u);
-  document.getElementById('par-v-eq').textContent = fmtNum(v);
+  document.getElementById('par-fx').innerHTML = fmtScheitel(u, v, true);
   document.getElementById('par-S').textContent = 'S(' + fmtNum(u) + ' | ' + fmtNum(v) + ')';
   // Anzahl Nullstellen: (x-u)^2 = -v
   const anzEl = document.getElementById('par-anzahl');
@@ -1895,7 +1907,7 @@ function parRender() {
   const cfg = {
     canvasId: 'par-canvas',
     xMin: -7, xMax: 7, yMin: -7, yMax: 7,
-    curves: [{ fn: x => (x - u) * (x - u) + v, color: '#1a4f8a', label: 'g(x) = (x \u2212 ' + fmtNum(u) + ')\u00B2 + ' + fmtNum(v), labelX: 5 }],
+    curves: [{ fn: x => (x - u) * (x - u) + v, color: '#1a4f8a', label: 'g(x) = ' + fmtScheitel(u, v, false), labelX: 5 }],
     points: [{ x: u, y: v, label: 'S', color: '#a02828', labelPos: (v <= 0 ? 'b' : 'r') }]
   };
   nstPoints.forEach(p => {

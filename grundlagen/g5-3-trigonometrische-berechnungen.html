@@ -1893,11 +1893,10 @@ function drawDefWF() {
   // Wenn x = bei A: x = α; GK = a (gegenüber A); AK = b (am A anliegend)
   // Wenn x = bei B: x = β = 90-α; GK = b (gegenüber B); AK = a (am B anliegend)
   const cVal = 10;
-  const a_len = cVal * Math.sin(xR);  // wenn x = α: a = c·sin α
-  const b_len = cVal * Math.cos(xR);
-  // Wenn Position B: tauschen a und b nicht — wir zeichnen das gleiche Dreieck,
-  // ändern nur, welcher Winkel hervorgehoben ist
-  // x = 35° bei A; oder x = 90-35 = 55° bei B (das wäre β)
+  // Das Dreieck wird so konstruiert, dass der Winkel x an der gewählten Ecke liegt:
+  // bei A: a = c·sin x, b = c·cos x; bei B: a = c·cos x, b = c·sin x
+  const a_len = cVal * ((defwfPosWahl === 'A') ? Math.sin(xR) : Math.cos(xR));
+  const b_len = cVal * ((defwfPosWahl === 'A') ? Math.cos(xR) : Math.sin(xR));
 
   // Skala dynamisch: max-Seite (b oder a) ≤ verfügbare Pixel-Strecke
   // Verfügbar: Breite W-140=420, Höhe H·0.7=294. Wir nehmen das kleinere → konservativ

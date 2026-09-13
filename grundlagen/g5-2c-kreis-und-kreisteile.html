@@ -1967,13 +1967,18 @@ function drawUmfang() {
   lblUT.textContent = t.toFixed(2);
   lblUD.textContent = dVal.toFixed(1) + ' m';
 
-  // 1 Meter = 50 Pixel
-  const PX_PER_M = 50;
+  const yBasis = H * 0.55;
+  // Massstab fest am grössten Reglerwert ausgerichtet (springt beim Ziehen
+  // von d nicht): Rad links am Start (Rand 20 px) plus Abrollweg pi*d plus
+  // Rad rechts am Ende müssen in die Breite passen (Rand 14 px), also
+  // (pi + 1)*dMax*PX_PER_M <= W - 34; zudem das Rad unter die Oberkante.
+  const dMax = +sldUD.max;
+  const PX_PER_M = Math.min((W - 34) / ((Math.PI + 1) * dMax), (yBasis - 24) / dMax);
   const dPx = dVal * PX_PER_M;
   const rPx = dPx / 2;
-  const yBasis = H * 0.55;
-  // Startposition des Kreismittelpunkts: links
-  const xStart = 80;
+  // Startposition des Kreismittelpunkts: links, so dass das grösste Rad
+  // noch 20 px Abstand zum linken Rand hat
+  const xStart = 20 + dMax * PX_PER_M / 2;
   // Abrollweg in Pixel = U = π · d
   const Upx = Math.PI * dPx;
   // Aktuelle x-Position des Mittelpunkts
@@ -2147,7 +2152,11 @@ function drawFlaecheK() {
 
   const cxK = W * 0.27;
   const cyK = H / 2;
-  const Rpx = Math.min(W * 0.20, H * 0.32);
+  const rectStartX = W * 0.52;
+  // Das Quasi-Rechteck ist pi*r breit; die Sektoren stehen bei n = 10 an beiden
+  // Enden noch um 0.15*r über. Darum Rpx <= (W - rectStartX - 14)/(pi + 0.16),
+  // sonst läuft der Streifen samt Beschriftung rechts aus dem Bild.
+  const Rpx = Math.min(W * 0.20, H * 0.32, (W - rectStartX - 14) / (Math.PI + 0.16));
 
   // Linke Seite: Vollkreis mit n Sektoren, t=0 zeigt Vollkreis, t→1 zeigt fast leeren Kreis (Sektoren wandern weg)
   // Wir machen es einfacher: links zeigt der Kreis sich progressiv leerend, rechts wächst das Quasi-Rechteck.
@@ -2161,7 +2170,6 @@ function drawFlaecheK() {
   // Anzahl noch im Kreis: Math.round((1 - t) * n) — wir wandern abwechselnd nach oben und unten,
   // aber damit es kontinuierlich aussieht: alle Sektoren gleichzeitig leicht versetzt animieren.
   const omega = 2 * Math.PI / n;
-  const rectStartX = W * 0.52;
   const sectArcPx = 2 * Math.PI * Rpx / n;
   const yMid = H * 0.50;
   // Höhe des Rechtecks = Rpx (Höhe eines Sektors gemessen Spitze→Bogen ist exakt Rpx)

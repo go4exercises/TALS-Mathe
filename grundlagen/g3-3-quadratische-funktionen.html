@@ -1388,7 +1388,13 @@ function updateWS(){
   const x = parseInt(document.getElementById('ws-x').value);
   document.getElementById('ws-xv').textContent = x;
   const y = wsY(x);
-  document.getElementById('ws-eq').textContent = `h(${x}) = −0.25·(${x} − 4)² + 5 = ${fmtNum(y)} m`;
+  // Landestelle: h(x) = 0  →  x = 4 + √20 ≈ 8.47. Dahinter ist h(x) negativ —
+  // der Ball liegt dann schon am Boden (Definitionsbereich der Anwendung).
+  const xLand = WS.u + Math.sqrt(-WS.v / WS.a);
+  const gelandet = x > xLand;
+  document.getElementById('ws-eq').textContent = gelandet
+    ? `Ball ist gelandet (x ≈ ${fmtNum(xLand)} m)`
+    : `h(${x}) = −0.25·(${x} − 4)² + 5 = ${fmtNum(y)} m`;
   // Tabelle
   const tbody = document.querySelector('#ws-table tbody');
   tbody.innerHTML = WS.xs.map(xi=>{
@@ -1412,7 +1418,6 @@ function updateWS(){
   beschriftung(ctx,'h [m]', cx(0)+5, 11, {align:'left', W, H});
   // Parabel — auf die physikalische Flugbahn (Abwurf bis Aufschlag) beschränken,
   // damit sie nicht unter die Grundlinie h = 0 taucht.
-  const xLand = WS.u + Math.sqrt(-WS.v / WS.a);   // 4 + √20 ≈ 8.47
   drawParabel(ctx, cx, cy, WS.a, -2*WS.a*WS.u, WS.a*WS.u*WS.u+WS.v, 0, xLand, '#1a4f8a', 2.5);
   // Alle Stützpunkte schwach
   WS.xs.forEach(xi=>{ const yi = wsY(xi); if(yi>=0) drawDot(ctx,cx,cy,xi,yi,'#b8c4d4',4); });
@@ -1427,6 +1432,12 @@ function updateWS(){
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(0),cy(y)); ctx.stroke();
     ctx.setLineDash([]);
+  } else if(gelandet){
+    // Ball bleibt am Landepunkt am Boden liegen.
+    drawDot(ctx, cx, cy, xLand, 0, '#1a4f8a', 7);
+    ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace';
+    // Beschriftung links vom Stützpunkt (8 | 1): dort verdeckt sie weder Kurve noch Punkt.
+    beschriftung(ctx, `(${fmtNum(xLand)} | 0)`, cx(Math.floor(xLand)) - 8, cy(0) - 22, {align:'right', W, H});
   }
   // Scheitelpunkt markieren
   drawDot(ctx, cx, cy, WS.u, WS.v, '#9b1c1c', 5);

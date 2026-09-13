@@ -397,13 +397,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Zieh eine Ecke und beobachte, wie sich rechts der Typ-Name und die vier Eigenschafts-Häkchen ändern. Welche Bedingung muss dazukommen, damit aus dem allgemeinen Viereck ein Trapez, dann ein Parallelogramm, dann ein Rechteck wird?</div>
+        <div class="ah-text">Zieh eine Ecke und beobachte, wie sich rechts der Typ-Name und die fünf Eigenschafts-Häkchen ändern. Welche Bedingung muss dazukommen, damit aus dem allgemeinen Viereck ein Trapez, dann ein Parallelogramm, dann ein Rechteck wird?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Je mehr Eigenschaften gleichzeitig erfüllt sind, desto spezieller ist die Figur. Das Quadrat erfüllt alle vier und ist deshalb zugleich Rechteck, Raute, Parallelogramm und Trapez. Die Vierecke bilden eine Hierarchie — keine getrennten Schubladen.</div>
+        <div class="ah-text">Je mehr Eigenschaften gleichzeitig erfüllt sind, desto spezieller ist die Figur. Das Quadrat erfüllt alle fünf und ist deshalb zugleich Rechteck, Raute, Parallelogramm, Trapez und Drachen. Die Vierecke bilden eine Hierarchie — keine getrennten Schubladen.</div>
       </div>
     </div>
   </div>
@@ -417,6 +417,7 @@ MathJax = {
         <li id="fam-e-par2">— zweites Paar paralleler Seiten</li>
         <li id="fam-e-gleich">— alle Seiten gleich lang</li>
         <li id="fam-e-recht">— alle Winkel rechtwinklig</li>
+        <li id="fam-e-drache">— zwei Paar gleich langer benachbarter Seiten</li>
       </ul>
       <div class="fb-presets">
         <button data-fam="quad">Quadrat</button>
@@ -432,7 +433,7 @@ MathJax = {
   </div>
 </div>
 
-<p>Was du siehst: Je <em>mehr</em> Eigenschaften gleichzeitig erfüllt sind, desto <em>spezieller</em> wird das Viereck. Das Quadrat hat alle vier Eigenschaften — es ist also gleichzeitig Rechteck, Raute, Parallelogramm und Trapez. Diese Hierarchie ist das Gerüst des ganzen Kapitels: Ausgehend vom allgemeinen Viereck werden schrittweise Bedingungen hinzugefügt, jede gibt eine zusätzliche Berechnungsformel oder Symmetrie.</p>
+<p>Was du siehst: Je <em>mehr</em> Eigenschaften gleichzeitig erfüllt sind, desto <em>spezieller</em> wird das Viereck. Das Quadrat hat alle fünf Eigenschaften — es ist also gleichzeitig Rechteck, Raute, Parallelogramm, Trapez und Drachen. Diese Hierarchie ist das Gerüst des ganzen Kapitels: Ausgehend vom allgemeinen Viereck werden schrittweise Bedingungen hinzugefügt, jede gibt eine zusätzliche Berechnungsformel oder Symmetrie.</p>
 
 
 <!-- ══ 3. DEFINITION ══ -->
@@ -2648,8 +2649,9 @@ window.addEventListener('resize', () => {
     const alleGleich = [lAB, lBC, lCD, lDA].every(l => Math.abs(l - avg)/avg < TOL_LEN);
 
     // Drachen: zwei Paare benachbarter gleich langer Seiten (Symmetrieachse durch eine Diagonale)
+    // alleGleich eingeschlossen: jede Raute ist Drachen, auch am Rand der Toleranz
     const glS = (p, q) => Math.abs(p - q)/avg < TOL_LEN;
-    const drache = (glS(lAB, lDA) && glS(lBC, lCD)) || (glS(lAB, lBC) && glS(lCD, lDA));
+    const drache = alleGleich || (glS(lAB, lDA) && glS(lBC, lCD)) || (glS(lAB, lBC) && glS(lCD, lDA));
 
     // Rechtwinklig: alle 4 Winkel ~90°
     const TOL_RW = 0.06;
@@ -2710,6 +2712,24 @@ window.addEventListener('resize', () => {
     ctx.fill();
     ctx.stroke();
 
+    // Seitenlängen klein an die Kanten (aussen, senkrecht zur Kante)
+    const kl = klassifiziere();
+    const laengen = [kl.lAB, kl.lBC, kl.lCD, kl.lDA];
+    const mitte = {x: (cv[0].x + cv[1].x + cv[2].x + cv[3].x)/4, y: (cv[0].y + cv[1].y + cv[2].y + cv[3].y)/4};
+    ctx.fillStyle = '#5a5040'; ctx.font = '12px JetBrains Mono, monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (let i = 0; i < 4; i++){
+      const P = cv[i], Q = cv[(i + 1) % 4];
+      const mx = (P.x + Q.x)/2, my = (P.y + Q.y)/2;
+      const kx = Q.x - P.x, ky = Q.y - P.y;
+      const kk = Math.sqrt(kx*kx + ky*ky) || 1;
+      let nx = -ky/kk, ny = kx/kk;
+      if (nx*(mx - mitte.x) + ny*(my - mitte.y) < 0){ nx = -nx; ny = -ny; }
+      const txt = laengen[i].toFixed(2);
+      const abst = 6 + Math.abs(nx)*ctx.measureText(txt).width/2 + Math.abs(ny)*7;
+      ctx.fillText(txt, mx + nx*abst, my + ny*abst);
+    }
+
     // Eckpunkte
     for (let i = 0; i < 4; i++){
       ctx.fillStyle = '#1a4f8a';
@@ -2743,6 +2763,7 @@ window.addEventListener('resize', () => {
     setEig('fam-e-par2', k.par2, 'BC ∥ DA');
     setEig('fam-e-gleich', k.alleGleich, 'alle Seiten gleich');
     setEig('fam-e-recht', k.alleRecht, 'alle Winkel rechtwinklig');
+    setEig('fam-e-drache', k.drache, '2 Paar Nachbarseiten gleich');
   }
 
   // Drag-Logik

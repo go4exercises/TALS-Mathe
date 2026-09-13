@@ -1319,16 +1319,60 @@ function drawFaelle() {
     ctx.moveTo(cx(xMin), cy(g.m * xMin + g.b));
     ctx.lineTo(cx(xMax), cy(g.m * xMax + g.b));
     ctx.stroke();
-    // Label
-    const labelX = xMax - 0.5, labelY = g.m * labelX + g.b;
-    if (labelY >= yMin && labelY <= yMax - 1) {
-      ctx.fillStyle = g.color; ctx.font = 'bold 13px monospace';
-      beschriftung(ctx, g.label, cx(labelX), cy(labelY) - 5, {align:'right', W, H});
-    }
   });
 
+  // Labels dort setzen, wo die Gerade tatsächlich im Fenster liegt — ohne
+  // Achse, Gerade, Tick-Beschriftung oder Schnittpunkt zu verdecken
+  const xv = px => xMin + (px - padL) / PW * (xMax - xMin);
+  const belegt = [];   // [x0, y0, x1, y1] in Canvas-Pixeln
+  for (let gx = -2; gx <= 6; gx += 2) if (gx !== 0) belegt.push([cx(gx) - 8, cy(0) + 3, cx(gx) + 8, cy(0) + 16]);
+  for (let gy = 2; gy <= 14; gy += 4) belegt.push([cx(0) - 22, cy(gy) - 8, cx(0) - 3, cy(gy) + 4]);
+  belegt.push([cx(0) + 3, padT, cx(0) + 17, padT + 14]);            // «y» (mit Abstand)
+  belegt.push([cx(xMax) - 14, cy(0) - 17, cx(xMax), cy(0) - 3]);    // «x»
+  const sText = (f.schnitt && typeof f.schnitt === 'object') ? `S(${f.schnitt.x} | ${f.schnitt.y})` : null;
+  if (sText) {
+    const sx = cx(f.schnitt.x), sy = cy(f.schnitt.y);
+    ctx.font = 'bold 13px JetBrains Mono,monospace';
+    belegt.push([sx - 8, sy - 8, sx + 8, sy + 8]);
+    belegt.push([sx + 7, sy - 20, sx + 19 + ctx.measureText(sText).width, sy - 3]);
+  }
+  const frei = (x0, y0, x1, y1) => {
+    if (x0 < padL + 2 || x1 > padL + PW - 2 || y0 < 2 || y1 > padT + PH - 2) return false;
+    if (x0 <= cx(0) + 2 && x1 >= cx(0) - 2) return false;           // y-Achse
+    if (y0 <= cy(0) + 2 && y1 >= cy(0) - 2) return false;           // x-Achse
+    for (const h of f.geraden) {
+      const ya = cy(h.m * xv(x0) + h.b), yb = cy(h.m * xv(x1) + h.b);
+      if (Math.min(ya, yb) <= y1 && Math.max(ya, yb) >= y0) return false;
+    }
+    return !belegt.some(b => x0 < b[2] + 4 && x1 > b[0] - 4 && y0 < b[3] + 4 && y1 > b[1] - 4);
+  };
+  const labelAn = g => {
+    // Varianten: einzeilig · lange Labels zweizeilig · schmales Canvas kleiner
+    const varianten = [[13, [g.label]]];
+    if (g.label.includes(' (')) varianten.push([13, g.label.replace(' (', '\n(').split('\n')]);
+    varianten.push([11, [g.label]]);
+    for (const [gr, zeilen] of varianten) {
+      ctx.font = `bold ${gr}px monospace`;
+      const w = Math.max(...zeilen.map(z => ctx.measureText(z).width)), zh = gr + 1, h = zeilen.length * zh;
+      for (let k = 5; k < 90; k++) {
+        const vx = xMax - k / 10, vy = g.m * vx + g.b;
+        if (vy <= yMin || vy >= yMax) continue;
+        const px = cx(vx), py = cy(vy);
+        // oben links oder unten rechts der (steigenden bzw. waagrechten) Geraden
+        for (const [x0, y0] of [[px - 5 - w, py - 5 - h], [px + 5, py + 5]]) {
+          if (!frei(x0 - 2, y0 - 2, x0 + w + 2, y0 + h + 2)) continue;
+          ctx.fillStyle = g.color;
+          zeilen.forEach((z, i) => beschriftung(ctx, z, x0, y0 + gr - 2 + i * zh, {align:'left', W, H}));
+          belegt.push([x0 - 2, y0 - 2, x0 + w + 2, y0 + h + 2]);
+          return;
+        }
+      }
+    }
+  };
+  f.geraden.forEach(labelAn);
+
   // Schnittpunkt einzeichnen, falls vorhanden
-  if (f.schnitt && typeof f.schnitt === 'object') {
+  if (sText) {
     ctx.fillStyle = '#b85a00';
     ctx.beginPath(); ctx.arc(cx(f.schnitt.x), cy(f.schnitt.y), 6, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#b85a00'; ctx.font = 'bold 13px JetBrains Mono,monospace';
