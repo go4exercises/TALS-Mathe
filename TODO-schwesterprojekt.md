@@ -722,3 +722,17 @@ Vorsorge, keine Reparatur** — und die Layout-Freigaben der 177 Clips bleiben g
 **Was das für diese Datei heisst.** Der Übertrag ist keine Einbahnstrasse mehr. Wer hier
 einen Eintrag schreibt, schaut auch, ob das Schwesterprojekt inzwischen etwas hat, das
 hier fehlt.
+
+## Physik-`CLAUDE.md`: Satz über `trigo2` streichen (2026-09-13)
+
+**Was.** In `../tals-physik/CLAUDE.md` (Abschnitt `build-clip-ton.py`, «Zahlen im
+`sprecher`-Text ausschreiben», Z. 142–143 am 13.09.2026) steht: «Die Reihe `trigo2`
+hält sich als einzige nicht daran (18 Szenen, Stand 13.09.2026).»
+
+**Warum.** Seit Commit `e0ba120` stimmt das nicht mehr: Die 18 Szenen in sechs Clips
+sind ausgeschrieben und neu vertont. In allen 197 Mathe-Drehbüchern stehen Ziffern im
+`sprecher` jetzt nur noch als Namen — `TI-30X` (1 Szene) und `L1`/`L2`/`L3` (4 Szenen,
+`g4-3-ti30x-*`). Der Rest des Absatzes («Mathes 162 Clips», die Ausnahmen) bleibt
+richtig.
+
+**Wie.** Den letzten Satz ab «Die Reihe `trigo2` …» löschen. Sonst nichts.
