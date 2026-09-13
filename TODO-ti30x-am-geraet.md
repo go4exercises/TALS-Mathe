@@ -1,14 +1,14 @@
-# TODO — drei Fragen, die nur das Gerät beantwortet
+# TODO — vier Fragen, die nur das Gerät beantwortet
 
-**Stand: 8. September 2026 — offen.**
+**Stand: 13. September 2026 — offen.**
 
 Die 22 Rechner-Clips stützen sich ausnahmslos auf das deutsche Handbuch von Texas
 Instruments (68 Seiten, Link und Rezept in `HOWTO-clips.md`, Abschnitt
-«Rechneranzeige»). Drei Dinge stehen dort **nicht**, und darum kommen sie in keinem
+«Rechneranzeige»). Vier Dinge stehen dort **nicht**, und darum kommen sie in keinem
 Clip vor — nach der Regel aus `CLAUDE.md`: nichts erfinden, was am Gerät nachgeschlagen
 gehört.
 
-Alle drei lassen sich mit dem TI-30X Pro MathPrint in der Hand in wenigen Minuten
+Alle vier lassen sich mit dem TI-30X Pro MathPrint in der Hand in wenigen Minuten
 klären. Wer das tut, trägt die Antwort hier ein und baut den jeweils genannten Clip
 nach — jede Antwort ist genau einen Schritt von einem besseren Clip entfernt.
 
@@ -97,6 +97,37 @@ und gehört hier als «geklärt» vermerkt — das ist genauso wertvoll.
 
 ---
 
+## 4. Was zeigen `poly-solv` und `sys-solv`, wenn es nicht glatt aufgeht?
+
+**Warum die Frage aufkam (13.09.2026).** Bei der Fachprüfung der Leitprogramme standen
+sich Seite und Clip gegenüber — und keine der beiden Aussagen ist belegt, weil das
+Handbuch kein Kapitel zu den Gleichungslösern hat (siehe Frage 1):
+
+| | Leitprogramm sagte | Clip sagt |
+|---|---|---|
+| `poly-solv` bei \(x^2 - 4x - 1 = 0\) | nur Dezimalwerte \(4.236\ldots\), keine Wurzelform | «kann quadratische Gleichungen **exakt** lösen» (`clips/g2-2b-ti30x-poly-solv.json`, Szene «Titel») |
+| `sys-solv` bei parallelen / deckungsgleichen Geraden | «Fehler oder Sonderausgabe», Fall nicht unterschieden | meldet «unendlich viele Lösungen in geschlossener Form» bzw. «keine» (`clips/g2-3-ti30x-sys-solv.json`, Szene «Wenn es klemmt») |
+
+Das Handbuch deutet bei `poly-solv` eher auf die Clip-Seite — die Umschalttaste wechselt
+allgemein zwischen «exaktem Wurzelterm oder Näherungswert», und «Editoren wie z. B. in
+Matrix, Vektor und Gleichungslöser» zeigen umgewandelte Werte an —, beweist es aber nicht.
+
+**Was schon geändert ist.** Die beiden Leitprogramme (`quadratische-gleichungen.html`,
+Warnkasten «Wofür er nicht gut ist» und Selbsttest 3b; `gleichungssysteme.html`,
+Warnkasten «Was der Rechner nicht sagt») sind **geräteneutral** umformuliert. Die zwei
+Clips sind unverändert und behaupten weiterhin das in der rechten Spalte.
+
+**Nachsehen:** `2nd` → `poly-solv`, quadratisch, `1`, `-4`, `-1` eingeben; notieren, ob
+\(2 \pm \sqrt{5}\) oder \(4.236\ldots\) erscheint, und was die Umschalttaste daraus macht.
+Dann `sys-solv` 2×2 mit \(x + y = 4,\ 2x + 2y = 10\) und mit \(x + y = 4,\ 2x + 2y = 8\);
+den Wortlaut beider Meldungen abschreiben.
+
+**Was danach möglich wird.** Stimmen die Clips, bekommen die Warnkästen den belegten
+Wortlaut zurück. Stimmen sie nicht, sind die Szenen «Titel» bzw. «Wenn es klemmt» neu zu
+sprechen.
+
+---
+
 ## Wenn eine Frage beantwortet ist
 
 1. Antwort hier eintragen, Überschrift auf `— geklärt am TT.MM.JJJJ` ändern.
@@ -104,5 +135,5 @@ und gehört hier als «geklärt» vermerkt — das ist genauso wertvoll.
    `build-clip-ton.py`, dann `build-clips.py`, dann `build-clips-einbau.py`.
 3. Die belegte Angabe in `HOWTO-clips.md` unter «Was am TI-30X Pro MathPrint belegt
    ist» ergänzen, damit sie beim nächsten Clip nicht wieder nachgeschlagen wird.
-4. Sind alle drei geklärt, wandert die Datei nach dem Muster von
+4. Sind alle vier geklärt, wandert die Datei nach dem Muster von
    `TODO-malpunkt-als-trennzeichen.md` auf «abgearbeitet» und bleibt als Beleg stehen.
