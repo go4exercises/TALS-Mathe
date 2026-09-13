@@ -439,10 +439,17 @@ Laufzeit; der Clip läuft **gross über dem Fenster**, nicht in der Zeile. Auch 
 ist dieselbe — Reihen alphabetisch, darin nach `folge`.
 
 Die Transkripte stehen gesammelt unter der Auswahl, jedes mit seiner eigenen
-`<h3 id="clip-…" class="clip-h">`. Diese Überschrift ist nicht Schmuck: An ihr schneidet
-`build-suchindex.py` seine Abschnitte, und der Transkripttext ist das Einzige, was Suche
-und Suchmaschine von einem animierten Clip überhaupt sehen. Wer den Aufklapper entfernt,
-nimmt den Clips ihre Auffindbarkeit.
+`<h3 id="clip-…" class="clip-h">`. Für Leserinnen und Suchmaschinen ist der Aufklapper
+weiterhin das Einzige, was von einem animierten Clip überhaupt zu sehen ist — wer ihn
+entfernt, nimmt den Clips ihre Auffindbarkeit.
+
+**Für die Volltextsuche der Site gilt das seit dem 13.09.2026 nicht mehr.** Sie nimmt
+jeden Clip **einmal** unter `clips.html#clip-<name>` auf, gebaut aus `clips/clips.json`
+und `clips/sprechertext-*.txt`; der Aufklapper der Lektionsseite ist dafür von der
+Indexierung ausgenommen (`clip-transkripte` steht in `SKIP_CLASSES`). Vorher lag jeder
+Clip so oft im Index, wie er eingebettet ist — 162 Clips ergaben 213 Abschnitte —, und
+jeder Treffer führte auf eine Lektionsseite, auf der man den Clip dann selbst suchen
+musste.
 
 Damit ein Suchtreffer nicht in einem zugeklappten `<details>` verschwindet, öffnet
 `mathlib.js` beim Laden alle `<details>` über dem Sprungziel aus `location.hash`.
@@ -537,9 +544,12 @@ die Schriften per `@import url("../schriften.css")`. Verschiebt man `clips/` tie
 die Schriften weg, ohne dass etwas bricht: die Seite fällt still auf Georgia zurück.
 
 **Das Transkript ist nicht Beiwerk.** Von einem animierten Clip sieht eine Suchmaschine
-gar nichts, und die Volltextsuche der Site ebenso wenig. Der Transkriptblock trägt darum
-die Klasse `clip-transkript`, und die darf **nicht** in `SKIP_CLASSES` von
-`scripts/build-suchindex.py` landen — sonst ist der Clip inhaltlich unsichtbar.
+gar nichts. Der Aufklapper der Lektionsseite ist das, was sie liest — er bleibt.
+
+Für die **site-eigene** Suche steht `clip-transkripte` dagegen bewusst in `SKIP_CLASSES`
+von `scripts/build-suchindex.py`: Dort ist der Clip über seinen eigenen Eintrag unter
+`clips.html` auffindbar, und ohne die Ausnahme fände man denselben Satz zweimal — der
+zweite Treffer führte nur auf eine Seite mit hundertsechzig Clips.
 
 **Nach jedem Drehbuch-Edit beide Skripte laufen lassen**, erst `build-clips.py`, dann
 `build-clips-einbau.py`. Das zweite liest nur `clips.json` und baut selbst nichts; ohne
@@ -680,7 +690,9 @@ Clips nicht angefasst werden:
 
 Die Clip-Dateien selbst stehen bewusst **nicht** in der Sitemap: ohne Seitengerüst,
 Navigation und Fussbereich wären sie als Landeseite aus einer Suche eine Sackgasse.
-Indexiert werden `clips.html` und die Lektionsseite — beide tragen das Transkript.
+Für Suchmaschinen tragen `clips.html` und die Lektionsseite das Transkript; die
+site-eigene Suche führt seit dem 13.09.2026 auf `clips.html#clip-<name>`, also auf die
+einzelne Zeile in der Bibliothek.
 
 ---
 

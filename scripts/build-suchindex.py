@@ -16,14 +16,27 @@
 #  auch, wenn eine Seite lokal per file:// geoeffnet wird (fetch() auf JSON
 #  scheitert dort an CORS).
 #
+#  ABWEICHUNG ZUR PHYSIK-FASSUNG (bewusst): Die Leitprogramme stehen hier
+#  als Handliste in seitenliste(), nicht als Auto-Erkennung von
+#  leitprogramme/*.html. Nur so laesst sich eine unverlinkte
+#  Uebungspruefung aus dem Index halten — siehe HOWTO-uebungspruefung.md,
+#  Schritt 6b. Beim naechsten Abgleich mit Physik nicht wegportieren.
+#
 #  Aufruf (immer vom Repo-Root):
 #      python3 scripts/build-suchindex.py              # neu bauen
-#      python3 scripts/build-suchindex.py --check      # nur pruefen, ob aktuell
-#                                                      # Exit 1 = veraltet
+#      python3 scripts/build-suchindex.py --check      # Gatter: Exit 1 = veraltet
 #      python3 scripts/build-suchindex.py --dry-run    # bauen, nur berichten
 #      python3 scripts/build-suchindex.py --root PFAD  # anderes Repo (schreibt
 #                                                      # dorthin — mit --dry-run
 #                                                      # gefahrlos pruefbar)
+#
+#  --check ist das Gatter fuer den Pre-Flight und interessiert sich nur fuer
+#  den Exit-Code; --dry-run ist zum Hinschauen und sagt, OB und WIE STARK
+#  sich der Index aendern wuerde. Exit dort immer 0.
+#
+#  Unbekannte Schalter brechen ab, statt durchzufallen — frueher wurde nur
+#  auf '--check' und '--dry-run' in argv geprueft, und ein Tippfehler baute
+#  den Index still neu. Ein `--root` ohne Pfad brach mit IndexError ab.
 #
 #  Was NICHT in den Index kommt (Entscheid: nur Fliesstext):
 #    - Mini-Checks (.minicheck) und Verstaendnisfragen (.frage)
@@ -34,9 +47,15 @@
 #      .erklaerung bleiben drin
 #    - Bedienelemente aller Art (<button>, <select>, <input>), <canvas>
 #    - Navigation, Footer, Scripts, Styles
+#    - die Transkript-Aufklapper der Lektionsseiten (.clip-transkripte):
+#      Jeder Clip steht einmal als eigener Eintrag unter clips.html — sonst
+#      faende man denselben Satz zweimal, und der Treffer fuehrte auf eine
+#      Seite statt auf den Clip.
 # ─────────────────────────────────────────────────────────────
 
+import argparse
 import hashlib
+import json
 import os
 import re
 import sys
@@ -57,6 +76,7 @@ SKIP_CLASSES = {
     'block-aufg', 'aufg-liste', 'aufg',      # Aufgaben
     'loesung-toggle', 'loesung-body',        # Loesungen zu Aufgaben
     'dl-grid', 'links-grid',                 # Kachel-/Linklisten
+    'clip-transkripte',                      # Clips stehen einzeln im Index
     'toc-wrap', 'site-footer', 'mobile-nav', 'site-hdr',
 }
 SKIP_IDS = {'nav-root', 'toc'}
@@ -201,14 +221,6 @@ class Extractor(HTMLParser):
             return
 
         # Untereintraege
-        # Jeder Clip bekommt einen eigenen Abschnitt. Ohne das heisst in den
-        # Suchergebnissen jeder Clip einer Seite «Clips» und alle fuehren auf
-        # dasselbe Sprungziel. Gilt in jedem Modus, nicht nur 'thema'.
-        if tag == 'h3' and eid and 'clip-h' in cls:
-            self._start(eid)
-            self._grab_start('h3')
-            return
-
         if self.mode == 'glossar' and 'glossar-eintrag' in cls:
             self._start(self.cur_anchor)
             return
@@ -329,6 +341,51 @@ def seiten_aus_navjs(root):
     return seiten
 
 
+def clip_eintraege(root):
+    """Ein Eintrag je Clip — Kurzbeschrieb, Transkript, Stichworte.
+
+    Ein Clip ist ein Film: Im HTML der Bibliothek steht von seinem Inhalt
+    kein Wort, und im Aufklapper der Lektionsseite stehen alle Transkripte
+    einer Seite in einem einzigen Abschnitt. Wer «Bremsweg» sucht, landete
+    darum auf einer Seite und musste den Clip dort selbst suchen. Hier
+    entsteht statt dessen je Clip ein Eintrag, der auf
+    `clips.html#clip-<name>` zeigt; die Bibliothek klappt sein Lerngebiet
+    beim Ankommen auf.
+
+    Quelle sind die erzeugten Dateien neben den Clips: `clips/clips.json`
+    fuer Titel, Kurzbeschrieb und Stichworte, `clips/sprechertext-*.txt`
+    fuer den gesprochenen Text. Gibt es sie nicht, bleibt alles beim Alten.
+
+    Zahlen stehen im Transkript ausgeschrieben («zweiundsiebzig») — die
+    Stelle wird also ueber Wort und Kurzbeschrieb gefunden, nicht ueber
+    die Ziffer.
+    """
+    pfad = os.path.join(root, 'clips', 'clips.json')
+    if not os.path.exists(pfad):
+        return []
+    daten = json.load(open(pfad, encoding='utf-8'))
+    aus = []
+    for c in daten.get('clips', []):
+        stamm = c.get('datei', '').replace('.html', '')
+        if not stamm:
+            continue
+        teile = [c.get('kurzbeschrieb', '')]
+        tk = os.path.join(root, 'clips', f'sprechertext-{stamm}.txt')
+        if os.path.exists(tk):
+            for z in open(tk, encoding='utf-8'):
+                if '\t' in z:
+                    teile.append(z.split('\t', 1)[1].strip())
+        sw = [w for w in (c.get('schlagworte') or []) if w]
+        if sw:
+            teile.append('Stichworte: ' + ', '.join(sw) + '.')
+        if c.get('reihe'):
+            teile.append('Reihe: ' + c['reihe'] + '.')
+        aus.append({'anker': 'clip-' + stamm,
+                    'titel': normalize(c.get('titel', stamm)),
+                    'text': normalize(' '.join(t for t in teile if t))})
+    return aus
+
+
 def js_string(s):
     return '"' + s.replace('\\', '\\\\').replace('"', '\\"').replace('\n', ' ') + '"'
 
@@ -348,7 +405,8 @@ def build(root, projekt):
         ex.feed(roh)
         ex.close()
         n = 0
-        for e in ex.eintraege:
+        zusatz = clip_eintraege(root) if s['url'] == 'clips.html' else []
+        for e in list(ex.eintraege) + zusatz:
             if len(e['text']) < 40:      # blosse Zwischenueberschrift ohne Inhalt
                 continue
             eintraege.append({'p': pi, 'a': e['anker'], 't': e['titel'], 'x': e['text']})
@@ -389,12 +447,32 @@ def aktuelle_fp(out):
     return m.group(1) if m else None
 
 
+def aktuelle_zahl(out):
+    """Abschnitte im bestehenden Index — fuer den Vergleich im Trockenlauf."""
+    if not os.path.exists(out):
+        return None
+    return len(re.findall(r'^\s*\{p:\d+,', open(out, encoding='utf-8').read(), re.M))
+
+
 def main(argv):
-    check = '--check' in argv
-    dry = '--dry-run' in argv
-    root = ROOT
-    if '--root' in argv:
-        root = os.path.abspath(argv[argv.index('--root') + 1])
+    ap = argparse.ArgumentParser(
+        prog='build-suchindex.py',
+        description='Schneidet den Fliesstext der Seiten an den h2-Ankern in Abschnitte '
+                    'und schreibt daraus suchindex.js. Laeuft in beiden TALS-Repos.',
+        epilog='Ohne Schalter wird geschrieben.')
+    modus = ap.add_mutually_exclusive_group()
+    modus.add_argument('--check', action='store_true',
+                       help='nur pruefen, nichts schreiben; Exit 1, wenn der Index veraltet ist '
+                            '(so ruft der Pre-Flight das Skript auf)')
+    modus.add_argument('--dry-run', action='store_true',
+                       help='Trockenlauf: baut den Index und berichtet, schreibt aber nicht')
+    ap.add_argument('--root', default=ROOT, metavar='PFAD',
+                    help='Projektwurzel, um das Schwesterprojekt zu bauen (Standard: dieses Repo)')
+    a = ap.parse_args(argv)
+
+    root = os.path.abspath(a.root)
+    if not os.path.isdir(root):
+        ap.error(f'--root: kein Verzeichnis: {root}')
 
     projekt = projekt_erkennen(root)
     out = os.path.join(root, 'suchindex.js')
@@ -402,16 +480,26 @@ def main(argv):
 
     inhalt, fp, n = build(root, projekt)
     kb = len(inhalt.encode('utf-8')) / 1024
+    alt_fp, alt_n = aktuelle_fp(out), aktuelle_zahl(out)
 
-    if check:
-        if aktuelle_fp(out) == fp:
+    if a.check:
+        if alt_fp == fp:
             print(f"Suchindex aktuell ({n} Abschnitte).")
             return 0
         print("Suchindex VERALTET — neu bauen mit: python3 scripts/build-suchindex.py")
         return 1
-    if dry:
+
+    if a.dry_run:
         print(f"\n[Trockenlauf] nichts geschrieben: {n} Abschnitte, {kb:.0f} KB (fp {fp})")
+        if alt_fp is None:
+            print("  suchindex.js gibt es noch nicht — er wuerde neu angelegt.")
+        elif alt_fp == fp:
+            print("  Der bestehende Index ist Zeichen fuer Zeichen derselbe.")
+        else:
+            d = '' if alt_n is None else f", {n - alt_n:+d} Abschnitte"
+            print(f"  Der Index wuerde sich aendern (bisher fp {alt_fp}{d}).")
         return 0
+
     open(out, 'w', encoding='utf-8').write(inhalt)
     print(f"\nsuchindex.js geschrieben: {n} Abschnitte, {kb:.0f} KB (fp {fp})")
     return 0

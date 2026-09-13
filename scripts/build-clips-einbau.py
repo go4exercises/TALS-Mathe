@@ -198,7 +198,7 @@ def transkript(datei):
     return zeilen or None
 
 
-def zeile(clip, vor="", nuance=1):
+def zeile(clip, vor="", nuance=1, anker=None):
     """Eine Clip-Zeile: Nummer, Titel, Laufzeit. Sonst nichts.
 
     Dieselbe Zeile in der Bibliothek und auf der Lektionsseite — es ist
@@ -209,14 +209,20 @@ def zeile(clip, vor="", nuance=1):
     `data-modus="gross"` heisst: der Clip laeuft ueber dem Fenster, nicht
     in der Zeile. Die Klasse `clip-start` bleibt am Knopf, damit
     clipStart/clipStop aus mathlib.js unveraendert greifen.
+
+    `anker` ist das Sprungziel der Volltextsuche. Sie fuehrt zum einzelnen
+    Clip, nicht mehr zur Bibliotheksseite — dafuer braucht die Zeile eine
+    Adresse. Nur die Bibliothek vergibt sie, und dort nur beim ersten
+    Vorkommen: Ein Clip zweier Lerngebiete steht zweimal in der Liste.
     """
     titel = html.escape(clip["titel"])
     kl = "cl-tr" if clip.get("werkzeug") else f"cl-r{nuance}"
     folge = clip.get("folge")
     nr = (f'<span class="cl-folge">{folge}</span>' if folge
           else '<span class="cl-folge cl-ohne" aria-hidden="true">·</span>')
+    id_ = f' id="{anker}"' if anker else ""
     return [
-        f'<div class="clip {kl}" data-clip="{vor}clips/{clip["datei"]}"'
+        f'<div class="clip {kl}"{id_} data-clip="{vor}clips/{clip["datei"]}"'
         f' data-titel="{titel}" data-modus="gross">',
         '  <button class="clip-start cl-clip" type="button" onclick="clipStart(this)"'
         f' aria-label="Clip abspielen: {titel}">',
@@ -301,6 +307,7 @@ def block_bibliothek(alle, seiten):
             nach_lektion.setdefault(code, []).append(c)
 
     aus = [BIB_AUF]
+    benannt = set()                            # je Clip nur eine id
     fach_titel = {"grundlagen": "Grundlagenfach", "schwerpunkt": "Schwerpunktfach"}
     offen = None
     gesamt = 0
@@ -358,8 +365,11 @@ def block_bibliothek(alle, seiten):
                            + (f'<span class="cl-gnr">{marke}</span>' if marke else "")
                            + html.escape(schlue[1]) + '</h3>')
                 letzte = schlue
+            stamm = c["datei"].replace(".html", "")
+            anker = None if stamm in benannt else "clip-" + stamm
+            benannt.add(stamm)
             aus += ["      " + z for z in
-                    zeile(c, "", nuance[c.get("reihe") or c["titel"]])]
+                    zeile(c, "", nuance[c.get("reihe") or c["titel"]], anker=anker)]
         if letzte is not None:
             aus.append('    </div>')
         aus += ['  </div>', '</div>']
