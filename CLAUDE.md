@@ -76,6 +76,18 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   OFL). `vendor/mathjax/` — MathJax 3.2.2 (Apache 2.0). **Keine Seite lädt etwas von
   einem fremden Host**; Details und Fallstricke in STYLEGUIDE §5.3.1. Umgestellt wird
   mit `scripts/schriften-lokal.py` und `scripts/mathjax-lokal.py`.
+- `scripts/abgleich.py` — vergleicht das **geteilte Werkzeug** mit dem
+  Schwesterrepo `tals-physik`. Physik und Mathe teilen rund 5200 Zeilen
+  Build-Skripte und Prüfer; gepflegt werden sie zweimal, und sie laufen
+  auseinander. Das Skript verhindert das nicht, es macht es sichtbar: drei
+  Klassen (`GLEICH` Fremdgut — jeder Unterschied ist ein Befund; `KERN`
+  geteiltes Werkzeug, gemessen gegen eine **Grundlinie**, die nur steigen
+  darf; `FACH` bewusst verschieden, mit Begründung). `--check` gibt Exit 1
+  bei neuer Drift, `--diff DATEI` zeigt sie, `--gegen PFAD` wählt das
+  Gegenüber. Es schreibt nie etwas, und fehlt das Schwesterrepo, endet es
+  mit Exit 0. Der Pre-Flight ruft es auf und meldet Drift als **[WARN]** —
+  ein Hinweis, kein Blocker. Dieselbe Datei liegt in beiden Repos; wer eine
+  Fassung angleicht, trägt die neue, höhere Grundlinie dort ein.
 - `scripts/build-seo.py` — erzeugt Seiten-Metadaten (Beschreibung, canonical, Open
   Graph, JSON-LD nach schema.org/LearningResource), `sitemap.xml` und `robots.txt`.
   Der Kopfblock zwischen `<!-- SEO:ANFANG -->` und `<!-- SEO:ENDE -->` ist
