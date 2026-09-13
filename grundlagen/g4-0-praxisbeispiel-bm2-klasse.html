@@ -1170,6 +1170,9 @@ function renderTabelle() {
     let v = t.value;
     if (c === 1 || c === 3) v = parseInt(v, 10);
     else if (c === 2) v = parseFloat(v);
+    // Leeres oder unlesbares Zahlenfeld: nicht übernehmen, alten Wert zurück.
+    // Sonst landet NaN in DATEN, und Histogramm und Kennwerte brechen ab.
+    if (c !== 4 && !isFinite(v)) { t.value = DATEN[r][c]; return; }
     DATEN[r][c] = v;
     // Manuelle Änderung markiert den aktiven Preset als "modifiziert"
     setActivePresetButton(null);
@@ -2011,6 +2014,7 @@ function zeichneKuchen(svgId, daten) {
  */
 function zeichneHistogramm(svgId, daten, klassenBreite, einheit, grenze, tabId) {
   grenze = grenze || 'lo';
+  daten = daten.filter(v => isFinite(v));
   const svg = document.getElementById(svgId);
   const W = 460, H = parseFloat(svg.getAttribute('viewBox').split(' ')[3]);
   if (daten.length === 0) { svg.innerHTML = ''; if (tabId) document.getElementById(tabId).innerHTML = ''; return; }
