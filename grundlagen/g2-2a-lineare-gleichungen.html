@@ -358,13 +358,13 @@ Alle drei Darstellungen enthalten dieselbe Information, machen aber unterschiedl
           <div class="anim-hinweis links">
             <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
             <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-              <div class="ah-text">Schiebe \(x\) langsam über die Lösung hinweg. Beobachte gleichzeitig alle drei Darstellungen: Wann steht in der Tabelle «gleich?» ein Haken, und was tun die zwei Geraden in genau diesem Moment?</div>
+              <div class="ah-text">Schiebe \(x\) langsam von links nach rechts. Beobachte die Tabellenzeile «aktuell» und die orange Strecke zwischen den beiden Punkten: Wie ändern sich das Vergleichszeichen und der Abstand der Seiten — und was zeigt der Graph, wenn der Abstand 0 wird?</div>
             </div>
           </div>
           <div class="anim-hinweis rechts">
             <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
             <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-              <div class="ah-text">Eine Gleichung lösen heisst: die Stelle finden, an der linke und rechte Seite denselben Wert haben. In der Tabelle ist das die Zeile mit dem Haken, im Graphen der Schnittpunkt der beiden Geraden. Tabelle, Graph und Term sind drei Ansichten <em>derselben</em> Frage — keine drei verschiedenen Verfahren.</div>
+              <div class="ah-text">Eine Gleichung lösen heisst: die Stelle finden, an der linke und rechte Seite denselben Wert haben. In der Tabelle kippt dort das Vergleichszeichen von \(\lt\) über \(=\) zu \(\gt\), im Graphen schrumpft der Abstand der Seiten auf 0 — die beiden Geraden schneiden sich. Tabelle, Graph und Term sind drei Ansichten <em>derselben</em> Frage — keine drei verschiedenen Verfahren.</div>
             </div>
           </div>
         </div>
@@ -533,19 +533,23 @@ neben der Unbekannten \(x\), von dem man wissen will, wie die Lösung von ihm ab
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Fahre langsam über den ganzen \(k\)-Bereich: Bei welchem Wert passiert etwas Besonderes mit dem Lösungsfall — und was zeigt die Anzeige genau dort?</div>
+          <div class="ah-text">Fahre in Beispiel A und in Beispiel B langsam über den ganzen \(k\)-Bereich: Wo bleibt \(x\) gleich, wo wandert es? Bei welchem Wert passiert etwas Besonderes mit dem Lösungsfall — und welche Aussage bleibt dort in A, welche in B übrig?</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">Eine Parameterdiskussion behandelt <strong>alle</strong> \(k\)-Werte auf einmal: am Sonderwert ändert sich der Lösungsfall, überall sonst gibt es genau eine Lösung als Formel in \(k\).</div>
+          <div class="ah-text">Eine Parameterdiskussion behandelt <strong>alle</strong> \(k\)-Werte auf einmal: am Sonderwert ändert sich der Lösungsfall, überall sonst gibt es genau eine Lösung als Formel in \(k\). Was am Sonderwert passiert, entscheidet \(b(k)\): Verschwindet es mit (A), bleibt \(0 = 0\) und \(\mathbb{L} = \mathbb{R}\); bleibt es stehen (B), entsteht der Widerspruch \(0 = 2\) und \(\mathbb{L} = \emptyset\).</div>
         </div>
       </div>
     </div>
-    <p>Die Anzeige zeigt links die Zwischenform \((k-2) \cdot x = 3(k-2)\) und rechts den daraus folgenden Lösungsfall.</p>
+    <p>Wähle ein Beispiel. Die Anzeige zeigt die Zwischenform \(a(k) \cdot x = b(k)\) mit eingesetztem \(k\) und darunter den daraus folgenden Lösungsfall.</p>
   </div>
   <div class="widget-body">
+    <div class="verf-btns" role="group" aria-label="Beispiel wählen">
+      <button type="button" class="verf-btn aktiv" data-modus="A" aria-pressed="true">Beispiel A: (k − 2)·x = 3·(k − 2)</button>
+      <button type="button" class="verf-btn" data-modus="B" aria-pressed="false">Beispiel B: (k − 2)·x = 2</button>
+    </div>
     <div class="sl-row akz-blau">
       <label for="sl-k">Parameter <span class="var"><em>k</em></span></label>
       <input type="range" id="sl-k" min="-3" max="6" step="0.5" value="4">
@@ -554,7 +558,7 @@ neben der Unbekannten \(x\), von dem man wissen will, wie die Lösung von ihm ab
     <div class="param-anz">
       <div class="pa-glg" id="pk-glg">(4 − 2)·x = 3·(4 − 2)</div>
       <div class="pa-fall" id="pk-fall">Fall 1: a = 2 ≠ 0 → eindeutig lösbar.</div>
-      <div class="pa-loes" id="pk-loes">x = 3</div>
+      <div class="pa-loes" id="pk-loes">x = 6 : 2 = 3</div>
     </div>
   </div>
 </div>
@@ -1144,17 +1148,25 @@ function drawThree() {
   const x = +document.getElementById('sl-three').value;
   document.getElementById('sv-three').textContent = fmtNum(x);
 
-  // Tabelle
+  // Tabelle: feste Probierwerte + Zeile «aktuell», die dem Slider folgt
+  const zahl = v => (v < 0 ? '−' : '') + fmtNum(Math.abs(v));
+  const vergleich = (ls, rs) => ls === rs
+    ? '<span style="color:var(--gruen);font-weight:700">= ✓</span>'
+    : `<span style="color:var(--tinte-2)">${ls > rs ? '&gt;' : '&lt;'}</span>`;
   const candidates = [-1, 1, 3, 4, 5];
   const tab = document.getElementById('tab-three');
+  const lsX = 2 * x - 3, rsX = 5;
+  const tdAkt = 'style="background:var(--blau-hell);border-top:2px solid var(--blau);font-weight:700"';
   tab.innerHTML = candidates.map(xi => {
     const ls = 2 * xi - 3, rs = 5;
     const ok = ls === rs;
     const aktiv = Math.abs(xi - x) < 0.25;
     const bg = aktiv ? 'background:var(--blau-hell)' : '';
-    const symbol = ok ? '<span style="color:var(--gruen);font-weight:700">✓</span>' : `<span style="color:var(--tinte-2)">${ls > rs ? '>' : '<'}</span>`;
-    return `<tr style="${bg}"><td>${xi}</td><td>${ls}</td><td>${rs}</td><td>${symbol}</td></tr>`;
-  }).join('');
+    const symbol = ok ? '<span style="color:var(--gruen);font-weight:700">✓</span>' : `<span style="color:var(--tinte-2)">${ls > rs ? '&gt;' : '&lt;'}</span>`;
+    return `<tr style="${bg}"><td>${zahl(xi)}</td><td>${zahl(ls)}</td><td>${rs}</td><td>${symbol}</td></tr>`;
+  }).join('') +
+    `<tr><td ${tdAkt}>${zahl(x)} <span style="font-weight:400;color:var(--tinte-2)">(aktuell)</span></td>` +
+    `<td ${tdAkt}>${zahl(lsX)}</td><td ${tdAkt}>${rsX}</td><td ${tdAkt}>${vergleich(lsX, rsX)}</td></tr>`;
 
   // Canvas
   const c = document.getElementById('cv-three');
@@ -1202,20 +1214,38 @@ function drawThree() {
   ctx.strokeStyle = '#2d6a3e'; ctx.lineWidth = 2.5;
   ctx.beginPath(); ctx.moveTo(cx(xMin), cy(5)); ctx.lineTo(cx(xMax), cy(5)); ctx.stroke();
 
-  // Schnittpunkt (4 | 5)
-  ctx.fillStyle = '#b85a00';
-  ctx.beginPath(); ctx.arc(cx(4), cy(5), 6, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#b85a00'; ctx.font = 'bold 13px JetBrains Mono,monospace';
-  ctx.textAlign = 'left'; ctx.fillText('S(4 | 5)', cx(4) + 9, cy(5) - 5);
+  // Geraden-Beschriftungen dort, wo die Abstandsstrecke nie hinkommt:
+  // unter der blauen Geraden bei x = 3 und unter y = 5 am rechten Rand
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#1a4f8a'; beschriftung(ctx, 'y = 2x − 3', cx(3) + 6, cy(3) + 18, {align:'left', W, H});
+  ctx.fillStyle = '#2d6a3e'; beschriftung(ctx, 'y = 5', cx(xMax) - 4, cy(5) + 17, {align:'right', W, H});
 
-  // Aktueller Punkt auf der blauen Geraden
-  ctx.fillStyle = '#1a4f8a';
-  ctx.beginPath(); ctx.arc(cx(x), cy(2 * x - 3), 5, 0, Math.PI * 2); ctx.fill();
+  // Beide Seiten beim aktuellen x: Punkt auf y = 2x − 3 und Punkt auf y = 5,
+  // dazwischen die Differenzstrecke (auf die Zeichenfläche beschnitten)
+  const ls = 2 * x - 3, rs = 5, abstand = Math.abs(ls - rs);
+  ctx.save();
+  ctx.beginPath(); ctx.rect(padL, padT, PW, PH); ctx.clip();
+  if (abstand > 0) {
+    ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(cx(x), cy(ls)); ctx.lineTo(cx(x), cy(rs)); ctx.stroke();
+    ctx.fillStyle = '#2d6a3e';
+    ctx.beginPath(); ctx.arc(cx(x), cy(rs), 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#1a4f8a';
+    ctx.beginPath(); ctx.arc(cx(x), cy(ls), 5, 0, Math.PI * 2); ctx.fill();
+  } else {
+    // Abstand 0: beide Punkte fallen zusammen — Schnittpunkt S
+    ctx.fillStyle = '#b85c00';
+    ctx.beginPath(); ctx.arc(cx(x), cy(rs), 6, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+  ctx.font = 'bold 13px JetBrains Mono,monospace'; ctx.fillStyle = '#b85c00';
+  if (abstand === 0) beschriftung(ctx, `S(${fmtNum(x)} | ${rs})`, cx(x) - 9, cy(rs) - 8, {align:'right', W, H});
 
-  // Beschriftungen
-  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace';
-  ctx.textAlign = 'left'; ctx.fillText('y = 2x − 3', cx(6) + 5, cy(2 * 6 - 3));
-  ctx.fillStyle = '#2d6a3e'; ctx.fillText('y = 5', cx(-1.5), cy(5) - 5);
+  // Abstand der Seiten (unten rechts, dort liegt weder Gerade noch Strecke);
+  // auf schmalen Canvas kleiner, damit die Tick-Zahlen der y-Achse frei bleiben
+  const abstText = `Abstand der Seiten: ${fmtNum(abstand)}${abstand === 0 ? ' ✓' : ''}`;
+  if (padL + PW - 4 - ctx.measureText(abstText).width < cx(0) + 8) ctx.font = 'bold 11px JetBrains Mono,monospace';
+  beschriftung(ctx, abstText, padL + PW - 4, cy(-6), {align:'right', W, H});
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -1383,25 +1413,43 @@ function drawFaelle() {
 /* ════════════════════════════════════════════════════════════════
    7 · PARAMETERDISKUSSION — k-Slider
    ════════════════════════════════════════════════════════════════ */
+// Beispiel A: (k − 2)·x = 3·(k − 2)  → b verschwindet bei k = 2 mit (Identität)
+// Beispiel B: (k − 2)·x = 2          → b bleibt 2 (Widerspruch)
+let paModus = 'A';
+
+function setParamModus(m) {
+  paModus = m;
+  document.querySelectorAll('.verf-btn[data-modus]').forEach(btn => {
+    const an = btn.dataset.modus === m;
+    btn.classList.toggle('aktiv', an);
+    btn.setAttribute('aria-pressed', an ? 'true' : 'false');
+  });
+  updateParam();
+}
+
 function updateParam() {
   const k = +document.getElementById('sl-k').value;
   document.getElementById('sv-k').textContent = fmtNum(k);
-  const a = k - 2, b = 3 * (k - 2);
-  const aStr = (k - 2 >= 0 ? `(${fmtNum(k)} − 2)` : `(${fmtNum(k)} − 2)`);
-  const bStr = `3·${aStr}`;
+  // Zahl mit höchstens 2 Dezimalen und echtem Minuszeichen; negativ in Klammern
+  const zahl = v => { const t = Math.abs(v).toFixed(2).replace(/\.?0+$/, ''); return (v < 0 && t !== '0' ? '−' : '') + t; };
+  const kl = v => v < 0 ? `(${zahl(v)})` : zahl(v);
+  const a = k - 2, b = paModus === 'A' ? 3 * (k - 2) : 2;
+  const aStr = `(${zahl(k)} − 2)`;
+  const bStr = paModus === 'A' ? `3·${aStr}` : '2';
   document.getElementById('pk-glg').textContent = `${aStr}·x = ${bStr}`;
 
   let fall, loes;
   if (Math.abs(a) < 0.001 && Math.abs(b) < 0.001) {
     fall = 'Fall 3: a = 0 und b = 0 → Identität. Jedes x ist Lösung.';
-    loes = '𝕃 = ℝ';
+    loes = '0 = 0 → 𝕃 = ℝ';
   } else if (Math.abs(a) < 0.001) {
-    fall = `Fall 2: a = 0, b = ${fmtNum(b)} ≠ 0 → keine Lösung.`;
-    loes = '𝕃 = ∅';
+    fall = `Fall 2: a = 0, b = ${zahl(b)} ≠ 0 → keine Lösung.`;
+    loes = `0 = ${zahl(b)} → 𝕃 = ∅`;
   } else {
-    fall = `Fall 1: a = ${fmtNum(a)} ≠ 0 → eindeutig lösbar.`;
+    fall = `Fall 1: a = ${zahl(a)} ≠ 0 → eindeutig lösbar.`;
     const x = b / a;
-    loes = `x = ${fmtNum(x)}`;
+    const exakt = Math.abs(x * 100 - Math.round(x * 100)) < 1e-9;
+    loes = `x = ${kl(b)} : ${kl(a)} ${exakt ? '=' : '≈'} ${zahl(x)}`;
   }
   document.getElementById('pk-fall').textContent = fall;
   document.getElementById('pk-loes').textContent = loes;
@@ -1566,6 +1614,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Parameter-Slider
   document.getElementById('sl-k').addEventListener('input', updateParam);
+  document.querySelectorAll('.verf-btn[data-modus]').forEach(btn => {
+    btn.addEventListener('click', () => setParamModus(btn.dataset.modus));
+  });
   updateParam();
 
   // Aufgaben

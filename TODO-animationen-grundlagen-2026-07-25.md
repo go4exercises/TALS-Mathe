@@ -67,38 +67,45 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
 
 ## P2 — Didaktisch hoch (Kernaussage kommt nicht an)
 
-- [ ] **AN-08** `g1-1` · Strukturbaum-Widget: Implizite Multiplikation wird nicht geparst —
+- [x] **AN-08** `g1-1` · Strukturbaum-Widget: Implizite Multiplikation wird nicht geparst —
   «2x+3» oder «3(x+2)» (genau die Schreibweise, die BM-Lernende zuerst tippen) scheitern mit
   kryptischer Meldung («Unerwartetes Token: {"t":"var"…}»). Tokenizer erweitern (Zahl vor
   Variable/Klammer → implizites ·, analog `parseL` in mathlib.js) und Fehlermeldungen in
   verständliches Deutsch übersetzen.
-- [ ] **AN-09** `g1-2` · Konverter `cv-p`/`cv-q`: Die 👁-Frage (periodisch vs. abbrechend je
+  **Erledigt 13.09.2026:** Tokenizer fügt implizites · ein (Zahl/Variable/«)» vor Variable/«(»/sqrt); «2x+3», «3(x+2)», «2x^2» richtig; alle Meldungen deutsch; «x2» und doppelte Rechenzeichen als verständliche Fehler. 49 Testfälle.
+- [x] **AN-09** `g1-2` · Konverter `cv-p`/`cv-q`: Die 👁-Frage (periodisch vs. abbrechend je
   nach Nenner) wird vom Widget nicht beantwortet — es zeigt nur «0.3333…». Badge ergänzen:
   «abbrechend (Nenner 4 = 2·2)» bzw. «periodisch (Nenner 3 enthält Faktor ≠ 2, 5)», der Code
   zerlegt den gekürzten Nenner bereits.
-- [ ] **AN-10** `g1-3` · `cv-equiv` (Einstieg, vier Terme): (a) Spaltenlayout sprengt die
+  **Erledigt 13.09.2026:** Zeile unter der Formel begründet abbrechend/periodisch über den gekürzten Nenner und seine Primfaktoren («3/6 = 1/2: gekürzter Nenner 2 …»); alle 300 Reglerkombinationen gegen Python geprüft.
+- [x] **AN-10** `g1-3` · `cv-equiv` (Einstieg, vier Terme): (a) Spaltenlayout sprengt die
   Boxen schon ab ~560 px, bei 360 px unlesbar — bei Schmalbreite 2×2-Anordnung; (b) warum
   Dario falsch liegt, wird nirgends erklärt — Erklärfeld ergänzen («(80+50)(x+y) erzeugt
   die gemischten Glieder 80y und 50x zu viel»).
-- [ ] **AN-11** `g2-1` · `uf-canvas` (Äquivalenzumformung): Die Waage ist faktisch tot
+  **Erledigt 13.09.2026:** Spaltenzahl aus der gemessenen Textbreite (2×2, bei 360 px eine Spalte), Neuzeichnen beim Resize; Erklärfeld mit Live-Zahlen zu den gemischten Gliedern 80·y + 50·x.
+- [x] **AN-11** `g2-1` · `uf-canvas` (Äquivalenzumformung): Die Waage ist faktisch tot
   (beide Seiten in allen Schritten gleich → Neigung immer 0), und der 👁-Hinweis «Was
   passiert, wenn du nur auf einer Seite wegnimmst?» ist im Widget nicht ausführbar. Fix:
   (a) Waageninhalt als Objekte (Kisten/Gewichte), die bei «−3» beidseitig verschwinden und
   bei «:4» schrumpfen; (b) Kontrast-Button «✗ nur links −3», der die Waage kippen lässt.
-- [ ] **AN-12** `g2-2a` · `cv-three` (drei Darstellungen): Tabelle statisch (reagiert bei
+  **Erledigt 13.09.2026:** Kisten und Gewichte in den Schalen, verschwinden beidseitig bzw. werden geviertelt; Knopf «✗ nur links −3» kippt die Waage (12 kg gegen 15 kg) und erklärt x = 3.75 statt 3.
+- [x] **AN-12** `g2-2a` · `cv-three` (drei Darstellungen): Tabelle statisch (reagiert bei
   den meisten Sliderwerten gar nicht), Schnittpunkt S(4|5) samt Label von Anfang an verraten.
   Fix: Zeile «aktuelles x» immer live anzeigen (x, 2x−3, 5, </=/>) ; Schnittpunkt-Label erst
   beim Erreichen einblenden; zweiten Punkt auf y = 5 mit vertikaler Differenzstrecke
   («Abstand der Seiten → 0»).
-- [ ] **AN-13** `g2-2a` · Parameterdiskussions-Widget (`sl-k`): Fall 𝕃 = ∅ ist nicht
+  **Erledigt 13.09.2026:** Live-Zeile «aktuell» in der Tabelle, Punkte auf beiden Geraden mit Abstandsstrecke, S(4 | 5) erst bei Abstand 0.
+- [x] **AN-13** `g2-2a` · Parameterdiskussions-Widget (`sl-k`): Fall 𝕃 = ∅ ist nicht
   explorierbar (b(k) verschwindet mit a(k)), und die Lösung ist konstant x = 3 («Slider tut
   nichts»). Umschalter «Beispiel A: (k−2)x = 3(k−2)» / «Beispiel B: (k−2)x = 2» einbauen —
   bei B variiert x = 2/(k−2) sichtbar und der Widerspruchsfall tritt bei k = 2 ein.
   Optional (P3): kleines Canvas mit den Geraden beider Seiten.
-- [ ] **AN-14** `g2-3` · `cv-kino` (Einstieg): Statisch, obwohl der 👁-Hinweis auffordert,
+  **Erledigt 13.09.2026:** Umschalter Beispiel A / B; B zeigt x = 2 : (k − 2) und bei k = 2 den Widerspruch 0 = 2 → 𝕃 = ∅.
+- [x] **AN-14** `g2-3` · `cv-kino` (Einstieg): Statisch, obwohl der 👁-Hinweis auffordert,
   Punkte zu verfolgen, die nur eine/beide Gleichungen erfüllen. Slider «Anzahl Erwachsene x»
   ergänzen: Punkt wandert auf der roten Geraden, Live-Doppel-Check Personen ✓ / Geld ✓|✗ —
   macht «eine Gleichung = ganze Gerade von Lösungen, beide = ein Punkt» erlebbar.
+  **Erledigt 13.09.2026:** Schieber «Anzahl Erwachsene x», Punkt auf der Personen-Geraden, Doppel-Check Personen ✓ / Geld ✓|✗ mit eingesetzten Zahlen.
 - [ ] **AN-15** `g5-1` · Winkelpaare-Widget (`wp-*`): Als «interaktiv» betitelt, aber nur
   Reiter sind klickbar — die Kern-Invarianz («α wächst, β schrumpft, Summe bleibt 90°/180°»)
   ist nicht erlebbar. Gemeinsamen α-Slider ergänzen, der alle drei Panels nachführt, mit

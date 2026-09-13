@@ -502,7 +502,7 @@ MathJax = {
   <p style="text-align:center;margin:4px 0">\(-x \le 5 \;\;\mid\, \cdot(-1) \;\;\Longleftrightarrow\;\; x \ge -5\)</p>
 </div>
 
-<p style="margin-top:14px">Klicke unten auf <em>„Nächster Schritt"</em> — jede Umformung erscheint einzeln, und du siehst, wie sich die Gleichung verändert, ohne ihre Lösung zu verlieren. Die Waage rechts bleibt stets im Gleichgewicht.</p>
+<p style="margin-top:14px">Klicke unten auf <em>„Nächster Schritt"</em> — jede Umformung erscheint einzeln, und du siehst, wie sich die Gleichung verändert, ohne ihre Lösung zu verlieren. Auf der Waage darunter verschwinden dabei auf beiden Seiten gleich viele Kisten und Gewichte, sie bleibt im Gleichgewicht. Mit <em>„✗ nur links −3"</em> siehst du, was eine einseitige Umformung anrichtet.</p>
 
 <div class="widget">
   <div class="widget-header">
@@ -511,13 +511,13 @@ MathJax = {
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Verfolge bei jedem Schritt: Welche Operation wird angewendet — und steht sie wirklich auf beiden Seiten? Notiere den Umformungspfeil mit der Operation (z.B. «| −3»).</div>
+          <div class="ah-text">Verfolge bei jedem Schritt: Welche Operation wird angewendet — und verschwinden auf <em>beiden</em> Schalen gleich viele Kisten und Gewichte? Drücke dann «✗ nur links −3»: Was passiert mit der Waage und mit der Gleichung, wenn du nur auf einer Seite wegnimmst?</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">Jeder Schritt erzeugt eine <strong>äquivalente</strong> Gleichung — gleiche Lösungsmenge, einfachere Form. Ziel ist immer, die Variable zu isolieren: zuerst Strich-, dann Punktoperationen rückgängig machen.</div>
+          <div class="ah-text">Jeder Schritt erzeugt eine <strong>äquivalente</strong> Gleichung — gleiche Lösungsmenge, einfachere Form; die Waage bleibt waagrecht. Nimmst du nur links 3 weg, kippt sie: Aus \(4 \cdot x = 15\) folgt \(x = 3.75\), die Lösung hat sich verändert. Ziel ist immer, die Variable zu isolieren: zuerst Strich-, dann Punktoperationen rückgängig machen.</div>
         </div>
       </div>
     </div>
@@ -527,10 +527,11 @@ MathJax = {
     <div class="umform-ctrl">
       <button class="umform-btn" id="uf-step">▶ Nächster Schritt</button>
       <button class="umform-btn sec" id="uf-reset">↺ Zurücksetzen</button>
+      <button class="umform-btn sec" id="uf-kontrast" aria-pressed="false">✗ nur links −3</button>
     </div>
     <div class="umform-stack" id="uf-stack"></div>
-    <div class="cv-wrap"><canvas id="uf-canvas" height="180"></canvas></div>
-    <div style="font-size:0.82rem;color:var(--tinte-2);margin-top:10px;font-style:italic;text-align:center" id="uf-status">Drücke „Nächster Schritt" — die Waage bleibt im Gleichgewicht.</div>
+    <div class="cv-wrap"><canvas id="uf-canvas" height="230"></canvas></div>
+    <div style="font-size:0.82rem;color:var(--tinte-2);margin-top:10px;font-style:italic;text-align:center" id="uf-status">Startgleichung: links 4 Kisten und 3 Gewichte, rechts 15 Gewichte. Die Waage ist im Gleichgewicht.</div>
   </div>
 </div>
 
@@ -965,24 +966,29 @@ buildNav({
 /* ════════════════════════════════════════════════════════════════
    1) WAAGEN-CANVAS (geteilt von Einstieg + Äquivalenz-Animation)
 ════════════════════════════════════════════════════════════════ */
-function drawWaage(canvasId, leftMass, rightMass, leftLabel, rightLabel) {
+// opt (nur Äquivalenz-Animation): { H, objL:{kisten,gewichte}, objR:{…}, maxDiff, maxAngle }
+// → Schaleninhalt als Objekte, Beschriftung unter der Schale, Legende unten.
+function drawWaage(canvasId, leftMass, rightMass, leftLabel, rightLabel, opt) {
   const c = document.getElementById(canvasId);
   if (!c) return;
+  const obj = !!(opt && opt.objL);
   const dpr = window.devicePixelRatio || 1;
   const W = c.offsetWidth || 480;
-  const H = canvasId === 'wg-canvas' ? 220 : 180;
+  const H = obj ? opt.H : (canvasId === 'wg-canvas' ? 220 : 180);
   c.width = W * dpr; c.height = H * dpr;
   c.style.width = W + 'px'; c.style.height = H + 'px';
   const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
 
   const cxM = W / 2;
-  const cyM = H / 2 + 6;
-  const beamLen = Math.min(W * 0.40, 200);
+  const cyM = obj ? 62 : H / 2 + 6;
+  const bh = obj ? 44 : 32;          // halbe Schalenbreite
+  const hang = obj ? 56 : 26;        // Länge der Aufhängung
+  const beamLen = obj ? Math.min(W / 2 - bh - 8, 200) : Math.min(W * 0.40, 200);
   // Differenz → Winkel (begrenzt)
   const diff = leftMass - rightMass;
-  const maxDiff = 18;
-  const maxAngle = 0.26;
+  const maxDiff = obj ? opt.maxDiff : 18;
+  const maxAngle = obj ? opt.maxAngle : 0.26;
   let angle = Math.max(-maxAngle, Math.min(maxAngle, diff / maxDiff * maxAngle));
 
   // Stativ
@@ -1004,29 +1010,74 @@ function drawWaage(canvasId, leftMass, rightMass, leftLabel, rightLabel) {
 
   // Schalen-Aufhängungen
   ctx.lineWidth = 1.2; ctx.strokeStyle = '#5a5040';
-  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx - 26, ly + 26); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 26, ly + 26); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx - 26, ry + 26); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx + 26, ry + 26); ctx.stroke();
+  const ha = obj ? bh - 2 : 26;
+  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx - ha, ly + hang); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + ha, ly + hang); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx - ha, ry + hang); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx + ha, ry + hang); ctx.stroke();
 
   // Schalen
   function bowl(cx0, cy0, color) {
+    const tief = obj ? 26 : 22;
     ctx.beginPath();
-    ctx.moveTo(cx0 - 32, cy0);
-    ctx.bezierCurveTo(cx0 - 32, cy0 + 22, cx0 + 32, cy0 + 22, cx0 + 32, cy0);
+    ctx.moveTo(cx0 - bh, cy0);
+    ctx.bezierCurveTo(cx0 - bh, cy0 + tief, cx0 + bh, cy0 + tief, cx0 + bh, cy0);
     ctx.closePath();
     ctx.fillStyle = color; ctx.fill();
     ctx.strokeStyle = '#3a322a'; ctx.lineWidth = 1.5; ctx.stroke();
   }
-  const lbx = lx, lby = ly + 28;
-  const rbx = rx, rby = ry + 28;
+  const lbx = lx, lby = ly + hang + 2;
+  const rbx = rx, rby = ry + hang + 2;
   bowl(lbx, lby, '#ddeaf8');
   bowl(rbx, rby, '#fdefd8');
 
+  // Schaleninhalt: x-Kisten (unten, max. 4 je Reihe) und 1-kg-Gewichte (darüber,
+  // max. 7 je Reihe, gleichmässig verteilt), zentriert auf dem Schalenrand
+  function kiste(x0, y0) {
+    ctx.fillStyle = '#d9b77e'; ctx.fillRect(x0, y0, 18, 18);
+    ctx.strokeStyle = '#7a5a2e'; ctx.lineWidth = 1.2; ctx.strokeRect(x0 + 0.5, y0 + 0.5, 17, 17);
+    ctx.font = 'italic bold 13px serif'; ctx.fillStyle = '#3a322a';
+    beschriftung(ctx, 'x', x0 + 9, y0 + 10, {align:'center', baseline:'middle', frei:false});
+  }
+  function gewicht(x0, y0) {
+    ctx.fillStyle = '#4b5563'; ctx.fillRect(x0, y0, 9, 9);
+  }
+  function inhalt(cx0, rim, o) {
+    let y = rim;
+    if (o.kisten > 0) {
+      const w = o.kisten * 18 + (o.kisten - 1) * 3;
+      for (let i = 0; i < o.kisten; i++) kiste(cx0 - w / 2 + i * 21, y - 18);
+      y -= 21;
+    }
+    if (o.gewichte > 0) {
+      const nReihen = Math.ceil(o.gewichte / 7);
+      const proReihe = Math.ceil(o.gewichte / nReihen);
+      let rest = o.gewichte;
+      for (let r = 0; r < nReihen; r++) {
+        const n = Math.min(proReihe, rest);
+        const w = n * 9 + (n - 1) * 2;
+        for (let i = 0; i < n; i++) gewicht(cx0 - w / 2 + i * 11, y - 9);
+        rest -= n; y -= 12;
+      }
+    }
+  }
+  if (obj) { inhalt(lbx, lby, opt.objL); inhalt(rbx, rby, opt.objR); }
+
   // Beschriftungen
   ctx.font = 'bold 13px monospace'; ctx.textAlign = 'center';
-  ctx.fillStyle = '#1a4f8a'; beschriftung(ctx, leftLabel, lbx, lby - 4, {align:'center', halo:true, W, H});
-  ctx.fillStyle = '#b85c00'; beschriftung(ctx, rightLabel, rbx, rby - 4, {align:'center', halo:true, W, H});
+  const labDy = obj ? 36 : -4;
+  ctx.fillStyle = '#1a4f8a'; beschriftung(ctx, leftLabel, lbx, lby + labDy, {align:'center', halo:true, W, H});
+  ctx.fillStyle = '#b85c00'; beschriftung(ctx, rightLabel, rbx, rby + labDy, {align:'center', halo:true, W, H});
+
+  // Legende (nur mit Objekten)
+  if (obj) {
+    kiste(8, H - 24);
+    ctx.font = '12px sans-serif'; ctx.fillStyle = '#5a5040';
+    beschriftung(ctx, '= x kg', 32, H - 10, {align:'left', W, H});
+    beschriftung(ctx, '= 1 kg', W - 8, H - 10, {align:'right', W, H});
+    const wLeg = ctx.measureText('= 1 kg').width;
+    gewicht(W - 8 - wLeg - 15, H - 19);
+  }
 
   // Status-Anzeige
   ctx.font = 'bold 13px sans-serif';
@@ -1073,45 +1124,67 @@ document.getElementById('wg-x').addEventListener('input', updateWG);
 /* ════════════════════════════════════════════════════════════════
    3) ÄQUIVALENZUMFORMUNGEN — schrittweise Animation
 ════════════════════════════════════════════════════════════════ */
+// Schaleninhalt je Schritt: Kiste = x (bei der Lösung 3 kg), Gewicht = 1 kg
+const UF_X = 3;
 const ufSteps = [
-  { eq: '4·x + 3 = 15', op: '',       lWert: 15, rWert: 15, lLabel: '4·x + 3 (= 15 bei x=3)', rLabel: '15',
-    info: 'Startgleichung. Beide Seiten haben den Wert 15, wenn x = 3 ist.' },
-  { eq: '4·x = 12',     op: '|  − 3', lWert: 12, rWert: 12, lLabel: '4·x (= 12 bei x=3)',     rLabel: '12',
-    info: 'Auf BEIDEN Seiten 3 abgezogen — die Waage bleibt im Gleichgewicht.' },
-  { eq: 'x = 3',        op: '|  : 4', lWert: 3,  rWert: 3,  lLabel: 'x (= 3)',                rLabel: '3',
-    info: 'Auf BEIDEN Seiten durch 4 geteilt — die Lösung steht da: x = 3.' },
+  { eq: '4·x + 3 = 15', op: '',       objL: {kisten: 4, gewichte: 3}, objR: {kisten: 0, gewichte: 15}, lLabel: '4·x + 3', rLabel: '15',
+    info: 'Startgleichung: links 4 Kisten und 3 Gewichte, rechts 15 Gewichte. Die Waage ist im Gleichgewicht.' },
+  { eq: '4·x = 12',     op: '|  − 3', objL: {kisten: 4, gewichte: 0}, objR: {kisten: 0, gewichte: 12}, lLabel: '4·x',     rLabel: '12',
+    info: 'Auf BEIDEN Seiten 3 Gewichte weggenommen: die Waage bleibt im Gleichgewicht.' },
+  { eq: 'x = 3',        op: '|  : 4', objL: {kisten: 1, gewichte: 0}, objR: {kisten: 0, gewichte: 3},  lLabel: 'x',       rLabel: '3',
+    info: 'Auf BEIDEN Seiten durch 4 geteilt: aus 4 Kisten wird 1, aus 12 Gewichten werden 3. Die Lösung steht da: x = 3.' },
 ];
+// Kontrast: nur links −3, ausgehend von der Startgleichung
+const ufFalsch = { eq: '✗ 4·x = 15', op: '|  − 3 nur links', objL: {kisten: 4, gewichte: 0}, objR: {kisten: 0, gewichte: 15}, lLabel: '4·x', rLabel: '15',
+  info: 'Nur LINKS 3 weggenommen: links 12 kg, rechts 15 kg, die Waage kippt. Die Gleichung 4·x = 15 ist falsch, ihre Lösung wäre x = 3.75 statt x = 3. Das ist keine Äquivalenzumformung.' };
 let ufIdx = 0;
+let ufKontrast = false;
+const ufMasse = o => o.kisten * UF_X + o.gewichte;
 
 function renderUf() {
   const stack = document.getElementById('uf-stack');
-  stack.innerHTML = ufSteps.slice(0, ufIdx + 1).map((s, i) => {
-    const opHtml = s.op ? `<span class="umform-op">${s.op}</span>` : '<span class="umform-op" style="opacity:0">·</span>';
-    const cur = i === ufIdx ? ' aktuell' : '';
-    return `<div class="umform-zeile${cur}" id="uf-zeile-${i}">
-      <span class="umform-eq">${s.eq}</span>${opHtml}
+  const zeilen = ufKontrast ? [ufSteps[0], ufFalsch] : ufSteps.slice(0, ufIdx + 1);
+  const aktIdx = zeilen.length - 1;
+  stack.innerHTML = zeilen.map((s, i) => {
+    const falsch = s === ufFalsch;
+    const opHtml = s.op ? `<span class="umform-op"${falsch ? ' style="color:var(--rot);border-color:var(--rot-rand)"' : ''}>${s.op}</span>` : '<span class="umform-op" style="opacity:0">·</span>';
+    const cur = (i === aktIdx && !falsch) ? ' aktuell' : '';
+    const zStil = falsch ? ' style="background:var(--rot-hell);border-color:var(--rot-rand)"' : '';
+    const eStil = falsch ? ' style="color:var(--rot)"' : '';
+    return `<div class="umform-zeile${cur}" id="uf-zeile-${i}"${zStil}>
+      <span class="umform-eq"${eStil}>${s.eq}</span>${opHtml}
     </div>`;
   }).join('');
   // Sichtbarkeits-Animation
   requestAnimationFrame(() => {
     document.querySelectorAll('.umform-zeile').forEach(el => el.classList.add('sichtbar'));
   });
+  const s = ufKontrast ? ufFalsch : ufSteps[ufIdx];
   // Status
-  document.getElementById('uf-status').textContent = ufSteps[ufIdx].info;
-  // Waage
-  const s = ufSteps[ufIdx];
-  drawWaage('uf-canvas', s.lWert, s.rWert, s.lLabel, s.rLabel);
+  const st = document.getElementById('uf-status');
+  st.textContent = s.info;
+  st.style.color = ufKontrast ? 'var(--rot)' : '';
+  // Waage: Neigung aus der Massendifferenz, 3 kg Unterschied = 12° (Anschlag)
+  drawWaage('uf-canvas', ufMasse(s.objL), ufMasse(s.objR), s.lLabel, s.rLabel,
+    { H: 230, objL: s.objL, objR: s.objR, maxDiff: 3, maxAngle: 12 * Math.PI / 180 });
   // Button-Status
   const btn = document.getElementById('uf-step');
-  if (ufIdx >= ufSteps.length - 1) { btn.textContent = '✓ Lösung erreicht'; btn.disabled = true; }
+  if (ufKontrast) { btn.textContent = '▶ Nächster Schritt'; btn.disabled = true; }
+  else if (ufIdx >= ufSteps.length - 1) { btn.textContent = '✓ Lösung erreicht'; btn.disabled = true; }
   else { btn.textContent = '▶ Nächster Schritt'; btn.disabled = false; }
+  const kb = document.getElementById('uf-kontrast');
+  kb.textContent = ufKontrast ? '↩ zurück zum Gleichgewicht' : '✗ nur links −3';
+  kb.setAttribute('aria-pressed', ufKontrast ? 'true' : 'false');
 }
 document.getElementById('uf-step').addEventListener('click', () => {
   if (ufIdx < ufSteps.length - 1) ufIdx++;
   renderUf();
 });
 document.getElementById('uf-reset').addEventListener('click', () => {
-  ufIdx = 0; renderUf();
+  ufIdx = 0; ufKontrast = false; renderUf();
+});
+document.getElementById('uf-kontrast').addEventListener('click', () => {
+  ufKontrast = !ufKontrast; renderUf();
 });
 
 /* ════════════════════════════════════════════════════════════════

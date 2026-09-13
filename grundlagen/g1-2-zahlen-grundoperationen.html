@@ -499,6 +499,7 @@ table.zm-def-tabelle tbody tr.zm-row-R td:first-child { border-left:3px solid #d
     <div class="formel-live">
       <div class="fl-label">Drei Darstellungen</div>
       <div class="fl-eq" id="cv-out">\(\dfrac{\textcolor{#1a4f8a}{3}}{\textcolor{#b85c00}{4}} \;=\; 0.75 \;=\; 75\%\)</div>
+      <div class="fl-eq fl-eval" id="cv-art" style="font-size:0.92rem;margin-top:4px">Nenner \(4 = 2 \cdot 2\) enthält nur den Primfaktor \(2\) →&nbsp;abbrechend</div>
     </div>
   </div>
 </div>
@@ -1301,7 +1302,30 @@ function updateConv() {
   const lhs = ungekuerztGleich ? texC(p, q) : `${texC(p, q)} \\;=\\; ${tex(pk, qk)}`;
   const out = document.getElementById('cv-out');
   out.innerHTML = `\\(${lhs} \\;=\\; ${dec} \\;=\\; ${pctStr}\\%\\)`;
-  mjTypeset([out]);
+
+  // Begründung abbrechend/periodisch: Primfaktoren des GEKÜRZTEN Nenners.
+  const fak = [];
+  for (let m = Math.abs(qk), t = 2; m > 1; ) {
+    if (m % t === 0) { fak.push(t); m /= t; } else t++;
+  }
+  const fremd = [...new Set(fak)].filter(f => f !== 2 && f !== 5);
+  const liste = fs => fs.map(f => `\\(${f}\\)`).join(' und ');
+  const nenner = fak.length > 1 ? `${Math.abs(qk)} = ${fak.join(' \\cdot ')}` : `${Math.abs(qk)}`;
+  let grund;
+  if (fak.length === 0) grund = ', also ganze Zahl';
+  else if (fremd.length) grund = fremd.length === 1 ? ` enthält den Primfaktor ${liste(fremd)}`
+                                                    : ` enthält die Primfaktoren ${liste(fremd)}`;
+  else {
+    const alle = [...new Set(fak)];
+    grund = alle.length === 1 ? ` enthält nur den Primfaktor ${liste(alle)}`
+                              : ` enthält nur die Primfaktoren ${liste(alle)}`;
+  }
+  const tfr = (n, d) => (n < 0 ? `-\\tfrac{${-n}}{${d}}` : `\\tfrac{${n}}{${d}}`);
+  const vorn = ungekuerztGleich ? `Nenner \\(${nenner}\\)`
+    : `\\(${tfr(p, q)} = ${tfr(pk, qk)}\\): gekürzter Nenner \\(${nenner}\\)`;
+  const art = document.getElementById('cv-art');
+  art.innerHTML = `${vorn}${grund} →&nbsp;${fremd.length ? 'periodisch' : 'abbrechend'}`;
+  mjTypeset([out, art]);
 }
 
 /* Klassifikation */

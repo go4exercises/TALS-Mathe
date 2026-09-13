@@ -472,6 +472,14 @@ Ausklammern, ausmultipliziert zum Sortieren.</p>
             <div class="legende-zeile"><span class="lab">Cinzia</span><span class="val" id="leg-equivC">550</span></div>
             <div class="legende-zeile"><span class="lab">Dario (?)</span><span class="val" id="leg-equivD">1040</span></div>
           </div>
+
+          <div class="erklaerung" id="equiv-erkl">
+            <strong>Warum Dario falsch liegt:</strong> Ausmultipliziert ist
+            \((80 + 50) \cdot (x + y)\) <span style="white-space:nowrap">\(= 80x + 80y + 50x + 50y\).</span> Anna hat nur \(80x + 50y\) —
+            Darios Klammer erzeugt die gemischten Glieder \(80y\) und \(50x\) zu viel: jedes
+            B-Stück zusätzlich zum Preis von A, jedes A-Stück zusätzlich zum Preis von B.
+            <span id="equiv-erkl-wert">Bei den aktuellen Werten: 80·3 + 50·5 = 240 + 250 = 490 — genau Darios Überschuss 1040&nbsp;−&nbsp;550.</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1823,30 +1831,73 @@ function drawEquiv() {
   document.getElementById('lbl-equivX').textContent = x;
   document.getElementById('lbl-equivY').textContent = y;
 
-  const { ctx, W, H } = initCanvas('cv-equiv', 260);
-  ctx.fillStyle = '#efeade';
-  ctx.fillRect(0, 0, W, H);
-
-  // Vier Terme, vier Spalten
-  const colW = W / 4;
   // Anna: 80x + 50y
   // Bruno: 10(8x + 5y)
   // Cinzia: 80x + 30y + 20y
-  // Dario: (80 + 50)(x + y) ← FALSCH
-  const anna   = 80 * x + 50 * y;
-  const bruno  = 10 * (8 * x + 5 * y);
-  const cinzia = 80 * x + 30 * y + 20 * y;
-  const dario  = (80 + 50) * (x + y);
-  const terme = [
-    { titel: 'Anna',   formel: '80·x + 50·y',         berechnung: `80·${x} + 50·${y}`,           ergebnis: anna,   korrekt: true },
-    { titel: 'Bruno',  formel: '10·(8·x + 5·y)',      berechnung: `10·(8·${x} + 5·${y})`,        ergebnis: bruno,  korrekt: true },
-    { titel: 'Cinzia', formel: '80·x + 30·y + 20·y',  berechnung: `80·${x} + 30·${y} + 20·${y}`, ergebnis: cinzia, korrekt: true },
-    { titel: 'Dario',  formel: '(80+50)·(x+y)',       berechnung: `(80+50)·(${x}+${y})`,         ergebnis: dario,  korrekt: (anna === dario) },
-  ];
+  // Dario: (80 + 50)(x + y) ← FALSCH, erzeugt 80y + 50x zu viel
+  const wert = (a, b) => ({
+    anna:   80 * a + 50 * b,
+    bruno:  10 * (8 * a + 5 * b),
+    cinzia: 80 * a + 30 * b + 20 * b,
+    dario:  (80 + 50) * (a + b),
+  });
+  const { anna, bruno, cinzia, dario } = wert(x, y);
 
+  // Texte je Term — dieselbe Funktion liefert die Zeilen fürs Zeichnen und
+  // (mit den Regler-Maxima) für die Breitenmessung des Layouts.
+  const termeFuer = (a, b) => {
+    const v = wert(a, b);
+    return [
+      { titel: 'Anna',   formel: '80·x + 50·y',        berechnung: `80·${a} + 50·${b}`,           zw: `= ${80*a} + ${50*b}`,           ergebnis: v.anna,   korrekt: true },
+      { titel: 'Bruno',  formel: '10·(8·x + 5·y)',     berechnung: `10·(8·${a} + 5·${b})`,        zw: `= 10·${8*a + 5*b}`,             ergebnis: v.bruno,  korrekt: true },
+      { titel: 'Cinzia', formel: '80·x + 30·y + 20·y', berechnung: `80·${a} + 30·${b} + 20·${b}`, zw: `= ${80*a} + ${30*b} + ${20*b}`, ergebnis: v.cinzia, korrekt: true },
+      { titel: 'Dario',  formel: '(80+50)·(x+y)',      berechnung: `(80+50)·(${a}+${b})`,         zw: `= 130·${a + b}`,                ergebnis: v.dario,  korrekt: (v.anna === v.dario) },
+    ];
+  };
+  const terme = termeFuer(x, y);
+
+  // ── Layout aus der Breite (AN-10): 4 Spalten, 2×2 oder 1 Spalte ──
+  // Gemessen wird die breiteste Zeile bei den Regler-Maxima, damit das Layout
+  // beim Ziehen nicht springt. Inline-Breite zurücksetzen, sonst wächst der
+  // Canvas nach einem Verkleinern des Fensters nicht mehr mit.
+  const cv = document.getElementById('cv-equiv');
+  cv.style.width = '';
+  const Wmess = cv.offsetWidth || 600;
+  const mctx = cv.getContext('2d');
+  const breite = (font, s) => { mctx.font = font; return mctx.measureText(s).width; };
+  const xMax = +sldX.max, yMax = +sldY.max;
+  const tMax = termeFuer(xMax, yMax);
+  let bedarf = 0;
+  tMax.forEach(t => {
+    bedarf = Math.max(bedarf,
+      breite('bold 13px monospace', t.titel.toUpperCase() + ' (?)'),
+      breite('bold 13px monospace', t.formel) + 18 + 10,   // Formel samt Box-Innenrand
+      breite('13px monospace', `x=${xMax}, y=${yMax}:`),
+      breite('13px monospace', '= ' + t.berechnung),
+      breite('13px monospace', t.zw),
+      breite('bold 13px monospace', 'zufällig gleich –'),
+      breite('bold 13px monospace', 'nicht äquivalent'),
+      breite('13px monospace', '+' + (tMax[3].ergebnis - tMax[0].ergebnis) + ' zu viel'));
+  });
+  bedarf += 16;                                            // Luft zu Trennlinie/Rand
+  const spalten = [4, 2, 1].find(n => Wmess / n >= bedarf) || 1;
+  const zeilen = 4 / spalten;
+  const streifenMax = `Anna = Bruno = Cinzia = ${tMax[0].ergebnis};    Dario = ${tMax[3].ergebnis}`;
+  const streifenZweizeilig = breite('bold 13px monospace', streifenMax) + 16 > Wmess;
+  const zellH = 152;
+  const hoehe = zeilen * zellH + (streifenZweizeilig ? 2 : 1) * 17 + 8;
+
+  const { ctx, W, H } = initCanvas('cv-equiv', hoehe);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+
+  const colW = W / spalten;
   terme.forEach((t, i) => {
-    const cx = colW * i + colW / 2;
-    let cy = 20;
+    const sp = i % spalten;
+    const ze = Math.floor(i / spalten);
+    const yT = ze * zellH;
+    const cx = colW * sp + colW / 2;
+    let cy = yT + 20;
 
     // Spaltentitel mit Farbcode
     ctx.fillStyle = t.korrekt ? '#5a5040' : '#a83a3a';
@@ -1859,7 +1910,7 @@ function drawEquiv() {
     ctx.fillStyle = t.korrekt ? '#dceaf8' : '#fde2e0';
     ctx.strokeStyle = t.korrekt ? '#1a4f8a' : '#a83a3a';
     ctx.lineWidth = 1.5;
-    const boxW = colW - 18;
+    const boxW = Math.min(colW - 18, 220);
     ctx.fillRect(cx - boxW/2, cy - 12, boxW, 22);
     ctx.strokeRect(cx - boxW/2, cy - 12, boxW, 22);
     ctx.fillStyle = t.korrekt ? '#1a4f8a' : '#a83a3a';
@@ -1880,12 +1931,7 @@ function drawEquiv() {
     cy += 14;
 
     // Zwischenschritt für jede Person
-    let zw;
-    if (t.titel === 'Anna')        zw = `= ${80*x} + ${50*y}`;
-    else if (t.titel === 'Bruno')  zw = `= 10·${8*x + 5*y}`;
-    else if (t.titel === 'Cinzia') zw = `= ${80*x} + ${30*y} + ${20*y}`;
-    else                            zw = `= 130·${x + y}`;
-    ctx.fillText(zw, cx, cy);
+    ctx.fillText(t.zw, cx, cy);
     cy += 18;
 
     // Ergebnis
@@ -1916,23 +1962,35 @@ function drawEquiv() {
       }
     }
 
-    // Trennlinie
-    if (i < 3) {
-      ctx.strokeStyle = '#d4cab5';
-      ctx.lineWidth = 1;
+    // Trennlinien: senkrecht zwischen Spalten, waagrecht zwischen Zeilen
+    ctx.strokeStyle = '#d4cab5';
+    ctx.lineWidth = 1;
+    if (sp < spalten - 1) {
       ctx.beginPath();
-      ctx.moveTo(colW * (i + 1), 12);
-      ctx.lineTo(colW * (i + 1), H - 18);
+      ctx.moveTo(colW * (sp + 1), yT + 8);
+      ctx.lineTo(colW * (sp + 1), yT + zellH - 8);
+      ctx.stroke();
+    }
+    if (sp === 0 && ze > 0) {
+      ctx.beginPath();
+      ctx.moveTo(12, yT + 2);
+      ctx.lineTo(W - 12, yT + 2);
       ctx.stroke();
     }
   });
 
-  // Streifen unten
+  // Streifen unten (bei Schmalbreite auf zwei Zeilen)
   const allGleich = (anna === bruno) && (bruno === cinzia);
   ctx.fillStyle = allGleich ? '#2d9d5e' : '#5a5040';
   ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'center';
-  ctx.fillText(`Anna = Bruno = Cinzia = ${anna};    Dario = ${dario}`, W / 2, H - 6);
+  const yS = zeilen * zellH + 14;
+  if (streifenZweizeilig) {
+    ctx.fillText(`Anna = Bruno = Cinzia = ${anna};`, W / 2, yS);
+    ctx.fillText(`Dario = ${dario}`, W / 2, yS + 17);
+  } else {
+    ctx.fillText(`Anna = Bruno = Cinzia = ${anna};    Dario = ${dario}`, W / 2, yS);
+  }
 
   // Live-Anzeigen
   document.getElementById('leg-equivA').textContent = anna;
@@ -1941,6 +1999,14 @@ function drawEquiv() {
   const dEl = document.getElementById('leg-equivD');
   dEl.textContent = dario;
   dEl.style.color = (dario === anna) ? 'var(--gruen)' : 'var(--rot)';
+
+  // Erklärfeld: die gemischten Glieder 80·y und 50·x mit den aktuellen Werten
+  const erklWert = document.getElementById('equiv-erkl-wert');
+  if (erklWert) {
+    erklWert.textContent = (dario === anna)
+      ? 'Bei den aktuellen Werten sind beide gemischten Glieder 0 — darum stimmt Dario hier zufällig. Äquivalent ist er trotzdem nicht.'
+      : `Bei den aktuellen Werten: 80·${y} + 50·${x} = ${80*y} + ${50*x} = ${80*y + 50*x} — genau Darios Überschuss ${dario}\u00a0−\u00a0${anna}.`;
+  }
 }
 document.addEventListener('DOMContentLoaded', () => {
   const sldX = document.getElementById('sld-equivX');
@@ -1950,6 +2016,7 @@ document.addEventListener('DOMContentLoaded', () => {
     drawEquiv();
   }
 });
+window.addEventListener('resize', () => { if (document.getElementById('cv-equiv')) drawEquiv(); });
 </script>
 
 <script>

@@ -285,7 +285,7 @@ denkbar, ebenso 8 und 12. Erst die zweite Bedingung legt das Paar eindeutig fest
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Verfolge beide Geraden einzeln: Welche Punkte erfüllen nur die erste, welche nur die zweite Gleichung — und welcher Punkt erfüllt <em>beide</em>?</div>
+          <div class="ah-text">Schiebe \(x\): Der orange Punkt wandert auf der roten Personen-Geraden. Die Personen-Gleichung bleibt bei jedem \(x\) erfüllt — bei welchem \(x\) stimmt auch das Geld, und wo liegt der Punkt dann?</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
@@ -298,12 +298,21 @@ denkbar, ebenso 8 und 12. Erst die zweite Bedingung legt das Paar eindeutig fest
     <p>Beide Gleichungen sind im Diagramm als Gerade eingezeichnet. Die Lösung des Systems ist genau der Schnittpunkt.</p>
   </div>
   <div class="widget-body">
+    <div class="sl-row akz-orange">
+      <label for="sl-kino">Anzahl Erwachsene <span class="var">\(x\)</span></label>
+      <input id="sl-kino" type="range" min="0" max="20" step="1" value="4">
+      <span class="sl-val" id="sl-kino-v">4</span>
+    </div>
     <div class="cv-wrap"><canvas id="cv-kino"></canvas></div>
+    <div class="formel-live" style="margin-top:12px">
+      <div class="fl-label">Doppel-Check · Punkt eingesetzt</div>
+      <div class="fl-eq" id="kino-check"></div>
+    </div>
     <div class="formel-live" style="margin-top:12px">
       <div class="fl-label">Lösung</div>
       <div class="fl-eq">x = 10 Erwachsene,&nbsp;&nbsp; y = 10 Kinder</div>
     </div>
-    <p class="hinweis">In rot die Personenzahl-Gerade, in blau die Geldgerade. Schnittpunkt = Lösung.</p>
+    <p class="hinweis">In rot die Personenzahl-Gerade, in blau die Geldgerade. Schnittpunkt = Lösung. Der orange Punkt liegt immer auf der roten Geraden.</p>
   </div>
 </div>
 
@@ -1091,7 +1100,8 @@ function drawKino() {
   drawLine(ctx, cx, cy, -15/9, 240/9, 0, 16, '#1a4f8a', 2.5);      // y = (240-15x)/9
   zahlenOben();
   ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
-  beschriftung(ctx,'x [Erw.]', W-2, cy(0)-7, {align:'right', W, H});
+  // über der roten Geraden, sonst verdeckt der Schieber-Punkt bei x = 18/19 das Label
+  beschriftung(ctx,'x [Erw.]', W-2, cy(4), {align:'right', W, H});
   beschriftung(ctx,'y [Kinder]', cx(0)+5, 11, {align:'left', W, H});
   // Schnittpunkt (10 | 10)
   drawDot(ctx, cx, cy, 10, 10, '#0f7a3a', 7);
@@ -1099,9 +1109,28 @@ function drawKino() {
   beschriftung(ctx, '(10 | 10)', cx(10)+9, cy(10)-6, {align:'left', W, H});
   // Linien-Beschriftungen
   ctx.fillStyle='#a0392c';
-  beschriftung(ctx, 'x + y = 20', cx(2)+2, cy(18)-3, {align:'left', W, H});
+  beschriftung(ctx, 'x + y = 20', cx(2)+6, cy(18)-3, {align:'left', W, H});
   ctx.fillStyle='#1a4f8a';
-  beschriftung(ctx, '15x + 9y = 240', cx(12), cy(7)+12, {align:'left', W, H});
+  // links der blauen Geraden unterhalb von (10 | 10): dort liegt die rote Gerade
+  // nicht, also auch nie der Schieber-Punkt (bei y = 4 ist x = 13.6 auf Blau)
+  beschriftung(ctx, '15x + 9y = 240', cx(13.6)-30, cy(4), {align:'right', W, H});
+  // Schieber-Punkt auf der Personen-Geraden: y = 20 - x (ganzzahlig 0 … 20)
+  const x = parseInt(document.getElementById('sl-kino').value);
+  const y = 20 - x;
+  document.getElementById('sl-kino-v').textContent = x;
+  drawDot(ctx, cx, cy, x, y, '#b85c00', 4);
+  // Koordinaten fest oben rechts: nahe am Punkt ist zwischen Achsenzahlen,
+  // Geraden und Beschriftungen nicht für jedes x Platz.
+  ctx.fillStyle='#b85c00'; ctx.font='bold 13px monospace';
+  beschriftung(ctx, `Punkt (${x} | ${y})`, W-6, 18, {align:'right', W, H});
+  // Doppel-Check mit den eingesetzten Zahlen (nur die Schieberzahl x gefärbt)
+  const xs = `<span class="tx-orange">${x}</span>`;
+  const geld = 15*x + 9*y;
+  document.getElementById('kino-check').innerHTML =
+    `x&nbsp;=&nbsp;${xs}, y&nbsp;=&nbsp;20&nbsp;−&nbsp;${xs} =&nbsp;${y}<br>` +
+    `Personen: ${xs}&nbsp;+&nbsp;${y} =&nbsp;${x + y}&nbsp;${x + y === 20 ? '✓' : '✗'}<br>` +
+    `Geld: 15·${xs}&nbsp;+&nbsp;9·${y} =&nbsp;${geld}` +
+    (geld === 240 ? '&nbsp;✓' : '&nbsp;≠&nbsp;240&nbsp;✗');
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1385,6 +1414,7 @@ function pruefA6() { pruefAW('a6-x','a6-y',[120,80],'a6-cr'); }
    ══════════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   // Einstieg
+  document.getElementById('sl-kino').addEventListener('input', drawKino);
   drawKino();
   // Drei Darstellungen
   document.getElementById('sl-three').addEventListener('input', updateThree);

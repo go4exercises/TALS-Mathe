@@ -275,7 +275,7 @@ MathJax = {
 .sb-waehler .sb-btn:hover { border-color:var(--blau-rand); color:var(--blau); }
 .sb-waehler .sb-btn.aktiv { border-color:var(--blau); background:var(--blau); color:#fff; }
 .sb-eigen {
-  display:flex; gap:8px; align-items:center;
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
   margin:10px 0 0; padding:10px 12px;
   background:var(--papier-2); border:1px solid var(--linie); border-radius:8px;
 }
@@ -287,7 +287,7 @@ MathJax = {
 }
 .sb-eigen input:focus { outline:none; border-color:var(--blau); }
 .sb-eigen .sb-fehler { color:var(--rot); font-size:0.78rem; font-family:var(--mono); display:none; }
-.sb-eigen .sb-fehler.sichtbar { display:inline; }
+.sb-eigen .sb-fehler.sichtbar { display:block; flex-basis:100%; }
 
 /* Würfel-Demo für Rechengesetze */
 .wuerfel-box {
@@ -1094,44 +1094,70 @@ document.addEventListener('DOMContentLoaded', () => {
                  wert?, links?, rechts?, kind? } */
 
 /* Tokenizer: Eingabe-String → Token-Liste.
-   Erlaubt: Zahlen (auch dezimal), Variablen [a-zA-Z], + - * / ^ ( ) sowie sqrt(...) */
+   Erlaubt: Zahlen (auch dezimal), Variablen [a-zA-Z] (je ein Buchstabe), + - * / ^ ( ) sowie sqrt(...).
+   Implizite Multiplikation wie in der Schreibweise auf Papier: Steht eine Zahl, eine Variable
+   oder eine schliessende Klammer direkt vor einer Variablen, einer öffnenden Klammer oder
+   sqrt — oder eine schliessende Klammer vor einer Zahl —, wird ein Mal-Token eingefügt:
+   2x → 2·x, 3(x+2) → 3·(x+2), ab → a·b, (a+b)(a-b) → (a+b)·(a-b).
+   «x2» bleibt ein Fehler: gemeint kann x^2 oder 2·x sein. */
 function sbTokenize(s) {
   const tokens = [];
   let i = 0;
   // Normalisierung: Unicode-Operatoren auf ASCII
   s = s.replace(/·/g, '*').replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/√/g, 'sqrt');
+  // Vor dem Anhängen eines Operanden-Tokens prüfen, ob davor ein implizites · steht
+  function operand(tk) {
+    const vor = tokens[tokens.length - 1];
+    if (vor) {
+      const vorEnde = vor.t === 'num' || vor.t === 'var' || vor.t === ')';
+      if (tk.t === 'num' && vor.t === 'var')
+        throw new Error(`„${vor.v}${tk.v}“ ist mehrdeutig: Meinst du ${vor.v}^${tk.v} oder ${tk.v}${vor.v}?`);
+      if (tk.t === 'num' && vor.t === 'num')
+        throw new Error(`Zwischen ${vor.v} und ${tk.v} fehlt ein Rechenzeichen.`);
+      if (vorEnde && (tk.t !== 'num' || vor.t === ')')) tokens.push({ t:'*', implizit:true });
+    }
+    tokens.push(tk);
+  }
   while (i < s.length) {
     const c = s[i];
     if (/\s/.test(c)) { i++; continue; }
     if (/[0-9.]/.test(c)) {
       let j = i;
       while (j < s.length && /[0-9.]/.test(s[j])) j++;
-      tokens.push({ t:'num', v: parseFloat(s.slice(i, j)) });
+      const txt = s.slice(i, j);
+      if (!/^(\d+\.?\d*|\.\d+)$/.test(txt)) throw new Error(`„${txt}“ ist keine gültige Zahl.`);
+      operand({ t:'num', v: parseFloat(txt) });
       i = j;
     } else if (/[a-zA-Z]/.test(c)) {
-      let j = i;
-      while (j < s.length && /[a-zA-Z]/.test(s[j])) j++;
-      const name = s.slice(i, j);
-      if (name === 'sqrt') {
-        tokens.push({ t:'sqrt' });
+      if (s.startsWith('sqrt', i)) {
+        operand({ t:'sqrt' });
+        i += 4;
       } else {
-        tokens.push({ t:'var', v: name });
+        operand({ t:'var', v: c });
+        i++;
       }
-      i = j;
-    } else if ('+-*/^()'.includes(c)) {
+    } else if (c === '(') {
+      operand({ t:'(' });
+      i++;
+    } else if ('+-*/^)'.includes(c)) {
       tokens.push({ t: c });
       i++;
+    } else if (c === ',') {
+      throw new Error('Das Komma ist nicht erlaubt. Dezimalzahlen mit Punkt schreiben, z. B. 2.5');
     } else {
-      throw new Error(`Unbekanntes Zeichen: '${c}'`);
+      throw new Error(`Das Zeichen „${c}“ ist nicht erlaubt. Erlaubt: Zahlen, Buchstaben, + − · / ^ ( ) und sqrt(…)`);
     }
   }
   return tokens;
 }
 
 /* Pratt-Parser für Terme.
-   Präzedenz: + - (1, links-assoc) · * / (2, links-assoc) · ^ (3, rechts-assoc) · unäres minus / sqrt (4) */
+   Präzedenz: + - (1, links-assoc) · * / (2, links-assoc, implizites · wie *) · ^ (3, rechts-assoc) · unäres minus / sqrt (4) */
 function sbParse(tokens) {
   let p = 0;
+  // Operator-Token → Zeichen für die Fehlermeldung
+  const ZEICHEN = { '+':'+', '-':'−', '*':'·', '/':'/', '^':'^', '(':'(', ')':')' };
+  const OPS = '+-*/^';
   function peek() { return tokens[p]; }
   function consume() { return tokens[p++]; }
   function parseExpr(minPrec) {
@@ -1155,7 +1181,16 @@ function sbParse(tokens) {
   }
   function parseUnary() {
     const tk = peek();
-    if (!tk) throw new Error('Term endet zu früh');
+    const vor = tokens[p - 1];
+    if (!tk) {
+      if (!vor) throw new Error('Bitte einen Term eingeben.');
+      if (vor.t === '(') throw new Error('Nach „(“ fehlt ein Term.');
+      throw new Error(`Nach „${ZEICHEN[vor.t]}“ fehlt ein Term.`);
+    }
+    if (tk.t === '-' || tk.t === '+') {
+      if (vor && OPS.includes(vor.t))
+        throw new Error(`Zwei Rechenzeichen hintereinander: „${ZEICHEN[vor.t]}\u00a0${ZEICHEN[tk.t]}“. Setze das Vorzeichen in Klammern: „${ZEICHEN[vor.t]}(${ZEICHEN[tk.t]}…)“.`);
+    }
     if (tk.t === '-') {
       consume();
       // Unäres Minus bindet SCHWÄCHER als Potenz (mathematische Konvention):
@@ -1168,11 +1203,11 @@ function sbParse(tokens) {
     if (tk.t === 'sqrt') {
       consume();
       const nxt = peek();
-      if (!nxt || nxt.t !== '(') throw new Error('sqrt muss von Klammer gefolgt sein');
+      if (!nxt || nxt.t !== '(') throw new Error('Nach „sqrt“ muss eine Klammer folgen, z. B. sqrt(x+4).');
       consume();
       const inner = parseExpr(1);
       const cl = peek();
-      if (!cl || cl.t !== ')') throw new Error('Klammer nach sqrt nicht geschlossen');
+      if (!cl || cl.t !== ')') throw new Error('Klammer nicht geschlossen: Bei sqrt(…) fehlt „)“.');
       consume();
       return { typ:'sqrt', kind: inner };
     }
@@ -1180,16 +1215,26 @@ function sbParse(tokens) {
       consume();
       const inner = parseExpr(1);
       const cl = peek();
-      if (!cl || cl.t !== ')') throw new Error('Klammer nicht geschlossen');
+      if (!cl || cl.t !== ')') throw new Error('Klammer nicht geschlossen: Es fehlt „)“.');
       consume();
       return inner;
     }
     if (tk.t === 'num') { consume(); return { typ:'num', wert: tk.v }; }
     if (tk.t === 'var') { consume(); return { typ:'var', wert: tk.v }; }
-    throw new Error(`Unerwartetes Token: ${JSON.stringify(tk)}`);
+    // Hier steht ein Rechenzeichen oder „)“, wo ein Term erwartet wird
+    if (tk.t === ')') {
+      if (vor && vor.t === '(') throw new Error('Die Klammer „( )“ ist leer.');
+      if (!vor) throw new Error('Zu „)“ fehlt die öffnende Klammer „(“.');
+    }
+    if (!vor) throw new Error(`Der Term darf nicht mit „${ZEICHEN[tk.t]}“ beginnen.`);
+    if (vor.t === '(') throw new Error(`Nach „(“ darf nicht direkt „${ZEICHEN[tk.t]}“ stehen.`);
+    throw new Error(`Nach „${ZEICHEN[vor.t]}“ fehlt ein Term.`);
   }
   const ast = parseExpr(1);
-  if (p < tokens.length) throw new Error(`Term nicht vollständig geparst (Rest ab Position ${p})`);
+  if (p < tokens.length) {
+    if (tokens[p].t === ')') throw new Error('Zu „)“ fehlt die öffnende Klammer „(“.');
+    throw new Error('Der Term ist nicht vollständig lesbar.');
+  }
   return ast;
 }
 
