@@ -1245,8 +1245,8 @@ function sbToTex(ast) {
     case 'var': return ast.wert;
     case 'neg': {
       const inner = sbToTex(ast.kind);
-      // Klammer um Summen/Differenzen
-      if (['sum','sub'].includes(ast.kind.typ)) return `-(${inner})`;
+      // Klammer um Summen/Differenzen und um ein weiteres Vorzeichen: -(-x)
+      if (['sum','sub','neg'].includes(ast.kind.typ)) return `-(${inner})`;
       return `-${inner}`;
     }
     case 'sqrt': return `\\sqrt{${sbToTex(ast.kind)}}`;
@@ -1256,12 +1256,22 @@ function sbToTex(ast) {
       if (['sum','sub','mul','div','neg'].includes(ast.links.typ)) basis = `(${basis})`;
       return `${basis}^{${sbToTex(ast.rechts)}}`;
     }
-    case 'sum': return `${sbToTex(ast.links)} + ${sbToTex(ast.rechts)}`;
-    case 'sub': return `${sbToTex(ast.links)} - ${sbToTex(ast.rechts)}`;
+    case 'sum': {
+      let r = sbToTex(ast.rechts);
+      if (ast.rechts.typ === 'neg') r = `(${r})`;               // x + (-3)
+      return `${sbToTex(ast.links)} + ${r}`;
+    }
+    case 'sub': {
+      // Wer eine Summe oder Differenz abzieht, braucht die Klammer:
+      // x - (y + z) ist nicht x - y + z.
+      let r = sbToTex(ast.rechts);
+      if (['sum','sub','neg'].includes(ast.rechts.typ)) r = `(${r})`;
+      return `${sbToTex(ast.links)} - ${r}`;
+    }
     case 'mul': {
       let l = sbToTex(ast.links), r = sbToTex(ast.rechts);
       if (['sum','sub'].includes(ast.links.typ)) l = `(${l})`;
-      if (['sum','sub'].includes(ast.rechts.typ)) r = `(${r})`;
+      if (['sum','sub','neg'].includes(ast.rechts.typ)) r = `(${r})`;   // 2 · (-3)
       return `${l} \\cdot ${r}`;
     }
     case 'div': return `\\dfrac{${sbToTex(ast.links)}}{${sbToTex(ast.rechts)}}`;

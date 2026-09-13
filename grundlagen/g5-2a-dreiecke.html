@@ -3651,9 +3651,11 @@ function drawAnw() {
     ctx.restore();
 
     // Winkel-Bögen und -Labels
-    // Im Halbdreieck: A = UR (unten rechts, Winkel α = 60°),
-    //                  B = SP (oben, Winkel β = 30°),
+    // Im Halbdreieck: A = SP (oben, Winkel α = 30°),
+    //                  B = UR (unten rechts, Winkel β = 60°),
     //                  C = MM (Lotfuss, γ = 90°)
+    // Die Variablen A_h/B_h bezeichnen nur die Lage (UR/SP); beschriftet wird
+    // so, dass a = BC gegenüber A liegt (kurze Kathete gegenüber 30°).
     const A_h = UR, B_h = SP, C_h = MM;
     drawAngleSector(ctx, A_h, B_h, C_h, 28, 'rgba(30,58,138,0.18)', C.blau);
     drawAngleSector(ctx, B_h, C_h, A_h, 28, 'rgba(30,58,138,0.18)', C.blau);
@@ -3667,14 +3669,14 @@ function drawAnw() {
     txt(ctx, C_h[0] + 18, C_h[1] - 18, '90°', C.tinte, 13, 'center', 'middle', '600');
 
     // Eckpunkte beschriften
-    txt(ctx, A_h[0] + 14, A_h[1] + 14, 'A', C.tinte, 14, 'center', 'middle', '700');
-    txt(ctx, B_h[0],      B_h[1] - 16, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, A_h[0] + 14, A_h[1] + 14, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B_h[0],      B_h[1] - 16, 'A', C.tinte, 14, 'center', 'middle', '700');
     txt(ctx, C_h[0] - 14, C_h[1] + 14, 'C', C.tinte, 14, 'center', 'middle', '700');
 
-    // Vollform-Spitze links (Spiegelung von A_h) als Punkt sichtbar
-    txt(ctx, UL[0] - 14, UL[1] + 14, "A'", C.tinte2, 14, 'center', 'middle', '600');
+    // Vollform-Ecke links (Spiegelung von B) als Punkt sichtbar
+    txt(ctx, UL[0] - 14, UL[1] + 14, "B'", C.tinte2, 14, 'center', 'middle', '600');
 
-    // Seitenbeschriftungen (Halbdreieck): a = C-A (unten), b = C-B (vertikal), c = A-B (Schenkel)
+    // Seitenbeschriftungen (Halbdreieck): a = BC (unten, gegenüber A), b = AC (vertikal, gegenüber B), c = AB (Schenkel)
     const innenG = [(A_h[0] + B_h[0] + C_h[0]) / 3, (A_h[1] + B_h[1] + C_h[1]) / 3];
     anwSeiteLabel('a', C_h, A_h, innenG);
     anwSeiteLabel('c', A_h, B_h, innenG);
@@ -3722,7 +3724,8 @@ function drawAnw() {
     ctx.restore();
 
     // Winkel-Bögen und -Labels
-    // Halbdreieck: A = DL (Winkel α = 45°), B = UR (Winkel β = 45°), C = DR (γ = 90°)
+    // Halbdreieck: B = DL (Winkel β = 45°), A = UR (Winkel α = 45°), C = DR (γ = 90°)
+    // Die Variablen A_h/B_h bezeichnen nur die Lage (DL/UR); a = BC liegt gegenüber A.
     const A_h = DL, B_h = UR, C_h = DR;
     drawAngleSector(ctx, A_h, B_h, C_h, 28, 'rgba(30,58,138,0.18)', C.blau);
     drawAngleSector(ctx, B_h, C_h, A_h, 28, 'rgba(30,58,138,0.18)', C.blau);
@@ -3732,14 +3735,14 @@ function drawAnw() {
     txt(ctx, C_h[0] - 18, C_h[1] - 18, '90°', C.tinte, 13, 'center', 'middle', '600');
 
     // Eckpunkte beschriften
-    txt(ctx, A_h[0] - 14, A_h[1] + 14, 'A', C.tinte, 14, 'center', 'middle', '700');
-    txt(ctx, B_h[0] + 14, B_h[1] - 14, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, A_h[0] - 14, A_h[1] + 14, 'B', C.tinte, 14, 'center', 'middle', '700');
+    txt(ctx, B_h[0] + 14, B_h[1] - 14, 'A', C.tinte, 14, 'center', 'middle', '700');
     txt(ctx, C_h[0] + 14, C_h[1] + 14, 'C', C.tinte, 14, 'center', 'middle', '700');
 
     // Vierter (gespiegelter) Eckpunkt
     txt(ctx, UL[0] - 14, UL[1] - 14, "C'", C.tinte2, 14, 'center', 'middle', '600');
 
-    // Seitenbeschriftungen (Halbdreieck): a = C-A (unten), b = C-B (rechts), c = A-B (Diagonale, nach aussen in die gestrichelte Hälfte)
+    // Seitenbeschriftungen (Halbdreieck): a = BC (unten, gegenüber A), b = AC (rechts, gegenüber B), c = AB (Diagonale, nach aussen in die gestrichelte Hälfte)
     const innenQ = [(A_h[0] + B_h[0] + C_h[0]) / 3, (A_h[1] + B_h[1] + C_h[1]) / 3];
     anwSeiteLabel('a', C_h, A_h, innenQ);
     anwSeiteLabel('b', C_h, B_h, innenQ);
