@@ -145,9 +145,9 @@
 
 <script>
 MathJax = {
-  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol','color']} },
   svg: { fontCache:'global', scale:1.05 },
-  loader: { load:['[tex]/boldsymbol'] },
+  loader: { load:['[tex]/boldsymbol','[tex]/color'] },
   options: { skipHtmlTags:['script','noscript','style','textarea'] }
 };
 </script>
@@ -549,6 +549,52 @@ table.zm-def-tabelle tbody tr.zm-row-R td:first-child { border-left:3px solid #d
 
 <p>Bei Addition und Subtraktion gibt es keine solche Tabelle — dort entscheidet die Stellung auf der Zahlengeraden.</p>
 
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Plus und Minus als Pfeile auf der Zahlengeraden</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Lass \(a\) und \(b\) stehen und klicke die vier Fälle durch. Vergleiche jedes Mal den gestrichelten Pfeil (die Zahl allein) mit dem ausgezogenen (der Schritt, der wirklich gegangen wird): In welchen Fällen zeigen sie in dieselbe Richtung, in welchen in die Gegenrichtung? Welche zwei Fälle landen am selben Punkt?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Das Plus übernimmt die Richtung der Zahl, das Minus kehrt sie um. Eine negative Zahl zeigt schon nach links — steht ein Minus davor, dreht es den Pfeil wieder nach rechts. Darum landen \(a - (-b)\) und \(a + b\) am selben Punkt, ebenso \(a + (-b)\) und \(a - b\).</div>
+        </div>
+      </div>
+    </div>
+    <p>Start bei \(a\). Der gestrichelte Pfeil zeigt die Zahl, die dazukommt; der ausgezogene den Schritt, der gegangen wird.</p>
+  </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="feld-titel">Fall</div>
+      <div class="chips" id="vz-faelle" style="margin-bottom:12px">
+        <button class="chip" type="button" data-fall="0" aria-pressed="false">a + b</button>
+        <button class="chip" type="button" data-fall="1" aria-pressed="false">a + (−b)</button>
+        <button class="chip" type="button" data-fall="2" aria-pressed="false">a − b</button>
+        <button class="chip aktiv" type="button" data-fall="3" aria-pressed="true">a − (−b)</button>
+      </div>
+      <div class="sl-row">
+        <div class="sl-grp akz-blau"><label>Zahl <span class="var">\(a\)</span></label>
+        <input type="range" id="vz-a" min="-7" max="7" step="1" value="7">
+        <span class="sl-val" id="vz-av">7</span></div>
+        <div class="sl-grp akz-orange"><label>Zahl <span class="var">\(b\)</span></label>
+        <input type="range" id="vz-b" min="1" max="7" step="1" value="2">
+        <span class="sl-val" id="vz-bv">2</span></div>
+      </div>
+      <canvas id="cv-vz" width="560" height="192"></canvas>
+      <div class="formel-live">
+        <div class="fl-label">Rechnung</div>
+        <div class="fl-eq" id="vz-eq"><span class="tx-blau">7</span> − (−<span class="tx-orange">2</span>) = <span class="tx-blau">7</span> + <span class="tx-orange">2</span> = 9</div>
+      </div>
+      <div class="erklaerung" id="vz-erkl">Die Zahl −2 allein zeigt nach links. Das Minus davor kehrt die Richtung um: Von 7 aus geht es 2 nach rechts, du landest bei 9.</div>
+    </div>
+  </div>
+</div>
+
 <div class="block block-bsp">
   <div class="block-titel">🟢 Beispiel · Rechnen mit Vorzeichen</div>
   <p>\((-3) \cdot (-4) = +12\) — minus mal minus = plus.</p>
@@ -731,11 +777,16 @@ Erscheinungsformen, die im Folgenden ständig verwendet werden — auch in <a cl
               <td class="li">\([0;\, 4[\)</td>
             </tr>
             <tr class="iv-row" data-iv="3">
+              <td>\(]a;\, b]\)</td>
+              <td class="li">\(\{x \in \mathbb{R} \mid a < x \leq b\}\)</td>
+              <td class="li">\(]0;\, 4]\)</td>
+            </tr>
+            <tr class="iv-row" data-iv="4">
               <td>\(]-\infty;\, b]\)</td>
               <td class="li">\(\{x \in \mathbb{R} \mid x \leq b\}\)</td>
               <td class="li">\(]-\infty;\, 2]\)</td>
             </tr>
-            <tr class="iv-row" data-iv="4">
+            <tr class="iv-row" data-iv="5">
               <td>\([a;\, +\infty[\)</td>
               <td class="li">\(\{x \in \mathbb{R} \mid x \geq a\}\)</td>
               <td class="li">\([{-1};\, +\infty[\)</td>
@@ -1410,6 +1461,9 @@ const IV_BEISPIELE = [
   { typ:'halboffen',    a: 0,    b: 4,    linksZu:true,  rechtsZu:false,
     formal:'[0;\\, 4[', mengen:'\\{x \\in \\mathbb{R} \\mid 0 \\leq x < 4\\}',
     erkl:'Linker Endpunkt dabei (Klammer nach innen), rechter Endpunkt nicht (Klammer nach aussen).' },
+  { typ:'halboffen',    a: 0,    b: 4,    linksZu:false, rechtsZu:true,
+    formal:']0;\\, 4]', mengen:'\\{x \\in \\mathbb{R} \\mid 0 < x \\leq 4\\}',
+    erkl:'Linker Endpunkt nicht dabei (Klammer nach aussen), rechter Endpunkt dabei (Klammer nach innen) — genau umgekehrt wie bei \\([0;\\, 4[\\).' },
   { typ:'links unbeschränkt',  a: null, b: 2,    linksZu:false, rechtsZu:true,
     formal:']-\\infty;\\, 2]', mengen:'\\{x \\in \\mathbb{R} \\mid x \\leq 2\\}',
     erkl:'Nach links unbeschränkt — Pfeil ohne Endpunkt. Rechts gehört die 2 dazu.' },
@@ -1923,6 +1977,126 @@ document.addEventListener('DOMContentLoaded', () => {
   drawBetragZG();
 });
 window.addEventListener('resize', () => { if (document.getElementById('cv-betrag-zg')) drawBetragZG(); });
+
+/* ══════════════════════════════════════════════════════════════
+ *  VORZEICHENREGELN · Plus und Minus als Pfeile (AN-23)
+ *  Bahn 0: Start 0 → a (blau). Bahn 1: die Zahl allein (+b bzw. −b),
+ *  gestrichelt ab a. Bahn 2: der gegangene Schritt ab a — Plus behält
+ *  die Richtung der Zahl, Minus kehrt sie um. Achse fest −14…14:
+ *  a ∈ [−7; 7], b ∈ [1; 7] → alle Pfeilenden in [−14; 14]
+ *  (nachgerechnet in Python für alle 4 · 15 · 7 = 420 Kombinationen).
+ * ══════════════════════════════════════════════════════════════ */
+(function () {
+  const cv = document.getElementById('cv-vz');
+  if (!cv) return;
+  const sA = document.getElementById('vz-a'), sB = document.getElementById('vz-b');
+  const vA = document.getElementById('vz-av'), vB = document.getElementById('vz-bv');
+  const eq = document.getElementById('vz-eq'), erkl = document.getElementById('vz-erkl');
+  const knoepfe = document.querySelectorAll('#vz-faelle [data-fall]');
+  const BL = '#1a4f8a', OR = '#b85c00', TI = '#1c1a17', T2 = '#5a5040';
+  const MONO = "'JetBrains Mono', monospace";
+  // Fall: op = Rechenzeichen (+1 plus, −1 minus), vz = Vorzeichen der Zahl (+b oder −b)
+  const FAELLE = [ { op: 1, vz: 1 }, { op: 1, vz: -1 }, { op: -1, vz: 1 }, { op: -1, vz: -1 } ];
+  let fall = 3;
+  const XMIN = -14, XMAX = 14, PAD = 22, HOEHE = 192;
+  const Y = [32, 68, 104], YAX = 140;
+  const zahl = v => (v < 0 ? '−' : '') + Math.abs(v);
+
+  function pfeil(ctx, x0, x1, y, farbe, gestrichelt) {
+    const len = Math.abs(x1 - x0), dir = x1 >= x0 ? 1 : -1;
+    const spitze = Math.min(8, len * 0.6);
+    ctx.strokeStyle = farbe; ctx.fillStyle = farbe; ctx.lineWidth = 2.5;
+    ctx.setLineDash(gestrichelt ? [5, 4] : []);
+    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1 - dir * spitze, y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y); ctx.lineTo(x1 - dir * spitze, y - 5); ctx.lineTo(x1 - dir * spitze, y + 5);
+    ctx.closePath(); ctx.fill();
+  }
+
+  function zeichne() {
+    const a = +sA.value, b = +sB.value, F = FAELLE[fall];
+    const z = F.vz * b, r = a + F.op * z;
+    cv.style.width = '';
+    const { ctx, W, H } = initCanvas('cv-vz', HOEHE);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    const pxu = (W - 2 * PAD) / (XMAX - XMIN);
+    const px = v => PAD + (v - XMIN) * pxu;
+    const schritt = pxu >= 30 ? 1 : (pxu >= 15 ? 2 : 5);
+    const lab = (txt, x, y, farbe, fett) => {
+      ctx.fillStyle = farbe; ctx.font = `${fett ? '700 ' : ''}12px ${MONO}`;
+      beschriftung(ctx, txt, x, y, { align: 'center', bg: '#fff', W, H });
+    };
+
+    // Achse mit Teilung
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(PAD - 6, YAX); ctx.lineTo(W - PAD + 6, YAX); ctx.stroke();
+    ctx.fillStyle = '#374151';
+    ctx.beginPath(); ctx.moveTo(W - 2, YAX); ctx.lineTo(W - 10, YAX - 4); ctx.lineTo(W - 10, YAX + 4); ctx.fill();
+    for (let v = XMIN; v <= XMAX; v++) {
+      const beschr = v % schritt === 0;
+      ctx.strokeStyle = v === 0 ? '#374151' : '#9ca3af'; ctx.lineWidth = v === 0 ? 1.8 : 1;
+      ctx.beginPath(); ctx.moveTo(px(v), YAX - (beschr ? 5 : 3)); ctx.lineTo(px(v), YAX + (beschr ? 5 : 3)); ctx.stroke();
+      if (beschr) lab(zahl(v), px(v), YAX + 18, '#6b7280', false);
+    }
+
+    // Hilfslinien von a und vom Ergebnis zur Achse
+    ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(px(a), Y[0]); ctx.lineTo(px(a), YAX); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px(r), Y[2]); ctx.lineTo(px(r), YAX); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Bahn 0: Start 0 → a
+    if (a !== 0) pfeil(ctx, px(0), px(a), Y[0], BL, false);
+    ctx.fillStyle = BL; ctx.beginPath(); ctx.arc(px(0), Y[0], 3, 0, Math.PI * 2); ctx.fill();
+    // Bahn 1: die Zahl allein, gestrichelt ab a
+    ctx.globalAlpha = 0.6;
+    pfeil(ctx, px(a), px(a + z), Y[1], OR, true);
+    ctx.globalAlpha = 1;
+    // Bahn 2: der gegangene Schritt ab a
+    pfeil(ctx, px(a), px(r), Y[2], OR, false);
+
+    // Punkte auf der Achse
+    ctx.fillStyle = BL; ctx.beginPath(); ctx.arc(px(a), YAX, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = TI; ctx.beginPath(); ctx.arc(px(r), YAX, 5, 0, Math.PI * 2); ctx.fill();
+
+    // Beschriftungen zuletzt — freigestellt über den Hilfslinien
+    lab('Start: a = ' + zahl(a), (px(0) + px(a)) / 2, Y[0] - 11, BL, true);
+    lab('Zahl ' + zahl(z) + ' zeigt nach ' + (z > 0 ? 'rechts' : 'links'), (px(a) + px(a + z)) / 2, Y[1] - 11, OR, false);
+    lab(F.op > 0 ? 'plus: Richtung beibehalten' : 'minus: Richtung umkehren', (px(a) + px(r)) / 2, Y[2] - 11, TI, true);
+    lab('Ergebnis: ' + zahl(r), px(r), 180, TI, true);
+
+    // Live-Rechnung (nur die Reglerwerte gefärbt) und Erklärung
+    vA.textContent = zahl(a); vB.textContent = zahl(b);
+    const cA = `<span class="tx-blau">${zahl(a)}</span>`, cB = `<span class="tx-orange">${b}</span>`;
+    const links = F.op > 0 ? (F.vz > 0 ? `${cA} + ${cB}` : `${cA} + (−${cB})`)
+                           : (F.vz > 0 ? `${cA} − ${cB}` : `${cA} − (−${cB})`);
+    const einfach = F.op * F.vz > 0 ? `${cA} + ${cB}` : `${cA} − ${cB}`;
+    eq.innerHTML = (F.op * F.vz === F.op ? `${links}` : `${links} = ${einfach}`) + ` = ${zahl(r)}`;
+    const richtung = r > a ? 'rechts' : 'links';
+    erkl.textContent = F.op > 0
+      ? `Die Zahl ${zahl(z)} zeigt nach ${z > 0 ? 'rechts' : 'links'}. Das Plus behält die Richtung bei: Von ${zahl(a)} aus geht es ${b} nach ${richtung}, du landest bei ${zahl(r)}.`
+      : `Die Zahl ${zahl(z)} allein zeigt nach ${z > 0 ? 'rechts' : 'links'}. Das Minus davor kehrt die Richtung um: Von ${zahl(a)} aus geht es ${b} nach ${richtung}, du landest bei ${zahl(r)}.`;
+  }
+
+  knoepfe.forEach(k => k.addEventListener('click', () => {
+    fall = +k.dataset.fall;
+    knoepfe.forEach(o => { const an = o === k; o.classList.toggle('aktiv', an); o.setAttribute('aria-pressed', an ? 'true' : 'false'); });
+    zeichne();
+  }));
+  sA.addEventListener('input', zeichne);
+  sB.addEventListener('input', zeichne);
+  // Erst nach dem Parsen zeichnen wie die übrigen Widgets der Seite, danach bei
+  // jeder Breitenänderung des Containers (Fenster, Scrollbalken).
+  document.addEventListener('DOMContentLoaded', () => {
+    zeichne();
+    let breite = 0;
+    if (window.ResizeObserver) new ResizeObserver(e => {
+      const w = Math.round(e[0].contentRect.width);
+      if (w !== breite) { breite = w; zeichne(); }
+    }).observe(cv.parentElement);
+  });
+})();
 </script>
 </body>
 </html>

@@ -448,9 +448,7 @@ MathJax = {
 
       <div class="legende">
         <div class="legende-titel">Werte aller drei Terme</div>
-        <div class="legende-zeile"><span class="lab">Form 1</span><span class="val" id="leg-hauptopT1">19</span></div>
-        <div class="legende-zeile"><span class="lab">Form 2</span><span class="val" id="leg-hauptopT2">19</span></div>
-        <div class="legende-zeile"><span class="lab">Form 3</span><span class="val" id="leg-hauptopT3">19</span></div>
+        <div class="legende-zeile"><span class="lab">alle drei</span><span class="val" id="leg-hauptopWert">= 19</span></div>
       </div>
 
       <div class="erklaerung" id="erkl-hauptop">
@@ -553,6 +551,50 @@ MathJax = {
 </div>
 
 <p>Eselsbrücke: <em>„Klammer vor Potenz vor Punkt vor Strich"</em>. Innerhalb derselben Stufe wird von <strong>links nach rechts</strong> gerechnet (\(a - b - c\) heisst \((a-b) - c\), nicht \(a - (b-c)\)). Bei Mausüberflug auf eine Stufe siehst du weitere Beispiele.</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Auswertungs-Reihenfolge — Schritt für Schritt zur Hauptoperation</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Schiebe den Schritt-Regler langsam: Welche Stufe leuchtet oben auf, und in welcher Reihenfolge? Beim zweiten Term steht die Potenz rechts — wird sie trotzdem vor dem Produkt links gerechnet? Und welches Zeichen bleibt beim dritten Term zuletzt übrig?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Ausgewertet wird Stufe um Stufe — Klammer, Potenz, Punkt, Strich —, innerhalb einer Stufe von links nach rechts. Was ganz am Schluss übrig bleibt, ist die <strong>Hauptoperation</strong>. Sie steht im Strukturbaum zuoberst und ist die Antwort in der Klassifizier-Übung.</div>
+        </div>
+      </div>
+    </div>
+    <p>Markiert ist die Operation, die als Nächstes dran ist; grün das Zwischenergebnis, blau die Hauptoperation.</p>
+  </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="anim-layout">
+        <canvas id="cv-auswert" width="560" height="256"></canvas>
+        <div class="bedien">
+          <div>
+            <div class="feld-titel">Term wählen</div>
+            <div class="chips" id="aw-chips">
+              <button class="chip aktiv" type="button" data-aw="0">\(3 \cdot (x+2)^2 - 5\)</button>
+              <button class="chip" type="button" data-aw="1">\(3 \cdot (x+5) - x^2\)</button>
+              <button class="chip" type="button" data-aw="2">\(10 - 3 + 2\)</button>
+            </div>
+          </div>
+          <div class="regler">
+            <div class="regler-label"><span>Schritt</span><span class="wert" id="lbl-awSchritt">0 von 4</span></div>
+            <input type="range" id="sld-awSchritt" min="0" max="4" step="1" value="0">
+          </div>
+          <div class="formel" id="aw-formel">Eingesetzt: <em>x</em> = 2 — welche Operation ist zuerst dran?</div>
+          <div class="erklaerung" id="aw-erkl">Suche die Operation mit dem höchsten Rang. Hier gibt es eine Klammer — sie kommt zuerst.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <table class="ftb-tabelle">
   <thead><tr><th>Term</th><th>Hauptoperation</th><th>Begründung</th></tr></thead>
@@ -699,6 +741,18 @@ MathJax = {
     <div class="wb-zelle"><div class="wb-formel">\(a \cdot b + a \cdot c\)</div></div>
   </div>
   <div class="wuerfel-bsp" id="wb-d-bsp"><!-- wird per JS gefüllt --></div>
+</div>
+
+<div class="wuerfel-box" id="wb-gegenprobe">
+  <div class="wuerfel-row">
+    <span class="gesetz-name">Gegenprobe — Subtraktion vertauschen</span>
+    <button class="btn-wuerfel" onclick="wuerfelGegenprobe()">🎲 Neue Zahlen</button>
+  </div>
+  <div class="wb-grid wb-gesetz">
+    <div class="wb-zelle"><div class="wb-formel">\(a - b\)</div></div>
+    <div class="wb-zelle"><div class="wb-formel">\(b - a\)</div></div>
+  </div>
+  <div class="wuerfel-bsp" id="wb-g-bsp"><!-- wird per JS gefüllt --></div>
 </div>
 
 <div class="anim">
@@ -1085,6 +1139,237 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ════════════════════════════════════════════════════════════════
+ *  AUSWERTUNGS-REIHENFOLGE · Schritt-Animation
+ *  Ein Beispielterm wird Stufe um Stufe ausgewertet. Zeile k ist der
+ *  Term nach k Schritten. Beim Schritt s ist in Zeile s−1 markiert, was
+ *  gerechnet wird, in Zeile s steht das Zwischenergebnis (grün). Der
+ *  letzte Schritt ist die Hauptoperation (blau, Zeichen auf Pille).
+ *  Segment-Marken: m = gehört zur Operation des nächsten Schritts,
+ *  e = Ergebnis des vorigen Schritts, o = Rechenzeichen dieser Operation.
+ *  Werte nachgerechnet (python3): 3·(2+2)² − 5 = 43, 3·(2+5) − 2² = 17,
+ *  10 − 3 + 2 = 9.
+ * ════════════════════════════════════════════════════════════════ */
+(function () {
+  const STUFEN = ['Klammer', 'Potenz', 'Punkt', 'Strich'];
+  const TERME = [
+    {
+      start: 'mit x = 2',
+      formel0: 'Eingesetzt: <em>x</em> = 2. Welche Operation ist zuerst dran?',
+      zeilen: [
+        [['3·', ''], ['(2+2)', 'm'], ['² − 5', '']],
+        [['3·', ''], ['4', 'em'], ['²', 'm'], [' − 5', '']],
+        [['3·', 'm'], ['16', 'em'], [' − 5', '']],
+        [['48', 'em'], [' ', 'm'], ['−', 'mo'], [' 5', 'm']],
+        [['43', 'e']]
+      ],
+      schritte: [
+        { st: 0, r: '2 + 2 = 4' },
+        { st: 1, r: '4² = 16' },
+        { st: 2, r: '3·16 = 48' },
+        { st: 3, r: '48 − 5 = 43', haupt: 'Subtraktion' }
+      ],
+      erkl: [
+        'Suche die Operation mit dem höchsten Rang. Hier gibt es eine Klammer: Sie kommt zuerst.',
+        'Stufe 1: Die Klammer wird zuerst ausgerechnet. Übrig bleiben eine Potenz, ein Produkt und eine Differenz.',
+        'Stufe 2: Potenz vor Punkt. Erst wird quadriert, dann mit 3 multipliziert.',
+        'Stufe 3: Punkt vor Strich. Das Produkt kommt vor der Subtraktion.',
+        'Stufe 4: Die Subtraktion wird zuletzt ausgeführt. Sie ist die <strong>Hauptoperation</strong>: Der Term ist eine Differenz, im Strukturbaum steht sie zuoberst.'
+      ]
+    },
+    {
+      start: 'mit x = 2',
+      formel0: 'Eingesetzt: <em>x</em> = 2. Welche Operation ist zuerst dran?',
+      zeilen: [
+        [['3·', ''], ['(2+5)', 'm'], [' − 2²', '']],
+        [['3·', ''], ['7', 'e'], [' − ', ''], ['2²', 'm']],
+        [['3·7', 'm'], [' − ', ''], ['4', 'e']],
+        [['21', 'em'], [' ', 'm'], ['−', 'mo'], [' 4', 'm']],
+        [['17', 'e']]
+      ],
+      schritte: [
+        { st: 0, r: '2 + 5 = 7' },
+        { st: 1, r: '2² = 4' },
+        { st: 2, r: '3·7 = 21' },
+        { st: 3, r: '21 − 4 = 17', haupt: 'Subtraktion' }
+      ],
+      erkl: [
+        'Links eine Klammer, rechts eine Potenz. Was ist zuerst dran?',
+        'Stufe 1: Die Klammer zuerst.',
+        'Stufe 2: Die Potenz rechts kommt vor dem Produkt links. Es zählt die Stufe, nicht die Position im Term.',
+        'Stufe 3: Jetzt das Produkt.',
+        'Stufe 4: Zuletzt die Subtraktion. Sie ist die <strong>Hauptoperation</strong>: Der Term ist eine Differenz aus einem Produkt und einer Potenz.'
+      ]
+    },
+    {
+      start: 'ohne Variable',
+      formel0: 'Nur Strichrechnung. Welche Operation ist zuerst dran?',
+      zeilen: [
+        [['10 − 3', 'm'], [' + 2', '']],
+        [['7', 'em'], [' ', 'm'], ['+', 'mo'], [' 2', 'm']],
+        [['9', 'e']]
+      ],
+      schritte: [
+        { st: 3, r: '10 − 3 = 7' },
+        { st: 3, r: '7 + 2 = 9', haupt: 'Addition' }
+      ],
+      erkl: [
+        'Beide Operationen stehen auf derselben Stufe. Dann entscheidet die Reihenfolge von links nach rechts.',
+        'Stufe 4, von links nach rechts: zuerst \\(10 - 3\\).',
+        'Das \\(+\\) steht rechts und kommt zuletzt. Hauptoperation ist die <strong>Addition</strong>, nicht die Subtraktion. Wer \\(10 - (3 + 2) = 5\\) rechnet, setzt eine Klammer, die nicht dasteht.'
+      ]
+    }
+  ];
+
+  const FARBE = {
+    tinte: '#1c1a17', grau: '#5a5040', linie: '#d8d0c4',
+    markFuell: '#fef3c7', markRand: '#f59e0b', markText: '#92400e',
+    hopFuell: '#ddeaf8', hopRand: '#1a4f8a',
+    ergFuell: '#d8f0e2', ergText: '#1f6b3a'
+  };
+  const FONT_T = '17px "JetBrains Mono", monospace';
+  const FONT_TB = 'bold 17px "JetBrains Mono", monospace';
+  const FONT_L = '12px "JetBrains Mono", monospace';
+  const FONT_LB = 'bold 12px "JetBrains Mono", monospace';
+  const FONT_C = 'bold 13px "JetBrains Mono", monospace';
+  const H_CANVAS = 256;
+  let termIdx = 0;
+
+  function rechteck(ctx, x, y, w, h, r, fuell, rand) {
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h);
+    if (fuell) { ctx.fillStyle = fuell; ctx.fill(); }
+    if (rand) { ctx.strokeStyle = rand; ctx.lineWidth = 1.5; ctx.stroke(); }
+  }
+
+  function zeichne() {
+    const sld = document.getElementById('sld-awSchritt');
+    const T = TERME[termIdx];
+    const n = T.schritte.length;
+    const s = Math.min(+sld.value, n);
+    document.getElementById('lbl-awSchritt').textContent = `${s} von ${n}`;
+
+    const { ctx, W, H } = initCanvas('cv-auswert', H_CANVAS);
+    ctx.fillStyle = '#efeade'; ctx.fillRect(0, 0, W, H);
+    const opt = (align) => ({ align: align || 'left', frei: false, W, H });
+
+    // Gruppe mittig, höchstens 440 px breit
+    const gw = Math.min(W - 28, 440), gx = (W - gw) / 2;
+    const akt = s > 0 ? T.schritte[s - 1] : null;
+    const istHaupt = !!(akt && akt.haupt);
+
+    // ── Stufen-Leiste: die Stufe des aktuellen Schritts leuchtet
+    const gap = 6, pw = (gw - 3 * gap) / 4;
+    STUFEN.forEach((name, i) => {
+      const px = gx + i * (pw + gap);
+      const an = akt && akt.st === i;
+      rechteck(ctx, px, 10, pw, 26, 13,
+        an ? (istHaupt ? FARBE.hopRand : FARBE.markFuell) : '#fff',
+        an ? (istHaupt ? FARBE.hopRand : FARBE.markRand) : FARBE.linie);
+      ctx.font = an ? FONT_LB : FONT_L;
+      ctx.fillStyle = an ? (istHaupt ? '#fff' : FARBE.markText) : FARBE.grau;
+      beschriftung(ctx, name, px + pw / 2, 27, opt('center'));
+    });
+
+    // ── Rechenzeilen
+    ctx.font = FONT_T;
+    const wGleich = ctx.measureText('= ').width;
+    const ex = gx + wGleich + 6;         // linke Kante der Terme (Luft zum «=» für den Rahmen)
+    const y0 = 76, lh = 34;
+    for (let k = 0; k <= s; k++) {
+      const y = y0 + k * lh;
+      const segs = T.zeilen[k];
+      const markZeile = k === s - 1;     // hier wird gerade gerechnet
+      const ergZeile = k === s && s > 0; // hier steht das Zwischenergebnis
+      const alt = k < s - 1;
+      // Segmentpositionen messen. Grenzt die umrandete Operation ohne Leerzeichen
+      // an ihren Nachbarn («3·(2+2)²»), rückt sie um LUFT ab — sonst schneidet
+      // der Rahmen das Nachbarzeichen.
+      const LUFT = 5;
+      const hinterlegt = f => markZeile && f.includes('m');
+      let px = ex;
+      ctx.font = FONT_T;                 // fett hat in der Monospace-Schrift dieselbe Breite
+      const pos = segs.map(([t, f], i) => {
+        const vor = segs[i - 1], nach = segs[i + 1];
+        if (vor && hinterlegt(f) && !hinterlegt(vor[1]) && !/\s$/.test(vor[0])) px += LUFT;
+        const w = ctx.measureText(t).width;
+        const p = { t, f, x: px, w }; px += w;
+        if (nach && hinterlegt(f) && !hinterlegt(nach[1]) && !/^\s/.test(nach[0])) px += LUFT;
+        return p;
+      });
+      // Markierung der Operation
+      if (markZeile) {
+        const m = pos.filter(p => p.f.includes('m'));
+        const x1 = m[0].x - 5, x2 = m[m.length - 1].x + m[m.length - 1].w + 5;
+        rechteck(ctx, x1, y - 18, x2 - x1, 25, 5,
+          istHaupt ? FARBE.hopFuell : FARBE.markFuell, istHaupt ? FARBE.hopRand : FARBE.markRand);
+        if (istHaupt) {
+          pos.filter(p => p.f.includes('o')).forEach(p =>
+            rechteck(ctx, p.x - 3, y - 15, p.w + 6, 19, 4, FARBE.hopRand, null));
+        }
+      }
+      // Zwischenergebnis hinterlegen
+      if (ergZeile) {
+        pos.filter(p => p.f.includes('e')).forEach(p =>
+          rechteck(ctx, p.x - 4, y - 18, p.w + 8, 25, 5, FARBE.ergFuell, null));
+      }
+      // Text
+      if (k > 0) {
+        ctx.font = FONT_T; ctx.fillStyle = alt ? FARBE.grau : FARBE.tinte;
+        beschriftung(ctx, '= ', gx, y, opt());
+      }
+      pos.forEach(p => {
+        let farbe = alt ? FARBE.grau : FARBE.tinte, font = FONT_T;
+        if (markZeile && p.f.includes('m')) farbe = istHaupt ? FARBE.hopRand : FARBE.markText;
+        if (markZeile && istHaupt && p.f.includes('o')) { farbe = '#fff'; font = FONT_TB; }
+        if (ergZeile && p.f.includes('e')) { farbe = FARBE.ergText; font = FONT_TB; }
+        ctx.font = font; ctx.fillStyle = farbe;
+        beschriftung(ctx, p.t, p.x, y, opt());
+      });
+      // Etikett rechts: woher die Zeile kommt
+      const etikett = k === 0 ? T.start : STUFEN[T.schritte[k - 1].st];
+      ctx.font = FONT_L; ctx.fillStyle = FARBE.grau;
+      if (ctx.measureText(etikett).width < gx + gw - px - 16) {
+        beschriftung(ctx, etikett, gx + gw, y, opt('right'));
+      }
+    }
+
+    // ── Fusszeile
+    let fuss, fussFarbe = FARBE.grau;
+    if (s === 0) fuss = 'Welche Operation ist zuerst dran?';
+    else if (istHaupt) { fuss = `Hauptoperation: ${akt.haupt}`; fussFarbe = FARBE.hopRand; }
+    else fuss = `Schritt ${s}: ${STUFEN[akt.st]}`;
+    ctx.font = FONT_C; ctx.fillStyle = fussFarbe;
+    beschriftung(ctx, fuss, W / 2, H - 14, opt('center'));
+
+    // ── Bedienfeld
+    const formel = document.getElementById('aw-formel');
+    if (s === 0) formel.innerHTML = T.formel0;
+    else if (istHaupt) formel.innerHTML = `<strong>Hauptoperation (${akt.haupt}):</strong> ${akt.r}`;
+    else formel.innerHTML = `<strong>${STUFEN[akt.st]}:</strong> ${akt.r}`;
+    const erkl = document.getElementById('aw-erkl');
+    erkl.innerHTML = T.erkl[s];
+    mjTypeset([erkl]);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const cv = document.getElementById('cv-auswert');
+    if (!cv) return;
+    const sld = document.getElementById('sld-awSchritt');
+    sld.addEventListener('input', zeichne);
+    document.querySelectorAll('#aw-chips .chip').forEach(ch => ch.addEventListener('click', () => {
+      termIdx = +ch.dataset.aw;
+      document.querySelectorAll('#aw-chips .chip').forEach(o => o.classList.toggle('aktiv', o === ch));
+      sld.max = TERME[termIdx].schritte.length;
+      sld.value = 0;
+      zeichne();
+    }));
+    zeichne();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(zeichne);
+    window.addEventListener('resize', zeichne);
+  });
+})();
+
+/* ════════════════════════════════════════════════════════════════
  *  STRUKTURBAUM — interaktiv, mit Term-Parser
  *  Vier vorgegebene Terme + eigene Eingabe (geparst zu AST,
  *  dann als verschachtelter Strukturbaum gerendert).
@@ -1436,6 +1721,13 @@ function rndInt(lo, hi, ausschluss) {
 /* Formatiere Zahl: negative in Klammern, wenn sie als zweiter Operand stehen */
 function fmtOp(z) { return z < 0 ? `(${z})` : String(z); }
 
+/* Prüfzeile unter einem Würfel-Beispiel: grünes ✓, wenn beide Seiten übereinstimmen */
+function wbPruefzeile(links, rechts) {
+  return links === rechts
+    ? `<div class="wb-formel"><strong class="tx-gruen">✓ beide Seiten \\(= ${links}\\)</strong></div>`
+    : `<div class="wb-formel"><strong style="color:var(--rot)">✗ verschieden: \\(${links} \\neq ${rechts}\\)</strong></div>`;
+}
+
 function wuerfelKommutativ() {
   const a = rndInt(-10, 10, [0]);
   const b = rndInt(-10, 10, [0]);
@@ -1448,10 +1740,12 @@ function wuerfelKommutativ() {
       <div class="wb-zelle">
         <div class="wb-label">Addition</div>
         <div class="wb-formel">\\(${a} + ${fmtOp(b)} = ${sum1}\\) \\(\\quad\\) \\(${b} + ${fmtOp(a)} = ${sum2}\\)</div>
+        ${wbPruefzeile(sum1, sum2)}
       </div>
       <div class="wb-zelle">
         <div class="wb-label">Multiplikation</div>
         <div class="wb-formel">\\(${c} \\cdot ${fmtOp(d)} = ${prod1}\\) \\(\\quad\\) \\(${d} \\cdot ${fmtOp(c)} = ${prod2}\\)</div>
+        ${wbPruefzeile(prod1, prod2)}
       </div>
     </div>
   `;
@@ -1472,10 +1766,12 @@ function wuerfelAssoziativ() {
       <div class="wb-zelle">
         <div class="wb-label">Addition</div>
         <div class="wb-formel">\\((${a} + ${fmtOp(b)}) + ${fmtOp(c)} = ${ab_c}\\) \\(\\quad\\) \\(${a} + (${b} + ${fmtOp(c)}) = ${a_bc}\\)</div>
+        ${wbPruefzeile(ab_c, a_bc)}
       </div>
       <div class="wb-zelle">
         <div class="wb-label">Multiplikation</div>
         <div class="wb-formel">\\((${d} \\cdot ${fmtOp(e)}) \\cdot ${fmtOp(f)} = ${def_l}\\) \\(\\quad\\) \\(${d} \\cdot (${e} \\cdot ${fmtOp(f)}) = ${def_r}\\)</div>
+        ${wbPruefzeile(def_l, def_r)}
       </div>
     </div>
   `;
@@ -1500,14 +1796,38 @@ function wuerfelDistributiv() {
         <div class="wb-formel">\\(${a} \\cdot ${fmtOp(b)} + ${a} \\cdot ${fmtOp(c)} = ${a*b} + ${fmtOp(a*c)} = ${rechts}\\)</div>
       </div>
     </div>
+    <div class="wb-zelle">${wbPruefzeile(links, rechts)}</div>
   `;
   mjTypeset([document.getElementById('wb-d-bsp')]);
+}
+
+/* Gegenprobe: Die Subtraktion ist nicht kommutativ. b wird so gewürfelt, dass
+   b ≠ a — bei a = b wären a − b und b − a zufällig beide 0. */
+function wuerfelGegenprobe() {
+  const a = rndInt(-10, 10, [0]);
+  const b = rndInt(-10, 10, [0, a]);
+  const vorher = a - b, vertauscht = b - a;
+  document.getElementById('wb-g-bsp').innerHTML = `
+    <div class="wb-grid">
+      <div class="wb-zelle">
+        <div class="wb-label">Vorher</div>
+        <div class="wb-formel">\\(${a} - ${fmtOp(b)} = ${vorher}\\)</div>
+      </div>
+      <div class="wb-zelle">
+        <div class="wb-label">Vertauscht</div>
+        <div class="wb-formel">\\(${b} - ${fmtOp(a)} = ${vertauscht}\\)</div>
+      </div>
+    </div>
+    <div class="wb-zelle">${wbPruefzeile(vorher, vertauscht)}<div style="font-family:var(--sans); font-size:0.85rem; color:var(--tinte-2)">Vertauschen kehrt das Vorzeichen um: Die Subtraktion ist nicht kommutativ.</div></div>
+  `;
+  mjTypeset([document.getElementById('wb-g-bsp')]);
 }
 
 function wuerfelInit() {
   wuerfelKommutativ();
   wuerfelAssoziativ();
   wuerfelDistributiv();
+  wuerfelGegenprobe();
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -1522,112 +1842,160 @@ function drawHauptop() {
   const x = +sld.value;
   document.getElementById('lbl-hauptopX').textContent = x;
 
-  const { ctx, W, H } = initCanvas('cv-hauptop', 320);
-  ctx.fillStyle = '#efeade';
-  ctx.fillRect(0, 0, W, H);
-
-  // Drei Terme, drei Spalten
-  const colW = W / 3;
+  // Jede Zeile ist [links, rechts] der Hauptoperation — des «+», das zuletzt
+  // ausgeführt wird. In Form 1 ist das das zweite «+»: (4·x + 3·x) + 5.
   const terme = [
-    { titel: 'Form 1', formel: '4·x + 3·x + 5', berechnung: `4·${x} + 3·${x} + 5`, schritte: [`${4*x} + ${3*x} + 5`, `${4*x + 3*x + 5}`] },
-    { titel: 'Form 2', formel: '(4+3)·x + 5', berechnung: `(4+3)·${x} + 5`,        schritte: [`7·${x} + 5`,            `${7*x} + 5`, `${7*x + 5}`] },
-    { titel: 'Form 3', formel: '7·x + 5',     berechnung: `7·${x} + 5`,            schritte: [`${7*x} + 5`,            `${7*x + 5}`] },
+    { titel: 'FORM 1', formel: ['4·x + 3·x', '5'], zeilen: [[`4·${x} + 3·${x}`, '5'], [`${4*x} + ${3*x}`, '5']] },
+    { titel: 'FORM 2', formel: ['(4+3)·x', '5'],   zeilen: [[`(4+3)·${x}`, '5'], [`7·${x}`, '5'], [`${7*x}`, '5']] },
+    { titel: 'FORM 3', formel: ['7·x', '5'],       zeilen: [[`7·${x}`, '5'], [`${7*x}`, '5']] },
   ];
   const ergebnis = 7 * x + 5;
+  const HOP = '#1a4f8a';
+  const FONT_F = 'bold 14px monospace', FONT_Z = '13px monospace', FONT_E = 'bold 16px monospace';
 
-  terme.forEach((t, i) => {
-    const cx = colW * i + colW / 2;
-    let cy = 30;
+  // Unter 520 px Canvasbreite reichen drei Spalten nicht (bei 360 px Viewport je
+  // knapp 100 px): Die Formen stehen dann untereinander, die Rechenschritte
+  // laufen als Kette nach rechts und brechen erst am Rand um.
+  const cvEl = document.getElementById('cv-hauptop');
+  const schmal = (cvEl.offsetWidth || 600) < 520;
 
-    // Spaltentitel
-    ctx.fillStyle = '#5a5040';
-    ctx.font = 'bold 13px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText(t.titel.toUpperCase(), cx, cy);
-    cy += 22;
+  // Ein Lauf ohne Zeichnen misst die Höhe, der zweite zeichnet.
+  function lauf(ctx, W, H, malen) {
+    const text = (t, px, py, font, farbe, align) => {
+      ctx.font = font; ctx.fillStyle = farbe;
+      if (malen) beschriftung(ctx, t, px, py, { align: align || 'left', frei: false, W, H });
+    };
+    const breite = (t, font) => { ctx.font = font; return ctx.measureText(t).width; };
+    // Term mit markierter Hauptoperation: «+» weiss auf blauer Pille
+    const hopBreite = (z, font) => breite(z[0] + ' ', font) + breite('+', font) + breite(' ' + z[1], font);
+    const hopTerm = (z, px, py, font, farbe, fs) => {
+      const wl = breite(z[0] + ' ', font), wp = breite('+', font);
+      text(z[0] + ' ', px, py, font, farbe);
+      if (malen) {
+        ctx.fillStyle = HOP;
+        if (ctx.roundRect) {
+          ctx.beginPath(); ctx.roundRect(px + wl - 3, py - fs * 0.85, wp + 6, fs * 1.15, 3); ctx.fill();
+        } else {
+          ctx.fillRect(px + wl - 3, py - fs * 0.85, wp + 6, fs * 1.15);
+        }
+      }
+      text('+', px + wl, py, font, '#fff');
+      text(' ' + z[1], px + wl + wp, py, font, farbe);
+    };
+    const ergBox = (px, py) => {           // grüne Ergebnis-Box, px = linke Kante
+      const bw = breite(String(ergebnis), FONT_E) + 24;
+      if (malen) {
+        ctx.fillStyle = '#d4f0d4'; ctx.strokeStyle = '#2d9d5e'; ctx.lineWidth = 2;
+        ctx.fillRect(px, py - 17, bw, 24); ctx.strokeRect(px, py - 17, bw, 24);
+      }
+      text(String(ergebnis), px + bw / 2, py + 1, FONT_E, '#1c1a17', 'center');
+      return bw;
+    };
+    const formelBox = (z, px, py, bw) => { // px = linke Kante
+      if (malen) {
+        ctx.fillStyle = '#dceaf8'; ctx.strokeStyle = HOP; ctx.lineWidth = 1.5;
+        ctx.fillRect(px, py - 14, bw, 26); ctx.strokeRect(px, py - 14, bw, 26);
+      }
+      hopTerm(z, px + (bw - hopBreite(z, FONT_F)) / 2, py + 4, FONT_F, HOP, 14);
+    };
+    const pfeil = (px, y1, y2) => {
+      if (!malen) return;
+      ctx.strokeStyle = '#a89b85'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(px, y1); ctx.lineTo(px, y2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(px - 4, y2 - 4); ctx.lineTo(px, y2); ctx.lineTo(px + 4, y2 - 4); ctx.stroke();
+    };
+    const schluss = [`✓ Alle drei Terme liefern denselben Wert: ${ergebnis}`];
 
-    // Formel-Box
-    ctx.fillStyle = '#dceaf8';
-    ctx.strokeStyle = '#1a4f8a';
-    ctx.lineWidth = 1.5;
-    const boxW = colW - 30;
-    ctx.fillRect(cx - boxW/2, cy - 14, boxW, 26);
-    ctx.strokeRect(cx - boxW/2, cy - 14, boxW, 26);
-    ctx.fillStyle = '#1a4f8a';
-    ctx.font = 'bold 14px monospace';
-    ctx.fillText(t.formel, cx, cy + 4);
-    cy += 35;
-
-    // Pfeil nach unten
-    ctx.strokeStyle = '#a89b85';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy - 14);
-    ctx.lineTo(cx, cy);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(cx - 4, cy - 4);
-    ctx.lineTo(cx, cy);
-    ctx.lineTo(cx + 4, cy - 4);
-    ctx.stroke();
-    cy += 8;
-
-    // Einsetzen
-    ctx.fillStyle = '#3a342a';
-    ctx.font = '13px monospace';
-    ctx.fillText(`x = ${x} einsetzen:`, cx, cy);
-    cy += 18;
-    ctx.fillStyle = '#1c1a17';
-    ctx.font = '13px monospace';
-    ctx.fillText('= ' + t.berechnung, cx, cy);
-    cy += 18;
-
-    // Schritte
-    t.schritte.forEach(s => {
-      ctx.fillStyle = '#1c1a17';
-      ctx.fillText('= ' + s, cx, cy);
-      cy += 18;
-    });
-
-    // Ergebnis-Highlight (alle gleich, deshalb hervorgehoben grün)
-    cy += 4;
-    ctx.fillStyle = '#d4f0d4';
-    ctx.strokeStyle = '#2d9d5e';
-    ctx.lineWidth = 2;
-    ctx.fillRect(cx - 36, cy - 18, 72, 28);
-    ctx.strokeRect(cx - 36, cy - 18, 72, 28);
-    ctx.fillStyle = '#1c1a17';
-    ctx.font = 'bold 16px monospace';
-    ctx.fillText(ergebnis, cx, cy);
-
-    // Trennlinie zwischen Spalten
-    if (i < 2) {
-      ctx.strokeStyle = '#d4cab5';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(colW * (i + 1), 20);
-      ctx.lineTo(colW * (i + 1), H - 20);
-      ctx.stroke();
+    let yEnde;
+    if (!schmal) {
+      const colW = W / 3;
+      const maxZ = Math.max(...terme.map(t => t.zeilen.length));
+      const yErg = 116 + maxZ * 18 + 8;
+      terme.forEach((t, i) => {
+        const cx = colW * i + colW / 2;
+        text(t.titel, cx, 30, 'bold 13px monospace', '#5a5040', 'center');
+        formelBox(t.formel, cx - (colW - 30) / 2, 52, colW - 30);
+        pfeil(cx, 70, 82);
+        text(`x = ${x} einsetzen:`, cx, 100, FONT_Z, '#3a342a', 'center');
+        t.zeilen.forEach((z, k) => {
+          const w = breite('= ', FONT_Z) + hopBreite(z, FONT_Z);
+          const px = cx - w / 2;
+          text('= ', px, 118 + k * 18, FONT_Z, '#1c1a17');
+          hopTerm(z, px + breite('= ', FONT_Z), 118 + k * 18, FONT_Z, '#1c1a17', 13);
+        });
+        // Ergebnis auf gleicher Höhe in allen drei Spalten
+        const bw = breite(String(ergebnis), FONT_E) + 24, wg = breite('= ', FONT_Z);
+        const px = cx - (wg + bw) / 2;
+        text('= ', px, yErg + 1, FONT_Z, '#1c1a17');
+        ergBox(px + wg, yErg);
+        if (malen && i < 2) {
+          ctx.strokeStyle = '#d4cab5'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(colW * (i + 1), 20); ctx.lineTo(colW * (i + 1), yErg + 14); ctx.stroke();
+        }
+      });
+      yEnde = yErg + 40;
+      text(schluss[0], W / 2, yEnde, 'bold 13px monospace', '#2d9d5e', 'center');
+    } else {
+      const rand = 12;
+      let y = 8;
+      terme.forEach((t, i) => {
+        y += 22;
+        text(t.titel, rand, y, 'bold 13px monospace', '#5a5040');
+        const fx = rand + breite(t.titel, 'bold 13px monospace') + 12;
+        formelBox(t.formel, fx, y - 4, hopBreite(t.formel, FONT_F) + 20);
+        y += 26;
+        text(`x = ${x} einsetzen:`, rand, y, FONT_Z, '#3a342a');
+        // Kette «= … = … = [Ergebnis]», gierig auf Zeilen verteilt
+        const stuecke = t.zeilen.map(z => ({ z, w: breite('= ', FONT_Z) + hopBreite(z, FONT_Z) }));
+        stuecke.push({ erg: true, w: breite('= ', FONT_Z) + breite(String(ergebnis), FONT_E) + 24 });
+        let px = rand;
+        y += 22;
+        stuecke.forEach(st => {
+          if (px > rand && px + st.w > W - rand) { px = rand; y += 24; }
+          text('= ', px, y, FONT_Z, '#1c1a17');
+          const wg = breite('= ', FONT_Z);
+          if (st.erg) ergBox(px + wg, y); else hopTerm(st.z, px + wg, y, FONT_Z, '#1c1a17', 13);
+          px += st.w + 10;
+        });
+        y += 18;
+        if (malen && i < 2) {
+          ctx.strokeStyle = '#d4cab5'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(rand, y); ctx.lineTo(W - rand, y); ctx.stroke();
+        }
+      });
+      // Schlusszeile wortweise umbrechen
+      const worte = schluss[0].split(' '), zeilen = [];
+      let akt = '';
+      worte.forEach(wo => {
+        const probe = akt ? akt + ' ' + wo : wo;
+        if (akt && breite(probe, 'bold 13px monospace') > W - 2 * rand) { zeilen.push(akt); akt = wo; }
+        else akt = probe;
+      });
+      zeilen.push(akt);
+      y += 8;
+      zeilen.forEach(zl => { y += 18; text(zl, W / 2, y, 'bold 13px monospace', '#2d9d5e', 'center'); });
+      yEnde = y;
     }
-  });
+    return Math.ceil(yEnde + 14);
+  }
 
-  // Schluss-Streifen unten: «alle drei gleich»
-  ctx.fillStyle = '#2d9d5e';
-  ctx.font = 'bold 13px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(`✓ Alle drei Terme liefern denselben Wert: ${ergebnis}`, W / 2, H - 12);
+  const messW = cvEl.offsetWidth || 600;
+  const mess = document.createElement('canvas').getContext('2d');
+  const Hsoll = lauf(mess, messW, 10000, false);
+  const { ctx, W, H } = initCanvas('cv-hauptop', Hsoll);
+  ctx.fillStyle = '#efeade';
+  ctx.fillRect(0, 0, W, H);
+  lauf(ctx, W, H, true);
 
-  // Legende aktualisieren
-  document.getElementById('leg-hauptopT1').textContent = ergebnis;
-  document.getElementById('leg-hauptopT2').textContent = ergebnis;
-  document.getElementById('leg-hauptopT3').textContent = ergebnis;
+  // Legende: eine Zeile genügt, die drei Werte sind immer gleich
+  document.getElementById('leg-hauptopWert').textContent = '= ' + ergebnis;
 
   // Erklärung
   let erkl;
   if (x === 0) {
-    erkl = `Bei \\(x = 0\\): nur die 5 Fr. Verpackung. Alle Terme liefern <strong>5</strong>.`;
+    erkl = `Bei \\(x = 0\\): nur die 5 Fr. Verpackung. Alle Terme liefern <strong>5</strong>. Die Hauptoperation bleibt das blau markierte <strong>+</strong>.`;
   } else {
-    erkl = `Bei \\(x = ${x}\\): Anna zahlt <strong>${ergebnis} Fr.</strong> für ${x} Schrauben-, ${x} Dübel-Päckchen und Verpackung. Die Hauptoperation ist eine <em>Addition</em> — Form 3 zeigt das direkt.`;
+    erkl = `Bei \\(x = ${x}\\): Anna zahlt <strong>${ergebnis} Fr.</strong> für ${x} Schrauben-, ${x} Dübel-Päckchen und Verpackung. Die Hauptoperation ist eine <em>Addition</em> — das blau markierte <strong>+</strong>. In Form 1 ist es das zweite, Form 3 zeigt es direkt.`;
   }
   const erklEl = document.getElementById('erkl-hauptop');
   erklEl.innerHTML = erkl;
@@ -1730,6 +2098,7 @@ document.addEventListener('DOMContentLoaded', () => {
   drawDistrib();
 });
 window.addEventListener('resize', () => { if (document.getElementById('cv-distrib')) drawDistrib(); });
+window.addEventListener('resize', drawHauptop);
 </script>
 </body>
 </html>

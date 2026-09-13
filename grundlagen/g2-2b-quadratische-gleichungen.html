@@ -479,6 +479,52 @@ schnellsten zum Ziel führt, hängt vom Aussehen der Gleichung ab.</p>
   <p>Das ist die pq-Formel. Die Mitternachtsformel folgt analog aus \(a \cdot x^2 + b \cdot x + c = 0\) — Division durch \(a\) liefert die Normalform mit \(p = b/a\), \(q = c/a\), und nach Einsetzen und Vereinfachen erhält man \(x_{1,2} = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a}\).</p>
 </div>
 
+<p>Schritt ② der Herleitung rechnet mit Termen. Denselben Trick sieht man, wenn man jeden Summanden als <strong>Fläche</strong> legt: \(x^2\) ist ein Quadrat mit der Seite \(x\), \(p \cdot x\) ein Rechteck mit den Seiten \(p\) und \(x\). Klicke dich mit «Weiter» durch die fünf Schritte und verändere dabei \(p\) und \(x\).</p>
+
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Flächenmodell: quadratische Ergänzung von \(x^2 + p \cdot x\)</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Verfolge die beiden orangen Rechtecke: Wohin wandern sie zwischen Schritt 2 und 3? Welches Stück fehlt danach noch zum grossen Quadrat, und wie gross ist es, wenn du \(p\) veränderst? Ändert sich an diesem Stück etwas, wenn du nur \(x\) verschiebst?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Halbiert man das Rechteck \(p \cdot x\) und legt die Hälften an zwei Seiten des Quadrats, fehlt zum Quadrat mit der Seite \(x + \tfrac{p}{2}\) genau die Ecke \(\left(\tfrac{p}{2}\right)^2\). Sie hängt nur von \(p\) ab, nicht von \(x\). Darum addiert man bei der quadratischen Ergänzung \(\left(\tfrac{p}{2}\right)^2\) und zieht es wieder ab: \(x^2 + p \cdot x = \left(x + \tfrac{p}{2}\right)^2 - \left(\tfrac{p}{2}\right)^2\). Anschaulich ist das Bild nur für \(p > 0\), weil eine Länge nicht negativ sein kann; die Umformung selbst gilt für jedes \(p\).</div>
+        </div>
+      </div>
+    </div>
+    <p>Blau ist das Quadrat \(x^2\), Orange gehört zu \(p\), Grün ist die Ergänzung \(\left(\tfrac{p}{2}\right)^2\).</p>
+  </div>
+  <div class="widget-body">
+    <div class="anim">
+      <div class="sl-row">
+        <div class="sl-grp akz-orange"><label for="qe-p"><span class="var"><em>p</em></span> =</label>
+        <input id="qe-p" type="range" min="2" max="8" step="2" value="6">
+        <span class="sl-val" id="qe-p-v">6</span></div>
+        <div class="sl-grp akz-blau"><label for="qe-x">Seite <span class="var"><em>x</em></span> =</label>
+        <input id="qe-x" type="range" min="2" max="6" step="1" value="4">
+        <span class="sl-val" id="qe-x-v">4</span></div>
+      </div>
+      <canvas id="qe-cv" width="560" height="362" aria-label="Flächenmodell: Quadrat x², Rechteck p·x, halbiert und zum grossen Quadrat ergänzt"></canvas>
+      <div style="margin-top:10px">
+        <button class="umform-btn" id="qe-zurueck" type="button">◀ Zurück</button>
+        <button class="umform-btn" id="qe-weiter" type="button">Weiter ▶</button>
+      </div>
+      <div class="formel-live">
+        <div class="fl-label" id="qe-fl-label">Schritt 1 von 5</div>
+        <div class="fl-eq" id="qe-eq1">x² + <span class="tx-orange">6</span>·x</div>
+        <div class="fl-eq" id="qe-eq2" style="font-size:0.88rem;margin-top:4px">mit x = <span class="tx-blau">4</span>: <span class="tx-blau">16</span> + <span class="tx-orange">24</span> = 40</div>
+      </div>
+      <div class="erklaerung" id="qe-erkl">Die Summe x² + 6·x als Fläche: ein Quadrat mit der Seite x und ein Rechteck mit den Seiten 6 und x.</div>
+    </div>
+  </div>
+</div>
+
 <!-- ════════════════════════════════════════════════════════════════
      6. FAKTORISIEREN — drei Sub-Methoden
      ════════════════════════════════════════════════════════════════ -->
@@ -1773,6 +1819,248 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('velo-reset').addEventListener('click', reset);
   window.addEventListener('resize', () => { if (!anim.running) update(); });
   update();
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   QUADRATISCHE ERGÄNZUNG GEOMETRISCH (AN-22) — Flächenmodell
+   Schritt 1: Quadrat x² und Rechteck p·x · 2: Rechteck halbiert ·
+   3: Hälften rechts und unten angelegt (L-Form) · 4: Eckquadrat (p/2)²
+   ergänzt → Quadrat (x + p/2)² · 5: Ecke wieder abgezogen.
+   Breites Canvas: Rechteck rechts vom Quadrat; schmales Canvas: darunter.
+   Massstab, Lage und Beschriftungsorte in Python nachgerechnet (Flächenbilanz,
+   alles im Bild, keine Überlappung) für p ∈ {2, 4, 6, 8}, x ∈ {2, …, 6}.
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  const cv = document.getElementById('qe-cv');
+  if (!cv) return;
+  const sP = document.getElementById('qe-p'), sX = document.getElementById('qe-x');
+  const vP = document.getElementById('qe-p-v'), vX = document.getElementById('qe-x-v');
+  const bZ = document.getElementById('qe-zurueck'), bW = document.getElementById('qe-weiter');
+  const flLab = document.getElementById('qe-fl-label');
+  const eq1 = document.getElementById('qe-eq1'), eq2 = document.getElementById('qe-eq2');
+  const erkl = document.getElementById('qe-erkl');
+  const BL = '#1a4f8a', OR = '#b85c00', GR = '#1f6b3a', TI = '#1c1a17', T2 = '#5a5040';
+  const BL_H = '#ddeaf8', OR_H = '#fdefd8', GR_H = '#d8f0e2';
+  const FONT = "bold 13px 'JetBrains Mono', monospace";
+  const SMAX = 30, ML = 24, MT = 26, N = 5, DAUER = 650;
+  const FARBE = { T: TI, T2: T2, B: BL, O: OR, G: GR };
+  const ruhig = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let schritt = 1, von = 1, t = 1, raf = null;
+
+  function lay(W) {
+    const sH = Math.min(SMAX, Math.floor((W - ML - 24 - 16 - 8) / 14));
+    const sV = Math.min(SMAX, Math.floor((W - ML - 8) / 10));
+    if (sH >= sV) return { lay: 'h', s: sH, W, H: MT + 10 * sH + 36, G1: 16, G2: 8 };
+    const G1 = 12, G2 = 6;
+    return { lay: 'v', s: sV, W, G1, G2,
+             H: MT + Math.max(14 * sV + G1 + 19, 14 * sV + G1 + G2 + 19, 10 * sV + 30) + 6 };
+  }
+  const kx = k => k === 1 ? 'x' : k + '·x';
+
+  // Rechtecke [x, y, b, h] und Beschriftungen [txt, x, y, align, baseline, farbe]
+  function geo(L, p, x, st) {
+    const s = L.s, X = x * s, h = p * s / 2, k = p / 2;
+    const wbox = L.lay === 'h' ? X + L.G1 + h + L.G2 + h + 14 : X + h;
+    // senkrecht mittig; die Höhe hängt nur von der Phase ab (1–2 bzw. 3–5), damit innerhalb einer Phase nichts springt
+    const Hc = st >= 3 ? X + h + 30 : (L.lay === 'h' ? X : X + L.G1 + p * s + L.G2 + 19);
+    const ox = Math.floor((L.W - (ML + wbox)) / 2) + ML, oy = Math.floor((L.H - (18 + Hc)) / 2) + 18;
+    const R = { SQ: [ox, oy, X, X] }, lab = [];
+    if (st >= 3) {
+      R.A = L.lay === 'h' ? [ox + X, oy, h, X] : [ox, oy + X, X, h];
+      R.B = L.lay === 'h' ? [ox, oy + X, X, h] : [ox + X, oy, h, X];
+      R.C = [ox + X, oy + X, h, h];
+      lab.push(['x', ox - 8, oy + X / 2, 'right', 'middle', 'T'], [String(k), ox - 8, oy + X + h / 2, 'right', 'middle', 'O'],
+               ['x', ox + X / 2, oy - 8, 'center', 'alphabetic', 'T'], [String(k), ox + X + h / 2, oy - 8, 'center', 'alphabetic', 'O']);
+      for (const n of ['A', 'B']) { const r = R[n]; lab.push([kx(k), r[0] + r[2] / 2, r[1] + r[3] / 2, 'center', 'middle', 'O']); }
+      lab.push(['x²', ox + X / 2, oy + X / 2, 'center', 'middle', 'B']);
+      lab.push([st === 3 ? '?' : k + '²', ox + X + h / 2, oy + X + h / 2, 'center', 'middle', st > 3 ? 'G' : 'T2']);
+      if (st >= 4) lab.push(['x + ' + k, ox + (X + h) / 2, oy + X + h + 17, 'center', 'top', 'mix']);
+    } else {
+      const g2 = st === 1 ? 0 : L.G2;
+      if (L.lay === 'h') {
+        const ax = ox + X + L.G1;
+        R.A = [ax, oy, h, X]; R.B = [ax + h + g2, oy, h, X];
+        lab.push(['x', ox - 8, oy + X / 2, 'right', 'middle', 'T'], ['x', ox + X / 2, oy - 8, 'center', 'alphabetic', 'T'],
+                 ['x', R.B[0] + h + 8, oy + X / 2, 'left', 'middle', 'T'], ['x²', ox + X / 2, oy + X / 2, 'center', 'middle', 'B']);
+        if (st === 1) lab.push([String(p), ax + h, oy - 8, 'center', 'alphabetic', 'O'], [p + '·x', ax + h, oy + X / 2, 'center', 'middle', 'O']);
+        else for (const n of ['A', 'B']) {
+          const r = R[n];
+          lab.push([String(k), r[0] + h / 2, oy - 8, 'center', 'alphabetic', 'O'], [kx(k), r[0] + h / 2, oy + X / 2, 'center', 'middle', 'O']);
+        }
+      } else {
+        const ay = oy + X + L.G1;
+        R.A = [ox, ay, X, h]; R.B = [ox, ay + h + g2, X, h];
+        lab.push(['x', ox - 8, oy + X / 2, 'right', 'middle', 'T'], ['x', ox + X / 2, oy - 8, 'center', 'alphabetic', 'T'],
+                 ['x', ox + X / 2, R.B[1] + h + 6, 'center', 'top', 'T'], ['x²', ox + X / 2, oy + X / 2, 'center', 'middle', 'B']);
+        if (st === 1) lab.push([String(p), ox - 8, ay + h, 'right', 'middle', 'O'], [p + '·x', ox + X / 2, ay + h, 'center', 'middle', 'O']);
+        else for (const n of ['A', 'B']) {
+          const r = R[n];
+          lab.push([String(k), ox - 8, r[1] + h / 2, 'right', 'middle', 'O'], [kx(k), ox + X / 2, r[1] + h / 2, 'center', 'middle', 'O']);
+        }
+      }
+    }
+    return { R, lab, ox, oy, X, h, k };
+  }
+
+  // Rechteck als Stück: Mittelpunkt, Eigenmasse (Breite, Höhe wie in Schritt 1) und Drehung
+  function stueck(r, gedreht) {
+    return { cx: r[0] + r[2] / 2, cy: r[1] + r[3] / 2, w: gedreht ? r[3] : r[2], hh: gedreht ? r[2] : r[3], rot: gedreht ? 1 : 0 };
+  }
+  function zeichneStueck(ctx, a, b, u, fuell, rand, strich) {
+    const cx = a.cx + (b.cx - a.cx) * u, cy = a.cy + (b.cy - a.cy) * u, rot = a.rot + (b.rot - a.rot) * u;
+    ctx.save();
+    ctx.translate(cx, cy); ctx.rotate(rot * Math.PI / 2);
+    ctx.fillStyle = fuell; ctx.fillRect(-a.w / 2, -a.hh / 2, a.w, a.hh);
+    if (strich) { ctx.strokeStyle = rand; ctx.lineWidth = 1.6; ctx.strokeRect(-a.w / 2, -a.hh / 2, a.w, a.hh); }
+    ctx.restore();
+  }
+  const bewegt = () => Math.min(von, schritt) <= 2 && von !== schritt;
+  const glatt = u => u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+
+  function zeichne() {
+    const p = +sP.value, x = +sX.value;
+    cv.style.width = '';
+    const L = lay(cv.offsetWidth || 560);
+    const { ctx, W, H } = initCanvas('qe-cv', L.H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    const G = geo(L, p, x, schritt), G0 = geo(L, p, x, von);
+    const u = glatt(t), fertig = t >= 1;
+    const { ox, oy, X, h, k } = G;
+
+    // Quadrat x² (wandert beim Übergang 2 ↔ 3 mit, weil die Figur mittig steht)
+    const q0 = stueck(G0.R.SQ, false), q1 = stueck(G.R.SQ, false);
+    zeichneStueck(ctx, q0, q1, u, BL_H, BL, true);
+
+    // Eckquadrat (Schritt 3: Lücke, 4: ergänzt, 5: wieder abgezogen)
+    const C = [ox + X, oy + X, h, h];
+    if (schritt >= 3 && fertig || schritt >= 4) {
+      if (schritt === 3) {
+        ctx.setLineDash([5, 4]); ctx.strokeStyle = T2; ctx.lineWidth = 1.4;
+        ctx.strokeRect(C[0], C[1], h, h); ctx.setLineDash([]);
+      } else if (schritt === 4) {
+        ctx.globalAlpha = von === 3 ? u : 1;
+        ctx.fillStyle = GR_H; ctx.fillRect(C[0], C[1], h, h);
+        ctx.strokeStyle = GR; ctx.lineWidth = 1.6; ctx.strokeRect(C[0], C[1], h, h);
+        ctx.globalAlpha = 1;
+      } else {
+        ctx.save();
+        ctx.beginPath(); ctx.rect(C[0], C[1], h, h); ctx.clip();
+        ctx.strokeStyle = 'rgba(31,107,58,0.35)'; ctx.lineWidth = 1.5;
+        for (let d = -h; d < 2 * h; d += 7) { ctx.beginPath(); ctx.moveTo(C[0] + d, C[1] + h); ctx.lineTo(C[0] + d + h, C[1]); ctx.stroke(); }
+        ctx.restore();
+        ctx.setLineDash([5, 4]); ctx.strokeStyle = GR; ctx.lineWidth = 1.6;
+        ctx.strokeRect(C[0], C[1], h, h); ctx.setLineDash([]);
+      }
+    }
+
+    // Die beiden Hälften von p·x (in Schritt 1 als ein Rechteck)
+    const a0 = stueck(G0.R.A, false), a1 = stueck(G.R.A, false);
+    const b0 = stueck(G0.R.B, von >= 3), b1 = stueck(G.R.B, schritt >= 3);
+    if (schritt === 1 && fertig) {
+      const r = [G.R.A[0], G.R.A[1], L.lay === 'h' ? 2 * h : X, L.lay === 'h' ? X : 2 * h];
+      ctx.fillStyle = OR_H; ctx.fillRect(r[0], r[1], r[2], r[3]);
+      ctx.strokeStyle = OR; ctx.lineWidth = 1.6; ctx.strokeRect(r[0], r[1], r[2], r[3]);
+    } else {
+      zeichneStueck(ctx, a0, a1, u, OR_H, OR, true);
+      zeichneStueck(ctx, b0, b1, u, OR_H, OR, true);
+    }
+
+    if (!fertig && bewegt()) return;
+
+    // grosses Quadrat (x + p/2)² mit Masslinie
+    if (schritt >= 4) {
+      ctx.strokeStyle = TI; ctx.lineWidth = 2.2; ctx.strokeRect(ox, oy, X + h, X + h);
+      const ym = oy + X + h + 10;
+      ctx.lineWidth = 1.2; ctx.beginPath();
+      ctx.moveTo(ox, ym); ctx.lineTo(ox + X + h, ym);
+      ctx.moveTo(ox, ym - 4); ctx.lineTo(ox, ym + 4);
+      ctx.moveTo(ox + X + h, ym - 4); ctx.lineTo(ox + X + h, ym + 4);
+      ctx.stroke();
+    }
+
+    ctx.font = FONT;
+    for (const [txt, lx, ly, align, baseline, f] of G.lab) {
+      if (f === 'mix') {
+        const teil1 = 'x + ', teil2 = String(k);
+        const b1w = ctx.measureText(teil1).width, b2w = ctx.measureText(teil2).width;
+        const x0 = lx - (b1w + b2w) / 2;
+        ctx.fillStyle = TI; beschriftung(ctx, teil1, x0, ly, { align: 'left', baseline, bg: '#fff', pad: 0, W, H });
+        ctx.fillStyle = OR; beschriftung(ctx, teil2, x0 + b1w, ly, { align: 'left', baseline, bg: '#fff', pad: 0, W, H });
+        continue;
+      }
+      const innen = baseline === 'middle' && align === 'center';
+      ctx.fillStyle = FARBE[f];
+      beschriftung(ctx, txt, lx, ly, innen ? { align, baseline, frei: false, W, H } : { align, baseline, bg: '#fff', W, H });
+    }
+  }
+
+  const o = z => `<span class="tx-orange">${z}</span>`;
+  const g = z => `<span class="tx-gruen">${z}</span>`;
+  const b = z => `<span class="tx-blau">${z}</span>`;
+
+  function texte() {
+    const p = +sP.value, x = +sX.value, k = p / 2;
+    vP.textContent = p; vX.textContent = x;
+    const kxH = k === 1 ? 'x' : `${o(k)}·x`;
+    const A = x * x, Bp = p * x, Bk = k * x, Ck = k * k, S = x * x + p * x, Q = (x + k) * (x + k);
+    const mit = `mit x = ${b(x)}: `;
+    // Umbruch auf schmalen Bildschirmen nur an « = », nie mitten in einem Term
+    const nw = z => `<span style="white-space:nowrap">${z}</span>`;
+    const kette = z => z.split(' = ').map(nw).join(' = ');
+    let e1, e2, tx;
+    if (schritt === 1) {
+      e1 = `x² + ${o(p)}·x`;
+      e2 = `${mit}${b(A)} + ${o(Bp)} = ${S}`;
+      tx = `Die Summe x² + ${p}·x als Fläche: ein Quadrat mit der Seite x und ein Rechteck mit den Seiten ${p} und x.`;
+    } else if (schritt === 2) {
+      e1 = `x² + ${o(p)}·x = x² + ${kxH} + ${kxH}`;
+      e2 = `${mit}${b(A)} + ${o(Bk)} + ${o(Bk)} = ${S}`;
+      tx = `Das Rechteck wird halbiert: zwei gleiche Rechtecke mit den Seiten ${k} und x. Zusammen haben sie wieder die Fläche ${p}·x.`;
+    } else if (schritt === 3) {
+      e1 = `x² + ${kxH} + ${kxH}`;
+      e2 = `${mit}${b(A)} + ${o(Bk)} + ${o(Bk)} = ${S}`;
+      tx = 'Je eine Hälfte liegt jetzt an der rechten und an der unteren Seite des Quadrats. Die L-Form hat dieselbe Fläche wie vorher, doch zum vollen Quadrat fehlt die Ecke rechts unten.';
+    } else if (schritt === 4) {
+      e1 = `x² + ${o(p)}·x + ${g(k + '²')} = (x + ${o(k)})²`;
+      e2 = `${mit}${b(A)} + ${o(Bp)} + ${g(Ck)} = ${Q} = ${x + k}²`;
+      tx = `Die fehlende Ecke ist ein Quadrat mit der Seite ${k}, also mit der Fläche ${k}² = ${Ck}. Mit ihr wird die Figur zum grossen Quadrat mit der Seite x + ${k}.`;
+    } else {
+      e1 = `x² + ${o(p)}·x = (x + ${o(k)})² − ${g(k + '²')}`;
+      e2 = `${mit}${b(A)} + ${o(Bp)} = ${Q} − ${g(Ck)} = ${S}`;
+      tx = `Die Ecke gehört nicht zu x² + ${p}·x. Darum wird sie wieder abgezogen: grosses Quadrat minus Eckquadrat. Genau das ist die quadratische Ergänzung.`;
+    }
+    flLab.textContent = `Schritt ${schritt} von ${N}`;
+    eq1.innerHTML = kette(e1);
+    eq2.innerHTML = nw(mit) + kette(e2.slice(mit.length));
+    erkl.textContent = tx.replace(/ \+ /g, '\u00a0+\u00a0');
+    bZ.disabled = schritt === 1; bW.disabled = schritt === N;
+  }
+
+  function lauf(ts0) {
+    const jetzt = performance.now();
+    t = Math.min(1, (jetzt - ts0) / DAUER);
+    zeichne();
+    raf = t < 1 ? requestAnimationFrame(() => lauf(ts0)) : null;
+  }
+  function gehe(neu) {
+    if (neu < 1 || neu > N || neu === schritt) return;
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+    von = schritt; schritt = neu; texte();
+    // Getweent wird nur, was sich bewegt (1 ↔ 2 ↔ 3) oder einblendet (3 → 4)
+    if (ruhig || !(bewegt() || (von === 3 && schritt === 4))) { t = 1; von = schritt; zeichne(); return; }
+    t = 0; lauf(performance.now());
+  }
+  function sofort() {
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+    t = 1; von = schritt; texte(); zeichne();
+  }
+
+  bW.addEventListener('click', () => gehe(schritt + 1));
+  bZ.addEventListener('click', () => gehe(schritt - 1));
+  sP.addEventListener('input', sofort);
+  sX.addEventListener('input', sofort);
+  window.addEventListener('resize', sofort);
+  sofort();
 })();
 </script>
 </body>

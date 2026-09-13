@@ -270,13 +270,13 @@ beherrscht, dem stehen Naturwissenschaften und Technik offen.</p>
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Schiebe von \(10^0\) je eine Stufe nach oben und nach unten: Um welchen Faktor ändert sich die Länge pro Schritt? Und wo auf der Skala wohnst du selber (Körpergrösse)?</div>
+        <div class="ah-text">Schiebe von \(10^0\) je eine Stufe nach oben und nach unten: Um welchen Faktor ändert sich die Länge pro Schritt? Weiter aussen überspringt der Regler Exponenten ohne Objekt — um welchen Faktor geht es von \(10^{8}\) zu \(10^{11}\)? Und wo auf der Skala wohnst du selber (Körpergrösse)?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Jede Stufe ist ein <strong>Faktor 10</strong> — der Exponent zählt die Verschiebungen des Dezimalpunkts. Negative Exponenten sind nichts Exotisches: \(10^{-n}\) heisst einfach \(\tfrac{1}{10^n}\), die Skala läuft nahtlos weiter.</div>
+        <div class="ah-text">Von \(10^{-7}\) bis \(10^{8}\) ist jede Stufe ein <strong>Faktor 10</strong> — der Exponent zählt die Verschiebungen des Dezimalpunkts. Springt der Exponent um mehr als 1, multiplizieren sich die Faktoren: von \(10^{8}\) zu \(10^{11}\) sind es \(10^{3} = 1000\). Negative Exponenten sind nichts Exotisches: \(10^{-n}\) heisst einfach \(\tfrac{1}{10^n}\), die Skala läuft nahtlos weiter.</div>
       </div>
     </div>
   </div>
@@ -288,7 +288,7 @@ beherrscht, dem stehen Naturwissenschaften und Technik offen.</p>
           <span>Zehnerpotenz \(10^{n}\) [m]</span>
           <span class="wert" id="lbl-zoomN">0</span>
         </div>
-        <input type="range" id="sld-zoomN" min="-15" max="22" step="1" value="0">
+        <input type="range" id="sld-zoomN" min="0" max="23" step="1" value="10">
       </div>
 
       <div class="legende">
@@ -1655,9 +1655,11 @@ Auswendiglernen, Aufgabenserien zum Üben:</p>
 <script>
 /* ════════════════════════════════════════════════════════════════
  *  EINSTIEG · Zoom-Skala vom Atom zur Galaxie
- *  37 Zehnerpotenz-Stufen mit Alltagsobjekten als Anker.
- *  Schieber wählt n, Canvas zeigt links die Skala und rechts ein
- *  symbolisches Objekt sowie die wissenschaftliche Notation.
+ *  Skala über 38 Zehnerpotenzen (10⁻¹⁵ … 10²²), 24 davon mit Objekt.
+ *  Der Schieber rastet auf die Objekte: Er wählt den Index in
+ *  ZOOM_OBJEKTE, der Exponent n kommt aus dem Eintrag. So zeigen
+ *  Regler, Legende und Bild immer dieselbe Grössenordnung.
+ *  Canvas: links die Skala, rechts Symbol und wiss. Notation.
  * ════════════════════════════════════════════════════════════════ */
 const ZOOM_OBJEKTE = [
   { n: -15, gr: '1 fm',     obj: 'Atomkern',           sym: '⚛︎', desc: 'Der Atomkern eines Wasserstoffs misst etwa \\(1\\cdot 10^{-15}\\) m. So klein, dass selbst Elektronenmikroskope ihn nicht direkt abbilden können.' },
@@ -1686,21 +1688,11 @@ const ZOOM_OBJEKTE = [
   { n:  22, gr: 'Mio. Lichtjahre', obj: 'Nachbargalaxien', sym: '✷', desc: 'Bei \\(10^{22}\\) m (rund eine Million Lichtjahre) blicken wir auf die nächsten Nachbargalaxien; der Radius des beobachtbaren Universums liegt mit rund \\(10^{26}\\) m weit darüber.' },
 ];
 
-function zoomEintrag(n) {
-  // suche nächstgelegenen Eintrag
-  let best = ZOOM_OBJEKTE[0];
-  let bestDiff = Math.abs(n - best.n);
-  for (const e of ZOOM_OBJEKTE) {
-    const d = Math.abs(n - e.n);
-    if (d < bestDiff) { best = e; bestDiff = d; }
-  }
-  return best;
-}
-
 function drawZoom() {
   const sld = document.getElementById('sld-zoomN');
   if (!sld) return;
-  const n = +sld.value;
+  const eintrag = ZOOM_OBJEKTE[+sld.value];
+  const n = eintrag.n;
   document.getElementById('lbl-zoomN').textContent = n >= 0 ? `+${n}` : `${n}`;
 
   const { ctx, W, H } = initCanvas('cv-zoom', 340);
@@ -1778,9 +1770,6 @@ function drawZoom() {
   const objCx = objX + (W - objX) / 2;
   const objCy = H / 2;
 
-  // Suche passenden Eintrag (oder den nächstliegenden)
-  const eintrag = zoomEintrag(n);
-
   // Hintergrund-Kreis als Referenz-Rahmen
   ctx.strokeStyle = '#a89b85';
   ctx.lineWidth = 1.5;
@@ -1810,14 +1799,7 @@ function drawZoom() {
   ctx.fillStyle = '#3a342a';
   ctx.font = 'bold 16px monospace';
   ctx.textAlign = 'center';
-  ctx.fillText(`1 · 10${supExp(eintrag.n)} m`, objCx, 22);
-
-  // Falls n nicht exakt einem Eintrag entspricht: Hinweis
-  if (eintrag.n !== n) {
-    ctx.fillStyle = '#a89b85';
-    ctx.font = 'italic 10px monospace';
-    ctx.fillText(`(nächster Anker: ${eintrag.n >= 0 ? '+' : ''}${eintrag.n})`, objCx, H - 12);
-  }
+  ctx.fillText(`1 · 10${supExp(n)} m`, objCx, 22);
 
   // Live-Anzeigen
   document.getElementById('leg-zoomObj').textContent = eintrag.obj;
@@ -1838,6 +1820,7 @@ function supExp(n) {
 document.addEventListener('DOMContentLoaded', () => {
   const sld = document.getElementById('sld-zoomN');
   if (sld) {
+    sld.max = ZOOM_OBJEKTE.length - 1;
     sld.addEventListener('input', drawZoom);
     drawZoom();
   }

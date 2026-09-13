@@ -145,16 +145,19 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
 ## P3 — Mittel
 
 ### Neue Animationen / Ergänzungen
-- [ ] **AN-22** `g2-2b`: Quadratische Ergänzung geometrisch — Flächenmodell (Quadrat x² +
+- [x] **AN-22** `g2-2b`: Quadratische Ergänzung geometrisch — Flächenmodell (Quadrat x² +
   zwei Rechtecke (p/2)·x → fehlendes Eckquadrat (p/2)²) als schrittgesteuertes Canvas;
   nimmt der pq-Formel die Willkür. (Verwandt: `g3-3` Umformung allgemeine Form →
   Scheitelform als Schritt-Widget, P4.)
-- [ ] **AN-23** `g1-2`: Zahlengeraden-Widget Vorzeichenregeln (7 − (−2) als Pfeilkette,
+  **Erledigt 13.09.2026:** Neues Widget «Flächenmodell» (IDs qe-) im Abschnitt Verfahren: x² und p·x, halbieren, L-Form, Eckquadrat (p/2)² ergänzen, wieder abziehen; Regler p und x, Flächenprobe live.
+- [x] **AN-23** `g1-2`: Zahlengeraden-Widget Vorzeichenregeln (7 − (−2) als Pfeilkette,
   Chips für die vier Fälle) — die grösste Fehlerquelle der Zielgruppe ist bisher rein
   tabellarisch.
-- [ ] **AN-24** `g1-1`: Schritt-Animation «Auswertungs-Reihenfolge» (Schritt-Slider hebt die
+  **Erledigt 13.09.2026:** Neues Widget Zahlengerade (IDs vz-): vier Fälle a ± b, a ± (−b) als Pfeilkette, Regler a und b, Rechnung und Erklärung live; 420 Kombinationen geprüft.
+- [x] **AN-24** `g1-1`: Schritt-Animation «Auswertungs-Reihenfolge» (Schritt-Slider hebt die
   jeweils nächste Operation hervor, letzte = Hauptoperation) — verbindet Hierarchie,
   Strukturbaum und Klassifizier-Übung.
+  **Erledigt 13.09.2026:** Neues Widget «Auswertungs-Reihenfolge» (IDs aw-): Schritt-Regler hebt die nächste Operation hervor, letzte als Hauptoperation; drei Beispielterme.
 - [ ] **AN-25** `g3-1`: Fehler-Box «Wertetabelle legt Funktion nicht eindeutig fest» um
   einen Graphen ergänzen: f(x) = x² und h(x) durch dieselben vier Punkte — der Aha-Moment
   ist visuell, nicht rechnerisch.
@@ -176,32 +179,41 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
   Q₁/Median/Q₃-Markern + Boxplot am Klasse-B-Datensatz).
 
 ### Zusammenlegung
-- [ ] **AN-32** `g2-3` · `cv-lf` ↔ Büschel-Widget: Zwei Chips-Leisten mit gleicher Semantik
+- [x] **AN-32** `g2-3` · `cv-lf` ↔ Büschel-Widget: Zwei Chips-Leisten mit gleicher Semantik
   (eindeutig/parallel/identisch) direkt untereinander. Entweder cv-lf-Karten als Presets ins
   Büschel-Widget integrieren und cv-lf streichen, oder cv-lf behalten und pro Fall das
   konkrete Gleichungssystem in der Live-Zeile ergänzen.
+  **Erledigt 13.09.2026:** cv-lf bleibt; Live-Zeile zeigt je Fall das konkrete System aus der Zeichnung, die Rechnung und die Lösungsmenge; beide Widgets verweisen aufeinander.
 
 ### Verbesserungen bestehender Widgets
-- [ ] **AN-33** `g1-1` · `cv-hauptop`: Hauptoperation (das letzte «+») in allen drei Formen
+- [x] **AN-33** `g1-1` · `cv-hauptop`: Hauptoperation (das letzte «+») in allen drei Formen
   farblich markieren; redundante 3-Zeilen-Legende durch «alle drei = N» ersetzen; Layout
   unter 400 px prüfen (360-px-Shot).
-- [ ] **AN-34** `g1-1` · Würfel-Demos Rechengesetze: pro Wurf grünes «✓ beide Seiten = N»;
+  **Erledigt 13.09.2026:** Hauptoperation in allen drei Formen als blaue Pille, Legende «alle drei = N», bei schmalem Canvas untereinander.
+- [x] **AN-34** `g1-1` · Würfel-Demos Rechengesetze: pro Wurf grünes «✓ beide Seiten = N»;
   vierte Box «Gegenprobe a − b vs. b − a» mit rotem ✗ (zeigt, warum die Gesetze auf +/·
   beschränkt sind).
-- [ ] **AN-35** `g1-2` · Intervall-Widget `cv-iv`: sechste Zeile ]a;b] ergänzen (Vergleich
+  **Erledigt 13.09.2026:** «✓ beide Seiten = N» unter jeder Rechnung, vierte Box «Gegenprobe a − b vs. b − a» mit ✗ (a ≠ b gewürfelt).
+- [x] **AN-35** `g1-2` · Intervall-Widget `cv-iv`: sechste Zeile ]a;b] ergänzen (Vergleich
   [0;4[ vs. ]0;4] festigt die Klammer-Richtung); optional kleine Slider für a, b.
-- [ ] **AN-36** `g1-3` · `cv-binomi` (3. Binom, Schritt 2): Streifen wird an alter UND neuer
+  **Erledigt 13.09.2026:** Sechste Zeile ]a; b] mit Beispiel ]0; 4].
+- [x] **AN-36** `g1-3` · `cv-binomi` (3. Binom, Schritt 2): Streifen wird an alter UND neuer
   Position identisch gezeichnet — Ausgangslage gestrichelt/halbtransparent plus Umlege-Pfeil.
-- [ ] **AN-37** `g1-3` · Faktorisier-Übung: `norm()` um `−`→`-` und `²`→`^2` ergänzen
+  **Erledigt 13.09.2026:** Ausgangsstreifen halbtransparent gestrichelt, Bogenpfeil zur neuen Position.
+- [x] **AN-37** `g1-3` · Faktorisier-Übung: `norm()` um `−`→`-` und `²`→`^2` ergänzen
   (Unicode-Minus von der Seite kopiert wird sonst als falsch gewertet); pro Zeile
   Lösungs-Toggle ergänzen (einzige Übung der Seite ohne Lösungszugang).
-- [ ] **AN-38** `g1-4` · `cv-zoom`: 13 von 38 Slider-Stufen haben keinen Anker — Legende
+  **Erledigt 13.09.2026:** norm() versteht −, –, ⋅, ×, ², ³; jede Zeile mit Lösungs-Toggle.
+- [x] **AN-38** `g1-4` · `cv-zoom`: 13 von 38 Slider-Stufen haben keinen Anker — Legende
   und Bild zeigen dann verschiedene Grössenordnungen. Slider auf die 24 Ankerstufen rastern
   (Index-Slider) oder Zwischenstufen explizit als «zwischen X und Y» rendern.
-- [ ] **AN-39** `g2-1` · `wg-canvas` (Waage): Story sichtbar machen — links 4 Kisten
+  **Erledigt 13.09.2026:** Regler rastet auf die 24 Anker (14 Stufen ohne Anker entfallen), Legende und Bild immer gleich.
+- [x] **AN-39** `g2-1` · `wg-canvas` (Waage): Story sichtbar machen — links 4 Kisten
   (Höhe ∝ x) + Werkzeugkasten, rechts 15 Einheitsgewichte statt reiner Textlabels.
-- [ ] **AN-40** `g2-1` · Probe-Widget: dieselbe Gleichung 4x+3=15 zum dritten Mal auf der
+  **Erledigt 13.09.2026:** Einstiegs-Waage mit 4 Kisten und Werkzeugkasten gegen 15 Gewichte; Balkenlänge aus der Canvasbreite, bei 360 px im Bild.
+- [x] **AN-40** `g2-1` · Probe-Widget: dieselbe Gleichung 4x+3=15 zum dritten Mal auf der
   Seite — wechseln (z.B. 5x − 7 = 2x + 8, Brücke zu 2.2a).
+  **Erledigt 13.09.2026:** Probe-Widget prüft 5·x − 7 = 2·x + 8 (Lösung 5) in vier Schritten.
 - [ ] **AN-41** `g2-2a` · `cv-budget`: Live-Zeile um Vergleichszeichen + Status ergänzen
   («81 < 117 — Budget nicht ausgeschöpft»); Budget-Label von cx(7) nach links verschieben
   (kollidiert mit K(x)-Label, Abstand ~12 px).

@@ -141,9 +141,9 @@
 <!-- MathJax: Inline \(...\) · Display \[...\] · SVG-Output -->
 <script>
 MathJax = {
-  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol','color']} },
   svg: { fontCache:'global', scale:1.05 },
-  loader: { load:['[tex]/boldsymbol'] },
+  loader: { load:['[tex]/boldsymbol','[tex]/color'] },
   options: { skipHtmlTags:['script','noscript','style','textarea'] }
 };
 </script>
@@ -507,19 +507,19 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
           <div class="anim-hinweis links">
             <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
             <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-              <div class="ah-text">Ziehe den Steigungsparameter langsam durch. Bei welchem Wert kippt der Fall von «genau eine Lösung» zu «keine» — und was passiert im selben Moment mit den beiden Geraden?</div>
+              <div class="ah-text">Klicke die drei Karten durch und vergleiche die beiden Gleichungen: Wann stehen links vor \(x\) und \(y\) dieselben Zahlen (oder ein Vielfaches davon) — und was zeigt das Bild in genau diesen Fällen?</div>
             </div>
           </div>
           <div class="anim-hinweis rechts">
             <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
             <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-              <div class="ah-text">Die drei Lösungsfälle sind die drei Lagen zweier Geraden: schneidend (genau eine Lösung), parallel (keine), identisch (unendlich viele). Entscheidend ist der Vergleich der Steigungen — verschiedene Steigungen schneiden sich immer, gleiche Steigungen nie, ausser die Geraden fallen ganz zusammen.</div>
+              <div class="ah-text">Die drei Lösungsfälle sind die drei Lagen zweier Geraden: schneidend (genau eine Lösung), parallel (keine), identisch (unendlich viele). Entscheidend ist der Vergleich der Steigungen — verschiedene Steigungen schneiden sich immer, gleiche Steigungen nie, ausser die Geraden fallen ganz zusammen. Hier steht zu jedem Fall ein festes System mit seiner Rechnung; im Geradenbüschel darunter kippst du die zweite Gerade stetig und siehst, wie ein Fall in den anderen übergeht.</div>
             </div>
           </div>
         </div>
     <div class="cv-wrap"><canvas id="cv-lf"></canvas></div>
     <div class="formel-live" style="margin-top:12px">
-      <div class="fl-label">Beispielsystem · Lösungsmenge</div>
+      <div class="fl-label">Beispielsystem · Rechnung · Lösungsmenge</div>
       <div class="fl-eq" id="lf-info"></div>
     </div>
   </div>
@@ -542,7 +542,7 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
       </div>
     </div>
   </div>
-    <p>Die drei Fälle sind keine getrennten Welten — kippe die zweite Gerade stetig und beobachte den Schnittpunkt:</p>
+    <p>Oben hat jeder Fall ein festes System mit seiner Rechnung. Die drei Fälle sind aber keine getrennten Welten — kippe die zweite Gerade stetig und beobachte den Schnittpunkt:</p>
   </div>
   <div class="widget-body">
   <div class="sl-row">
@@ -1267,10 +1267,17 @@ function drawVerf() {
    6. LÖSUNGSFÄLLE
    ══════════════════════════════════════════════════════════════ */
 let lfAktiv = 'eindeutig';
+// Systeme = die Geraden aus drawLf in Normalform (I = rote, II = blaue Gerade)
 const LF_INFO = {
-  eindeutig: '\\(\\mathbb{L} = \\{(1 \\mid 2)\\}\\) — die zwei Geraden schneiden sich genau einmal.',
-  parallel:  '\\(\\mathbb{L} = \\emptyset\\) — die zwei Geraden sind parallel und treffen sich nie.',
-  identisch: '\\(\\mathbb{L} = \\{(x \\mid 2x - 1) : x \\in \\mathbb{R}\\}\\) — alle Punkte einer Geraden sind Lösung.'
+  eindeutig: '\\(\\textcolor{#a0392c}{\\text{I:}}\\; x - y = -1\\);&nbsp;&nbsp; \\(\\textcolor{#1a4f8a}{\\text{II:}}\\; x + y = 3\\)<br>' +
+             '\\(\\text{I} + \\text{II}:\\; 2 \\cdot x = 2\\) → \\(x = 1\\);&nbsp; in II: \\(1 + y = 3\\) → \\(y = 2\\)<br>' +
+             '\\(\\mathbb{L} = \\{(1 \\mid 2)\\}\\) — genau eine Lösung: der Schnittpunkt.',
+  parallel:  '\\(\\textcolor{#a0392c}{\\text{I:}}\\; 2 \\cdot x - y = 1\\);&nbsp;&nbsp; \\(\\textcolor{#1a4f8a}{\\text{II:}}\\; 2 \\cdot x - y = -2\\)<br>' +
+             '\\(\\text{I} - \\text{II}:\\; 0 = 3\\) → Widerspruch<br>' +
+             '\\(\\mathbb{L} = \\emptyset\\) — keine Lösung: die Geraden sind parallel.',
+  identisch: '\\(\\textcolor{#a0392c}{\\text{I:}}\\; 2 \\cdot x - y = 1\\);&nbsp;&nbsp; \\(\\textcolor{#1a4f8a}{\\text{II:}}\\; 4 \\cdot x - 2 \\cdot y = 2\\)<br>' +
+             '\\(\\text{II} - 2 \\cdot \\text{I}:\\; 0 = 0\\) → immer wahr<br>' +
+             '\\(\\mathbb{L} = \\{(x \\mid 2 \\cdot x - 1) : x \\in \\mathbb{R}\\}\\) — unendlich viele Lösungen: die Geraden sind identisch.'
 };
 function drawLf() {
   const {ctx, W, H} = initCanvas('cv-lf', 240, true);

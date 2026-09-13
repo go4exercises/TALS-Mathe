@@ -282,7 +282,7 @@ MathJax = {
       <div class="fl-eq" id="wg-eq">4·2 + 3 = 11    ≠    15</div>
       <div class="fl-eq fl-eval" id="wg-status" style="font-size:0.95rem;color:var(--rot);margin-top:4px">Linke Schale ist zu leicht</div>
     </div>
-    <div class="cv-wrap"><canvas id="wg-canvas" height="220"></canvas></div>
+    <div class="cv-wrap"><canvas id="wg-canvas" height="230"></canvas></div>
   </div>
 </div>
 
@@ -598,18 +598,19 @@ MathJax = {
 
 <div class="widget">
   <div class="widget-header">
-    <h3>🔍 Probe für \(4 \cdot x + 3 = 15\)</h3>
+    <h3>🔍 Probe für \(5 \cdot x - 7 = 2 \cdot x + 8\)</h3>
     <p>Einsetzen, ausrechnen, vergleichen</p>
   </div>
   <div class="widget-body">
     <div class="sl-row akz-blau">
       <label>Versuchswert <span class="var">\(x\)</span></label>
-      <input type="range" id="pr-x" min="0" max="6" step="0.5" value="2">
+      <input type="range" id="pr-x" min="0" max="10" step="0.5" value="2">
       <span class="sl-val" id="pr-xv">2</span>
     </div>
-    <div class="probe-step" id="pr-1"><span class="pf-label">① Einsetzen</span><span id="pr-1t">4·2 + 3 = 15</span></div>
-    <div class="probe-step" id="pr-2"><span class="pf-label">② Linke Seite ausrechnen</span><span id="pr-2t">8 + 3 = 11</span></div>
-    <div class="probe-step" id="pr-3"><span class="pf-label">③ Vergleichen</span><span id="pr-3t">11 = 15  →  falsch</span></div>
+    <div class="probe-step" id="pr-1"><span class="pf-label">① Einsetzen</span><span id="pr-1t">5·2 − 7 = 2·2 + 8</span></div>
+    <div class="probe-step" id="pr-2"><span class="pf-label">② Linke Seite ausrechnen</span><span id="pr-2t">10 − 7 = 3</span></div>
+    <div class="probe-step" id="pr-3"><span class="pf-label">③ Rechte Seite ausrechnen</span><span id="pr-3t">4 + 8 = 12</span></div>
+    <div class="probe-step fail" id="pr-4"><span class="pf-label">④ Vergleichen</span><span id="pr-4t">3 = 12  →  falsch ✗</span></div>
     <div class="formel-live" style="margin-top:6px">
       <div class="fl-label">Ergebnis</div>
       <div class="fl-eq" id="pr-erg" style="color:var(--rot)">x = 2 ist KEINE Lösung</div>
@@ -966,8 +967,9 @@ buildNav({
 /* ════════════════════════════════════════════════════════════════
    1) WAAGEN-CANVAS (geteilt von Einstieg + Äquivalenz-Animation)
 ════════════════════════════════════════════════════════════════ */
-// opt (nur Äquivalenz-Animation): { H, objL:{kisten,gewichte}, objR:{…}, maxDiff, maxAngle }
+// opt: { H, objL:{kisten,gewichte[,werkzeug]}, objR:{…}, maxDiff, maxAngle }
 // → Schaleninhalt als Objekte, Beschriftung unter der Schale, Legende unten.
+//   werkzeug (optional, nur Einstieg): Masse des Werkzeugkastens in kg, liegt auf den Kisten.
 function drawWaage(canvasId, leftMass, rightMass, leftLabel, rightLabel, opt) {
   const c = document.getElementById(canvasId);
   if (!c) return;
@@ -1042,6 +1044,14 @@ function drawWaage(canvasId, leftMass, rightMass, leftLabel, rightLabel, opt) {
   function gewicht(x0, y0) {
     ctx.fillStyle = '#4b5563'; ctx.fillRect(x0, y0, 9, 9);
   }
+  function werkzeugkasten(cx0, yU, masse) {   // yU = Unterkante, 34 × 15 px + Griff
+    ctx.fillStyle = '#4a6a8a'; ctx.fillRect(cx0 - 17, yU - 15, 34, 15);
+    ctx.strokeStyle = '#2d4257'; ctx.lineWidth = 1.2;
+    ctx.strokeRect(cx0 - 16.5, yU - 14.5, 33, 14);
+    ctx.strokeRect(cx0 - 6.5, yU - 18.5, 13, 4);
+    ctx.font = 'bold 10px sans-serif'; ctx.fillStyle = '#fff';
+    beschriftung(ctx, `${masse} kg`, cx0, yU - 7, {align:'center', baseline:'middle', frei:false});
+  }
   function inhalt(cx0, rim, o) {
     let y = rim;
     if (o.kisten > 0) {
@@ -1049,6 +1059,7 @@ function drawWaage(canvasId, leftMass, rightMass, leftLabel, rightLabel, opt) {
       for (let i = 0; i < o.kisten; i++) kiste(cx0 - w / 2 + i * 21, y - 18);
       y -= 21;
     }
+    if (o.werkzeug > 0) { werkzeugkasten(cx0, y, o.werkzeug); y -= 22; }
     if (o.gewichte > 0) {
       const nReihen = Math.ceil(o.gewichte / 7);
       const proReihe = Math.ceil(o.gewichte / nReihen);
@@ -1117,7 +1128,10 @@ function updateWG() {
     st.style.color = 'var(--rot)';
     st.textContent = 'Linke Schale ist zu schwer';
   }
-  drawWaage('wg-canvas', ls, rs, `${fmtNum(ls)} kg`, '15 kg');
+  // Story: 4 Pakete (je x kg) + Werkzeugkasten 3 kg links, 15 Gewichte je 1 kg rechts
+  drawWaage('wg-canvas', ls, rs, `${fmtNum(ls)} kg`, '15 kg',
+    { H: 230, objL: {kisten: 4, gewichte: 0, werkzeug: 3}, objR: {kisten: 0, gewichte: 15},
+      maxDiff: 18, maxAngle: 0.26 });
 }
 document.getElementById('wg-x').addEventListener('input', updateWG);
 
@@ -1220,20 +1234,22 @@ function setTyp(i) {
 function updatePR() {
   const x = parseFloat(document.getElementById('pr-x').value);
   document.getElementById('pr-xv').textContent = fmtNum(x);
-  const xDispRaw = fmtNum(x);
+  // Gleichung 5·x − 7 = 2·x + 8, Lösung x = 5; Minuszeichen typografisch (−)
+  const fm = n => fmtNum(n).replace('-', '−');
+  const xDispRaw = fm(x);
   const xDispMul = x < 0 ? `(${xDispRaw})` : xDispRaw;
-  const ls = 4 * x + 3;
-  const rs = 15;
-  const lsMul = 4 * x;
+  const ls = 5 * x - 7;
+  const rs = 2 * x + 8;
   const ok = Math.abs(ls - rs) < 0.01;
 
-  document.getElementById('pr-1t').textContent = `4·${xDispMul} + 3 = 15`;
-  document.getElementById('pr-2t').textContent = `${fmtNum(lsMul)} + 3 = ${fmtNum(ls)}`;
-  document.getElementById('pr-3t').textContent = `${fmtNum(ls)} = ${rs}  →  ${ok ? 'wahr ✓' : 'falsch ✗'}`;
+  document.getElementById('pr-1t').textContent = `5·${xDispMul} − 7 = 2·${xDispMul} + 8`;
+  document.getElementById('pr-2t').textContent = `${fm(5 * x)} − 7 = ${fm(ls)}`;
+  document.getElementById('pr-3t').textContent = `${fm(2 * x)} + 8 = ${fm(rs)}`;
+  document.getElementById('pr-4t').textContent = `${fm(ls)} = ${fm(rs)}  →  ${ok ? 'wahr ✓' : 'falsch ✗'}`;
 
-  // Steps färben (alle gleich, aber Schritt 3 + Ergebnis je nach OK/Fail)
-  const step3 = document.getElementById('pr-3');
-  step3.classList.toggle('fail', !ok);
+  // Steps färben (alle gleich, aber Vergleich + Ergebnis je nach OK/Fail)
+  const step4 = document.getElementById('pr-4');
+  step4.classList.toggle('fail', !ok);
 
   const erg = document.getElementById('pr-erg');
   if (ok) {
