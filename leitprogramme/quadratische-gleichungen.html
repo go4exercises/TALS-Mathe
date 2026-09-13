@@ -181,8 +181,14 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
 /* ---------- Anleitung ---------- */
 .anleitung{background:var(--karte);border:1px solid var(--linie);border-radius:10px;
   padding:22px 26px;margin-bottom:46px;box-shadow:var(--s)}
-.anleitung h2{font-size:1.12rem;margin-bottom:12px}
-.anleitung ol{margin:0;padding-left:1.25em;font-family:var(--sans);font-size:.94rem;color:var(--tinte-2)}
+.anleitung summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px}
+.anleitung summary::-webkit-details-marker{display:none}
+.anleitung summary::after{content:"";flex:none;margin-left:auto;width:.5em;height:.5em;
+  border-right:2px solid var(--tinte-2);border-bottom:2px solid var(--tinte-2);
+  transform:translateY(-.15em) rotate(45deg);transition:transform .2s}
+.anleitung[open] summary::after{transform:translateY(.1em) rotate(-135deg)}
+.anleitung h2{font-size:1.12rem}
+.anleitung ol{margin:12px 0 0;padding-left:1.25em;font-family:var(--sans);font-size:.94rem;color:var(--tinte-2)}
 .anleitung li{margin:6px 0}
 .anleitung li b{color:var(--tinte)}
 
@@ -380,8 +386,8 @@ details.loes .inhaltbox p:last-child{margin-bottom:0}
 
   <main class="inhalt">
 
-    <div class="anleitung">
-      <h2 id="so-arbeitest-du-mit-diesem-leitprogramm">So arbeitest du mit diesem Leitprogramm</h2>
+    <details class="anleitung">
+      <summary><h2 id="so-arbeitest-du-mit-diesem-leitprogramm">So arbeitest du mit diesem Leitprogramm</h2></summary>
       <ol>
         <li><b>Clip schauen.</b> Jedes Kapitel beginnt mit einem Clip von rund einer Minute. Er zeigt den Gedankengang, der Text darunter macht ihn vollständig.</li>
         <li><b>Text lesen und mitrechnen.</b> Die Beispiele stehen mit Zwischenschritten da. Rechne sie auf einem Blatt nach, bevor du weiterliest.</li>
@@ -390,7 +396,7 @@ details.loes .inhaltbox p:last-child{margin-bottom:0}
         <li><b>Gesamttest am Schluss.</b> 24 Punkte, ohne Taschenrechner, in etwa 20 Minuten.</li>
         <li><b>Die Reihenfolge ist Absicht.</b> Die Mitternachtsformel kommt erst in Kapitel 2 — weil drei von vier Gleichungen sie gar nicht brauchen. Wer sie zuerst lernt, benutzt sie überall.</li>
       </ol>
-    </div>
+    </details>
 
     <!-- ================= LEKTION 1 ================= -->
     <div class="band"><span>Lektion 1</span><span class="strich"></span><span>Von den Sonderfällen zur Formel</span></div>

@@ -180,8 +180,14 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
 /* ---------- Anleitung ---------- */
 .anleitung{background:var(--karte);border:1px solid var(--linie);border-radius:10px;
   padding:22px 26px;margin-bottom:46px;box-shadow:var(--s)}
-.anleitung h2{font-size:1.12rem;margin-bottom:12px}
-.anleitung ol{margin:0;padding-left:1.25em;font-family:var(--sans);font-size:.94rem;color:var(--tinte-2)}
+.anleitung summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px}
+.anleitung summary::-webkit-details-marker{display:none}
+.anleitung summary::after{content:"";flex:none;margin-left:auto;width:.5em;height:.5em;
+  border-right:2px solid var(--tinte-2);border-bottom:2px solid var(--tinte-2);
+  transform:translateY(-.15em) rotate(45deg);transition:transform .2s}
+.anleitung[open] summary::after{transform:translateY(.1em) rotate(-135deg)}
+.anleitung h2{font-size:1.12rem}
+.anleitung ol{margin:12px 0 0;padding-left:1.25em;font-family:var(--sans);font-size:.94rem;color:var(--tinte-2)}
 .anleitung li{margin:6px 0}
 .anleitung li b{color:var(--tinte)}
 
@@ -424,8 +430,8 @@ figure.bild figcaption{font-family:var(--sans);font-size:.82rem;color:var(--tint
 
   <main class="inhalt">
 
-    <div class="anleitung">
-      <h2 id="so-arbeitest-du-mit-dieser-loesung">So arbeitest du mit dieser Lösung</h2>
+    <details class="anleitung">
+      <summary><h2 id="so-arbeitest-du-mit-dieser-loesung">So arbeitest du mit dieser Lösung</h2></summary>
       <ol>
         <li><b>Zuerst rechnen, dann lesen.</b> Das Aufgabenblatt steht gleich unten, vollständig und ohne Lösungen. Nimm ein Blatt und arbeite es durch, bevor du weiterscrollst.</li>
         <li><b>Erst danach hierher zurück.</b> Wer die Lösung vorher liest, verwechselt Verstehen mit Wiedererkennen. Das gilt für die Clips genauso.</li>
@@ -433,7 +439,7 @@ figure.bild figcaption{font-family:var(--sans);font-size:.82rem;color:var(--tint
         <li><b>Der orange Balken sagt, was zählt.</b> Unter jeder Lösung steht, wofür es die Punkte gibt — daran siehst du, ob dein Rechenweg gereicht hätte.</li>
         <li><b>Hakenfeld setzen.</b> Sitzt eine Aufgabe, hakst du sie oben rechts im Aufgabenkopf ab. Der Balken links zeigt, wo du stehst.</li>
       </ol>
-    </div>
+    </details>
 
     <!-- ================= AUFGABENBLATT ================= -->
     <section class="kap" id="bogen">
