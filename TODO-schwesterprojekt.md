@@ -23,6 +23,14 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
+- **2026-09-14 · Marke «TALS Physik» → «Physik begreifbar» · ganzes Physik-Repo ·
+  warum:** Letzter offener Punkt des Domain-Umzugs (Mathes `DOMAIN-UMZUG.md`, Phase 5).
+  Mathe heisst seit dem 10.08.2026 «Mathe begreifbar» (Mathe-Commit `6e88526`), und
+  Mathes Menü nennt Physik schon «Physik begreifbar». Live am 14.09.2026 gemessen:
+  `physik.begreifbar.ch` liefert `<title>TALS Physik — RLP-BM 2030</title>` und
+  `og:site_name` «TALS Physik». Den ausführlichen Auftrag zum Einfügen in eine
+  Physik-Sitzung enthält der Abschnitt «Auftrag Markenname Physik» weiter unten.
+
 - **2026-09-01 · ~~Leitprogramme als zweites Format~~ — ERLEDIGT, nachgesehen am
   07.09.2026:** Physik hat inzwischen **fünf eigene Leitprogramme**
   (`leitprogramm-heizen`, `-ideale-gase`, `-vorwissen`, `-waermeausdehnung`,
@@ -330,6 +338,70 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
   und analog für `.akz-gruen`. Farbneutral, kein JS. In Physik dort prüfen, wo ein
   Widget mehrere Regler mit unterschiedlichen akz-Farben hat (Amber/Bernstein-Palette
   entsprechend). Verwandt: Live-Formel-Werte via `.tx-…`-Spans an dieselben Farben koppeln.
+
+## Auftrag Markenname Physik (2026-09-14) — zum Einfügen in eine Physik-Sitzung
+
+> Nachgezählt am 14.09.2026 im Physik-Repo, Stand `86a7206`, nur lesend.
+
+**Ziel:** Die Marke «TALS Physik» heisst überall, wo sie als Name des Lehrmittels steht,
+**«Physik begreifbar»** — passend zur Domain `physik.begreifbar.ch` und zu «Mathe
+begreifbar». Vorbild ist Mathe-Commit `6e88526` (891 Stellen, ein Commit).
+
+**Bestand:** 349 × «TALS Physik» in 102 Dateien.
+
+| Ort | Stellen | Art |
+|---|---|---|
+| `themen/*.html` (18 Seiten) | 125 | je 7–8: `<title>`, `og:site_name`, `og:title`, JSON-LD (3×), Fusszeile — der Kopf ist SEO-Block, generiert |
+| `downloads/themen/*/` (Handout, Aufgabenserie, Teste-dich-selbst) | 64 | Titel, Kopf- und Fusszeile der Druckseiten |
+| `scripts/` | 44 | `build-seo.py` 9 (Tabelle `SEITEN`, WebSite-Name Z. 370/379), `gen_stubs.py` 2, 10 × `build_apkg_*.py` je 3, `build-suchindex.py` 1, `check_identifier_collisions.py` 1, `abgleich.py` 1 |
+| `.quellen/formelsammlung/` | 40 | `formelsammlung.tex` 7, 8 Prüfdateien je 4, `README-Build.md` |
+| Wurzel | ≈ 50 | `rechtliches` 7, `index` 6, `feedback` 5, `glossar`/`formelsammlung`/`clips`/`leitprogramme` je 4, `nav.js` 3, `sonnenfinsternis-12-08-2026.html` 2, je 1: `suche.js`, `suchindex.js`, `style.css`, `physiklib.js`, `robots.txt`, `favicon.svg` (`aria-label`), `LICENSE` |
+| Doku | 6 | `README`, `CLAUDE`, `SETUP`, `STYLEGUIDE`, `HOWTO-neue-themenseite` je 1 |
+
+Dazu nennt Physik **Mathe noch beim alten Namen**: `nav.js:141` Linktext «TALS
+Mathematik» (→ «Mathe begreifbar»), `README.md:5`, `style.css:4` (Kommentar).
+
+**Vorgehen**
+
+1. Ersetzen per Skript, nicht von Hand. Vorher `grep -rIc "TALS Physik"` als Liste
+   sichern, nachher dieselbe Zählung: 0 ausserhalb der Ausnahmen unten.
+2. **«TALS» bleibt, wo es die Zielgruppe benennt, nicht die Marke** (wie in Mathe):
+   - Fusszeile: nur der fette Name wechselt, «— Lernmaterial für die Berufsmaturität
+     Technik, Architektur, Life Sciences» bleibt.
+   - OG-Bild: die Vorspann-Zeile `ew` («… — TALS») bleibt.
+   - `feedback.html`: `<title>Kontakt &amp; Feedback — TALS</title>` und die
+     Projekterkennung «TALS-Mathe UND TALS-Physik» bleiben (gemeinsame Seite beider Fächer).
+   - Der Repo-Name **«TALS-Physik»** (54 Stellen, mit Bindestrich) bleibt.
+3. **Nicht umbenennen:**
+   - **Anki-Decks.** Die 10 `downloads/themen/*/ankideck.apkg` heissen «TALS Physik::…».
+     `build_apkg_*.py` erzeugt die GUIDs mit `random.seed(hash(deck_name))`: Ein neuer
+     Deckname gibt beim Import **Dubletten statt Umbenennung**, und `hash()` ist pro
+     Prozess gesalzen. Decknamen in den Skripten und die `.apkg` bleiben — genau wie in
+     Mathe. (Docstrings dürfen mit.)
+   - **Geteiltes Werkzeug:** `build-suchindex.py` (Kopfkommentar im Suchindex),
+     `check_identifier_collisions.py`, `abgleich.py`. Diese Dateien werden mit Mathe
+     abgeglichen; eine einseitige Änderung erzeugt Drift. `abgleich.py` Z. 130 zitiert
+     ausserdem den Abschnittstitel «Schwesterprojekt TALS Physik» aus *Mathes*
+     `CLAUDE.md` — der ist kein Physik-Text. Soll das Werkzeug mit, gehört es als
+     Eintrag in die Warteschlange `OFFEN` in `abgleich.py`.
+   - Historie (Changelog-Einträge, Protokolle): dokumentiert den damaligen Stand.
+4. **Formelsammlung-Quelle:** Die `.tex`-Dateien nur umbenennen, wenn das PDF danach nach
+   `README-Build.md` neu gebaut wird — sonst weichen Quelle und ausgeliefertes PDF
+   voneinander ab. Beides oder nichts; Entscheidung im Commit nennen. (Nebenbei:
+   `formelsammlung.tex` Z. 5 und 54 zeigen noch auf `go4exercises.github.io/TALS-Physik`.)
+5. **Generiertes neu erzeugen:** `scripts/build-seo.py` (danach `--check` sauber, zwei
+   Durchgänge wie in Mathe), `scripts/build-suchindex.py`. `gen_stubs.py` mitziehen,
+   damit neue Seiten den neuen Namen bekommen.
+6. **Bilder:** `.claude/tools/build-bilder.mjs` — `<h1>Physik <span>…</span></h1>` wird
+   `<h1>Physik begreifbar <span>…</span></h1>`; Mathe brauchte dafür
+   `h1 span { display:block }`, weil der Name länger ist. `og-bild.png`,
+   `favicon-32.png`, `apple-touch-icon.png` neu bauen (einmalig Netz für die Schriften)
+   und **das Bild ansehen**.
+7. **Prüfen:** Pre-Flight über alle Themenseiten; Zählung aus Schritt 1; Druckseite und
+   Startseite im Browser bei 1280 und 360 px (längerer Name im Kopf). Nach dem Push
+   (Cache 600 s): `<title>`, `og:site_name`, JSON-LD `name` und `og-bild.png` live.
+8. Committen, **nicht pushen**. Wenn es live ist, in Mathe `DOMAIN-UMZUG.md` Phase 5
+   abhaken (Mathe-Sitzung) und diesen Abschnitt nach «Erledigt» verschieben.
 
 ## Erledigt / portiert
 
