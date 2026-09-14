@@ -1457,6 +1457,32 @@ function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='mid
   beschriftung(ctx, s, x, y, { align, baseline: base, halo: true, W, H });
   ctx.restore();
 }
+// Beschriftung mit tiefgestelltem Index (M mit I, U, a …): für Buchstaben gibt
+// es keine Unicode-Tiefstellung. Muster wie qName (g4-3): Index kleiner und
+// mit tieferer Grundlinie, beide mit Halo, als Ganzes ausgerichtet und in den
+// Canvas geklemmt.
+function txtIndex(ctx, x, y, basis, index, color = C.tinte, size = 14, align = 'center', weight = '600') {
+  ctx.save();
+  ctx.fillStyle = color;
+  const fB = schriftPx(ctx, size), fI = schriftPx(ctx, size * 0.72);
+  const fontB = `${weight} ${fB}px "Source Sans 3", sans-serif`;
+  const fontI = `${weight} ${fI}px "Source Sans 3", sans-serif`;
+  ctx.font = fontB; const wB = ctx.measureText(basis).width + fB * 0.04;
+  ctx.font = fontI; const wI = ctx.measureText(index).width;
+  const wG = wB + wI;
+  let W, H;
+  const tf = ctx.getTransform ? ctx.getTransform() : null;
+  if (tf && tf.b === 0 && tf.c === 0 && tf.e === 0 && tf.f === 0 && tf.a > 0 && tf.d > 0) {
+    W = ctx.canvas.width / tf.a; H = ctx.canvas.height / tf.d;
+  }
+  let x0 = align === 'left' ? x : align === 'right' ? x - wG : x - wG / 2;
+  if (W !== undefined) x0 = Math.max(2, Math.min(W - 2 - wG, x0));
+  ctx.font = fontB;
+  beschriftung(ctx, basis, x0, y, { align: 'left', baseline: 'middle', halo: true, W, H });
+  ctx.font = fontI;
+  beschriftung(ctx, index, x0 + wB, y + fB * 0.3, { align: 'left', baseline: 'middle', halo: true, W, H });
+  ctx.restore();
+}
 function dot(ctx, p, color = C.blau, r = 5) {
   ctx.save();
   ctx.fillStyle = color;
@@ -2148,6 +2174,39 @@ const elemValEl = document.getElementById('elem-val');
 const elemErkl = document.getElementById('elem-erkl');
 
 const elemPts = [[110, 350], [450, 350], [260, 110]];
+// Zugbereich wie bei Animation 1 (allgBegrenzen): Ecken im Feld, Umlaufsinn
+// bleibt, kein Winkel unter ELEM_MIN_WINKEL, keine Seite unter ELEM_MIN_SEITE.
+// Flachere Dreiecke liessen keinen Platz für die Winkelbeschriftungen
+// (α/2, β/2, γ/2 und M_I überdeckten sich) — nachgerechnet an 6000 zufälligen
+// Lagen für 294 px und 634 px Breite.
+const ELEM_RAND = 28, ELEM_MIN_WINKEL = 20 * Math.PI / 180, ELEM_MIN_SEITE = 160;
+let elemLetzte = elemPts.map(p => p.slice());
+function elemPruefen(P) {
+  const [A, B, C0] = P;
+  const kreuz = (B[0]-A[0]) * (C0[1]-A[1]) - (B[1]-A[1]) * (C0[0]-A[0]);
+  const s = [dist(B, C0), dist(C0, A), dist(A, B)];
+  if (kreuz >= 0 || Math.min(...s) < ELEM_MIN_SEITE - 1e-6) return false;
+  const wMin = Math.min(angleAt(A, B, C0), angleAt(B, C0, A), angleAt(C0, A, B));
+  return wMin >= ELEM_MIN_WINKEL - 1e-9;
+}
+function elemBegrenzen(W, H) {
+  const box = p => [clamp(p[0], ELEM_RAND, W - ELEM_RAND), clamp(p[1], ELEM_RAND, H - ELEM_RAND)];
+  const ziel = elemPts.map(box);
+  let neu = ziel;
+  const alt = elemLetzte.map(box);
+  if (!elemPruefen(ziel) && elemPruefen(alt)) {
+    // Von der letzten gültigen Lage zum Ziel so weit gehen, wie es gültig bleibt
+    const zwischen = m => alt.map((p, i) => [lerp(p[0], ziel[i][0], m), lerp(p[1], ziel[i][1], m)]);
+    let lo = 0, hi = 1;
+    for (let n = 0; n < 20; n++) {
+      const m = (lo + hi) / 2;
+      if (elemPruefen(zwischen(m))) lo = m; else hi = m;
+    }
+    neu = zwischen(lo);
+  }
+  neu.forEach((p, i) => { elemPts[i][0] = p[0]; elemPts[i][1] = p[1]; });
+  elemLetzte = elemPts.map(p => p.slice());
+}
 
 elemTabs.querySelectorAll('.chip').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -2161,7 +2220,25 @@ elemTogKreis.addEventListener('change', drawElem);
 
 function drawElem() {
   const { ctx, W, H, cv } = initCvSkaliert('cv-elem', 480, 480);
+  elemBegrenzen(W, H);
   const [A, B, C0] = elemPts;
+  // Kästen der bereits gesetzten Beschriftungen [x0, y0, x1, y1] — die
+  // Beschriftung des Schnittpunkts weicht ihnen aus (siehe unten)
+  const belegt = [];
+  const kastenMitte = (s, x, y) => {
+    ctx.save();
+    const fs = schriftPx(ctx, 14);
+    ctx.font = `700 ${fs}px "Source Sans 3", sans-serif`;
+    const m = ctx.measureText(s);
+    ctx.restore();
+    const bh = isFinite(m.actualBoundingBoxAscent) ? m.actualBoundingBoxAscent + m.actualBoundingBoxDescent : fs * 0.9;
+    return [x - m.width / 2, y - bh / 2, x + m.width / 2, y + bh / 2];
+  };
+  // grosszügiger Kasten für «M» mit Index, zentriert an P (wie txtIndex)
+  const kastenIndex = P => {
+    const fs = schriftPx(ctx, 14);
+    return [P[0] - fs * 0.7, P[1] - fs * 0.5, P[0] + fs * 0.7, P[1] + fs * 0.7];
+  };
   fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
 
   let schnittpunkt = null;
@@ -2220,7 +2297,7 @@ function drawElem() {
     kreisMitte = MU;
     kreisRadius = dist(MU, A);
     punktName = 'Umkreismittelpunkt M<sub>U</sub>';
-    beschreibung = 'Die drei Mittelsenkrechten schneiden sich im Umkreismittelpunkt M_U — er liegt von allen Eckpunkten gleich weit entfernt.';
+    beschreibung = 'Die drei Mittelsenkrechten schneiden sich im Umkreismittelpunkt M<sub>U</sub> — er liegt von allen Eckpunkten gleich weit entfernt.';
     // Mittelpunkte markieren mit Beschriftung M_a (Mitte von BC, gegenüber A), M_b (Mitte CA), M_c (Mitte AB)
     dot(ctx, mAB, C.tinte2, 4);
     dot(ctx, mBC, C.tinte2, 4);
@@ -2235,9 +2312,9 @@ function drawElem() {
     const lMc = lbl_offset(mAB);   // Mitte von c = AB → M_c
     const lMa = lbl_offset(mBC);   // Mitte von a = BC → M_a
     const lMb = lbl_offset(mCA);   // Mitte von b = CA → M_b
-    txt(ctx, lMc[0], lMc[1], 'M_c', C.tinte2, 14, 'center', 'middle', '700');
-    txt(ctx, lMa[0], lMa[1], 'M_a', C.tinte2, 14, 'center', 'middle', '700');
-    txt(ctx, lMb[0], lMb[1], 'M_b', C.tinte2, 14, 'center', 'middle', '700');
+    txtIndex(ctx, lMc[0], lMc[1], 'M', 'c', C.tinte2, 14, 'center', '700'); belegt.push(kastenIndex(lMc));
+    txtIndex(ctx, lMa[0], lMa[1], 'M', 'a', C.tinte2, 14, 'center', '700'); belegt.push(kastenIndex(lMa));
+    txtIndex(ctx, lMb[0], lMb[1], 'M', 'b', C.tinte2, 14, 'center', '700'); belegt.push(kastenIndex(lMb));
     // Rechtwinkel-Marker AN JEDEM Seitenmittelpunkt (Mittelsenkrechte ⊥ Seite)
     // Wir geben drawSmallRect die richtigen Richtungen: ein Schenkel entlang der Seite,
     // der andere entlang der Mittelsenkrechten — Ecke an mAB
@@ -2288,9 +2365,9 @@ function drawElem() {
     const lMc_s = lbl_offset_s(mAB);
     const lMa_s = lbl_offset_s(mBC);
     const lMb_s = lbl_offset_s(mCA);
-    txt(ctx, lMc_s[0], lMc_s[1], 'M_c', C.tinte2, 14, 'center', 'middle', '700');
-    txt(ctx, lMa_s[0], lMa_s[1], 'M_a', C.tinte2, 14, 'center', 'middle', '700');
-    txt(ctx, lMb_s[0], lMb_s[1], 'M_b', C.tinte2, 14, 'center', 'middle', '700');
+    txtIndex(ctx, lMc_s[0], lMc_s[1], 'M', 'c', C.tinte2, 14, 'center', '700'); belegt.push(kastenIndex(lMc_s));
+    txtIndex(ctx, lMa_s[0], lMa_s[1], 'M', 'a', C.tinte2, 14, 'center', '700'); belegt.push(kastenIndex(lMa_s));
+    txtIndex(ctx, lMb_s[0], lMb_s[1], 'M', 'b', C.tinte2, 14, 'center', '700'); belegt.push(kastenIndex(lMb_s));
   }
   else if (elemTyp === 'winkelhalbierende') {
     // Winkelhalbierende: durch jede Ecke, halbiert den Innenwinkel.
@@ -2329,30 +2406,54 @@ function drawElem() {
     const hEndB = [B[0]  + dirHalfB[0]*80, B[1]  + dirHalfB[1]*80];
     const hEndC = [C0[0] + dirHalfC[0]*80, C0[1] + dirHalfC[1]*80];
 
+    // Beschriftung der beiden Hälften: je in der Mitte ihres Bogens, aber mit
+    // gemessenem Mindestabstand. Die beiden Mitten liegen um θ/2 auseinander,
+    // ihr Abstand ist r · 2 sin(θ/4) — bei spitzen Winkeln wird r darum grösser
+    // (bis HALB_RMAX), reicht das nicht, rücken beide quer zur Halbierenden
+    // auseinander. Nachgerechnet für 634 px und 294 px Breite, C über das Feld.
+    const HALB_R0 = 36, HALB_RMAX = 60;
+    const halbLabels = (P, s, midA1, midA2) => {
+      ctx.save();
+      const fs = schriftPx(ctx, 14);
+      ctx.font = `700 ${fs}px "Source Sans 3", sans-serif`;
+      const m = ctx.measureText(s);
+      ctx.restore();
+      const bw = m.width;
+      const bh = (isFinite(m.actualBoundingBoxAscent) && isFinite(m.actualBoundingBoxDescent))
+               ? m.actualBoundingBoxAscent + m.actualBoundingBoxDescent : fs * 0.9;
+      const luecke = fs * 0.45;
+      const u1 = [Math.cos(midA1), Math.sin(midA1)];
+      const u2 = [Math.cos(midA2), Math.sin(midA2)];
+      const dv = [u1[0] - u2[0], u1[1] - u2[1]];
+      const dl = Math.hypot(dv[0], dv[1]) || 1e-9;
+      const n = [dv[0] / dl, dv[1] / dl];      // quer zur Halbierenden, zu Label 1 hin
+      // nötiger Mittenabstand in Richtung n, damit sich die Kästen nicht berühren
+      const noetig = Math.min(
+        Math.abs(n[0]) > 1e-9 ? (bw + luecke) / Math.abs(n[0]) : Infinity,
+        Math.abs(n[1]) > 1e-9 ? (bh + luecke) / Math.abs(n[1]) : Infinity);
+      const r = Math.min(HALB_RMAX, Math.max(HALB_R0, noetig / dl));
+      const quer = Math.max(0, (noetig - r * dl) / 2);
+      const l1 = [P[0] + u1[0] * r + n[0] * quer, P[1] + u1[1] * r + n[1] * quer];
+      const l2 = [P[0] + u2[0] * r - n[0] * quer, P[1] + u2[1] * r - n[1] * quer];
+      txt(ctx, l1[0], l1[1], s, C.orange, 14, 'center', 'middle', '700');
+      txt(ctx, l2[0], l2[1], s, C.orange, 14, 'center', 'middle', '700');
+      belegt.push(kastenMitte(s, l1[0], l1[1]), kastenMitte(s, l2[0], l2[1]));
+    };
+
     // Bei A: Bogen zwischen AB und Halbierender + Bogen zwischen AC und Halbierender
     const [midAh1] = halfArc(A, B,  hEndA, C.orange);
     const [midAh2] = halfArc(A, hEndA, C0,  C.orange);
-    // Symbol "α/2" einmalig in der Mitte des inneren Bogens (zwischen AB und Halbierender)
-    const lblA = arcLabelPos(A, midAh1, 22 + 14);
-    txt(ctx, lblA[0], lblA[1], 'α/2', C.orange, 14, 'center', 'middle', '700');
-    const lblA2 = arcLabelPos(A, midAh2, 22 + 14);
-    txt(ctx, lblA2[0], lblA2[1], 'α/2', C.orange, 14, 'center', 'middle', '700');
+    halbLabels(A, 'α/2', midAh1, midAh2);
 
     // Bei B: zwischen BA und Halbierender + zwischen BC und Halbierender
     const [midBh1] = halfArc(B, A,  hEndB, C.orange);
     const [midBh2] = halfArc(B, hEndB, C0, C.orange);
-    const lblB1 = arcLabelPos(B, midBh1, 22 + 14);
-    const lblB2 = arcLabelPos(B, midBh2, 22 + 14);
-    txt(ctx, lblB1[0], lblB1[1], 'β/2', C.orange, 14, 'center', 'middle', '700');
-    txt(ctx, lblB2[0], lblB2[1], 'β/2', C.orange, 14, 'center', 'middle', '700');
+    halbLabels(B, 'β/2', midBh1, midBh2);
 
     // Bei C: zwischen CA und Halbierender + zwischen CB und Halbierender
     const [midCh1] = halfArc(C0, A,  hEndC, C.orange);
     const [midCh2] = halfArc(C0, hEndC, B,  C.orange);
-    const lblC1 = arcLabelPos(C0, midCh1, 22 + 14);
-    const lblC2 = arcLabelPos(C0, midCh2, 22 + 14);
-    txt(ctx, lblC1[0], lblC1[1], 'γ/2', C.orange, 14, 'center', 'middle', '700');
-    txt(ctx, lblC2[0], lblC2[1], 'γ/2', C.orange, 14, 'center', 'middle', '700');
+    halbLabels(C0, 'γ/2', midCh1, midCh2);
 
     schnittpunkt = MI;
     kreisMitte = MI;
@@ -2361,13 +2462,27 @@ function drawElem() {
       kreisRadius = dist(MI, f_AB);
     }
     punktName = 'Inkreismittelpunkt M<sub>I</sub>';
-    beschreibung = 'Die drei Winkelhalbierenden schneiden sich im Inkreismittelpunkt M_I. Jede halbiert den Innenwinkel in zwei gleich grosse Teile (α/2, β/2, γ/2).';
+    beschreibung = 'Die drei Winkelhalbierenden schneiden sich im Inkreismittelpunkt M<sub>I</sub>. Jede halbiert den Innenwinkel in zwei gleich grosse Teile (α/2, β/2, γ/2).';
   }
 
-  // Eckpunkte
-  txt(ctx, A[0]-16, A[1]+16, 'A', C.tinte, 14, 'center', 'middle', '700');
-  txt(ctx, B[0]+16, B[1]+16, 'B', C.tinte, 14, 'center', 'middle', '700');
-  txt(ctx, C0[0],   C0[1]-18, 'C', C.tinte, 14, 'center', 'middle', '700');
+  // Eckpunkte: Buchstabe entgegen der Winkelhalbierenden nach aussen — dort
+  // liegt nie eine Winkelbeschriftung, auch wenn das Dreieck gedreht wird.
+  // Abstand: Punktradius + Luft + Ausdehnung des Kastens in dieser Richtung.
+  const eckLabel = (P, Q, R, s) => {
+    const e1 = [Q[0]-P[0], Q[1]-P[1]], e2 = [R[0]-P[0], R[1]-P[1]];
+    const l1 = Math.hypot(e1[0], e1[1]) || 1, l2 = Math.hypot(e2[0], e2[1]) || 1;
+    let u = [-(e1[0]/l1 + e2[0]/l2), -(e1[1]/l1 + e2[1]/l2)];
+    const lu = Math.hypot(u[0], u[1]) || 1;
+    u = [u[0]/lu, u[1]/lu];
+    const k0 = kastenMitte(s, 0, 0);
+    const d = 10 + Math.abs(u[0]) * (k0[2] - k0[0]) / 2 + Math.abs(u[1]) * (k0[3] - k0[1]) / 2;
+    const x = P[0] + u[0] * d, y = P[1] + u[1] * d;
+    txt(ctx, x, y, s, C.tinte, 14, 'center', 'middle', '700');
+    belegt.push(kastenMitte(s, x, y));
+  };
+  eckLabel(A, B, C0, 'A');
+  eckLabel(B, C0, A, 'B');
+  eckLabel(C0, A, B, 'C');
   dot(ctx, A, C.blau, 5);
   dot(ctx, B, C.blau, 5);
   dot(ctx, C0, C.blau, 5);
@@ -2375,11 +2490,32 @@ function drawElem() {
   // Schnittpunkt einzeichnen
   if (schnittpunkt) {
     dot(ctx, schnittpunkt, C.rot, 6);
-    const labelTxt = elemTyp === 'hoehen' ? 'H'
-                    : elemTyp === 'mittelsenkrechten' ? 'M_U'
-                    : elemTyp === 'seitenhalbierende' ? 'S'
-                    : 'M_I';
-    txt(ctx, schnittpunkt[0]+12, schnittpunkt[1]-12, labelTxt, C.rot, 14, 'left', 'middle', '700');
+    // Beschriftung rechts oberhalb; liegt dort schon eine andere (beim
+    // stumpfen Winkel rückt M_I nahe an die Ecke und ihre Winkelbeschriftung),
+    // weicht sie aus: links oben, rechts/links unten, seitlich, darüber, darunter.
+    const fs = schriftPx(ctx, 14);
+    const breite = fs * 1.4;   // «M» mit Index bzw. «H», «S» grosszügig; Index reicht unter die Mitte
+    const kand = [[12, -12, 'left'], [-12, -12, 'right'], [12, 14, 'left'], [-12, 14, 'right'],
+                  [14, 0, 'left'], [-14, 0, 'right'], [0, -22, 'center'], [0, 22, 'center']];
+    const ueberdeckung = ([dx, dy, al]) => {
+      const x0 = schnittpunkt[0] + dx - (al === 'left' ? 0 : al === 'right' ? breite : breite / 2);
+      const k = [x0 - 3, schnittpunkt[1] + dy - fs * 0.45 - 3, x0 + breite + 3, schnittpunkt[1] + dy + fs * 0.65 + 3];
+      // wie beschriftung(): am Rand in den Canvas geschoben
+      const vx = Math.max(0, -k[0]) - Math.max(0, k[2] - W), vy = Math.max(0, -k[1]) - Math.max(0, k[3] - H);
+      k[0] += vx; k[2] += vx; k[1] += vy; k[3] += vy;
+      return belegt.reduce((summe, b) =>
+        summe + Math.max(0, Math.min(k[2], b[2]) - Math.max(k[0], b[0])) * Math.max(0, Math.min(k[3], b[3]) - Math.max(k[1], b[1])), 0);
+    };
+    let wahl = kand[0], wahlU = ueberdeckung(kand[0]);
+    for (const kd of kand.slice(1)) {
+      if (wahlU === 0) break;
+      const u = ueberdeckung(kd);
+      if (u < wahlU) { wahl = kd; wahlU = u; }
+    }
+    const sx = schnittpunkt[0] + wahl[0], sy = schnittpunkt[1] + wahl[1], al = wahl[2];
+    if (elemTyp === 'hoehen')                 txt(ctx, sx, sy, 'H', C.rot, 14, al, 'middle', '700');
+    else if (elemTyp === 'seitenhalbierende') txt(ctx, sx, sy, 'S', C.rot, 14, al, 'middle', '700');
+    else txtIndex(ctx, sx, sy, 'M', elemTyp === 'mittelsenkrechten' ? 'U' : 'I', C.rot, 14, al, '700');
   }
 
   // Um- bzw. Inkreis
@@ -2396,7 +2532,7 @@ function drawElem() {
   // Legende
   elemNameEl.innerHTML = punktName;
   elemValEl.textContent = '';
-  elemErkl.textContent = beschreibung;
+  elemErkl.innerHTML = beschreibung;   // feste Texte, M<sub>U</sub> / M<sub>I</sub>
 }
 
 function drawSmallRect(ctx, P, F, towards) {
@@ -3025,6 +3161,15 @@ function drawPyth() {
     C0[1] = 2 * midAB[1] - C0[1];
     if (C0[1] > midAB[1] - 5) C0[1] = midAB[1] - 5;
   }
+  // Zugbereich auf dem Thaleskreis begrenzen: Winkel von C (von der Mitte aus,
+  // 0° bei B, 180° bei A) zwischen PYTH_PHI_MIN und 180° − PYTH_PHI_MIN. Weiter
+  // aussen lagen F auf a²/b² bzw. auf h, c auf p · q und a auf a². Nachgerechnet
+  // (Beschriftungskästen im Browser, Schieber in 0.05-Schritten): frei ab
+  // 27.5° bei 294 px Breite bzw. 21.5° bei 634 px.
+  const PYTH_PHI_MIN = 28 * Math.PI / 180;
+  const phiC = clamp(Math.atan2(midAB[1] - C0[1], C0[0] - midAB[0]), PYTH_PHI_MIN, Math.PI - PYTH_PHI_MIN);
+  C0[0] = midAB[0] + rAB * Math.cos(phiC);
+  C0[1] = midAB[1] - rAB * Math.sin(phiC);
 
   const c = dist(A, B);
   const a = dist(C0, B);
@@ -3302,8 +3447,19 @@ function drawPythKath(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
     // Um c/4 zur Hypotenuse hin versetzt: in der Mitte stuende «p · c» bzw.
     // «q · c» auf der Beschriftung «c²» (beide Mitten liegen in Tiefe c/2).
     const zurHyp = [-out[0] * c / 4, -out[1] * c / 4];
-    txt(ctx, aPolyMid[0] + zurHyp[0], aPolyMid[1] + zurHyp[1], 'p · c', COL_A_LINE, 14, 'center', 'middle', '700');
-    txt(ctx, bPolyMid[0] + zurHyp[0], bPolyMid[1] + zurHyp[1], 'q · c', COL_B_LINE, 14, 'center', 'middle', '700');
+    // Während der Scherung liegt die Mitte zeitweise knapp unter der Hypotenuse
+    // und die Beschriftung glitt über «p» bzw. «q» (Tiefe 12): darum nie weniger
+    // tief als unter diese Beschriftungen hinaus.
+    const minTiefe = 18 + schriftPx(ctx, 14);
+    const unterPQ = P => {
+      const tiefe = (P[0] - A[0]) * out[0] + (P[1] - A[1]) * out[1];
+      const plus = Math.max(0, minTiefe - tiefe);
+      return [P[0] + out[0] * plus, P[1] + out[1] * plus];
+    };
+    const lPc = unterPQ([aPolyMid[0] + zurHyp[0], aPolyMid[1] + zurHyp[1]]);
+    const lQc = unterPQ([bPolyMid[0] + zurHyp[0], bPolyMid[1] + zurHyp[1]]);
+    txt(ctx, lPc[0], lPc[1], 'p · c', COL_A_LINE, 14, 'center', 'middle', '700');
+    txt(ctx, lQc[0], lQc[1], 'q · c', COL_B_LINE, 14, 'center', 'middle', '700');
   }
 
   // Dreieck + Beschriftungen oben drauf
@@ -3323,7 +3479,7 @@ function drawPythKath(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
   txt(ctx, lA_side[0], lA_side[1], 'a', C.tinte, 14, 'center', 'middle', '700');
   const lB_side = sLab(A, C0, B, 12);
   txt(ctx, lB_side[0], lB_side[1], 'b', C.tinte, 14, 'center', 'middle', '700');
-  txt(ctx, (A[0]+B[0])/2, A[1]-12, 'c', C.tinte, 14, 'center', 'middle', '700');
+  txt(ctx, cLabelX(ctx, A, B, F, p, q), A[1]-12, 'c', C.tinte, 14, 'center', 'middle', '700');
 
   // F-Punkt + p, q
   seg(ctx, C0, F, C.tinte2, 1);
@@ -3552,8 +3708,8 @@ function drawHoehe(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
   };
   const lA = sLab(B, C0, A); txt(ctx, lA[0], lA[1], 'a', C.tinte2, 14, 'center', 'middle', '600');
   const lB = sLab(A, C0, B); txt(ctx, lB[0], lB[1], 'b', C.tinte2, 14, 'center', 'middle', '600');
-  // c-Beschriftung auf Hypotenuse, abseits von p, q
-  const cLabX = A[0] + (B[0]-A[0]) * 0.5;   // mittig
+  // c-Beschriftung auf Hypotenuse, abseits von p, q und vom Höhenfusspunkt F
+  const cLabX = cLabelX(ctx, A, B, F, p, q);
   txt(ctx, cLabX, A[1]-10, 'c', C.tinte, 14, 'center', 'middle', '700');
   // F-Label
   txt(ctx, F[0]-8, F[1]-10, 'F', C.tinte2, 14, 'center', 'middle', '700');
@@ -3561,8 +3717,9 @@ function drawHoehe(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
   const labelY = F[1] + rectHeight + 14;
   txt(ctx, (A[0]+F[0])/2, labelY, 'q', C.tinte2, 14, 'center', 'middle', '700');
   txt(ctx, (F[0]+B[0])/2, labelY, 'p', C.tinte2, 14, 'center', 'middle', '700');
-  // h-Beschriftung neben der Höhe
-  txt(ctx, (C0[0]+F[0])/2 - 12, (C0[1]+F[1])/2, 'h', C.orange, 14, 'center', 'middle', '700');
+  // h-Beschriftung neben der Höhe, auf der vom h²-Quadrat abgewandten Seite
+  // (sonst lag sie bei C weit links auf der Beschriftung «b»)
+  txt(ctx, (C0[0]+F[0])/2 - hOut[0]*12, (C0[1]+F[1])/2 - hOut[1]*12, 'h', C.orange, 14, 'center', 'middle', '700');
 
   // C als Drag-Handle
   dot(ctx, C0, C.blau, 7);
@@ -3591,6 +3748,19 @@ function drawHoehe(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
     <div class="legende-zeile"><span class="lab">q</span><span class="val">${(q/10).toFixed(2)} cm</span></div>
     <div class="legende-zeile" style="border-top:1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab" style="color:${C.orange}">h²</span><span class="val" style="color:${C.orange}">${(h*h/100).toFixed(2)} cm²</span></div>
     <div class="legende-zeile"><span class="lab" style="color:${C.gruen}">p · q</span><span class="val" style="color:${C.gruen}">${(p*q/100).toFixed(2)} cm²</span></div>`;
+}
+
+// x-Position der Beschriftung «c» (beide Tabs der Satzgruppe): mittig auf der
+// Hypotenuse, ausser F liegt näher als D an der Mitte — dann um D neben F, auf
+// der Seite der längeren Hälfte (dort liegt im Höhensatz auch nicht das
+// h²-Quadrat). Bei der symmetrischen Lage lagen «F» und «c» sonst aufeinander.
+// Nachgerechnet über den ganzen Thaleskreis: Lücke zu «F» min. 11 px (634 px
+// Breite) bzw. 14 logische px (294 px), auch zum Rechtwinkel-Zeichen bei F.
+function cLabelX(ctx, A, B, F, p, q) {
+  const mitte = (A[0] + B[0]) / 2;
+  const D = schriftPx(ctx, 14) + 12;
+  if (Math.abs(F[0] - mitte) >= D) return mitte;
+  return p >= q ? F[0] + D : F[0] - D;
 }
 
 function drawQuadOnSeg(ctx, P, Q, fill, stroke, label) {

@@ -1400,6 +1400,78 @@ function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='mid
   beschriftung(ctx, s, x, y, { align, baseline: base, halo: true, W, H });
   ctx.restore();
 }
+/* ── Freie Lage für Beschriftungen ─────────────────────────────
+ * Bei Winkeln nahe 0°, 90°, 180°, 270° schrumpfen Strecken auf null. Eine fest
+ * neben die Streckenmitte gesetzte Beschriftung lag dann auf einer anderen
+ * Beschriftung oder auf der Strecke selbst. lageFrei() prüft Kandidaten der
+ * Reihe nach und nimmt die erste Lage ohne Treffer. Die erste Lage ist jeweils
+ * die bisherige, das Standardbild bleibt so unverändert.
+ * Hindernisse: {k:[x0,y0,x1,y1]} Kasten · {a:[x,y], b:[x,y], w} Strecke ·
+ * {c:[x,y], r, w, von, bis} Bogen in Mathe-Winkeln (ohne von/bis: Vollkreis). */
+function txtKasten(ctx, s, x, y, font, align = 'center', base = 'middle') {
+  ctx.save();
+  ctx.font = font; ctx.textAlign = align; ctx.textBaseline = base;
+  const m = ctx.measureText(s);
+  ctx.restore();
+  return [x - m.actualBoundingBoxLeft, y - m.actualBoundingBoxAscent,
+          x + m.actualBoundingBoxRight, y + m.actualBoundingBoxDescent];
+}
+function kastenTrifft(k, h, pad) {
+  if (h.k) return k[0] < h.k[2] + pad && h.k[0] < k[2] + pad && k[1] < h.k[3] + pad && h.k[1] < k[3] + pad;
+  const e = (h.w || 1) / 2 + pad;
+  const drin = (x, y) => x > k[0] - e && x < k[2] + e && y > k[1] - e && y < k[3] + e;
+  if (h.a) {
+    const n = Math.max(1, Math.ceil(Math.hypot(h.b[0] - h.a[0], h.b[1] - h.a[1]) / 2));
+    for (let i = 0; i <= n; i++) {
+      if (drin(h.a[0] + (h.b[0] - h.a[0]) * i / n, h.a[1] + (h.b[1] - h.a[1]) * i / n)) return true;
+    }
+    return false;
+  }
+  const von = h.von === undefined ? 0 : h.von, bis = h.bis === undefined ? 2 * Math.PI : h.bis;
+  const n = Math.max(2, Math.ceil(Math.abs(bis - von) * h.r / 2));
+  for (let i = 0; i <= n; i++) {
+    const t = von + (bis - von) * i / n;
+    if (drin(h.c[0] + h.r * Math.cos(t), h.c[1] - h.r * Math.sin(t))) return true;
+  }
+  return false;
+}
+// kand: [[x, y, align, base], …] — gewählter Kasten kommt zu den Hindernissen.
+function lageFrei(ctx, s, font, kand, hind, W, H, pad = 3) {
+  for (const [x, y, align = 'center', base = 'middle'] of kand) {
+    const k = txtKasten(ctx, s, x, y, font, align, base);
+    if (k[0] >= 1 && k[1] >= 1 && k[2] <= W - 1 && k[3] <= H - 1 &&
+        !hind.some(h => kastenTrifft(k, h, pad))) {
+      hind.push({ k });
+      return { x, y, align, base, k };
+    }
+  }
+  const [x, y, align = 'center', base = 'middle'] = kand[0];
+  const k = txtKasten(ctx, s, x, y, font, align, base);
+  hind.push({ k });
+  return { x, y, align, base, k, notfall: true };
+}
+// Richtung der Winkelbeschriftung im Abstand rho: die Bogenmitte, ausser sie liegt
+// näher als rund 12 px an einem Schenkel oder an einer Richtung aus meiden (Achsen),
+// oder pruef(t) meldet einen Treffer. Dann die nächste freie Richtung, zuerst
+// innerhalb des Bogens, sonst knapp daneben.
+function winkelRichtung(von, bis, rho, meiden = [], pruef = null) {
+  const minW = Math.asin(Math.min(1, 12 / rho));
+  const strahlen = [von, bis, ...(meiden || [])];
+  const ab = (a, b) => { const d = (((a - b) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI); return Math.min(d, 2 * Math.PI - d); };
+  const frei = t => strahlen.every(s => ab(t, s) >= minW - 1e-9) && (!pruef || pruef(t));
+  const mid = (von + bis) / 2;
+  if (frei(mid)) return mid;
+  const lo = Math.min(von, bis), hi = Math.max(von, bis);
+  let aussen = null;
+  for (let g = 1; g <= 180; g++) {
+    for (const t of [mid + g * Math.PI / 180, mid - g * Math.PI / 180]) {
+      if (!frei(t)) continue;
+      if (t >= lo && t <= hi) return t;
+      if (aussen === null) aussen = t;
+    }
+  }
+  return aussen === null ? mid : aussen;
+}
 function seg(ctx, p1, p2, color, lw = 2) {
   ctx.save();
   ctx.strokeStyle = color;
@@ -1461,7 +1533,7 @@ function rightAngleMarker(ctx, vert, p1, p2, size, color) {
   ctx.stroke();
   ctx.restore();
 }
-function drawAngleArc(ctx, vert, radius, fromRadMath, toRadMath, color, label) {
+function drawAngleArc(ctx, vert, radius, fromRadMath, toRadMath, color, label, meiden, hind) {
   // Math-Konvention: 0=rechts, ccw positiv. Canvas-y geht runter → also clockwise auf Canvas
   // canvas.arc(x, y, r, start, end, anticlockwise) — wir spiegeln die Winkel
   ctx.save();
@@ -1472,11 +1544,17 @@ function drawAngleArc(ctx, vert, radius, fromRadMath, toRadMath, color, label) {
   ctx.stroke();
   ctx.restore();
   if (label) {
-    const midRad = (fromRadMath + toRadMath) / 2;
-    const lx = vert[0] + Math.cos(midRad) * (radius + 14);
-    const ly = vert[1] - Math.sin(midRad) * (radius + 14);
+    // Bei kleinem Winkel lag die Beschriftung sonst auf dem Schenkel (winkelRichtung)
+    const F13 = '600 13px "Source Sans 3", sans-serif', rho = radius + 14;
+    const kastenBei = t => txtKasten(ctx, label, vert[0] + Math.cos(t) * rho, vert[1] - Math.sin(t) * rho, F13);
+    const pruef = hind ? t => { const k = kastenBei(t); return !hind.some(h => kastenTrifft(k, h, 2)); } : null;
+    const midRad = winkelRichtung(fromRadMath, toRadMath, rho, meiden, pruef);
+    const lx = vert[0] + Math.cos(midRad) * rho;
+    const ly = vert[1] - Math.sin(midRad) * rho;
     txt(ctx, lx, ly, label, color, 13);
+    return { k: kastenBei(midRad) };
   }
+  return null;
 }
 
 // Bogenmass-Label als Bruch von π
@@ -1573,22 +1651,82 @@ function drawSinCos() {
   seg(ctx, [cx, cy], [Qx, Qy], C.gruen, 3);
 
   fillTriangle(ctx, [cx, cy], [Qx, Qy], [Px, Py], BLAU_FILL, null);
-  // „r = 1" nach der Dreiecksflaeche: davor lag es unter der Fuellung.
-  txt(ctx, radMid[0] + nx, radMid[1] + ny, 'r = 1', C.tinte2, 12);
   rightAngleMarker(ctx, [Qx, Qy], [cx, cy], [Px, Py], 8, C.tinte2);
-  drawAngleArc(ctx, [cx, cy], 28, 0, phiR, C.lila, 'φ');
+  const ACHSEN = [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2];
+  // φ nicht auf die rote Sinus-Strecke (nahe 90° und 270° rückt sie an den Bogen)
+  const phiK = drawAngleArc(ctx, [cx, cy], 28, 0, phiR, C.lila, 'φ', ACHSEN, [{ a: [Qx, Qy], b: [Px, Py], w: 3 }]);
 
   dot(ctx, [Px, Py], C.blau, 5);
   const off_dx = Math.cos(phiR), off_dy = -Math.sin(phiR);
-  txt(ctx, Px + off_dx*14, Py + off_dy*14, `P = (cos φ, sin φ)`, C.blau, 12);
   dot(ctx, [Qx, Qy], C.tinte2, 3);
 
-  const sinMid = [Qx, (Qy + Py) / 2];
+  // Streckenbeschriftungen frei setzen (lageFrei): bei 0°, 90°, 180°, 270° lagen
+  // «sin φ», «cos φ» und «r = 1» sonst auf P, O, dem Bogen oder aneinander
+  // («r = 1sin φ»). Erste Lage ist jeweils die bisherige.
+  const F12 = '600 12px "Source Sans 3", sans-serif';
+  const hind = [
+    { a: [cx, cy], b: [Px, Py], w: 2 }, { a: [Qx, Qy], b: [Px, Py], w: 3 }, { a: [cx, cy], b: [Qx, Qy], w: 3 },
+    { c: [cx, cy], r: R, w: 1.5 }, { c: [cx, cy], r: 28, w: 1.6, von: 0, bis: phiR },
+    { k: [Px - 5, Py - 5, Px + 5, Py + 5] }, { k: [Qx - 3, Qy - 3, Qx + 3, Qy + 3] }
+  ];
+  const fest = [
+    phiK,
+    { k: txtKasten(ctx, 'O', cx - 12, cy + 14, '600 13px "Source Sans 3", sans-serif') },
+    { k: txtKasten(ctx, '1', cx + R, cy + 14, '600 11px "Source Sans 3", sans-serif') },
+    { k: txtKasten(ctx, '1', cx - 14, cy - R, '600 11px "Source Sans 3", sans-serif') },
+    { k: txtKasten(ctx, 'x', cx + R + 32, cy + 14, '600 13px "Source Sans 3", sans-serif', 'left') },
+    { k: txtKasten(ctx, 'y', cx + 14, cy - R - 30, '600 13px "Source Sans 3", sans-serif', 'left') }
+  ];
+  // «P = (cos φ, sin φ)» bleibt, solange es Punkt P und die festen Beschriftungen
+  // frei lässt (Linien kreuzt es auch bisher). Bei 0° und 180° lag es auf P und
+  // «1»: dann neben P ausweichen, ohne Linien und Kreis zu treffen.
+  const PTXT = 'P = (cos φ, sin φ)';
+  let pL = lageFrei(ctx, PTXT, F12, [[Px + off_dx*14, Py + off_dy*14]],
+    [{ c: [Px, Py], r: 2, w: 4 }, ...fest], W, H, 1);
+  hind.push(...fest);
+  if (pL.notfall) {
+    const cs = Math.cos(phiR) >= 0 ? 1 : -1, aus = cs > 0 ? 'left' : 'right', ein = cs > 0 ? 'right' : 'left';
+    pL = lageFrei(ctx, PTXT, F12, [
+      [Px + cs * 10, Py, aus], [Px + cs * 10, Py - 14, aus], [Px + cs * 10, Py + 14, aus],
+      [Px - cs * 10, Py - 14, ein], [Px - cs * 10, Py + 14, ein], [Px, Py - 16], [Px, Py + 16]
+    ], hind, W, H);
+  } else {
+    hind.push({ k: pL.k });
+  }
+  txt(ctx, pL.x, pL.y, PTXT, C.blau, 12, pL.align);
   const sinSign = Math.cos(phiR) >= 0 ? 1 : -1;
-  txt(ctx, sinMid[0] + sinSign * 18, sinMid[1], 'sin φ', C.rot, 12, sinSign>0?'left':'right');
-  const cosMid = [(cx + Qx) / 2, Qy];
   const cosSign = Math.sin(phiR) >= 0 ? 1 : -1;
-  txt(ctx, cosMid[0], cosMid[1] + cosSign * 14, 'cos φ', C.gruen, 12);
+  const mSin = Math.abs(Py - cy) / 2, mCos = Math.abs(Qx - cx) / 2;
+  const sinKand = [];
+  for (const seite of [sinSign, -sinSign]) {
+    for (const d of [mSin, Math.max(mSin, 20), Math.max(mSin, 36), Math.max(mSin, 52)]) {
+      sinKand.push([Qx + seite * 18, cy - cosSign * d, seite > 0 ? 'left' : 'right']);
+    }
+  }
+  // zuletzt jenseits der x-Achse neben Q (dort ist bei kurzer Strecke noch Platz)
+  for (const seite of [sinSign, -sinSign]) {
+    for (const d of [14, 28]) sinKand.push([Qx + seite * 18, cy + cosSign * d, seite > 0 ? 'left' : 'right']);
+  }
+  const sinL = lageFrei(ctx, 'sin φ', F12, sinKand, hind, W, H);
+  txt(ctx, sinL.x, sinL.y, 'sin φ', C.rot, 12, sinL.align);
+  const cosKand = [];
+  for (const seite of [cosSign, -cosSign]) {
+    for (const d of [mCos, Math.max(mCos, 30), Math.max(mCos, 50), Math.max(mCos, 70)]) {
+      cosKand.push([cx + sinSign * d, cy + seite * 14, 'center']);
+    }
+  }
+  const cosL = lageFrei(ctx, 'cos φ', F12, cosKand, hind, W, H);
+  txt(ctx, cosL.x, cosL.y, 'cos φ', C.gruen, 12);
+  const rKand = [[.5, 1], [.5, -1], [.7, 1], [.7, -1], [.3, 1], [.3, -1], [.5, 2], [.5, -2]]
+    .map(([f, g]) => [cx + dx * f + nx * g, cy + dy * f + ny * g, 'center']);
+  // Gegen den Radius selbst nicht prüfen: die Lagen stehen senkrecht 14 px davon
+  // ab, und die bisherige Lage liegt knapp (≈ 1 px) daneben.
+  // «r = 1» nicht in Lesedistanz neben «sin φ», «cos φ» oder P («r = 1 cos φ»):
+  // deren Kästen für diese Prüfung seitlich um 8 px verbreitert.
+  const breit = L => ({ k: [L.k[0] - 8, L.k[1], L.k[2] + 8, L.k[3]] });
+  const rL = lageFrei(ctx, 'r = 1', F12, rKand,
+    [...hind.slice(1), breit(sinL), breit(cosL), breit(pL)], W, H);   // hind[0] = Radius
+  txt(ctx, rL.x, rL.y, 'r = 1', C.tinte2, 12);
 
   const cosVal = Math.cos(phiR);
   const sinVal = Math.sin(phiR);
@@ -1703,22 +1841,80 @@ function drawTan() {
 
   fillTriangle(ctx, [cx, cy], [Qx, Qy], [Px, Py], BLAU_FILL, null);
   rightAngleMarker(ctx, [Qx, Qy], [cx, cy], [Px, Py], 8, C.tinte2);
-  drawAngleArc(ctx, [cx, cy], 24, 0, phiR, C.lila, 'φ');
+  // φ nicht auf die rote Sinus-Strecke (nahe 90° und 270° rückt sie an den Bogen)
+  const phiK = drawAngleArc(ctx, [cx, cy], 24, 0, phiR, C.lila, 'φ', [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2],
+    [{ a: [Qx, Qy], b: [Px, Py], w: 2.5 }]);
 
   dot(ctx, [Px, Py], C.blau, 5);
-  txt(ctx, Px + Math.cos(phiR)*14, Py - Math.sin(phiR)*14 - 4, 'P', C.blau, 13);
 
-  if (tanDefiniert && Math.abs(R * tanVal) <= tanMaxShow) {
+  // Beschriftungen frei setzen (lageFrei): nahe 0° und 180° ist die Tangens-
+  // Strecke kurz, «S = (1, tan φ)», «tan φ» und «P» lagen dann aufeinander;
+  // nahe 90° lag «P» auf «y».
+  const mitS = tanDefiniert && Math.abs(R * tanVal) <= tanMaxShow;
+  const SSF = px => `600 ${px}px "Source Sans 3", sans-serif`;
+  const sPunkt = { k: [Sx - 5, Sy - 5, Sx + 5, Sy + 5] };
+  const hind = [
+    { a: [cx, cy], b: [Px, Py], w: 2 }, { a: [Qx, Qy], b: [Px, Py], w: 2.5 }, { a: [cx, cy], b: [Qx, Qy], w: 2.5 },
+    { a: [tanX, cy - R - 30], b: [tanX, cy + R + 30], w: 1.4 },
+    { c: [cx, cy], r: R, w: 1.5 }, { c: [cx, cy], r: 24, w: 1.6, von: 0, bis: phiR },
+    { k: [Px - 5, Py - 5, Px + 5, Py + 5] }, phiK,
+    { k: txtKasten(ctx, 'O', cx - 12, cy + 14, SSF(13)) },
+    { k: txtKasten(ctx, 'x', cx + R + 72, cy + 14, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'Tangente x=1', tanX + 6, cy + R + 22, SSF(10), 'left') }
+  ];
+  // Für «P» zählen nur Tangente, Tangens-Strecke, S und die Beschriftungen daneben
+  // (Radius und Sinus-Strecke berührt es auch in der bisherigen Lage).
+  const pFest = [
+    hind[3],
+    { k: txtKasten(ctx, 'R', tanX + 6, cy + 14, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'r=1', cx + R - 10, cy + 14, SSF(10)) },
+    { k: txtKasten(ctx, 'y', cx + 14, cy - R - 30, SSF(13), 'left') }
+  ];
+  hind.push(pFest[1], pFest[2], pFest[3]);
+  if (mitS) {
+    pFest.push({ a: [tanX, cy], b: [Sx, Sy], w: 3.5 }, sPunkt,
+               { a: cosVal > 0 ? [Px, Py] : [cx, cy], b: [Sx, Sy], w: 1.2 });   // Verlängerung OP
+    hind.push(pFest[4], pFest[6]);
+  }
+  let pL = lageFrei(ctx, 'P', SSF(13), [[Px + Math.cos(phiR)*14, Py - Math.sin(phiR)*14 - 4]], pFest, W, H, 1);
+  if (pL.notfall) {                                    // rund um P ausweichen
+    const ring = [];
+    for (const rr of [14, 22]) {
+      for (const da of [0, 45, -45, 90, -90, 135, -135, 180]) {
+        const a = phiR + da * Math.PI / 180;
+        ring.push([Px + Math.cos(a) * rr, Py - Math.sin(a) * rr]);
+      }
+    }
+    pL = lageFrei(ctx, 'P', SSF(13), ring, mitS ? [...hind, sPunkt] : hind.slice(), W, H);
+  }
+  hind.push({ k: pL.k });
+  txt(ctx, pL.x, pL.y, 'P', C.blau, 13);
+
+  if (mitS) {
     dot(ctx, [Sx, Sy], C.orange, 5);
-    txt(ctx, tanX + 6, Sy - 8, `S = (1, tan φ)`, C.orange, 11, 'left');
     seg(ctx, [tanX, cy], [Sx, Sy], C.orange, 3.5);
-    const tanMidY = (cy + Sy) / 2;
-    txt(ctx, tanX + 6, tanMidY, 'tan φ', C.orange, 12, 'left');
+    const sKand = [];
+    for (const y of [Sy - 8, Sy - 22, Sy + 10, Sy + 24, Sy - 36, Sy + 38]) sKand.push([tanX + 6, y, 'left'], [tanX + 16, y, 'left']);
+    const sL = lageFrei(ctx, 'S = (1, tan φ)', SSF(11), sKand, hind, W, H);
+    hind.push(sPunkt);   // erst jetzt: «S = (1, tan φ)» stand schon immer dicht neben S
+    txt(ctx, sL.x, sL.y, `S = (1, tan φ)`, C.orange, 11, 'left');
+    const mTan = Math.abs(Sy - cy) / 2, tRicht = Sy <= cy ? -1 : 1;
+    const tanKand = [];
+    for (const [xx, al] of [[tanX + 6, 'left'], [tanX - 6, 'right']]) {
+      for (const d of [mTan, Math.max(mTan, 14), Math.max(mTan, 28), Math.max(mTan, 42), Math.max(mTan, 56)]) {
+        tanKand.push([xx, cy + tRicht * d, al]);
+      }
+    }
+    for (const d of [14, 28]) tanKand.push([tanX + 6, cy - tRicht * d, 'left']);   // jenseits der x-Achse
+    const tL = lageFrei(ctx, 'tan φ', SSF(12), tanKand, hind, W, H);
+    txt(ctx, tL.x, tL.y, 'tan φ', C.orange, 12, tL.align);
   } else if (!tanDefiniert) {
     txt(ctx, tanX + 6, cy - R, 'tan φ nicht', C.rot, 11, 'left');
     txt(ctx, tanX + 6, cy - R + 14, 'definiert!', C.rot, 11, 'left');
   } else {
-    const yPos = tanVal > 0 ? cy - R - 10 : cy + R + 10;
+    // Unten zwei Zeilen höher als bisher: bei cy + R + 10 lag «(zu gross für Bild)»
+    // auf «Tangente x=1».
+    const yPos = tanVal > 0 ? cy - R - 10 : cy + R - 8;
     txt(ctx, tanX + 6, yPos, `tan φ = ${zahlFix(tanVal, 2)}`, C.orange, 11, 'left');
     txt(ctx, tanX + 6, yPos + 14, '(zu gross für Bild)', C.tinte2, 10, 'left');
   }
@@ -1830,11 +2026,6 @@ function drawBez() {
     seg(ctx, [cx, cy], [Qx, Qy], C.gruen, 3);
     seg(ctx, [tanX, cy], [Sx, Sy], C.orange, 3);
 
-    txt(ctx, Qx + 16, (Qy + Py) / 2, 'sin φ', C.rot, 11, 'left');
-    txt(ctx, (cx + Qx) / 2, Qy + 14, 'cos φ', C.gruen, 11);
-    txt(ctx, tanX + 6, (cy + Sy) / 2, 'tan φ', C.orange, 11, 'left');
-    txt(ctx, (cx + tanX) / 2, cy - 12, 'OR = 1', C.tinte2, 11);
-
     dashedSeg(ctx, [Px, Py], [Sx, Sy_raw], C.tinte2, 1.2, [4,3]);
 
     formelBez.innerHTML = '\\(\\dfrac{\\tan\\varphi}{1} = \\dfrac{\\sin\\varphi}{\\cos\\varphi} \\quad\\Rightarrow\\quad \\tan\\varphi = \\dfrac{\\sin\\varphi}{\\cos\\varphi}\\)';
@@ -1848,27 +2039,110 @@ function drawBez() {
     seg(ctx, [Qx, Qy], [Px, Py], C.rot, 3);
     seg(ctx, [cx, cy], [Qx, Qy], C.gruen, 3);
 
-    const radMid = [(cx+Px)/2, (cy+Py)/2];
-    const dx = Px-cx, dy = Py-cy;
-    const len = Math.hypot(dx, dy) || 1;
-    const nx = -dy/len * 14, ny = dx/len * 14;
-    txt(ctx, radMid[0] + nx, radMid[1] + ny, 'OP = 1', C.orange, 12);
-    txt(ctx, Qx + 16, (Qy + Py)/2, 'sin φ', C.rot, 11, 'left');
-    txt(ctx, (cx + Qx)/2, Qy + 14, 'cos φ', C.gruen, 11);
 
     formelBez.innerHTML = '\\(\\sin^2\\varphi + \\cos^2\\varphi = 1\\)';
     erklBez.innerHTML = `<strong>Pythagoras am Dreieck OQP:</strong> Hypotenuse \\(OP\\) hat Länge 1 (Radius), Katheten sind \\(\\sin\\varphi\\) und \\(\\cos\\varphi\\). Probe für \\(\\varphi = ${phiD}°\\): \\(${(Math.sin(phiR)**2).toFixed(3)} + ${(Math.cos(phiR)**2).toFixed(3)} = ${(Math.sin(phiR)**2 + Math.cos(phiR)**2).toFixed(3)}\\).`;
   }
 
-  drawAngleArc(ctx, [cx, cy], 26, 0, phiR, C.lila, 'φ');
+  // Beschriftungen frei setzen (lageFrei): bei kleinen Winkeln fallen P und S,
+  // Q und R zusammen, «S»/«P» und «tan φ»/«sin φ» lagen dann übereinander.
+  // Erste Lage ist jeweils die bisherige.
+  const aehnl = bezMode === 'aehnl', mitS = aehnl && Sy === Sy_raw;
+  const SSF = px => `600 ${px}px "Source Sans 3", sans-serif`;
+  const hind = [
+    { a: [cx, cy], b: [Qx, Qy], w: 3 }, { a: [Qx, Qy], b: [Px, Py], w: 3 }, { a: [cx, cy], b: [Px, Py], w: 3 },
+    { c: [cx, cy], r: R, w: 1.5 }, { a: [tanX, cy - R - 30], b: [tanX, cy + R + 20], w: 1.4 },
+    { k: [Px - 5, Py - 5, Px + 5, Py + 5] }, { k: [Qx - 3, Qy - 3, Qx + 3, Qy + 3] },
+    { k: txtKasten(ctx, 'O', cx - 12, cy + 14, SSF(13)) },
+    { k: txtKasten(ctx, 'R', tanX + 6, cy + 14, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'x', cx + R + 72, cy + 14, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'y', cx + 14, cy - R - 30, SSF(13), 'left') },
+    { k: [Qx - 9, Qy - 9, Qx + 1, Qy + 1] }                               // rechter Winkel bei Q
+  ];
+  if (aehnl) {
+    hind.push({ a: [cx, cy], b: [tanX, cy], w: 2.4 }, { a: [tanX, cy], b: [Sx, Sy], w: 3 },
+              { a: [cx, cy], b: [Sx, Sy], w: 2.4 }, { a: [Px, Py], b: [Sx, Sy_raw], w: 1.2 });
+    hind.push({ k: [tanX - 9, Math.min(cy, Sy) - 9, tanX + 1, cy + 1] });  // rechter Winkel bei R
+    if (mitS) hind.push({ k: [Sx - 5, Sy - 5, Sx + 5, Sy + 5] });
+  }
+  const phiK = drawAngleArc(ctx, [cx, cy], 26, 0, phiR, C.lila, 'φ', [0, Math.PI / 2], [hind[1]]);
+  hind.push(phiK, { c: [cx, cy], r: 26, w: 1.6, von: 0, bis: phiR });
 
   dot(ctx, [Px, Py], C.blau, 5);
-  txt(ctx, Px + Math.cos(phiR)*14, Py - Math.sin(phiR)*14 - 4, 'P', C.blau, 13);
   dot(ctx, [Qx, Qy], C.tinte2, 3);
-  txt(ctx, Qx, Qy + 14, 'Q', C.tinte2, 11);
-  if (bezMode === 'aehnl' && Sy === Sy_raw) {
-    dot(ctx, [Sx, Sy], C.lila, 5);
-    txt(ctx, tanX + 6, Sy - 4, 'S', C.lila, 13, 'left');
+  if (mitS) dot(ctx, [Sx, Sy], C.lila, 5);
+
+  // Punkte: bisherige Lage, solange sie Tangente, S/P und die festen Beschriftungen
+  // frei lässt (Radius und Kreis berührt sie auch bisher), sonst rund um den Punkt.
+  const ring = (x, y, a0) => {
+    const l = [];
+    for (const rr of [14, 22]) {
+      for (const da of [0, 45, -45, 90, -90, 135, -135, 180]) {
+        const a = a0 + da * Math.PI / 180;
+        l.push([x + Math.cos(a) * rr, y - Math.sin(a) * rr]);
+      }
+    }
+    return l;
+  };
+  const punkt = (name, px, orig, fest, kand) => {
+    let L = lageFrei(ctx, name, SSF(px), [orig], fest.slice(), W, H, 1);
+    if (L.notfall) L = lageFrei(ctx, name, SSF(px), kand, hind.slice(), W, H);
+    hind.push({ k: L.k });
+    return L;
+  };
+  const fest = () => hind.filter(h => h.k).concat([hind[4]]);
+  // «P» liegt bei «Ähnlichkeit» sonst auf der Verlängerung OS und der Hilfslinie zu S
+  const pL = punkt('P', 13, [Px + Math.cos(phiR)*14, Py - Math.sin(phiR)*14 - 4],
+    aehnl ? [...fest(), hind[14], hind[15]] : fest(), ring(Px, Py, phiR));
+  txt(ctx, pL.x, pL.y, 'P', C.blau, 13);
+  if (mitS) {
+    const sL = punkt('S', 13, [tanX + 6, Sy - 4, 'left'], fest(),
+      [Sy - 4, Sy - 18, Sy - 32, Sy + 12].flatMap(y => [[tanX + 6, y, 'left'], [tanX + 18, y, 'left']]));
+    txt(ctx, sL.x, sL.y, 'S', C.lila, 13, sL.align);
+  }
+  const qL = punkt('Q', 11, [Qx, Qy + 14], [...fest(), hind[3]],
+    [[Qx, Qy + 14], [Qx - 8, Qy + 14, 'right'], [Qx, Qy + 26], [Qx - 8, Qy + 26, 'right']]);
+  txt(ctx, qL.x, qL.y, 'Q', C.tinte2, 11, qL.align);
+
+  // Strecken
+  const breit = L => ({ k: [L.k[0] - 8, L.k[1], L.k[2] + 8, L.k[3]] });
+  const mSin = (Qy - Py) / 2;
+  if (aehnl) {
+    const mTan = (cy - Sy) / 2, tanK = [];
+    for (const d of [mTan, 14, 28, 42, 56, 70]) tanK.push([tanX + 6, cy - Math.max(mTan, d), 'left']);
+    for (const d of [mTan, 14, 28, 42]) tanK.push([tanX + 40, cy - Math.max(mTan, d), 'left']);
+    const tL = lageFrei(ctx, 'tan φ', SSF(11), tanK, hind, W, H);
+    txt(ctx, tL.x, tL.y, 'tan φ', C.orange, 11, 'left');
+  }
+  const sinK = [];
+  for (const d of [mSin, 14, 28, 42, 56]) sinK.push([Qx + 16, cy - Math.max(mSin, d), 'left']);
+  // nahe am Kreis: dichter an die Strecke bzw. tiefer, wo der Kreis weiter aussen liegt
+  sinK.push([Qx + 8, cy - mSin, 'left'], [Qx + 16, cy - 0.6 * mSin, 'left'], [Qx + 8, cy - 0.6 * mSin, 'left']);
+  for (const d of [mSin, 14, 28, 42, 56]) sinK.push([Qx - 16, cy - Math.max(mSin, d), 'right']);
+  for (const d of [14, 28, 42, 56]) sinK.push([Qx + 50, cy - Math.max(mSin, d), 'left']);
+  const siL = lageFrei(ctx, 'sin φ', SSF(11), sinK, hind, W, H);
+  txt(ctx, siL.x, siL.y, 'sin φ', C.rot, 11, siL.align);
+  const cosK = [];
+  for (const dx of [0, -20, -40, -60]) cosK.push([(cx + Qx) / 2 + dx, Qy + 14], [(cx + Qx) / 2 + dx, Qy + 28]);
+  const coL = lageFrei(ctx, 'cos φ', SSF(11), cosK, hind, W, H);
+  txt(ctx, coL.x, coL.y, 'cos φ', C.gruen, 11);
+  if (aehnl) {
+    // bisherige Lage berührte den rechten Winkel bei Q: dann auf derselben Höhe
+    // zwischen Q und R, sonst unter die Achse, zuletzt höher
+    const orK = [[(cx + tanX) / 2, cy - 12]];
+    for (const y of [cy - 12, cy + 14, cy - 24, cy - 36, cy + 28]) {
+      for (const f of [0.75, 0.3, 0.5, 0.65, 0.35, 0.85]) orK.push([cx + (tanX - cx) * f, y]);
+    }
+    const oL = lageFrei(ctx, 'OR = 1', SSF(11), orK, [...hind, breit(coL), breit(siL)], W, H);
+    txt(ctx, oL.x, oL.y, 'OR = 1', C.tinte2, 11);
+  } else {
+    const dx = Px - cx, dy = Py - cy, len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len * 14, ny = dx / len * 14;
+    const opK = [[.5, 1], [.5, -1], [.7, 1], [.7, -1], [.3, 1], [.3, -1], [.5, 2], [.5, -2]]
+      .map(([f, g]) => [cx + dx * f + nx * g, cy + dy * f + ny * g]);
+    const oL = lageFrei(ctx, 'OP = 1', SSF(12), opK, [...hind.slice(0, 2), ...hind.slice(3), breit(coL), breit(siL),
+      { a: [cx, cy], b: [Px, Py], w: 0 }], W, H);   // Radius schmal: die Lagen stehen senkrecht 14 px davon ab
+    txt(ctx, oL.x, oL.y, 'OP = 1', C.orange, 12);
   }
 
   legBezSin.textContent  = Math.sin(phiR).toFixed(3);
@@ -2075,8 +2349,14 @@ function drawSymm() {
   txt(ctx, A[0] + (cosA >= 0 ? 20 : -20), A[1] - 12, 'A', C.gruen, 14);
   txt(ctx, B[0] + (cosB >= 0 ? 20 : -20), B[1] + (sinB >= 0 ? -12 : 14), 'B', C.orange, 14);
   // Winkelbögen
-  drawAngleArc(ctx, [cx, cy], 42, 0, ar, C.gruen, 'α');
-  drawAngleArc(ctx, [cx, cy], 62, 0, br, C.orange, 'β');
+  // Achsen und den anderen Radius meiden: bei α = 5° lag «α» sonst auf Schenkel und
+  // x-Achse, «β» auf der Spiegelachse oder dem grünen Radius
+  const ACHSEN = [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2];
+  const hilfs = [[A, [A[0], cy]], [A, [cx, A[1]]], [B, [B[0], cy]], [B, [cx, B[1]]]]
+    .map(([a, b]) => ({ a, b, w: 1.5 }));                                  // gestrichelte Koordinaten
+  drawAngleArc(ctx, [cx, cy], 42, 0, ar, C.gruen, 'α', [...ACHSEN, br], hilfs);
+  // β-Bogen bei 70 statt 62: dazwischen lag «α» (Radius 56) auf dem β-Bogen
+  drawAngleArc(ctx, [cx, cy], 70, 0, br, C.orange, 'β', [...ACHSEN, ar], hilfs);
   // Kopfzeile
   txt(ctx, 12, 18, `α = ${alpha}°`, C.gruen, 14, 'left');
   txt(ctx, W - 12, 18, `β = ${beta}°`, C.orange, 14, 'right');
@@ -2216,18 +2496,21 @@ function drawSchiff() {
   const cx = W / 2;
   const cy = H / 2;
   const R = Math.min(W, H) * 0.36;
+  // «W» und «O» mit mindestens 12 px Abstand zum Rand (bei 360 px lagen sie
+  // halb ausserhalb); die Ost-West-Achse endet dann 8 px vor dem Buchstaben.
+  const xW = Math.max(cx - R * 1.30 - 6, 12), xO = Math.min(cx + R * 1.30 + 6, W - 12);
 
   // Achsen (Ost = +x, Nord = +y nach oben → Bildschirm-y umdrehen)
   ctx.strokeStyle = '#a89b85';
   ctx.lineWidth = 1.5;
   ctx.setLineDash([4, 3]);
   ctx.beginPath();
-  ctx.moveTo(cx - R * 1.25, cy);
-  ctx.lineTo(cx + R * 1.25, cy);
+  ctx.moveTo(Math.max(cx - R * 1.25, xW + 8), cy);
+  ctx.lineTo(Math.min(cx + R * 1.25, xO - 8), cy);
   ctx.stroke();
   ctx.beginPath();
   ctx.moveTo(cx, cy - R * 1.25);
-  ctx.lineTo(cx, cy + R * 1.25);
+  ctx.lineTo(cx, cy + R * 1.18 - 12);   // endet über «S» (lief bisher hindurch)
   ctx.stroke();
   ctx.setLineDash([]);
 
@@ -2238,8 +2521,8 @@ function drawSchiff() {
   ctx.fillText('N', cx, cy - R * 1.30);
   // Etwas naeher an den Kreis: am alten Platz lag das S auf der Quadranten-Zeile.
   ctx.fillText('S', cx, cy + R * 1.18 + 4);
-  ctx.fillText('O', cx + R * 1.30 + 6, cy + 4);
-  ctx.fillText('W', cx - R * 1.30 - 6, cy + 4);
+  ctx.fillText('O', xO, cy + 4);
+  ctx.fillText('W', xW, cy + 4);
 
   // Bahn-Kreis
   ctx.strokeStyle = '#1a4f8a';
@@ -2263,9 +2546,7 @@ function drawSchiff() {
   ctx.moveTo(cx - 12, cy);
   ctx.lineTo(cx + 12, cy);
   ctx.stroke();
-  ctx.fillStyle = '#1c1a17';
-  ctx.font = '13px sans-serif';
-  ctx.fillText('Boje', cx, cy + 26);
+  // Beschriftung «Boje» folgt unten mit den Versatz-Labels (lageFrei)
 
   // Schiff-Position
   const sx = cx + Math.cos(phiRad) * R;
@@ -2308,8 +2589,14 @@ function drawSchiff() {
   ctx.beginPath();
   ctx.arc(cx, cy, 22, 0, -phiRad, true); // Bildschirm-Mathematik-Winkel
   ctx.stroke();
-  // Winkel-Label
-  const midRad = phiRad / 2;
+  // Winkel-Label — bei kleinem φ nicht auf der Ost-Strecke (winkelRichtung)
+  // … und nicht auf die gestrichelten Hilfslinien zum Schiff
+  const phiHind = [{ a: [sx, sy], b: [sx, cy], w: 2 }, { a: [sx, sy], b: [cx, sy], w: 2 },
+                   { a: [cx, cy], b: [sx, cy], w: 4 }, { a: [cx, cy], b: [cx, sy], w: 4 }];
+  const midRad = winkelRichtung(0, phiRad, 38, [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2], t => {
+    const k = txtKasten(ctx, 'φ', cx + Math.cos(t) * 38, cy - Math.sin(t) * 38 + 4, 'bold 13px monospace', 'center', 'alphabetic');
+    return !phiHind.some(h => kastenTrifft(k, h, 2));
+  });
   const lblX = cx + Math.cos(midRad) * 38;
   const lblY = cy - Math.sin(midRad) * 38;
   ctx.fillStyle = '#1a4f8a';
@@ -2352,19 +2639,66 @@ function drawSchiff() {
   ctx.stroke();
   ctx.restore();
 
-  // Versatz-Labels neben den dicken Strecken
+  // Versatz-Labels neben den dicken Strecken, dazu «Boje».
+  // Ist eine Strecke kurz (Winkel nahe 0°, 90°, 180°, 270°), hat die Zahl neben
+  // der Streckenmitte keinen Platz: sie lag dann auf «Boje», dem Kreuz, auf φ
+  // oder auf der eigenen Strecke; «Boje» selbst lag bei Südkurs auf der grünen
+  // Strecke. lageFrei() nimmt die erste freie Lage, die erste ist die bisherige.
   const ostVersatz = Math.cos(phiRad);
   const nordVersatz = Math.sin(phiRad);
+  const ostTxt = zahlFix(ostVersatz, 2, '−', '+');
+  const nordTxt = zahlFix(nordVersatz, 2, '−', '+');
+  const MONO = 'bold 13px monospace', SANS = '13px sans-serif';
+  const phiK = txtKasten(ctx, 'φ', lblX, lblY + 4, MONO, 'center', 'alphabetic');
+  const hind = [
+    { a: [cx, cy], b: [sx, cy], w: 4 }, { a: [cx, cy], b: [cx, sy], w: 4 },   // Versatz-Strecken
+    { a: [sx, sy], b: [sx, cy], w: 2 }, { a: [sx, sy], b: [cx, sy], w: 2 },   // Hilfslinien
+    { c: [cx, cy], r: R, w: 2 }, { c: [cx, cy], r: 22, w: 2, von: 0, bis: phiRad },
+    { k: [cx - 12, cy - 12, cx + 12, cy + 12] },                              // Boje mit Kreuz
+    { k: [sx - 16, sy - 16, sx + 16, sy + 16] },                              // Schiff
+    // φ mit Abstand: eine Zahl direkt daneben liest sich sonst als «φ 0.00»
+    { k: [phiK[0] - 6, phiK[1] - 2, phiK[2] + 6, phiK[3] + 2] },
+    { k: txtKasten(ctx, 'N', cx, cy - R * 1.30, MONO, 'center', 'alphabetic') },
+    { k: txtKasten(ctx, 'S', cx, cy + R * 1.18 + 4, MONO, 'center', 'alphabetic') },
+    { k: txtKasten(ctx, 'O', xO, cy + 4, MONO, 'center', 'alphabetic') },
+    { k: txtKasten(ctx, 'W', xW, cy + 4, MONO, 'center', 'alphabetic') },
+    { k: [0, H - 26, W, H] },                                                 // Quadranten-Zeile
+    { a: [cx, cy - R * 1.25], b: [cx, cy + R * 1.25], w: 1.5 },               // Nord-Süd-Achse
+    { a: [cx - R * 1.25, cy], b: [cx + R * 1.25, cy], w: 1.5 }                // Ost-West-Achse
+  ];
+  // «Boje» neben die Nord-Süd-Achse (mittig lag es darauf): zuerst links unten,
+  // weil rechts unten in der Grundstellung der Ost-Versatz steht.
+  const boje = lageFrei(ctx, 'Boje', SANS,
+    [[cx - 8, cy + 26, 'right'], [cx + 8, cy + 26, 'left'], [cx - 8, cy + 36, 'right'],
+     [cx + 8, cy + 36, 'left'], [cx - 8, cy - 18, 'right'], [cx + 8, cy - 18, 'left']]
+      .map(l => [...l, 'alphabetic']), hind, W, H, 2);
+  // Ost-Versatz: unter bzw. über der Streckenmitte, sonst nach aussen geschoben
+  // (neben den Startpunkt), sonst auf die andere Seite der Boje.
+  const sO = ostVersatz >= 0 ? 1 : -1;
+  const mO = Math.abs(ostVersatz) * R / 2;
+  const hwO = txtKasten(ctx, ostTxt, 0, 0, MONO)[2] + 18;
+  const ostLagen = [];
+  for (const dx of [sO * mO, sO * Math.max(mO, hwO), -sO * hwO]) {
+    for (const y of [cy + 18, cy - 8, cy + 34, cy - 24]) ostLagen.push([cx + dx, y, 'center', 'alphabetic']);
+  }
+  const ost = lageFrei(ctx, ostTxt, MONO, ostLagen, hind, W, H, 2);
+  // Nord-Versatz: rechts bzw. links der Streckenmitte, sonst vom Startpunkt weg
+  // nach oben bzw. unten geschoben.
+  const sN = nordVersatz >= 0 ? 1 : -1;
+  const mN = Math.abs(nordVersatz) * R / 2;
+  const nordLagen = [];
+  for (const d of [mN, Math.max(mN, 22), Math.max(mN, 40), Math.max(mN, 58)]) {
+    nordLagen.push([cx + 8, cy - sN * d + 4, 'left', 'alphabetic'], [cx - 8, cy - sN * d + 4, 'right', 'alphabetic']);
+  }
+  const nord = lageFrei(ctx, nordTxt, MONO, nordLagen, hind, W, H, 2);
+  ctx.font = SANS;
+  ctx.fillStyle = '#1c1a17';
+  beschriftung(ctx, 'Boje', boje.x, boje.y, { align: boje.align, halo: true, bg: '#efeade', W, H });
+  ctx.font = MONO;
   ctx.fillStyle = '#b85c00';
-  ctx.font = 'bold 13px monospace';
-  ctx.textAlign = 'center';
-  const ostLblX = cx + Math.cos(phiRad) * R / 2;
-  // Tiefer gesetzt: auf Hoehe cy-8 kollidierte die Zahl mit dem Winkel-Label φ.
-  ctx.fillText(zahlFix(ostVersatz, 2, '−', '+'), ostLblX, cy + 18);
+  beschriftung(ctx, ostTxt, ost.x, ost.y, { align: ost.align, halo: true, bg: '#efeade', W, H });
   ctx.fillStyle = '#1f6b3a';
-  const nordLblY = cy - Math.sin(phiRad) * R / 2;
-  ctx.textAlign = 'left';
-  ctx.fillText(zahlFix(nordVersatz, 2, '−', '+'), cx + 8, nordLblY + 4);
+  beschriftung(ctx, nordTxt, nord.x, nord.y, { align: nord.align, halo: true, bg: '#efeade', W, H });
 
   // Quadranten-Anzeige unten — Achsenwinkel liegen auf keiner Quadranten-Fläche
   const pd = ((phiDeg % 360) + 360) % 360;

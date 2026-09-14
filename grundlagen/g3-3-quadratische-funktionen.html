@@ -1433,7 +1433,8 @@ function updateWS(){
     drawDot(ctx, cx, cy, x, y, '#1a4f8a', 7);
     ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace';
     const lx = x>7 ? cx(x)-70 : cx(x)+8;
-    beschriftung(ctx, `(${x} | ${fmtNum(y)})`, cx(x) + 11, cy(y) + 17, {align:'left', W, H});
+    // Im Scheitel nennt «S(4 | 5)» dieselben Koordinaten — keine zweite Beschriftung darunter
+    if(x !== WS.u) beschriftung(ctx, `(${x} | ${fmtNum(y)})`, cx(x) + 11, cy(y) + 17, {align:'left', W, H});
     // gestrichelte Linien
     ctx.strokeStyle='#1a4f8a55'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
@@ -1456,6 +1457,30 @@ document.getElementById('ws-x').addEventListener('input', updateWS);
 /* ══════════════════════════════════════════════════════════
    DREI DARSTELLUNGEN — Scheitelform mit Schiebereglern a, u, v
    ══════════════════════════════════════════════════════════ */
+// c = a·u² + v ist ein Vielfaches von 0.0625 und braucht bis zu 4 Nachkommastellen.
+// Exakt anzeigen (nachgestellte Nullen weg), damit D = b² − 4ac mit den
+// angezeigten Zahlen nachgerechnet werden kann.
+function fmtExakt(n){
+  if(Math.abs(n)<1e-9) return '0';
+  const r = parseFloat(n.toFixed(4));
+  return (r === 0 ? '0' : r.toString()).replace('-', '−');
+}
+function fmtExaktEin(n){ const t = fmtExakt(n); return t.startsWith('−') ? `(${t})` : t; }
+// «=» nur, wenn die auf 2 Stellen gerundete Anzeige den Wert exakt trifft, sonst «≈»
+function drGl(n){ return Math.abs(n - parseFloat(n.toFixed(2))) < 1e-9 ? '=' : '≈'; }
+
+// Allgemeine Form als Text: Koeffizient 1 entfällt («x», nicht «1·x»); bei a = 0
+// bleibt nur der Rest (hier stets die Konstante v, da dann auch b = 0 ist).
+function drAllgTerm(A, B, C){
+  let t = Math.abs(A) < 1e-9 ? '' : (A === 1 ? '' : A === -1 ? '−' : `${fmtNum(A)}·`) + 'x²';
+  const glied = (wert, betrag) => {
+    t += t ? (wert > 0 ? ` + ${betrag}` : ` − ${betrag}`) : (wert > 0 ? betrag : `−${betrag}`);
+  };
+  if(Math.abs(B) > 1e-9) glied(B, (Math.abs(B) === 1 ? '' : `${fmtNum(Math.abs(B))}·`) + 'x');
+  if(Math.abs(C) > 1e-9) glied(C, fmtExakt(Math.abs(C)));
+  return `f(x) = ${t || '0'}`;
+}
+
 function fmtKlammer(c){
   // Format (x − u) — bei u<0: (x + |u|), bei u=0: (x), bei u>0: (x − u)
   if(Math.abs(c)<1e-9) return 'x';
@@ -1471,16 +1496,19 @@ function updateDR(){
   document.getElementById('dr-uv').textContent = fmtNum(u);
   document.getElementById('dr-vv').textContent = fmtNum(v);
 
-  // Falls a=0 — keine quadratische Funktion
+  // Falls a = 0: f(x) = 0·(x − u)² + v = v — konstante Funktion, keine Parabel
   if(Math.abs(a) < 1e-9){
-    document.getElementById('dr-scheitel').textContent = `f(x) = 0  (kein quadratischer Term — a ≠ 0 erforderlich)`;
+    document.getElementById('dr-scheitel').textContent = `f(x) = ${fmtNum(v)}  (a = 0: keine Parabel)`;
     document.getElementById('dr-S').textContent = '—';
-    document.getElementById('dr-oeff').textContent = 'keine Parabel';
-    document.getElementById('dr-allg').textContent = `f(x) = ${fmtNum(v)}`;
+    document.getElementById('dr-oeff').textContent = 'keine Parabel (a = 0)';
+    document.getElementById('dr-allg').textContent = drAllgTerm(0, 0, v);
     document.getElementById('dr-c').textContent = `c = ${fmtNum(v)}`;
-    document.getElementById('dr-linfak').textContent = 'nicht definiert';
-    document.getElementById('dr-nst').textContent = '—';
-    document.getElementById('dr-nst-rechnung').textContent = 'a = 0 ⇒ keine quadratische Funktion';
+    document.getElementById('dr-linfak').textContent = 'nicht definiert (a = 0)';
+    const nullfkt = Math.abs(v) < 1e-9;
+    document.getElementById('dr-nst').textContent = nullfkt ? 'jedes x' : 'keine';
+    document.getElementById('dr-nst-rechnung').textContent = nullfkt
+      ? 'a = 0 ⇒ keine quadratische Funktion, die Mitternachtsformel gilt nicht.  f(x) = 0 für jedes x ⇒ jede Stelle ist Nullstelle'
+      : `a = 0 ⇒ keine quadratische Funktion, die Mitternachtsformel gilt nicht.  f(x) = ${fmtNum(v)} ist konstant und nie 0 ⇒ keine Nullstelle`;
     drawDR(); return;
   }
 
@@ -1494,91 +1522,186 @@ function updateDR(){
 
   /* ── Allgemeine Form: f(x) = a·x² − 2au·x + (au² + v) ── */
   const A = a, B = -2*a*u, C = a*u*u + v;
-  const aPolyStr = A===1 ? '' : A===-1 ? '−' : `${fmtNum(A)}·`;
-  let bStr = '';
-  if(Math.abs(B) > 1e-9){
-    const sign = B>0 ? '+' : '−';
-    const absB = Math.abs(B);
-    const bCoef = absB===1 ? '' : `${fmtNum(absB)}·`;
-    bStr = ` ${sign} ${bCoef}x`;
-  }
-  let cStr = '';
-  if(Math.abs(C) > 1e-9) cStr = C>0 ? ` + ${fmtNum(C)}` : ` − ${fmtNum(-C)}`;
-  document.getElementById('dr-allg').textContent = `f(x) = ${aPolyStr}x²${bStr}${cStr}`;
-  document.getElementById('dr-c').textContent = `c = ${fmtNum(C)}`;
+  document.getElementById('dr-allg').textContent = drAllgTerm(A, B, C);
+  document.getElementById('dr-c').textContent = `c = ${fmtExakt(C)}`;
 
   /* ── Linearfaktorform / Nullstellen ── */
   const ns = nullstellen(A, B, C);
   const D = ns.D;
   let nstText = '', nstRechnung = '';
   if(ns.n === 2){
-    const x1 = ns.x1, x2 = ns.x2;
+    // stets x₁ < x₂ — bei a < 0 liefert «−b − √D» sonst die grössere Nullstelle
+    const x1 = Math.min(ns.x1, ns.x2), x2 = Math.max(ns.x1, ns.x2);
     const aLF = A===1 ? '' : A===-1 ? '−' : `${fmtNum(A)}·`;
     const f1 = fmtKlammer(x1), f2 = fmtKlammer(x2);
-    document.getElementById('dr-linfak').textContent = `f(x) = ${aLF}(${f1})(${f2})`;
-    nstText = `x₁ = ${fmtNum(x1)}, x₂ = ${fmtNum(x2)}`;
+    // Gerundete Nullstellen: die Linearfaktorform stimmt dann nur noch näherungsweise
+    const glLF = (drGl(x1) === '=' && drGl(x2) === '=') ? '=' : '≈';
+    document.getElementById('dr-linfak').textContent = `f(x) ${glLF} ${aLF}(${f1})(${f2})`;
+    nstText = `x₁ ${drGl(x1)} ${fmtNum(x1)}, x₂ ${drGl(x2)} ${fmtNum(x2)}`;
     document.getElementById('dr-nst').textContent = nstText;
-    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtEin(C)} = <span class="disk-hl">${fmtNum(D)}</span> > 0  →  zwei Nullstellen<br>x = (${fmtNum(-B)} ± √<span class="disk-hl">${fmtNum(D)}</span>) / ${fmtEin(2*A)}  ⇒  x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtExaktEin(C)} = <span class="disk-hl">${fmtNum(D)}</span> > 0  →  zwei Nullstellen<br>x = (${fmtNum(-B)} ± √<span class="disk-hl">${fmtNum(D)}</span>) / ${fmtEin(2*A)}  ⇒  x₁ ${drGl(x1)} ${fmtNum(x1)},  x₂ ${drGl(x2)} ${fmtNum(x2)}`;
   } else if(ns.n === 1){
     const x1 = ns.x1;
     const aLF = A===1 ? '' : A===-1 ? '−' : `${fmtNum(A)}·`;
     document.getElementById('dr-linfak').textContent = `f(x) = ${aLF}(${fmtKlammer(x1)})²`;
     nstText = `x₁ = x₂ = ${fmtNum(x1)} (doppelt)`;
     document.getElementById('dr-nst').textContent = nstText;
-    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtEin(C)} = <span class="disk-hl">0</span>  →  eine doppelte Nullstelle<br>x = ${fmtNum(-B)} / ${fmtEin(2*A)} = ${fmtNum(x1)}`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtExaktEin(C)} = <span class="disk-hl">0</span>  →  eine doppelte Nullstelle<br>x = ${fmtNum(-B)} / ${fmtEin(2*A)} ${drGl(x1)} ${fmtNum(x1)}`;
   } else {
     document.getElementById('dr-linfak').textContent = `nicht definiert über ℝ`;
     document.getElementById('dr-nst').textContent = 'keine reellen Nullstellen';
-    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtEin(C)} = <span class="disk-hl">${fmtNum(D)}</span> < 0  →  keine reelle Nullstelle`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtExaktEin(C)} = <span class="disk-hl">${fmtNum(D)}</span> < 0  →  keine reelle Nullstelle`;
   }
   document.getElementById('dr-nst-rechnung').innerHTML = nstRechnung;
 
   drawDR();
 }
 
+// Rechteck, das beschriftung() für txt an (x | y) belegt: gleiche Klemmung ins
+// Canvas, gleicher Rand (pad 2). Die Schrift muss vorher gesetzt sein.
+function drRahmen(ctx, txt, x, y, align, W, H){
+  const alt = ctx.textAlign; ctx.textAlign = align;
+  const m = ctx.measureText(String(txt)); ctx.textAlign = alt;
+  let l = m.actualBoundingBoxLeft, r = m.actualBoundingBoxRight;
+  let o = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent;
+  if(!isFinite(l) || !isFinite(r)){ l = 0; r = m.width; }
+  if(!isFinite(o) || !isFinite(d)){ o = 10; d = 3; }
+  const pad = 2;
+  if(x - l - pad < 0) x = l + pad;
+  if(x + r + pad > W) x = W - r - pad;
+  if(y - o - pad < 0) y = o + pad;
+  if(y + d + pad > H) y = H - d - pad;
+  return {x1: x - l - pad, y1: y - o - pad, x2: x + r + pad, y2: y + d + pad};
+}
+function drTrifft(p, q){ return p.x1 < q.x2 && q.x1 < p.x2 && p.y1 < q.y2 && q.y1 < p.y2; }
+
 function drawDR(){
   const a = parseFloat(document.getElementById('dr-a').value);
   const u = parseFloat(document.getElementById('dr-u').value);
   const v = parseFloat(document.getElementById('dr-v').value);
   const A = a, B = -2*a*u, C = a*u*u + v;
+  const quadr = Math.abs(a) > 1e-9;   // a = 0: f(x) = v ist konstant, keine Parabel
   const {ctx, W, H} = initCanvas('dr-canvas', 260, true);
   const rng = 8;
-  const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -rng, rng, -rng, rng, {zahlen:false});
-  // Funktionsterm ins Bild — bisher standen dort nur Scheitel und Achsenabschnitt.
+  const {cx, cy} = drawGrid(ctx, W, H, -rng, rng, -rng, rng, {zahlen:false});
+  const belegt = [];     // Rechtecke der Beschriftungen — dort entfallen Achsenzahlen
+  const hindernis = [];  // Punkte und die Achsennamen x, y — Beschriftungen weichen aus
+  const scheiben = [];   // volle Punktflächen: Überdecken zählt beim Ausweichen dreifach
+  ctx.font = 'bold 13px monospace';
+  const achsen = [drRahmen(ctx, 'x', W - 14, cy(0) - 7, 'left', W, H),
+                  drRahmen(ctx, 'y', cx(0) + 13, 14, 'center', W, H)];
+  hindernis.push(...achsen);
+
+  /* ── Punkte zuerst nur planen ── */
+  const punkte = [], texte = [];
+  const punkt = (x, y, farbe, r) => {
+    punkte.push([x, y, farbe, r]);
+    // um 3 px verkleinert: nur echtes Überdecken zählt, nicht der Rand der Freistellung
+    const k = r - 3;
+    hindernis.push({x1: cx(x) - k, y1: cy(y) - k, x2: cx(x) + k, y2: cy(y) + k});
+    scheiben.push({x1: cx(x) - r, y1: cy(y) - r, x2: cx(x) + r, y2: cy(y) + r});
+  };
+  const zeigeS = quadr && Math.abs(u)<=rng && Math.abs(v)<=rng;
+  const zeigeC = Math.abs(C)<=rng;
+  const ns = quadr ? nullstellen(A, B, C) : {n:0};
+  const nst = (ns.n === 2 ? [ns.x1, ns.x2] : ns.n === 1 ? [ns.x1] : [])
+                .filter(xn => Math.abs(xn) <= rng).sort((p, q) => p - q);
+  if(zeigeS) punkt(u, v, '#1a4f8a', 7);
+  if(zeigeC) punkt(0, C, '#1f6b3a', 6);
+  nst.forEach(xn => punkt(xn, 0, '#b85c00', 6));
+
+  // Lage wählen: erste freie; ist keine frei, die mit der kleinsten Überdeckung
+  // (Beschriftungen und Punkte zählen dreifach, die Achsennamen x, y mit wAchse)
+  const flaeche = (p, q) => Math.max(0, Math.min(p.x2, q.x2) - Math.max(p.x1, q.x1))
+                          * Math.max(0, Math.min(p.y2, q.y2) - Math.max(p.y1, q.y1));
+  const waehle = (txt, lagen, wAchse) => {
+    const box = lage => drRahmen(ctx, txt, lage[0], lage[1], lage[2], W, H);
+    let frei = lagen.find(lage => { const b = box(lage);
+      return !belegt.some(q => drTrifft(b, q)) && !hindernis.some(q => drTrifft(b, q)); });
+    if(!frei){
+      let best = Infinity;
+      for(const lage of lagen){
+        const b = box(lage);
+        const kosten = 3 * belegt.reduce((z, q) => z + flaeche(b, q), 0)
+                     + 3 * scheiben.reduce((z, q) => z + flaeche(b, q), 0)
+                     + hindernis.reduce((z, q) => z + flaeche(b, q), 0)
+                     + (wAchse || 0) * achsen.reduce((z, q) => z + flaeche(b, q), 0);
+        if(kosten < best){ best = kosten; frei = lage; }
+      }
+    }
+    belegt.push(box(frei));
+    return frei;
+  };
+
+  // Funktionsterm ins Bild — oben links; deckt er dort das «y» der Achse oder
+  // einen Punkt ab, eine Zeile tiefer bzw. unten links.
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono,monospace';
   {
-    const aT = A === 1 ? '' : (A === -1 ? '−' : `${fmtNum(A)}·`);
-    const bT = Math.abs(B) < 1e-9 ? '' : (B > 0 ? ` + ${fmtNum(B)}·x` : ` − ${fmtNum(-B)}·x`);
-    const cT = Math.abs(C) < 1e-9 ? '' : (C > 0 ? ` + ${fmtNum(C)}` : ` − ${fmtNum(-C)}`);
-    beschriftung(ctx, `f(x) = ${aT}x²${bT}${cT}`, 10, 19, {align:'left', bg:'#fff', W, H});
+    const term = drAllgTerm(A, B, C);
+    const [tx, ty] = waehle(term, [[10, 19, 'left'], [10, 36, 'left'], [10, H - 8, 'left'], [10, H - 25, 'left']], 1e4);
+    beschriftung(ctx, term, tx, ty, {align:'left', bg:'#fff', W, H});
   }
-  if(Math.abs(a) > 1e-9) drawParabel(ctx, cx, cy, A, B, C, -rng, rng, '#1a4f8a', 2.8);
-  // Scheitelpunkt (blau)
-  if(Math.abs(u)<=rng && Math.abs(v)<=rng){
-    drawDot(ctx, cx, cy, u, v, '#1a4f8a', 7);
-    ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
-    beschriftung(ctx, `S(${fmtNum(u)} | ${fmtNum(v)})`, cx(u)+12, cy(v)+20, {align:'left', W, H});
+  drawParabel(ctx, cx, cy, A, B, C, -rng, rng, '#1a4f8a', 2.8);   // bei a = 0 die Waagrechte y = v
+
+  /* ── Beschriftungen planen ── */
+  ctx.font = 'bold 13px monospace';
+  const setze = (txt, lagen, farbe) => {
+    const [x, y, al] = waehle(txt, lagen, 1);
+    texte.push([txt, x, y, al, farbe]);
+  };
+  // Nullstellen (orange) unter der Achse — über der Achse, weiter weg oder seitlich
+  // nur, wenn unten ein Punkt oder eine Beschriftung im Weg liegt.
+  // Liegen sie eng, symmetrisch auseinanderrücken.
+  const nx = nst.map(xn => cx(xn)), nt = nst.map(xn => fmtNum(xn));
+  if(nst.length === 2){
+    const luecke = (nx[1] - ctx.measureText(nt[1]).width/2) - (nx[0] + ctx.measureText(nt[0]).width/2);
+    if(luecke < 8){ const d = (8 - luecke)/2; nx[0] -= d; nx[1] += d; }
   }
-  // y-Achsenabschnitt (grün)
-  if(Math.abs(C)<=rng){
-    drawDot(ctx, cx, cy, 0, C, '#1f6b3a', 6);
-    ctx.fillStyle='#1f6b3a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
-    beschriftung(ctx, `(0 | ${fmtNum(C)})`, cx(0)+12, cy(C)+4, {align:'left', W, H});
+  nst.forEach((xn, i) => setze(nt[i], [[nx[i], cy(0)+24, 'center'], [nx[i], cy(0)-10, 'center'],
+    [nx[i], cy(0)+40, 'center'], [nx[i], cy(0)-26, 'center'], [nx[i]-16, cy(0)+24, 'center'], [nx[i]+16, cy(0)+24, 'center']], '#b85c00'));
+  if(zeigeS){
+    const px = cx(u), py = cy(v);
+    setze(`S(${fmtNum(u)} | ${fmtNum(v)})`,
+          [[px+12, py+20, 'left'], [px+12, py-12, 'left'], [px-12, py+20, 'right'], [px-12, py-12, 'right'],
+           [px+12, py+38, 'left'], [px-12, py+38, 'right'], [px+12, py-30, 'left'], [px-12, py-30, 'right'],
+           [px+12, py+56, 'left'], [px-12, py+56, 'right'], [px+12, py-48, 'left'], [px-12, py-48, 'right']], '#1a4f8a');
   }
-  // Nullstellen (orange)
-  if(Math.abs(a) > 1e-9){
-    const ns = nullstellen(A, B, C);
-    const drawN = (xn) => {
-      if(Math.abs(xn) > rng) return;
-      drawDot(ctx, cx, cy, xn, 0, '#b85c00', 6);
-      ctx.fillStyle='#b85c00'; ctx.font='bold 13px monospace'; ctx.textAlign='center';
-      ctx.fillText(fmtNum(xn), cx(xn), cy(0)+24);
+  if(zeigeC){
+    const px = cx(0), py = cy(C);
+    setze(`(0 | ${fmtExakt(C)})`,
+          [[px+12, py+4, 'left'], [px+12, py+20, 'left'], [px+12, py-12, 'left'], [px-12, py+4, 'right'],
+           [px-12, py+20, 'right'], [px-12, py-12, 'right'], [px+12, py+38, 'left'], [px+12, py-30, 'left'],
+           [px-12, py+38, 'right'], [px-12, py-30, 'right'], [px+12, py+56, 'left'], [px+12, py-48, 'left']], '#1f6b3a');
+  }
+
+  /* ── Achsenzahlen (wie drawGrid), aber ohne die, die eine Beschriftung verdecken würde ── */
+  {
+    const schritt = (spanne, pixel, mindest) => {
+      const proEinheit = pixel / spanne;
+      if(proEinheit >= mindest) return 1;
+      for(let z = 1; z <= 1e6; z *= 10) for(const m of [1, 2, 5]) if(z * m * proEinheit >= mindest) return z * m;
+      return 1;
     };
-    if(ns.n === 2){ drawN(ns.x1); drawN(ns.x2); }
-    else if(ns.n === 1){ drawN(ns.x1); }
+    const sx = schritt(2*rng, W, 26), sy = Math.max(2, schritt(2*rng, H, 16));
+    ctx.font = '13px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
+    const zahl = (g, x, y, al) => {
+      const t = String(g).replace('-', '−');
+      if(belegt.some(q => drTrifft(drRahmen(ctx, t, x, y, al, W, H), q))) return;
+      beschriftung(ctx, t, x, y, {align: al, bg:'#fff', W, H});
+    };
+    for(let gx = Math.ceil(-rng / sx) * sx; gx < rng; gx += sx){
+      if(gx === 0 || gx <= -rng) continue;
+      zahl(gx, cx(gx), cy(0) + 14, 'center');
+    }
+    for(let gy = Math.ceil(-rng / sy) * sy; gy < rng; gy += sy){
+      if(gy === 0 || gy <= -rng) continue;
+      zahl(gy, cx(0) - 5, cy(gy) + 4, 'right');
+    }
   }
-  // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
-  zahlenOben();
+  // Punkte und Beschriftungen über Kurve und Achsenzahlen
+  punkte.forEach(([x, y, farbe, r]) => drawDot(ctx, cx, cy, x, y, farbe, r));
+  ctx.font = 'bold 13px monospace';
+  texte.forEach(([t, x, y, al, farbe]) => { ctx.fillStyle = farbe; beschriftung(ctx, t, x, y, {align: al, W, H}); });
 }
 
 ['dr-a','dr-u','dr-v'].forEach(id=>document.getElementById(id).addEventListener('input', updateDR));
@@ -2018,13 +2141,16 @@ function drawExtrem() {
     `A = ${x.toFixed(1)} · ${y.toFixed(1)} = <strong>${A.toFixed(2)} m²</strong>` +
     (istMax ? ' &nbsp;— <strong>Maximum: das Quadrat</strong>' : '');
 
-  const { ctx, W, H } = initCanvas('cv-extrem', 270, false);
+  // Schmaler Canvas (Handy): Rechteck oben, Parabel darunter — nebeneinander
+  // würde das Rechteck winzig und seine Beschriftungen lägen übereinander.
+  const eng = (document.getElementById('cv-extrem').offsetWidth || 600) < 440;
+  const { ctx, W, H } = initCanvas('cv-extrem', eng ? 425 : 270, false);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
 
-  /* ── linke Hälfte: das Rechteck, massstäblich (feste Skala 20 m) */
+  /* ── linke Hälfte (schmal: oben): das Rechteck, massstäblich (feste Skala 20 m) */
   const lw = W * 0.42;
-  const sc = Math.min((lw - 60) / 20, (H - 80) / 20);
-  const ox = 30, oy = H - 40;
+  const sc = eng ? Math.min((W - 90) / 20, 7) : Math.min((lw - 60) / 20, (H - 80) / 20);
+  const ox = eng ? 40 : 30, oy = eng ? 175 : H - 40;
   ctx.fillStyle = 'rgba(26,79,138,0.16)';
   ctx.fillRect(ox, oy - y * sc, x * sc, y * sc);
   ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2;
@@ -2040,8 +2166,9 @@ function drawExtrem() {
   ctx.fillStyle = '#6b7280'; ctx.font = 'italic 10px JetBrains Mono, monospace'; ctx.textAlign = 'left';
   ctx.fillText('Umfang immer 40 m', 8, 18);
 
-  /* ── rechte Hälfte: die Parabel A(x) = −x² + 20x */
-  const px0 = W * 0.50, pw = W - px0 - 24, ph = H - 74, py0 = H - 40;
+  /* ── rechte Hälfte (schmal: unten): die Parabel A(x) = −x² + 20x */
+  const px0 = eng ? 40 : W * 0.50, pw = W - px0 - 24;
+  const py0 = eng ? H - 24 : H - 40, ph = eng ? py0 - 240 : H - 74;
   const cx = v => px0 + v / 20 * pw;          // x von 0 bis 20
   const cy = v => py0 - v / 110 * ph;         // A von 0 bis 110
   ctx.strokeStyle = '#c8d0da'; ctx.lineWidth = 1;
@@ -2074,10 +2201,42 @@ function drawExtrem() {
   ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 1.2; ctx.setLineDash([3, 3]);
   ctx.beginPath(); ctx.moveTo(cx(x), cy(A)); ctx.lineTo(cx(x), cy(0)); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = '#b85c00'; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-  ctx.fillText('A = ' + A.toFixed(1), cx(x), cy(A) - 10);
+  // «A = …» über dem Punkt — kreuzt dort die Kurve (nahe x = 0 / 20) oder liegt es
+  // auf «S(10 | 100)», auf der Achsenteilung oder dem Term, weicht es aus: über dem
+  // Punkt nach aussen (dort liegt die Kurve tiefer), darunter nach innen oder
+  // – dicht am Scheitel – über dem Punkt zur Scheitelseite hin.
+  ctx.font = 'italic 11px JetBrains Mono, monospace';
+  const besetzt = [drRahmen(ctx, 'A(x) = −x² + 20x', W - 8, eng ? 218 : 18, 'right', W, H)];
+  ctx.font = '10px JetBrains Mono, monospace';
+  [0, 5, 10, 15, 20].forEach(v => besetzt.push(drRahmen(ctx, String(v), cx(v), cy(0) + 14, 'center', W, H)));
+  [50, 100].forEach(v => besetzt.push(drRahmen(ctx, String(v), cx(0) - 5, cy(v) + 3, 'right', W, H)));
+  ctx.font = 'bold 10px JetBrains Mono, monospace';
+  besetzt.push(drRahmen(ctx, 'S(10 | 100)', cx(10) + 6, cy(100) - 6, 'left', W, H));
+  besetzt.push({x1: cx(10) - 4, y1: cy(100) - 4, x2: cx(10) + 4, y2: cy(100) + 4});
+  const aTxt = 'A = ' + A.toFixed(1);
+  const kreuzt = b => {
+    if (besetzt.some(q => drTrifft(b, q))) return true;
+    for (let v = 0; v <= 20; v += 0.02) {      // Kurve (Strichbreite 2.4) als dichte Punktfolge
+      const px = cx(v), py = cy(v * (20 - v));
+      if (px > b.x1 - 1.5 && px < b.x2 + 1.5 && py > b.y1 - 1.5 && py < b.y2 + 1.5) return true;
+    }
+    return false;
+  };
+  const aus = x <= 10 ? -1 : 1, al = d => (d < 0 ? 'right' : 'left');
+  const px = cx(x), py = cy(A);
+  const lagen = [[px, py - 10, 'center'],
+                 [px + 9 * aus, py - 8, al(aus)], [px - 9 * aus, py + 16, al(-aus)],
+                 [px + 9 * aus, py - 22, al(aus)], [px - 9 * aus, py + 30, al(-aus)],
+                 [px + 10 * aus, py + 4, al(aus)],
+                 [px - 9 * aus, py - 8, al(-aus)], [px - 9 * aus, py - 22, al(-aus)], [px, py - 24, 'center']];
+  // Ohne freie Lage (sehr schmale Canvas): eine ohne andere Beschriftung, die Kurve deckt der Hintergrund ab
+  const box = l => drRahmen(ctx, aTxt, l[0], l[1], l[2], W, H);
+  const lage = lagen.find(l => !kreuzt(box(l))) || lagen.find(l => !besetzt.some(q => drTrifft(box(l), q))) || lagen[1];
+  ctx.fillStyle = '#b85c00';
+  if (lage === lagen[0] && !kreuzt(box(lage))) { ctx.textAlign = 'center'; ctx.fillText(aTxt, px, py - 10); }
+  else beschriftung(ctx, aTxt, lage[0], lage[1], { align: lage[2], bg: '#fff', W, H });
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'italic 11px JetBrains Mono, monospace'; ctx.textAlign = 'right';
-  ctx.fillText('A(x) = −x² + 20x', W - 8, 18);
+  ctx.fillText('A(x) = −x² + 20x', W - 8, eng ? 218 : 18);
 }
 
 /* ══ INIT ══ */

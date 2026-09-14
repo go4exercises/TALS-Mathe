@@ -1516,12 +1516,18 @@ function drawIntervall() {
   ctx.fillStyle = '#5a5040';
   ctx.font = '13px monospace';
   ctx.textAlign = 'center';
+  // Beschriftungsschritt nach verfügbarer Breite: Ticks bei jeder ganzen Zahl,
+  // Zahlen nur so dicht, dass sie nicht ineinanderlaufen (schmale Ansicht: jede 2.).
+  const breitesteZahl = Math.max(ctx.measureText('−' + Math.abs(Math.ceil(xMin))).width,
+                                 ctx.measureText(String(Math.floor(xMax))).width);
+  const proEinheit = xPx(1) - xPx(0);
+  const zahlSchritt = [1, 2, 5, 10].find(s => proEinheit * s >= breitesteZahl + 6) || 10;
   for (let v = Math.ceil(xMin); v <= Math.floor(xMax); v++) {
     ctx.beginPath();
     ctx.moveTo(xPx(v), axisY - 4);
     ctx.lineTo(xPx(v), axisY + 4);
     ctx.stroke();
-    ctx.fillText(String(v).replace('-', '−'), xPx(v), axisY + 18);
+    if (v % zahlSchritt === 0) ctx.fillText(String(v).replace('-', '−'), xPx(v), axisY + 18);
   }
 
   // Endpunkte zeichnen — als Klammer, in derselben Notation wie in der
@@ -1758,12 +1764,18 @@ function drawZahlmenge() {
   ctx.fillStyle = '#5a5040';
   ctx.font = '13px monospace';
   ctx.textAlign = 'center';
+  // Beschriftungsschritt nach verfügbarer Breite: Ticks bei jeder ganzen Zahl,
+  // Zahlen nur so dicht, dass sie nicht ineinanderlaufen (schmale Ansicht: jede 2.).
+  const breitesteZahl = Math.max(ctx.measureText('−' + Math.abs(Math.ceil(xMin))).width,
+                                 ctx.measureText(String(Math.floor(xMax))).width);
+  const proEinheit = xPx(1) - xPx(0);
+  const zahlSchritt = [1, 2, 5, 10].find(s => proEinheit * s >= breitesteZahl + 6) || 10;
   for (let v = Math.ceil(xMin); v <= Math.floor(xMax); v++) {
     ctx.beginPath();
     ctx.moveTo(xPx(v), axisY - 4);
     ctx.lineTo(xPx(v), axisY + 4);
     ctx.stroke();
-    ctx.fillText(String(v).replace('-', '−'), xPx(v), axisY + 18);
+    if (v % zahlSchritt === 0) ctx.fillText(String(v).replace('-', '−'), xPx(v), axisY + 18);
   }
 
   // Markierungspunkt für den aktiven Wert

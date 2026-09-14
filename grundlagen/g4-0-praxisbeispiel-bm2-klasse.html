@@ -536,6 +536,7 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
 </div>
 
 <p class="imp-status" id="imp-status" hidden></p>
+<p class="imp-status fehler" id="tab-status" role="status" hidden></p>
 
 <div class="daten-wrap">
   <table class="daten-tab" id="daten-tab">
@@ -1147,17 +1148,45 @@ function fmtN(x, d=1) {
 /* ═══════════════════════════════════════════════════════════════
    TABELLE EINHÄNGEN / EDITIEREN
 ═══════════════════════════════════════════════════════════════ */
+/* Plausibilitätsgrenzen für die editierbaren Zellen (Spalte → Grenzen) — dieselbe
+   Quelle gilt für den CSV-Import (IMPORT_GRENZEN). Weit genug für alle Datensätze samt
+   Ausreissern (152 cm / 42 kg, 198 cm / 118 kg) und so, dass sie die «erwarteten
+   Bereiche» der Plausibilitätsprüfung (140–210 cm, 35–150 kg, 2000–2015) ganz enthalten —
+   deren ⚠ muss an beiden Enden erreichbar bleiben. Eng genug, dass keine Achse ins
+   Negative oder in sinnlose Bereiche kippt. */
+const TABELLE_GRENZEN = {
+  1: { name: 'Grösse',   einheit: 'cm', lo: 120,  hi: 230  },
+  2: { name: 'Masse',    einheit: 'kg', lo: 30,   hi: 200  },
+  3: { name: 'Jahrgang', einheit: '',   lo: 1990, hi: 2020 }
+};
+
+function zeigeTabellenStatus(text, zeile) {
+  const el = document.getElementById('tab-status');
+  el.textContent = text;
+  el.hidden = false;
+  /* Meldung auf die Seite der Tabelle, auf der die bearbeitete Zeile liegt —
+     sonst stünde sie bei 26 Zeilen ausserhalb des Bildschirms. */
+  const wrap = document.querySelector('.daten-wrap');
+  if (zeile < DATEN.length / 2) wrap.before(el); else wrap.after(el);
+}
+
+function verbergeTabellenStatus() {
+  const el = document.getElementById('tab-status');
+  if (el) el.hidden = true;
+}
+
 function renderTabelle() {
   const tbody = document.getElementById('daten-body');
   tbody.innerHTML = '';
+  verbergeTabellenStatus();
   const schonGebunden = tbody.dataset.gebunden === 'ja';
   DATEN.forEach((row, i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="col-nr">${svgEscape(row[0])}</td>
-      <td class="col-gr"><input type="number" min="120" max="220" step="1" value="${svgEscape(row[1])}" data-row="${i}" data-col="1"></td>
-      <td class="col-ma"><input type="number" min="20" max="200" step="0.1" value="${svgEscape(row[2])}" data-row="${i}" data-col="2"></td>
-      <td class="col-jg"><input type="number" min="1990" max="2015" step="1" value="${svgEscape(row[3])}" data-row="${i}" data-col="3"></td>
+      <td class="col-gr"><input type="number" min="${TABELLE_GRENZEN[1].lo}" max="${TABELLE_GRENZEN[1].hi}" step="1" value="${svgEscape(row[1])}" data-row="${i}" data-col="1"></td>
+      <td class="col-ma"><input type="number" min="${TABELLE_GRENZEN[2].lo}" max="${TABELLE_GRENZEN[2].hi}" step="0.1" value="${svgEscape(row[2])}" data-row="${i}" data-col="2"></td>
+      <td class="col-jg"><input type="number" min="${TABELLE_GRENZEN[3].lo}" max="${TABELLE_GRENZEN[3].hi}" step="1" value="${svgEscape(row[3])}" data-row="${i}" data-col="3"></td>
       <td class="col-sp"><input type="text" value="${svgEscape(row[4])}" data-row="${i}" data-col="4"></td>
     `;
     tbody.appendChild(tr);
@@ -1175,6 +1204,16 @@ function renderTabelle() {
     // Leeres oder unlesbares Zahlenfeld: nicht übernehmen, alten Wert zurück.
     // Sonst landet NaN in DATEN, und Histogramm und Kennwerte brechen ab.
     if (c !== 4 && !isFinite(v)) { t.value = DATEN[r][c]; return; }
+    // Unplausibler Wert (z.B. Grösse 1 cm): nicht übernehmen, alten Wert zurück, Rückmeldung.
+    const gz = TABELLE_GRENZEN[c];
+    if (gz && (v < gz.lo || v > gz.hi)) {
+      const eh = gz.einheit ? ' ' + gz.einheit : '';
+      zeigeTabellenStatus(`Nr. ${DATEN[r][0]}: ${gz.name} ${fmtN(v, 2)}${eh} liegt ausserhalb des erlaubten `
+        + `Bereichs ${gz.lo}–${gz.hi}${eh} — der alte Wert ${fmtN(DATEN[r][c], 2)}${eh} bleibt.`, r);
+      t.value = DATEN[r][c];
+      return;
+    }
+    verbergeTabellenStatus();
     DATEN[r][c] = v;
     // Manuelle Änderung markiert den aktiven Preset als "modifiziert"
     setActivePresetButton(null);
@@ -1437,10 +1476,11 @@ function exportXLSX() {
    fehlende Kopfzeile, Anführungszeichen um Textfelder.
    Alles läuft im Browser — es wird nichts hochgeladen.
 ═══════════════════════════════════════════════════════════════ */
+/* Dieselben Grenzen wie beim Eintippen in die Tabelle — Import und Eingabe sind gleich streng. */
 const IMPORT_GRENZEN = {
-  gr: { name: 'Grösse',   einheit: 'cm', lo: 100,  hi: 250  },
-  ma: { name: 'Masse',    einheit: 'kg', lo: 20,   hi: 250  },
-  jg: { name: 'Jahrgang', einheit: '',   lo: 1900, hi: 2100 }
+  gr: TABELLE_GRENZEN[1],
+  ma: TABELLE_GRENZEN[2],
+  jg: TABELLE_GRENZEN[3]
 };
 
 function starteImport() {
@@ -1490,7 +1530,7 @@ function pruefeWert(spez, wert, zeilenNr) {
   if (!isFinite(wert))
     throw new Error(`Zeile ${zeilenNr}: „${spez.name}" ist keine Zahl.`);
   if (wert < spez.lo || wert > spez.hi)
-    throw new Error(`Zeile ${zeilenNr}: ${spez.name} = ${wert} ${spez.einheit}`.trim()
+    throw new Error(`Zeile ${zeilenNr}: ${spez.name} = ${fmtN(wert, 2)} ${spez.einheit}`.trim()
       + ` liegt ausserhalb des erlaubten Bereichs ${spez.lo}–${spez.hi} ${spez.einheit}`.trimEnd() + '.');
   return wert;
 }
@@ -2087,11 +2127,13 @@ function zeichneHistogramm(svgId, daten, klassenBreite, einheit, grenze, tabId) 
     if (k.h > 0) s += `<text x="${x + balkenBreite/2}" y="${y - 3}" font-size="9" text-anchor="middle" fill="#1f2937">${k.h}</text>`;
   });
   // x-Achsen-Ticks: an Klassengrenzen, ggf. ausgedünnt bei vielen Klassen
-  const tickJede = klassen.length > 10 ? 2 : 1;
+  // (bis 40 Klassen jede zweite; bei Extremwerten an den Tabellengrenzen entsprechend weiter,
+  //  und keine Zahl so nahe an der Schlussgrenze, dass sie sich mit ihr überdeckt)
+  const tickJede = klassen.length > 10 ? Math.max(2, Math.ceil(klassen.length / 20)) : 1;
   klassen.forEach((k, i) => {
     const x = padL + balkenBreite * i;
     s += `<line x1="${x}" y1="${H-padB}" x2="${x}" y2="${H-padB+3}" stroke="#1f2937" stroke-width="1"/>`;
-    if (i % tickJede === 0) {
+    if (i % tickJede === 0 && klassen.length - i >= tickJede) {
       s += `<text x="${x}" y="${H-padB+14}" font-size="9" text-anchor="middle" fill="#5a5040">${k.lower}</text>`;
     }
   });
@@ -2182,11 +2224,27 @@ function zeichneBoxplot(svgId, daten, einheit) {
   if (range === 0) {
     s += `<text x="${xOf(min)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1d4ed8" font-weight="700">alle Werte ${fmtN(min,1)}</text>`;
   } else {
-    s += `<text x="${xOf(min)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1c1a17">Q₀ ${fmtN(min,1)}</text>`;
-    s += `<text x="${xOf(q1)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1c1a17">Q₁ ${fmtN(q1,1)}</text>`;
-    s += `<text x="${xOf(med)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1d4ed8" font-weight="700">Med ${fmtN(med,1)}</text>`;
-    s += `<text x="${xOf(q3)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1c1a17">Q₃ ${fmtN(q3,1)}</text>`;
-    s += `<text x="${xOf(max)}" y="${cy-halbeBox-6}" font-size="10" text-anchor="middle" fill="#1c1a17">Q₄ ${fmtN(max,1)}</text>`;
+    /* Kennzahl-Beschriftungen über der Box; zu nahe Nachbarn weichen eine Zeile nach oben aus
+       (wie renderBox in g4-2). Feste Reihenfolge Q₀, Q₄, Q₁, Q₃, Median: die Enden bleiben
+       unten, der Median weicht zuletzt aus. Ins SVG geklemmt, mit weissem Halo — das
+       SVG-Gegenstück zu beschriftung() aus mathlib.js. Breite geschätzt (Schrift 10). */
+    const namen = [
+      { t: `Q₀ ${fmtN(min,1)}`, v: min }, { t: `Q₄ ${fmtN(max,1)}`, v: max },
+      { t: `Q₁ ${fmtN(q1,1)}`,  v: q1 },  { t: `Q₃ ${fmtN(q3,1)}`,  v: q3 },
+      { t: `Med ${fmtN(med,1)}`, v: med, fett: true }
+    ];
+    const belegt = [];
+    namen.forEach(n => {
+      const b = n.t.length * (n.fett ? 6.4 : 5.8);
+      n.x = Math.max(b/2 + 2, Math.min(W - b/2 - 2, xOf(n.v)));
+      const l = n.x - b/2, r = n.x + b/2;
+      n.zeile = 0;
+      while (belegt.some(o => o.zeile === n.zeile && r + 5 > o.l && l < o.r + 5)) n.zeile++;
+      belegt.push({ zeile: n.zeile, l, r });
+      const y = Math.max(9, cy - halbeBox - 6 - 11 * n.zeile);
+      s += `<text x="${n.x}" y="${y}" font-size="10" text-anchor="middle" fill="${n.fett ? '#1d4ed8' : '#1c1a17'}"`
+         + `${n.fett ? ' font-weight="700"' : ''} stroke="#fff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">${n.t}</text>`;
+    });
   }
   // Einheit
   s += `<text x="${padL + innerW/2}" y="${H-1}" font-size="10.5" text-anchor="middle" fill="#1c1a17">${einheit}</text>`;

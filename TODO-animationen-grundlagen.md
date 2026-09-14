@@ -218,3 +218,13 @@ niemand erneut verfolgt:
   nicht in der Startstellung. Bedingt, nicht tot.
 - Knöpfe, die als aktives Preset erneut geklickt werden, ändern erwartungsgemäss
   nichts. Der Test meldet sie, es ist kein Defekt.
+## AN-G04 — drawGrid: Achsenzahlen unter Beschriftungen aussparen · **Idee, offen**
+
+Beim Nachbessern der Beschriftungen am 14.09.2026 mussten zwei Seiten die Achsenzahlen
+von `drawGrid` (mathlib.js) seitenseitig nachbauen, um Zahlen wegzulassen, die unter
+einem Punkt- oder Nullstellenlabel liegen: `g3-3` («Drei Darstellungen», `drRahmen`)
+und `g3-1` (`plotChart`, eigene Zeichenfunktion mit Schrittweite aus der Pixelbreite).
+Sauberer wäre eine Option in `drawGrid`, etwa `opt.aussparen = [{x, y, w, h}, …]`
+(Rechtecke, in denen keine Zahl steht) und eine Schrittweite, die sich an der
+Textbreite statt nur an der Einheitsbreite orientiert. Dann liessen sich beide
+Nachbauten wieder zurückführen. Betrifft alle Seiten mit `drawGrid` — vorher zählen.

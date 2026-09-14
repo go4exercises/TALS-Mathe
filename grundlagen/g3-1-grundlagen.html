@@ -636,7 +636,7 @@ einmal</em> schneiden.</p>
   </div>
   <div class="slider-box">
     <div class="sl-row">
-      <div class="sl-grp akz-blau"><label>Testgerade bei \(x =\) <span class="slider-val" id="vt-xv">1.0</span></label>
+      <div class="sl-grp akz-blau"><label>Testgerade bei \(x =\) <span class="slider-val" id="vt-xv">1</span></label>
       <input type="range" id="vt-x" min="-5" max="5" step="0.25" value="1"></div>
     </div>
     <div style="margin-top:8px" id="vt-eq"></div>
@@ -1764,6 +1764,15 @@ function plotChart(cfg) {
   const tickX = [], tickY = [];
   for (let g = Math.ceil(xMin); g <= Math.floor(xMax); g++) if (g !== 0) tickX.push(g);
   for (let g = Math.ceil(yMin); g <= Math.floor(yMax); g++) if (g !== 0) tickY.push(g);
+  // Beschriftungsschritt nach verfügbarem Platz (1-2-5-10): Gitter bei jeder ganzen
+  // Zahl, Zahlen nur so dicht, dass sie nicht ineinanderlaufen (schmale Ansicht).
+  const zahlBreite = Math.max(...tickX.concat(tickY).map(g => ctx.measureText(fmtNum(g)).width));
+  const zahlHoehe = ctx.measureText('0').actualBoundingBoxAscent || 10;
+  const schritt = (proEinheit, bedarf) => [1, 2, 5, 10].find(st => proEinheit * st >= bedarf) || 10;
+  const schrittX = schritt((Wpx - padL - padR) / (xMax - xMin), zahlBreite + 6);
+  const schrittY = schritt((Hpx - padT - padB) / (yMax - yMin), zahlHoehe + 4);
+  for (let j = tickX.length - 1; j >= 0; j--) if (tickX[j] % schrittX !== 0) tickX.splice(j, 1);
+  for (let j = tickY.length - 1; j >= 0; j--) if (tickY[j] % schrittY !== 0) tickY.splice(j, 1);
   // Achsen-Zahlen erst nach den Kurven setzen -> siehe zahlenOben() unten
   const zahlenOben = () => {
     const f = ctx.font, s = ctx.fillStyle;
@@ -1774,31 +1783,179 @@ function plotChart(cfg) {
     ctx.font = f; ctx.fillStyle = s;
   };
 
-  // Kurven zeichnen
+  // Kasten, den beschriftung() (pad 2, geklemmt) für einen Text belegt — für die
+  // Platzwahl der Kurvenbeschriftungen unten.
+  const kasten = (txt, x, y, align, font) => {
+    const f = ctx.font, ta = ctx.textAlign, tb = ctx.textBaseline;
+    ctx.font = font; ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
+    const m = ctx.measureText(txt);
+    ctx.font = f; ctx.textAlign = ta; ctx.textBaseline = tb;
+    let l = m.actualBoundingBoxLeft, r = m.actualBoundingBoxRight;
+    let a = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent;
+    if (!isFinite(l) || !isFinite(r)) { l = 0; r = m.width; }
+    if (!isFinite(a) || !isFinite(d)) { a = 10; d = 3; }
+    if (x - l - 2 < 0) x = l + 2;
+    if (x + r + 2 > Wpx) x = Wpx - r - 2;
+    if (y - a - 2 < 0) y = a + 2;
+    if (y + d + 2 > Hpx) y = Hpx - d - 2;
+    return { x, y, x0: x - l - 2, y0: y - a - 2, x1: x + r + 2, y1: y + d + 2 };
+  };
+  const SCHRIFT = '13px JetBrains Mono,monospace', SCHRIFT_B = 'bold 13px JetBrains Mono,monospace';
+  // y-Zahl, die nahe dem Ursprung in eine x-Zahl ragt (flaches Canvas), entfällt
+  const kastenX = tickX.map(g => kasten(fmtNum(g), cx(g), cy(0)+12, 'center', SCHRIFT));
+  for (let j = tickY.length - 1; j >= 0; j--) {
+    const k = kasten(fmtNum(tickY[j]), cx(0)-4, cy(tickY[j])+3, 'right', SCHRIFT);
+    if (kastenX.some(h => !(k.x1 <= h.x0 || k.x0 >= h.x1 || k.y1 <= h.y0 || k.y0 >= h.y1))) tickY.splice(j, 1);
+  }
+  // Hindernisse: Achsenzahlen, Achsennamen, Punkte; die Punkt- und Kurvenbeschriftungen
+  // kommen hinzu, sobald ihr Platz gewählt ist
+  const hindernisse = [];
+  tickX.forEach(g => hindernisse.push(Object.assign(kasten(fmtNum(g), cx(g), cy(0)+12, 'center', SCHRIFT), { zahl: [tickX, g] })));
+  tickY.forEach(g => hindernisse.push(Object.assign(kasten(fmtNum(g), cx(0)-4, cy(g)+3, 'right', SCHRIFT), { zahl: [tickY, g] })));
+  hindernisse.push(kasten('x', cx(xMax)-4, cy(0)-5, 'right', SCHRIFT_B));
+  hindernisse.push(kasten('y', cx(0)+5, cy(yMax)+10, 'left', SCHRIFT_B));
+  (cfg.points || []).forEach(p => {
+    const px = cx(p.x), py = cy(p.y);
+    hindernisse.push({ x0: px - 6, y0: py - 6, x1: px + 6, y1: py + 6 });
+  });
+
+  // Kurven zeichnen; die gezeichneten Strecken als Hindernis merken, dazu Punkte
+  // im Abstand ≤ 2 px als mögliche Ankerstellen für die Beschriftung
+  const spuren = [], strecken = [];
   (cfg.curves || []).forEach(cv => {
     ctx.strokeStyle = cv.color; ctx.lineWidth = 2.4;
     ctx.beginPath();
     let first = true;
     const N = 200;
     const dx = (xMax - xMin) / N;
+    const spur = [];
+    let vorher = null;
     for (let k = 0; k <= N; k++) {
       const x = xMin + k * dx;
       const y = cv.fn(x);
-      if (!isFinite(y) || y < yMin - 0.5 || y > yMax + 0.5) { first = true; continue; }
-      if (first) { ctx.moveTo(cx(x), cy(y)); first = false; }
-      else        { ctx.lineTo(cx(x), cy(y)); }
+      if (!isFinite(y) || y < yMin - 0.5 || y > yMax + 0.5) { first = true; vorher = null; continue; }
+      const px = cx(x), py = cy(y);
+      if (first) { ctx.moveTo(px, py); first = false; }
+      else        { ctx.lineTo(px, py); }
+      if (vorher) {
+        strecken.push([vorher[0], vorher[1], px, py]);
+        const n = Math.max(1, Math.ceil(Math.hypot(px - vorher[0], py - vorher[1]) / 2));
+        for (let i = 1; i <= n; i++) spur.push([vorher[0] + (px - vorher[0]) * i / n, vorher[1] + (py - vorher[1]) * i / n]);
+      } else spur.push([px, py]);
+      vorher = [px, py];
     }
     ctx.stroke();
-    if (cv.label) {
-      const lx = (cv.labelX !== undefined) ? cv.labelX : xMax - 0.2;
-      const ly = cv.fn(lx);
-      ctx.fillStyle = cv.color; ctx.font = '13px JetBrains Mono,monospace';
-      ctx.textAlign = 'right';
-      // + 26 statt + 14: bei Kurven, die oben aus dem Bild laufen, sass das
-      // Label sonst auf der y-Achsenbeschriftung.
-      const yPx = (ly >= yMin && ly <= yMax) ? cy(ly) - 6 : cy(yMax) + 26;
-      beschriftung(ctx, cv.label, cx(lx) - 2, yPx, {align:'right', W:Wpx, H:Hpx});
+    spuren.push(spur);
+  });
+
+  // Kurvenbeschriftungen: zuerst die bisherige Stelle (bei labelX über der Kurve).
+  // Deckt sie dort Achsenzahlen, Punkte, eine Kurve oder ein anderes Label, rückt
+  // sie der Kurve entlang an die nächste freie Stelle (links/rechts, über/unter
+  // der Kurve); findet sich dort keine, an die nächste freie Stelle im Bild.
+  // Strecke schneidet den um 1 px erweiterten Kasten? (Liang-Barsky)
+  const streckeTrifft = ([ax, ay, bx, by], k) => {
+    const dx = bx - ax, dy = by - ay;
+    const pp = [-dx, dx, -dy, dy];
+    const qq = [ax - (k.x0 - 1), (k.x1 + 1) - ax, ay - (k.y0 - 1), (k.y1 + 1) - ay];
+    let t0 = 0, t1 = 1;
+    for (let j = 0; j < 4; j++) {
+      if (pp[j] === 0) { if (qq[j] < 0) return false; continue; }
+      const t = qq[j] / pp[j];
+      if (pp[j] < 0) { if (t > t1) return false; if (t > t0) t0 = t; }
+      else           { if (t < t0) return false; if (t < t1) t1 = t; }
     }
+    return true;
+  };
+  const trennt = (k, h) => k.x1 <= h.x0 || k.x0 >= h.x1 || k.y1 <= h.y0 || k.y0 >= h.y1;
+  // ohneZahlen: Achsenzahlen zählen nicht als Hindernis (sie entfallen dann, siehe unten)
+  const frei = (k, ohneZahlen) => hindernisse.every(h => (ohneZahlen && h.zahl) || trennt(k, h))
+    && !strecken.some(st => streckeTrifft(st, k));
+
+  // Punktbeschriftungen zuerst (sie sind die Aussage der Grafik): bevorzugte Lage aus
+  // labelPos; ist sie belegt, die übrigen Lagen rund um den Punkt. Ist nahe am Punkt
+  // nur eine Achsenzahl im Weg, darf das Label sie ersetzen (die Zahl entfällt);
+  // sonst schrittweise weiter weg, zuletzt die nächste freie Stelle im Bild.
+  (cfg.points || []).forEach(p => {
+    if (!p.label) return;
+    const px = cx(p.x), py = cy(p.y);
+    const lagen = [[8, -7, 'left'], [8, 14, 'left'], [-8, -7, 'right'], [-8, 14, 'right'],
+                   [0, -10, 'center'], [0, 19, 'center'], [9, 4, 'left'], [-9, 4, 'right']];
+    const bevorzugt = (p.labelPos === 'l') ? 2 : (p.labelPos === 'b') ? 1 : 0;
+    const liste = [lagen[bevorzugt]].concat(lagen.filter((_, j) => j !== bevorzugt));
+    const kandidaten = [];
+    const ring = (f, ohne) => liste.forEach(([dx, dy, al]) => kandidaten.push([px + dx * f, py + dy * f, al, ohne]));
+    ring(1, false); ring(1.25, false); ring(1, true); ring(1.25, true);
+    [1.5, 2, 2.5, 3, 4].forEach(f => ring(f, false));
+    [1.5, 2, 2.5, 3, 4].forEach(f => ring(f, true));
+    const raster = [];
+    for (let gy = 16; gy < Hpx; gy += 6)
+      for (let gx = 4; gx < Wpx; gx += 6) raster.push([Math.hypot(gx - px, gy - py), gx, gy, 'left', false]);
+    raster.sort((a, b) => a[0] - b[0]);
+    const [x0, y0, a0] = kandidaten[0];
+    let wahl = Object.assign(kasten(p.label, x0, y0, a0, SCHRIFT_B), { align: a0, txt: p.label });
+    // Abstand Punkt–Kasten; das Label muss dem eigenen Punkt am nächsten liegen
+    // (sonst hiesse «x = 5.87» neben der Nullstelle 2.13 das Falsche)
+    const abstand = (k, q) => Math.hypot(Math.max(k.x0 - cx(q.x), 0, cx(q.x) - k.x1), Math.max(k.y0 - cy(q.y), 0, cy(q.y) - k.y1));
+    const eigen = k => cfg.points.every(q => q === p || abstand(k, q) > abstand(k, p)
+      || Math.hypot(cx(q.x) - px, cy(q.y) - py) < 1);   // deckungsgleiche Punkte (Ursprung)
+    // Ist es rund um den Punkt zu eng (schmales Canvas, Punkte dicht beisammen), steht
+    // nur der Wert («4.22» statt «x = 4.22»).
+    const kurz = p.label.split(' = ').pop();
+    const rasterStreng = raster.map(r => r.slice(1));
+    const stufen = [[p.label, kandidaten], [kurz, kandidaten], [p.label, rasterStreng], [kurz, rasterStreng],
+                    [p.label, raster.map(r => [r[1], r[2], r[3], true])]].filter(([t], j) => j % 2 === 0 || t !== p.label);
+    suche: for (const [txt, liste] of stufen) {
+      for (const [x, y, al, ohne] of liste) {
+        const k = kasten(txt, x, y, al, SCHRIFT_B);
+        if (!eigen(k) || !frei(k, ohne)) continue;
+        wahl = Object.assign(k, { align: al, txt });
+        if (ohne) for (let j = hindernisse.length - 1; j >= 0; j--) {
+          const h = hindernisse[j];
+          if (h.zahl && !trennt(k, h)) { h.zahl[0].splice(h.zahl[0].indexOf(h.zahl[1]), 1); hindernisse.splice(j, 1); }
+        }
+        break suche;
+      }
+    }
+    p._wahl = wahl;
+    hindernisse.push(wahl);
+  });
+
+  (cfg.curves || []).forEach((cv, i) => {
+    if (!cv.label) return;
+    const lx = (cv.labelX !== undefined) ? cv.labelX : xMax - 0.2;
+    const ly = cv.fn(lx);
+    // + 26 statt + 14: bei Kurven, die oben aus dem Bild laufen, sass das
+    // Label sonst auf der y-Achsenbeschriftung.
+    const yPx = (ly >= yMin && ly <= yMax) ? cy(ly) - 6 : cy(yMax) + 26;
+    const ax = cx(lx) - 2;
+    let wahl = kasten(cv.label, ax, yPx, 'right', SCHRIFT);
+    wahl.align = 'right'; wahl.txt = cv.label;
+    if (!frei(wahl)) {
+      const kandidaten = [];
+      spuren[i].filter((q, j) => j % 4 === 0).forEach(([px, py]) => {
+        const dist = Math.hypot(px - ax, py - yPx);
+        kandidaten.push([dist, px - 2, py - 6, 'right'], [dist, px + 4, py + 16, 'left'],
+                        [dist, px + 4, py - 6, 'left'], [dist, px - 4, py + 16, 'right']);
+      });
+      kandidaten.sort((p, q) => p[0] - q[0]);
+      const raster = [];
+      for (let gy = 16; gy < Hpx; gy += 8)
+        for (let gx = 4; gx < Wpx; gx += 8) raster.push([Math.hypot(gx - ax, gy - yPx), gx, gy, 'right']);
+      raster.sort((p, q) => p[0] - q[0]);
+      // Reicht auf schmalem Canvas der Platz für den ganzen Term nirgends, steht
+      // nur der Funktionsname («f(x)») — der Term steht in der Live-Anzeige darüber.
+      const kurz = cv.label.split(' = ')[0];
+      suche: for (const [txt, liste] of [[cv.label, kandidaten], [cv.label, raster], [kurz, kandidaten], [kurz, raster]]) {
+        for (const [, x, y, align] of liste) {
+          const k = kasten(txt, x, y, align, SCHRIFT);
+          if (frei(k)) { wahl = k; wahl.align = align; wahl.txt = txt; break suche; }
+        }
+      }
+    }
+    hindernisse.push(wahl);
+    ctx.fillStyle = cv.color; ctx.font = SCHRIFT;
+    ctx.textAlign = wahl.align;
+    beschriftung(ctx, wahl.txt, wahl.x, wahl.y, {align: wahl.align, W:Wpx, H:Hpx});
   });
 
 
@@ -1814,13 +1971,10 @@ function plotChart(cfg) {
   (cfg.points || []).forEach(p => {
     ctx.fillStyle = p.color || '#a02828';
     ctx.beginPath(); ctx.arc(cx(p.x), cy(p.y), 5.5, 0, 2*Math.PI); ctx.fill();
-    if (p.label) {
+    if (p.label && p._wahl) {
       ctx.font = 'bold 13px JetBrains Mono,monospace';
-      ctx.textAlign = (p.labelPos === 'l') ? 'right' : 'left';
-      const dx = (p.labelPos === 'l') ? -8 : 8;
-      const dy = (p.labelPos === 'b') ? 14 : -7;
-      beschriftung(ctx, p.label, cx(p.x) + dx, cy(p.y) + dy,
-                   {align: (p.labelPos === 'l') ? 'right' : 'left', W:Wpx, H:Hpx});
+      ctx.textAlign = p._wahl.align;
+      beschriftung(ctx, p._wahl.txt, p._wahl.x, p._wahl.y, {align: p._wahl.align, W:Wpx, H:Hpx});
     }
   });
 
@@ -1880,11 +2034,16 @@ function renderAllPlots() {
 
 /* Hilfsformat: Zahl mit max. 2 Nachkommastellen, Minus als Unicode */
 function fmtNum(x, dp) {
-  const s = (Math.round(x * 100) / 100).toFixed(dp !== undefined ? dp : 2);
-  return s.replace(/\.?0+$/, '').replace(/^-/, '\u2212') || '0';
+  let s = (Math.round(x * 100) / 100).toFixed(dp !== undefined ? dp : 2);
+  // Nullen nur hinter einem Dezimalpunkt kürzen («10» bleibt «10»), keine negative Null
+  if (s.indexOf('.') >= 0) s = s.replace(/0+$/, '').replace(/\.$/, '');
+  if (/^-0?$/.test(s) || s === '') s = '0';
+  return s.replace(/^-/, '\u2212');
 }
 /* Term der Form "a·x + b" mit Vorzeichen-Logik */
 function fmtLin(a, b) {
+  // Sonderfälle wie fmtAffine (mathlib.js): a = 0 -> nur b, a = ±1 -> «x»/«−x», b = 0 -> ohne «+ 0»
+  if (a === 0) return fmtNum(b);
   const aStr = (a === 1) ? 'x' : (a === -1) ? '\u2212x' : fmtNum(a) + '\u00B7x';
   if (b === 0) return aStr;
   const bAbs = fmtNum(Math.abs(b));
@@ -1892,6 +2051,7 @@ function fmtLin(a, b) {
 }
 // Farbgekoppelte Variante f\u00FCrs Live-HTML: a-Wert blau, b-Wert orange, Rest neutral.
 function fmtLinHTML(a, b) {
+  if (a === 0) return '<span class="tx-orange">' + fmtNum(b) + '</span>';
   const aStr = (a === 1) ? 'x' : (a === -1) ? '\u2212x'
              : '<span class="tx-blau">' + fmtNum(a) + '</span>\u00B7x';
   if (b === 0) return aStr;
@@ -2163,7 +2323,8 @@ function vtRender() {
   const x = parseFloat(document.getElementById('vt-x').value);
   const K = VT_KURVEN[vtAkt];
   const treffer = K.ys(x).filter(y => y >= -5.5 && y <= 5.5);
-  document.getElementById('vt-xv').textContent = x.toFixed(1).replace('-', '\u2212');
+  // fmtNum: exakter Reglerwert (−2.25, −2.5, −2) mit Unicode-Minus
+  document.getElementById('vt-xv').textContent = fmtNum(x);
   const wort = treffer.length === 0 ? 'kein Schnittpunkt'
              : (treffer.length === 1 ? 'genau ein Schnittpunkt' : treffer.length + ' Schnittpunkte');
   document.getElementById('vt-eq').innerHTML =

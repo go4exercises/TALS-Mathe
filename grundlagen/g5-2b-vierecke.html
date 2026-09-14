@@ -2941,16 +2941,74 @@ window.addEventListener('resize', () => {
     }
     // optional: lieber weglassen als eine andere Beschriftung überdecken
     // (gilt nur für die Schenkel e/f — ihre Längen stehen auch in der Legende)
-    function setze(lab, farbe, kandidaten, gewicht = '700', optional = false) {
+    function setze(lab, farbe, kandidaten, gewicht = '700', optional = false, anker = null) {
       let best = null, bestK = Infinity;
       kandidaten.forEach(([x, y, align], i) => {
         const b = kasten(lab, x, y, align, gewicht);
         const roh = kosten(b), kk = roh + 8 * i;
         if (kk < bestK) { best = { b, align, roh }; bestK = kk; }
       });
+      // Kein Platz an der Kante (flache Figur): weiter weg setzen, mit Hinweislinie
+      if (optional && best.roh >= 60 && anker) {
+        const mitLinie = mitHinweislinie(lab, gewicht, anker);
+        if (mitLinie) best = mitLinie;
+      }
       if (optional && best.roh >= 60) return;
+      if (best.linie) {
+        seg(ctx, best.linie[0], best.linie[1], farbe, 1);
+        for (const [px, py] of best.linie[2]) belegt.push({ x0: px - 1.5, x1: px + 1.5, y0: py - 1.5, y1: py + 1.5 });
+      }
       belegt.push(best.b);
       txt(ctx, best.b.x, best.b.y, lab, farbe, FS, best.align, 'middle', gewicht);
+    }
+    function innen(x, y) {
+      const eck = [eckA, eckB, eckCc, eckD];
+      let drin = false;
+      for (let i = 0, j = 3; i < 4; j = i++) {
+        const [xi, yi] = eck[i], [xj, yj] = eck[j];
+        if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) drin = !drin;
+      }
+      return drin;
+    }
+    // anker = [[x, y] auf der Kante, Aussennormale [nx, ny]]; mehrere Anker möglich.
+    // Kandidaten rund um den Anker (Linie nicht ins Innere der Figur), in wachsendem Abstand.
+    function mitHinweislinie(lab, gewicht, anker) {
+      let best = null, bestK = Infinity;
+      anker.forEach(([[axp, ayp], [nx, ny]], ia) => {
+        for (const r of [30, 42, 56, 72, 90]) for (let iw = 0; iw < 24; iw++) {
+          const w = iw * Math.PI / 12, ux = Math.cos(w), uy = Math.sin(w);
+          const dot = ux * nx + uy * ny;
+          if (innen(axp + ux * 6, ayp + uy * 6)) continue;
+          const b = kasten(lab, axp + ux * r * k, ayp + uy * r * k, 'center', gewicht);
+          // Linie vom Anker bis an den Rand des Kastens
+          const cx = (b.x0 + b.x1) / 2, cy = (b.y0 + b.y1) / 2;
+          const dx = cx - axp, dy = cy - ayp, L = Math.hypot(dx, dy);
+          const tx = dx !== 0 ? Math.min((b.x0 - axp) / dx, (b.x1 - axp) / dx) : -Infinity;
+          const ty = dy !== 0 ? Math.min((b.y0 - ayp) / dy, (b.y1 - ayp) / dy) : -Infinity;
+          const tE = Math.max(tx, ty);
+          if (!(tE > 0) || tE * L < 10) continue;
+          const vx = dx / L, vy = dy / L;
+          const p0 = [axp + vx * 3, ayp + vy * 3], p1 = [axp + dx * tE, ayp + dy * tE];
+          const n = Math.max(1, Math.ceil(Math.hypot(p1[0] - p0[0], p1[1] - p0[1]) / 3));
+          const punkte = [];
+          for (let i = 0; i <= n; i++) punkte.push([lerp(p0[0], p1[0], i / n), lerp(p0[1], p1[1], i / n)]);
+          // hart: Überdeckung mit Beschriftungen (Kasten oder Linie), weich: Figurlinien
+          let hart = 0, weich = 0;
+          for (const q of belegt) {
+            if (Math.min(b.x1, q.x1) > Math.max(b.x0, q.x0) && Math.min(b.y1, q.y1) > Math.max(b.y0, q.y0)) hart += 60;
+            for (const [px, py] of punkte) if (px > q.x0 && px < q.x1 && py > q.y0 && py < q.y1) hart += 60;
+          }
+          if (hart && best && !best.roh) continue;
+          for (const [lx, ly] of linienPkt) {
+            if (lx > b.x0 && lx < b.x1 && ly > b.y0 && ly < b.y1) weich += 4;
+            for (const [px, py] of punkte) if (Math.abs(px - lx) < 2 && Math.abs(py - ly) < 2 && Math.hypot(px - axp, py - ayp) > 6) weich += 3;
+          }
+          // ohne Überdeckung geht immer vor
+          const kk = (hart ? 1e6 : 0) + weich + 0.4 * r + 6 * (1 - dot) + 4 * ia;
+          if (kk < bestK) { best = { b, align: 'center', roh: hart, linie: [p0, p1, punkte] }; bestK = kk; }
+        }
+      });
+      return best;
     }
     const kopf = 'A bleibt ' + (0.5 * (A_GRUND + c) * h).toFixed(2) + ' — egal, wie stark geschert wird';
     belegt.push(kasten(kopf, W / 2, 16 * k, 'center', '600'));
@@ -3025,13 +3083,19 @@ window.addEventListener('resize', () => {
                       [P(A_GRUND, 0), P(d + c, h), knapp ? 'f' : 'f = ' + f.toFixed(2)]];
     for (const [p1, p2, lab] of schenkel) {
       // Kandidaten: Kantenmitte, dann näher an den Enden; erst nah, dann weiter weg
-      const kand = [];
+      const kand = [], anker = [];
       for (const ab of [13, 24]) for (const t of [0.5, 0.3, 0.7]) {
         const q = aussen([lerp(p1[0], p2[0], t - 0.5), lerp(p1[1], p2[1], t - 0.5)],
                          [lerp(p1[0], p2[0], t + 0.5), lerp(p1[1], p2[1], t + 0.5)], ab * k);
         kand.push([q[0], q[1], 'center']);
       }
-      setze(lab, C.blau, kand, '700', true);
+      for (const t of [0.5, 0.3, 0.7, 0.15, 0.85, 0.02, 0.98]) {
+        const pk = [lerp(p1[0], p2[0], t), lerp(p1[1], p2[1], t)];
+        const q = aussen([lerp(p1[0], p2[0], t - 0.5), lerp(p1[1], p2[1], t - 0.5)],
+                         [lerp(p1[0], p2[0], t + 0.5), lerp(p1[1], p2[1], t + 0.5)], 1);
+        anker.push([pk, [q[0] - pk[0], q[1] - pk[1]]]);
+      }
+      setze(lab, C.blau, kand, '700', true, anker);
     }
 
     const A = 0.5 * (A_GRUND + c) * h;

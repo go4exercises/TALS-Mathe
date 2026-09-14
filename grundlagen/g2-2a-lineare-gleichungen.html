@@ -1244,6 +1244,37 @@ function drawThree() {
     ctx.beginPath(); ctx.arc(cx(x), cy(rs), 6, 0, Math.PI * 2); ctx.fill();
   }
   ctx.restore();
+
+  // Achsenzahlen, über die Strecke oder Punkt laufen (x = −2 über «−2»,
+  // auf schmalem Canvas x = −0.5 und −1 über die y-Zahlen), auf weissem
+  // Grund neu setzen; die beiden Punkte danach wieder obenauf
+  if (abstand > 0) {
+    ctx.font = '13px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
+    const sx = cx(x), yOben = padT, yUnten = padT + PH;
+    const klemm = v => Math.max(yOben, Math.min(yUnten, v));
+    const formen = [[sx - 1.5, sx + 1.5, klemm(Math.min(cy(ls), cy(rs))), klemm(Math.max(cy(ls), cy(rs)))]];
+    [ls, rs].forEach(v => { const py = cy(v); if (py >= yOben && py <= yUnten) formen.push([sx - 5, sx + 5, py - 5, py + 5]); });
+    let neuGesetzt = false;
+    const neu = (txt, tx, ty, align) => {
+      ctx.textAlign = align;
+      const m = ctx.measureText(txt);
+      const l = tx - m.actualBoundingBoxLeft, r = tx + m.actualBoundingBoxRight;
+      const t = ty - m.actualBoundingBoxAscent, b = ty + m.actualBoundingBoxDescent;
+      if (formen.some(f => f[0] < r && f[1] > l && f[2] < b && f[3] > t)) {
+        beschriftung(ctx, txt, tx, ty, {align, pad: 1}); neuGesetzt = true;
+      }
+    };
+    for (let gx = -2; gx <= 8; gx += 2) if (gx !== 0) neu(fmtNum(gx), cx(gx), cy(0) + 13, 'center');
+    for (let gy = -6; gy <= 10; gy += 2) if (gy !== 0) neu(fmtNum(gy), cx(0) - 5, cy(gy) + 3, 'right');
+    if (neuGesetzt) {
+      ctx.save();
+      ctx.beginPath(); ctx.rect(padL, padT, PW, PH); ctx.clip();
+      ctx.fillStyle = '#2d6a3e'; ctx.beginPath(); ctx.arc(sx, cy(rs), 5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#1a4f8a'; ctx.beginPath(); ctx.arc(sx, cy(ls), 5, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+  }
+
   ctx.font = 'bold 13px JetBrains Mono,monospace'; ctx.fillStyle = '#b85c00';
   if (abstand === 0) beschriftung(ctx, `S(${fmtNum(x)} | ${rs})`, cx(x) - 9, cy(rs) - 8, {align:'right', W, H});
 
@@ -1565,11 +1596,24 @@ function drawVkipp() {
   ctx.fillText('vorher', 6, yO - 22);
   ctx.fillText('nach · k', 6, yU - 30);
 
-  const punkt = (x, y, col, lab) => {
+  const punkt = (x, y, col, lab, lx) => {
     ctx.fillStyle = col;
     ctx.beginPath(); ctx.arc(px(x), y, 6, 0, Math.PI * 2); ctx.fill();
     ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-    ctx.fillText(lab, px(x), y - 12);
+    ctx.fillText(lab, lx, y - 12);
+  };
+  // Zwei Punkte auf derselben Achse: Liegen die Beschriftungen näher als
+  // halbe Breiten + 10 px (schmaler Canvas, kleines |k|, k = 0), weichen
+  // beide symmetrisch nach aussen aus; sonst bleiben sie über dem Punkt.
+  const punktPaar = (xa, xb, y, labA, labB) => {
+    ctx.font = 'bold 11px JetBrains Mono, monospace';
+    const wa = ctx.measureText(labA).width, wb = ctx.measureText(labB).width;
+    let la = px(xa), lb = px(xb);
+    const links = xa <= xb ? -1 : 1;              // Seite, auf die a ausweicht
+    const noetig = (wa + wb) / 2 + 10, ist = Math.abs(lb - la);
+    if (ist < noetig) { const s = (noetig - ist) / 2; la += links * s; lb -= links * s; }
+    punkt(xa, y, '#1a4f8a', labA, la);
+    punkt(xb, y, '#b85c00', labB, lb);
   };
   // Abbildungspfeile
   const pfeil = (x1, x2, col) => {
@@ -1579,10 +1623,8 @@ function drawVkipp() {
   };
   pfeil(VK_A, ak, '#1a4f8a');
   pfeil(VK_B, bk, '#b85c00');
-  punkt(VK_A, yO, '#1a4f8a', 'a = 2');
-  punkt(VK_B, yO, '#b85c00', 'b = 5');
-  punkt(ak, yU, '#1a4f8a', nz(ak));
-  punkt(bk, yU, '#b85c00', nz(bk));
+  punktPaar(VK_A, VK_B, yO, 'a = 2', 'b = 5');
+  punktPaar(ak, bk, yU, nz(ak), nz(bk));
 
   // Statuszeile
   ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
