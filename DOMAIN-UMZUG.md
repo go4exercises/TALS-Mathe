@@ -8,6 +8,11 @@ Domain, die beide Lehrmittel trägt und für die geplanten Erweiterungen
 Phasen 0–2 sind erledigt und nachgemessen; Phase 3 läuft. Der Ist-Zustand steht
 jeweils unter der Phase.
 
+> **Nachgemessen am 14. September 2026:** Phasen 0–4 sind live erledigt. Offen sind nur
+> noch der Physik-Markenname (Phase 5), die Search Console (Phase 6, von aussen nicht
+> messbar — siehe dort) und die Anki-Decks. Neu: Der Ordner `apex-startseite/` liegt
+> jetzt *hinter* der ausgelieferten Seite (Phase 4).
+
 ---
 
 ## Rollen
@@ -192,6 +197,15 @@ wie `mathe.`.
 
 ### ⚠️ Der ausgelieferte Stand hinkt dem Ordner hinterher
 
+> **Überholt — nachgemessen am 14.9.2026:** Die Apex-Seite ist nachgezogen
+> (`last-modified` 9.9.2026). Live lädt sie `schriften.css` (200) samt Schriftdateien
+> (200), **kein** `fonts.googleapis.com` mehr, Kachel-Layout mit `auto-fit` und
+> `:focus-visible` ist da. Die Umkehrung gilt jetzt: Live steht zusätzlich ein Link
+> «Projektwoche IDM 2027» auf `projektwoche/` (200) samt CSS-Block `.anlass`, der in
+> `apex-startseite/index.html` **fehlt**. Wer den Ordner das nächste Mal mit `rsync
+> --delete` ins Apex-Repo kopiert, löscht diesen Link — vorher den Ordner aus dem
+> Apex-Repo aktualisieren. Der Text unten beschreibt den Stand vom 31.8.
+
 `apex-startseite/index.html` ist seither **zweimal geändert** worden, live ist noch die
 Fassung vom 11.8.:
 
@@ -253,6 +267,12 @@ Wahl.
 > aus, kein `googleapis`, kein `jsdelivr`. Damit ist der Markenname der **einzige** offene
 > Punkt des ganzen Umzugs.
 
+>
+> **Nachgemessen am 14.9.2026:** unverändert offen. `https://physik.begreifbar.ch/`
+> (`last-modified` 13.9.2026) liefert `<title>TALS Physik — RLP-BM 2030</title>` und
+> `og:site_name` «TALS Physik»; das lokale Physik-Repo hat denselben Titel. Kein
+> `googleapis`/`jsdelivr`.
+
 🔑 **Komplett bei dir** — ich fasse das Physik-Repo grundsätzlich nicht an
 (`CLAUDE.md`). Dort dieselben Schritte: `CNAME` mit `physik.begreifbar.ch`,
 Pages-Einstellung, Enforce HTTPS, Basis-URL im dortigen SEO-Skript, Querlinks
@@ -262,6 +282,14 @@ zurück auf `mathe.begreifbar.ch`. Ich lege den Eintrag dafür in
 ---
 
 ## Phase 6 · Auffindbarkeit
+
+> **Nachgemessen am 14.9.2026:** Von aussen ist kein Zeichen einer Search-Console-
+> Verifikation zu sehen — kein TXT-Record `google-site-verification` auf `begreifbar.ch`
+> (dort nur SPF und der GitHub-TXT), kein Meta-Tag auf `mathe.begreifbar.ch`, keine
+> Verifikationsdatei im Repo. Das spricht dafür, dass die Property nicht angelegt ist;
+> sicher sagen kann es nur die Search Console selbst (Verifikation per Google-Konto
+> hinterlässt keine Spur auf der Seite). `sitemap.xml` ist erreichbar (58 Einträge),
+> `robots.txt` verweist darauf.
 
 - [ ] 🔑 **Google Search Console**: neue Property `mathe.begreifbar.ch` anlegen
       (Verifikation läuft über denselben DNS-Zugang) und `sitemap.xml` einreichen.
