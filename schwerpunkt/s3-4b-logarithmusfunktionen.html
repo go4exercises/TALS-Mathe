@@ -436,16 +436,16 @@ MathJax = {
     <p>Oben lineare Achse (0…1000); unten log-Achse (10⁰…10³); Zeiger bei \(x\); \(\lg x\) als Abstand</p>
   </div>
   <div class="widget-body">
-    <div class="sl-row akz-blau">
-      <label>Wert <span class="var">\(x\)</span></label>
-      <input type="range" id="ll-x" min="0" max="3" step="0.01" value="2">
-      <span class="sl-val" id="ll-xv">100</span>
-    </div>
     <div class="typ-btns" id="ll-snap-btns">
       <button class="typ-btn" onclick="setLlX(1)">1</button>
       <button class="typ-btn" onclick="setLlX(10)">10</button>
       <button class="typ-btn aktiv" onclick="setLlX(100)">100</button>
       <button class="typ-btn" onclick="setLlX(1000)">1000</button>
+    </div>
+    <div class="sl-row akz-blau">
+      <label>Wert <span class="var">\(x\)</span></label>
+      <input type="range" id="ll-x" min="0" max="3" step="0.01" value="2">
+      <span class="sl-val" id="ll-xv">100</span>
     </div>
     <div class="formel-live">
       <div class="fl-label">Ablesen</div>
@@ -595,16 +595,16 @@ MathJax = {
     <p>Restanteil \(N/N_0\) einstellen · Zerfallskurve mit abgelesenem Alter · Halbwertszeit \(T = 5730\) a</p>
   </div>
   <div class="widget-body">
-    <div class="sl-row akz-orange">
-      <label>Restanteil <span class="var">\(N/N_0\)</span></label>
-      <input type="range" id="c14-r" min="0.06" max="1" step="0.01" value="0.5">
-      <span class="sl-val" id="c14-rv">50%</span>
-    </div>
     <div class="typ-btns" id="c14-snap-btns">
       <button class="typ-btn" onclick="setC14(1)">100 %</button>
       <button class="typ-btn aktiv" onclick="setC14(0.5)">50 %</button>
       <button class="typ-btn" onclick="setC14(0.25)">25 %</button>
       <button class="typ-btn" onclick="setC14(0.527)">Ötzi</button>
+    </div>
+    <div class="sl-row akz-orange">
+      <label>Restanteil <span class="var">\(N/N_0\)</span></label>
+      <input type="range" id="c14-r" min="0.06" max="1" step="0.01" value="0.5">
+      <span class="sl-val" id="c14-rv">50%</span>
     </div>
     <div class="formel-live">
       <div class="fl-label">Alter der Probe</div>
@@ -1329,7 +1329,9 @@ function drawC14(){
   document.getElementById('c14-rv').textContent = Math.round(r * 100) + '%';
   document.getElementById('c14-eq').innerHTML =
     `t = 5730 · log(1/2)(${r.toFixed(2)}) = ${Math.round(t).toLocaleString('de-CH')} a`;
-  document.querySelectorAll('#c14-snap-btns .typ-btn').forEach(b => b.classList.remove('aktiv'));
+  // Knopf hervorheben, dessen Voreinstellung dem Regler entspricht (Ötzi 0.527 rastet auf 0.53)
+  document.querySelectorAll('#c14-snap-btns .typ-btn').forEach((b, i) =>
+    b.classList.toggle('aktiv', Math.abs(r - [1, 0.5, 0.25, 0.527][i]) < 0.005));
 
   const tMax = 24000;   // knapp über 4 Halbwertszeiten
   const {ctx, W, H, cx, cy} = gridApp('c14-canvas', 240, 0, tMax, 0, 100, 5730, 20, 't [a]', 'N/N₀ [%]');

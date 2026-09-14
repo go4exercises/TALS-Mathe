@@ -127,12 +127,38 @@ mit `width:min(440px,86vw)` auf jeder Breite.
 Diese Punkte wurden in Physik pro Animation umgesetzt; in Mathe nur übernehmen, wo es
 inhaltlich passt:
 
-- [ ] **Play-/Pause-Knöpfe entfernen, wo unnötig** — Animationen starten ohnehin per
+- [x] **Play-/Pause-Knöpfe entfernen, wo unnötig** — Animationen starten ohnehin per
   IntersectionObserver-Autostart (`makeLoop(canvasId, null, tick)` statt Button-ID).
-- [ ] **Auswahl-Knöpfe + Regler in einer `.sl-row`** (Knöpfe zuerst, dann Regler-`.sl-grp`)
+- [x] **Auswahl-Knöpfe + Regler in einer `.sl-row`** (Knöpfe zuerst, dann Regler-`.sl-grp`)
   als einheitliches Bedienmuster.
-- [ ] **Texte auf Schweizer Hochdeutsch / Punkt als Dezimaltrennzeichen** gegenprüfen
+- [x] **Texte auf Schweizer Hochdeutsch / Punkt als Dezimaltrennzeichen** gegenprüfen
   (gilt in Mathe ohnehin, aber bei kopierten Snippets kontrollieren).
+
+> **Geprüft am 14.09.2026:**
+>
+> 1. **Play/Pause — nichts zu tun.** Mathe hat keine Endlos-Animationen und kein
+>    `makeLoop`. Die zwei Startknöpfe (g2-2b «Fahrt starten», g4-2 «Animation starten»)
+>    lösen einen einmaligen Ablauf aus, nachdem man einen Wert eingestellt hat — der
+>    Knopf gehört dort zur Didaktik. Die Stativ-Animation in g5-2a läuft ohne Knopf.
+> 2. **Reihenfolge übernommen, Zusammenlegen nicht.** Gemessen: 30 Widgets mit
+>    Auswahl-Knöpfen neben einer `.sl-row` — 16 mit Knöpfen oben, 14 unten. Jetzt stehen
+>    die Knöpfe überall **vor** der Reglerzeile (14 px Abstand, bestehende Klassen):
+>    g2-3 Geradenbüschel, g3-3 Diskriminante, g5-1 Winkelpaare, s2-2a Pol-Falle,
+>    s2-2c Vorzeichentabellen-Labor und Betrags-Explorer, s3-1 Ungleichungs-Labor,
+>    s3-4b log-Leiter und Radiokarbon, s3-6 Waagrechte am W, s4-1 Raumwinkel,
+>    s4-2c Kugelteil, s4-3b Winkel-Labor. Bewusst unten geblieben: g5-1
+>    Winkel-Klassifikator (Antwortknöpfe neben der Skizze, keine Auswahl für den Regler)
+>    und g2-2b Flächenmodell (Zurück/Weiter). **Nicht** in eine gemeinsame `.sl-row`
+>    gelegt: Die Mathe-Knopftexte sind lang («c = 3: D > 0 (zwei Nullstellen)»), die
+>    Zeile bräche ohnehin um und drückte die Regler. Nebenbei: Radiokarbon hob den
+>    aktiven Knopf nie hervor (`drawC14` entfernte `aktiv` immer) — behoben.
+> 3. **Sprache und Dezimalpunkt — sauber.** Kein ß in Seiten und Skripten (nur die
+>    Such-Normalisierung in `suche.js`), kein Dezimalkomma in Anzeigen, Tausender über
+>    `toLocaleString('de-CH')`, kein €, keine Physik-Reste (`physiklib`, Bernstein).
+>    Einziger Fund daneben, nicht Teil dieses Punkts: Auf mehreren
+>    **Schwerpunktfach**-Seiten stehen negative Zahlen noch mit Bindestrich statt «−»
+>    (u. a. s3-5, s3-2a/b, s3-4a/b, s3-6, s2-2b; dazu «−0 a» in s3-4b und «≈ −0.00» in s3-5).
+>    Im Grundlagenfach ist das seit dem 14.09.2026 erledigt.
 
 ---
 
