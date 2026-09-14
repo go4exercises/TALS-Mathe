@@ -1070,8 +1070,8 @@ Zweiklammersatz.</p>
     </div>
   </div>
   <p style="margin-top:10px;font-size:9.5pt;color:var(--tinte-2);font-style:italic">
-    Schreib die Antwort so, wie du sie auch von Hand notieren würdest — Leerzeichen und
-    Reihenfolge der Faktoren sind egal. Beispiele für gültige Eingaben: <code>4x(3x - 2)</code>,
+    Schreib die Antwort so, wie du sie auch von Hand notieren würdest — Leerzeichen und die
+    Reihenfolge der Faktoren und der Summanden in einer Klammer sind egal. Beispiele für gültige Eingaben: <code>4x(3x - 2)</code>,
     <code>(x+9)(x-9)</code>, <code>(x+3)^2</code>.</p>
 </div>
 
@@ -1087,29 +1087,104 @@ Zweiklammersatz.</p>
             .replace(/³/g, '^3')
             .toLowerCase();
   }
-  function check(id, fbId, alternativen) {
+  // Geprüft wird nicht gegen eine Liste von Schreibweisen, sondern mathematisch:
+  // gleiches Polynom, dieselben Faktoren (Reihenfolge von Faktoren und Summanden
+  // egal) und in keiner Klammer mehr ein gemeinsamer Zahlfaktor.
+  function fakPruefer() {
+    // Polynom: Map «Monom» → Koeffizient; Monom z. B. "a1x2" für a·x².
+    const konst = c => new Map([['', c]]);
+    const zerlege = m => { const o = {}; for (const [, v, e] of m.matchAll(/([a-z])(\d+)/g)) o[v] = +e; return o; };
+    const monom = o => Object.keys(o).sort().map(v => v + o[v]).join('');
+    const add = (p, q, k = 1) => { const r = new Map(p); for (const [m, c] of q) { const v = (r.get(m) || 0) + k * c; if (Math.abs(v) < 1e-12) r.delete(m); else r.set(m, v); } return r; };
+    const mul = (p, q) => { let r = new Map(); for (const [m1, c1] of p) for (const [m2, c2] of q) { const a = zerlege(m1), b = zerlege(m2); for (const v in b) a[v] = (a[v] || 0) + b[v]; r = add(r, new Map([[monom(a), c1 * c2]])); } return r; };
+    const pow = (p, n) => { let r = konst(1); for (let k = 0; k < n; k++) r = mul(r, p); return r; };
+
+    // Rekursiver Abstieg: Summe aus Termen, Term = Folge von Faktoren (implizites Mal).
+    function parse(s) {
+      let i = 0;
+      const peek = () => s[i];
+      function ausdruck() {
+        const terme = []; let poly = new Map(); let vorz = 1;
+        if (peek() === '+' || peek() === '-') { vorz = peek() === '-' ? -1 : 1; i++; }
+        for (;;) {
+          const f = [];
+          while (i < s.length && /[0-9.a-z(]/.test(peek())) f.push(faktor());
+          if (!f.length) throw new Error('leer');
+          poly = add(poly, f.reduce((acc, x) => mul(acc, pow(x.basis, x.exp)), konst(vorz)));
+          terme.push(f);
+          if (peek() === '+' || peek() === '-') { vorz = peek() === '-' ? -1 : 1; i++; continue; }
+          return { poly, terme };
+        }
+      }
+      function faktor() {
+        let basis;
+        if (peek() === '(') { i++; basis = ausdruck().poly; if (peek() !== ')') throw new Error('Klammer'); i++; }
+        else if (/[0-9.]/.test(peek())) { let z = ''; while (i < s.length && /[0-9.]/.test(peek())) z += s[i++]; if (isNaN(+z)) throw new Error('Zahl'); basis = konst(+z); }
+        else if (/[a-z]/.test(peek())) { basis = new Map([[peek() + '1', 1]]); i++; }
+        else throw new Error('Zeichen');
+        let exp = 1;
+        if (peek() === '^') { i++; let z = ''; while (i < s.length && /[0-9]/.test(peek())) z += s[i++]; if (!z) throw new Error('Hochzahl'); exp = +z; }
+        return { basis, exp };
+      }
+      const r = ausdruck();
+      if (i !== s.length) throw new Error('Rest');
+      return r;
+    }
+    const gleich = (p, q) => { for (const k of new Set([...p.keys(), ...q.keys()])) if (Math.abs((p.get(k) || 0) - (q.get(k) || 0)) > 1e-9) return false; return true; };
+    // Schlüssel eines Faktors bis auf einen Zahlfaktor: durch den Koeffizienten des grössten Monoms teilen.
+    const schluessel = p => { const ms = [...p.keys()].sort(); const lead = p.get(ms[ms.length - 1]); return ms.map(m => m + ':' + (p.get(m) / lead).toFixed(9)).join('|'); };
+    const inhalt = p => { const c = [...p.values()]; if (!c.every(Number.isInteger)) return 1; const g = (a, b) => b ? g(b, a % b) : Math.abs(a); return c.reduce(g, 0); };
+    function faktoren(r) {
+      if (r.terme.length !== 1) return null;                                    // kein Produkt
+      const liste = [];
+      for (const { basis, exp } of r.terme[0]) {
+        if (basis.size === 0 || (basis.size === 1 && basis.has(''))) continue;    // reine Zahl
+        for (let k = 0; k < exp; k++) liste.push(basis);
+      }
+      return liste;
+    }
+    // Ergebnis: 'ok' | 'ausmultipliziert' | 'unvollstaendig' | 'inhalt:<g>' | 'falsch'
+    return function bewerte(eingabe, loesung) {
+      let e, l;
+      try { e = parse(eingabe); } catch (err) { return 'falsch'; }
+      l = parse(loesung);
+      if (!gleich(e.poly, l.poly)) return 'falsch';
+      const fe = faktoren(e), fl = faktoren(l);
+      if (!fe) return 'ausmultipliziert';
+      const ke = fe.map(schluessel).sort().join('‖'), kl = fl.map(schluessel).sort().join('‖');
+      if (ke !== kl) return 'unvollstaendig';
+      for (const p of fe) if (p.size > 1) { const g = inhalt(p); if (g > 1) return 'inhalt:' + g; }
+      return 'ok';
+    };
+  }
+  const bewerte = fakPruefer();
+  const MELDUNG = {
+    ok: '✓ richtig',
+    ausmultipliziert: '≈ gleichwertig, aber noch nicht als Produkt geschrieben',
+    unvollstaendig: '≈ gleichwertig, aber noch nicht vollständig faktorisiert',
+    falsch: '… probier nochmal'
+  };
+  function check(id, fbId, loesung) {
     const inp = document.getElementById(id);
     const fb = document.getElementById(fbId);
     if (!inp) return;
     inp.addEventListener('input', () => {
       const v = norm(inp.value);
       if (!v) { fb.textContent = ''; fb.className = 'fak-feedback'; return; }
-      if (alternativen.some(a => norm(a) === v)) {
-        fb.textContent = '✓ richtig';
-        fb.className = 'fak-feedback ok';
-      } else {
-        fb.textContent = '… probier nochmal';
-        fb.className = 'fak-feedback fehl';
-      }
+      const urteil = bewerte(v, loesung);
+      fb.textContent = urteil.startsWith('inhalt:')
+        ? `≈ fast — in einer Klammer steckt noch der Faktor ${urteil.slice(7)}`
+        : MELDUNG[urteil];
+      fb.className = 'fak-feedback ' + (urteil === 'ok' ? 'ok' : 'fehl');
     });
   }
-  check('fak1', 'fb1', ['4x(3x-2)', '4x(3x-2)', '(3x-2)4x', '4·x(3x-2)']);
-  check('fak2', 'fb2', ['(x+9)(x-9)', '(x-9)(x+9)']);
-  check('fak3', 'fb3', ['(x+3)^2', '(x+3)(x+3)', '(x+3)²']);
-  check('fak4', 'fb4', ['3(a+3)(a-3)', '3(a-3)(a+3)']);
-  check('fak5', 'fb5', ['(x+3)(x+4)', '(x+4)(x+3)']);
-  check('fak6', 'fb6', ['(x-3)(x+2)', '(x+2)(x-3)']);
-  check('fak7', 'fb7', ['(x+y)(a+2)', '(a+2)(x+y)']);
+  check('fak1', 'fb1', '4x(3x-2)');
+  check('fak2', 'fb2', '(x+9)(x-9)');
+  check('fak3', 'fb3', '(x+3)^2');
+  check('fak4', 'fb4', '3(a+3)(a-3)');
+  check('fak5', 'fb5', '(x+3)(x+4)');
+  check('fak6', 'fb6', '(x-3)(x+2)');
+  check('fak7', 'fb7', '(x+y)(a+2)');
 })();
 </script>
 
