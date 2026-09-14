@@ -492,12 +492,12 @@ Zehnerpotenz geschrieben:</p>
     // Wissenschaftliche Notation
     const exp = Math.floor(Math.log10(Math.abs(num)));
     const mantisse = num / Math.pow(10, exp);
-    const m = parseFloat(mantisse.toPrecision(6)).toString();
+    const m = parseFloat(mantisse.toPrecision(6)).toString().replace('-', '−');
     out.textContent = `${m} · 10${superscript(exp)}`;
     // Engineering-Notation: Exponent auf nächstes Vielfaches von 3 abrunden (gegen −∞)
     const eExp = Math.floor(exp / 3) * 3;
     const eMant = num / Math.pow(10, eExp);
-    const em = parseFloat(eMant.toPrecision(6)).toString();
+    const em = parseFloat(eMant.toPrecision(6)).toString().replace('-', '−');
     eng.textContent = `${em} · 10${superscript(eExp)}`;
   }
   inp.addEventListener('input', update);
@@ -1693,7 +1693,7 @@ function drawZoom() {
   if (!sld) return;
   const eintrag = ZOOM_OBJEKTE[+sld.value];
   const n = eintrag.n;
-  document.getElementById('lbl-zoomN').textContent = n >= 0 ? `+${n}` : `${n}`;
+  document.getElementById('lbl-zoomN').textContent = n >= 0 ? `+${n}` : `−${-n}`;
 
   const { ctx, W, H } = initCanvas('cv-zoom', 340);
   ctx.fillStyle = '#efeade';
@@ -1766,9 +1766,17 @@ function drawZoom() {
   });
 
   // ═══ Rechte Seite: Objekt-Visualisierung ═══
-  const objX = skalaX + 140;
+  // Auf schmalen Bildschirmen rückt die Visualisierung nach links, damit
+  // rechts neben der Skala mindestens 190 px (Kreis Ø 140 + Rand) bleiben.
+  const objX = Math.min(skalaX + 140, W - 190);
   const objCx = objX + (W - objX) / 2;
   const objCy = H / 2;
+  // Schriftgrösse verkleinern, falls ein Text breiter ist als die rechte Fläche
+  const textMax = W - objX - 8;
+  const passendeSchrift = (txt, stil, px) => {
+    ctx.font = `${stil}${px}px monospace`;
+    while (px > 9 && ctx.measureText(txt).width > textMax) ctx.font = `${stil}${--px}px monospace`;
+  };
 
   // Hintergrund-Kreis als Referenz-Rahmen
   ctx.strokeStyle = '#a89b85';
@@ -1787,12 +1795,12 @@ function drawZoom() {
 
   // Objekt-Bezeichnung darunter
   ctx.fillStyle = '#1a4f8a';
-  ctx.font = 'bold 14px monospace';
+  passendeSchrift(eintrag.obj, 'bold ', 14);
   ctx.fillText(eintrag.obj, objCx, objCy + 50);
 
   // Grösse darüber
   ctx.fillStyle = '#5a5040';
-  ctx.font = '13px monospace';
+  passendeSchrift(`Grösse: ${eintrag.gr}`, '', 13);
   ctx.fillText(`Grösse: ${eintrag.gr}`, objCx, objCy - 75);
 
   // Wissenschaftliche Notation gross oben

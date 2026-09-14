@@ -366,7 +366,7 @@ MathJax = {
           <!-- Winkelpunkt -->
           <circle cx="120" cy="120" r="3" fill="#1c1a17"/>
           <!-- Winkel-Label -->
-          <text id="wv-label" x="155" y="105" font-size="14" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
+          <text id="wv-label" x="155" y="105" text-anchor="middle" font-size="14" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
         </svg>
       </div>
       <div>
@@ -480,7 +480,7 @@ MathJax = {
           <line id="zt-arm" x1="100" y1="100" x2="178" y2="100" stroke="#1c1a17" stroke-width="2"/>
           <path id="zt-arc" d="" fill="#ddeaf8" fill-opacity="0.7" stroke="#1a4f8a" stroke-width="2"/>
           <circle cx="100" cy="100" r="2.5" fill="#1c1a17"/>
-          <text id="zt-label" x="135" y="92" font-size="13" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
+          <text id="zt-label" x="135" y="92" text-anchor="middle" font-size="13" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
         </svg>
       </div>
       <div>
@@ -647,7 +647,7 @@ MathJax = {
           <line id="kl-arm" x1="100" y1="100" x2="178" y2="100" stroke="#1c1a17" stroke-width="2"/>
           <path id="kl-arc" d="" fill="#ddeaf8" fill-opacity="0.7" stroke="#1a4f8a" stroke-width="2"/>
           <circle cx="100" cy="100" r="2.5" fill="#1c1a17"/>
-          <text id="kl-label" x="135" y="92" font-size="13" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
+          <text id="kl-label" x="135" y="92" text-anchor="middle" font-size="13" fill="#1a4f8a" font-weight="700" font-family="JetBrains Mono">α</text>
         </svg>
       </div>
       <div>
@@ -1545,6 +1545,22 @@ updateWP();
 /* ══════════════════════════════════════════════════════════
    WIDGET 1: Winkel-Visualisierer (Grad ↔ Radiant)
    ══════════════════════════════════════════════════════════ */
+/* Lage der Winkelbeschriftung α (SVG-Koordinaten, Tintenmitte): auf der Winkelhalbierenden
+   innerhalb des Bogens, solange die Mitte Abstand c zu beiden Schenkeln und zum Bogen hat;
+   sonst ausserhalb des Bogens (höchstens bis rMax); bei ganz kleinen Winkeln knapp über
+   dem beweglichen Schenkel. Für alle Reglerwerte in Python nachgerechnet. */
+function wlPos(cx, cy, deg, rIn, rBogen, rMax, c){
+  const h = deg / 2;
+  let r = rIn, w = h;
+  if(h < 90){
+    const rMin = h > 0 ? c / Math.sin(h * Math.PI / 180) : Infinity;
+    if(Math.max(rIn, rMin) <= rBogen - c)      { r = Math.max(rIn, rMin); }
+    else if(Math.max(rBogen + c, rMin) <= rMax) { r = Math.max(rBogen + c, rMin); }
+    else { r = rMax; w = deg + Math.asin(c / rMax) * 180 / Math.PI; }
+  }
+  const t = w * Math.PI / 180;
+  return [cx + r * Math.cos(t), cy - r * Math.sin(t)];
+}
 function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){[a,b]=[b,a%b];} return a; }
 function radExakt(deg){
   // Gibt einen sauberen Bruch von π zurück (oder Dezimal, wenn nicht möglich)
@@ -1592,16 +1608,16 @@ function updateWV(){
   const arcEy = cy + rArc * Math.sin(angRad);
   const largeArc = deg > 180 ? 1 : 0;
   // sweep flag: 0 = gegen den Uhrzeigersinn (für Standard-Mathekonvention)
-  const arcD = `M ${(cx + rArc).toFixed(1)} ${cy} A ${rArc} ${rArc} 0 ${largeArc} 0 ${arcEx.toFixed(1)} ${arcEy.toFixed(1)}`;
+  // Bei 360° fallen Start- und Endpunkt zusammen, der Bogen entartet: voller Kreis als zwei Halbkreise
+  const arcD = deg >= 360
+    ? `M ${cx + rArc} ${cy} A ${rArc} ${rArc} 0 1 0 ${cx - rArc} ${cy} A ${rArc} ${rArc} 0 1 0 ${cx + rArc} ${cy} Z`
+    : `M ${(cx + rArc).toFixed(1)} ${cy} A ${rArc} ${rArc} 0 ${largeArc} 0 ${arcEx.toFixed(1)} ${arcEy.toFixed(1)}`;
   document.getElementById('wv-arc').setAttribute('d', arcD);
 
-  // Label-Position: Mitte des Bogens
-  const midRad = angRad / 2;
-  const lblR = 30;
-  const lx = cx + lblR * Math.cos(midRad);
-  const ly = cy + lblR * Math.sin(midRad);
+  // Label-Position: im Bogen, bei kleinen Winkeln ausserhalb (Kreis r = 92)
+  const [lx, ly] = wlPos(cx, cy, deg, 30, rArc, 92 - 9, 9);
   document.getElementById('wv-label').setAttribute('x', lx.toFixed(1));
-  document.getElementById('wv-label').setAttribute('y', (ly+5).toFixed(1));
+  document.getElementById('wv-label').setAttribute('y', (ly + 3.5).toFixed(1));  // Tinte von α mittig
 }
 document.getElementById('wv-deg').addEventListener('input', updateWV);
 updateWV();
@@ -1642,7 +1658,8 @@ function updatePY(){
   document.getElementById('py-lbl-b').textContent = `b = ${b}`;
   // Hypotenuse-Label-Position: Mitte
   document.getElementById('py-lbl-c').setAttribute('x', (x0 + aPx/2 + 8).toFixed(1));
-  document.getElementById('py-lbl-c').setAttribute('y', (y0 - bPx/2).toFixed(1));
+  // Grundlinie mind. 4 px über der Hypotenuse am Labelanfang (x-Mitte + 8), sonst berührt «c» bei flachem Dreieck die Linie
+  document.getElementById('py-lbl-c').setAttribute('y', (y0 - bPx/2 + Math.min(0, 8*bPx/aPx - 4)).toFixed(1));
   document.getElementById('py-lbl-c').textContent = `c = ${c.toFixed(2)}`;
 }
 document.getElementById('py-a').addEventListener('input', updatePY);
@@ -1691,12 +1708,10 @@ function updateKL(){
   } else {
     document.getElementById('kl-arc').setAttribute('d', `M ${cx+rArc} ${cy} A ${rArc} ${rArc} 0 ${large} 0 ${aex.toFixed(1)} ${aey.toFixed(1)} L ${cx} ${cy} Z`);
   }
-  // Label
-  const midRad = angRad / 2;
-  const lx = cx + 18 * Math.cos(midRad);
-  const ly = cy + 18 * Math.sin(midRad);
+  // Label: im Bogen, bei kleinen Winkeln ausserhalb (Kreis r = 78)
+  const [lx, ly] = wlPos(cx, cy, deg, 18, rArc, 78 - 8.5, 8.5);
   document.getElementById('kl-label').setAttribute('x', lx.toFixed(1));
-  document.getElementById('kl-label').setAttribute('y', (ly+5).toFixed(1));
+  document.getElementById('kl-label').setAttribute('y', (ly + 3.5).toFixed(1));  // Tinte von α mittig
   klFeedback(deg);
 }
 document.getElementById('kl-deg').addEventListener('input', updateKL);
@@ -1837,28 +1852,52 @@ updateKL();
     ctx.fillText(b + ' m', 0, 0);
     ctx.restore();
 
-    // Diagonale beschriften — mittig
-    const d = Math.sqrt(l*l + b*b);
-    ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px JetBrains Mono, monospace';
-    ctx.textAlign = 'left';
-    // Position oberhalb der Diagonal-Mitte
-    const dxLabel = (x0 + x1)/2 + 6;
-    const dyLabel = (y0 + y1)/2 - 6;
-    ctx.fillText('d ≈ ' + d.toFixed(2) + ' m', dxLabel, dyLabel);
-
     // Plausibilitäts-Anzeige rechts
     const longer = Math.max(l, b);
     const sumLB = l + b;
-    const x_info = W - padR + 5;
     ctx.fillStyle = '#374151'; ctx.font = '13px JetBrains Mono, monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText('Plausibel?', x_info, padT + 8);
+    const infoZeilen = ['Plausibel?', '✓ d > ' + longer, '  (= ' + longer + ')', '✓ d < l + b', '  (= ' + sumLB + ')'];
+    // Spalte als Ganzes so weit nach links, dass die breiteste Zeile ins Canvas passt
+    const breiteste = Math.max(...infoZeilen.map(z => ctx.measureText(z).width));
+    const x_info = Math.min(W - padR + 5, W - breiteste - 4);
+    beschriftung(ctx, infoZeilen[0], x_info, padT + 8, { align: 'left', frei: false, W, H });
     ctx.fillStyle = '#1f6b3a';
-    ctx.fillText('✓ d > ' + longer, x_info, padT + 24);
-    ctx.fillText('  (= ' + longer + ')', x_info, padT + 36);
-    ctx.fillStyle = '#1f6b3a';
-    ctx.fillText('✓ d < l + b', x_info, padT + 52);
-    ctx.fillText('  (= ' + sumLB + ')', x_info, padT + 64);
+    beschriftung(ctx, infoZeilen[1], x_info, padT + 24, { align: 'left', frei: false, W, H });
+    beschriftung(ctx, infoZeilen[2], x_info, padT + 36, { align: 'left', frei: false, W, H });
+    beschriftung(ctx, infoZeilen[3], x_info, padT + 52, { align: 'left', frei: false, W, H });
+    beschriftung(ctx, infoZeilen[4], x_info, padT + 64, { align: 'left', frei: false, W, H });
+
+    // Diagonale beschriften: erste Lage, deren Textkasten weder Diagonale noch Rechteckseiten
+    // noch die Plausibilitäts-Spalte berührt — sonst die mittige Lage mit Halo
+    const d = Math.sqrt(l*l + b*b);
+    const dTxt = 'd ≈ ' + d.toFixed(2) + ' m';
+    ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px JetBrains Mono, monospace';
+    const tw = ctx.measureText(dTxt).width, ta = 10, td = 2, luft = 4;
+    const xm = (x0 + x1)/2, ym = (y0 + y1)/2;
+    const kanten = [[x0, y1, x1, y0], [x0, y0, x1, y0], [x1, y0, x1, y1], [x0, y0, x0, y1], [x0, y1, x1, y1]];
+    const lageFrei = (xl, yb) => {
+      const L = xl - luft, R = xl + tw + luft, O = yb - ta - luft, U = yb + td + luft;
+      if (L < 0 || O < 0 || R > W || U > H) return false;
+      if (R > x_info - 4 && O < padT + 68) return false;
+      return kanten.every(([ax, ay, bx, by]) => {
+        for (let i = 0; i <= 60; i++) {
+          const px = ax + (bx - ax)*i/60, py = ay + (by - ay)*i/60;
+          if (px > L && px < R && py > O && py < U) return false;
+        }
+        return true;
+      });
+    };
+    const yDiag = x => y1 - (x - x0) * rectH / rectW;   // Diagonale an der Stelle x
+    const lagen = [
+      [xm + 6, ym - 6],                              // mittig über der Diagonale
+      xm + 6 + tw + luft <= x1                       // im Rechteck, ganz über der Diagonale
+        ? [xm + 6, yDiag(xm + 6 + tw) - td - luft - 1] : null,
+      [xm + 6, y0 - td - luft - 1],                  // über dem Rechteck, beim Diagonalende
+      [x1 + 8, ym + ta/2],                           // rechts neben dem Rechteck
+      [x0, y0 - td - luft - 1]                       // über dem Rechteck, linksbündig
+    ].filter(Boolean);
+    const lage = lagen.find(([xl, yb]) => lageFrei(xl, yb)) || lagen[0];
+    beschriftung(ctx, dTxt, lage[0], lage[1], { align: 'left', halo: true, bg: '#fff', W, H });
   }
 
   sL.addEventListener('input', render);
@@ -1899,9 +1938,9 @@ updateKL();
     const aex = cx + rArc * Math.cos(a), aey = cy + rArc * Math.sin(a);
     const large = deg > 180 ? 1 : 0;
     $('zt-arc').setAttribute('d', `M ${cx+rArc} ${cy} A ${rArc} ${rArc} 0 ${large} 0 ${aex.toFixed(1)} ${aey.toFixed(1)} L ${cx} ${cy} Z`);
-    const m = a / 2;
-    $('zt-label').setAttribute('x', (cx + 18 * Math.cos(m)).toFixed(1));
-    $('zt-label').setAttribute('y', (cy + 18 * Math.sin(m) + 5).toFixed(1));
+    const [lx, ly] = wlPos(cx, cy, deg, 18, rArc, 78 - 8.5, 8.5);   // wie im Klassifikator
+    $('zt-label').setAttribute('x', lx.toFixed(1));
+    $('zt-label').setAttribute('y', (ly + 3.5).toFixed(1));
   }
 
   function stelleFrage(){

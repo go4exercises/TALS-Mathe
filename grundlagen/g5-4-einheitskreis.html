@@ -1330,6 +1330,9 @@ buildNav({
 <!-- ================================================================ -->
 <script>
 function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+// Zahl mit d Dezimalen, ohne negative Null. Anzeige: Unicode-Minus; in LaTeX minus = '-'.
+// plus = '+' setzt ein Pluszeichen vor positive Werte (0 bleibt ohne Vorzeichen).
+function zahlFix(v, d, minus = '−', plus = '') { const t = Math.abs(v).toFixed(d); return (+t === 0 ? '' : (v < 0 ? minus : plus)) + t; }
 
 const css = getComputedStyle(document.documentElement);
 const C = {
@@ -1591,8 +1594,8 @@ function drawSinCos() {
   const sinVal = Math.sin(phiR);
 
   legEk1Phi.textContent = phiLabel;
-  legEk1Cos.textContent = cosVal.toFixed(3);
-  legEk1Sin.textContent = sinVal.toFixed(3);
+  legEk1Cos.textContent = zahlFix(cosVal, 3);
+  legEk1Sin.textContent = zahlFix(sinVal, 3);
 
   let q;
   if (phiD === 0 || phiD === 360) q = 'auf der positiven x-Achse';
@@ -1603,7 +1606,7 @@ function drawSinCos() {
   else if (phiD < 180) q = 'im Quadranten II (sin > 0, cos < 0)';
   else if (phiD < 270) q = 'im Quadranten III (sin < 0, cos < 0)';
   else q = 'im Quadranten IV (sin < 0, cos > 0)';
-  erklEk1.innerHTML = `\\(P\\) liegt ${q}. Koordinaten: \\(\\cos ${phiLabel} = ${cosVal.toFixed(3)}\\), \\(\\sin ${phiLabel} = ${sinVal.toFixed(3)}\\).`;
+  erklEk1.innerHTML = `\\(P\\) liegt ${q}. Koordinaten: \\(\\cos ${phiLabel} = ${zahlFix(cosVal, 3, '-')}\\), \\(\\sin ${phiLabel} = ${zahlFix(sinVal, 3, '-')}\\).`;
   mjTypeset([erklEk1]);
 }
 sldEk1Phi.addEventListener('input', drawSinCos);
@@ -1716,14 +1719,14 @@ function drawTan() {
     txt(ctx, tanX + 6, cy - R + 14, 'definiert!', C.rot, 11, 'left');
   } else {
     const yPos = tanVal > 0 ? cy - R - 10 : cy + R + 10;
-    txt(ctx, tanX + 6, yPos, `tan φ = ${tanVal.toFixed(2)}`, C.orange, 11, 'left');
+    txt(ctx, tanX + 6, yPos, `tan φ = ${zahlFix(tanVal, 2)}`, C.orange, 11, 'left');
     txt(ctx, tanX + 6, yPos + 14, '(zu gross für Bild)', C.tinte2, 10, 'left');
   }
 
   legEk2Phi.textContent = phiLabel;
   if (tanDefiniert) {
-    legEk2Tan.textContent  = tanVal.toFixed(3);
-    legEk2Quot.textContent = (Math.sin(phiR)/Math.cos(phiR)).toFixed(3);
+    legEk2Tan.textContent  = zahlFix(tanVal, 3);
+    legEk2Quot.textContent = zahlFix(Math.sin(phiR)/Math.cos(phiR), 3);
   } else {
     legEk2Tan.textContent  = 'undefiniert';
     legEk2Quot.textContent = 'cos = 0';
@@ -1732,9 +1735,9 @@ function drawTan() {
   if (!tanDefiniert) {
     erklEk2.innerHTML = `Bei \\(\\varphi = ${phiLabel}\\) liegt \\(P\\) genau über/unter \\(O\\); der Strahl \\(OP\\) ist parallel zur Tangente und schneidet sie nicht — \\(\\tan ${phiLabel}\\) ist <strong>nicht definiert</strong>.`;
   } else if (Math.abs(tanVal) > 4) {
-    erklEk2.innerHTML = `\\(\\tan ${phiLabel} = ${tanVal.toFixed(2)}\\) — sehr gross, da \\(\\cos\\varphi\\) nahe 0 ist.`;
+    erklEk2.innerHTML = `\\(\\tan ${phiLabel} = ${zahlFix(tanVal, 2, '-')}\\) — sehr gross, da \\(\\cos\\varphi\\) nahe 0 ist.`;
   } else {
-    erklEk2.innerHTML = `Der Strahl \\(OP\\) schneidet die rechte Tangente in \\(S = (1, ${tanVal.toFixed(3)})\\); die Länge \\(\\overline{RS} = |\\tan ${phiLabel}| = ${Math.abs(tanVal).toFixed(3)}\\).`;
+    erklEk2.innerHTML = `Der Strahl \\(OP\\) schneidet die rechte Tangente in \\(S = (1, ${zahlFix(tanVal, 3, '-')})\\); die Länge \\(\\overline{RS} = |\\tan ${phiLabel}| = ${Math.abs(tanVal).toFixed(3)}\\).`;
   }
   mjTypeset([erklEk2]);
 }
@@ -2031,7 +2034,7 @@ function drawSymm() {
   const cosA = Math.cos(ar), sinA = Math.sin(ar), cosB = Math.cos(br), sinB = Math.sin(br);
 
   document.getElementById('lbl-syAlpha').textContent = alpha + '°';
-  const nf = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(2);
+  const nf = v => zahlFix(v, 2);
   document.getElementById('leg-syCos').textContent = `${nf(cosA)} / ${nf(cosB)}`;
   document.getElementById('leg-sySin').textContent = `${nf(sinA)} / ${nf(sinB)}`;
   const achseEl = document.getElementById('leg-syAchse');
@@ -2357,11 +2360,11 @@ function drawSchiff() {
   ctx.textAlign = 'center';
   const ostLblX = cx + Math.cos(phiRad) * R / 2;
   // Tiefer gesetzt: auf Hoehe cy-8 kollidierte die Zahl mit dem Winkel-Label φ.
-  ctx.fillText(`${ostVersatz >= 0 ? '+' : ''}${ostVersatz.toFixed(2)}`, ostLblX, cy + 18);
+  ctx.fillText(zahlFix(ostVersatz, 2, '−', '+'), ostLblX, cy + 18);
   ctx.fillStyle = '#1f6b3a';
   const nordLblY = cy - Math.sin(phiRad) * R / 2;
   ctx.textAlign = 'left';
-  ctx.fillText(`${nordVersatz >= 0 ? '+' : ''}${nordVersatz.toFixed(2)}`, cx + 8, nordLblY + 4);
+  ctx.fillText(zahlFix(nordVersatz, 2, '−', '+'), cx + 8, nordLblY + 4);
 
   // Quadranten-Anzeige unten — Achsenwinkel liegen auf keiner Quadranten-Fläche
   const pd = ((phiDeg % 360) + 360) % 360;
@@ -2375,9 +2378,9 @@ function drawSchiff() {
 
   // Live-Anzeigen
   document.getElementById('leg-schiffX').textContent =
-    `${ostVersatz >= 0 ? '+' : ''}${ostVersatz.toFixed(3)}`;
+    zahlFix(ostVersatz, 3, '−', '+');
   document.getElementById('leg-schiffY').textContent =
-    `${nordVersatz >= 0 ? '+' : ''}${nordVersatz.toFixed(3)}`;
+    zahlFix(nordVersatz, 3, '−', '+');
 
   // Erklärung je nach Quadrant — Achsenwinkel gesondert behandeln
   let erkl;

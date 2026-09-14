@@ -806,7 +806,7 @@ MathJax = {
 
 <h3 id="kongruenz">Kongruenzsätze — wann ist ein Dreieck eindeutig?</h3>
 
-<p>Aus wie vielen Angaben lässt sich ein Dreieck eindeutig konstruieren? Die Antwort ist immer dieselbe: <strong>drei Stücke</strong> — aber nicht jede Kombination reicht. Vier Kombinationen führen zu einem eindeutigen Dreieck:</p>
+<p>Aus wie vielen Angaben lässt sich ein Dreieck eindeutig konstruieren? Die Antwort ist immer dieselbe: <strong>drei Stücke</strong> — aber nicht jede Kombination reicht. Welche Anordnungen legen das Dreieck eindeutig fest? Klicke die fünf Fälle durch:</p>
 
 <div class="anim">
   <div class="widget-titelzeile">
@@ -854,7 +854,7 @@ MathJax = {
 
 <h3 id="pythagoras">Satzgruppe Pythagoras</h3>
 
-<p>Im rechtwinkligen Dreieck — dem rechte Winkel sitze bei \(C\) — gelten drei verwandte Sätze. Sie alle drücken Längen-Beziehungen aus, die mit der Höhe \(h\) auf der Hypotenuse \(c\) und den Hypotenusen-Abschnitten \(p\) (unter \(a\)) und \(q\) (unter \(b\)) zusammenhängen.</p>
+<p>Im rechtwinkligen Dreieck — der rechte Winkel sitze bei \(C\) — gelten drei verwandte Sätze. Sie alle drücken Längen-Beziehungen aus, die mit der Höhe \(h\) auf der Hypotenuse \(c\) und den Hypotenusen-Abschnitten \(p\) (unter \(a\)) und \(q\) (unter \(b\)) zusammenhängen.</p>
 
 <table class="ftb-tabelle">
   <thead><tr><th>Satz</th><th>Aussage</th><th>Was er bedeutet</th></tr></thead>
@@ -1343,6 +1343,49 @@ function initCv(id) {
   return { ctx, W: rect.width, H: rect.height, cv };
 }
 
+// Wie initCv, aber fuer Figuren mit fest gesetzten Koordinaten: Braucht die
+// Figur eine logische Flaeche LW × LH und ist der Canvas schmaler, wird die
+// Zeichnung mit k = Breite/LW verkleinert und der Canvas (wie bei initCanvas)
+// per CSS so hoch gemacht, dass LH hineinpasst. Bei breitem Canvas ist k = 1
+// und alles bleibt wie mit initCv. k steht in cv.dataset.k — txt() haelt die
+// Schrift damit lesbar, makeDraggable rechnet Zeigerpositionen zurueck.
+function initCvSkaliert(id, LW, LH) {
+  const cv = document.getElementById(id);
+  if (!cv.dataset.w0) { cv.dataset.w0 = cv.width; cv.dataset.h0 = cv.height; }
+  const breite = cv.getBoundingClientRect().width;
+  const k = breite > 0 ? Math.min(1, breite / LW) : 1;
+  // Hoehe, die height:auto aus dem Seitenverhaeltnis der Attribute ergibt
+  const autoH = breite * (+cv.dataset.h0) / (+cv.dataset.w0);
+  if (autoH < LH * k) {
+    cv.style.height = (LH * k) + 'px';
+  } else if (cv.style.height) {
+    // zurueck zu height:auto — Puffer auf das urspruengliche Seitenverhaeltnis
+    cv.style.height = '';
+    cv.width = +cv.dataset.w0; cv.height = +cv.dataset.h0;
+  }
+  const rect = cv.getBoundingClientRect();
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const bw = Math.round(rect.width * dpr), bh = Math.round(rect.height * dpr);
+  // Wie initCv nur bei neuer Breite anpassen: bei height:auto folgt die Hoehe
+  // dem Puffer, ein Angleichen bei jedem Aufruf liesse sie wachsen.
+  if (cv.width !== bw || (cv.style.height && cv.height !== bh)) { cv.width = bw; cv.height = bh; }
+  cv.dataset.k = k;
+  ctx.setTransform(dpr * k, 0, 0, dpr * k, 0, 0);
+  ctx.clearRect(0, 0, rect.width / k, rect.height / k);
+  return { ctx, W: rect.width / k, H: rect.height / k, cv, k };
+}
+// Schriftgroesse in logischen Pixeln: auf verkleinertem Canvas (dataset.k < 1)
+// wird die Schrift nicht unter min(size, 11) Bildschirm-Pixel verkleinert.
+function kVon(ctx) {
+  const d = ctx.canvas && ctx.canvas.dataset;
+  return (d && +d.k) || 1;
+}
+function schriftPx(ctx, size) {
+  const k = kVon(ctx);
+  return k < 1 ? Math.max(size * k, Math.min(size, 11)) / k : size;
+}
+
 const css = getComputedStyle(document.documentElement);
 const C = {
   blau:      (css.getPropertyValue('--blau').trim()       || '#1e3a8a'),
@@ -1397,7 +1440,7 @@ function seg(ctx, p1, p2, color, lw = 2) {
 function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='middle', weight='600') {
   ctx.save();
   ctx.fillStyle = color;
-  ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
+  ctx.font = `${weight} ${schriftPx(ctx, size)}px "Source Sans 3", sans-serif`;
   // Halo in der lokalen Hintergrundfarbe (beschriftung() aus mathlib.js): die
   // Beschriftungen liegen hier auf Figurenkanten und Fuellungen und waeren
   // sonst schlecht zu lesen. Zusaetzlich in den Canvas geklemmt, damit keine
@@ -1499,7 +1542,8 @@ function makeDraggable(cv, pts, redrawFn, radius = 12, allowIdx = null) {
   function getPos(ev) {
     const rect = cv.getBoundingClientRect();
     const e = ev.touches ? ev.touches[0] : ev;
-    return [e.clientX - rect.left, e.clientY - rect.top];
+    const k = +cv.dataset.k || 1;   // initCvSkaliert: logische Koordinaten
+    return [(e.clientX - rect.left) / k, (e.clientY - rect.top) / k];
   }
   function down(ev) {
     const [x, y] = getPos(ev);
@@ -1764,7 +1808,7 @@ function drawBeweis() {
   beweisLbl.textContent = t.toFixed(2);
   updateSchritte(beweisSchritte, t, [0.05, 0.35, 0.70]);
 
-  const { ctx, W, H } = initCv('cv-beweis');
+  const { ctx, W, H } = initCvSkaliert('cv-beweis', 490, 380);
 
   // Festes Dreieck — etwas weiter unten platziert, damit oben Platz für die Parallele und ihre Beschriftung bleibt
   const A = [130, 320], B = [430, 320], C0 = [290, 150];
@@ -2116,7 +2160,7 @@ elemTabs.querySelectorAll('.chip').forEach(btn => {
 elemTogKreis.addEventListener('change', drawElem);
 
 function drawElem() {
-  const { ctx, W, H, cv } = initCv('cv-elem');
+  const { ctx, W, H, cv } = initCvSkaliert('cv-elem', 480, 480);
   const [A, B, C0] = elemPts;
   fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
 
@@ -2528,7 +2572,7 @@ function drawKong() {
   const t = +sldKong.value;
   kongLbl.textContent = t.toFixed(2);
 
-  const { ctx, W, H } = initCv('cv-kong');
+  const { ctx, W, H } = initCvSkaliert('cv-kong', 450, 400);
 
   // Festes Beispiel-Dreieck (Werte je nach Fall) — A unten links, B unten rechts, C oben
   const A = [120, 320];
@@ -2818,9 +2862,20 @@ function drawKong() {
 
   // Wenn der Schieber noch ganz links ist: Hinweis im Canvas einblenden.
   if (t < 0.05) {
-    txt(ctx, W/2, H/2 + 40,
-        'Schieberegler bewegen, um die Konstruktion Schritt für Schritt aufzubauen.',
-        C.tinte2, 14, 'center', 'middle', '500');
+    const hinweis = 'Schieberegler bewegen, um die Konstruktion Schritt für Schritt aufzubauen.';
+    ctx.save();
+    ctx.font = `500 ${schriftPx(ctx, 14)}px "Source Sans 3", sans-serif`;
+    // Auf schmalem Canvas in Zeilen umbrechen, die in die Breite passen
+    const zeilen = [];
+    hinweis.split(' ').forEach(wort => {
+      const probe = zeilen.length ? zeilen[zeilen.length - 1] + ' ' + wort : wort;
+      if (zeilen.length && ctx.measureText(probe).width <= W - 24) zeilen[zeilen.length - 1] = probe;
+      else zeilen.push(wort);
+    });
+    const zh = schriftPx(ctx, 14) * 1.3;
+    ctx.restore();
+    zeilen.forEach((z, i) => txt(ctx, W/2, H/2 + 40 + (i - (zeilen.length - 1) / 2) * zh,
+        z, C.tinte2, 14, 'center', 'middle', '500'));
   }
 
   // Inset-Skizze oben links — IMMER sichtbar (auch bei t = 0)
@@ -2841,6 +2896,10 @@ function sideLabelOutside(P, Q, R, dist = 16) {
 // Inset-Skizze für Kongruenzsätze — klein, oben links in der Canvas-Ecke
 function drawKongInset(ctx, given) {
   ctx.save();
+  // Auf verkleinertem Canvas (initCvSkaliert) in Bildschirmgroesse zeichnen —
+  // verkleinert waeren Kasten und 9-px-Schrift nicht mehr lesbar.
+  const kI = kVon(ctx);
+  ctx.scale(1 / kI, 1 / kI);
   // Position: oben links
   const ox = 12, oy = 14;
   const w = 84, hI = 84;
@@ -2949,7 +3008,7 @@ function drawPyth() {
   pythLbl.textContent = tMorph.toFixed(2);
   if (pythSchritte) updateSchritte(pythSchritte, tMorph, [1/3, 2/3]);
 
-  const { ctx, W, H, cv } = initCv('cv-pyth');
+  const { ctx, W, H, cv } = initCvSkaliert('cv-pyth', 530, 555);
   const A = pythPts[0], B = pythPts[1], C0 = pythPts[2];
 
   // C auf Thales-Kreis projizieren (rechter Winkel bei C garantiert)
@@ -3240,8 +3299,11 @@ function drawPythKath(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
   const aPolyMid = [(aPoly[0][0]+aPoly[2][0])/2, (aPoly[0][1]+aPoly[2][1])/2];
   const bPolyMid = [(bPoly[0][0]+bPoly[2][0])/2, (bPoly[0][1]+bPoly[2][1])/2];
   if (t > 2/3 + 0.05) {
-    txt(ctx, aPolyMid[0], aPolyMid[1], 'p · c', COL_A_LINE, 14, 'center', 'middle', '700');
-    txt(ctx, bPolyMid[0], bPolyMid[1], 'q · c', COL_B_LINE, 14, 'center', 'middle', '700');
+    // Um c/4 zur Hypotenuse hin versetzt: in der Mitte stuende «p · c» bzw.
+    // «q · c» auf der Beschriftung «c²» (beide Mitten liegen in Tiefe c/2).
+    const zurHyp = [-out[0] * c / 4, -out[1] * c / 4];
+    txt(ctx, aPolyMid[0] + zurHyp[0], aPolyMid[1] + zurHyp[1], 'p · c', COL_A_LINE, 14, 'center', 'middle', '700');
+    txt(ctx, bPolyMid[0] + zurHyp[0], bPolyMid[1] + zurHyp[1], 'q · c', COL_B_LINE, 14, 'center', 'middle', '700');
   }
 
   // Dreieck + Beschriftungen oben drauf
@@ -3280,7 +3342,7 @@ function drawPythKath(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
   else              phaseTitle = 'Phase 3: Scherung — Parallelogramm zum Rechteck';
   ctx.save();
   ctx.fillStyle = C.tinte2;
-  ctx.font = '600 12px "Source Sans 3", sans-serif';
+  ctx.font = `600 ${schriftPx(ctx, 12)}px "Source Sans 3", sans-serif`;
   ctx.textAlign = 'center'; ctx.textBaseline = 'top';
   ctx.fillText(phaseTitle, 265, 8);
   ctx.restore();
@@ -3466,8 +3528,12 @@ function drawHoehe(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
 
   // Original h²-Quadrat IMMER sichtbar (schwach orange)
   fillPoly(ctx, Z0_h, 'rgba(194, 65, 12, 0.15)', C.orange, 1.5);
-  const Z0_mid = [(Z0_h[0][0]+Z0_h[2][0])/2, (Z0_h[0][1]+Z0_h[2][1])/2];
-  txt(ctx, Z0_mid[0], Z0_mid[1], 'h²', C.orange, 14, 'center', 'middle', '700');
+  // Nicht in der Quadratmitte: dort kreuzt die Kathete b das Quadrat und die
+  // Beschriftung «b» lag darauf. In der Ecke gegenueber F (Abstand m von den
+  // aeusseren Kanten) bleibt sie immer auf der von b abgewandten Seite.
+  const mH = Math.min(h / 4, 24);
+  const Z0_lab = [F[0] + (hOut[0] + hN[0]) * (h - mH), F[1] + (hOut[1] + hN[1]) * (h - mH)];
+  txt(ctx, Z0_lab[0], Z0_lab[1], 'h²', C.orange, 14, 'center', 'middle', '700');
 
   // Animierte Kopie (kräftiger orange)
   fillPoly(ctx, hPoly, 'rgba(194, 65, 12, 0.40)', C.orange, 2);
@@ -3508,7 +3574,7 @@ function drawHoehe(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
   else              phaseTitle = 'Phase 3: Scherung zum p·q-Rechteck';
   ctx.save();
   ctx.fillStyle = C.tinte2;
-  ctx.font = '600 12px "Source Sans 3", sans-serif';
+  ctx.font = `600 ${schriftPx(ctx, 12)}px "Source Sans 3", sans-serif`;
   ctx.textAlign = 'center'; ctx.textBaseline = 'top';
   ctx.fillText(phaseTitle, 265, 8);
   ctx.restore();

@@ -1156,7 +1156,8 @@ function updateThree() {
     if (isHit && isAct) cls = 'treff';
     else if (isAct) cls = 'aktiv';
     const check = threeBesucht.has(xi) ? (y1 === y2 ? '✓' : '✗') : '';
-    return `<tr class="${cls}"><td>${xi}</td><td>${y1}</td><td>${y2}</td><td>${check}</td></tr>`;
+    const mz = n => String(n).replace('-', '−');   // Unicode-Minus in der Anzeige
+    return `<tr class="${cls}"><td>${mz(xi)}</td><td>${mz(y1)}</td><td>${mz(y2)}</td><td>${check}</td></tr>`;
   }).join('');
   // Graph (1:1 für reine Mathematik)
   const {ctx, W, H} = initCanvas('cv-three', 280, true);
@@ -1296,7 +1297,11 @@ function drawVerf() {
   ctx.textAlign='left'; ctx.fillText('(2 | 3)', cx(2)+9, cy(3)-6);
   // Geradenlabels
   ctx.fillStyle='#a0392c'; ctx.textAlign='left';
-  ctx.fillText('2x + y = 7', cx(0)+4, cy(7.2));
+  // Auf schmalem Canvas (360 px) reicht die Oberkante bis in die Zeile des
+  // Achsen-y (Grundlinie 14, rechts bis cx(0)+17): dann rechts neben das y ausweichen.
+  const rotY = cy(7.2), rotOben = rotY - ctx.measureText('2x + y = 7').actualBoundingBoxAscent - 2;
+  const rotX = rotOben < 14 + 5 ? cx(0) + 22 : cx(0) + 4;
+  beschriftung(ctx, '2x + y = 7', rotX, rotY, {align:'left', W, H});
   ctx.fillStyle='#1a4f8a';
   ctx.fillText('x − y = −1', cx(3.6), cy(5.2));
   // Beschriftung der Hilfslinien: x = 2 unten rechts der Senkrechten (dort liegt keine

@@ -1495,20 +1495,42 @@ function showDia(key, btn){
     if (step >= 22){
       const sorted = [...boxPunkte].sort((a,b) => a-b);
       const min = sorted[0], max = sorted[sorted.length-1];
-      const q1 = 3, med = 4, q3 = 5; // bekannt aus Datensatz
+      // Quartile aus den Daten: Median der Hälften (wie 4.3), bei ungeradem n ohne den Median
+      const medianVon = a => a.length % 2 ? a[(a.length-1)/2] : (a[a.length/2-1] + a[a.length/2])/2;
+      const hn = Math.floor(sorted.length/2);
+      const med = medianVon(sorted);
+      const q1 = medianVon(sorted.slice(0, hn));
+      const q3 = medianVon(sorted.slice(sorted.length - hn));
       const boxY = yBase - 10;
       const boxH = 28;
 
       const phase = step - 22; // 0..5
+
+      // Kennzahl-Namen über der Box; zu nahe Nachbarn weichen eine Zeile nach oben aus.
+      // Feste Reihenfolge, damit ein Name beim nächsten Schritt nicht springt.
+      ctx.font = '13px JetBrains Mono, monospace';
+      const namen = [
+        { t: 'Q₀', v: min, ab: 1, farbe: '#1f2937' }, { t: 'Q₄', v: max, ab: 1, farbe: '#1f2937' },
+        { t: 'Q₁', v: q1, ab: 2, farbe: '#1e40af' },  { t: 'Q₃', v: q3, ab: 2, farbe: '#1e40af' },
+        { t: 'Median', v: med, ab: 3, farbe: '#1d4ed8' }
+      ].filter(n => phase >= n.ab);
+      const belegt = [];
+      namen.forEach(n => {
+        const b = ctx.measureText(n.t).width, l = xPx(n.v) - b/2, r = xPx(n.v) + b/2;
+        n.zeile = 0;
+        while (belegt.some(o => o.zeile === n.zeile && r + 4 > o.l && l < o.r + 4)) n.zeile++;
+        belegt.push({ zeile: n.zeile, l, r });
+      });
+      const nameZeichnen = n => {
+        ctx.fillStyle = n.farbe;
+        beschriftung(ctx, n.t, xPx(n.v), boxY - 8 - 16*n.zeile, { align: 'center', halo: true, W, H });
+      };
 
       // (1) min/max Whisker-Enden
       if (phase >= 1){
         ctx.strokeStyle = '#1f2937'; ctx.lineWidth = 1.5;
         ctx.beginPath(); ctx.moveTo(xPx(min), boxY - 4); ctx.lineTo(xPx(min), boxY + boxH + 4); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(xPx(max), boxY - 4); ctx.lineTo(xPx(max), boxY + boxH + 4); ctx.stroke();
-        ctx.fillStyle = '#1f2937'; ctx.font = '13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-        ctx.fillText('Q₀', xPx(min), boxY - 8);
-        ctx.fillText('Q₄', xPx(max), boxY - 8);
       }
       // (2) Q1 + Q3 Box
       if (phase >= 2){
@@ -1516,17 +1538,13 @@ function showDia(key, btn){
         ctx.fillRect(xPx(q1), boxY, xPx(q3)-xPx(q1), boxH);
         ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2;
         ctx.strokeRect(xPx(q1), boxY, xPx(q3)-xPx(q1), boxH);
-        ctx.fillStyle = '#1e40af'; ctx.font = '13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-        ctx.fillText('Q₁', xPx(q1), boxY + boxH + 14);
-        ctx.fillText('Q₃', xPx(q3), boxY + boxH + 14);
       }
       // (3) Median
       if (phase >= 3){
         ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 2.5;
         ctx.beginPath(); ctx.moveTo(xPx(med), boxY); ctx.lineTo(xPx(med), boxY + boxH); ctx.stroke();
-        ctx.fillStyle = '#1d4ed8'; ctx.textAlign = 'center';
-        ctx.fillText('Median', xPx(med), boxY + boxH + 14);
       }
+      namen.forEach(nameZeichnen);
       // (4) Whisker-Linien
       if (phase >= 4){
         ctx.strokeStyle = '#1f2937'; ctx.lineWidth = 1.5; ctx.setLineDash([3,2]);

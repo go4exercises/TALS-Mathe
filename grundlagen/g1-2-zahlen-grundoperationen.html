@@ -1326,7 +1326,7 @@ function fmtPeriode(p, q) {
 function updateConv() {
   let p = +document.getElementById('cv-p').value;
   let q = +document.getElementById('cv-q').value;
-  document.getElementById('cv-pv').textContent = p;
+  document.getElementById('cv-pv').textContent = String(p).replace('-', '−');
   document.getElementById('cv-qv').textContent = q;
   // gekürzter Bruch
   const g = gcd(p, q) || 1;
@@ -1521,7 +1521,7 @@ function drawIntervall() {
     ctx.moveTo(xPx(v), axisY - 4);
     ctx.lineTo(xPx(v), axisY + 4);
     ctx.stroke();
-    ctx.fillText(String(v), xPx(v), axisY + 18);
+    ctx.fillText(String(v).replace('-', '−'), xPx(v), axisY + 18);
   }
 
   // Endpunkte zeichnen — als Klammer, in derselben Notation wie in der
@@ -1763,7 +1763,7 @@ function drawZahlmenge() {
     ctx.moveTo(xPx(v), axisY - 4);
     ctx.lineTo(xPx(v), axisY + 4);
     ctx.stroke();
-    ctx.fillText(String(v), xPx(v), axisY + 18);
+    ctx.fillText(String(v).replace('-', '−'), xPx(v), axisY + 18);
   }
 
   // Markierungspunkt für den aktiven Wert

@@ -1057,7 +1057,7 @@ buildNav({
 /* ════════════════════════════════════════════════════════════════
    2 · EINSTIEG — Mietkosten-Slider mit Canvas-Visualisierung
    ════════════════════════════════════════════════════════════════ */
-function fmtNum(n) { return n % 1 === 0 ? n.toString() : n.toFixed(1); }
+function fmtNum(n) { const t = n % 1 === 0 ? Math.abs(n).toString() : Math.abs(n).toFixed(1); return (n < 0 && t !== '0' ? '−' : '') + t; }
 
 function drawBudget() {
   const x = +document.getElementById('sl-budget').value;
@@ -1202,9 +1202,9 @@ function drawThree() {
 
   // Labels
   ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace'; ctx.textAlign = 'center';
-  for (let gx = -2; gx <= 8; gx += 2) if (gx !== 0) ctx.fillText(gx, cx(gx), cy(0) + 13);
+  for (let gx = -2; gx <= 8; gx += 2) if (gx !== 0) ctx.fillText(fmtNum(gx), cx(gx), cy(0) + 13);
   ctx.textAlign = 'right';
-  for (let gy = -6; gy <= 10; gy += 2) if (gy !== 0) ctx.fillText(gy, cx(0) - 5, cy(gy) + 3);
+  for (let gy = -6; gy <= 10; gy += 2) if (gy !== 0) ctx.fillText(fmtNum(gy), cx(0) - 5, cy(gy) + 3);
   ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'right'; ctx.fillText('x', cx(xMax) - 4, cy(0) - 6);
   ctx.textAlign = 'left';  ctx.fillText('y', cx(0) + 5, padT + 10);
@@ -1339,7 +1339,7 @@ function drawFaelle() {
 
   // Tick-Labels
   ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace'; ctx.textAlign = 'center';
-  for (let gx = -2; gx <= 6; gx += 2) if (gx !== 0) beschriftung(ctx, gx, cx(gx), cy(0) + 13, {align:'center', W, H});
+  for (let gx = -2; gx <= 6; gx += 2) if (gx !== 0) beschriftung(ctx, fmtNum(gx), cx(gx), cy(0) + 13, {align:'center', W, H});
   ctx.textAlign = 'right';
   for (let gy = 2; gy <= 14; gy += 4) beschriftung(ctx, gy, cx(0) - 5, cy(gy) + 3, {align:'right', W, H});
 
@@ -1531,7 +1531,7 @@ function drawVkipp() {
   const k = parseFloat(document.getElementById('vk-k').value);
   const ak = VK_A * k, bk = VK_B * k;
   const nz = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(v % 1 === 0 ? 0 : 1);
-  document.getElementById('vk-kv').textContent = k.toFixed(1);
+  document.getElementById('vk-kv').textContent = (k < 0 ? '−' : '') + Math.abs(k).toFixed(1);
 
   const rel = k > 0 ? '<' : (k < 0 ? '>' : '=');
   document.getElementById('vk-eq').innerHTML =

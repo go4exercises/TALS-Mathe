@@ -1139,7 +1139,9 @@ function korrelation(xs, ys) {
 
 function fmtN(x, d=1) {
   if (!isFinite(x)) return '—';
-  return x.toFixed(d).replace(/\.0+$/, '').replace(/(\.\d*?)0+$/, '$1');
+  // Anzeige: Unicode-Minus, keine negative Null («−0»)
+  const t = Math.abs(x).toFixed(d).replace(/\.0+$/, '').replace(/(\.\d*?)0+$/, '$1');
+  return (x < 0 && t !== '0' ? '−' : '') + t;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2114,7 +2116,7 @@ function baueHaeufTab(klassen, grenze) {
   // Spalte „Klasse" zeigt das Intervall in schweizerischer Notation:
   // grenze='lo': [lower, upper)  →  "[a; b["  bzw.  "g_L ≤ x < g_R"
   // grenze='hi': (lower, upper]  →  "]a; b]"  bzw.  "g_L < x ≤ g_R"
-  const fmt = (v) => Number.isInteger(v) ? String(v) : v.toFixed(1).replace(/\.0$/, '');
+  const fmt = (v) => fmtN(v, 1);
   let n = 0;
   let rows = '';
   klassen.forEach((k, i) => {
@@ -2216,7 +2218,7 @@ function zeichneStreu() {
     const v = xMin + (xMax - xMin) * i / xTicks;
     const x = xOf(v);
     s += `<line x1="${x}" y1="${H-padB}" x2="${x}" y2="${H-padB+3}" stroke="#1f2937" stroke-width="1"/>`;
-    s += `<text x="${x}" y="${H-padB+15}" font-size="9" text-anchor="middle" fill="#5a5040">${Math.round(v)}</text>`;
+    s += `<text x="${x}" y="${H-padB+15}" font-size="9" text-anchor="middle" fill="#5a5040">${fmtN(Math.round(v), 0)}</text>`;
   }
   // y-Ticks
   const yTicks = 6;
@@ -2224,7 +2226,7 @@ function zeichneStreu() {
     const v = yMin + (yMax - yMin) * i / yTicks;
     const y = yOf(v);
     s += `<line x1="${padL-3}" y1="${y}" x2="${padL}" y2="${y}" stroke="#1f2937" stroke-width="1"/>`;
-    s += `<text x="${padL-6}" y="${y+3}" font-size="9" text-anchor="end" fill="#5a5040">${Math.round(v)}</text>`;
+    s += `<text x="${padL-6}" y="${y+3}" font-size="9" text-anchor="end" fill="#5a5040">${fmtN(Math.round(v), 0)}</text>`;
   }
   // Punkte
   DATEN.forEach((row, i) => {

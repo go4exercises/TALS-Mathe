@@ -2852,13 +2852,15 @@ window.addEventListener('resize', () => {
   if (!sldD || !sldC || !sldH) return;
 
   const A_GRUND = 8;                    // Grundseite a, fest
+  // Anzeige mit Unicode-Minus; −0.0 wird zu 0.0
+  const zahl = (v, n) => { const t = v.toFixed(n); return (parseFloat(t) === 0 ? (0).toFixed(n) : t).replace('-', '\u2212'); };
   const XMIN = -4, XMAX = 15, YMIN = -0.9, YMAX = 5.6;
 
   function render() {
     const d = parseFloat(sldD.value);
     const c = parseFloat(sldC.value);
     const h = parseFloat(sldH.value);
-    document.getElementById('sc-lblD').textContent = d.toFixed(1);
+    document.getElementById('sc-lblD').textContent = zahl(d, 1);
     document.getElementById('sc-lblC').textContent = c.toFixed(1);
     document.getElementById('sc-lblH').textContent = h.toFixed(1);
 
@@ -2899,60 +2901,149 @@ window.addEventListener('resize', () => {
       return [mx + nx * abstand, my + ny * abstand];
     }
 
+    // Beschriftungen werden reihum gesetzt. Für jede gibt es eine Liste von
+    // Kandidaten; der erste ist die gewohnte Lage. Gewählt wird der Kandidat mit
+    // den kleinsten Kosten: Überdeckung mit schon gesetzten Beschriftungen (schwer),
+    // Figurlinien unter dem Text (leicht) und ein Aufschlag je Ausweichschritt.
+    // So bleibt das Bild bei Standardwerten gleich, und an den Anschlägen
+    // (h = 1, d = −3 oder 7, schmaler Canvas) stapeln sich die Labels nicht.
+    const belegt = [], linienPkt = [];
+    function linie(p1, p2) {
+      const n = Math.max(1, Math.ceil(Math.hypot(p2[0] - p1[0], p2[1] - p1[1]) / 3));
+      for (let i = 0; i <= n; i++) linienPkt.push([lerp(p1[0], p2[0], i / n), lerp(p1[1], p2[1], i / n)]);
+    }
+    function kasten(lab, x, y, align, gewicht) {
+      ctx.save();
+      ctx.font = `${gewicht} ${FS}px "Source Sans 3", sans-serif`;
+      ctx.textAlign = align; ctx.textBaseline = 'middle';
+      const mt = ctx.measureText(lab);
+      ctx.restore();
+      let l = mt.actualBoundingBoxLeft, rr = mt.actualBoundingBoxRight;
+      let a = mt.actualBoundingBoxAscent, u = mt.actualBoundingBoxDescent;
+      if (!isFinite(l) || !isFinite(rr)) { l = align === 'center' ? mt.width / 2 : (align === 'right' ? mt.width : 0); rr = mt.width - l; }
+      if (!isFinite(a) || !isFinite(u)) { a = FS / 2; u = FS / 2; }
+      // wie beschriftung(): in den Canvas klemmen (Rand 2 px)
+      if (x - l - 2 < 0) x = l + 2;
+      if (x + rr + 2 > W) x = W - rr - 2;
+      if (y - a - 2 < 0) y = a + 2;
+      if (y + u + 2 > H) y = H - u - 2;
+      return { x, y, x0: x - l - 2, x1: x + rr + 2, y0: y - a - 2, y1: y + u + 2 };
+    }
+    function kosten(b) {
+      let sum = 0;
+      for (const q of belegt) {
+        const ow = Math.min(b.x1, q.x1) - Math.max(b.x0, q.x0);
+        const oh = Math.min(b.y1, q.y1) - Math.max(b.y0, q.y0);
+        if (ow > 0 && oh > 0) sum += 60 + 2 * ow * oh;
+      }
+      for (const [px, py] of linienPkt) if (px > b.x0 && px < b.x1 && py > b.y0 && py < b.y1) sum += 4;
+      return sum;
+    }
+    // optional: lieber weglassen als eine andere Beschriftung überdecken
+    // (gilt nur für die Schenkel e/f — ihre Längen stehen auch in der Legende)
+    function setze(lab, farbe, kandidaten, gewicht = '700', optional = false) {
+      let best = null, bestK = Infinity;
+      kandidaten.forEach(([x, y, align], i) => {
+        const b = kasten(lab, x, y, align, gewicht);
+        const roh = kosten(b), kk = roh + 8 * i;
+        if (kk < bestK) { best = { b, align, roh }; bestK = kk; }
+      });
+      if (optional && best.roh >= 60) return;
+      belegt.push(best.b);
+      txt(ctx, best.b.x, best.b.y, lab, farbe, FS, best.align, 'middle', gewicht);
+    }
+    const kopf = 'A bleibt ' + (0.5 * (A_GRUND + c) * h).toFixed(2) + ' — egal, wie stark geschert wird';
+    belegt.push(kasten(kopf, W / 2, 16 * k, 'center', '600'));
+
     // Höhe als gestrichelte Strecke vom oberen linken Eckpunkt auf die Grundlinie
     dashedSeg(ctx, P(d, h), P(d, 0), C.gruen, 1.5);
-    // Das h-Label steht auf der Innenseite der Höhenlinie, das e-Label aussen —
-    // sonst fallen beide bei d = 0 aufeinander.
-    const hMid = P(d, 0.72 * h);
-    const hInnenRechts = Z[0] >= hMid[0];
-    txt(ctx, hMid[0] + (hInnenRechts ? 6 : -6) * k, hMid[1], 'h = ' + h.toFixed(1), C.gruen, FS, hInnenRechts ? 'left' : 'right', 'middle', '700');
-
     // Versatz d als gestrichelte Strecke entlang der oberen Kante
-    if (Math.abs(d) > 0.05) {
-      dashedSeg(ctx, P(0, h), P(d, h), C.orange, 1.5, [4, 3]);
-      const dMid = P(d / 2, h);
-      txt(ctx, dMid[0], dMid[1] - 12 * k, 'd = ' + d.toFixed(1), C.orange, FS, 'center', 'middle', '700');
-    }
+    if (Math.abs(d) > 0.05) dashedSeg(ctx, P(0, h), P(d, h), C.orange, 1.5, [4, 3]);
     dashedSeg(ctx, P(0, 0), P(0, h), C.linie, 1, [2, 3]);
-
-    // Beschriftung der Parallelseiten
-    const aMid = P(A_GRUND / 2, 0), cMid = P(d + c / 2, h);
-    txt(ctx, aMid[0], aMid[1] + 15 * k, 'a = ' + A_GRUND.toFixed(1), C.tinte, FS, 'center', 'middle', '700');
-    txt(ctx, cMid[0], cMid[1] - (Math.abs(d) > 0.05 ? 28 : 13) * k, 'c = ' + c.toFixed(1), C.tinte, FS, 'center', 'middle', '700');
 
     // Mittellinie: verbindet die Seitenmitten der Schenkel, liegt auf halber Höhe.
     // Länge ((a + d + c) - d)/2 = (a + c)/2 — unabhängig vom Versatz d.
     const m = 0.5 * (A_GRUND + c);
-    if (togMit && togMit.checked) {
-      const mE = P(d / 2, h / 2), mF = P((A_GRUND + d + c) / 2, h / 2);
+    const mitAn = !!(togMit && togMit.checked);
+    const mE = P(d / 2, h / 2), mF = P((A_GRUND + d + c) / 2, h / 2);
+    if (mitAn) {
       seg(ctx, mE, mF, C.lila, 2.2);
       dot(ctx, mE, C.lila, 3.5);
       dot(ctx, mF, C.lila, 3.5);
+      for (const q of [mE, mF]) belegt.push({ x0: q[0] - 4, x1: q[0] + 4, y0: q[1] - 4, y1: q[1] + 4 });
+      linie(mE, mF);
+    }
+    // Linien, über die möglichst keine Beschriftung laufen soll
+    linie(eckA, eckB); linie(eckB, eckCc); linie(eckCc, eckD); linie(eckD, eckA);
+    linie(P(d, h), P(d, 0));
+    if (Math.abs(d) > 0.05) linie(P(0, h), P(d, h));
+
+    // Beschriftung der Parallelseiten
+    const aMid = P(A_GRUND / 2, 0), cMid = P(d + c / 2, h);
+    setze('a = ' + A_GRUND.toFixed(1), C.tinte, [
+      [aMid[0], aMid[1] + 15 * k, 'center'], [aMid[0], aMid[1] + 30 * k, 'center']]);
+    if (Math.abs(d) > 0.05) {
+      const dMid = P(d / 2, h);
+      setze('d = ' + zahl(d, 1), C.orange, [
+        [dMid[0], dMid[1] - 12 * k, 'center'], [dMid[0], dMid[1] - 27 * k, 'center'],
+        [dMid[0], dMid[1] - 42 * k, 'center']]);
+    }
+    const cVor = (Math.abs(d) > 0.05 ? 28 : 13) * k;
+    setze('c = ' + c.toFixed(1), C.tinte, [
+      [cMid[0], cMid[1] - cVor, 'center'], [cMid[0], cMid[1] - 13 * k, 'center'],
+      [cMid[0], cMid[1] - 43 * k, 'center'], [cMid[0], cMid[1] - 58 * k, 'center']]);
+
+    // Das h-Label steht auf der Innenseite der Höhenlinie, das e-Label aussen —
+    // sonst fallen beide bei d = 0 aufeinander.
+    const hMid = P(d, 0.72 * h), hTief = P(d, 0.35 * h), hFuss = P(d, 0);
+    const hInnenRechts = Z[0] >= hMid[0];
+    const hIn = hInnenRechts ? 'left' : 'right', hAus = hInnenRechts ? 'right' : 'left';
+    const hdx = (hInnenRechts ? 6 : -6) * k;
+    setze('h = ' + h.toFixed(1), C.gruen, [
+      [hMid[0] + hdx, hMid[1], hIn], [hMid[0] - hdx, hMid[1], hAus],
+      [hTief[0] + hdx, hTief[1], hIn], [hTief[0] - hdx, hTief[1], hAus],
+      [hMid[0] + hdx, P(d, h)[1] - 12 * k, hIn], [hMid[0] - hdx, P(d, h)[1] - 12 * k, hAus],
+      [hFuss[0], hFuss[1] + 15 * k, 'center'], [hFuss[0] - hdx, hFuss[1] + 15 * k, hAus],
+      [hFuss[0] + hdx, hFuss[1] + 15 * k, hIn]]);
+
+    if (mitAn) {
       // Beschriftung unter der Linie: darüber steht auf 0.72·h das h-Label
-      txt(ctx, (mE[0] + mF[0]) / 2, mE[1] + 11 * k, 'm = ' + m.toFixed(2), C.lila, FS, 'center', 'middle', '700');
+      const mx = (mE[0] + mF[0]) / 2;
+      setze('m = ' + m.toFixed(2), C.lila, [
+        [mx, mE[1] + 11 * k, 'center'], [mx, mE[1] - 11 * k, 'center'],
+        [mx + 0.25 * (mF[0] - mE[0]), mE[1] + 11 * k, 'center'], [mx - 0.25 * (mF[0] - mE[0]), mE[1] + 11 * k, 'center'],
+        [mE[0] - 8 * k, mE[1], 'right'], [mF[0] + 8 * k, mF[1], 'left'],
+        [mx, aMid[1] + 15 * k, 'center'], [mx, aMid[1] + 30 * k, 'center']]);
     }
 
     // Schenkel — Label auf der Aussenseite der jeweiligen Kante, entlang ihrer Normalen
     const e = Math.hypot(d, h);                       // linker Schenkel
     const f = Math.hypot(A_GRUND - c - d, h);         // rechter Schenkel
-    const eL = aussen(P(0, 0), P(d, h), 13 * k);
-    const fL = aussen(P(A_GRUND, 0), P(d + c, h), 13 * k);
     // Auf schmalen Canvases nur die Buchstaben — die Zahlen stehen in der Legende
     const knapp = k < 0.85;
-    txt(ctx, eL[0], eL[1], knapp ? 'e' : 'e = ' + e.toFixed(2), C.blau, FS, 'center', 'middle', '700');
-    txt(ctx, fL[0], fL[1], knapp ? 'f' : 'f = ' + f.toFixed(2), C.blau, FS, 'center', 'middle', '700');
+    const schenkel = [[P(0, 0), P(d, h), knapp ? 'e' : 'e = ' + e.toFixed(2)],
+                      [P(A_GRUND, 0), P(d + c, h), knapp ? 'f' : 'f = ' + f.toFixed(2)]];
+    for (const [p1, p2, lab] of schenkel) {
+      // Kandidaten: Kantenmitte, dann näher an den Enden; erst nah, dann weiter weg
+      const kand = [];
+      for (const ab of [13, 24]) for (const t of [0.5, 0.3, 0.7]) {
+        const q = aussen([lerp(p1[0], p2[0], t - 0.5), lerp(p1[1], p2[1], t - 0.5)],
+                         [lerp(p1[0], p2[0], t + 0.5), lerp(p1[1], p2[1], t + 0.5)], ab * k);
+        kand.push([q[0], q[1], 'center']);
+      }
+      setze(lab, C.blau, kand, '700', true);
+    }
 
     const A = 0.5 * (A_GRUND + c) * h;
     const U = A_GRUND + c + e + f;
     document.getElementById('sc-legA').textContent = A.toFixed(2);
     document.getElementById('sc-legU').textContent = U.toFixed(2);
     document.getElementById('sc-legS').textContent = e.toFixed(2) + ' / ' + f.toFixed(2);
-    const mitAn = !!(togMit && togMit.checked);
     document.getElementById('sc-legMZeile').style.display = mitAn ? '' : 'none';
     document.getElementById('sc-legM').textContent = m.toFixed(2);
 
     // Kopfzeile im Canvas
-    txt(ctx, W / 2, 16 * k, 'A bleibt ' + A.toFixed(2) + ' — egal, wie stark geschert wird', C.tinte2, FS, 'center', 'middle', '600');
+    txt(ctx, W / 2, 16 * k, kopf, C.tinte2, FS, 'center', 'middle', '600');
 
     let erkl;
     if (Math.abs(d - d0) < 0.06) {

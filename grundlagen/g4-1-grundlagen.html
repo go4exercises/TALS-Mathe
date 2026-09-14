@@ -189,7 +189,8 @@ MathJax = {
 .qg-schlecht .qg-tit { color: var(--rot); }
 
 /* Einstieg: Datensammel-Animation */
-.sammel-box { background: var(--papier-2, #f3eedf); border-radius: 8px; padding: 14px 16px; margin: 12px 0; }
+/* .sammel-box ist nur noch Namensraum fuer die Detailregeln — Rahmen macht .widget */
+.sammel-box { margin: 0; }
 .sammel-box .sb-frage { font-family: var(--mono); font-size: 0.88rem; margin-bottom: 10px; color: var(--tinte); }
 .sammel-box .sb-buttons { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
 .sammel-box .sb-btn { padding: 6px 10px; border: 1px solid var(--linie); background: var(--weiss); border-radius: 6px; cursor: pointer; font-family: var(--mono); font-size: 0.82rem; min-width: 32px; transition: 0.12s; }
@@ -201,7 +202,8 @@ MathJax = {
 .sammel-box .sb-hint { font-size: 0.85rem; color: var(--tinte-2); margin-top: 8px; font-style: italic; }
 
 /* ── Merkmalstyp-Zuordnungsspiel ── */
-.mt-spiel { background: var(--weiss); border: 1px solid var(--linie); border-radius: 9px; padding: 14px 16px; margin: 12px 0; }
+/* .mt-spiel ist nur noch Namensraum fuer die Detailregeln — Rahmen macht .widget */
+.mt-spiel { margin: 0; }
 .mt-kopf { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 0.75rem; color: var(--tinte-2); }
 .mt-kopf .mt-score { color: var(--blau); font-weight: 700; }
 .mt-karte { text-align: center; font-size: 1.25rem; font-weight: 600; color: var(--tinte); padding: 18px 10px 6px; }
@@ -263,41 +265,47 @@ MathJax = {
 
 <p>Eine BM-Klasse mit 22 Lernenden wird gefragt: <em>„Wie viele Stunden hast du letzte Woche für Mathe gelernt?"</em> Sammle die Antworten selbst ein — klicke für jede befragte Person die passende Stundenzahl an und beobachte, wie die Verteilung entsteht.</p>
 
-<div class="sammel-box">
-  <div class="sb-frage">Klick für jede befragte Person die Lernstunden an (0 bis 8 h):</div>
-  <div class="sb-buttons" id="sb-buttons">
-    <button class="sb-btn" data-val="0">0 h</button>
-    <button class="sb-btn" data-val="1">1 h</button>
-    <button class="sb-btn" data-val="2">2 h</button>
-    <button class="sb-btn" data-val="3">3 h</button>
-    <button class="sb-btn" data-val="4">4 h</button>
-    <button class="sb-btn" data-val="5">5 h</button>
-    <button class="sb-btn" data-val="6">6 h</button>
-    <button class="sb-btn" data-val="7">7 h</button>
-    <button class="sb-btn" data-val="8">8 h</button>
-  </div>
-  <div>
-    <span class="sb-zaehler">Befragt: <span id="sb-n">0</span> / 22</span>
-    <button class="sb-reset" id="sb-reset">⟲ zurücksetzen</button>
-  </div>
-  <div class="sb-frage" style="margin:8px 0 10px">Urliste: <span id="sb-urliste">noch leer</span></div>
-  <div class="widget-titelzeile">
-      <div class="anim-titel">Einstieg · Klassenumfrage — von Rohdaten zur Verteilung</div>
-        <div class="anim-hinweis links">
-          <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-          <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Klicke einige Antworten ein und beobachte das Säulendiagramm. Wie verändert sich das Bild, wenn eine einzelne Antwort dazukommt — und wie, wenn schon viele gesammelt sind?</div>
-          </div>
-        </div>
-        <div class="anim-hinweis rechts">
-          <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-          <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Aus Rohdaten wird durch <strong>Auszählen</strong> eine Häufigkeitsverteilung. Je mehr Daten, desto stabiler das Bild: einzelne Antworten fallen kaum noch ins Gewicht. Das ist der Grund, warum Stichprobengrösse in der Statistik überhaupt eine Rolle spielt.</div>
-          </div>
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Einstieg · Klassenumfrage — von Rohdaten zur Verteilung</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Klicke einige Antworten ein und beobachte das Säulendiagramm. Wie verändert sich das Bild, wenn eine einzelne Antwort dazukommt — und wie, wenn schon viele gesammelt sind?</div>
         </div>
       </div>
-  <canvas id="sb-canvas" aria-label="Verteilung der Lernstunden"></canvas>
-  <div class="sb-hint">Tipp: Klicke schnell hintereinander oder gib eine typische Verteilung ein — was siehst du nach ein paar Klicks?</div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Aus Rohdaten wird durch <strong>Auszählen</strong> eine Häufigkeitsverteilung. Je mehr Daten, desto stabiler das Bild: einzelne Antworten fallen kaum noch ins Gewicht. Das ist der Grund, warum Stichprobengrösse in der Statistik überhaupt eine Rolle spielt.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="widget-body">
+    <div class="sammel-box">
+      <div class="sb-frage">Klick für jede befragte Person die Lernstunden an (0 bis 8 h):</div>
+      <div class="sb-buttons" id="sb-buttons">
+        <button class="sb-btn" data-val="0">0 h</button>
+        <button class="sb-btn" data-val="1">1 h</button>
+        <button class="sb-btn" data-val="2">2 h</button>
+        <button class="sb-btn" data-val="3">3 h</button>
+        <button class="sb-btn" data-val="4">4 h</button>
+        <button class="sb-btn" data-val="5">5 h</button>
+        <button class="sb-btn" data-val="6">6 h</button>
+        <button class="sb-btn" data-val="7">7 h</button>
+        <button class="sb-btn" data-val="8">8 h</button>
+      </div>
+      <div>
+        <span class="sb-zaehler">Befragt: <span id="sb-n">0</span> / 22</span>
+        <button class="sb-reset" id="sb-reset">⟲ zurücksetzen</button>
+      </div>
+      <div class="sb-frage" style="margin:8px 0 10px">Urliste: <span id="sb-urliste">noch leer</span></div>
+      <canvas id="sb-canvas" aria-label="Verteilung der Lernstunden"></canvas>
+      <div class="sb-hint">Tipp: Klicke schnell hintereinander oder gib eine typische Verteilung ein — was siehst du nach ein paar Klicks?</div>
+    </div>
+  </div>
 </div>
 
 <p>Was du eben gesammelt hast, ist eine <strong>Urliste</strong>: eine Folge von Einzelwerten in der Reihenfolge der Erhebung. Mit dieser Liste allein lässt sich noch keine Aussage über die Klasse machen. Erst wenn die Daten <strong>geordnet</strong>, <strong>gezählt</strong>, <strong>gruppiert</strong> oder durch eine <strong>Kennzahl</strong> zusammengefasst werden, entsteht eine Aussage. Genau das ist <em>Datenanalyse</em>: aus einer Liste eine Aussage machen.</p>
@@ -411,34 +419,41 @@ MathJax = {
   <p style="margin-top:6px">Beide zusammen bilden die <strong>kategorialen</strong> Merkmale; erst bei <em>quantitativen</em> (diskret/stetig) darf man auch den Mittelwert bilden.</p>
 </div>
 
-<div class="widget-titelzeile" style="margin:16px 0 8px">
-  <p style="margin:0">Ordne jedes Merkmal seinem Typ zu — zwölf Karten, ein paar davon mit Stolperstein:</p>
-  <div class="anim-hinweis links">
-    <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
-    <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-      <div class="ah-text">Lass dich nicht davon täuschen, <em>dass</em> ein Merkmal mit Zahlen notiert wird. Frage stattdessen: Darf ich mit diesen Zahlen rechnen — und sind Zwischenwerte real möglich?</div>
+<div class="widget">
+  <div class="widget-header">
+    <div class="widget-titelzeile">
+      <h3>Merkmalstyp-Zuordnungsspiel</h3>
+      <div class="anim-hinweis links">
+        <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+        <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+          <div class="ah-text">Lass dich nicht davon täuschen, <em>dass</em> ein Merkmal mit Zahlen notiert wird. Frage stattdessen: Darf ich mit diesen Zahlen rechnen — und sind Zwischenwerte real möglich?</div>
+        </div>
+      </div>
+      <div class="anim-hinweis rechts">
+        <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+        <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+          <div class="ah-text">Postleitzahl und Schulnote sind Zahlen und trotzdem kategorial: Bei der PLZ ist die Zahl ein reines Etikett (nominal), bei der Note ein Rang mit ungleichen Abständen (ordinal). Der Merkmalstyp hängt an der <strong>Bedeutung</strong> der Werte, nicht an ihrer Schreibweise.</div>
+        </div>
+      </div>
     </div>
+    <p>Ordne jedes Merkmal seinem Typ zu — zwölf Karten, ein paar davon mit Stolperstein:</p>
   </div>
-  <div class="anim-hinweis rechts">
-    <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
-    <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-      <div class="ah-text">Postleitzahl und Schulnote sind Zahlen und trotzdem kategorial: Bei der PLZ ist die Zahl ein reines Etikett (nominal), bei der Note ein Rang mit ungleichen Abständen (ordinal). Der Merkmalstyp hängt an der <strong>Bedeutung</strong> der Werte, nicht an ihrer Schreibweise.</div>
+  <div class="widget-body">
+    <div class="mt-spiel">
+      <div class="mt-kopf"><span id="mt-nr">Merkmal 1 von 12</span><span class="mt-score" id="mt-score">0 richtig</span></div>
+      <div class="mt-karte" id="mt-karte">Augenfarbe</div>
+      <div class="mt-btns">
+        <button class="mt-btn" type="button" data-typ="nominal">nominal</button>
+        <button class="mt-btn" type="button" data-typ="ordinal">ordinal</button>
+        <button class="mt-btn" type="button" data-typ="diskret">diskret</button>
+        <button class="mt-btn" type="button" data-typ="stetig">stetig</button>
+      </div>
+      <div class="mt-fb" id="mt-fb"></div>
+      <div class="mt-foot">
+        <button class="mt-next" type="button" id="mt-next" disabled>▶ Nächstes Merkmal</button>
+        <button class="mt-reset" type="button" id="mt-reset">⟲ neu starten</button>
+      </div>
     </div>
-  </div>
-</div>
-<div class="mt-spiel">
-  <div class="mt-kopf"><span id="mt-nr">Merkmal 1 von 12</span><span class="mt-score" id="mt-score">0 richtig</span></div>
-  <div class="mt-karte" id="mt-karte">Augenfarbe</div>
-  <div class="mt-btns">
-    <button class="mt-btn" type="button" data-typ="nominal">nominal</button>
-    <button class="mt-btn" type="button" data-typ="ordinal">ordinal</button>
-    <button class="mt-btn" type="button" data-typ="diskret">diskret</button>
-    <button class="mt-btn" type="button" data-typ="stetig">stetig</button>
-  </div>
-  <div class="mt-fb" id="mt-fb"></div>
-  <div class="mt-foot">
-    <button class="mt-next" type="button" id="mt-next" disabled>▶ Nächstes Merkmal</button>
-    <button class="mt-reset" type="button" id="mt-reset">⟲ neu starten</button>
   </div>
 </div>
 
@@ -909,7 +924,7 @@ function showMerkmal(key, btn){
     const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
     ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
 
-    const padL = 32, padR = 12, padT = 14, padB = 26;
+    const padL = 32, padR = 12, padT = 14, padB = 36;
     const plotW = W - padL - padR;
     const plotH = H - padT - padB;
     const nBins = 9;
@@ -930,7 +945,9 @@ function showMerkmal(key, btn){
     ctx.fillStyle = '#6b7280';
     ctx.font = '13px JetBrains Mono, monospace';
     ctx.textAlign = 'right';
-    for (let i = 1; i <= maxBin; i++){
+    // Schrittweite so, dass die Zahlen mind. 14 px auseinander liegen (sonst bei max 22 übereinander)
+    const yStep = [1, 2, 5, 10].find(s => plotH*s/maxBin >= 14) || 10;
+    for (let i = yStep; i <= maxBin; i += yStep){
       const y = padT + plotH - (i/maxBin)*plotH;
       ctx.fillText(i, padL-4, y+3);
     }
@@ -959,9 +976,9 @@ function showMerkmal(key, btn){
     for (let i = 0; i < nBins; i++){
       ctx.fillText(i, padL + i*binW + binW/2, padT + plotH + 14);
     }
-    ctx.textAlign = 'right';
+    // Achsenbeschriftung eine Zeile unter den Achsenzahlen, sonst deckt sie die «8»
     ctx.fillStyle = '#6b7280';
-    ctx.fillText('Lernzeit [h]', W-padR, padT + plotH + 22);
+    beschriftung(ctx, 'Lernzeit [h]', W-padR, padT + plotH + 31, { align: 'right', bg: '#fff', W, H });
   }
 
   function sbAdd(v){

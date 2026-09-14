@@ -1354,10 +1354,14 @@ buildNav({
    HELFER: Quadratische Funktionen
    ══════════════════════════════════════════════════════════ */
 function fmtNum(n){
+  // Anzeige mit Unicode-Minus (U+2212); negative Null wird zu 0.
   if(Math.abs(n)<1e-9) return '0';
-  if(Math.abs(n - Math.round(n)) < 1e-9) return Math.round(n).toString();
-  return parseFloat(n.toFixed(2)).toString();
+  if(Math.abs(n - Math.round(n)) < 1e-9) return Math.round(n).toString().replace('-', '−');
+  const r = parseFloat(n.toFixed(2));
+  return (r === 0 ? '0' : r.toString()).replace('-', '−');
 }
+// Eingesetzte Zahl: negative Werte in Klammern, z.B. (−1)² statt −1²
+function fmtEin(n){ const t = fmtNum(n); return t.startsWith('−') ? `(${t})` : t; }
 function fmtSign(n){ return n>=0 ? `+ ${fmtNum(n)}` : `− ${fmtNum(Math.abs(n))}`; }
 function fmtSignNoSpace(n){ return n>=0 ? `+${fmtNum(n)}` : `−${fmtNum(Math.abs(n))}`; }
 
@@ -1514,18 +1518,18 @@ function updateDR(){
     document.getElementById('dr-linfak').textContent = `f(x) = ${aLF}(${f1})(${f2})`;
     nstText = `x₁ = ${fmtNum(x1)}, x₂ = ${fmtNum(x2)}`;
     document.getElementById('dr-nst').textContent = nstText;
-    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = <span class="disk-hl">${fmtNum(D)}</span> > 0  →  zwei Nullstellen<br>x = (${fmtNum(-B)} ± √<span class="disk-hl">${fmtNum(D)}</span>) / ${fmtNum(2*A)}  ⇒  x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtEin(C)} = <span class="disk-hl">${fmtNum(D)}</span> > 0  →  zwei Nullstellen<br>x = (${fmtNum(-B)} ± √<span class="disk-hl">${fmtNum(D)}</span>) / ${fmtEin(2*A)}  ⇒  x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}`;
   } else if(ns.n === 1){
     const x1 = ns.x1;
     const aLF = A===1 ? '' : A===-1 ? '−' : `${fmtNum(A)}·`;
     document.getElementById('dr-linfak').textContent = `f(x) = ${aLF}(${fmtKlammer(x1)})²`;
     nstText = `x₁ = x₂ = ${fmtNum(x1)} (doppelt)`;
     document.getElementById('dr-nst').textContent = nstText;
-    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = <span class="disk-hl">0</span>  →  eine doppelte Nullstelle<br>x = ${fmtNum(-B)} / ${fmtNum(2*A)} = ${fmtNum(x1)}`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtEin(C)} = <span class="disk-hl">0</span>  →  eine doppelte Nullstelle<br>x = ${fmtNum(-B)} / ${fmtEin(2*A)} = ${fmtNum(x1)}`;
   } else {
     document.getElementById('dr-linfak').textContent = `nicht definiert über ℝ`;
     document.getElementById('dr-nst').textContent = 'keine reellen Nullstellen';
-    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtNum(B)}² − 4·${fmtNum(A)}·${fmtNum(C)} = <span class="disk-hl">${fmtNum(D)}</span> < 0  →  keine reelle Nullstelle`;
+    nstRechnung = `D = <span class="disk-hl">b² − 4ac</span> = ${fmtEin(B)}² − 4·${fmtEin(A)}·${fmtEin(C)} = <span class="disk-hl">${fmtNum(D)}</span> < 0  →  keine reelle Nullstelle`;
   }
   document.getElementById('dr-nst-rechnung').innerHTML = nstRechnung;
 
@@ -1863,7 +1867,7 @@ function drawA2(){
   ctx.beginPath(); ctx.arc(cx(a2S.u), cy(a2S.v), 11, 0, Math.PI*2); ctx.fill(); ctx.stroke();
   ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
   ctx.fillText('S', cx(a2S.u), cy(a2S.v)+4);
-  document.getElementById('a2-pos').textContent = `S(${a2S.u} | ${a2S.v})`;
+  document.getElementById('a2-pos').textContent = `S(${fmtNum(a2S.u)} | ${fmtNum(a2S.v)})`;
 }
 function a2Pos(e, c){
   const r = c.getBoundingClientRect();
@@ -1903,14 +1907,14 @@ function checkA2(){
   const r = document.getElementById('a2-cr'); r.style.display='block';
   if(a2S.u === it.S.u && a2S.v === it.S.v){
     a2Fehl = 0; a2LetzterFehl = null;
-    r.className='cr ok'; r.textContent = `✓ Richtig — der Scheitelpunkt ist S(${it.S.u} | ${it.S.v}).`;
+    r.className='cr ok'; r.textContent = `✓ Richtig — der Scheitelpunkt ist S(${fmtNum(it.S.u)} | ${fmtNum(it.S.v)}).`;
     return;
   }
   const key = a2S.u + '|' + a2S.v;
   if(key !== a2LetzterFehl){ a2Fehl++; a2LetzterFehl = key; }
   r.className='cr err';
   if(a2Fehl >= 2){
-    r.textContent = `✗ Noch nicht. Du hast S(${a2S.u} | ${a2S.v}) — richtig wäre S(${it.S.u} | ${it.S.v}).`;
+    r.textContent = `✗ Noch nicht. Du hast S(${fmtNum(a2S.u)} | ${fmtNum(a2S.v)}) — richtig wäre S(${fmtNum(it.S.u)} | ${fmtNum(it.S.v)}).`;
   } else {
     r.textContent = '✗ Noch nicht — ' + a2Hinweis(a2S.u, a2S.v, it);
   }
@@ -1934,7 +1938,7 @@ function chkScheitel(id, u, v){
   const r = document.getElementById(id+'-cr'); r.style.display='block';
   const m = inp.match(/s?\(?(-?[\d.]+)\|?,?\s*(-?[\d.]+)\)?/);
   if(m && Math.abs(+m[1]-u)<0.01 && Math.abs(+m[2]-v)<0.01){
-    r.className='cr ok'; r.textContent = `✓ Richtig! S(${u} | ${v})`;
+    r.className='cr ok'; r.textContent = `✓ Richtig! S(${fmtNum(u)} | ${fmtNum(v)})`;
   } else {
     r.className='cr err'; r.textContent = '✗ Nicht korrekt. Erinnere: u = −b/(2a), v = f(u).';
   }
@@ -1945,7 +1949,7 @@ function chkNullstellen(id, x1, x2){
   const target = [x1, x2].sort((a,b)=>a-b);
   const r = document.getElementById(id+'-cr'); r.style.display='block';
   if(nums.length>=2 && Math.abs(nums[0]-target[0])<0.01 && Math.abs(nums[1]-target[1])<0.01){
-    r.className='cr ok'; r.textContent = `✓ Richtig! x₁ = ${x1}, x₂ = ${x2}`;
+    r.className='cr ok'; r.textContent = `✓ Richtig! x₁ = ${fmtNum(x1)}, x₂ = ${fmtNum(x2)}`;
   } else {
     r.className='cr err'; r.textContent = '✗ Nicht korrekt. Verwende die Mitternachtsformel.';
   }

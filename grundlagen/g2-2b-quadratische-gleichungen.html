@@ -1255,14 +1255,19 @@ function fmtQ(q) {
   if (q === 0) return '';
   return q > 0 ? ` + ${q}` : ` − ${-q}`;
 }
+// Anzeigezahl mit Unicode-Minus; negative Null (auch gerundet «-0.00») wird zu 0
+function zahlM(v, st) {
+  const s = st === undefined ? String(v) : v.toFixed(st);
+  return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
 function loesungstext(p, q) {
   const D = p*p - 4*q;
-  if (D < 0)  return '𝕃 = ∅  (D = ' + D + ' < 0)';
-  if (D === 0) return '𝕃 = { ' + (-p/2) + ' }  (doppelte Lösung)';
+  if (D < 0)  return '𝕃 = ∅  (D = ' + zahlM(D) + ' < 0)';
+  const fmt = x => Number.isInteger(x) ? zahlM(x) : zahlM(x, 2);
+  if (D === 0) return '𝕃 = { ' + fmt(-p/2) + ' }  (doppelte Lösung)';
   const w = Math.sqrt(D);
-  const x1 = (-p + w) / 2, x2 = (-p - w) / 2;
-  const fmt = x => Number.isInteger(x) ? x.toString() : x.toFixed(2);
-  return '𝕃 = { ' + fmt(x1) + ',  ' + fmt(x2) + ' }';
+  const x1 = (-p - w) / 2, x2 = (-p + w) / 2;   // aufsteigend
+  return '𝕃 = { ' + fmt(x1) + ', ' + fmt(x2) + ' }';
 }
 function updateThree() {
   const p = parseInt(document.getElementById('sl-p').value);
@@ -1280,7 +1285,7 @@ function updateThree() {
   const tbody = document.querySelector('#three-table tbody');
   const xs = [-2, -1, 0, 1, 2, 3, 4, 5, 6];
   const D = p*p - 4*q;
-  const zahl = v => v < 0 ? '−' + (-v) : String(v);
+  const zahl = v => zahlM(v);
   const f = x => x*x + p*x + q;
   // Markierungen: f(x) = 0 → Zeile hervorheben (Nullstelle, bei D = 0 ohne Vorzeichenwechsel);
   // Vorzeichenwechsel zwischen zwei Nachbarzeilen → Hinweiszeile dazwischen.
@@ -1288,7 +1293,7 @@ function updateThree() {
   tbody.innerHTML = xs.map((x, i) => {
     const x2 = x*x, px = p*x, fx = f(x);
     const cls = fx === 0 ? 'aktiv' : '';
-    let zeilen = `<tr class="${cls}"><td>${x}</td><td>${x2}</td><td>${px}</td><td>${fx}</td></tr>`;
+    let zeilen = `<tr class="${cls}"><td>${zahl(x)}</td><td>${zahl(x2)}</td><td>${zahl(px)}</td><td>${zahl(fx)}</td></tr>`;
     if (fx === 0) zeilen += notiz(D === 0
       ? `↑ f(x) = 0 ohne Vorzeichenwechsel: doppelte Nullstelle bei x = ${zahl(x)}`
       : `↑ f(x) = 0: Nullstelle bei x = ${zahl(x)}`);
@@ -1419,7 +1424,7 @@ function setD(f) {
   document.querySelectorAll('.lf-card[data-d]').forEach(c => c.classList.toggle('aktiv', c.dataset.d === f));
   const fall = D_FAELLE[f];
   document.getElementById('d-formel').innerHTML =
-    `D = ${fall.formel}<span class="D-wert">${fall.D}</span>`;
+    `D = ${fall.formel}<span class="D-wert">${zahlM(fall.D)}</span>`;
   const baum = document.getElementById('d-baum');
   baum.innerHTML = fall.aeste.map(a =>
     `<div class="ast ${a.cls}"><div class="ast-tit">${a.tit}</div><div class="ast-val">${a.val}</div></div>`
@@ -1433,13 +1438,13 @@ function setD(f) {
    ══════════════════════════════════════════════════════════════ */
 function drawPK() {
   const k = parseFloat(document.getElementById('sl-k').value);
-  document.getElementById('sl-k-v').textContent = k.toString();
+  document.getElementById('sl-k-v').textContent = zahlM(k);
   const D = 36 - 4*k;
   // Formel + Fall-Pille
   const sign = D >= 0 ? '+' : '−';
   // k ist der Regler → k-Variable und eingesetzter k-Wert blau; D-Resultat neutral (abgeleitet).
   const Tk = s => `<span class="tx-blau">${s}</span>`;
-  document.getElementById('pk-formel').innerHTML = `D(${Tk('k')}) = 36 − 4·${Tk(k)} = ${D.toFixed(1)}`;
+  document.getElementById('pk-formel').innerHTML = `D(${Tk('k')}) = 36 − 4·${Tk(k < 0 ? '(' + zahlM(k) + ')' : zahlM(k))} = ${zahlM(D, 1)}`;
   const fallEl = document.getElementById('pk-fall');
   fallEl.classList.remove('eindeutig','doppelt','keine');
   if (D > 0.001)       { fallEl.classList.add('eindeutig'); fallEl.textContent = 'D > 0 — zwei Lösungen'; }
@@ -1450,7 +1455,7 @@ function drawPK() {
   if (D > 0.001) {
     const w = Math.sqrt(D);
     const x1 = (6 + w) / 2, x2 = (6 - w) / 2;
-    lEl.textContent = `x₁ = ${x1.toFixed(2)},  x₂ = ${x2.toFixed(2)}`;
+    lEl.textContent = `x₁ = ${zahlM(x1, 2)},  x₂ = ${zahlM(x2, 2)}`;
   } else if (D < -0.001) {
     lEl.textContent = '𝕃 = ∅  (D < 0)';
   } else {
@@ -1485,7 +1490,7 @@ function drawPK() {
   ctx.fillStyle = '#374151'; ctx.font = '13px JetBrains Mono, monospace'; ctx.textAlign = 'center';
   for (const t of [-20, 0, 20, 40]) {
     ctx.beginPath(); ctx.moveTo(cx(t), yAchse - 4); ctx.lineTo(cx(t), yAchse + 4); ctx.stroke();
-    beschriftung(ctx, t, cx(t), yAchse + 17, {align:'center', W, H});
+    beschriftung(ctx, zahlM(t), cx(t), yAchse + 17, {align:'center', W, H});
   }
   // 0-Linie hervorheben (Grenzfall)
   ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
@@ -1504,7 +1509,7 @@ function drawPK() {
   // Beschriftung "D = ..." über Punkt
   ctx.font = 'bold 13px JetBrains Mono, monospace';
   ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
-  ctx.fillText('D = ' + D.toFixed(1), cx(dClamped), yAchse - 12);
+  ctx.fillText('D = ' + zahlM(D, 1), cx(dClamped), yAchse - 12);
   // Achsenbeschriftung links
   ctx.font = 'bold 13px monospace'; ctx.fillStyle = '#374151'; ctx.textAlign = 'left';
   ctx.fillText('D', 6, yAchse + 4);
@@ -1538,7 +1543,7 @@ function drawPKParabel(k) {
   // Scheitel S(3 | k−9)
   drawDot(ctx, cx, cy, 3, k - 9, '#9b1c1c', 5);
   ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
-  beschriftung(ctx, 'S(3 | ' + (k - 9).toFixed(1) + ')', cx(3) + 9, cy(k - 9) - 6, {align:'left', W, H});
+  beschriftung(ctx, 'S(3 | ' + zahlM(k - 9, 1) + ')', cx(3) + 9, cy(k - 9) - 6, {align:'left', W, H});
   // Nullstellen auf der x-Achse
   if (D > 0.001) {
     const half = Math.sqrt(D) / 2;

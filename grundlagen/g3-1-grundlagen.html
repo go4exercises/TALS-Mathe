@@ -1768,8 +1768,9 @@ function plotChart(cfg) {
   const zahlenOben = () => {
     const f = ctx.font, s = ctx.fillStyle;
     ctx.fillStyle = '#9ca3af'; ctx.font = '13px JetBrains Mono,monospace';
-    tickX.forEach(g => beschriftung(ctx, g, cx(g), cy(0)+12, {align:'center', bg:'#fff', W:Wpx, H:Hpx}));
-    tickY.forEach(g => beschriftung(ctx, g, cx(0)-4, cy(g)+3, {align:'right', bg:'#fff', W:Wpx, H:Hpx}));
+    // fmtNum: Unicode-Minus statt Bindestrich auf den negativen Achsenzahlen
+    tickX.forEach(g => beschriftung(ctx, fmtNum(g), cx(g), cy(0)+12, {align:'center', bg:'#fff', W:Wpx, H:Hpx}));
+    tickY.forEach(g => beschriftung(ctx, fmtNum(g), cx(0)-4, cy(g)+3, {align:'right', bg:'#fff', W:Wpx, H:Hpx}));
     ctx.font = f; ctx.fillStyle = s;
   };
 
@@ -2077,7 +2078,7 @@ function checkA1() {
   if (okA && okB && okC && okD) {
     fb.textContent = '\u2713 Alle vier richtig.'; fb.className = 'feedback ok';
   } else {
-    const mw = []; if (!okA) mw.push('f(0)'); if (!okB) mw.push('f(2)'); if (!okC) mw.push('f(-1)'); if (!okD) mw.push('f(5/3)');
+    const mw = []; if (!okA) mw.push('f(0)'); if (!okB) mw.push('f(2)'); if (!okC) mw.push('f(\u22121)'); if (!okD) mw.push('f(5/3)');
     fb.textContent = '\u2717 Nochmal: ' + mw.join(', '); fb.className = 'feedback fehler';
   }
 }
@@ -2110,7 +2111,7 @@ function checkA5() {
   if (close(x, 2) && close(y, 4)) {
     fb.textContent = '\u2713 S(2 | 4) \u2014 korrekt.'; fb.className = 'feedback ok';
   } else {
-    fb.textContent = '\u2717 Gleichsetzen: x + 2 = -2x + 8.'; fb.className = 'feedback fehler';
+    fb.textContent = '\u2717 Gleichsetzen: x + 2 = \u22122x + 8.'; fb.className = 'feedback fehler';
   }
 }
 
@@ -2162,7 +2163,7 @@ function vtRender() {
   const x = parseFloat(document.getElementById('vt-x').value);
   const K = VT_KURVEN[vtAkt];
   const treffer = K.ys(x).filter(y => y >= -5.5 && y <= 5.5);
-  document.getElementById('vt-xv').textContent = x.toFixed(1);
+  document.getElementById('vt-xv').textContent = x.toFixed(1).replace('-', '\u2212');
   const wort = treffer.length === 0 ? 'kein Schnittpunkt'
              : (treffer.length === 1 ? 'genau ein Schnittpunkt' : treffer.length + ' Schnittpunkte');
   document.getElementById('vt-eq').innerHTML =

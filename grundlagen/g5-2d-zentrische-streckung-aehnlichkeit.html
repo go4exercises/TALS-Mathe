@@ -1156,6 +1156,8 @@ buildNav({
  * ============================================================ */
 function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
 function lerp(a, b, t) { return a + (b - a) * t; }
+// Anzeige-Zahl mit d Dezimalen: Unicode-Minus, keine negative Null
+function zahlFix(v, d) { const t = Math.abs(v).toFixed(d); return (v < 0 && +t !== 0 ? '−' : '') + t; }
 
 const css = getComputedStyle(document.documentElement);
 const C = {
@@ -1365,7 +1367,7 @@ function drawStreck() {
   const r = initCv('cv-streck'); if (!r) return;
   const { ctx, W, H, cv } = r;
   const k = +sldStrK.value;
-  lblStrK.textContent = k.toFixed(1);
+  lblStrK.textContent = zahlFix(k, 1);
 
   // Initialposition beim ersten Aufruf
   if (!strPunkte) {
@@ -1440,7 +1442,7 @@ function drawStreck() {
   txt(ctx, Z[0] + 14, Z[1] - 14, 'Z', C.tinte, 15, 'left', 'middle', '700');
 
   // Live-Werte
-  legStrK.textContent = k.toFixed(2);
+  legStrK.textContent = zahlFix(k, 2);
   legStrAbs.textContent = Math.abs(k).toFixed(2);
   legStrFla.textContent = (k*k).toFixed(2);
   legStrOri.textContent = k >= 0 ? 'erhalten' : 'gespiegelt';
@@ -1849,7 +1851,7 @@ function drawFig() {
   const r = initCv('cv-figur'); if (!r) return;
   const { ctx, W, H } = r;
   const k = +sldFigK.value;
-  lblFigK.textContent = k.toFixed(1);
+  lblFigK.textContent = zahlFix(k, 1);
 
   const Zx = W * 0.50, Zy = H * 0.50;
 
@@ -2007,10 +2009,10 @@ function drawFig() {
   txt(ctx, Zx + 12, Zy - 12, 'Z', C.tinte, 15, 'left', 'middle', '700');
   // Streckfaktor ins Bild: er ist die eine Groesse, um die es hier geht,
   // stand aber nur in der Reglerzeile ausserhalb der Grafik.
-  txt(ctx, 12, 20, `k = ${k.toFixed(1)}`, k < 0 ? C.orange : C.blau, 15, 'left', 'middle', '700');
+  txt(ctx, 12, 20, `k = ${zahlFix(k, 1)}`, k < 0 ? C.orange : C.blau, 15, 'left', 'middle', '700');
 
   // Werte
-  legFigK.textContent = k.toFixed(2);
+  legFigK.textContent = zahlFix(k, 2);
   legFigStreck.textContent = Math.abs(k).toFixed(2);
   legFigFla.textContent = (k*k).toFixed(2);
 
@@ -2641,7 +2643,7 @@ window.addEventListener('resize', () => {
   function zeichne() {
     const k = parseFloat(sldK.value);
     const sep = parseFloat(sldSep.value);
-    document.getElementById('sl-lblK').textContent = k.toFixed(2);
+    document.getElementById('sl-lblK').textContent = zahlFix(k, 2);
     document.getElementById('sl-lblSep').textContent = sep.toFixed(2);
 
     const res = initCv('cv-strlabor'); if (!res) return;

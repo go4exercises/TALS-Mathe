@@ -911,6 +911,10 @@ buildNav({
   next:{nr:'3.3',titel:'Quadratische Funktionen',url:'g3-3-quadratische-funktionen.html'}
 });
 
+/* Anzeige-Zahl: Bindestrich → Unicode-Minus U+2212. Nur für Ausgaben —
+   Eingaben liest parseL, das «−» ohnehin auf «-» zurückführt. */
+const zahl = v => String(v).replace(/-/g, '−');
+
 /* ══ EINSTIEG (Kostenfunktion) ══ */
 const KS={m:2,b:5,xs:[0,2,4,6,8,10,12,14]};
 function updateKS(){
@@ -966,12 +970,12 @@ function updateDR(){
   const b=parseInt(document.getElementById('dr-b').value);
   const x=parseInt(document.getElementById('dr-x').value);
   const y=m*x+b;
-  document.getElementById('dr-mv').textContent=m;
-  document.getElementById('dr-bv').textContent=b;
-  document.getElementById('dr-xv').textContent=x;
+  document.getElementById('dr-mv').textContent=zahl(m);
+  document.getElementById('dr-bv').textContent=zahl(b);
+  document.getElementById('dr-xv').textContent=zahl(x);
   // Gleichung (allgemeine Form) — Bestandteile in den Gruppen-Akzentfarben:
   // m blau, x grün, b orange (Werte sind Slider-Ganzzahlen, innerHTML unkritisch)
-  const T=(c,s)=>`<span class="tx-${c}">${s}</span>`;
+  const T=(c,s)=>`<span class="tx-${c}">${zahl(s)}</span>`;
   const bStr=b===0?'':(b>0?` + ${T('orange',b)}`:` − ${T('orange',Math.abs(b))}`);
   const mStr=m===0?'':(m===1?T('gruen','x'):(m===-1?`−${T('gruen','x')}`:`${T('blau',m)}·${T('gruen','x')}`));
   document.getElementById('dr-eq').innerHTML=`f(${T('gruen','x')}) = ${mStr||T('blau','0')}${bStr}`;
@@ -984,14 +988,14 @@ function updateDR(){
   else if(m===-1) mxTerm = x<0 ? `−${xDisp}` : `−${T('gruen',x)}`;
   else mxTerm = `${T('blau',m)}·${xDisp}`;
   const evalStr = m===0 ? T('orange',b) : `${mxTerm}${bStr}`;
-  document.getElementById('dr-eval').innerHTML = `f(${T('gruen',x)}) = ${evalStr} = ${y}`;
+  document.getElementById('dr-eval').innerHTML = `f(${T('gruen',x)}) = ${evalStr} = ${zahl(y)}`;
   // Tabelle
   const xs=[-3,-2,-1,0,1,2,3];
   const tbody=document.querySelector('#dr-table tbody');
   tbody.innerHTML=xs.map(xi=>{
     const yi=m*xi+b;
     const act=xi===x;
-    return `<tr class="${act?'aktiv-zeile':''}"><td class="td-x">${xi}</td><td class="td-y">${yi}</td><td class="td-pt">(${xi}|${yi})</td></tr>`;
+    return `<tr class="${act?'aktiv-zeile':''}"><td class="td-x">${zahl(xi)}</td><td class="td-y">${zahl(yi)}</td><td class="td-pt">(${zahl(xi)}|${zahl(yi)})</td></tr>`;
   }).join('');
   // Graph
   const {ctx,W,H}=initCanvas('dr-canvas',220,true);
@@ -999,7 +1003,8 @@ function updateDR(){
   const {cx,cy}=drawGrid(ctx,W,H,-rng,rng,-rng,rng);
   // Funktionsterm ins Bild — bisher stand dort nur der bewegliche Punkt.
   ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px JetBrains Mono,monospace';
-  beschriftung(ctx, `f(x) = ${fmtAffine(m,b)}`, 10, 19, {align:'left', bg:'#fff', W, H});
+  // zahl(): fmtAffine gibt bei m = 0 die Konstante mit Bindestrich aus.
+  beschriftung(ctx, `f(x) = ${zahl(fmtAffine(m,b))}`, 10, 19, {align:'left', bg:'#fff', W, H});
   if(m!==0||b!==0) drawLine(ctx,cx,cy,m,b,-rng,rng,'#1a4f8a',2.5);
   else { ctx.strokeStyle='#1a4f8a'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(0,cy(b)); ctx.lineTo(W,cy(b)); ctx.stroke(); }
   // b dot
@@ -1012,7 +1017,7 @@ function updateDR(){
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(0),cy(y)); ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
-    ctx.fillText(`(${x}|${y})`,cx(x)+7,cy(y)-7);
+    ctx.fillText(`(${zahl(x)}|${zahl(y)})`,cx(x)+7,cy(y)-7);
   }
 }
 ['dr-m','dr-b','dr-x'].forEach(id=>document.getElementById(id).addEventListener('input',updateDR));
@@ -1114,15 +1119,15 @@ function showA1Sol(){
 
 /* ══ A2: Graph zeichnen ══ */
 const a2G=[
-  {label:'f(x) = x+1',m:1,b:1},{label:'f(x) = -2·x+4',m:-2,b:4},
-  {label:'f(x) = 0.5·x-2',m:0.5,b:-2},{label:'f(x) = 3·x',m:3,b:0},
+  {m:1,b:1},{m:-2,b:4},
+  {m:0.5,b:-2},{m:3,b:0},
 ];
 let a2Act=0, a2Drag=null;
 const a2Pts=[{x:-2,y:0},{x:2,y:0}];
 let a2S={W:600,H:300};
 function buildA2(){
   document.getElementById('a2-btns').innerHTML=a2G.map((g,i)=>
-    `<button class="graf-btn${i===0?' aktiv':''}" onclick="setA2(${i})">${g.label}</button>`
+    `<button class="graf-btn${i===0?' aktiv':''}" onclick="setA2(${i})">f(x) = ${fmtAffine(g.m, g.b)}</button>`
   ).join('');
 }
 function setA2(i){
@@ -1156,8 +1161,8 @@ function drawA2(){
     ctx.fillStyle='#fff'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
     ctx.fillText(i===0?'P1':'P2',a2CX(p.x),a2CY(p.y)+4);
   });
-  document.getElementById('a2-p1c').textContent=`(${a2Pts[0].x}|${a2Pts[0].y})`;
-  document.getElementById('a2-p2c').textContent=`(${a2Pts[1].x}|${a2Pts[1].y})`;
+  document.getElementById('a2-p1c').textContent=`(${zahl(a2Pts[0].x)}|${zahl(a2Pts[0].y)})`;
+  document.getElementById('a2-p2c').textContent=`(${zahl(a2Pts[1].x)}|${zahl(a2Pts[1].y)})`;
   // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
   zahlenOben();
 }
@@ -1198,7 +1203,7 @@ function checkA2(){
   } else {
     const bad=a2Pts.filter(p=>!on(p));
     r.className='cr err';
-    r.textContent=`✗ ${bad.length===2?'Beide Punkte liegen':'Ein Punkt liegt'} nicht auf der Geraden. Für x=${a2Pts[0].x} gilt y=${fmt(g.m*a2Pts[0].x+g.b)}.`;
+    r.textContent=`✗ ${bad.length===2?'Beide Punkte liegen':'Ein Punkt liegt'} nicht auf der Geraden. Für x = ${zahl(a2Pts[0].x)} gilt y = ${zahl(fmt(g.m*a2Pts[0].x+g.b))}.`;
   }
 }
 
@@ -1208,7 +1213,7 @@ function chk(id,correct,display){
   const exp=parseL(correct.replace(/\s/g,''));
   const r=document.getElementById(id+'-cr'); r.style.display='block';
   if(p&&exp&&Math.abs(p.m-exp.m)<0.01&&Math.abs(p.b-exp.b)<0.01){
-    r.className='cr ok'; r.textContent=`✓ Richtig! f(x) = ${display}`;
+    r.className='cr ok'; r.textContent=`✓ Richtig! f(x) = ${zahl(display)}`;
   } else {
     r.className='cr err'; r.textContent='✗ Nicht korrekt. Überprüfe deine Rechnung.';
   }

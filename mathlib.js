@@ -41,12 +41,13 @@ const fmtMx = m => {
 };
 // Komplette affin-lineare Funktion m·x + b mit sauberer Behandlung der Sonderfälle:
 //   m=0, b=5  →  '5'
+//   m=0, b=-3 →  '−3'
 //   m=2, b=0  →  '2·x'
 //   m=0, b=0  →  '0'
 //   m=2, b=5  →  '2·x + 5'
 //   m=2, b=-5 →  '2·x − 5'
 const fmtAffine = (m, b) => {
-  if (m === 0) return fmt(b);
+  if (m === 0) return b < 0 ? `−${fmt(-b)}` : fmt(b);
   if (b === 0) return fmtMx(m);
   return `${fmtMx(m)} ${fmtS(b)}`;
 };
@@ -271,16 +272,17 @@ function drawGrid(ctx, W, H, xMin, xMax, yMin, yMax, opt) {
   // nur weiter, nie dichter.
   const sy = Math.max(2, schritt(yMax - yMin, H, 16));
 
+  // Negative Achsenzahlen mit Unicode-Minus (U+2212), wie fmtS und fmtM
   function zahlen() {
     const f = ctx.font, s = ctx.fillStyle;
     ctx.font = '13px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
     for (let gx = Math.ceil(xMin / sx) * sx; gx < xMax; gx += sx) {
       if (gx === 0 || gx <= xMin) continue;
-      beschriftung(ctx, gx, cx(gx), unten ? cy(0) + 14 : cy(0) - 6, { align: 'center', bg: '#fff', W, H });
+      beschriftung(ctx, String(gx).replace('-', '−'), cx(gx), unten ? cy(0) + 14 : cy(0) - 6, { align: 'center', bg: '#fff', W, H });
     }
     for (let gy = Math.ceil(yMin / sy) * sy; gy < yMax; gy += sy) {
       if (gy === 0 || gy <= yMin) continue;
-      beschriftung(ctx, gy, links ? cx(0) - 5 : cx(0) + 5, cy(gy) + 4,
+      beschriftung(ctx, String(gy).replace('-', '−'), links ? cx(0) - 5 : cx(0) + 5, cy(gy) + 4,
                    { align: links ? 'right' : 'left', bg: '#fff', W, H });
     }
     ctx.font = f; ctx.fillStyle = s;
