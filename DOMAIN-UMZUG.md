@@ -8,9 +8,9 @@ Domain, die beide Lehrmittel trägt und für die geplanten Erweiterungen
 Phasen 0–2 sind erledigt und nachgemessen; Phase 3 läuft. Der Ist-Zustand steht
 jeweils unter der Phase.
 
-> **Nachgemessen am 14. September 2026:** Phasen 0–4 sind live erledigt. Offen sind nur
-> noch der Physik-Markenname (Phase 5), die Search Console (Phase 6, von aussen nicht
-> messbar — siehe dort) und die Anki-Decks. Neu: Der Ordner `apex-startseite/` liegt
+> **Nachgemessen am 14. September 2026:** Phasen 0–4 sind live erledigt. Phase 5 ist im
+> Physik-Repo erledigt (`2c72192`), aber noch nicht gepusht. Offen sind sonst nur die
+> Search Console (Phase 6, von aussen nicht messbar — siehe dort) und die Anki-Decks. Neu: Der Ordner `apex-startseite/` liegt
 > jetzt *hinter* der ausgelieferten Seite (Phase 4).
 
 ---
@@ -251,6 +251,12 @@ Wahl.
 ---
 
 ## Phase 5 · Physik nachziehen
+
+- [x] 🔑 Markenname «TALS Physik» → «Physik begreifbar» im Physik-Repo umgestellt —
+      Commit `2c72192` (104 Dateien). **Live noch nicht:** `origin/main` steht am
+      14.9.2026 auf `ec7cafa`, zwei Commits dahinter; `physik.begreifbar.ch` liefert
+      weiterhin «TALS Physik» (`last-modified` 13.9.2026). Nach dem Push im Physik-Repo
+      nachmessen: `<title>`, `og:site_name`, JSON-LD `name`, `og-bild.png`.
 
 > **Teilweise erledigt (gemessen am 11.8.2026):** `https://physik.begreifbar.ch/`
 > antwortet mit **200**, und `go4exercises.github.io/TALS-Physik/` leitet mit **301**
