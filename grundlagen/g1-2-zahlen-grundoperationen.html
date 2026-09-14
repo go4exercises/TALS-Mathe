@@ -1922,8 +1922,11 @@ function drawBetragZG() {
     `|<span class="tx-orange">${nz(b)}</span> − ${sub(a, 'tx-blau')}|`;
 
   const cv = document.getElementById('cv-betrag-zg');
-  const LW = 560, LH = 200, dpr = window.devicePixelRatio || 1;
-  const cssW = cv.getBoundingClientRect().width || LW, cssH = cssW * LH / LW;
+  // Logische Breite = tatsächliche Breite (höchstens 560): Auf schmalen Bildschirmen wird die
+  // Zahlengerade kürzer statt die ganze Zeichnung samt Schrift verkleinert (sonst ~6 px bei 360 px).
+  const LH = 200, dpr = window.devicePixelRatio || 1;
+  const cssW = cv.getBoundingClientRect().width || 560;
+  const LW = Math.min(560, cssW), cssH = cssW * LH / LW;
   cv.style.height = cssH + 'px';
   cv.width = Math.max(1, Math.round(cssW * dpr));
   cv.height = Math.max(1, Math.round(cssH * dpr));
@@ -1944,7 +1947,6 @@ function drawBetragZG() {
     const gross = z % 5 === 0;
     ctx.strokeStyle = z === 0 ? '#374151' : '#c8d0da'; ctx.lineWidth = z === 0 ? 1.8 : 1;
     ctx.beginPath(); ctx.moveTo(px(z), y - (gross ? 7 : 4)); ctx.lineTo(px(z), y + (gross ? 7 : 4)); ctx.stroke();
-    if (gross) { ctx.fillStyle = '#9ca3af'; ctx.fillText(z < 0 ? '−' + Math.abs(z) : z, px(z), y + 22); }
   }
 
   // |a| — Abstand a zur Null (grün, unterhalb)
@@ -1958,6 +1960,11 @@ function drawBetragZG() {
   ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
   ctx.fillText('|a| = ' + nz(Math.abs(a)), (px(0) + px(a)) / 2, yA + 17);
 
+  // Achsenzahlen erst jetzt, mit Hintergrund: die grünen Hilfslinien (bei 0 immer) laufen durch sie hindurch
+  ctx.font = '11px JetBrains Mono, monospace'; ctx.fillStyle = '#9ca3af';
+  for (let z = -10; z <= 10; z += 5)
+    beschriftung(ctx, z < 0 ? '−' + Math.abs(z) : String(z), px(z), y + 22, { align: 'center', bg: '#fff', pad: 1, W: LW, H: LH });
+
   // |a − b| — Abstand der Punkte (violett, oberhalb)
   const yB = y - 46;
   ctx.strokeStyle = '#6b21a8'; ctx.lineWidth = 4; ctx.lineCap = 'round';
@@ -1967,17 +1974,27 @@ function drawBetragZG() {
   ctx.beginPath(); ctx.moveTo(px(b), y); ctx.lineTo(px(b), yB); ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = '#6b21a8'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-  ctx.fillText('|a − b| = ' + nz(Math.abs(a - b)), (px(a) + px(b)) / 2, yB - 9);
+  // Symmetrie mit im Bild: derselbe Abstand, egal in welcher Reihenfolge subtrahiert.
+  // beschriftung() klemmt das längere Label bei a ≈ b ≈ ±9 ins Canvas.
+  beschriftung(ctx, '|a − b| = |b − a| = ' + nz(Math.abs(a - b)), (px(a) + px(b)) / 2, yB - 9,
+    { align: 'center', bg: '#fff', W: LW, H: LH });
 
-  // Punkte
-  const punkt = (z, col, lab) => {
+  // Punkte — liegen a und b zu nah, weichen die Buchstaben symmetrisch auseinander (a links bei a ≤ b)
+  ctx.font = 'bold 12px JetBrains Mono, monospace';
+  const abst = (ctx.measureText('a').width + ctx.measureText('b').width) / 2 + 6;
+  let xa = px(a), xb = px(b);
+  if (Math.abs(xa - xb) < abst) {
+    const m = (xa + xb) / 2, s = a <= b ? 1 : -1;
+    xa = m - s * abst / 2; xb = m + s * abst / 2;
+  }
+  const punkt = (z, col, lab, xl) => {
     ctx.fillStyle = col;
     ctx.beginPath(); ctx.arc(px(z), y, 6, 0, Math.PI * 2); ctx.fill();
-    ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-    ctx.fillText(lab, px(z), y - 14);
+    ctx.font = 'bold 12px JetBrains Mono, monospace';
+    beschriftung(ctx, lab, xl, y - 14, { align: 'center', bg: '#fff', pad: 1, W: LW, H: LH });
   };
-  punkt(b, '#b85c00', 'b');
-  punkt(a, '#1a4f8a', 'a');
+  punkt(b, '#b85c00', 'b', xb);
+  punkt(a, '#1a4f8a', 'a', xa);
   ctx.fillStyle = '#374151';
   ctx.beginPath(); ctx.arc(px(0), y, 3, 0, Math.PI * 2); ctx.fill();
 }

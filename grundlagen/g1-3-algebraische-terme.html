@@ -288,6 +288,11 @@ MathJax = {
   .zus-display .gl.farbe-D { background: #e8d5f0; color: #5b2b75; }
   .zus-display .gl.farbe-E { background: #fde2e0; color: #7a2a2a; }
   .zus-display .op { color: var(--tinte-2); margin: 0 2px; }
+  /* schmal: Schritt-Label über den Term statt daneben, sonst bleibt dem Term kaum Breite */
+  @media (max-width: 600px) {
+    .zus-display { grid-template-columns: 1fr; row-gap: 4px; padding: 12px 14px; }
+    .zus-display .zeile-label { text-align: left; white-space: normal; margin-top: 6px; }
+  }
 
   /* Klammern-Vorzeichen-Toggle: schwache Plus-Zeichen */
   .vz-schwach { color: var(--tinte-2); opacity: 0.45; transition: opacity 0.18s, color 0.18s; }
@@ -618,7 +623,7 @@ Variablen-Anteil bleibt unverändert (Distributivgesetz, rückwärts gelesen):</
             <input type="range" id="sld-zus" min="0" max="3" step="1" value="0">
           </div>
           <div class="erklaerung" id="zus-erkl">
-            Beobachte, wie sich die gleichartigen Glieder zuerst farblich gruppieren, dann zueinander rücken und schliesslich zu einem einzigen Glied zusammenschmelzen.
+            Schiebe den Regler Schritt für Schritt: Zuerst bekommen gleichartige Glieder dieselbe Farbe, dann werden sie nebeneinander sortiert, und schliesslich werden ihre Koeffizienten zu einem einzigen Glied verrechnet. Jeder Schritt erscheint als eigene Zeile unter dem vorherigen.
           </div>
         </div>
       </div>
@@ -2322,7 +2327,8 @@ window.addEventListener('resize', () => { if (document.getElementById('cv-equiv'
 (function() {
   // Polynome als Liste von Gliedern mit Sort-Schlüssel
   // sortKey: gleicher Schlüssel → gleichartig → gleiche Farbe
-  // Wir nutzen 5 unsortierte Polynome unterschiedlicher Komplexität.
+  // Wir nutzen 6 unsortierte Polynome unterschiedlicher Komplexität;
+  // das letzte enthält eine Gruppe, die sich zu 0 aufhebt.
   const POLYS = [
     { label: '5x + 3 − 2x + 7',
       glieder: [
@@ -2368,6 +2374,13 @@ window.addEventListener('resize', () => { if (document.getElementById('cv-equiv'
         { coeff: -4,varStr: '',   sortKey: 'k' },
       ]
     },
+    { label: '3x + 5 − 3x',
+      glieder: [
+        { coeff: 3, varStr: 'x',  sortKey: 'x' },
+        { coeff: 5, varStr: '',   sortKey: 'k' },
+        { coeff: -3,varStr: 'x',  sortKey: 'x' },
+      ]
+    },
   ];
 
   // Map sortKey → CSS-Farbklasse (max. 5 verschiedene Farben)
@@ -2400,11 +2413,12 @@ window.addEventListener('resize', () => { if (document.getElementById('cv-equiv'
     if (g.varStr && absK === 1) koStr = '';
     else koStr = String(absK);
     const inner = (idx === 0 && vz === '−' ? '−' : '') + koStr + varHtml(g.varStr);
-    let out = '';
+    // Vorzeichen und Glied bleiben zusammen; umbrechen darf der Term nur zwischen Gliedern
+    let out = '<span style="white-space:nowrap">';
     if (idx > 0) {
       out += '<span class="op">' + vz + '</span> ';
     }
-    out += '<span class="gl ' + (klass || '') + '"' + (sup ? ' ' + sup : '') + '>' + inner + '</span> ';
+    out += '<span class="gl ' + (klass || '') + '"' + (sup ? ' ' + sup : '') + '>' + inner + '</span></span> ';
     return out;
   }
 
@@ -2471,7 +2485,21 @@ window.addEventListener('resize', () => { if (document.getElementById('cv-equiv'
       html += '<div class="zeile-poly">' + polyHtmlFuerSchritt(poly, s) + '</div>';
     }
     display.innerHTML = html;
-    document.getElementById('zus-erkl').innerHTML = SCHRITT_ERKL[aktuellerSchritt];
+    let erkl = SCHRITT_ERKL[aktuellerSchritt];
+    if (aktuellerSchritt === 3) {
+      // Gruppen, deren Koeffizienten sich zu 0 addieren, fallen ganz weg
+      const keys = [...new Set(poly.glieder.map(g => g.sortKey))];
+      const null0 = keys.filter(k => poly.glieder.filter(g => g.sortKey === k).reduce((s, g) => s + g.coeff, 0) === 0);
+      if (null0.length > 0) {
+        erkl += ' Heben sich die Koeffizienten einer Farbgruppe auf (Summe 0), fällt die ganze Gruppe weg — ' + (null0.length === 1 ? 'hier: ' : '') +
+          null0.map(k => poly.glieder.filter(g => g.sortKey === k).map((g, i) => {
+            const absK = Math.abs(g.coeff);
+            return (i === 0 ? (g.coeff < 0 ? '−' : '') : (g.coeff < 0 ? ' − ' : ' + ')) +
+                   (g.varStr && absK === 1 ? '' : absK) + varHtml(g.varStr);
+          }).join('') + ' = 0').join(', ') + '.';
+      }
+    }
+    document.getElementById('zus-erkl').innerHTML = erkl;
     document.getElementById('lbl-zus-schritt').textContent = aktuellerSchritt;
   }
 

@@ -368,6 +368,18 @@ MathJax = {
 .baum-dyn .baum-zeile.tief-2 { margin-left:60px; }
 .baum-dyn .baum-zeile.tief-3 { margin-left:90px; }
 .baum-dyn .baum-zeile.tief-4 { margin-left:120px; }
+
+/* Flächenmodell (cv-distrib): Akzentfarbe am .regler — Gegenstück zu .sl-grp.akz-*
+   in ../style.css. Regler, Wert und Variable tragen die Farbe ihrer Teilfläche im Bild. */
+.anim .regler.akz-blau   { --akz: var(--blau); }
+.anim .regler.akz-orange { --akz: var(--orange); }
+.anim .regler.akz-gruen  { --akz: var(--gruen); }
+.anim .regler[class*="akz-"] input[type=range] { accent-color: var(--akz); }
+.anim .regler[class*="akz-"] .regler-label .wert,
+.anim .regler[class*="akz-"] .regler-label > span:first-child { color: var(--akz); font-weight: 600; }
+/* a in a·(b + c): gemeinsamer Faktor beider Teilflächen, darum neutral wie die Kante im Bild */
+#dm-reglerA:not([class*="akz-"]) input[type=range] { accent-color: var(--tinte-2); }
+#dm-reglerA:not([class*="akz-"]) .regler-label .wert { color: var(--tinte); }
 </style>
 </head>
 <body>
@@ -781,23 +793,23 @@ MathJax = {
           <button class="chip" type="button" data-dm="2">\((a + b)(c + d)\)</button>
         </div>
       </div>
-      <div class="regler">
+      <div class="regler" id="dm-reglerA">
         <div class="regler-label"><span>\(a\)</span><span class="wert" id="lbl-dmA">3</span></div>
         <input type="range" id="sld-dmA" min="1" max="5" step="1" value="3">
       </div>
-      <div class="regler">
+      <div class="regler akz-blau" id="dm-reglerB">
         <div class="regler-label"><span>\(b\)</span><span class="wert" id="lbl-dmB">4</span></div>
         <input type="range" id="sld-dmB" min="1" max="5" step="1" value="4">
       </div>
-      <div class="regler">
+      <div class="regler akz-orange" id="dm-reglerC">
         <div class="regler-label"><span>\(c\)</span><span class="wert" id="lbl-dmC">2</span></div>
         <input type="range" id="sld-dmC" min="1" max="5" step="1" value="2">
       </div>
-      <div class="regler" id="dm-reglerD" style="display:none">
+      <div class="regler akz-orange" id="dm-reglerD" style="display:none">
         <div class="regler-label"><span>\(d\)</span><span class="wert" id="lbl-dmD">3</span></div>
         <input type="range" id="sld-dmD" min="1" max="5" step="1" value="3">
       </div>
-      <div class="formel" id="dm-formel">3 · (4 + 2) = 3·4 + 3·2 = 18</div>
+      <div class="formel" id="dm-formel">3 · (<span class="tx-blau">4</span> + <span class="tx-orange">2</span>) = <span class="tx-blau">3·4</span> + <span class="tx-orange">3·2</span> = 12 + 6 = 18</div>
       <div class="legende">
         <div class="legende-titel">Flächen-Bilanz</div>
         <div class="legende-zeile"><span class="lab">grosses Rechteck</span><span class="val" id="leg-dmGanz">18</span></div>
@@ -2009,7 +2021,12 @@ function drawHauptop() {
  *  wächst statt zu springen.
  * ══════════════════════════════════════════════════════════════ */
 let dmModus = 1;
-const DM_FARBEN = { ac: '#1a4f8a', ad: '#b85c00', bc: '#1f6b3a', bd: '#6b21a8' };
+const DM_FARBEN = { ac: '#1a4f8a', ad: '#b85c00', bc: '#1f6b3a', bd: '#5b2d8e' };  // bd = var(--lila) wie in der Formel
+// Reglerfarbe = Farbe der Kante, die der Regler im Bild verändert (akz-* ↔ DM_FARBEN).
+// Modus 1: a gemeinsamer Faktor (neutral), b blau, c orange.
+// Modus 2: a und c spannen die blaue Teilfläche, d die orange, b die grüne.
+const DM_AKZ = { 1: { A: '', B: 'akz-blau', C: 'akz-orange', D: 'akz-orange' },
+                 2: { A: 'akz-blau', B: 'akz-gruen', C: 'akz-blau', D: 'akz-orange' } };
 function drawDistrib() {
   const a = +document.getElementById('sld-dmA').value;
   const b = +document.getElementById('sld-dmB').value;
@@ -2019,6 +2036,11 @@ function drawDistrib() {
     document.getElementById('sld-dm' + k).value);
   document.getElementById('lbl-dmD').textContent = d;
   document.getElementById('dm-reglerD').style.display = dmModus === 2 ? '' : 'none';
+  ['A','B','C','D'].forEach(k => {
+    const r = document.getElementById('dm-regler' + k);
+    r.classList.remove('akz-blau', 'akz-orange', 'akz-gruen');
+    if (DM_AKZ[dmModus][k]) r.classList.add(DM_AKZ[dmModus][k]);
+  });
 
   const { ctx, W, H } = initCanvas('cv-distrib', 340);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
@@ -2043,17 +2065,29 @@ function drawDistrib() {
     ctx.fillStyle = col; ctx.font = 'bold 12px JetBrains Mono, monospace';
     ctx.textAlign = align || 'center'; ctx.fillText(text, x, y);
   };
+  // Zwei Kantenlabels an derselben Seite: rücken sie bei kleinen Werten / schmalem Canvas
+  // zu nah zusammen, weichen beide symmetrisch um ihre gemeinsame Mitte aus.
+  const kantenUnten = (t1, x1, c1, t2, x2, c2) => {
+    ctx.font = 'bold 12px JetBrains Mono, monospace';
+    const abst = (ctx.measureText(t1).width + ctx.measureText(t2).width) / 2 + 8;
+    if (x2 - x1 < abst) { const m = (x1 + x2) / 2; x1 = m - abst / 2; x2 = m + abst / 2; }
+    kante(t1, x1, oy + 18, c1); kante(t2, x2, oy + 18, c2);
+  };
+  const kantenLinks = (t1, y1, c1, t2, y2, c2) => {       // y1 unten, y2 darüber
+    const abst = 18;                                     // 12px-Zeile + Luft
+    if (y1 - y2 < abst) { const m = (y1 + y2) / 2; y1 = m + abst / 2; y2 = m - abst / 2; }
+    kante(t1, ox - 10, y1, c1, 'right'); kante(t2, ox - 10, y2, c2, 'right');
+  };
 
   let ganz, teile, formel, erkl;
   if (dmModus === 1) {
     rect(0, 0, b, a, DM_FARBEN.ac, `${a}·${b}`);
     rect(b, 0, c, a, DM_FARBEN.ad, `${a}·${c}`);
     // Kantenbeschriftung
-    kante('b = ' + b, ox + b / 2 * px, oy + 18, DM_FARBEN.ac);
-    kante('c = ' + c, ox + (b + c / 2) * px, oy + 18, DM_FARBEN.ad);
+    kantenUnten('b = ' + b, ox + b / 2 * px, DM_FARBEN.ac, 'c = ' + c, ox + (b + c / 2) * px, DM_FARBEN.ad);
     kante('a = ' + a, ox - 10, oy - a / 2 * px + 4, '#374151', 'right');
     ganz = a * (b + c); teile = a * b + a * c;
-    formel = `<span class="tx-blau">${a}</span> · (${b} + ${c}) = ` +
+    formel = `${a} · (<span class="tx-blau">${b}</span> + <span class="tx-orange">${c}</span>) = ` +
              `<span class="tx-blau">${a}·${b}</span> + <span class="tx-orange">${a}·${c}</span> = ${a*b} + ${a*c} = ${ganz}`;
     erkl = 'Ein Schnitt teilt das Rechteck in <strong>zwei</strong> Streifen gleicher Höhe \\(a\\). Die Gesamtfläche \\(a \\cdot (b+c)\\) ist die Summe der Teilflächen — das ist das Distributivgesetz.';
   } else {
@@ -2061,12 +2095,11 @@ function drawDistrib() {
     rect(c, 0, d, a, DM_FARBEN.ad, `${a}·${d}`);
     rect(0, a, c, b, DM_FARBEN.bc, `${b}·${c}`);
     rect(c, a, d, b, DM_FARBEN.bd, `${b}·${d}`);
-    kante('c = ' + c, ox + c / 2 * px, oy + 18, DM_FARBEN.ac);
-    kante('d = ' + d, ox + (c + d / 2) * px, oy + 18, DM_FARBEN.ad);
-    kante('a = ' + a, ox - 10, oy - a / 2 * px + 4, DM_FARBEN.ac, 'right');
-    kante('b = ' + b, ox - 10, oy - (a + b / 2) * px + 4, DM_FARBEN.bc, 'right');
+    kantenUnten('c = ' + c, ox + c / 2 * px, DM_FARBEN.ac, 'd = ' + d, ox + (c + d / 2) * px, DM_FARBEN.ad);
+    kantenLinks('a = ' + a, oy - a / 2 * px + 4, DM_FARBEN.ac, 'b = ' + b, oy - (a + b / 2) * px + 4, DM_FARBEN.bc);
     ganz = (a + b) * (c + d); teile = a*c + a*d + b*c + b*d;
-    formel = `(${a} + ${b})(${c} + ${d}) = ` +
+    formel = `(<span class="tx-blau">${a}</span> + <span class="tx-gruen">${b}</span>)` +
+             `(<span class="tx-blau">${c}</span> + <span class="tx-orange">${d}</span>) = ` +
              `<span class="tx-blau">${a}·${c}</span> + <span class="tx-orange">${a}·${d}</span> + ` +
              `<span class="tx-gruen">${b}·${c}</span> + <span style="color:var(--lila)">${b}·${d}</span> = ${ganz}`;
     erkl = 'Zwei Schnitte, <strong>vier</strong> Teilflächen: Jeder Summand der ersten Klammer trifft jeden der zweiten. Für \\(a = c\\) und \\(b = d\\) liest man die erste binomische Formel direkt ab.';

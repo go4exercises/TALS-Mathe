@@ -248,6 +248,8 @@ MathJax = {
   width: 15px; height: 15px;
   accent-color: var(--blau); cursor: pointer;
 }
+.anim .toggle-zeile:has(input:disabled),
+.anim .toggle-zeile input[type="checkbox"]:disabled { opacity: 0.5; cursor: not-allowed; }
 .anim .legende {
   background: var(--papier-2);
   border: 1px solid var(--linie);
@@ -464,7 +466,7 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Erhöhe \(n\) schrittweise: Wie viele Dreiecke entstehen von der gewählten Ecke aus — und um wie viel wächst die Winkelsumme pro Schritt?</div>
+        <div class="ah-text">Erhöhe \(n\) schrittweise: Wie viele Dreiecke entstehen von der gewählten Ecke aus — und um wie viel wächst die Winkelsumme pro Schritt? Vergleiche in der Legende die in der Figur gemessenen Innenwinkel mit der Formel.</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
@@ -511,6 +513,11 @@ MathJax = {
             <tr data-n="8"><td class="lab">8</td><td>6</td><td>1080°</td></tr>
           </tbody>
         </table>
+        <div class="legende-titel" style="margin-top:8px">In der Figur gemessen</div>
+        <div class="legende-zeile" id="mess-n-teile" style="display:block;font-size:0.78rem;color:var(--tinte-2)">101.6° + 120.7° + 95.3° + 120.7° + 101.6°</div>
+        <div class="legende-zeile"><span class="lab">Summe gemessen</span><span class="val" id="mess-n-summe">540.0°</span></div>
+        <div class="legende-zeile"><span class="lab" id="mess-n-flab">(5 − 2)·180°</span><span class="val" id="mess-n-formel">540°</span></div>
+        <div class="legende-zeile" id="mess-n-rund" style="display:block;font-size:0.74rem;color:var(--tinte-2)"></div>
       </div>
 
       <div class="erklaerung" id="erkl-n">
@@ -668,6 +675,10 @@ MathJax = {
       <div class="formel">
         \( A = a \cdot b = \) <span id="flR-lblA2" class="wert" style="color:var(--blau);font-weight:600">5</span> · <span id="flR-lblB2" class="wert" style="color:var(--blau);font-weight:600">3</span> = <strong id="flR-lblF">15</strong> <span id="flR-lblEinheit2">cm²</span>
       </div>
+
+      <div class="erklaerung" id="flR-erklEinheit">
+        Die Einheit legt fest, wie gross ein Einheitsquadrat ist (\(1\,\text{cm} \cdot 1\,\text{cm} = 1\,\text{cm}^2\)) — gezählt wird gleich: 15 Quadrate ergeben \(15\,\text{cm}^2\).
+      </div>
     </div>
   </div>
 </div>
@@ -680,13 +691,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Wähle eine Figur per Chip und zieh den Schieber langsam von «Start» bis «Rechteck». Welches Teilstück wird abgeschnitten und wo wird es wieder angesetzt — bleibt die Fläche dabei gleich gross?</div>
+        <div class="ah-text">Wähle eine Figur per Chip und zieh den Schieber langsam bis ans Ende. Welches Teilstück wird abgeschnitten und wo wird es wieder angesetzt — bleibt die Fläche dabei gleich gross? Bei Raute und Drachen wird nichts geschnitten: Welcher Anteil des umrahmenden Rechtecks gehört zur Figur?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Durch Schneiden und Anlegen entsteht ein flächengleiches Rechteck: Parallelogramm \(A = g \cdot h\), Dreieck die Hälfte davon, Trapez das Mittel der Parallelseiten mal Höhe. Jede Flächenformel ist im Kern eine Rechteck-Umformung.</div>
+        <div class="ah-text">Durch Schneiden und Anlegen entsteht ein flächengleiches Rechteck: Parallelogramm \(A = g \cdot h\), Dreieck die Hälfte davon, Trapez das Mittel der Parallelseiten mal Höhe. Raute und Drachen füllen genau die Hälfte ihres Diagonalen-Rechtecks: \(A = \tfrac{1}{2}\, e \cdot f\). Jede Flächenformel ist im Kern eine Rechteck-Umformung.</div>
       </div>
     </div>
   </div>
@@ -1527,6 +1538,13 @@ function drawRechteck() {
   flR_lblB2.textContent = b;
   flR_lblF.textContent  = a * b;
   flR_lblE2.textContent = flR_einheit + '²';
+  const flR_erklE = document.getElementById('flR-erklEinheit');
+  const flR_eTxt = `Die Einheit legt fest, wie gross ein Einheitsquadrat ist (\\(1\\,\\text{${flR_einheit}} \\cdot 1\\,\\text{${flR_einheit}} = 1\\,\\text{${flR_einheit}}^2\\)) — gezählt wird gleich: ${a * b} Quadrate ergeben \\(${a * b}\\,\\text{${flR_einheit}}^2\\).`;
+  if (flR_erklE.dataset.txt !== flR_eTxt) {
+    flR_erklE.dataset.txt = flR_eTxt;
+    flR_erklE.innerHTML = flR_eTxt;
+    mjTypeset([flR_erklE]);
+  }
 
   const { ctx, W, H } = initCv('cv-rect');
 
@@ -1542,6 +1560,14 @@ function drawRechteck() {
   const rectH = cellSafe * b;
   const x0 = padL + (usableW - rectW) / 2;
   const y0 = padT + (usableH - rectH) / 2;
+
+  // Durchzählen geht nur im sichtbaren Raster und nur, wenn die Nummern in die
+  // Quadrate passen — sonst ist der Schalter wirkungslos und wird ausgegraut.
+  const flR_zaehlbar = flR_togRas.checked && cellSafe > 22;
+  flR_togZ.disabled = !flR_zaehlbar;
+  flR_togZ.closest('label').title = flR_zaehlbar ? ''
+    : (!flR_togRas.checked ? 'Zum Durchzählen zuerst die Einheitsquadrate einblenden.'
+                           : 'Die Quadrate sind zu klein für Nummern — a oder b verkleinern.');
 
   // Rechteck-Füllung
   ctx.fillStyle = C.blauHell;
@@ -1560,7 +1586,7 @@ function drawRechteck() {
       ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x0 + rectW, y); ctx.stroke();
     }
     // Quadrate zählen
-    if (flR_togZ.checked && cellSafe > 22) {
+    if (flR_togZ.checked && flR_zaehlbar) {
       ctx.fillStyle = C.blau;
       ctx.font = `${Math.min(14, cellSafe * 0.4)}px "JetBrains Mono", ui-monospace, monospace`;
       ctx.textAlign = 'center';
@@ -1586,7 +1612,7 @@ function drawRechteck() {
   drawMass(ctx, x0 - 18, y0, x0 - 18, y0 + rectH, `b = ${b} ${flR_einheit}`, 'links');
 
   // Flächenangabe in der Mitte (nur wenn nicht durchgezählt wird)
-  if (!flR_togZ.checked || cellSafe <= 22) {
+  if (!flR_togZ.checked || !flR_zaehlbar) {
     ctx.fillStyle = C.blau;
     ctx.font = '700 22px "Source Serif 4", Georgia, serif';
     ctx.textAlign = 'center';
@@ -1644,6 +1670,26 @@ function drawNEck() {
     const r = R * (i % 2 === 0 ? 1.0 : 0.85);
     pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
   }
+
+  // Innenwinkel der gezeichneten Figur messen (die Figur ist konvex, also liefert
+  // der Winkel zwischen den beiden Nachbarkanten direkt den Innenwinkel) und
+  // aufsummieren — die Formel wird an der Figur nachgeprüft, nicht nur behauptet.
+  const gemessen = pts.map((p, i) =>
+    angleAt(p, pts[(i - 1 + n) % n], pts[(i + 1) % n]) * 180 / Math.PI);
+  const summeMess = gemessen.reduce((s, w) => s + w, 0);
+  const gerundet = gemessen.map(w => Math.round(w * 10) / 10);
+  const summeGerundet = Math.round(gerundet.reduce((s, w) => s + w, 0) * 10) / 10;
+  const summeMessTxt = (Math.round(summeMess * 10) / 10).toFixed(1);
+  document.getElementById('mess-n-teile').textContent =
+    gerundet.map(w => w.toFixed(1) + '°').join(' + ');
+  document.getElementById('mess-n-summe').textContent =
+    summeMessTxt + '°' + (Math.abs(summeMess - summe) < 0.05 ? ' ✓' : '');
+  document.getElementById('mess-n-flab').textContent = `(${n} − 2)·180°`;
+  document.getElementById('mess-n-formel').textContent = summe + '°';
+  document.getElementById('mess-n-rund').textContent =
+    summeGerundet.toFixed(1) === summeMessTxt ? '' :
+    `Die auf 0.1° gerundeten Einzelwerte ergeben ${summeGerundet.toFixed(1)}° — ` +
+    'das ist nur Rundung; mit den ungerundeten Winkeln ergibt sich ' + summeMessTxt + '°.';
 
   // Vieleck-Füllung (hellblau)
   fillPoly(ctx, pts, C.blauHell, C.blau, 2.5);
@@ -1738,15 +1784,24 @@ document.querySelectorAll('#figuren .chip').forEach(btn => {
 });
 [sldTF, togFM].forEach(el => el.addEventListener('input', drawUmformung));
 
+// Schrittleiste je Figur: Wörter und Grenzen passend zu dem, was die Zeichnung
+// tatsächlich tut. Parallelogramm wird geschnitten und verschoben, Dreieck und
+// Trapez werden zuerst gedreht; bei Raute und Drachen wird nichts geschnitten —
+// sie werden umrahmt, und das Rechteck e · f wird halbiert.
+const SCHRITTE_F = {
+  parallelogramm: { txt: ['Start', 'Schneiden', 'Verschieben', 'Rechteck'], grenzen: [0.05, 0.40, 0.85] },
+  dreieck:        { txt: ['Start', 'Kopie drehen', 'Verschieben', 'Rechteck'], grenzen: [0.05, 0.50, 0.90] },
+  trapez:         { txt: ['Start', 'Kopie drehen', 'Verschieben', 'Rechteck'], grenzen: [0.05, 0.50, 0.90] },
+  raute:          { txt: ['Start', 'Umrahmen', 'Rechteck e·f', 'Halbieren'], grenzen: [0.05, 0.25, 0.65] },
+  drachen:        { txt: ['Start', 'Umrahmen', 'Rechteck e·f', 'Halbieren'], grenzen: [0.05, 0.25, 0.65] }
+};
 function updateSchritteF(t) {
-  const idx =
-    t < 0.05 ? 0 :
-    t < 0.40 ? 1 :
-    t < 0.85 ? 2 :
-    3;
-  schritteF.querySelectorAll('span').forEach((s, i) =>
-    s.classList.toggle('akt', i === idx)
-  );
+  const sch = SCHRITTE_F[figurF];
+  const idx = sch.grenzen.filter(g => t >= g).length;
+  schritteF.querySelectorAll('span').forEach((s, i) => {
+    s.textContent = sch.txt[i];
+    s.classList.toggle('akt', i === idx);
+  });
 }
 
 function drawUmformung() {

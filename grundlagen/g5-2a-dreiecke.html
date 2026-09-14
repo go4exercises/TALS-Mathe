@@ -248,6 +248,8 @@ MathJax = {
   width: 15px; height: 15px;
   accent-color: var(--blau); cursor: pointer;
 }
+.anim .toggle-zeile:has(input:disabled),
+.anim .toggle-zeile input[type="checkbox"]:disabled { opacity: 0.5; cursor: not-allowed; }
 .anim .legende {
   background: var(--papier-2);
   border: 1px solid var(--linie);
@@ -558,13 +560,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Verfolge die drei Farben: Wo tauchen \(\alpha\) und \(\beta\) an der Parallelen durch \(C\) wieder auf — und welche Winkelpaar-Regel rechtfertigt das?</div>
+        <div class="ah-text">Verfolge die drei Farben: Wo tauchen \(\alpha\) und \(\beta\) an der Parallelen durch \(C\) wieder auf — und welche Winkelpaar-Regel rechtfertigt das? Ziehe danach an der Ecke \(C\), auch bis zu einem stumpfen Winkel: Bleibt jeder Schritt gültig?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Die Wechselwinkel an der Parallelen kopieren \(\alpha\) und \(\beta\) an die Ecke \(C\) — dort liegen sie mit \(\gamma\) auf einer Geraden: zusammen \(180°\). Der Beweis braucht nur Parallelität und Winkelpaare.</div>
+        <div class="ah-text">Die Wechselwinkel an der Parallelen kopieren \(\alpha\) und \(\beta\) an die Ecke \(C\) — dort liegen sie mit \(\gamma\) auf einer Geraden: zusammen \(180°\). Der Beweis braucht nur Parallelität und Winkelpaare, keine Messwerte — darum gilt er für jedes Dreieck, wie immer du \(C\) ziehst.</div>
       </div>
     </div>
   </div>
@@ -588,7 +590,7 @@ MathJax = {
         \(\alpha + \beta + \gamma = \;?\)
       </div>
       <div class="erklaerung" id="beweis-erkl">
-        Ausgangsfigur: ein beliebiges Dreieck mit Innenwinkeln α, β, γ.
+        Ausgangsfigur: ein beliebiges Dreieck mit Innenwinkeln α, β, γ. Ziehe an C — der Beweis gilt für jedes Dreieck.
       </div>
     </div>
   </div>
@@ -1829,15 +1831,61 @@ function updateSchritte(container, t, thresholds = [0.05, 0.5, 0.95]) {
 
 sldBeweis.addEventListener('input', drawBeweis);
 
+// Ecke C ist ziehbar (A und B fest): Der Beweis gilt für jedes Dreieck.
+// Zugbereich wie bei Animation 1 (allgBegrenzen): C im Feld und oberhalb von
+// AB, kein Innenwinkel unter BEWEIS_MIN_WINKEL — sonst rückten die Winkel-
+// beschriftungen bei A, B und die drei bei C aufeinander. Oben bleibt Platz für
+// «α + γ + β = 180°» über dem C.
+// Grundkoordinaten: AB von 130 bis 430 (Mitte 280). drawBeweis verschiebt die
+// ganze Figur waagrecht, damit AB mittig in der Zeichenfläche liegt (beweisDx).
+const BEWEIS_A = [130, 320], BEWEIS_B = [430, 320];
+const beweisPts = [[290, 150]];   // C
+let beweisDx = 0;
+// BEWEIS_RAND: Platz links/rechts von C für die Wechselwinkel-Bögen und α, β
+const BEWEIS_RAND = 50, BEWEIS_OBEN = 90, BEWEIS_MIN_WINKEL = 30 * Math.PI / 180;
+let beweisLetzte = beweisPts[0].slice();
+function beweisPruefen(C0) {
+  const A = BEWEIS_A, B = BEWEIS_B;
+  const kreuz = (B[0]-A[0]) * (C0[1]-A[1]) - (B[1]-A[1]) * (C0[0]-A[0]);
+  if (kreuz >= 0) return false;
+  return Math.min(angleAt(A, B, C0), angleAt(B, C0, A), angleAt(C0, A, B)) >= BEWEIS_MIN_WINKEL - 1e-9;
+}
+function beweisBegrenzen(W) {
+  const box = p => [clamp(p[0], BEWEIS_RAND, W - BEWEIS_RAND), clamp(p[1], BEWEIS_OBEN, BEWEIS_A[1] - BEWEIS_RAND)];
+  const ziel = box(beweisPts[0]);
+  let neu = ziel;
+  const alt = box(beweisLetzte);
+  if (!beweisPruefen(ziel) && beweisPruefen(alt)) {
+    // Von der letzten gültigen Lage zum Ziel so weit gehen, wie es gültig bleibt
+    const zwischen = m => [lerp(alt[0], ziel[0], m), lerp(alt[1], ziel[1], m)];
+    let lo = 0, hi = 1;
+    for (let n = 0; n < 20; n++) {
+      const m = (lo + hi) / 2;
+      if (beweisPruefen(zwischen(m))) lo = m; else hi = m;
+    }
+    neu = zwischen(lo);
+  }
+  beweisPts[0][0] = neu[0]; beweisPts[0][1] = neu[1];
+  beweisLetzte = beweisPts[0].slice();
+}
+
 function drawBeweis() {
   const t = +sldBeweis.value;
   beweisLbl.textContent = t.toFixed(2);
   updateSchritte(beweisSchritte, t, [0.05, 0.35, 0.70]);
 
   const { ctx, W, H } = initCvSkaliert('cv-beweis', 490, 380);
+  // Figur waagrecht zentrieren; bei neuer Breite A, B und C mitverschieben
+  const dx = W / 2 - 280, ddx = dx - beweisDx;
+  if (ddx !== 0) {
+    BEWEIS_A[0] += ddx; BEWEIS_B[0] += ddx;
+    beweisPts[0][0] += ddx; beweisLetzte[0] += ddx;
+    beweisDx = dx;
+  }
+  beweisBegrenzen(W);
 
-  // Festes Dreieck — etwas weiter unten platziert, damit oben Platz für die Parallele und ihre Beschriftung bleibt
-  const A = [130, 320], B = [430, 320], C0 = [290, 150];
+  // A und B fest, etwas weiter unten platziert, damit oben Platz für die Parallele und ihre Beschriftung bleibt; C ziehbar
+  const A = BEWEIS_A, B = BEWEIS_B, C0 = beweisPts[0];
 
   // Innenwinkel berechnen
   const alpha = angleAt(A, B, C0);
@@ -1850,10 +1898,13 @@ function drawBeweis() {
   const midA = drawAngleSector(ctx, A,  B,  C0, rIn, 'rgba(30,58,138,0.18)',  C.blau);
   const midB = drawAngleSector(ctx, B,  C0, A,  rIn, 'rgba(22,101,52,0.18)',  C.gruen);
   const midC = drawAngleSector(ctx, C0, A,  B,  rIn, 'rgba(107,33,168,0.18)', C.lila);
-  // Symbole an Bogenmitten (weiter aussen)
-  const lblA = arcLabelPos(A,  midA, rIn + 14);
-  const lblB = arcLabelPos(B,  midB, rIn + 14);
-  const lblC = arcLabelPos(C0, midC, rIn + 14);
+  // Symbole an Bogenmitten (weiter aussen). Bei spitzem Winkel (C gezogen) weiter
+  // hinaus, bis der Buchstabe Luft zu beiden Schenkeln hat: Abstand zum Schenkel
+  // r·sin(w/2) mindestens halbe Kastendiagonale plus 3 px.
+  const rLbl = (r0, w) => Math.max(r0, (schriftPx(ctx, 14) * 0.6 + 3) / Math.sin(w / 2));
+  const lblA = arcLabelPos(A,  midA, rLbl(rIn + 14, alpha));
+  const lblB = arcLabelPos(B,  midB, rLbl(rIn + 14, beta));
+  const lblC = arcLabelPos(C0, midC, rLbl(rIn + 14, gamma));
   txt(ctx, lblA[0], lblA[1], 'α', C.blau,  14, 'center', 'middle', '700');
   txt(ctx, lblB[0], lblB[1], 'β', C.gruen, 14, 'center', 'middle', '700');
   txt(ctx, lblC[0], lblC[1], 'γ', C.lila,  14, 'center', 'middle', '700');
@@ -1874,8 +1925,12 @@ function drawBeweis() {
     const PR = [C0[0] + ux * reach, C0[1] + uy * reach];
     seg(ctx, PL, PR, C.orange, 2);
     if (tParallel > 0.6) {
-      // Beschriftung der Parallele OBERHALB (Y - 12), damit sie nicht mit dem Dreieck kollidiert
-      txt(ctx, PR[0] - 6, PR[1] - 12, 'parallel zu c', C.orange, 14, 'right', 'middle', '600');
+      // Beschriftung der Parallele OBERHALB (Y - 12), damit sie nicht mit dem Dreieck kollidiert.
+      // Am rechten Ende; passt sie dort nicht (C weit rechts), am Ende mit mehr Platz —
+      // an den Rand geschoben läge sie sonst über dem «C».
+      const rechts = C0[0] + 174 <= W - 4 || W - C0[0] >= C0[0];
+      if (rechts) txt(ctx, PR[0] - 6, PR[1] - 12, 'parallel zu c', C.orange, 14, 'right', 'middle', '600');
+      else        txt(ctx, PL[0] + 6, PL[1] - 12, 'parallel zu c', C.orange, 14, 'left',  'middle', '600');
     }
   }
 
@@ -1892,8 +1947,8 @@ function drawBeweis() {
     const midL = drawAngleSector(ctx, C0, A, PL, rWX, `rgba(30,58,138,${0.20 * tWechsel})`, C.blau);
     const midR = drawAngleSector(ctx, C0, B, PR, rWX, `rgba(22,101,52,${0.20 * tWechsel})`, C.gruen);
     if (tWechsel > 0.5) {
-      const lL = arcLabelPos(C0, midL, rWX + 14);
-      const lR = arcLabelPos(C0, midR, rWX + 14);
+      const lL = arcLabelPos(C0, midL, rLbl(rWX + 14, alpha));
+      const lR = arcLabelPos(C0, midR, rLbl(rWX + 14, beta));
       txt(ctx, lL[0], lL[1], 'α', C.blau,  14, 'center', 'middle', '700');
       txt(ctx, lR[0], lR[1], 'β', C.gruen, 14, 'center', 'middle', '700');
     }
@@ -1917,6 +1972,7 @@ function drawBeweis() {
     // 180°-Beschriftung WEIT oberhalb C (Y - 56), so dass sie über dem 'C' und der Parallele steht
     txt(ctx, C0[0], C0[1] - 60, 'α + γ + β = 180°', C.rot, 14, 'center', 'middle', '700');
   }
+  dot(ctx, C0, C.blau, 5);   // Griff: C ist ziehbar
 
   // Formel + Erklärung
   if (tFinal > 0.7) {
@@ -1927,7 +1983,7 @@ function drawBeweis() {
     beweisFbox.classList.remove('fertig');
   }
   if (t < 0.05) {
-    beweisErkl.textContent = 'Ausgangsfigur: ein beliebiges Dreieck mit Innenwinkeln α, β, γ.';
+    beweisErkl.textContent = 'Ausgangsfigur: ein beliebiges Dreieck mit Innenwinkeln α, β, γ. Ziehe an C — der Beweis gilt für jedes Dreieck.';
   } else if (t < 0.35) {
     beweisErkl.textContent = 'Wir ziehen durch C die Parallele zur Seite c (= AB).';
   } else if (t < 0.70) {
@@ -1937,6 +1993,7 @@ function drawBeweis() {
   }
   mjTypeset([beweisFbox]);
 }
+makeDraggable(document.getElementById('cv-beweis'), beweisPts, drawBeweis);
 
 /* ============================================================
  *  ANIMATION 3 — Spezielle Dreiecke
@@ -2044,6 +2101,8 @@ function drawSpez() {
       <div class="legende-zeile"><span class="lab">α = β (Basiswinkel)</span><span class="val">${betaDeg.toFixed(1)}°</span></div>
       <div class="legende-zeile"><span class="lab">γ (Spitzenwinkel)</span><span class="val">${gammaDeg.toFixed(1)}°</span></div>
       <div class="legende-zeile" style="border-top: 1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab"><strong>Summe</strong></span><span class="val"><strong>180°</strong></span></div>
+      <div class="legende-titel" style="border-top: 1px solid var(--linie); margin-top:6px; padding-top:6px">Kernaussage</div>
+      <div class="legende-zeile"><span class="val"><strong>a = b ⇒ α = β</strong></span></div>
     `;
   }
   else if (spezTyp === 'rechtwinklig') {
@@ -2108,6 +2167,8 @@ function drawSpez() {
       <div class="legende-zeile"><span class="lab">α</span><span class="val">${alphaDeg.toFixed(1)}°</span></div>
       <div class="legende-zeile"><span class="lab">β</span><span class="val">${betaDeg.toFixed(1)}°</span></div>
       <div class="legende-zeile"><span class="lab">γ</span><span class="val">90°</span></div>
+      <div class="legende-titel" style="border-top: 1px solid var(--linie); margin-top:6px; padding-top:6px">Kernaussage</div>
+      <div class="legende-zeile"><span class="val"><strong>γ = 90° ⇒ a² + b² = c²</strong></span></div>
     `;
   }
   else { // gleichseitig
@@ -2159,6 +2220,8 @@ function drawSpez() {
       <div class="legende-zeile"><span class="lab">α = β = γ</span><span class="val">60°</span></div>
       <div class="legende-zeile"><span class="lab">Höhe h = a·√3/2</span><span class="val">${(h/10).toFixed(2)} cm</span></div>
       <div class="legende-zeile"><span class="lab">Fläche A = a²·√3/4</span><span class="val">${(s*s*Math.sqrt(3)/4/100).toFixed(2)} cm²</span></div>
+      <div class="legende-titel" style="border-top: 1px solid var(--linie); margin-top:6px; padding-top:6px">Kernaussage</div>
+      <div class="legende-zeile"><span class="val"><strong>a = b = c ⇒ α = β = γ = 60°</strong></span></div>
     `;
   }
 }
@@ -2213,10 +2276,20 @@ elemTabs.querySelectorAll('.chip').forEach(btn => {
     elemTabs.querySelectorAll('.chip').forEach(b => b.classList.remove('aktiv'));
     btn.classList.add('aktiv');
     elemTyp = btn.dataset.el;
+    elemKreisSchalter();
     drawElem();
   });
 });
 elemTogKreis.addEventListener('change', drawElem);
+// Um- und Inkreis gehören zu Mittelsenkrechten und Winkelhalbierenden; bei Höhen
+// und Seitenhalbierenden gibt es keinen besonderen Kreis — Schalter ausgegraut.
+function elemKreisSchalter() {
+  const mitKreis = elemTyp === 'mittelsenkrechten' || elemTyp === 'winkelhalbierende';
+  elemTogKreis.disabled = !mitKreis;
+  elemTogKreis.closest('label').title = mitKreis ? ''
+    : 'Zu den ' + (elemTyp === 'hoehen' ? 'Höhen' : 'Seitenhalbierenden') + ' gehört kein besonderer Kreis.';
+}
+elemKreisSchalter();
 
 function drawElem() {
   const { ctx, W, H, cv } = initCvSkaliert('cv-elem', 480, 480);

@@ -261,7 +261,7 @@ MathJax = {
           <div class="anim-hinweis links">
             <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
             <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-              <div class="ah-text">Verändere Länge und Breite und beobachte die Skizze. Welche Grössen kannst du direkt ablesen, und welche musst du erst berechnen?</div>
+              <div class="ah-text">Verändere Länge und Breite und beobachte die Skizze. Welche Grössen kannst du direkt ablesen, und welche musst du erst berechnen? Wo landet \(d\) auf dem Zahlenstrahl, wenn eine Seite viel kürzer ist als die andere?</div>
             </div>
           </div>
           <div class="anim-hinweis rechts">
@@ -286,7 +286,7 @@ MathJax = {
       </div>
     </div>
     <canvas id="dg-canvas" aria-label="Grundstück mit Diagonale"></canvas>
-    <div class="dg-cap">Verschiebe die Regler und beobachte, wie sich die Diagonale \(d\) ändert. Die Skizze zeigt das Grundstück massstabsgetreu — du kannst die Diagonale direkt am Bild ablesen.</div>
+    <div class="dg-cap">Verschiebe die Regler und beobachte, wie sich die Diagonale \(d\) ändert. Die Skizze zeigt das Grundstück massstabsgetreu — du kannst die Diagonale direkt am Bild ablesen. Der Zahlenstrahl im Feld «Plausibel?» zeigt die Schranken: \(d\) liegt immer zwischen der längeren Seite und \(l + b\).</div>
     </div>
   </div>
 </div>
@@ -937,7 +937,7 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Ab welchem Schritt könntest du die Aufgabe an jemanden weitergeben, der den Aufgabentext nicht kennt? Vergleiche dazu jederzeit mit der linken Rohskizze.</div>
+        <div class="ah-text">Ab welchem Schritt könntest du die Aufgabe an jemanden weitergeben, der den Aufgabentext nicht kennt? Vergleiche dazu jederzeit mit der linken Rohskizze. In Schritt 2 entsteht die Zeichnung in einer festen Reihenfolge: Boden, Wand, Leiter.</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
@@ -1566,10 +1566,12 @@ function radExakt(deg){
   // Gibt einen sauberen Bruch von π zurück (oder Dezimal, wenn nicht möglich)
   if(deg === 0) return '0';
   if(deg === 360) return '2π';
-  // deg / 180 als gekürzten Bruch z*π/n
-  const g = gcd(deg, 180);
-  const z = deg / g;
-  const n = 180 / g;
+  // deg / 180 als gekürzten Bruch z*π/n — in halben Grad gerechnet, damit auch
+  // 22.5° = π/8 und 67.5° = 3π/8 (Trainer) exakt herauskommen
+  const h = Math.round(deg * 2);
+  const g = gcd(h, 360);
+  const z = h / g;
+  const n = 360 / g;
   if(n === 1) return z === 1 ? 'π' : `${z}π`;
   if(z === 1) return `π / ${n}`;
   return `${z}π / ${n}`;
@@ -1795,18 +1797,25 @@ updateKL();
     const c = document.getElementById('dg-canvas');
     if (!c) return;
     const dpr = window.devicePixelRatio || 1;
-    const W = c.offsetWidth || 480, H = c.offsetHeight || 280;
+    const W = c.offsetWidth || 480;
+    // Figurzone immer 280 px hoch. Das Plausibilitäts-Feld (Schranken-Zahlenstrahl) steht
+    // rechts neben der Figur, wenn dort mindestens PANEL_MIN px frei sind — sonst darunter,
+    // und das Canvas wird um PANEL_H höher (Muster sk-canvas).
+    const FIG_H = 280, PANEL_H = 112, PANEL_MIN = 230;
+    const padL = 30, padT = 30, padB = 50;
+    const plotH = FIG_H - padT - padB;
+    // Skalieren auf maximalen Längen-/Breitenbereich (40 × 30 m)
+    const mx = 40, my = 30;
+    const figRechts = padL + mx * plotH / my + 110;          // Figur bei voller Höhe + Platz fürs d-Label
+    const daneben = W - figRechts - 16 >= PANEL_MIN;
+    const H = daneben ? FIG_H : FIG_H + PANEL_H;
+    c.style.height = H + 'px';
     c.width = W*dpr; c.height = H*dpr;
     const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
     ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
 
-    // Massstab: Rechteck soll im Canvas Platz haben (mit Margins)
-    const padL = 30, padR = 90, padT = 30, padB = 50;
-    const plotW = W - padL - padR;
-    const plotH = H - padT - padB;
-    // Skalieren auf maximalen Längen-/Breitenbereich (40 × 30 m)
-    const mx = 40, my = 30;
-    const px = Math.min(plotW / mx, plotH / my);
+    // daneben: volle Höhe; darunter: auch die Breite begrenzt (20 px Rand rechts)
+    const px = daneben ? plotH / my : Math.min((W - padL - 20) / mx, plotH / my);
     const rectW = l * px;
     const rectH = b * px;
     const x0 = padL;
@@ -1852,24 +1861,48 @@ updateKL();
     ctx.fillText(b + ' m', 0, 0);
     ctx.restore();
 
-    // Plausibilitäts-Anzeige rechts
+    // Plausibilitäts-Feld: zwei Schranken als Text und auf einem Zahlenstrahl von 0 bis l + b.
+    // d liegt im offenen Intervall ]max(l, b); l + b[ — Klammern nach STYLEGUIDE §2.7.
+    const d = Math.sqrt(l*l + b*b);
     const longer = Math.max(l, b);
     const sumLB = l + b;
-    ctx.fillStyle = '#374151'; ctx.font = '13px JetBrains Mono, monospace';
-    const infoZeilen = ['Plausibel?', '✓ d > ' + longer, '  (= ' + longer + ')', '✓ d < l + b', '  (= ' + sumLB + ')'];
-    // Spalte als Ganzes so weit nach links, dass die breiteste Zeile ins Canvas passt
-    const breiteste = Math.max(...infoZeilen.map(z => ctx.measureText(z).width));
-    const x_info = Math.min(W - padR + 5, W - breiteste - 4);
-    beschriftung(ctx, infoZeilen[0], x_info, padT + 8, { align: 'left', frei: false, W, H });
+    const pX = daneben ? figRechts : 16;
+    const pW = daneben ? Math.min(330, W - figRechts - 16) : W - 32;
+    const pY = daneben ? padT + (plotH - PANEL_H) / 2 : FIG_H - 4;
+    const panel = { L: pX - 4, R: pX + pW + 4, O: pY - 4, U: pY + PANEL_H };
+    ctx.font = '13px JetBrains Mono, monospace';
+    ctx.fillStyle = '#374151';
+    beschriftung(ctx, 'Plausibel?', pX, pY + 13, { align: 'left', frei: false, W, H });
     ctx.fillStyle = '#1f6b3a';
-    beschriftung(ctx, infoZeilen[1], x_info, padT + 24, { align: 'left', frei: false, W, H });
-    beschriftung(ctx, infoZeilen[2], x_info, padT + 36, { align: 'left', frei: false, W, H });
-    beschriftung(ctx, infoZeilen[3], x_info, padT + 52, { align: 'left', frei: false, W, H });
-    beschriftung(ctx, infoZeilen[4], x_info, padT + 64, { align: 'left', frei: false, W, H });
+    beschriftung(ctx, '✓ d > max(l, b) = ' + longer, pX, pY + 31, { align: 'left', frei: false, W, H });
+    beschriftung(ctx, '✓ d < l + b = ' + sumLB, pX, pY + 49, { align: 'left', frei: false, W, H });
+    const yS = pY + 84, xa = pX + 6, xe = pX + pW - 24;   // xe = l + b; Pfeilspitze 18 px weiter rechts
+    const X = v => xa + v * (xe - xa) / sumLB;
+    ctx.fillStyle = 'rgba(31,107,58,0.14)';
+    ctx.fillRect(X(longer), yS - 7, X(sumLB) - X(longer), 14);
+    ctx.strokeStyle = '#8a8378'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(xa, yS); ctx.lineTo(xe + 18, yS); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xe + 18, yS); ctx.lineTo(xe + 12, yS - 4); ctx.moveTo(xe + 18, yS); ctx.lineTo(xe + 12, yS + 4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xa, yS - 5); ctx.lineTo(xa, yS + 5); ctx.stroke();
+    ctx.font = '12px JetBrains Mono, monospace'; ctx.fillStyle = '#374151';
+    beschriftung(ctx, '0', xa, yS + 22, { align: 'center', W, H });
+    intervallKlammer(ctx, X(longer), yS, false, { farbe: '#1f6b3a', h: 8, serif: 5, lw: 2.2 });
+    intervallKlammer(ctx, X(sumLB), yS, true, { farbe: '#1f6b3a', h: 8, serif: 5, lw: 2.2 });
+    // Grenzzahlen unter dem Strahl; rücken auseinander, falls sie sich berühren würden
+    ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 12px JetBrains Mono, monospace';
+    const wLo = ctx.measureText(String(longer)).width, wHi = ctx.measureText(String(sumLB)).width;
+    const luecke = (X(sumLB) - wHi/2) - (X(longer) + wLo/2) - 6;
+    const schub = luecke < 0 ? -luecke/2 : 0;
+    beschriftung(ctx, String(longer), X(longer) - schub, yS + 22, { align: 'center', W, H });
+    beschriftung(ctx, String(sumLB), X(sumLB) + schub, yS + 22, { align: 'center', W, H });
+    // d als Wertemarke (Punkt) mit Namen darüber
+    ctx.fillStyle = '#9b1c1c';
+    ctx.beginPath(); ctx.arc(X(d), yS, 3.5, 0, 2*Math.PI); ctx.fill();
+    ctx.font = 'bold 12px JetBrains Mono, monospace';
+    beschriftung(ctx, 'd', X(d), yS - 13, { align: 'center', halo: true, bg: '#fff', W, H });
 
     // Diagonale beschriften: erste Lage, deren Textkasten weder Diagonale noch Rechteckseiten
-    // noch die Plausibilitäts-Spalte berührt — sonst die mittige Lage mit Halo
-    const d = Math.sqrt(l*l + b*b);
+    // noch das Plausibilitäts-Feld berührt — sonst die mittige Lage mit Halo
     const dTxt = 'd ≈ ' + d.toFixed(2) + ' m';
     ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px JetBrains Mono, monospace';
     const tw = ctx.measureText(dTxt).width, ta = 10, td = 2, luft = 4;
@@ -1878,7 +1911,7 @@ updateKL();
     const lageFrei = (xl, yb) => {
       const L = xl - luft, R = xl + tw + luft, O = yb - ta - luft, U = yb + td + luft;
       if (L < 0 || O < 0 || R > W || U > H) return false;
-      if (R > x_info - 4 && O < padT + 68) return false;
+      if (R > panel.L && L < panel.R && U > panel.O && O < panel.U) return false;
       return kanten.every(([ax, ay, bx, by]) => {
         for (let i = 0; i <= 60; i++) {
           const px = ax + (bx - ax)*i/60, py = ay + (by - ay)*i/60;
@@ -1913,8 +1946,16 @@ updateKL();
   const $ = id => document.getElementById(id);
   if(!$('zt-frage')) return;
 
-  // Vielfache von 15° — alle ergeben einen sauberen Bruch von π
-  const POOL = [15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345];
+  // Winkel mit sauberem Bruch von π, zwischen 0° und 360° (ohne die Grenzen):
+  // Vielfache von 15° (Nenner 2, 3, 4, 6, 12), von 10° (Nenner 9, 18 — etwa 40° = 2π/9),
+  // von 36° (Nenner 5 — π/5) und ungerade Vielfache von 22.5° (Nenner 8 — 3π/8).
+  // Deckt alle Brüche aus A3 ab. 63 Winkel.
+  const POOL = [...new Set([
+    ...Array.from({length: 23}, (_, k) => 15 * (k + 1)),
+    ...Array.from({length: 35}, (_, k) => 10 * (k + 1)),
+    ...Array.from({length: 9},  (_, k) => 36 * (k + 1)),
+    ...Array.from({length: 8},  (_, k) => 22.5 * (2 * k + 1))
+  ])].filter(w => w < 360);
   let deg = 60, mode = 'deg2rad', richtig = 0, versuche = 0;
 
   function fb(text, art){
@@ -2039,8 +2080,10 @@ updateKL();
     ctx.fillText(s, x, y);
   }
 
-  // Zeichnet Wand + Boden + Leiter in ein Panel; gibt die Eckpunkte zurück
-  function geruest(ctx, px, py, pw, ph){
+  // Zeichnet Wand + Boden + Leiter in ein Panel; gibt die Eckpunkte zurück.
+  // a = gezeichneter Anteil je Element (0 … 1) für den Aufbau in Schritt 2; ohne a alles ganz.
+  function geruest(ctx, px, py, pw, ph, a){
+    a = a || { boden: 1, wand: 1, leiter: 1 };
     // Bodenlinie hoch genug, dass die Schluss-Zeilen aus Schritt 4 darunter Platz haben
     const gy = py + ph - 78;
     // 30 px pro Meter, auf engen Panels so weit herunterskaliert,
@@ -2049,14 +2092,21 @@ updateKL();
     const wx = px + pw * 0.66;           // Wand
     const fuss = [wx - ABSTAND*S, gy];
     const oben = [wx, gy - HOEHE*S];
-    // Boden
+    // Boden (wächst von links nach rechts)
     ctx.strokeStyle = '#8a8378'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(px + 22, gy); ctx.lineTo(px + pw - 22, gy); ctx.stroke();
-    // Wand
-    ctx.beginPath(); ctx.moveTo(wx, gy); ctx.lineTo(wx, gy - 5.2*S); ctx.stroke();
-    // Leiter
+    if(a.boden > 0){
+      ctx.beginPath(); ctx.moveTo(px + 22, gy); ctx.lineTo(px + 22 + (pw - 44)*a.boden, gy); ctx.stroke();
+    }
+    // Wand (wächst vom Boden nach oben)
+    if(a.wand > 0){
+      ctx.beginPath(); ctx.moveTo(wx, gy); ctx.lineTo(wx, gy - 5.2*S*a.wand); ctx.stroke();
+    }
+    // Leiter (wächst vom Fuss zur Wand)
     ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.moveTo(fuss[0], fuss[1]); ctx.lineTo(oben[0], oben[1]); ctx.stroke();
+    if(a.leiter > 0){
+      ctx.beginPath(); ctx.moveTo(fuss[0], fuss[1]);
+      ctx.lineTo(fuss[0] + (oben[0] - fuss[0])*a.leiter, fuss[1] + (oben[1] - fuss[1])*a.leiter); ctx.stroke();
+    }
     return { S, gy, wx, fuss, oben };
   }
 
@@ -2071,7 +2121,7 @@ updateKL();
     text(ctx, px + pw/2, py + ph - 12, 'Was ist gegeben, was gesucht?', '#9b1c1c', 11, 'center');
   }
 
-  function gutSkizze(ctx, px, py, pw, ph, s){
+  function gutSkizze(ctx, px, py, pw, ph, s, t){
     text(ctx, px + pw/2, py + 22, 'Nach Workflow', '#1f6b3a', 13, 'center', 'bold');
     text(ctx, px + pw/2, py + 38, NAMEN[s-1], '#1f6b3a', 11, 'center');
 
@@ -2086,6 +2136,25 @@ updateKL();
       text(ctx, x + 10, y, '· Höhe h an der Wand', '#9b1c1c', 12, 'left'); y += 26;
       text(ctx, x, y, 'Beziehung: rechter Winkel', '#374151', 11, 'left');
       text(ctx, x, y + 16, 'zwischen Wand und Boden', '#374151', 11, 'left');
+      return;
+    }
+
+    if(s === 2){
+      // Schritt 2: Boden, Wand, Leiter nacheinander (t = Fortschritt 0 … 1 der Aufbau-Animation)
+      const teil = (von, bis) => Math.max(0, Math.min(1, (t - von) / (bis - von)));
+      const a = { boden: teil(0, 0.3), wand: teil(0.33, 0.6), leiter: teil(0.63, 0.95) };
+      geruest(ctx, px, py, pw, ph, a);
+      // Reihenfolge als Zeile unten; ein Wort erscheint farbig, sobald sein Element gezeichnet wird
+      const teile = [['Boden', '#5a5040', a.boden], [' → ', '#8a8378', a.wand], ['Wand', '#5a5040', a.wand],
+                     [' → ', '#8a8378', a.leiter], ['Leiter', '#1a4f8a', a.leiter]];
+      ctx.font = 'bold 12px "JetBrains Mono", monospace';
+      const breite = teile.reduce((sum, [w]) => sum + ctx.measureText(w).width, 0);
+      let x = px + pw/2 - breite/2;
+      teile.forEach(([w, farbe, anteil]) => {
+        text(ctx, x, py + ph - 28, w, anteil > 0 ? farbe : '#d8d0c4', 12, 'left', 'bold');
+        x += ctx.measureText(w).width;
+      });
+      text(ctx, px + pw/2, py + ph - 10, 'noch ohne Werte — die folgen in Schritt 3', '#5a5040', 10.5, 'center');
       return;
     }
 
@@ -2115,6 +2184,29 @@ updateKL();
     }
   }
 
+  // Aufbau-Animation für Schritt 2: startet, wenn der Regler auf 2 wechselt
+  const DAUER = 2200;
+  const ruhig = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let t2 = 1, animStart = null, animId = null, sAlt = parseInt(sl.value, 10);
+  function schritt(now){
+    if(animStart === null) animStart = now;
+    t2 = Math.min(1, (now - animStart) / DAUER);
+    render();
+    animId = t2 < 1 ? requestAnimationFrame(schritt) : null;
+  }
+  function beiEingabe(){
+    const s = parseInt(sl.value, 10);
+    if(s === 2 && sAlt !== 2 && !ruhig){
+      if(animId) cancelAnimationFrame(animId);
+      t2 = 0; animStart = null;
+      animId = requestAnimationFrame(schritt);
+    } else if(s !== 2 && animId){
+      cancelAnimationFrame(animId); animId = null; t2 = 1;
+    }
+    sAlt = s;
+    render();
+  }
+
   function render(){
     const s = parseInt(sl.value, 10);
     document.getElementById('sk-schritt-name').textContent = NAMEN[s-1];
@@ -2138,18 +2230,18 @@ updateKL();
       ctx.beginPath(); ctx.moveTo(half, 12); ctx.lineTo(half, H-12); ctx.stroke();
       ctx.setLineDash([]);
       rohSkizze(ctx, 0, 0, half, H);
-      gutSkizze(ctx, half, 0, half, H, s);
+      gutSkizze(ctx, half, 0, half, H, s, t2);
     } else {
       // schmal: Panels untereinander (das Canvas ist dort doppelt so hoch)
       const halfH = H/2;
       ctx.beginPath(); ctx.moveTo(12, halfH); ctx.lineTo(W-12, halfH); ctx.stroke();
       ctx.setLineDash([]);
       rohSkizze(ctx, 0, 0, W, halfH);
-      gutSkizze(ctx, 0, halfH, W, halfH, s);
+      gutSkizze(ctx, 0, halfH, W, halfH, s, t2);
     }
   }
 
-  sl.addEventListener('input', render);
+  sl.addEventListener('input', beiEingabe);
   window.addEventListener('resize', render);
   render();
 })();

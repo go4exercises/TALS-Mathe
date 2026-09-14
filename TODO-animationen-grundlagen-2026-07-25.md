@@ -300,86 +300,116 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
   Überholen stillschweigend die Identität (Sortierung nach jedem Zug) — Überhol-Sperre
   aktivieren; Fallback bei fast-parallelen Tangenten mit einem Erklärsatz versehen.
   **Erledigt 14.09.2026:** Überhol-Sperre (Punkt bleibt zwischen seinen Nachbarn, keine Umsortierung); Tangentenviereck: Bögen zwischen Berührungspunkten ≤ 110° (Ecke ≤ 1.74·R, kein Fallback mehr nötig), Erklärsatz für den Fallback bleibt als Sicherung.
-- [ ] **AN-61** `g5-2c` · Pizza-Einstieg: Symbol-Inkonsistenz ζ (Canvas) vs. φ (Readout und
+- [x] **AN-61** `g5-2c` · Pizza-Einstieg: Symbol-Inkonsistenz ζ (Canvas) vs. φ (Readout und
   Anim 7) vereinheitlichen; nach Anim 7 Rückverweis-Satz auf den Pizza-Cliffhanger.
-- [ ] **AN-62** `g5-2c` · `cv-strecken`: Modus/Slider «Abstand der Geraden zu M» ergänzen —
+  **Erledigt 14.09.2026:** Pizza zeigt φ wie Theorie und Anim 7; Rückverweis-Absatz nach Anim 7 (ein Stück bei 8 Teilen, A = ½·b·r). Pizza-Kasten in die .anim-Karte eingebettet, r-Label weicht dem φ-Label aus.
+- [x] **AN-62** `g5-2c` · `cv-strecken`: Modus/Slider «Abstand der Geraden zu M» ergänzen —
   eine Gerade wandert kontinuierlich Passante → Tangente → Sekante (Live-Anzeige Abstand
   vs. r): verankert die drei Begriffe als ein Kriterium statt drei Vokabeln.
-- [ ] **AN-63** `g5-2d` · `cv-figur`: Der Parkettierungs-Beweis (k²) bei exakt |k| = 2 ist
+  **Erledigt 14.09.2026:** Chip «a — Abstand zu M» mit Regler a (0–4), Lot und Radius im Bild, Tabelle a vs. r → Passante/Tangente/Sekante. Abstand heisst a, weil d auf der Seite der Durchmesser ist.
+- [x] **AN-63** `g5-2d` · `cv-figur`: Der Parkettierungs-Beweis (k²) bei exakt |k| = 2 ist
   das Highlight, aber versteckt — Marke/Chip «probiere k = 2» bzw. 👁-Hinweis konkretisieren.
-- [ ] **AN-64** `g5-2d` · `cv-aehnSatz`: Konstruktionsbedingt immer ähnlich, nichts zu
+  **Erledigt 14.09.2026:** Chips «Probiere k = 2» / «k = −2» unter dem Regler, 👁-Hinweis nennt k = 2 und die vier Kopien; Kreis-Erklärung sagt, warum dort kein Kopien-Beweis geht.
+- [x] **AN-64** `g5-2d` · `cv-aehnSatz`: Konstruktionsbedingt immer ähnlich, nichts zu
   entdecken — «Störungs»-Regler ergänzen (eine Seite ±20 % → Verhältnisse laufen auseinander,
   Anzeige kippt rot auf «nicht ähnlich»); stützt A4 (6-8-9-Gegenbeispiel).
-- [ ] **AN-65** `g5-3` · `bm-canvas` (Baum-Einstieg): Readout-Zelle «h/d» ergänzen (hängt
+  **Erledigt 14.09.2026:** Störungsregler a′ ±20 % (5-%-Schritte, −10 % = A4): ungestörtes Dreieck gestrichelt, a′ und falsche Winkel rot, Formelkasten kippt auf «nicht ähnlich».
+- [x] **AN-65** `g5-3` · `bm-canvas` (Baum-Einstieg): Readout-Zelle «h/d» ergänzen (hängt
   nur von α ab — Brücke zu «Seitenverhältnis hängt nur vom Winkel ab»); Halbsatz zur
   vernachlässigten Augenhöhe.
-- [ ] **AN-66** `g5-3` · `cv-sinussatz`: Quotienten erscheinen als «300.0» in nackten
+  **Erledigt 14.09.2026:** Anzeige «Verhältnis h/d», Augenhöhe-Satz in der Bildunterschrift. Canvas zusätzlich 1:1 skaliert (Sichtstrahl steht im wahren Winkel α), Labels frei.
+- [x] **AN-66** `g5-3` · `cv-sinussatz`: Quotienten erscheinen als «300.0» in nackten
   Pixeln — auf r = 1 normieren (alle Werte 2.00 = Durchmesser); Legende um α, β, γ und
   a, b, c ergänzen; Slider-Labels «Position von A auf dem Kreis» (Verwechslung mit
   Dreieckswinkeln); optional Drag-Punkte statt Slider (Muster g5-2d).
+  **Erledigt 14.09.2026:** Auf r = 1 normiert (Quotienten 2.00), Legende α, β, γ und a, b, c, Regler «Position von A/B/C auf dem Kreis», A/B/C ziehbar. Mindestabstand der Punkte 20°, Mindestschrift 11 px, Labels über 58 718 Stellungen frei.
 
 ## P4 — Niedrig (Feinschliff)
 
-- [ ] **AN-67** `g1-1` · `cv-distrib`: Slider mit akz-Farben an die Teilflächen koppeln.
-- [ ] **AN-68** `g1-2` · `cv-betrag-zg`: im violetten Label «= |b − a|» andeuten.
-- [ ] **AN-69** `g1-3` · Zusammenfassen-Widget: Einleitungssatz («zusammenschmelzen») an das
+- [x] **AN-67** `g1-1` · `cv-distrib`: Slider mit akz-Farben an die Teilflächen koppeln.
+  **Erledigt 14.09.2026:** Regler in der Farbe der Kante, die sie verändern (Seiten-CSS für .regler wie g3-1); Live-Formel: Faktoren in Reglerfarbe, Produkte in Flächenfarbe. Kantenlabels weichen bei kleinen Werten aus.
+- [x] **AN-68** `g1-2` · `cv-betrag-zg`: im violetten Label «= |b − a|» andeuten.
+  **Erledigt 14.09.2026:** Label «|a − b| = |b − a| = N»; Canvas zeichnet in echter Breite (Schrift ≥ 11 px bei 360 px).
+- [x] **AN-69** `g1-3` · Zusammenfassen-Widget: Einleitungssatz («zusammenschmelzen») an das
   diskrete Verhalten anpassen; sechstes Preset mit sich aufhebender Gruppe (3x − 3x + 5).
-- [ ] **AN-70** `g1-4` · `wn-konv`: Zusatzzeile «Dezimalpunkt um N Stellen verschoben»
+  **Erledigt 14.09.2026:** Einleitungssatz beschreibt die Schritte; sechstes Beispiel 3x + 5 − 3x (unsortiert wie die übrigen) mit Satz «die ganze Gruppe fällt weg». Glieder brechen bei 360 px nicht mehr einzeln um.
+- [x] **AN-70** `g1-4` · `wn-konv`: Zusatzzeile «Dezimalpunkt um N Stellen verschoben»
   (Verschiebungs-Regel sichtbar machen); optional Zwei-Zahlen-Multiplikationsmodus.
-- [ ] **AN-71** `g1-4` · `cv-einschachtel`: getestete Mitte m² auch auf der Radikanden-Achse
+  **Erledigt 14.09.2026:** Zeile «Dezimalpunkt um N Stelle(n) nach links/rechts verschoben → Exponent N». Multiplikationsmodus weggelassen (Beispiel darunter zeigt es). Nebenbei: Rundung normiert (kein «10 · 10⁵»), Unicode-Minus in der Eingabe.
+- [x] **AN-71** `g1-4` · `cv-einschachtel`: getestete Mitte m² auch auf der Radikanden-Achse
   spiegeln.
-- [ ] **AN-72** `g2-1` · Gleichungstypen-Umschalter: mit der fast identischen Tabelle
+  **Erledigt 14.09.2026:** Obere Achse zeigt m² als rote Marke, untere Achse m; 💡 ergänzt.
+- [x] **AN-72** `g2-1` · Gleichungstypen-Umschalter: mit der fast identischen Tabelle
   darunter zusammenführen (Zusatzspalten Lösungsmethode/Fundstelle in die Tabelle) — oder
   beim Klick das x-Merkmal im Beispiel farbig hervorheben.
-- [ ] **AN-73** `g2-1` · `cv-ungl`: Prüfpunkte g−1/g+1 mit ✓/✗ neben der Grenze.
-- [ ] **AN-74** `g2-2a` · `uf-lin`: Operations-Pille an die Zeile setzen, auf die sie
+  **Erledigt 14.09.2026:** Variante Hervorheben: Merkmal im Beispiel orange (LaTeX), neue Zeile «Erkennungsmerkmal». Tabelle bleibt Zusammenfassung, Umschalter übt das Erkennen.
+- [x] **AN-73** `g2-1` · `cv-ungl`: Prüfpunkte g−1/g+1 mit ✓/✗ neben der Grenze.
+  **Erledigt 14.09.2026:** Prüfpunkte g − 1 / g + 1 mit ✓/✗ (im Code verglichen); Beschriftungen via beschriftung() geklemmt.
+- [x] **AN-74** `g2-2a` · `uf-lin`: Operations-Pille an die Zeile setzen, auf die sie
   angewendet wird (Heft-Konvention).
-- [ ] **AN-75** `g2-2b` · velo-canvas: mitlaufende min-Zähler pro Weg während der Animation;
+  **Erledigt 14.09.2026:** Operations-Pille an der Zeile, auf die sie wirkt, erscheint mit der Ergebniszeile. Waage-Widget auf g2-1 ebenso umgestellt.
+- [x] **AN-75** `g2-2b` · velo-canvas: mitlaufende min-Zähler pro Weg während der Animation;
   Hinweissatz zur verworfenen zweiten Lösung (Vorgriff A6).
-- [ ] **AN-76** `g2-2b` · fak-stack: Stolperstein erst ab dem Kernschritt einblenden.
+  **Erledigt 14.09.2026:** Mitlaufende Zähler «Zeit hin/zurück» während der Fahrt; Bildunterschrift: Regler ab 5 km/h, die zweite Lösung klärt A6 (Wert nicht verraten).
+- [x] **AN-76** `g2-2b` · fak-stack: Stolperstein erst ab dem Kernschritt einblenden.
   Wurzelterm-Baum: drei Fälle auf eine Familie x² − 6x + c umstellen (verzahnt mit k-Widget).
-- [ ] **AN-77** `g2-2b` · `cv-pk`: x₁/x₂-Labels an die grünen Nullstellen, «D = 0»-Label an
+  **Erledigt 14.09.2026:** Stolperstein erst ab dem Kernschritt. Wurzelterm-Baum: x² − 6·x + c mit c = 5 / 9 / 10 wie das k-Widget.
+- [x] **AN-77** `g2-2b` · `cv-pk`: x₁/x₂-Labels an die grünen Nullstellen, «D = 0»-Label an
   die Grenzlinie.
-- [ ] **AN-78** `g2-3` · `cv-lbuschel`: Begriff «Determinante» ersetzen oder in einem Satz
+  **Erledigt 14.09.2026:** x₁/x₂-Labels an den Nullstellen (Freiplatz-Suche, «x₁ = x₂» bei k = 9); «D = 0» an der Grenzlinie, Zahlenstrahl neu gesetzt.
+- [x] **AN-78** `g2-3` · `cv-lbuschel`: Begriff «Determinante» ersetzen oder in einem Satz
   einführen (kommt im RLP-Grundlagenfach nicht vor); Slider-Farbkopplung m/c nachziehen.
   `dd-stack`: Kommentar präzisieren («damit die y-Koeffizienten +3 und −3 werden»).
   `cv-a1`: Geraden-Legende ergänzen. `cv-kino`: Tick-Beschriftung auf 5er-Schritte.
-- [ ] **AN-79** `g3-1`: `lin-canvas` Hinweis «(ausserhalb des Bildes)» wenn x₀ das Fenster
+  **Erledigt 14.09.2026:** «Determinante» ersetzt durch Steigungsvergleich (💡 über g₂ − g₁); m/c orange wie g₂. dd-stack-Kommentar präzisiert, cv-a1-Legende, cv-kino 5er-Ticks. Lösungspunkt in cv-a1 erst nach richtiger Eingabe oder offener Lösung.
+- [x] **AN-79** `g3-1`: `lin-canvas` Hinweis «(ausserhalb des Bildes)» wenn x₀ das Fenster
   verlässt; `schn-canvas` akz-orange auf b-Slider + Fazit-Zeile einfärben; Einstieg
   «genau ein Wert» betonen; Quiz-Feedback auf Testgeraden-Widget verweisen.
-- [ ] **AN-80** `g3-2`: `dr-canvas` b-Punkt orange statt dunkelrot + «b»-Label;
+  **Erledigt 14.09.2026:** «(ausserhalb des Bildes)» für x₀; schn: b orange, Parabel violett; Einstieg «genau ein Wert»; Quiz-Link zum Vertikaltest (wählt dieselbe Kurve). Nebenbei: «±√2» → «±2». Farbkopplung auch in lin/par entwirrt.
+- [x] **AN-80** `g3-2`: `dr-canvas` b-Punkt orange statt dunkelrot + «b»-Label;
   `a1-canvas` Feedback differenzieren («m stimmt, b nicht»); `ks-canvas` Schrittweite 1 kg
   erwägen (direkteste m-Ablesung).
-- [ ] **AN-81** `g3-3`: `dr-canvas` Slider-Akzente vs. Punktfarben entwirren;
+  **Erledigt 14.09.2026:** b-Punkt orange mit «b»-Label, x-Punkt grün wie der x-Regler; a1-Feedback in vier Fällen; ks-canvas in 1-kg-Schritten (Tabelle zeigt acht Zeilen um den aktiven Wert).
+- [x] **AN-81** `g3-3`: `dr-canvas` Slider-Akzente vs. Punktfarben entwirren;
   typ-Button «rein quadratisch (b = 0)».
-- [ ] **AN-82** `g5-1`: `dg-canvas` Plausibilitäts-Panel responsiv, optional
+  **Erledigt 14.09.2026:** Punkte ohne Reglerfarbe (S dunkel, Nullstellen violett, (0 | c) rot), u/v nur in «S(u | v)» gefärbt. Typ «rein quadratisch (b = 0)» gab es schon (umbenannt); «a > 0» jetzt 0.5·x² − x − 1.5.
+- [x] **AN-82** `g5-1`: `dg-canvas` Plausibilitäts-Panel responsiv, optional
   Schranken-Zahlenstrahl; Zufallswinkel-Trainer-Pool um Nenner 9/18 erweitern (deckt A3 ab);
   `sk-canvas` Elemente in Schritt 2 nacheinander einblenden.
-- [ ] **AN-83** `g5-2a`: `cv-beweis` C ziehbar machen («funktioniert für jedes Dreieck»);
+  **Erledigt 14.09.2026:** Plausibel-Feld rechts oder unter der Figur, Zahlenstrahl ]max(l, b); l + b[; Trainer-Pool 63 Winkel (Nenner 5, 8, 9, 18 für A3); sk-canvas Schritt 2 baut Boden → Wand → Leiter nacheinander auf.
+- [x] **AN-83** `g5-2a`: `cv-beweis` C ziehbar machen («funktioniert für jedes Dreieck»);
   `cv-elem` Kreis-Toggle bei Höhen/Seitenhalbierenden ausgrauen; `cv-spez`
   Kernaussage-Zeile je Typ («a = b ⇒ α = β»).
-- [ ] **AN-84** `g5-2b`: `cv-nEck` gemessene Winkelsumme in der Legende (beweisen statt
+  **Erledigt 14.09.2026:** C in cv-beweis ziehbar (Winkel ≥ 30°), Figur zentriert; Kreis-Toggle bei Höhen/Seitenhalbierenden ausgegraut; Kernaussage je Typ in cv-spez.
+- [x] **AN-84** `g5-2b`: `cv-nEck` gemessene Winkelsumme in der Legende (beweisen statt
   behaupten); `cv-rect` Zähl-Toggle ohne Raster deaktivieren, Einheiten-Chips begründen
   oder streichen; `cv-flaeche` Schrittleisten-Beschriftung pro Figur (bei Raute/Drachen
   wird nichts «geschnitten/verschoben»).
-- [ ] **AN-85** `g5-2c`: `cv-sektor` Legendenzeile «½·b·r» (Probe A4.2), Optik-Satz bei 90°
+  **Erledigt 14.09.2026:** Gemessene Innenwinkel und Summe in der cv-nEck-Legende (Rundungshinweis bei n = 5, 7); Zähl-Toggle ohne Raster ausgegraut, Einheiten-Chips mit Satz begründet; Schrittleiste je Figur.
+- [x] **AN-85** `g5-2c`: `cv-sektor` Legendenzeile «½·b·r» (Probe A4.2), Optik-Satz bei 90°
   streichen; `cv-segment` Label-Ausblendung bei φ < 30°, Formelbox-Hinweis bei φ > 180°.
-- [ ] **AN-86** `g5-2d`: `cv-streck` Handles auf r = 6 px, Drag-Fähigkeit im 👁-Hinweis;
+  **Erledigt 14.09.2026:** Legendenzeile «Probe ½·b·r», Optik-Satz gestrichen; cv-segment mit Freiplatz-Regel statt fester 30°-Grenze, Hinweis h > r bei φ > 180°, A_SK/A_SG mit echtem Index.
+- [x] **AN-86** `g5-2d`: `cv-streck` Handles auf r = 6 px, Drag-Fähigkeit im 👁-Hinweis;
   `cv-strahl` Slider-Beschriftung «Schritt 0–4: Aufbau · 5: Variante 2»; `cv-recht` Hinweis,
   in welchem α-Fenster die Drehkopie sichtbar ist, optional Höhensatz-Chip.
-- [ ] **AN-87** `g5-3`: `cv-spez` α/β-Chips im 45°-Modus ausblenden, optional
+  **Erledigt 14.09.2026:** Handles r = 6 px, Drag im 👁; Slider «Schritt 0–4: Aufbau, 5: Variante 2» (Schritt 5 beschriftet jetzt AA′/BB′); α-Fenster der Drehkopie im Hinweis, Höhensatz-Chip; Labels über alle α frei.
+- [x] **AN-87** `g5-3`: `cv-spez` α/β-Chips im 45°-Modus ausblenden, optional
   Pythagoras-Overlay; `cv-cossatz` Legendenzeile als «−2bc·cos α» mit Vorzeichen;
   `cv-flaeche` Erklärsatz bei φ ≈ 90° («grösstmögliche Fläche — sin φ = 1»).
-- [ ] **AN-88** `g5-4`: `cv-sincos` bei Spezialwinkeln exakten Wert in der Legende
+  **Erledigt 14.09.2026:** α/β-Chips im 45°-Modus ausgeblendet (Pythagoras-Overlay weggelassen: passt nicht ins Canvas); «−2bc·cos α» mit Vorzeichen; Satz bei φ = 90°.
+- [x] **AN-88** `g5-4`: `cv-sincos` bei Spezialwinkeln exakten Wert in der Legende
   («0.866 = √3/2»); `cv-tan` Chips 90°/270° ergänzen (zeigen «nicht definiert»),
   Kappungsgrenze höher; `cv-symm` vierter Chip «90° − α» (Diagonale y = x — erklärt
   «Co-Sinus» visuell); Vorzeichen-Trainer Mini-Einheitskreis im Feedback.
-- [ ] **AN-89** `g5-5`: `gl-svg` c beim Tab-Wechsel symmetrisch klemmen (negativer
+  **Erledigt 14.09.2026:** Exakte Werte «√3/2 ≈ 0.866»; Chips 90°/270°, höhere Kappung; Chip «90° − α» mit Spiegelgerade y = x; Mini-Einheitskreis im Trainer-Feedback. Canvas-Schrift auf der Seite ≥ 11 px.
+- [x] **AN-89** `g5-5`: `gl-svg` c beim Tab-Wechsel symmetrisch klemmen (negativer
   tan-Wert bleibt sonst stehen), im tan-Modus Tangente x = 1 mit Punkt S einblenden
   (Rückgriff 5.4); `cv-kk` Satz, warum die Brückenlinie bei cos fehlt.
-- [ ] **AN-90** `g5-4`/Nachschlag: Arcus-Hauptwerte am Einheitskreis visualisieren
+  **Erledigt 14.09.2026:** c beim Tab-Wechsel geklemmt; tan-Modus mit Tangente x = 1 und S; cv-kk-Satz zur fehlenden Brücke bei cos; Unicode-Minus in allen Anzeigen, Achsenzahlen frei.
+- [x] **AN-90** `g5-4`/Nachschlag: Arcus-Hauptwerte am Einheitskreis visualisieren
   (arcsin-Bereich als rechte Kreishälfte einfärben, zweiten Winkel grau) — operativ durch
   5.5 aufgefangen, darum P4.
+  **Erledigt 14.09.2026:** Neues Widget «Hauptwerte am Einheitskreis» nach dem Arcus-Block: Hauptwertbereich eingefärbt mit Intervallklammern, φ₁ blau, φ₂ grau; arctan-Intervall im Text auf ]−90°; 90°[ korrigiert.
 
 ---
 

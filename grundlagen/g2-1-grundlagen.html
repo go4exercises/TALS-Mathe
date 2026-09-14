@@ -186,7 +186,11 @@ MathJax = {
 .umform-zeile { display:flex; align-items:center; gap:12px; background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:9px 14px; opacity:0; transform:translateY(-6px); transition:opacity 0.4s ease, transform 0.4s ease; }
 .umform-zeile.sichtbar { opacity:1; transform:translateY(0); }
 .umform-zeile.aktuell { background:var(--blau-hell); border-color:var(--blau-rand); }
-.umform-eq { font-family:var(--mono); font-size:1rem; font-weight:700; color:var(--tinte); flex:1; }
+.umform-eq { font-family:var(--mono); font-size:1rem; font-weight:700; color:var(--tinte); min-width:12ch; white-space:nowrap; }
+@media (max-width:520px) {
+  .umform-zeile { gap:8px; flex-wrap:wrap; padding:8px 10px; }
+  .umform-eq { font-size:0.95rem; }
+}
 .umform-op { font-family:var(--mono); font-size:0.78rem; color:var(--blau); background:var(--weiss); padding:3px 10px; border-radius:14px; border:1px solid var(--blau-rand); white-space:nowrap; }
 .umform-ctrl { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
 .umform-btn { font-family:var(--sans); font-size:0.82rem; font-weight:700; padding:6px 14px; border-radius:8px; border:1.5px solid var(--blau); background:var(--blau); color:#fff; cursor:pointer; }
@@ -440,17 +444,17 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Wechsle zwischen «höchstens» und «weniger als» bei gleicher Grenze. Der schattierte Bereich sieht fast gleich aus — nur die Klammer am Rand dreht sich um. Was bedeutet das?</div>
+        <div class="ah-text">Wechsle zwischen «höchstens» und «weniger als» bei gleicher Grenze. Der schattierte Bereich sieht fast gleich aus — nur die Klammer am Rand dreht sich um. Was bedeutet das? Unter der Grenze sind die Nachbarwerte \(g - 1\) und \(g + 1\) eingesetzt: Welcher erfüllt die Ungleichung?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Die Klammer <strong>nach innen</strong> heisst: Die Grenze gehört zur Lösungsmenge (\(\leq\), \(\geq\)). Die Klammer <strong>nach aussen</strong> heisst: Sie gehört nicht dazu (\(<\), \(>\)). Am Zahlenstrahl steht damit dieselbe Klammer wie in der Intervallschreibweise — \([g;\ \infty[\) gegenüber \(]g;\ \infty[\). Bei einer Tragfähigkeit ist das der Unterschied zwischen «450 kg sind erlaubt» und «450 kg sind bereits zu viel».</div>
+        <div class="ah-text">Die Klammer <strong>nach innen</strong> heisst: Die Grenze gehört zur Lösungsmenge (\(\leq\), \(\geq\)). Die Klammer <strong>nach aussen</strong> heisst: Sie gehört nicht dazu (\(<\), \(>\)). Am Zahlenstrahl steht damit dieselbe Klammer wie in der Intervallschreibweise — \([g;\ \infty[\) gegenüber \(]g;\ \infty[\). Bei einer Tragfähigkeit ist das der Unterschied zwischen «450 kg sind erlaubt» und «450 kg sind bereits zu viel». Die Prüfpunkte \(g - 1\) und \(g + 1\) zeigen, auf welcher Seite der Grenze die Lösungen liegen — ob die Grenze selbst dazugehört, entscheidet allein das Zeichen.</div>
       </div>
     </div>
   </div>
-    <p>Vom Signalwort zum Zahlenstrahl — achte auf den Randpunkt:</p>
+    <p>Vom Signalwort zum Zahlenstrahl — achte auf den Randpunkt und auf die Prüfpunkte daneben:</p>
   </div>
   <div class="widget-body">
   <div class="typ-btns" id="uz-chips">
@@ -464,7 +468,7 @@ MathJax = {
     <input type="range" id="uz-g" min="5" max="45" step="1" value="30">
   </div>
   <div class="formel-live"><div class="fl-label">Ungleichung · Lösungsmenge · Intervall</div><div class="fl-eq" id="uz-eq" style="font-size:1rem"></div></div>
-  <div class="cv-wrap" style="max-width:520px"><canvas id="cv-ungl" height="150"></canvas></div>
+  <div class="cv-wrap" style="max-width:520px"><canvas id="cv-ungl" height="158"></canvas></div>
   <div id="uz-rand" style="font-size:0.8rem;margin-top:8px"></div>
   </div>
 </div>
@@ -502,7 +506,7 @@ MathJax = {
   <p style="text-align:center;margin:4px 0">\(-x \le 5 \;\;\mid\, \cdot(-1) \;\;\Longleftrightarrow\;\; x \ge -5\)</p>
 </div>
 
-<p style="margin-top:14px">Klicke unten auf <em>„Nächster Schritt"</em> — jede Umformung erscheint einzeln, und du siehst, wie sich die Gleichung verändert, ohne ihre Lösung zu verlieren. Auf der Waage darunter verschwinden dabei auf beiden Seiten gleich viele Kisten und Gewichte, sie bleibt im Gleichgewicht. Mit <em>„✗ nur links −3"</em> siehst du, was eine einseitige Umformung anrichtet.</p>
+<p style="margin-top:14px">Klicke unten auf <em>„Nächster Schritt"</em> — jede Umformung erscheint einzeln, und du siehst, wie sich die Gleichung verändert, ohne ihre Lösung zu verlieren. Wie im Heft steht die Operation rechts neben der Gleichung, auf die sie angewendet wird; die Zeile darunter ist das Ergebnis. Auf der Waage darunter verschwinden dabei auf beiden Seiten gleich viele Kisten und Gewichte, sie bleibt im Gleichgewicht. Mit <em>„✗ nur links −3"</em> siehst du, was eine einseitige Umformung anrichtet.</p>
 
 <div class="widget">
   <div class="widget-header">
@@ -555,15 +559,16 @@ MathJax = {
 
 <h2 id="typen">Gleichungstypen erkennen</h2>
 
-<p>Bevor man losrechnet, lohnt sich ein kurzer Blick: <em>Welcher Typ Gleichung liegt vor?</em> Davon hängt die Lösungsmethode ab. Klicke auf einen Typ — die typische Form, ein Beispiel und die übliche Lösungsmethode werden angezeigt.</p>
+<p>Bevor man losrechnet, lohnt sich ein kurzer Blick: <em>Welcher Typ Gleichung liegt vor?</em> Davon hängt die Lösungsmethode ab. Klicke auf einen Typ — farbig markiert ist das Merkmal, an dem du ihn erkennst: <em>wie</em> und <em>wo</em> \(x\) vorkommt. Darunter stehen die übliche Lösungsmethode und wo der Typ behandelt wird.</p>
 
 <div class="typ-btns" id="typ-btns"></div>
 
 <div class="formel-live" style="text-align:left">
   <div class="fl-label" id="typ-name">linear</div>
-  <div class="fl-eq" id="typ-form" style="font-size:1.05rem">a·x + b = 0</div>
-  <div class="fl-eq" id="typ-bsp" style="font-size:0.95rem;color:var(--blau);margin-top:8px;font-style:italic">Beispiel: 3·x + 5 = 14</div>
-  <div style="font-family:var(--sans);font-size:0.86rem;color:var(--tinte-2);margin-top:8px" id="typ-method">Lösungsmethode: Äquivalenzumformungen — x auf einer Seite isolieren.</div>
+  <div class="fl-eq" id="typ-form" style="font-size:1.05rem">\(a \cdot \textcolor{#b85c00}{x} + b = 0\;(a \neq 0)\)</div>
+  <div class="fl-eq" id="typ-bsp" style="font-size:0.95rem;margin-top:8px"><span style="font-family:var(--sans);font-size:0.86rem;font-style:normal;font-weight:400;color:var(--tinte-2)">Beispiel:</span> \(3 \cdot \textcolor{#b85c00}{x} + 5 = 14\)</div>
+  <div style="font-family:var(--sans);font-size:0.86rem;color:var(--tinte);margin-top:8px" id="typ-merkmal">Erkennungsmerkmal: <strong class="tx-orange">\(x\) kommt nur in der ersten Potenz vor — kein \(x^2\), nicht im Nenner, nicht unter der Wurzel.</strong></div>
+  <div style="font-family:var(--sans);font-size:0.86rem;color:var(--tinte-2);margin-top:8px" id="typ-method">Lösungsmethode: Äquivalenzumformungen — \(x\) auf einer Seite isolieren.</div>
   <div style="font-family:var(--sans);font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic" id="typ-info">Behandelt in: Teilgebiet 2.2</div>
 </div>
 
@@ -1143,13 +1148,13 @@ const UF_X = 3;
 const ufSteps = [
   { eq: '4·x + 3 = 15', op: '',       objL: {kisten: 4, gewichte: 3}, objR: {kisten: 0, gewichte: 15}, lLabel: '4·x + 3', rLabel: '15',
     info: 'Startgleichung: links 4 Kisten und 3 Gewichte, rechts 15 Gewichte. Die Waage ist im Gleichgewicht.' },
-  { eq: '4·x = 12',     op: '|  − 3', objL: {kisten: 4, gewichte: 0}, objR: {kisten: 0, gewichte: 12}, lLabel: '4·x',     rLabel: '12',
+  { eq: '4·x = 12',     op: '| −3', objL: {kisten: 4, gewichte: 0}, objR: {kisten: 0, gewichte: 12}, lLabel: '4·x',     rLabel: '12',
     info: 'Auf BEIDEN Seiten 3 Gewichte weggenommen: die Waage bleibt im Gleichgewicht.' },
-  { eq: 'x = 3',        op: '|  : 4', objL: {kisten: 1, gewichte: 0}, objR: {kisten: 0, gewichte: 3},  lLabel: 'x',       rLabel: '3',
+  { eq: 'x = 3',        op: '| :4', objL: {kisten: 1, gewichte: 0}, objR: {kisten: 0, gewichte: 3},  lLabel: 'x',       rLabel: '3',
     info: 'Auf BEIDEN Seiten durch 4 geteilt: aus 4 Kisten wird 1, aus 12 Gewichten werden 3. Die Lösung steht da: x = 3.' },
 ];
 // Kontrast: nur links −3, ausgehend von der Startgleichung
-const ufFalsch = { eq: '✗ 4·x = 15', op: '|  − 3 nur links', objL: {kisten: 4, gewichte: 0}, objR: {kisten: 0, gewichte: 15}, lLabel: '4·x', rLabel: '15',
+const ufFalsch = { eq: '✗ 4·x = 15', op: '| −3 nur links', objL: {kisten: 4, gewichte: 0}, objR: {kisten: 0, gewichte: 15}, lLabel: '4·x', rLabel: '15',
   info: 'Nur LINKS 3 weggenommen: links 12 kg, rechts 15 kg, die Waage kippt. Die Gleichung 4·x = 15 ist falsch, ihre Lösung wäre x = 3.75 statt x = 3. Das ist keine Äquivalenzumformung.' };
 let ufIdx = 0;
 let ufKontrast = false;
@@ -1161,7 +1166,11 @@ function renderUf() {
   const aktIdx = zeilen.length - 1;
   stack.innerHTML = zeilen.map((s, i) => {
     const falsch = s === ufFalsch;
-    const opHtml = s.op ? `<span class="umform-op"${falsch ? ' style="color:var(--rot);border-color:var(--rot-rand)"' : ''}>${s.op}</span>` : '<span class="umform-op" style="opacity:0">·</span>';
+    // Heft-Konvention: «| op» steht an der Zeile, auf die die Operation angewendet
+    // wird — also die Operation des nächsten Schritts; sie erscheint mit dessen Zeile.
+    const naechste = zeilen[i + 1];
+    const opFalsch = naechste === ufFalsch;
+    const opHtml = naechste ? `<span class="umform-op"${opFalsch ? ' style="color:var(--rot);border-color:var(--rot-rand)"' : ''}>${naechste.op}</span>` : '<span class="umform-op" style="opacity:0">·</span>';
     const cur = (i === aktIdx && !falsch) ? ' aktuell' : '';
     const zStil = falsch ? ' style="background:var(--rot-hell);border-color:var(--rot-rand)"' : '';
     const eStil = falsch ? ' style="color:var(--rot)"' : '';
@@ -1205,10 +1214,28 @@ document.getElementById('uf-kontrast').addEventListener('click', () => {
    4) GLEICHUNGSTYPEN — Klick-Visualisierung
 ════════════════════════════════════════════════════════════════ */
 const typen = [
-  { label: 'linear',       form: 'a·x + b = 0',           bsp: '3·x + 5 = 14',          method: 'Lösungsmethode: Äquivalenzumformungen — x auf einer Seite isolieren.', info: 'Behandelt in: Teilgebiet 2.2' },
-  { label: 'quadratisch',  form: 'a·x² + b·x + c = 0',    bsp: 'x² − 5·x + 6 = 0',      method: 'Lösungsmethode: Mitternachtsformel, p-q-Formel oder Faktorisieren.',  info: 'Behandelt in: Teilgebiet 2.2' },
-  { label: 'Bruch',        form: 'P(x) / Q(x) = R(x)',    bsp: '2 / (x − 1) = 4',       method: 'Lösungsmethode: mit Hauptnenner multiplizieren — Definitionsmenge (Q(x) ≠ 0) beachten!', info: 'Behandelt in: Schwerpunkt 2.2' },
-  { label: 'Wurzel',       form: '√(P(x)) = R(x)',        bsp: '√(x + 3) = x − 1',      method: 'Lösungsmethode: Quadrieren — Probe Pflicht (Scheinlösungen möglich).', info: 'Behandelt in: Schwerpunkt 2.2' },
+  // Das Erkennungsmerkmal (wie bzw. wo x vorkommt) steht in Form und Beispiel
+  // orange (#b85c00) — die Tabelle darunter fasst nur zusammen.
+  { label: 'linear',
+    form: String.raw`\(a \cdot \textcolor{#b85c00}{x} + b = 0\;(a \neq 0)\)`,
+    bsp:  String.raw`\(3 \cdot \textcolor{#b85c00}{x} + 5 = 14\)`,
+    merkmal: String.raw`\(x\) kommt nur in der ersten Potenz vor — kein \(x^2\), nicht im Nenner, nicht unter der Wurzel.`,
+    method: String.raw`Lösungsmethode: Äquivalenzumformungen — \(x\) auf einer Seite isolieren.`, info: 'Behandelt in: Teilgebiet 2.2' },
+  { label: 'quadratisch',
+    form: String.raw`\(a \cdot \textcolor{#b85c00}{x^2} + b \cdot x + c = 0\)`,
+    bsp:  String.raw`\(\textcolor{#b85c00}{x^2} - 5 \cdot x + 6 = 0\)`,
+    merkmal: String.raw`\(x\) kommt quadriert vor — \(x^2\) ist die höchste Potenz.`,
+    method: 'Lösungsmethode: Mitternachtsformel, p-q-Formel oder Faktorisieren.', info: 'Behandelt in: Teilgebiet 2.2' },
+  { label: 'Bruch',
+    form: String.raw`\(\dfrac{P(x)}{\textcolor{#b85c00}{Q(x)}} = R(x)\)`,
+    bsp:  String.raw`\(\dfrac{2}{\textcolor{#b85c00}{x - 1}} = 4\)`,
+    merkmal: String.raw`\(x\) steht im Nenner.`,
+    method: String.raw`Lösungsmethode: mit Hauptnenner multiplizieren — Definitionsmenge (\(Q(x) \neq 0\)) beachten!`, info: 'Behandelt in: Schwerpunkt 2.2' },
+  { label: 'Wurzel',
+    form: String.raw`\(\textcolor{#b85c00}{\sqrt{P(x)}} = R(x)\)`,
+    bsp:  String.raw`\(\textcolor{#b85c00}{\sqrt{x + 3}} = x - 1\)`,
+    merkmal: String.raw`\(x\) steht unter der Wurzel.`,
+    method: 'Lösungsmethode: Quadrieren — Probe Pflicht (Scheinlösungen möglich).', info: 'Behandelt in: Schwerpunkt 2.2' },
 ];
 let typActive = 0;
 
@@ -1222,10 +1249,13 @@ function setTyp(i) {
   document.querySelectorAll('#typ-btns .typ-btn').forEach((b, j) => b.classList.toggle('aktiv', j === i));
   const t = typen[i];
   document.getElementById('typ-name').textContent = t.label;
-  document.getElementById('typ-form').textContent = t.form;
-  document.getElementById('typ-bsp').textContent = `Beispiel: ${t.bsp}`;
-  document.getElementById('typ-method').textContent = t.method;
+  const els = ['typ-form', 'typ-bsp', 'typ-merkmal', 'typ-method'].map(id => document.getElementById(id));
+  els[0].innerHTML = t.form;
+  els[1].innerHTML = `<span style="font-family:var(--sans);font-size:0.86rem;font-style:normal;font-weight:400;color:var(--tinte-2)">Beispiel:</span> ${t.bsp}`;
+  els[2].innerHTML = `Erkennungsmerkmal: <strong class="tx-orange">${t.merkmal}</strong>`;
+  els[3].innerHTML = t.method;
   document.getElementById('typ-info').textContent = t.info;
+  mjTypeset(els);
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -1476,7 +1506,7 @@ function drawUngl() {
   rEl.style.color = u.geschlossen ? 'var(--gruen)' : 'var(--rot)';
   mjTypeset([rEl]);
 
-  const { ctx, W, H } = initCanvas('cv-ungl', 150, false);
+  const { ctx, W, H } = initCanvas('cv-ungl', 158, false);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
   const X0 = 34, L = W - 68, y = 84, xMin = 0, xMax = 50;
   const px = z => X0 + (z - xMin) / (xMax - xMin) * L;
@@ -1514,15 +1544,33 @@ function drawUngl() {
   // heisst das «[» für ≥ und «]» für >, links spiegelbildlich.
   intervallKlammer(ctx, px(g), y, u.rechts === u.geschlossen, {farbe:'#1a4f8a', h:13});
 
-  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-  ctx.fillText('x ' + u.zeichen + ' ' + g, px(g) + (u.rechts ? 42 : -42), y - 30);
+  // beschriftung() klemmt ins Canvas: bei g nahe am Rand würde «x ≤ g» sonst
+  // auf schmalen Bildschirmen abgeschnitten.
+  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace';
+  beschriftung(ctx, 'x ' + u.zeichen + ' ' + g, px(g) + (u.rechts ? 42 : -42), y - 30, {align:'center', W, H});
   ctx.fillStyle = '#374151'; ctx.font = 'bold 11px JetBrains Mono, monospace';
-  ctx.fillText('g = ' + g, px(g), y + 38);
+  beschriftung(ctx, 'g = ' + g, px(g), y + 38, {align:'center', W, H});
 
   // Prüfpunkt genau auf der Grenze
   ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'left';
   ctx.fillStyle = u.geschlossen ? '#1f6b3a' : '#c8412c';
   ctx.fillText(u.geschlossen ? `x = ${g} ist erlaubt ✓` : `x = ${g} ist nicht erlaubt ✗`, 8, 20);
+
+  // Prüfpunkte g − 1 (links der Grenze) und g + 1 (rechts): eingesetzt und
+  // verglichen. Als Paar unter «g = …» um die Grenze gelegt; stösst das Paar an
+  // den Rand, wird es als Ganzes eingerückt, damit die Seiten nicht tauschen.
+  const gilt = z => ({ le: z <= g, ge: z >= g, lt: z < g, gt: z > g })[uzTyp];
+  const pruef = [g - 1, g + 1].map(z => ({ txt: `${z} ${u.zeichen} ${g} ${gilt(z) ? '✓' : '✗'}`, ok: gilt(z) }));
+  ctx.font = 'bold 11px JetBrains Mono, monospace';
+  const lueke = 7, rand = 8, yP = y + 58;
+  const bL = ctx.measureText(pruef[0].txt).width, bR = ctx.measureText(pruef[1].txt).width;
+  let mitte = px(g);
+  if (mitte - lueke - bL < rand) mitte = rand + bL + lueke;
+  if (mitte + lueke + bR > W - rand) mitte = W - rand - bR - lueke;
+  ctx.fillStyle = pruef[0].ok ? '#1f6b3a' : '#c8412c';
+  beschriftung(ctx, pruef[0].txt, mitte - lueke, yP, {align:'right', W, H});
+  ctx.fillStyle = pruef[1].ok ? '#1f6b3a' : '#c8412c';
+  beschriftung(ctx, pruef[1].txt, mitte + lueke, yP, {align:'left', W, H});
 }
 </script>
 </body>

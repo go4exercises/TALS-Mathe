@@ -174,6 +174,9 @@ MathJax = {
   .slider-box .sl-grp.akz-orange .slider-val { color: var(--orange, #b85c00); }
   .slider-box .sl-grp.akz-gruen  .slider-val { color: var(--gruen, #1f6b3a); }
   .slider-box .fx-live { font-weight: 700; }
+  /* Label nie schmaler als sein laengstes Wort, sonst ragt «y-Achsenabschnitt» bei 360 px unter den Regler.
+     Darum dort kein MathJax-y: SVG mit max-width:100% zaehlt fuer min-content nicht mit. */
+  .slider-box .sl-grp label { min-width: min-content; }
   .slider-box .sl-row { margin-bottom: 10px; }
   .slider-box .sl-row:last-of-type { margin-bottom: 4px; }
 
@@ -198,6 +201,11 @@ MathJax = {
   @media (max-width: 540px) {
     .einstieg-grid { grid-template-columns: 100px 1fr; gap: 10px; }
     .einstieg-grid #einstieg-glas { width: 100px; height: 160px; }
+  }
+  @media (max-width: 420px) {
+    /* Neben dem Becher bliebe dem Graphen nur ~180 px — zu schmal fuer den Punkt samt Beschriftung */
+    .einstieg-grid { grid-template-columns: 1fr; }
+    .einstieg-grid #einstieg-glas { justify-self: center; }
   }
 
   .vier-darstellungen {
@@ -358,11 +366,11 @@ MathJax = {
 <h2 id="einstieg">Einstieg — Wasser im Becher</h2>
 
 <p>Ein Wasserhahn liefert konstant <strong>3 dl pro Sekunde</strong> in einen Becher. Zu jedem
-Zeitpunkt \(t\) (in Sekunden) gehört eindeutig eine Wassermenge \(V\) (in dl) im Becher:</p>
+Zeitpunkt \(t\) (in Sekunden) gehört <strong>genau ein Wert</strong>: die Wassermenge \(V\) (in dl) im Becher.</p>
 
 \[ V(t) = 3 \cdot t \]
 
-<p>Stelle den Schieberegler unten ein und beobachte, wie zu jedem \(t\) genau ein \(V\) gehört.
+<p>Stelle den Schieberegler unten ein und beobachte, wie zu jedem \(t\) <em>genau ein</em> \(V\) gehört — nie zwei, nie keines.
 Genau diese Eindeutigkeit ist das Kernstück des Funktionsbegriffs.</p>
 
 <div class="widget">
@@ -388,7 +396,7 @@ Genau diese Eindeutigkeit ist das Kernstück des Funktionsbegriffs.</p>
   <div class="slider-box">
     <label>Zeit \(t\) [s]: <span class="slider-val" id="einstieg-t-val">3</span></label>
     <input type="range" id="einstieg-t" min="0" max="10" step="0.5" value="3">
-    <div style="margin-top:8px">Wassermenge: \(V(\)<span class="slider-val" id="einstieg-t-out">3</span>\() = 3 \cdot \)<span class="slider-val" id="einstieg-t-out2">3</span>\( = \)<span class="slider-val" id="einstieg-v-out">9</span> dl</div>
+    <div style="margin-top:8px">Wassermenge: \(V(\)<span class="slider-val" id="einstieg-t-out">3</span>\() = 3 \cdot \)<span class="slider-val" id="einstieg-t-out2">3</span>\( = \)<span class="slider-val" id="einstieg-v-out">9</span> dl — <strong>genau ein</strong> Wert</div>
   </div>
     <div class="einstieg-grid">
     <canvas id="einstieg-glas" aria-label="Glas mit Füllstand"></canvas>
@@ -608,7 +616,7 @@ einmal</em> schneiden.</p>
   \(y\)-Achse parallele Gerade die Kurve <strong>höchstens in einem Punkt</strong> schneidet.</p>
 </div>
 
-<div class="widget">
+<div class="widget" id="vertikaltest" style="scroll-margin-top:66px">
   <div class="widget-header">
   <div class="widget-titelzeile">
     <h3>Vertikaltest: Funktion oder nicht?</h3>
@@ -815,13 +823,13 @@ und die Schnitte mit der \(x\)-Achse. Wir betrachten zwei Beispiele unterschiedl
     <div class="sl-row">
         <div class="sl-grp akz-blau"><label>Steigung <span class="var">\(a\)</span>: <span class="slider-val" id="lin-a-val">2</span></label>
       <input type="range" id="lin-a" min="-3" max="3" step="0.25" value="2"></div>
-        <div class="sl-grp akz-orange"><label>\(y\)-Achsenabschnitt <span class="var">\(b\)</span>: <span class="slider-val" id="lin-b-val">-4</span></label>
+        <div class="sl-grp akz-orange"><label><span style="white-space:nowrap">y-Achsenabschnitt</span> <span class="var">\(b\)</span>: <span class="slider-val" id="lin-b-val">-4</span></label>
       <input type="range" id="lin-b" min="-6" max="6" step="0.5" value="-4"></div>
       </div>
     <div style="margin-top:8px">
       \(f(x) = \)<span class="fx-live" id="lin-fx"><span class="tx-blau">2</span>·x − <span class="tx-orange">4</span></span>
       ;&nbsp;&nbsp; y-Achsenabschnitt: <span id="lin-y0"><span class="tx-orange">−4</span></span>
-      ;&nbsp;&nbsp; Nullstelle \(x_0\): <span class="slider-val" id="lin-x0">2</span>
+      ;&nbsp;&nbsp; Nullstelle \(x_0\): <span class="slider-val" id="lin-x0" style="color:var(--tinte)">2</span> <span id="lin-x0-aus" style="color:var(--tinte-2);font-weight:400"></span>
     </div>
   </div>
   <canvas id="lin-canvas"></canvas>
@@ -859,8 +867,8 @@ und die Schnitte mit der \(x\)-Achse. Wir betrachten zwei Beispiele unterschiedl
       </div>
     <div style="margin-top:8px">
       \(g(x) = \)<span class="fx-live" id="par-fx">(x − <span class="tx-blau">1</span>)² − <span class="tx-orange">2</span></span>
-      ;&nbsp;&nbsp; Scheitel: <span class="slider-val" id="par-S">S(1 | −2)</span>
-      ;&nbsp;&nbsp; <span class="slider-val" id="par-anzahl">2 Nullstellen</span> <span id="par-nst" style="color:var(--tinte-2);font-weight:400">(x ≈ −0.41 und x ≈ 2.41)</span>
+      ;&nbsp;&nbsp; Scheitel: <span class="slider-val" id="par-S" style="color:var(--tinte)">S(<span class="tx-blau">1</span> | <span class="tx-orange">−2</span>)</span>
+      ;&nbsp;&nbsp; <span class="slider-val" id="par-anzahl" style="color:var(--tinte)">2 Nullstellen</span> <span id="par-nst" style="color:var(--tinte-2);font-weight:400">(x ≈ −0.41 und x ≈ 2.41)</span>
     </div>
   </div>
   <canvas id="par-canvas"></canvas>
@@ -969,14 +977,14 @@ Einsetzen in eine der beiden Funktionen.</p>
     <div class="sl-row">
         <div class="sl-grp akz-blau"><label>Steigung <span class="var">\(m\)</span>: <span class="slider-val" id="schn-m-val">2</span></label>
       <input type="range" id="schn-m" min="-4" max="4" step="0.25" value="2"></div>
-        <div class="sl-grp"><label>y-Achsenabschnitt \(b\): <span class="slider-val" id="schn-b-val">-1</span></label>
+        <div class="sl-grp akz-orange"><label><span style="white-space:nowrap">y-Achsenabschnitt</span> <span class="var">\(b\)</span>: <span class="slider-val" id="schn-b-val">-1</span></label>
       <input type="range" id="schn-b" min="-3" max="4" step="0.25" value="-1"></div>
       </div>
     <div style="margin-top:8px">
-      \(f(x) = \)<span class="slider-val" id="schn-fx">2·x − 1</span>
-      ;&nbsp;&nbsp; Diskriminante \(D = m^2 + 4b = \)<span class="slider-val" id="schn-D">0</span>
-      ;&nbsp;&nbsp; <span class="slider-val" id="schn-anzahl">1 Schnittpunkt</span>
-      <span id="schn-pts" style="color:var(--tinte-2);font-weight:400"> &nbsp;S(1 | 1)</span>
+      \(f(x) = \)<span class="fx-live" id="schn-fx"><span class="tx-blau">2</span>·x − <span class="tx-orange">1</span></span>
+      ;&nbsp;&nbsp; Diskriminante \(D = m^2 + 4b = \)<span class="slider-val" id="schn-D" style="color:var(--tinte)">0</span>
+      ;&nbsp;&nbsp; <span class="slider-val" id="schn-anzahl" style="color:var(--tinte)">1 Schnittpunkt</span>
+      <span id="schn-pts" style="color:var(--tinte-2);font-weight:400"> &nbsp;<span style="white-space:nowrap">S(1 | 1)</span></span>
     </div>
   </div>
   <canvas id="schn-canvas"></canvas>
@@ -1454,11 +1462,17 @@ function einstiegRender() {
   ctx.beginPath(); ctx.moveTo(cx(0), cy(VMax)-6); ctx.lineTo(cx(0)-4, cy(VMax)); ctx.lineTo(cx(0)+4, cy(VMax)); ctx.fill();
   ctx.font = 'bold 13px JetBrains Mono,monospace';
   ctx.textAlign = 'right'; ctx.fillText('t [s]', cx(tMax)+8, cy(0)+18);
+  const tLinks = cx(tMax) + 8 - ctx.measureText('t [s]').width;
   ctx.textAlign = 'left'; ctx.fillText('V [dl]', cx(0)+5, cy(VMax)-2);
+  const vKasten = [cx(0)+5, cy(VMax)-2-11, cx(0)+5+ctx.measureText('V [dl]').width, cy(VMax)-2+3];
   ctx.font = '13px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
   ctx.textAlign = 'center';
-  // Die 10 entfaellt: dort steht die Achsenbeschriftung t [s].
-  for (let i = 2; i <= 8;  i += 2) beschriftung(ctx, i, cx(i), cy(0)+14, {align:'center', W, H});
+  // Die 10 entfaellt: dort steht die Achsenbeschriftung t [s]. Auf schmalem Canvas
+  // entfaellt auch jede weitere Zahl, die an «t [s]» stossen wuerde.
+  for (let i = 2; i <= 8;  i += 2) {
+    if (cx(i) + ctx.measureText(String(i)).width / 2 + 4 > tLinks) continue;
+    beschriftung(ctx, i, cx(i), cy(0)+14, {align:'center', W, H});
+  }
   ctx.textAlign = 'right';
   for (let i = 5; i <= 30; i += 5) beschriftung(ctx, i, cx(0)-5, cy(i)+4, {align:'right', W, H});
   // Gerade
@@ -1473,7 +1487,33 @@ function einstiegRender() {
   ctx.beginPath(); ctx.arc(cx(t), cy(V), 6, 0, 2*Math.PI); ctx.fill();
   ctx.fillStyle = '#1a1a1a'; ctx.font = 'bold 13px JetBrains Mono,monospace';
   ctx.textAlign = 'left';
-  ctx.fillText('('+t+' | '+V.toFixed(1)+')', cx(t)+8, cy(V)-8);
+  // Punktbeschriftung: freien Platz suchen — nicht auf Gerade, Punkt, Hilfslinien,
+  // «V [dl]» und nicht ueber den Rand. Oberhalb links der Geraden ist fast immer frei.
+  const txt = '(' + t + ' | ' + V.toFixed(1) + ')';
+  const lw = ctx.measureText(txt).width, la = 10, ld = 3, P = 3;
+  const px = cx(t), py = cy(V);
+  const frei = (l, top) => {
+    const L = l - P, T = top - P, R = l + lw + P, B = top + la + ld + P;
+    if (L < cx(0) + 2 || R > W || T < 0 || B > cy(0) - 1) return false;   // rechts der y-Achse, ueber der t-Achse
+    if (!(R < vKasten[0] || L > vKasten[2] || B < vKasten[1] || T > vKasten[3])) return false;
+    for (let j = 0; j <= 400; j++) {
+      const gx = cx(j / 40), gy = cy(3 * j / 40);
+      if (gx > L && gx < R && gy > T && gy < B) return false;
+    }
+    if (L < px + 7 && R > px - 7 && T < py + 7 && B > py - 7) return false;
+    if (L < px && R > px && B > py) return false;          // senkrechte Hilfslinie
+    if (T < py && B > py && L < px) return false;          // waagrechte Hilfslinie
+    return true;
+  };
+  let pos = null;
+  for (let d = 0; d <= 80 && !pos; d += 4) {
+    pos = [[px - 9 - lw, py - 8 - la - ld - d],
+           [px + 8, py + 8 + d],
+           [Math.max(cx(0) + 6, px - 9 - lw), py - 8 - la - ld - d],
+           [px - 5 - lw, py + 8 + d]].find(k => frei(k[0], k[1])) || null;
+  }
+  if (!pos) pos = [px - 9 - lw, py - 8 - la - ld];
+  beschriftung(ctx, txt, pos[0], pos[1] + la, {align:'left', W, H});
 }
 document.getElementById('einstieg-t').addEventListener('input', () => { einstiegRender(); glasRender(); });
 
@@ -1714,11 +1754,20 @@ document.querySelectorAll('#fq .fq-karte').forEach(karte => {
         btn.classList.add('fehler');
         const erkl = {
           A: 'Eine schiefe Gerade ist immer Funktionsgraph.',
-          B: 'Jede senkrechte Gerade trifft die Parabel hoechstens 1x.',
+          B: 'Jede senkrechte Gerade trifft die Parabel h\u00F6chstens einmal.',
           C: 'Bei einem Kreis hat fast jedes x zwei y-Werte.',
-          D: 'Liegende Parabel: bei x=0 zwei y-Werte (\u00B1\u221A2).'
+          D: 'Liegende Parabel: bei x = 0 zwei y-Werte (\u00B12).'
         }[kind];
-        fb.textContent = '\u2717 Nochmal \u00FCberlegen \u2014 ' + erkl;
+        fb.textContent = '\u2717 Nochmal \u00FCberlegen \u2014 ' + erkl + ' ';
+        // Verweis aufs Vertikaltest-Widget: springt hin und w\u00E4hlt dort dieselbe Kurvenart
+        const link = document.createElement('a');
+        link.href = '#vertikaltest';
+        link.textContent = 'Mit der Testgeraden pr\u00FCfen \u2191';
+        link.addEventListener('click', () => {
+          const chip = document.querySelector('#vt-chips .vt-chip[data-vt="' + 'ABCD'.indexOf(kind) + '"]');
+          if (chip) chip.click();
+        });
+        fb.appendChild(link);
         fb.style.color = 'var(--rot, #a02828)';
       }
     });
@@ -1987,8 +2036,8 @@ const PLOTS = {
     xMin: -1, xMax: 6, yMin: -8, yMax: 4,
     curves: [{ fn: x => 2*x - 6, color: '#1a4f8a', label: 'f(x) = 2\u00B7x \u2212 6', labelX: 5 }],
     points: [
-      { x: 0, y: -6, label: '(0 | \u22126)', color: '#2d6a3e', labelPos: 'l' },
-      { x: 3, y: 0,  label: '(3 | 0)',       color: '#b85a00', labelPos: 'b' }
+      { x: 0, y: -6, label: '(0 | \u22126)', color: '#b85c00', labelPos: 'l' },
+      { x: 3, y: 0,  label: '(3 | 0)',       color: '#5b2d8e', labelPos: 'b' }
     ]
   },
   'ach2-canvas': {
@@ -1996,9 +2045,9 @@ const PLOTS = {
     xMin: -4, xMax: 4, yMin: -6, yMax: 6,
     curves: [{ fn: x => x*x - 4, color: '#1a4f8a', label: 'g(x) = x\u00B2 \u2212 4', labelX: 3 }],
     points: [
-      { x: 0,  y: -4, label: '(0 | \u22124)', color: '#2d6a3e', labelPos: 'l' },
-      { x: -2, y: 0,  label: '(\u22122 | 0)', color: '#b85a00', labelPos: 'b' },
-      { x: 2,  y: 0,  label: '(2 | 0)',       color: '#b85a00', labelPos: 'b' }
+      { x: 0,  y: -4, label: '(0 | \u22124)', color: '#b85c00', labelPos: 'l' },
+      { x: -2, y: 0,  label: '(\u22122 | 0)', color: '#5b2d8e', labelPos: 'b' },
+      { x: 2,  y: 0,  label: '(2 | 0)',       color: '#5b2d8e', labelPos: 'b' }
     ]
   },
   'schn1-canvas': {
@@ -2006,7 +2055,7 @@ const PLOTS = {
     xMin: -2, xMax: 6, yMin: -5, yMax: 7,
     curves: [
       { fn: x => 2*x - 4, color: '#1a4f8a', label: 'f(x) = 2\u00B7x \u2212 4', labelX: 5.5 },
-      { fn: x => -x + 5,  color: '#b85a00', label: 'g(x) = \u2212x + 5',     labelX: -1.5 }
+      { fn: x => -x + 5,  color: '#5b2d8e', label: 'g(x) = \u2212x + 5',     labelX: -1.5 }
     ],
     points: [{ x: 3, y: 2, label: 'S(3 | 2)', color: '#a02828', labelPos: 'r' }]
   },
@@ -2015,7 +2064,7 @@ const PLOTS = {
     xMin: -3, xMax: 4, yMin: -3, yMax: 6,
     curves: [
       { fn: x => x + 1,   color: '#1a4f8a', label: 'f(x) = x + 1',    labelX: 3.5 },
-      { fn: x => x*x - 1, color: '#b85a00', label: 'g(x) = x\u00B2 \u2212 1', labelX: -2 }
+      { fn: x => x*x - 1, color: '#5b2d8e', label: 'g(x) = x\u00B2 \u2212 1', labelX: -2 }
     ],
     points: [
       { x: 2,  y: 3, label: 'S\u2081(2 | 3)',   color: '#a02828', labelPos: 'r' },
@@ -2087,17 +2136,21 @@ function linRender() {
   } else {
     x0el.textContent = fmtNum(-b / a);
   }
+  // Nullstelle ausserhalb des Fensters [−7, 7]: im Bild nicht markiert, darum Hinweis
+  const x0aus = Math.abs(a) > 1e-9 && Math.abs(-b / a) > 7;
+  document.getElementById('lin-x0-aus').textContent = x0aus ? '(ausserhalb des Bildes)' : '';
   // Plot-Konfig
   const cfg = {
     canvasId: 'lin-canvas',
     xMin: -7, xMax: 7, yMin: -7, yMax: 7,
     curves: [{ fn: x => a * x + b, color: '#1a4f8a', label: 'f(x) = ' + fmtLin(a, b), labelX: 5 }],
-    points: [{ x: 0, y: b, label: 'y\u2080 = ' + fmtNum(b), color: '#2d6a3e', labelPos: 'l' }]
+    // Farbkopplung: y₀ = b in der Farbe des b-Reglers; x₀ violett (kein Regler-Akzent)
+    points: [{ x: 0, y: b, label: 'y\u2080 = ' + fmtNum(b), color: '#b85c00', labelPos: 'l' }]
   };
   if (Math.abs(a) > 1e-9) {
     const x0 = -b / a;
     if (x0 >= cfg.xMin && x0 <= cfg.xMax) {
-      cfg.points.push({ x: x0, y: 0, label: 'x\u2080 = ' + fmtNum(x0), color: '#b85a00', labelPos: 'b' });
+      cfg.points.push({ x: x0, y: 0, label: 'x\u2080 = ' + fmtNum(x0), color: '#5b2d8e', labelPos: 'b' });
     }
   }
   plotChart(cfg);
@@ -2110,7 +2163,8 @@ function parRender() {
   document.getElementById('par-u-val').textContent = fmtNum(u);
   document.getElementById('par-v-val').textContent = fmtNum(v);
   document.getElementById('par-fx').innerHTML = fmtScheitel(u, v, true);
-  document.getElementById('par-S').textContent = 'S(' + fmtNum(u) + ' | ' + fmtNum(v) + ')';
+  // Nur die Reglerwerte farbig (u blau, v orange), Klammer und Strich neutral (STYLEGUIDE §10.4)
+  document.getElementById('par-S').innerHTML = 'S(<span class="tx-blau">' + fmtNum(u) + '</span> | <span class="tx-orange">' + fmtNum(v) + '</span>)';
   // Anzahl Nullstellen: (x-u)^2 = -v
   const anzEl = document.getElementById('par-anzahl');
   const nstEl = document.getElementById('par-nst');
@@ -2137,7 +2191,8 @@ function parRender() {
     points: [{ x: u, y: v, label: 'S', color: '#a02828', labelPos: (v <= 0 ? 'b' : 'r') }]
   };
   nstPoints.forEach(p => {
-    cfg.points.push({ x: p.x, y: p.y, label: 'x = ' + fmtNum(p.x), color: '#b85a00', labelPos: 'b' });
+    // Violett statt orange: orange gehoert dem v-Regler
+    cfg.points.push({ x: p.x, y: p.y, label: 'x = ' + fmtNum(p.x), color: '#5b2d8e', labelPos: 'b' });
   });
   plotChart(cfg);
 }
@@ -2148,7 +2203,7 @@ function schnRender() {
   const b = parseFloat(document.getElementById('schn-b').value);
   document.getElementById('schn-m-val').textContent = fmtNum(m);
   document.getElementById('schn-b-val').textContent = fmtNum(b);
-  document.getElementById('schn-fx').textContent = fmtLin(m, b);
+  document.getElementById('schn-fx').innerHTML = fmtLinHTML(m, b);
   // Schnittbedingung: m·x + b = x^2 -> x^2 - m·x - b = 0; D = m^2 + 4b
   const D = m * m + 4 * b;
   document.getElementById('schn-D').textContent = fmtNum(D);
@@ -2161,21 +2216,23 @@ function schnRender() {
   } else if (Math.abs(D) <= 1e-9) {
     const x = m / 2, y = x * x;
     anzEl.textContent = '1 Schnittpunkt';
-    ptsEl.textContent = ' \u00B7 S(' + fmtNum(x) + ' | ' + fmtNum(y) + ')  (Tangente)';
+    ptsEl.innerHTML = ' \u00B7 <span style="white-space:nowrap">S(' + fmtNum(x) + ' | ' + fmtNum(y) + ')</span>  (Tangente)';
     schnPoints.push({ x, y });
   } else {
     const sq = Math.sqrt(D);
     const x1 = (m - sq) / 2, x2 = (m + sq) / 2;
     const y1 = x1 * x1, y2 = x2 * x2;
     anzEl.textContent = '2 Schnittpunkte';
-    ptsEl.textContent = ' \u00B7 S\u2081(' + fmtNum(x1) + ' | ' + fmtNum(y1) + '), S\u2082(' + fmtNum(x2) + ' | ' + fmtNum(y2) + ')';
+    // Punkte nicht umbrechen: «S₂(1 |» / «1)» ist unlesbar
+    ptsEl.innerHTML = ' \u00B7 <span style="white-space:nowrap">S\u2081(' + fmtNum(x1) + ' | ' + fmtNum(y1) + '),</span> <span style="white-space:nowrap">S\u2082(' + fmtNum(x2) + ' | ' + fmtNum(y2) + ')</span>';
     schnPoints.push({ x: x1, y: y1 }, { x: x2, y: y2 });
   }
   const cfg = {
     canvasId: 'schn-canvas',
     xMin: -4, xMax: 4, yMin: -4, yMax: 12,
     curves: [
-      { fn: x => x * x, color: '#b85a00', label: 'g(x) = x\u00B2', labelX: -2.5 },
+      // Violett: kein Regler-Akzent — orange steht in diesem Widget nur fuer b
+      { fn: x => x * x, color: '#5b2d8e', label: 'g(x) = x\u00B2', labelX: -2.5 },
       { fn: x => m * x + b, color: '#1a4f8a', label: 'f(x) = ' + fmtLin(m, b), labelX: 3 }
     ],
     points: []
@@ -2328,7 +2385,7 @@ function vtRender() {
   const wort = treffer.length === 0 ? 'kein Schnittpunkt'
              : (treffer.length === 1 ? 'genau ein Schnittpunkt' : treffer.length + ' Schnittpunkte');
   document.getElementById('vt-eq').innerHTML =
-    `<strong>${K.term}</strong>;&nbsp;&nbsp; Testgerade und Kurve: <span class="slider-val">${wort}</span>` +
+    `<strong>${K.term}</strong>;&nbsp;&nbsp; Testgerade und Kurve: <span class="slider-val" style="color:var(--tinte)">${wort}</span>` +
     (treffer.length ? ` (y = ${treffer.map(v => v.toFixed(2).replace('-', '−')).join(', ')})` : '');
 
   const fz = document.getElementById('vt-fazit');

@@ -258,7 +258,7 @@ MathJax = {
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Stelle den Regler zuerst auf \(0\) kg: Was kostet es trotzdem? Beobachte dann, um wie viel \(K(x)\) bei jedem Schritt (+2 kg) wächst — in der Tabelle <em>und</em> am Punkt im Graphen.</div>
+          <div class="ah-text">Stelle den Regler zuerst auf \(0\) kg: Was kostet es trotzdem? Beobachte dann, um wie viel \(K(x)\) bei jedem Schritt (+1 kg) wächst — in der Tabelle <em>und</em> am Punkt im Graphen.</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
@@ -273,7 +273,7 @@ MathJax = {
   <div class="widget-body">
     <div class="sl-row akz-blau">
       <label>Menge <span class="var">\(x\)</span> [kg]</label>
-      <input type="range" id="ks-x" min="0" max="14" step="2" value="4">
+      <input type="range" id="ks-x" min="0" max="14" step="1" value="4">
       <span class="sl-val"><span id="ks-xv">4</span> kg</span>
     </div>
     <div class="formel-live">
@@ -916,7 +916,10 @@ buildNav({
 const zahl = v => String(v).replace(/-/g, '−');
 
 /* ══ EINSTIEG (Kostenfunktion) ══ */
-const KS={m:2,b:5,xs:[0,2,4,6,8,10,12,14]};
+// Regler in 1-kg-Schritten: jeder Schritt hebt K um genau m = 2 CHF (direkte m-Ablesung).
+// Die Tabelle zeigt acht aufeinanderfolgende kg — 0 bis 7 oder 7 bis 14 —, damit ihre
+// Höhe beim Ziehen gleich bleibt und die aktive Zeile immer darin steht.
+const KS={m:2,b:5,xs:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]};
 function updateKS(){
   const x=parseInt(document.getElementById('ks-x').value);
   document.getElementById('ks-xv').textContent=x;
@@ -925,7 +928,7 @@ function updateKS(){
   document.getElementById('ks-eq').innerHTML=`K(${xB}) = 2·${xB} + 5 = ${y.toFixed(2)} CHF`;
   // Table
   const tbody=document.querySelector('#ks-table tbody');
-  tbody.innerHTML=KS.xs.map(xi=>{
+  tbody.innerHTML=KS.xs.filter(xi=>x<=7 ? xi<=7 : xi>=7).map(xi=>{
     const yi=KS.m*xi+KS.b;
     const act=xi===x;
     return `<tr class="${act?'aktiv-zeile':''}"><td class="td-x">${xi}</td><td class="td-calc">${KS.m}·${xi}+${KS.b}</td><td class="td-y">${yi.toFixed(2)}</td></tr>`;
@@ -938,8 +941,15 @@ function updateKS(){
   // Eigene Zahlenteilung (alle 2 kg bzw. 5 CHF). Nullpunkt liegt in der Ecke,
   // darum innen an der Achse und freigestellt — sonst fallen die Zahlen heraus.
   // Die letzte x-Zahl (14) entfaellt: dort steht die Achsenbeschriftung.
+  // Eine Zahl, die an die Achsenbeschriftung stossen würde, entfällt ebenfalls
+  // (schmales Canvas: «12» lief sonst in «x [kg]»).
+  ctx.font='bold 13px monospace';
+  const achseLinks=W-2-ctx.measureText('x [kg]').width-6;
   ctx.font='13px monospace'; ctx.fillStyle='#9ca3af';
-  for(let gx=2;gx<=12;gx+=2) beschriftung(ctx,gx,cx(gx),cy(0)-6,{align:'center', W, H});
+  for(let gx=2;gx<=12;gx+=2){
+    if(cx(gx)+ctx.measureText(String(gx)).width/2>achseLinks) continue;
+    beschriftung(ctx,gx,cx(gx),cy(0)-6,{align:'center', W, H});
+  }
   for(let gy=5;gy<=30;gy+=5) beschriftung(ctx,gy,cx(0)+5,cy(gy)+4,{align:'left', W, H});
   // Achsenbeschriftung zuletzt: ihre Freistellung liegt damit ueber allem.
   ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
@@ -1001,23 +1011,107 @@ function updateDR(){
   const {ctx,W,H}=initCanvas('dr-canvas',220,true);
   const rng=7;
   const {cx,cy}=drawGrid(ctx,W,H,-rng,rng,-rng,rng);
-  // Funktionsterm ins Bild — bisher stand dort nur der bewegliche Punkt.
-  ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px JetBrains Mono,monospace';
-  // zahl(): fmtAffine gibt bei m = 0 die Konstante mit Bindestrich aus.
-  beschriftung(ctx, `f(x) = ${zahl(fmtAffine(m,b))}`, 10, 19, {align:'left', bg:'#fff', W, H});
   if(m!==0||b!==0) drawLine(ctx,cx,cy,m,b,-rng,rng,'#1a4f8a',2.5);
   else { ctx.strokeStyle='#1a4f8a'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(0,cy(b)); ctx.lineTo(W,cy(b)); ctx.stroke(); }
-  // b dot
-  if(Math.abs(b)<=rng){ drawDot(ctx,cx,cy,0,b,'#9b1c1c',5); }
+  // Rechtecke, denen Funktionsterm und «b»-Beschriftung ausweichen (Kosten je Pixel Überdeckung).
+  // rahmen(): Feld wie beschriftung() es belegt, ebenso ins Canvas geklemmt.
+  const hindernisse=[];
+  const rahmen=(txt,x0,y0,al)=>{
+    const w=ctx.measureText(String(txt)).width;
+    let l = al==='right' ? x0-w : x0;
+    l=Math.min(Math.max(l,2),W-w-2); y0=Math.min(Math.max(y0,14),H-5);
+    return {x1:l-2, y1:y0-12, x2:l+w+2, y2:y0+5};
+  };
+  const flaeche=(p,q)=>Math.max(0,Math.min(p.x2,q.x2)-Math.max(p.x1,q.x1))*Math.max(0,Math.min(p.y2,q.y2)-Math.max(p.y1,q.y1));
+  const kosten=r=>{
+    let k=hindernisse.reduce((z,[q,w])=>z+w*flaeche(r,q),0);
+    const yl=X=>cy(m*((X-cx(0))/(W/(2*rng)))+b);
+    const ya=yl(r.x1), yb=yl(r.x2);
+    if(Math.max(ya,yb)+2>r.y1 && Math.min(ya,yb)-2<r.y2) k+=1e4;   // Gerade samt Linienbreite
+    return k;
+  };
+  const waehle=(txt,lagen)=>{
+    let wahl=lagen[0], best=Infinity;
+    for(const lage of lagen){
+      const k=kosten(rahmen(txt,lage[0],lage[1],lage[2]));
+      if(k<best){ best=k; wahl=lage; }
+      if(k===0) break;
+    }
+    return wahl;
+  };
+  ctx.font='bold 13px monospace';
+  hindernisse.push([rahmen('x',W-14,cy(0)-7,'left'),3]);   // Achsennamen aus drawGrid
+  {
+    const r=rahmen('y',cx(0)+13,14,'left'); r.x1-=5; r.x2-=5;   // «y» ist dort zentriert
+    hindernisse.push([r,3]);
+  }
+  // x-Punkt grün wie der x-Regler; Beschriftung rechts oberhalb, am rechten Rand
+  // nach links, am oberen Rand unter den Punkt gekippt. Nur x ist Reglerwert und
+  // grün, y = f(x) ist abgeleitet und bleibt neutral.
+  const xSicht=Math.abs(x)<=rng&&Math.abs(y)<=rng;
+  const xTxt=`(${zahl(x)}|${zahl(y)})`;
+  let xLage=null;
+  if(xSicht){
+    const w=ctx.measureText(xTxt).width;
+    const links = cx(x)+7+w > W-2;
+    const unten = cy(y)-7-12 < 0;
+    xLage=[cx(x)+(links?-9:7), cy(y)+(unten?20:-7), links?'right':'left'];
+    hindernisse.push([rahmen(xTxt,...xLage),3]);
+    hindernisse.push([{x1:cx(x)-7,y1:cy(y)-7,x2:cx(x)+7,y2:cy(y)+7},3]);
+  }
+  if(Math.abs(b)<=rng) hindernisse.push([{x1:cx(0)-5,y1:cy(b)-5,x2:cx(0)+5,y2:cy(b)+5},3]);
+  // Funktionsterm ins Bild: in die erste Ecke, die Gerade und Punkte frei lässt
+  // (bei steilen Geraden und schmalem Canvas liegt oben links sonst die Gerade).
+  ctx.font='bold 13px JetBrains Mono,monospace';
+  {
+    // zahl(): fmtAffine gibt bei m = 0 die Konstante mit Bindestrich aus.
+    const term=`f(x) = ${zahl(fmtAffine(m,b))}`;
+    const lage=waehle(term,[[10,19,'left'],[W-10,19,'right'],[10,H-8,'left'],[W-10,H-8,'right'],
+                            [10,36,'left'],[W-10,36,'right'],[10,H-25,'left'],[W-10,H-25,'right']]);
+    ctx.fillStyle='#1a4f8a';
+    beschriftung(ctx, term, lage[0], lage[1], {align:lage[2], bg:'#fff', W, H});
+    hindernisse.push([rahmen(term,...lage),3]);
+  }
   // x dot
-  if(Math.abs(x)<=rng&&Math.abs(y)<=rng){
-    drawDot(ctx,cx,cy,x,y,'#1a4f8a',7);
-    ctx.strokeStyle='#1a4f8a44'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  if(xSicht){
+    ctx.strokeStyle='#1f6b3a55'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(x),cy(0)); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(cx(x),cy(y)); ctx.lineTo(cx(0),cy(y)); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle='#1a4f8a'; ctx.font='bold 13px monospace'; ctx.textAlign='left';
-    ctx.fillText(`(${zahl(x)}|${zahl(y)})`,cx(x)+7,cy(y)-7);
+    drawDot(ctx,cx,cy,x,y,'#1f6b3a',7);
+    // Mehrfarbig: erst Freistellung und Klemmung für den ganzen Text (Schrift
+    // durchsichtig), dann die Teile nebeneinander in ihren Farben.
+    ctx.font='bold 13px monospace';
+    ctx.fillStyle='rgba(0,0,0,0)';
+    const pos=beschriftung(ctx, xTxt, xLage[0], xLage[1], {align:xLage[2], bg:'#fff', W, H});
+    let lx = xLage[2]==='right' ? pos.x-ctx.measureText(xTxt).width : pos.x;
+    [['(','#1c1a17'],[zahl(x),'#1f6b3a'],[`|${zahl(y)})`,'#1c1a17']].forEach(([teil,f])=>{
+      ctx.fillStyle=f; beschriftung(ctx, teil, lx, pos.y, {align:'left', frei:false});
+      lx+=ctx.measureText(teil).width;
+    });
+  }
+  // b-Punkt orange wie der b-Regler, nach dem x-Punkt gezeichnet: bei x = 0 liegen
+  // beide auf (0 | b), der orange Punkt bleibt dann im grünen Ring sichtbar.
+  if(Math.abs(b)<=rng){
+    drawDot(ctx,cx,cy,0,b,'#b85c00',5);
+    // Achsenzahlen links der y-Achse (wie drawGrid: jede sy-te Einheit)
+    ctx.font='13px JetBrains Mono,monospace';
+    const proEinheit=H/(2*rng); let sy=1;
+    if(proEinheit<16){ sy=0; for(let z=1;z<=1e6&&!sy;z*=10) for(const f of [1,2,5]) if(!sy&&z*f*proEinheit>=16) sy=z*f; }
+    sy=Math.max(2,sy);
+    for(let gy=Math.ceil(-rng/sy)*sy; gy<rng; gy+=sy){
+      if(gy===0||gy<=-rng) continue;
+      hindernisse.push([rahmen(String(gy).replace('-','−'),cx(0)-5,cy(gy)+4,'right'),1]);
+    }
+    // Lage für «b»: erste ohne Überdeckung, sonst die günstigste. Die Gerade
+    // (Linienbreite eingerechnet) zählt stark — das Label soll nicht auf ihr sitzen.
+    ctx.font='bold 13px monospace';
+    const px=cx(0), py=cy(b);
+    const wahl=waehle('b',[[px+9,py-8,'left'],[px+9,py+18,'left'],[px-9,py-8,'right'],[px-9,py+18,'right'],
+                 [px+10,py+5,'left'],[px-10,py+5,'right'],[px+9,py+32,'left'],[px-9,py+32,'right'],
+                 [px+9,py-22,'left'],[px-9,py-22,'right']]);
+    ctx.fillStyle='#b85c00';
+    beschriftung(ctx,'b',wahl[0],wahl[1],{align:wahl[2],W,H});
   }
 }
 ['dr-m','dr-b','dr-x'].forEach(id=>document.getElementById(id).addEventListener('input',updateDR));
@@ -1108,8 +1202,12 @@ function checkA1(){
   const p=parseL(document.getElementById('a1-inp').value);
   const r=document.getElementById('a1-cr'); r.style.display='block';
   if(!p){r.className='cr err';r.textContent='Format nicht erkannt. Beispiel: 2·x-1';return;}
-  if(Math.abs(p.m-g.m)<0.01&&Math.abs(p.b-g.b)<0.01){r.className='cr ok';r.textContent=`✓ Richtig! f(x) = ${fmtAffine(g.m, g.b)}`;}
-  else{r.className='cr err';r.textContent='✗ Nicht ganz. Lies m und b nochmals ab.';}
+  // Rückmeldung getrennt nach m und b: sagt, welcher Teil stimmt, ohne die Lösung zu verraten
+  const mOk=Math.abs(p.m-g.m)<0.01, bOk=Math.abs(p.b-g.b)<0.01;
+  if(mOk&&bOk){r.className='cr ok';r.textContent=`✓ Richtig! f(x) = ${fmtAffine(g.m, g.b)}`;}
+  else if(mOk){r.className='cr err';r.textContent='✗ m stimmt, b nicht. Wo schneidet die Gerade die y-Achse?';}
+  else if(bOk){r.className='cr err';r.textContent='✗ b stimmt, m nicht. Gehe vom Punkt (0|b) eine Einheit nach rechts: Um wie viel steigt oder fällt die Gerade?';}
+  else{r.className='cr err';r.textContent='✗ m und b stimmen beide nicht. Lies zuerst b auf der y-Achse ab, dann m über ein Steigungsdreieck.';}
 }
 function showA1Sol(){
   const g=a1G[a1Act];

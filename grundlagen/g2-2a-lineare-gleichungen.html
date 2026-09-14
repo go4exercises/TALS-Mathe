@@ -190,8 +190,13 @@ MathJax = {
 .umform-stack { background:var(--papier-2); border:1px solid var(--linie); border-radius:9px; padding:14px 18px; margin:12px 0; min-height:170px; }
 .umform-zeile { display:flex; align-items:center; gap:14px; padding:5px 0; opacity:0; transform:translateY(-6px); transition:opacity 0.35s, transform 0.35s; }
 .umform-zeile.sichtbar { opacity:1; transform:translateY(0); }
-.umform-zeile .uf-glg { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--tinte); flex:1; }
-.umform-op { font-family:var(--mono); font-size:0.78rem; color:var(--blau); background:var(--blau-hell); padding:3px 9px; border-radius:5px; border:1px solid var(--blau-rand); }
+.umform-zeile .uf-glg { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--tinte); min-width:17ch; white-space:nowrap; }
+.umform-op { font-family:var(--mono); font-size:0.78rem; color:var(--blau); background:var(--blau-hell); padding:3px 9px; border-radius:5px; border:1px solid var(--blau-rand); white-space:nowrap; }
+@media (max-width:520px) {
+  .umform-stack { padding:12px; }
+  .umform-zeile { gap:8px; flex-wrap:wrap; }
+  .umform-zeile .uf-glg { font-size:0.95rem; }
+}
 
 .umform-btn { font-family:var(--mono); font-size:0.75rem; padding:6px 14px; border-radius:6px; border:1.5px solid var(--linie); background:var(--weiss); cursor:pointer; color:var(--tinte); margin-right:7px; }
 .umform-btn:hover { border-color:var(--blau-rand); background:var(--blau-hell); color:var(--blau); }
@@ -400,7 +405,7 @@ dann alle Konstanten auf die andere, schliesslich durch den Koeffizienten teilen
 <div class="widget">
   <div class="widget-header">
     <h3>Schrittweise: \( 5 \cdot x - 7 \;=\; 2 \cdot x + 8 \) <a class="quer" href="g2-1-grundlagen.html#aequivalenz">↩ 2.1</a></h3>
-    <p>Klick „Nächster Schritt" — jede Zeile zeigt den Umformungsschritt mit der angewandten Operation rechts.</p>
+    <p>Klick „Nächster Schritt" — wie im Heft steht rechts neben einer Zeile die Operation, die man auf <em>diese</em> Gleichung anwendet; die Zeile darunter ist das Ergebnis.</p>
   </div>
   <div class="widget-body">
     <div class="umform-stack" id="uf-lin"></div>
@@ -1288,11 +1293,13 @@ function drawThree() {
 /* ════════════════════════════════════════════════════════════════
    5 · UMFORMUNGS-STACK
    ════════════════════════════════════════════════════════════════ */
+// Heft-Konvention: «| op» steht an der Zeile, auf die die Operation angewendet
+// wird; die nächste Zeile ist ihr Ergebnis. Die letzte Zeile trägt keine.
 const UF_STEPS = [
-  { glg: '5·x − 7 = 2·x + 8',  op: 'gegeben' },
-  { glg: '3·x − 7 = 8',         op: '− 2·x' },
-  { glg: '3·x = 15',             op: '+ 7' },
-  { glg: 'x = 5',                op: ': 3' }
+  { glg: '5·x − 7 = 2·x + 8',  op: '| −2·x' },
+  { glg: '3·x − 7 = 8',         op: '| +7' },
+  { glg: '3·x = 15',             op: '| :3' },
+  { glg: 'x = 5',                op: '' }
 ];
 let ufIdx = 0;
 
@@ -1301,7 +1308,7 @@ function renderUf() {
   wrap.innerHTML = UF_STEPS.map((s, i) =>
     `<div class="umform-zeile ${i <= ufIdx ? 'sichtbar' : ''}">
        <span class="uf-glg">${s.glg}</span>
-       <span class="umform-op">${s.op}</span>
+       ${s.op ? `<span class="umform-op"${i < ufIdx ? '' : ' style="visibility:hidden"'}>${s.op}</span>` : ''}
      </div>`
   ).join('');
   document.getElementById('uf-zurueck').disabled = ufIdx === 0;

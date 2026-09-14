@@ -332,7 +332,7 @@ MathJax = {
 <div class="widget">
   <div class="widget-header">
     <h3>Gleichung am Einheitskreis <a class="quer" href="g5-4-einheitskreis.html">↩ 5.4</a></h3>
-    <p>Schiebe den Wert \(c\) und beobachte, welche Punkte am Einheitskreis die Gleichung erfüllen.</p>
+    <p>Schiebe den Wert \(c\) und beobachte, welche Punkte am Einheitskreis die Gleichung erfüllen. Bei \(\tan\) schneidet die Gerade die Tangente \(x = 1\) im Punkt \(S = (1, c)\) — wie in 5.4 ist die \(y\)-Koordinate von \(S\) der Tangenswert.</p>
   </div>
   <div class="widget-body">
     <div class="tabs-row">
@@ -351,18 +351,17 @@ MathJax = {
       <line x1="240" y1="390" x2="240" y2="20" stroke="#1a1a1a" stroke-width="1.2"/>
       <text x="445" y="225" font-family="serif" font-style="italic" font-size="14">x</text>
       <text x="250" y="20" font-family="serif" font-style="italic" font-size="14">y</text>
-      <!-- Achsmarkierungen -->
+      <!-- Achsmarkierungen (die Zahlen dazu stehen weiter unten, obenauf) -->
       <line x1="380" y1="206" x2="380" y2="214" stroke="#1a1a1a"/>
-      <text x="375" y="230" font-family="monospace" font-size="11">1</text>
       <line x1="100" y1="206" x2="100" y2="214" stroke="#1a1a1a"/>
-      <text x="93" y="230" font-family="monospace" font-size="11">−1</text>
       <line x1="236" y1="70" x2="244" y2="70" stroke="#1a1a1a"/>
-      <text x="226" y="74" font-family="monospace" font-size="11" text-anchor="end">1</text>
       <line x1="236" y1="350" x2="244" y2="350" stroke="#1a1a1a"/>
-      <text x="226" y="354" font-family="monospace" font-size="11" text-anchor="end">−1</text>
       <!-- Einheitskreis -->
       <circle cx="240" cy="210" r="140" fill="none" stroke="#1a4f8a" stroke-width="1.5"/>
       <circle cx="240" cy="210" r="3" fill="#1a1a1a"/>
+      <!-- Tangente x = 1 mit Schnittpunkt S (nur im tan-Modus, Rückgriff auf 5.4) -->
+      <line id="gl-tang" x1="380" y1="22" x2="380" y2="392" stroke="#5a5a5a" stroke-width="1.3" opacity="0"/>
+      <text id="gl-tang-lbl" x="386" y="388" fill="#5a5a5a" font-family="monospace" font-size="11" opacity="0">x = 1</text>
       <!-- Niveaulinie (horizontal für sin, vertikal für cos, durch Ursprung für tan) -->
       <line id="gl-niv" x1="0" y1="0" x2="0" y2="0" stroke="#c8412c" stroke-width="2" stroke-dasharray="6 4"/>
       <!-- Lösungs-Strahlen (Radius zum Punkt) -->
@@ -373,6 +372,13 @@ MathJax = {
       <text id="gl-P1-lbl" x="0" y="0" fill="#2d9d5e" font-family="monospace" font-size="11" font-weight="700">P₁</text>
       <circle id="gl-P2" cx="0" cy="0" r="6" fill="#2d9d5e"/>
       <text id="gl-P2-lbl" x="0" y="0" fill="#2d9d5e" font-family="monospace" font-size="11" font-weight="700">P₂</text>
+      <!-- Achsenzahlen obenauf (Halo über Niveaulinie und Radien), in den Lücken zwischen Kreis und Achsen -->
+      <text id="gl-tick1" x="366" y="228" font-family="monospace" font-size="11" text-anchor="end" stroke="#fff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">1</text>
+      <text id="gl-tickm1" x="88" y="228" font-family="monospace" font-size="11" text-anchor="end" stroke="#fff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">−1</text>
+      <text id="gl-ticky1" x="234" y="92" font-family="monospace" font-size="11" text-anchor="end" stroke="#fff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">1</text>
+      <text id="gl-tickym1" x="234" y="372" font-family="monospace" font-size="11" text-anchor="end" stroke="#fff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">−1</text>
+      <circle id="gl-S" cx="380" cy="210" r="4.5" fill="#1a1a1a" opacity="0"/>
+      <text id="gl-S-lbl" x="0" y="0" fill="#1a1a1a" font-family="monospace" font-size="11" font-weight="700" stroke="#fff" stroke-width="3" paint-order="stroke" opacity="0">S</text>
     </svg>
     <div class="lsg-live">
       <div class="ll-label" id="gl-lbl">Hauptlösungen im Bereich 0° ≤ φ &lt; 360°</div>
@@ -549,7 +555,7 @@ MathJax = {
 <div class="widget">
   <div class="widget-header">
     <h3>Gekoppelt: Einheitskreis ↔ Kurve</h3>
-    <p>Verschiebe \(c\) und beobachte beide Lösungspunkte gleichzeitig links im Kreis und rechts auf der Kurve.</p>
+    <p>Verschiebe \(c\) und beobachte beide Lösungspunkte gleichzeitig links im Kreis und rechts auf der Kurve. Bei \(\sin\) führt eine gestrichelte Linie waagrecht vom Kreis zur Kurve, weil \(\sin\varphi\) in beiden Bildern als Höhe erscheint; bei \(\cos\) fehlt sie, denn \(\cos\varphi\) ist im Kreis die waagrecht gemessene \(x\)-Koordinate, auf der Kurve aber die Höhe — gleiche Werte liegen darum nicht auf gleicher Höhe.</p>
   </div>
   <div class="widget-body">
     <div class="widget-titelzeile" style="margin-bottom:8px">
@@ -958,6 +964,12 @@ buildNav({
   next:null
 });
 
+/* Zahl für die Anzeige: d Nachkommastellen, Unicode-Minus (U+2212), nie «−0.00». */
+function zahlM(v, d) {
+  const s = (+v).toFixed(d);
+  return /^-0\.?0*$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
+
 /* ══════════════════════════════════════════════════════════
    WIDGET 1: Gleichung am Einheitskreis
    ══════════════════════════════════════════════════════════ */
@@ -975,15 +987,70 @@ buildNav({
   const lbl = document.getElementById('gl-lbl');
   const valOut = document.getElementById('gl-val');
   const allgOut = document.getElementById('gl-allg');
+  const tang = document.getElementById('gl-tang');
+  const tangLbl = document.getElementById('gl-tang-lbl');
+  const S = document.getElementById('gl-S');
+  const Slbl = document.getElementById('gl-S-lbl');
 
   const cx = 240, cy = 210, r = 140;
   let typ = 'sin';
 
-  function fmt(d){ return (Math.round(d*10)/10).toFixed(1) + '°'; }
+  function fmt(d){ return zahlM(Math.round(d*10)/10, 1) + '°'; }
+
+  // Tangente x = 1 und Schnittpunkt S = (1, c) — nur im tan-Modus (wie in 5.4:
+  // die y-Koordinate von S ist tan φ). Liegt S ausserhalb des Bildes, steht am
+  // Tangentenende ein Hinweis mit Richtung und Wert.
+  function zeigeTangente(c){
+    const an = typ === 'tan';
+    [tang, tangLbl, S, Slbl].forEach(e => e.setAttribute('opacity', an ? 1 : 0));
+    if (!an) return;
+    const tx = cx + r, Sy = cy - r * c;
+    const oben = 34, unten = 388;                       // Grundlinien am Tangentenende
+    const cTxt = zahlM(c, 2);
+    // «x = 1» an das Ende, zu dem S nicht hin liegt
+    tangLbl.setAttribute('y', c >= 0 ? unten : oben);
+    if (Sy < 26 || Sy > 394) {                          // S ausserhalb des Bildes
+      S.setAttribute('opacity', 0);
+      Slbl.textContent = `S ${c > 0 ? '↑' : '↓'} y = ${cTxt}`;
+      Slbl.setAttribute('x', tx + 6);
+      Slbl.setAttribute('y', c > 0 ? oben : unten);
+      return;
+    }
+    S.setAttribute('cy', Sy);
+    Slbl.textContent = 'S';
+    // Freie Lage für «S» suchen: Hindernisse sind Niveaulinie, P₁ samt Label,
+    // Kreislinie, x-Achse mit Marke «1» und die Tangente selbst.
+    const p1 = Math.atan(c), p1x = cx + r * Math.cos(p1), p1y = cy - r * Math.sin(p1);
+    const boxe = [
+      [p1x - 7, p1y - 7, p1x + 7, p1y + 7],             // Punkt P₁
+      [p1x + 10, p1y - 17, p1x + 24, p1y - 5],          // Label P₁
+      [358, 218, 367, 230]                              // Achsenzahl «1»
+    ];
+    const frei = ([x0, y0, x1, y1]) => {
+      const pad = 2;
+      if (x0 < 2 || x1 > 478 || y0 < 2 || y1 > 398) return false;
+      if (x0 - pad < tx && x1 + pad > tx) return false;
+      if (y0 - pad < cy && y1 + pad > cy) return false;
+      if (boxe.some(b => x0 - pad < b[2] && x1 + pad > b[0] && y0 - pad < b[3] && y1 + pad > b[1])) return false;
+      for (let x = x0 - pad; x <= x1 + pad; x += 0.5) {  // Niveaulinie y = cy − c·(x − cx)
+        const y = cy - c * (x - cx);
+        if (y >= y0 - pad && y <= y1 + pad) return false;
+      }
+      const nx = Math.max(x0, Math.min(cx, x1)), ny = Math.max(y0, Math.min(cy, y1));
+      const dMin = Math.hypot(nx - cx, ny - cy);
+      const dMax = Math.max(...[[x0, y0], [x1, y0], [x0, y1], [x1, y1]].map(([x, y]) => Math.hypot(x - cx, y - cy)));
+      return !(dMin <= r + pad && dMax >= r - pad);
+    };
+    const kand = [[tx + 6, Sy + 4], [tx + 7, Sy + 16], [tx + 6, Sy - 6], [tx - 13, Sy + 15], [tx - 13, Sy - 6]];
+    const lage = kand.find(([x, y]) => frei([x, y - 8, x + 7, y + 2])) || kand[1];
+    Slbl.setAttribute('x', lage[0]);
+    Slbl.setAttribute('y', lage[1]);
+  }
 
   function update(){
     const c = +sl.value;
-    slV.textContent = c.toFixed(2);
+    slV.textContent = zahlM(c, 2);
+    zeigeTangente(c);
 
     // Slider-Bereich pro Typ anpassen
     if (typ === 'tan') {
@@ -1015,7 +1082,7 @@ buildNav({
       if (p1 < 0) p1 += 360;
       if (p2 < 0) p2 += 360;
       drawSolutions(p1, p2);
-      lbl.textContent = 'Lösungen sin(φ) = ' + c.toFixed(2) + ' im Bereich 0° ≤ φ < 360°';
+      lbl.textContent = 'Lösungen sin(φ) = ' + zahlM(c, 2) + ' im Bereich 0° ≤ φ < 360°';
       // Sortieren für saubere Anzeige; bei c = ±1 fallen beide Lösungen zusammen
       const arr = [p1, p2].sort((a,b) => a-b);
       if (Math.abs(arr[1] - arr[0]) < 1e-9) {
@@ -1047,7 +1114,7 @@ buildNav({
       let p1 = phi1, p2 = 360 - phi1;
       if (Math.abs(c) === 1) p2 = p1; // Spezial: nur eine Lösung
       drawSolutions(p1, p2);
-      lbl.textContent = 'Lösungen cos(φ) = ' + c.toFixed(2) + ' im Bereich 0° ≤ φ < 360°';
+      lbl.textContent = 'Lösungen cos(φ) = ' + zahlM(c, 2) + ' im Bereich 0° ≤ φ < 360°';
       if (Math.abs(c) === 1) {
         valOut.textContent = `φ₁ = ${fmt(p1)}  (einzige Lösung)`;
         allgOut.textContent = `φ = ${fmt(p1)} + k·360°,  k ∈ ℤ`;
@@ -1070,7 +1137,7 @@ buildNav({
       if (p2 < 0) { p2 += 360; }
       if (p2 >= 360) { p2 -= 360; }
       drawSolutions(p1, p2);
-      lbl.textContent = 'Lösungen tan(φ) = ' + c.toFixed(2) + ' im Bereich 0° ≤ φ < 360°';
+      lbl.textContent = 'Lösungen tan(φ) = ' + zahlM(c, 2) + ' im Bereich 0° ≤ φ < 360°';
       const arr = [p1, p2].sort((a,b) => a-b);
       valOut.textContent = `φ₁ = ${fmt(arr[0])};  φ₂ = ${fmt(arr[1])}`;
       allgOut.textContent = `φ = ${fmt(phi1 < 0 ? phi1+180 : phi1)} + k·180°,  k ∈ ℤ`;
@@ -1098,12 +1165,15 @@ buildNav({
       b.classList.add('aktiv');
       typ = b.dataset.typ;
       // Slider-Bereich an Typ anpassen
+      // c symmetrisch klemmen: ein Wert aus dem tan-Modus (bis ±3) wird für sin/cos
+      // auf [−1; 1] zurückgenommen — positive wie negative Werte gleich behandelt.
+      const cAlt = +sl.value;
       if (typ === 'tan') {
         sl.min = -3; sl.max = 3; sl.step = 0.1;
-        if (+sl.value > 3) sl.value = 1;
+        sl.value = Math.max(-3, Math.min(3, cAlt));
       } else {
         sl.min = -1.5; sl.max = 1.5; sl.step = 0.05;
-        if (+sl.value > 1.5) sl.value = 0.5;
+        sl.value = Math.max(-1, Math.min(1, cAlt));
       }
       update();
     });
@@ -1167,7 +1237,7 @@ buildNav({
     svg.setAttribute('aria-label', typ + '-Kurve mit Lösungen');
   }
 
-  function fmt(d){ return (Math.round(d*10)/10).toFixed(1) + '°'; }
+  function fmt(d){ return zahlM(Math.round(d*10)/10, 1) + '°'; }
   function svgEl(name, attrs){
     const e = document.createElementNS(NS, name);
     for (const k in attrs) e.setAttribute(k, attrs[k]);
@@ -1176,12 +1246,12 @@ buildNav({
 
   function update(){
     const c = +sl.value;
-    slV.textContent = c.toFixed(2);
+    slV.textContent = zahlM(c, 2);
     // Niveaulinie
     const yLine = yMid - yUnit() * c;
     niv.setAttribute('y1', yLine); niv.setAttribute('y2', yLine);
     nivLbl.setAttribute('y', yLine + 4);
-    nivLbl.textContent = 'y = ' + c.toFixed(2);
+    nivLbl.textContent = 'y = ' + zahlM(c, 2);
 
     points.innerHTML = '';
     if (typ !== 'tan' && (c < -1 || c > 1)) {
@@ -1575,7 +1645,7 @@ function kkLoesungen(typ, c) {
 }
 function drawKK() {
   const c = parseFloat(document.getElementById('kk-c').value);
-  document.getElementById('kk-cv').textContent = c.toFixed(2);
+  document.getElementById('kk-cv').textContent = zahlM(c, 2);
   const sol = kkLoesungen(kkTyp, c);
   const { ctx, W, H } = initKK();
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
@@ -1629,7 +1699,7 @@ function drawKK() {
   dash([x0, yOf(c)], [x1 + 8, yOf(c)], rot, 1.8);
   // c-Label in die Statuszeile: an der Niveaulinie kollidiert es je nach c mit φ₁ oder φ₂.
   ctx.fillStyle = rot; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
-  ctx.fillText('c = ' + c.toFixed(2).replace('-', '−'), W - 14, 20);
+  ctx.fillText('c = ' + zahlM(c, 2), W - 14, 20);
 
   // ── Lösungspunkte
   const gruen = '#1f6b3a';
@@ -1658,12 +1728,12 @@ function drawKK() {
   } else if (sol.length === 1) {
     ctx.fillStyle = gruen; ctx.fillText('genau eine Lösung (Scheitelpunkt)', 14, 20);
     lbl.textContent = 'Genau eine Lösung im Bereich 0° ≤ φ < 360°';
-    val.textContent = `φ = ${sol[0].toFixed(1)}° — die beiden Lösungen sind zusammengefallen.`;
+    val.textContent = `φ = ${zahlM(sol[0], 1)}° — die beiden Lösungen sind zusammengefallen.`;
   } else {
     ctx.fillStyle = gruen; ctx.fillText('zwei Lösungen pro Umlauf', 14, 20);
     lbl.textContent = 'Lösungen im Bereich 0° ≤ φ < 360°';
     const achse = kkTyp === 'sin' ? 'senkrechten' : 'waagrechten';
-    val.textContent = `φ₁ = ${sol[0].toFixed(1)}°;  φ₂ = ${sol[1].toFixed(1)}°  — spiegelbildlich zur ${achse} Achse`;
+    val.textContent = `φ₁ = ${zahlM(sol[0], 1)}°;  φ₂ = ${zahlM(sol[1], 1)}°  — spiegelbildlich zur ${achse} Achse`;
   }
 }
 document.getElementById('kk-c').addEventListener('input', drawKK);
@@ -1690,7 +1760,7 @@ document.querySelectorAll('#kk-tabs .tab-btn').forEach(t => t.addEventListener('
     { typ: 'tan', c: 0.5,   tr: 26.57,  p1: 26.57,  p2: 206.57 },
   ];
   const el = id => document.getElementById(id);
-  const nz = v => v.toFixed(2).replace('-', '−');      // Unicode-Minus für die Anzeige
+  const nz = v => zahlM(v, 2);      // Unicode-Minus für die Anzeige
   const cTxt = a => a.ct || nz(a.c);                    // exakter Wert (z.B. −√3), falls angegeben
   const ARC = { sin: 'arcsin', cos: 'arccos', tan: 'arctan' };
   let reihe = [], i = 0, punkte = 0;

@@ -538,19 +538,19 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Der Schnittpunkt flieht ins Unendliche, je näher die Steigungen zusammenrücken. Bei \(m = 2\) sind die Geraden parallel: Entweder liegen sie übereinander (\(c = 4\), unendlich viele Lösungen) oder nebeneinander (\(c \neq 4\), keine). Rechnerisch ist das dieselbe Grösse — die <strong>Determinante</strong> \(2 - m\). Ist sie null, entscheidet erst \(c\) zwischen «keine» und «unendlich viele».</div>
+        <div class="ah-text">Der Schnittpunkt flieht ins Unendliche, je näher die Steigungen zusammenrücken. Bei \(m = 2\) sind die Geraden parallel: Entweder liegen sie übereinander (\(c = 4\), unendlich viele Lösungen) oder nebeneinander (\(c \neq 4\), keine). Rechnerisch zeigt es die Subtraktion \(g_2 - g_1\): Es bleibt \((m - 2) \cdot x = c - 4\). Für \(m \neq 2\) lässt sich nach \(x\) auflösen; bei \(m = 2\) fällt \(x\) weg, und erst \(c\) entscheidet: \(0 = c - 4\) ist für \(c \neq 4\) ein Widerspruch (keine Lösung), für \(c = 4\) die wahre Aussage \(0 = 0\) (unendlich viele).</div>
       </div>
     </div>
   </div>
     <p>Oben hat jeder Fall ein festes System mit seiner Rechnung. Die drei Fälle sind aber keine getrennten Welten — kippe die zweite Gerade stetig und beobachte den Schnittpunkt:</p>
   </div>
   <div class="widget-body">
-  <div class="sl-row">
-    <label>Steigungsparameter \(m\): <span class="sl-val" id="lb-mv">1.00</span></label>
+  <div class="sl-row akz-orange">
+    <label>Steigungsparameter <span class="var">\(m\)</span>: <span class="sl-val" id="lb-mv">1.00</span></label>
     <input type="range" id="lb-m" min="0" max="4" step="0.25" value="1">
   </div>
-  <div class="sl-row">
-    <label>Konstante \(c\): <span class="sl-val" id="lb-cv">4.0</span></label>
+  <div class="sl-row akz-orange">
+    <label>Konstante <span class="var">\(c\)</span>: <span class="sl-val" id="lb-cv">4.0</span></label>
     <input type="range" id="lb-c" min="0" max="8" step="0.5" value="4">
   </div>
   <div class="meth-btns">
@@ -558,9 +558,9 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
     <button class="meth-btn" type="button" data-lb="2|6">parallel (keine)</button>
     <button class="meth-btn" type="button" data-lb="2|4">identisch (unendlich)</button>
   </div>
-  <div class="formel-live"><div class="fl-label">System und Determinante</div><div class="fl-eq" id="lb-eq" style="font-size:0.95rem"></div></div>
+  <div class="formel-live"><div class="fl-label">System und Steigungen</div><div class="fl-eq" id="lb-eq" style="font-size:0.95rem"></div></div>
   <div class="cv-wrap" style="max-width:520px"><canvas id="cv-lbuschel" height="300"></canvas></div>
-  <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blass gezeichnet ist das <strong>Geradenbüschel</strong>: dieselbe Gerade \(g_2\) für andere Werte von \(c\). Alle Büschelgeraden sind parallel zueinander — \(c\) verschiebt nur, \(m\) kippt.</div>
+  <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blass gezeichnet ist das <strong>Geradenbüschel</strong>: dieselbe Gerade \(g_2\) für andere Werte von \(c\). Alle Büschelgeraden sind parallel zueinander — \(c\) verschiebt nur, \(m\) kippt. Nach \(y\) aufgelöst lauten die Geraden \(g_1\colon y = -2 \cdot x + 4\) und \(g_2\colon y = -m \cdot x + c\); ihre Steigungen \(-2\) und \(-m\) stimmen genau bei \(m = 2\) überein.</div>
   </div>
 </div>
 
@@ -689,7 +689,7 @@ Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte 
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Lies den Schnittpunkt zuerst grob aus dem Graphen ab und trage ihn ein. Setze deine Werte danach in <em>beide</em> Gleichungen ein: Stimmen wirklich beide?</div>
+            <div class="ah-text">Lies den Schnittpunkt zuerst grob aus dem Graphen ab und trage ihn ein. Setze deine Werte danach in <em>beide</em> Gleichungen ein: Stimmen wirklich beide? Markiert wird der Schnittpunkt erst nach richtiger Eingabe oder mit der Lösung.</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
@@ -1093,16 +1093,25 @@ function drawKino() {
   const xMin=0, xMax=22, yMin=0, yMax=28;
   // Anwendungsgraph: keine generischen x/y-Labels, wir schreiben eigene mit Einheit.
   // Zahlen erst nach den Geraden setzen, sonst kreuzt die rote Gerade die 21.
-  const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax,
-                                        {achsenLabels:false, zahlen:false});
+  const {cx, cy} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax,
+                            {achsenLabels:false, zahlen:false});
   // Geraden (begrenzt auf den jeweils sinnvollen Bereich)
   drawLine(ctx, cx, cy, -1, 20, 0, 20, '#a0392c', 2.5);            // y = 20 - x
   drawLine(ctx, cx, cy, -15/9, 240/9, 0, 16, '#1a4f8a', 2.5);      // y = (240-15x)/9
-  zahlenOben();
+  // Eigene Achsenzahlen in 5er-Schritten (Personenzahlen, Lösung bei 10 | 10);
+  // Lage wie drawGrid bei xMin = yMin = 0: x-Zahlen über, y-Zahlen rechts der Achse.
+  // x-Zahlen 9 px über der Achse (Freiraum-Unterkante H − 7): Der Schieber-Punkt
+  // (20 | 0) mit Radius 4 reicht nur bis H − 4 und liegt so nicht auf der «20».
+  ctx.font = '13px JetBrains Mono,monospace'; ctx.fillStyle = '#9ca3af';
+  for (let gx = 5; gx < xMax; gx += 5)
+    beschriftung(ctx, String(gx), cx(gx), cy(0) - 9, {align:'center', bg:'#fff', W, H});
+  for (let gy = 5; gy < yMax; gy += 5)
+    beschriftung(ctx, String(gy), cx(0) + 5, cy(gy) + 4, {align:'left', bg:'#fff', W, H});
   ctx.fillStyle='#374151'; ctx.font='bold 13px monospace';
   // über der roten Geraden, sonst verdeckt der Schieber-Punkt bei x = 18/19 das Label
   beschriftung(ctx,'x [Erw.]', W-2, cy(4), {align:'right', W, H});
-  beschriftung(ctx,'y [Kinder]', cx(0)+5, 11, {align:'left', W, H});
+  // Abstand 10 px: Der Pfeil der y-Achse am linken Rand reicht bis x = 4 (plus Freiraum)
+  beschriftung(ctx,'y [Kinder]', cx(0)+10, 13, {align:'left', W, H});
   // Schnittpunkt (10 | 10)
   drawDot(ctx, cx, cy, 10, 10, '#0f7a3a', 7);
   ctx.fillStyle='#0f7a3a'; ctx.font='bold 13px monospace';
@@ -1371,7 +1380,7 @@ const DD_STEPS = [
   ['kern', 'G1 + G3:   2·x + 3·y = 8       →   (G4)', 'ADDITION'],
   ['kommentar', 'Schritt 2: Auch G2 + G3 lässt z verschwinden.'],
   ['kern', 'G2 + G3:   3·x + y = 5         →   (G5)', 'ADDITION'],
-  ['kommentar', 'Schritt 3: Jetzt haben wir ein 2×2-System in x und y. Wir lösen es ebenfalls mit der Additionsmethode — multipliziere G5 mit −3:'],
+  ['kommentar', 'Schritt 3: Jetzt haben wir ein 2×2-System in x und y. Wir lösen es ebenfalls mit der Additionsmethode — multipliziere G5 mit −3, damit y in G4 den Koeffizienten +3 und in −3·G5 den Koeffizienten −3 hat und beim Addieren wegfällt:'],
   ['glg', '−3·G5:  −9·x − 3·y = −15', '· (−3)'],
   ['kern', 'G4 + (−3·G5):  −7·x = −7   →   x = 1', 'ADDITION'],
   ['kommentar', 'Schritt 4: x = 1 in G5 einsetzen — Einsetzmethode.'],
@@ -1404,12 +1413,33 @@ function rendDd() {
 /* ══════════════════════════════════════════════════════════════
    AUFGABEN — A1: Graph für y = 2x − 1 und y = -x + 5
    ══════════════════════════════════════════════════════════════ */
+let a1Richtig = false;
 function drawA1() {
   const {ctx, W, H} = initCanvas('cv-a1', 240, true);
   const {cx, cy} = drawGrid(ctx, W, H, -3, 6, -4, 6);
   drawLine(ctx, cx, cy,  2, -1, -3, 6, '#a0392c', 2.5);  // y = 2x - 1
   drawLine(ctx, cx, cy, -1,  5, -3, 6, '#1a4f8a', 2.5);  // y = -x + 5
-  drawDot(ctx, cx, cy, 2, 3, '#0f7a3a', 7);
+  // Schnittpunkt erst nach richtiger Eingabe oder bei geöffneter Lösung — abgelesen
+  // werden soll er von den Lernenden selbst.
+  if (a1Richtig || document.getElementById('a1-l').classList.contains('sichtbar'))
+    drawDot(ctx, cx, cy, 2, 3, '#0f7a3a', 7);
+  // Legende unten rechts: Die rote Gerade liegt dort links von x = 0 (y < −1 ⇔ x < 0),
+  // die blaue verlässt das Fenster schon bei (6 | −1) — der Kasten (Oberkante y < −2)
+  // bleibt bei jeder Breite frei.
+  ctx.font = 'bold 13px monospace';
+  const leg = [['y = 2x − 1', '#a0392c'], ['y = −x + 5', '#1a4f8a']];
+  const tw = Math.max(...leg.map(([t]) => ctx.measureText(t).width));
+  const boxW = 8 + 22 + 6 + tw + 8, boxH = 8 + 2 * 18;
+  const bx = W - 8 - boxW, by = H - 8 - boxH;
+  ctx.fillStyle = '#fff'; ctx.fillRect(bx, by, boxW, boxH);
+  ctx.strokeStyle = '#d1d5db'; ctx.lineWidth = 1; ctx.strokeRect(bx + 0.5, by + 0.5, boxW - 1, boxH - 1);
+  leg.forEach(([t, f], i) => {
+    const zy = by + 4 + 18 * i + 9;               // Zeilenmitte
+    ctx.strokeStyle = f; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(bx + 8, zy); ctx.lineTo(bx + 30, zy); ctx.stroke();
+    ctx.fillStyle = f;
+    beschriftung(ctx, t, bx + 36, zy + 4.5, {align:'left', bg:'#fff', W, H});
+  });
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1463,7 +1493,10 @@ function pruefAW3(idA, idB, idC, gut, idCr) {
     cr.className = 'cr err';
   }
 }
-function pruefA1() { pruefAW('a1-x','a1-y',[2,3],'a1-cr'); }
+function pruefA1() {
+  pruefAW('a1-x','a1-y',[2,3],'a1-cr');
+  if (document.getElementById('a1-cr').classList.contains('ok')) { a1Richtig = true; drawA1(); }
+}
 function pruefA2() { pruefAW('a2-x','a2-y',[3,1],'a2-cr'); }
 function pruefA3() { pruefAW('a3-x','a3-y',[3,7/3],'a3-cr'); }
 function pruefA5() { pruefAW3('a5-x','a5-y','a5-z',[2,3,4],'a5-cr'); }
@@ -1507,7 +1540,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('dd-reset').addEventListener('click', () => { ddSchritt = 0; rendDd(); });
   rendDd();
-  // Aufgabe 1 Graph
+  // Aufgabe 1 Graph — Lösungs-Toggle blendet den Schnittpunkt ein und aus (toggleL läuft vorher)
+  document.querySelector('#a1-l').previousElementSibling.addEventListener('click', drawA1);
   drawA1();
   // Lösungsfall-Slider
   ['lb-m', 'lb-c'].forEach(id => document.getElementById(id).addEventListener('input', drawBuschel));
@@ -1523,8 +1557,10 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ══════════════════════════════════════════════════════════════
  *  LÖSUNGSFALL-SLIDER + GERADENBÜSCHEL
  *  g₁: 2x + y = 4      g₂: m·x + y = c
- *  Determinante D = 2 − m.  D ≠ 0 → S((4−c)/D | 4 − 2x_S)
+ *  D = 2 − m (Differenz der x-Koeffizienten; D = 0 ⇔ gleiche Steigung −2 = −m).
+ *  D ≠ 0 → S((4−c)/D | 4 − 2x_S)
  *  D = 0: c = 4 → identisch (unendlich viele);  c ≠ 4 → parallel (keine)
+ *  Anzeige ohne den Begriff «Determinante» (nicht im RLP-Grundlagenfach): Vergleich der Steigungen.
  * ══════════════════════════════════════════════════════════════ */
 function drawBuschel() {
   const m = parseFloat(document.getElementById('lb-m').value);
@@ -1538,26 +1574,33 @@ function drawBuschel() {
   });
 
   const eqEl = document.getElementById('lb-eq');
+  // Reglerwerte m und c orange wie die Gerade g₂ und die Slider (akz-orange).
+  // Unicode-Minus und keine «−0» — jede Zahl einzeln formatiert, weil ein
+  // replace(/-/g) über das HTML auch «tx-orange» treffen würde.
+  const zf = (v, d) => { const t = d === undefined ? String(v) : v.toFixed(d);
+                         return /^-0(\.0+)?$/.test(t) ? t.slice(1) : t.replace('-', '−'); };
+  const mS = `<span class="tx-orange">${m}</span>`, cS = `<span class="tx-orange">${c}</span>`;
   // linke Seite von g₂ sauber setzen: m = 1 → «x», m = 0 → nur «y».
   // Nicht fmtMx() verwenden — das rundet auf eine Dezimale (1.75 → «1.8·x»).
-  const g2links = m === 0 ? 'y' : (m === 1 ? 'x + y' : `${m}·x + y`);
+  const g2links = m === 0 ? 'y' : (m === 1 ? 'x + y' : `${mS}·x + y`);
+  const steig2 = m === 0 ? mS : `−${mS}`;            // Steigung von g₂: y = −m·x + c
   let fall, farbe, S = null;
   if (Math.abs(D) > 1e-9) {
     const xs = (4 - c) / D, ys = 4 - 2 * xs;
     S = [xs, ys];
     fall = 'eindeutig';
-    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${c} &nbsp; → &nbsp; D = 2 − ${m} = ${D.toFixed(2)} ≠ 0 → ` +
-      `<strong>genau eine Lösung</strong> S(${xs.toFixed(2)} | ${ys.toFixed(2)})`.replace(/-/g, '−');
+    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 ≠ ${steig2} → ` +
+      `<strong>genau eine Lösung</strong> S(${zf(xs, 2)}&nbsp;|&nbsp;${zf(ys, 2)})`;
     farbe = '#1f6b3a';
   } else if (Math.abs(c - 4) < 1e-9) {
     fall = 'identisch';
-    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; 2·x + y = 4 &nbsp; → &nbsp; D = 0 und beide Gleichungen sind gleich: ` +
+    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 = ${steig2}, beide Gleichungen gleich: ` +
       `0 = 0 → <strong>unendlich viele Lösungen</strong> (die ganze Gerade)`;
     farbe = '#1a4f8a';
   } else {
     fall = 'parallel';
-    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; 2·x + y = ${c} &nbsp; → &nbsp; D = 0, Subtraktion ergibt ` +
-      `0 = ${(c - 4).toFixed(1)} → <strong>keine Lösung</strong>, 𝕃 = { }`.replace(/= -/g, '= −');
+    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 = ${steig2}, Subtraktion ergibt ` +
+      `0 = ${zf(c - 4, 1)} → <strong>keine Lösung</strong>, 𝕃&nbsp;=&nbsp;{&nbsp;}`;
     farbe = '#c8412c';
   }
 
@@ -1573,11 +1616,65 @@ function drawBuschel() {
   drawLine(ctx, cx, cy, -2, 4, xMin, xMax, '#1a4f8a', 2.8);       // g₁: y = 4 − 2x
   drawLine(ctx, cx, cy, -m, c, xMin, xMax, '#b85c00', 2.8);       // g₂: y = c − m·x
 
-  // Labels dort setzen, wo die Gerade tatsächlich im Fenster liegt
+  const drin = S && S[0] > xMin && S[0] < xMax && S[1] > yMin && S[1] < yMax;
+
+  // Hinweis-Kasten (Schnittpunkt ausserhalb) und Statuszeile zuerst nur vermessen,
+  // damit die Geradenlabels ihnen ausweichen können; gezeichnet wird zuletzt.
+  const kaesten = [];
+  let hinweis = null;
+  if (S && !drin) {
+    ctx.font = 'italic 11px JetBrains Mono, monospace';
+    // Passt der Hinweis nicht in eine Zeile (schmales Canvas), zweizeilig setzen.
+    const ganz = 'Schnittpunkt ausserhalb des Fensters — er flieht, wenn m → 2';
+    const zeilen = ctx.measureText(ganz).width + 10 <= W - 8
+      ? [ganz] : ['Schnittpunkt ausserhalb des Fensters —', 'er flieht, wenn m → 2'];
+    const hw = Math.max(...zeilen.map(z => ctx.measureText(z).width));
+    // Zeilenabstand 14 px: Auch zweizeilig bleibt die Kastenoberkante (H − 36 = 264)
+    // unter der Achsenzahl −2 (Grundlinie cy(−2) + 4 ≈ 261).
+    const h0 = H - 6 - 14 * zeilen.length - 2;
+    hinweis = { zeilen, x: W / 2 - hw / 2 - 5, y: h0, w: hw + 10, h: 14 * zeilen.length + 2 };
+    kaesten.push(hinweis);
+  }
+  // Statuszeile oben rechts. Reicht sie auf schmalem Canvas bis zum Achsen-«y»
+  // (drawGrid: Mitte cx(0) + 13, Grundlinie 14), weicht sie eine Zeile tiefer aus,
+  // ganz rechts der y-Achse; dort ist sie kleiner und bei «unendlich viele» kürzer.
+  let txt = fall === 'eindeutig' ? 'genau eine Lösung' : (fall === 'parallel' ? 'keine Lösung' : 'unendlich viele Lösungen');
+  let statusFont = 'bold 12px JetBrains Mono, monospace';
+  ctx.font = statusFont;
+  let tw = ctx.measureText(txt).width, sy = 19;
+  if (W - 12 - tw < cx(0) + 13 + 5 + 4) {
+    statusFont = 'bold 11px JetBrains Mono, monospace'; ctx.font = statusFont;
+    if (fall === 'identisch') txt = 'unendlich viele';
+    tw = ctx.measureText(txt).width; sy = 36;
+  }
+  const status = { x: W - 12 - tw, y: sy - 13, w: tw + 8, h: 18 };
+  kaesten.push(status);
+  // Schnittpunkt-Label rechts neben S; läge es unter der Statuszeile (S nahe
+  // am oberen Rand, schmales Canvas), rückt es unter den Punkt.
+  let sLabel = null;
+  if (drin) {
+    ctx.font = 'bold 11px JetBrains Mono, monospace';
+    const st = `S(${zf(S[0], 2)} | ${zf(S[1], 2)})`, sw = ctx.measureText(st).width;
+    const sx = Math.min(cx(S[0]) + 12, W - sw - 2);
+    let sBase = cy(S[1]) + 4;
+    const kasten = y => ({ x: sx - 2, y: y - 11, w: sw + 4, h: 15 });
+    const k = kasten(sBase);
+    if (k.x < status.x + status.w && k.x + k.w > status.x && k.y < status.y + status.h && k.y + k.h > status.y)
+      sBase = cy(S[1]) + 22;
+    sLabel = { st, sx, sBase };
+    kaesten.push(kasten(sBase));
+  }
+
+  // Labels dort setzen, wo die Gerade tatsächlich im Fenster liegt — und nicht
+  // unter Hinweis-Kasten oder Statuszeile.
+  const ueberlappt = (x0, y0, w, h) => kaesten.some(k =>
+    x0 < k.x + k.w && x0 + w > k.x && y0 < k.y + k.h && y0 + h > k.y);
   const labelAn = (steig, achs, farbe, name) => {
+    const lw = ctx.measureText(name).width;
     for (let x = xMax - 0.8; x > xMin; x -= 0.4) {
       const y = steig * x + achs;
-      if (y > yMin + 0.8 && y < yMax - 0.8) {
+      if (y > yMin + 0.8 && y < yMax - 0.8 &&
+          !ueberlappt(cx(x) + 4 - 2, cy(y) - 8 - 11, lw + 4, 15)) {
         ctx.fillStyle = farbe; ctx.textAlign = 'left';
         ctx.fillText(name, cx(x) + 4, cy(y) - 8);
         return;
@@ -1588,27 +1685,19 @@ function drawBuschel() {
   labelAn(-2, 4, '#1a4f8a', 'g₁');
   labelAn(-m, c, '#b85c00', 'g₂');
 
-  if (S) {
-    const drin = S[0] > xMin && S[0] < xMax && S[1] > yMin && S[1] < yMax;
-    if (drin) {
-      drawDot(ctx, cx, cy, S[0], S[1], '#1f6b3a', 6);
-      ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-      beschriftung(ctx, `S(${S[0].toFixed(2)} | ${S[1].toFixed(2)})`.replace(/-/g, '−'),
-               cx(S[0]) + 12, cy(S[1]) + 4, {align:'left', W, H});
-    } else {
-      ctx.font = 'italic 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-      const hw = ctx.measureText('Schnittpunkt ausserhalb des Fensters — er flieht, wenn m → 2').width;
-      ctx.fillStyle = '#fff'; ctx.fillRect(W / 2 - hw / 2 - 5, H - 24, hw + 10, 18);
-      ctx.fillStyle = '#6b7280';
-      ctx.fillText('Schnittpunkt ausserhalb des Fensters — er flieht, wenn m → 2', W / 2, H - 11);
-    }
+  if (drin) {
+    drawDot(ctx, cx, cy, S[0], S[1], '#1f6b3a', 6);
+    ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    beschriftung(ctx, sLabel.st, sLabel.sx, sLabel.sBase, {align:'left', W, H});
+  } else if (hinweis) {
+    ctx.font = 'italic 11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#fff'; ctx.fillRect(hinweis.x, hinweis.y, hinweis.w, hinweis.h);
+    ctx.fillStyle = '#6b7280';
+    hinweis.zeilen.forEach((z, i) => ctx.fillText(z, W / 2, hinweis.y + 12 + 14 * i));
   }
-  // Statuszeile
-  ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'right';
-  const txt = fall === 'eindeutig' ? 'genau eine Lösung' : (fall === 'parallel' ? 'keine Lösung' : 'unendlich viele Lösungen');
-  const tw = ctx.measureText(txt).width;
-  ctx.fillStyle = '#fff'; ctx.fillRect(W - 12 - tw, 6, tw + 8, 18);
-  ctx.fillStyle = farbe; ctx.fillText(txt, W - 8, 19);
+  ctx.font = statusFont; ctx.textAlign = 'right';
+  ctx.fillStyle = '#fff'; ctx.fillRect(status.x, status.y, status.w, status.h);
+  ctx.fillStyle = farbe; ctx.fillText(txt, W - 8, sy);
 }
 </script>
 </body>

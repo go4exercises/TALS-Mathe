@@ -330,9 +330,6 @@ MathJax = {
 }
 
 /* Einstiegs-Animation: Pizza-Sektoren */
-.pizza-box{background:var(--papier-2,#f3eedf);border-radius:8px;padding:14px 16px;margin:12px 0}
-.pizza-box .pb-grid{display:grid;grid-template-columns:1fr 240px;gap:16px;align-items:center}
-@media(max-width:760px){.pizza-box .pb-grid{grid-template-columns:1fr}}
 .pizza-box canvas{width:100%;height:320px;display:block;background:var(--weiss);border-radius:6px}
 .pizza-box .pb-row{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:0.9rem;margin-bottom:10px;flex-wrap:wrap}
 .pizza-box .pb-row label{min-width:130px}
@@ -342,7 +339,7 @@ MathJax = {
 .pizza-box .pb-readout dt{font-size:0.72rem;color:var(--tinte-2);text-transform:uppercase;letter-spacing:0.5px;font-weight:700;margin-top:6px}
 .pizza-box .pb-readout dt:first-child{margin-top:0}
 .pizza-box .pb-readout dd{margin:2px 0 0;color:var(--blau);font-size:1.0rem;font-weight:700}
-.pizza-box .pb-cap{grid-column:1 / -1;font-size:0.85rem;color:var(--tinte-2);margin-top:8px;font-style:italic}
+.pizza-box .pb-cap{font-size:0.85rem;color:var(--tinte-2);margin-top:8px;font-style:italic}
 </style>
 </head>
 
@@ -394,8 +391,7 @@ MathJax = {
 
 <p>Stell dir eine kreisförmige Pizza vor (Durchmesser 30 cm). Sie wird in gleich grosse Stücke geschnitten. Verschiebe den Regler und beobachte, wie sich der <strong>Sektorwinkel</strong> und die <strong>Bogenlänge</strong> pro Stück verändern:</p>
 
-<div class="pizza-box">
-  <div class="pb-grid">
+<div class="anim pizza-box">
     <div class="widget-titelzeile">
           <div class="anim-titel">Einstieg · Pizza in gleiche Stücke schneiden</div>
           <div class="anim-hinweis links">
@@ -411,8 +407,9 @@ MathJax = {
             </div>
           </div>
         </div>
+  <div class="anim-layout">
     <canvas id="pizza-canvas" aria-label="Pizza mit verstellbarer Stückzahl"></canvas>
-    <div>
+    <div class="bedien">
       <div class="pb-row">
         <label>Anzahl Stücke: <span class="pb-val" id="pz-vn">8</span></label>
       </div>
@@ -421,15 +418,15 @@ MathJax = {
       </div>
       <dl class="pb-readout">
         <dt>Sektorwinkel \(\varphi = 360°/n\)</dt>
-        <dd id="pz-zeta">45.0°</dd>
+        <dd id="pz-phi">45.0°</dd>
         <dt>Bogenlänge pro Stück</dt>
         <dd id="pz-bogen">11.78 cm</dd>
         <dt>Pizza-Umfang gesamt</dt>
         <dd id="pz-umfang">≈ 94.25 cm</dd>
       </dl>
     </div>
-    <div class="pb-cap">Pizza-Radius \(r = 15\,\text{cm}\) (Durchmesser 30 cm). Der Sektorwinkel ist einfach 360° geteilt durch die Anzahl Stücke. Die Bogenlänge ist der Anteil des Umfangs, der zu einem Stück gehört.</div>
   </div>
+  <div class="pb-cap">Pizza-Radius \(r = 15\,\text{cm}\) (Durchmesser 30 cm). Der Sektorwinkel ist einfach 360° geteilt durch die Anzahl Stücke. Die Bogenlänge ist der Anteil des Umfangs, der zu einem Stück gehört.</div>
 </div>
 
 <p>Was du beobachtest: Je <em>mehr</em> Stücke, desto <em>kleiner</em> der Sektorwinkel und desto <em>kürzer</em> der Bogen. <strong>Wie gross ist die Fläche eines Stücks?</strong> Diese Frage bleibt vorerst offen — sie führt direkt auf die Kreisflächen-Formel \(A = \pi r^2\), die im Kapitel über Pi und Umfang behandelt wird. Und damit auf die berühmteste Konstante der Geometrie.</p>
@@ -466,7 +463,7 @@ MathJax = {
 <!-- ══ 4. DARSTELLUNGEN ══ -->
 <h2 id="darstellungen">Darstellungen — Geraden und Strecken am Kreis</h2>
 
-<p>Am Kreis treten verschiedene <strong>Strecken</strong> und <strong>Geraden</strong> auf — sechs Begriffe, die du sicher unterscheiden können musst. Erkunde sie zuerst in der Animation: wähle den Typ per Chip; die zugehörige Strecke oder Gerade wird hervorgehoben, die Endpunkte (bzw. der Berührungspunkt der Tangente) lassen sich mit der Maus oder per Touch verschieben.</p>
+<p>Am Kreis treten verschiedene <strong>Strecken</strong> und <strong>Geraden</strong> auf — sechs Begriffe, die du sicher unterscheiden können musst. Erkunde sie zuerst in der Animation: wähle den Typ per Chip; die zugehörige Strecke oder Gerade wird hervorgehoben, die Endpunkte (bzw. der Berührungspunkt der Tangente) lassen sich mit der Maus oder per Touch verschieben. Mit «a — Abstand zu M» schiebst du eine einzige Gerade mit dem Regler auf den Kreis zu: Aus der Passante wird eine Tangente und dann eine Sekante.</p>
 
 <div class="anim">
   <div class="widget-titelzeile">
@@ -474,13 +471,13 @@ MathJax = {
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Klicke die sechs Begriffe einzeln durch, bevor du «Alle gleichzeitig zeigen» aktivierst. Achte bei jedem darauf: Wie viele Punkte hat die Linie mit dem Kreis gemeinsam — keinen, einen oder zwei?</div>
+            <div class="ah-text">Klicke die sechs Begriffe einzeln durch, bevor du «Alle gleichzeitig zeigen» aktivierst. Achte bei jedem darauf: Wie viele Punkte hat die Linie mit dem Kreis gemeinsam — keinen, einen oder zwei? Wähle danach «a — Abstand zu M» und ziehe den Regler langsam von gross nach klein: Bei welchem Abstand ändert sich die Anzahl?</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
           <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
           <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Die Anzahl gemeinsamer Punkte ordnet die Begriffe: Passante keinen, Tangente genau einen, Sekante zwei. Sehne, Radius und Durchmesser sind Strecken — Ausschnitte, die im Kreis enden. Wer nach den Schnittpunkten fragt, muss die Namen nicht auswendig lernen.</div>
+            <div class="ah-text">Die Anzahl gemeinsamer Punkte ordnet die Begriffe: Passante keinen, Tangente genau einen, Sekante zwei. Entschieden wird das von einem einzigen Vergleich — dem Abstand \(a\) der Geraden von \(M\) mit dem Radius: \(a > r\) Passante, \(a = r\) Tangente, \(a < r\) Sekante. Sehne, Radius und Durchmesser sind Strecken — Ausschnitte, die im Kreis enden. Wer nach den Schnittpunkten fragt, muss die Namen nicht auswendig lernen.</div>
           </div>
         </div>
       </div>
@@ -501,6 +498,24 @@ MathJax = {
           <button class="chip" data-typ="sekante">g — Sekante</button>
           <button class="chip" data-typ="tangente">t — Tangente</button>
           <button class="chip" data-typ="passante">p — Passante</button>
+          <button class="chip" data-typ="abstand">a — Abstand zu M</button>
+        </div>
+      </div>
+
+      <div id="st-abstand-bedien" hidden>
+        <div class="regler">
+          <div class="regler-label">
+            <span>Abstand \(a\) der Geraden zu \(M\)</span>
+            <span class="wert" id="lbl-stAbst">3.60</span>
+          </div>
+          <input type="range" id="sld-stAbst" min="0" max="4" step="0.05" value="3.6">
+        </div>
+        <div class="legende" style="margin-top:12px">
+          <div class="legende-titel">Abstand und Radius</div>
+          <div class="legende-zeile"><span class="lab">Abstand \(a\)</span><span class="val" id="leg-stAbst">3.60</span></div>
+          <div class="legende-zeile"><span class="lab">Radius \(r\)</span><span class="val">3.00</span></div>
+          <div class="legende-zeile"><span class="lab">Vergleich</span><span class="val" id="leg-stVergl">a &gt; r</span></div>
+          <div class="legende-zeile"><span class="lab">Gemeinsame Punkte</span><span class="val" id="leg-stPunkte">0</span></div>
         </div>
       </div>
 
@@ -965,6 +980,7 @@ MathJax = {
         <div class="legende-zeile"><span class="lab">\(\varphi\)</span><span class="val" id="leg-sekPhi">70°</span></div>
         <div class="legende-zeile"><span class="lab">Bogenlänge \(b\)</span><span class="val" id="leg-sekB">3.665</span></div>
         <div class="legende-zeile"><span class="lab">Fläche \(A_{SK}\)</span><span class="val" id="leg-sekA">5.50</span></div>
+        <div class="legende-zeile"><span class="lab">Probe \(\tfrac{1}{2}\,b \cdot r\)</span><span class="val" id="leg-sekHalbBR">5.50</span></div>
         <div class="legende-zeile"><span class="lab">Anteil am Vollkreis</span><span class="val" id="leg-sekAnt">19.4%</span></div>
       </div>
 
@@ -994,6 +1010,8 @@ MathJax = {
   <p>Die Formel \(A_{SK} = \tfrac{1}{2}\,b \cdot r\) ist die Verallgemeinerung der Dreiecksflächenformel auf den Sektor: „halbe Grundseite mal Höhe", wobei \(b\) die (gekrümmte) „Grundseite" und \(r\) die „Höhe" ist.</p>
 </div>
 
+<p>Damit ist die offene Frage aus dem <a class="quer" href="#einstieg">↩ Einstieg</a> beantwortet: Ein Pizzastück ist ein Kreissektor. Bei 8 Stücken ist \(\varphi = 45°\), also \(A_{SK} = \dfrac{15^2 \cdot \pi \cdot 45°}{360°} = \dfrac{225\pi}{8} \approx 88.36\,\text{cm}^2\) — gleich viel liefert \(\tfrac{1}{2}\,b \cdot r\) mit der Bogenlänge \(b = \tfrac{15\pi}{4} \approx 11.78\,\text{cm}\) aus dem Einstieg.</p>
+
 
 <h3 id="kreissegment-h3">Kreissegment</h3>
 
@@ -1011,7 +1029,7 @@ MathJax = {
         <div class="anim-hinweis rechts">
           <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
           <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Das Kreissegment ist der Sektor <em>minus</em> das Dreieck aus den beiden Radien und der Sehne: \(A_{\text{Segment}} = A_{\text{Sektor}} - A_{\text{Dreieck}}\). Bei \(\varphi = 180°\) verschwindet das Dreieck und das Segment ist der halbe Kreis. Wer die Zerlegung sieht, braucht keine eigene Segmentformel auswendig.</div>
+            <div class="ah-text">Das Kreissegment ist der Sektor <em>minus</em> das Dreieck aus den beiden Radien und der Sehne: \(A_{\text{Segment}} = A_{\text{Sektor}} - A_{\text{Dreieck}}\). Bei \(\varphi = 180°\) verschwindet das Dreieck und das Segment ist der halbe Kreis. Darüber liegt das Dreieck innerhalb des Segments und wird addiert — die Formel bleibt dieselbe, weil dann \(r - h\) negativ ist. Wer die Zerlegung sieht, braucht keine eigene Segmentformel auswendig.</div>
           </div>
         </div>
       </div>
@@ -1511,6 +1529,95 @@ function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='mid
   beschriftung(ctx, s, x, y, { align, baseline: base, halo: true, W, H });
   ctx.restore();
 }
+// Beschriftung mit tiefgestelltem Index (A_SK, A_SG) — Muster txtIndex aus g5-2a,
+// hier ohne Schriftskalierung, weil initCv die Fläche nicht verkleinert
+function txtIndex(ctx, x, y, basis, index, color = C.tinte, size = 14, align = 'center', weight = '600') {
+  ctx.save();
+  ctx.fillStyle = color;
+  const fB = size, fI = size * 0.72;
+  const fontB = `${weight} ${fB}px "Source Sans 3", sans-serif`;
+  const fontI = `${weight} ${fI}px "Source Sans 3", sans-serif`;
+  ctx.font = fontB; const wB = ctx.measureText(basis).width + fB * 0.04;
+  ctx.font = fontI; const wI = ctx.measureText(index).width;
+  const wG = wB + wI;
+  let W, H;
+  const tf = ctx.getTransform ? ctx.getTransform() : null;
+  if (tf && tf.b === 0 && tf.c === 0 && tf.e === 0 && tf.f === 0 && tf.a > 0 && tf.d > 0) {
+    W = ctx.canvas.width / tf.a; H = ctx.canvas.height / tf.d;
+  }
+  let x0 = align === 'left' ? x : align === 'right' ? x - wG : x - wG / 2;
+  if (W !== undefined) x0 = Math.max(2, Math.min(W - 2 - wG, x0));
+  ctx.font = fontB;
+  beschriftung(ctx, basis, x0, y, { align: 'left', baseline: 'middle', halo: true, W, H });
+  ctx.font = fontI;
+  beschriftung(ctx, index, x0 + wB, y + fB * 0.3, { align: 'left', baseline: 'middle', halo: true, W, H });
+  ctx.restore();
+}
+/* Freiplatz-Suche für Canvas-Beschriftungen (Muster cv-flaeche in g5-2b).
+ * Jede Beschriftung hat eine Kandidatenliste, der erste ist die gewohnte Lage.
+ * Gewählt wird der Kandidat mit den kleinsten Kosten — Überdeckung mit schon
+ * gesetzten Beschriftungen (schwer), Figurlinien unter dem Text (leicht),
+ * Aufschlag je Ausweichschritt. optional: lieber weglassen als überdecken. */
+function labelPlatz(ctx, W, H, FS) {
+  const belegt = [], linienPkt = [], fehlt = [];
+  function linie(p, q) {
+    const n = Math.max(1, Math.ceil(Math.hypot(q[0] - p[0], q[1] - p[1]) / 3));
+    for (let i = 0; i <= n; i++) linienPkt.push([lerp(p[0], q[0], i / n), lerp(p[1], q[1], i / n)]);
+  }
+  function bogenPkt(cx, cy, r, b1, b2) {
+    const n = Math.max(1, Math.ceil(r * Math.abs(b2 - b1) / 3));
+    for (let i = 0; i <= n; i++) {
+      const w = lerp(b1, b2, i / n);
+      linienPkt.push([cx + r * Math.cos(w), cy + r * Math.sin(w)]);
+    }
+  }
+  // Textkasten wie beschriftung()/txtIndex(): gemessen und in den Canvas geklemmt
+  function kasten(lab, x, y, align, gewicht, index) {
+    ctx.save();
+    ctx.font = `${gewicht} ${FS}px "Source Sans 3", sans-serif`;
+    let w = ctx.measureText(lab).width;
+    if (index) {
+      w += FS * 0.04;
+      ctx.font = `${gewicht} ${FS * 0.72}px "Source Sans 3", sans-serif`;
+      w += ctx.measureText(index).width;
+    }
+    ctx.restore();
+    const a = FS * 0.5, u = index ? FS * 0.62 : FS * 0.42;
+    let x0 = align === 'left' ? x : align === 'right' ? x - w : x - w / 2;
+    x0 = Math.max(2, Math.min(W - 2 - w, x0));
+    const yy = Math.max(a + 2, Math.min(H - u - 2, y));
+    const xa = align === 'left' ? x0 : align === 'right' ? x0 + w : x0 + w / 2;
+    return { x: xa, y: yy, x0: x0 - 2, x1: x0 + w + 2, y0: yy - a - 2, y1: yy + u + 2 };
+  }
+  function kosten(b, linienGewicht = 1) {
+    let sum = 0;
+    for (const q of belegt) {
+      const ow = Math.min(b.x1, q.x1) - Math.max(b.x0, q.x0);
+      const oh = Math.min(b.y1, q.y1) - Math.max(b.y0, q.y0);
+      if (ow > 0 && oh > 0) sum += 60 + 2 * ow * oh;
+    }
+    for (const [px, py] of linienPkt) if (px > b.x0 && px < b.x1 && py > b.y0 && py < b.y1) sum += 4 * linienGewicht;
+    return sum;
+  }
+  // opt: gewicht, index (tiefgestellt), optional, passt(kasten) als Filter,
+  //      linien (Gewicht der Figurlinien; kleiner = Beschriftung darf eher auf Linien)
+  function setze(lab, farbe, kandidaten, opt = {}) {
+    const gewicht = opt.gewicht || '600';
+    let best = null, bestK = Infinity;
+    kandidaten.forEach(([x, y, align], i) => {
+      const b = kasten(lab, x, y, align, gewicht, opt.index);
+      if (opt.passt && !opt.passt(b)) return;
+      const roh = kosten(b, opt.linien === undefined ? 1 : opt.linien), kk = roh + 8 * i;
+      if (kk < bestK) { best = { b, align, roh }; bestK = kk; }
+    });
+    if (!best || (opt.optional && best.roh >= 60)) { fehlt.push(lab); return false; }
+    belegt.push(best.b);
+    if (opt.index) txtIndex(ctx, best.b.x, best.b.y, lab, opt.index, farbe, FS, best.align, gewicht);
+    else txt(ctx, best.b.x, best.b.y, lab, farbe, FS, best.align, 'middle', gewicht);
+    return true;
+  }
+  return { belegt, fehlt, linie, bogenPkt, kasten, setze };
+}
 function dot(ctx, p, color = C.blau, r = 5) {
   ctx.save();
   ctx.fillStyle = color;
@@ -1564,6 +1671,15 @@ geradenChips.forEach(b => b.addEventListener('click', () => {
   drawStrecken();
 }));
 togAlle.addEventListener('input', drawStrecken);
+/* Modus «Abstand zu M»: eine Gerade, deren Abstand a zu M per Regler läuft (r = 3) */
+const sldStAbst   = document.getElementById('sld-stAbst');
+const lblStAbst   = document.getElementById('lbl-stAbst');
+const legStAbst   = document.getElementById('leg-stAbst');
+const legStVergl  = document.getElementById('leg-stVergl');
+const legStPunkte = document.getElementById('leg-stPunkte');
+const stAbstBedien = document.getElementById('st-abstand-bedien');
+const ST_R = 3;   // Radius in Längeneinheiten für die Anzeige
+sldStAbst.addEventListener('input', drawStrecken);
 
 /* Winkel für die einzelnen Linien/Strecken (auf dem Kreis bzw. relativ zu M) */
 const stAngles = {
@@ -1602,6 +1718,7 @@ let stActiveKey = null;
     let bestD = Infinity, bestKey = null, bestI = -1;
     for (const key of visible) {
       const arr = stAngles[key];
+      if (!arr) continue;   // Modus «Abstand»: nichts zu ziehen, der Regler steuert
       for (let i = 0; i < arr.length; i++) {
         const px = cx + R * Math.cos(arr[i]);
         const py = cy + R * Math.sin(arr[i]);
@@ -1641,7 +1758,9 @@ function drawStrecken() {
   // Kreis
   circleK(ctx, cx, cy, R, C.lila, 2);
   dot(ctx, [cx, cy], C.tinte2, 4);
-  txt(ctx, cx + 12, cy + 14, 'M', C.tinte2, 14);
+  // Im Modus «Abstand» läuft die Gerade bei kleinem a rechts unter M durch → M links unten
+  const mLinks = aktiverTyp === 'abstand' && !togAlle.checked;
+  txt(ctx, cx + (mLinks ? -12 : 12), cy + 14, 'M', C.tinte2, 14);
 
   const visible = togAlle.checked
     ? Object.keys(stAngles)
@@ -1788,6 +1907,60 @@ function drawStrecken() {
     dot(ctx, Steuer, isAktiv('passante') ? C.orange : C.tinte2, isAktiv('passante') ? 7 : 4);
   }
 
+  /* ABSTAND DER GERADEN ZU M — Passante → Tangente → Sekante als ein Kriterium */
+  const abstandModus = aktiverTyp === 'abstand' && !togAlle.checked;
+  stAbstBedien.hidden = !abstandModus;
+  let abstLage = null;
+  if (abstandModus) {
+    const av = +sldStAbst.value;
+    const apx = av / ST_R * R;
+    // Lage exakt vergleichen (Reglerwerte sind Vielfache von 0.05, 3.00 wird genau getroffen)
+    abstLage = Math.abs(av - ST_R) < 1e-9 ? 'tangente' : (av > ST_R ? 'passante' : 'sekante');
+    const ux = Math.cos(-Math.PI/4), uy = Math.sin(-Math.PI/4);   // Lotrichtung von M (nach rechts oben)
+    const dirX = -uy, dirY = ux;                                   // Richtung der Geraden
+    const F = [cx + ux * apx, cy + uy * apx];                      // Lotfusspunkt
+    // Radius zum Vergleich, waagrecht nach links (weg von Gerade und Lot)
+    seg(ctx, [cx, cy], [cx - R, cy], C.lila, 1.8);
+    txt(ctx, cx - R / 2, cy - 12, 'r', C.lila, 14);
+    // Die Gerade
+    drawLine([F[0] - dirX * R, F[1] - dirY * R], [F[0] + dirX * R, F[1] + dirY * R], C.tinte, 2.5);
+    // Abstand a = Lot von M auf die Gerade
+    if (apx > 10) {
+      ctx.save();
+      ctx.strokeStyle = C.blau; ctx.lineWidth = 2.5; ctx.setLineDash([6, 4]);
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(F[0], F[1]); ctx.stroke();
+      ctx.restore();
+      const qs = 9;   // Rechtwinkel-Markierung im Lotfusspunkt
+      ctx.save();
+      ctx.strokeStyle = C.blau; ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(F[0] - ux * qs, F[1] - uy * qs);
+      ctx.lineTo(F[0] - ux * qs + dirX * qs, F[1] - uy * qs + dirY * qs);
+      ctx.lineTo(F[0] + dirX * qs, F[1] + dirY * qs);
+      ctx.stroke();
+      ctx.restore();
+      txt(ctx, cx + ux * apx / 2 - dirX * 14, cy + uy * apx / 2 - dirY * 14, 'a', C.blau, 15, 'center', 'middle', '700');
+    }
+    dot(ctx, F, C.blau, 4);
+    // Gemeinsame Punkte mit der Kreislinie
+    if (abstLage === 'tangente') {
+      dot(ctx, F, C.orange, 6);
+    } else if (abstLage === 'sekante') {
+      const w = Math.sqrt(R * R - apx * apx);
+      dot(ctx, [F[0] - dirX * w, F[1] - dirY * w], C.orange, 6);
+      dot(ctx, [F[0] + dirX * w, F[1] + dirY * w], C.orange, 6);
+    }
+    // Name der Geraden am unteren Ende
+    const nameG = { passante: 'p', tangente: 't', sekante: 'g' }[abstLage];
+    txt(ctx, F[0] + dirX * R * 1.1 + ux * 16, F[1] + dirY * R * 1.1 + uy * 16, nameG, C.tinte, 15, 'center', 'middle', '700');
+
+    const aTxt = av.toFixed(2);
+    lblStAbst.textContent = aTxt;
+    legStAbst.textContent = aTxt;
+    legStVergl.textContent = { passante: 'a > r', tangente: 'a = r', sekante: 'a < r' }[abstLage];
+    legStPunkte.textContent = { passante: '0', tangente: '1', sekante: '2' }[abstLage];
+  }
+
   // Aktualisiere Formel- und Erklärungsbox (nur wenn nicht "alle")
   const beschr = {
     radius: {
@@ -1815,6 +1988,26 @@ function drawStrecken() {
       erkl: 'Ziehe den orangen Steuerpunkt. Eine Passante hat keinen Schnittpunkt mit dem Kreis; ihr Abstand zum Mittelpunkt \\(M\\) ist grösser als \\(r\\).'
     }
   };
+
+  if (abstandModus) {
+    // Nur beim Wechsel der Lage neu setzen, nicht bei jedem Reglerschritt
+    if (formelSt.dataset.lage !== abstLage) {
+      formelSt.dataset.lage = abstLage;
+      formelSt.innerHTML = {
+        passante: '\\( a > r \\) — Passante: kein gemeinsamer Punkt',
+        tangente: '\\( a = r \\) — Tangente: genau ein gemeinsamer Punkt',
+        sekante:  '\\( a < r \\) — Sekante: zwei gemeinsame Punkte'
+      }[abstLage];
+      erklSt.innerHTML = {
+        passante: 'Die Gerade ist weiter von \\(M\\) entfernt als der Radius lang ist — sie verfehlt den Kreis. Schiebe den Regler nach links.',
+        tangente: 'Genau bei \\(a = r\\) berührt die Gerade den Kreis im Lotfusspunkt. Das Lot von \\(M\\) ist dort der Radius: Tangente \\(\\perp\\) Radius.',
+        sekante:  'Die Gerade kommt näher an \\(M\\) heran als \\(r\\) — sie schneidet die Kreislinie in zwei Punkten (orange). Bei \\(a = 0\\) geht sie durch \\(M\\).'
+      }[abstLage];
+      mjTypeset([formelSt, erklSt]);
+    }
+    return;
+  }
+  delete formelSt.dataset.lage;
 
   if (togAlle.checked) {
     formelSt.innerHTML = 'Alle Strecken und Geraden gleichzeitig';
@@ -2417,6 +2610,7 @@ const legSekPhi = document.getElementById('leg-sekPhi');
 const legSekB   = document.getElementById('leg-sekB');
 const legSekA   = document.getElementById('leg-sekA');
 const legSekAnt = document.getElementById('leg-sekAnt');
+const legSekHalbBR = document.getElementById('leg-sekHalbBR');
 const erklSek   = document.getElementById('erkl-sek');
 
 [sldSekR, sldSekPhi, togSekB, togSekVoll].forEach(el => el.addEventListener('input', drawSektor));
@@ -2484,12 +2678,26 @@ function drawSektor() {
           cyK + (arcR + 14) * Math.sin(aMid),
           'φ', C.lila, 13);
 
-  // Beschriftung A_SK (in der Mitte des Sektors)
+  // Beschriftung A_SK (im Sektor). Freiplatz-Suche: nicht über φ und M, ganz
+  // im Sektor; ohne Platz weggelassen (die Fläche steht in der Tabelle)
   if (phi > 30) {
-    const labR = rpx * 0.55;
-    txt(ctx, cxK + labR * Math.cos(aMid),
-            cyK + labR * Math.sin(aMid),
-            'A_SK', C.blau, 14, 'center', 'middle', '700');
+    const LP = labelPlatz(ctx, W, H, 14);
+    const phiLab = [cxK + (arcR + 14) * Math.cos(aMid), cyK + (arcR + 14) * Math.sin(aMid)];
+    LP.belegt.push(LP.kasten('φ', phiLab[0], phiLab[1], 'center', '600'));
+    LP.belegt.push(LP.kasten('M', cxK - 12, cyK + 12, 'center', '600'));
+    LP.bogenPkt(cxK, cyK, arcR, a1, a2);
+    const inSektor = b => [[b.x0, b.y0], [b.x1, b.y0], [b.x0, b.y1], [b.x1, b.y1]].every(([x, y]) => {
+      const d = Math.hypot(x - cxK, y - cyK);
+      if (d > rpx - 2) return false;
+      let w = Math.atan2(y - cyK, x - cxK) - a1;
+      w = ((w % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+      return w <= phiRad;
+    });
+    const k = [];
+    for (const t of [0.55, 0.65, 0.75, 0.45, 0.85])
+      for (const dw of [0, -0.15, 0.15, -0.3, 0.3])
+        k.push([cxK + t * rpx * Math.cos(aMid + dw * phiRad), cyK + t * rpx * Math.sin(aMid + dw * phiRad), 'center']);
+    LP.setze('A', C.blau, k, { gewicht: '700', index: 'SK', optional: true, passt: inSektor });
   }
 
   // Beschriftung b (auf dem Bogen)
@@ -2514,15 +2722,18 @@ function drawSektor() {
   legSekB.textContent = bv.toFixed(3);
   legSekA.textContent = Av.toFixed(2);
   legSekAnt.textContent = anteil.toFixed(1) + '%';
+  // Probe wie in A4.2: ½·b·r muss dieselbe Fläche liefern wie r²πφ/360°
+  legSekHalbBR.textContent = (bv * rv / 2).toFixed(2);
 
   let erkl;
-  if (phi === 0) erkl = `Bei φ = 0° entartet der Sektor zu einem Strahl (keine Fläche).`;
+  // Variablen kursiv wie im MathJax daneben
+  if (phi === 0) erkl = `Bei <em>φ</em> = 0° entartet der Sektor zu einem Strahl (keine Fläche).`;
   else if (phi <= 45) erkl = `Schmaler Sektor (${phi}°). Anteil am Vollkreis: ${anteil.toFixed(1)} %.`;
-  else if (phi === 90) erkl = `Viertelkreis: φ = 90°, Anteil = 25 %. Klassische Form aus der Optik (Linsenform).`;
-  else if (phi === 180) erkl = `Halbkreis: Sehne = Durchmesser, Bogenlänge = π·r.`;
-  else if (phi === 360) erkl = `Vollkreis. Hier degeneriert die Sektorformel zur Kreisformel A = π·r².`;
-  else erkl = `Sektor mit φ = ${phi}°. Anteil am Vollkreis: ${anteil.toFixed(1)} %.`;
-  erklSek.textContent = erkl;
+  else if (phi === 90) erkl = `Viertelkreis: <em>φ</em> = 90°, Anteil = 25 %.`;
+  else if (phi === 180) erkl = `Halbkreis: Sehne = Durchmesser, Bogenlänge = π·<em>r</em>.`;
+  else if (phi === 360) erkl = `Vollkreis. Hier degeneriert die Sektorformel zur Kreisformel <em>A</em> = π·<em>r</em>².`;
+  else erkl = `Sektor mit <em>φ</em> = ${phi}°. Anteil am Vollkreis: ${anteil.toFixed(1)} %.`;
+  erklSek.innerHTML = erkl;
 }
 
 
@@ -2543,6 +2754,7 @@ const legSegASek = document.getElementById('leg-segASek');
 const legSegADre = document.getElementById('leg-segADre');
 const legSegA   = document.getElementById('leg-segA');
 const erklSeg   = document.getElementById('erkl-seg');
+const formelSeg = document.getElementById('formel-seg');
 
 [sldSegR, sldSegPhi, togSegDre, togSegMass].forEach(el => el.addEventListener('input', drawSegment));
 
@@ -2615,9 +2827,8 @@ function drawSegment() {
   ctx.stroke();
   ctx.restore();
 
-  // Mittelpunkt
+  // Mittelpunkt (Beschriftung M folgt unten mit der Freiplatz-Suche)
   dot(ctx, [cxK, cyK], C.tinte, 3);
-  txt(ctx, cxK - 12, cyK - 12, 'M', C.tinte2, 14);
 
   // Sehnen-Mittelpunkt + Höhe h
   const Mse = [(P1[0]+P2[0])/2, (P1[1]+P2[1])/2];  // Mittelpunkt der Sehne
@@ -2632,7 +2843,6 @@ function drawSegment() {
   const ADre = sv * rmh / 2;
   const ASG = ASek - ADre;
 
-  // Masse beschriften
   if (togSegMass.checked) {
     // Senkrechte Linie M - Mse - bogenMittel
     ctx.save();
@@ -2644,16 +2854,6 @@ function drawSegment() {
     ctx.lineTo(bogenMittel[0], bogenMittel[1]);
     ctx.stroke();
     ctx.restore();
-    // Beschriftungen
-    // s zwischen P1 und P2 (auf der Sehne)
-    txt(ctx, Mse[0], Mse[1] + 14, 's', C.blau, 14, 'center', 'middle', '700');
-    // h zwischen Mse und Bogen-Mittel
-    txt(ctx, Mse[0] + 12, (Mse[1] + bogenMittel[1])/2, 'h', C.blau, 14, 'left');
-    // r-h zwischen M und Mse
-    txt(ctx, cxK + 12, (cyK + Mse[1])/2, 'r-h', C.tinte2, 14, 'left');
-    // r auf einem der Schenkel
-    const Mr = [(cxK + P1[0])/2, (cyK + P1[1])/2];
-    txt(ctx, Mr[0] - 14, Mr[1] - 4, 'r', C.orange, 14);
     // Rechtwinkel-Markierung am Mse
     const qs = 8;
     ctx.save();
@@ -2667,11 +2867,6 @@ function drawSegment() {
     ctx.restore();
   }
 
-  // Beschriftung A_SG
-  if (phi > 30) {
-    txt(ctx, Mse[0], (Mse[1] + bogenMittel[1])/2 + 8, 'A_SG', C.blau, 14, 'center', 'middle', '700');
-  }
-
   // φ-Bogen klein nahe M
   const arcR = Math.min(22, rpx * 0.25);
   ctx.save();
@@ -2681,7 +2876,87 @@ function drawSegment() {
   ctx.arc(cxK, cyK, arcR, a1, a2);
   ctx.stroke();
   ctx.restore();
-  txt(ctx, cxK, cyK + arcR + 10, 'φ', C.lila, 14);
+
+  /* Beschriftungen mit Freiplatz-Suche (labelPlatz): M, φ und s werden immer
+   * gesetzt; h, r − h, r und A_SG lieber weggelassen als übereinander (die Werte
+   * stehen in der Tabelle). */
+  const FS = 14;
+  const LP = labelPlatz(ctx, W, H, FS);
+  const { linie, setze, fehlt } = LP;
+  const bogenPkt = (r, b1, b2) => LP.bogenPkt(cxK, cyK, r, b1, b2);
+  linie([cxK, cyK], P1); linie([cxK, cyK], P2); linie(P1, P2);
+  bogenPkt(rpx, a1, a2); bogenPkt(arcR, a1, a2);
+  if (togSegMass.checked) linie([cxK, cyK], bogenMittel);
+  LP.belegt.push({ x0: cxK - 4, x1: cxK + 4, y0: cyK - 4, y1: cyK + 4 });
+
+  // Kandidaten rund um einen Punkt in wachsendem Abstand
+  function rundum(p, abst, erster) {
+    const k = erster ? [erster] : [];
+    for (const d of abst)
+      for (const [dx, dy] of [[-1,-1],[1,-1],[-1,1],[1,1],[0,-1],[-1,0],[1,0],[0,1]])
+        k.push([p[0] + dx * d, p[1] + dy * d, 'center']);
+    return k;
+  }
+
+  // M
+  setze('M', C.tinte2, rundum([cxK, cyK], [13, 20, 28], [cxK - 12, cyK - 12, 'center']));
+  // φ: auf der Winkelhalbierenden (nach unten), dann seitlich
+  {
+    const k = [];
+    for (const d of [10, 18, 26, 36]) k.push([cxK, cyK + arcR + d, 'center']);
+    for (const d of [10, 18]) k.push([cxK - arcR - d, cyK + arcR, 'center'], [cxK + arcR + d, cyK + arcR, 'center']);
+    // φ gehört an seinen Bogen: Figurlinien unter dem Text (mit Halo) zählen wenig
+    setze('φ', C.lila, k, { linien: 0.25 });
+  }
+  if (togSegMass.checked) {
+    // s: unter bzw. über der Sehne, dann an den Sehnenenden
+    const sp = Math.abs(P1[0] - P2[0]);
+    const k = [[Mse[0], Mse[1] + 14, 'center'], [Mse[0], Mse[1] - 14, 'center']];
+    for (const f of [0.25, 0.4]) for (const dy of [14, -14])
+      k.push([Mse[0] + f * sp, Mse[1] + dy, 'center'], [Mse[0] - f * sp, Mse[1] + dy, 'center']);
+    k.push([P1[0] + 10, P1[1], 'left'], [P2[0] - 10, P2[1], 'right']);
+    setze('s', C.blau, k, { gewicht: '700' });
+  }
+  if (togSegMass.checked) {
+    // h: neben der Höhenlinie zwischen Sehne und Bogen
+    const k = [];
+    for (const t of [0.5, 0.3, 0.7])
+      k.push([Mse[0] + 12, lerp(Mse[1], bogenMittel[1], t), 'left'], [Mse[0] - 12, lerp(Mse[1], bogenMittel[1], t), 'right']);
+    setze('h', C.blau, k, { optional: true });
+    // r − h: neben der Linie M–Sehnenmitte
+    const k2 = [];
+    for (const t of [0.5, 0.3, 0.7])
+      k2.push([cxK + 12, lerp(cyK, Mse[1], t), 'left'], [cxK - 12, lerp(cyK, Mse[1], t), 'right']);
+    setze('r − h', C.tinte2, k2, { optional: true });
+    // r: an einem der beiden Schenkel, beidseits
+    const k3 = [];
+    for (const P of [P1, P2]) {
+      const len = Math.hypot(P[0] - cxK, P[1] - cyK) || 1;
+      const nx = -(P[1] - cyK) / len, ny = (P[0] - cxK) / len;
+      for (const t of [0.5, 0.65, 0.35, 0.8])
+        for (const sg of [1, -1])
+          k3.push([lerp(cxK, P[0], t) + sg * nx * 12, lerp(cyK, P[1], t) + sg * ny * 12, 'center']);
+    }
+    // gewohnte Lage (links oberhalb der Mitte des rechten Schenkels) zuerst
+    k3.unshift([(cxK + P1[0]) / 2 - 14, (cyK + P1[1]) / 2 - 4, 'center']);
+    setze('r', C.orange, k3, { optional: true });
+  }
+  // A_SG: nur ganz im Segment (innerhalb des Kreises, auf der Bogenseite der Sehne)
+  if (phi > 30) {
+    const drin = b => [[b.x0, b.y0], [b.x1, b.y0], [b.x0, b.y1], [b.x1, b.y1]].every(([x, y]) =>
+      Math.hypot(x - cxK, y - cyK) < rpx - 2 && y > Mse[1] + 2);
+    const k = [];
+    const yM = (Mse[1] + bogenMittel[1]) / 2;
+    k.push([Mse[0], yM + 8, 'center']);
+    const tiefe = bogenMittel[1] - Mse[1];
+    for (const t of [0.5, 0.35, 0.65, 0.25, 0.8]) {
+      // dicht links/rechts der Höhenlinie (flaches Segment), dann weiter aussen
+      k.push([Mse[0] - 6, Mse[1] + t * tiefe, 'right'], [Mse[0] + 6, Mse[1] + t * tiefe, 'left']);
+      for (const dx of [0, -0.3, 0.3, -0.5, 0.5])
+        k.push([Mse[0] + dx * rpx, Mse[1] + t * tiefe, 'center']);
+    }
+    setze('A', C.blau, k, { gewicht: '700', index: 'SG', optional: true, passt: drin });
+  }
 
   // Werte
   legSegR.textContent = rv.toFixed(1);
@@ -2689,17 +2964,35 @@ function drawSegment() {
   legSegS.textContent = sv.toFixed(3);
   legSegH.textContent = hv.toFixed(3);
   legSegASek.textContent = ASek.toFixed(2);
-  legSegADre.textContent = ADre.toFixed(2);
+  // φ > 180°: r − h < 0, die Dreiecksfläche zählt negativ (Unicode-Minus, keine −0.00)
+  const aDreTxt = ADre.toFixed(2);
+  legSegADre.textContent = (/^-0\.0+$/.test(aDreTxt) ? aDreTxt.slice(1) : aDreTxt).replace('-', '\u2212');
+  // Formelbox: Hinweis, sobald r − h negativ wird
+  const formelGross = phi > 180;
+  if ((formelSeg.dataset.gross || 'false') !== String(formelGross)) {
+    formelSeg.dataset.gross = String(formelGross);
+    formelSeg.innerHTML = formelGross
+      ? '\\( A_{SG} = \\dfrac{r^2 \\pi \\varphi}{360°} - \\dfrac{s\\,(r-h)}{2} \\)'
+        + '<br><small>Für \\(\\varphi > 180°\\) ist \\(h > r\\), also \\(r - h < 0\\): '
+        + 'Der zweite Term wird negativ — das Dreieck wird zum Sektor <strong>addiert</strong>.</small>'
+      : '\\( A_{SG} = \\dfrac{r^2 \\pi \\varphi}{360°} - \\dfrac{s\\,(r-h)}{2} \\)';
+    mjTypeset([formelSeg]);
+  }
   legSegA.textContent = ASG.toFixed(2);
 
   let erkl;
-  if (phi === 0) erkl = `Bei φ = 0° entartet das Segment zu einer Strecke (keine Fläche).`;
-  else if (phi === 360) erkl = `Bei φ = 360° umfasst das „Segment" den ganzen Kreis; Sehne und Dreieck entarten zu Punkten.`;
+  // Variablen kursiv wie im MathJax daneben
+  if (phi === 0) erkl = `Bei <em>φ</em> = 0° entartet das Segment zu einer Strecke (keine Fläche).`;
+  else if (phi === 360) erkl = `Bei <em>φ</em> = 360° umfasst das „Segment" den ganzen Kreis; Sehne und Dreieck entarten zu Punkten.`;
   else if (phi === 180) erkl = `Halbkreis: Segmentfläche = halber Kreis (das Dreieck degeneriert zur Strecke).`;
-  else if (phi < 90) erkl = `Dünnes Segment: Sehne ≈ Bogen, Höhe h klein.`;
+  else if (phi < 90) erkl = `Dünnes Segment: Sehne ≈ Bogen, Höhe <em>h</em> klein.`;
   else if (phi < 180) erkl = `Segment (blau) = Sektor (grau-gestrichelt) minus Dreieck (orange).`;
-  else erkl = `Grosses Segment (φ > 180°): Sektor und Dreieck liegen auf derselben Seite der Sehne — die Segmentfläche ist Sektor + Dreieck. In der Rechnung „Sektor − Dreieck" wird die Dreiecksfläche darum negativ gezählt.`;
-  erklSeg.textContent = erkl;
+  else erkl = `Grosses Segment (<em>φ</em> &gt; 180°): Sektor und Dreieck liegen auf derselben Seite der Sehne — die Segmentfläche ist Sektor + Dreieck. In der Rechnung „Sektor − Dreieck" wird die Dreiecksfläche darum negativ gezählt.`;
+  // Beschriftung ohne freien Platz weggelassen → sagen, wo die Werte stehen
+  const fehltMass = fehlt.filter(l => l !== 'A');
+  if (fehltMass.length && phi > 0 && phi < 360)
+    erkl += ` Zu eng für die Beschriftung von ${fehltMass.map(l => '<em>' + l + '</em>').join(', ')} — die Werte stehen in der Tabelle.`;
+  erklSeg.innerHTML = erkl;
 }
 
 
@@ -2741,12 +3034,12 @@ window.addEventListener('resize', () => {
     document.getElementById('pz-vn').textContent = n;
 
     const r_cm = 15;  // Radius in cm (mathematisch)
-    const zeta_deg = 360 / n;
-    const zeta_rad = 2 * Math.PI / n;
-    const bogen = r_cm * zeta_rad;       // Bogenlänge pro Stück (cm)
+    const phi_deg = 360 / n;
+    const phi_rad = 2 * Math.PI / n;
+    const bogen = r_cm * phi_rad;       // Bogenlänge pro Stück (cm)
     const umfang = 2 * Math.PI * r_cm;   // Gesamtumfang (cm)
 
-    document.getElementById('pz-zeta').textContent = zeta_deg.toFixed(1) + '°';
+    document.getElementById('pz-phi').textContent = phi_deg.toFixed(1) + '°';
     document.getElementById('pz-bogen').textContent = bogen.toFixed(2) + ' cm';
     document.getElementById('pz-umfang').textContent = '≈ ' + umfang.toFixed(2) + ' cm';
 
@@ -2765,8 +3058,8 @@ window.addEventListener('resize', () => {
 
     // Sektoren als Teigflächen
     for (let i = 0; i < n; i++){
-      const a0 = -Math.PI/2 + i * zeta_rad;
-      const a1 = -Math.PI/2 + (i+1) * zeta_rad;
+      const a0 = -Math.PI/2 + i * phi_rad;
+      const a1 = -Math.PI/2 + (i+1) * phi_rad;
       ctx.fillStyle = teigtoene[i % teigtoene.length];
       ctx.beginPath();
       ctx.moveTo(cx, cy);
@@ -2778,7 +3071,7 @@ window.addEventListener('resize', () => {
     // Schnittlinien zwischen den Stücken
     ctx.strokeStyle = '#a96235'; ctx.lineWidth = 1.6;
     for (let i = 0; i < n; i++){
-      const a = -Math.PI/2 + i * zeta_rad;
+      const a = -Math.PI/2 + i * phi_rad;
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.lineTo(cx + r_px*Math.cos(a), cy + r_px*Math.sin(a));
@@ -2790,20 +3083,20 @@ window.addEventListener('resize', () => {
 
     // Erstes Stück hervorheben: Sektorwinkel-Bogen + Bogenlängen-Markierung
     const hi_a0 = -Math.PI/2;
-    const hi_a1 = -Math.PI/2 + zeta_rad;
+    const hi_a1 = -Math.PI/2 + phi_rad;
 
     // Sektorwinkel-Bogen am Mittelpunkt
     const arc_r = Math.min(28, r_px*0.25);
     ctx.strokeStyle = '#9b1c1c'; ctx.lineWidth = 2.5;
     ctx.beginPath(); ctx.arc(cx, cy, arc_r, hi_a0, hi_a1); ctx.stroke();
 
-    // ζ-Beschriftung in der Sektor-Bissektrix-Richtung
+    // φ-Beschriftung (Sektorwinkel, gleiches Symbol wie Anzeige und Anim 7)
+    // in der Sektor-Bissektrix-Richtung
     const a_mid = (hi_a0 + hi_a1)/2;
     const tx = cx + (arc_r + 18)*Math.cos(a_mid);
     const ty = cy + (arc_r + 18)*Math.sin(a_mid);
     ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px JetBrains Mono, monospace';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText('ζ', tx, ty);
+    beschriftung(ctx, 'φ', tx, ty, {align:'center', baseline:'middle', halo:true, W, H});
 
     // Bogenlängen-Markierung: dickerer Bogen auf der Aussenseite des ersten Stücks
     ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 5;
@@ -2816,12 +3109,26 @@ window.addEventListener('resize', () => {
     ctx.lineTo(cx + r_px*Math.cos(a_mid), cy + r_px*Math.sin(a_mid));
     ctx.stroke();
     ctx.setLineDash([]);
-    // r-Label
-    const rL_x = cx + (r_px/2)*Math.cos(a_mid) + 8;
-    const rL_y = cy + (r_px/2)*Math.sin(a_mid);
+    // r-Label: neben der r-Linie, aber nie über der φ-Beschriftung (beide
+    // liegen auf der Bissektrix). Kandidaten entlang und quer zur Linie,
+    // der erste freie gewinnt; Klemmung in den Canvas eingerechnet.
     ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono, monospace';
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    beschriftung(ctx, 'r = 15 cm', rL_x, rL_y, {align:'center', halo:true, W, H});
+    const rTxt = 'r = 15 cm';
+    const rw = ctx.measureText(rTxt).width + 6, rh = 18, pw = ctx.measureText('φ').width + 8, ph = 20;
+    const ux = Math.cos(a_mid), uy = Math.sin(a_mid), nx = -uy, ny = ux;
+    let rL_x = cx + (r_px/2)*ux + 8, rL_y = cy + (r_px/2)*uy;
+    suche:
+    for (const t of [0.5, 0.62, 0.74]) {
+      for (const s of [0, 12, -12, 20, -20, 28, -28, 36, -36, 44, -44]) {
+        let x = cx + t*r_px*ux + s*nx, y = cy + t*r_px*uy + s*ny;
+        x = Math.min(Math.max(x, rw/2), W - rw/2);
+        y = Math.min(Math.max(y, rh/2), H - rh/2);
+        if (Math.abs(x - tx) >= (rw + pw)/2 || Math.abs(y - ty) >= (rh + ph)/2) {
+          rL_x = x; rL_y = y; break suche;
+        }
+      }
+    }
+    beschriftung(ctx, rTxt, rL_x, rL_y, {align:'center', baseline:'middle', halo:true, W, H});
     ctx.textBaseline = 'alphabetic';
   }
 

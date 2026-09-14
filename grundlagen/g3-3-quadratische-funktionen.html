@@ -519,11 +519,11 @@ MathJax = {
     </div>
 
     <div style="margin-top:8px;font-size:0.76rem;color:var(--tinte-2);text-align:center">
-      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--blau);vertical-align:middle"></span>
-      Scheitelpunkt &nbsp;·&nbsp;
-      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--orange);vertical-align:middle"></span>
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--tinte);vertical-align:middle"></span>
+      Scheitelpunkt \(S(\textcolor{#b85c00}{u} \mid \textcolor{#1f6b3a}{v})\) &nbsp;·&nbsp;
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--lila);vertical-align:middle"></span>
       Nullstellen &nbsp;·&nbsp;
-      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--gruen);vertical-align:middle"></span>
+      <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--rot);vertical-align:middle"></span>
       y-Achsenabschnitt
     </div>
   </div>
@@ -1606,9 +1606,25 @@ function drawDR(){
   const ns = quadr ? nullstellen(A, B, C) : {n:0};
   const nst = (ns.n === 2 ? [ns.x1, ns.x2] : ns.n === 1 ? [ns.x1] : [])
                 .filter(xn => Math.abs(xn) <= rng).sort((p, q) => p - q);
-  if(zeigeS) punkt(u, v, '#1a4f8a', 7);
-  if(zeigeC) punkt(0, C, '#1f6b3a', 6);
-  nst.forEach(xn => punkt(xn, 0, '#b85c00', 6));
+  // Farben: Blau, Orange, Grün gehören den Reglern a, u, v — blau ist die Parabel
+  // samt Term (a formt sie), orange/grün stehen nur als u- und v-Wert in «S(u | v)».
+  // Die Punkte selbst tragen keine Reglerfarbe, sonst läse man eine falsche Kopplung
+  // (a verschiebt S nicht; Nullstellen und c hängen von allen drei Reglern ab):
+  // S neutral dunkel, Nullstellen violett, (0 | c) rot.
+  // Fallen Punkte zusammen (z.B. u = 0: S = (0 | c); v = 0: S ist Nullstelle), werden
+  // sie als Ringe ineinander gezeichnet — aussen S, dann (0 | c), innen die Nullstelle —
+  // und nur eine Beschriftung gesetzt: die ausführlichste (S vor (0 | c) vor Nullstelle).
+  const gleich = (x1, y1, x2, y2) => Math.abs(x1 - x2) < 1e-6 && Math.abs(y1 - y2) < 1e-6;
+  const cAufS = zeigeS && zeigeC && gleich(0, C, u, v);
+  const nAufS = nst.map(xn => zeigeS && gleich(xn, 0, u, v));
+  const nAufC = nst.map(xn => zeigeC && gleich(xn, 0, 0, C));
+  const stapel = (anzahl, k, r) => anzahl === 1 ? r : [9, 6, 3][k];
+  if(zeigeS) punkt(u, v, '#1c1a17', stapel(1 + (cAufS ? 1 : 0) + (nAufS.some(Boolean) ? 1 : 0), 0, 7));
+  if(zeigeC) punkt(0, C, '#9b1c1c', stapel(1 + (cAufS ? 1 : 0) + (nAufC.some(Boolean) ? 1 : 0), cAufS ? 1 : 0, 6));
+  nst.forEach((xn, i) => {
+    const drauf = (nAufS[i] ? 1 : 0) + (nAufC[i] ? 1 : 0);   // beide: dann liegt auch C auf S
+    punkt(xn, 0, '#5b2d8e', stapel(1 + drauf, drauf, 6));
+  });
 
   // Lage wählen: erste freie; ist keine frei, die mit der kleinsten Überdeckung
   // (Beschriftungen und Punkte zählen dreifach, die Achsennamen x, y mit wAchse)
@@ -1649,7 +1665,7 @@ function drawDR(){
     const [x, y, al] = waehle(txt, lagen, 1);
     texte.push([txt, x, y, al, farbe]);
   };
-  // Nullstellen (orange) unter der Achse — über der Achse, weiter weg oder seitlich
+  // Nullstellen (violett) unter der Achse — über der Achse, weiter weg oder seitlich
   // nur, wenn unten ein Punkt oder eine Beschriftung im Weg liegt.
   // Liegen sie eng, symmetrisch auseinanderrücken.
   const nx = nst.map(xn => cx(xn)), nt = nst.map(xn => fmtNum(xn));
@@ -1657,21 +1673,22 @@ function drawDR(){
     const luecke = (nx[1] - ctx.measureText(nt[1]).width/2) - (nx[0] + ctx.measureText(nt[0]).width/2);
     if(luecke < 8){ const d = (8 - luecke)/2; nx[0] -= d; nx[1] += d; }
   }
-  nst.forEach((xn, i) => setze(nt[i], [[nx[i], cy(0)+24, 'center'], [nx[i], cy(0)-10, 'center'],
-    [nx[i], cy(0)+40, 'center'], [nx[i], cy(0)-26, 'center'], [nx[i]-16, cy(0)+24, 'center'], [nx[i]+16, cy(0)+24, 'center']], '#b85c00'));
+  nst.forEach((xn, i) => (nAufS[i] || nAufC[i]) || setze(nt[i], [[nx[i], cy(0)+24, 'center'], [nx[i], cy(0)-10, 'center'],
+    [nx[i], cy(0)+40, 'center'], [nx[i], cy(0)-26, 'center'], [nx[i]-16, cy(0)+24, 'center'], [nx[i]+16, cy(0)+24, 'center']], '#5b2d8e'));
   if(zeigeS){
     const px = cx(u), py = cy(v);
     setze(`S(${fmtNum(u)} | ${fmtNum(v)})`,
           [[px+12, py+20, 'left'], [px+12, py-12, 'left'], [px-12, py+20, 'right'], [px-12, py-12, 'right'],
            [px+12, py+38, 'left'], [px-12, py+38, 'right'], [px+12, py-30, 'left'], [px-12, py-30, 'right'],
-           [px+12, py+56, 'left'], [px-12, py+56, 'right'], [px+12, py-48, 'left'], [px-12, py-48, 'right']], '#1a4f8a');
+           [px+12, py+56, 'left'], [px-12, py+56, 'right'], [px+12, py-48, 'left'], [px-12, py-48, 'right']],
+          [['S(', '#1c1a17'], [fmtNum(u), '#b85c00'], [' | ', '#1c1a17'], [fmtNum(v), '#1f6b3a'], [')', '#1c1a17']]);
   }
-  if(zeigeC){
+  if(zeigeC && !cAufS){
     const px = cx(0), py = cy(C);
     setze(`(0 | ${fmtExakt(C)})`,
           [[px+12, py+4, 'left'], [px+12, py+20, 'left'], [px+12, py-12, 'left'], [px-12, py+4, 'right'],
            [px-12, py+20, 'right'], [px-12, py-12, 'right'], [px+12, py+38, 'left'], [px+12, py-30, 'left'],
-           [px-12, py+38, 'right'], [px-12, py-30, 'right'], [px+12, py+56, 'left'], [px+12, py-48, 'left']], '#1f6b3a');
+           [px-12, py+38, 'right'], [px-12, py-30, 'right'], [px+12, py+56, 'left'], [px+12, py-48, 'left']], '#9b1c1c');
   }
 
   /* ── Achsenzahlen (wie drawGrid), aber ohne die, die eine Beschriftung verdecken würde ── */
@@ -1701,7 +1718,20 @@ function drawDR(){
   // Punkte und Beschriftungen über Kurve und Achsenzahlen
   punkte.forEach(([x, y, farbe, r]) => drawDot(ctx, cx, cy, x, y, farbe, r));
   ctx.font = 'bold 13px monospace';
-  texte.forEach(([t, x, y, al, farbe]) => { ctx.fillStyle = farbe; beschriftung(ctx, t, x, y, {align: al, W, H}); });
+  texte.forEach(([t, x, y, al, farbe]) => {
+    if(!Array.isArray(farbe)){ ctx.fillStyle = farbe; beschriftung(ctx, t, x, y, {align: al, W, H}); return; }
+    // Mehrfarbig («S(u | v)»): erst Freistellung und Klemmung für den ganzen Text
+    // (Schrift durchsichtig), dann die Teile nebeneinander in ihren Farben.
+    ctx.fillStyle = 'rgba(0,0,0,0)';
+    const lage = beschriftung(ctx, t, x, y, {align: al, bg:'#fff', W, H});
+    let lx = al === 'right' ? lage.x - ctx.measureText(t).width
+           : al === 'center' ? lage.x - ctx.measureText(t).width/2 : lage.x;
+    farbe.forEach(([teil, f]) => {
+      ctx.fillStyle = f;
+      beschriftung(ctx, teil, lx, lage.y, {align:'left', frei:false});
+      lx += ctx.measureText(teil).width;
+    });
+  });
 }
 
 ['dr-a','dr-u','dr-v'].forEach(id=>document.getElementById(id).addEventListener('input', updateDR));
@@ -1824,12 +1854,12 @@ document.getElementById('disk-c').addEventListener('input', updateDisk);
    ══════════════════════════════════════════════════════════ */
 const typenQ = [
   {label:'Normalparabel',   desc:'f(x) = x²;  Normalparabel: a=1, Scheitelpunkt im Ursprung', a:1,  b:0,  c:0,  color:'#1a4f8a'},
-  {label:'a > 0 (offen ↑)', desc:'f(x) = 0.5·x² − 2;  nach oben geöffnet, gestaucht (|a|<1)', a:0.5, b:0, c:-2, color:'#1f6b3a'},
+  {label:'a > 0 (offen ↑)', desc:'f(x) = 0.5·x² − x − 1.5;  nach oben geöffnet, gestaucht (|a|<1); b ≠ 0: Scheitel S(1 | −2) neben der y-Achse', a:0.5, b:-1, c:-1.5, color:'#1f6b3a'},
   {label:'a < 0 (offen ↓)', desc:'f(x) = −2·x² + 3;  nach unten geöffnet, gestreckt (|a|>1)', a:-2,  b:0, c:3, color:'#b85c00'},
   {label:'gestreckt',       desc:'f(x) = 2·x²;  schmaler als Normalparabel (|a|>1)',           a:2,  b:0, c:0, color:'#5b2d8e'},
   {label:'gestaucht',       desc:'f(x) = 0.25·x²;  breiter als Normalparabel (|a|<1)',          a:0.25, b:0, c:0, color:'#9b1c1c'},
   {label:'verschoben',      desc:'f(x) = (x − 2)² + 1;  Scheitel S(2 | 1) — verschoben',       a:1,  b:-4, c:5, color:'#0f766e'},
-  {label:'reine quadratische', desc:'f(x) = x² − 3;  b = 0: Symmetrieachse ist y-Achse',       a:1,  b:0, c:-3, color:'#7c3aed'},
+  {label:'rein quadratisch (b = 0)', desc:'f(x) = x² − 3;  b = 0: Symmetrieachse ist y-Achse',       a:1,  b:0, c:-3, color:'#7c3aed'},
 ];
 let typActiveQ = 0;
 function buildTypBtnsQ(){

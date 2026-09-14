@@ -315,8 +315,12 @@ MathJax = {
 .vz-btn.falsch   { background: var(--rot-hell);   border-color: var(--rot);   color: var(--rot); }
 .vz-btn:disabled { cursor: not-allowed; }
 .vz-fb { display: none; margin-top: 10px; padding: 9px 13px; border-radius: 7px; font-size: 0.85rem; }
-.vz-fb.ok  { display: block; background: var(--gruen-hell); color: var(--gruen); border: 1px solid var(--gruen); }
-.vz-fb.err { display: block; background: var(--rot-hell);   color: var(--rot);   border: 1px solid var(--rot); }
+.vz-fb.ok  { display: flex; background: var(--gruen-hell); color: var(--gruen); border: 1px solid var(--gruen); }
+.vz-fb.err { display: flex; background: var(--rot-hell);   color: var(--rot);   border: 1px solid var(--rot); }
+.vz-fb.ok, .vz-fb.err { gap: 12px; align-items: center; }
+/* Mini-Einheitskreis in der Rückmeldung (AN-88) */
+.vz-kreis { width: 140px; height: auto; flex: none; background: var(--weiss); border: 1px solid var(--linie); border-radius: 6px; }
+.vz-kreis[hidden] { display: none; }
 .vz-foot { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
 .vz-pruef, .vz-next { padding: 7px 14px; border: 1px solid var(--blau); background: var(--blau); color: var(--weiss); border-radius: 7px; cursor: pointer; font-family: var(--mono); font-size: 0.8rem; }
 .vz-next { background: var(--weiss); color: var(--blau); }
@@ -606,6 +610,7 @@ MathJax = {
           <button class="chip" data-w="30">30°</button>
           <button class="chip" data-w="45">45°</button>
           <button class="chip" data-w="60">60°</button>
+          <button class="chip" data-w="90">90°</button>
           <button class="chip" data-w="120">120°</button>
           <button class="chip" data-w="135">135°</button>
           <button class="chip" data-w="150">150°</button>
@@ -613,6 +618,7 @@ MathJax = {
           <button class="chip" data-w="210">210°</button>
           <button class="chip" data-w="225">225°</button>
           <button class="chip" data-w="240">240°</button>
+          <button class="chip" data-w="270">270°</button>
           <button class="chip" data-w="300">300°</button>
           <button class="chip" data-w="315">315°</button>
           <button class="chip" data-w="330">330°</button>
@@ -793,7 +799,7 @@ MathJax = {
     <div class="vz-fn"><span class="vz-lab">\(\cos\varphi\)</span><div class="vz-wahl"><button class="vz-btn" type="button" data-fn="cos" data-vz="+">+</button><button class="vz-btn" type="button" data-fn="cos" data-vz="-">−</button></div></div>
     <div class="vz-fn"><span class="vz-lab">\(\tan\varphi\)</span><div class="vz-wahl"><button class="vz-btn" type="button" data-fn="tan" data-vz="+">+</button><button class="vz-btn" type="button" data-fn="tan" data-vz="-">−</button></div></div>
   </div>
-  <div class="vz-fb" id="vz-fb"></div>
+  <div class="vz-fb" id="vz-fb"><canvas class="vz-kreis" id="vz-kreis" width="140" height="140" hidden></canvas><span id="vz-fb-text"></span></div>
   <div class="vz-foot">
     <button class="vz-pruef" type="button" id="vz-pruef" disabled>Prüfen</button>
     <button class="vz-next" type="button" id="vz-next" disabled>▶ Nächster Winkel</button>
@@ -852,13 +858,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Vergleiche die beiden gestrichelten Strecken: Welche Koordinate des Spiegelpunkts hat denselben <em>Betrag</em> wie beim Original — und welche wechselt bloss das <em>Vorzeichen</em>?</div>
+        <div class="ah-text">Vergleiche die beiden gestrichelten Strecken: Welche Koordinate des Spiegelpunkts hat denselben <em>Betrag</em> wie beim Original — und welche wechselt bloss das <em>Vorzeichen</em>? Beim Chip \(90° - \alpha\) ändert kein Vorzeichen: Achte darauf, welche Strecken den Platz tauschen.</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Jede Symmetrie-Regel ist nur die Spiegelung des Kreispunkts: An der \(y\)-Achse (\(180° - \alpha\)) kippt \(x\), also der Cosinus. An der \(x\)-Achse (\(360° - \alpha\)) kippt \(y\), also der Sinus. Am Ursprung (\(180° + \alpha\)) kippen beide — der Tangens als Quotient behält deshalb sein Vorzeichen. Man muss die Tabelle nicht auswendig lernen, wenn man den Kreis vor Augen hat.</div>
+        <div class="ah-text">Jede Symmetrie-Regel ist nur die Spiegelung des Kreispunkts: An der \(y\)-Achse (\(180° - \alpha\)) kippt \(x\), also der Cosinus. An der \(x\)-Achse (\(360° - \alpha\)) kippt \(y\), also der Sinus. Am Ursprung (\(180° + \alpha\)) kippen beide — der Tangens als Quotient behält deshalb sein Vorzeichen. An der Geraden \(y = x\) (\(90° - \alpha\)) tauschen \(x\) und \(y\) die Rollen: \(\sin(90° - \alpha) = \cos\alpha\) — der Cosinus ist der Sinus des Komplementwinkels. Man muss die Tabelle nicht auswendig lernen, wenn man den Kreis vor Augen hat.</div>
       </div>
     </div>
   </div>
@@ -875,6 +881,7 @@ MathJax = {
           <button class="chip aktiv" data-sy="180-">180° − α</button>
           <button class="chip" data-sy="180+">180° + α</button>
           <button class="chip" data-sy="360-">360° − α</button>
+          <button class="chip" data-sy="90-">90° − α</button>
         </div>
       </div>
       <div class="formel" id="sy-formel">\(\sin(180° - \alpha) = \sin\alpha\)</div>
@@ -912,9 +919,61 @@ MathJax = {
   <ul style="margin-left:1.2em;margin-top:4px">
     <li>\(\arcsin\) liefert \(\varphi \in [-90°;\, 90°]\),</li>
     <li>\(\arccos\) liefert \(\varphi \in [0°;\, 180°]\),</li>
-    <li>\(\arctan\) liefert \(\varphi \in (-90°;\, 90°)\).</li>
+    <li>\(\arctan\) liefert \(\varphi \in \,]{-90°};\, 90°[\).</li>
   </ul>
   <p style="margin-top:6px">Alle <em>übrigen</em> Winkel mit demselben Funktionswert findet man über die Symmetrie- und Periodizitätsbeziehungen von oben. Wie man daraus die vollständige Lösungsmenge einer trigonometrischen Gleichung gewinnt, lernst du in <a class="quer" href="g5-5-trigonometrische-gleichungen.html">↗ 5.5 (Trigonometrische Gleichungen)</a>.</p>
+</div>
+
+<div class="anim">
+  <div class="widget-titelzeile">
+    <div class="anim-titel">Anim · Hauptwerte am Einheitskreis — welchen Winkel liefert der Rechner?</div>
+    <div class="anim-hinweis links">
+      <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
+      <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
+        <div class="ah-text">Schiebe den Wert \(w\) langsam durch: Wie viele Kreispunkte haben denselben Funktionswert — und welcher davon liegt im blau eingefärbten Bereich? Wechsle zwischen \(\arcsin\), \(\arccos\) und \(\arctan\): Welche Kreishälfte ist jeweils eingefärbt?</div>
+      </div>
+    </div>
+    <div class="anim-hinweis rechts">
+      <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
+      <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
+        <div class="ah-text">Zu einem Wert gehören am Kreis meist <strong>zwei</strong> Winkel. Der Rechner nimmt immer den im Hauptwertbereich: bei \(\arcsin\) die rechte Kreishälfte \([-90°;\, 90°]\), bei \(\arccos\) die obere \([0°;\, 180°]\), bei \(\arctan\) die rechte ohne die beiden Endpunkte \(]{-90°};\, 90°[\). Den zweiten Winkel (grau) liefert die Symmetrie: \(180° - \varphi_1\), \(360° - \varphi_1\) bzw. \(\varphi_1 + 180°\).</div>
+      </div>
+    </div>
+  </div>
+  <div class="anim-layout">
+    <canvas id="cv-arcus" width="560" height="440"></canvas>
+    <div class="bedien">
+      <div>
+        <div class="feld-titel">Umkehroperation</div>
+        <div class="chips" id="arc-modus">
+          <button class="chip aktiv" data-m="sin">arcsin</button>
+          <button class="chip" data-m="cos">arccos</button>
+          <button class="chip" data-m="tan">arctan</button>
+        </div>
+      </div>
+
+      <div class="regler">
+        <div class="regler-label">
+          <span>Wert \(w\)</span>
+          <span class="wert" id="lbl-arcW">0.50</span>
+        </div>
+        <input type="range" id="sld-arcW" min="-1" max="1" step="0.01" value="0.5">
+      </div>
+
+      <div class="formel" id="formel-arc">\(\sin\varphi = w \;\Rightarrow\; \varphi_1 = \arcsin w\)</div>
+
+      <div class="legende">
+        <div class="legende-titel">Winkel mit diesem Wert</div>
+        <div class="legende-zeile"><span class="lab" id="lab-arcP1">\(\varphi_1 = \arcsin w\)</span><span class="val" id="leg-arcP1">30°</span></div>
+        <div class="legende-zeile"><span class="lab" id="lab-arcP2">\(\varphi_2 = 180° - \varphi_1\)</span><span class="val" id="leg-arcP2" style="color:var(--tinte-2)">150°</span></div>
+        <div class="legende-zeile"><span class="lab">Hauptwerte</span><span class="val" id="leg-arcBereich">\([-90°;\, 90°]\)</span></div>
+      </div>
+
+      <div class="erklaerung" id="erkl-arc">
+        Der Rechner liefert \(\arcsin 0.5 = 30°\) aus der rechten Kreishälfte. Auch \(150°\) hat den Sinuswert \(0.5\) — diesen Winkel liefert er nicht.
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ══ 10. AUFGABEN ══ -->
@@ -1378,12 +1437,24 @@ function initCv(id) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(bufW / W, bufH / H);
   ctx.clearRect(0, 0, W, H);
+  cv.dataset.k = cssW / W;     // Bildschirm-px je logischem px (schriftPx)
   return { ctx, W, H, cv };
 }
+// Schriftgrösse in logischen px: nie unter 11 Bildschirm-px. Auf breitem Canvas
+// (k ≥ 1, etwa 1280 px) bleibt jede Grösse ab 11/k unverändert; bei 360 px (k ≈ 0.5)
+// wächst die Schrift gegenüber der Figur — Muster aus g5-2a.
+function schriftPx(ctx, size) {
+  const d = ctx.canvas && ctx.canvas.dataset;
+  const k = (d && +d.k) || 1;
+  return size * k < 11 ? 11 / k : size;
+}
+// Faktor, um den die Schrift gegenüber der Figur wächst (1 bei breitem Canvas):
+// Abstände von Beschriftungen zu Punkten und Strecken damit multiplizieren.
+function fSchrift(ctx) { return schriftPx(ctx, 11) / 11; }
 function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='middle', weight='600') {
   ctx.save();
   ctx.fillStyle = color;
-  ctx.font = `${weight} ${size}px "Source Sans 3", sans-serif`;
+  ctx.font = `${weight} ${schriftPx(ctx, size)}px "Source Sans 3", sans-serif`;
   // Halo in der lokalen Hintergrundfarbe (beschriftung() aus mathlib.js): die
   // Beschriftungen liegen hier auf Figurenkanten und Fuellungen und waeren
   // sonst schlecht zu lesen. Zusaetzlich in den Canvas geklemmt, damit keine
@@ -1410,7 +1481,9 @@ function txt(ctx, x, y, s, color = C.tinte, size = 14, align='center', base='mid
  * {c:[x,y], r, w, von, bis} Bogen in Mathe-Winkeln (ohne von/bis: Vollkreis). */
 function txtKasten(ctx, s, x, y, font, align = 'center', base = 'middle') {
   ctx.save();
-  ctx.font = font; ctx.textAlign = align; ctx.textBaseline = base;
+  // gemessen in der Grösse, in der txt() zeichnet (schriftPx)
+  ctx.font = String(font).replace(/([\d.]+)px/, (m, n) => schriftPx(ctx, +n) + 'px');
+  ctx.textAlign = align; ctx.textBaseline = base;
   const m = ctx.measureText(s);
   ctx.restore();
   return [x - m.actualBoundingBoxLeft, y - m.actualBoundingBoxAscent,
@@ -1454,8 +1527,8 @@ function lageFrei(ctx, s, font, kand, hind, W, H, pad = 3) {
 // näher als rund 12 px an einem Schenkel oder an einer Richtung aus meiden (Achsen),
 // oder pruef(t) meldet einen Treffer. Dann die nächste freie Richtung, zuerst
 // innerhalb des Bogens, sonst knapp daneben.
-function winkelRichtung(von, bis, rho, meiden = [], pruef = null) {
-  const minW = Math.asin(Math.min(1, 12 / rho));
+function winkelRichtung(von, bis, rho, meiden = [], pruef = null, abst = 12) {
+  const minW = Math.asin(Math.min(1, abst / rho));
   const strahlen = [von, bis, ...(meiden || [])];
   const ab = (a, b) => { const d = (((a - b) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI); return Math.min(d, 2 * Math.PI - d); };
   const frei = t => strahlen.every(s => ab(t, s) >= minW - 1e-9) && (!pruef || pruef(t));
@@ -1545,15 +1618,28 @@ function drawAngleArc(ctx, vert, radius, fromRadMath, toRadMath, color, label, m
   ctx.restore();
   if (label) {
     // Bei kleinem Winkel lag die Beschriftung sonst auf dem Schenkel (winkelRichtung)
-    const F13 = '600 13px "Source Sans 3", sans-serif', rho = radius + 14;
+    // Abstand wächst mit der Schrift (fSchrift), bei 1280 px unverändert
+    const f = fSchrift(ctx), F13 = '600 13px "Source Sans 3", sans-serif', rho = radius + 14 * f;
     const kastenBei = t => txtKasten(ctx, label, vert[0] + Math.cos(t) * rho, vert[1] - Math.sin(t) * rho, F13);
     const pruef = hind ? t => { const k = kastenBei(t); return !hind.some(h => kastenTrifft(k, h, 2)); } : null;
-    const midRad = winkelRichtung(fromRadMath, toRadMath, rho, meiden, pruef);
+    const midRad = winkelRichtung(fromRadMath, toRadMath, rho, meiden, pruef, 12 * f);
     const lx = vert[0] + Math.cos(midRad) * rho;
     const ly = vert[1] - Math.sin(midRad) * rho;
     txt(ctx, lx, ly, label, color, 13);
     return { k: kastenBei(midRad) };
   }
+  return null;
+}
+
+// Exakter Wert von sin/cos bei Vielfachen von 30° und 45° als LaTeX
+// (\tfrac{1}{2}, \tfrac{\sqrt{2}}{2}, \tfrac{\sqrt{3}}{2}, mit Vorzeichen);
+// null bei 0 und ±1 (die Dezimalzahl ist dort schon exakt) und sonst.
+function exaktWert(v, deg) {
+  if (deg % 30 !== 0 && deg % 45 !== 0) return null;
+  const b = Math.abs(v), vz = v < 0 ? '-' : '';
+  if (Math.abs(b - 0.5) < 1e-9) return `${vz}\\tfrac{1}{2}`;
+  if (Math.abs(b - Math.SQRT2 / 2) < 1e-9) return `${vz}\\tfrac{\\sqrt{2}}{2}`;
+  if (Math.abs(b - Math.sqrt(3) / 2) < 1e-9) return `${vz}\\tfrac{\\sqrt{3}}{2}`;
   return null;
 }
 
@@ -1612,6 +1698,7 @@ function drawSinCos() {
 
   const cx = W * 0.42, cy = H * 0.50;
   const R = 175;
+  const fs = fSchrift(ctx);   // > 1 auf schmalem Canvas: Abstände der Beschriftungen wachsen mit
 
   // Achsen
   seg(ctx, [cx - R - 30, cy], [cx + R + 30, cy], C.linie, 1);
@@ -1620,8 +1707,8 @@ function drawSinCos() {
   ctx.beginPath(); ctx.moveTo(cx + R + 30, cy); ctx.lineTo(cx + R + 23, cy - 4); ctx.lineTo(cx + R + 23, cy + 4); ctx.fill();
   ctx.beginPath(); ctx.moveTo(cx, cy - R - 30); ctx.lineTo(cx - 4, cy - R - 23); ctx.lineTo(cx + 4, cy - R - 23); ctx.fill();
   ctx.restore();
-  txt(ctx, cx + R + 32, cy + 14, 'x', C.tinte2, 13, 'left');
-  txt(ctx, cx + 14, cy - R - 30, 'y', C.tinte2, 13, 'left');
+  txt(ctx, cx + R + 32, cy + 14 * fs, 'x', C.tinte2, 13, 'left');
+  txt(ctx, cx + 14 * fs, cy - R - 30, 'y', C.tinte2, 13, 'left');
 
   // Kreis
   ctx.save();
@@ -1630,9 +1717,10 @@ function drawSinCos() {
   ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2*Math.PI); ctx.stroke();
   ctx.restore();
 
-  txt(ctx, cx + R, cy + 14, '1', C.tinte2, 11);
-  txt(ctx, cx - 14, cy - R, '1', C.tinte2, 11);
-  txt(ctx, cx - 12, cy + 14, 'O', C.tinte, 13);
+  txt(ctx, cx + R, cy + 14 * fs, '1', C.tinte2, 11);
+  txt(ctx, cx - 14 * fs, cy - R, '1', C.tinte2, 11);
+  // «O» auf schmalem Canvas erst unten neben den Beschriftungen setzen (Winkelbogen meiden)
+  if (!(fs > 1)) txt(ctx, cx - 12, cy + 14, 'O', C.tinte, 13);
 
   const Px = cx + R * Math.cos(phiR);
   const Py = cy - R * Math.sin(phiR);
@@ -1643,7 +1731,7 @@ function drawSinCos() {
   const radMid = [(cx+Px)/2, (cy+Py)/2];
   const dx = Px-cx, dy = Py-cy;
   const len = Math.hypot(dx, dy) || 1;
-  const nx = -dy/len * 14, ny = dx/len * 14;
+  const nx = -dy/len * 14 * fs, ny = dx/len * 14 * fs;
 
   // sin: senkrecht von Q nach P (rot)
   seg(ctx, [Qx, Qy], [Px, Py], C.rot, 3);
@@ -1669,26 +1757,40 @@ function drawSinCos() {
     { c: [cx, cy], r: R, w: 1.5 }, { c: [cx, cy], r: 28, w: 1.6, von: 0, bis: phiR },
     { k: [Px - 5, Py - 5, Px + 5, Py + 5] }, { k: [Qx - 3, Qy - 3, Qx + 3, Qy + 3] }
   ];
+  // «O»: auf schmalem Canvas die erste Ecke um O, die Bogen und Strecken frei lässt
+  let oK;
+  if (fs > 1) {
+    const oL = lageFrei(ctx, 'O', '600 13px "Source Sans 3", sans-serif',
+      [[-12, 14], [-12, -14], [12, 14], [12, -14], [-20, 20], [-20, -20], [20, 20], [20, -20]].map(([u, v]) => [cx + u * fs, cy + v * fs])
+        .concat([[-26, 26], [-26, -26], [26, 26], [26, -26]].map(([u, v]) => [cx + u * Math.max(fs, 1.3), cy + v * Math.max(fs, 1.3)])),
+      [{ c: [cx, cy], r: 28, w: 1.6, von: 0, bis: phiR }, { a: [cx, cy], b: [Px, Py], w: 2 }, { a: [Qx, Qy], b: [Px, Py], w: 3 },
+       { a: [cx, cy], b: [Qx, Qy], w: 3 }, phiK].filter(Boolean), W, H);
+    txt(ctx, oL.x, oL.y, 'O', C.tinte, 13);
+    oK = { k: oL.k };
+  } else {
+    oK = { k: txtKasten(ctx, 'O', cx - 12, cy + 14, '600 13px "Source Sans 3", sans-serif') };
+  }
   const fest = [
     phiK,
-    { k: txtKasten(ctx, 'O', cx - 12, cy + 14, '600 13px "Source Sans 3", sans-serif') },
-    { k: txtKasten(ctx, '1', cx + R, cy + 14, '600 11px "Source Sans 3", sans-serif') },
-    { k: txtKasten(ctx, '1', cx - 14, cy - R, '600 11px "Source Sans 3", sans-serif') },
-    { k: txtKasten(ctx, 'x', cx + R + 32, cy + 14, '600 13px "Source Sans 3", sans-serif', 'left') },
-    { k: txtKasten(ctx, 'y', cx + 14, cy - R - 30, '600 13px "Source Sans 3", sans-serif', 'left') }
+    oK,
+    { k: txtKasten(ctx, '1', cx + R, cy + 14 * fs, '600 11px "Source Sans 3", sans-serif') },
+    { k: txtKasten(ctx, '1', cx - 14 * fs, cy - R, '600 11px "Source Sans 3", sans-serif') },
+    { k: txtKasten(ctx, 'x', cx + R + 32, cy + 14 * fs, '600 13px "Source Sans 3", sans-serif', 'left') },
+    { k: txtKasten(ctx, 'y', cx + 14 * fs, cy - R - 30, '600 13px "Source Sans 3", sans-serif', 'left') }
   ];
   // «P = (cos φ, sin φ)» bleibt, solange es Punkt P und die festen Beschriftungen
   // frei lässt (Linien kreuzt es auch bisher). Bei 0° und 180° lag es auf P und
   // «1»: dann neben P ausweichen, ohne Linien und Kreis zu treffen.
-  const PTXT = 'P = (cos φ, sin φ)';
-  let pL = lageFrei(ctx, PTXT, F12, [[Px + off_dx*14, Py + off_dy*14]],
+  // Auf schmalem Canvas nur «P» — die Koordinaten stehen im Formelkasten darunter.
+  const PTXT = fs > 1 ? 'P' : 'P = (cos φ, sin φ)';
+  let pL = lageFrei(ctx, PTXT, F12, [[Px + off_dx*14*fs, Py + off_dy*14*fs]],
     [{ c: [Px, Py], r: 2, w: 4 }, ...fest], W, H, 1);
   hind.push(...fest);
   if (pL.notfall) {
     const cs = Math.cos(phiR) >= 0 ? 1 : -1, aus = cs > 0 ? 'left' : 'right', ein = cs > 0 ? 'right' : 'left';
     pL = lageFrei(ctx, PTXT, F12, [
-      [Px + cs * 10, Py, aus], [Px + cs * 10, Py - 14, aus], [Px + cs * 10, Py + 14, aus],
-      [Px - cs * 10, Py - 14, ein], [Px - cs * 10, Py + 14, ein], [Px, Py - 16], [Px, Py + 16]
+      [Px + cs * 10 * fs, Py, aus], [Px + cs * 10 * fs, Py - 14 * fs, aus], [Px + cs * 10 * fs, Py + 14 * fs, aus],
+      [Px - cs * 10 * fs, Py - 14 * fs, ein], [Px - cs * 10 * fs, Py + 14 * fs, ein], [Px, Py - 16 * fs], [Px, Py + 16 * fs]
     ], hind, W, H);
   } else {
     hind.push({ k: pL.k });
@@ -1699,23 +1801,33 @@ function drawSinCos() {
   const mSin = Math.abs(Py - cy) / 2, mCos = Math.abs(Qx - cx) / 2;
   const sinKand = [];
   for (const seite of [sinSign, -sinSign]) {
-    for (const d of [mSin, Math.max(mSin, 20), Math.max(mSin, 36), Math.max(mSin, 52)]) {
-      sinKand.push([Qx + seite * 18, cy - cosSign * d, seite > 0 ? 'left' : 'right']);
+    for (const d of [mSin, Math.max(mSin, 20 * fs), Math.max(mSin, 36 * fs), Math.max(mSin, 52 * fs)]) {
+      sinKand.push([Qx + seite * 18 * fs, cy - cosSign * d, seite > 0 ? 'left' : 'right']);
+    }
+  }
+  // schmaler Canvas: auch längs der Strecke verschoben
+  if (fs > 1) for (const seite of [sinSign, -sinSign]) {
+    for (const d of [mSin - 20 * fs, mSin + 20 * fs, mSin - 40 * fs, mSin + 40 * fs]) {
+      if (d > 8 * fs) sinKand.push([Qx + seite * 18 * fs, cy - cosSign * d, seite > 0 ? 'left' : 'right']);
     }
   }
   // zuletzt jenseits der x-Achse neben Q (dort ist bei kurzer Strecke noch Platz)
   for (const seite of [sinSign, -sinSign]) {
-    for (const d of [14, 28]) sinKand.push([Qx + seite * 18, cy + cosSign * d, seite > 0 ? 'left' : 'right']);
+    for (const d of [14 * fs, 28 * fs]) sinKand.push([Qx + seite * 18 * fs, cy + cosSign * d, seite > 0 ? 'left' : 'right']);
   }
   const sinL = lageFrei(ctx, 'sin φ', F12, sinKand, hind, W, H);
   txt(ctx, sinL.x, sinL.y, 'sin φ', C.rot, 12, sinL.align);
   const cosKand = [];
   for (const seite of [cosSign, -cosSign]) {
-    for (const d of [mCos, Math.max(mCos, 30), Math.max(mCos, 50), Math.max(mCos, 70)]) {
-      cosKand.push([cx + sinSign * d, cy + seite * 14, 'center']);
+    for (const d of [mCos, Math.max(mCos, 30 * fs), Math.max(mCos, 50 * fs), Math.max(mCos, 70 * fs)]) {
+      cosKand.push([cx + sinSign * d, cy + seite * 14 * fs, 'center']);
     }
   }
-  const cosL = lageFrei(ctx, 'cos φ', F12, cosKand, hind, W, H);
+  const breit = L => ({ k: [L.k[0] - 8 * fs, L.k[1], L.k[2] + 8 * fs, L.k[3]] });
+  // schmaler Canvas: nicht in Lesedistanz neben «sin φ» («cos φ sin φ»)
+  const cosHind = fs > 1 ? [...hind, breit(sinL)] : hind;
+  const cosL = lageFrei(ctx, 'cos φ', F12, cosKand, cosHind, W, H);
+  if (cosHind !== hind) hind.push({ k: cosL.k });
   txt(ctx, cosL.x, cosL.y, 'cos φ', C.gruen, 12);
   const rKand = [[.5, 1], [.5, -1], [.7, 1], [.7, -1], [.3, 1], [.3, -1], [.5, 2], [.5, -2]]
     .map(([f, g]) => [cx + dx * f + nx * g, cy + dy * f + ny * g, 'center']);
@@ -1723,17 +1835,24 @@ function drawSinCos() {
   // ab, und die bisherige Lage liegt knapp (≈ 1 px) daneben.
   // «r = 1» nicht in Lesedistanz neben «sin φ», «cos φ» oder P («r = 1 cos φ»):
   // deren Kästen für diese Prüfung seitlich um 8 px verbreitert.
-  const breit = L => ({ k: [L.k[0] - 8, L.k[1], L.k[2] + 8, L.k[3]] });
   const rL = lageFrei(ctx, 'r = 1', F12, rKand,
-    [...hind.slice(1), breit(sinL), breit(cosL), breit(pL)], W, H);   // hind[0] = Radius
-  txt(ctx, rL.x, rL.y, 'r = 1', C.tinte2, 12);
+    [...hind.slice(1), breit(sinL), breit(cosL), breit(pL), ...(fs > 1 && phiK ? [breit(phiK)] : [])], W, H);   // hind[0] = Radius
+  // Schmaler Canvas ohne freien Platz: «r = 1» weglassen, es steht im Formelkasten
+  if (!(fs > 1 && rL.notfall)) txt(ctx, rL.x, rL.y, 'r = 1', C.tinte2, 12);
 
   const cosVal = Math.cos(phiR);
   const sinVal = Math.sin(phiR);
 
   legEk1Phi.textContent = phiLabel;
-  legEk1Cos.textContent = zahlFix(cosVal, 3);
-  legEk1Sin.textContent = zahlFix(sinVal, 3);
+  // Spezialwinkel: exakter Wert vor dem gerundeten (AN-88). √2/2 und √3/2 sind
+  // irrational, dort steht «≈»; 1/2 ist als 0.500 exakt, dort «=».
+  const exCos = exaktWert(cosVal, phiD), exSin = exaktWert(sinVal, phiD);
+  const legWert = (el, v, ex) => {
+    if (ex) el.innerHTML = `\\(${ex} ${ex.includes('sqrt') ? '\\approx' : '='} ${zahlFix(v, 3, '-')}\\)`;
+    else el.textContent = zahlFix(v, 3);
+  };
+  legWert(legEk1Cos, cosVal, exCos);
+  legWert(legEk1Sin, sinVal, exSin);
 
   let q;
   if (phiD === 0 || phiD === 360) q = 'auf der positiven x-Achse';
@@ -1744,8 +1863,14 @@ function drawSinCos() {
   else if (phiD < 180) q = 'im Quadranten II (sin > 0, cos < 0)';
   else if (phiD < 270) q = 'im Quadranten III (sin < 0, cos < 0)';
   else q = 'im Quadranten IV (sin < 0, cos > 0)';
-  erklEk1.innerHTML = `\\(P\\) liegt ${q}. Koordinaten: \\(\\cos ${phiLabel} = ${zahlFix(cosVal, 3, '-')}\\), \\(\\sin ${phiLabel} = ${zahlFix(sinVal, 3, '-')}\\).`;
-  mjTypeset([erklEk1]);
+  // «=» nur, wo der Wert auf drei Stellen exakt ist, sonst «≈»
+  const erklWert = (v, ex) => {
+    const rund = zahlFix(v, 3, '-'), genau = Math.abs(v - (+rund)) < 1e-9;
+    if (ex) return `= ${ex} ${genau ? '=' : '\\approx'} ${rund}`;
+    return `${genau ? '=' : '\\approx'} ${rund}`;
+  };
+  erklEk1.innerHTML = `\\(P\\) liegt ${q}. Koordinaten: \\(\\cos ${phiLabel} ${erklWert(cosVal, exCos)}\\), \\(\\sin ${phiLabel} ${erklWert(sinVal, exSin)}\\).`;
+  mjTypeset([legEk1Cos, legEk1Sin, erklEk1]);
 }
 sldEk1Phi.addEventListener('input', drawSinCos);
 
@@ -1787,6 +1912,9 @@ function drawTan() {
 
   const cx = W * 0.38, cy = H * 0.50;
   const R = 100;
+  const fs = fSchrift(ctx);   // > 1 auf schmalem Canvas: Abstände der Beschriftungen wachsen mit
+  const eng = fs > 1;
+  const xR1 = eng ? cx + R * 0.5 : cx + R - 10;   // «r=1»: schmal mittig unter dem Radius, sonst neben «R»
 
   // Achsen
   seg(ctx, [cx - R - 30, cy], [cx + R + 70, cy], C.linie, 1);
@@ -1795,8 +1923,8 @@ function drawTan() {
   ctx.beginPath(); ctx.moveTo(cx + R + 70, cy); ctx.lineTo(cx + R + 63, cy - 4); ctx.lineTo(cx + R + 63, cy + 4); ctx.fill();
   ctx.beginPath(); ctx.moveTo(cx, cy - R - 30); ctx.lineTo(cx - 4, cy - R - 23); ctx.lineTo(cx + 4, cy - R - 23); ctx.fill();
   ctx.restore();
-  txt(ctx, cx + R + 72, cy + 14, 'x', C.tinte2, 13, 'left');
-  txt(ctx, cx + 14, cy - R - 30, 'y', C.tinte2, 13, 'left');
+  txt(ctx, cx + R + 72, cy + 14 * fs, 'x', C.tinte2, 13, 'left');
+  txt(ctx, cx + 14 * fs, cy - R - 30, 'y', C.tinte2, 13, 'left');
 
   // Kreis
   ctx.save();
@@ -1808,11 +1936,11 @@ function drawTan() {
   // Tangente bei x = 1
   const tanX = cx + R;
   seg(ctx, [tanX, cy - R - 30], [tanX, cy + R + 30], C.tinte2, 1.4);
-  txt(ctx, tanX + 6, cy + R + 22, 'Tangente x=1', C.tinte2, 10, 'left');
+  txt(ctx, tanX + 6 * fs, cy + R + 22 * fs, 'Tangente x=1', C.tinte2, 10, 'left');
 
-  txt(ctx, cx - 12, cy + 14, 'O', C.tinte, 13);
-  txt(ctx, tanX + 6, cy + 14, 'R', C.tinte, 13, 'left');
-  txt(ctx, cx + R - 10, cy + 14, 'r=1', C.tinte2, 10);
+  txt(ctx, cx - 12 * fs, cy + 14 * fs, 'O', C.tinte, 13);
+  txt(ctx, tanX + 6 * fs, cy + 14 * fs, 'R', C.tinte, 13, 'left');
+  txt(ctx, xR1, cy + 14 * fs, 'r=1', C.tinte2, 10);
 
   const Px = cx + R * Math.cos(phiR);
   const Py = cy - R * Math.sin(phiR);
@@ -1828,9 +1956,11 @@ function drawTan() {
   const tanDefiniert = !(phiD === 90 || phiD === 270);
 
   let Sx = tanX, Sy = cy - R * tanVal;
-  // |tan φ|·R auf Canvas-Bereich beschränken (oben/unten je 220 px ab Mitte)
-  const tanMaxShow = 220;
-  if (tanDefiniert && Math.abs(R * tanVal) <= tanMaxShow) {
+  // S mit Beschriftung zeigen, solange es 14 px vor dem Rand liegt (H/2 − 14 = 236 px,
+  // also bis φ ≈ 67°; vorher 220 px ≈ 65.6°). Darüber laufen Verlängerung und
+  // Tangens-Strecke bis an den Rand weiter (AN-88), S selbst liegt ausserhalb.
+  const tanMaxShow = H / 2 - 14;
+  if (tanDefiniert) {
     // Verlängerung des Strahls OP zur Tangente
     if (cosVal > 0) {
       dashedSeg(ctx, [Px, Py], [Sx, Sy], C.lila, 1.2, [4,3]);
@@ -1843,7 +1973,8 @@ function drawTan() {
   rightAngleMarker(ctx, [Qx, Qy], [cx, cy], [Px, Py], 8, C.tinte2);
   // φ nicht auf die rote Sinus-Strecke (nahe 90° und 270° rückt sie an den Bogen)
   const phiK = drawAngleArc(ctx, [cx, cy], 24, 0, phiR, C.lila, 'φ', [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2],
-    [{ a: [Qx, Qy], b: [Px, Py], w: 2.5 }]);
+    [{ a: [Qx, Qy], b: [Px, Py], w: 2.5 },
+     ...(eng ? [{ k: txtKasten(ctx, 'r=1', xR1, cy + 14 * fs, '600 10px "Source Sans 3", sans-serif') }, { a: [cx, cy], b: [Px, Py], w: 2 }] : [])]);
 
   dot(ctx, [Px, Py], C.blau, 5);
 
@@ -1858,28 +1989,35 @@ function drawTan() {
     { a: [tanX, cy - R - 30], b: [tanX, cy + R + 30], w: 1.4 },
     { c: [cx, cy], r: R, w: 1.5 }, { c: [cx, cy], r: 24, w: 1.6, von: 0, bis: phiR },
     { k: [Px - 5, Py - 5, Px + 5, Py + 5] }, phiK,
-    { k: txtKasten(ctx, 'O', cx - 12, cy + 14, SSF(13)) },
-    { k: txtKasten(ctx, 'x', cx + R + 72, cy + 14, SSF(13), 'left') },
-    { k: txtKasten(ctx, 'Tangente x=1', tanX + 6, cy + R + 22, SSF(10), 'left') }
+    { k: txtKasten(ctx, 'O', cx - 12 * fs, cy + 14 * fs, SSF(13)) },
+    { k: txtKasten(ctx, 'x', cx + R + 72, cy + 14 * fs, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'Tangente x=1', tanX + 6 * fs, cy + R + 22 * fs, SSF(10), 'left') }
   ];
   // Für «P» zählen nur Tangente, Tangens-Strecke, S und die Beschriftungen daneben
   // (Radius und Sinus-Strecke berührt es auch in der bisherigen Lage).
   const pFest = [
     hind[3],
-    { k: txtKasten(ctx, 'R', tanX + 6, cy + 14, SSF(13), 'left') },
-    { k: txtKasten(ctx, 'r=1', cx + R - 10, cy + 14, SSF(10)) },
-    { k: txtKasten(ctx, 'y', cx + 14, cy - R - 30, SSF(13), 'left') }
+    { k: txtKasten(ctx, 'R', tanX + 6 * fs, cy + 14 * fs, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'r=1', xR1, cy + 14 * fs, SSF(10)) },
+    { k: txtKasten(ctx, 'y', cx + 14 * fs, cy - R - 30, SSF(13), 'left') }
   ];
   hind.push(pFest[1], pFest[2], pFest[3]);
   if (mitS) {
     pFest.push({ a: [tanX, cy], b: [Sx, Sy], w: 3.5 }, sPunkt,
                { a: cosVal > 0 ? [Px, Py] : [cx, cy], b: [Sx, Sy], w: 1.2 });   // Verlängerung OP
     hind.push(pFest[4], pFest[6]);
+  } else if (tanDefiniert) {
+    // S ausserhalb: Verlängerung nur bis zum Bildrand als Hindernis (für «P»)
+    const yRand = tanVal > 0 ? 0 : H, sR = (cy - yRand) / (R * tanVal);
+    pFest.push({ a: cosVal > 0 ? [Px, Py] : [cx, cy], b: [cx + sR * R, yRand], w: 1.2 });
+    hind.push(pFest[4]);
+    // «y» liegt nahe 90° und 270° auf der Verlängerung: obenauf neu setzen (Halo)
+    txt(ctx, cx + 14 * fs, cy - R - 30, 'y', C.tinte2, 13, 'left');
   }
-  let pL = lageFrei(ctx, 'P', SSF(13), [[Px + Math.cos(phiR)*14, Py - Math.sin(phiR)*14 - 4]], pFest, W, H, 1);
+  let pL = lageFrei(ctx, 'P', SSF(13), [[Px + Math.cos(phiR)*14*fs, Py - Math.sin(phiR)*14*fs - 4*fs]], pFest, W, H, 1);
   if (pL.notfall) {                                    // rund um P ausweichen
     const ring = [];
-    for (const rr of [14, 22]) {
+    for (const rr of [14 * fs, 22 * fs]) {
       for (const da of [0, 45, -45, 90, -90, 135, -135, 180]) {
         const a = phiR + da * Math.PI / 180;
         ring.push([Px + Math.cos(a) * rr, Py - Math.sin(a) * rr]);
@@ -1894,29 +2032,36 @@ function drawTan() {
     dot(ctx, [Sx, Sy], C.orange, 5);
     seg(ctx, [tanX, cy], [Sx, Sy], C.orange, 3.5);
     const sKand = [];
-    for (const y of [Sy - 8, Sy - 22, Sy + 10, Sy + 24, Sy - 36, Sy + 38]) sKand.push([tanX + 6, y, 'left'], [tanX + 16, y, 'left']);
+    for (const y of [Sy - 8, Sy - 22, Sy + 10, Sy + 24, Sy - 36, Sy + 38].map(v => Sy + (v - Sy) * fs)) sKand.push([tanX + 6 * fs, y, 'left'], [tanX + 16 * fs, y, 'left']);
     const sL = lageFrei(ctx, 'S = (1, tan φ)', SSF(11), sKand, hind, W, H);
     hind.push(sPunkt);   // erst jetzt: «S = (1, tan φ)» stand schon immer dicht neben S
     txt(ctx, sL.x, sL.y, `S = (1, tan φ)`, C.orange, 11, 'left');
     const mTan = Math.abs(Sy - cy) / 2, tRicht = Sy <= cy ? -1 : 1;
     const tanKand = [];
-    for (const [xx, al] of [[tanX + 6, 'left'], [tanX - 6, 'right']]) {
-      for (const d of [mTan, Math.max(mTan, 14), Math.max(mTan, 28), Math.max(mTan, 42), Math.max(mTan, 56)]) {
+    for (const [xx, al] of [[tanX + 6 * fs, 'left'], [tanX - 6 * fs, 'right']]) {
+      for (const d of [mTan, Math.max(mTan, 14 * fs), Math.max(mTan, 28 * fs), Math.max(mTan, 42 * fs), Math.max(mTan, 56 * fs)]) {
         tanKand.push([xx, cy + tRicht * d, al]);
       }
     }
-    for (const d of [14, 28]) tanKand.push([tanX + 6, cy - tRicht * d, 'left']);   // jenseits der x-Achse
+    for (const d of [14 * fs, 28 * fs]) tanKand.push([tanX + 6 * fs, cy - tRicht * d, 'left']);   // jenseits der x-Achse
     const tL = lageFrei(ctx, 'tan φ', SSF(12), tanKand, hind, W, H);
     txt(ctx, tL.x, tL.y, 'tan φ', C.orange, 12, tL.align);
   } else if (!tanDefiniert) {
     txt(ctx, tanX + 6, cy - R, 'tan φ nicht', C.rot, 11, 'left');
-    txt(ctx, tanX + 6, cy - R + 14, 'definiert!', C.rot, 11, 'left');
+    txt(ctx, tanX + 6, cy - R + 14 * fs, 'definiert!', C.rot, 11, 'left');
   } else {
     // Unten zwei Zeilen höher als bisher: bei cy + R + 10 lag «(zu gross für Bild)»
     // auf «Tangente x=1».
-    const yPos = tanVal > 0 ? cy - R - 10 : cy + R - 8;
-    txt(ctx, tanX + 6, yPos, `tan φ = ${zahlFix(tanVal, 2)}`, C.orange, 11, 'left');
-    txt(ctx, tanX + 6, yPos + 14, '(zu gross für Bild)', C.tinte2, 10, 'left');
+    // Tangens-Strecke bis an den Rand, Pfeilspitze zeigt zum ausserhalb liegenden S
+    const rtg = tanVal > 0 ? -1 : 1, ySpitze = tanVal > 0 ? 3 : H - 3;
+    seg(ctx, [tanX, cy], [tanX, ySpitze - rtg * 10], C.orange, 3.5);
+    ctx.save(); ctx.fillStyle = C.orange; ctx.beginPath();
+    ctx.moveTo(tanX, ySpitze); ctx.lineTo(tanX - 6, ySpitze - rtg * 12); ctx.lineTo(tanX + 6, ySpitze - rtg * 12);
+    ctx.closePath(); ctx.fill(); ctx.restore();
+    // schmaler Canvas: Zeilenabstand mit der Schrift, unten um die Mehrhöhe nach oben, kürzerer Hinweis
+    const yPos = tanVal > 0 ? cy - R - 10 * fs : cy + R - 8 - 22 * (fs - 1);
+    txt(ctx, tanX + 8 * fs, yPos, `tan φ = ${zahlFix(tanVal, 2)}`, C.orange, 11, 'left');
+    txt(ctx, tanX + 8 * fs, yPos + 14 * fs, eng ? '(S ausserhalb)' : '(S ausserhalb des Bildes)', C.tinte2, 10, 'left');
   }
 
   legEk2Phi.textContent = phiLabel;
@@ -1972,6 +2117,7 @@ function drawBez() {
 
   const cx = W * 0.38, cy = H * 0.60;
   const R = 145;
+  const fs = fSchrift(ctx), eng = fs > 1;   // schmaler Canvas: Abstände der Beschriftungen wachsen mit
 
   // Achsen
   seg(ctx, [cx - R - 20, cy], [cx + R + 70, cy], C.linie, 1);
@@ -1980,8 +2126,8 @@ function drawBez() {
   ctx.beginPath(); ctx.moveTo(cx + R + 70, cy); ctx.lineTo(cx + R + 63, cy - 4); ctx.lineTo(cx + R + 63, cy + 4); ctx.fill();
   ctx.beginPath(); ctx.moveTo(cx, cy - R - 30); ctx.lineTo(cx - 4, cy - R - 23); ctx.lineTo(cx + 4, cy - R - 23); ctx.fill();
   ctx.restore();
-  txt(ctx, cx + R + 72, cy + 14, 'x', C.tinte2, 13, 'left');
-  txt(ctx, cx + 14, cy - R - 30, 'y', C.tinte2, 13, 'left');
+  txt(ctx, cx + R + 72, cy + 14 * fs, 'x', C.tinte2, 13, 'left');
+  txt(ctx, cx + 14 * fs, cy - R - 30, 'y', C.tinte2, 13, 'left');
 
   // Kreis
   ctx.save();
@@ -1993,8 +2139,8 @@ function drawBez() {
   const tanX = cx + R;
   seg(ctx, [tanX, cy - R - 30], [tanX, cy + R + 20], C.tinte2, 1.4);
 
-  txt(ctx, cx - 12, cy + 14, 'O', C.tinte, 13);
-  txt(ctx, tanX + 6, cy + 14, 'R', C.tinte, 13, 'left');
+  txt(ctx, cx - 12 * fs, cy + 14 * fs, 'O', C.tinte, 13);
+  txt(ctx, tanX + 6 * fs, cy + 14 * fs, 'R', C.tinte, 13, 'left');
 
   const Px = cx + R * Math.cos(phiR);
   const Py = cy - R * Math.sin(phiR);
@@ -2053,10 +2199,10 @@ function drawBez() {
     { a: [cx, cy], b: [Qx, Qy], w: 3 }, { a: [Qx, Qy], b: [Px, Py], w: 3 }, { a: [cx, cy], b: [Px, Py], w: 3 },
     { c: [cx, cy], r: R, w: 1.5 }, { a: [tanX, cy - R - 30], b: [tanX, cy + R + 20], w: 1.4 },
     { k: [Px - 5, Py - 5, Px + 5, Py + 5] }, { k: [Qx - 3, Qy - 3, Qx + 3, Qy + 3] },
-    { k: txtKasten(ctx, 'O', cx - 12, cy + 14, SSF(13)) },
-    { k: txtKasten(ctx, 'R', tanX + 6, cy + 14, SSF(13), 'left') },
-    { k: txtKasten(ctx, 'x', cx + R + 72, cy + 14, SSF(13), 'left') },
-    { k: txtKasten(ctx, 'y', cx + 14, cy - R - 30, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'O', cx - 12 * fs, cy + 14 * fs, SSF(13)) },
+    { k: txtKasten(ctx, 'R', tanX + 6 * fs, cy + 14 * fs, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'x', cx + R + 72, cy + 14 * fs, SSF(13), 'left') },
+    { k: txtKasten(ctx, 'y', cx + 14 * fs, cy - R - 30, SSF(13), 'left') },
     { k: [Qx - 9, Qy - 9, Qx + 1, Qy + 1] }                               // rechter Winkel bei Q
   ];
   if (aehnl) {
@@ -2076,7 +2222,7 @@ function drawBez() {
   // frei lässt (Radius und Kreis berührt sie auch bisher), sonst rund um den Punkt.
   const ring = (x, y, a0) => {
     const l = [];
-    for (const rr of [14, 22]) {
+    for (const rr of [14 * fs, 22 * fs]) {
       for (const da of [0, 45, -45, 90, -90, 135, -135, 180]) {
         const a = a0 + da * Math.PI / 180;
         l.push([x + Math.cos(a) * rr, y - Math.sin(a) * rr]);
@@ -2092,57 +2238,63 @@ function drawBez() {
   };
   const fest = () => hind.filter(h => h.k).concat([hind[4]]);
   // «P» liegt bei «Ähnlichkeit» sonst auf der Verlängerung OS und der Hilfslinie zu S
-  const pL = punkt('P', 13, [Px + Math.cos(phiR)*14, Py - Math.sin(phiR)*14 - 4],
+  const pL = punkt('P', 13, [Px + Math.cos(phiR)*14*fs, Py - Math.sin(phiR)*14*fs - 4*fs],
     aehnl ? [...fest(), hind[14], hind[15]] : fest(), ring(Px, Py, phiR));
   txt(ctx, pL.x, pL.y, 'P', C.blau, 13);
   if (mitS) {
-    const sL = punkt('S', 13, [tanX + 6, Sy - 4, 'left'], fest(),
-      [Sy - 4, Sy - 18, Sy - 32, Sy + 12].flatMap(y => [[tanX + 6, y, 'left'], [tanX + 18, y, 'left']]));
+    const sL = punkt('S', 13, [tanX + 6 * fs, Sy - 4 * fs, 'left'], fest(),
+      [Sy - 4, Sy - 18, Sy - 32, Sy + 12].map(y => Sy + (y - Sy) * fs).flatMap(y => [[tanX + 6 * fs, y, 'left'], [tanX + 18 * fs, y, 'left']]));
     txt(ctx, sL.x, sL.y, 'S', C.lila, 13, sL.align);
   }
-  const qL = punkt('Q', 11, [Qx, Qy + 14], [...fest(), hind[3]],
-    [[Qx, Qy + 14], [Qx - 8, Qy + 14, 'right'], [Qx, Qy + 26], [Qx - 8, Qy + 26, 'right']]);
+  const qL = punkt('Q', 11, [Qx, Qy + 14 * fs], [...fest(), hind[3]],
+    [[Qx, Qy + 14 * fs], [Qx - 8 * fs, Qy + 14 * fs, 'right'], [Qx, Qy + 26 * fs], [Qx - 8 * fs, Qy + 26 * fs, 'right'],
+     ...(eng ? [[Qx + 8 * fs, Qy + 14 * fs, 'left'], [Qx + 8 * fs, Qy + 26 * fs, 'left'], [Qx, Qy + 40 * fs]] : [])]);
   txt(ctx, qL.x, qL.y, 'Q', C.tinte2, 11, qL.align);
 
   // Strecken
-  const breit = L => ({ k: [L.k[0] - 8, L.k[1], L.k[2] + 8, L.k[3]] });
+  const breit = L => ({ k: [L.k[0] - 8 * fs, L.k[1], L.k[2] + 8 * fs, L.k[3]] });
   const mSin = (Qy - Py) / 2;
   if (aehnl) {
     const mTan = (cy - Sy) / 2, tanK = [];
-    for (const d of [mTan, 14, 28, 42, 56, 70]) tanK.push([tanX + 6, cy - Math.max(mTan, d), 'left']);
-    for (const d of [mTan, 14, 28, 42]) tanK.push([tanX + 40, cy - Math.max(mTan, d), 'left']);
+    for (const d of [mTan, 14, 28, 42, 56, 70]) tanK.push([tanX + 6 * fs, cy - Math.max(mTan, d * fs), 'left']);
+    for (const d of [mTan, 14, 28, 42]) tanK.push([tanX + 40 * fs, cy - Math.max(mTan, d * fs), 'left']);
+    if (eng) for (const d of [84, 98, 112]) tanK.push([tanX + 6 * fs, cy - Math.max(mTan, d * fs), 'left']);
     const tL = lageFrei(ctx, 'tan φ', SSF(11), tanK, hind, W, H);
     txt(ctx, tL.x, tL.y, 'tan φ', C.orange, 11, 'left');
   }
   const sinK = [];
-  for (const d of [mSin, 14, 28, 42, 56]) sinK.push([Qx + 16, cy - Math.max(mSin, d), 'left']);
+  for (const d of [mSin, 14, 28, 42, 56]) sinK.push([Qx + 16 * fs, cy - Math.max(mSin, d * fs), 'left']);
   // nahe am Kreis: dichter an die Strecke bzw. tiefer, wo der Kreis weiter aussen liegt
-  sinK.push([Qx + 8, cy - mSin, 'left'], [Qx + 16, cy - 0.6 * mSin, 'left'], [Qx + 8, cy - 0.6 * mSin, 'left']);
-  for (const d of [mSin, 14, 28, 42, 56]) sinK.push([Qx - 16, cy - Math.max(mSin, d), 'right']);
-  for (const d of [14, 28, 42, 56]) sinK.push([Qx + 50, cy - Math.max(mSin, d), 'left']);
+  sinK.push([Qx + 8 * fs, cy - mSin, 'left'], [Qx + 16 * fs, cy - 0.6 * mSin, 'left'], [Qx + 8 * fs, cy - 0.6 * mSin, 'left']);
+  for (const d of [mSin, 14, 28, 42, 56]) sinK.push([Qx - 16 * fs, cy - Math.max(mSin, d * fs), 'right']);
+  for (const d of [14, 28, 42, 56]) sinK.push([Qx + 50 * fs, cy - Math.max(mSin, d * fs), 'left']);
+  if (eng) for (const f of [0.3, 0.8, 1.1, 1.3]) sinK.push([Qx - 16 * fs, cy - f * (Qy - Py), 'right'], [Qx + 16 * fs, cy - f * (Qy - Py), 'left']);
   const siL = lageFrei(ctx, 'sin φ', SSF(11), sinK, hind, W, H);
   txt(ctx, siL.x, siL.y, 'sin φ', C.rot, 11, siL.align);
   const cosK = [];
-  for (const dx of [0, -20, -40, -60]) cosK.push([(cx + Qx) / 2 + dx, Qy + 14], [(cx + Qx) / 2 + dx, Qy + 28]);
+  for (const dx of [0, -20, -40, -60]) cosK.push([(cx + Qx) / 2 + dx * fs, Qy + 14 * fs], [(cx + Qx) / 2 + dx * fs, Qy + 28 * fs]);
+  if (eng) for (const dx of [0, -40, -80, 40]) cosK.push([(cx + Qx) / 2 + dx * fs, Qy + 42 * fs]);
   const coL = lageFrei(ctx, 'cos φ', SSF(11), cosK, hind, W, H);
   txt(ctx, coL.x, coL.y, 'cos φ', C.gruen, 11);
   if (aehnl) {
     // bisherige Lage berührte den rechten Winkel bei Q: dann auf derselben Höhe
     // zwischen Q und R, sonst unter die Achse, zuletzt höher
-    const orK = [[(cx + tanX) / 2, cy - 12]];
-    for (const y of [cy - 12, cy + 14, cy - 24, cy - 36, cy + 28]) {
+    const orK = [[(cx + tanX) / 2, cy - 12 * fs]];
+    for (const y of [cy - 12, cy + 14, cy - 24, cy - 36, cy + 28, ...(eng ? [cy + 42, cy - 48] : [])].map(v => cy + (v - cy) * fs)) {
       for (const f of [0.75, 0.3, 0.5, 0.65, 0.35, 0.85]) orK.push([cx + (tanX - cx) * f, y]);
     }
     const oL = lageFrei(ctx, 'OR = 1', SSF(11), orK, [...hind, breit(coL), breit(siL)], W, H);
-    txt(ctx, oL.x, oL.y, 'OR = 1', C.tinte2, 11);
+    // schmaler Canvas ohne freien Platz: weglassen (die Strecke OR ist der Radius 1, siehe Erklärung)
+    if (!(eng && oL.notfall)) txt(ctx, oL.x, oL.y, 'OR = 1', C.tinte2, 11);
   } else {
     const dx = Px - cx, dy = Py - cy, len = Math.hypot(dx, dy) || 1;
-    const nx = -dy / len * 14, ny = dx / len * 14;
-    const opK = [[.5, 1], [.5, -1], [.7, 1], [.7, -1], [.3, 1], [.3, -1], [.5, 2], [.5, -2]]
+    const nx = -dy / len * 14 * fs, ny = dx / len * 14 * fs;
+    const opK = [[.5, 1], [.5, -1], [.7, 1], [.7, -1], [.3, 1], [.3, -1], [.5, 2], [.5, -2],
+                 ...(eng ? [[.8, 1], [.8, -1], [.2, 1.5], [.2, -1.5], [.7, 2], [.7, -2], [.35, 2], [.35, -2], [.5, 3], [.5, -3]] : [])]
       .map(([f, g]) => [cx + dx * f + nx * g, cy + dy * f + ny * g]);
     const oL = lageFrei(ctx, 'OP = 1', SSF(12), opK, [...hind.slice(0, 2), ...hind.slice(3), breit(coL), breit(siL),
       { a: [cx, cy], b: [Px, Py], w: 0 }], W, H);   // Radius schmal: die Lagen stehen senkrecht 14 px davon ab
-    txt(ctx, oL.x, oL.y, 'OP = 1', C.orange, 12);
+    if (!(eng && oL.notfall)) txt(ctx, oL.x, oL.y, 'OP = 1', C.orange, 12);
   }
 
   legBezSin.textContent  = Math.sin(phiR).toFixed(3);
@@ -2200,12 +2352,10 @@ function drawAbw() {
   ctx.beginPath(); ctx.arc(cxL, cy, R, 0, 2 * Math.PI); ctx.stroke();
   ctx.strokeStyle = '#e5e7eb';
   ctx.beginPath(); ctx.moveTo(cxL, cy - R - 8); ctx.lineTo(cxL, cy + R + 8); ctx.stroke();
-  // Ticks
-  ctx.fillStyle = C.tinte2; ctx.font = '11px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  // Ticks (die Gradzahlen folgen erst über Kurve und Verbindungslinie, siehe unten)
   for (const d of [180, 360, 540, 720]) {
     ctx.strokeStyle = '#e5e7eb';
     ctx.beginPath(); ctx.moveTo(xOf(d), cy - 4); ctx.lineTo(xOf(d), cy + 4); ctx.stroke();
-    ctx.fillText(d + '°', xOf(d), cy + 16);
   }
   // volle Kurve blass + getracete Kurve 0..φ
   ctx.strokeStyle = C.linie; ctx.lineWidth = 1.2; ctx.beginPath();
@@ -2258,6 +2408,16 @@ function drawAbw() {
   ctx.strokeStyle = farbe; ctx.lineWidth = 1.3; ctx.setLineDash([5, 4]);
   ctx.beginPath(); ctx.moveTo(istCos ? cxL : Px, startY); ctx.lineTo(curX, startY); ctx.stroke();
   ctx.setLineDash([]);
+  // Gradzahlen obenauf, mit Hintergrundfeld: Kurve und Verbindungslinie liefen sonst
+  // durch die Ziffern. beschriftung() klemmt «720°» in den Canvas.
+  ctx.fillStyle = C.tinte2; ctx.font = `${schriftPx(ctx, 11)}px JetBrains Mono, monospace`;
+  // Liegt der Kurvenpunkt auf dem Feld unter der Achse, rückt die Zahl über die Achse.
+  for (const d of [180, 360, 540, 720]) {
+    const lab = d + '°', fsA = fSchrift(ctx);
+    const k = txtKasten(ctx, lab, xOf(d), cy + 16 * fsA, ctx.font, 'center', 'alphabetic');
+    const trifft = curX > k[0] - 6 && curX < k[2] + 6 && startY > k[1] - 6 && startY < k[3] + 6;   // Punktradius 5
+    beschriftung(ctx, lab, xOf(d), trifft ? cy - 8 * fsA : cy + 16 * fsA, { align: 'center', pad: 2, W, H });
+  }
   fillDot(curX, startY, farbe, 5);
 }
 document.getElementById('sld-abwPhi').addEventListener('input', drawAbw);
@@ -2280,6 +2440,7 @@ document.querySelectorAll('#abw-modus .chip').forEach(c => {
  *    β = 180° − α  → Spiegelung an der y-Achse   (cos kippt, sin bleibt)
  *    β = 180° + α  → Punktspiegelung am Ursprung (beide kippen, tan bleibt)
  *    β = 360° − α  → Spiegelung an der x-Achse   (sin kippt, cos bleibt)
+ *    β = 90° − α   → Spiegelung an der Geraden y = x (sin und cos tauschen)
  * ════════════════════════════════════════════════════════════════ */
 const SY_MODI = {
   '180-': {
@@ -2297,6 +2458,11 @@ const SY_MODI = {
     formel: '\\(\\sin(360° - \\alpha) = -\\sin\\alpha,\\quad \\cos(360° - \\alpha) = \\cos\\alpha\\)',
     erkl: 'Gleicher Punkt wie bei \\(-\\alpha\\): Der Cosinus bleibt (gerade Funktion), der Sinus kippt (ungerade Funktion).',
   },
+  '90-': {
+    beta: a => 90 - a, achse: 'Gerade y = x', achseHtml: 'Gerade \\(y = x\\)',
+    formel: '\\(\\sin(90° - \\alpha) = \\cos\\alpha,\\quad \\cos(90° - \\alpha) = \\sin\\alpha\\)',
+    erkl: 'Die Spiegelung an der Geraden \\(y = x\\) vertauscht die Koordinaten: Die \\(y\\)-Koordinate von \\(B\\) ist die \\(x\\)-Koordinate von \\(A\\). Darum ist der Sinus von \\(90° - \\alpha\\) der Cosinus von \\(\\alpha\\) — «Co-Sinus» heisst: Sinus des Komplementwinkels. Bei \\(\\alpha = 45°\\) liegt \\(A\\) auf der Spiegelgeraden, \\(B\\) fällt mit \\(A\\) zusammen.',
+  },
 };
 let syModus = '180-';
 function drawSymm() {
@@ -2312,7 +2478,7 @@ function drawSymm() {
   document.getElementById('leg-syCos').textContent = `${nf(cosA)} / ${nf(cosB)}`;
   document.getElementById('leg-sySin').textContent = `${nf(sinA)} / ${nf(sinB)}`;
   const achseEl = document.getElementById('leg-syAchse');
-  achseEl.innerHTML = M.achse === 'y-Achse' ? '\\(y\\)-Achse' : (M.achse === 'x-Achse' ? '\\(x\\)-Achse' : M.achse);
+  achseEl.innerHTML = M.achseHtml || (M.achse === 'y-Achse' ? '\\(y\\)-Achse' : (M.achse === 'x-Achse' ? '\\(x\\)-Achse' : M.achse));
   document.getElementById('sy-formel').innerHTML = M.formel;
   document.getElementById('sy-erkl').innerHTML = M.erkl;
   mjTypeset([document.getElementById('sy-formel'), document.getElementById('sy-erkl'), achseEl]);
@@ -2332,7 +2498,10 @@ function drawSymm() {
   ctx.beginPath();
   if (syModus === '180-')      { ctx.moveTo(cx, cy - R - 20); ctx.lineTo(cx, cy + R + 20); }
   else if (syModus === '360-') { ctx.moveTo(cx - R - 20, cy); ctx.lineTo(cx + R + 20, cy); }
+  const dL = (R + 20) / Math.SQRT2;                                       // Diagonale y = x
+  if (syModus === '90-')       { ctx.moveTo(cx - dL, cy + dL); ctx.lineTo(cx + dL, cy - dL); }
   ctx.stroke(); ctx.restore();
+  if (syModus === '90-') txt(ctx, cx + dL + 6, cy - dL - 6, 'y = x', C.lila, 13, 'left');
   if (syModus === '180+') dot(ctx, [cx, cy], C.lila, 5);
 
   // Radien + Punkte
@@ -2346,12 +2515,23 @@ function drawSymm() {
   dashedSeg(ctx, B, [cx, B[1]], C.orange, 1.5);
   dot(ctx, A, C.gruen, 6);
   dot(ctx, B, C.orange, 6);
-  txt(ctx, A[0] + (cosA >= 0 ? 20 : -20), A[1] - 12, 'A', C.gruen, 14);
-  txt(ctx, B[0] + (cosB >= 0 ? 20 : -20), B[1] + (sinB >= 0 ? -12 : 14), 'B', C.orange, 14);
+  // «A» und «B» frei setzen (lageFrei, erste Lage ist die bisherige): beim Chip
+  // 90° − α lag «A» nahe α = 45° auf der Diagonalen und «B» auf «A».
+  const SF14 = '600 14px "Source Sans 3", sans-serif';
+  const abHind = [{ k: [A[0] - 6, A[1] - 6, A[0] + 6, A[1] + 6] }, { k: [B[0] - 6, B[1] - 6, B[0] + 6, B[1] + 6] }];
+  if (syModus === '90-') abHind.push({ a: [cx - dL, cy + dL], b: [cx + dL, cy - dL], w: 2.5 },
+                                     { k: txtKasten(ctx, 'y = x', cx + dL + 6, cy - dL - 6, '600 13px "Source Sans 3", sans-serif', 'left') });
+  const ring = (p, x0, y0) => [[x0, y0], ...[[20, -12], [-20, -12], [20, 14], [-20, 14], [0, -20], [0, 20], [28, 0], [-28, 0]]
+    .map(([ddx, ddy]) => [p[0] + ddx, p[1] + ddy])];
+  const aL = lageFrei(ctx, 'A', SF14, ring(A, A[0] + (cosA >= 0 ? 20 : -20), A[1] - 12), abHind, W, H);
+  const bL = lageFrei(ctx, 'B', SF14, ring(B, B[0] + (cosB >= 0 ? 20 : -20), B[1] + (sinB >= 0 ? -12 : 14)), abHind, W, H);
+  txt(ctx, aL.x, aL.y, 'A', C.gruen, 14);
+  txt(ctx, bL.x, bL.y, 'B', C.orange, 14);
   // Winkelbögen
   // Achsen und den anderen Radius meiden: bei α = 5° lag «α» sonst auf Schenkel und
   // x-Achse, «β» auf der Spiegelachse oder dem grünen Radius
-  const ACHSEN = [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2];
+  // beim Chip 90° − α auch die Diagonale y = x (45°) meiden
+  const ACHSEN = [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2, ...(syModus === '90-' ? [Math.PI / 4] : [])];
   const hilfs = [[A, [A[0], cy]], [A, [cx, A[1]]], [B, [B[0], cy]], [B, [cx, B[1]]]]
     .map(([a, b]) => ({ a, b, w: 1.5 }));                                  // gestrichelte Koordinaten
   drawAngleArc(ctx, [cx, cy], 42, 0, ar, C.gruen, 'α', [...ACHSEN, br], hilfs);
@@ -2367,6 +2547,194 @@ document.querySelectorAll('#sy-chips .chip').forEach(ch => ch.addEventListener('
   syModus = ch.dataset.sy;
   document.querySelectorAll('#sy-chips .chip').forEach(c => c.classList.toggle('aktiv', c === ch));
   drawSymm();
+}));
+
+/* ════════════════════════════════════════════════════════════════
+ *  HAUPTWERTE — arcsin, arccos, arctan am Einheitskreis (AN-90)
+ *  Der Hauptwertbereich ist als Kreishälfte eingefärbt, seine Grenzen
+ *  stehen als Klammer wie in der Schreibweise (STYLEGUIDE §2.7):
+ *    arcsin [−90°; 90°]  rechte Hälfte      φ₂ = 180° − φ₁
+ *    arccos [0°; 180°]   obere Hälfte       φ₂ = 360° − φ₁
+ *    arctan ]−90°; 90°[  rechte Hälfte      φ₂ = φ₁ + 180°
+ *  φ₁ = Hauptwert (blau), φ₂ = zweiter Winkel in [0°; 360°] (grau).
+ * ════════════════════════════════════════════════════════════════ */
+const ARC_MODI = {
+  sin: { fn: 'arcsin', min: -1, max: 1, step: 0.01, p1: w => Math.asin(w) * 180 / Math.PI, p2: p => 180 - p,
+         lab2: '\\(\\varphi_2 = 180° - \\varphi_1\\)', bereich: '\\([-90°;\\, 90°]\\)', bereichTxt: '[−90°; 90°]',
+         formel: '\\(\\sin\\varphi = w \\;\\Rightarrow\\; \\varphi_1 = \\arcsin w\\)',
+         haelfte: 'rechten Kreishälfte', wort: 'Sinuswert' },
+  cos: { fn: 'arccos', min: -1, max: 1, step: 0.01, p1: w => Math.acos(w) * 180 / Math.PI, p2: p => 360 - p,
+         lab2: '\\(\\varphi_2 = 360° - \\varphi_1\\)', bereich: '\\([0°;\\, 180°]\\)', bereichTxt: '[0°; 180°]',
+         formel: '\\(\\cos\\varphi = w \\;\\Rightarrow\\; \\varphi_1 = \\arccos w\\)',
+         haelfte: 'oberen Kreishälfte', wort: 'Cosinuswert' },
+  tan: { fn: 'arctan', min: -2, max: 2, step: 0.05, p1: w => Math.atan(w) * 180 / Math.PI, p2: p => p + 180,
+         lab2: '\\(\\varphi_2 = \\varphi_1 + 180°\\)', bereich: '\\(]{-90°};\\, 90°[\\)', bereichTxt: ']−90°; 90°[',
+         formel: '\\(\\tan\\varphi = w \\;\\Rightarrow\\; \\varphi_1 = \\arctan w\\)',
+         haelfte: 'rechten Kreishälfte (ohne ihre Endpunkte)', wort: 'Tangenswert' },
+};
+let arcModus = 'sin';
+// Winkel auf eine Dezimale; «≈», wo gerundet wurde (exakt nur bei w = 0, ±1/2, ±1 bzw. tan 0, ±1)
+function arcGrad(v, minus = '−') {
+  const r = Math.round(v * 10) / 10, genau = Math.abs(v - r) < 1e-9;
+  const z = zahlFix(r, genau && Number.isInteger(r) ? 0 : 1, minus) + '°';
+  return { z, genau, txt: (genau ? '' : '≈ ') + z };
+}
+function drawArcus() {
+  const r = initCv('cv-arcus'); if (!r) return;
+  const { ctx, W, H } = r;
+  const M = ARC_MODI[arcModus];
+  const w = Math.round(+document.getElementById('sld-arcW').value * 100) / 100;
+  const p1 = M.p1(w), p2 = M.p2(p1);
+  const t1 = p1 * Math.PI / 180, t2 = p2 * Math.PI / 180;
+  const einPunkt = arcModus !== 'tan' && Math.abs(Math.abs(w) - 1) < 1e-9;   // φ₁ und φ₂ auf demselben Kreispunkt
+  const cx = W * 0.40, cy = H / 2, R = 100, tanX = cx + R;
+  const fs = fSchrift(ctx), eng = fs > 1;   // schmaler Canvas: Abstände der Beschriftungen wachsen mit
+  const pt = t => [cx + R * Math.cos(t), cy - R * Math.sin(t)];
+  const P1 = pt(t1), P2 = pt(t2);
+  const SSF = px => `600 ${px}px "Source Sans 3", sans-serif`;
+  const wTxt = zahlFix(w, 2);
+  document.getElementById('lbl-arcW').textContent = wTxt;
+
+  // Hauptwertbereich: Kreishälfte (Canvas-Winkel, im Uhrzeigersinn)
+  const [a0, a1] = arcModus === 'cos' ? [Math.PI, 2 * Math.PI] : [-Math.PI / 2, Math.PI / 2];
+  ctx.save(); ctx.fillStyle = C.blauHell; ctx.beginPath(); ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, R, a0, a1); ctx.closePath(); ctx.fill(); ctx.restore();
+
+  // Achsen
+  seg(ctx, [cx - R - 30, cy], [cx + R + 60, cy], C.linie, 1);
+  seg(ctx, [cx, cy - R - 40], [cx, cy + R + 40], C.linie, 1);
+  ctx.save(); ctx.fillStyle = C.linie;
+  ctx.beginPath(); ctx.moveTo(cx + R + 60, cy); ctx.lineTo(cx + R + 53, cy - 4); ctx.lineTo(cx + R + 53, cy + 4); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx, cy - R - 40); ctx.lineTo(cx - 4, cy - R - 33); ctx.lineTo(cx + 4, cy - R - 33); ctx.fill();
+  ctx.restore();
+
+  // Kreis, Hauptwertbogen kräftig
+  ctx.save(); ctx.strokeStyle = C.tinte; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI); ctx.stroke();
+  ctx.strokeStyle = C.blau; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.arc(cx, cy, R, a0, a1); ctx.stroke(); ctx.restore();
+
+  // Wert: sin waagrechte Gerade y = w, cos senkrechte x = w, tan Punkt S auf der Tangente x = 1
+  const hind = [
+    { a: [cx - R - 30, cy], b: [cx + R + 60, cy], w: 1 }, { a: [cx, cy - R - 40], b: [cx, cy + R + 40], w: 1 },
+    { c: [cx, cy], r: R, w: 4 }
+  ];
+  let wertL;
+  if (arcModus === 'sin') {
+    const yw = cy - w * R;
+    dashedSeg(ctx, [cx - R - 24, yw], [cx + R + 24, yw], C.rot, 1.6);
+    hind.push({ a: [cx - R - 24, yw], b: [cx + R + 24, yw], w: 1.6 });
+    wertL = { s: `sin φ = ${wTxt}`, f: C.rot, kand: [[cx + R + 30, yw, 'left'], [cx + R + 30, yw - 14 * fs, 'left'], [cx + R + 30, yw + 14 * fs, 'left'],
+      [cx - R - 30, yw - 12 * fs, 'right'], [cx - R - 30, yw + 12 * fs, 'right'],
+      ...(eng ? [[cx + R + 30, yw - 28 * fs, 'left'], [cx + R + 30, yw + 28 * fs, 'left'], [cx - R - 30, yw - 26 * fs, 'right'], [cx - R - 30, yw + 26 * fs, 'right']] : [])] };
+  } else if (arcModus === 'cos') {
+    const xw = cx + w * R;
+    dashedSeg(ctx, [xw, cy - R - 24], [xw, cy + R + 24], C.gruen, 1.6);
+    hind.push({ a: [xw, cy - R - 24], b: [xw, cy + R + 24], w: 1.6 });
+    wertL = { s: `cos φ = ${wTxt}`, f: C.gruen, kand: [[xw, cy - R - 34 * fs], [xw, cy + R + 34 * fs], [xw + 8 * fs, cy - R - 34 * fs, 'left'], [xw - 8 * fs, cy - R - 34 * fs, 'right'],
+      [xw + 8 * fs, cy + R + 34 * fs, 'left'], [xw - 8 * fs, cy + R + 34 * fs, 'right']] };
+  } else {
+    const S = [tanX, cy - w * R], len = Math.hypot(1, w), u = [1 / len, -w / len];
+    const gA = [cx - (R + 24) * u[0], cy - (R + 24) * u[1]], gB = [S[0] + 16 * u[0], S[1] + 16 * u[1]];   // Gerade OS
+    seg(ctx, [tanX, 12], [tanX, H - 12], C.tinte2, 1.4);
+    dashedSeg(ctx, gA, gB, C.orange, 1.4);
+    seg(ctx, [tanX, cy], S, C.orange, 3.5);
+    dot(ctx, S, C.orange, 5);
+    hind.push({ a: [tanX, 12], b: [tanX, H - 12], w: 1.4 }, { a: gA, b: gB, w: 1.4 },
+              { k: [S[0] - 6, S[1] - 6, S[0] + 6, S[1] + 6] });
+    wertL = { s: `tan φ = ${wTxt}`, f: C.orange, kand: [[tanX + 10 * fs, S[1], 'left'], [tanX + 10 * fs, S[1] - 16 * fs, 'left'], [tanX + 10 * fs, S[1] + 16 * fs, 'left'],
+      ...(eng ? [[tanX + 10 * fs, S[1] - 32 * fs, 'left'], [tanX + 10 * fs, S[1] + 32 * fs, 'left']] : [])] };
+    // links unten an der Tangente: rechts davon läuft S bis w = −2 hinunter
+    txt(ctx, tanX - 6, H - 16, 'x = 1', C.tinte2, 11, 'right');
+    hind.push({ k: txtKasten(ctx, 'x = 1', tanX - 6, H - 16, SSF(11), 'right') });
+  }
+
+  // Klammern an den Enden der Kreishälfte: öffnen zum Bogen, wenn der Endpunkt dazugehört
+  const zu = arcModus !== 'tan';
+  const klammer = (x, y, dreh) => {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(dreh);
+    intervallKlammer(ctx, 0, 0, zu, { farbe: C.blau });
+    ctx.restore();
+    hind.push({ k: [x - 13, y - 13, x + 13, y + 13] });
+  };
+  if (arcModus === 'cos') { klammer(cx + R, cy, -Math.PI / 2); klammer(cx - R, cy, -Math.PI / 2); }
+  else { klammer(cx, cy - R, 0); klammer(cx, cy + R, 0); }
+
+  // zweiter Winkel grau, Hauptwert blau (obenauf)
+  if (!einPunkt) {
+    dashedSeg(ctx, [cx, cy], P2, C.tinte2, 1.8);
+    dot(ctx, P2, C.tinte2, 5);
+    hind.push({ a: [cx, cy], b: P2, w: 1.8 }, { k: [P2[0] - 6, P2[1] - 6, P2[0] + 6, P2[1] + 6] });
+  }
+  seg(ctx, [cx, cy], P1, C.blau, 2.5);
+  drawAngleArc(ctx, [cx, cy], 30, Math.min(0, t1), Math.max(0, t1), C.blau);
+  dot(ctx, P1, C.blau, 6);
+  hind.push({ a: [cx, cy], b: P1, w: 2.5 }, { k: [P1[0] - 7, P1[1] - 7, P1[0] + 7, P1[1] + 7] },
+            { c: [cx, cy], r: 30, w: 1.6, von: Math.min(0, t1), bis: Math.max(0, t1) });
+
+  // Beschriftungen frei setzen
+  txt(ctx, cx + R + 62, cy + 14 * fs, 'x', C.tinte2, 13, 'left');
+  txt(ctx, cx + 14 * fs, cy - R - 40, 'y', C.tinte2, 13, 'left');
+  txt(ctx, 12, 18, `${M.fn}: Hauptwerte in ${M.bereichTxt}`, C.blau, 14, 'left');
+  hind.push({ k: txtKasten(ctx, 'x', cx + R + 62, cy + 14 * fs, SSF(13), 'left') },
+            { k: txtKasten(ctx, 'y', cx + 14 * fs, cy - R - 40, SSF(13), 'left') },
+            { k: txtKasten(ctx, `${M.fn}: Hauptwerte in ${M.bereichTxt}`, 12, 18, SSF(14), 'left') });
+  const wL = lageFrei(ctx, wertL.s, SSF(12), wertL.kand, hind, W, H);
+  txt(ctx, wL.x, wL.y, wertL.s, wertL.f, 12, wL.align);
+  // Kandidaten: aussen um den Punkt, dann seitlich nach aussen bündig,
+  // bei arctan rechts der Tangente, zuletzt innen
+  const ringKand = t => {
+    const k = [], P = pt(t), sx = Math.cos(t) >= 0 ? 1 : -1, al = sx > 0 ? 'left' : 'right';
+    for (const rr of [R + 22 * fs, R + 36 * fs]) {
+      for (const d of [0, 14, -14, 28, -28, 42, -42]) {
+        const a = t + d * Math.PI / 180;
+        k.push([cx + rr * Math.cos(a), cy - rr * Math.sin(a)]);
+      }
+    }
+    for (const dy of [-14, 14, -28, 28, -42, 42]) k.push([P[0] + sx * 12 * fs, P[1] + dy * fs, al]);
+    if (arcModus === 'tan') for (const dy of [-18, 18, -34, 34, -50, 50]) k.push([tanX + 10 * fs, P[1] + dy * fs, 'left']);
+    for (const d of [0, 25, -25, 50, -50]) {
+      const a = t + d * Math.PI / 180;
+      k.push([cx + (R - 42 * Math.min(fs, 1.5)) * Math.cos(a), cy - (R - 42 * Math.min(fs, 1.5)) * Math.sin(a)]);
+    }
+    return k;
+  };
+  const g1 = arcGrad(p1), g2 = arcGrad(p2);
+  const s1 = `φ₁ ${g1.genau ? '=' : '≈'} ${g1.z}`;
+  const l1 = lageFrei(ctx, s1, SSF(13), ringKand(t1), hind, W, H);
+  txt(ctx, l1.x, l1.y, s1, C.blau, 13, l1.align);
+  const s2 = einPunkt ? `φ₂ = ${g2.z}` : `φ₂ ${g2.genau ? '=' : '≈'} ${g2.z}`;
+  const l2 = lageFrei(ctx, s2, SSF(13), einPunkt ? ringKand(t1).slice(1) : ringKand(t2), hind, W, H);
+  txt(ctx, l2.x, l2.y, s2, C.tinte2, 13, l2.align);
+
+  // Anzeigen
+  document.getElementById('leg-arcP1').textContent = g1.txt;
+  document.getElementById('leg-arcP2').textContent = g2.txt;
+  const erkl = document.getElementById('erkl-arc');
+  const wLx = zahlFix(w, 2, '-'), p1Lx = arcGrad(p1, '-'), p2Lx = arcGrad(p2, '-');
+  const eq = g => g.genau ? '=' : '\\approx';
+  if (einPunkt) {
+    erkl.innerHTML = `Der Rechner liefert \\(\\${M.fn}(${wLx}) = ${p1Lx.z}\\). Nur <strong>ein</strong> Kreispunkt hat den ${M.wort} \\(${wLx}\\): \\(\\varphi_2 = ${p2Lx.z}\\) ${p1 === p2 ? 'ist derselbe Winkel' : 'bezeichnet denselben Punkt'}.`;
+  } else {
+    erkl.innerHTML = `Der Rechner liefert \\(\\${M.fn}(${wLx}) ${eq(p1Lx)} ${p1Lx.z}\\) aus der ${M.haelfte}. Auch \\(\\varphi_2 ${eq(p2Lx)} ${p2Lx.z}\\) hat den ${M.wort} \\(${wLx}\\) — diesen Winkel liefert er nicht.`;
+  }
+  mjTypeset([erkl]);
+}
+document.getElementById('sld-arcW').addEventListener('input', drawArcus);
+document.querySelectorAll('#arc-modus .chip').forEach(ch => ch.addEventListener('click', () => {
+  arcModus = ch.dataset.m;
+  document.querySelectorAll('#arc-modus .chip').forEach(c => c.classList.toggle('aktiv', c === ch));
+  const M = ARC_MODI[arcModus], sld = document.getElementById('sld-arcW');
+  const w = clamp(+sld.value, M.min, M.max);
+  sld.min = M.min; sld.max = M.max; sld.step = M.step;
+  sld.value = w;
+  document.getElementById('formel-arc').innerHTML = M.formel;
+  document.getElementById('lab-arcP1').innerHTML = `\\(\\varphi_1 = \\${M.fn} w\\)`;
+  document.getElementById('lab-arcP2').innerHTML = M.lab2;
+  document.getElementById('leg-arcBereich').innerHTML = M.bereich;
+  mjTypeset([document.getElementById('formel-arc'), document.getElementById('lab-arcP1'),
+             document.getElementById('lab-arcP2'), document.getElementById('leg-arcBereich')]);
+  drawArcus();
 }));
 
 /* ════════════════════════════════════════════════════════════════
@@ -2398,7 +2766,7 @@ document.querySelectorAll('#sy-chips .chip').forEach(ch => ch.addEventListener('
     el('vz-nr').textContent = `Aufgabe ${i + 1} von ${reihe.length}`;
     el('vz-score').textContent = `${punkte} richtig`;
     el('vz-winkel').textContent = (w < 0 ? '−' + Math.abs(w) : w) + '°';
-    el('vz-fb').className = 'vz-fb'; el('vz-fb').textContent = '';
+    el('vz-fb').className = 'vz-fb'; el('vz-fb-text').textContent = ''; el('vz-kreis').hidden = true;
     document.querySelectorAll('.vz-btn').forEach(b => { b.disabled = false; b.classList.remove('gewaehlt', 'richtig', 'falsch'); });
     el('vz-pruef').disabled = true;
     el('vz-next').disabled = true;
@@ -2425,26 +2793,58 @@ document.querySelectorAll('#sy-chips .chip').forEach(ch => ch.addEventListener('
     const wStr = (w < 0 ? '−' + Math.abs(w) : w) + '°';
     const zusatz = norm === w ? '' : ` (entspricht ${norm}°)`;
     const z = fn => VZ(w, fn).replace('-', '−');   // Unicode-Minus für die Anzeige
-    const fb = el('vz-fb');
+    const fb = el('vz-fb'), fbText = el('vz-fb-text');
     if (alle) {
       punkte++;
       fb.className = 'vz-fb ok';
-      fb.textContent = `✓ Richtig — ${wStr} liegt in Quadrant ${q}${zusatz}: sin ${z('sin')}, cos ${z('cos')}, tan ${z('tan')}.`;
+      fbText.textContent = `✓ Richtig — ${wStr} liegt in Quadrant ${q}${zusatz}: sin ${z('sin')}, cos ${z('cos')}, tan ${z('tan')}.`;
     } else {
       fb.className = 'vz-fb err';
-      fb.textContent = `✗ ${wStr} liegt in Quadrant ${q}${zusatz}: sin ${z('sin')}, cos ${z('cos')}, tan ${z('tan')}. Das Vorzeichen von tan ist das Produkt der beiden anderen.`;
+      fbText.textContent = `✗ ${wStr} liegt in Quadrant ${q}${zusatz}: sin ${z('sin')}, cos ${z('cos')}, tan ${z('tan')}. Das Vorzeichen von tan ist das Produkt der beiden anderen.`;
     }
+    kreis(w);
     el('vz-score').textContent = `${punkte} richtig`;
     el('vz-pruef').disabled = true;
     el('vz-next').disabled = false;
+  }
+  // Mini-Einheitskreis zur Rückmeldung: Quadrant eingefärbt, Kreispunkt mit
+  // cos-Strecke (grün, waagrecht) und sin-Strecke (rot, senkrecht) wie in Anim 1.
+  function kreis(w) {
+    const cv = el('vz-kreis');
+    cv.hidden = false;                       // vor initCv: sonst clientWidth = 0
+    const r = initCv('vz-kreis'); if (!r) return;
+    const { ctx, W, H } = r;
+    const cx = W / 2, cy = H / 2, R = 48;
+    const n = ((w % 360) + 360) % 360, t = n * Math.PI / 180;
+    const q0 = Math.floor(n / 90);
+    ctx.save(); ctx.fillStyle = BLAU_FILL; ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, -(q0 + 1) * Math.PI / 2, -q0 * Math.PI / 2); ctx.closePath(); ctx.fill(); ctx.restore();
+    seg(ctx, [cx - R - 12, cy], [cx + R + 12, cy], C.linie, 1);
+    seg(ctx, [cx, cy - R - 12], [cx, cy + R + 12], C.linie, 1);
+    ctx.save(); ctx.strokeStyle = C.tinte2; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI); ctx.stroke(); ctx.restore();
+    const c = Math.cos(t), s = Math.sin(t);
+    const P = [cx + R * c, cy - R * s], Q = [P[0], cy];
+    seg(ctx, [cx, cy], P, C.tinte, 1.5);
+    // Winkelbogen: negative Winkel im Uhrzeigersinn, über 360° der Rest
+    const wr = (w < 0 ? w : n) * Math.PI / 180;
+    drawAngleArc(ctx, [cx, cy], 8, Math.min(0, wr), Math.max(0, wr), C.lila);
+    seg(ctx, [cx, cy], Q, C.gruen, 3);
+    seg(ctx, Q, P, C.rot, 3);
+    dot(ctx, P, C.blau, 4);
+    const sx = c >= 0 ? 1 : -1, sy = s >= 0 ? 1 : -1;
+    txt(ctx, cx + sx * (R + 10), cy - sy * (R + 10), ['I', 'II', 'III', 'IV'][q0], C.blau, 12);
+    txt(ctx, cx + sx * Math.max(Math.abs(c) * R / 2, 14), cy + sy * 14, 'cos', C.gruen, 11);
+    txt(ctx, Q[0] + sx * 5, cy - sy * Math.max(Math.abs(s) * R / 2, 9), 'sin', C.rot, 11, sx > 0 ? 'left' : 'right');
   }
   function weiter() {
     if (i < reihe.length - 1) { i++; zeige(); return; }
     el('vz-nr').textContent = 'Durchgang beendet';
     el('vz-winkel').textContent = `${punkte}/${reihe.length}`;
     const fb = el('vz-fb');
+    el('vz-kreis').hidden = true;
     fb.className = punkte >= reihe.length - 2 ? 'vz-fb ok' : 'vz-fb err';
-    fb.textContent = punkte >= reihe.length - 2
+    el('vz-fb-text').textContent = punkte >= reihe.length - 2
       ? 'Sitzt — du findest den Quadranten auch bei Winkeln über 360° und bei negativen Winkeln.'
       : 'Rechne den Winkel zuerst auf das Intervall 0° bis 360° zurück, bestimme dann den Quadranten.';
     el('vz-next').disabled = true;
@@ -2465,6 +2865,7 @@ window.addEventListener('load', () => {
   drawTan();
   drawBez();
   drawSymm();
+  drawArcus();
 });
 window.addEventListener('resize', () => {
   drawSchiff();
@@ -2473,6 +2874,7 @@ window.addEventListener('resize', () => {
   drawTan();
   drawBez();
   drawSymm();
+  drawArcus();
 });
 
 /* ════════════════════════════════════════════════════════════════

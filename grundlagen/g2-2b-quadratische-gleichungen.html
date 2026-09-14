@@ -313,7 +313,7 @@ MathJax = {
           <div class="anim-hinweis links">
             <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
             <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-              <div class="ah-text">Stell verschiedene Hinweg-Geschwindigkeiten ein und lass die Fahrt laufen. Wie verändert sich die Gesamtzeit — gleichmässig, oder wird der Effekt bei kleinen \(v\) plötzlich gross?</div>
+              <div class="ah-text">Stell verschiedene Hinweg-Geschwindigkeiten ein und lass die Fahrt laufen — die Zähler zwischen den Strassen zeigen, wie viele Minuten Anna auf jedem Weg schon unterwegs ist. Wie verändert sich die Gesamtzeit — gleichmässig, oder wird der Effekt bei kleinen \(v\) plötzlich gross?</div>
             </div>
           </div>
           <div class="anim-hinweis rechts">
@@ -343,7 +343,7 @@ MathJax = {
       <button id="velo-play">▶ Fahrt starten</button>
       <button id="velo-reset">↺ Reset</button>
     </div>
-    <div class="vb-cap">Probiere verschiedene Werte für \(v\). Klick „Fahrt starten", um Hin- und Rückweg nacheinander als Animation laufen zu lassen — die Geschwindigkeiten sind dabei massstäblich. Ziel: Gesamtzeit möglichst nahe an 90 min.</div>
+    <div class="vb-cap">Probiere verschiedene Werte für \(v\). Klick „Fahrt starten", um Hin- und Rückweg nacheinander als Animation laufen zu lassen — die Geschwindigkeiten sind dabei massstäblich, und je Weg laufen die Minuten mit. Ziel: Gesamtzeit möglichst nahe an 90 min. Der Schieber beginnt erst bei 5 km/h, denn für \(v \le 4\) wäre die Rückweg-Geschwindigkeit \(v - 4\) null oder negativ. Die Gleichung unten hat trotzdem eine zweite Lösung in genau diesem Bereich — warum sie wegfällt, klärt Aufgabe A6.</div>
     </div>
   </div>
 </div>
@@ -577,7 +577,7 @@ eine Methode und sieh dir das Beispiel Schritt für Schritt an.</p>
 
 <p>Der Ausdruck unter der Wurzel — \(D = b^2 - 4 \cdot a \cdot c\) — heisst <strong>Diskriminante</strong>
 („das Unterscheidende"). Sie entscheidet allein durch ihr Vorzeichen, wie viele reelle Lösungen die
-Gleichung hat. Klicke die drei Fälle durch und beobachte, was im Wurzelterm passiert:</p>
+Gleichung hat. Klicke die drei Fälle durch und beobachte, was im Wurzelterm passiert. Alle drei Gleichungen gehören zur selben Familie \(x^2 - 6 \cdot x + c = 0\); nur \(c\) ändert sich (\(c = 5\), \(9\), \(10\)). In der Parameterdiskussion weiter unten kommt diese Familie mit \(k\) statt \(c\) wieder.</p>
 
 <div class="widget">
   <div class="widget-body">
@@ -1367,9 +1367,13 @@ const FAK_STEPS = {
 let fakAktiv = 'cnull', fakSchritt = 0;
 function rendFak() {
   document.getElementById('fak-info').innerHTML = FAK_INFO[fakAktiv];
-  document.getElementById('fak-stolper').innerHTML = FAK_STOLPER[fakAktiv];
   const stack = document.getElementById('fak-stack');
   const steps = FAK_STEPS[fakAktiv];
+  // Stolperstein erst ab dem Kernschritt: vorher ist der Fehler, vor dem er warnt, noch gar nicht möglich.
+  const stolperEl = document.getElementById('fak-stolper');
+  const stolperZeigen = fakSchritt >= steps.findIndex(st => st[0] === 'kern');
+  stolperEl.hidden = !stolperZeigen;
+  stolperEl.innerHTML = stolperZeigen ? FAK_STOLPER[fakAktiv] : '';
   let html = '';
   for (let i = 0; i < steps.length; i++) {
     const visible = i <= fakSchritt;
@@ -1386,20 +1390,20 @@ function rendFak() {
   stack.innerHTML = html;
   document.getElementById('fak-zurueck').disabled = fakSchritt === 0;
   document.getElementById('fak-vor').disabled = fakSchritt >= steps.length - 1;
-  mjTypeset([document.getElementById('fak-info'), document.getElementById('fak-stolper')]);
+  mjTypeset(stolperZeigen ? [document.getElementById('fak-info'), stolperEl] : [document.getElementById('fak-info')]);
 }
 
 /* ══════════════════════════════════════════════════════════════
    7. DISKRIMINANTE — Wurzelterm-Visualisierung
    ══════════════════════════════════════════════════════════════ */
 const D_FAELLE = {
-  pos:  { D:  16, b: -8, a: 1, c: 12,
-          formel: 'b² − 4·a·c = 64 − 48 = ',
-          info: '√16 = 4, also liefert ±√D zwei verschiedene Werte. Damit hat die Mitternachtsformel zwei verschiedene Lösungen: x₁ = (8 + 4)/2 = 6, x₂ = (8 − 4)/2 = 2.',
+  pos:  { D:  16, b: -6, a: 1, c: 5,
+          formel: 'b² − 4·a·c = 36 − 20 = ',
+          info: '√16 = 4, also liefert ±√D zwei verschiedene Werte. Damit hat die Mitternachtsformel zwei verschiedene Lösungen: x₁ = (6 + 4)/2 = 5, x₂ = (6 − 4)/2 = 1.',
           aeste: [
             { tit: 'b² − 4ac', val: 'D = 16', cls: 'aktiv' },
             { tit: '√D', val: '√16 = 4', cls: 'aktiv' },
-            { tit: '−b ± √D', val: '8 + 4  und  8 − 4', cls: 'aktiv' }
+            { tit: '−b ± √D', val: '6 + 4  und  6 − 4', cls: 'aktiv' }
           ] },
   null: { D:   0, b: -6, a: 1, c: 9,
           formel: 'b² − 4·a·c = 36 − 36 = ',
@@ -1409,12 +1413,12 @@ const D_FAELLE = {
             { tit: '√D', val: '√0 = 0', cls: 'aktiv' },
             { tit: '−b ± √D', val: '6 + 0  und  6 − 0', cls: 'aktiv' }
           ] },
-  neg:  { D:  -7, b:  1, a: 1, c: 2,
-          formel: 'b² − 4·a·c = 1 − 8 = ',
-          info: '√(−7) ist in ℝ nicht definiert — Quadratwurzel aus einer negativen Zahl gibt es in den reellen Zahlen nicht. Die Gleichung hat keine reelle Lösung.',
+  neg:  { D:  -4, b: -6, a: 1, c: 10,
+          formel: 'b² − 4·a·c = 36 − 40 = ',
+          info: '√(−4) ist in ℝ nicht definiert — Quadratwurzel aus einer negativen Zahl gibt es in den reellen Zahlen nicht. Die Gleichung hat keine reelle Lösung.',
           aeste: [
-            { tit: 'b² − 4ac', val: 'D = −7', cls: 'warn' },
-            { tit: '√D', val: '√(−7)  in ℝ ?', cls: 'warn' },
+            { tit: 'b² − 4ac', val: 'D = −4', cls: 'warn' },
+            { tit: '√D', val: '√(−4)  in ℝ ?', cls: 'warn' },
             { tit: '−b ± √D', val: 'nicht berechenbar', cls: 'warn' }
           ] }
 };
@@ -1423,8 +1427,9 @@ function setD(f) {
   dAktiv = f;
   document.querySelectorAll('.lf-card[data-d]').forEach(c => c.classList.toggle('aktiv', c.dataset.d === f));
   const fall = D_FAELLE[f];
+  // Alle drei Fälle aus derselben Familie x² − 6x + c (wie das k-Widget weiter unten): nur c ändert sich.
   document.getElementById('d-formel').innerHTML =
-    `D = ${fall.formel}<span class="D-wert">${zahlM(fall.D)}</span>`;
+    `x² − 6·x + ${fall.c} = 0<br>D = ${fall.formel}<span class="D-wert">${zahlM(fall.D)}</span>`;
   const baum = document.getElementById('d-baum');
   baum.innerHTML = fall.aeste.map(a =>
     `<div class="ast ${a.cls}"><div class="ast-tit">${a.tit}</div><div class="ast-val">${a.val}</div></div>`
@@ -1465,14 +1470,22 @@ function drawPK() {
   const c = document.getElementById('cv-pk');
   const dpr = window.devicePixelRatio || 1;
   const W = c.offsetWidth || 540;
-  const H = 80;
-  c.width = W*dpr; c.height = H*dpr; c.style.width = W+'px'; c.style.height = H+'px';
-  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
-  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
   const Dmin = -20, Dmax = 50;
   const padL = 40, padR = 30;
   const cx = D => padL + (D - Dmin) / (Dmax - Dmin) * (W - padL - padR);
-  const yAchse = 50;
+  // Zeilen: «D = 0» über der Grenzlinie · D-Wert über dem Punkt · Achse mit Zahlen ·
+  // Bereichs-Beschriftungen darunter, links und rechts an die Grenzlinie gelehnt.
+  // Passen beide nicht nebeneinander (schmales Canvas), stehen sie in zwei Zeilen.
+  const yAchse = 46, yZone = yAchse + 36;
+  const txtL = 'D < 0  (keine Lösung)', txtR = 'D > 0  (zwei Lösungen)';
+  const mctx = c.getContext('2d');
+  mctx.font = 'bold 13px JetBrains Mono, monospace';
+  const wL = mctx.measureText(txtL).width, wR = mctx.measureText(txtR).width;
+  const nebeneinander = cx(0) - 6 - wL >= 2 && cx(0) + 6 + wR <= W - 2;
+  const H = nebeneinander ? yZone + 8 : yZone + 24;
+  c.width = W*dpr; c.height = H*dpr; c.style.width = W+'px'; c.style.height = H+'px';
+  const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
   // Zonen
   ctx.fillStyle = 'rgba(160, 57, 44, 0.12)';
   ctx.fillRect(cx(Dmin), yAchse - 12, cx(0) - cx(Dmin), 24);   // D < 0 rot
@@ -1492,24 +1505,33 @@ function drawPK() {
     ctx.beginPath(); ctx.moveTo(cx(t), yAchse - 4); ctx.lineTo(cx(t), yAchse + 4); ctx.stroke();
     beschriftung(ctx, zahlM(t), cx(t), yAchse + 17, {align:'center', W, H});
   }
-  // 0-Linie hervorheben (Grenzfall)
+  // 0-Linie hervorheben (Grenzfall) und beschriften
   ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
-  ctx.beginPath(); ctx.moveTo(cx(0), 8); ctx.lineTo(cx(0), 42); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx(0), 20); ctx.lineTo(cx(0), yAchse - 4); ctx.stroke();
+  if (nebeneinander) {   // unten als Trenner zwischen den beiden Bereichs-Beschriftungen
+    ctx.beginPath(); ctx.moveTo(cx(0), yZone - 11); ctx.lineTo(cx(0), H - 2); ctx.stroke();
+  }
   ctx.setLineDash([]);
+  ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, 'D = 0', cx(0), 14, {align:'center', W, H});
   // Beschriftung: D < 0 / D > 0
-  ctx.font = 'bold 13px JetBrains Mono, monospace';
-  ctx.fillStyle = '#a0392c'; ctx.textAlign = 'center';
-  ctx.fillText('D < 0  (keine Lösung)', (cx(Dmin) + cx(0))/2, 18);
+  ctx.fillStyle = '#a0392c';
+  if (nebeneinander) beschriftung(ctx, txtL, cx(0) - 6, yZone, {align:'right', W, H});
+  else               beschriftung(ctx, txtL, cx(Dmin), yZone, {align:'left', W, H});
   ctx.fillStyle = '#0f7a3a';
-  ctx.fillText('D > 0  (zwei Lösungen)', (cx(0) + cx(Dmax))/2, 18);
+  if (nebeneinander) beschriftung(ctx, txtR, cx(0) + 6, yZone, {align:'left', W, H});
+  else               beschriftung(ctx, txtR, cx(Dmax) + 8, yZone + 16, {align:'right', W, H});
   // Aktueller D-Wert als Punkt
   const dClamped = Math.max(Dmin, Math.min(Dmax, D));
   ctx.fillStyle = D > 0.001 ? '#0f7a3a' : (D < -0.001 ? '#a0392c' : '#1a4f8a');
   ctx.beginPath(); ctx.arc(cx(dClamped), yAchse, 7, 0, Math.PI*2); ctx.fill();
   // Beschriftung "D = ..." über Punkt
   ctx.font = 'bold 13px JetBrains Mono, monospace';
-  ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
-  ctx.fillText('D = ' + zahlM(D, 1), cx(dClamped), yAchse - 12);
+  ctx.fillStyle = '#374151';
+  // Nicht über den Achsennamen «D» links (bei D = −20 stiess das Label sonst direkt daran)
+  const dTxt = 'D = ' + zahlM(D, 1);
+  const dxLabel = Math.max(cx(dClamped), 22 + ctx.measureText(dTxt).width / 2);
+  beschriftung(ctx, dTxt, dxLabel, yAchse - 12, {align:'center', W, H});
   // Achsenbeschriftung links
   ctx.font = 'bold 13px monospace'; ctx.fillStyle = '#374151'; ctx.textAlign = 'left';
   ctx.fillText('D', 6, yAchse + 4);
@@ -1523,10 +1545,6 @@ function drawPKParabel(k) {
   const xMin = -2, xMax = 8, yMin = -12, yMax = 8;
   const { cx, cy } = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
   const D = 36 - 4*k;
-  // Term ins Bild: die Parabel wandert mit k, im Graphen stand bisher nur der Scheitel.
-  ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono,monospace';
-  beschriftung(ctx, `f(x) = x² − 6·x ${k >= 0 ? '+' : '−'} ${Math.abs(k).toFixed(1)}`,
-               10, 19, {align:'left', bg:'#fff', W, H});
   // Parabel nur im sichtbaren Bereich zeichnen
   ctx.strokeStyle = '#1a4f8a'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
   ctx.beginPath();
@@ -1540,18 +1558,118 @@ function drawPKParabel(k) {
     if (!started) { ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
   }
   ctx.stroke();
-  // Scheitel S(3 | k−9)
+  // Punkte: Scheitel S(3 | k−9) und Nullstellen (x₁ ist die grössere, wie in der Anzeige darunter)
+  const half = D > 0.001 ? Math.sqrt(D) / 2 : 0;
   drawDot(ctx, cx, cy, 3, k - 9, '#9b1c1c', 5);
-  ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
-  beschriftung(ctx, 'S(3 | ' + zahlM(k - 9, 1) + ')', cx(3) + 9, cy(k - 9) - 6, {align:'left', W, H});
-  // Nullstellen auf der x-Achse
   if (D > 0.001) {
-    const half = Math.sqrt(D) / 2;
     drawDot(ctx, cx, cy, 3 - half, 0, '#0f7a3a', 6);
     drawDot(ctx, cx, cy, 3 + half, 0, '#0f7a3a', 6);
   } else if (D >= -0.001) {
     drawDot(ctx, cx, cy, 3, 0, '#1a4f8a', 6);   // doppelte Nullstelle bei k = 9
   }
+
+  // ── Beschriftungen mit Freiplatz-Suche ──
+  // Hindernisse: Parabel, Punkte, Achsenzahlen, Achsenname «y». Reihenfolge der Vergabe:
+  // Term → Scheitel-Label zusammen mit den Nullstellen-Labels (die erste Scheitel-Lage,
+  // bei der auch die Nullstellen-Labels frei bleiben).
+  const FT = 'bold 13px JetBrains Mono, monospace', FS = 'bold 12px JetBrains Mono, monospace';
+  const boxVon = (txt, x, y, align, font) => {
+    ctx.font = font;
+    const m = ctx.measureText(txt), w = m.width;
+    const a = isFinite(m.actualBoundingBoxAscent) ? m.actualBoundingBoxAscent : 11;
+    const d = isFinite(m.actualBoundingBoxDescent) ? m.actualBoundingBoxDescent : 4;
+    let l = align === 'left' ? x : (align === 'right' ? x - w : x - w / 2);
+    l = Math.max(2, Math.min(l, W - w - 2));
+    return { l, r: l + w, o: y - a - 1, u: y + d + 1 };
+  };
+  const ueber = (a, b, m) => a.l < b.r + m && a.r > b.l - m && a.o < b.u + m && a.u > b.o - m;
+  const fest = [];
+  fest.push({ l: 0, r: W, o: cy(0) + 2, u: cy(0) + 18 });                 // Achsenzahlen x
+  for (let gy = -10; gy < yMax; gy += 2) {                                 // Achsenzahlen y (drawGrid: Schritt 2)
+    if (gy !== 0) fest.push(boxVon(String(gy).replace('-', '−'), cx(0) - 5, cy(gy) + 4, 'right', '13px JetBrains Mono,monospace'));
+  }
+  fest.push(boxVon('y', cx(0) + 13, 14, 'center', 'bold 13px monospace'));  // Achsenname y
+  const punkt = (x, y, r) => ({ l: cx(x) - r, r: cx(x) + r, o: cy(y) - r, u: cy(y) + r });
+  fest.push(punkt(3, k - 9, 5));
+  if (D > 0.001) { fest.push(punkt(3 - half, 0, 6)); fest.push(punkt(3 + half, 0, 6)); }
+  else if (D >= -0.001) fest.push(punkt(3, 0, 6));
+  const kurve = Array.from({ length: 481 }, (_, i) => xMin + (xMax - xMin) * i / 480)
+    .map(x => [cx(x), cy(x*x - 6*x + k)]);
+  const frei = (bx, weitere) =>
+    bx.o >= 2 && bx.u <= H - 2 &&
+    !fest.some(q => ueber(bx, q, 3)) && !weitere.some(q => ueber(bx, q, 3)) &&
+    !kurve.some(([px, py]) => px > bx.l - 4 && px < bx.r + 4 && py > bx.o - 4 && py < bx.u + 4);
+  // erste freie Lage, sonst die erste
+  const suche = (kand, weitere) => kand.find(e => frei(e.bx, weitere)) || null;
+
+  // 1. Term — die Parabel wandert mit k. Unten rechts (dort ist die Parabel fast immer weg; so springt
+  //    der Term beim Ziehen kaum), sonst oben neben dem Achsennamen, oben rechts, oben links.
+  const tTxt = `f(x) = x² − 6·x ${k >= 0 ? '+' : '−'} ${Math.abs(k).toFixed(1)}`;
+  const tKand = [[W - 8, H - 8, 'right'], [cx(0) + 24, 19, 'left'], [W - 8, 19, 'right'], [10, 19, 'left']]
+    .map(ld => ({ ld, bx: boxVon(tTxt, ...ld, FT) }));
+  const tWahl = suche(tKand, []) || tKand[0];
+  const belegt = [tWahl.bx];
+
+  // 2. Nullstellen-Labels: unter den Achsenzahlen · über der Achse zum Scheitel hin · vom Scheitel weg.
+  //    Beide möglichst in derselben Lage (sonst springt das Bild beim Ziehen), sonst einzeln.
+  //    innen = Richtung Scheitel (+1 nach rechts, −1 nach links, 0 = doppelte Nullstelle).
+  const nListe = D > 0.001 ? [['x₂', 3 - half, +1], ['x₁', 3 + half, -1]]
+               : (D >= -0.001 ? [['x₁ = x₂', 3, 0]] : []);
+  const nKand = nListe.map(([txt, x0, innen]) => {
+    const px = cx(x0), py = cy(0);
+    const l = [[px, py + 32, 'center']];
+    if (innen === 0) l.push([px, py + 48, 'center']);
+    if (innen !== 0) {
+      l.push([px + 10 * innen, py - 8, innen > 0 ? 'left' : 'right']);
+      l.push([px - 10 * innen, py - 8, innen > 0 ? 'right' : 'left']);
+      // Ausweichlagen nahe beim Ursprung (Achsenzahlen der y-Achse, steile Parabel)
+      l.push([px - 8 * innen, py + 32, innen > 0 ? 'right' : 'left']);
+      l.push([px, py + 48, 'center']);
+      l.push([px + 14 * innen, py + 48, innen > 0 ? 'left' : 'right']);
+      l.push([px + 20 * innen, py - 6, innen > 0 ? 'left' : 'right']);
+    }
+    return l.map(ld => ({ ld, bx: boxVon(txt, ...ld, FT) }));
+  });
+  const nullstellenLagen = (weitere) => {   // → [Wahl…] und ob alle frei sind
+    for (let n = 0; n < (nKand[0] || []).length; n++) {
+      const set = nKand.map(kk => kk[n]);
+      if (set.every((e, i) => frei(e.bx, weitere.concat(set.slice(0, i).map(f => f.bx))))) return { wahl: set, ok: true };
+    }
+    const wahl = []; let ok = true;
+    for (const kk of nKand) {
+      const e = suche(kk, weitere.concat(wahl.map(f => f.bx)));
+      if (!e) ok = false;
+      wahl.push(e || kk[0]);
+    }
+    return { wahl, ok };
+  };
+
+  // 3. Scheitel-Label: rechts oben (bisherige Lage), unterhalb (dort verläuft die nach oben offene
+  //    Parabel nie), rechts/links unten, innen über dem Scheitel, links oben, weiter unten.
+  const sTxt = 'S(3 | ' + zahlM(k - 9, 1) + ')';
+  const sx = cx(3), sy = cy(k - 9);
+  const sKand = [[sx + 9, sy - 6, 'left'], [sx, sy + 19, 'center'], [sx + 9, sy + 17, 'left'],
+                 [sx - 9, sy + 17, 'right'], [sx, sy - 26, 'center'], [sx, sy - 40, 'center'],
+                 [sx - 9, sy - 6, 'right'], [sx, sy + 35, 'center']]
+    .map(ld => ({ ld, bx: boxVon(sTxt, ...ld, FS) }));
+  // Bewertung: freies Scheitel-Label und freie Nullstellen-Labels; sonst die Lage mit den wenigsten Konflikten
+  let sWahl = null, nWahl = null, bestePunkte = Infinity;
+  for (const e of sKand) {
+    const nl = nullstellenLagen(belegt.concat([e.bx]));
+    const nKonflikte = nl.wahl.filter((f, i) =>
+      !frei(f.bx, belegt.concat([e.bx], nl.wahl.slice(0, i).map(g => g.bx)))).length;
+    const punkte = (frei(e.bx, belegt) ? 0 : 2) + nKonflikte;
+    if (punkte < bestePunkte) { bestePunkte = punkte; sWahl = e; nWahl = nl.wahl; }
+    if (punkte === 0) break;
+  }
+
+  // Zeichnen
+  ctx.font = FT; ctx.fillStyle = '#1a4f8a';
+  beschriftung(ctx, tTxt, tWahl.ld[0], tWahl.ld[1], {align: tWahl.ld[2], bg: '#fff', W, H});
+  ctx.font = FS; ctx.fillStyle = '#9b1c1c';
+  beschriftung(ctx, sTxt, sWahl.ld[0], sWahl.ld[1], {align: sWahl.ld[2], bg: '#fff', W, H});
+  ctx.font = FT; ctx.fillStyle = D > 0.001 ? '#0f7a3a' : '#1a4f8a';
+  nWahl.forEach((e, i) => beschriftung(ctx, nListe[i][0], e.ld[0], e.ld[1], {align: e.ld[2], bg: '#fff', W, H}));
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1688,14 +1806,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function draw(progressH, progressR){
+  // zaehler (nur waehrend und am Ende der Fahrt): { minH, minR, rLaeuft } —
+  // verstrichene Anna-Minuten je Weg, mitlaufend unter bzw. über der Strasse.
+  function draw(progressH, progressR, zaehler){
     const dpr = window.devicePixelRatio || 1;
     const W = canvas.offsetWidth || 720, H = canvas.offsetHeight || 240;
     canvas.width = W*dpr; canvas.height = H*dpr;
     const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
     ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
 
-    const padL = 70, padR = 30, padT = 28, padB = 28;
+    // Links Platz für «← Rückweg»: Label-Breite + Abstand, damit das Velo am Strassenanfang
+    // (Rad ragt 13 px vor) das Label nicht überdeckt — am Ende der Rückfahrt steht es dort.
+    ctx.font = 'bold 13px JetBrains Mono, monospace';
+    const wegLabelB = Math.max(ctx.measureText('Hinweg →').width, ctx.measureText('← Rückweg').width);
+    const padL = Math.ceil(wegLabelB) + 22, padR = 30, padT = 28, padB = 28;
     const plotW = W - padL - padR;
     const yHin = padT + 36;
     const yRueck = H - padB - 36;
@@ -1738,8 +1862,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Labels für die Wege
     ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono, monospace';
     ctx.textAlign = 'right';
-    beschriftung(ctx, 'Hinweg →', padL - 14, yHin + 4, {align:'right', W, H});
-    beschriftung(ctx, '← Rückweg', padL - 14, yRueck + 4, {align:'right', W, H});
+    beschriftung(ctx, 'Hinweg →', padL - 18, yHin + 4, {align:'right', W, H});
+    beschriftung(ctx, '← Rückweg', padL - 18, yRueck + 4, {align:'right', W, H});
     ctx.textAlign = 'left';
 
     // Velo Hinweg (Bewegung von links nach rechts)
@@ -1749,6 +1873,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Velo Rückweg (Bewegung von rechts nach links)
     const xR = padL + plotW - progressR * plotW;
     drawVelo(ctx, xR, yRueck, -1);
+
+    // Mitlaufende Zeitzähler je Weg, im freien Band zwischen den km-Zahlen
+    if (zaehler){
+      ctx.font = 'bold 13px JetBrains Mono, monospace';
+      const xm = padL + plotW / 2;
+      ctx.fillStyle = '#1a4f8a';
+      beschriftung(ctx, 'Zeit hin: ' + fmtMin(zaehler.minH / 60), xm, yHin + 50, {align:'center', W, H});
+      ctx.fillStyle = zaehler.rLaeuft ? '#1a4f8a' : '#9ca3af';
+      beschriftung(ctx, 'Zeit zurück: ' + fmtMin(zaehler.minR / 60), xm, yRueck - 42, {align:'center', W, H});
+      ctx.textAlign = 'left';
+    }
   }
 
   function drawVelo(ctx, x, y, dir){
@@ -1800,7 +1935,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const elapsedR = elapsedH - c.tH;
         progressR = (isFinite(c.tR)) ? Math.min(1, elapsedR / c.tR) : 0;
       }
-      draw(progressH, progressR);
+      draw(progressH, progressR, {
+        minH: progressH * c.tH * 60,
+        minR: progressR * (isFinite(c.tR) ? c.tR : 0) * 60,
+        rLaeuft: elapsedH > c.tH
+      });
 
       if (progressH >= 1 && progressR >= 1){
         anim.running = false;
