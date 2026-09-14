@@ -558,23 +558,26 @@ MathJax = {
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Suche Einstellungen mit zwei, mit genau einer und mit keiner Nullstelle: Wo liegt die Parabel jeweils relativ zur \(x\)-Achse?</div>
+          <div class="ah-text">Ziehe \(c\) langsam von 0 bis 8 und behalte \(D\) im Blick: Bei welchem \(c\) wechselt die Anzahl der Nullstellen — und wo liegt in diesem Moment der Scheitel?</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">\(D > 0\): die Parabel schneidet die Achse zweimal; \(D = 0\): sie berührt sie im Scheitel; \(D < 0\): sie liegt ganz darüber oder darunter. Die Diskriminante ist die Lage-Frage in einer Zahl.</div>
+          <div class="ah-text">Ein grösseres \(c\) schiebt die Parabel nach oben, und \(D = 16 - 4c\) nimmt ab. Bis \(c = 4\) ist \(D > 0\): zwei Schnittpunkte. Bei \(c = 4\) ist \(D = 0\): Der Scheitel \(S(2 \mid 0)\) berührt die Achse. Darüber ist \(D < 0\): Die Parabel liegt ganz über der Achse. Die Diskriminante ist die Lage-Frage in einer Zahl.</div>
         </div>
       </div>
     </div>
-    <p>Klicke auf einen Fall — die Parabel und die Rechnung passen sich an</p>
+    <p>Familie \(f(x) = x^2 - 4x + \textcolor{#1a4f8a}{c}\): Verschiebe \(c\) oder wähle einen Fall — die Parabel und die Rechnung passen sich an</p>
   </div>
   <div class="widget-body">
+    <div class="sl-row">
+      <div class="sl-grp akz-blau"><label><span class="var">\(c\)</span></label><input type="range" id="disk-c" min="0" max="8" step="0.5" value="3"><span class="sl-val" id="disk-cv">3</span></div>
+    </div>
     <div class="typ-btns">
-      <button class="disk-btn aktiv-pos" id="disk-btn-pos" onclick="setDisk('pos')">D &gt; 0 (zwei Nullstellen)</button>
-      <button class="disk-btn" id="disk-btn-null" onclick="setDisk('null')">D = 0 (eine Nullstelle)</button>
-      <button class="disk-btn" id="disk-btn-neg" onclick="setDisk('neg')">D &lt; 0 (keine Nullstelle)</button>
+      <button class="disk-btn aktiv-pos" id="disk-btn-pos" onclick="setDisk('pos')">c = 3: D &gt; 0 (zwei Nullstellen)</button>
+      <button class="disk-btn" id="disk-btn-null" onclick="setDisk('null')">c = 4: D = 0 (eine Nullstelle)</button>
+      <button class="disk-btn" id="disk-btn-neg" onclick="setDisk('neg')">c = 7: D &lt; 0 (keine Nullstelle)</button>
     </div>
 
     <div class="zwei-spalten">
@@ -593,10 +596,10 @@ MathJax = {
 </div>
 
 <p style="font-size:0.86rem;color:var(--tinte-2);margin-top:8px;font-style:italic">
-  Die drei Klick-Beispiele zeigen je eine quadratische Funktion mit ihrer Diskriminante:
-  <strong>D > 0</strong>: \(x^2 - 2x - 3\) mit \(D = 16\) (zwei Nullstellen \(x_1=-1,\,x_2=3\)) · 
-  <strong>D = 0</strong>: \(x^2 - 4x + 4\) mit \(D = 0\) (doppelte Nullstelle \(x=2\)) · 
-  <strong>D < 0</strong>: \(x^2 + 3\) mit \(D = -12\) (keine reelle Nullstelle).
+  Alle Parabeln im Widget gehören zur Familie \(f(x) = x^2 - 4x + c\) mit \(a = 1\), \(b = -4\), also \(D = 16 - 4c\). Die drei Schnellwahl-Knöpfe setzen:
+  <strong>D > 0</strong>: \(c = 3\), \(x^2 - 4x + 3\) mit \(D = 4\) (zwei Nullstellen \(x_1=1,\,x_2=3\)); 
+  <strong>D = 0</strong>: \(c = 4\), \(x^2 - 4x + 4\) mit \(D = 0\) (doppelte Nullstelle \(x=2\)); 
+  <strong>D < 0</strong>: \(c = 7\), \(x^2 - 4x + 7\) mit \(D = -12\) (keine reelle Nullstelle).
 </p>
 
 <table class="ftb-tabelle" style="margin-top:14px">
@@ -911,20 +914,20 @@ MathJax = {
 <div class="block block-aufg">
   <div class="block-titel">🟠 <span class="aufg-nr-tag">A2</span><span class="aufg-titel-text">Scheitelpunkt setzen — verschiebe S an die richtige Stelle</span></div>
 
-  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Klicke (oder ziehe) den Scheitelpunkt im Graphen auf die richtige Position für die angegebene Funktion.</p>
+  <p style="font-size:0.85rem;color:var(--tinte-2);margin-bottom:10px">Klicke (oder ziehe) den Scheitelpunkt im Graphen auf die richtige Position für die angegebene Funktion. Die blasse Kontroll-Parabel läuft dabei mit: Sie hat schon die Öffnung und Streckung der gewählten Funktion und zeigt, wie der Graph mit deinem Scheitel aussähe. Beim ersten Fehlversuch erhältst du einen Hinweis, die Lösung erst beim zweiten.</p>
   <div class="graf-btn-row" id="a2-btns"></div>
   <div class="widget-titelzeile">
-      <div class="anim-titel">A2 · Funktionsgleichung aus gegebenen Punkten</div>
+      <div class="anim-titel">A2 · Scheitelpunkt setzen</div>
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Bestimme zuerst, welche Angaben du hast: Scheitel? Nullstellen? Zwei beliebige Punkte? Wähle danach die Darstellungsform, die diese Angaben direkt aufnimmt.</div>
+            <div class="ah-text">Lies \(u\) und \(v\) aus der Scheitelform ab, bevor du klickst. Achte besonders auf die Vorzeichen — und darauf, welche Zahl gar nicht zum Scheitel gehört.</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
           <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
           <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Der schnellste Weg zur Funktionsgleichung ist fast immer die Wahl der passenden Form: Scheitel gegeben \(\Rightarrow\) Scheitelform, Nullstellen gegeben \(\Rightarrow\) Nullstellenform. Erst danach in die Normalform ausmultiplizieren, falls sie verlangt ist.</div>
+            <div class="ah-text">In \(f(x) = a(x - u)^2 + v\) liegt der Scheitel bei \(S(u \mid v)\): \(u\) steht in der Klammer mit umgekehrtem Vorzeichen, \(v\) mit eigenem Vorzeichen dahinter. Der Faktor \(a\) verschiebt nichts — er bestimmt nur Öffnung und Streckung, darum passt die Kontroll-Parabel schon vor dem Klicken in der Form.</div>
           </div>
         </div>
       </div>
@@ -1579,53 +1582,51 @@ function drawDR(){
 /* ══════════════════════════════════════════════════════════
    DISKRIMINANTE — Visualisierung
    ══════════════════════════════════════════════════════════ */
-const diskFalle = {
-  pos:  {a:1, b:-2, c:-3, label:'D > 0',   farbe:'#1f6b3a', name:'pos'},   // x²-2x-3 = (x-3)(x+1)
-  null: {a:1, b:-4, c: 4, label:'D = 0',   farbe:'#b85c00', name:'null'},  // x²-4x+4 = (x-2)²
-  neg:  {a:1, b: 0, c: 3, label:'D < 0',   farbe:'#9b1c1c', name:'neg'}    // x²+3
-};
-let diskAktiv = 'pos';
+// Familie f(x) = x² − 4x + c: nur c ändert sich, D = 16 − 4c läuft durch 0.
+// Die Knöpfe sind Schnellwahl auf passende c-Werte der Familie.
+const diskSchnell = { pos:3, null:4, neg:7 };
+const diskFarbe = { pos:'#1f6b3a', null:'#b85c00', neg:'#9b1c1c' };
+function diskZ(n){ return fmtNum(n).replace('-', '−'); }
 
 function setDisk(key){
-  diskAktiv = key;
-  ['pos','null','neg'].forEach(k=>{
-    const btn = document.getElementById('disk-btn-'+k);
-    btn.classList.remove('aktiv-pos','aktiv-null','aktiv-neg');
-    if(k === key){
-      if(k==='pos')  btn.classList.add('aktiv-pos');
-      if(k==='null') btn.classList.add('aktiv-null');
-      if(k==='neg')  btn.classList.add('aktiv-neg');
-    }
-  });
+  document.getElementById('disk-c').value = diskSchnell[key];
   updateDisk();
 }
 
 function updateDisk(){
-  const f = diskFalle[diskAktiv];
-  const {a,b,c} = f;
+  const a = 1, b = -4;
+  const c = parseFloat(document.getElementById('disk-c').value);
+  document.getElementById('disk-cv').textContent = diskZ(c);
   const D = b*b - 4*a*c;
-  // Rechnung
-  const aPart = a===1?'':`${fmtNum(a)}·`;
-  let bPart = '';
-  if(Math.abs(b) > 1e-9){
-    bPart = b>0 ? ` + ${fmtNum(b)}·x` : ` − ${fmtNum(-b)}·x`;
-  }
-  const cPart = c>=0 ? ` + ${fmtNum(c)}` : ` − ${fmtNum(-c)}`;
-  let html = `<strong>f(x) = ${aPart}x²${bPart}${cPart}</strong><br><br>`;
+  const fall = D > 1e-9 ? 'pos' : (Math.abs(D) < 1e-9 ? 'null' : 'neg');
+  const farbe = diskFarbe[fall];
+  // Schnellwahl-Knopf des aktuellen Falls hervorheben — auch beim Ziehen
+  ['pos','null','neg'].forEach(k=>{
+    const btn = document.getElementById('disk-btn-'+k);
+    btn.classList.remove('aktiv-pos','aktiv-null','aktiv-neg');
+    if(k === fall) btn.classList.add('aktiv-'+k);
+  });
+  // Rechnung — nur der Reglerwert c ist blau (akz-blau am Regler)
+  const cTx = `<span class="tx-blau">${diskZ(c)}</span>`;
+  const cPart = Math.abs(c) < 1e-9 ? '' : ` + ${cTx}`;
+  let html = `<strong>f(x) = x² − 4·x${cPart}</strong><br><br>`;
   html += `D = b² − 4ac<br>`;
-  html += `D = (${fmtNum(b)})² − 4·${fmtNum(a)}·${fmtNum(c)}<br>`;
-  html += `D = ${fmtNum(b*b)} − ${fmtNum(4*a*c)}<br>`;
-  html += `<strong>D = ${fmtNum(D)}</strong><br><br>`;
-  if(D > 1e-9){
+  html += `D = (${diskZ(b)})² − 4·${diskZ(a)}·${cTx}<br>`;
+  html += `D = ${diskZ(b*b)} − ${diskZ(4*a*c)}<br>`;
+  html += `<strong>D = ${diskZ(D)}</strong><br><br>`;
+  const gl = n => Math.abs(n - Math.round(n)) < 1e-9 ? '=' : '≈';
+  let x1 = null, x2 = null;
+  if(fall === 'pos'){
     const sq = Math.sqrt(D);
-    const x1 = (-b - sq)/(2*a), x2 = (-b + sq)/(2*a);
+    x1 = (-b - sq)/(2*a); x2 = (-b + sq)/(2*a);
     html += `<span style="color:var(--gruen)"><strong>D > 0</strong></span> → zwei Nullstellen<br>`;
-    html += `x = (${fmtNum(-b)} ± √${fmtNum(D)}) / ${fmtNum(2*a)}<br>`;
-    html += `<strong>x₁ = ${fmtNum(x1)},  x₂ = ${fmtNum(x2)}</strong>`;
-  } else if(Math.abs(D) < 1e-9){
-    const x1 = -b/(2*a);
+    html += `x = (${diskZ(-b)} ± √${diskZ(D)}) / ${diskZ(2*a)}<br>`;
+    html += `<strong>x₁ ${gl(x1)} ${diskZ(x1)},  x₂ ${gl(x2)} ${diskZ(x2)}</strong>`;
+  } else if(fall === 'null'){
+    x1 = -b/(2*a);
     html += `<span style="color:var(--orange)"><strong>D = 0</strong></span> → eine doppelte Nullstelle<br>`;
-    html += `<strong>x₁ = x₂ = ${fmtNum(x1)}</strong>`;
+    html += `x = ${diskZ(-b)} / ${diskZ(2*a)}<br>`;
+    html += `<strong>x₁ = x₂ = ${diskZ(x1)}</strong>`;
   } else {
     html += `<span style="color:var(--rot)"><strong>D < 0</strong></span> → keine reelle Nullstelle<br>`;
     html += `(√ aus negativer Zahl ist in ℝ nicht definiert)`;
@@ -1634,12 +1635,12 @@ function updateDisk(){
 
   // Fazit-Box
   const fazitEl = document.getElementById('disk-fazit');
-  if(D > 1e-9){
+  if(fall === 'pos'){
     fazitEl.style.background = 'var(--gruen-hell)';
     fazitEl.style.color = 'var(--gruen)';
     fazitEl.style.border = '1px solid var(--gruen-rand)';
     fazitEl.innerHTML = '<strong>Die Parabel schneidet die x-Achse in zwei Punkten.</strong>';
-  } else if(Math.abs(D) < 1e-9){
+  } else if(fall === 'null'){
     fazitEl.style.background = 'var(--orange-hell)';
     fazitEl.style.color = 'var(--orange)';
     fazitEl.style.border = '1px solid var(--orange-rand)';
@@ -1648,46 +1649,48 @@ function updateDisk(){
     fazitEl.style.background = 'var(--rot-hell)';
     fazitEl.style.color = 'var(--rot)';
     fazitEl.style.border = '1px solid var(--rot-rand)';
-    fazitEl.innerHTML = '<strong>Die Parabel berührt die x-Achse nicht — sie liegt vollständig oberhalb (oder unterhalb).</strong>';
+    fazitEl.innerHTML = '<strong>Die Parabel berührt die x-Achse nicht — sie liegt vollständig oberhalb der x-Achse.</strong>';
   }
 
   // Graph
   const {ctx, W, H} = initCanvas('disk-canvas', 240, true);
   const rng = 6;
   const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -rng, rng, -rng, rng, {zahlen:false});
-  drawParabel(ctx, cx, cy, a, b, c, -rng, rng, f.farbe, 2.8);
-  // Term und Diskriminante ins Bild — die Rechnung steht zwar darunter, im
-  // Graphen selbst blieb bisher offen, welche Parabel man sieht.
-  ctx.fillStyle = f.farbe; ctx.font = 'bold 13px JetBrains Mono,monospace';
-  beschriftung(ctx, `f(x) = ${aPart}x²${bPart}${cPart}`, 10, 19, {align:'left', bg:'#fff', W, H});
+  drawParabel(ctx, cx, cy, a, b, c, -rng, rng, farbe, 2.8);
+  // Term und Diskriminante ins Bild
+  ctx.fillStyle = farbe; ctx.font = 'bold 13px JetBrains Mono,monospace';
+  beschriftung(ctx, `f(x) = x² − 4·x${Math.abs(c) < 1e-9 ? '' : ' + ' + diskZ(c)}`, 10, 19, {align:'left', bg:'#fff', W, H});
   ctx.font = '13px JetBrains Mono,monospace';
-  beschriftung(ctx, `D = ${fmtNum(D)}`, 10, 36, {align:'left', bg:'#fff', W, H});
+  beschriftung(ctx, `D = ${diskZ(D)}`, 10, 36, {align:'left', bg:'#fff', W, H});
   // Scheitelpunkt
   const us = -b/(2*a), vs = c - b*b/(4*a);
   if(Math.abs(us)<=rng && Math.abs(vs)<=rng){
-    drawDot(ctx, cx, cy, us, vs, f.farbe, 6);
+    drawDot(ctx, cx, cy, us, vs, farbe, 6);
   }
-  // Nullstellen
-  if(D > 1e-9){
-    const sq = Math.sqrt(D);
-    [(-b-sq)/(2*a), (-b+sq)/(2*a)].forEach(xn => {
-      if(Math.abs(xn) <= rng){
-        drawDot(ctx, cx, cy, xn, 0, f.farbe, 7);
-        ctx.fillStyle=f.farbe; ctx.font='bold 13px monospace';
-        beschriftung(ctx, fmtNum(xn), cx(xn), cy(0)+24, {align:'center', W, H});
-      }
+  // Nullstellen — Beschriftung unterhalb der Achsenzahlen (y + 30), damit
+  // Nullstellen auf ganzen Zahlen (c = 0, 3, 4) nicht auf der Teilung liegen
+  ctx.font = 'bold 13px monospace';
+  const yLab = cy(0) + 30;
+  if(fall === 'pos'){
+    const t1 = diskZ(x1), t2 = diskZ(x2);
+    let p1 = cx(x1), p2 = cx(x2);
+    // Liegen die Nullstellen eng (c nahe 4), beide Zahlen symmetrisch auseinanderrücken
+    const luecke = (p2 - ctx.measureText(t2).width/2) - (p1 + ctx.measureText(t1).width/2);
+    if(luecke < 8){ const d = (8 - luecke)/2; p1 -= d; p2 += d; }
+    [[x1, t1, p1], [x2, t2, p2]].forEach(([xn, t, px]) => {
+      drawDot(ctx, cx, cy, xn, 0, farbe, 7);
+      ctx.fillStyle = farbe;
+      beschriftung(ctx, t, px, yLab, {align:'center', W, H});
     });
-  } else if(Math.abs(D) < 1e-9){
-    const xn = -b/(2*a);
-    if(Math.abs(xn) <= rng){
-      drawDot(ctx, cx, cy, xn, 0, f.farbe, 7);
-      ctx.fillStyle=f.farbe; ctx.font='bold 13px monospace'; ctx.textAlign='center';
-      ctx.fillText(fmtNum(xn), cx(xn), cy(0)+24);
-    }
+  } else if(fall === 'null'){
+    drawDot(ctx, cx, cy, x1, 0, farbe, 7);
+    ctx.fillStyle = farbe;
+    beschriftung(ctx, diskZ(x1), cx(x1), yLab, {align:'center', W, H});
   }
   // Achsenzahlen zuletzt obenauf: Kurven und Flächen überdecken sie sonst.
   zahlenOben();
 }
+document.getElementById('disk-c').addEventListener('input', updateDisk);
 
 /* ══════════════════════════════════════════════════════════
    TYPEN-VISUALISIERUNG
@@ -1802,11 +1805,14 @@ function showA1Sol(){
 
 /* ── A2: Scheitelpunkt platzieren ── */
 const a2Items = [
-  { eq:'f(x) = (x − 2)² − 3', S:{u:2, v:-3} },
-  { eq:'f(x) = −0.5·(x + 1)² + 2', S:{u:-1, v:2} },
-  { eq:'f(x) = 2·(x − 3)²', S:{u:3, v:0} },
-  { eq:'f(x) = −(x + 2)² − 1', S:{u:-2, v:-1} },
+  { eq:'f(x) = (x − 2)² − 3', a:1, S:{u:2, v:-3} },
+  { eq:'f(x) = −0.5·(x + 1)² + 2', a:-0.5, S:{u:-1, v:2} },
+  { eq:'f(x) = 2·(x − 3)²', a:2, S:{u:3, v:0} },
+  { eq:'f(x) = −(x + 2)² − 1', a:-1, S:{u:-2, v:-1} },
 ];
+// Fehlversuche je Aufgabe: 1. → Richtungs-Hinweis, ab 2. → Lösung.
+// Nochmals prüfen ohne S zu verschieben zählt nicht als neuer Versuch.
+let a2Fehl = 0, a2LetzterFehl = null;
 let a2Act = 0;
 let a2S = {u:0, v:0};
 let a2Drag = false;
@@ -1821,6 +1827,7 @@ function setA2(i){
   a2Act = i;
   document.querySelectorAll('#a2-btns .graf-btn').forEach((b,j)=>b.classList.toggle('aktiv', j===i));
   a2S = {u:0, v:0};
+  a2Fehl = 0; a2LetzterFehl = null;
   document.getElementById('a2-cr').style.display='none';
   drawA2();
 }
@@ -1895,10 +1902,30 @@ function checkA2(){
   const it = a2Items[a2Act];
   const r = document.getElementById('a2-cr'); r.style.display='block';
   if(a2S.u === it.S.u && a2S.v === it.S.v){
+    a2Fehl = 0; a2LetzterFehl = null;
     r.className='cr ok'; r.textContent = `✓ Richtig — der Scheitelpunkt ist S(${it.S.u} | ${it.S.v}).`;
-  } else {
-    r.className='cr err'; r.textContent = `✗ Noch nicht. Du hast S(${a2S.u} | ${a2S.v}) — richtig wäre S(${it.S.u} | ${it.S.v}).`;
+    return;
   }
+  const key = a2S.u + '|' + a2S.v;
+  if(key !== a2LetzterFehl){ a2Fehl++; a2LetzterFehl = key; }
+  r.className='cr err';
+  if(a2Fehl >= 2){
+    r.textContent = `✗ Noch nicht. Du hast S(${a2S.u} | ${a2S.v}) — richtig wäre S(${it.S.u} | ${it.S.v}).`;
+  } else {
+    r.textContent = '✗ Noch nicht — ' + a2Hinweis(a2S.u, a2S.v, it);
+  }
+}
+// Richtungs-Hinweis passend zum Fehler, ohne die Lösung zu nennen
+function a2Hinweis(U, V, it){
+  const {u, v} = it.S, a = it.a;
+  if(U === v && V === u && u !== v) return 'u und v vertauscht? Die erste Koordinate von S gehört zur Klammer, die zweite zur Zahl dahinter.';
+  if(U === -u && V === -v && u !== 0 && v !== 0) return 'prüfe die Vorzeichen von u und v.';
+  if(U === -u && u !== 0 && V === v) return 'prüfe das Vorzeichen von u. Die Klammer hat die Form (x − u).';
+  if(U === u && V === -v && v !== 0) return 'prüfe das Vorzeichen von v. v steht mit seinem eigenen Vorzeichen hinter der Klammer.';
+  if(U === u && V === a && a !== 1 && a !== v) return 'der Streckfaktor a vor der Klammer gehört nicht zum Scheitel. Er bestimmt nur Öffnung und Streckung.';
+  if(U === u) return 'u stimmt, prüfe v (Verschiebung nach oben oder unten).';
+  if(V === v) return 'v stimmt, prüfe u (Verschiebung nach links oder rechts).';
+  return 'u und v stimmen beide noch nicht. Lies u aus der Klammer (x − u) und v aus der Zahl dahinter ab.';
 }
 
 /* ── A3: Antwort-Prüfer ── */

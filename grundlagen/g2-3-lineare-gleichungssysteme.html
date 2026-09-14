@@ -363,18 +363,18 @@ unterschiedliche Aspekte sichtbar.</p>
 <div class="widget">
   <div class="widget-header">
     <h3>Drei Darstellungen: \( \begin{cases} 2 \cdot x + y = 7 \\ x - y = -1 \end{cases} \)</h3>
-    <p>Verschiebe den Schieber, um Punkte auf den beiden Geraden zu finden. Der Schnittpunkt der Geraden ist die Lösung des Systems.</p>
+    <p>Verschiebe den Schieber, um Punkte auf den beiden Geraden zu finden. Der Schnittpunkt der Geraden ist die Lösung des Systems — seine Koordinaten erscheinen, sobald du ihn triffst.</p>
   </div>
   <div class="widget-body">
     <div class="zwei-spalten">
       <div>
         <div class="sl-row">
           <label for="sl-three">x =</label>
-          <input id="sl-three" type="range" min="-1" max="5" step="1" value="2">
-          <span class="sl-val" id="sl-three-v">2</span>
+          <input id="sl-three" type="range" min="-1" max="5" step="1" value="0">
+          <span class="sl-val" id="sl-three-v">0</span>
         </div>
         <table class="ftb-tabelle" id="three-table">
-          <thead><tr><th>x</th><th>y aus G1: 7−2·x</th><th>y aus G2: x+1</th></tr></thead>
+          <thead><tr><th>x</th><th>y₁ aus G1: 7−2·x</th><th>y₂ aus G2: x+1</th><th>y₁ = y₂?</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -384,13 +384,13 @@ unterschiedliche Aspekte sichtbar.</p>
               <div class="anim-hinweis links">
                 <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
                 <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-                  <div class="ah-text">Schiebe \(x\) und lies in der Tabelle beide \(y\)-Werte ab: einen aus \(G_1\), einen aus \(G_2\). An welcher Stelle stimmen sie überein — und was tun die Geraden dort?</div>
+                  <div class="ah-text">Schiebe \(x\) und lies in der Tabelle beide \(y\)-Werte ab: \(y_1\) aus \(G_1\), \(y_2\) aus \(G_2\). An welcher Stelle gilt \(y_1 = y_2\) — und was tun die Geraden dort?</div>
                 </div>
               </div>
               <div class="anim-hinweis rechts">
                 <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
                 <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-                  <div class="ah-text">Ein Gleichungssystem lösen heisst: ein Paar \((x \mid y)\) finden, das <em>beide</em> Gleichungen erfüllt. In der Tabelle ist das die Zeile mit zwei gleichen \(y\)-Werten, im Graphen der Schnittpunkt. Deshalb hat ein System so viele Lösungen, wie die Geraden gemeinsame Punkte haben.</div>
+                  <div class="ah-text">Ein Gleichungssystem lösen heisst: ein Paar \((x \mid y)\) finden, das <em>beide</em> Gleichungen erfüllt. In der Tabelle ist das die Zeile mit zwei gleichen \(y\)-Werten (✓), im Graphen der Schnittpunkt. Deshalb hat ein System so viele Lösungen, wie die Geraden gemeinsame Punkte haben.</div>
                 </div>
               </div>
             </div>
@@ -399,7 +399,7 @@ unterschiedliche Aspekte sichtbar.</p>
     </div>
     <div class="formel-live" style="margin-top:14px">
       <div class="fl-label">Schnittpunkt</div>
-      <div class="fl-eq">(2 | 3) — beide Geraden treffen sich genau dort.</div>
+      <div class="fl-eq" id="three-loes">noch nicht gefunden — schiebe x, bis y₁ = y₂ gilt.</div>
     </div>
   </div>
 </div>
@@ -434,17 +434,17 @@ vorhergehenden Abschnitt. Wähle ein Verfahren und klicke dich Schritt für Schr
       <div class="anim-hinweis links">
         <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
         <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-          <div class="ah-text">Spiele alle drei Verfahren am selben System durch: An welcher Stelle verschwindet jeweils eine Variable — und welches Verfahren braucht hier am wenigsten Schritte?</div>
+          <div class="ah-text">Spiele alle drei Verfahren am selben System durch: An welcher Stelle verschwindet jeweils eine Variable — was erscheint dann im Graphen — und welches Verfahren braucht hier am wenigsten Schritte?</div>
         </div>
       </div>
       <div class="anim-hinweis rechts">
         <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
         <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-          <div class="ah-text">Alle drei Verfahren tun dasselbe: sie <strong>eliminieren eine Variable</strong> und führen auf eine lineare Gleichung. Die Wahl ist Geschmacks- und Struktursache — hier lädt \(x - y = -1\) zum Einsetzen oder Addieren ein.</div>
+          <div class="ah-text">Alle drei Verfahren tun dasselbe: sie <strong>eliminieren eine Variable</strong> und führen auf eine lineare Gleichung. Im Graphen ist \(x = 2\) die gestrichelte Senkrechte durch den Schnittpunkt: Das Eliminieren von \(y\) projiziert die Lösung auf die \(x\)-Achse, das Einsetzen liefert mit \(y = 3\) die Waagrechte dazu. Die Wahl des Verfahrens ist Geschmacks- und Struktursache — hier lädt \(x - y = -1\) zum Einsetzen oder Addieren ein.</div>
         </div>
       </div>
     </div>
-    <p>Klicke „Vor" und beobachte den Lösungsweg. Der namensgebende Schritt ist gelb hervorgehoben. Rechts der Graph mit dem Schnittpunkt.</p>
+    <p>Klicke „Vor" und beobachte den Lösungsweg. Der namensgebende Schritt ist gelb hervorgehoben. Rechts der Graph mit dem Schnittpunkt: Sobald \(x = 2\) feststeht, erscheint die gestrichelte Senkrechte \(x = 2\), mit \(y = 3\) die Waagrechte.</p>
   </div>
   <div class="widget-body">
     <div class="meth-btns" id="verf-btns">
@@ -464,7 +464,7 @@ vorhergehenden Abschnitt. Wähle ein Verfahren und klicke dich Schritt für Schr
       </div>
       <div>
         <div class="cv-wrap"><canvas id="cv-verf"></canvas></div>
-        <p class="hinweis">Beide Geraden bleiben sichtbar. Der Schnittpunkt (2 | 3) ist die Lösung — unabhängig davon, welches Verfahren wir wählen.</p>
+        <p class="hinweis">Beide Geraden bleiben sichtbar. Der Schnittpunkt (2 | 3) ist die Lösung — unabhängig davon, welches Verfahren wir wählen. Die gestrichelten Linien \(x = 2\) und \(y = 3\) kreuzen sich genau dort.</p>
       </div>
     </div>
   </div>
@@ -1136,9 +1136,14 @@ function drawKino() {
 /* ══════════════════════════════════════════════════════════════
    4. DREI DARSTELLUNGEN — System 2x+y=7, x-y=-1
    ══════════════════════════════════════════════════════════════ */
+// Besuchte Schieberwerte: ✓/✗ steht erst in einer Zeile, die der Schieber erreicht hat;
+// Schnittpunkt-Label und Lösungszeile erst, wenn x = 2 (Lösung: 7 − 2·2 = 2 + 1 = 3) erreicht war.
+const threeBesucht = new Set();
 function updateThree() {
   const x = parseInt(document.getElementById('sl-three').value);
   document.getElementById('sl-three-v').textContent = x;
+  threeBesucht.add(x);
+  const gefunden = threeBesucht.has(2);
   // Tabelle
   const tbody = document.querySelector('#three-table tbody');
   const xs = [-1, 0, 1, 2, 3, 4, 5];
@@ -1150,7 +1155,8 @@ function updateThree() {
     let cls = '';
     if (isHit && isAct) cls = 'treff';
     else if (isAct) cls = 'aktiv';
-    return `<tr class="${cls}"><td>${xi}</td><td>${y1}</td><td>${y2}</td></tr>`;
+    const check = threeBesucht.has(xi) ? (y1 === y2 ? '✓' : '✗') : '';
+    return `<tr class="${cls}"><td>${xi}</td><td>${y1}</td><td>${y2}</td><td>${check}</td></tr>`;
   }).join('');
   // Graph (1:1 für reine Mathematik)
   const {ctx, W, H} = initCanvas('cv-three', 280, true);
@@ -1160,10 +1166,15 @@ function updateThree() {
   // Slider-Punkte auf den beiden Geraden
   drawDot(ctx, cx, cy, x, 7-2*x, '#a0392c', 5);
   drawDot(ctx, cx, cy, x, x+1,   '#1a4f8a', 5);
-  // Schnittpunkt (2|3)
-  drawDot(ctx, cx, cy, 2, 3, '#0f7a3a', 7);
-  ctx.fillStyle='#0f7a3a'; ctx.font='bold 13px monospace';
-  ctx.textAlign='left'; ctx.fillText('(2 | 3)', cx(2)+9, cy(3)-6);
+  // Schnittpunkt (2|3): Punkt und Label erst, wenn der Schieber x = 2 erreicht hat
+  if (gefunden) {
+    drawDot(ctx, cx, cy, 2, 3, '#0f7a3a', 7);
+    ctx.fillStyle='#0f7a3a'; ctx.font='bold 13px monospace';
+    ctx.textAlign='left'; ctx.fillText('(2 | 3)', cx(2)+9, cy(3)-6);
+  }
+  document.getElementById('three-loes').textContent = gefunden
+    ? '(2 | 3) — beide Geraden treffen sich genau dort.'
+    : 'noch nicht gefunden — schiebe x, bis y₁ = y₂ gilt.';
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1226,10 +1237,19 @@ const VERF_STEPS = {
 };
 let verfAktiv = 'einsetz';
 let verfSchritt = 0;
+// Ab welchem Schritt x = 2 bzw. y = 3 dasteht — aus dem Stapel gelesen, damit Zeile
+// und Hilfslinie im Graphen nicht auseinanderlaufen (x orange, y grün).
+function verfIndex(steps) {
+  return {
+    x: steps.findIndex(s => s[0] === 'glg' && s[1] === 'x = 2'),
+    y: steps.findIndex(s => s[0] === 'glg' && s[1].startsWith('y = ') && s[1].endsWith('= 3'))
+  };
+}
 function rendVerf() {
   document.getElementById('verf-info').innerHTML = VERF_INFO[verfAktiv];
   const stack = document.getElementById('verf-stack');
   const steps = VERF_STEPS[verfAktiv];
+  const idx = verfIndex(steps);
   let html = '';
   for (let i = 0; i < steps.length; i++) {
     const visible = i <= verfSchritt;
@@ -1240,7 +1260,9 @@ function rendVerf() {
     } else if (type === 'kern') {
       html += `<div class="umform-zeile kernschritt ${cls}"><div class="uf-glg">${rest[0]}</div>${rest[1] ? `<span class="kern-hinweis">${rest[1]}</span>` : ''}</div>`;
     } else {
-      html += `<div class="umform-zeile ${cls}"><div class="uf-glg">${rest[0]}</div>${rest[1] ? `<span class="umform-op">${rest[1]}</span>` : ''}</div>`;
+      const txt = i === idx.x ? `<span class="tx-orange">${rest[0]}</span>`
+                : i === idx.y ? `<span class="tx-gruen">${rest[0]}</span>` : rest[0];
+      html += `<div class="umform-zeile ${cls}"><div class="uf-glg">${txt}</div>${rest[1] ? `<span class="umform-op">${rest[1]}</span>` : ''}</div>`;
     }
   }
   stack.innerHTML = html;
@@ -1250,7 +1272,23 @@ function rendVerf() {
 }
 function drawVerf() {
   const {ctx, W, H} = initCanvas('cv-verf', 280, true);
-  const {cx, cy} = drawGrid(ctx, W, H, -2, 6, -3, 8);
+  const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -2, 6, -3, 8);
+  // Elimination als Projektion: steht x = 2 (bzw. y = 3) im Stapel, erscheint die
+  // Gerade x = 2 (bzw. y = 3) gestrichelt — hinter den beiden Systemgeraden.
+  const idx = verfIndex(VERF_STEPS[verfAktiv]);
+  const xBekannt = idx.x >= 0 && verfSchritt >= idx.x;
+  const yBekannt = idx.y >= 0 && verfSchritt >= idx.y;
+  ctx.lineWidth = 1.6; ctx.setLineDash([6, 4]);
+  if (xBekannt) {
+    ctx.strokeStyle = '#b85c00';
+    ctx.beginPath(); ctx.moveTo(cx(2), 0); ctx.lineTo(cx(2), H); ctx.stroke();
+  }
+  if (yBekannt) {
+    ctx.strokeStyle = '#1f6b3a';
+    ctx.beginPath(); ctx.moveTo(0, cy(3)); ctx.lineTo(W, cy(3)); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  zahlenOben();   // Achsenzahl 2 nicht von der Senkrechten durchstreichen lassen
   drawLine(ctx, cx, cy, -2, 7, -2, 6, '#a0392c', 2.5);
   drawLine(ctx, cx, cy,  1, 1, -2, 6, '#1a4f8a', 2.5);
   drawDot(ctx, cx, cy, 2, 3, '#0f7a3a', 7);
@@ -1261,6 +1299,16 @@ function drawVerf() {
   ctx.fillText('2x + y = 7', cx(0)+4, cy(7.2));
   ctx.fillStyle='#1a4f8a';
   ctx.fillText('x − y = −1', cx(3.6), cy(5.2));
+  // Beschriftung der Hilfslinien: x = 2 unten rechts der Senkrechten (dort liegt keine
+  // Gerade), y = 3 links über der Waagrechten (vor der y-Achse)
+  if (xBekannt) {
+    ctx.fillStyle = '#b85c00';
+    beschriftung(ctx, 'x = 2', cx(2)+5, cy(-2.6), {align:'left', W, H});
+  }
+  if (yBekannt) {
+    ctx.fillStyle = '#1f6b3a';
+    beschriftung(ctx, 'y = 3', cx(-2)+4, cy(3)-6, {align:'left', W, H});
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════

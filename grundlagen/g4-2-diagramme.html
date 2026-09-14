@@ -270,20 +270,22 @@ mjx-container svg { width: auto !important; height: auto !important; display: in
   <div class="ea-bar">
     <div class="ea-frage" id="ea-frage">Welches Schulfach mögen 100 Lernende am liebsten?</div>
     <span class="ea-zaehler">Datenpunkte: <span id="ea-n">0</span> / <span id="ea-total">100</span></span>
+    <span class="ea-zaehler" id="ea-phase" aria-live="polite" hidden></span>
     <button class="ea-play" id="ea-play">▶ Animation starten</button>
+    <button class="ea-play" id="ea-schritt" hidden>▶ Schritt</button>
   </div>
   <div class="widget-titelzeile">
       <div class="anim-titel">Einstieg · vier Datensätze, vier passende Diagramme</div>
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Wähle die vier Datensätze nacheinander und lass die Animation laufen. Frage dich bei jedem: Warum passt <em>dieser</em> Diagrammtyp — und was ginge verloren, wenn man einen anderen nähme?</div>
+            <div class="ah-text">Wähle die vier Datensätze nacheinander und lass die Animation laufen. Frage dich bei jedem: Warum passt <em>dieser</em> Diagrammtyp — und was ginge verloren, wenn man einen anderen nähme? Beim Boxplot kannst du mit <em>▶ Schritt</em> die Konstruktion selbst durchgehen: erst Minimum und Maximum, dann Q₁ und Q₃, dann der Median, zuletzt die Whisker.</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
           <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
           <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Der Diagrammtyp folgt aus der Art der Daten, nicht aus dem Geschmack. Säulen für Häufigkeiten von Kategorien, Kreis für Anteile an einem Ganzen, Linie für Verläufe über die Zeit, Boxplot für Streuung und Ausreisser. Ein Kreisdiagramm für einen Zeitverlauf wäre nicht hässlich, sondern falsch.</div>
+            <div class="ah-text">Der Diagrammtyp folgt aus der Art der Daten, nicht aus dem Geschmack. Balken für Häufigkeiten von Kategorien, Kreis für Anteile an einem Ganzen, Histogramm für klassierte stetige Werte, Boxplot für Lage und Streuung. Der Boxplot zeigt am Schluss keine einzelnen Werte mehr, sondern nur noch fünf Kennzahlen — die Box umfasst die mittlere Hälfte der Daten.</div>
           </div>
         </div>
       </div>
@@ -1532,6 +1534,9 @@ function showDia(key, btn){
         ctx.beginPath(); ctx.moveTo(xPx(q3), boxY + boxH/2); ctx.lineTo(xPx(max), boxY + boxH/2); ctx.stroke();
         ctx.setLineDash([]);
       }
+      // Phasenname oben links
+      ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px JetBrains Mono, monospace'; ctx.textAlign = 'left';
+      ctx.fillText(boxPhasenText(step), padL, 22);
     } else if (step > 0){
       // Pulse für letzten Punkt
       const v = boxPunkte[step-1];
@@ -1541,6 +1546,21 @@ function showDia(key, btn){
       ctx.arc(xPx(v), yBase + 30 - 6 - dup*7, 6, 0, 2*Math.PI);
       ctx.stroke();
     }
+  }
+
+  // Boxplot-Konstruktion: Schritt 22 = alle Werte da, 23–26 = Phasen 1–4
+  const BOX_N = 22, BOX_PHASEN = ['Minimum und Maximum', 'Q₁ und Q₃ (Box)', 'Median', 'Whisker'];
+  const BOX_ENDE = BOX_N + BOX_PHASEN.length;
+  const BOX_PUNKT_MS = 250, BOX_PHASE_MS = 900;
+  function boxPhasenText(step){
+    if (step <= 0) return '';
+    if (step < BOX_N) return 'Werte eintragen';
+    if (step === BOX_N) return 'Alle ' + BOX_N + ' Werte eingetragen';
+    const p = Math.min(step, BOX_ENDE) - BOX_N;
+    return 'Schritt ' + p + '/' + BOX_PHASEN.length + ': ' + BOX_PHASEN[p-1];
+  }
+  function ruhig(){
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
   function render(){
@@ -1553,6 +1573,14 @@ function showDia(key, btn){
     if (aktKey === 'kuchen') zaehlerWert = Math.round(aktStep / 3.6); // Grad → %
     if (aktKey === 'box') zaehlerWert = Math.min(aktStep, 22);
     document.getElementById('ea-n').textContent = zaehlerWert;
+    // Boxplot: Phasenname und Schritt-Taste
+    const phEl = document.getElementById('ea-phase');
+    const schrittBtn = document.getElementById('ea-schritt');
+    phEl.hidden = schrittBtn.hidden = (aktKey !== 'box');
+    if (aktKey === 'box'){
+      phEl.textContent = boxPhasenText(aktStep);
+      schrittBtn.textContent = aktStep >= BOX_ENDE ? '↻ Schritte von vorn' : '▶ Schritt';
+    }
   }
 
   function switchTab(key, btn){
@@ -1577,8 +1605,16 @@ function showDia(key, btn){
   function playAnim(){
     stopAnim();
     aktStep = 0;
-    render();
     const btn = document.getElementById('ea-play');
+    // Boxplot bei reduzierter Bewegung: fertiges Bild sofort, Phasen per Schritt-Taste
+    if (aktKey === 'box' && ruhig()){
+      aktStep = BOX_ENDE;
+      render();
+      btn.textContent = '↻ nochmal abspielen';
+      btn.disabled = false;
+      return;
+    }
+    render();
     btn.textContent = '… läuft';
     btn.disabled = true;
 
@@ -1587,17 +1623,35 @@ function showDia(key, btn){
     if (aktKey === 'balken'){ maxStep = 100; intervalMs = 40; }
     else if (aktKey === 'kuchen'){ maxStep = 360; intervalMs = 12; }
     else if (aktKey === 'histo'){ maxStep = 60; intervalMs = 60; }
-    else { maxStep = 22 + 5; intervalMs = 250; } // 22 Punkte + 5 Box-Phasen
+    else { maxStep = BOX_ENDE; intervalMs = BOX_PUNKT_MS; } // 22 Punkte, dann 4 Box-Phasen
 
-    timer = setInterval(() => {
+    const tick = () => {
       aktStep++;
       render();
       if (aktStep >= maxStep){
         stopAnim();
         btn.textContent = '↻ nochmal abspielen';
         btn.disabled = false;
+      } else if (aktKey === 'box' && aktStep === BOX_N){
+        // Punkte fertig: Konstruktionsphasen langsamer
+        stopAnim();
+        timer = setInterval(tick, BOX_PHASE_MS);
       }
-    }, intervalMs);
+    };
+    timer = setInterval(tick, intervalMs);
+  }
+
+  // Boxplot: eine Phase weiter (hält eine laufende Animation an)
+  function schrittBox(){
+    if (aktKey !== 'box') return;
+    stopAnim();
+    if (aktStep < BOX_N) aktStep = BOX_N;
+    else if (aktStep >= BOX_ENDE) aktStep = BOX_N;
+    else aktStep++;
+    const btn = document.getElementById('ea-play');
+    btn.textContent = aktStep >= BOX_ENDE ? '↻ nochmal abspielen' : '▶ Animation starten';
+    btn.disabled = false;
+    render();
   }
 
   // ── Events ────────────────────────────────────────────────────
@@ -1605,6 +1659,7 @@ function showDia(key, btn){
     t.addEventListener('click', () => switchTab(t.dataset.key, t));
   });
   document.getElementById('ea-play').addEventListener('click', playAnim);
+  document.getElementById('ea-schritt').addEventListener('click', schrittBox);
 
   // Initial: leeres Achsensystem zeichnen
   render();

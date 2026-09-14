@@ -280,6 +280,7 @@ MathJax = {
     <span class="sb-zaehler">Befragt: <span id="sb-n">0</span> / 22</span>
     <button class="sb-reset" id="sb-reset">⟲ zurücksetzen</button>
   </div>
+  <div class="sb-frage" style="margin:8px 0 10px">Urliste: <span id="sb-urliste">noch leer</span></div>
   <div class="widget-titelzeile">
       <div class="anim-titel">Einstieg · Klassenumfrage — von Rohdaten zur Verteilung</div>
         <div class="anim-hinweis links">
@@ -327,7 +328,7 @@ MathJax = {
 <div class="block block-def" style="margin-top:10px">
   <div class="block-titel">📘 Urliste und Stichprobenumfang</div>
   <p>Die <strong>Urliste</strong> ist die rohe, unsortierte Liste der erhobenen Werte — genau so, wie sie eingesammelt wurden. Der <strong>Stichprobenumfang</strong> \(n\) ist die Anzahl der Werte in der Stichprobe.</p>
-  <p style="margin-top:8px">Im Klassenbeispiel oben: \(n = 22\). Die Urliste ist <code>3, 5, 2, 4, 6, 3, 0, …</code>.</p>
+  <p style="margin-top:8px">Im Klassenbeispiel oben: \(n = 22\). Deine eigene Urliste aus dem Einstieg hält die Werte in der Reihenfolge deiner Klicks fest. Damit alle mit denselben Zahlen arbeiten, rechnen wir im Folgenden mit dieser Beispiel-Urliste: <code>3, 5, 2, 4, 6, 3, 0, …</code>.</p>
 </div>
 
 <div class="block block-def" style="margin-top:10px">
@@ -892,6 +893,12 @@ function showMerkmal(key, btn){
   const sbBuckets = [0,0,0,0,0,0,0,0,0]; // 0h .. 8h
   const sbMaxN = 22;
   let sbN = 0;
+  const sbListe = []; // Urliste in Klick-Reihenfolge
+
+  function sbListeZeigen(){
+    document.getElementById('sb-urliste').textContent =
+      sbListe.length ? sbListe.join(', ') : 'noch leer';
+  }
 
   function sbRender(){
     const c = document.getElementById('sb-canvas');
@@ -960,7 +967,9 @@ function showMerkmal(key, btn){
   function sbAdd(v){
     if (sbN >= sbMaxN) return;
     sbBuckets[v]++;
+    sbListe.push(v);
     sbN++;
+    sbListeZeigen();
     document.getElementById('sb-n').textContent = sbN;
     if (sbN >= sbMaxN){
       document.querySelectorAll('#sb-buttons .sb-btn').forEach(b => b.disabled = true);
@@ -971,6 +980,8 @@ function showMerkmal(key, btn){
   function sbReset(){
     for (let i = 0; i < sbBuckets.length; i++) sbBuckets[i] = 0;
     sbN = 0;
+    sbListe.length = 0;
+    sbListeZeigen();
     document.getElementById('sb-n').textContent = 0;
     document.querySelectorAll('#sb-buttons .sb-btn').forEach(b => b.disabled = false);
     sbRender();

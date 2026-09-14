@@ -440,6 +440,7 @@ und beobachte, welche Werte den Term zu null machen.</p>
       <thead><tr><th>x</th><th>x²</th><th>p·x</th><th>f(x) = x² + p·x + q</th></tr></thead>
       <tbody></tbody>
     </table>
+    <p class="hinweis" id="three-fn" hidden></p>
     <div class="formel-live" style="margin-top:12px">
       <div class="fl-label">Lösungsmenge</div>
       <div class="fl-eq" id="three-l"></div>
@@ -1278,11 +1279,34 @@ function updateThree() {
   // Wertetabelle
   const tbody = document.querySelector('#three-table tbody');
   const xs = [-2, -1, 0, 1, 2, 3, 4, 5, 6];
-  tbody.innerHTML = xs.map(x => {
-    const x2 = x*x, px = p*x, fx = x2 + px + q;
+  const D = p*p - 4*q;
+  const zahl = v => v < 0 ? '−' + (-v) : String(v);
+  const f = x => x*x + p*x + q;
+  // Markierungen: f(x) = 0 → Zeile hervorheben (Nullstelle, bei D = 0 ohne Vorzeichenwechsel);
+  // Vorzeichenwechsel zwischen zwei Nachbarzeilen → Hinweiszeile dazwischen.
+  const notiz = t => `<tr><td colspan="4"><span class="hinweis">${t}</span></td></tr>`;
+  tbody.innerHTML = xs.map((x, i) => {
+    const x2 = x*x, px = p*x, fx = f(x);
     const cls = fx === 0 ? 'aktiv' : '';
-    return `<tr class="${cls}"><td>${x}</td><td>${x2}</td><td>${px}</td><td>${fx}</td></tr>`;
+    let zeilen = `<tr class="${cls}"><td>${x}</td><td>${x2}</td><td>${px}</td><td>${fx}</td></tr>`;
+    if (fx === 0) zeilen += notiz(D === 0
+      ? `↑ f(x) = 0 ohne Vorzeichenwechsel: doppelte Nullstelle bei x = ${zahl(x)}`
+      : `↑ f(x) = 0: Nullstelle bei x = ${zahl(x)}`);
+    if (i < xs.length - 1 && fx * f(xs[i+1]) < 0)
+      zeilen += notiz(`↕ Vorzeichenwechsel: Nullstelle zwischen ${zahl(x)} und ${zahl(xs[i+1])}`);
+    return zeilen;
   }).join('');
+  // Lösungen ausserhalb des Tabellenbereichs als Fussnote (sonst wirkt 𝕃 der Tabelle widersprechend)
+  const aussen = [];
+  if (D === 0) aussen.push(-p/2);
+  else if (D > 0) aussen.push((-p - Math.sqrt(D)) / 2, (-p + Math.sqrt(D)) / 2);
+  const fnL = aussen.filter(r => r < xs[0] || r > xs[xs.length - 1]).map(r => Number.isInteger(r)
+    ? 'x = ' + zahl(r) : 'x ≈ ' + (r < 0 ? '−' : '') + Math.abs(r).toFixed(2));
+  const fn = document.getElementById('three-fn');
+  fn.textContent = fnL.length
+    ? fnL.join(' und ') + (fnL.length > 1 ? ' liegen' : ' liegt') + ' ausserhalb der Tabelle (sie reicht von x = −2 bis x = 6).'
+    : '';
+  fn.hidden = fnL.length === 0;
   document.getElementById('three-l').textContent = loesungstext(p, q);
 }
 

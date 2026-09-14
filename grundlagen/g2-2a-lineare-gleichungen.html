@@ -284,7 +284,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Aktuelle Bilanz</div>
-      <div class="fl-eq" id="fl-budget">12·3 + 45 = 81 &nbsp;&nbsp; vs. &nbsp;&nbsp; 117</div>
+      <div class="fl-eq" id="fl-budget">12·3&nbsp;+&nbsp;45 =&nbsp;81&nbsp;&lt;&nbsp;117 —&nbsp;Budget nicht ausgeschöpft</div>
     </div>
     <div class="cv-wrap"><canvas id="cv-budget" height="220"></canvas></div>
   </div>
@@ -1063,8 +1063,11 @@ function drawBudget() {
   const x = +document.getElementById('sl-budget').value;
   document.getElementById('sv-budget').textContent = fmtNum(x);
   const ls = 12 * x + 45, rs = 117;
+  const [zeichen, status] = ls < rs ? ['&lt;', 'Budget nicht ausgeschöpft']
+                          : ls > rs ? ['&gt;', 'Budget überschritten']
+                          :           ['=', 'Budget genau ausgeschöpft'];
   document.getElementById('fl-budget').innerHTML =
-    `12·${fmtNum(x)} + 45 = ${fmtNum(ls)} &nbsp;&nbsp; vs. &nbsp;&nbsp; ${rs}`;
+    `12·${fmtNum(x)}&nbsp;+&nbsp;45 =&nbsp;${fmtNum(ls)}&nbsp;${zeichen}&nbsp;${rs} —&nbsp;${status}`;
 
   const c = document.getElementById('cv-budget');
   if (!c) return;
@@ -1129,15 +1132,18 @@ function drawBudget() {
 
   // Beschriftungen
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 13px monospace'; ctx.textAlign = 'left';
-  ctx.fillText('K(x) = 12·x + 45', cx(7), cy(12 * 7 + 45) - 8);
+  // K(x)-Label oben links im freien Feld über der Budget-Linie: dort liegt die
+  // Gerade erst ab x ≈ 9.9, und bei 360 px wird nichts am rechten Rand abgeschnitten.
+  beschriftung(ctx, 'K(x) = 12·x + 45', cx(0.5), cy(160), { align: 'left', W, H });
+  // Budget-Label links vom Schnittpunkt x = 6: frei vom K(x)-Label, von der Geraden,
+  // vom Punkt und von der Hilfslinie bei jedem Reglerwert
   ctx.fillStyle = '#2d6a3e';
-  ctx.fillText('Budget = 117', cx(7), cy(117) - 8);
+  beschriftung(ctx, 'Budget = 117', cx(0.5), cy(117) - 8, { align: 'left', W, H });
 
   // Lösungs-Hinweis bei x = 6
   if (Math.abs(x - 6) < 0.4) {
     ctx.fillStyle = '#2d6a3e'; ctx.font = 'bold 13px JetBrains Mono,monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('✓ Lösung x = 6', cx(6), cy(0) - 6);
+    beschriftung(ctx, '✓ Lösung x = 6', cx(6), cy(0) - 6, { align: 'center', W, H });
   }
 }
 

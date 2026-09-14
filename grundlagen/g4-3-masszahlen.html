@@ -256,7 +256,7 @@ MathJax = {
 
 <div class="streu-box">
   <div class="sl-row akz-blau">
-    <label>Streuung Klasse B: <span class="sl-val" id="sl-s">100</span> %</label>
+    <label>Klasse B: <span class="sl-val" id="sl-s">100</span> % des Wegs von den A-Noten zu den B-Noten</label>
     <input type="range" id="sl-streuung" min="0" max="100" step="1" value="100">
   </div>
   <div class="widget-titelzeile">
@@ -264,18 +264,18 @@ MathJax = {
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Beide Klassen haben denselben Mittelwert 4.5. Ziehe den Streuungs-Regler und achte darauf, was sich dabei ändert — und was gleich bleibt.</div>
+            <div class="ah-text">Beide Klassen haben denselben Mittelwert 4.5. Ziehe den Regler von 100 % gegen 0 % und beobachte die Noten von Klasse B, ihre Spannweite und ihre Standardabweichung \(s\) unter dem Bild: Was ändert sich dabei — und was bleibt gleich?</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
           <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
           <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Der Mittelwert allein beschreibt eine Verteilung nicht. Zwei Klassen mit identischem Mittelwert können völlig verschieden aussehen: eng beieinander oder weit gestreut. Deshalb braucht es neben dem Lagemass immer auch ein <strong>Streumass</strong> — Spannweite oder Standardabweichung.</div>
+            <div class="ah-text">Der Mittelwert allein beschreibt eine Verteilung nicht. Zwei Klassen mit identischem Mittelwert können völlig verschieden aussehen: eng beieinander oder weit gestreut. Deshalb braucht es neben dem Lagemass immer auch ein <strong>Streumass</strong> — Spannweite oder Standardabweichung. Die Standardabweichung fasst die Streuung in einer Zahl: Klasse A hat \(s \approx 0.29\), Klasse B bei 100 % \(s \approx 1.39\) — bei gleichem Mittelwert fast fünfmal so viel.</div>
           </div>
         </div>
       </div>
   <canvas id="sl-canvas" aria-label="Notenverteilungen zweier Klassen"></canvas>
-  <div class="sl-cap">Beide Klassen haben acht Noten und denselben Mittelwert 4.5 (rote Linie). Der Regler ändert nur, wie weit die Noten von Klasse B auseinander liegen.</div>
+  <div class="sl-cap">Beide Klassen haben acht Noten und denselben Mittelwert 4.5 (rote Linie). Der Regler schiebt jede Note von Klasse B geradlinig von ihrem Wert in Klasse A (0 %) zu ihrem Wert in Klasse B (100 %) — der Mittelwert bleibt dabei 4.5. Standardabweichung \(s\) (mit \(n-1\), wie im Beispiel unten): Klasse A <span id="sl-sA">0.29</span>, Klasse B <span class="tx-blau" id="sl-sB">1.39</span>.</div>
 </div>
 
 <p>Was du beobachtest: Der <strong>Mittelwert bleibt fix bei 4.5</strong>, egal wie du den Regler einstellst. Trotzdem sehen die Klassen sehr unterschiedlich aus — bei voller Spreizung liegen einzelne Noten weit ausserhalb, bei null Spreizung sind beide Klassen identisch. Mittelwert alleine erzählt also nicht die ganze Geschichte. Du brauchst eine zweite Zahl, die misst, <em>wie breit</em> die Werte verteilt sind. In diesem Kapitel lernst du beide Arten von Masszahlen — und siehst, wann welche relevant ist.</p>
@@ -1178,6 +1178,10 @@ function showLage(key, btn){
     // Spreizung in „Bereich" anzeigen (Max minus Min) als zweite Aussage
     const spanA = Math.max(...klasseA) - Math.min(...klasseA);
     const spanB = Math.max(...klasseBaktuell) - Math.min(...klasseBaktuell);
+    // Standardabweichung der Stichprobe (Division durch n-1, wie in der Definition auf der Seite)
+    const stabw = (werte, m) => Math.sqrt(werte.reduce((q, v) => q + (v - m)*(v - m), 0) / (werte.length - 1));
+    document.getElementById('sl-sA').textContent = stabw(klasseA, meanA).toFixed(2);
+    document.getElementById('sl-sB').textContent = stabw(klasseBaktuell, meanB).toFixed(2);
     // Rechtsbuendig am Plotrand statt auf fester Breite: die Zeilen sind je nach
     // Zahlenwert unterschiedlich lang und liefen sonst rechts aus dem Bild.
     // Die B-Zeile liegt tiefer, damit sie nicht auf der Achsenbeschriftung „Note" sitzt.

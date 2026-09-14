@@ -223,33 +223,43 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
 - [x] **AN-40** `g2-1` · Probe-Widget: dieselbe Gleichung 4x+3=15 zum dritten Mal auf der
   Seite — wechseln (z.B. 5x − 7 = 2x + 8, Brücke zu 2.2a).
   **Erledigt 13.09.2026:** Probe-Widget prüft 5·x − 7 = 2·x + 8 (Lösung 5) in vier Schritten.
-- [ ] **AN-41** `g2-2a` · `cv-budget`: Live-Zeile um Vergleichszeichen + Status ergänzen
+- [x] **AN-41** `g2-2a` · `cv-budget`: Live-Zeile um Vergleichszeichen + Status ergänzen
   («81 < 117 — Budget nicht ausgeschöpft»); Budget-Label von cx(7) nach links verschieben
   (kollidiert mit K(x)-Label, Abstand ~12 px).
-- [ ] **AN-42** `g2-2b` · Drei-Darstellungen-Widget: Vorzeichenwechsel in der f(x)-Spalte
+  **Erledigt 14.09.2026:** Live-Zeile «12·3 + 45 = 81 < 117 — Budget nicht ausgeschöpft» (bzw. «genau ausgeschöpft»/«überschritten»); Budget-Label links frei, K(x)- und Lösungs-Label mit beschriftung() ohne Kollision und ohne Abschneiden bei 360 px.
+- [x] **AN-42** `g2-2b` · Drei-Darstellungen-Widget: Vorzeichenwechsel in der f(x)-Spalte
   markieren («Nullstelle zwischen 0 und −1»); bei Lösungen ausserhalb der Tabelle Fussnote
   «liegt ausserhalb» (sonst wirkt 𝕃 der Tabelle widersprechend).
-- [ ] **AN-43** `g2-3` · `cv-three`: Schnittpunkt-Label und Lösungszeile erst nach Erreichen
+  **Erledigt 14.09.2026:** Tabelle markiert Vorzeichenwechsel («Nullstelle zwischen −1 und 0»), f(x) = 0 und doppelte Nullstellen; Fussnote für Lösungen ausserhalb der Tabelle; alle 208 Reglerkombinationen geprüft.
+- [x] **AN-43** `g2-3` · `cv-three`: Schnittpunkt-Label und Lösungszeile erst nach Erreichen
   von x = 2 einblenden; Spalte «y₁ = y₂?» (✓/✗) ergänzen.
-- [ ] **AN-44** `g2-3` · `cv-verf`: Graph an die Schritte koppeln — bei «x = 2» gestrichelte
+  **Erledigt 14.09.2026:** Schnittpunkt (Punkt, Label, Lösungszeile) erst nach Erreichen von x = 2; Spalte «y₁ = y₂?» mit ✓/✗ für besuchte Zeilen; Start bei x = 0.
+- [x] **AN-44** `g2-3` · `cv-verf`: Graph an die Schritte koppeln — bei «x = 2» gestrichelte
   Vertikale, bei «y = 3» Horizontale einblenden (Elimination = Projektion auf eine Koordinate).
-- [ ] **AN-45** `g3-3` · `disk-canvas`: Die drei D-Beispiele wechseln b und c gleichzeitig —
+  **Erledigt 14.09.2026:** Hilfslinien x = 2 (orange) und y = 3 (grün) erscheinen mit dem jeweiligen Rechenschritt, Zeilen gleich eingefärbt.
+- [x] **AN-45** `g3-3` · `disk-canvas`: Die drei D-Beispiele wechseln b und c gleichzeitig —
   auf eine Familie x² − 4x + c mit c-Slider umstellen (D = 16 − 4c läuft live durch 0),
   Buttons bleiben als Schnellwahl.
-- [ ] **AN-46** `g3-3` · A2 (Scheitel setzen): Fehler-Feedback verrät sofort die Lösung —
+  **Erledigt 14.09.2026:** Familie x² − 4x + c mit c-Slider (D = 16 − 4c läuft durch 0), Buttons als Schnellwahl c = 3/4/7.
+- [x] **AN-46** `g3-3` · A2 (Scheitel setzen): Fehler-Feedback verrät sofort die Lösung —
   beim ersten Fehlversuch nur Richtungs-Hinweis («u-Vorzeichen prüfen»), Lösung erst beim
   zweiten; Satz zur mitlaufenden Kontroll-Parabel in den Aufgabentext.
-- [ ] **AN-47** `g4-0` · Stichproben-Widget: Schwankung ist ohne Gedächtnis nicht erlebbar —
+  **Erledigt 14.09.2026:** Erster Fehlversuch nur fehlerbezogener Hinweis, Lösung beim zweiten; Satz zur Kontroll-Parabel im Aufgabentext; Widget-Titel «A2 · Scheitelpunkt setzen».
+- [x] **AN-47** `g4-0` · Stichproben-Widget: Schwankung ist ohne Gedächtnis nicht erlebbar —
   Mini-Historie der letzten ~10 Stichproben-Mittelwerte als Punktleiste; bei n = 26 Hinweis
   «Gesamterhebung — Abweichung zwingend 0».
-- [ ] **AN-48** `g4-1` · `sb-canvas` (Klassenumfrage): Klick-Urliste live mitschreiben
+  **Erledigt 14.09.2026:** Punktleiste der letzten 10 Stichproben-Mittelwerte (Abweichung vom Klassenmittel), Reset bei n-/Datenänderung, Hinweis «Gesamterhebung» bei n = N.
+- [x] **AN-48** `g4-1` · `sb-canvas` (Klassenumfrage): Klick-Urliste live mitschreiben
   («Urliste: 3, 5, 2, …») — der Folgetext macht die Urliste zum zentralen Begriff, springt
   aber auf eine andere, fixe Liste um.
-- [ ] **AN-49** `g4-2` · `ea-canvas`: Boxplot-Konstruktionsphasen (5 × 250 ms) sind in ~1.3 s
+  **Erledigt 14.09.2026:** Urliste wird in Klick-Reihenfolge mitgeschrieben; Brückensatz zur Beispiel-Urliste im Folgetext.
+- [x] **AN-49** `g4-2` · `ea-canvas`: Boxplot-Konstruktionsphasen (5 × 250 ms) sind in ~1.3 s
   vorbei — verlangsamen (≥ 800 ms) oder «▶ Schritt»-Taste.
-- [ ] **AN-50** `g4-3` · `sl-canvas` (Einstieg Streuung): Slider-Label «Streuung 100 %»
+  **Erledigt 14.09.2026:** Boxplot-Phasen 900 ms, «▶ Schritt»-Taste mit Phasennamen, reduced-motion respektiert.
+- [x] **AN-50** `g4-3` · `sl-canvas` (Einstieg Streuung): Slider-Label «Streuung 100 %»
   benennt den Interpolationsfaktor («100 % wovon?») — umbenennen; s live mitanzeigen
   (Brücke zum später händisch gerechneten s = 0.29 vs. 1.39).
+  **Erledigt 14.09.2026:** Regler ehrlich benannt («% des Wegs von den A-Noten zu den B-Noten»), s (n − 1) live: A 0.29, B 1.39 wie im Beispiel.
 - [ ] **AN-51** Sammelposten **👁/💡-Rollover nachrüsten** (laut Projektkonvention Pflicht
   bei interaktiven Animationen): g3-1 Einstieg, g4-1 `sb-canvas`, g4-2 `ea-canvas`,
   g4-3 `sl-canvas`, g1-4 `wn-konv` (optional).
