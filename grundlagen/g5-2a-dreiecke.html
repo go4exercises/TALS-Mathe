@@ -356,13 +356,13 @@ MathJax = {
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Ziehe die Boden-Unebenheit langsam nach rechts und vergleiche dabei drei und vier Beine. Bei welcher Anzahl behalten <em>alle</em> Füsse Bodenkontakt — und warum ausgerechnet bei dieser?</div>
+            <div class="ah-text">Ziehe die Boden-Unebenheit langsam nach rechts: Unter Fuss A wächst ein Buckel. Vergleiche dabei drei und vier Beine. Bei welcher Anzahl behalten <em>alle</em> Füsse Bodenkontakt — und auf welchen drei Füssen liegt das vierbeinige Stativ gerade?</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
           <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
           <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Drei Punkte legen immer genau eine Ebene fest, vier im Allgemeinen nicht. Darum wackelt der vierbeinige Tisch und das Stativ nie. Dasselbe Prinzip macht das Dreieck zum Baustein jedes Vielecks: es ist die kleinste Figur, die eine Fläche eindeutig aufspannt.</div>
+            <div class="ah-text">Drei Punkte legen immer genau eine Ebene fest, vier im Allgemeinen nicht. Darum steht das Stativ auch auf dem Buckel fest, während der vierbeinige Tisch wackelt: Er liegt mal auf A-B-C, mal auf A-C-D, und der vierte Fuss hängt jeweils in der Luft. Dasselbe Prinzip macht das Dreieck zum Baustein jedes Vielecks: es ist die kleinste Figur, die eine Fläche eindeutig aufspannt.</div>
           </div>
         </div>
       </div>
@@ -380,7 +380,7 @@ MathJax = {
       <div class="regler">
         <div class="regler-label">
           <span>Boden-Unebenheit</span>
-          <span class="wert" id="lbl-stativU">0</span>
+          <span class="wert" id="lbl-stativU">0 cm</span>
         </div>
         <input type="range" id="sld-stativU" min="0" max="20" step="1" value="0">
       </div>
@@ -486,13 +486,13 @@ MathJax = {
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Ziehe an den Eckpunkten und behalte die Winkelsumme im Blick. Schalte dann die Aussenwinkel dazu: Wie hängt jeder Aussenwinkel mit den beiden nicht anliegenden Innenwinkeln zusammen?</div>
+            <div class="ah-text">Ziehe an den Eckpunkten und behalte die Winkelsumme im Blick. Schalte dann die Aussenwinkel dazu: Wie hängt jeder Aussenwinkel mit den beiden nicht anliegenden Innenwinkeln zusammen? Die letzte Legendenzeile vergleicht \(\alpha'\) mit \(\beta + \gamma\). Versuche zum Schluss, das Dreieck ganz flach zu drücken.</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
           <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
           <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Die Innenwinkelsumme bleibt bei jeder Form \(180°\) — sie ist keine Eigenschaft <em>dieses</em> Dreiecks, sondern jedes Dreiecks. Ein Aussenwinkel ist so gross wie die Summe der beiden nicht anliegenden Innenwinkel; das folgt direkt daraus, dass Innen- und Aussenwinkel zusammen \(180°\) ergeben.</div>
+            <div class="ah-text">Die Innenwinkelsumme bleibt bei jeder Form \(180°\) — sie ist keine Eigenschaft <em>dieses</em> Dreiecks, sondern jedes Dreiecks. Ein Aussenwinkel ist so gross wie die Summe der beiden nicht anliegenden Innenwinkel; das folgt direkt daraus, dass Innen- und Aussenwinkel zusammen \(180°\) ergeben. Ganz flach lässt sich das Dreieck nicht drücken: Liegen drei Punkte auf einer Geraden, gibt es kein Dreieck mehr.</div>
           </div>
         </div>
       </div>
@@ -501,6 +501,7 @@ MathJax = {
     <div class="bedien">
       <div class="feld-titel">Eckpunkte ziehen</div>
       <p style="font-size: 0.82rem; color: var(--tinte-2); margin: 0 0 4px">Ziehe die Punkte A, B, C mit der Maus oder dem Finger. Beschriftungen aktualisieren sich live.</p>
+      <div class="erklaerung" id="allg-erkl">Die Ecken bleiben im Zeichenfeld. Ganz flach drücken lässt sich das Dreieck nicht: Lägen A, B und C auf einer Geraden, gäbe es kein Dreieck mehr.</div>
       <label class="toggle-zeile">
         <input type="checkbox" id="tog-allg-aussen" checked>
         Aussenwinkel anzeigen
@@ -518,6 +519,7 @@ MathJax = {
         <div class="legende-zeile"><span class="lab">β' = 180° − β</span><span class="val" id="allg-βs">—</span></div>
         <div class="legende-zeile"><span class="lab">γ' = 180° − γ</span><span class="val" id="allg-γs">—</span></div>
         <div class="legende-zeile" style="border-top: 1px solid var(--linie); margin-top:4px; padding-top:4px"><span class="lab"><strong>Summe</strong></span><span class="val" id="allg-summe-a">—</span></div>
+        <div class="legende-zeile"><span class="lab">α' vs. β + γ</span><span class="val" id="allg-aussensatz">—</span></div>
       </div>
       <div class="formel">
         \(\alpha + \beta + \gamma = 180°\)<br>
@@ -812,7 +814,7 @@ MathJax = {
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Klicke die Sätze durch und vergleiche besonders die letzten beiden: «SsW» mit einer Lösung und «sSW» mit zweien. Welches Stück ist dort jeweils der längeren Seite zugeordnet?</div>
+            <div class="ah-text">Klicke die Sätze durch und vergleiche besonders die letzten beiden, «SsW» und «sSW»: Wie viele Dreiecke passen am Ende der Konstruktion zu den gegebenen Stücken? Welcher Seite liegt der gegebene Winkel jeweils gegenüber, der längeren oder der kürzeren?</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
@@ -830,8 +832,8 @@ MathJax = {
         <button class="chip aktiv" data-fall="sss">SSS</button>
         <button class="chip" data-fall="sws">SWS</button>
         <button class="chip" data-fall="wsw">WSW</button>
-        <button class="chip" data-fall="ssw_unique">SsW (1 Lösung)</button>
-        <button class="chip" data-fall="ssw_two">sSW (2 Lösungen)</button>
+        <button class="chip" data-fall="ssw_unique">SsW</button>
+        <button class="chip" data-fall="ssw_two">sSW</button>
       </div>
       <div class="regler">
         <div class="regler-label">
@@ -869,13 +871,13 @@ MathJax = {
         <div class="anim-hinweis links">
           <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
           <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-            <div class="ah-text">Lass die Scherung erst für «Pythagoras + Kathetensatz» und dann für den Höhensatz laufen. Welche Fläche wandert dabei wohin — und bleibt sie beim Verschieben gleich gross?</div>
+            <div class="ah-text">Lass die Scherung erst für «Pythagoras + Kathetensatz» und dann für den Höhensatz laufen. Welche Fläche wandert dabei wohin — und bleibt sie beim Verschieben gleich gross? Schiebe bei «Pythagoras + Kathetensatz» ganz nach rechts: Was ergeben die beiden Rechtecke zusammen?</div>
           </div>
         </div>
         <div class="anim-hinweis rechts">
           <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
           <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-            <div class="ah-text">Alle drei Sätze beruhen auf derselben Idee: Flächen lassen sich scheren und drehen, ohne ihren Inhalt zu ändern. \(a^2 + b^2 = c^2\) ist damit kein Rechentrick, sondern eine Flächenaussage. Kathetensatz \(a^2 = c \cdot p\) und Höhensatz \(h^2 = p \cdot q\) entstehen aus denselben Verschiebungen.</div>
+            <div class="ah-text">Alle drei Sätze beruhen auf derselben Idee: Flächen lassen sich scheren und drehen, ohne ihren Inhalt zu ändern. \(a^2 + b^2 = c^2\) ist damit kein Rechentrick, sondern eine Flächenaussage. Kathetensatz \(a^2 = c \cdot p\) und Höhensatz \(h^2 = p \cdot q\) entstehen aus denselben Verschiebungen. Am Schluss füllen die Rechtecke \(p \cdot c\) und \(q \cdot c\) zusammen das Hypotenusenquadrat: \(p \cdot c + q \cdot c = (p + q) \cdot c = c^2\), also \(a^2 + b^2 = c^2\).</div>
           </div>
         </div>
       </div>
@@ -906,6 +908,7 @@ MathJax = {
       <div class="formel" id="pyth-fbox">
         \( a^2 + b^2 = c^2 \)
       </div>
+      <div class="erklaerung">Scherung und Drehung ändern die Fläche nicht: Bei der Scherung bleiben Grundseite und Höhe gleich (siehe <a href="g5-2b-vierecke.html#scherung">5.2b, Scherung</a>). Darum ist jedes Rechteck am Ende so gross wie das Quadrat, aus dem es entstanden ist.</div>
     </div>
   </div>
 </div>
@@ -1541,13 +1544,56 @@ const allgEl = {
   betaS: document.getElementById('allg-βs'),
   gammaS: document.getElementById('allg-γs'),
   summeA: document.getElementById('allg-summe-a'),
+  aussensatz: document.getElementById('allg-aussensatz'),
+  erkl: document.getElementById('allg-erkl'),
 };
+// Ecken im Zeichenfeld halten und kein entartetes Dreieck zulassen
+const ALLG_RAND = 28;        // Abstand zum Canvasrand (Platz für die Eckbeschriftung)
+// Mindestmasse so gewählt, dass sich Ecken-, Seiten- und Winkelbeschriftungen
+// auch an der Grenze nicht überdecken (nachgerechnet für 294 px und 634 px Breite)
+const ALLG_MIN_SEITE = 100;  // Mindestlänge jeder Seite
+const ALLG_MIN_HOEHE = 60;   // Mindestabstand jeder Ecke von der Geraden durch die Gegenseite
+let allgLetzte = allgPts.map(p => p.slice());   // letzte gültige Lage
+
+// Gültig: Umlaufsinn wie beim Start (A, B, C gegen den Uhrzeigersinn), keine
+// Seite zu kurz, keine Ecke zu nah an der Gegenseite. Die kleinste Höhe ist
+// die Höhe auf die längste Seite: doppelte Fläche / längste Seite.
+function allgPruefen(P) {
+  const [A, B, C0] = P;
+  const kreuz = (B[0]-A[0]) * (C0[1]-A[1]) - (B[1]-A[1]) * (C0[0]-A[0]);
+  const s = [dist(B, C0), dist(C0, A), dist(A, B)];   // a, b, c
+  const sMin = Math.min(...s), sMax = Math.max(...s);
+  const hMin = kreuz < 0 ? -kreuz / sMax : 0;
+  // Toleranz: an der Grenze entlang ziehen bleibt möglich (Rundungsrauschen)
+  return { ok: kreuz < 0 && sMin >= ALLG_MIN_SEITE - 1e-6 && hMin >= ALLG_MIN_HOEHE - 1e-6, s, sMin, sMax, hMin };
+}
+
+function allgBegrenzen(W, H) {
+  const box = p => [clamp(p[0], ALLG_RAND, W - ALLG_RAND), clamp(p[1], ALLG_RAND, H - ALLG_RAND)];
+  const ziel = allgPts.map(box);
+  let neu = ziel;
+  const alt = allgLetzte.map(box);
+  if (!allgPruefen(ziel).ok && allgPruefen(alt).ok) {
+    // Auf dem Weg von der letzten gültigen Lage zum Ziel so weit gehen, wie es gültig bleibt
+    const zwischen = m => alt.map((p, i) => [lerp(p[0], ziel[i][0], m), lerp(p[1], ziel[i][1], m)]);
+    let lo = 0, hi = 1;
+    for (let n = 0; n < 20; n++) {
+      const m = (lo + hi) / 2;
+      if (allgPruefen(zwischen(m)).ok) lo = m; else hi = m;
+    }
+    neu = zwischen(lo);
+  }
+  neu.forEach((p, i) => { allgPts[i][0] = p[0]; allgPts[i][1] = p[1]; });
+  allgLetzte = allgPts.map(p => p.slice());
+}
 const togAllgAussen = document.getElementById('tog-allg-aussen');
 togAllgAussen.addEventListener('change', drawAllg);
 
 function drawAllg() {
   const { ctx, W, H, cv } = initCv('cv-allg');
+  allgBegrenzen(W, H);
   const [A, B, C0] = allgPts;
+  const pruef = allgPruefen(allgPts);
   // Berechne Innenwinkel
   const alpha = angleAt(A, B, C0);
   const beta = angleAt(B, C0, A);
@@ -1565,6 +1611,23 @@ function drawAllg() {
 
   // Füllung
   fillPoly(ctx, [A, B, C0], BLAU_FILL, C.blau, 2);
+
+  // An der Grenze: die Gerade bzw. Seite rot gestrichelt, an der das Dreieck entarten würde
+  const NAMEN = ['A', 'B', 'C'];
+  let grenzText = 'Die Ecken bleiben im Zeichenfeld. Ganz flach drücken lässt sich das Dreieck nicht: Lägen A, B und C auf einer Geraden, gäbe es kein Dreieck mehr.';
+  if (pruef.sMin < ALLG_MIN_SEITE + 1.5) {
+    const k = pruef.s.indexOf(pruef.sMin);               // Seite gegenüber Ecke k
+    const P1 = allgPts[(k + 1) % 3], P2 = allgPts[(k + 2) % 3];
+    seg(ctx, P1, P2, C.rot, 3);
+    grenzText = `<strong>Grenze erreicht:</strong> Näher rücken ${NAMEN[(k + 1) % 3]} und ${NAMEN[(k + 2) % 3]} nicht zusammen (rote Seite). Fielen zwei Ecken zusammen, gäbe es kein Dreieck mehr.`;
+  } else if (pruef.hMin < ALLG_MIN_HOEHE + 1.5) {
+    const k = pruef.s.indexOf(pruef.sMax);               // Ecke k liegt fast auf der Geraden durch die Gegenseite
+    const P1 = allgPts[(k + 1) % 3], P2 = allgPts[(k + 2) % 3];
+    const gerade = clipLineToRect(P1, [P2[0] - P1[0], P2[1] - P1[1]], W, H);
+    if (gerade) dashedSeg(ctx, gerade[0], gerade[1], C.rot, 2, [6, 4]);
+    grenzText = `<strong>Grenze erreicht:</strong> Flacher geht es nicht, ${NAMEN[k]} bleibt auf Abstand zur Geraden durch ${NAMEN[(k + 1) % 3]} und ${NAMEN[(k + 2) % 3]} (rot gestrichelt). Läge ${NAMEN[k]} auf dieser Geraden, wäre das Dreieck entartet: Winkel 0°, 0° und 180°, Fläche null.`;
+  }
+  allgEl.erkl.innerHTML = grenzText;
 
   // Innenwinkelbögen — die mid-Winkel-Rückgabe für Beschriftung nutzen
   const rIn = 32;
@@ -1636,6 +1699,9 @@ function drawAllg() {
   allgEl.betaS.textContent  = fmtDeg(betaS);
   allgEl.gammaS.textContent = fmtDeg(gammaS);
   allgEl.summeA.textContent = fmtDeg(alphaS + betaS + gammaS);
+  // Aussenwinkelsatz: α' = β + γ
+  allgEl.aussensatz.textContent = `${fmtDeg(alphaS)} = ${fmtDeg(beta + gamma)}` +
+    (Math.abs(alphaS - (beta + gamma)) < 1e-6 ? ' ✓' : ' ✗');
 }
 
 function drawAngleSector(ctx, P, Q, R, radius, fill, stroke, outside = false) {
@@ -2651,7 +2717,7 @@ function drawKong() {
     erkl = t < 0.30 ? 'Kleine Seite b von A nach C antragen.' :
            t < 0.55 ? 'Hilfsstrahl bei A mit Winkel α nach rechts ziehen.' :
            t < 0.80 ? 'Kreis um C mit Radius a (grosse Seite).' :
-                      'Der Kreis schneidet den Strahl genau einmal in B.';
+                      'Der Kreis schneidet den Strahl genau einmal in B: Es gibt genau ein Dreieck. Liegt der Winkel der grösseren Seite gegenüber, ist das Dreieck eindeutig (SsW ist ein Kongruenzsatz).';
   }
   else { // 'ssw_two' — sSW: kleine Seite ist die GEGENÜBER des Winkels → 2 Lösungen
     // Gegeben: a (klein, gegenüber α), b (gross), α
@@ -2721,7 +2787,7 @@ function drawKong() {
     erkl = t < 0.30 ? 'Grosse Seite b von A nach C antragen.' :
            t < 0.55 ? 'Hilfsstrahl bei A mit Winkel α nach rechts.' :
            t < 0.80 ? 'Kreis um C mit Radius a (kleine Seite).' :
-                      'Der Kreis schneidet den Strahl an ZWEI Punkten B₁ und B₂ — zwei mögliche Dreiecke.';
+                      'Der Kreis schneidet den Strahl an ZWEI Punkten B₁ und B₂: zwei mögliche Dreiecke. Liegt der Winkel der kleineren Seite gegenüber, ist das Dreieck nicht eindeutig (sSW ist kein Kongruenzsatz).';
   }
 
   // Eckpunkte A, B, C — Beschriftung erst sobald die Konstruktion gestartet ist (t > 0.05).
@@ -3225,7 +3291,12 @@ function drawPythKath(ctx, A, B, C0, F, a, b, c, p, q, h, t) {
     ? `\\( a^2 + b^2 = c^2 \\)<br>
        <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--tinte-2)">${(a*a/100).toFixed(2)} + ${(b*b/100).toFixed(2)} = ${(c*c/100).toFixed(2)} cm²</span>`
     : `\\( a^2 = p \\cdot c,\\ \\ b^2 = q \\cdot c \\)<br>
-       <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--tinte-2)">${(a*a/100).toFixed(2)} = ${(p*c/100).toFixed(2)}, ${(b*b/100).toFixed(2)} = ${(q*c/100).toFixed(2)}</span>`;
+       <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--tinte-2)">${(a*a/100).toFixed(2)} = ${(p*c/100).toFixed(2)}, ${(b*b/100).toFixed(2)} = ${(q*c/100).toFixed(2)}</span>` +
+      // Am Ende der Scherungen: die beiden Rechtecke füllen zusammen das c²-Quadrat
+      (t >= 0.95
+        ? `<br>\\( p \\cdot c + q \\cdot c = (p + q) \\cdot c = c^2 \\)<br>
+       <span style="font-family: var(--mono); font-size: 0.85rem; color: var(--tinte-2)">${(p*c/100).toFixed(2)} + ${(q*c/100).toFixed(2)} = ${((p+q)/10).toFixed(2)} · ${(c/10).toFixed(2)} = ${(c*c/100).toFixed(2)} cm²</span>`
+        : '');
   pythLegende.innerHTML = `
     <div class="legende-titel">Werte</div>
     <div class="legende-zeile"><span class="lab">a</span><span class="val">${(a/10).toFixed(2)} cm</span></div>
@@ -3960,16 +4031,39 @@ window.addEventListener('resize', () => {
 
 /* ════════════════════════════════════════════════════════════════
  *  EINSTIEG · Stativ-Animation
- *  Sicht von schräg oben. Boden-Unebenheit hebt einen Aufstandspunkt
- *  in der Höhe an; bei N=2 fällt das Stativ, bei N=3 immer stabil
- *  (drei Punkte definieren eine Ebene), bei N>=4 mit Unebenheit > 0
- *  hebt sich genau ein Bein vom Boden.
+ *  Sicht von schräg oben. Die Boden-Unebenheit ist ein Buckel der Höhe U
+ *  unter Fuss A. Die Füsse bilden ein starres, ebenes Vieleck (gleich lange
+ *  Beine); gesucht sind die Lagen, in denen es auf drei Füssen aufliegt und
+ *  kein Fuss unter den Boden ragt. N = 2 kippt, N = 3 hat genau eine Lage
+ *  (alle drei Füsse liegen auf, auch auf dem Buckel), N >= 4 hat bei U > 0
+ *  mehrere Lagen: das Gestell wackelt zwischen ihnen hin und her.
  * ════════════════════════════════════════════════════════════════ */
+const STATIV_NAMEN = 'ABCDE';
+let stativSchritt = 0;     // Zähler für das Hin und Her zwischen den Kipp-Lagen
+let stativTimer = null;
+
+// Alle Auflage-Lagen: Ebene durch drei Füsse (Grundriss-Koordinaten xy,
+// Bodenhöhe g), bei der kein anderer Fuss unter seinem Bodenpunkt liegt.
+// Rückgabe je Lage: die drei tragenden Füsse und die Abhebung jedes Fusses.
+function stativLagen(xy, g) {
+  const N = xy.length, lagen = [];
+  for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) for (let k = j + 1; k < N; k++) {
+    const [x1, y1] = xy[i], [x2, y2] = xy[j], [x3, y3] = xy[k];
+    const det = (x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1);
+    if (Math.abs(det) < 1e-9) continue;
+    const bx = ((g[j] - g[i]) * (y3 - y1) - (g[k] - g[i]) * (y2 - y1)) / det;
+    const by = ((x2 - x1) * (g[k] - g[i]) - (x3 - x1) * (g[j] - g[i])) / det;
+    const ab = xy.map(([x, y], n) => g[i] + bx * (x - x1) + by * (y - y1) - g[n]);
+    if (ab.every(v => v > -1e-6)) lagen.push({ traeger: [i, j, k], ab: ab.map(v => Math.max(0, v)) });
+  }
+  return lagen;
+}
+
 function drawStativ() {
   const N = +document.getElementById('sld-stativN').value;
   const U = +document.getElementById('sld-stativU').value;
   document.getElementById('lbl-stativN').textContent = N;
-  document.getElementById('lbl-stativU').textContent = U;
+  document.getElementById('lbl-stativU').textContent = `${U} cm`;
 
   const { ctx, W, H } = initCanvas('cv-stativ', 360);
   // Hintergrund-Boden
@@ -3992,23 +4086,64 @@ function drawStativ() {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  // Boden-Höhen pro Bein berechnen (Unebenheit als sinusoide Welle über Winkel)
-  // u_i = U * sin(2 * angle_i)  → ergibt sichtbares Auf-und-Ab
-  const beine = [];
+  // Aufstandspunkte: Fuss A hinten, dann im Uhrzeigersinn. Bodenhöhe U nur unter A.
+  const xy = [], g = [], beine = [];
   for (let i = 0; i < N; i++) {
-    const angle = -Math.PI / 2 + (2 * Math.PI * i) / N; // start oben, Gegenuhrzeiger
-    const fx = cx + Math.cos(angle) * radius_screen_x;
-    const fy_base = cy_floor + Math.sin(angle) * radius_screen_y;
-    // Höhe des Bodens am Aufstandspunkt — nur 1.Bein hebt sich (für klare Visualisierung)
-    const u_i = (i === 0) ? U : 0; // einfacher: ein Bein wird angehoben
-    const fy = fy_base - u_i;       // negativ = höher auf Bildschirm
-    beine.push({ fx, fy, fy_base, u: u_i, angle });
+    const angle = -Math.PI / 2 + (2 * Math.PI * i) / N;
+    xy.push([Math.cos(angle), Math.sin(angle)]);
+    g.push(i === 0 ? U : 0);
+    beine.push({
+      fx: cx + Math.cos(angle) * radius_screen_x,
+      fy_base: cy_floor + Math.sin(angle) * radius_screen_y,
+    });
   }
 
-  // Welche Beine berühren den Boden?
-  // N=2: nie stabil (Linie kippt um) — beide Beine zwar in Kontakt, aber kein Stand
-  // N=3: alle drei Beine immer in Kontakt
-  // N>=4: bei U>0 verliert ein Bein den Kontakt; bei U=0 alle in Kontakt
+  // Buckel unter Fuss A: Kosinus-Profil, Scheitel genau am Fuss
+  if (U > 0) {
+    const bx = beine[0].fx, by = beine[0].fy_base, bw = 30;
+    ctx.beginPath();
+    ctx.moveTo(bx - bw, by);
+    for (let s = -bw; s <= bw; s += 2) {
+      ctx.lineTo(bx + s, by - U * (0.5 + 0.5 * Math.cos(Math.PI * s / bw)));
+    }
+    ctx.closePath();
+    ctx.fillStyle = '#d9ccb2';
+    ctx.fill();
+    ctx.strokeStyle = '#8a7c64';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // Lage bestimmen. N = 2 hat keine Auflage auf drei Füssen (kippt).
+  const lagen = N >= 3 ? stativLagen(xy, g) : [];
+  // Welche Lagen trägt das Stativ wirklich? Der Schwerpunkt liegt über der Mitte (0|0).
+  // Liegt er strikt innerhalb eines Auflage-Dreiecks, steht das Stativ dort stabil.
+  // Liegt er genau auf der gemeinsamen Kante zweier Dreiecke (N = 4: Diagonale A–C),
+  // kippt es zwischen ihnen hin und her — nur dann wackelt es.
+  const lageZurMitte = l => {
+    const [a, b, c] = l.traeger.map(n => xy[n]);
+    const sd = (p, q) => (q[0] - p[0]) * (0 - p[1]) - (q[1] - p[1]) * (0 - p[0]);
+    const d = [sd(a, b), sd(b, c), sd(c, a)], eps = 1e-9;
+    if (d.some(v => v < -eps) && d.some(v => v > eps)) return 'aussen';
+    return d.some(v => Math.abs(v) <= eps) ? 'kante' : 'innen';
+  };
+  const tragend = U > 0 && N >= 4 ? lagen.filter(l => lageZurMitte(l) !== 'aussen') : lagen;
+  const wackelt = N >= 4 && U > 0 && tragend.length > 1;
+  const stabilAufDrei = N >= 4 && U > 0 && tragend.length === 1;
+  let lage = null;
+  if (wackelt) {
+    // Hin und her: 0, 1, …, n−1, …, 1, 0, …
+    const per = 2 * (tragend.length - 1);
+    const s = stativSchritt % per;
+    lage = tragend[s < tragend.length ? s : per - s];
+  } else if (tragend.length) {
+    lage = tragend[0];
+  }
+  const lageName = l => l.traeger.map(n => STATIV_NAMEN[n]).join('-');
+  // im Erklärtext ohne Umbruch am Bindestrich
+  const lageNameHtml = l => `<span style="white-space: nowrap">${lageName(l)}</span>`;
+  const fmtCm = v => fmt(Math.round(v * 10) / 10);
+
   let bodenKontakte, stabil, erkl;
   if (N === 2) {
     bodenKontakte = 2;
@@ -4017,45 +4152,65 @@ function drawStativ() {
   } else if (N === 3) {
     bodenKontakte = 3;
     stabil = true;
-    erkl = 'Drei Beine: die drei Aufstandspunkte definieren <em>immer</em> eine Ebene. Egal wie uneben der Boden — das Stativ steht stabil.';
+    erkl = U === 0
+      ? 'Drei Beine: die drei Aufstandspunkte definieren <em>immer</em> eine Ebene. Egal wie uneben der Boden — das Stativ steht stabil.'
+      : `Drei Beine: Auch mit dem ${U} cm hohen Buckel unter A liegen alle drei Füsse auf. Die drei Aufstandspunkte definieren <em>immer</em> eine Ebene; das Stativ steht nur etwas schräg, aber stabil.`;
+  } else if (stabilAufDrei) {
+    bodenKontakte = 3;
+    stabil = true;
+    const frei = lage.ab.map((v, n) => v > 1e-6 ? `${STATIV_NAMEN[n]} (${fmtCm(v)} cm)` : null).filter(Boolean);
+    erkl = `${N} Beine auf dem ${U} cm hohen Buckel: Das Stativ liegt auf ${lageNameHtml(lage)}. `
+         + `Die Mitte, über der der Schwerpunkt liegt, befindet sich innerhalb dieses Dreiecks — darum steht es stabil, `
+         + `obwohl ${frei.join(' und ')} in der Luft hängen (gelb). Wackeln würde es erst, wenn die Mitte genau auf einer Kante zweier Auflage-Dreiecke läge, wie bei vier Beinen.`;
+  } else if (!wackelt) {
+    bodenKontakte = N;
+    stabil = true;
+    erkl = `${N} Beine bei perfekt ebenem Boden: alle berühren ihn. Aber sobald der Boden uneben wird …`;
   } else {
-    if (U === 0) {
-      bodenKontakte = N;
-      stabil = true;
-      erkl = `${N} Beine bei perfekt ebenem Boden: alle berühren ihn. Aber sobald der Boden uneben wird …`;
-    } else {
-      bodenKontakte = N - 1;
-      stabil = false;
-      erkl = `${N} Beine: ein Bein ist in der Luft (gelb markiert). Das Stativ kippelt zwischen Diagonal-Positionen.`;
-    }
+    bodenKontakte = 3;
+    stabil = false;
+    const frei = lage.ab.map((v, n) => v > 1e-6 ? `${STATIV_NAMEN[n]} (${fmtCm(v)} cm)` : null).filter(Boolean);
+    erkl = `${N} Beine auf dem ${U} cm hohen Buckel: Das Stativ wackelt. Es liegt mal auf ${tragend.map(lageNameHtml).join(', mal auf ')} — jeweils nur auf drei Füssen. `
+         + `Gerade liegt es auf ${lageNameHtml(lage)}; in der Luft (gelb): ${frei.join(' und ')}.`;
   }
 
   // Kernaussage ins Bild: Beinzahl und Bodenkontakte. Ohne sie zeigt die
   // Grafik nur ein Gestell, ohne dass man den gemessenen Befund ablesen kann.
-  ctx.font = 'bold 15px "Source Sans 3", sans-serif';
-  ctx.fillStyle = stabil ? C.gruen : C.rot;
-  txt(ctx, W / 2, 26, `${N} Beine · ${bodenKontakte} von ${N} berühren den Boden`,
+  txt(ctx, W / 2, 26, `${N} Beine: ${bodenKontakte} von ${N} berühren den Boden`,
       stabil ? C.gruen : C.rot, 15, 'center', 'middle', '700');
-  txt(ctx, W / 2, 48, stabil ? 'steht stabil' : 'kippelt',
+  txt(ctx, W / 2, 48,
+      stabilAufDrei ? `steht stabil auf ${lageName(lage)}`
+             : stabil ? 'steht stabil'
+             : wackelt ? (tragend.length === 2
+                 ? `wackelt: liegt mal auf ${lageName(tragend[0])}, mal auf ${lageName(tragend[1])}`
+                 : `wackelt: liegt mal auf ${tragend.map(lageName).join(', ')}`)
+             : 'kippelt',
       stabil ? C.gruen : C.rot, 13, 'center', 'middle', '600');
+
+  // Beim Wackeln und beim Stehen auf drei von N Füssen: das tragende Dreieck auf dem Boden
+  if (wackelt || stabilAufDrei) {
+    const pts = lage.traeger.map(n => [beine[n].fx, beine[n].fy_base - g[n]]);
+    fillPoly(ctx, pts, 'rgba(22, 101, 52, 0.12)', '#1f6b3a', 1.5);
+  }
 
   // Beine zeichnen
   beine.forEach((b, i) => {
-    const inKontakt = (N === 3) || (N >= 4 && U === 0) || (N >= 4 && i !== 0);
+    const ab = lage ? lage.ab[i] : 0;
+    const inKontakt = ab < 1e-6;
     const farbe = inKontakt ? '#1f6b3a' : '#d4a017'; // grün = Kontakt, gelb = abgehoben
-    const linewidth = 3;
+    const fy = b.fy_base - g[i] - ab;                 // Bodenhöhe + Abhebung
 
     ctx.strokeStyle = farbe;
-    ctx.lineWidth = linewidth;
+    ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(cx, cy_top);
-    ctx.lineTo(b.fx, b.fy);
+    ctx.lineTo(b.fx, fy);
     ctx.stroke();
 
     // Aufstandspunkt
     ctx.fillStyle = farbe;
     ctx.beginPath();
-    ctx.arc(b.fx, b.fy, 6, 0, 2 * Math.PI);
+    ctx.arc(b.fx, fy, 6, 0, 2 * Math.PI);
     ctx.fill();
 
     // Wenn Bein abgehoben: gestrichelte Linie nach unten zum Boden
@@ -4064,16 +4219,21 @@ function drawStativ() {
       ctx.lineWidth = 1.5;
       ctx.setLineDash([3, 3]);
       ctx.beginPath();
-      ctx.moveTo(b.fx, b.fy);
-      ctx.lineTo(b.fx, b.fy_base);
+      ctx.moveTo(b.fx, fy);
+      ctx.lineTo(b.fx, b.fy_base - g[i]);
       ctx.stroke();
       ctx.setLineDash([]);
-      // Markierung "schwebt"
-      ctx.fillStyle = '#9a7508';
-      ctx.font = 'bold 13px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(`+${U} cm`, b.fx, b.fy - 10);
+      txt(ctx, b.fx, fy - 14, `+${fmtCm(ab)} cm`, '#9a7508', 13, 'center', 'middle', '700');
     }
+  });
+
+  // Fussnamen rechts unterhalb des Aufstandspunkts, am rechten Rand nach links
+  beine.forEach((b, i) => {
+    const ab = lage ? lage.ab[i] : 0;
+    const fy = b.fy_base - g[i] - ab;
+    const rechts = b.fx + 24 <= W;
+    txt(ctx, rechts ? b.fx + 9 : b.fx - 9, fy + 12, STATIV_NAMEN[i], C.tinte, 13,
+        rechts ? 'left' : 'right', 'middle', '700');
   });
 
   // Stativ-Spitze (Kamera-Symbol als Kasten oben)
@@ -4112,6 +4272,15 @@ function drawStativ() {
   sEl.textContent = stabil ? '✓ ja' : '✗ nein';
   sEl.style.color = stabil ? 'var(--gruen)' : 'var(--rot)';
   document.getElementById('erkl-stativ').innerHTML = erkl;
+
+  // Wackeln: langsam zwischen den Kipp-Lagen hin und her schalten
+  if (wackelt && !stativTimer) {
+    stativTimer = setInterval(() => { stativSchritt++; drawStativ(); }, 1400);
+  } else if (!wackelt && stativTimer) {
+    clearInterval(stativTimer);
+    stativTimer = null;
+    stativSchritt = 0;
+  }
 }
 document.getElementById('sld-stativN').addEventListener('input', drawStativ);
 document.getElementById('sld-stativU').addEventListener('input', drawStativ);

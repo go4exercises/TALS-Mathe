@@ -333,13 +333,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Drehe den Winkel langsam über \(90°\), \(180°\) und \(270°\) hinweg: Wie wandern Grad- und Bogenmass-Anzeige mit — und an welchen Marken wechselt der Winkeltyp?</div>
+        <div class="ah-text">Drehe den Winkel langsam über \(90°\), \(180°\) und \(270°\) hinweg: Wie wandern Grad- und Bogenmass-Anzeige mit — und an welchen Marken wechselt die Anzeige «Winkeltyp»? Vergleiche ausserdem die Bogenlänge mit dem Radiant-Wert.</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Grad und Bogenmass sind zwei Skalen für dieselbe Drehung — fest gekoppelt über \(180° \;\widehat{=}\; \pi\). Die Typgrenzen (spitz/recht/stumpf/gestreckt/überstumpf) liegen genau bei \(90°\), \(180°\), \(360°\).</div>
+        <div class="ah-text">Grad und Bogenmass sind zwei Skalen für dieselbe Drehung — fest gekoppelt über \(180° \;\widehat{=}\; \pi\). Die Typgrenzen (spitz/recht/stumpf/gestreckt/überstumpf/voll) liegen genau bei \(90°\), \(180°\), \(360°\) — \(270°\) ist keine Grenze. Die Bogenlänge auf dem Einheitskreis und der Radiant-Wert sind immer dieselbe Zahl: Genau so ist das Bogenmass definiert.</div>
       </div>
     </div>
   </div>
@@ -376,6 +376,10 @@ MathJax = {
           <div class="fl-eq" style="font-size:1.3rem"><span id="wv-grad">60</span>°</div>
         </div>
         <div class="formel-live">
+          <div class="fl-label">Winkeltyp</div>
+          <div class="fl-eq" id="wv-typ">spitz (0° &lt; α &lt; 90°)</div>
+        </div>
+        <div class="formel-live">
           <div class="fl-label">In Radiant (exakt)</div>
           <div class="fl-eq" id="wv-rad-exakt">π / 3</div>
         </div>
@@ -385,7 +389,8 @@ MathJax = {
         </div>
         <div class="formel-live">
           <div class="fl-label">Bogenlänge auf Einheitskreis</div>
-          <div class="fl-eq" id="wv-bogen">b = 1.047</div>
+          <div class="fl-eq"><span id="wv-bogen">b = 1.047</span> <span class="acc">= Radiant!</span></div>
+          <div style="font-family:var(--mono);font-size:0.78rem;color:var(--tinte-2);margin-top:6px">Radius 1: Die Bogenlänge <span id="wv-bogen-satz">1.047</span> ist genau das Bogenmass <span id="wv-rad-satz">1.047</span>&nbsp;rad — das definiert den Radiant.</div>
         </div>
       </div>
     </div>
@@ -606,7 +611,7 @@ MathJax = {
 
 <h3 id="klassifikator">Trainer — selbst klassifizieren</h3>
 
-<p>Hier kannst du das Erkennen üben. Stelle einen Winkel ein und klicke den Typ, den du vermutest. Das Widget gibt dir sofort Rückmeldung.</p>
+<p>Hier kannst du das Erkennen üben. Stelle einen Winkel ein und klicke den Typ, den du vermutest. Das Widget gibt dir sofort Rückmeldung. Mit «Zufallswinkel» bleibt die Gradzahl verdeckt — dann entscheidest du allein nach der Form.</p>
 
 <div class="widget">
   <div class="widget-header">
@@ -615,22 +620,22 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Schiebe den Winkel dicht an die Grenzen \(90°\), \(180°\) und \(360°\) heran und tippe erst dann auf den Typ: Wie verändert sich die richtige Antwort, wenn du \(89°\) auf \(91°\) erhöhst?</div>
+        <div class="ah-text">Schiebe den Winkel dicht an die Grenzen \(90°\), \(180°\) und \(360°\) heran und tippe erst dann auf den Typ: Wie verändert sich die richtige Antwort, wenn du \(89°\) auf \(91°\) erhöhst? Ziehe danach einen Zufallswinkel: Erkennst du den Typ ohne Gradzahl, nur an der Form?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Der Winkeltyp hängt nur von festen Schwellen ab: spitz unter \(90°\), recht bei \(90°\), stumpf bis \(180°\), gestreckt bei \(180°\), überstumpf bis \(360°\). Schon ein Grad über der Grenze kippt die Klasse.</div>
+        <div class="ah-text">Der Winkeltyp hängt nur von festen Schwellen ab: spitz unter \(90°\), recht bei \(90°\), stumpf bis \(180°\), gestreckt bei \(180°\), überstumpf bis \(360°\), voll bei \(360°\). Schon ein Grad über der Grenze kippt die Klasse. Ohne Zahl entscheidet die Lage des beweglichen Schenkels: oben rechts spitz, senkrecht nach oben recht, oben links stumpf, waagrecht nach links gestreckt, unterhalb der Waagrechten überstumpf, auf dem festen Schenkel mit vollem Bogen voll.</div>
       </div>
     </div>
     </div>
-    <p>Stelle den Winkel ein, klicke den passenden Typ — Live-Feedback</p>
+    <p>Stelle den Winkel ein oder ziehe einen Zufallswinkel, klicke den passenden Typ — Live-Feedback</p>
   </div>
   <div class="widget-body">
     <div class="sl-row">
       <label>Winkel \(\alpha\)</label>
-      <input type="range" id="kl-deg" min="0" max="360" step="1" value="55">
+      <input type="range" id="kl-deg" min="1" max="360" step="1" value="55">
       <span class="sl-val"><span id="kl-deg-v">55</span>°</span>
     </div>
     <div class="zwei-spalten">
@@ -654,6 +659,10 @@ MathJax = {
           <button class="kl-btn" data-typ="gestreckt">gestreckt</button>
           <button class="kl-btn" data-typ="ueberstumpf">überstumpf</button>
           <button class="kl-btn" data-typ="voll">voll</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
+          <button class="kl-btn" id="kl-zufall">🎲 Zufallswinkel</button>
+          <button class="kl-btn" id="kl-aufdecken" style="visibility:hidden">Aufdecken</button>
         </div>
         <div id="kl-feedback" class="cr" style="display:block;margin-top:12px;background:var(--papier-2);color:var(--tinte-2);border:1px solid var(--linie)">Wähle einen Typ.</div>
       </div>
@@ -1008,8 +1017,8 @@ MathJax = {
         <svg id="py-svg" viewBox="0 0 240 200" style="width:100%;max-width:280px;display:block;margin:0 auto;background:var(--weiss);border:1px solid var(--linie);border-radius:9px">
           <polygon id="py-tri" points="20,180 220,180 20,40" fill="#d8f0e2" stroke="#1f6b3a" stroke-width="2"/>
           <rect x="20" y="170" width="10" height="10" fill="none" stroke="#1f6b3a" stroke-width="1.5"/>
-          <text id="py-lbl-a" x="120" y="195" text-anchor="middle" font-size="13" fill="#1c1a17" font-family="JetBrains Mono">a</text>
-          <text id="py-lbl-b" x="8" y="115" text-anchor="middle" font-size="13" fill="#1c1a17" font-family="JetBrains Mono" transform="rotate(-90 8 115)">b</text>
+          <text id="py-lbl-a" x="120" y="195" text-anchor="middle" font-size="13" fill="#1a4f8a" font-family="JetBrains Mono">a</text>
+          <text id="py-lbl-b" x="13" y="115" text-anchor="middle" font-size="13" fill="#b85c00" font-family="JetBrains Mono" transform="rotate(-90 13 115)">b</text>
           <text id="py-lbl-c" x="135" y="100" font-size="14" fill="#9b1c1c" font-weight="700" font-family="JetBrains Mono">c = ?</text>
         </svg>
       </div>
@@ -1557,6 +1566,16 @@ function updateWV(){
   const rad = deg * Math.PI / 180;
   document.getElementById('wv-rad-dez').textContent = rad.toFixed(3) + ' rad';
   document.getElementById('wv-bogen').textContent = 'b = ' + rad.toFixed(3);
+  document.getElementById('wv-bogen-satz').textContent = rad.toFixed(3);
+  document.getElementById('wv-rad-satz').textContent = rad.toFixed(3);
+  // Winkeltyp: Namen und Grenzen wie im Definitionsraster «Winkeltypen»
+  const wvTypText = {
+    spitz: 'spitz (0° < α < 90°)', recht: 'recht (α = 90°)',
+    stumpf: 'stumpf (90° < α < 180°)', gestreckt: 'gestreckt (α = 180°)',
+    ueberstumpf: 'überstumpf (180° < α < 360°)', voll: 'voll (α = 360°)'
+  };
+  const wvT = klTyp(deg);
+  document.getElementById('wv-typ').textContent = wvT ? wvTypText[wvT] : 'kein Typ (α = 0°)';
 
   // SVG Update: Arm und Bogen
   const cx = 120, cy = 120, r = 100;
@@ -1615,7 +1634,11 @@ function updatePY(){
   document.getElementById('py-lbl-a').setAttribute('x', (x0 + aPx/2).toFixed(1));
   document.getElementById('py-lbl-a').setAttribute('y', y0 + 15);
   document.getElementById('py-lbl-a').textContent = `a = ${a}`;
-  document.getElementById('py-lbl-b').setAttribute('y', (y0 - bPx/2).toFixed(1));
+  // Drehmitte mitführen: mit fester Mitte (8|115) wanderte das Label beim Verschieben waagrecht aus dem Bild
+  // Bei kurzem b nicht tiefer als y0 − 32, sonst läuft es unten ins a-Label.
+  const yLblB = Math.min(y0 - bPx/2, y0 - 32).toFixed(1);
+  document.getElementById('py-lbl-b').setAttribute('y', yLblB);
+  document.getElementById('py-lbl-b').setAttribute('transform', `rotate(-90 13 ${yLblB})`);
   document.getElementById('py-lbl-b').textContent = `b = ${b}`;
   // Hypotenuse-Label-Position: Mitte
   document.getElementById('py-lbl-c').setAttribute('x', (x0 + aPx/2 + 8).toFixed(1));
@@ -1677,8 +1700,9 @@ function updateKL(){
   klFeedback(deg);
 }
 document.getElementById('kl-deg').addEventListener('input', updateKL);
-document.querySelectorAll('.kl-btn').forEach(btn=>{
+document.querySelectorAll('.kl-btn[data-typ]').forEach(btn=>{
   btn.addEventListener('click', e=>{
+    if(klVerdeckt) klSetzeVerdeckt(false);   // Antwort deckt die Gradzahl auf
     const deg = parseInt(document.getElementById('kl-deg').value);
     const correct = klTyp(deg);
     const choice = btn.dataset.typ;
@@ -1686,18 +1710,59 @@ document.querySelectorAll('.kl-btn').forEach(btn=>{
     document.querySelectorAll('.kl-btn').forEach(b=>b.classList.remove('ok','err'));
     if(choice === correct){
       btn.classList.add('ok');
-      fb.textContent = `✓ Richtig! ${deg}° ist ein ${labelOf(correct)} Winkel.`;
+      fb.textContent = `✓ Richtig! ${deg}° ist ein ${attributivOf(correct)} Winkel.`;
       fb.style.background = 'var(--gruen-hell)'; fb.style.color = 'var(--gruen)'; fb.style.border = '1px solid var(--gruen-rand)';
     } else {
       btn.classList.add('err');
-      fb.textContent = correct ? `✗ Nein, ${deg}° ist ${labelOf(correct)}.` : `✗ ${deg}° hat keinen Typ aus dieser Liste.`;
+      fb.textContent = correct ? `✗ Nein, ${deg}° ist ein ${attributivOf(correct)} Winkel.` : `✗ ${deg}° hat keinen Typ aus dieser Liste.`;
       fb.style.background = 'var(--rot-hell)'; fb.style.color = 'var(--rot)'; fb.style.border = '1px solid var(--rot-rand)';
     }
   });
 });
+// «ein spitzer Winkel» — gebeugte Form für den Satz mit «Winkel»
+function attributivOf(t){
+  return {spitz:'spitzer', recht:'rechter', stumpf:'stumpfer', gestreckt:'gestreckter', ueberstumpf:'überstumpfer', voll:'voller'}[t] || t;
+}
 function labelOf(t){
   return {spitz:'spitz', recht:'recht', stumpf:'stumpf', gestreckt:'gestreckt', ueberstumpf:'überstumpf', voll:'voll'}[t] || t;
 }
+/* Zufallsmodus: Form → Typ, die Gradzahl bleibt bis zur Antwort verdeckt.
+   Erst wird der Typ gezogen, dann ein Winkel dazu. Die Sonderwerte 90°, 180°, 360°
+   kämen bei gleichverteilten Graden nur mit je 1/360 vor — hier mit 15 %, 15 %, 10 %.
+   Die Bereichstypen halten 10° Abstand zur Grenze: ohne Zahl ist 88° von 90°
+   nach der Form nicht zu unterscheiden. */
+let klVerdeckt = false, klLetzter = null;
+const KL_ZUFALL = [
+  ['spitz', 0.20, 10, 80], ['recht', 0.15, 90, 90], ['stumpf', 0.20, 100, 170],
+  ['gestreckt', 0.15, 180, 180], ['ueberstumpf', 0.20, 190, 350], ['voll', 0.10, 360, 360]
+];
+function klSetzeVerdeckt(v){
+  klVerdeckt = v;
+  const sl = document.getElementById('kl-deg');
+  document.getElementById('kl-deg-v').textContent = v ? '?' : sl.value;
+  sl.style.visibility = v ? 'hidden' : 'visible';
+  document.getElementById('kl-aufdecken').style.visibility = v ? 'visible' : 'hidden';
+}
+function klZiehe(){
+  let deg;
+  do {
+    let u = Math.random(), eintrag = KL_ZUFALL[KL_ZUFALL.length - 1];
+    for(const e of KL_ZUFALL){ if(u < e[1]){ eintrag = e; break; } u -= e[1]; }
+    deg = eintrag[2] + Math.floor(Math.random() * (eintrag[3] - eintrag[2] + 1));
+  } while(deg === klLetzter);
+  klLetzter = deg;
+  return deg;
+}
+document.getElementById('kl-zufall').addEventListener('click', ()=>{
+  document.getElementById('kl-deg').value = klZiehe();
+  updateKL();
+  klSetzeVerdeckt(true);
+  document.getElementById('kl-feedback').textContent = 'Gradzahl verdeckt — welcher Typ ist das? Entscheide nach der Form.';
+});
+document.getElementById('kl-aufdecken').addEventListener('click', ()=>{
+  klSetzeVerdeckt(false);
+  document.getElementById('kl-feedback').textContent = `Aufgedeckt: α = ${document.getElementById('kl-deg').value}°. Welcher Typ?`;
+});
 updateKL();
 
 /* Einstieg: Diagonalen-Skizze mit Live-Berechnung */

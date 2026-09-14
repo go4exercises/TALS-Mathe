@@ -260,36 +260,46 @@ Prioritäten: **P1** = fachlicher Fehler / faktischer Defekt (zuerst beheben) ·
   benennt den Interpolationsfaktor («100 % wovon?») — umbenennen; s live mitanzeigen
   (Brücke zum später händisch gerechneten s = 0.29 vs. 1.39).
   **Erledigt 14.09.2026:** Regler ehrlich benannt («% des Wegs von den A-Noten zu den B-Noten»), s (n − 1) live: A 0.29, B 1.39 wie im Beispiel.
-- [ ] **AN-51** Sammelposten **👁/💡-Rollover nachrüsten** (laut Projektkonvention Pflicht
+- [x] **AN-51** Sammelposten **👁/💡-Rollover nachrüsten** (laut Projektkonvention Pflicht
   bei interaktiven Animationen): g3-1 Einstieg, g4-1 `sb-canvas`, g4-2 `ea-canvas`,
   g4-3 `sl-canvas`, g1-4 `wn-konv` (optional).
-- [ ] **AN-52** `g5-1` · Winkel-Visualisierer `wv-svg`: (a) 👁-Frage nach dem Winkeltyp ist
+  **Erledigt 14.09.2026:** Geprüft: Hinweispaare auf g3-1 (Einstieg), g4-1 sb-canvas, g4-2 ea-canvas, g4-3 sl-canvas vorhanden, Texte ans neue Verhalten angepasst. g1-4 wn-konv ist ein Umrechner ohne Titelzeile und keine Animation — bewusst ohne Hinweispaar.
+- [x] **AN-52** `g5-1` · Winkel-Visualisierer `wv-svg`: (a) 👁-Frage nach dem Winkeltyp ist
   im Widget nicht beantwortbar — Typ-Anzeige («stumpf») ergänzen; (b) Gleichheit
   Bogenlänge = Radiant explizit beschriften («= Radiant!») — das ist die Definition des
   Bogenmasses und geht als «zwei gleiche Zahlen» unter.
-- [ ] **AN-53** `g5-1` · Klassifikator `kl-svg`: Zufallsmodus mit verdeckter Gradzahl
+  **Erledigt 14.09.2026:** Winkeltyp-Anzeige mit Grenzen wie auf der Seite; «b = … = Radiant!» und Satz zur Definition des Bogenmasses.
+- [x] **AN-53** `g5-1` · Klassifikator `kl-svg`: Zufallsmodus mit verdeckter Gradzahl
   (Form → Typ statt Zahl → Typ); Slider-Minimum 1° (0° hat keinen Typ).
-- [ ] **AN-54** `g5-1` · `py-svg`: SVG-Labels a/b schwarz trotz akz-blau/akz-orange-Slidern —
+  **Erledigt 14.09.2026:** Zufallsmodus mit verdeckter Gradzahl (Typ zuerst gezogen, Sonderwerte 90°/180°/360° gezielt), Slider ab 1°; Klick-Handler nur noch für Typ-Knöpfe. Rückmeldung grammatisch («ein rechter Winkel»).
+- [x] **AN-54** `g5-1` · `py-svg`: SVG-Labels a/b schwarz trotz akz-blau/akz-orange-Slidern —
   Farbkopplung gemäss STYLEGUIDE nachziehen (#1a4f8a / #b85c00).
-- [ ] **AN-55** `g5-2a` · `cv-stativ`: Bei N = 3 schwebt ein Fuss sichtbar über dem Boden,
+  **Erledigt 14.09.2026:** Labels a/b in Sliderfarben; Label b dreht um die mitgeführte Mitte und bleibt bei allen Werten im Bild.
+- [x] **AN-55** `g5-2a` · `cv-stativ`: Bei N = 3 schwebt ein Fuss sichtbar über dem Boden,
   gilt aber als «in Kontakt» (widerspricht der Kernaussage) — Boden am angehobenen Fuss als
   Buckel zeichnen; bei N = 4 die zwei Kipp-Lagen alternierend andeuten; Einheit (cm)
   vereinheitlichen.
-- [ ] **AN-56** `g5-2a` · `cv-allg`: Drag auf Canvas-Inneres clampen (Punkte derzeit
+  **Erledigt 14.09.2026:** Buckel unter Fuss A, Lagen aus der Geometrie; Stabilität nach Schwerpunkt: N = 4 wackelt zwischen A-B-C und A-C-D, N = 5 steht stabil auf A-C-D; Einheit cm.
+- [x] **AN-56** `g5-2a` · `cv-allg`: Drag auf Canvas-Inneres clampen (Punkte derzeit
   unbegrenzt ziehbar, Figur degeneriert kommentarlos); Aussenwinkel-Legende um Zeile
   «α' vs. β + γ» ergänzen — deckt den Aussenwinkelsatz (A1c) ohne neues Widget ab.
-- [ ] **AN-57** `g5-2a` · `cv-kong`: Chip-Beschriftungen «SsW (1 Lösung)» / «sSW (2 Lösungen)»
+  **Erledigt 14.09.2026:** Ecken im Canvas geklemmt, Mindestseite/-höhe gegen Entartung mit sichtbarer Grenze; Legende «α′ vs. β + γ».
+- [x] **AN-57** `g5-2a` · `cv-kong`: Chip-Beschriftungen «SsW (1 Lösung)» / «sSW (2 Lösungen)»
   verraten die Pointe — neutral beschriften, Auflösung erst im Erklärtext; optional α oder a
   im sSW-Fall verstellbar (Grenzfall a = b·sin α aus A4.5 wird darstellbar).
-- [ ] **AN-58** `g5-2a` · `cv-pyth`: Am Ende von Tab 1 die Additionszeile einblenden
+  **Erledigt 14.09.2026:** Chips neutral «SsW»/«sSW», Auflösung erst im letzten Konstruktionsschritt.
+- [x] **AN-58** `g5-2a` · `cv-pyth`: Am Ende von Tab 1 die Additionszeile einblenden
   (p·c + q·c = c²) — der Schluss Kathetensätze → Pythagoras wird nie explizit gezeigt;
   Flächentreue der Scherung im Text absichern («siehe 5.2b»).
-- [ ] **AN-59** `g5-2b` · `cv-scher` (Trapez-Scherung): Mittellinien-Toggle ergänzen
+  **Erledigt 14.09.2026:** Additionszeile p·c + q·c = (p + q)·c = c² am Ende von Tab 1; Erklärfeld zur Flächentreue mit Link auf g5-2b#scherung.
+- [x] **AN-59** `g5-2b` · `cv-scher` (Trapez-Scherung): Mittellinien-Toggle ergänzen
   («m = ½(a+c) — auch sie ist scherungsinvariant») — schliesst die RLP-Lücke Mittellinie
   ohne neues Widget.
-- [ ] **AN-60** `g5-2b` · `cv-stv`: Beim Sehnenviereck wechselt der gezogene Punkt beim
+  **Erledigt 14.09.2026:** Toggle Mittellinie m = ½(a + c) mit Wert, bleibt bei der Scherung konstant; A = m·h im Erklärtext.
+- [x] **AN-60** `g5-2b` · `cv-stv`: Beim Sehnenviereck wechselt der gezogene Punkt beim
   Überholen stillschweigend die Identität (Sortierung nach jedem Zug) — Überhol-Sperre
   aktivieren; Fallback bei fast-parallelen Tangenten mit einem Erklärsatz versehen.
+  **Erledigt 14.09.2026:** Überhol-Sperre (Punkt bleibt zwischen seinen Nachbarn, keine Umsortierung); Tangentenviereck: Bögen zwischen Berührungspunkten ≤ 110° (Ecke ≤ 1.74·R, kein Fallback mehr nötig), Erklärsatz für den Fallback bleibt als Sicherung.
 - [ ] **AN-61** `g5-2c` · Pizza-Einstieg: Symbol-Inkonsistenz ζ (Canvas) vs. φ (Readout und
   Anim 7) vereinheitlichen; nach Anim 7 Rückverweis-Satz auf den Pizza-Cliffhanger.
 - [ ] **AN-62** `g5-2c` · `cv-strecken`: Modus/Slider «Abstand der Geraden zu M» ergänzen —

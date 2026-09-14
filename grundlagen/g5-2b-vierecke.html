@@ -744,13 +744,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Verschiebe die obere Parallelseite mit dem Versatz \(d\) über den ganzen Bereich. Welche der beiden Zahlen in der Legende — Fläche oder Umfang — bleibt stehen, und bei welchem \(d\) wird der Umfang am kleinsten?</div>
+        <div class="ah-text">Verschiebe die obere Parallelseite mit dem Versatz \(d\) über den ganzen Bereich. Welche der beiden Zahlen in der Legende — Fläche oder Umfang — bleibt stehen, und bei welchem \(d\) wird der Umfang am kleinsten? Schalte dann die Mittellinie \(m\) ein: Wird sie beim Scheren länger oder kürzer?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Die Scherung lässt \(a\), \(c\) und \(h\) unverändert, also bleibt \(A = \tfrac{1}{2}(a+c)\,h\) konstant — ganz gleich, wie schief das Trapez wird. Der Umfang dagegen wächst, sobald die Schenkel länger werden; am kürzesten sind sie in der symmetrischen Lage \(d = \tfrac{a-c}{2}\), also beim gleichschenkligen Trapez.</div>
+        <div class="ah-text">Die Scherung lässt \(a\), \(c\) und \(h\) unverändert, also bleibt \(A = \tfrac{1}{2}(a+c)\,h\) konstant — ganz gleich, wie schief das Trapez wird. Der Umfang dagegen wächst, sobald die Schenkel länger werden; am kürzesten sind sie in der symmetrischen Lage \(d = \tfrac{a-c}{2}\), also beim gleichschenkligen Trapez. Auch die Mittellinie \(m = \tfrac{1}{2}(a+c)\) ist scherungsinvariant: Sie verbindet die Seitenmitten der Schenkel, liegt immer auf halber Höhe und behält ihre Länge — darum gilt \(A = m \cdot h\).</div>
       </div>
     </div>
   </div>
@@ -786,11 +786,17 @@ MathJax = {
         Gleichschenklige Lage als Schatten
       </label>
 
+      <label class="toggle-zeile">
+        <input type="checkbox" id="sc-togMit">
+        Mittellinie \(m\) einzeichnen
+      </label>
+
       <div class="legende">
         <div class="legende-titel">Fläche bleibt, Umfang nicht</div>
         <div class="legende-zeile"><span class="lab">A = ½(a+c)·h</span><span class="val" id="sc-legA">18.00</span></div>
         <div class="legende-zeile"><span class="lab">U = a+c+e+f</span><span class="val" id="sc-legU">19.21</span></div>
         <div class="legende-zeile"><span class="lab">Schenkel e / f</span><span class="val" id="sc-legS">3.61 / 3.61</span></div>
+        <div class="legende-zeile" id="sc-legMZeile" style="display:none"><span class="lab">m = ½(a+c)</span><span class="val" id="sc-legM">6.00</span></div>
       </div>
 
       <div class="erklaerung" id="sc-erkl">
@@ -877,13 +883,13 @@ MathJax = {
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Zieh beim Sehnenviereck die Ecken auf dem Kreis, beim Tangentenviereck die Berührungspunkte. Beobachte in der Legende die Summen gegenüberliegender Winkel bzw. Seiten — bleiben sie bei jeder Verschiebung konstant?</div>
+        <div class="ah-text">Zieh beim Sehnenviereck die Ecken auf dem Kreis, beim Tangentenviereck die Berührungspunkte. Beobachte in der Legende die Summen gegenüberliegender Winkel bzw. Seiten — bleiben sie bei jeder Verschiebung konstant? Ein Punkt lässt sich nur bis kurz vor seine Nachbarn ziehen, so bleibt die Reihenfolge der Namen erhalten.</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Im Sehnenviereck ergänzen sich gegenüberliegende Winkel stets zu \(180°\) (\(\alpha + \gamma = 180°\)). Im Tangentenviereck sind die Summen gegenüberliegender Seiten stets gleich (\(a + c = b + d\)). Diese Beziehungen gelten für jede zulässige Lage der Punkte.</div>
+        <div class="ah-text">Im Sehnenviereck ergänzen sich gegenüberliegende Winkel stets zu \(180°\) (\(\alpha + \gamma = 180°\)). Im Tangentenviereck sind die Summen gegenüberliegender Seiten stets gleich (\(a + c = b + d\)). Diese Beziehungen gelten für jede zulässige Lage der Punkte. Nicht zulässig ist beim Tangentenviereck, wenn zwei benachbarte Berührungspunkte fast gegenüber liegen: Dort sind die Tangenten beinahe parallel, und ihr Schnittpunkt, eine Ecke des Vierecks, rückt beliebig weit nach aussen.</div>
       </div>
     </div>
   </div>
@@ -2142,14 +2148,29 @@ function stvAnglesActive() { return typSTV === 'sehnen' ? sehnenAngles : tangent
     const [x, y] = pos(ev);
     const { cx, cy } = getSTVCenter();
     const angs = stvAnglesActive();
-    let a = Math.atan2(y - cy, x - cx);
-    // Verhindere, dass benachbarte Punkte sich überholen (Sortierung wahren)
-    const n = 4;
+    const a = Math.atan2(y - cy, x - cx);
+    // Überhol-Sperre: Der gezogene Punkt bleibt auf dem Bogen zwischen seinen
+    // beiden Nachbarn (0.15 rad Mindestabstand). So behält jeder Punkt seinen
+    // Namen, und die Reihenfolge A–D auf dem Kreis ändert sich nie.
+    const n = 4, TAU = 2 * Math.PI, MIN = 0.15;
+    const mod = w => ((w % TAU) + TAU) % TAU;
     const prev = angs[(stvActive - 1 + n) % n];
     const next = angs[(stvActive + 1) % n];
-    // Halte 0.15 rad Mindestabstand
-    // (Wir akzeptieren a, wenn die Sortierordnung nicht verletzt wird)
-    angs[stvActive] = a;
+    const luecke = mod(next - prev);                 // Bogen prev → next
+    // Tangentenviereck: Zwischen benachbarten Berührungspunkten muss der Bogen
+    // unter 180° bleiben, sonst schneiden sich die Tangenten auf der falschen
+    // Seite und der Kreis ist kein Inkreis mehr. Die Ecke liegt im Abstand
+    // R / cos(Bogen/2) vom Mittelpunkt: 110° ergibt 1.74·R und bleibt im Bild.
+    const MAXB = typSTV === 'tangenten' ? 110 * Math.PI / 180 : TAU;
+    const lo = Math.max(MIN, luecke - MAXB), hi = Math.min(luecke - MIN, MAXB);
+    if (lo > hi) { ev.preventDefault(); return; }    // kein zulässiger Ort: Punkt bleibt
+    let t = mod(a - prev);                            // Mausposition auf diesem Bogen
+    if (t < lo || t > hi) {
+      // Maus ausserhalb: am Ende stehen bleiben, an dem der Punkt gerade ist
+      t = mod(angs[stvActive] - prev) > (lo + hi) / 2 ? hi : lo;
+    }
+    const neu = prev + t;
+    angs[stvActive] = Math.atan2(Math.sin(neu), Math.cos(neu));
     drawSTV();
     ev.preventDefault();
   }
@@ -2188,10 +2209,10 @@ function drawSTV() {
 }
 
 function drawSehnenviereck(ctx, cx, cy, R) {
-  // 4 Eckpunkte direkt auf dem Kreis
-  // Sortiere Winkel aufsteigend modulo 2π, damit das Viereck konvex bleibt
-  const angsRaw = sehnenAngles.map(a => ({ a, idxOrig: sehnenAngles.indexOf(a) }));
-  const angs = sehnenAngles.slice().sort((u, v) => u - v);
+  // 4 Eckpunkte direkt auf dem Kreis, in fester Reihenfolge A–D. Keine Sortierung:
+  // Die Überhol-Sperre beim Ziehen hält die zyklische Reihenfolge, das Viereck
+  // bleibt konvex und jeder Punkt behält seinen Namen (auch beim Überschreiten von ±π).
+  const angs = sehnenAngles.slice();
   const pts = angs.map(a => [cx + R * Math.cos(a), cy + R * Math.sin(a)]);
 
   fillPoly(ctx, pts, BLAU_FILL, C.blau, 2);
@@ -2257,8 +2278,8 @@ function drawSehnenviereck(ctx, cx, cy, R) {
 }
 
 function drawTangentenviereck(ctx, cx, cy, R) {
-  // 4 Berührungspunkte auf dem Kreis (sortiert)
-  const angs = tangentenAngles.slice().sort((u, v) => u - v);
+  // 4 Berührungspunkte auf dem Kreis, in fester Reihenfolge (Überhol-Sperre wie oben)
+  const angs = tangentenAngles.slice();
   const T = angs.map(a => [cx + R * Math.cos(a), cy + R * Math.sin(a)]);
 
   // Eckpunkte = Schnitte der Tangenten in benachbarten Berührungspunkten
@@ -2363,7 +2384,9 @@ function drawTangentenviereck(ctx, cx, cy, R) {
     <div class="legende-zeile"><span class="lab" style="color:var(--tinte-2)">Differenz</span><span class="val" style="color:${Math.abs(sum_ac-sum_bd) < 1 ? 'var(--gruen)' : 'var(--orange)'}">${Math.abs(sum_ac-sum_bd).toFixed(3)}</span></div>
   `;
 
-  erklSTV.innerHTML = `Im Tangentenviereck berührt der Inkreis alle vier Seiten. Die Summen gegenüberliegender Seiten sind gleich: \\(a + c = b + d\\). Ziehe die orangen Berührungspunkte auf dem Kreis.`;
+  erklSTV.innerHTML = validShape
+    ? `Im Tangentenviereck berührt der Inkreis alle vier Seiten. Die Summen gegenüberliegender Seiten sind gleich: \\(a + c = b + d\\). Ziehe die orangen Berührungspunkte auf dem Kreis.`
+    : `Zwei benachbarte Berührungspunkte liegen fast gegenüber: Die Tangenten dort sind beinahe parallel und schneiden sich erst weit ausserhalb des Bildes. Darum sind nur die Tangenten gestrichelt gezeichnet, und die Seitensummen lassen sich nicht messen. Ziehe einen der beiden Punkte etwas zurück.`;
   mjTypeset([fBoxSTV, erklSTV]);
 }
 
@@ -2825,6 +2848,7 @@ window.addEventListener('resize', () => {
   const sldC = document.getElementById('sc-sldC');
   const sldH = document.getElementById('sc-sldH');
   const togRef = document.getElementById('sc-togRef');
+  const togMit = document.getElementById('sc-togMit');
   if (!sldD || !sldC || !sldH) return;
 
   const A_GRUND = 8;                    // Grundseite a, fest
@@ -2896,6 +2920,18 @@ window.addEventListener('resize', () => {
     txt(ctx, aMid[0], aMid[1] + 15 * k, 'a = ' + A_GRUND.toFixed(1), C.tinte, FS, 'center', 'middle', '700');
     txt(ctx, cMid[0], cMid[1] - (Math.abs(d) > 0.05 ? 28 : 13) * k, 'c = ' + c.toFixed(1), C.tinte, FS, 'center', 'middle', '700');
 
+    // Mittellinie: verbindet die Seitenmitten der Schenkel, liegt auf halber Höhe.
+    // Länge ((a + d + c) - d)/2 = (a + c)/2 — unabhängig vom Versatz d.
+    const m = 0.5 * (A_GRUND + c);
+    if (togMit && togMit.checked) {
+      const mE = P(d / 2, h / 2), mF = P((A_GRUND + d + c) / 2, h / 2);
+      seg(ctx, mE, mF, C.lila, 2.2);
+      dot(ctx, mE, C.lila, 3.5);
+      dot(ctx, mF, C.lila, 3.5);
+      // Beschriftung unter der Linie: darüber steht auf 0.72·h das h-Label
+      txt(ctx, (mE[0] + mF[0]) / 2, mE[1] + 11 * k, 'm = ' + m.toFixed(2), C.lila, FS, 'center', 'middle', '700');
+    }
+
     // Schenkel — Label auf der Aussenseite der jeweiligen Kante, entlang ihrer Normalen
     const e = Math.hypot(d, h);                       // linker Schenkel
     const f = Math.hypot(A_GRUND - c - d, h);         // rechter Schenkel
@@ -2911,6 +2947,9 @@ window.addEventListener('resize', () => {
     document.getElementById('sc-legA').textContent = A.toFixed(2);
     document.getElementById('sc-legU').textContent = U.toFixed(2);
     document.getElementById('sc-legS').textContent = e.toFixed(2) + ' / ' + f.toFixed(2);
+    const mitAn = !!(togMit && togMit.checked);
+    document.getElementById('sc-legMZeile').style.display = mitAn ? '' : 'none';
+    document.getElementById('sc-legM').textContent = m.toFixed(2);
 
     // Kopfzeile im Canvas
     txt(ctx, W / 2, 16 * k, 'A bleibt ' + A.toFixed(2) + ' — egal, wie stark geschert wird', C.tinte2, FS, 'center', 'middle', '600');
@@ -2927,6 +2966,9 @@ window.addEventListener('resize', () => {
     } else {
       erkl = 'Geschertes Trapez: \\(a\\), \\(c\\) und \\(h\\) sind unverändert, also auch die Fläche. Nur die Schenkel und damit der Umfang ändern sich.';
     }
+    if (mitAn) {
+      erkl += ' Die Mittellinie \\(m = \\tfrac{1}{2}(a+c)\\) bleibt dabei gleich lang, und es gilt \\(A = m \\cdot h\\).';
+    }
     const box = document.getElementById('sc-erkl');
     box.innerHTML = erkl;
     if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([box]);
@@ -2934,6 +2976,7 @@ window.addEventListener('resize', () => {
 
   [sldD, sldC, sldH].forEach(el => el.addEventListener('input', render));
   togRef.addEventListener('change', render);
+  if (togMit) togMit.addEventListener('change', render);
   window.addEventListener('resize', render);
   render();
 })();
