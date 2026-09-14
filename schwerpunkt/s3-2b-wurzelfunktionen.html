@@ -912,7 +912,7 @@ buildNav({
 });
 
 /* ── Lokale Helfer ─────────────────────────────────────── */
-const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+const fmt2 = n => (Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2))).replace('-', '−');  // Unicode-Minus, keine negative Null
 
 // Kurven-Plot mit Definitionslücken-Behandlung (NaN wird übersprungen)
 function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
@@ -944,13 +944,13 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    ctx.fillText(fmt(Math.abs(gx) < 1e-9 ? 0 : gx).replace('-', '−'), cx(gx), HH - padB + 15);
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(fmt(Math.abs(gy) < 1e-9 ? 0 : gy).replace('-', '−'), padL - 5, cy(gy) + 4);
   }
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
@@ -1101,7 +1101,9 @@ function updateWG(){
   ctx.setLineDash([]);
   ctx.fillStyle = '#9b1c1c'; ctx.font = 'bold 13px monospace';
   ctx.textAlign = xP > 5 ? 'right' : 'left';
-  ctx.fillText(`P(${fmt2(xP)}|${c.toFixed(2)})`, cx(xP) + (xP > 5 ? -8 : 8), cy(c) - 10);
+  // Halo: sonst überdeckt die Kurve bei schmalem Canvas das Minus von xP
+  beschriftung(ctx, `P(${fmt2(xP)}|${c.toFixed(2)})`, cx(xP) + (xP > 5 ? -8 : 8), cy(c) - 10,
+               {align: xP > 5 ? 'right' : 'left', halo:true, W, H});
   // Beschriftung der Kurven
   ctx.font = 'bold 13px monospace';
   ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'left';
@@ -1170,7 +1172,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${String(target).replace('-', '−')} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
   }

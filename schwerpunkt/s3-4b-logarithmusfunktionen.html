@@ -975,6 +975,11 @@ buildNav({
 /* ── Lokale Helfer ─────────────────────────────────────── */
 // Zahlformat mit 2 Nachkommastellen für Tabellenwerte (fmt aus mathlib rundet auf 1)
 const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+// Anzeigezahl: Unicode-Minus U+2212, keine negative Null (wie zahlM in g2-2b)
+function zahlM(v, st) {
+  const s = st === undefined ? String(v) : v.toFixed(st);
+  return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
 
 // Kurven-Plot mit Segmenttrennung bei Ausreissern (wie s3-2a)
 function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
@@ -1006,13 +1011,13 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    ctx.fillText(zahlM(fmt(gx)), cx(gx), HH - padB + 15);
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(zahlM(fmt(gy)), padL - 5, cy(gy) + 4);
   }
   // Achsen
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
@@ -1235,7 +1240,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${zahlM(target)} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
   }
@@ -1325,7 +1330,8 @@ function setC14(r){
 }
 function drawC14(){
   const r = parseFloat(document.getElementById('c14-r').value);   // Restanteil N/N0
-  const t = C14_T * Math.log(r) / Math.log(0.5);                   // Alter in Jahren
+  // Alter in Jahren; r ≤ 1 gibt t ≥ 0 — abs, damit r = 1 nicht «−0 a» zeigt (log(1)/log(0.5) = −0)
+  const t = Math.abs(C14_T * Math.log(r) / Math.log(0.5));
   document.getElementById('c14-rv').textContent = Math.round(r * 100) + '%';
   document.getElementById('c14-eq').innerHTML =
     `t = 5730 · log(1/2)(${r.toFixed(2)}) = ${Math.round(t).toLocaleString('de-CH')} a`;
@@ -1355,11 +1361,18 @@ function drawC14(){
   ctx.beginPath(); ctx.moveTo(cx(0), cy(r * 100)); ctx.lineTo(cx(t), cy(r * 100)); ctx.lineTo(cx(t), cy(0)); ctx.stroke();
   ctx.setLineDash([]);
   drawDot(ctx, cx, cy, t, r * 100, '#b85c00', 6);
-  // Label nach links kippen, sobald der Punkt in der rechten Bildhälfte liegt
+  // Alters-Label frei platzieren: rechts oberhalb der fallenden Kurve, unter der Kopfzeile
+  // («N/N₀ [%]», Funktionsterm) und nie über den rechten Rand — sonst überdeckt es bei
+  // r ≥ 0.89 die Achsenbeschriftung und in der rechten Bildhälfte die Kurve
   ctx.fillStyle = '#b85c00'; ctx.font = 'bold 12px monospace';
-  const rechts = t > tMax * 0.5;
-  ctx.textAlign = rechts ? 'right' : 'left';
-  ctx.fillText(Math.round(t).toLocaleString('de-CH') + ' a', cx(t) + (rechts ? -9 : 9), cy(r * 100) - 6);
+  const lab = Math.round(t).toLocaleString('de-CH') + ' a';
+  const unten = ctx.measureText(lab).actualBoundingBoxDescent + 3, breit = ctx.measureText(lab).width;
+  const kurveY = px => cy(100 * Math.pow(0.5, (px - cx(0)) / (cx(tMax) - cx(0)) * tMax / C14_T));
+  let lx = cx(t) + 9, ly = Math.max(cy(r * 100) - 6, 34);
+  const pLab = (cy(0) - (ly + unten)) / (cy(0) - cy(100));        // Anteil auf Höhe der Label-Unterkante
+  lx = Math.max(lx, cx(C14_T * Math.log(pLab) / Math.log(0.5)));    // erst rechts der Kurve beginnen
+  if(lx + breit > W - 4){ lx = W - 4 - breit; ly = Math.min(ly, kurveY(lx) - unten); }
+  beschriftung(ctx, lab, lx, ly, {align:'left', halo:true, W, H});
 }
 document.getElementById('c14-r').addEventListener('input', drawC14);
 

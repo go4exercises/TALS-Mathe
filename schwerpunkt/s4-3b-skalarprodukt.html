@@ -953,7 +953,7 @@ function checkA1(ans){
   const r = document.getElementById('a1-cr'); r.style.display = 'block';
   const sp = g.a[0] * g.b[0] + g.a[1] * g.b[1];
   if(ans === g.sol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig! a · b = ${sp}`;
+    r.className = 'cr ok'; r.textContent = `✓ Richtig! a · b = ${String(sp).replace('-', '−')}`;
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht ganz. Rechne nach: a·b = a₁b₁ + a₂b₂ — oder schätze den Winkel: unter 90° positiv, genau 90° null, darüber negativ.';
   }
@@ -965,7 +965,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${String(target).replace('-', '−')} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Produkte summieren — und beim Winkel den Taschenrechner auf DEG stellen.';
   }

@@ -554,7 +554,7 @@ MathJax = {
   </div>
   <div class="widget-body">
     <div class="sl-row">
-      <div class="sl-grp akz-blau"><label>Stelle <span class="var">\(a\)</span></label><input type="range" id="wa-a" min="-4" max="4" step="0.5" value="-2"><span class="sl-val" id="wa-av">-2</span></div>
+      <div class="sl-grp akz-blau"><label>Stelle <span class="var">\(a\)</span></label><input type="range" id="wa-a" min="-4" max="4" step="0.5" value="-2"><span class="sl-val" id="wa-av">−2</span></div>
       <div class="sl-grp akz-orange"><label>Stelle <span class="var">\(b\)</span></label><input type="range" id="wa-b" min="-4" max="4" step="0.5" value="3"><span class="sl-val" id="wa-bv">3</span></div>
     </div>
     <div class="formel-live">
@@ -922,6 +922,11 @@ buildNav({
 
 /* ── Lokale Helfer ─────────────────────────────────────── */
 const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+// Anzeigezahl mit Unicode-Minus; negative Null (auch gerundet «-0.0») wird zu 0
+function zahlM(v, st) {
+  const s = st === undefined ? String(v) : v.toFixed(st);
+  return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
 
 function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
   ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
@@ -951,13 +956,13 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    ctx.fillText(zahlM(+fmt(gx)), cx(gx), HH - padB + 15);
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(zahlM(+fmt(gy)), padL - 5, cy(gy) + 4);
   }
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
@@ -1127,7 +1132,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${zahlM(target)} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Knickpunkt und Fälle prüfen — hilft die Skizze?';
   }
@@ -1141,7 +1146,8 @@ function setCwC(c){
 }
 function drawCw(){
   const c = parseFloat(document.getElementById('cw-c').value);
-  document.getElementById('cw-cv').textContent = c.toFixed(1);
+  const cT = zahlM(c, 1);
+  document.getElementById('cw-cv').textContent = cT;
   document.querySelectorAll('#cw-snap-btns .typ-btn').forEach(b =>
     b.classList.toggle('aktiv', Math.abs(parseFloat(b.textContent.match(/-?[0-9.]+/)[0]) - c) < 0.05));
 
@@ -1153,20 +1159,67 @@ function drawCw(){
   else if(Math.abs(c - 4) < 1e-9){ xs = [-Math.sqrt(8), 0, Math.sqrt(8)]; lage = '(c = 4)'; }
   else { const a = Math.sqrt(4 + c); xs = [-a, a]; lage = '(c > 4)'; }
   document.getElementById('cw-eq').innerHTML =
-    `c = ${c.toFixed(1)} ${lage} ⇒ <strong>${xs.length}</strong> Lösung${xs.length === 1 ? '' : 'en'}`;
+    `c = ${cT} ${lage} ⇒ <strong>${xs.length}</strong> Lösung${xs.length === 1 ? '' : 'en'}`;
 
   const {ctx, W, H} = initCanvas('cw-canvas', 240, false);
   const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, -4, 4, -1, 8, {zahlen:false});
   // W-Kurve |x²-4| — die Schnittgerade ist benannt, die Kurve muss es auch sein
-  plotFx(ctx, cx, cy, x => Math.abs(x * x - 4), -4, 4, '#5b2d8e', 3, 1e4);
+  const fW = x => Math.abs(x * x - 4);
+  plotFx(ctx, cx, cy, fW, -4, 4, '#5b2d8e', 3, 1e4);
+  // Kurvenname rechts neben der y-Achse: oben rechts kreuzte ihn der rechte Ast.
+  // Dort bleibt die Kurve bis x = 3 unter y = 5, weit unter der Beschriftung.
   ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';
-  beschriftung(ctx, 'y = |x² − 4|', W - 8, 18, {align:'right', halo:true, W, H});
+  const kTxt = 'y = |x² − 4|', kX = cx(0) + 24, kB = ctx.measureText(kTxt).width;
+  beschriftung(ctx, kTxt, kX, 18, {align:'left', halo:true, W, H});
   // Waagrechte y = c (nur wenn im Bild)
   if(c >= -1 && c <= 8){
     ctx.strokeStyle = '#b85c00'; ctx.lineWidth = 2.4;
     ctx.beginPath(); ctx.moveTo(cx(-4), cy(c)); ctx.lineTo(cx(4), cy(c)); ctx.stroke();
-    ctx.fillStyle = '#b85c00'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
-    ctx.fillText('y = ' + c.toFixed(1), cx(-4) + 4, cy(c) - 6);
+    ctx.fillStyle = '#b85c00'; ctx.font = 'bold 12px monospace';
+    // Freien Platz suchen: erst über, dann unter der Geraden, jeweils von links.
+    // Gemieden werden Kurve, Schnittpunkte, das Band der x-Achsenzahlen und der
+    // Kurvenname, im ersten Durchgang auch die y-Achse ganz. Bleibt auf schmalen
+    // Canvases nichts frei, darf die Beschriftung die y-Achse queren (Halo), aber
+    // nicht deren Zahlen 2, 4, 6 und das «y»; zuletzt eine Schriftstufe kleiner
+    // (360 px, c um 2.9). Bei c < 0 liegt die Gerade im Zahlenband oder am
+    // unteren Rand — dann steht die Beschriftung knapp über der x-Achse.
+    const txt = 'y = ' + cT;
+    let bw = 0, asc = 11, desc = 3;
+    const ux = px => -4 + px / W * 8;
+    const grund = [
+      [0, cy(0) - 2, W, cy(0) + 18],   // x-Achse und ihre Zahlen
+      [kX - 3, 5, kX + kB + 3, 23],
+      [cx(0) + 5, 0, cx(0) + 21, 19],
+      ...[2, 4, 6].map(g => [cx(0) - 18, cy(g) - 7, cx(0) - 2, cy(g) + 6]),
+      ...xs.map(x => [cx(x) - 6, cy(c) - 6, cx(x) + 6, cy(c) + 5]),
+    ];
+    let rechtecke = grund;
+    const frei = (x0, yb) => {
+      const o = yb - asc, u = yb + desc;
+      if(o < 2 || u > H - 2 || x0 < 2 || x0 + bw > W - 2) return false;
+      if(rechtecke.some(([l, t, r, b]) => x0 < r && x0 + bw > l && o < b && u > t)) return false;
+      for(let p = x0 - 1; p < x0 + bw + 1; p++){
+        const y1 = cy(fW(ux(p))), y2 = cy(fW(ux(p + 1)));
+        if(Math.max(y1, y2) >= o - 1 && Math.min(y1, y2) <= u + 1) return false;
+      }
+      return true;
+    };
+    let pos = null;
+    for(const [schrift, achse] of [['bold 12px monospace', true], ['bold 12px monospace', false], ['bold 11px monospace', false]]){
+      ctx.font = schrift;
+      const m = ctx.measureText(txt);
+      bw = m.width; asc = Math.ceil(m.actualBoundingBoxAscent) + 1; desc = Math.ceil(m.actualBoundingBoxDescent) + 1;
+      // über der Geraden mit 6 px Luft, darunter so, dass die Oberkante 5 px unter ihr liegt
+      const zeilen = [cy(c) - 6, cy(c) + 5 + asc].concat(c < 0 ? [cy(0) - 6] : []);
+      rechtecke = achse ? grund.concat([[cx(0) - 26, 0, cx(0) + 6, H]]) : grund;
+      for(const yb of zeilen){
+        for(let x0 = 2; x0 + bw <= W - 2 && !pos; x0 += 2) if(frei(x0, yb)) pos = [x0, yb];
+        if(pos) break;
+      }
+      if(pos) break;
+    }
+    if(!pos){ ctx.font = 'bold 12px monospace'; pos = [4, c < 0 ? cy(0) - 6 : cy(c) - 6]; }
+    beschriftung(ctx, txt, pos[0], pos[1], {align:'left', halo:true, W, H});
   }
   // Schnittpunkte
   xs.forEach(x => drawDot(ctx, cx, cy, x, c, '#9b1c1c', 5));
@@ -1179,12 +1232,12 @@ document.getElementById('cw-c').addEventListener('input', drawCw);
 function drawWa(){
   let a = parseFloat(document.getElementById('wa-a').value);
   let b = parseFloat(document.getElementById('wa-b').value);
-  document.getElementById('wa-av').textContent = a;
-  document.getElementById('wa-bv').textContent = b;
+  document.getElementById('wa-av').textContent = zahlM(a);
+  document.getElementById('wa-bv').textContent = zahlM(b);
   const lo = Math.min(a, b), hi = Math.max(a, b), boden = hi - lo;
   document.getElementById('wa-eq').innerHTML = boden < 1e-9
-    ? `Boden zu einem Punkt;  Minimum = 0;  reines V bei x = ${a}`
-    : `Boden [${lo}; ${hi}];  Minimum |a−b| = ${boden}`;
+    ? `Boden zu einem Punkt;  Minimum = 0;  reines V bei x = ${zahlM(a)}`
+    : `Boden [${zahlM(lo)}; ${zahlM(hi)}];  Minimum |a−b| = ${boden}`;
 
   const f = x => Math.abs(x - a) + Math.abs(x - b);
   const {ctx, W, H} = initCanvas('wa-canvas', 240, false);

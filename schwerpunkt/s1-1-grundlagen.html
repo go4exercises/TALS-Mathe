@@ -765,6 +765,11 @@ buildNav({
 
 /* ── Lokale Helfer ─────────────────────────────────────── */
 const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+// Anzeigezahl mit Unicode-Minus; negative Null (auch gerundet «-0.0000») wird zu 0
+function zahlM(v, st) {
+  const s = st === undefined ? String(v) : v.toFixed(st);
+  return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
 
 /* ══ EINSTIEG: Struktur-Waage ══ */
 function updateSW(){
@@ -906,7 +911,7 @@ const RP_REGELN = [
   { t: 'log(a+b) = log a + log b', ok: false, c: false,
     L: (a, b) => Math.log10(a + b),   R: (a, b) => Math.log10(a) + Math.log10(b),
     lt: (a, b) => `lg(${a} + ${b}) = ${Math.log10(a + b).toFixed(4)}`,
-    rt: (a, b) => `lg ${a} + lg ${b} = ${(Math.log10(a) + Math.log10(b)).toFixed(4)}`,
+    rt: (a, b) => `lg ${a} + lg ${b} = ${zahlM(Math.log10(a) + Math.log10(b), 4)}`,
     warum: 'Richtig wäre \\(\\log(a \\cdot b) = \\log a + \\log b\\). Zufällige Gleichheit tritt ein, wenn \\(a + b = a \\cdot b\\) ist — etwa bei \\(a = b = 2\\).',
     bedingung: (a, b) => a > 0 && b > 0,
     fehlt: 'Für \\(a = 0\\) ist \\(\\log a\\) nicht definiert — stelle \\(a > 0\\) ein.' },
@@ -964,8 +969,8 @@ function drawPruefstand() {
   // Ganze Zahlen ohne Nachkommastellen, sonst so viele wie noetig — vier feste
   // Stellen liessen «12.0000» wie eine Maschinenausgabe aussehen.
   const zahl = v => {
-    const s = Math.abs(v) >= 1 ? v.toFixed(2) : v.toFixed(4);
-    return s.replace(/\.?0+$/, '').replace('-', '−');
+    const s = zahlM(v, Math.abs(v) >= 1 ? 2 : 4);
+    return s.replace(/\.?0+$/, '');
   };
   const max = Math.max(Math.abs(li), Math.abs(re), 1e-9);
   const bx = 118, bw = W - 150;

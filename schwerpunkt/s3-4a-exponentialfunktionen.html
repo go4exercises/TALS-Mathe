@@ -975,7 +975,12 @@ buildNav({
 
 /* ── Lokale Helfer ─────────────────────────────────────── */
 // Zahlformat mit 2 Nachkommastellen für Tabellenwerte (fmt aus mathlib rundet auf 1)
-const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+// Anzeigezahl mit Unicode-Minus; negative Null (auch gerundet «-0.00») wird zu 0
+function zahlM(v, st) {
+  const s = st === undefined ? String(v) : v.toFixed(st);
+  return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : zahlM(n, n % 1 === 0 ? undefined : 2);
 
 // Kurven-Plot mit Segmenttrennung bei Ausreissern (wie s3-2a)
 function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
@@ -1007,13 +1012,13 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    ctx.fillText(zahlM(gx, gx % 1 === 0 ? undefined : 1), cx(gx), HH - padB + 15);
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(zahlM(gy, gy % 1 === 0 ? undefined : 1), padL - 5, cy(gy) + 4);
   }
   // Achsen
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
@@ -1082,7 +1087,7 @@ function updateDR(){
   tbody.innerHTML = xs.map(xi => {
     const yi = Math.pow(a, xi);
     const act = xi === x;
-    return `<tr class="${act ? 'aktiv-zeile' : ''}"><td class="td-x">${xi}</td><td class="td-y">${fmt2(yi)}</td><td class="td-pt">(${xi}|${fmt2(yi)})</td></tr>`;
+    return `<tr class="${act ? 'aktiv-zeile' : ''}"><td class="td-x">${zahlM(xi)}</td><td class="td-y">${fmt2(yi)}</td><td class="td-pt">(${zahlM(xi)}|${fmt2(yi)})</td></tr>`;
   }).join('');
   // Graph: x −4…4, y −2…10 (aufgabenbezogene Skalierung)
   const {ctx, W, H} = initCanvas('dr-canvas', 260, false);
@@ -1240,7 +1245,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${zahlM(target)} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
   }

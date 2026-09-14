@@ -1111,7 +1111,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${String(target).replace('-', '−')} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe die Fälle bzw. das Relationszeichen.';
   }
@@ -1123,7 +1123,7 @@ function chkNum(id, target, tol, einheit){
    c < 0 → keiner (Betrag ist nie negativ)                        */
 function drawBetrag() {
   const c = parseFloat(document.getElementById('be-c').value);
-  document.getElementById('be-cv').textContent = c.toFixed(1);
+  document.getElementById('be-cv').textContent = (c < 0 ? '−' : '') + Math.abs(c).toFixed(1);
   document.querySelectorAll('[data-bec]').forEach(b =>
     b.classList.toggle('aktiv', parseFloat(b.dataset.bec) === c));
   const nf = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(v % 1 === 0 ? 0 : 1);

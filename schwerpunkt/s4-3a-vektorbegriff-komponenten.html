@@ -1023,7 +1023,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${String(target).replace('-', '−')} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Komponentenweise rechnen — und beim Betrag an Pythagoras denken.';
   }
@@ -1035,8 +1035,8 @@ function chkNum(id, target, tol, einheit){
 function drawPolar() {
   const a1 = parseInt(document.getElementById('pk-a1').value, 10);
   const a2 = parseInt(document.getElementById('pk-a2').value, 10);
-  document.getElementById('pk-a1v').textContent = a1;
-  document.getElementById('pk-a2v').textContent = a2;
+  document.getElementById('pk-a1v').textContent = String(a1).replace('-', '−');
+  document.getElementById('pk-a2v').textContent = String(a2).replace('-', '−');
   const r = Math.hypot(a1, a2);
   const nz = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(2);
   const eqEl = document.getElementById('pk-eq'), hEl = document.getElementById('pk-hinw');
@@ -1080,24 +1080,104 @@ function drawPolar() {
 
   if (phi !== null) {
     // falscher Rechner-Strahl (nur wenn Korrektur nötig)
+    const rad = korr ? tr * Math.PI / 180 : 0;
     if (korr) {
-      const rad = tr * Math.PI / 180;
       ctx.strokeStyle = '#c8412c'; ctx.lineWidth = 1.8; ctx.setLineDash([5, 4]);
       ctx.beginPath(); ctx.moveTo(cx(0), cy(0));
       ctx.lineTo(cx(r * Math.cos(rad)), cy(r * Math.sin(rad)));
       ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle = '#c8412c'; ctx.font = 'bold 10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
-      ctx.fillText('Rechner', cx(r * Math.cos(rad) * 0.62), cy(r * Math.sin(rad) * 0.62) - 8);
     }
     // Winkelbogen
     ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.6;
     ctx.beginPath(); ctx.arc(cx(0), cy(0), 30, 0, -phi * Math.PI / 180, true); ctx.stroke();
     // Vektor
     drawArrow(ctx, cx(0), cy(0), cx(a1), cy(a2), '#1a4f8a', 3);
-    ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
-    ctx.fillText(`a(${a1} | ${a2})`.replace(/-/g, '−'), cx(a1) + 8, cy(a2) - 8);
-    ctx.fillStyle = '#1f6b3a'; ctx.font = 'bold 11px JetBrains Mono, monospace';
-    ctx.fillText('φ = ' + phi.toFixed(1) + '°', cx(0) + 36, cy(0) - 12);
+    /* Etiketten «φ = …», «Rechner» und «a(…)» weichen aus (Muster wie g5-2b): je Etikett
+       Kandidaten, der erste ist die gewohnte Lage. Kosten: Überdeckung mit Quadranten-
+       und Achsenzahlen und schon gesetzten Etiketten (schwer), Linien unter dem Text
+       (leicht), Verschiebung durchs Klemmen an den Rand, Aufschlag je Schritt. Sonst lief
+       a(…) bei a₁ ≥ 5 rechts aus dem Canvas und lag bei a₁ = −6 auf dem Pfeil, und bei
+       a₂ ∈ {0, −1}, a₁ < 0 lagen «φ = …» und «Rechner» übereinander. */
+    const belegt = [], linienPkt = [];
+    const linie = (p, q, gew) => {
+      const n = Math.max(1, Math.ceil(Math.hypot(q[0] - p[0], q[1] - p[1]) / 3));
+      for (let i = 0; i <= n; i++) linienPkt.push([p[0] + (q[0] - p[0]) * i / n, p[1] + (q[1] - p[1]) * i / n, gew]);
+    };
+    const kasten = (s, x, y, align, font) => {
+      ctx.font = font; ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
+      const m = ctx.measureText(s);
+      let l = m.actualBoundingBoxLeft, rr = m.actualBoundingBoxRight, as = m.actualBoundingBoxAscent, de = m.actualBoundingBoxDescent;
+      if (!isFinite(l) || !isFinite(rr)) { l = align === 'center' ? m.width / 2 : (align === 'right' ? m.width : 0); rr = m.width - l; }
+      if (!isFinite(as) || !isFinite(de)) { as = 10; de = 3; }
+      const xa = x, ya = y;
+      // wie beschriftung(): in den Canvas klemmen (Rand 2 px)
+      if (x - l - 2 < 0) x = l + 2;
+      if (x + rr + 2 > W) x = W - rr - 2;
+      if (y - as - 2 < 0) y = as + 2;
+      if (y + de + 2 > H) y = H - de - 2;
+      return { x, y, x0: x - l - 2, x1: x + rr + 2, y0: y - as - 2, y1: y + de + 2, klemm: Math.hypot(x - xa, y - ya) };
+    };
+    const kosten = b => {
+      let k = 2 * b.klemm;
+      for (const q of belegt) {
+        const ow = Math.min(b.x1, q.x1) - Math.max(b.x0, q.x0), oh = Math.min(b.y1, q.y1) - Math.max(b.y0, q.y0);
+        if (ow > 0 && oh > 0) k += q.blass ? 15 : 60 + 2 * ow * oh;
+      }
+      for (const [px, py, gew] of linienPkt) if (px > b.x0 && px < b.x1 && py > b.y0 && py < b.y1) k += gew;
+      return k;
+    };
+    const setze = (txt, font, farbe, kandidaten) => {
+      let best = null, bestK = Infinity;
+      kandidaten.forEach(([x, y, al], i) => {
+        const b = kasten(txt, x, y, al, font), k = kosten(b) + 3 * i;
+        if (k < bestK) { best = { b, al }; bestK = k; }
+      });
+      belegt.push(best.b);
+      ctx.fillStyle = farbe; ctx.font = font;
+      beschriftung(ctx, txt, best.b.x, best.b.y, {align: best.al, halo: true, W, H});
+      ctx.textAlign = 'left';
+    };
+    // Hindernisse: Pfeil, Rechner-Strahl, Winkelbogen, Achsen (leicht) …
+    linie([cx(0), cy(0)], [cx(a1), cy(a2)], 8);
+    belegt.push({ x0: cx(a1) - 7, x1: cx(a1) + 7, y0: cy(a2) - 7, y1: cy(a2) + 7 });   // Pfeilspitze
+    if (korr) linie([cx(0), cy(0)], [cx(r * Math.cos(rad)), cy(r * Math.sin(rad))], 3);
+    for (let w = 0; w <= phi; w += 4) linienPkt.push([cx(0) + 30 * Math.cos(w * Math.PI / 180), cy(0) - 30 * Math.sin(w * Math.PI / 180), 4]);
+    linie([0, cy(0)], [W, cy(0)], 4); linie([cx(0), 0], [cx(0), H], 4);
+    // … Quadrantenzeichen (blass, leichter) und Achsenzahlen (schwer)
+    [['I', 5.6, 5.6], ['II', -5.6, 5.6], ['III', -5.6, -5.6], ['IV', 5.6, -5.6]].forEach(([n, x, y]) =>
+      belegt.push({ ...kasten(n, cx(x), cy(y), 'center', 'bold 11px JetBrains Mono, monospace'), blass: true }));
+    for (let g = -6; g <= 6; g++) if (g) {
+      belegt.push({ x0: cx(g) - 9, x1: cx(g) + 9, y0: cy(0) + 4, y1: cy(0) + 17 });
+      if (g % 2 === 0) belegt.push({ x0: cx(0) - 24, x1: cx(0) - 3, y0: cy(g) - 6, y1: cy(g) + 6 });
+    }
+    const umPunkt = (px, py, ring, fs) => fs.flatMap(f => ring.map(([dx, dy, al]) => [px + dx * f, py + dy * f, al]));
+
+    // 1) «φ = …»: gewohnt rechts über der x-Achse, sonst in den übrigen Ecken um den Ursprung
+    setze('φ = ' + phi.toFixed(1) + '°', 'bold 11px JetBrains Mono, monospace', '#1f6b3a',
+          umPunkt(cx(0), cy(0), [[36, -12, 'left'], [36, 32, 'left'], [-36, -12, 'right'], [-36, 32, 'right']], [1, 1.6, 2.2]));
+
+    // 2) «Rechner»: gewohnt bei 62 % über dem Strahl, sonst weiter innen/aussen und auf beiden Seiten
+    if (korr) {
+      const ex = cx(r * Math.cos(rad)) - cx(0), ey = cy(r * Math.sin(rad)) - cy(0), el = Math.hypot(ex, ey) || 1;   // Strahl in Pixeln
+      const kandR = [[cx(0) + 0.62 * ex, cy(0) + 0.62 * ey - 8, 'center']];
+      for (const f of [0.62, 0.8, 0.45, 0.9, 1.3, 1.7]) for (const sg of [1, -1]) for (const ab of [10, 18]) {
+        const nx = -ey / el * sg, ny = ex / el * sg;
+        kandR.push([cx(0) + f * ex + nx * ab, cy(0) + f * ey + ny * ab + (ny > 0.3 ? 9 : (ny < -0.3 ? -2 : 4)),
+                    nx > 0.3 ? 'left' : (nx < -0.3 ? 'right' : 'center')]);
+      }
+      setze('Rechner', 'bold 10px JetBrains Mono, monospace', '#c8412c', kandR);
+    }
+
+    // 3) «a(…)»: rund um die Pfeilspitze, danach seitlich neben dem Pfeil kurz vor der Spitze
+    const ring = [[8, -8, 'left'], [-8, -8, 'right'], [8, 16, 'left'], [-8, 16, 'right'], [0, -12, 'center'], [0, 24, 'center'], [12, 4, 'left'], [-12, 4, 'right']];
+    const vx = cx(a1) - cx(0), vy = cy(a2) - cy(0), vl = Math.hypot(vx, vy) || 1;
+    const neben = [0.8, 0.6].flatMap(f => [1, -1].map(sg => {
+      const nx = -vy / vl * sg, ny = vx / vl * sg;
+      return [cx(0) + f * vx + nx * 12, cy(0) + f * vy + ny * 12 + (ny > 0.3 ? 10 : (ny < -0.3 ? -2 : 4)),
+              nx > 0.3 ? 'left' : (nx < -0.3 ? 'right' : 'center')];
+    }));
+    setze(`a(${a1} | ${a2})`.replace(/-/g, '−'), 'bold 12px JetBrains Mono, monospace', '#1a4f8a',
+          [...umPunkt(cx(a1), cy(a2), ring, [1]), ...neben, ...umPunkt(cx(a1), cy(a2), ring, [1.8, 2.6])]);
   } else {
     drawDot(ctx, cx, cy, 0, 0, '#1a4f8a', 5);
   }

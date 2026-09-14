@@ -507,11 +507,11 @@ MathJax = {
     <div class="sl-row">
       <label>Verschiebung <span class="var">\(c\)</span></label>
       <input type="range" id="ug-c" min="-3" max="2.5" step="0.05" value="-1">
-      <span class="sl-val" id="ug-cv">-1.00</span>
+      <span class="sl-val" id="ug-cv">−1.00</span>
     </div>
     <div class="formel-live">
       <div class="fl-label">Lösungsmenge</div>
-      <div class="fl-eq" id="ug-eq">L = { x | x &lt; -1 ∨ x &gt; 2 }</div>
+      <div class="fl-eq" id="ug-eq">L = { x | x &lt; −1 ∨ x &gt; 2 }</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="ug-canvas" height="260"></canvas></div>
   </div>
@@ -896,7 +896,8 @@ buildNav({
 
 /* ── Lokale Helfer ─────────────────────────────────────── */
 // Zahlformat mit 2 Nachkommastellen
-const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+// Negative Werte mit Unicode-Minus (U+2212); |n| < 0.005 wird zu «0», nie «−0.00»
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2)).replace('-', '−');
 
 // Kurven-Plot mit Segmenttrennung bei Polen/Ausreissern (wie s3-2a)
 function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
@@ -931,14 +932,14 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     // sie beruehren und wird deshalb weggelassen.
     if(!(labX && gx + stepX > xMax + 1e-9)){
       ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-      ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+      ctx.fillText(fmt(gx).replace('-', '−'), cx(gx), HH - padB + 15);
     }
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(fmt(gy).replace('-', '−'), padL - 5, cy(gy) + 4);
   }
   // Achsen
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
@@ -1151,7 +1152,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${String(target).replace('-', '−')} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
   }
@@ -1167,7 +1168,7 @@ function setUgRel(r){
 }
 function drawUg(){
   const c = parseFloat(document.getElementById('ug-c').value);
-  document.getElementById('ug-cv').textContent = c.toFixed(2);
+  document.getElementById('ug-cv').textContent = (c < -0.005 ? '−' : '') + Math.abs(c).toFixed(2);
   const f = x => x * x + c;      // Parabel
   const g = x => x + 1;          // Gerade
   const xMin = -3.5, xMax = 3.5, yMin = -3, yMax = 7;

@@ -159,6 +159,7 @@ inhaltlich passt:
 >    **Schwerpunktfach**-Seiten stehen negative Zahlen noch mit Bindestrich statt «−»
 >    (u. a. s3-5, s3-2a/b, s3-4a/b, s3-6, s2-2b; dazu «−0 a» in s3-4b und «≈ −0.00» in s3-5).
 >    Im Grundlagenfach ist das seit dem 14.09.2026 erledigt.
+>    **Nachtrag 14.09.2026:** auch im Schwerpunktfach erledigt (alle 23 Seiten geprüft).
 
 ---
 

@@ -953,6 +953,11 @@ buildNav({
 
 /* ── Lokale Helfer (Muster: s3-2a) ── */
 const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : (Math.abs(n*10) % 1 < 1e-9 ? n.toFixed(1) : n.toFixed(2)));
+// Anzeigezahl mit Unicode-Minus; negative Null (auch gerundet «-0.00») wird zu 0
+function zahlM(v, st) {
+  const s = st === undefined ? String(v) : v.toFixed(st);
+  return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
 
 function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
   ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
@@ -982,13 +987,13 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    ctx.fillText(zahlM(gx, gx % 1 === 0 ? undefined : 1), cx(gx), HH - padB + 15);
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(zahlM(gy, gy % 1 === 0 ? undefined : 1), padL - 5, cy(gy) + 4);
   }
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
@@ -1211,7 +1216,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${zahlM(target)} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
   }
@@ -1224,11 +1229,13 @@ function drawLt() {
   const p = parseFloat(document.getElementById('lt-p').value);
   const tx = (p / 100) * z;
   document.getElementById('lt-zv').textContent = z;
-  document.getElementById('lt-pv').textContent = tx.toFixed(1);
+  const txS = zahlM(tx, 1);
+  const txK = txS.startsWith('−') ? '(' + txS + ')' : txS;   // negativ eingesetzt: in Klammern
+  document.getElementById('lt-pv').textContent = txS;
   const f = x => x*x*x - 4*x;
   const fx = f(tx);
   document.getElementById('lt-eq').innerHTML =
-    'f(' + tx.toFixed(1) + ') = ' + tx.toFixed(1) + '³ − 4·' + tx.toFixed(1) + ' ≈ ' + fx.toFixed(2).replace('-', '−');
+    'f(' + txS + ') = ' + txK + '³ − 4·' + txK + ' ≈ ' + zahlM(fx, 2);
   const { ctx, W, H } = initCanvas('cv-lt', 260, false);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
   const padL = 46, padR = 16, padT = 14, padB = 26;

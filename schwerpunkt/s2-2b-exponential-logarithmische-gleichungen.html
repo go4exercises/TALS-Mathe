@@ -874,6 +874,11 @@ buildNav({
 
 /* ── Lokale Helfer ─────────────────────────────────────── */
 const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+// Anzeigezahl mit Unicode-Minus; negative Null (auch gerundet «-0.0») wird zu 0 (wie g2-2b)
+function zahlM(v, st) {
+  const s = st === undefined ? String(v) : v.toFixed(st);
+  return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
 
 function plotFx(ctx, cx, cy, f, xMin, xMax, color, lw, yCap){
   ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
@@ -903,13 +908,13 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    ctx.fillText(zahlM(fmt(gx)), cx(gx), HH - padB + 15);
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(zahlM(fmt(gy)), padL - 5, cy(gy) + 4);
   }
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(padL, HH - padB); ctx.lineTo(W - padR, HH - padB); ctx.stroke();
@@ -1031,7 +1036,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${zahlM(target)} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung (und die Definitionsmenge).';
   }
@@ -1048,7 +1053,7 @@ function drawLd(){
   const xs = (u - disk) / 2;    // Scheinlösung (< 0)
   const fmtU = u % 1 === 0 ? u : u.toFixed(1);
   document.getElementById('ld-eq').innerHTML =
-    `D: x &gt; ${fmtU};  x₁ = ${xg.toFixed(2)} ∈ D ✓;  x₂ = ${xs.toFixed(2)} ∉ D (Scheinlösung);  L = {${xg.toFixed(2)}}`;
+    `D: x &gt; ${fmtU};  x₁ = ${xg.toFixed(2)} ∈ D ✓;  x₂ = ${zahlM(xs, 2)} ∉ D (Scheinlösung);  L = {${xg.toFixed(2)}}`;
 
   const L = x => x > u ? Math.log10(x - u) : NaN;   // linke Seite lg(x-u)
   const R = x => x > 0 ? 1 - Math.log10(x) : NaN;   // rechte Seite 1 - lg x
@@ -1073,7 +1078,7 @@ function drawLd(){
   ctx.beginPath(); ctx.moveTo(padL, cy(0)); ctx.lineTo(W - padR, cy(0)); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cx(0), padT); ctx.lineTo(cx(0), gH - 10); ctx.stroke();
   ctx.fillStyle = '#9ca3af'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
-  for(let gx = -4; gx <= xMax; gx += 2){ if(gx !== 0) beschriftung(ctx, gx, cx(gx), cy(0) + 13, {align:'center', W, H}); }
+  for(let gx = -4; gx <= xMax; gx += 2){ if(gx !== 0) beschriftung(ctx, zahlM(gx), cx(gx), cy(0) + 13, {align:'center', W, H}); }
 
   // Definitionsgrenze x = u
   ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
@@ -1114,7 +1119,7 @@ function drawLd(){
   for(let gx = -4; gx <= xMax; gx += 2){
     ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), yS - 4); ctx.lineTo(cx(gx), yS + 4); ctx.stroke();
-    ctx.fillStyle = '#9ca3af'; ctx.fillText(gx, cx(gx), yS + 17);
+    ctx.fillStyle = '#9ca3af'; ctx.fillText(zahlM(gx), cx(gx), yS + 17);
   }
   // Definitionsbereich als grüner Strahl ab u
   ctx.strokeStyle = '#1f6b3a'; ctx.lineWidth = 4;
@@ -1122,8 +1127,9 @@ function drawLd(){
   // Grenze von D als Klammer: D ist ]u; ∞[, also öffnet sie nach links —
   // dieselbe Notation wie in der Intervallschreibweise.
   intervallKlammer(ctx, cx(u), yS, false, {farbe:'#1f6b3a', h:9, lw:2.4});
-  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
-  ctx.fillText('D-Strahl', padL, yS - 12);
+  // rechts statt links: links sitzt die Scheinlösung x₂ (−2.7 … −1.5) und stiess an die Beschriftung
+  ctx.fillStyle = '#374151'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'right';
+  ctx.fillText('D-Strahl', W - padR, yS - 12);
   // gültige Lösung (grün) und Scheinlösung (rot) auf dem Strahl
   ctx.fillStyle = '#1f6b3a';
   ctx.beginPath(); ctx.arc(cx(xg), yS, 5, 0, 2 * Math.PI); ctx.fill();

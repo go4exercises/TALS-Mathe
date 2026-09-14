@@ -846,7 +846,7 @@ buildNav({
 });
 
 /* ── Lokale Helfer ─────────────────────────────────────── */
-const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2)).replace('-', '−');
 
 function drawArrow(ctx, x1, y1, x2, y2, color, lw){
   ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw || 2.5; ctx.setLineDash([]);
@@ -873,10 +873,14 @@ function drawLineFull(ctx, cx, cy, A, u, color, dash){
 /* ══ EINSTIEG: Drohne ══ */
 function updateDR(){
   const t = parseFloat(document.getElementById('dr-t').value);
-  document.getElementById('dr-tv').textContent = t.toFixed(2);
+  // Unicode-Minus; negativer Parameter als Faktor in Klammern
+  const tS = t.toFixed(2).replace('-', '−');
+  document.getElementById('dr-tv').textContent = tS;
   const x = 1 + 3 * t, y = 2 + t;
+  // Punkt- und Vektorausdrücke nicht umbrechen (Muster nw aus g2-2b) — Umbruch nur zwischen den Termen
+  const nw = z => `<span style="white-space:nowrap">${z}</span>`;
   document.getElementById('dr-eq').innerHTML =
-    `r(${t.toFixed(2)}) = (1 | 2) + ${t.toFixed(2)}·(3 | 1) = (${fmt2(x)} | ${fmt2(y)})`;
+    `${nw(`r(${tS})`)} ${nw('= (1 | 2)')} ${nw(`+ ${t < 0 ? '(' + tS + ')' : tS}·(3 | 1)`)} ${nw(`= (${fmt2(x)} | ${fmt2(y)})`)}`;
   const {ctx, W, H} = initCanvas('dr-canvas', 240, false);
   const {cx, cy} = drawGrid(ctx, W, H, -6, 12, -2, 7);
   // Gerade
@@ -888,11 +892,53 @@ function updateDR(){
   ctx.fillStyle = '#1a4f8a'; ctx.textAlign = 'right'; ctx.fillText('A', cx(1) - 8, cy(2) + 4);
   ctx.fillStyle = '#b85c00'; ctx.textAlign = 'center'; ctx.fillText('u', cx(2.5), cy(2.5) - 10);
   ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';
-  beschriftung(ctx, 'X = (1|2) + t·(3|1)', 8, 19, {align:'left', halo:true, W, H});
+  /* Positions-Etikett und Gleichung weichen aus (Muster wie g5-2b): je Etikett Kandidaten,
+     der erste ist die gewohnte Lage. Kosten: Lage ausserhalb des Canvas (sehr schwer),
+     Überdeckung mit Etiketten, Punkten und Achsenzahlen (schwer), Linien unter dem Text
+     (leicht), Aufschlag je Schritt. Sonst lief «(x|y)» für grosse t rechts aus dem Canvas
+     und lag für t um −0.5 auf «A»; die Gleichung stiess bei 360 px an y-Achse und «y». */
+  const box = (s, x0, y0, align) => {
+    const m = ctx.measureText(s), w = m.width;
+    const l = align === 'right' ? w : (align === 'center' ? w / 2 : 0);
+    return { x0: x0 - l - 2, x1: x0 - l + w + 2, y0: y0 - 12, y1: y0 + 4 };
+  };
+  const belegt = [box('y', cx(0) + 13, 14, 'center'), box('x', W - 14, cy(0) - 7, 'left'),
+    box('A', cx(1) - 8, cy(2) + 4, 'right'), box('u', cx(2.5), cy(2.5) - 10, 'center'),
+    { x0: cx(x) - 8, x1: cx(x) + 8, y0: cy(y) - 8, y1: cy(y) + 8 }, { x0: cx(1) - 7, x1: cx(1) + 7, y0: cy(2) - 7, y1: cy(2) + 7 }];
+  for (let g = -6; g < 12; g++) if (g) belegt.push({ x0: cx(g) - 9, x1: cx(g) + 9, y0: cy(0) + 3, y1: cy(0) + 17 });
+  for (let g = 2; g < 7; g += 2) belegt.push({ x0: cx(0) - 16, x1: cx(0) - 3, y0: cy(g) - 6, y1: cy(g) + 6 });
+  const linienPkt = [];
+  for (let px = 0; px <= W; px += 3) {
+    linienPkt.push([px, cy(0)]);
+    const xw = -6 + px / W * 18; linienPkt.push([px, cy(2 + (xw - 1) / 3)]);   // Gerade y = 2 + (x − 1)/3
+  }
+  for (let py = 0; py <= H; py += 3) linienPkt.push([cx(0), py]);
+  for (let f = 0; f <= 1; f += 0.05) linienPkt.push([cx(1 + 3 * f), cy(2 + f)]);          // Pfeil u
+  const setze = (txt, kandidaten, halo) => {
+    let best = null, bestK = Infinity;
+    kandidaten.forEach(([x0, y0, al], i) => {
+      const b = box(txt, x0, y0, al);
+      let k = 10 * i;
+      if (b.x0 < 0 || b.x1 > W || b.y0 < 0 || b.y1 > H) k += 1000;
+      for (const q of belegt) if (Math.min(b.x1, q.x1) > Math.max(b.x0, q.x0) && Math.min(b.y1, q.y1) > Math.max(b.y0, q.y0)) k += 60;
+      for (const [px, py] of linienPkt) if (px > b.x0 && px < b.x1 && py > b.y0 && py < b.y1) k += 4;
+      if (k < bestK) { bestK = k; best = { x0, y0, al, b }; }
+    });
+    belegt.push(best.b);
+    return best;
+  };
+  // Lagen zuerst wählen (Position vor Gleichung), gezeichnet wird in der gewohnten Reihenfolge
+  const pTxt = `(${fmt2(x)}|${fmt2(y)})`, px0 = cx(x), py0 = cy(y);
+  const ringP = [[9, -8, 'left'], [-9, -8, 'right'], [9, 18, 'left'], [-9, 18, 'right'], [0, -14, 'center'], [0, 26, 'center']];
+  const posP = setze(pTxt, [1, 1.8, 2.6].flatMap(f => ringP.map(([dx, dy, al]) => [px0 + dx * f, py0 + dy * f, al])));
+  const gl = 'X = (1|2) + t·(3|1)';
+  const posG = setze(gl, [[8, 19, 'left'], [cx(0) + 26, 19, 'left'], [W - 8, H - 8, 'right'], [W - 8, 19, 'right'], [8, H - 8, 'left']]);
+  beschriftung(ctx, gl, posG.x0, posG.y0, {align: posG.al, halo:true, W, H});
   // Position
   drawDot(ctx, cx, cy, x, y, '#5b2d8e', 7);
-  ctx.fillStyle = '#5b2d8e'; ctx.textAlign = 'left';
-  ctx.fillText(`(${fmt2(x)}|${fmt2(y)})`, cx(x) + 9, cy(y) - 8);
+  ctx.fillStyle = '#5b2d8e';
+  beschriftung(ctx, pTxt, posP.x0, posP.y0, {align: posP.al, halo:true, W, H});
+  ctx.textAlign = 'left';
 }
 document.getElementById('dr-t').addEventListener('input', updateDR);
 
@@ -942,7 +988,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${String(target).replace('-', '−')} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Komponentenweise ansetzen — und t und s auseinanderhalten.';
   }
@@ -955,14 +1001,14 @@ function drawLot() {
   const F = [A[0] + t * u[0], A[1] + t * u[1]];
   const d = Math.hypot(F[0] - P[0], F[1] - P[1]);
   const atMin = Math.abs(t - 1.4) < 0.06;
-  document.getElementById('lo-tv').textContent = t.toFixed(1);
+  document.getElementById('lo-tv').textContent = t.toFixed(1).replace('-', '−');
   document.getElementById('lo-eq').innerHTML = '|PF| = ' + d.toFixed(2) + (atMin ? '  →  Minimum! Lot ⊥ g, d ≈ 2.68' : '');
   const { ctx, W, H } = initCanvas('cv-lot', 260, false);
-  const { cx, cy } = drawGrid(ctx, W, H, -2, 9, -2, 6);
+  // xMin −2.5 statt −2: Bei t = −1 liegt F bei x = −2 und sass halb ausserhalb des Canvas
+  const { cx, cy } = drawGrid(ctx, W, H, -2.5, 9, -2, 6);
   drawLineFull(ctx, cx, cy, A, u, '#1a4f8a', false);
   ctx.fillStyle = '#1a4f8a'; ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.textAlign = 'left';
   beschriftung(ctx, 'g: X = (0|1) + t·(2|1)', 8, H - 9, {align:'left', halo:true, W, H});
-  ctx.fillText('g', cx(A[0] + 3.2 * u[0]) + 4, cy(A[1] + 3.2 * u[1]) - 4);
   // Strecke PF
   ctx.strokeStyle = atMin ? '#1f6b3a' : '#b85c00'; ctx.lineWidth = 2.5;
   ctx.beginPath(); ctx.moveTo(cx(P[0]), cy(P[1])); ctx.lineTo(cx(F[0]), cy(F[1])); ctx.stroke();
@@ -981,14 +1027,80 @@ function drawLot() {
   }
   const dotp = (pt, col, r) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(cx(pt[0]), cy(pt[1]), r, 0, 2 * Math.PI); ctx.fill(); };
   dotp(A, '#374151', 4); dotp(P, '#9b1c1c', 6); dotp(F, atMin ? '#1f6b3a' : '#b85c00', 6);
-  ctx.textAlign = 'left';
-  ctx.fillStyle = '#9b1c1c'; beschriftung(ctx, 'P', cx(P[0]) + 8, cy(P[1]) + 4, {align:'left', halo:true, W, H});
-  ctx.fillStyle = atMin ? '#1f6b3a' : '#b85c00'; beschriftung(ctx, 'F', cx(F[0]) + 8, cy(F[1]) + 4, {align:'left', halo:true, W, H});
-  // Der Abstand, um den es geht, direkt an der Strecke
+
+  /* Beschriftungen weichen aus (Muster wie g5-2b): Je Etikett eine Kandidatenliste,
+     die erste ist die gewohnte Lage. Gewählt wird der Kandidat mit den kleinsten Kosten:
+     Überdeckung mit Punkten, Achsenzahlen und schon gesetzten Etiketten (schwer), Linien
+     unter dem Text (leicht), Verschiebung durchs Klemmen an den Rand, Aufschlag je Schritt.
+     Sonst lag «|PF| = …» für t < −0.4 auf der Strecke und «F» bei t = −1 am Rand. */
+  const belegt = [], linienPkt = [];
+  const linie = (p, q, gew) => {
+    const n = Math.max(1, Math.ceil(Math.hypot(q[0] - p[0], q[1] - p[1]) / 3));
+    for (let i = 0; i <= n; i++) linienPkt.push([p[0] + (q[0] - p[0]) * i / n, p[1] + (q[1] - p[1]) * i / n, gew]);
+  };
+  const kasten = (s, x, y, align) => {
+    ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
+    const m = ctx.measureText(s);
+    let l = m.actualBoundingBoxLeft, r = m.actualBoundingBoxRight, a = m.actualBoundingBoxAscent, de = m.actualBoundingBoxDescent;
+    if (!isFinite(l) || !isFinite(r)) { l = align === 'center' ? m.width / 2 : (align === 'right' ? m.width : 0); r = m.width - l; }
+    if (!isFinite(a) || !isFinite(de)) { a = 10; de = 3; }
+    const xa = x, ya = y;
+    // wie beschriftung(): in den Canvas klemmen (Rand 2 px)
+    if (x - l - 2 < 0) x = l + 2;
+    if (x + r + 2 > W) x = W - r - 2;
+    if (y - a - 2 < 0) y = a + 2;
+    if (y + de + 2 > H) y = H - de - 2;
+    return { x, y, x0: x - l - 2, x1: x + r + 2, y0: y - a - 2, y1: y + de + 2, klemm: Math.hypot(x - xa, y - ya) };
+  };
+  const kosten = b => {
+    let k = 2 * b.klemm;
+    for (const q of belegt) {
+      const ow = Math.min(b.x1, q.x1) - Math.max(b.x0, q.x0), oh = Math.min(b.y1, q.y1) - Math.max(b.y0, q.y0);
+      if (ow > 0 && oh > 0) k += 60 + 2 * ow * oh;
+    }
+    for (const [px, py, gew] of linienPkt) if (px > b.x0 && px < b.x1 && py > b.y0 && py < b.y1) k += gew;
+    return k;
+  };
+  const setze = (s, farbe, kandidaten, halo) => {
+    let best = null, bestK = Infinity;
+    kandidaten.forEach(([x, y, align], i) => {
+      const b = kasten(s, x, y, align), k = kosten(b) + 8 * i;
+      if (k < bestK) { best = { b, align }; bestK = k; }
+    });
+    belegt.push(best.b);
+    ctx.fillStyle = farbe;
+    if (halo) beschriftung(ctx, s, best.b.x, best.b.y, {align: best.align, halo: true, W, H});
+    else { ctx.textAlign = best.align; ctx.fillText(s, best.b.x, best.b.y); }
+  };
+  // Hindernisse in Pixeln: Gerade g, Strecke PF, Rechtwinkel, Achsen (leicht) …
+  linie([cx(-3), cy(-0.5)], [cx(10), cy(6)], 4);
+  linie([cx(P[0]), cy(P[1])], [cx(F[0]), cy(F[1])], 4);
+  linie([0, cy(0)], [W, cy(0)], 1); linie([cx(0), 0], [cx(0), H], 1);
+  if (atMin) linie([cx(F[0]), cy(F[1])], [cx(F[0]) + 16 * (cx(P[0]) - cx(F[0])) / Math.hypot(cx(P[0]) - cx(F[0]), cy(P[1]) - cy(F[1])),
+                   cy(F[1]) + 16 * (cy(P[1]) - cy(F[1])) / Math.hypot(cx(P[0]) - cx(F[0]), cy(P[1]) - cy(F[1]))], 4);
+  // … Punkte, Achsenzahlen und das Gleichungsetikett unten links (schwer)
+  [[A, 4], [P, 6], [F, 6]].forEach(([pt, r]) => belegt.push({ x0: cx(pt[0]) - r, x1: cx(pt[0]) + r, y0: cy(pt[1]) - r, y1: cy(pt[1]) + r }));
+  for (let gx = -2; gx < 9; gx++) if (gx) belegt.push({ x0: cx(gx) - 8, x1: cx(gx) + 8, y0: cy(0) + 4, y1: cy(0) + 17 });
+  for (let gy = 2; gy < 6; gy += 2) belegt.push({ x0: cx(0) - 22, x1: cx(0) - 3, y0: cy(gy) - 6, y1: cy(gy) + 6 });
+  belegt.push(kasten('g: X = (0|1) + t·(2|1)', 8, H - 9, 'left'));
+
+  const fx = cx(F[0]), fy = cy(F[1]);
+  const ringF = [[8, 4, 'left'], [-8, 4, 'right'], [8, -6, 'left'], [-8, -6, 'right'], [8, 16, 'left'], [-8, 16, 'right'], [0, -10, 'center'], [0, 22, 'center']];
+  setze('g', '#1a4f8a', [3.2, 2.6, 3.8, 2.0].flatMap(s => [
+    [cx(A[0] + s * u[0]) + 4, cy(A[1] + s * u[1]) - 4, 'left'], [cx(A[0] + s * u[0]) + 4, cy(A[1] + s * u[1]) + 14, 'left']]), false);
+  setze('P', '#9b1c1c', [[cx(P[0]) + 8, cy(P[1]) + 4, 'left']], true);
+  setze('F', atMin ? '#1f6b3a' : '#b85c00',
+        [1, 1.8].flatMap(f => ringF.map(([dx, dy, al]) => [fx + dx * f, fy + dy * f, al])), true);
+  // Der Abstand, um den es geht, direkt an der Strecke — seitlich versetzt, wenn sie flach liegt
   ctx.font = 'bold 11px JetBrains Mono, monospace';
-  ctx.fillStyle = atMin ? '#1f6b3a' : '#b85c00';
-  beschriftung(ctx, `|PF| = ${d.toFixed(2)}`, (cx(P[0]) + cx(F[0])) / 2 + 6, (cy(P[1]) + cy(F[1])) / 2,
-               {align:'left', halo:true, W, H});
+  const px = cx(P[0]), py = cy(P[1]), el = Math.hypot(fx - px, fy - py) || 1;
+  const nx = -(fy - py) / el, ny = (fx - px) / el;
+  const kandPF = [[(px + fx) / 2 + 6, (py + fy) / 2, 'left']];
+  for (const f of [0.5, 0.35, 0.65, 0.2, 0.8]) for (const ab of [10, 20]) for (const sg of [1, -1]) {
+    const qx = px + f * (fx - px) + sg * nx * ab, qy = py + f * (fy - py) + sg * ny * ab;
+    kandPF.push([qx, qy + (sg * ny > 0.3 ? 10 : (sg * ny < -0.3 ? -2 : 4)), sg * nx > 0.3 ? 'left' : (sg * nx < -0.3 ? 'right' : 'center')]);
+  }
+  setze(`|PF| = ${d.toFixed(2)}`, atMin ? '#1f6b3a' : '#b85c00', kandPF, true);
 }
 document.getElementById('lo-t').addEventListener('input', drawLot);
 

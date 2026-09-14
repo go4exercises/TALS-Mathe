@@ -983,13 +983,14 @@ document.getElementById('fa-n').addEventListener('input', updateFA);
 /* ══ EXPONENTEN-TREPPE ══ */
 function updateEX(){
   const x = parseFloat(document.getElementById('ex-x').value);
-  document.getElementById('ex-xv').textContent = x.toFixed(2);
+  const xTxt = x.toFixed(2).replace('-', '−');
+  document.getElementById('ex-xv').textContent = xTxt;
   const v = Math.pow(16, x);
   const exakt = {'-2': '1/256', '-1': '1/16', '-0.5': '0.25', '0': '1', '0.5': '4', '1': '16', '2': '256', '1.5': '64', '-1.5': '1/64', '0.25': '2', '-0.25': '0.5', '0.75': '8', '1.25': '32', '1.75': '128', '-0.75': '1/8', '-1.25': '1/32', '-1.75': '1/128'};
   const key = String(x);
   const zusatz = exakt[key] ? ` = ${exakt[key]}` : '';
   document.getElementById('ex-eq').innerHTML =
-    `16^${x.toFixed(2).replace('-', '−')} = ${v >= 1 ? v.toFixed(v % 1 === 0 ? 0 : 2) : v.toFixed(4)}${zusatz}`;
+    `16^${xTxt} = ${v >= 1 ? v.toFixed(v % 1 === 0 ? 0 : 2) : v.toFixed(4)}${zusatz}`;
   const {ctx, W, H} = initCanvas('ex-canvas', 210, false);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
   // Treppe: x-Achse Exponent -2..2, y log-skaliert 1/256..256
@@ -1134,9 +1135,10 @@ function drawZehnerpot() {
   const teile = zpTeile(mStr, k);
   const aus = teile.map(x => x.c).join('');
   document.getElementById('zp-mv').textContent = mStr;
-  document.getElementById('zp-kv').textContent = k;
+  const kTxt = k < 0 ? '−' + Math.abs(k) : k;
+  document.getElementById('zp-kv').textContent = kTxt;
   document.getElementById('zp-eq').innerHTML =
-    `<span class="tx-blau">${mStr}</span> · 10<sup>${k < 0 ? '−' + Math.abs(k) : k}</sup> = <strong>${aus}</strong>`;
+    `<span class="tx-blau">${mStr}</span> · 10<sup>${kTxt}</sup> = <strong>${aus}</strong>`;
 
   const { ctx, W, H } = initCanvas('cv-zehnerpot', 170, false);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);

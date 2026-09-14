@@ -965,7 +965,7 @@ buildNav({
 
 /* ── Lokale Helfer ─────────────────────────────────────── */
 // Zahlformat mit 2 Nachkommastellen für Tabellenwerte (fmt aus mathlib rundet auf 1)
-const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+const fmt2 = n => (Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2))).replace('-', '−');  // Unicode-Minus, keine negative Null
 // Unicode-Hochzahlen für Live-Formeln
 const SUP = {'-4':'⁻⁴','-3':'⁻³','-2':'⁻²','-1':'⁻¹','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵'};
 
@@ -999,13 +999,13 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    ctx.fillText(fmt(Math.abs(gx) < 1e-9 ? 0 : gx).replace('-', '−'), cx(gx), HH - padB + 15);
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(fmt(Math.abs(gy) < 1e-9 ? 0 : gy).replace('-', '−'), padL - 5, cy(gy) + 4);
   }
   // Achsen
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
@@ -1090,7 +1090,7 @@ function updateDR(){
       return `<tr class="${act ? 'aktiv-zeile' : ''}"><td class="td-x">0</td><td class="td-y">–</td><td class="td-pt">Def.-Lücke</td></tr>`;
     }
     const yi = a * Math.pow(xi, n);
-    return `<tr class="${act ? 'aktiv-zeile' : ''}"><td class="td-x">${xi}</td><td class="td-y">${fmt2(yi)}</td><td class="td-pt">(${xi}|${fmt2(yi)})</td></tr>`;
+    return `<tr class="${act ? 'aktiv-zeile' : ''}"><td class="td-x">${fmt2(xi)}</td><td class="td-y">${fmt2(yi)}</td><td class="td-pt">(${fmt2(xi)}|${fmt2(yi)})</td></tr>`;
   }).join('');
   // Graph (reine Mathematik → square 1:1)
   const {ctx, W, H} = initCanvas('dr-canvas', 220, true);
@@ -1266,7 +1266,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${String(target).replace('-', '−')} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung.';
   }
@@ -1277,7 +1277,7 @@ function chkNum(id, target, tol, einheit){
 function drawPa(){
   const n = parseInt(document.getElementById('pa-n').value);
   const x0 = parseFloat(document.getElementById('pa-x').value);
-  document.getElementById('pa-nv').textContent = n;
+  document.getElementById('pa-nv').textContent = String(n).replace('-', '−');
   document.getElementById('pa-xv').textContent = x0.toFixed(2);
   const gerade = (n % 2 === 0);
   const f = x => Math.pow(x, n);   // n ganzzahlig; für x<0 und ungerades n liefert pow das korrekte Vorzeichen

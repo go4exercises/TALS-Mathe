@@ -1036,6 +1036,11 @@ buildNav({
 const PI = Math.PI;
 // Zahlformat mit 2 Nachkommastellen
 const fmt2 = n => Math.abs(n) < 0.005 ? '0' : (n % 1 === 0 ? n.toString() : n.toFixed(2));
+// Anzeigezahl: Unicode-Minus U+2212, keine negative Null (wie zahlM in g2-2b)
+function zahlM(v, st) {
+  const s = st === undefined ? String(v) : v.toFixed(st);
+  return /^-0(\.0+)?$/.test(s) ? s.slice(1) : s.replace('-', '−');
+}
 
 // Bruchdarstellung von k·π/den, gekürzt (z.B. piFrac(7,12) -> '7π/12')
 function piFrac(k, den){
@@ -1077,13 +1082,13 @@ function gridApp(id, H, xMin, xMax, yMin, yMax, stepX, stepY, labX, labY){
     ctx.strokeStyle = gx === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gx === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(cx(gx), padT); ctx.lineTo(cx(gx), HH - padB); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'center';
-    ctx.fillText(fmt(gx), cx(gx), HH - padB + 15);
+    ctx.fillText(zahlM(fmt(gx)), cx(gx), HH - padB + 15);
   }
   for(let gy = yMin; gy <= yMax + 1e-9; gy += stepY){
     ctx.strokeStyle = gy === 0 ? '#b8c4d4' : '#eff1f5'; ctx.lineWidth = gy === 0 ? 1.5 : 1;
     ctx.beginPath(); ctx.moveTo(padL, cy(gy)); ctx.lineTo(W - padR, cy(gy)); ctx.stroke();
     ctx.fillStyle = '#9ca3af'; ctx.textAlign = 'right';
-    ctx.fillText(fmt(gy), padL - 5, cy(gy) + 4);
+    ctx.fillText(zahlM(fmt(gy)), padL - 5, cy(gy) + 4);
   }
   // Achsen
   ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
@@ -1127,7 +1132,7 @@ function gridTrig(id, H, xMin, xMax, yMin, yMax){
   // y-Labels
   ctx.textAlign = 'right';
   for(let gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++){
-    if(gy !== 0) ctx.fillText(gy, (xMin <= 0 ? cx(0) : 30) - 5, cy(gy) + 4);
+    if(gy !== 0) ctx.fillText(zahlM(gy), (xMin <= 0 ? cx(0) : 30) - 5, cy(gy) + 4);
   }
   // Achsen-Labels
   ctx.fillStyle = '#374151'; ctx.font = 'bold 13px monospace';
@@ -1200,7 +1205,7 @@ function updateEK(){
   const xLab = piFrac(k, 12);
   document.getElementById('ek-xv').textContent = xLab;
   const grad = k * 15;
-  const yTxt = Math.abs(y) > 100 ? 'nicht definiert (Pol!)' : `≈ ${y.toFixed(2)}`;
+  const yTxt = Math.abs(y) > 100 ? 'nicht definiert (Pol!)' : `≈ ${zahlM(y, 2)}`;
   document.getElementById('ek-eq').innerHTML =
     `${F.lab}(<span class="tx-blau">${xLab}</span>) ${yTxt};  x = ${grad}°`;
   // Einheitskreis (1:1)
@@ -1378,7 +1383,7 @@ function chkNum(id, target, tol, einheit){
   const v = raw.indexOf('/')>=0 ? parseFloat(raw.split('/')[0])/parseFloat(raw.split('/')[1]) : parseFloat(raw);
   const r = document.getElementById(id + '-cr'); r.style.display = 'block';
   if(!isNaN(v) && Math.abs(v - target) <= tol){
-    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${target} ${einheit || ''}`.trim();
+    r.className = 'cr ok'; r.textContent = `✓ Richtig: ${zahlM(target)} ${einheit || ''}`.trim();
   } else {
     r.className = 'cr err'; r.textContent = '✗ Nicht korrekt. Überprüfe deine Rechnung (Taschenrechner im RAD-Modus?).';
   }
@@ -1394,7 +1399,7 @@ function drawPhasor() {
   document.getElementById('ph-tv').textContent = tDeg + '°';
   const yv = A * Math.sin(th);
   document.getElementById('ph-eq').textContent =
-    'y = ' + A.toFixed(1) + '·sin(' + tDeg + '°) ≈ ' + yv.toFixed(2).replace('-', '−');
+    'y = ' + A.toFixed(1) + '·sin(' + tDeg + '°) ≈ ' + zahlM(yv, 2);
   const { ctx, W, H } = initCanvas('cv-phasor', 250, false);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
   const cy = 118, cxL = 100, ampPx = A * 32, R = ampPx;
