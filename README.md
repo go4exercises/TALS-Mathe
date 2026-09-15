@@ -19,11 +19,12 @@ Alle 31 RLP-Teilgebiete sind ausgearbeitet und verfügbar — dazu kommen die TA
 
 ## Was Version 1.0 enthält
 
-- **46 Themenseiten** — alle 31 RLP-Teilgebiete plus die TALS-Ergänzungen 3.6 und 4.3d
+- **47 Themenseiten** — alle 31 RLP-Teilgebiete plus die TALS-Ergänzungen 3.6 und 4.3d
+  und der Modellier-Baukasten 2.M für Textaufgaben
 - **Interaktive Canvas-Animationen** auf jeder Seite, mit Rollover-Hinweisen
   „Worauf achten?" und „Erkenntnis"
-- **162 Clips** — kurze, vertonte Animationen, die einen Gedankengang Zeile für Zeile
-  aufbauen (zusammen 160:41 min); auf der Themenseite und gesammelt unter *Nachschlagen → Clips*.
+- **168 Clips** — kurze, vertonte Animationen, die einen Gedankengang Zeile für Zeile
+  aufbauen (zusammen 167:25 min); auf der Themenseite und gesammelt unter *Nachschlagen → Clips*.
   22 davon führen den Taschenrechner TI-30X Pro MathPrint vor — jeweils dort, wo sein
   Stoff steht, nicht in einem eigenen Kapitel
 - **Volltextsuche** über alle Seiten, Glossar und Formelsammlung (Tastenkürzel `/`)

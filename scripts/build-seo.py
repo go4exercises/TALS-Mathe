@@ -165,13 +165,19 @@ SEITEN = {
    themen=['Lineare Gleichung', 'Äquivalenzumformung', 'Lösungsfälle', 'Parameterdiskussion', 'Lineare Ungleichung'],
    tg='2.2 Lineare und quadratische Gleichungen'),
  'grundlagen/g2-2b-quadratische-gleichungen.html': dict(
-   beschreibung='Quadratische Gleichungen lösen: Lösungsformel, Faktorisieren, quadratisches Ergänzen, Diskriminante und Anzahl Lösungen sowie der Satz von Vieta.',
-   themen=['Quadratische Gleichung', 'Lösungsformel', 'Diskriminante', 'Satz von Vieta', 'Quadratisches Ergänzen'],
+   beschreibung='Quadratische Gleichungen lösen: Lösungsformel, Faktorisieren, Diskriminante, Parameter, Satz von Vieta, Bruchgleichungen, Substitution und quadratische Ungleichungen.',
+   themen=['Quadratische Gleichung', 'Lösungsformel', 'Diskriminante', 'Satz von Vieta', 'Quadratisches Ergänzen', 'Biquadratische Gleichung', 'Quadratische Ungleichung'],
    tg='2.2 Lineare und quadratische Gleichungen'),
  'grundlagen/g2-3-lineare-gleichungssysteme.html': dict(
-   beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, die drei Lösungsfälle und ihre grafische Deutung.',
-   themen=['Lineares Gleichungssystem', 'Einsetzungsverfahren', 'Additionsverfahren', 'Gauss-Verfahren', 'Lösungsfälle'],
+   beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, Substitution, die drei Lösungsfälle mit Parameter und ihre grafische Deutung.',
+   themen=['Lineares Gleichungssystem', 'Einsetzungsverfahren', 'Additionsverfahren', 'Gauss-Verfahren', 'Lösungsfälle', 'Parameter'],
    tg='2.3 Lineare Gleichungssysteme'),
+ 'grundlagen/g2-modellieren.html': dict(
+   beschreibung='Textaufgaben modellieren: Unbekannte deklarieren, Mengen- und Wertbilanz aufstellen — für Zahlenrätsel, Misch-, Verteil- und Zinsaufgaben, mit Ansatz-Trainer.',
+   themen=['Textaufgabe', 'Gleichungssystem aufstellen', 'Mischungsaufgabe', 'Zinsaufgabe', 'Zahlenrätsel', 'Modellieren'],
+   tg='2.1 Grundlagen'),
+   # Ergaenzung ohne eigene RLP-Nummer (nav.js: id 'g2-M', nr '2.M'); die Seite
+   # vertieft 2.1 (Sachverhalte formulieren) und 2.3 (Gleichungssysteme).
  'grundlagen/g3-1-grundlagen.html': dict(
    titel='3.1 Grundlagen der Funktionenlehre — Grundlagenfach — Mathe begreifbar',
    beschreibung='Was eine Funktion ist: vier Darstellungsformen, Schreibweisen, Definitions- und Wertemenge, Vertikaltest sowie Schnittpunkte mit den Achsen und untereinander.',

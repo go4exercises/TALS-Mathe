@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handout · Textaufgaben modellieren — Mathe begreifbar</title>
+<link rel="stylesheet" href="../../../schriften.css">
+<link rel="stylesheet" href="../../print.css">
+<style>
+  .druck-wrapper h2 { margin-top: 4.5mm; }
+  .druck-wrapper .block { padding: 2.2mm 3.5mm; margin: 2mm 0; }
+  .druck-wrapper .block p:last-child, .druck-wrapper .block ul:last-child { margin-bottom: 0; }
+  .druck-wrapper table.ftb-tabelle th, .druck-wrapper table.ftb-tabelle td { padding: 1.2mm 2.2mm; }
+  .druck-wrapper .merksatz { margin: 3mm 0; }
+  .paar { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin: 2mm 0; break-inside: avoid; page-break-inside: avoid; }
+  .paar > .block { margin: 0; }
+</style>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 0.95 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="../../../vendor/mathjax/tex-svg.js"></script>
+</head>
+<body>
+
+<div class="druck-bar no-print">
+  <a class="db-back" href="../../../grundlagen/g2-modellieren.html#downloads">← zurück zur Themenseite</a>
+  <span class="db-info">Handout · A4 · 3 Seiten</span>
+  <button class="db-print" onclick="window.print()">Seite drucken</button>
+</div>
+
+<div class="druck-wrapper">
+
+  <header class="doc-kopf">
+    <div class="dk-bereich">Mathe begreifbar · Grundlagenfach · Textaufgaben modellieren</div>
+    <h1>Textaufgaben modellieren — Handout</h1>
+    <div class="dk-unter">Zuerst deklarieren, dann bilanzieren</div>
+  </header>
+
+  <h2>1. Das Bilanzprinzip in vier Schritten</h2>
+  <table class="ftb-tabelle">
+    <thead><tr><th>Schritt</th><th>Was</th><th>Worauf achten</th></tr></thead>
+    <tbody>
+      <tr><td>①</td><td class="li"><strong>Unbekannte deklarieren</strong></td><td class="li">immer mit Bedeutung <strong>und Einheit</strong>: «\(x\): Anzahl verkaufte Gipfeli (Stück)», nicht bloss «\(x\) = Gipfeli»</td></tr>
+      <tr><td>②</td><td class="li"><strong>Gleichungen aufstellen</strong></td><td class="li">so viele <strong>unabhängige</strong> Gleichungen wie Unbekannte; jede Gleichung ist eine Bilanz — dieselbe Grösse auf zwei Arten gezählt</td></tr>
+      <tr><td>③</td><td class="li"><strong>Lösen</strong></td><td class="li">Einsetzen, Gleichsetzen, Addition bzw. Lösungsformel, wenn eine Gleichung quadratisch ist</td></tr>
+      <tr><td>④</td><td class="li"><strong>Probe am Text</strong></td><td class="li">Werte in die Aussagen des <em>Textes</em> einsetzen, nicht nur in die eigenen Gleichungen; passt die Lösung zur Situation (ganzzahlig, nicht negativ, Ziffer von 0 bis 9)?</td></tr>
+    </tbody>
+  </table>
+
+  <div class="merksatz">
+    <strong>Merksatz.</strong> Jede Aufgabe dieses Blocks ist eine <strong>Mengenbilanz</strong> plus
+    eine <strong>Wertbilanz</strong>: Die Mengen addieren sich zur Gesamtmenge, und die Werte, die an
+    den Mengen hängen — Preis, Stoffanteil, Zins, Stellenwert —, addieren sich zum Gesamtwert.
+  </div>
+
+  <div class="block block-bsp">
+    <div class="block-titel">Beispiel: Gipfeli und Weggli</div>
+    <p><em>150 Gipfeli und Weggli für zusammen 205 CHF; ein Gipfeli kostet 1.60 CHF, ein Weggli 1.10 CHF.</em></p>
+    <p>① \(x\): Anzahl Gipfeli (Stück), \(y\): Anzahl Weggli (Stück).
+    ② \(x + y = 150\) (Stück) und \(1.60 \cdot x + 1.10 \cdot y = 205\) (CHF).
+    ③ \(y = 150 - x\) einsetzen: \(0.50 \cdot x + 165 = 205\), also \(x = 80\), \(y = 70\).
+    ④ \(80 + 70 = 150\) ✓, \(128 + 77 = 205\) CHF ✓.</p>
+  </div>
+
+  <div class="block block-fehler">
+    <div class="block-titel">Probe am Text — warum?</div>
+    <p>Eine falsch aufgestellte Gleichung lässt sich fehlerfrei lösen, und die Probe in den eigenen Gleichungen
+    stimmt trotzdem. Wer rechts in der Wertbilanz 150 statt 205 schreibt, erhält \(x = -30\), \(y = 180\) —
+    erst am Text fällt auf, dass es keine negative Stückzahl gibt.</p>
+  </div>
+
+  <h2>2. Typ 1 — Zahlen- und Ziffernrätsel</h2>
+  <div class="block block-def">
+    <div class="block-titel">Deklarationsmuster</div>
+    <ul>
+      <li><strong>Zweistellige Zahl:</strong> \(z\): Zehnerziffer, \(e\): Einerziffer. Zahl \(10 \cdot z + e\), Quersumme \(z + e\), vertauscht \(10 \cdot e + z\); \(z \in \{1, \ldots, 9\}\), \(e \in \{0, \ldots, 9\}\).</li>
+      <li><strong>Bruch:</strong> \(z\): Zähler, der Nenner als Term in \(z\) — «Nenner um 3 grösser» gibt \(\dfrac{z}{z + 3}\).</li>
+      <li><strong>Aufeinanderfolgende natürliche Zahlen:</strong> \(n\), \(n + 1\), \(n + 2\).</li>
+    </ul>
+    <p><strong>Bilanzen:</strong> Jede Aussage des Textes wird wörtlich zu einer Gleichung. Kommt ein Produkt vor, wird das System quadratisch.</p>
+  </div>
+  <div class="paar">
+  <div class="block block-fehler">
+    <div class="block-titel">Falle</div>
+    <p>«um 3 grösser als \(a\)» ist \(a + 3\), «3-mal so gross wie \(a\)» ist \(3 \cdot a\). Die 3 kommt zur <em>kleineren</em> Grösse.
+    Die Zahl mit den Ziffern \(z\) und \(e\) ist \(10 \cdot z + e\), nicht \(z \cdot e\).</p>
+  </div>
+  <div class="block block-bsp">
+    <div class="block-titel">Beispiel</div>
+    <p><em>Quersumme 9; vertauscht man die Ziffern, wird die Zahl um 45 kleiner.</em>
+    \(z + e = 9\) und \(10 \cdot e + z = 10 \cdot z + e - 45\), also \(z - e = 5\): \(z = 7\), \(e = 2\). Die Zahl heisst <strong>72</strong>;
+    \(72 - 27 = 45\) ✓. Mit «Ziffernprodukt 14» statt der zweiten Aussage: \(z^2 - 9 \cdot z + 14 = 0\), zwei Lösungen <strong>27 und 72</strong>.</p>
+  </div>
+  </div>
+
+  <h2>3. Typ 2 — Mischen</h2>
+  <div class="block block-def">
+    <div class="block-titel">Deklarationsmuster und Bilanzen</div>
+    <p>\(x\), \(y\): Mengen der beiden Sorten in kg bzw. l.</p>
+    <p><strong>Mengenbilanz</strong> \(x + y = M\) &nbsp;·&nbsp; <strong>Stoffbilanz</strong> \(p_1 \cdot x + p_2 \cdot y = p \cdot M\)</p>
+    <p>Anteile als Dezimalzahl (3.8 % → \(0.038\)). Beim Mischen von Preisen ist \(p\) der Preis pro kg. Verdünnen: Wasser hat den Anteil \(0\).</p>
+  </div>
+  <div class="paar">
+  <div class="block block-fehler">
+    <div class="block-titel">Falle</div>
+    <p>Prozent und Menge in derselben Gleichung: \(0.038 \cdot x + 0.002 \cdot y = 2.6\) ist falsch — rechts gehört die Fettmasse der Mischung \(0.026 \cdot 600 = 15.6\) kg hin. Kontrollfrage: Steht links und rechts dieselbe Einheit?</p>
+  </div>
+  <div class="block block-bsp">
+    <div class="block-titel">Beispiel</div>
+    <p><em>Vollmilch 3.8 % Fett und Magermilch 0.2 % Fett zu 600 kg Milch mit 2.6 % Fett.</em>
+    \(x\): Masse Vollmilch in kg, \(y\): Masse Magermilch in kg.
+    \(x + y = 600\) und \(0.038 \cdot x + 0.002 \cdot y = 15.6\). Einsetzen: \(0.036 \cdot x + 1.2 = 15.6\), also <strong>\(x = 400\) kg, \(y = 200\) kg</strong>; Fett \(15.2 + 0.4 = 15.6\) kg ✓.</p>
+  </div>
+  </div>
+
+  <h2>4. Typ 3 — Verteilen</h2>
+  <div class="block block-def">
+    <div class="block-titel">Deklarationsmuster und Bilanzen</div>
+    <p>\(x\), \(y\), \(z\): Stückzahlen bzw. Anzahl Fahrten — ganze Zahlen, nicht negativ.</p>
+    <p><strong>Stückbilanz</strong> \(x + y = N\) &nbsp;·&nbsp; <strong>Wertbilanz</strong> \(a \cdot x + b \cdot y = W\) (CHF, t, Personen)</p>
+    <p>Sind mehrere Artikelzahlen bekannt, gibt es <strong>pro Artikel eine eigene Stückbilanz</strong>.</p>
+  </div>
+  <div class="paar">
+  <div class="block block-fehler">
+    <div class="block-titel">Falle</div>
+    <p>Ein Set enthält zwei Artikel und zählt in <em>beiden</em> Stückbilanzen — es ist keine dritte Artikelsorte in einer einzigen Summe \(x + y + z\).</p>
+  </div>
+  <div class="block block-bsp">
+    <div class="block-titel">Beispiel</div>
+    <p><em>Skistöcke 45 CHF, Brillen 80 CHF, Set «Stöcke + Brille» 110 CHF; 21 Paar Stöcke und 17 Brillen, einzeln oder im Set, für 2215 CHF.</em>
+    \(x\): Stöcke einzeln, \(y\): Brillen einzeln, \(z\): Sets.
+    \(x + z = 21\), \(y + z = 17\), \(45 \cdot x + 80 \cdot y + 110 \cdot z = 2215\). Einsetzen: \(2305 - 15 \cdot z = 2215\), also <strong>\(z = 6\) Sets</strong>, \(x = 15\), <span style="white-space:nowrap">\(y = 11\);</span>
+    \(675 + 880 + 660 = 2215\) CHF ✓.</p>
+  </div>
+  </div>
+
+  <h2>5. Typ 4 — Zins</h2>
+  <div class="block block-def">
+    <div class="block-titel">Deklarationsmuster und Bilanzen</div>
+    <p>\(x\), \(y\): Kapitalien in CHF.</p>
+    <p><strong>Kapitalgleichung</strong> \(x + y = K\) &nbsp;·&nbsp; <strong>Zinsgleichung</strong> \(p_1 \cdot t_1 \cdot x + p_2 \cdot t_2 \cdot y = Z\)</p>
+    <p>Zinssatz \(p\) als Dezimalzahl (2 % → \(0.02\)), Zeitanteil \(t\) in Jahren: Halbjahr \(\tfrac{1}{2}\), vier Monate \(\tfrac{4}{12} = \tfrac{1}{3}\), drei Monate \(\tfrac{1}{4}\). Einfacher Zins, ohne Zinseszins.</p>
+  </div>
+  <div class="paar">
+  <div class="block block-fehler">
+    <div class="block-titel">Falle</div>
+    <p>Zinssatz in Prozent stehen lassen: \(0.75 \cdot x + 2 \cdot y = 425\) rechnet mit 75 % und 200 %. Zeitanteil vergessen: Ein Halbjahr zum vollen Satz gibt den doppelten Zins.</p>
+  </div>
+  <div class="block block-bsp">
+    <div class="block-titel">Beispiel</div>
+    <p><em>30&nbsp;000 CHF, ein Teil zu 0.75 %, der Rest zu 2 %; nach einem Jahr 425 CHF Zins.</em>
+    \(x\): Kapital zu 0.75 % in CHF, \(y\): Kapital zu 2 % in CHF.
+    \(x + y = 30\,000\) und \(0.0075 \cdot x + 0.02 \cdot y = 425\). Einsetzen: \(225 + 0.0125 \cdot y = 425\), also <strong>\(y = 16\,000\) CHF, \(x = 14\,000\) CHF</strong>; \(105 + 320 = 425\) CHF ✓.</p>
+  </div>
+  </div>
+
+  <h2>6. Zusammenfassung</h2>
+  <div class="merksatz">
+    <strong>Merksatz.</strong> Zuerst deklarieren, dann bilanzieren: Jede Unbekannte bekommt Bedeutung und
+    Einheit, und jede Gleichung zählt dieselbe Grösse auf zwei Arten — Menge und Wert. Die Probe gehört an
+    den Text, nicht an die eigenen Gleichungen.
+  </div>
+
+  <footer class="doc-fuss">
+    <span>Mathe begreifbar · Grundlagen Textaufgaben modellieren</span>
+    <span>Handout</span>
+  </footer>
+
+</div>
+</body>
+</html>

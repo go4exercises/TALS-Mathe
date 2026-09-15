@@ -27,7 +27,8 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 
 ## Projektstruktur
 
-- `grundlagen/` — Grundlagenfach: `g1-*` … `g5-*` (23 Seiten, inkl. Sub-Splits `g2-2a/b`, `g5-2a–d`).
+- `grundlagen/` — Grundlagenfach: `g1-*` … `g5-*` (24 Seiten, inkl. Sub-Splits `g2-2a/b`, `g5-2a–d` und der
+  Modellier-Seite `g2-modellieren` mit nav-Kürzel `g2-M` / `2.M`).
 - `schwerpunkt/` — Schwerpunktfach: `s1-*` … `s4-*` (23 Seiten, inkl. Sub-Splits `s2-2a–c`,
   `s3-2a/b`, `s3-4a/b`, `s4-2a–c`, `s4-3a–d` und Ergänzungen `s3-6`, `s4-3d`). Alle Teilgebiete
   sind ausgebaut — es gibt keine Stubs mehr.
@@ -58,11 +59,11 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 197 Drehbücher, alle vertont: **162 in der Bibliothek** (160:41 min,
-  54 Reihen, 122 Grundlagenfach / 40 Schwerpunktfach) und **35 unverlinkte**
+- `clips/` — 203 Drehbücher, alle vertont: **168 in der Bibliothek** (167:25 min,
+  55 Reihen, 128 Grundlagenfach / 40 Schwerpunktfach) und **35 unverlinkte**
   Prüfungsclips mit `"probe": true`, die nur im zugehörigen Leitprogramm stehen und
-  weder in `clips.json` noch auf einer Lektionsseite auftauchen. **39 der 46
-  Themenseiten tragen Clips**; 44 tragen den Marker, fünf davon leer. Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
+  weder in `clips.json` noch auf einer Lektionsseite auftauchen. **40 der 47
+  Themenseiten tragen Clips**; 45 tragen den Marker, fünf davon leer. Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
   `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,
   nicht als HTML-Entität. Vollständig in `HOWTO-clips.md`, das Verbindliche in

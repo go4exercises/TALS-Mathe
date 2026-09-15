@@ -1994,6 +1994,46 @@ s11_cards = [
      '<b>Ausklammern:</b> 25·(16+4) = 25·20 = 500 — Struktur als Rechenvorteil.'),
 ]
 
+# ─── Cards für g2-modellieren (Textaufgaben modellieren) ─────────────────
+g2M_cards = [
+    ('Die vier Schritte des <b>Bilanzprinzips</b>?',
+     '① Unbekannte <b>deklarieren</b> (Bedeutung und Einheit) · ② so viele <b>unabhängige Gleichungen</b> wie Unbekannte · ③ <b>lösen</b> · ④ <b>Probe am Text</b>.'),
+    ('Was gehört in eine vollständige <b>Deklaration</b>?',
+     '<b>Grösse, Bezug, Einheit</b> — z. B. «<i>x</i>: Masse der Vollmilch in kg», nicht bloss «<i>x</i> = Milch».'),
+    ('Merksatz: Aus welchen zwei Bilanzen besteht jede Aufgabe dieses Blocks?',
+     'Aus einer <b>Mengenbilanz</b> (Mengen addieren sich zur Gesamtmenge) und einer <b>Wertbilanz</b> (Preis, Stoffanteil, Zins, Stellenwert addieren sich zum Gesamtwert).'),
+    ('Warum die Probe <b>am Text</b> und nicht nur an den eigenen Gleichungen?',
+     'Ein falsch aufgestelltes System lässt sich fehlerfrei lösen — die Probe in den eigenen Gleichungen stimmt dann trotzdem. Nur der Text deckt einen Fehler im <b>Ansatz</b> auf (z. B. negative Stückzahl).'),
+    ('Zweistellige Zahl mit Zehnerziffer <i>z</i> und Einerziffer <i>e</i>: Zahl, Quersumme, vertauschte Zahl?',
+     'Zahl <b>10·<i>z</i> + <i>e</i></b> · Quersumme <b><i>z</i> + <i>e</i></b> · vertauscht <b>10·<i>e</i> + <i>z</i></b>.<br>Achtung: <i>z</i>·<i>e</i> ist das Produkt der Ziffern, nicht die Zahl.'),
+    ('«um 3 grösser als <i>a</i>» oder «3-mal so gross wie <i>a</i>»?',
+     '«um 3 grösser» = <b><i>a</i> + 3</b> · «3-mal so gross» = <b>3·<i>a</i></b>.<br>Die 3 kommt zur <i>kleineren</i> Grösse. Kontrolle mit einer Zahl: <i>z</i> = 2, «<i>e</i> um 3 grösser» → <i>e</i> = 5.'),
+    ('Bruchrätsel: Wie deklariert man?',
+     '<i>z</i>: Zähler; der Nenner als <b>Term in <i>z</i></b>. «Nenner um 3 grösser als der Zähler» → Bruch <b><i>z</i>/(<i>z</i> + 3)</b>.'),
+    ('Wann wird ein Ziffernrätsel quadratisch?',
+     'Sobald ein <b>Produkt</b> der Unbekannten vorkommt, z. B. <i>z</i> + <i>e</i> = 9 und <i>z</i>·<i>e</i> = 14 → <i>z</i>² − 9·<i>z</i> + 14 = 0 → <b>zwei</b> Zahlen: 27 und 72.'),
+    ('Mischen: Deklaration und die zwei Bilanzen?',
+     '<i>x</i>, <i>y</i>: Mengen der Sorten in kg bzw. l.<br><b>Mengenbilanz</b> <i>x</i> + <i>y</i> = <i>M</i><br><b>Stoffbilanz</b> <i>p</i><sub>1</sub>·<i>x</i> + <i>p</i><sub>2</sub>·<i>y</i> = <i>p</i>·<i>M</i> (Anteile als Dezimalzahl)'),
+    ('Mischen: Was ist falsch an 0.038·<i>x</i> + 0.002·<i>y</i> = 2.6?',
+     'Links steht eine <b>Masse</b> (kg Fett), rechts ein <b>Prozentsatz</b>. Rechts gehört die Fettmasse der Mischung hin, z. B. 0.026·600 = <b>15.6</b> kg. Kontrollfrage: links und rechts dieselbe Einheit?'),
+    ('Verdünnen mit Wasser — welchen Stoffanteil hat das Wasser?',
+     'Den Anteil <b>0</b>. Die Stoffmenge bleibt gleich: 0.30·5 = 0.12·(5 + <i>w</i>) → <i>w</i> = 7.5 l.'),
+    ('Verteilen: Deklaration und die zwei Bilanzen?',
+     '<i>x</i>, <i>y</i>, <i>z</i>: Stückzahlen bzw. Anzahl Fahrten (ganz, nicht negativ).<br><b>Stückbilanz</b> <i>x</i> + <i>y</i> = <i>N</i> — eine pro Artikel<br><b>Wertbilanz</b> <i>a</i>·<i>x</i> + <i>b</i>·<i>y</i> = <i>W</i> (CHF, t, Personen)'),
+    ('Verteilen: Wie zählt ein <b>Set</b> «Stöcke + Brille»?',
+     'In <b>beiden</b> Stückbilanzen: <i>x</i> + <i>z</i> = 21 (Stöcke) und <i>y</i> + <i>z</i> = 17 (Brillen) — nicht als dritte Sorte in einer einzigen Summe <i>x</i> + <i>y</i> + <i>z</i>.'),
+    ('Eine Verteilaufgabe liefert <i>x</i> = 12.5 Stück. Was nun?',
+     'Stückzahlen sind ganz. Zuerst Ansatz und Rechnung <b>am Text</b> prüfen; stimmen beide, ist die Antwort «<b>nicht möglich</b>».'),
+    ('Zins: Deklaration und die zwei Gleichungen?',
+     '<i>x</i>, <i>y</i>: Kapitalien in CHF.<br><b>Kapitalgleichung</b> <i>x</i> + <i>y</i> = <i>K</i><br><b>Zinsgleichung</b> <i>p</i><sub>1</sub>·<i>t</i><sub>1</sub>·<i>x</i> + <i>p</i><sub>2</sub>·<i>t</i><sub>2</sub>·<i>y</i> = <i>Z</i>'),
+    ('Zins: Zinssatz und Zeitanteil in der Gleichung?',
+     'Zinssatz als <b>Dezimalzahl</b>: 2 % → 0.02, 0.75 % → 0.0075.<br>Zeitanteil in <b>Jahren</b>: Halbjahr ½, vier Monate 4/12 = ⅓, drei Monate ¼.'),
+    ('Zins: Was ist falsch an 0.75·<i>x</i> + 2·<i>y</i> = 425?',
+     'Die Zinssätze stehen in <b>Prozent</b> — gerechnet wird mit 75 % und 200 %. Richtig: <b>0.0075·<i>x</i> + 0.02·<i>y</i> = 425</b>.'),
+    ('Zins mit einfachem Zins: 9000 CHF zu 2 % während eines halben Jahres?',
+     '0.02 · ½ · 9000 = <b>90 CHF</b>.'),
+]
+
 # ─── Generation ────────────────────────────────────────────
 out_dir_51 = 'downloads/grundlagen/g5-1-grundlagen'
 # Hinweis: g5-2 Planimetrie wurde in 5.2a/5.2b/5.2c gesplittet. Das alte Deck
@@ -2038,6 +2078,8 @@ NEW_DECKS = [
      'Geraden und Strecken am Kreis, Pi, Umfang und Fläche, Kreisring, Kreissektor und Kreissegment.', g52c_cards),
     ('g5-2d-zentrische-streckung-aehnlichkeit', '5.2d Zentrische Streckung und Ähnlichkeit',
      'Zentrische Streckung, Strahlensätze, Ähnliche Figuren, Ähnlichkeitssätze, Höhe im rechtwinkligen Dreieck (Höhensatz, Kathetensatz).', g52d_cards),
+    ('g2-modellieren',                    '2.M Textaufgaben modellieren',
+     'Bilanzprinzip, Deklaration mit Einheit, Zahlenrätsel, Mischen, Verteilen, Zins, typische Fallen.', g2M_cards),
 ]
 
 new_dirs = []

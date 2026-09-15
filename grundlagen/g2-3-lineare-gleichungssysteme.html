@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2.3 Lineare Gleichungssysteme — Mathe begreifbar</title>
 <!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
-<meta name="description" content="Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, die drei Lösungsfälle und ihre grafische Deutung.">
+<meta name="description" content="Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, Substitution, die drei Lösungsfälle mit Parameter und ihre grafische Deutung.">
 <meta name="author" content="Raphael Arnold Kohler">
 <link rel="canonical" href="https://mathe.begreifbar.ch/grundlagen/g2-3-lineare-gleichungssysteme.html">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Mathe begreifbar">
 <meta property="og:locale" content="de_CH">
 <meta property="og:title" content="2.3 Lineare Gleichungssysteme — Mathe begreifbar">
-<meta property="og:description" content="Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, die drei Lösungsfälle und ihre grafische Deutung.">
+<meta property="og:description" content="Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, Substitution, die drei Lösungsfälle mit Parameter und ihre grafische Deutung.">
 <meta property="og:url" content="https://mathe.begreifbar.ch/grundlagen/g2-3-lineare-gleichungssysteme.html">
 <meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -31,7 +31,7 @@
    "@id": "https://mathe.begreifbar.ch/grundlagen/g2-3-lineare-gleichungssysteme.html#inhalt",
    "url": "https://mathe.begreifbar.ch/grundlagen/g2-3-lineare-gleichungssysteme.html",
    "name": "2.3 Lineare Gleichungssysteme — Mathe begreifbar",
-   "description": "Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, die drei Lösungsfälle und ihre grafische Deutung.",
+   "description": "Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, Substitution, die drei Lösungsfälle mit Parameter und ihre grafische Deutung.",
    "inLanguage": "de-CH",
    "isAccessibleForFree": true,
    "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
@@ -67,9 +67,13 @@
     {
      "@type": "DefinedTerm",
      "name": "Lösungsfälle"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Parameter"
     }
    ],
-   "keywords": "Lineares Gleichungssystem, Einsetzungsverfahren, Additionsverfahren, Gauss-Verfahren, Lösungsfälle",
+   "keywords": "Lineares Gleichungssystem, Einsetzungsverfahren, Additionsverfahren, Gauss-Verfahren, Lösungsfälle, Parameter",
    "learningResourceType": [
     "Lerneinheit",
     "interaktive Simulation",
@@ -253,7 +257,8 @@ MathJax = {
       <li>Ich kann erklären, was ein lineares Gleichungssystem ist und was eine Lösung (ein Zahlenpaar) erfüllen muss.</li>
       <li>Ich kann 2×2-Systeme mit Einsetzungs-, Gleichsetzungs- und Additionsverfahren lösen und das passende Verfahren wählen.</li>
       <li>Ich kann die Lösungsmenge grafisch deuten: Schnittpunkt, parallele oder identische Geraden.</li>
-      <li>Ich kann die drei Lösungsfälle rechnerisch erkennen (eindeutig, leer, unendlich).</li>
+      <li>Ich kann die drei Lösungsfälle rechnerisch erkennen (eindeutig, leer, unendlich) und bei einem Parameter \(k\) angeben und geometrisch begründen, für welche Werte welcher Fall eintritt.</li>
+      <li>Ich kann Systeme mit Unbekannten im Nenner durch Substitution auf ein lineares System zurückführen und zurücksubstituieren.</li>
       <li>Ich kann 3×3-Systeme durch schrittweises Eliminieren auf 2×2 zurückführen.</li>
     </ul>
   </div>
@@ -471,7 +476,7 @@ vorhergehenden Abschnitt. Wähle ein Verfahren und klicke dich Schritt für Schr
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════
-     6. LÖSUNGSFÄLLE
+     5b. NICHT LINEARE SYSTEME — SUBSTITUTION
      ════════════════════════════════════════════════════════════════ -->
 <details class="minicheck">
 <summary class="mc-kopf">✏️ Mini-Check — Lösungsverfahren</summary>
@@ -479,6 +484,97 @@ vorhergehenden Abschnitt. Wähle ein Verfahren und klicke dich Schritt für Schr
 <div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Beim Additionsverfahren werden die Gleichungen so vorbereitet, dass beim Addieren eine Variable <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">wegfällt (eliminiert wird).</div></details></div>
 <div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Löse \(2x + y = 7\), \(x - y = -1\) mit dem Additionsverfahren.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Addieren eliminiert \(y\): \(3x = 6\) → \(x = 2\), einsetzen: \(y = 3\). \(\mathbb{L} = \{(2 \mid 3)\}\).</div></details></div>
 <div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Was bedeutet die rechnerische Lösung \((2 \mid 3)\) im grafischen Bild der beiden Geraden?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Sie ist der <strong>Schnittpunkt</strong>: der einzige Punkt, der auf beiden Geraden liegt. Rechnerisches und grafisches Verfahren liefern dieselbe Lösungsmenge.</div></details></div>
+</details>
+
+<h2 id="substitution">Nicht lineare Gleichungssysteme: wenn <em>x</em> im Nenner steht</h2>
+
+<p>Nicht jedes System mit zwei Unbekannten ist linear. Manche sehen aber nur schwierig aus: Ersetzt
+man den störenden Term durch eine neue Variable, steht ein gewöhnliches lineares System da, und das
+löst du mit den drei bekannten Verfahren.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Woran man ein nicht lineares System erkennt</div>
+  <p>Ein Gleichungssystem ist <strong>nicht linear</strong>, sobald eine Unbekannte nicht nur als
+  «Zahl mal Variable» vorkommt, sondern zum Beispiel</p>
+  <ul style="margin:6px 0 0 22px">
+    <li><strong>im Nenner:</strong> \(\frac{3}{x}\), \(\frac{2}{x+y}\)</li>
+    <li><strong>unter einer Wurzel:</strong> \(\sqrt{x}\)</li>
+    <li><strong>als Produkt oder Potenz:</strong> \(x \cdot y\), \(x^2\)</li>
+  </ul>
+  <p style="margin-top:6px">Harmlos ist dagegen \(\frac{x}{2}\): Das ist \(\frac{1}{2} \cdot x\), also linear. Entscheidend
+  ist, ob die <em>Unbekannte</em> im Nenner steht, nicht eine Zahl.</p>
+</div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Substitution: das System linear machen</div>
+  <p>Kommt derselbe nicht lineare Term in beiden Gleichungen vor, ersetzt man ihn durch eine neue
+  Variable. Stehen \(x\) und \(y\) im Nenner, heisst das</p>
+  \[ u = \frac{1}{x}, \qquad v = \frac{1}{y}. \]
+  <ol style="margin:6px 0 0 22px">
+    <li><strong>Definitionsmenge</strong> notieren: Kein Nenner darf null werden, hier \(x \neq 0\) und \(y \neq 0\).</li>
+    <li><strong>Substituieren:</strong> Mit \(u\) und \(v\) wird das System linear.</li>
+    <li><strong>Lösen</strong> mit Einsetzen, Gleichsetzen oder Addition.</li>
+    <li><strong>Rücksubstituieren:</strong> \(x = \frac{1}{u}\) und \(y = \frac{1}{v}\).</li>
+    <li><strong>Probe</strong> in den Originalgleichungen und Abgleich mit der Definitionsmenge.</li>
+  </ol>
+  <p style="margin-top:6px">Genauso geht es mit \(u = \sqrt{x}\) oder mit einer ganzen Klammer wie \(u = \frac{1}{x+y}\).
+  Ein Produkt \(x \cdot y\) lässt sich so meist nicht ersetzen; dort führt Einsetzen oft auf eine
+  quadratische Gleichung <a class="quer" href="g2-2b-quadratische-gleichungen.html">↩ 2.2b</a>.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 1: Kehrwert-Substitution</div>
+  \[ \begin{cases} \dfrac{3}{x} + \dfrac{2}{y} = 7 \\[6pt] \dfrac{6}{x} - \dfrac{2}{y} = 2 \end{cases} \qquad x \neq 0,\; y \neq 0 \]
+  <p><strong>Substituieren</strong> mit \(u = \frac{1}{x}\) und \(v = \frac{1}{y}\):</p>
+  \[ \begin{cases} 3 \cdot u + 2 \cdot v = 7 \\ 6 \cdot u - 2 \cdot v = 2 \end{cases} \]
+  <p><strong>Lösen</strong> mit Addition, die \(v\)-Terme heben sich weg: \(9 \cdot u = 9\), also \(u = 1\).
+  In die erste Gleichung: \(3 + 2 \cdot v = 7\), also \(v = 2\).</p>
+  <p><strong>Rücksubstituieren:</strong> \(x = \frac{1}{u} = 1\) und \(y = \frac{1}{v} = \frac{1}{2}\).</p>
+  <p><strong>Probe:</strong> \(\frac{3}{1} + 2 : \frac{1}{2} = 3 + 4 = 7\) ✓ und \(\frac{6}{1} - 2 : \frac{1}{2} = 6 - 4 = 2\) ✓.
+  Beide Werte sind von null verschieden, also \(\mathbb{L} = \left\{\left(1 \mid \tfrac{1}{2}\right)\right\}\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2: eine Klammer substituieren</div>
+  \[ \begin{cases} \dfrac{4}{x+y} + \dfrac{2}{x-y} = 2 \\[6pt] \dfrac{8}{x+y} - \dfrac{6}{x-y} = -1 \end{cases} \]
+  <p><strong>Definitionsmenge:</strong> \(x + y \neq 0\) und \(x - y \neq 0\), also \(y \neq -x\) und \(y \neq x\).</p>
+  <p>Im Nenner steht jetzt eine ganze Klammer. Substituiert wird deshalb die Klammer: \(u = \frac{1}{x+y}\) und \(v = \frac{1}{x-y}\).</p>
+  \[ \begin{cases} 4 \cdot u + 2 \cdot v = 2 \\ 8 \cdot u - 6 \cdot v = -1 \end{cases} \]
+  <p><strong>Lösen:</strong> Die erste Gleichung mal 2 ergibt \(8 \cdot u + 4 \cdot v = 4\). Davon die zweite
+  subtrahieren: \(10 \cdot v = 5\), also \(v = \frac{1}{2}\). In die erste Gleichung: \(4 \cdot u + 1 = 2\), also \(u = \frac{1}{4}\).</p>
+  <p><strong>Rücksubstituieren</strong> ergibt ein zweites, ganz einfaches lineares System:</p>
+  \[ \begin{cases} x + y = \frac{1}{u} = 4 \\ x - y = \frac{1}{v} = 2 \end{cases} \]
+  <p>Addieren: \(2 \cdot x = 6\), also \(x = 3\) und \(y = 1\).</p>
+  <p><strong>Probe:</strong> \(\frac{4}{4} + \frac{2}{2} = 2\) ✓ und \(\frac{8}{4} - \frac{6}{2} = 2 - 3 = -1\) ✓.
+  Die Nenner \(x + y = 4\) und \(x - y = 2\) sind nicht null, also \(\mathbb{L} = \{(3 \mid 1)\}\).</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Achtung: Rücksubstitution und der Sonderfall \(u = 0\)</div>
+  <p>Mit \(u = 1\) und \(v = 2\) ist die Aufgabe noch nicht gelöst: Gefragt sind \(x\) und \(y\). Ausserdem hat
+  nicht jeder Wert eine Rücksubstitution. Der Kehrwert \(\frac{1}{x}\) ist <strong>nie null</strong>. Ergibt die
+  Rechnung \(u = 0\) oder \(v = 0\), gibt es kein passendes \(x\) bzw. \(y\), und das System hat <strong>keine Lösung</strong>.</p>
+  <p>Beispiel: Aus \(\frac{2}{x} + \frac{1}{y} = 3\) und \(\frac{4}{x} + \frac{1}{y} = 3\) wird \(2 \cdot u + v = 3\) und
+  \(4 \cdot u + v = 3\). Subtrahieren liefert \(2 \cdot u = 0\), also \(u = 0\). Die Gleichung \(\frac{1}{x} = 0\) hat keine Lösung, darum \(\mathbb{L} = \emptyset\).</p>
+  <p>Ebenso bei \(u = \sqrt{x}\): Ein negativer Wert für \(u\) lässt sich nicht zurücksubstituieren.</p>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Kommt ein nicht linearer Term in beiden Gleichungen gleich vor, ersetzt man ihn durch eine neue
+  Variable. Dann das <strong>lineare</strong> System lösen, <strong>zurücksubstituieren</strong> und die
+  Lösung mit der Definitionsmenge und der Probe abgleichen.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     6. LÖSUNGSFÄLLE
+     ════════════════════════════════════════════════════════════════ -->
+<details class="minicheck">
+<summary class="mc-kopf">✏️ Mini-Check — Linear oder nicht, und welche Substitution?</summary>
+<div class="mc-item"><span class="mc-typ">Multiple Choice</span><p class="mc-frage">Welches System ist <strong>nicht</strong> linear?</p><ul class="mc-optionen"><li data-opt="A">\(\frac{x}{2} + \frac{y}{3} = 5\) und \(x - y = 1\)</li><li data-opt="B">\(\frac{2}{x} + \frac{3}{y} = 5\) und \(\frac{1}{x} - \frac{1}{y} = 0\)</li><li data-opt="C">\(0.5 \cdot x + 3 \cdot y = 5\) und \(x = 2 \cdot y\)</li></ul><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort"><strong>B.</strong> Dort stehen \(x\) und \(y\) im Nenner. In A ist \(\frac{x}{2} = \frac{1}{2} \cdot x\), die Zahl steht im Nenner, nicht die Unbekannte. Das System B wird mit \(u = \frac{1}{x}\), \(v = \frac{1}{y}\) linear.</div></details></div>
+<div class="mc-item"><span class="mc-typ">Lückentext</span><p class="mc-frage">Im System \(\frac{4}{x-1} + \frac{1}{y} = 3\), \(\frac{2}{x-1} - \frac{3}{y} = 5\) setzt man \(v = \frac{1}{y}\) und \(u =\) <span class="mc-luecke"></span>.</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">\(u = \frac{1}{x-1}\), die ganze Klammer wird ersetzt. Definitionsmenge: \(x \neq 1\), \(y \neq 0\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Kurze Rechnung</span><p class="mc-frage">Ein System in \(u = \frac{1}{x}\) und \(v = \frac{1}{y}\) hat die Lösung \(u = \frac{1}{4}\), \(v = -\frac{1}{2}\). Bestimme \(x\) und \(y\).</p><details class="mc-loesung"><summary>Lösung anzeigen</summary><div class="mc-antwort">Rücksubstitution: \(x = \frac{1}{u} = 4\) und \(y = \frac{1}{v} = -2\), also \(\mathbb{L} = \{(4 \mid -2)\}\).</div></details></div>
+<div class="mc-item"><span class="mc-typ">Transfer</span><p class="mc-frage">Ist \(\sqrt{x} + \sqrt{y} = 5\), \(\sqrt{x} - \sqrt{y} = 1\) linear? Welche Substitution hilft, und worauf ist bei der Rücksubstitution zu achten?</p><details class="mc-loesung"><summary>Lösungsweg anzeigen</summary><div class="mc-antwort">Nicht linear, die Unbekannten stehen unter der Wurzel. Mit \(u = \sqrt{x}\), \(v = \sqrt{y}\) wird daraus \(u + v = 5\), \(u - v = 1\). Addieren: \(2 \cdot u = 6\), also \(u = 3\) und \(v = 2\). Rücksubstitution durch Quadrieren: \(x = 9\), \(y = 4\). Zu beachten: \(u\) und \(v\) müssen \(\geq 0\) sein (eine Wurzel ist nie negativ), und die Definitionsmenge verlangt \(x \geq 0\), \(y \geq 0\). Probe: \(3 + 2 = 5\) ✓, \(3 - 2 = 1\) ✓.</div></details></div>
 </details>
 
 <h2 id="loesungsfaelle">Drei Lösungsfälle bei 2×2-Systemen <a class="quer" href="g2-2a-lineare-gleichungen.html#spezialfaelle">↩ 2.2a</a></h2>
@@ -532,19 +628,25 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
     <div class="anim-hinweis links">
       <span class="ah-trigger" tabindex="0">👁 Worauf achten?</span>
       <div class="ah-pop"><span class="ah-titel">Worauf achten?</span>
-        <div class="ah-text">Schiebe \(m\) langsam gegen \(2\), während \(c \neq 4\) bleibt. Wohin wandert der Schnittpunkt — und was passiert genau im Moment \(m = 2\)?</div>
+        <div class="ah-text">Schiebe \(m\) langsam gegen \(2\), während \(c \neq 4\) bleibt. Wohin wandert der Schnittpunkt — und was passiert genau im Moment \(m = 2\)? Im Modus «Parameter \(k\) im Koeffizienten»: Schiebe \(k\) gegen \(-2\) und gegen \(2\). Warum flieht der Schnittpunkt nur bei einem der beiden Werte ins Unendliche?</div>
       </div>
     </div>
     <div class="anim-hinweis rechts">
       <span class="ah-trigger" tabindex="0">💡 Erkenntnis</span>
       <div class="ah-pop"><span class="ah-titel">Erkenntnis</span>
-        <div class="ah-text">Der Schnittpunkt flieht ins Unendliche, je näher die Steigungen zusammenrücken. Bei \(m = 2\) sind die Geraden parallel: Entweder liegen sie übereinander (\(c = 4\), unendlich viele Lösungen) oder nebeneinander (\(c \neq 4\), keine). Rechnerisch zeigt es die Subtraktion \(g_2 - g_1\): Es bleibt \((m - 2) \cdot x = c - 4\). Für \(m \neq 2\) lässt sich nach \(x\) auflösen; bei \(m = 2\) fällt \(x\) weg, und erst \(c\) entscheidet: \(0 = c - 4\) ist für \(c \neq 4\) ein Widerspruch (keine Lösung), für \(c = 4\) die wahre Aussage \(0 = 0\) (unendlich viele).</div>
+        <div class="ah-text">Der Schnittpunkt flieht ins Unendliche, je näher die Steigungen zusammenrücken. Bei \(m = 2\) sind die Geraden parallel: Entweder liegen sie übereinander (\(c = 4\), unendlich viele Lösungen) oder nebeneinander (\(c \neq 4\), keine). Rechnerisch zeigt es die Subtraktion \(g_2 - g_1\): Es bleibt \((m - 2) \cdot x = c - 4\). Für \(m \neq 2\) lässt sich nach \(x\) auflösen; bei \(m = 2\) fällt \(x\) weg, und erst \(c\) entscheidet: \(0 = c - 4\) ist für \(c \neq 4\) ein Widerspruch (keine Lösung), für \(c = 4\) die wahre Aussage \(0 = 0\) (unendlich viele). Mit einem Parameter \(k\) ist es dasselbe Bild: Bei «\(k\) in der Konstanten» haben beide Geraden für jedes \(k\) die Steigung \(\frac{1}{2}\), sie sind immer parallel und fallen nur beim kritischen Wert \(k = -3\) zusammen. Bei «\(k\) im Koeffizienten» kippen beide Geraden mit \(k\): \(g_1\) dreht sich um \((2 \mid 0)\), \(g_2\) um \((0 \mid 1)\). Nur bei \(k = -2\) (parallel) und \(k = 2\) (identisch) sind die Koeffizienten proportional; jeder andere Wert ergibt genau einen Schnittpunkt. Nähert sich \(k\) dem Wert \(-2\), flieht der Schnittpunkt; nähert es sich \(2\), bleibt er in der Nähe von \(\left(1 \mid \tfrac{1}{2}\right)\) — dort drehen sich die beiden Geraden ineinander.</div>
       </div>
     </div>
   </div>
-    <p>Oben hat jeder Fall ein festes System mit seiner Rechnung. Die drei Fälle sind aber keine getrennten Welten — kippe die zweite Gerade stetig und beobachte den Schnittpunkt:</p>
+    <p>Oben hat jeder Fall ein festes System mit seiner Rechnung. Die drei Fälle sind aber keine getrennten Welten — kippe die zweite Gerade stetig und beobachte den Schnittpunkt. In den beiden Modi mit Parameter \(k\) steckt der Schieber direkt in einem Gleichungssystem:</p>
   </div>
   <div class="widget-body">
+  <div class="meth-btns" id="lb-modi">
+    <button class="meth-btn aktiv" type="button" data-lbmodus="mc">Steigung \(m\) und Konstante \(c\)</button>
+    <button class="meth-btn" type="button" data-lbmodus="k1">Parameter \(k\) in der Konstanten</button>
+    <button class="meth-btn" type="button" data-lbmodus="k2">Parameter \(k\) im Koeffizienten</button>
+  </div>
+  <div id="lb-teil-mc">
   <div class="meth-btns">
     <button class="meth-btn" type="button" data-lb="1|6">eindeutig</button>
     <button class="meth-btn" type="button" data-lb="2|6">parallel (keine)</button>
@@ -558,9 +660,31 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
     <label>Konstante <span class="var">\(c\)</span>: <span class="sl-val" id="lb-cv">4.0</span></label>
     <input type="range" id="lb-c" min="0" max="8" step="0.5" value="4">
   </div>
-  <div class="formel-live"><div class="fl-label">System und Steigungen</div><div class="fl-eq" id="lb-eq" style="font-size:0.95rem"></div></div>
+  </div>
+  <div id="lb-teil-k" hidden>
+  <div id="lb-kbtn-k1">
+  <div class="meth-btns">
+    <button class="meth-btn" type="button" data-lbk="1">\(k = 1\): parallel (keine)</button>
+    <button class="meth-btn" type="button" data-lbk="-3">kritisch \(k = -3\): identisch (unendlich)</button>
+  </div>
+  </div>
+  <div id="lb-kbtn-k2" hidden>
+  <div class="meth-btns">
+    <button class="meth-btn" type="button" data-lbk="1">\(k = 1\): eindeutig</button>
+    <button class="meth-btn" type="button" data-lbk="-2">kritisch \(k = -2\): parallel (keine)</button>
+    <button class="meth-btn" type="button" data-lbk="2">kritisch \(k = 2\): identisch (unendlich)</button>
+  </div>
+  </div>
+  <div class="sl-row akz-orange">
+    <label>Parameter <span class="var">\(k\)</span>: <span class="sl-val" id="lb-kv">1</span></label>
+    <input type="range" id="lb-k" min="-9" max="3" step="1" value="1">
+  </div>
+  </div>
+  <div class="formel-live"><div class="fl-label" id="lb-eq-titel">System und Steigungen</div><div class="fl-eq" id="lb-eq" style="font-size:0.95rem"></div></div>
   <div class="cv-wrap" style="max-width:520px"><canvas id="cv-lbuschel" height="300"></canvas></div>
-  <div style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blass gezeichnet ist das <strong>Geradenbüschel</strong>: dieselbe Gerade \(g_2\) für andere Werte von \(c\). Alle Büschelgeraden sind parallel zueinander — \(c\) verschiebt nur, \(m\) kippt. Nach \(y\) aufgelöst lauten die Geraden \(g_1\colon y = -2 \cdot x + 4\) und \(g_2\colon y = -m \cdot x + c\); ihre Steigungen \(-2\) und \(-m\) stimmen genau bei \(m = 2\) überein.</div>
+  <div id="lb-cap-k1" hidden style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">System \(g_1\colon 3 \cdot x - 6 \cdot y = 9\) und \(g_2\colon -x + 2 \cdot y = k\). Nach \(y\) aufgelöst: \(g_1\colon y = \frac{1}{2} \cdot x - \frac{3}{2}\) und \(g_2\colon y = \frac{1}{2} \cdot x + \frac{k}{2}\). Beide Steigungen sind \(\frac{1}{2}\), egal welches \(k\): Blass gezeichnet ist \(g_2\) für andere Werte von \(k\), alle parallel zu \(g_1\). Genau eine Lösung gibt es darum für kein \(k\).</div>
+  <div id="lb-cap-k2" hidden style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">System \(g_1\colon x + k \cdot y = 2\) und \(g_2\colon k \cdot x + 4 \cdot y = 4\). Beide Geraden hängen von \(k\) ab. Die Koeffizienten sind proportional, wenn \(1 : k = k : 4\), also \(k^2 = 4\): Nur bei \(k = -2\) und \(k = 2\) haben die Geraden dieselbe Steigung. Bei \(k = 0\) ist \(g_1\) die Senkrechte \(x = 2\).</div>
+  <div id="lb-cap-mc" style="font-size:0.78rem;color:var(--tinte-2);margin-top:6px;font-style:italic">Blass gezeichnet ist das <strong>Geradenbüschel</strong>: dieselbe Gerade \(g_2\) für andere Werte von \(c\). Alle Büschelgeraden sind parallel zueinander — \(c\) verschiebt nur, \(m\) kippt. Nach \(y\) aufgelöst lauten die Geraden \(g_1\colon y = -2 \cdot x + 4\) und \(g_2\colon y = -m \cdot x + c\); ihre Steigungen \(-2\) und \(-m\) stimmen genau bei \(m = 2\) überein.</div>
   </div>
 </div>
 
@@ -572,6 +696,102 @@ das die drei Lagebeziehungen, die zwei Geraden in der Ebene haben können:</p>
     <tr><td>Unendlich viele</td><td>Es kommt etwas immer Wahres heraus, z. B. \(0 = 0\).</td><td>\(\mathbb{L}\) ist eine Gerade</td></tr>
   </tbody>
 </table>
+
+<h3 id="parameter-k">Für welches \(k\) …?</h3>
+
+<p>Steht in einem System ein <strong>Parameter</strong> \(k\), hängt der Lösungsfall von \(k\) ab. Gefragt ist
+dann: Für welche Werte von \(k\) gibt es genau eine, keine oder unendlich viele Lösungen? Man muss dazu
+nicht für jedes \(k\) neu rechnen, es genügt ein Vergleich der Koeffizienten.</p>
+
+<div class="block block-def">
+  <div class="block-titel">📘 Lösungsfall am Parameter ablesen</div>
+  <p><strong>1. Beide Gleichungen auf dieselbe Form bringen:</strong> \(x\) und \(y\) links in derselben Reihenfolge, die Konstante rechts:</p>
+  \[ \begin{cases} a_1 \cdot x + b_1 \cdot y = c_1 \\ a_2 \cdot x + b_2 \cdot y = c_2 \end{cases} \]
+  <p><strong>2. Koeffizienten vergleichen.</strong> «Proportional» heisst: Die zweite Zeile ist ein Vielfaches der ersten.</p>
+  <div style="overflow-x:auto">
+  <table class="ftb-tabelle">
+    <thead><tr><th>Bedingung</th><th>Lösungsfall</th><th>Geometrie</th></tr></thead>
+    <tbody>
+      <tr><td>\(\dfrac{a_1}{a_2} \neq \dfrac{b_1}{b_2}\) (Koeffizienten nicht proportional)</td><td>genau eine Lösung</td><td>verschiedene Steigungen: die Geraden schneiden sich</td></tr>
+      <tr><td>\(\dfrac{a_1}{a_2} = \dfrac{b_1}{b_2} \neq \dfrac{c_1}{c_2}\) (Koeffizienten proportional, Konstanten nicht)</td><td>keine Lösung</td><td>gleiche Steigung, verschiedene Achsenabschnitte: parallele Geraden</td></tr>
+      <tr><td>\(\dfrac{a_1}{a_2} = \dfrac{b_1}{b_2} = \dfrac{c_1}{c_2}\) (alle drei Verhältnisse gleich)</td><td>unendlich viele Lösungen</td><td>dieselbe Gerade: identische Geraden</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="margin-top:6px"><strong>Warum das die Geometrie ist:</strong> Nach \(y\) aufgelöst hat die Gerade \(a \cdot x + b \cdot y = c\) die Steigung \(-\frac{a}{b}\).
+  Proportionale Koeffizienten bedeuten also <em>gleiche Steigung</em>. Zwei Geraden mit gleicher Steigung schneiden sich nie; sie sind
+  parallel oder fallen zusammen, und das entscheidet die Konstante. Steht in einem Verhältnis eine Null im Nenner, vergleicht man
+  über Kreuz: \(\frac{a_1}{a_2} = \frac{b_1}{b_2}\) heisst dasselbe wie \(a_1 \cdot b_2 = a_2 \cdot b_1\).</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 1: \(k\) in der Konstanten</div>
+  \[ \begin{cases} 3 \cdot x - 6 \cdot y = 9 & \text{(I)} \\ -x + 2 \cdot y = k & \text{(II)} \end{cases} \]
+  <p><strong>Koeffizienten:</strong> \(\frac{3}{-1} = -3\) und \(\frac{-6}{2} = -3\). Die Koeffizienten sind für <em>jedes</em> \(k\) proportional,
+  genau eine Lösung gibt es also nie. Geometrisch: Beide Geraden haben die Steigung \(\frac{1}{2}\), sie sind immer parallel.</p>
+  <p><strong>Konstanten:</strong> Auch \(\frac{9}{k} = -3\) gilt genau für \(k = -3\). Rechnerisch: \(\text{(I)} + 3 \cdot \text{(II)}\) ergibt \(0 = 9 + 3 \cdot k\).</p>
+  <ul style="margin:6px 0 0 22px">
+    <li>\(k = -3\): \(0 = 0\) ist immer wahr. Die Geraden sind identisch, unendlich viele Lösungen: \(\mathbb{L} = \left\{\left(x \mid \tfrac{x - 3}{2}\right) : x \in \mathbb{R}\right\}\).</li>
+    <li>\(k \neq -3\): \(0 = 9 + 3 \cdot k\) ist falsch. Die Geraden sind parallel, \(\mathbb{L} = \emptyset\).</li>
+  </ul>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Beispiel 2: \(k\) im Koeffizienten</div>
+  \[ \begin{cases} x + k \cdot y = 2 & \text{(I)} \\ k \cdot x + 4 \cdot y = 4 & \text{(II)} \end{cases} \]
+  <p><strong>Koeffizienten proportional</strong>, wenn \(\frac{1}{k} = \frac{k}{4}\), über Kreuz \(k \cdot k = 1 \cdot 4\), also \(k^2 = 4\): \(k = 2\) oder \(k = -2\).
+  Für jedes andere \(k\) (auch \(k = 0\)) haben die Geraden verschiedene Steigungen und schneiden sich: genau eine Lösung.</p>
+  <ul style="margin:6px 0 0 22px">
+    <li>\(k = 2\): \(x + 2 \cdot y = 2\) und \(2 \cdot x + 4 \cdot y = 4\). Die zweite Gleichung ist genau das Doppelte der ersten, auch die Konstante (\(\frac{2}{4} = \frac{1}{2}\)). Identische Geraden, unendlich viele Lösungen: \(\mathbb{L} = \left\{\left(x \mid 1 - \tfrac{x}{2}\right) : x \in \mathbb{R}\right\}\).</li>
+    <li>\(k = -2\): \(x - 2 \cdot y = 2\) und \(-2 \cdot x + 4 \cdot y = 4\). Links steht das \((-2)\)-Fache der ersten Gleichung, rechts müsste dann \(-4\) stehen, es steht aber \(4\). Parallele Geraden, \(\mathbb{L} = \emptyset\).</li>
+  </ul>
+  <p style="margin-top:6px">Im Geradenbüschel oben (Modus «Parameter \(k\) im Koeffizienten») siehst du alle drei Fälle an einem Schieber.</p>
+</div>
+
+<h3 id="parameter-aufloesen">Nach \(x\) und \(y\) auflösen, wenn Parameter dabei sind</h3>
+
+<p>Man rechnet mit dem Parameter wie mit einer Zahl. Das Resultat ist dann keine Zahl, sondern ein Term in \(k\).
+Heikel wird es nur an einer Stelle: beim <strong>Teilen durch einen Term, der \(k\) enthält</strong>.</p>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Ohne Fallunterscheidung: \(k\) nur in den Konstanten</div>
+  \[ \begin{cases} 2 \cdot x + y = 5 \cdot k & \text{(I)} \\ x - 3 \cdot y = -k & \text{(II)} \end{cases} \]
+  <p>Die Koeffizienten \(\frac{2}{1} \neq \frac{1}{-3}\) sind nicht proportional, das System hat also für jedes \(k\) genau eine Lösung.</p>
+  <p>\(3 \cdot \text{(I)} + \text{(II)}\): \(7 \cdot x = 15 \cdot k - k = 14 \cdot k\), also \(x = 2 \cdot k\). Geteilt wird nur durch die Zahl 7, das ist immer erlaubt.
+  In (I): \(4 \cdot k + y = 5 \cdot k\), also \(y = k\).</p>
+  <p>\(\mathbb{L} = \{(2 \cdot k \mid k)\}\). Probe: \(2 \cdot 2k + k = 5k\) ✓ und \(2k - 3k = -k\) ✓.</p>
+</div>
+
+<div class="block block-bsp">
+  <div class="block-titel">🟢 Mit Fallunterscheidung: \(k\) im Koeffizienten</div>
+  <p>Wir lösen das System aus Beispiel 2, \(x + k \cdot y = 2\) (I) und \(k \cdot x + 4 \cdot y = 4\) (II).</p>
+  <p>\(\text{(II)} - k \cdot \text{(I)}\) eliminiert \(x\):</p>
+  \[ (4 - k^2) \cdot y = 4 - 2 \cdot k \]
+  <p>Jetzt möchte man durch \(4 - k^2\) teilen. Das geht nur, wenn \(4 - k^2 \neq 0\) ist, also \(k \neq 2\) und \(k \neq -2\). Darum drei Fälle:</p>
+  <ul style="margin:6px 0 0 22px">
+    <li><strong>Fall \(k \neq 2\) und \(k \neq -2\):</strong> \(y = \dfrac{4 - 2k}{4 - k^2} = \dfrac{2 \cdot (2 - k)}{(2 - k)(2 + k)} = \dfrac{2}{k + 2}\).
+    In (I): \(x = 2 - k \cdot \dfrac{2}{k + 2} = \dfrac{2k + 4 - 2k}{k + 2} = \dfrac{4}{k + 2}\). Also \(\mathbb{L} = \left\{\left(\tfrac{4}{k+2} \mid \tfrac{2}{k+2}\right)\right\}\).</li>
+    <li><strong>Fall \(k = 2\):</strong> \(0 \cdot y = 0\) gilt für jedes \(y\). Unendlich viele Lösungen, die Geraden sind identisch.</li>
+    <li><strong>Fall \(k = -2\):</strong> \(0 \cdot y = 8\) ist ein Widerspruch. \(\mathbb{L} = \emptyset\), die Geraden sind parallel.</li>
+  </ul>
+  <p style="margin-top:6px">Probe für \(k = 1\): \(\left(\tfrac{4}{3} \mid \tfrac{2}{3}\right)\) in (I): \(\tfrac{4}{3} + \tfrac{2}{3} = 2\) ✓, in (II): \(\tfrac{4}{3} + \tfrac{8}{3} = 4\) ✓.</p>
+</div>
+
+<div class="block block-fehler">
+  <div class="block-titel">⚠ Häufiger Fehler: durch einen Term teilen, der null sein kann</div>
+  <p>Wer \((4 - k^2) \cdot y = 4 - 2k\) sofort teilt und kürzt, erhält \(y = \frac{2}{k+2}\) und \(x = \frac{4}{k+2}\). Diese Formel
+  liefert für \(k = 2\) brav den Punkt \(\left(1 \mid \tfrac{1}{2}\right)\) und verschweigt, dass es dort <strong>unendlich viele</strong>
+  Lösungen gibt. Beim Kürzen ist der Faktor \(2 - k\) verschwunden, und mit ihm der Fall \(k = 2\).</p>
+  <p>Darum vor jedem Teilen fragen: <em>Für welche \(k\) ist der Teiler null?</em> Diese Werte getrennt untersuchen, und zwar geometrisch
+  begründet: gleiche Steigung heisst parallel oder identisch.</p>
+</div>
+
+<div class="block block-merksatz">
+  <div class="block-titel">⭐ Merksatz</div>
+  <p>Proportionale Koeffizienten bedeuten <strong>gleiche Steigung</strong>. Dann entscheidet die Konstante: auch proportional → identische Geraden,
+  unendlich viele Lösungen; sonst parallele Geraden, keine Lösung. Beim Auflösen mit Parameter nie durch einen Term teilen, ohne vorher
+  seine Nullstellen als eigene Fälle zu behandeln.</p>
+</div>
 
 <!-- ════════════════════════════════════════════════════════════════
      7. 3×3-SYSTEME
@@ -878,6 +1098,75 @@ Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte 
   </div>
 </div>
 
+<!-- A8: Substitution im Gleichungssystem -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A8</span><span class="aufg-titel-text">Substitution im Gleichungssystem</span></div>
+  <p>Gib jeweils die Definitionsmenge an, wähle eine passende Substitution und bestimme die Lösungsmenge.</p>
+  <ol class="aufg-liste">
+    <li>\(\dfrac{4}{x} + \dfrac{3}{y} = 1\) und \(\dfrac{2}{x} - \dfrac{6}{y} = 3\)</li>
+    <li>\(\dfrac{6}{x-2} - \dfrac{2}{y+1} = 1\) und \(\dfrac{3}{x-2} + \dfrac{4}{y+1} = 3\)</li>
+    <li>\(\dfrac{2}{x+y} + \dfrac{6}{x-y} = 2\) und \(\dfrac{6}{x+y} - \dfrac{12}{x-y} = 1\)</li>
+    <li>\(\dfrac{3}{x} + \dfrac{2}{y} = 4\) und \(\dfrac{6}{x} + \dfrac{2}{y} = 4\)</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('a8-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a8-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p><strong>1.</strong> Definitionsmenge: \(x \neq 0\), \(y \neq 0\). Mit \(u = \frac{1}{x}\), \(v = \frac{1}{y}\): \(4 \cdot u + 3 \cdot v = 1\) und \(2 \cdot u - 6 \cdot v = 3\).
+      Erste Gleichung mal 2 plus zweite: \(10 \cdot u = 5\), also \(u = \frac{1}{2}\). Dann \(2 + 3 \cdot v = 1\), also \(v = -\frac{1}{3}\).
+      Rücksubstitution: \(x = 2\), \(y = -3\). Probe: \(\frac{4}{2} + \frac{3}{-3} = 2 - 1 = 1\) ✓, \(\frac{2}{2} - \frac{6}{-3} = 1 + 2 = 3\) ✓. \(\mathbb{L} = \{(2 \mid -3)\}\).</p>
+      <p><strong>2.</strong> Definitionsmenge: \(x \neq 2\), \(y \neq -1\). Mit \(u = \frac{1}{x-2}\), \(v = \frac{1}{y+1}\): \(6 \cdot u - 2 \cdot v = 1\) und \(3 \cdot u + 4 \cdot v = 3\).
+      Erste Gleichung mal 2 plus zweite: \(15 \cdot u = 5\), also \(u = \frac{1}{3}\). Dann \(1 + 4 \cdot v = 3\), also \(v = \frac{1}{2}\).
+      Rücksubstitution: \(x - 2 = 3\), also \(x = 5\); \(y + 1 = 2\), also \(y = 1\). Probe: \(\frac{6}{3} - \frac{2}{2} = 1\) ✓, \(\frac{3}{3} + \frac{4}{2} = 3\) ✓. \(\mathbb{L} = \{(5 \mid 1)\}\).</p>
+      <p><strong>3.</strong> Definitionsmenge: \(y \neq -x\), \(y \neq x\). Mit \(u = \frac{1}{x+y}\), \(v = \frac{1}{x-y}\): \(2 \cdot u + 6 \cdot v = 2\) und \(6 \cdot u - 12 \cdot v = 1\).
+      Erste Gleichung mal 2 plus zweite: \(10 \cdot u = 5\), also \(u = \frac{1}{2}\). Dann \(1 + 6 \cdot v = 2\), also \(v = \frac{1}{6}\).
+      Rücksubstitution ergibt ein zweites System: \(x + y = 2\) und \(x - y = 6\). Addieren: \(2 \cdot x = 8\), also \(x = 4\) und \(y = -2\).
+      Probe: \(\frac{2}{2} + \frac{6}{6} = 2\) ✓, \(\frac{6}{2} - \frac{12}{6} = 3 - 2 = 1\) ✓. \(\mathbb{L} = \{(4 \mid -2)\}\).</p>
+      <p><strong>4.</strong> Definitionsmenge: \(x \neq 0\), \(y \neq 0\). Mit \(u = \frac{1}{x}\), \(v = \frac{1}{y}\): \(3 \cdot u + 2 \cdot v = 4\) und \(6 \cdot u + 2 \cdot v = 4\).
+      Subtrahieren: \(3 \cdot u = 0\), also \(u = 0\) und \(v = 2\). Aber \(\frac{1}{x} = 0\) hat keine Lösung, zu \(u = 0\) gibt es kein \(x\).
+      Darum \(\mathbb{L} = \emptyset\), obwohl das System in \(u\) und \(v\) eindeutig lösbar war.</p>
+    </div>
+  </div>
+</div>
+
+<!-- A9: Für welches k? -->
+<div class="block block-aufg">
+  <div class="block-titel">🟠 <span class="aufg-nr-tag">A9</span><span class="aufg-titel-text">Für welches \(k\)?</span></div>
+  <ol class="aufg-liste">
+    <li>\(4 \cdot x - 2 \cdot y = k\) und \(-6 \cdot x + 3 \cdot y = 9\). Für welches \(k\) gibt es unendlich viele Lösungen, für welche keine? Begründe geometrisch, warum es für kein \(k\) genau eine Lösung gibt.</li>
+    <li>\(k \cdot x + 3 \cdot y = 6\) und \(2 \cdot x + y = 1\). Für welches \(k\) hat das System keine Lösung? Gibt es ein \(k\) mit unendlich vielen Lösungen? Löse für die übrigen \(k\) nach \(x\) und \(y\) auf.</li>
+    <li>\(k \cdot x + 9 \cdot y = -6\) und \(x + k \cdot y = 2\). Bestimme, für welche \(k\) welcher Lösungsfall vorliegt, und gib im eindeutigen Fall die Lösung in Abhängigkeit von \(k\) an.</li>
+  </ol>
+  <button class="loesung-toggle" onclick="toggleL('a9-l')">▶ Lösung</button>
+  <div class="loesung-body" id="a9-l">
+    <div class="block block-bsp" style="margin:6px 0 0">
+      <div class="block-titel">🟢 Lösung</div>
+      <p><strong>1.</strong> Koeffizienten: \(\frac{4}{-6} = -\frac{2}{3}\) und \(\frac{-2}{3} = -\frac{2}{3}\), für jedes \(k\) proportional.
+      Geometrisch: Nach \(y\) aufgelöst lauten die Geraden \(y = 2 \cdot x - \frac{k}{2}\) und \(y = 2 \cdot x + 3\). Beide haben die Steigung 2,
+      sie sind parallel oder identisch und schneiden sich nie in genau einem Punkt.
+      Konstanten: \(\frac{k}{9} = -\frac{2}{3}\) gilt für \(k = -6\). Rechnerisch: \(3 \cdot \text{(I)} + 2 \cdot \text{(II)}\) ergibt \(0 = 3 \cdot k + 18\).</p>
+      <ul style="margin:0 0 6px 22px">
+        <li>\(k = -6\): \(0 = 0\), identische Geraden, \(\mathbb{L} = \{(x \mid 2 \cdot x + 3) : x \in \mathbb{R}\}\).</li>
+        <li>\(k \neq -6\): Widerspruch, parallele Geraden, \(\mathbb{L} = \emptyset\).</li>
+      </ul>
+      <p><strong>2.</strong> Koeffizienten proportional, wenn \(\frac{k}{2} = \frac{3}{1}\), also \(k = 6\). Dann ist die Konstante \(\frac{6}{1} = 6 \neq 3\):
+      <strong>keine Lösung</strong> für \(k = 6\) (parallele Geraden \(y = -2 \cdot x + 2\) und \(y = -2 \cdot x + 1\)). Unendlich viele Lösungen gibt es für kein \(k\),
+      weil das Konstanten-Verhältnis 6 nie zum Koeffizienten-Verhältnis 3 passt.</p>
+      <p>Für \(k \neq 6\): \(\text{(I)} - 3 \cdot \text{(II)}\) ergibt \((k - 6) \cdot x = 3\), also \(x = \dfrac{3}{k - 6}\), und aus (II)
+      \(y = 1 - 2 \cdot x = \dfrac{k - 12}{k - 6}\). Probe für \(k = 7\): \((3 \mid -5)\), \(21 - 15 = 6\) ✓, \(6 - 5 = 1\) ✓.</p>
+      <p><strong>3.</strong> Koeffizienten proportional, wenn \(\frac{k}{1} = \frac{9}{k}\), also \(k^2 = 9\): \(k = 3\) oder \(k = -3\).
+      \(\text{(I)} - k \cdot \text{(II)}\) ergibt \((9 - k^2) \cdot y = -6 - 2 \cdot k\).</p>
+      <ul style="margin:0 0 6px 22px">
+        <li>\(k = 3\): \(0 \cdot y = -12\), Widerspruch. \(3 \cdot x + 9 \cdot y = -6\) und \(3 \cdot x + 9 \cdot y = 6\) (dreifache zweite Gleichung) sind parallele Geraden, \(\mathbb{L} = \emptyset\).</li>
+        <li>\(k = -3\): \(0 \cdot y = 0\), immer wahr. Die erste Gleichung ist das \((-3)\)-Fache der zweiten, identische Geraden: \(\mathbb{L} = \left\{\left(x \mid \tfrac{x - 2}{3}\right) : x \in \mathbb{R}\right\}\).</li>
+        <li>\(k \neq 3\) und \(k \neq -3\): \(y = \dfrac{-2 \cdot (k + 3)}{(3 - k)(3 + k)} = \dfrac{2}{k - 3}\) und \(x = 2 - k \cdot y = \dfrac{-6}{k - 3}\).
+        Probe für \(k = 0\): \(\left(2 \mid -\tfrac{2}{3}\right)\), \(9 \cdot \left(-\tfrac{2}{3}\right) = -6\) ✓, \(2 = 2\) ✓.</li>
+      </ul>
+      <p>Achtung: Nach dem Kürzen durch \(k + 3\) liefert die Formel für \(k = -3\) einen einzelnen Punkt, obwohl dort unendlich viele Lösungen vorliegen. Die Fälle \(k = \pm 3\) gehören deshalb <em>vor</em> das Teilen.</p>
+    </div>
+  </div>
+</div>
+
 <h2 id="zusammenfassung">Zusammenfassung</h2>
 
 <div class="block block-merksatz">
@@ -897,6 +1186,8 @@ Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte 
     <tr><td>Gleichsetzen</td><td>beide Gleichungen nach derselben Variable auflösen, gleichsetzen</td><td>ideal, wenn beide schon nach <em>y</em> aufgelöst sind</td></tr>
     <tr><td>Addition</td><td>passend multiplizieren, dann beide Gleichungen addieren</td><td>ideal, wenn Koeffizienten direkt passen</td></tr>
     <tr><td>3 Lösungsfälle</td><td>eine / keine / unendlich viele Lösungen</td><td>erkennbar an Aussagen wie \(x = 2\) / \(0 = 5\) / \(0 = 0\)</td></tr>
+    <tr><td>Parameter \(k\)</td><td>Koeffizienten vergleichen: proportional heisst gleiche Steigung</td><td>Konstanten auch proportional: unendlich viele, sonst keine; vor dem Teilen durch einen Term in \(k\) Fälle trennen</td></tr>
+    <tr><td>Substitution</td><td>nicht linearen Term ersetzen, z. B. \(u = \frac{1}{x}\), \(v = \frac{1}{y}\)</td><td>Definitionsmenge beachten, zurücksubstituieren; zu \(u = 0\) gibt es kein \(x\)</td></tr>
   </tbody>
 </table>
 
@@ -912,7 +1203,8 @@ Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte 
   <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/teste-dich-selbst.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">✅</span><div><div class="dl-t">Teste dich selbst</div><div class="dl-s">Grundlagenaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/aufgabenserie.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🧩</span><div><div class="dl-t">Aufgabenserie</div><div class="dl-s">Anwendungsaufgaben mit Lösungen</div><div class="dl-fmt">Druckseite</div></div></a>
   <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/ankideck.apkg" class="dl"><span class="dl-ic">🃏</span><div><div class="dl-t">Anki-Deck</div><div class="dl-s">Karteikarten zum Auswendiglernen</div><div class="dl-fmt">APKG</div></div></a>
-  <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/zusatz-gauss-cramer.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🔬</span><div><div class="dl-t">Zusatz: Gauss &amp; Cramer</div><div class="dl-s">Gauss-Verfahren und Cramersche Regel — fakultativ, über RLP hinaus</div><div class="dl-fmt">Druckseite · über RLP hinaus</div></div></a>
+  <a href="g2-modellieren.html" class="dl"><span class="dl-ic">🧱</span><div><div class="dl-t">Modellier-Baukasten</div><div class="dl-s">Textaufgaben: erst deklarieren, dann Gleichungssystem aufstellen</div><div class="dl-fmt">Themenseite</div></div></a>
+  <a href="../downloads/grundlagen/g2-3-lineare-gleichungssysteme/zusatz-gauss-cramer.html" target="_blank" rel="noopener" class="dl"><span class="dl-ic">🔬</span><div><div class="dl-t">Zusatz: Gauss &amp; Cramer <span class="aufg-vertiefung">über RLP hinaus</span><span class="aufg-vertiefung">nicht prüfungsrelevant</span></div><div class="dl-s">Gauss-Verfahren und Cramersche Regel — fakultativ, über RLP hinaus</div><div class="dl-fmt">Druckseite · über RLP hinaus</div></div></a>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════
@@ -920,7 +1212,7 @@ Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte 
      ════════════════════════════════════════════════════════════════ -->
 <!-- CLIPS:ANFANG — generiert von scripts/build-clips-einbau.py, nicht von Hand ändern -->
 <h2 id="clips">Clips</h2>
-<div class="cl-body clip-auswahl" style="grid-template-rows: repeat(4, auto)">
+<div class="cl-body clip-auswahl" style="grid-template-rows: repeat(5, auto)">
   <div class="clip cl-r1" data-clip="../clips/g2-3-grafisch.html" data-titel="Gleichungssysteme: grafisch — der Schnittpunkt ist die Lösung" data-modus="gross">
     <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungssysteme: grafisch — der Schnittpunkt ist die Lösung">
       <span class="cl-folge">1</span>
@@ -949,23 +1241,37 @@ Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte 
       <span class="cl-zeit">1:05</span>
     </button>
   </div>
+  <div class="clip cl-r1" data-clip="../clips/g2-3-nenner-substitution.html" data-titel="Gleichungssysteme: wenn x im Nenner steht" data-modus="gross">
+    <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungssysteme: wenn x im Nenner steht">
+      <span class="cl-folge">5</span>
+      <span class="cl-titel">Gleichungssysteme: wenn x im Nenner steht</span>
+      <span class="cl-zeit">1:06</span>
+    </button>
+  </div>
   <div class="clip cl-r1" data-clip="../clips/g2-3-anzahl-loesungen.html" data-titel="Gleichungssysteme: wie viele Lösungen? Drei Fälle" data-modus="gross">
     <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungssysteme: wie viele Lösungen? Drei Fälle">
-      <span class="cl-folge">5</span>
+      <span class="cl-folge">6</span>
       <span class="cl-titel">Gleichungssysteme: wie viele Lösungen? Drei Fälle</span>
       <span class="cl-zeit">1:20</span>
     </button>
   </div>
+  <div class="clip cl-r1" data-clip="../clips/g2-3-parameter-keine-loesung.html" data-titel="Gleichungssysteme: für welches k gibt es keine Lösung?" data-modus="gross">
+    <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungssysteme: für welches k gibt es keine Lösung?">
+      <span class="cl-folge">7</span>
+      <span class="cl-titel">Gleichungssysteme: für welches k gibt es keine Lösung?</span>
+      <span class="cl-zeit">1:05</span>
+    </button>
+  </div>
   <div class="clip cl-r1" data-clip="../clips/g2-3-drei-variablen.html" data-titel="Gleichungssysteme: drei Variablen auf zwei zurückführen" data-modus="gross">
     <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungssysteme: drei Variablen auf zwei zurückführen">
-      <span class="cl-folge">6</span>
+      <span class="cl-folge">8</span>
       <span class="cl-titel">Gleichungssysteme: drei Variablen auf zwei zurückführen</span>
       <span class="cl-zeit">0:57</span>
     </button>
   </div>
   <div class="clip cl-tr" data-clip="../clips/g2-3-ti30x-sys-solv.html" data-titel="Gleichungssysteme: 2×2 mit sys-solv lösen" data-modus="gross">
     <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungssysteme: 2×2 mit sys-solv lösen">
-      <span class="cl-folge">7</span>
+      <span class="cl-folge">9</span>
       <span class="cl-titel">Gleichungssysteme: 2×2 mit sys-solv lösen</span>
       <span class="cl-zeit">1:10</span>
     </button>
@@ -1008,6 +1314,15 @@ Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte 
 <li><span class="tk-zeit">0:47</span><span>Schritt vier: in beide Gleichungen einsetzen. Eine allein genügt nicht.</span></li>
 <li><span class="tk-zeit">0:55</span><span>Passt kein Paar von selbst, macht man es passend: eine Gleichung mit einer Zahl multiplizieren.</span></li>
 </ol>
+<h3 id="clip-g2-3-nenner-substitution" class="clip-h">Gleichungssysteme: wenn x im Nenner steht</h3>
+<ol>
+<li><span class="tk-zeit">0:00</span><span>Drei durch x plus zwei durch y gleich sieben. Die Unbekannten stehen im Nenner, das System ist nicht linear. Aber es sieht nur schwierig aus.</span></li>
+<li><span class="tk-zeit">0:09</span><span>Schritt eins: Zuerst die Definitionsmenge, x und y dürfen nicht null sein. Dann eins durch x durch u ersetzen und eins durch y durch v. Das neue System ist linear.</span></li>
+<li><span class="tk-zeit">0:21</span><span>Schritt zwei: addieren. Die v-Glieder heben sich weg, neun u gleich neun, also u gleich eins. Eingesetzt: drei plus zwei v gleich sieben, also v gleich zwei. Fertig ist man damit noch nicht.</span></li>
+<li><span class="tk-zeit">0:33</span><span>Schritt drei: zurück. x ist der Kehrwert von u, also eins. y ist der Kehrwert von v, also ein halb. Beide sind nicht null, und die Probe stimmt: drei plus vier gibt sieben, sechs minus vier gibt zwei.</span></li>
+<li><span class="tk-zeit">0:46</span><span>Ein Sonderfall: Ergibt die Rechnung u gleich null, gibt es kein passendes x, denn eins durch x ist nie null. Dann hat das System keine Lösung.</span></li>
+<li><span class="tk-zeit">0:55</span><span>Zum Mitnehmen: den störenden Term ersetzen, das lineare System lösen, zurücksubstituieren und gegen die Definitionsmenge prüfen. Das geht genauso, wenn eine ganze Klammer im Nenner steht.</span></li>
+</ol>
 <h3 id="clip-g2-3-anzahl-loesungen" class="clip-h">Gleichungssysteme: wie viele Lösungen? Drei Fälle</h3>
 <ol>
 <li><span class="tk-zeit">0:00</span><span>Ein Gleichungssystem aus zwei Geraden hat genau drei mögliche Ausgänge. Man muss es nicht ausrechnen, um zu wissen welcher — ein Blick auf die Steigungen genügt.</span></li>
@@ -1016,6 +1331,14 @@ Addition oder Einsetzen, und durch <em>Einsetzen</em> kommen wir auf die dritte 
 <li><span class="tk-zeit">0:31</span><span>Dritter Fall: Die zweite Gleichung ist die erste, nur anders geschrieben. Vier x minus zwei y gleich minus zwei ist dieselbe Gerade. Jeder Punkt darauf löst beide Gleichungen — unendlich viele Lösungen. Rechnerisch bleibt null gleich null stehen: eine wahre Aussage, die nichts einschränkt.</span></li>
 <li><span class="tk-zeit">0:49</span><span>Das Vorgehen ist damit immer dasselbe: beide nach y auflösen, dann die Steigungen vergleichen. Sind sie verschieden, gibt es genau eine Lösung, ohne weitere Prüfung. Nur wenn sie gleich sind, entscheidet der Achsenabschnitt zwischen keiner und unendlich vielen.</span></li>
 <li><span class="tk-zeit">1:04</span><span>Und wenn man doch losgerechnet hat, sagt das Ergebnis selbst, welcher Fall vorliegt. Fallen beide Unbekannten weg und es bleibt eine falsche Aussage, gibt es keine Lösung. Bleibt eine wahre Aussage, sind es unendlich viele. Bleibt eine Zahl für x, ist es die eine.</span></li>
+</ol>
+<h3 id="clip-g2-3-parameter-keine-loesung" class="clip-h">Gleichungssysteme: für welches k gibt es keine Lösung?</h3>
+<ol>
+<li><span class="tk-zeit">0:00</span><span>Drei x minus sechs y gleich neun, und minus x plus zwei y gleich k. Für welches k hat das System keine Lösung? Dafür muss man nicht jedes k durchprobieren.</span></li>
+<li><span class="tk-zeit">0:11</span><span>Schritt eins: die Koeffizienten vergleichen. Drei durch minus eins und minus sechs durch zwei ergeben beide minus drei. Die Koeffizienten sind proportional, beide Geraden haben die Steigung ein halb, egal welches k. Genau eine Lösung gibt es also nie.</span></li>
+<li><span class="tk-zeit">0:26</span><span>Schritt zwei: Die Konstante entscheidet. Gleichung eins plus dreimal Gleichung zwei lässt x und y verschwinden, es bleibt null gleich neun plus drei k. Nur für k gleich minus drei ist das wahr. Für jedes andere k, etwa eins, ist es falsch.</span></li>
+<li><span class="tk-zeit">0:41</span><span>Im Bild: Beide Geraden haben dieselbe Steigung. Für k gleich eins liegen sie nebeneinander und treffen sich nie. Für k gleich minus drei liegen sie aufeinander, dann ist jeder Punkt der Geraden eine Lösung.</span></li>
+<li><span class="tk-zeit">0:53</span><span>Zum Mitnehmen: Zuerst die Koeffizienten. Sind sie proportional, sind die Geraden parallel oder identisch, und erst die Konstante entscheidet. Hier gibt es keine Lösung für jedes k ausser minus drei.</span></li>
 </ol>
 <h3 id="clip-g2-3-drei-variablen" class="clip-h">Gleichungssysteme: drei Variablen auf zwei zurückführen</h3>
 <ol>
@@ -1551,6 +1874,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('lb-c').value = c;
     drawBuschel();
   }));
+  // Parameter-Modi (k in der Konstanten / im Koeffizienten)
+  document.querySelectorAll('[data-lbmodus]').forEach(btn => btn.addEventListener('click', () => setLbModus(btn.dataset.lbmodus)));
+  document.getElementById('lb-k').addEventListener('input', drawBuschel);
+  document.querySelectorAll('[data-lbk]').forEach(btn => btn.addEventListener('click', () => {
+    document.getElementById('lb-k').value = btn.dataset.lbk;
+    drawBuschel();
+  }));
   drawBuschel();
 });
 
@@ -1561,17 +1891,47 @@ document.addEventListener('DOMContentLoaded', () => {
  *  D ≠ 0 → S((4−c)/D | 4 − 2x_S)
  *  D = 0: c = 4 → identisch (unendlich viele);  c ≠ 4 → parallel (keine)
  *  Anzeige ohne den Begriff «Determinante» (nicht im RLP-Grundlagenfach): Vergleich der Steigungen.
+ *
+ *  Parameter-Modi (Schieber k):
+ *  k1  g₁: 3x − 6y = 9   g₂: −x + 2y = k      beide Steigung 1/2
+ *      (I) + 3·(II): 0 = 9 + 3k  → k = −3 identisch, sonst parallel (nie genau eine Lösung)
+ *  k2  g₁: x + ky = 2    g₂: kx + 4y = 4      g₁ dreht um (2 | 0), g₂ um (0 | 1)
+ *      (II) − k·(I): (4 − k²)·y = 4 − 2k
+ *      k ≠ ±2 → S(4/(k+2) | 2/(k+2));  k = 2 → 0·y = 0 identisch;  k = −2 → 0·y = 8 parallel
+ *      k = 0: g₁ ist die Senkrechte x = 2 (keine Steigung) — eigener Zeichenzweig.
  * ══════════════════════════════════════════════════════════════ */
+let lbModus = 'mc';
+const LB_K = { k1: { min: -9, max: 3, step: 1, start: 1 }, k2: { min: -4, max: 4, step: 0.5, start: 1 } };
+function setLbModus(modus) {
+  lbModus = modus;
+  const mitK = modus !== 'mc';
+  document.querySelectorAll('[data-lbmodus]').forEach(b => b.classList.toggle('aktiv', b.dataset.lbmodus === modus));
+  document.getElementById('lb-teil-mc').hidden = mitK;
+  document.getElementById('lb-teil-k').hidden = !mitK;
+  document.getElementById('lb-kbtn-k1').hidden = modus !== 'k1';
+  document.getElementById('lb-kbtn-k2').hidden = modus !== 'k2';
+  ['mc', 'k1', 'k2'].forEach(md => { document.getElementById('lb-cap-' + md).hidden = md !== modus; });
+  document.getElementById('lb-eq-titel').textContent = mitK ? 'System, Elimination und Lösungsfall' : 'System und Steigungen';
+  if (mitK) {
+    // min/max/step vor dem Wert setzen, sonst klemmt der Browser auf den alten Bereich
+    const s = document.getElementById('lb-k'), p = LB_K[modus];
+    s.min = p.min; s.max = p.max; s.step = p.step; s.value = p.start;
+  }
+  drawBuschel();
+}
 function drawBuschel() {
   const m = parseFloat(document.getElementById('lb-m').value);
   const c = parseFloat(document.getElementById('lb-c').value);
+  const k = parseFloat(document.getElementById('lb-k').value);
   const D = 2 - m;
   document.getElementById('lb-mv').textContent = m.toFixed(2);
   document.getElementById('lb-cv').textContent = c.toFixed(1);
+  document.getElementById('lb-kv').textContent = (lbModus === 'k2' ? k.toFixed(1) : String(k)).replace('-', '−');
   document.querySelectorAll('[data-lb]').forEach(b => {
     const [bm, bc] = b.dataset.lb.split('|').map(Number);
     b.classList.toggle('aktiv', bm === m && bc === c);
   });
+  document.querySelectorAll('[data-lbk]').forEach(b => b.classList.toggle('aktiv', Number(b.dataset.lbk) === k));
 
   const eqEl = document.getElementById('lb-eq');
   // Reglerwerte m und c orange wie die Gerade g₂ und die Slider (akz-orange).
@@ -1579,55 +1939,116 @@ function drawBuschel() {
   // replace(/-/g) über das HTML auch «tx-orange» treffen würde.
   const zf = (v, d) => { const t = d === undefined ? String(v) : v.toFixed(d);
                          return /^-0(\.0+)?$/.test(t) ? t.slice(1) : t.replace('-', '−'); };
-  const mS = `<span class="tx-orange">${m}</span>`, cS = `<span class="tx-orange">${c}</span>`;
-  // linke Seite von g₂ sauber setzen: m = 1 → «x», m = 0 → nur «y».
-  // Nicht fmtMx() verwenden — das rundet auf eine Dezimale (1.75 → «1.8·x»).
-  const g2links = m === 0 ? 'y' : (m === 1 ? 'x + y' : `${mS}·x + y`);
-  const steig2 = m === 0 ? mS : `−${mS}`;            // Steigung von g₂: y = −m·x + c
+  // k-Modi: Zahl ohne Nachkommanullen (2.25, 1.5, −8); negatives k in Klammern: 3·(−5)
+  const zk = v => zf(Math.round(v * 1000) / 1000);
+  const kS = `<span class="tx-orange">${zk(k)}</span>`;
+  const kKl = k < 0 ? `(${kS})` : kS;
+  // k-Modi: zusammengehörige Rechenstücke nicht umbrechen (360 px), dazwischen schon
+  const nw = t => `<span style="white-space:nowrap">${t}</span>`;
   let fall, farbe, S = null;
-  if (Math.abs(D) > 1e-9) {
-    const xs = (4 - c) / D, ys = 4 - 2 * xs;
-    S = [xs, ys];
-    fall = 'eindeutig';
-    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 ≠ ${steig2} → ` +
-      `<strong>genau eine Lösung</strong> S(${zf(xs, 2)}&nbsp;|&nbsp;${zf(ys, 2)})`;
-    farbe = '#1f6b3a';
-  } else if (Math.abs(c - 4) < 1e-9) {
-    fall = 'identisch';
-    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 = ${steig2}, beide Gleichungen gleich: ` +
-      `0 = 0 → <strong>unendlich viele Lösungen</strong> (die ganze Gerade)`;
-    farbe = '#1a4f8a';
+  let xMin = -6, xMax = 6, yMin = -4, yMax = 10;
+  let g1, g2, flucht = 'm → 2';
+  const familie = [];
+  if (lbModus === 'mc') {
+    g1 = { steig: -2, achs: 4 };
+    g2 = { steig: -m, achs: c };
+    // Geradenbüschel: g₂ für andere c (parallel zueinander)
+    for (let cc = 0; cc <= 8; cc += 2) if (Math.abs(cc - c) >= 1e-9) familie.push({ steig: -m, achs: cc });
+    const mS = `<span class="tx-orange">${m}</span>`, cS = `<span class="tx-orange">${c}</span>`;
+    // linke Seite von g₂ sauber setzen: m = 1 → «x», m = 0 → nur «y».
+    // Nicht fmtMx() verwenden — das rundet auf eine Dezimale (1.75 → «1.8·x»).
+    const g2links = m === 0 ? 'y' : (m === 1 ? 'x + y' : `${mS}·x + y`);
+    const steig2 = m === 0 ? mS : `−${mS}`;            // Steigung von g₂: y = −m·x + c
+    if (Math.abs(D) > 1e-9) {
+      const xs = (4 - c) / D, ys = 4 - 2 * xs;
+      S = [xs, ys];
+      fall = 'eindeutig';
+      eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 ≠ ${steig2} → ` +
+        `<strong>genau eine Lösung</strong> S(${zf(xs, 2)}&nbsp;|&nbsp;${zf(ys, 2)})`;
+      farbe = '#1f6b3a';
+    } else if (Math.abs(c - 4) < 1e-9) {
+      fall = 'identisch';
+      eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 = ${steig2}, beide Gleichungen gleich: ` +
+        `0 = 0 → <strong>unendlich viele Lösungen</strong> (die ganze Gerade)`;
+      farbe = '#1a4f8a';
+    } else {
+      fall = 'parallel';
+      eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 = ${steig2}, Subtraktion ergibt ` +
+        `0 = ${zf(c - 4, 1)} → <strong>keine Lösung</strong>, 𝕃&nbsp;=&nbsp;{&nbsp;}`;
+      farbe = '#c8412c';
+    }
+  } else if (lbModus === 'k1') {
+    yMin = -6; yMax = 6;
+    g1 = { steig: 0.5, achs: -1.5 };                    // 3x − 6y = 9  →  y = x/2 − 3/2
+    g2 = { steig: 0.5, achs: k / 2 };                   // −x + 2y = k  →  y = x/2 + k/2
+    for (let kk = -9; kk <= 3; kk += 2) if (kk !== k) familie.push({ steig: 0.5, achs: kk / 2 });
+    const rest = 9 + 3 * k;
+    const kopf = `${nw('3·x − 6·y = 9 ;')}&nbsp; ${nw(`−x + 2·y = ${kS}`)}<br>` +
+      `${nw('(I) + 3·(II):')} ${nw(`0 = 9 + 3·${kKl} = ${zk(rest)}`)}<br>`;
+    if (Math.abs(rest) < 1e-9) {
+      fall = 'identisch'; farbe = '#1a4f8a';
+      eqEl.innerHTML = kopf + `wahre Aussage → ${nw('<strong>unendlich viele Lösungen</strong>:')} ` +
+        `beim kritischen Wert k&nbsp;=&nbsp;${kS} sind die Geraden identisch`;
+    } else {
+      fall = 'parallel'; farbe = '#c8412c';
+      eqEl.innerHTML = kopf + `Widerspruch → ${nw('<strong>keine Lösung</strong>,')} ${nw('𝕃 = { }:')} ` +
+        `gleiche Steigung, die Geraden sind parallel`;
+    }
   } else {
-    fall = 'parallel';
-    eqEl.innerHTML = `2·x + y = 4 ;&nbsp;&nbsp; ${g2links} = ${cS} &nbsp; → &nbsp; Steigungen −2 = ${steig2}, Subtraktion ergibt ` +
-      `0 = ${zf(c - 4, 1)} → <strong>keine Lösung</strong>, 𝕃&nbsp;=&nbsp;{&nbsp;}`;
-    farbe = '#c8412c';
+    yMin = -6; yMax = 6;
+    flucht = 'k → −2';
+    g1 = Math.abs(k) < 1e-9 ? { senkrecht: 2 } : { steig: -1 / k, achs: 2 / k };   // x + ky = 2
+    g2 = { steig: -k / 4, achs: 1 };                                                // kx + 4y = 4
+    const a = 4 - k * k, b = 4 - 2 * k;
+    const kopf = `${nw(`x + ${kKl}·y = 2 ;`)}&nbsp; ${nw(`${kKl}·x + 4·y = 4`)}<br>` +
+      `${nw(`(II) − ${kKl}·(I):`)} ${nw(`(4 − ${kKl}²)·y`)} ${nw(`= 4 − 2·${kKl}`)} ${nw(`→ ${zk(a)}·y = ${zk(b)}`)}<br>`;
+    if (Math.abs(a) > 1e-9) {
+      const xs = 4 / (k + 2), ys = 2 / (k + 2);
+      S = [xs, ys];
+      fall = 'eindeutig'; farbe = '#1f6b3a';
+      eqEl.innerHTML = kopf + `${nw(`y = ${zf(ys, 2)},`)} ${nw('in (I) eingesetzt:')} ${nw(`x = ${zf(xs, 2)} →`)} ` +
+        `${nw('<strong>genau eine Lösung</strong>')} ${nw(`S(${zf(xs, 2)} | ${zf(ys, 2)})`)}`;
+    } else if (Math.abs(b) < 1e-9) {
+      fall = 'identisch'; farbe = '#1a4f8a';
+      eqEl.innerHTML = kopf + `wahr für jedes y → ${nw('<strong>unendlich viele Lösungen</strong>:')} ` +
+        `beim kritischen Wert k&nbsp;=&nbsp;${kS} sind die Geraden identisch`;
+    } else {
+      fall = 'parallel'; farbe = '#c8412c';
+      eqEl.innerHTML = kopf + `Widerspruch → ${nw('<strong>keine Lösung</strong>,')} ${nw('𝕃 = { }:')} ` +
+        `beim kritischen Wert k&nbsp;=&nbsp;${kS} sind die Geraden parallel`;
+    }
   }
 
   const { ctx, W, H } = initCanvas('cv-lbuschel', 300, false);
-  const xMin = -6, xMax = 6, yMin = -4, yMax = 10;
   const { cx, cy } = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax);
-
-  // Geradenbüschel: g₂ für andere c (parallel zueinander)
-  for (let cc = 0; cc <= 8; cc += 2) {
-    if (Math.abs(cc - c) < 1e-9) continue;
-    drawLine(ctx, cx, cy, -m, cc, xMin, xMax, 'rgba(184,92,0,0.18)', 1.5);
-  }
-  drawLine(ctx, cx, cy, -2, 4, xMin, xMax, '#1a4f8a', 2.8);       // g₁: y = 4 − 2x
-  drawLine(ctx, cx, cy, -m, c, xMin, xMax, '#b85c00', 2.8);       // g₂: y = c − m·x
+  const zieh = (g, f, breite) => {
+    if (g.senkrecht !== undefined) {
+      ctx.strokeStyle = f; ctx.lineWidth = breite; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(cx(g.senkrecht), 0); ctx.lineTo(cx(g.senkrecht), H); ctx.stroke();
+    } else drawLine(ctx, cx, cy, g.steig, g.achs, xMin, xMax, f, breite);
+  };
+  familie.forEach(g => zieh(g, 'rgba(184,92,0,0.18)', 1.5));
+  // Identisch in den k-Modi: g₁ breit unter g₂, damit beide Geraden sichtbar bleiben
+  zieh(g1, '#1a4f8a', lbModus !== 'mc' && fall === 'identisch' ? 6 : 2.8);
+  zieh(g2, '#b85c00', 2.8);
 
   const drin = S && S[0] > xMin && S[0] < xMax && S[1] > yMin && S[1] < yMax;
 
   // Hinweis-Kasten (Schnittpunkt ausserhalb) und Statuszeile zuerst nur vermessen,
   // damit die Geradenlabels ihnen ausweichen können; gezeichnet wird zuletzt.
-  const kaesten = [];
+  // Achsen-«x» und -«y» von drawGrid (x: links ab W − 14, Grundlinie cy(0) − 7;
+  // y: Mitte cx(0) + 13, Grundlinie 14) sowie die Achsenzahlen (x: Grundlinie
+  // cy(0) + 14 unter der Achse; y: rechtsbündig bis cx(0) − 5) — die Geradenlabels
+  // weichen ihnen aus.
+  const kaesten = [{ x: W - 16, y: cy(0) - 18, w: 14, h: 15 }, { x: cx(0) + 5, y: 3, w: 16, h: 15 },
+                   { x: 0, y: cy(0) + 2, w: W, h: 16 }, { x: cx(0) - 30, y: 0, w: 28, h: H }];
   let hinweis = null;
   if (S && !drin) {
     ctx.font = 'italic 11px JetBrains Mono, monospace';
     // Passt der Hinweis nicht in eine Zeile (schmales Canvas), zweizeilig setzen.
-    const ganz = 'Schnittpunkt ausserhalb des Fensters — er flieht, wenn m → 2';
+    const ganz = `Schnittpunkt ausserhalb des Fensters — er flieht, wenn ${flucht}`;
     const zeilen = ctx.measureText(ganz).width + 10 <= W - 8
-      ? [ganz] : ['Schnittpunkt ausserhalb des Fensters —', 'er flieht, wenn m → 2'];
+      ? [ganz] : ['Schnittpunkt ausserhalb des Fensters —', `er flieht, wenn ${flucht}`];
     const hw = Math.max(...zeilen.map(z => ctx.measureText(z).width));
     // Zeilenabstand 14 px: Auch zweizeilig bleibt die Kastenoberkante (H − 36 = 264)
     // unter der Achsenzahl −2 (Grundlinie cy(−2) + 4 ≈ 261).
@@ -1655,35 +2076,50 @@ function drawBuschel() {
   if (drin) {
     ctx.font = 'bold 11px JetBrains Mono, monospace';
     const st = `S(${zf(S[0], 2)} | ${zf(S[1], 2)})`, sw = ctx.measureText(st).width;
-    const sx = Math.min(cx(S[0]) + 12, W - sw - 2);
-    let sBase = cy(S[1]) + 4;
+    // Kandidaten: rechts neben S, rechts darunter, links neben S, links darunter.
+    // Genommen wird der erste, der ins Canvas passt und weder Statuszeile noch
+    // Hinweis-Kasten noch Achsen-«x»/«y» trifft (die Zahlenstreifen zählen hier nicht,
+    // sonst fände ein Punkt auf der Achse keinen Platz); sonst der erste.
+    const frei = kaesten.slice(0, 2).concat([status], hinweis ? [hinweis] : []);
+    const trifft = (x0, y0) => frei.some(q => x0 - 2 < q.x + q.w && x0 - 2 + sw + 4 > q.x && y0 - 11 < q.y + q.h && y0 + 4 > q.y);
+    const rechts = cx(S[0]) + 12, links = cx(S[0]) - 12 - sw;
+    const kand = [[rechts, cy(S[1]) + 4], [rechts, cy(S[1]) + 22], [links, cy(S[1]) + 4], [links, cy(S[1]) + 22]]
+      .filter(([x0]) => x0 >= 2 && x0 + sw <= W - 2);
+    const [sx, sBase] = kand.find(([x0, y0]) => !trifft(x0, y0)) || kand[0] || [Math.max(2, W - sw - 2), cy(S[1]) + 4];
     const kasten = y => ({ x: sx - 2, y: y - 11, w: sw + 4, h: 15 });
-    const k = kasten(sBase);
-    if (k.x < status.x + status.w && k.x + k.w > status.x && k.y < status.y + status.h && k.y + k.h > status.y)
-      sBase = cy(S[1]) + 22;
     sLabel = { st, sx, sBase };
-    kaesten.push(kasten(sBase));
+    kaesten.push(kasten(sBase), { x: cx(S[0]) - 8, y: cy(S[1]) - 8, w: 16, h: 16 });   // Label und Punkt
   }
 
   // Labels dort setzen, wo die Gerade tatsächlich im Fenster liegt — und nicht
-  // unter Hinweis-Kasten oder Statuszeile.
+  // unter Hinweis-Kasten, Statuszeile oder einem schon gesetzten Label (identische
+  // Geraden: g₂ weicht g₁ aus). Senkrechte Gerade (k-Modus, k = 0): entlang y suchen.
   const ueberlappt = (x0, y0, w, h) => kaesten.some(k =>
     x0 < k.x + k.w && x0 + w > k.x && y0 < k.y + k.h && y0 + h > k.y);
-  const labelAn = (steig, achs, farbe, name) => {
+  const labelAn = (g, farbe, name) => {
     const lw = ctx.measureText(name).width;
+    const setze = (bx, by) => {
+      ctx.fillStyle = farbe; ctx.textAlign = 'left';
+      ctx.fillText(name, bx, by);
+      kaesten.push({ x: bx - 2, y: by - 11, w: lw + 4, h: 15 });
+    };
+    if (g.senkrecht !== undefined) {
+      for (let y = yMax - 0.8; y > yMin; y -= 0.4)
+        if (!ueberlappt(cx(g.senkrecht) + 6 - 2, cy(y) - 11, lw + 4, 15)) { setze(cx(g.senkrecht) + 6, cy(y)); return; }
+      return;
+    }
     for (let x = xMax - 0.8; x > xMin; x -= 0.4) {
-      const y = steig * x + achs;
-      if (y > yMin + 0.8 && y < yMax - 0.8 &&
+      const y = g.steig * x + g.achs;
+      if (y > yMin + 0.8 && y < yMax - 0.8 && cx(x) + 4 + lw <= W - 2 &&
           !ueberlappt(cx(x) + 4 - 2, cy(y) - 8 - 11, lw + 4, 15)) {
-        ctx.fillStyle = farbe; ctx.textAlign = 'left';
-        ctx.fillText(name, cx(x) + 4, cy(y) - 8);
+        setze(cx(x) + 4, cy(y) - 8);
         return;
       }
     }
   };
   ctx.font = 'bold 12px JetBrains Mono, monospace';
-  labelAn(-2, 4, '#1a4f8a', 'g₁');
-  labelAn(-m, c, '#b85c00', 'g₂');
+  labelAn(g1, '#1a4f8a', 'g₁');
+  labelAn(g2, '#b85c00', 'g₂');
 
   if (drin) {
     drawDot(ctx, cx, cy, S[0], S[1], '#1f6b3a', 6);

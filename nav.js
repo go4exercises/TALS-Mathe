@@ -17,6 +17,7 @@ const SITE = {
     { id:'g2-2a', nr:'2.2a', titel:'Lineare Gleichungen', url:'grundlagen/g2-2a-lineare-gleichungen.html' },
     { id:'g2-2b', nr:'2.2b', titel:'Quadratische Gleichungen', url:'grundlagen/g2-2b-quadratische-gleichungen.html' },
     { id:'g2-3', nr:'2.3', titel:'Lineare Gleichungssysteme', url:'grundlagen/g2-3-lineare-gleichungssysteme.html' },
+    { id:'g2-M', nr:'2.M', titel:'Textaufgaben modellieren', url:'grundlagen/g2-modellieren.html' },
     { id:'g3-1', nr:'3.1', titel:'Grundlagen', url:'grundlagen/g3-1-grundlagen.html' },
     { id:'g3-2', nr:'3.2', titel:'Lineare Funktionen', url:'grundlagen/g3-2-lineare-funktionen.html' },
     { id:'g3-3', nr:'3.3', titel:'Quadratische Funktionen', url:'grundlagen/g3-3-quadratische-funktionen.html' },
@@ -64,7 +65,7 @@ const SITE = {
 const GROUPS = {
   grundlagen: [
     { nr:'1', titel:'Arithmetik/Algebra', ids:['g1-1', 'g1-2', 'g1-3', 'g1-4'] },
-    { nr:'2', titel:'Gleichungen, Ungleichungen und Gleichungssysteme', ids:['g2-1', 'g2-2a', 'g2-2b', 'g2-3'] },
+    { nr:'2', titel:'Gleichungen, Ungleichungen und Gleichungssysteme', ids:['g2-1', 'g2-2a', 'g2-2b', 'g2-3', 'g2-M'] },
     { nr:'3', titel:'Funktionen', ids:['g3-1', 'g3-2', 'g3-3'] },
     { nr:'4', titel:'Datenanalyse', ids:['g4-0', 'g4-1', 'g4-2', 'g4-3'] },
     { nr:'5', titel:'Geometrie', ids:['g5-1', 'g5-2a', 'g5-2b', 'g5-2c', 'g5-2d', 'g5-3', 'g5-4', 'g5-5'] }
