@@ -808,3 +808,27 @@ sind ausgeschrieben und neu vertont. In allen 197 Mathe-Drehbüchern stehen Ziff
 richtig.
 
 **Wie.** Den letzten Satz ab «Die Reihe `trigo2` …» löschen. Sonst nichts.
+
+## Clip-Bühne: «✕ Schliessen» bei schmalem Bildschirm abgeschnitten (2026-09-15)
+
+**Was.** Unter 720 px teilt sich der Kopf der Clip-Bühne (`.cb-kopf`) eine Zeile mit
+Titel, «eigener Tab ↗» und «✕ Schliessen». Weil `.cb-tab`/`.cb-zu` nicht umbrechen und
+der Titel nicht unter die Breite seines längsten Worts schrumpft, ragt der
+Schliessen-Knopf über den rechten Rand. In Mathe gemessen: bei 360 px 81 von 177
+Titeln, bei 320 px 170, bei 400 px 11.
+
+**Wo in Physik.** `../tals-physik/style.css`, `@media (max-width: 720px)` direkt nach
+`.cb-rahmen iframe` (Z. 1359–1363 am 15.09.2026) — wortgleich mit dem Mathe-Block vor
+der Korrektur. Die Bühne öffnet `physiklib.js` (Z. ~347); `clips.html` hat 91 Einträge
+mit `data-modus="gross"`, der längste der 100 Drehbuch-Titel hat 80 Zeichen.
+
+**Wie.** Im Media-Block nach `.cb-kopf, .cb-rahmen { width: 100%; }` ergänzen:
+
+```css
+  .cb-kopf { flex-wrap: wrap; gap: 4px 12px; }
+  .cb-titel { flex: 1 1 100%; }
+```
+
+Der Titel nimmt dann die erste Zeile, Tab und Schliessen stehen darunter rechts
+(`.cb-tab` hat schon `margin-left: auto`). In Mathe danach alle Titel bei 320/360/400/720
+und 1280 px nachgemessen: Knopf überall innerhalb des Rands, 1280 px unverändert.
