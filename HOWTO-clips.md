@@ -993,17 +993,17 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 
-- **Der Bestand ist beisammen.** Stand 08.09.2026: **197 Drehbücher**, alle vertont —
-  162 in der Bibliothek (160:41 min, 54 Reihen) und 35 unverlinkte Prüfungsclips mit
+- **Der Bestand ist beisammen.** Stand 15.09.2026: **203 Drehbücher**, alle vertont —
+  168 in der Bibliothek (167:25 min, 55 Reihen) und 35 unverlinkte Prüfungsclips mit
   `"probe": true` (28:04 min). Alle fünf Lerngebiete des Grundlagenfachs und alle vier
   des Schwerpunktfachs sind angefangen — abgedeckt ist damit nicht dasselbe:
-  **39 der 46 Themenseiten tragen Clips**, 44 tragen den Marker (fünf davon leer).
+  **40 der 47 Themenseiten tragen Clips**, 45 tragen den Marker (fünf davon leer).
   Das Schwerpunktfach ist dabei deutlich dünner besetzt als das Grundlagenfach:
-  128 Zuordnungen auf den 20 GF-Seiten mit Clips (Median 6 je Seite) gegen 46 auf den
+  133 Zuordnungen auf den 21 GF-Seiten mit Clips (Median 5 je Seite) gegen 46 auf den
   19 SF-Seiten mit Clips (Median 1). Ohne Clip sind `s1-1`, `s2-1`, `s3-1` und `s4-1` —
   dazu `g1-1`, `g4-0` und `g5-2b`. Elf der belegten SF-Seiten haben genau einen Clip.
 
-- **Der Rechner ist ein eigener Strang.** 22 der 162 Clips tragen `werkzeug: true`
+- **Der Rechner ist ein eigener Strang.** 22 der 168 Clips tragen `werkzeug: true`
   (31:12 min) und liegen auf 14 Seiten — von `g1-2` (Brüche, ggT und kgV) bis `s4-2a`
   (Formeln mehrfach auswerten). Sie bilden keine eigene Reihe, sondern hängen als
   letzter Clip an der Reihe, deren Stoff sie bedienen. Die Belegquelle und die drei

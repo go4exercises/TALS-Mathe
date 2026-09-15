@@ -687,6 +687,11 @@ TALS-Mathe/
 - Bereichs-Präfix: `g` für Grundlagen, `s` für Schwerpunkt
 - Lerngebiet-Nummer: `g3-2` = Grundlagen, Lerngebiet 3 (Funktionen), Thema 2 (Lineare)
 - **Sub-Split** (siehe 4.1): Buchstaben-Suffixe `a`, `b`, `c` direkt an die RLP-Nummer angehängt — `g2-2a`, `g2-2b`. Die Schwesterseiten teilen das gemeinsame Numerik-Präfix (`g2-2`), unterscheiden sich nur im Suffix.
+- **Seite ohne eigene RLP-Nummer** (seit 15.09.2026, bisher nur `g2-modellieren.html`): Sie
+  bündelt Stoff mehrerer Teilgebiete eines Lerngebiets. Dateiname `g<lerngebiet>-<thema>.html`
+  ohne Teilgebiet-Nummer; in `nav.js` `id:'g2-M'`, `nr:'2.M'`, eingereiht nach dem letzten
+  Teilgebiet des Lerngebiets; `pt-untertitel` nennt die bedienten RLP-Punkte
+  («Vertiefung zu RLP 2.1 und 2.3»). Clip-Dateinamen folgen dem nav-Code (`g2-M-…`).
 - Dateinamen kleingeschrieben, mit Bindestrichen, ohne Umlaute (`-funktionen.html`, nicht `_Funktionen.html`)
 - **Druckseiten-Dateinamen** sind über alle Themen hinweg identisch: `handout.html`, `teste-dich-selbst.html`, `aufgabenserie.html` (plus `ankideck.apkg`). Das erleichtert Verlinkung, Kopiervorlagen und Suche.
 
@@ -1069,8 +1074,8 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
 Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
-`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 08.09.2026: 162 Clips in der
-Bibliothek (160:41 min), dazu 35 unverlinkte Prüfungsclips.
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 15.09.2026: 168 Clips in der
+Bibliothek (167:25 min), dazu 35 unverlinkte Prüfungsclips.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass

@@ -4,6 +4,62 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 15. September 2026 · Quadratische Gleichungen und Gleichungssysteme: Lücken geschlossen
+
+Arbeitsliste `todo-Q-GS.md` (30-Lektionen-Planung zu Algebra Kap. 9 und 10) abgearbeitet:
+T1–T7 und T9 umgesetzt, T8 (Leitprogramm-Führungsschicht) auf Entscheid des Auftraggebers
+gestrichen. Das Lehrbuch lag nicht vor; alle Aufgaben ausser den vorgegebenen
+Prüfungsbeispielen sind eigene, mit Python nachgerechnet.
+
+### Hinzugefügt
+
+**`grundlagen/g2-2b-quadratische-gleichungen.html`**
+
+- *Wenn x im Nenner steht* (`#bruchgleichungen`) — Definitionsmenge, Hauptnenner,
+  Scheinlösung; Beispiel `x/(x−2) + 3/(x+2) = 8/(x²−4)` → 𝕃 = {−7}. Mini-Check, **A8**.
+- *Zurückführen auf quadratisch* — Substitution, Rücksubstitution, 0 bis 4 Lösungen. Mini-Check, **A9**.
+- *Quadratische Ungleichungen* — Vorzeichenmuster am Zahlenstrahl mit neuem Widget
+  (2 oder 3 Linearfaktoren, < ≤ > ≥, Intervallklammern nach §2.7). Abgrenzung zu s2-2c, **A10**.
+- *Parameterdiskussion* erweitert — Tabelle D > 0 / = 0 / < 0, Sonderfall a = 0, zweiter
+  Mini-Check; **A4** um Teil b) mit Fallunterscheidung ergänzt.
+
+**`grundlagen/g2-3-lineare-gleichungssysteme.html`**
+
+- *Nicht lineare Gleichungssysteme: wenn x im Nenner steht* — Substitution u = 1/x, v = 1/y,
+  Klammer-Substitution, Sonderfall u = 0. Mini-Check, **A8**.
+- *Drei Lösungsfälle* erweitert — Geradenbüschel mit zwei Parameter-Modi (k in der
+  Konstanten, k im Koeffizienten), *Für welches k …?*, *Nach x und y auflösen, wenn
+  Parameter dabei sind*. **A9**.
+
+**`grundlagen/g2-modellieren.html`** (neu, nav `g2-M` / `2.M`) — Modellier-Baukasten:
+Bilanzprinzip in vier Schritten, vier Typen (Zahlenrätsel, Mischen, Verteilen, Zins),
+Ansatz-Trainer mit 10 Aufgaben (Rückmeldung nur auf den Ansatz, Drag & Drop oder Klick),
+Aufgaben, Zusatzserie *Technische Sachverhalte*. Zusatzmaterial in
+`downloads/grundlagen/g2-modellieren/`: Handout (3 S.), Übersichtstabelle (A4 quer),
+Anki-Deck (18 Karten, `NEW_DECKS` in `scripts/build_apkg.py`). Eingetragen in `nav.js`,
+`index.html`, `scripts/build-seo.py`; verlinkt aus g2-1, g2-2b und g2-3.
+
+**Sechs Clips** — `g2-2b-bruchgleichung-definitionsmenge`, `g2-2b-biquadratisch-ruecksubstitution`,
+`g2-2b-ungleichung-vorzeichenmuster`, `g2-3-nenner-substitution`, `g2-3-parameter-keine-loesung`,
+`g2-M-deklarieren-bilanzieren` (neue Reihe *Textaufgaben*). Bibliothek **162 → 168 Clips**
+(160:41 → 167:25 min), 55 Reihen; 40 der 47 Themenseiten tragen Clips.
+
+### Geändert
+
+- `downloads/grundlagen/g2-3-lineare-gleichungssysteme/zusatz-gauss-cramer.html` und ihr
+  Download-Link: gekennzeichnet als «über RLP hinaus — nicht prüfungsrelevant».
+- Clip `s2-2a-bruchgleichungen` hängt nicht mehr als Gast auf g2-2b; der neue Clip zur
+  Definitionsmenge deckt dort denselben Stoff ab.
+- `style.css`: Unter 720 px bricht der Kopf der Clip-Bühne um; «✕ Schliessen» ragte vorher
+  bei 360 px in 81 von 177 Titeln über den Rand. Übertrag nach Physik in
+  `TODO-schwesterprojekt.md`.
+- MathJax setzte `]-\infty` mit dem Abstand eines Rechenminus; an 10 Stellen auf g1-2,
+  g2-2a, s2-2c und s3-2b auf `]{-\infty}` umgestellt.
+- `CLAUDE.md`, `README.md`, `STYLEGUIDE.md`, `HOWTO-clips.md`, `HOWTO-neue-themenseite.md` —
+  Zählungen nachgeführt; Naming-Regel für Seiten ohne eigene RLP-Nummer ergänzt.
+
+---
+
 ## [Unveröffentlicht] — 8. September 2026 · Alle fünf Leitprogramme sichtbar
 
 `leitprogramme.html` zeigte drei von fünf Programmen. Die beiden nach Prüfungsbogen —
