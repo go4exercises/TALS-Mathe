@@ -13,6 +13,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - **Dezimaltrennzeichen ist der Punkt, nie das Komma** — überall: LaTeX (`9.81`, nicht
   `9{,}81`), Aufgabentexte, Live-Anzeigen, JS-Code.
 - MathJax-Delimiter: `\(…\)` inline, `\[…\]` abgesetzt. Niemals `$…$`.
+- **Leere Menge als `\{\,\}`**, nie `\emptyset` oder `∅` (STYLEGUIDE §2.11).
 - Alles Mathematische in LaTeX/MathJax.
 
 ## Bereichs- & Farbsystem (STYLEGUIDE §5)

@@ -299,6 +299,30 @@ liegt (`xMin = 0` / `yMin = 0`).
 
 ---
 
+## 2.11 Leere Menge (verbindlich seit 21.09.2026)
+
+Die leere Menge wird **als leere Mengenklammer** geschrieben, nie als durchgestrichene Null:
+
+| Wo | Lehrmittel-Standard | NICHT verwenden |
+|---|---|---|
+| LaTeX (Seiten, Clips, Druckseiten) | `\(\mathbb{L} = \{\,\}\)` | `\emptyset`, `\varnothing` |
+| Live-Anzeige (JS-Text), Anki-Karten | `𝕃 = { }` | `∅` |
+
+- **Genau diese Form:** `\{\,\}` mit schmalem Abstand. Nicht `\{\}`, `\{\ \}` oder `\{\;\}` —
+  alle stellen dasselbe dar, eine einheitliche Schreibweise macht die Suche nach Restfunden
+  aber trivial (`grep -rn 'emptyset\|∅'`).
+- **Begleittext:** «die leere Menge», «die Lösungsmenge ist leer». Wo es didaktisch nötig ist:
+  «zwischen den Klammern steht nichts». Nicht vom «Leere-Menge-Zeichen» sprechen.
+- **Typischer Fehler, der benannt werden darf:** \(\{0\}\) statt \(\{\,\}\) — das ist eine Menge
+  mit einem Element, der Null.
+- Gilt auch für Sprechertexte von Clips: gesprochen wird «die Lösungsmenge ist leer», nie das
+  Zeichen beschrieben.
+
+Umgestellt am 21.09.2026 in allen Themenseiten, Leitprogrammen, Glossar, Formelsammlung,
+Druckseiten, Clip-Drehbüchern, Anki-Decks und im Notationstrainer.
+
+---
+
 ## 3. Achsenskalierung (verbindlich)
 
 > **Diese Regel kommt direkt aus den Projekt-Instructions und gilt unbedingt.**
@@ -1256,6 +1280,7 @@ Bevor eine Themenseite live geht, prüfe:
 **Notation**
 - [ ] Multiplikationspunkt in Live-Anzeigen (`2·x`, nicht `2x`)
 - [ ] Punkt-Komma-Notation: `(2 | 3)`, nicht `(2, 3)`
+- [ ] Leere Menge als `\{\,\}`, nicht `\emptyset` / `∅` (§2.11)
 - [ ] Dezimal**punkt**, nicht Komma
 - [ ] „Graph" geschrieben, nicht „Graf"
 - [ ] LaTeX für alle Formeln (kein Unicode-Improvising)

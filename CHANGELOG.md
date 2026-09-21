@@ -4,6 +4,18 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 21. September 2026 · Leere Menge als { }
+
+### Geändert
+
+Die leere Menge heisst im ganzen Lehrmittel \(\{\,\}\), nicht mehr \(\emptyset\) — neue Regel
+STYLEGUIDE §2.11. Umgestellt: Themenseiten g2-2a, g2-2b, g2-3, g5-5 (Text und Live-Anzeigen),
+Leitprogramme Quadratische Gleichungen, Gleichungssysteme, Übungsprüfung 1, Glossar,
+Formelsammlung, 12 Druckseiten, 13 Clip-Drehbücher (neu gebaut, Tonspuren unverändert — kein
+Sprechertext nennt das Zeichen) und 4 Anki-Decks (g2-1, g2-2a, g2-2b, g2-3; 14 Notizen, IDs
+und GUIDs unverändert, damit ein erneuter Import aktualisiert statt verdoppelt). Die
+Schreibvarianten `\{\}`, `\{\ \}`, `\{\;\}` sind mit vereinheitlicht.
+
 ## [Unveröffentlicht] — 21. September 2026 · Notationstrainer
 
 ### Hinzugefügt
