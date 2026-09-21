@@ -37,6 +37,10 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
 - `formelsammlung.html`, `glossar.html`, `clips.html`, `leitprogramme.html` — vier
   Nachschlag-Seiten im Repo-Root.
+- `notationstrainer.html` — Lernkartei (5 Fächer, Stand in `localStorage`) zur Notation von
+  𝔻, 𝕃 und Intervallen mit wechselnder Grundmenge. Die Karten stehen als Array `KARTEN`
+  im Seitenskript; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
+  Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
 - `leitprogramme/` — 5 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über

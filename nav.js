@@ -127,7 +127,8 @@ function buildNav(cfg) {
   // gleich behandelt — auf der Startseite und den übrigen Seiten bleibt alles
   // zu und wird erst per Klick geöffnet.
   const refAktiv = (cfg.id === 'glossar' || cfg.id === 'formeln' ||
-                    cfg.id === 'clips' || cfg.id === 'leitprogramme');
+                    cfg.id === 'clips' || cfg.id === 'leitprogramme' ||
+                    cfg.id === 'notation');
   const spOffen  = (cfg.bereich === 'schwerpunkt');
   const glOffen  = (cfg.bereich === 'grundlagen');
 
@@ -207,7 +208,7 @@ function buildNav(cfg) {
       </div>
     </div>
     <div class="dropdown">
-      <button class="nav-btn${(cfg.id==='glossar'||cfg.id==='formeln'||cfg.id==='clips') ? ' aktiv':''}" onclick="toggleDD('dd-ref')">
+      <button class="nav-btn${(cfg.id==='glossar'||cfg.id==='formeln'||cfg.id==='clips'||cfg.id==='notation') ? ' aktiv':''}" onclick="toggleDD('dd-ref')">
         Nachschlagen ▾
       </button>
       <div class="dd-menu" id="dd-ref">
@@ -224,6 +225,9 @@ function buildNav(cfg) {
           </a>
           <a href="${prefix}leitprogramme.html" class="${cfg.id==='leitprogramme'?'dd-aktiv':''}">
             <span class="dd-nr">▤</span><span class="dd-tit">Leitprogramme</span>
+          </a>
+          <a href="${prefix}notationstrainer.html" class="${cfg.id==='notation'?'dd-aktiv':''}">
+            <span class="dd-nr">{ }</span><span class="dd-tit">Notationstrainer</span>
           </a>
         </div>
         <div class="dd-gruppe">
@@ -282,6 +286,7 @@ function buildNav(cfg) {
       <a href="${prefix}formelsammlung.html" class="${cfg.id==='formeln'?'mn-aktiv':''}">∑ · Formelsammlung</a>
       <a href="${prefix}clips.html" class="${cfg.id==='clips'?'mn-aktiv':''}">▶ · Clips</a>
       <a href="${prefix}leitprogramme.html" class="${cfg.id==='leitprogramme'?'mn-aktiv':''}">▤ · Leitprogramme</a>
+      <a href="${prefix}notationstrainer.html" class="${cfg.id==='notation'?'mn-aktiv':''}">{ } · Notationstrainer</a>
       <a href="https://www.sbfi.admin.ch/dam/de/sd-web/xCh9wCCwVgrh/formulaire_final_d.pdf" target="_blank" rel="noopener">PDF · SBFI-Formelsammlung</a>
     </div>
   </details>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notationstrainer — Mathe begreifbar</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<meta name="description" content="Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit fünf Fächern zum Wiederholen.">
+<meta name="author" content="Raphael Arnold Kohler">
+<link rel="canonical" href="https://mathe.begreifbar.ch/notationstrainer.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mathe begreifbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:title" content="Notationstrainer — Definitions- und Lösungsmengen richtig aufschreiben">
+<meta property="og:description" content="Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit fünf Fächern zum Wiederholen.">
+<meta property="og:url" content="https://mathe.begreifbar.ch/notationstrainer.html">
+<meta property="og:image" content="https://mathe.begreifbar.ch/og-bild.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebPage",
+   "@id": "https://mathe.begreifbar.ch/notationstrainer.html#inhalt",
+   "url": "https://mathe.begreifbar.ch/notationstrainer.html",
+   "name": "Notationstrainer — Definitions- und Lösungsmengen richtig aufschreiben",
+   "description": "Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit fünf Fächern zum Wiederholen.",
+   "inLanguage": "de-CH",
+   "isAccessibleForFree": true,
+   "license": "https://creativecommons.org/licenses/by-nc/4.0/deed.de",
+   "creator": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "publisher": {
+    "@type": "Person",
+    "name": "Raphael Arnold Kohler"
+   },
+   "dateModified": "2026-08-02",
+   "isPartOf": {
+    "@id": "https://mathe.begreifbar.ch/#website"
+   },
+   "about": [
+    {
+     "@type": "DefinedTerm",
+     "name": "Mathematik"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Definitionsmenge"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Lösungsmenge"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Intervall"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Grundmenge"
+    },
+    {
+     "@type": "DefinedTerm",
+     "name": "Lernkartei"
+    }
+   ],
+   "keywords": "Mathematik, Definitionsmenge, Lösungsmenge, Intervall, Grundmenge, Lernkartei",
+   "learningResourceType": "Lernkartei",
+   "educationalLevel": "Sekundarstufe II — Berufsmaturität (Schweiz)",
+   "typicalAgeRange": "16-20",
+   "audience": {
+    "@type": "EducationalAudience",
+    "educationalRole": [
+     "student",
+     "teacher"
+    ]
+   },
+   "interactivityType": "active"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://mathe.begreifbar.ch/#website",
+   "url": "https://mathe.begreifbar.ch/",
+   "name": "Mathe begreifbar"
+  }
+ ]
+}
+</script>
+<!-- SEO:ENDE -->
+<link rel="stylesheet" href="schriften.css">
+<link rel="stylesheet" href="style.css">
+<script>
+MathJax = {
+  tex: { inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']], packages:{'[+]':['boldsymbol']} },
+  svg: { fontCache:'global', scale:1.05 },
+  loader: { load:['[tex]/boldsymbol'] },
+  options: { skipHtmlTags:['script','noscript','style','textarea'] }
+};
+</script>
+<script src="vendor/mathjax/tex-svg.js"></script>
+<style>
+/* Notationstrainer — seiteneigene Klassen (Präfix nt-), Farben aus style.css.
+   Orange = Aufgabe (Vorderseite), Grün = Lösung (Rückseite), Rot = Stolperfalle. */
+.nt-filter { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:10px 0 6px; padding:10px 14px;
+  background:var(--papier-2); border:1px solid var(--linie); border-radius:8px; }
+.nt-filter .gm-label { font-family:var(--mono); font-size:.82rem; color:var(--tinte-2); margin-right:4px; }
+.nt-filter + .nt-filter { margin-top:0; }
+.nt-fach-leiste { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin:14px 0 4px; }
+.nt-fach { text-align:center; border:1px solid var(--linie); border-radius:8px; background:var(--weiss); padding:6px 4px; }
+.nt-fach-nr { font-family:var(--mono); font-size:.68rem; color:var(--tinte-2); letter-spacing:.5px; }
+.nt-fach-n { font-family:var(--mono); font-size:1.15rem; font-weight:700; line-height:1.3; }
+.nt-fach.nt-jetzt { border-color:var(--orange-rand); box-shadow:0 0 0 2px var(--orange-hell); }
+.nt-fach[data-f="5"] .nt-fach-n { color:var(--gruen); }
+.nt-meta { font-family:var(--mono); font-size:.74rem; color:var(--tinte-2); margin:2px 0 12px; }
+.nt-karte { background:var(--weiss); border:1px solid var(--linie); border-radius:12px; box-shadow:var(--sl); overflow:hidden; }
+.nt-vorne { border-top:5px solid var(--orange); padding:16px 20px 18px; }
+.nt-kopf { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:10px; }
+.nt-tag { font-family:var(--mono); font-size:.7rem; padding:2px 9px; border-radius:20px; background:var(--orange-hell); color:var(--orange); border:1px solid var(--orange-rand); }
+.nt-tag.nt-gf { background:var(--blau-hell); color:var(--blau); border-color:var(--blau-rand); }
+.nt-tag.nt-sf { background:var(--lila-hell); color:var(--lila); border-color:var(--lila-rand); }
+.nt-tag.nt-fachtag { background:var(--papier-2); color:var(--tinte-2); border-color:var(--linie); margin-left:auto; }
+.nt-lage { font-size:1.02rem; }
+.nt-lage .nt-g { display:inline-block; margin-top:4px; font-family:var(--mono); font-size:.8rem; color:var(--tinte-2); }
+.nt-frage { margin-top:10px; font-weight:600; color:var(--orange); }
+.nt-hinten { border-top:1px dashed var(--linie); background:var(--gruen-hell); padding:14px 20px 16px; }
+.nt-hinten .nt-antwort { overflow-x:auto; }
+.nt-weg { font-size:.93rem; margin-top:4px; }
+.nt-falle { margin-top:10px; padding:8px 12px; background:var(--rot-hell); border-left:3px solid var(--rot); border-radius:4px; font-size:.9rem; }
+.nt-falle strong { color:var(--rot); }
+.nt-quer { margin-top:8px; font-size:.82rem; color:var(--tinte-2); }
+.nt-knoepfe { display:flex; flex-wrap:wrap; gap:8px; padding:12px 20px 16px; justify-content:center; }
+.nt-btn { font-family:var(--sans); font-size:.95rem; font-weight:600; padding:9px 18px; border-radius:8px; cursor:pointer;
+  border:1.5px solid var(--orange-rand); background:var(--orange-hell); color:var(--orange); min-width:150px; }
+.nt-btn:hover { filter:brightness(.97); }
+.nt-btn.nt-nein { border-color:var(--rot-rand); background:var(--rot-hell); color:var(--rot); }
+.nt-btn.nt-ja { border-color:var(--gruen-rand); background:var(--gruen-hell); color:var(--gruen); }
+.nt-taste { font-family:var(--mono); font-size:.7rem; font-weight:400; opacity:.75; margin-left:6px; }
+.nt-leer { padding:24px 20px; text-align:center; color:var(--tinte-2); }
+.nt-reset { margin-top:14px; text-align:right; }
+.nt-reset button { font-family:var(--mono); font-size:.74rem; color:var(--tinte-2); background:none; border:none; text-decoration:underline; cursor:pointer; }
+[hidden] { display:none !important; }
+@media (max-width:560px) {
+  .nt-vorne, .nt-hinten { padding-left:14px; padding-right:14px; }
+  .nt-btn { min-width:0; flex:1 1 40%; }
+  .nt-fach-n { font-size:1rem; }
+  .nt-filter { padding:8px 10px; gap:5px; }
+  .nt-filter .gm-btn { padding:4px 9px; font-size:.74rem; }
+  .nt-taste { display:none; }
+  .nt-fach-nr { font-size:.6rem; }
+}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<div class="page-wrap">
+  <main class="content">
+    <div class="page-titel">
+      <div class="pt-bereich">{ } · Üben</div>
+      <h1 class="pt-h1">Notationstrainer</h1>
+      <p class="pt-untertitel">Eine Lernkartei für die Schreibweise: Vorne steht eine Gleichung, eine Ungleichung oder eine Menge, dazu die Grundmenge. Du schreibst die Definitionsmenge, die Lösungsmenge oder das Intervall auf — erst auf Papier, dann drehst du die Karte um.</p>
+    </div>
+
+<div class="nt-filter" id="nt-bereich">
+  <span class="gm-label">Fach:</span>
+  <button type="button" class="gm-btn aktiv" data-b="gf">Grundlagenfach</button>
+  <button type="button" class="gm-btn aktiv" data-b="sf">Schwerpunktfach</button>
+</div>
+<div class="nt-filter" id="nt-kat">
+  <span class="gm-label">Thema:</span>
+</div>
+
+<div class="nt-fach-leiste" id="nt-faecher"></div>
+<div class="nt-meta" id="nt-meta"></div>
+
+<div class="nt-karte" id="nt-karte">
+  <div class="nt-vorne">
+    <div class="nt-kopf" id="nt-kopf"></div>
+    <div class="nt-lage" id="nt-lage"></div>
+    <div class="nt-frage" id="nt-frage"></div>
+  </div>
+  <div class="nt-hinten" id="nt-hinten" hidden>
+    <div class="nt-antwort" id="nt-antwort"></div>
+    <div class="nt-weg" id="nt-weg"></div>
+    <div class="nt-falle" id="nt-falle" hidden></div>
+    <div class="nt-quer" id="nt-quer"></div>
+  </div>
+  <div class="nt-knoepfe" id="nt-knoepfe-vorne">
+    <button type="button" class="nt-btn" id="nt-umdrehen">Umdrehen<span class="nt-taste">Leertaste</span></button>
+  </div>
+  <div class="nt-knoepfe" id="nt-knoepfe-hinten" hidden>
+    <button type="button" class="nt-btn nt-nein" id="nt-nein">✗ Noch nicht<span class="nt-taste">1</span></button>
+    <button type="button" class="nt-btn nt-ja" id="nt-ja">✓ Gewusst<span class="nt-taste">2</span></button>
+  </div>
+  <div class="nt-leer" id="nt-leer" hidden>Mit dieser Auswahl gibt es keine Karten. Wähle mindestens ein Fach und ein Thema.</div>
+</div>
+
+<div class="nt-reset"><button type="button" id="nt-reset">Kartei zurücksetzen — alle Karten in Fach 1</button></div>
+
+<div class="block block-def">
+  <div class="block-titel">📘 So funktioniert die Kartei</div>
+  <p>Jede Karte liegt in einem von fünf Fächern. Neue Karten starten in Fach 1. Hast du die Notation <strong>genau so</strong> aufgeschrieben wie auf der Rückseite — mit der richtigen Klammer, dem richtigen Zeichen, der richtigen Menge —, wandert die Karte ein Fach weiter. Sonst fällt sie zurück in Fach 1. Karten aus den vorderen Fächern kommen öfter dran.</p>
+  <p>Tastatur: <strong>Leertaste</strong> dreht um, <strong>1</strong> heisst «noch nicht», <strong>2</strong> heisst «gewusst». Dein Stand wird nur in diesem Browser gespeichert.</p>
+</div>
+
+<details class="block block-merksatz" style="margin-top:10px">
+  <summary class="block-titel" style="cursor:pointer">⭐ Die Schreibweisen auf einen Blick</summary>
+  <table class="ftb-tabelle" style="margin-top:8px">
+    <thead><tr><th>Was</th><th>Schreibweise</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td style="text-align:left;font-family:var(--sans)">Grundmenge</td><td>\(\mathbb{G}\)</td><td>\(\mathbb{G} = \mathbb{Z}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Definitionsmenge</td><td>\(\mathbb{D}\)</td><td>\(\mathbb{D} = \mathbb{R} \setminus \{-2, 2\}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Lösungsmenge (aufzählend)</td><td>\(\mathbb{L} = \{\ldots\}\)</td><td>\(\mathbb{L} = \{-3, 3\}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">keine Lösung</td><td>\(\mathbb{L} = \emptyset\)</td><td>nicht \(\{0\}\), nicht \(\{\emptyset\}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">jede erlaubte Zahl</td><td>\(\mathbb{L} = \mathbb{G}\) bzw. \(\mathbb{L} = \mathbb{D}\)</td><td>\(\mathbb{L} = \mathbb{R}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Intervall, Grenze dabei</td><td>Klammer zum Intervall hin</td><td>\([1;\, 3]\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Intervall, Grenze nicht dabei</td><td>Klammer vom Intervall weg</td><td>\(]{-3};\, 3[\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">unbeschränkt</td><td>bei \(\infty\) immer nach aussen</td><td>\([{-4};\, +\infty[\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">beschreibend</td><td>\(\{x \in \mathbb{G} \mid \ldots\}\)</td><td>\(\{x \in \mathbb{R} \mid x \le 1\}\)</td></tr>
+      <tr><td style="text-align:left;font-family:var(--sans)">Zahlenpaar</td><td>\(\{(x \mid y)\}\)</td><td>\(\mathbb{L} = \{(3 \mid 2)\}\)</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:8px">In diesem Lehrmittel gehört die Null zu den natürlichen Zahlen: \(\mathbb{N} = \{0, 1, 2, 3, \ldots\}\).</p>
+</details>
+
+  </main>
+</div>
+<script src="nav.js"></script>
+<script>buildNav({ id: 'notation' });</script>
+<script>
+// ── Kartensatz ───────────────────────────────────────────────
+// Jede Lösung ist mit python3 nachgerechnet. Kleiner/Grösser in LaTeX als \lt / \gt,
+// weil die Strings per innerHTML eingesetzt werden.
+// k = Thema, b = gf|sf, lage = Ausgangslage, g = Grundmenge, frage, a = Antwort (Display),
+// weg = kurze Begründung, falle = Stolperfalle (optional), s = [Seite, Titel]
+const THEMEN = {
+  D:      'Definitionsmenge',
+  lin:    'Lineare Gleichungen',
+  quad:   'Quadratische Gleichungen',
+  sonder: 'Sonderfälle',
+  ungl:   'Ungleichungen',
+  schreib:'Schreibweisen',
+  lgs:    'Gleichungssysteme',
+  weitere:'Betrag, Wurzel, Exponent, Log'
+};
+const S_G22A = ['grundlagen/g2-2a-lineare-gleichungen.html', '2.2a Lineare Gleichungen'];
+const S_G22B = ['grundlagen/g2-2b-quadratische-gleichungen.html', '2.2b Quadratische Gleichungen'];
+const S_G12  = ['grundlagen/g1-2-zahlen-grundoperationen.html#theorie', '1.2 Zahlen und Grundoperationen'];
+const S_G23  = ['grundlagen/g2-3-lineare-gleichungssysteme.html', '2.3 Lineare Gleichungssysteme'];
+const S_S22A = ['schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html', 'SF 2.2a Potenz-, Wurzel- und rationale Gleichungen'];
+const S_S22B = ['schwerpunkt/s2-2b-exponential-logarithmische-gleichungen.html', 'SF 2.2b Exponential- und logarithmische Gleichungen'];
+const S_S22C = ['schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html', 'SF 2.2c Betrag, Polynome, Ungleichungen'];
+const R = String.raw;
+const FD = 'Gib die Definitionsmenge \\(\\mathbb{D}\\) an.';
+const FL = 'Gib die Lösungsmenge \\(\\mathbb{L}\\) an.';
+const FI = 'Gib die Lösungsmenge \\(\\mathbb{L}\\) als Intervall an.';
+
+const KARTEN = [
+  // ── Definitionsmenge ──
+  { id:'d1', k:'D', b:'gf', lage:R`\[\dfrac{3}{x - 2} = 5\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{R} \setminus \{2\}`,
+    weg:R`Der Nenner \(x - 2\) wird null für \(x = 2\). Diese eine Zahl fällt weg.`, s:S_G22B },
+  { id:'d2', k:'D', b:'gf', lage:R`\[\dfrac{x}{x + 4} = \dfrac{2}{x}\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{R} \setminus \{-4, 0\}`,
+    weg:R`Zwei Nenner, zwei Verbote: \(x + 4 = 0\) für \(x = -4\), und \(x = 0\) im zweiten Nenner.`, s:S_G22B },
+  { id:'d3', k:'D', b:'gf', lage:R`\[\dfrac{1}{x^2 - 9} = \dfrac{2}{x + 3}\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{R} \setminus \{-3, 3\}`,
+    weg:R`\(x^2 - 9 = (x - 3)(x + 3)\) ist null für \(x = 3\) und \(x = -3\). Der zweite Nenner liefert \(-3\) noch einmal — in der Menge steht jede Zahl nur einmal.`,
+    falle:R`\(x^2 - 9 = 0\) hat <strong>zwei</strong> Lösungen. Wer nur \(x = 3\) ausschliesst, vergisst die negative.`, s:S_G22B },
+  { id:'d4', k:'D', b:'gf', lage:R`\[\dfrac{5}{2x - 3} + 1 = \dfrac{1}{x}\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{R} \setminus \left\{0, \tfrac{3}{2}\right\}`,
+    weg:R`\(2x - 3 = 0\) ergibt \(x = \tfrac{3}{2} = 1.5\); der zweite Nenner verbietet \(x = 0\).`, s:S_G22B },
+  { id:'d5', k:'D', b:'gf', lage:R`\[\dfrac{4}{x^2 + 1} = 1\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{R}`,
+    weg:R`\(x^2 + 1\) ist mindestens \(1\), also nie null. Es fällt keine Zahl weg.`,
+    falle:R`Nicht \(\mathbb{R} \setminus \{-1\}\): \(x^2 + 1 = 0\) hätte \(x^2 = -1\) zur Folge — das hat keine reelle Lösung.`, s:S_G22B },
+  { id:'d6', k:'D', b:'gf', lage:R`\[\dfrac{x + 1}{x^2 - 5x + 6} = 2\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{R} \setminus \{2, 3\}`,
+    weg:R`\(x^2 - 5x + 6 = (x - 2)(x - 3)\) — null für \(x = 2\) und \(x = 3\).`, s:S_G22B },
+  { id:'d7', k:'D', b:'gf', lage:R`\[\dfrac{2}{x^2 - 4x} = \dfrac{1}{x - 4}\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{R} \setminus \{0, 4\}`,
+    weg:R`\(x^2 - 4x = x(x - 4)\) ist null für \(x = 0\) und \(x = 4\).`, s:S_G22B },
+  { id:'d8', k:'D', b:'gf', lage:R`\[\dfrac{1}{2x - 1} = 3\]`, g:R`\mathbb{Z}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{Z}`,
+    weg:R`Verboten wäre \(x = 0.5\). Diese Zahl liegt aber gar nicht in \(\mathbb{Z}\) — aus der Grundmenge fällt nichts weg.`,
+    falle:R`\(\mathbb{D}\) ist immer eine Teilmenge von \(\mathbb{G}\). \(\mathbb{Z} \setminus \{0.5\}\) wäre sinnlos.`, s:S_G22B },
+  { id:'d9', k:'D', b:'gf', lage:R`\[\dfrac{6}{x + 2} = \dfrac{1}{x - 3}\]`, g:R`\mathbb{N}`, frage:FD,
+    a:R`\mathbb{D} = \mathbb{N} \setminus \{3\}`,
+    weg:R`Die Nenner verbieten \(-2\) und \(3\). Nur \(3\) liegt in \(\mathbb{N}\).`, s:S_G22B },
+  { id:'d10', k:'D', b:'sf', lage:R`\[\sqrt{x - 3} = 2\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = [3;\, +\infty[`,
+    weg:R`Unter der Wurzel darf nichts Negatives stehen: \(x - 3 \ge 0\), also \(x \ge 3\). Die \(3\) selbst ist erlaubt — Klammer zum Intervall hin.`, s:S_S22A },
+  { id:'d11', k:'D', b:'sf', lage:R`\[\sqrt{5 - 2x} = x\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \,]{-\infty};\, 2.5]`,
+    weg:R`\(5 - 2x \ge 0 \iff -2x \ge -5 \iff x \le 2.5\). Beim Teilen durch \(-2\) kippt das Zeichen.`, s:S_S22A },
+  { id:'d12', k:'D', b:'sf', lage:R`\[\sqrt{x + 2} = \sqrt{4 - x}\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = [-2;\, 4]`,
+    weg:R`Beide Radikanden \(\ge 0\): \(x \ge -2\) <em>und</em> \(x \le 4\). Beide Grenzen gehören dazu.`, s:S_S22A },
+  { id:'d13', k:'D', b:'sf', lage:R`\[\log_2(x + 1) = 3\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \,]{-1};\, +\infty[`,
+    weg:R`Das Argument eines Logarithmus muss <em>echt</em> positiv sein: \(x + 1 \gt 0\), also \(x \gt -1\).`,
+    falle:R`Beim Logarithmus ist die Grenze <strong>nicht</strong> dabei (\(\log 0\) gibt es nicht) — anders als bei der Wurzel.`, s:S_S22B },
+  { id:'d14', k:'D', b:'sf', lage:R`\[\lg(x) + \lg(x - 3) = 1\]`, g:R`\mathbb{R}`, frage:FD,
+    a:R`\mathbb{D} = \,]3;\, +\infty[`,
+    weg:R`\(x \gt 0\) <em>und</em> \(x - 3 \gt 0\). Beides zusammen heisst \(x \gt 3\).`, s:S_S22B },
+
+  // ── Lineare Gleichungen ──
+  { id:'l1', k:'lin', b:'gf', lage:R`\[3x + 5 = 17\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{4\}`,
+    weg:R`\(3x = 12 \Rightarrow x = 4\).`,
+    falle:R`Die Lösungs<em>menge</em> ist \(\{4\}\), nicht \(4\) und nicht \(x = 4\).`, s:S_G22A },
+  { id:'l2', k:'lin', b:'gf', lage:R`\[4x - 3 = 2x + 4\]`, g:R`\mathbb{Z}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`\(2x = 7 \Rightarrow x = 3.5\). Das ist keine ganze Zahl — in \(\mathbb{Z}\) gibt es keine Lösung.`, s:S_G22A },
+  { id:'l3', k:'lin', b:'gf', lage:R`\[4x - 3 = 2x + 4\]`, g:R`\mathbb{Q}`, frage:FL,
+    a:R`\mathbb{L} = \{3.5\}`,
+    weg:R`\(2x = 7 \Rightarrow x = 3.5 = \tfrac{7}{2}\) — ein Bruch, also in \(\mathbb{Q}\). Ebenso richtig: \(\mathbb{L} = \left\{\tfrac{7}{2}\right\}\).`, s:S_G22A },
+  { id:'l4', k:'lin', b:'gf', lage:R`\[x + 7 = 2\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`\(x = -5\), und das ist keine natürliche Zahl.`, s:S_G22A },
+  { id:'l5', k:'lin', b:'gf', lage:R`\[5x - 2 = 3x + 8\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \{5\}`,
+    weg:R`\(2x = 10 \Rightarrow x = 5 \in \mathbb{N}\).`, s:S_G22A },
+  { id:'l6', k:'lin', b:'gf', lage:R`\[3x = 2\]`, g:R`\mathbb{Q}`, frage:FL,
+    a:R`\mathbb{L} = \left\{\tfrac{2}{3}\right\}`,
+    weg:R`\(x = \tfrac{2}{3}\). Als Dezimalzahl periodisch (\(0.\overline{6}\)) — darum als Bruch angeben.`,
+    falle:R`\(\{0.67\}\) ist gerundet und damit falsch: \(3 \cdot 0.67 = 2.01 \ne 2\).`, s:S_G22A },
+  { id:'l7', k:'lin', b:'gf', lage:R`\[7x + 3 = 2x - 7\]`, g:R`\mathbb{Z}`, frage:FL,
+    a:R`\mathbb{L} = \{-2\}`,
+    weg:R`\(5x = -10 \Rightarrow x = -2 \in \mathbb{Z}\).`, s:S_G22A },
+  { id:'l8', k:'lin', b:'gf', lage:R`\[\dfrac{x}{3} + 1 = 2\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \{3\}`,
+    weg:R`\(\tfrac{x}{3} = 1 \Rightarrow x = 3\).`, s:S_G22A },
+
+  // ── Quadratische Gleichungen ──
+  { id:'q1', k:'quad', b:'gf', lage:R`\[x^2 = 9\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{-3, 3\}`,
+    weg:R`\((-3)^2 = 9\) und \(3^2 = 9\).`,
+    falle:R`Nicht nur \(\{3\}\): Die Wurzel aus \(9\) ist \(3\), aber die Gleichung hat zwei Lösungen.`, s:S_G22B },
+  { id:'q2', k:'quad', b:'gf', lage:R`\[x^2 = 9\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \{3\}`,
+    weg:R`Von \(\pm 3\) liegt nur \(3\) in \(\mathbb{N}\).`, s:S_G22B },
+  { id:'q3', k:'quad', b:'gf', lage:R`\[x^2 = 7\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \left\{-\sqrt{7}, \sqrt{7}\right\}`,
+    weg:R`\(x = \pm\sqrt{7}\). Exakt angeben, nicht als \(\pm 2.65\).`, s:S_G22B },
+  { id:'q4', k:'quad', b:'gf', lage:R`\[x^2 = 7\]`, g:R`\mathbb{Q}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`\(\sqrt{7}\) ist irrational — also kein Element von \(\mathbb{Q}\).`, s:S_G22B },
+  { id:'q5', k:'quad', b:'gf', lage:R`\[x^2 + 4 = 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`\(x^2 = -4\): Kein Quadrat einer reellen Zahl ist negativ.`, s:S_G22B },
+  { id:'q6', k:'quad', b:'gf', lage:R`\[x^2 + 5x = 0\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \{0\}`,
+    weg:R`\(x(x + 5) = 0 \Rightarrow x = 0\) oder \(x = -5\). Nur \(0\) ist natürlich.`,
+    falle:R`\(\{0\}\) ist nicht dasselbe wie \(\emptyset\): Die Menge enthält eine Zahl, nämlich die Null.`, s:S_G22B },
+  { id:'q7', k:'quad', b:'gf', lage:R`\[x^2 - 6x + 9 = 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{3\}`,
+    weg:R`\((x - 3)^2 = 0\), Diskriminante \(0\): eine (doppelte) Lösung. In der Menge steht sie einmal.`, s:S_G22B },
+  { id:'q8', k:'quad', b:'gf', lage:R`\[x^2 - x - 6 = 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{-2, 3\}`,
+    weg:R`\((x - 3)(x + 2) = 0\).`, s:S_G22B },
+  { id:'q9', k:'quad', b:'gf', lage:R`\[x^2 - x - 6 = 0\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \{3\}`,
+    weg:R`Die Lösungen sind \(-2\) und \(3\); nur \(3\) liegt in \(\mathbb{N}\).`, s:S_G22B },
+  { id:'q10', k:'quad', b:'gf', lage:R`\[2x^2 - 3x - 2 = 0\]`, g:R`\mathbb{Z}`, frage:FL,
+    a:R`\mathbb{L} = \{2\}`,
+    weg:R`\((2x + 1)(x - 2) = 0 \Rightarrow x = -0.5\) oder \(x = 2\). Nur \(2\) ist ganz.`, s:S_G22B },
+  { id:'q11', k:'quad', b:'gf', lage:R`\[x^2 - 2x - 1 = 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \left\{1 - \sqrt{2}, 1 + \sqrt{2}\right\}`,
+    weg:R`\(x = \dfrac{2 \pm \sqrt{8}}{2} = 1 \pm \sqrt{2}\).`, s:S_G22B },
+  { id:'q12', k:'quad', b:'gf', lage:R`\[x^2 - 2x - 1 = 0\]`, g:R`\mathbb{Q}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`Beide Lösungen \(1 \pm \sqrt{2}\) sind irrational.`, s:S_G22B },
+  { id:'q13', k:'quad', b:'gf', lage:R`\[x^2 = 2x\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{0, 2\}`,
+    weg:R`\(x^2 - 2x = x(x - 2) = 0\).`,
+    falle:R`Wer durch \(x\) teilt, erhält nur \(x = 2\) und verliert die Lösung \(0\).`, s:S_G22B },
+
+  // ── Sonderfälle ──
+  { id:'x1', k:'sonder', b:'gf', lage:R`\[2(x + 3) = 2x + 6\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \mathbb{R}`,
+    weg:R`Ausmultipliziert steht \(2x + 6 = 2x + 6\), also \(0 = 0\): wahr für jedes \(x\).`, s:S_G22A },
+  { id:'x2', k:'sonder', b:'gf', lage:R`\[2(x + 3) = 2x + 5\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`Es bleibt \(6 = 5\) — für kein \(x\) wahr.`,
+    falle:R`Nicht \(\mathbb{L} = \{0\}\): Dass \(x\) verschwindet, heisst nicht, dass \(x = 0\) eine Lösung ist.`, s:S_G22A },
+  { id:'x3', k:'sonder', b:'gf', lage:R`\[3(x - 1) + 3 = 3x\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \mathbb{N}`,
+    weg:R`Links steht \(3x\), also \(0 = 0\). Lösung ist jede Zahl <em>der Grundmenge</em> — hier \(\mathbb{N}\), nicht \(\mathbb{R}\).`, s:S_G22A },
+  { id:'x4', k:'sonder', b:'gf', lage:R`\[\dfrac{x^2}{x - 2} = \dfrac{4}{x - 2}\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{-2\}`,
+    weg:R`\(\mathbb{D} = \mathbb{R} \setminus \{2\}\). Mal \((x - 2)\): \(x^2 = 4 \Rightarrow x = \pm 2\). Die \(2\) liegt nicht in \(\mathbb{D}\) — Scheinlösung.`, s:S_G22B },
+  { id:'x5', k:'sonder', b:'gf', lage:R`\[\dfrac{x}{x - 3} = \dfrac{3}{x - 3}\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`\(\mathbb{D} = \mathbb{R} \setminus \{3\}\). Mal \((x - 3)\) ergibt \(x = 3\) — genau die verbotene Zahl. Es bleibt nichts.`, s:S_G22B },
+  { id:'x6', k:'sonder', b:'gf', lage:R`\[\dfrac{3}{x - 1} = \dfrac{2}{x - 1} + 1\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{2\}`,
+    weg:R`\(\mathbb{D} = \mathbb{R} \setminus \{1\}\). \(\tfrac{1}{x - 1} = 1 \Rightarrow x - 1 = 1 \Rightarrow x = 2 \in \mathbb{D}\).`, s:S_G22B },
+  { id:'x7', k:'sonder', b:'gf', lage:R`\[\dfrac{2x}{x + 1} = \dfrac{2x}{x + 1}\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \mathbb{R} \setminus \{-1\}`,
+    weg:R`Links und rechts steht dasselbe — wahr für jede <em>erlaubte</em> Zahl. Also \(\mathbb{L} = \mathbb{D}\).`,
+    falle:R`Nicht \(\mathbb{L} = \mathbb{R}\): Für \(x = -1\) ist die Gleichung gar nicht definiert.`, s:S_G22B },
+
+  // ── Ungleichungen ──
+  { id:'u1', k:'ungl', b:'gf', lage:R`\[2x - 3 \gt 5\]`, g:R`\mathbb{R}`, frage:FI,
+    a:R`\mathbb{L} = \,]4;\, +\infty[`,
+    weg:R`\(2x \gt 8 \Rightarrow x \gt 4\). Die \(4\) gehört nicht dazu — Klammer weg vom Intervall.`, s:S_G22A },
+  { id:'u2', k:'ungl', b:'gf', lage:R`\[-3x \le 12\]`, g:R`\mathbb{R}`, frage:FI,
+    a:R`\mathbb{L} = [-4;\, +\infty[`,
+    weg:R`Durch \(-3\) teilen, Zeichen kippt: \(x \ge -4\).`,
+    falle:R`Wer das Zeichen nicht kippt, schreibt \(]{-\infty};\, -4]\) — genau die falsche Seite.`, s:S_G22A },
+  { id:'u3', k:'ungl', b:'gf', lage:R`\[2x - 3 \gt 5\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \{5, 6, 7, \ldots\}`,
+    weg:R`\(x \gt 4\), und in \(\mathbb{N}\) ist die kleinste solche Zahl \(5\). Ein Intervall wäre falsch: Es enthielte auch \(4.5\).`, s:S_G22A },
+  { id:'u4', k:'ungl', b:'gf', lage:R`\[-2 \lt x \le 3\]`, g:R`\mathbb{Z}`, frage:FL,
+    a:R`\mathbb{L} = \{-1, 0, 1, 2, 3\}`,
+    weg:R`\(-2\) ist ausgeschlossen, \(3\) ist dabei. Dazwischen liegen in \(\mathbb{Z}\) genau fünf Zahlen.`, s:S_G22A },
+  { id:'u5', k:'ungl', b:'gf', lage:R`\[1 \le 2x + 1 \lt 7\]`, g:R`\mathbb{R}`, frage:FI,
+    a:R`\mathbb{L} = [0;\, 3[`,
+    weg:R`Überall \(-1\), dann \(:2\): \(0 \le x \lt 3\).`, s:S_G22A },
+  { id:'u6', k:'ungl', b:'gf', lage:R`\[5 - x \ge 2\]`, g:R`\mathbb{N}`, frage:FL,
+    a:R`\mathbb{L} = \{0, 1, 2, 3\}`,
+    weg:R`\(-x \ge -3 \Rightarrow x \le 3\). In \(\mathbb{N}\) (mit der Null) sind das vier Zahlen.`, s:S_G22A },
+  { id:'u7', k:'ungl', b:'gf', lage:R`\[3(x - 2) \ge 5x + 4\]`, g:R`\mathbb{R}`, frage:FI,
+    a:R`\mathbb{L} = \,]{-\infty};\, -5]`,
+    weg:R`\(3x - 6 \ge 5x + 4 \Rightarrow -2x \ge 10 \Rightarrow x \le -5\).`, s:S_G22A },
+  { id:'u8', k:'ungl', b:'gf', lage:R`\[4x + 1 \lt 4x + 3\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \mathbb{R}`,
+    weg:R`Es bleibt \(1 \lt 3\) — immer wahr.`, s:S_G22A },
+  { id:'u9', k:'ungl', b:'gf', lage:R`\[x^2 \lt 9\]`, g:R`\mathbb{R}`, frage:FI,
+    a:R`\mathbb{L} = \,]{-3};\, 3[`,
+    weg:R`Die Parabel \(x^2 - 9\) liegt zwischen ihren Nullstellen \(\pm 3\) unter der Achse.`,
+    falle:R`Nicht \(x \lt 3\) allein: \(x = -5\) erfüllt \(x \lt 3\), aber \(25 \lt 9\) ist falsch.`, s:S_G22B },
+  { id:'u10', k:'ungl', b:'gf', lage:R`\[x^2 \ge 4\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \,]{-\infty};\, -2] \cup [2;\, +\infty[`,
+    weg:R`Aussen an den Nullstellen \(\pm 2\), beide Grenzen dabei. Zwei Stücke, verbunden mit \(\cup\).`, s:S_G22B },
+  { id:'u11', k:'ungl', b:'gf', lage:R`\[x^2 - 4x + 3 \le 0\]`, g:R`\mathbb{R}`, frage:FI,
+    a:R`\mathbb{L} = [1;\, 3]`,
+    weg:R`\((x - 1)(x - 3) \le 0\): zwischen den Nullstellen, Grenzen dabei.`, s:S_G22B },
+  { id:'u12', k:'ungl', b:'gf', lage:R`\[x^2 - x - 6 \gt 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \,]{-\infty};\, -2[ \;\cup\; ]3;\, +\infty[`,
+    weg:R`Nullstellen \(-2\) und \(3\); die nach oben offene Parabel ist aussen positiv. Grenzen nicht dabei.`, s:S_G22B },
+  { id:'u13', k:'ungl', b:'gf', lage:R`\[x^2 + 1 \gt 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \mathbb{R}`,
+    weg:R`\(x^2 + 1 \ge 1\) für jedes \(x\).`, s:S_G22B },
+  { id:'u14', k:'ungl', b:'gf', lage:R`\[x^2 \lt 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`Ein Quadrat ist nie negativ.`, s:S_G22B },
+  { id:'u15', k:'ungl', b:'gf', lage:R`\[(x - 1)^2 \le 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{1\}`,
+    weg:R`Kleiner als null geht nicht, gleich null nur für \(x = 1\).`,
+    falle:R`Kein Intervall und nicht \(\emptyset\): Das «gleich» im \(\le\) rettet genau eine Zahl.`, s:S_G22B },
+  { id:'u16', k:'ungl', b:'gf', lage:R`\[x^2 \lt 5\]`, g:R`\mathbb{Z}`, frage:FL,
+    a:R`\mathbb{L} = \{-2, -1, 0, 1, 2\}`,
+    weg:R`In \(\mathbb{R}\) wäre es \(]{-\sqrt{5}};\, \sqrt{5}[\) mit \(\sqrt{5} \approx 2.24\). Davon die ganzen Zahlen.`, s:S_G22B },
+  { id:'u17', k:'ungl', b:'sf', lage:R`\[|x| \lt 3\]`, g:R`\mathbb{R}`, frage:FI,
+    a:R`\mathbb{L} = \,]{-3};\, 3[`,
+    weg:R`Alle Zahlen, deren Abstand von \(0\) kleiner als \(3\) ist.`, s:S_S22C },
+  { id:'u18', k:'ungl', b:'sf', lage:R`\[|x - 1| \ge 2\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \,]{-\infty};\, -1] \cup [3;\, +\infty[`,
+    weg:R`Abstand von \(1\) mindestens \(2\): \(x \le -1\) oder \(x \ge 3\).`, s:S_S22C },
+  { id:'u19', k:'ungl', b:'sf', lage:R`\[x^3 - 4x \ge 0\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = [-2;\, 0] \cup [2;\, +\infty[`,
+    weg:R`\(x(x - 2)(x + 2) \ge 0\). Vorzeichentabelle über \(-2,\, 0,\, 2\): positiv auf \(]{-2};\, 0[\) und \(]2;\, +\infty[\), Nullstellen dabei.`, s:S_S22C },
+
+  // ── Schreibweisen ──
+  { id:'s1', k:'schreib', b:'gf', lage:R`\[\{x \in \mathbb{R} \mid -2 \le x \lt 5\}\]`, g:null, frage:'Schreib die Menge als Intervall.',
+    a:R`[-2;\, 5[`,
+    weg:R`\(-2\) dabei (Klammer zum Intervall hin), \(5\) nicht (Klammer weg).`, s:S_G12 },
+  { id:'s2', k:'schreib', b:'gf', lage:R`\[]{-\infty};\, 1]\]`, g:null, frage:'Schreib das Intervall als beschreibende Menge.',
+    a:R`\{x \in \mathbb{R} \mid x \le 1\}`,
+    weg:R`Nach links unbeschränkt, die \(1\) gehört dazu.`, s:S_G12 },
+  { id:'s3', k:'schreib', b:'gf', lage:R`<p>alle reellen Zahlen, die grösser als \(3\) sind</p>`, g:null, frage:'Schreib die Menge als Intervall.',
+    a:R`]3;\, +\infty[`,
+    weg:R`«grösser als» heisst: die \(3\) selbst nicht. Bei \(\infty\) ohnehin Klammer nach aussen.`, s:S_G12 },
+  { id:'s4', k:'schreib', b:'gf', lage:R`\[\{x \in \mathbb{R} \mid x \ne 4\}\]`, g:null, frage:'Schreib die Menge mit dem Zeichen \\(\\setminus\\).',
+    a:R`\mathbb{R} \setminus \{4\}`,
+    weg:R`Alle reellen Zahlen ohne die \(4\). Gleichwertig: \(]{-\infty};\, 4[ \;\cup\; ]4;\, +\infty[\).`, s:S_G12 },
+  { id:'s5', k:'schreib', b:'gf', lage:R`\[\{x \in \mathbb{Z} \mid -2 \le x \lt 2\}\]`, g:null, frage:'Schreib die Menge aufzählend.',
+    a:R`\{-2, -1, 0, 1\}`,
+    weg:R`Nur ganze Zahlen — darum kein Intervall, sondern eine Aufzählung. Die \(2\) fehlt.`, s:S_G12 },
+  { id:'s6', k:'schreib', b:'gf', lage:R`\[\{x \in \mathbb{R} \mid x \lt -1 \ \text{oder}\ x \gt 1\}\]`, g:null, frage:'Schreib die Menge mit Intervallen.',
+    a:R`]{-\infty};\, -1[ \;\cup\; ]1;\, +\infty[`,
+    weg:R`«oder» wird zur Vereinigung \(\cup\). Beide Grenzen nicht dabei.`, s:S_G12 },
+  { id:'s7', k:'schreib', b:'gf', lage:R`\[[0;\, 10]\]`, g:null, frage:'Welche der Zahlen \\(0,\\ 10,\\ 10.5\\) liegen im Intervall?',
+    a:R`0 \in [0;\, 10], \quad 10 \in [0;\, 10], \quad 10.5 \notin [0;\, 10]`,
+    weg:R`Geschlossenes Intervall: beide Grenzen gehören dazu.`, s:S_G12 },
+  { id:'s8', k:'schreib', b:'gf', lage:R`\[\{x \in \mathbb{R} \mid x \ge 0\}\]`, g:null, frage:'Schreib die Menge als Intervall.',
+    a:R`[0;\, +\infty[`,
+    weg:R`Die \(0\) ist dabei, nach rechts unbeschränkt.`, s:S_G12 },
+
+  // ── Gleichungssysteme ──
+  { id:'g1', k:'lgs', b:'gf', lage:R`\[\begin{cases} x + y = 5 \\ x - y = 1 \end{cases}\]`, g:R`\mathbb{R} \times \mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{(3 \mid 2)\}`,
+    weg:R`Addieren: \(2x = 6 \Rightarrow x = 3\), dann \(y = 2\). Eine Lösung ist ein <em>Paar</em>.`,
+    falle:R`Nicht \(\{3, 2\}\) — das wären zwei einzelne Zahlen. Und nicht \((3, 2)\): Im Paar steht der senkrechte Strich.`, s:S_G23 },
+  { id:'g2', k:'lgs', b:'gf', lage:R`\[\begin{cases} 2x + y = 7 \\ x - y = 2 \end{cases}\]`, g:R`\mathbb{R} \times \mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{(3 \mid 1)\}`,
+    weg:R`Addieren: \(3x = 9 \Rightarrow x = 3\), dann \(y = 1\).`, s:S_G23 },
+  { id:'g3', k:'lgs', b:'gf', lage:R`\[\begin{cases} x + y = 2 \\ x + y = 5 \end{cases}\]`, g:R`\mathbb{R} \times \mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`Subtrahieren ergibt \(0 = 3\). Die Geraden sind parallel.`, s:S_G23 },
+  { id:'g4', k:'lgs', b:'gf', lage:R`\[\begin{cases} x + y = 2 \\ 2x + 2y = 4 \end{cases}\]`, g:R`\mathbb{R} \times \mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{(x \mid 2 - x) : x \in \mathbb{R}\}`,
+    weg:R`Die zweite Gleichung ist das Doppelte der ersten: dieselbe Gerade \(y = 2 - x\). Jeder ihrer Punkte ist Lösung.`,
+    falle:R`Nicht \(\mathbb{L} = \mathbb{R}\): Nicht jedes Paar passt — \((0 \mid 0)\) zum Beispiel nicht.`, s:S_G23 },
+  { id:'g5', k:'lgs', b:'gf', lage:R`\[\begin{cases} x + 2y = 8 \\ 3x - y = 3 \end{cases}\]`, g:R`\mathbb{R} \times \mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{(2 \mid 3)\}`,
+    weg:R`Zweite mal \(2\) und addieren: \(7x = 14 \Rightarrow x = 2\), dann \(y = 3\).`, s:S_G23 },
+
+  // ── Betrag, Wurzel, Exponent, Log (Schwerpunktfach) ──
+  { id:'w1', k:'weitere', b:'sf', lage:R`\[|x - 2| = 3\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{-1, 5\}`,
+    weg:R`Zwei Fälle: \(x - 2 = 3\) oder \(x - 2 = -3\).`, s:S_S22C },
+  { id:'w2', k:'weitere', b:'sf', lage:R`\[|x + 1| = -2\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`Ein Betrag ist nie negativ.`, s:S_S22C },
+  { id:'w3', k:'weitere', b:'sf', lage:R`\[\sqrt{x + 6} = x\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{3\}`,
+    weg:R`Quadrieren: \(x^2 - x - 6 = 0 \Rightarrow x = 3\) oder \(x = -2\). Probe: \(\sqrt{4} = 2 \ne -2\) — Scheinlösung.`,
+    falle:R`Quadrieren ist keine Äquivalenzumformung. Ohne Probe steht fälschlich \(\{-2, 3\}\) da.`, s:S_S22A },
+  { id:'w4', k:'weitere', b:'sf', lage:R`\[2^x = 8\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{3\}`,
+    weg:R`\(8 = 2^3\).`, s:S_S22B },
+  { id:'w5', k:'weitere', b:'sf', lage:R`\[2^x = -4\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \emptyset`,
+    weg:R`\(2^x \gt 0\) für jedes \(x\).`, s:S_S22B },
+  { id:'w6', k:'weitere', b:'sf', lage:R`\[\lg(x) + \lg(x - 3) = 1\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{5\}`,
+    weg:R`\(\mathbb{D} = \,]3;\, +\infty[\). \(\lg(x(x - 3)) = 1 \Rightarrow x^2 - 3x - 10 = 0 \Rightarrow x = 5\) oder \(x = -2\). \(-2 \notin \mathbb{D}\).`, s:S_S22B },
+  { id:'w7', k:'weitere', b:'sf', lage:R`\[x^4 = 16\]`, g:R`\mathbb{R}`, frage:FL,
+    a:R`\mathbb{L} = \{-2, 2\}`,
+    weg:R`Gerader Exponent: zwei Lösungen \(\pm\sqrt[4]{16} = \pm 2\).`, s:S_S22A }
+];
+
+// ── Zustand (nur in diesem Browser) ──────────────────────────
+const SPEICHER = 'tals-mathe-notationstrainer-v1';
+let fach = {};                                 // id → 1…5
+let auswahl = { b: new Set(['gf', 'sf']), k: new Set(Object.keys(THEMEN)) };
+try { const s = JSON.parse(localStorage.getItem(SPEICHER) || '{}'); if (s.fach) fach = s.fach; } catch (e) {}
+function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify({ fach })); } catch (e) {} }
+const fachVon = id => fach[id] || 1;
+
+let aktuell = null, letzte = null;
+
+function imStapel() { return KARTEN.filter(c => auswahl.b.has(c.b) && auswahl.k.has(c.k)); }
+
+// Leitner: Fach 1 kommt 16-mal so oft wie Fach 5; nie zweimal dieselbe Karte hintereinander.
+function ziehen() {
+  const st = imStapel();
+  if (!st.length) return null;
+  const pool = st.length > 1 ? st.filter(c => c.id !== letzte) : st;
+  const gew = pool.map(c => [16, 8, 4, 2, 1][fachVon(c.id) - 1]);
+  let r = Math.random() * gew.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < pool.length; i++) { r -= gew[i]; if (r < 0) return pool[i]; }
+  return pool[pool.length - 1];
+}
+
+const $ = id => document.getElementById(id);
+function setzen(el, html) {
+  if (window.MathJax && MathJax.typesetClear) MathJax.typesetClear([el]);
+  el.innerHTML = html;
+}
+function setzeFormeln(els) {
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise(els).catch(() => {});
+}
+
+function zeigeFaecher() {
+  const st = imStapel(), n = [0, 0, 0, 0, 0];
+  st.forEach(c => n[fachVon(c.id) - 1]++);
+  const jetzt = aktuell ? fachVon(aktuell.id) : 0;
+  $('nt-faecher').innerHTML = n.map((z, i) =>
+    `<div class="nt-fach${jetzt === i + 1 ? ' nt-jetzt' : ''}" data-f="${i + 1}"><div class="nt-fach-nr">Fach ${i + 1}</div><div class="nt-fach-n">${z}</div></div>`).join('');
+  $('nt-meta').textContent = `${st.length} Karten in der Auswahl · ${n[4]} davon in Fach 5`;
+}
+
+function zeigeKarte() {
+  aktuell = ziehen();
+  const leer = !aktuell;
+  $('nt-leer').hidden = !leer;
+  document.querySelector('.nt-vorne').hidden = leer;
+  $('nt-knoepfe-vorne').hidden = leer;
+  $('nt-hinten').hidden = true;
+  $('nt-knoepfe-hinten').hidden = true;
+  zeigeFaecher();
+  if (leer) return;
+  const c = aktuell;
+  setzen($('nt-kopf'),
+    `<span class="nt-tag">${THEMEN[c.k]}</span>` +
+    `<span class="nt-tag ${c.b === 'gf' ? 'nt-gf' : 'nt-sf'}">${c.b === 'gf' ? 'Grundlagenfach' : 'Schwerpunktfach'}</span>` +
+    `<span class="nt-tag nt-fachtag">Fach ${fachVon(c.id)}</span>`);
+  setzen($('nt-lage'), c.lage + (c.g ? `<span class="nt-g">Grundmenge \\(\\mathbb{G} = ${c.g}\\)</span>` : ''));
+  setzen($('nt-frage'), c.frage);
+  setzeFormeln([$('nt-lage'), $('nt-frage')]);
+}
+
+function umdrehen() {
+  if (!aktuell || !$('nt-hinten').hidden) return;
+  const c = aktuell;
+  setzen($('nt-antwort'), `\\[ ${c.a} \\]`);
+  setzen($('nt-weg'), c.weg);
+  $('nt-falle').hidden = !c.falle;
+  setzen($('nt-falle'), c.falle ? `<strong>Stolperfalle:</strong> ${c.falle}` : '');
+  setzen($('nt-quer'), `→ <a href="${c.s[0]}">${c.s[1]}</a>`);
+  $('nt-hinten').hidden = false;
+  $('nt-knoepfe-vorne').hidden = true;
+  $('nt-knoepfe-hinten').hidden = false;
+  setzeFormeln([$('nt-antwort'), $('nt-weg'), $('nt-falle')]);
+  // Fokus weg vom Knopf, sonst löst die nächste Leertaste «gewusst» aus
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+}
+
+function bewerten(gewusst) {
+  if (!aktuell || $('nt-hinten').hidden) return;
+  fach[aktuell.id] = gewusst ? Math.min(5, fachVon(aktuell.id) + 1) : 1;
+  speichern();
+  letzte = aktuell.id;
+  zeigeKarte();
+}
+
+// ── Filter ───────────────────────────────────────────────────
+const katLeiste = $('nt-kat');
+Object.entries(THEMEN).forEach(([k, t]) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'gm-btn aktiv'; b.dataset.k = k; b.textContent = t;
+  katLeiste.appendChild(b);
+});
+function filterKlick(e, menge, schluessel) {
+  const b = e.target.closest('.gm-btn'); if (!b) return;
+  const v = b.dataset[schluessel];
+  if (menge.has(v)) menge.delete(v); else menge.add(v);
+  b.classList.toggle('aktiv', menge.has(v));
+  letzte = null;
+  zeigeKarte();
+}
+$('nt-bereich').addEventListener('click', e => filterKlick(e, auswahl.b, 'b'));
+katLeiste.addEventListener('click', e => filterKlick(e, auswahl.k, 'k'));
+
+$('nt-umdrehen').addEventListener('click', umdrehen);
+$('nt-ja').addEventListener('click', () => bewerten(true));
+$('nt-nein').addEventListener('click', () => bewerten(false));
+$('nt-reset').addEventListener('click', () => {
+  if (!confirm('Alle Karten zurück in Fach 1?')) return;
+  fach = {}; speichern(); letzte = null; zeigeKarte();
+});
+document.addEventListener('keydown', e => {
+  if (e.target.closest('input, textarea, select, .gm-btn, a') || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.key === ' ' && $('nt-hinten').hidden && aktuell) { e.preventDefault(); umdrehen(); }
+  else if (e.key === '1') bewerten(false);
+  else if (e.key === '2') bewerten(true);
+});
+
+// Erste Karte erst setzen, wenn MathJax bereit ist
+if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(zeigeKarte);
+else window.addEventListener('load', zeigeKarte);
+</script>
+</body>
+</html>

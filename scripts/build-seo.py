@@ -96,6 +96,11 @@ SEITEN = {
    titel='Leitprogramme — selbstständig durch ein Thema',
    beschreibung='Leitprogramme der BM-Mathematik: Ein Thema in Kapiteln zum selbstständigen Durcharbeiten, mit Vorwissenstest, Beispielen, Aufgaben und Gesamttest.',
    themen=['Mathematik', 'Leitprogramm', 'Selbststudium', 'Berufsmaturität']),
+ 'notationstrainer.html': dict(
+   typ='article', lrt='Lernkartei',
+   titel='Notationstrainer — Definitions- und Lösungsmengen richtig aufschreiben',
+   beschreibung='Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit fünf Fächern zum Wiederholen.',
+   themen=['Mathematik', 'Definitionsmenge', 'Lösungsmenge', 'Intervall', 'Grundmenge', 'Lernkartei']),
  'leitprogramme/potenzen.html': dict(
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Potenzen — von ℕ über ℤ zu ℚ',

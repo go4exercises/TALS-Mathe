@@ -4,6 +4,20 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 21. September 2026 · Notationstrainer
+
+### Hinzugefügt
+
+**`notationstrainer.html`** — Lernkartei zur Schreibweise, unter «Nachschlagen» verlinkt.
+81 Karten in acht Themen: Definitionsmenge (Bruchgleichungen, im SF auch Wurzel und
+Logarithmus), lineare und quadratische Gleichungen mit wechselnder Grundmenge
+(ℕ, ℤ, ℚ, ℝ), Sonderfälle (∅, 𝕃 = 𝔾, Scheinlösung), Ungleichungen als Intervall
+oder Aufzählung, Umschreiben zwischen Intervall- und Mengenschreibweise,
+Gleichungssysteme, Betrag/Wurzel/Exponent/Log (SF). Vorderseite Aufgabe, Rückseite
+Lösung mit Begründung, Stolperfalle und Link zur Themenseite. Leitner-System mit fünf
+Fächern, Stand nur im Browser; Filter nach Fach und Thema, Tastatur Leertaste/1/2.
+Alle Lösungen mit Python nachgerechnet.
+
 ## [Unveröffentlicht] — 15. September 2026 · Quadratische Gleichungen und Gleichungssysteme: Lücken geschlossen
 
 Arbeitsliste `todo-Q-GS.md` (30-Lektionen-Planung zu Algebra Kap. 9 und 10) abgearbeitet:

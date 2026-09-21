@@ -318,6 +318,7 @@ def seiten_aus_navjs(root):
                                  ('formelsammlung.html', '∑', 'Formelsammlung', 'formeln'),
                                  ('clips.html', '▶', 'Clips', 'thema'),
                                  ('leitprogramme.html', '▤', 'Leitprogramme', 'thema'),
+                                 ('notationstrainer.html', '{ }', 'Notationstrainer', 'thema'),
                                  ('leitprogramme/potenzen.html', '▤',
                                   'Leitprogramm Potenzen', 'thema'),
                                  ('leitprogramme/quadratische-gleichungen.html', '▤',
