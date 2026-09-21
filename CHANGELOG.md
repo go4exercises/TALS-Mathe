@@ -12,7 +12,8 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 Gerechnet wird nicht: Jede Karte nennt vorne das Ergebnis der Rechnung (z.B. «\(x = 3\) und
 \(y = 2\)», «Nenner null für \(x = 2\)», «erfüllt für \(x \le -2\) oder \(x \ge 2\)»), die
 Ausgangsgleichung steht nur klein als Kontext daneben. Geübt wird allein die Notation.
-85 Karten in acht Themen: Definitionsmenge (Bruchgleichungen, im SF auch Wurzel und
+135 Karten in acht Themen, jedes Thema mit Karten zu jeder Grundmenge ℕ, ℤ, ℚ, ℝ
+(im SF bei der Definitionsmenge ohne ℚ): Definitionsmenge (Bruchgleichungen, im SF auch Wurzel und
 Logarithmus), lineare und quadratische Gleichungen mit wechselnder Grundmenge
 (ℕ, ℤ, ℚ, ℝ), Sonderfälle (∅, 𝕃 = 𝔾, Scheinlösung), Ungleichungen als Intervall
 oder Aufzählung, Umschreiben zwischen Intervall- und Mengenschreibweise,
