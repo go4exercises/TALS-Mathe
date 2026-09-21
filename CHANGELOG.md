@@ -9,12 +9,15 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 ### Hinzugefügt
 
 **`notationstrainer.html`** — Lernkartei zur Schreibweise, unter «Nachschlagen» verlinkt.
-81 Karten in acht Themen: Definitionsmenge (Bruchgleichungen, im SF auch Wurzel und
+Gerechnet wird nicht: Jede Karte nennt vorne das Ergebnis der Rechnung (z.B. «\(x = 3\) und
+\(y = 2\)», «Nenner null für \(x = 2\)», «erfüllt für \(x \le -2\) oder \(x \ge 2\)»), die
+Ausgangsgleichung steht nur klein als Kontext daneben. Geübt wird allein die Notation.
+85 Karten in acht Themen: Definitionsmenge (Bruchgleichungen, im SF auch Wurzel und
 Logarithmus), lineare und quadratische Gleichungen mit wechselnder Grundmenge
 (ℕ, ℤ, ℚ, ℝ), Sonderfälle (∅, 𝕃 = 𝔾, Scheinlösung), Ungleichungen als Intervall
 oder Aufzählung, Umschreiben zwischen Intervall- und Mengenschreibweise,
 Gleichungssysteme, Betrag/Wurzel/Exponent/Log (SF). Vorderseite Aufgabe, Rückseite
-Lösung mit Begründung, Stolperfalle und Link zur Themenseite. Leitner-System mit fünf
+Notation mit Begründung, Stolperfalle und Link zur Themenseite. Leitner-System mit fünf
 Fächern, Stand nur im Browser; Filter nach Fach und Thema, Tastatur Leertaste/1/2.
 Alle Lösungen mit Python nachgerechnet.
 
