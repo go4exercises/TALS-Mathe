@@ -247,6 +247,7 @@ MathJax = {
 // weil die Strings per innerHTML eingesetzt werden.
 // Gerechnet wird hier nicht: lage nennt das Ergebnis der Rechnung, geübt wird nur die Notation.
 // k = Thema, b = gf|sf, ctx = Ausgangsgleichung (nur Kontext), lage = gegebenes Ergebnis,
+// erg = Ergebnis der Rechnung (Definitionsmenge-Karten), l / lweg = Lösungsmenge und Begründung,
 // g = Grundmenge, frage, a = Antwort (Display),
 // weg = Begründung der Notation, falle = Stolperfalle (optional), s = [Seite, Titel]
 const THEMEN = {
@@ -269,102 +270,131 @@ const S_S22C = ['schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html', 'SF 2.2c 
 const R = String.raw;
 const FD = 'Gib die Definitionsmenge \\(\\mathbb{D}\\) an.';
 const FL = 'Gib die Lösungsmenge \\(\\mathbb{L}\\) an.';
+const FDL = 'Gib die Definitionsmenge \\(\\mathbb{D}\\) und die Lösungsmenge \\(\\mathbb{L}\\) an.';
 const FI = 'Gib die Lösungsmenge \\(\\mathbb{L}\\) als Intervall an.';
 
 const KARTEN = [
   // ── Definitionsmenge ──
-  { id:'d1', k:'D', b:'gf', ctx:R`\dfrac{3}{x - 2} = 5`, lage:R`Der Nenner wird null für \(x = 2\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d1', k:'D', b:'gf', ctx:R`\dfrac{3}{x - 2} = 5`, lage:R`Der Nenner wird null für \(x = 2\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x = 2.6\).`, frage:FDL, l:R`\{2.6\}`, lweg:R`\(2.6 \in \mathbb{D}\) — die Lösung bleibt.`,
     a:R`\mathbb{D} = \mathbb{R} \setminus \{2\}`,
     weg:R`Aus der Grundmenge wird die verbotene Zahl mit \(\setminus\) («ohne») herausgenommen.`,
     falle:R`Nicht \(\mathbb{R} \setminus 2\) und nicht \(\mathbb{D} = x \ne 2\): Weggenommen wird eine <em>Menge</em>, darum \(\{2\}\) mit Mengenklammern.`, s:S_G22B },
-  { id:'d2', k:'D', b:'gf', ctx:R`\dfrac{x}{x + 4} = \dfrac{2}{x}`, lage:R`Die Nenner werden null für \(x = -4\) und für \(x = 0\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d2', k:'D', b:'gf', ctx:R`\dfrac{x}{x + 4} = \dfrac{2}{x}`, lage:R`Die Nenner werden null für \(x = -4\) und für \(x = 0\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x_1 = -2\) und \(x_2 = 4\).`, frage:FDL, l:R`\{-2, 4\}`, lweg:R`Beide liegen in \(\mathbb{D}\).`,
     a:R`\mathbb{D} = \mathbb{R} \setminus \{-4, 0\}`,
     weg:R`Beide verbotenen Zahlen kommen in <em>eine</em> Menge, durch Komma getrennt.`,
     falle:R`Nicht \(\mathbb{R} \setminus \{-4\} \setminus \{0\}\) und nicht zwei getrennte Angaben — eine Menge genügt.`, s:S_G22B },
-  { id:'d3', k:'D', b:'gf', ctx:R`\dfrac{1}{x^2 - 9} = \dfrac{2}{x + 3}`, lage:R`Der erste Nenner wird null für \(x = 3\) und \(x = -3\), der zweite für \(x = -3\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d3', k:'D', b:'gf', ctx:R`\dfrac{1}{x^2 - 9} = \dfrac{2}{x + 3}`, lage:R`Der erste Nenner wird null für \(x = 3\) und \(x = -3\), der zweite für \(x = -3\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x = 3.5\).`, frage:FDL, l:R`\{3.5\}`, lweg:R`\(3.5 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = \mathbb{R} \setminus \{-3, 3\}`,
     weg:R`In einer Menge steht jede Zahl nur einmal — die \(-3\) wird nicht doppelt aufgeschrieben.`, s:S_G22B },
-  { id:'d4', k:'D', b:'gf', ctx:R`\dfrac{5}{2x - 3} + 1 = \dfrac{1}{x}`, lage:R`Die Nenner werden null für \(x = 1.5\) und für \(x = 0\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d4', k:'D', b:'gf', ctx:R`\dfrac{5}{2x - 3} + 1 = \dfrac{1}{x}`, lage:R`Die Nenner werden null für \(x = 1.5\) und für \(x = 0\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung führt auf \(2x^2 + 3 = 0\) — dafür gibt es keine reelle Zahl.`, frage:FDL, l:R`\emptyset`, lweg:R`Keine Lösung. \(\mathbb{D}\) und \(\mathbb{L}\) sind verschiedene Dinge: Erlaubt sind fast alle Zahlen, gelöst wird die Gleichung von keiner.`,
     a:R`\mathbb{D} = \mathbb{R} \setminus \{0, 1.5\}`,
     weg:R`Üblich ist die aufsteigende Reihenfolge. \(\{1.5, 0\}\) bezeichnet aber dieselbe Menge — bei Mengen zählt die Reihenfolge nicht.`, s:S_G22B },
-  { id:'d5', k:'D', b:'gf', ctx:R`\dfrac{4}{x^2 + 1} = 1`, lage:R`Der Nenner \(x^2 + 1\) wird für keine reelle Zahl null.`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d5', k:'D', b:'gf', ctx:R`\dfrac{4}{x^2 + 1} = 1`, lage:R`Der Nenner \(x^2 + 1\) wird für keine reelle Zahl null.`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x_1 = -\sqrt{3}\) und \(x_2 = \sqrt{3}\).`, frage:FDL, l:R`\left\{-\sqrt{3}, \sqrt{3}\right\}`, lweg:R`Beide erlaubt, exakt mit Wurzel.`,
     a:R`\mathbb{D} = \mathbb{R}`,
     weg:R`Es fällt nichts weg: Die Definitionsmenge ist die ganze Grundmenge.`,
     falle:R`\(\mathbb{R} \setminus \emptyset\) ist nicht falsch, aber umständlich. Und \(\mathbb{D} = \emptyset\) wäre das Gegenteil: gar keine Zahl erlaubt.`, s:S_G22B },
-  { id:'d6', k:'D', b:'gf', ctx:R`\dfrac{x + 1}{x^2 - 5x + 6} = 2`, lage:R`Der Nenner wird null für \(x = 2\) und für \(x = 3\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d6', k:'D', b:'gf', ctx:R`\dfrac{2}{x - 2} = \dfrac{3}{x - 3}`, lage:R`Die Nenner werden null für \(x = 2\) und für \(x = 3\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x = 0\).`, frage:FDL, l:R`\{0\}`, lweg:R`\(0 \in \mathbb{D}\) — und \(\{0\}\) ist nicht leer.`,
     a:R`\mathbb{D} = \mathbb{R} \setminus \{2, 3\}`,
     weg:R`Zwei verbotene Zahlen, eine Menge.`,
     falle:R`Nicht \(\mathbb{D} = \mathbb{R} \setminus [2;\, 3]\): Das würde auch alle Zahlen <em>zwischen</em> 2 und 3 ausschliessen, etwa 2.5.`, s:S_G22B },
-  { id:'d7', k:'D', b:'gf', ctx:R`\dfrac{2}{x^2 - 2} = 1`, lage:R`Der Nenner wird null für \(x = -\sqrt{2}\) und für \(x = \sqrt{2}\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d7', k:'D', b:'gf', ctx:R`\dfrac{2}{x^2 - 2} = 1`, lage:R`Der Nenner wird null für \(x = -\sqrt{2}\) und für \(x = \sqrt{2}\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x_1 = -2\) und \(x_2 = 2\).`, frage:FDL, l:R`\{-2, 2\}`, lweg:R`Beide liegen in \(\mathbb{D}\).`,
     a:R`\mathbb{D} = \mathbb{R} \setminus \left\{-\sqrt{2}, \sqrt{2}\right\}`,
     weg:R`Die Wurzeln bleiben exakt stehen, nicht als \(\pm 1.41\).`, s:S_G22B },
-  { id:'d7q', k:'D', b:'gf', ctx:R`\dfrac{2}{x^2 - 2} = 1`, lage:R`Der Nenner wird null für \(x = -\sqrt{2}\) und für \(x = \sqrt{2}\).`, g:R`\mathbb{Q}`, frage:FD,
+  { id:'d7q', k:'D', b:'gf', ctx:R`\dfrac{2}{x^2 - 2} = 1`, lage:R`Der Nenner wird null für \(x = -\sqrt{2}\) und für \(x = \sqrt{2}\).`, g:R`\mathbb{Q}`,
+    erg:R`Die Rechnung ergibt \(x_1 = -2\) und \(x_2 = 2\).`, frage:FDL, l:R`\{-2, 2\}`, lweg:R`Beide sind rational und erlaubt.`,
     a:R`\mathbb{D} = \mathbb{Q}`,
     weg:R`\(\pm\sqrt{2}\) sind irrational, liegen also gar nicht in \(\mathbb{Q}\). Aus der Grundmenge fällt nichts weg.`, s:S_G22B },
-  { id:'d8', k:'D', b:'gf', ctx:R`\dfrac{1}{2x - 1} = 3`, lage:R`Der Nenner wird null für \(x = 0.5\).`, g:R`\mathbb{Z}`, frage:FD,
+  { id:'d8', k:'D', b:'gf', ctx:R`\dfrac{1}{2x - 1} = 3`, lage:R`Der Nenner wird null für \(x = 0.5\).`, g:R`\mathbb{Z}`,
+    erg:R`Die Rechnung ergibt \(x = \tfrac{2}{3}\).`, frage:FDL, l:R`\emptyset`, lweg:R`\(\tfrac{2}{3} \notin \mathbb{Z}\).`,
     a:R`\mathbb{D} = \mathbb{Z}`,
     weg:R`\(0.5\) ist keine ganze Zahl — aus \(\mathbb{Z}\) fällt nichts weg.`,
     falle:R`\(\mathbb{D}\) ist immer eine Teilmenge von \(\mathbb{G}\). \(\mathbb{Z} \setminus \{0.5\}\) nimmt etwas weg, das gar nicht drin ist.`, s:S_G22B },
-  { id:'d9', k:'D', b:'gf', ctx:R`\dfrac{6}{x + 2} = \dfrac{1}{x - 3}`, lage:R`Die Nenner werden null für \(x = -2\) und für \(x = 3\).`, g:R`\mathbb{N}`, frage:FD,
+  { id:'d9', k:'D', b:'gf', ctx:R`\dfrac{6}{x + 2} = \dfrac{1}{x - 3}`, lage:R`Die Nenner werden null für \(x = -2\) und für \(x = 3\).`, g:R`\mathbb{N}`,
+    erg:R`Die Rechnung ergibt \(x = 4\).`, frage:FDL, l:R`\{4\}`, lweg:R`\(4 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = \mathbb{N} \setminus \{3\}`,
     weg:R`Nur die \(3\) liegt in \(\mathbb{N}\); die \(-2\) war ohnehin nicht dabei.`, s:S_G22B },
-  { id:'d10', k:'D', b:'sf', ctx:R`\sqrt{x - 3} = 2`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 3\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d10', k:'D', b:'sf', ctx:R`\sqrt{x - 3} = 2`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 3\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x = 7\).`, frage:FDL, l:R`\{7\}`, lweg:R`\(7 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = [3;\, +\infty[`,
     weg:R`«\(\ge\)»: Die \(3\) gehört dazu — Klammer zum Intervall hin. Bei \(+\infty\) immer Klammer nach aussen.`,
     falle:R`Nicht \([3;\, +\infty]\): \(\infty\) ist keine Zahl und kann nie dazugehören.`, s:S_S22A },
-  { id:'d11', k:'D', b:'sf', ctx:R`\sqrt{5 - 2x} = x`, lage:R`Erlaubt sind alle \(x\) mit \(x \le 2.5\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d11', k:'D', b:'sf', ctx:R`\sqrt{5 - 2x} = x`, lage:R`Erlaubt sind alle \(x\) mit \(x \le 2.5\).`, g:R`\mathbb{R}`,
+    erg:R`Nach dem Quadrieren: \(x_1 = -1 - \sqrt{6}\), \(x_2 = -1 + \sqrt{6}\). Die Probe stimmt nur für \(x_2\).`, frage:FDL, l:R`\left\{-1 + \sqrt{6}\right\}`, lweg:R`\(x_1\) liegt zwar in \(\mathbb{D}\), ist aber eine Scheinlösung des Quadrierens.`,
     a:R`\mathbb{D} = \,]{-\infty};\, 2.5]`,
     weg:R`Nach links unbeschränkt, die \(2.5\) gehört dazu.`,
     falle:R`Nicht \((-\infty;\, 2.5]\): Runde Klammern sind die internationale Schreibweise. In diesem Lehrmittel ist die offene Grenze eine eckige Klammer nach aussen.`, s:S_S22A },
-  { id:'d12', k:'D', b:'sf', ctx:R`\sqrt{x + 2} = \sqrt{4 - x}`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge -2\) und zugleich \(x \le 4\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d12', k:'D', b:'sf', ctx:R`\sqrt{x + 2} = \sqrt{4 - x}`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge -2\) und zugleich \(x \le 4\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x = 1\).`, frage:FDL, l:R`\{1\}`, lweg:R`\(1 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = [-2;\, 4]`,
     weg:R`«und zugleich» ergibt ein einziges Intervall zwischen den beiden Grenzen, beide dabei.`, s:S_S22A },
-  { id:'d13', k:'D', b:'sf', ctx:R`\log_2(x + 1) = 3`, lage:R`Erlaubt sind alle \(x\) mit \(x \gt -1\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d13', k:'D', b:'sf', ctx:R`\log_2(x + 1) = 3`, lage:R`Erlaubt sind alle \(x\) mit \(x \gt -1\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x = 7\).`, frage:FDL, l:R`\{7\}`, lweg:R`\(7 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = \,]{-1};\, +\infty[`,
     weg:R`«\(\gt\)»: Die \(-1\) gehört nicht dazu — Klammer vom Intervall weg.`, s:S_S22B },
-  { id:'d14', k:'D', b:'sf', ctx:R`\lg(x) + \lg(x - 3) = 1`, lage:R`Beide Bedingungen zusammen ergeben: erlaubt sind alle \(x\) mit \(x \gt 3\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d14', k:'D', b:'sf', ctx:R`\lg(x) + \lg(x - 3) = 1`, lage:R`Beide Bedingungen zusammen ergeben: erlaubt sind alle \(x\) mit \(x \gt 3\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x_1 = -2\) und \(x_2 = 5\).`, frage:FDL, l:R`\{5\}`, lweg:R`\(-2 \notin \mathbb{D}\) — gestrichen.`,
     a:R`\mathbb{D} = \,]3;\, +\infty[`,
     weg:R`Die \(3\) ist ausgeschlossen, nach rechts unbeschränkt.`, s:S_S22B },
-  { id:'d15', k:'D', b:'sf', ctx:R`\dfrac{\sqrt{x}}{x - 4} = 1`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 0\), ausser \(x = 4\).`, g:R`\mathbb{R}`, frage:FD,
+  { id:'d15', k:'D', b:'sf', ctx:R`\dfrac{\sqrt{x}}{x - 4} = \dfrac{1}{x - 4}`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 0\), ausser \(x = 4\).`, g:R`\mathbb{R}`,
+    erg:R`Die Rechnung ergibt \(x = 1\).`, frage:FDL, l:R`\{1\}`, lweg:R`\(1 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = [0;\, +\infty[ \,\setminus \{4\}`,
     weg:R`Erst das Intervall, dann mit \(\setminus\) die einzelne Zahl herausnehmen. Gleichwertig: \([0;\, 4[ \;\cup\; ]4;\, +\infty[\).`, s:S_S22A },
-  { id:'dn2', k:'D', b:'gf', ctx:R`\dfrac{2}{x + 5} = 1`, lage:R`Der Nenner wird null für \(x = -5\).`, g:R`\mathbb{N}`, frage:FD,
+  { id:'dn2', k:'D', b:'gf', ctx:R`\dfrac{2}{x + 5} = 1`, lage:R`Der Nenner wird null für \(x = -5\).`, g:R`\mathbb{N}`,
+    erg:R`Die Rechnung ergibt \(x = -3\).`, frage:FDL, l:R`\emptyset`, lweg:R`\(-3 \notin \mathbb{N}\). Alle natürlichen Zahlen sind erlaubt, aber keine ist Lösung.`,
     a:R`\mathbb{D} = \mathbb{N}`,
     weg:R`\(-5 \notin \mathbb{N}\) — aus der Grundmenge fällt nichts weg.`, s:S_G22B },
-  { id:'dn3', k:'D', b:'gf', ctx:R`\dfrac{4}{x} + \dfrac{1}{x - 1} = 3`, lage:R`Die Nenner werden null für \(x = 0\) und für \(x = 1\).`, g:R`\mathbb{N}`, frage:FD,
+  { id:'dn3', k:'D', b:'gf', ctx:R`\dfrac{4}{x} + \dfrac{1}{x - 1} = 3`, lage:R`Die Nenner werden null für \(x = 0\) und für \(x = 1\).`, g:R`\mathbb{N}`,
+    erg:R`Die Rechnung ergibt \(x_1 = \tfrac{2}{3}\) und \(x_2 = 2\).`, frage:FDL, l:R`\{2\}`, lweg:R`\(\tfrac{2}{3}\) ist nicht natürlich; \(2 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = \mathbb{N} \setminus \{0, 1\}`,
     weg:R`Beide liegen in \(\mathbb{N}\) — auch die Null, sie gehört in diesem Lehrmittel dazu.`,
     falle:R`Nicht \(\mathbb{N} \setminus \{1\}\): Die \(0\) ist ein Element von \(\mathbb{N}\) und muss ebenfalls weg.`, s:S_G22B },
-  { id:'dn4', k:'D', b:'gf', ctx:R`\dfrac{3}{x^2 - 16} = 1`, lage:R`Der Nenner wird null für \(x = -4\) und für \(x = 4\).`, g:R`\mathbb{N}`, frage:FD,
+  { id:'dn4', k:'D', b:'gf', ctx:R`\dfrac{3}{x^2 - 16} = 1`, lage:R`Der Nenner wird null für \(x = -4\) und für \(x = 4\).`, g:R`\mathbb{N}`,
+    erg:R`Die Rechnung ergibt \(x_{1,2} = \pm\sqrt{19}\).`, frage:FDL, l:R`\emptyset`, lweg:R`\(\pm\sqrt{19}\) sind keine natürlichen Zahlen.`,
     a:R`\mathbb{D} = \mathbb{N} \setminus \{4\}`,
     weg:R`Nur die Zahlen herausnehmen, die in \(\mathbb{N}\) liegen.`,
     falle:R`\(\mathbb{N} \setminus \{-4, 4\}\) nimmt eine Zahl weg, die gar nicht drin ist — nicht sauber.`, s:S_G22B },
-  { id:'dz2', k:'D', b:'gf', ctx:R`\dfrac{1}{x + 3} = \dfrac{2}{x - 1}`, lage:R`Die Nenner werden null für \(x = -3\) und für \(x = 1\).`, g:R`\mathbb{Z}`, frage:FD,
+  { id:'dz2', k:'D', b:'gf', ctx:R`\dfrac{1}{x + 3} = \dfrac{2}{x - 1}`, lage:R`Die Nenner werden null für \(x = -3\) und für \(x = 1\).`, g:R`\mathbb{Z}`,
+    erg:R`Die Rechnung ergibt \(x = -7\).`, frage:FDL, l:R`\{-7\}`, lweg:R`\(-7 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = \mathbb{Z} \setminus \{-3, 1\}`,
     weg:R`Beide Zahlen sind ganz, beide fallen weg.`, s:S_G22B },
-  { id:'dz3', k:'D', b:'gf', ctx:R`\dfrac{x}{2x + 1} = \dfrac{3}{x - 2}`, lage:R`Die Nenner werden null für \(x = -0.5\) und für \(x = 2\).`, g:R`\mathbb{Z}`, frage:FD,
+  { id:'dz3', k:'D', b:'gf', ctx:R`\dfrac{x}{2x + 1} = \dfrac{3}{x - 2}`, lage:R`Die Nenner werden null für \(x = -0.5\) und für \(x = 2\).`, g:R`\mathbb{Z}`,
+    erg:R`Die Rechnung ergibt \(x_{1,2} = 4 \pm \sqrt{19}\).`, frage:FDL, l:R`\emptyset`, lweg:R`Beide Lösungen sind irrational, also nicht ganz.`,
     a:R`\mathbb{D} = \mathbb{Z} \setminus \{2\}`,
     weg:R`\(-0.5\) ist nicht ganz und liegt ohnehin nicht in \(\mathbb{Z}\). Weg muss nur die \(2\).`, s:S_G22B },
-  { id:'dz4', k:'D', b:'gf', ctx:R`\dfrac{2}{x^2 - 3} = 1`, lage:R`Der Nenner wird null für \(x = -\sqrt{3}\) und für \(x = \sqrt{3}\).`, g:R`\mathbb{Z}`, frage:FD,
+  { id:'dz4', k:'D', b:'gf', ctx:R`\dfrac{2}{x^2 - 3} = 1`, lage:R`Der Nenner wird null für \(x = -\sqrt{3}\) und für \(x = \sqrt{3}\).`, g:R`\mathbb{Z}`,
+    erg:R`Die Rechnung ergibt \(x_{1,2} = \pm\sqrt{5}\).`, frage:FDL, l:R`\emptyset`, lweg:R`Keine ganze Lösung.`,
     a:R`\mathbb{D} = \mathbb{Z}`,
     weg:R`\(\pm\sqrt{3}\) sind keine ganzen Zahlen.`, s:S_G22B },
-  { id:'dq2', k:'D', b:'gf', ctx:R`\dfrac{1}{3x - 1} = 2`, lage:R`Der Nenner wird null für \(x = \tfrac{1}{3}\).`, g:R`\mathbb{Q}`, frage:FD,
+  { id:'dq2', k:'D', b:'gf', ctx:R`\dfrac{1}{3x - 1} = 2`, lage:R`Der Nenner wird null für \(x = \tfrac{1}{3}\).`, g:R`\mathbb{Q}`,
+    erg:R`Die Rechnung ergibt \(x = 0.5\).`, frage:FDL, l:R`\{0.5\}`, lweg:R`\(0.5 \in \mathbb{D}\). Ebenso: \(\left\{\tfrac{1}{2}\right\}\).`,
     a:R`\mathbb{D} = \mathbb{Q} \setminus \left\{\tfrac{1}{3}\right\}`,
     weg:R`\(\tfrac{1}{3}\) ist ein Bruch, liegt also in \(\mathbb{Q}\) und fällt weg. Als Bruch schreiben, nicht als \(0.33\).`, s:S_G22B },
-  { id:'dq3', k:'D', b:'gf', ctx:R`\dfrac{x}{x^2 - 5} + \dfrac{1}{x - 2} = 0`, lage:R`Die Nenner werden null für \(x = -\sqrt{5}\), \(x = \sqrt{5}\) und \(x = 2\).`, g:R`\mathbb{Q}`, frage:FD,
+  { id:'dq3', k:'D', b:'gf', ctx:R`\dfrac{x}{x^2 - 5} + \dfrac{1}{x - 2} = 0`, lage:R`Die Nenner werden null für \(x = -\sqrt{5}\), \(x = \sqrt{5}\) und \(x = 2\).`, g:R`\mathbb{Q}`,
+    erg:R`Die Rechnung ergibt \(x_{1,2} = \dfrac{1 \pm \sqrt{11}}{2}\).`, frage:FDL, l:R`\emptyset`, lweg:R`Beide Lösungen sind irrational — nicht in \(\mathbb{Q}\).`,
     a:R`\mathbb{D} = \mathbb{Q} \setminus \{2\}`,
     weg:R`\(\pm\sqrt{5}\) sind irrational, liegen also nicht in \(\mathbb{Q}\). Weg muss nur die \(2\).`, s:S_G22B },
-  { id:'dq4', k:'D', b:'gf', ctx:R`\dfrac{3}{4x^2 - 1} = 1`, lage:R`Der Nenner wird null für \(x = -0.5\) und für \(x = 0.5\).`, g:R`\mathbb{Q}`, frage:FD,
+  { id:'dq4', k:'D', b:'gf', ctx:R`\dfrac{3}{4x^2 - 1} = 1`, lage:R`Der Nenner wird null für \(x = -0.5\) und für \(x = 0.5\).`, g:R`\mathbb{Q}`,
+    erg:R`Die Rechnung ergibt \(x_1 = -1\) und \(x_2 = 1\).`, frage:FDL, l:R`\{-1, 1\}`, lweg:R`Beide rational und erlaubt.`,
     a:R`\mathbb{D} = \mathbb{Q} \setminus \{-0.5, 0.5\}`,
     weg:R`Beide sind rational. Ebenso richtig: \(\mathbb{Q} \setminus \left\{-\tfrac{1}{2}, \tfrac{1}{2}\right\}\).`, s:S_G22B },
-  { id:'d16', k:'D', b:'sf', ctx:R`\sqrt{x - 3} = 2`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 3\).`, g:R`\mathbb{Z}`, frage:FD,
+  { id:'d16', k:'D', b:'sf', ctx:R`\sqrt{x - 3} = 2`, lage:R`Erlaubt sind alle \(x\) mit \(x \ge 3\).`, g:R`\mathbb{Z}`,
+    erg:R`Die Rechnung ergibt \(x = 7\).`, frage:FDL, l:R`\{7\}`, lweg:R`\(7 \in \mathbb{D}\).`,
     a:R`\mathbb{D} = \{3, 4, 5, \ldots\}`,
     weg:R`In \(\mathbb{Z}\) kein Intervall, sondern aufzählen. Ebenso richtig: \(\{x \in \mathbb{Z} \mid x \ge 3\}\).`,
     falle:R`\([3;\, +\infty[\) enthielte auch \(3.5\) — keine ganze Zahl.`, s:S_S22A },
-  { id:'d17', k:'D', b:'sf', ctx:R`\log_2(x + 1) = 3`, lage:R`Erlaubt sind alle \(x\) mit \(x \gt -1\).`, g:R`\mathbb{N}`, frage:FD,
+  { id:'d17', k:'D', b:'sf', ctx:R`\log_2(x + 1) = 3`, lage:R`Erlaubt sind alle \(x\) mit \(x \gt -1\).`, g:R`\mathbb{N}`,
+    erg:R`Die Rechnung ergibt \(x = 7\).`, frage:FDL, l:R`\{7\}`, lweg:R`\(7 \in \mathbb{N}\).`,
     a:R`\mathbb{D} = \mathbb{N}`,
     weg:R`Jede natürliche Zahl ist grösser als \(-1\) — es fällt nichts weg.`, s:S_S22B },
-  { id:'d18', k:'D', b:'sf', ctx:R`\sqrt{5 - 2x} = x`, lage:R`Erlaubt sind alle \(x\) mit \(x \le 2.5\).`, g:R`\mathbb{Z}`, frage:FD,
+  { id:'d18', k:'D', b:'sf', ctx:R`\sqrt{5 - 2x} = x`, lage:R`Erlaubt sind alle \(x\) mit \(x \le 2.5\).`, g:R`\mathbb{Z}`,
+    erg:R`Nach dem Quadrieren: \(x_{1,2} = -1 \pm \sqrt{6}\).`, frage:FDL, l:R`\emptyset`, lweg:R`Beide sind irrational, also nicht in \(\mathbb{Z}\).`,
     a:R`\mathbb{D} = \{\ldots, 0, 1, 2\}`,
     weg:R`Nach unten unbeschränkt: die Pünktchen stehen links. Ebenso richtig: \(\{x \in \mathbb{Z} \mid x \le 2\}\).`, s:S_S22A },
 
@@ -794,7 +824,7 @@ function zeigeKarte() {
   const art = !c.ctx ? '' : /cases/.test(c.ctx) ? 'Gleichungssystem' : /\\[lg][te]\b/.test(c.ctx) ? 'Ungleichung' : 'Gleichung';
   setzen($('nt-lage'),
     (c.ctx ? `<div class="nt-ctx">${art}: \\(\\displaystyle ${c.ctx}\\)</div>` : '') +
-    `<div class="nt-gegeben">${c.lage}</div>` +
+    `<div class="nt-gegeben">${c.lage}${c.erg ? ' ' + c.erg : ''}</div>` +
     (c.g ? `<span class="nt-g">Grundmenge \\(\\mathbb{G} = ${c.g}\\)</span>` : ''));
   setzen($('nt-frage'), c.frage);
   setzeFormeln([$('nt-lage'), $('nt-frage')]);
@@ -803,8 +833,13 @@ function zeigeKarte() {
 function umdrehen() {
   if (!aktuell || !$('nt-hinten').hidden) return;
   const c = aktuell;
-  setzen($('nt-antwort'), `\\[ ${c.a} \\]`);
-  setzen($('nt-weg'), c.weg);
+  // Karten mit D und L: beide Mengen untereinander, Begründung je Menge
+  setzen($('nt-antwort'), c.l
+    ? `\\[ \\begin{aligned} ${c.a.replace(' = ', ' &= ')} \\\\ \\mathbb{L} &= ${c.l} \\end{aligned} \\]`
+    : `\\[ ${c.a} \\]`);
+  setzen($('nt-weg'), c.l
+    ? `<p><strong>\\(\\mathbb{D}\\):</strong> ${c.weg}</p><p><strong>\\(\\mathbb{L}\\):</strong> ${c.lweg}</p>`
+    : c.weg);
   $('nt-falle').hidden = !c.falle;
   setzen($('nt-falle'), c.falle ? `<strong>Stolperfalle:</strong> ${c.falle}` : '');
   setzen($('nt-quer'), `→ <a href="${c.s[0]}">${c.s[1]}</a>`);
