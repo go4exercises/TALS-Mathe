@@ -21,8 +21,9 @@ Logarithmus), lineare und quadratische Gleichungen mit wechselnder Grundmenge
 (ℕ, ℤ, ℚ, ℝ), Sonderfälle (∅, 𝕃 = 𝔾, Scheinlösung), Ungleichungen als Intervall
 oder Aufzählung, Umschreiben zwischen Intervall- und Mengenschreibweise,
 Gleichungssysteme, Betrag/Wurzel/Exponent/Log (SF). Vorderseite Aufgabe, Rückseite
-Notation mit Begründung, Stolperfalle und Link zur Themenseite. Leitner-System mit fünf
-Fächern, Stand nur im Browser; Filter nach Fach, Grundmenge (ℕ, ℤ, ℚ, ℝ) und Thema,
+Notation mit Begründung, Stolperfalle und Link zur Themenseite. Leitner-System mit drei
+Fächern (Gewicht 4 : 2 : 1), Stand nur im Browser; Fächer und Filter in der rechten Seitenspalte,
+klebend, unter 900 px als eingeklappte Zeile über der Karte; Filter nach Fach, Grundmenge (ℕ, ℤ, ℚ, ℝ) und Thema,
 beim Laden voreingestellt auf Grundlagenfach · ℝ · Definitionsmenge; Tastatur Leertaste/1/2.
 Alle Lösungen mit Python nachgerechnet.
 

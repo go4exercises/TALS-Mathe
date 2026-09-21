@@ -37,7 +37,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   interaktiven Animationen), `nav.js` (`buildNav`), `style.css`.
 - `formelsammlung.html`, `glossar.html`, `clips.html`, `leitprogramme.html` — vier
   Nachschlag-Seiten im Repo-Root.
-- `notationstrainer.html` — Lernkartei (5 Fächer, Stand in `localStorage`) zur Notation von
+- `notationstrainer.html` — Lernkartei (3 Fächer, Stand in `localStorage`) zur Notation von
   𝔻, 𝕃 und Intervallen mit wechselnder Grundmenge. Die Karten stehen als Array `KARTEN`
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein

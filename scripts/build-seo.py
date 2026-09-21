@@ -99,7 +99,7 @@ SEITEN = {
  'notationstrainer.html': dict(
    typ='article', lrt='Lernkartei',
    titel='Notationstrainer — Definitions- und Lösungsmengen richtig aufschreiben',
-   beschreibung='Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit fünf Fächern zum Wiederholen.',
+   beschreibung='Lernkartei zur mathematischen Notation: Definitionsmenge von Bruchgleichungen, Lösungsmengen mit verschiedenen Grundmengen, Intervalle und Mengenschreibweise — mit drei Fächern zum Wiederholen.',
    themen=['Mathematik', 'Definitionsmenge', 'Lösungsmenge', 'Intervall', 'Grundmenge', 'Lernkartei']),
  'leitprogramme/potenzen.html': dict(
    typ='article', lrt='Leitprogramm',
