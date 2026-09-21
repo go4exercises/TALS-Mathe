@@ -198,7 +198,7 @@
   .karte.geplant .k-tit { color: var(--tinte-2); }
   .karte.geplant::after { content: 'in Vorbereitung'; position: absolute; right: 8px; top: 7px; font-family: var(--mono); font-size: 0.55rem; color: var(--tinte-2); background: var(--papier-2); padding: 1px 5px; border-radius: 3px; letter-spacing: 0.3px; }
 
-  /* Kleiner Weg zu den Clips — letztes Element der rechten Spalte.
+  /* Kleine Wege zu Clips, Leitprogrammen, Notationstrainer — letztes Element der rechten Spalte.
      Die .kap-Bloecke stossen bündig aneinander (0 px), darum genuegen 8 px,
      damit die Karte sichtbar abgesetzt ist.
      ACHTUNG: 8 px margin plus 43 px Hoehe sind genau die 51 px, um die die
@@ -216,6 +216,16 @@
     border-radius: 50%; background: var(--blau); color: #fff; font-size: 0.6rem; padding-left: 2px; }
   .ch-t { font-family: var(--serif); font-size: 0.93rem; font-weight: 700; color: var(--blau); }
   .ch-pfeil { margin-left: auto; font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--blau); }
+  /* Drei Wege in einer Zeile (Clips, Leitprogramme, Notationstrainer) — gleiche Hoehe wie
+     die einzelne Karte zuvor (8 px Abstand + 43.5 px), damit die Spalten weiter buendig enden.
+     Schmal stehen die drei untereinander; dort liegen die Spalten ohnehin untereinander. */
+  .weg-leiste { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+  .weg-leiste .clip-hinweis { margin-top: 0; padding: 8px 9px; gap: 7px; min-width: 0; min-height: 43.5px; }
+  .weg-leiste .ch-t { font-size: 0.86rem; white-space: nowrap; }
+  .weg-leiste .ch-ic { padding-left: 0; font-size: 0.58rem; }
+  .weg-leiste a:first-child .ch-ic { padding-left: 2px; }
+  @media (min-width: 601px) and (max-width: 1060px) { .weg-leiste .ch-ic { display: none; } .weg-leiste .clip-hinweis { justify-content: center; } }
+  @media (max-width: 600px) { .weg-leiste { grid-template-columns: 1fr; } }
 
   .ds { background: var(--weiss); border: 1px solid var(--linie); border-radius: 10px; padding: 18px 22px; margin-top: 44px; box-shadow: var(--s); }
   .ds-t { font-family: var(--serif); font-size: 0.88rem; font-weight: 700; margin-bottom: 12px; padding-bottom: 9px; border-bottom: 1px solid var(--linie); display: flex; align-items: center; gap: 10px; }
@@ -738,11 +748,20 @@
 
   <!-- ── DESIGN-SYSTEM LEGENDE ── -->
 
-      <a href="clips.html" class="clip-hinweis">
-        <span class="ch-ic" aria-hidden="true">▶</span>
-        <span class="ch-t">Mathematik Clips</span>
-        <span class="ch-pfeil">→</span>
-      </a>
+      <div class="weg-leiste">
+        <a href="clips.html" class="clip-hinweis">
+          <span class="ch-ic" aria-hidden="true">▶</span>
+          <span class="ch-t">Clips</span>
+        </a>
+        <a href="leitprogramme.html" class="clip-hinweis">
+          <span class="ch-ic" aria-hidden="true">▤</span>
+          <span class="ch-t">Leitprogramme</span>
+        </a>
+        <a href="notationstrainer.html" class="clip-hinweis">
+          <span class="ch-ic" aria-hidden="true">{ }</span>
+          <span class="ch-t">Notationstrainer</span>
+        </a>
+      </div>
     </div>
   </div>
 
