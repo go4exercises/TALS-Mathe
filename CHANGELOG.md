@@ -18,7 +18,8 @@ Logarithmus), lineare und quadratische Gleichungen mit wechselnder Grundmenge
 oder Aufzählung, Umschreiben zwischen Intervall- und Mengenschreibweise,
 Gleichungssysteme, Betrag/Wurzel/Exponent/Log (SF). Vorderseite Aufgabe, Rückseite
 Notation mit Begründung, Stolperfalle und Link zur Themenseite. Leitner-System mit fünf
-Fächern, Stand nur im Browser; Filter nach Fach und Thema, Tastatur Leertaste/1/2.
+Fächern, Stand nur im Browser; Filter nach Fach, Grundmenge (ℕ, ℤ, ℚ, ℝ) und Thema,
+beim Laden voreingestellt auf Grundlagenfach · ℝ · Definitionsmenge; Tastatur Leertaste/1/2.
 Alle Lösungen mit Python nachgerechnet.
 
 ## [Unveröffentlicht] — 15. September 2026 · Quadratische Gleichungen und Gleichungssysteme: Lücken geschlossen

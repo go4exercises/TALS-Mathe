@@ -171,7 +171,14 @@ MathJax = {
 <div class="nt-filter" id="nt-bereich">
   <span class="gm-label">Fach:</span>
   <button type="button" class="gm-btn aktiv" data-b="gf">Grundlagenfach</button>
-  <button type="button" class="gm-btn aktiv" data-b="sf">Schwerpunktfach</button>
+  <button type="button" class="gm-btn" data-b="sf">Schwerpunktfach</button>
+</div>
+<div class="nt-filter" id="nt-grund">
+  <span class="gm-label">Grundmenge:</span>
+  <button type="button" class="gm-btn" data-m="N">\(\mathbb{N}\)</button>
+  <button type="button" class="gm-btn" data-m="Z">\(\mathbb{Z}\)</button>
+  <button type="button" class="gm-btn" data-m="Q">\(\mathbb{Q}\)</button>
+  <button type="button" class="gm-btn aktiv" data-m="R">\(\mathbb{R}\)</button>
 </div>
 <div class="nt-filter" id="nt-kat">
   <span class="gm-label">Thema:</span>
@@ -199,7 +206,7 @@ MathJax = {
     <button type="button" class="nt-btn nt-nein" id="nt-nein">✗ Noch nicht<span class="nt-taste">1</span></button>
     <button type="button" class="nt-btn nt-ja" id="nt-ja">✓ Gewusst<span class="nt-taste">2</span></button>
   </div>
-  <div class="nt-leer" id="nt-leer" hidden>Mit dieser Auswahl gibt es keine Karten. Wähle mindestens ein Fach und ein Thema.</div>
+  <div class="nt-leer" id="nt-leer" hidden>Mit dieser Auswahl gibt es keine Karten. Wähle mindestens ein Fach, eine Grundmenge und ein Thema.</div>
 </div>
 
 <div class="nt-reset"><button type="button" id="nt-reset">Kartei zurücksetzen — alle Karten in Fach 1</button></div>
@@ -566,14 +573,21 @@ const KARTEN = [
 // ── Zustand (nur in diesem Browser) ──────────────────────────
 const SPEICHER = 'tals-mathe-notationstrainer-v1';
 let fach = {};                                 // id → 1…5
-let auswahl = { b: new Set(['gf', 'sf']), k: new Set(Object.keys(THEMEN)) };
+// Startauswahl: Grundlagenfach, Grundmenge ℝ, Definitionsmenge
+let auswahl = { b: new Set(['gf']), m: new Set(['R']), k: new Set(['D']) };
+// Grundmenge einer Karte: erstes \mathbb{…} in g (ℝ × ℝ zählt als ℝ, ℕ × ℕ als ℕ).
+// Schreibweisen-Karten haben kein g — dort zählt die Menge in der Ausgangslage, sonst ℝ.
+function grundVon(c) {
+  const m = /\\mathbb\{([NZQR])\}/.exec(c.g || c.lage);
+  return m ? m[1] : 'R';
+}
 try { const s = JSON.parse(localStorage.getItem(SPEICHER) || '{}'); if (s.fach) fach = s.fach; } catch (e) {}
 function speichern() { try { localStorage.setItem(SPEICHER, JSON.stringify({ fach })); } catch (e) {} }
 const fachVon = id => fach[id] || 1;
 
 let aktuell = null, letzte = null;
 
-function imStapel() { return KARTEN.filter(c => auswahl.b.has(c.b) && auswahl.k.has(c.k)); }
+function imStapel() { return KARTEN.filter(c => auswahl.b.has(c.b) && auswahl.m.has(grundVon(c)) && auswahl.k.has(c.k)); }
 
 // Leitner: Fach 1 kommt 16-mal so oft wie Fach 5; nie zweimal dieselbe Karte hintereinander.
 function ziehen() {
@@ -656,7 +670,7 @@ function bewerten(gewusst) {
 const katLeiste = $('nt-kat');
 Object.entries(THEMEN).forEach(([k, t]) => {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'gm-btn aktiv'; b.dataset.k = k; b.textContent = t;
+  b.type = 'button'; b.className = 'gm-btn' + (auswahl.k.has(k) ? ' aktiv' : ''); b.dataset.k = k; b.textContent = t;
   katLeiste.appendChild(b);
 });
 function filterKlick(e, menge, schluessel) {
@@ -669,6 +683,7 @@ function filterKlick(e, menge, schluessel) {
 }
 $('nt-bereich').addEventListener('click', e => filterKlick(e, auswahl.b, 'b'));
 katLeiste.addEventListener('click', e => filterKlick(e, auswahl.k, 'k'));
+$('nt-grund').addEventListener('click', e => filterKlick(e, auswahl.m, 'm'));
 
 $('nt-umdrehen').addEventListener('click', umdrehen);
 $('nt-ja').addEventListener('click', () => bewerten(true));
