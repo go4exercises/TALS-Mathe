@@ -59,7 +59,7 @@ ZEICHEN = {
     "∞": r"\infty", "√": r"\sqrt{}", "ℝ": r"\mathbb{R}", "ℕ": r"\mathbb{N}",
     "ℤ": r"\mathbb{Z}", "ℚ": r"\mathbb{Q}", "ℓ": r"\ell",
     "%": r"\%", "‰": r"\text{‰}", "Ω": r"\Omega", "µ": r"\mu",
-    "°": r"^\circ", "∅": r"\emptyset",
+    "°": r"^\circ", "∅": r"\{\,\}",
 }
 # Zeichen, die in einen Textblock gehören — im Mathesatz sähen sie falsch aus.
 TEXTZEICHEN = set("✓✗—…«»„“")
