@@ -9,16 +9,17 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 ### Hinzugefügt
 
 **`notationstrainer.html`** — Lernkartei zur Schreibweise, unter «Nachschlagen» verlinkt.
+Die leere Menge steht als \(\{\,\}\), nicht als \(\emptyset\) (Wunsch des Auftraggebers).
 Gerechnet wird nicht: Jede Karte nennt vorne das Ergebnis der Rechnung (z.B. «\(x = 3\) und
 \(y = 2\)», «Nenner null für \(x = 2\)», «erfüllt für \(x \le -2\) oder \(x \ge 2\)»), die
 Ausgangsgleichung steht nur klein als Kontext daneben. Geübt wird allein die Notation.
 Die Karten zur Definitionsmenge nennen zusätzlich die Lösungen der Gleichung und fragen
-𝔻 und 𝕃 zusammen ab — darunter Fälle mit leerer 𝕃 bei grosser 𝔻, einer Lösung ausserhalb
+𝔻 und 𝕃 zusammen ab — darunter Fälle mit 𝕃 = { } bei grosser 𝔻, einer Lösung ausserhalb
 von 𝔻 und einer Scheinlösung des Quadrierens.
 135 Karten in acht Themen, jedes Thema mit Karten zu jeder Grundmenge ℕ, ℤ, ℚ, ℝ
 (im SF bei der Definitionsmenge ohne ℚ): Definitionsmenge (Bruchgleichungen, im SF auch Wurzel und
 Logarithmus), lineare und quadratische Gleichungen mit wechselnder Grundmenge
-(ℕ, ℤ, ℚ, ℝ), Sonderfälle (∅, 𝕃 = 𝔾, Scheinlösung), Ungleichungen als Intervall
+(ℕ, ℤ, ℚ, ℝ), Sonderfälle (𝕃 = { }, 𝕃 = 𝔾, Scheinlösung), Ungleichungen als Intervall
 oder Aufzählung, Umschreiben zwischen Intervall- und Mengenschreibweise,
 Gleichungssysteme, Betrag/Wurzel/Exponent/Log (SF). Vorderseite Aufgabe, Rückseite
 Notation mit Begründung, Stolperfalle und Link zur Themenseite. Leitner-System mit drei
