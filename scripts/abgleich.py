@@ -155,16 +155,6 @@ OFFEN = [
              'Link «Anim» (a.cl-animlink neben dem Knopf); style.css .ah-clip-knopf/.cl-anim*; Werkzeug '
              '.claude/tools/aufnahme-anim.mjs. Ohne Uebernahme sinkt die KERN-Aehnlichkeit von build-clips.py '
              '(Physik 78.2 -> 78.0 %); Grundlinie dann auf 0.780 senken oder uebernehmen.'),
-    dict(quelle='Physik', was='clipBuehne: Fokus in den Clip (Fehler, 27.09.2026)',
-         wie='mathlib.js Z. 466 setzt den Fokus nach dem Oeffnen der Buehne auf .cb-zu. '
-             'Folge: Pfeiltasten spulen nicht (sie gehen an die Seite), die Leertaste '
-             'drueckt «Schliessen» statt zu pausieren. Physik-Fix physiklib.js clipBuehne '
-             '(Commit 86d3071): iframe fokussieren, sofort und im load-Handler; dort '
-             'zusaetzlich clipEscape per try an f.contentWindow.document haengen, sonst '
-             'schliesst Escape nicht mehr (unter file:// verweigert — Knopf und Rand '
-             'bleiben). Die Clips selbst brauchen keinen Neubau. Testfalle: python3 -m '
-             'http.server kann keine Range-Anfragen, der Ton springt beim Spulen auf 0 — '
-             'mit file:// oder auf GitHub Pages (206) pruefen.'),
     dict(quelle='Physik', was='build-seo: tex_weg loest Brueche und LaTeX-Abstaende auf (Fehler in Mathe)',
          wie='Physik cac3db1: bruch_auf(x) loest \\frac/\\tfrac/\\dfrac{a}{b} zu a/b auf '
              '(von innen nach aussen), dazu \\, \\; \\: \\! -> Leerzeichen und ^\\circ -> °. '
