@@ -1052,6 +1052,30 @@ canvas { display: block; width: 100%; }
 .cl-sp .cl-r7 .cl-folge { background: #7a3f9e; }  .cl-sp .cl-r7 .cl-clip { border-left-color: #7a3f9e; }
 .cl-sp .cl-r8 .cl-folge { background: #5a4bb0; }  .cl-sp .cl-r8 .cl-clip { border-left-color: #5a4bb0; }
 
+/* Clips zu einer einzelnen Animation (Drehbuch-Feld `animation`, uebernommen
+   aus TALS Physik 27.09.2026): in beiden Bereichen die Farbe der Animations-
+   Hinweise (.ah-titel), getoente Zeile und vorn der Link «Anim» zur Animation.
+   Auf der Lektionsseite stehen sie zudem in eigener Gruppe. Stand 27.09.2026
+   traegt noch kein Mathe-Drehbuch das Feld — die Regeln greifen erst dann. */
+.cl-anim { display: flex; align-items: stretch; }
+.cl-anim[hidden] { display: none; }        /* Sofortsuche in clips.html */
+.cl-anim .cl-clip, .cl-sp .cl-anim .cl-clip { flex: 1; min-width: 0; background: var(--blau-hell); border-left: 0; padding-left: 6px; }
+.cl-anim .cl-clip:hover { background: #cfe0f4; }
+.cl-anim .cl-folge, .cl-sp .cl-anim .cl-folge { background: var(--blau); }
+/* «Anim» vor der Zeile: Link zur Animation, die der Clip erklärt */
+.cl-animlink {
+  flex-shrink: 0; display: flex; align-items: center; padding: 0 8px 0 12px;
+  background: var(--blau-hell); color: var(--blau); text-decoration: none;
+  font-family: var(--mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.4px;
+  border-left: 3px solid var(--blau);
+}
+.cl-animlink:hover { background: #cfe0f4; text-decoration: underline; }
+.cl-animlink:focus-visible { outline: 2px solid var(--blau); outline-offset: -2px; }
+.cl-animkopf {
+  margin: 20px 0 0; font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.6px; text-transform: uppercase; color: var(--blau);
+}
+
 /* Werkzeug-Reihe (Taschenrechner): in beiden Bereichen dieselbe Farbe —
    sie soll gerade *nicht* zum Bereich gehoeren. */
 .cl-tr .cl-folge, .cl-sp .cl-tr .cl-folge { background: var(--orange); }
@@ -1355,6 +1379,12 @@ canvas { display: block; width: 100%; }
 .anim-hinweis:hover .ah-pop,
 .anim-hinweis:focus-within .ah-pop,
 .anim-hinweis.fixiert .ah-pop { opacity:1; visibility:visible; transform:none; pointer-events:auto; }
+/* Clip zur Animation (.clip mit .ah-clip-knopf): Eintrag rechts in der Titelzeile, gleich unauffällig
+   wie die Hinweise, aber ein Knopf (clipStart öffnet die grosse Bühne). Gesetzt von build-clips-einbau.py. */
+.ah-clip-knopf { font:inherit; font-size:0.8rem; color:var(--blau); background:none; border:0;
+  border-bottom:1px dotted var(--blau-rand); padding:1px 0; cursor:pointer; white-space:nowrap; }
+.ah-clip-knopf:hover { color:var(--tinte); }
+.ah-clip-knopf:focus-visible { outline:2px solid var(--blau-rand); outline-offset:2px; border-radius:2px; }
 .ah-titel { display:block; font-weight:600; font-size:0.8rem; color:var(--blau); margin-bottom:5px; }
 .ah-text { font-size:0.8rem; line-height:1.5; color:var(--tinte); }
 .ah-text ul { margin:0; padding-left:1.15em; }

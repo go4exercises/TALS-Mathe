@@ -85,8 +85,8 @@ GRUNDLINIE = {
     'feedback.html': 0.977,
     'LICENSE': 0.955,
     'scripts/build-suchindex.py': 0.962,
-    'scripts/build-clips.py': 0.798,
-    'scripts/build-clips-einbau.py': 0.806,
+    'scripts/build-clips.py': 0.812,
+    'scripts/build-clips-einbau.py': 0.830,
     'scripts/build-clip-ton.py': 1.000,
     'scripts/build-seo.py': 0.533,
     'scripts/schriften-lokal.py': 0.961,
@@ -125,19 +125,6 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Physik', was='Clips zu einzelnen Animationen: bild, animation, Einbau (27.09.2026, optional)',
-         wie='scripts/build-clips.py, element_html: neuer Zweig typ == "bild" (liest '
-             'el["datei"] relativ zu CLIPS, prueft auf <svg, giesst die SVG ein; Klasse graf) '
-             'und "bild" in den beiden Ausnahmelisten ("graf", "bild", "strich") fuer die '
-             'Breite. 12 Zeilen. Doku: HOWTO-clips.md, Tabelle Elementtypen + Absatz «bild». '
-             'Anlass: Clip zu einer einzelnen Animation (p6-2-fi-stromvergleich), der deren '
-             'Skizze zeigt. Seit 91bd722/586c637 dazu: bild nimmt JPG/PNG (data:-URL); '
-             'Drehbuch-Feld animation (Anker des h3) wandert nach clips.json; '
-             'build-clips-einbau.py setzt «▶ Clip» in die .widget-titelzeile (Marker '
-             'CLIP-ANIM), eigene Gruppe auf der Lektionsseite, Zeilen cl-anim mit vorangestelltem '
-             'Link «Anim» (a.cl-animlink neben dem Knopf); style.css .ah-clip-knopf/.cl-anim*; Werkzeug '
-             '.claude/tools/aufnahme-anim.mjs. Ohne Uebernahme sinkt die KERN-Aehnlichkeit von build-clips.py '
-             '(Physik 78.2 -> 78.0 %); Grundlinie dann auf 0.780 senken oder uebernehmen.'),
 ]
 
 FACH = {

@@ -316,6 +316,45 @@ die nur das Gerät beantwortet (Grenzen-Maske des numerischen Lösers, Beschrift
 Konstanten-Menü, Matrix und Vektor). Wer eine davon klärt, trägt sie dort ein und
 ergänzt die Liste oben.
 
+### Bild einer Animation — `typ: "bild"` und `"animation"`
+
+Übernommen aus TALS Physik am 27.09.2026 (dort Prototyp
+`p6-2-fi-stromvergleich`). **Stand 27.09.2026 nutzt kein Mathe-Drehbuch das
+Werkzeug**; es liegt bereit für Clips, die die Erkenntnisse *einer* Animation einer
+Lektionsseite zusammenfassen.
+
+```json
+{"typ": "bild", "datei": "bilder/g3-2-kartoffeln-1.jpg", "breite": 1140, "abstand": 450}
+```
+
+`datei` ist relativ zu `clips/`. Eine SVG wird beim Bauen eingegossen (sie muss mit
+`<svg` beginnen), JPG und PNG als `data:`-URL; der Clip bleibt eine Datei. `breite`
+in Bühnenpixeln, die Höhe folgt dem Seitenverhältnis. Im Schienen-Layout passt ein Bild
+von 1140 × 400 px über Formelzeile, Text und Notiz; `abstand` auf etwa 450 setzen.
+Aufnahmen der Animation selbst macht
+`node .claude/tools/aufnahme-anim.mjs <plan.json>` (Zustände per Klick, Reglerwert
+oder JS-Aufruf, doppelte Pixeldichte, JPEG; Aufbau des Plans im Kopf der Datei). Das
+zeigt im Clip genau das Bild, das auf der Seite steht. Eine eigene SVG-Skizze lohnt nur,
+wo die Animation etwas nicht zeigen kann. Ihre Zahlen werden aus der Rechnung der
+Animation nachgerechnet, nie abgeschrieben.
+
+Das Drehbuch trägt dazu `"animation": "<id des h3>"`. `build-clips.py` schreibt das
+Feld nach `clips.json`, und `build-clips-einbau.py` macht drei Dinge daraus:
+
+- Es setzt «▶ Clip» als letzten Eintrag in die `.widget-titelzeile` der Animation,
+  rechts neben «Worauf achten?» und «Erkenntnis», zwischen die Marker
+  `<!-- CLIP-ANIM … -->`. Nie von Hand ändern.
+- Auf der Lektionsseite stellt es den Clip in eine eigene Gruppe «Clips zu den
+  Animationen».
+- Die Zeile wird dort und in `clips.html` in der Farbe der Animations-Hinweise
+  abgesetzt (Blau, `.cl-anim`), mit dem Link «Anim» davor.
+
+**Falle, nur in Mathe:** Die `h3` in Mathes Titelzeilen tragen keine `id`. Vor dem
+ersten Animationsclip bekommt die Überschrift der Animation einen Anker
+(`<h3 id="anim-…">`), sonst meldet der Einbau `[FEHLER] … Animation #… nicht gefunden`.
+Der Titel muss sich klar vom Stoff-Clip zum selben Thema unterscheiden, denn dieselbe
+Liste zeigt beide.
+
 ### Die Bedingungsleiste — `voraussetzung`
 
 Der häufigste didaktische Mangel in einem mehrszenigen Clip: In Szene 2 wird eine

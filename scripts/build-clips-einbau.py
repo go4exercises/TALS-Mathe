@@ -198,7 +198,7 @@ def transkript(datei):
     return zeilen or None
 
 
-def zeile(clip, vor="", nuance=1, anker=None):
+def zeile(clip, vor="", nuance=1, anker=None, animlink=None):
     """Eine Clip-Zeile: Nummer, Titel, Laufzeit. Sonst nichts.
 
     Dieselbe Zeile in der Bibliothek und auf der Lektionsseite — es ist
@@ -221,9 +221,18 @@ def zeile(clip, vor="", nuance=1, anker=None):
     nr = (f'<span class="cl-folge">{folge}</span>' if folge
           else '<span class="cl-folge cl-ohne" aria-hidden="true">·</span>')
     id_ = f' id="{anker}"' if anker else ""
+    # Clips zu einer einzelnen Animation sind farblich abgesetzt und tragen
+    # vorn den Link «Anim» zu ihrer Animation — sie erklaeren ein Bild auf
+    # der Seite, nicht ein Stoffgebiet. Der Link steht neben dem Knopf, nicht
+    # darin: ein <a> in einem <button> ist kein gueltiges HTML.
+    anim = clip.get("animation")
+    kl += " cl-anim" if anim else ""
+    alink = ([f'  <a class="cl-animlink" href="{animlink}"'
+              f' aria-label="Zur Animation: {titel}">Anim</a>'] if anim and animlink else [])
     return [
         f'<div class="clip {kl}"{id_} data-clip="{vor}clips/{clip["datei"]}"'
         f' data-titel="{titel}" data-modus="gross">',
+    ] + alink + [
         '  <button class="clip-start cl-clip" type="button" onclick="clipStart(this)"'
         f' aria-label="Clip abspielen: {titel}">',
         '    ' + nr,
@@ -233,6 +242,54 @@ def zeile(clip, vor="", nuance=1, anker=None):
         '</div>',
     ]
 
+
+
+ANIM_AUF = '<!-- CLIP-ANIM — generiert von scripts/build-clips-einbau.py -->'
+ANIM_ZU = '<!-- /CLIP-ANIM -->'
+ANIM_ALT = re.compile(r'\n\s*' + re.escape(ANIM_AUF) + r'.*?' + re.escape(ANIM_ZU), re.DOTALL)
+
+
+def anim_knoepfe(text, clips, tiefe):
+    """Setzt in die Titelzeile jeder Animation, zu der es einen Clip gibt,
+    den Eintrag «▶ Clip» neben «Worauf achten?» und «Erkenntnis».
+
+    Gefunden wird die Animation ueber den Anker ihres <h3> (Feld
+    `animation` im Drehbuch); eingesetzt wird als letztes Kind der
+    .widget-titelzeile, zwischen eigenen Markern — so bleibt der Knopf
+    generiert und die Dauer stimmt nach jedem Neubau.
+    """
+    text = ANIM_ALT.sub("", text)
+    vor = "../" * tiefe
+    for c in clips:
+        anker = c.get("animation")
+        if not anker:
+            continue
+        m = re.search(r'<h3 id="%s"' % re.escape(anker), text)
+        if not m:
+            print(f"  [FEHLER] {c['datei']}: Animation #{anker} nicht gefunden")
+            continue
+        start = text.rfind('<div class="widget-titelzeile">', 0, m.start())
+        if start < 0 or m.start() - start > 200:
+            print(f"  [FEHLER] {c['datei']}: #{anker} steht in keiner .widget-titelzeile")
+            continue
+        # Ende der Titelzeile: das passende </div> ab ihrem Anfang
+        tiefe_, i = 0, start
+        for t in re.finditer(r'<div\b|</div>', text[start:]):
+            tiefe_ += 1 if t.group(0) != '</div>' else -1
+            if tiefe_ == 0:
+                i = start + t.start()
+                break
+        titel = html.escape(c["titel"])
+        knopf = (f'\n  {ANIM_AUF}\n'
+                 f'  <div class="clip" data-clip="{vor}clips/{c["datei"]}" data-titel="{titel}"'
+                 f' data-modus="gross">\n'
+                 f'    <button class="ah-clip-knopf" type="button" onclick="clipStart(this)"'
+                 f' aria-label="Clip zu dieser Animation abspielen ({mmss(c.get("dauer_s", 0))}):'
+                 f' {titel}">▶ Clip</button>\n'
+                 f'  </div>\n  {ANIM_ZU}')
+        rumpf = text[:i].rstrip()
+        text = rumpf + knopf + "\n" + text[i:]
+    return text
 
 
 def block_lektion(clips, tiefe, code=None):
@@ -259,13 +316,23 @@ def block_lektion(clips, tiefe, code=None):
 
     clips = sorted(clips, key=platz)
     nuance = nuancen_zuteilen(clips)
-    aus = [MARKE_AUF, '<h2 id="clips">Clips</h2>',
-           f'<div class="cl-body clip-auswahl"'
-           f' style="grid-template-rows: repeat({-(-len(clips) // 2)}, auto)">']
-    for c in clips:
-        aus += ["  " + z for z in
-                zeile(c, vor, nuance[c.get("reihe") or c["titel"]])]
-    aus.append('</div>')
+    # Zuerst die Clips zum Stoff, darunter abgesetzt die zu den Animationen
+    stoff = [c for c in clips if not c.get("animation")]
+    anim = [c for c in clips if c.get("animation")]
+    aus = [MARKE_AUF, '<h2 id="clips">Clips</h2>']
+    for gruppe, kopf in ((stoff, None),
+                         (anim, 'Clips zu den Animationen — was jede Animation zeigt')):
+        if not gruppe:
+            continue
+        if kopf:
+            aus.append(f'<p class="cl-animkopf">{kopf}</p>')
+        aus.append(f'<div class="cl-body clip-auswahl"'
+                   f' style="grid-template-rows: repeat({-(-len(gruppe) // 2)}, auto)">')
+        for c in gruppe:
+            aus += ["  " + z for z in
+                    zeile(c, vor, nuance[c.get("reihe") or c["titel"]],
+                          animlink=("#" + c["animation"]) if c.get("animation") else None)]
+        aus.append('</div>')
 
     tk = [(c, transkript(c["datei"])) for c in clips]
     if any(t for _, t in tk):
@@ -369,7 +436,9 @@ def block_bibliothek(alle, seiten):
             anker = None if stamm in benannt else "clip-" + stamm
             benannt.add(stamm)
             aus += ["      " + z for z in
-                    zeile(c, "", nuance[c.get("reihe") or c["titel"]], anker=anker)]
+                    zeile(c, "", nuance[c.get("reihe") or c["titel"]], anker=anker,
+                          animlink=(seiten[eigene[0]]["url"] + "#" + c["animation"])
+                          if c.get("animation") and eigene else None)]
         if letzte is not None:
             aus.append('    </div>')
         aus += ['  </div>', '</div>']
@@ -415,6 +484,7 @@ def main():
             continue
         tiefe = seiten[code]["url"].count("/")
         neu = BLOCK.sub(lambda _m: block_lektion(clips, tiefe, code), text, count=1)
+        neu = anim_knoepfe(neu, clips, tiefe)
         if neu == text:
             gleich += 1
         else:
