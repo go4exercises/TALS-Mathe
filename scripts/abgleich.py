@@ -88,7 +88,7 @@ GRUNDLINIE = {
     'scripts/build-clips.py': 0.798,
     'scripts/build-clips-einbau.py': 0.806,
     'scripts/build-clip-ton.py': 1.000,
-    'scripts/build-seo.py': 0.520,
+    'scripts/build-seo.py': 0.533,
     'scripts/schriften-lokal.py': 0.961,
     'scripts/mathjax-lokal.py': 0.853,
     'scripts/verify_mathjax.js': 0.941,
@@ -155,17 +155,6 @@ OFFEN = [
              'Link «Anim» (a.cl-animlink neben dem Knopf); style.css .ah-clip-knopf/.cl-anim*; Werkzeug '
              '.claude/tools/aufnahme-anim.mjs. Ohne Uebernahme sinkt die KERN-Aehnlichkeit von build-clips.py '
              '(Physik 78.2 -> 78.0 %); Grundlinie dann auf 0.780 senken oder uebernehmen.'),
-    dict(quelle='Physik', was='build-seo: tex_weg loest Brueche und LaTeX-Abstaende auf (Fehler in Mathe)',
-         wie='Physik cac3db1: bruch_auf(x) loest \\frac/\\tfrac/\\dfrac{a}{b} zu a/b auf '
-             '(von innen nach aussen), dazu \\, \\; \\: \\! -> Leerzeichen und ^\\circ -> °. '
-             'In Mathe nachgewiesen (27.09.2026): grundlagen/g5-4-einheitskreis.html '
-             'schreibt in teaches «sin(/π2-φ) = cos(φ)» statt «sin(π/2-φ)». Betroffen '
-             'sind die rlp-kompetenzen von 4 Seiten: g5-4-einheitskreis (frac), '
-             's1-3-logarithmen, s3-4a-exponentialfunktionen, s3-4b-logarithmusfunktionen '
-             '(Abstaende). Uebernehmen: bruch_auf und die zwei re.sub-Zeilen in innen(); '
-             'danach build-seo.py laufen lassen und die vier Beschreibungen ansehen. '
-             'Die Drift von build-seo.py (50.9 % gegen Grundlinie 52 %) kommt sonst aus '
-             'Projektdaten (SEITEN-Tabelle), nicht aus der Logik.'),
 ]
 
 FACH = {

@@ -351,7 +351,8 @@ MARKE_ZU = '<!-- SEO:ENDE -->'
 
 MAKROS = {'cdot': '·', 'Delta': 'Δ', 'delta': 'δ', 'lambda': 'λ', 'alpha': 'α',
           'beta': 'β', 'gamma': 'γ', 'rho': 'ρ', 'omega': 'ω', 'pi': 'π', 'mu': 'µ',
-          'circ': '°', 'approx': '≈', 'cdots': '…', 'times': '×', 'frac': '/',
+          'circ': '°', 'approx': '≈', 'cdots': '…', 'times': '×',
+          'frac': '/', 'tfrac': '/', 'dfrac': '/',   # Rueckfall, s. bruch_auf()
           'mathbb': '', 'mathbf': '', 'longmapsto': '↦', 'longrightarrow': '→',
           'Longleftrightarrow': '⇔', 'Rightarrow': '⇒', 'leq': '≤', 'geq': '≥',
           'neq': '≠', 'in': '∈', 'sqrt': '√', 'varphi': 'φ', 'setminus': '\\',
@@ -359,10 +360,26 @@ MAKROS = {'cdot': '·', 'Delta': 'Δ', 'delta': 'δ', 'lambda': 'λ', 'alpha': '
           'vec': '', 'text': '', 'mathrm': '', 'left': '', 'right': '', 'quad': ' '}
 
 
+def bruch_auf(x):
+    """\\frac{a}{b} zu a/b aufloesen, von innen nach aussen.
+
+    Ohne das wird aus \\tfrac{1}{2} erst «/{1}{2}» und dann «12» — in
+    Metadaten ist das eine falsche Zahl, kein Bruch.
+    """
+    muster = re.compile(r'\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}')
+    for _ in range(4):
+        x, n = muster.subn(r'\1/\2', x)
+        if not n:
+            break
+    return x
+
+
 def tex_weg(t):
     """LaTeX aus Fliesstext in lesbaren Klartext ueberfuehren."""
     def innen(m):
-        x = m.group(1)
+        x = bruch_auf(m.group(1))
+        x = re.sub(r'\\[ ,;:!]', ' ', x)            # LaTeX-Abstaende
+        x = re.sub(r'\^\s*\\circ', '°', x)         # ^\circ C -> °C, nicht ^°C
         x = re.sub(r'\\([a-zA-Z]+)', lambda k: MAKROS.get(k.group(1), ' '), x)
         # ^ und _ bleiben stehen: ohne sie wird aus a^x ein «ax» und aus
         # log_a(b) ein «a(b)» — in Metadaten waere das schlicht falsch.
