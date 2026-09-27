@@ -87,7 +87,7 @@ GRUNDLINIE = {
     'scripts/build-suchindex.py': 0.962,
     'scripts/build-clips.py': 0.782,
     'scripts/build-clips-einbau.py': 0.806,
-    'scripts/build-clip-ton.py': 0.575,
+    'scripts/build-clip-ton.py': 0.575,   # zurueck auf 1.000, sobald Mathe OFFEN abgearbeitet hat
     'scripts/build-seo.py': 0.520,
     'scripts/schriften-lokal.py': 0.961,
     'scripts/mathjax-lokal.py': 0.853,
@@ -99,7 +99,7 @@ GRUNDLINIE = {
     '.claude/tools/scan-live.mjs': 0.761,
     '.claude/tools/render-check.mjs': 0.968,
     '.claude/tools/build-bilder.mjs': 0.753,
-    '.claude/skills/preflight/preflight.py': 0.760,
+    '.claude/skills/preflight/preflight.py': 0.849,
     '.claude/skills/preflight/SKILL.md': 0.659,
     '.claude/settings.json': 0.509,
 }
@@ -107,16 +107,18 @@ GRUNDLINIE = {
 # Was tief unter seiner Grundlinie liegt, ist kein Naturgesetz, sondern eine
 # offene Baustelle. Hier steht, was daran zu tun waere.
 BAUSTELLE = {
+    'scripts/build-clip-ton.py':
+        'Physik ist die Fassung ohne Zweitstimme; Mathe traegt die Mechanik noch, '
+        'obwohl seit dem 07.09.2026 keine Spur sie nutzt. Rueckbau: siehe OFFEN.',
     'scripts/build-seo.py':
         'Grosse Teile sind Projektdatei (SEITEN, Lerngebiete). Die Logik ist seit '
         'dem 13.09.2026 gleich (argparse, --dry-run, einsetzen, main). Trennen '
         'waere der naechste Schritt.',
-    'scripts/build-clip-ton.py':
-        'Mathe kann Klangkurve, Zweitstimme und Tempo; Physik nicht. Kein Fach-'
-        'unterschied, nur Rueckstand.',
     '.claude/skills/preflight/preflight.py':
-        'Neun Pruefungen geteilt (check_html_in_math seit 13.09.2026 in beiden). '
-        'Offen: check_clips nur in Mathe.',
+        'Alle Pruefungen geteilt (check_html_in_math seit 13.09.2026, '
+        'check_clips seit 26.09.2026 in beiden). Verschieden bleiben Ordner und '
+        'Bibliotheksname, dazu Einzelheiten: Slot-Limits nur in Physik, '
+        'Skelett-Ausnahmen (EIGENES_SKELETT) nur in Mathe.',
     '.claude/settings.json':
         'Erlaubnislisten verschieden lang. Die deny-Listen sind seit dem '
         '13.09.2026 deckungsgleich; das ist der Teil, auf den es ankommt.',
@@ -126,11 +128,89 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='scripts/build-clip-ton.py',
-         wie='Mathe kann Klangkurve, Zweitstimme, Tempo und Rausch-Parameter '
-             '(342 Zeilen gegen 155). Kein Fachunterschied, nur Rueckstand.'),
-    dict(quelle='Mathe', was='check_clips im Pre-Flight',
-         wie='Gibt es nur in Mathe.'),
+    dict(quelle='Physik', was='Regel «Eine Rechnung, eine Zeile» (Entscheid Auftraggeber 26.09.2026)',
+         wie='Formelzeichen = Formel = Zahlen (mit Einheiten) = Ergebnis als EINE Kette in einer '
+             '.fl-eq statt Formel- und Zahlenzeile untereinander; fehlt der Platz, Umbruch nur vor '
+             'einem «=». Quelle Physik: STYLEGUIDE §2.8 (Absatz «Eine Rechnung, eine Zeile»), '
+             'CLAUDE.md Stilcheck-Regel 9, physiklib.js flTex/flHtml/flTeil (Z. 95-130; Glieder '
+             'als Inline-Formeln mit \\displaystyle, dazwischen <wbr>, fuehrendes = mit {}, '
+             'Container inline-block, Frame-Drosselung + serielle Typeset-Kette). Commits '
+             'f8c108d, ff768a1. Stand Mathe (gezaehlt 26.09.2026): 34 Seiten mit 147 .fl-eq; '
+             'nur 5 statisch LaTeX, 83 per innerHTML + mjTypeset (20 Seiten) — dort sitzt das '
+             'Zusammenlegen; mathlib.js hat mjTypeset, aber kein flTex. Typisches Paar: '
+             's3-4a bk-eq (Formelzeile darueber, Zahlenzeile darunter). Sonderfaelle: '
+             'farbige tx-gruen/tx-blau-Spans in g5-1 (wp-*-eq, sw-eq) muessen als \\color '
+             'oder Fach-Ausnahme mit; reine Wertanzeigen (g5-1 wv-grad, py-min/py-c/py-max, '
+             'zt-frage) sind keine Rechnung und bleiben. Nebenbefund Physik: LaTeX im Kopf '
+             'einer ❓-Frage braucht <summary><span>…</span></summary>, sonst zerlegt der '
+             'Flex-Container den Satz (Mathe-style.css pruefen). Falle beim Patchen: \\\\; in '
+             'eingetippten Skripten kam als \\; an — Backslashes per chr(92) schreiben.'),
+    dict(quelle='Physik', was='Zweitstimme zurueckbauen (Entscheid Auftraggeber 26.09.2026)',
+         wie='Die Mechanik war fuer de_CH-kohler-medium gebaut; seit dem 07.09.2026 '
+             'gibt es keine Kohler-Spur mehr (clips/ton: 0 Treffer), sie laeuft leer. '
+             'Zu entfernen: (1) scripts/build-clip-ton.py — --zweitstimme, --modell2, '
+             '--noise-scale, --noise-w, --klang, --tempo, mittleres_spektrum, '
+             'klangkurve, klang_anwenden, Dehnung, Lautheitsangleichung, Beipackzettel; '
+             'Ziel ist Physiks Fassung (155 Zeilen), danach 1:1 kopieren. Nebenbei weg: '
+             'bei festem --tempo druckte der Szenen-Print dehnungen[-1] = Szenenindex '
+             'als Faktor. (2) scripts/build-clips.py — STANDARDSTIMME (Z. 56-59), die '
+             'Stimmenliste weitere/liste/stimmen_js (Z. 814-841), im Player STIMMEN, '
+             'dehnung und der Umschalter (Z. 1218-1259); t * dehnung wird t. '
+             '(3) HOWTO-clips.md — die vier Abschnitte «Zweite Stimme» bis «Wenn die '
+             'Stimme dafuer zu schnell wird» (Z. 795-912); «Lizenzlage» bleibt. '
+             '(4) Alle 203 Clips neu bauen — jede clips/*.html traegt den toten '
+             'STIMMEN-Code. Danach in Physik die Grundlinie build-clip-ton wieder 1.000.'),
+    dict(quelle='Physik', was='Clips zu einzelnen Animationen: bild, animation, Einbau (27.09.2026, optional)',
+         wie='scripts/build-clips.py, element_html: neuer Zweig typ == "bild" (liest '
+             'el["datei"] relativ zu CLIPS, prueft auf <svg, giesst die SVG ein; Klasse graf) '
+             'und "bild" in den beiden Ausnahmelisten ("graf", "bild", "strich") fuer die '
+             'Breite. 12 Zeilen. Doku: HOWTO-clips.md, Tabelle Elementtypen + Absatz «bild». '
+             'Anlass: Clip zu einer einzelnen Animation (p6-2-fi-stromvergleich), der deren '
+             'Skizze zeigt. Seit 91bd722/586c637 dazu: bild nimmt JPG/PNG (data:-URL); '
+             'Drehbuch-Feld animation (Anker des h3) wandert nach clips.json; '
+             'build-clips-einbau.py setzt «▶ Clip» in die .widget-titelzeile (Marker '
+             'CLIP-ANIM), eigene Gruppe auf der Lektionsseite, Zeilen cl-anim mit vorangestelltem '
+             'Link «Anim» (a.cl-animlink neben dem Knopf); style.css .ah-clip-knopf/.cl-anim*; Werkzeug '
+             '.claude/tools/aufnahme-anim.mjs. Ohne Uebernahme sinkt die KERN-Aehnlichkeit von build-clips.py '
+             '(Physik 78.2 -> 78.0 %); Grundlinie dann auf 0.780 senken oder uebernehmen.'),
+    dict(quelle='Physik', was='clipBuehne: Fokus in den Clip (Fehler, 27.09.2026)',
+         wie='mathlib.js Z. 466 setzt den Fokus nach dem Oeffnen der Buehne auf .cb-zu. '
+             'Folge: Pfeiltasten spulen nicht (sie gehen an die Seite), die Leertaste '
+             'drueckt «Schliessen» statt zu pausieren. Physik-Fix physiklib.js clipBuehne '
+             '(Commit 86d3071): iframe fokussieren, sofort und im load-Handler; dort '
+             'zusaetzlich clipEscape per try an f.contentWindow.document haengen, sonst '
+             'schliesst Escape nicht mehr (unter file:// verweigert — Knopf und Rand '
+             'bleiben). Die Clips selbst brauchen keinen Neubau. Testfalle: python3 -m '
+             'http.server kann keine Range-Anfragen, der Ton springt beim Spulen auf 0 — '
+             'mit file:// oder auf GitHub Pages (206) pruefen.'),
+    dict(quelle='Physik', was='build-clip-ton: Aussprache-Tabellen (27.09.2026)',
+         wie='Physik ba888a2/8559cc9/02c0c1b: AUSSPRACHE (Wortstamm -> IPA als [[…]]), '
+             'ABKUERZUNGEN (nur exakt als ganzes Wort), TAUSCH (reiner Worttausch), '
+             'VORSILBEN; aussprache(text) wirkt nur auf den Text an Piper. Mathe: in '
+             'sprich(...) an allen vier Aufrufstellen (Z. 182, 193, 199, 213) den Text '
+             'durch aussprache(text) ersetzen — oder erst die Zweitstimme zurueckbauen '
+             '(eigener OFFEN-Eintrag), dann bleibt eine Stelle. Nachgezaehlt 27.09.2026: '
+             '9 von 204 Mathe-Drehbuechern betroffen — Pythagoras 7 (g5-2a-pythagoras, '
+             'g5-3-cosinussatz, g5-4-spezialwinkel, g5-4-trig-pythagoras, s4-2b-…), '
+             'achthundert 1 (trigo2-3-ballon-zwei-fehler), Megahertz 1 (g1-4-ti30x-ee-eng); '
+             'danach diese 9 neu vertonen. Die Tabellen sind nach Hoerproben des '
+             'Auftraggebers entschieden und gelten fuer Thorsten in beiden Repos. Fallen: '
+             'Satzzeichen muss in die Klammer (sonst verschluckt, Wort klebt an), '
+             'Wortgrenze/Vorsilbe noetig («Schlamperei»). Empfohlen: Mathes eigenes '
+             'Vokabular mit denselben zwei Suchdurchgaengen pruefen (HOWTO-clips.md, '
+             'Abschnitt Ton; Physik fand so «Zentripetalkraft» englisch gelesen) — '
+             'Entscheid je Wort per Hoerprobe durch den Auftraggeber.'),
+    dict(quelle='Physik', was='build-seo: tex_weg loest Brueche und LaTeX-Abstaende auf (Fehler in Mathe)',
+         wie='Physik cac3db1: bruch_auf(x) loest \\frac/\\tfrac/\\dfrac{a}{b} zu a/b auf '
+             '(von innen nach aussen), dazu \\, \\; \\: \\! -> Leerzeichen und ^\\circ -> °. '
+             'In Mathe nachgewiesen (27.09.2026): grundlagen/g5-4-einheitskreis.html '
+             'schreibt in teaches «sin(/π2-φ) = cos(φ)» statt «sin(π/2-φ)». Betroffen '
+             'sind die rlp-kompetenzen von 4 Seiten: g5-4-einheitskreis (frac), '
+             's1-3-logarithmen, s3-4a-exponentialfunktionen, s3-4b-logarithmusfunktionen '
+             '(Abstaende). Uebernehmen: bruch_auf und die zwei re.sub-Zeilen in innen(); '
+             'danach build-seo.py laufen lassen und die vier Beschreibungen ansehen. '
+             'Die Drift von build-seo.py (50.9 % gegen Grundlinie 52 %) kommt sonst aus '
+             'Projektdaten (SEITEN-Tabelle), nicht aus der Logik.'),
 ]
 
 FACH = {
