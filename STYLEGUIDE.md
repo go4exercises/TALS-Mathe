@@ -321,6 +321,43 @@ Die leere Menge wird **als leere Mengenklammer** geschrieben, nie als durchgestr
 Umgestellt am 21.09.2026 in allen Themenseiten, Leitprogrammen, Glossar, Formelsammlung,
 Druckseiten, Clip-Drehbüchern, Anki-Decks und im Notationstrainer.
 
+## 2.12 Eine Rechnung, eine Zeile (verbindlich seit 27.09.2026)
+
+Übernommen aus TALS Physik (Entscheid Auftraggeber 26.09.2026). Symbol, Formel,
+eingesetzte Zahlen und Ergebnis stehen in einer Live-Formel (`.formel-live`) als
+**eine Kette** in **einer** `.fl-eq`, nicht als Formelzeile mit Zahlenzeile darunter:
+
+- \( t = \log_2(y) = \log_2(64) = 6.00\;\text{h} \) ✓
+- oben `t = log₂(y)`, darunter `t = log₂(64) = 6.00 h` ✗
+
+Fehlt der Platz (360 px), bricht die Kette **nur vor einem Gleichheitszeichen** um, nie
+mitten in einem Bruch oder Term. Umsetzung: `flTex(id, glieder)` aus `mathlib.js`. Jedes
+Glied (`t = \log_2(y)`, `= \log_2(64)`, `= 6.00\;\text{h}`) wird eine eigene Inline-Formel
+mit `\displaystyle`, dazwischen `<wbr>`. Ein führendes `=` bekommt ein `{}` davor, sonst
+fehlt ihm links der Abstand. Die Formel-Container werden `inline-block`, damit
+umgebrochene Brüche sich nicht berühren. Gesetzt wird über die Queue von `mjTypeset`,
+höchstens einmal je Frame. `texE(zahl, einheit)` schreibt eine Zahl mit Einheit
+(`6.00\;\text{h}`). Ein Array von Glieder-Arrays ergibt mehrere Rechnungen, durch
+Strichpunkt getrennt.
+
+**Wie das in Mathe gelesen wird:**
+
+- **Funktionsvorschrift und Funktionswert** sind zwei Aussagen, keine Formel- und
+  Zahlenzeile derselben Rechnung. \(f(x) = 2^x\) darf über \(f(3) = 2^3 = 8\) stehen,
+  weil sich \(f(3)\) nicht mit \(2^x\) gleichsetzen lässt. Die Wertzeile ist dann aber
+  selbst eine **vollständige Kette** (Symbol = eingesetzte Vorschrift = Ergebnis), nicht
+  nur \(f(3) = 8\).
+- **Produktform = Summenform** ist eine Kette: \(f(x) = 0.5 \cdot (x-1)(x+2)(x-3) =
+  0.5 \cdot x^3 - x^2 - 2.5 \cdot x + 3\) in einer Zeile.
+- **Umformung und Zahlenprobe** bleiben getrennt, wenn sie zwei Wege zum selben Ergebnis
+  sind, etwa \(2^3 \cdot 2^4 = 2^{3+4} = 2^7\) und darunter \(8 \cdot 16 = 128\), oder eine
+  quadratische Ergänzung mit der Probe «mit \(x = 4\)».
+- **Verschiedene Rechnungen** bleiben getrennte Zeilen. Reine Wertanzeigen (ein Winkel, eine
+  Lösungsmenge, ein Status) sind keine Rechnung.
+
+Umgestellt am 27.09.2026: s3-2a (Drei Darstellungen), s3-2b (Pendel), s3-3
+(Linearfaktor-Baukasten), s3-4a (Drei Darstellungen), s3-4b (Umkehrfrage).
+
 ---
 
 ## 3. Achsenskalierung (verbindlich)
@@ -919,6 +956,8 @@ Themenseiten binden `nav.js` und `mathlib.js` als geteilte Bibliotheken ein. Bei
 | `drawLine` | `function` | Linie mit logischen Koordinaten |
 | `drawDot` | `function` | Punkt mit logischen Koordinaten |
 | `intervallKlammer` | `function` | Intervallgrenze als Klammer (§2.7) |
+| `flTex`, `flHtml`, `flTeil`, `flOffen` | `function`/`const` | Eine Rechnung, eine Zeile (§2.12) |
+| `texE` | `const` | Zahl mit Einheit in LaTeX (§2.12) |
 
 **Aus `nav.js` reserviert:**
 

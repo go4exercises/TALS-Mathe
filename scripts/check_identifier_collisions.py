@@ -25,6 +25,7 @@ RESERVED = {
     # mathlib.js
     'fmt', 'fmtS', 'fmtMx', 'fmtAffine', 'parseL', 'toggleL',
     'initCanvas', 'drawGrid', 'drawLine', 'drawDot',
+    'flTex', 'flHtml', 'flTeil', 'flOffen', 'texE',
     # nav.js
     'SITE', 'GROUPS', 'TOC_KURZ',
     'buildNav', 'buildToC', 'toggleDD', 'toggleMobileNav',

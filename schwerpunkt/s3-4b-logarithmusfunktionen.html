@@ -279,8 +279,7 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Umkehrfrage und Antwort</div>
-      <div class="fl-eq">2<sup>t</sup> = <span class="tx-blau">y</span>  ⇒  t = log₂(<span class="tx-blau">y</span>)</div>
-      <div class="fl-eq" id="ek-eq" style="font-size:0.95rem;margin-top:4px">t = log₂(<span class="tx-blau">64</span>) = 6.00 h</div>
+      <div class="fl-eq" id="ek-eq">\(2^t = \textcolor{#1a4f8a}{y} \;\Rightarrow\; t = \log_2(\textcolor{#1a4f8a}{y}) = \log_2(\textcolor{#1a4f8a}{64}) = 6.00\;\text{h}\)</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="ek-canvas" height="240"></canvas></div>
   </div>
@@ -1036,8 +1035,9 @@ function updateEK(){
   const y = EK_Y[parseInt(document.getElementById('ek-y').value)];
   document.getElementById('ek-yv').textContent = y;
   const t = Math.log2(y);
-  const yB = `<span class="tx-blau">${y}</span>`;
-  document.getElementById('ek-eq').innerHTML = `t = log₂(${yB}) = ${t.toFixed(2)} h`;
+  // Eine Rechnung, eine Zeile (STYLEGUIDE §2.8): t = log₂(y) = log₂(Zahl) = Ergebnis
+  const yB = `\\textcolor{#1a4f8a}{${y}}`, yV = '\\textcolor{#1a4f8a}{y}';
+  flTex('ek-eq', [`2^t = ${yV} \\;\\Rightarrow\\; t = \\log_2(${yV})`, `= \\log_2(${yB})`, `= ${texE(t.toFixed(2), 'h')}`]);
   const {ctx, W, H, cx, cy} = gridApp('ek-canvas', 240, 0, 1050, 0, 11, 100, 1, 'y [Tausend]', 't [h]');
   // Funktionsterm zur Kurve — im Bild, nicht nur in der Reglerzeile
   ctx.font = 'bold 12px JetBrains Mono, monospace'; ctx.fillStyle = '#5b2d8e';

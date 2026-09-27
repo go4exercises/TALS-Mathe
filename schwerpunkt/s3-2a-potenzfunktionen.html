@@ -361,8 +361,8 @@ MathJax = {
 
     <div class="formel-live">
       <div class="fl-label">① Funktionsgleichung</div>
-      <div class="fl-eq" id="dr-eq">f(<span class="tx-gruen">x</span>) = <span class="tx-blau">1</span>·<span class="tx-gruen">x</span><span class="tx-orange">³</span></div>
-      <div class="fl-eq" id="dr-eval" style="font-size:0.95rem;margin-top:4px">f(<span class="tx-gruen">2</span>) = 8</div>
+      <div class="fl-eq" id="dr-eq">\(f(\textcolor{#1f6b3a}{x}) = \textcolor{#1f6b3a}{x}^{\textcolor{#b85c00}{3}}\)</div>
+      <div class="fl-eq" id="dr-eval" style="font-size:0.95rem;margin-top:4px">\(f(\textcolor{#1f6b3a}{2}) = \textcolor{#1f6b3a}{2}^{\textcolor{#b85c00}{3}} = 8\)</div>
     </div>
 
     <div class="zwei-spalten">
@@ -1066,21 +1066,21 @@ function updateDR(){
   document.getElementById('dr-av').textContent = fmt(a).replace('-', '−');
   document.getElementById('dr-nv').textContent = String(n).replace('-', '−');
   document.getElementById('dr-xv').textContent = String(x).replace('-', '−');
-  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
   // Gleichung: a farbig (blau), Exponent farbig (orange), x grün
   // Koeffizient ±1 wird nicht geschrieben (STYLEGUIDE §10.4) — die Slider-Anzeige bleibt Referenz
-  const aStr = a === 1 ? '' : (a === -1 ? '−' : `${T('blau', fmt(a).replace('-', '−'))}·`);
-  document.getElementById('dr-eq').innerHTML =
-    `f(${T('gruen','x')}) = ${aStr}${T('gruen','x')}${T('orange', SUP[String(n)])}`;
+  // Eine Rechnung, eine Zeile (STYLEGUIDE §2.8): f(x) = a·x^n = Zahl
+  const cB = z => `\\textcolor{#1a4f8a}{${z}}`, cO = z => `\\textcolor{#b85c00}{${z}}`,
+        cG = z => `\\textcolor{#1f6b3a}{${z}}`;
+  const aTex = a === 1 ? '' : (a === -1 ? '-' : `${cB(fmt(a))} \\cdot `);
+  flTex('dr-eq', `f(${cG('x')}) = ${aTex}${cG('x')}^{${cO(n)}}`);
   // Auswertung
-  let evalHtml;
   if(x === 0 && n < 0){
-    evalHtml = `f(${T('gruen','0')}) — nicht definiert (Definitionslücke!)`;
+    flTex('dr-eval', `f(${cG(0)})\\;\\text{— nicht definiert (Definitionslücke!)}`);
   } else {
     const y = a * Math.pow(x, n);
-    evalHtml = `f(${T('gruen', String(x).replace('-','−'))}) = ${fmt2(y).replace('-','−')}`;
+    const xTex = x < 0 ? `(${cG(x)})` : cG(x);
+    flTex('dr-eval', [`f(${cG(x)}) = ${aTex}${xTex}^{${cO(n)}}`, `= ${fmt2(y).replace('−', '-')}`]);
   }
-  document.getElementById('dr-eval').innerHTML = evalHtml;
   // Tabelle
   const xs = [-3, -2, -1, 0, 1, 2, 3];
   const tbody = document.querySelector('#dr-table tbody');

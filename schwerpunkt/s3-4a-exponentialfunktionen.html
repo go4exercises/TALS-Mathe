@@ -365,8 +365,8 @@ MathJax = {
 
     <div class="formel-live">
       <div class="fl-label">① Funktionsgleichung</div>
-      <div class="fl-eq" id="dr-eq">f(<span class="tx-gruen">x</span>) = <span class="tx-blau">2</span><sup class="tx-gruen">x</sup></div>
-      <div class="fl-eq" id="dr-eval" style="font-size:0.95rem;margin-top:4px">f(<span class="tx-gruen">2</span>) = 4</div>
+      <div class="fl-eq" id="dr-eq">\(f(\textcolor{#1f6b3a}{x}) = \textcolor{#1a4f8a}{2}^{\textcolor{#1f6b3a}{x}}\)</div>
+      <div class="fl-eq" id="dr-eval" style="font-size:0.95rem;margin-top:4px">\(f(\textcolor{#1f6b3a}{2}) = \textcolor{#1a4f8a}{2}^{\textcolor{#1f6b3a}{2}} = 4\)</div>
     </div>
 
     <div class="zwei-spalten">
@@ -1074,13 +1074,14 @@ function updateDR(){
   const x = parseInt(document.getElementById('dr-x').value);
   document.getElementById('dr-av').textContent = DR_LAB[ai];
   document.getElementById('dr-xv').textContent = String(x).replace('-', '−');
-  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
-  const aStr = DR_LAB[ai].includes('/') ? `(${DR_LAB[ai]})` : DR_LAB[ai];
-  document.getElementById('dr-eq').innerHTML =
-    `f(${T('gruen','x')}) = ${T('blau', aStr)}<sup>${T('gruen','x')}</sup>`;
+  // Eine Rechnung, eine Zeile (STYLEGUIDE §2.8): f(x) = a^x = Zahl
+  const cB = z => `\\textcolor{#1a4f8a}{${z}}`, cG = z => `\\textcolor{#1f6b3a}{${z}}`;
+  const aTex = DR_LAB[ai].includes('/')
+    ? `\\left(\\tfrac{${DR_LAB[ai].split('/')[0]}}{${DR_LAB[ai].split('/')[1]}}\\right)` : DR_LAB[ai];
+  const aStr = DR_LAB[ai].includes('/') ? `(${DR_LAB[ai]})` : DR_LAB[ai];   // Canvas-Beschriftung
+  flTex('dr-eq', `f(${cG('x')}) = ${cB(aTex)}^{${cG('x')}}`);
   const y = Math.pow(a, x);
-  document.getElementById('dr-eval').innerHTML =
-    `f(${T('gruen', String(x).replace('-','−'))}) = ${fmt2(y).replace('-','−')}`;
+  flTex('dr-eval', [`f(${cG(x)}) = ${cB(aTex)}^{${cG(x)}}`, `= ${fmt2(y).replace('−', '-')}`]);
   // Tabelle
   const xs = [-3, -2, -1, 0, 1, 2, 3];
   const tbody = document.querySelector('#dr-table tbody');

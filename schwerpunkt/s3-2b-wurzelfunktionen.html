@@ -268,8 +268,8 @@ MathJax = {
     </div>
     <div class="formel-live">
       <div class="fl-label">Funktion und Auswertung</div>
-      <div class="fl-eq">T(<span class="tx-blau">l</span>) = 2π·√(<span class="tx-blau">l</span>/9.81)</div>
-      <div class="fl-eq" id="pe-eq" style="font-size:0.95rem;margin-top:4px">T(<span class="tx-blau">1.0</span>) = 2.01 s</div>
+      <div class="fl-eq">\(T(\textcolor{#1a4f8a}{l}) = 2\pi \cdot \sqrt{\frac{\textcolor{#1a4f8a}{l}}{9.81}}\)</div>
+      <div class="fl-eq" id="pe-eq" style="font-size:0.95rem;margin-top:4px">\(T(\textcolor{#1a4f8a}{1.0}) = 2\pi \cdot \sqrt{\frac{\textcolor{#1a4f8a}{1.0}}{9.81}} = 2.01\;\text{s}\)</div>
     </div>
     <div class="cv-wrap" style="max-width:520px"><canvas id="pe-canvas" height="240"></canvas></div>
   </div>
@@ -967,8 +967,9 @@ function updatePE(){
   const l = parseFloat(document.getElementById('pe-l').value);
   document.getElementById('pe-lv').textContent = l.toFixed(1);
   const T = 2 * Math.PI * Math.sqrt(l / PE.g);
-  const lB = `<span class="tx-blau">${l.toFixed(1)}</span>`;
-  document.getElementById('pe-eq').innerHTML = `T(${lB}) = ${T.toFixed(2)} s`;
+  // Eine Rechnung, eine Zeile (STYLEGUIDE §2.8): T(l) = 2π·√(l/g) = Zahl
+  const lB = `\\textcolor{#1a4f8a}{${l.toFixed(1)}}`;
+  flTex('pe-eq', [`T(${lB}) = 2\\pi \\cdot \\sqrt{\\frac{${lB}}{9.81}}`, `= ${texE(T.toFixed(2), 's')}`]);
   const {ctx, W, H, cx, cy} = gridApp('pe-canvas', 240, 0, 11, 0, 7, 1, 1, 'l [m]', 'T [s]');
   plotFx(ctx, cx, cy, x => 2 * Math.PI * Math.sqrt(x / PE.g), 0, 11, '#1a4f8a', 2.5, 1e6);
   // Der Term, den die Kurve zeigt

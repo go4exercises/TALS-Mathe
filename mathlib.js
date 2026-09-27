@@ -393,6 +393,62 @@ function mjTypeset(els) {
   return _mjTypesetQueue;
 }
 
+/* ── Eine Rechnung, eine Zeile (STYLEGUIDE §2.8) ─────────────────────────────
+   Formelzeichen = Formel = Zahlen = Ergebnis stehen als EINE Kette in einer
+   .fl-eq. Die Kette wird als Array von Gliedern übergeben
+   (['t = \\log_2(y)', '= \\log_2(64)', '= 6.00\;\\text{h}']); jedes Glied ist
+   eine eigene Formel, dazwischen eine Umbruchstelle ohne Abstand (<wbr> — ein
+   Leerzeichen käme zum Abstand vor dem «=» noch dazu). Reicht der Platz nicht,
+   bricht die Zeile darum nur vor einem Gleichheitszeichen um, nie mitten im Bruch.
+   tex: String oder Glieder-Array = eine Rechnung; Array von Rechnungen = mehrere,
+   durch Strichpunkt getrennt. '' leert und versteckt die Zeile.
+   Ein «=» am Anfang eines Glieds bekäme von MathJax links keinen Abstand; das
+   leere {} davor macht es zum gewöhnlichen Relationszeichen.
+   Übernommen aus physiklib.js (TALS Physik, 26.09.2026); statt einer eigenen
+   Kette reiht sich das Setzen in die Queue von mjTypeset ein. */
+const flOffen = new Map();
+const flTeil = t => '\\(\\displaystyle ' + (/^[=<>≈≤≥]|^\\(approx|le|ge|Rightarrow)/.test(t) ? '{}' : '') + t + '\\)';
+function flHtml(tex) {
+  const liste = (Array.isArray(tex) && tex.some(Array.isArray)) ? tex : [tex];
+  return liste.map((r, i) => {
+    const glieder = Array.isArray(r) ? r.slice() : [r];
+    if (i < liste.length - 1) glieder[glieder.length - 1] += ';';
+    return glieder.map(flTeil).join('<wbr>');
+  }).join('&ensp; ');
+}
+function flTex(id, tex) {
+  const el = typeof id === 'string' ? document.getElementById(id) : id;
+  if (!el) return;
+  el.style.display = tex === '' ? 'none' : '';
+  const h = tex === '' ? '' : flHtml(tex);
+  const wartet = flOffen.has(el);
+  if (!wartet && el.dataset.stand === h) return;          // nichts geändert
+  flOffen.set(el, h);
+  if (wartet) return;                                     // ein Frame genügt
+  requestAnimationFrame(() => {
+    const h2 = flOffen.get(el); flOffen.delete(el);
+    if (el.dataset.stand === h2) return;
+    el.dataset.stand = h2;
+    if (!_mjTypesetQueue) {
+      _mjTypesetQueue = (window.MathJax && MathJax.startup && MathJax.startup.promise) || Promise.resolve();
+    }
+    _mjTypesetQueue = _mjTypesetQueue
+      .then(() => window.MathJax && MathJax.startup && MathJax.startup.promise)
+      .then(() => {
+        if (el.dataset.stand !== h2) return null;           // inzwischen überholt
+        if (window.MathJax && MathJax.typesetClear) MathJax.typesetClear([el]);
+        el.innerHTML = h2;
+        return (window.MathJax && MathJax.typesetPromise) ? MathJax.typesetPromise([el]) : null;
+      }).then(() => {
+        // Jedes Glied als inline-block: dann reserviert die Zeile die volle Höhe
+        // der Brüche, und umgebrochene Glieder berühren sich nicht.
+        el.querySelectorAll('mjx-container').forEach(c => { c.style.display = 'inline-block'; c.style.margin = '2px 0'; });
+      }).catch(err => console.error('flTex:', err));
+  });
+}
+// Zahl mit Einheit (STYLEGUIDE §2.3): \; vor der Einheit, Einheit aufrecht
+const texE = (zahl, einheit) => zahl + '\\;\\text{' + einheit + '}';
+
 /* ── Clip starten und wieder schliessen ───────────────────────────────────────
    Ein Clip wird bewusst nicht beim Seitenaufruf geladen. Sichtbar ist zuerst
    nur der Knopf; erst der Klick setzt das <iframe> ein. So laeuft bei mehreren

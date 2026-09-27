@@ -365,7 +365,6 @@ MathJax = {
     <div class="formel-live">
       <div class="fl-label">Produktform · Summenform · Nullstellen</div>
       <div class="fl-eq" id="lf-eq"></div>
-      <div class="fl-eq" id="lf-sum" style="font-size:0.95rem;margin-top:4px"></div>
       <div id="lf-hint" style="font-size:0.8rem;color:var(--tinte-2);margin-top:5px;font-style:italic"></div>
     </div>
     <div class="cv-wrap"><canvas id="lf-canvas" height="220"></canvas></div>
@@ -1048,23 +1047,24 @@ function updateLF(){
   document.getElementById('lf-n2v').textContent = mm(n2);
   document.getElementById('lf-n3v').textContent = mm(n3);
   document.getElementById('lf-av').textContent = mm(fmt2(a));
-  const T = (c, s) => `<span class="tx-${c}">${s}</span>`;
-  const fac = (n, col) => n === 0 ? 'x' : (n > 0 ? `(x − ${T(col, n)})` : `(x + ${T(col, Math.abs(n))})`);
-  const aStr = a === 1 ? '' : (a === -1 ? '−' : `${mm(fmt2(a))}·`);
-  document.getElementById('lf-eq').innerHTML =
-    `f(x) = ${aStr}${fac(n1,'blau')}·${fac(n2,'orange')}·${fac(n3,'gruen')}`;
+  // Eine Rechnung, eine Zeile (STYLEGUIDE §2.8): f(x) = Produktform = Summenform
+  const FARBE = { blau: '#1a4f8a', orange: '#b85c00', gruen: '#1f6b3a' };
+  const T = (c, s) => `\\textcolor{${FARBE[c]}}{${s}}`;
+  const fac = (n, col) => n === 0 ? 'x' : (n > 0 ? `(x - ${T(col, n)})` : `(x + ${T(col, Math.abs(n))})`);
+  const aTex = a === 1 ? '' : (a === -1 ? '-' : `${fmt2(a)} \\cdot `);
+  const aStr = a === 1 ? '' : (a === -1 ? '−' : `${mm(fmt2(a))}·`);   // Canvas-Beschriftung
   // Summenform: a(x³ − s1x² + s2x − s3)
   const s1 = n1 + n2 + n3, s2 = n1*n2 + n1*n3 + n2*n3, s3 = n1*n2*n3;
   const term = (c, pot) => {
     if(Math.abs(c) < 1e-9) return '';
-    const sign = c > 0 ? ' + ' : ' − ';
+    const sign = c > 0 ? ' + ' : ' - ';
     const v = Math.abs(c);
-    const coef = (v === 1 && pot) ? '' : mm(fmt2(v)) + (pot ? '·' : '');
+    const coef = (v === 1 && pot) ? '' : fmt2(v) + (pot ? ' \\cdot ' : '');
     return sign + coef + pot;
   };
-  let sum = (a === 1 ? '' : (a === -1 ? '−' : mm(fmt2(a)) + '·')) + 'x³'
-          + term(-a*s1, 'x²') + term(a*s2, 'x') + term(-a*s3, '');
-  document.getElementById('lf-sum').innerHTML = 'Summenform: f(x) = ' + sum;
+  const sum = (a === 1 ? '' : (a === -1 ? '-' : fmt2(a) + ' \\cdot ')) + 'x^3'
+          + term(-a*s1, 'x^2') + term(a*s2, 'x') + term(-a*s3, '');
+  flTex('lf-eq', [`f(x) = ${aTex}${fac(n1,'blau')} \\cdot ${fac(n2,'orange')} \\cdot ${fac(n3,'gruen')}`, `= ${sum}`]);
   // Vielfachheits-Hinweis
   const roots = [n1, n2, n3];
   const counts = {};

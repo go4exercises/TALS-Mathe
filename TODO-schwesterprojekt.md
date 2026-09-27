@@ -23,6 +23,15 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
+- **2026-09-27 · Kollisions-Check kennt `flTex` & Co. nicht ·
+  `scripts/check_identifier_collisions.py`, Menge `RESERVED` · warum:** Mathe hat
+  «Eine Rechnung, eine Zeile» übernommen und die Helfer aus `physiklib.js` nach
+  `mathlib.js` geholt; dabei `'flTex', 'flHtml', 'flTeil', 'flOffen', 'texE'` in
+  Mathes `RESERVED` eingetragen. In Physik fehlen sie dort (nachgesehen 27.09.2026),
+  dazu `flKette` und `texO`, die nur Physik hat. Eine Themenseite, die eines davon
+  auf oberster Ebene mit `const` neu deklariert, bricht still. Nachtragen hebt nebenbei
+  die KERN-Ähnlichkeit der Datei (Mathe 93.7 %, Grundlinie 0.940).
+
 - **2026-09-14 · Marke «TALS Physik» → «Physik begreifbar» · ganzes Physik-Repo ·
   warum:** Letzter offener Punkt des Domain-Umzugs (Mathes `DOMAIN-UMZUG.md`, Phase 5).
   Mathe heisst seit dem 10.08.2026 «Mathe begreifbar» (Mathe-Commit `6e88526`), und
