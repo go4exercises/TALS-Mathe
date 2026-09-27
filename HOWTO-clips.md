@@ -792,6 +792,37 @@ Encoder — Piper steuert einzelne Sätze bis an die Grenze aus.
 Opus wäre kleiner, scheidet aber vorerst aus: libsndfile schreibt Opus nur bei 8/12/16/24/48 kHz,
 Piper liefert 22.05 kHz. Ohne Resampling bleibt MP3 — das dafür überall abspielbar ist.
 
+### Aussprache
+
+Liest die Stimme ein Fremdwort falsch, kommt es in `AUSSPRACHE` in
+`scripts/build-clip-ton.py`: Wortstamm und Lautschrift (IPA), Piper erhält es als
+`[[…]]`. Buchstabierte Abkürzungen stehen in `ABKUERZUNGEN` (nur exakt als ganzes
+Wort), einfache Worttausche ohne Lautschrift in `TAUSCH` (achthundert). Vorsilben
+(Mega-, Kilo-, …) und Zusammensetzungen greifen mit — «Megahertz» fällt unter
+«hertz». Getauscht wird nur im Text an Piper; Drehbuch, Sprechertext und Suchindex
+behalten die Schreibweise. Das Skript ist **dasselbe wie in TALS Physik** (Grundlinie
+1.000 in `scripts/abgleich.py`); die Tabellen sind nach Hörproben des Auftraggebers
+entschieden und gelten für Thorsten in beiden Repos. Ein neuer Eintrag hier gehört
+darum auch drüben hin — per `TODO-schwesterprojekt.md`, nicht quer editiert.
+
+Zwei Fallen, beide im Skript abgefangen: Ein Satzzeichen direkt nach `]]` verschluckt
+Piper samt Pause und klebt das nächste Wort an — es gehört in die Klammer. Und ohne
+Wortgrenze träfe «ampere» auch «Schlamperei». Probe vor dem Eintrag:
+`PiperVoice.load(modell).phonemize(text)` zeigt, was die Stimme daraus macht;
+Hörproben mit `synthesize_wav`.
+
+*Problemwörter finden* — zwei Durchgänge über alle Drehbücher: (1) nach Schreibung:
+Personennamen, Einheiten, Abkürzungen, Fremdschreibungen (c, y, ph, th, ou …)
+phonemisieren und die Lautschrift lesen; (2) über **alle** Wörter der Sprechertexte:
+englische Laute (ɹ, ð, θ, w, æ …) und Wörter mit drei und mehr Silben ohne
+Hauptbetonung. Ein deutsches Wort, das nur auf der falschen Silbe betont ist, findet
+keiner der beiden — das hört man nur. *Hörproben zeigen:* je Wort «bisher» und
+«Vorschlag» als WAV, dazu eine kleine `index.html` mit `<audio>`-Knöpfen im selben
+Ordner; im Windows-Browser über `file://wsl.localhost/Ubuntu/<pfad>/index.html` öffnen.
+Nach einem neuen Eintrag die betroffenen Clips ermitteln (`aussprache(text) != text`)
+und neu vertonen — am 27.09.2026 waren es neun (Pythagoras 7, Megahertz 1,
+achthundert 1).
+
 ### Lizenzlage (geprüft am 30.08.2026)
 
 | | |

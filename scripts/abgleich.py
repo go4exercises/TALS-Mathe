@@ -87,7 +87,7 @@ GRUNDLINIE = {
     'scripts/build-suchindex.py': 0.962,
     'scripts/build-clips.py': 0.798,
     'scripts/build-clips-einbau.py': 0.806,
-    'scripts/build-clip-ton.py': 0.808,   # zurueck auf 1.000, sobald Mathe OFFEN abgearbeitet hat
+    'scripts/build-clip-ton.py': 1.000,
     'scripts/build-seo.py': 0.520,
     'scripts/schriften-lokal.py': 0.961,
     'scripts/mathjax-lokal.py': 0.853,
@@ -107,9 +107,6 @@ GRUNDLINIE = {
 # Was tief unter seiner Grundlinie liegt, ist kein Naturgesetz, sondern eine
 # offene Baustelle. Hier steht, was daran zu tun waere.
 BAUSTELLE = {
-    'scripts/build-clip-ton.py':
-        'Zweitstimme in Mathe zurueckgebaut (27.09.2026). Es fehlen nur noch die '
-        'Aussprache-Tabellen: siehe OFFEN.',
     'scripts/build-seo.py':
         'Grosse Teile sind Projektdatei (SEITEN, Lerngebiete). Die Logik ist seit '
         'dem 13.09.2026 gleich (argparse, --dry-run, einsetzen, main). Trennen '
@@ -168,23 +165,6 @@ OFFEN = [
              'bleiben). Die Clips selbst brauchen keinen Neubau. Testfalle: python3 -m '
              'http.server kann keine Range-Anfragen, der Ton springt beim Spulen auf 0 — '
              'mit file:// oder auf GitHub Pages (206) pruefen.'),
-    dict(quelle='Physik', was='build-clip-ton: Aussprache-Tabellen (27.09.2026)',
-         wie='Physik ba888a2/8559cc9/02c0c1b: AUSSPRACHE (Wortstamm -> IPA als [[…]]), '
-             'ABKUERZUNGEN (nur exakt als ganzes Wort), TAUSCH (reiner Worttausch), '
-             'VORSILBEN; aussprache(text) wirkt nur auf den Text an Piper. Mathe: in '
-             'sprich(...) an allen vier Aufrufstellen (Z. 182, 193, 199, 213) den Text '
-             'durch aussprache(text) ersetzen — oder erst die Zweitstimme zurueckbauen '
-             '(eigener OFFEN-Eintrag), dann bleibt eine Stelle. Nachgezaehlt 27.09.2026: '
-             '9 von 204 Mathe-Drehbuechern betroffen — Pythagoras 7 (g5-2a-pythagoras, '
-             'g5-3-cosinussatz, g5-4-spezialwinkel, g5-4-trig-pythagoras, s4-2b-…), '
-             'achthundert 1 (trigo2-3-ballon-zwei-fehler), Megahertz 1 (g1-4-ti30x-ee-eng); '
-             'danach diese 9 neu vertonen. Die Tabellen sind nach Hoerproben des '
-             'Auftraggebers entschieden und gelten fuer Thorsten in beiden Repos. Fallen: '
-             'Satzzeichen muss in die Klammer (sonst verschluckt, Wort klebt an), '
-             'Wortgrenze/Vorsilbe noetig («Schlamperei»). Empfohlen: Mathes eigenes '
-             'Vokabular mit denselben zwei Suchdurchgaengen pruefen (HOWTO-clips.md, '
-             'Abschnitt Ton; Physik fand so «Zentripetalkraft» englisch gelesen) — '
-             'Entscheid je Wort per Hoerprobe durch den Auftraggeber.'),
     dict(quelle='Physik', was='build-seo: tex_weg loest Brueche und LaTeX-Abstaende auf (Fehler in Mathe)',
          wie='Physik cac3db1: bruch_auf(x) loest \\frac/\\tfrac/\\dfrac{a}{b} zu a/b auf '
              '(von innen nach aussen), dazu \\, \\; \\: \\! -> Leerzeichen und ^\\circ -> °. '

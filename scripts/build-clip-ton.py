@@ -52,6 +52,77 @@ def lade_generator():
     return m
 
 
+# ---------------------------------------------------------------- Aussprache
+# Fremdwoerter, die die Stimme falsch liest, bekommen eine feste Lautschrift
+# (Piper nimmt IPA zwischen [[ und ]]). Getauscht wird nur im Text, der an
+# Piper geht — Drehbuch, Transkript und Suchindex behalten die Schreibweise.
+# Gilt auch in Zusammensetzungen (Milliampere, Amperemeter).
+# Alles nach Hoerproben entschieden (Auftraggeber, 27.09.2026).
+#
+# 1. Wortstaemme -> Lautschrift. Gross/klein egal, nur am Wortanfang oder
+#    nach einer Einheiten-Vorsilbe (sonst traefe «ampere» auch
+#    «Schlamperei»); Zusammensetzungen greifen mit (Amperemeter).
+AUSSPRACHE = [
+    ("ampere", "ampˈɛːɾ"),              # bisher «AM-pe-re»
+    ("coulomb", "kulˈoː"),              # bisher «KUH-lomp»; Nasal kennt die Stimme kaum
+    ("joule", "dʒˈuːl"),                # bisher «Juh-le»
+    ("pascal", "paskˈal"),              # bisher «PAS-kal»
+    ("hertz", "hˈɛɾts"),                # «Kilohertz» verlor sonst das h
+    ("boyle", "bˈɔɪl"),                 # bisher «Böh-le»
+    ("mariotte", "maɾjˈɔt"),            # bisher «MAri-o-te»
+    ("gay-lussac", "ɡeːlyːsˈak"),       # «Gee-lüü-SACK», langes ee und üü
+    ("hooke", "hˈʊk"),                  # bisher «Hoo-ke»
+    ("pythagoras", "pytˈɑːɡoːras"),     # bisher «PÜ-tagoras»
+    ("laserpointer", "lˈeːzɐpɔɪntɐ"),   # bisher «Laaser-po-inter»
+    ("spraydose", "ʃprˈeːdoːzə"),       # bisher «Schprei-dose»
+    ("isotherm", "iːzoːtˈɛɾm"),         # bisher «I-sotterm»
+    ("isobar", "iːzoːbˈɑːɾ"),           # bisher «I-sobar»
+    ("photonen", "foːtˈoːnən"),         # sonst ohne Hauptbetonung
+    ("zentripetal", "tsɛntɾipeːtˈɑːl"),  # sonst englisch «Sentraipt-oh…»
+]
+# Nicht geaendert, weil die bisherige Lesart besser klang: Archimedes,
+# Perihel, Parabel.
+#
+# 2. Abkuerzungen, die buchstabiert werden: nur in exakt dieser Schreibung
+#    als ganzes Wort (sonst traefe «SI» auch «si» in anderen Woertern).
+ABKUERZUNGEN = [
+    ("FI", "ɛfˈiː"),                    # bisher «Fie»
+    ("LED", "ɛleːdˈeː"),                # bisher «Leet»
+    ("COP", "tseːoːpˈeː"),              # bisher «Kop»
+    ("SI", "ɛsˈiː"),                    # bisher «Sie»
+]
+# 3. Einfache Worttausche, wo keine Lautschrift noetig ist.
+TAUSCH = [
+    ("achthundert", "acht hundert"),    # sonst «acht-undert», auch in tausendachthundert…
+    ("Newtonmeter", "Newton-Meter"),    # sonst englisch «Njuten-mieter»
+    ("Lageenergie", "Lage-Energie"),    # sonst «Lag-energie»
+]
+VORSILBEN = r"(?:milli|mikro|nano|zenti|dezi|hekto|kilo|mega|giga)?"
+
+
+def aussprache(text):
+    """Setzt Lautschrift und Worttausche ein. Falle: Folgt ein Satzzeichen
+    direkt auf ]], verschluckt Piper es und klebt das naechste Wort an
+    («ampˈɛːɾdan», ohne Satzpause). Darum wandert ein Satzzeichen mit in die
+    Klammer."""
+    import re
+
+    def klammer(ipa, nach, zeichen):
+        if nach:                           # Amperemeter: Satzzeichen hinter dem Rest
+            return "[[" + ipa + "]]" + nach + zeichen
+        return "[[" + ipa + zeichen + "]]"
+
+    for alt, neu_ in TAUSCH:
+        text = re.sub(alt, neu_, text, flags=re.I) if alt.islower() else text.replace(alt, neu_)
+    for wort, ipa in AUSSPRACHE:
+        muster = re.compile(r"\b(%s)(%s)([^\W\d_]*)([.,;:!?]*)" % (VORSILBEN, re.escape(wort)), re.I)
+        text = muster.sub(lambda m: m.group(1) + klammer(ipa, m.group(3), m.group(4)), text)
+    for abk, ipa in ABKUERZUNGEN:
+        muster = re.compile(r"\b%s\b([.,;:!?]*)" % re.escape(abk))
+        text = muster.sub(lambda m: klammer(ipa, "", m.group(1)), text)
+    return text
+
+
 def sprich(piper, modell, text, ziel):
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False,
                                      encoding="utf-8") as f:
@@ -100,7 +171,7 @@ def main():
             if not text:
                 continue
             w = os.path.join(tmp, f"{i}.wav")
-            sprich(piper, a.modell, text, w)
+            sprich(piper, a.modell, aussprache(text), w)
             daten, sr = sf.read(w, dtype="float32")
             stuecke[i] = (daten, sr)
             print(f"  Szene {i+1}: {len(daten)/sr:6.2f} s   {text[:52]}")
