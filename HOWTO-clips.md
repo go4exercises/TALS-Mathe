@@ -970,17 +970,14 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 
-- **Der Bestand ist beisammen.** Stand 15.09.2026: **203 Drehbücher**, alle vertont —
-  168 in der Bibliothek (167:25 min, 55 Reihen) und 35 unverlinkte Prüfungsclips mit
-  `"probe": true` (28:04 min). Alle fünf Lerngebiete des Grundlagenfachs und alle vier
-  des Schwerpunktfachs sind angefangen — abgedeckt ist damit nicht dasselbe:
-  **40 der 47 Themenseiten tragen Clips**, 45 tragen den Marker (fünf davon leer).
-  Das Schwerpunktfach ist dabei deutlich dünner besetzt als das Grundlagenfach:
-  133 Zuordnungen auf den 21 GF-Seiten mit Clips (Median 5 je Seite) gegen 46 auf den
-  19 SF-Seiten mit Clips (Median 1). Ohne Clip sind `s1-1`, `s2-1`, `s3-1` und `s4-1` —
-  dazu `g1-1`, `g4-0` und `g5-2b`. Elf der belegten SF-Seiten haben genau einen Clip.
+- **Der Bestand ist beisammen.** Stand 28.09.2026: **426 Drehbücher**, alle vertont —
+  391 in der Bibliothek (361:32 min, 56 Reihen) und 35 unverlinkte Prüfungsclips mit
+  `"probe": true` (28:07 min). **46 der 47 Themenseiten tragen Clips** und den Marker;
+  ohne Clip ist nur `g4-0` (Praxisbeispiel, keine Animation). Seit den Animationsclips
+  ist das Schwerpunktfach nicht mehr dünn besetzt: 260 Zuordnungen auf den 23
+  GF-Seiten (Median 11 je Seite), 142 auf den 23 SF-Seiten (Median 6).
 
-- **Der Rechner ist ein eigener Strang.** 22 der 168 Clips tragen `werkzeug: true`
+- **Der Rechner ist ein eigener Strang.** 22 der 391 Clips tragen `werkzeug: true`
   (31:12 min) und liegen auf 14 Seiten — von `g1-2` (Brüche, ggT und kgV) bis `s4-2a`
   (Formeln mehrfach auswerten). Sie bilden keine eigene Reihe, sondern hängen als
   letzter Clip an der Reihe, deren Stoff sie bedienen. Die Belegquelle und die drei
@@ -998,8 +995,8 @@ Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
   einzeln neu gebaut werden**, sonst steht die alte Zuordnung weiter in `clips.json`
   und `build-clips-einbau.py` schreibt nichts.
 
-  Verteilung: Lerngebiet 1 mit 32 Clips, 2 mit 29, 3 mit 20, 4 mit 19, 5 mit 18 —
-  im Schwerpunktfach 1.x mit 2, 2.x mit 12, 3.x mit 6, 4.x mit 8.
+  Verteilung (28.09.2026, Clips je Lerngebiet): Lerngebiet 1 mit 51, 2 mit 57, 3 mit 43,
+  4 mit 28, 5 mit 79 — im Schwerpunktfach 1.x mit 20, 2.x mit 27, 3.x mit 62, 4.x mit 33.
 
   **Als Referenz für ein neues Drehbuch:**
 
@@ -1024,4 +1021,3 @@ Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
   eigene Aufnahme nur ein Dateiaustausch — das Verfahren bleibt dasselbe.
 - **Untertitel.** Text und Zeitmarken liegen vor; eine WebVTT-Spur wäre fast geschenkt und
   funktioniert im Schulzimmer besser als Ton: lautlos abspielbar, an der Wand mitlesbar.
-- **Übertrag nach TALS Physik** — vermerkt in `TODO-schwesterprojekt.md`.

@@ -7,7 +7,7 @@ Repository, weil GitHub Pages eine Domain an genau ein Repo bindet und
 
 Hier liegt er nur zur Aufbewahrung und Versionierung; ausgeliefert wird er aus
 **`go4exercises/begreifbar`**. Das Repo steht, Pages baut aus `main` / Wurzel,
-`CNAME` = `begreifbar.ch`, Enforce HTTPS ist an. Siehe `DOMAIN-UMZUG.md`, Phase 4.
+`CNAME` = `begreifbar.ch`, Enforce HTTPS ist an. Siehe `DOMAIN-UMZUG.md`, Abschnitt «Startseite begreifbar.ch pflegen».
 
 > ⚠️ **Dieser Ordner ist die Quelle, nicht die Auslieferung — und die beiden laufen
 > auseinander.** Es gibt keinen Automatismus und keinen lokalen Klon des Apex-Repos.

@@ -32,8 +32,8 @@ Warum die Inline-Stile NICHT automatisch zentralisiert werden:
   redaktionell, welche Variante gelten soll — das ist keine Skriptarbeit.
 
 NICHT übertragen (bewusst):
-  - Live-Box-Spaltenabstand: Mathe hat keine .live-box (siehe
-    TODO-port-to-tals-mathe.md §2, dort seit 24.06.2026 korrekt vermerkt).
+  - Live-Box-Spaltenabstand: Mathe hat keine .live-box (so festgehalten
+    seit 24.06.2026; die Port-Liste ist seit 28.09.2026 abgearbeitet und gelöscht).
   - CHANGELOG-Ablösung: gilt nur für Physik. Mathes CHANGELOG.md wird
     weiter gepflegt (ZIP-Snapshot-Rhythmus).
 """
@@ -160,7 +160,7 @@ Neue Regeln, die der Auftraggeber ansagt, werden in STYLEGUIDE.md aufgenommen
 
 > Herkunft: TALS Physik, Sessions vom 26./27.07.2026. Physik führt dort eine
 > sechste Regel zum Spaltenabstand der `.live-box` — die entfällt hier, weil
-> Mathe keine `.live-box`-Struktur hat (siehe `TODO-port-to-tals-mathe.md` §2).
+> Mathe keine `.live-box`-Struktur hat.
 
 """
 

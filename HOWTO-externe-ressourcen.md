@@ -2,7 +2,7 @@
 
 Dieser Leitfaden beschreibt den Workflow, mit dem die Sektion **„Externe Videos &amp; Aufgabensammlungen"** (Master-Schema §10) jeder Themenseite kuratiert wird. Adressat sind sowohl der Auftraggeber als auch Claude in jedem zukünftigen Chat.
 
-Verwandte Dokumente: `STYLEGUIDE.md` §4 (allgemeine Konventionen zur Ressourcen-Sektion), `STYLEGUIDE.md` §6.1 (HTML-Container `.links-grid` und Karten `.lk` / `.lk aufg`), `HOWTO-neue-themenseite.md`, `COLLABORATION.md` §9 (Kurzfassung).
+Verwandte Dokumente: `STYLEGUIDE.md` §4 (allgemeine Konventionen zur Ressourcen-Sektion), `STYLEGUIDE.md` §6.1 (HTML-Container `.links-grid` und Karten `.lk` / `.lk aufg`), `HOWTO-neue-themenseite.md`, `CLAUDE.md` Abschnitt «Externe Ressourcen» (Kurzfassung).
 
 ---
 
@@ -205,7 +205,7 @@ Der `(?=\s*</main>)`-Lookahead frisst das `</main>` nicht mit auf, sodass es nac
 ### 4.5 Verifikation
 Nach Patch (vor ZIP-Packen):
 - **Standard-Pre-Flight** aus `STYLEGUIDE.md` §6.1 (Marker-Anwesenheit, Phantom-Klassen).
-- **Strukturelle Integritäts-Checks** aus `COLLABORATION.md` §3.7 (Eindeutigkeit der Marker, Tag-Bilanz, Slot-Limits ≤ 4). Diese fangen den Fail-Modus ab, bei dem ein unsauberes Block-Ersatz-Pattern einen Müll-Schwanz aus dem alten Block hinterlässt — der Standard-Pre-Flight zeigt dann trotzdem grün, der Browser aber Layout-Bruch.
+- **Strukturelle Integritäts-Checks** aus dem Pre-Flight (`.claude/skills/preflight/preflight.py`: Eindeutigkeit der Marker, Tag-Bilanz, Slot-Limits ≤ 4). Diese fangen den Fail-Modus ab, bei dem ein unsauberes Block-Ersatz-Pattern einen Müll-Schwanz aus dem alten Block hinterlässt — der Standard-Pre-Flight zeigt dann trotzdem grün, der Browser aber Layout-Bruch.
 - **Negativlisten-Check**:
   ```bash
   grep -cE 'mathebibel\.de|mathepower\.com|klassenarbeiten\.de|youtube\.com/results|youtu\.be/' <datei>

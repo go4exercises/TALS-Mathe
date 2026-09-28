@@ -459,7 +459,7 @@ Das Schema ist **didaktisch begründet**:
   1. sos-mathe.ch · 2. serlo.org · 3. SwissEduc Munterbunt.
   Lösungen müssen verfügbar sein. Negativ-Liste: kein mathebibel.de, kein mathepower.com, kein klassenarbeiten.de.
 - **Verifikations-Methode bei Playlist-Kandidaten:** `web_fetch` auf die Playlist-URL liefert Owner und Videocount. Playlist-ID-Präfixe sind keine zuverlässigen Kanal-Indikatoren — immer per `web_fetch` verifizieren.
-- **Detail-Anleitung:** `HOWTO-externe-ressourcen.md` (im Repo) enthält das Schritt-für-Schritt-Verfahren, die Anbieter-Map mit bereits verifizierten Playlist-IDs und Platzhalter-HTML für leere Slots. Kurzfassung in `COLLABORATION.md` §9 (Project-Knowledge).
+- **Detail-Anleitung:** `HOWTO-externe-ressourcen.md` (im Repo) enthält das Schritt-für-Schritt-Verfahren, die Anbieter-Map mit bereits verifizierten Playlist-IDs und Platzhalter-HTML für leere Slots. Kurzfassung in `CLAUDE.md`, Abschnitt «Externe Ressourcen».
 
 **RLP-Hilfsmittel-Pill (`<span class="ohm">`) — wann verwenden:**
 
@@ -1140,8 +1140,8 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
 Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
-`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 15.09.2026: 168 Clips in der
-Bibliothek (167:25 min), dazu 35 unverlinkte Prüfungsclips.
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 28.09.2026: 391 Clips in der
+Bibliothek (361:32 min, davon 223 Animationsclips), dazu 35 unverlinkte Prüfungsclips.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass

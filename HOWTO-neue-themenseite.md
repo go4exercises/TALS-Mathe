@@ -2,7 +2,7 @@
 
 Dieser Leitfaden beschreibt den Workflow für **eine neue Themenseite plus Materialien** (4 Druckseiten + 1 Anki-Deck). Die Schwerpunkt-Stubs sind inzwischen alle ausgearbeitet (Stand Juli 2026); der Ablauf gilt für jede neu hinzukommende Seite — etwa weitere TALS-Ergänzungen nach dem Muster von 3.6/4.3d.
 
-Verwandte Dokumente: `STYLEGUIDE.md` (Pflicht-Konventionen), `COLLABORATION.md` (Arbeitsweise mit Claude), `CHANGELOG.md` (Versions-Historie).
+Verwandte Dokumente: `STYLEGUIDE.md` (Pflicht-Konventionen), `CLAUDE.md` (Arbeitsweise mit Claude Code, Pre-Flight), `CHANGELOG.md` (Versions-Historie).
 
 ---
 
@@ -396,7 +396,7 @@ installiert, kein Setup nötig.
 
 - **`STYLEGUIDE.md`** — verbindliche Konventionen (Pre-Flight-Check-Spezifikation, Klassen-Namen, Pflicht-Skelett, h2-Standard-Schema, Werkzeug-Skripte §6.3)
 - **`HOWTO-externe-ressourcen.md`** — Schritt-für-Schritt-Anleitung für die Sektion „Externe Videos &amp; Aufgabensammlungen". Anbieter-Reihenfolge, `web_fetch`-Verifikation, Anbieter-Map mit bereits verifizierten Playlist-IDs.
-- **`COLLABORATION.md`** — liegt im Project-Knowledge des Claude-Projekts, nicht im Repo. Regelt die Arbeitsweise zwischen Auftraggeber und Claude (Iterationsmodus, Effizienz-Regeln, Default-Verhalten). Für den Aufbau einer Themenseite nicht erforderlich, aber bei der Zusammenarbeit mit Claude die operative Referenz.
+- **`CLAUDE.md`** — regelt die Arbeitsweise mit Claude Code (Pre-Flight, Commit nach jedem Durchgang, Schwesterprojekt). Ersetzt die frühere `COLLABORATION.md` aus dem Project-Knowledge des Claude-Projekts.
 - **`scripts/build_apkg.py`** — Anki-Build-Skript, parametrisiert über `NEW_DECKS`-Liste
 - **`scripts/build_print_g4.py`** — Druckseiten-Generator für die g4-Reihe (Vorlage für analoge Generatoren)
 - **`scripts/_archiv/convert_*.py`** — Massenpatch-Skripte für Konventions-Erzwingung: `convert_eszett.py` (ß→ss), `convert_cosinus.py` (Kosinus→Cosinus), `convert_decimals.py` (Komma→Punkt, plus `verify_no_residuals`-Helper), `convert_punktkoord.py` (Punkt-Koord-Notation, Template-Pattern). Details: STYLEGUIDE §6.3.

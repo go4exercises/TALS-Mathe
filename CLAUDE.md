@@ -68,8 +68,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
 - `clips/` — 426 Drehbücher, alle vertont: **391 in der Bibliothek** (361:32 min,
   56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **35 unverlinkte**
   Prüfungsclips mit `"probe": true`, die nur im zugehörigen Leitprogramm stehen und
-  weder in `clips.json` noch auf einer Lektionsseite auftauchen. **40 der 47
-  Themenseiten tragen Clips**; 45 tragen den Marker, fünf davon leer. Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
+  weder in `clips.json` noch auf einer Lektionsseite auftauchen. **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
   `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,
   nicht als HTML-Entität. Vollständig in `HOWTO-clips.md`, das Verbindliche in

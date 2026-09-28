@@ -135,5 +135,5 @@ sprechen.
    `build-clip-ton.py`, dann `build-clips.py`, dann `build-clips-einbau.py`.
 3. Die belegte Angabe in `HOWTO-clips.md` unter «Was am TI-30X Pro MathPrint belegt
    ist» ergänzen, damit sie beim nächsten Clip nicht wieder nachgeschlagen wird.
-4. Sind alle vier geklärt, wandert die Datei nach dem Muster von
-   `TODO-malpunkt-als-trennzeichen.md` auf «abgearbeitet» und bleibt als Beleg stehen.
+4. Sind alle vier geklärt, wird die Datei gelöscht — der Beleg steht dann in
+   `HOWTO-clips.md` und in der Git-Geschichte.
