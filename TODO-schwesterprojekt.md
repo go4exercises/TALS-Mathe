@@ -136,77 +136,21 @@ in `scripts/abgleich.py`.
   direkt am «—»), danach im Browser nachsehen, ob kein Titel umbricht. In Physiks
   STYLEGUIDE die Klasse in die Liste der Titel aufnehmen.
 
-- **2026-09-28 · Wassermodell des Stromkreises als neue Animation · Physik
-  `themen/p6-2-elektrizitaet.html`, Abschnitt «Grundbegriffe» · warum:** Auf Wunsch
-  des Auftraggebers in einer Mathe-Session gebaut, gehört aber nach Physik. Vorlage:
-  **`_intern/uebertrag-physik-wassermodell/wassermodell.html`** (nur lokal —
-  `_intern/` steht in `.gitignore`; eigenständige Seite, auch
-  als Artifact veröffentlicht: https://claude.ai/artifact/BoaXnQU8i1qbWzLwyArboE).
-  Inhalt: Wasserkreis und Stromkreis in **derselben Anordnung**, umschaltbar
-  (Überblendung, Bauteile bleiben am Platz) oder nebeneinander; ein Widerstand / Reihe
-  / parallel; Hahn–Schalter; Durchflussmesser ↔ Amperemeter, U-Rohr-Manometer ↔
-  Voltmeter mit Live-Werten; Druck bzw. Potenzial als Farbe der Leitung; Punkte für
-  Wasser/Ladung mit Tempo ∝ Stromstärke; Tabellen «Grössen» und «Bauteile» mit
-  Hervorhebung im Bild; fünf Aufträge, Merksatz, «Wo das Modell hinkt». Massstab
-  1 V ↔ 10 kPa, 1 A ↔ 100 mL/s (dann stimmen die Leistungen in W überein).
-
-  **Nachgesehen im Physik-Repo (Stand `9f88611`, nur gelesen):**
-  - p6-2 hat 4518 Zeilen und **12 Animationen**, im Titel nummeriert
-    «Animation 1 · …» bis «Animation 12 · …», plus die unnummerierte
-    «Einstieg-Animation · Einfacher Stromkreis». Ein Wassermodell gibt es nicht; der
-    Wasservergleich steht nur als Transfer-Frage im Mini-Check nach «Grundbegriffe»
-    («Im Vergleich mit einem Wasserkreislauf: Was entspricht der elektrischen
-    Spannung, was der Stromstärke?»).
-  - **Vorschlag Platz:** nach dem Block «📘 Stromstärke und Spannung», vor diesem
-    Mini-Check — die Frage übt dann, was die Animation zeigt. Dann rutschen
-    «Animation 1–12» um eins; keines der 24 p6-2-Drehbücher nennt eine
-    Animationsnummer (geprüft), die 11 `p6-2-anim-*`-Clips bleiben also gültig.
-    Alternativ unnummeriert wie die Einstieg-Animation.
-  - **Physik schreibt «Amperemeter»** (33 Treffer auf p6-2, «Ampèremeter» nirgends
-    in `themen/`). Die Vorlage ist seit 28.09.2026 angeglichen.
-  - **«Potenzial» kommt auf p6-2 nicht vor.** Legende und Bauteiltabelle der Vorlage
-    sprechen davon; entweder dort kurz einführen oder umformulieren
-    («Spannung gegenüber dem Minuspol»).
-  - **Stromrichtung:** Die Einstieg-Animation zeigt **Elektronen** (− → +), die
-    Vorlage standardmässig die technische Stromrichtung (+ → −, wie das Wasser) mit
-    Schalter «Elektronen zeigen». Beim Einbau entscheiden, ob der Standard kippen soll.
-
-  **Umbau fürs Physik-Skelett** (die Vorlage ist eine freie Seite, keine
-  Themenseiten-Struktur): Markup auf `widget` / `widget-header` /
-  `widget-titelzeile` / `widget-body`, Regler als `sl-row` + `sl-val`, Knöpfe als
-  `typ-btn` bzw. `play-btn`, Leinwand in `cv-wrap` mit `cv-titel`; Hinweispaar
-  `anim-hinweis links` («💡 Worauf achten?») und `rechts` («✓ Erkenntnis») statt der
-  aufklappbaren Aufträge; die Tabellen und «Wo das Modell hinkt» als Blöcke im
-  Fliesstext (`block-def` bzw. Rot-Block). Farben aus Physiks `style.css` statt der
-  eigenen Tokens; Google-Fonts- und jsDelivr-MathJax-Link **entfernen** (Physik lädt
-  nichts von fremden Hosts). Canvas-Code (≈ 300 Zeilen, IIFE, keine globalen Namen)
-  kann weitgehend bleiben; auf Kollisionen mit den übrigen Seitenskripten prüfen.
-  Danach Pre-Flight.
-
-  **Der Animationsclip ist schon gebaut** — mit Physiks eigenem Werkzeug, aus
-  einer Kopie von `scripts/build-clips.py`, `build-clip-ton.py`, `clips/themes`,
-  `schriften*` und `vendor/mathjax` im Scratchpad (Physik-Repo nur gelesen).
-  Alles liegt unter `_intern/uebertrag-physik-wassermodell/clips/`, in Physiks
-  Ordnerstruktur, also 1:1 nach `clips/` kopierbar: Drehbuch
-  `p6-2-anim-wassermodell.json`, gebaute Web-Fassung `.html`, Sprechertext,
-  `ton/p6-2-anim-wassermodell.mp3` (Thorsten, Physiks Aussprache-Tabellen) und
-  vier Aufnahmen `bilder/p6-2-anim-wassermodell-1…4.jpg`; der Aufnahmeplan
-  liegt daneben in `aufnahme/aufnahme.mjs`. Reihe «Animationen erklärt», 86.0 s,
-  Titel · 4 Schritte · Merksatz; `pruef-clip.mjs` an 29 Zeitmarken ohne Befund,
-  Bilder angesehen, Beschriftung im Bild rund 20 px auf der 1920er-Bühne.
-  Inhalt: Pumpe ↔ Quelle (60 kPa ↔ 6.0 V), Strom vor = nach dem Widerstand
-  (0.60 A ↔ 60 mL/s, Fehlvorstellung «Widerstand verbraucht Strom»), Widerstand
-  verdoppelt (20 Ω → 0.30 A ↔ 30 mL/s), Schalter offen ↔ Hahn zu, Merksatz mit
-  Modellgrenze Elektronenrichtung. Beim Einbau noch offen:
-  - `"probe": true` entfernen und `folge` setzen (Nummer der Animation; das Feld
-    fehlt bewusst, `_folge` im Drehbuch erklärt es). Der Anker ist schon
-    `"animation": "anim-wassermodell"` — das `h3` der Animation muss ihn tragen.
-  - **Wird die Animation beim Umbau aufs Physik-Skelett optisch verändert**
-    (Farben aus `style.css`, andere Schrift), die vier Bilder mit dem
-    Aufnahmeplan neu aufnehmen — er setzt die Zustände über `#sl-u`, `#sl-r1`,
-    `#seg-kreis` und `#btn-schalter`, die IDs also mitnehmen oder den Plan
-    anpassen. Die Bilder sind bei 390 px Fensterbreite aufgenommen, weil die
-    Animation dort grössere Schrift setzt (Faktor bis 1.35).
-  - Danach die üblichen vier: `build-clips.py` → `build-clips-einbau.py
-    --schreiben` → `build-suchindex.py` → `build-seo.py`; Sprechertext
-    unverändert, also keine neue Vertonung nötig.
+- **2026-09-28 · Clip `p6-2-anim-wassermodell`: zwei Punkte nachtragen · Physik
+  `clips/p6-2-anim-wassermodell.json` · warum:** Das Wassermodell steht seit
+  `0db4d47` als Animation 1 auf p6-2, mit eigenem Clip (1:21). Ein in Mathe
+  gebauter Vergleichsclip (86 s, lokal unter
+  `_intern/uebertrag-physik-wassermodell/clips/`, nicht übernehmen — Bilder der
+  freien Seite, «mL» statt «ml») hat zwei Dinge, die dem Physik-Clip fehlen
+  (nachgesehen 28.09.2026, nur gelesen):
+  1. **Modellgrenze Elektronenrichtung.** Das Drehbuch nennt Elektronen nirgends
+     (0 Treffer). Die Seite hat es im Block «Wo das Modell hinkt» und im Knopf
+     «Elektronen zeigen», der Clip nicht. Vorschlag: Notiz im Merksatz «Modellgrenze:
+     Die Elektronen laufen von − nach +, gegen das Wasser im Bild.» und ein Satz im
+     Sprechertext.
+  2. **Fehlvorstellung sichtbar machen.** Schritt 2 sagt nur im Sprechertext «Der
+     Widerstand verbraucht keinen Strom»; im Bild steht es nicht als Fehlvorstellung
+     (Prüfliste Punkt 14). Vorschlag: rote Notiz «Falsch ist: «Der Widerstand
+     verbraucht Strom.»» in Schritt 2.
+  Danach neu vertonen (Sprechertext geändert), bauen, `pruef-clip.mjs`; die Dauer
+  darf 87 s nicht überschreiten.
