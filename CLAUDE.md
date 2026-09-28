@@ -65,8 +65,8 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 266 Drehbücher, alle vertont: **231 in der Bibliothek** (221:28 min,
-  56 Reihen, 191 Grundlagenfach / 40 Schwerpunktfach) und **35 unverlinkte**
+- `clips/` — 274 Drehbücher, alle vertont: **239 in der Bibliothek** (227:54 min,
+  56 Reihen, 199 Grundlagenfach / 40 Schwerpunktfach) und **35 unverlinkte**
   Prüfungsclips mit `"probe": true`, die nur im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. **40 der 47
   Themenseiten tragen Clips**; 45 tragen den Marker, fünf davon leer. Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
@@ -74,7 +74,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,
   nicht als HTML-Entität. Vollständig in `HOWTO-clips.md`, das Verbindliche in
   STYLEGUIDE §6.4.
-  **Animationsclips** (`animation`, Reihe «Animationen erklärt»): 63 Clips auf 14 Seiten
+  **Animationsclips** (`animation`, Reihe «Animationen erklärt»): 71 Clips auf 15 Seiten
   (Stand 28.09.2026), je Animation einer, «▶ Clip» in ihrer Titelzeile. Wie in
   `HOWTO-clips.md`, «Bild einer Animation».
   **Rechner-Clips** (`werkzeug: true`, 22 Stück auf 14 Seiten) sind ein eigener Strang:
