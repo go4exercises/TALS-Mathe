@@ -274,6 +274,12 @@ def anim_knoepfe(text, clips, tiefe):
         auf = [t.start() for t in re.finditer(r'<div class="widget-titelzeile"[^>]*>', text[:m.start()])]
         start = auf[-1] if auf else -1
         if start < 0 or m.start() - start > 200:
+            # Mathe: <h3> im .widget-header, Titelzeile erst im .widget-body —
+            # dann die naechste Titelzeile, sofern sie im selben Widget liegt
+            nach = re.search(r'<div class="widget-titelzeile"[^>]*>', text[m.end():])
+            if nach and '<div class="widget">' not in text[m.end():m.end() + nach.start()]:
+                start = m.end() + nach.start()
+        if start < 0 or (start < m.start() and m.start() - start > 200):
             print(f"  [FEHLER] {c['datei']}: #{anker} steht in keiner .widget-titelzeile")
             continue
         # Ende der Titelzeile: das passende </div> ab ihrem Anfang
