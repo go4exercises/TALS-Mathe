@@ -154,3 +154,25 @@ in `scripts/abgleich.py`.
      verbraucht Strom.»» in Schritt 2.
   Danach neu vertonen (Sprechertext geändert), bauen, `pruef-clip.mjs`; die Dauer
   darf 87 s nicht überschreiten.
+
+- **2026-09-28 · Wassermodell: Spannung am Widerstand im einfachen Kreis indizieren ·
+  Physik `themen/p6-2-elektrizitaet.html`, Animation `#anim-wassermodell` · warum:**
+  Im Fall «Ein Widerstand» tragen Quellen- und Widerstandsspannung dasselbe Symbol.
+  Bei 1280 px steht bei offenem Schalter «U = 6.0 V» an der Quelle neben
+  «U = 0.0 V» am Widerstand, bei 360 px zweimal nur «U». In Reihe und parallel
+  ist es richtig (Indizes ₁, ₂). Ursache (Stand `0db4d47`, nur gelesen): Z. 2718
+  `g.R.push({key:'r1',… nr:''…})` und Z. 2719 `g.mano.push({key:'r1',… idx:''…})`.
+  In Mathes Vorlage behoben mit `nr:'1'` und `idx:'₁'` — dann heisst es
+  «R₁ = 10 Ω», «U₁ = 0.0 V», «Kiesfüllung 1» / «Δp₁», passend zur Vergleichstabelle
+  («an R₁»). Wer lieber «U_R» will, muss sich um die Canvas-Schrift kümmern (kein
+  tiefgestelltes R in Unicode).
+  **Clip zieht mit:** `p6-2-anim-wassermodell`, Bild 3 (Schalter offen) zeigt
+  «U = 0.0 V», die Formel darunter aber \(U_R = R\cdot I\); Bild 2 zeigt
+  «R = 10 Ω» und «U = 6.0 V». Nach der Änderung Bilder 2 und 3 mit
+  `.quellen/clip-bilder/p6-2-anim-wassermodell.plan.json` neu aufnehmen und die
+  Formel in Schritt 3 an den neuen Namen angleichen (\(U_1\) oder \(U_R\)).
+  Sprechertext nennt die Spannung nicht mit Symbol, also keine neue Vertonung.
+  Die zwei übrigen Fehler, die Mathe beim Aufnehmen fand (Beschriftung Δp am Rohr,
+  «Schalter geschlossen» an der Strom-Anzeige bei grosser Schrift), treten in
+  Physik nicht auf: gerendert bei 360 und 1280 px, Physik blendet schmal die Werte
+  aus und kürzt die Namen.
