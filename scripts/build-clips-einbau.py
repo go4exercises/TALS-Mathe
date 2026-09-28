@@ -270,7 +270,9 @@ def anim_knoepfe(text, clips, tiefe):
         if not m:
             print(f"  [FEHLER] {c['datei']}: Animation #{anker} nicht gefunden")
             continue
-        start = text.rfind('<div class="widget-titelzeile">', 0, m.start())
+        # Titelzeile auch mit weiteren Attributen (Mathe: style="margin:…")
+        auf = [t.start() for t in re.finditer(r'<div class="widget-titelzeile"[^>]*>', text[:m.start()])]
+        start = auf[-1] if auf else -1
         if start < 0 or m.start() - start > 200:
             print(f"  [FEHLER] {c['datei']}: #{anker} steht in keiner .widget-titelzeile")
             continue
