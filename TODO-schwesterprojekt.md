@@ -26,17 +26,18 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 - **2026-09-28 · Aussprache-Tabellen um Mathe-Wörter erweitert ·
   `scripts/build-clip-ton.py`, Listen `AUSSPRACHE`, `ABKUERZUNGEN`, `TAUSCH` · warum:**
   Das Skript ist KERN mit Grundlinie 1.000 und die Tabellen gelten für Thorsten in beiden
-  Repos. Mathe hat nach Hörproben des Auftraggebers 25 Wörter eingetragen, vor allem
-  Mathe-Vokabular mit falscher Hauptbetonung (Hypotenuse, Logarithmus, Definitions-,
-  Sechstel, Volumen …) und Tasten des TI-30X (EE, HY, clear, round, NAMES …). Für Physik
+  Repos. Mathe hat nach Hörproben des Auftraggebers 28 Wörter eingetragen (Stand 28.09.2026), vor
+  allem Mathe-Vokabular mit falscher Hauptbetonung (Hypotenuse, Logarithmus, Definitions-,
+  Sechstel, Volumen, linear, Kathete, Tangens mit hörbarem g …) und Tasten des TI-30X (EE, HY, clear, round, NAMES …). Für Physik
   sind die Mathe-Wörter harmlos; sie greifen nur, wo das Wort vorkommt. Übernahme: die
   Datei aus Mathe 1:1 kopieren, danach in Physik mit `aussprache(alt) != aussprache(neu)`
   die betroffenen Clips ermitteln und neu vertonen. Nachgezählt 28.09.2026 (nur gelesen):
-  **35 Physik-Clips**, fast alle wegen «Volumen» (74 Stellen, p0, p4-5, p5-3,
-  uebungstest-*), dazu Erdbeschleunigung 5, Hyperbel 3, Sechstel 1, komponentenweise 1.
+  **42 Physik-Clips**, fast alle wegen «Volumen» (74 Stellen, p0, p4-5, p5-3,
+  uebungstest-*), dazu Erdbeschleunigung 5, Tangens 5, linear 5, Hyperbel 3, Sechstel 1,
+  komponentenweise 1.
   Wer «Volumen» für Physik anders hören will, entscheidet das per Hörprobe *vor* dem
   Neuvertonen, und Mathe übernimmt es dann wieder. Neue Falle: Folgt auf `]]` ein «-» und eine Ziffer,
-  liest Piper «minus» — darum ist TI-30X ein Worttausch. Verworfen: MathPrint.
+  liest Piper «minus» — darum ist TI-30X ein Worttausch. Verworfen: MathPrint, Asymptote.
 
 - **2026-09-27 · Kollisions-Check kennt `flTex` & Co. nicht ·
   `scripts/check_identifier_collisions.py`, Menge `RESERVED` · warum:** Mathe hat

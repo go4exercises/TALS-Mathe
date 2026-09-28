@@ -96,6 +96,15 @@ AUSSPRACHE = [
     ("exakte", "ɛksˈaktə"),                 # vor «exakt», sonst [[…]]e
     ("exakt", "ɛksˈakt"),
     ("hyperbel", "hypˈɛɾbəl"),
+    ("lineares", "liːneːˈɑːrəs"),          # gebeugte Formen vor «linear»
+    ("linearen", "liːneːˈɑːrən"),
+    ("lineare", "liːneːˈɑːrə"),
+    ("linear", "liːneːˈɑːɾ"),
+    ("gegenkathete", "ɡˈeːɡənkateːtə"),    # bisher «KA-te-te», kurz und verschluckt
+    ("ankathete", "ˈankateːtə"),
+    ("kathete", "katˈeːtə"),
+    ("arkustangens", "ˈaɾkʊstˌaŋɡɛns"),    # vor «tangens»; bisher «TANG-ens» ohne g
+    ("tangens", "tˈaŋɡɛns"),
     ("vertippt", "fɛɾtˈɪpt"),
     ("varianz", "vaɾiˈants"),
     ("variablenmenü", "vaɾiˈɑːblənmeːnyː"),
@@ -107,7 +116,7 @@ AUSSPRACHE = [
     ("domain", "doːmˈeːn"),
 ]
 # Nicht geaendert, weil die bisherige Lesart besser klang: Archimedes,
-# Perihel, Parabel, MathPrint.
+# Perihel, Parabel, MathPrint, Asymptote.
 #
 # 2. Abkuerzungen, die buchstabiert werden: nur in exakt dieser Schreibung
 #    als ganzes Wort (sonst traefe «SI» auch «si» in anderen Woertern).
