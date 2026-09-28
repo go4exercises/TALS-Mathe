@@ -125,14 +125,6 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='build-clips-einbau: Anker auch an div.anim-titel (28.09.2026)',
-         wie='anim_knoepfe sucht den Anker per re.search(r\'<(?:h3|div class="anim-titel") id="%s"\' ...) '
-             'statt nur <h3 id=...>; Docstring nennt beide. Ausserdem findet es die Titelzeile auch mit '
-             'weiteren Attributen (<div class="widget-titelzeile" style=...>, Regex statt rfind), und '
-             'als Titelelement auch ein <p id=...> (g4-2); steht das <h3> im widget-header vor der '
-             'Titelzeile, nimmt es die naechste Titelzeile im selben Widget (g5-5). Mathe '
-             'braucht beides fuer Animationen in Aufgaben und Beispielkaesten (g3-1, g3-2); in Physik '
-             'wirkungslos. Die Stellen aus Mathe uebernehmen, dann ist die KERN-Aehnlichkeit wieder >= 0.830.'),
 ]
 
 FACH = {

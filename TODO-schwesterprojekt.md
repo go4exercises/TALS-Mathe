@@ -122,16 +122,3 @@ in `scripts/abgleich.py`.
   Physik braucht dort eine **eigene Zahl**, weil das Band von `halten` bereits Platz
   belegt: dort beginnen Folgeszenen laut HOWTO bei `oben: 430`. Wer beides kombiniert,
   prüft die Schwelle im Browser nach, statt 170 zu übernehmen.
-
-- **2026-09-28 · Gedankenstrich an Formeln auch in `.cv-titel` beseitigen · Physik
-  `themen/*`, Klasse `.cv-titel` · warum:** Entscheid des Auftraggebers vom 28.09.2026:
-  Die Regel «Kein Gedankenstrich unmittelbar an einer Formel» (Mathe STYLEGUIDE §2.8,
-  in Physik mit `3a16835` für h2/h3/anim-titel/block-titel/aufg-titel-text umgesetzt)
-  gilt **auch für die Diagrammtitel `.cv-titel`**. Dort klebt noch 22-mal ein
-  Gedankenstrich direkt an `\(` oder `\)`, z.B. `p0-1:374`, `p0-2:1195`, `p6-1a:290`
-  (gezählt 28.09.2026, nur gelesen). Vorgehen wie in §2.8: **vor** der Formel
-  Doppelpunkt statt Strich; **nach** der Formel umstellen (Tätigkeit nach vorn, Formel
-  ans Ende) oder bei einem blossen Etikett Doppelpunkt; steht ein Wort zwischen Strich
-  und Formel, bleibt der Titel. Vor dem Umbau neu zählen (`.cv-titel` samt `\(`/`\)`
-  direkt am «—»), danach im Browser nachsehen, ob kein Titel umbricht. In Physiks
-  STYLEGUIDE die Klasse in die Liste der Titel aufnehmen.

@@ -205,8 +205,13 @@ im Repo-Root; fehlen die Module, werden diese Checks als `[WARN]` übersprungen.
   derselben Datei), nicht für einen Quer-Edit. Die Datei ist in beiden Repos gleich und
   steht in ihrer eigenen KERN-Liste mit Grundlinie `1.000`: Wer einen Eintrag hinzufügt
   oder streicht, macht sie ungleich, und das Schwesterrepo sieht es beim nächsten
-  Pre-Flight. `--diff scripts/abgleich.py` zeigt, was drüben neu ist; übernommen wird
-  die ganze Datei, erst nachdem die eigenen Einträge darin abgearbeitet sind.
+  Pre-Flight. `--diff scripts/abgleich.py` zeigt, was drüben neu ist.
+  **Vor jedem Hinzufügen oder Streichen eines Eintrags zuerst
+  `python3 scripts/abgleich.py --diff scripts/abgleich.py`.** Ist die Datei gedriftet,
+  liegt drüben vielleicht eine neuere Fassung — dann zuerst diese übernehmen und ihre
+  Einträge sichten, erst danach die eigene Änderung. Nie blind anhängen, nie blind
+  überschreiben: Am 28.09.2026 hatten beide Repos die Datei geändert, und jede
+  Übernahme der ganzen Datei hätte den Eintrag der anderen Seite gelöscht.
 - Änderungen, die auch ins Schwesterprojekt gehören (gemeinsame CSS-Muster, didaktische
   Module, `mathlib`/`physiklib`-Helfer, Nav-Logik), werden **nicht** quer-editiert,
   sondern als Eintrag in **`TODO-schwesterprojekt.md`** vermerkt (was, wo, warum) und
