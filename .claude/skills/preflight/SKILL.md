@@ -33,6 +33,9 @@ div/details-Bilanz · doppelte HTML-`id` · kein `ß` · Dezimalkomma in Body-Ma
 - **verify_js_runtime.js** — führt den Seiten-JS in jsdom aus, findet Laufzeitfehler.
   Braucht `node_modules/jsdom`.
 - **check_identifier_collisions.py** — Inline-Symbole vs. mathlib/nav. Ohne npm.
+- **check_todo_schwester** — liest `TODO-schwesterprojekt.md` im Schwesterrepo
+  (Physik liest Mathes; Physik führt keine solche Datei, in Mathe schweigt der
+  Check) und meldet offene Einträge unter «## Offen» als `[WARN]`. Schreibt nie.
 
 Fehlt ein npm-Modul, meldet der Pre-Flight das als `[WARN]` und überspringt nur diesen
 Teil. Einmalig installieren mit: `npm install mathjax-full jsdom` (im Repo-Root).

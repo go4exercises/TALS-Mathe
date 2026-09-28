@@ -100,7 +100,7 @@ GRUNDLINIE = {
     '.claude/tools/render-check.mjs': 0.968,
     '.claude/tools/build-bilder.mjs': 0.753,
     '.claude/skills/preflight/preflight.py': 0.849,
-    '.claude/skills/preflight/SKILL.md': 0.659,
+    '.claude/skills/preflight/SKILL.md': 0.680,
     '.claude/settings.json': 0.509,
 }
 
