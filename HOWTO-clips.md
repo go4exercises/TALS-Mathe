@@ -352,8 +352,19 @@ Feld nach `clips.json`, und `build-clips-einbau.py` macht drei Dinge daraus:
 **Falle, nur in Mathe:** Die `h3` in Mathes Titelzeilen tragen keine `id`. Vor dem
 ersten Animationsclip bekommt die Überschrift der Animation einen Anker
 (`<h3 id="anim-…">`), sonst meldet der Einbau `[FEHLER] … Animation #… nicht gefunden`.
+Animationen in Aufgaben haben statt `h3` ein `div.anim-titel`; der Anker kommt dann
+dorthin (`<div class="anim-titel" id="anim-…">`), der Einbau findet beide.
 Der Titel muss sich klar vom Stoff-Clip zum selben Thema unterscheiden, denn dieselbe
 Liste zeigt beide.
+
+**Pilot in Mathe: g3-2 (28.09.2026).** Sechs Clips `g3-2-anim-*`, einer je Animation,
+Reihe «Animationen erklärt», `folge` = Nummer der Animation auf der Seite. Aufbau je
+Clip: Titel mit der Frage, drei Schritte im Schienen-Layout mit je einer Aufnahme,
+«Was man sich merkt»; der Inhalt ist die 💡 Erkenntnis der Animation. Bildbreiten, die
+sich bewährt haben: Tabelle und Graph nebeneinander (`.zwei-spalten`) 860 px, ein
+quadratisches Canvas 480 px, `abstand` rund 500. Vor den Aufnahmen die Animation selbst
+ansehen: Was im Bild falsch sitzt (Beschriftung über Achsenzahlen, Text aus dem Canvas),
+steht auch im Clip — zuerst die Animation beheben, dann aufnehmen.
 
 ### Die Bedingungsleiste — `voraussetzung`
 

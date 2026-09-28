@@ -132,6 +132,11 @@ OFFEN = [
              'kopieren, Grundlinie bleibt 1.000. Danach in Physik 42 Clips neu vertonen '
              '(nachgezaehlt, v.a. «Volumen» in p0/p4-5/p5-3/uebungstest-*). Liste und Fallen: '
              'Mathe TODO-schwesterprojekt.md, Eintrag 2026-09-28.'),
+    dict(quelle='Mathe', was='build-clips-einbau: Anker auch an div.anim-titel (28.09.2026)',
+         wie='anim_knoepfe sucht den Anker per re.search(r\'<(?:h3|div class="anim-titel") id="%s"\' ...) '
+             'statt nur <h3 id=...>; Docstring nennt beide. Mathe braucht es fuer Animationen in '
+             'Aufgaben (A1/A2 auf g3-2), Physik hat kein anim-titel — dort wirkungslos. Zwei Zeilen '
+             'aus Mathe uebernehmen, dann ist die KERN-Aehnlichkeit wieder >= 0.830.'),
 ]
 
 FACH = {

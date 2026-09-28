@@ -253,7 +253,8 @@ def anim_knoepfe(text, clips, tiefe):
     """Setzt in die Titelzeile jeder Animation, zu der es einen Clip gibt,
     den Eintrag «▶ Clip» neben «Worauf achten?» und «Erkenntnis».
 
-    Gefunden wird die Animation ueber den Anker ihres <h3> (Feld
+    Gefunden wird die Animation ueber den Anker ihres <h3> oder
+    div.anim-titel (Feld
     `animation` im Drehbuch); eingesetzt wird als letztes Kind der
     .widget-titelzeile, zwischen eigenen Markern — so bleibt der Knopf
     generiert und die Dauer stimmt nach jedem Neubau.
@@ -264,7 +265,8 @@ def anim_knoepfe(text, clips, tiefe):
         anker = c.get("animation")
         if not anker:
             continue
-        m = re.search(r'<h3 id="%s"' % re.escape(anker), text)
+        # Mathe: Animationen in Aufgaben tragen statt <h3> ein div.anim-titel
+        m = re.search(r'<(?:h3|div class="anim-titel") id="%s"' % re.escape(anker), text)
         if not m:
             print(f"  [FEHLER] {c['datei']}: Animation #{anker} nicht gefunden")
             continue
