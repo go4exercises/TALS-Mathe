@@ -163,8 +163,7 @@ in `scripts/abgleich.py`.
     Animationsnummer (geprüft), die 11 `p6-2-anim-*`-Clips bleiben also gültig.
     Alternativ unnummeriert wie die Einstieg-Animation.
   - **Physik schreibt «Amperemeter»** (33 Treffer auf p6-2, «Ampèremeter» nirgends
-    in `themen/`), die Vorlage
-    «Ampèremeter» — beim Einbau angleichen.
+    in `themen/`). Die Vorlage ist seit 28.09.2026 angeglichen.
   - **«Potenzial» kommt auf p6-2 nicht vor.** Legende und Bauteiltabelle der Vorlage
     sprechen davon; entweder dort kurz einführen oder umformulieren
     («Spannung gegenüber dem Minuspol»).
@@ -182,5 +181,32 @@ in `scripts/abgleich.py`.
   eigenen Tokens; Google-Fonts- und jsDelivr-MathJax-Link **entfernen** (Physik lädt
   nichts von fremden Hosts). Canvas-Code (≈ 300 Zeilen, IIFE, keine globalen Namen)
   kann weitgehend bleiben; auf Kollisionen mit den übrigen Seitenskripten prüfen.
-  Danach Animationsclip nach Physiks `HOWTO-clips.md` («Bild einer Animation») und
-  Pre-Flight.
+  Danach Pre-Flight.
+
+  **Der Animationsclip ist schon gebaut** — mit Physiks eigenem Werkzeug, aus
+  einer Kopie von `scripts/build-clips.py`, `build-clip-ton.py`, `clips/themes`,
+  `schriften*` und `vendor/mathjax` im Scratchpad (Physik-Repo nur gelesen).
+  Alles liegt unter `_intern/uebertrag-physik-wassermodell/clips/`, in Physiks
+  Ordnerstruktur, also 1:1 nach `clips/` kopierbar: Drehbuch
+  `p6-2-anim-wassermodell.json`, gebaute Web-Fassung `.html`, Sprechertext,
+  `ton/p6-2-anim-wassermodell.mp3` (Thorsten, Physiks Aussprache-Tabellen) und
+  vier Aufnahmen `bilder/p6-2-anim-wassermodell-1…4.jpg`; der Aufnahmeplan
+  liegt daneben in `aufnahme/aufnahme.mjs`. Reihe «Animationen erklärt», 86.0 s,
+  Titel · 4 Schritte · Merksatz; `pruef-clip.mjs` an 29 Zeitmarken ohne Befund,
+  Bilder angesehen, Beschriftung im Bild rund 20 px auf der 1920er-Bühne.
+  Inhalt: Pumpe ↔ Quelle (60 kPa ↔ 6.0 V), Strom vor = nach dem Widerstand
+  (0.60 A ↔ 60 mL/s, Fehlvorstellung «Widerstand verbraucht Strom»), Widerstand
+  verdoppelt (20 Ω → 0.30 A ↔ 30 mL/s), Schalter offen ↔ Hahn zu, Merksatz mit
+  Modellgrenze Elektronenrichtung. Beim Einbau noch offen:
+  - `"probe": true` entfernen und `folge` setzen (Nummer der Animation; das Feld
+    fehlt bewusst, `_folge` im Drehbuch erklärt es). Der Anker ist schon
+    `"animation": "anim-wassermodell"` — das `h3` der Animation muss ihn tragen.
+  - **Wird die Animation beim Umbau aufs Physik-Skelett optisch verändert**
+    (Farben aus `style.css`, andere Schrift), die vier Bilder mit dem
+    Aufnahmeplan neu aufnehmen — er setzt die Zustände über `#sl-u`, `#sl-r1`,
+    `#seg-kreis` und `#btn-schalter`, die IDs also mitnehmen oder den Plan
+    anpassen. Die Bilder sind bei 390 px Fensterbreite aufgenommen, weil die
+    Animation dort grössere Schrift setzt (Faktor bis 1.35).
+  - Danach die üblichen vier: `build-clips.py` → `build-clips-einbau.py
+    --schreiben` → `build-suchindex.py` → `build-seo.py`; Sprechertext
+    unverändert, also keine neue Vertonung nötig.
