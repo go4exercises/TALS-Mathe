@@ -23,7 +23,7 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 > laufen lassen. Der Pre-Flight prüft Struktur, JS und MathJax — eine still entkleidete
 > Bedienspalte besteht alle Checks.
 
-- **2026-09-28 · Aussprache-Tabellen um Mathe-Wörter erweitert ·
+- **✅ Erledigt 28.09.2026 (Physik hat die Tabellen vereinheitlicht, Mathe übernimmt Physiks Fassung 1:1) — 2026-09-28 · Aussprache-Tabellen um Mathe-Wörter erweitert ·
   `scripts/build-clip-ton.py`, Listen `AUSSPRACHE`, `ABKUERZUNGEN`, `TAUSCH` · warum:**
   Das Skript ist KERN mit Grundlinie 1.000 und die Tabellen gelten für Thorsten in beiden
   Repos. Mathe hat nach Hörproben des Auftraggebers 28 Wörter eingetragen (Stand 28.09.2026), vor

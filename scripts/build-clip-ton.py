@@ -79,7 +79,8 @@ AUSSPRACHE = [
     ("isobar", "iːzoːbˈɑːɾ"),           # bisher «I-sobar»
     ("photonen", "foːtˈoːnən"),         # sonst ohne Hauptbetonung
     ("zentripetal", "tsɛntɾipeːtˈɑːl"),  # sonst englisch «Sentraipt-oh…»
-    # Mathe, nach Hoerproben 28.09.2026 (bisher meist falsche Hauptbetonung)
+    # Nach Hoerproben 28.09.2026, in Saetzen aus beiden Repos (bisher meist
+    # falsche Hauptbetonung)
     ("hypotenuse", "hypoːteːnˈuːzə"),
     ("logarithmus", "loːɡarˈɪtmʊs"),
     ("logarithmen", "loːɡarˈɪtmən"),
@@ -87,7 +88,6 @@ AUSSPRACHE = [
     ("funktions", "fʊŋktsjˈoːns"),
     ("äquivalenz", "ɛkviːvaːlˈɛnts"),
     ("sechstel", "zˈɛkstəl"),               # bisher «Sechs-TEEL»
-    ("volumen", "voːlˈuːmən"),
     ("achsenabschnitt", "ˈaksənapʃnɪt"),
     ("komponentenweise", "kɔmpoːnˈɛntənvaɪzə"),
     ("mantisse", "mantˈɪsə"),
@@ -96,10 +96,6 @@ AUSSPRACHE = [
     ("exakte", "ɛksˈaktə"),                 # vor «exakt», sonst [[…]]e
     ("exakt", "ɛksˈakt"),
     ("hyperbel", "hypˈɛɾbəl"),
-    ("lineares", "liːneːˈɑːrəs"),          # gebeugte Formen vor «linear»
-    ("linearen", "liːneːˈɑːrən"),
-    ("lineare", "liːneːˈɑːrə"),
-    ("linear", "liːneːˈɑːɾ"),
     ("gegenkathete", "ɡˈeːɡənkateːtə"),    # bisher «KA-te-te», kurz und verschluckt
     ("ankathete", "ˈankateːtə"),
     ("kathete", "katˈeːtə"),
@@ -107,16 +103,30 @@ AUSSPRACHE = [
     ("tangens", "tˈaŋɡɛns"),
     ("vertippt", "fɛɾtˈɪpt"),
     ("varianz", "vaɾiˈants"),
-    ("variablenmenü", "vaɾiˈɑːblənmeːnyː"),
+    ("variablenmenü", "vaɾiˈɑːblənmeːnˌyː"),
+    ("untermenüs", "ˈʊntɐmeːnˌyːs"),       # «Menü» immer hinten betont (me-NÜ);
+    ("untermenü", "ˈʊntɐmeːnˌyː"),         # bisher «Menüs» vorne, «Menü» hinten
+    ("menüs", "meːnˈyːs"),                 # vor «menü», sonst [[…]]s
+    ("menü", "meːnˈyː"),
     ("variablentaste", "vaɾiˈɑːbləntastə"),
     ("extremwerten", "ɛkstrˈeːmveːɾtən"),
-    ("erdbeschleunigung", "ˈeːɾtbəʃlɔønɪɡʊŋ"),
     ("clear", "klˈiːɐ"),                    # Taste des TI-30X
     ("round", "rˈaʊnt"),
     ("domain", "doːmˈeːn"),
+    # Nach Hoerprobe 28.09.2026 (Woerter aus den 6.1-Clips)
+    ("oktave", "ɔktˈaːvə"),                # bisher «OK-tave»
+    ("ellipsen", "ɛlˈɪpsən"),              # bisher «EL-lip-zen», stimmhaftes s
+    ("ellipse", "ɛlˈɪpsə"),
+    ("longitudinal", "lɔŋɡiːtuːdiːnˈaːl"), # Betonung auf «-nal», nicht auf «-welle»
+    ("laser", "lˈeːzɐ"),                   # wie «Laserpointer»; allein sonst englisch
+    ("orange", "oɾˈɑ̃ːʒə"),                 # bisher «O-rang-e»
+    ("radio", "ɾˈaːdioː"),                 # Radiowellen: Betonung auf «Ra-»
+    ("elektromagnetisch", "eːlɛktɾoːmaɡnˈeːtɪʃ"),
 ]
 # Nicht geaendert, weil die bisherige Lesart besser klang: Archimedes,
-# Perihel, Parabel, MathPrint, Asymptote.
+# Perihel, Parabel, MathPrint, Asymptote, Mikrometer, Mikro; Volumen, linear
+# und Erdbeschleunigung (28.09.2026 in Saetzen aus beiden Repos angehoert);
+# Transversal, Niveau, Photon (28.09.2026).
 #
 # 2. Abkuerzungen, die buchstabiert werden: nur in exakt dieser Schreibung
 #    als ganzes Wort (sonst traefe «SI» auch «si» in anderen Woertern).
@@ -130,6 +140,7 @@ ABKUERZUNGEN = [
     ("NAMES", "nˈeːms"),
     ("UNITS", "jˈuːnɪts"),
     ("Pfactor", "pˈeːfɛktɐ"),
+    ("My", "mˈyː"),                     # Reibungszahl μ; bisher englisch «Mai»
 ]
 # 3. Einfache Worttausche, wo keine Lautschrift noetig ist.
 TAUSCH = [
@@ -137,6 +148,18 @@ TAUSCH = [
     ("Newtonmeter", "Newton-Meter"),    # sonst englisch «Njuten-mieter»
     ("Lageenergie", "Lage-Energie"),    # sonst «Lag-energie»
     ("TI-30X", "T-I 30X"),              # Lautschrift vor «-30X» hiesse «minus dreissig»
+    # Wortfuge: In Zusammensetzungen las die Stimme «s-t»/«s-p» statt «scht»/
+    # «schp» (Waerme-s-trahlung). Der Bindestrich zeigt ihr die Fuge. Nach
+    # Hoerprobe 28.09.2026 nur diese Woerter; Widerstand, Kilowattstunde,
+    # Normzustand, Brennstoff, Meeresspiegel u. a. klangen ohne besser.
+    ("Wärmestrahlung", "Wärme-strahlung"),
+    ("Gammastrahlung", "Gamma-strahlung"),
+    ("Nachkommastelle", "Nachkomma-stelle"),   # auch «…stellen»
+    ("Zahlenstrahl", "Zahlen-strahl"),          # auch «…strahlen»
+    ("Häufigkeitsspalte", "Häufigkeits-spalte"),
+    ("Bewegungszustand", "Bewegungszu-stand"),
+    ("Tabellendichte", "Tabellen-dichte"),     # bisher «Tabellen-digge»
+    ("Normdichte", "Norm-dichte"),
 ]
 VORSILBEN = r"(?:milli|mikro|nano|zenti|dezi|hekto|kilo|mega|giga)?"
 

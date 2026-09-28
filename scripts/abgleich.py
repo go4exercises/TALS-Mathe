@@ -125,13 +125,6 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='build-clip-ton: 28 Aussprache-Woerter aus Mathe (28.09.2026)',
-         wie='Nach Hoerproben des Auftraggebers: AUSSPRACHE +23 Woerter (Hypotenuse, Logarithmus, '
-             'Definitions-, Sechstel, Volumen, linear, Kathete, Tangens, Erdbeschleunigung ...), ABKUERZUNGEN +5 '
-             '(TI-Tasten EE, HY, NAMES, UNITS, Pfactor), TAUSCH TI-30X. Datei aus Mathe 1:1 '
-             'kopieren, Grundlinie bleibt 1.000. Danach in Physik 42 Clips neu vertonen '
-             '(nachgezaehlt, v.a. «Volumen» in p0/p4-5/p5-3/uebungstest-*). Liste und Fallen: '
-             'Mathe TODO-schwesterprojekt.md, Eintrag 2026-09-28.'),
     dict(quelle='Mathe', was='build-clips-einbau: Anker auch an div.anim-titel (28.09.2026)',
          wie='anim_knoepfe sucht den Anker per re.search(r\'<(?:h3|div class="anim-titel") id="%s"\' ...) '
              'statt nur <h3 id=...>; Docstring nennt beide. Ausserdem findet es die Titelzeile auch mit '

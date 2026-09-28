@@ -65,7 +65,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 426 Drehbücher, alle vertont: **391 in der Bibliothek** (361:25 min,
+- `clips/` — 426 Drehbücher, alle vertont: **391 in der Bibliothek** (361:32 min,
   56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **35 unverlinkte**
   Prüfungsclips mit `"probe": true`, die nur im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. **40 der 47

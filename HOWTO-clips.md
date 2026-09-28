@@ -357,7 +357,7 @@ dorthin (`<div class="anim-titel" id="anim-…">`), der Einbau findet beide.
 Der Titel muss sich klar vom Stoff-Clip zum selben Thema unterscheiden, denn dieselbe
 Liste zeigt beide.
 
-**Pilot in Mathe: g3-2 (28.09.2026).** Sechs Clips `g3-2-anim-*`, einer je Animation,
+**Ausgerollt 28.09.2026:** alle 46 Themenseiten mit Animationen, 223 Clips, einer je Titelzeile. Ausgangspunkt war der **Pilot g3-2**. Sechs Clips `g3-2-anim-*`, einer je Animation,
 Reihe «Animationen erklärt», `folge` = Nummer der Animation auf der Seite. Aufbau je
 Clip: Titel mit der Frage, drei Schritte im Schienen-Layout mit je einer Aufnahme,
 «Was man sich merkt»; der Inhalt ist die 💡 Erkenntnis der Animation. Bildbreiten, die
@@ -365,6 +365,19 @@ sich bewährt haben: Tabelle und Graph nebeneinander (`.zwei-spalten`) 860 px, e
 quadratisches Canvas 480 px, `abstand` rund 500. Vor den Aufnahmen die Animation selbst
 ansehen: Was im Bild falsch sitzt (Beschriftung über Achsenzahlen, Text aus dem Canvas),
 steht auch im Clip — zuerst die Animation beheben, dann aufnehmen.
+
+Was beim Ausrollen immer wieder auffiel und darum vor jedem neuen Animationsclip geprüft
+wird:
+- **Lesbarkeit:** Die kleinste Schrift, auf die der Clip Bezug nimmt, ist auf der
+  1920er-Bühne mindestens 20 px hoch (Faktor = Bildbreite ÷ CSS-Breite des Elements).
+  Tabelle und Graph zusammen sind fast immer zu klein; dann nur das Canvas aufnehmen,
+  bei schmaler Fensterbreite (360–640 px), und Tabellenwerte in der Formelzeile nennen.
+- **Farben:** `\fd` ist Rot und heisst «falsch» — nie für eine vierte Grösse.
+- **Grenzen der Animation** (Regler, Bildrand) sind keine Bedingungen der Mathematik.
+- **💡/👁 prüfen:** verlangen sie etwas, das die Animation nicht kann (fehlender Regler,
+  nicht einstellbarer Wert), oder gilt die Aussage nur für einen Teil der Werte?
+- **Live-Anzeigen:** gerundete Werte mit «≈», exakte mit «=».
+- **Achsen 1:1**, wo Winkel oder Senkrechte gezeigt werden.
 
 ### Die Bedingungsleiste — `voraussetzung`
 
