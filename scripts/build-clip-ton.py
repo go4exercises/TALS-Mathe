@@ -79,9 +79,35 @@ AUSSPRACHE = [
     ("isobar", "iːzoːbˈɑːɾ"),           # bisher «I-sobar»
     ("photonen", "foːtˈoːnən"),         # sonst ohne Hauptbetonung
     ("zentripetal", "tsɛntɾipeːtˈɑːl"),  # sonst englisch «Sentraipt-oh…»
+    # Mathe, nach Hoerproben 28.09.2026 (bisher meist falsche Hauptbetonung)
+    ("hypotenuse", "hypoːteːnˈuːzə"),
+    ("logarithmus", "loːɡarˈɪtmʊs"),
+    ("logarithmen", "loːɡarˈɪtmən"),
+    ("definitions", "deːfiːniːtsjˈoːns"),
+    ("funktions", "fʊŋktsjˈoːns"),
+    ("äquivalenz", "ɛkviːvaːlˈɛnts"),
+    ("sechstel", "zˈɛkstəl"),               # bisher «Sechs-TEEL»
+    ("volumen", "voːlˈuːmən"),
+    ("achsenabschnitt", "ˈaksənapʃnɪt"),
+    ("komponentenweise", "kɔmpoːnˈɛntənvaɪzə"),
+    ("mantisse", "mantˈɪsə"),
+    ("exponentielles", "ɛkspoːnɛntsjˈɛləs"),
+    ("exponential", "ɛkspoːnɛntsjˈɑːl"),
+    ("exakte", "ɛksˈaktə"),                 # vor «exakt», sonst [[…]]e
+    ("exakt", "ɛksˈakt"),
+    ("hyperbel", "hypˈɛɾbəl"),
+    ("vertippt", "fɛɾtˈɪpt"),
+    ("varianz", "vaɾiˈants"),
+    ("variablenmenü", "vaɾiˈɑːblənmeːnyː"),
+    ("variablentaste", "vaɾiˈɑːbləntastə"),
+    ("extremwerten", "ɛkstrˈeːmveːɾtən"),
+    ("erdbeschleunigung", "ˈeːɾtbəʃlɔønɪɡʊŋ"),
+    ("clear", "klˈiːɐ"),                    # Taste des TI-30X
+    ("round", "rˈaʊnt"),
+    ("domain", "doːmˈeːn"),
 ]
 # Nicht geaendert, weil die bisherige Lesart besser klang: Archimedes,
-# Perihel, Parabel.
+# Perihel, Parabel, MathPrint.
 #
 # 2. Abkuerzungen, die buchstabiert werden: nur in exakt dieser Schreibung
 #    als ganzes Wort (sonst traefe «SI» auch «si» in anderen Woertern).
@@ -90,12 +116,18 @@ ABKUERZUNGEN = [
     ("LED", "ɛleːdˈeː"),                # bisher «Leet»
     ("COP", "tseːoːpˈeː"),              # bisher «Kop»
     ("SI", "ɛsˈiː"),                    # bisher «Sie»
+    ("EE", "eːˈeː"),                    # Tasten des TI-30X (Mathe, 28.09.2026)
+    ("HY", "haːˈʏpsɪlɔn"),
+    ("NAMES", "nˈeːms"),
+    ("UNITS", "jˈuːnɪts"),
+    ("Pfactor", "pˈeːfɛktɐ"),
 ]
 # 3. Einfache Worttausche, wo keine Lautschrift noetig ist.
 TAUSCH = [
     ("achthundert", "acht hundert"),    # sonst «acht-undert», auch in tausendachthundert…
     ("Newtonmeter", "Newton-Meter"),    # sonst englisch «Njuten-mieter»
     ("Lageenergie", "Lage-Energie"),    # sonst «Lag-energie»
+    ("TI-30X", "T-I 30X"),              # Lautschrift vor «-30X» hiesse «minus dreissig»
 ]
 VORSILBEN = r"(?:milli|mikro|nano|zenti|dezi|hekto|kilo|mega|giga)?"
 
