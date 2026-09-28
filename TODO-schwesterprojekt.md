@@ -9,7 +9,7 @@ Format pro Eintrag: Datum · was · wo (Datei/Selektor) · warum.
 
 **Bereinigt am 28.09.2026:** Alle Einträge wurden gegen das Physik-Repo geprüft
 (Stand `f115899`, nur gelesen). Erledigte und gegenstandslose sind entfernt —
-ihr Wortlaut steht in der Git-Geschichte dieser Datei. Übrig sind die drei unten.
+ihr Wortlaut steht in der Git-Geschichte dieser Datei. Übrig waren danach drei; neue kommen unten dazu.
 Ein erledigter Eintrag wird künftig gelöscht, nicht als «erledigt» markiert.
 Übertrage an geteiltem Werkzeug laufen zusätzlich über die Warteschlange `OFFEN`
 in `scripts/abgleich.py`.
@@ -135,3 +135,52 @@ in `scripts/abgleich.py`.
   und Formel, bleibt der Titel. Vor dem Umbau neu zählen (`.cv-titel` samt `\(`/`\)`
   direkt am «—»), danach im Browser nachsehen, ob kein Titel umbricht. In Physiks
   STYLEGUIDE die Klasse in die Liste der Titel aufnehmen.
+
+- **2026-09-28 · Wassermodell des Stromkreises als neue Animation · Physik
+  `themen/p6-2-elektrizitaet.html`, Abschnitt «Grundbegriffe» · warum:** Auf Wunsch
+  des Auftraggebers in einer Mathe-Session gebaut, gehört aber nach Physik. Vorlage:
+  **`_intern/uebertrag-physik-wassermodell/wassermodell.html`** (nur lokal —
+  `_intern/` steht in `.gitignore`; eigenständige Seite, auch
+  als Artifact veröffentlicht: https://claude.ai/artifact/BoaXnQU8i1qbWzLwyArboE).
+  Inhalt: Wasserkreis und Stromkreis in **derselben Anordnung**, umschaltbar
+  (Überblendung, Bauteile bleiben am Platz) oder nebeneinander; ein Widerstand / Reihe
+  / parallel; Hahn–Schalter; Durchflussmesser ↔ Amperemeter, U-Rohr-Manometer ↔
+  Voltmeter mit Live-Werten; Druck bzw. Potenzial als Farbe der Leitung; Punkte für
+  Wasser/Ladung mit Tempo ∝ Stromstärke; Tabellen «Grössen» und «Bauteile» mit
+  Hervorhebung im Bild; fünf Aufträge, Merksatz, «Wo das Modell hinkt». Massstab
+  1 V ↔ 10 kPa, 1 A ↔ 100 mL/s (dann stimmen die Leistungen in W überein).
+
+  **Nachgesehen im Physik-Repo (Stand `9f88611`, nur gelesen):**
+  - p6-2 hat 4518 Zeilen und **12 Animationen**, im Titel nummeriert
+    «Animation 1 · …» bis «Animation 12 · …», plus die unnummerierte
+    «Einstieg-Animation · Einfacher Stromkreis». Ein Wassermodell gibt es nicht; der
+    Wasservergleich steht nur als Transfer-Frage im Mini-Check nach «Grundbegriffe»
+    («Im Vergleich mit einem Wasserkreislauf: Was entspricht der elektrischen
+    Spannung, was der Stromstärke?»).
+  - **Vorschlag Platz:** nach dem Block «📘 Stromstärke und Spannung», vor diesem
+    Mini-Check — die Frage übt dann, was die Animation zeigt. Dann rutschen
+    «Animation 1–12» um eins; keines der 24 p6-2-Drehbücher nennt eine
+    Animationsnummer (geprüft), die 11 `p6-2-anim-*`-Clips bleiben also gültig.
+    Alternativ unnummeriert wie die Einstieg-Animation.
+  - **Physik schreibt «Amperemeter»** (33 Treffer auf p6-2, «Ampèremeter» nirgends
+    in `themen/`), die Vorlage
+    «Ampèremeter» — beim Einbau angleichen.
+  - **«Potenzial» kommt auf p6-2 nicht vor.** Legende und Bauteiltabelle der Vorlage
+    sprechen davon; entweder dort kurz einführen oder umformulieren
+    («Spannung gegenüber dem Minuspol»).
+  - **Stromrichtung:** Die Einstieg-Animation zeigt **Elektronen** (− → +), die
+    Vorlage standardmässig die technische Stromrichtung (+ → −, wie das Wasser) mit
+    Schalter «Elektronen zeigen». Beim Einbau entscheiden, ob der Standard kippen soll.
+
+  **Umbau fürs Physik-Skelett** (die Vorlage ist eine freie Seite, keine
+  Themenseiten-Struktur): Markup auf `widget` / `widget-header` /
+  `widget-titelzeile` / `widget-body`, Regler als `sl-row` + `sl-val`, Knöpfe als
+  `typ-btn` bzw. `play-btn`, Leinwand in `cv-wrap` mit `cv-titel`; Hinweispaar
+  `anim-hinweis links` («💡 Worauf achten?») und `rechts` («✓ Erkenntnis») statt der
+  aufklappbaren Aufträge; die Tabellen und «Wo das Modell hinkt» als Blöcke im
+  Fliesstext (`block-def` bzw. Rot-Block). Farben aus Physiks `style.css` statt der
+  eigenen Tokens; Google-Fonts- und jsDelivr-MathJax-Link **entfernen** (Physik lädt
+  nichts von fremden Hosts). Canvas-Code (≈ 300 Zeilen, IIFE, keine globalen Namen)
+  kann weitgehend bleiben; auf Kollisionen mit den übrigen Seitenskripten prüfen.
+  Danach Animationsclip nach Physiks `HOWTO-clips.md` («Bild einer Animation») und
+  Pre-Flight.
