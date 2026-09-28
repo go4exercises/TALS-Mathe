@@ -85,7 +85,7 @@ GRUNDLINIE = {
     'feedback.html': 0.977,
     'LICENSE': 0.955,
     'scripts/build-suchindex.py': 0.962,
-    'scripts/build-clips.py': 0.812,
+    'scripts/build-clips.py': 0.836,
     'scripts/build-clips-einbau.py': 0.830,
     'scripts/build-clip-ton.py': 1.000,
     'scripts/build-seo.py': 0.533,
