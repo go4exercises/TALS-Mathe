@@ -195,7 +195,8 @@ bei einer Umstellung immer mitprüfen (Erklärzeilen, Hinweispaare 👁/💡).
 
 ## 2.8 Kein Gedankenstrich unmittelbar an einer Formel (verbindlich seit 03.08.2026)
 
-In **Titeln** (`<h2>`, `<h3>`, `.anim-titel`, `.block-titel`, `.aufg-titel-text`)
+In **Titeln** (`<h2>`, `<h3>`, `.anim-titel`, `.block-titel`, `.aufg-titel-text`,
+in Physik auch die Diagrammtitel `.cv-titel` — Entscheid Auftraggeber 28.09.2026)
 trennt kein Gedankenstrich den Text von der Formel. Gerendert steht der Strich
 direkt an der Formel und liest sich als **Vorzeichen**. Das gilt in **beide
 Richtungen** — der Strich darf weder unmittelbar vor `\(` noch unmittelbar nach
