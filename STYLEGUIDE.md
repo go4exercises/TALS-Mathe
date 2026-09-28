@@ -421,6 +421,9 @@ Jede Themenseite folgt diesem Schema in genau dieser Reihenfolge:
       • A3: Rechnen (mehrere Teilaufgaben)
       • A4–A6: Anwendung in Realsituation
 8. Zusammenfassung        — kompakte Tabelle, Merksatz
+8b. Clips                 — generiert zwischen <!-- CLIPS:ANFANG/ENDE --> (build-clips-einbau.py);
+                            immer nach der Zusammenfassung, vor dem Zusatzmaterial
+                            (Entscheid Auftraggeber 27.09.2026, wie TALS Physik)
 9. Zusatzmaterial         — vier Einträge in fester Reihenfolge:
       • Handout (HTML-Druckseite, neuer Tab) — Theorie ohne Beispiele und ohne Aufgaben
       • Anki-Deck erstellen zu automatisieren der Grundlagen (Download `.apkg`)
@@ -434,7 +437,7 @@ Das Schema ist **didaktisch begründet**:
 - Drei Darstellungen früh verknüpfen — das verhindert das „Symbol-Schubsen" ohne Verständnis.
 - Spezialfälle sichtbar machen, bevor sie in Aufgaben auftauchen.
 - Aufgabentypen steigern Selbstständigkeit.
-- Zusatzmaterial kommt **vor** den externen Links — denn das eigene Material ist primär.
+- Clips und Zusatzmaterial kommen **vor** den externen Links — denn das eigene Material ist primär.
 
 **Trennung Handout ↔ Aufgaben:** Das Handout enthält nur Theorie (Definitionen, Sätze, Tabellen, Übersichts-SVGs wie eine Geradenschar). **Beispiele** stehen in der Themenseite und in „Teste dich selbst", **Aufgaben** in „Teste dich selbst" (rein-mathematisch) und in der „Aufgabenserie" (Anwendungen). So bleibt das Handout als knapper Theorie-Auszug zum Mitnehmen brauchbar.
 

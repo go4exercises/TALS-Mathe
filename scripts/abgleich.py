@@ -80,7 +80,7 @@ GRUNDLINIE = {
     'anim-hinweise.js': 0.923,
     'schriften.css': 0.773,
     'package.json': 0.880,
-    '.gitignore': 0.740,
+    '.gitignore': 0.793,
     'downloads/print.css': 0.900,
     'feedback.html': 0.977,
     'LICENSE': 0.955,

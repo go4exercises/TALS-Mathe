@@ -453,8 +453,9 @@ löschen müssen. Der ganze Ablauf für Prüfungsclips steht in `HOWTO-uebungspr
 
 ## Schritt 3 — In die Lektionsseite einbauen
 
-Einmal pro Seite die beiden Kommentarzeilen setzen, sinnvollerweise direkt vor
-`<h2 id="ressourcen">` — erst die eigenen Clips, dann die fremden Links:
+Einmal pro Seite die beiden Kommentarzeilen setzen, **nach der Zusammenfassung und
+vor dem Zusatzmaterial** — direkt vor dem Kommentarkopf von `<h2 id="downloads">`
+(Entscheid Auftraggeber 27.09.2026, wie TALS Physik; STYLEGUIDE §4, Punkt 8b):
 
 ```html
 <!-- CLIPS:ANFANG — generiert von scripts/build-clips-einbau.py, nicht von Hand ändern -->
