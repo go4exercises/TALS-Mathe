@@ -114,17 +114,20 @@ Matrix, Vektor und Gleichungslöser» zeigen umgewandelte Werte an —, beweist 
 
 **Was schon geändert ist.** Die beiden Leitprogramme (`quadratische-gleichungen.html`,
 Warnkasten «Wofür er nicht gut ist» und Selbsttest 3b; `gleichungssysteme.html`,
-Warnkasten «Was der Rechner nicht sagt») sind **geräteneutral** umformuliert. Die zwei
-Clips sind unverändert und behaupten weiterhin das in der rechten Spalte.
+Warnkasten «Was der Rechner nicht sagt») sind **geräteneutral** umformuliert. Seit der
+G2-Prüfung vom 29.09.2026 (`TODO-g2.md`) sind es auch die zwei Clips: `poly-solv` sagt
+«löst … direkt» statt «exakt», `sys-solv` sagt nur noch, dass bei nicht eindeutiger Lösung
+kein einzelnes Zahlenpaar erscheint. Gestrichen ist dort ausserdem die unbelegte Angabe,
+`sys-solv` lege die Ergebnisse in den Variablen `x` und `y` ab — auch das beim Nachsehen
+prüfen (nach dem Lösen `x` abrufen).
 
 **Nachsehen:** `2nd` → `poly-solv`, quadratisch, `1`, `-4`, `-1` eingeben; notieren, ob
 \(2 \pm \sqrt{5}\) oder \(4.236\ldots\) erscheint, und was die Umschalttaste daraus macht.
 Dann `sys-solv` 2×2 mit \(x + y = 4,\ 2x + 2y = 10\) und mit \(x + y = 4,\ 2x + 2y = 8\);
 den Wortlaut beider Meldungen abschreiben.
 
-**Was danach möglich wird.** Stimmen die Clips, bekommen die Warnkästen den belegten
-Wortlaut zurück. Stimmen sie nicht, sind die Szenen «Titel» bzw. «Wenn es klemmt» neu zu
-sprechen.
+**Was danach möglich wird.** Mit dem Wortlaut vom Gerät bekommen Warnkästen und Clips
+(Szenen «Titel» bzw. «Wenn es klemmt») die konkrete Anzeige zurück.
 
 ---
 

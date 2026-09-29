@@ -326,6 +326,7 @@ MathJax = {
       <tr><td class="td-pt">Lösung</td><td>\(x_0 = 3\)</td><td style="text-align:left;font-family:var(--sans)">Wert, bei dem die Gleichheit erfüllt ist</td></tr>
       <tr><td>Lösungsmenge</td><td>\(\mathbb{L} = \{3\}\)</td><td style="text-align:left;font-family:var(--sans)">Menge aller Lösungen</td></tr>
       <tr><td>Grundmenge</td><td>\(\mathbb{G} = \mathbb{R}\)</td><td style="text-align:left;font-family:var(--sans)">Menge der erlaubten Werte für die Variable</td></tr>
+      <tr><td>Definitionsmenge</td><td>\(\dfrac{2}{x-1} = 4\): \(\mathbb{D} = \mathbb{R} \setminus \{1\}\)</td><td style="text-align:left;font-family:var(--sans)">alle Werte der Grundmenge, für die jeder Term der Gleichung definiert ist — kein Nenner wird null, unter einer Wurzel steht nichts Negatives</td></tr>
     </tbody>
   </table>
 </div>
@@ -418,7 +419,7 @@ MathJax = {
   <p>① Sei \(n\) die Anzahl Materialkisten.<br>
   ② Eine Kiste \(18\) kg, Werkzeug \(25\) kg, Tragfähigkeit \(450\) kg.<br>
   ③ „höchstens 450 kg" → \(\le 450\): \(\;\boxed{18 \cdot n + 25 \le 450}\)</p>
-  <p>Aufgelöst: \(18 n \le 425\), also \(n \le 23.61\). Da \(n \in \mathbb{N}\), dürfen maximal <strong>23 Kisten</strong> dazu. Auf 24 Kisten wäre die Tragfähigkeit überschritten.</p>
+  <p>Aufgelöst: \(18 n \le 425\), also \(n \le 23.6\overline{1}\). Da \(n \in \mathbb{N}\), dürfen maximal <strong>23 Kisten</strong> dazu. Auf 24 Kisten wäre die Tragfähigkeit überschritten.</p>
 </div>
 
 <div class="block block-bsp" style="margin-top:10px">
@@ -595,9 +596,9 @@ MathJax = {
     <thead><tr><th>Typ</th><th>Form</th><th>Beispiel</th><th>Lösungen (in \(\mathbb{R}\))</th></tr></thead>
     <tbody>
       <tr><td style="font-family:var(--sans);text-align:left">linear</td><td>\(a \cdot x + b = 0\;(a \neq 0)\)</td><td>\(3 \cdot x + 5 = 14\)</td><td>genau 1</td></tr>
-      <tr><td style="font-family:var(--sans);text-align:left">quadratisch</td><td>\(a \cdot x^2 + b \cdot x + c = 0\)</td><td>\(x^2 - 5 \cdot x + 6 = 0\)</td><td>0, 1 oder 2</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">quadratisch</td><td>\(a \cdot x^2 + b \cdot x + c = 0\;(a \neq 0)\)</td><td>\(x^2 - 5 \cdot x + 6 = 0\)</td><td>0, 1 oder 2</td></tr>
       <tr><td style="font-family:var(--sans);text-align:left">Bruchgleichung</td><td>\(\dfrac{P(x)}{Q(x)} = R(x)\)</td><td>\(\dfrac{2}{x-1} = 4\)</td><td>je nach \(Q(x)\neq 0\)</td></tr>
-      <tr><td style="font-family:var(--sans);text-align:left">Wurzelgleichung</td><td>\(\sqrt{P(x)} = R(x)\)</td><td>\(\sqrt{x+3} = x-1\)</td><td>nur Werte mit \(P(x)\ge 0\)</td></tr>
+      <tr><td style="font-family:var(--sans);text-align:left">Wurzelgleichung</td><td>\(\sqrt{P(x)} = R(x)\)</td><td>\(\sqrt{x+3} = x-1\)</td><td>nur Werte mit \(P(x)\ge 0\) und \(R(x)\ge 0\)</td></tr>
     </tbody>
   </table>
 </div>
@@ -629,7 +630,7 @@ MathJax = {
       <input type="range" id="pr-x" min="0" max="10" step="0.5" value="2">
       <span class="sl-val" id="pr-xv">2</span>
     </div>
-    <div class="probe-step" id="pr-1"><span class="pf-label">① Einsetzen</span><span id="pr-1t">5·2 − 7 = 2·2 + 8</span></div>
+    <div class="probe-step" id="pr-1"><span class="pf-label">① Einsetzen</span><span id="pr-1t">5·2 − 7 ≟ 2·2 + 8</span></div>
     <div class="probe-step" id="pr-2"><span class="pf-label">② Linke Seite ausrechnen</span><span id="pr-2t">10 − 7 = 3</span></div>
     <div class="probe-step" id="pr-3"><span class="pf-label">③ Rechte Seite ausrechnen</span><span id="pr-3t">4 + 8 = 12</span></div>
     <div class="probe-step fail" id="pr-4"><span class="pf-label">④ Vergleichen</span><span id="pr-4t">3 = 12  →  falsch ✗</span></div>
@@ -643,7 +644,7 @@ MathJax = {
 <!-- ══ 8. AUFGABEN ══ -->
 <div class="block block-fehler">
   <div class="block-titel">⚠ Häufiger Fehler — Multiplizieren mit einem Term</div>
-  <p>Multipliziert man beide Seiten mit einem Ausdruck wie \((x - 3)\), kann das die Lösungsmenge verändern: Wird der Term zufällig null, entstehen Schein-Lösungen, oder echte Lösungen gehen verloren. <strong>Regel</strong>: Bei jeder Multiplikation mit einem variablen Term muss am Ende geprüft werden, ob dieser für die gefundene Lösung tatsächlich \(\neq 0\) ist. Sonst Probe machen — immer.</p>
+  <p>Multipliziert man beide Seiten mit einem Ausdruck wie \((x - 3)\), kann das die Lösungsmenge verändern: Wird der Term null, entstehen Schein-Lösungen. Aus \(x + 1 = 5\) mit \(\mathbb{L} = \{4\}\) wird nach \(\cdot\,(x - 3)\) eine Gleichung mit \(\mathbb{L} = \{3;\,4\}\). Echte Lösungen gehen dagegen beim <em>Dividieren</em> durch einen variablen Term verloren. <strong>Regel</strong>: Bei jeder Multiplikation mit einem variablen Term muss am Ende geprüft werden, ob dieser für die gefundene Lösung tatsächlich \(\neq 0\) ist. Sonst Probe machen — immer.</p>
 </div>
 
 <div class="block block-tipp">
@@ -813,7 +814,7 @@ MathJax = {
           <p><strong>Probe \(x = -3\):</strong> linke Seite \(-3\), rechte Seite \(3\). Es gilt \(-3 \neq 3\) — also <em>keine</em> Lösung der Originalgleichung. \(x_2 = -3\) ist eine <strong>Scheinlösung</strong>, entstanden durchs Quadrieren.</p>
           <p>Lösungsmenge der Originalgleichung \(\;\mathbb{L} = \{3\}\). Nur \(x_1 = 3\) ist Lösung; \(x_2 = -3\) ist eine Scheinlösung.</p>
         </li>
-        <li>Quadrieren ist <em>keine</em> Äquivalenzumformung — beim Übergang von \(x = 3\) zu \(x^2 = 9\) wird die Lösungsmenge unzulässig erweitert (von \(\{3\}\) zu \(\{3,\,-3\}\)). In der Praxis ist deshalb nach dem Quadrieren <em>immer</em> die Probe in der Originalgleichung Pflicht.</li>
+        <li>Quadrieren ist <em>keine</em> Äquivalenzumformung — beim Übergang von \(x = 3\) zu \(x^2 = 9\) wird die Lösungsmenge unzulässig erweitert (von \(\{3\}\) zu \(\{3;\,-3\}\)). In der Praxis ist deshalb nach dem Quadrieren <em>immer</em> die Probe in der Originalgleichung Pflicht.</li>
       </ol>
       <p style="font-size:0.85rem;color:var(--tinte-2);font-style:italic;margin-top:8px">Merke: Quadrieren ist <em>keine</em> Äquivalenzumformung. Nach jedem Quadrieren <em>immer</em> alle Kandidaten in die <strong>Originalgleichung</strong> einsetzen — Scheinlösungen aussortieren.</p>
     </div>
@@ -876,21 +877,14 @@ MathJax = {
     <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungen: von der Textaufgabe zur Gleichung">
       <span class="cl-folge">2</span>
       <span class="cl-titel">Gleichungen: von der Textaufgabe zur Gleichung</span>
-      <span class="cl-zeit">0:55</span>
+      <span class="cl-zeit">0:57</span>
     </button>
   </div>
   <div class="clip cl-tr" data-clip="../clips/g2-1-ti30x-num-solv-sachaufgabe.html" data-titel="Gleichungen verstehen: vom Ansatz direkt zur Lösung" data-modus="gross">
     <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungen verstehen: vom Ansatz direkt zur Lösung">
       <span class="cl-folge">3</span>
       <span class="cl-titel">Gleichungen verstehen: vom Ansatz direkt zur Lösung</span>
-      <span class="cl-zeit">1:32</span>
-    </button>
-  </div>
-  <div class="clip cl-r3" data-clip="../clips/g3-1-definitions-und-wertemenge.html" data-titel="Funktionen: Definitionsmenge und Wertemenge" data-modus="gross">
-    <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Funktionen: Definitionsmenge und Wertemenge">
-      <span class="cl-folge">2</span>
-      <span class="cl-titel">Funktionen: Definitionsmenge und Wertemenge</span>
-      <span class="cl-zeit">0:54</span>
+      <span class="cl-zeit">1:33</span>
     </button>
   </div>
 </div>
@@ -950,11 +944,11 @@ MathJax = {
 <h3 id="clip-g2-1-aequivalenzumformungen" class="clip-h">Gleichungen: was die Lösungsmenge erhält</h3>
 <ol>
 <li><span class="tk-zeit">0:00</span><span>Beim Lösen einer Gleichung formt man um. Erlaubt ist dabei nur, was die Lösungsmenge unverändert lässt — solche Schritte heissen Äquivalenzumformungen.</span></li>
-<li><span class="tk-zeit">0:09</span><span>Erlaubt ist: auf beiden Seiten dasselbe addieren oder subtrahieren, und mit derselben Zahl ungleich null malnehmen oder teilen. Alle drei lassen sich rückgängig machen — daran erkennt man sie.</span></li>
+<li><span class="tk-zeit">0:09</span><span>Erlaubt ist: auf beiden Seiten dasselbe addieren oder subtrahieren, und mit derselben Zahl ungleich null malnehmen oder teilen. Alle vier lassen sich rückgängig machen — daran erkennt man sie.</span></li>
 <li><span class="tk-zeit">0:21</span><span>Und jetzt die drei, die es nicht sind. Erstens: mal null. Aus x gleich eins wird null gleich null — plötzlich stimmt es für jede Zahl. Die Lösungsmenge ist gewachsen.</span></li>
 <li><span class="tk-zeit">0:31</span><span>Zweitens: quadrieren. Aus x gleich zwei wird x Quadrat gleich vier — und das hat auch minus zwei als Lösung. Es sind Lösungen dazugekommen, die vorher keine waren.</span></li>
-<li><span class="tk-zeit">0:42</span><span>Drittens: durch einen Term mit x teilen. Aus x Quadrat gleich x wird nach Division durch x die Gleichung x gleich eins — die Lösung null ist verschwunden.</span></li>
-<li><span class="tk-zeit">0:52</span><span>Zum Mitnehmen: Erlaubt ist, was umkehrbar ist. Wo das nicht gilt — quadrieren, mit einem Term multiplizieren oder durch ihn teilen —, gehört eine Probe dazu.</span></li>
+<li><span class="tk-zeit">0:41</span><span>Drittens: durch einen Term mit x teilen. Aus x Quadrat gleich x wird nach Division durch x die Gleichung x gleich eins — die Lösung null ist verschwunden.</span></li>
+<li><span class="tk-zeit">0:51</span><span>Zum Mitnehmen: Erlaubt ist, was umkehrbar ist. Wo das nicht gilt — quadrieren, mit einem Term multiplizieren oder durch ihn teilen —, gehört eine Probe dazu.</span></li>
 </ol>
 <h3 id="clip-g2-1-textaufgabe-in-gleichung" class="clip-h">Gleichungen: von der Textaufgabe zur Gleichung</h3>
 <ol>
@@ -963,26 +957,17 @@ MathJax = {
 <li><span class="tk-zeit">0:18</span><span>Dann Satz für Satz übersetzen. In zehn Jahren sind beide zehn Jahre älter: x plus zehn und drei x plus zehn. Und dann soll der Vater doppelt so alt sein.</span></li>
 <li><span class="tk-zeit">0:28</span><span>Jetzt die gewöhnliche Rechnung: ausmultiplizieren, sortieren. Es bleibt x gleich zehn.</span></li>
 <li><span class="tk-zeit">0:36</span><span>Und der Schritt, der am häufigsten fehlt: die Antwort im Text. Der Sohn ist zehn, der Vater dreissig. Probe: in zehn Jahren zwanzig und vierzig — vierzig ist doppelt zwanzig.</span></li>
-<li><span class="tk-zeit">0:47</span><span>Zum Mitnehmen: benennen, übersetzen, lösen, antworten. Und die Probe macht man am Text, nicht an der Gleichung.</span></li>
+<li><span class="tk-zeit">0:47</span><span>Zum Mitnehmen: benennen, übersetzen, lösen, antworten. Die Probe macht man an der Gleichung, und am Text prüft man, ob die Antwort passt.</span></li>
 </ol>
 <h3 id="clip-g2-1-ti30x-num-solv-sachaufgabe" class="clip-h">Gleichungen verstehen: vom Ansatz direkt zur Lösung</h3>
 <ol>
-<li><span class="tk-zeit">0:00</span><span>In einer Sachaufgabe steckt die eigentliche Arbeit im Ansatz: Die eine Menge gibt genau so viel Wärme ab, wie die andere aufnimmt. Das ist in zwei Zeilen hingeschrieben. Es nach der Mischtemperatur aufzulösen dauert länger als das Aufstellen.</span></li>
-<li><span class="tk-zeit">0:13</span><span>Ein einfacher Fall zuerst: drei Kilogramm Wasser mit fünfzehn Grad, zwei Kilogramm Wasser mit achtzig Grad. Links steht, was das kalte Wasser aufnimmt, rechts, was das warme abgibt. Weil beides Wasser ist, kürzt sich die Wärmekapazität heraus.</span></li>
-<li><span class="tk-zeit">0:29</span><span>Zweit-Taste, num-solv. Der Rechner will die Gleichung in zwei Hälften: links die linke Seite, rechts die rechte. Genau so, wie sie dasteht — nichts wird vorher umgeformt.</span></li>
-<li><span class="tk-zeit">0:40</span><span>Jetzt fragt der Rechner nach einem Startwert — und hier hilft die Physik. Eine Mischtemperatur kann nur zwischen den beiden Anfangstemperaturen liegen, also zwischen fünfzehn und achtzig Grad. Tippst du vierzig, findet der Löser einundvierzig Grad.</span></li>
-<li><span class="tk-zeit">0:54</span><span>Und jetzt der Fall, für den sich der Weg wirklich lohnt: ein halbes Kilogramm Wasser mit fünfzehn Grad, ein halbes Kilogramm Aluminium mit zweihundert Grad. Jetzt kürzt sich nichts mehr, die beiden Wärmekapazitäten bleiben stehen. Der Ansatz ist derselbe, die Eingabe auch — Startwert hundert, Ergebnis siebenundvierzig Komma sechs Grad.</span></li>
-<li><span class="tk-zeit">1:14</span><span>Zwei Dinge nimmt dir der Rechner nicht ab. Den Ansatz musst du selber aufstellen — er weiss nichts von Wärme. Und den Bereich, in dem die Lösung liegen kann, musst du selber kennen. Genau dafür ist die Sachaufgabe da.</span></li>
-<li><span class="tk-zeit">1:26</span><span>Was gleich ist, schreibst du hin. Auflösen darf der Rechner.</span></li>
-</ol>
-<h3 id="clip-g3-1-definitions-und-wertemenge" class="clip-h">Funktionen: Definitionsmenge und Wertemenge</h3>
-<ol>
-<li><span class="tk-zeit">0:00</span><span>Zwei Mengen gehören zu jeder Funktion: die eine sagt, was hinein darf, die andere, was herauskommt.</span></li>
-<li><span class="tk-zeit">0:08</span><span>Die Definitionsmenge ist die Menge aller x, die man einsetzen darf. Meistens sind das alle reellen Zahlen — ausser dort, wo etwas verboten ist.</span></li>
-<li><span class="tk-zeit">0:16</span><span>Beispiel: eins durch x minus zwei. Der Nenner darf nicht null werden, also ist zwei verboten. D ist R ohne die Zwei.</span></li>
-<li><span class="tk-zeit">0:26</span><span>Bei einer Wurzel muss stehen bleiben, was darunter steht: Wurzel aus x minus drei verlangt x grösser gleich drei.</span></li>
-<li><span class="tk-zeit">0:35</span><span>Die Wertemenge liest man anders ab — nicht am Term, sondern am Verlauf. Bei x Quadrat kommt nie etwas Negatives heraus, also ist W das Intervall von null bis unendlich.</span></li>
-<li><span class="tk-zeit">0:46</span><span>Zum Mitnehmen: D ist der Vorrat, W ist die Ausbeute. D findet man über die Verbote, W über den Verlauf.</span></li>
+<li><span class="tk-zeit">0:00</span><span>In einer Sachaufgabe steckt die eigentliche Arbeit im Ansatz: Die eine Menge gibt genau so viel Wärme ab, wie die andere aufnimmt. Das ist in zwei Zeilen hingeschrieben. Auflösen kannst du von Hand — der Rechner löst dieselbe Gleichung direkt und kontrolliert so deine Rechnung.</span></li>
+<li><span class="tk-zeit">0:15</span><span>Ein einfacher Fall zuerst: drei Kilogramm Wasser mit fünfzehn Grad, zwei Kilogramm Wasser mit achtzig Grad. Links steht, was das kalte Wasser aufnimmt, rechts, was das warme abgibt. Weil beides Wasser ist, kürzt sich die Wärmekapazität heraus.</span></li>
+<li><span class="tk-zeit">0:30</span><span>Zweit-Taste, num-solv. Der Rechner will die Gleichung in zwei Hälften: links die linke Seite, rechts die rechte. Genau so, wie sie dasteht — nichts wird vorher umgeformt.</span></li>
+<li><span class="tk-zeit">0:41</span><span>Jetzt fragt der Rechner nach einem Startwert — und hier hilft die Physik. Eine Mischtemperatur kann nur zwischen den beiden Anfangstemperaturen liegen, also zwischen fünfzehn und achtzig Grad. Tippst du vierzig, findet der Löser einundvierzig Grad.</span></li>
+<li><span class="tk-zeit">0:55</span><span>Und jetzt der Fall, für den sich der Weg wirklich lohnt: ein halbes Kilogramm Wasser mit fünfzehn Grad, ein halbes Kilogramm Aluminium mit zweihundert Grad. Jetzt kürzt sich nichts mehr, die beiden Wärmekapazitäten bleiben stehen. Der Ansatz ist derselbe, die Eingabe auch — Startwert hundert, Ergebnis siebenundvierzig Komma sechs Grad.</span></li>
+<li><span class="tk-zeit">1:15</span><span>Zwei Dinge nimmt dir der Rechner nicht ab. Den Ansatz musst du selber aufstellen — er weiss nichts von Wärme. Und den Bereich, in dem die Lösung liegen kann, musst du selber kennen. Genau dafür ist die Sachaufgabe da.</span></li>
+<li><span class="tk-zeit">1:27</span><span>Was gleich ist, schreibst du hin. Auflösen darf der Rechner.</span></li>
 </ol>
 </details>
 <!-- CLIPS:ENDE -->
@@ -1290,7 +1275,7 @@ const typen = [
     merkmal: String.raw`\(x\) kommt nur in der ersten Potenz vor — kein \(x^2\), nicht im Nenner, nicht unter der Wurzel.`,
     method: String.raw`Lösungsmethode: Äquivalenzumformungen — \(x\) auf einer Seite isolieren.`, info: 'Behandelt in: Teilgebiet 2.2' },
   { label: 'quadratisch',
-    form: String.raw`\(a \cdot \textcolor{#b85c00}{x^2} + b \cdot x + c = 0\)`,
+    form: String.raw`\(a \cdot \textcolor{#b85c00}{x^2} + b \cdot x + c = 0\;(a \neq 0)\)`,
     bsp:  String.raw`\(\textcolor{#b85c00}{x^2} - 5 \cdot x + 6 = 0\)`,
     merkmal: String.raw`\(x\) kommt quadriert vor — \(x^2\) ist die höchste Potenz.`,
     method: 'Lösungsmethode: Mitternachtsformel, p-q-Formel oder Faktorisieren.', info: 'Behandelt in: Teilgebiet 2.2' },
@@ -1340,7 +1325,7 @@ function updatePR() {
   const rs = 2 * x + 8;
   const ok = Math.abs(ls - rs) < 0.01;
 
-  document.getElementById('pr-1t').textContent = `5·${xDispMul} − 7 = 2·${xDispMul} + 8`;
+  document.getElementById('pr-1t').textContent = `5·${xDispMul} − 7 ≟ 2·${xDispMul} + 8`;
   document.getElementById('pr-2t').textContent = `${fm(5 * x)} − 7 = ${fm(ls)}`;
   document.getElementById('pr-3t').textContent = `${fm(2 * x)} + 8 = ${fm(rs)}`;
   document.getElementById('pr-4t').textContent = `${fm(ls)} = ${fm(rs)}  →  ${ok ? 'wahr ✓' : 'falsch ✗'}`;

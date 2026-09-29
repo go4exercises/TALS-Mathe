@@ -174,8 +174,8 @@ SEITEN = {
    themen=['Quadratische Gleichung', 'Lösungsformel', 'Diskriminante', 'Satz von Vieta', 'Quadratisches Ergänzen', 'Biquadratische Gleichung', 'Quadratische Ungleichung'],
    tg='2.2 Lineare und quadratische Gleichungen'),
  'grundlagen/g2-3-lineare-gleichungssysteme.html': dict(
-   beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetzen, Gleichsetzen, Addition und Gauss, Substitution, die drei Lösungsfälle mit Parameter und ihre grafische Deutung.',
-   themen=['Lineares Gleichungssystem', 'Einsetzungsverfahren', 'Additionsverfahren', 'Gauss-Verfahren', 'Lösungsfälle', 'Parameter'],
+   beschreibung='Lineare Gleichungssysteme mit zwei und drei Variablen: Einsetz-, Gleichsetz- und Additionsverfahren, Substitution, die drei Lösungsfälle mit Parameter und ihre grafische Deutung.',
+   themen=['Lineares Gleichungssystem', 'Einsetzverfahren', 'Gleichsetzverfahren', 'Additionsverfahren', 'Lösungsfälle', 'Parameter'],
    tg='2.3 Lineare Gleichungssysteme'),
  'grundlagen/g2-modellieren.html': dict(
    beschreibung='Textaufgaben modellieren: Unbekannte deklarieren, Mengen- und Wertbilanz aufstellen — für Zahlenrätsel, Misch-, Verteil- und Zinsaufgaben, mit Ansatz-Trainer.',
