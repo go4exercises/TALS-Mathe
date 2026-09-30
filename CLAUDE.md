@@ -78,9 +78,11 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `HOWTO-clips.md`, «Bild einer Animation».
   **Rechner-Clips** (`werkzeug: true`, 22 Stück auf 14 Seiten) sind ein eigener Strang:
   keine eigene Reihe, sondern letzter Clip der Reihe, deren Stoff sie bedienen. **Jede
-  Angabe zum TI-30X Pro MathPrint gehört im Handbuch nachgeschlagen** — Link und
-  Extraktionsrezept in `HOWTO-clips.md` («Rechneranzeige»). Was dort nicht steht, kommt
-  nicht in einen Clip, sondern nach `TODO-ti30x-am-geraet.md`.
+  Angabe zum TI-30X Pro MathPrint gehört nachgeschlagen**: zuerst in der TI-Online-Hilfe
+  (Bildschirmfotos, Kapitel zu Lösern, Matrizen, Vektoren), dann im PDF-Handbuch — Links
+  und Rezept in `HOWTO-clips.md` («Rechneranzeige»). Was in beiden nicht steht, kommt
+  nicht in einen Clip, sondern nach `TODO-ti30x-am-geraet.md` (seit 30.09.2026 gelöscht,
+  alle Fragen geklärt; bei der nächsten offenen Frage neu anlegen).
 - `schriften.css` + `schriften/` — lokal ausgelieferte Schriften (Fontsource 5.3.0,
   OFL). `vendor/mathjax/` — MathJax 3.2.2 (Apache 2.0). **Keine Seite lädt etwas von
   einem fremden Host**; Details und Fallstricke in STYLEGUIDE §5.3.1. Umgestellt wird

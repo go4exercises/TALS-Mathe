@@ -288,11 +288,11 @@ Seit dem 30.09.2026 ausserdem belegt (Online-Hilfe, siehe unten, mit Bildschirmf
 `num-solv` mit seinen fünf Schirmen (`□=□` · «EDIT VARIABLE IF NEEDED» · «SOLVE FOR:» ·
 «SOLVE ON [LOWER,UPPER]:» mit `LOWER=-1E99`, `UPPER=1E99` · Ergebnis mit `LEFT-RIGHT=0`),
 `poly-solv` (`POLY SOLVER`, `1:ax²+bx+c=0`, Koeffizienten einzeln, `x1=`/`x2=` je ein
-Schirm, komplexe Lösungen mit `i`, Scheitelform), `sys-solv` (`SYSTEM SOLVER`,
+Schirm, exakt mit Bruch oder Wurzel wie \(2 \pm \sqrt{5}\), komplexe Lösungen mit `i` auch im Modus REAL, Scheitelform), `sys-solv` (`SYSTEM SOLVER`,
 `1:2x2 Linear EQs`, Maske `(2)x+(3)y= 12`, Zeichen mit `+`/`−` gewählt, Ergebnisse in
 `x`, `y`, `z` abgelegt, `INFINITE SOLUTIONS`), das Konstanten-Menü (`1:c Speed Light`,
 `2:g GravityAccel`, `3↓h Planck Const`; UNITS `m/s`, `m/s²`, `J s`), Matrizen `[A]`–`[C]`
-und Vektoren `[u]`–`[w]` bis 3×3. Einzelheiten in `TODO-ti30x-am-geraet.md`.
+und Vektoren `[u]`–`[w]` bis 3×3. Wurzelform und `i` im Modus REAL hat der Auftraggeber am 30.09.2026 am Gerät bestätigt; die Einzelheiten stehen in der Git-Geschichte von `TODO-ti30x-am-geraet.md` (Commit d8022c3).
 **Kopfzeilen** wie «EDIT VARIABLE IF NEEDED» stehen am Gerät in kleiner, inverser Schrift
 und passen nicht in die 16 Zeichen des Nachbaus — weglassen, nicht kürzen.
 
@@ -338,10 +338,10 @@ schwarzer Balken samt alter Tastenkappe hervor. Der Prüfer erkennt deckungsglei
 Kästen als Stapel und schweigt dazu; sichtbar wird es erst im Bild. Also: alle `zeilen`-
 Listen eines Stapels auf dieselbe Länge bringen, notfalls mit einer leeren Zeile `""`.
 
-**Was beide Quellen nicht hergeben, steht in `TODO-ti30x-am-geraet.md`** — seit dem
-30.09.2026 nur noch zwei Punkte zu `poly-solv` (Wurzelform der Lösungen; komplexe
-Lösungen auch im Modus REAL?). Wer einen davon am Gerät klärt, trägt ihn dort ein und
-ergänzt die Liste oben.
+**Was beide Quellen nicht hergeben, kommt nach `TODO-ti30x-am-geraet.md`** — die Datei
+ist seit dem 30.09.2026 gelöscht, weil alle Fragen geklärt sind, und wird bei der
+nächsten offenen Gerätefrage neu angelegt. Wer eine Frage klärt, trägt die Antwort
+in die Liste oben ein.
 
 ### Bild einer Animation — `typ: "bild"` und `"animation"`
 
