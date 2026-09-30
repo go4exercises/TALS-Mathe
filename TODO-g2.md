@@ -1,6 +1,6 @@
 # TODO — Prüfung Lerngebiet G2 (Stand 29.09.2026)
 
-**Abgearbeitet am 29.09.2026.** Legende: `[x]` erledigt · `[–]` bewusst nicht geändert (Grund dahinter) · `[ ]` offen. 19 Clips sind neu vertont, alle Clips neu gebaut, die Laufzeiten in den Leitprogrammen und in `leitprogramme.html` nachgeführt.
+**Abgearbeitet am 29.09.2026.** Legende: `[x]` erledigt · `[–]` bewusst nicht geändert (Grund dahinter) · `[ ]` offen (keine mehr). 19 Clips sind neu vertont, alle Clips neu gebaut, die Laufzeiten in den Leitprogrammen und in `leitprogramme.html` nachgeführt.
 
 Geprüft auf fachliche und didaktische Richtigkeit:
 
@@ -49,7 +49,7 @@ Zeilennummern gelten für den Stand vom 29.09.2026 (Commit 4bce695).
 - [x] **Z. 1012**. «D > 0: Scheitel unterhalb …» gilt nur für \(a>0\) (\(y_S=-D/(4a)\)). Ergänzen.
 - [x] **Z. 1292–1398**. A7 ist als «Vertiefung» markiert, danach folgen A8–A10 als normale Aufgaben. Reihenfolge oder Nummerierung ordnen (Master-Schema: Vertiefung am Ende).
 - [x] **Z. 1306**. A7 multipliziert über Kreuz, ohne vorher \(\mathbb{D}=\mathbb{R}\setminus\{0,\,1\}\) anzugeben. Widerspricht dem eigenen Verfahren «Definitionsmenge zuerst» (661, 1419).
-- [ ] **Z. 1520–1533, 1703–1711, 1760–1769**. Der Clip «Quadratische Gleichungssysteme» behandelt Stoff ohne Abschnitt, Aufgabe oder Lernziel auf der Seite. Entweder den Stoff ergänzen oder den Clip zu g2-3 bzw. an eine passendere Stelle. → **Offen, Entscheid: Der Clip bleibt vorerst auf g2-2b. Das Leitprogramm Gleichungssysteme verweist in Kapitel 4 darauf; g2-3 behandelt nur lineare Systeme.**
+- [–] **Z. 1520–1533, 1703–1711, 1760–1769**. Der Clip «Quadratische Gleichungssysteme» behandelt Stoff ohne Abschnitt, Aufgabe oder Lernziel auf der Seite. Entweder den Stoff ergänzen oder den Clip zu g2-3 bzw. an eine passendere Stelle. → **Entscheid Auftraggeber 30.09.2026: Der Clip bleibt vorerst auf g2-2b. Das Leitprogramm Gleichungssysteme verweist in Kapitel 4 darauf; g2-3 behandelt nur lineare Systeme.**
 
 ### g2-2b Clips
 
@@ -128,7 +128,7 @@ Zeilennummern gelten für den Stand vom 29.09.2026 (Commit 4bce695).
 - [x] Z. 657, clips/g2-3-anim-bueschel.json Szene 3: «parallel» schliesst dort «identisch» ein, anderswo nicht.
 - [x] clips/g2-3-anzahl-loesungen.json:228: «Immer beide nach y auflösen» versagt bei senkrechten Geraden (Beispiel 2, k = 0).
 - [x] Z. 1096–1100: «Massenbilanz» gegen «Mengenbilanz», obwohl beide Masse bilanzieren; «Gesamtmasse» und «Zinnmasse».
-- [ ] Z. 1110–1198: Substitution und Parameter (Lernziele 4 und 5) nur in A8/A9 nach der Vertiefung A7. In A1–A6 fehlt Gleichsetzen ganz. → **Reihenfolge erledigt (Vertiefung jetzt A9). Gleichsetzen nur als Kontrollauftrag in A2, eine eigene Aufgabe fehlt weiterhin.**
+- [x] Z. 1110–1198: Substitution und Parameter (Lernziele 4 und 5) nur in A8/A9 nach der Vertiefung A7. In A1–A6 fehlt Gleichsetzen ganz. → **Reihenfolge erledigt (Vertiefung jetzt A9). Am 30.09.2026 neue A3 «Gleichsetzverfahren anwenden» (𝕃 = {(3 | 4)}), die folgenden Aufgaben sind jetzt A4–A10 (Vertiefung A10). Der Kontrollauftrag in A2 ist wieder entfernt.**
 - [x] Z. 8 (SEO): Die Beschreibung nennt Gauss als Inhalt; in `scripts/build-seo.py` (Tabelle `SEITEN`) ändern.
 - [x] Die Begriffe schwanken: Einsetzmethode, Einsetzungsverfahren, Einsetzverfahren und Einsetzung (Z. 474, 498, 908, Clips).
 - [x] clips/g2-3-anim-verfahren.json:40: «Drei Verfahren», gezeigt werden nur zwei.
