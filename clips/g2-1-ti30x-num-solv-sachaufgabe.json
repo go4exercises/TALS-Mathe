@@ -17,7 +17,7 @@
  ],
  "dateiname": "g2-1-ti30x-num-solv-sachaufgabe",
  "titel": "Gleichungen verstehen: vom Ansatz direkt zur Lösung",
- "kurzbeschrieb": "Bei einer Wärmebilanz ist der Ansatz in zwei Zeilen hingeschrieben, das Auflösen dagegen mühsam — der numerische Löser übernimmt es, wenn der Startwert aus der Sache kommt.",
+ "kurzbeschrieb": "Bei einer Wärmebilanz ist der Ansatz die Arbeit — der numerische Löser kontrolliert die Handrechnung, wenn Startwert und Grenzen aus der Sache kommen.",
  "schlagworte": [
   "TI-30X Pro",
   "num-solv",
@@ -29,7 +29,7 @@
  "schiene": [
   "Ansatz hinschreiben|~was gleich ist~",
   "Beide Seiten eintippen",
-  "Startwert einklemmen|~zwischen die Temperaturen~",
+  "Startwert und Grenzen|~aus der Sache~",
   "Ergebnis prüfen"
  ],
  "szenen": [
@@ -59,7 +59,7 @@
      "farbe": "blau"
     }
    ],
-   "dauer": 15.16
+   "dauer": 14.71
   },
   {
    "name": "Ansatz",
@@ -95,36 +95,22 @@
    "layout": "schiene",
    "schritt": 2,
    "oben": 180,
-   "sprecher": "Zweit-Taste, num-solv. Der Rechner will die Gleichung in zwei Hälften: links die linke Seite, rechts die rechte. Genau so, wie sie dasteht — nichts wird vorher umgeformt.",
+   "sprecher": "Zweit-Taste, num-solv. Der Rechner zeigt ein leeres Kästchen, ein Gleichheitszeichen und noch ein leeres Kästchen. Links tippst du die linke Seite, mit der Pfeiltaste geht es nach rechts, dann kommt die rechte Seite. Genau so, wie die Gleichung dasteht — nichts wird vorher umgeformt.",
    "elemente": [
     {
      "typ": "rechner",
      "breite": 780,
      "zeilen": [
-      "LEFT=",
-      "RIGHT="
-     ],
-     "tasten": [
-      "2nd"
-     ],
-     "y": 180,
-     "ein": 0.6,
-     "anim": "fade",
-     "abstand": 0
-    },
-    {
-     "typ": "rechner",
-     "breite": 780,
-     "zeilen": [
-      "LEFT=",
-      "RIGHT="
+      "□=□",
+      "Enter equation",
+      "to solve."
      ],
      "tasten": [
       "2nd",
       "num-solv"
      ],
      "y": 180,
-     "ein": 1.6,
+     "ein": 0.8,
      "anim": "fade",
      "abstand": 0
     },
@@ -132,53 +118,35 @@
      "typ": "rechner",
      "breite": 780,
      "zeilen": [
-      "LEFT=3(x-15)",
-      "RIGHT="
+      "3(x-15)=2(80-x)",
+      "",
+      ""
      ],
      "tasten": [
-      "2nd",
-      "num-solv",
-      "3(x-15)"
-     ],
-     "y": 180,
-     "ein": 2.6,
-     "anim": "fade",
-     "abstand": 0
-    },
-    {
-     "typ": "rechner",
-     "breite": 780,
-     "zeilen": [
-      "LEFT=3(x-15)",
-      "RIGHT=2(80-x)"
-     ],
-     "tasten": [
-      "2nd",
-      "num-solv",
       "3(x-15)",
-      "enter",
+      "▶",
       "2(80-x)"
      ],
      "y": 180,
-     "ein": 3.6,
+     "ein": 7.0,
      "anim": "fade",
-     "abstand": 350
+     "abstand": 385
     },
     {
      "typ": "notiz",
-     "text": "Der Löser kennt nur @x@. Die gesuchte Mischtemperatur heisst am Gerät also @x@, nicht @T@.",
-     "groesse": 48,
+     "text": "Ein grosses @T@ kennt der Rechner nicht. Wählbar sind @x, y, z, t, a, b, c, d@ — die Mischtemperatur heisst hier @x@.",
+     "groesse": 46,
      "farbe": "blau"
     }
    ],
-   "dauer": 11.2
+   "dauer": 16.59
   },
   {
-   "name": "Startwert",
+   "name": "Startwert und Grenzen",
    "layout": "schiene",
    "schritt": 3,
    "oben": 175,
-   "sprecher": "Jetzt fragt der Rechner nach einem Startwert — und hier hilft die Physik. Eine Mischtemperatur kann nur zwischen den beiden Anfangstemperaturen liegen, also zwischen fünfzehn und achtzig Grad. Tippst du vierzig, findet der Löser einundvierzig Grad.",
+   "sprecher": "Dann fragt der Rechner nach dem Wert von x — das ist der Startwert —, danach, nach welcher Variablen er lösen soll, und zuletzt nach dem Bereich. Hier hilft die Physik: Eine Mischtemperatur liegt zwischen den beiden Anfangstemperaturen. Also Startwert vierzig, untere Grenze fünfzehn, obere achtzig. Der Löser findet einundvierzig Grad. Und LEFT minus RIGHT gleich null heisst: Beide Seiten sind gleich.",
    "elemente": [
     {
      "typ": "formel",
@@ -192,33 +160,81 @@
      "breite": 800,
      "zeilen": [
       "x=40",
-      "x=41",
-      "LEFT-RIGHT=0"
+      ""
      ],
      "tasten": [
+      "enter",
       "40",
       "enter"
      ],
      "y": 350,
-     "ein": 2.2,
+     "ein": 1.0,
      "anim": "fade",
-     "abstand": 400
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 800,
+     "zeilen": [
+      "SOLVE FOR: x",
+      ""
+     ],
+     "tasten": [
+      "enter"
+     ],
+     "y": 350,
+     "ein": 6.0,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 800,
+     "zeilen": [
+      "LOWER=15",
+      "UPPER=80"
+     ],
+     "tasten": [
+      "15",
+      "enter",
+      "80",
+      "enter"
+     ],
+     "y": 350,
+     "ein": 13.0,
+     "anim": "fade",
+     "abstand": 0
+    },
+    {
+     "typ": "rechner",
+     "breite": 800,
+     "zeilen": [
+      "x=41",
+      "LEFT-RIGHT=0"
+     ],
+     "tasten": [
+      "SOLVE"
+     ],
+     "y": 350,
+     "ein": 19.0,
+     "anim": "fade",
+     "abstand": 330
     },
     {
      "typ": "notiz",
-     "text": "Findet der Löser nichts, meldet er «No sign change found. Try new guess.» — er braucht einen Vorzeichenwechsel. Zwischen den beiden Anfangstemperaturen ist der garantiert.",
+     "text": "Ohne eigene Eingabe gelten die Grenzen @-10^{99}@ und @10^{99}@. Die Schranke aus der Sache ist besser als jeder geratene Startwert.",
      "groesse": 46,
-     "farbe": "rot"
+     "farbe": "gruen"
     }
    ],
-   "dauer": 13.95
+   "dauer": 23.0
   },
   {
    "name": "Zwei Stoffe",
    "layout": "schiene",
    "schritt": 4,
    "oben": 178,
-   "sprecher": "Und jetzt der Fall, für den sich der Weg wirklich lohnt: ein halbes Kilogramm Wasser mit fünfzehn Grad, ein halbes Kilogramm Aluminium mit zweihundert Grad. Jetzt kürzt sich nichts mehr, die beiden Wärmekapazitäten bleiben stehen. Der Ansatz ist derselbe, die Eingabe auch — Startwert hundert, Ergebnis siebenundvierzig Komma sechs Grad.",
+   "sprecher": "Und jetzt der Fall, für den sich die Kontrolle wirklich lohnt: ein halbes Kilogramm Wasser mit fünfzehn Grad, ein halbes Kilogramm Aluminium mit zweihundert Grad. Jetzt kürzt sich nichts mehr, die beiden Wärmekapazitäten bleiben stehen. Der Ansatz ist derselbe, die Eingabe auch — Grenzen fünfzehn und zweihundert, Ergebnis siebenundvierzig Komma sechs Grad.",
    "elemente": [
     {
      "typ": "formel",
@@ -230,12 +246,13 @@
      "typ": "rechner",
      "breite": 820,
      "zeilen": [
-      "LEFT=2.1(x-15)",
-      "RIGHT=.45(200-x)",
-      "x=47.6471"
+      "x=47.64705882",
+      "LEFT-RIGHT=0"
      ],
      "tasten": [
-      "100",
+      "15",
+      "enter",
+      "200",
       "enter"
      ],
      "y": 340,
@@ -250,13 +267,13 @@
      "farbe": "gruen"
     }
    ],
-   "dauer": 19.29
+   "dauer": 20.51
   },
   {
    "name": "Was bleibt",
    "layout": "zentriert",
    "oben": 180,
-   "sprecher": "Zwei Dinge nimmt dir der Rechner nicht ab. Den Ansatz musst du selber aufstellen — er weiss nichts von Wärme. Und den Bereich, in dem die Lösung liegen kann, musst du selber kennen. Genau dafür ist die Sachaufgabe da.",
+   "sprecher": "Zwei Dinge nimmt dir der Rechner nicht ab. Den Ansatz musst du selber aufstellen — er weiss nichts von Wärme. Und den Bereich, in dem die Lösung liegen kann, musst du selber kennen — der Rechner fragt danach, aber er weiss ihn nicht. Genau dafür ist die Sachaufgabe da.",
    "elemente": [
     {
      "typ": "aussage",
@@ -269,7 +286,7 @@
      "groesse": 46,
      "punkte": [
       "aufstellen kann nur, wer die Sache versteht",
-      "der Startwert kommt aus dem Sachzusammenhang",
+      "Startwert und Grenzen kommen aus dem Sachzusammenhang",
       "am Schluss die Probe: beide Seiten gleich?"
      ],
      "abstand": 290
@@ -281,7 +298,7 @@
      "farbe": "rot"
     }
    ],
-   "dauer": 11.95
+   "dauer": 14.38
   },
   {
    "name": "Merkbild",

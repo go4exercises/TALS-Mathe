@@ -1,133 +1,116 @@
-# TODO — vier Fragen, die nur das Gerät beantwortet
+# TODO — was nur das Gerät beantwortet
 
-**Stand: 13. September 2026 — offen.**
+**Stand: 30. September 2026 — drei von vier Fragen geklärt, von Frage 4 ist ein Rest offen.**
 
-Die 22 Rechner-Clips stützen sich ausnahmslos auf das deutsche Handbuch von Texas
-Instruments (68 Seiten, Link und Rezept in `HOWTO-clips.md`, Abschnitt
-«Rechneranzeige»). Vier Dinge stehen dort **nicht**, und darum kommen sie in keinem
-Clip vor — nach der Regel aus `CLAUDE.md`: nichts erfinden, was am Gerät nachgeschlagen
+Die Rechner-Clips stützen sich auf das deutsche Handbuch von Texas Instruments (PDF,
+68 Seiten) und seit dem 30.09.2026 zusätzlich auf die **Online-Hilfe von TI** zum selben
+Gerät. Die Online-Hilfe hat Kapitel, die im PDF fehlen: Gleichungslöser, Matrizen,
+Vektoren, Konstanten — **mit Bildschirmfotos der Anzeige**. Link und Rezept in
+`HOWTO-clips.md`, Abschnitt «Rechneranzeige». Was auch dort nicht steht, kommt in keinen
+Clip — nach der Regel aus `CLAUDE.md`: nichts erfinden, was am Gerät nachgeschlagen
 gehört.
 
-Alle vier lassen sich mit dem TI-30X Pro MathPrint in der Hand in wenigen Minuten
-klären. Wer das tut, trägt die Antwort hier ein und baut den jeweils genannten Clip
-nach — jede Antwort ist genau einen Schritt von einem besseren Clip entfernt.
+---
+
+## 1. Wie sieht die Maske des numerischen Lösers aus? — geklärt am 30.09.2026
+
+**Antwort (Online-Hilfe, Kapitel «Gleichungslöser», mit Bildschirmfotos).** `num-solv`
+führt durch fünf Schirme:
+
+1. `□=□` und «Enter equation to solve.» — die Gleichung wird als Ganzes eingetippt,
+   links die linke Seite, mit `▶` in das rechte Kästchen.
+2. «EDIT VARIABLE IF NEEDED» — für jede Variable der Gleichung ein Wert (`x=…`); der
+   Wert der gesuchten Variablen ist der Startwert.
+3. «SELECT SOLUTION VAR» — «SOLVE FOR: x a b»: Der Löser löst nach jeder der
+   vorkommenden Variablen auf, nicht nur nach `x`.
+4. «ENTER SOLUTION BOUNDS» — «SOLVE ON [LOWER,UPPER]:», darunter `LOWER=-1E99` und
+   `UPPER=1E99` als Vorgabe, unten die Schaltfläche `SOLVE`.
+5. «NUMERIC SOLVER SOLUTION» — z. B. `b=6.208333333`, darunter `LEFT-RIGHT=0`; die
+   Umschalttaste macht daraus `b=149/24`.
+
+**Umgesetzt.** `clips/g2-1-ti30x-num-solv-sachaufgabe.json` zeigt diese Abfolge und setzt
+die Grenzen 15 und 80 aus der Sache; die erfundene Anzeige `LEFT=`/`RIGHT=` ist weg, ebenso
+die falsche Aussage «Der Löser kennt nur x». `clips/s2-2c-ti30x-num-solv.json` zeigt die
+Eingabe jetzt ebenfalls als `□=□`.
 
 ---
 
-## 1. Wie sieht die Maske des numerischen Lösers aus, wenn er nach Grenzen fragt?
+## 2. Was steht im Konstanten-Menü neben dem Zeichen? — geklärt am 30.09.2026
 
-**Was belegt ist.** Die Fehlerliste des Handbuchs nennt zwei Meldungen, die es nur
-geben kann, wenn `num-solv` eine untere und eine obere Grenze kennt:
+**Antwort (Online-Hilfe, Kapitel «Konstanten», zwei Bildschirmfotos).** Die
+Kurzbezeichnungen sind **englisch**, die Einheiten stehen mit Schrägstrich und
+hochgestellter Potenz:
 
-> **Bad Guess** — «Dieser Fehler wird angezeigt, wenn der Variableneintrag für die
-> Variable ‚solve for‘ im numerischen Gleichungslöser **ausserhalb der eingegebenen
-> unteren und oberen Grenze** liegt.»
->
-> **Bounds: Enter LOWER<UPPER** — «… wenn der Eintrag für die untere Grenze grösser ist
-> als der für die obere bei: Normalcdf-Verteilungen · **begrenzte Lösungsfindung des
-> numerischen Gleichungslösers**.»
+| NAMES | UNITS |
+|---|---|
+| `1:c Speed Light` | `1:c m/s` |
+| `2:g GravityAccel` | `2:g m/s²` |
+| `3↓h Planck Const` | `3↓h J s` |
 
-**Was fehlt.** Das Handbuch hat **kein Kapitel zum Gleichungslöser** — weder zu
-`num-solv` noch zu `poly-solv` oder `sys-solv`. Wie die Eingabemaske aussieht, in
-welcher Zeile die Grenzen stehen, wie sie heissen und wie man dorthin kommt, steht
-nirgends. Die bestehenden Clips zeigen darum nur `LEFT=`, `RIGHT=` und den Startwert.
+Kopfzeile `NAMES UNITS`, das aktive Untermenü invers. Die Werte der Tabelle im
+PDF-Handbuch gelten unverändert.
 
-**Nachsehen:** `2nd` → `num-solv`, eine Gleichung eintippen, mit den Pfeiltasten nach
-unten blättern. Notieren: Zeilenbeschriftungen, Reihenfolge, Standardwerte.
-
-**Was danach möglich wird.** `clips/g2-1-ti30x-num-solv-sachaufgabe.json` sagt heute
-«Startwert zwischen die beiden Anfangstemperaturen». Mit der Maske liesse sich daraus
-das Stärkere machen: die **Schranke setzen** statt den Startwert raten — genau das, was
-die Physik der Aufgabe ohnehin hergibt. Eine zusätzliche Szene, kein neuer Clip.
+**Umgesetzt.** Die Menü-Szene in `clips/g1-4-ti30x-konstanten.json` zeigt beide
+Ansichten.
 
 ---
 
-## 2. Was steht im Konstanten-Menü neben dem Zeichen?
+## 3. Kann dieses Modell Matrix und Vektor? — geklärt am 30.09.2026: **Ja**
 
-**Was belegt ist.** Es gibt zwanzig Konstanten in zwei Untermenüs:
+**Antwort (Online-Hilfe, Kapitel «Matrizen» und «Vektoren», mit Bildschirmfotos).**
 
-> «Beide Untermenüs enthalten die gleichen 20 physikalischen Konstanten. … Das Menü
-> **NAMES** zeigt neben dem Zeichen für die Konstante auch eine **Kurzbezeichnung** an.
-> Das Menü **UNITS** enthält die gleichen Konstanten wie NAMES, es wird jedoch nur die
-> **Masseinheit** angezeigt.»
+- **Matrizen** `[A]`, `[B]`, `[C]`, Zeilen und Spalten je 1 bis 3, dazu `[Ans]`, `[I2]`,
+  `[I3]`. Menüs NAMES · MATH · EDIT; MATH enthält `Determinant`, `ᵀ Transpose`,
+  `Inverse`, `ref`, `rref`. Erlaubt sind Matrix ± Matrix, Matrix × Matrix,
+  Skalar × Matrix, Matrix × Vektor. Editor «MATRIX [A]», «ROWS: 1 2 3», «COLUMNS: 1 2 3».
+- **Vektoren** `[u]`, `[v]`, `[w]`, Dimension 1 bis 3. MATH enthält `DotProduct`
+  (`DotP(`), `CrossProduct` (`CrossP(`), `norm` (Betrag). Editor «VECTOR [u]»,
+  «DIMENSION: 1 2 3».
+- Fehlermeldungen dazu: «Invalid Dimension», «Singular matrix».
 
-Die Werte selbst stehen als Tabelle im Handbuch (NIST 2018) und sind in
-`clips/g1-4-ti30x-konstanten.json` verwendet.
-
-**Was fehlt.** Der **Wortlaut** der Kurzbezeichnungen (deutsch oder englisch?) und die
-**Schreibweise der Einheiten** auf der Anzeige — `m/s`, `m/s^2`, `J*s`, `Js`? Der Clip
-zeigt darum nur die Zeichen `c`, `g`, `h` untereinander, was auf dem Bildschirm etwas
-leer wirkt.
-
-**Nachsehen:** `2nd` → `constants`, mit `◀`/`▶` zwischen NAMES und UNITS wechseln, mit
-`▲`/`▼` durch die Liste blättern. Drei bis vier Einträge abschreiben, genau wie sie
-dastehen.
-
-**Was danach möglich wird.** Die Menü-Szene in `clips/g1-4-ti30x-konstanten.json`
-bekommt echten Inhalt statt drei einzelner Buchstaben — und die Aussage «in UNITS steht
-die Einheit» wird sichtbar statt behauptet.
+**Was danach möglich wird.** Rechner-Clips für `s4-3a`–`s4-3d` (Skalarprodukt, Betrag,
+Kreuzprodukt, Determinante bei Gleichungssystemen). Das ist ein eigener Auftrag, keine
+Gerätefrage mehr.
 
 ---
 
-## 3. Kann dieses Modell Matrix und Vektor?
+## 4. Was zeigen `poly-solv` und `sys-solv`, wenn es nicht glatt aufgeht? — zum grössten Teil geklärt am 30.09.2026
 
-**Was belegt ist — und was daran unklar ist.** Beide Wörter kommen im PDF **nur in
-Sammelaufzählungen** vor, nie als eigenes Thema:
+**`sys-solv`: geklärt.** Die Online-Hilfe sagt: «x, y, and z results are automatically
+stored in the x, y, and z variables» und «The system solver solves for a unique solution
+or infinite solutions in closed form, or it indicates no solution.» Ihr Bildschirmfoto
+zum 3×3-System mit unendlich vielen Lösungen zeigt `INFINITE SOLUTIONS`, danach
+`x=4-2y-3z`, `y=y`, `z=z`. Menü: `SYSTEM SOLVER` · `1:2x2 Linear EQs` ·
+`2:3x3 Linear Sys`; Ergebnisse unter dem Kopf «LINEAR SYSTEM SOLUTION», je eines pro
+Schirm. Eine Anleitung aus Schleswig-Holstein (lernnetz.de, «Taschenrechner im MSA»)
+zeigt die 2×2-Maske als `(2)x+(3)y= 12` mit dem Hinweis «Press [+] or [-]»: Das Zeichen
+zwischen x- und y-Glied wird mit `+` oder `−` gewählt.
+Den Wortlaut der Meldung «keine Lösung» belegt nur das Handbuch des baugleichen
+Lösers im TI-36X Pro: «No Solution Found». Er steht darum in keinem Clip.
 
-- in der Rangfolge-Fussnote: «Editoren wie z. B. in Matrix, Vektor und Gleichungslöser
-  ignorieren diese Operatoren …»
-- unter `clear`: «Verlässt schnell die folgenden Anwendungen: … Vektor, Matrix,
-  numerischer Gleichungslöser …»
-- in der Fehlerliste: «**Singular matrix** — wenn versucht wird, den Kehrwert einer
-  singulären Matrix zu berechnen.»
+**`poly-solv`: fast geklärt.** Menü `POLY SOLVER` · `1:ax²+bx+c=0` ·
+`2:ax³+bx²+cx+d=0`; die Koeffizienten einzeln (`a=`, `b=`, `c=`), negative Zahlen
+hochgestellt (`b=⁻2`); danach `x1=…` und `x2=…` je auf einem Schirm, auf Wunsch
+Speichern und die Scheitelform `a(x-h)²+k=0`. **Komplexe Lösungen zeigt er an**:
+Beispiel der Online-Hilfe \(x^2 - 2x + 2 = 0\) ergibt `x1=1+i`, `x2=1-i`; ein Forumsfall
+(mathelounge.de) zeigt für \(x^2 + x + 1 = 0\) `x1=-1/2+0.8660254038i`. Die Umschalttaste
+«toggle[s] the number format of the solutions».
 
-**Was dagegen spricht.** Es gibt **kein Kapitel** dazu, und im Inhaltsverzeichnis
-fehlen beide. Das kann heissen: Der Text ist Vorlagentext, den TI über mehrere Modelle
-hinweg verwendet — oder das Kapitel steht nur im Online-eGuide.
+**Noch offen — am Gerät nachsehen:**
+1. Zeigt `poly-solv` bei \(x^2 - 4x - 1 = 0\) die Wurzelform \(2 \pm \sqrt{5}\) oder nur
+   \(4.236\ldots\)? (Die Online-Hilfe zeigt nur ganzzahlige und komplexe Beispiele; das
+   Forumsbeispiel mit \(0.866\ldots\) statt \(\sqrt{3}/2\) spricht eher für Dezimalzahlen.)
+2. Erscheinen die komplexen Lösungen auch im Modus REAL, oder nur in a+bi? Beide Quellen
+   nennen den Modus nicht. Die Clips sagen darum nur: Bei \(D < 0\) zeigt der Löser
+   Lösungen mit \(i\).
 
-**Nachsehen:** Tastatur und `2nd`-Belegungen nach `matrix` / `vector` absuchen. Falls
-vorhanden: welche Formate (2×2, 3×3?), welche Operationen (Determinante, Inverse,
-Skalar- und Kreuzprodukt?).
-
-**Was danach möglich wird.** Bei `s4-3a`–`s4-3d` (Vektorbegriff, Skalarprodukt,
-Geraden, Ebenen) stehen heute **null Rechner-Clips**, obwohl es die einzigen Seiten
-sind, auf denen sich Matrix- und Vektorrechnung am Gerät lohnen würde. Bei einem Ja
-wären das drei bis vier weitere Clips; bei einem Nein ist die Frage endgültig erledigt
-und gehört hier als «geklärt» vermerkt — das ist genauso wertvoll.
-
----
-
-## 4. Was zeigen `poly-solv` und `sys-solv`, wenn es nicht glatt aufgeht?
-
-**Warum die Frage aufkam (13.09.2026).** Bei der Fachprüfung der Leitprogramme standen
-sich Seite und Clip gegenüber — und keine der beiden Aussagen ist belegt, weil das
-Handbuch kein Kapitel zu den Gleichungslösern hat (siehe Frage 1):
-
-| | Leitprogramm sagte | Clip sagt |
-|---|---|---|
-| `poly-solv` bei \(x^2 - 4x - 1 = 0\) | nur Dezimalwerte \(4.236\ldots\), keine Wurzelform | «kann quadratische Gleichungen **exakt** lösen» (`clips/g2-2b-ti30x-poly-solv.json`, Szene «Titel») |
-| `sys-solv` bei parallelen / deckungsgleichen Geraden | «Fehler oder Sonderausgabe», Fall nicht unterschieden | meldet «unendlich viele Lösungen in geschlossener Form» bzw. «keine» (`clips/g2-3-ti30x-sys-solv.json`, Szene «Wenn es klemmt») |
-
-Das Handbuch deutet bei `poly-solv` eher auf die Clip-Seite — die Umschalttaste wechselt
-allgemein zwischen «exaktem Wurzelterm oder Näherungswert», und «Editoren wie z. B. in
-Matrix, Vektor und Gleichungslöser» zeigen umgewandelte Werte an —, beweist es aber nicht.
-
-**Was schon geändert ist.** Die beiden Leitprogramme (`quadratische-gleichungen.html`,
-Warnkasten «Wofür er nicht gut ist» und Selbsttest 3b; `gleichungssysteme.html`,
-Warnkasten «Was der Rechner nicht sagt») sind **geräteneutral** umformuliert. Seit der
-G2-Prüfung vom 29.09.2026 (`TODO-g2.md`) sind es auch die zwei Clips: `poly-solv` sagt
-«löst … direkt» statt «exakt», `sys-solv` sagt nur noch, dass bei nicht eindeutiger Lösung
-kein einzelnes Zahlenpaar erscheint. Gestrichen ist dort ausserdem die unbelegte Angabe,
-`sys-solv` lege die Ergebnisse in den Variablen `x` und `y` ab — auch das beim Nachsehen
-prüfen (nach dem Lösen `x` abrufen).
-
-**Nachsehen:** `2nd` → `poly-solv`, quadratisch, `1`, `-4`, `-1` eingeben; notieren, ob
-\(2 \pm \sqrt{5}\) oder \(4.236\ldots\) erscheint, und was die Umschalttaste daraus macht.
-Dann `sys-solv` 2×2 mit \(x + y = 4,\ 2x + 2y = 10\) und mit \(x + y = 4,\ 2x + 2y = 8\);
-den Wortlaut beider Meldungen abschreiben.
-
-**Was danach möglich wird.** Mit dem Wortlaut vom Gerät bekommen Warnkästen und Clips
-(Szenen «Titel» bzw. «Wenn es klemmt») die konkrete Anzeige zurück.
+**Umgesetzt.** `clips/g2-3-ti30x-sys-solv.json` nennt wieder die Ablage in `x`/`y` und
+die Meldung `INFINITE SOLUTIONS`, Menü und Maske nach den Fotos.
+`clips/g2-2b-ti30x-poly-solv.json` zeigt Menü und Einzelabfrage nach den Fotos und sagt,
+dass bei \(D < 0\) Lösungen mit \(i\) erscheinen. `clips/g2-2b-ti30x-real-oder-i.json`
+schränkt «ein i heisst falscher Modus» aufs Wurzelziehen ein. Die Warnkästen in
+`leitprogramme/gleichungssysteme.html` und `leitprogramme/quadratische-gleichungen.html`
+sind nachgeführt.
 
 ---
 
@@ -138,5 +121,5 @@ den Wortlaut beider Meldungen abschreiben.
    `build-clip-ton.py`, dann `build-clips.py`, dann `build-clips-einbau.py`.
 3. Die belegte Angabe in `HOWTO-clips.md` unter «Was am TI-30X Pro MathPrint belegt
    ist» ergänzen, damit sie beim nächsten Clip nicht wieder nachgeschlagen wird.
-4. Sind alle vier geklärt, wird die Datei gelöscht — der Beleg steht dann in
+4. Ist auch der Rest von Frage 4 geklärt, wird die Datei gelöscht — der Beleg steht dann in
    `HOWTO-clips.md` und in der Git-Geschichte.

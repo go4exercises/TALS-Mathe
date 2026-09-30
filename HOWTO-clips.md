@@ -284,6 +284,18 @@ zu 16 Zeichen, Eingabe oben, Ergebnis rechtsbündig, getrennte Tasten für Subtr
 ein Zeichen, `clear` die Eingabe. Was darüber hinausgeht, gehört nachgeschlagen, bevor
 es in einen Clip kommt.
 
+Seit dem 30.09.2026 ausserdem belegt (Online-Hilfe, siehe unten, mit Bildschirmfotos):
+`num-solv` mit seinen fünf Schirmen (`□=□` · «EDIT VARIABLE IF NEEDED» · «SOLVE FOR:» ·
+«SOLVE ON [LOWER,UPPER]:» mit `LOWER=-1E99`, `UPPER=1E99` · Ergebnis mit `LEFT-RIGHT=0`),
+`poly-solv` (`POLY SOLVER`, `1:ax²+bx+c=0`, Koeffizienten einzeln, `x1=`/`x2=` je ein
+Schirm, komplexe Lösungen mit `i`, Scheitelform), `sys-solv` (`SYSTEM SOLVER`,
+`1:2x2 Linear EQs`, Maske `(2)x+(3)y= 12`, Zeichen mit `+`/`−` gewählt, Ergebnisse in
+`x`, `y`, `z` abgelegt, `INFINITE SOLUTIONS`), das Konstanten-Menü (`1:c Speed Light`,
+`2:g GravityAccel`, `3↓h Planck Const`; UNITS `m/s`, `m/s²`, `J s`), Matrizen `[A]`–`[C]`
+und Vektoren `[u]`–`[w]` bis 3×3. Einzelheiten in `TODO-ti30x-am-geraet.md`.
+**Kopfzeilen** wie «EDIT VARIABLE IF NEEDED» stehen am Gerät in kleiner, inverser Schrift
+und passen nicht in die 16 Zeichen des Nachbaus — weglassen, nicht kürzen.
+
 **Die Quelle, jedes Mal dieselbe.** Das deutsche Handbuch von Texas Instruments,
 68 Seiten:
 
@@ -294,6 +306,21 @@ https://education.ti.com/download/de/ed-tech/4AF74FB5F81C45348BF24C0BFD52ECA7/B5
 `WebFetch` scheitert am Binär-PDF, legt es aber lokal ab; den Text danach mit `pypdf`
 herausziehen und `grep`en — rund 62 kB. Die Extraktion verschluckt die Leerzeichen
 (`TastenmitMehrfachbelegung`), also nach Wortteilen suchen, nicht nach Wortgruppen.
+
+**Die zweite Quelle: die Online-Hilfe von TI.** Sie hat Kapitel, die im PDF fehlen
+(Gleichungslöser, Matrizen, Vektoren), und zu jedem Schritt ein Bildschirmfoto der
+Anzeige (150 × 58 Pixel, PNG):
+
+```
+https://education.ti.com/html/webhelp/30Xpro/de/content/m_mathtools/mt_solvers.HTML
+https://education.ti.com/html/webhelp/30Xpro/de/Data/Toc.js        # Inhaltsverzeichnis
+```
+
+Mit `curl` holen, Tags entfernen, die Bilder aus `../_images/…` nachladen und vergrössert
+ansehen (`PIL`, `Image.NEAREST`, Faktor 3). Die Tasten stehen in einer eigenen
+Symbolschrift (`<span class="Keys_TI-30X_Pro">`): `%` ist `2nd`, `<` ist `enter`,
+`!` `"` `#` `$` sind die Pfeile links, rechts, auf, ab, `r` ist die Umschalttaste.
+Die englische Fassung liegt unter `…/30Xpro/en-gb/…`.
 
 **Zeilenlänge vorher zählen.** Sechzehn Zeichen sind sechzehn Zeichen — `"LEFT=3(x-15)"`
 passt, `"RIGHT=.7168(200-x)"` nicht. Der Prüfer meldet das *nicht*: Der SVG-Text läuft
@@ -311,9 +338,9 @@ schwarzer Balken samt alter Tastenkappe hervor. Der Prüfer erkennt deckungsglei
 Kästen als Stapel und schweigt dazu; sichtbar wird es erst im Bild. Also: alle `zeilen`-
 Listen eines Stapels auf dieselbe Länge bringen, notfalls mit einer leeren Zeile `""`.
 
-**Was das Handbuch nicht hergibt, steht in `TODO-ti30x-am-geraet.md`** — drei Fragen,
-die nur das Gerät beantwortet (Grenzen-Maske des numerischen Lösers, Beschriftungen im
-Konstanten-Menü, Matrix und Vektor). Wer eine davon klärt, trägt sie dort ein und
+**Was beide Quellen nicht hergeben, steht in `TODO-ti30x-am-geraet.md`** — seit dem
+30.09.2026 nur noch zwei Punkte zu `poly-solv` (Wurzelform der Lösungen; komplexe
+Lösungen auch im Modus REAL?). Wer einen davon am Gerät klärt, trägt ihn dort ein und
 ergänzt die Liste oben.
 
 ### Bild einer Animation — `typ: "bild"` und `"animation"`
