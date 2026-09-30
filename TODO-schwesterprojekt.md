@@ -16,4 +16,42 @@ in `scripts/abgleich.py`.
 
 ## Offen
 
-Zurzeit keine.
+### 30.09.2026 · Zwei Styleguide-Regeln übernehmen (Entscheid Auftraggeber 30.09.2026)
+
+**Was.** Zwei Regeln, die Mathe am 29.09.2026 eingeführt hat, gelten auch in Physik.
+Nachgezählt im Physik-Repo (Stand `5f27e6f`, nur gelesen).
+
+**1. Aufzählende Mengen mit Strichpunkt.** Mathe STYLEGUIDE §2.11, Absatz «Aufzählende
+Mengen»: \(\{3;\,4\}\) statt \(\{3,\,4\}\), in JS-Text `{ 3; 4 }`; Komma nur in Prosa,
+Koordinaten weiter `(3 | 4)`.
+- *Wo in Physik:* `STYLEGUIDE.md` §2 (Physikalische Notation) hat heute **keinen**
+  Abschnitt zu Mengen oder Intervallen — die Regel kommt als neuer Unterabschnitt dazu,
+  sinnvollerweise nach §2.6 (Schreibweise von Werten).
+- *Inhalt anfassen: nichts.* Aufzählende Mengen gibt es in Physik **keine**: 0 Treffer
+  in `themen/*.html` (18 Seiten), `leitprogramme/*.html` (11), `clips/*.json` und den
+  übrigen HTML-Seiten (`grep -P '\\\{\s*-?[0-9a-z.]+\s*[,;]'`). Die Regel wirkt nur für
+  künftige Inhalte.
+
+**2. Vertiefungsaufgaben stehen am Ende der Aufgabenreihe.** Mathe STYLEGUIDE §5.4 und
+Checkliste §8: reguläre Aufgaben vor der Vertiefung; kommt eine dazu, rückt die
+Vertiefung nach hinten, mit allen IDs, `toggleL`-Argumenten und Prüffunktionen.
+- *Wo in Physik:* Die Regel setzt eine Vertiefungsaufgabe voraus, und die kennt Physik
+  heute nicht: `STYLEGUIDE.md` §4.3 sagt «**Genau** 6 Aufgaben (A1–A6), nicht mehr»,
+  §9 «Genau 6 Aufgaben», `style.css` hat **keine** Klasse `aufg-vertiefung` (0 Treffer),
+  keine Themenseite nutzt sie.
+- *Was dafür nötig ist:* (a) §4.3 und §9 um «optional A7 Vertiefung, am Ende der Reihe»
+  ergänzen, wie Mathe §8; (b) die Klasse `.aufg-vertiefung` aus Mathe `style.css`
+  (Z. 467–486, Orange-Familie, Pille hinter `aufg-titel-text`) übernehmen — sie nutzt
+  `--orange`, `--orange-hell`, `--orange-rand`; prüfen, ob Physik diese Tokens hat.
+- *Sonderfälle, die dabei auffallen:* Vier Themenseiten haben schon heute mehr als sechs
+  Aufgaben, ohne Vertiefungs-Markierung: `p0-1-vorwissen-mathematik` (A1–A12),
+  `p0-2-vorwissen-physik` (A1–A12), `p6-2-elektrizitaet` (A1–A16) und
+  `p6-2-prototyp-layout` (A1–A16). In der Physik-Sitzung entscheiden: als Vertiefung
+  markieren und ans Ende ordnen, oder die §4.3-Ausnahme für diese Seiten festhalten.
+- *Verwandt, schon vorhanden:* Die Physik-Leitprogramme kennen «Kern zuerst, Vertiefung
+  danach» (`.task-id .kern` / `.vert`, z. B. `leitprogramm-vorwissen.html` Z. 428–431;
+  in allen zehn Leitprogrammen vergeben, je 9–17 `kern` und 7–9 `vert`,
+  `uebungstest-waermelehre.html` ohne). Dieselbe Idee, andere Klassen — nicht vermischen.
+
+**Warum.** Gleiche Notation und gleicher Aufgabenaufbau in beiden Lehrmitteln; Lernende
+wechseln zwischen den Fächern.
