@@ -28,12 +28,12 @@ für beide).
 
 Drei Ebenen, jede begrenzt die nächste:
 
-1. **Der RLP bestimmt, *was* gelernt wird.** Quelle: `../Math-GL.pdf` (Grundlagenfach,
+1. **Der RLP bestimmt, *was* gelernt wird — und wie die Begriffe heissen.** Quelle: `../Math-GL.pdf` (Grundlagenfach,
    RLP-BM, Abschnitt 6.4.4.1, Gruppe 1) und `../Math-SP.pdf` (Schwerpunktfach, 7.4.4).
    Ein Leitprogramm deckt die **fachlichen Kompetenzen genau eines Teilgebiets** ab
    (z. B. GF 3.3) oder einer klar benannten Teilmenge davon — und **nichts darüber
    hinaus**.
-2. **Die Themenseite bestimmt, *wie* es heisst und aussieht:** Begriffe, Notation,
+2. **Die Themenseite bestimmt, *wie* es aussieht:** Notation,
    Vorzeichenkonventionen, Achsen, Konstanten, Merksätze, Beispiele. Das Leitprogramm
    erfindet nichts Eigenes.
 3. **Das Leitprogramm bestimmt nur den Weg:** Reihenfolge, Umfang, Tests.
@@ -303,7 +303,7 @@ Immer nach `STYLEGUIDE.md`. Beim Vergleich schiefgegangen:
 | Parametrisierte Menge | Doppelpunkt: `\{(x \mid 2x-3) : x \in \mathbb{R}\}` |
 | Intervalle | `]a;\, b[` |
 | Zahlen | Dezimalpunkt; Brüche, wo die Themenseite Brüche verwendet |
-| Fachbegriffe | der Begriff der Themenseite **und**, wo er abweicht, der des RLP in Klammern (z. B. «allgemeine Form (Grundform)») |
+| Fachbegriffe | **der Begriff aus den RLP-Kompetenzen** (z. B. Grund-, Scheitel-, Produktform); weicht die Themenseite oder ein Clip ab, deren Namen einmal in Klammern nennen (z. B. «Produktform (Linearfaktorform)»). Die Synonyme stehen auf der Themenseite beim Begriff |
 | Methodenwahl | andere Hauptmethode als die Themenseite → beide nennen, Wahl in einem Satz begründen |
 
 Sprache: Du-Form, kurze Sätze, Schweizer Rechtschreibung (ss), kein «wir».
