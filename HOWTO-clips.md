@@ -997,19 +997,19 @@ Cache. Wer ihn direkt aufruft, lädt sie — gemessen 2190 statt 531 kB, 191 sta
 
 Mechanik und Inhalt stehen. Was bleibt, ist Feinarbeit und der Übertrag:
 
-- **Der Bestand ist beisammen.** Stand 28.09.2026: **426 Drehbücher**, alle vertont —
-  391 in der Bibliothek (361:32 min, 56 Reihen) und 35 unverlinkte Prüfungsclips mit
+- **Der Bestand ist beisammen.** Stand 30.09.2026: **426 Drehbücher**, alle vertont —
+  391 in der Bibliothek (362:25 min, 56 Reihen) und 35 unverlinkte Prüfungsclips mit
   `"probe": true` (28:07 min). **46 der 47 Themenseiten tragen Clips** und den Marker;
   ohne Clip ist nur `g4-0` (Praxisbeispiel, keine Animation). Seit den Animationsclips
-  ist das Schwerpunktfach nicht mehr dünn besetzt: 260 Zuordnungen auf den 23
+  ist das Schwerpunktfach nicht mehr dünn besetzt: 259 Zuordnungen auf den 23
   GF-Seiten (Median 11 je Seite), 142 auf den 23 SF-Seiten (Median 6).
 
 - **Der Rechner ist ein eigener Strang.** 22 der 391 Clips tragen `werkzeug: true`
-  (31:12 min) und liegen auf 14 Seiten — von `g1-2` (Brüche, ggT und kgV) bis `s4-2a`
+  (31:38 min) und liegen auf 14 Seiten — von `g1-2` (Brüche, ggT und kgV) bis `s4-2a`
   (Formeln mehrfach auswerten). Sie bilden keine eigene Reihe, sondern hängen als
-  letzter Clip an der Reihe, deren Stoff sie bedienen. Die Belegquelle und die drei
-  offenen Gerätefragen stehen oben unter «Rechneranzeige» und in
-  `TODO-ti30x-am-geraet.md`.
+  letzter Clip an der Reihe, deren Stoff sie bedienen. Die Belegquellen stehen oben
+  unter «Rechneranzeige». Offene Gerätefragen gibt es seit dem 30.09.2026 keine mehr:
+  drei hat die TI-Online-Hilfe beantwortet, zwei der Auftraggeber am Gerät.
 
 - **Ein Clip kann auf mehreren Seiten stehen — auch fachübergreifend.** `lektion` ist
   eine Liste; ein zweiter Eintrag kostet eine Zeile und keine Produktion. Am 07.09.2026

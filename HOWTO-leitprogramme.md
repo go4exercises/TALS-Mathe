@@ -242,6 +242,21 @@ Phantom-Klassen, die in Wahrheit im Kopf der Datei stehen.
 
 Beim ersten Übertrag ist jeder dieser drei erst im Bild aufgefallen.
 
+**Was die Fachprüfung vom 29.09.2026 gefunden hat** (`TODO-g2.md`) und beim Übertrag
+gleich mitzuprüfen ist:
+
+- **Selbsttests nicht aus den Beispielen abschreiben.** Eine Aufgabe, die wörtlich ein
+  Beispiel aus dem Kapitel ist, prüft Wiedererkennen, nicht Verstehen. Eigene Zahlen,
+  gleiches Verfahren, gleiche Punktzahl — und jede neue Lösung mit `python3` nachrechnen.
+- **Jedes Kapitelziel wird geprüft.** Was in `<p class="ziel">` steht, braucht ein
+  Beispiel im Text und eine Aufgabe im Selbst- oder Gesamttest.
+- **Nichts testen, was nicht eingeführt ist.** Ein Clip allein reicht nicht als
+  Einführung: Wer ihn überspringt, muss das Verfahren trotzdem im Text finden.
+- **Je Kapitel ein Verweis auf die Themenseite**, als Absatz «Ausführlich: …» vor dem
+  Selbsttest, mit Anker auf den passenden Abschnitt oder Clip. Querverweise auf ein
+  anderes Leitprogramm werden verlinkt.
+- **Rechnerangaben nur mit Beleg** (`HOWTO-clips.md`, «Rechneranzeige»).
+
 ---
 
 ## Nicht tun

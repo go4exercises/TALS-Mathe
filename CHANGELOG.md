@@ -4,6 +4,57 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 30. September 2026 · TI-30X: alle Gerätefragen geklärt
+
+### Geändert
+
+Die **Online-Hilfe von Texas Instruments** zum TI-30X Pro MathPrint hat Kapitel, die im
+PDF-Handbuch fehlen — Gleichungslöser, Matrizen, Vektoren, Konstanten —, samt
+Bildschirmfotos. Damit waren drei der vier Fragen aus `TODO-ti30x-am-geraet.md` geklärt;
+den Rest (Wurzelform bei `poly-solv`, `i` auch im Modus REAL) hat der Auftraggeber am
+Gerät bestätigt. Die Datei ist gelöscht, die Belege stehen in `HOWTO-clips.md`.
+
+- **`num-solv`** (`g2-1`, `s2-2c`): echte Schirmfolge (`□=□`, Variablen, «SOLVE FOR»,
+  Grenzen `LOWER`/`UPPER`) statt der erfundenen Anzeige `LEFT=`/`RIGHT=`; die falsche
+  Aussage «Der Löser kennt nur x» ist entfernt. Der g2-1-Clip setzt die Grenzen 15 und 80
+  aus der Sachaufgabe.
+- **`sys-solv`** (`g2-3`): Ablage der Ergebnisse in `x`/`y` und die Meldung
+  `INFINITE SOLUTIONS` wieder im Clip; Menü und Eingabemaske nach den Fotos.
+- **`poly-solv`** (`g2-2b`): löst exakt, auch mit Wurzeln; bei \(D < 0\) Lösungen mit
+  \(i\), auch im Modus REAL. Der Clip «real oder i» nennt den Polynomlöser als Ausnahme
+  von «ein i heisst falscher Modus».
+- **Konstanten-Menü** (`g1-4`): echte Zeilen «1:c Speed Light» bzw. «1:c m/s».
+- **Matrix und Vektor:** Das Gerät kann beides (`[A]`–`[C]`, `[u]`–`[w]`, bis 3×3).
+  Rechner-Clips für `s4-3a`–`s4-3d` wären damit möglich; noch nicht gebaut.
+- Leitprogramme Quadratische Gleichungen und Gleichungssysteme: Rechner-Kästen und
+  Selbsttest 3b nachgeführt. Sechs Clips geändert, vier neu vertont.
+
+## [Unveröffentlicht] — 29./30. September 2026 · Lerngebiet G2 fachlich und didaktisch geprüft
+
+### Geändert
+
+Fachprüfung der fünf Themenseiten `g2-1`, `g2-2a`, `g2-2b`, `g2-3`, `g2-modellieren`, ihrer
+57 Clips, der Leitprogramme Quadratische Gleichungen und Gleichungssysteme sowie von Teil C
+der Übungsprüfung 1. Rechenfehler gab es keine; die Befunde und ihre Erledigung stehen in
+`TODO-g2.md`. Das Wichtigste:
+
+- **Zwei fachlich falsche Fehlerkästen korrigiert.** `g2-1`: Multiplizieren mit einem Term
+  erzeugt Scheinlösungen, verlieren kann man Lösungen nur beim Dividieren. `g2-3`: Der
+  gefundene Wert darf in jede Gleichung eingesetzt werden; der Fehler ist, den *Ausdruck*
+  in dieselbe Gleichung zurückzusetzen.
+- **`g2-2a`:** Lösungsfälle an \(a \cdot x = c\) festgemacht, Parameterform
+  \(a(k) \cdot x = c(k)\) statt eines doppelt belegten \(b\).
+- **`g2-2b`:** A1 verrät die Lösung nicht mehr; Parabel und Scheitel eingeführt;
+  Live-Anzeigen mit «≈» bei gerundeten Lösungen.
+- **Vertiefung ans Ende:** auf `g2-2b` und `g2-3` jeweils als A10; `g2-3` hat eine neue A3
+  «Gleichsetzverfahren anwenden».
+- **Leitprogramme:** Selbsttests mit eigenen Zahlen statt der Textbeispiele, Beispiele zu
+  grafischem Lösen, Bruchgleichungen und Parametern ergänzt, Links auf die Themenseiten.
+- **Clips:** 47 Drehbücher korrigiert (u. a. Vieta-Konvention, Kriterium für parallele
+  Geraden, \(\mathbb{L}\) statt \(L\)), 19 neu vertont.
+- **Neue Regeln im STYLEGUIDE:** Elemente aufzählender Mengen mit Strichpunkt (§2.11),
+  Vertiefungsaufgaben am Ende der Reihe (§5.4).
+
 ## [Unveröffentlicht] — 21. September 2026 · Leere Menge als { }
 
 ### Geändert

@@ -322,6 +322,14 @@ Die leere Menge wird **als leere Mengenklammer** geschrieben, nie als durchgestr
 Umgestellt am 21.09.2026 in allen Themenseiten, Leitprogrammen, Glossar, Formelsammlung,
 Druckseiten, Clip-Drehbüchern, Anki-Decks und im Notationstrainer.
 
+**Aufzählende Mengen (verbindlich seit 29.09.2026).** Die Elemente einer aufzählenden Menge
+trennt ein **Strichpunkt**, wie bei den Intervallen (§2.7) und den Live-Anzeigen (§2.1):
+`\(\mathbb{L} = \{3;\,4\}\)`, in JS-Text `𝕃 = { 3; 4 }` — nicht `\{3,\,4\}`. Das Komma
+bleibt der Aufzählung in Prosa vorbehalten. Koordinaten schreiben weiter `(3 | 4)`.
+Umgestellt am 29.09.2026 im Lerngebiet G2 (Themenseiten, Clips, Leitprogramme
+Quadratische Gleichungen und Gleichungssysteme); **die übrigen Seiten sind noch nicht
+umgestellt** — wer eine anfasst, zieht sie mit (`grep -n '\\{[^}]*,' <seite>`).
+
 ## 2.12 Eine Rechnung, eine Zeile (verbindlich seit 27.09.2026)
 
 Übernommen aus TALS Physik (Entscheid Auftraggeber 26.09.2026). Symbol, Formel,
@@ -599,6 +607,8 @@ Zwei Stellen, an denen Aufgabennummern in Themenseiten erscheinen. Beide nutzen 
 ```
 
 Die `aufg-nr-tag`-Pille ist orange (auf der orangen `block-aufg`-Hintergrundfarbe), monospace, kompakt. Der `aufg-titel-text`-Span enthält den eigentlichen Aufgabentitel; ein optionales `<span class="aufg-vertiefung">`-Pille darf am Ende stehen.
+
+**Vertiefung steht am Ende der Reihe (verbindlich seit 29.09.2026).** Aufgaben mit der Pille «Vertiefung» kommen nach allen übrigen. Kommt später eine reguläre Aufgabe dazu, wird sie *vor* der Vertiefung eingereiht und die Vertiefung umnummeriert — mit allen IDs, `toggleL`-Argumenten und Prüffunktionen (so am 29./30.09.2026 auf `g2-2b` und `g2-3`: Vertiefung jetzt A10).
 
 Verboten: das alte Muster `🟠 A1 — Hauptoperation erkennen` mit Spiegelstrich.
 
@@ -1141,8 +1151,8 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
 Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
-`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 28.09.2026: 391 Clips in der
-Bibliothek (361:32 min, davon 223 Animationsclips), dazu 35 unverlinkte Prüfungsclips.
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 30.09.2026: 391 Clips in der
+Bibliothek (362:25 min, davon 223 Animationsclips), dazu 35 unverlinkte Prüfungsclips.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass
@@ -1317,7 +1327,7 @@ Bevor eine Themenseite live geht, prüfe:
 - [ ] Mindestens ein Anwendungsbeispiel im Einstieg
 - [ ] Drei Darstellungen (Gleichung/Tabelle/Graph) verknüpft
 - [ ] Spezialfälle visualisiert
-- [ ] 6 Aufgaben (A1–A6) mit zunehmender Selbstständigkeit; optional eine 7. Vertiefungsaufgabe (A7, Badge „Vertiefung") — der Intro-Text nennt dann „Sieben Aufgaben" bzw. eine neutrale Formulierung
+- [ ] 6 Aufgaben (A1–A6) mit zunehmender Selbstständigkeit; optional eine 7. Vertiefungsaufgabe (A7, Badge „Vertiefung") — der Intro-Text nennt dann „Sieben Aufgaben" bzw. eine neutrale Formulierung. Weitere reguläre Aufgaben stehen **vor** der Vertiefung (§5.4)
 - [ ] Zusammenfassung als kompakte Tabelle
 
 **Notation**
