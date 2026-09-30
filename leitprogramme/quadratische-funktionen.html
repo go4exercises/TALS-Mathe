@@ -406,12 +406,48 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
 .sim .kurve{fill:none;stroke:var(--blau);stroke-width:2.6}
 .sim .scheitel{fill:var(--tinte)}
 .sim .s-text{fill:var(--tinte);font-family:var(--sans);font-size:12px;font-weight:600}
+
+/* ════════ Fassung 2 — «zuerst sehen» (HOWTO-LP.md §4, §8) ════════ */
+.phase{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tinte-2);margin:34px 0 8px;display:flex;align-items:center;gap:8px}
+.phase span{display:inline-grid;place-items:center;width:1.7em;height:1.7em;border-radius:50%;
+  background:var(--papier-2);border:1px solid var(--linie);color:var(--tinte);font-size:.9rem;letter-spacing:0}
+.sim-knoepfe{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:8px 0 2px;
+  font-family:var(--sans);font-size:.8rem;color:var(--tinte-2)}
+.sim-knoepfe button,.formen-live button{font-family:var(--sans);font-size:.8rem;cursor:pointer;
+  background:var(--karte);color:var(--tinte);border:1px solid var(--linie);border-radius:999px;padding:4px 12px}
+.sim-knoepfe button.aktiv{background:var(--gruen-hell);border-color:var(--gruen-rand);color:var(--gruen);font-weight:700}
+.formen-live{display:flex;flex-direction:column;gap:5px}
+.formen-live button{border-radius:7px;display:flex;gap:10px;align-items:baseline;text-align:left;padding:6px 10px;
+  font-family:var(--mono);font-size:.86rem}
+.formen-live .fl-name{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;min-width:8.5em;color:var(--tinte-2)}
+.formen-live button[data-form="g"].aktiv{border-color:var(--blau-rand);background:var(--blau-hell)}
+.formen-live button[data-form="s"].aktiv{border-color:var(--gruen-rand);background:var(--gruen-hell)}
+.formen-live button[data-form="p"].aktiv{border-color:var(--orange-rand);background:var(--orange-hell)}
+.sim.treffer{border-color:var(--gruen-rand);box-shadow:0 0 0 2px var(--gruen-hell)}
+.sim .zielkurve{fill:none;stroke:var(--gruen);stroke-width:3;stroke-dasharray:7 5;opacity:.85}
+.sim .symachse{stroke:var(--tinte-2);stroke-width:1.3;stroke-dasharray:6 5}
+.p-s{fill:var(--gruen)} .p-g{fill:var(--blau)} .p-n{fill:var(--orange)} .p-geist{fill:var(--orange);opacity:.35}
+text.p-text{font-family:var(--sans);font-size:11.5px;font-weight:700}
+.sim .feld-rahmen{fill:none;stroke:var(--linie);stroke-dasharray:4 4}
+.sim .feld{fill:var(--gruen-hell);stroke:var(--gruen);stroke-width:2}
+.mini-reihe{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 6px calc(5.8em + 11px)}
+.beisp .mini-reihe{margin:10px 16px 0}
+svg.mini{width:128px;height:auto;background:var(--karte);border:1px solid var(--linie);border-radius:6px}
+svg.mini.gross{width:190px}
+svg.mini .kurve{fill:none;stroke:var(--blau);stroke-width:2.2}
+svg.mini .gitter{stroke:var(--linie);stroke-width:.5}
+svg.mini .achse{stroke:var(--tinte-2);stroke-width:1}
+svg.mini .skala{font-size:8px}
+svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--tinte)}
+@media(max-width:600px){ .mini-reihe{margin-left:0} svg.mini{width:110px} }
 </style>
 </head>
 <body>
 <div id="nav-root"></div>
 <!--
-  PLANUNG nach HOWTO-LP.md §2 (Probe vom 30.09.2026)
+  PLANUNG nach HOWTO-LP.md §2 (Probe, Fassung 2 vom 30.09.2026: «zuerst sehen»)
 
   RLP-BM 2030, Grundlagenfach, Gruppe 1, Teilgebiet 3.3 Quadratische Funktionen (Math-GL.pdf S. 43):
     K1  den Unterschied zwischen den verschiedenen Darstellungsformen der Funktion (Grund-,
@@ -421,26 +457,28 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
     K3  die Funktionsgleichung einer quadratischen Funktion aufstellen
     K4  Extremwertaufgaben loesen (auch ohne Hilfsmittel)
 
-  Kapitel | Kompetenz | Clips | Erkundung | Beispiel (Quelle) | min
-  0 Vorwissen            | GF 3.1, 2.2, 1.3 | g1-3-binome-erkennen            | –                      | –                         | 10
-  1 Scheitelform lesen   | K2               | quadratische-funktion, verschieben-strecken, scheitelpunktform | eigene SVG (§8b) | (x-2)^2-1 (Clips) | 20
-  2 Drei Formen          | K1, K2           | produktform, allgemeine-form, formen-wechseln, anim-darstellungen | #anim-darstellungen | x^2-4x+3 (Clips) | 20
-  3 Nullstellen, Scheitel| K2               | nullstellen-parabel, scheitelpunkt-bestimmen | #anim-diskriminante | x^2-4x+3 (Clips) | 20
-  4 Aufstellen           | K3               | anim-wurfparabel (kein Themenclip vorhanden!) | #anim-wurfparabel | Wurf S(4|5) (Themenseite) | 25
-  5 Extremwertaufgaben   | K4               | anim-zaun                        | #anim-zaun             | Zaun 40 m (Themenseite)   | 20
-  Gesamttest             | K1–K4            |                                  |                        |                           | 20
-  Summe 135 min = 3 Lektionen · 12 Clips · 9:31 Clipzeit
+  Ablauf je Kapitel: (1) Erfahren an der eingebetteten Simulation, (2) Clip, der dieselbe
+  Bewegung zeigt, (3) Verallgemeinern und Definition, (4) Ueben — auch am Graphen.
 
-  Bewusst weggelassen (Themenseite ja, RLP 3.3 nein bzw. nicht Kern):
-    Notationen anderer Lehrmittel (d,e / h,k / x_S,y_S) · Typen-Katalog (#anim-typen) ·
-    Rechner-Clip Scheiteltabelle (K4 verlangt «ohne Hilfsmittel»; nur als Ausfuehrlich-Link)
+  Kapitel | Kompetenz | Simulation | Clip(s) | min
+  0 Vorwissen            | GF 3.1, 2.2, 1.3 | –                         | g1-3-binome-erkennen                      | 10
+  1 Die Parabel bewegen  | K2     | a, u, v + Normalparabel + Ziele     | g3-3-lp-verschieben                       | 25
+  2 Drei Formen          | K1 K2  | a, u, v + drei Formen live          | g3-3-lp-drei-formen, g3-3-formen-wechseln | 20
+  3 Nullstellen, Scheitel| K2     | b, c + Achse + D                     | g3-3-lp-achse-bleibt, g3-3-scheitelpunkt-bestimmen | 20
+  4 Aufstellen           | K3     | a suchen (Scheitel / Nullstellen)   | g3-3-lp-a-finden                          | 20
+  5 Extremwertaufgaben   | K4     | Zaun: Rechteck + Parabel            | g3-3-lp-mitte                             | 20
+  Gesamttest             | K1–K4  |                                      |                                           | 20
+  Summe 135 min = 3 Lektionen · 8 Clips · 7:10 Clipzeit (5 davon eigene, "probe": true)
+
+  Bewusst weggelassen: Notationen anderer Lehrmittel, Typen-Katalog (#anim-typen),
+  Rechner-Clip Scheiteltabelle (K4 verlangt «ohne Hilfsmittel»; nur als Ausfuehrlich-Link).
 -->
 <header class="kopf">
   <div class="kopf-innen">
     <div>
       <p class="marke">begreifbar.ch · Leitprogramm · Probe</p>
       <h1>Quadratische Funktionen</h1>
-      <p class="unter">Die Parabel lesen, umschreiben, aufstellen — und ihren höchsten Punkt nutzen. Fünf Kapitel mit Clips, Erkundungen und Selbsttests. Angelegt für drei Lektionen.</p>
+      <p class="unter">Zuerst schieben und sehen, dann die Regel. Fünf Kapitel mit Simulationen, Clips und Selbsttests — die Parabel lesen, umformen, aufstellen und ihren höchsten Punkt nutzen. Angelegt für drei Lektionen.</p>
     </div>
     <div class="kopf-rechts">
       <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>
@@ -457,7 +495,7 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
     <p class="lekt">Lektion 1</p>
     <ol>
       <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
-      <li><a href="#k1"><span class="nr">1</span><span>Die Scheitelform lesen</span></a></li>
+      <li><a href="#k1"><span class="nr">1</span><span>Die Parabel bewegen</span></a></li>
       <li><a href="#k2"><span class="nr">2</span><span>Drei Formen, eine Parabel</span></a></li>
     </ol>
     <p class="lekt">Lektion 2</p>
@@ -483,12 +521,11 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
       <details class="anleitung">
         <summary><h2 id="so-arbeitest-du-mit-diesem-leitprogramm">So arbeitest du mit diesem Leitprogramm</h2></summary>
         <ol>
-          <li><b>Clip schauen.</b> Die Kapitel beginnen mit einem Clip von knapp einer Minute. Er zeigt den Gedankengang, der Text darunter macht ihn vollständig.</li>
-          <li><b>Text lesen und mitrechnen.</b> Die Beispiele stehen mit Zwischenschritten da. Rechne sie auf einem Blatt nach.</li>
-          <li><b>Erkunden.</b> Ein 🔍-Kasten schickt dich zu einer Animation auf der Themenseite (neuer Tab) oder hat die Regler gleich dabei. Notiere, was er verlangt — die Frage kommt im Selbsttest wieder.</li>
-          <li><b>Selbsttest lösen — zuerst ohne Lösung.</b> Erst rechnen, dann aufklappen. Wer die Lösung vorher liest, verwechselt Verstehen mit Wiedererkennen.</li>
-          <li><b>Abhaken.</b> Sitzt ein Selbsttest, setzt du das Häkchen im Testkopf. Der Balken im Ablauf zeigt, wo du stehst.</li>
-          <li><b>Gesamttest am Schluss.</b> 24 Punkte in etwa 20 Minuten. Die Teile A und C ohne Taschenrechner, Teil B mit.</li>
+          <li><b>① Erfahren.</b> Jedes Kapitel beginnt mit einer Parabel zum Anfassen. Sag zuerst voraus, was passiert, dann schieb — und notiere, was du siehst.</li>
+          <li><b>② Im Clip.</b> Der Clip zeigt dieselbe Bewegung noch einmal, Schritt für Schritt, und sagt, worauf es ankommt.</li>
+          <li><b>③ Verallgemeinern.</b> Erst jetzt kommt die Regel — sie fasst zusammen, was du schon gesehen hast.</li>
+          <li><b>④ Üben — zuerst ohne Lösung.</b> Erst rechnen oder zeichnen, dann aufklappen. Sitzt ein Selbsttest, setzt du das Häkchen.</li>
+          <li><b>Gesamttest am Schluss.</b> 24 Punkte in etwa 20 Minuten. Teile A und C ohne Taschenrechner, Teil B mit.</li>
         </ol>
       </details>
 
@@ -505,7 +542,7 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
     </div>
 
     <!-- ================= LEKTION 1 ================= -->
-    <div class="band"><span>Lektion 1</span><span class="strich"></span><span>Die Parabel lesen</span></div>
+    <div class="band"><span>Lektion 1</span><span class="strich"></span><span>Die Parabel sehen</span></div>
 
     <section class="kap" id="k0">
       <div class="kap-meta">
@@ -577,88 +614,100 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
       <div class="kap-meta">
         <span class="marker">Kapitel 1</span>
         <span class="abz abz-gf">GF 3.3 · K2</span>
-        <span class="zeit">≈ 20 min</span>
+        <span class="zeit">≈ 25 min</span>
       </div>
-      <h2 id="die-scheitelform-lesen">Die Scheitelform lesen</h2>
-      <p class="ziel">Du liest aus \(f(x) = a(x-u)^2 + v\) den Scheitelpunkt, die Öffnung und die Streckung ab — und beschreibst, wie die Parabel aus der Normalparabel \(y = x^2\) entsteht.</p>
+      <h2 id="die-parabel-bewegen">Die Parabel bewegen</h2>
+      <p class="ziel">Du beschreibst, wie jede Parabel aus der Normalparabel \(y = x^2\) entsteht, und liest aus der Scheitelform Scheitelpunkt, Öffnung und Streckung ab — auch umgekehrt aus dem Graphen die Gleichung.</p>
 
-      <div class="clipkarte" data-clip="clips/g3-3-quadratische-funktion.html" data-titel="Quadratische Funktionen: woran man sie erkennt">
-        <button class="clip-start" type="button">
-          <span class="clip-play" aria-hidden="true">▶</span>
-          <span class="clip-txt">
-            <span class="clip-titel">Quadratische Funktionen: woran man sie erkennt</span>
-            <span class="clip-quelle">Clip · Themenseite 3.3</span>
-          </span>
-          <span class="clip-zeit">0:47</span>
-        </button>
+      <p class="phase"><span>①</span> Erfahren</p>
+      <div class="duo">
+        <div class="erkunden">
+          <div class="titel">🔍 Sag voraus, dann schieb</div>
+          <p>Gestrichelt siehst du die Normalparabel \(y = x^2\). Die Regler verändern drei Zahlen \(a\), \(u\) und \(v\). Bevor du einen Regler bewegst: <b>Sag voraus</b>, was passiert.</p>
+          <ol>
+            <li>Zieh \(v\) auf \(3\), dann auf \(-2\). Was macht die Parabel?</li>
+            <li>Stell \(v\) zurück auf 0 und zieh \(u\) auf \(2\). In welche Richtung wandert sie — und welches Zeichen steht in der Klammer? Hattest du recht?</li>
+            <li>Zieh \(a\) auf \(2\), auf \(0.5\) und auf \(-1\). Was ändert sich — und was bleibt?</li>
+          </ol>
+          <p><b>Treffer!</b> Wenn du die drei Regler verstanden hast: Blende ein Ziel ein und stell die Regler so, dass deine Parabel genau auf der grünen liegt.</p>
+        </div>
+        <!-- Unterschied zur Themenseite (#anim-darstellungen): nur die Scheitelform und ein
+             Zielspiel, keine Umrechnung — die kommt in Kapitel 2. Reglerbereiche, Buchstaben
+             und Farben wie dort; Start bei der Normalparabel wie der Clip danach. -->
+        <figure class="sim" id="sim1">
+          <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+          <svg viewBox="0 0 300 300" role="img" aria-label="Parabel in Scheitelform mit Normalparabel zum Vergleich"></svg>
+          <div class="sl-row">
+            <div class="sl-grp akz-blau"><label for="s1-a"><span class="var">a</span></label><input type="range" id="s1-a" data-p="a" min="-2" max="2" step="0.25" value="1"><span class="sl-val"></span></div>
+            <div class="sl-grp akz-orange"><label for="s1-u"><span class="var">u</span></label><input type="range" id="s1-u" data-p="u" min="-5" max="5" step="0.5" value="0"><span class="sl-val"></span></div>
+            <div class="sl-grp akz-gruen"><label for="s1-v"><span class="var">v</span></label><input type="range" id="s1-v" data-p="v" min="-5" max="5" step="0.5" value="0"><span class="sl-val"></span></div>
+          </div>
+          <div class="sim-knoepfe">
+            <span>Treffer:</span>
+            <button type="button" data-ziel="1,-3,2">Ziel 1</button>
+            <button type="button" data-ziel="-1,1,4">Ziel 2</button>
+            <button type="button" data-ziel="0.5,2,-3">Ziel 3</button>
+            <button type="button" data-ziel="">aus</button>
+          </div>
+          <figcaption data-rolle="text"></figcaption>
+        </figure>
       </div>
 
-      <p>Eine <b>quadratische Funktion</b> hat die Form \(f(x) = ax^2 + bx + c\) mit \(a \neq 0\). Ihr Graph ist eine <b>Parabel</b>: symmetrisch, mit einem tiefsten oder höchsten Punkt, dem <b>Scheitelpunkt</b> \(S\). Das Vorzeichen von \(a\) entscheidet über die Öffnung.</p>
-
-      <div class="clipkarte" data-clip="clips/g3-3-verschieben-strecken.html" data-titel="Quadratische Funktionen: verschieben und strecken">
-        <button class="clip-start" type="button">
-          <span class="clip-play" aria-hidden="true">▶</span>
-          <span class="clip-txt">
-            <span class="clip-titel">Quadratische Funktionen: verschieben und strecken</span>
-            <span class="clip-quelle">Clip · Themenseite 3.3</span>
-          </span>
-          <span class="clip-zeit">0:56</span>
-        </button>
-      </div>
-      <div class="clipkarte" data-clip="clips/g3-3-scheitelpunktform.html" data-titel="Quadratische Funktionen: die Scheitelpunktform">
-        <button class="clip-start" type="button">
-          <span class="clip-play" aria-hidden="true">▶</span>
-          <span class="clip-txt">
-            <span class="clip-titel">Quadratische Funktionen: die Scheitelpunktform</span>
-            <span class="clip-quelle">Clip · Themenseite 3.3</span>
-          </span>
-          <span class="clip-zeit">0:44</span>
-        </button>
+      <p class="phase"><span>②</span> Im Clip</p>
+      <div class="duo">
+        <div class="clipkarte" data-clip="clips/g3-3-lp-verschieben.html" data-titel="Parabel sehen: verschieben und strecken">
+          <button class="clip-start" type="button">
+            <span class="clip-play" aria-hidden="true">▶</span>
+            <span class="clip-txt">
+              <span class="clip-titel">Parabel sehen: verschieben und strecken</span>
+              <span class="clip-quelle">Clip zu diesem Leitprogramm</span>
+            </span>
+            <span class="clip-zeit">1:08</span>
+          </button>
+        </div>
+        <p class="notiz">Der Clip zeigt Schritt für Schritt, was du eben geschoben hast — mit denselben Farben: <span class="tx-blau">\(a\)</span> blau, <span class="tx-orange">\(u\)</span> orange, <span class="tx-gruen">\(v\)</span> grün.</p>
       </div>
 
-      <p class="notiz">Die beiden Clips schreiben die Verschiebung mit \(d\) und \(e\), hier heissen sie \(u\) und \(v\) — dieselbe Bedeutung. Welche Buchstaben in anderen Lehrmitteln und im Rechner vorkommen, zeigt der <a href="../grundlagen/g3-3-quadratische-funktionen.html#definition">Hinweis auf der Themenseite</a>. Die Form heisst hier wie im Lehrplan <b>Scheitelform</b>, im Clip <em>Scheitelpunktform</em>.</p>
+      <p class="phase"><span>③</span> Verallgemeinern</p>
+      <p>Drei Zahlen, drei Wirkungen — und jede hast du gesehen:</p>
+      <div class="tabhuelle">
+        <table class="gesetze formen">
+          <thead><tr><th>Zahl</th><th>Im Bild</th><th>Im Term</th></tr></thead>
+          <tbody>
+            <tr><td>\(v\)</td><td class="wort">schiebt senkrecht: \(v \gt 0\) hinauf, \(v \lt 0\) hinunter</td><td class="wort">steht hinter der Klammer, mit eigenem Vorzeichen</td></tr>
+            <tr><td>\(u\)</td><td class="wort">schiebt waagrecht: \(u \gt 0\) nach rechts, \(u \lt 0\) nach links</td><td class="wort">steht in der Klammer \((x - u)\) — mit umgekehrtem Vorzeichen: \((x-2)\) heisst rechts, \((x+2)\) links</td></tr>
+            <tr><td>\(a\)</td><td class="wort">formt: \(|a| \gt 1\) schmaler, \(|a| \lt 1\) breiter, \(a \lt 0\) nach unten geöffnet</td><td class="wort">Faktor vor der Klammer; \(a \neq 0\), sonst keine Parabel</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Warum rechts, obwohl in der Klammer ein Minus steht? Der Scheitel liegt dort, wo die Klammer null wird — bei \((x - 2)\) also bei \(x = 2\).</p>
 
       <div class="merk">
-        <div class="titel">Scheitelform</div>
-        <p>\[ f(x) = a\,(x - u)^2 + v \qquad \Longrightarrow \qquad S(u \mid v) \]</p>
-        <p>In \(f(x) = a(x - u)^2 + v\) liegt der Scheitel bei \(S(u \mid v)\): \(u\) steht in der Klammer mit umgekehrtem Vorzeichen, \(v\) mit eigenem Vorzeichen dahinter. Der Faktor \(a\) verschiebt nichts — er bestimmt nur Öffnung und Streckung.</p>
+        <div class="titel">Definition — Scheitelform</div>
+        <p>\[ f(x) = a\,(x - u)^2 + v, \qquad a \neq 0 \qquad \Longrightarrow \qquad S(u \mid v) \]</p>
+        <p>In \(f(x) = a(x - u)^2 + v\) liegt der Scheitel bei \(S(u \mid v)\): \(u\) steht in der Klammer mit umgekehrtem Vorzeichen, \(v\) mit eigenem Vorzeichen dahinter. Der Faktor \(a\) verschiebt nichts — er bestimmt nur Öffnung und Streckung. Für \(a \gt 0\) ist der Scheitel der tiefste Punkt, für \(a \lt 0\) der höchste.</p>
       </div>
 
       <div class="duo">
-        <div>
-          <div class="erkunden">
-            <div class="titel">🔍 Erkunden</div>
-            <p>Die Regler starten beim Beispiel aus den Clips: \(f(x) = (x-2)^2 - 1\), also \(a = 1\), \(u = 2\), \(v = -1\).</p>
-            <ol>
-              <li>Zieh nur \(u\) auf \(-3\). In welche Richtung wandert die Parabel — und welches Zeichen steht jetzt in der Klammer?</li>
-              <li>Zieh \(a\) auf \(-0.5\). Was ändert sich am Scheitel, was an der Form?</li>
-              <li>Stell \(f(x) = 2(x+1)^2 - 3\) ein und lies \(S\) ab, bevor du hinschaust.</li>
-            </ol>
-            <p>Notiere die drei Antworten. Frage 1 kommt in Aufgabe 1b wieder.</p>
-          </div>
-          <div class="beisp">
-            <div class="kopfz">Beispiel · Scheitelform lesen</div>
-            <ul>
-              <li><span class="schritt">Funktion</span> <span class="wert">\(f(x) = (x - 2)^2 - 1\)</span></li>
-              <li><span class="schritt">Streckung, Öffnung</span> <span class="wert">\(a = 1 \gt 0\): nach oben, so breit wie die Normalparabel</span></li>
-              <li><span class="schritt">Verschiebung</span> <span class="wert">2 nach rechts, 1 nach unten</span></li>
-              <li><span class="schritt">Scheitelpunkt</span> <span class="wert">\(S(2 \mid -1)\), ein Minimum</span></li>
-            </ul>
-          </div>
+        <div class="beisp">
+          <div class="kopfz">Beispiel · vom Term zum Bild</div>
+          <ul>
+            <li><span class="schritt">Funktion</span> <span class="wert">\(f(x) = -0.5(x + 1)^2 + 3\)</span></li>
+            <li><span class="schritt">Klammer null bei</span> <span class="wert">\(x = -1\): 1 nach links</span></li>
+            <li><span class="schritt">hinter der Klammer</span> <span class="wert">\(+3\): 3 hinauf</span></li>
+            <li><span class="schritt">\(a = -0.5\)</span> <span class="wert">nach unten geöffnet, breiter</span></li>
+            <li><span class="schritt">Scheitel</span> <span class="wert">\(S(-1 \mid 3)\), ein Maximum</span></li>
+          </ul>
         </div>
-        <!-- Unterschied zur Themenseite (#anim-darstellungen): nur die Scheitelform,
-             keine Umrechnung — die kommt in Kapitel 2. Regler-Bereiche, Farben und
-             Buchstaben wie dort; Start (x-2)^2-1 wie in den Clips davor. -->
-        <figure class="sim" id="sim-scheitel">
-          <div class="sim-formel" id="sim-formel" aria-live="polite">f(x) = 1·(x − 2)² − 1</div>
-          <svg id="sim-svg" viewBox="0 0 300 300" role="img" aria-label="Parabel in Scheitelform mit Normalparabel zum Vergleich"></svg>
-          <div class="sl-row">
-            <div class="sl-grp akz-blau"><label for="sim-a"><span class="var">a</span></label><input type="range" id="sim-a" min="-2" max="2" step="0.25" value="1"><span class="sl-val" id="sim-av">1</span></div>
-            <div class="sl-grp akz-orange"><label for="sim-u"><span class="var">u</span></label><input type="range" id="sim-u" min="-5" max="5" step="0.5" value="2"><span class="sl-val" id="sim-uv">2</span></div>
-            <div class="sl-grp akz-gruen"><label for="sim-v"><span class="var">v</span></label><input type="range" id="sim-v" min="-5" max="5" step="0.5" value="-1"><span class="sl-val" id="sim-vv">−1</span></div>
-          </div>
-          <figcaption id="sim-text">Scheitel S(2 | −1) · nach oben geöffnet · Normalparabel gestrichelt</figcaption>
-        </figure>
+        <div class="beisp">
+          <div class="kopfz">Beispiel · vom Bild zum Term</div>
+          <div class="mini-reihe"><svg class="mini" data-f="1,2,-1" data-fenster="-2,5,-2,5" data-punkte="2,-1;3,0" aria-label="Parabel mit Scheitel (2 | −1) durch (3 | 0)"></svg></div>
+          <ul>
+            <li><span class="schritt">Scheitel ablesen</span> <span class="wert">\(S(2 \mid -1)\): \(f(x) = a(x-2)^2 - 1\)</span></li>
+            <li><span class="schritt">einen Schritt nach rechts</span> <span class="wert">1 hinauf wie bei \(x^2\), also \(a = 1\)</span></li>
+            <li><span class="schritt">Gleichung</span> <span class="wert">\(f(x) = (x-2)^2 - 1\)</span></li>
+          </ul>
+        </div>
       </div>
 
       <div class="warn">
@@ -666,35 +715,43 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         <p>Aus \(f(x) = (x + 4)^2 - 1\) wird \(S(-4 \mid -1)\), nicht \(S(4 \mid -1)\). Das Minus in der Klammer macht das Vorzeichen von \(u\) im Punkt <em>positiv</em>; ein Plus in der Klammer heisst \(u\) negativ.</p>
       </div>
 
-      <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#definition">Themenseite 3.3, «Definition und Parameter»</a> und die Aufgabe <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-a2-scheitel">A2 «Scheitelpunkt setzen»</a></p>
+      <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#definition">Themenseite 3.3, «Definition und Parameter»</a> — dort auch der Hinweis zu den anderen Buchstaben für den Scheitel (\(d, e\) in manchen Clips, \(h, k\) im Rechner); zum Weiterüben <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-a2-scheitel">A2 «Scheitelpunkt setzen»</a></p>
 
+      <p class="phase"><span>④</span> Üben</p>
       <div class="test" data-test="t1">
         <div class="test-kopf">
-          <h3>Selbsttest 1 — Scheitelform <span class="summe">· 11 P</span></h3>
+          <h3>Selbsttest 1 — Die Parabel bewegen <span class="summe">· 13 P</span></h3>
           <span class="werkz">
             <button type="button" class="alle-loesungen">alle Lösungen</button>
             <label><input type="checkbox" class="erledigt"> erledigt</label>
           </span>
         </div>
-        <ol class="aufg zwei">
+        <ol class="aufg">
           <li>
-            <div class="frage"><span class="nr">1a</span><span class="pkt">(3 P)</span><span class="txt">Scheitel und Öffnung: \(f(x) = 3(x+1)^2 - 4\), \(g(x) = -0.5(x-3)^2 + 2\), \(h(x) = x^2 + 5\).</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(f\): \(S(-1 \mid -4)\), nach oben, schmaler. \(g\): \(S(3 \mid 2)\), nach unten, breiter. \(h\): \(S(0 \mid 5)\), nach oben, wie die Normalparabel.</p><p class="komm">Bei \(h\) ist \(u = 0\): Die Klammer \((x - 0)\) schreibt man nicht hin.</p></div></details>
+            <div class="frage"><span class="nr">1a</span><span class="pkt">(4 P)</span><span class="txt">Welcher Graph gehört zu welcher Gleichung? &nbsp;(1) \(f(x) = (x-1)^2 + 2\) &nbsp;(2) \(f(x) = -(x+2)^2 + 1\) &nbsp;(3) \(f(x) = 2x^2 - 3\) &nbsp;(4) \(f(x) = 0.5(x-3)^2\)</span></div>
+            <div class="mini-reihe">
+              <svg class="mini" data-f="-1,-2,1" data-titel="A"></svg>
+              <svg class="mini" data-f="0.5,3,0" data-titel="B"></svg>
+              <svg class="mini" data-f="1,1,2" data-titel="C"></svg>
+              <svg class="mini" data-f="2,0,-3" data-titel="D"></svg>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>(1) → C, (2) → A, (3) → D, (4) → B.</p><p class="komm">Am schnellsten über den Scheitel: \((1 \mid 2)\), \((-2 \mid 1)\), \((0 \mid -3)\), \((3 \mid 0)\). A ist die einzige nach unten geöffnete.</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">1b</span><span class="pkt">(2 P)</span><span class="txt">In der Erkundung hast du \(u\) von \(2\) auf \(-3\) gezogen. Wohin wandert die Parabel, und wie heisst jetzt die Klammer?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Um 5 nach links. Die Klammer heisst \((x + 3)\), denn \(x - (-3) = x + 3\).</p></div></details>
+            <div class="frage"><span class="nr">1b</span><span class="pkt">(3 P)</span><span class="txt">Lies die Scheitelform aus dem Graphen ab. Die markierten Punkte liegen auf Gitterpunkten.</span></div>
+            <div class="mini-reihe"><svg class="mini gross" data-f="2,-2,-3" data-fenster="-5,2,-4,4" data-punkte="-2,-3;-1,-1"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Scheitel \(S(-2 \mid -3)\): \(f(x) = a(x+2)^2 - 3\). Einen Schritt nach rechts geht es 2 hinauf (bei \(x^2\) wäre es 1), also \(a = 2\): \(f(x) = 2(x+2)^2 - 3\).</p><p class="komm">Probe mit dem zweiten Punkt: \(f(-1) = 2 \cdot 1 - 3 = -1\) ✓</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">1c</span><span class="pkt">(2 P)</span><span class="txt">Die Normalparabel wird doppelt so steil, 2 nach links und 3 nach unten geschoben. Wie lautet die Scheitelform?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(f(x) = 2(x + 2)^2 - 3\), Scheitel \(S(-2 \mid -3)\).</p></div></details>
+            <div class="frage"><span class="nr">1c</span><span class="pkt">(2 P)</span><span class="txt">Du stellst im Simulator \(a = 1\), \(u = -3\), \(v = 0\) ein. Wohin wandert die Normalparabel, und wie heisst die Klammer?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Um 3 nach links. Die Klammer heisst \((x + 3)\), denn \(x - (-3) = x + 3\).</p></div></details>
           </li>
           <li>
             <div class="frage"><span class="nr">1d</span><span class="pkt">(2 P)</span><span class="txt">Warum ist \(v\) der kleinste Funktionswert von \(f(x) = a(x-u)^2 + v\), wenn \(a \gt 0\)?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\((x-u)^2 \geq 0\) für jedes \(x\), und mit \(a \gt 0\) auch \(a(x-u)^2 \geq 0\). Also ist \(f(x) \geq v\), und gleich \(v\) nur bei \(x = u\).</p></div></details>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\((x-u)^2 \geq 0\) für jedes \(x\), und mit \(a \gt 0\) auch \(a(x-u)^2 \geq 0\). Also ist \(f(x) \geq v\), und gleich \(v\) nur bei \(x = u\) — dort, wo die Klammer null wird.</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">1e</span><span class="pkt">(2 P)</span><span class="txt">Gib die Wertemenge von \(f(x) = -2(x-1)^2 + 6\) an.</span></div>
+            <div class="frage"><span class="nr">1e</span><span class="pkt">(2 P)</span><span class="txt">Gib die Wertemenge von \(f(x) = -2(x-1)^2 + 6\) an. Skizziere zuerst.</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Nach unten geöffnet, höchster Wert \(6\): \(W = \left]-\infty;\ 6\right]\).</p></div></details>
           </li>
         </ol>
@@ -708,108 +765,107 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         <span class="zeit">≈ 20 min</span>
       </div>
       <h2 id="drei-formen-eine-parabel">Drei Formen, eine Parabel</h2>
-      <p class="ziel">Du erklärst, was Grundform, Scheitelform und Produktform direkt zeigen, und überführst sie ohne Rechner ineinander.</p>
+      <p class="ziel">Du erklärst, was Grundform, Scheitelform und Produktform im Bild direkt zeigen, und überführst sie ohne Rechner ineinander.</p>
 
+      <p class="phase"><span>①</span> Erfahren</p>
       <div class="duo">
-        <div class="clipkarte" data-clip="clips/g3-3-produktform.html" data-titel="Quadratische Funktionen: die Produktform">
-          <button class="clip-start" type="button">
-            <span class="clip-play" aria-hidden="true">▶</span>
-            <span class="clip-txt">
-              <span class="clip-titel">Quadratische Funktionen: die Produktform</span>
-              <span class="clip-quelle">Clip · Themenseite 3.3</span>
-            </span>
-            <span class="clip-zeit">0:42</span>
-          </button>
+        <div class="erkunden">
+          <div class="titel">🔍 Drei Schreibweisen, ein Bild</div>
+          <p>Der Simulator schreibt dieselbe Parabel auf drei Arten. Klick eine Form an — der Punkt, den sie direkt verrät, leuchtet auf.</p>
+          <ol>
+            <li>Welche Zahl der <b>Grundform</b> siehst du im Bild? Welche der <b>Scheitelform</b>? Welche der <b>Produktform</b>?</li>
+            <li>Zieh \(v\) langsam über 0 (bei \(a \gt 0\)). Was geschieht mit der Produktform — und warum?</li>
+            <li>Stell \(u = 0\) ein. Was wird dann aus dem mittleren Glied der Grundform?</li>
+          </ol>
         </div>
-        <div class="clipkarte" data-clip="clips/g3-3-allgemeine-form.html" data-titel="Quadratische Funktionen: die Grundform">
-          <button class="clip-start" type="button">
-            <span class="clip-play" aria-hidden="true">▶</span>
-            <span class="clip-txt">
-              <span class="clip-titel">Quadratische Funktionen: die Grundform</span>
-              <span class="clip-quelle">Clip · Themenseite 3.3</span>
-            </span>
-            <span class="clip-zeit">0:44</span>
-          </button>
-        </div>
+        <!-- Unterschied zur Themenseite (#anim-darstellungen): gleiche Regler, aber je Form
+             ein Knopf, der nur ihr Merkmal zeigt. Start (x-2)^2-1 wie im Clip. -->
+        <figure class="sim" id="sim2">
+          <div class="formen-live">
+            <button type="button" data-form="g"><span class="fl-name">Grundform</span><span data-rolle="g"></span></button>
+            <button type="button" data-form="s"><span class="fl-name">Scheitelform</span><span data-rolle="s"></span></button>
+            <button type="button" data-form="p"><span class="fl-name">Produktform</span><span data-rolle="p"></span></button>
+          </div>
+          <svg viewBox="0 0 300 300" role="img" aria-label="Parabel mit y-Achsenabschnitt, Scheitel und Nullstellen"></svg>
+          <div class="sl-row">
+            <div class="sl-grp akz-blau"><label for="s2-a"><span class="var">a</span></label><input type="range" id="s2-a" data-p="a" min="-2" max="2" step="0.25" value="1"><span class="sl-val"></span></div>
+            <div class="sl-grp akz-orange"><label for="s2-u"><span class="var">u</span></label><input type="range" id="s2-u" data-p="u" min="-5" max="5" step="0.5" value="2"><span class="sl-val"></span></div>
+            <div class="sl-grp akz-gruen"><label for="s2-v"><span class="var">v</span></label><input type="range" id="s2-v" data-p="v" min="-5" max="5" step="0.5" value="-1"><span class="sl-val"></span></div>
+          </div>
+          <figcaption data-rolle="text"></figcaption>
+        </figure>
       </div>
 
-      <p>Jede quadratische Funktion lässt sich in <b>drei äquivalenten Formen</b> schreiben — jede macht eine andere geometrische Eigenschaft direkt sichtbar. Hier heissen sie wie im Lehrplan <b>Grund-, Scheitel- und Produktform</b>. In den Clips und auf der Themenseite begegnen dir auch die anderen Namen in Klammern.</p>
+      <p class="phase"><span>②</span> Im Clip</p>
+      <div class="duo">
+        <div class="clipkarte" data-clip="clips/g3-3-lp-drei-formen.html" data-titel="Parabel sehen: drei Formen, drei Blicke">
+          <button class="clip-start" type="button">
+            <span class="clip-play" aria-hidden="true">▶</span>
+            <span class="clip-txt">
+              <span class="clip-titel">Parabel sehen: drei Formen, drei Blicke</span>
+              <span class="clip-quelle">Clip zu diesem Leitprogramm</span>
+            </span>
+            <span class="clip-zeit">0:54</span>
+          </button>
+        </div>
+        <p class="notiz">Dieselbe Parabel wie im Simulator beim Start: \(x^2 - 4x + 3\). Der Clip zeigt, wohin man bei jeder Form schaut — und wann die Produktform verschwindet.</p>
+      </div>
+
+      <p class="phase"><span>③</span> Verallgemeinern</p>
+      <p>Jede quadratische Funktion lässt sich in <b>drei äquivalenten Formen</b> schreiben — jede macht eine andere Eigenschaft im Bild direkt sichtbar. Hier heissen sie wie im Lehrplan <b>Grund-, Scheitel- und Produktform</b>; in Clips und auf der Themenseite begegnen dir auch die Namen in Klammern.</p>
 
       <div class="tabhuelle">
         <table class="gesetze formen">
-          <thead><tr><th>Form</th><th>Gleichung</th><th>Direkt ablesbar</th><th>Beispiel</th></tr></thead>
+          <thead><tr><th>Form</th><th>Gleichung</th><th>Im Bild direkt sichtbar</th><th>Beispiel</th></tr></thead>
           <tbody>
-            <tr><td>Grundform<br><span class="wort">(allgemeine Form, Polynomform)</span></td><td>\(f(x) = ax^2 + bx + c\)</td><td class="wort">\(y\)-Achsenabschnitt \(f(0) = c\); Öffnung: Vorzeichen von \(a\)</td><td>\(x^2 - 4x + 3\)</td></tr>
+            <tr><td>Grundform<br><span class="wort">(allgemeine Form, Polynomform)</span></td><td>\(f(x) = ax^2 + bx + c\)</td><td class="wort">\(y\)-Achsenabschnitt \((0 \mid c)\); Öffnung: Vorzeichen von \(a\)</td><td>\(x^2 - 4x + 3\)</td></tr>
             <tr><td>Scheitelform<br><span class="wort">(Scheitelpunktform)</span></td><td>\(f(x) = a(x - u)^2 + v\)</td><td class="wort">Scheitelpunkt \(S(u \mid v)\); Streckung und Öffnung: \(a\)</td><td>\((x-2)^2 - 1\)</td></tr>
-            <tr><td>Produktform<br><span class="wort">(Linearfaktorform, Nullstellenform)</span></td><td>\(f(x) = a(x - x_1)(x - x_2)\)</td><td class="wort">Nullstellen \(x_1\) und \(x_2\) (nur falls reelle Nullstellen existieren)</td><td>\((x-1)(x-3)\)</td></tr>
+            <tr><td>Produktform<br><span class="wort">(Linearfaktorform, Nullstellenform)</span></td><td>\(f(x) = a(x - x_1)(x - x_2)\)</td><td class="wort">Nullstellen \(x_1\) und \(x_2\) — nur, wenn die Parabel die \(x\)-Achse trifft</td><td>\((x-1)(x-3)\)</td></tr>
           </tbody>
         </table>
       </div>
 
-      <div class="clipkarte" data-clip="clips/g3-3-formen-wechseln.html" data-titel="Quadratische Funktionen: zwischen den drei Formen wechseln">
-        <button class="clip-start" type="button">
-          <span class="clip-play" aria-hidden="true">▶</span>
-          <span class="clip-txt">
-            <span class="clip-titel">Quadratische Funktionen: zwischen den drei Formen wechseln</span>
-            <span class="clip-quelle">Clip · Themenseite 3.3</span>
-          </span>
-          <span class="clip-zeit">0:50</span>
-        </button>
-      </div>
-
-      <p>Hin zur Grundform ist immer dasselbe: <b>ausmultiplizieren</b>. Zurück braucht es mehr — die <b>quadratische Ergänzung</b> zur Scheitelform, die <b>Nullstellen</b> zur Produktform. Der Faktor \(a\) bleibt in allen drei Formen derselbe.</p>
-
       <div class="duo">
-        <div class="beisp">
-          <div class="kopfz">Beispiel · hin: ausmultiplizieren</div>
-          <ul>
-            <li><span class="schritt">aus der Produktform</span> <span class="wert">\((x-1)(x-3) = x^2 - 3x - x + 3 = x^2 - 4x + 3\)</span></li>
-            <li><span class="schritt">aus der Scheitelform</span> <span class="wert">\((x-2)^2 - 1 = x^2 - 4x + 4 - 1 = x^2 - 4x + 3\)</span></li>
-          </ul>
+        <div>
+          <p>Hin zur Grundform ist immer dasselbe: <b>ausmultiplizieren</b>. Zurück braucht es mehr — die <b>quadratische Ergänzung</b> zur Scheitelform, die <b>Nullstellen</b> zur Produktform. Der Faktor \(a\) bleibt in allen drei Formen derselbe. Das ist Rechenhandwerk; der Clip dazu zeigt es an derselben Parabel:</p>
+          <div class="clipkarte" data-clip="clips/g3-3-formen-wechseln.html" data-titel="Quadratische Funktionen: zwischen den drei Formen wechseln">
+            <button class="clip-start" type="button">
+              <span class="clip-play" aria-hidden="true">▶</span>
+              <span class="clip-txt">
+                <span class="clip-titel">Quadratische Funktionen: zwischen den drei Formen wechseln</span>
+                <span class="clip-quelle">Clip · Themenseite 3.3</span>
+              </span>
+              <span class="clip-zeit">0:50</span>
+            </button>
+          </div>
         </div>
-        <div class="beisp">
-          <div class="kopfz">Beispiel · zurück: quadratisch ergänzen</div>
-          <ul>
-            <li><span class="schritt">Ausgangslage</span> <span class="wert">\(x^2 - 4x + 3\)</span></li>
-            <li><span class="schritt">Hälfte von \(-4\), quadriert</span> <span class="wert">\((-2)^2 = 4\)</span></li>
-            <li><span class="schritt">dazu und wieder weg</span> <span class="wert">\(x^2 - 4x + 4 - 4 + 3\)</span></li>
-            <li><span class="schritt">Scheitelform</span> <span class="wert">\((x-2)^2 - 1\), also \(S(2 \mid -1)\)</span></li>
-          </ul>
+        <div>
+          <div class="beisp">
+            <div class="kopfz">Beispiel · hin: ausmultiplizieren</div>
+            <ul>
+              <li><span class="schritt">aus der Produktform</span> <span class="wert">\((x-1)(x-3) = x^2 - 4x + 3\)</span></li>
+              <li><span class="schritt">aus der Scheitelform</span> <span class="wert">\((x-2)^2 - 1 = x^2 - 4x + 4 - 1 = x^2 - 4x + 3\)</span></li>
+            </ul>
+          </div>
+          <div class="beisp">
+            <div class="kopfz">Beispiel · zurück: quadratisch ergänzen</div>
+            <ul>
+              <li><span class="schritt">Hälfte von \(-4\), quadriert</span> <span class="wert">\((-2)^2 = 4\)</span></li>
+              <li><span class="schritt">dazu und wieder weg</span> <span class="wert">\(x^2 - 4x + 4 - 4 + 3\)</span></li>
+              <li><span class="schritt">Scheitelform</span> <span class="wert">\((x-2)^2 - 1\), also \(S(2 \mid -1)\)</span></li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="warn">
         <div class="titel">Häufiger Fehler — Scheitelform und Grundform direkt vergleichen</div>
-        <p>\(y = (x - 3)^2 + 2\) ist <b>nicht</b> dasselbe wie \(y = x^2 - 3x + 2\). Die Klammer muss ausquadriert werden: \((x - 3)^2 = x^2 - 6x + 9\), also \(y = x^2 - 6x + 11\).</p>
+        <p>\(y = (x - 3)^2 + 2\) ist <b>nicht</b> dasselbe wie \(y = x^2 - 3x + 2\). Die Klammer muss ausquadriert werden: \((x - 3)^2 = x^2 - 6x + 9\), also \(y = x^2 - 6x + 11\). Im Simulator siehst du es sofort: Die beiden Parabeln haben verschiedene Scheitel.</p>
       </div>
 
-      <div class="duo">
-        <div class="erkunden">
-          <div class="titel">🔍 Erkunden</div>
-          <p>Öffne die Animation <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-darstellungen" target="_blank" rel="noopener">«Darstellungsformen» auf der Themenseite</a> (neuer Tab). Sie startet mit \(a = 0.5\), \(u = 1\), \(v = -2\).</p>
-          <ol>
-            <li>Notiere die drei Formen, die sie anzeigt.</li>
-            <li>Zieh nur \(u\) auf \(3\). Was geschieht mit den Nullstellen, was mit dem \(y\)-Achsenabschnitt?</li>
-            <li>Zieh dann \(a\) auf \(2\). Was bleibt, was ändert sich?</li>
-          </ol>
-        </div>
-        <div>
-          <p>Danach erklärt der Clip, was du gesehen hast:</p>
-          <div class="clipkarte" data-clip="clips/g3-3-anim-darstellungen.html" data-titel="Drei Formen: jede zeigt ein anderes Merkmal">
-            <button class="clip-start" type="button">
-              <span class="clip-play" aria-hidden="true">▶</span>
-              <span class="clip-txt">
-                <span class="clip-titel">Drei Formen: jede zeigt ein anderes Merkmal</span>
-                <span class="clip-quelle">Clip zur Animation · Themenseite 3.3</span>
-              </span>
-              <span class="clip-zeit">0:57</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#darstellungen">Themenseite 3.3, «Die drei Darstellungen»</a> mit der Tabelle «Umwandeln zwischen den Formen» im Abschnitt <a href="../grundlagen/g3-3-quadratische-funktionen.html#anwendungen">«Anwendungen der drei Formen»</a></p>
 
-      <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#darstellungen">Themenseite 3.3, «Die drei Darstellungen»</a> und die Tabelle «Umwandeln zwischen den Formen» im Abschnitt <a href="../grundlagen/g3-3-quadratische-funktionen.html#anwendungen">«Anwendungen der drei Formen»</a></p>
-
+      <p class="phase"><span>④</span> Üben</p>
       <div class="test" data-test="t2">
         <div class="test-kopf">
           <h3>Selbsttest 2 — Drei Formen <span class="summe">· 15 P</span></h3>
@@ -820,7 +876,7 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         </div>
         <ol class="aufg zwei">
           <li>
-            <div class="frage"><span class="nr">2a</span><span class="pkt">(3 P)</span><span class="txt">Welche Form, und was liest du direkt ab? \(f(x) = -2(x-1)(x+5)\) und \(g(x) = 3x^2 - x + 7\).</span></div>
+            <div class="frage"><span class="nr">2a</span><span class="pkt">(3 P)</span><span class="txt">Welche Form, und was siehst du davon im Graphen? \(f(x) = -2(x-1)(x+5)\) und \(g(x) = 3x^2 - x + 7\).</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(f\): Produktform, Nullstellen \(1\) und \(-5\), nach unten geöffnet. \(g\): Grundform, \(y\)-Achsenabschnitt \((0 \mid 7)\), nach oben geöffnet.</p></div></details>
           </li>
           <li>
@@ -828,7 +884,7 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(f(x) = -(x^2 + 6x + 9) + 4 = -x^2 - 6x - 5\).</p><p>\(g(x) = 2(x^2 + 3x - 4) = 2x^2 + 6x - 8\).</p><p class="komm">Das Minus vor der Klammer gilt für alle drei Glieder.</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">2c</span><span class="pkt">(3 P)</span><span class="txt">In die Scheitelform, mit quadratischer Ergänzung: \(f(x) = x^2 + 6x + 5\).</span></div>
+            <div class="frage"><span class="nr">2c</span><span class="pkt">(3 P)</span><span class="txt">In die Scheitelform, mit quadratischer Ergänzung: \(f(x) = x^2 + 6x + 5\). Wo liegt der Scheitel?</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(x^2 + 6x + 9 - 9 + 5 = (x+3)^2 - 4\), also \(S(-3 \mid -4)\).</p></div></details>
           </li>
           <li>
@@ -836,12 +892,12 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Produkt \(-12\), Summe \(1\): \(4\) und \(-3\). Also \(f(x) = (x+4)(x-3)\).</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">2e</span><span class="pkt">(2 P)</span><span class="txt">Warum hat \(f(x) = x^2 + 2x + 5\) keine Produktform über \(\mathbb{R}\)?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(f(x) = (x+1)^2 + 4 \geq 4\): Die Parabel liegt ganz über der \(x\)-Achse, es gibt keine Nullstellen, die man in die Klammern schreiben könnte.</p></div></details>
+            <div class="frage"><span class="nr">2e</span><span class="pkt">(2 P)</span><span class="txt">Warum hat \(f(x) = x^2 + 2x + 5\) keine Produktform über \(\mathbb{R}\)? Begründe mit dem Bild.</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(f(x) = (x+1)^2 + 4\): Scheitel \((-1 \mid 4)\) über der Achse, nach oben geöffnet — die Parabel trifft die \(x\)-Achse nie. Ohne Nullstellen gibt es nichts, was in die Klammern käme.</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">2f</span><span class="pkt">(2 P)</span><span class="txt">Aus der Erkundung: \(u\) von \(1\) auf \(3\). Wie ändern sich Nullstellen und \(y\)-Achsenabschnitt? Warum verschiebt sich der Achsenabschnitt nicht einfach um 2?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Die Nullstellen wandern mit der Parabel von \(-1\) und \(3\) auf \(1\) und \(5\). Der \(y\)-Achsenabschnitt springt von \(-1.5\) auf \(2.5\): Die Parabel verschiebt sich waagrecht, gemessen wird aber senkrecht an der festen Stelle \(x = 0\).</p></div></details>
+            <div class="frage"><span class="nr">2f</span><span class="pkt">(2 P)</span><span class="txt">Im Simulator: \(a = 1\), \(u = 2\). Für welche \(v\) gibt es eine Produktform?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Für \(v \leq 0\): Dann liegt der Scheitel auf oder unter der Achse, und die nach oben geöffnete Parabel trifft sie. Für \(v \gt 0\) nicht.</p></div></details>
           </li>
         </ol>
       </div>
@@ -857,53 +913,49 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         <span class="zeit">≈ 20 min</span>
       </div>
       <h2 id="nullstellen-und-scheitel">Nullstellen und Scheitel berechnen</h2>
-      <p class="ziel">Du bestimmst aus der Grundform die Achsenschnittpunkte und den Scheitelpunkt, sagst mit der Diskriminante die Anzahl Nullstellen voraus und prüfst den Scheitel mit der Symmetrie.</p>
+      <p class="ziel">Du bestimmst aus der Grundform Achsenschnittpunkte und Scheitel, sagst mit der Diskriminante die Anzahl Nullstellen voraus und nutzt die Symmetrie als Probe.</p>
 
+      <p class="phase"><span>①</span> Erfahren</p>
       <div class="duo">
-        <div class="clipkarte" data-clip="clips/g3-3-nullstellen-parabel.html" data-titel="Quadratische Funktionen: die Nullstellen einer Parabel">
+        <div class="erkunden">
+          <div class="titel">🔍 Was hängt woran?</div>
+          <p>Jetzt liegt die Parabel in der Grundform \(f(x) = x^2 + bx + c\) vor. Die gestrichelte Linie ist ihre <b>Symmetrieachse</b>.</p>
+          <ol>
+            <li>Zieh nur \(c\). Was macht die Parabel, was die Achse? Was geschieht mit den beiden Nullstellen?</li>
+            <li>Bei \(b = -4\): Für welches \(c\) berührt die Parabel die \(x\)-Achse? Welchen Wert zeigt dann \(D\)?</li>
+            <li>Zieh nur \(b\). Wo liegt die Achse bei \(b = -4\), \(b = 2\), \(b = 4\)? Findest du die Regel?</li>
+          </ol>
+        </div>
+        <!-- Themenseite #anim-diskriminante hat nur c; hier zusaetzlich b, damit die Achse
+             x = -b/2 sichtbar wird. a = 1 fest. Start b = -4, c = 3 wie im Clip. -->
+        <figure class="sim" id="sim3">
+          <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+          <svg viewBox="0 0 300 300" role="img" aria-label="Parabel mit Symmetrieachse und Nullstellen"></svg>
+          <div class="sl-row">
+            <div class="sl-grp akz-orange"><label for="s3-b"><span class="var">b</span></label><input type="range" id="s3-b" data-p="b" min="-4" max="4" step="1" value="-4"><span class="sl-val"></span></div>
+            <div class="sl-grp akz-blau"><label for="s3-c"><span class="var">c</span></label><input type="range" id="s3-c" data-p="c" min="-3" max="7" step="0.5" value="3"><span class="sl-val"></span></div>
+          </div>
+          <figcaption data-rolle="text"></figcaption>
+        </figure>
+      </div>
+
+      <p class="phase"><span>②</span> Im Clip</p>
+      <div class="duo">
+        <div class="clipkarte" data-clip="clips/g3-3-lp-achse-bleibt.html" data-titel="Parabel sehen: c hebt, die Achse bleibt">
           <button class="clip-start" type="button">
             <span class="clip-play" aria-hidden="true">▶</span>
             <span class="clip-txt">
-              <span class="clip-titel">Quadratische Funktionen: die Nullstellen einer Parabel</span>
-              <span class="clip-quelle">Clip · Themenseite 3.3</span>
+              <span class="clip-titel">Parabel sehen: c hebt, die Achse bleibt</span>
+              <span class="clip-quelle">Clip zu diesem Leitprogramm</span>
             </span>
-            <span class="clip-zeit">0:41</span>
+            <span class="clip-zeit">0:52</span>
           </button>
         </div>
-        <div class="clipkarte" data-clip="clips/g3-3-scheitelpunkt-bestimmen.html" data-titel="Quadratische Funktionen: den Scheitelpunkt bestimmen">
-          <button class="clip-start" type="button">
-            <span class="clip-play" aria-hidden="true">▶</span>
-            <span class="clip-txt">
-              <span class="clip-titel">Quadratische Funktionen: den Scheitelpunkt bestimmen</span>
-              <span class="clip-quelle">Clip · Themenseite 3.3</span>
-            </span>
-            <span class="clip-zeit">0:47</span>
-          </button>
-        </div>
+        <p class="notiz">Die Parabel \(x^2 - 4x + c\) für \(c = 3\), \(4\) und \(7\) — mit der Achse, die stehen bleibt.</p>
       </div>
 
-      <p>Die <b>Nullstellen</b> sind die Stellen, an denen die Parabel die \(x\)-Achse trifft: \(f(x) = 0\) setzen und die quadratische Gleichung lösen. Wie viele es gibt, sagt vorher die <b>Diskriminante</b> \(D = b^2 - 4ac\). Der <b>Scheitel</b> liegt bei \(u = -\dfrac{b}{2a}\), seine Höhe ist \(v = f(u)\). Den \(y\)-Achsenabschnitt liefert \(f(0) = c\) ohne Rechnung.</p>
-
-      <div class="duo">
-        <div class="beisp">
-          <div class="kopfz">Beispiel · Nullstellen von \(f(x) = x^2 - 4x + 3\)</div>
-          <ul>
-            <li><span class="schritt">Diskriminante</span> <span class="wert">\(D = (-4)^2 - 4 \cdot 1 \cdot 3 = 4 \gt 0\): zwei Nullstellen</span></li>
-            <li><span class="schritt">Formel</span> <span class="wert">\(x_{1,2} = \dfrac{4 \pm 2}{2}\), also \(x_1 = 1\), \(x_2 = 3\)</span></li>
-            <li><span class="schritt">oder faktorisieren</span> <span class="wert">\((x-1)(x-3) = 0\)</span></li>
-            <li><span class="schritt">Achsenschnittpunkte</span> <span class="wert">\((1 \mid 0)\), \((3 \mid 0)\), \((0 \mid 3)\)</span></li>
-          </ul>
-        </div>
-        <div class="beisp">
-          <div class="kopfz">Beispiel · Scheitel derselben Parabel</div>
-          <ul>
-            <li><span class="schritt">\(x\)-Wert</span> <span class="wert">\(u = -\dfrac{-4}{2 \cdot 1} = 2\)</span></li>
-            <li><span class="schritt">\(y\)-Wert</span> <span class="wert">\(v = f(2) = 4 - 8 + 3 = -1\)</span></li>
-            <li><span class="schritt">Scheitelpunkt</span> <span class="wert">\(S(2 \mid -1)\)</span></li>
-            <li><span class="schritt">Probe: Mitte der Nullstellen</span> <span class="wert">\(\dfrac{1 + 3}{2} = 2\) ✓</span></li>
-          </ul>
-        </div>
-      </div>
+      <p class="phase"><span>③</span> Verallgemeinern</p>
+      <p>Was du gesehen hast, lässt sich rechnen. Die <b>Achse</b> liegt bei \(u = -\dfrac{b}{2a}\) — sie hängt nur von \(a\) und \(b\) ab, darum bewegt \(c\) sie nicht. Den <b>Scheitel</b> bekommst du durch Einsetzen: \(v = f(u)\). Die <b>Nullstellen</b> liegen spiegelbildlich links und rechts der Achse; ob es sie gibt, sagt die <b>Diskriminante</b> \(D = b^2 - 4ac\). Den \(y\)-Achsenabschnitt liefert \(f(0) = c\) ohne Rechnung.</p>
 
       <div class="merk">
         <div class="titel">Diskriminante</div>
@@ -911,21 +963,50 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
       </div>
 
       <div class="duo">
+        <div class="beisp">
+          <div class="kopfz">Beispiel · Nullstellen von \(f(x) = x^2 - 4x + 3\)</div>
+          <ul>
+            <li><span class="schritt">Diskriminante</span> <span class="wert">\(D = (-4)^2 - 4 \cdot 1 \cdot 3 = 4 \gt 0\): zwei Nullstellen</span></li>
+            <li><span class="schritt">Formel</span> <span class="wert">\(x_{1,2} = \dfrac{4 \pm 2}{2}\), also \(x_1 = 1\), \(x_2 = 3\)</span></li>
+            <li><span class="schritt">Achsenschnittpunkte</span> <span class="wert">\((1 \mid 0)\), \((3 \mid 0)\), \((0 \mid 3)\)</span></li>
+          </ul>
+        </div>
+        <div class="beisp">
+          <div class="kopfz">Beispiel · Scheitel derselben Parabel</div>
+          <ul>
+            <li><span class="schritt">Achse</span> <span class="wert">\(u = -\dfrac{-4}{2 \cdot 1} = 2\)</span></li>
+            <li><span class="schritt">Höhe</span> <span class="wert">\(v = f(2) = 4 - 8 + 3 = -1\), also \(S(2 \mid -1)\)</span></li>
+            <li><span class="schritt">Probe: Mitte der Nullstellen</span> <span class="wert">\(\dfrac{1 + 3}{2} = 2\) ✓</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="duo">
         <div class="warn">
           <div class="titel">Häufiger Fehler — das Minus in \(-\frac{b}{2a}\)</div>
-          <p>Bei \(b = -4\) ist \(-\dfrac{b}{2a} = -\dfrac{-4}{2} = +2\). Wer das Minus vor dem Bruch vergisst, bekommt \(-2\) — und die Probe mit der Mitte der Nullstellen schlägt fehl.</p>
+          <p>Bei \(b = -4\) ist \(-\dfrac{b}{2a} = -\dfrac{-4}{2} = +2\). Wer das Minus vor dem Bruch vergisst, bekommt \(-2\) — und die Achse steht auf der falschen Seite. Die Probe mit der Mitte der Nullstellen deckt es auf.</p>
         </div>
-        <div class="erkunden">
-          <div class="titel">🔍 Erkunden</div>
-          <p>Öffne <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-diskriminante" target="_blank" rel="noopener">«Diskriminante visualisieren» auf der Themenseite</a>. Die Familie ist \(f(x) = x^2 - 4x + c\). Zieh \(c\) langsam von 0 bis 8: Bei welchem \(c\) berührt die Parabel die Achse, und wo liegt dann ihr Scheitel?</p>
+        <div>
+          <p>Den Scheitel auf drei Wegen, ohne Bild — derselbe Stoff als Rechnung:</p>
+          <div class="clipkarte" data-clip="clips/g3-3-scheitelpunkt-bestimmen.html" data-titel="Quadratische Funktionen: den Scheitelpunkt bestimmen">
+            <button class="clip-start" type="button">
+              <span class="clip-play" aria-hidden="true">▶</span>
+              <span class="clip-txt">
+                <span class="clip-titel">Quadratische Funktionen: den Scheitelpunkt bestimmen</span>
+                <span class="clip-quelle">Clip · Themenseite 3.3</span>
+              </span>
+              <span class="clip-zeit">0:47</span>
+            </button>
+          </div>
         </div>
       </div>
 
       <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#diskriminante">Themenseite 3.3, «Die Diskriminante — wie viele Nullstellen?»</a>; das Lösen selbst im <a href="quadratische-gleichungen.html">Leitprogramm Quadratische Gleichungen</a></p>
 
+      <p class="phase"><span>④</span> Üben</p>
       <div class="test" data-test="t3">
         <div class="test-kopf">
-          <h3>Selbsttest 3 — Nullstellen und Scheitel <span class="summe">· 12 P</span></h3>
+          <h3>Selbsttest 3 — Nullstellen und Scheitel <span class="summe">· 14 P</span></h3>
           <span class="werkz">
             <button type="button" class="alle-loesungen">alle Lösungen</button>
             <label><input type="checkbox" class="erledigt"> erledigt</label>
@@ -933,24 +1014,33 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         </div>
         <ol class="aufg zwei">
           <li>
-            <div class="frage"><span class="nr">3a</span><span class="pkt">(3 P)</span><span class="txt">Achsenschnittpunkte und Scheitel von \(f(x) = x^2 - 6x + 8\).</span></div>
+            <div class="frage"><span class="nr">3a</span><span class="pkt">(3 P)</span><span class="txt">Achsenschnittpunkte und Scheitel von \(f(x) = x^2 - 6x + 8\). Skizziere.</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\((x-2)(x-4) = 0\): Nullstellen \((2 \mid 0)\), \((4 \mid 0)\); \(y\)-Achse \((0 \mid 8)\). Scheitel: \(u = 3\), \(v = 9 - 18 + 8 = -1\), also \(S(3 \mid -1)\).</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">3b</span><span class="pkt">(3 P)</span><span class="txt">Scheitel und Nullstellen von \(f(x) = -2x^2 + 8x - 6\). Ist der Scheitel ein Maximum oder ein Minimum?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(u = -\dfrac{8}{2 \cdot (-2)} = 2\), \(v = -8 + 16 - 6 = 2\): \(S(2 \mid 2)\), ein Maximum, da \(a \lt 0\).</p><p>\(-2(x^2 - 4x + 3) = -2(x-1)(x-3)\): Nullstellen \(1\) und \(3\). Probe: Mitte \(2\) ✓</p><p class="komm">Den Faktor \(-2\) zuerst ausklammern, sonst wird das Faktorisieren mühsam.</p></div></details>
+            <div class="frage"><span class="nr">3b</span><span class="pkt">(3 P)</span><span class="txt">Scheitel und Nullstellen von \(f(x) = -2x^2 + 8x - 6\). Maximum oder Minimum?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(u = -\dfrac{8}{2 \cdot (-2)} = 2\), \(v = -8 + 16 - 6 = 2\): \(S(2 \mid 2)\), ein Maximum, da \(a \lt 0\).</p><p>\(-2(x^2 - 4x + 3) = -2(x-1)(x-3)\): Nullstellen \(1\) und \(3\). Probe: Mitte \(2\) ✓</p></div></details>
           </li>
           <li>
             <div class="frage"><span class="nr">3c</span><span class="pkt">(2 P)</span><span class="txt">Wie viele Nullstellen, ohne sie zu berechnen? \(g(x) = x^2 + 4x + 5\) und \(h(x) = 4x^2 - 4x + 1\).</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(g\): \(D = 16 - 20 = -4 \lt 0\), keine. \(h\): \(D = 16 - 16 = 0\), eine (doppelte) bei \(x = 0.5\).</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">3d</span><span class="pkt">(2 P)</span><span class="txt">Warum liegt der Scheitel immer genau in der Mitte zwischen den beiden Nullstellen?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Die Parabel ist symmetrisch zur senkrechten Geraden durch den Scheitel. Die beiden Nullstellen sind Spiegelbilder voneinander an dieser Achse — also liegt sie in ihrer Mitte.</p></div></details>
+            <div class="frage"><span class="nr">3d</span><span class="pkt">(2 P)</span><span class="txt">Warum verschiebt \(c\) die Symmetrieachse nicht?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(c\) wird zu jedem Funktionswert gleich addiert: Die ganze Parabel rückt senkrecht, nichts verschiebt sich waagrecht. In \(u = -\frac{b}{2a}\) kommt \(c\) gar nicht vor.</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">3e</span><span class="pkt">(2 P)</span><span class="txt">Aus der Erkundung: Bei welchem \(c\) berührt \(x^2 - 4x + c\) die \(x\)-Achse? Begründe mit \(D\).</span></div>
+            <div class="frage"><span class="nr">3e</span><span class="pkt">(2 P)</span><span class="txt">Aus dem Simulator: Bei welchem \(c\) berührt \(x^2 - 4x + c\) die \(x\)-Achse? Begründe mit \(D\).</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(D = 16 - 4c = 0\) bei \(c = 4\). Dann ist \(f(x) = (x-2)^2\), der Scheitel \(S(2 \mid 0)\) liegt auf der Achse.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">3f</span><span class="pkt">(2 P)</span><span class="txt">Ist \(D\) positiv, null oder negativ? Lies es am Graphen ab.</span></div>
+            <div class="mini-reihe">
+              <svg class="mini" data-f="1,1,-4" data-titel="P"></svg>
+              <svg class="mini" data-f="1,1,0" data-titel="Q"></svg>
+              <svg class="mini" data-f="-1,1,-2" data-titel="R"></svg>
+            </div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>P: zwei Schnittpunkte, \(D \gt 0\). Q: berührt, \(D = 0\). R: nach unten geöffnet mit Scheitel unter der Achse — kein Schnittpunkt, \(D \lt 0\).</p></div></details>
           </li>
         </ol>
       </div>
@@ -960,32 +1050,56 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
       <div class="kap-meta">
         <span class="marker">Kapitel 4</span>
         <span class="abz abz-gf">GF 3.3 · K3</span>
-        <span class="zeit">≈ 25 min</span>
+        <span class="zeit">≈ 20 min</span>
       </div>
       <h2 id="die-gleichung-aufstellen">Die Funktionsgleichung aufstellen</h2>
       <p class="ziel">Du wählst zu den gegebenen Punkten die passende Form, stellst die Funktionsgleichung auf und bestimmst \(a\) mit einem zusätzlichen Punkt.</p>
 
+      <p class="phase"><span>①</span> Erfahren</p>
       <div class="duo">
         <div class="erkunden">
-          <div class="titel">🔍 Erkunden</div>
-          <p>Öffne die <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-wurfparabel" target="_blank" rel="noopener">«Wurfparabel» auf der Themenseite</a>. Stell die Distanz \(x\) auf 0, dann auf 4, dann auf 8 und notiere jeweils die Höhe \(h(x)\). Wo ist der Ball am höchsten? Wo startet er?</p>
+          <div class="titel">🔍 Die Parabel einfangen</div>
+          <p>Ein Ball wird geworfen: höchster Punkt \(S(4 \mid 5)\), Abwurf bei \(P(0 \mid 1)\). Der Scheitel ist fest — nur \(a\) ist frei.</p>
+          <ol>
+            <li>Such mit dem Regler das \(a\), bei dem die Parabel durch \(P\) geht. Notiere es.</li>
+            <li>Wechsle zu «Nullstellen fest»: Nullstellen \(-1\) und \(3\), Punkt \(P(1 \mid -8)\). Such wieder \(a\).</li>
+            <li>Hättest du \(a\) auch ohne Regler gefunden? Welche Rechnung macht der Regler eigentlich?</li>
+          </ol>
         </div>
-        <div>
-          <p>Danach der Clip dazu:</p>
-          <div class="clipkarte" data-clip="clips/g3-3-anim-wurfparabel.html" data-titel="Wurfparabel: Abwurf, Scheitel, Landung">
-            <button class="clip-start" type="button">
-              <span class="clip-play" aria-hidden="true">▶</span>
-              <span class="clip-txt">
-                <span class="clip-titel">Wurfparabel: Abwurf, Scheitel, Landung</span>
-                <span class="clip-quelle">Clip zur Animation · Themenseite 3.3</span>
-              </span>
-              <span class="clip-zeit">0:49</span>
-            </button>
+        <!-- Eigene Simulation; auf der Themenseite gibt es zum Aufstellen keine Animation.
+             Fall A ist die Wurfparabel der Themenseite (#anim-wurfparabel), Fall B deren
+             Beispiel «Aus den Nullstellen und einem Punkt». -->
+        <figure class="sim" id="sim4">
+          <div class="sim-knoepfe">
+            <button type="button" data-fall="A" class="aktiv">Scheitel fest</button>
+            <button type="button" data-fall="B">Nullstellen fest</button>
           </div>
-        </div>
+          <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+          <svg viewBox="0 0 300 300" role="img" aria-label="Parabel durch einen festen Scheitel oder feste Nullstellen, Streckfaktor einstellbar"></svg>
+          <div class="sl-row">
+            <div class="sl-grp akz-blau"><label for="s4-a"><span class="var">a</span></label><input type="range" id="s4-a" data-p="a" min="-1" max="-0.05" step="0.05" value="-0.5"><span class="sl-val"></span></div>
+          </div>
+          <figcaption data-rolle="text"></figcaption>
+        </figure>
       </div>
 
-      <p>Die Animation hat die Gleichung fertig mitgebracht. Hier geht es in die umgekehrte Richtung: Gegeben sind Punkte, gesucht ist die Gleichung. <b>Welche Form man ansetzt, hängt davon ab, was gegeben ist</b> — dann bleibt meistens nur noch \(a\) zu bestimmen.</p>
+      <p class="phase"><span>②</span> Im Clip</p>
+      <div class="duo">
+        <div class="clipkarte" data-clip="clips/g3-3-lp-a-finden.html" data-titel="Parabel sehen: a finden">
+          <button class="clip-start" type="button">
+            <span class="clip-play" aria-hidden="true">▶</span>
+            <span class="clip-txt">
+              <span class="clip-titel">Parabel sehen: a finden</span>
+              <span class="clip-quelle">Clip zu diesem Leitprogramm</span>
+            </span>
+            <span class="clip-zeit">0:50</span>
+          </button>
+        </div>
+        <p class="notiz">Erst schieben — zu schmal, zu breit, getroffen — dann dasselbe in einer Zeile gerechnet.</p>
+      </div>
+
+      <p class="phase"><span>③</span> Verallgemeinern</p>
+      <p>Der Regler hat probiert, was eine Gleichung direkt liefert: <b>Punkt einsetzen, nach \(a\) auflösen.</b> Welche Form man ansetzt, hängt davon ab, was gegeben ist — man wählt die, in der das Gegebene schon steht.</p>
 
       <div class="tabhuelle">
         <table class="gesetze formen">
@@ -1002,18 +1116,16 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         <div class="beisp">
           <div class="kopfz">Beispiel · Scheitel und Punkt: der Wurf</div>
           <ul>
-            <li><span class="schritt">Gegeben</span> <span class="wert">höchster Punkt \(S(4 \mid 5)\), Abwurf \(P(0 \mid 1)\)</span></li>
             <li><span class="schritt">Ansatz</span> <span class="wert">\(h(x) = a(x-4)^2 + 5\)</span></li>
-            <li><span class="schritt">\(P\) einsetzen</span> <span class="wert">\(1 = a \cdot 16 + 5 \ \Longrightarrow\ a = -0.25\)</span></li>
+            <li><span class="schritt">\(P(0 \mid 1)\) einsetzen</span> <span class="wert">\(1 = 16a + 5 \ \Longrightarrow\ a = -0.25\)</span></li>
             <li><span class="schritt">Gleichung</span> <span class="wert">\(h(x) = -0.25(x-4)^2 + 5\)</span></li>
           </ul>
         </div>
         <div class="beisp">
           <div class="kopfz">Beispiel · Nullstellen und Punkt</div>
           <ul>
-            <li><span class="schritt">Gegeben</span> <span class="wert">\(x_1 = -1\), \(x_2 = 3\), \(P(1 \mid -8)\)</span></li>
             <li><span class="schritt">Ansatz</span> <span class="wert">\(f(x) = a(x+1)(x-3)\)</span></li>
-            <li><span class="schritt">\(P\) einsetzen</span> <span class="wert">\(-8 = a \cdot 2 \cdot (-2) = -4a \ \Longrightarrow\ a = 2\)</span></li>
+            <li><span class="schritt">\(P(1 \mid -8)\) einsetzen</span> <span class="wert">\(-8 = a \cdot 2 \cdot (-2) = -4a \ \Longrightarrow\ a = 2\)</span></li>
             <li><span class="schritt">Gleichung</span> <span class="wert">\(f(x) = 2(x+1)(x-3) = 2x^2 - 4x - 6\)</span></li>
           </ul>
         </div>
@@ -1023,13 +1135,12 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
 
       <div class="warn">
         <div class="titel">Häufiger Fehler — den Scheitel falsch einsetzen</div>
-        <p>Zu \(S(-1 \mid 4)\) gehört der Ansatz \(a(x+1)^2 + 4\), nicht \(a(x-1)^2 + 4\). Wer unsicher ist, prüft: Für \(x = -1\) muss die Klammer null werden.</p>
+        <p>Zu \(S(-1 \mid 4)\) gehört der Ansatz \(a(x+1)^2 + 4\), nicht \(a(x-1)^2 + 4\). Prüfe: Für \(x = -1\) muss die Klammer null werden.</p>
       </div>
-
-      <p class="notiz">Für das Aufstellen gibt es auf der Themenseite noch keinen eigenen Clip.</p>
 
       <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#aufstellen">Themenseite 3.3, «Funktionsgleichung aufstellen — Beispiele»</a> und die Strategie-Tabelle unter <a href="../grundlagen/g3-3-quadratische-funktionen.html#anwendungen">«Anwendungen der drei Formen»</a></p>
 
+      <p class="phase"><span>④</span> Üben</p>
       <div class="test" data-test="t4">
         <div class="test-kopf">
           <h3>Selbsttest 4 — Aufstellen <span class="summe">· 14 P</span></h3>
@@ -1048,16 +1159,17 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Ansatz \(a(x+3)(x-1)\); \(P(0 \mid 6)\): \(6 = a \cdot 3 \cdot (-1)\), also \(a = -2\). \(f(x) = -2(x+3)(x-1) = -2x^2 - 4x + 6\).</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">4c</span><span class="pkt">(3 P)</span><span class="txt">Ein parabelförmiger Torbogen ist unten 6 m breit und in der Mitte 4.5 m hoch. Lege den Ursprung in die Mitte am Boden, stelle die Gleichung auf und berechne die Höhe 2 m neben der Mitte.</span></div>
+            <div class="frage"><span class="nr">4c</span><span class="pkt">(3 P)</span><span class="txt">Ein parabelförmiger Torbogen ist unten 6 m breit und in der Mitte 4.5 m hoch. Lege den Ursprung in die Mitte am Boden, skizziere, stelle die Gleichung auf und berechne die Höhe 2 m neben der Mitte.</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Scheitel \((0 \mid 4.5)\), Nullstellen \(\pm 3\). \(0 = a \cdot 9 + 4.5\), also \(a = -0.5\): \(f(x) = -0.5x^2 + 4.5\). \(f(2) = -2 + 4.5 = 2.5\) m.</p><p class="komm">Mit dem Ursprung in der Mitte ist \(u = 0\) — die Wahl des Koordinatensystems spart Rechnung.</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">4d</span><span class="pkt">(2 P)</span><span class="txt">Warum braucht die Grundform drei Punkte, die Scheitelform aber nur den Scheitel und einen Punkt?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>In \(ax^2 + bx + c\) sind drei Zahlen unbekannt, also braucht es drei Gleichungen. In \(a(x-u)^2 + v\) legt der Scheitel \(u\) und \(v\) schon fest; nur \(a\) bleibt, eine Gleichung genügt.</p></div></details>
+            <div class="frage"><span class="nr">4d</span><span class="pkt">(2 P)</span><span class="txt">Warum brauchte der Simulator nur einen Regler, die Grundform aber drei Punkte?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>In \(a(x-u)^2 + v\) legt der Scheitel \(u\) und \(v\) schon fest; nur \(a\) bleibt, ein Punkt genügt. In \(ax^2 + bx + c\) sind drei Zahlen unbekannt, also braucht es drei Gleichungen.</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">4e</span><span class="pkt">(3 P)</span><span class="txt">Durch \((0 \mid -3)\), \((1 \mid 0)\) und \((3 \mid 12)\). Rechner erlaubt.</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(c = -3\); \(a + b = 3\); \(9a + 3b = 15\), also \(3a + b = 5\). Differenz: \(2a = 2\), \(a = 1\), \(b = 2\). \(f(x) = x^2 + 2x - 3\).</p></div></details>
+            <div class="frage"><span class="nr">4e</span><span class="pkt">(3 P)</span><span class="txt">Stelle die Gleichung der abgebildeten Parabel auf. Die markierten Punkte liegen auf Gitterpunkten.</span></div>
+            <div class="mini-reihe"><svg class="mini gross" data-f="-1,1,4" data-fenster="-3,5,-2,5" data-punkte="1,4;-1,0;3,0"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Scheitel \((1 \mid 4)\), also \(a(x-1)^2 + 4\). Mit \((3 \mid 0)\): \(0 = 4a + 4\), \(a = -1\). \(f(x) = -(x-1)^2 + 4 = -x^2 + 2x + 3\).</p><p class="komm">Ebenso gut über die Nullstellen: \(a(x+1)(x-3)\) mit \((1 \mid 4)\) gibt \(-4a = 4\).</p></div></details>
           </li>
         </ol>
       </div>
@@ -1075,26 +1187,45 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
       <h2 id="extremwertaufgaben">Extremwertaufgaben</h2>
       <p class="ziel">Du stellst zu einer Sachaufgabe die Zielgrösse als quadratische Funktion einer Variablen auf, findest ihren Scheitel ohne Rechner und beantwortest die Frage mit Stelle und Wert.</p>
 
+      <p class="phase"><span>①</span> Erfahren</p>
       <div class="duo">
         <div class="erkunden">
-          <div class="titel">🔍 Erkunden</div>
-          <p>Öffne den <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-zaun" target="_blank" rel="noopener">«Extremwert-Zaun» auf der Themenseite</a>: 40 m Zaun, ein rechteckiges Feld. Stell die Seite \(x\) auf 4, 10 und 19 m und notiere die Fläche. Wie sieht das Rechteck aus, wenn die Fläche am grössten ist?</p>
+          <div class="titel">🔍 40 m Zaun</div>
+          <p>Mit 40 m Zaun wird ein rechteckiges Feld eingezäunt. Links siehst du das Feld, rechts seine Fläche als Punkt auf einer Parabel. Der blasse Punkt gehört zum gedrehten Feld.</p>
+          <ol>
+            <li>Stell \(x = 4\) und dann \(x = 16\) ein. Vergleiche die Flächen. Warum sind sie gleich?</li>
+            <li>Wo liegt die grösste Fläche? Wie sieht das Feld dort aus?</li>
+            <li>Was geschieht ganz am Rand, bei \(x\) nahe 0 oder 20?</li>
+          </ol>
         </div>
-        <div>
-          <p>Danach der Clip dazu:</p>
-          <div class="clipkarte" data-clip="clips/g3-3-anim-zaun.html" data-titel="Extremwert-Zaun: die grösste Fläche im Scheitel">
-            <button class="clip-start" type="button">
-              <span class="clip-play" aria-hidden="true">▶</span>
-              <span class="clip-txt">
-                <span class="clip-titel">Extremwert-Zaun: die grösste Fläche im Scheitel</span>
-                <span class="clip-quelle">Clip zur Animation · Themenseite 3.3</span>
-              </span>
-              <span class="clip-zeit">0:50</span>
-            </button>
+        <!-- Themenseite #anim-zaun: gleiche Zahlen (40 m, A = x(20-x)). Hier zusaetzlich der
+             Spiegelpunkt bei 20-x, damit die Symmetrie das Maximum verraet. Start x = 4 wie im Clip. -->
+        <figure class="sim" id="sim5">
+          <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+          <svg viewBox="0 0 440 230" role="img" aria-label="Rechteck mit festem Umfang und seine Fläche als Parabel"></svg>
+          <div class="sl-row">
+            <div class="sl-grp akz-orange"><label for="s5-x"><span class="var">x</span></label><input type="range" id="s5-x" data-p="x" min="0.5" max="19.5" step="0.5" value="4"><span class="sl-val"></span></div>
           </div>
-        </div>
+          <figcaption data-rolle="text"></figcaption>
+        </figure>
       </div>
 
+      <p class="phase"><span>②</span> Im Clip</p>
+      <div class="duo">
+        <div class="clipkarte" data-clip="clips/g3-3-lp-mitte.html" data-titel="Parabel sehen: die grösste Fläche liegt in der Mitte">
+          <button class="clip-start" type="button">
+            <span class="clip-play" aria-hidden="true">▶</span>
+            <span class="clip-txt">
+              <span class="clip-titel">Parabel sehen: die grösste Fläche liegt in der Mitte</span>
+              <span class="clip-quelle">Clip zu diesem Leitprogramm</span>
+            </span>
+            <span class="clip-zeit">0:45</span>
+          </button>
+        </div>
+        <p class="notiz">Zwei gleich grosse Felder, ein Symmetriegedanke — und das Maximum ist gefunden, ohne eine Formel.</p>
+      </div>
+
+      <p class="phase"><span>③</span> Verallgemeinern</p>
       <div class="duo">
         <div class="merk">
           <div class="titel">Extremwertaufgabe in vier Schritten</div>
@@ -1108,15 +1239,15 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
           <ul>
             <li><span class="schritt">Zielgrösse</span> <span class="wert">Fläche \(A\)</span></li>
             <li><span class="schritt">Nebenbedingung</span> <span class="wert">\(2x + 2y = 40\), also \(y = 20 - x\)</span></li>
-            <li><span class="schritt">Funktion</span> <span class="wert">\(A(x) = x(20 - x) = -x^2 + 20x\), nach unten geöffnet</span></li>
+            <li><span class="schritt">Funktion</span> <span class="wert">\(A(x) = x(20 - x)\), nach unten geöffnet</span></li>
             <li><span class="schritt">Nullstellen</span> <span class="wert">\(0\) und \(20\), Mitte \(x = 10\)</span></li>
             <li><span class="schritt">Wert</span> <span class="wert">\(A(10) = 10 \cdot 10 = 100\)</span></li>
-            <li><span class="schritt">Antwort</span> <span class="wert">Das Feld wird ein Quadrat von 10 m × 10 m mit 100 m².</span></li>
+            <li><span class="schritt">Antwort</span> <span class="wert">Ein Quadrat von 10 m × 10 m mit 100 m².</span></li>
           </ul>
         </div>
       </div>
 
-      <p>Die Produktform \(x(20 - x)\) stand schon da, bevor irgendetwas ausmultipliziert war — darum sind die Nullstellen hier geschenkt. Sinnvoll sind nur Seiten zwischen 0 und 20 m; der Scheitel liegt dazwischen.</p>
+      <p>Die Produktform \(x(20 - x)\) stand schon da, bevor irgendetwas ausmultipliziert war — darum sind die Nullstellen geschenkt. Sinnvoll sind nur Seiten zwischen 0 und 20 m; der Scheitel liegt dazwischen.</p>
 
       <div class="warn">
         <div class="titel">Häufiger Fehler — nur die Stelle angeben</div>
@@ -1125,9 +1256,10 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
 
       <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#extremwert">Themenseite 3.3, «Extremwertaufgabe live»</a>; zur Kontrolle mit dem Rechner der Clip <a href="../grundlagen/g3-3-quadratische-funktionen.html#clip-g3-3-ti30x-scheitel-tabelle">«den Scheitel in der Tabelle einkreisen»</a></p>
 
+      <p class="phase"><span>④</span> Üben und anwenden</p>
       <div class="test" data-test="t5">
         <div class="test-kopf">
-          <h3>Selbsttest 5 — Extremwertaufgaben <span class="summe">· 12 P</span></h3>
+          <h3>Selbsttest 5 — Extremwertaufgaben <span class="summe">· 14 P</span></h3>
           <span class="werkz">
             <button type="button" class="alle-loesungen">alle Lösungen</button>
             <label><input type="checkbox" class="erledigt"> erledigt</label>
@@ -1135,7 +1267,7 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         </div>
         <ol class="aufg zwei">
           <li>
-            <div class="frage"><span class="nr">5a</span><span class="pkt">(4 P)</span><span class="txt">Ein rechteckiges Beet liegt an einer Mauer; nur die drei anderen Seiten bekommen 60 m Zaun. Welche Masse geben die grösste Fläche?</span></div>
+            <div class="frage"><span class="nr">5a</span><span class="pkt">(4 P)</span><span class="txt">Ein rechteckiges Beet liegt an einer Mauer; nur die drei anderen Seiten bekommen 60 m Zaun. Welche Masse geben die grösste Fläche? Skizziere zuerst.</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Seiten senkrecht zur Mauer \(x\), parallel \(60 - 2x\). \(A(x) = x(60 - 2x)\), Nullstellen \(0\) und \(30\), Mitte \(x = 15\).</p><p>\(15\) m × \(30\) m, \(A = 450\) m².</p><p class="komm">Kein Quadrat — die Mauer spart eine Seite.</p></div></details>
           </li>
           <li>
@@ -1149,6 +1281,10 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
           <li>
             <div class="frage"><span class="nr">5d</span><span class="pkt">(2 P)</span><span class="txt">Warum ist der Scheitel von \(A(x) = x(20 - x)\) ein Maximum und kein Minimum?</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Ausmultipliziert \(-x^2 + 20x\): \(a = -1 \lt 0\), die Parabel ist nach unten geöffnet, der Scheitel ihr höchster Punkt.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">5e</span><span class="pkt">(2 P)</span><span class="txt">Im Simulator geben \(x = 4\) und \(x = 16\) dieselbe Fläche. Wo liegt das Maximum, wenn \(x = 7\) und \(x = 13\) dieselbe Fläche geben — und warum?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Bei \(x = 10\), der Mitte von 7 und 13: Gleich hohe Punkte liegen spiegelbildlich zur Achse der Parabel, und auf der Achse liegt der Scheitel.</p></div></details>
           </li>
         </ol>
       </div>
@@ -1166,7 +1302,7 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         <p class="gesamt-teil">Teil A · Formen lesen und umformen · K1 K2 · ohne Rechner (11 Punkte)</p>
         <ol class="aufg zwei">
           <li>
-            <div class="frage"><span class="nr">G1</span><span class="pkt">(4 P)</span><span class="txt">\(f(x) = -(x-2)^2 + 9\): Scheitel, Öffnung, Nullstellen, Produktform.</span></div>
+            <div class="frage"><span class="nr">G1</span><span class="pkt">(4 P)</span><span class="txt">\(f(x) = -(x-2)^2 + 9\): Scheitel, Öffnung, Nullstellen, Produktform. Skizziere.</span></div>
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(S(2 \mid 9)\), nach unten. \((x-2)^2 = 9\), \(x - 2 = \pm 3\): Nullstellen \(-1\) und \(5\). \(f(x) = -(x+1)(x-5)\).</p></div></details>
           </li>
           <li>
@@ -1174,8 +1310,9 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
             <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(2(x^2 - 6x + 5) = 2\big((x-3)^2 - 4\big) = 2(x-3)^2 - 8\), \(S(3 \mid -8)\). \(y\)-Achse bei \((0 \mid 10)\).</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">G3</span><span class="pkt">(2 P)</span><span class="txt">Wie viele Nullstellen hat \(f(x) = x^2 - 3x + 4\)?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(D = 9 - 16 = -7 \lt 0\): keine.</p></div></details>
+            <div class="frage"><span class="nr">G3</span><span class="pkt">(2 P)</span><span class="txt">Gib die Scheitelform der abgebildeten Parabel an (Punkte auf Gitterpunkten).</span></div>
+            <div class="mini-reihe"><svg class="mini" data-f="1,-1,-2" data-fenster="-4,3,-3,4" data-punkte="-1,-2;0,-1;1,2"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(S(-1 \mid -2)\), ein Schritt rechts 1 hinauf, also \(a = 1\): \(f(x) = (x+1)^2 - 2\).</p></div></details>
           </li>
           <li>
             <div class="frage"><span class="nr">G4</span><span class="pkt">(2 P)</span><span class="txt">\(f(x) = 3(x+1)(x-2)\) in die Grundform.</span></div>
@@ -1211,9 +1348,9 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
           <b>Selbsteinschätzung</b>
           <table>
             <tr><td>21 – 24 P</td><td>Sitzt. Die Kompetenzen K1–K4 von Teilgebiet 3.3 hast du im Griff.</td></tr>
-            <tr><td>16 – 20 P</td><td>Gut. Schau, in welchem Teil die Punkte fehlen, und rechne das Beispiel des Kapitels dazu nochmals nach.</td></tr>
+            <tr><td>16 – 20 P</td><td>Gut. Schau, in welchem Teil die Punkte fehlen, und spiel die Simulation des Kapitels dazu nochmals durch.</td></tr>
             <tr><td>10 – 15 P</td><td>Wiederhole gezielt: Teil A → Kapitel 1 bis 3 (K1, K2), Teil B → Kapitel 4 (K3), Teil C → Kapitel 5 (K4).</td></tr>
-            <tr><td>0 – 9 P</td><td>Zurück zu Kapitel 0 und 1. Jedes Beispiel selber ausschreiben, bevor du weitergehst.</td></tr>
+            <tr><td>0 – 9 P</td><td>Zurück zu Kapitel 1. Zuerst im Simulator, dann jedes Beispiel selber ausschreiben, bevor du weitergehst.</td></tr>
           </table>
         </div>
       </div>
@@ -1225,7 +1362,7 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
         </div>
         <div class="merk">
           <div class="titel">Weiter</div>
-          <p>Zurück zur <a href="../grundlagen/g3-3-quadratische-funktionen.html">Themenseite 3.3 Quadratische Funktionen</a> oder zu den <a href="../leitprogramme.html">anderen Leitprogrammen</a>.</p>
+          <p>Zurück zur <a href="../grundlagen/g3-3-quadratische-funktionen.html">Themenseite 3.3 Quadratische Funktionen</a> — dort stehen alle Animationen offen, ohne Auftrag — oder zu den <a href="../leitprogramme.html">anderen Leitprogrammen</a>.</p>
         </div>
       </div>
     </section>
@@ -1340,97 +1477,307 @@ table.gesetze.formen td:first-child .wort{font-weight:400}
 })();
 </script>
 <script>
-/* Eingebettete Simulation Kapitel 1 (HOWTO-LP.md §8b).
-   Unterschied zur Themenseite (#anim-darstellungen): nur die Scheitelform, keine
-   Umrechnung in die anderen Formen und keine Nullstellen — die kommen in Kapitel 2
-   und 3. Reglerbereiche (a -2..2, u und v -5..5), Buchstaben und Farben wie dort.
-   Sichtfenster -7.5..7.5: Scheitel liegt fuer alle Reglerstellungen im Bild. */
+/* Simulationen und Minigrafen des Leitprogramms (HOWTO-LP.md §8b).
+   Konventionen wie auf Themenseite 3.3: x waagrecht, y senkrecht, Buchstaben a, u, v,
+   Reglerfarben a blau, u orange, v gruen. Alle Zahlen mit Dezimalpunkt und echtem Minus. */
 (function(){
   'use strict';
-  var svg = document.getElementById('sim-svg');
-  if (!svg) return;
   var NS = 'http://www.w3.org/2000/svg';
-  var R = 7.5, K = 20;                       // Einheiten bis zum Rand, px je Einheit
-  function X(x){ return 150 + K * x; }
-  function Y(y){ return 150 - K * y; }
-  function el(name, attr, eltern){
+
+  function z(n){                                   // Zahl -> Text, hoechstens 2 Stellen
+    var r = Math.round(n * 100) / 100;
+    if (Object.is(r, -0)) r = 0;
+    return (r < 0 ? '−' : '') + String(Math.abs(r));
+  }
+  function el(eltern, name, attr, text){
     var e = document.createElementNS(NS, name);
     for (var k in attr) e.setAttribute(k, attr[k]);
-    (eltern || svg).appendChild(e);
+    if (text != null) e.textContent = text;
+    eltern.appendChild(e);
     return e;
   }
-  var clip = el('clipPath', { id: 'sim-rahmen' });
-  el('rect', { x: 0, y: 0, width: 300, height: 300 }, clip);
-  for (var i = -7; i <= 7; i++){
-    el('line', { x1: X(i), y1: 0, x2: X(i), y2: 300, 'class': 'gitter' });
-    el('line', { x1: 0, y1: Y(i), x2: 300, y2: Y(i), 'class': 'gitter' });
-  }
-  el('line', { x1: 0, y1: Y(0), x2: 300, y2: Y(0), 'class': 'achse' });
-  el('line', { x1: X(0), y1: 0, x2: X(0), y2: 300, 'class': 'achse' });
-  [-5, 5].forEach(function(t){
-    el('text', { x: X(t), y: Y(0) + 13, 'text-anchor': 'middle', 'class': 'skala' }).textContent = t < 0 ? '−5' : '5';
-    el('text', { x: X(0) - 5, y: Y(t) + 4, 'text-anchor': 'end', 'class': 'skala' }).textContent = t < 0 ? '−5' : '5';
-  });
-  el('text', { x: 292, y: Y(0) - 6, 'text-anchor': 'end', 'class': 'skala' }).textContent = 'x';
-  el('text', { x: X(0) + 7, y: 12, 'class': 'skala' }).textContent = 'y';
-
-  function pfad(f){
-    var d = '';
-    for (var x = -R; x <= R + 1e-9; x += 0.05){
-      var y = Math.max(-9, Math.min(9, f(x)));
-      d += (d ? ' L' : 'M') + X(x).toFixed(1) + ' ' + Y(y).toFixed(1);
-    }
-    return d;
-  }
-  el('path', { d: pfad(function(x){ return x * x; }), 'class': 'normal', 'clip-path': 'url(#sim-rahmen)' });
-  var kurve = el('path', { 'class': 'kurve', 'clip-path': 'url(#sim-rahmen)' });
-  var punkt = el('circle', { r: 4.5, 'class': 'scheitel' });
-  var text  = el('text', { 'class': 's-text' });
-
-  var ra = document.getElementById('sim-a'), ru = document.getElementById('sim-u'), rv = document.getElementById('sim-v');
-  function z(n){ return (n < 0 ? '−' : '') + String(Math.abs(n)); }   // Dezimalpunkt, echtes Minus
   function sp(cls, s){ return '<span class="' + cls + '">' + s + '</span>'; }
 
-  function zeichnen(){
-    var a = +ra.value, u = +ru.value, v = +rv.value;
-    document.getElementById('sim-av').textContent = z(a);
-    document.getElementById('sim-uv').textContent = z(u);
-    document.getElementById('sim-vv').textContent = z(v);
-    kurve.setAttribute('d', pfad(function(x){ return a * (x - u) * (x - u) + v; }));
-    punkt.setAttribute('cx', X(u)); punkt.setAttribute('cy', Y(v));
-
-    var tx = X(u) + (u > 3 ? -8 : 8);
-    var ty = Y(v) + (a > 0 ? 18 : -10);
-    ty = Math.max(14, Math.min(292, ty));
-    text.setAttribute('x', tx); text.setAttribute('y', ty);
-    text.setAttribute('text-anchor', u > 3 ? 'end' : 'start');
-    text.textContent = 'S(' + z(u) + ' | ' + z(v) + ')';
-
-    var klammer = u === 0 ? 'x²' : '(x ' + (u > 0 ? '− ' : '+ ') + sp('tx-orange', String(Math.abs(u))) + ')²';
-    var rest = v === 0 ? '' : ' ' + (v > 0 ? '+ ' : '− ') + sp('tx-gruen', String(Math.abs(v)));
-    document.getElementById('sim-formel').innerHTML = 'f(x) = ' + sp('tx-blau', z(a)) + '·' + klammer + rest;
-
-    var cap;
-    if (a === 0){
-      cap = 'a = 0: keine quadratische Funktion — der Graph ist die waagrechte Gerade y = ' + z(v);
-      text.textContent = '';
-    } else {
-      var breite = Math.abs(a) > 1 ? 'schmaler als' : (Math.abs(a) < 1 ? 'breiter als' : 'so breit wie');
-      cap = 'Scheitel S(' + z(u) + ' | ' + z(v) + ') · ' + (a > 0 ? 'nach oben' : 'nach unten') +
-            ' geöffnet · ' + breite + ' die Normalparabel (gestrichelt)';
+  /* Koordinatensystem in ein SVG; liefert Umrechnung und eine Ebene fuer Bewegliches. */
+  function Achsen(svg, o){
+    var W = o.w, H = o.h, x0 = o.x0, x1 = o.x1, y0 = o.y0, y1 = o.y1, rx = o.rx || 0, ry = o.ry || 0;
+    var id = 'k' + Math.random().toString(36).slice(2, 8);
+    function X(x){ return rx + (x - x0) / (x1 - x0) * (W - 2 * rx); }
+    function Y(y){ return H - ry - (y - y0) / (y1 - y0) * (H - 2 * ry); }
+    var g = el(svg, 'g', {});
+    var cp = el(g, 'clipPath', { id: id });
+    el(cp, 'rect', { x: X(x0), y: Y(y1), width: X(x1) - X(x0), height: Y(y0) - Y(y1) });
+    var sx = o.sx || 1, sy = o.sy || 1;
+    for (var i = Math.ceil(x0 / sx) * sx; i <= x1 + 1e-9; i += sx)
+      el(g, 'line', { x1: X(i), y1: Y(y0), x2: X(i), y2: Y(y1), 'class': 'gitter' });
+    for (var j = Math.ceil(y0 / sy) * sy; j <= y1 + 1e-9; j += sy)
+      el(g, 'line', { x1: X(x0), y1: Y(j), x2: X(x1), y2: Y(j), 'class': 'gitter' });
+    if (y0 <= 0 && y1 >= 0) el(g, 'line', { x1: X(x0), y1: Y(0), x2: X(x1), y2: Y(0), 'class': 'achse' });
+    if (x0 <= 0 && x1 >= 0) el(g, 'line', { x1: X(0), y1: Y(y0), x2: X(0), y2: Y(y1), 'class': 'achse' });
+    (o.xm || []).forEach(function(t){
+      el(g, 'text', { x: X(t), y: Y(Math.max(0, y0)) + 13, 'text-anchor': 'middle', 'class': 'skala' }, z(t));
+    });
+    (o.ym || []).forEach(function(t){
+      el(g, 'text', { x: X(Math.max(0, x0)) - 5, y: Y(t) + 4, 'text-anchor': 'end', 'class': 'skala' }, z(t));
+    });
+    var ebene = el(svg, 'g', {});
+    function pfad(f, a, b){
+      var d = '', a_ = a == null ? x0 : a, b_ = b == null ? x1 : b, n = 240;
+      for (var k = 0; k <= n; k++){
+        var x = a_ + (b_ - a_) * k / n, y = f(x);
+        y = Math.max(y0 - 3 * (y1 - y0), Math.min(y1 + 3 * (y1 - y0), y));
+        d += (d ? ' L' : 'M') + X(x).toFixed(1) + ' ' + Y(y).toFixed(1);
+      }
+      return d;
     }
-    document.getElementById('sim-text').textContent = cap;
+    return {
+      X: X, Y: Y, ebene: ebene,
+      leeren: function(){ while (ebene.firstChild) ebene.removeChild(ebene.firstChild); },
+      kurve: function(f, cls, a, b){ return el(ebene, 'path', { d: pfad(f, a, b), 'class': cls, 'clip-path': 'url(#' + id + ')' }); },
+      senkrecht: function(x, cls){ return el(ebene, 'line', { x1: X(x), y1: Y(y0), x2: X(x), y2: Y(y1), 'class': cls }); },
+      punkt: function(x, y, cls, text, dx, dy, anker){
+        if (x < x0 || x > x1 || y < y0 || y > y1) return;
+        el(ebene, 'circle', { cx: X(x), cy: Y(y), r: o.r || 4.5, 'class': cls });
+        if (text) el(ebene, 'text', { x: X(x) + (dx || 8), y: Y(y) + (dy || -8), 'text-anchor': anker || 'start', 'class': 'p-text ' + cls }, text);
+      }
+    };
   }
-  [ra, ru, rv].forEach(function(r){ r.addEventListener('input', zeichnen); });
-  zeichnen();
+
+  function regler(fig, weiter){
+    var r = {};
+    fig.querySelectorAll('input[type=range]').forEach(function(inp){
+      r[inp.dataset.p] = inp;
+      inp.addEventListener('input', weiter);
+    });
+    return r;
+  }
+  function werte(r){
+    var w = {};
+    for (var k in r){ w[k] = +r[k].value; r[k].parentNode.querySelector('.sl-val').textContent = z(w[k]); }
+    return w;
+  }
+  function rolle(fig, n){ return fig.querySelector('[data-rolle="' + n + '"]'); }
+
+  /* Scheitelform als Text mit Farbkopplung */
+  function scheitelText(a, u, v){
+    var kl = u === 0 ? 'x²' : '(x ' + (u > 0 ? '− ' : '+ ') + sp('tx-orange', z(Math.abs(u))) + ')²';
+    var rest = v === 0 ? '' : ' ' + (v > 0 ? '+ ' : '− ') + sp('tx-gruen', z(Math.abs(v)));
+    return sp('tx-blau', z(a)) + '·' + kl + rest;
+  }
+  function grundText(a, b, c){
+    var s = (a === 1 ? '' : a === -1 ? '−' : z(a)) + 'x²';
+    if (b !== 0) s += (b > 0 ? ' + ' : ' − ') + (Math.abs(b) === 1 ? '' : z(Math.abs(b))) + 'x';
+    if (c !== 0) s += (c > 0 ? ' + ' : ' − ') + z(Math.abs(c));
+    return s;
+  }
+  function klammer(x){ return Math.abs(x) < 1e-9 ? 'x' : '(x ' + (x > 0 ? '− ' : '+ ') + z(Math.abs(x)) + ')'; }
+
+  var FENSTER = { w: 300, h: 300, x0: -7.5, x1: 7.5, y0: -7.5, y1: 7.5, rx: 0, ry: 0, xm: [-5, 5], ym: [-5, 5] };
+
+  /* ---- Kapitel 1: verschieben und strecken, mit Zielspiel ---- */
+  (function(){
+    var fig = document.getElementById('sim1'); if (!fig) return;
+    var K = Achsen(fig.querySelector('svg'), FENSTER);
+    var ziel = null;
+    var r = regler(fig, zeichnen);
+    fig.querySelectorAll('[data-ziel]').forEach(function(k){
+      k.addEventListener('click', function(){
+        ziel = k.dataset.ziel ? k.dataset.ziel.split(',').map(Number) : null;
+        fig.querySelectorAll('[data-ziel]').forEach(function(b){ b.classList.toggle('aktiv', b === k && !!ziel); });
+        zeichnen();
+      });
+    });
+    function zeichnen(){
+      var w = werte(r), a = w.a, u = w.u, v = w.v;
+      K.leeren();
+      K.kurve(function(x){ return x * x; }, 'normal');
+      if (ziel) K.kurve(function(x){ return ziel[0] * (x - ziel[1]) * (x - ziel[1]) + ziel[2]; }, 'zielkurve');
+      K.kurve(function(x){ return a * (x - u) * (x - u) + v; }, 'kurve');
+      if (a !== 0) K.punkt(u, v, 'p-s', 'S(' + z(u) + ' | ' + z(v) + ')', u > 3 ? -8 : 8, a > 0 ? 18 : -10, u > 3 ? 'end' : 'start');
+      rolle(fig, 'formel').innerHTML = 'f(x) = ' + scheitelText(a, u, v);
+      var t;
+      if (a === 0) t = 'a = 0: keine Parabel — der Graph ist die waagrechte Gerade y = ' + z(v);
+      else t = 'Scheitel S(' + z(u) + ' | ' + z(v) + ') · ' + (a > 0 ? 'nach oben' : 'nach unten') + ' geöffnet · ' +
+               (Math.abs(a) > 1 ? 'schmaler als' : Math.abs(a) < 1 ? 'breiter als' : 'so breit wie') + ' die Normalparabel';
+      if (ziel){
+        var ok = a === ziel[0] && u === ziel[1] && v === ziel[2];
+        t = ok ? '✓ Getroffen! Das Ziel war f(x) = ' + scheitelText(ziel[0], ziel[1], ziel[2]).replace(/<[^>]+>/g, '')
+               : 'Ziel: grüne Parabel. Lies ihren Scheitel ab und schau, ob sie schmaler oder breiter ist.';
+        fig.classList.toggle('treffer', ok);
+      } else fig.classList.remove('treffer');
+      rolle(fig, 'text').textContent = t;
+    }
+    zeichnen();
+  })();
+
+  /* ---- Kapitel 2: drei Formen, drei Merkmale ---- */
+  (function(){
+    var fig = document.getElementById('sim2'); if (!fig) return;
+    var K = Achsen(fig.querySelector('svg'), FENSTER);
+    var aktiv = null;
+    var r = regler(fig, zeichnen);
+    fig.querySelectorAll('[data-form]').forEach(function(k){
+      k.addEventListener('click', function(){
+        aktiv = aktiv === k.dataset.form ? null : k.dataset.form;
+        zeichnen();
+      });
+    });
+    function zeichnen(){
+      var w = werte(r), a = w.a, u = w.u, v = w.v;
+      var b = -2 * a * u, c = a * u * u + v;
+      fig.querySelectorAll('[data-form]').forEach(function(k){ k.classList.toggle('aktiv', k.dataset.form === aktiv); });
+      K.leeren();
+      K.kurve(function(x){ return a * (x - u) * (x - u) + v; }, 'kurve');
+      var zeig = function(f){ return !aktiv || aktiv === f; };
+      rolle(fig, 'g').innerHTML = a === 0 ? '—' : 'f(x) = ' + grundText(a, b, c);
+      rolle(fig, 's').innerHTML = a === 0 ? '—' : 'f(x) = ' + scheitelText(a, u, v);
+      var t = '';
+      if (a === 0){ rolle(fig, 'p').textContent = '—'; rolle(fig, 'text').textContent = 'a = 0: keine Parabel.'; return; }
+      var q = -v / a;                                  // (x-u)^2 = -v/a
+      var nst = q > 1e-12 ? [u - Math.sqrt(q), u + Math.sqrt(q)] : (Math.abs(q) < 1e-12 ? [u, u] : []);
+      if (nst.length){
+        var genau = nst.every(function(x){ return Math.abs(x * 100 - Math.round(x * 100)) < 1e-6; });
+        var p = nst[0] === nst[1] ? z(a) + '·' + klammer(nst[0]) + '²' : z(a) + '·' + klammer(nst[0]) + klammer(nst[1]);
+        rolle(fig, 'p').innerHTML = 'f(x) ' + (genau ? '=' : '≈') + ' ' + p;
+      } else rolle(fig, 'p').innerHTML = '<em>gibt es nicht — keine Nullstellen</em>';
+      if (zeig('g')) K.punkt(0, c, 'p-g', '(0 | ' + z(c) + ')', 8, -8);
+      if (zeig('s')) K.punkt(u, v, 'p-s', 'S(' + z(u) + ' | ' + z(v) + ')', u > 3 ? -8 : 8, a > 0 ? 18 : -10, u > 3 ? 'end' : 'start');
+      if (zeig('p')) nst.forEach(function(x){ K.punkt(x, 0, 'p-n'); });
+      if (aktiv === 'g') t = 'Grundform: c = ' + z(c) + ' ist der y-Achsenabschnitt' + (Math.abs(c) > 7.5 ? ' (liegt ausserhalb des Bildes)' : '') + '.';
+      else if (aktiv === 's') t = 'Scheitelform: S(u | v) = (' + z(u) + ' | ' + z(v) + ') steht im Term.';
+      else if (aktiv === 'p') t = nst.length ? 'Produktform: die Nullstellen ' + (nst[0] === nst[1] ? z(nst[0]) + ' (doppelt)' : z(nst[0]) + ' und ' + z(nst[1])) + ' stehen in den Klammern.' : 'Keine Nullstellen — darum keine Produktform.';
+      else t = 'Klick eine Form an: Sie zeigt nur ihr Merkmal.';
+      rolle(fig, 'text').textContent = t;
+    }
+    zeichnen();
+  })();
+
+  /* ---- Kapitel 3: b und c, Achse und Diskriminante (a = 1) ---- */
+  (function(){
+    var fig = document.getElementById('sim3'); if (!fig) return;
+    var K = Achsen(fig.querySelector('svg'), FENSTER);
+    var r = regler(fig, zeichnen);
+    function zeichnen(){
+      var w = werte(r), b = w.b, c = w.c;
+      var u = -b / 2, v = c - b * b / 4, D = b * b - 4 * c;
+      K.leeren();
+      K.senkrecht(u, 'symachse');
+      K.kurve(function(x){ return x * x + b * x + c; }, 'kurve');
+      K.punkt(u, v, 'p-s', 'S(' + z(u) + ' | ' + z(v) + ')', u > 2 ? -8 : 8, 18, u > 2 ? 'end' : 'start');
+      var nst = D > 0 ? [u - Math.sqrt(D) / 2, u + Math.sqrt(D) / 2] : D === 0 ? [u] : [];
+      nst.forEach(function(x){ K.punkt(x, 0, 'p-n'); });
+      rolle(fig, 'formel').innerHTML = 'f(x) = ' + grundText(1, b, c) +
+        ' &nbsp;·&nbsp; D = ' + z(b * b) + ' − 4·' + z(c) + ' = <b>' + z(D) + '</b>';
+      var gen = nst.every(function(x){ return Math.abs(x * 100 - Math.round(x * 100)) < 1e-6; });
+      rolle(fig, 'text').textContent = 'Achse x = ' + z(u) + ' · ' +
+        (D > 0 ? 'D > 0: zwei Nullstellen ' + (gen ? '' : '≈ ') + z(nst[0]) + ' und ' + z(nst[1])
+               : D === 0 ? 'D = 0: eine doppelte Nullstelle bei ' + z(u) : 'D < 0: keine Nullstelle');
+    }
+    zeichnen();
+  })();
+
+  /* ---- Kapitel 4: a suchen, Scheitel oder Nullstellen fest ---- */
+  (function(){
+    var fig = document.getElementById('sim4'); if (!fig) return;
+    var svg = fig.querySelector('svg');
+    var FAELLE = {
+      A: { fenster: { w: 300, h: 300, x0: -2, x1: 9, y0: -4, y1: 6, xm: [4, 8], ym: [-2, 2, 4] },
+           a: { min: -1, max: -0.05, step: 0.05, value: -0.5 },
+           f: function(a, x){ return a * (x - 4) * (x - 4) + 5; }, p: [0, 1], ziel: -0.25,
+           term: function(a){ return 'h(x) = ' + sp('tx-blau', z(a)) + '·(x − 4)² + 5'; },
+           fest: function(K){ K.punkt(4, 5, 'p-s', 'S(4 | 5)', 8, -8); } },
+      B: { fenster: { w: 300, h: 300, x0: -3, x1: 5, y0: -10, y1: 6, sy: 2, xm: [-2, 2, 4], ym: [-8, -4, 4] },
+           a: { min: -3, max: 3, step: 0.5, value: 1 },
+           f: function(a, x){ return a * (x + 1) * (x - 3); }, p: [1, -8], ziel: 2,
+           term: function(a){ return 'f(x) = ' + sp('tx-blau', z(a)) + '·(x + 1)(x − 3)'; },
+           fest: function(K){ K.punkt(-1, 0, 'p-n', '−1', -6, -8, 'end'); K.punkt(3, 0, 'p-n', '3', 6, -8); } }
+    };
+    var fall = 'A', K, inp = fig.querySelector('input[data-p="a"]');
+    function aufbauen(){
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      K = Achsen(svg, FAELLE[fall].fenster);
+      var s = FAELLE[fall].a;
+      inp.min = s.min; inp.max = s.max; inp.step = s.step; inp.value = s.value;
+      zeichnen();
+    }
+    function zeichnen(){
+      var F = FAELLE[fall], a = +inp.value;
+      inp.parentNode.querySelector('.sl-val').textContent = z(a);
+      K.leeren();
+      if (a !== 0) K.kurve(function(x){ return F.f(a, x); }, 'kurve');
+      F.fest(K);
+      var ok = Math.abs(a - F.ziel) < 1e-9;
+      K.punkt(F.p[0], F.p[1], ok ? 'p-s' : 'p-g', 'P(' + z(F.p[0]) + ' | ' + z(F.p[1]) + ')', fall === 'A' ? -8 : 8, fall === 'A' ? -8 : 16, fall === 'A' ? 'end' : 'start');
+      rolle(fig, 'formel').innerHTML = a === 0 ? 'a = 0: keine Parabel' : F.term(a);
+      var y = F.f(a, F.p[0]);
+      rolle(fig, 'text').textContent = a === 0 ? 'Mit a = 0 bleibt nichts übrig.' :
+        (fall === 'A' ? 'h(0) = ' : 'f(1) = ') + z(y) + (ok ? ' — ✓ getroffen, a = ' + z(a) : ' — gesucht ist ' + z(F.p[1]));
+      fig.classList.toggle('treffer', ok);
+    }
+    inp.addEventListener('input', zeichnen);
+    fig.querySelectorAll('[data-fall]').forEach(function(k){
+      k.addEventListener('click', function(){
+        fall = k.dataset.fall;
+        fig.querySelectorAll('[data-fall]').forEach(function(b){ b.classList.toggle('aktiv', b === k); });
+        aufbauen();
+      });
+    });
+    aufbauen();
+  })();
+
+  /* ---- Kapitel 5: Zaun, Rechteck links, Parabel rechts ---- */
+  (function(){
+    var fig = document.getElementById('sim5'); if (!fig) return;
+    var svg = fig.querySelector('svg');
+    var feld = el(svg, 'g', {});
+    var gp = el(svg, 'g', { transform: 'translate(200,0)' });
+    var K = Achsen(gp, { w: 240, h: 230, x0: -1, x1: 21, y0: -8, y1: 110, sx: 2, sy: 20, rx: 0, ry: 0, xm: [10, 20], ym: [50, 100] });
+    var r = regler(fig, zeichnen);
+    function zeichnen(){
+      var x = werte(r).x, y = 20 - x, A = x * y;
+      while (feld.firstChild) feld.removeChild(feld.firstChild);
+      var s = 9;                                     // px je m
+      el(feld, 'rect', { x: 10, y: 20, width: 20 * s, height: 20 * s, 'class': 'feld-rahmen' });
+      el(feld, 'rect', { x: 10, y: 20 + (20 * s - y * s), width: x * s, height: y * s, 'class': 'feld' });
+      el(feld, 'text', { x: 10 + x * s / 2, y: 215, 'text-anchor': 'middle', 'class': 'p-text p-n' }, 'x = ' + z(x) + ' m');
+      el(feld, 'text', { x: 10 + x * s + 4, y: 20 + 20 * s - y * s / 2, 'class': 'skala' }, z(y) + ' m');
+      K.leeren();
+      K.kurve(function(t){ return t * (20 - t); }, 'kurve', 0, 20);
+      if (Math.abs(x - 10) > 1e-9) K.punkt(20 - x, A, 'p-geist');
+      K.punkt(x, A, x === 10 ? 'p-s' : 'p-n', 'A = ' + z(A), x > 12 ? -8 : 8, -8, x > 12 ? 'end' : 'start');
+      rolle(fig, 'formel').innerHTML = 'A(' + sp('tx-orange', z(x)) + ') = ' + z(x) + ' · ' + z(y) + ' = <b>' + z(A) + ' m²</b>';
+      rolle(fig, 'text').textContent = x === 10 ? '✓ Quadrat: die grösste Fläche, 100 m².' :
+        'Der blasse Punkt: dasselbe Feld gedreht, x = ' + z(20 - x) + ' — gleich hoch.';
+      fig.classList.toggle('treffer', x === 10);
+    }
+    zeichnen();
+  })();
+
+  /* ---- Minigrafen: <svg class="mini" data-f="a,u,v" data-fenster="x0,x1,y0,y1" data-punkte="x,y;x,y"> ---- */
+  document.querySelectorAll('svg.mini').forEach(function(svg){
+    var f = svg.dataset.f.split(',').map(Number);
+    var fe = (svg.dataset.fenster || '-5,5,-5,5').split(',').map(Number);
+    var w = 150, h = 150 * (fe[3] - fe[2]) / (fe[1] - fe[0]);
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h.toFixed(1));
+    svg.setAttribute('role', 'img');
+    var K = Achsen(svg, { w: w, h: h, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, xm: [1], ym: [1] });
+    K.kurve(function(x){ return f[0] * (x - f[1]) * (x - f[1]) + f[2]; }, 'kurve');
+    if (svg.dataset.punkte) svg.dataset.punkte.split(';').forEach(function(p){
+      var q = p.split(',').map(Number); K.punkt(q[0], q[1], 'p-s');
+    });
+    if (svg.dataset.titel) el(svg, 'text', { x: 6, y: 14, 'class': 'mini-titel' }, svg.dataset.titel);
+    if (!svg.getAttribute('aria-label'))
+      svg.setAttribute('aria-label', 'Parabel' + (svg.dataset.titel ? ' ' + svg.dataset.titel : ''));
+  });
 })();
 </script>
+
 <footer class="site-footer">
   <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
   <p>Leitprogramm · Quadratische Funktionen (Probe)</p>
   <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
   <p><a href="../leitprogramme.html">Alle Leitprogramme</a> · <a href="../clips.html">Clips</a> · <a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
-  <p>Keine Cookies · Kein Tracking · Version 0.1 (Probe) · Stand 30. September 2026</p>
+  <p>Keine Cookies · Kein Tracking · Version 0.2 (Probe) · Stand 30. September 2026</p>
 </footer>
 
 <script src="../mathlib.js"></script>

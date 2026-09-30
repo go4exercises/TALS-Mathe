@@ -1,6 +1,6 @@
 # HOWTO — Leitprogramme (Gesamtfassung, Probe)
 
-**Status: Probefassung vom 30.09.2026.** Führt `HOWTO-leitprogramm-didaktik.md` (was
+**Status: Probefassung vom 30.09.2026, Fassung 2 («zuerst sehen») am selben Tag.** Führt `HOWTO-leitprogramm-didaktik.md` (was
 hineingehört) und `HOWTO-leitprogramme.md` (wie es ins Repo kommt) zu einer Datei
 zusammen, löst ihre Widersprüche auf und ergänzt zwei Punkte, die in beiden fehlten:
 die **Bindung an den RLP** (§1) und die **Nutzung der Bildschirmbreite** (§6). Erprobt an
@@ -140,30 +140,45 @@ oder wenn eine RLP-Kompetenz sich nicht in 2–3 Lektionen unterbringen lässt.
 ```
 Kopf          Titel · Standfirst · Fach + Teilgebiet (RLP) · Lektionen
 Ablauf        Kapitelliste nach Lektionen, Fortschrittszähler      (Schiene links)
-So arbeitest  Clip → Text mitrechnen → Selbsttest ohne Lösung → abhaken
+So arbeitest  ① Erfahren → ② Clip → ③ Verallgemeinern → ④ Üben (ohne Lösung) → abhaken
 Kompetenzen   RLP-Liste des Teilgebiets, K1…Kn, mit «ohne HM»-Vermerk; Abgrenzung
 Kapitel 0     Vorwissen: kurze Klärung + Vortest (Verweis auf Vorwissens-LP/Themenseite)
-Kapitel 1…n   je: Lernziel · Clip · Kerntext · Beispiel · Häufiger Fehler ·
-              [Erkundung] · Ausführlich-Link · Selbsttest
+Kapitel 1…n   je: Lernziel · ① Erfahren (Simulation) · ② Clip · ③ Verallgemeinern
+              (Regel, Definition, Beispiel, Häufiger Fehler) · Ausführlich-Link · ④ Üben
 Gesamttest    Teile A/B/C ↔ Kapitel ↔ Kompetenzen · Hilfsmittel je Teil · Punkte
 Einschätzung  Punktebereiche → konkrete Rückverweise auf Kapitel
 Weiter        nächstes Leitprogramm · Themenseite · bewusst Weggelassenes
 ```
 
-### Innerhalb eines Kapitels
+### Innerhalb eines Kapitels: zuerst sehen, dann die Regel
 
-1. **Lernziel** in `<p class="ziel">`, ein Satz in Du-Form: «Du liest …, bestimmst …,
-   begründest …».
-2. **Clip zuerst** (Gedankengang), dann der Text, der ihn vollständig macht. Ein Clip
-   allein ist keine Einführung: Wer ihn überspringt, muss das Verfahren im Text finden.
-3. **Kerntext kurz.** Merkkasten mit **demselben Wortlaut** wie auf der Themenseite.
-4. **Ein durchgerechnetes Beispiel** mit Zwischenschritten, möglichst dasselbe wie im
-   Clip davor — sonst sagen, dass es ein anderes ist.
-5. **Häufiger Fehler**, übernommen aus der Themenseite, wenn vorhanden.
-6. **Erkundung** (optional, §8).
-7. **«Ausführlich: …»** — ein Absatz mit Link auf den passenden Abschnitt oder Clip der
-   Themenseite.
-8. **Selbsttest** (§9).
+Seit Fassung 2 (30.09.2026, Rückmeldung des Auftraggebers zum Prototyp): **Wo sich der
+Stoff zeigen lässt, wird er zuerst gezeigt.** Bei Funktionen ist das immer der Fall —
+jeder Zusammenhang hat ein Bild. Die Reihenfolge ist induktiv:
+
+1. **Lernziel** in `<p class="ziel">`, ein Satz in Du-Form.
+2. **① Erfahren.** Eine eingebettete Simulation (§8) mit einem Auftrag in drei Schritten:
+   **voraussagen, schieben, notieren.** Die Voraussage ist der Kern — erst die
+   enttäuschte Erwartung («Minus in der Klammer, und doch nach rechts») macht die Regel
+   merkenswert. Wo es passt, ein Zielspiel («stell die Regler so, dass deine Parabel auf
+   der grünen liegt»).
+3. **② Clip.** Er zeigt **dieselbe Bewegung** noch einmal, Schritt für Schritt, mit
+   demselben Startwert und denselben Farben wie die Simulation (§7).
+4. **③ Verallgemeinern.** Aus den Beobachtungen wird die Regel (Tabelle «Zahl → im Bild
+   → im Term»), dann die **Definition** oder der Merksatz — mit demselben Wortlaut wie auf
+   der Themenseite. Danach ein durchgerechnetes Beispiel, möglichst in beide Richtungen
+   (vom Term zum Bild, vom Bild zum Term), und der Häufige Fehler. Reine Rechenclips der
+   Themenseite (Umformen, Formeln) gehören hierher, nicht an den Anfang.
+5. **«Ausführlich: …»** — Link auf den passenden Abschnitt der Themenseite.
+6. **④ Üben** — der Selbsttest (§9), mit mindestens einer Aufgabe am Graphen.
+7. **Anwenden** — in den Anwendungskapiteln (Aufstellen, Extremwerte) ist die Anwendung
+   selbst der Stoff; sonst eine Sachaufgabe im Selbsttest.
+
+Die vier Phasen stehen sichtbar als `<p class="phase"><span>①</span> Erfahren</p>` über
+dem Abschnitt, damit man weiss, in welchem Modus man gerade ist.
+
+Wo sich nichts zeigen lässt (reine Termumformung), bleibt die alte Folge: Clip → Text →
+Beispiel → Selbsttest. Das ist die Ausnahme, nicht die Vorlage.
 
 ⟂ Entscheid: Didaktik «Mehr dazu» *am Ende* des Kapitels, Technik «Ausführlich» *vor*
 dem Selbsttest. Gilt jetzt **«Ausführlich:» vor dem Selbsttest** — so machen es die
@@ -231,7 +246,23 @@ ein Graph lässt sich nicht neben den Text stellen, der ihn erklärt.
 
 ## 7 · Clips
 
-- **Nur bestehende Clips**, dieselben Dateien wie auf der Themenseite. Keine fast
+- **Clips zeigen, sie erzählen nicht nur.** Wo es einen Graphen gibt, steht er im Clip
+  (`graf` mit `parabeln`, `geraden`, `kurven`, `punkte`; HOWTO-clips.md). Bewegung
+  entsteht aus einer Folge kurzer Szenen mit je einem Zustand und einem Satz — dieselbe
+  Parabel an derselben Stelle, Szene für Szene verschoben, die Normalparabel gestrichelt
+  als Bezug. Ein Clip, der «die Parabel wandert nach rechts» nur sagt, verfehlt sein Thema.
+- **Leitprogramm-eigene Clips sind erlaubt**, wenn sie eine Simulation *des
+  Leitprogramms* beschreiben (Entscheid 30.09.2026). Dann: `"probe": true` mit
+  `_probe`-Begründung (nicht in der Bibliothek, auf keiner Themenseite), Dateiname
+  `<lektion>-lp-<name>`, eine eigene Reihe «<Thema> sehen», Startwert und Farben der
+  Simulation. Layout, das sich bewährt hat: Bild rechts (`x` 1010, `y` 175, 760 × 760),
+  Formeln und Notizen links (`x` 150), `anim: "fade"` am Bild.
+  **Werkstatt:** Drehbücher per Skript erzeugen (gleiche Fenster und Farben in allen
+  Szenen), zuerst ohne Ton bauen und mit `pruef-clip.mjs` Szene für Szene ansehen
+  (Übersichtsbild), dann `build-clip-ton.py` → `build-clips.py`. **Nach der Vertonung
+  das Erzeugerskript nicht mehr laufen lassen** — es überschreibt die gemessenen `dauer`;
+  späte Layoutkorrekturen direkt im JSON und nur neu bauen.
+- **Sonst nur bestehende Clips**, dieselben Dateien wie auf der Themenseite. Keine fast
   gleichen Varianten mit anderen Zahlen.
 - **Themenclips** (Alltagsfrage, Verfahren, «Zum Mitnehmen») passen ins Leitprogramm.
 - **Animations-Clips** (`*-anim-*`, «In der Animation hast du …») setzen voraus, dass
@@ -242,6 +273,7 @@ ein Graph lässt sich nicht neben den Text stellen, der ihn erklärt.
 - **Zahlen im Clip = Zahlen im Text direkt danach.** Widerspricht eine Simulation ihrem
   Clip, wird die Simulation angepasst, nicht der Clip (neu vertonen ist teuer).
 - **Dauer** von der Themenseite übernehmen (`cl-zeit` bzw. aria-label des «▶ Clip»),
+  bei eigenen Clips die Tonlänge aus `build-clip-ton.py` (abgerundet auf Sekunden) —
   nicht aus dem Drehbuch summieren.
 - Fehlt für einen Kernschritt ein Clip: melden, nicht ohne Auftrag bauen.
 
@@ -249,16 +281,29 @@ ein Graph lässt sich nicht neben den Text stellen, der ihn erklärt.
 
 ## 8 · Erkundungen und Simulationen
 
-Entscheid pro Kapitel, in dieser Reihenfolge:
+**Bei Funktionen ist die eingebettete Simulation (b) der Normalfall** (Fassung 2). Ein
+Link in einen zweiten Tab reisst den Faden ab; wer erst suchen muss, wo er ist, erfährt
+nichts. Der Link auf die Themenseite bleibt für die Vertiefung.
 
-**a) Eine Animation der Themenseite passt → Erkundungsauftrag, keine Code-Kopie.**
+**Ist das zu nahe an der Themenseite?** Nein, solange die Rollen verschieden sind: Die
+Themenseite ist der offene Spielplatz (alle Regler, alles gleichzeitig, kein Auftrag),
+das Leitprogramm führt (ein bis drei Regler, eine Frage, Voraussage, Zielspiel, Treffer-
+Rückmeldung). Gleich sein müssen Konventionen und Beispiele, nicht die Bedienung. Jede
+Simulation trägt im Code einen Satz, worin sie sich von der Themenseiten-Animation
+unterscheidet — lässt er sich nicht schreiben, ist sie überflüssig und der Link genügt.
+
+Entscheid pro Kapitel:
+
+**a) Die Animation der Themenseite passt genau so → Erkundungsauftrag, keine Code-Kopie.**
 Kasten «🔍 Erkunden» mit Link auf den Anker (`../grundlagen/<seite>.html#anim-…`, neuer
 Tab) und einem **konkreten Auftrag**: was einstellen, was beobachten, was notieren. Die
 Frage kommt im Selbsttest wieder. Danach darf der passende `*-anim-*`-Clip folgen.
 Höchstens eine Erkundung pro Kapitel.
 
-**b) Das Leitprogramm braucht eine geführte Variante** (ein bis drei Regler, eine
-Aussage, eingebettet) → kleine SVG-Simulation. Verbindlich:
+**b) Geführte Variante** (ein bis drei Regler, eine Aussage, eingebettet) → kleine
+SVG-Simulation. Bewährte Muster: Regler + Bezugskurve (gestrichelt) · Zielspiel mit
+Treffer-Rückmeldung · Knöpfe, die je ein Merkmal hervorheben · fester Punkt, der
+«eingefangen» werden muss · Spiegelpunkt, der eine Symmetrie verrät. Verbindlich:
 - Achsen, Variablennamen, Einheiten, Konstanten, **Reglerfarben** (`akz-blau/orange/
   gruen`) identisch zur Themenseiten-Animation
 - **Startwert = Beispiel im Text bzw. Clip** desselben Kapitels
@@ -266,10 +311,10 @@ Aussage, eingebettet) → kleine SVG-Simulation. Verbindlich:
 - der Unterschied zur Themenseiten-Animation als Ein-Satz-Kommentar im Code
 - Reglerenden und Sichtfenster vorab mit `python3` durchrechnen (bleibt der Scheitel
   im Bild? wo stehen Beschriftungen?)
-- steht in einem `.duo` neben dem Text, der sie erklärt (§6)
+- steht in einem `.duo` neben dem Auftrag, der sie führt (§6)
+- Werte im Text mit Dezimalpunkt und echtem Minus, gerundete mit «≈»
 
-**c) Reine Rechentechnik → keine Animation.** Erlaubt, aber mindestens das Kernkapitel
-hat eine Erkundung.
+**c) Reine Rechentechnik → keine Animation.** Nur, wo sich wirklich nichts zeigen lässt.
 
 ---
 
@@ -278,6 +323,12 @@ hat eine Erkundung.
 - **Vortest** prüft nur Voraussetzungen, 8–13 Punkte, mit Verweis bei Lücken.
 - **Selbsttest je Kapitel**, 7–16 Punkte, 3–6 Aufgaben à 2–5 Punkte. Mischung:
   Rechnen · Erkennen/Entscheiden · Begründen (mindestens eine «Warum»-Frage).
+- **Mindestens eine Aufgabe am Graphen je Kapitel**, wo es einen gibt: zuordnen
+  (Graph ↔ Gleichung), ablesen (Gleichung aus dem Graphen), skizzieren, am Bild
+  entscheiden (Vorzeichen von \(D\)). Minigrafen als `<svg class="mini" data-f="a,u,v"
+  data-fenster="…" data-punkte="…">`, gezeichnet vom Seitenskript — Punkte auf
+  Gitterpunkte legen, sonst ist nichts ablesbar. Eine Aufgabe nimmt die Voraussage aus
+  ① wieder auf.
 - **Kein Selbsttest wiederholt ein Beispiel** (gleicher Typ, andere Zahlen), **kein
   Gesamttest einen Selbsttest.**
 - **Jedes Kapitelziel wird geprüft; nichts wird geprüft, was nicht eingeführt ist.**
