@@ -499,6 +499,7 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
 .sim .pfeil{fill:var(--tinte-2)} svg.mini .pfeil{fill:var(--tinte-2)}
 .achsname{fill:var(--tinte);font-family:var(--serif);font-style:italic;font-size:12px;stroke:var(--karte);stroke-width:4px;paint-order:stroke}
 svg.mini .achsname{font-size:10px;stroke-width:3px}
+text.p-text{stroke:var(--karte);stroke-width:4px;paint-order:stroke}
 .hilfs-schalter{display:flex;gap:7px;align-items:center;justify-content:center;font-family:var(--sans);font-size:.82rem;color:var(--tinte-2);margin:2px 0 8px;cursor:pointer}
 .ohne-hilfslinien .hilfslinie{display:none}
 .festhalten{display:grid;grid-template-columns:minmax(0,1fr);gap:0 26px}
@@ -1396,15 +1397,18 @@ svg.mini .achsname{font-size:10px;stroke-width:3px}
         var genau = nst.every(function(x){ return Math.abs(x * 100 - Math.round(x * 100)) < 1e-6; });
         rolle(fig, 'p').innerHTML = (genau ? '' : '≈ ') + z(a) + '·' + (nst[0] === nst[1] ? kl(nst[0]) + '²' : kl(nst[0]) + kl(nst[1]));
       } else rolle(fig, 'p').innerHTML = '<em>gibt es nicht</em>';
-      if (zeig('g')) K.punkt(0, c, 'p-g', '(0 | ' + z(c) + ')');
-      if (zeig('s')) K.punkt(xs, ys, 'p-s', 'S(' + z(xs) + ' | ' + z(ys) + ')', xs > 3 ? -8 : 8, a > 0 ? 18 : -10, xs > 3 ? 'end' : 'start');
-      if (zeig('p')) nst.forEach(function(x){ K.punkt(x, 0, 'p-n'); });
+      // Punkte immer, Koordinaten erst, wenn die zugehörige Form angeklickt ist
+      if (zeig('g')) K.punkt(0, c, 'p-g', aktiv === 'g' ? '(0 | ' + z(c) + ')' : null);
+      if (zeig('s')) K.punkt(xs, ys, 'p-s', aktiv === 's' ? 'S(' + z(xs) + ' | ' + z(ys) + ')' : null, xs > 3 ? -8 : 8, a > 0 ? 18 : -10, xs > 3 ? 'end' : 'start');
+      if (zeig('p')) nst.forEach(function(x, i){
+        K.punkt(x, 0, 'p-n', aktiv === 'p' ? '(' + z(x) + ' | 0)' : null, i === 0 && nst.length > 1 ? -6 : 6, a > 0 ? -8 : 16, i === 0 && nst.length > 1 ? 'end' : 'start');
+      });
       pruefen();
     }
     pruefen = Leiste(fig, [
       { text: 'Klick die <b>Grundform</b> an. Wo im Bild siehst du \\(c\\)?', ok: function(s){ return s.aktiv === 'g'; } },
-      { text: 'Klick die <b>Scheitelform</b> an.', ok: function(s){ return s.aktiv === 's'; } },
-      { text: 'Klick die <b>Produktform</b> an.', ok: function(s){ return s.aktiv === 'p'; } },
+      { text: 'Klick die <b>Scheitelform</b> an. Wo im Bild siehst du den Scheitelpunkt?', ok: function(s){ return s.aktiv === 's'; } },
+      { text: 'Klick die <b>Produktform</b> an. Wo im Bild siehst du die Nullstellen?', ok: function(s){ return s.aktiv === 'p'; } },
       { text: 'Schieb \\(y_s\\) über \\(0\\). Was passiert mit der Produktform?', ok: function(s){ return s.a > 0 && s.ys > 0; } },
       { text: 'Stell \\(x_s = 0\\). Was fehlt jetzt in der Grundform?', ok: function(s){ return s.xs === 0 && s.a !== 0; } },
       { text: 'Stell \\(x^2 - 4x + 3\\) ein.', ok: function(s){ return s.a === 1 && s.xs === 2 && s.ys === -1; } }
