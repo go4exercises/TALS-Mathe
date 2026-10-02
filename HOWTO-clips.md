@@ -196,7 +196,7 @@ Begleiter — alle aus derselben Zeit gerechnet, alle mit `farbe`:
 | Schlüssel | zeigt |
 |---|---|
 | `"scheitel": {}` | Scheitelpunkt mit mitlaufender Beschriftung «S(u \| v)» |
-| `"nullstellen": {}` | die beiden Nullstellen; sie laufen zusammen und verschwinden, wenn die Parabel die Achse verlässt |
+| `"nullstellen": {}` | die beiden Nullstellen; sie laufen zusammen und verschwinden, wenn die Parabel die Achse verlässt; mit `"beschriftung": true` steht «(x \| 0)» daneben |
 | `"yachse": {}` | den \(y\)-Achsenabschnitt mit «(0 \| c)» |
 | `"marken": [{"x": 0, "text": "h(0) = {y}"}]` | Punkt an festem \(x\) mit Live-Wert |
 | `"laeufer": {"bahn": [[t, x], …], "text": "A = {y}", "spiegel": true}` | Punkt, der auf der Kurve fährt; `spiegel` zeigt blass den Partner bei \(2u - x\) |

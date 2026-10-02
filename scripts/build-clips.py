@@ -482,8 +482,9 @@ def graf_svg(el, theme):
                 teile.append(punkt_g("bew-s", pa["scheitel"].get("farbe", 3)))
             if pa.get("nullstellen"):
                 f_ = pa["nullstellen"].get("farbe", 2)
-                teile.append(punkt_g("bew-n bew-n1", f_, text=False))
-                teile.append(punkt_g("bew-n bew-n2", f_, text=False))
+                mit = bool(pa["nullstellen"].get("beschriftung"))   # «(x | 0)» an den Nullstellen
+                teile.append(punkt_g("bew-n bew-n1", f_, text=mit))
+                teile.append(punkt_g("bew-n bew-n2", f_, text=mit))
             if pa.get("yachse"):
                 teile.append(punkt_g("bew-y", pa["yachse"].get("farbe", 1)))
             for m in pa.get("marken", []):
@@ -781,7 +782,13 @@ function bewegen(t) {
       } else if (g.classList.contains('bew-n')) {
         const q = a !== 0 ? -v / a : -1, w = q >= 0 ? Math.sqrt(q) : NaN;
         if (isNaN(w)) { g.style.display = 'none'; continue; }
-        setze(g, g.classList.contains('bew-n1') ? u - w : u + w, 0);
+        const xn = g.classList.contains('bew-n1') ? u - w : u + w;
+        setze(g, xn, 0);
+        if (g.querySelector(':scope > text')) {
+          const tx = g.querySelector(':scope > text'), links = g.classList.contains('bew-n1') && w > 1e-9;
+          tx.setAttribute('x', px(xn) + (links ? -16 : 16)); tx.setAttribute('y', py(0) + (a > 0 ? -18 : 44));
+          tx.setAttribute('text-anchor', links ? 'end' : 'start'); tx.textContent = '(' + bewZahl(xn) + ' | 0)';
+        }
       } else if (g.classList.contains('bew-y')) {
         setze(g, 0, f(0)); beschrifte(g, 0, f(0), '(0 | ' + bewZahl(f(0)) + ')', false);
       } else if (g.classList.contains('bew-m')) {

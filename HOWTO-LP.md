@@ -171,14 +171,15 @@ eingeklappt (`details.anleitung`).
    stimmt, und bietet «Nächste ▶» bzw. «überspringen». **Kein Text links daneben** — lange
    Aufträge schrecken ab. Eine Aufgabe = ein Satz. Zielspiele («Triff die grüne Parabel»)
    gehören als letzte Aufgaben dazu.
-3. **③ Kontrollfragen.** Ein zweiter Clip mit **neuen** Beispielen hält an und fragt
+3. **③ Kontrollfragen.** Ein zweiter Clip mit **neuen** Beispielen — ohne Einleitungsszene, er
+   beginnt direkt mit Frage 1 — hält an und fragt
    (Knöpfe oder Tippen ins Bild). Richtig → kurzes ✓, der Clip rollt sofort weiter; falsch →
    Erklärung (vorgelesen) und «Weiter». Danach **Festhalten**: ein Merkkasten (Definition im
    Wortlaut der Themenseite, kurz) und der Häufige Fehler in einem Satz.
 4. **④ Üben mit Rückmeldung.** Zwei bis drei `.uebung`-Kästen (§9).
 5. **⑤ Aufgaben mit Lösungen.** Drei bis vier Aufgaben auf Papier, Lösung aufklappbar.
 
-**Text aufs Nötigste.** Lernziel ein Satz, keine Einleitungsabsätze, keine Hinweise, die der
+**Text aufs Nötigste.** Clip-Karten nur mit Titel und Dauer (keine Unterzeile). Lernziel ein Satz, keine Einleitungsabsätze, keine Hinweise, die der
 Clip schon gibt; «Mehr dazu» als eine Zeile mit Link.
 
 Am Ende des Leitprogramms: **Gesamttest und Bewertungspaket als PDF** (§9) — kein HTML.
