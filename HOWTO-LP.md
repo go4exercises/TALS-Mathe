@@ -1,6 +1,6 @@
 # HOWTO — Leitprogramme (Gesamtfassung, Probe)
 
-**Status: Probefassung vom 30.09.2026, Fassung 2 («zuerst sehen») am selben Tag.** Führt `HOWTO-leitprogramm-didaktik.md` (was
+**Status: Probefassung vom 30.09.2026, Fassung 3 vom 02.10.2026.** Führt `HOWTO-leitprogramm-didaktik.md` (was
 hineingehört) und `HOWTO-leitprogramme.md` (wie es ins Repo kommt) zu einer Datei
 zusammen, löst ihre Widersprüche auf und ergänzt zwei Punkte, die in beiden fehlten:
 die **Bindung an den RLP** (§1) und die **Nutzung der Bildschirmbreite** (§6). Erprobt an
@@ -150,70 +150,35 @@ Einschätzung  Punktebereiche → konkrete Rückverweise auf Kapitel
 Weiter        nächstes Leitprogramm · Themenseite · bewusst Weggelassenes
 ```
 
-### Innerhalb eines Kapitels: das Muster (Entscheid 02.10.2026)
+### Innerhalb eines Kapitels: das Muster (Fassung 3, 02.10.2026)
 
-Vorbild ist Kapitel 1 von `leitprogramme/quadratische-funktionen.html`. Jedes Kapitel hat fünf
-Stufen; sie stehen als Fahrplan (`.fahrplan`) unter dem Lernziel und als Phasen
-(`<p class="phase">`) über den Abschnitten:
+Alle Kapitel von `leitprogramme/quadratische-funktionen.html` folgen diesem Muster; die Seite
+entsteht aus einer Kapitelbeschreibung, damit es überall gleich bleibt. Fahrplan (`.fahrplan`)
+unter dem Lernziel, Phasen (`<p class="phase">`) über den Abschnitten:
 
-1. **① Clip: zuschauen.** Ein Einführungsclip zeigt **alles**, was das Kapitel bringt — in
-   Bewegung (bewegte Grafen, HOWTO-clips) — und endet mit einer Szene «Jetzt du»: dem
-   Auftrag, das Gezeigte in der Animation darunter nachzuvollziehen.
-2. **② Selber tüfteln.** Die eingebettete Simulation (§8) mit genau diesem Auftrag
-   («Vollzieh den Clip nach»), Schritt für Schritt wie im Clip, danach ein Zielspiel. Start
-   der Simulation = Start des Clips.
-3. **③ Kontrollfragen.** Ein zweiter Clip mit **neuen** Beispielen hält an, fragt
-   (Knöpfe oder Tippen ins Bild), liest Frage und Rückmeldung vor und zeigt danach die
-   Lösung in Bewegung (HOWTO-clips, «Fragen im Clip»). Darunter **Festhalten**: Tabelle
-   «Zahl → im Bild → im Term», Definition im Wortlaut der Themenseite, Beispiele, Häufiger
-   Fehler.
-4. **④ Fragen mit Rückmeldung.** Zwei bis drei `.uebung`-Kästen (§9) — Zufallszahlen,
-   Fehlerdiagnose. «Wenn in jedem Kasten drei auf Anhieb sitzen, weiter.»
-5. **⑤ Aufgaben mit Lösungen.** Der klassische Selbsttest auf Papier, Lösungen
-   aufklappbar, Häkchen für den Fortschritt.
+1. **① Clip.** Ein Einführungsclip zeigt **alles**, was das Kapitel bringt — in Bewegung —
+   und endet mit dem allgemeinen Auftrag: «Erkunde diese Zusammenhänge in der nachfolgenden
+   Animation und löse die Aufgaben.» Der erste Clip eines Themas führt die Grundform ein
+   (hier: Normalparabel über die Wertetabelle).
+2. **② Tüfteln.** Die Simulation (§8) trägt ihre Aufgaben **selbst**: eine Aufgabenleiste
+   (`.leiste`) über dem Bild zeigt eine Aufgabe nach der anderen, setzt ✓, sobald der Zustand
+   stimmt, und bietet «Nächste ▶» bzw. «überspringen». **Kein Text links daneben** — lange
+   Aufträge schrecken ab. Eine Aufgabe = ein Satz. Zielspiele («Triff die grüne Parabel»)
+   gehören als letzte Aufgaben dazu.
+3. **③ Kontrollfragen.** Ein zweiter Clip mit **neuen** Beispielen hält an und fragt
+   (Knöpfe oder Tippen ins Bild). Richtig → kurzes ✓, der Clip rollt sofort weiter; falsch →
+   Erklärung (vorgelesen) und «Weiter». Danach **Festhalten**: ein Merkkasten (Definition im
+   Wortlaut der Themenseite, kurz) und der Häufige Fehler in einem Satz.
+4. **④ Üben mit Rückmeldung.** Zwei bis drei `.uebung`-Kästen (§9).
+5. **⑤ Aufgaben mit Lösungen.** Drei bis vier Aufgaben auf Papier, Lösung aufklappbar.
 
-Am Ende des Leitprogramms steht der **Gesamttest als PDF mit getrenntem Bewertungspaket**
-für die Bewertung durch eine KI (§9).
+**Text aufs Nötigste.** Lernziel ein Satz, keine Einleitungsabsätze, keine Hinweise, die der
+Clip schon gibt; «Mehr dazu» als eine Zeile mit Link.
 
-Zeit: Ein Kapitel nach diesem Muster braucht rund 30 Minuten (zwei Clips à ~1 min,
-Tüfteln ~8 min, Fragen ~7 min, Aufgaben ~10 min). Das verschiebt die Rechnung in §3: Fünf
-Kapitel sind gut drei bis vier Lektionen.
+Am Ende des Leitprogramms: **Gesamttest und Bewertungspaket als PDF** (§9) — kein HTML.
 
-### Vorgängermuster: zuerst sehen, dann die Regel
-
-*Gilt noch für Kapitel 2–5 des Prototyps, bis sie auf das Muster oben umgestellt sind.*
-
-Seit Fassung 2 (30.09.2026, Rückmeldung des Auftraggebers zum Prototyp): **Wo sich der
-Stoff zeigen lässt, wird er zuerst gezeigt.** Bei Funktionen ist das immer der Fall —
-jeder Zusammenhang hat ein Bild. Die Reihenfolge ist induktiv:
-
-1. **Lernziel** in `<p class="ziel">`, ein Satz in Du-Form.
-2. **① Erfahren.** Eine eingebettete Simulation (§8) mit einem Auftrag in drei Schritten:
-   **voraussagen, schieben, notieren.** Die Voraussage ist der Kern — erst die
-   enttäuschte Erwartung («Minus in der Klammer, und doch nach rechts») macht die Regel
-   merkenswert. Wo es passt, ein Zielspiel («stell die Regler so, dass deine Parabel auf
-   der grünen liegt»).
-3. **② Clip.** Er zeigt **dieselbe Bewegung** noch einmal, Schritt für Schritt, mit
-   demselben Startwert und denselben Farben wie die Simulation (§7).
-4. **③ Verallgemeinern.** Aus den Beobachtungen wird die Regel (Tabelle «Zahl → im Bild
-   → im Term»), dann die **Definition** oder der Merksatz — mit demselben Wortlaut wie auf
-   der Themenseite. Danach ein durchgerechnetes Beispiel, möglichst in beide Richtungen
-   (vom Term zum Bild, vom Bild zum Term), und der Häufige Fehler. Reine Rechenclips der
-   Themenseite (Umformen, Formeln) gehören hierher, nicht an den Anfang.
-5. **«Ausführlich: …»** — Link auf den passenden Abschnitt der Themenseite.
-6. **④ Üben** — der Selbsttest (§9), mit mindestens einer Aufgabe am Graphen.
-7. **Anwenden** — in den Anwendungskapiteln (Aufstellen, Extremwerte) ist die Anwendung
-   selbst der Stoff; sonst eine Sachaufgabe im Selbsttest.
-
-Die vier Phasen stehen sichtbar als `<p class="phase"><span>①</span> Erfahren</p>` über
-dem Abschnitt, damit man weiss, in welchem Modus man gerade ist.
-
-Wo sich nichts zeigen lässt (reine Termumformung), bleibt die alte Folge: Clip → Text →
-Beispiel → Selbsttest. Das ist die Ausnahme, nicht die Vorlage.
-
-⟂ Entscheid: Didaktik «Mehr dazu» *am Ende* des Kapitels, Technik «Ausführlich» *vor*
-dem Selbsttest. Gilt jetzt **«Ausführlich:» vor dem Selbsttest** — so machen es die
-bestehenden Leitprogramme, und der Selbsttest bleibt das Letzte, was man im Kapitel tut.
+Zeit: rund 30 Minuten je Kapitel (zwei Clips à ~1 min, Tüfteln ~8, Üben ~7, Aufgaben ~10).
+Fünf Kapitel + Vorwissen + Gesamttest ≈ vier Lektionen (§3).
 
 ---
 
@@ -282,6 +247,10 @@ ein Graph lässt sich nicht neben den Text stellen, der ihn erklärt.
   entsteht aus einer Folge kurzer Szenen mit je einem Zustand und einem Satz — dieselbe
   Parabel an derselben Stelle, Szene für Szene verschoben, die Normalparabel gestrichelt
   als Bezug. Ein Clip, der «die Parabel wandert nach rechts» nur sagt, verfehlt sein Thema.
+- **Je Kapitel zwei eigene Clips** (Entscheid 02.10.2026): Einführungsclip und Kontrollclip.
+  Theme **`begreifbar-schlicht`** — ohne Häuschenpapier und roten Rand, weil sich Karo und
+  Koordinatengitter stören. Notation wie im Leitprogramm (hier \(x_s\), \(y_s\); gesprochen
+  «x s», «y s»).
 - **Leitprogramm-eigene Clips sind erlaubt**, wenn sie eine Simulation *des
   Leitprogramms* beschreiben (Entscheid 30.09.2026). Dann: `"probe": true` mit
   `_probe`-Begründung (nicht in der Bibliothek, auf keiner Themenseite), Dateiname
@@ -342,7 +311,9 @@ Treffer-Rückmeldung · Knöpfe, die je ein Merkmal hervorheben · fester Punkt,
 - der Unterschied zur Themenseiten-Animation als Ein-Satz-Kommentar im Code
 - Reglerenden und Sichtfenster vorab mit `python3` durchrechnen (bleibt der Scheitel
   im Bild? wo stehen Beschriftungen?)
-- steht in einem `.duo` neben dem Auftrag, der sie führt (§6)
+- trägt ihre Aufträge selbst: Aufgabenleiste `.leiste` mit `Leiste(fig, aufgaben, sim)` —
+  je Aufgabe ein Satz (`text`), eine Prüfbedingung auf den Zustand (`ok`) und optional
+  `setup` (Ziel einblenden, Modus wechseln); ✓ erscheint von selbst (§4)
 - Werte im Text mit Dezimalpunkt und echtem Minus, gerundete mit «≈»
 
 **c) Reine Rechentechnik → keine Animation.** Nur, wo sich wirklich nichts zeigen lässt.
@@ -367,7 +338,7 @@ Treffer-Rückmeldung · Knöpfe, die je ein Merkmal hervorheben · fester Punkt,
   fragt (HOWTO-clips, «Fragen im Clip»).
 - **Mindestens eine Aufgabe am Graphen je Kapitel**, wo es einen gibt: zuordnen
   (Graph ↔ Gleichung), ablesen (Gleichung aus dem Graphen), skizzieren, am Bild
-  entscheiden (Vorzeichen von \(D\)). Minigrafen als `<svg class="mini" data-f="a,u,v"
+  entscheiden (Vorzeichen von \(D\)). Minigrafen als `<svg class="mini" data-f="a,xs,ys"
   data-fenster="…" data-punkte="…">`, gezeichnet vom Seitenskript — Punkte auf
   Gitterpunkte legen, sonst ist nichts ablesbar. Eine Aufgabe nimmt die Voraussage aus
   ① wieder auf.
@@ -376,17 +347,20 @@ Treffer-Rückmeldung · Knöpfe, die je ein Merkmal hervorheben · fester Punkt,
 - **Jedes Kapitelziel wird geprüft; nichts wird geprüft, was nicht eingeführt ist.**
 - **Lösung aufklappbar**, darunter optional eine Zeile `.komm` zur typischen
   Fehlerquelle.
-- **Gesamttest als PDF, Bewertungspaket getrennt** (Entscheid 02.10.2026). Beide als
-  Druckseite unter `downloads/leitprogramme/<name>/` (Skelett und `print.css` wie die
-  übrigen Druckseiten) und daraus als PDF:
-  `node .claude/tools/druck-pdf.mjs downloads/leitprogramme/<name>/gesamttest.html …/bewertungspaket.html`
-  (wartet auf MathJax und Diagramme, meldet Formelfehler). Im Leitprogramm stehen die
-  Aufgaben weiter zum Ansehen, aber **ohne** aufklappbare Lösungen, dazu ein Dreischritt mit
-  beiden Downloads.
+- **Gesamttest und Bewertungspaket nur als PDF aus LaTeX** (Entscheid 02.10.2026, keine
+  HTML-Ansicht). Quellen `downloads/leitprogramme/<name>/{gesamttest,bewertungspaket}.tex`,
+  gemeinsame Gestaltung `downloads/leitprogramme/lp-druck.sty` (pdfLaTeX, Palatino über
+  `mathpazo`, Graphen mit pgfplots). Bauen: `python3 scripts/build-lp-pdf.py [filter]` —
+  übersetzt in einem temporären Ordner und legt nur das PDF neben die Quelle. Im Leitprogramm
+  steht nur ein Dreischritt mit den beiden Downloads und die Selbsteinschätzung.
   - *Gesamttest-Blatt:* Feld «Code (kein Name)», Anleitung mit Zeit und Hilfsmitteln je Teil,
     Schreibflächen, Hinweis auf das Bewertungspaket.
-  - *Bewertungspaket:* (1) So gehst du vor — erst lösen, fotografieren ohne Namen, nur ein
-    von der Schule erlaubtes KI-Werkzeug, Lesung der KI prüfen; (2) **Auftrag an die KI**
+  - *Bewertungspaket:* (1) So gehst du vor — erst lösen, fotografieren ohne Namen; ob und
+    welche KI, entscheiden die Lernenden **selbst und in eigener Verantwortung** nach dem, was
+    ihnen aufgrund von Alter und persönlicher Situation erlaubt ist (Altersgrenzen,
+    Nutzungsbedingungen, allenfalls Einverständnis der Eltern) — die Seite ist frei
+    zugänglich, nicht an eine Schule gebunden; ohne KI Selbstbewertung nach dem Raster;
+    Lesung der KI prüfen; (2) **Auftrag an die KI**
     zum Kopieren — erst abschreiben, was sie liest, `[unsicher]` statt raten, Punkte nach
     Raster, Folgefehler nur einmal abziehen, andere Wege voll, jeden Abzug begründen,
     Musterlösung nicht abschreiben, Tabelle und Rückverweis aufs Kapitel, keine Note;
@@ -413,6 +387,7 @@ Immer nach `STYLEGUIDE.md`. Beim Vergleich schiefgegangen:
 | Parametrisierte Menge | Doppelpunkt: `\{(x \mid 2x-3) : x \in \mathbb{R}\}` |
 | Intervalle | `]a;\, b[` |
 | Zahlen | Dezimalpunkt; Brüche, wo die Themenseite Brüche verwendet |
+| Scheitel | im Leitprogramm \(S(x_s \mid y_s)\), \(f(x) = a(x - x_s)^2 + y_s\) (Entscheid 02.10.2026); einmal vermerken, dass die Themenseite \(u, v\) schreibt |
 | Fachbegriffe | **der Begriff aus den RLP-Kompetenzen** (z. B. Grund-, Scheitel-, Produktform); weicht die Themenseite oder ein Clip ab, deren Namen einmal in Klammern nennen (z. B. «Produktform (Linearfaktorform)»). Die Synonyme stehen auf der Themenseite beim Begriff |
 | Methodenwahl | andere Hauptmethode als die Themenseite → beide nennen, Wahl in einem Satz begründen |
 

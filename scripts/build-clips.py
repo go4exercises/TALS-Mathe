@@ -829,17 +829,22 @@ FRAGEN_JS = r'''
     offen = null;
   }
   function antwort(F, ok, text, schl) {
+    box.dataset.fertig = '1';
     vorlesen((F.ton || {})[schl]);
     if (F.typ === 'klick') box.querySelector('.fr-knoepfe').innerHTML = '';
     const r = box.querySelector('.fr-rueck');
     r.innerHTML = (ok ? '✓ ' : '') + text;
     r.style.color = ok ? 'var(--f3)' : '';
+    if (ok) {                      // richtig: kurz bestaetigen, dann von selbst weiter
+      setTimeout(() => { if (offen) { schliessen(); weiter(); } }, 1300);
+      return;
+    }
     const w = document.createElement('button'); w.className = 'fr-weiter'; w.textContent = 'Weiter ▶';
     w.onclick = () => { schliessen(); weiter(); };
     box.appendChild(w); w.focus();
   }
   function zeigen(i, F) {
-    offen = { i }; erledigt.add(i); pause();
+    offen = { i }; erledigt.add(i); pause(); delete box.dataset.fertig;
     box.innerHTML = '<div class="fr-kopf">Deine Vorhersage</div><div class="fr-text"></div>'
       + '<div class="fr-knoepfe"></div><div class="fr-rueck"></div>';
     box.querySelector('.fr-text').textContent = F.text;
@@ -863,7 +868,7 @@ FRAGEN_JS = r'''
       // Am Stage horchen, nicht am Layer: unsichtbare spaetere Layer (Deckkraft 0)
       // liegen obenauf und wuerden den Tipp abfangen.
       tippen = ev => {
-        if (!offen || box.querySelector('.fr-weiter') || box.contains(ev.target)) return;
+        if (!offen || box.dataset.fertig || box.contains(ev.target)) return;
         const r = svg.getBoundingClientRect();
         if (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom) return;
         const sx = (ev.clientX - r.left) / r.width * b, sy = (ev.clientY - r.top) / r.height * h;
@@ -909,14 +914,16 @@ def fragen_texte(F):
     Text gelesen. Dieselbe Liste benutzt build-clip-fragen-ton.py — so passen
     Tondateien und Abspieler immer zusammen."""
     t = [("frage", F["text"], F.get("sprich", F["text"]))]
+    # Richtige Antworten werden nicht vorgelesen: Der Clip zeigt kurz ✓ und
+    # rollt weiter (Entscheid 02.10.2026) — eine Ansage liefe in den Sprecher.
     if F.get("typ") == "wahl":
         rs = F.get("rueck_sprich", {})
         for j in range(len(F.get("optionen", []))):
+            if j == F.get("richtig"):
+                continue
             if str(j) in F.get("rueck", {}):
                 t.append(("r%d" % j, F["rueck"][str(j)], rs.get(str(j), F["rueck"][str(j)])))
     else:
-        if F.get("richtig_text"):
-            t.append(("ok", F["richtig_text"], F.get("richtig_sprich", F["richtig_text"])))
         for k, f in enumerate(F.get("fallen", [])):
             t.append(("fall%d" % k, f["text"], f.get("sprich", f["text"])))
         if F.get("falsch_text"):

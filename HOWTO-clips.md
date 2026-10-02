@@ -162,6 +162,12 @@ Kurve an dieser Stelle verläuft — bei `y = x²` liegt die Kurve an `x = 1.35`
 ein Label bei `7.6` ist also frei. Vier Kollisionen sind auf diese Weise entstanden und
 erst im Bild aufgefallen, nicht in der Prüfung.
 
+### Theme `begreifbar-schlicht` — Standard für neue Clips (seit 02.10.2026)
+
+Wie `begreifbar`, aber **ohne Häuschenpapier und ohne roten Rand** (`karo: false`,
+`rand: false`). Karo und Koordinatengitter eines `graf` stören sich, besonders in Bewegung.
+Neue Clips setzen `"theme": "begreifbar-schlicht"`; bestehende bleiben, wie sie sind.
+
 ### Bewegte Parabel im `graf`: `bewegung` (seit 02.10.2026)
 
 Statt eines festen Bildes je Szene kann eine Parabel **während der Szene gleiten**:
@@ -228,6 +234,9 @@ Voraussage (predict–observe–explain) wandert in den Clip selbst:
 
 - `bei` ist die Sekunde **ab Szenenbeginn** — vor `sprecher_bei` (0.4) legen, sonst
   bricht der Satz mitten im Wort ab.
+- **Richtig → der Clip rollt sofort weiter** (kurzes ✓, keine Ansage). Nur eine falsche
+  Antwort zeigt die Erklärung, liest sie vor und wartet auf «Weiter». Darum werden die
+  Rückmeldungen zu richtigen Antworten nicht vertont (`fragen_texte()` lässt sie aus).
 - `wahl`: Knöpfe, `rueck` gibt **je Antwort** eine eigene Rückmeldung. Bei einer
   falschen Voraussage die Lösung nicht verraten, sondern aufs Hinschauen lenken — der
   Clip löst sie gleich danach auf.
