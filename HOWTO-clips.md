@@ -240,6 +240,19 @@ Voraussage (predict–observe–explain) wandert in den Clip selbst:
   Fragen.
 - Wie `bewegung` nur in Clips mit `fragen` eingebaut (`FRAGEN_JS`); alle anderen bleiben
   Byte für Byte gleich.
+- **Vorlesen:** Frage und Rückmeldung spricht dieselbe Stimme wie der Clip, sobald sie
+  erscheinen — aber nur, wenn der Ton des Clips an ist. Erzeugt werden die Dateien
+  getrennt von der Haupttonspur:
+  ```sh
+  python3 scripts/build-clip-fragen-ton.py <clip>   # je Text clips/ton/<clip>-f<i>-<schluessel>.mp3
+  python3 scripts/build-clips.py <clip>             # danach: der Clip nimmt nur vorhandene Dateien auf
+  ```
+  Gesprochen wird der Wortlaut aus `sprich`, `rueck_sprich` (je Option), `richtig_sprich`,
+  `falsch_sprich` und `fallen[].sprich` — wie beim Sprechertext ausgeschrieben («x minus
+  zwei», nicht «x − 2»). Fehlt er, liest die Stimme den angezeigten Text. Welche Texte es
+  gibt, steht an einer Stelle (`fragen_texte()` in `build-clips.py`); das Ton-Skript und der
+  Abspieler benutzen dieselbe Liste. Das Skript ist Mathe-eigen und benutzt `sprich()` und
+  `aussprache()` aus dem geteilten `build-clip-ton.py`, ohne es zu ändern.
 - **Lokal testen:** `python3 -m http.server` kann keine Bereichsanfragen; darum springt
   der Ton beim Spulen auf den Anfang zurück. Auf GitHub Pages tritt das nicht auf.
 

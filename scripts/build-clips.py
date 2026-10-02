@@ -809,18 +809,27 @@ FRAGEN_JS = r'''
     .fr-tippbar, .fr-tippbar svg{pointer-events:auto !important;cursor:crosshair}`;
   document.head.appendChild(css);
   const box = document.createElement('div'); box.id = 'frage'; stage.appendChild(box);
-  let letzt = 0, offen = null, tippen = null;
+  let letzt = 0, offen = null, tippen = null, stimme = null;
+  // Vorlesen mit derselben Stimme wie der Clip — nur wenn dessen Ton an ist.
+  const hauptton = document.getElementById('ton');
+  const vorlesen = src => {
+    if (stimme) { stimme.pause(); stimme = null; }
+    if (!src || !hauptton || hauptton.muted) return;
+    stimme = new Audio(src); stimme.play().catch(() => {});
+  };
   const erledigt = new Set();
   const pause = () => { if (pp.textContent === 'Pause') pp.click(); };
   const weiter = () => { if (pp.textContent === 'Play') pp.click(); };
   function schliessen() {
+    vorlesen(null);
     box.style.display = 'none'; box.innerHTML = '';
     document.querySelectorAll('.fr-marke').forEach(m => m.remove());
     document.querySelectorAll('.fr-tippbar').forEach(l => l.classList.remove('fr-tippbar'));
     if (tippen) { stage.removeEventListener('click', tippen); tippen = null; }
     offen = null;
   }
-  function antwort(F, ok, text) {
+  function antwort(F, ok, text, schl) {
+    vorlesen((F.ton || {})[schl]);
     if (F.typ === 'klick') box.querySelector('.fr-knoepfe').innerHTML = '';
     const r = box.querySelector('.fr-rueck');
     r.innerHTML = (ok ? '✓ ' : '') + text;
@@ -841,7 +850,7 @@ FRAGEN_JS = r'''
         b.onclick = () => {
           kn.querySelectorAll('button').forEach(x => x.disabled = true);
           b.classList.add(j === F.richtig ? 'ok' : 'nein');
-          antwort(F, j === F.richtig, (F.rueck || {})[j] || (j === F.richtig ? 'Richtig.' : 'Schau, was der Clip zeigt.'));
+          antwort(F, j === F.richtig, (F.rueck || {})[j] || (j === F.richtig ? 'Richtig.' : 'Schau, was der Clip zeigt.'), 'r' + j);
         };
         kn.appendChild(b);
       });
@@ -864,16 +873,18 @@ FRAGEN_JS = r'''
           c.setAttribute('fill', 'none'); c.setAttribute('stroke', farbe); c.setAttribute('stroke-width', 6); svg.appendChild(c); };
         mk(sx, sy, 'var(--f2)');
         const d = Math.hypot(x - F.ziel[0], y - F.ziel[1]);
-        if (d <= (F.toleranz || 0.5)) return antwort(F, true, F.richtig_text || 'Getroffen.');
+        if (d <= (F.toleranz || 0.5)) return antwort(F, true, F.richtig_text || 'Getroffen.', 'ok');
         const zx = rd + (F.ziel[0] - x0) / (x1 - x0) * (b - 2 * rd), zy = h - rd - (F.ziel[1] - y0) / (y1 - y0) * (h - 2 * rd);
         mk(zx, zy, 'var(--f3)');
-        const fall = (F.fallen || []).find(f => Math.hypot(x - f.bei[0], y - f.bei[1]) <= (F.toleranz || 0.5));
-        antwort(F, false, fall ? fall.text : (F.falsch_text || 'Nicht ganz — der grüne Kreis zeigt die Stelle.'));
+        const fk = (F.fallen || []).findIndex(f => Math.hypot(x - f.bei[0], y - f.bei[1]) <= (F.toleranz || 0.5));
+        antwort(F, false, fk >= 0 ? F.fallen[fk].text : (F.falsch_text || 'Nicht ganz — der grüne Kreis zeigt die Stelle.'),
+                fk >= 0 ? 'fall' + fk : 'falsch');
       };
       stage.addEventListener('click', tippen);
       kn.innerHTML = '<span style="font-size:30px;color:var(--f2)">👉 Tipp ins Bild rechts.</span>';
     }
     box.style.display = 'block';
+    vorlesen((F.ton || {}).frage);
   }
   const vorFragen = seek;
   seek = function (t) {
@@ -889,6 +900,32 @@ FRAGEN_JS = r'''
   };
 })();
 '''
+
+
+def fragen_texte(F):
+    """Alle Texte einer Frage, die vorgelesen werden: Liste (schluessel,
+    angezeigt, gesprochen). Der gesprochene Wortlaut steht in den *_sprich-
+    Feldern (wie «x minus zwei» statt «x − 2»); fehlt er, wird der angezeigte
+    Text gelesen. Dieselbe Liste benutzt build-clip-fragen-ton.py — so passen
+    Tondateien und Abspieler immer zusammen."""
+    t = [("frage", F["text"], F.get("sprich", F["text"]))]
+    if F.get("typ") == "wahl":
+        rs = F.get("rueck_sprich", {})
+        for j in range(len(F.get("optionen", []))):
+            if str(j) in F.get("rueck", {}):
+                t.append(("r%d" % j, F["rueck"][str(j)], rs.get(str(j), F["rueck"][str(j)])))
+    else:
+        if F.get("richtig_text"):
+            t.append(("ok", F["richtig_text"], F.get("richtig_sprich", F["richtig_text"])))
+        for k, f in enumerate(F.get("fallen", [])):
+            t.append(("fall%d" % k, f["text"], f.get("sprich", f["text"])))
+        if F.get("falsch_text"):
+            t.append(("falsch", F["falsch_text"], F.get("falsch_sprich", F["falsch_text"])))
+    return t
+
+
+def fragen_tondatei(dateiname, i, schluessel):
+    return "%s-f%d-%s.mp3" % (dateiname, i, schluessel)
 
 
 def element_html(el, theme):
@@ -1266,8 +1303,16 @@ def bauen(quelle, eigenstaendig=False):
             sz = next((q for q in plan if q["sz"].get("name") == F["szene"]), None)
             if sz is None:
                 raise SystemExit("Frage verweist auf unbekannte Szene: %s" % F["szene"])
-            G = {k: v for k, v in F.items() if not k.startswith("_") and k not in ("szene", "bei")}
+            G = {k: v for k, v in F.items() if not k.startswith("_") and k not in ("szene", "bei")
+                 and not k.endswith("sprich")}
+            for f_ in G.get("fallen", []):
+                f_.pop("sprich", None)
             G["t"] = round(sz["start"] + F.get("bei", 0.3), 2)
+            G["ton"] = {}
+            for schl, _, _ in fragen_texte(F):
+                datei = fragen_tondatei(dreh["dateiname"], len(fr), schl)
+                if os.path.exists(os.path.join(CLIPS, "ton", datei)):
+                    G["ton"][schl] = "ton/" + datei
             fr.append(G)
         html = html.replace("window.__seek = seek;", "const FRAGEN = " + json.dumps(fr, ensure_ascii=False)
                             + ";" + FRAGEN_JS + "window.__seek = seek;", 1)

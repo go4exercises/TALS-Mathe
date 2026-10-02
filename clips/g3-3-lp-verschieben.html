@@ -225,7 +225,7 @@ function bewegen(t) {
 }
 const seekOhneBewegung = seek;
 seek = function (t) { seekOhneBewegung(t); bewegen(t); };
-const FRAGEN = [{"typ": "wahl", "text": "Gleich steht in der Klammer x − 2. Wohin wandert die Parabel?", "optionen": ["2 nach links", "2 nach rechts", "2 nach unten"], "richtig": 1, "rueck": {"0": "Das denken die meisten — wegen des Minus. Schau genau hin, was jetzt passiert.", "1": "Ja. Der Clip zeigt gleich, warum.", "2": "Nach unten schiebt nur ein v hinter der Klammer. Eine Zahl in der Klammer schiebt waagrecht — aber wohin?"}, "t": 20.91}, {"typ": "wahl", "text": "Gleich wird aus x² die Funktion 2x². Was passiert mit der Parabel?", "optionen": ["schmaler", "breiter", "sie rückt nach oben"], "richtig": 0, "rueck": {"0": "Ja: Jeder Funktionswert verdoppelt sich, die Parabel steigt schneller.", "1": "Gegenteil: Jeder Funktionswert verdoppelt sich — sie steigt schneller an.", "2": "Der Scheitel bleibt bei 0, denn 2 · 0² = 0. Was ändert sich dann?"}, "t": 35.2}, {"typ": "klick", "text": "y = (x − 2)² − 1: Wo landet der Scheitel? Tipp die Stelle ins Bild.", "ziel": [2, -1], "toleranz": 0.6, "richtig_text": "Getroffen: S(2 | −1). Schau, wie die Parabel dorthin gleitet.", "fallen": [{"bei": [-2, -1], "text": "Das Minus in der Klammer heisst rechts: x − 2 wird bei x = 2 null. Der grüne Kreis zeigt S(2 | −1)."}, {"bei": [2, 1], "text": "Die 2 stimmt. Aber −1 hinter der Klammer heisst hinunter. Der grüne Kreis zeigt S(2 | −1)."}, {"bei": [-2, 1], "text": "Beide Vorzeichen gedreht. Nur u in der Klammer dreht sich, v nicht. Der grüne Kreis zeigt S(2 | −1)."}], "falsch_text": "Nicht ganz. Der grüne Kreis zeigt S(2 | −1): 2 nach rechts, 1 hinunter.", "t": 49.05}];
+const FRAGEN = [{"typ": "wahl", "text": "Gleich steht in der Klammer x − 2. Wohin wandert die Parabel?", "optionen": ["2 nach links", "2 nach rechts", "2 nach unten"], "richtig": 1, "rueck": {"0": "Das denken die meisten — wegen des Minus. Schau genau hin, was jetzt passiert.", "1": "Ja. Der Clip zeigt gleich, warum.", "2": "Nach unten schiebt nur ein v hinter der Klammer. Eine Zahl in der Klammer schiebt waagrecht — aber wohin?"}, "t": 20.91, "ton": {"frage": "ton/g3-3-lp-verschieben-f0-frage.mp3", "r0": "ton/g3-3-lp-verschieben-f0-r0.mp3", "r1": "ton/g3-3-lp-verschieben-f0-r1.mp3", "r2": "ton/g3-3-lp-verschieben-f0-r2.mp3"}}, {"typ": "wahl", "text": "Gleich wird aus x² die Funktion 2x². Was passiert mit der Parabel?", "optionen": ["schmaler", "breiter", "sie rückt nach oben"], "richtig": 0, "rueck": {"0": "Ja: Jeder Funktionswert verdoppelt sich, die Parabel steigt schneller.", "1": "Gegenteil: Jeder Funktionswert verdoppelt sich — sie steigt schneller an.", "2": "Der Scheitel bleibt bei 0, denn 2 · 0² = 0. Was ändert sich dann?"}, "t": 35.2, "ton": {"frage": "ton/g3-3-lp-verschieben-f1-frage.mp3", "r0": "ton/g3-3-lp-verschieben-f1-r0.mp3", "r1": "ton/g3-3-lp-verschieben-f1-r1.mp3", "r2": "ton/g3-3-lp-verschieben-f1-r2.mp3"}}, {"typ": "klick", "text": "y = (x − 2)² − 1: Wo landet der Scheitel? Tipp die Stelle ins Bild.", "ziel": [2, -1], "toleranz": 0.6, "richtig_text": "Getroffen: S(2 | −1). Schau, wie die Parabel dorthin gleitet.", "fallen": [{"bei": [-2, -1], "text": "Das Minus in der Klammer heisst rechts: x − 2 wird bei x = 2 null. Der grüne Kreis zeigt S(2 | −1)."}, {"bei": [2, 1], "text": "Die 2 stimmt. Aber −1 hinter der Klammer heisst hinunter. Der grüne Kreis zeigt S(2 | −1)."}, {"bei": [-2, 1], "text": "Beide Vorzeichen gedreht. Nur u in der Klammer dreht sich, v nicht. Der grüne Kreis zeigt S(2 | −1)."}], "falsch_text": "Nicht ganz. Der grüne Kreis zeigt S(2 | −1): 2 nach rechts, 1 hinunter.", "t": 49.05, "ton": {"frage": "ton/g3-3-lp-verschieben-f2-frage.mp3", "ok": "ton/g3-3-lp-verschieben-f2-ok.mp3", "fall0": "ton/g3-3-lp-verschieben-f2-fall0.mp3", "fall1": "ton/g3-3-lp-verschieben-f2-fall1.mp3", "fall2": "ton/g3-3-lp-verschieben-f2-fall2.mp3", "falsch": "ton/g3-3-lp-verschieben-f2-falsch.mp3"}}];
 (() => {
   if (location.search.includes('render')) return;
   const pp = document.getElementById('pp');
@@ -246,18 +246,27 @@ const FRAGEN = [{"typ": "wahl", "text": "Gleich steht in der Klammer x − 2. Wo
     .fr-tippbar, .fr-tippbar svg{pointer-events:auto !important;cursor:crosshair}`;
   document.head.appendChild(css);
   const box = document.createElement('div'); box.id = 'frage'; stage.appendChild(box);
-  let letzt = 0, offen = null, tippen = null;
+  let letzt = 0, offen = null, tippen = null, stimme = null;
+  // Vorlesen mit derselben Stimme wie der Clip — nur wenn dessen Ton an ist.
+  const hauptton = document.getElementById('ton');
+  const vorlesen = src => {
+    if (stimme) { stimme.pause(); stimme = null; }
+    if (!src || !hauptton || hauptton.muted) return;
+    stimme = new Audio(src); stimme.play().catch(() => {});
+  };
   const erledigt = new Set();
   const pause = () => { if (pp.textContent === 'Pause') pp.click(); };
   const weiter = () => { if (pp.textContent === 'Play') pp.click(); };
   function schliessen() {
+    vorlesen(null);
     box.style.display = 'none'; box.innerHTML = '';
     document.querySelectorAll('.fr-marke').forEach(m => m.remove());
     document.querySelectorAll('.fr-tippbar').forEach(l => l.classList.remove('fr-tippbar'));
     if (tippen) { stage.removeEventListener('click', tippen); tippen = null; }
     offen = null;
   }
-  function antwort(F, ok, text) {
+  function antwort(F, ok, text, schl) {
+    vorlesen((F.ton || {})[schl]);
     if (F.typ === 'klick') box.querySelector('.fr-knoepfe').innerHTML = '';
     const r = box.querySelector('.fr-rueck');
     r.innerHTML = (ok ? '✓ ' : '') + text;
@@ -278,7 +287,7 @@ const FRAGEN = [{"typ": "wahl", "text": "Gleich steht in der Klammer x − 2. Wo
         b.onclick = () => {
           kn.querySelectorAll('button').forEach(x => x.disabled = true);
           b.classList.add(j === F.richtig ? 'ok' : 'nein');
-          antwort(F, j === F.richtig, (F.rueck || {})[j] || (j === F.richtig ? 'Richtig.' : 'Schau, was der Clip zeigt.'));
+          antwort(F, j === F.richtig, (F.rueck || {})[j] || (j === F.richtig ? 'Richtig.' : 'Schau, was der Clip zeigt.'), 'r' + j);
         };
         kn.appendChild(b);
       });
@@ -301,16 +310,18 @@ const FRAGEN = [{"typ": "wahl", "text": "Gleich steht in der Klammer x − 2. Wo
           c.setAttribute('fill', 'none'); c.setAttribute('stroke', farbe); c.setAttribute('stroke-width', 6); svg.appendChild(c); };
         mk(sx, sy, 'var(--f2)');
         const d = Math.hypot(x - F.ziel[0], y - F.ziel[1]);
-        if (d <= (F.toleranz || 0.5)) return antwort(F, true, F.richtig_text || 'Getroffen.');
+        if (d <= (F.toleranz || 0.5)) return antwort(F, true, F.richtig_text || 'Getroffen.', 'ok');
         const zx = rd + (F.ziel[0] - x0) / (x1 - x0) * (b - 2 * rd), zy = h - rd - (F.ziel[1] - y0) / (y1 - y0) * (h - 2 * rd);
         mk(zx, zy, 'var(--f3)');
-        const fall = (F.fallen || []).find(f => Math.hypot(x - f.bei[0], y - f.bei[1]) <= (F.toleranz || 0.5));
-        antwort(F, false, fall ? fall.text : (F.falsch_text || 'Nicht ganz — der grüne Kreis zeigt die Stelle.'));
+        const fk = (F.fallen || []).findIndex(f => Math.hypot(x - f.bei[0], y - f.bei[1]) <= (F.toleranz || 0.5));
+        antwort(F, false, fk >= 0 ? F.fallen[fk].text : (F.falsch_text || 'Nicht ganz — der grüne Kreis zeigt die Stelle.'),
+                fk >= 0 ? 'fall' + fk : 'falsch');
       };
       stage.addEventListener('click', tippen);
       kn.innerHTML = '<span style="font-size:30px;color:var(--f2)">👉 Tipp ins Bild rechts.</span>';
     }
     box.style.display = 'block';
+    vorlesen((F.ton || {}).frage);
   }
   const vorFragen = seek;
   seek = function (t) {
