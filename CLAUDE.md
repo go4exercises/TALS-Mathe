@@ -43,31 +43,38 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
   Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
-- `leitprogramme/` — 5 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 6 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt und ist seit dem 08.09.2026 in **zwei
-  Abschnitte** gegliedert, einen je Art — alle fünf sind verlinkt:
-  - *nach Thema* (3: `potenzen.html`, `quadratische-gleichungen.html`,
-    `gleichungssysteme.html`) — Vorwissenstest, 4 Kapitel, Gesamttest.
-    Extern gebaute Datei hereinholen: **`HOWTO-leitprogramme.md` Punkt für Punkt**.
+  Abschnitte** gegliedert, einen je Art — alle sechs sind verlinkt:
+  - *nach Thema* (4: `potenzen.html`, `quadratische-gleichungen.html`,
+    `gleichungssysteme.html`, `quadratische-funktionen.html`) — Vorwissenstest, 4–5 Kapitel,
+    Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
+    Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
+    Gesamttest und Bewertungspaket als PDF aus LaTeX unter `downloads/leitprogramme/`).
+    Aufbau, Didaktik und Technik: **`HOWTO-leitprogramme.md`** (seit 02.10.2026 Gesamtfassung;
+    Vorbild `quadratische-funktionen.html`, Bauskript unter `_intern/lp-quadratische-funktionen/`).
+    Extern gebaute Datei hereinholen: dort §12, Punkt für Punkt.
   - *nach Prüfungsbogen* (2: `uebungspruefung-1.html`, `trigo2.html`) — jede
     Teilaufgabe mit eigenem
     Clip, Musterlösung und Punktezeile. Der ganze Weg vom PDF zur Seite steht in
     **`HOWTO-uebungspruefung.md`**; er hat eigene Fallstricke (verlorene Hoch- und
     Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).
-  **Ein Leitprogramm hängt an drei Stellen**: Kärtchen in `leitprogramme.html`, Eintrag
-  in `scripts/build-seo.py` (Sitemap) und in `scripts/build-suchindex.py` (Volltext­suche).
+  **Ein Leitprogramm hängt an vier Stellen**: Kärtchen in `leitprogramme.html`, Eintrag
+  in `scripts/build-seo.py` (Sitemap), in `scripts/build-suchindex.py` (Volltext­suche)
+  und ein Kasten «🧭 Lieber geführt?» auf der Themenseite nach den Lernzielen.
   Fehlt eine, ist die Seite entweder unsichtbar oder unauffindbar. Die `"probe": true`
   an den Prüfungsclips bleibt davon unberührt — sie hält die Clips aus der Bibliothek,
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 426 Drehbücher, alle vertont: **391 in der Bibliothek** (362:25 min,
-  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **35 unverlinkte**
-  Prüfungsclips mit `"probe": true`, die nur im zugehörigen Leitprogramm stehen und
+- `clips/` — 436 Drehbücher, alle vertont: **391 in der Bibliothek** (362:25 min,
+  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **45 unverlinkte**
+  Clips mit `"probe": true` (35 Prüfungsclips, 10 Clips «Parabel sehen» des Leitprogramms
+  Quadratische Funktionen), die nur im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
   `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,

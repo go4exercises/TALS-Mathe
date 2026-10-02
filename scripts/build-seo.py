@@ -127,7 +127,7 @@ SEITEN = {
    beschreibung='Ein Prüfungsbogen zur Trigonometrie mit vollständiger Musterlösung: Sinus, Cosinus und Tangens am rechtwinkligen Dreieck, Kofunktion und trigonometrischer Pythagoras, Fehlersuche an einer Ballonaufgabe und Winkel am Einheitskreis — zu jeder der 9 Teilaufgaben ein vertonter Clip.',
    themen=['Mathematik', 'Trigonometrie', 'Einheitskreis', 'Übungsprüfung', 'Leitprogramm']),
  'leitprogramme/quadratische-funktionen.html': dict(
-   typ='article', lrt='Leitprogramm', noindex=True,   # Probe nach HOWTO-LP.md, unverlinkt
+   typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Quadratische Funktionen — lesen, umformen, aufstellen, optimieren',
    beschreibung='Leitprogramm zu den quadratischen Funktionen nach RLP GF 3.3: Scheitelform lesen, zwischen den drei Formen wechseln, Nullstellen und Scheitel berechnen, Funktionsgleichungen aufstellen und Extremwertaufgaben lösen — mit Clips, Erkundungen und Selbsttests.',
    themen=['Mathematik', 'Quadratische Funktionen', 'Parabel', 'Scheitelform', 'Extremwertaufgaben', 'Leitprogramm']),
