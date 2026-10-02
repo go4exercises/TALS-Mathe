@@ -323,6 +323,17 @@ Treffer-Rückmeldung · Knöpfe, die je ein Merkmal hervorheben · fester Punkt,
 - **Vortest** prüft nur Voraussetzungen, 8–13 Punkte, mit Verweis bei Lücken.
 - **Selbsttest je Kapitel**, 7–16 Punkte, 3–6 Aufgaben à 2–5 Punkte. Mischung:
   Rechnen · Erkennen/Entscheiden · Begründen (mindestens eine «Warum»-Frage).
+- **Üben mit Rückmeldung vor dem Selbsttest** (Prototyp 02.10.2026, Kapitel 1 und 3 in
+  `quadratische-funktionen.html`): `<div class="uebung" data-typ="…">` — jede Aufgabe
+  würfelt neue Zahlen, die Eingabe wird im Browser geprüft (echtes Minus, `0.5`, `1/2`;
+  Komma wird verstanden, aber angemerkt), und **jedes bekannte Fehlermuster hat eine eigene
+  Rückmeldung** (Vorzeichen in der Klammer, \(c\) statt \(v\), vertauschte Koordinaten,
+  Minus in \(-\frac{b}{2a}\) vergessen). Die Lösung erscheint erst nach dem zweiten
+  Fehlversuch. Zähler «auf Anhieb richtig in Folge»; nichts wird gespeichert. Neue
+  Aufgabentypen stehen als Objekt in `TYPEN` (Felder, Eingabemuster, `neu`, `pruefen`,
+  `loesung`). Der Selbsttest mit Papier bleibt danach — er prüft das Aufschreiben.
+- **Clips, die fragen**: Wo ein eigener Clip eine Voraussage zulässt, hält er an und
+  fragt (HOWTO-clips, «Fragen im Clip»).
 - **Mindestens eine Aufgabe am Graphen je Kapitel**, wo es einen gibt: zuordnen
   (Graph ↔ Gleichung), ablesen (Gleichung aus dem Graphen), skizzieren, am Bild
   entscheiden (Vorzeichen von \(D\)). Minigrafen als `<svg class="mini" data-f="a,u,v"

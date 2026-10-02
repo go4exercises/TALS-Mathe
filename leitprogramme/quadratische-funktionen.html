@@ -442,6 +442,28 @@ svg.mini .achse{stroke:var(--tinte-2);stroke-width:1}
 svg.mini .skala{font-size:8px}
 svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--tinte)}
 @media(max-width:600px){ .mini-reihe{margin-left:0} svg.mini{width:110px} }
+
+/* ---------- Üben mit Rückmeldung (Prototyp) ---------- */
+.uebung{border:1.5px solid var(--orange-rand);border-radius:11px;background:var(--karte);padding:12px 16px 14px;margin:14px 0}
+.ue-kopf{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-family:var(--sans);font-size:.8rem;margin-bottom:6px}
+.ue-titel{font-weight:700;color:var(--orange)}
+.ue-serie{color:var(--tinte-2)}
+.ue-aufgabe{margin:6px 0 10px}
+.ue-zeile{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--mono);font-size:.95rem}
+.ue-eingabe input{width:4.2em;font-family:var(--mono);font-size:.95rem;padding:4px 6px;margin:0 3px;border:1.5px solid var(--linie);
+  border-radius:6px;background:var(--papier);color:var(--tinte);text-align:center}
+.ue-eingabe input:focus{outline:none;border-color:var(--orange-rand)}
+.ue-eingabe input.falsch{border-color:var(--rot-rand)}
+.ue-zeile button,.ue-weiter{font-family:var(--sans);font-size:.8rem;cursor:pointer;border-radius:999px;padding:4px 12px;
+  border:1px solid var(--orange-rand);background:var(--orange-hell);color:var(--tinte)}
+.ue-zeile .ue-neu{background:none;border-color:var(--linie);color:var(--tinte-2)}
+.ue-rueck{font-family:var(--sans);font-size:.9rem;margin-top:10px;border-radius:7px}
+.ue-rueck:empty{display:none}
+.ue-rueck.richtig{background:var(--gruen-hell);border-left:4px solid var(--gruen-rand);padding:8px 12px}
+.ue-rueck.falsch{background:var(--rot-hell);border-left:4px solid var(--rot-rand);padding:8px 12px}
+.ue-rueck.hinweis{background:var(--papier-2);padding:8px 12px}
+.ue-loes{margin-top:6px} .ue-loes summary{cursor:pointer;color:var(--tinte-2)}
+.uebung .ue-bild{display:block;margin:4px 0 6px}
 </style>
 </head>
 <body>
@@ -665,7 +687,7 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
             <span class="clip-zeit">1:08</span>
           </button>
         </div>
-        <p class="notiz">Im Clip gleitet die Parabel genau so, wie du sie eben geschoben hast — mit denselben Farben: <span class="tx-blau">\(a\)</span> blau, <span class="tx-orange">\(u\)</span> orange, <span class="tx-gruen">\(v\)</span> grün.</p>
+        <p class="notiz">Der Clip hält dreimal an und fragt nach deiner Vorhersage — erst antworten, dann weiterschauen. Die Parabel gleitet genau so, wie du sie eben geschoben hast — mit denselben Farben: <span class="tx-blau">\(a\)</span> blau, <span class="tx-orange">\(u\)</span> orange, <span class="tx-gruen">\(v\)</span> grün.</p>
       </div>
 
       <p class="phase"><span>③</span> Verallgemeinern</p>
@@ -718,6 +740,23 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#definition">Themenseite 3.3, «Definition und Parameter»</a> — dort auch der Hinweis zu den anderen Buchstaben für den Scheitel (\(d, e\) in manchen Clips, \(h, k\) im Rechner); zum Weiterüben <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-a2-scheitel">A2 «Scheitelpunkt setzen»</a></p>
 
       <p class="phase"><span>④</span> Üben</p>
+      <p class="notiz">Zuerst mit Rückmeldung — jede Aufgabe hat beliebig viele neue Zahlen, und typische Fehler bekommen eine eigene Antwort. Wenn drei auf Anhieb sitzen, weiter zum Selbsttest.</p>
+      <div class="duo">
+        <div class="uebung" data-typ="scheitel-lesen">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Scheitel ablesen</span><span class="ue-serie">0 auf Anhieb richtig in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="graf-scheitelform">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Vom Graphen zur Gleichung</span><span class="ue-serie">0 auf Anhieb richtig in Folge</span></div>
+          <svg class="mini gross ue-bild" role="img" aria-label="Parabel zur Aufgabe"></svg>
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+      </div>
       <div class="test" data-test="t1">
         <div class="test-kopf">
           <h3>Selbsttest 1 — Die Parabel bewegen <span class="summe">· 13 P</span></h3>
@@ -1004,6 +1043,23 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#diskriminante">Themenseite 3.3, «Die Diskriminante — wie viele Nullstellen?»</a>; das Lösen selbst im <a href="quadratische-gleichungen.html">Leitprogramm Quadratische Gleichungen</a></p>
 
       <p class="phase"><span>④</span> Üben</p>
+      <p class="notiz">Erst mit Rückmeldung üben, dann der Selbsttest.</p>
+      <div class="duo">
+        <div class="uebung" data-typ="grund-scheitel">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Scheitel aus der Grundform</span><span class="ue-serie">0 auf Anhieb richtig in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="nullstellen">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Nullstellen bestimmen</span><span class="ue-serie">0 auf Anhieb richtig in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+      </div>
       <div class="test" data-test="t3">
         <div class="test-kopf">
           <h3>Selbsttest 3 — Nullstellen und Scheitel <span class="summe">· 14 P</span></h3>
@@ -1753,8 +1809,189 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
     zeichnen();
   })();
 
+  /* ---- Üben mit Rückmeldung (Prototyp 02.10.2026, HOWTO-LP.md §9) ----
+     Jede Aufgabe würfelt neue Zahlen. Die Eingabe wird im Browser geprüft;
+     bekannte Fehlermuster bekommen eine eigene Rückmeldung statt nur «falsch».
+     Nichts wird gespeichert oder verschickt. */
+  (function(){
+    var ALLE = document.querySelectorAll('.uebung'); if (!ALLE.length) return;
+    function zufall(liste){ return liste[Math.floor(Math.random() * liste.length)]; }
+    function bereich(a, b, ohne){ var r = []; for (var i = a; i <= b; i++) if (!ohne || ohne.indexOf(i) < 0) r.push(i); return r; }
+    function tz(n){ return n < 0 ? '-' + Math.abs(n) : String(n); }              // fuer LaTeX
+    function kl(u){ return u > 0 ? '(x - ' + u + ')' : '(x + ' + (-u) + ')'; }
+    function plus(v){ return v === 0 ? '' : (v > 0 ? ' + ' + v : ' - ' + (-v)); }
+    function koef(a){ return a === 1 ? '' : a === -1 ? '-' : tz(a); }
+    function grund(a, b, c){
+      var s = koef(a) + 'x^2';
+      if (b) s += (b > 0 ? ' + ' : ' - ') + (Math.abs(b) === 1 ? '' : Math.abs(b)) + 'x';
+      return s + plus(c);
+    }
+    /* Eingabe lesen: echtes Minus, Bruch a/b, Dezimalpunkt. Ein Komma wird
+       verstanden, aber angemerkt (Dezimalpunkt ist Hausregel). */
+    function lesen(s){
+      var komma = /\d,\d/.test(s);
+      s = String(s).trim().replace(/\u2212/g, '-').replace(',', '.').replace(/\s+/g, '');
+      if (!s) return { wert: NaN, leer: true };
+      var m = s.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+      var w = m ? parseFloat(m[1]) / parseFloat(m[2]) : (/^-?\d+(\.\d+)?$/.test(s) ? parseFloat(s) : NaN);
+      return { wert: w, komma: komma };
+    }
+    var gleich = function(a, b){ return Math.abs(a - b) < 1e-9; };
+
+    var TYPEN = {
+      /* Scheitelform -> Scheitel */
+      'scheitel-lesen': {
+        felder: ['u', 'v'], muster: 'S( {u} | {v} )',
+        neu: function(){
+          var a = zufall([-2, -1, -0.5, 0.5, 1, 2, 3]), u = zufall(bereich(-5, 5, [0])), v = zufall(bereich(-5, 5, [0]));
+          return { a: a, u: u, v: v, text: 'Lies den Scheitelpunkt ab: \\(f(x) = ' + koef(a) + kl(u) + '^2' + plus(v) + '\\)' };
+        },
+        pruefen: function(A, e){
+          var u = e.u, v = e.v;
+          if (gleich(u, A.u) && gleich(v, A.v)) return null;
+          if (gleich(u, -A.u) && gleich(v, A.v)) return 'Das Vorzeichen von \\(u\\) dreht sich: In der Klammer steht \\(x - u\\). Bei \\(' + kl(A.u) + '\\) ist \\(u = ' + tz(A.u) + '\\) — die Klammer wird bei \\(x = ' + tz(A.u) + '\\) null.';
+          if (gleich(u, A.u) && gleich(v, -A.v)) return '\\(u\\) stimmt. Aber \\(v\\) steht <b>mit eigenem Vorzeichen</b> hinter der Klammer — hier \\(' + tz(A.v) + '\\).';
+          if (gleich(u, -A.u) && gleich(v, -A.v)) return 'Beide Vorzeichen sind gedreht. Nur \\(u\\) in der Klammer dreht sich; \\(v\\) behält sein Vorzeichen.';
+          if (gleich(u, A.v) && gleich(v, A.u)) return 'Vertauscht: Zuerst kommt die Stelle aus der Klammer, dann die Höhe hinter der Klammer.';
+          if (gleich(u, A.a) || gleich(v, A.a)) return '\\(a = ' + tz(A.a) + '\\) verschiebt nichts — es formt nur. Der Scheitel steht in der Klammer und dahinter.';
+          return 'Noch nicht. \\(u\\): Wo wird die Klammer null? \\(v\\): Was steht hinter der Klammer?';
+        },
+        loesung: function(A){ return 'S(' + tz(A.u) + ' \\mid ' + tz(A.v) + ')'; }
+      },
+
+      /* Graph -> Scheitelform */
+      'graf-scheitelform': {
+        felder: ['a', 'u', 'v'], muster: 'f(x) = {a} · (x − {u})² + {v}',
+        neu: function(){
+          var a = zufall([-2, -1, -0.5, 0.5, 1, 2]), u = zufall(bereich(-3, 3)), v = zufall(bereich(-3, 3));
+          var s = Math.abs(a) === 0.5 ? 2 : 1;                       // Schritt so, dass der Punkt auf dem Gitter liegt
+          return { a: a, u: u, v: v, s: s, text: 'Stelle die Scheitelform der abgebildeten Parabel auf. Die markierten Punkte liegen auf Gitterpunkten. (Bei \\(u = 2\\) steht in der Klammer \\(x - 2\\): Gib hier \\(u\\) ein, nicht das Zeichen in der Klammer.)', graf: true };
+        },
+        pruefen: function(A, e){
+          if (gleich(e.a, A.a) && gleich(e.u, A.u) && gleich(e.v, A.v)) return null;
+          var r = [];
+          if (!gleich(e.u, A.u) || !gleich(e.v, A.v)) {
+            if (gleich(e.u, -A.u) && gleich(e.v, A.v) && A.u !== 0) r.push('Der Scheitel liegt bei \\(x = ' + tz(A.u) + '\\), also \\(u = ' + tz(A.u) + '\\). Das umgekehrte Vorzeichen entsteht erst in der Klammer.');
+            else r.push('Lies den Scheitel nochmals ab — den tiefsten oder höchsten Punkt. Seine \\(x\\)-Koordinate ist \\(u\\), seine \\(y\\)-Koordinate \\(v\\).');
+          }
+          if (!gleich(e.a, A.a)) {
+            if (gleich(e.a, -A.a)) r.push('Das Vorzeichen von \\(a\\) passt nicht zur Öffnung: nach ' + (A.a > 0 ? 'oben' : 'unten') + ' geöffnet heisst \\(a ' + (A.a > 0 ? '\\gt' : '\\lt') + ' 0\\).');
+            else r.push('\\(a\\): Geh vom Scheitel aus ' + A.s + ' nach rechts. Wie weit geht es hinauf oder hinunter? Bei der Normalparabel wären es ' + (A.s * A.s) + '.');
+          }
+          return r.join(' ');
+        },
+        loesung: function(A){ return 'f(x) = ' + koef(A.a) + (A.u === 0 ? 'x' : kl(A.u)) + '^2' + plus(A.v); }
+      },
+
+      /* Grundform -> Scheitel */
+      'grund-scheitel': {
+        felder: ['u', 'v'], muster: 'S( {u} | {v} )',
+        neu: function(){
+          var a = zufall([1, 1, -1, 2]), u = zufall(bereich(-4, 4, [0])), v = zufall(bereich(-6, 6, [0]));
+          var b = -2 * a * u, c = a * u * u + v;
+          return { a: a, b: b, c: c, u: u, v: v, text: 'Bestimme den Scheitelpunkt von \\(f(x) = ' + grund(a, b, c) + '\\) — ohne Rechner.' };
+        },
+        pruefen: function(A, e){
+          var f = function(x){ return A.a * x * x + A.b * x + A.c; };
+          if (gleich(e.u, A.u) && gleich(e.v, A.v)) return null;
+          if (gleich(e.u, -A.u)) return 'Das Minus in \\(u = -\\dfrac{b}{2a}\\) vergessen? Hier: \\(u = -\\dfrac{' + tz(A.b) + '}{' + tz(2 * A.a) + '} = ' + tz(A.u) + '\\).' + (gleich(e.v, f(-A.u)) ? ' Dein \\(v\\) passt zu deinem \\(u\\) — der Fehler liegt nur beim Vorzeichen.' : '');
+          if (gleich(e.u, A.u) && gleich(e.v, A.c)) return '\\(u\\) stimmt. Aber \\(c = ' + tz(A.c) + '\\) ist der \\(y\\)-Achsenabschnitt, nicht die Höhe des Scheitels. Setze \\(u\\) ein: \\(v = f(' + tz(A.u) + ')\\).';
+          if (gleich(e.u, A.u)) return '\\(u\\) stimmt. Rechne \\(v = f(' + tz(A.u) + ')\\) nochmals nach — Klammern um negative Zahlen beim Quadrieren.';
+          if (gleich(e.u, A.b / (2 * A.a))) return 'Fast: \\(u = -\\dfrac{b}{2a}\\) — das Minus gehört vor den Bruch.';
+          return 'Noch nicht. \\(u = -\\dfrac{b}{2a}\\), dann \\(v = f(u)\\).';
+        },
+        loesung: function(A){ return 'S(' + tz(A.u) + ' \\mid ' + tz(A.v) + ')'; }
+      },
+
+      /* Grundform -> Nullstellen */
+      'nullstellen': {
+        felder: ['x_1', 'x_2'], muster: 'x₁ = {x_1}   x₂ = {x_2}',
+        neu: function(){
+          var r1 = zufall(bereich(-6, 6)), r2; do { r2 = zufall(bereich(-6, 6)); } while (r2 === r1 || (r1 === 0 && r2 === 0));
+          var b = -(r1 + r2), c = r1 * r2;
+          return { r: [Math.min(r1, r2), Math.max(r1, r2)], b: b, c: c, text: 'Bestimme die Nullstellen von \\(f(x) = ' + grund(1, b, c) + '\\).' };
+        },
+        pruefen: function(A, e){
+          var x = [e.x_1, e.x_2].sort(function(p, q){ return p - q; });
+          var hat = function(w){ return gleich(x[0], w) || gleich(x[1], w); };
+          if (hat(A.r[0]) && hat(A.r[1])) return null;
+          if (hat(-A.r[0]) && hat(-A.r[1])) return 'Die Vorzeichen sind gedreht: Aus \\((x ' + (A.r[0] < 0 ? '+' : '-') + ' ' + Math.abs(A.r[0]) + ')\\) folgt \\(x = ' + tz(A.r[0]) + '\\) — die Klammer muss null werden.';
+          if (hat(A.r[0]) || hat(A.r[1])) return 'Eine Nullstelle stimmt. Prüfe die andere durch Einsetzen: \\(f(x)\\) muss \\(0\\) ergeben.';
+          var u = -A.b / 2;
+          if (gleich(x[0], u) || gleich(x[1], u)) return '\\(' + tz(u) + '\\) ist die Stelle des Scheitels, nicht eine Nullstelle. Die Nullstellen liegen links und rechts davon, gleich weit entfernt.';
+          return 'Noch nicht. Zwei Zahlen mit Produkt \\(' + tz(A.c) + '\\) und Summe \\(' + tz(-A.b) + '\\) — oder die Mitternachtsformel.';
+        },
+        loesung: function(A){ return 'x_1 = ' + tz(A.r[0]) + ',\\ x_2 = ' + tz(A.r[1]); }
+      }
+    };
+
+    function setzen(el){ if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(function(){}); }
+
+    ALLE.forEach(function(box){
+      var T = TYPEN[box.dataset.typ]; if (!T) return;
+      var A, serie = 0, versuche = 0;
+      var auf = box.querySelector('.ue-aufgabe'), ein = box.querySelector('.ue-eingabe'),
+          rueck = box.querySelector('.ue-rueck'), zaehler = box.querySelector('.ue-serie'),
+          bild = box.querySelector('.ue-bild');
+      function neu(){
+        A = T.neu(); versuche = 0; box.__aufgabe = A;   // fuer automatische Tests
+        auf.innerHTML = A.text;
+        var html = T.muster;
+        T.felder.forEach(function(f){
+          html = html.replace('{' + f + '}', '<input type="text" inputmode="decimal" autocomplete="off" aria-label="' + f + '" data-f="' + f + '">');
+        });
+        ein.innerHTML = html;
+        rueck.className = 'ue-rueck'; rueck.innerHTML = '';
+        if (bild){
+          while (bild.firstChild) bild.removeChild(bild.firstChild);
+          if (A.graf){
+            var fe = [A.u - 4, A.u + 4, A.v - 4, A.v + 4];
+            bild.setAttribute('viewBox', '0 0 170 170');
+            var K = Achsen(bild, { w: 170, h: 170, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3.5, xm: [1].filter(function(t){ return t > fe[0] && t < fe[1]; }), ym: [1].filter(function(t){ return t > fe[2] && t < fe[3]; }) });
+            K.kurve(function(x){ return A.a * (x - A.u) * (x - A.u) + A.v; }, 'kurve');
+            K.punkt(A.u, A.v, 'p-s'); K.punkt(A.u + A.s, A.v + A.a * A.s * A.s, 'p-s');
+            bild.style.display = '';
+          } else bild.style.display = 'none';
+        }
+        setzen(auf);
+        var erstes = ein.querySelector('input'); if (erstes && box.dataset.fokus) erstes.focus();
+        box.dataset.fokus = '1';
+      }
+      function pruefen(){
+        var e = {}, leer = false, komma = false, kaputt = false;
+        ein.querySelectorAll('input').forEach(function(i){
+          var r = lesen(i.value); e[i.dataset.f] = r.wert;
+          if (r.leer) leer = true; else if (isNaN(r.wert)) kaputt = true;
+          if (r.komma) komma = true;
+          i.classList.toggle('falsch', !r.leer && isNaN(r.wert));
+        });
+        if (leer){ rueck.className = 'ue-rueck hinweis'; rueck.innerHTML = 'Fülle alle Felder aus.'; return; }
+        if (kaputt){ rueck.className = 'ue-rueck hinweis'; rueck.innerHTML = 'Zahlen wie <code>-3</code>, <code>0.5</code> oder <code>1/2</code>.'; return; }
+        versuche++;
+        var fehler = T.pruefen(A, e);
+        if (fehler === null){
+          serie = versuche === 1 ? serie + 1 : 0;
+          rueck.className = 'ue-rueck richtig';
+          rueck.innerHTML = '✓ Richtig' + (versuche > 1 ? ' — im ' + versuche + '. Versuch.' : '.') + (komma ? ' Hinweis: Hier schreibt man den Dezimalpunkt.' : '') +
+            ' <button type="button" class="ue-weiter">Nächste Aufgabe</button>';
+          rueck.querySelector('.ue-weiter').addEventListener('click', neu);
+        } else {
+          serie = 0;
+          rueck.className = 'ue-rueck falsch';
+          rueck.innerHTML = fehler + (versuche >= 2 ? ' <details class="ue-loes"><summary>Lösung zeigen</summary>\\(' + T.loesung(A) + '\\)</details>' : '');
+        }
+        zaehler.textContent = serie + ' auf Anhieb richtig in Folge' + (serie >= 3 ? ' — sitzt.' : '');
+        setzen(rueck);
+      }
+      box.querySelector('.ue-pruefen').addEventListener('click', pruefen);
+      box.querySelector('.ue-neu').addEventListener('click', neu);
+      ein.addEventListener('keydown', function(ev){ if (ev.key === 'Enter') pruefen(); });
+      neu();
+    });
+  })();
+
   /* ---- Minigrafen: <svg class="mini" data-f="a,u,v" data-fenster="x0,x1,y0,y1" data-punkte="x,y;x,y"> ---- */
-  document.querySelectorAll('svg.mini').forEach(function(svg){
+  document.querySelectorAll('svg.mini[data-f]').forEach(function(svg){
     var f = svg.dataset.f.split(',').map(Number);
     var fe = (svg.dataset.fenster || '-5,5,-5,5').split(',').map(Number);
     var w = 150, h = 150 * (fe[3] - fe[2]) / (fe[1] - fe[0]);

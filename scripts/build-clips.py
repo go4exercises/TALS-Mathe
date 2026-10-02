@@ -784,6 +784,113 @@ seek = function (t) { seekOhneBewegung(t); bewegen(t); };
 '''
 
 
+# Abspieler-Zusatz fuer "fragen" (Prototyp 02.10.2026): Der Clip haelt an,
+# stellt eine Frage (Knoepfe oder Tippen ins Bild), gibt Rueckmeldung und
+# laeuft auf «Weiter» weiter. Nur in Clips mit "fragen", nie im Pruefmodus
+# (?render). Gespult wird an Fragen vorbei, ohne anzuhalten.
+FRAGEN_JS = r'''
+(() => {
+  if (location.search.includes('render')) return;
+  const pp = document.getElementById('pp');
+  const css = document.createElement('style');
+  css.textContent = `
+    #frage{position:absolute;left:110px;top:560px;width:820px;z-index:50;display:none;
+      background:rgba(255,255,255,.97);border:3px solid var(--f2);border-radius:22px;
+      padding:28px 34px;box-shadow:0 10px 40px rgba(0,0,0,.18);font-family:inherit;color:inherit}
+    #frage .fr-kopf{font-size:26px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--f2);margin-bottom:10px}
+    #frage .fr-text{font-size:38px;line-height:1.3;margin-bottom:22px}
+    #frage .fr-knoepfe{display:flex;flex-wrap:wrap;gap:14px}
+    #frage button{font:inherit;font-size:32px;padding:10px 26px;border-radius:999px;cursor:pointer;
+      border:2.5px solid var(--f2);background:var(--f2w);color:inherit}
+    #frage button.ok{border-color:var(--f3);background:var(--f3w)}
+    #frage button.nein{border-color:var(--f4);background:var(--f4w)}
+    #frage .fr-rueck{font-size:32px;line-height:1.35;margin-top:20px}
+    #frage .fr-weiter{margin-top:20px}
+    .fr-tippbar, .fr-tippbar svg{pointer-events:auto !important;cursor:crosshair}`;
+  document.head.appendChild(css);
+  const box = document.createElement('div'); box.id = 'frage'; stage.appendChild(box);
+  let letzt = 0, offen = null, tippen = null;
+  const erledigt = new Set();
+  const pause = () => { if (pp.textContent === 'Pause') pp.click(); };
+  const weiter = () => { if (pp.textContent === 'Play') pp.click(); };
+  function schliessen() {
+    box.style.display = 'none'; box.innerHTML = '';
+    document.querySelectorAll('.fr-marke').forEach(m => m.remove());
+    document.querySelectorAll('.fr-tippbar').forEach(l => l.classList.remove('fr-tippbar'));
+    if (tippen) { stage.removeEventListener('click', tippen); tippen = null; }
+    offen = null;
+  }
+  function antwort(F, ok, text) {
+    if (F.typ === 'klick') box.querySelector('.fr-knoepfe').innerHTML = '';
+    const r = box.querySelector('.fr-rueck');
+    r.innerHTML = (ok ? '✓ ' : '') + text;
+    r.style.color = ok ? 'var(--f3)' : '';
+    const w = document.createElement('button'); w.className = 'fr-weiter'; w.textContent = 'Weiter ▶';
+    w.onclick = () => { schliessen(); weiter(); };
+    box.appendChild(w); w.focus();
+  }
+  function zeigen(i, F) {
+    offen = { i }; erledigt.add(i); pause();
+    box.innerHTML = '<div class="fr-kopf">Deine Vorhersage</div><div class="fr-text"></div>'
+      + '<div class="fr-knoepfe"></div><div class="fr-rueck"></div>';
+    box.querySelector('.fr-text').textContent = F.text;
+    const kn = box.querySelector('.fr-knoepfe');
+    if (F.typ === 'wahl') {
+      F.optionen.forEach((o, j) => {
+        const b = document.createElement('button'); b.textContent = o;
+        b.onclick = () => {
+          kn.querySelectorAll('button').forEach(x => x.disabled = true);
+          b.classList.add(j === F.richtig ? 'ok' : 'nein');
+          antwort(F, j === F.richtig, (F.rueck || {})[j] || (j === F.richtig ? 'Richtig.' : 'Schau, was der Clip zeigt.'));
+        };
+        kn.appendChild(b);
+      });
+    } else if (F.typ === 'klick') {
+      const L = [...document.querySelectorAll('.l')].find(l => +l.style.opacity > 0.5 && l.querySelector('[data-fenster]'));
+      if (!L) { schliessen(); weiter(); return; }
+      const svg = L.querySelector('svg'), fe = L.querySelector('[data-fenster]').dataset.fenster.split(',').map(Number);
+      const [x0, x1, y0, y1, b, h, rd] = fe;
+      L.classList.add('fr-tippbar');
+      // Am Stage horchen, nicht am Layer: unsichtbare spaetere Layer (Deckkraft 0)
+      // liegen obenauf und wuerden den Tipp abfangen.
+      tippen = ev => {
+        if (!offen || box.querySelector('.fr-weiter') || box.contains(ev.target)) return;
+        const r = svg.getBoundingClientRect();
+        if (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom) return;
+        const sx = (ev.clientX - r.left) / r.width * b, sy = (ev.clientY - r.top) / r.height * h;
+        const x = x0 + (sx - rd) / (b - 2 * rd) * (x1 - x0), y = y0 + (h - rd - sy) / (h - 2 * rd) * (y1 - y0);
+        const mk = (cx, cy, farbe) => { const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('cx', cx); c.setAttribute('cy', cy); c.setAttribute('r', 16); c.setAttribute('class', 'fr-marke');
+          c.setAttribute('fill', 'none'); c.setAttribute('stroke', farbe); c.setAttribute('stroke-width', 6); svg.appendChild(c); };
+        mk(sx, sy, 'var(--f2)');
+        const d = Math.hypot(x - F.ziel[0], y - F.ziel[1]);
+        if (d <= (F.toleranz || 0.5)) return antwort(F, true, F.richtig_text || 'Getroffen.');
+        const zx = rd + (F.ziel[0] - x0) / (x1 - x0) * (b - 2 * rd), zy = h - rd - (F.ziel[1] - y0) / (y1 - y0) * (h - 2 * rd);
+        mk(zx, zy, 'var(--f3)');
+        const fall = (F.fallen || []).find(f => Math.hypot(x - f.bei[0], y - f.bei[1]) <= (F.toleranz || 0.5));
+        antwort(F, false, fall ? fall.text : (F.falsch_text || 'Nicht ganz — der grüne Kreis zeigt die Stelle.'));
+      };
+      stage.addEventListener('click', tippen);
+      kn.innerHTML = '<span style="font-size:30px;color:var(--f2)">👉 Tipp ins Bild rechts.</span>';
+    }
+    box.style.display = 'block';
+  }
+  const vorFragen = seek;
+  seek = function (t) {
+    vorFragen(t);
+    if (!offen) FRAGEN.forEach((F, i) => {
+      // nur beim Abspielen und nur beim gewoehnlichen Durchlaufen — ein Sprung
+      // auf der Zeitleiste an einer Frage vorbei loest sie nicht aus
+      if (!offen && !erledigt.has(i) && pp.textContent === 'Pause' && t - letzt < 0.3
+          && letzt < F.t && t >= F.t) zeigen(i, F);
+    });
+    if (offen && Math.abs(t - FRAGEN[offen.i].t) > 1.0) schliessen();
+    letzt = t;
+  };
+})();
+'''
+
+
 def element_html(el, theme):
     typ = el.get("typ", "text")
     stil = []
@@ -1153,6 +1260,17 @@ def bauen(quelle, eigenstaendig=False):
     # bleiben Byte fuer Byte, wie sie waren.
     if "data-bew=" in html:
         html = html.replace("window.__seek = seek;", BEWEGUNG_JS + "window.__seek = seek;", 1)
+    if dreh.get("fragen"):
+        fr = []
+        for F in dreh["fragen"]:
+            sz = next((q for q in plan if q["sz"].get("name") == F["szene"]), None)
+            if sz is None:
+                raise SystemExit("Frage verweist auf unbekannte Szene: %s" % F["szene"])
+            G = {k: v for k, v in F.items() if not k.startswith("_") and k not in ("szene", "bei")}
+            G["t"] = round(sz["start"] + F.get("bei", 0.3), 2)
+            fr.append(G)
+        html = html.replace("window.__seek = seek;", "const FRAGEN = " + json.dumps(fr, ensure_ascii=False)
+                            + ";" + FRAGEN_JS + "window.__seek = seek;", 1)
 
     name = dreh.get("dateiname") or os.path.splitext(os.path.basename(quelle))[0]
     if eigenstaendig:

@@ -207,6 +207,44 @@ Funktionen). Noch nicht: bewegte Geraden und freie Kurven, Live-Zahlen in Formel
 **Formelzeile und Bewegung abstimmen:** Nennt die Formel links schon den Endwert, soll die
 Bewegung früh und kurz sein (unter 2 s) — sonst steht im Text etwas anderes als im Bild.
 
+### Fragen im Clip: `fragen` (Prototyp 02.10.2026)
+
+Ein Clip kann **anhalten und fragen**, bevor der Sprecher die Auflösung nennt — die
+Voraussage (predict–observe–explain) wandert in den Clip selbst:
+
+```json
+"fragen": [
+  {"szene": "u schiebt", "bei": 0.35, "typ": "wahl",
+   "text": "Gleich steht in der Klammer x − 2. Wohin wandert die Parabel?",
+   "optionen": ["2 nach links", "2 nach rechts", "2 nach unten"], "richtig": 1,
+   "rueck": {"0": "Das denken die meisten — wegen des Minus. Schau genau hin …"}},
+  {"szene": "Zusammen", "bei": 0.38, "typ": "klick",
+   "text": "y = (x − 2)² − 1: Wo landet der Scheitel? Tipp die Stelle ins Bild.",
+   "ziel": [2, -1], "toleranz": 0.6, "richtig_text": "Getroffen …",
+   "fallen": [{"bei": [-2, -1], "text": "Das Minus in der Klammer heisst rechts …"}],
+   "falsch_text": "Nicht ganz …"}
+]
+```
+
+- `bei` ist die Sekunde **ab Szenenbeginn** — vor `sprecher_bei` (0.4) legen, sonst
+  bricht der Satz mitten im Wort ab.
+- `wahl`: Knöpfe, `rueck` gibt **je Antwort** eine eigene Rückmeldung. Bei einer
+  falschen Voraussage die Lösung nicht verraten, sondern aufs Hinschauen lenken — der
+  Clip löst sie gleich danach auf.
+- `klick`: Tippen ins bewegte Bild der Szene (braucht ein `graf` mit `bewegung`, denn
+  dessen Fenster rechnet den Tipp in Koordinaten um). `fallen` sind typische falsche
+  Stellen mit eigener Rückmeldung; ein grüner Kreis zeigt danach die richtige Stelle.
+- Der Clip hält nur beim **Abspielen** an und nur beim gewöhnlichen Durchlaufen — ein
+  Sprung auf der Zeitleiste an einer Frage vorbei löst sie nicht aus, eine beantwortete
+  Frage kommt nicht wieder. Im Prüfmodus (`?render`, `pruef-clip.mjs`) gibt es keine
+  Fragen.
+- Wie `bewegung` nur in Clips mit `fragen` eingebaut (`FRAGEN_JS`); alle anderen bleiben
+  Byte für Byte gleich.
+- **Lokal testen:** `python3 -m http.server` kann keine Bereichsanfragen; darum springt
+  der Ton beim Spulen auf den Anfang zurück. Auf GitHub Pages tritt das nicht auf.
+
+Im Einsatz: `g3-3-lp-verschieben` (drei Fragen).
+
 ### Kurven im `graf`: `kurven`, `xteilung`/`yteilung`, `von`/`bis`
 
 Bis zum 07.09.2026 konnte ein `graf` nur Geraden, Parabeln und Punkte. Für die Reihe zu

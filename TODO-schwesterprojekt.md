@@ -56,10 +56,11 @@ Vertiefung nach hinten, mit allen IDs, `toggleL`-Argumenten und Prüffunktionen.
 **Warum.** Gleiche Notation und gleicher Aufgabenaufbau in beiden Lehrmitteln; Lernende
 wechseln zwischen den Fächern.
 
-### 02.10.2026 · `build-clips.py`: bewegte Parabel im `graf` (Prototyp — erst nach Abnahme portieren)
+### 02.10.2026 · `build-clips.py`: bewegte Parabel im `graf` und Fragen im Clip (Prototyp — erst nach Abnahme portieren)
 
 **Was.** Neuer Schlüssel `bewegung` für `parabeln` im `graf` (Stützpunkte `[t, a, u, v]`,
-Begleiter `scheitel`, `nullstellen`, `yachse`, `marken`, `laeufer`), dazu die Konstante `BEWEGUNG_JS`, die nur in Clips mit Bewegung
+Begleiter `scheitel`, `nullstellen`, `yachse`, `marken`, `laeufer`) und neues Drehbuchfeld `fragen` (Clip hält an
+und fragt, `FRAGEN_JS`; HOWTO-clips «Fragen im Clip»), dazu die Konstante `BEWEGUNG_JS`, die nur in Clips mit Bewegung
 `seek(t)` um `bewegen(t)` erweitert, und `data-t0` am Bild-Layer. Beschreibung in Mathe
 `HOWTO-clips.md`, «Bewegte Parabel im `graf`».
 **Wo in Physik.** `scripts/build-clips.py` hat `graf_svg` mit `parabeln` und denselben
@@ -68,6 +69,6 @@ Physik nutzt den `graf` heute in **keinem** seiner 234 Drehbücher — der Über
 Werkzeug gleich, er ändert keinen Clip.
 **Warum.** Clips sollen Zusammenhänge zeigen statt beschreiben (Auftraggeber,
 30.09.2026). `abgleich.py`: `scripts/build-clips.py` fällt dadurch von 83.6 % auf
-79.2 % (Grundlinie 84 %) — der Eintrag in `OFFEN` kommt erst, wenn der Prototyp
+75.7 % (Grundlinie 84 %) — der Eintrag in `OFFEN` kommt erst, wenn der Prototyp
 angenommen ist.
 
