@@ -150,7 +150,38 @@ Einschätzung  Punktebereiche → konkrete Rückverweise auf Kapitel
 Weiter        nächstes Leitprogramm · Themenseite · bewusst Weggelassenes
 ```
 
-### Innerhalb eines Kapitels: zuerst sehen, dann die Regel
+### Innerhalb eines Kapitels: das Muster (Entscheid 02.10.2026)
+
+Vorbild ist Kapitel 1 von `leitprogramme/quadratische-funktionen.html`. Jedes Kapitel hat fünf
+Stufen; sie stehen als Fahrplan (`.fahrplan`) unter dem Lernziel und als Phasen
+(`<p class="phase">`) über den Abschnitten:
+
+1. **① Clip: zuschauen.** Ein Einführungsclip zeigt **alles**, was das Kapitel bringt — in
+   Bewegung (bewegte Grafen, HOWTO-clips) — und endet mit einer Szene «Jetzt du»: dem
+   Auftrag, das Gezeigte in der Animation darunter nachzuvollziehen.
+2. **② Selber tüfteln.** Die eingebettete Simulation (§8) mit genau diesem Auftrag
+   («Vollzieh den Clip nach»), Schritt für Schritt wie im Clip, danach ein Zielspiel. Start
+   der Simulation = Start des Clips.
+3. **③ Kontrollfragen.** Ein zweiter Clip mit **neuen** Beispielen hält an, fragt
+   (Knöpfe oder Tippen ins Bild), liest Frage und Rückmeldung vor und zeigt danach die
+   Lösung in Bewegung (HOWTO-clips, «Fragen im Clip»). Darunter **Festhalten**: Tabelle
+   «Zahl → im Bild → im Term», Definition im Wortlaut der Themenseite, Beispiele, Häufiger
+   Fehler.
+4. **④ Fragen mit Rückmeldung.** Zwei bis drei `.uebung`-Kästen (§9) — Zufallszahlen,
+   Fehlerdiagnose. «Wenn in jedem Kasten drei auf Anhieb sitzen, weiter.»
+5. **⑤ Aufgaben mit Lösungen.** Der klassische Selbsttest auf Papier, Lösungen
+   aufklappbar, Häkchen für den Fortschritt.
+
+Am Ende des Leitprogramms steht der **Gesamttest als PDF mit getrenntem Bewertungspaket**
+für die Bewertung durch eine KI (§9).
+
+Zeit: Ein Kapitel nach diesem Muster braucht rund 30 Minuten (zwei Clips à ~1 min,
+Tüfteln ~8 min, Fragen ~7 min, Aufgaben ~10 min). Das verschiebt die Rechnung in §3: Fünf
+Kapitel sind gut drei bis vier Lektionen.
+
+### Vorgängermuster: zuerst sehen, dann die Regel
+
+*Gilt noch für Kapitel 2–5 des Prototyps, bis sie auf das Muster oben umgestellt sind.*
 
 Seit Fassung 2 (30.09.2026, Rückmeldung des Auftraggebers zum Prototyp): **Wo sich der
 Stoff zeigen lässt, wird er zuerst gezeigt.** Bei Funktionen ist das immer der Fall —
@@ -345,6 +376,23 @@ Treffer-Rückmeldung · Knöpfe, die je ein Merkmal hervorheben · fester Punkt,
 - **Jedes Kapitelziel wird geprüft; nichts wird geprüft, was nicht eingeführt ist.**
 - **Lösung aufklappbar**, darunter optional eine Zeile `.komm` zur typischen
   Fehlerquelle.
+- **Gesamttest als PDF, Bewertungspaket getrennt** (Entscheid 02.10.2026). Beide als
+  Druckseite unter `downloads/leitprogramme/<name>/` (Skelett und `print.css` wie die
+  übrigen Druckseiten) und daraus als PDF:
+  `node .claude/tools/druck-pdf.mjs downloads/leitprogramme/<name>/gesamttest.html …/bewertungspaket.html`
+  (wartet auf MathJax und Diagramme, meldet Formelfehler). Im Leitprogramm stehen die
+  Aufgaben weiter zum Ansehen, aber **ohne** aufklappbare Lösungen, dazu ein Dreischritt mit
+  beiden Downloads.
+  - *Gesamttest-Blatt:* Feld «Code (kein Name)», Anleitung mit Zeit und Hilfsmitteln je Teil,
+    Schreibflächen, Hinweis auf das Bewertungspaket.
+  - *Bewertungspaket:* (1) So gehst du vor — erst lösen, fotografieren ohne Namen, nur ein
+    von der Schule erlaubtes KI-Werkzeug, Lesung der KI prüfen; (2) **Auftrag an die KI**
+    zum Kopieren — erst abschreiben, was sie liest, `[unsicher]` statt raten, Punkte nach
+    Raster, Folgefehler nur einmal abziehen, andere Wege voll, jeden Abzug begründen,
+    Musterlösung nicht abschreiben, Tabelle und Rückverweis aufs Kapitel, keine Note;
+    (3) **Musterlösung und Punkteraster** je Aufgabe (Teilschritt · Punkt · Lösung) mit
+    typischen Fehlern und Abzug; (4) Selbsteinschätzung.
+  - Ganze Punkte je Teilschritt — halbe Punkte machen die KI-Bewertung unzuverlässig.
 - **Gesamttest** 20–25 Punkte, rund 20 Minuten, Teile = Kapitel = Kompetenzen, Hilfsmittel
   je Teil nach RLP-Vermerk (§1.1).
 - **Selbsteinschätzung** mit Punktebereichen, die auf **bestimmte Kapitel** zurückverweisen.

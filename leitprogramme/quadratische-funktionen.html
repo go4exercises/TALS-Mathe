@@ -464,6 +464,19 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
 .ue-rueck.hinweis{background:var(--papier-2);padding:8px 12px}
 .ue-loes{margin-top:6px} .ue-loes summary{cursor:pointer;color:var(--tinte-2)}
 .uebung .ue-bild{display:block;margin:4px 0 6px}
+
+.fahrplan{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 18px;font-family:var(--sans);font-size:.78rem}
+.fahrplan span{padding:3px 10px;border-radius:999px;background:var(--papier-2);border:1px solid var(--linie);color:var(--tinte-2)}
+
+.pdf-weg{margin:14px 0 4px;display:flex;flex-direction:column;gap:10px;font-family:var(--sans);font-size:.92rem}
+.pdf-schritt{display:flex;gap:12px;align-items:flex-start}
+.pdf-schritt .nr{flex:none;width:1.8em;height:1.8em;border-radius:50%;display:grid;place-items:center;
+  background:var(--karte);border:1px solid var(--linie);font-weight:700}
+.pdf-knoepfe{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+.pdf-knopf{display:inline-block;padding:6px 14px;border-radius:999px;background:var(--blau-hell);border:1px solid var(--blau-rand);
+  color:var(--tinte);text-decoration:none;font-weight:600}
+.pdf-knopf:hover{box-shadow:var(--sl)}
+.pdf-link{font-size:.85rem}
 </style>
 </head>
 <body>
@@ -500,7 +513,7 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
     <div>
       <p class="marke">begreifbar.ch · Leitprogramm · Probe</p>
       <h1>Quadratische Funktionen</h1>
-      <p class="unter">Zuerst schieben und sehen, dann die Regel. Fünf Kapitel mit Simulationen, Clips und Selbsttests — die Parabel lesen, umformen, aufstellen und ihren höchsten Punkt nutzen. Angelegt für drei Lektionen.</p>
+      <p class="unter">Zuschauen, selber tüfteln, kontrollieren, üben. Fünf Kapitel mit bewegten Clips, Simulationen und Aufgaben mit Rückmeldung — die Parabel lesen, umformen, aufstellen und ihren höchsten Punkt nutzen. Angelegt für gut drei Lektionen.</p>
     </div>
     <div class="kopf-rechts">
       <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>
@@ -543,11 +556,12 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       <details class="anleitung">
         <summary><h2 id="so-arbeitest-du-mit-diesem-leitprogramm">So arbeitest du mit diesem Leitprogramm</h2></summary>
         <ol>
-          <li><b>① Erfahren.</b> Jedes Kapitel beginnt mit einer Parabel zum Anfassen. Sag zuerst voraus, was passiert, dann schieb — und notiere, was du siehst.</li>
-          <li><b>② Im Clip.</b> Der Clip zeigt dieselbe Bewegung noch einmal, Schritt für Schritt, und sagt, worauf es ankommt.</li>
-          <li><b>③ Verallgemeinern.</b> Erst jetzt kommt die Regel — sie fasst zusammen, was du schon gesehen hast.</li>
-          <li><b>④ Üben — zuerst ohne Lösung.</b> Erst rechnen oder zeichnen, dann aufklappen. Sitzt ein Selbsttest, setzt du das Häkchen.</li>
-          <li><b>Gesamttest am Schluss.</b> 24 Punkte in etwa 20 Minuten. Teile A und C ohne Taschenrechner, Teil B mit.</li>
+          <li><b>① Clip schauen.</b> Ein Clip zeigt, was in diesem Kapitel passiert — in Bewegung — und endet mit einem Auftrag.</li>
+          <li><b>② Selber tüfteln.</b> Dieselbe Parabel zum Anfassen: Vollzieh nach, was der Clip gezeigt hat, und triff die Ziele.</li>
+          <li><b>③ Kontrollfragen.</b> Ein zweiter Clip hält an und fragt. Antworte, bevor er weiterläuft. Danach steht das Wichtigste zum Festhalten.</li>
+          <li><b>④ Fragen mit Rückmeldung.</b> Neue Zahlen bei jedem Versuch; typische Fehler bekommen eine eigene Antwort.</li>
+          <li><b>⑤ Aufgaben mit Lösungen.</b> Auf Papier, dann aufklappen. Sitzt es, setzt du das Häkchen.</li>
+          <li><b>Gesamttest am Schluss — mit KI-Rückmeldung.</b> Als PDF lösen, das Bewertungspaket mit Musterlösung und Punkteraster einer KI geben. Kapitel 1 ist schon nach diesem Muster gebaut, Kapitel 2–5 folgen.</li>
         </ol>
       </details>
 
@@ -633,25 +647,49 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
     </section>
 
     <section class="kap" id="k1">
+      <!-- MUSTER-KAPITEL (02.10.2026, Entscheid Auftraggeber): ① Einführungsclip zeigt alles und
+           endet mit einem Auftrag → ② selber tüfteln in derselben Animation → ③ Kontrollclip, der
+           anhält und fragt → festhalten → ④ Fragen mit Rückmeldung → ⑤ Aufgaben mit Lösungen.
+           Kapitel 2–5 folgen noch dem Vorgängermuster «zuerst sehen». -->
       <div class="kap-meta">
         <span class="marker">Kapitel 1</span>
         <span class="abz abz-gf">GF 3.3 · K2</span>
-        <span class="zeit">≈ 25 min</span>
+        <span class="zeit">≈ 30 min</span>
       </div>
       <h2 id="die-parabel-bewegen">Die Parabel bewegen</h2>
       <p class="ziel">Du beschreibst, wie jede Parabel aus der Normalparabel \(y = x^2\) entsteht, und liest aus der Scheitelform Scheitelpunkt, Öffnung und Streckung ab — auch umgekehrt aus dem Graphen die Gleichung.</p>
 
-      <p class="phase"><span>①</span> Erfahren</p>
+      <div class="fahrplan" aria-label="Ablauf dieses Kapitels">
+        <span>① Clip schauen</span><span>② selber tüfteln</span><span>③ Kontrollfragen</span><span>④ Fragen mit Rückmeldung</span><span>⑤ Aufgaben mit Lösungen</span>
+      </div>
+
+      <p class="phase"><span>①</span> Clip: zuschauen</p>
+      <div class="duo">
+        <div class="clipkarte" data-clip="clips/g3-3-lp-verschieben.html" data-titel="Parabel sehen: verschieben und strecken">
+          <button class="clip-start" type="button">
+            <span class="clip-play" aria-hidden="true">▶</span>
+            <span class="clip-txt">
+              <span class="clip-titel">Parabel sehen: verschieben und strecken</span>
+              <span class="clip-quelle">Einführung · Clip zu diesem Leitprogramm</span>
+            </span>
+            <span class="clip-zeit">1:21</span>
+          </button>
+        </div>
+        <p class="notiz">Der Clip zeigt alles, was die drei Zahlen \(a\), \(u\) und \(v\) mit der Parabel machen — Schritt für Schritt, mit denselben Farben wie die Regler unten: <span class="tx-blau">\(a\)</span> blau, <span class="tx-orange">\(u\)</span> orange, <span class="tx-gruen">\(v\)</span> grün. Am Schluss bekommst du einen Auftrag.</p>
+      </div>
+
+      <p class="phase"><span>②</span> Selber tüfteln</p>
       <div class="duo">
         <div class="erkunden">
-          <div class="titel">🔍 Sag voraus, dann schieb</div>
-          <p>Gestrichelt siehst du die Normalparabel \(y = x^2\). Die Regler verändern drei Zahlen \(a\), \(u\) und \(v\). Bevor du einen Regler bewegst: <b>Sag voraus</b>, was passiert.</p>
+          <div class="titel">🔍 Vollzieh den Clip nach</div>
+          <p>Die Animation startet wie der Clip bei der Normalparabel (gestrichelt bleibt sie als Vergleich stehen).</p>
           <ol>
-            <li>Zieh \(v\) auf \(3\), dann auf \(-2\). Was macht die Parabel?</li>
-            <li>Stell \(v\) zurück auf 0 und zieh \(u\) auf \(2\). In welche Richtung wandert sie — und welches Zeichen steht in der Klammer? Hattest du recht?</li>
-            <li>Zieh \(a\) auf \(2\), auf \(0.5\) und auf \(-1\). Was ändert sich — und was bleibt?</li>
+            <li>Zieh \(v\) auf \(2\), dann auf \(-1\). Was macht die Parabel?</li>
+            <li>Stell \(v\) zurück auf 0 und zieh \(u\) auf \(2\). Lies die Formel über dem Bild: Welches Zeichen steht in der Klammer? Und bei \(u = -3\)?</li>
+            <li>Zieh \(a\) auf \(2\), auf \(0.5\) und auf \(-1\). Was ändert sich, was bleibt?</li>
+            <li>Stell zum Schluss \(y = (x-2)^2 - 1\) ein — wie am Ende des Clips.</li>
           </ol>
-          <p><b>Treffer!</b> Wenn du die drei Regler verstanden hast: Blende ein Ziel ein und stell die Regler so, dass deine Parabel genau auf der grünen liegt.</p>
+          <p><b>Treffer!</b> Danach die drei Ziele: Stell die Regler so, dass deine Parabel genau auf der grünen liegt.</p>
         </div>
         <!-- Unterschied zur Themenseite (#anim-darstellungen): nur die Scheitelform und ein
              Zielspiel, keine Umrechnung — die kommt in Kapitel 2. Reglerbereiche, Buchstaben
@@ -675,23 +713,22 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
         </figure>
       </div>
 
-      <p class="phase"><span>②</span> Im Clip</p>
+      <p class="phase"><span>③</span> Kontrollfragen</p>
       <div class="duo">
-        <div class="clipkarte" data-clip="clips/g3-3-lp-verschieben.html" data-titel="Parabel sehen: verschieben und strecken">
+        <div class="clipkarte" data-clip="clips/g3-3-lp-kontrolle-scheitelform.html" data-titel="Parabel sehen: Kontrollfragen zur Scheitelform">
           <button class="clip-start" type="button">
             <span class="clip-play" aria-hidden="true">▶</span>
             <span class="clip-txt">
-              <span class="clip-titel">Parabel sehen: verschieben und strecken</span>
-              <span class="clip-quelle">Clip zu diesem Leitprogramm</span>
+              <span class="clip-titel">Parabel sehen: Kontrollfragen zur Scheitelform</span>
+              <span class="clip-quelle">Kontrollclip · hält fünfmal an</span>
             </span>
-            <span class="clip-zeit">1:08</span>
+            <span class="clip-zeit">0:56</span>
           </button>
         </div>
-        <p class="notiz">Der Clip hält dreimal an und fragt nach deiner Vorhersage — erst antworten, dann weiterschauen. Die Parabel gleitet genau so, wie du sie eben geschoben hast — mit denselben Farben: <span class="tx-blau">\(a\)</span> blau, <span class="tx-orange">\(u\)</span> orange, <span class="tx-gruen">\(v\)</span> grün.</p>
+        <p class="notiz">Der Clip hält fünfmal an und fragt nach deiner Vorhersage — antworte zuerst, dann zeigt er die Lösung in Bewegung. Frage und Rückmeldung werden vorgelesen, wenn der Ton an ist.</p>
       </div>
 
-      <p class="phase"><span>③</span> Verallgemeinern</p>
-      <p>Drei Zahlen, drei Wirkungen — und jede hast du gesehen:</p>
+      <h3>Festhalten</h3>
       <div class="tabhuelle">
         <table class="gesetze formen">
           <thead><tr><th>Zahl</th><th>Im Bild</th><th>Im Term</th></tr></thead>
@@ -737,10 +774,8 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
         <p>Aus \(f(x) = (x + 4)^2 - 1\) wird \(S(-4 \mid -1)\), nicht \(S(4 \mid -1)\). Das Minus in der Klammer macht das Vorzeichen von \(u\) im Punkt <em>positiv</em>; ein Plus in der Klammer heisst \(u\) negativ.</p>
       </div>
 
-      <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#definition">Themenseite 3.3, «Definition und Parameter»</a> — dort auch der Hinweis zu den anderen Buchstaben für den Scheitel (\(d, e\) in manchen Clips, \(h, k\) im Rechner); zum Weiterüben <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-a2-scheitel">A2 «Scheitelpunkt setzen»</a></p>
-
-      <p class="phase"><span>④</span> Üben</p>
-      <p class="notiz">Zuerst mit Rückmeldung — jede Aufgabe hat beliebig viele neue Zahlen, und typische Fehler bekommen eine eigene Antwort. Wenn drei auf Anhieb sitzen, weiter zum Selbsttest.</p>
+      <p class="phase"><span>④</span> Fragen mit Rückmeldung</p>
+      <p class="notiz">Jede Aufgabe hat beliebig viele neue Zahlen, und typische Fehler bekommen eine eigene Antwort. Wenn in jedem Kasten drei auf Anhieb sitzen, weiter zu ⑤.</p>
       <div class="duo">
         <div class="uebung" data-typ="scheitel-lesen">
           <div class="ue-kopf"><span class="ue-titel">🔁 Scheitel ablesen</span><span class="ue-serie">0 auf Anhieb richtig in Folge</span></div>
@@ -749,17 +784,29 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
           <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
           <div class="ue-rueck" aria-live="polite"></div>
         </div>
-        <div class="uebung" data-typ="graf-scheitelform">
+        <div class="uebung" data-typ="beschreibung">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Von der Beschreibung zur Gleichung</span><span class="ue-serie">0 auf Anhieb richtig in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="uebung" data-typ="graf-scheitelform">
           <div class="ue-kopf"><span class="ue-titel">🔁 Vom Graphen zur Gleichung</span><span class="ue-serie">0 auf Anhieb richtig in Folge</span></div>
           <svg class="mini gross ue-bild" role="img" aria-label="Parabel zur Aufgabe"></svg>
           <p class="ue-aufgabe"></p>
           <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
           <div class="ue-rueck" aria-live="polite"></div>
         </div>
-      </div>
+
+      <p class="ausf">Ausführlich: <a href="../grundlagen/g3-3-quadratische-funktionen.html#definition">Themenseite 3.3, «Definition und Parameter»</a> — dort auch der Hinweis zu den anderen Buchstaben für den Scheitel (\(d, e\) in manchen Clips, \(h, k\) im Rechner); zum Weiterüben <a href="../grundlagen/g3-3-quadratische-funktionen.html#anim-a2-scheitel">A2 «Scheitelpunkt setzen»</a></p>
+
+      <p class="phase"><span>⑤</span> Aufgaben mit Lösungen</p>
+      <p class="notiz">Auf Papier lösen, erst dann aufklappen. Hier geht es ums saubere Aufschreiben — so, wie es im Gesamttest verlangt ist.</p>
       <div class="test" data-test="t1">
         <div class="test-kopf">
-          <h3>Selbsttest 1 — Die Parabel bewegen <span class="summe">· 13 P</span></h3>
+          <h3>Aufgaben mit Lösungen — Kapitel 1 <span class="summe">· 13 P</span></h3>
           <span class="werkz">
             <button type="button" class="alle-loesungen">alle Lösungen</button>
             <label><input type="checkbox" class="erledigt"> erledigt</label>
@@ -1352,27 +1399,32 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
         <div class="gesamt-kopf">
           <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-gf">GF 3.3 · K1–K4</span><span class="zeit">≈ 20 min · 24 Punkte</span></div>
           <h2 id="gesamttest-titel">Gesamttest</h2>
-          <p>Neue Zahlen, keine Wiederholung aus den Selbsttests. <b>Teile A und C ohne Taschenrechner</b> (RLP: «auch ohne Hilfsmittel»), <b>Teil B mit</b>. <button type="button" class="alle-loesungen knopf-link">alle Lösungen</button></p>
+          <p>Neue Zahlen, keine Wiederholung aus den Selbsttests. <b>Teile A und C ohne Taschenrechner</b> (RLP: «auch ohne Hilfsmittel»), <b>Teil B mit</b>. Gelöst wird auf Papier — mit Rechenweg.</p>
+          <div class="pdf-weg">
+            <div class="pdf-schritt"><span class="nr">1</span><div><b>Gesamttest lösen.</b> PDF herunterladen oder ausdrucken, in rund 20 Minuten lösen.
+              <div class="pdf-knoepfe"><a class="pdf-knopf" href="../downloads/leitprogramme/quadratische-funktionen/gesamttest.pdf" download>⬇ Gesamttest (PDF)</a>
+              <a class="pdf-link" href="../downloads/leitprogramme/quadratische-funktionen/gesamttest.html" target="_blank" rel="noopener">Druckseite</a></div></div></div>
+            <div class="pdf-schritt"><span class="nr">2</span><div><b>Von einer KI bewerten lassen.</b> Lösung fotografieren — ohne Namen —, mit dem Bewertungspaket einer KI geben, die deine Schule erlaubt. Der Auftrag an die KI steht im Paket. <em>Erst öffnen, wenn du fertig bist: Es enthält die Musterlösung.</em>
+              <div class="pdf-knoepfe"><a class="pdf-knopf" href="../downloads/leitprogramme/quadratische-funktionen/bewertungspaket.pdf" download>⬇ Bewertungspaket (PDF)</a>
+              <a class="pdf-link" href="../downloads/leitprogramme/quadratische-funktionen/bewertungspaket.html" target="_blank" rel="noopener">Druckseite</a></div></div></div>
+            <div class="pdf-schritt"><span class="nr">3</span><div><b>Rückmeldung prüfen und gezielt wiederholen</b> — nach der Selbsteinschätzung unten.</div></div>
+          </div>
         </div>
 
         <p class="gesamt-teil">Teil A · Formen lesen und umformen · K1 K2 · ohne Rechner (11 Punkte)</p>
         <ol class="aufg zwei">
           <li>
             <div class="frage"><span class="nr">G1</span><span class="pkt">(4 P)</span><span class="txt">\(f(x) = -(x-2)^2 + 9\): Scheitel, Öffnung, Nullstellen, Produktform. Skizziere.</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(S(2 \mid 9)\), nach unten. \((x-2)^2 = 9\), \(x - 2 = \pm 3\): Nullstellen \(-1\) und \(5\). \(f(x) = -(x+1)(x-5)\).</p></div></details>
           </li>
           <li>
             <div class="frage"><span class="nr">G2</span><span class="pkt">(3 P)</span><span class="txt">\(f(x) = 2x^2 - 12x + 10\) in die Scheitelform. Wo schneidet die Parabel die \(y\)-Achse?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(2(x^2 - 6x + 5) = 2\big((x-3)^2 - 4\big) = 2(x-3)^2 - 8\), \(S(3 \mid -8)\). \(y\)-Achse bei \((0 \mid 10)\).</p></div></details>
           </li>
           <li>
             <div class="frage"><span class="nr">G3</span><span class="pkt">(2 P)</span><span class="txt">Gib die Scheitelform der abgebildeten Parabel an (Punkte auf Gitterpunkten).</span></div>
             <div class="mini-reihe"><svg class="mini" data-f="1,-1,-2" data-fenster="-4,3,-3,4" data-punkte="-1,-2;0,-1;1,2"></svg></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(S(-1 \mid -2)\), ein Schritt rechts 1 hinauf, also \(a = 1\): \(f(x) = (x+1)^2 - 2\).</p></div></details>
           </li>
           <li>
             <div class="frage"><span class="nr">G4</span><span class="pkt">(2 P)</span><span class="txt">\(f(x) = 3(x+1)(x-2)\) in die Grundform.</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(3(x^2 - x - 2) = 3x^2 - 3x - 6\).</p></div></details>
           </li>
         </ol>
 
@@ -1380,11 +1432,9 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
         <ol class="aufg zwei">
           <li>
             <div class="frage"><span class="nr">G5</span><span class="pkt">(3 P)</span><span class="txt">Scheitel \(S(3 \mid -2)\), durch \(P(5 \mid 6)\).</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(6 = a \cdot 4 - 2\), \(a = 2\): \(f(x) = 2(x-3)^2 - 2 = 2x^2 - 12x + 16\).</p></div></details>
           </li>
           <li>
             <div class="frage"><span class="nr">G6</span><span class="pkt">(3 P)</span><span class="txt">Ein Wasserstrahl tritt bei \(x = 0\) aus und trifft 8 m weiter auf dieselbe Höhe; dazwischen steigt er 4 m hoch. Stelle \(h(x)\) auf.</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Nullstellen \(0\) und \(8\), Scheitel \((4 \mid 4)\). \(4 = a \cdot 4 \cdot (-4)\), \(a = -0.25\): \(h(x) = -0.25\,x(x-8) = -0.25x^2 + 2x\).</p></div></details>
           </li>
         </ol>
 
@@ -1392,11 +1442,9 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
         <ol class="aufg zwei">
           <li>
             <div class="frage"><span class="nr">G7</span><span class="pkt">(3 P)</span><span class="txt">Ein Ball fliegt nach \(h(t) = -5t^2 + 20t + 1.5\) (\(t\) in s, \(h\) in m). Wann und wie hoch ist er am höchsten?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(u = -\dfrac{20}{2 \cdot (-5)} = 2\) s, \(h(2) = -20 + 40 + 1.5 = 21.5\) m.</p><p class="komm">Hier sind die Nullstellen nicht glatt — dann ist \(-\frac{b}{2a}\) der kürzere Weg.</p></div></details>
           </li>
           <li>
             <div class="frage"><span class="nr">G8</span><span class="pkt">(4 P)</span><span class="txt">Aus einem 24 cm breiten Blech wird eine Rinne gebogen: links und rechts je \(x\) cm hoch, der Rest ist der Boden. Bei welchem \(x\) ist der rechteckige Querschnitt am grössten?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(A(x) = x(24 - 2x)\), Nullstellen \(0\) und \(12\), Mitte \(x = 6\). Boden 12 cm, \(A = 72\) cm².</p></div></details>
           </li>
         </ol>
 
@@ -1857,6 +1905,34 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
           return 'Noch nicht. \\(u\\): Wo wird die Klammer null? \\(v\\): Was steht hinter der Klammer?';
         },
         loesung: function(A){ return 'S(' + tz(A.u) + ' \\mid ' + tz(A.v) + ')'; }
+      },
+
+      /* Beschreibung -> Scheitelform */
+      'beschreibung': {
+        felder: ['a', 'u', 'v'], muster: 'f(x) = {a} · (x − {u})² + {v}',
+        neu: function(){
+          var a = zufall([-3, -2, -1, -0.5, 0.5, 2, 3]), u = zufall(bereich(-4, 4, [0])), v = zufall(bereich(-4, 4, [0]));
+          var teile = [];
+          if (a < 0) teile.push('an der \\(x\\)-Achse gespiegelt');
+          if (Math.abs(a) > 1) teile.push('mit dem Faktor \\(' + Math.abs(a) + '\\) gestreckt (schmaler)');
+          if (Math.abs(a) < 1) teile.push('mit dem Faktor \\(' + Math.abs(a) + '\\) gestaucht (breiter)');
+          teile.push('um \\(' + Math.abs(u) + '\\) nach ' + (u > 0 ? 'rechts' : 'links'));
+          teile.push('um \\(' + Math.abs(v) + '\\) nach ' + (v > 0 ? 'oben' : 'unten') + ' verschoben');
+          var txt = teile.length > 2 ? teile.slice(0, -2).join(', ') + ' und dann ' + teile.slice(-2).join(' und ') : teile.join(' und ');
+          return { a: a, u: u, v: v, text: 'Die Normalparabel \\(y = x^2\\) wird ' + txt + '. Wie lautet die Scheitelform? (Gib \\(u\\) ein, nicht das Zeichen in der Klammer.)' };
+        },
+        pruefen: function(A, e){
+          if (gleich(e.a, A.a) && gleich(e.u, A.u) && gleich(e.v, A.v)) return null;
+          var r = [];
+          if (gleich(e.u, -A.u)) r.push('Nach ' + (A.u > 0 ? 'rechts' : 'links') + ' heisst \\(u = ' + tz(A.u) + '\\). In der Klammer steht dann \\(' + kl(A.u) + '\\) — das Zeichen dreht sich erst dort.');
+          else if (!gleich(e.u, A.u)) r.push('\\(u\\) ist die waagrechte Verschiebung: rechts positiv, links negativ.');
+          if (gleich(e.v, -A.v)) r.push('Nach ' + (A.v > 0 ? 'oben' : 'unten') + ' heisst \\(v = ' + tz(A.v) + '\\): \\(v\\) behält sein Vorzeichen.');
+          else if (!gleich(e.v, A.v)) r.push('\\(v\\) ist die senkrechte Verschiebung: oben positiv, unten negativ.');
+          if (gleich(e.a, -A.a)) r.push(A.a < 0 ? 'Gespiegelt heisst: \\(a\\) ist negativ.' : 'Nicht gespiegelt: \\(a\\) bleibt positiv.');
+          else if (!gleich(e.a, A.a)) r.push('\\(a\\): Der Streckfaktor steht vor der Klammer; die Spiegelung gibt ihm ein Minus.');
+          return r.join(' ');
+        },
+        loesung: function(A){ return 'f(x) = ' + koef(A.a) + kl(A.u) + '^2' + plus(A.v); }
       },
 
       /* Graph -> Scheitelform */
