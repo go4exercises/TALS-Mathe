@@ -378,10 +378,30 @@ def graf_svg(el, theme):
                  % (py(0), b, py(0), tinte))
     teile.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="0" stroke="%s" stroke-width="3"/>'
                  % (px(0), h, px(0), tinte))
-    teile.append('<text x="%.1f" y="%.1f" font-size="26" font-style="italic" fill="%s">x</text>'
-                 % (b - 26, py(0) - 14, tinte))
-    teile.append('<text x="%.1f" y="26" font-size="26" font-style="italic" fill="%s">y</text>'
-                 % (px(0) + 14, tinte))
+    # "pfeile": Pfeilspitzen in positiver Richtung; "xname"/"yname": Achsenbeschriftung,
+    # bei Anwendungen mit Grösse und Einheit ("x [m]", "A [m²]"). Ohne Angabe bleibt das
+    # Bild wie bisher — bestehende Clips bauen Byte für Byte gleich.
+    xname, yname = el.get("xname", "x"), el.get("yname", "y")
+    achsnamen = []      # benannte Achsen kommen zuletzt, mit Hof — sonst liegt die Kurve darüber
+    if el.get("pfeile"):
+        teile.append('<polygon points="%.1f,%.1f %.1f,%.1f %.1f,%.1f" fill="%s"/>'
+                     % (b, py(0), b - 18, py(0) - 9, b - 18, py(0) + 9, tinte))
+        teile.append('<polygon points="%.1f,0 %.1f,18 %.1f,18" fill="%s"/>'
+                     % (px(0), px(0) - 9, px(0) + 9, tinte))
+    if xname == "x":
+        teile.append('<text x="%.1f" y="%.1f" font-size="26" font-style="italic" fill="%s">x</text>'
+                     % (b - 26, py(0) - 14, tinte))
+    else:
+        achsnamen.append('<text x="%.1f" y="%.1f" font-size="26" font-style="italic" fill="%s" '
+                         'stroke="%s" stroke-width="10" paint-order="stroke" text-anchor="end">%s</text>'
+                         % (b - 8, py(0) - 16, tinte, papier, entschaerfen(xname)))
+    if yname == "y":
+        teile.append('<text x="%.1f" y="26" font-size="26" font-style="italic" fill="%s">y</text>'
+                     % (px(0) + 14, tinte))
+    else:
+        achsnamen.append('<text x="%.1f" y="26" font-size="26" font-style="italic" fill="%s" '
+                         'stroke="%s" stroke-width="10" paint-order="stroke">%s</text>'
+                         % (px(0) + 14, tinte, papier, entschaerfen(yname)))
     for x, mark in xt:
         if abs(x) < 1e-9:
             continue
@@ -560,6 +580,7 @@ def graf_svg(el, theme):
                          'text-anchor="%s">%s</text>'
                          % (tx, ty, farbe, pt.get("anker", "start"),
                             entschaerfen(pt["beschriftung"])))
+    teile.extend(achsnamen)
     teile.append("</svg>")
     return "".join(teile)
 

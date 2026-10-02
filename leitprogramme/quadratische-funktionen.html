@@ -492,6 +492,15 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
 .leiste.geloest .ls-weiter{border-color:var(--gruen-rand);color:var(--tinte);font-weight:700}
 .leiste.fertig{background:var(--gruen-hell);border-color:var(--gruen-rand)}
 .kap-clip{max-width:640px}
+.kompetenzen ul{margin:10px 0 0;padding-left:1.25em;font-family:var(--sans);font-size:.92rem}
+.kompetenzen li{margin:5px 0}
+.kompetenzen .rlp-quelle{font-family:var(--sans);font-size:.8rem;color:var(--tinte-2);margin:8px 0 0}
+.kompetenzen .ohm{font-size:.72rem;padding:1px 7px;border-radius:999px;background:var(--orange-hell);border:1px solid var(--orange-rand);white-space:nowrap}
+.sim .pfeil{fill:var(--tinte-2)} svg.mini .pfeil{fill:var(--tinte-2)}
+.achsname{fill:var(--tinte);font-family:var(--serif);font-style:italic;font-size:12px;stroke:var(--karte);stroke-width:4px;paint-order:stroke}
+svg.mini .achsname{font-size:10px;stroke-width:3px}
+.hilfs-schalter{display:flex;gap:7px;align-items:center;justify-content:center;font-family:var(--sans);font-size:.82rem;color:var(--tinte-2);margin:2px 0 8px;cursor:pointer}
+.ohne-hilfslinien .hilfslinie{display:none}
 .festhalten{display:grid;grid-template-columns:minmax(0,1fr);gap:0 26px}
 @media(min-width:1180px){.festhalten{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 .pdf-weg{margin:14px 0 4px;display:flex;flex-direction:column;gap:10px;font-family:var(--sans);font-size:.92rem}
@@ -565,15 +574,16 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
           <li><b>⑤ Aufgaben</b> auf Papier, dann Lösung aufklappen und abhaken.</li>
         </ol>
       </details>
-      <div class="rlp-kompetenzen">
-        <div class="rlp-titel">📋 RLP-BM 2030, Grundlagenfach 3.3</div>
+      <details class="anleitung kompetenzen">
+        <summary><h2 id="kompetenzen">Kompetenzen nach Lehrplan</h2></summary>
+        <p class="rlp-quelle">RLP-BM 2030, Grundlagenfach 3.3</p>
         <ul>
           <li><b>K1</b> Darstellungsformen (Grund-, Scheitel-, Produktform) erläutern und ineinander überführen <span class="ohm">auch ohne Hilfsmittel</span></li>
           <li><b>K2</b> die Darstellungsformen geometrisch interpretieren (Öffnung, Nullstellen, Scheitelpunkt, Achsenabschnitte) <span class="ohm">auch ohne Hilfsmittel</span></li>
           <li><b>K3</b> die Funktionsgleichung aufstellen</li>
           <li><b>K4</b> Extremwertaufgaben lösen <span class="ohm">auch ohne Hilfsmittel</span></li>
         </ul>
-      </div>
+      </details>
     </div>
 
     <div class="band"><span>Lektion 1</span><span class="strich"></span><span>Die Parabel sehen</span></div>
@@ -618,7 +628,6 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       <div class="kap-meta"><span class="marker">Kapitel 1</span><span class="abz abz-gf">GF 3.3 · K2</span><span class="zeit">≈ 30 min</span></div>
       <h2 id="die-parabel-bewegen">Die Parabel bewegen</h2>
       <p class="ziel">Du liest aus \(f(x) = a(x - x_s)^2 + y_s\) Scheitel, Öffnung und Streckung ab — und umgekehrt die Gleichung aus dem Graphen.</p>
-      <div class="fahrplan" aria-label="Ablauf"><span>① Clip</span><span>② Tüfteln</span><span>③ Kontrollfragen</span><span>④ Üben mit Rückmeldung</span><span>⑤ Aufgaben</span></div>
 
       <p class="phase"><span>①</span> Clip</p>
       <div class="clipkarte kap-clip" data-clip="clips/g3-3-lp-verschieben.html" data-titel="Parabel sehen: von der Normalparabel zur Scheitelform">
@@ -634,6 +643,7 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
         <div class="leiste" aria-live="polite"></div>
         <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
         <svg viewBox="0 0 300 300" role="img" aria-label="Parabel in Scheitelform, Normalparabel gestrichelt"></svg>
+        <label class="hilfs-schalter"><input type="checkbox" checked> Hilfslinien (Normalparabel)</label>
         <div class="sl-row">
           <div class="sl-grp akz-blau"><label for="s1-a"><span class="var">a</span></label><input type="range" id="s1-a" data-p="a" min="-2" max="2" step="0.25" value="1"><span class="sl-val"></span></div>
           <div class="sl-grp akz-orange"><label for="s1-xs"><span class="var">x<sub>s</sub></span></label><input type="range" id="s1-xs" data-p="xs" min="-5" max="5" step="0.5" value="0"><span class="sl-val"></span></div>
@@ -720,7 +730,6 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       <div class="kap-meta"><span class="marker">Kapitel 2</span><span class="abz abz-gf">GF 3.3 · K1 · K2</span><span class="zeit">≈ 30 min</span></div>
       <h2 id="drei-formen-eine-parabel">Drei Formen, eine Parabel</h2>
       <p class="ziel">Du erklärst, was Grund-, Scheitel- und Produktform im Bild zeigen, und formst ohne Rechner um.</p>
-      <div class="fahrplan" aria-label="Ablauf"><span>① Clip</span><span>② Tüfteln</span><span>③ Kontrollfragen</span><span>④ Üben mit Rückmeldung</span><span>⑤ Aufgaben</span></div>
 
       <p class="phase"><span>①</span> Clip</p>
       <div class="clipkarte kap-clip" data-clip="clips/g3-3-lp-drei-formen.html" data-titel="Parabel sehen: drei Formen, drei Blicke">
@@ -821,7 +830,6 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       <div class="kap-meta"><span class="marker">Kapitel 3</span><span class="abz abz-gf">GF 3.3 · K2</span><span class="zeit">≈ 30 min</span></div>
       <h2 id="nullstellen-und-scheitel">Nullstellen und Scheitel berechnen</h2>
       <p class="ziel">Du bestimmst aus der Grundform Scheitel und Nullstellen und sagst mit \(D\) voraus, wie viele es gibt.</p>
-      <div class="fahrplan" aria-label="Ablauf"><span>① Clip</span><span>② Tüfteln</span><span>③ Kontrollfragen</span><span>④ Üben mit Rückmeldung</span><span>⑤ Aufgaben</span></div>
 
       <p class="phase"><span>①</span> Clip</p>
       <div class="clipkarte kap-clip" data-clip="clips/g3-3-lp-achse-bleibt.html" data-titel="Parabel sehen: c hebt, die Achse bleibt">
@@ -914,7 +922,6 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       <div class="kap-meta"><span class="marker">Kapitel 4</span><span class="abz abz-gf">GF 3.3 · K3</span><span class="zeit">≈ 30 min</span></div>
       <h2 id="die-gleichung-aufstellen">Die Funktionsgleichung aufstellen</h2>
       <p class="ziel">Du wählst den passenden Ansatz und bestimmst \(a\) mit einem Punkt.</p>
-      <div class="fahrplan" aria-label="Ablauf"><span>① Clip</span><span>② Tüfteln</span><span>③ Kontrollfragen</span><span>④ Üben mit Rückmeldung</span><span>⑤ Aufgaben</span></div>
 
       <p class="phase"><span>①</span> Clip</p>
       <div class="clipkarte kap-clip" data-clip="clips/g3-3-lp-a-finden.html" data-titel="Parabel sehen: a finden">
@@ -1007,7 +1014,6 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       <div class="kap-meta"><span class="marker">Kapitel 5</span><span class="abz abz-gf">GF 3.3 · K4</span><span class="zeit">≈ 30 min</span></div>
       <h2 id="extremwertaufgaben">Extremwertaufgaben</h2>
       <p class="ziel">Du findest das Maximum einer Sachaufgabe ohne Rechner — und nennst Stelle und Wert.</p>
-      <div class="fahrplan" aria-label="Ablauf"><span>① Clip</span><span>② Tüfteln</span><span>③ Kontrollfragen</span><span>④ Üben mit Rückmeldung</span><span>⑤ Aufgaben</span></div>
 
       <p class="phase"><span>①</span> Clip</p>
       <div class="clipkarte kap-clip" data-clip="clips/g3-3-lp-mitte.html" data-titel="Parabel sehen: die grösste Fläche liegt in der Mitte">
@@ -1252,9 +1258,22 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
     for (i = Math.ceil(y0 / sy) * sy; i <= y1 + 1e-9; i += sy) el(g, 'line', { x1: 0, y1: Y(i), x2: W, y2: Y(i), 'class': 'gitter' });
     if (y0 <= 0 && y1 >= 0) el(g, 'line', { x1: 0, y1: Y(0), x2: W, y2: Y(0), 'class': 'achse' });
     if (x0 <= 0 && x1 >= 0) el(g, 'line', { x1: X(0), y1: 0, x2: X(0), y2: H, 'class': 'achse' });
+    // Pfeil in positiver Richtung, Achsenname am Pfeil; bei Anwendungen mit Grösse und Einheit
+    var pf = o.pfeil || 7, xn = o.xname || 'x', yn = o.yname || 'y';
+    var namen = [];
+    if (y0 <= 0 && y1 >= 0){
+      el(g, 'polygon', { points: W + ',' + Y(0) + ' ' + (W - pf) + ',' + (Y(0) - pf / 2) + ' ' + (W - pf) + ',' + (Y(0) + pf / 2), 'class': 'pfeil' });
+      namen.push([W - 3, Y(0) - pf, 'end', xn]);
+    }
+    if (x0 <= 0 && x1 >= 0){
+      el(g, 'polygon', { points: X(0) + ',0 ' + (X(0) - pf / 2) + ',' + pf + ' ' + (X(0) + pf / 2) + ',' + pf, 'class': 'pfeil' });
+      namen.push([X(0) + pf, pf + 3, 'start', yn]);
+    }
     (o.xm || []).forEach(function(t){ el(g, 'text', { x: X(t), y: Y(Math.max(0, y0)) + 13, 'text-anchor': 'middle', 'class': 'skala' }, z(t)); });
     (o.ym || []).forEach(function(t){ el(g, 'text', { x: X(Math.max(0, x0)) - 5, y: Y(t) + 4, 'text-anchor': 'end', 'class': 'skala' }, z(t)); });
     var ebene = el(svg, 'g', {});
+    var schilder = el(svg, 'g', {});      // Achsennamen über allem, mit Hof
+    namen.forEach(function(n){ el(schilder, 'text', { x: n[0], y: n[1], 'text-anchor': n[2], 'class': 'achsname' }, n[3]); });
     return {
       X: X, Y: Y,
       leeren: function(){ while (ebene.firstChild) ebene.removeChild(ebene.firstChild); },
@@ -1328,14 +1347,17 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
   /* ---------- Kapitel 1: Parabel bewegen ---------- */
   (function(){
     var fig = document.getElementById('sim1'); if (!fig) return;
-    var K = Achsen(fig.querySelector('svg'), FENSTER), ziel = null, pruefen = function(){};
+    var K = Achsen(fig.querySelector('svg'), FENSTER), ziel = null, pruefen = function(){}, bewegt = {};
     var r = regler(fig, zeichnen);
-    var sim = { zustand: function(){ var w = werte(r); return { a: w.a, xs: w.xs, ys: w.ys, ziel: ziel }; },
+    for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
+    var hs = fig.querySelector('.hilfs-schalter input');
+    if (hs) hs.addEventListener('change', function(){ fig.classList.toggle('ohne-hilfslinien', !hs.checked); });
+    var sim = { zustand: function(){ var w = werte(r); return { a: w.a, xs: w.xs, ys: w.ys, ziel: ziel, bewegt: bewegt }; },
                 zeichnen: zeichnen, aufraeumen: function(){ ziel = null; } };
     function zeichnen(){
       var w = werte(r), a = w.a, xs = w.xs, ys = w.ys;
       K.leeren();
-      K.kurve(function(x){ return x * x; }, 'normal');
+      K.kurve(function(x){ return x * x; }, 'normal hilfslinie');
       if (ziel) K.kurve(function(x){ return ziel[0] * (x - ziel[1]) * (x - ziel[1]) + ziel[2]; }, 'zielkurve');
       K.kurve(function(x){ return a * (x - xs) * (x - xs) + ys; }, 'kurve');
       if (a !== 0) K.punkt(xs, ys, 'p-s', 'S(' + z(xs) + ' | ' + z(ys) + ')', xs > 3 ? -8 : 8, a > 0 ? 18 : -10, xs > 3 ? 'end' : 'start');
@@ -1343,13 +1365,10 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
       pruefen();
     }
     function zielAufgabe(t){ return { text: 'Triff die grüne Parabel.', setup: function(){ ziel = t; }, ok: function(s){ return s.a === t[0] && s.xs === t[1] && s.ys === t[2]; } }; }
+    function bau(a, xs, ys, tex){ return { text: 'Bau nach: \\(f(x) = ' + tex + '\\)', ok: function(s){ return s.a === a && s.xs === xs && s.ys === ys; } }; }
     pruefen = Leiste(fig, [
-      { text: 'Schieb \\(y_s\\) auf \\(2\\).', ok: function(s){ return s.ys === 2; } },
-      { text: 'Jetzt \\(y_s = -1\\).', ok: function(s){ return s.ys === -1; } },
-      { text: '\\(y_s\\) zurück auf \\(0\\), dann \\(x_s = 2\\). Welches Zeichen steht in der Klammer?', ok: function(s){ return s.ys === 0 && s.xs === 2; } },
-      { text: '\\(x_s = -3\\). Und jetzt?', ok: function(s){ return s.xs === -3; } },
-      { text: 'Stell \\(a = -1\\) ein.', ok: function(s){ return s.a === -1; } },
-      { text: 'Stell \\(f(x) = (x-2)^2 - 1\\) ein.', ok: function(s){ return s.a === 1 && s.xs === 2 && s.ys === -1; } },
+      { text: 'Erkunde: Zieh an allen drei Reglern und beobachte, was sich ändert.', ok: function(s){ return s.bewegt.a && s.bewegt.xs && s.bewegt.ys; } },
+      bau(1, 0, -3, 'x^2 - 3'), bau(1, -2, 0, '(x + 2)^2'), bau(-1, 1, 4, '-(x - 1)^2 + 4'), bau(0.5, -3, -2, '0.5\\,(x + 3)^2 - 2'),
       zielAufgabe([1, -3, 2]), zielAufgabe([-1, 1, 4]), zielAufgabe([0.5, 2, -3])
     ], sim);
     zeichnen();
@@ -1422,7 +1441,7 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
     var fig = document.getElementById('sim4'); if (!fig) return;
     var svg = fig.querySelector('svg'), inp = fig.querySelector('input[data-p="a"]'), K, fall = 'A', pruefen = function(){};
     var FAELLE = {
-      A: { fenster: { w: 300, h: 300, x0: -2, x1: 9, y0: -4, y1: 6, xm: [4, 8], ym: [-2, 2, 4] }, a: [-1, -0.05, 0.05, -0.5],
+      A: { fenster: { w: 300, h: 300, x0: -2, x1: 9, y0: -4, y1: 6, xm: [4, 8], ym: [-2, 2, 4], xname: 'x [m]', yname: 'h [m]' }, a: [-1, -0.05, 0.05, -0.5],
            f: function(a, x){ return a * (x - 4) * (x - 4) + 5; }, p: [0, 1],
            term: function(a){ return 'h(x) = ' + sp('tx-blau', z(a)) + '·(x − 4)² + 5'; },
            fest: function(){ K.punkt(4, 5, 'p-s', 'S(4 | 5)'); } },
@@ -1459,7 +1478,7 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
   (function(){
     var fig = document.getElementById('sim5'); if (!fig) return;
     var svg = fig.querySelector('svg'), feld = el(svg, 'g', {}), gp = el(svg, 'g', { transform: 'translate(200,0)' });
-    var K = Achsen(gp, { w: 240, h: 230, x0: -1, x1: 21, y0: -8, y1: 110, sx: 2, sy: 20, xm: [10, 20], ym: [50, 100] });
+    var K = Achsen(gp, { w: 240, h: 230, x0: -1, x1: 21, y0: -8, y1: 110, sx: 2, sy: 20, xm: [10, 20], ym: [50, 100], xname: 'x [m]', yname: 'A [m²]' });
     var besucht = {}, pruefen = function(){};
     var r = regler(fig, zeichnen);
     var sim = { zustand: function(){ var x = werte(r).x; return { x: x, besucht: besucht }; }, zeichnen: zeichnen, aufraeumen: function(){ besucht = {}; } };
@@ -1650,7 +1669,7 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
           if (T.graf){
             var fe = [A.xs - 4, A.xs + 4, A.ys - 4, A.ys + 4];
             bild.setAttribute('viewBox', '0 0 170 170');
-            var K = Achsen(bild, { w: 170, h: 170, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3.5 });
+            var K = Achsen(bild, { w: 170, h: 170, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3.5, pfeil: 6 });
             K.kurve(function(x){ return A.a * (x - A.xs) * (x - A.xs) + A.ys; }, 'kurve');
             K.punkt(A.xs, A.ys, 'p-s'); K.punkt(A.xs + A.s, A.ys + A.a * A.s * A.s, 'p-s');
           }
@@ -1690,7 +1709,7 @@ svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill
     var f = svg.dataset.f.split(',').map(Number), fe = (svg.dataset.fenster || '-5,5,-5,5').split(',').map(Number);
     var w = 150, h = 150 * (fe[3] - fe[2]) / (fe[1] - fe[0]);
     svg.setAttribute('viewBox', '0 0 150 ' + h.toFixed(1)); svg.setAttribute('role', 'img');
-    var K = Achsen(svg, { w: w, h: h, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, xm: [1], ym: [1] });
+    var K = Achsen(svg, { w: w, h: h, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, xm: [1], ym: [1], pfeil: 6 });
     K.kurve(function(x){ return f[0] * (x - f[1]) * (x - f[1]) + f[2]; }, 'kurve');
     if (svg.dataset.punkte) svg.dataset.punkte.split(';').forEach(function(p){ var q = p.split(',').map(Number); K.punkt(q[0], q[1], 'p-s'); });
     if (svg.dataset.titel) el(svg, 'text', { x: 6, y: 14, 'class': 'mini-titel' }, svg.dataset.titel);

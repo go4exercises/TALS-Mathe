@@ -168,6 +168,14 @@ Wie `begreifbar`, aber **ohne Häuschenpapier und ohne roten Rand** (`karo: fals
 `rand: false`). Karo und Koordinatengitter eines `graf` stören sich, besonders in Bewegung.
 Neue Clips setzen `"theme": "begreifbar-schlicht"`; bestehende bleiben, wie sie sind.
 
+### Achsen mit Pfeil und Namen: `pfeile`, `xname`, `yname` (seit 02.10.2026)
+
+`"pfeile": true` setzt Pfeilspitzen in positiver Richtung; `"xname"`/`"yname"` ersetzen die
+Beschriftung «x»/«y» — bei Anwendungen mit Grösse und Einheit: `"xname": "x [m]", "yname": "A [m²]"`.
+Benannte Achsen werden zuletzt gezeichnet, mit einem Hof in der Papierfarbe, damit eine Kurve sie
+nicht überdeckt. Ohne die Felder bleibt das Bild wie bisher (bestehende Clips bauen gleich).
+Für neue Clips mit Koordinatenbild: `pfeile` immer setzen.
+
 ### Bewegte Parabel im `graf`: `bewegung` (seit 02.10.2026)
 
 Statt eines festen Bildes je Szene kann eine Parabel **während der Szene gleiten**:

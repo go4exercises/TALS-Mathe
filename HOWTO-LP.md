@@ -153,14 +153,20 @@ Weiter        nächstes Leitprogramm · Themenseite · bewusst Weggelassenes
 ### Innerhalb eines Kapitels: das Muster (Fassung 3, 02.10.2026)
 
 Alle Kapitel von `leitprogramme/quadratische-funktionen.html` folgen diesem Muster; die Seite
-entsteht aus einer Kapitelbeschreibung, damit es überall gleich bleibt. Fahrplan (`.fahrplan`)
-unter dem Lernziel, Phasen (`<p class="phase">`) über den Abschnitten:
+entsteht aus einer Kapitelbeschreibung, damit es überall gleich bleibt. Phasen
+(`<p class="phase">`) über den Abschnitten — **kein** Fahrplan unter dem Kapiteltitel
+(Entscheid 02.10.2026). «So arbeitest du» und die RLP-Kompetenzen stehen oben, beide
+eingeklappt (`details.anleitung`).
 
 1. **① Clip.** Ein Einführungsclip zeigt **alles**, was das Kapitel bringt — in Bewegung —
    und endet mit dem allgemeinen Auftrag: «Erkunde diese Zusammenhänge in der nachfolgenden
    Animation und löse die Aufgaben.» Der erste Clip eines Themas führt die Grundform ein
    (hier: Normalparabel über die Wertetabelle).
-2. **② Tüfteln.** Die Simulation (§8) trägt ihre Aufgaben **selbst**: eine Aufgabenleiste
+2. **② Tüfteln.** Die Simulation (§8) trägt ihre Aufgaben **selbst**. Reihenfolge: zuerst
+   **Erkunden** (frei an allen Reglern ziehen), dann **konkrete Funktionen zum Nachbauen** —
+   nicht die Beispiele aus dem Clip —, dann Zielspiele. Hilfslinien (gestrichelte
+   Bezugskurven) lassen sich mit einem Schalter aus- und einblenden (`.hilfs-schalter`,
+   Klasse `hilfslinie`). Technik: eine Aufgabenleiste
    (`.leiste`) über dem Bild zeigt eine Aufgabe nach der anderen, setzt ✓, sobald der Zustand
    stimmt, und bietet «Nächste ▶» bzw. «überspringen». **Kein Text links daneben** — lange
    Aufträge schrecken ab. Eine Aufgabe = ein Satz. Zielspiele («Triff die grüne Parabel»)
@@ -387,6 +393,7 @@ Immer nach `STYLEGUIDE.md`. Beim Vergleich schiefgegangen:
 | Parametrisierte Menge | Doppelpunkt: `\{(x \mid 2x-3) : x \in \mathbb{R}\}` |
 | Intervalle | `]a;\, b[` |
 | Zahlen | Dezimalpunkt; Brüche, wo die Themenseite Brüche verwendet |
+| Koordinatensysteme | Achsen mit **Pfeil in positiver Richtung** und Namen am Pfeil (\(x\), \(y\)); bei Anwendungen **Grösse und Einheit** («x [m]», «h [m]», «A [m²]»). Gilt für Simulationen, Minigrafen, Übungsbilder, Clips (`pfeile`, `xname`, `yname`) und PDFs (pgfplots `axis lines=middle`) |
 | Scheitel | im Leitprogramm \(S(x_s \mid y_s)\), \(f(x) = a(x - x_s)^2 + y_s\) (Entscheid 02.10.2026); einmal vermerken, dass die Themenseite \(u, v\) schreibt |
 | Fachbegriffe | **der Begriff aus den RLP-Kompetenzen** (z. B. Grund-, Scheitel-, Produktform); weicht die Themenseite oder ein Clip ab, deren Namen einmal in Klammern nennen (z. B. «Produktform (Linearfaktorform)»). Die Synonyme stehen auf der Themenseite beim Begriff |
 | Methodenwahl | andere Hauptmethode als die Themenseite → beide nennen, Wahl in einem Satz begründen |
