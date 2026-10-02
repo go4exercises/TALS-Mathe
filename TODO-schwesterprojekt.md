@@ -73,3 +73,51 @@ Werkzeug gleich, er ändert keinen Clip.
 74.5 % (Grundlinie 84 %) — der Eintrag in `OFFEN` kommt erst, wenn der Prototyp
 angenommen ist.
 
+
+### 02.10.2026 · Drei Werkzeuge aus dem Leitprogramm Quadratische Funktionen (Theme, Gesamttest als PDF, vorgelesene Fragen)
+
+Nachgezählt im Physik-Repo (Stand `ebe6205`, nur gelesen). Vorbild in Mathe:
+`leitprogramme/quadratische-funktionen.html`, seit 02.10.2026 freigeschaltet.
+
+**1. Theme `begreifbar-schlicht`** — `clips/themes/begreifbar-schlicht.json`: Kopie von
+`begreifbar.json` mit `"karo": false` und `"rand": false` und neuer `beschreibung`
+(HOWTO-clips «Theme `begreifbar-schlicht`»). Karo und Koordinatengitter eines `graf`
+stören sich.
+- *Wo in Physik:* `clips/themes/` hat `begreifbar`, `heft`, `papier`, `tafel`;
+  `scripts/build-clips.py` wertet `karo` und `rand` schon aus (Zeilen 718 ff.) — **kein
+  Code nötig**, nur die Datei. Als Vorlage Physiks eigene `begreifbar.json` nehmen
+  (Bernstein `#8a4a0e`, Karo `rgba(138,74,14,.10)`), nicht die Mathe-Datei — sonst
+  kommen Mathes Blautöne mit.
+- *Inhalt anfassen: nichts.* 233 Drehbücher setzen `begreifbar` und bleiben so; gilt für
+  neue Clips. Den Satz «Standard für neue Clips» in Physiks `HOWTO-clips.md` übernehmen.
+
+**2. Gesamttest und Bewertungspaket als PDF aus LaTeX** — `scripts/build-lp-pdf.py`
+(32 Zeilen, übersetzt `downloads/leitprogramme/**/*.tex` mit `latexmk -pdf` in einem
+temporären Ordner, legt nur das PDF ab) und `downloads/leitprogramme/lp-druck.sty`
+(42 Zeilen: pdfLaTeX, T1, mathpazo, tcolorbox, pgfplots, needspace). Dazu der Ansatz
+aus `HOWTO-leitprogramme.md` §9: Bewertungspaket (Musterlösung + Kriterien) **getrennt**,
+damit Lernende ihre Lösung einer KI zur Bewertung geben können; KI-Hinweis in
+Selbstverantwortung, nicht an die Schule gerichtet.
+- *Wo in Physik:* Es gibt **kein** `downloads/` und kein PDF in den Leitprogrammen
+  (0 Verweise auf `.pdf`, kein `window.print`); 8 der 11 Seiten in `leitprogramme/`
+  haben einen Gesamttest als HTML. LaTeX liegt nur unter `.quellen/formelsammlung/`.
+  `latexmk` und `pdflatex` sind auf dem Rechner da (gleiche Maschine).
+- *Anpassen:* In `lp-druck.sty` die Farben auf Bernstein und die Fusszeile
+  «physik.begreifbar.ch»; LuaLaTeX geht nicht (luaotfload-tool fehlt), darum pdfLaTeX.
+- *Entscheid offen:* ob Physik seine HTML-Gesamttests umstellt — das ist ein
+  inhaltlicher Entscheid des Auftraggebers, kein reiner Übertrag. Das Skript
+  allein kann vorab übernommen werden.
+
+**3. Vorgelesene Fragen im Clip** — `scripts/build-clip-fragen-ton.py` (77 Zeilen,
+bewusst Mathe-eigen, nicht in `abgleich.py`). Holt `sprich()` und `aussprache()` aus
+`build-clip-ton.py` und `fragen_texte()` aus `build-clips.py` per importlib.
+- *Wo in Physik:* `build-clip-ton.py` hat `aussprache` (Z. 176) und `sprich` (Z. 199);
+  `fragen_texte` fehlt in `build-clips.py` (0 Treffer) — kommt erst mit dem Eintrag
+  «bewegte Parabel und Fragen im Clip» oben. **Darum erst nach diesem portieren**; die
+  Datei selbst lässt sich dann unverändert kopieren (Pfade aus dem eigenen Dateipfad).
+- *Inhalt anfassen: nichts.* Kein Physik-Drehbuch hat `fragen` (0 von 233).
+
+**Warum.** Leitprogramme sollen in beiden Fächern gleich arbeiten: ruhiges Bild für
+bewegte Grafen, Test zum Ausdrucken mit eigenständiger Bewertung, Clips, die fragen.
+Die drei Dateien stehen nicht in `abgleich.py`; ein `OFFEN`-Eintrag ist nicht nötig,
+solange sie nicht als KERN aufgenommen werden.
