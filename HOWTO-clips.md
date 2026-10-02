@@ -162,7 +162,7 @@ Kurve an dieser Stelle verläuft — bei `y = x²` liegt die Kurve an `x = 1.35`
 ein Label bei `7.6` ist also frei. Vier Kollisionen sind auf diese Weise entstanden und
 erst im Bild aufgefallen, nicht in der Prüfung.
 
-### Bewegte Parabel im `graf`: `bewegung` (Prototyp 02.10.2026)
+### Bewegte Parabel im `graf`: `bewegung` (seit 02.10.2026)
 
 Statt eines festen Bildes je Szene kann eine Parabel **während der Szene gleiten**:
 
@@ -174,8 +174,21 @@ Statt eines festen Bildes je Szene kann eine Parabel **während der Szene gleite
 
 `bewegung` ist eine Liste von Stützpunkten `[t, a, u, v]` für \(y = a(x-u)^2 + v\), `t` in
 Sekunden **ab Szenenbeginn**. Dazwischen weich überblendet (smoothstep), vor dem ersten und
-nach dem letzten Punkt steht die Parabel still. `scheitel` zeichnet den Scheitelpunkt mit
-mitlaufender Beschriftung «S(u | v)» (eine Nachkommastelle).
+nach dem letzten Punkt steht die Parabel still. Ein einziger Stützpunkt ergibt eine stehende
+Parabel, an der sich trotzdem Begleiter bewegen können.
+
+Begleiter — alle aus derselben Zeit gerechnet, alle mit `farbe`:
+
+| Schlüssel | zeigt |
+|---|---|
+| `"scheitel": {}` | Scheitelpunkt mit mitlaufender Beschriftung «S(u \| v)» |
+| `"nullstellen": {}` | die beiden Nullstellen; sie laufen zusammen und verschwinden, wenn die Parabel die Achse verlässt |
+| `"yachse": {}` | den \(y\)-Achsenabschnitt mit «(0 \| c)» |
+| `"marken": [{"x": 0, "text": "h(0) = {y}"}]` | Punkt an festem \(x\) mit Live-Wert |
+| `"laeufer": {"bahn": [[t, x], …], "text": "A = {y}", "spiegel": true}` | Punkt, der auf der Kurve fährt; `spiegel` zeigt blass den Partner bei \(2u - x\) |
+
+In `text` stehen `{x}` und `{y}` für die laufenden Werte (eine Nachkommastelle, echtes
+Minus).
 
 Gezeichnet wird im Abspieler, **allein aus der Zeit**: `seek(t)` wird nur in Clips mit
 `bewegung` um `bewegen(t)` erweitert (`BEWEGUNG_JS` in `build-clips.py`). Darum stimmen
@@ -189,9 +202,10 @@ nennt — die Zeiten nach der Vertonung aus der Szenendauer wählen. Bewegungen 
 wirken ruhig, unter 1 s hektisch. Geht \(a\) durch 0 (Umklappen), ist die Parabel
 kurz eine Gerade — das ist gewollt und zeigt, was dabei passiert.
 
-Prototyp: `clips/g3-3-lp-verschieben-bewegt.json` (gleicher Ton wie
-`g3-3-lp-verschieben`). Noch nicht: bewegte Punkte, Geraden, Kurven und Live-Zahlen in
-Formelzeilen.
+Im Einsatz: die fünf Clips `g3-3-lp-*` («Parabel sehen», Leitprogramm Quadratische
+Funktionen). Noch nicht: bewegte Geraden und freie Kurven, Live-Zahlen in Formelzeilen.
+**Formelzeile und Bewegung abstimmen:** Nennt die Formel links schon den Endwert, soll die
+Bewegung früh und kurz sein (unter 2 s) — sonst steht im Text etwas anderes als im Bild.
 
 ### Kurven im `graf`: `kurven`, `xteilung`/`yteilung`, `von`/`bis`
 

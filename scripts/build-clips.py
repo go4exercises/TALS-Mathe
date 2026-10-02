@@ -443,13 +443,38 @@ def graf_svg(el, theme):
                          % (entschaerfen(json.dumps(pa["bewegung"])), bid, x0, x1, y0, y1, b, h, rand,
                             farbe, pa.get("dicke", 5),
                             'stroke-dasharray="14 10"' if pa.get("gestrichelt") else ""))
-            sch = pa.get("scheitel")
-            if sch:
-                fs = fv[sch.get("farbe", 3) - 1]
-                teile.append('<g class="bew-s" data-zu="%s"><circle r="11" fill="%s" stroke="%s" '
-                             'stroke-width="3.5"/><circle r="5" fill="%s"/><text font-size="29" '
-                             'font-weight="600" fill="%s"></text></g>'
-                             % (bid, papier, fs, fs, fs))
+            # Begleiter der bewegten Parabel, alle aus derselben Zeit gerechnet:
+            # scheitel (mit "S(u | v)"), nullstellen, yachse, marken (Punkt an
+            # festem x mit Live-Wert) und laeufer (Punkt, der auf der Kurve
+            # faehrt; "spiegel" zeigt den Partner bei 2u - x).
+            def punkt_g(klasse, farbe, attr="", geist=False, text=True):
+                f_ = fv[farbe - 1]
+                g = '<g class="%s" data-zu="%s"%s>' % (klasse, bid, attr)
+                if geist:
+                    g += ('<g class="bew-geist" opacity=".35"><circle r="11" fill="%s" stroke="%s" '
+                          'stroke-width="3.5"/><circle r="5" fill="%s"/></g>' % (papier, f_, f_))
+                g += ('<g class="bew-pt"><circle r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
+                      '<circle r="5" fill="%s"/></g>' % (papier, f_, f_))
+                if text:
+                    g += '<text font-size="29" font-weight="600" fill="%s"></text>' % f_
+                return g + '</g>'
+            if pa.get("scheitel"):
+                teile.append(punkt_g("bew-s", pa["scheitel"].get("farbe", 3)))
+            if pa.get("nullstellen"):
+                f_ = pa["nullstellen"].get("farbe", 2)
+                teile.append(punkt_g("bew-n bew-n1", f_, text=False))
+                teile.append(punkt_g("bew-n bew-n2", f_, text=False))
+            if pa.get("yachse"):
+                teile.append(punkt_g("bew-y", pa["yachse"].get("farbe", 1)))
+            for m in pa.get("marken", []):
+                teile.append(punkt_g("bew-m", m.get("farbe", 4),
+                                     ' data-x="%g" data-text="%s"' % (m["x"], entschaerfen(m.get("text", "")))))
+            lf = pa.get("laeufer")
+            if lf:
+                teile.append(punkt_g("bew-l", lf.get("farbe", 2),
+                                     ' data-bahn="%s" data-text="%s"' % (entschaerfen(json.dumps(lf["bahn"])),
+                                                                         entschaerfen(lf.get("text", ""))),
+                                     geist=bool(lf.get("spiegel"))))
             continue
         a_, b_, c_ = pa["a"], pa.get("b", 0), pa.get("c", 0)
         stuecke, lauf = [], []
@@ -689,8 +714,7 @@ const RUHIG = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)'
 const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
   t0: parseFloat(L.dataset.t0),
   teile: [...L.querySelectorAll('[data-bew]')].map(p => ({
-    p, k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number),
-    s: L.querySelector('.bew-s[data-zu="' + p.dataset.paar + '"]') }))
+    p, L, k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number) }))
 }));
 function bewZustand(k, t) {
   if (t <= k[0][0]) return k[0].slice(1);
@@ -717,15 +741,41 @@ function bewegen(t) {
       else zug = false;
     }
     T.p.setAttribute('d', d);
-    if (T.s) {
-      const sx = px(u), sy = py(v), innen = u >= x0 && u <= x1 && v >= y0 && v <= y1;
-      T.s.style.display = innen ? '' : 'none';
-      T.s.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', sx); c.setAttribute('cy', sy); });
-      const tx = T.s.querySelector('text'), rechts = u > x1 - (x1 - x0) * 0.3;
-      tx.setAttribute('x', sx + (rechts ? -18 : 18));
-      tx.setAttribute('y', sy + (a > 0 ? 44 : -18));
+    const f = x => a * (x - u) * (x - u) + v;
+    const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+      g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+    const beschrifte = (g, x, y, text, unten) => {
+      const tx = g.querySelector(':scope > text'); if (!tx) return;
+      const rechts = x > x1 - (x1 - x0) * 0.3;
+      tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+      tx.setAttribute('y', py(y) + (unten ? 44 : -18));
       tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
-      tx.textContent = 'S(' + bewZahl(u) + ' | ' + bewZahl(v) + ')';
+      tx.textContent = text;
+    };
+    const fuell = (vorlage, x, y) => vorlage.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+    for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+      if (g.classList.contains('bew-s')) {
+        setze(g, u, v); beschrifte(g, u, v, 'S(' + bewZahl(u) + ' | ' + bewZahl(v) + ')', a > 0);
+      } else if (g.classList.contains('bew-n')) {
+        const q = a !== 0 ? -v / a : -1, w = q >= 0 ? Math.sqrt(q) : NaN;
+        if (isNaN(w)) { g.style.display = 'none'; continue; }
+        setze(g, g.classList.contains('bew-n1') ? u - w : u + w, 0);
+      } else if (g.classList.contains('bew-y')) {
+        setze(g, 0, f(0)); beschrifte(g, 0, f(0), '(0 | ' + bewZahl(f(0)) + ')', false);
+      } else if (g.classList.contains('bew-m')) {
+        const x = parseFloat(g.dataset.x);
+        setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)), false);
+      } else if (g.classList.contains('bew-l')) {
+        const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn).map(b => [b[0], b[1], 0, 0]));
+        const x = bewZustand(bahn, t - L.t0)[0], y = f(x);
+        setze(g.querySelector('.bew-pt'), x, y);
+        g.style.display = innen(x, y) ? '' : 'none';
+        const gs = g.querySelector('.bew-geist');
+        if (gs) { const xs = 2 * u - x; gs.style.display = Math.abs(xs - x) > 0.05 && innen(xs, f(xs)) ? '' : 'none';
+          gs.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(xs)); c.setAttribute('cy', py(f(xs))); }); }
+        beschrifte(g, x, y, fuell(g.dataset.text, x, y), a > 0 && Math.abs(x - u) < (x1 - x0) * 0.15);
+      }
     }
   }
 }
