@@ -165,8 +165,8 @@ eingeklappt (`details.anleitung`).
 2. **② Tüfteln.** Die Simulation (§8) trägt ihre Aufgaben **selbst**. Reihenfolge: zuerst
    **Erkunden** (frei an allen Reglern ziehen), dann **konkrete Funktionen zum Nachbauen** —
    nicht die Beispiele aus dem Clip —, dann Zielspiele. Hilfslinien (gestrichelte
-   Bezugskurven) lassen sich mit einem Schalter aus- und einblenden (`.hilfs-schalter`,
-   Klasse `hilfslinie`). Technik: eine Aufgabenleiste
+   Bezugskurven) lassen sich in jeder Animation, die welche hat, mit einem Schalter aus- und einblenden
+   (`<label class="hilfs-schalter">` in der Figur, Klasse `hilfslinie` am Element). Technik: eine Aufgabenleiste
    (`.leiste`) über dem Bild zeigt eine Aufgabe nach der anderen, setzt ✓, sobald der Zustand
    stimmt, und bietet «Nächste ▶» bzw. «überspringen». **Kein Text links daneben** — lange
    Aufträge schrecken ab. Eine Aufgabe = ein Satz. Zielspiele («Triff die grüne Parabel»)

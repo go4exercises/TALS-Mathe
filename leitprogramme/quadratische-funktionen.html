@@ -845,6 +845,7 @@ svg.mini .achsname{font-size:10px;stroke-width:3px}
         <div class="leiste" aria-live="polite"></div>
         <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
         <svg viewBox="0 0 300 300" role="img" aria-label="Parabel mit Symmetrieachse und Nullstellen"></svg>
+        <label class="hilfs-schalter"><input type="checkbox" checked> Hilfslinien (Symmetrieachse)</label>
         <div class="sl-row">
           <div class="sl-grp akz-orange"><label for="s3-b"><span class="var">b</span></label><input type="range" id="s3-b" data-p="b" min="-4" max="4" step="1" value="-4"><span class="sl-val"></span></div>
           <div class="sl-grp akz-blau"><label for="s3-c"><span class="var">c</span></label><input type="range" id="s3-c" data-p="c" min="-3" max="7" step="0.5" value="3"><span class="sl-val"></span></div>
@@ -1029,6 +1030,7 @@ svg.mini .achsname{font-size:10px;stroke-width:3px}
         <div class="leiste" aria-live="polite"></div>
         <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
         <svg viewBox="0 0 440 230" role="img" aria-label="Rechteck mit 40 m Umfang und seine Fläche als Parabel"></svg>
+        <label class="hilfs-schalter"><input type="checkbox" checked> Hilfslinien (Rahmen 20 m × 20 m)</label>
         <div class="sl-row">
           <div class="sl-grp akz-orange"><label for="s5-x"><span class="var">x</span></label><input type="range" id="s5-x" data-p="x" min="0.5" max="19.5" step="0.5" value="4"><span class="sl-val"></span></div>
         </div>
@@ -1350,8 +1352,6 @@ svg.mini .achsname{font-size:10px;stroke-width:3px}
     var K = Achsen(fig.querySelector('svg'), FENSTER), ziel = null, pruefen = function(){}, bewegt = {};
     var r = regler(fig, zeichnen);
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
-    var hs = fig.querySelector('.hilfs-schalter input');
-    if (hs) hs.addEventListener('change', function(){ fig.classList.toggle('ohne-hilfslinien', !hs.checked); });
     var sim = { zustand: function(){ var w = werte(r); return { a: w.a, xs: w.xs, ys: w.ys, ziel: ziel, bewegt: bewegt }; },
                 zeichnen: zeichnen, aufraeumen: function(){ ziel = null; } };
     function zeichnen(){
@@ -1420,7 +1420,7 @@ svg.mini .achsname{font-size:10px;stroke-width:3px}
     var sim = { zustand: function(){ var w = werte(r); return { b: w.b, c: w.c, D: w.b * w.b - 4 * w.c }; }, zeichnen: zeichnen };
     function zeichnen(){
       var w = werte(r), b = w.b, c = w.c, xs = -b / 2, ys = c - b * b / 4, D = b * b - 4 * c;
-      K.leeren(); K.senkrecht(xs, 'symachse'); K.kurve(function(x){ return x * x + b * x + c; }, 'kurve');
+      K.leeren(); K.senkrecht(xs, 'symachse hilfslinie'); K.kurve(function(x){ return x * x + b * x + c; }, 'kurve');
       K.punkt(xs, ys, 'p-s', 'S(' + z(xs) + ' | ' + z(ys) + ')', xs > 2 ? -8 : 8, 18, xs > 2 ? 'end' : 'start');
       (D > 0 ? [xs - Math.sqrt(D) / 2, xs + Math.sqrt(D) / 2] : D === 0 ? [xs] : []).forEach(function(x){ K.punkt(x, 0, 'p-n'); });
       rolle(fig, 'formel').innerHTML = 'f(x) = ' + grundText(1, b, c) + ' &nbsp;·&nbsp; D = <b>' + z(D) + '</b>';
@@ -1485,7 +1485,7 @@ svg.mini .achsname{font-size:10px;stroke-width:3px}
     function zeichnen(){
       var x = werte(r).x, y = 20 - x, A = x * y, s = 9; besucht[x] = true;
       while (feld.firstChild) feld.removeChild(feld.firstChild);
-      el(feld, 'rect', { x: 10, y: 20, width: 20 * s, height: 20 * s, 'class': 'feld-rahmen' });
+      el(feld, 'rect', { x: 10, y: 20, width: 20 * s, height: 20 * s, 'class': 'feld-rahmen hilfslinie' });
       el(feld, 'rect', { x: 10, y: 20 + (20 * s - y * s), width: x * s, height: y * s, 'class': 'feld' });
       el(feld, 'text', { x: 10 + x * s / 2, y: 215, 'text-anchor': 'middle', 'class': 'p-text p-n' }, 'x = ' + z(x) + ' m');
       el(feld, 'text', { x: 10 + x * s + 4, y: 20 + 20 * s - y * s / 2, 'class': 'skala' }, z(y) + ' m');
@@ -1502,6 +1502,12 @@ svg.mini .achsname{font-size:10px;stroke-width:3px}
     ], sim);
     zeichnen();
   })();
+
+  /* ---------- Hilfslinien-Schalter: blendet alles mit Klasse .hilfslinie in seiner Animation aus ---------- */
+  document.querySelectorAll('.hilfs-schalter input').forEach(function(hs){
+    var fig = hs.closest('figure');
+    hs.addEventListener('change', function(){ fig.classList.toggle('ohne-hilfslinien', !hs.checked); });
+  });
 
   /* ---------- Übungen mit Rückmeldung ---------- */
   (function(){
