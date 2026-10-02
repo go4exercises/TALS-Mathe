@@ -429,7 +429,28 @@ def graf_svg(el, theme):
                             entschaerfen(g["beschriftung"])))
 
     # Parabeln y = a x^2 + b x + c, als Streckenzug im Fenster
-    for pa in el.get("parabeln", []):
+    for nr, pa in enumerate(el.get("parabeln", [])):
+        # "bewegung": [[t, a, u, v], ...] — eine Parabel in Scheitelform, die
+        # sich waehrend der Szene bewegt (t ab Szenenbeginn). Gezeichnet wird
+        # sie erst im Abspieler, aus der Zeit allein: Pause, Spulen und die
+        # Pruefbilder bleiben so richtig. Siehe BEWEGUNG_JS.
+        if pa.get("bewegung"):
+            farbe = fv[pa.get("farbe", 1) - 1]
+            bid = "bew%d" % nr
+            teile.append('<path data-bew="%s" data-paar="%s" data-fenster="%g,%g,%g,%g,%d,%d,%d" '
+                         'fill="none" stroke="%s" stroke-width="%s" stroke-linecap="round" '
+                         'stroke-linejoin="round" %s/>'
+                         % (entschaerfen(json.dumps(pa["bewegung"])), bid, x0, x1, y0, y1, b, h, rand,
+                            farbe, pa.get("dicke", 5),
+                            'stroke-dasharray="14 10"' if pa.get("gestrichelt") else ""))
+            sch = pa.get("scheitel")
+            if sch:
+                fs = fv[sch.get("farbe", 3) - 1]
+                teile.append('<g class="bew-s" data-zu="%s"><circle r="11" fill="%s" stroke="%s" '
+                             'stroke-width="3.5"/><circle r="5" fill="%s"/><text font-size="29" '
+                             'font-weight="600" fill="%s"></text></g>'
+                             % (bid, papier, fs, fs, fs))
+            continue
         a_, b_, c_ = pa["a"], pa.get("b", 0), pa.get("c", 0)
         stuecke, lauf = [], []
         n = 240
@@ -659,6 +680,60 @@ def rechner_svg(el, theme):
 
 
 # ---------------------------------------------------------------- Elemente
+# Abspieler-Zusatz fuer "bewegung" (Prototyp 02.10.2026). seek(t) wird
+# umgehaengt: erst die Ebenen wie immer, dann jede bewegte Parabel aus der
+# Zeit neu gerechnet. Zwischen zwei Stuetzpunkten weich (smoothstep); wer
+# "Bewegung reduzieren" eingestellt hat, sieht die Stuetzpunkte als Spruenge.
+BEWEGUNG_JS = r'''
+const RUHIG = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
+  t0: parseFloat(L.dataset.t0),
+  teile: [...L.querySelectorAll('[data-bew]')].map(p => ({
+    p, k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number),
+    s: L.querySelector('.bew-s[data-zu="' + p.dataset.paar + '"]') }))
+}));
+function bewZustand(k, t) {
+  if (t <= k[0][0]) return k[0].slice(1);
+  for (let i = 0; i < k.length - 1; i++) {
+    if (t < k[i + 1][0]) {
+      let q = (t - k[i][0]) / (k[i + 1][0] - k[i][0]);
+      q = RUHIG ? 0 : q * q * (3 - 2 * q);
+      return [1, 2, 3].map(j => k[i][j] + (k[i + 1][j] - k[i][j]) * q);
+    }
+  }
+  return k[k.length - 1].slice(1);
+}
+const bewZahl = x => { const r = Math.round(x * 10) / 10; return (r < 0 ? '−' : '') + Math.abs(r); };
+function bewegen(t) {
+  for (const L of BEW) for (const T of L.teile) {
+    const [a, u, v] = bewZustand(T.k, t - L.t0);
+    const [x0, x1, y0, y1, b, h, rd] = T.f;
+    const px = x => rd + (x - x0) / (x1 - x0) * (b - 2 * rd);
+    const py = y => h - rd - (y - y0) / (y1 - y0) * (h - 2 * rd);
+    let d = '', zug = false;
+    for (let i = 0; i <= 240; i++) {
+      const x = x0 + (x1 - x0) * i / 240, y = a * (x - u) * (x - u) + v;
+      if (y >= y0 && y <= y1) { d += (zug ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); zug = true; }
+      else zug = false;
+    }
+    T.p.setAttribute('d', d);
+    if (T.s) {
+      const sx = px(u), sy = py(v), innen = u >= x0 && u <= x1 && v >= y0 && v <= y1;
+      T.s.style.display = innen ? '' : 'none';
+      T.s.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', sx); c.setAttribute('cy', sy); });
+      const tx = T.s.querySelector('text'), rechts = u > x1 - (x1 - x0) * 0.3;
+      tx.setAttribute('x', sx + (rechts ? -18 : 18));
+      tx.setAttribute('y', sy + (a > 0 ? 44 : -18));
+      tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+      tx.textContent = 'S(' + bewZahl(u) + ' | ' + bewZahl(v) + ')';
+    }
+  }
+}
+const seekOhneBewegung = seek;
+seek = function (t) { seekOhneBewegung(t); bewegen(t); };
+'''
+
+
 def element_html(el, theme):
     typ = el.get("typ", "text")
     stil = []
@@ -956,6 +1031,8 @@ def bauen(quelle, eigenstaendig=False):
             y = el.get("y", y) + el.get("abstand", max(abstand, hoehe))
 
             attr = f' data-at="{ein:.2f}"'
+            if el.get("typ") == "graf" and any(pa.get("bewegung") for pa in el.get("parabeln", [])):
+                attr += f' data-t0="{start:.2f}"'
             if aus is not None:
                 attr += f' data-out="{aus:.2f}"'
             attr += f' data-anim="{anim}"'
@@ -1021,6 +1098,11 @@ def bauen(quelle, eigenstaendig=False):
         inhalt="\n".join(teile),
         sprecher=json.dumps(sprecher, ensure_ascii=False),
     )
+
+    # Nur Clips mit bewegten Bildern bekommen den Zusatz — alle anderen
+    # bleiben Byte fuer Byte, wie sie waren.
+    if "data-bew=" in html:
+        html = html.replace("window.__seek = seek;", BEWEGUNG_JS + "window.__seek = seek;", 1)
 
     name = dreh.get("dateiname") or os.path.splitext(os.path.basename(quelle))[0]
     if eigenstaendig:

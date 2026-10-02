@@ -162,6 +162,37 @@ Kurve an dieser Stelle verläuft — bei `y = x²` liegt die Kurve an `x = 1.35`
 ein Label bei `7.6` ist also frei. Vier Kollisionen sind auf diese Weise entstanden und
 erst im Bild aufgefallen, nicht in der Prüfung.
 
+### Bewegte Parabel im `graf`: `bewegung` (Prototyp 02.10.2026)
+
+Statt eines festen Bildes je Szene kann eine Parabel **während der Szene gleiten**:
+
+```json
+{"typ": "graf", "xbereich": [-4, 5], "ybereich": [-4, 6], "parabeln": [
+  {"a": 1, "gestrichelt": true, "dicke": 3},
+  {"bewegung": [[0.8, 1, 0, 0], [3.6, 1, 0, 2]], "farbe": 1, "scheitel": {"farbe": 3}}]}
+```
+
+`bewegung` ist eine Liste von Stützpunkten `[t, a, u, v]` für \(y = a(x-u)^2 + v\), `t` in
+Sekunden **ab Szenenbeginn**. Dazwischen weich überblendet (smoothstep), vor dem ersten und
+nach dem letzten Punkt steht die Parabel still. `scheitel` zeichnet den Scheitelpunkt mit
+mitlaufender Beschriftung «S(u | v)» (eine Nachkommastelle).
+
+Gezeichnet wird im Abspieler, **allein aus der Zeit**: `seek(t)` wird nur in Clips mit
+`bewegung` um `bewegen(t)` erweitert (`BEWEGUNG_JS` in `build-clips.py`). Darum stimmen
+Pause, Spulen und die Bilder von `pruef-clip.mjs` — ein Prüfbild mitten in der Bewegung
+zeigt den Zwischenstand. Alle anderen Clips bleiben beim Neubau Byte für Byte gleich.
+«Bewegung reduzieren» im Betriebssystem lässt die Parabel von Stützpunkt zu Stützpunkt
+springen statt gleiten.
+
+**Stützpunkte an den Sprechertext legen:** Die Bewegung soll laufen, während der Satz sie
+nennt — die Zeiten nach der Vertonung aus der Szenendauer wählen. Bewegungen von 2–3 s
+wirken ruhig, unter 1 s hektisch. Geht \(a\) durch 0 (Umklappen), ist die Parabel
+kurz eine Gerade — das ist gewollt und zeigt, was dabei passiert.
+
+Prototyp: `clips/g3-3-lp-verschieben-bewegt.json` (gleicher Ton wie
+`g3-3-lp-verschieben`). Noch nicht: bewegte Punkte, Geraden, Kurven und Live-Zahlen in
+Formelzeilen.
+
 ### Kurven im `graf`: `kurven`, `xteilung`/`yteilung`, `von`/`bis`
 
 Bis zum 07.09.2026 konnte ein `graf` nur Geraden, Parabeln und Punkte. Für die Reihe zu
