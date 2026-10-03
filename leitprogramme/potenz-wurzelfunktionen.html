@@ -1,0 +1,2235 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leitprogramm Potenz- und Wurzelfunktionen</title>
+<!-- SEO:ANFANG — generiert von scripts/build-seo.py, nicht von Hand ändern -->
+<!-- SEO:ENDE -->
+
+<link rel="stylesheet" href="../schriften.css">
+<!-- Die Seite erbt Farben, Karten und die Clip-Buehne von der Site.
+     Reihenfolge zaehlt: der eigene <style> unten gewinnt bei gleichem
+     Gewicht, das Leitprogramm behaelt also sein Layout. -->
+<link rel="stylesheet" href="../style.css">
+<style>
+:root{
+  /* Die Palette kommt aus ../style.css — 20 Tokens, Wert fuer Wert dieselben.
+     Hier steht nur, was dort anders heisst oder fehlt. Damit kann sie nicht
+     mehr auseinanderlaufen. */
+  --karte:var(--weiss);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --papier:#171512; --papier-2:#1f1c17; --karte:#211e19; --weiss:#211e19;
+    --tinte:#f1ece1; --tinte-2:#b6ab97; --linie:#3a342a;
+    --blau:#8ab6e8; --blau-hell:#1b2a3d; --blau-rand:#3f6da3;
+    --gruen:#79c894; --gruen-hell:#162c1f; --gruen-rand:#3f8058;
+    --lila:#c3a0ec; --lila-hell:#251b33; --lila-rand:#7d5cae;
+    --orange:#e9a25e; --orange-hell:#33240f; --orange-rand:#9c6a2c;
+    --rot:#ef9393; --rot-hell:#331a1a; --rot-rand:#a35050;
+    --s:0 2px 10px rgba(0,0,0,.35); --sl:0 4px 22px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --papier:#171512; --papier-2:#1f1c17; --karte:#211e19; --weiss:#211e19;
+  --tinte:#f1ece1; --tinte-2:#b6ab97; --linie:#3a342a;
+  --blau:#8ab6e8; --blau-hell:#1b2a3d; --blau-rand:#3f6da3;
+  --gruen:#79c894; --gruen-hell:#162c1f; --gruen-rand:#3f8058;
+  --lila:#c3a0ec; --lila-hell:#251b33; --lila-rand:#7d5cae;
+  --orange:#e9a25e; --orange-hell:#33240f; --orange-rand:#9c6a2c;
+  --rot:#ef9393; --rot-hell:#331a1a; --rot-rand:#a35050;
+  --s:0 2px 10px rgba(0,0,0,.35); --sl:0 4px 22px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--papier);color:var(--tinte);
+  font-family:var(--serif);font-size:17px;line-height:1.62;
+  -webkit-text-size-adjust:100%}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.22;margin:0}
+a{color:var(--blau)}
+:focus-visible{outline:2.5px solid var(--lila-rand);outline-offset:2px;border-radius:3px}
+mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%}
+
+/* ---------- Gerüst ---------- */
+.huelle{max-width:1180px;margin:0 auto;padding:0 20px 100px}
+.raster{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:1000px){
+  .raster{grid-template-columns:236px minmax(0,1fr);gap:52px;align-items:start}
+}
+.inhalt{min-width:0;max-width:70ch}
+
+/* ---------- Kopf ---------- */
+.kopf{border-bottom:1px solid var(--linie);background:var(--papier-2);
+  margin-bottom:44px;padding:0 20px}
+.kopf-innen{max-width:1180px;margin:0 auto;padding:30px 0 34px;
+  display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between}
+.marke{font-family:var(--sans);font-size:.76rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tinte-2);margin:0 0 10px}
+.kopf h1{font-size:clamp(2rem,5.2vw,2.9rem);font-weight:700;letter-spacing:-.015em}
+.kopf .unter{font-family:var(--sans);color:var(--tinte-2);margin:10px 0 0;font-size:1rem;max-width:52ch}
+.kopf-rechts{font-family:var(--sans);font-size:.82rem;color:var(--tinte-2);text-align:right;
+  display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.themenschalter{font-family:var(--sans);font-size:.78rem;font-weight:600;color:var(--tinte-2);
+  background:var(--karte);border:1px solid var(--linie);border-radius:999px;
+  padding:6px 13px;cursor:pointer}
+.themenschalter:hover{color:var(--tinte);border-color:var(--tinte-2)}
+
+/* ---------- Seitenschiene ---------- */
+.schiene{font-family:var(--sans);font-size:.87rem;margin-bottom:40px}
+@media(min-width:1000px){.schiene{position:sticky;top:22px;margin-bottom:0}}
+.schiene h2{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tinte-2);margin-bottom:12px}
+.schiene ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.schiene a{display:flex;gap:9px;align-items:baseline;padding:6px 8px;border-radius:5px;
+  text-decoration:none;color:var(--tinte);border-left:2.5px solid transparent}
+.schiene a:hover{background:var(--papier-2)}
+.schiene a.aktiv{border-left-color:var(--lila-rand);background:var(--papier-2);font-weight:600}
+.schiene .nr{font-family:var(--mono);font-size:.76rem;color:var(--tinte-2);min-width:1.6em}
+.schiene .lekt{font-family:var(--sans);font-size:.68rem;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tinte-2);margin:16px 0 5px;padding-left:8px}
+.fortschritt{margin-top:22px;padding-top:16px;border-top:1px solid var(--linie)}
+.balken{height:6px;background:var(--papier-2);border:1px solid var(--linie);border-radius:99px;overflow:hidden}
+.balken i{display:block;height:100%;background:var(--gruen-rand);width:0;transition:width .35s ease}
+.fortschritt p{margin:9px 0 0;font-size:.79rem;color:var(--tinte-2)}
+.fortschritt button{margin-top:10px;font-family:var(--sans);font-size:.75rem;color:var(--tinte-2);
+  background:none;border:none;padding:0;cursor:pointer;text-decoration:underline}
+
+/* ---------- Anleitung ---------- */
+.anleitung{background:var(--karte);border:1px solid var(--linie);border-radius:10px;
+  padding:22px 26px;margin-bottom:46px;box-shadow:var(--s)}
+.anleitung summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px}
+.anleitung summary::-webkit-details-marker{display:none}
+.anleitung summary::after{content:"";flex:none;margin-left:auto;width:.5em;height:.5em;
+  border-right:2px solid var(--tinte-2);border-bottom:2px solid var(--tinte-2);
+  transform:translateY(-.15em) rotate(45deg);transition:transform .2s}
+.anleitung[open] summary::after{transform:translateY(.1em) rotate(-135deg)}
+.anleitung h2{font-size:1.12rem}
+.anleitung ol{margin:12px 0 0;padding-left:1.25em;font-family:var(--sans);font-size:.94rem;color:var(--tinte-2)}
+.anleitung li{margin:6px 0}
+.anleitung li b{color:var(--tinte)}
+
+/* ---------- Lektionsband ---------- */
+.band{display:flex;align-items:center;gap:14px;margin:56px 0 30px}
+.band:first-of-type{margin-top:8px}
+.band .strich{flex:1;height:1px;background:var(--linie)}
+.band span{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--tinte-2);white-space:nowrap}
+
+/* ---------- Kapitel ---------- */
+.kap{margin-bottom:52px;scroll-margin-top:20px}
+.kap-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.marker{font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.04em;
+  padding:3px 8px;border-radius:4px;background:var(--papier-2);color:var(--tinte-2)}
+.abz{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.05em;
+  padding:3px 9px;border-radius:999px;border:1px solid}
+.abz-gf{color:var(--blau);border-color:var(--blau-rand);background:var(--blau-hell)}
+.abz-sf{color:var(--lila);border-color:var(--lila-rand);background:var(--lila-hell)}
+.zeit{font-family:var(--sans);font-size:.78rem;color:var(--tinte-2)}
+.kap h2{font-size:1.62rem;font-weight:700;letter-spacing:-.01em}
+.ziel{font-family:var(--sans);font-size:.95rem;color:var(--tinte-2);
+  border-left:2.5px solid var(--linie);padding-left:13px;margin:12px 0 22px}
+.kap h3{font-family:var(--sans);font-size:1rem;font-weight:700;margin:30px 0 10px}
+.kap p{margin:0 0 14px}
+
+/* ---------- Clipkarte ---------- */
+.clipkarte{margin:22px 0 26px}
+.clip-start{display:flex;width:100%;align-items:center;gap:15px;text-align:left;cursor:pointer;
+  background:var(--lila-hell);border:1px solid var(--lila-rand);border-radius:10px;
+  padding:14px 17px;font-family:var(--sans);color:var(--tinte)}
+.clip-start:hover{box-shadow:var(--sl)}
+.clip-play{flex:none;width:38px;height:38px;border-radius:50%;background:var(--lila);color:#fff;
+  display:grid;place-items:center;font-size:.9rem;padding-left:3px}
+:root[data-theme="dark"] .clip-play,
+:root:not([data-theme="light"]) .clip-play{color:#171512}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .clip-play{color:#fff}}
+.clip-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.clip-titel{font-weight:600;font-size:.97rem;line-height:1.32}
+.clip-quelle{font-size:.75rem;color:var(--tinte-2);letter-spacing:.03em}
+.clip-zeit{font-family:var(--mono);font-size:.8rem;color:var(--tinte-2);flex:none}
+@media(max-width:720px){
+}
+
+/* ---------- Merkkasten, Beispiele, Warnung ---------- */
+.merk{background:var(--blau-hell);border:1px solid var(--blau-rand);border-left-width:4px;
+  border-radius:8px;padding:16px 20px;margin:20px 0}
+.merk .titel{font-family:var(--sans);font-size:.73rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--blau);margin-bottom:8px}
+.merk p:last-child{margin-bottom:0}
+.warn{background:var(--orange-hell);border:1px solid var(--orange-rand);border-left-width:4px;
+  border-radius:8px;padding:16px 20px;margin:20px 0}
+.warn .titel{font-family:var(--sans);font-size:.73rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+.warn p:last-child{margin-bottom:0}
+
+table.gesetze{width:100%;border-collapse:collapse;margin:18px 0;font-size:.97rem}
+.tabhuelle{overflow-x:auto}
+table.gesetze th,table.gesetze td{border-bottom:1px solid var(--linie);padding:9px 10px;text-align:left;vertical-align:middle}
+table.gesetze th{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--tinte-2)}
+table.gesetze td:first-child{font-family:var(--mono);font-size:.82rem;color:var(--tinte-2);white-space:nowrap;width:1%}
+table.gesetze td.wort{font-family:var(--sans);font-size:.88rem;color:var(--tinte-2)}
+
+.beisp{margin:18px 0;border:1px solid var(--linie);border-radius:8px;background:var(--karte);overflow:hidden}
+.beisp .kopfz{font-family:var(--sans);font-size:.73rem;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--tinte-2);background:var(--papier-2);
+  padding:7px 16px;border-bottom:1px solid var(--linie)}
+.beisp ul{list-style:none;margin:0;padding:12px 16px;display:flex;flex-direction:column;gap:9px}
+.beisp li{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.beisp .schritt{font-family:var(--sans);font-size:.82rem;color:var(--tinte-2)}
+
+/* ---------- Selbsttest ---------- */
+.test{border:1.5px solid var(--gruen-rand);border-radius:11px;background:var(--karte);
+  margin:30px 0 0;overflow:hidden}
+.test-kopf{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;
+  background:var(--gruen-hell);padding:11px 18px;border-bottom:1px solid var(--gruen-rand)}
+.test-kopf h3{font-family:var(--sans);font-size:.94rem;font-weight:700;color:var(--gruen);margin:0}
+.test-kopf .werkz{display:flex;gap:14px;align-items:center;font-family:var(--sans);font-size:.78rem}
+.test-kopf button{font-family:var(--sans);font-size:.78rem;background:none;border:none;
+  color:var(--gruen);cursor:pointer;text-decoration:underline;padding:0}
+.test-kopf label{display:flex;gap:6px;align-items:center;color:var(--tinte-2);cursor:pointer}
+.aufg{list-style:none;margin:0;padding:6px 18px 18px}
+.aufg>li{border-bottom:1px dotted var(--linie);padding:11px 0}
+.aufg>li:last-child{border-bottom:none;padding-bottom:2px}
+.frage{display:flex;gap:11px;align-items:baseline}
+.frage .nr{font-family:var(--mono);font-size:.83rem;font-weight:700;color:var(--gruen);
+  flex:none;min-width:2.4em}
+.frage .pkt{font-family:var(--mono);font-size:.72rem;color:var(--tinte-2);
+  flex:none;min-width:3.4em;margin-left:-4px}
+.frage .txt{flex:1;min-width:0}
+details.loes{margin:7px 0 0 calc(5.8em + 11px)}
+details.loes summary{font-family:var(--sans);font-size:.79rem;color:var(--tinte-2);
+  cursor:pointer;list-style:none;display:inline-flex;gap:6px;align-items:center;
+  border:1px solid var(--linie);border-radius:999px;padding:2px 11px}
+details.loes summary::-webkit-details-marker{display:none}
+details.loes summary:hover{border-color:var(--gruen-rand);color:var(--gruen)}
+details.loes[open] summary{color:var(--gruen);border-color:var(--gruen-rand)}
+details.loes .inhaltbox{border-left:2.5px solid var(--gruen-rand);padding:6px 0 2px 13px;margin-top:9px}
+details.loes .inhaltbox p{margin:0 0 7px}
+details.loes .inhaltbox p:last-child{margin-bottom:0}
+.komm{font-family:var(--sans);font-size:.87rem;color:var(--tinte-2)}
+
+/* ---------- Gesamttest ---------- */
+.gesamt{border:2px solid var(--tinte-2);border-radius:12px;background:var(--karte);
+  padding:0;overflow:hidden;margin-top:20px}
+.gesamt-kopf{background:var(--papier-2);padding:16px 20px;border-bottom:1px solid var(--linie)}
+.gesamt-kopf h2{font-size:1.4rem}
+.gesamt-kopf p{font-family:var(--sans);font-size:.88rem;color:var(--tinte-2);margin:7px 0 0}
+.gesamt-teil{font-family:var(--sans);font-size:.75rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--tinte-2);padding:18px 20px 0}
+.gesamt .aufg{padding:6px 20px 16px}
+.summe{font-family:var(--mono);font-size:.76rem;color:var(--tinte-2);white-space:nowrap}
+.bewertung{margin:0;padding:16px 20px 20px;border-top:1px solid var(--linie);
+  font-family:var(--sans);font-size:.88rem;color:var(--tinte-2)}
+.bewertung table{width:100%;border-collapse:collapse;margin-top:8px}
+.bewertung td{padding:5px 8px;border-bottom:1px solid var(--linie)}
+.bewertung td:first-child{font-family:var(--mono);white-space:nowrap;width:1%;color:var(--tinte)}
+
+/* ---------- Fuss ---------- */
+.fuss{margin-top:64px;padding-top:20px;border-top:1px solid var(--linie);
+  font-family:var(--sans);font-size:.8rem;color:var(--tinte-2);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+
+@media(max-width:600px){
+  body{font-size:16px}
+  .huelle{padding:0 15px 70px}
+  details.loes{margin-left:0}
+}
+@media print{
+  .schiene,.themenschalter,.clip-buehne,.test-kopf .werkz{display:none}
+  .kap{break-inside:avoid}
+  details.loes{display:none}
+  body{background:#fff}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+/* ── Fuss im Dunkelmodus ─────────────────────────────────────────
+   Kopf und Menue kommen ohne Nachhilfe aus: style.css faerbt seine
+   Flaechen mit --weiss, und das ist oben dunkel gesetzt. Nur der Fuss
+   braucht eine Regel — er benutzt --tinte als *Flaeche*, und die kippt
+   im Dunkelmodus mit dem Text nach hell. */
+:root[data-theme="dark"] .site-footer{
+  background:var(--papier-2); color:var(--tinte-2);
+  border-top:1px solid var(--linie);
+}
+:root[data-theme="dark"] .site-footer a{ color:var(--blau); }
+
+/* Das Lektionsband traegt `white-space:nowrap`. Auf schmalen Schirmen
+   laeuft ein laengerer Untertitel damit ueber den Rand hinaus — in der
+   Uebungspruefung derselbe Fall, dort mit derselben Zeile behoben. */
+@media(max-width:600px){ .band span{white-space:normal} }
+/* ════════ HOWTO-leitprogramme.md §6 — Fliesstext schmal, Arbeitsflaechen breit ════════
+   Vorher: .inhalt max-width 70ch (~620 px), .huelle 1180 px. Auf 1280 px blieben
+   rechts ~230 px leer. Jetzt begrenzen die Textelemente sich selbst, Beispiele,
+   Tabellen, Tests und Erkundungen nehmen die ganze Spalte, und .duo stellt zwei
+   zusammengehoerige Teile ab 1180 px nebeneinander. Quelltextreihenfolge =
+   Lesereihenfolge auf dem Handy. */
+.huelle,.kopf-innen{max-width:1440px}
+.inhalt{max-width:none}
+.kap>p,.kap>h2,.kap>h3,.ziel,.duo>div>p,.erkunden p,.erkunden ol{max-width:68ch}
+.duo{display:grid;grid-template-columns:minmax(0,1fr);gap:0 26px;align-items:start}
+.duo>*{min-width:0}
+@media(min-width:1180px){
+  .duo{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .aufg.zwei{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:34px}
+  .aufg.zwei>li:nth-last-child(2):nth-child(odd){border-bottom:none}
+}
+.duo>.anleitung{margin-bottom:24px}
+.duo>.rlp-kompetenzen{margin:0 0 24px}
+.rlp-kompetenzen .rlp-fuss{font-family:var(--sans);font-size:.84rem;color:var(--tinte-2);margin:8px 0 0}
+
+/* Didaktische Farben nach STYLEGUIDE §5: Rot = Fehler/Achtung, Orange = Aufgabe.
+   Die Vorlage faerbte den Haeufigen Fehler orange; hier rot, damit das Orange
+   frei ist fuer den Erkundungsauftrag. */
+.warn{background:var(--rot-hell);border-color:var(--rot-rand)}
+.warn .titel{color:var(--rot)}
+.erkunden{background:var(--orange-hell);border:1px solid var(--orange-rand);border-left-width:4px;
+  border-radius:8px;padding:16px 20px;margin:20px 0}
+.erkunden .titel{font-family:var(--sans);font-size:.73rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+.erkunden ol{margin:6px 0 10px;padding-left:1.3em}
+.erkunden li{margin:4px 0}
+.erkunden p:last-child{margin-bottom:0}
+.notiz{font-family:var(--sans);font-size:.9rem;color:var(--tinte-2)}
+.ausf{font-family:var(--sans);font-size:.92rem;border-top:1px solid var(--linie);padding-top:12px;margin-top:26px}
+.knopf-link{font-family:var(--sans);font-size:.8rem;background:none;border:none;padding:0;
+  color:var(--tinte-2);text-decoration:underline;cursor:pointer}
+table.gesetze.formen td:first-child{font-family:var(--sans);font-size:.86rem;color:var(--tinte);
+  white-space:normal;width:auto;font-weight:600}
+table.gesetze.formen td:first-child .wort{font-weight:400}
+.weiter{margin-top:30px}
+.beisp .wert{flex:1;min-width:0}
+
+/* ---------- eingebettete Simulation (§8b) ---------- */
+.sim{margin:20px 0;background:var(--karte);border:1px solid var(--linie);border-radius:10px;
+  padding:14px 16px 12px}
+.sim > svg{display:block;width:100%;max-width:420px;height:auto;margin:6px auto 10px}
+.sim-formel{font-family:var(--mono);font-size:1rem;text-align:center;padding:6px 8px;
+  background:var(--papier-2);border-radius:6px}
+.sim figcaption{font-family:var(--sans);font-size:.84rem;color:var(--tinte-2);text-align:center;margin-top:8px}
+.sl-row{display:flex;gap:10px;align-items:center;font-family:var(--sans);font-size:.9rem}
+.sl-row input[type=range]{flex:1}
+.sl-val{font-family:var(--mono);font-size:.86rem;min-width:2.6em}
+.sim .gitter{stroke:var(--linie);stroke-width:.6}
+.sim .achse{stroke:var(--tinte-2);stroke-width:1.2}
+.sim .skala{fill:var(--tinte-2);font-family:var(--sans);font-size:10px}
+.sim .normal{fill:none;stroke:var(--tinte-2);stroke-width:1.4;stroke-dasharray:5 4;opacity:.7}
+.sim .kurve{fill:none;stroke:var(--blau);stroke-width:2.6}
+.sim .scheitel{fill:var(--tinte)}
+.sim .s-text{fill:var(--tinte);font-family:var(--sans);font-size:12px;font-weight:600}
+
+/* ════════ Fassung 2 — «zuerst sehen» (HOWTO-leitprogramme.md §4, §8) ════════ */
+.phase{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tinte-2);margin:34px 0 8px;display:flex;align-items:center;gap:8px}
+.phase span{display:inline-grid;place-items:center;width:1.7em;height:1.7em;border-radius:50%;
+  background:var(--papier-2);border:1px solid var(--linie);color:var(--tinte);font-size:.9rem;letter-spacing:0}
+.sim-knoepfe{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:8px 0 2px;
+  font-family:var(--sans);font-size:.8rem;color:var(--tinte-2)}
+.sim-knoepfe button,.formen-live button{font-family:var(--sans);font-size:.8rem;cursor:pointer;
+  background:var(--karte);color:var(--tinte);border:1px solid var(--linie);border-radius:999px;padding:4px 12px}
+.sim-knoepfe button.aktiv{background:var(--gruen-hell);border-color:var(--gruen-rand);color:var(--gruen);font-weight:700}
+.formen-live{display:flex;flex-direction:column;gap:5px}
+.formen-live button{border-radius:7px;display:flex;gap:10px;align-items:baseline;text-align:left;padding:6px 10px;
+  font-family:var(--mono);font-size:.86rem}
+.formen-live .fl-name{font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;min-width:8.5em;color:var(--tinte-2)}
+.formen-live button[data-form="g"].aktiv{border-color:var(--blau-rand);background:var(--blau-hell)}
+.formen-live button[data-form="s"].aktiv{border-color:var(--gruen-rand);background:var(--gruen-hell)}
+.formen-live button[data-form="p"].aktiv{border-color:var(--orange-rand);background:var(--orange-hell)}
+.sim.treffer{border-color:var(--gruen-rand);box-shadow:0 0 0 2px var(--gruen-hell)}
+.sim .zielkurve{fill:none;stroke:var(--gruen);stroke-width:3;stroke-dasharray:7 5;opacity:.85}
+.sim .symachse{stroke:var(--tinte-2);stroke-width:1.3;stroke-dasharray:6 5}
+.p-s{fill:var(--gruen)} .p-g{fill:var(--blau)} .p-n{fill:var(--orange)} .p-geist{fill:var(--orange);opacity:.35}
+text.p-text{font-family:var(--sans);font-size:11.5px;font-weight:700}
+.sim .feld-rahmen{fill:none;stroke:var(--linie);stroke-dasharray:4 4}
+.sim .feld{fill:var(--gruen-hell);stroke:var(--gruen);stroke-width:2}
+.mini-reihe{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 6px calc(5.8em + 11px)}
+.beisp .mini-reihe{margin:10px 16px 0}
+svg.mini{width:128px;height:auto;background:var(--karte);border:1px solid var(--linie);border-radius:6px}
+svg.mini.gross{width:190px}
+svg.mini .kurve{fill:none;stroke:var(--blau);stroke-width:2.2}
+svg.mini .gitter{stroke:var(--linie);stroke-width:.5}
+svg.mini .achse{stroke:var(--tinte-2);stroke-width:1}
+svg.mini .skala{font-size:8px}
+svg.mini .mini-titel{font-family:var(--sans);font-size:13px;font-weight:700;fill:var(--tinte)}
+@media(max-width:600px){ .mini-reihe{margin-left:0} svg.mini{width:110px} }
+
+/* ---------- Üben mit Rückmeldung (Prototyp) ---------- */
+.uebung{border:1.5px solid var(--orange-rand);border-radius:11px;background:var(--karte);padding:12px 16px 14px;margin:14px 0}
+.ue-kopf{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-family:var(--sans);font-size:.8rem;margin-bottom:6px}
+.ue-titel{font-weight:700;color:var(--orange)}
+.ue-serie{color:var(--tinte-2)}
+.ue-aufgabe{margin:6px 0 10px}
+.ue-zeile{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--mono);font-size:.95rem}
+.ue-eingabe input{width:4.2em;font-family:var(--mono);font-size:.95rem;padding:4px 6px;margin:0 3px;border:1.5px solid var(--linie);
+  border-radius:6px;background:var(--papier);color:var(--tinte);text-align:center}
+.ue-eingabe input:focus{outline:none;border-color:var(--orange-rand)}
+.ue-eingabe input.falsch{border-color:var(--rot-rand)}
+.ue-zeile button,.ue-weiter{font-family:var(--sans);font-size:.8rem;cursor:pointer;border-radius:999px;padding:4px 12px;
+  border:1px solid var(--orange-rand);background:var(--orange-hell);color:var(--tinte)}
+.ue-zeile .ue-neu{background:none;border-color:var(--linie);color:var(--tinte-2)}
+.ue-rueck{font-family:var(--sans);font-size:.9rem;margin-top:10px;border-radius:7px}
+.ue-rueck:empty{display:none}
+.ue-rueck.richtig{background:var(--gruen-hell);border-left:4px solid var(--gruen-rand);padding:8px 12px}
+.ue-rueck.falsch{background:var(--rot-hell);border-left:4px solid var(--rot-rand);padding:8px 12px}
+.ue-rueck.hinweis{background:var(--papier-2);padding:8px 12px}
+.ue-loes{margin-top:6px} .ue-loes summary{cursor:pointer;color:var(--tinte-2)}
+.uebung .ue-bild{display:block;margin:4px 0 6px}
+
+.fahrplan{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 18px;font-family:var(--sans);font-size:.78rem}
+.fahrplan span{padding:3px 10px;border-radius:999px;background:var(--papier-2);border:1px solid var(--linie);color:var(--tinte-2)}
+
+.pdf-weg{margin:14px 0 4px;display:flex;flex-direction:column;gap:10px;font-family:var(--sans);font-size:.92rem}
+.pdf-schritt{display:flex;gap:12px;align-items:flex-start}
+.pdf-schritt .nr{flex:none;width:1.8em;height:1.8em;border-radius:50%;display:grid;place-items:center;
+  background:var(--karte);border:1px solid var(--linie);font-weight:700}
+.pdf-knoepfe{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+.pdf-knopf{display:inline-block;padding:6px 14px;border-radius:999px;background:var(--blau-hell);border:1px solid var(--blau-rand);
+  color:var(--tinte);text-decoration:none;font-weight:600}
+.pdf-knopf:hover{box-shadow:var(--sl)}
+.pdf-link{font-size:.85rem}
+
+/* ════════ Potenz- und Wurzelfunktionen (03.10.2026) — Fassung 4 des Kapitelmusters ════════
+   Grundgerüst (Leiste, Übungen, Minigrafen, Festhalten, PDF-Weg) wie im Leitprogramm
+   Lineare Funktionen. Eigen sind die Farben der Kurven-Bausteine, die Spiegelkurve und
+   die zwei Schreibweisen (Bruch, Wurzel) in der Live-Anzeige. */
+.sim-gross{max-width:640px;margin:10px auto 6px}
+.sim-gross > svg{max-width:440px}
+.leiste{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 10px;padding:9px 12px;border-radius:9px;
+  background:var(--orange-hell);border:1px solid var(--orange-rand);font-family:var(--sans);font-size:.92rem}
+.leiste .ls-nr{font-family:var(--mono);font-size:.78rem;color:var(--orange);font-weight:700}
+.leiste .ls-text{flex:1 1 260px;min-width:0}
+.leiste .ls-ok{color:var(--gruen);font-weight:700;font-size:1.1rem;min-width:1em}
+.leiste .ls-weiter,.leiste .ls-neu{font-family:var(--sans);font-size:.8rem;cursor:pointer;border-radius:999px;padding:4px 12px;
+  border:1px solid var(--linie);background:var(--karte);color:var(--tinte-2)}
+.leiste.geloest{background:var(--gruen-hell);border-color:var(--gruen-rand)}
+.leiste.geloest .ls-weiter{border-color:var(--gruen-rand);color:var(--tinte);font-weight:700}
+.leiste.fertig{background:var(--gruen-hell);border-color:var(--gruen-rand)}
+.kap-clip{max-width:640px}
+.kompetenzen ul{margin:10px 0 0;padding-left:1.25em;font-family:var(--sans);font-size:.92rem}
+.kompetenzen li{margin:5px 0}
+.kompetenzen .rlp-quelle{font-family:var(--sans);font-size:.8rem;color:var(--tinte-2);margin:8px 0 0}
+.kompetenzen .ohm{font-size:.72rem;padding:1px 7px;border-radius:999px;background:var(--orange-hell);border:1px solid var(--orange-rand);white-space:nowrap}
+.sim .pfeil{fill:var(--tinte-2)} svg.mini .pfeil{fill:var(--tinte-2)}
+.achsname{fill:var(--tinte);font-family:var(--serif);font-style:italic;font-size:12px;stroke:var(--karte);stroke-width:4px;paint-order:stroke}
+svg.mini .achsname{font-size:10px;stroke-width:3px}
+text.p-text{stroke:var(--karte);stroke-width:4px;paint-order:stroke}
+.hilfs-schalter,.sim-schalter{display:flex;gap:7px;align-items:center;justify-content:center;font-family:var(--sans);font-size:.82rem;color:var(--tinte-2);margin:2px 0 8px;cursor:pointer}
+.ohne-hilfslinien .hilfslinie{display:none}
+.festhalten{display:grid;grid-template-columns:minmax(0,1fr);gap:0 26px}
+@media(min-width:1180px){.festhalten{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.pdf-weg{margin:14px 0 4px;display:flex;flex-direction:column;gap:10px;font-family:var(--sans);font-size:.92rem}
+.pdf-schritt{display:flex;gap:12px;align-items:flex-start}
+.pdf-schritt .nr{flex:none;width:1.8em;height:1.8em;border-radius:50%;display:grid;place-items:center;background:var(--karte);border:1px solid var(--linie);font-weight:700}
+.pdf-knopf{display:inline-block;margin-top:6px;padding:6px 14px;border-radius:999px;background:var(--lila-hell);border:1px solid var(--lila-rand);color:var(--tinte);text-decoration:none;font-weight:600}
+.ue-eingabe select{font-family:var(--sans);font-size:.88rem;padding:4px 6px;margin:0 3px;border:1.5px solid var(--linie);border-radius:6px;background:var(--papier);color:var(--tinte)}
+.ue-eingabe select:focus{outline:none;border-color:var(--orange-rand)}
+.ue-eingabe input:disabled{opacity:.35}
+.sl-grp.akz-grau{--akz:var(--tinte-2)}
+.sim input[type=range]:disabled{opacity:.4}
+/* Farben im ganzen Leitprogramm: blau = die Potenzkurve und ihr Faktor a, orange = der
+   Exponent n, grün = Wurzelkurve, Umkehrfunktion und Startpunkt, rot = Gegenbeispiel und
+   Polstelle, Tinte = neutral. Dieselben Farben tragen die Clips (farbe 1/2/3/4/5). */
+.sim .kurve.g2,svg.mini .kurve.g2{stroke:var(--tinte-2)}
+.sim .kurve.gruen,svg.mini .kurve.gruen{stroke:var(--gruen)}
+.sim .normal{stroke-dasharray:5 4;stroke:var(--tinte-2);fill:none}
+.sim .asym{stroke:var(--tinte-2);stroke-width:1.4;stroke-dasharray:4 3;fill:none}
+.sim .umkehr{stroke:var(--gruen);stroke-width:2.4;fill:none}
+.sim .umkehr.falsch{stroke:var(--rot)}
+.sim .zielkurve{stroke:var(--gruen);stroke-width:4;opacity:.38;fill:none}
+.p-b{fill:var(--orange)} .p-null{fill:var(--gruen)} .p-pkt{fill:var(--tinte)}
+.p-m{fill:var(--tinte-2);font-weight:600}
+svg.mini .p-pkt{fill:var(--tinte)} svg.mini .p-null{fill:var(--gruen)}
+.mini-reihe svg.mini{background:var(--karte)}
+.sim-formel .rot{color:var(--rot)}
+/* Bruch und Wurzel in der Live-Anzeige — ohne MathJax, damit sie bei jedem Reglerzug
+   sofort steht (ein typesetPromise pro Pixel wäre zu langsam). */
+.br{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1;margin:0 .15em}
+.br > span:first-child{border-bottom:1.5px solid currentColor;padding:0 .25em}
+.wz{white-space:nowrap} .wz > sup{font-size:.7em;margin-right:-.15em}
+.wz .rad{border-top:1.5px solid currentColor;padding:0 .18em 0 .1em;margin-left:-.05em}
+/* Ein Punkt direkt hinter einer Formel landet sonst allein auf der naechsten Zeile. */
+.nb{white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+<!-- Leitprogramm Potenz- und Wurzelfunktionen, Version 1.0 (03.10.2026). Gebaut aus
+     scripts/lp/potenz-wurzelfunktionen/seite.py — Änderungen dort, nicht in dieser Datei.
+
+     RLP-BM 2030, Schwerpunktfach 3.2 «Potenz- und Wurzelfunktionen», die einzige
+     Kompetenz des Teilgebiets wörtlich (Quelle ../Math-SP.pdf, Schwerpunktbereich,
+     Lerngebiet 3 «Funktionen»):
+       K1  die Wurzelfunktionen als Umkehrfunktion der Potenzfunktion mit ganzzahligen
+           Exponenten berechnen, interpretieren und grafisch darstellen
+           (auch ohne Hilfsmittel)
+     Weil sie die Wurzelfunktion ausdrücklich «als Umkehrfunktion der Potenzfunktion»
+     verlangt, deckt dieses Leitprogramm beide Themenseiten des Teilgebiets ab —
+     s3-2a (Potenzfunktionen) und s3-2b (Wurzelfunktionen). Getrennt wäre der Kern
+     der Kompetenz in keinem von beiden ganz enthalten.
+
+     Kompetenz → Kapitel → Test: «berechnen» → 1, 2, 3, 5 → G1, G3, G4, G7 ·
+     «interpretieren» → 1, 2, 4 → G2, G3, G6, G8 · «grafisch darstellen» → 1, 3, 4, 5
+     → G1, G2, G5. Kein Kapitelziel ohne Kompetenz.
+
+     Kapitel 3 (Verschieben und strecken) gehört dem Lehrplan nach zu SP 3.1
+     («Funktionstransformationen … algebraisch und grafisch durchführen, Parameter
+     interpretieren»); es steht hier, weil Kapitel 5 die verschobene Wurzelkurve braucht
+     und das Schema für Potenz- und Wurzelkurven dasselbe ist. Der Kapitelkopf sagt das.
+
+     Nicht in diesem Leitprogramm, weil in anderen Teilgebieten: das Rechnen mit Potenzen
+     und Wurzeln selbst (SP 1.2 — steht im Vorwissen), das Lösen von Wurzelgleichungen
+     mit quadratischer Folgegleichung samt Scheinlösungen (SP 2.2) und der Funktionsbegriff
+     (SP 3.1).
+
+     Muster je Kapitel: ① Einführungsclip (zeigt alles, Auftrag am Schluss) → ② Simulation
+     mit Aufgabenleiste → ③ Kontrollclip mit Fragen → Festhalten → ④ Übungen mit
+     Rückmeldung → ⑤ Aufgaben mit Lösungen. Notation wie die Themenseiten 3.2a/3.2b.
+     Gesamttest und Bewertungspaket nur als PDF aus LaTeX
+     (downloads/leitprogramme/potenz-wurzelfunktionen/*.tex). Verfahren: HOWTO-leitprogramme.md. -->
+<header class="kopf">
+  <div class="kopf-innen">
+    <div>
+      <p class="marke">begreifbar.ch · Leitprogramm</p>
+      <h1>Potenz- und Wurzelfunktionen</h1>
+      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Fünf Kapitel und Gesamttest, rund fünf Lektionen.</p>
+    </div>
+    <div class="kopf-rechts">
+      <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>
+      <span>Schwerpunktfach 3.2</span>
+    </div>
+  </div>
+</header>
+
+<div class="huelle">
+<div class="raster">
+
+  <nav class="schiene" aria-label="Kapitelnavigation">
+    <h2 id="ablauf">Ablauf</h2>
+    <p class="lekt">Vorab</p>
+    <ol>
+      <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
+    </ol>
+    <p class="lekt">Lektion 1</p>
+    <ol>
+      <li><a href="#k1"><span class="nr">1</span><span>Der Exponent</span></a></li>
+    </ol>
+    <p class="lekt">Lektion 2</p>
+    <ol>
+      <li><a href="#k2"><span class="nr">2</span><span>Hyperbeln</span></a></li>
+    </ol>
+    <p class="lekt">Lektion 3</p>
+    <ol>
+      <li><a href="#k3"><span class="nr">3</span><span>Verschieben</span></a></li>
+    </ol>
+    <p class="lekt">Lektion 4</p>
+    <ol>
+      <li><a href="#k4"><span class="nr">4</span><span>Umkehren</span></a></li>
+    </ol>
+    <p class="lekt">Lektion 5</p>
+    <ol>
+      <li><a href="#k5"><span class="nr">5</span><span>Wurzelfunktionen</span></a></li>
+    </ol>
+    <p class="lekt">Abschluss</p>
+    <ol>
+      <li><a href="#gesamttest"><span class="nr">✓</span><span>Gesamttest</span></a></li>
+    </ol>
+    <div class="fortschritt">
+      <div class="balken"><i id="balken-fuellung"></i></div>
+      <p id="fortschritt-text">0 von 6 Aufgabenblöcken bearbeitet</p>
+      <button type="button" id="fortschritt-reset">zurücksetzen</button>
+    </div>
+  </nav>
+
+  <main class="inhalt">
+
+    <div class="duo">
+      <details class="anleitung">
+        <summary><h2 id="so-arbeitest-du">So arbeitest du</h2></summary>
+        <ol>
+          <li><b>① Clip</b> anschauen.</li>
+          <li><b>② Tüfteln:</b> Aufgaben in der Animation lösen — sie zeigt ✓, wenn es stimmt.</li>
+          <li><b>③ Kontrollfragen:</b> Der Clip hält an. Erst antworten.</li>
+          <li><b>④ Üben</b> mit Rückmeldung, bis drei in Folge sitzen.</li>
+          <li><b>⑤ Aufgaben</b> auf Papier, dann Lösung aufklappen und abhaken.</li>
+        </ol>
+      </details>
+      <details class="anleitung kompetenzen">
+        <summary><h2 id="kompetenzen">Kompetenzen nach Lehrplan</h2></summary>
+        <p class="rlp-quelle">RLP-BM 2030, Schwerpunktfach 3.2 — das Teilgebiet hat genau eine Kompetenz.</p>
+        <ul>
+          <li><b>K1</b> die Wurzelfunktionen als Umkehrfunktion der Potenzfunktion mit ganzzahligen Exponenten berechnen, interpretieren und grafisch darstellen <span class="ohm">auch ohne Hilfsmittel</span></li>
+        </ul>
+        <p class="rlp-quelle">Weil diese Kompetenz die Wurzelfunktion ausdrücklich <em>als Umkehrfunktion der Potenzfunktion</em> verlangt, deckt dieses Leitprogramm beide Themenseiten des Teilgebiets ab: <a href="../schwerpunkt/s3-2a-potenzfunktionen.html">3.2a</a> und <a href="../schwerpunkt/s3-2b-wurzelfunktionen.html">3.2b</a>.</p>
+        <p class="rlp-quelle">Kapitel 3 (Verschieben und strecken) gehört zu <a href="../schwerpunkt/s3-1-grundlagen.html">Teilgebiet 3.1</a> und steht hier, weil Kapitel 5 die verschobene Wurzelkurve braucht.</p>
+        <p class="rlp-quelle">Nicht hier, sondern in <a href="../schwerpunkt/s1-2-potenzen.html">1.2</a> bzw. <a href="../schwerpunkt/s2-2a-potenz-wurzel-rationale-gleichungen.html">2.2</a>: das Rechnen mit Potenzen und Wurzeln und das Lösen von Wurzelgleichungen mit quadratischer Folgegleichung.</p>
+      </details>
+    </div>
+
+    <div class="band"><span>Vorab</span><span class="strich"></span><span>Vorwissen</span></div>
+
+    <section class="kap" id="k0">
+      <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-sf">Vorwissen · SP 1.2 · 3.1</span><span class="zeit">≈ 10 min</span></div>
+      <h2 id="vorwissen">Vorwissen</h2>
+      <p class="ziel">Potenzregeln, Wurzeln als Potenzen, Transformationen einer Grundfunktion. Wenn das wackelt: <a href="../schwerpunkt/s1-2-potenzen.html">Teilgebiet 1.2</a> und <a href="../schwerpunkt/s3-1-grundlagen.html">Teilgebiet 3.1</a>.</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s1-2-anim-exponenten-treppe.html" data-titel="Exponenten-Treppe: Wurzeln sind die halben Schritte">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Exponenten-Treppe: Wurzeln sind die halben Schritte</span></span>
+          <span class="clip-zeit">0:51</span>
+        </button>
+      </div>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-1-anim-transformationen.html" data-titel="Transformationen: ein Schema für alle Grundfunktionen">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Transformationen: ein Schema für alle Grundfunktionen</span></span>
+          <span class="clip-zeit">0:49</span>
+        </button>
+      </div>
+<div class="test" data-test="t0">
+        <div class="test-kopf">
+          <h3>Vortest <span class="summe">· 10 P</span></h3>
+          <span class="werkz"><button type="button" class="alle-loesungen">alle Lösungen</button><label title="Aufgaben auf Papier gelöst und mit den Lösungen verglichen — ob alles sitzt, zeigt der Gesamttest."><input type="checkbox" class="erledigt" aria-label="Aufgaben dieses Kapitels bearbeitet"> bearbeitet</label></span>
+        </div>
+        <ol class="aufg zwei">
+          <li>
+            <div class="frage"><span class="nr">0a</span><span class="pkt">(2 P)</span><span class="txt">Berechne ohne Rechner: \((-2)^{3}\) · \((-2)^{4}\) · \(2^{-3}\) · \(\left(\tfrac{1}{2}\right)^{-2}\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(-8\) · \(16\) · \(\tfrac{1}{8} = 0.125\) · \(4\).</p><p class="komm">Falsch? Ein <em>gerader</em> Exponent macht jede Basis positiv, ein negativer Exponent bedeutet den Kehrwert. <a href="../schwerpunkt/s1-2-potenzen.html#definition">Teilgebiet 1.2, Potenzen</a></p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">0b</span><span class="pkt">(3 P)</span><span class="txt">Vereinfache: \(x^{3} \cdot x^{5}\) · \(\left(x^{3}\right)^{4}\) · \(\dfrac{x^{7}}{x^{3}}\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(x^{8}\) · \(x^{12}\) · \(x^{4}\).</p><p class="komm">Falsch? Beim Multiplizieren werden die Exponenten addiert, beim Potenzieren multipliziert, beim Dividieren subtrahiert. <a href="../schwerpunkt/s1-2-potenzen.html#potenzgesetze">Teilgebiet 1.2, Potenzgesetze</a></p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">0c</span><span class="pkt">(2 P)</span><span class="txt">Berechne: \(\sqrt{49}\) · \(\sqrt[3]{27}\) · \(\sqrt[4]{16}\) · \(\sqrt[3]{-8}\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(7\) · \(3\) · \(2\) · \(-2\).</p><p class="komm">Die dritte Wurzel aus einer negativen Zahl gibt es — die Quadratwurzel aus einer negativen nicht. Genau dieser Unterschied trägt Kapitel 4 und 5.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">0d</span><span class="pkt">(3 P)</span><span class="txt">Der Graph von \(y = (x-2)^{2} + 1\) entsteht aus der Normalparabel \(y = x^{2}\). Wie ist er verschoben, und wo liegt sein Scheitel?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(2\) nach rechts und \(1\) nach oben; Scheitel \(S(2 \mid 1)\).</p><p class="komm">Falsch? Die Zahl <em>in der Klammer</em> schiebt waagrecht, mit umgekehrtem Vorzeichen; die Zahl dahinter senkrecht, mit eigenem. Genau dieses Schema gilt in Kapitel 3 für jeden Exponenten. <a href="../schwerpunkt/s3-1-grundlagen.html#theorie">Teilgebiet 3.1, Transformationen</a> und der Clip oben.</p></div></details>
+          </li>
+        </ol>
+      </div>
+      <p class="komm">Weniger als 7 von 10 Punkten: zuerst die verlinkten Stellen zu den falschen Aufgaben, dann Kapitel 1. Ist 0c falsch, zuerst die <a href="../schwerpunkt/s1-2-potenzen.html#rationale-exponenten">Wurzeln</a> — ohne sie gehen Kapitel 4 und 5 nicht.</p>
+    </section>
+    <div class="band"><span>Lektion 1</span><span class="strich"></span><span>Der Exponent formt</span></div>
+
+    <section class="kap" id="k1">
+      <div class="kap-meta"><span class="marker">Kapitel 1</span><span class="abz abz-sf">SP 3.2 · Potenzfunktionen</span><span class="zeit">≈ 40 min</span></div>
+      <h2 id="der-exponent">Der Exponent formt den Graphen</h2>
+      <p class="ziel">Du erkennst an \(n\) die Form und an seiner Parität die Symmetrie, berechnest Funktionswerte von \(a \cdot x^{n}\) und liest umgekehrt die Gleichung aus einer Kurve.</p>
+
+      <p class="phase"><span>①</span> Clip</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-exponent.html" data-titel="Kurve sehen: der Exponent formt den Graphen">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kurve sehen: der Exponent formt den Graphen</span></span>
+          <span class="clip-zeit">1:32</span>
+        </button>
+      </div>
+
+      <p class="phase"><span>②</span> Tüfteln</p>
+      <figure class="sim sim-gross" id="sim1">
+        <div class="leiste" aria-live="polite"></div>
+        <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+        <svg viewBox="0 0 300 300" role="img" aria-label="Potenzkurve y = a mal x hoch n, mit der Bezugskurve y = x Quadrat gestrichelt"></svg>
+        <label class="hilfs-schalter"><input type="checkbox" checked> Bezugskurve \(y = x^2\) (gestrichelt)</label>
+        <div class="sl-row">
+          <div class="sl-grp akz-blau"><label for="s1-a"><span class="var">a</span></label><input type="range" id="s1-a" data-p="a" min="-3" max="3" step="0.5" value="1"><span class="sl-val"></span></div>
+          <div class="sl-grp akz-orange"><label for="s1-n"><span class="var">n</span></label><input type="range" id="s1-n" data-p="n" min="2" max="7" step="1" value="2"><span class="sl-val"></span></div>
+        </div>
+      </figure>
+
+      <p class="phase"><span>③</span> Kontrollfragen</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-kontrolle-exponent.html" data-titel="Kontrollfragen zum Exponenten">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kontrollfragen zum Exponenten</span></span>
+          <span class="clip-zeit">0:55</span>
+        </button>
+      </div>
+
+      <h3>Festhalten</h3>
+      <div class="festhalten">
+        <div class="merk">
+          <div class="titel">Potenzfunktion</div>
+          <p>\[ f(x) = a \cdot x^{n}, \qquad a \in \mathbb{R}\setminus\{0\},\ n \in \mathbb{Z}\setminus\{0\} \]</p>
+          <p>Für \(n \geq 2\) heisst der Graph <b>Parabel \(n\)-ter Ordnung</b>. \(D = \mathbb{R}\).</p>
+          <p><b>Der Exponent \(n\) bestimmt die Form</b>, seine <b>Parität die Symmetrie</b>:</p>
+          <ul>
+            <li>\(n\) gerade \(\Rightarrow f(-x) = f(x)\): <b>gerade Funktion</b>, Graph achsensymmetrisch zur \(y\)-Achse.</li>
+            <li>\(n\) ungerade \(\Rightarrow f(-x) = -f(x)\): <b>ungerade Funktion</b>, Graph punktsymmetrisch zum Ursprung.</li>
+          </ul>
+          <p><b>Feste Punkte:</b> Alle \(y = x^{n}\) gehen durch \((0 \mid 0)\) und \((1 \mid 1)\). Bei \(x = -1\) trennen sie sich: gerades \(n\) gibt \(+1\), ungerades \(-1\).</p>
+          <p><b>\(a\) streckt in \(y\)-Richtung:</b> \(|a| \gt 1\) schmaler, \(|a| \lt 1\) breiter, \(a \lt 0\) spiegelt an der \(x\)-Achse. Es gilt immer \(f(1) = a\).</p>
+          <p>Zwischen \(-1\) und \(1\) wird die Kurve mit wachsendem \(n\) <em>flacher</em>, ausserhalb <em>steiler</em>.</p>
+        </div>
+        <div class="warn">
+          <div class="titel">Häufiger Fehler</div>
+          <p>Der Exponent ist <em>kein Faktor</em>: \(x^{3}\) heisst \(x \cdot x \cdot x\), nicht \(3x\). Bei \(x = 2\) ist \(x^3 = 8\), nicht \(6\).</p>
+          <p>Und \(a\) steht <em>ausserhalb</em> der Potenz: \(2x^{3}\) ist \(2 \cdot (x^3)\), nicht \((2x)^3\). Bei \(x = 2\) also \(16\), nicht \(64\).</p>
+        </div>
+      </div>
+
+      <p class="phase"><span>④</span> Üben mit Rückmeldung</p>
+      <div class="duo">
+        <div class="uebung" data-typ="potenz-wert">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Funktionswert berechnen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="symmetrie">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Symmetrie erkennen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="graf-potenz">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Kurve → Gleichung</span><span class="ue-serie">0 in Folge</span></div>
+          <svg class="mini gross ue-bild" role="img" aria-label="Kurve zur Aufgabe"></svg>
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <p class="phase"><span>⑤</span> Aufgaben mit Lösungen</p>
+<div class="test" data-test="t1">
+        <div class="test-kopf">
+          <h3>Aufgaben · Kapitel 1 <span class="summe">· 13 P</span></h3>
+          <span class="werkz"><button type="button" class="alle-loesungen">alle Lösungen</button><label title="Aufgaben auf Papier gelöst und mit den Lösungen verglichen — ob alles sitzt, zeigt der Gesamttest."><input type="checkbox" class="erledigt" aria-label="Aufgaben dieses Kapitels bearbeitet"> bearbeitet</label></span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">1a</span><span class="pkt">(4 P)</span><span class="txt">Welche Kurve gehört zu welcher Funktion? (1) \(f(x) = x^4\) (2) \(g(x) = -x^3\) (3) \(h(x) = 2x^2\) (4) \(k(x) = x^5\)</span></div>
+            <div class="mini-reihe"><svg class="mini" data-k="2,2" data-fenster="-2,2,-8,8" data-titel="A"></svg><svg class="mini" data-k="1,4" data-fenster="-2,2,-8,8" data-titel="B"></svg><svg class="mini" data-k="-1,3" data-fenster="-2,2,-8,8" data-titel="C"></svg><svg class="mini" data-k="1,5" data-fenster="-2,2,-8,8" data-titel="D"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>(1) → B, (2) → C, (3) → A, (4) → D.</p><p class="komm">Zuerst die Symmetrie: A und B sind achsensymmetrisch, also gerade Exponenten; C und D punktsymmetrisch, also ungerade. Zwischen A und B entscheidet der Wert bei \(x = 1\) \((2\) bzw. \(1)\), zwischen C und D die Richtung — \(g\) fällt, \(k\) steigt.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">1b</span><span class="pkt">(3 P)</span><span class="txt">\(f(x) = -2x^{3}\): Berechne \(f(-2)\), \(f(0.5)\) und \(f(3)\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(f(-2) = -2 \cdot (-8) = 16\) · \(f(0.5) = -2 \cdot 0.125 = -0.25\) · \(f(3) = -2 \cdot 27 = -54\).</p><p class="komm">Immer zuerst die Potenz, dann mal \(a\). Die Klammer um die negative Zahl nicht vergessen.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">1c</span><span class="pkt">(2 P)</span><span class="txt">Welche Symmetrie haben die Graphen von \(g(x) = 3x^{6}\) und \(h(x) = -x^{7}\)? Weise sie mit \(f(-x)\) nach.</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(g(-x) = 3(-x)^6 = 3x^6 = g(x)\): gerade Funktion, Graph achsensymmetrisch zur \(y\)-Achse.</p><p>\(h(-x) = -(-x)^7 = x^7 = -h(x)\): ungerade Funktion, Graph punktsymmetrisch zum Ursprung.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">1d</span><span class="pkt">(2 P)</span><span class="txt">Durch welche Punkte gehen <em>alle</em> Graphen von \(y = x^{n}\) mit \(n \in \mathbb{N}\setminus\{0\}\)? Und was geschieht bei \(x = -1\)?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Durch \((0 \mid 0)\) und \((1 \mid 1)\): \(0^n = 0\) und \(1^n = 1\) für jedes \(n\).</p><p>Bei \(x = -1\) trennen sie sich: gerades \(n\) gibt \((-1 \mid 1)\), ungerades \(n\) gibt \((-1 \mid -1)\).</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">1e</span><span class="pkt">(2 P)</span><span class="txt">Skizziere \(y = x^{2}\) und \(y = x^{4}\) in <em>ein</em> Koordinatensystem für \(-1.5 \leq x \leq 1.5\). Wo liegt \(x^{4}\) unter \(x^{2}\), wo darüber?</span></div>
+            <div class="mini-reihe"><svg class="mini gross" data-k="1,2;1,4" data-fenster="-1.5,1.5,-0.5,2.5" data-punkte="1,1;-1,1"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Beide gehen durch \((0 \mid 0)\), \((1 \mid 1)\) und \((-1 \mid 1)\).</p><p>Für \(0 \lt |x| \lt 1\) liegt \(x^4\) <em>unter</em> \(x^2\) (bei \(0.5\): \(0.0625 \lt 0.25\)), für \(|x| \gt 1\) <em>darüber</em> (bei \(1.5\): \(5.0625 \gt 2.25\)).</p></div></details>
+          </li>
+        </ol>
+      </div>
+      <p class="ausf">Mehr dazu: <a href="../schwerpunkt/s3-2a-potenzfunktionen.html#definition">Themenseite 3.2a, Potenzfunktionen</a></p>
+    </section>
+    <div class="band"><span>Lektion 2</span><span class="strich"></span><span>Negative Exponenten</span></div>
+
+    <section class="kap" id="k2">
+      <div class="kap-meta"><span class="marker">Kapitel 2</span><span class="abz abz-sf">SP 3.2 · Potenzfunktionen</span><span class="zeit">≈ 40 min</span></div>
+      <h2 id="negative-exponenten">Negative Exponenten: Hyperbeln</h2>
+      <p class="ziel">Du deutest \(x^{-n}\) als Kehrwert, gibst Definitionsmenge und Asymptoten an und sagst an der Parität von \(n\), wo die beiden Äste liegen.</p>
+
+      <p class="phase"><span>①</span> Clip</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-hyperbel.html" data-titel="Kurve sehen: wenn der Exponent negativ wird">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kurve sehen: wenn der Exponent negativ wird</span></span>
+          <span class="clip-zeit">1:23</span>
+        </button>
+      </div>
+
+      <p class="phase"><span>②</span> Tüfteln</p>
+      <figure class="sim sim-gross" id="sim2">
+        <div class="leiste" aria-live="polite"></div>
+        <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+        <svg viewBox="0 0 300 300" role="img" aria-label="Hyperbel y = a mal x hoch n mit negativem n, mit den Achsen als Asymptoten"></svg>
+        <label class="hilfs-schalter"><input type="checkbox" checked> Asymptoten (die beiden Achsen)</label>
+        <div class="sl-row">
+          <div class="sl-grp akz-blau"><label for="s2-a"><span class="var">a</span></label><input type="range" id="s2-a" data-p="a" min="-3" max="3" step="0.5" value="1"><span class="sl-val"></span></div>
+          <div class="sl-grp akz-orange"><label for="s2-n"><span class="var">n</span></label><input type="range" id="s2-n" data-p="n" min="-4" max="-1" step="1" value="-1"><span class="sl-val"></span></div>
+        </div>
+      </figure>
+
+      <p class="phase"><span>③</span> Kontrollfragen</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-kontrolle-hyperbel.html" data-titel="Kontrollfragen zu den Hyperbeln">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kontrollfragen zu den Hyperbeln</span></span>
+          <span class="clip-zeit">0:55</span>
+        </button>
+      </div>
+
+      <h3>Festhalten</h3>
+      <div class="festhalten">
+        <div class="merk">
+          <div class="titel">Negative Exponenten: Hyperbeln</div>
+          <p>\[ f(x) = a \cdot x^{-n} = \frac{a}{x^{n}}, \qquad n \in \mathbb{N}\setminus\{0\} \]</p>
+          <p>Der Graph heisst <b>Hyperbel \(n\)-ter Ordnung</b>. An der Stelle \(0\) müsste man durch null teilen — sie fehlt:</p>
+          <p>\[ D = \mathbb{R}\setminus\{0\} \]</p>
+          <p>Die Kurve zerfällt dort in zwei <b>Äste</b>. Die Stelle \(x = 0\) heisst <b>Polstelle</b>, die \(y\)-Achse <b>Polgerade</b>.</p>
+          <p><b>Asymptoten:</b> Beide Achsen. Die Äste kommen ihnen beliebig nahe, erreichen sie aber nie.</p>
+          <p><b>Wieder entscheidet die Parität von \(n\):</b></p>
+          <ul>
+            <li>\(n\) gerade (also \(y = \frac{a}{x^{2}}\), \(\frac{a}{x^{4}}\), …): gerade Funktion, beide Äste auf <em>derselben</em> Seite — bei \(a \gt 0\) oben, bei \(a \lt 0\) unten.</li>
+            <li>\(n\) ungerade: ungerade Funktion, die Äste liegen <b>diagonal</b> in gegenüberliegenden Quadranten.</li>
+          </ul>
+          <p><b>Keine Nullstelle:</b> Ein Bruch ist nur null, wenn sein Zähler null ist — und \(a \neq 0\). Durch \((1 \mid a)\) gehen aber alle.</p>
+        </div>
+        <div class="warn">
+          <div class="titel">Häufiger Fehler</div>
+          <p>\(x^{-2}\) ist nicht \(-x^{2}\). Das Minus im Exponenten heisst <em>Kehrwert</em>, nicht Vorzeichenwechsel: \(2^{-2} = \frac{1}{4}\), nicht \(-4\).</p>
+          <p>Und \(x = 0\) gehört nicht zur Definitionsmenge — in jeder Antwort mit angeben.</p>
+        </div>
+      </div>
+
+      <p class="phase"><span>④</span> Üben mit Rückmeldung</p>
+      <div class="duo">
+        <div class="uebung" data-typ="hyperbel-wert">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Funktionswert berechnen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="aeste">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Wo liegen die Äste?</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="def-hyperbel">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Definitionslücke finden</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <p class="phase"><span>⑤</span> Aufgaben mit Lösungen</p>
+<div class="test" data-test="t2">
+        <div class="test-kopf">
+          <h3>Aufgaben · Kapitel 2 <span class="summe">· 12 P</span></h3>
+          <span class="werkz"><button type="button" class="alle-loesungen">alle Lösungen</button><label title="Aufgaben auf Papier gelöst und mit den Lösungen verglichen — ob alles sitzt, zeigt der Gesamttest."><input type="checkbox" class="erledigt" aria-label="Aufgaben dieses Kapitels bearbeitet"> bearbeitet</label></span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">2a</span><span class="pkt">(3 P)</span><span class="txt">\(f(x) = \dfrac{4}{x}\): Berechne \(f(2)\), \(f(-0.5)\) und \(f(8)\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(f(2) = 2\) · \(f(-0.5) = -8\) · \(f(8) = 0.5\).</p><p class="komm">Je grösser \(|x|\), desto näher liegt der Wert bei null — die \(x\)-Achse ist Asymptote.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">2b</span><span class="pkt">(3 P)</span><span class="txt">Gegeben ist \(g(x) = \dfrac{3}{x^{2}}\). Gib Definitionsmenge, Wertemenge und die beiden Asymptoten an, und sag, wo die Äste liegen.</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(D = \mathbb{R}\setminus\{0\}\), \(W = \mathbb{R}^{+}\) (nur positive Werte, denn \(x^2 \gt 0\) und \(3 \gt 0\)).</p><p>Asymptoten: \(x = 0\) und \(y = 0\). Der Exponent \(2\) ist gerade und \(a = 3 \gt 0\): <b>beide Äste oben</b>.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">2c</span><span class="pkt">(2 P)</span><span class="txt">Begründe: Keine Funktion \(f(x) = \dfrac{a}{x^{n}}\) mit \(a \neq 0\) hat eine Nullstelle.</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Ein Bruch ist genau dann null, wenn sein <em>Zähler</em> null ist. Hier ist der Zähler die feste Zahl \(a \neq 0\), also wird \(f(x)\) nie null.</p><p class="komm">Grafisch: Die \(x\)-Achse ist Asymptote — die Kurve nähert sich ihr beliebig, trifft sie aber nie.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">2d</span><span class="pkt">(2 P)</span><span class="txt">Ordne zu: (1) \(y = \dfrac{1}{x}\) (2) \(y = \dfrac{1}{x^{2}}\) (3) \(y = -\dfrac{1}{x}\) (4) \(y = -\dfrac{1}{x^{2}}\)</span></div>
+            <div class="mini-reihe"><svg class="mini" data-k="1,-2" data-fenster="-3,3,-3,3" data-titel="A"></svg><svg class="mini" data-k="1,-1" data-fenster="-3,3,-3,3" data-titel="B"></svg><svg class="mini" data-k="-1,-2" data-fenster="-3,3,-3,3" data-titel="C"></svg><svg class="mini" data-k="-1,-1" data-fenster="-3,3,-3,3" data-titel="D"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>(1) → B, (2) → A, (3) → D, (4) → C.</p><p class="komm">Erst die Parität: A und C haben beide Äste auf derselben Seite, also gerade Ordnung. Dann das Vorzeichen von \(a\): bei \(a \gt 0\) liegen sie oben.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">2e</span><span class="pkt">(2 P)</span><span class="txt">Warum ist die Wertemenge von \(y = \dfrac{1}{x^{2}}\) nur \(\mathbb{R}^{+}\), die von \(y = \dfrac{1}{x}\) aber \(\mathbb{R}\setminus\{0\}\)?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(x^{2}\) ist für jedes \(x \neq 0\) positiv, also ist auch \(\frac{1}{x^{2}}\) immer positiv — negative Werte kommen nicht vor.</p><p>Bei \(\frac{1}{x}\) hat der Wert dasselbe Vorzeichen wie \(x\): jeder Wert ausser null wird erreicht.</p></div></details>
+          </li>
+        </ol>
+      </div>
+      <p class="ausf">Mehr dazu: <a href="../schwerpunkt/s3-2a-potenzfunktionen.html#typen">Themenseite 3.2a, Hyperbeln</a></p>
+    </section>
+    <div class="band"><span>Lektion 3</span><span class="strich"></span><span>Verschieben und strecken</span></div>
+
+    <section class="kap" id="k3">
+      <div class="kap-meta"><span class="marker">Kapitel 3</span><span class="abz abz-sf">SP 3.2 · Transformationen (SP 3.1)</span><span class="zeit">≈ 40 min</span></div>
+      <h2 id="verschieben">Verschieben und strecken</h2>
+      <p class="ziel">Du liest aus \(a \cdot (x-u)^{n} + v\) ab, wohin die Kurve wandert, gibst die mitgewanderten Asymptoten an und berechnest Nullstellen — mit dem \(\pm\), wo es hingehört.</p>
+
+      <p class="phase"><span>①</span> Clip</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-verschieben.html" data-titel="Kurve sehen: verschieben und strecken">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kurve sehen: verschieben und strecken</span></span>
+          <span class="clip-zeit">1:14</span>
+        </button>
+      </div>
+
+      <p class="phase"><span>②</span> Tüfteln</p>
+      <figure class="sim sim-gross" id="sim3">
+        <div class="leiste" aria-live="polite"></div>
+        <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+        <svg viewBox="0 0 300 300" role="img" aria-label="Verschobene Potenzkurve a mal Klammer x minus u hoch n plus v, mit mitwandernden Asymptoten"></svg>
+        <label class="hilfs-schalter"><input type="checkbox" checked> Grundkurve \(a \cdot x^{n}\) (gestrichelt)</label>
+        <div class="sl-row">
+          <div class="sl-grp akz-blau"><label for="s3-a"><span class="var">a</span></label><input type="range" id="s3-a" data-p="a" min="-2" max="2" step="0.5" value="1"><span class="sl-val"></span></div>
+          <div class="sl-grp akz-orange"><label for="s3-n"><span class="var">n</span></label><input type="range" id="s3-n" data-p="n" min="-3" max="4" step="1" value="3"><span class="sl-val"></span></div>
+          <div class="sl-grp akz-gruen"><label for="s3-u"><span class="var">u</span></label><input type="range" id="s3-u" data-p="u" min="-3" max="3" step="1" value="0"><span class="sl-val"></span></div>
+          <div class="sl-grp akz-gruen"><label for="s3-v"><span class="var">v</span></label><input type="range" id="s3-v" data-p="v" min="-3" max="3" step="1" value="0"><span class="sl-val"></span></div>
+        </div>
+      </figure>
+
+      <p class="phase"><span>③</span> Kontrollfragen</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-kontrolle-verschieben.html" data-titel="Kontrollfragen zum Verschieben">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kontrollfragen zum Verschieben</span></span>
+          <span class="clip-zeit">0:53</span>
+        </button>
+      </div>
+
+      <h3>Festhalten</h3>
+      <div class="festhalten">
+        <div class="merk">
+          <div class="titel">Ein Schema für alle</div>
+          <p>\[ f(x) = a \cdot (x - u)^{n} + v \]</p>
+          <p>Dasselbe Schema wie bei jeder Grundfunktion (<a href="../schwerpunkt/s3-1-grundlagen.html">Teilgebiet 3.1</a>):</p>
+          <ul>
+            <li>\(u\) verschiebt <b>waagrecht</b> und steht <em>in der Klammer</em> mit <b>umgekehrtem</b> Vorzeichen: \((x - 2)^3\) ist \(2\) nach rechts.</li>
+            <li>\(v\) verschiebt <b>senkrecht</b> und steht <em>hinter</em> der Potenz mit seinem <b>eigenen</b> Vorzeichen.</li>
+            <li>\(a\) streckt in \(y\)-Richtung; \(a \lt 0\) spiegelt an der Waagrechten \(y = v\).</li>
+          </ul>
+          <p><b>Bei \(n \geq 2\)</b> wandert der ausgezeichnete Punkt des Graphen (Scheitel bzw. Terrassenpunkt) nach \((u \mid v)\).</p>
+          <p><b>Bei \(n \lt 0\)</b> wandern die <b>Asymptoten mit</b>:</p>
+          <p>\[ x = u \qquad \text{und} \qquad y = v, \qquad D = \mathbb{R}\setminus\{u\} \]</p>
+          <p><b>Nullstellen</b> berechnet man mit \(f(x) = 0\):</p>
+          <p>\[ a\,(x-u)^{n} = -v \;\Longrightarrow\; (x-u)^{n} = -\tfrac{v}{a} \]</p>
+          <p>Bei <b>geradem</b> \(n\) gibt das Wurzelziehen <b>zwei</b> Lösungen \((\pm)\), bei ungeradem genau eine — und bei geradem \(n\) und negativer rechter Seite gar keine.</p>
+        </div>
+        <div class="warn">
+          <div class="titel">Häufiger Fehler</div>
+          <p>Das \(\pm\) beim geraden Exponenten vergessen. Aus \((x-3)^4 = 16\) folgt \(x - 3 = \pm 2\), also \(x_1 = 1\) <em>und</em> \(x_2 = 5\) — nicht nur \(5\).</p>
+          <p>Und das Vorzeichen von \(u\): \((x + 1)^3\) ist \(1\) nach <em>links</em>, denn die Klammer wird bei \(x = -1\) null.</p>
+        </div>
+      </div>
+
+      <p class="phase"><span>④</span> Üben mit Rückmeldung</p>
+      <div class="duo">
+        <div class="uebung" data-typ="transformation-lesen">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Verschiebung ablesen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="asymptoten">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Asymptoten angeben</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="nullstelle-potenz">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Nullstellen berechnen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <p class="phase"><span>⑤</span> Aufgaben mit Lösungen</p>
+<div class="test" data-test="t3">
+        <div class="test-kopf">
+          <h3>Aufgaben · Kapitel 3 <span class="summe">· 13 P</span></h3>
+          <span class="werkz"><button type="button" class="alle-loesungen">alle Lösungen</button><label title="Aufgaben auf Papier gelöst und mit den Lösungen verglichen — ob alles sitzt, zeigt der Gesamttest."><input type="checkbox" class="erledigt" aria-label="Aufgaben dieses Kapitels bearbeitet"> bearbeitet</label></span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">3a</span><span class="pkt">(3 P)</span><span class="txt">\(f(x) = (x+1)^{3} - 2\): Wie ist der Graph gegenüber \(y = x^{3}\) verschoben, wo liegt der Terrassenpunkt, und wie gross sind \(f(0)\) und \(f(1)\)?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(1\) nach links und \(2\) nach unten; Terrassenpunkt \((-1 \mid -2)\).</p><p>\(f(0) = 1^3 - 2 = -1\) · \(f(1) = 2^3 - 2 = 6\).</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">3b</span><span class="pkt">(3 P)</span><span class="txt">\(g(x) = \dfrac{2}{x-3} + 1\): Gib Definitionsmenge und beide Asymptoten an und berechne \(g(5)\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(D = \mathbb{R}\setminus\{3\}\); Asymptoten \(x = 3\) und \(y = 1\).</p><p>\(g(5) = \dfrac{2}{2} + 1 = 2\).</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">3c</span><span class="pkt">(3 P)</span><span class="txt">Berechne die Nullstellen von \(h(x) = (x+2)^{4} - 81\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\((x+2)^4 = 81 \Rightarrow x + 2 = \pm 3 \Rightarrow x_1 = -5,\ x_2 = 1\).</p><p class="komm">Probe: \((-5+2)^4 = (-3)^4 = 81\) ✓ und \((1+2)^4 = 3^4 = 81\) ✓. Der Exponent ist gerade — darum zwei Lösungen.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">3d</span><span class="pkt">(2 P)</span><span class="txt">Berechne die Nullstellen von \(k(x) = (x-1)^{3} + 8\). Wie viele sind es, und warum?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\((x-1)^3 = -8 \Rightarrow x - 1 = -2 \Rightarrow x = -1\). Nur <b>eine</b>.</p><p class="komm">Der Exponent \(3\) ist ungerade: Die dritte Wurzel aus einer Zahl ist eindeutig, es gibt kein \(\pm\).</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">3e</span><span class="pkt">(2 P)</span><span class="txt">Welche Gleichung gehört zur abgebildeten Hyperbel? Lies die beiden Asymptoten ab.</span></div>
+            <div class="mini-reihe"><svg class="mini gross" data-k="1,-1,-2,3" data-fenster="-6,2,-1,7"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Asymptoten \(x = -2\) und \(y = 3\), also \(y = \dfrac{1}{x+2} + 3\).</p><p class="komm">Die Polgerade liegt links vom Ursprung, also ist \(u = -2\) und in der Klammer steht \(x + 2\).</p></div></details>
+          </li>
+        </ol>
+      </div>
+      <p class="ausf">Mehr dazu: <a href="../schwerpunkt/s3-2a-potenzfunktionen.html#theorie">Themenseite 3.2a, Transformationen</a></p>
+    </section>
+    <div class="band"><span>Lektion 4</span><span class="strich"></span><span>Umkehren</span></div>
+
+    <section class="kap" id="k4">
+      <div class="kap-meta"><span class="marker">Kapitel 4</span><span class="abz abz-sf">SP 3.2 · Umkehrfunktion · RLP-Kern</span><span class="zeit">≈ 45 min</span></div>
+      <h2 id="umkehren">Umkehren: spiegeln an \(y = x\)</h2>
+      <p class="ziel">Du deutest die Umkehrfunktion als Spiegelung an \(y = x\), bestimmst sie rechnerisch in drei Schritten und begründest, wann eine Potenzfunktion vorher eingeschränkt werden muss.</p>
+
+      <p class="phase"><span>①</span> Clip</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-umkehren.html" data-titel="Kurve sehen: umkehren heisst spiegeln">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kurve sehen: umkehren heisst spiegeln</span></span>
+          <span class="clip-zeit">1:24</span>
+        </button>
+      </div>
+
+      <p class="phase"><span>②</span> Tüfteln</p>
+      <figure class="sim sim-gross" id="sim4">
+        <div class="leiste" aria-live="polite"></div>
+        <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+        <svg viewBox="0 0 300 300" role="img" aria-label="Potenzkurve und ihr Spiegelbild an der Winkelhalbierenden y gleich x"></svg>
+        <label class="sim-schalter"><input type="checkbox"> nur \(x \geq 0\) (einschränken)</label>
+        <div class="sl-row">
+          <div class="sl-grp akz-orange"><label for="s4-n"><span class="var">n</span></label><input type="range" id="s4-n" data-p="n" min="2" max="6" step="1" value="2"><span class="sl-val"></span></div>
+        </div>
+      </figure>
+
+      <p class="phase"><span>③</span> Kontrollfragen</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-kontrolle-umkehren.html" data-titel="Kontrollfragen zum Umkehren">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kontrollfragen zum Umkehren</span></span>
+          <span class="clip-zeit">0:56</span>
+        </button>
+      </div>
+
+      <h3>Festhalten</h3>
+      <div class="festhalten">
+        <div class="merk">
+          <div class="titel">Umkehren heisst spiegeln</div>
+          <p>Die <b>Umkehrfunktion</b> \(f^{-1}\) macht rückgängig, was \(f\) tut: Aus dem bekannten \(y\) wird das gesuchte \(x\).</p>
+          <p>Im Bild ist das eine <b>Spiegelung an der Winkelhalbierenden \(y = x\)</b>:</p>
+          <p>\[ (x \mid y) \;\longmapsto\; (y \mid x) \]</p>
+          <p>Punkte auf \(y = x\) bleiben liegen, etwa \((1 \mid 1)\). Definitions- und Wertemenge tauschen die Rollen.</p>
+          <p><b>Das Rezept</b> — drei Schritte:</p>
+          <ol>
+            <li>Nach \(x\) auflösen.</li>
+            <li>\(x\) und \(y\) vertauschen.</li>
+            <li>Definitionsmenge prüfen.</li>
+          </ol>
+          <p>Beispiel: \(y = x^{3} + 1 \Rightarrow x^{3} = y - 1 \Rightarrow x = \sqrt[3]{y-1}\), vertauscht: \(f^{-1}(x) = \sqrt[3]{x-1}\).</p>
+          <p><b>Die Parität entscheidet wieder:</b></p>
+          <ul>
+            <li>\(n\) <b>ungerade</b>: \(f\) steigt überall, jedem \(y\) gehört genau ein \(x\) — direkt umkehrbar, \(f^{-1}(x) = \sqrt[n]{x}\) mit \(D = \mathbb{R}\).</li>
+            <li>\(n\) <b>gerade</b>: \(f(-x) = f(x)\), zu einem \(y\) gäbe es zwei \(x\). Erst auf \(x \geq 0\) <b>einschränken</b>, dann ist \(f^{-1}(x) = \sqrt[n]{x}\) mit \(D = \mathbb{R}_0^{+}\).</li>
+          </ul>
+        </div>
+        <div class="warn">
+          <div class="titel">Häufiger Fehler</div>
+          <p>\(f^{-1}\) ist <em>nicht</em> der Kehrwert \(\dfrac{1}{f}\). Die Umkehrfunktion von \(x^{5}\) ist \(\sqrt[5]{x}\), nicht \(x^{-5}\).</p>
+          <p>Und gespiegelt wird an \(y = x\), nicht an einer Achse — dabei <em>tauschen</em> die Koordinaten, sie wechseln nicht das Vorzeichen.</p>
+        </div>
+      </div>
+
+      <p class="phase"><span>④</span> Üben mit Rückmeldung</p>
+      <div class="duo">
+        <div class="uebung" data-typ="einschraenken">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Einschränken nötig?</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="spiegelpunkt">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Punkt spiegeln</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="umkehrfunktion">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Umkehrfunktion bestimmen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <p class="phase"><span>⑤</span> Aufgaben mit Lösungen</p>
+<div class="test" data-test="t4">
+        <div class="test-kopf">
+          <h3>Aufgaben · Kapitel 4 <span class="summe">· 12 P</span></h3>
+          <span class="werkz"><button type="button" class="alle-loesungen">alle Lösungen</button><label title="Aufgaben auf Papier gelöst und mit den Lösungen verglichen — ob alles sitzt, zeigt der Gesamttest."><input type="checkbox" class="erledigt" aria-label="Aufgaben dieses Kapitels bearbeitet"> bearbeitet</label></span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">4a</span><span class="pkt">(3 P)</span><span class="txt">Bestimme die Umkehrfunktion von \(f(x) = x^{5} - 3\). Schreib den Rechenweg auf und mach die Probe mit \(x = 2\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(y = x^5 - 3 \Rightarrow x^5 = y + 3 \Rightarrow x = \sqrt[5]{y+3}\), vertauscht: \(f^{-1}(x) = \sqrt[5]{x+3}\).</p><p>Probe: \(f(2) = 32 - 3 = 29\) und \(f^{-1}(29) = \sqrt[5]{32} = 2\) ✓</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">4b</span><span class="pkt">(2 P)</span><span class="txt">Warum muss man \(y = x^{6}\) vor dem Umkehren einschränken, \(y = x^{7}\) aber nicht?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(6\) ist gerade: \(f(-x) = f(x)\), also haben \(-2\) und \(2\) denselben Funktionswert \(64\). Beim Spiegeln lägen über \(x = 64\) zwei Punkte — kein Funktionsgraph. Erst \(x \geq 0\) macht die Zuordnung eindeutig.</p><p>\(7\) ist ungerade: Die Kurve steigt überall, jeder Wert kommt genau einmal vor.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">4c</span><span class="pkt">(3 P)</span><span class="txt">Auf dem Graphen von \(f(x) = x^{4}\) mit \(x \geq 0\) liegt \(P(3 \mid 81)\). Welcher Punkt liegt dann auf \(f^{-1}\), und wie lautet \(f^{-1}\)?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(3^4 = 81\) ✓. Beim Spiegeln tauschen die Koordinaten: \(P\,\'(81 \mid 3)\).</p><p>\(f^{-1}(x) = \sqrt[4]{x}\) mit \(D = \mathbb{R}_0^{+}\).</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">4d</span><span class="pkt">(2 P)</span><span class="txt">Zeichne \(y = x^{3}\), die Winkelhalbierende \(y = x\) und die Umkehrfunktion in <em>ein</em> Koordinatensystem \((-2\) bis \(2)\).</span></div>
+            <div class="mini-reihe"><svg class="mini gross" data-k="1,3;1,0.3333333333333333" data-fenster="-2,2,-2,2" data-punkte="1,1;-1,-1"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Die Umkehrfunktion ist \(y = \sqrt[3]{x}\). Sie geht ebenfalls durch \((0 \mid 0)\), \((1 \mid 1)\) und \((-1 \mid -1)\) und ist das Spiegelbild von \(y = x^3\) an der gestrichelten Geraden.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">4e</span><span class="pkt">(2 P)</span><span class="txt">Gegeben \(f(x) = x^{3} + 1\) und \(g(x) = \sqrt[3]{x-1}\). Zeige an der Stelle \(x = 9\), dass \(f(g(x)) = x\) gilt.</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(g(9) = \sqrt[3]{8} = 2\), dann \(f(2) = 2^3 + 1 = 9\) ✓</p><p class="komm">Genau das heisst «Umkehrfunktion»: Erst \(g\), dann \(f\) — und man ist wieder am Anfang.</p></div></details>
+          </li>
+        </ol>
+      </div>
+      <p class="ausf">Mehr dazu: <a href="../schwerpunkt/s3-2b-wurzelfunktionen.html#theorie">Themenseite 3.2b, Umkehrfunktion</a></p>
+    </section>
+    <div class="band"><span>Lektion 5</span><span class="strich"></span><span>Wurzelfunktionen nutzen</span></div>
+
+    <section class="kap" id="k5">
+      <div class="kap-meta"><span class="marker">Kapitel 5</span><span class="abz abz-sf">SP 3.2 · Wurzelfunktionen · RLP-Kern</span><span class="zeit">≈ 45 min</span></div>
+      <h2 id="wurzelfunktionen">Wurzelfunktionen nutzen</h2>
+      <p class="ziel">Du bestimmst Definitionsmenge, Startpunkt und Nullstelle einer verschobenen Wurzelfunktion, vergleichst \(\sqrt{x}\), \(x\) und \(x^{2}\) und löst eine Wurzelgleichung grafisch wie rechnerisch.</p>
+
+      <p class="phase"><span>①</span> Clip</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-wurzel.html" data-titel="Kurve sehen: Wurzelfunktionen nutzen">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kurve sehen: Wurzelfunktionen nutzen</span></span>
+          <span class="clip-zeit">1:28</span>
+        </button>
+      </div>
+
+      <p class="phase"><span>②</span> Tüfteln</p>
+      <figure class="sim sim-gross" id="sim5">
+        <div class="leiste" aria-live="polite"></div>
+        <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
+        <svg viewBox="0 0 300 300" role="img" aria-label="Wurzelfunktion a mal n-te Wurzel aus x minus u plus v, mit Startpunkt und Nullstelle"></svg>
+        <div class="sl-row">
+          <div class="sl-grp akz-blau"><label for="s5-a"><span class="var">a</span></label><input type="range" id="s5-a" data-p="a" min="-2" max="2" step="0.5" value="1"><span class="sl-val"></span></div>
+          <div class="sl-grp akz-orange"><label for="s5-n"><span class="var">n</span></label><input type="range" id="s5-n" data-p="n" min="2" max="5" step="1" value="2"><span class="sl-val"></span></div>
+          <div class="sl-grp akz-gruen"><label for="s5-u"><span class="var">u</span></label><input type="range" id="s5-u" data-p="u" min="-4" max="4" step="1" value="0"><span class="sl-val"></span></div>
+          <div class="sl-grp akz-gruen"><label for="s5-v"><span class="var">v</span></label><input type="range" id="s5-v" data-p="v" min="-4" max="4" step="1" value="0"><span class="sl-val"></span></div>
+        </div>
+      </figure>
+
+      <p class="phase"><span>③</span> Kontrollfragen</p>
+      <div class="clipkarte kap-clip" data-clip="clips/s3-2-lp-kontrolle-wurzel.html" data-titel="Kontrollfragen zu den Wurzelfunktionen">
+        <button class="clip-start" type="button">
+          <span class="clip-play" aria-hidden="true">▶</span>
+          <span class="clip-txt"><span class="clip-titel">Kontrollfragen zu den Wurzelfunktionen</span></span>
+          <span class="clip-zeit">1:01</span>
+        </button>
+      </div>
+
+      <h3>Festhalten</h3>
+      <div class="festhalten">
+        <div class="merk">
+          <div class="titel">Wurzelfunktionen</div>
+          <p>\[ \sqrt[n]{x} = x^{\frac{1}{n}} \]</p>
+          <p>Eine Wurzel ist eine Potenz mit gebrochenem Exponenten — alle Potenzregeln gelten weiter.</p>
+          <p><b>Definitionsmenge</b>, wieder nach der Parität:</p>
+          <ul>
+            <li>\(n\) <b>gerade</b>: Der Radikand muss \(\geq 0\) sein. \(D = \mathbb{R}_0^{+}\), bei \(\sqrt[n]{x-u}\) also \(D = [u;\infty[\).</li>
+            <li>\(n\) <b>ungerade</b>: keine Schranke, \(D = \mathbb{R}\) — es ist \(\sqrt[3]{-8} = -2\).</li>
+          </ul>
+          <p><b>Verschoben</b> nach demselben Schema wie in Kapitel 3:</p>
+          <p>\[ f(x) = a \cdot \sqrt[n]{x - u} + v \]</p>
+          <p>Bei <b>geradem</b> \(n\) beginnt die Kurve im <b>Startpunkt \((u \mid v)\)</b>, und dort beginnt auch die Definitionsmenge. Bei ungeradem \(n\) gibt es keinen Startpunkt — die Kurve läuft nach links weiter.</p>
+          <p><b>Nullstelle:</b> \(f(x) = 0\) nach der Wurzel auflösen, dann beide Seiten hoch \(n\).</p>
+          <p><b>Grössenvergleich</b> für \(x \gt 0\):</p>
+          <p>\[ 0 \lt x \lt 1:\ \sqrt{x} \gt x \gt x^{2} \qquad x \gt 1:\ \sqrt{x} \lt x \lt x^{2} \]</p>
+          <p>Bei \(x = 1\) schneiden sich alle drei.</p>
+        </div>
+        <div class="warn">
+          <div class="titel">Häufiger Fehler</div>
+          <p>Einen <b>Startpunkt</b> hat nur die Kurve mit <em>geradem</em> Wurzelexponenten. \(y = \sqrt[3]{x+1} - 4\) beginnt nirgends — sie läuft nach links weiter, \(D = \mathbb{R}\).</p>
+          <p>Und beim Quadrieren einer Wurzelgleichung können <b>Scheinlösungen</b> entstehen: Die Probe gehört dazu.</p>
+        </div>
+      </div>
+
+      <p class="phase"><span>④</span> Üben mit Rückmeldung</p>
+      <div class="duo">
+        <div class="uebung" data-typ="wurzel-def">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Definitionsmenge bestimmen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="wurzel-startpunkt">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Startpunkt angeben</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="wurzel-nullstelle">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Nullstelle berechnen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="wurzelgleichung">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Wurzelgleichung lösen</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+        <div class="uebung" data-typ="vergleich">
+          <div class="ue-kopf"><span class="ue-titel">🔁 Der Grösse nach</span><span class="ue-serie">0 in Folge</span></div>
+          
+          <p class="ue-aufgabe"></p>
+          <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
+          <div class="ue-rueck" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <p class="phase"><span>⑤</span> Aufgaben mit Lösungen</p>
+<div class="test" data-test="t5">
+        <div class="test-kopf">
+          <h3>Aufgaben · Kapitel 5 <span class="summe">· 14 P</span></h3>
+          <span class="werkz"><button type="button" class="alle-loesungen">alle Lösungen</button><label title="Aufgaben auf Papier gelöst und mit den Lösungen verglichen — ob alles sitzt, zeigt der Gesamttest."><input type="checkbox" class="erledigt" aria-label="Aufgaben dieses Kapitels bearbeitet"> bearbeitet</label></span>
+        </div>
+        <ol class="aufg">
+          <li>
+            <div class="frage"><span class="nr">5a</span><span class="pkt">(3 P)</span><span class="txt">Gib die maximale Definitionsmenge an: \(\sqrt{x-5}\) · \(\sqrt[3]{x+1}\) · \(\sqrt[4]{x+2} - 1\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\([5;\infty[\) · \(\mathbb{R}\) · \([-2;\infty[\).</p><p class="komm">Nur der <em>Radikand</em> zählt. Die \(-1\) hinter der Wurzel ändert die Definitionsmenge nicht, und der ungerade Wurzelexponent \(3\) setzt gar keine Schranke.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">5b</span><span class="pkt">(3 P)</span><span class="txt">\(f(x) = 3\sqrt{x+1} - 6\): Gib Definitionsmenge und Startpunkt an und berechne Ordinatenabschnitt und Nullstelle.</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(D = [-1;\infty[\), Startpunkt \((-1 \mid -6)\).</p><p>Ordinatenabschnitt: \(f(0) = 3 \cdot 1 - 6 = -3\).</p><p>Nullstelle: \(3\sqrt{x+1} = 6 \Rightarrow \sqrt{x+1} = 2 \Rightarrow x + 1 = 4 \Rightarrow x_0 = 3\).</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">5c</span><span class="pkt">(3 P)</span><span class="txt">Löse \(\sqrt[3]{x-1} = 2\) rechnerisch und beschreib, wie man die Lösung am Graphen abliest.</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Beide Seiten hoch \(3\): \(x - 1 = 8 \Rightarrow x = 9\). Probe: \(\sqrt[3]{8} = 2\) ✓ · \(\mathbb{L} = \{9\}\).</p><p>Grafisch: Man zeichnet \(y = \sqrt[3]{x-1}\) und die waagrechte Gerade \(y = 2\) und liest die \(x\)-Koordinate des Schnittpunkts ab.</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">5d</span><span class="pkt">(2 P)</span><span class="txt">Ordne \(\sqrt{x}\), \(x\) und \(x^{2}\) der Grösse nach — einmal für \(x = 0.09\), einmal für \(x = 16\).</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(x = 0.09\): \(\sqrt{0.09} = 0.3 \gt 0.09 \gt 0.0081\), also \(\sqrt{x} \gt x \gt x^2\).</p><p>\(x = 16\): \(4 \lt 16 \lt 256\), also \(\sqrt{x} \lt x \lt x^2\) — die Reihenfolge kippt bei \(x = 1\).</p></div></details>
+          </li>
+          <li>
+            <div class="frage"><span class="nr">5e</span><span class="pkt">(3 P)</span><span class="txt">Die abgebildete Wurzelkurve hat den Startpunkt \((2 \mid -1)\) und geht durch \((6 \mid 1)\). Bestimme \(a\) in \(f(x) = a\sqrt{x-2} - 1\) und gib die Definitionsmenge an.</span></div>
+            <div class="mini-reihe"><svg class="mini gross" data-k="1,2,2,-1" data-wurzel="1" data-fenster="-1,8,-2,3" data-punkte="2,-1;6,1"></svg></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Einsetzen von \((6 \mid 1)\): \(a\sqrt{4} - 1 = 1 \Rightarrow 2a = 2 \Rightarrow a = 1\).</p><p>Also \(f(x) = \sqrt{x-2} - 1\) mit \(D = [2;\infty[\).</p></div></details>
+          </li>
+        </ol>
+      </div>
+      <p class="ausf">Mehr dazu: <a href="../schwerpunkt/s3-2b-wurzelfunktionen.html#definition">Themenseite 3.2b, Wurzelfunktionen</a></p>
+    </section>
+    <div class="band"><span>Abschluss</span><span class="strich"></span><span>Gesamttest</span></div>
+
+    <section class="kap" id="gesamttest">
+      <div class="gesamt">
+        <div class="gesamt-kopf">
+          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-sf">SP 3.2 · Kapitel 1–5</span><span class="zeit">≈ 25 min · 24 Punkte</span></div>
+          <h2 id="gesamttest-titel">Gesamttest</h2>
+          <div class="pdf-weg">
+            <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Rechenweg. Ganz ohne Taschenrechner: Die Kompetenz des Teilgebiets trägt im Lehrplan den Vermerk «auch ohne Hilfsmittel».<br>
+              <a class="pdf-knopf" href="../downloads/leitprogramme/potenz-wurzelfunktionen/gesamttest.pdf" download>⬇ Gesamttest (PDF)</a></div></div>
+            <div class="pdf-schritt"><span class="nr">2</span><div><b>Bewerten lassen</b> — Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem Bewertungspaket einer KI geben. Das Paket enthält die Musterlösung: erst danach öffnen.<br>
+              <a class="pdf-knopf" href="../downloads/leitprogramme/potenz-wurzelfunktionen/bewertungspaket.pdf" download>⬇ Bewertungspaket (PDF)</a></div></div>
+            <div class="pdf-schritt"><span class="nr">3</span><div><b>Gezielt wiederholen</b> — nach der Tabelle unten.</div></div>
+          </div>
+        </div>
+        <div class="bewertung">
+          <b>Selbsteinschätzung</b>
+          <table>
+            <tr><td>21 – 24 P</td><td>Die geprüften Teile sitzen. Wo du Punkte verloren hast: das Kapitel dieser Aufgabe nochmals (Zuordnung unten).</td></tr>
+            <tr><td>17 – 20 P</td><td>Den schwächsten Teil nochmals: Simulation und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.</td></tr>
+            <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
+            <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
+          </table>
+          <p>Aufgabe → Kapitel: G1, G2 → 1 · G3 → 2 · G4 → 3 · G5, G6 → 4 · G7, G8 → 5</p>
+        </div>
+      </div>
+    </section>
+    <div class="fuss">
+      <span>Leitprogramm Potenz- und Wurzelfunktionen · Clips von mathe.begreifbar.ch</span>
+      <span>Raphael Arnold Kohler</span>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+  };
+</script>
+<script src="../vendor/mathjax/tex-svg.js"></script>
+
+<script>
+(function(){
+  'use strict';
+  // Relativ, nicht absolut: Im Repo liegt die Datei eine Ebene tief, und die
+  // Clips sollen von hier kommen — sonst zeigt eine lokale Vorschau den Stand
+  // der Live-Site und ohne Netz gar nichts.
+  var BASIS = '../';
+
+  /* ---- Theme ---- */
+  var schalter = document.getElementById('themenschalter');
+  function themaLesen(){ try { return localStorage.getItem('lp-potwurzel-thema'); } catch(e){ return null; } }
+  var gespeichert = themaLesen();
+  if (gespeichert === 'dark' || gespeichert === 'light') document.documentElement.setAttribute('data-theme', gespeichert);
+  schalter.addEventListener('click', function(){
+    var jetzt = document.documentElement.getAttribute('data-theme');
+    if (!jetzt) jetzt = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var neu = jetzt === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', neu);
+    try { localStorage.setItem('lp-potwurzel-thema', neu); } catch(e){}
+  });
+
+  /* ---- Clip-Buehne (nach clipBuehne/clipZu von mathe.begreifbar.ch) ---- */
+
+  /* Clip-Buehne kommt aus ../mathlib.js — clipBuehne(quelle, titel).
+     Vorher stand hier eine Kopie; Scrollsperre und Fokusrueckgabe
+     sind dabei nach mathlib.js gewandert und gelten jetzt ueberall. */
+
+  document.querySelectorAll('.clipkarte').forEach(function(karte){
+    var knopf = karte.querySelector('.clip-start');
+    knopf.addEventListener('click', function(){
+      if (document.querySelector('.clip-buehne')) return;
+      clipBuehne(BASIS + karte.dataset.clip, karte.dataset.titel || 'Clip');
+    });
+  });
+
+  /* ---- Lösungen: alle auf/zu ---- */
+  document.querySelectorAll('.alle-loesungen').forEach(function(knopf){
+    knopf.addEventListener('click', function(){
+      var test = knopf.closest('.test') || knopf.closest('.gesamt');
+      var alle = test.querySelectorAll('details.loes');
+      var oeffnen = Array.prototype.some.call(alle, function(d){ return !d.open; });
+      alle.forEach(function(d){ d.open = oeffnen; });
+      knopf.textContent = oeffnen ? 'Lösungen zuklappen' : 'alle Lösungen';
+    });
+  });
+
+  /* ---- Fortschritt ---- */
+  var tests = Array.prototype.slice.call(document.querySelectorAll('.test'));
+  var fuellung = document.getElementById('balken-fuellung');
+  var text = document.getElementById('fortschritt-text');
+  function standLesen(){
+    try { return JSON.parse(localStorage.getItem('lp-potwurzel-stand') || '{}'); } catch(e){ return {}; }
+  }
+  function standSchreiben(s){ try { localStorage.setItem('lp-potwurzel-stand', JSON.stringify(s)); } catch(e){} }
+  function zeichnen(){
+    var fertig = tests.filter(function(t){ return t.querySelector('.erledigt').checked; }).length;
+    fuellung.style.width = (fertig / tests.length * 100) + '%';
+    text.textContent = fertig + ' von ' + tests.length + ' Aufgabenblöcken bearbeitet';
+  }
+  var stand = standLesen();
+  tests.forEach(function(t){
+    var box = t.querySelector('.erledigt');
+    if (stand[t.dataset.test]) box.checked = true;
+    box.addEventListener('change', function(){
+      var s = standLesen();
+      s[t.dataset.test] = box.checked;
+      standSchreiben(s);
+      zeichnen();
+    });
+  });
+  zeichnen();
+  document.getElementById('fortschritt-reset').addEventListener('click', function(){
+    tests.forEach(function(t){ t.querySelector('.erledigt').checked = false; });
+    standSchreiben({});
+    zeichnen();
+  });
+
+  /* ---- aktives Kapitel in der Schiene ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('.schiene a'));
+  var ziele = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if ('IntersectionObserver' in window && ziele.length){
+    var beobachter = new IntersectionObserver(function(eintraege){
+      eintraege.forEach(function(e){
+        if (!e.isIntersecting) return;
+        links.forEach(function(a){ a.classList.toggle('aktiv', a.getAttribute('href') === '#' + e.target.id); });
+      });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    ziele.forEach(function(z){ beobachter.observe(z); });
+  }
+})();
+</script>
+<script>
+/* Leitprogramm Potenz- und Wurzelfunktionen — Simulationen mit Aufgabenleiste, Übungen
+   mit Rückmeldung, Minigrafen. Notation wie auf den Themenseiten 3.2a und 3.2b:
+   f(x) = a·xⁿ mit n ∈ ℤ∖{0}, Wurzelfunktion f(x) = ⁿ√x = x^(1/n), verschoben
+   a·(x−u)ⁿ + v bzw. a·ⁿ√(x−u) + v.
+   Eine Farbe, eine Bedeutung (HOWTO-leitprogramme §15, gleich wie in den Clips):
+   blau = die Potenzkurve und ihr Faktor a · orange = der Exponent n · grün = Wurzelkurve,
+   Umkehrfunktion und Startpunkt · rot = Gegenbeispiel, Polstelle, verbotener Bereich ·
+   Tinte = neutral (gemeinsame Punkte, Asymptoten, Bezugskurve, Spiegelachse y = x).
+   Zahlen mit Dezimalpunkt und echtem Minus. */
+(function(){
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  function z(n){ var r = Math.round(n * 100) / 100; if (Object.is(r, -0)) r = 0; return (r < 0 ? '−' : '') + String(Math.abs(r)); }
+  function el(eltern, name, attr, text){
+    var e = document.createElementNS(NS, name);
+    for (var k in attr) e.setAttribute(k, attr[k]);
+    if (text != null) e.textContent = text;
+    eltern.appendChild(e); return e;
+  }
+  function sp(cls, s){ return '<span class="' + cls + '">' + s + '</span>'; }
+  function setzen(e){ if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([e]).catch(function(){}); }
+
+  /* ---------- Koordinatensystem (wie im Leitprogramm Quadratische Funktionen) ---------- */
+  function Achsen(svg, o){
+    var W = o.w, H = o.h, x0 = o.x0, x1 = o.x1, y0 = o.y0, y1 = o.y1;
+    var id = 'k' + Math.random().toString(36).slice(2, 8);
+    function X(x){ return (x - x0) / (x1 - x0) * W; }
+    function Y(y){ return H - (y - y0) / (y1 - y0) * H; }
+    var g = el(svg, 'g', {});
+    var cp = el(g, 'clipPath', { id: id }); el(cp, 'rect', { x: 0, y: 0, width: W, height: H });
+    var sx = o.sx || 1, sy = o.sy || 1, i;
+    for (i = Math.ceil(x0 / sx) * sx; i <= x1 + 1e-9; i += sx) el(g, 'line', { x1: X(i), y1: 0, x2: X(i), y2: H, 'class': 'gitter' });
+    for (i = Math.ceil(y0 / sy) * sy; i <= y1 + 1e-9; i += sy) el(g, 'line', { x1: 0, y1: Y(i), x2: W, y2: Y(i), 'class': 'gitter' });
+    if (y0 <= 0 && y1 >= 0) el(g, 'line', { x1: 0, y1: Y(0), x2: W, y2: Y(0), 'class': 'achse' });
+    if (x0 <= 0 && x1 >= 0) el(g, 'line', { x1: X(0), y1: 0, x2: X(0), y2: H, 'class': 'achse' });
+    // Pfeil in positiver Richtung, Achsenname am Pfeil; bei Anwendungen mit Grösse und Einheit
+    var pf = o.pfeil || 7, xn = o.xname || 'x', yn = o.yname || 'y';
+    var namen = [];
+    if (y0 <= 0 && y1 >= 0){
+      el(g, 'polygon', { points: W + ',' + Y(0) + ' ' + (W - pf) + ',' + (Y(0) - pf / 2) + ' ' + (W - pf) + ',' + (Y(0) + pf / 2), 'class': 'pfeil' });
+      namen.push([W - 3, Y(0) - pf, 'end', xn]);
+    }
+    if (x0 <= 0 && x1 >= 0){
+      el(g, 'polygon', { points: X(0) + ',0 ' + (X(0) - pf / 2) + ',' + pf + ' ' + (X(0) + pf / 2) + ',' + pf, 'class': 'pfeil' });
+      namen.push([X(0) + pf, pf + 3, 'start', yn]);
+    }
+    (o.xm || []).forEach(function(t){ el(g, 'text', { x: X(t), y: Y(Math.max(0, y0)) + 13, 'text-anchor': 'middle', 'class': 'skala' }, z(t)); });
+    (o.ym || []).forEach(function(t){ el(g, 'text', { x: X(Math.max(0, x0)) - 5, y: Y(t) + 4, 'text-anchor': 'end', 'class': 'skala' }, z(t)); });
+    var ebene = el(svg, 'g', {});
+    var schilder = el(svg, 'g', {});      // Achsennamen über allem, mit Hof
+    namen.forEach(function(n){ el(schilder, 'text', { x: n[0], y: n[1], 'text-anchor': n[2], 'class': 'achsname' }, n[3]); });
+    return {
+      X: X, Y: Y,
+      leeren: function(){ while (ebene.firstChild) ebene.removeChild(ebene.firstChild); },
+      /* Streckenzug; wo f keinen Wert hat (Pol, verbotener Radikand), bricht er ab und
+         beginnt danach neu — genau so entstehen die zwei Äste einer Hyperbel. */
+      kurve: function(f, cls, a, b){
+        var d = '', an = false, A = a == null ? x0 : a, B = b == null ? x1 : b;
+        for (var k = 0; k <= 300; k++){
+          var x = A + (B - A) * k / 300, y = f(x);
+          if (y == null || isNaN(y) || !isFinite(y)){ an = false; continue; }
+          y = Math.max(y0 - 3 * (y1 - y0), Math.min(y1 + 3 * (y1 - y0), y));
+          d += (an ? ' L' : 'M') + X(x).toFixed(1) + ' ' + Y(y).toFixed(1); an = true;
+        }
+        return el(ebene, 'path', { d: d, 'class': cls, 'clip-path': 'url(#' + id + ')' });
+      },
+      /* Dieselbe Kurve an y = x gespiegelt: aus (x | y) wird (y | x). Das ist der Graph
+         der Umkehrfunktion — und bei geradem Exponenten ohne Einschränkung eben keiner. */
+      gespiegelt: function(f, cls, a, b){
+        var d = '', an = false, A = a == null ? x0 : a, B = b == null ? x1 : b;
+        for (var k = 0; k <= 300; k++){
+          var x = A + (B - A) * k / 300, y = f(x);
+          if (y == null || isNaN(y) || !isFinite(y)){ an = false; continue; }
+          if (y < x0 || y > x1 || x < y0 || x > y1){ an = false; continue; }
+          d += (an ? ' L' : 'M') + X(y).toFixed(1) + ' ' + Y(x).toFixed(1); an = true;
+        }
+        return el(ebene, 'path', { d: d, 'class': cls, 'clip-path': 'url(#' + id + ')' });
+      },
+      strecke: function(xa, ya, xb, yb, cls){
+        return el(ebene, 'line', { x1: X(xa), y1: Y(ya), x2: X(xb), y2: Y(yb), 'class': cls, 'clip-path': 'url(#' + id + ')' });
+      },
+      senkrecht: function(x, cls){ return el(ebene, 'line', { x1: X(x), y1: 0, x2: X(x), y2: H, 'class': cls }); },
+      text: function(x, y, s, cls, anker){
+        if (x < x0 || x > x1 || y < y0 || y > y1) return;
+        el(ebene, 'text', { x: X(x), y: Y(y), 'text-anchor': anker || 'middle', 'class': 'p-text ' + cls }, s);
+      },
+      punkt: function(x, y, cls, text, dx, dy, anker){
+        if (x < x0 || x > x1 || y < y0 || y > y1) return;
+        el(ebene, 'circle', { cx: X(x), cy: Y(y), r: o.r || 4.5, 'class': cls });
+        if (text) el(ebene, 'text', { x: X(x) + (dx == null ? 8 : dx), y: Y(y) + (dy == null ? -8 : dy), 'text-anchor': anker || 'start', 'class': 'p-text ' + cls }, text);
+      }
+    };
+  }
+  // Beide Fenster sind quadratisch — nur dann sieht die Spiegelung an y = x wie eine aus.
+  var FENSTER3 = { w: 300, h: 300, x0: -3, x1: 3, y0: -3, y1: 3, xm: [-2, -1, 1, 2], ym: [-2, -1, 1, 2] };
+  var FENSTER5 = { w: 300, h: 300, x0: -5, x1: 5, y0: -5, y1: 5, xm: [-4, -2, 2, 4], ym: [-4, -2, 2, 4] };
+
+  function regler(fig, weiter){
+    var r = {};
+    fig.querySelectorAll('input[type=range]').forEach(function(inp){ r[inp.dataset.p] = inp; inp.addEventListener('input', weiter); });
+    return r;
+  }
+  function werte(r){ var w = {}; for (var k in r){ w[k] = +r[k].value; r[k].parentNode.querySelector('.sl-val').textContent = z(w[k]); } return w; }
+  function rolle(fig, n){ return fig.querySelector('[data-rolle="' + n + '"]'); }
+
+
+  /* Ungerade Wurzel aus einer negativen Zahl: Math.pow(-8, 1/3) ist NaN, die dritte
+     Wurzel aus −8 ist −2. Dieselbe Regel steckt in scripts/build-clips.py (BEWEGUNG_JS),
+     damit Clip und Simulation dieselbe Kurve zeigen. */
+  function pot(b, p){
+    if (b >= 0 || Number.isInteger(p)) return Math.pow(b, p);
+    var q = Math.round(1 / p);
+    return (Math.abs(1 / p - q) < 1e-9 && q % 2 !== 0) ? -Math.pow(-b, p) : NaN;
+  }
+  /* y = a·(x−u)^p + v; null, wo es keinen Wert gibt (Pol, verbotener Radikand). */
+  function kurveF(a, p, u, v){
+    return function(x){ var y = a * pot(x - u, p) + v; return isFinite(y) ? y : NaN; };
+  }
+  /* «n» als Exponent oder als Wurzelexponent, in HTML mit den Farben des Leitprogramms. */
+  function potText(a, n, u, v){
+    var k = (u === 0 ? 'x' : '(x ' + (u > 0 ? '− ' : '+ ') + z(Math.abs(u)) + ')');
+    var s = (a === 1 ? '' : a === -1 ? '−' : sp('tx-blau', z(a)) + '·') + k + '<sup>' + sp('tx-orange', z(n)) + '</sup>';
+    if (v !== 0) s += (v > 0 ? ' + ' : ' − ') + z(Math.abs(v));
+    return 'f(x) = ' + s;
+  }
+  function wurzelText(a, n, u, v){
+    var k = (u === 0 ? 'x' : 'x ' + (u > 0 ? '− ' : '+ ') + z(Math.abs(u)));
+    var s = (a === 1 ? '' : a === -1 ? '−' : sp('tx-blau', z(a)) + '·')
+      + '<span class="wz">' + (n === 2 ? '' : '<sup>' + sp('tx-orange', z(n)) + '</sup>') + '√<span class="rad">' + k + '</span></span>';
+    if (v !== 0) s += (v > 0 ? ' + ' : ' − ') + z(Math.abs(v));
+    return 'f(x) = ' + s;
+  }
+  /* Ein Exponentenregler darf nie auf 0 stehenbleiben — x⁰ ist keine Potenzfunktion.
+     Er springt über die Null hinweg, in die Richtung, aus der er kommt. */
+  function ohneNull(inp){
+    var letzt = +inp.value;
+    inp.addEventListener('input', function(){
+      if (+inp.value === 0) inp.value = letzt > 0 ? -1 : 1;
+      letzt = +inp.value;
+    });
+  }
+  /* ---------- Aufgabenleiste in der Simulation ----------
+     Eine Aufgabe nach der anderen; ✓ sobald der Zustand stimmt. «überspringen» geht
+     immer — wer hängt, soll nicht festsitzen. Gelöst und übersprungen werden getrennt
+     gezählt; am Ende führt «zu den offenen» zurück zu den übersprungenen Aufgaben. */
+  function Leiste(fig, aufgaben, sim){
+    var box = fig.querySelector('.leiste'); if (!box) return function(){};
+    var n = aufgaben.length, i = 0, erledigt = {};
+    box.innerHTML = '<span class="ls-nr"></span><span class="ls-text"></span><span class="ls-ok" aria-live="polite"></span><button type="button" class="ls-weiter"></button><button type="button" class="ls-neu" hidden>von vorn</button>';
+    var nr = box.querySelector('.ls-nr'), tx = box.querySelector('.ls-text'), ok = box.querySelector('.ls-ok'),
+        bt = box.querySelector('.ls-weiter'), bv = box.querySelector('.ls-neu');
+    function anzahl(){ var k = 0; for (var j = 0; j < n; j++) if (erledigt[j]) k++; return k; }
+    function offen(ab){ for (var j = ab; j < n; j++) if (!erledigt[j]) return j; return n; }
+    function zeigen(){
+      if (i >= n){
+        var k = anzahl();
+        ok.textContent = ''; box.classList.remove('geloest');
+        if (k === n){ nr.textContent = '✓'; tx.innerHTML = 'Alle ' + n + ' Aufgaben gelöst — weiter mit dem Kontrollclip.'; bt.textContent = 'nochmals'; bv.hidden = true; box.classList.add('fertig'); }
+        else { nr.textContent = k + '/' + n; tx.innerHTML = k + ' von ' + n + ' gelöst, ' + (n - k) + ' übersprungen.'; bt.textContent = 'zu den offenen ▶'; bv.hidden = false; box.classList.remove('fertig'); }
+        return;
+      }
+      box.classList.remove('fertig'); bv.hidden = true;
+      nr.textContent = (i + 1) + '/' + n; tx.innerHTML = aufgaben[i].text; setzen(tx);
+      if (aufgaben[i].setup) aufgaben[i].setup(sim);
+      pruefen();
+    }
+    function pruefen(){
+      if (i >= n) return;
+      var gut = !!aufgaben[i].ok(sim.zustand());
+      if (gut) erledigt[i] = true;
+      ok.textContent = erledigt[i] ? '✓' : '';
+      bt.textContent = erledigt[i] ? 'Nächste ▶' : 'überspringen';
+      box.classList.toggle('geloest', !!erledigt[i]);
+    }
+    function gehe(j){ i = j; if (sim.aufraeumen) sim.aufraeumen(); zeigen(); if (sim.zeichnen) sim.zeichnen(); }
+    bt.addEventListener('click', function(){
+      if (i >= n){ if (anzahl() === n){ erledigt = {}; gehe(0); } else gehe(offen(0)); }
+      else gehe(offen(i + 1));
+    });
+    bv.addEventListener('click', function(){ erledigt = {}; gehe(0); });
+    setTimeout(zeigen, 0);
+    return pruefen;
+  }
+
+  /* ---------- Kapitel 1: der Exponent formt den Graphen ----------
+     Unterschied zur Animation «Potenzfunktionen erkunden» auf Themenseite 3.2a: dort
+     läuft n nur über 1…5 und a ist fest. Hier kommt a dazu, die Bezugskurve y = x²
+     liegt gestrichelt darunter, und die beiden Punkte, an denen sich alles entscheidet —
+     (1 | a) und (−1 | ±a) — tragen ihre Werte mit. */
+  (function(){
+    var fig = document.getElementById('sim1'); if (!fig) return;
+    var K = Achsen(fig.querySelector('svg'), FENSTER3), ziel = null, pruefen = function(){}, bewegt = {};
+    var r = regler(fig, zeichnen);
+    for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
+    var sim = { zustand: function(){ var w = werte(r);
+                  return { a: w.a, n: w.n, bewegt: bewegt,
+                           gerade: w.n % 2 === 0, sym: w.n % 2 === 0 ? 'achs' : 'punkt' }; },
+                zeichnen: zeichnen, aufraeumen: function(){ ziel = null; bewegt = {}; } };
+    function zeichnen(){
+      var w = werte(r), a = w.a, n = w.n;
+      K.leeren();
+      K.kurve(kurveF(1, 2, 0, 0), 'normal hilfslinie');
+      if (ziel) K.kurve(kurveF(ziel[0], ziel[1], 0, 0), 'zielkurve');
+      K.kurve(kurveF(a, n, 0, 0), 'kurve');
+      K.punkt(1, a, 'p-pkt', '(1 | ' + z(a) + ')', 8, -8);
+      K.punkt(-1, a * (n % 2 === 0 ? 1 : -1), 'p-pkt', '(−1 | ' + z(a * (n % 2 === 0 ? 1 : -1)) + ')', -8, -8, 'end');
+      rolle(fig, 'formel').innerHTML = potText(a, n, 0, 0) + ' &nbsp;·&nbsp; '
+        + (a === 0 ? 'Nullfunktion' : n % 2 === 0 ? 'gerade Funktion, achsensymmetrisch zur <i>y</i>-Achse'
+                                                  : 'ungerade Funktion, punktsymmetrisch zum Ursprung');
+      pruefen();
+    }
+    function bau(a, n, tex){ return { text: 'Bau nach: \\(' + tex + '\\)', ok: function(s){ return s.a === a && s.n === n; } }; }
+    pruefen = Leiste(fig, [
+      { text: 'Erkunde: Zieh an beiden Reglern. Welcher ändert die <em>Form</em>, welcher die <em>Höhe</em>?',
+        ok: function(s){ return s.bewegt.a && s.bewegt.n; } },
+      // Keine Aufgabe darf im Startzustand (a = 1, n = 2) schon erfuellt sein —
+      // sonst steht das ✓ da, bevor jemand etwas getan hat (pruef-leiste.mjs).
+      { text: 'Stell einen Graphen ein, der <b>achsensymmetrisch</b> zur \\(y\\)-Achse ist und einen Exponenten \\(n \\gt 2\\) hat.',
+        ok: function(s){ return s.gerade && s.n > 2 && s.a !== 0; } },
+      { text: 'Stell einen Graphen ein, der <b>punktsymmetrisch</b> zum Ursprung ist.',
+        ok: function(s){ return !s.gerade && s.a !== 0; } },
+      bau(2, 3, 'f(x) = 2x^3'), bau(-0.5, 4, 'f(x) = -0.5x^4'),
+      { text: 'Stell \\(n = 6\\) ein und vergleich die Kurve mit der gestrichelten \\(y = x^2\\): Wo liegt sie flacher, wo steiler?',
+        ok: function(s){ return s.n === 6; } },
+      { text: 'Stell einen Graphen ein, für den \\(f(1) = -1.5\\) gilt.',
+        ok: function(s){ return s.a === -1.5; } },
+      { text: 'Triff die grüne Kurve.', setup: function(){ ziel = [-2, 5]; }, ok: function(s){ return s.a === -2 && s.n === 5; } }
+    ], sim);
+    zeichnen();
+  })();
+
+  /* ---------- Kapitel 2: negative Exponenten ----------
+     Unterschied zur Animation «Hyperbeln n-ter Ordnung» auf Themenseite 3.2a: dort
+     zeigt ein Knopf je eine fertige Ordnung. Hier läuft n stufenlos durch die negativen
+     ganzen Zahlen, a kommt dazu, und die Simulation sagt laufend, wo die Äste liegen —
+     daran hängt die Parität. */
+  (function(){
+    var fig = document.getElementById('sim2'); if (!fig) return;
+    var K = Achsen(fig.querySelector('svg'), FENSTER3), pruefen = function(){}, bewegt = {};
+    var r = regler(fig, zeichnen);
+    for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
+    var sim = { zustand: function(){ var w = werte(r);
+                  return { a: w.a, n: w.n, bewegt: bewegt, gerade: w.n % 2 === 0,
+                           f2: kurveF(w.a, w.n, 0, 0)(2) }; },
+                zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
+    function zeichnen(){
+      var w = werte(r), a = w.a, n = w.n, f = kurveF(a, n, 0, 0);
+      K.leeren();
+      K.senkrecht(0, 'asym hilfslinie');
+      K.strecke(-3, 0, 3, 0, 'asym hilfslinie');
+      K.kurve(f, 'kurve', -3, -0.02); K.kurve(f, 'kurve', 0.02, 3);
+      K.punkt(1, a, 'p-pkt', '(1 | ' + z(a) + ')', 8, -8);
+      var lage = a === 0 ? '—' : n % 2 === 0 ? (a > 0 ? 'beide Äste oben' : 'beide Äste unten') : 'die Äste liegen diagonal';
+      rolle(fig, 'formel').innerHTML = potText(a, n, 0, 0) + ' = ' + (a === 1 ? '' : z(a) + '·')
+        + '<span class="br"><span>1</span><span>x<sup>' + z(-n) + '</sup></span></span>'
+        + ' &nbsp;·&nbsp; <b>' + lage + '</b> &nbsp;·&nbsp; D = ℝ∖{0}';
+      pruefen();
+    }
+    function bau(a, n, tex){ return { text: 'Bau nach: \\(' + tex + '\\)', ok: function(s){ return s.a === a && s.n === n; } }; }
+    pruefen = Leiste(fig, [
+      { text: 'Erkunde: Zieh an \\(n\\). Was geschieht an der Stelle \\(x = 0\\), und was weit draussen?',
+        ok: function(s){ return s.bewegt.n; } },
+      // Startzustand ist a = 1, n = −1 (die Hyperbel 1/x) — keine Aufgabe darf ihn treffen.
+      bau(1, -2, 'f(x) = \\dfrac{1}{x^2}'),
+      { text: 'Stell eine Hyperbel ein, deren beide Äste <b>oben</b> liegen.',
+        ok: function(s){ return s.gerade && s.a > 0; } },
+      { text: 'Stell eine Hyperbel <b>dritter</b> Ordnung ein, deren Äste <b>diagonal</b> liegen (links unten, rechts oben).',
+        ok: function(s){ return s.n === -3 && s.a > 0; } },
+      { text: 'Stell eine Hyperbel ein, deren beide Äste <b>unten</b> liegen.',
+        ok: function(s){ return s.gerade && s.a < 0; } },
+      { text: 'Stell \\(f(x) = \\dfrac{2}{x}\\) ein und lies \\(f(2)\\) am Graphen ab.',
+        ok: function(s){ return s.a === 2 && s.n === -1; } },
+      { text: 'Stell eine Hyperbel ein, für die \\(f(1) = -2\\) gilt.',
+        ok: function(s){ return s.a === -2; } }
+    ], sim);
+    zeichnen();
+  })();
+
+  /* ---------- Kapitel 3: verschieben und strecken ----------
+     Unterschied zur Animation «Transformationen» auf Themenseite 3.1: dort wird eine
+     Parabel verschoben. Hier gilt dasselbe Schema für jeden ganzzahligen Exponenten,
+     und bei negativem n wandern die Asymptoten sichtbar mit — das ist der Fall, den
+     die Parabel nicht zeigt. */
+  (function(){
+    var fig = document.getElementById('sim3'); if (!fig) return;
+    var K = Achsen(fig.querySelector('svg'), FENSTER5), ziel = null, pruefen = function(){}, bewegt = {};
+    var r = regler(fig, zeichnen);
+    if (r.n) ohneNull(r.n);
+    for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
+    var sim = { zustand: function(){ var w = werte(r);
+                  return { a: w.a, n: w.n, u: w.u, v: w.v, bewegt: bewegt,
+                           hyperbel: w.n < 0, f0: kurveF(w.a, w.n, w.u, w.v)(0) }; },
+                zeichnen: zeichnen, aufraeumen: function(){ ziel = null; bewegt = {}; } };
+    function zeichnen(){
+      var w = werte(r), a = w.a, n = w.n, u = w.u, v = w.v, f = kurveF(a, n, u, v);
+      K.leeren();
+      K.kurve(kurveF(a, n, 0, 0), 'normal hilfslinie');
+      if (ziel) K.kurve(kurveF(ziel[0], ziel[1], ziel[2], ziel[3]), 'zielkurve');
+      if (n < 0){
+        K.senkrecht(u, 'asym'); K.strecke(-5, v, 5, v, 'asym');
+        K.kurve(f, 'kurve', -5, u - 0.02); K.kurve(f, 'kurve', u + 0.02, 5);
+        K.text(u + 0.25, 4.6, 'x = ' + z(u), 'p-m', 'start');
+        K.text(4.8, v + 0.4, 'y = ' + z(v), 'p-m', 'end');
+      } else {
+        K.kurve(f, 'kurve');
+        K.punkt(u, v, 'p-null', '(' + z(u) + ' | ' + z(v) + ')', 8, -8);
+      }
+      rolle(fig, 'formel').innerHTML = potText(a, n, u, v)
+        + (n < 0 ? ' &nbsp;·&nbsp; Asymptoten <i>x</i> = ' + z(u) + ', <i>y</i> = ' + z(v)
+                 : ' &nbsp;·&nbsp; verschoben um (' + z(u) + ' | ' + z(v) + ')');
+      pruefen();
+    }
+    function bau(a, n, u, v, tex){
+      return { text: 'Bau nach: \\(' + tex + '\\)',
+               ok: function(s){ return s.a === a && s.n === n && s.u === u && s.v === v; } };
+    }
+    pruefen = Leiste(fig, [
+      { text: 'Erkunde: Zieh an \\(u\\) und an \\(v\\). Welcher schiebt waagrecht, welcher senkrecht?',
+        ok: function(s){ return s.bewegt.u && s.bewegt.v; } },
+      bau(1, 3, 2, 0, 'f(x) = (x-2)^3'),
+      bau(1, 3, 0, -2, 'f(x) = x^3 - 2'),
+      { text: 'Stell eine Hyperbel mit der Polgeraden \\(x = -2\\) ein.',
+        ok: function(s){ return s.hyperbel && s.u === -2; } },
+      bau(1, -1, 2, 1, 'f(x) = \\dfrac{1}{x-2} + 1'),
+      { text: 'Stell eine Kurve ein, deren Graph durch den Punkt \\((0 \\mid 0)\\) geht und <em>nicht</em> \\(f(x) = x^n\\) ist.',
+        ok: function(s){ return Math.abs(s.f0) < 1e-9 && (s.u !== 0 || s.v !== 0); } },
+      { text: 'Triff die grüne Kurve.', setup: function(){ ziel = [-1, 2, 1, 3]; },
+        ok: function(s){ return s.a === -1 && s.n === 2 && s.u === 1 && s.v === 3; } }
+    ], sim);
+    zeichnen();
+  })();
+
+  /* ---------- Kapitel 4: umkehren heisst spiegeln ----------
+     Das Herzstück des Teilgebiets: die einzige RLP-Kompetenz zu 3.2 verlangt die
+     Wurzelfunktion ausdrücklich «als Umkehrfunktion der Potenzfunktion». Der Schalter
+     «nur x ≥ 0» macht den Unterschied sichtbar: bei geradem n ist das Spiegelbild ohne
+     ihn rot — über einem x lägen zwei Punkte, das ist kein Funktionsgraph. */
+  (function(){
+    var fig = document.getElementById('sim4'); if (!fig) return;
+    var K = Achsen(fig.querySelector('svg'), FENSTER3), pruefen = function(){}, bewegt = {};
+    var schalter = fig.querySelector('.sim-schalter input');
+    var r = regler(fig, zeichnen);
+    for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
+    if (schalter) schalter.addEventListener('change', function(){ bewegt.ein = true; zeichnen(); });
+    function istFunktion(n, ein){ return n % 2 !== 0 || ein; }
+    var sim = { zustand: function(){ var w = werte(r), ein = !!(schalter && schalter.checked);
+                  return { n: w.n, ein: ein, bewegt: bewegt, gerade: w.n % 2 === 0,
+                           funktion: istFunktion(w.n, ein) }; },
+                zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
+    function zeichnen(){
+      var w = werte(r), n = w.n, ein = !!(schalter && schalter.checked), f = kurveF(1, n, 0, 0);
+      var von = ein ? 0 : -3, gut = istFunktion(n, ein);
+      K.leeren();
+      K.kurve(function(x){ return x; }, 'normal');
+      K.kurve(f, 'kurve', von, 3);
+      // Spiegelbild an y = x: Punkt für Punkt (x | y) ↦ (y | x).
+      K.gespiegelt(f, gut ? 'umkehr' : 'umkehr falsch', von, 3);
+      K.punkt(1, 1, 'p-pkt');
+      rolle(fig, 'formel').innerHTML = 'f(x) = x<sup>' + sp('tx-orange', z(n)) + '</sup>'
+        + (ein ? ', &nbsp;x ≥ 0' : '') + ' &nbsp;·&nbsp; '
+        + (gut ? 'Spiegelbild ist ein Funktionsgraph: f<sup>−1</sup>(x) = '
+                 + '<span class="wz">' + (n === 2 ? '' : '<sup>' + sp('tx-orange', z(n)) + '</sup>') + '√<span class="rad">x</span></span>'
+               : '<b class="rot">Spiegelbild ist kein Funktionsgraph</b> — über einem x lägen zwei Punkte');
+      fig.classList.toggle('treffer', gut);
+      pruefen();
+    }
+    pruefen = Leiste(fig, [
+      { text: 'Erkunde: Zieh an \\(n\\) und setz den Haken «nur \\(x \\geq 0\\)» einmal und wieder weg.',
+        ok: function(s){ return s.bewegt.n && s.bewegt.ein; } },
+      { text: 'Stell einen Exponenten ein, bei dem das Spiegelbild <b>ohne</b> Einschränkung schon ein Funktionsgraph ist.',
+        ok: function(s){ return !s.gerade && !s.ein; } },
+      { text: 'Stell \\(n = 4\\) ein. Was zeigt die Simulation, solange der Haken fehlt?',
+        ok: function(s){ return s.n === 4 && !s.ein; } },
+      { text: 'Setz jetzt bei \\(n = 4\\) den Haken. Wie heisst die Umkehrfunktion?',
+        ok: function(s){ return s.n === 4 && s.ein; } },
+      { text: 'Welcher Punkt liegt bei jedem \\(n\\) auf beiden Kurven? Stell \\(n = 5\\) ein und such ihn.',
+        ok: function(s){ return s.n === 5; } }
+    ], sim);
+    zeichnen();
+  })();
+
+  /* ---------- Kapitel 5: Wurzelfunktionen nutzen ----------
+     Dieselben vier Parameter wie in Kapitel 3, nur steht n jetzt im Wurzelexponenten.
+     Die Simulation schreibt die Definitionsmenge laufend mit — bei geradem n beginnt
+     sie beim Startpunkt, bei ungeradem ist sie ganz ℝ und es gibt keinen Startpunkt. */
+  (function(){
+    var fig = document.getElementById('sim5'); if (!fig) return;
+    var K = Achsen(fig.querySelector('svg'), FENSTER5), ziel = null, pruefen = function(){}, bewegt = {};
+    var r = regler(fig, zeichnen);
+    for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
+    function nullstelle(a, n, u, v){            // a·ⁿ√(x−u) + v = 0
+      if (a === 0) return null;
+      var w = -v / a;                           // ⁿ√(x − u) = w
+      if (n % 2 === 0 && w < 0) return null;    // eine gerade Wurzel wird nie negativ
+      return u + Math.pow(w, n);                // x = u + wⁿ
+    }
+    var sim = { zustand: function(){ var w = werte(r);
+                  return { a: w.a, n: w.n, u: w.u, v: w.v, bewegt: bewegt, gerade: w.n % 2 === 0,
+                           x0: nullstelle(w.a, w.n, w.u, w.v) }; },
+                zeichnen: zeichnen, aufraeumen: function(){ ziel = null; bewegt = {}; } };
+    function zeichnen(){
+      var w = werte(r), a = w.a, n = w.n, u = w.u, v = w.v, f = kurveF(a, 1 / n, u, v);
+      K.leeren();
+      if (ziel) K.kurve(kurveF(ziel[0], 1 / ziel[1], ziel[2], ziel[3]), 'zielkurve');
+      K.kurve(f, 'kurve gruen', n % 2 === 0 ? u : -5, 5);
+      if (n % 2 === 0) K.punkt(u, v, 'p-null', '(' + z(u) + ' | ' + z(v) + ')', 8, 14);
+      var x0 = nullstelle(a, n, u, v);
+      // Faellt die Nullstelle mit dem Startpunkt zusammen, traegt dieser schon seine
+      // Beschriftung — zwei Schilder uebereinander waeren nur unleserlich.
+      if (x0 !== null && Math.abs(x0) <= 5 && !(n % 2 === 0 && Math.abs(x0 - u) < 1e-9))
+        K.punkt(x0, 0, 'p-pkt', 'x₀ = ' + z(x0), 8, -8);
+      rolle(fig, 'formel').innerHTML = wurzelText(a, n, u, v) + ' &nbsp;·&nbsp; '
+        + (n % 2 === 0 ? 'Startpunkt (' + z(u) + ' | ' + z(v) + '), D = [' + z(u) + '; ∞['
+                       : 'kein Startpunkt, D = ℝ');
+      pruefen();
+    }
+    function bau(a, n, u, v, tex){
+      return { text: 'Bau nach: \\(' + tex + '\\)',
+               ok: function(s){ return s.a === a && s.n === n && s.u === u && s.v === v; } };
+    }
+    pruefen = Leiste(fig, [
+      { text: 'Erkunde: Zieh an \\(n\\). Wann beginnt die Kurve an einem Startpunkt, wann läuft sie nach links weiter?',
+        ok: function(s){ return s.bewegt.n; } },
+      bau(1, 2, 3, 0, 'f(x) = \\sqrt{x-3}'),
+      { text: 'Stell eine Wurzelfunktion mit \\(D = [-2;\\infty[\\) ein.',
+        ok: function(s){ return s.gerade && s.u === -2; } },
+      { text: 'Stell eine Wurzelfunktion mit \\(D = \\mathbb{R}\\) ein.',
+        ok: function(s){ return !s.gerade; } },
+      bau(2, 2, -1, -4, 'f(x) = 2\\sqrt{x+1} - 4'),
+      { text: 'Stell eine Wurzelfunktion ein, deren Nullstelle bei \\(x_0 = 4\\) liegt.',
+        ok: function(s){ return s.x0 !== null && Math.abs(s.x0 - 4) < 1e-9; } },
+      { text: 'Triff die grüne Kurve.', setup: function(){ ziel = [-1, 3, 2, 1]; },
+        ok: function(s){ return s.a === -1 && s.n === 3 && s.u === 2 && s.v === 1; } }
+    ], sim);
+    zeichnen();
+  })();
+  /* ---------- Hilfslinien-Schalter: blendet alles mit Klasse .hilfslinie in seiner Animation aus ---------- */
+  document.querySelectorAll('.hilfs-schalter input').forEach(function(hs){
+    var fig = hs.closest('figure');
+    hs.addEventListener('change', function(){ fig.classList.toggle('ohne-hilfslinien', !hs.checked); });
+  });
+
+  /* ---------- Übungen mit Rückmeldung ---------- */
+  (function(){
+    var ALLE = document.querySelectorAll('.uebung'); if (!ALLE.length) return;
+    function zufall(l){ return l[Math.floor(Math.random() * l.length)]; }
+    function bereich(a, b, ohne){ var r = []; for (var i = a; i <= b; i++) if (!ohne || ohne.indexOf(i) < 0) r.push(i); return r; }
+    function tz(n){ return n < 0 ? '-' + Math.abs(n) : String(n); }
+    function kx(m){ return m === 1 ? 'x' : m === -1 ? '-x' : tz(m) + 'x'; }
+    function plus(v){ return v === 0 ? '' : (v > 0 ? ' + ' + v : ' - ' + (-v)); }
+    /* Term m·x + b in LaTeX; m = 0 gibt die konstante Funktion. */
+    function lin(m, b){ return m === 0 ? tz(b) : kx(m) + plus(b); }
+    function pkt(x, y){ return '(' + tz(x) + ' \\mid ' + tz(y) + ')'; }
+    function lesen(s){
+      var komma = /\d,\d/.test(s);
+      s = String(s).trim().replace(/\u2212/g, '-').replace(',', '.').replace(/\s+/g, '').replace(/^\+(?=[\d.])/, '');
+      if (!s) return { wert: NaN, leer: true };
+      var m = s.match(/^(-?(?:\d+(?:\.\d+)?|\.\d+))\/(\d+(?:\.\d+)?|\.\d+)$/);
+      return { wert: m ? parseFloat(m[1]) / parseFloat(m[2]) : (/^-?(\d+(\.\d+)?|\.\d+)$/.test(s) ? parseFloat(s) : NaN), komma: komma };
+    }
+    var gl = function(a, b){ return Math.abs(a - b) < 1e-9; };
+    /* Potenzterm a·(x−u)^n + v in LaTeX. */
+    function kl(u){ return u === 0 ? 'x' : '(x ' + (u > 0 ? '- ' + u : '+ ' + (-u)) + ')'; }
+    function vor(a){ return a === 1 ? '' : a === -1 ? '-' : tz(a); }
+    function potT(a, n, u, v){ return vor(a) + kl(u) + '^{' + tz(n) + '}' + plus(v); }
+    function wzT(a, n, u, v){
+      var w = (n === 2 ? '\\sqrt{' : '\\sqrt[' + n + ']{') + (u === 0 ? 'x' : 'x ' + (u > 0 ? '- ' + u : '+ ' + (-u))) + '}';
+      return vor(a) + w + plus(v);
+    }
+    /* Exponenten und Faktoren, mit denen die Aufgaben rechnen. */
+    var EXP_P = [2, 3, 4, 5], EXP_N = [-1, -2, -3], FAK = [-3, -2, -1, 1, 2, 3];
+    /* Funktionen, nach denen das Leitprogramm an fester Stelle fragt — eine Zufalls-
+       übung darf keine davon treffen, sonst steht ihre Lösung schon irgendwo
+       (HOWTO §15). Je Eintrag [a, n, u, v]; n ist der Exponent bzw. Wurzelexponent.
+       Reihenfolge: Clips · Simulationen · Aufgaben der Kapitel · Vortest · Gesamttest. */
+    var FEST = [
+      [1, 2, 0, 0], [1, 3, 0, 0], [1, 4, 0, 0], [1, 5, 0, 0], [1, 6, 0, 0],
+      [2, 3, 0, 0], [-0.5, 4, 0, 0], [-1.5, 3, 0, 0], [-2, 5, 0, 0], [0.5, 3, 0, 0],
+      [1, -1, 0, 0], [1, -2, 0, 0], [1, -3, 0, 0], [1, -4, 0, 0], [2, -1, 0, 0],
+      [1, 3, 2, 0], [1, 3, 0, -2], [1, 3, 0, 3], [1, -1, 2, -1], [1, -1, 2, 1],
+      [1, -1, -1, 2], [1, 4, 3, -16], [-1, 2, 1, 3], [1, 3, 0, 1], [1, 3, 0, -1],
+      [1, 2, 3, 0], [2, 2, -1, -4], [1, 3, -2, 0], [1, 4, 1, -2], [-1, 3, 2, 1],
+      [1, 2, -1, 0], [1, 3, 3, 0], [2, 3, -1, -4], [1, 2, 0, -4], [3, 2, 0, 0],
+      [1, -2, 1, -2], [-2, 2, 0, 3], [1, 5, -1, 0], [0.5, 4, 0, -2], [-1, 4, 2, 1]
+    ];
+    function fest(a, n, u, v){
+      return FEST.some(function(p){ return gl(p[0], a) && p[1] === n && gl(p[2], u || 0) && gl(p[3], v || 0); });
+    }
+
+    var TYPEN = {
+      /* ── Kapitel 1: der Exponent formt den Graphen ───────────── */
+      'potenz-wert': { felder: ['y'], muster: 'f(x₁) = {y}',
+        eingabe: function(A){ return { y: String(A.y) }; },
+        neu: function(){ var a = zufall(FAK), n = zufall(EXP_P), x = zufall([-2, -1, 1, 2, 3].filter(function(q){ return Math.abs(Math.pow(q, n)) <= 81; }));
+          return { a: a, n: n, u: 0, v: 0, x: x, y: a * Math.pow(x, n),
+            text: 'Berechne \\(f(' + tz(x) + ')\\) für \\(f(x) = ' + potT(a, n, 0, 0) + '\\).' }; },
+        fehler: function(A){ var f = [[{ y: String(-A.y) }, 'Vorzeichen']], m = A.a * A.n * A.x;
+          // Die Probe «Exponent als Faktor» faellt manchmal mit −y zusammen; dann
+          // greift die Vorzeichen-Diagnose, und die Probe waere nicht unterscheidbar.
+          if (!gl(m, A.y) && !gl(m, -A.y)) f.push([{ y: String(m) }, 'ist kein Faktor']);
+          return f; },
+        pruefen: function(A, e){
+          if (gl(e.y, A.y)) return null;
+          if (gl(e.y, -A.y)) return A.x < 0 && A.n % 2 === 0
+            ? 'Vorzeichen: Eine negative Zahl hoch einen <em>geraden</em> Exponenten wird positiv.'
+            : 'Vorzeichen: Rechne \\((' + tz(A.x) + ')^{' + A.n + '} = ' + tz(Math.pow(A.x, A.n)) + '\\), dann mal \\(' + tz(A.a) + '\\).';
+          if (gl(e.y, A.a * A.n * A.x)) return 'Der Exponent ist kein Faktor: \\(x^{' + A.n + '}\\) heisst \\(' + A.n + '\\)-mal \\(x\\) <em>multipliziert</em>.';
+          if (gl(e.y, Math.pow(A.a * A.x, A.n))) return 'Zuerst die Potenz, dann mal \\(' + tz(A.a) + '\\) — das \\(a\\) steht ausserhalb der Potenz.';
+          return 'Zuerst \\((' + tz(A.x) + ')^{' + A.n + '} = ' + tz(Math.pow(A.x, A.n)) + '\\), dann mal \\(' + tz(A.a) + '\\).'; },
+        loesung: function(A){ return 'f(' + tz(A.x) + ') = ' + tz(A.a) + ' \\cdot (' + tz(A.x) + ')^{' + A.n + '} = ' + tz(A.y); } },
+
+      'symmetrie': { felder: ['sym'], muster: 'Der Graph ist {sym:achsensymmetrisch zur y-Achse|punktsymmetrisch zum Ursprung}',
+        eingabe: function(A){ return { sym: A.n % 2 === 0 ? 'achsensymmetrisch zur y-Achse' : 'punktsymmetrisch zum Ursprung' }; },
+        neu: function(){ var a = zufall(FAK), n = zufall([2, 3, 4, 5, 6, 7]);
+          return { a: a, n: n, u: 0, v: 0, gerade: n % 2 === 0,
+            text: 'Welche Symmetrie hat der Graph von \\(f(x) = ' + potT(a, n, 0, 0) + '\\)?' }; },
+        fehler: function(A){ return [[{ sym: A.gerade ? 'punktsymmetrisch zum Ursprung' : 'achsensymmetrisch zur y-Achse' }, 'Exponent']]; },
+        pruefen: function(A, e){
+          var richtig = A.gerade ? 'achsensymmetrisch zur y-Achse' : 'punktsymmetrisch zum Ursprung';
+          if (e.sym === richtig) return null;
+          return 'Der Exponent \\(' + A.n + '\\) ist ' + (A.gerade ? 'gerade' : 'ungerade')
+            + '. Rechne \\(f(-x)\\) aus: ' + (A.gerade ? '\\(f(-x) = f(x)\\)' : '\\(f(-x) = -f(x)\\)') + '.'; },
+        loesung: function(A){ return A.gerade ? 'f(-x) = f(x) \\text{ — achsensymmetrisch zur } y\\text{-Achse}'
+                                              : 'f(-x) = -f(x) \\text{ — punktsymmetrisch zum Ursprung}'; } },
+
+      'graf-potenz': { felder: ['a', 'n'], muster: 'f(x) = {a} · x^{n}', graf: 'potenz',
+        neu: function(){ var a = zufall([-2, -1, -0.5, 0.5, 1, 2]), n = zufall([2, 3, 4, 5]);
+          return { a: a, n: n, u: 0, v: 0,
+            text: 'Gleichung der Kurve? (Der markierte Punkt liegt auf einem Gitterpunkt.)' }; },
+        fehler: function(A){ var f = [[{ a: String(-A.a), n: String(A.n) }, 'Vorzeichen von']];
+          f.push([{ a: String(A.a), n: String(A.n % 2 === 0 ? A.n + 1 : A.n + 1) }, 'Symmetrie']);
+          return f; },
+        pruefen: function(A, e){
+          if (gl(e.a, A.a) && gl(e.n, A.n)) return null;
+          var r = [];
+          if (!gl(e.n, A.n)){
+            if (e.n % 2 !== A.n % 2) r.push('Symmetrie: Der Graph ist ' + (A.n % 2 === 0 ? 'achsensymmetrisch, der Exponent also gerade' : 'punktsymmetrisch, der Exponent also ungerade') + '.');
+            else r.push('Der Exponent stimmt noch nicht: Lies den Wert bei \\(x = 1\\) und bei \\(x = 2\\) ab.');
+          }
+          if (!gl(e.a, A.a)) r.push('Vorzeichen von \\(a\\) und Wert bei \\(x = 1\\): Dort ist \\(f(1) = a\\).');
+          return r.join(' '); },
+        loesung: function(A){ return 'f(x) = ' + potT(A.a, A.n, 0, 0); } },
+
+      /* ── Kapitel 2: negative Exponenten ──────────────────────── */
+      'hyperbel-wert': { felder: ['y'], muster: 'f(x₁) = {y}',
+        eingabe: function(A){ return { y: String(A.y) }; },
+        neu: function(){ var a = zufall([-4, -2, -1, 1, 2, 4]), n = zufall(EXP_N), x = zufall([-2, -1, 1, 2]);
+          return { a: a, n: n, u: 0, v: 0, x: x, y: a * Math.pow(x, n),
+            text: 'Berechne \\(f(' + tz(x) + ')\\) für \\(f(x) = ' + potT(a, n, 0, 0) + '\\).' }; },
+        fehler: function(A){ var f = [[{ y: String(-A.y) }, 'Vorzeichen']];
+          if (!gl(A.a * Math.pow(A.x, -A.n), A.y)) f.push([{ y: String(A.a * Math.pow(A.x, -A.n)) }, 'Kehrwert']);
+          return f.filter(function(p){ return !gl(+p[0].y, A.y); }); },
+        pruefen: function(A, e){
+          if (gl(e.y, A.y)) return null;
+          if (gl(e.y, A.a * Math.pow(A.x, -A.n))) return 'Der negative Exponent bedeutet den Kehrwert: \\(x^{' + A.n + '} = \\dfrac{1}{x^{' + (-A.n) + '}}\\).';
+          if (gl(e.y, -A.y)) return 'Vorzeichen: \\((' + tz(A.x) + ')^{' + (-A.n) + '} = ' + tz(Math.pow(A.x, -A.n)) + '\\) — ein gerader Exponent macht positiv.';
+          return 'Erst \\((' + tz(A.x) + ')^{' + (-A.n) + '} = ' + tz(Math.pow(A.x, -A.n)) + '\\), dann \\(' + tz(A.a) + '\\) durch diese Zahl.'; },
+        loesung: function(A){ return 'f(' + tz(A.x) + ') = \\dfrac{' + tz(A.a) + '}{(' + tz(A.x) + ')^{' + (-A.n) + '}} = ' + tz(A.y); } },
+
+      'aeste': { felder: ['lage'], muster: 'Die Äste liegen {lage:beide oben|beide unten|diagonal}',
+        eingabe: function(A){ return { lage: A.lage }; },
+        neu: function(){ var a = zufall([-3, -2, -1, 1, 2, 3]), n = zufall([-1, -2, -3, -4]);
+          return { a: a, n: n, u: 0, v: 0, lage: n % 2 !== 0 ? 'diagonal' : (a > 0 ? 'beide oben' : 'beide unten'),
+            text: 'Wo liegen die beiden Äste von \\(f(x) = ' + potT(a, n, 0, 0) + '\\)?' }; },
+        fehler: function(A){ return [[{ lage: A.lage === 'diagonal' ? 'beide oben' : 'diagonal' }, 'Exponent']]; },
+        pruefen: function(A, e){
+          if (e.lage === A.lage) return null;
+          if (A.lage === 'diagonal') return 'Der Exponent \\(' + A.n + '\\) ist ungerade — dann hat \\(f(-x)\\) das andere Vorzeichen als \\(f(x)\\).';
+          if (e.lage === 'diagonal') return 'Der Exponent \\(' + A.n + '\\) ist gerade — dann haben \\(f(-x)\\) und \\(f(x)\\) dasselbe Vorzeichen.';
+          return 'Der Exponent ist gerade, also entscheidet \\(a\\): Setz \\(x = 1\\) ein.'; },
+        loesung: function(A){ return '\\text{' + A.lage + '}'; } },
+
+      'def-hyperbel': { felder: ['u'], muster: 'D = ℝ ∖ { {u} }',
+        eingabe: function(A){ return { u: String(A.u) }; },
+        neu: function(){ var a = zufall([-2, -1, 1, 2, 3]), n = zufall(EXP_N), u = zufall(bereich(-4, 4, [0]));
+          return { a: a, n: n, u: u, v: 0,
+            text: 'Welche Zahl fehlt in der Definitionsmenge von \\(f(x) = ' + potT(a, n, u, 0) + '\\)?' }; },
+        fehler: function(A){ return [[{ u: String(-A.u) }, 'Vorzeichen'], [{ u: '0' }, 'verschoben']]
+          .filter(function(p){ return !gl(+p[0].u, A.u); }); },
+        pruefen: function(A, e){
+          if (gl(e.u, A.u)) return null;
+          if (gl(e.u, -A.u)) return 'Vorzeichen: Die Klammer wird null bei \\(x = ' + tz(A.u) + '\\), nicht bei \\(' + tz(-A.u) + '\\).';
+          if (gl(e.u, 0)) return 'Die Kurve ist verschoben: Setz die Klammer null und löse nach \\(x\\) auf.';
+          return 'Gesucht ist die Stelle, an der die Klammer null wird: \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' = 0\\).'; },
+        loesung: function(A){ return 'D = \\mathbb{R} \\setminus \\{' + tz(A.u) + '\\}'; } },
+
+      /* ── Kapitel 3: verschieben und strecken ─────────────────── */
+      'transformation-lesen': { felder: ['u', 'v'], muster: 'u = {u}   v = {v}',
+        eingabe: function(A){ return { u: String(A.u), v: String(A.v) }; },
+        neu: function(){ var a = zufall([-2, -1, 1, 2]), n = zufall([2, 3, 4]),
+            u = zufall(bereich(-4, 4, [0])), v = zufall(bereich(-4, 4, [0]));
+          return { a: a, n: n, u: u, v: v,
+            text: 'Um wie viel ist \\(f(x) = ' + potT(a, n, u, v) + '\\) gegenüber \\(' + vor(a) + 'x^{' + n + '}\\) verschoben?' }; },
+        fehler: function(A){ return [[{ u: String(-A.u), v: String(A.v) }, 'In der Klammer'],
+                                     [{ u: String(A.v), v: String(A.u) }, 'Vertauscht']]
+          .filter(function(p){ return !(gl(+p[0].u, A.u) && gl(+p[0].v, A.v)); }); },
+        pruefen: function(A, e){
+          if (gl(e.u, A.u) && gl(e.v, A.v)) return null;
+          if (gl(e.u, A.v) && gl(e.v, A.u)) return 'Vertauscht: \\(u\\) steht in der Klammer, \\(v\\) dahinter.';
+          if (!gl(e.u, A.u) && gl(e.u, -A.u)) return 'In der Klammer kehrt sich das Vorzeichen um: \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + '\\) heisst \\(u = ' + tz(A.u) + '\\).';
+          if (!gl(e.u, A.u)) return '\\(u\\) liest man in der Klammer ab — mit umgekehrtem Vorzeichen.';
+          return '\\(v\\) steht hinter der Potenz und behält sein Vorzeichen.'; },
+        loesung: function(A){ return 'u = ' + tz(A.u) + ',\\quad v = ' + tz(A.v); } },
+
+      'asymptoten': { felder: ['xa', 'ya'], muster: 'x = {xa}   y = {ya}',
+        eingabe: function(A){ return { xa: String(A.u), ya: String(A.v) }; },
+        neu: function(){ var a = zufall([-2, -1, 1, 2]), n = zufall([-1, -2]),
+            u = zufall(bereich(-4, 4, [0])), v = zufall(bereich(-4, 4, [0]));
+          return { a: a, n: n, u: u, v: v,
+            text: 'Gib die beiden Asymptoten von \\(f(x) = ' + potT(a, n, u, v) + '\\) an.' }; },
+        fehler: function(A){ return [[{ xa: String(-A.u), ya: String(A.v) }, 'In der Klammer'],
+                                     [{ xa: String(A.v), ya: String(A.u) }, 'Vertauscht']]
+          .filter(function(p){ return !(gl(+p[0].xa, A.u) && gl(+p[0].ya, A.v)); }); },
+        pruefen: function(A, e){
+          if (gl(e.xa, A.u) && gl(e.ya, A.v)) return null;
+          if (gl(e.xa, A.v) && gl(e.ya, A.u)) return 'Vertauscht: Die Polgerade liegt bei \\(x = u\\), die waagrechte Asymptote bei \\(y = v\\).';
+          if (!gl(e.xa, A.u)) return 'In der Klammer kehrt sich das Vorzeichen um: Die Klammer wird null bei \\(x = ' + tz(A.u) + '\\).';
+          return 'Die waagrechte Asymptote liegt auf der Höhe, die hinter der Potenz steht: \\(y = ' + tz(A.v) + '\\).'; },
+        loesung: function(A){ return 'x = ' + tz(A.u) + ',\\quad y = ' + tz(A.v); } },
+
+      'nullstelle-potenz': { felder: ['x1', 'x2'], muster: 'x₁ = {x1}   x₂ = {x2}',
+        eingabe: function(A){ return { x1: String(A.x1), x2: String(A.x2) }; },
+        neu: function(){ var n = zufall([2, 4]), u = zufall(bereich(-3, 3)), w = zufall([1, 2, 3]),
+            v = -Math.pow(w, n);
+          return { a: 1, n: n, u: u, v: v, w: w, x1: u - w, x2: u + w,
+            text: 'Berechne die Nullstellen von \\(f(x) = ' + potT(1, n, u, v) + '\\).' }; },
+        fehler: function(A){ return [[{ x1: String(A.x2), x2: String(A.x2) }, 'zwei Lösungen'],
+                                     [{ x1: String(A.u - A.w * 2), x2: String(A.u + A.w * 2) }, 'Wurzel']]
+          .filter(function(p){ return !(gl(+p[0].x1, A.x1) && gl(+p[0].x2, A.x2)); }); },
+        pruefen: function(A, e){
+          var kl2 = Math.min(e.x1, e.x2), gr = Math.max(e.x1, e.x2);
+          if (gl(kl2, A.x1) && gl(gr, A.x2)) return null;
+          if (gl(e.x1, e.x2)) return 'Ein gerader Exponent gibt beim Wurzelziehen <em>zwei</em> Lösungen: \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' = \\pm ' + A.w + '\\).';
+          if (gl(kl2, A.u - A.w * 2) || gl(gr, A.u + A.w * 2)) return 'Die \\(' + A.n + '\\)-te Wurzel aus \\(' + (-A.v) + '\\) ist \\(' + A.w + '\\) — nachrechnen: \\(' + A.w + '^{' + A.n + '} = ' + (-A.v) + '\\).';
+          return 'Setz \\(f(x) = 0\\): \\(' + kl(A.u) + '^{' + A.n + '} = ' + (-A.v) + '\\), also \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' = \\pm ' + A.w + '\\).'; },
+        loesung: function(A){ return 'x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' = \\pm ' + A.w + ' \\Rightarrow x_1 = ' + tz(A.x1) + ',\\ x_2 = ' + tz(A.x2); } },
+
+      /* ── Kapitel 4: umkehren ─────────────────────────────────── */
+      'einschraenken': { felder: ['noetig'], muster: 'Einschränken auf x ≥ 0 {noetig:nötig|nicht nötig}',
+        eingabe: function(A){ return { noetig: A.gerade ? 'nötig' : 'nicht nötig' }; },
+        neu: function(){ var n = zufall([2, 3, 4, 5, 6, 7]);
+          return { a: 1, n: n, u: 0, v: 0, gerade: n % 2 === 0,
+            text: 'Muss man \\(f(x) = x^{' + n + '}\\) einschränken, bevor man sie umkehrt?' }; },
+        fehler: function(A){ return [[{ noetig: A.gerade ? 'nicht nötig' : 'nötig' }, 'Exponent']]; },
+        pruefen: function(A, e){
+          if (e.noetig === (A.gerade ? 'nötig' : 'nicht nötig')) return null;
+          return A.gerade
+            ? 'Der Exponent \\(' + A.n + '\\) ist gerade: \\(f(-x) = f(x)\\), also lägen im Spiegelbild über einem \\(x\\) zwei Punkte.'
+            : 'Der Exponent \\(' + A.n + '\\) ist ungerade: Die Kurve steigt überall, jedem \\(y\\) gehört genau ein \\(x\\).'; },
+        loesung: function(A){ return A.gerade ? '\\text{nötig — gerader Exponent}' : '\\text{nicht nötig — ungerader Exponent}'; } },
+
+      'spiegelpunkt': { felder: ['x', 'y'], muster: 'Bildpunkt ( {x} | {y} )',
+        eingabe: function(A){ return { x: String(A.py), y: String(A.px) }; },
+        neu: function(){ var n = zufall([2, 3, 4]), px = zufall([2, 3, 2, 3, 4]).valueOf(),
+            py = Math.pow(px, n);
+          if (py > 81){ px = 2; py = Math.pow(2, n); }
+          return { a: 1, n: n, u: 0, v: 0, px: px, py: py,
+            text: 'Auf \\(f(x) = x^{' + n + '}\\) liegt \\(P' + pkt(px, py) + '\\). Welcher Punkt liegt dann auf \\(f^{-1}\\)?' }; },
+        fehler: function(A){ return [[{ x: String(A.px), y: String(A.py) }, 'tauschen'],
+                                     [{ x: String(-A.py), y: String(A.px) }, 'Vorzeichen']]; },
+        pruefen: function(A, e){
+          if (gl(e.x, A.py) && gl(e.y, A.px)) return null;
+          if (gl(e.x, A.px) && gl(e.y, A.py)) return 'Das ist \\(P\\) selbst. Beim Spiegeln an \\(y = x\\) tauschen die beiden Koordinaten.';
+          if (gl(e.x, -A.py) || gl(e.y, -A.px)) return 'Kein Vorzeichenwechsel: Gespiegelt wird an \\(y = x\\), nicht an einer Achse.';
+          return 'Aus \\((x \\mid y)\\) wird \\((y \\mid x)\\): aus \\(' + pkt(A.px, A.py) + '\\) also …'; },
+        loesung: function(A){ return 'P\'' + pkt(A.py, A.px); } },
+
+      'umkehrfunktion': { felder: ['n', 'v'], muster: 'f⁻¹(x) = ⁿ√( x + {v} ),  n = {n}',
+        eingabe: function(A){ return { n: String(A.n), v: String(-A.v) }; },
+        neu: function(){ var n = zufall([3, 5, 3, 5, 7]), v = zufall(bereich(-5, 5, [0]));
+          return { a: 1, n: n, u: 0, v: v,
+            text: 'Bestimme die Umkehrfunktion von \\(f(x) = x^{' + n + '}' + plus(v) + '\\). '
+              + 'Gib \\(n\\) und die Zahl an, die <em>unter</em> der Wurzel zu \\(x\\) dazukommt.' }; },
+        fehler: function(A){ return [[{ n: String(A.n), v: String(A.v) }, 'andere Seite'],
+                                     [{ n: String(1 / A.n), v: String(-A.v) }, 'Wurzelexponent']]
+          .filter(function(p){ return !(gl(+p[0].n, A.n) && gl(+p[0].v, -A.v)); }); },
+        pruefen: function(A, e){
+          if (gl(e.n, A.n) && gl(e.v, -A.v)) return null;
+          if (!gl(e.n, A.n)) return 'Der Wurzelexponent ist derselbe wie der Exponent: \\(n = ' + A.n + '\\).';
+          if (gl(e.v, A.v)) return 'Beim Auflösen wandert \\(' + tz(A.v) + '\\) auf die andere Seite — mit umgekehrtem Vorzeichen.';
+          return 'Erst \\(y ' + (A.v > 0 ? '- ' + A.v : '+ ' + (-A.v)) + ' = x^{' + A.n + '}\\), dann die Wurzel ziehen, dann \\(x\\) und \\(y\\) vertauschen.'; },
+        loesung: function(A){ return 'f^{-1}(x) = \\sqrt[' + A.n + ']{x ' + (A.v > 0 ? '- ' + A.v : '+ ' + (-A.v)) + '}'; } },
+
+      /* ── Kapitel 5: Wurzelfunktionen nutzen ──────────────────── */
+      'wurzel-def': { felder: ['grenze'], muster: 'D = [ {grenze} ; ∞ [',
+        eingabe: function(A){ return { grenze: String(A.u) }; },
+        neu: function(){ var a = zufall([-2, -1, 1, 2, 3]), n = zufall([2, 4, 6]),
+            u = zufall(bereich(-5, 5, [0])), v = zufall(bereich(-3, 3));
+          return { a: a, n: n, u: u, v: v,
+            text: 'Welche Definitionsmenge hat \\(f(x) = ' + wzT(a, n, u, v) + '\\)?' }; },
+        fehler: function(A){ return [[{ grenze: String(-A.u) }, 'Vorzeichen'], [{ grenze: '0' }, 'Radikand']]
+          .filter(function(p){ return !gl(+p[0].grenze, A.u); }); },
+        pruefen: function(A, e){
+          if (gl(e.grenze, A.u)) return null;
+          if (gl(e.grenze, -A.u)) return 'Vorzeichen: \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' \\geq 0\\) gibt \\(x \\geq ' + tz(A.u) + '\\).';
+          if (gl(e.grenze, A.v)) return 'Die Zahl hinter der Wurzel ändert die Definitionsmenge nicht — nur der Radikand zählt.';
+          return 'Der Radikand muss \\(\\geq 0\\) sein: Löse \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' \\geq 0\\).'; },
+        loesung: function(A){ return 'D = [' + tz(A.u) + ';\\infty['; } },
+
+      'wurzel-startpunkt': { felder: ['x', 'y'], muster: 'Startpunkt ( {x} | {y} )',
+        eingabe: function(A){ return { x: String(A.u), y: String(A.v) }; },
+        neu: function(){ var a = zufall([-2, -1, 1, 2, 3]), n = zufall([2, 4]),
+            u = zufall(bereich(-4, 4, [0])), v = zufall(bereich(-4, 4, [0]));
+          return { a: a, n: n, u: u, v: v,
+            text: 'Wo liegt der Startpunkt von \\(f(x) = ' + wzT(a, n, u, v) + '\\)?' }; },
+        fehler: function(A){ return [[{ x: String(-A.u), y: String(A.v) }, 'Vorzeichen'],
+                                     [{ x: String(A.v), y: String(A.u) }, 'Vertauscht']]
+          .filter(function(p){ return !(gl(+p[0].x, A.u) && gl(+p[0].y, A.v)); }); },
+        pruefen: function(A, e){
+          if (gl(e.x, A.u) && gl(e.y, A.v)) return null;
+          if (gl(e.x, A.v) && gl(e.y, A.u)) return 'Vertauscht: \\(u\\) steht unter der Wurzel, \\(v\\) dahinter.';
+          if (gl(e.x, -A.u) && gl(e.y, A.v)) return 'Vorzeichen: Der Radikand wird null bei \\(x = ' + tz(A.u) + '\\), nicht bei \\(' + tz(-A.u) + '\\).';
+          if (!gl(e.x, A.u)) return 'Der Startpunkt liegt dort, wo der Radikand null wird: \\(x = ' + tz(A.u) + '\\).';
+          return 'Die Höhe des Startpunkts ist die Zahl hinter der Wurzel: \\(v = ' + tz(A.v) + '\\).'; },
+        loesung: function(A){ return 'S' + pkt(A.u, A.v); } },
+
+      'wurzel-nullstelle': { felder: ['x_0'], muster: 'x₀ = {x_0}',
+        eingabe: function(A){ return { x_0: String(A.x0) }; },
+        neu: function(){ var n = zufall([2, 3]), a = zufall([1, 2, 1, 2, 3]),
+            w = zufall([1, 2, 3]), v = -a * w, u = zufall(bereich(-3, 3));
+          return { a: a, n: n, u: u, v: v, w: w, x0: u + Math.pow(w, n),
+            text: 'Berechne die Nullstelle von \\(f(x) = ' + wzT(a, n, u, v) + '\\).' }; },
+        fehler: function(A){ var f = [[{ x_0: String(A.u + A.w) }, 'noch hoch']];
+          if (!gl(A.u - Math.pow(A.w, A.n), A.x0)) f.push([{ x_0: String(A.u - Math.pow(A.w, A.n)) }, 'Vorzeichen']);
+          return f.filter(function(p){ return !gl(+p[0].x_0, A.x0); }); },
+        pruefen: function(A, e){
+          if (gl(e.x_0, A.x0)) return null;
+          if (gl(e.x_0, A.u + A.w)) return 'Die Wurzel ist \\(' + A.w + '\\) — jetzt noch hoch \\(' + A.n + '\\): \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' = ' + Math.pow(A.w, A.n) + '\\).';
+          if (gl(e.x_0, A.u - Math.pow(A.w, A.n))) return 'Vorzeichen: \\(x = ' + tz(A.u) + ' + ' + Math.pow(A.w, A.n) + '\\).';
+          if (gl(e.x_0, Math.pow(A.w, A.n))) return 'Das \\(u\\) fehlt noch: \\(x = u + ' + Math.pow(A.w, A.n) + '\\).';
+          return 'Setz \\(f(x) = 0\\): Wurzel \\(= ' + A.w + '\\), beide Seiten hoch \\(' + A.n + '\\), dann nach \\(x\\) auflösen.'; },
+        loesung: function(A){ return '\\sqrt[' + A.n + ']{x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + '} = ' + A.w
+          + ' \\Rightarrow x_0 = ' + tz(A.u) + ' + ' + Math.pow(A.w, A.n) + ' = ' + tz(A.x0); } },
+
+      'wurzelgleichung': { felder: ['x'], muster: 'x = {x}',
+        eingabe: function(A){ return { x: String(A.x) }; },
+        neu: function(){ var n = zufall([2, 3]), u = zufall(bereich(-4, 4)), c = zufall([2, 3, 4]);
+          return { a: 1, n: n, u: u, v: 0, c: c, x: u + Math.pow(c, n),
+            text: 'Löse \\(' + (n === 2 ? '\\sqrt{' : '\\sqrt[' + n + ']{') + 'x ' + (u > 0 ? '- ' + u : '+ ' + (-u)) + '} = ' + c + '\\).' }; },
+        fehler: function(A){ var f = [[{ x: String(A.u + A.c) }, 'hoch']];
+          if (!gl(A.u - Math.pow(A.c, A.n), A.x)) f.push([{ x: String(A.u - Math.pow(A.c, A.n)) }, 'Vorzeichen']);
+          return f.filter(function(p){ return !gl(+p[0].x, A.x); }); },
+        pruefen: function(A, e){
+          if (gl(e.x, A.x)) return null;
+          if (gl(e.x, A.u + A.c)) return 'Beide Seiten hoch \\(' + A.n + '\\): rechts steht dann \\(' + A.c + '^{' + A.n + '} = ' + Math.pow(A.c, A.n) + '\\).';
+          if (gl(e.x, Math.pow(A.c, A.n))) return 'Das \\(u\\) fehlt: \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' = ' + Math.pow(A.c, A.n) + '\\).';
+          if (gl(e.x, A.u - Math.pow(A.c, A.n))) return 'Vorzeichen beim Auflösen: \\(x = ' + tz(A.u) + ' + ' + Math.pow(A.c, A.n) + '\\).';
+          return 'Beide Seiten hoch \\(' + A.n + '\\), dann nach \\(x\\) auflösen. Probe nicht vergessen.'; },
+        loesung: function(A){ return 'x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' = ' + A.c + '^{' + A.n + '} = '
+          + Math.pow(A.c, A.n) + ' \\Rightarrow x = ' + tz(A.x); } },
+
+      'vergleich': { felder: ['ordnung'], muster: 'Es gilt {ordnung:√x > x > x²|x² > x > √x}',
+        eingabe: function(A){ return { ordnung: A.klein ? '√x > x > x²' : 'x² > x > √x' }; },
+        neu: function(){ var klein = Math.random() < 0.5, x = klein ? zufall([0.25, 0.04, 0.09, 0.16]) : zufall([4, 9, 16, 25]);
+          return { a: 1, n: 2, u: 0, v: 0, klein: klein, x: x,
+            text: 'Ordne \\(\\sqrt{x}\\), \\(x\\) und \\(x^2\\) der Grösse nach für \\(x = ' + x + '\\).' }; },
+        fehler: function(A){ return [[{ ordnung: A.klein ? 'x² > x > √x' : '√x > x > x²' }, 'Setz']]; },
+        pruefen: function(A, e){
+          if (e.ordnung === (A.klein ? '√x > x > x²' : 'x² > x > √x')) return null;
+          return 'Setz \\(x = ' + A.x + '\\) ein und rechne alle drei Werte aus: \\(\\sqrt{' + A.x + '} = '
+            + z(Math.sqrt(A.x)) + '\\), \\(' + A.x + '\\), \\(' + A.x + '^2 = ' + z(A.x * A.x) + '\\).'; },
+        loesung: function(A){ return '\\sqrt{' + A.x + '} = ' + z(Math.sqrt(A.x)) + ',\\quad ' + A.x
+          + ',\\quad ' + A.x + '^2 = ' + z(A.x * A.x); } }
+    };
+    ALLE.forEach(function(box){
+      var T = TYPEN[box.dataset.typ]; if (!T) return;
+      var A, serie = 0, versuche = 0, geloest = false;
+      var auf = box.querySelector('.ue-aufgabe'), ein = box.querySelector('.ue-eingabe'), rueck = box.querySelector('.ue-rueck'),
+          zaehler = box.querySelector('.ue-serie'), bild = box.querySelector('.ue-bild');
+      function neu(){
+        // Trifft der Wurf eine Gerade, nach der eine feste Aufgabe fragt, wird neu
+        // gewürfelt (FEST oben). 40 Versuche reichen weit; danach gilt der letzte Wurf.
+        A = T.neu();
+        for (var v = 0; v < 40 && fest(A.a, A.n, A.u, A.v); v++) A = T.neu();
+        versuche = 0; geloest = false; box.__aufgabe = A; box.__typ = T;   // Testhaken (.claude/tools/pruef-uebungen.mjs)
+        auf.innerHTML = A.text;
+        var html = T.muster;
+        T.felder.forEach(function(f){
+          html = html.replace(new RegExp('\\{' + f + '(?::([^}]*))?\\}'), function(m, wahl){
+            if (!wahl) return '<input type="text" inputmode="decimal" autocomplete="off" aria-label="' + f + '" data-f="' + f + '">';
+            return '<select aria-label="' + f + '" data-f="' + f + '"><option value="">?</option>' + wahl.split('|').map(function(w){ return '<option>' + w + '</option>'; }).join('') + '</select>';
+          }); });
+        ein.innerHTML = html; rueck.className = 'ue-rueck'; rueck.innerHTML = '';
+        if (T.wahl) ein.querySelectorAll('select').forEach(function(w){ w.addEventListener('change', function(){ T.wahl(ein); }); });
+        if (bild){
+          while (bild.firstChild) bild.removeChild(bild.firstChild);
+          if (T.graf){
+            // Fenster so weit, dass der markierte Punkt (1 | a) und der Verlauf
+            // bis x = ±2 hineinpassen — sonst ist der Exponent nicht ablesbar.
+            var hoch = Math.max(Math.abs(A.a), Math.abs(A.a * Math.pow(2, A.n)));
+            var gr = hoch > 8 ? 2 : hoch > 4 ? 1.6 : 1.2, fe = [-gr * 2, gr * 2, -8, 8];
+            bild.setAttribute('viewBox', '0 0 170 170');
+            var K = Achsen(bild, { w: 170, h: 170, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3.5, pfeil: 6, xm: [1], ym: [2] });
+            K.kurve(kurveF(A.a, A.n, 0, 0), 'kurve');
+            K.punkt(1, A.a, 'p-pkt');
+          }
+        }
+        setzen(auf);
+      }
+      function pruefen(){
+        if (geloest) return;   // nach ✓ zählt erst die nächste Aufgabe
+        var e = {}, leer = false, kaputt = false, komma = false;
+        ein.querySelectorAll('select').forEach(function(w){ e[w.dataset.f] = w.value; if (!w.value) leer = true; });
+        ein.querySelectorAll('input').forEach(function(i){ if (i.disabled){ e[i.dataset.f] = NaN; i.classList.remove('falsch'); return; }
+          var r = lesen(i.value); e[i.dataset.f] = r.wert;
+          if (r.leer) leer = true; else if (isNaN(r.wert)) kaputt = true; if (r.komma) komma = true;
+          i.classList.toggle('falsch', !r.leer && isNaN(r.wert)); });
+        if (leer){ rueck.className = 'ue-rueck hinweis'; rueck.textContent = ein.querySelector('select') ? 'Wähle aus und fülle alle offenen Felder aus.' : 'Fülle alle Felder aus.'; return; }
+        if (kaputt){ rueck.className = 'ue-rueck hinweis'; rueck.innerHTML = 'Zahlen wie <code>-3</code>, <code>0.5</code> oder <code>1/2</code>.'; return; }
+        versuche++;
+        var f = T.pruefen(A, e);
+        if (f === null){
+          serie = versuche === 1 ? serie + 1 : 0; geloest = true;
+          rueck.className = 'ue-rueck richtig';
+          rueck.innerHTML = '✓ Richtig' + (komma ? ' (Hier schreibt man den Dezimalpunkt.)' : '') + (T.richtig ? ' ' + T.richtig(A) : '') + ' <button type="button" class="ue-weiter">Nächste</button>';
+          rueck.querySelector('.ue-weiter').addEventListener('click', neu);
+        } else {
+          serie = 0; rueck.className = 'ue-rueck falsch';
+          rueck.innerHTML = f + (versuche >= 2 ? ' <details class="ue-loes"><summary>Lösung</summary>\\(' + T.loesung(A) + '\\)</details>' : '');
+        }
+        zaehler.textContent = serie + ' in Folge' + (serie >= 3 ? ' ✓' : '');
+        setzen(rueck);
+      }
+      box.querySelector('.ue-pruefen').addEventListener('click', pruefen);
+      box.querySelector('.ue-neu').addEventListener('click', neu);
+      ein.addEventListener('keydown', function(ev){ if (ev.key === 'Enter') pruefen(); });
+      neu();
+    });
+  })();
+
+
+  /* ---------- Minigrafen: <svg class="mini" data-k="a,n,u,v[;a,n,u,v…]" data-fenster
+       data-punkte data-titel data-wurzel="1" (n ist dann der Wurzelexponent)> ---------- */
+  document.querySelectorAll('svg.mini[data-k]').forEach(function(svg){
+    var kk = svg.dataset.k.split(';').map(function(s){ return s.split(',').map(Number); });
+    var wz = svg.dataset.wurzel === '1';
+    var fe = (svg.dataset.fenster || '-3,3,-3,3').split(',').map(Number);
+    var w = 150, h = 150 * (fe[3] - fe[2]) / (fe[1] - fe[0]);
+    svg.setAttribute('viewBox', '0 0 150 ' + h.toFixed(1)); svg.setAttribute('role', 'img');
+    var K = Achsen(svg, { w: w, h: h, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, xm: [1], ym: [1], pfeil: 6,
+      xname: svg.dataset.xname, yname: svg.dataset.yname });
+    kk.forEach(function(k, i){
+      var a = k[0], n = k[1], u = k[2] || 0, v = k[3] || 0, p = wz ? 1 / n : n;
+      var f = kurveF(a, p, u, v);
+      // Wurzelkurven grün, Potenzkurven blau; jede weitere Kurve neutral (Bezugskurve).
+      var cls = i ? 'kurve g2' : (wz ? 'kurve gruen' : 'kurve');
+      if (!wz && n < 0){ K.kurve(f, cls, fe[0], u - 0.02); K.kurve(f, cls, u + 0.02, fe[1]); }
+      else K.kurve(f, cls);
+    });
+    if (svg.dataset.punkte) svg.dataset.punkte.split(';').forEach(function(p){
+      var q = p.split(',').map(Number);
+      K.punkt(q[0], q[1], q[1] === 0 ? 'p-pkt' : 'p-null');
+    });
+    if (svg.dataset.titel) el(svg, 'text', { x: 6, y: 14, 'class': 'mini-titel' }, svg.dataset.titel);
+    if (!svg.getAttribute('aria-label')) svg.setAttribute('aria-label', 'Kurve' + (svg.dataset.titel ? ' ' + svg.dataset.titel : ''));
+  });
+})();
+</script>
+
+<footer class="site-footer">
+  <p><strong>Mathe begreifbar</strong> — Lernmaterial für die Berufsmaturität Technik, Architektur, Life Sciences</p>
+  <p>Leitprogramm · Potenz- und Wurzelfunktionen</p>
+  <p>© 2026 Raphael Arnold Kohler · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+  <p><a href="../leitprogramme.html">Alle Leitprogramme</a> · <a href="../clips.html">Clips</a> · <a href="../feedback.html">Kontakt &amp; Feedback</a> · <a href="../rechtliches.html">Rechtliches &amp; Datenschutz</a></p>
+  <p>Keine Cookies · Kein Tracking · Version 1.0 (Probe) · Stand 3. Oktober 2026</p>
+</footer>
+
+<script src="../mathlib.js"></script>
+<script src="../nav.js"></script>
+<script>buildNav({ id: 'leitprogramme' });</script>
+</body>
+</html>
