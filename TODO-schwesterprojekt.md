@@ -56,7 +56,7 @@ Vertiefung nach hinten, mit allen IDs, `toggleL`-Argumenten und Prüffunktionen.
 **Warum.** Gleiche Notation und gleicher Aufgabenaufbau in beiden Lehrmitteln; Lernende
 wechseln zwischen den Fächern.
 
-### 02.10.2026 · `build-clips.py`: bewegte Parabel im `graf` und Fragen im Clip (Prototyp — erst nach Abnahme portieren)
+### 02.10.2026 · `build-clips.py`: bewegte Parabel im `graf` und Fragen im Clip (**abgenommen 03.10.2026, portierbar**)
 
 **Was.** Neuer Schlüssel `bewegung` für `parabeln` im `graf` (Stützpunkte `[t, a, u, v]`,
 Begleiter `scheitel`, `nullstellen`, `yachse`, `marken`, `laeufer`) und neues Drehbuchfeld `fragen` (Clip hält an
@@ -71,7 +71,9 @@ Werkzeug gleich, er ändert keinen Clip.
 **Warum.** Clips sollen Zusammenhänge zeigen statt beschreiben (Auftraggeber,
 30.09.2026). `abgleich.py`: `scripts/build-clips.py` fällt dadurch von 83.6 % auf
 74.5 % (Grundlinie 84 %) — der Eintrag in `OFFEN` kommt erst, wenn der Prototyp
-angenommen ist.
+angenommen ist. **Abgenommen am 03.10.2026** mit der Freischaltung von
+`leitprogramme/lineare-funktionen.html` (Hörprobe und KI-Test durch den Auftraggeber);
+der `OFFEN`-Eintrag in `abgleich.py` kann damit gesetzt werden.
 
 **Nachtrag 03.10.2026 — `bewegung` auch für `geraden`.** Derselbe Schlüssel an einer
 Geraden, Stützpunkte `[t, m, q]` für \(y = m x + q\); gezeichnet wird die am Fenster
@@ -138,3 +140,74 @@ bewusst Mathe-eigen, nicht in `abgleich.py`). Holt `sprich()` und `aussprache()`
 bewegte Grafen, Test zum Ausdrucken mit eigenständiger Bewertung, Clips, die fragen.
 Die drei Dateien stehen nicht in `abgleich.py`; ein `OFFEN`-Eintrag ist nicht nötig,
 solange sie nicht als KERN aufgenommen werden.
+
+---
+
+### 03.10.2026 · Die Leitprogramm-Erstellung als Ganzes (Didaktik, Kapitelmuster, Prüfung)
+
+Nachgezählt im Physik-Repo (Stand `ebe6205`, nur gelesen). Die drei Einträge oben decken
+das **Clip-Werkzeug** ab. Was fehlt, ist alles, was aus einer Seite ein Leitprogramm nach
+dem heutigen Muster macht. Ohne diesen Block lässt sich in Physik kein Leitprogramm nach
+dem Vorbild `lineare-funktionen` bauen — mit ihm schon.
+
+**1. `HOWTO-leitprogramme.md` — Gesamtfassung** (Mathe 599 Zeilen).
+- *Wo in Physik:* vorhanden, aber die **alte technische Fassung** (385 Zeilen, Kopf
+  «ein Leitprogramm ins Repo holen», übernommen aus Mathe Stand 01.09.2026, Gliederung
+  Übertragsliste / Prüfen / Nicht tun). Es fehlen §1 (RLP-Bindung), §2 (Planung,
+  Kompetenzmatrix), §3 (Umfang nach Format), §4 (**das Kapitelmuster**), §8 (Simulationen
+  mit Aufgabenleiste), §9 (Übungen mit Rückmeldung, PDF-Gesamttest), §15 (Prüfung vor der
+  Freischaltung samt Prüfliste).
+- *Anpassen:* Die RLP-Quelle ist eine andere (`../Physik-GL.pdf` statt `Math-GL.pdf`), und
+  §10 «Notation und Fachsprache» ist mathe-eigen — in Physik gehören dort Einheiten,
+  Formelzeichen und signifikante Stellen hin. §1.1 («Kompetenzliste wörtlich übernehmen»)
+  gilt unverändert.
+- *Inhalt anfassen:* Die **11 bestehenden Physik-Leitprogramme** bleiben, wie sie sind;
+  die Fassung gilt für neue. 8 von ihnen haben einen Gesamttest als HTML — ob sie auf PDF
+  umgestellt werden, ist ein eigener Entscheid (siehe Eintrag vom 02.10., Punkt 2).
+
+**2. STYLEGUIDE §6.5 «Leitprogramme»** — in Mathe `STYLEGUIDE.md` ab Zeile 1236, das
+Verbindliche hinter dem HOWTO.
+- *Wo in Physik:* **kein §6.5** (0 Treffer). Der Abschnitt muss neu angelegt werden.
+
+**3. Das Kapitelmuster als Bauskript** — Mathe `scripts/lp/lineare-funktionen/`:
+`seite.py` (545 Z., baut die Seite aus einer Kapitelbeschreibung), `seite.js` (662 Z.:
+Koordinatensystem, **Aufgabenleiste** `Leiste()`, Simulationen, **Übungen mit Rückmeldung**
+`TYPEN`, Minigrafen), `grafgeom.py` (75 Z.) und `pruef-graf.py` (139 Z.), die jede
+Beschriftung im Clipbild ausrechnen statt schätzen, dazu `clips.py` (866 Z.) und `README.md`.
+- *Wo in Physik:* `scripts/lp/` **fehlt ganz**. Die 11 bestehenden Leitprogramme sind von
+  Hand geschrieben, ohne Generator.
+- *Anpassen:* `seite.py` und `seite.js` sind zur Hälfte Fachinhalt (Geraden, Steigung) und
+  zur Hälfte Gerüst. Portierbar ist das Gerüst — `Achsen()`, `Leiste()`, der Übungsrahmen
+  mit `lesen()`/`pruefen()`/`loesung()`, die Minigrafen; die `TYPEN` und die Simulationen
+  schreibt Physik neu. **Nicht Datei für Datei kopieren**, sondern das Muster übernehmen
+  und am ersten Physik-Leitprogramm erproben.
+
+**4. Prüfung vor der Freischaltung** — Skill `.claude/skills/lp-pruefung/SKILL.md` (90 Z.)
+und vier Werkzeuge: `.claude/tools/pruef-uebungen.mjs` (108 Z.), `pruef-leiste.mjs` (73 Z.),
+`pruef-fragen.mjs` (127 Z.), `sprechzeiten.py` (58 Z.).
+- *Wo in Physik:* `.claude/skills/` enthält **nur `preflight`**; von den vier Werkzeugen
+  ist **keines** da (`.claude/tools/` hat `aufnahme-anim.mjs`, `build-bilder.mjs`,
+  `pruef-clip.mjs`, `pruef-mathjax.mjs`, `render-check.mjs`, `scan-live.mjs`).
+- *Reihenfolge:* `pruef-fragen.mjs` setzt `fragen` im Clip voraus (Eintrag 02.10.) und
+  `pruef-uebungen.mjs` die Testhaken `box.__aufgabe`/`box.__typ` aus dem Kapitelmuster
+  (Punkt 3). `pruef-leiste.mjs` und `sprechzeiten.py` laufen sofort — Letzteres ist auch
+  ohne Leitprogramm nützlich, es misst nur Sprechzeiten im Clip.
+- *Anpassen:* Die vier Werkzeuge sind fachneutral; einzig der Pfad-Vorspann und der
+  Massstab in `SKILL.md` (Themenseite, RLP-Datei) sind einzusetzen.
+
+**Warum.** Die Prüfung am Vorbild hat gezeigt, dass §14 (Selbstkontrolle) allein nicht
+reicht: Drei unabhängige Agenten fanden danach je rund 25 Befunde, darunter fachlich
+Falsches. Das Verfahren — bauen, unverlinkt veröffentlichen, prüfen lassen, beheben,
+abnehmen, freischalten — gehört zum Format, nicht zum Fach.
+
+**Aufwand, ehrlich.** Punkt 1, 2 und 4 sind Übertragsarbeit mit Anpassung (ein Durchgang).
+Punkt 3 ist kein Übertrag, sondern ein **Neubau am ersten Physik-Leitprogramm**: Die
+Simulationen und Übungstypen sind Fachinhalt. Realistisch ist, Punkt 1, 2 und 4 zuerst zu
+portieren und Punkt 3 beim ersten neuen Leitprogramm entstehen zu lassen — so, wie es
+`scripts/lp/quadratische-funktionen/` hier auch entstanden ist.
+
+**Was in Physik heute ungenutzt bliebe.** `bewegung` und `fragen` im `graf` (Einträge
+02.10./03.10.) hängen am Bildtyp `graf` — und den nutzt **kein einziges** der 234
+Physik-Drehbücher. Der Übertrag hält das Werkzeug gleich; gebraucht wird er erst, wenn ein
+Physik-Clip ein Koordinatenbild zeigt (etwa p-V-Diagramm, Kennlinie, Weg-Zeit-Gesetz).
+Dafür spricht einiges — aber es ist ein eigener Entscheid, kein Automatismus.
