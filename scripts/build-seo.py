@@ -136,6 +136,14 @@ SEITEN = {
    titel='Leitprogramm Lineare Funktionen — lesen, messen, unterscheiden, aufstellen',
    beschreibung='Leitprogramm zu den linearen Funktionen nach RLP GF 3.2: Steigung und y-Achsenabschnitt aus Gleichung und Graph lesen, das Steigungsdreieck und die Nullstelle, Typen und Lagebeziehungen, die Geradengleichung aufstellen — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Lineare Funktionen', 'Gerade', 'Steigung', 'Achsenabschnitt', 'Leitprogramm']),
+ 'leitprogramme/potenz-wurzelfunktionen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
+   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
+   noindex=True,
+   titel='Leitprogramm Potenz- und Wurzelfunktionen — formen, verschieben, umkehren',
+   beschreibung='Leitprogramm zu den Potenz- und Wurzelfunktionen nach RLP SP 3.2: der Exponent und die Symmetrie, Hyperbeln mit ihren Asymptoten, Verschieben und Strecken, die Wurzelfunktion als Umkehrfunktion der Potenzfunktion und ihre Definitionsmenge — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Potenzfunktionen', 'Wurzelfunktionen', 'Umkehrfunktion', 'Hyperbel', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',
