@@ -555,8 +555,16 @@ gegen sie und darüber hinaus.
 - Lösung und Aufgabenstellung passen zusammen («ohne Rechnen» + Lösung rechnet = Befund).
 
 **Clips**
+- **Eine neue Bewegung einmal wirklich laufen lassen.** Nicht ein Bild ansehen, sondern
+  über `window.__seek(t)` im `?render`-Modus mehrere Zeitpunkte abtasten und die Pfade
+  (`getAttribute('d')`) vergleichen. Am 03.10.2026 standen *alle* bewegten Geraden und
+  Kurven still (ein `undefined` in `t0` machte die Zeit zu `NaN`, und `bewZustand` fiel
+  auf den letzten Stützpunkt) — `pruef-clip` schiesst Bilder, vergleicht sie aber nicht
+  über die Zeit, und keiner der drei Prüfagenten hätte es ohne diese Messung gesehen.
 - Wenn eine Frage erscheint, steht ihre Antwort **nicht** im Bild (erster Stützpunkt
-  neutral, Begleiter und Beschriftung erst nach der Antwort).
+  neutral, Begleiter und Beschriftung erst nach der Antwort). Das gilt auch für
+  **Begleiter, die ihre Koordinaten anschreiben** — ein `startpunkt` oder eine `marke`
+  auf dem Klickziel beantwortet die Frage, bevor sie gestellt ist.
 - Bild und Ton gleichzeitig: Bewegungen nach `sprechzeiten.py` legen, nicht nach Gefühl.
   Was der Ton sagt («senkt um eins»), zeigt das Bild genau so.
 - Eindeutige Begriffe («x-Achse» oder «Symmetrieachse», nie «Achse»).
@@ -572,6 +580,12 @@ gegen sie und darüber hinaus.
 - Zufallsübungen: nur lösbare, «schöne» Fälle; Sonderwerte (0, ±1, gleiche Zahlen) erzeugen
   keine falsche Diagnose; Randfälle des Stoffs mit üben (z. B. \(D = 0\), \(D \lt 0\));
   kein Zufallsfall gleich einer festen Aufgabe (`pruef-uebungen` mit `fehler()`).
+- **Die Sperrliste gegen feste Aufgaben darf den Wurfraum nicht leerfegen.** Hängt die
+  Aufgabe eines Typs nur an einem Merkmal (etwa der Parität des Exponenten), sperrt eine
+  Liste nach Funktion fast alles — der Typ zeigt dann immer dieselbe Aufgabe mit immer
+  derselben Antwort. Nachzählen: 20 000 Würfe simulieren und die Verteilung ansehen.
+- **Was eine Rundungsfunktion ausgibt, gehört nachgerechnet.** Eine Live-Anzeige auf zwei
+  Stellen macht aus \(0.04^2 = 0.0016\) ein «\(= 0\)» — und damit eine falsche Aussage.
 - Hinweise rechnen nicht anders als die Lösung (Klammerzahlen ≠ Nullstellen).
 - Live-Anzeigen runden nur mit «≈».
 - Je Kapitel mindestens eine «Warum»-Aufgabe und eine Aufgabe am Graphen (§9).
