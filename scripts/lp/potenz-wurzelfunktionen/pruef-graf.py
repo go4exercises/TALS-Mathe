@@ -98,6 +98,36 @@ def pruefe(datei):
                     melde(f'Punkt ({x} | {y}) liegt ausserhalb des Fensters')
 
             achsen = achsenkisten(el)
+            # Begleiter bewegter Kurven (startpunkt, marken) schreiben ihre Koordinaten an.
+            # Der Abspieler setzt sie zur Laufzeit, darum stehen sie in keiner punkte-Liste —
+            # und bis zum 03.10.2026 sah der Pruefer sie nicht. Sie koennen auf einer
+            # Achsenmarke landen, und in einer klick-Frage verraten sie das Ziel.
+            def bewzahl(x):
+                """Wie bewZahl() im Abspieler: eine Nachkommastelle, echtes Minus."""
+                r = round(x * 10) / 10
+                return ('\u2212' if r < 0 else '') + ('%g' % abs(r))
+
+            begleiter = {}
+            for kv in el.get('kurven', []):
+                b = kv.get('bewegung')
+                if not b:
+                    continue
+                for st in b:
+                    _, a_, p_, u_, v_ = st
+                    if kv.get('startpunkt') and kv['startpunkt'].get('beschriftung', True) is not False:
+                        t_ = '(%s | %s)' % (bewzahl(u_), bewzahl(v_))
+                        begleiter[(t_, u_, v_)] = True
+                    for mk in kv.get('marken', []):
+                        y_ = pot(mk['x'] - u_, p_)
+                        if y_ is None:
+                            continue
+                        y_ = a_ * y_ + v_
+                        txt = str(mk.get('text', '')).replace('{x}', bewzahl(mk['x'])).replace('{y}', bewzahl(y_))
+                        if txt:
+                            begleiter[(txt, mk['x'], y_)] = True
+            begleiter = list(begleiter)
+
+            achsen = achsen
             texte = []
             for g in el.get('geraden', []) + el.get('punkte', []):
                 if not g.get('beschriftung'):
@@ -107,6 +137,25 @@ def pruefe(datei):
                     bei = [g.get('x', 0) + 18 * ex, g.get('y', 0) - 16 * ey]
                 texte.append((g['beschriftung'], bei, g.get('anker', 'start'), g.get('x'), g.get('y')))
             kisten = [(t, kiste(t, b[0], b[1], ank, ex, ey), px_, py_) for t, b, ank, px_, py_ in texte]
+            # Der Abspieler setzt den Begleitertext 18 px rechts und 44 px unter den Punkt
+            # (bei a > 0; siehe beschrifte() in BEWEGUNG_JS) — dieselbe Lage hier nachbauen.
+            for txt, bx, by in begleiter:
+                if not (x0 <= bx <= x1 and y0 <= by <= y1):
+                    melde(f'Begleiter «{txt}» sitzt bei ({bx:g} | {by:g}) ausserhalb des Fensters')
+                    continue
+                # beschrifte() in BEWEGUNG_JS: im rechten Drittel linksbuendig ans Zeichen,
+                # sonst rechts daneben; senkrecht 44 px darunter (a > 0) bzw. 18 px darueber.
+                rechts = bx > x1 - (x1 - x0) * 0.3
+                lx = bx + (-18 if rechts else 18) * ex
+                # Sitzt der Begleiter auf der x-Achse, weicht der Abspieler nach oben aus
+                # (dort stehen die x-Marken) — dieselbe Regel wie in beschrifte().
+                nah = abs(by) < 40 * ey
+                a_, b_, u_, o_ = kiste(txt, lx, by + (18 if nah else -44) * ey,
+                                       'end' if rechts else 'start', ex, ey)
+                # Saum von 4 px: Der Abspieler setzt den Begleiter zur Laufzeit, und
+                # Klammern reichen tiefer als das pauschale TIEF-Mass. Ohne den Saum
+                # verfehlte der Pruefer «(2 | 0)» auf der Achsenmarke «3» um einen Pixel.
+                kisten.append((txt, (a_ - 4 * ex, b_ + 4 * ex, u_ - 4 * ey, o_ + 4 * ey), bx, by))
             for i, (text, (a, b, u, o), px_, py_) in enumerate(kisten):
                 wo = f'«{text}» (Kiste x {a:.2f}…{b:.2f}, y {u:.2f}…{o:.2f})'
                 if not (x0 <= a and b <= x1 and y0 <= u and o <= y1):

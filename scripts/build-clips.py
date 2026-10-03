@@ -443,7 +443,7 @@ def graf_svg(el, theme):
                 t_ += ('<g class="bew-pt"><circle r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
                        '<circle r="5" fill="%s"/></g>' % (papier, f_, f_))
                 if text:
-                    t_ += '<text font-size="29" font-weight="600" fill="%s"></text>' % f_
+                    t_ += '<text font-size="29" font-weight="600" fill="%s" stroke="%s" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text>' % (f_, papier)
                 return t_ + '</g>'
             if g.get("yachse"):
                 teile.append(g_punkt("bew-gy", g["yachse"].get("farbe", 2),
@@ -534,7 +534,7 @@ def graf_svg(el, theme):
                 g += ('<g class="bew-pt"><circle r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
                       '<circle r="5" fill="%s"/></g>' % (papier, f_, f_))
                 if text:
-                    g += '<text font-size="29" font-weight="600" fill="%s"></text>' % f_
+                    g += '<text font-size="29" font-weight="600" fill="%s" stroke="%s" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text>' % (f_, papier)
                 return g + '</g>'
             if pa.get("scheitel"):
                 teile.append(punkt_g("bew-s", pa["scheitel"].get("farbe", 3)))
@@ -626,7 +626,7 @@ def graf_svg(el, theme):
                 t_ += ('<g class="bew-pt"><circle r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
                        '<circle r="5" fill="%s"/></g>' % (papier, f_, f_))
                 if text:
-                    t_ += '<text font-size="29" font-weight="600" fill="%s"></text>' % f_
+                    t_ += '<text font-size="29" font-weight="600" fill="%s" stroke="%s" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text>' % (f_, papier)
                 return t_ + '</g>'
             if kv.get("startpunkt"):
                 teile.append(k_punkt("bew-ks", kv["startpunkt"].get("farbe", 3),
@@ -884,7 +884,8 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
     const tx = g.querySelector(':scope > text'); if (!tx) return;
     const rechts = x > x1 - (x1 - x0) * 0.3;
     tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
-    tx.setAttribute('y', py(y) + (m > 0 ? 44 : -18));          // auf die Seite, wo die Gerade nicht laeuft
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (m > 0 ? 44 : -18)));
     tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
     tx.textContent = text;
   };
@@ -966,7 +967,8 @@ function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
     const tx = g.querySelector(':scope > text'); if (!tx) return;
     const rechts = x > x1 - (x1 - x0) * 0.3;
     tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
-    tx.setAttribute('y', py(y) + (a > 0 ? 44 : -18));
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (a > 0 ? 44 : -18)));
     tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
     tx.textContent = text;
   };

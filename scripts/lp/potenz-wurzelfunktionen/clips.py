@@ -803,9 +803,10 @@ clip('wurzel', 'Kurve sehen: Wurzelfunktionen nutzen',
      ['Wurzelfunktion', 'Definitionsmenge', 'Startpunkt', 'Grössenvergleich', 'grafisch lösen'], [
          sz('Die Wurzel ist eine Potenz',
             'Eine Wurzel ist nichts anderes als eine Potenz mit gebrochenem Exponenten: '
-            'n-te Wurzel aus x gleich x hoch eins durch n. Damit gelten alle Potenzregeln weiter.',
+            'n-te Wurzel aus x gleich x hoch eins durch n. Damit gelten alle Potenzregeln weiter. '
+            'Diese Schreibweise gilt für positives x — die Wurzel selbst reicht gleich noch weiter.',
             titel('Wurzel = Potenz', 280, 80),
-            f(r'\sqrt[\fb{n}]{x} = x^{\frac{1}{\fb{n}}}', 430, 68, ein=4.4),
+            f(r'\sqrt[\fb{n}]{x} = x^{\frac{1}{\fb{n}}} \quad (x \gt 0)', 430, 62, ein=4.4),
             graf(W_SP, [kurve([[0, 1, HALB, 0, 0]], farbe=3)])),
          sz('Definitionsmenge',
             'Die Definitionsmenge hängt davon ab, ob der Wurzelexponent gerade oder ungerade ist. '

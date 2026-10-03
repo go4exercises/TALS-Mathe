@@ -171,8 +171,12 @@ noch ausdrücklich, R setzt Fragen zurück (`FRAGEN_JS`); 4 Clips neu vertont (1
 
 ## Übertrag und Werkzeug
 
-- [ ] `scripts/abgleich.py`: `build-clips.py` liegt bei 74.3 % (Grundlinie 84 %). Eintrag in
-  `OFFEN` erst nach Abnahme — vorher `python3 scripts/abgleich.py --diff scripts/abgleich.py`.
+- [ ] `scripts/abgleich.py`: `build-clips.py` liegt am 03.10.2026 bei **94.2 %**
+  (Grundlinie 84 %) — die Datei ist dem Schwesterrepo also *näher* als die Grundlinie
+  verlangt, und das Skript bittet um das Nachtragen der höheren Grundlinie. Eintrag in
+  `OFFEN` und neue Grundlinie erst nach Abnahme, und vorher
+  `python3 scripts/abgleich.py --diff scripts/abgleich.py`: die Datei selbst steht bei
+  93.1 % gegen Grundlinie 100 %, drüben liegt also eine neuere Fassung.
 - [–] Physik-Übertrag: steht in `TODO-schwesterprojekt.md` (zwei Einträge vom 02.10.2026),
   wird in einer Physik-Session abgearbeitet.
 
@@ -188,8 +192,12 @@ noch ausdrücklich, R setzt Fragen zurück (`FRAGEN_JS`); 4 Clips neu vertont (1
 ## Ideen (ohne Auftrag)
 
 - [ ] Verteiltes/gemischtes Üben über die Kapitel, adaptiver Weg nach dem Vorwissenstest.
-- [ ] Bewegte Grafen im Clip (`bewegung`) über Parabeln hinaus (Geraden, Exponentialfunktionen)
-  — Voraussetzung für weitere Leitprogramme dieser Art.
+- [x] Bewegte Grafen im Clip (`bewegung`) über Parabeln hinaus: **Geraden** (`[t, m, q]`,
+  02.10.2026) und **Potenz-, Hyperbel- und Wurzelkurven** (`[t, a, p, u, v]` für
+  \(a(x-u)^p + v\), 03.10.2026) stehen, mit den Begleitern `yachse`, `nullstelle`,
+  `marken`, `laeufer`, `dreieck`, `startpunkt`, `asymptoten` und `spiegel`.
+  Offen bleiben Exponential- und Logarithmusfunktionen — sie brauchen einen eigenen
+  Schlüssel, weil \(a \cdot b^{x}\) nicht in \(a(x-u)^p + v\) passt.
 
 ---
 
@@ -526,15 +534,19 @@ eigenen Durchgang nachgezogen (eigener Abschnitt unten).
 - [x] «Probe: \(2^3 - 2 = 6\)» in `s3-2-lp-wurzel` ist die Rückrechnung, nicht die Probe
   (\(\sqrt[3]{6+2} = 2\)).
 - [x] Der Clip heisst «verschieben und strecken», zeigt aber kein Strecken.
-- [ ] `pruef-graf.py` prüft nur feste `punkte`, nicht die Begleiter bewegter Kurven —
+- [x] `pruef-graf.py` prüft nur feste `punkte`, nicht die Begleiter bewegter Kurven —
   in `kontrolle-verschieben` F1 legt sich «(2 | 0)» über die Achsenmarke «3».
+  *Behoben:* Der Prüfer rechnet die Begleiter jetzt mit (Rundung, Rand- und
+  Achsenregel wie im Abspieler, 4 px Saum) und fand damit neun solche Stellen. Im
+  Abspieler weicht ein Schild auf der x-Achse nach oben aus, wo keine Marken stehen,
+  und jedes Begleiterschild hat einen Hof — vorher lief die Kurve durch die Schrift.
 - [x] Bezugsgerade \(y = 2\) in `s3-2-lp-wurzel` «Grafisch lösen» ist blau statt Tinte;
   Startpunkt mal Tinte, mal grün. Grüne Punktfarbe im Minigrafen für gemeinsame Punkte.
 - [x] G5 im Gesamttest hat die meisten Punkte (4) und die kleinste Schreibfläche.
 
 ### Folgt daraus — eigener Durchgang
 
-- [ ] **Themenseite `schwerpunkt/s3-2b-wurzelfunktionen.html` nachziehen.** Sie beschränkt
+- [x] **Themenseite `schwerpunkt/s3-2b-wurzelfunktionen.html` nachziehen.** Sie beschränkt
   im Kasten «💡 Konvention — die dritte Wurzel und der Definitionsbereich» alle
   Wurzelfunktionen auf \(D = \mathbb{R}_0^+\), widerspricht sich aber zwei Kästen weiter
   selbst («\(f^{-1}: y = \sqrt[3]{x}\) mit \(x \in \mathbb{R}\)»). Betroffen sind
@@ -543,7 +555,23 @@ eigenen Durchgang nachgezogen (eigener Abschnitt unten).
   `// Konvention: D = [u; ∞[ für jede Wurzel` im Seitenskript. Das Leitprogramm nennt
   die Abweichung seit dem 03.10.2026 ausdrücklich — die Themenseite sollte dieselbe
   Sprache sprechen.
-- [ ] **`s1-2-anim-exponenten-treppe`, Szene «Was man sich merkt»** sagt «a hoch ein
-  halb ist die Wurzel aus a, für a grösser null». Als Vorwissensclip dieses
-  Leitprogramms steht er damit gegen dessen Kapitel 5. Beim Nachziehen der Themenseite
-  mitbedenken (Neuvertonung einer Szene).
+  *Behoben:* Der Widerspruch ist weg. Der Konventionskasten ist jetzt die **einzige**
+  Stelle, die einschränkt, sagt dass es eine Vereinbarung und keine Notwendigkeit ist,
+  und nennt die andere Lesart samt Folge («keinen Startpunkt, \(D = \mathbb{R}\)»).
+  Die Definition verweist darauf, der Umkehrbarkeits-Kasten behauptet nichts mehr, und
+  die Kommentare im Seitenskript sprechen von «Vereinbarung dieser Seite». Die Seite
+  bleibt bei \(\mathbb{R}_0^+\) — das ist eine verbreitete, begründete Wahl, und sie
+  umzubauen hätte Definition, Tabelle, Animation und mehrere Aufgaben betroffen.
+  Der Link auf das Leitprogramm kommt mit dem Kasten «🧭 Lieber geführt?» bei der
+  Freischaltung (§13), nicht vorher.
+- [–] **`s1-2-anim-exponenten-treppe`, Szene «Was man sich merkt»** sagt «a hoch ein
+  halb ist die Wurzel aus a, für a grösser null». **Bestätigt sich nicht:** Der Satz
+  gilt der *Potenzschreibweise* \(a^{1/n}\), und die ist in Teilgebiet 1.2
+  ausdrücklich «für \(a \gt 0\)» definiert — der Clip gibt seine eigene Themenseite
+  korrekt wieder und sagt nichts über \(\sqrt[3]{\;}\).
+  *Dafür ein echter Befund an derselben Stelle, behoben:* Das Leitprogramm schrieb
+  \(\sqrt[n]{x} = x^{1/n}\) **ohne Bedingung** und leitete zwei Absätze später
+  \(D = \mathbb{R}\) für ungerades \(n\) daraus ab. Jetzt steht die Bedingung
+  \(x \gt 0\) an der Gleichung, mit Verweis auf 1.2, und der Unterschied zwischen
+  Schreibweise und Wurzelfunktion ist ausgesprochen — in Kapitel 5 und im Clip
+  `s3-2-lp-wurzel` (eine Szene neu vertont).

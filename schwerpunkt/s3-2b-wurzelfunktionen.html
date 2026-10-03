@@ -303,7 +303,7 @@ MathJax = {
 
 <div class="block block-def">
   <div class="block-titel">📘 Definition — Wurzelfunktion</div>
-  <p>Eine Funktion \(f : \mathbb{R}_0^+ \longrightarrow \mathbb{R}_0^+\) mit einer Gleichung der Form</p>
+  <p>Eine Funktion \(f : \mathbb{R}_0^+ \longrightarrow \mathbb{R}_0^+\) (zur Einschränkung auf \(\mathbb{R}_0^+\) siehe die Konvention weiter unten) mit einer Gleichung der Form</p>
   \[ y = f(x) = \sqrt[n]{x} = x^{\frac{1}{n}}, \qquad n \in \mathbb{N}^* \]
   <p>heisst <strong>Wurzelfunktion</strong> mit Wurzelexponent \(n\).</p>
 </div>
@@ -330,15 +330,17 @@ MathJax = {
   <div class="block-titel">📘 Umkehrbarkeit der Potenzfunktionen</div>
   <ul style="margin-top:4px">
     <li><strong>Gerader Exponent</strong> (z.B. \(y = x^2\)): Auf ganz \(\mathbb{R}\) <em>nicht</em> umkehrbar — zu jedem \(y &gt; 0\) gehören zwei \(x\)-Werte (\(\pm\)). Beschränkt man sich auf den rechten Ast (\(x \in \mathbb{R}_0^+\)), wird die Funktion umkehrbar: \(f^{-1}: y = \sqrt{x}\). (Der linke Ast hätte die Umkehrfunktion \(y = -\sqrt{x}\).)</li>
-    <li><strong>Ungerader Exponent</strong> (z.B. \(y = x^3\)): Auf ganz \(\mathbb{R}\) umkehrbar, denn jede Höhe wird genau einmal erreicht: \(f^{-1}: y = \sqrt[3]{x}\) mit \(x \in \mathbb{R}\).</li>
+    <li><strong>Ungerader Exponent</strong> (z.B. \(y = x^3\)): Auf ganz \(\mathbb{R}\) umkehrbar, denn jede Höhe wird genau einmal erreicht — die Umkehrfunktion ist \(f^{-1}: y = \sqrt[3]{x}\). Welche Definitionsmenge wir ihr hier geben, sagt die Konvention unten.</li>
     <li><strong>Negativer Exponent</strong> (z.B. \(y = x^{-2}\), eine Hyperbel): Auf \(\mathbb{R}^+\) ist auch sie umkehrbar. Löst man \(y = x^{-n}\) nach \(x\) auf, entsteht wieder eine <strong>Potenzfunktion</strong> — mit negativem Stammbruch als Exponent: \(f^{-1}: y = x^{-1/n}\). Für \(y = x^{-2}\) also \(f^{-1}: y = x^{-1/2} = \tfrac{1}{\sqrt{x}}\).</li>
   </ul>
-  <p style="margin-top:6px">Es ist sinnvoll, die Umkehrbarkeit aller Potenzfunktionen <strong>einheitlich auf \(D = \mathbb{R}_0^+\)</strong> zu beschränken.</p>
+  <p style="margin-top:6px">In allen drei Fällen entsteht der Graph der Umkehrfunktion durch Spiegelung an \(y = x\). Nur beim geraden Exponenten ist die Einschränkung <em>nötig</em> — bei den anderen ist sie eine Vereinbarung, siehe den Kasten darunter.</p>
 </div>
 
 <div class="block block-tipp" style="margin-top:8px">
   <div class="block-titel">💡 Konvention — die dritte Wurzel und der Definitionsbereich</div>
-  <p>Ungerade Wurzeln wie \(\sqrt[3]{\ }\) sind mathematisch auch für <em>negative</em> Radikanden erklärt: \(\sqrt[3]{-8} = -2\), denn \((-2)^3 = -8\). Gerade Wurzeln (\(\sqrt{\ }\), \(\sqrt[4]{\ }\)) dagegen nur für Radikand \(\geq 0\). Damit aber <strong>alle</strong> Wurzelfunktionen dieselbe Definitionsmenge haben und die Potenzschreibweise \(x^{1/n}\) einheitlich gilt, beschränkt man sie in diesem Kapitel durchgehend auf \(D = \mathbb{R}_0^+\).</p>
+  <p>Ungerade Wurzeln wie \(\sqrt[3]{\ }\) sind mathematisch auch für <em>negative</em> Radikanden erklärt: \(\sqrt[3]{-8} = -2\), denn \((-2)^3 = -8\). Gerade Wurzeln (\(\sqrt{\ }\), \(\sqrt[4]{\ }\)) dagegen nur für Radikand \(\geq 0\).</p>
+  <p>Damit aber <strong>alle</strong> Wurzelfunktionen dieselbe Definitionsmenge haben und die Potenzschreibweise \(x^{1/n}\) einheitlich gilt, beschränken wir sie <strong>auf dieser Seite durchgehend</strong> auf \(D = \mathbb{R}_0^+\) — bei \(\sqrt[n]{x-u}\) also auf \([u;\, +\infty[\). Das ist eine <em>Vereinbarung</em>, keine mathematische Notwendigkeit: Sie gilt überall dort, wo auf dieser Seite \(D\) steht, auch bei ungeradem \(n\).</p>
+  <p><strong>Anderswo wird es anders gehalten</strong> — und das ist kein Widerspruch, sondern eine andere Vereinbarung. Mit der vollen Definitionsmenge hat \(\sqrt[3]{x}\) keinen Startpunkt: Die Kurve läuft dann nach links weiter, und ihre Definitionsmenge ist \(\mathbb{R}\). In einer Prüfung sagt die Aufgabe, welche Lesart gilt; im Zweifel die Definitionsmenge dazuschreiben.</p>
 </div>
 
 <div class="widget">
@@ -1340,7 +1342,8 @@ function drawTf(){
   document.getElementById('tf-uv').textContent = fmt2(u);
   document.getElementById('tf-vv').textContent = fmt2(v);
 
-  // Konvention des Kapitels: alle Wurzeln nur für Radikand ≥ 0 (auch ∛)
+  // Vereinbarung dieser Seite: alle Wurzeln nur für Radikand ≥ 0 (auch ∛).
+  // Das Leitprogramm zeichnet ∛ auf ganz R — siehe Konventionskasten im Theorieteil.
   const wurzel = t => t >= 0 ? (tfN === 2 ? Math.sqrt(t) : cbrt(t)) : NaN;
   const base = x => wurzel(x);
   const f    = x => { const w = wurzel(x - u); return isNaN(w) ? NaN : a * w + v; };
@@ -1349,7 +1352,7 @@ function drawTf(){
   const {ctx, W, H} = initCanvas('tf-canvas', 260, false);
   const {cx, cy, zahlenOben} = drawGrid(ctx, W, H, xMin, xMax, yMin, yMax, {zahlen:false});
 
-  // Verbotenes Definitionsband x < u (Konvention: D = [u; ∞[ für jede Wurzel)
+  // Verbotenes Definitionsband x < u (Vereinbarung dieser Seite: D = [u; +∞[ für jede Wurzel)
   if(u > xMin){
     ctx.fillStyle = 'rgba(155,28,28,0.08)';
     ctx.fillRect(0, 0, cx(u), H);

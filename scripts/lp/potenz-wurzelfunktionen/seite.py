@@ -423,8 +423,8 @@ sim5 = f'''      <figure class="sim sim-gross" id="sim5">
 fest5 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Wurzelfunktionen</div>
-          <p>\[ \sqrt[n]{x} = x^{\frac{1}{n}} \]</p>
-          <p>Eine Wurzel ist eine Potenz mit gebrochenem Exponenten — alle Potenzregeln gelten weiter.</p>
+          <p>\[ \sqrt[n]{x} = x^{\frac{1}{n}}, \qquad x \gt 0 \]</p>
+          <p>Eine Wurzel ist eine Potenz mit gebrochenem Exponenten — alle Potenzregeln gelten weiter. Die <em>Schreibweise</em> \(x^{1/n}\) ist nach <a href="../schwerpunkt/s1-2-potenzen.html#rationale-exponenten">Teilgebiet 1.2</a> nur für \(x \gt 0\) erklärt; die <em>Wurzel</em> mit ungeradem \(n\) reicht weiter, wie gleich zu sehen ist.</p>
           <p><b>Definitionsmenge</b>, wieder nach der Parität:</p>
           <ul>
             <li>\(n\) <b>gerade</b>: Der Radikand muss \(\geq 0\) sein. \(D = \mathbb{R}_0^{+}\), bei \(\sqrt[n]{x-u}\) also \(D = [u;\infty[\).</li>
@@ -461,7 +461,7 @@ auf5 = test('t5', 'Aufgaben · Kapitel 5', 14, [
 ], zwei=False)
 k5 = kapitel(5, 'wurzelfunktionen', 'Wurzelfunktionen nutzen', 'Wurzelfunktionen · RLP-Kern', 45,
              r'Du bestimmst Definitionsmenge, Startpunkt und Nullstelle einer verschobenen Wurzelfunktion, vergleichst \(\sqrt{x}\), \(x\) und \(x^{2}\) und löst eine Wurzelgleichung grafisch wie rechnerisch.',
-             ('s3-2-lp-wurzel', 'Wurzelfunktionen nutzen', '1:30'),
+             ('s3-2-lp-wurzel', 'Wurzelfunktionen nutzen', '1:35'),
              sim5, ('s3-2-lp-kontrolle-wurzel', 'Kontrollfragen zu den Wurzelfunktionen', '1:02'),
              fest5, [uebung('wurzel-def', 'Definitionsmenge bestimmen'), uebung('wurzel-startpunkt', 'Startpunkt angeben'),
                      uebung('wurzel-nullstelle', 'Nullstelle berechnen'), uebung('wurzelgleichung', 'Wurzelgleichung lösen'),

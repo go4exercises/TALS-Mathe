@@ -188,7 +188,8 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
     const tx = g.querySelector(':scope > text'); if (!tx) return;
     const rechts = x > x1 - (x1 - x0) * 0.3;
     tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
-    tx.setAttribute('y', py(y) + (m > 0 ? 44 : -18));          // auf die Seite, wo die Gerade nicht laeuft
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (m > 0 ? 44 : -18)));
     tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
     tx.textContent = text;
   };
@@ -270,7 +271,8 @@ function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
     const tx = g.querySelector(':scope > text'); if (!tx) return;
     const rechts = x > x1 - (x1 - x0) * 0.3;
     tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
-    tx.setAttribute('y', py(y) + (a > 0 ? 44 : -18));
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (a > 0 ? 44 : -18)));
     tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
     tx.textContent = text;
   };
