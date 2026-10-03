@@ -255,10 +255,14 @@ Voraussage (predict–observe–explain) wandert in den Clip selbst:
 - `klick`: Tippen ins bewegte Bild der Szene (braucht ein `graf` mit `bewegung`, denn
   dessen Fenster rechnet den Tipp in Koordinaten um). `fallen` sind typische falsche
   Stellen mit eigener Rückmeldung; ein grüner Kreis zeigt danach die richtige Stelle.
-- Der Clip hält nur beim **Abspielen** an und nur beim gewöhnlichen Durchlaufen — ein
-  Sprung auf der Zeitleiste an einer Frage vorbei löst sie nicht aus, eine beantwortete
-  Frage kommt nicht wieder. Im Prüfmodus (`?render`, `pruef-clip.mjs`) gibt es keine
-  Fragen.
+- Der Clip hält nur beim **Abspielen** an. Spulen erkennt `FRAGEN_JS` ausdrücklich
+  (Klick auf die Zeitleiste, ← →), nicht am Zeitabstand zweier Bilder: Ein Sprung an
+  einer Frage vorbei löst sie nicht aus, eine beantwortete Frage kommt beim Zurückspulen
+  nicht wieder. Springt dagegen ein *Bild* über eine Frage (langsames Laden,
+  Hintergrund-Tab), wird sie gestellt und der Clip an ihre Stelle zurückgesetzt.
+  **R** und ein Sprung vor die erste Frage sind ein Neustart: offene Frage, Markierungen
+  und Frage-Ton weg, alle Fragen wieder offen. Eine nur weggespulte, unbeantwortete
+  Frage bleibt offen. Im Prüfmodus (`?render`, `pruef-clip.mjs`) gibt es keine Fragen.
 - Wie `bewegung` nur in Clips mit `fragen` eingebaut (`FRAGEN_JS`); alle anderen bleiben
   Byte für Byte gleich.
 - **Vorlesen:** Frage und Rückmeldung spricht dieselbe Stimme wie der Clip, sobald sie

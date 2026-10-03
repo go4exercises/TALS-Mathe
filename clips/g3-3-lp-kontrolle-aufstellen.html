@@ -242,7 +242,7 @@ const FRAGEN = [{"typ": "wahl", "text": "Scheitel S(1 | 3), Punkt P(2 | 1). Wie 
     .fr-tippbar, .fr-tippbar svg{pointer-events:auto !important;cursor:crosshair}`;
   document.head.appendChild(css);
   const box = document.createElement('div'); box.id = 'frage'; stage.appendChild(box);
-  let letzt = 0, offen = null, tippen = null, stimme = null;
+  let letzt = 0, offen = null, tippen = null, stimme = null, sprung = false;
   // Vorlesen mit derselben Stimme wie der Clip — nur wenn dessen Ton an ist.
   const hauptton = document.getElementById('ton');
   const vorlesen = src => {
@@ -250,7 +250,7 @@ const FRAGEN = [{"typ": "wahl", "text": "Scheitel S(1 | 3), Punkt P(2 | 1). Wie 
     if (!src || !hauptton || hauptton.muted) return;
     stimme = new Audio(src); stimme.play().catch(() => {});
   };
-  const erledigt = new Set();
+  const erledigt = new Set();     // beantwortete Fragen
   const pause = () => { if (pp.textContent === 'Pause') pp.click(); };
   const weiter = () => { if (pp.textContent === 'Play') pp.click(); };
   function schliessen() {
@@ -262,6 +262,7 @@ const FRAGEN = [{"typ": "wahl", "text": "Scheitel S(1 | 3), Punkt P(2 | 1). Wie 
     offen = null;
   }
   function antwort(F, ok, text, schl) {
+    const o = offen; erledigt.add(o.i);
     box.dataset.fertig = '1';
     vorlesen((F.ton || {})[schl]);
     if (F.typ === 'klick') box.querySelector('.fr-knoepfe').innerHTML = '';
@@ -269,7 +270,7 @@ const FRAGEN = [{"typ": "wahl", "text": "Scheitel S(1 | 3), Punkt P(2 | 1). Wie 
     r.innerHTML = (ok ? '✓ ' : '') + text;
     r.style.color = ok ? 'var(--f3)' : '';
     if (ok) {                      // richtig: kurz bestaetigen, dann von selbst weiter
-      setTimeout(() => { if (offen) { schliessen(); weiter(); } }, 1300);
+      setTimeout(() => { if (offen === o) { schliessen(); weiter(); } }, 1300);
       return;
     }
     const w = document.createElement('button'); w.className = 'fr-weiter'; w.textContent = 'Weiter ▶';
@@ -277,7 +278,7 @@ const FRAGEN = [{"typ": "wahl", "text": "Scheitel S(1 | 3), Punkt P(2 | 1). Wie 
     box.appendChild(w); w.focus();
   }
   function zeigen(i, F) {
-    offen = { i }; erledigt.add(i); pause(); delete box.dataset.fertig;
+    offen = { i, t: F.t }; pause(); delete box.dataset.fertig;
     box.innerHTML = '<div class="fr-kopf">Deine Vorhersage</div><div class="fr-text"></div>'
       + '<div class="fr-knoepfe"></div><div class="fr-rueck"></div>';
     box.querySelector('.fr-text').textContent = F.text;
@@ -324,16 +325,44 @@ const FRAGEN = [{"typ": "wahl", "text": "Scheitel S(1 | 3), Punkt P(2 | 1). Wie 
     box.style.display = 'block';
     vorlesen((F.ton || {}).frage);
   }
+  // Spulen wird ausdruecklich erkannt: Pfeiltasten und ein Klick auf die
+  // Zeitleiste setzen ein Zeichen, das das naechste Bild auswertet. Ein
+  // spaetes Bild (langsames Laden, Hintergrund-Tab) ist kein Spulen.
+  // Neustart (R) und ein Sprung vor die erste Frage stellen alle Fragen neu;
+  // nach R laeuft der Clip ab 0 wie beim ersten Abspielen.
+  document.addEventListener('keydown', e => {
+    if ((e.key || '').toLowerCase() === 'r') { schliessen(); erledigt.clear(); letzt = 0; }
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') sprung = true;
+  });
+  const bar = document.getElementById('bar');
+  bar.addEventListener('click', () => { sprung = true; });
+  // Die Abspielzeit ist im Abspieler lokal; zurueckgestellt wird sie ueber
+  // dessen Zeitleiste.
+  const zurueck = s => {
+    const r = bar.getBoundingClientRect();
+    if (r.width > 0 && bar.onclick) bar.onclick({ currentTarget: bar, clientX: r.left + s / DUR * r.width });
+  };
   const vorFragen = seek;
   seek = function (t) {
     vorFragen(t);
-    if (!offen) FRAGEN.forEach((F, i) => {
-      // nur beim Abspielen und nur beim gewoehnlichen Durchlaufen — ein Sprung
-      // auf der Zeitleiste an einer Frage vorbei loest sie nicht aus
-      if (!offen && !erledigt.has(i) && pp.textContent === 'Pause' && t - letzt < 0.3
-          && letzt < F.t && t >= F.t) zeigen(i, F);
-    });
-    if (offen && Math.abs(t - FRAGEN[offen.i].t) > 1.0) schliessen();
+    if (sprung) {
+      // gespult: eine uebersprungene Frage wird nicht gestellt, eine
+      // beantwortete kommt nicht wieder — ausser zurueck an den Anfang
+      sprung = false;
+      if (FRAGEN.length && t < Math.min(...FRAGEN.map(F => F.t))) { schliessen(); erledigt.clear(); }
+    } else if (!offen && pp.textContent === 'Pause') {
+      // gewoehnliches Abspielen, auch wenn ein Bild weit springt: die erste
+      // ueberschrittene Frage wird gestellt, der Clip geht an ihre Stelle zurueck
+      let i = -1;
+      FRAGEN.forEach((F, j) => {
+        if (!erledigt.has(j) && letzt < F.t && t >= F.t && (i < 0 || F.t < FRAGEN[i].t)) i = j;
+      });
+      if (i >= 0) {
+        zeigen(i, FRAGEN[i]);
+        if (offen && t - offen.t > 0.1) { t = offen.t; zurueck(t); vorFragen(t); }
+      }
+    }
+    if (offen && Math.abs(t - offen.t) > 1.0) schliessen();
     letzt = t;
   };
 })();

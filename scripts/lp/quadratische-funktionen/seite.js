@@ -85,33 +85,44 @@
   }
 
   /* ---------- Aufgabenleiste in der Simulation ----------
-     Eine Aufgabe nach der anderen; ✓ sobald der Zustand stimmt. «Nächste» geht
-     immer — wer hängt, soll nicht festsitzen. */
+     Eine Aufgabe nach der anderen; ✓ sobald der Zustand stimmt. «überspringen» geht
+     immer — wer hängt, soll nicht festsitzen. Gelöst und übersprungen werden getrennt
+     gezählt; am Ende führt «zu den offenen» zurück zu den übersprungenen Aufgaben. */
   function Leiste(fig, aufgaben, sim){
     var box = fig.querySelector('.leiste'); if (!box) return function(){};
-    var i = 0, erledigt = {};
-    box.innerHTML = '<span class="ls-nr"></span><span class="ls-text"></span><span class="ls-ok" aria-live="polite"></span><button type="button" class="ls-weiter"></button>';
-    var nr = box.querySelector('.ls-nr'), tx = box.querySelector('.ls-text'), ok = box.querySelector('.ls-ok'), bt = box.querySelector('.ls-weiter');
+    var n = aufgaben.length, i = 0, erledigt = {};
+    box.innerHTML = '<span class="ls-nr"></span><span class="ls-text"></span><span class="ls-ok" aria-live="polite"></span><button type="button" class="ls-weiter"></button><button type="button" class="ls-neu" hidden>von vorn</button>';
+    var nr = box.querySelector('.ls-nr'), tx = box.querySelector('.ls-text'), ok = box.querySelector('.ls-ok'),
+        bt = box.querySelector('.ls-weiter'), bv = box.querySelector('.ls-neu');
+    function anzahl(){ var k = 0; for (var j = 0; j < n; j++) if (erledigt[j]) k++; return k; }
+    function offen(ab){ for (var j = ab; j < n; j++) if (!erledigt[j]) return j; return n; }
     function zeigen(){
-      if (i >= aufgaben.length){ nr.textContent = '✓'; tx.innerHTML = 'Alle Aufgaben gelöst — weiter mit dem Kontrollclip.'; ok.textContent = ''; bt.textContent = 'nochmals'; box.classList.add('fertig'); return; }
-      box.classList.remove('fertig');
-      nr.textContent = (i + 1) + '/' + aufgaben.length; tx.innerHTML = aufgaben[i].text; setzen(tx);
+      if (i >= n){
+        var k = anzahl();
+        ok.textContent = ''; box.classList.remove('geloest');
+        if (k === n){ nr.textContent = '✓'; tx.innerHTML = 'Alle ' + n + ' Aufgaben gelöst — weiter mit dem Kontrollclip.'; bt.textContent = 'nochmals'; bv.hidden = true; box.classList.add('fertig'); }
+        else { nr.textContent = k + '/' + n; tx.innerHTML = k + ' von ' + n + ' gelöst, ' + (n - k) + ' übersprungen.'; bt.textContent = 'zu den offenen ▶'; bv.hidden = false; box.classList.remove('fertig'); }
+        return;
+      }
+      box.classList.remove('fertig'); bv.hidden = true;
+      nr.textContent = (i + 1) + '/' + n; tx.innerHTML = aufgaben[i].text; setzen(tx);
       if (aufgaben[i].setup) aufgaben[i].setup(sim);
       pruefen();
     }
     function pruefen(){
-      if (i >= aufgaben.length) return;
+      if (i >= n) return;
       var gut = !!aufgaben[i].ok(sim.zustand());
       if (gut) erledigt[i] = true;
       ok.textContent = erledigt[i] ? '✓' : '';
       bt.textContent = erledigt[i] ? 'Nächste ▶' : 'überspringen';
       box.classList.toggle('geloest', !!erledigt[i]);
     }
+    function gehe(j){ i = j; if (sim.aufraeumen) sim.aufraeumen(); zeigen(); if (sim.zeichnen) sim.zeichnen(); }
     bt.addEventListener('click', function(){
-      if (i >= aufgaben.length){ i = 0; erledigt = {}; } else i++;
-      if (sim.aufraeumen) sim.aufraeumen();
-      zeigen(); if (sim.zeichnen) sim.zeichnen();
+      if (i >= n){ if (anzahl() === n){ erledigt = {}; gehe(0); } else gehe(offen(0)); }
+      else gehe(offen(i + 1));
     });
+    bv.addEventListener('click', function(){ erledigt = {}; gehe(0); });
     setTimeout(zeigen, 0);
     return pruefen;
   }
@@ -166,7 +177,7 @@
       if (nst.length){
         var genau = nst.every(function(x){ return Math.abs(x * 100 - Math.round(x * 100)) < 1e-6; });
         rolle(fig, 'p').innerHTML = (genau ? '' : '≈ ') + z(a) + '·' + (nst[0] === nst[1] ? kl(nst[0]) + '²' : kl(nst[0]) + kl(nst[1]));
-      } else rolle(fig, 'p').innerHTML = '<em>gibt es nicht</em>';
+      } else rolle(fig, 'p').innerHTML = '<em>keine reellen Nullstellen</em>';
       // Punkte immer, Koordinaten erst, wenn die zugehörige Form angeklickt ist
       if (zeig('g')) K.punkt(0, c, 'p-c', aktiv === 'g' ? '(0 | ' + (Math.abs(c * 100 - Math.round(c * 100)) < 1e-6 ? '' : '≈ ') + z(c) + ')' : null);
       if (zeig('s')) K.punkt(xs, ys, 'p-s', aktiv === 's' ? 'S(' + z(xs) + ' | ' + z(ys) + ')' : null, xs > 3 ? -8 : 8, a > 0 ? 18 : -10, xs > 3 ? 'end' : 'start');
@@ -179,7 +190,7 @@
       { text: 'Klick die <b>Grundform</b> an. Wo im Bild siehst du \\(c\\)?', ok: function(s){ return s.aktiv === 'g'; } },
       { text: 'Klick die <b>Scheitelform</b> an. Wo im Bild siehst du den Scheitelpunkt?', ok: function(s){ return s.aktiv === 's'; } },
       { text: 'Klick die <b>Produktform</b> an. Wo im Bild siehst du die Nullstellen?', ok: function(s){ return s.aktiv === 'p'; } },
-      { text: 'Schieb \\(y_s\\) über \\(0\\). Was passiert mit der Produktform?', ok: function(s){ return s.a > 0 && s.ys > 0; } },
+      { text: 'Bei \\(a \\gt 0\\): Schieb \\(y_s\\) über \\(0\\). Was passiert mit der Produktform?', ok: function(s){ return s.a > 0 && s.ys > 0; } },
       { text: 'Stell \\(x_s = 0\\). Was fehlt jetzt in der Grundform?', ok: function(s){ return s.xs === 0 && s.a !== 0; } },
       { text: 'Stell \\(-x^2 - 2x + 3\\) ein.', ok: function(s){ return s.a === -1 && s.xs === -1 && s.ys === 4; } }
     ], sim);
@@ -393,17 +404,51 @@
           if (gl(e.xs, A.xs)) return '\\(x_s\\) stimmt. \\(y_s = f(' + tz(A.xs) + ')\\) nachrechnen.';
           return '\\(x_s = -\\dfrac{b}{2a}\\), dann \\(y_s = f(x_s)\\).'; },
         loesung: function(A){ return 'S(' + tz(A.xs) + ' \\mid ' + tz(A.ys) + ')'; } },
-      'nullstellen': { felder: ['x_1', 'x_2'], muster: 'x₁ = {x_1}   x₂ = {x_2}',
-        neu: function(){ var r1 = zufall(bereich(-6, 6)), r2; do { r2 = zufall(bereich(-6, 6)); } while (r2 === r1);
-          return { r: [Math.min(r1, r2), Math.max(r1, r2)], b: -(r1 + r2), c: r1 * r2, text: 'Nullstellen von \\(f(x) = ' + grund(1, -(r1 + r2), r1 * r2) + '\\)?' }; },
+      'nullstellen': { felder: ['n', 'x_1', 'x_2'], muster: 'Anzahl {n:2|1|0}   x₁ = {x_1}   x₂ = {x_2}',
+        // Anzahl wählen; nicht gebrauchte Felder werden gesperrt (wahl). Fälle: a = 1 ganzzahlig,
+        // a ≠ 1 mit ganzzahligen oder .5-Nullstellen, D = 0, D < 0. b und c immer ganzzahlig.
+        neu: function(){
+          var art = zufall(['zwei1', 'zwei1', 'zweiA', 'zweiA', 'doppelt', 'keine']), a, b, c, r = [];
+          if (art === 'zwei1'){ var r1 = zufall(bereich(-6, 6)), r2; do { r2 = zufall(bereich(-6, 6)); } while (r2 === r1);
+            a = 1; r = [r1, r2]; }
+          else if (art === 'zweiA'){
+            a = zufall([2, 2, -1, -2, 3]); var p = zufall(bereich(-4, 4)), q;
+            if (a === 2 || a === -2) do { q = zufall(bereich(-7, 7)) / 2; } while (q === p || Number.isInteger(q) && Math.random() < 0.5);
+            else do { q = zufall(bereich(-5, 5)); } while (q === p);
+            r = [p, q]; }
+          else if (art === 'doppelt'){ a = zufall([1, 1, -1, 4, 2]); var d = a === 4 ? zufall([-5, -3, -1, 1, 3, 5]) / 2 : zufall(bereich(-5, 5, [0])); r = [d, d]; }
+          else { a = zufall([1, 1, 2, -1]); var u = zufall(bereich(-4, 4)), v = (a > 0 ? 1 : -1) * zufall(bereich(1, 5)); r = [];
+            b = -2 * a * u; c = a * u * u + v; }
+          if (art !== 'keine'){ b = -a * (r[0] + r[1]); c = a * r[0] * r[1]; }
+          if (Object.is(b, -0)) b = 0; if (Object.is(c, -0)) c = 0;
+          r.sort(function(x, y){ return x - y; });
+          var D = b * b - 4 * a * c;
+          return { a: a, b: b, c: c, D: D, r: r, n: D > 0 ? 2 : D === 0 ? 1 : 0,
+            text: 'Nullstellen von \\(f(x) = ' + grund(a, b, c) + '\\)? Zuerst die Anzahl wählen.' }; },
+        wahl: function(ein){
+          var n = ein.querySelector('[data-f="n"]').value;
+          ein.querySelectorAll('input').forEach(function(i){ var aus = n === '0' || (n === '1' && i.dataset.f === 'x_2');
+            i.disabled = aus; if (aus) i.value = ''; }); },
         pruefen: function(A, e){
+          var n = +e.n, Dt = '\\(D = ' + (A.b < 0 ? '(' + tz(A.b) + ')' : tz(A.b)) + '^2 - 4 \\cdot ' + (A.a < 0 ? '(' + tz(A.a) + ')' : tz(A.a)) + ' \\cdot ' + (A.c < 0 ? '(' + tz(A.c) + ')' : tz(A.c)) + ' = ' + tz(A.D) + '\\)';
+          if (n !== A.n) return Dt + (A.n === 2 ? ' ist positiv: zwei Nullstellen.' : A.n === 1 ? ': genau eine Nullstelle.' : ' ist negativ: keine Nullstelle.');
+          if (n === 0) return null;
+          var xs = -A.b / (2 * A.a);
+          if (n === 1){
+            if (gl(e.x_1, A.r[0])) return null;
+            if (gl(e.x_1, -A.r[0])) return 'Vorzeichen: \\(x = -\\dfrac{b}{2a} = ' + tz(A.r[0]) + '\\).';
+            return 'Bei \\(D = 0\\) ist \\(x = -\\dfrac{b}{2a}\\).';
+          }
           var x = [e.x_1, e.x_2], hat = function(w){ return gl(x[0], w) || gl(x[1], w); };
-          if (hat(A.r[0]) && hat(A.r[1])) return null;
-          if (hat(-A.r[0]) && hat(-A.r[1])) return 'Vorzeichen gedreht: Die Klammer muss null werden.';
+          if (hat(A.r[0]) && hat(A.r[1]) && !gl(x[0], x[1])) return null;
+          var w = Math.sqrt(A.D);
+          if (hat(-A.r[0]) && hat(-A.r[1])) return 'Vorzeichen gedreht: \\(x_{1,2} = \\dfrac{-b \\pm \\sqrt{D}}{2a}\\) — mit \\(-b\\).';
+          if (A.a !== 1 && hat((-A.b - w) / 2) && hat((-A.b + w) / 2)) return 'Durch \\(2a = ' + tz(2 * A.a) + '\\) teilen, nicht durch \\(2\\).';
           if (hat(A.r[0]) || hat(A.r[1])) return 'Eine stimmt. Die andere durch Einsetzen prüfen.';
-          if (hat(-A.b / 2)) return '\\(' + tz(-A.b / 2) + '\\) ist die Stelle des Scheitels.';
-          return 'Zwei Zahlen mit Produkt \\(c = ' + tz(A.c) + '\\) und Summe \\(-b = ' + tz(-A.b) + '\\) — oder Mitternachtsformel.'; },
-        loesung: function(A){ return 'x_1 = ' + tz(A.r[0]) + ',\\ x_2 = ' + tz(A.r[1]); } },
+          if (hat(xs)) return '\\(' + tz(xs) + '\\) ist die Stelle des Scheitels.';
+          return A.a === 1 ? 'Zwei Zahlen mit Produkt \\(c = ' + tz(A.c) + '\\) und Summe \\(-b = ' + tz(-A.b) + '\\) — oder \\(x_{1,2} = \\dfrac{-b \\pm \\sqrt{D}}{2a}\\).'
+                           : 'Nullstellenformel: \\(x_{1,2} = \\dfrac{-b \\pm \\sqrt{D}}{2a}\\) mit \\(D = ' + tz(A.D) + '\\).'; },
+        loesung: function(A){ return A.n === 0 ? 'D = ' + tz(A.D) + ' \\lt 0:\\ \\text{keine Nullstelle}' : A.n === 1 ? 'D = 0:\\ x_1 = ' + tz(A.r[0]) : 'x_1 = ' + tz(A.r[0]) + ',\\ x_2 = ' + tz(A.r[1]); } },
       'aufstellen-scheitel': { felder: ['a'], muster: 'a = {a}',
         neu: function(){ var a = zufall([-3, -2, -1, -0.5, 0.5, 1, 2, 3]), xs = zufall(bereich(-3, 3)), ys = zufall(bereich(-4, 4)),
           d = Math.abs(a) === 0.5 ? zufall([-2, 2]) : zufall([-3, -2, 2, 3]);   // |d| ≥ 2, sonst prüft die Aufgabe das Quadrieren nicht
@@ -436,7 +481,8 @@
           if (gl(e.x, A.U / 2)) return '\\(' + (A.U / 2) + '\\) ist eine Nullstelle von \\(A(x) = x(' + (A.U / 2) + ' - x)\\). Das Maximum liegt in der Mitte.';
           if (gl(e.x, A.x)) return '\\(x\\) stimmt. \\(A = ' + A.x + ' \\cdot ' + A.x + '\\).';
           return '\\(A(x) = x(' + (A.U / 2) + ' - x)\\): Nullstellen ablesen, Mitte nehmen, einsetzen.'; },
-        loesung: function(A){ return 'x = ' + A.x + '\\ \\text{m},\\ A = ' + A.A + '\\ \\text{m}^2'; } },
+        richtig: function(A){ return 'Zulässig: \\(0 \\lt x \\lt ' + (A.U / 2) + '\\), der Scheitel liegt darin.'; },
+        loesung: function(A){ return 'A(x) = x(' + (A.U / 2) + ' - x),\\ 0 \\lt x \\lt ' + (A.U / 2) + ':\\ x = ' + A.x + '\\ \\text{m},\\ A = ' + A.A + '\\ \\text{m}^2'; } },
       'mauer': { felder: ['x', 'A'], muster: 'x = {x} m   A = {A} m²',
         neu: function(){ var L = zufall(bereich(5, 14)) * 4; return { L: L, x: L / 4, A: L * L / 8,   // ohne 60 m (= Aufgabe 5a)
           text: 'Rechteckiges Beet an einer Mauer, \\(' + L + '\\) m Zaun für die drei anderen Seiten. \\(x\\) = Seite senkrecht zur Mauer. Grösste Fläche?' }; },
@@ -446,7 +492,28 @@
           if (gl(e.x, A.L / 3)) return 'Kein Quadrat: Die Mauer spart eine Seite. Nullstellen von \\(x(' + A.L + ' - 2x)\\) sind \\(0\\) und \\(' + (A.L / 2) + '\\).';
           if (gl(e.x, A.x)) return '\\(x\\) stimmt. \\(A = ' + A.x + ' \\cdot ' + (A.L - 2 * A.x) + '\\).';
           return '\\(A(x) = x(' + A.L + ' - 2x)\\): Nullstellen \\(0\\) und \\(' + (A.L / 2) + '\\), Mitte nehmen.'; },
-        loesung: function(A){ return 'x = ' + A.x + '\\ \\text{m},\\ A = ' + A.A + '\\ \\text{m}^2'; } }
+        richtig: function(A){ return 'Zulässig: \\(0 \\lt x \\lt ' + (A.L / 2) + '\\), der Scheitel liegt darin.'; },
+        loesung: function(A){ return 'A(x) = x(' + A.L + ' - 2x),\\ 0 \\lt x \\lt ' + (A.L / 2) + ':\\ x = ' + A.x + '\\ \\text{m},\\ A = ' + A.A + '\\ \\text{m}^2'; } },
+      'extremwert': { felder: ['xs', 'ys', 'art'], muster: 'S( {xs} | {ys} ) ist ein {art:Maximum|Minimum}',
+        // Grundform, Scheitel über −b/(2a); Nullstellen oft nicht ablesbar oder gar keine.
+        neu: function(){
+          var a = zufall([-5, -5, -2, -1, 1, 2, 3]), xs = a === -5 ? zufall([0.5, 1, 1.5, 2, 2.5, 3]) : zufall(bereich(-4, 4, [0])),
+              c = a === -5 ? zufall(bereich(0, 3)) : zufall(bereich(-6, 6)), b = -2 * a * xs, ys = c - a * xs * xs;
+          return { a: a, b: b, c: c, xs: xs, ys: ys, art: a < 0 ? 'Maximum' : 'Minimum',
+            text: 'Wo hat \\(f(x) = ' + grund(a, b, c) + '\\) ihr Extremum, welchen Wert, welche Art?' }; },
+        pruefen: function(A, e){
+          if (gl(e.xs, A.xs) && gl(e.ys, A.ys) && e.art === A.art) return null;
+          var r = [];
+          if (gl(e.xs, -A.xs)) r.push('Minus vor dem Bruch: \\(x_s = -\\dfrac{' + tz(A.b) + '}{' + tz(2 * A.a) + '} = ' + tz(A.xs) + '\\).');
+          else if (gl(e.xs, -A.b / A.a) || gl(e.xs, A.b / A.a)) r.push('Durch \\(2a\\) teilen: \\(x_s = -\\dfrac{b}{2a}\\).');
+          else if (!gl(e.xs, A.xs)) r.push('\\(x_s = -\\dfrac{b}{2a}\\).');
+          else if (gl(e.ys, A.ys)) {}
+          else if (gl(e.ys, A.c)) r.push('\\(c = f(0)\\) ist nicht der Extremwert: \\(y_s = f(' + tz(A.xs) + ')\\).');
+          else if (gl(e.ys, 0) || gl(e.ys, A.xs)) r.push('Der Wert fehlt: \\(y_s = f(' + tz(A.xs) + ')\\) ausrechnen.');
+          else r.push('\\(x_s\\) stimmt. \\(y_s = f(' + tz(A.xs) + ')\\) nachrechnen.');
+          if (e.art !== A.art) r.push('\\(a = ' + tz(A.a) + (A.a < 0 ? ' \\lt 0' : ' \\gt 0') + '\\): nach ' + (A.a < 0 ? 'unten geöffnet, der Scheitel ist der höchste Punkt' : 'oben geöffnet, der Scheitel ist der tiefste Punkt') + '.');
+          return r.join(' '); },
+        loesung: function(A){ return 'x_s = -\\dfrac{' + tz(A.b) + '}{' + tz(2 * A.a) + '} = ' + tz(A.xs) + ',\\ y_s = f(' + tz(A.xs) + ') = ' + tz(A.ys) + ',\\ \\text{' + A.art + '}'; } }
     };
     ALLE.forEach(function(box){
       var T = TYPEN[box.dataset.typ]; if (!T) return;
@@ -457,14 +524,19 @@
         A = T.neu(); versuche = 0; geloest = false; box.__aufgabe = A;   // Testhaken
         auf.innerHTML = A.text;
         var html = T.muster;
-        T.felder.forEach(function(f){ html = html.replace('{' + f + '}', '<input type="text" inputmode="decimal" autocomplete="off" aria-label="' + f + '" data-f="' + f + '">'); });
+        T.felder.forEach(function(f){
+          html = html.replace(new RegExp('\\{' + f + '(?::([^}]*))?\\}'), function(m, wahl){
+            if (!wahl) return '<input type="text" inputmode="decimal" autocomplete="off" aria-label="' + f + '" data-f="' + f + '">';
+            return '<select aria-label="' + f + '" data-f="' + f + '"><option value="">?</option>' + wahl.split('|').map(function(w){ return '<option>' + w + '</option>'; }).join('') + '</select>';
+          }); });
         ein.innerHTML = html; rueck.className = 'ue-rueck'; rueck.innerHTML = '';
+        if (T.wahl) ein.querySelectorAll('select').forEach(function(w){ w.addEventListener('change', function(){ T.wahl(ein); }); });
         if (bild){
           while (bild.firstChild) bild.removeChild(bild.firstChild);
           if (T.graf){
             var fe = [A.xs - 4, A.xs + 4, A.ys - 4, A.ys + 4];
             bild.setAttribute('viewBox', '0 0 170 170');
-            var K = Achsen(bild, { w: 170, h: 170, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3.5, pfeil: 6 });
+            var K = Achsen(bild, { w: 170, h: 170, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3.5, pfeil: 6, xm: [1], ym: [1] });
             K.kurve(function(x){ return A.a * (x - A.xs) * (x - A.xs) + A.ys; }, 'kurve');
             K.punkt(A.xs, A.ys, 'p-s'); K.punkt(A.xs + A.s, A.ys + A.a * A.s * A.s, 'p-s');
           }
@@ -474,17 +546,19 @@
       function pruefen(){
         if (geloest) return;   // nach ✓ zählt erst die nächste Aufgabe
         var e = {}, leer = false, kaputt = false, komma = false;
-        ein.querySelectorAll('input').forEach(function(i){ var r = lesen(i.value); e[i.dataset.f] = r.wert;
+        ein.querySelectorAll('select').forEach(function(w){ e[w.dataset.f] = w.value; if (!w.value) leer = true; });
+        ein.querySelectorAll('input').forEach(function(i){ if (i.disabled){ e[i.dataset.f] = NaN; i.classList.remove('falsch'); return; }
+          var r = lesen(i.value); e[i.dataset.f] = r.wert;
           if (r.leer) leer = true; else if (isNaN(r.wert)) kaputt = true; if (r.komma) komma = true;
           i.classList.toggle('falsch', !r.leer && isNaN(r.wert)); });
-        if (leer){ rueck.className = 'ue-rueck hinweis'; rueck.textContent = 'Fülle alle Felder aus.'; return; }
+        if (leer){ rueck.className = 'ue-rueck hinweis'; rueck.textContent = ein.querySelector('select') ? 'Wähle aus und fülle alle offenen Felder aus.' : 'Fülle alle Felder aus.'; return; }
         if (kaputt){ rueck.className = 'ue-rueck hinweis'; rueck.innerHTML = 'Zahlen wie <code>-3</code>, <code>0.5</code> oder <code>1/2</code>.'; return; }
         versuche++;
         var f = T.pruefen(A, e);
         if (f === null){
           serie = versuche === 1 ? serie + 1 : 0; geloest = true;
           rueck.className = 'ue-rueck richtig';
-          rueck.innerHTML = '✓ Richtig' + (komma ? ' (Hier schreibt man den Dezimalpunkt.)' : '') + ' <button type="button" class="ue-weiter">Nächste</button>';
+          rueck.innerHTML = '✓ Richtig' + (komma ? ' (Hier schreibt man den Dezimalpunkt.)' : '') + (T.richtig ? ' ' + T.richtig(A) : '') + ' <button type="button" class="ue-weiter">Nächste</button>';
           rueck.querySelector('.ue-weiter').addEventListener('click', neu);
         } else {
           serie = 0; rueck.className = 'ue-rueck falsch';

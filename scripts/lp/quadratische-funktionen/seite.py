@@ -17,7 +17,7 @@ if '/* ════════ Fassung 3' in kopf:
     kopf = kopf[:kopf.index('\n/* ════════ Fassung 3')]
 i = alt.index('<script>\n  window.MathJax')
 j = min(k for k in (alt.find('<script>\n/* Leitprogramm Quadratische Funktionen — Simulationen'), alt.find('<script>\n/* Simulationen und Minigrafen')) if k > 0)
-basis = alt[i:j]
+basis = alt[i:j].replace("' Selbsttests erledigt'", "' Aufgabenblöcken bearbeitet'")
 fuss = alt[alt.index('<footer class="site-footer">'):]
 fuss = re.sub(r'Version [0-9.]+( \(Probe\))?', 'Version 1.0', fuss).replace('Quadratische Funktionen (Probe)', 'Quadratische Funktionen')
 fuss = re.sub(r'Stand [0-9]+\. [A-Za-zäöü]+ 2026', 'Stand 2. Oktober 2026', fuss)
@@ -31,7 +31,7 @@ CSS = '''
 .leiste .ls-nr{font-family:var(--mono);font-size:.78rem;color:var(--orange);font-weight:700}
 .leiste .ls-text{flex:1 1 260px;min-width:0}
 .leiste .ls-ok{color:var(--gruen);font-weight:700;font-size:1.1rem;min-width:1em}
-.leiste .ls-weiter{font-family:var(--sans);font-size:.8rem;cursor:pointer;border-radius:999px;padding:4px 12px;
+.leiste .ls-weiter,.leiste .ls-neu{font-family:var(--sans);font-size:.8rem;cursor:pointer;border-radius:999px;padding:4px 12px;
   border:1px solid var(--linie);background:var(--karte);color:var(--tinte-2)}
 .leiste.geloest{background:var(--gruen-hell);border-color:var(--gruen-rand)}
 .leiste.geloest .ls-weiter{border-color:var(--gruen-rand);color:var(--tinte);font-weight:700}
@@ -58,6 +58,9 @@ text.p-text{stroke:var(--karte);stroke-width:4px;paint-order:stroke}
 .sl-grp.akz-lila{--akz:var(--lila)} .sl-grp.akz-grau{--akz:var(--tinte-2)}
 .formen-live button[data-form="g"].aktiv{border-color:var(--lila-rand);background:var(--lila-hell)}
 .formen-live button[data-form="p"].aktiv{border-color:var(--tinte-2);background:var(--papier-2)}
+.ue-eingabe select{font-family:var(--sans);font-size:.88rem;padding:4px 6px;margin:0 3px;border:1.5px solid var(--linie);border-radius:6px;background:var(--papier);color:var(--tinte)}
+.ue-eingabe select:focus{outline:none;border-color:var(--orange-rand)}
+.ue-eingabe input:disabled{opacity:.35}
 .pdf-knopf{display:inline-block;margin-top:6px;padding:6px 14px;border-radius:999px;background:var(--blau-hell);border:1px solid var(--blau-rand);color:var(--tinte);text-decoration:none;font-weight:600}
 '''
 
@@ -93,7 +96,7 @@ def test(tid, titel, punkte, aufgaben, zwei=True):
     return f'''<div class="test" data-test="{tid}">
         <div class="test-kopf">
           <h3>{titel} <span class="summe">· {punkte} P</span></h3>
-          <span class="werkz"><button type="button" class="alle-loesungen">alle Lösungen</button><label><input type="checkbox" class="erledigt"> erledigt</label></span>
+          <span class="werkz"><button type="button" class="alle-loesungen">alle Lösungen</button><label title="Aufgaben auf Papier gelöst und mit den Lösungen verglichen — ob alles sitzt, zeigt der Gesamttest."><input type="checkbox" class="erledigt" aria-label="Aufgaben dieses Kapitels bearbeitet"> bearbeitet</label></span>
         </div>
         <ol class="aufg{' zwei' if zwei else ''}">
 {chr(10).join(lis)}
@@ -102,11 +105,11 @@ def test(tid, titel, punkte, aufgaben, zwei=True):
 
 FAHRPLAN = '<div class="fahrplan" aria-label="Ablauf"><span>① Clip</span><span>② Tüfteln</span><span>③ Kontrollfragen</span><span>④ Üben mit Rückmeldung</span><span>⑤ Aufgaben</span></div>'
 
-def kapitel(n, kid, titel, komp, ziel, clip1, sim, clip2, festhalten, uebungen, aufgaben, mehr):
+def kapitel(n, kid, titel, komp, zeit, ziel, clip1, sim, clip2, festhalten, uebungen, aufgaben, mehr):
     ue = '\n        '.join(uebungen)
     return f'''
     <section class="kap" id="k{n}">
-      <div class="kap-meta"><span class="marker">Kapitel {n}</span><span class="abz abz-gf">GF 3.3 · {komp}</span><span class="zeit">≈ 30 min</span></div>
+      <div class="kap-meta"><span class="marker">Kapitel {n}</span><span class="abz abz-gf">GF 3.3 · {komp}</span><span class="zeit">≈ {zeit} min</span></div>
       <h2 id="{kid}">{titel}</h2>
       <p class="ziel">{ziel}</p>
 
@@ -171,7 +174,7 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 11, [
     ('1d', 2, r'Warum hat \(f(x) = (x-3)^2 - 2\) bei \(x = 1\) und bei \(x = 5\) denselben Wert?',
      r'<p>Beide liegen \(2\) neben \(x_s = 3\): \((1-3)^2 = (5-3)^2 = 4\), also \(f(1) = f(5) = 2\). Die Parabel ist symmetrisch zur Symmetrieachse \(x = 3\).</p>', ''),
 ], zwei=False)
-k1 = kapitel(1, 'die-parabel-bewegen', 'Die Parabel bewegen', 'K2',
+k1 = kapitel(1, 'die-parabel-bewegen', 'Die Parabel bewegen', 'K2', 35,
     r'Du liest aus \(f(x) = a(x - x_s)^2 + y_s\) Scheitel, Öffnung und Streckung ab — und umgekehrt die Gleichung aus dem Graphen.',
     ('g3-3-lp-verschieben', 'Parabel sehen: von der Normalparabel zur Scheitelform', 'Einführung', '1:41'),
     sim1, ('g3-3-lp-kontrolle-scheitelform', 'Kontrollfragen zur Scheitelform', '', '0:50'),
@@ -201,7 +204,7 @@ fest2 = r'''      <div class="merk"><div class="titel">Quadratische Funktion</di
           <tbody>
             <tr><td>Grundform <span class="komm">(allgemeine Form)</span></td><td>\(ax^2 + bx + c\)</td><td class="wort">\(y\)-Achsenabschnitt \((0 \mid c)\)</td></tr>
             <tr><td>Scheitelform</td><td>\(a(x - x_s)^2 + y_s\)</td><td class="wort">Scheitel \(S(x_s \mid y_s)\)</td></tr>
-            <tr><td>Produktform <span class="komm">(Linearfaktorform)</span></td><td>\(a(x - x_1)(x - x_2)\)</td><td class="wort">Nullstellen \(x_1,\ x_2\) — nur wenn es welche gibt</td></tr>
+            <tr><td>Produktform <span class="komm">(reelle Linearfaktoren)</span></td><td>\(a(x - x_1)(x - x_2)\)</td><td class="wort">Nullstellen \(x_1,\ x_2\) — nur bei \(D \geq 0\); bei \(D = 0\): \(a(x - x_1)^2\)</td></tr>
           </tbody>
         </table>
       </div>
@@ -217,15 +220,15 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 13, [
     ('2a', 3, r'In die Grundform: \(-(x+3)^2 + 4\) und \(2(x-1)(x+4)\).', r'<p>\(-x^2 - 6x - 5\) und \(2x^2 + 6x - 8\).</p>', ''),
     ('2b', 3, r'Scheitelform von \(x^2 + 6x + 5\)?', r'<p>\(x^2 + 6x + 9 - 9 + 5 = (x+3)^2 - 4\), \(S(-3 \mid -4)\).</p>', ''),
     ('2c', 2, r'Produktform von \(x^2 + x - 12\)?', r'<p>\((x+4)(x-3)\).</p>', ''),
-    ('2d', 2, r'Warum hat \(x^2 + 2x + 5\) keine Produktform?', r'<p>\((x+1)^2 + 4 \geq 4\): keine Nullstellen.</p>', ''),
+    ('2d', 2, r'Warum hat \(x^2 + 2x + 5\) keine Produktform (mit reellen Linearfaktoren)?', r'<p>\((x+1)^2 + 4 \geq 4\): keine reellen Nullstellen, also keine Faktoren \((x - x_1)\).</p>', ''),
     ('2e', 3, r'Lies Scheitel, Nullstellen und \(y\)-Achsenabschnitt ab und gib alle drei Formen an. (Punkte auf Gitterpunkten)',
      r'<p>\(S(1 \mid -4)\), Nullstellen \(-1\) und \(3\), \(y\)-Achsenabschnitt \(-3\); ein Schritt neben dem Scheitel 1 hinauf: \(a = 1\).</p><p>\(f(x) = (x-1)^2 - 4\) \(= (x+1)(x-3)\) \(= x^2 - 2x - 3\)</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-f="1,1,-4" data-fenster="-3,5,-5,3" data-punkte="1,-4;-1,0;3,0;0,-3"></svg></div>'),
 ])
-k2 = kapitel(2, 'drei-formen-eine-parabel', 'Drei Formen, eine Parabel', 'K1 · K2',
+k2 = kapitel(2, 'drei-formen-eine-parabel', 'Drei Formen, eine Parabel', 'K1 · K2', 40,
     'Du erklärst, was Grund-, Scheitel- und Produktform im Bild zeigen, und formst ohne Rechner um.',
-    ('g3-3-lp-drei-formen', 'Parabel sehen: drei Formen, drei Blicke', 'Einführung', '0:58'),
-    sim2, ('g3-3-lp-kontrolle-formen', 'Kontrollfragen zu den drei Formen', '', '0:50'),
+    ('g3-3-lp-drei-formen', 'Parabel sehen: drei Formen, drei Blicke', 'Einführung', '1:01'),
+    sim2, ('g3-3-lp-kontrolle-formen', 'Kontrollfragen zu den drei Formen', '', '0:51'),
     fest2, [uebung('scheitel-grund', 'Scheitelform → Grundform'), uebung('produkt-grund', 'Produktform → Grundform'),
             uebung('grund-scheitelform', 'Grundform → Scheitelform')],
     auf2, f'<a href="{TS}#darstellungen">Themenseite 3.3, Die drei Darstellungen</a>')
@@ -245,6 +248,7 @@ fest3 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Scheitel und Nullstellen</div>
           <p>\[ x_s = -\frac{b}{2a}, \qquad y_s = f(x_s), \qquad D = b^2 - 4ac \]</p>
+          <p>\[ x_{1,2} = \frac{-b \pm \sqrt{D}}{2a} \quad (D \geq 0) \]</p>
           <p>Die Diskriminante \(D\) zählt die Nullstellen: \(D \gt 0\): zwei · \(D = 0\): eine · \(D \lt 0\): keine. Die Nullstellen liegen spiegelbildlich zur Symmetrieachse \(x = x_s\).</p>
         </div>
         <div class="warn"><div class="titel">Häufiger Fehler</div><p>Bei \(a = 1,\ b = -4\) ist \(x_s = -\frac{-4}{2 \cdot 1} = +2\). Das Minus vor dem Bruch nicht vergessen.</p></div>
@@ -258,7 +262,7 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 12, [
     ('3e', 2, r'Warum hat \(f(x) = x^2 + bx - 3\) für jedes \(b\) zwei Nullstellen?',
      r'<p>\(D = b^2 + 12 \gt 0\), weil \(b^2 \geq 0\).</p><p class="komm">Oder am Graphen: nach oben geöffnet und \(f(0) = -3 \lt 0\).</p>', ''),
 ])
-k3 = kapitel(3, 'nullstellen-und-scheitel', 'Nullstellen und Scheitel berechnen', 'K1 · K2',
+k3 = kapitel(3, 'nullstellen-und-scheitel', 'Nullstellen und Scheitel berechnen', 'K1 · K2', 40,
     'Du bestimmst aus der Grundform Scheitel und Nullstellen und sagst mit der Diskriminante \\(D = b^2 - 4ac\\) voraus, wie viele es gibt.',
     ('g3-3-lp-achse-bleibt', 'Parabel sehen: c hebt, die Symmetrieachse bleibt', 'Einführung', '1:07'),
     sim3, ('g3-3-lp-kontrolle-nullstellen', 'Kontrollfragen zu Nullstellen und Scheitel', '', '0:52'),
@@ -278,8 +282,8 @@ fest4 = r'''      <div class="tabhuelle">
         <table class="gesetze formen">
           <thead><tr><th>Gegeben</th><th>Ansatz</th><th>Dann</th></tr></thead>
           <tbody>
-            <tr><td>Scheitel + Punkt</td><td>\(a(x - x_s)^2 + y_s\)</td><td class="wort">Punkt einsetzen → \(a\)</td></tr>
-            <tr><td>Nullstellen + Punkt</td><td>\(a(x - x_1)(x - x_2)\)</td><td class="wort">Punkt einsetzen → \(a\)</td></tr>
+            <tr><td>Scheitel + Punkt <span class="komm">(\(x_P \neq x_s\))</span></td><td>\(a(x - x_s)^2 + y_s\)</td><td class="wort">Punkt einsetzen → \(a\)</td></tr>
+            <tr><td>Nullstellen + Punkt <span class="komm">(Punkt keine Nullstelle)</span></td><td>\(a(x - x_1)(x - x_2)\)</td><td class="wort">Punkt einsetzen → \(a\)</td></tr>
             <tr><td>drei Punkte</td><td>\(ax^2 + bx + c\)</td><td class="wort">drei Gleichungen → \(a, b, c\)</td></tr>
           </tbody>
         </table>
@@ -288,14 +292,14 @@ fest4 = r'''      <div class="tabhuelle">
 auf4 = test('t4', 'Aufgaben · Kapitel 4', 16, [
     ('4a', 3, r'Scheitel \(S(-2 \mid 3)\), Punkt \(P(0 \mid -5)\).', r'<p>\(-5 = 4a + 3\), \(a = -2\): \(f(x) = -2(x+2)^2 + 3\).</p>', ''),
     ('4b', 3, r'Nullstellen \(-3\) und \(1\), \(y\)-Achsenabschnitt \(6\).', r'<p>\(6 = a \cdot 3 \cdot (-1)\), \(a = -2\): \(f(x) = -2(x+3)(x-1)\).</p>', ''),
-    ('4c', 3, 'Torbogen: unten 6 m breit, in der Mitte 4.5 m hoch. Ursprung in der Mitte am Boden. Gleichung und Höhe 2 m neben der Mitte?',
-     r'<p>\(f(x) = -0.5x^2 + 4.5\), \(f(2) = 2.5\) m.</p>', ''),
+    ('4c', 3, 'Parabelförmiger Torbogen: unten 6 m breit, in der Mitte 4.5 m hoch. Ursprung in der Mitte am Boden. Gleichung und Höhe 2 m neben der Mitte?',
+     r'<p>\(f(x) = -0.5x^2 + 4.5\) für \(-3 \leq x \leq 3\) (nur der Bogen), \(f(2) = 2.5\) m.</p>', ''),
     ('4d', 3, 'Gleichung der Parabel? (Punkte auf Gitterpunkten)', r'<p>\(S(1 \mid 4)\), mit \((3 \mid 0)\): \(a = -1\). \(f(x) = -(x-1)^2 + 4\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-f="-1,1,4" data-fenster="-3,5,-2,5" data-punkte="1,4;-1,0;3,0"></svg></div>'),
     ('4e', 4, r'Parabel durch \((0 \mid 4)\), \((1 \mid 3)\) und \((2 \mid -2)\): Gleichung? Warum braucht es hier drei Punkte, bei bekanntem Scheitel aber nur einen?',
      r'<p>\(c = 4\); \(a + b + 4 = 3\) und \(4a + 2b + 4 = -2\) ergeben \(a = -2\), \(b = 1\): \(f(x) = -2x^2 + x + 4\).</p><p>In der Grundform sind \(a\), \(b\), \(c\) unbekannt: drei Unbekannte brauchen drei Gleichungen. Der Scheitel liefert \(x_s\) und \(y_s\), offen bleibt nur \(a\).</p>', ''),
 ])
-k4 = kapitel(4, 'die-gleichung-aufstellen', 'Die Funktionsgleichung aufstellen', 'K3',
+k4 = kapitel(4, 'die-gleichung-aufstellen', 'Die Funktionsgleichung aufstellen', 'K3', 40,
     'Du wählst den passenden Ansatz und bestimmst \\(a\\) mit einem Punkt.',
     ('g3-3-lp-a-finden', 'Parabel sehen: a finden', 'Einführung', '0:56'),
     sim4, ('g3-3-lp-kontrolle-aufstellen', 'Kontrollfragen zum Aufstellen', '', '0:49'),
@@ -313,25 +317,35 @@ sim5 = f'''      <figure class="sim sim-gross" id="sim5">
         </div>
       </figure>'''
 fest5 = r'''      <div class="festhalten">
-        <div class="merk"><div class="titel">Extremwertaufgabe</div>
-          <p>1. Zielgrösse als Funktion einer Variablen · 2. Nullstellen ablesen · 3. Mitte = Stelle des Maximums — oder Scheitel über \(x_s = -\frac{b}{2a}\); bei \(a \gt 0\) ein Minimum · 4. Antwort mit Stelle <em>und</em> Wert.</p></div>
+        <div class="merk"><div class="titel">Extremwertaufgabe — Vorgehen</div>
+          <ol>
+            <li>Variable festlegen (was ist \(x\)?), Zielgrösse als Funktion aufstellen.</li>
+            <li>Zulässigen Bereich angeben, z. B. \(0 \lt x \lt 30\).</li>
+            <li>Scheitel bestimmen: \(x_s = -\frac{b}{2a}\) oder Scheitelform. Abkürzung, wenn die Nullstellen leicht ablesbar sind: \(x_s\) liegt in ihrer Mitte.</li>
+            <li>Art aus dem Vorzeichen: \(a \lt 0\) Maximum, \(a \gt 0\) Minimum. Der Scheitel muss im zulässigen Bereich liegen — sonst liegt das Extremum am Rand.</li>
+            <li>Antwort mit Stelle <em>und</em> Wert, mit Einheit.</li>
+          </ol></div>
         <div class="warn"><div class="titel">Häufiger Fehler</div><p>\(x = 10\) ist nicht die grösste Fläche. Gefragt ist \(A(10) = 100\) m².</p></div>
       </div>'''
-auf5 = test('t5', 'Aufgaben · Kapitel 5', 14, [
-    ('5a', 4, r'Beet an einer Mauer, 60 m Zaun für die drei anderen Seiten, \(x\) = Seite senkrecht zur Mauer. Grösste Fläche?', r'<p>\(A(x) = x(60 - 2x)\), Mitte \(x = 15\): 15 m × 30 m, 450 m².</p>', ''),
-    ('5b', 4, '30 CHF Eintritt, 200 Besucher; jeder Franken mehr kostet 5 Besucher. Bester Preis, grösste Einnahme?', r'<p>\(x\) = Preiserhöhung in CHF: \((30 + x)(200 - 5x)\), Nullstellen \(-30\) und \(40\), Mitte \(5\): 35 CHF, 6125 CHF.</p>', ''),
-    ('5c', 2, 'Zwei Zahlen mit Summe 14: Wann ist ihr Produkt am grössten?', r'<p>\(x(14 - x)\): beide 7, Produkt 49.</p>', ''),
+auf5 = test('t5', 'Aufgaben · Kapitel 5', 20, [
+    ('5a', 4, r'Beet an einer Mauer, 60 m Zaun für die drei anderen Seiten, \(x\) = Seite senkrecht zur Mauer. Grösste Fläche?', r'<p>\(A(x) = x(60 - 2x)\), zulässig \(0 \lt x \lt 30\). Mitte der Nullstellen \(x = 15\): 15 m × 30 m, 450 m².</p>', ''),
+    ('5b', 4, '30 CHF Eintritt, 200 Besucher; jeder Franken mehr kostet 5 Besucher. Bester Preis, grösste Einnahme?', r'<p>\(x\) = Preiserhöhung in CHF, zulässig \(-30 \lt x \lt 40\) (Preis und Besucherzahl positiv). Einnahme \(E(x) = (30 + x)(200 - 5x)\) — nicht Gewinn, die Kosten sind unbekannt. Nullstellen \(-30\) und \(40\), Mitte \(5\): 35 CHF, 6125 CHF.</p>', ''),
+    ('5c', 2, 'Zwei Zahlen mit Summe 14: Wann ist ihr Produkt am grössten?', r'<p>\(x(14 - x)\), \(x\) beliebig reell: beide 7, Produkt 49.</p>', ''),
     ('5d', 2, r'Der Graph zeigt die Fläche \(A\) eines Rechtecks mit der Seite \(x\). Bei welchem \(x\) ist sie am grössten, wie gross ist sie, und welchen Umfang hat das Rechteck? (Punkte auf Gitterpunkten)',
-     r'<p>Nullstellen \(0\) und \(6\), Mitte \(x = 3\) m, \(A = 9\) m². \(A(x) = x(6 - x)\): Die andere Seite ist \(6 - x\), der Umfang \(2 \cdot 6 = 12\) m.</p>',
+     r'<p>Nullstellen \(0\) und \(6\), zulässig \(0 \lt x \lt 6\). Mitte \(x = 3\) m, \(A = 9\) m². \(A(x) = x(6 - x)\): Die andere Seite ist \(6 - x\), der Umfang \(2 \cdot 6 = 12\) m.</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-f="-1,3,9" data-fenster="-1,7,-1,10" data-punkte="0,0;3,9;6,0" data-xname="x [m]" data-yname="A [m²]"></svg></div>'),
     ('5e', 2, r'Warum liegt das Maximum von \(A(x) = x(30 - x)\) genau in der Mitte der Nullstellen?',
      r'<p>Die Parabel ist symmetrisch zur Symmetrieachse durch den Scheitel. Die Nullstellen \(0\) und \(30\) liegen spiegelbildlich dazu, also liegt der Scheitel bei \(x = 15\).</p>', ''),
+    ('5f', 3, r'Ein Ball fliegt nach \(h(t) = -5t^2 + 15t + 2\) (\(t\) in s, \(h\) in m). Wann ist er am höchsten, und wie hoch?',
+     r'<p>Die Nullstellen sind nicht ablesbar, also \(t_s = -\dfrac{15}{2 \cdot (-5)} = 1.5\) s. \(a = -5 \lt 0\): Maximum, \(h(1.5) = 13.25\) m. Zulässig von \(t = 0\) bis zur Landung (\(t \approx 3.13\) s), \(1.5\) liegt darin.</p>', ''),
+    ('5g', 3, r'Ein Seil hängt näherungsweise parabelförmig zwischen zwei Masten: \(h(x) = 0.02x^2 - 1.2x + 25\) für \(0 \leq x \leq 50\) (\(x\), \(h\) in m). Wo hängt es am tiefsten, wie hoch über Boden? Wo ist es am höchsten?',
+     r'<p>\(a = 0.02 \gt 0\): Der Scheitel ist ein Minimum. \(x_s = -\dfrac{-1.2}{2 \cdot 0.02} = 30\) m, \(h(30) = 7\) m. (\(D = -0.56 \lt 0\): keine Nullstellen, die Mitte-Abkürzung geht nicht.)</p><p>Am höchsten am Rand: \(h(0) = 25\) m, \(h(50) = 15\) m — also beim linken Mast, 25 m.</p>', ''),
 ])
-k5 = kapitel(5, 'extremwertaufgaben', 'Extremwertaufgaben', 'K4',
-    'Du findest das Maximum einer Sachaufgabe ohne Rechner — und nennst Stelle und Wert.',
-    ('g3-3-lp-mitte', 'Parabel sehen: die grösste Fläche liegt in der Mitte', 'Einführung', '0:51'),
-    sim5, ('g3-3-lp-kontrolle-extremwert', 'Kontrollfragen zu Extremwerten', '', '0:49'),
-    fest5, [uebung('zaun', 'Zaun: grösste Fläche'), uebung('mauer', 'Beet an der Mauer')],
+k5 = kapitel(5, 'extremwertaufgaben', 'Extremwertaufgaben', 'K4', 45,
+    'Du findest Maximum oder Minimum einer Sachaufgabe ohne Rechner — und nennst Stelle, Wert und zulässigen Bereich.',
+    ('g3-3-lp-mitte', 'Parabel sehen: die grösste Fläche liegt in der Mitte', 'Einführung', '1:00'),
+    sim5, ('g3-3-lp-kontrolle-extremwert', 'Kontrollfragen zu Extremwerten', '', '0:59'),
+    fest5, [uebung('zaun', 'Zaun: grösste Fläche'), uebung('mauer', 'Beet an der Mauer'), uebung('extremwert', 'Extremwert aus der Grundform')],
     auf5, f'<a href="{TS}#extremwert">Themenseite 3.3, Extremwertaufgabe</a>')
 
 # ------------------------------------------------------------------ Vorwissen
@@ -343,11 +357,12 @@ k0 = '''
       ''' + clipkarte('g1-3-binome-erkennen', 'Binomische Formeln erkennen', 'Themenseite 1.3', '0:44') + r'''
       <p class="komm">Im Clip heissen die Binomglieder \(a\) und \(b\) — nicht zu verwechseln mit den Koeffizienten \(a\), \(b\) der Parabel.</p>
 ''' + test('t0', 'Vortest', 10, [
-    ('0a', 2, r'\(f(x) = 2x^2 - 3x + 1\): \(f(-2)\) und \(f(0.5)\)?', r'<p>\(15\) und \(0\).</p>', ''),
-    ('0b', 3, r'Ausmultiplizieren: \((x-3)^2\), \(2(x+1)^2 - 5\), \((x+2)(x-5)\).', r'<p>\(x^2 - 6x + 9\), \(2x^2 + 4x - 3\), \(x^2 - 3x - 10\).</p>', ''),
-    ('0c', 3, r'Löse \(x^2 - 2x - 8 = 0\).', r'<p>\((x-4)(x+2) = 0\): \(\mathbb{L} = \{-2;\ 4\}\).</p>', ''),
-    ('0d', 2, r'Löse \(2x^2 + 3x - 2 = 0\).', r'<p>\(x_{1,2} = \dfrac{-3 \pm 5}{4}\): \(\mathbb{L} = \{-2;\ 0.5\}\).</p>', ''),
+    ('0a', 2, r'\(f(x) = 2x^2 - 3x + 1\): \(f(-2)\) und \(f(0.5)\)?', r'<p>\(15\) und \(0\).</p><p class="komm">Falsch? Klammer um negative Zahlen: \(2 \cdot (-2)^2 = 8\). <a href="../grundlagen/g1-3-algebraische-terme.html#klammern">Themenseite 1.3, Klammern auflösen</a></p>', ''),
+    ('0b', 3, r'Ausmultiplizieren: \((x-3)^2\), \(2(x+1)^2 - 5\), \((x+2)(x-5)\).', r'<p>\(x^2 - 6x + 9\), \(2x^2 + 4x - 3\), \(x^2 - 3x - 10\).</p><p class="komm">Falsch? <a href="../grundlagen/g1-3-algebraische-terme.html#binomi">Themenseite 1.3, Binomische Formeln</a> und der Clip oben.</p>', ''),
+    ('0c', 3, r'Löse \(x^2 - 2x - 8 = 0\).', r'<p>\((x-4)(x+2) = 0\): \(\mathbb{L} = \{-2;\ 4\}\).</p><p class="komm">Falsch? <a href="../grundlagen/g2-2b-quadratische-gleichungen.html#faktorisieren">Themenseite 2.2b, Faktorisieren</a></p>', ''),
+    ('0d', 2, r'Löse \(2x^2 + 3x - 2 = 0\).', r'<p>\(x_{1,2} = \dfrac{-3 \pm 5}{4}\): \(\mathbb{L} = \{-2;\ 0.5\}\).</p><p class="komm">Falsch? <a href="../grundlagen/g2-2b-quadratische-gleichungen.html#verfahren">Themenseite 2.2b, Lösungsverfahren (Mitternachtsformel)</a></p>', ''),
 ]) + '''
+      <p class="komm">Weniger als 7 von 10 Punkten: zuerst die verlinkten Stellen zu den falschen Aufgaben, dann Kapitel 1. 0c und 0d beide falsch: zuerst das <a href="quadratische-gleichungen.html">Leitprogramm Quadratische Gleichungen</a>.</p>
     </section>'''
 
 # ------------------------------------------------------------------ Gesamttest
@@ -369,7 +384,7 @@ gt = f'''
         <div class="bewertung">
           <b>Selbsteinschätzung</b>
           <table>
-            <tr><td>22 – 25 P</td><td>Sitzt.</td></tr>
+            <tr><td>22 – 25 P</td><td>Die geprüften Teile sitzen. Wo du Punkte verloren hast: das Kapitel dieser Aufgabe nochmals (Zuordnung unten).</td></tr>
             <tr><td>17 – 21 P</td><td>Den schwächsten Teil nochmals: Simulation und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.</td></tr>
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
@@ -390,7 +405,7 @@ oben = '''<div id="nav-root"></div>
     <div>
       <p class="marke">begreifbar.ch · Leitprogramm</p>
       <h1>Quadratische Funktionen</h1>
-      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Fünf Kapitel, rund vier Lektionen.</p>
+      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Fünf Kapitel und Gesamttest, rund fünf Lektionen.</p>
     </div>
     <div class="kopf-rechts">
       <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>
@@ -412,20 +427,26 @@ oben = '''<div id="nav-root"></div>
     <p class="lekt">Lektion 2</p>
     <ol>
       <li><a href="#k2"><span class="nr">2</span><span>Drei Formen</span></a></li>
-      <li><a href="#k3"><span class="nr">3</span><span>Nullstellen und Scheitel</span></a></li>
     </ol>
     <p class="lekt">Lektion 3</p>
     <ol>
-      <li><a href="#k4"><span class="nr">4</span><span>Gleichung aufstellen</span></a></li>
-      <li><a href="#k5"><span class="nr">5</span><span>Extremwerte</span></a></li>
+      <li><a href="#k3"><span class="nr">3</span><span>Nullstellen und Scheitel</span></a></li>
     </ol>
     <p class="lekt">Lektion 4</p>
+    <ol>
+      <li><a href="#k4"><span class="nr">4</span><span>Gleichung aufstellen</span></a></li>
+    </ol>
+    <p class="lekt">Lektion 5</p>
+    <ol>
+      <li><a href="#k5"><span class="nr">5</span><span>Extremwerte</span></a></li>
+    </ol>
+    <p class="lekt">Abschluss</p>
     <ol>
       <li><a href="#gesamttest"><span class="nr">✓</span><span>Gesamttest</span></a></li>
     </ol>
     <div class="fortschritt">
       <div class="balken"><i id="balken-fuellung"></i></div>
-      <p id="fortschritt-text">0 von 6 erledigt</p>
+      <p id="fortschritt-text">0 von 6 Aufgabenblöcken bearbeitet</p>
       <button type="button" id="fortschritt-reset">zurücksetzen</button>
     </div>
   </nav>
@@ -465,9 +486,11 @@ unten = '''
 </div>
 </div>
 '''
-band = lambda n, t: f'\n    <div class="band"><span>Lektion {n}</span><span class="strich"></span><span>{t}</span></div>\n'
-body = (oben + band(1, 'Die Parabel sehen') + k0 + k1 + band(2, 'Formen und Berechnung') + k2 + k3
-        + band(3, 'Aufstellen und anwenden') + k4 + k5 + band(4, 'Abschluss') + gt + unten)
+band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
+# Zeiten (03.10.2026): K0 10 · K1 35 · K2 40 · K3 40 · K4 40 · K5 45 · Gesamttest 25 = 235 min
+body = (oben + band(1, 'Die Parabel sehen') + k0 + k1 + band(2, 'Drei Formen') + k2
+        + band(3, 'Berechnen') + k3 + band(4, 'Aufstellen') + k4
+        + band(5, 'Anwenden') + k5 + band('Abschluss', 'Gesamttest') + gt + unten)
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(R + 'leitprogramme/quadratische-funktionen.html', 'w').write(seite)
 print('geschrieben', len(seite.splitlines()), 'Zeilen')

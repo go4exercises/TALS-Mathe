@@ -186,8 +186,10 @@ Clip schon gibt; «Mehr dazu» als eine Zeile mit Link.
 
 Am Ende des Leitprogramms: **Gesamttest und Bewertungspaket als PDF** (§9) — kein HTML.
 
-Zeit: rund 30 Minuten je Kapitel (zwei Clips à ~1 min, Tüfteln ~8, Üben ~7, Aufgaben ~10).
-Fünf Kapitel + Vorwissen + Gesamttest ≈ vier Lektionen (§3).
+Zeit: geplant waren rund 30 Minuten je Kapitel (zwei Clips à ~1 min, Tüfteln ~8, Üben ~7, Aufgaben ~10).
+Nach den beiden Prüfungen vom 03.10.2026 ehrlich geschätzt: 35–45 Minuten je Kapitel, mit Vorwissen
+und Gesamttest ≈ 235 Minuten, also rund fünf Lektionen — über der Zielgrösse von §3. Ob das Vorbild
+geteilt oder Teile als Vertiefung markiert werden, ist offen (TODO.md).
 
 ---
 
