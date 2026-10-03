@@ -5,7 +5,7 @@ Prio: **HOCH** = Lernende lernen Falsches · **MITTEL** = irreführend, widerspr
 unvollständig · **NIEDRIG** = Kleinigkeit/Konvention.
 
 Seite: `leitprogramme/quadratische-funktionen.html`, gebaut aus
-`_intern/lp-quadratische-funktionen/seite.py` + `seite.js` (Änderungen dort, nicht in der HTML-Datei).
+`scripts/lp/quadratische-funktionen/seite.py` + `seite.js` (Änderungen dort, nicht in der HTML-Datei).
 Ein erledigter Punkt wird abgehakt; ist die Liste leer, wird die Datei gelöscht (steht in der Git-Geschichte).
 
 ---
@@ -23,7 +23,7 @@ gewertet (je 20 000 Zufallsfälle in node). Alle Zielwerte der Aufgabenleisten l
 Reglerraster. Punkte im Gesamttest: 11 + 6 + 7 = 24, stimmen mit Paket und Seite überein.
 **Behoben am 03.10.2026** (alle Punkte unten). Neu: Gesamttest 25 P (G4 Diskriminante/Nullstellen, G8 «Quadrat im Quadrat», Minimum über \(-\frac{b}{2a}\)); 7 Clips neu vertont (10:31 min); Theme `begreifbar-schlicht` mit Farbe 5 = Tinte; Kapiteltests 11/13/12/16/14 P.
 Bewusst gelassen: «Häufiger Fehler» in Kapitel 5 rechnet mit 40 m wie der Clip (Sim jetzt 36 m); in `a-finden` reichen bewegte Probeparabeln am Rand bis −0.6 m (ganz nur mit Skriptänderung).
-Zeilen: Stand Commit `3ebeed9`. `seite.*` = `_intern/lp-quadratische-funktionen/`.
+Zeilen: Stand Commit `3ebeed9`. `seite.*` = `scripts/lp/quadratische-funktionen/`.
 
 ### HOCH
 

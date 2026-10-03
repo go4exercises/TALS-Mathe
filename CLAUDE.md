@@ -56,7 +56,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
     Gesamttest und Bewertungspaket als PDF aus LaTeX unter `downloads/leitprogramme/`).
     Aufbau, Didaktik und Technik: **`HOWTO-leitprogramme.md`** (seit 02.10.2026 Gesamtfassung;
-    Vorbild `quadratische-funktionen.html`, Bauskript unter `_intern/lp-quadratische-funktionen/`).
+    Vorbild `quadratische-funktionen.html`, Bauskript unter `scripts/lp/quadratische-funktionen/`).
     Extern gebaute Datei hereinholen: dort §12, Punkt für Punkt.
   - *nach Prüfungsbogen* (2: `uebungspruefung-1.html`, `trigo2.html`) — jede
     Teilaufgabe mit eigenem

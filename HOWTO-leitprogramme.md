@@ -11,7 +11,7 @@ Fassung bewusst von einem der Vorgänger abweicht, steht es als **⟂ Entscheid*
 Vorgänger stehen in der Git-Geschichte (bis Commit `9c1a4a5`).
 
 **Vorbild für ein neues Leitprogramm:** `leitprogramme/quadratische-funktionen.html`, gebaut mit
-`_intern/lp-quadratische-funktionen/seite.py` (siehe dortige README).
+`scripts/lp/quadratische-funktionen/seite.py` (siehe dortige README).
 ---
 
 ## 0 · Zwei Arten, ein Layout
