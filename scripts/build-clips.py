@@ -586,7 +586,55 @@ def graf_svg(el, theme):
     # mit freier Formel — und mit dem Zusatz, dass ein Stueck auch dann
     # abbricht, wenn f an einer Stelle gar nicht definiert ist. Genau daran
     # entstehen die Luecken der Tangenskurve an ihren Polstellen.
-    for kv in el.get("kurven", []):
+    for nr, kv in enumerate(el.get("kurven", [])):
+        # "bewegung": [[t, a, p, u, v], ...] fuer y = a*(x-u)^p + v — Potenz- und
+        # Wurzelkurven, die sich waehrend der Szene aendern (seit 03.10.2026).
+        # "stufen": true rundet p beim Ueberblenden auf ganze Zahlen; zwischen
+        # x^2 und x^3 gibt es auf ganz R nichts, und ein gebrochener Exponent
+        # loeschte den linken Ast mitten in der Bewegung.
+        if kv.get("bewegung"):
+            farbe = fv[kv.get("farbe", 1) - 1]
+            kid = "bewk%d" % nr
+            # "von"/"bis" schraenken die Kurve auf ein Stueck ein — gebraucht fuer die
+            # Umkehrbarkeit: y = x^2 ist erst auf x >= 0 umkehrbar.
+            teile.append('<path data-bewk="%s" data-paar="%s" data-fenster="%g,%g,%g,%g,%d,%d,%d" '
+                         'data-stufen="%d" data-von="%g" data-bis="%g" fill="none" stroke="%s" '
+                         'stroke-width="%s" stroke-linecap="round" stroke-linejoin="round" %s/>'
+                         % (entschaerfen(json.dumps(kv["bewegung"])), kid, x0, x1, y0, y1, b, h, rand,
+                            1 if kv.get("stufen") else 0, kv.get("von", x0), kv.get("bis", x1),
+                            farbe, kv.get("dicke", 5),
+                            'stroke-dasharray="14 10"' if kv.get("gestrichelt") else ""))
+            # Begleiter: startpunkt (u | v), asymptoten (x = u und y = v),
+            # marken (Punkt an festem x mit Live-Wert) und spiegel (dieselbe
+            # Kurve an y = x gespiegelt — die Umkehrfunktion).
+            sp = kv.get("spiegel")
+            if sp:
+                teile.append('<path data-spiegel="%s" fill="none" stroke="%s" stroke-width="%s" '
+                             'stroke-linecap="round" stroke-linejoin="round" %s/>'
+                             % (kid, fv[sp.get("farbe", 3) - 1], sp.get("dicke", 5),
+                                'stroke-dasharray="14 10"' if sp.get("gestrichelt") else ""))
+            if kv.get("asymptoten"):
+                f_ = fv[kv["asymptoten"].get("farbe", 5) - 1]
+                teile.append('<g class="bew-ka" data-zu="%s">'
+                             '<path class="bew-ka-s" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="10 8"/>'
+                             '<path class="bew-ka-w" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="10 8"/>'
+                             '</g>' % (kid, f_, f_))
+
+            def k_punkt(klasse, farbe_, attr="", text=True):
+                f_ = fv[farbe_ - 1]
+                t_ = '<g class="%s" data-zu="%s"%s>' % (klasse, kid, attr)
+                t_ += ('<g class="bew-pt"><circle r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
+                       '<circle r="5" fill="%s"/></g>' % (papier, f_, f_))
+                if text:
+                    t_ += '<text font-size="29" font-weight="600" fill="%s"></text>' % f_
+                return t_ + '</g>'
+            if kv.get("startpunkt"):
+                teile.append(k_punkt("bew-ks", kv["startpunkt"].get("farbe", 3),
+                                     text=kv["startpunkt"].get("beschriftung", True) is not False))
+            for mk in kv.get("marken", []):
+                teile.append(k_punkt("bew-km", mk.get("farbe", 5),
+                                     ' data-x="%g" data-text="%s"' % (mk["x"], entschaerfen(mk.get("text", "")))))
+            continue
         n = kv.get("n", 480)
         # Eine Kurve darf auch nur ein Stueck des Fensters belegen. Gebraucht
         # wird das fuer Hilfslinien wie die Mittellinie einer Schwingung: Ohne
@@ -797,6 +845,9 @@ const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
     art: 'p', p, L, k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number) }))
     .concat([...L.querySelectorAll('[data-bewg]')].map(p => ({
       art: 'g', p, L, k: JSON.parse(p.dataset.bewg), f: p.dataset.fenster.split(',').map(Number) })))
+    .concat([...L.querySelectorAll('[data-bewk]')].map(p => ({
+      art: 'k', p, L, k: JSON.parse(p.dataset.bewk), f: p.dataset.fenster.split(',').map(Number),
+      stufen: p.dataset.stufen === '1' })))
 }));
 // Zwischen zwei Stuetzpunkten weich. Wie viele Zahlen ein Stuetzpunkt traegt, sagt er
 // selbst: [t, a, u, v] bei einer Parabel, [t, m, q] bei einer Geraden, [t, x] bei einer Bahn.
@@ -873,12 +924,68 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
     }
   }
 }
+// Eine bewegte Potenz- oder Wurzelkurve y = a*(x-u)^p + v, am Fenster abgeschnitten.
+// Wo es keinen Wert gibt (Pol, negative Basis mit gebrochenem Exponenten), bricht der
+// Streckenzug ab und beginnt danach neu — genau so entstehen Aeste und Definitionsluecken.
+function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
+  const [a, p0, u, v] = bewZustand(T.k, t - T.L.t0);
+  const p = T.stufen ? Math.round(p0) : p0;
+  const f = x => { const b = x - u, y = a * Math.pow(b, p) + v;
+    return (isFinite(y) && !isNaN(y)) ? y : null; };
+  const vx = parseFloat(T.p.dataset.von), bx = parseFloat(T.p.dataset.bis);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  const zug = (abx, aby) => {           // abx/aby: wie der Punkt auf die Achsen faellt
+    let d = '', an = false;
+    if (a1 <= a0) return '';
+    for (let i = 0; i <= 600; i++) {
+      const x = a0 + (a1 - a0) * i / 600, y = f(x);
+      if (y === null) { an = false; continue; }
+      const sx = abx(x, y), sy = aby(x, y);
+      if (sx < -5 || sx > 1e5 || sy < -5 || sy > 1e5) { an = false; continue; }
+      if (!(abx === px ? (y >= y0 && y <= y1) : (y >= x0 && y <= x1 && x >= y0 && x <= y1))) { an = false; continue; }
+      d += (an ? 'L' : 'M') + sx.toFixed(1) + ',' + sy.toFixed(1); an = true;
+    }
+    return d;
+  };
+  T.p.setAttribute('d', zug(px, (x, y) => py(y)));
+  // Spiegelkurve an y = x: aus (x | y) wird (y | x) — die Umkehrfunktion.
+  const sp = T.L.querySelector('[data-spiegel="' + T.p.dataset.paar + '"]');
+  if (sp) sp.setAttribute('d', zug((x, y) => px(y), (x, y) => py(x)));
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (a > 0 ? 44 : -18));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ks')) {
+      setze(g, u, v); beschrifte(g, u, v, '(' + bewZahl(u) + ' | ' + bewZahl(v) + ')');
+    } else if (g.classList.contains('bew-ka')) {
+      // Polgerade x = u und waagrechte Asymptote y = v
+      g.querySelector('.bew-ka-s').setAttribute('d',
+        (u >= x0 && u <= x1) ? 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1) : '');
+      g.querySelector('.bew-ka-w').setAttribute('d',
+        (v >= y0 && v <= y1) ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-km')) {
+      const x = parseFloat(g.dataset.x), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y);
+      beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
 function bewegen(t) {
   for (const L of BEW) for (const T of L.teile) {
     const [x0, x1, y0, y1, b, h, rd] = T.f;
     const px = x => rd + (x - x0) / (x1 - x0) * (b - 2 * rd);
     const py = y => h - rd - (y - y0) / (y1 - y0) * (h - 2 * rd);
     if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'k') { bewegeKurve(T, t, px, py, x0, x1, y0, y1); continue; }
     const [a, u, v] = bewZustand(T.k, t - L.t0);
     let d = '', zug = false;
     for (let i = 0; i <= 240; i++) {
@@ -1414,7 +1521,8 @@ def bauen(quelle, eigenstaendig=False):
 
             attr = f' data-at="{ein:.2f}"'
             if el.get("typ") == "graf" and (any(pa.get("bewegung") for pa in el.get("parabeln", []))
-                                            or any(ge.get("bewegung") for ge in el.get("geraden", []))):
+                                            or any(ge.get("bewegung") for ge in el.get("geraden", []))
+                                            or any(kv.get("bewegung") for kv in el.get("kurven", []))):
                 attr += f' data-t0="{start:.2f}"'
             if aus is not None:
                 attr += f' data-out="{aus:.2f}"'
@@ -1484,7 +1592,7 @@ def bauen(quelle, eigenstaendig=False):
 
     # Nur Clips mit bewegten Bildern bekommen den Zusatz — alle anderen
     # bleiben Byte fuer Byte, wie sie waren.
-    if "data-bew=" in html or "data-bewg=" in html:
+    if "data-bew=" in html or "data-bewg=" in html or "data-bewk=" in html:
         html = html.replace("window.__seek = seek;", BEWEGUNG_JS + "window.__seek = seek;", 1)
     if dreh.get("fragen"):
         fr = []

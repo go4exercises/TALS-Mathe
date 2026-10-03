@@ -208,8 +208,8 @@ Begleiter — alle aus derselben Zeit gerechnet, alle mit `farbe`:
 In `text` stehen `{x}` und `{y}` für die laufenden Werte (eine Nachkommastelle, echtes
 Minus).
 
-**Geraden bewegen sich genauso** (seit 03.10.2026). Der Stützpunkt ist `[t, m, q]` für
-\(y = m x + q\); gezeichnet wird die am Fenster abgeschnittene Strecke:
+**Geraden und Kurven bewegen sich genauso** (seit 03.10.2026). Der Stützpunkt ist
+`[t, m, q]` für \(y = m x + q\); gezeichnet wird die am Fenster abgeschnittene Strecke:
 
 ```json
 {"typ": "graf", "xbereich": [-4, 5], "ybereich": [-5, 6], "geraden": [
@@ -231,6 +231,30 @@ In `text` gibt es zusätzlich `{m}` und `{q}`. Die Beschriftung setzt sich selbs
 Seite, auf der die Gerade *nicht* verläuft (bei \(m \gt 0\) unter den Punkt, sonst darüber) —
 eine freie Stelle von Hand suchen muss man nur bei **festen** Punkten.
 
+**Potenz- und Wurzelkurven** stehen in `kurven` mit einer `bewegung` aus Stützpunkten
+`[t, a, p, u, v]` für \(y = a\,(x-u)^p + v\). Damit gehen Parabeln n-ter Ordnung (\(p \in \mathbb{N}\)),
+Hyperbeln (\(p \lt 0\)) und Wurzelkurven (\(p = \tfrac1n\)) mit demselben Schlüssel:
+
+```json
+{"typ": "graf", "xbereich": [-4, 5], "ybereich": [-4, 5], "kurven": [
+  {"bewegung": [[0.5, 1, 2, 0, 0], [4.0, 1, 5, 0, 0]], "stufen": true, "farbe": 1},
+  {"bewegung": [[0, 1, -1, 0, 0]], "farbe": 1, "asymptoten": {"farbe": 5}}]}
+```
+
+| Schlüssel | zeigt |
+|---|---|
+| `"startpunkt": {}` | den Punkt \((u \mid v)\) mit Beschriftung — der Anfang einer Wurzelkurve |
+| `"asymptoten": {}` | Polgerade \(x = u\) und waagrechte Asymptote \(y = v\), gestrichelt |
+| `"marken": [{"x": 1, "text": "(1 \| {y})"}]` | Punkt an festem \(x\) mit Live-Wert |
+| `"spiegel": {}` | **dieselbe Kurve an \(y = x\) gespiegelt** — die Umkehrfunktion |
+| `"von"` / `"bis"` | schränken die Kurve auf ein Stück ein; \(y = x^2\) ist erst auf \(x \geq 0\) umkehrbar |
+
+**`"stufen": true`** rundet \(p\) beim Überblenden auf ganze Zahlen. Ohne das entstünde
+zwischen \(x^2\) und \(x^3\) kurz ein gebrochener Exponent — und der löscht den linken Ast
+mitten in der Bewegung, weil es \((-2)^{2.5}\) nicht gibt. Wo es keinen Wert gibt (Pol,
+negative Basis mit gebrochenem Exponenten), bricht der Streckenzug ab und beginnt danach
+neu; so entstehen die zwei Äste einer Hyperbel von selbst.
+
 Gezeichnet wird im Abspieler, **allein aus der Zeit**: `seek(t)` wird nur in Clips mit
 `bewegung` um `bewegen(t)` erweitert (`BEWEGUNG_JS` in `build-clips.py`). Darum stimmen
 Pause, Spulen und die Bilder von `pruef-clip.mjs` — ein Prüfbild mitten in der Bewegung
@@ -244,8 +268,9 @@ wirken ruhig, unter 1 s hektisch. Geht \(a\) durch 0 (Umklappen), ist die Parabe
 kurz eine Gerade — das ist gewollt und zeigt, was dabei passiert.
 
 Im Einsatz: die fünf Clips `g3-3-lp-*` («Parabel sehen», Leitprogramm Quadratische
-Funktionen) und die acht Clips `g3-2-lp-*` («Gerade sehen», Leitprogramm Lineare
-Funktionen). Noch nicht: bewegte freie Kurven, Live-Zahlen in Formelzeilen.
+Funktionen), die acht Clips `g3-2-lp-*` («Gerade sehen», Leitprogramm Lineare
+Funktionen) und die Clips `s3-2-lp-*` («Kurve sehen», Leitprogramm Potenz- und
+Wurzelfunktionen). Noch nicht: bewegte freie Formeln, Live-Zahlen in Formelzeilen.
 **Formelzeile und Bewegung abstimmen:** Nennt die Formel links schon den Endwert, soll die
 Bewegung früh und kurz sein (unter 2 s) — sonst steht im Text etwas anderes als im Bild.
 
