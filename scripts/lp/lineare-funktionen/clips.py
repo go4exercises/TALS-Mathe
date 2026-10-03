@@ -33,6 +33,7 @@ ausdrücklich nach «der Geraden im Bild» fragt, ist es umgekehrt — Bild frü
 import json
 import os
 import sys
+import zlib
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))   # scripts/lp/grafgeom.py
 
@@ -135,12 +136,23 @@ def sz(name, spr, *el):
 
 
 def wahl(szene, text, opt, richtig, rueck, sprich=None, rueck_sprich=None, bei=0.3):
+    """Die richtige Antwort steht nicht immer zuoberst.
+
+    Stand sie in allen Wahlfragen an Position 0, liess sich jede ohne Nachdenken über
+    die erste Schaltfläche lösen (externe Prüfung, 03.10.2026). Die Drehung ist
+    deterministisch aus Szene und Fragetext — derselbe Lauf gibt dieselbe Reihenfolge,
+    und Rückmeldungen wie Tondateien wandern mit, weil sie nach dem Drehen aus dem
+    Drehbuch erzeugt werden.
+    """
+    k = zlib.crc32((szene + '|' + text).encode('utf-8')) % len(opt)
+    dreh = lambda i: (i - k) % len(opt)                 # alter Index -> neuer Index
+    opt = [opt[(i + k) % len(opt)] for i in range(len(opt))]
     d = {'szene': szene, 'bei': bei, 'typ': 'wahl', 'text': text, 'optionen': opt,
-         'richtig': richtig, 'rueck': {str(k): v for k, v in rueck.items()}}
+         'richtig': dreh(richtig), 'rueck': {str(dreh(i)): v for i, v in rueck.items()}}
     if sprich:
         d['sprich'] = sprich
     if rueck_sprich:
-        d['rueck_sprich'] = {str(k): v for k, v in rueck_sprich.items()}
+        d['rueck_sprich'] = {str(dreh(i)): v for i, v in rueck_sprich.items()}
     return d
 
 
@@ -211,7 +223,8 @@ clip('m-und-b', 'Gerade sehen: m kippt, b schiebt',
          # Einblendzeiten nach sprechzeiten.py: der Satz zur Tabelle beginnt bei rund 5.9 s,
          # der Satz zu den Punkten bei rund 11.3 s.
          sz('Wertetabelle',
-            'Eine lineare Funktion wächst in gleichen Schritten. Zum Beispiel y gleich zwei x plus eins. '
+            'Eine lineare Funktion ändert sich bei gleichen Schritten nach rechts immer um denselben Betrag — '
+            'nach oben, nach unten oder gar nicht. Zum Beispiel y gleich zwei x plus eins. '
             'Die Wertetabelle: minus drei, minus eins, eins, drei, fünf, sieben. Jedes Wertepaar wird ein Punkt.',
             titel('Die Gerade', 280, 80),
             f(r'\begin{array}{c|cccccc} x & -2 & -1 & 0 & 1 & 2 & 3 \\ \hline y = 2x + 1 & -3 & -1 & 1 & 3 & 5 & 7 \end{array}',
@@ -225,7 +238,7 @@ clip('m-und-b', 'Gerade sehen: m kippt, b schiebt',
             graf(W_TAB, [bew([[0.6, 2, 1]], dreieck=dreieck(None, None, [[2.4, -2, 1], [5.4, 2, 1]]))],
                  [pt(x, 2 * x + 1, 1) for x in (-2, -1, 0, 1, 2, 3)])),
          sz('Zwei Zahlen',
-            'Jede Gerade steckt in zwei Zahlen: m und b. Schauen wir sie uns einzeln an.',
+            'Jede nicht senkrechte Gerade steckt in zwei Zahlen: m und b. Schauen wir sie uns einzeln an.',
             titel('Zwei Zahlen', 300, 86),
             f(r'f(x) = \fa{m}\,x + \fb{b}', 470, 66),
             graf(W_MB, [bew([[0, 2, 1]], yachse={'farbe': 2})])),
@@ -317,10 +330,11 @@ clip('kontrolle-m-und-b', 'Gerade sehen: Kontrollfragen zu m und b',
             graf(W_MB, [bew([[0.9, 0, -1], [3.6, -2, -1]], yachse={'farbe': 2}, dreieck=dreieck(0, 1))])),
          sz('Merke',
             'Zum Mitnehmen: b liest man direkt auf der y-Achse ab, m über einen Schritt nach rechts. '
-            'Gleiches m heisst parallel. Und ob ein Punkt auf der Geraden liegt, entscheidet nur das Einsetzen.',
+            'Gleiches m heisst parallel, solange b verschieden ist — bei gleichem b ist es dieselbe Gerade. '
+            'Und ob ein Punkt auf der Geraden liegt, entscheidet nur das Einsetzen.',
             titel('Zum Mitnehmen', 260, 76),
             f(r'f(x) = \fa{m}\,x + \fb{b}', 420, 66, ein=0.4),
-            n('@\\fb{b}@: auf der @y@-Achse ablesen|@\\fa{m}@: 1 nach rechts, @\\fa{m}@ hinauf|gleiches @\\fa{m}@: parallel',
+            n('@\\fb{b}@: auf der @y@-Achse ablesen|@\\fa{m}@: 1 nach rechts, @\\fa{m}@ hinauf|gleiches @\\fa{m}@, anderes @\\fb{b}@: parallel',
               560, 'blau', 44, ein=1.2),
             graf(W_MB, [bew([[0, -2, -1]], yachse={'farbe': 2}, dreieck=dreieck(0, 1))])),
      ], [
@@ -570,8 +584,8 @@ clip('typen', 'Gerade sehen: Typen und Lagebeziehungen',
             n('@\\fd{keine\\ Funktion}@:|einem @x@ unendlich viele @y@', 460, 'rot'),
             graf(W_GL, punkte=leiter(3, -4, 5))),
          sz('Parallel',
-            'Zwei Geraden mit gleichem m zeigen in dieselbe Richtung: Sie sind parallel und treffen sich nie. '
-            'Verschieden ist nur ihr b.',
+            'Zwei Geraden mit gleichem m zeigen in dieselbe Richtung. Ist ihr b verschieden, sind sie '
+            'parallel und treffen sich nie; ist auch b gleich, ist es dieselbe Gerade.',
             f(r'y = \fa{2}x \fb{+ 1} \qquad y = \fa{2}x \fb{- 3}', 300, 50),
             n('parallel:|@\\fa{m_1} = \\fa{m_2}@, @\\fb{b_1} \\neq \\fb{b_2}@', 460, 'blau'),
             graf(W_GL, [ger(2, 1), bew([[0.9, 2, 4], [3.8, 2, -3]], yachse={'farbe': 2})],
@@ -642,7 +656,8 @@ clip('kontrolle-typen', 'Gerade sehen: Kontrollfragen zu Typen und Lage',
             graf(W_GL, [ger(0.5, 2), ger(-2, -1)], [pt(0, 2, 2), pt(0, -1, 2)])),
          sz('Merke',
             'Zum Mitnehmen: b gleich null heisst proportional, m gleich null heisst konstant. '
-            'x gleich k ist keine Funktion. Gleiches m heisst parallel, Produkt minus eins heisst senkrecht.',
+            'x gleich k ist keine Funktion. Gleiches m bei verschiedenem b heisst parallel, '
+            'Produkt minus eins heisst senkrecht.',
             titel('Zum Mitnehmen', 240, 76),
             f(r'\fb{b} = 0:\ \text{proportional}', 380, 48, ein=0.4),
             f(r'\fa{m} = 0:\ \text{konstant}', 460, 48, ein=0.7),
@@ -680,8 +695,10 @@ clip('kontrolle-typen', 'Gerade sehen: Kontrollfragen zu Typen und Lage',
                [4, 0], 'Getroffen: (4 | 0).',
                [{'bei': [-4, 0], 'text': 'Das Vorzeichen: Die senkrechte Gerade fällt und startet bei +1.',
                  'sprich': 'Das Vorzeichen: Die senkrechte Gerade fällt und startet bei plus eins.'},
-                {'bei': [0.25, 0], 'text': 'Das ist die Steigung von g, nicht die gesuchte Stelle.',
-                 'sprich': 'Das ist die Steigung von g, nicht die gesuchte Stelle.'},
+                {'bei': [0.25, 0], 'text': 'Das ist der Kehrwert von \\(m_g = 4\\) — ohne das Minus. '
+                                            'Senkrecht heisst \\(m_h = -\\tfrac14\\); gesucht ist aber die Nullstelle.',
+                 'sprich': 'Das ist der Kehrwert von m g gleich vier, ohne das Minus. Senkrecht heisst '
+                           'm h gleich minus ein Viertel. Gesucht ist aber die Nullstelle.'},
                 {'bei': [0, 1], 'text': 'Das ist der y-Achsenabschnitt. Auf welcher Achse liegt der gesuchte Punkt?',
                  'sprich': 'Das ist der y-Achsenabschnitt. Auf welcher Achse liegt der gesuchte Punkt?'}],
                'Nicht ganz. Der grüne Kreis zeigt die Stelle — erst der negative Kehrwert, dann y = 0 setzen.',
@@ -813,7 +830,7 @@ clip('kontrolle-aufstellen', 'Gerade sehen: Kontrollfragen zum Aufstellen',
             'Parallel übernimmt m, senkrecht nimmt den negativen Kehrwert. Im Sachtext ist «pro» die Steigung.',
             titel('Zum Mitnehmen', 260, 76),
             f(r'\fb{b} = y_1 - \fa{m}\,x_1', 420, 62, ein=0.4),
-            n('zwei Punkte: erst @\\fa{m}@, dann @\\fb{b}@|parallel: gleiches @\\fa{m}@|«pro …» @\\to \\fa{m}@, «zu Beginn» @\\to \\fb{b}@',
+            n('zwei Punkte: erst @\\fa{m}@, dann @\\fb{b}@|parallel: gleiches @\\fa{m}@, anderes @\\fb{b}@|«pro …» @\\to \\fa{m}@, «zu Beginn» @\\to \\fb{b}@',
               560, 'blau', 44, ein=1.2),
             graf(dict(xbereich=[-2, 7], ybereich=[-2, 7]),
                  [bew([[0, -3, 7]], yachse={'farbe': 2})], [pt(1, 4, 5)])),
@@ -830,7 +847,7 @@ clip('kontrolle-aufstellen', 'Gerade sehen: Kontrollfragen zum Aufstellen',
                sprich='m gleich drei und P zwei, eins: Tipp den Schnittpunkt der Geraden mit der y-Achse ins Bild.',
                falsch_sprich='Nicht ganz. Der grüne Kreis zeigt die Stelle. Setz P in y gleich drei x plus b ein '
                              'und löse nach b auf.',
-               tol=1.1),
+               tol=0.6),
          wahl('Frage 2', 'A(0 | 4) und B(2 | 0): Welche Gleichung gehört zur Geraden durch A und B?',
               ['y = −2x + 4', 'y = 2x + 4', 'y = −0.5x + 4'], 0,
               {0: 'Ja.',

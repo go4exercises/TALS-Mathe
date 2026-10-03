@@ -216,8 +216,8 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 13, [
 ], zwei=False)
 k1 = kapitel(1, 'm-kippt-b-schiebt', 'Die Gerade bewegen: \\(m\\) und \\(b\\)', 'K1 · K2', 40,
              r'Du liest aus \(f(x) = m \cdot x + b\) Steigung und Achsenabschnitt ab, zeichnest damit die Gerade — und liest umgekehrt die Gleichung aus dem Graphen.',
-             ('g3-2-lp-m-und-b', 'Gerade sehen: m kippt, b schiebt', '1:34'),
-             sim1, ('g3-2-lp-kontrolle-m-und-b', 'Kontrollfragen zu m und b', '1:00'),
+             ('g3-2-lp-m-und-b', 'Gerade sehen: m kippt, b schiebt', '1:37'),
+             sim1, ('g3-2-lp-kontrolle-m-und-b', 'Kontrollfragen zu m und b', '1:03'),
              fest1, [uebung('mb-lesen', 'm und b ablesen'), uebung('beschreibung-g', 'Beschreibung → Gleichung'),
                      uebung('graf-mb', 'Graph → Gleichung', True)],
              auf1, f'<a href="{TS}#definition">Themenseite 3.2, Definition und Parameter</a>')
@@ -263,7 +263,7 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
 ])
 k2 = kapitel(2, 'steigung-messen', 'Die Steigung messen', 'K2', 40,
              r'Du bestimmst \(m\) aus einem Steigungsdreieck und aus zwei Punkten — und findest die Nullstelle.',
-             ('g3-2-lp-steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m', '1:44'),
+             ('g3-2-lp-steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m', '1:42'),
              sim2, ('g3-2-lp-kontrolle-steigung', 'Kontrollfragen zur Steigung', '0:58'),
              fest2, [uebung('steigung-punkte', 'Steigung aus zwei Punkten'), uebung('nullstelle', 'Nullstelle bestimmen'),
                      uebung('punkt-pruefen', 'Liegt der Punkt auf der Geraden?')],
@@ -316,8 +316,8 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 11, [
 ])
 k3 = kapitel(3, 'typen-und-lage', 'Typen und Lagebeziehungen', 'K1 · K2', 35,
              'Du erkennst an \\(m\\) und \\(b\\), ob eine Funktion proportional, konstant oder die Identität ist, unterscheidest sie von der senkrechten Geraden \\(x = k\\) — und entscheidest, ob zwei Geraden parallel oder senkrecht sind.',
-             ('g3-2-lp-typen', 'Gerade sehen: Typen und Lagebeziehungen', '1:43'),
-             sim3, ('g3-2-lp-kontrolle-typen', 'Kontrollfragen zu Typen und Lage', '0:58'),
+             ('g3-2-lp-typen', 'Gerade sehen: Typen und Lagebeziehungen', '1:44'),
+             sim3, ('g3-2-lp-kontrolle-typen', 'Kontrollfragen zu Typen und Lage', '0:59'),
              fest3, [uebung('typ-erkennen', 'Typ erkennen'), uebung('parallel-senkrecht', 'parallel oder senkrecht')],
              auf3, f'<a href="{TS}#typen">Themenseite 3.2, Typen linearer Funktionen</a>')
 
@@ -371,7 +371,7 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 14, [
 ])
 k4 = kapitel(4, 'gleichung-aufstellen', 'Die Geradengleichung aufstellen', 'K3', 45,
              'Du stellst die Gleichung auf — aus Steigung und Punkt, aus zwei Punkten, aus einer Lagebeziehung und aus einem Sachtext.',
-             ('g3-2-lp-aufstellen', 'Gerade sehen: die Geradengleichung aufstellen', '1:46'),
+             ('g3-2-lp-aufstellen', 'Gerade sehen: die Geradengleichung aufstellen', '1:47'),
              sim4, ('g3-2-lp-kontrolle-aufstellen', 'Kontrollfragen zum Aufstellen', '1:01'),
              fest4, [uebung('aufstellen-m-punkt', 'Steigung + Punkt → b'), uebung('aufstellen-zwei-punkte', 'Zwei Punkte → Gleichung'),
                      uebung('aufstellen-lage', 'parallel/senkrecht durch einen Punkt')],
