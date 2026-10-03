@@ -575,3 +575,38 @@ eigenen Durchgang nachgezogen (eigener Abschnitt unten).
   \(x \gt 0\) an der Gleichung, mit Verweis auf 1.2, und der Unterschied zwischen
   Schreibweise und Wurzelfunktion ist ausgesprochen — in Kapitel 5 und im Clip
   `s3-2-lp-wurzel` (eine Szene neu vertont).
+
+
+---
+
+## Externe Prüfung Lineare Funktionen (`../TODO-Lin.md`, ausgewertet 03.10.2026)
+
+27 Punkte gegen die Live-Fassung 1.0. Jeden selbst an der Quelle nachgeprüft.
+**Behoben: 01–07, 09–16, 18–22, 24** (und 08 war schon mit `6dc9244` erledigt).
+Was offen bleibt, steht unten.
+
+- [–] **08 — bestätigt sich nicht mehr.** «Vor der Antwort ist bereits die richtige
+  Gerade samt beschriftetem \((0 \mid -5)\) sichtbar»: Das war eine Folge des
+  Stillstands der bewegten Grafen (`T.L.t0` war `undefined`), der live noch drin war.
+  Seit `6dc9244` steht die Gerade beim Fragen bei \(q = 4\) und wandert erst danach.
+- [ ] **23 — Zugänglichkeit.** Die vier Klickfragen haben keine Tastaturalternative;
+  unsichtbare Clip-Ebenen bleiben im zugänglichen Baum; nach einer richtigen Antwort
+  geht es nach 1.3 s automatisch weiter. Das betrifft die **Clip-Maschine** in
+  `scripts/build-clips.py`, also alle drei Leitprogramme und die 436 Clips — ein
+  eigener Durchgang mit Entscheiden: Koordinateneingabe als gleichwertige Alternative?
+  `aria-hidden` auf nicht aktive Ebenen? Weiter-Knopf statt Zeitschaltung?
+- [ ] **25–27 — offene Abnahmetests**, ausdrücklich keine festgestellten Fehler:
+  alle Kontrollfragen unter realen Bedingungen durchspielen (25), die 77 Tondateien
+  hören (26), Geräte, Tastatur, Druck und ein echter Schülerdurchlauf (27). Liegen
+  beim Auftraggeber; 26 betrifft nach den Neuvertonungen dieses Durchgangs alle neun
+  Haupt- und 68 Fragetöne neu.
+- [ ] **19 (Rest) — Gewichtung der Kapitel.** Die Zuordnung nach Fehlerart steht jetzt
+  auf der Seite und im Paket. Offen bleibt, dass die vier Kapitel ungleich viele
+  Gesamttest-Punkte tragen (Kapitel 4 deutlich am meisten); eine Wiederholung «nach den
+  meisten verlorenen Punkten» bevorzugt es dadurch. Braucht eine Entscheidung über die
+  Aufgabenverteilung, nicht nur eine Textänderung.
+
+**Vom Prüfbericht ausdrücklich als gut bewertet und darum unangetastet:** der manuelle
+Fortschritt «Aufgabenblöcke bearbeitet», die Trennung gelöst/übersprungen in der
+Aufgabenleiste, der Schutz gegen mehrfaches Zählen derselben Lösung, die Sonderfälle im
+Merkteil, der KI-freie Weg und die Handschriftkontrolle im Bewertungspaket.
