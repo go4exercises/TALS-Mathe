@@ -238,10 +238,10 @@ fest2 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Steigung und Nullstelle</div>
           <p>\[ m = \frac{\Delta y}{\Delta x} = \frac{y_2 - y_1}{x_2 - x_1} \qquad x_0 = -\frac{b}{m} \quad (m \neq 0) \]</p>
-          <p>Jedes Steigungsdreieck derselben Geraden gibt dasselbe \(m\) — die Dreiecke sind ähnlich. Die Steigung ist ein Verhältnis, kein Abstand.</p>
+          <p>Jedes Steigungsdreieck derselben Geraden gibt dasselbe \(m\) — bei \(m \neq 0\) sind die Dreiecke ähnlich. Bei \(m = 0\) ist \(\Delta y = 0\) für jedes \(\Delta x \neq 0\), der Quotient also ebenfalls immer \(0\). Die Steigung ist ein Verhältnis, kein Abstand.</p>
           <p>Gelesen wird von links nach rechts, also mit <span class="nb">\(\Delta x \gt 0\).</span> Vertauscht man die Punkte, drehen \(\Delta y\) und \(\Delta x\) beide das Vorzeichen — \(m\) bleibt gleich.</p>
           <p>Die <b>Nullstelle</b> \(x_0\) ist die <em>Stelle</em> mit \(f(x_0) = 0\) — eine Zahl. Der zugehörige <em>Punkt</em> \((x_0 \mid 0)\) ist der Schnittpunkt des Graphen mit der \(x\)-Achse. Man findet sie aus \(0 = m x_0 + b\). Bei \(m = 0\) gibt es keine (oder, bei \(b = 0\), unendlich viele).</p>
-          <p>Haben zwei Punkte dieselbe \(x\)-Koordinate, ist \(\Delta x = 0\): \(m\) ist nicht definiert, die Gerade steht senkrecht und ist keine Funktion.</p>
+          <p>Haben <b>zwei verschiedene</b> Punkte dieselbe \(x\)-Koordinate, ist \(\Delta x = 0\): \(m\) ist nicht definiert, die Gerade steht senkrecht und ist keine Funktion. Fallen beide Punkte zusammen, legen sie gar keine Gerade fest — durch einen einzelnen Punkt gehen unendlich viele.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -257,13 +257,13 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
      r'<p>\(b = 3\), zwei nach rechts und drei hinunter: \(m = -1.5\). Nullstelle \(x_0 = 2\), also \(f(x) = -1.5x + 3\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-g="-1.5,3" data-fenster="-3,5,-4,5" data-punkte="0,3;2,0"></svg></div>'),
     ('2d', 2, r'Warum liefert jedes Steigungsdreieck derselben Geraden dasselbe \(m\)?',
-     r'<p>Alle diese Dreiecke sind ähnlich: Wird \(\Delta x\) verdoppelt, verdoppelt sich \(\Delta y\) mit. Das Verhältnis \(\Delta y : \Delta x\) bleibt dadurch gleich.</p>', ''),
-    ('2e', 2, r'Zwei Punkte haben dieselbe \(x\)-Koordinate. Warum lässt sich keine Steigung angeben — und warum ist die Gerade durch sie keine Funktion?',
-     r'<p>\(\Delta x = 0\), und durch null lässt sich nicht teilen: \(m\) ist nicht definiert. Die Gerade steht senkrecht; zu dieser einen Stelle gehören unendlich viele \(y\)-Werte, und eine Funktion ordnet jedem \(x\) genau einen zu.</p>', ''),
+     r'<p>Bei \(m \neq 0\) sind alle diese Dreiecke ähnlich: Wird \(\Delta x\) verdoppelt, verdoppelt sich \(\Delta y\) mit. Das Verhältnis \(\Delta y : \Delta x\) bleibt dadurch gleich.</p><p class="komm">Bei \(m = 0\) gibt es kein Dreieck mehr — \(\Delta y\) ist null, und null geteilt durch jedes \(\Delta x \neq 0\) bleibt null.</p>', ''),
+    ('2e', 2, r'Zwei <em>verschiedene</em> Punkte haben dieselbe \(x\)-Koordinate. Warum lässt sich keine Steigung angeben — und warum ist die Gerade durch sie keine Funktion? Und was gilt, wenn beide Punkte zusammenfallen?',
+     r'<p>\(\Delta x = 0\), und durch null lässt sich nicht teilen: \(m\) ist nicht definiert. Die Gerade steht senkrecht; zu dieser einen Stelle gehören unendlich viele \(y\)-Werte, und eine Funktion ordnet jedem \(x\) genau einen zu.</p><p>Fallen beide Punkte zusammen, gibt es gar keine eindeutige Gerade: Durch einen einzelnen Punkt gehen unendlich viele.</p>', ''),
 ])
 k2 = kapitel(2, 'steigung-messen', 'Die Steigung messen', 'K2', 40,
              r'Du bestimmst \(m\) aus einem Steigungsdreieck und aus zwei Punkten — und findest die Nullstelle.',
-             ('g3-2-lp-steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m', '1:42'),
+             ('g3-2-lp-steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m', '1:45'),
              sim2, ('g3-2-lp-kontrolle-steigung', 'Kontrollfragen zur Steigung', '0:58'),
              fest2, [uebung('steigung-punkte', 'Steigung aus zwei Punkten'), uebung('nullstelle', 'Nullstelle bestimmen'),
                      uebung('punkt-pruefen', 'Liegt der Punkt auf der Geraden?')],

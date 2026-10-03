@@ -28,6 +28,7 @@ die Winkelhalbierende nicht wie 45° aus und die Spiegelung wäre keine.
 import json
 import os
 import sys
+import zlib
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))   # scripts/lp/grafgeom.py
 
@@ -120,12 +121,23 @@ def sz(name, spr, *el):
 
 
 def wahl(szene, text, opt, richtig, rueck, sprich=None, rueck_sprich=None, bei=0.3):
+    """Die richtige Antwort steht nicht immer zuoberst.
+
+    Stuende sie in jeder Wahlfrage an Position 0, liesse sich jede ohne Nachdenken
+    ueber die erste Schaltflaeche loesen (Befund der externen Pruefung am Leitprogramm
+    Lineare Funktionen, 03.10.2026). Die Drehung ist deterministisch aus Szene und
+    Fragetext; Rueckmeldungen und Tondateien wandern mit, weil sie nach dem Drehen aus
+    dem Drehbuch erzeugt werden.
+    """
+    k = zlib.crc32((szene + '|' + text).encode('utf-8')) % len(opt)
+    dreh = lambda i: (i - k) % len(opt)                 # alter Index -> neuer Index
+    opt = [opt[(i + k) % len(opt)] for i in range(len(opt))]
     d = {'szene': szene, 'bei': bei, 'typ': 'wahl', 'text': text, 'optionen': opt,
-         'richtig': richtig, 'rueck': {str(k): v for k, v in rueck.items()}}
+         'richtig': dreh(richtig), 'rueck': {str(dreh(i)): v for i, v in rueck.items()}}
     if sprich:
         d['sprich'] = sprich
     if rueck_sprich:
-        d['rueck_sprich'] = {str(k): v for k, v in rueck_sprich.items()}
+        d['rueck_sprich'] = {str(dreh(i)): v for i, v in rueck_sprich.items()}
     return d
 
 

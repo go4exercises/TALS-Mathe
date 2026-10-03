@@ -401,7 +401,7 @@ clip('steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m',
             'Jetzt ein kleineres Dreieck auf derselben Geraden — schau zu, wie es schrumpft. '
             'Zwei Komma fünf nach rechts, zwei hinauf. Zwei geteilt durch zwei Komma fünf — wieder null Komma acht.',
             f(r'\fa{m} = \dfrac{2}{2.5} = \fa{0.8}', 300, 62),
-            n('anderes Dreieck,|dasselbe @\\fa{m}@ — die Dreiecke sind ähnlich', 460, 'blau'),
+            n('anderes Dreieck,|dasselbe @\\fa{m}@ — bei @\\fa{m} \\neq 0@ sind sie ähnlich', 460, 'blau'),
             graf(W_DREI, [bew([[0, 0.8, 1]], dreieck=dreieck(None, None, [[1.4, 0, 5], [4.6, 0, 2.5]]))],
                  [pt(0, 1, 5, 'P')])),
          sz('Die Formel',
@@ -434,7 +434,7 @@ clip('steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m',
               470, 'gruen'),
             graf(W_NULL, [bew([[0, 2, -6]], yachse={'farbe': 2}, nullstelle={'farbe': 3})])),
          sz('Delta x null',
-            'Ein Fall bleibt übrig: Punkte mit derselben x-Koordinate. Dann ist Delta x null — '
+            'Ein Fall bleibt übrig: zwei verschiedene Punkte mit derselben x-Koordinate. Dann ist Delta x null — '
             'und durch null lässt sich nicht teilen. Die Gerade durch diese Punkte steht senkrecht, '
             'sie hat keine Steigung und ist keine Funktion.',
             f(r'\Delta x = 0 \quad\Longrightarrow\quad \dfrac{\Delta y}{0}', 300, 60),

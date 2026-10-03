@@ -790,7 +790,7 @@ svg.mini .p-pkt{fill:var(--tinte)} svg.mini .p-b{fill:var(--orange)}
         <button class="clip-start" type="button">
           <span class="clip-play" aria-hidden="true">▶</span>
           <span class="clip-txt"><span class="clip-titel">Gerade sehen: jedes Steigungsdreieck gibt dasselbe m</span></span>
-          <span class="clip-zeit">1:42</span>
+          <span class="clip-zeit">1:45</span>
         </button>
       </div>
 
@@ -821,10 +821,10 @@ svg.mini .p-pkt{fill:var(--tinte)} svg.mini .p-b{fill:var(--orange)}
         <div class="merk">
           <div class="titel">Steigung und Nullstelle</div>
           <p>\[ m = \frac{\Delta y}{\Delta x} = \frac{y_2 - y_1}{x_2 - x_1} \qquad x_0 = -\frac{b}{m} \quad (m \neq 0) \]</p>
-          <p>Jedes Steigungsdreieck derselben Geraden gibt dasselbe \(m\) — die Dreiecke sind ähnlich. Die Steigung ist ein Verhältnis, kein Abstand.</p>
+          <p>Jedes Steigungsdreieck derselben Geraden gibt dasselbe \(m\) — bei \(m \neq 0\) sind die Dreiecke ähnlich. Bei \(m = 0\) ist \(\Delta y = 0\) für jedes \(\Delta x \neq 0\), der Quotient also ebenfalls immer \(0\). Die Steigung ist ein Verhältnis, kein Abstand.</p>
           <p>Gelesen wird von links nach rechts, also mit <span class="nb">\(\Delta x \gt 0\).</span> Vertauscht man die Punkte, drehen \(\Delta y\) und \(\Delta x\) beide das Vorzeichen — \(m\) bleibt gleich.</p>
           <p>Die <b>Nullstelle</b> \(x_0\) ist die <em>Stelle</em> mit \(f(x_0) = 0\) — eine Zahl. Der zugehörige <em>Punkt</em> \((x_0 \mid 0)\) ist der Schnittpunkt des Graphen mit der \(x\)-Achse. Man findet sie aus \(0 = m x_0 + b\). Bei \(m = 0\) gibt es keine (oder, bei \(b = 0\), unendlich viele).</p>
-          <p>Haben zwei Punkte dieselbe \(x\)-Koordinate, ist \(\Delta x = 0\): \(m\) ist nicht definiert, die Gerade steht senkrecht und ist keine Funktion.</p>
+          <p>Haben <b>zwei verschiedene</b> Punkte dieselbe \(x\)-Koordinate, ist \(\Delta x = 0\): \(m\) ist nicht definiert, die Gerade steht senkrecht und ist keine Funktion. Fallen beide Punkte zusammen, legen sie gar keine Gerade fest — durch einen einzelnen Punkt gehen unendlich viele.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -879,11 +879,11 @@ svg.mini .p-pkt{fill:var(--tinte)} svg.mini .p-b{fill:var(--orange)}
           </li>
           <li>
             <div class="frage"><span class="nr">2d</span><span class="pkt">(2 P)</span><span class="txt">Warum liefert jedes Steigungsdreieck derselben Geraden dasselbe \(m\)?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Alle diese Dreiecke sind ähnlich: Wird \(\Delta x\) verdoppelt, verdoppelt sich \(\Delta y\) mit. Das Verhältnis \(\Delta y : \Delta x\) bleibt dadurch gleich.</p></div></details>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>Bei \(m \neq 0\) sind alle diese Dreiecke ähnlich: Wird \(\Delta x\) verdoppelt, verdoppelt sich \(\Delta y\) mit. Das Verhältnis \(\Delta y : \Delta x\) bleibt dadurch gleich.</p><p class="komm">Bei \(m = 0\) gibt es kein Dreieck mehr — \(\Delta y\) ist null, und null geteilt durch jedes \(\Delta x \neq 0\) bleibt null.</p></div></details>
           </li>
           <li>
-            <div class="frage"><span class="nr">2e</span><span class="pkt">(2 P)</span><span class="txt">Zwei Punkte haben dieselbe \(x\)-Koordinate. Warum lässt sich keine Steigung angeben — und warum ist die Gerade durch sie keine Funktion?</span></div>
-            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(\Delta x = 0\), und durch null lässt sich nicht teilen: \(m\) ist nicht definiert. Die Gerade steht senkrecht; zu dieser einen Stelle gehören unendlich viele \(y\)-Werte, und eine Funktion ordnet jedem \(x\) genau einen zu.</p></div></details>
+            <div class="frage"><span class="nr">2e</span><span class="pkt">(2 P)</span><span class="txt">Zwei <em>verschiedene</em> Punkte haben dieselbe \(x\)-Koordinate. Warum lässt sich keine Steigung angeben — und warum ist die Gerade durch sie keine Funktion? Und was gilt, wenn beide Punkte zusammenfallen?</span></div>
+            <details class="loes"><summary>Lösung</summary><div class="inhaltbox"><p>\(\Delta x = 0\), und durch null lässt sich nicht teilen: \(m\) ist nicht definiert. Die Gerade steht senkrecht; zu dieser einen Stelle gehören unendlich viele \(y\)-Werte, und eine Funktion ordnet jedem \(x\) genau einen zu.</p><p>Fallen beide Punkte zusammen, gibt es gar keine eindeutige Gerade: Durch einen einzelnen Punkt gehen unendlich viele.</p></div></details>
           </li>
         </ol>
       </div>
@@ -1746,22 +1746,52 @@ svg.mini .p-pkt{fill:var(--tinte)} svg.mini .p-b{fill:var(--orange)}
           return '\\(m = \\dfrac{y_2 - y_1}{x_2 - x_1} = \\dfrac{' + tz(A.dy) + '}{' + A.dx + '}\\).'; },
         loesung: function(A){ return 'm = \\dfrac{' + tz(A.dy) + '}{' + A.dx + '} = ' + tz(A.m); } },
 
-      'nullstelle': { felder: ['x_0'], muster: 'x₀ = {x_0}',
-        eingabe: function(A){ return { x_0: String(A.x0) }; },
-        neu: function(){ var m = zufall([-3, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 3]),
-            x0 = zufall(Number.isInteger(m) ? bereich(-5, 5, [0]) : [-4, -2, 2, 4, 6]), b = -m * x0;   // halbe Steigung nur auf geraden Stellen: b bleibt ganzzahlig
-          return { m: m, b: b, x0: x0, text: 'Nullstelle von \\(f(x) = ' + lin(m, b) + '\\)?' }; },
-        fehler: function(A){ var f = [[{ x_0: String(-A.x0) }, 'Vorzeichen']];
-          if (!gl(A.b, A.x0) && !gl(A.b, -A.x0)) f.push([{ x_0: String(A.b) }, 'Schnitt mit der']);
-          if (!gl(A.m, A.x0) && !gl(A.m, -A.x0) && !gl(A.m, A.b)) f.push([{ x_0: String(A.m) }, 'Das ist \\(m\\)']);
+      /* Die drei Fälle aus dem Festhalten — genau eine, keine, alle — sind jetzt auch
+         antwortbar; vorher gab es nur ein Zahlenfeld, und die Sonderfälle liessen sich
+         gar nicht hinschreiben. Nicht ganze Nullstellen kommen ebenfalls vor. */
+      'nullstelle': { felder: ['art', 'x_0'], muster: 'Es gibt {art:genau eine|keine|alle reellen Zahlen}   ·   x₀ = {x_0}',
+        wahl: function(ein){ var w = ein.querySelector('select'), i = ein.querySelector('input');
+          if (!w || !i) return;
+          i.disabled = w.value !== 'genau eine';
+          if (i.disabled) i.value = ''; },
+        eingabe: function(A){ return { art: A.art, x_0: A.art === 'genau eine' ? String(A.x0) : '' }; },
+        neu: function(){
+          var w = Math.random();
+          if (w < 0.12) return { m: 0, b: zufall(bereich(-6, 6, [0])), x0: null, art: 'keine',
+            text: 'Nullstelle von \\(f(x) = ' + lin(0, zufall(bereich(-6, 6, [0]))) + '\\)?' };
+          if (w < 0.2) return { m: 0, b: 0, x0: null, art: 'alle reellen Zahlen',
+            text: 'Nullstelle von \\(f(x) = 0\\) mit \\(D = \\mathbb{R}\\)?' };
+          var m = zufall([-4, -3, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 3, 4]),
+              x0 = zufall(Number.isInteger(m) ? bereich(-5, 5, [0]) : [-4, -2, 2, 4, 6]), b = -m * x0;
+          if (Math.random() < 0.25 && Math.abs(m) >= 2){        // nicht ganze Nullstelle
+            b = zufall(bereich(-6, 6, [0])); x0 = -b / m;
+          }
+          return { m: m, b: b, x0: x0, art: 'genau eine',
+            text: 'Nullstelle von \\(f(x) = ' + lin(m, b) + '\\)?' }; },
+        fehler: function(A){
+          if (A.art !== 'genau eine')
+            return [[{ art: A.art === 'keine' ? 'alle reellen Zahlen' : 'keine', x_0: '' },
+                     A.art === 'keine' ? 'erreicht die' : 'überall null']];
+          var f = [[{ art: 'genau eine', x_0: String(-A.x0) }, 'Vorzeichen']];
+          if (!gl(A.b, A.x0) && !gl(A.b, -A.x0)) f.push([{ art: 'genau eine', x_0: String(A.b) }, 'Schnitt mit der']);
+          if (!gl(A.m, A.x0) && !gl(A.m, -A.x0) && !gl(A.m, A.b)) f.push([{ art: 'genau eine', x_0: String(A.m) }, 'Das ist']);
           return f.filter(function(p){ return !gl(+p[0].x_0, A.x0); }); },
         pruefen: function(A, e){
+          if (e.art !== A.art){
+            if (A.m !== 0) return 'Die Gerade ist nicht waagrecht — sie schneidet die \\(x\\)-Achse genau einmal.';
+            return A.b === 0
+              ? 'Die Funktion ist überall null: Jede Stelle ist eine Nullstelle.'
+              : 'Eine waagrechte Gerade auf der Höhe \\(' + tz(A.b) + '\\) erreicht die \\(x\\)-Achse nie.'; }
+          if (A.art !== 'genau eine') return null;
           if (gl(e.x_0, A.x0)) return null;
           if (gl(e.x_0, -A.x0)) return 'Vorzeichen: \\(x_0 = -\\dfrac{b}{m} = -\\dfrac{' + tz(A.b) + '}{' + tz(A.m) + '} = ' + tz(A.x0) + '\\).';
           if (gl(e.x_0, A.b)) return '\\(' + tz(A.b) + '\\) ist \\(b\\), der Schnitt mit der \\(y\\)-Achse. Gesucht ist die Stelle mit \\(f(x) = 0\\).';
           if (gl(e.x_0, A.m)) return 'Das ist \\(m\\). Setz \\(f(x) = 0\\) und löse nach \\(x\\) auf.';
           return 'Setz \\(0 = ' + lin(A.m, A.b) + '\\) und löse nach \\(x\\) auf.'; },
-        loesung: function(A){ return 'x_0 = -\\dfrac{' + tz(A.b) + '}{' + tz(A.m) + '} = ' + tz(A.x0); } },
+        loesung: function(A){
+          if (A.art === 'keine') return '\\text{keine Nullstelle}';
+          if (A.art !== 'genau eine') return '\\text{jede Stelle: } \\mathbb{L} = \\mathbb{R}';
+          return 'x_0 = -\\dfrac{' + tz(A.b) + '}{' + tz(A.m) + '} = ' + tz(A.x0); } },
 
       'punkt-pruefen': { felder: ['y', 'lage'], muster: 'Ergebnis {y}   →   P liegt {lage:auf g|nicht auf g}',
         eingabe: function(A){ return { y: String(A.y), lage: A.drauf ? 'auf g' : 'nicht auf g' }; },
@@ -1920,7 +1950,7 @@ svg.mini .p-pkt{fill:var(--tinte)} svg.mini .p-b{fill:var(--orange)}
             return '<select aria-label="' + f + '" data-f="' + f + '"><option value="">?</option>' + wahl.split('|').map(function(w){ return '<option>' + w + '</option>'; }).join('') + '</select>';
           }); });
         ein.innerHTML = html; rueck.className = 'ue-rueck'; rueck.innerHTML = '';
-        if (T.wahl) ein.querySelectorAll('select').forEach(function(w){ w.addEventListener('change', function(){ T.wahl(ein); }); });
+        if (T.wahl){ ein.querySelectorAll('select').forEach(function(w){ w.addEventListener('change', function(){ T.wahl(ein); }); }); T.wahl(ein); }
         if (bild){
           while (bild.firstChild) bild.removeChild(bild.firstChild);
           if (T.graf){
