@@ -166,7 +166,7 @@
     function zielAufgabe(t){ return { text: 'Triff die grüne Gerade.', setup: function(){ ziel = t; }, ok: function(s){ return s.m === t[0] && s.b === t[1]; } }; }
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Zieh an beiden Reglern und beobachte, was sich ändert.', ok: function(s){ return s.bewegt.m && s.bewegt.b; } },
-      bau(3, -2, 'f(x) = 3x - 2'), bau(-0.5, 4, 'f(x) = -0.5x + 4'), bau(-2, -3, 'f(x) = -2x - 3'),
+      bau(3, -2, 'f(x) = 3x - 2'), bau(-1.5, 4, 'f(x) = -1.5x + 4'), bau(-2, -3, 'f(x) = -2x - 3'),
       { text: 'Stell eine Gerade durch den Ursprung ein.', ok: function(s){ return s.b === 0 && s.m !== 0; } },
       { text: 'Stell eine waagrechte Gerade ein.', ok: function(s){ return s.m === 0; } },
       zielAufgabe([1.5, -3]), zielAufgabe([-2.5, 2])
@@ -199,7 +199,10 @@
       K.text(X1 + dx + 0.3, (ya + yb) / 2, 'Δy = ' + z(dy), 'p-m hilfslinie', 'start');
       K.punkt(X1, ya, 'p-pkt'); K.punkt(X1 + dx, yb, 'p-pkt');
       K.punkt(0, b, 'p-b');
-      if (m !== 0) K.punkt(-b / m, 0, 'p-null', 'x\u2080 = ' + z(-b / m), m > 0 ? -9 : 9, -8, m > 0 ? 'end' : 'start');
+      if (m !== 0){
+        var x0 = -b / m, rund = Math.abs(x0 * 100 - Math.round(x0 * 100)) > 1e-9;   // gerundet: nur mit «≈»
+        K.punkt(x0, 0, 'p-null', 'x\u2080 ' + (rund ? '≈ ' : '= ') + z(x0), m > 0 ? -9 : 9, -8, m > 0 ? 'end' : 'start');
+      }
       rolle(fig, 'formel').innerHTML = 'm = ' + sp('tx-blau', z(dy)) + ' : ' + sp('tx-blau', z(dx))
         + ' = <b>' + sp('tx-blau', z(m)) + '</b> &nbsp;·&nbsp; ' + linText(m, b);
       pruefen();
@@ -210,7 +213,7 @@
       { text: 'Stell eine fallende Gerade ein.', ok: function(s){ return s.m < 0; } },
       { text: 'Stell \\(m = 0\\) ein. Wie gross ist \\(\\Delta y\\) jetzt?', ok: function(s){ return s.m === 0; } },
       { text: 'Stell eine Gerade mit der Nullstelle \\(3\\) ein.', ok: function(s){ return s.x0 === 3; } },
-      { text: 'Stell \\(f(x) = -0.5x + 2\\) ein. Wo liegt ihre Nullstelle?', ok: function(s){ return s.m === -0.5 && s.b === 2; } }
+      { text: 'Stell \\(f(x) = -2.5x + 5\\) ein. Wo liegt ihre Nullstelle?', ok: function(s){ return s.m === -2.5 && s.b === 5; } }
     ], sim);
     zeichnen();
   })();
@@ -223,7 +226,7 @@
   (function(){
     var fig = document.getElementById('sim3'); if (!fig) return;
     var K = Achsen(fig.querySelector('svg'), FENSTER), pruefen = function(){}, bewegt = {};
-    var M1 = 2, B1 = -1;                           // g: y = 2x − 1, fest
+    var M1 = -2, B1 = 3;                           // g: y = −2x + 3, fest (kein Clip-Beispiel)
     var r = regler(fig, zeichnen);
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
     var sim = { zustand: function(){ var w = werte(r); return { m: w.m2, b: w.b2, bewegt: bewegt }; },
@@ -234,13 +237,13 @@
       K.kurve(function(x){ return M1 * x + B1; }, 'kurve g2');
       K.kurve(function(x){ return m * x + b; }, 'kurve');
       K.punkt(0, B1, 'p-b'); K.punkt(0, b, 'p-b');
-      K.text(3.2, 6.8, 'g fest', 'p-m', 'start');
+      K.text(-5.4, 6.6, 'g fest', 'p-m', 'start');
       var lage = m === M1 && b === B1 ? 'dieselbe Gerade'
         : m === M1 ? 'parallel'
         : Math.abs(m * M1 + 1) < 1e-9 ? 'senkrecht'
         : 'schneidend';
-      rolle(fig, 'formel').innerHTML = 'g: f(x) = ' + sp('tx-blau', '2') + '·x − ' + sp('tx-orange', '1')
-        + ' &nbsp;·&nbsp; h: ' + linText(m, b).replace('f(x) = ', '')
+      rolle(fig, 'formel').innerHTML = 'g: y = ' + sp('tx-blau', '−2') + '·x + ' + sp('tx-orange', '3')
+        + ' &nbsp;·&nbsp; h: y = ' + linText(m, b).replace('f(x) = ', '')
         + '<br>m<sub>1</sub>·m<sub>2</sub> = ' + z(M1 * m) + ' — <b>' + lage + '</b>';
       fig.classList.toggle('treffer', lage === 'parallel' || lage === 'senkrecht');
       pruefen();
@@ -266,12 +269,10 @@
     var K = Achsen(fig.querySelector('svg'), FENSTER), pruefen = function(){}, fall = 'A';
     var r = regler(fig, zeichnen);
     var FAELLE = {
-      A: { m: [-2, -2, 1, -2], b: [-5, 5, 0.5, 0], ziel: [-2, 3], punkte: [[2, -1, 'P']],
-           auftrag: 'Gegeben: \\(m = -2\\) und \\(P(2 \\mid -1)\\).' },
-      B: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], ziel: [-0.5, 2], punkte: [[-2, 3, 'A'], [2, 1, 'B']],
-           auftrag: 'Gegeben: \\(A(-2 \\mid 3)\\) und \\(B(2 \\mid 1)\\).' },
-      C: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], ziel: [1.5, 4], punkte: [[-2, 1, 'P']], hilfs: [1.5, -2],
-           auftrag: 'Gegeben: \\(g\\) gestrichelt und \\(P(-2 \\mid 1)\\).' }
+      A: { m: [3, 3, 1, 3], b: [-5, 5, 0.5, 0], punkte: [[-1, 2, 'P']] },
+      B: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], punkte: [[-2, 4, 'A'], [2, -1, 'B']] },
+      C: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], punkte: [[-2, 1, 'P']], hilfs: [1.5, -2] },
+      D: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], punkte: [[1, -1, 'P']], hilfs: [0.5, -1] }
     };
     function aufbauen(f){
       fall = f; var F = FAELLE[f];
@@ -281,13 +282,15 @@
       });
       zeichnen();
     }
-    var sim = { zustand: function(){ var w = werte(r); return { fall: fall, m: w.m, b: w.b }; },
-                zeichnen: zeichnen };
+    var bewegt = {};
+    for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
+    var sim = { zustand: function(){ var w = werte(r); return { fall: fall, m: w.m, b: w.b, bewegt: bewegt }; },
+                zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
     function zeichnen(){
       var w = werte(r), m = w.m, b = w.b, F = FAELLE[fall];
       var treffer = F.punkte.every(function(p){ return Math.abs(m * p[0] + b - p[1]) < 1e-9; });
       K.leeren();
-      if (F.hilfs) K.kurve(function(x){ return F.hilfs[0] * x + F.hilfs[1]; }, 'normal hilfslinie');
+      if (F.hilfs) K.kurve(function(x){ return F.hilfs[0] * x + F.hilfs[1]; }, 'normal');
       K.kurve(function(x){ return m * x + b; }, 'kurve');
       F.punkte.forEach(function(p){ K.punkt(p[0], p[1], treffer ? 'p-null' : 'p-pkt', p[2] + '(' + z(p[0]) + ' | ' + z(p[1]) + ')', 8, -8); });
       K.punkt(0, b, 'p-b');
@@ -296,12 +299,16 @@
       pruefen();
     }
     pruefen = Leiste(fig, [
-      { text: '\\(m = -2\\) ist fest. Stell \\(b\\) so ein, dass die Gerade durch \\(P(2 \\mid -1)\\) geht.',
-        setup: function(){ aufbauen('A'); }, ok: function(s){ return s.fall === 'A' && s.b === 3; } },
-      { text: 'Jetzt zwei Punkte: Stell die Gerade durch \\(A(-2 \\mid 3)\\) und \\(B(2 \\mid 1)\\) ein.',
-        setup: function(){ aufbauen('B'); }, ok: function(s){ return s.fall === 'B' && s.m === -0.5 && s.b === 2; } },
+      { text: 'Erkunde: \\(m = 3\\) ist fest. Zieh an \\(b\\) und beobachte, wann die Gerade \\(P\\) trifft.',
+        setup: function(){ aufbauen('A'); }, ok: function(s){ return s.fall === 'A' && s.bewegt.b; } },
+      { text: '\\(m = 3\\) ist fest. Stell \\(b\\) so ein, dass die Gerade durch \\(P(-1 \\mid 2)\\) geht.',
+        setup: function(){ aufbauen('A'); }, ok: function(s){ return s.fall === 'A' && s.b === 5; } },
+      { text: 'Jetzt zwei Punkte: Stell die Gerade durch \\(A(-2 \\mid 4)\\) und \\(B(2 \\mid -1)\\) ein.',
+        setup: function(){ aufbauen('B'); }, ok: function(s){ return s.fall === 'B' && s.m === -1.25 && s.b === 1.5; } },
       { text: 'Stell die Gerade parallel zur gestrichelten ein, die durch \\(P(-2 \\mid 1)\\) geht.',
-        setup: function(){ aufbauen('C'); }, ok: function(s){ return s.fall === 'C' && s.m === 1.5 && s.b === 4; } }
+        setup: function(){ aufbauen('C'); }, ok: function(s){ return s.fall === 'C' && s.m === 1.5 && s.b === 4; } },
+      { text: 'Stell die Gerade <b>senkrecht</b> zur gestrichelten ein, die durch \\(P(1 \\mid -1)\\) geht.',
+        setup: function(){ aufbauen('D'); }, ok: function(s){ return s.fall === 'D' && s.m === -2 && s.b === 1; } }
     ], sim);
     aufbauen('A');
   })();
@@ -332,6 +339,24 @@
     }
     var gl = function(a, b){ return Math.abs(a - b) < 1e-9; };
     var STEIG = [-3, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 3];      // nie 0: diese Typen brauchen eine echte Steigung
+    /* Geraden, nach denen das Leitprogramm an fester Stelle fragt — eine Zufallsübung
+       darf keine davon treffen, sonst steht ihre Lösung schon irgendwo (HOWTO §15).
+       Reihenfolge: Aufgaben der Kapitel · Vortest · Gesamttest · Clipfragen. */
+    var FEST = [
+      [2, -3], [-1, 2], [0.5, 0], [-2, -1], [1.5, -1], [1.5, -2], [-1, -1],
+      [-0.5, 3], [2, -2], [0, 5], [4, -6], [-2, 8], [0.5, 3], [-1.5, 3],
+      [-0.5, 0], [0, 4], [1, 0], [3, 1], [-1 / 3, 2], [3, -4], [1 / 3, 0],
+      [-1.5, -2], [1, -2], [-1, 3], [-3, 7], [2, 2], [-2, 3], [-2, 10],
+      [3, -1], [3, 4], [2, 1], [-0.5, 5], [0.05, 12], [0.5, 2], [2, -1],
+      [0.5, -2], [2 / 3, -2], [-3, 6], [-4, 1], [-4, 5], [0.25, 2], [0, -2],
+      [-2, 0], [-0.5, 4], [-1.5, 18],
+      [3, -4], [-2, 5], [0.8, 1], [2, -6], [-1.5, 2.5], [1.5, -6], [-0.5, 2],
+      [2, 1], [2, 3], [0.5, 1], [-1.5, 1], [1.5, 0], [0, 3], [4, -1],
+      [-0.25, 1], [3, 2], [3, -3], [3, -5], [-2, 4], [-1, 5], [4, 80], [-0.5, 1.5]
+    ];
+    function fest(m, b){
+      return FEST.some(function(p){ return gl(p[0], m) && gl(p[1], b); });
+    }
 
     var TYPEN = {
       /* ── Kapitel 1 ───────────────────────────────────────────── */
@@ -363,14 +388,15 @@
           if (gl(e.m, A.m) && gl(e.b, A.b)) return null;
           if (gl(e.m, A.b) && gl(e.b, A.m)) return 'Vertauscht: Der Zuwachs pro Schritt ist \\(m\\), die Höhe auf der \\(y\\)-Achse ist \\(b\\).';
           if (gl(e.m, -A.m)) return 'Vorzeichen von \\(m\\): «' + (A.m > 0 ? 'steigt' : 'fällt') + '» heisst \\(m ' + (A.m > 0 ? '\\gt' : '\\lt') + ' 0\\).';
-          if (gl(e.b, -A.b)) return 'Vorzeichen von \\(b\\): Die Gerade schneidet die \\(y\\)-Achse bei \\(' + tz(A.b) + '\\).';
+          if (A.b !== 0 && gl(e.b, -A.b)) return 'Vorzeichen von \\(b\\): Die Gerade schneidet die \\(y\\)-Achse bei \\(' + tz(A.b) + '\\).';
           if (!gl(e.m, A.m)) return 'Der Zuwachs pro Schritt nach rechts ist \\(m\\).';
           return '\\(b\\) ist die Höhe, in der die Gerade die \\(y\\)-Achse schneidet.'; },
         loesung: function(A){ return 'f(x) = ' + lin(A.m, A.b); } },
 
       'graf-mb': { felder: ['m', 'b'], muster: 'f(x) = {m} · x + {b}', graf: true,
-        neu: function(){ var m = zufall([-2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2]), b = zufall(bereich(-3, 3));
-          return { m: m, b: b, s: Math.abs(m) === 0.5 || Math.abs(m) === 1.5 ? 2 : 1,
+        neu: function(){ var m = zufall([-2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 1 / 3, -1 / 3, 2 / 3, -2 / 3]),
+            b = zufall(bereich(-3, 3)), n3 = Math.abs(Math.round(m * 3) - m * 3) < 1e-9 && !Number.isInteger(m * 2);
+          return { m: m, b: b, s: n3 ? 3 : (Math.abs(m) === 0.5 || Math.abs(m) === 1.5 ? 2 : 1),
             text: 'Gleichung der Geraden? (Die Punkte liegen auf Gitterpunkten.)' }; },
         fehler: function(A){ var f = [[{ m: String(-A.m), b: String(A.b) }, 'Steigt']];
           if (A.b !== 0) f.push([{ m: String(A.m), b: String(-A.b) }, 'Dort schneidet']);
@@ -389,7 +415,7 @@
       /* ── Kapitel 2 ───────────────────────────────────────────── */
       'steigung-punkte': { felder: ['m'], muster: 'm = {m}',
         neu: function(){ var m = zufall(STEIG), x1 = zufall(bereich(-5, 3)), d = zufall([2, 2, 4, 4, 6]), y1 = zufall(bereich(-5, 5));
-          return { m: m, x1: x1, y1: y1, x2: x1 + d, y2: y1 + m * d, dx: d, dy: m * d,
+          return { m: m, b: y1 - m * x1, x1: x1, y1: y1, x2: x1 + d, y2: y1 + m * d, dx: d, dy: m * d,
             text: 'Steigung der Geraden durch \\(A' + pkt(x1, y1) + '\\) und \\(B' + pkt(x1 + d, y1 + m * d) + '\\)?' }; },
         fehler: function(A){ var f = [[{ m: String(-A.m) }, 'geht es hin']];
           if (!gl(A.dy, A.m) && !gl(A.dy, -A.m)) f.push([{ m: String(A.dy) }, 'Teile noch durch']);
@@ -420,7 +446,7 @@
           return 'Setz \\(0 = ' + lin(A.m, A.b) + '\\) und löse nach \\(x\\) auf.'; },
         loesung: function(A){ return 'x_0 = -\\dfrac{' + tz(A.b) + '}{' + tz(A.m) + '} = ' + tz(A.x0); } },
 
-      'punkt-pruefen': { felder: ['y', 'lage'], muster: 'f(x\u209a) = {y}   →   P liegt {lage:auf g|nicht auf g}',
+      'punkt-pruefen': { felder: ['y', 'lage'], muster: 'Ergebnis {y}   →   P liegt {lage:auf g|nicht auf g}',
         eingabe: function(A){ return { y: String(A.y), lage: A.drauf ? 'auf g' : 'nicht auf g' }; },
         neu: function(){ var m = zufall(STEIG), b = zufall(bereich(-5, 5)), xp = zufall([-4, -2, 2, 4, 6]),
             y = m * xp + b, drauf = Math.random() < 0.5, yp = drauf ? y : y + zufall([-3, -2, -1, 1, 2, 3]);
@@ -440,34 +466,37 @@
         loesung: function(A){ return 'f(' + tz(A.xp) + ') = ' + tz(A.y) + ' \\Rightarrow P \\text{ liegt ' + (A.drauf ? '' : 'nicht ') + 'auf } g'; } },
 
       /* ── Kapitel 3 ───────────────────────────────────────────── */
-      'typ-erkennen': { felder: ['typ'], muster: '{typ:allgemeine lineare Funktion|proportionale Funktion|konstante Funktion|Identität|keine Funktion}',
+      // «am genauesten», weil die Typen ineinander liegen: die Identität ist auch
+      // proportional, eine proportionale Funktion mit m ≠ 0 auch eine lineare.
+      'typ-erkennen': { felder: ['typ'], muster: '{typ:allgemeine lineare Funktion|proportionale Funktion|konstante Funktion|Identität|senkrechte Gerade (keine Funktion)}',
         eingabe: function(A){ return { typ: A.typ }; },
         neu: function(){
           var art = zufall(['allg', 'prop', 'konst', 'id', 'keine']), m, b, text, typ;
           if (art === 'prop'){ m = zufall([-3, -2, -0.5, 0.5, 2, 3]); text = 'f(x) = ' + kx(m); typ = 'proportionale Funktion'; }
           else if (art === 'konst'){ b = zufall(bereich(-5, 5, [0])); text = 'f(x) = ' + tz(b); typ = 'konstante Funktion'; }
           else if (art === 'id'){ text = 'f(x) = x'; typ = 'Identität'; }
-          else if (art === 'keine'){ b = zufall(bereich(-5, 5, [0])); text = 'x = ' + tz(b); typ = 'keine Funktion'; }
+          else if (art === 'keine'){ b = zufall(bereich(-5, 5, [0])); text = 'x = ' + tz(b); typ = 'senkrechte Gerade (keine Funktion)'; }
           else { m = zufall([-3, -2, -1.5, 1.5, 2, 3]); b = zufall(bereich(-5, 5, [0])); text = 'f(x) = ' + lin(m, b); typ = 'allgemeine lineare Funktion'; }
-          return { art: art, typ: typ, gl: text, text: 'Welcher Typ ist \\(' + text + '\\)?' }; },
+          return { art: art, typ: typ, gl: text, text: 'Welcher Typ passt am genauesten zu \\(' + text + '\\)?' }; },
         fehler: function(A){
-          var andere = ['allgemeine lineare Funktion', 'proportionale Funktion', 'konstante Funktion', 'Identität', 'keine Funktion']
+          var andere = ['allgemeine lineare Funktion', 'proportionale Funktion', 'konstante Funktion', 'Identität', 'senkrechte Gerade (keine Funktion)']
             .filter(function(t){ return t !== A.typ; });
           return andere.slice(0, 2).map(function(t){ return [{ typ: t }, null]; }); },
         pruefen: function(A, e){
           if (e.typ === A.typ) return null;
           if (A.art === 'id') return 'Schau genau: \\(m = 1\\) und \\(b = 0\\) — jedes \\(x\\) wird auf sich selbst abgebildet.';
-          if (A.art === 'prop') return 'Hier ist \\(b = 0\\): Die Gerade geht durch den Ursprung, aber \\(m \\neq 1\\).';
+          if (A.art === 'prop') return 'Hier ist \\(b = 0\\): Die Gerade geht durch den Ursprung — genauer als «linear», und wegen \\(m \\neq 1\\) nicht die Identität.';
           if (A.art === 'konst') return 'Hier steht kein \\(x\\): \\(m = 0\\), der Graph ist waagrecht.';
           if (A.art === 'keine') return 'Hier ist \\(x\\) festgelegt, nicht \\(y\\): Zu dieser einen Stelle gehören unendlich viele \\(y\\)-Werte.';
-          return 'Hier sind \\(m \\neq 0\\) und \\(b \\neq 0\\) — kein Sonderfall.'; },
+          return 'Hier sind \\(m \\neq 0\\) und \\(b \\neq 0\\) — keiner der drei Sonderfälle trifft zu.'; },
         loesung: function(A){ return '\\text{' + A.typ + '}'; } },
 
       'parallel-senkrecht': { felder: ['m_2'], muster: 'm₂ = {m_2}',
         eingabe: function(A){ return { m_2: String(A.m2) }; },
-        neu: function(){ var m1 = zufall([-4, -3, -2, -1, -0.5, 0.5, 1, 2, 3, 4]), b1 = zufall(bereich(-5, 5)),
+        // m1 nur mit abbrechendem Kehrwert, sonst zeigt loesung() 16 Dezimalstellen
+        neu: function(){ var m1 = zufall([-4, -2, -1, -0.5, 0.5, 1, 2, 4]), b1 = zufall(bereich(-5, 5)),
             senk = Math.random() < 0.5, m2 = senk ? -1 / m1 : m1;
-          return { m1: m1, b1: b1, m2: m2, senk: senk,
+          return { m1: m1, b1: b1, m2: m2, senk: senk, m: m1, b: b1,
             text: 'Welche Steigung hat eine Gerade ' + (senk ? '<b>senkrecht</b>' : '<b>parallel</b>')
               + ' zu \\(g: y = ' + lin(m1, b1) + '\\)?' }; },
         fehler: function(A){ var f = [], zweit = A.senk ? A.m1 : -1 / A.m1;
@@ -553,7 +582,11 @@
       var auf = box.querySelector('.ue-aufgabe'), ein = box.querySelector('.ue-eingabe'), rueck = box.querySelector('.ue-rueck'),
           zaehler = box.querySelector('.ue-serie'), bild = box.querySelector('.ue-bild');
       function neu(){
-        A = T.neu(); versuche = 0; geloest = false; box.__aufgabe = A; box.__typ = T;   // Testhaken (.claude/tools/pruef-uebungen.mjs)
+        // Trifft der Wurf eine Gerade, nach der eine feste Aufgabe fragt, wird neu
+        // gewürfelt (FEST oben). 40 Versuche reichen weit; danach gilt der letzte Wurf.
+        A = T.neu();
+        for (var v = 0; v < 40 && A.m !== undefined && A.b !== undefined && fest(A.m, A.b); v++) A = T.neu();
+        versuche = 0; geloest = false; box.__aufgabe = A; box.__typ = T;   // Testhaken (.claude/tools/pruef-uebungen.mjs)
         auf.innerHTML = A.text;
         var html = T.muster;
         T.felder.forEach(function(f){
@@ -616,7 +649,12 @@
     var K = Achsen(svg, { w: w, h: h, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, xm: [1], ym: [1], pfeil: 6,
       xname: svg.dataset.xname, yname: svg.dataset.yname });
     gg.forEach(function(g, i){ K.kurve(function(x){ return g[0] * x + g[1]; }, 'kurve' + (i ? ' g2' : '')); });
-    if (svg.dataset.punkte) svg.dataset.punkte.split(';').forEach(function(p){ var q = p.split(',').map(Number); K.punkt(q[0], q[1], 'p-pkt'); });
+    // Eine Farbe, eine Bedeutung — auch im Minigrafen: (0 | b) orange, die Nullstelle
+    // grün, jeder andere Gitterpunkt neutral.
+    if (svg.dataset.punkte) svg.dataset.punkte.split(';').forEach(function(p){
+      var q = p.split(',').map(Number);
+      K.punkt(q[0], q[1], q[0] === 0 ? 'p-b' : q[1] === 0 ? 'p-null' : 'p-pkt');
+    });
     if (svg.dataset.titel) el(svg, 'text', { x: 6, y: 14, 'class': 'mini-titel' }, svg.dataset.titel);
     if (!svg.getAttribute('aria-label')) svg.setAttribute('aria-label', 'Gerade' + (svg.dataset.titel ? ' ' + svg.dataset.titel : ''));
   });

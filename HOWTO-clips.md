@@ -180,7 +180,7 @@ Benannte Achsen werden zuletzt gezeichnet, mit einem Hof in der Papierfarbe, dam
 nicht überdeckt. Ohne die Felder bleibt das Bild wie bisher (bestehende Clips bauen gleich).
 Für neue Clips mit Koordinatenbild: `pfeile` immer setzen.
 
-### Bewegte Parabel im `graf`: `bewegung` (seit 02.10.2026)
+### Bewegte Parabel und Gerade im `graf`: `bewegung` (seit 02.10.2026)
 
 Statt eines festen Bildes je Szene kann eine Parabel **während der Szene gleiten**:
 
@@ -208,6 +208,29 @@ Begleiter — alle aus derselben Zeit gerechnet, alle mit `farbe`:
 In `text` stehen `{x}` und `{y}` für die laufenden Werte (eine Nachkommastelle, echtes
 Minus).
 
+**Geraden bewegen sich genauso** (seit 03.10.2026). Der Stützpunkt ist `[t, m, q]` für
+\(y = m x + q\); gezeichnet wird die am Fenster abgeschnittene Strecke:
+
+```json
+{"typ": "graf", "xbereich": [-4, 5], "ybereich": [-5, 6], "geraden": [
+  {"m": 2, "q": 0, "gestrichelt": true, "farbe": 5, "dicke": 3},
+  {"bewegung": [[0.8, 2, 0], [3.4, 2, 3]], "farbe": 1, "yachse": {"farbe": 2}}]}
+```
+
+Begleiter der bewegten Geraden — alle aus derselben Zeit gerechnet, alle mit `farbe`:
+
+| Schlüssel | zeigt |
+|---|---|
+| `"yachse": {}` | den \(y\)-Achsenabschnitt mit «(0 \| q)»; `"beschriftung": false` lässt den Text weg |
+| `"nullstelle": {}` | die Nullstelle mit «(x \| 0)»; verschwindet bei \(m = 0\) |
+| `"marken": [{"x": 2, "text": "f(2) = {y}"}]` | Punkt an festem \(x\) mit Live-Wert |
+| `"laeufer": {"bahn": [[t, x], …], "text": "{x} \| {y}"}` | Punkt, der auf der Geraden fährt |
+| `"dreieck": {"x": -3, "dx": 2}` | mitlaufendes Steigungsdreieck ab \(x\), mit «Δx = …» und «Δy = …» |
+
+In `text` gibt es zusätzlich `{m}` und `{q}`. Die Beschriftung setzt sich selbst auf die
+Seite, auf der die Gerade *nicht* verläuft (bei \(m \gt 0\) unter den Punkt, sonst darüber) —
+eine freie Stelle von Hand suchen muss man nur bei **festen** Punkten.
+
 Gezeichnet wird im Abspieler, **allein aus der Zeit**: `seek(t)` wird nur in Clips mit
 `bewegung` um `bewegen(t)` erweitert (`BEWEGUNG_JS` in `build-clips.py`). Darum stimmen
 Pause, Spulen und die Bilder von `pruef-clip.mjs` — ein Prüfbild mitten in der Bewegung
@@ -221,7 +244,8 @@ wirken ruhig, unter 1 s hektisch. Geht \(a\) durch 0 (Umklappen), ist die Parabe
 kurz eine Gerade — das ist gewollt und zeigt, was dabei passiert.
 
 Im Einsatz: die fünf Clips `g3-3-lp-*` («Parabel sehen», Leitprogramm Quadratische
-Funktionen). Noch nicht: bewegte Geraden und freie Kurven, Live-Zahlen in Formelzeilen.
+Funktionen) und die acht Clips `g3-2-lp-*` («Gerade sehen», Leitprogramm Lineare
+Funktionen). Noch nicht: bewegte freie Kurven, Live-Zahlen in Formelzeilen.
 **Formelzeile und Bewegung abstimmen:** Nennt die Formel links schon den Endwert, soll die
 Bewegung früh und kurz sein (unter 2 s) — sonst steht im Text etwas anderes als im Bild.
 
@@ -252,8 +276,8 @@ Voraussage (predict–observe–explain) wandert in den Clip selbst:
 - `wahl`: Knöpfe, `rueck` gibt **je Antwort** eine eigene Rückmeldung. Bei einer
   falschen Voraussage die Lösung nicht verraten, sondern aufs Hinschauen lenken — der
   Clip löst sie gleich danach auf.
-- `klick`: Tippen ins bewegte Bild der Szene (braucht ein `graf` mit `bewegung`, denn
-  dessen Fenster rechnet den Tipp in Koordinaten um). `fallen` sind typische falsche
+- `klick`: Tippen ins bewegte Bild der Szene (braucht ein `graf` mit `bewegung` —
+  Parabel oder Gerade —, denn dessen Fenster rechnet den Tipp in Koordinaten um). `fallen` sind typische falsche
   Stellen mit eigener Rückmeldung; ein grüner Kreis zeigt danach die richtige Stelle.
 - Der Clip hält nur beim **Abspielen** an. Spulen erkennt `FRAGEN_JS` ausdrücklich
   (Klick auf die Zeitleiste, ← →), nicht am Zeitabstand zweier Bilder: Ein Sprung an
@@ -281,7 +305,8 @@ Voraussage (predict–observe–explain) wandert in den Clip selbst:
 - **Lokal testen:** `python3 -m http.server` kann keine Bereichsanfragen; darum springt
   der Ton beim Spulen auf den Anfang zurück. Auf GitHub Pages tritt das nicht auf.
 
-Im Einsatz: `g3-3-lp-verschieben` (drei Fragen).
+Im Einsatz: `g3-3-lp-verschieben` (drei Fragen) und die vier Kontrollclips
+`g3-2-lp-kontrolle-*` (je fünf, `wahl` und `klick` gemischt).
 
 ### Kurven im `graf`: `kurven`, `xteilung`/`yteilung`, `von`/`bis`
 

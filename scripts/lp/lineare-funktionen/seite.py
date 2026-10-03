@@ -191,16 +191,17 @@ fest1 = r'''      <div class="festhalten">
           <p>\[ f(x) = m \cdot x + b, \qquad m,\, b \in \mathbb{R} \]</p>
           <p>\(b\) ist der \(y\)-Achsenabschnitt: \(f(0) = b\). Die Gerade schneidet die \(y\)-Achse im Punkt \((0 \mid b)\); \(b\) schiebt sie nur senkrecht — plus hinauf, minus hinunter.</p>
           <p>\(m\) ist die Steigung: ein Schritt nach rechts, \(m\) Schritte hinauf. \(m\) kippt die Gerade um den Punkt \((0 \mid b)\). \(m \gt 0\): steigt · \(m \lt 0\): fällt · \(m = 0\): waagrecht.</p>
+          <p><b>Punktprobe:</b> Ob \(P(x_1 \mid y_1)\) auf dem Graphen liegt, entscheidet das Einsetzen: \(f(x_1)\) ausrechnen und mit \(y_1\) vergleichen.</p>
           <p>Definitionsmenge: \(D = \mathbb{R}\), wenn nichts anderes dasteht. In Anwendungen schränkt der Sachverhalt sie ein (etwa \(t \geq 0\)) — dann gehört sie in die Antwort.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
-          <p>\(b\) ist nicht die Nullstelle. Bei \(f(x) = 2x - 6\) ist \(b = -6\) der Schnittpunkt mit der \(y\)-Achse; die Nullstelle liegt bei \(x_0 = 3\) auf der \(x\)-Achse.</p>
+          <p>\(b\) ist nicht die Nullstelle. Bei \(f(x) = 2x - 6\) ist \(b = -6\) der \(y\)-Achsenabschnitt, die Gerade schneidet die \(y\)-Achse also in \((0 \mid -6)\); die Nullstelle liegt bei \(x_0 = 3\) auf der \(x\)-Achse.</p>
         </div>
       </div>'''
-auf1 = test('t1', 'Aufgaben · Kapitel 1', 11, [
-    ('1a', 4, r'Welcher Graph gehört zu welcher Gleichung? (1) \(2x - 3\) (2) \(-x + 2\) (3) \(0.5x\) (4) \(-2x - 1\)',
-     r'<p>(1) → C, (2) → A, (3) → B, (4) → D.</p><p class="komm">Am schnellsten über \(b\): A und C schneiden die \(y\)-Achse über, B im Ursprung, D unter dem Ursprung. Zwischen A und D entscheidet die Steilheit.</p>',
+auf1 = test('t1', 'Aufgaben · Kapitel 1', 13, [
+    ('1a', 4, r'Welcher Graph gehört zu welcher Funktion? (1) \(f(x) = 2x - 3\) (2) \(g(x) = -x + 2\) (3) \(h(x) = 0.5x\) (4) \(k(x) = -2x - 1\)',
+     r'<p>(1) → C, (2) → A, (3) → B, (4) → D.</p><p class="komm">Am schnellsten über \(b\): A schneidet die \(y\)-Achse über dem Ursprung, B genau im Ursprung, C und D darunter. Zwischen C und D entscheidet die Richtung: C steigt, D fällt.</p>',
      '\n            <div class="mini-reihe"><svg class="mini" data-g="-1,2" data-titel="A"></svg><svg class="mini" data-g="0.5,0" data-titel="B"></svg><svg class="mini" data-g="2,-3" data-titel="C"></svg><svg class="mini" data-g="-2,-1" data-titel="D"></svg></div>'),
     ('1b', 3, 'Gleichung der Geraden? (Punkte auf Gitterpunkten)',
      r'<p>\(b = -1\); von \((0 \mid -1)\) zwei nach rechts und drei hinauf, also \(m = \dfrac{3}{2} = 1.5\): \(f(x) = 1.5x - 1\).</p>',
@@ -209,11 +210,14 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 11, [
      r'<p>\(f(4) = 5\): \(P\) liegt darauf. \(f(-2) = -4 \neq -3\): \(Q\) nicht.</p>', ''),
     ('1d', 2, r'Warum gehen alle Geraden \(f(x) = m \cdot x + 3\) — unabhängig von \(m\) — durch denselben Punkt?',
      r'<p>Bei \(x = 0\) fällt der ganze \(x\)-Teil weg: \(f(0) = 3\) für jedes \(m\). Alle gehen durch \((0 \mid 3)\); \(m\) kippt sie nur um diesen Punkt.</p>', ''),
+    ('1e', 2, r'Zeichne die Graphen von \(f(x) = 1.5x - 2\) und \(g(x) = -x - 1\) in <em>ein</em> Koordinatensystem (Bereich \(-4\) bis \(5\)). Vorgehen: \(b\) auf der \(y\)-Achse eintragen, dann mit einem Steigungsdreieck einen zweiten Punkt suchen.',
+     r'<p>\(f\): \((0 \mid -2)\), dann zwei nach rechts und drei hinauf zu \((2 \mid 1)\).</p><p>\(g\): \((0 \mid -1)\), dann einen nach rechts und einen hinunter zu \((1 \mid -2)\).</p><p class="komm">Zwei Punkte genügen — die Gerade durch sie über das ganze Fenster ziehen.</p>',
+     '\n            <div class="mini-reihe"><svg class="mini gross" data-g="1.5,-2;-1,-1" data-fenster="-4,5,-4,5" data-punkte="0,-2;2,1;0,-1;1,-2"></svg></div>'),
 ], zwei=False)
 k1 = kapitel(1, 'm-kippt-b-schiebt', 'Die Gerade bewegen: \\(m\\) und \\(b\\)', 'K1 · K2', 40,
-             r'Du liest aus \(f(x) = m \cdot x + b\) Steigung und Achsenabschnitt ab — und umgekehrt die Gleichung aus dem Graphen.',
-             ('g3-2-lp-m-und-b', 'Gerade sehen: m kippt, b schiebt', '1:35'),
-             sim1, ('g3-2-lp-kontrolle-m-und-b', 'Kontrollfragen zu m und b', '1:02'),
+             r'Du liest aus \(f(x) = m \cdot x + b\) Steigung und Achsenabschnitt ab, zeichnest damit die Gerade — und liest umgekehrt die Gleichung aus dem Graphen.',
+             ('g3-2-lp-m-und-b', 'Gerade sehen: m kippt, b schiebt', '1:34'),
+             sim1, ('g3-2-lp-kontrolle-m-und-b', 'Kontrollfragen zu m und b', '1:00'),
              fest1, [uebung('mb-lesen', 'm und b ablesen'), uebung('beschreibung-g', 'Beschreibung → Gleichung'),
                      uebung('graf-mb', 'Graph → Gleichung', True)],
              auf1, f'<a href="{TS}#definition">Themenseite 3.2, Definition und Parameter</a>')
@@ -245,9 +249,9 @@ fest2 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
-    ('2a', 3, r'Steigung der Geraden durch (i) \(P(1 \mid 2)\), \(Q(5 \mid 10)\) · (ii) \(P(-3 \mid 4)\), \(Q(1 \mid -2)\) · (iii) \(P(2 \mid 5)\), \(Q(6 \mid 5)\)?',
-     r'<p>(i) \(m = \dfrac{8}{4} = 2\) · (ii) \(m = \dfrac{-6}{4} = -1.5\) · (iii) \(m = \dfrac{0}{4} = 0\), eine waagrechte Gerade.</p>', ''),
-    ('2b', 3, r'Nullstellen von \(4x - 6\), \(-2x + 8\) und \(0.5x + 3\).',
+    ('2a', 3, r'Steigung der Geraden durch (i) \(A(-4 \mid 5)\), \(B(2 \mid 2)\) · (ii) \(A(-1 \mid -4)\), \(B(3 \mid 4)\) · (iii) \(A(2 \mid 5)\), \(B(6 \mid 5)\)?',
+     r'<p>(i) \(m = \dfrac{-3}{6} = -0.5\) · (ii) \(m = \dfrac{8}{4} = 2\) · (iii) \(m = \dfrac{0}{4} = 0\), eine waagrechte Gerade.</p>', ''),
+    ('2b', 3, r'Nullstellen von \(f(x) = 4x - 6\), \(g(x) = -2x + 8\) und \(h(x) = 0.5x + 3\).',
      r'<p>\(1.5\), \(4\) und \(-6\).</p><p class="komm">Je aus \(0 = m x_0 + b\), also \(x_0 = -\dfrac{b}{m}\).</p>', ''),
     ('2c', 2, r'Lies \(m\), \(b\) und die Nullstelle ab. (Punkte auf Gitterpunkten)',
      r'<p>\(b = 3\), zwei nach rechts und drei hinunter: \(m = -1.5\). Nullstelle \(x_0 = 2\), also \(f(x) = -1.5x + 3\).</p>',
@@ -259,8 +263,8 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
 ])
 k2 = kapitel(2, 'steigung-messen', 'Die Steigung messen', 'K2', 40,
              r'Du bestimmst \(m\) aus einem Steigungsdreieck und aus zwei Punkten — und findest die Nullstelle.',
-             ('g3-2-lp-steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m', '1:41'),
-             sim2, ('g3-2-lp-kontrolle-steigung', 'Kontrollfragen zur Steigung', '0:56'),
+             ('g3-2-lp-steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m', '1:44'),
+             sim2, ('g3-2-lp-kontrolle-steigung', 'Kontrollfragen zur Steigung', '0:58'),
              fest2, [uebung('steigung-punkte', 'Steigung aus zwei Punkten'), uebung('nullstelle', 'Nullstelle bestimmen'),
                      uebung('punkt-pruefen', 'Liegt der Punkt auf der Geraden?')],
              auf2, f'<a href="{TS}#steigung">Themenseite 3.2, Steigung, Achsenabschnitt, Nullstelle</a>')
@@ -303,17 +307,17 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 11, [
     ('3a', 4, r'Welcher Typ? (i) \(y = -0.5x\) · (ii) \(y = 4\) · (iii) \(x = -2\) · (iv) \(y = x\)',
      r'<p>(i) proportionale Funktion (\(b = 0\)) · (ii) konstante Funktion (\(m = 0\)) · (iii) senkrechte Gerade — <b>keine Funktion</b> · (iv) Identität (\(m = 1\), \(b = 0\); auch proportional).</p>', ''),
     ('3b', 3, r'Gegeben \(g_1: y = 3x + 1\), \(g_2: y = -\tfrac{1}{3}x + 2\), \(g_3: y = 3x - 4\), \(g_4: y = \tfrac{1}{3}x\). Welche Paare sind parallel, welche senkrecht?',
-     r'<p>Parallel: \(g_1 \parallel g_3\) (beide \(m = 3\)).</p><p>Senkrecht: \(g_1 \perp g_2\) und \(g_3 \perp g_2\), denn \(3 \cdot \left(-\tfrac{1}{3}\right) = -1\).</p><p class="komm">\(g_4\) steht zu keiner der anderen senkrecht: \(3 \cdot \tfrac{1}{3} = 1 \neq -1\).</p>', ''),
+     r'<p>Parallel: \(g_1 \parallel g_3\) (beide \(m = 3\)).</p><p>Senkrecht: \(g_1 \perp g_2\) und \(g_3 \perp g_2\), denn \(3 \cdot \left(-\tfrac{1}{3}\right) = -1\).</p><p class="komm">\(g_4\) steht zu keiner der anderen senkrecht: \(3 \cdot \tfrac{1}{3} = 1\) und \(-\tfrac{1}{3} \cdot \tfrac{1}{3} = -\tfrac{1}{9}\) — beides ist nicht \(-1\).</p>', ''),
     ('3c', 2, r'Liegen die beiden Geraden parallel, senkrecht oder keines von beidem?',
-     r'<p>P: parallel (beide \(m = 3\)). Q: senkrecht, denn \(0.5 \cdot (-2) = -1\).</p>',
-     '\n            <div class="mini-reihe"><svg class="mini gross" data-g="3,1;3,-3" data-titel="P"></svg><svg class="mini gross" data-g="0.5,-2;-2,3" data-titel="Q"></svg></div>'),
+     r'<p>P: parallel (beide \(m = -1.5\)). Q: senkrecht, denn \(1 \cdot (-1) = -1\).</p>',
+     '\n            <div class="mini-reihe"><svg class="mini gross" data-g="-1.5,3;-1.5,-2" data-titel="P"></svg><svg class="mini gross" data-g="1,-2;-1,3" data-titel="Q"></svg></div>'),
     ('3d', 2, r'Warum schneiden sich zwei Geraden mit gleichem \(m\) und verschiedenem \(b\) nie?',
      r'<p>Gleiches \(m\) heisst gleiche Richtung. Zu jeder Stelle \(x\) unterscheiden sich die beiden Werte um genau \(b_1 - b_2 \neq 0\) — dieser Abstand bleibt überall gleich und wird nie null.</p>', ''),
 ])
 k3 = kapitel(3, 'typen-und-lage', 'Typen und Lagebeziehungen', 'K1 · K2', 35,
-             'Du erkennst proportionale, konstante und senkrechte Geraden an den Koeffizienten — und entscheidest, ob zwei Geraden parallel oder senkrecht sind.',
-             ('g3-2-lp-typen', 'Gerade sehen: Typen und Lagebeziehungen', '1:37'),
-             sim3, ('g3-2-lp-kontrolle-typen', 'Kontrollfragen zu Typen und Lage', '0:55'),
+             'Du erkennst an \\(m\\) und \\(b\\), ob eine Funktion proportional, konstant oder die Identität ist, unterscheidest sie von der senkrechten Geraden \\(x = k\\) — und entscheidest, ob zwei Geraden parallel oder senkrecht sind.',
+             ('g3-2-lp-typen', 'Gerade sehen: Typen und Lagebeziehungen', '1:43'),
+             sim3, ('g3-2-lp-kontrolle-typen', 'Kontrollfragen zu Typen und Lage', '0:58'),
              fest3, [uebung('typ-erkennen', 'Typ erkennen'), uebung('parallel-senkrecht', 'parallel oder senkrecht')],
              auf3, f'<a href="{TS}#typen">Themenseite 3.2, Typen linearer Funktionen</a>')
 
@@ -335,7 +339,7 @@ fest4 = r'''      <div class="tabhuelle">
             <tr><td>\(b\) und ein Punkt <span class="komm">(\(x_1 \neq 0\))</span></td><td>\(y = m x + b\)</td><td class="wort">\(P\) einsetzen, nach \(m\) auflösen</td></tr>
             <tr><td>zwei Punkte <span class="komm">(\(x_1 \neq x_2\))</span></td><td>\(y = m x + b\)</td><td class="wort">erst \(m = \dfrac{y_2 - y_1}{x_2 - x_1}\), dann \(b\)</td></tr>
             <tr><td>parallel zu \(g\) durch \(P\)</td><td>\(m = m_g\)</td><td class="wort">dann wie oben: \(P\) einsetzen</td></tr>
-            <tr><td>senkrecht zu \(g\) durch \(P\)</td><td>\(m = -\dfrac{1}{m_g}\)</td><td class="wort">dann wie oben: \(P\) einsetzen</td></tr>
+            <tr><td>senkrecht zu \(g\) durch \(P\) <span class="komm">(\(m_g \neq 0\))</span></td><td>\(m = -\dfrac{1}{m_g}\)</td><td class="wort">dann wie oben: \(P\) einsetzen</td></tr>
             <tr><td>Sachtext</td><td>«pro …» \(\to m\)</td><td class="wort">«Grundgebühr», «zu Beginn» \(\to b\); Variablen mit Einheit benennen und den zulässigen Bereich angeben</td></tr>
           </tbody>
         </table>
@@ -350,7 +354,7 @@ fest4 = r'''      <div class="tabhuelle">
           </ol>
           <p>Durch zwei verschiedene Punkte mit \(x_1 \neq x_2\) geht genau eine Gerade — zwei Punkte genügen also immer.</p></div>
         <div class="warn"><div class="titel">Häufiger Fehler</div>
-          <p>In \(b = y_1 - m\,x_1\) wird \(m\,x_1\) <em>abgezogen</em>. Für \(m = 3\) und \(P(2 \mid 1)\) ist \(b = 1 - 6 = -5\), nicht \(7\).</p></div>
+          <p>In \(b = y_1 - m\,x_1\) wird \(m\,x_1\) <em>abgezogen</em>. Für \(m = 3\) und \(P(4 \mid 2)\) ist \(b = 2 - 12 = -10\), nicht \(14\).</p></div>
       </div>'''
 auf4 = test('t4', 'Aufgaben · Kapitel 4', 14, [
     ('4a', 3, r'Gleichung der Geraden mit (i) \(m = -3\) durch \(P(2 \mid 1)\) · (ii) \(b = 2\) durch \(P(4 \mid 10)\) · (iii) durch \(A(-1 \mid 5)\) und \(B(3 \mid -3)\).',
@@ -367,7 +371,7 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 14, [
 ])
 k4 = kapitel(4, 'gleichung-aufstellen', 'Die Geradengleichung aufstellen', 'K3', 45,
              'Du stellst die Gleichung auf — aus Steigung und Punkt, aus zwei Punkten, aus einer Lagebeziehung und aus einem Sachtext.',
-             ('g3-2-lp-aufstellen', 'Gerade sehen: die Geradengleichung aufstellen', '1:43'),
+             ('g3-2-lp-aufstellen', 'Gerade sehen: die Geradengleichung aufstellen', '1:46'),
              sim4, ('g3-2-lp-kontrolle-aufstellen', 'Kontrollfragen zum Aufstellen', '1:01'),
              fest4, [uebung('aufstellen-m-punkt', 'Steigung + Punkt → b'), uebung('aufstellen-zwei-punkte', 'Zwei Punkte → Gleichung'),
                      uebung('aufstellen-lage', 'parallel/senkrecht durch einen Punkt')],
@@ -399,7 +403,7 @@ gt = f'''
     <section class="kap" id="gesamttest">
       <div class="gesamt">
         <div class="gesamt-kopf">
-          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-gf">GF 3.2 · K1–K3</span><span class="zeit">≈ 20 min · 22 Punkte</span></div>
+          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-gf">GF 3.2 · K1–K3</span><span class="zeit">≈ 25 min · 22 Punkte</span></div>
           <h2 id="gesamttest-titel">Gesamttest</h2>
           <div class="pdf-weg">
             <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Rechenweg. Ganz ohne Taschenrechner: Alle drei Kompetenzen des Teilgebiets tragen im Lehrplan den Vermerk «auch ohne Hilfsmittel».<br>
@@ -464,9 +468,12 @@ oben = '''<div id="nav-root"></div>
 
   <nav class="schiene" aria-label="Kapitelnavigation">
     <h2 id="ablauf">Ablauf</h2>
-    <p class="lekt">Lektion 1</p>
+    <p class="lekt">Vorab</p>
     <ol>
       <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
+    </ol>
+    <p class="lekt">Lektion 1</p>
+    <ol>
       <li><a href="#k1"><span class="nr">1</span><span>m und b</span></a></li>
     </ol>
     <p class="lekt">Lektion 2</p>
@@ -528,8 +535,9 @@ unten = '''
 </div>
 '''
 band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
-# Zeiten (03.10.2026): K0 10 · K1 40 · K2 40 · K3 35 · K4 45 · Gesamttest 20 = 190 min
-body = (oben + band(1, 'Die Gerade sehen') + k0 + k1 + band(2, 'Steigung messen') + k2
+# Zeiten (03.10.2026): Vorwissen 10 (vorab) · K1 40 · K2 40 · K3 35 · K4 45 · Gesamttest 25 = 195 min
+# Die vier Kapitel sind die vier Lektionen; Vorwissen und Gesamttest kommen davor und danach.
+body = (oben + band('Vorab', 'Vorwissen') + k0 + band(1, 'Die Gerade sehen') + k1 + band(2, 'Steigung messen') + k2
         + band(3, 'Typen und Lage') + k3 + band(4, 'Aufstellen') + k4
         + band('Abschluss', 'Gesamttest') + gt + unten)
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss

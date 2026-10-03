@@ -40,7 +40,9 @@
   before upper={{\color{lporange}\bfseries #1}\hspace{4mm}{\bfseries #2}\hfill{\small\ttfamily\color{lpgrau}#3}\par\smallskip}}
 \newcommand{\lpteil}[2]{\par\needspace{6\baselineskip}\medskip{\large\bfseries #1}\ {\color{lpgrau}— #2}\par\vspace{-2pt}\rule{\linewidth}{0.4pt}\par}
 % Schreibfläche mit Linien
-\newcommand{\lpplatz}[1]{\par\begin{tikzpicture}
+% K3 (03.10.2026): ohne den Abstand schneidet die gestrichelte Oberkante die
+% Unterlaengen der letzten Textzeile.
+\newcommand{\lpplatz}[1]{\par\vspace{4pt}\begin{tikzpicture}
   \foreach \i in {1,...,#1} \draw[lplinie,line width=0.4pt] (0,-\i*7mm) -- (\linewidth,-\i*7mm);
   \draw[lplinie,dashed,line width=0.4pt] (0,0) rectangle (\linewidth,-#1*7mm-2mm);
   \end{tikzpicture}\par}

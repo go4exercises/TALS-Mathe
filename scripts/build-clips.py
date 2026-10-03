@@ -420,7 +420,65 @@ def graf_svg(el, theme):
                      % (px(0) - 13, py(y) + 8, tinte, entschaerfen(mark)))
 
     # Geraden y = m x + q, am Fenster abgeschnitten
-    for g in el.get("geraden", []):
+    for nr, g in enumerate(el.get("geraden", [])):
+        # "bewegung": [[t, m, q], ...] — eine Gerade, die sich waehrend der Szene
+        # bewegt (t ab Szenenbeginn, seit 03.10.2026). Wie bei den Parabeln wird
+        # sie erst im Abspieler gezeichnet, aus der Zeit allein; siehe BEWEGUNG_JS.
+        if g.get("bewegung"):
+            farbe = fv[g.get("farbe", 1) - 1]
+            gid = "bewg%d" % nr
+            teile.append('<path data-bewg="%s" data-paar="%s" data-fenster="%g,%g,%g,%g,%d,%d,%d" '
+                         'fill="none" stroke="%s" stroke-width="%s" stroke-linecap="round" %s/>'
+                         % (entschaerfen(json.dumps(g["bewegung"])), gid, x0, x1, y0, y1, b, h, rand,
+                            farbe, g.get("dicke", 5),
+                            'stroke-dasharray="14 10"' if g.get("gestrichelt") else ""))
+
+            # Begleiter der bewegten Geraden, alle aus derselben Zeit gerechnet:
+            # yachse ((0 | q)), nullstelle ((x_0 | 0)), marken (Punkt an festem x
+            # mit Live-Wert), laeufer (Punkt, der auf der Geraden faehrt) und
+            # dreieck (Steigungsdreieck ab Stelle x mit Breite dx, mit Delta-Zahlen).
+            def g_punkt(klasse, farbe_, attr="", text=True):
+                f_ = fv[farbe_ - 1]
+                t_ = '<g class="%s" data-zu="%s"%s>' % (klasse, gid, attr)
+                t_ += ('<g class="bew-pt"><circle r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
+                       '<circle r="5" fill="%s"/></g>' % (papier, f_, f_))
+                if text:
+                    t_ += '<text font-size="29" font-weight="600" fill="%s"></text>' % f_
+                return t_ + '</g>'
+            if g.get("yachse"):
+                teile.append(g_punkt("bew-gy", g["yachse"].get("farbe", 2),
+                                     text=g["yachse"].get("beschriftung", True) is not False))
+            if g.get("nullstelle"):
+                teile.append(g_punkt("bew-gn", g["nullstelle"].get("farbe", 3),
+                                     text=g["nullstelle"].get("beschriftung", True) is not False))
+            for mk in g.get("marken", []):
+                teile.append(g_punkt("bew-gm", mk.get("farbe", 5),
+                                     ' data-x="%g" data-text="%s"' % (mk["x"], entschaerfen(mk.get("text", "")))))
+            lf = g.get("laeufer")
+            if lf:
+                teile.append(g_punkt("bew-gl", lf.get("farbe", 5),
+                                     ' data-bahn="%s" data-text="%s"'
+                                     % (entschaerfen(json.dumps(lf["bahn"])), entschaerfen(lf.get("text", "")))))
+            dr = g.get("dreieck")
+            if dr:
+                f_ = fv[dr.get("farbe", 5) - 1]
+                # Feste Stelle und Breite — oder "bahn": [[t, x, dx], ...], dann wandert
+                # und waechst das Dreieck waehrend der Szene mit.
+                if dr.get("bahn"):
+                    teile.append('<g class="bew-gd" data-zu="%s" data-bahn="%s">'
+                                 '<path class="bew-gd-w" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="9 7"/>'
+                                 '<path class="bew-gd-s" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="9 7"/>'
+                                 '<text class="bew-gd-tx" font-size="27" font-weight="600" fill="%s" text-anchor="middle"></text>'
+                                 '<text class="bew-gd-ty" font-size="27" font-weight="600" fill="%s"></text>'
+                                 '</g>' % (gid, entschaerfen(json.dumps(dr["bahn"])), f_, f_, f_, f_))
+                    continue
+                teile.append('<g class="bew-gd" data-zu="%s" data-x="%g" data-dx="%g">'
+                             '<path class="bew-gd-w" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="9 7"/>'
+                             '<path class="bew-gd-s" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="9 7"/>'
+                             '<text class="bew-gd-tx" font-size="27" font-weight="600" fill="%s" text-anchor="middle"></text>'
+                             '<text class="bew-gd-ty" font-size="27" font-weight="600" fill="%s"></text>'
+                             '</g>' % (gid, dr["x"], dr["dx"], f_, f_, f_, f_))
+            continue
         m, q = g["m"], g["q"]
         punkte = []
         for x in (x0, x1):
@@ -736,26 +794,92 @@ const RUHIG = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)'
 const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
   t0: parseFloat(L.dataset.t0),
   teile: [...L.querySelectorAll('[data-bew]')].map(p => ({
-    p, L, k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number) }))
+    art: 'p', p, L, k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number) }))
+    .concat([...L.querySelectorAll('[data-bewg]')].map(p => ({
+      art: 'g', p, L, k: JSON.parse(p.dataset.bewg), f: p.dataset.fenster.split(',').map(Number) })))
 }));
+// Zwischen zwei Stuetzpunkten weich. Wie viele Zahlen ein Stuetzpunkt traegt, sagt er
+// selbst: [t, a, u, v] bei einer Parabel, [t, m, q] bei einer Geraden, [t, x] bei einer Bahn.
 function bewZustand(k, t) {
+  const n = k[0].length - 1;
   if (t <= k[0][0]) return k[0].slice(1);
   for (let i = 0; i < k.length - 1; i++) {
     if (t < k[i + 1][0]) {
       let q = (t - k[i][0]) / (k[i + 1][0] - k[i][0]);
       q = RUHIG ? 0 : q * q * (3 - 2 * q);
-      return [1, 2, 3].map(j => k[i][j] + (k[i + 1][j] - k[i][j]) * q);
+      const aus = [];
+      for (let j = 1; j <= n; j++) aus.push(k[i][j] + (k[i + 1][j] - k[i][j]) * q);
+      return aus;
     }
   }
   return k[k.length - 1].slice(1);
 }
 const bewZahl = x => { const r = Math.round(x * 10) / 10; return (r < 0 ? '−' : '') + Math.abs(r); };
+// Eine bewegte Gerade y = m x + q: am Fenster abgeschnitten, dazu ihre Begleiter.
+function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
+  const [m, q] = bewZustand(T.k, t - T.L.t0);
+  const f = x => m * x + q, innen = (x, y) => x >= x0 - 1e-9 && x <= x1 + 1e-9 && y >= y0 - 1e-9 && y <= y1 + 1e-9;
+  const pt = [];
+  for (const x of [x0, x1]) { const y = f(x); if (y >= y0 - 1e-9 && y <= y1 + 1e-9) pt.push([x, y]); }
+  if (Math.abs(m) > 1e-9) for (const y of [y0, y1]) { const x = (y - q) / m; if (x >= x0 - 1e-9 && x <= x1 + 1e-9) pt.push([x, y]); }
+  pt.sort((u, v) => u[0] - v[0]);
+  T.p.setAttribute('d', pt.length > 1
+    ? 'M' + px(pt[0][0]).toFixed(1) + ',' + py(pt[0][1]).toFixed(1) +
+      'L' + px(pt[pt.length - 1][0]).toFixed(1) + ',' + py(pt[pt.length - 1][1]).toFixed(1)
+    : '');
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (m > 0 ? 44 : -18));          // auf die Seite, wo die Gerade nicht laeuft
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  const fuell = (v, x, y) => v.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y))
+                              .replace('{m}', bewZahl(m)).replace('{q}', bewZahl(q));
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-gy')) {
+      setze(g, 0, q); beschrifte(g, 0, q, '(0 | ' + bewZahl(q) + ')');
+    } else if (g.classList.contains('bew-gn')) {
+      if (Math.abs(m) < 1e-9) { g.style.display = 'none'; continue; }
+      const xn = -q / m; setze(g, xn, 0); beschrifte(g, xn, 0, '(' + bewZahl(xn) + ' | 0)');
+    } else if (g.classList.contains('bew-gm')) {
+      const x = parseFloat(g.dataset.x);
+      setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)));
+    } else if (g.classList.contains('bew-gl')) {
+      const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+      const x = bewZustand(bahn, t - T.L.t0)[0];
+      setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)));
+    } else if (g.classList.contains('bew-gd')) {
+      // Steigungsdreieck: von (x | f(x)) nach rechts, dann senkrecht auf die Gerade.
+      let xa, dx;
+      if (g.dataset.bahn) {
+        const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+        [xa, dx] = bewZustand(bahn, t - T.L.t0);
+      } else { xa = parseFloat(g.dataset.x); dx = parseFloat(g.dataset.dx); }
+      const xb = xa + dx;
+      const ya = f(xa), yb = f(xb), sichtbar = innen(xa, ya) && innen(xb, yb);
+      g.style.display = sichtbar ? '' : 'none';
+      if (!sichtbar) continue;
+      g.querySelector('.bew-gd-w').setAttribute('d', 'M' + px(xa) + ',' + py(ya) + 'L' + px(xb) + ',' + py(ya));
+      g.querySelector('.bew-gd-s').setAttribute('d', 'M' + px(xb) + ',' + py(ya) + 'L' + px(xb) + ',' + py(yb));
+      const tx = g.querySelector('.bew-gd-tx'), ty = g.querySelector('.bew-gd-ty');
+      tx.setAttribute('x', px((xa + xb) / 2)); tx.setAttribute('y', py(ya) + (m > 0 ? 36 : -14));
+      tx.textContent = 'Δx = ' + bewZahl(dx);
+      ty.setAttribute('x', px(xb) + 12); ty.setAttribute('y', py((ya + yb) / 2) + 10);
+      ty.textContent = 'Δy = ' + bewZahl(yb - ya);
+    }
+  }
+}
 function bewegen(t) {
   for (const L of BEW) for (const T of L.teile) {
-    const [a, u, v] = bewZustand(T.k, t - L.t0);
     const [x0, x1, y0, y1, b, h, rd] = T.f;
     const px = x => rd + (x - x0) / (x1 - x0) * (b - 2 * rd);
     const py = y => h - rd - (y - y0) / (y1 - y0) * (h - 2 * rd);
+    if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
+    const [a, u, v] = bewZustand(T.k, t - L.t0);
     let d = '', zug = false;
     for (let i = 0; i <= 240; i++) {
       const x = x0 + (x1 - x0) * i / 240, y = a * (x - u) * (x - u) + v;
@@ -1289,7 +1413,8 @@ def bauen(quelle, eigenstaendig=False):
             y = el.get("y", y) + el.get("abstand", max(abstand, hoehe))
 
             attr = f' data-at="{ein:.2f}"'
-            if el.get("typ") == "graf" and any(pa.get("bewegung") for pa in el.get("parabeln", [])):
+            if el.get("typ") == "graf" and (any(pa.get("bewegung") for pa in el.get("parabeln", []))
+                                            or any(ge.get("bewegung") for ge in el.get("geraden", []))):
                 attr += f' data-t0="{start:.2f}"'
             if aus is not None:
                 attr += f' data-out="{aus:.2f}"'
@@ -1359,7 +1484,7 @@ def bauen(quelle, eigenstaendig=False):
 
     # Nur Clips mit bewegten Bildern bekommen den Zusatz — alle anderen
     # bleiben Byte fuer Byte, wie sie waren.
-    if "data-bew=" in html:
+    if "data-bew=" in html or "data-bewg=" in html:
         html = html.replace("window.__seek = seek;", BEWEGUNG_JS + "window.__seek = seek;", 1)
     if dreh.get("fragen"):
         fr = []

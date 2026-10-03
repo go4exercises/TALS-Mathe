@@ -73,6 +73,22 @@ Werkzeug gleich, er ändert keinen Clip.
 74.5 % (Grundlinie 84 %) — der Eintrag in `OFFEN` kommt erst, wenn der Prototyp
 angenommen ist.
 
+**Nachtrag 03.10.2026 — `bewegung` auch für `geraden`.** Derselbe Schlüssel an einer
+Geraden, Stützpunkte `[t, m, q]` für \(y = m x + q\); gezeichnet wird die am Fenster
+abgeschnittene Strecke. Begleiter: `yachse`, `nullstelle`, `marken`, `laeufer` und
+`dreieck` (mitlaufendes Steigungsdreieck mit Δx und Δy). Dazu im Abspieler
+`bewegeGerade()` in `BEWEGUNG_JS`, die Sammelliste `BEW` nimmt `[data-bewg]` mit auf,
+und `bewZustand()` ist auf beliebig viele Zahlen je Stützpunkt verallgemeinert
+(`[t, a, u, v]`, `[t, m, q]`, `[t, x]`). `fragen` vom Typ `klick` funktionieren damit
+auch über einer bewegten Geraden — der Tipp wird aus dem `data-fenster` des bewegten
+Pfads in Koordinaten umgerechnet, und das trägt jetzt auch eine Gerade.
+- *Nachgewiesen gleich geblieben:* `clips/g3-2-achsenabschnitt.html` (ohne Bewegung)
+  baut Byte für Byte gleich; `g3-3-lp-verschieben` unterscheidet sich nur im
+  eingefügten Skript und rendert bei 3/12/28/48/70 s pixelgleich.
+- *Wo in Physik:* unverändert — der `graf` wird in keinem der 234 Drehbücher genutzt;
+  der Übertrag hält nur das Werkzeug gleich. Zusammen mit dem Eintrag oben portieren.
+- *Vorbild:* die acht Clips `g3-2-lp-*` («Gerade sehen»), Leitprogramm Lineare Funktionen.
+
 
 ### 02.10.2026 · Drei Werkzeuge aus dem Leitprogramm Quadratische Funktionen (Theme, Gesamttest als PDF, vorgelesene Fragen)
 

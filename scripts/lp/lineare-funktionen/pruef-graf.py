@@ -30,7 +30,7 @@ def pruefe(datei):
             if el.get('typ') != 'graf':
                 continue
             x0, x1, y0, y1, ex, ey = masse(el)
-            ger = [(g['m'], g['q']) for g in el.get('geraden', [])]
+            ger = [(g['m'], g['q']) for g in el.get('geraden', []) if 'm' in g]
             pkt = [(p['x'], p['y']) for p in el.get('punkte', [])]
 
             def melde(t):
@@ -40,6 +40,28 @@ def pruefe(datei):
                 ys = [m * x0 + q, m * x1 + q]
                 if not (any(y0 <= y <= y1 for y in ys) or (min(ys) < y0 and max(ys) > y1)):
                     melde(f'Gerade y = {m}x + {q} liegt ausserhalb des Fensters')
+
+            # Bewegte Geraden: jeder Stuetzpunkt muss ein Bild ergeben, und das
+            # mitlaufende Steigungsdreieck muss zu jeder Zeit im Fenster liegen —
+            # sonst blendet der Abspieler es einfach aus, und die Szene zeigt nichts.
+            for g in el.get('geraden', []):
+                if not g.get('bewegung'):
+                    continue
+                for t, m, q in g['bewegung']:
+                    ys = [m * x0 + q, m * x1 + q]
+                    if not (any(y0 <= y <= y1 for y in ys) or (min(ys) < y0 and max(ys) > y1)):
+                        melde(f'bewegte Gerade bei t = {t}: y = {m}x + {q} ist nicht im Bild')
+                dr = g.get('dreieck')
+                if not dr:
+                    continue
+                ecken = dr['bahn'] if dr.get('bahn') else [[0, dr['x'], dr['dx']]]
+                for _, m, q in g['bewegung']:
+                    for _, xa, dxx in ecken:
+                        for x in (xa, xa + dxx):
+                            y = m * x + q
+                            if not (x0 <= x <= x1 and y0 <= y <= y1):
+                                melde(f'Steigungsdreieck: Ecke ({x} | {y:g}) bei y = {m}x + {q} '
+                                      f'liegt ausserhalb des Fensters')
             for x, y in pkt:
                 if not (x0 <= x <= x1 and y0 <= y <= y1):
                     melde(f'Punkt ({x} | {y}) liegt ausserhalb des Fensters')
@@ -73,8 +95,43 @@ def pruefe(datei):
                         melde(f'Beschriftungen «{text}» und «{t2}» überlappen')
 
 
+def pruefe_fragen(datei):
+    """Ziel und Fallen einer klick-Frage muessen im Fenster ihrer Szene liegen —
+    sonst kann niemand sie treffen."""
+    d = json.load(open(datei))
+    for F in d.get('fragen', []):
+        if F.get('typ') != 'klick':
+            continue
+        sz = next((q for q in d['szenen'] if q['name'] == F['szene']), None)
+        if sz is None:
+            befunde.append(f"{d['dateiname']}: Frage verweist auf unbekannte Szene {F['szene']}")
+            continue
+        el = next((e for e in sz['elemente'] if e.get('typ') == 'graf'), None)
+        if el is None:
+            befunde.append(f"{d['dateiname']} · {F['szene']}: klick-Frage ohne graf")
+            continue
+        if not any(g.get('bewegung') for g in el.get('geraden', [])):
+            befunde.append(f"{d['dateiname']} · {F['szene']}: klick-Frage ohne bewegte Gerade "
+                           f"(der Abspieler braucht deren data-fenster)")
+        if el.get('ein', 0.05) > F.get('bei', 0.3):
+            befunde.append(f"{d['dateiname']} · {F['szene']}: Bild erscheint erst bei "
+                           f"{el.get('ein')} s, die klick-Frage steht schon bei {F.get('bei')} s")
+        x0, x1 = el['xbereich']
+        y0, y1 = el['ybereich']
+        for name, p in [('Ziel', F['ziel'])] + [('Falle', f_['bei']) for f_ in F.get('fallen', [])]:
+            if not (x0 <= p[0] <= x1 and y0 <= p[1] <= y1):
+                befunde.append(f"{d['dateiname']} · {F['szene']}: {name} {p} liegt ausserhalb des Fensters")
+        tol = F.get('toleranz', 0.5)
+        for f_ in F.get('fallen', []):
+            d_ = ((f_['bei'][0] - F['ziel'][0]) ** 2 + (f_['bei'][1] - F['ziel'][1]) ** 2) ** 0.5
+            if d_ <= tol:
+                befunde.append(f"{d['dateiname']} · {F['szene']}: Falle {f_['bei']} liegt innerhalb "
+                               f"der Toleranz {tol} um das Ziel — sie wird nie erreicht")
+
+
 for datei in sorted(glob.glob(R + 'clips/g3-2-lp-*.json')):
     pruefe(datei)
+    pruefe_fragen(datei)
 
 for b in befunde:
     print('[BEFUND]', b)
