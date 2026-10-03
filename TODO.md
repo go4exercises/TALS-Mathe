@@ -147,7 +147,7 @@ noch ausdrücklich, R setzt Fragen zurück (`FRAGEN_JS`); 4 Clips neu vertont (1
 - [x] **Zulässige Bereiche in Sachaufgaben** (TODOx 15): 4c, 5a–5c, G6–G8.
 - [x] **Sim 2, Aufgabe zu \(y_s\)** setzt stillschweigend \(a \gt 0\) voraus (TODOx 12, Zusatz) — prüfen.
 
-- [ ] **Entscheid Auftraggeber: Umfang über HOWTO §3.** Ehrlich geschätzt ≈ 235 min (Kapitel 35–45 min,
+- [x] **Entscheid Auftraggeber: Umfang über HOWTO §3.** → Variante 3 (03.10.2026): §3 unterscheidet jetzt klassisch / Kapitelmuster (bis 5 Lektionen, Kapitel 35–45 min). Ehrlich geschätzt ≈ 235 min (Kapitel 35–45 min,
   rund fünf Lektionen + Gesamttest); §3 sagt «höchstens 30 min je Kapitel», «mehr als 4 Lektionen →
   teilen». Möglichkeiten: in zwei Leitprogramme teilen (Kapitel 1–3 / 4–5), Aufgaben als Vertiefung
   markieren und aus der Zeit nehmen, oder §3 für dieses Format anpassen.

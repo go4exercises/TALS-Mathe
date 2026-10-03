@@ -115,7 +115,7 @@ benennen.
 HTML vorzulegen; `CLAUDE.md` verlangt, klare Aufträge direkt umzusetzen. Jetzt: Die
 Planung steht als HTML-Kommentar im Kopf der Datei und im Bericht (§14). **Vorgelegt und
 abgewartet** wird nur, wenn (d) einen Widerspruch enthält, der ein Kernkapitel betrifft,
-oder wenn eine RLP-Kompetenz sich nicht in 2–3 Lektionen unterbringen lässt.
+oder wenn eine RLP-Kompetenz sich nicht im Zeitrahmen von §3 unterbringen lässt.
 
 ---
 
@@ -124,10 +124,17 @@ oder wenn eine RLP-Kompetenz sich nicht in 2–3 Lektionen unterbringen lässt.
 - **Eine Lektion = 45 Minuten.** Die Minuten der Kapitel (inkl. Vorwissen und
   Gesamttest) werden addiert; die Summe bestimmt die Lektionenzahl im Kopf. «Zwei
   Lektionen» bei 130 Minuten ist falsch.
-- **Zielgrösse 2–3 Lektionen**, 4–5 Kapitel plus Vorwissen und Gesamttest, ein Kapitel =
-  eine Idee, höchstens 30 Minuten.
+- **Zielgrösse nach Format** (Entscheid Auftraggeber 03.10.2026):
+
+  | Format | Kapitel | Gesamt |
+  |---|---|---|
+  | **Kapitelmuster** (§4; Einführungsclip → Animation → Kontrollclip → Übungen → Aufgaben; Vorbild *Quadratische Funktionen*) | 4–5 Kapitel, je 35–45 Minuten — ein Kapitel ≈ eine Lektion | bis 5 Lektionen plus Vorwissen und Gesamttest |
+  | **klassisch** (Leitprogramme vor dem 02.10.2026) | 4–5 Kapitel, je höchstens 30 Minuten | 2–3 Lektionen plus Vorwissen und Gesamttest |
+
+  Ein Kapitel = eine Idee, in beiden Formaten.
 - **Clips:** rund 6–11 Clips, 8–12 Minuten Clipzeit (STYLEGUIDE §6.5).
-- **Mehr als 4 Lektionen oder deutlich mehr als 11 Clips → teilen**, jedes Teil mit
+- **Über der Zielgrösse (klassisch mehr als 4, Kapitelmuster mehr als 5 Lektionen ohne
+  Gesamttest) oder deutlich mehr als 11 Clips → teilen**, jedes Teil mit
   eigenem Vorwissen und Gesamttest (Vorbild: *Quadratische Gleichungen* /
   *Gleichungssysteme*, 07.09.2026).
 - Der Kern ist, was ohne Leitprogramm in der Prüfung fehlen würde. Parameter,
@@ -186,10 +193,9 @@ Clip schon gibt; «Mehr dazu» als eine Zeile mit Link.
 
 Am Ende des Leitprogramms: **Gesamttest und Bewertungspaket als PDF** (§9) — kein HTML.
 
-Zeit: geplant waren rund 30 Minuten je Kapitel (zwei Clips à ~1 min, Tüfteln ~8, Üben ~7, Aufgaben ~10).
-Nach den beiden Prüfungen vom 03.10.2026 ehrlich geschätzt: 35–45 Minuten je Kapitel, mit Vorwissen
-und Gesamttest ≈ 235 Minuten, also rund fünf Lektionen — über der Zielgrösse von §3. Ob das Vorbild
-geteilt oder Teile als Vertiefung markiert werden, ist offen (TODO.md).
+Zeit: 35–45 Minuten je Kapitel (zwei Clips à ~1 min, Tüfteln ~8–10, Übungen ~8, Selbsttest ~15–20)
+— ein Kapitel ≈ eine Lektion (§3). Vorbild: 5 Kapitel + Vorwissen + Gesamttest ≈ 235 Minuten,
+rund fünf Lektionen plus Gesamttest. Die Zeiten werden geschätzt, nicht aus der Planung übernommen.
 
 ---
 
