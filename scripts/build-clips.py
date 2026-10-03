@@ -1260,8 +1260,15 @@ def element_html(el, theme):
         inhalt = text_html(el["text"])
     elif typ == "notiz":
         klassen += ["hand"]
-        farbe = {"rot": "var(--rot)", "blau": "var(--blau)",
-                 "tinte": "var(--tinte)", "gruen": "var(--gruen)"}.get(el.get("farbe", "blau"))
+        # Ein unbekannter Name ergab frueher still color:None, das der Browser wegwirft —
+        # die Notiz stand dann schwarz statt farbig, ohne jede Meldung (03.10.2026).
+        FARBEN = {"rot": "var(--rot)", "blau": "var(--blau)", "tinte": "var(--tinte)",
+                  "gruen": "var(--gruen)", "gold": "var(--gold)", "orange": "var(--gold)"}
+        name = el.get("farbe", "blau")
+        if name not in FARBEN:
+            raise SystemExit("[FEHLER] Notizfarbe «%s» gibt es nicht. Erlaubt: %s"
+                             % (name, ", ".join(sorted(FARBEN))))
+        farbe = FARBEN[name]
         stil.append("font-size:%dpx;color:%s" % (el.get("groesse", 50), farbe))
         inhalt = text_html(el["text"])
     elif typ == "karte":

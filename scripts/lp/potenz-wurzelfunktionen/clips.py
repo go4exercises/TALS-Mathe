@@ -222,13 +222,13 @@ clip('exponent', 'Kurve sehen: der Exponent formt den Graphen',
             f(r'y = \fa{a} \cdot x^{\fb{3}}', 300, 66),
             n('@|\\fa{a}| \\gt 1@: schmaler · @|\\fa{a}| \\lt 1@: breiter|@\\fa{a} \\lt 0@: an der @x@-Achse gespiegelt',
               440, 'blau'),
-            graf(W, [kurve([[0.8, 1, 3, 0, 0], [2.4, 2, 3, 0, 0], [4.0, 0.5, 3, 0, 0], [5.6, -1, 3, 0, 0]])])),
+            graf(W, [kurve([[3.4, 1, 3, 0, 0], [4.6, 2, 3, 0, 0], [5.9, 0.5, 3, 0, 0], [8.8, -1, 3, 0, 0]])])),
          sz('Merke',
             'Zum Mitnehmen: Der Exponent n bestimmt die Form, seine Parität die Symmetrie — gerade heisst '
             'Achsensymmetrie, ungerade Punktsymmetrie. Alle Kurven gehen durch eins, eins. Und a streckt '
             'in y-Richtung; ein negatives a spiegelt an der x-Achse.',
             titel('Zum Mitnehmen', 250, 76),
-            f(r'y = \fa{a} \cdot x^{\fb{n}}, \quad \fb{n} \in \mathbb{Z} \setminus \{0\}', 410, 58, ein=0.4),
+            f(r'y = \fa{a} \cdot x^{\fb{n}}, \quad \fa{a},\, \fb{n} \neq 0', 410, 58, ein=0.4),
             n('@\\fb{n}@ gerade: Achsensymmetrie|@\\fb{n}@ ungerade: Punktsymmetrie|alle durch @(1 \\mid 1)@',
               540, 'blau', 44, ein=1.2),
             graf(W, [kurve([[0.8, 1, 2, 0, 0], [3.6, 1, 5, 0, 0]], stufen=True)],
@@ -259,8 +259,8 @@ clip('kontrolle-exponent', 'Kurve sehen: Kontrollfragen zum Exponenten',
             'Eins hoch irgendetwas bleibt eins.',
             f(r'1^{\fb{n}} = 1 \quad \text{für jedes } \fb{n}', 300, 58, ein=1.2),
             n('@(1 \\mid 1)@ liegt auf|jeder dieser Kurven', 440, 'blau', ein=2.6),
-            graf(W, [kurve([[0.9, 1, 2, 0, 0], [3.8, 1, 5, 0, 0]], stufen=True,
-                           marken=[{'x': 1, 'text': '(1 | {y})', 'farbe': 5}])])),
+            # Keine Marke: Sie schriebe «(1 | 1)» an — also genau das Klickziel (§15).
+            graf(W, [kurve([[0.9, 1, 2, 0, 0], [3.8, 1, 5, 0, 0]], stufen=True)])),
          sz('Frage 4',
             'Das Minus steht vor der Potenz, nicht in der Klammer. Minus zwei hoch vier ist also minus sechzehn — '
             'erst potenzieren, dann das Vorzeichen.',
@@ -342,7 +342,7 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             titel('Eins durch x', 280, 80),
             f(r'y = x^{\fb{-1}} = \dfrac{1}{x}', 440, 62, ein=4.6),
             graf(W_HY, [kurve([[0, 1, -1, 0, 0]])],
-                 punkte=[pt(2, 0.5, 5, '(2 | 0.5)'), pt(0.5, 2, 5, '(0.5 | 2)')], ein=8.8)),
+                 punkte=[pt(2, 0.5, 5, '(2 | 0.5)'), pt(0.5, 2, 5, '(0.5 | 2)')], ein=6.4)),
          sz('Bei null ist Schluss',
             'An der Stelle null gibt es keinen Wert — man müsste durch null teilen. '
             'Die Kurve zerfällt in zwei Äste, und die Definitionsmenge ist die reellen Zahlen ohne null.',
@@ -357,9 +357,10 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 5},
                               marken=[{'x': 3.5, 'text': '{y}', 'farbe': 5}])])),
          sz('Die Ordnung wächst',
-            'Jetzt wächst die Ordnung: von minus eins über minus zwei und minus drei bis minus vier. '
-            'Die Äste springen zwischen diagonal und beide oben — wieder entscheidet die Parität.',
-            f(r'y = x^{\fb{n}}, \quad \fb{n} = -1 \to -4', 300, 58),
+            'Jetzt wächst die Ordnung: von eins über zwei und drei bis vier — der Exponent geht dabei '
+            'von minus eins auf minus vier. Die Äste springen zwischen diagonal und beide oben, '
+            'und wieder entscheidet die Parität.',
+            f(r'y = x^{-\fb{n}}, \quad \fb{n} = 1 \to 4', 300, 58),
             n('ungerade Ordnung: diagonal|gerade Ordnung: beide oben', 440, 'orange'),
             graf(W_HY, [kurve([[0.9, 1, -1, 0, 0], [4.6, 1, -4, 0, 0]], stufen=True)])),
          sz('Gerade Ordnung',
@@ -377,7 +378,7 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             graf(W_HY, [kurve([[0, 1, -1, 0, 0]], farbe=1), kurve([[0, 1, -2, 0, 0]], farbe=1, gestrichelt=True)],
                  punkte=[pt(1, 1, 5, '(1 | 1)')])),
          sz('Merke',
-            'Zum Mitnehmen: Negatives n gibt eine Hyperbel n-ter Ordnung. Die Definitionsmenge ist die '
+            'Zum Mitnehmen: Der Exponent minus n gibt eine Hyperbel n-ter Ordnung. Die Definitionsmenge ist die '
             'reellen Zahlen ohne null, die Achsen sind Asymptoten, eine Nullstelle gibt es nicht. '
             'Gerade Ordnung heisst beide Äste oben, ungerade heisst diagonal.',
             titel('Zum Mitnehmen', 250, 76),
@@ -397,21 +398,22 @@ clip('kontrolle-hyperbel', 'Kurve sehen: Kontrollfragen zu den Hyperbeln',
             'die Definitionsmenge ist die reellen Zahlen ohne null.',
             f(r'D = \mathbb{R} \setminus \{0\}', 300, 64, ein=1.0),
             n('nur die eine Stelle fehlt —|sonst ist alles erlaubt', 440, 'blau', ein=2.4),
-            graf(W_HY, [kurve([[0.9, 1, -1, 0, 0], [3.4, 1, -2, 0, 0]], stufen=True,
+            graf(W_HY, ein=1.0, kurven=[kurve([[0.9, 1, -1, 0, 0], [3.4, 1, -2, 0, 0]], stufen=True,
                               asymptoten={'farbe': 5})])),
          sz('Frage 2',
             'Drei ist ungerade, also liegen die Äste diagonal: einer rechts oben, einer links unten. '
             'Für negative x ist auch der Wert negativ.',
             f(r'y = \dfrac{1}{x^{\fb{3}}}', 300, 64, ein=1.0),
-            n('ungerade Ordnung:|rechts oben, links unten', 440, 'blau', ein=2.4),
+            n('ungerade Ordnung:|rechts oben, links unten', 500, 'blau', ein=2.4),
             graf(W_HY, [kurve([[0, 1, -3, 0, 0]], asymptoten={'farbe': 5})], ein=1.2)),
          sz('Frage 3',
             'Eingesetzt: eins durch minus zwei ist minus ein Halb. Der Punkt liegt auf dem linken Ast, '
             'unterhalb der x-Achse.',
             f(r'f(-2) = \dfrac{1}{-2} = -0.5', 300, 58, ein=1.2),
             n('negatives @x@, ungerade Ordnung:|negativer Wert', 440, 'blau', ein=2.8),
-            graf(W_HY, [kurve([[0.9, 1, -1, 2.6, 0], [3.4, 1, -1, 0, 0]], asymptoten={'farbe': 5})],
-                 punkte=[pt(-2, -0.5, 5, '(−2 | −0.5)')])),
+            # Der Punkt darf erst nach der Antwort stehen, und die Kurve ist die aus der
+            # Frage — eine verschobene hiesse nicht mehr @y = 1/x@.
+            graf(W_HY, [kurve([[0.9, 1, -1, 0, 0], [3.4, 1, -1, 0, 0]], asymptoten={'farbe': 5})])),
          sz('Frage 4',
             'Die Hyperbel erreicht die x-Achse nie: Eins durch x gleich null hat keine Lösung. '
             'Je grösser x wird, desto näher kommt der Wert der null — aber ein Abstand bleibt immer.',
@@ -486,7 +488,7 @@ W_NS = dict(xbereich=[0, 6], ybereich=[-24, 24],
             yteilung=[[-16, '−16'], [0, '0'], [16, '16']])
 
 # ════════════════════════════════════════════════ Kapitel 3 · Einführung
-clip('verschieben', 'Kurve sehen: verschieben und strecken',
+clip('verschieben', 'Kurve sehen: verschieben — und was die Asymptoten tun',
      'Das Schema a·(x−u)ⁿ + v — und wie bei der Hyperbel die Asymptoten mitwandern.',
      ['Transformation', 'Verschiebung', 'Streckung', 'Asymptote', 'Nullstellen'], [
          sz('Das Schema',
@@ -497,7 +499,8 @@ clip('verschieben', 'Kurve sehen: verschieben und strecken',
             graf(W_TR, [kurve([[0, 1, 3, 0, 0]])])),
          sz('u schiebt waagrecht',
             'u verschiebt waagrecht. Minus zwei in der Klammer schiebt die Kurve zwei nach rechts — '
-            'mit umgekehrtem Vorzeichen, wie immer in der Klammer.',
+            'mit umgekehrtem Vorzeichen, wie immer in der Klammer. Der ausgezeichnete Punkt, bei '
+            'ungeradem n der Terrassenpunkt, wandert mit.',
             f(r'y = (x \fc{- 2})^{\fb{3}}', 300, 64),
             n('in der Klammer:|umgekehrtes Vorzeichen', 440, 'gruen'),
             graf(W_TR, [kurve([[0, 1, 3, 0, 0]], farbe=5, gestrichelt=True),
@@ -508,13 +511,14 @@ clip('verschieben', 'Kurve sehen: verschieben und strecken',
             f(r'y = (x \fc{- 2})^{\fb{3}} \fc{- 2}', 300, 60),
             n('hinter der Potenz:|eigenes Vorzeichen', 440, 'gruen'),
             graf(W_TR, [kurve([[0, 1, 3, 0, 0]], farbe=5, gestrichelt=True),
-                        kurve([[0.9, 1, 3, 2, 0], [3.8, 1, 3, 2, -2]], startpunkt={'farbe': 5})])),
+                        kurve([[4.4, 1, 3, 2, 0], [7.2, 1, 3, 2, -2]], startpunkt={'farbe': 5})])),
          sz('Die Asymptoten wandern mit',
             'Bei einer Hyperbel ist das besonders gut zu sehen: Die Polgerade wandert nach x gleich u, '
             'die waagrechte Asymptote nach y gleich v. Der Kreuzungspunkt der beiden ist das neue Zentrum.',
             f(r'y = \dfrac{1}{x - \fc{2}} \fc{- 1}', 300, 58),
             n('Polgerade @x = \\fc{u}@|Asymptote @y = \\fc{v}@', 440, 'gruen'),
-            graf(W_TR, [kurve([[0.9, 1, -1, 0, 0], [4.4, 1, -1, 2, -1]], asymptoten={'farbe': 5})])),
+            graf(W_TR, [kurve([[0.9, 1, -1, 0, 0], [4.6, 1, -1, 2, 0],
+                               [5.2, 1, -1, 2, 0], [7.6, 1, -1, 2, -1]], asymptoten={'farbe': 5})])),
          sz('Nullstellen',
             'Und die Nullstellen? Man setzt y gleich null und löst auf. Null gleich Klammer x minus drei, '
             'hoch vier, minus sechzehn gibt Klammer hoch vier gleich sechzehn, also x minus drei gleich plus oder '
@@ -522,7 +526,7 @@ clip('verschieben', 'Kurve sehen: verschieben und strecken',
             f(r'(x-3)^{\fb{4}} = 16 \;\Longrightarrow\; x - 3 = \pm 2', 300, 48, ein=5.4),
             n('gerader Exponent:|beim Wurzelziehen @\\pm@ nicht vergessen|@x_1 = 1@, @x_2 = 5@', 440, 'blau',
               ein=11.0),
-            graf(W_NS, [kurve([[0, 1, 4, 3, -16]])],
+            graf(W_NS, [kurve([[0, 1, 4, 3, -16]])], ein=11.0,
                  punkte=[pt(1, 0, 5, '(1 | 0)'), pt(5, 0, 5, '(5 | 0)')])),
          sz('Merke',
             'Zum Mitnehmen: u schiebt waagrecht und steht in der Klammer mit umgekehrtem Vorzeichen, '
@@ -671,8 +675,9 @@ clip('umkehren', 'Kurve sehen: umkehren heisst spiegeln',
             n('nur der rechte Ast|wird umkehrbar', 440, 'gruen'),
             graf(W_SP, [kurve([[0, 1, 2, 0, 0]], von=0, spiegel={'farbe': 3})], geraden=[WH])),
          sz('Das Rezept',
-            'Rechnerisch geht man in drei Schritten vor: nach x auflösen, dann x und y vertauschen, '
-            'fertig. Aus y gleich x hoch drei plus eins wird so y gleich dritte Wurzel aus x minus eins.',
+            'Rechnerisch geht man in drei Schritten vor: nach x auflösen, x und y vertauschen, und '
+            'zum Schluss die Definitionsmenge prüfen. Aus y gleich x hoch drei plus eins wird so '
+            'y gleich dritte Wurzel aus x minus eins.',
             f(r'y = x^{\fb{3}} + 1 \;\longrightarrow\; y = \sqrt[\fb{3}]{x - 1}', 300, 48),
             n('1. nach @x@ auflösen|2. @x@ und @y@ vertauschen|3. Definitionsmenge prüfen',
               440, 'blau', 44),
@@ -723,7 +728,9 @@ clip('kontrolle-umkehren', 'Kurve sehen: Kontrollfragen zum Umkehren',
             'vertauschen. Es bleibt y gleich dritte Wurzel aus x minus eins.',
             f(r'y = \sqrt[\fb{3}]{x - 1}', 300, 58, ein=1.4),
             n('die @1@ landet|unter der Wurzel', 440, 'gruen', ein=2.8),
-            graf(W_UM, [kurve([[0, 1, 3, 0, 1]], spiegel={'farbe': 3})], geraden=[WH])),
+            # Das Spiegelbild geht sichtbar durch @(1 \\mid 0)@ und verriete damit,
+            # welche der drei Gleichungen stimmt — darum erst nach der Antwort.
+            graf(W_UM, [kurve([[0, 1, 3, 0, 1]], spiegel={'farbe': 3})], geraden=[WH], ein=1.2)),
          sz('Merke',
             'Zum Mitnehmen: spiegeln an y gleich x, Koordinaten tauschen, bei geradem Exponenten '
             'vorher einschränken. Und im Rezept wandert alles, was beim Auflösen übrig bleibt, '
@@ -735,7 +742,7 @@ clip('kontrolle-umkehren', 'Kurve sehen: Kontrollfragen zum Umkehren',
             graf(W_UM, [kurve([[0, 1, 3, 0, 0]], spiegel={'farbe': 3})], geraden=[WH])),
      ], [
          wahl('Frage 1', 'Was ist die Umkehrfunktion von f(x) = x⁵?',
-              ['y = ⁵√x', 'y = x^(−5)', 'y = 5√x'], 0,
+              ['y = ⁵√x', 'y = x⁻⁵', 'y = 5·√x'], 0,
               {0: 'Ja.',
                1: 'Das wäre der Kehrwert, nicht die Umkehrung. Spiegeln ≠ Kehrwert bilden.',
                2: 'Die 5 gehört in den Wurzelexponenten, nicht als Faktor davor.'},
@@ -820,7 +827,7 @@ clip('wurzel', 'Kurve sehen: Wurzelfunktionen nutzen',
               450, 'gruen', 44, ein=8.4),
             graf(W_WZ, [kurve([[0, 2, HALB, -1, -4]], farbe=3,
                               startpunkt={'farbe': 3},
-                              marken=[{'x': 0, 'text': '(0 | {y})', 'farbe': 5}])],
+                              marken=[{'x': 0, 'text': '(0 | {y})', 'farbe': 5}])], ein=3.0,
                  punkte=[pt(3, 0, 5, '(3 | 0)')])),
          sz('Wer ist grösser?',
             'Drei Kurven zwischen null und eins: Dort liegt die Wurzel oben, x in der Mitte, '
@@ -835,11 +842,12 @@ clip('wurzel', 'Kurve sehen: Wurzelfunktionen nutzen',
          sz('Grafisch lösen',
             'Und damit lässt sich eine Wurzelgleichung grafisch lösen: Dritte Wurzel aus x plus zwei '
             'gleich zwei. Man zeichnet die Kurve und die waagrechte Gerade y gleich zwei und liest '
-            'den Schnittpunkt ab — bei x gleich sechs. Die Probe: zwei hoch drei minus zwei ist sechs.',
+            'den Schnittpunkt ab — bei x gleich sechs. Die Probe: dritte Wurzel aus sechs plus zwei '
+            'ist dritte Wurzel aus acht, also zwei.',
             f(r'\sqrt[\fb{3}]{x + 2} = 2', 300, 58, ein=3.6),
-            n('Schnittpunkt @(6 \\mid 2)@|Probe: @2^3 - 2 = 6@', 450, 'blau', 44, ein=9.8),
-            graf(W_GL, [kurve([[0, 1, DRITTEL, -2, 0]], farbe=3)],
-                 geraden=[ger(0, 2, farbe=1)], punkte=[pt(6, 2, 5, '(6 | 2)')])),
+            n('Schnittpunkt @(6 \\mid 2)@|Probe: @\\sqrt[3]{6+2} = \\sqrt[3]{8} = 2@', 450, 'blau', 44, ein=9.8),
+            graf(W_GL, [kurve([[0, 1, DRITTEL, -2, 0]], farbe=3)], ein=5.8,
+                 geraden=[ger(0, 2, farbe=5)], punkte=[pt(6, 2, 5, '(6 | 2)')])),
          sz('Merke',
             'Zum Mitnehmen: Die n-te Wurzel ist x hoch eins durch n. Bei geradem Wurzelexponenten '
             'beginnt die Definitionsmenge beim Startpunkt, bei ungeradem gibt es keine Schranke. '
@@ -875,7 +883,9 @@ clip('kontrolle-wurzel', 'Kurve sehen: Kontrollfragen zu den Wurzelfunktionen',
             'bei minus eins und minus zwei.',
             f(r'y = \sqrt[\fb{4}]{x + \fc{1}} - \fc{2}', 300, 56, ein=1.2),
             n('Startpunkt @(\\fc{-1} \\mid \\fc{-2})@', 440, 'gruen', ein=2.8),
-            graf(W_WZ, [kurve([[0.9, 1, 0.25, -1, -2], [3.2, 1, 0.25, -1, -2]], farbe=3,
+            # Erster Stuetzpunkt neutral: Beim Fragen steht die unverschobene Kurve da,
+            # und der Startpunkt wandert erst mit der Antwort an seinen Platz.
+            graf(W_WZ, [kurve([[0.9, 1, 0.25, 0, 0], [3.2, 1, 0.25, -1, -2]], farbe=3,
                               startpunkt={'farbe': 3, 'beschriftung': False})])),
          sz('Frage 4',
             'Null gleich zwei mal Wurzel aus x plus eins, minus vier. Also Wurzel gleich zwei, '
@@ -892,7 +902,7 @@ clip('kontrolle-wurzel', 'Kurve sehen: Kontrollfragen zu den Wurzelfunktionen',
             graf(W_VG, [kurve([[0, 1, HALB, 0, 0]], farbe=3),
                         kurve([[0, 1, 1, 0, 0]], farbe=5, gestrichelt=True),
                         kurve([[0, 1, 2, 0, 0]], farbe=1)],
-                 punkte=[pt(1, 1, 5, '(1 | 1)')])),
+                 punkte=[pt(1, 1, 5, '(1 | 1)')], ein=1.2)),
          sz('Merke',
             'Zum Mitnehmen: Gerader Wurzelexponent heisst Radikand grösser oder gleich null, '
             'ungerader heisst keine Schranke und keinen Startpunkt. Bei geradem Exponenten liegt '
@@ -906,7 +916,7 @@ clip('kontrolle-wurzel', 'Kurve sehen: Kontrollfragen zu den Wurzelfunktionen',
             graf(W_WZ, [kurve([[0, 2, HALB, -1, -4]], farbe=3, startpunkt={'farbe': 3})])),
      ], [
          wahl('Frage 1', 'Welche Definitionsmenge hat y = √(x − 3)?',
-              ['[3; ∞[', '] −∞; 3]', 'ℝ'], 0,
+              ['[3; +∞[', ']−∞; 3]', 'ℝ'], 0,
               {0: 'Ja.',
                1: 'Setz x = 0 ein: Was steht dann unter der Wurzel?',
                2: 'Der Wurzelexponent ist 2, also gerade. Darf der Radikand negativ sein?'},
@@ -914,7 +924,7 @@ clip('kontrolle-wurzel', 'Kurve sehen: Kontrollfragen zu den Wurzelfunktionen',
               rueck_sprich={1: 'Setz x gleich null ein. Was steht dann unter der Wurzel?',
                             2: 'Der Wurzelexponent ist zwei, also gerade. Darf der Radikand negativ sein?'}),
          wahl('Frage 2', 'Und welche Definitionsmenge hat y = ³√(x − 3)?',
-              ['ℝ', '[3; ∞[', '[−3; ∞['], 0,
+              ['ℝ', '[3; +∞[', '[−3; +∞['], 0,
               {0: 'Ja.',
                1: 'Das wäre die Antwort bei einem geraden Wurzelexponenten. Ist 3 gerade?',
                2: 'Rechne ³√(−8) aus — gibt es diesen Wert?'},
@@ -948,7 +958,7 @@ clip('kontrolle-wurzel', 'Kurve sehen: Kontrollfragen zu den Wurzelfunktionen',
                1: 'Setz x = 0.25 ein und rechne alle drei Werte aus.',
                2: 'Setz x = 0.25 ein: Was ist grösser, 0.5 oder 0.25?'},
               sprich='Für x zwischen null und eins gilt:',
-              rueck_sprich={1: 'Setz x gleich null Punkt zwei fünf ein und rechne alle drei Werte aus.',
-                            2: 'Setz x gleich null Punkt zwei fünf ein. Was ist grösser, null Punkt fünf '
-                               'oder null Punkt zwei fünf?'}),
+              rueck_sprich={1: 'Setz x gleich null Komma zwei fünf ein und rechne alle drei Werte aus.',
+                            2: 'Setz x gleich null Komma zwei fünf ein. Was ist grösser, null Komma fünf '
+                               'oder null Komma zwei fünf?'}),
      ], art='Kontrollclip')

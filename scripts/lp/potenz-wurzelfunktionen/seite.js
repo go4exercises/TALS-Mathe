@@ -134,9 +134,9 @@
   /* Ein Exponentenregler darf nie auf 0 stehenbleiben — x⁰ ist keine Potenzfunktion.
      Er springt über die Null hinweg, in die Richtung, aus der er kommt. */
   function ohneNull(inp){
-    var letzt = +inp.value;
+    var letzt = +inp.value, st = parseFloat(inp.step) || 1;
     inp.addEventListener('input', function(){
-      if (+inp.value === 0) inp.value = letzt > 0 ? -1 : 1;
+      if (+inp.value === 0) inp.value = letzt > 0 ? -st : st;
       letzt = +inp.value;
     });
   }
@@ -304,10 +304,11 @@
         K.text(4.8, v + 0.4, 'y = ' + z(v), 'p-m', 'end');
       } else {
         K.kurve(f, 'kurve');
-        K.punkt(u, v, 'p-null', '(' + z(u) + ' | ' + z(v) + ')', 8, -8);
+        K.punkt(u, v, 'p-pkt', '(' + z(u) + ' | ' + z(v) + ')', 8, -8);
       }
       rolle(fig, 'formel').innerHTML = potText(a, n, u, v)
         + (n < 0 ? ' &nbsp;·&nbsp; Asymptoten <i>x</i> = ' + z(u) + ', <i>y</i> = ' + z(v)
+                 : (u === 0 && v === 0) ? ' &nbsp;·&nbsp; nicht verschoben'
                  : ' &nbsp;·&nbsp; verschoben um (' + z(u) + ' | ' + z(v) + ')');
       pruefen();
     }
@@ -374,7 +375,7 @@
         ok: function(s){ return s.n === 4 && !s.ein; } },
       { text: 'Setz jetzt bei \\(n = 4\\) den Haken. Wie heisst die Umkehrfunktion?',
         ok: function(s){ return s.n === 4 && s.ein; } },
-      { text: 'Welcher Punkt liegt bei jedem \\(n\\) auf beiden Kurven? Stell \\(n = 5\\) ein und such ihn.',
+      { text: 'Welche <b>zwei</b> Punkte liegen bei jedem \\(n\\) auf beiden Kurven? Stell \\(n = 5\\) ein und such sie.',
         ok: function(s){ return s.n === 5; } }
     ], sim);
     zeichnen();
@@ -409,9 +410,10 @@
       // Faellt die Nullstelle mit dem Startpunkt zusammen, traegt dieser schon seine
       // Beschriftung — zwei Schilder uebereinander waeren nur unleserlich.
       if (x0 !== null && Math.abs(x0) <= 5 && !(n % 2 === 0 && Math.abs(x0 - u) < 1e-9))
-        K.punkt(x0, 0, 'p-pkt', 'x₀ = ' + z(x0), 8, -8);
+        K.punkt(x0, 0, 'p-pkt', 'x₀ ' + (Math.abs(x0 - Math.round(x0 * 100) / 100) > 1e-12 ? '≈ ' : '= ')
+                + z(x0), 8, -8);
       rolle(fig, 'formel').innerHTML = wurzelText(a, n, u, v) + ' &nbsp;·&nbsp; '
-        + (n % 2 === 0 ? 'Startpunkt (' + z(u) + ' | ' + z(v) + '), D = [' + z(u) + '; ∞['
+        + (n % 2 === 0 ? 'Startpunkt (' + z(u) + ' | ' + z(v) + '), D = [' + z(u) + '; +∞['
                        : 'kein Startpunkt, D = ℝ');
       pruefen();
     }
@@ -423,7 +425,7 @@
       { text: 'Erkunde: Zieh an \\(n\\). Wann beginnt die Kurve an einem Startpunkt, wann läuft sie nach links weiter?',
         ok: function(s){ return s.bewegt.n; } },
       bau(1, 2, 3, 0, 'f(x) = \\sqrt{x-3}'),
-      { text: 'Stell eine Wurzelfunktion mit \\(D = [-2;\\infty[\\) ein.',
+      { text: 'Stell eine Wurzelfunktion mit \\(D = [-2;\\, +\\infty[\\) ein.',
         ok: function(s){ return s.gerade && s.u === -2; } },
       { text: 'Stell eine Wurzelfunktion mit \\(D = \\mathbb{R}\\) ein.',
         ok: function(s){ return !s.gerade; } },
@@ -482,11 +484,23 @@
       [1, -1, -1, 2], [1, 4, 3, -16], [-1, 2, 1, 3], [1, 3, 0, 1], [1, 3, 0, -1],
       [1, 2, 3, 0], [2, 2, -1, -4], [1, 3, -2, 0], [1, 4, 1, -2], [-1, 3, 2, 1],
       [1, 2, -1, 0], [1, 3, 3, 0], [2, 3, -1, -4], [1, 2, 0, -4], [3, 2, 0, 0],
-      [1, -2, 1, -2], [-2, 2, 0, 3], [1, 5, -1, 0], [0.5, 4, 0, -2], [-1, 4, 2, 1]
+      [1, -2, 1, -2], [-2, 2, 0, 3], [1, 5, -1, 0], [0.5, 4, 0, -2], [-1, 4, 2, 1],
+      // Gesamttest G1…G8 (downloads/leitprogramme/potenz-wurzelfunktionen/gesamttest.tex)
+      [3, 4, 0, 0], [0.5, 4, 0, 0], [-2, -2, 0, 0], [1, 4, 1, -16], [2, 2, -3, -4],
+      // Aufgaben der Kapitel und Vortest, die eine feste Funktion nennen
+      [-1, 3, 0, 0], [2, 2, 0, 0], [-2, 3, 0, 0], [3, 6, 0, 0], [-1, 7, 0, 0],
+      [4, -1, 0, 0], [3, -2, 0, 0], [1, -1, 0, 0], [-1, -1, 0, 0], [-1, -2, 0, 0],
+      [1, 3, -1, -2], [2, -1, 3, 1], [1, 4, -2, -81], [1, 3, 1, 8], [1, -1, -2, 3],
+      [1, 5, 0, -3], [1, 4, 0, 0], [1, 6, 0, 0], [3, 2, -1, -6], [1, 2, 2, -1],
+      [1, 2, 5, 0], [1, 3, -1, 0], [1, 4, -2, -1], [1, 2, 0, 0]
     ];
     function fest(a, n, u, v){
       return FEST.some(function(p){ return gl(p[0], a) && p[1] === n && gl(p[2], u || 0) && gl(p[3], v || 0); });
     }
+    /* Typen, deren Aufgabe gar nicht an der Funktion haengt, sondern nur an der Parität
+       des Exponenten: Dort sperrte FEST fast den ganzen Wurfraum. «Einschränken nötig?»
+       zeigte so in 99.9 % der Fälle x⁷ — und hatte damit immer dieselbe Antwort. */
+    var OHNE_FEST = { einschraenken: 1, symmetrie: 1, aeste: 1, vergleich: 1 };
 
     var TYPEN = {
       /* ── Kapitel 1: der Exponent formt den Graphen ───────────── */
@@ -525,18 +539,18 @@
                                               : 'f(-x) = -f(x) \\text{ — punktsymmetrisch zum Ursprung}'; } },
 
       'graf-potenz': { felder: ['a', 'n'], muster: 'f(x) = {a} · x^{n}', graf: 'potenz',
-        neu: function(){ var a = zufall([-2, -1, -0.5, 0.5, 1, 2]), n = zufall([2, 3, 4, 5]);
+        neu: function(){ var a = zufall([-3, -2, -1, 1, 2, 3]), n = zufall([2, 3, 4, 5]);
           return { a: a, n: n, u: 0, v: 0,
             text: 'Gleichung der Kurve? (Der markierte Punkt liegt auf einem Gitterpunkt.)' }; },
         fehler: function(A){ var f = [[{ a: String(-A.a), n: String(A.n) }, 'Vorzeichen von']];
-          f.push([{ a: String(A.a), n: String(A.n % 2 === 0 ? A.n + 1 : A.n + 1) }, 'Symmetrie']);
+          f.push([{ a: String(A.a), n: String(A.n + 1) }, 'Symmetrie']);     // Parität gekippt
           return f; },
         pruefen: function(A, e){
           if (gl(e.a, A.a) && gl(e.n, A.n)) return null;
           var r = [];
           if (!gl(e.n, A.n)){
             if (e.n % 2 !== A.n % 2) r.push('Symmetrie: Der Graph ist ' + (A.n % 2 === 0 ? 'achsensymmetrisch, der Exponent also gerade' : 'punktsymmetrisch, der Exponent also ungerade') + '.');
-            else r.push('Der Exponent stimmt noch nicht: Lies den Wert bei \\(x = 1\\) und bei \\(x = 2\\) ab.');
+            else r.push('Der Exponent stimmt noch nicht: Vergleich die Kurve mit \\(y = x^2\\) — innen flacher heisst grösseres \\(n\\).');
           }
           if (!gl(e.a, A.a)) r.push('Vorzeichen von \\(a\\) und Wert bei \\(x = 1\\): Dort ist \\(f(1) = a\\).');
           return r.join(' '); },
@@ -656,7 +670,8 @@
             py = Math.pow(px, n);
           if (py > 81){ px = 2; py = Math.pow(2, n); }
           return { a: 1, n: n, u: 0, v: 0, px: px, py: py,
-            text: 'Auf \\(f(x) = x^{' + n + '}\\) liegt \\(P' + pkt(px, py) + '\\). Welcher Punkt liegt dann auf \\(f^{-1}\\)?' }; },
+            text: 'Auf \\(f(x) = x^{' + n + '}\\)' + (n % 2 === 0 ? ' mit \\(x \\geq 0\\)' : '')
+              + ' liegt \\(P' + pkt(px, py) + '\\). Welcher Punkt liegt dann auf \\(f^{-1}\\)?' }; },
         fehler: function(A){ return [[{ x: String(A.px), y: String(A.py) }, 'tauschen'],
                                      [{ x: String(-A.py), y: String(A.px) }, 'Vorzeichen']]; },
         pruefen: function(A, e){
@@ -677,13 +692,13 @@
           .filter(function(p){ return !(gl(+p[0].n, A.n) && gl(+p[0].v, -A.v)); }); },
         pruefen: function(A, e){
           if (gl(e.n, A.n) && gl(e.v, -A.v)) return null;
-          if (!gl(e.n, A.n)) return 'Der Wurzelexponent ist derselbe wie der Exponent: \\(n = ' + A.n + '\\).';
+          if (!gl(e.n, A.n)) return 'Der Wurzelexponent ist derselbe wie der Exponent von \\(f\\) — lies ihn dort ab.';
           if (gl(e.v, A.v)) return 'Beim Auflösen wandert \\(' + tz(A.v) + '\\) auf die andere Seite — mit umgekehrtem Vorzeichen.';
           return 'Erst \\(y ' + (A.v > 0 ? '- ' + A.v : '+ ' + (-A.v)) + ' = x^{' + A.n + '}\\), dann die Wurzel ziehen, dann \\(x\\) und \\(y\\) vertauschen.'; },
         loesung: function(A){ return 'f^{-1}(x) = \\sqrt[' + A.n + ']{x ' + (A.v > 0 ? '- ' + A.v : '+ ' + (-A.v)) + '}'; } },
 
       /* ── Kapitel 5: Wurzelfunktionen nutzen ──────────────────── */
-      'wurzel-def': { felder: ['grenze'], muster: 'D = [ {grenze} ; ∞ [',
+      'wurzel-def': { felder: ['grenze'], muster: 'D = [ {grenze} ; +∞ [',
         eingabe: function(A){ return { grenze: String(A.u) }; },
         neu: function(){ var a = zufall([-2, -1, 1, 2, 3]), n = zufall([2, 4, 6]),
             u = zufall(bereich(-5, 5, [0])), v = zufall(bereich(-3, 3));
@@ -696,7 +711,7 @@
           if (gl(e.grenze, -A.u)) return 'Vorzeichen: \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' \\geq 0\\) gibt \\(x \\geq ' + tz(A.u) + '\\).';
           if (gl(e.grenze, A.v)) return 'Die Zahl hinter der Wurzel ändert die Definitionsmenge nicht — nur der Radikand zählt.';
           return 'Der Radikand muss \\(\\geq 0\\) sein: Löse \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' \\geq 0\\).'; },
-        loesung: function(A){ return 'D = [' + tz(A.u) + ';\\infty['; } },
+        loesung: function(A){ return 'D = [' + tz(A.u) + ';\\, +\\infty['; } },
 
       'wurzel-startpunkt': { felder: ['x', 'y'], muster: 'Startpunkt ( {x} | {y} )',
         eingabe: function(A){ return { x: String(A.u), y: String(A.v) }; },
@@ -721,12 +736,12 @@
             w = zufall([1, 2, 3]), v = -a * w, u = zufall(bereich(-3, 3));
           return { a: a, n: n, u: u, v: v, w: w, x0: u + Math.pow(w, n),
             text: 'Berechne die Nullstelle von \\(f(x) = ' + wzT(a, n, u, v) + '\\).' }; },
-        fehler: function(A){ var f = [[{ x_0: String(A.u + A.w) }, 'noch hoch']];
+        fehler: function(A){ var f = [[{ x_0: String(A.u + A.w) }, 'noch nicht']];
           if (!gl(A.u - Math.pow(A.w, A.n), A.x0)) f.push([{ x_0: String(A.u - Math.pow(A.w, A.n)) }, 'Vorzeichen']);
           return f.filter(function(p){ return !gl(+p[0].x_0, A.x0); }); },
         pruefen: function(A, e){
           if (gl(e.x_0, A.x0)) return null;
-          if (gl(e.x_0, A.u + A.w)) return 'Die Wurzel ist \\(' + A.w + '\\) — jetzt noch hoch \\(' + A.n + '\\): \\(x ' + (A.u > 0 ? '- ' + A.u : '+ ' + (-A.u)) + ' = ' + Math.pow(A.w, A.n) + '\\).';
+          if (gl(e.x_0, A.u + A.w)) return 'Der Wurzelwert stimmt — er ist aber noch nicht \\(x\\). Nimm beide Seiten hoch \\(' + A.n + '\\).';
           if (gl(e.x_0, A.u - Math.pow(A.w, A.n))) return 'Vorzeichen: \\(x = ' + tz(A.u) + ' + ' + Math.pow(A.w, A.n) + '\\).';
           if (gl(e.x_0, Math.pow(A.w, A.n))) return 'Das \\(u\\) fehlt noch: \\(x = u + ' + Math.pow(A.w, A.n) + '\\).';
           return 'Setz \\(f(x) = 0\\): Wurzel \\(= ' + A.w + '\\), beide Seiten hoch \\(' + A.n + '\\), dann nach \\(x\\) auflösen.'; },
@@ -758,10 +773,11 @@
         fehler: function(A){ return [[{ ordnung: A.klein ? 'x² > x > √x' : '√x > x > x²' }, 'Setz']]; },
         pruefen: function(A, e){
           if (e.ordnung === (A.klein ? '√x > x > x²' : 'x² > x > √x')) return null;
+          // Nicht z(): das rundet auf zwei Stellen, und «0.04^2 = 0» waere falsch.
           return 'Setz \\(x = ' + A.x + '\\) ein und rechne alle drei Werte aus: \\(\\sqrt{' + A.x + '} = '
-            + z(Math.sqrt(A.x)) + '\\), \\(' + A.x + '\\), \\(' + A.x + '^2 = ' + z(A.x * A.x) + '\\).'; },
-        loesung: function(A){ return '\\sqrt{' + A.x + '} = ' + z(Math.sqrt(A.x)) + ',\\quad ' + A.x
-          + ',\\quad ' + A.x + '^2 = ' + z(A.x * A.x); } }
+            + String(Math.sqrt(A.x)) + '\\), \\(' + A.x + '\\), \\(' + A.x + '^2 = ' + String(A.x * A.x) + '\\).'; },
+        loesung: function(A){ return '\\sqrt{' + A.x + '} = ' + String(Math.sqrt(A.x)) + ',\\quad ' + A.x
+          + ',\\quad ' + A.x + '^2 = ' + String(A.x * A.x); } }
     };
     ALLE.forEach(function(box){
       var T = TYPEN[box.dataset.typ]; if (!T) return;
@@ -772,7 +788,8 @@
         // Trifft der Wurf eine Gerade, nach der eine feste Aufgabe fragt, wird neu
         // gewürfelt (FEST oben). 40 Versuche reichen weit; danach gilt der letzte Wurf.
         A = T.neu();
-        for (var v = 0; v < 40 && fest(A.a, A.n, A.u, A.v); v++) A = T.neu();
+        if (!OHNE_FEST[box.dataset.typ])
+          for (var v = 0; v < 40 && fest(A.a, A.n, A.u, A.v); v++) A = T.neu();
         versuche = 0; geloest = false; box.__aufgabe = A; box.__typ = T;   // Testhaken (.claude/tools/pruef-uebungen.mjs)
         auf.innerHTML = A.text;
         var html = T.muster;
@@ -788,8 +805,10 @@
           if (T.graf){
             // Fenster so weit, dass der markierte Punkt (1 | a) und der Verlauf
             // bis x = ±2 hineinpassen — sonst ist der Exponent nicht ablesbar.
-            var hoch = Math.max(Math.abs(A.a), Math.abs(A.a * Math.pow(2, A.n)));
-            var gr = hoch > 8 ? 2 : hoch > 4 ? 1.6 : 1.2, fe = [-gr * 2, gr * 2, -8, 8];
+            // Je steiler die Kurve, desto ENGER das Fenster — sonst ist die interessante
+            // Zone zusammengedrückt und f(2) liegt ausserhalb.
+            var hoch = Math.abs(A.a * Math.pow(2, A.n));
+            var gr = hoch > 24 ? 1.3 : hoch > 10 ? 1.8 : 2.4, fe = [-gr, gr, -8, 8];
             bild.setAttribute('viewBox', '0 0 170 170');
             var K = Achsen(bild, { w: 170, h: 170, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3.5, pfeil: 6, xm: [1], ym: [2] });
             K.kurve(kurveF(A.a, A.n, 0, 0), 'kurve');
@@ -848,9 +867,13 @@
       if (!wz && n < 0){ K.kurve(f, cls, fe[0], u - 0.02); K.kurve(f, cls, u + 0.02, fe[1]); }
       else K.kurve(f, cls);
     });
+    // data-diagonale="1": die Spiegelachse y = x, gestrichelt und neutral.
+    if (svg.dataset.diagonale === '1') K.kurve(function(x){ return x; }, 'normal');
+    // Ein markierter Punkt ist hier immer ein neutraler Hinweis (gemeinsamer Punkt,
+    // abgelesener Gitterpunkt) — grün bleibt der Wurzel und dem Startpunkt vorbehalten.
     if (svg.dataset.punkte) svg.dataset.punkte.split(';').forEach(function(p){
       var q = p.split(',').map(Number);
-      K.punkt(q[0], q[1], q[1] === 0 ? 'p-pkt' : 'p-null');
+      K.punkt(q[0], q[1], 'p-pkt');
     });
     if (svg.dataset.titel) el(svg, 'text', { x: 6, y: 14, 'class': 'mini-titel' }, svg.dataset.titel);
     if (!svg.getAttribute('aria-label')) svg.setAttribute('aria-label', 'Kurve' + (svg.dataset.titel ? ' ' + svg.dataset.titel : ''));

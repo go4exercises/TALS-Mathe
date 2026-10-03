@@ -208,7 +208,7 @@ fest1 = r'''      <div class="festhalten">
             <li>\(n\) gerade \(\Rightarrow f(-x) = f(x)\): <b>gerade Funktion</b>, Graph achsensymmetrisch zur \(y\)-Achse.</li>
             <li>\(n\) ungerade \(\Rightarrow f(-x) = -f(x)\): <b>ungerade Funktion</b>, Graph punktsymmetrisch zum Ursprung.</li>
           </ul>
-          <p><b>Feste Punkte:</b> Alle \(y = x^{n}\) gehen durch \((0 \mid 0)\) und \((1 \mid 1)\). Bei \(x = -1\) trennen sie sich: gerades \(n\) gibt \(+1\), ungerades \(-1\).</p>
+          <p><b>Feste Punkte:</b> Alle \(y = x^{n}\) mit \(n \geq 1\) gehen durch \((0 \mid 0)\) und \((1 \mid 1)\) — für \(n \lt 0\) fehlt die Stelle \(0\) in \(D\), \((1 \mid 1)\) bleibt. Bei \(x = -1\) trennen sie sich: gerades \(n\) gibt \(+1\), ungerades \(-1\).</p>
           <p><b>\(a\) streckt in \(y\)-Richtung:</b> \(|a| \gt 1\) schmaler, \(|a| \lt 1\) breiter, \(a \lt 0\) spiegelt an der \(x\)-Achse. Es gilt immer \(f(1) = a\).</p>
           <p>Zwischen \(-1\) und \(1\) wird die Kurve mit wachsendem \(n\) <em>flacher</em>, ausserhalb <em>steiler</em>.</p>
         </div>
@@ -234,8 +234,8 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 13, [
 ], zwei=False)
 k1 = kapitel(1, 'der-exponent', 'Der Exponent formt den Graphen', 'Potenzfunktionen', 40,
              r'Du erkennst an \(n\) die Form und an seiner Parität die Symmetrie, berechnest Funktionswerte von \(a \cdot x^{n}\) und liest umgekehrt die Gleichung aus einer Kurve.',
-             ('s3-2-lp-exponent', 'Kurve sehen: der Exponent formt den Graphen', '1:32'),
-             sim1, ('s3-2-lp-kontrolle-exponent', 'Kontrollfragen zum Exponenten', '0:55'),
+             ('s3-2-lp-exponent', 'Der Exponent formt den Graphen', '1:30'),
+             sim1, ('s3-2-lp-kontrolle-exponent', 'Kontrollfragen zum Exponenten', '0:56'),
              fest1, [uebung('potenz-wert', 'Funktionswert berechnen'), uebung('symmetrie', 'Symmetrie erkennen'),
                      uebung('graf-potenz', 'Kurve → Gleichung', True)],
              auf1, f'<a href="{TA}#definition">Themenseite 3.2a, Potenzfunktionen</a>')
@@ -265,6 +265,7 @@ fest2 = r'''      <div class="festhalten">
             <li>\(n\) ungerade: ungerade Funktion, die Äste liegen <b>diagonal</b> in gegenüberliegenden Quadranten.</li>
           </ul>
           <p><b>Keine Nullstelle:</b> Ein Bruch ist nur null, wenn sein Zähler null ist — und \(a \neq 0\). Durch \((1 \mid a)\) gehen aber alle.</p>
+          <p><b>Wertemenge \(W\)</b> — die Menge aller Werte, die \(f\) überhaupt annimmt: Bei <em>ungeradem</em> \(n\) ist \(W = \mathbb{R}\setminus\{0\}\) (jeder Wert ausser null kommt vor), bei <em>geradem</em> \(n\) nur die eine Hälfte — \(W = \mathbb{R}^{+}\) für \(a \gt 0\), \(W = \mathbb{R}^{-}\) für \(a \lt 0\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -287,7 +288,7 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
 ], zwei=False)
 k2 = kapitel(2, 'negative-exponenten', 'Negative Exponenten: Hyperbeln', 'Potenzfunktionen', 40,
              r'Du deutest \(x^{-n}\) als Kehrwert, gibst Definitionsmenge und Asymptoten an und sagst an der Parität von \(n\), wo die beiden Äste liegen.',
-             ('s3-2-lp-hyperbel', 'Kurve sehen: wenn der Exponent negativ wird', '1:23'),
+             ('s3-2-lp-hyperbel', 'Negative Exponenten geben Hyperbeln', '1:24'),
              sim2, ('s3-2-lp-kontrolle-hyperbel', 'Kontrollfragen zu den Hyperbeln', '0:55'),
              fest2, [uebung('hyperbel-wert', 'Funktionswert berechnen'), uebung('aeste', 'Wo liegen die Äste?'),
                      uebung('def-hyperbel', 'Definitionslücke finden')],
@@ -316,12 +317,12 @@ fest3 = r'''      <div class="festhalten">
             <li>\(v\) verschiebt <b>senkrecht</b> und steht <em>hinter</em> der Potenz mit seinem <b>eigenen</b> Vorzeichen.</li>
             <li>\(a\) streckt in \(y\)-Richtung; \(a \lt 0\) spiegelt an der Waagrechten \(y = v\).</li>
           </ul>
-          <p><b>Bei \(n \geq 2\)</b> wandert der ausgezeichnete Punkt des Graphen (Scheitel bzw. Terrassenpunkt) nach \((u \mid v)\).</p>
+          <p><b>Bei \(n \geq 2\)</b> wandert der ausgezeichnete Punkt des Graphen nach \((u \mid v)\). Er heisst bei \(n = 2\) <b>Scheitel</b>, bei grösserem geradem \(n\) <b>Flachpunkt</b> und bei ungeradem \(n\) <b>Terrassenpunkt</b> (so auch auf <a href="../schwerpunkt/s3-2a-potenzfunktionen.html#paritaet">Themenseite 3.2a</a>).</p>
           <p><b>Bei \(n \lt 0\)</b> wandern die <b>Asymptoten mit</b>:</p>
           <p>\[ x = u \qquad \text{und} \qquad y = v, \qquad D = \mathbb{R}\setminus\{u\} \]</p>
           <p><b>Nullstellen</b> berechnet man mit \(f(x) = 0\):</p>
           <p>\[ a\,(x-u)^{n} = -v \;\Longrightarrow\; (x-u)^{n} = -\tfrac{v}{a} \]</p>
-          <p>Bei <b>geradem</b> \(n\) gibt das Wurzelziehen <b>zwei</b> Lösungen \((\pm)\), bei ungeradem genau eine — und bei geradem \(n\) und negativer rechter Seite gar keine.</p>
+          <p>Bei <b>geradem</b> \(n\) hängt es an der rechten Seite: ist sie positiv, gibt das Wurzelziehen <b>zwei</b> Lösungen \((\pm)\); ist sie null, genau eine; ist sie negativ, keine — dann ist \(\mathbb{L} = \{\,\}\). Bei <b>ungeradem</b> \(n\) gibt es immer genau eine.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -344,8 +345,8 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 13, [
 ], zwei=False)
 k3 = kapitel(3, 'verschieben', 'Verschieben und strecken', 'Transformationen (SP 3.1)', 40,
              r'Du liest aus \(a \cdot (x-u)^{n} + v\) ab, wohin die Kurve wandert, gibst die mitgewanderten Asymptoten an und berechnest Nullstellen — mit dem \(\pm\), wo es hingehört.',
-             ('s3-2-lp-verschieben', 'Kurve sehen: verschieben und strecken', '1:14'),
-             sim3, ('s3-2-lp-kontrolle-verschieben', 'Kontrollfragen zum Verschieben', '0:53'),
+             ('s3-2-lp-verschieben', 'Verschieben — und was die Asymptoten tun', '1:18'),
+             sim3, ('s3-2-lp-kontrolle-verschieben', 'Kontrollfragen zum Verschieben', '0:52'),
              fest3, [uebung('transformation-lesen', 'Verschiebung ablesen'), uebung('asymptoten', 'Asymptoten angeben'),
                      uebung('nullstelle-potenz', 'Nullstellen berechnen')],
              auf3, f'<a href="{TA}#theorie">Themenseite 3.2a, Transformationen</a>')
@@ -394,15 +395,15 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 12, [
     ('4c', 3, r'Auf dem Graphen von \(f(x) = x^{4}\) mit \(x \geq 0\) liegt \(P(3 \mid 81)\). Welcher Punkt liegt dann auf \(f^{-1}\), und wie lautet \(f^{-1}\)?',
      r'<p>\(3^4 = 81\) ✓. Beim Spiegeln tauschen die Koordinaten: \(P\,\'(81 \mid 3)\).</p><p>\(f^{-1}(x) = \sqrt[4]{x}\) mit \(D = \mathbb{R}_0^{+}\).</p>', ''),
     ('4d', 2, r'Zeichne \(y = x^{3}\), die Winkelhalbierende \(y = x\) und die Umkehrfunktion in <em>ein</em> Koordinatensystem \((-2\) bis \(2)\).',
-     r'<p>Die Umkehrfunktion ist \(y = \sqrt[3]{x}\). Sie geht ebenfalls durch \((0 \mid 0)\), \((1 \mid 1)\) und \((-1 \mid -1)\) und ist das Spiegelbild von \(y = x^3\) an der gestrichelten Geraden.</p>',
-     '\n            <div class="mini-reihe"><svg class="mini gross" data-k="1,3;1,0.3333333333333333" data-fenster="-2,2,-2,2" data-punkte="1,1;-1,-1"></svg></div>'),
+     r'<p>Die Umkehrfunktion ist \(y = \sqrt[3]{x}\). Sie geht ebenfalls durch \((0 \mid 0)\), \((1 \mid 1)\) und \((-1 \mid -1)\) und ist das Spiegelbild von \(y = x^3\) an der gestrichelten Winkelhalbierenden.</p>',
+     '\n            <div class="mini-reihe"><svg class="mini gross" data-k="1,3;1,0.3333333333333333" data-diagonale="1" data-fenster="-2,2,-2,2" data-punkte="1,1;-1,-1"></svg></div>'),
     ('4e', 2, r'Gegeben \(f(x) = x^{3} + 1\) und \(g(x) = \sqrt[3]{x-1}\). Zeige an der Stelle \(x = 9\), dass \(f(g(x)) = x\) gilt.',
      r'<p>\(g(9) = \sqrt[3]{8} = 2\), dann \(f(2) = 2^3 + 1 = 9\) ✓</p><p class="komm">Genau das heisst «Umkehrfunktion»: Erst \(g\), dann \(f\) — und man ist wieder am Anfang.</p>', ''),
 ], zwei=False)
 k4 = kapitel(4, 'umkehren', 'Umkehren: spiegeln an \\(y = x\\)', 'Umkehrfunktion · RLP-Kern', 45,
              r'Du deutest die Umkehrfunktion als Spiegelung an \(y = x\), bestimmst sie rechnerisch in drei Schritten und begründest, wann eine Potenzfunktion vorher eingeschränkt werden muss.',
-             ('s3-2-lp-umkehren', 'Kurve sehen: umkehren heisst spiegeln', '1:24'),
-             sim4, ('s3-2-lp-kontrolle-umkehren', 'Kontrollfragen zum Umkehren', '0:56'),
+             ('s3-2-lp-umkehren', 'Umkehren heisst spiegeln', '1:28'),
+             sim4, ('s3-2-lp-kontrolle-umkehren', 'Kontrollfragen zum Umkehren', '0:57'),
              fest4, [uebung('einschraenken', 'Einschränken nötig?'), uebung('spiegelpunkt', 'Punkt spiegeln'),
                      uebung('umkehrfunktion', 'Umkehrfunktion bestimmen')],
              auf4, f'<a href="{TB}#theorie">Themenseite 3.2b, Umkehrfunktion</a>')
@@ -432,7 +433,9 @@ fest5 = r'''      <div class="festhalten">
           <p><b>Verschoben</b> nach demselben Schema wie in Kapitel 3:</p>
           <p>\[ f(x) = a \cdot \sqrt[n]{x - u} + v \]</p>
           <p>Bei <b>geradem</b> \(n\) beginnt die Kurve im <b>Startpunkt \((u \mid v)\)</b>, und dort beginnt auch die Definitionsmenge. Bei ungeradem \(n\) gibt es keinen Startpunkt — die Kurve läuft nach links weiter.</p>
-          <p><b>Nullstelle:</b> \(f(x) = 0\) nach der Wurzel auflösen, dann beide Seiten hoch \(n\).</p>
+          <p class="komm"><b>Eine Abweichung, die du kennen musst:</b> <a href="../schwerpunkt/s3-2b-wurzelfunktionen.html">Themenseite 3.2b</a> beschränkt der Einheitlichkeit halber <em>alle</em> Wurzelfunktionen auf \(D = \mathbb{R}_0^+\), auch die dritte. Hier nutzen wir, dass ungerade Wurzeln auch negative Radikanden haben: \(\sqrt[3]{-8} = -2\). In einer Prüfung sagt die Aufgabe, welche Lesart gilt — im Zweifel die Definitionsmenge dazuschreiben.</p>
+          <p><b>Ordinatenabschnitt</b> ist der \(y\)-Wert bei \(x = 0\), also \(f(0)\) — sofern \(0\) überhaupt in \(D\) liegt.</p>
+          <p><b>Nullstelle:</b> \(f(x) = 0\) nach der Wurzel auflösen, dann beide Seiten hoch \(n\). Bei geradem \(n\) muss der freigestellte Wurzelwert \(\geq 0\) sein — sonst gibt es keine Nullstelle.</p>
           <p><b>Grössenvergleich</b> für \(x \gt 0\):</p>
           <p>\[ 0 \lt x \lt 1:\ \sqrt{x} \gt x \gt x^{2} \qquad x \gt 1:\ \sqrt{x} \lt x \lt x^{2} \]</p>
           <p>Bei \(x = 1\) schneiden sich alle drei.</p>
@@ -458,8 +461,8 @@ auf5 = test('t5', 'Aufgaben · Kapitel 5', 14, [
 ], zwei=False)
 k5 = kapitel(5, 'wurzelfunktionen', 'Wurzelfunktionen nutzen', 'Wurzelfunktionen · RLP-Kern', 45,
              r'Du bestimmst Definitionsmenge, Startpunkt und Nullstelle einer verschobenen Wurzelfunktion, vergleichst \(\sqrt{x}\), \(x\) und \(x^{2}\) und löst eine Wurzelgleichung grafisch wie rechnerisch.',
-             ('s3-2-lp-wurzel', 'Kurve sehen: Wurzelfunktionen nutzen', '1:28'),
-             sim5, ('s3-2-lp-kontrolle-wurzel', 'Kontrollfragen zu den Wurzelfunktionen', '1:01'),
+             ('s3-2-lp-wurzel', 'Wurzelfunktionen nutzen', '1:30'),
+             sim5, ('s3-2-lp-kontrolle-wurzel', 'Kontrollfragen zu den Wurzelfunktionen', '1:02'),
              fest5, [uebung('wurzel-def', 'Definitionsmenge bestimmen'), uebung('wurzel-startpunkt', 'Startpunkt angeben'),
                      uebung('wurzel-nullstelle', 'Nullstelle berechnen'), uebung('wurzelgleichung', 'Wurzelgleichung lösen'),
                      uebung('vergleich', 'Der Grösse nach')],
@@ -492,10 +495,10 @@ gt = f'''
     <section class="kap" id="gesamttest">
       <div class="gesamt">
         <div class="gesamt-kopf">
-          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-sf">SP 3.2 · Kapitel 1–5</span><span class="zeit">≈ 25 min · 24 Punkte</span></div>
+          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-sf">SP 3.2 · Kapitel 1–5</span><span class="zeit">≈ 30 min · 26 Punkte</span></div>
           <h2 id="gesamttest-titel">Gesamttest</h2>
           <div class="pdf-weg">
-            <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Rechenweg. Ganz ohne Taschenrechner: Die Kompetenz des Teilgebiets trägt im Lehrplan den Vermerk «auch ohne Hilfsmittel».<br>
+            <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Rechenweg. Ganz ohne Taschenrechner: Die Kompetenz des Teilgebiets trägt im Lehrplan den Vermerk «auch ohne Hilfsmittel» — und die Aufgaben aus Kapitel 3, das zu Teilgebiet 3.1 gehört, sind ebenfalls ohne Rechner lösbar.<br>
               <a class="pdf-knopf" href="{PDF}gesamttest.pdf" download>⬇ Gesamttest (PDF)</a></div></div>
             <div class="pdf-schritt"><span class="nr">2</span><div><b>Bewerten lassen</b> — Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem Bewertungspaket einer KI geben. Das Paket enthält die Musterlösung: erst danach öffnen.<br>
               <a class="pdf-knopf" href="{PDF}bewertungspaket.pdf" download>⬇ Bewertungspaket (PDF)</a></div></div>
@@ -505,12 +508,12 @@ gt = f'''
         <div class="bewertung">
           <b>Selbsteinschätzung</b>
           <table>
-            <tr><td>21 – 24 P</td><td>Die geprüften Teile sitzen. Wo du Punkte verloren hast: das Kapitel dieser Aufgabe nochmals (Zuordnung unten).</td></tr>
-            <tr><td>17 – 20 P</td><td>Den schwächsten Teil nochmals: Simulation und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.</td></tr>
-            <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
-            <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
+            <tr><td>23 – 26 P</td><td>Die geprüften Teile sitzen. Wo du Punkte verloren hast: das Kapitel dieser Aufgabe nochmals (Zuordnung unten).</td></tr>
+            <tr><td>18 – 22 P</td><td>Den schwächsten Teil nochmals: Simulation und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.</td></tr>
+            <tr><td>12 – 17 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
+            <tr><td>0 – 11 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1, G2 → 1 · G3 → 2 · G4 → 3 · G5, G6 → 4 · G7, G8 → 5</p>
+          <p>Aufgabe → Kapitel: G1, G2 → 1 · G3 → 2 · G4 → 3 (Nullstellen und Asymptoten) · G5, G6 → 4 · G7 → 5 (beide Paritäten) · G8 → 5</p>
         </div>
       </div>
     </section>'''
@@ -639,7 +642,7 @@ unten = '''
 </div>
 '''
 band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
-# Zeiten (03.10.2026): Vorwissen 10 (vorab) · K1 40 · K2 40 · K3 40 · K4 45 · K5 45 · Gesamttest 25 = 245 min
+# Zeiten (03.10.2026): Vorwissen 10 (vorab) · K1 40 · K2 40 · K3 40 · K4 45 · K5 45 · Gesamttest 30 = 250 min
 # Die fünf Kapitel sind die fünf Lektionen; Vorwissen und Gesamttest kommen davor und danach.
 body = (oben + band('Vorab', 'Vorwissen') + k0 + band(1, 'Der Exponent formt') + k1
         + band(2, 'Negative Exponenten') + k2 + band(3, 'Verschieben und strecken') + k3
