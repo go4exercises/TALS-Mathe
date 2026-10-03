@@ -364,3 +364,165 @@ die Clips zu **bewegen** und Fragen beider Typen (`wahl` und `klick`) zu stellen
   Themenseite 3.2 — dem Massstab nach HOWTO §1.2 — ausgebaut. Das Leitprogramm geht nicht
   über die Themenseite hinaus.
 - [–] **Themenseite 3.2 bleibt unberührt.** Die Prüfung hat dort keinen Widerspruch gefunden.
+
+---
+
+## Prüfung Potenz- und Wurzelfunktionen (03.10.2026)
+
+Seite `leitprogramme/potenz-wurzelfunktionen.html`, gebaut aus
+`scripts/lp/potenz-wurzelfunktionen/seite.py` + `seite.js`; Clips aus `clips.py`;
+PDFs unter `downloads/leitprogramme/potenz-wurzelfunktionen/`. Drei Agenten gegen die
+Prüfliste (HOWTO-leitprogramme §15), alle Zahlen mit `python3` nachgerechnet.
+
+**Rechenfehler in den Inhalten: keine.** Vortest 0a–0d, Aufgaben 1a–5e, Festhalten-Kästen,
+Minigrafen, alle 25 Kontrollfragen, alle Stützpunkte der Bewegungen und beide PDFs stimmen.
+Die 17 Übungsgeneratoren liefern immer lösbare Aufgaben, keine richtige Antwort wird als
+falsch gewertet (je 2000 Zufallsfälle), jede Diagnose ist für die auslösende Eingabe wahr.
+Alle fünf Aufgabenleisten sind im Reglerraster erfüllbar und keine im Startzustand.
+Punkte: 9 + 10 + 5 = 24, deckungsgleich in Test, Paket, Selbsteinschätzung und Seite.
+RLP-Bindung wörtlich aus `Math-SP.pdf` belegt.
+
+### HOCH
+
+- [x] **Alle bewegten Geraden und Kurven standen still.** `scripts/build-clips.py`,
+  `BEWEGUNG_JS`: `bewegeGerade` und `bewegeKurve` lasen `T.L.t0`, aber `T.L` ist das
+  DOM-Element — `t0` lag nur auf dem Hüllobjekt in `BEW`. `t - undefined` ist `NaN`,
+  und `bewZustand` fällt bei `NaN` auf den **letzten** Stützpunkt. Gemessen: Pfad über
+  die ganze Szene unverändert im Endzustand. Betroffen waren 17 Szenen in 6 der neuen
+  Clips **und alle bewegten Geraden des freigeschalteten Leitprogramms Lineare
+  Funktionen**. Nur der Parabel-Zweig (`L.t0` aus dem Hüllobjekt) war richtig.
+  *Behoben:* jedes Teil trägt sein eigenes `t0`; 28 Clips neu gebaut, Bewegung in allen
+  drei Zweigen im Browser nachgemessen.
+- [ ] **Kapitel 5 widerspricht der Konvention der Themenseite 3.2b.** Dort:
+  «… beschränkt man sie **in diesem Kapitel durchgehend auf \(D = \mathbb{R}_0^+\)**»,
+  ausdrücklich auch für die Kubikwurzel. Das Leitprogramm lehrt \(D = \mathbb{R}\) bei
+  ungeradem Wurzelexponenten — im Festhalten, in sim5, im Clip `s3-2-lp-wurzel`
+  («Definitionsmenge», «Merke»), in `kontrolle-wurzel` Frage 2 und in Aufgabe 5a.
+  Auch der Vorwissensclip `s1-2-anim-exponenten-treppe` sagt «für a grösser null».
+  **Die Themenseite ist dabei selbst uneins** (ein Kasten schreibt
+  «\(f^{-1}: y = \sqrt[3]{x}\) mit \(x \in \mathbb{R}\)»). Entscheid des Auftraggebers
+  nötig; HOWTO verlangt: nicht still angleichen, melden.
+- [ ] **Fünf Fragen zeigen ihre Antwort, wenn sie erscheinen** (§15). `kontrolle-exponent`
+  F3: die Marke ist mit «(1 | 1)» angeschrieben — genau das Klickziel. `kontrolle-hyperbel`
+  F3: der Punkt «(−2 | −0.5)» steht angeschrieben im Bild; zudem zeigt die versteckte
+  Kurve \(1/(x-2.6)\), die Frage spricht von \(1/x\). `kontrolle-wurzel` F3: beide
+  Stützpunkte tragen den Endzustand, der grüne Startpunkt-Ring sitzt auf dem Klickziel.
+  `kontrolle-verschieben` F1/F2: mit dem Stillstand (oben) stand der Startpunkt
+  «(2 | 0)» bzw. «(0 | 3)» von Anfang an da — nach dem Fix nochmals ansehen.
+- [ ] **Die Übung «Einschränken nötig?» ist entartet.** `seite.js`, Typ `einschraenken`
+  würfelt \(n \in \{2…7\}\); die `FEST`-Liste sperrt `[1,2,0,0]` … `[1,6,0,0]`, also
+  alles ausser \(n = 7\). 20 000 simulierte Würfe: \(n = 7\) in 99.94 %. Die Antwort ist
+  praktisch immer «nicht nötig», der gerade Exponent — der Punkt von Kapitel 4 — wird
+  nie geübt.
+- [ ] **Die Zufallsübungen können fünf Gesamttest-Aufgaben auswürfeln** (§15).
+  Nicht in `FEST`: G1 \((-2,3,0,0)\), G2 \((0.5,4,0,0)\), G3 \((-2,-2,0,0)\),
+  G4 \((1,4,1,-16)\), G7 \((2,2,-3,-4)\) — dazu die Kapitelaufgaben 1a, 1c, 2a, 2b, 3a,
+  3c, 4a, 4b, 5b, 5e und Vortest 0d. Nach dem zweiten Fehlversuch zeigt die Übung die Lösung.
+- [ ] **«Ordnung» und «Exponent» verwechselt.** `s3-2-lp-hyperbel`, Szene «Die Ordnung
+  wächst»: «Jetzt wächst die Ordnung: von minus eins über … bis minus vier.» Die Ordnung
+  ist positiv und wächst von 1 auf 4; der Exponent fällt von −1 auf −4. Ebenso im Merke:
+  «Negatives n gibt eine Hyperbel n-ter Ordnung» mit dem Bild \(y = x^{-n} = 1/x^n\) —
+  `n` steht im selben Satz für beides. Zieht Neuvertonung zweier Szenen nach sich.
+- [ ] **Rundung macht Lösungen falsch.** `seite.js`, Typ `vergleich`: `z()` rundet auf zwei
+  Stellen, also «\(0.04^2 = 0\)», «\(0.09^2 = 0.01\)», «\(0.16^2 = 0.03\)» — und
+  «\(= 0\)» widerspricht der Ordnungsaussage derselben Aufgabe. Kein «≈».
+  *Behebung:* `String(A.x*A.x)`; die vier Startwerte sind in IEEE exakt.
+
+### MITTEL
+
+- [ ] **Rasterfehler im Bewertungspaket.** G1: «\(f(-2) = 24\) (Exponent als Faktor)» —
+  \(-2 \cdot 3 \cdot (-2) = 12\), 24 ist aus keinem Fehler erreichbar. G7:
+  «\(x_0 = 5\) (die 2 nicht weggeteilt, also \(\sqrt{x+3} = 4\))» — das gibt \(x = 13\);
+  5 entsteht aus \(2(x+3) = 16\). G5: «\((-6 \mid -2)\) (an einer Achse gespiegelt)» —
+  das ist die Spiegelung an \(y = -x\). G7: zwei Zeilen geben \(S(3 \mid -4)\)
+  widersprüchlich 1 oder 0 Punkte. G8: «ein Zahlenbeispiel … kann es nicht geben» ist
+  falsch (\(x = 4\): \(16 > 4 > 2\)) — es liegt nur ausserhalb des Bereichs.
+- [ ] **G2 ist aus der Abbildung nicht eindeutig lösbar.** Markiert sind nur
+  \((\pm 2 \mid 8)\); \(2x^2\), \(0.5x^4\), \(0.125x^6\) erfüllen das alle. Die
+  Musterlösung begründet nur «\(n\) gerade und \(n > 2\)». Der im Kapitel geübte Weg
+  (\(f(1) = a\) ablesen) ist versperrt: \(f(1) = 0.5\) liegt zwischen zwei Gitterlinien.
+- [ ] **`a = 0` ist in sim1, sim2, sim3 und sim5 einstellbar**, obwohl das Festhalten
+  \(a \in \mathbb{R}\setminus\{0\}\) definiert. sim3 behauptet dann Asymptoten für die
+  Gerade \(y = v\). Der Exponentenregler wird mit `ohneNull()` um die 0 geführt — beim
+  Faktor fehlt das Gegenstück. (sim1 fängt den Fall mit «Nullfunktion» ab.)
+- [ ] **Die Wertemenge wird abgefragt, aber nie eingeführt** (5 von 12 Punkten in
+  Kapitel 2: Aufgaben 2b und 2e). Der Begriff kommt sonst nur einmal vor — im Festhalten
+  von Kapitel **4**, also nach dem Test.
+- [ ] **Der Gesamttest wiederholt Selbsttests.** G1 ist Aufgabe 1b mit **denselben**
+  Argumenten (\(f(-2)\), \(f(0.5)\) zu \(-2x^3\)), dazu G1(b) ↔ 1c, G7 ↔ 5b, G8 ↔ 5d.
+  Teil C ist damit ganz, Teil A zur Hälfte Wiederholung. (Derselbe Befund wie bei den
+  Linearen Funktionen, dort behoben.)
+- [ ] **Kapitelziele ohne Gesamttest-Aufgabe.** K3 verspricht Verschiebung und
+  mitgewanderte Asymptoten — geprüft werden nur die Nullstellen (G4). K5 verspricht
+  «grafisch wie rechnerisch» — der ungerade Wurzelexponent und das grafische Lösen
+  kommen nicht vor. Teil C trägt 5 von 24 Punkten für das namengebende Kapitel.
+- [ ] **Aufgabe 4d verweist auf eine Gerade, die im Bild fehlt.** Lösung: «Spiegelbild …
+  an der **gestrichelten Geraden**»; der Minigraf-Renderer zeichnet nur `data-k` und
+  `data-punkte`, keine Winkelhalbierende.
+- [ ] **Bild-Ton-Versatz.** `s3-2-lp-exponent` «a streckt»: bei «Zwei macht sie schmaler»
+  ist \(a \approx 0.8\), bei «null Komma fünf breiter» bereits \(a \approx -0.42\).
+  `s3-2-lp-verschieben` «v schiebt senkrecht»: die Bewegung endet 0.5 s bevor der Satz
+  dazu beginnt. `s3-2-lp-hyperbel` «Ein neuer Fall»: das Bild kommt 2.1 s nach dem ersten
+  genannten Punkt. (Alle drei waren bisher wegen des Stillstands unsichtbar — nach dem
+  Fix neu messen.)
+- [ ] **`s3-2-lp-umkehren` «Das Rezept»: Ton nennt zwei Schritte, das Bild drei.**
+  «… nach x auflösen, dann x und y vertauschen, **fertig**» gegen «3. Definitionsmenge
+  prüfen» — gerade der fachlich heikle Schritt wird nie gesprochen.
+- [ ] **`farbe: "orange"` wird still verworfen.** `build-clips.py` kennt nur
+  `rot|blau|tinte|gruen`; unbekannte Namen ergeben `color:None`, das der Browser
+  wegwirft. Betroffen: die beiden Notizen, die den Exponenten erklären
+  (`s3-2-lp-exponent` «n wächst», `s3-2-lp-hyperbel` «Die Ordnung wächst») — sie stehen
+  schwarz statt orange. Dieselbe Panne in fünf `g3-2-lp-*`-Clips.
+  *Behebung:* `gold` (#b85c00) in die Farbtabelle, oder beim Bau auf unbekannte Farbe abbrechen.
+- [ ] **Lösungen stehen in den Lehrclips ab Sekunde 0 im Bild.** `s3-2-lp-verschieben`
+  «Nullstellen»: (1 | 0) und (5 | 0) angeschrieben, während der Ton 13.9 s darauf
+  hinarbeitet. Ebenso `s3-2-lp-wurzel` «Verschieben wie immer» und «Grafisch lösen».
+  In den Kontrollclips ist dasselbe über `ein`-Zeiten sauber gelöst.
+- [ ] **«Terrassenpunkt» wird abgefragt, ohne im Clip eingeführt zu sein**
+  (`kontrolle-verschieben` F1; der Lehrclip benutzt das Wort nie).
+- [ ] **sim4, letzte Aufgabe hat zwei richtige Antworten:** «Welcher Punkt liegt bei
+  jedem \(n\) auf beiden Kurven?» — \((0 \mid 0)\) und \((1 \mid 1)\), bei ungeradem
+  \(n\) zusätzlich \((-1 \mid -1)\).
+- [ ] **`graf-potenz`: das Fenster wird breiter, je steiler die Kurve** (y-Bereich fest
+  ±8, x gedehnt) — in 8 von 16 Aufgaben liegt \(f(2)\) ausserhalb, obwohl die Diagnose
+  «Lies den Wert bei \(x = 1\) und bei \(x = 2\) ab» genau dorthin zeigt.
+- [ ] **Zwei Rückmeldungen verraten die Lösung:** `umkehrfunktion` nennt \(n\) im
+  Klartext, `wurzel-nullstelle` rechnet bis zum letzten Schritt vor.
+- [ ] **Übung «Punkt spiegeln» spricht von \(f^{-1}\) ohne die Einschränkung** (bei
+  \(n = 2, 4\) existiert sie nach dem eigenen Festhalten nicht ohne \(x \geq 0\)).
+  Die Papieraufgabe 4c macht es richtig.
+- [ ] **«Flachpunkt» fehlt.** Die Themenseite 3.2a nennt \((u \mid v)\) bei geradem
+  Exponenten «Flachpunkt», das Leitprogramm sagt durchgehend «Scheitel bzw.
+  Terrassenpunkt». §10: fremden Namen einmal in Klammern nennen.
+- [ ] **Übung «Kurve → Gleichung»: «Der markierte Punkt liegt auf einem Gitterpunkt»
+  stimmt in 6 von 16 Fällen nicht** (\(a = \pm 0.5\)).
+
+### NIEDRIG
+
+- [ ] Intervalle als `[5;\infty[` statt `[5;\, +\infty[` (STYLEGUIDE §2.7) — 7 Stellen
+  plus das Übungs-Muster und die sim5-Anzeige.
+- [ ] sim5 zeigt die gerundete Nullstelle ohne «≈» (318 von 2916 Reglerstellungen,
+  z. B. «x₀ = 0.13» statt \(0.125\)).
+- [ ] Vier Clipzeiten auf der Seite abgerundet statt gerundet (0:55→0:56, 1:14→1:15,
+  0:56→0:57, 1:01→1:02).
+- [ ] «Alle \(y = x^n\) gehen durch \((0 \mid 0)\)» steht unter der Definition mit
+  \(n \in \mathbb{Z}\setminus\{0\}\) — für \(n < 0\) ist \(0 \notin D\).
+- [ ] «Bei geradem \(n\) gibt das Wurzelziehen zwei Lösungen» — bei \(-v/a = 0\) ist es
+  eine. (Die Themenseite 3.2a lässt den Fall ebenfalls aus — melden, nicht angleichen.)
+- [ ] «Ordinatenabschnitt» wird in Aufgabe 5b verlangt, im Leitprogramm nie eingeführt.
+- [ ] Tote Verzweigung `A.n % 2 === 0 ? A.n + 1 : A.n + 1` in `graf-potenz`.
+- [ ] sim3 zeigt im Startzustand «verschoben um (0 | 0)».
+- [ ] Überlappung in `kontrolle-hyperbel` «Frage 2»: \(1/x^3\) stösst 7 px in die Notiz.
+- [ ] «null Punkt zwei fünf» statt «null Komma zwei fünf» in `kontrolle-wurzel` F5
+  (repoweit sagen alle Clips «Komma»).
+- [ ] Gemischte Potenzschreibweise in `kontrolle-umkehren` F1 («y = x^(−5)» statt «x⁻⁵»).
+- [ ] `kontrolle-umkehren` F3 und `kontrolle-wurzel` F3: zwei identische Stützpunkte —
+  Bewegungs-Overhead ohne Bewegung.
+- [ ] «Probe: \(2^3 - 2 = 6\)» in `s3-2-lp-wurzel` ist die Rückrechnung, nicht die Probe
+  (\(\sqrt[3]{6+2} = 2\)).
+- [ ] Der Clip heisst «verschieben und strecken», zeigt aber kein Strecken.
+- [ ] `pruef-graf.py` prüft nur feste `punkte`, nicht die Begleiter bewegter Kurven —
+  in `kontrolle-verschieben` F1 legt sich «(2 | 0)» über die Achsenmarke «3».
+- [ ] Bezugsgerade \(y = 2\) in `s3-2-lp-wurzel` «Grafisch lösen» ist blau statt Tinte;
+  Startpunkt mal Tinte, mal grün. Grüne Punktfarbe im Minigrafen für gemeinsame Punkte.
+- [ ] G5 im Gesamttest hat die meisten Punkte (4) und die kleinste Schreibfläche.
