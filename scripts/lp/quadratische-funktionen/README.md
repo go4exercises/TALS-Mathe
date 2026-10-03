@@ -23,3 +23,14 @@ Clips ändern: Drehbuch `clips/g3-3-lp-*.json` bearbeiten, dann
 
 Gesamttest und Bewertungspaket: `downloads/leitprogramme/quadratische-funktionen/*.tex`,
 bauen mit `python3 scripts/build-lp-pdf.py`.
+
+## Prüfen
+
+```sh
+node .claude/tools/pruef-uebungen.mjs leitprogramme/quadratische-funktionen.html 1000
+node .claude/tools/pruef-leiste.mjs leitprogramme/quadratische-funktionen.html
+node .claude/tools/pruef-fragen.mjs g3-3-lp-kontrolle-scheitelform g3-3-lp-kontrolle-formen
+```
+
+`seite.js` setzt dafür die Testhaken `box.__aufgabe` und `box.__typ`; `TYPEN.nullstellen.eingabe(A)`
+liefert die richtige Eingabe, wo `A[feld]` nicht reicht (HOWTO-leitprogramme §14).

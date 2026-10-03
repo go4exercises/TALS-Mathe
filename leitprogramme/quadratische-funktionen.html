@@ -1717,7 +1717,8 @@ text.p-text{stroke:var(--karte);stroke-width:4px;paint-order:stroke}
           if (gl(e.xs, A.xs)) return '\\(x_s\\) stimmt. \\(y_s = f(' + tz(A.xs) + ')\\) nachrechnen.';
           return '\\(x_s = -\\dfrac{b}{2a}\\), dann \\(y_s = f(x_s)\\).'; },
         loesung: function(A){ return 'S(' + tz(A.xs) + ' \\mid ' + tz(A.ys) + ')'; } },
-      'nullstellen': { felder: ['n', 'x_1', 'x_2'], muster: 'Anzahl {n:2|1|0}   x₁ = {x_1}   x₂ = {x_2}',
+      'nullstellen': { felder: ['n', 'x_1', 'x_2'],
+        eingabe: function(A){ return A.n === 2 ? { n: '2', x_1: String(A.r[0]), x_2: String(A.r[1]) } : A.n === 1 ? { n: '1', x_1: String(A.r[0]) } : { n: '0' }; }, muster: 'Anzahl {n:2|1|0}   x₁ = {x_1}   x₂ = {x_2}',
         // Anzahl wählen; nicht gebrauchte Felder werden gesperrt (wahl). Fälle: a = 1 ganzzahlig,
         // a ≠ 1 mit ganzzahligen oder .5-Nullstellen, D = 0, D < 0. b und c immer ganzzahlig.
         neu: function(){
@@ -1834,7 +1835,7 @@ text.p-text{stroke:var(--karte);stroke-width:4px;paint-order:stroke}
       var auf = box.querySelector('.ue-aufgabe'), ein = box.querySelector('.ue-eingabe'), rueck = box.querySelector('.ue-rueck'),
           zaehler = box.querySelector('.ue-serie'), bild = box.querySelector('.ue-bild');
       function neu(){
-        A = T.neu(); versuche = 0; geloest = false; box.__aufgabe = A;   // Testhaken
+        A = T.neu(); versuche = 0; geloest = false; box.__aufgabe = A; box.__typ = T;   // Testhaken (.claude/tools/pruef-uebungen.mjs)
         auf.innerHTML = A.text;
         var html = T.muster;
         T.felder.forEach(function(f){

@@ -12,6 +12,7 @@ Vorgänger stehen in der Git-Geschichte (bis Commit `9c1a4a5`).
 
 **Vorbild für ein neues Leitprogramm:** `leitprogramme/quadratische-funktionen.html`, gebaut mit
 `scripts/lp/quadratische-funktionen/seite.py` (siehe dortige README).
+**Vor der Freischaltung:** unabhängige Prüfung nach §15 (`/lp-pruefung`).
 ---
 
 ## 0 · Zwei Arten, ein Layout
@@ -500,13 +501,90 @@ grep 'name="robots"' leitprogramme/<name>.html                      # noindex, n
    python3 -m http.server 8899 &
    node .claude/tools/pruef-mathjax.mjs http://localhost:8899/leitprogramme/<name>.html
    node .claude/tools/render-check.mjs leitprogramme/<name>.html
+   node .claude/tools/pruef-uebungen.mjs leitprogramme/<name>.html 1000   # Zufallsübungen
+   node .claude/tools/pruef-leiste.mjs leitprogramme/<name>.html          # Aufgabenleisten
+   node .claude/tools/pruef-fragen.mjs <clip> …                           # Fragen in Kontrollclips
    ```
+   Alle drei starten einen eigenen Server und enden mit Exit 1 bei einem Befund.
+   `pruef-uebungen` braucht im Seitenskript die Testhaken `box.__aufgabe = A` und
+   `box.__typ = T`; die richtige Eingabe ist `A[feld]`, sonst liefert der Typ
+   `eingabe(A)`. Gezielte Fehler mit erwarteter Meldung: `fehler(A)` →
+   `[[{ feld: 'wert' }, 'Stichwort'], …]` — ohne sie prüft das Werkzeug nur, dass eine
+   verschobene Eingabe nicht als richtig gilt, nicht, ob die Diagnose stimmt.
+   Bewegung im Clip auf den Ton legen: `python3 .claude/tools/sprechzeiten.py <clip>`.
    und **hinschauen**: hell und dunkel, 360 / 1280 / 1600 px. Keine Prüfung sieht
    zerfallene Umlaute, eine weisse Kopfleiste über dunkler Seite oder einen Clip vom
    Live-Stand.
 9. **Bericht** an den Auftraggeber: Planung (§2), was bewusst anders ist als auf der
    Themenseite und warum, welche Widersprüche in der Themenseite gefunden wurden, welche
    Clips fehlen.
+
+---
+
+## 15 · Prüfung vor der Freischaltung
+
+Die Selbstkontrolle in §14 macht, wer baut — und sieht darum, was er sehen will. Beim Vorbild
+haben zwei unabhängige Prüfungen nach bestandener §14 noch je rund 25 Befunde gefunden
+(03.10.2026, Git-Geschichte von `TODO.md`). Darum gilt für jedes neue Leitprogramm:
+
+1. **Unverlinkt veröffentlichen** (§13), noch nicht freischalten.
+2. **Unabhängige Prüfung:** Skill `/lp-pruefung leitprogramme/<name>.html`. Drei frische
+   Agenten prüfen Seite, Clips und PDFs gegen die Prüfliste unten und rechnen jede Zahl nach;
+   sie ändern nichts. Die Befunde kommen nach `TODO.md`, nach HOCH / MITTEL / NIEDRIG.
+3. **Beheben**, Befund für Befund, mit §14 danach; in `TODO.md` abhaken.
+4. **Abnahme durch den Auftraggeber** (kann niemand sonst): Hörprobe aller neu vertonten
+   Clips mit Fragen — je eine Frage absichtlich falsch beantworten —, und das
+   Bewertungspaket mit einer absichtlich fehlerhaften Schülerlösung einer KI geben.
+5. **Erst dann freischalten** (§13, alle vier Stellen).
+
+### Prüfliste — was bei den Prüfungen des Vorbilds aufgefallen ist
+
+Jeder Punkt war ein echter Befund. Wer baut, geht sie vor §15 selbst durch; wer prüft, prüft
+gegen sie und darüber hinaus.
+
+**Fachlich**
+- Voraussetzungen ausschreiben: Definitionen mit ihren Bedingungen (\(a \neq 0\), reell,
+  «nur bei \(D \geq 0\)»), Sachaufgaben mit Variable und zulässigem Bereich.
+- Vorzeichen- und Richtungsregeln wörtlich prüfen: «\(x_s\) hat umgekehrtes Vorzeichen» ist
+  falsch, «steht in der Klammer mit umgekehrtem Vorzeichen» richtig. Clip, Seite und
+  Themenseite müssen dasselbe sagen.
+- Erst das allgemeine Verfahren, dann die Abkürzung — und die Abkürzung als solche
+  kennzeichnen, mit ihrer Bedingung («Nullstellen-Mitte, wenn die Nullstellen ablesbar sind»).
+- Nichts abfragen, was nicht eingeführt ist (Begriff, Schreibweise, Verfahren). Jedes
+  Verfahren, das der Gesamttest verlangt, wird in einem Kapitel geübt.
+- Lösung und Aufgabenstellung passen zusammen («ohne Rechnen» + Lösung rechnet = Befund).
+
+**Clips**
+- Wenn eine Frage erscheint, steht ihre Antwort **nicht** im Bild (erster Stützpunkt
+  neutral, Begleiter und Beschriftung erst nach der Antwort).
+- Bild und Ton gleichzeitig: Bewegungen nach `sprechzeiten.py` legen, nicht nach Gefühl.
+  Was der Ton sagt («senkt um eins»), zeigt das Bild genau so.
+- Eindeutige Begriffe («x-Achse» oder «Symmetrieachse», nie «Achse»).
+- Eine Farbe, eine Bedeutung — im ganzen Leitprogramm, Clips und Seite (Vorbild: blau \(a\),
+  orange \(x_s\), grün \(y_s\)).
+- Rückmeldungen lenken aufs Hinschauen und verraten die Lösung nicht; angezeigter Text =
+  gesprochener Text.
+- Notation wie im Leitprogramm, auch im Merkbild (keine \(u, v\), wo \(x_s, y_s\) gilt).
+
+**Animationen und Übungen**
+- Kein Ziel der Aufgabenleiste ist schon im Startzustand erfüllt; Ziele sind nicht die
+  Beispiele aus dem Clip; Überspringen wird als Überspringen gezählt (`pruef-leiste`).
+- Zufallsübungen: nur lösbare, «schöne» Fälle; Sonderwerte (0, ±1, gleiche Zahlen) erzeugen
+  keine falsche Diagnose; Randfälle des Stoffs mit üben (z. B. \(D = 0\), \(D \lt 0\));
+  kein Zufallsfall gleich einer festen Aufgabe (`pruef-uebungen` mit `fehler()`).
+- Hinweise rechnen nicht anders als die Lösung (Klammerzahlen ≠ Nullstellen).
+- Live-Anzeigen runden nur mit «≈».
+- Je Kapitel mindestens eine «Warum»-Aufgabe und eine Aufgabe am Graphen (§9).
+
+**Gesamttest und Bewertungspaket**
+- Jedes Kapitelziel hat eine Aufgabe; kein Modell aus Selbsttest oder Übung wiederholt.
+- Raster mit (E) Ergebnis- und (A) Ablesepunkt, typische Fehler mit Restpunkten statt
+  Abzügen, gleichwertige Schreibweisen geregelt, Folgefehler je Aufgabe.
+- Selbsteinschätzung verspricht keine Kompetenz, die der Test nicht prüft; jede Aufgabe ist
+  einem Kapitel zugeordnet.
+- Datenschutz: kein Name, keine Standortdaten im Foto.
+
+**Zeit:** geschätzt aus den Teilen, nicht aus der Planung übernommen (§3).
 
 ---
 
