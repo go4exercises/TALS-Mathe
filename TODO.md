@@ -108,6 +108,49 @@ Zeilen: Stand Commit `3ebeed9`. `seite.*` = `scripts/lp/quadratische-funktionen/
 
 ---
 
+## Zweite Prüfung (`../TODOx.md`, ausgewertet 03.10.2026)
+
+Unabhängige Prüfung desselben Stands (02.10.2026). Was die erste Prüfung schon abgedeckt hat,
+ist dort erledigt; hier stehen nur die zusätzlichen Punkte, im Code nachgeprüft.
+
+### Wichtig
+
+- [ ] **Extremwerte nur über Nullstellen-Mitte geübt** (TODOx 01, 16): Kapitel 5 (5a–5e, Clips
+  `mitte`, `kontrolle-extremwert`) übt nur «Nullstellen → Mitte». G7 (Wurf) und G8 (Minimum, \(D \lt 0\))
+  verlangen \(-\frac{b}{2a}\) bzw. Scheitelform. → Festhalten mit allgemeinem Vorgehen (Variable,
+  Zielfunktion, zulässiger Bereich, Scheitel, Art des Extremums, Antwort), Aufgabe Wurf \(h(t)\) in
+  Grundform, Aufgabe mit Minimum; in den Clips die Nullstellen-Mitte als Abkürzung kennzeichnen.
+- [ ] **Aufgabenleiste meldet «Alle Aufgaben gelöst» auch nach Überspringen** (TODOx 07,
+  `seite.js:96`). → gelöst/übersprungen zählen, Rückweg zu offenen Aufgaben.
+- [ ] **Neustart mit R setzt die Fragen nicht zurück** (TODOx 22, `build-clips.py:848`, `:1560`):
+  `erledigt` wird nie geleert.
+- [ ] **Frage 1 kann beim Laden übersprungen werden** (TODOx 27): Auslöser `t − letzt < 0.3`, Frage 1
+  bei 0.35 s; ein verspätetes erstes Bild gilt als Spulen. → nachstellen, Spulen ausdrücklich erkennen.
+- [ ] **Themenseite g3-3** (TODOx 23): Zeile 901 «das Minuszeichen … macht das Vorzeichen von u im
+  Punkt positiv» (gleicher Fehler wie oben HOCH 1); Zeile 422 «Jede quadratische Funktion … in drei
+  äquivalenten Formen» ohne «Produktform nur bei \(D \ge 0\)».
+
+### Mittel
+
+- [ ] **Nullstellen-Übung** nur \(a = 1\) mit zwei ganzzahligen Nullstellen (TODOx 03) → auch
+  \(a \ne 1\), \(D = 0\), \(D \lt 0\) mit Antworten «eine»/«keine».
+- [ ] **Zufallsgraph «Graph → Gleichung» ohne Achsenzahlen** (TODOx 11, `seite.js:467`).
+- [ ] **Zeitplan** (TODOx 20): jedes Kapitel fix «≈ 30 min», Lektion 2 und 3 je zwei Kapitel; die
+  Kapiteltests sind gewachsen. → Zeiten je Kapitel neu schätzen, Lektionen neu aufteilen.
+- [ ] **Selbsteinschätzung verspricht zu viel** (TODOx 06): «Sitzt. K1–K4 im Griff» bei 22 P auch ohne
+  G7. → «Die geprüften Teile sitzen; jede Aufgabe mit Abzug → ihr Kapitel» (Seite und Paket).
+- [ ] **Produktform = reelle Linearfaktoren** (TODOx 09), bei \(D = 0\): \(a(x-x_1)^2\); 2d «keine
+  reellen Nullstellen».
+- [ ] **Zulässige Bereiche in Sachaufgaben** (TODOx 15): 4c, 5a–5c, G6–G8.
+- [ ] **Sim 2, Aufgabe zu \(y_s\)** setzt stillschweigend \(a \gt 0\) voraus (TODOx 12, Zusatz) — prüfen.
+
+### Klein
+
+- [ ] Ansatz «Scheitel + Punkt»: \(x_P \ne x_s\) (TODOx 10).
+- [ ] Clip `kontrolle-formen` F1: «Der Faktor 0.5 streckt nur» → «ändert nur die Form» (TODOx 17).
+- [ ] Vortest: zu jeder Aufgabe der Rückweg (0b → Binome, 0c/0d → g2-2) (TODOx 19).
+- [ ] Häkchen der Kapitelnavigation als «bearbeitet» beschriften (TODOx 26).
+
 ## Abnahme durch den Auftraggeber
 
 - [ ] **Hörprobe** der 10 Leitprogramm-Clips: Aussprache von «x s», «y s», «x plus eins in
