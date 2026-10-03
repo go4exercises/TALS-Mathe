@@ -131,6 +131,12 @@ SEITEN = {
    titel='Leitprogramm Quadratische Funktionen — lesen, umformen, aufstellen, optimieren',
    beschreibung='Leitprogramm zu den quadratischen Funktionen nach RLP GF 3.3: Scheitelform lesen, zwischen den drei Formen wechseln, Nullstellen und Scheitel berechnen, Funktionsgleichungen aufstellen und Extremwertaufgaben lösen — mit Clips, Erkundungen und Selbsttests.',
    themen=['Mathematik', 'Quadratische Funktionen', 'Parabel', 'Scheitelform', 'Extremwertaufgaben', 'Leitprogramm']),
+ 'leitprogramme/lineare-funktionen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   titel='Leitprogramm Lineare Funktionen — lesen, messen, unterscheiden, aufstellen',
+   beschreibung='Leitprogramm zu den linearen Funktionen nach RLP GF 3.2: Steigung und y-Achsenabschnitt aus Gleichung und Graph lesen, das Steigungsdreieck und die Nullstelle, Typen und Lagebeziehungen, die Geradengleichung aufstellen — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Lineare Funktionen', 'Gerade', 'Steigung', 'Achsenabschnitt', 'Leitprogramm'],
+   noindex=True),   # noch nicht freigeschaltet (HOWTO-leitprogramme §13, §15): kein Kaertchen, kein Suchindex
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',
