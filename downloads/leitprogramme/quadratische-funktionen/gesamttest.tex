@@ -1,21 +1,21 @@
 % Gesamttest «Quadratische Funktionen» — Quelle des PDFs (python3 scripts/build-lp-pdf.py).
-% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (02.10.2026).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (02.10.2026; G4 und G8 neu).
 \documentclass[11pt]{article}
 \usepackage{../lp-druck}
-\renewcommand{\lpfuss}{Gesamttest · 24 Punkte}
+\renewcommand{\lpfuss}{Gesamttest · 25 Punkte}
 \begin{document}
 \lpkopf{Gesamttest}{%
-  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X X@{}}
-  Code (kein Name): \hrulefill & Datum: \hrulefill & Punkte: \hrulefill\ / 24
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 25
   \end{tabularx}}
 
 \begin{lpinfo}{Anleitung}
-\textbf{Zeit:} rund 20 Minuten. \textbf{Hilfsmittel:} Teil A und C ohne Taschenrechner, Teil B mit.
+\textbf{Zeit:} rund 25 Minuten. \textbf{Hilfsmittel:} Teil A und C ohne Taschenrechner, Teil B mit.
 Schreib zu jeder Aufgabe den \textbf{Rechenweg} auf — bewertet wird der Weg.
-Danach: Lösung fotografieren (ohne Namen) und mit dem \emph{Bewertungspaket} bewerten lassen.
+Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket} bewerten lassen.
 \end{lpinfo}
 
-\lpteil{Teil A · Formen lesen und umformen}{ohne Taschenrechner · 11 Punkte}
+\lpteil{Teil A · Formen lesen und umformen}{ohne Taschenrechner · 12 Punkte}
 
 \begin{lpaufgabe}{G1}{Scheitelform lesen}{4 P}
 $f(x) = -(x-2)^2 + 9$. Gib Scheitelpunkt und Öffnung an, berechne die Nullstellen und schreibe $f$ in der Produktform.
@@ -36,7 +36,8 @@ Gib die Scheitelform der abgebildeten Parabel an. Die markierten Punkte liegen a
 \begin{tikzpicture}
 \begin{axis}[width=6.2cm,height=6.2cm,axis lines=middle,xmin=-4,xmax=3,ymin=-3,ymax=4,
   xtick={-4,...,3},ytick={-3,...,4},grid=both,grid style={lplinie},tick label style={font=\scriptsize},
-  xlabel=$x$,ylabel=$y$,axis equal image]
+  xlabel=$x$,ylabel=$y$,axis equal image,
+  yticklabel style={fill=white,inner sep=1pt,xshift=-2pt},xticklabel style={fill=white,inner sep=1pt}]
 \addplot[lpblau,very thick,domain=-3.7:1.6,samples=100] {(x+1)^2-2};
 \addplot[only marks,mark=*,color=lpgruen] coordinates {(-1,-2) (0,-1) (1,2)};
 \end{axis}
@@ -44,22 +45,23 @@ Gib die Scheitelform der abgebildeten Parabel an. Die markierten Punkte liegen a
 \end{minipage}
 \end{lpaufgabe}
 
-\begin{lpaufgabe}{G4}{In die Grundform}{2 P}
-Schreibe $f(x) = 3(x+1)(x-2)$ in der Grundform $ax^2 + bx + c$.
-\lpplatz{3}
+\begin{lpaufgabe}{G4}{Nullstellen aus der Grundform}{3 P}
+Gegeben ist $f(x) = 2x^2 - 4x - 30$. Begründe mit der Diskriminante $D = b^2 - 4ac$, wie viele Nullstellen $f$ hat.
+Bestimme die Nullstellen und schreibe $f$ in der Produktform.
+\lpplatz{8}
 \end{lpaufgabe}
 
 \lpteil{Teil B · Aufstellen}{Taschenrechner erlaubt · 6 Punkte}
 
 \begin{lpaufgabe}{G5}{Scheitel und Punkt}{3 P}
 Eine Parabel hat den Scheitel $S(3 \mid -2)$ und geht durch $P(5 \mid 6)$. Stelle ihre Funktionsgleichung auf.
-\lpplatz{5}
+\lpplatz{6}
 \end{lpaufgabe}
 
 \begin{lpaufgabe}{G6}{Wasserstrahl}{3 P}
-Ein Wasserstrahl tritt bei $x = 0$ aus und trifft 8\,m weiter auf dieselbe Höhe; dazwischen steigt er 4\,m hoch.
+Ein Wasserstrahl tritt bei $x = 0$ aus und trifft 8\,m weiter auf dieselbe Höhe; seine grösste Höhe ist 4\,m.
 Stelle die Funktionsgleichung $h(x)$ der Flugbahn auf ($x$ und $h$ in m, Austrittsstelle im Ursprung).
-\lpplatz{5}
+\lpplatz{7}
 \end{lpaufgabe}
 
 \lpteil{Teil C · Extremwerte}{ohne Taschenrechner · 7 Punkte}
@@ -69,9 +71,23 @@ Ein Ball fliegt nach $h(t) = -5t^2 + 20t + 1.5$ ($t$ in s, $h$ in m). Wann ist e
 \lpplatz{5}
 \end{lpaufgabe}
 
-\begin{lpaufgabe}{G8}{Regenrinne}{4 P}
-Aus einem 24\,cm breiten Blech wird eine Rinne gebogen: links und rechts je $x$\,cm hoch, der Rest ist der Boden.
-Bei welchem $x$ ist der rechteckige Querschnitt am grössten? Gib die Masse und die Fläche an.
-\lpplatz{7}
+\begin{lpaufgabe}{G8}{Quadrat im Quadrat}{4 P}
+\begin{minipage}[t]{0.6\linewidth}
+Ein Quadrat hat 8\,cm Seitenlänge. Auf jeder Seite wird von einer Ecke aus die gleiche Strecke $x$ abgetragen, wie im Bild.
+Die vier Punkte sind die Ecken eines inneren Quadrats.
+Für welches $x$ ist der Flächeninhalt des inneren Quadrats am kleinsten? Gib $x$ und diesen kleinsten Flächeninhalt an.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.34\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}[scale=0.42]
+\draw[lpgrau,thick] (0,0) rectangle (8,8);
+\draw[lpblau,very thick,fill=lpblau!10] (2.5,0) -- (8,2.5) -- (5.5,8) -- (0,5.5) -- cycle;
+\foreach \p in {(2.5,0),(8,2.5),(5.5,8),(0,5.5)} \fill[lpgruen] \p circle (3.5pt);
+\draw[lporange,very thick] (0,0) -- (2.5,0) node[midway,below] {\small$x$};
+\draw[lporange,very thick] (8,0) -- (8,2.5) node[midway,right] {\small$x$};
+\draw[lporange,very thick] (8,8) -- (5.5,8) node[midway,above] {\small$x$};
+\draw[lporange,very thick] (0,8) -- (0,5.5) node[midway,left] {\small$x$};
+\end{tikzpicture}
+\end{minipage}
+\lpplatz{11}
 \end{lpaufgabe}
 \end{document}

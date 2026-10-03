@@ -80,7 +80,8 @@ Nachgezählt im Physik-Repo (Stand `ebe6205`, nur gelesen). Vorbild in Mathe:
 `leitprogramme/quadratische-funktionen.html`, seit 02.10.2026 freigeschaltet.
 
 **1. Theme `begreifbar-schlicht`** — `clips/themes/begreifbar-schlicht.json`: Kopie von
-`begreifbar.json` mit `"karo": false` und `"rand": false` und neuer `beschreibung`
+`begreifbar.json` mit `"karo": false`, `"rand": false`, neuer `beschreibung` und einer fünften
+Farbe in `farben` (Tinte, `farbe: 5` = ungefärbte Punkte, seit 03.10.2026)
 (HOWTO-clips «Theme `begreifbar-schlicht`»). Karo und Koordinatengitter eines `graf`
 stören sich.
 - *Wo in Physik:* `clips/themes/` hat `begreifbar`, `heft`, `papier`, `tafel`;

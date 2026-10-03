@@ -167,6 +167,10 @@ erst im Bild aufgefallen, nicht in der Prüfung.
 Wie `begreifbar`, aber **ohne Häuschenpapier und ohne roten Rand** (`karo: false`,
 `rand: false`). Karo und Koordinatengitter eines `graf` stören sich, besonders in Bewegung.
 Neue Clips setzen `"theme": "begreifbar-schlicht"`; bestehende bleiben, wie sie sind.
+Das Theme kennt eine fünfte Farbe: `farbe: 5` ist Tinte, also «ungefärbt» — für Punkte und
+Begleiter im `graf`, die keine der Termfarben tragen sollen (Nullstellen, \((0 \mid c)\),
+gegebene Punkte). In den Clips `g3-3-lp-*` gilt durchgehend: 1 blau = \(a\), 2 orange =
+\(x_s\), 3 grün = \(y_s\) bzw. Scheitel.
 
 ### Achsen mit Pfeil und Namen: `pfeile`, `xname`, `yname` (seit 02.10.2026)
 
