@@ -1,5 +1,7 @@
-"""Geometrie eines `graf` im Clip — gemeinsam genutzt von clips.py (setzt die
-Beschriftungen) und pruef-graf.py (prüft sie nach).
+"""Geometrie eines `graf` im Clip — gemeinsam genutzt von allen Leitprogramm-Bauskripten
+unter `scripts/lp/`: `<thema>/clips.py` setzt damit die Beschriftungen, `<thema>/pruef-graf.py`
+prüft sie nach. Liegt seit dem 03.10.2026 eine Ebene höher, weil es das zweite Leitprogramm
+mit Clip-Bildern gibt und zwei Kopien auseinanderlaufen würden.
 
 Die Zahlen stammen aus scripts/build-clips.py, Funktion `graf_svg`: Innenrand 8 px,
 Punktbeschriftung font-size 29, Achsenteilung font-size 22 (x-Marken 32 px unter der

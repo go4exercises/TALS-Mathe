@@ -254,7 +254,15 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
 function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
   const [a, p0, u, v] = bewZustand(T.k, t - T.L.t0);
   const p = T.stufen ? Math.round(p0) : p0;
-  const f = x => { const b = x - u, y = a * Math.pow(b, p) + v;
+  // Negative Basis: Math.pow(-8, 1/3) ist NaN, die dritte Wurzel aus -8 ist -2.
+  // Bei ungeradem Wurzelexponenten (1/p ganz und ungerade) gibt es den Wert, bei
+  // geradem nicht — genau dort endet die Definitionsmenge.
+  const pot = b => {
+    if (b >= 0 || Number.isInteger(p)) return Math.pow(b, p);
+    const q = Math.round(1 / p);
+    return (Math.abs(1 / p - q) < 1e-9 && q % 2 !== 0) ? -Math.pow(-b, p) : NaN;
+  };
+  const f = x => { const y = a * pot(x - u) + v;
     return (isFinite(y) && !isNaN(y)) ? y : null; };
   const vx = parseFloat(T.p.dataset.von), bx = parseFloat(T.p.dataset.bis);
   const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
