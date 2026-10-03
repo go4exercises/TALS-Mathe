@@ -43,20 +43,23 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
   Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
-- `leitprogramme/` — 6 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 7 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt und ist seit dem 08.09.2026 in **zwei
-  Abschnitte** gegliedert, einen je Art — alle sechs sind verlinkt:
-  - *nach Thema* (4: `potenzen.html`, `quadratische-gleichungen.html`,
-    `gleichungssysteme.html`, `quadratische-funktionen.html`) — Vorwissenstest, 4–5 Kapitel,
+  Abschnitte** gegliedert, einen je Art — alle sieben sind verlinkt:
+  - *nach Thema* (5: `potenzen.html`, `quadratische-gleichungen.html`,
+    `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`)
+    — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
     Gesamttest und Bewertungspaket als PDF aus LaTeX unter `downloads/leitprogramme/`).
     Aufbau, Didaktik und Technik: **`HOWTO-leitprogramme.md`** (seit 02.10.2026 Gesamtfassung;
-    Vorbild `quadratische-funktionen.html`, Bauskript unter `scripts/lp/quadratische-funktionen/`).
+    Vorbild `quadratische-funktionen.html`, Bauskript unter `scripts/lp/quadratische-funktionen/`;
+    `lineare-funktionen.html` ist nach demselben Muster gebaut, mit **bewegten Geraden** in
+    den Clips und Fragen beider Typen — Bauskripte unter `scripts/lp/lineare-funktionen/`).
     Extern gebaute Datei hereinholen: dort §12, Punkt für Punkt.
     **Vor der Freischaltung** unabhängig prüfen: Skill `/lp-pruefung leitprogramme/<name>.html`
     (§15, drei Agenten gegen die Prüfliste, Befunde nach `TODO.md`); Prüfwerkzeuge
@@ -74,10 +77,10 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 436 Drehbücher, alle vertont: **391 in der Bibliothek** (362:25 min,
-  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **45 unverlinkte**
+- `clips/` — 444 Drehbücher, alle vertont: **391 in der Bibliothek** (362:25 min,
+  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **53 unverlinkte**
   Clips mit `"probe": true` (35 Prüfungsclips, 10 Clips «Parabel sehen» des Leitprogramms
-  Quadratische Funktionen), die nur im zugehörigen Leitprogramm stehen und
+  Quadratische Funktionen, 8 Clips «Gerade sehen» des Leitprogramms Lineare Funktionen), die nur im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
   `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,

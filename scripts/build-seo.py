@@ -135,8 +135,7 @@ SEITEN = {
    typ='article', lrt='Leitprogramm',
    titel='Leitprogramm Lineare Funktionen — lesen, messen, unterscheiden, aufstellen',
    beschreibung='Leitprogramm zu den linearen Funktionen nach RLP GF 3.2: Steigung und y-Achsenabschnitt aus Gleichung und Graph lesen, das Steigungsdreieck und die Nullstelle, Typen und Lagebeziehungen, die Geradengleichung aufstellen — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
-   themen=['Mathematik', 'Lineare Funktionen', 'Gerade', 'Steigung', 'Achsenabschnitt', 'Leitprogramm'],
-   noindex=True),   # noch nicht freigeschaltet (HOWTO-leitprogramme §13, §15): kein Kaertchen, kein Suchindex
+   themen=['Mathematik', 'Lineare Funktionen', 'Gerade', 'Steigung', 'Achsenabschnitt', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',

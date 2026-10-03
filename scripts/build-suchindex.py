@@ -327,6 +327,8 @@ def seiten_aus_navjs(root):
                                   'Leitprogramm Gleichungssysteme', 'thema'),
                                  ('leitprogramme/quadratische-funktionen.html', '▤',
                                   'Leitprogramm Quadratische Funktionen', 'thema'),
+                                 ('leitprogramme/lineare-funktionen.html', '▤',
+                                  'Leitprogramm Lineare Funktionen', 'thema'),
                                  ('leitprogramme/uebungspruefung-1.html', '▤',
                                   'Übungsprüfung 1', 'thema'),
                                  ('leitprogramme/trigo2.html', '▤',
