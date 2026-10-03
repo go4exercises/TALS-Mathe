@@ -240,7 +240,7 @@ fest2 = r'''      <div class="festhalten">
           <p>\[ m = \frac{\Delta y}{\Delta x} = \frac{y_2 - y_1}{x_2 - x_1} \qquad x_0 = -\frac{b}{m} \quad (m \neq 0) \]</p>
           <p>Jedes Steigungsdreieck derselben Geraden gibt dasselbe \(m\) — die Dreiecke sind ähnlich. Die Steigung ist ein Verhältnis, kein Abstand.</p>
           <p>Gelesen wird von links nach rechts, also mit <span class="nb">\(\Delta x \gt 0\).</span> Vertauscht man die Punkte, drehen \(\Delta y\) und \(\Delta x\) beide das Vorzeichen — \(m\) bleibt gleich.</p>
-          <p>Die <b>Nullstelle</b> \(x_0\) ist die Stelle mit \(f(x_0) = 0\), also der Schnittpunkt mit der \(x\)-Achse. Man findet sie aus \(0 = m x_0 + b\). Bei \(m = 0\) gibt es keine (oder, bei \(b = 0\), unendlich viele).</p>
+          <p>Die <b>Nullstelle</b> \(x_0\) ist die <em>Stelle</em> mit \(f(x_0) = 0\) — eine Zahl. Der zugehörige <em>Punkt</em> \((x_0 \mid 0)\) ist der Schnittpunkt des Graphen mit der \(x\)-Achse. Man findet sie aus \(0 = m x_0 + b\). Bei \(m = 0\) gibt es keine (oder, bei \(b = 0\), unendlich viele).</p>
           <p>Haben zwei Punkte dieselbe \(x\)-Koordinate, ist \(\Delta x = 0\): \(m\) ist nicht definiert, die Gerade steht senkrecht und ist keine Funktion.</p>
         </div>
         <div class="warn">
@@ -283,7 +283,7 @@ fest3 = r'''      <div class="tabhuelle">
         <table class="gesetze formen">
           <thead><tr><th>Typ</th><th>Gleichung</th><th>Bedingung</th><th>Graph</th></tr></thead>
           <tbody>
-            <tr><td>allgemeine lineare Funktion</td><td>\(f(x) = m x + b\)</td><td>\(m \neq 0\)</td><td class="wort">schiefe Gerade</td></tr>
+            <tr><td>nicht konstante lineare Funktion</td><td>\(f(x) = m x + b\)</td><td>\(m \neq 0\)</td><td class="wort">schiefe Gerade</td></tr>
             <tr><td>proportionale Funktion</td><td>\(f(x) = m x\)</td><td>\(b = 0\)</td><td class="wort">Gerade durch den Ursprung</td></tr>
             <tr><td>Identität</td><td>\(f(x) = x\)</td><td>\(m = 1,\ b = 0\)</td><td class="wort">Winkelhalbierende des 1. und 3. Quadranten</td></tr>
             <tr><td>konstante Funktion</td><td>\(f(x) = b\)</td><td>\(m = 0\)</td><td class="wort">waagrechte Gerade</td></tr>
@@ -408,7 +408,7 @@ gt = f'''
           <div class="pdf-weg">
             <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Rechenweg. Ganz ohne Taschenrechner: Alle drei Kompetenzen des Teilgebiets tragen im Lehrplan den Vermerk «auch ohne Hilfsmittel».<br>
               <a class="pdf-knopf" href="{PDF}gesamttest.pdf" download>⬇ Gesamttest (PDF)</a></div></div>
-            <div class="pdf-schritt"><span class="nr">2</span><div><b>Bewerten lassen</b> — Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem Bewertungspaket einer KI geben. Das Paket enthält die Musterlösung: erst danach öffnen.<br>
+            <div class="pdf-schritt"><span class="nr">2</span><div><b>Bewerten lassen</b> — mit dem Punkteraster im Bewertungspaket selbst, zusammen mit einer Lehrperson, oder wahlweise von einer KI. Für den KI-Weg die Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem Paket hochladen. Das Paket enthält die Musterlösung: erst nach dem Lösen öffnen.<br>
               <a class="pdf-knopf" href="{PDF}bewertungspaket.pdf" download>⬇ Bewertungspaket (PDF)</a></div></div>
             <div class="pdf-schritt"><span class="nr">3</span><div><b>Gezielt wiederholen</b> — nach der Tabelle unten.</div></div>
           </div>
@@ -421,7 +421,7 @@ gt = f'''
             <tr><td>10 – 14 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 9 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1 und 2 · G2 → 1 und 2 · G3 → 1 und 2 · G4 → 3 und 4 · G5 → 3 · G6, G7, G8 → 4</p>
+          <p>Aufgabe → Kapitel: G1 → 1 (zeichnen) und 2 (Nullstelle) · G2 → 1 und 2 · G3 → 1 und 2 · G4 → 3 (Lage) und 4 (aufstellen) · G5 → 3 · G6 → 2 (Steigung) und 4 · G7, G8 → 4</p>
         </div>
       </div>
     </section>'''
@@ -454,7 +454,7 @@ oben = '''<div id="nav-root"></div>
     <div>
       <p class="marke">begreifbar.ch · Leitprogramm</p>
       <h1>Lineare Funktionen</h1>
-      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Vier Kapitel und Gesamttest, rund vier Lektionen.</p>
+      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Vier Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest — zusammen rund 195 Minuten.</p>
     </div>
     <div class="kopf-rechts">
       <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>

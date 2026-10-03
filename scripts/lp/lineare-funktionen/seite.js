@@ -167,7 +167,8 @@
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Zieh an beiden Reglern und beobachte, was sich ändert.', ok: function(s){ return s.bewegt.m && s.bewegt.b; } },
       bau(3, -2, 'f(x) = 3x - 2'), bau(-1.5, 4, 'f(x) = -1.5x + 4'), bau(-2, -3, 'f(x) = -2x - 3'),
-      { text: 'Stell eine Gerade durch den Ursprung ein.', ok: function(s){ return s.b === 0 && s.m !== 0; } },
+      { text: 'Stell eine <b>nicht waagrechte</b> Gerade durch den Ursprung ein.',
+        ok: function(s){ return s.b === 0 && s.m !== 0; } },
       { text: 'Stell eine waagrechte Gerade ein.', ok: function(s){ return s.m === 0; } },
       zielAufgabe([1.5, -3]), zielAufgabe([-2.5, 2])
     ], sim);
@@ -182,7 +183,19 @@
   (function(){
     var fig = document.getElementById('sim2'); if (!fig) return;
     var K = Achsen(fig.querySelector('svg'), FENSTER), pruefen = function(){}, bewegt = {};
-    var X1 = -3;                                   // linker Punkt des Dreiecks, fest
+    /* Linker Punkt des Dreiecks. Fest bei −3, solange beide Ecken ins Fenster passen;
+       sonst so weit verschoben, dass sie es tun. Bei m = 3, b = −5, Δx = 6 lag die Ecke
+       früher bei (−3 | −14) — ausserhalb, während die Zahlenzeile trotzdem 18 : 6 zeigte. */
+    function startX(m, b, dx){
+      var X = -3, rand = 0.4;
+      if (m === 0) return X;
+      var lo = Math.min(m * X + b, m * (X + dx) + b), hi = Math.max(m * X + b, m * (X + dx) + b);
+      var d = 0;
+      if (hi > FENSTER.y1 - rand) d = (FENSTER.y1 - rand - hi) / m;
+      else if (lo < FENSTER.y0 + rand) d = (FENSTER.y0 + rand - lo) / m;
+      X = Math.round((X + d) * 2) / 2;
+      return Math.max(FENSTER.x0 + 0.5, Math.min(FENSTER.x1 - 0.5 - dx, X));
+    }
     var r = regler(fig, zeichnen);
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
     var sim = { zustand: function(){ var w = werte(r); return { m: w.m, b: w.b, dx: w.dx, bewegt: bewegt,
@@ -190,6 +203,11 @@
                 zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
     function zeichnen(){
       var w = werte(r), m = w.m, b = w.b, dx = w.dx;
+      // Δx so begrenzen, dass die Höhe des Dreiecks ins Fenster passt (|m|·Δx ≤ Höhe).
+      var dxMax = m === 0 ? 6 : Math.max(1, Math.floor(Math.min(6, (FENSTER.y1 - FENSTER.y0 - 1) / Math.abs(m)) * 2) / 2);
+      if (+r.dx.max !== dxMax){ r.dx.max = dxMax; if (dx > dxMax){ r.dx.value = dxMax; dx = dxMax;
+        r.dx.parentNode.querySelector('.sl-val').textContent = z(dx); } }
+      var X1 = startX(m, b, dx);
       var ya = m * X1 + b, yb = m * (X1 + dx) + b, dy = yb - ya;
       K.leeren();
       K.kurve(function(x){ return m * x + b; }, 'kurve');
@@ -208,12 +226,12 @@
       pruefen();
     }
     pruefen = Leiste(fig, [
-      { text: 'Erkunde: Zieh nur an \\(\\Delta x\\). Was passiert mit \\(\\Delta y\\), was mit \\(m\\)?', ok: function(s){ return s.bewegt.dx; } },
+      { text: 'Erkunde: Zieh nur an \\(\\Delta x\\). Was passiert mit \\(\\Delta y\\), was mit \\(m\\)? <em>(Das ✓ bestätigt nur, dass du gezogen hast — die Antwort gibst du dir selbst.)</em>', ok: function(s){ return s.bewegt.dx; } },
       { text: 'Stell \\(m = 1.5\\) ein und lies \\(\\Delta y\\) bei \\(\\Delta x = 2\\) ab.', ok: function(s){ return s.m === 1.5 && s.dx === 2; } },
       { text: 'Stell eine fallende Gerade ein.', ok: function(s){ return s.m < 0; } },
-      { text: 'Stell \\(m = 0\\) ein. Wie gross ist \\(\\Delta y\\) jetzt?', ok: function(s){ return s.m === 0; } },
+      { text: 'Stell \\(m = 0\\) ein. Wie gross ist \\(\\Delta y\\) jetzt? <em>(✓ heisst: Einstellung stimmt. Lies \\(\\Delta y\\) selbst ab.)</em>', ok: function(s){ return s.m === 0; } },
       { text: 'Stell eine Gerade mit der Nullstelle \\(3\\) ein.', ok: function(s){ return s.x0 === 3; } },
-      { text: 'Stell \\(f(x) = -2.5x + 5\\) ein. Wo liegt ihre Nullstelle?', ok: function(s){ return s.m === -2.5 && s.b === 5; } }
+      { text: 'Stell \\(f(x) = -2.5x + 5\\) ein. Wo liegt ihre Nullstelle? <em>(✓ heisst: Einstellung stimmt. Die Nullstelle liest du am Graphen ab.)</em>', ok: function(s){ return s.m === -2.5 && s.b === 5; } }
     ], sim);
     zeichnen();
   })();
@@ -272,7 +290,7 @@
       A: { m: [3, 3, 1, 3], b: [-5, 5, 0.5, 0], punkte: [[-1, 2, 'P']] },
       B: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], punkte: [[-2, 4, 'A'], [2, -1, 'B']] },
       C: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], punkte: [[-2, 1, 'P']], hilfs: [1.5, -2] },
-      D: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], punkte: [[1, -1, 'P']], hilfs: [0.5, -1] }
+      D: { m: [-3, 3, 0.25, 1], b: [-5, 5, 0.5, 0], punkte: [[1, -1, 'P']], hilfs: [0.5, -1], senkrecht: true }
     };
     function aufbauen(f){
       fall = f; var F = FAELLE[f];
@@ -288,13 +306,22 @@
                 zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
     function zeichnen(){
       var w = werte(r), m = w.m, b = w.b, F = FAELLE[fall];
-      var treffer = F.punkte.every(function(p){ return Math.abs(m * p[0] + b - p[1]) < 1e-9; });
+      // Die Punktprobe allein ist noch kein Treffer: In den Fällen C und D gehört die
+      // Lagebedingung dazu, sonst widersprechen sich Grafik und Aufgabenleiste.
+      var durchP = F.punkte.every(function(p){ return Math.abs(m * p[0] + b - p[1]) < 1e-9; });
+      var lage = !F.hilfs ? true
+        : F.senkrecht ? Math.abs(m * F.hilfs[0] + 1) < 1e-9 : Math.abs(m - F.hilfs[0]) < 1e-9;
+      var treffer = durchP && lage;
       K.leeren();
       if (F.hilfs) K.kurve(function(x){ return F.hilfs[0] * x + F.hilfs[1]; }, 'normal');
       K.kurve(function(x){ return m * x + b; }, 'kurve');
       F.punkte.forEach(function(p){ K.punkt(p[0], p[1], treffer ? 'p-null' : 'p-pkt', p[2] + '(' + z(p[0]) + ' | ' + z(p[1]) + ')', 8, -8); });
       K.punkt(0, b, 'p-b');
-      rolle(fig, 'formel').innerHTML = linText(m, b) + (treffer ? ' &nbsp;✓' : '');
+      rolle(fig, 'formel').innerHTML = linText(m, b)
+        + (treffer ? ' &nbsp;✓'
+           : durchP && F.hilfs ? ' &nbsp;<span class="teil">geht durch ' + F.punkte[0][2]
+             + ' — aber noch nicht ' + (F.senkrecht ? 'senkrecht' : 'parallel') + '</span>'
+           : '');
       fig.classList.toggle('treffer', treffer);
       pruefen();
     }
@@ -324,7 +351,21 @@
     var ALLE = document.querySelectorAll('.uebung'); if (!ALLE.length) return;
     function zufall(l){ return l[Math.floor(Math.random() * l.length)]; }
     function bereich(a, b, ohne){ var r = []; for (var i = a; i <= b; i++) if (!ohne || ohne.indexOf(i) < 0) r.push(i); return r; }
-    function tz(n){ return n < 0 ? '-' + Math.abs(n) : String(n); }
+    /* Zahlen in LaTeX. Endliche Dezimalzahlen stehen als solche (Hausschreibweise mit
+       Punkt); ein Drittel hat keine endliche Darstellung und wird als Bruch gesetzt —
+       sonst stünde in der Musterlösung «0.3333333333333333x». */
+    function tz(n){
+      if (!isFinite(n)) return String(n);
+      if (Number.isInteger(n * 10000)) return n < 0 ? '-' + Math.abs(n) : String(n);
+      for (var q = 2; q <= 12; q++){
+        var p_ = n * q;
+        if (Number.isInteger(Math.round(p_ * 1e9) / 1e9) && Math.abs(p_ - Math.round(p_)) < 1e-9){
+          p_ = Math.round(p_);
+          return (n < 0 ? '-' : '') + '\\tfrac{' + Math.abs(p_) + '}{' + q + '}';
+        }
+      }
+      return String(Math.round(n * 10000) / 10000);
+    }
     function kx(m){ return m === 1 ? 'x' : m === -1 ? '-x' : tz(m) + 'x'; }
     function plus(v){ return v === 0 ? '' : (v > 0 ? ' + ' + v : ' - ' + (-v)); }
     /* Term m·x + b in LaTeX; m = 0 gibt die konstante Funktion. */
@@ -335,10 +376,15 @@
       s = String(s).trim().replace(/\u2212/g, '-').replace(',', '.').replace(/\s+/g, '').replace(/^\+(?=[\d.])/, '');
       if (!s) return { wert: NaN, leer: true };
       var m = s.match(/^(-?(?:\d+(?:\.\d+)?|\.\d+))\/(\d+(?:\.\d+)?|\.\d+)$/);
-      return { wert: m ? parseFloat(m[1]) / parseFloat(m[2]) : (/^-?(\d+(\.\d+)?|\.\d+)$/.test(s) ? parseFloat(s) : NaN), komma: komma };
+      var w = m ? parseFloat(m[1]) / parseFloat(m[2]) : (/^-?(\d+(\.\d+)?|\.\d+)$/.test(s) ? parseFloat(s) : NaN);
+      if (!isFinite(w)) w = NaN;     // «1/0» ist keine Zahl, sondern ein Eingabefehler
+      return { wert: w, komma: komma };
     }
     var gl = function(a, b){ return Math.abs(a - b) < 1e-9; };
-    var STEIG = [-3, -2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 3];      // nie 0: diese Typen brauchen eine echte Steigung
+    // 0 ist eine Steigung wie jede andere. STEIG enthält sie; wo ein Verfahren durch m
+    // teilt (Nullstelle, Kehrwert), nimmt der Typ STEIG_0 ohne die Null.
+    var STEIG = [-3, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 3];
+    var STEIG_0 = STEIG.filter(function(m){ return m !== 0; });
     /* Geraden, nach denen das Leitprogramm an fester Stelle fragt — eine Zufallsübung
        darf keine davon treffen, sonst steht ihre Lösung schon irgendwo (HOWTO §15).
        Reihenfolge: Aufgaben der Kapitel · Vortest · Gesamttest · Clipfragen. */
@@ -364,9 +410,12 @@
         neu: function(){ var m, b;
           do { m = zufall(STEIG); b = zufall(bereich(-6, 6, [0])); } while (Math.abs(m) === Math.abs(b));
           return { m: m, b: b, text: 'Steigung und \\(y\\)-Achsenabschnitt von \\(f(x) = ' + lin(m, b) + '\\)?' }; },
-        fehler: function(A){ return [[{ m: String(A.b), b: String(A.m) }, 'Vertauscht'],
-                                     [{ m: String(-A.m), b: String(A.b) }, 'Vorzeichen'],
-                                     [{ m: String(A.m), b: String(-A.b) }, 'Vorzeichen']]; },
+        fehler: function(A){
+          // Bei m = 0 ist −m wieder m: Die Probe zum Vorzeichen von m gibt es dort nicht.
+          var f = [[{ m: String(A.b), b: String(A.m) }, 'Vertauscht']];
+          if (A.m !== 0) f.push([{ m: String(-A.m), b: String(A.b) }, 'Vorzeichen']);
+          f.push([{ m: String(A.m), b: String(-A.b) }, 'Vorzeichen']);
+          return f; },
         pruefen: function(A, e){
           if (gl(e.m, A.m) && gl(e.b, A.b)) return null;
           if (gl(e.m, A.b) && gl(e.b, A.m)) return 'Vertauscht: \\(m\\) steht <em>vor</em> dem \\(x\\), \\(b\\) allein dahinter.';
@@ -378,14 +427,20 @@
 
       'beschreibung-g': { felder: ['m', 'b'], muster: 'f(x) = {m} · x + {b}',
         neu: function(){ var m = zufall(STEIG), b = zufall(bereich(-6, 6));
-          return { m: m, b: b, text: 'Eine Gerade ' + (m > 0 ? 'steigt' : 'fällt') + ' pro Schritt nach rechts um \\('
-            + Math.abs(m) + '\\) und schneidet die \\(y\\)-Achse bei \\(' + tz(b) + '\\). Wie lautet \\(f(x)\\)?' }; },
-        fehler: function(A){ var f = [[{ m: String(-A.m), b: String(A.b) }, 'Vorzeichen']];
-          if (A.b !== 0) f.push([{ m: String(A.m), b: String(-A.b) }, 'Vorzeichen']);
-          if (A.m !== A.b) f.push([{ m: String(A.b), b: String(A.m) }, 'Vertauscht']);
+          return { m: m, b: b, text: 'Eine Gerade ' + (m === 0 ? 'verläuft <b>waagrecht</b>'
+              : (m > 0 ? 'steigt' : 'fällt') + ' pro Schritt nach rechts um \\(' + tz(Math.abs(m)) + '\\)')
+            + ' und schneidet die \\(y\\)-Achse bei \\(' + tz(b) + '\\). Wie lautet \\(f(x)\\)?' }; },
+        fehler: function(A){ var f = [];
+          // Bei m = 0 ist −m wieder m, und «vertauscht» hiesse (b | 0) — beides prueft
+          // die Diagnose zu «waagrecht», nicht die Vorzeichen.
+          if (A.m !== 0) f.push([{ m: String(-A.m), b: String(A.b) }, 'Vorzeichen']);
+          else f.push([{ m: '1', b: String(A.b) }, 'Waagrecht']);
+          if (A.b !== 0) f.push([{ m: String(A.m), b: String(-A.b) }, A.m === 0 ? 'Waagrecht' : 'Vorzeichen']);
+          if (A.m !== A.b && A.m !== 0) f.push([{ m: String(A.b), b: String(A.m) }, 'Vertauscht']);
           return f; },
         pruefen: function(A, e){
           if (gl(e.m, A.m) && gl(e.b, A.b)) return null;
+          if (A.m === 0) return 'Waagrecht heisst \\(m = 0\\): Die Gerade ist \\(f(x) = ' + tz(A.b) + '\\).';
           if (gl(e.m, A.b) && gl(e.b, A.m)) return 'Vertauscht: Der Zuwachs pro Schritt ist \\(m\\), die Höhe auf der \\(y\\)-Achse ist \\(b\\).';
           if (gl(e.m, -A.m)) return 'Vorzeichen von \\(m\\): «' + (A.m > 0 ? 'steigt' : 'fällt') + '» heisst \\(m ' + (A.m > 0 ? '\\gt' : '\\lt') + ' 0\\).';
           if (A.b !== 0 && gl(e.b, -A.b)) return 'Vorzeichen von \\(b\\): Die Gerade schneidet die \\(y\\)-Achse bei \\(' + tz(A.b) + '\\).';
@@ -394,18 +449,22 @@
         loesung: function(A){ return 'f(x) = ' + lin(A.m, A.b); } },
 
       'graf-mb': { felder: ['m', 'b'], muster: 'f(x) = {m} · x + {b}', graf: true,
-        neu: function(){ var m = zufall([-2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2, 1 / 3, -1 / 3, 2 / 3, -2 / 3]),
+        neu: function(){ var m = zufall([-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 1 / 3, -1 / 3, 2 / 3, -2 / 3]),
             b = zufall(bereich(-3, 3)), n3 = Math.abs(Math.round(m * 3) - m * 3) < 1e-9 && !Number.isInteger(m * 2);
           return { m: m, b: b, s: n3 ? 3 : (Math.abs(m) === 0.5 || Math.abs(m) === 1.5 ? 2 : 1),
             text: 'Gleichung der Geraden? (Die Punkte liegen auf Gitterpunkten.)' }; },
-        fehler: function(A){ var f = [[{ m: String(-A.m), b: String(A.b) }, 'Steigt']];
+        fehler: function(A){ var f = [];
+          // Bei m = 0 faellt −m mit m zusammen und 1/m ist gar keine Zahl.
+          if (A.m !== 0) f.push([{ m: String(-A.m), b: String(A.b) }, 'Steigt']);
+          else f.push([{ m: '1', b: String(A.b) }, 'waagrecht']);
           if (A.b !== 0) f.push([{ m: String(A.m), b: String(-A.b) }, 'Dort schneidet']);
-          if (!gl(1 / A.m, A.m) && !gl(1 / A.m, -A.m)) f.push([{ m: String(1 / A.m), b: String(A.b) }, 'Bruch ist verkehrt']);
+          if (A.m !== 0 && !gl(1 / A.m, A.m) && !gl(1 / A.m, -A.m)) f.push([{ m: String(1 / A.m), b: String(A.b) }, 'Bruch ist verkehrt']);
           return f; },
         pruefen: function(A, e){
           if (gl(e.m, A.m) && gl(e.b, A.b)) return null;
           var r = [];
-          if (gl(e.m, -A.m)) r.push('Steigt die Gerade oder fällt sie? Hier ist \\(m ' + (A.m > 0 ? '\\gt' : '\\lt') + ' 0\\).');
+          if (A.m === 0 && !gl(e.m, 0)) r.push('Die Gerade verläuft waagrecht: Ein Schritt nach rechts ändert die Höhe nicht, also ist \\(m = 0\\).');
+          else if (gl(e.m, -A.m)) r.push('Steigt die Gerade oder fällt sie? Hier ist \\(m ' + (A.m > 0 ? '\\gt' : '\\lt') + ' 0\\).');
           else if (gl(e.m, 1 / A.m)) r.push('Der Bruch ist verkehrt: hinauf geteilt durch nach rechts, also \\(\\dfrac{\\Delta y}{\\Delta x}\\).');
           else if (!gl(e.m, A.m)) r.push('\\(m\\): ' + A.s + ' nach rechts — wie weit hinauf oder hinunter?');
           if (!gl(e.b, A.b)) r.push('\\(b\\): Dort schneidet die Gerade die \\(y\\)-Achse.');
@@ -417,12 +476,15 @@
         neu: function(){ var m = zufall(STEIG), x1 = zufall(bereich(-5, 3)), d = zufall([2, 2, 4, 4, 6]), y1 = zufall(bereich(-5, 5));
           return { m: m, b: y1 - m * x1, x1: x1, y1: y1, x2: x1 + d, y2: y1 + m * d, dx: d, dy: m * d,
             text: 'Steigung der Geraden durch \\(A' + pkt(x1, y1) + '\\) und \\(B' + pkt(x1 + d, y1 + m * d) + '\\)?' }; },
-        fehler: function(A){ var f = [[{ m: String(-A.m) }, 'geht es hin']];
-          if (!gl(A.dy, A.m) && !gl(A.dy, -A.m)) f.push([{ m: String(A.dy) }, 'Teile noch durch']);
-          if (!gl(1 / A.m, A.m) && !gl(1 / A.m, -A.m) && !gl(1 / A.m, A.dy)) f.push([{ m: String(1 / A.m) }, 'Bruch ist verkehrt']);
+        fehler: function(A){ var f = [];
+          if (A.m !== 0) f.push([{ m: String(-A.m) }, 'geht es hin']);
+          if (A.m !== 0 && !gl(A.dy, A.m) && !gl(A.dy, -A.m)) f.push([{ m: String(A.dy) }, 'Teile noch durch']);
+          if (A.m !== 0 && !gl(1 / A.m, A.m) && !gl(1 / A.m, -A.m) && !gl(1 / A.m, A.dy)) f.push([{ m: String(1 / A.m) }, 'Bruch ist verkehrt']);
+          if (A.m === 0) f.push([{ m: String(A.dx) }, 'gleicher Höhe']);
           return f; },
         pruefen: function(A, e){
           if (gl(e.m, A.m)) return null;
+          if (A.m === 0) return 'Beide Punkte liegen auf gleicher Höhe: \\(\\Delta y = 0\\), und \\(0\\) geteilt durch \\(\\Delta x\\) ist \\(0\\).';
           if (gl(e.m, -A.m)) return 'Von \\(A\\) nach \\(B\\) geht es ' + (A.m > 0 ? 'hinauf' : 'hinunter') + ': \\(\\Delta y = ' + tz(A.dy) + '\\).';
           if (gl(e.m, A.dy)) return 'Das ist \\(\\Delta y\\). Teile noch durch \\(\\Delta x = ' + A.dx + '\\).';
           if (gl(e.m, 1 / A.m)) return 'Der Bruch ist verkehrt: \\(m = \\dfrac{\\Delta y}{\\Delta x}\\), nicht umgekehrt.';
@@ -521,11 +583,14 @@
         neu: function(){ var m = zufall(STEIG), xp = zufall([-6, -4, -2, 2, 4, 6]), b = zufall(bereich(-6, 6, [0]));
           return { m: m, b: b, xp: xp, yp: m * xp + b,
             text: 'Eine Gerade mit \\(m = ' + tz(m) + '\\) geht durch \\(P' + pkt(xp, m * xp + b) + '\\). Wie gross ist \\(b\\)?' }; },
-        fehler: function(A){ var f = [[{ b: String(A.yp + A.m * A.xp) }, 'abziehen']];
+        fehler: function(A){ var f = [];
+          if (A.m !== 0) f.push([{ b: String(A.yp + A.m * A.xp) }, 'abziehen']);
+          else if (!gl(A.xp, A.b)) f.push([{ b: String(A.xp) }, 'waagrecht']);
           if (!gl(A.yp, A.b) && !gl(A.yp, A.yp + A.m * A.xp)) f.push([{ b: String(A.yp) }, 'Koordinate von']);
           return f; },
         pruefen: function(A, e){
           if (gl(e.b, A.b)) return null;
+          if (A.m === 0) return 'Die Gerade ist waagrecht: Sie hat überall denselben Wert, also ist \\(b\\) die Höhe von \\(P\\).';
           if (gl(e.b, A.yp + A.m * A.xp)) return 'Vorzeichen: \\(m \\cdot x_1\\) abziehen, nicht dazuzählen — \\(b = y_1 - m\\,x_1\\).';
           if (gl(e.b, A.yp)) return 'Das ist die \\(y\\)-Koordinate von \\(P\\). \\(b\\) ist der Wert bei \\(x = 0\\).';
           if (gl(e.b, -A.b)) return 'Vorzeichen: \\(b = ' + tz(A.yp) + ' - (' + tz(A.m) + ') \\cdot (' + tz(A.xp) + ') = ' + tz(A.b) + '\\).';
@@ -537,12 +602,15 @@
             x1 = Number.isInteger(m) ? zufall(bereich(-5, 2)) : zufall([-4, -2, 0, 2]);   // halbe Steigung nur auf geraden Stellen
           return { m: m, b: b, x1: x1, y1: m * x1 + b, x2: x1 + d, y2: m * (x1 + d) + b, dx: d, dy: m * d,
             text: 'Gleichung der Geraden durch \\(A' + pkt(x1, m * x1 + b) + '\\) und \\(B' + pkt(x1 + d, m * (x1 + d) + b) + '\\)?' }; },
-        fehler: function(A){ var f = [[{ m: String(-A.m), b: String(A.b) }, 'geht es hin']];
+        fehler: function(A){ var f = [];
+          if (A.m !== 0) f.push([{ m: String(-A.m), b: String(A.b) }, 'geht es hin']);
           if (!gl(A.y1 - A.m * A.x1, A.y1 + A.m * A.x1)) f.push([{ m: String(A.m), b: String(A.y1 + A.m * A.x1) }, 'abziehen']);
+          if (A.m === 0) f.push([{ m: String(A.dx), b: String(A.b) }, 'gleicher Höhe']);
           return f; },
         pruefen: function(A, e){
           if (gl(e.m, A.m) && gl(e.b, A.b)) return null;
           if (!gl(e.m, A.m)){
+            if (A.m === 0) return 'Beide Punkte liegen auf gleicher Höhe: \\(\\Delta y = 0\\), also \\(m = 0\\) und \\(f(x) = ' + tz(A.b) + '\\).';
             if (gl(e.m, -A.m)) return 'Von \\(A\\) nach \\(B\\) geht es ' + (A.m > 0 ? 'hinauf' : 'hinunter') + ': \\(\\Delta y = ' + tz(A.dy) + '\\), \\(\\Delta x = ' + A.dx + '\\).';
             if (gl(e.m, A.dy)) return 'Das ist \\(\\Delta y\\). Teile noch durch \\(\\Delta x = ' + A.dx + '\\).';
             return 'Zuerst \\(m = \\dfrac{\\Delta y}{\\Delta x} = \\dfrac{' + tz(A.dy) + '}{' + A.dx + '}\\).';
@@ -555,7 +623,9 @@
         neu: function(){ var m1 = zufall([-4, -2, -1, -0.5, 0.5, 1, 2, 4]), b1 = zufall(bereich(-5, 5)),
             senk = Math.random() < 0.5, m = senk ? -1 / m1 : m1,
             xp = zufall(Number.isInteger(m) ? bereich(-4, 4, [0]) : Math.abs(m) === 0.25 ? [-8, -4, 4, 8] : [-4, -2, 2, 4]),
-            b = zufall(bereich(-5, 5));   // halbe/viertel Steigung nur auf passenden Stellen: ganzzahlige Punkte
+            // Bei «parallel» darf b nicht b1 sein — sonst ist die gesuchte Gerade g selbst,
+            // und Kapitel 3 unterscheidet parallel (anderes b) ausdrücklich von identisch.
+            b = zufall(bereich(-5, 5, senk ? null : [b1]));   // halbe/viertel Steigung nur auf passenden Stellen
           return { m1: m1, b1: b1, senk: senk, m: m, b: b, xp: xp, yp: m * xp + b,
             text: 'Gesucht: die Gerade ' + (senk ? '<b>senkrecht</b>' : '<b>parallel</b>') + ' zu \\(g: y = '
               + lin(m1, b1) + '\\) durch \\(P' + pkt(xp, m * xp + b) + '\\).' }; },
@@ -624,7 +694,7 @@
         if (f === null){
           serie = versuche === 1 ? serie + 1 : 0; geloest = true;
           rueck.className = 'ue-rueck richtig';
-          rueck.innerHTML = '✓ Richtig' + (komma ? ' (Hier schreibt man den Dezimalpunkt.)' : '') + (T.richtig ? ' ' + T.richtig(A) : '') + ' <button type="button" class="ue-weiter">Nächste</button>';
+          rueck.innerHTML = '✓ Richtig' + (komma ? ' (In diesem Lehrmittel schreiben wir den Dezimalpunkt: <code>1.5</code>.)' : '') + (T.richtig ? ' ' + T.richtig(A) : '') + ' <button type="button" class="ue-weiter">Nächste</button>';
           rueck.querySelector('.ue-weiter').addEventListener('click', neu);
         } else {
           serie = 0; rueck.className = 'ue-rueck falsch';
