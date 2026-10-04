@@ -43,15 +43,16 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
   Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
-- `leitprogramme/` — 7 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 10 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt und ist seit dem 08.09.2026 in **zwei
-  Abschnitte** gegliedert, einen je Art — alle sieben sind verlinkt:
-  - *nach Thema* (5: `potenzen.html`, `quadratische-gleichungen.html`,
-    `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`)
+  Abschnitte** gegliedert, einen je Art — acht sind verlinkt, zwei noch unverlinkt (`noindex`, Abnahme offen):
+  - *nach Thema* (6 verlinkt: `potenzen.html`, `quadratische-gleichungen.html`,
+    `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`,
+    `exp-log-funktionen.html`; unverlinkt: `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`)
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,

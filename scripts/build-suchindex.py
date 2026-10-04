@@ -329,6 +329,8 @@ def seiten_aus_navjs(root):
                                   'Leitprogramm Quadratische Funktionen', 'thema'),
                                  ('leitprogramme/lineare-funktionen.html', '▤',
                                   'Leitprogramm Lineare Funktionen', 'thema'),
+                                 ('leitprogramme/exp-log-funktionen.html', '▤',
+                                  'Leitprogramm Exponential- und Logarithmusfunktionen', 'thema'),
                                  ('leitprogramme/uebungspruefung-1.html', '▤',
                                   'Übungsprüfung 1', 'thema'),
                                  ('leitprogramme/trigo2.html', '▤',
