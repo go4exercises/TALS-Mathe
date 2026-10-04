@@ -197,10 +197,11 @@ fest1 = r'''      <div class="festhalten">
           <div class="titel">Polynomfunktion</div>
           <p>\[ f(x) = a_n x^n + a_{n-1} x^{n-1} + \dots + a_1 x + a_0, \qquad n \in \mathbb{N} \]</p>
           <p>mit \(a_k \in \mathbb{R}\) und \(a_n \neq 0\). \(n\) heisst <b>Grad</b>, \(a_n\) <b>Leitkoeffizient</b>. Die Darstellung als Summe heisst auch <b>Summenform</b>.</p>
-          <p><b>Linearfaktordarstellung:</b> Sind \(x_1, \dots, x_n\) die Nullstellen, so ist</p>
+          <p><b>Linearfaktordarstellung:</b> Hat \(f\) vom Grad \(n\) genau \(n\) reelle Nullstellen \(x_1, \dots, x_n\) (mehrfache mehrfach gezählt), so ist</p>
           <p>\[ f(x) = a_n \cdot (x - x_1)(x - x_2) \cdots (x - x_n) \]</p>
+          <p>Nicht jede Polynomfunktion zerfällt so: \(x^2 + 1\) hat gar keine reelle Nullstelle.</p>
           <p><b>Satz vom Nullprodukt:</b> Ein Produkt ist genau dann null, wenn ein Faktor null ist. Jeder Linearfaktor \((x - x_k)\) wird genau bei \(x_k\) null — die Nullstellen stehen in den Klammern, <b>mit umgekehrtem Vorzeichen</b>.</p>
-          <p>Der Faktor vor den Klammern ist der <b>Leitkoeffizient</b>. Er streckt den Graphen in \(y\)-Richtung und ändert die Nullstellen nicht.</p>
+          <p>Der Faktor vor den Klammern ist der <b>Leitkoeffizient</b> — sofern jede Klammer die Form \((x - x_k)\) hat. Er streckt den Graphen in \(y\)-Richtung (ist er negativ, spiegelt er ihn zusätzlich an der \(x\)-Achse) und ändert die Nullstellen nicht.</p>
           <p><b>Gleichung aus Nullstellen:</b> Ansatz \(f(x) = a\,(x - x_1)(x - x_2)(x - x_3)\), dann einen weiteren Punkt einsetzen — meist \((0 \mid f(0))\) — und nach \(a\) auflösen.</p>
         </div>
         <div class="warn">
@@ -214,11 +215,11 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 13, [
      r'<p>(1) ja, Grad 4, Leitkoeffizient 3. (2) nein: \(\frac{5}{x} = 5x^{-1}\) hat einen negativen Exponenten. (3) ja, Grad 3, Leitkoeffizient \(-1\).</p><p class="komm">Bei (3) nur die \(x\)-Terme ausmultiplizieren: \(-1 \cdot x \cdot x \cdot x = -x^3\).</p>', ''),
     ('1b', 3, r'\(f(x) = 2\,(x+1)(x-3)\): Gib die Nullstellen an und schreib \(f\) in Summenform. Warum ändert der Faktor \(2\) nichts an den Nullstellen?',
      r'<p>Nullstellen \(-1\) und \(3\). Summenform: \(2\,(x^2 - 2x - 3) = 2x^2 - 4x - 6\).</p><p>Ein Produkt ist nur null, wenn ein Faktor null ist — und \(2\) ist nie null. Der Faktor streckt nur in \(y\)-Richtung.</p>', ''),
-    ('1c', 4, r'Gesucht ist die Polynomfunktion dritten Grades mit den Nullstellen \(-3\), \(1\) und \(2\), deren Graph die \(y\)-Achse bei \(-3\) schneidet.',
-     r'<p>Ansatz: \(f(x) = a\,(x+3)(x-1)(x-2)\).</p><p>\(f(0) = a \cdot 3 \cdot (-1) \cdot (-2) = 6a = -3 \;\Rightarrow\; a = -0.5\).</p><p>\(f(x) = -0.5\,(x+3)(x-1)(x-2)\).</p><p class="komm">Typischer Fehler: \(f(0) = a \cdot (-3) \cdot 1 \cdot 2\) — die Nullstellen statt der Klammerwerte bei \(x = 0\) eingesetzt.</p>', ''),
+    ('1c', 4, r'Gesucht ist die Polynomfunktion dritten Grades mit den Nullstellen \(-4\), \(1\) und \(2\), deren Graph die \(y\)-Achse bei \(4\) schneidet.',
+     r'<p>Ansatz: \(f(x) = a\,(x+4)(x-1)(x-2)\).</p><p>\(f(0) = a \cdot 4 \cdot (-1) \cdot (-2) = 8a = 4 \;\Rightarrow\; a = 0.5\).</p><p>\(f(x) = 0.5\,(x+4)(x-1)(x-2)\).</p><p class="komm">Typischer Fehler: \(f(0) = a \cdot (-4) \cdot 1 \cdot 2\) — die Nullstellen statt der Klammerwerte bei \(x = 0\) eingesetzt.</p>', ''),
     ('1d', 3, r'Der Graph gehört zu einem Polynom dritten Grades. Bestimme seine Gleichung in Linearfaktordarstellung. (Die markierten Punkte liegen auf Gitterpunkten.)',
      r'<p>Nullstellen \(-1\), \(1\), \(3\); Ansatz \(f(x) = a\,(x+1)(x-1)(x-3)\).</p><p>Der Graph geht durch \((0 \mid 3)\): \(f(0) = a \cdot 1 \cdot (-1) \cdot (-3) = 3a = 3 \;\Rightarrow\; a = 1\).</p><p>\(f(x) = (x+1)(x-1)(x-3)\).</p>',
-     '\n            <div class="mini-reihe"><svg class="mini gross" data-p="1;-1,1,3" data-fenster="-3,5,-6,8" data-punkte="-1,0;1,0;3,0;0,3"></svg></div>'),
+     '\n            <div class="mini-reihe"><svg class="mini gross" data-p="1;-1,1,3" data-fenster="-2,4,-5,5" data-punkte="-1,0;1,0;3,0;0,3"></svg></div>'),
 ], zwei=False)
 k1 = kapitel(1, 'linearfaktoren', 'Linearfaktoren und Nullstellen', 'K1', 40,
              r'Du erkennst eine Polynomfunktion mit Grad und Leitkoeffizient, liest die Nullstellen aus den Linearfaktoren ab und stellst umgekehrt aus Nullstellen und einem Punkt die Gleichung auf.',
@@ -306,19 +307,20 @@ fest3 = r'''      <div class="festhalten">
             <li>\(n\) <b>ungerade</b>, \(a_n \gt 0\): von links unten nach rechts oben; \(a_n \lt 0\): von links oben nach rechts unten.</li>
             <li>\(n\) <b>gerade</b>, \(a_n \gt 0\): beide Enden nach oben; \(a_n \lt 0\): beide Enden nach unten.</li>
           </ul>
-          <p>Eine Polynomfunktion \(n\)-ten Grades hat <b>höchstens \(n\) Nullstellen</b> und <b>höchstens \(n - 1\) lokale Extremstellen</b>. Bei <b>ungeradem</b> Grad gibt es immer mindestens eine Nullstelle.</p>
+          <p>Eine Polynomfunktion \(n\)-ten Grades hat <b>höchstens \(n\) Nullstellen</b> und <b>höchstens \(n - 1\) lokale Extremstellen</b> — das sind die Stellen der Hoch- und Tiefpunkte, an denen der Graph die Richtung wechselt (genauer in Kapitel 5). Bei <b>ungeradem</b> Grad gibt es immer mindestens eine Nullstelle.</p>
           <p><b>Symmetrie-Schnellcheck</b> über die Exponenten:</p>
           <ul>
             <li>nur gerade Exponenten (das konstante Glied \(a_0 = a_0 x^0\) zählt als gerade): <b>gerade Funktion</b>, achsensymmetrisch zur \(y\)-Achse;</li>
             <li>nur ungerade Exponenten (also auch \(a_0 = 0\)): <b>ungerade Funktion</b>, punktsymmetrisch zum Ursprung;</li>
-            <li>gemischt: weder noch.</li>
+            <li>gemischt: weder gerade noch ungerade — keine dieser beiden Symmetrien.</li>
           </ul>
-          <p>Nachweis mit \(f(-x) = f(x)\) bzw. \(f(-x) = -f(x)\).</p>
+          <p><b>Nachweis</b> mit \(f(-x) = f(x)\) (gerade) bzw. \(f(-x) = -f(x)\) (ungerade), zum Beispiel:</p>
+          <p>\[ f(x) = x^3 - 4x:\quad f(-x) = (-x)^3 - 4(-x) = -x^3 + 4x = -f(x) \]</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
           <p>Den Leitkoeffizienten vorne suchen: Bei \(f(x) = 3 + 2x - x^4\) ist er \(-1\), nicht \(3\) — er gehört zum <em>höchsten</em> Exponenten.</p>
-          <p>Und das konstante Glied übersehen: \(x^3 + x + 1\) ist <em>nicht</em> punktsymmetrisch, denn \(1 = 1 \cdot x^0\) hat einen geraden Exponenten.</p>
+          <p>Und das konstante Glied übersehen: \(x^3 + x + 1\) ist <em>nicht</em> punktsymmetrisch zum Ursprung, denn \(1 = 1 \cdot x^0\) hat einen geraden Exponenten.</p>
         </div>
       </div>'''
 auf3 = test('t3', 'Aufgaben · Kapitel 3', 11, [
@@ -356,12 +358,14 @@ fest4 = r'''      <div class="festhalten">
             <li><b>Ausklammern</b>, wenn das konstante Glied fehlt: \(x^3 - 9x = x\,(x^2 - 9) = x\,(x-3)(x+3)\).</li>
             <li><b>Satz vom Nullprodukt</b>: jeden Faktor null setzen.</li>
             <li>Sonst eine Nullstelle <b>raten</b>: Bei ganzzahligen Koeffizienten und \(a_n = 1\) ist jede ganzzahlige Nullstelle ein <b>Teiler von \(a_0\)</b>. Probe: \(f(x_1) = 0\)?</li>
-            <li>Den Linearfaktor \((x - x_1)\) <b>abspalten</b> (Polynomdivision): Der Rest ist \(0\), der Quotient hat einen Grad weniger.</li>
-            <li>Den quadratischen Rest faktorisieren oder mit der Lösungsformel lösen.</li>
+            <li>Den Linearfaktor \((x - x_1)\) <b>abspalten</b>: Ansatz \(f(x) = (x - x_1)(x^2 + px + q)\), ausmultiplizieren und die Koeffizienten mit \(f\) vergleichen. Der <b>Quotient</b> \(x^2 + px + q\) hat einen Grad weniger.</li>
+            <li>Den Quotienten faktorisieren oder mit der Lösungsformel lösen.</li>
           </ol>
-          <p>Beispiel: \(f(1) = 1 - 2 - 5 + 6 = 0\), also</p>
-          <p>\[ (x^3 - 2x^2 - 5x + 6) : (x - 1) = x^2 - x - 6 = (x-3)(x+2) \]</p>
-          <p>Probe einer Division: zurückmultiplizieren.</p>
+          <p>Beispiel \(f(x) = x^3 - 2x^2 - 5x + 6\): \(f(1) = 1 - 2 - 5 + 6 = 0\), also</p>
+          <p>\[ (x - 1)(x^2 + px + q) = x^3 + (p - 1)\,x^2 + (q - p)\,x - q \]</p>
+          <p>Vergleich: \(p - 1 = -2 \Rightarrow p = -1\); \(-q = 6 \Rightarrow q = -6\); Kontrolle beim \(x\): \(q - p = -5\) ✓.</p>
+          <p>\[ f(x) = (x - 1)(x^2 - x - 6) = (x - 1)(x - 3)(x + 2) \]</p>
+          <p>Den Quotienten liefert auch die <b>Polynomdivision</b> — sie steht auf der <a href="../schwerpunkt/s3-3-polynomfunktionen.html#darstellungen">Themenseite</a>. Beide Wege geben dasselbe.</p>
           <p>Mit dem Taschenrechner lassen sich Nullstellen auch über eine Wertetabelle oder den Gleichungslöser finden — zur Kontrolle.</p>
         </div>
         <div class="warn">
@@ -373,20 +377,21 @@ fest4 = r'''      <div class="festhalten">
 auf4 = test('t4', 'Aufgaben · Kapitel 4', 14, [
     ('4a', 3, r'Berechne alle Nullstellen von \(f(x) = x^3 + 2x^2 - 8x\).',
      r'<p>\(x^3 + 2x^2 - 8x = x\,(x^2 + 2x - 8) = x\,(x+4)(x-2)\).</p><p>Nullstellen: \(0\), \(-4\), \(2\).</p>', ''),
-    ('4b', 4, r'Berechne alle Nullstellen von \(f(x) = x^3 - 6x^2 + 11x - 6\): Rate eine, spalte den Linearfaktor ab und löse den Rest.',
-     r'<p>Teiler von \(-6\) probieren: \(f(1) = 1 - 6 + 11 - 6 = 0\).</p><p>\((x^3 - 6x^2 + 11x - 6) : (x - 1) = x^2 - 5x + 6 = (x-2)(x-3)\).</p><p>Nullstellen \(1\), \(2\), \(3\); \(f(x) = (x-1)(x-2)(x-3)\).</p>', ''),
+    ('4b', 4, r'Der Graph gehört zu \(f(x) = x^3 - 3x^2 - 2x + 6\). Lies die ganzzahlige Nullstelle ab, bestätige sie durch Einsetzen und berechne die beiden anderen exakt.',
+     r'<p>Abgelesen \(x_1 = 3\); \(f(3) = 27 - 27 - 6 + 6 = 0\) ✓.</p><p>Ansatz \((x - 3)(x^2 + px + q) = x^3 + (p - 3)x^2 + (q - 3p)x - 3q\): \(p - 3 = -3 \Rightarrow p = 0\), \(-3q = 6 \Rightarrow q = -2\); Kontrolle \(q - 3p = -2\) ✓.</p><p>\(x^2 - 2 = 0 \Rightarrow x = \pm\sqrt{2} \approx \pm 1.41\). Nullstellen \(-\sqrt{2}\), \(\sqrt{2}\), \(3\).</p><p class="komm">Die beiden anderen sind nicht ganzzahlig — am Graphen nur ungefähr ablesbar, darum die Rechnung.</p>',
+     '\n            <div class="mini-reihe"><svg class="mini gross" data-c="1,-3,-2,6" data-fenster="-2.5,4,-4,8" data-punkte="3,0"></svg></div>'),
     ('4c', 4, r'\(f(x) = x^3 + x^2 - 5x + 3\): Bestimme alle Nullstellen samt Vielfachheit und sag, was der Graph an jeder tut.',
-     r'<p>\(f(1) = 1 + 1 - 5 + 3 = 0\). \((x^3 + x^2 - 5x + 3) : (x - 1) = x^2 + 2x - 3 = (x+3)(x-1)\).</p><p>Also \(f(x) = (x-1)^2\,(x+3)\): \(1\) ist doppelt (berühren), \(-3\) einfach (schneiden).</p>', ''),
+     r'<p>\(f(1) = 1 + 1 - 5 + 3 = 0\). Ansatz \((x - 1)(x^2 + px + q) = x^3 + (p - 1)x^2 + (q - p)x - q\): \(p = 2\), \(q = -3\); Kontrolle \(q - p = -5\) ✓. Quotient \(x^2 + 2x - 3 = (x+3)(x-1)\).</p><p>Also \(f(x) = (x-1)^2\,(x+3)\): \(1\) ist doppelt (berühren), \(-3\) einfach (schneiden).</p>', ''),
     ('4d', 3, r'Jemand löst \(x^3 = 4x\) so: «durch \(x\) teilen, \(x^2 = 4\), also \(x = \pm 2\).» Was ist falsch? Löse richtig.',
      r'<p>Durch \(x\) teilen ist nur erlaubt, wenn \(x \neq 0\) — dabei geht die Lösung \(0\) verloren.</p><p>Richtig: \(x^3 - 4x = x\,(x-2)(x+2) = 0\), also \(\mathbb{L} = \{-2;\ 0;\ 2\}\).</p>', ''),
 ], zwei=False)
 k4 = kapitel(4, 'nullstellen-berechnen', 'Nullstellen berechnen', 'K1 · K3', 40,
-             r'Du berechnest die Nullstellen einer Polynomfunktion in Summenform: durch Ausklammern, oder indem du eine Nullstelle rätst, den Linearfaktor abspaltest und den Rest löst.',
+             r'Du berechnest die Nullstellen einer Polynomfunktion in Summenform: durch Ausklammern, oder indem du eine Nullstelle rätst, den Linearfaktor mit Ansatz und Koeffizientenvergleich abspaltest und den Quotienten löst.',
              ('s3-3-lp-nullstellen-berechnen', 'Nullstellen berechnen'),
              sim4, ('s3-3-lp-kontrolle-nullstellen', 'Kontrollfragen zum Nullstellen berechnen'),
              fest4, [uebung('ausklammern', 'Ausklammern'), uebung('probe-teiler', 'Einen Teiler prüfen'),
-                     uebung('abspalten', 'Linearfaktor abspalten')],
-             auf4, f'<a href="{TS}#darstellungen">Themenseite 3.3, Polynomdivision</a>')
+                     uebung('abspalten', 'Quotient bestimmen')],
+             auf4, f'<a href="{TS}#darstellungen">Themenseite 3.3, Linearfaktor abspalten — zwei Wege</a>')
 
 # ------------------------------------------------------------------ Kapitel 5
 sim5 = f'''      <figure class="sim sim-gross" id="sim5">
@@ -425,8 +430,8 @@ auf5 = test('t5', 'Aufgaben · Kapitel 5', 14, [
      '\n            <div class="mini-reihe"><svg class="mini gross" data-c="1,-3,0,3" data-fenster="-2,4,-3,5" data-punkte="0,3;2,-1"></svg></div>'),
     ('5b', 3, r'Berechne den Extrempunkt von \(f(x) = 2x^2 - 8x + 5\) exakt. Ist er ein Hoch- oder ein Tiefpunkt?',
      r'<p>\(x_s = -\frac{-8}{2 \cdot 2} = 2\), \(y_s = f(2) = 8 - 16 + 5 = -3\).</p><p>\(a = 2 \gt 0\): Tiefpunkt \(T(2 \mid -3)\).</p>', ''),
-    ('5c', 4, r'Aus einem quadratischen Blech mit 12 cm Seitenlänge entsteht eine offene Schachtel: In jeder Ecke wird ein Quadrat der Seite \(x\) (in cm) ausgeschnitten. Ihr Volumen ist \(V(x) = x\,(12 - 2x)^2\). Gib die sinnvolle Definitionsmenge an, berechne \(V(1)\) und bestimme mit einer Wertetabelle (Rechner erlaubt), für welches \(x\) das Volumen am grössten ist.',
-     r'<p>\(D = \,]0;\, 6[\) — bei \(x = 6\) bliebe kein Boden.</p><p>\(V(1) = 1 \cdot 10^2 = 100\) cm³.</p><p>Wertetabelle: \(V(1.5) = 121.5\), \(V(2) = 128\), \(V(2.5) = 122.5\). Grösstes Volumen bei \(x = 2\) cm mit \(128\) cm³ — der Hochpunkt, und weil \(V\) an beiden Rändern gegen \(0\) geht, auch das absolute Maximum auf \(D\).</p>', ''),
+    ('5c', 4, r'Bei einem Zylinder messen Radius \(r\) und Höhe zusammen \(6\) cm. Sein Volumen ist \(V(r) = \pi r^2\,(6 - r)\). Gib die sinnvolle Definitionsmenge an, berechne \(V(1)\) und bestimme mit einer Wertetabelle (Schrittweite \(0.5\), Rechner erlaubt), bei welchem Radius das Volumen am grössten ist.',
+     r'<p>\(D = \,]0;\, 6[\) — bei \(r = 6\) wäre die Höhe null.</p><p>\(V(1) = 5\pi \approx 15.7\) cm³.</p><p>Wertetabelle: \(V(3.5) \approx 96.2\), \(V(4) = 32\pi \approx 100.5\), \(V(4.5) \approx 95.4\). In der Tabelle ist \(r = 4\) cm am grössten, das Maximum liegt also bei etwa \(4\) cm mit rund \(100.5\) cm³. Weil \(V\) an beiden Rändern gegen \(0\) geht, ist es auch das absolute Maximum auf \(D\).</p><p class="komm">Grad 3: \(V(r) = -\pi r^3 + 6\pi r^2\).</p>', ''),
     ('5d', 3, r'\(f(x) = x^3 - 3x^2\) hat \(H(0 \mid 0)\) und \(T(2 \mid -4)\). Bestimme das absolute Maximum und das absolute Minimum auf \(D = [-0.5;\, 4]\).',
      r'<p>Randwerte: \(f(-0.5) = -0.125 - 0.75 = -0.875\), \(f(4) = 64 - 48 = 16\).</p><p>Absolutes Maximum \(16\) am Rand \(x = 4\); absolutes Minimum \(-4\) im Tiefpunkt \(x = 2\).</p>', ''),
 ], zwei=False)
@@ -452,7 +457,7 @@ k0 = '''
     ('0b', 3, r'Multipliziere aus: \((x+1)(x-2)(x+3)\).',
      r'<p>\((x+1)(x-2) = x^2 - x - 2\); mal \((x+3)\): \(x^3 + 3x^2 - x^2 - 3x - 2x - 6 = x^3 + 2x^2 - 5x - 6\).</p><p class="komm">Falsch? Erst zwei Klammern, dann das Ergebnis mit der dritten — jeder Term mit jedem. <a href="../grundlagen/g1-3-algebraische-terme.html">GF 1.3, Algebraische Terme</a></p>', ''),
     ('0c', 3, r'Faktorisiere: \(x^2 - x - 12\) · \(x^2 - 9\) · \(x^2 + 6x + 9\).',
-     r'<p>\((x-4)(x+3)\) · \((x-3)(x+3)\) · \((x+3)^2\).</p><p class="komm">Falsch? Zwei Zahlen mit Produkt \(-12\) und Summe \(-1\); dann die binomischen Formeln. Der Clip oben zeigt das Verfahren.</p>', ''),
+     r'<p>\((x-4)(x+3)\) · \((x-3)(x+3)\) · \((x+3)^2\).</p><p class="komm">Falsch? Wie im Clip oben: Die Lösungen von \(x^2 - x - 12 = 0\) haben das Produkt \(-12\) und die Summe \(1\) — das sind \(4\) und \(-3\), also \((x-4)(x+3)\). Dann die binomischen Formeln.</p>', ''),
     ('0d', 2, r'Wie verlaufen die Graphen von \(y = x^3\) und \(y = x^4\)? Symmetrie und die beiden Enden.',
      r'<p>\(y = x^3\): punktsymmetrisch zum Ursprung, von links unten nach rechts oben. \(y = x^4\): achsensymmetrisch zur \(y\)-Achse, beide Enden oben.</p><p class="komm">Falsch? <a href="../schwerpunkt/s3-2a-potenzfunktionen.html">SP 3.2, Potenzfunktionen</a> — der Leitterm einer Polynomfunktion verhält sich für grosse \(|x|\) genau so (Kapitel 3).</p>', ''),
 ]) + '''
@@ -483,7 +488,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1, 2 · G2 → 2 · G3, G4 → 3 · G5 → 4 · G6, G7 → 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1, 2 · G2 → 2 · G3, G4 → 3 · G5 → 4 · G6, G7, G8 → 5</p>
         </div>
       </div>
     </section>'''
@@ -503,9 +508,9 @@ oben = '''<div id="nav-root"></div>
            bestimmen und berechnen
 
      Kompetenzmatrix (Kompetenz | ohne HM | Kapitel | Kapitelaufgaben | Gesamttest):
-       K1 | ja   | 1, 2, 4 | 1a–1d, 2a, 2b, 2d, 4c | G1, G2
+       K1 | ja   | 1, 2, 4 | 1a–1d, 2a, 2b, 2d, 4c | G1, G2, G4
        K2 | ja   | 2, 3    | 2a, 2c, 3a–3d          | G1, G3, G4
-       K3 | nein | 4, 5    | 4a–4d, 5a–5d           | G5, G6, G7
+       K3 | nein | 4, 5    | 4a–4d, 5a–5d           | G5, G6, G7, G8
      Kein Kapitelziel ohne Kompetenz. Teil A des Gesamttests (K1, K2) ohne Hilfsmittel,
      Teil B (K3) mit Taschenrechner.
 
@@ -513,6 +518,10 @@ oben = '''<div id="nav-root"></div>
      Clip und als Schalter in Simulation 3), die Anwendungen A4–A6 der Themenseite (Truthahn,
      Temperatur, Tank) und die Vertiefung A7. Die exakte Berechnung von Extremstellen ab
      Grad 3 gehört zur Differentialrechnung und ist nicht Teil von SP 3.3.
+
+     Abspalten eines Linearfaktors: im Leitprogramm nur über Ansatz und Koeffizientenvergleich
+     (braucht nur Ausmultiplizieren, Vorwissen GF 1.3); die Themenseite führt zusätzlich die
+     Polynomdivision ein (Entscheid Auftraggeber 04.10.2026).
 
      Konventionen wie auf der Themenseite: Grad n, Leitkoeffizient aₙ, Linearfaktor­
      darstellung a·(x − x₁)(x − x₂)…, H und T, lokales/absolutes Maximum. Abweichung mit
@@ -529,7 +538,7 @@ oben = '''<div id="nav-root"></div>
     <div>
       <p class="marke">begreifbar.ch · Leitprogramm</p>
       <h1>Polynomfunktionen</h1>
-      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Fünf Kapitel und Gesamttest, rund fünf Lektionen.</p>
+      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Fünf Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest.</p>
     </div>
     <div class="kopf-rechts">
       <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>

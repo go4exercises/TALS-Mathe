@@ -223,8 +223,9 @@
   (function(){
     var fig = document.getElementById('sim1'); if (!fig) return;
     var K = Achsen(fig.querySelector('svg'), FENSTER1), ziel = null, pruefen = function(){}, bewegt = {};
+    // ohneNull zuerst: Es muss den Regler korrigieren, bevor zeichnen() ihn liest.
+    ohneNull(fig.querySelector('input[data-p="a"]'));
     var r = regler(fig, zeichnen);
-    ohneNull(r.a);
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
     function zust(){ var w = werte(r), ws = [w.x1, w.x2, w.x3], c = ausWurzeln(w.a, ws);
       return { a: w.a, w: ws, c: c, f0: wert(c, 0), bewegt: bewegt }; }
@@ -271,8 +272,9 @@
   (function(){
     var fig = document.getElementById('sim2'); if (!fig) return;
     var K = Achsen(fig.querySelector('svg'), FENSTER2), ziel = null, pruefen = function(){}, bewegt = {};
+    // ohneNull zuerst: Es muss den Regler korrigieren, bevor zeichnen() ihn liest.
+    ohneNull(fig.querySelector('input[data-p="a"]'));
     var r = regler(fig, zeichnen);
-    ohneNull(r.a);
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
     function liste(w){ var l = []; for (var i = 0; i < w.k; i++) l.push(w.p); for (i = 0; i < w.m; i++) l.push(w.q); return l; }
     function zust(){
@@ -321,8 +323,9 @@
     var fig = document.getElementById('sim3'); if (!fig) return;
     var svg = fig.querySelector('svg'), pruefen = function(){}, bewegt = {};
     var weit = fig.querySelector('.sim-schalter input');
+    // ohneNull zuerst: Es muss den Regler korrigieren, bevor zeichnen() ihn liest.
+    ohneNull(fig.querySelector('input[data-p="a"]'));
     var r = regler(fig, zeichnen);
-    ohneNull(r.a);
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
     if (weit) weit.addEventListener('change', function(){ bewegt.weit = true; zeichnen(); });
     function koeff(w){
@@ -422,10 +425,10 @@
       rolle(fig, 'formel').innerHTML = zeile;
       pruefen();
     }
-    function wechsle(p){ return function(){ c = POLY4[p]; gefunden = {}; }; }
+    function wechsle(p){ return function(){ c = POLY4[p]; gefunden = {}; r.r.value = 0; }; }
     function alleGefunden(s){ return s.alle.every(function(x){ return s.gefunden.indexOf(x) >= 0; }); }
     pruefen = Leiste(fig, [
-      { text: 'Fahr die Probestelle über die Teiler von 6. Finde alle drei Nullstellen von \\(x^3 - 2x^2 - 5x + 6\\).',
+      { text: 'Erkunde: Fahr die Probestelle über die Teiler von 6 und finde alle drei Nullstellen von \\(x^3 - 2x^2 - 5x + 6\\).',
         ok: alleGefunden },
       { text: 'Neues Polynom: \\(f(x) = x^3 + 2x^2 - x - 2\\). Finde eine Nullstelle unter den Teilern von \\(-2\\).',
         setup: wechsle('p1'), ok: function(s){ return s.gefunden.length >= 1; } },
@@ -446,7 +449,7 @@
      Maximum auch am Rand liegen kann. */
   (function(){
     var fig = document.getElementById('sim5'); if (!fig) return;
-    var K = Achsen(fig.querySelector('svg'), { w: 300, h: 300, x0: -3, x1: 3, y0: -6, y1: 10, sy: 2, xm: [-2, -1, 1, 2], ym: [-4, -2, 2, 4, 6, 8] });
+    var K = Achsen(fig.querySelector('svg'), { w: 300, h: 300, x0: -3, x1: 3, y0: -10, y1: 20, sy: 5, xm: [-2, -1, 1, 2], ym: [-5, 5, 10, 15] });
     var pruefen = function(){}, bewegt = {};
     var schalter = fig.querySelector('.sim-schalter input');
     var r = regler(fig, zeichnen);
@@ -467,9 +470,11 @@
         K.kurve(f, 'kurve', s.l, s.r);
         K.punkt(s.l, f(s.l), 'p-pkt'); K.punkt(s.r, f(s.r), 'p-pkt');
       } else K.kurve(f, 'kurve');
-      K.punkt(s.x, s.y, 'p-lauf', '(' + z(s.x) + ' | ' + z(s.y) + ')', s.x > 1.5 ? -8 : 8, -10, s.x > 1.5 ? 'end' : 'start');
+      // Gerundete Werte mit «≈» (HOWTO §15).
+      var gr = Math.abs(s.y - Math.round(s.y * 1000) / 1000) > 1e-12, yt = (gr ? '≈ ' : '') + z(s.y);
+      K.punkt(s.x, s.y, 'p-lauf', '(' + z(s.x) + ' | ' + yt + ')', s.x > 1.5 ? -8 : 8, -10, s.x > 1.5 ? 'end' : 'start');
       rolle(fig, 'formel').innerHTML = 'f(x) = x<sup>3</sup> − 3x &nbsp;·&nbsp; Läufer bei x = ' + z(s.x)
-        + ', f(x) = ' + z(s.y) + (Math.abs(s.y - Math.round(s.y * 1000) / 1000) > 1e-12 ? ' (gerundet)' : '')
+        + ', f(x) ' + (gr ? '≈ ' : '= ') + z(s.y)
         + ' &nbsp;·&nbsp; ' + (s.ein ? 'D = [' + z(s.l) + '; ' + z(s.r) + ']' : 'D = ℝ');
       pruefen();
     }
@@ -484,10 +489,12 @@
         ok: function(s){ return nah(s.x, 1); } },
       { text: 'Finde eine Stelle, an der \\(f\\) <b>grösser</b> ist als im Hochpunkt.',
         ok: function(s){ return !s.ein && s.y > 2 + 1e-9; } },
-      { text: 'Setz den Haken «\\(D\\) einschränken», stell \\(D = [-1.5;\\, 2.5]\\) ein und bring den Läufer auf den grössten Wert in \\(D\\).',
-        ok: function(s){ return s.ein && s.l === -1.5 && s.r === 2.5 && nah(s.x, 2.5); } },
+      // Nicht das Clip-Beispiel D = [−1.5; 2.5] (HOWTO §15).
+      { text: 'Setz den Haken «\\(D\\) einschränken», stell \\(D = [-2;\\, 3]\\) ein und bring den Läufer auf den grössten Wert in \\(D\\).',
+        ok: function(s){ return s.ein && s.l === -2 && s.r === 3 && nah(s.x, 3); } },
+      // Bei r = 2 ist f(2) = 2 = f(−1): Der Hochpunkt bleibt absolutes Maximum (gleichauf mit dem Rand).
       { text: 'Stell \\(D\\) so ein, dass der Hochpunkt das <b>absolute</b> Maximum auf \\(D\\) ist, und bring den Läufer dorthin.',
-        ok: function(s){ return s.ein && s.l <= -1 && s.r < 2 && nah(s.x, -1); } }
+        ok: function(s){ return s.ein && s.l <= -1 && s.r <= 2 && nah(s.x, -1); } }
     ], sim);
     zeichnen();
   })();
@@ -548,12 +555,23 @@
       [1, -3, 0, 2], [2, -1, 0, 1], [-0.5, -3, -1, 2], [-1, 0, 0, 0, 2], [1, -2, -1, 1], [1, 2, 2, -3], [1, -2, 2, 3],
       // Aufgaben der Kapitel und Vortest
       [-1, 2, -1, -5], [2, -1, 3], [-0.5, -3, 1, 2], [1, -1, 1, 3], [-0.5, 2, 2, -1], [-2, -1, -1, 3],
-      [1, 0, -4, 2], [1, 1, 2, 3], [1, 1, 1, -3], [1, 0, 2, -2], [1, 0, 6, 6], [1, -1, 2, -3], [1, 1, 3, -3],
+      [1, 0, -4, 2], [1, 1, 2, 3], [1, 1, 1, -3], [1, 0, 2, -2], [1, -1, 2, -3], [1, 1, 3, -3], [0.5, -4, 1, 2], [1, 2, 3, -1], [1, 2, -1, -3],
       // Gesamttest (downloads/leitprogramme/polynomfunktionen/gesamttest.tex)
-      [3, 2, 2, -1], [-0.5, -2, -2, 1], [1, -1, 2, 3]
+      [3, 2, 2, -1], [-0.5, -2, -2, 1], [1, -1, 2, 3], [-2, -3, 1, 1, 1], [0.5, -2, 2, 2], [-1, 0, 0, 6]
     ].map(schluessel);
     function schluessel(p){ return p[0] + '|' + p.slice(1).sort(function(u, v){ return u - v; }).join(','); }
     function fest(a, w){ return w && FEST.indexOf(schluessel([a].concat(w))) >= 0; }
+    /* Typen ohne Nullstellen-Liste haben einen eigenen Schlüssel (T.schl) und eine eigene
+       Sperrliste — sonst würfelte «Grad 2: exakt berechnen» genau G6 des Gesamttests. */
+    var SPERRE = [
+      // extrem-ablesen [s, q, u, v]: x³ − 3x (Clip, Sim 5) · −x³ + 3x + 1 (Kontrollclip) · 5a · 5d · GT G6
+      'e|1|1|0|0', 'e|-1|1|0|1', 'e|1|1|1|1', 'e|1|1|1|-2', 'e|-1|1|1|3', 'e|1|1|1|2',
+      // scheitel-extrem [a, b, c]: Clip, Kontrollclip, 5b, GT G7
+      's|-1|4|-1', 's|1|-6|5', 's|2|-8|5', 's|0.5|-3|2', 's|-2|8|-3',
+      // lokal-global [s, l, r]: Clip «Am Rand», Kontrollclip F5
+      'l|1|-1.5|2.5', 'l|1|0|4'
+    ];
+    function gesperrt(T, A){ return T.schl ? SPERRE.indexOf(T.schl(A)) >= 0 : fest(A.a, A.w); }
 
     var TYPEN = {
       /* ── Kapitel 1: Linearfaktoren und Nullstellen ───────────── */
@@ -576,19 +594,15 @@
 
       'grad-leitkoeff': { felder: ['n', 'an'], muster: 'Grad {n}   Leitkoeffizient {an}',
         eingabe: function(A){ return { n: String(A.n), an: String(A.a) }; },
-        neu: function(){ var a = zufall([-4, -3, -2, -1, 0.5, 2, 3, 5]), p = ziehe(bereich(-5, 5), 2);
-          var k = zufall([1, 2, 3]), m = zufall([1, 2]), w = [];
-          for (var i = 0; i < k; i++) w.push(p[0]); for (i = 0; i < m; i++) w.push(p[1]);
-          return { a: a, w: w, n: k + m, klammern: 2,
+        // Nur verschiedene, einfache Linearfaktoren: Potenzen wie (x − p)² führt erst Kapitel 2 ein.
+        neu: function(){ var a = zufall([-4, -3, -2, -1, 0.5, 2, 3, 5]), w = ziehe(bereich(-5, 5), zufall([2, 3, 4]));
+          return { a: a, w: w, n: w.length,
             text: 'Gib Grad und Leitkoeffizient von \\(f(x) = ' + faktT(a, w) + '\\) an.' }; },
-        fehler: function(A){ var f = [[{ n: String(A.n), an: String(-A.a) }, 'Vorzeichen']];
-          if (A.n !== 2) f.push([{ n: '2', an: String(A.a) }, 'Exponenten']);
-          return f; },
+        fehler: function(A){ return [[{ n: String(A.n), an: String(-A.a) }, 'Vorzeichen'], [{ n: String(A.n + 1), an: String(A.a) }, 'Klammern']]; },
         pruefen: function(A, e){
           if (gl(e.n, A.n) && gl(e.an, A.a)) return null;
           var r = [];
-          if (!gl(e.n, A.n)) r.push(gl(e.n, 2) ? 'Grad: Die Exponenten der Klammern zählen mit — jede Klammer steckt so oft drin, wie ihr Exponent sagt.'
-                                                : 'Grad: Zähl, wie oft \\(x\\) insgesamt mit sich multipliziert wird (Exponenten der Klammern addieren).');
+          if (!gl(e.n, A.n)) r.push('Grad: Zähl die Klammern mit \\(x\\) — jede bringt einen Faktor \\(x\\). Der Faktor vorne zählt nicht.');
           if (!gl(e.an, A.a)) r.push(gl(e.an, -A.a) ? 'Vorzeichen des Leitkoeffizienten: Jede Klammer beginnt mit \\(+x\\), das Vorzeichen kommt nur vom Faktor vorne.'
                                                     : 'Leitkoeffizient: Multiplizier nur die \\(x\\)-Terme aus — übrig bleibt der Faktor vorne.');
           return r.join(' '); },
@@ -622,13 +636,16 @@
         fehler: function(A){ return [[{ v: A.k === 2 ? 'schneidet der Graph die x-Achse' : 'berührt der Graph die x-Achse' }, 'Exponent']]; },
         pruefen: function(A, e){
           if (e.v === A.richtig) return null;
-          return 'Schau auf den Exponenten der Klammer \\(' + klT(A.p) + '\\): \\(' + A.k + '\\) ist '
-            + (A.k % 2 ? 'ungerade — das Vorzeichen wechselt' : 'gerade — das Vorzeichen wechselt nicht') + (A.k === 3 ? ', und bei 3 wird der Graph dort flach.' : '.'); },
-        loesung: function(A){ return '(' + klT(A.p).replace(/[()]/g, '') + ')^{' + A.k + '}:\\ \\text{' + A.richtig.replace('der Graph ', '') + '}'; } },
+          return 'Schau auf den Exponenten des Faktors \\(' + klT(A.p) + '\\): \\(' + A.k + '\\) ist '
+            + (A.k % 2 ? 'ungerade — das Vorzeichen wechselt' : 'gerade — das Vorzeichen wechselt nicht')
+            + (A.k === 3 ? ', und bei 3 wird der Graph dort flach.' : A.k === 1 ? '. Flach (Terrasse) wird der Graph erst bei Vielfachheit 3.' : '.'); },
+        loesung: function(A){ return klT(A.p) + (A.k > 1 ? '^{' + A.k + '}' : '') + ':\\ \\text{' + A.richtig.replace('der Graph ', '') + '}'; } },
 
       'graf-vielfachheit': { felder: ['b', 's'], muster: 'berührt bei x = {b}   schneidet bei x = {s}', graf: 'vielfach',
         eingabe: function(A){ return { b: String(A.b), s: String(A.s) }; },
-        neu: function(){ var p = ziehe(bereich(-2, 2), 2), a = zufall([-0.5, 0.5, -1, 1]);
+        // Abstand der Nullstellen mindestens 2 — bei Abstand 1 wäre der Buckel 1–2 px hoch.
+        neu: function(){ var p; do { p = ziehe(bereich(-2, 2), 2); } while (Math.abs(p[0] - p[1]) < 2);
+          var a = zufall([-0.5, 0.5, -1, 1]);
           return { a: a, b: p[0], s: p[1], w: [p[0], p[0], p[1]],
             text: 'An welcher Stelle berührt der Graph die \\(x\\)-Achse, an welcher schneidet er sie? (Nullstellen auf Gitterpunkten)' }; },
         fehler: function(A){ return [[{ b: String(A.s), s: String(A.b) }, 'Vertauscht']]; },
@@ -640,7 +657,8 @@
 
       'gleichung-mehrfach': { felder: ['a'], muster: 'a = {a}',
         eingabe: function(A){ return { a: String(A.a) }; },
-        neu: function(){ var p = ziehe(bereich(-3, 3, [0]), 2), a = zufall([-2, -1, -0.5, 0.5, 1, 2]);
+        // Doppelte Nullstelle ±2 oder ±3: Bei ±1 gäbe das vergessene Quadrat dasselbe (oder −a).
+        neu: function(){ var d = zufall([-3, -2, 2, 3]), p = [d, zufall(bereich(-3, 3, [0, d]))], a = zufall([-2, -1, -0.5, 0.5, 1, 2]);
           var prod = p[0] * p[0] * (-p[1]);
           if (Math.abs(a * prod) > 60) a = prod > 0 ? 0.5 : -0.5;
           return { a: a, w: [p[0], p[0], p[1]], d: p[0], e: p[1], prod: prod, f0: a * prod,
@@ -688,7 +706,7 @@
           if (gl(e.N, A.n) && gl(e.E, A.n - 1)) return null;
           var r = [];
           if (!gl(e.N, A.n)) r.push('Nullstellen: höchstens so viele wie der Grad.');
-          if (!gl(e.E, A.n - 1)) r.push('Extremstellen: zwischen zwei Nullstellen liegt höchstens ein Hoch- oder Tiefpunkt — es sind höchstens n − 1.');
+          if (!gl(e.E, A.n - 1)) r.push('Extremstellen: höchstens eine weniger als der Grad, also n − 1.');
           return r.join(' '); },
         loesung: function(A){ return '\\le ' + A.n + ' \\text{ Nullstellen},\\ \\le ' + (A.n - 1) + ' \\text{ Extremstellen}'; } },
 
@@ -709,7 +727,7 @@
         pruefen: function(A, e){
           if (e.s === A.richtig) return null;
           if (A.konst && e.s !== 'achsensymmetrisch zur y-Achse') return 'Das konstante Glied ist ein Term mit \\(x^0\\) — und \\(0\\) ist gerade. Schau alle Exponenten an: \\(' + A.ex.join(',\\ ') + '\\).';
-          return 'Schau alle Exponenten an: \\(' + A.ex.join(',\\ ') + '\\). Nur gerade → Achse, nur ungerade → Ursprung, gemischt → weder noch.'; },
+          return 'Schau alle Exponenten an: \\(' + A.ex.join(',\\ ') + '\\). Nur gerade → achsensymmetrisch zur \\(y\\)-Achse, nur ungerade → punktsymmetrisch zum Ursprung, gemischt → weder noch.'; },
         loesung: function(A){ return '\\text{Exponenten } ' + A.ex.join(',\\ ') + ':\\ \\text{' + A.richtig + '}'; } },
 
       /* ── Kapitel 4: Nullstellen berechnen ────────────────────── */
@@ -726,13 +744,14 @@
           if (!ein.some(function(x){ return gl(x, 0); })) return 'Nach dem Ausklammern steht \\(x \\cdot (\\dots) = 0\\) — der Faktor \\(x\\) liefert die Nullstelle \\(0\\).';
           if (ein.some(function(x){ return !gl(x, 0) && A.w.indexOf(-x) >= 0 && A.w.indexOf(x) < 0; }))
             return 'Vorzeichen: Faktorisier die Klammer \\(' + sumT([1, A.c[1], A.c[2]]) + '\\) und setz jeden Faktor null.';
-          return '\\(x\\) ausklammern, dann die quadratische Klammer faktorisieren (Produkt \\(' + tz(A.c[2]) + '\\), Summe \\(' + tz(-A.c[1]) + '\\)).'; },
+          return '\\(x\\) ausklammern, dann die Nullstellen der Klammer suchen: zwei Zahlen mit Produkt \\(' + tz(A.c[2]) + '\\) und Summe \\(' + tz(-A.c[1]) + '\\).'; },
         loesung: function(A){ return sumT(A.c) + ' = x' + klT(A.w[1]) + klT(A.w[2]) + ' \\Rightarrow x \\in \\{0;\\ ' + tz(A.w[1]) + ';\\ ' + tz(A.w[2]) + '\\}'; } },
 
       'probe-teiler': { felder: ['y'], muster: 'f(r) = {y}',
         eingabe: function(A){ return { y: String(A.y) }; },
         neu: function(){ var w = ziehe(bereich(-3, 3, [0]), 3), c = ausWurzeln(1, w);
-          var t = zufall([1, -1, 2, -2, 3, -3]);
+          // Nur echte Teiler von a₀ — das ist das gelehrte Verfahren.
+          var a0 = Math.abs(c[3]), t = zufall([1, 2, 3, 4, 6, 9].filter(function(q){ return a0 % q === 0; })) * zufall([1, -1]);
           return { a: 1, w: w, c: c, r: t, y: wert(c, t),
             text: 'Prüfe, ob \\(' + tz(t) + '\\) eine Nullstelle von \\(f(x) = ' + sumT(c) + '\\) ist: Berechne \\(f(' + tz(t) + ')\\).' }; },
         fehler: function(A){ var f = [], b = wert(A.c, -A.r);
@@ -745,21 +764,32 @@
         richtig: function(A){ return A.y === 0 ? '— also ist ' + z(A.r) + ' eine Nullstelle.' : '— nicht null, also keine Nullstelle.'; },
         loesung: function(A){ return 'f(' + tz(A.r) + ') = ' + tz(A.y) + (A.y === 0 ? ' \\Rightarrow \\text{Nullstelle}' : ' \\ne 0'); } },
 
-      'abspalten': { felder: ['x2', 'x3'], muster: 'weitere Nullstellen: {x2}  {x3}',
-        eingabe: function(A){ return { x2: String(A.w[1]), x3: String(A.w[2]) }; },
-        neu: function(){ var w = ziehe(bereich(-4, 4, [0]), 3), c = ausWurzeln(1, w);
-          return { a: 1, w: w, c: c, q: teilen(c, w[0]).q,
-            text: '\\(x_1 = ' + tz(w[0]) + '\\) ist eine Nullstelle von \\(f(x) = ' + sumT(c) + '\\). Spalte \\(' + klT(w[0]) + '\\) ab und bestimme die beiden anderen.' }; },
-        fehler: function(A){ return [[{ x2: String(-A.w[1]), x3: String(-A.w[2]) }, 'Vorzeichen']]
-          .filter(function(p){ return !(gleicheMenge2([+p[0].x2, +p[0].x3], A.w.slice(1))); }); },
+      /* Abspalten über Ansatz und Koeffizientenvergleich (das Verfahren des Leitprogramms;
+         die Polynomdivision steht auf der Themenseite): (x − r)(x² + px + q) mit
+         p = a₂ + r und q = −a₀ / r. Gefragt ist der Quotient, nicht nur die Nullstellen. */
+      'abspalten': { felder: ['p', 'q'], muster: 'Quotient x² + {p}·x + {q}',
+        eingabe: function(A){ return { p: String(A.p), q: String(A.q) }; },
+        neu: function(){ var w = ziehe(bereich(-4, 4, [0]), 3), c = ausWurzeln(1, w), qq = teilen(c, w[0]).q;
+          return { a: 1, w: w, c: c, r: w[0], p: qq[1], q: qq[2],
+            text: '\\(x_1 = ' + tz(w[0]) + '\\) ist eine Nullstelle von \\(f(x) = ' + sumT(c) + '\\). Bestimme \\(p\\) und \\(q\\) im Ansatz \\(f(x) = '
+              + klT(w[0]) + '(x^2 + px + q)\\).' }; },
+        fehler: function(A){ var f = [], p2 = A.c[1] - A.r, q2 = A.c[3] / A.r;      // Vorzeichen von r falsch übernommen
+          if (!gl(p2, A.p)) f.push([{ p: String(p2), q: String(A.q) }, 'Vorzeichen']);
+          if (!gl(q2, A.q)) f.push([{ p: String(A.p), q: String(q2) }, 'konstante']);
+          return f; },
         pruefen: function(A, e){
-          if (gleicheMenge2([e.x2, e.x3], A.w.slice(1))) return null;
-          if (gleicheMenge2([-e.x2, -e.x3], A.w.slice(1))) return 'Vorzeichen: \\(' + sumT(A.q) + ' = ' + klT(A.w[1]) + klT(A.w[2]) + '\\) — jede Klammer wird bei der Gegenzahl null.';
-          return 'Teil durch \\(' + klT(A.w[0]) + '\\): Der Rest ist \\(' + sumT(A.q) + '\\). Diesen faktorisieren oder mit der Lösungsformel lösen.'; },
-        loesung: function(A){ return '(' + sumT(A.c) + ') : ' + klT(A.w[0]) + ' = ' + sumT(A.q) + ' = ' + klT(A.w[1]) + klT(A.w[2]); } },
+          if (gl(e.p, A.p) && gl(e.q, A.q)) return null;
+          var r = [];
+          if (!gl(e.p, A.p)) r.push(gl(e.p, A.c[1] - A.r) ? 'Vorzeichen beim \\(x^2\\)-Glied: Ausmultipliziert steht dort \\(p ' + (A.r > 0 ? '- ' + A.r : '+ ' + (-A.r)) + '\\), und das muss \\(' + tz(A.c[1]) + '\\) sein.'
+                                                      : 'Multiplizier \\(' + klT(A.r) + '(x^2 + px + q)\\) aus und vergleich das \\(x^2\\)-Glied.');
+          if (!gl(e.q, A.q)) r.push('Das konstante Glied: ausmultipliziert \\(' + tz(-A.r) + ' \\cdot q\\), und das muss \\(' + tz(A.c[3]) + '\\) sein.');
+          return r.join(' '); },
+        richtig: function(A){ return '— der Quotient ist \\(' + sumT([1, A.p, A.q]) + ' = ' + klT(A.w[1]) + klT(A.w[2]) + '\\), also sind \\(' + tz(A.w[1]) + '\\) und \\(' + tz(A.w[2]) + '\\) die anderen Nullstellen.'; },
+        loesung: function(A){ return sumT(A.c) + ' = ' + klT(A.r) + '(' + sumT([1, A.p, A.q]) + ')'; } },
 
       /* ── Kapitel 5: Hoch- und Tiefpunkte ─────────────────────── */
       'extrem-ablesen': { felder: ['hx', 'hy', 'tx', 'ty'], muster: 'H( {hx} | {hy} )   T( {tx} | {ty} )', graf: 'extrem',
+        schl: function(A){ return ['e', A.s, A.q, A.u, A.v].join('|'); },
         eingabe: function(A){ return { hx: String(A.hx), hy: String(A.hy), tx: String(A.tx), ty: String(A.ty) }; },
         neu: function(){ var s = zufall([1, -1]), u = zufall(bereich(-2, 2)), v = zufall(bereich(-2, 2)), q = zufall([1, 0.5]);
           // f(x) = s·q·((x−u)³ − 3(x−u)) + v: Extremstellen bei u ± 1, Werte v ± 2q
@@ -769,11 +799,16 @@
         pruefen: function(A, e){
           if (gl(e.hx, A.hx) && gl(e.hy, A.hy) && gl(e.tx, A.tx) && gl(e.ty, A.ty)) return null;
           if (gl(e.hx, A.tx) && gl(e.hy, A.ty)) return 'Vertauscht: Der Hochpunkt ist der lokal höchste Punkt — dort wechselt der Graph von steigend zu fallend.';
-          if (gl(e.hx, A.hy) && gl(e.hy, A.hx)) return 'Erst die \\(x\\)-Koordinate, dann die \\(y\\)-Koordinate.';
+          var hOk = gl(e.hx, A.hx) && gl(e.hy, A.hy), tOk = gl(e.tx, A.tx) && gl(e.ty, A.ty);
+          if (!hOk && A.hx !== A.hy && gl(e.hx, A.hy) && gl(e.hy, A.hx)) return 'Beim Hochpunkt: erst die \\(x\\)-Koordinate, dann die \\(y\\)-Koordinate.';
+          if (hOk && A.tx !== A.ty && gl(e.tx, A.ty) && gl(e.ty, A.tx)) return 'Beim Tiefpunkt: erst die \\(x\\)-Koordinate, dann die \\(y\\)-Koordinate.';
+          if (hOk && !tOk) return 'Der Hochpunkt stimmt. Lies den Tiefpunkt nochmals ab — dort wechselt der Graph von fallend zu steigend.';
+          if (tOk && !hOk) return 'Der Tiefpunkt stimmt. Lies den Hochpunkt nochmals ab — dort wechselt der Graph von steigend zu fallend.';
           return 'Such die beiden Stellen, an denen der Graph die Richtung wechselt, und lies je \\(x\\) und \\(y\\) ab.'; },
         loesung: function(A){ return 'H(' + tz(A.hx) + ' \\mid ' + tz(A.hy) + '),\\ T(' + tz(A.tx) + ' \\mid ' + tz(A.ty) + ')'; } },
 
       'scheitel-extrem': { felder: ['xs', 'ys', 'art'], muster: 'xₛ = {xs}   yₛ = {ys}   {art:Hochpunkt|Tiefpunkt}',
+        schl: function(A){ return ['s', A.a, A.b, A.c].join('|'); },
         eingabe: function(A){ return { xs: String(A.xs), ys: String(A.ys), art: A.a < 0 ? 'Hochpunkt' : 'Tiefpunkt' }; },
         neu: function(){ var a = zufall([-2, -1, 1, 2]), xs = zufall(bereich(-4, 4, [0])), ys = zufall(bereich(-6, 6));
           var b = -2 * a * xs, c = a * xs * xs + ys;
@@ -786,11 +821,12 @@
           if (gl(e.xs, A.xs) && gl(e.ys, A.ys) && e.art === art) return null;
           if (!gl(e.xs, A.xs)) r.push(gl(e.xs, -A.xs) ? 'Das Minus in \\(x_s = -\\frac{b}{2a}\\) nicht vergessen.' : '\\(x_s = -\\frac{b}{2a} = -\\frac{' + tz(A.b) + '}{' + tz(2 * A.a) + '}\\).');
           else if (!gl(e.ys, A.ys)) r.push('\\(y_s = f(x_s)\\): Setz \\(x_s = ' + tz(A.xs) + '\\) in \\(f\\) ein.');
-          if (e.art !== art) r.push('Schau auf das Vorzeichen von \\(a\\): positiv heisst nach oben geöffnet, also Tiefpunkt.');
+          if (e.art !== art) r.push('Schau auf das Vorzeichen von \\(a\\): ' + (A.a > 0 ? 'positiv heisst nach oben geöffnet, also Tiefpunkt.' : 'negativ heisst nach unten geöffnet, also Hochpunkt.'));
           return r.join(' '); },
         loesung: function(A){ return 'x_s = -\\frac{' + tz(A.b) + '}{' + tz(2 * A.a) + '} = ' + tz(A.xs) + ',\\ y_s = f(' + tz(A.xs) + ') = ' + tz(A.ys) + ':\\ ' + (A.a < 0 ? 'H' : 'T') + '(' + tz(A.xs) + ' \\mid ' + tz(A.ys) + ')'; } },
 
       'lokal-global': { felder: ['wo'], muster: 'Das absolute Maximum liegt {wo:im Hochpunkt|am linken Rand|am rechten Rand}',
+        schl: function(A){ return ['l', A.s, A.l, A.r].join('|'); },
         eingabe: function(A){ return { wo: A.richtig }; },
         neu: function(){ var s = zufall([1, -1]), l = zufall([-2.5, -1.5, -0.5]), r = zufall([0.5, 1.5, 2.5]);
           if (s < 0){ var t = l; l = -r; r = -t; }
@@ -823,7 +859,7 @@
         // Trifft der Wurf ein Polynom, nach dem eine feste Aufgabe fragt, wird neu
         // gewürfelt (FEST oben). 40 Versuche reichen weit; danach gilt der letzte Wurf.
         A = T.neu();
-        for (var v = 0; v < 40 && fest(A.a, A.w); v++) A = T.neu();
+        for (var v = 0; v < 40 && gesperrt(T, A); v++) A = T.neu();
         versuche = 0; geloest = false; box.__aufgabe = A; box.__typ = T;   // Testhaken (.claude/tools/pruef-uebungen.mjs)
         auf.innerHTML = A.text;
         var html = T.muster;

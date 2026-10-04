@@ -553,6 +553,12 @@ gegen sie und darüber hinaus.
 - Nichts abfragen, was nicht eingeführt ist (Begriff, Schreibweise, Verfahren). Jedes
   Verfahren, das der Gesamttest verlangt, wird in einem Kapitel geübt.
 - Lösung und Aufgabenstellung passen zusammen («ohne Rechnen» + Lösung rechnet = Befund).
+- **Ein Verfahren gilt erst als gezeigt, wenn seine Schritte zu sehen sind** — nicht nur das
+  Ergebnis. Polynomfunktionen (04.10.2026): Clip, Festhalten und Simulation zeigten von der
+  Polynomdivision nur den Quotienten, Aufgaben und Gesamttest verlangten sie von Hand.
+- **Auch die Begründung eines richtigen Satzes prüfen.** «Höchstens n − 1 Extremstellen, weil
+  zwischen zwei Nullstellen höchstens ein Hoch- oder Tiefpunkt liegt» — der Satz stimmt, die
+  Begründung nicht (\(x^4 - 2x^2 - 3\)). Gegenbeispiele stehen oft schon im eigenen Leitprogramm.
 
 **Clips**
 - **Eine neue Bewegung einmal wirklich laufen lassen.** Nicht ein Bild ansehen, sondern
@@ -577,6 +583,11 @@ gegen sie und darüber hinaus.
 **Animationen und Übungen**
 - Kein Ziel der Aufgabenleiste ist schon im Startzustand erfüllt; Ziele sind nicht die
   Beispiele aus dem Clip; Überspringen wird als Überspringen gezählt (`pruef-leiste`).
+- **Auch nicht beim Wechsel**: Setzt eine Aufgabe ein neues Polynom, darf der Endzustand der
+  vorigen Aufgabe (Reglerstellung) das neue Ziel nicht schon erfüllen — `pruef-leiste` prüft nur
+  den Startzustand. Im `setup` die Regler zurücksetzen.
+- **Korrigierende Listener vor dem Zeichnen registrieren** (`ohneNull`): Sonst zeichnet die
+  Simulation noch den verbotenen Wert, während der Regler schon daneben steht.
 - Zufallsübungen: nur lösbare, «schöne» Fälle; Sonderwerte (0, ±1, gleiche Zahlen) erzeugen
   keine falsche Diagnose; Randfälle des Stoffs mit üben (z. B. \(D = 0\), \(D \lt 0\));
   kein Zufallsfall gleich einer festen Aufgabe (`pruef-uebungen` mit `fehler()`).
@@ -587,6 +598,15 @@ gegen sie und darüber hinaus.
 - **Was eine Rundungsfunktion ausgibt, gehört nachgerechnet.** Eine Live-Anzeige auf zwei
   Stellen macht aus \(0.04^2 = 0.0016\) ein «\(= 0\)» — und damit eine falsche Aussage.
 - Hinweise rechnen nicht anders als die Lösung (Klammerzahlen ≠ Nullstellen).
+- **Sperrliste für jeden Typ**, nicht nur für die mit Nullstellenliste: Ein Typ «Extrempunkt
+  berechnen» würfelte sonst genau eine Gesamttest-Aufgabe samt Lösung. Eigener Schlüssel je Typ.
+- **Sonderwerte können einen Fehler unsichtbar machen**: Bei einer doppelten Nullstelle ±1 gibt
+  das vergessene Quadrat dasselbe \(a\) — die falsche Rechnung gilt als richtig. Solche Werte
+  nicht würfeln.
+- **Was ein Übungsbild zeigen soll, in Pixeln nachrechnen**: Bei Nullstellenabstand 1 ist der
+  Buckel einer doppelten Nullstelle 1–2 px hoch — Berühren und Schneiden sind nicht zu unterscheiden.
+- **Fragetexte eines Kontrollclips verschieden beginnen lassen**: `pruef-fragen` erkennt eine Frage
+  an ihren ersten 20 Zeichen; zwei Fragen «Welche Nullstellen hat …» lassen den Durchlauf scheitern.
 - Live-Anzeigen runden nur mit «≈».
 - Je Kapitel mindestens eine «Warum»-Aufgabe und eine Aufgabe am Graphen (§9).
 

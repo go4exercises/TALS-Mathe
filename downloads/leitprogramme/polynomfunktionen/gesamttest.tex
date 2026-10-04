@@ -1,5 +1,5 @@
 % Gesamttest «Polynomfunktionen» — Quelle des PDFs (python3 scripts/build-lp-pdf.py).
-% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (04.10.2026).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (04.10.2026, nach der Prüfung überarbeitet).
 % Kein \lt/\gt — pdfLaTeX kennt sie nicht, < und > tun es.
 \documentclass[11pt]{article}
 \usepackage{../lp-druck}
@@ -22,30 +22,30 @@ Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem
 \lpteil{Teil A · Nullstellen und Verlauf — ohne Taschenrechner}{Kapitel 1 bis 3 · 13 Punkte}
 
 \begin{lpaufgabe}{G1}{Aus der Linearfaktordarstellung lesen}{4 P}
-Gegeben ist $f(x) = 3\,(x-2)^{2}\,(x+1)$.
+Gegeben ist $f(x) = -0.5\,(x+3)\,(x-2)^{3}$.
 \begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
 \item Gib Grad und Leitkoeffizient an.
 \item Gib alle Nullstellen mit ihrer Vielfachheit an und beschreib, was der Graph an jeder Nullstelle tut.
 \item Berechne $f(0)$.
 \end{enumerate}
-\lpplatz{6}
+\lpplatz{7}
 \end{lpaufgabe}
 
 \begin{lpaufgabe}{G2}{Vom Graphen zur Gleichung}{4 P}
 \begin{minipage}[t]{0.52\linewidth}
 Der Graph gehört zu einer Polynomfunktion dritten Grades. Die markierten Punkte liegen auf Gitterpunkten.
 Bestimme die Gleichung in Linearfaktordarstellung und begründe, welche Nullstelle doppelt ist.
-\lpplatz{7}
+\lpplatz{8}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.42\linewidth}\vspace{0pt}\centering
 \begin{tikzpicture}
-\begin{axis}[width=6.4cm,height=7.2cm,axis lines=middle,xmin=-3.6,xmax=2.4,ymin=-5,ymax=7,
-  xtick={-3,-2,-1,1,2},ytick={-4,-2,2,4,6},grid=both,grid style={lplinie},tick label style={font=\scriptsize},
+\begin{axis}[width=6.4cm,height=7.6cm,axis lines=middle,xmin=-3.2,xmax=4.2,ymin=-4.5,ymax=8.5,
+  xtick={-3,-2,-1,1,2,3,4},ytick={-4,-2,2,4,6,8},grid=both,grid style={lplinie},tick label style={font=\scriptsize},
   xlabel=$x$,ylabel=$y$,
-  yticklabel style={fill=white,inner sep=1pt,xshift=-2pt},xticklabel style={fill=white,inner sep=1pt}]
-\addplot[lpblau,very thick,domain=-3.45:1.95,samples=160] {-0.5*(x+2)^2*(x-1)};
-\addplot[only marks,mark=*,color=lporange] coordinates {(-2,0) (1,0)};
-\addplot[only marks,mark=*,color=black] coordinates {(0,2)};
+  yticklabel style={fill=white,inner sep=1pt,xshift=-2pt},xticklabel style={fill=white,inner sep=1pt,yshift=-2pt}]
+\addplot[lpblau,very thick,domain=-2.45:3.62,samples=160] {0.5*(x+2)*(x-2)^2};
+\addplot[only marks,mark=*,color=lporange] coordinates {(-2,0) (2,0)};
+\addplot[only marks,mark=*,color=black] coordinates {(0,4)};
 \end{axis}
 \end{tikzpicture}
 \end{minipage}
@@ -61,31 +61,52 @@ Gegeben ist $g(x) = -x^{4} + 5x^{2} - 4$.
 \lpplatz{6}
 \end{lpaufgabe}
 
-\begin{lpaufgabe}{G4}{Ohne Nullstelle?}{2 P}
-Gibt es eine Polynomfunktion dritten Grades, deren Graph die $x$-Achse nirgends trifft? Begründe.
-\lpplatz{4}
+\begin{lpaufgabe}{G4}{Zweimal berühren}{2 P}
+Der Graph einer Polynomfunktion hat genau zwei Nullstellen. An beiden berührt er die $x$-Achse, und beide Enden zeigen nach unten.
+Welchen Grad hat die Funktion mindestens, und welches Vorzeichen hat ihr Leitkoeffizient? Begründe beides.
+\lpplatz{5}
 \end{lpaufgabe}
 
 \lpteil{Teil B · Ausgezeichnete Stellen — mit Taschenrechner}{Kapitel 4 und 5 · 12 Punkte}
 
 \begin{lpaufgabe}{G5}{Nullstellen berechnen}{4 P}
-Berechne alle Nullstellen von $h(x) = x^{3} - 4x^{2} + x + 6$: Rate eine Nullstelle, spalte den Linearfaktor ab und löse den Rest. Gib $h$ in Linearfaktordarstellung an.
-\lpplatz{8}
+Berechne alle Nullstellen von $h(x) = x^{3} - 4x^{2} + x + 6$: Rate eine Nullstelle, spalte den Linearfaktor ab und löse den Quotienten. Gib $h$ in Linearfaktordarstellung an.
+\lpplatz{10}
 \end{lpaufgabe}
 
-\begin{lpaufgabe}{G6}{Ein Extrempunkt exakt}{3 P}
-Berechne den Extrempunkt von $k(x) = -2x^{2} + 8x - 3$ exakt und gib an, ob es ein Hoch- oder ein Tiefpunkt ist.
+\begin{lpaufgabe}{G6}{Am Graphen ablesen}{3 P}
+\begin{minipage}[t]{0.52\linewidth}
+Abgebildet ist der Graph von $k(x) = -x^{3} + 3x^{2} + 1$. Hoch- und Tiefpunkt liegen auf Gitterpunkten.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Lies Hochpunkt und Tiefpunkt ab.
+\item Bestimme das absolute Maximum und das absolute Minimum von $k$ auf $D = [-0.5;\, 3.5]$.
+\end{enumerate}
+\lpplatz{6}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.42\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}
+\begin{axis}[width=6.4cm,height=7.6cm,axis lines=middle,xmin=-1.2,xmax=4.2,ymin=-6.5,ymax=7.5,
+  xtick={-1,1,2,3,4},ytick={-6,-4,-2,2,4,6},grid=both,grid style={lplinie},tick label style={font=\scriptsize},
+  xlabel=$x$,ylabel=$y$,
+  yticklabel style={fill=white,inner sep=1pt,xshift=-2pt},xticklabel style={fill=white,inner sep=1pt,yshift=-2pt}]
+\addplot[lpblau,very thick,domain=-1:3.55,samples=160] {-x^3+3*x^2+1};
+\addplot[only marks,mark=*,color=lpgruen] coordinates {(0,1) (2,5)};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G7}{Ein Extrempunkt exakt}{2 P}
+Berechne den Extrempunkt von $p(x) = 0.5x^{2} - 3x + 2$ exakt und gib an, ob es ein Hoch- oder ein Tiefpunkt ist.
 \lpplatz{5}
 \end{lpaufgabe}
 
-\begin{lpaufgabe}{G7}{Eine Schachtel aus Karton}{5 P}
-Aus einem Karton von 16\,cm × 10\,cm entsteht eine offene Schachtel: In jeder Ecke wird ein Quadrat der Seite $x$ (in cm) ausgeschnitten, dann werden die Ränder hochgefaltet. Das Volumen ist
-\[ V(x) = x\,(16 - 2x)(10 - 2x) \quad (\text{in cm}^3). \]
+\begin{lpaufgabe}{G8}{Eine Flugbahn}{3 P}
+Die Höhe eines Modellflugzeugs wird für $0 \le t \le 6$ beschrieben durch $h(t) = -t^{3} + 6t^{2}$ ($t$ in s, $h$ in m).
 \begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
-\item Gib die sinnvolle Definitionsmenge an und berechne $V(1)$.
-\item Bestimme mit einer Wertetabelle (Schrittweite $0.5$), für welches $x$ das Volumen am grössten ist, und gib das grösste Volumen an.
-\item Ist das ein lokales oder auch ein absolutes Maximum auf der Definitionsmenge? Begründe.
+\item Berechne die Nullstellen von $h$ durch Ausklammern und gib ihre Vielfachheit an.
+\item Bestimme mit einer Wertetabelle (Schrittweite $1$), wann das Flugzeug in der Tabelle am höchsten ist und wie hoch es dann fliegt.
 \end{enumerate}
-\lpplatz{9}
+\lpplatz{8}
 \end{lpaufgabe}
 \end{document}

@@ -285,8 +285,9 @@
   (function(){
     var fig = document.getElementById('sim3'); if (!fig) return;
     var K = Achsen(fig.querySelector('svg'), FENSTER5), ziel = null, pruefen = function(){}, bewegt = {};
+    // ohneNull zuerst: Es muss den Regler korrigieren, bevor zeichnen() ihn liest.
+    if (fig.querySelector('input[data-p="n"]')) ohneNull(fig.querySelector('input[data-p="n"]'));
     var r = regler(fig, zeichnen);
-    if (r.n) ohneNull(r.n);
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
     var sim = { zustand: function(){ var w = werte(r);
                   return { a: w.a, n: w.n, u: w.u, v: w.v, bewegt: bewegt,
