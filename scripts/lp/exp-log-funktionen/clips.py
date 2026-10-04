@@ -30,6 +30,11 @@ E = math.e
 
 
 def graf(W, kurven=(), punkte=(), ein=0.05, **kw):
+    # Ist die x-Achse eine Zeit (xname «t…»), gibt es keine negativen Zeiten: Kurven ab t = 0.
+    if W.get('xname', '').startswith('t'):
+        for kv in kurven:
+            if kv.get('bewegung') and 'von' not in kv:
+                kv['von'] = 0
     g = dict(typ='graf', x=GX, y=GY, breite=GB, hoehe=GH, abstand=0, anim='fade', ein=ein,
              kurven=list(kurven), geraden=[], punkte=list(punkte), pfeile=True, **W)
     g.update(kw)
@@ -181,7 +186,7 @@ clip('exponentialfunktion', 'Exponentialkurve sehen: die Exponentialfunktion',
               430, 42, ein=3.0),
             n('je Schritt: mal @\\fa{2}@', 560, 'blau', ein=3.7),
             graf(W1, [ek([[0, 1, 2, 0]])], ein=3.0,
-                 punkte=[pt(-1, 0.5, 5), pt(0, 1, 5), pt(1, 2, 5), pt(2, 4, 5), pt(3, 8, 5)])),
+                 punkte=[pt(-2, 0.25, 5), pt(-1, 0.5, 5), pt(0, 1, 5), pt(1, 2, 5), pt(2, 4, 5), pt(3, 8, 5)])),
          sz('Die Basis',
             'Die Basis a bestimmt, wie stark die Kurve steigt. Drei hoch x ist steiler, eins Komma fünf hoch x flacher. '
             'Ein Punkt bleibt immer gleich: null, eins. Denn a hoch null ist eins.',
@@ -303,7 +308,7 @@ clip('kontrolle-exponentialfunktion', 'Exponentialkurve sehen: Kontrollfragen zu
                1: 'Das wäre die Spiegelung an der x-Achse — alle Werte negativ.',
                2: 'Spiegeln verschiebt nicht. Ersetze nur x durch −x.'},
               sprich='Spiegelt man y gleich drei hoch x an der y-Achse, entsteht …',
-              rueck_sprich={1: 'Das wäre die Spiegelung an der x-Achse. Alle Werte wären negativ.',
+              rueck_sprich={1: 'Das wäre die Spiegelung an der x-Achse, alle Werte negativ.',
                             2: 'Spiegeln verschiebt nicht. Ersetze nur x durch minus x.'}),
      ], art='Kontrollclip')
 
@@ -323,12 +328,12 @@ clip('wachstum-zerfall', 'Exponentialkurve sehen: Wachstum und Zerfall',
             graf(W2, [ek([[0, 200, 1.5, 0]], startpunkt={'farbe': 2})], ein=2.0,
                  punkte=[pt(1, 300, 5), pt(2, 450, 5), pt(3, 675, 5)])),
          sz('Prozent und Faktor',
-            'Plus fünfzig Prozent heisst mal eins Komma fünf. Ein Zuwachs von p Prozent gibt den Faktor eins plus p. '
+            'Plus fünfzig Prozent heisst mal eins Komma fünf. Ein Zuwachs von p Prozent gibt den Faktor eins plus p Hundertstel. '
             'Eine Abnahme von zwanzig Prozent gibt den Faktor null Komma acht: Es bleiben achtzig Prozent.',
-            f(r'+p \;\to\; \fa{a} = 1 + p', 300, 56),
-            f(r'-p \;\to\; \fa{a} = 1 - p', 390, 56, ein=6.4),
-            n('@+50\\,\\%@: @\\fa{1.5}@ · @-20\\,\\%@: @\\fa{0.8}@', 490, 'blau', ein=7.6),
-            graf(W2, [ek([[0.4, 200, 1.5, 0], [6.4, 200, 1.5, 0], [8.4, 200, 0.8, 0]], startpunkt={'farbe': 2})])),
+            f(r'+p\,\% \;\to\; \fa{a} = 1 + \tfrac{p}{100}', 300, 52),
+            f(r'-p\,\% \;\to\; \fa{a} = 1 - \tfrac{p}{100}', 390, 52, ein=7.2),
+            n('@+50\\,\\%@: @\\fa{1.5}@ · @-20\\,\\%@: @\\fa{0.8}@', 490, 'blau', ein=8.0),
+            graf(W2, [ek([[0.4, 200, 1.5, 0], [7.2, 200, 1.5, 0], [9.2, 200, 0.8, 0]], startpunkt={'farbe': 2})])),
          sz('Verdopplungszeit',
             'Verdoppelt sich eine Grösse alle drei Stunden, schreibt man zwei hoch t durch drei. Nach drei Stunden das '
             'Doppelte, nach sechs das Vierfache, nach neun das Achtfache.',
@@ -357,11 +362,11 @@ clip('wachstum-zerfall', 'Exponentialkurve sehen: Wachstum und Zerfall',
                       xname='t', yname='N'),
                  [ek([[0, 50, 1.2, 0]])], ein=3.0, punkte=[pt(0, 50, 2), pt(1, 60, 5), pt(2, 72, 5), pt(3, 86.4, 5)])),
          sz('Merke',
-            'Zum Mitnehmen: N von t gleich Startwert mal Faktor hoch t. Ein Zuwachs von p Prozent gibt den Faktor eins plus p, '
-            'eine Abnahme eins minus p. Verdopplungszeit und Halbwertszeit stehen im Exponenten: t durch T.',
+            'Zum Mitnehmen: N von t gleich Startwert mal Faktor hoch t. Ein Zuwachs von p Prozent gibt den Faktor eins plus p Hundertstel, '
+            'eine Abnahme eins minus p Hundertstel. Verdopplungszeit und Halbwertszeit stehen im Exponenten: t durch T.',
             titel('Zum Mitnehmen', 250, 76),
             f(r'N(t) = \fb{N_0} \cdot \fa{a}^{\,t}', 410, 56, ein=0.4),
-            n('@\\fa{a} = 1 \\pm p@|Verdopplung: @\\fb{N_0} \\cdot 2^{t/T}@|Halbierung: @\\fb{N_0} \\cdot \\left(\\tfrac12\\right)^{t/T}@',
+            n('@\\fa{a} = 1 \\pm \\tfrac{p}{100}@|Verdopplung: @\\fb{N_0} \\cdot 2^{t/T}@|Halbierung: @\\fb{N_0} \\cdot \\left(\\tfrac12\\right)^{t/T}@',
               540, 'blau', 44, ein=1.2),
             graf(W2, [ek([[0, 200, 1.5, 0]], startpunkt={'farbe': 2})])),
          JETZT_DU,
@@ -404,10 +409,10 @@ clip('kontrolle-wachstum', 'Exponentialkurve sehen: Kontrollfragen zu Wachstum u
                       xname='t', yname='N'),
                  [ek([[0, 20, 1.5, 0]])], ein=1.2, punkte=[pt(0, 20, 5), pt(1, 30, 5), pt(2, 45, 5)])),
          sz('Merke',
-            'Zum Mitnehmen: Prozent werden zum Faktor eins plus oder minus p. Halbwertszeiten zählt man ab. '
+            'Zum Mitnehmen: Prozent werden zum Faktor eins plus oder minus p Hundertstel. Halbwertszeiten zählt man ab. '
             'Und exponentiell erkennt man am gleichen Quotienten.',
             titel('Zum Mitnehmen', 250, 76),
-            n('@+p \\to 1 + p@, @-p \\to 1 - p@|@t : T@ Halbierungen|gleicher Quotient: exponentiell',
+            n('@\\pm p\\,\\% \\to 1 \\pm \\tfrac{p}{100}@|@t : T@ Halbierungen|gleicher Quotient: exponentiell',
               400, 'blau', 44, ein=1.2),
             graf(W2, [ek([[0, 200, 1.5, 0]], startpunkt={'farbe': 2})])),
      ], [
@@ -488,11 +493,11 @@ clip('e-funktion', 'Exponentialkurve sehen: die e-Funktion und der Basiswechsel'
             n('@a^x = e^{\\fb{b}x}@ mit @\\fb{b} = \\ln a@', 500, 'orange', 44, ein=6.0),
             graf(W3, [ek([[0, 1, 2, 0]]), ek([[0, 1, 2, 0]], farbe=3, gestrichelt=True)], ein=1.0)),
          sz('Vorzeichen von b',
-            'Ist die Basis kleiner als eins, ist ihr Logarithmus negativ. Ein Halb hoch x ist e hoch minus null Komma '
+            'Ist die Basis kleiner als eins, ist ihr Logarithmus negativ. Ein Halb hoch x ist ungefähr e hoch minus null Komma '
             'sechs neun x. Positives b heisst Wachstum, negatives b Zerfall.',
-            f(r'\left(\tfrac12\right)^{x} = e^{-0.69\,x}', 300, 54),
-            n('@\\fb{b} \\gt 0@: Wachstum · @\\fb{b} \\lt 0@: Zerfall', 440, 'orange', ein=7.8),
-            graf(W3, [ek([[4.0, 1, 2, 0], [6.0, 1, 0.5, 0]], farbe=3)])),
+            f(r'\left(\tfrac12\right)^{x} = e^{(\ln 0.5)\,x} \approx e^{-0.69\,x}', 300, 46),
+            n('@\\fb{b} \\gt 0@: Wachstum · @\\fb{b} \\lt 0@: Zerfall', 440, 'orange', ein=9.0),
+            graf(W3, [ek([[4.3, 1, 2, 0], [6.3, 1, 0.5, 0]], farbe=3)])),
          sz('Merke',
             'Zum Mitnehmen: e ist ungefähr zwei Komma sieben eins acht. Jede Exponentialfunktion lässt sich zur Basis e '
             'schreiben, a hoch x gleich e hoch b x mit b gleich ln a, und genauso zu jeder anderen Basis.',
@@ -625,22 +630,22 @@ clip('saettigung', 'Exponentialkurve sehen: Sättigung',
             'hundert Prozent lädt. Die Form ist dieselbe, nur gespiegelt.',
             f(r'f(t) = 100 - 80\,e^{-kt}', 300, 54),
             n('@\\fb{A} \\lt S@: steigt · @\\fb{A} \\gt S@: fällt', 440, 'blau', ein=7.7),
-            graf(dict(xbereich=[-0.3, 5], ybereich=[-5, 115], yteilung=yt(20, 40, 60, 80, 100), xteilung=yt(1, 2, 3, 4),
+            graf(dict(xbereich=[-0.3, 5], ybereich=[-5, 115], yteilung=yt(20, 40, 60, 80), xteilung=yt(1, 2, 3, 4),
                       xname='t [h]', yname='Ladung [%]'),
                  [ek([[0, -80, 0.5, 100]], asymptote=True, startpunkt={'farbe': 2})], ein=1.0)),
          sz('Merke',
             'Zum Mitnehmen: Bei der Sättigung nähert sich die Grösse dem Sättigungswert S, ohne ihn zu erreichen. '
-            'Der Rückstand S minus f zerfällt exponentiell. Startwert A, Sättigungswert S und k bestimmen den Verlauf.',
+            'Der Abstand zu S zerfällt exponentiell, und je grösser k, desto schneller. Startwert A, Sättigungswert S und k bestimmen den Verlauf.',
             titel('Zum Mitnehmen', 250, 76),
             f(r'f(t) = S - (S - \fb{A})\,e^{-kt}', 410, 52, ein=0.4),
-            n('@f(0) = \\fb{A}@ · Asymptote @y = S@|Rückstand @S - f(t)@ zerfällt',
+            n('@f(0) = \\fb{A}@ · Asymptote @y = S@|Abstand @|S - f(t)|@ zerfällt',
               540, 'blau', 44, ein=1.2),
             graf(WK, [ek([[0, 60, Q, 20]], asymptote=True, startpunkt={'farbe': 2})])),
          JETZT_DU,
      ])
 
 # ════════════════════════════════════════════════ Kapitel 4 · Kontrolle
-WS = dict(xbereich=[-0.5, 12], ybereich=[-5, 115], yteilung=yt(20, 40, 60, 80, 100), xteilung=yt(2, 4, 6, 8, 10),
+WS = dict(xbereich=[-1.6, 12], ybereich=[-5, 115], yteilung=yt(20, 40, 60, 80, 100), xteilung=yt(2, 4, 6, 8, 10),
           xname='t', yname='y')
 clip('kontrolle-saettigung', 'Exponentialkurve sehen: Kontrollfragen zur Sättigung',
      'Fünf Vorhersagen zu Startwert, Sättigungswert, Asymptote und Rückstand.',
@@ -676,7 +681,7 @@ clip('kontrolle-saettigung', 'Exponentialkurve sehen: Kontrollfragen zur Sättig
             'Zum Mitnehmen: f von null ist der Startwert, die Asymptote liegt beim Sättigungswert, und der Rückstand zerfällt '
             'exponentiell.',
             titel('Zum Mitnehmen', 250, 76),
-            n('@f(0) = \\fb{A}@|@y = S@ Asymptote|Rückstand halbiert sich gleichmässig',
+            n('@f(0) = \\fb{A}@|@y = S@ Asymptote|Rückstand: in gleichen Zeiten halbiert',
               400, 'blau', 44, ein=1.2),
             graf(WS, [ek([[0, -80, math.exp(-0.5), 100]], asymptote=True, startpunkt={'farbe': 2})])),
      ], [
@@ -713,14 +718,18 @@ clip('kontrolle-saettigung', 'Exponentialkurve sehen: Kontrollfragen zur Sättig
                      'Wie gross ist f von vier?',
               rueck_sprich={1: 'Das ist f von zwei. Nach vier Minuten ist zweimal halbiert.',
                             2: 'Rechne den Rückstand: achtzig, dann vierzig, dann …'}),
-         klick('Frage 5', 'Tipp eine Stelle auf der waagrechten Asymptote dieser Kurve ins Bild (bei t = 8).',
-               [8, 100], 'Getroffen: Die Asymptote ist y = 100.',
-               [{'bei': [8, 20], 'text': 'Das ist die Höhe des Startwerts. Die Asymptote liegt dort, wohin die Kurve strebt.',
+         # Bei t = 2 liegt die Kurve bei 70.6 — weit genug unter der Asymptote, dass ein Tipp auf
+         # die Kurve nicht als Treffer gilt (bei t = 8 läge sie nur 1.5 darunter).
+         klick('Frage 5', 'Tipp die Stelle der waagrechten Asymptote dieser Kurve bei t = 2 ins Bild.',
+               [2, 100], 'Getroffen: Die Asymptote ist y = 100.',
+               [{'bei': [2, 70.6], 'text': 'Das ist die Kurve selbst. Die Asymptote liegt dort, wohin die Kurve strebt.',
+                 'sprich': 'Das ist die Kurve selbst. Die Asymptote liegt dort, wohin die Kurve strebt.'},
+                {'bei': [2, 20], 'text': 'Das ist die Höhe des Startwerts. Die Asymptote liegt dort, wohin die Kurve strebt.',
                  'sprich': 'Das ist die Höhe des Startwerts. Die Asymptote liegt dort, wohin die Kurve strebt.'},
-                {'bei': [8, 0], 'text': 'Die x-Achse ist hier keine Asymptote: Die Kurve ist um 100 verschoben.',
+                {'bei': [2, 0], 'text': 'Die x-Achse ist hier keine Asymptote: Die Kurve ist um 100 verschoben.',
                  'sprich': 'Die x-Achse ist hier keine Asymptote. Die Kurve ist um hundert verschoben.'}],
                'Nicht ganz. Der grüne Kreis zeigt die Stelle — wohin strebt die Kurve?',
-               sprich='Tipp eine Stelle auf der waagrechten Asymptote dieser Kurve ins Bild, bei t gleich acht.',
+               sprich='Tipp die Stelle der waagrechten Asymptote dieser Kurve bei t gleich zwei ins Bild.',
                falsch_sprich='Nicht ganz. Der grüne Kreis zeigt die Stelle. Wohin strebt die Kurve?',
                # y-Einheiten sind hier klein (120 auf 744 px): 4 Einheiten ≈ 25 px.
                tol=4),
@@ -737,7 +746,8 @@ clip('logarithmusfunktion', 'Exponentialkurve sehen: die Logarithmusfunktion',
             'braucht es bis acht? Die Antwort ist drei, der Logarithmus von acht zur Basis zwei.',
             titel('Die Umkehrfrage', 280, 80),
             f(r'2^{x} = 8 \;\Leftrightarrow\; x = \log_2 8 = 3', 430, 52, ein=7.2),
-            graf(WL, [ek([[0, 1, 2, 0]], marken=[{'x': 3, 'text': '(3 | 8)', 'farbe': 1}])], ein=1.0)),
+            graf(WL, [ek([[0, 1, 2, 0]])], ein=1.0),
+            graf(WL, [ek([[0, 1, 2, 0]], marken=[{'x': 3, 'text': '(3 | 8)', 'farbe': 1}])], ein=6.0)),
          sz('Spiegeln',
             'Die Logarithmusfunktion ist die Umkehrfunktion. Ihr Graph ist das Spiegelbild der Exponentialkurve an der '
             'Winkelhalbierenden y gleich x. Aus drei, acht wird acht, drei.',
@@ -766,7 +776,10 @@ clip('logarithmusfunktion', 'Exponentialkurve sehen: die Logarithmusfunktion',
             n('erst die Potenz freistellen,|dann logarithmieren', 500, 'blau', 44, ein=8.8),
             graf(dict(xbereich=[-0.5, 6.5], ybereich=[-5, 110], yteilung=yt(20, 40, 60, 80, 100), xteilung=yt(1, 2, 3, 4, 5, 6),
                       xname='t', yname='y'),
-                 [ek([[0, 3, 2, 0]]), fest('96', farbe=5)], ein=1.0, punkte=[pt(5, 96, 3, '(5 | 96)', [4.6, 104], 'end')])),
+                 [ek([[0, 3, 2, 0]]), fest('96', farbe=5)], ein=1.0),
+            graf(dict(xbereich=[-0.5, 6.5], ybereich=[-5, 110], yteilung=yt(20, 40, 60, 80, 100), xteilung=yt(1, 2, 3, 4, 5, 6),
+                      xname='t', yname='y'),
+                 [ek([[0, 3, 2, 0]]), fest('96', farbe=5)], ein=8.6, punkte=[pt(5, 96, 3, '(5 | 96)', [4.6, 104], 'end')])),
          sz('Merke',
             'Zum Mitnehmen: Die Logarithmusfunktion ist die Umkehrfunktion der Exponentialfunktion, gespiegelt an y gleich x. '
             'Sie geht durch eins, null, hat die y-Achse als Asymptote und ist nur für positive x definiert.',
@@ -802,7 +815,7 @@ clip('kontrolle-logarithmus', 'Exponentialkurve sehen: Kontrollfragen zur Logari
                  punkte=[pt(2, 4, 1, '(2 | 4)', [1.6, 4.9], 'end'), pt(4, 2, 3, '(4 | 2)', [4.4, 1.2])])),
          sz('Frage 4',
             'Umkehrfunktion: nach x auflösen, dann tauschen. y plus eins gleich drei hoch x, also x gleich log drei von '
-            'y plus eins. Getauscht: y gleich log drei von x plus eins.',
+            'Klammer y plus eins. Getauscht: y gleich log drei von Klammer x plus eins.',
             f(r'y = 3^{x} - 1 \;\Rightarrow\; x = \log_3(y + 1)', 300, 48, ein=1.0),
             f(r'f^{-1}(x) = \fc{\log_3(x + 1)}', 400, 50, ein=6.0),
             graf(dict(xbereich=[-3, 6], ybereich=[-3, 6], yteilung=yt(-2, 2, 4), xteilung=yt(-2, 2, 4)),

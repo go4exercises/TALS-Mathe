@@ -559,6 +559,14 @@ gegen sie und darüber hinaus.
 - **Auch die Begründung eines richtigen Satzes prüfen.** «Höchstens n − 1 Extremstellen, weil
   zwischen zwei Nullstellen höchstens ein Hoch- oder Tiefpunkt liegt» — der Satz stimmt, die
   Begründung nicht (\(x^4 - 2x^2 - 3\)). Gegenbeispiele stehen oft schon im eigenen Leitprogramm.
+- **Die eigene Simulation als Gegenbeispiel-Probe.** Exp/Log (04.10.2026): «\(f\) erreicht \(S\)
+  nie» und «der Rückstand \(S - f(t)\) zerfällt» — die Sättigungs-Simulation liess \(A = S\)
+  (konstant) und \(A \gt S\) (Rückstand negativ, steigt) einstellen. Jede Aussage gegen alle
+  Reglerstellungen der eigenen Animation lesen; richtig war «Abstand \(|S - f(t)|\)» mit \(A \neq S\).
+- **Was eine Formel sagt, sagt der Ton genau so.** «Faktor eins plus p» statt «eins plus
+  p Hundertstel» gibt bei 5 % den Faktor 6 — gesprochene Kurzformen gegen das Festhalten rechnen.
+- **Nicht nur nicht abfragen, auch nicht benutzen, was erst später kommt**: \(\ln\) in Kapitel 3,
+  erklärt erst in Kapitel 5. Vorgezogenes kurz erklären und im Vortest prüfen.
 
 **Clips**
 - **Eine neue Bewegung einmal wirklich laufen lassen.** Nicht ein Bild ansehen, sondern
@@ -571,6 +579,10 @@ gegen sie und darüber hinaus.
   neutral, Begleiter und Beschriftung erst nach der Antwort). Das gilt auch für
   **Begleiter, die ihre Koordinaten anschreiben** — ein `startpunkt` oder eine `marke`
   auf dem Klickziel beantwortet die Frage, bevor sie gestellt ist.
+- **Klicktoleranz gilt in Dateneinheiten, auf beiden Achsen.** Liegt die Kurve näher am Klickziel
+  als die Toleranz (Sättigung: \(f(8) = 98.5\) bei Ziel 100, Toleranz 4), zählt der Klick auf die
+  Kurve als richtig. Abstand zur Kurve nachrechnen und die Kurve als `fallen`-Punkt eintragen;
+  bei grosser \(y\)-Spanne (1000) ist ein Klick untreffbar — dort eine Wahlfrage.
 - Bild und Ton gleichzeitig: Bewegungen nach `sprechzeiten.py` legen, nicht nach Gefühl.
   Was der Ton sagt («senkt um eins»), zeigt das Bild genau so.
 - Eindeutige Begriffe («x-Achse» oder «Symmetrieachse», nie «Achse»).
@@ -585,7 +597,8 @@ gegen sie und darüber hinaus.
   Beispiele aus dem Clip; Überspringen wird als Überspringen gezählt (`pruef-leiste`).
 - **Auch nicht beim Wechsel**: Setzt eine Aufgabe ein neues Polynom, darf der Endzustand der
   vorigen Aufgabe (Reglerstellung) das neue Ziel nicht schon erfüllen — `pruef-leiste` prüft nur
-  den Startzustand. Im `setup` die Regler zurücksetzen.
+  den Startzustand. Im `setup` die Regler zurücksetzen — oder allgemein in der Leiste: `gehe(j)`
+  setzt alle `input[type=range]` auf `defaultValue` (Vorbild `exp-log-funktionen/seite.js`).
 - **Korrigierende Listener vor dem Zeichnen registrieren** (`ohneNull`): Sonst zeichnet die
   Simulation noch den verbotenen Wert, während der Regler schon daneben steht.
 - Zufallsübungen: nur lösbare, «schöne» Fälle; Sonderwerte (0, ±1, gleiche Zahlen) erzeugen
@@ -608,7 +621,10 @@ gegen sie und darüber hinaus.
 - **Fragetexte eines Kontrollclips verschieden beginnen lassen**: `pruef-fragen` erkennt eine Frage
   an ihren ersten 20 Zeichen; zwei Fragen «Welche Nullstellen hat …» lassen den Durchlauf scheitern.
 - Live-Anzeigen runden nur mit «≈».
-- Je Kapitel mindestens eine «Warum»-Aufgabe und eine Aufgabe am Graphen (§9).
+- Je Kapitel mindestens eine «Warum»-Aufgabe und eine Aufgabe am Graphen (§9). Ein Graph zum
+  **Ablesen** braucht beschriftete Stellen an den abzulesenden Werten, nicht nur an der Einheit.
+- Verlangt ein Kapitelziel «zeichnen» oder «skizzieren», wird gezeichnet — in einer Aufgabe und im
+  Gesamttest (Exp/Log: \(\log_2 x\) durch Spiegeln einzeichnen).
 
 **Gesamttest und Bewertungspaket**
 - Jedes Kapitelziel hat eine Aufgabe; kein Modell aus Selbsttest oder Übung wiederholt.

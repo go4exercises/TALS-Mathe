@@ -124,7 +124,13 @@
       bt.textContent = erledigt[i] ? 'Nächste ▶' : 'überspringen';
       box.classList.toggle('geloest', !!erledigt[i]);
     }
-    function gehe(j){ i = j; if (sim.aufraeumen) sim.aufraeumen(); zeigen(); if (sim.zeichnen) sim.zeichnen(); }
+    // Beim Wechsel die Regler auf den Startwert: Sonst erfüllt der Endzustand der vorigen
+    // Aufgabe die nächste schon, bevor jemand etwas getan hat (HOWTO §15).
+    function gehe(j){
+      i = j;
+      fig.querySelectorAll('input[type=range]').forEach(function(inp){ inp.value = inp.defaultValue; });
+      if (sim.aufraeumen) sim.aufraeumen(); zeigen(); if (sim.zeichnen) sim.zeichnen();
+    }
     bt.addEventListener('click', function(){
       if (i >= n){ if (anzahl() === n){ erledigt = {}; gehe(0); } else gehe(offen(0)); }
       else gehe(offen(i + 1));
@@ -175,7 +181,7 @@
     ohneEins(fig.querySelector('input[data-p="a"]'));
     var r = regler(fig, zeichnen);
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
-    function zust(){ var w = werte(r); gesehen[w.a > 1 ? 'g' : 'k'] = true;
+    function zust(){ var w = werte(r); if (bewegt.a) gesehen[w.a > 1 ? 'g' : 'k'] = true;
       return { a: w.a, bewegt: bewegt, beide: gesehen.g && gesehen.k }; }
     var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ ziel = null; bewegt = {}; gesehen = {}; } };
     function zeichnen(){
@@ -237,7 +243,7 @@
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Zieh am Prozentsatz. Wann steigt die Kurve, wann fällt sie?', ok: function(s){ return s.bewegt.p; } },
       // Startzustand N₀ = 200, +50 % (wie im Clip) — keine Aufgabe trifft ihn.
-      { text: 'Stell einen <b>Zerfall</b> um 20 % pro Schritt ein.', ok: function(s){ return s.p === -20; } },
+      { text: 'Stell einen <b>Zerfall</b> um 25 % pro Schritt ein.', ok: function(s){ return s.p === -25; } },
       { text: 'Stell ein Modell ein, das sich in jedem Schritt <b>verdoppelt</b>.', ok: function(s){ return s.p === 100; } },
       { text: 'Stell \\(N_0 = 400\\) und eine <b>Halbierung</b> pro Schritt ein und lies \\(N(3)\\) ab.',
         ok: function(s){ return s.n0 === 400 && s.p === -50 && s.t === 3; } },
@@ -271,7 +277,7 @@
       var s = zust();
       K.leeren();
       K.kurve(function(x){ return Math.pow(s.c, x); }, 'kurve');
-      K.kurve(function(x){ return Math.pow(s.a, s.b * x); }, 'kurve gruen gestrichelt');
+      K.kurve(function(x){ return Math.pow(s.a, s.b * x); }, 'bau');
       rolle(fig, 'formel').innerHTML = 'Ziel: y = ' + sp('tx-blau', basisText(s.c)) + '<sup>x</sup> &nbsp;·&nbsp; gebaut: y = '
         + (s.e ? 'e' : '2') + '<sup>' + sp('tx-orange', z(s.b)) + '·x</sup> &nbsp;·&nbsp; '
         + (s.passt ? '<b>passt</b>: b ' + (Math.abs(s.b - Math.round(s.b)) < 1e-9 && !s.e ? '= ' : '≈ ') + (s.e ? 'ln ' : 'log₂ ') + basisText(s.c)
@@ -286,8 +292,8 @@
       fall(4, false, 'Schreib \\(4^x\\) als \\(2^{bx}\\): Stell \\(b\\) ein.'),
       fall(0.25, false, 'Stell \\(c = \\tfrac14\\) ein und schreib \\(\\left(\\tfrac14\\right)^x\\) als \\(2^{bx}\\).'),
       fall(9, true, 'Stell \\(c = 9\\) ein. Zur Basis 2 passt keine schöne Zahl — setz den Haken «Basis \\(e\\)» und triff \\(9^x\\) mit \\(e^{bx}\\).'),
-      fall(2, true, 'Basis \\(e\\): Schreib \\(2^x\\) als \\(e^{bx}\\). Welches \\(b\\) ist es ungefähr?'),
-      fall(0.5, true, 'Basis \\(e\\): Und \\(\\left(\\tfrac12\\right)^x\\)? Achte auf das Vorzeichen von \\(b\\).'),
+      fall(4, true, 'Basis \\(e\\): Schreib \\(4^x\\) als \\(e^{bx}\\). Welches \\(b\\) ist es ungefähr?'),
+      fall(0.25, true, 'Basis \\(e\\): Und \\(\\left(\\tfrac14\\right)^x\\)? Achte auf das Vorzeichen von \\(b\\).'),
       fall(3, true, 'Basis \\(e\\): Schreib \\(3^x\\) als \\(e^{bx}\\).')
     ], sim);
     zeichnen();
@@ -296,7 +302,7 @@
   /* ---------- Kapitel 4: Sättigung ----------
      Unterschied zur Themenseite 3.4a: dort steht das Sättigungsmodell nur als Formel mit dem
      Kaffee-Beispiel. Hier stellt man Startwert A, Sättigungswert S und k ein; die Asymptote
-     y = S und der Rückstand S − f(t) sind eingezeichnet. */
+     y = S und der Abstand |S − f(t)| sind eingezeichnet. */
   (function(){
     var fig = document.getElementById('sim4'); if (!fig) return;
     var K = Achsen(fig.querySelector('svg'), { w: 300, h: 300, x0: -5, x1: 40, y0: -5, y1: 110, sx: 10, sy: 20,
@@ -315,16 +321,16 @@
       K.strecke(10, f(10), 10, s.S, 'rueckstand hilfslinie');
       K.punkt(0, s.A, 'p-start', '(0 | ' + z(s.A) + ')', 8, s.A > s.S ? -8 : 16);
       var D = s.S - s.A;
-      rolle(fig, 'formel').innerHTML = 'f(t) = ' + z(s.S) + (D >= 0 ? ' − ' : ' + ') + z(Math.abs(D)) + '·e<sup>−' + z(s.k) + 't</sup>'
+      rolle(fig, 'formel').innerHTML = 'f(t) = ' + z(s.S) + (D === 0 ? '' : (D > 0 ? ' − ' : ' + ') + z(Math.abs(D)) + '·e<sup>−' + z(s.k) + 't</sup>')
         + ' &nbsp;·&nbsp; Start ' + sp('tx-orange', z(s.A)) + ', Sättigung ' + z(s.S) + ' &nbsp;·&nbsp; '
         + (s.A < s.S ? 'steigt gegen ' + z(s.S) : s.A > s.S ? 'fällt gegen ' + z(s.S) : 'bleibt konstant')
-        + '<br>Rückstand bei t = 10: ' + zz(Math.abs(D) * Math.exp(-10 * s.k));
+        + '<br>Abstand zu S bei t = 10: ' + zz(Math.abs(D) * Math.exp(-10 * s.k));
       pruefen();
     }
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Zieh an \\(k\\). Was ändert sich — und was bleibt?', ok: function(s){ return s.bewegt.k; } },
       // Startzustand Kaffee A = 80, S = 20, k = 0.07 (wie im Clip) — keine Aufgabe trifft ihn.
-      { text: 'Stell einen Akku ein, der von 20 % auf 100 % lädt.', ok: function(s){ return s.A === 20 && s.S === 100; } },
+      { text: 'Stell einen leeren Akku ein, der auf 100 % lädt.', ok: function(s){ return s.A === 0 && s.S === 100; } },
       { text: 'Stell eine Abkühlung von 90 °C auf eine Raumtemperatur von 25 °C ein.', ok: function(s){ return s.A === 90 && s.S === 25; } },
       { text: 'Was geschieht, wenn Startwert und Sättigungswert gleich sind? Stell es ein.', ok: function(s){ return s.A === s.S; } },
       { text: 'Bau nach: \\(f(t) = 50 - 40\\,e^{-0.2t}\\)', ok: function(s){ return s.A === 10 && s.S === 50 && Math.abs(s.k - 0.2) < 1e-9; } },
@@ -367,7 +373,7 @@
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Fahr den Läufer von links nach rechts. Wo ist der Logarithmus negativ, wo null?', ok: function(s){ return s.bewegt.x; } },
       // Startzustand Basis 2, Läufer bei x = 4 — keine Aufgabe trifft ihn.
-      { text: 'Basis 2: Bring den Läufer auf \\(\\log_2 8\\). Wie gross ist der Wert?', ok: function(s){ return s.a === 2 && nah(s.x, 8); } },
+      { text: 'Basis \\(e\\): Finde die Stelle \\(x\\), an der \\(\\ln x = 2\\) ist (auf eine Stelle genau).', ok: function(s){ return Math.abs(s.a - Math.E) < 1e-9 && Math.abs(s.y - 2) < 0.02; } },
       { text: 'Basis 3: Finde die Stelle \\(x\\), an der \\(\\log_3 x = 2\\) ist.', ok: function(s){ return s.a === 3 && nah(s.x, 9); } },
       { text: 'Bring den Läufer auf die Nullstelle. Gilt sie für jede Basis?', ok: function(s){ return nah(s.x, 1); } },
       { text: 'Stell die <b>fallende</b> Logarithmuskurve ein.', ok: function(s){ return s.a < 1; } },
@@ -413,14 +419,18 @@
       'b|2|3', 'b|3|2', 'b|-1|0.2', 'b|2|2.5', 'b|2|5', 'b|-2|0.25', 'b|3|0.1', 'b|-3|0.5',
       'g|3', 'g|0.5',
       'n|200|1.5|2', 'n|200|1.5|3', 'n|2000|1.05|2', 'n|400|0.5|3', 'n|100|1.2|2',
-      'h|80|4|8', 'h|80|4|12', 'h|64|5|15', 'h|120|8|24', 'h|240|6|18',
+      'h|80|4|8|false', 'h|80|4|12|false', 'h|64|5|15|false', 'h|120|8|24|false',
       'c|8|2', 'c|9|3', 'c|4|2', 'c|16|2', 'c|0.125|2', 'c|0.25|2',
       'e|5', 'e|2', 'e|0.5',
       'l|2|8', 'l|2|32', 'l|2|64', 'l|2|0.125', 'l|10|1000', 'l|2|16', 'l|10|0.001', 'l|3|9', 'l|2|0.5', 'l|10|10',
       'u|3|-1', 'u|3|1', 'u|2|-3',
       'q|3|2|96', 'q|5|2|160',
+      'c|' + Math.SQRT2 + '|2', 'c|4|2', 'u|2|1', 'u|3|1', 'l|3|1', 'l|2|4', 'l|3|9', 'l|3|' + (1 / 3), 'h|80|4|4|false',
+      'p|f|50', 'p|f|5', 'p|f|-20', 'p|f|8', 'p|f|-15', 'p|p|-3', 'p|f|25', 'p|f|-25', 'p|f|30', 'p|f|-10',
+      's|30|20|0.5', 's|100|80|0.5', 's|30|-50|0.3', 's|50|40|0.2',
+      'w2|100|20|2|2', 'w2|20|80|10|1', 'w2|20|80|10|2', 'w2|20|80|10|3', 'w2|22|6|15|1', 'w2|22|6|15|2', 'w2|22|6|15|3',
       // Gesamttest (downloads/leitprogramme/exp-log-funktionen/gesamttest.tex)
-      'n|500|1.2|2', 'c|' + (1 / 9) + '|3', 'l|2|0.0625', 'l|10|0.01'
+      'n|500|1.2|3', 'c|' + (1 / 9) + '|3', 'c|25|5', 'h|240|6|18|false', 'h|240|6|24|true', 'u|2|-3', 'w2|90|20|5|2'
     ];
     function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
 
@@ -431,6 +441,7 @@
         eingabe: function(A){ return { y: String(A.y) }; },
         neu: function(){ var a = zufall([2, 3, 4, 5, 10, 0.5, 0.25]), x = zufall([-3, -2, -1, 0, 1, 2, 3]);
           if (a === 10 && x > 2) x = 2; if ((a === 5 || a === 4) && x > 3) x = 3;
+          if (a === 2 && x === 2) x = 3;     // 2² = 2·2: der Fehler «Exponent als Faktor» wäre unsichtbar
           return { a: a, x: x, y: pot(a, x),
             text: 'Berechne \\(f(' + tz(x) + ')\\) für \\(f(x) = ' + basT(a) + '^{x}\\) ohne Taschenrechner (Bruch oder Dezimalzahl).' }; },
         fehler: function(A){ var f = [];
@@ -442,18 +453,20 @@
           if (gl(e.y, A.y)) return null;
           if (A.x === 0) return 'Jede Basis hoch null ist \\(1\\) — darum gehen alle Kurven durch \\((0 \\mid 1)\\).';
           if (A.x < 0 && gl(e.y, -pot(A.a, -A.x))) return 'Ein negativer Exponent bedeutet den Kehrwert, nicht ein negatives Ergebnis: \\(a^{-n} = \\frac{1}{a^n}\\).';
-          if (gl(e.y, A.a * A.x)) return 'Der Exponent ist kein Faktor: \\(' + basT(A.a) + '^{' + tz(A.x) + '}\\) heisst ' + Math.abs(A.x) + '-mal mit der Basis multiplizieren.';
+          if (gl(e.y, A.a * A.x)) return 'Der Exponent ist kein Faktor: \\(' + basT(A.a) + '^{' + Math.abs(A.x) + '}\\) heisst ' + Math.abs(A.x) + '-mal mit der Basis multiplizieren' + (A.x < 0 ? ' — und beim negativen Exponenten davon den Kehrwert.' : '.');
           return 'Rechne \\(' + basT(A.a) + '^{' + Math.abs(A.x) + '}\\)' + (A.x < 0 ? ' und nimm davon den Kehrwert.' : '.'); },
         loesung: function(A){ return basT(A.a) + '^{' + tz(A.x) + '} = ' + zT(A.y); } },
 
       'basis-punkt': { felder: ['a'], muster: 'a = {a}',
         schl: function(A){ return 'b|' + A.n + '|' + A.a; },
         eingabe: function(A){ return { a: String(A.a) }; },
-        neu: function(){ var a = zufall([2, 3, 4, 5, 10, 0.5, 0.2, 0.25]), n = zufall([2, 3, -1, -2]);
+        neu: function(){ var a = zufall([2, 3, 4, 5, 10, 0.5, 0.2, 0.25]), n = zufall([2, 3, -1, -2, 0.5]);
           if (a === 10 && n === 3) n = 2; if ((a === 0.2 || a === 0.25) && n === 3) n = -2;
+          if (n === 0.5) a = zufall([4, 9, 16, 25]);     // gebrochener Exponent: Quadratzahl als Basis
+          if (a === 2 && n === 2) a = 3;                 // (2 | 4): 4 : 2 = 2 wäre zufällig richtig
           var v = pot(a, n);
           return { a: a, n: n, v: v,
-            text: 'Der Graph von \\(y = a^x\\) geht durch \\((' + tz(n) + ' \\mid ' + zT(v) + ')\\). Bestimme die Basis \\(a\\).' }; },
+            text: 'Der Graph von \\(y = a^x\\) geht durch \\((' + zT(n) + ' \\mid ' + zT(v) + ')\\). Bestimme die Basis \\(a\\).' }; },
         fehler: function(A){ var f = [], q = A.v / A.n;
           if (!gl(q, A.a) && q > 0) f.push([{ a: String(q) }, 'teilen']);
           if (A.n < 0 && !gl(1 / A.a, A.a)) f.push([{ a: String(1 / A.a) }, 'Kehrwert']);
@@ -463,13 +476,14 @@
           if (gl(e.a, A.v / A.n)) return 'Nicht teilen: Gesucht ist die Zahl, deren \\(' + tz(A.n) + '\\)-te Potenz \\(' + zT(A.v) + '\\) ist.';
           if (A.n < 0 && gl(e.a, 1 / A.a)) return 'Der Exponent ist negativ: \\(a^{' + tz(A.n) + '} = \\frac{1}{a^{' + (-A.n) + '}}\\). Den Kehrwert beachten.';
           if (e.a <= 0) return 'Die Basis einer Exponentialfunktion ist positiv.';
-          return 'Setz ein: \\(a^{' + tz(A.n) + '} = ' + zT(A.v) + '\\), dann die ' + (A.n < 0 ? 'Kehrwert-' : '') + 'Wurzel ziehen.'; },
+          if (A.n === 0.5) return 'Setz ein: \\(a^{1/2} = \\sqrt{a} = ' + zT(A.v) + '\\), also quadrieren.';
+          return 'Setz ein: \\(a^{' + tz(A.n) + '} = ' + zT(A.v) + '\\)' + (A.n < 0 ? ', also \\(a^{' + (-A.n) + '} = ' + zT(1 / A.v) + '\\)' : '') + (Math.abs(A.n) > 1 ? ', dann die Wurzel ziehen.' : '.'); },
         loesung: function(A){ return 'a^{' + tz(A.n) + '} = ' + zT(A.v) + ' \\Rightarrow a = ' + zT(A.a); } },
 
       'graf-basis': { felder: ['a'], muster: 'f(x) = {a}ˣ', graf: true,
         schl: function(A){ return 'g|' + A.a; },
         eingabe: function(A){ return { a: String(A.a) }; },
-        neu: function(){ var a = zufall([2, 3, 4, 0.5, 1 / 3, 0.25]);
+        neu: function(){ var a = zufall([2, 3, 4, 0.5, 0.2, 0.25]);
           return { a: a, text: 'Lies die Basis \\(a\\) am Graphen von \\(y = a^x\\) ab (der markierte Punkt liegt auf einem Gitterpunkt). Bruch oder Dezimalzahl.' }; },
         zeichne: function(bild, A){
           var K = Achsen(bild, { w: 170, h: 170, x0: -3, x1: 3, y0: -0.6, y1: 5.4, r: 3.5, pfeil: 6, xm: [-2, -1, 1, 2], ym: [1, 2, 3, 4] });
@@ -484,6 +498,7 @@
 
       /* ── Kapitel 2: Wachstum und Zerfall ─────────────────────── */
       'prozent-faktor': { felder: ['w'], muster: '{w}',
+        schl: function(A){ return 'p|' + A.art + '|' + A.p; },
         eingabe: function(A){ return { w: String(A.loes) }; },
         neu: function(){ var p = zufall([3, 5, 8, 12, 15, 20, 25, 40, 60]) * zufall([1, -1]), richtung = Math.random() < 0.5;
           var a = Math.round((1 + p / 100) * 1000) / 1000;
@@ -506,6 +521,7 @@
         schl: function(A){ return 'n|' + A.n0 + '|' + A.a + '|' + A.t; },
         eingabe: function(A){ return { n: String(A.n) }; },
         neu: function(){ var n0 = zufall([100, 200, 400, 500, 1000]), a = zufall([1.1, 1.2, 1.5, 2, 0.5, 0.8, 0.9]), t = zufall([2, 3]);
+          if (a === 2 && t === 2) t = 3;   // 2² = 2·2: «Exponent als Faktor» wäre unsichtbar
           return { n0: n0, a: a, t: t, n: Math.round(n0 * pot(a, t) * 1e6) / 1e6,
             text: 'Gegeben \\(N(t) = ' + n0 + ' \\cdot ' + a + '^{t}\\). Berechne \\(N(' + t + ')\\) ohne Taschenrechner.' }; },
         fehler: function(A){ var f = [], lin = A.n0 * (1 + (A.a - 1) * A.t), mal = A.n0 * A.a * A.t;
@@ -519,22 +535,33 @@
           return 'Schritt für Schritt: \\(' + A.n0 + ' \\cdot ' + A.a + ' = ' + Math.round(A.n0 * A.a * 1e6) / 1e6 + '\\), dann weiter mal \\(' + A.a + '\\).'; },
         loesung: function(A){ return 'N(' + A.t + ') = ' + A.n0 + ' \\cdot ' + A.a + '^{' + A.t + '} = ' + A.n; } },
 
-      'halbwertszeit': { felder: ['m'], muster: 'm = {m}',
-        schl: function(A){ return 'h|' + A.m0 + '|' + A.T + '|' + A.t; },
-        eingabe: function(A){ return { m: String(A.m) }; },
-        neu: function(){ var j = zufall([1, 2, 3, 4]), T = zufall([2, 3, 4, 5, 6, 8, 10]), m0 = zufall([16, 32, 48, 64, 80, 96, 160, 240]);
-          var verd = Math.random() < 0.3;
-          return { m0: m0, T: T, t: j * T, j: j, verd: verd, m: verd ? m0 * pot(2, j) : m0 / pot(2, j),
-            text: verd ? 'Eine Kultur von ' + m0 + ' Zellen verdoppelt sich alle ' + T + ' Stunden. Wie viele Zellen sind es nach ' + j * T + ' Stunden?'
-                       : 'Ein Stoff hat eine Halbwertszeit von ' + T + ' Tagen. Von ' + m0 + ' mg — wie viel ist nach ' + j * T + ' Tagen übrig?' }; },
-        fehler: function(A){ var f = [], lin = A.verd ? A.m0 * (1 + A.j) : A.m0 / (2 * A.j);
-          if (!gl(lin, A.m) && A.j > 1) f.push([{ m: String(lin) }, 'nicht']);
-          return f; },
+      'halbwertszeit': { felder: ['m'], muster: '{m}',
+        schl: function(A){ return 'h|' + A.m0 + '|' + A.T + '|' + A.t + '|' + A.zeit; },
+        eingabe: function(A){ return { m: String(A.zeit ? A.t : A.m) }; },
+        // Halbierung nur mit j ≥ 3, Verdopplung mit j ≥ 2: Sonst gäbe die lineare Rechnung
+        // (m₀ : 2j bzw. m₀·(1 + j)) zufällig dasselbe. Bei «Zeit gesucht» wird j erfragt.
+        neu: function(){ var verd = Math.random() < 0.3, zeit = Math.random() < 0.4;
+          var j = zeit ? zufall([2, 3, 4]) : (verd ? zufall([2, 3, 4]) : zufall([3, 4])), T = zufall([2, 3, 4, 5, 6, 8, 10]),
+              m0 = zufall([16, 32, 48, 64, 80, 96, 160, 240]);
+          var m = verd ? m0 * pot(2, j) : m0 / pot(2, j), was = verd ? 'Zellen' : 'mg', einh = verd ? 'Stunden' : 'Tagen';
+          var satz = verd ? 'Eine Kultur von ' + m0 + ' Zellen verdoppelt sich alle ' + T + ' Stunden.' : 'Ein Stoff hat eine Halbwertszeit von ' + T + ' Tagen; zu Beginn sind es ' + m0 + ' mg.';
+          return { m0: m0, T: T, t: j * T, j: j, verd: verd, zeit: zeit, m: m,
+            text: satz + (zeit ? ' Nach wie vielen ' + einh + ' sind es ' + m + ' ' + was + '?' : ' Wie viele ' + (verd ? 'Zellen' : 'mg') + ' sind es nach ' + j * T + ' ' + einh + '?') }; },
+        fehler: function(A){
+          if (A.zeit) return [[{ m: String(A.j) }, 'Anzahl']];
+          var lin = A.verd ? A.m0 * (1 + A.j) : A.m0 / (2 * A.j);
+          return gl(lin, A.m) ? [] : [[{ m: String(lin) }, 'nicht']]; },
         pruefen: function(A, e){
+          if (A.zeit){
+            if (gl(e.m, A.t)) return null;
+            if (gl(e.m, A.j)) return 'Das ist die Anzahl ' + (A.verd ? 'Verdopplungen' : 'Halbierungen') + '. Gefragt ist die Zeit: mal \\(' + A.T + '\\).';
+            return 'Wie oft muss man ' + (A.verd ? 'verdoppeln' : 'halbieren') + ', bis \\(' + A.m + '\\) erreicht ist? Jedes Mal vergehen \\(' + A.T + '\\) Zeiteinheiten.'; }
           if (gl(e.m, A.m)) return null;
-          if (A.j > 1 && gl(e.m, A.verd ? A.m0 * (1 + A.j) : A.m0 / (2 * A.j))) return 'Das wäre nicht exponentiell: In jeder ' + (A.verd ? 'Verdopplungszeit wird verdoppelt' : 'Halbwertszeit wird halbiert') + ' — immer vom neuen Wert aus.';
+          if (gl(e.m, A.verd ? A.m0 * (1 + A.j) : A.m0 / (2 * A.j))) return 'Das wäre nicht exponentiell: In jeder ' + (A.verd ? 'Verdopplungszeit wird verdoppelt' : 'Halbwertszeit wird halbiert') + ' — immer vom neuen Wert aus.';
           return 'Zähl, wie oft \\(' + A.T + '\\) in \\(' + A.t + '\\) passt, und ' + (A.verd ? 'verdopple' : 'halbiere') + ' so oft.'; },
-        loesung: function(A){ return A.m0 + ' \\cdot ' + (A.verd ? '2' : '\\left(\\tfrac12\\right)') + '^{' + A.t + '/' + A.T + '} = ' + A.m0 + ' \\cdot ' + (A.verd ? '2' : '\\left(\\tfrac12\\right)') + '^{' + A.j + '} = ' + A.m; } },
+        loesung: function(A){ var b = A.verd ? '2' : '\\left(\\tfrac12\\right)';
+          return A.zeit ? A.m0 + ' \\cdot ' + b + '^{' + A.j + '} = ' + A.m + ' \\Rightarrow t = ' + A.j + ' \\cdot ' + A.T + ' = ' + A.t
+                        : A.m0 + ' \\cdot ' + b + '^{' + A.t + '/' + A.T + '} = ' + A.m0 + ' \\cdot ' + b + '^{' + A.j + '} = ' + A.m; } },
 
       /* ── Kapitel 3: e-Funktion und Basiswechsel ──────────────── */
       'basiswechsel': { felder: ['b'], muster: 'b = {b}',
@@ -552,12 +579,12 @@
           if (gl(e.b, -A.b)) return 'Vorzeichen: Eine Basis ' + (A.c < 1 ? 'kleiner' : 'grösser') + ' als 1 braucht einen ' + (A.c < 1 ? 'negativen' : 'positiven') + ' Exponenten \\(b\\).';
           if (gl(e.b, A.c / A.a)) return 'Nicht teilen: Gesucht ist der Exponent \\(b\\) mit \\(' + A.a + '^{b} = ' + zT(A.c) + '\\).';
           return 'Schreib die Basis als Potenz von \\(' + A.a + '\\): \\(' + zT(A.c) + ' = ' + A.a + '^{b}\\).'; },
-        loesung: function(A){ return zT(A.c) + ' = ' + A.a + '^{' + zT(A.b) + '} \\Rightarrow b = ' + zT(A.b); } },
+        loesung: function(A){ return (A.b === 0.5 ? '\\sqrt{' + A.a + '}' : zT(A.c)) + ' = ' + A.a + '^{' + zT(A.b) + '} \\Rightarrow b = ' + zT(A.b); } },
 
       'e-form': { felder: ['c'], muster: 'Basis c = {c}',
         schl: function(A){ return 'e|' + A.c; },
         eingabe: function(A){ return { c: String(A.c) }; },
-        neu: function(){ var a = zufall([2, 3, 4, 5, 7, 10]), minus = Math.random() < 0.4;
+        neu: function(){ var a = zufall([2, 3, 4, 5, 10]), minus = Math.random() < 0.4;
           return { a: a, minus: minus, c: minus ? 1 / a : a,
             text: 'Schreib \\(y = e^{' + (minus ? '-' : '') + '(\\ln ' + a + ')\\,x}\\) in der Form \\(y = c^x\\). Wie gross ist \\(c\\)? (Bruch oder Dezimalzahl)' }; },
         fehler: function(A){ return [[{ c: String(A.minus ? A.a : 1 / A.a) }, 'Minus'], [{ c: String(Math.E) }, 'Basis']]; },
@@ -584,10 +611,11 @@
 
       /* ── Kapitel 4: Sättigung ────────────────────────────────── */
       'saettigung-lesen': { felder: ['A', 'S'], muster: 'Startwert A = {A}   Sättigungswert S = {S}',
+        schl: function(A){ return 's|' + A.S + '|' + A.D + '|' + A.k; },
         eingabe: function(A){ return { A: String(A.A), S: String(A.S) }; },
         neu: function(){ var S = zufall([20, 30, 50, 60, 80, 100]), D = zufall([10, 20, 30, 40, 50]) * zufall([1, -1]), k = zufall([0.1, 0.2, 0.3, 0.5]);
           if (S - D < 0) D = -D;
-          return { S: S, A: S - D, D: D,
+          return { S: S, A: S - D, D: D, k: k,
             text: 'Gegeben \\(f(t) = ' + S + (D > 0 ? ' - ' : ' + ') + Math.abs(D) + '\\,e^{-' + k + 't}\\). Gib Startwert und Sättigungswert an.' }; },
         fehler: function(A){ return [[{ A: String(Math.abs(A.D)), S: String(A.S) }, 'f(0)'], [{ A: String(A.S), S: String(A.A) }, 'Vertauscht']]
           .filter(function(p){ return !(gl(+p[0].A, A.A) && gl(+p[0].S, A.S)); }); },
@@ -601,6 +629,7 @@
         loesung: function(A){ return 'A = f(0) = ' + A.A + ',\\ S = ' + A.S; } },
 
       'saettigung-wert': { felder: ['y'], muster: 'f(t₁) = {y}',
+        schl: function(A){ return 'w2|' + A.S + '|' + A.A + '|' + A.T + '|' + A.j; },
         eingabe: function(A){ return { y: String(A.y) }; },
         // Rückstand durch 8 teilbar, damit drei Halbierungen ganze Zahlen geben; Startwert ≥ 0.
         neu: function(){ var S = zufall([20, 40, 60, 100]), D = zufall([16, 32, 40, 48, 80]) * zufall([1, -1]),
@@ -608,14 +637,16 @@
           if (S - D < 0) D = -D;
           var A = S - D;
           return { S: S, A: A, T: T, j: j, y: S - (S - A) / pot(2, j),
-            text: 'Ein Vorgang startet bei ' + A + ' und strebt gegen ' + S + '; der Rückstand zum Sättigungswert halbiert sich alle ' + T + ' Minuten. Welchen Wert hat er nach ' + j * T + ' Minuten?' }; },
-        fehler: function(A){ var f = [], halbW = A.A / pot(2, A.j);
-          if (!gl(halbW, A.y)) f.push([{ y: String(halbW) }, 'Rückstand']);
+            text: 'Ein Vorgang startet bei ' + A + ' und strebt gegen ' + S + '; der Abstand zum Sättigungswert halbiert sich alle ' + T + ' Minuten. Welchen Wert hat der Vorgang nach ' + j * T + ' Minuten?' }; },
+        fehler: function(A){ var f = [], halbW = A.A / pot(2, A.j), rest = Math.abs(A.S - A.A) / pot(2, A.j);
+          if (!gl(halbW, A.y)) f.push([{ y: String(halbW) }, 'Abstand']);
+          if (!gl(rest, A.y) && !gl(rest, halbW)) f.push([{ y: String(rest) }, 'Abstand']);
           return f; },
         pruefen: function(A, e){
           if (gl(e.y, A.y)) return null;
-          if (gl(e.y, A.A / pot(2, A.j))) return 'Halbiert wird der Rückstand \\(' + Math.abs(A.S - A.A) + '\\), nicht der Wert selbst. Danach zum Sättigungswert zurückrechnen.';
-          return 'Rückstand am Anfang: \\(|' + A.S + ' - ' + A.A + '| = ' + Math.abs(A.S - A.A) + '\\). Nach ' + A.j + ' Halbierungen: \\(' + Math.abs(A.S - A.A) / pot(2, A.j) + '\\). Dann vom Sättigungswert aus.'; },
+          if (gl(e.y, Math.abs(A.S - A.A) / pot(2, A.j)) && !gl(e.y, A.A / pot(2, A.j))) return 'Das ist der Abstand, der nach ' + A.j + ' Halbierungen bleibt. Gefragt ist der Wert: vom Sättigungswert \\(' + A.S + '\\) aus ' + (A.A < A.S ? 'abziehen' : 'addieren') + '.';
+          if (gl(e.y, A.A / pot(2, A.j))) return 'Halbiert wird der Abstand \\(' + Math.abs(A.S - A.A) + '\\), nicht der Wert selbst. Danach zum Sättigungswert zurückrechnen.';
+          return 'Abstand am Anfang: \\(|' + A.S + ' - ' + A.A + '| = ' + Math.abs(A.S - A.A) + '\\). Nach ' + A.j + (A.j === 1 ? ' Halbierung' : ' Halbierungen') + ': \\(' + Math.abs(A.S - A.A) / pot(2, A.j) + '\\). Dann vom Sättigungswert aus.'; },
         loesung: function(A){ return A.S + ' - (' + A.S + ' - ' + A.A + ') \\cdot \\left(\\tfrac12\\right)^{' + A.j + '} = ' + A.y; } },
 
       'saettigung-art': { felder: ['v'], muster: 'Die Kurve {v:steigt gegen S|fällt gegen S|bleibt konstant}',
@@ -633,24 +664,29 @@
 
       /* ── Kapitel 5: die Logarithmusfunktion ──────────────────── */
       'log-wert': { felder: ['y'], muster: 'Logarithmus = {y}',
-        schl: function(A){ return 'l|' + A.a + '|' + A.x; },
+        schl: function(A){ return 'l|' + A.a + '|' + (A.a === 'e' ? 'n' + A.n : A.x); },
         eingabe: function(A){ return { y: String(A.n) }; },
-        neu: function(){ var a = zufall([2, 3, 4, 5, 10]), n = zufall([-3, -2, -1, 0, 1, 2, 3, 4]);
-          if (a === 10 && n > 3) n = 3; if (a >= 4 && n > 3) n = 3;
+        // n = 1 und log₂ 4 nicht: Dort gäbe «Zahl durch Basis» zufällig das Richtige.
+        neu: function(){ var a = zufall([2, 3, 4, 5, 10, 'e']), n = zufall([-3, -2, -1, 0, 2, 3, 4]);
+          if (a === 'e') return { a: 'e', n: n, x: NaN, text: 'Berechne ohne Taschenrechner: \\(\\ln e^{' + n + '}\\).' };
+          if (a === 10 && n > 3) n = 3; if (a >= 4 && n > 3) n = 3; if (a === 2 && n === 2) n = 3;
           var x = pot(a, n);
           return { a: a, n: n, x: x,
             text: 'Berechne ohne Taschenrechner: \\(' + (a === 10 ? '\\lg' : '\\log_{' + a + '}') + ' ' + zT(x) + '\\).' }; },
         fehler: function(A){ var f = [];
           if (A.n !== 0) f.push([{ y: String(-A.n) }, 'Vorzeichen']);
-          if (A.x > 1 && !gl(A.x / A.a, A.n)) f.push([{ y: String(A.x / A.a) }, 'Exponent']);
+          if (A.a !== 'e' && A.x > 1 && !gl(A.x / A.a, A.n)) f.push([{ y: String(A.x / A.a) }, 'Exponent']);
           return f; },
         pruefen: function(A, e){
           if (gl(e.y, A.n)) return null;
+          if (A.a === 'e' && gl(e.y, -A.n)) return 'Vorzeichen: \\(\\ln e^{' + A.n + '}\\) ist der Exponent selbst, also \\(' + A.n + '\\) — mit seinem Vorzeichen.';
+          if (A.a === 'e') return '\\(\\ln\\) ist der Logarithmus zur Basis \\(e\\): Mit welchem Exponenten wird \\(e\\) zu \\(e^{' + A.n + '}\\)?';
           if (A.n === 0) return 'Jede Basis hoch 0 ist 1 — darum ist der Logarithmus von 1 immer 0.';
           if (gl(e.y, -A.n)) return 'Vorzeichen: ' + (A.x < 1 ? 'Zahlen zwischen 0 und 1 haben einen negativen Logarithmus (Basis grösser als 1).' : 'Zahlen grösser als 1 haben einen positiven Logarithmus.');
           if (gl(e.y, A.x / A.a)) return 'Der Logarithmus ist ein Exponent, kein Quotient: \\(' + A.a + '\\) hoch wie viel ergibt \\(' + zT(A.x) + '\\)?';
           return 'Frag dich: \\(' + A.a + '\\) hoch wie viel ergibt \\(' + zT(A.x) + '\\)?'; },
-        loesung: function(A){ return A.a + '^{' + tz(A.n) + '} = ' + zT(A.x) + ' \\Rightarrow ' + (A.a === 10 ? '\\lg' : '\\log_{' + A.a + '}') + ' ' + zT(A.x) + ' = ' + tz(A.n); } },
+        loesung: function(A){ if (A.a === 'e') return '\\ln e^{' + A.n + '} = ' + A.n;
+          return A.a + '^{' + tz(A.n) + '} = ' + zT(A.x) + ' \\Rightarrow ' + (A.a === 10 ? '\\lg' : '\\log_{' + A.a + '}') + ' ' + zT(A.x) + ' = ' + tz(A.n); } },
 
       'umkehr-exp': { felder: ['u', 'x0'], muster: 'f⁻¹(x) = logₐ(x + {u}),   Nullstelle von f⁻¹: x₀ = {x0}',
         schl: function(A){ return 'u|' + A.a + '|' + A.v; },
@@ -671,7 +707,8 @@
       'exp-gleichung': { felder: ['t'], muster: 't = {t}',
         schl: function(A){ return 'q|' + A.c + '|' + A.a + '|' + A.N; },
         eingabe: function(A){ return { t: String(A.t) }; },
-        neu: function(){ var c = zufall([2, 3, 4, 5]), a = zufall([2, 3]), t = a === 2 ? zufall([2, 3, 4, 5, 6]) : zufall([2, 3, 4]);
+        // a = 2, t = 2 nicht: N : c : a = 2 = t wäre zufällig richtig.
+        neu: function(){ var c = zufall([2, 3, 4, 5]), a = zufall([2, 3]), t = a === 2 ? zufall([3, 4, 5, 6]) : zufall([2, 3, 4]);
           return { c: c, a: a, t: t, N: c * pot(a, t),
             text: 'Löse ohne Taschenrechner: \\(' + c + ' \\cdot ' + a + '^{t} = ' + c * pot(a, t) + '\\).' }; },
         fehler: function(A){ var f = [], q = A.N / A.c / A.a;
@@ -743,12 +780,15 @@
 
   /* ---------- Minigrafen: <svg class="mini" data-e="c,a,v" (y = c·aˣ + v) oder data-l="c,a,v"
        (y = c·logₐ x + v), mehrere mit «;» getrennt (die erste blau bzw. grün, weitere neutral),
-       data-diagonale="1" (y = x), data-fenster, data-punkte, data-titel, data-xname, data-yname> ---------- */
+       data-diagonale="1" (y = x), data-fenster, data-punkte, data-titel, data-xname, data-yname,
+       data-xm/data-ym (beschriftete Stellen), data-sy (Gitterweite y)> ---------- */
   document.querySelectorAll('svg.mini[data-e], svg.mini[data-l]').forEach(function(svg){
     var fe = (svg.dataset.fenster || '-3,3,-1,5').split(',').map(Number);
     svg.setAttribute('viewBox', '0 0 150 150'); svg.setAttribute('role', 'img');
-    var hy = fe[3] - fe[2], sy = hy > 40 ? 20 : hy > 20 ? 5 : hy > 12 ? 2 : 1;
-    var K = Achsen(svg, { w: 150, h: 150, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, xm: [1], ym: [sy], sy: sy, pfeil: 6,
+    var hy = fe[3] - fe[2], sy = +svg.dataset.sy || (hy > 40 ? 20 : hy > 20 ? 5 : hy > 12 ? 2 : 1);
+    var liste = function(t, d){ return t ? t.split(',').map(Number) : d; };
+    var K = Achsen(svg, { w: 150, h: 150, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, sy: sy, pfeil: 6,
+      xm: liste(svg.dataset.xm, [1]), ym: liste(svg.dataset.ym, [sy]),
       xname: svg.dataset.xname, yname: svg.dataset.yname });
     if (svg.dataset.diagonale === '1') K.kurve(function(x){ return x; }, 'normal');
     (svg.dataset.e || '').split(';').filter(Boolean).forEach(function(s, i){

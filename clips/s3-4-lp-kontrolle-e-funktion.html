@@ -320,11 +320,14 @@ function bewegeExpLog(T, Z, px, py, x0, x1, y0, y1) {
   const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
   const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
     g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  // Beschriftung auf die Seite, auf der die Kurve nicht verläuft: rechts unter dem Punkt bei
+  // steigender, rechts über ihm bei fallender Kurve (sonst kreuzt die Kurve den Text).
   const beschrifte = (g, x, y, text) => {
     const tx = g.querySelector(':scope > text'); if (!tx) return;
     const rechts = x > x1 - (x1 - x0) * 0.3;
+    const ya = f(x - 1e-3), yb = f(x + 1e-3), steigt = ya !== null && yb !== null && yb > ya;
     tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
-    tx.setAttribute('y', py(y) - 18);
+    tx.setAttribute('y', py(y) + ((steigt !== rechts) ? 44 : -18));
     tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
     tx.textContent = text;
   };

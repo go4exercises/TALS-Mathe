@@ -90,7 +90,8 @@ svg.mini .p-pkt{fill:var(--tinte)}
 .sim .kurve.gruen,svg.mini .kurve.gruen{stroke:var(--gruen)}
 svg.mini .kurve.g2{stroke:var(--tinte-2);stroke-dasharray:4 3}
 .sim .kurve.gestrichelt{stroke-dasharray:7 5}
-.sim .rueckstand{stroke:var(--orange);stroke-width:2.2;stroke-dasharray:3 3}
+.sim .rueckstand{stroke:var(--tinte-2);stroke-width:2.2;stroke-dasharray:3 3}
+.sim .bau{stroke:var(--tinte-2);stroke-width:2.4;stroke-dasharray:7 5;fill:none}
 .mini-reihe svg.mini{background:var(--karte)}
 .sim-formel{line-height:1.6}
 /* Ein Punkt direkt hinter einer Formel landet sonst allein auf der naechsten Zeile. */
@@ -216,16 +217,20 @@ fest1 = r'''      <div class="festhalten">
           <p>Ein negativer Exponent macht nichts negativ: \(5^{-1} = \frac{1}{5}\), nicht \(-5\).</p>
         </div>
       </div>'''
-auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
+auf1 = test('t1', 'Aufgaben · Kapitel 1', 14, [
     ('1a', 3, r'Ordne zu: (1) \(y = 3^x\) (2) \(y = \left(\tfrac13\right)^x\) (3) \(y = 1.5^x\) (4) \(y = \left(\tfrac23\right)^x\)',
      r'<p>(1) → C, (2) → A, (3) → D, (4) → B.</p><p class="komm">Zuerst die Richtung: Steigende Kurven haben eine Basis grösser als 1. Dann die Steilheit: Bei \(x = 1\) steht die Basis — \(3\) liegt höher als \(1.5\), \(\tfrac13\) tiefer als \(\tfrac23\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini" data-e="1,0.3333333333333333,0" data-fenster="-3,3,-1,5" data-titel="A"></svg><svg class="mini" data-e="1,0.6666666666666666,0" data-fenster="-3,3,-1,5" data-titel="B"></svg><svg class="mini" data-e="1,3,0" data-fenster="-3,3,-1,5" data-titel="C"></svg><svg class="mini" data-e="1,1.5,0" data-fenster="-3,3,-1,5" data-titel="D"></svg></div>'),
     ('1b', 3, r'\(f(x) = 4^x\): Berechne ohne Taschenrechner \(f(-1)\), \(f(0.5)\) und \(f(1.5)\).',
      r'<p>\(f(-1) = \tfrac14\) · \(f(0.5) = \sqrt{4} = 2\) · \(f(1.5) = \left(\sqrt{4}\right)^3 = 8\).</p><p class="komm">Ein halber Exponent ist eine Quadratwurzel (Teilgebiet 1.2).</p>', ''),
-    ('1c', 3, r'Bestimme die Basis \(a\) so, dass \(y = a^x\) durch den Punkt geht: \(P(2 \mid 25)\) · \(Q(-2 \mid 16)\) · \(R(3 \mid 0.001)\).',
-     r'<p>\(a^2 = 25 \Rightarrow a = 5\) · \(a^{-2} = 16 \Rightarrow a^2 = \tfrac{1}{16} \Rightarrow a = \tfrac14\) · \(a^3 = 0.001 \Rightarrow a = 0.1\).</p><p class="komm">Immer nur die positive Lösung: Die Basis ist positiv.</p>', ''),
-    ('1d', 3, r'Begründe: (a) Warum hat \(y = a^x\) keine Nullstelle? (b) Warum schliesst man die Basen \(a = 1\) und \(a \lt 0\) aus?',
-     r'<p>(a) Eine positive Zahl, beliebig oft mit sich multipliziert, als Kehrwert oder Wurzel genommen, bleibt positiv: \(a^x \gt 0\) für alle \(x\).</p><p>(b) \(a = 1\) gibt die konstante Funktion \(y = 1\) — kein Wachstum, kein Zerfall. Bei \(a \lt 0\) gibt es Ausdrücke wie \((-2)^{0.5}\) nicht.</p>', ''),
+    ('1c', 3, r'Bestimme die Basis \(a\) so, dass \(y = a^x\) durch den Punkt geht: \(P(2 \mid 25)\) · \(Q(-2 \mid 16)\) · \(R\left(\tfrac32 \,\middle|\, 64\right)\).',
+     r'<p>\(a^2 = 25 \Rightarrow a = 5\) · \(a^{-2} = 16 \Rightarrow a^2 = \tfrac{1}{16} \Rightarrow a = \tfrac14\) · \(a^{3/2} = 64 \Rightarrow a = 64^{2/3} = \left(\sqrt[3]{64}\right)^2 = 16\).</p><p class="komm">Immer nur die positive Lösung: Die Basis ist positiv.</p>', ''),
+    ('1d', 3, r'Begründe: (a) Warum hat \(y = a^x\) keine Nullstelle? (b) Warum schliesst man die Basen \(a = 1\), \(a = 0\) und \(a \lt 0\) aus?',
+     r'<p>(a) Eine positive Zahl, beliebig oft mit sich multipliziert, als Kehrwert oder Wurzel genommen, bleibt positiv: \(a^x \gt 0\) für alle \(x\).</p><p>(b) \(a = 1\) gibt die konstante Funktion \(y = 1\) — kein Wachstum, kein Zerfall. \(0^x\) ist für \(x \le 0\) nicht definiert. Bei \(a \lt 0\) gibt es Ausdrücke wie \((-2)^{0.5}\) nicht.</p>', ''),
+    ('1e', 2, r'Skizziere \(y = 4^x\) und \(y = \left(\tfrac14\right)^x\) für \(-2 \le x \le 2\) in <em>ein</em> Koordinatensystem — mit je drei Stützpunkten und der Asymptote.',
+     r'<p>\(4^x\) durch \(\left(-1 \mid \tfrac14\right)\), \((0 \mid 1)\), \((1 \mid 4)\), steigend; \(\left(\tfrac14\right)^x\) durch \(\left(1 \mid \tfrac14\right)\), \((0 \mid 1)\), \((-1 \mid 4)\), fallend — das Spiegelbild an der \(y\)-Achse. Beide über der Asymptote \(y = 0\).</p>'
+     '<div class="mini-reihe"><svg class="mini gross" data-e="1,4,0;1,0.25,0" data-fenster="-2,2,-0.5,4.5" data-punkte="0,1;1,4;-1,4;1,0.25;-1,0.25"></svg></div>',
+     ''),
 ], zwei=False)
 k1 = kapitel(1, 'exponentialfunktion', 'Die Exponentialfunktion', 'K1', 40,
              r'Du zeichnest und erkennst Graphen von \(y = a^x\), sagst an der Basis, ob die Kurve steigt oder fällt, und bestimmst die Basis aus einem Punkt.',
@@ -264,15 +269,18 @@ fest2 = r'''      <div class="festhalten">
           <p>Und linear rechnen: Drei Halbwertszeiten sind \(\left(\tfrac12\right)^3 = \tfrac18\), nicht \(\tfrac13\) oder \(\tfrac16\).</p>
         </div>
       </div>'''
-auf2 = test('t2', 'Aufgaben · Kapitel 2', 13, [
+auf2 = test('t2', 'Aufgaben · Kapitel 2', 15, [
     ('2a', 3, r'Gib den Wachstumsfaktor an: Zunahme um \(8\,\%\) · Abnahme um \(15\,\%\). Und umgekehrt: Um wie viel Prozent ändert sich eine Grösse mit dem Faktor \(0.97\)?',
      r'<p>\(1.08\) · \(0.85\) · Abnahme um \(3\,\%\).</p>', ''),
-    ('2b', 4, r'Ein Kapital von \(2000\) CHF wird zu \(5\,\%\) Jahreszins angelegt, der Zins wird mitverzinst. (a) Stell das Modell \(K(n)\) auf. (b) Berechne \(K(2)\). (c) Begründe, warum der Zinsbetrag jedes Jahr grösser wird.',
+    ('2b', 4, r'Ein Kapital von \(2000\) CHF wird zu \(5\,\%\) Jahreszins angelegt, der Zins wird mitverzinst. (a) Stell das Modell \(K(n)\) auf (\(n\) in Jahren). (b) Berechne \(K(2)\). (c) Begründe, warum der Zinsbetrag jedes Jahr grösser wird.',
      r'<p>(a) \(K(n) = 2000 \cdot 1.05^{n}\). (b) \(K(2) = 2000 \cdot 1.1025 = 2205\) CHF.</p><p>(c) Verzinst wird immer das ganze Kapital samt den bisherigen Zinsen — \(5\,\%\) einer grösseren Zahl sind mehr.</p>', ''),
-    ('2c', 3, r'Iod-131 hat eine Halbwertszeit von \(8\) Tagen. Stell das Modell für \(120\) mg auf und berechne, wie viel nach \(24\) Tagen übrig ist.',
+    ('2c', 3, r'Iod-131 hat eine Halbwertszeit von \(8\) Tagen. Stell das Modell \(m(t)\) für \(120\) mg auf (\(t\) in Tagen) und berechne, wie viel nach \(24\) Tagen übrig ist.',
      r'<p>\(m(t) = 120 \cdot \left(\tfrac12\right)^{t/8}\); \(m(24) = 120 \cdot \left(\tfrac12\right)^{3} = 15\) mg.</p>', ''),
-    ('2d', 3, r'Eine Messreihe (je ein Jahr Abstand): \(40,\ 60,\ 90,\ 135\). Ist das Wachstum linear oder exponentiell? Begründe und stell das Modell auf.',
-     r'<p>Die Differenzen \(20, 30, 45\) sind nicht gleich, die Quotienten schon: \(\tfrac{60}{40} = \tfrac{90}{60} = \tfrac{135}{90} = 1.5\). Exponentiell: \(N(t) = 40 \cdot 1.5^{t}\).</p>', ''),
+    ('2d', 3, r'Eine Messreihe zum Zeitpunkt \(t = 0, 1, 2, 3\) (in Jahren): \(50,\ 40,\ 32,\ 25.6\). Ist die Abnahme linear oder exponentiell? Begründe und stell das Modell auf.',
+     r'<p>Die Differenzen \(10,\ 8,\ 6.4\) sind nicht gleich, die Quotienten schon: \(\tfrac{40}{50} = \tfrac{32}{40} = \tfrac{25.6}{32} = 0.8\). Exponentiell: \(N(t) = 50 \cdot 0.8^{t}\), eine Abnahme um \(20\,\%\) pro Jahr.</p>', ''),
+    ('2e', 2, r'Der Graph zeigt den Zerfall eines Stoffes (\(t\) in Stunden, \(m\) in mg). Lies Startwert und Halbwertszeit ab und stell das Modell auf.',
+     r'<p>Startwert \(m(0) = 64\) mg; nach \(3\) Stunden \(32\) mg, nach \(6\) Stunden \(16\) mg — Halbwertszeit \(3\) h.</p><p>\(m(t) = 64 \cdot \left(\tfrac12\right)^{t/3}\).</p>',
+     '\n            <div class="mini-reihe"><svg class="mini gross" data-e="64,0.7937005259840998,0" data-fenster="-1.5,10,-11,70" data-punkte="0,64;3,32;6,16;9,8" data-sy="8" data-xm="3,6,9" data-ym="16,32,64" data-xname="t" data-yname="m"></svg></div>'),
 ], zwei=False)
 k2 = kapitel(2, 'wachstum-und-zerfall', 'Wachstum und Zerfall', 'K2', 45,
              r'Du stellst ein Modell \(N(t) = N_0 \cdot a^t\) auf, übersetzt Prozente in Faktoren, rechnest mit Verdopplungs- und Halbwertszeit und erkennst exponentielles Wachstum in einer Tabelle.',
@@ -299,28 +307,28 @@ fest3 = r'''      <div class="festhalten">
           <p>Die <b>Eulersche Zahl</b> \(e \approx 2.71828\) ist der Grenzwert von \(\left(1 + \frac1n\right)^n\) für immer grössere \(n\). Die <b>natürliche Exponentialfunktion</b> ist</p>
           <p>\[ y = e^{x} \]</p>
           <p>Sie liegt für \(x \gt 0\) zwischen \(2^x\) und \(3^x\) und geht durch \((0 \mid 1)\) und \((1 \mid e)\).</p>
-          <p><b>Basiswechsel:</b> Eine Basis lässt sich als Potenz einer anderen schreiben:</p>
-          <p>\[ c^{x} = \left(a^{b}\right)^{x} = a^{b\,x} \quad \text{mit } c = a^{b} \]</p>
-          <p>Beispiele: \(8^x = 2^{3x}\), \(9^x = 3^{2x}\), \(\left(\tfrac14\right)^x = 2^{-2x}\). Im Bild: Die Kurve von \(a^x\), in \(x\)-Richtung gestaucht oder gestreckt.</p>
-          <p><b>Zur Basis \(e\)</b> geht es immer, mit dem natürlichen Logarithmus \(\ln\) (Teilgebiet 1.3):</p>
-          <p>\[ a^{x} = e^{b\,x} \quad \text{mit } b = \ln a \]</p>
-          <p>\(b \gt 0\) (also \(a \gt 1\)): Wachstum; \(b \lt 0\) (also \(0 \lt a \lt 1\)): Zerfall.</p>
+          <p><b>Basiswechsel:</b> Eine Exponentialfunktion \(c^x\) lässt sich zu jeder anderen Basis \(a\) schreiben, denn \(c = a^{b}\) mit \(b = \log_a c\):</p>
+          <p>\[ c^{x} = \left(a^{b}\right)^{x} = a^{b\,x}, \qquad b = \log_a c \]</p>
+          <p>Beispiele: \(8^x = 2^{3x}\), \(9^x = 3^{2x}\), \(\left(\tfrac14\right)^x = 2^{-2x}\). Im Bild: die Kurve von \(a^x\), in \(x\)-Richtung gestaucht oder gestreckt — bei \(b \lt 0\) zusätzlich an der \(y\)-Achse gespiegelt.</p>
+          <p><b>Zur Basis \(e\)</b> braucht es den <b>natürlichen Logarithmus</b> \(\ln c = \log_e c\) (Teilgebiet 1.3): Er ist der Exponent, mit dem man \(e\) potenzieren muss, um \(c\) zu erhalten, also \(e^{\ln c} = c\). Damit gilt immer</p>
+          <p>\[ c^{x} = e^{b\,x} \quad \text{mit } b = \ln c \]</p>
+          <p>Beispiel: \(3^x = e^{(\ln 3)\,x}\). \(b \gt 0\) (also \(c \gt 1\)): Wachstum; \(b \lt 0\) (also \(0 \lt c \lt 1\)): Zerfall.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
           <p>Den Basiswechsel als Division rechnen: \(8^x = 2^{3x}\), weil \(2^3 = 8\) — nicht \(2^{4x}\), weil \(8 : 2 = 4\).</p>
-          <p>Und das Minus vergessen: \(\left(\tfrac12\right)^x = e^{-0.69\,x}\), denn \(\ln \tfrac12 \lt 0\).</p>
+          <p>Und das Minus vergessen: \(\left(\tfrac12\right)^x = e^{(\ln 0.5)\,x} \approx e^{-0.69\,x}\), denn \(\ln \tfrac12 \lt 0\).</p>
         </div>
       </div>'''
 auf3 = test('t3', 'Aufgaben · Kapitel 3', 11, [
     ('3a', 3, r'Schreib zur Basis \(2\): \(16^x\) · \(\left(\tfrac18\right)^x\) · \(\left(\sqrt{2}\right)^x\).',
      r'<p>\(2^{4x}\) · \(2^{-3x}\) · \(2^{0.5x}\).</p><p class="komm">Immer die Basis als Potenz von 2 schreiben: \(16 = 2^4\), \(\tfrac18 = 2^{-3}\), \(\sqrt2 = 2^{1/2}\).</p>', ''),
-    ('3b', 3, r'Schreib als \(c^x\): \(e^{(\ln 5)\,x}\) · \(e^{-x}\) · \(e^{3x}\).',
-     r'<p>\(5^x\) · \(\left(\tfrac{1}{e}\right)^x\) · \(\left(e^{3}\right)^x\).</p><p class="komm">\(e^{\ln 5} = 5\): Die Exponentialfunktion und der natürliche Logarithmus heben sich auf.</p>', ''),
-    ('3c', 2, r'Wachstum oder Zerfall? \(N(t) = 20 \cdot e^{-0.3t}\) · \(N(t) = 5 \cdot e^{0.05t}\) · \(N(t) = 8 \cdot 0.8^{-t}\).',
-     r'<p>Zerfall · Wachstum · Wachstum, denn \(0.8^{-t} = 1.25^{t}\).</p>', ''),
+    ('3b', 3, r'(a) Schreib \(3^x\) zur Basis \(e\). (b) Schreib \(e^{(\ln 5)\,x}\) und \(e^{-x}\) als \(c^x\).',
+     r'<p>(a) \(3 = e^{\ln 3}\), also \(3^x = e^{(\ln 3)\,x}\) (\(\ln 3 \approx 1.10\)).</p><p>(b) \(5^x\) · \(\left(\tfrac{1}{e}\right)^x\).</p><p class="komm">\(e^{\ln c} = c\): Die Exponentialfunktion und der natürliche Logarithmus heben sich auf.</p>', ''),
+    ('3c', 2, r'Wachstum oder Zerfall? \(N(t) = 20 \cdot e^{-0.3t}\) · \(N(t) = 8 \cdot 0.8^{-t}\).',
+     r'<p>Zerfall · Wachstum, denn \(0.8^{-t} = \left(\tfrac{1}{0.8}\right)^{t} = 1.25^{t}\).</p>', ''),
     ('3d', 3, r'Warum liegt \(e^x\) für \(x \gt 0\) zwischen \(2^x\) und \(3^x\) — und wie ist es für \(x \lt 0\)?',
-     r'<p>Für \(x \gt 0\) wächst \(a^x\) mit der Basis: \(2 \lt e \lt 3\), also \(2^x \lt e^x \lt 3^x\).</p><p>Für \(x \lt 0\) kehrt sich die Reihenfolge um, denn dort ist \(a^x = \frac{1}{a^{-x}}\): \(3^x \lt e^x \lt 2^x\). Bei \(x = 0\) gehen alle durch \((0 \mid 1)\).</p>',
+     r'<p>Für \(x \gt 0\) wächst \(a^x\) mit der Basis: \(2 \lt e \lt 3\), also \(2^x \lt e^x \lt 3^x\).</p><p>Für \(x \lt 0\) kehrt sich die Reihenfolge um, denn dort ist \(a^x = \frac{1}{a^{-x}}\): \(3^x \lt e^x \lt 2^x\). Bei \(x = 0\) gehen alle durch \((0 \mid 1)\). Im Bild: \(e^x\) durchgezogen, \(2^x\) und \(3^x\) gestrichelt (für \(x \gt 0\) ist \(3^x\) die obere).</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-e="1,2.718281828459045,0;1,2,0;1,3,0" data-fenster="-2,2,-0.5,5" data-punkte="0,1"></svg></div>'),
 ], zwei=False)
 k3 = kapitel(3, 'e-funktion', 'Die e-Funktion und der Basiswechsel', 'K3', 40,
@@ -336,7 +344,7 @@ sim4 = f'''      <figure class="sim sim-gross" id="sim4">
         <div class="leiste" aria-live="polite"></div>
         <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
         <svg viewBox="0 0 300 300" role="img" aria-label="Sättigungskurve f von t gleich S minus Klammer S minus A mal e hoch minus k t, mit der Asymptote y gleich S"></svg>
-        <label class="hilfs-schalter"><input type="checkbox" checked> Asymptote \\(y = S\\) und Rückstand bei \\(t = 10\\)</label>
+        <label class="hilfs-schalter"><input type="checkbox" checked> Asymptote \\(y = S\\) und Abstand bei \\(t = 10\\)</label>
         <div class="sl-row">
           {regler('s4', 'A', 'Startwert A', 0, 100, 5, 80, 'orange')}
           {regler('s4', 'S', 'Sättigung S', 0, 100, 5, 20, 'grau')}
@@ -348,36 +356,36 @@ fest4 = r'''      <div class="festhalten">
           <div class="titel">Sättigung — beschränktes Wachstum</div>
           <p>Viele Vorgänge streben nicht ins Unendliche, sondern auf einen <b>Sättigungswert</b> \(S\) zu:</p>
           <p>\[ f(t) = S - (S - A)\,e^{-k t}, \qquad k \gt 0 \]</p>
-          <p>mit <b>Startwert</b> \(A = f(0)\). Für \(t \to \infty\) geht \(e^{-kt} \to 0\), also \(f(t) \to S\): Die Waagrechte \(y = S\) ist <b>Asymptote</b>.</p>
+          <p>mit <b>Startwert</b> \(A = f(0)\). Für \(t \to \infty\) geht \(e^{-kt} \to 0\), also \(f(t) \to S\): Die Waagrechte \(y = S\) ist <b>Asymptote</b>. Ist \(A \neq S\), wird \(S\) nie erreicht (bei \(A = S\) ist \(f\) konstant).</p>
           <ul>
             <li>\(A \lt S\): Die Kurve steigt gegen \(S\) (Erwärmen, Aufladen).</li>
             <li>\(A \gt S\): Die Kurve fällt gegen \(S\) (Abkühlen).</li>
           </ul>
-          <p>Der <b>Rückstand</b> \(S - f(t) = (S - A)\,e^{-kt}\) ist eine reine Zerfallsfunktion. Halbiert er sich alle \(T\) Minuten, ist er nach \(2T\) auf einen Viertel gesunken.</p>
-          <p>Beispiel Kaffee: \(f(t) = 20 + 60\,e^{-kt}\) mit halbiertem Rückstand alle 10 min: \(80 \to 50 \to 35 \to 27.5\) °C.</p>
+          <p>Der <b>Abstand</b> zum Sättigungswert \(|S - f(t)| = |S - A|\,e^{-kt}\) nimmt exponentiell ab — wie ein Zerfall (beim Erwärmen heisst er auch <em>Rückstand</em>). Halbiert er sich alle \(T\) Minuten, ist er nach \(2T\) auf einen Viertel gesunken. Je grösser \(k\), desto schneller nähert sich \(f\) dem Sättigungswert.</p>
+          <p>Beispiel Kaffee: \(f(t) = 20 + 60\,e^{-kt}\), der Abstand halbiert sich alle 10 min: \(80 \to 50 \to 35 \to 27.5\) °C.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
-          <p>Den Wert statt des Rückstands halbieren: Nach 10 min hat der Kaffee \(50\) °C, nicht \(40\) °C — halbiert wird der Abstand \(60\) zur Raumtemperatur.</p>
+          <p>Den Wert statt des Abstands halbieren: Nach 10 min hat der Kaffee \(50\) °C, nicht \(40\) °C — halbiert wird der Abstand \(60\) zur Raumtemperatur.</p>
           <p>Und den Sättigungswert mit dem Startwert verwechseln: \(f(0) = S - (S - A) = A\).</p>
         </div>
       </div>'''
 auf4 = test('t4', 'Aufgaben · Kapitel 4', 12, [
     ('4a', 3, r'\(f(t) = 30 - 20\,e^{-0.5t}\): Gib Startwert, Sättigungswert und Asymptote an. Steigt oder fällt die Kurve?',
      r'<p>\(A = f(0) = 30 - 20 = 10\), \(S = 30\), Asymptote \(y = 30\). Sie steigt, denn \(A \lt S\).</p>', ''),
-    ('4b', 4, r'Ein Akku wird von \(20\,\%\) auf \(100\,\%\) geladen; der Rückstand zur vollen Ladung halbiert sich jede Stunde. (a) Stell das Modell auf. (b) Berechne die Ladung nach \(1\), \(2\) und \(3\) Stunden.',
-     r'<p>(a) \(f(t) = 100 - 80\,e^{-kt}\) mit \(e^{-k} = \tfrac12\), also \(f(t) = 100 - 80 \cdot \left(\tfrac12\right)^{t}\).</p><p>(b) \(60\,\%\), \(80\,\%\), \(90\,\%\).</p>', ''),
+    ('4b', 4, r'Ein Getränk mit \(6\) °C aus dem Kühlschrank erwärmt sich in einem \(22\) °C warmen Raum; der Abstand zur Raumtemperatur halbiert sich alle \(15\) Minuten. (a) Stell das Modell \(f(t)\) auf (\(t\) in Minuten). (b) Berechne die Temperatur nach \(15\), \(30\) und \(45\) Minuten.',
+     r'<p>(a) \(f(t) = 22 - 16\,e^{-kt}\) mit \(e^{-15k} = \tfrac12\), also \(f(t) = 22 - 16 \cdot \left(\tfrac12\right)^{t/15}\).</p><p>(b) \(14\) °C, \(18\) °C, \(20\) °C.</p>', ''),
     ('4c', 2, r'Skizziere je einen Sättigungsprozess mit \(A \lt S\) und mit \(A \gt S\) und zeichne die Asymptote ein.',
      r'<p>\(A \lt S\): steigende Kurve, anfangs steil, dann immer flacher unter der Asymptote \(y = S\). \(A \gt S\): fallende Kurve über der Asymptote.</p>',
      ''),
-    ('4d', 3, r'Begründe: (a) Warum erreicht \(f(t) = S - (S-A)\,e^{-kt}\) den Wert \(S\) nie? (b) Warum ist der Rückstand \(S - f(t)\) eine Zerfallsfunktion?',
-     r'<p>(a) \(e^{-kt}\) ist für jedes \(t\) positiv, also bleibt ein Rückstand \((S - A)\,e^{-kt} \neq 0\).</p><p>(b) \(S - f(t) = (S - A)\,e^{-kt} = (S - A) \cdot \left(e^{-k}\right)^{t}\) mit der Basis \(e^{-k} \lt 1\) — ein Zerfall.</p>', ''),
+    ('4d', 3, r'Begründe für \(A \neq S\): (a) Warum erreicht \(f(t) = S - (S-A)\,e^{-kt}\) den Wert \(S\) nie? (b) Warum nimmt der Abstand \(|S - f(t)|\) exponentiell ab?',
+     r'<p>(a) \(e^{-kt}\) ist für jedes \(t\) positiv, also bleibt ein Abstand \(|S - A|\,e^{-kt} \neq 0\).</p><p>(b) \(|S - f(t)| = |S - A|\,e^{-kt} = |S - A| \cdot \left(e^{-k}\right)^{t}\) mit der Basis \(e^{-k} \lt 1\) — ein Zerfall.</p>', ''),
 ], zwei=False)
 k4 = kapitel(4, 'saettigung', 'Sättigung', 'K2', 35,
-             r'Du liest aus einem Sättigungsmodell Startwert, Sättigungswert und Asymptote ab, berechnest Werte über den halbierten Rückstand und unterscheidest Erwärmen von Abkühlen.',
+             r'Du liest aus einem Sättigungsmodell Startwert, Sättigungswert und Asymptote ab, berechnest Werte über den halbierten Abstand und unterscheidest Erwärmen von Abkühlen.',
              ('s3-4-lp-saettigung', 'Sättigung'),
              sim4, ('s3-4-lp-kontrolle-saettigung', 'Kontrollfragen zur Sättigung'),
-             fest4, [uebung('saettigung-lesen', 'Startwert und Sättigungswert'), uebung('saettigung-wert', 'Mit dem Rückstand rechnen'),
+             fest4, [uebung('saettigung-lesen', 'Startwert und Sättigungswert'), uebung('saettigung-wert', 'Mit dem Abstand rechnen'),
                      uebung('saettigung-art', 'Steigt oder fällt?')],
              auf4, f'<a href="{TA}#saettigung">Themenseite 3.4a, Sättigungsprozesse</a>')
 
@@ -386,7 +394,7 @@ sim5 = f'''      <figure class="sim sim-gross" id="sim5">
         <div class="leiste" aria-live="polite"></div>
         <div class="sim-formel" data-rolle="formel" aria-live="polite"></div>
         <svg viewBox="0 0 300 300" role="img" aria-label="Logarithmuskurve und die gespiegelte Exponentialkurve, mit einem Läufer"></svg>
-        <label class="hilfs-schalter"><input type="checkbox" checked> Exponentialkurve und \\(y = x\\) (gestrichelt)</label>
+        <label class="hilfs-schalter"><input type="checkbox" checked> Exponentialkurve (blau) und \\(y = x\\) (gestrichelt)</label>
         <div class="sl-row">
           {regler('s5', 'a', 'Basis a', 0, 4, 1, 1, 'blau')}
           {regler('s5', 'x', 'Läufer x', 0.1, 10, 0.1, 4, 'grau')}
@@ -406,6 +414,7 @@ fest5 = r'''      <div class="festhalten">
           </ul>
           <p>Spezialfälle: \(\ln x = \log_e x\) und \(\lg x = \log_{10} x\).</p>
           <p><b>Umkehrfunktion bestimmen:</b> nach \(x\) auflösen, dann \(x\) und \(y\) tauschen. Aus \(y = 2^x + 1\) wird \(x = \log_2(y - 1)\), also \(f^{-1}(x) = \log_2(x - 1)\).</p>
+          <p>Dabei wandert die Asymptote mit: Die waagrechte Asymptote \(y = 1\) von \(f\) wird die senkrechte Asymptote \(x = 1\) von \(f^{-1}\), und \(D_{f^{-1}} = \,]1;\, \infty[\) — das Argument muss positiv sein.</p>
           <p><b>Gleichung mit \(x\) im Exponenten:</b> erst die Potenz freistellen, dann logarithmieren: \(3 \cdot 2^t = 96 \Rightarrow 2^t = 32 \Rightarrow t = \log_2 32 = 5\).</p>
         </div>
         <div class="warn">
@@ -414,18 +423,20 @@ fest5 = r'''      <div class="festhalten">
           <p>Und die Definitionsmenge vergessen: \(\log_2 0\) und \(\log_2(-4)\) gibt es nicht. Bei \(\log_2(x - 1)\) muss \(x \gt 1\) sein.</p>
         </div>
       </div>'''
-auf5 = test('t5', 'Aufgaben · Kapitel 5', 14, [
+auf5 = test('t5', 'Aufgaben · Kapitel 5', 16, [
     ('5a', 3, r'Berechne ohne Taschenrechner: \(\log_2 \tfrac18\) · \(\lg 1000\) · \(\log_5 \sqrt{5}\).',
      r'<p>\(-3\) · \(3\) · \(\tfrac12\).</p><p class="komm">\(2^{-3} = \tfrac18\), \(10^3 = 1000\), \(5^{1/2} = \sqrt5\).</p>', ''),
     ('5b', 4, r'Bestimme die Umkehrfunktion von \(f(x) = 3^x + 1\). Gib ihre Definitionsmenge, ihre Asymptote und ihre Nullstelle an.',
      r'<p>\(y = 3^x + 1 \Rightarrow 3^x = y - 1 \Rightarrow x = \log_3(y - 1)\); getauscht: \(f^{-1}(x) = \log_3(x - 1)\).</p><p>\(D = \,]1;\, \infty[\), Asymptote \(x = 1\), Nullstelle: \(x - 1 = 1 \Rightarrow x_0 = 2\).</p>', ''),
-    ('5c', 4, r'Löse ohne Taschenrechner: (a) \(5 \cdot 2^{t} = 160\) (b) \(100 \cdot \left(\tfrac12\right)^{t/3} = 12.5\).',
-     r'<p>(a) \(2^t = 32 \Rightarrow t = 5\). (b) \(\left(\tfrac12\right)^{t/3} = 0.125 = \left(\tfrac12\right)^{3} \Rightarrow \tfrac{t}{3} = 3 \Rightarrow t = 9\).</p>', ''),
-    ('5d', 3, r'Abgebildet ist \(y = \log_2 x\). Lies \(\log_2 4\) und \(\log_2 0.5\) ab. Welcher Punkt liegt dann auf dem Graphen von \(y = 2^x\)?',
-     r'<p>\(\log_2 4 = 2\), \(\log_2 0.5 = -1\).</p><p>Gespiegelt an \(y = x\): \((2 \mid 4)\) und \((-1 \mid 0.5)\) liegen auf \(y = 2^x\).</p>',
-     '\n            <div class="mini-reihe"><svg class="mini gross" data-l="1,2,0" data-fenster="-1,7,-3,4" data-punkte="4,2;0.5,-1;1,0"></svg></div>'),
+    ('5c', 4, r'Löse ohne Taschenrechner: (a) \(3 \cdot 3^{t} = 243\) (b) \(100 \cdot \left(\tfrac12\right)^{t/3} = 12.5\).',
+     r'<p>(a) \(3^t = 81 \Rightarrow t = \log_3 81 = 4\). (b) \(\left(\tfrac12\right)^{t/3} = 0.125 = \left(\tfrac12\right)^{3} \Rightarrow \tfrac{t}{3} = 3 \Rightarrow t = 9\).</p>', ''),
+    ('5d', 3, r'Abgebildet ist \(y = \log_3 x\). Lies \(\log_3 9\) und \(\log_3 \tfrac13\) ab. Welche Punkte liegen damit auf dem Graphen von \(y = 3^x\)?',
+     r'<p>\(\log_3 9 = 2\), \(\log_3 \tfrac13 = -1\).</p><p>Gespiegelt an \(y = x\): \((2 \mid 9)\) und \(\left(-1 \mid \tfrac13\right)\) liegen auf \(y = 3^x\).</p>',
+     '\n            <div class="mini-reihe"><svg class="mini gross" data-l="1,3,0" data-fenster="-1,10,-3,3" data-punkte="9,2;0.3333333333333333,-1;1,0" data-xm="1,3,9" data-ym="-1,1,2"></svg></div>'),
+    ('5e', 2, r'Warum hat \(y = \log_a x\) keinen Schnittpunkt mit der \(y\)-Achse, \(y = a^x\) aber schon?',
+     r'<p>Beim Spiegeln an \(y = x\) tauschen die Rollen: \(y = a^x\) schneidet die \(y\)-Achse in \((0 \mid 1)\) und hat die \(x\)-Achse als Asymptote. Die Logarithmusfunktion schneidet darum die \(x\)-Achse in \((1 \mid 0)\) und hat die \(y\)-Achse als Asymptote — bei \(x = 0\) ist sie nicht definiert, denn \(a^y = 0\) hat keine Lösung.</p>', ''),
 ], zwei=False)
-k5 = kapitel(5, 'logarithmusfunktion', 'Die Logarithmusfunktion', 'K4', 45,
+k5 = kapitel(5, 'logarithmusfunktion', 'Die Logarithmusfunktion', 'K4 · SP 1.3', 45,
              r'Du deutest die Logarithmusfunktion als Umkehrfunktion der Exponentialfunktion, zeichnest sie durch Spiegeln an \(y = x\), berechnest Logarithmen und Umkehrfunktionen und löst Gleichungen mit der Unbekannten im Exponenten.',
              ('s3-4-lp-logarithmusfunktion', 'Die Logarithmusfunktion'),
              sim5, ('s3-4-lp-kontrolle-logarithmus', 'Kontrollfragen zur Logarithmusfunktion'),
@@ -444,8 +455,8 @@ k0 = '''
 ''' + test('t0', 'Vortest', 10, [
     ('0a', 3, r'Berechne ohne Taschenrechner: \(2^{-3}\) · \(8^{2/3}\) · \(\left(2^{3}\right)^{2}\).',
      r'<p>\(\tfrac18\) · \(\left(\sqrt[3]{8}\right)^2 = 4\) · \(2^6 = 64\).</p><p class="komm">Falsch? Negativer Exponent = Kehrwert, gebrochener Exponent = Wurzel. <a href="../schwerpunkt/s1-2-potenzen.html">Teilgebiet 1.2, Potenzen</a></p>', ''),
-    ('0b', 3, r'Berechne: \(\log_2 16\) · \(\lg 0.001\) · \(\log_3 1\).',
-     r'<p>\(4\) · \(-3\) · \(0\).</p><p class="komm">Falsch? Der Logarithmus ist der gesuchte Exponent: \(2^{?} = 16\). Der Clip oben zeigt es. <a href="../schwerpunkt/s1-3-logarithmen.html">Teilgebiet 1.3, Logarithmen</a></p>', ''),
+    ('0b', 3, r'Berechne: \(\log_2 16\) · \(\lg 0.001\) · \(\ln e^{2}\).',
+     r'<p>\(4\) · \(-3\) · \(2\) — \(\ln\) ist der Logarithmus zur Basis \(e \approx 2.718\).</p><p class="komm">Falsch? Der Logarithmus ist der gesuchte Exponent: \(2^{?} = 16\). Der Clip oben zeigt es. <a href="../schwerpunkt/s1-3-logarithmen.html">Teilgebiet 1.3, Logarithmen</a></p>', ''),
     ('0c', 2, r'Ein Preis von \(80\) CHF steigt um \(25\,\%\). Wie hoch ist er danach? Und wie hoch wäre er nach einer Senkung um \(25\,\%\)?',
      r'<p>\(80 \cdot 1.25 = 100\) CHF · \(80 \cdot 0.75 = 60\) CHF.</p><p class="komm">Prozentuale Änderung heisst: mit einem Faktor multiplizieren — genau das trägt Kapitel 2.</p>', ''),
     ('0d', 2, r'Der Punkt \((2 \mid 5)\) liegt auf dem Graphen einer umkehrbaren Funktion \(f\). Welcher Punkt liegt auf dem Graphen von \(f^{-1}\)?',
@@ -501,10 +512,10 @@ oben = '''<div id="nav-root"></div>
      ausdrücklich als Umkehrfunktion der Exponentialfunktion.
 
      Kompetenzmatrix (Kompetenz | ohne HM | Kapitel | Kapitelaufgaben | Gesamttest):
-       K1 | ja | 1    | 1a–1d       | G1, G2
-       K2 | ja | 2, 4 | 2a–2d, 4a–4d | G3, G4, G6
+       K1 | ja | 1    | 1a–1e       | G1, G2
+       K2 | ja | 2, 4 | 2a–2e, 4a–4d | G3, G4, G6
        K3 | ja | 3    | 3a–3d       | G5
-       K4 | ja | 5    | 5a–5d       | G7, G8
+       K4 | ja | 5    | 5a–5e       | G7, G8
      Kein Kapitelziel ohne Kompetenz. Der ganze Gesamttest ohne Taschenrechner.
 
      Bewusst weggelassen (→ Themenseiten): Transformationen y = k·a^(x−u) + v im Allgemeinen
