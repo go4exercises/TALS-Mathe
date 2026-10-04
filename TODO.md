@@ -726,3 +726,45 @@ Themenseite übernehmen), Gesamttest 30 min (25 P mit Rechner-Teil).
 - [x] Festhalten 1: \(a \lt 0\) spiegelt auch; Festhalten 4 «Beispiel: f(1)» nennt \(f\) nicht. Randfall
   (Rest ohne reelle Nullstellen) nie geübt. FEST-Eintrag `[1, 0, 6, 6]` (5c) hat \(a = 4\).
 - [x] PDF-Layout: G5/G7 wenig Schreibplatz, Seiten 2–4 halb leer; G2 Tick «1» unter Kurve.
+
+---
+
+## Prüfung Exponential- und Logarithmusfunktionen (04.10.2026)
+
+Skill `/lp-pruefung leitprogramme/exp-log-funktionen.html`, drei Agenten (Seite, Clips, PDFs),
+Stand Commit `4022f46` (unverlinkt, noindex). `seite.*`/`clips.py` = `scripts/lp/exp-log-funktionen/`,
+`GT`/`BP` = `downloads/leitprogramme/exp-log-funktionen/{gesamttest,bewertungspaket}.tex`.
+
+**Rechenfehler: keine** in Vortest, Aufgaben 1a–5d, Festhalten, 25 Kontrollfragen, Stützpunkten der
+bewegten Kurven und GT G1–G8; alles ohne Rechner lösbar. Werkzeuge grün (`pruef-uebungen` 15 × 2000,
+`pruef-leiste` 5, `pruef-fragen` 5). Nachgeprüft vom Hauptagenten: H1, H2, M1.
+
+### HOCH
+- [ ] **H1 · Clip `wachstum-zerfall` «Prozent und Faktor», «Merke» und Kontrollclip «Merke»: «Faktor eins plus p»,
+  Bild `a = 1 + p`** — widerspricht dem Festhalten \(1 + \frac{p}{100}\) (bei 5 % gäbe es 6). → «p Hundertstel», neu vertonen.
+- [ ] **H2 · Kontrollclip Sättigung F5 (Klick bei t = 8)**: \(f(8) = 98.5\) liegt 1.5 unter dem Ziel 100, Toleranz 4 —
+  wer die Kurve tippt, gilt als richtig. → bei \(t = 2\) fragen, Kurve als Falle.
+
+### MITTEL
+- [ ] M1 · Aufgabenleisten beim Wechsel schon gelöst (Sim 1: 1 → 2, Sim 3: 1 → 2, Sim 5: 4 → 5, Sim 2: 1 → 2). → Regler beim Wechsel zurücksetzen; Sim 1 zählt «über 1» schon beim Laden.
+- [ ] M2 · Sättigung: «erreicht S nie» (4d, Festhalten) ohne \(A \neq S\); «Rückstand \(S - f(t)\) ist Zerfall» stimmt beim Abkühlen nicht (negativ, steigt) → Abstand \(|S - f(t)| = |S - A|\,e^{-kt}\). Gleiche Formulierung auf **Themenseite 3.4a** (Sättigung).
+- [ ] M3 · `exp-wert`: Rückmeldung bei negativem Exponenten falsch («\(3^{-2}\) heisst 2-mal multiplizieren»).
+- [ ] M4 · Sonderwerte verdecken Fehler: `halbwertszeit` j = 2 (17 %), `exp-gleichung` a = t = 2, `wachstum-wert` a = t = 2, `basis-punkt` (2 | 4), `log-wert` \(\log_2 4\), `exp-wert` \(2^2\).
+- [ ] M5 · Sperrliste: `prozent-faktor`, `saettigung-lesen`, `saettigung-wert` ohne Schlüssel; fehlend \((\sqrt2)^x\), \(2^x + 1\), \(\log_3 1\), \(\log_5 1\), \(\log_2 4\), Clip-Fälle.
+- [ ] M6 · \(\ln\) in Kapitel 3 benutzt, erst in Kapitel 5 erklärt; Vortest prüft ln nicht.
+- [ ] M7 · «Zeichnen» (Kapitelziele 1 und 5, K1 «grafisch darstellen», K4 «visualisieren») nicht geübt bzw. nicht im GT; Kap. 2 ohne Aufgabe am Graphen, Kap. 5 ohne «Warum»-Aufgabe.
+- [ ] M8 · GT verlangt Ungeübtes: G2b gebrochener Exponent, G4b Zeit aus Menge (erst Kap. 5), G8 \(\ln e^3\); Basiswechsel *zur* Basis e nie geübt.
+- [ ] M9 · GT wiederholt: G5c = Aufgabe 3b, G5a = Festhalten/Clip \(8^x = 2^{3x}\), G1 = Clip-Kurvenpaar; Kapitelaufgaben 4b, 5c, 5d, 2d = Clip-/Kontrollbeispiele; Leistenziele = Clip-Beispiele (Sim 2 −20 %, Sim 3 \(2^x\)/\(\left(\frac12\right)^x\), Sim 4 Akku, Sim 5 \(\log_2 8\)).
+- [ ] M10 · Raster: G3 «höchstens 2» ist 1; G6 typischer Fehler «45 °C» falsch hergeleitet, 17.5/37.5 fehlen.
+- [ ] M11 · Basiswechsel zu beliebiger Basis: \(b = \log_a c\) fehlt, Buchstaben wechseln die Rolle; bei \(b \lt 0\) Spiegelung.
+- [ ] M12 · Verschobene Asymptote der Umkehrfunktion (5b, G7) nicht eingeführt.
+- [ ] M13 · `saettigung-wert`: «Welchen Wert hat er» mehrdeutig.
+
+### NIEDRIG
+- [ ] \(\left(\tfrac12\right)^x = e^{-0.69x}\) mit «=» (Festhalten 3, Clip «Vorzeichen von b»); `basiswechsel`-Lösung \(2.236 = 5^{1/2}\).
+- [ ] Clips: Kurven für \(t \lt 0\); Antworten vor der rhetorischen Frage im Bild (Log «Umkehrfrage», «Gleichungen lösen»); Beschriftungen von Kurve gekreuzt; Punkt \((-2 \mid \frac14)\) fehlt; Marke 100 abgeschnitten (Kontrollclip Sättigung), Asymptote über 100 («Erwärmen»); Kontrollclip Log F4 «log drei von x plus eins» mehrdeutig gesprochen; Kontrollclip Exp F5 Text ≠ Ton; «halbiert sich gleichmässig».
+- [ ] Farben: Nachbau-Kurve Sim 3 grün bei Basis 2, Rückstandslinie orange; [–] Zielkurve grün (Konvention aller Leitprogramme).
+- [ ] Übungen: «Kehrwert-Wurzel», «1 Halbierungen», \(\tfrac13\), \(\tfrac17\) nur als Bruch eingebbar, «Bring den Läufer auf \(\log_2 8\)», Anzeige «\(-\,0 \cdot e\)» bei \(A = S\), Schalter Sim 5 «(gestrichelt)».
+- [ ] Aufgaben: Variablen/Einheiten in 2b, 2c, 2d, 4b; 1d \(a = 0\); 3c drei Teile für 2 P; 5d «Welcher Punkt»; Minigraf 3d \(2^x\)/\(3^x\) gleich gezeichnet; Wirkung von \(k\) nirgends gesagt.
+- [ ] PDF: Bewertungspaket mit halbleeren Seiten (`\needspace`); [–] Kopfzeile trennt den langen Namen; [–] GT 30 min (25 P, wie die anderen Leitprogramme); [–] Teil B mischt K2–K4 (nach Kapiteln gegliedert).
+- [–] Vorwissensclip `s3-2b-anim-spiegelung` 0:53 wie auf der Themenseite (HOWTO §7). Vortest verlinkt das noch unverlinkte Leitprogramm Potenz/Wurzel — erledigt sich mit dessen Freischaltung.
