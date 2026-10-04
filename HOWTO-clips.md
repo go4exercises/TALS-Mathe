@@ -264,6 +264,19 @@ der Steigung) und `marken` wie oben. Vorbild: `scripts/lp/polynomfunktionen/clip
 eine Stelle: Wo es auf zwei Stellen ankommt (\(0.25\)), die Marke mit festem Text schreiben.
 Vorbild: `scripts/lp/exp-log-funktionen/clips.py`.
 
+**Sinus- und Tangenskurven** (seit 05.10.2026): `"trig": "sin"` bzw. `"tan"` liest die
+Stützpunkte als `[t, a, b, u, v]` für \(y = a \sin\big(b(x - u)\big) + v\) (Tangens ebenso); die
+Cosinuskurve ist die Sinuskurve mit \(u = -\tfrac{\pi}{2}\). `asymptoten` zeichnet beim Sinus die
+Mittellinie \(y = v\), beim Tangens alle Polgeraden. **`kreis`** setzt den Einheitskreis links
+neben die Kurve: `{"mx": -1.6, "bahn": [[t, Winkel], …], "spur": true}` — Mittelpunkt
+\((mx \mid 0)\), Radius 1 in \(y\)-Einheiten (bleibt rund, auch bei ungleicher Teilung), der Punkt
+\(P\) folgt der Bahn, der markierte Bogen zeigt den Winkel im Bogenmass, eine gestrichelte
+Waagrechte trägt die Höhe zur Kurve; beim Tangens trifft der Strahl die Tangente \(x = 1\).
+`spur` zeichnet die Kurve nur bis zum aktuellen Winkel (Abrollen), `"projektion": false` zeigt
+nur den Kreis. Die Kurve muss dann bei \(x = 0\) beginnen (`von`), sonst liegt sie über dem Kreis.
+Für Sinuskurven das Bild breit statt quadratisch setzen (1640 × 480 unter dem Text).
+Vorbild: `scripts/lp/trigonometrische-funktionen/clips.py`.
+
 **`"stufen": true`** rundet \(p\) beim Überblenden auf ganze Zahlen. Ohne das entstünde
 zwischen \(x^2\) und \(x^3\) kurz ein gebrochener Exponent — und der löscht den linken Ast
 mitten in der Bewegung, weil es \((-2)^{2.5}\) nicht gibt. Wo es keinen Wert gibt (Pol,

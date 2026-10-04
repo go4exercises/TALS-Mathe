@@ -43,16 +43,17 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
   Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
-- `leitprogramme/` — 10 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 11 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt und ist seit dem 08.09.2026 in **zwei
-  Abschnitte** gegliedert, einen je Art — acht sind verlinkt, zwei noch unverlinkt (`noindex`, Abnahme offen):
+  Abschnitte** gegliedert, einen je Art — acht sind verlinkt, drei noch unverlinkt (`noindex`, Abnahme offen):
   - *nach Thema* (6 verlinkt: `potenzen.html`, `quadratische-gleichungen.html`,
     `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`,
-    `exp-log-funktionen.html`; unverlinkt: `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`)
+    `exp-log-funktionen.html`; unverlinkt: `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`,
+    `trigonometrische-funktionen.html`)
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
@@ -78,10 +79,11 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 444 Drehbücher, alle vertont: **391 in der Bibliothek** (362:25 min,
-  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **53 unverlinkte**
-  Clips mit `"probe": true` (35 Prüfungsclips, 10 Clips «Parabel sehen» des Leitprogramms
-  Quadratische Funktionen, 8 Clips «Gerade sehen» des Leitprogramms Lineare Funktionen), die nur im zugehörigen Leitprogramm stehen und
+- `clips/` — 484 Drehbücher, alle vertont: **391 in der Bibliothek** (362:25 min,
+  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **93 unverlinkte**
+  Clips mit `"probe": true` (35 Prüfungsclips und 58 Clips der Leitprogramme nach Thema:
+  je 10 «Parabel sehen», «Kurve sehen», «Polynom sehen», «Exponentialkurve sehen»,
+  «Sinuskurve sehen», 8 «Gerade sehen»), die nur im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
   `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,

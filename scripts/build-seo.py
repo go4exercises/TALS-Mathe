@@ -157,6 +157,14 @@ SEITEN = {
    titel='Leitprogramm Exponential- und Logarithmusfunktionen — Wachstum, Zerfall, Sättigung, Umkehrung',
    beschreibung='Leitprogramm zu den Exponential- und Logarithmusfunktionen nach RLP SP 3.4: der Graph von aˣ, Wachstum und Zerfall mit Prozent, Verdopplungs- und Halbwertszeit, e-Funktion und Basiswechsel, Sättigungsprozesse und die Logarithmusfunktion als Umkehrfunktion — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Exponentialfunktion', 'Logarithmusfunktion', 'Wachstum', 'Zerfall', 'Leitprogramm']),
+ 'leitprogramme/trigonometrische-funktionen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
+   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
+   noindex=True,
+   titel='Leitprogramm Trigonometrische Funktionen — Einheitskreis, Periode, Symmetrie, Parameter',
+   beschreibung='Leitprogramm zu den trigonometrischen Funktionen nach RLP SP 3.5: Sinus und Cosinus vom Einheitskreis zur Kurve, Periode und Symmetrie, die Tangenskurve mit ihren Polen, Amplitude, Periode und Verschiebung von y = a·sin(b(x − u)) + v und alle Lösungen von sin x = c über die Symmetrie — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Trigonometrische Funktionen', 'Sinusfunktion', 'Einheitskreis', 'Periode', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',

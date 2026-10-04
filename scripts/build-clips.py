@@ -600,6 +600,10 @@ def graf_svg(el, theme):
             # "exponential": true / "logarithmus": true (seit 04.10.2026) lesen die Stuetzpunkte
             # als [t, c, a, v] fuer y = c*a^x + v bzw. y = c*log_a(x) + v; Begleiter wie unten
             # (asymptoten, startpunkt = (0 | c + v) bzw. (1 | v), marken, spiegel).
+            # "trig": "sin" / "tan" (seit 05.10.2026) liest die Stuetzpunkte als [t, a, b, u, v]
+            # fuer y = a*sin(b(x-u)) + v bzw. a*tan(b(x-u)) + v. "asymptoten" zeichnet bei sin die
+            # Mittellinie y = v, bei tan die Polgeraden; "kreis" den Einheitskreis mit Laeufer
+            # (siehe unten).
             # "polynom": true (seit 04.10.2026) liest die Stuetzpunkte als [t, a, x1, x2, …]
             # fuer y = a*(x-x1)*(x-x2)*… — die Linearfaktordarstellung. Legt man zwei
             # Nullstellen aufeinander, entsteht die doppelte Nullstelle von selbst.
@@ -608,7 +612,8 @@ def graf_svg(el, theme):
                          'stroke-width="%s" stroke-linecap="round" stroke-linejoin="round" %s/>'
                          % (entschaerfen(json.dumps(kv["bewegung"])), kid, x0, x1, y0, y1, b, h, rand,
                             1 if kv.get("stufen") else 0, 1 if kv.get("polynom") else 0,
-                            "e" if kv.get("exponential") else "l" if kv.get("logarithmus") else "",
+                            "e" if kv.get("exponential") else "l" if kv.get("logarithmus") else
+                            {"sin": "s", "tan": "t"}.get(kv.get("trig"), ""),
                             kv.get("von", x0), kv.get("bis", x1),
                             farbe, kv.get("dicke", 5),
                             'stroke-dasharray="14 10"' if kv.get("gestrichelt") else ""))
@@ -636,6 +641,28 @@ def graf_svg(el, theme):
                 if text:
                     t_ += '<text font-size="29" font-weight="600" fill="%s" stroke="%s" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text>' % (f_, papier)
                 return t_ + '</g>'
+            # Nur bei "trig": der Einheitskreis links neben der Kurve. Mittelpunkt (mx | 0),
+            # Radius 1 in y-Einheiten (der Kreis bleibt rund, auch wenn die Achsen verschieden
+            # geteilt sind). "bahn": [[t, Winkel], …] fuehrt den Punkt P; eine waagrechte
+            # Strecke traegt seine Hoehe zur Kurve (bei tan: der Punkt auf der Tangente x = 1).
+            # "spur": true zeichnet die Kurve nur bis zum aktuellen Winkel — das Abrollen.
+            kk = kv.get("kreis")
+            if kv.get("trig") and kk:
+                f_ = fv[kk.get("farbe", 1) - 1]
+                teile.append(
+                    '<g class="bew-kk" data-zu="%s" data-mx="%g" data-bahn="%s" data-spur="%d" data-proj="%d">'
+                    '<circle class="kk-kreis" fill="none" stroke="%s" stroke-width="3" stroke-opacity=".55"/>'
+                    '<path class="kk-bogen" fill="none" stroke="%s" stroke-width="7" stroke-opacity=".45" stroke-linecap="round"/>'
+                    '<line class="kk-tang" stroke="%s" stroke-width="3" stroke-opacity=".55"/>'
+                    '<line class="kk-radius" stroke="%s" stroke-width="3"/>'
+                    '<line class="kk-hoehe" stroke="%s" stroke-width="5"/>'
+                    '<line class="kk-proj" stroke="%s" stroke-width="3" stroke-dasharray="10 8"/>'
+                    '<circle class="kk-p" r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
+                    '<circle class="kk-q" r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
+                    '</g>' % (kid, kk.get("mx", -1.6), entschaerfen(json.dumps(kk["bahn"])),
+                              1 if kk.get("spur") else 0, 0 if kk.get("projektion") is False else 1,
+                              tinte, f_, tinte, tinte, f_, tinte,
+                              papier, f_, papier, f_))
             if kv.get("startpunkt"):
                 teile.append(k_punkt("bew-ks", kv["startpunkt"].get("farbe", 3),
                                      text=kv["startpunkt"].get("beschriftung", True) is not False))
@@ -952,6 +979,7 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
 function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
   const Z = bewZustand(T.k, t - T.t0);
   if (T.poly) return bewegePolynom(T, Z, px, py, x0, x1, y0, y1);
+  if (T.el === 's' || T.el === 't') return bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1);
   if (T.el) return bewegeExpLog(T, Z, px, py, x0, x1, y0, y1);
   const [a, p0, u, v] = Z;
   const p = T.stufen ? Math.round(p0) : p0;
@@ -1059,6 +1087,95 @@ function bewegeExpLog(T, Z, px, py, x0, x1, y0, y1) {
       const x = parseFloat(g.dataset.x), y = f(x);
       if (y === null) { g.style.display = 'none'; continue; }
       setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Sinus- oder Tangenskurve y = a*sin(b(x-u)) + v (el 's') bzw. a*tan(b(x-u)) + v (el 't');
+// Z = [a, b, u, v]. Begleiter: Mittellinie bzw. Pole, Marken, Einheitskreis mit Läufer.
+function bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1) {
+  const [a, b, u, v] = Z, tg = T.el === 't';
+  const f = x => { const w = b * (x - u);
+    if (tg) { if (Math.abs(Math.cos(w)) < 1e-4) return null; return a * Math.tan(w) + v; }
+    return a * Math.sin(w) + v; };
+  const kk = T.L.querySelector('.bew-kk[data-zu="' + T.p.dataset.paar + '"]');
+  let th = null;
+  if (kk) { const bahn = kk._bahn || (kk._bahn = JSON.parse(kk.dataset.bahn)); th = bewZustand(bahn, t - T.t0)[0]; }
+  const vx = parseFloat(T.p.dataset.von);
+  let bx = parseFloat(T.p.dataset.bis);
+  if (kk && kk.dataset.spur === '1') bx = Math.min(bx, th);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx), H = y1 - y0;
+  let d = '', an = false, yl = null;
+  for (let i = 0; i <= 900 && a1 > a0; i++) {
+    const x = a0 + (a1 - a0) * i / 900, y = f(x);
+    if (y === null || !isFinite(y) || y < y0 - H || y > y1 + H) { an = false; yl = null; continue; }
+    // Am Pol springt der Tangens von oben nach unten: dort neu ansetzen, nicht verbinden.
+    if (tg && yl !== null && Math.abs(y - yl) > H) an = false;
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true; yl = y;
+  }
+  T.p.setAttribute('d', d);
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.25;
+    const ya = f(x - 1e-3), yb = f(x + 1e-3), steigt = ya !== null && yb !== null && yb > ya;
+    const oben = y > v + 1e-9 || (Math.abs(y - v) < 1e-9 && !steigt);
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (oben ? -22 : 44));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      let pole = '';
+      if (tg && Math.abs(b) > 1e-9) {
+        const per = Math.PI / Math.abs(b), start = u + per / 2;
+        for (let k = Math.ceil((x0 - start) / per); start + k * per <= x1; k++) {
+          const xp = start + k * per;
+          pole += 'M' + px(xp).toFixed(1) + ',' + py(y0) + 'L' + px(xp).toFixed(1) + ',' + py(y1);
+        }
+      }
+      g.querySelector('.bew-ka-s').setAttribute('d', pole);
+      g.querySelector('.bew-ka-w').setAttribute('d', !tg && Math.abs(v) > 1e-9 && v >= y0 && v <= y1
+        ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-km')) {
+      const x = parseFloat(g.dataset.x), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    } else if (g.classList.contains('bew-kk')) {
+      // Einheitskreis: Pixelradius aus der y-Teilung, Mittelpunkt (mx | 0).
+      const r = Math.abs(py(1) - py(0)), cx = px(parseFloat(g.dataset.mx)), cy = py(0);
+      const P = [cx + r * Math.cos(th), cy - r * Math.sin(th)];
+      const k = g.querySelector('.kk-kreis'); k.setAttribute('cx', cx); k.setAttribute('cy', cy); k.setAttribute('r', r);
+      const lin = (c, xa, ya, xb, yb) => { const l = g.querySelector(c);
+        l.setAttribute('x1', xa); l.setAttribute('y1', ya); l.setAttribute('x2', xb); l.setAttribute('y2', yb); };
+      // "projektion": false — nur der Kreis, ohne Strecke zur Kurve (Winkel zeigen).
+      const yq = f(th), sichtbar = yq !== null && innen(th, yq) && g.dataset.proj !== '0';
+      if (tg) {
+        // Tangente x = 1 am Kreis; der Strahl durch P trifft sie in T = (1 | tan th).
+        const ty = Math.tan(th), T_ = [cx + r, cy - r * ty], ok = Math.abs(Math.cos(th)) > 1e-4 && ty >= y0 && ty <= y1;
+        lin('.kk-tang', cx + r, py(y0), cx + r, py(y1));
+        lin('.kk-radius', cx, cy, ok ? T_[0] : P[0], ok ? T_[1] : P[1]);
+        lin('.kk-hoehe', cx + r, cy, ok ? T_[0] : cx + r, ok ? T_[1] : cy);
+        lin('.kk-proj', ok ? T_[0] : 0, ok ? T_[1] : 0, ok && sichtbar ? px(th) : (ok ? T_[0] : 0), ok ? T_[1] : 0);
+        const q = g.querySelector('.kk-q'); q.style.display = ok && sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', py(ty));
+      } else {
+        lin('.kk-tang', 0, 0, 0, 0);
+        lin('.kk-radius', cx, cy, P[0], P[1]);
+        lin('.kk-hoehe', P[0], cy, P[0], P[1]);
+        lin('.kk-proj', P[0], P[1], sichtbar ? px(th) : P[0], P[1]);
+        const q = g.querySelector('.kk-q'); q.style.display = sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', sichtbar ? py(yq) : 0);
+      }
+      // Der Bogen vom Start (1 | 0) bis P — seine Länge ist der Winkel im Bogenmass.
+      const gross = Math.abs(th) > Math.PI ? 1 : 0, dreh = th >= 0 ? 0 : 1;
+      g.querySelector('.kk-bogen').setAttribute('d', Math.abs(th) < 1e-6 ? '' :
+        Math.abs(th) >= 2 * Math.PI - 1e-6
+          ? 'M' + (cx + r) + ',' + cy + 'A' + r + ',' + r + ' 0 1 0 ' + (cx - r) + ',' + cy + 'A' + r + ',' + r + ' 0 1 0 ' + (cx + r) + ',' + cy
+          : 'M' + (cx + r) + ',' + cy + 'A' + r + ',' + r + ' 0 ' + gross + ' ' + dreh + ' ' + P[0].toFixed(1) + ',' + P[1].toFixed(1));
+      const pp = g.querySelector('.kk-p'); pp.setAttribute('cx', P[0]); pp.setAttribute('cy', P[1]);
     }
   }
 }
