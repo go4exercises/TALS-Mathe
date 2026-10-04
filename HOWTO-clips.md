@@ -256,6 +256,14 @@ Nullstellen aufeinander, entsteht die doppelte Nullstelle von selbst. Begleiter:
 `"extrema": {}` (Hoch- und Tiefpunkte «H(…)», «T(…)», numerisch aus dem Vorzeichenwechsel
 der Steigung) und `marken` wie oben. Vorbild: `scripts/lp/polynomfunktionen/clips.py`.
 
+**Exponential- und Logarithmuskurven** (seit 04.10.2026): `"exponential": true` bzw.
+`"logarithmus": true` lesen die Stützpunkte als `[t, c, a, v]` für \(y = c \cdot a^x + v\) bzw.
+\(y = c \cdot \log_a x + v\). Begleiter: `asymptoten` (waagrecht \(y = v\) bzw. senkrecht
+\(x = 0\)), `startpunkt` (\((0 \mid c + v)\) bzw. \((1 \mid v)\)), `marken` und `spiegel` — die an
+\(y = x\) gespiegelte Exponentialkurve ist die Logarithmuskurve. Die Live-Beschriftung rundet auf
+eine Stelle: Wo es auf zwei Stellen ankommt (\(0.25\)), die Marke mit festem Text schreiben.
+Vorbild: `scripts/lp/exp-log-funktionen/clips.py`.
+
 **`"stufen": true`** rundet \(p\) beim Überblenden auf ganze Zahlen. Ohne das entstünde
 zwischen \(x^2\) und \(x^3\) kurz ein gebrochener Exponent — und der löscht den linken Ast
 mitten in der Bewegung, weil es \((-2)^{2.5}\) nicht gibt. Wo es keinen Wert gibt (Pol,

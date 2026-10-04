@@ -597,14 +597,18 @@ def graf_svg(el, theme):
             kid = "bewk%d" % nr
             # "von"/"bis" schraenken die Kurve auf ein Stueck ein — gebraucht fuer die
             # Umkehrbarkeit: y = x^2 ist erst auf x >= 0 umkehrbar.
+            # "exponential": true / "logarithmus": true (seit 04.10.2026) lesen die Stuetzpunkte
+            # als [t, c, a, v] fuer y = c*a^x + v bzw. y = c*log_a(x) + v; Begleiter wie unten
+            # (asymptoten, startpunkt = (0 | c + v) bzw. (1 | v), marken, spiegel).
             # "polynom": true (seit 04.10.2026) liest die Stuetzpunkte als [t, a, x1, x2, …]
             # fuer y = a*(x-x1)*(x-x2)*… — die Linearfaktordarstellung. Legt man zwei
             # Nullstellen aufeinander, entsteht die doppelte Nullstelle von selbst.
             teile.append('<path data-bewk="%s" data-paar="%s" data-fenster="%g,%g,%g,%g,%d,%d,%d" '
-                         'data-stufen="%d" data-poly="%d" data-von="%g" data-bis="%g" fill="none" stroke="%s" '
+                         'data-stufen="%d" data-poly="%d" data-el="%s" data-von="%g" data-bis="%g" fill="none" stroke="%s" '
                          'stroke-width="%s" stroke-linecap="round" stroke-linejoin="round" %s/>'
                          % (entschaerfen(json.dumps(kv["bewegung"])), kid, x0, x1, y0, y1, b, h, rand,
                             1 if kv.get("stufen") else 0, 1 if kv.get("polynom") else 0,
+                            "e" if kv.get("exponential") else "l" if kv.get("logarithmus") else "",
                             kv.get("von", x0), kv.get("bis", x1),
                             farbe, kv.get("dicke", 5),
                             'stroke-dasharray="14 10"' if kv.get("gestrichelt") else ""))
@@ -864,7 +868,7 @@ const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
       art: 'g', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewg), f: p.dataset.fenster.split(',').map(Number) })))
     .concat([...L.querySelectorAll('[data-bewk]')].map(p => ({
       art: 'k', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewk), f: p.dataset.fenster.split(',').map(Number),
-      stufen: p.dataset.stufen === '1', poly: p.dataset.poly === '1' })))
+      stufen: p.dataset.stufen === '1', poly: p.dataset.poly === '1', el: p.dataset.el || '' })))
 }));
 // Zwischen zwei Stuetzpunkten weich. Wie viele Zahlen ein Stuetzpunkt traegt, sagt er
 // selbst: [t, a, u, v] bei einer Parabel, [t, m, q] bei einer Geraden, [t, x] bei einer Bahn.
@@ -948,6 +952,7 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
 function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
   const Z = bewZustand(T.k, t - T.t0);
   if (T.poly) return bewegePolynom(T, Z, px, py, x0, x1, y0, y1);
+  if (T.el) return bewegeExpLog(T, Z, px, py, x0, x1, y0, y1);
   const [a, p0, u, v] = Z;
   const p = T.stufen ? Math.round(p0) : p0;
   // Negative Basis: Math.pow(-8, 1/3) ist NaN, die dritte Wurzel aus -8 ist -2.
@@ -1005,6 +1010,52 @@ function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
       if (y === null) { g.style.display = 'none'; continue; }
       setze(g, x, y);
       beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Exponentialkurve y = c*a^x + v (el 'e') oder Logarithmuskurve y = c*log_a(x) + v (el 'l');
+// Z = [c, a, v]. Die Spiegelkurve an y = x ist die Umkehrfunktion.
+function bewegeExpLog(T, Z, px, py, x0, x1, y0, y1) {
+  const [c, a, v] = Z, ex = T.el === 'e';
+  const f = x => { if (ex) return c * Math.pow(a, x) + v;
+    if (x <= 0 || Math.abs(Math.log(a)) < 1e-9) return null; return c * Math.log(x) / Math.log(a) + v; };
+  const vx = parseFloat(T.p.dataset.von), bx = parseFloat(T.p.dataset.bis);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  const zug = (abx, aby, imBild) => {
+    let d = '', an = false;
+    for (let i = 0; i <= 800; i++) {
+      // Nahe x = 0 fein abtasten, sonst endet die Logarithmuskurve weit über der Asymptote.
+      const q = i / 800, x = a0 + (a1 - a0) * (T.el === 'l' ? q * q : q), y = f(x);
+      if (y === null || !isFinite(y) || !imBild(x, y)) { an = false; continue; }
+      d += (an ? 'L' : 'M') + abx(x, y).toFixed(1) + ',' + aby(x, y).toFixed(1); an = true;
+    }
+    return d;
+  };
+  const H = y1 - y0;
+  T.p.setAttribute('d', zug(px, (x, y) => py(y), (x, y) => y >= y0 - H && y <= y1 + H));
+  const sp = T.L.querySelector('[data-spiegel="' + T.p.dataset.paar + '"]');
+  if (sp) sp.setAttribute('d', zug((x, y) => px(y), (x, y) => py(x), (x, y) => y >= x0 - 1 && y <= x1 + 1 && x >= y0 - 1 && x <= y1 + 1));
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) - 18);
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      g.querySelector('.bew-ka-s').setAttribute('d', ex ? '' : 'M' + px(0) + ',' + py(y0) + 'L' + px(0) + ',' + py(y1));
+      g.querySelector('.bew-ka-w').setAttribute('d', ex && v >= y0 && v <= y1 ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-ks')) {
+      const x = ex ? 0 : 1, y = f(x); setze(g, x, y); beschrifte(g, x, y, '(' + bewZahl(x) + ' | ' + bewZahl(y) + ')');
+    } else if (g.classList.contains('bew-km')) {
+      const x = parseFloat(g.dataset.x), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
     }
   }
 }

@@ -1,0 +1,103 @@
+% Gesamttest «Exponential- und Logarithmusfunktionen» — Quelle des PDFs (python3 scripts/build-lp-pdf.py).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (04.10.2026).
+% Kein \lt/\gt — pdfLaTeX kennt sie nicht, < und > tun es.
+\documentclass[11pt]{article}
+\usepackage{../lp-druck}
+\renewcommand{\lpname}{Exponential- und Logarithmusfunktionen}
+\renewcommand{\lpteilgebiet}{3.4}
+\renewcommand{\lpbereich}{Schwerpunktfach}
+\renewcommand{\lpfuss}{Gesamttest · 25 Punkte}
+\begin{document}
+\lpkopf{Gesamttest}{%
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 25
+  \end{tabularx}}
+
+\begin{lpinfo}{Anleitung}
+\textbf{Zeit:} rund 30 Minuten. \textbf{Hilfsmittel:} kein Taschenrechner — alle vier Kompetenzen des Teilgebiets 3.4 tragen im Lehrplan den Vermerk «auch ohne Hilfsmittel». Lineal und Bleistift sind erlaubt.
+Schreib zu jeder Aufgabe den \textbf{Rechenweg} auf — bewertet wird der Weg.
+Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket} bewerten lassen.
+\end{lpinfo}
+
+\lpteil{Teil A · Exponentialfunktion, Wachstum und Zerfall}{Kapitel 1 und 2 · 13 Punkte}
+
+\begin{lpaufgabe}{G1}{Zwei Kurven skizzieren}{3 P}
+\begin{minipage}[t]{0.52\linewidth}
+Skizziere $y = 2^{x}$ und $y = \left(\tfrac12\right)^{x}$ für $-3 \le x \le 3$ in das Koordinatensystem. Gib den gemeinsamen Punkt, die Asymptote und die Wertemenge an.
+\lpplatz{6}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.42\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}
+\begin{axis}[width=6.4cm,height=6.4cm,axis lines=middle,xmin=-3.3,xmax=3.3,ymin=-1,ymax=9,
+  xtick={-3,-2,-1,1,2,3},ytick={2,4,6,8},minor ytick={1,3,5,7},grid=both,grid style={lplinie},tick label style={font=\scriptsize},
+  xlabel=$x$,ylabel=$y$,
+  yticklabel style={fill=white,inner sep=1pt,xshift=-2pt},xticklabel style={fill=white,inner sep=1pt,yshift=-2pt}]
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G2}{Die Basis bestimmen}{3 P}
+Bestimme die Basis $a$ der Exponentialfunktion $y = a^{x}$, deren Graph durch den Punkt geht:
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item $P(-3 \mid 8)$
+\item $Q\left(\tfrac32 \,\middle|\, 27\right)$
+\end{enumerate}
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G3}{Eine Population wächst}{4 P}
+Eine Population von $500$ Tieren wächst jedes Jahr um $20\,\%$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Stell das Modell $N(t)$ auf ($t$ in Jahren).
+\item Berechne $N(2)$.
+\item Um wie viel Prozent ist die Population in zwei Jahren gewachsen? Begründe, warum es nicht $40\,\%$ sind.
+\end{enumerate}
+\lpplatz{7}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G4}{Ein Medikament wird abgebaut}{3 P}
+Von einem Medikament sind $240$ mg im Blut; die Halbwertszeit beträgt $6$ Stunden.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Stell das Modell $m(t)$ auf ($t$ in Stunden) und berechne $m(18)$.
+\item Nach wie vielen Stunden sind noch $15$ mg übrig?
+\end{enumerate}
+\lpplatz{6}
+\end{lpaufgabe}
+
+\lpteil{Teil B · e-Funktion, Sättigung, Logarithmusfunktion}{Kapitel 3 bis 5 · 12 Punkte}
+
+\begin{lpaufgabe}{G5}{Basiswechsel}{3 P}
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Schreib $8^{x}$ in der Form $2^{b x}$.
+\item Schreib $\left(\tfrac19\right)^{x}$ in der Form $3^{b x}$.
+\item Schreib $e^{(\ln 5)\,x}$ in der Form $c^{x}$.
+\end{enumerate}
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G6}{Wasser wird erwärmt}{3 P}
+Die Temperatur (in °C) von Wasser in einem Wasserkocher folgt dem Modell $f(t) = 90 - 70\,e^{-k t}$ ($t$ in Minuten, $k > 0$).
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Gib Starttemperatur und Sättigungswert an.
+\item Steigt oder fällt die Kurve? Wie heisst ihre waagrechte Asymptote?
+\item Der Rückstand zum Sättigungswert halbiert sich alle $5$ Minuten. Welche Temperatur hat das Wasser nach $10$ Minuten?
+\end{enumerate}
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G7}{Die Umkehrfunktion}{4 P}
+Gegeben ist $f(x) = 2^{x} - 3$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Bestimme die Umkehrfunktion $f^{-1}$ mit Rechenweg.
+\item Gib Definitionsmenge und Asymptote von $f^{-1}$ an.
+\item Berechne die Nullstelle von $f^{-1}$.
+\end{enumerate}
+\lpplatz{7}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G8}{Logarithmen ohne Rechner}{2 P}
+Berechne: (a) $\log_2 \tfrac{1}{16}$ und $\lg 0.01$ \quad (b) $\ln e^{3}$ und $\log_5 1$
+\lpplatz{4}
+\end{lpaufgabe}
+\end{document}

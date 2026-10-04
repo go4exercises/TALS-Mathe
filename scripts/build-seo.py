@@ -152,6 +152,14 @@ SEITEN = {
    titel='Leitprogramm Polynomfunktionen — Nullstellen, Verlauf, Hoch- und Tiefpunkte',
    beschreibung='Leitprogramm zu den Polynomfunktionen nach RLP SP 3.3: Linearfaktoren und Nullstellen, mehrfache Nullstellen am Graphen, der Globalverlauf aus Grad und Leitkoeffizient, Nullstellen berechnen sowie Hoch- und Tiefpunkte lokal und absolut — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Polynomfunktionen', 'Linearfaktor', 'Nullstellen', 'Extremwerte', 'Leitprogramm']),
+ 'leitprogramme/exp-log-funktionen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
+   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
+   noindex=True,
+   titel='Leitprogramm Exponential- und Logarithmusfunktionen — Wachstum, Zerfall, Sättigung, Umkehrung',
+   beschreibung='Leitprogramm zu den Exponential- und Logarithmusfunktionen nach RLP SP 3.4: der Graph von aˣ, Wachstum und Zerfall mit Prozent, Verdopplungs- und Halbwertszeit, e-Funktion und Basiswechsel, Sättigungsprozesse und die Logarithmusfunktion als Umkehrfunktion — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Exponentialfunktion', 'Logarithmusfunktion', 'Wachstum', 'Zerfall', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',
