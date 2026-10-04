@@ -610,3 +610,105 @@ Was offen bleibt, steht unten.
 Fortschritt «Aufgabenblöcke bearbeitet», die Trennung gelöst/übersprungen in der
 Aufgabenleiste, der Schutz gegen mehrfaches Zählen derselben Lösung, die Sonderfälle im
 Merkteil, der KI-freie Weg und die Handschriftkontrolle im Bewertungspaket.
+
+---
+
+## Prüfung Polynomfunktionen (04.10.2026)
+
+Skill `/lp-pruefung leitprogramme/polynomfunktionen.html`, drei Agenten (Seite, Clips, PDFs),
+Stand Commit `8fb85c4` (unverlinkt, noindex). `seite.*`/`clips.py` = `scripts/lp/polynomfunktionen/`,
+`GT`/`BP` = `downloads/leitprogramme/polynomfunktionen/{gesamttest,bewertungspaket}.tex`.
+Legende wie oben.
+
+**Rechenfehler: einer** — `BP` G6, typischer Fehler «\(k(2) = -29\)» entsteht aus keinem
+naheliegenden Fehler (\(+8\) statt \(-8\) gibt \(21\)). Sonst alles nachgerechnet und richtig:
+Vortest, Aufgaben 1a–5d, Festhalten, Minigrafen, 25 Kontrollfragen samt Rückmeldungen,
+Stützpunkte und Begleiter der bewegten Polynome (Bewegung über `__seek` abgetastet, läuft),
+Gesamttest G1–G7 samt Folgefehler-Fällen, Punktesummen (10/13/12/11/14/14, GT 13 + 12 = 25).
+Werkzeuge grün: `pruef-uebungen` (15 × 2000), `pruef-leiste` (5), `pruef-fragen` (5 × 9/9).
+Nachgeprüft vom Hauptagenten: H1–H4, M1–M4, M6 an der Quelle bestätigt.
+
+### HOCH
+
+- [ ] **H1 · Polynomdivision verlangt, nie gezeigt.** Clip `nullstellen-berechnen` («Abspalten»),
+  Festhalten 4 und Sim 4 zeigen nur das Ergebnis \(x^2 - x - 6\); die Übung `abspalten` fragt nur
+  die Nullstellen. 4b, 4c, Kontrollfrage 3 und GT G5 verlangen das Abspalten auf Papier.
+  → Divisionsschema Schritt für Schritt in Clip (neu vertonen) und Festhalten, Übung mit dem
+  Quotienten als Eingabe — oder das Abspalten über Ansatz \((x - x_1)(x^2 + px + q)\) und
+  Koeffizientenvergleich lehren. RLP-Hinweis: GF 1.3 «ohne Polynomdivision auch ohne Hilfsmittel».
+- [ ] **H2 · Falsche Begründung «höchstens n − 1 Extremstellen».** `seite.js:691` («zwischen zwei
+  Nullstellen liegt höchstens ein Hoch- oder Tiefpunkt») und Rückmeldung Kontrollclip
+  Globalverlauf F2 («Zwischen Nullstellen liegen die Extremstellen»). Gegenbeispiel Aufgabe 3b:
+  \(x^4 - 2x^2 - 3\), drei Extremstellen zwischen \(\pm\sqrt3\). → ohne Begründung «eins weniger als
+  der Grad». **Themenseite 3.3** (Mini-Check Globalverlauf) hat denselben Satz — dort separat entscheiden.
+- [ ] **H3 · Voraussetzungen fehlen in Festhalten 1** (`seite.py`, fest1) und Merkbild Clip 1:
+  Linearfaktordarstellung nur bei \(n\) reellen Nullstellen (mit Vielfachheit); «Faktor vorne =
+  Leitkoeffizient» nur bei Klammern \((x - x_k)\) (5c: \(x(12-2x)^2\) hat \(a_3 = 4\)). Gleiche Lücke
+  auf der Themenseite (Definition Linearfaktordarstellung) — melden, nicht still angleichen.
+- [ ] **H4 · «\(x^3 + x + 1\) ist nicht punktsymmetrisch»** (fest3, Häufiger Fehler): Der Graph ist
+  punktsymmetrisch zu \((0 \mid 1)\). → «nicht punktsymmetrisch *zum Ursprung*»; Kontrollclip
+  Globalverlauf F5 und Übung `symmetrie-poly` («weder noch») ebenso präzisieren.
+
+### MITTEL
+
+- [ ] **M1 · Sim 4, Aufgabe 2 und 5 schon beim Erscheinen gelöst**, wenn die Probestelle auf einer
+  gemeinsamen Nullstelle steht (\(-2\), \(1\) bei p0/p1; \(2\) bei p2/p3). → in `wechsle()` Regler auf 0.
+- [ ] **M2 · `ohneNull` wirkt nach `zeichnen`** (`seite.js`, Sim 1–3): Bild zeigt «Leitkoeffizient 0»,
+  flache Kurve, Regler steht auf ±0.5. Aus Potenz/Wurzel übernommen — dort ebenso beheben.
+- [ ] **M3 · `gleichung-mehrfach`: Quadrat-vergessen bei \(d = -1\) gilt als richtig, bei \(d = 1\) Diagnose
+  «Vorzeichen»** (ein Drittel der Würfe). → doppelte Nullstelle aus \(\{\pm2, \pm3\}\).
+- [ ] **M4 · Bild läuft dem Ton voraus**: Clip `linearfaktoren` «a streckt» (Spiegelung schon bei «Eins
+  macht ihn doppelt so hoch», Ton 3.94–5.28 / 5.52–7.96 s) und `globalverlauf` «Ungerader Grad»
+  (Wechsel auf \(a \lt 0\) bei 4.6–6.4 s, gesprochen gegen 8 s). → Stützpunkte nach `sprechzeiten.py`.
+- [ ] **M5 · Kontrollclip Globalverlauf F4**: \(2x^4 - x^2 + 3\) im Fenster \(y \in [-3; 3]\) — Minimum
+  2.875, fast nichts sichtbar. → \(y\) etwa \([-1; 6]\).
+- [ ] **M6 · Übung `graf-vielfachheit`**: bei Nullstellenabstand 1 (40 % der Würfe) ist der Buckel
+  1–2 px hoch, Berühren nicht erkennbar. → \(|b - s| \geq 2\).
+- [ ] **M7 · Zufallsübungen ohne Sperre gegen feste Aufgaben**: `extrem-ablesen` (trifft 5a, \(x^3-3x\),
+  \(-x^3+3x+1\), 5d), `scheitel-extrem` (trifft **GT G6** samt Lösung, 5b, Clip-Beispiele),
+  `lokal-global` (Clip «Am Rand»). → eigener Sperrschlüssel je Typ.
+- [ ] **M8 · Gesamttest wiederholt Modelle**: G7 = 5c (Schachtel, Maximum bei 2) und Clip-Schachtel;
+  G2 ≈ 2b gespiegelt (\(a = -0.5\), \(|f(0)| = 2\)); G6 ≈ 5b (\(x_s = 2\)); G4 = 3d; G1 = Kontrollclip
+  Vielfachheit F1 (2 doppelt, −1 einfach). Dazu: Aufgabe 1c = Kontrollclip Linearfaktoren F3.
+  → neue Modelle.
+- [ ] **M9 · Kapitelziele ohne Gesamttest-Aufgabe**: H/T am Graphen ablesen (K3 «grafisch»),
+  Ausklammern, dreifache Nullstelle, Polynomfunktion erkennen. → Ableseaufgabe in Teil B.
+- [ ] **M10 · Vortest 0c und Übung `ausklammern` rechnen «Produkt/Summe» verschieden** (Klammerzahlen
+  vs. Nullstellen wie im Clip `g2-2b-quadratisch-faktorisieren`). → eine Lesart, ausdrücklich benannt.
+- [ ] **M11 · Raster für die KI**: G2 «falsches Vorzeichen in der Klammer → höchstens 3 von 4» ergibt
+  nachgerechnet 2; G5 «Probe falsch → höchstens 1» widerspricht der Folgefehler-Regel; Satz ergänzen,
+  dass (E)-Zeilen nie Folgepunkte sind. G6 −29 → 21 (siehe oben).
+- [ ] **M12 · Begriffe vor Einführung**: «Extremstellen» in Kapitel 3 (Clip, F2, Übung, 3b), eingeführt
+  erst in 5; «gerade/ungerade Funktion» im Kontrollclip 3 vor dem Festhalten; \(f(-x)\)-Nachweis (3c)
+  nur ein Satz ohne Beispiel. `grad-leitkoeff` (Kapitel 1) würfelt in 84 % Potenzen \((x-p)^k\),
+  die erst Kapitel 2 einführt.
+- [ ] **M13 · Leistenziele = Clip-Beispiele**: Sim 4 A1 (\(x^3-2x^2-5x+6\)), Sim 5 A5 (\(D = [-1.5; 2.5]\)).
+- [ ] **M14 · Kapitel 4 ohne Aufgabe am Graphen** (HOWTO §9).
+
+### NIEDRIG
+
+- [ ] Minigraf 1d: \((0 \mid 3)\) liegt nicht auf einer Gitterlinie (`sy = 2`) — Fenster \(-2,4,-5,5\).
+- [ ] `extrem-ablesen`: bei \(h_x = h_y\) falsche Diagnose «Erst die x-Koordinate»; vertauschtes T nicht erkannt.
+- [ ] «Rest» heisst einmal Divisionsrest, einmal Quotient (fest4, Übung `abspalten`, Clip) → «Quotient».
+- [ ] Gerundete Live-Werte ohne «≈» (Sim 5 Läufer, «(gerundet)»); Clip «Anwendung» H(2.83 | 379) ohne ≈.
+- [ ] Sim 5 letzte Aufgabe lehnt \(r = 2\) ab (Gleichstand, H bleibt absolutes Maximum) → \(r \le 2\).
+- [ ] Text ≠ Ton: Kontrollclip Nullstellen F3 Rückmeldung 1, F5 Rückmeldung 1.
+- [ ] Farben: Exponenten orange (`\fb`) bei der Symmetrie (Orange = Nullstellen); Zielkurve grün (Grün = H/T);
+  «Nah dran» \(x^3\) blau, Leitterm-Kurve Tinte. «Achse» ohne Zusatz (Notiz «Symmetrie», Übung).
+- [ ] Clip `vielfachheit` «Warum kein Wechsel»: auch \((x+2)\) behält sein Vorzeichen — fehlt; Marken zeigen \(f\), nicht \((x-1)^2\).
+- [ ] Kontrollclip Nullstellen F3/F4 am Bild ablesbar ohne Rechnen.
+- [ ] Clip `extrema` «Grad 2 exakt»: H(2 | 3) steht vor der Rechnung im Bild; «−1x²» → «−x²».
+  Clip `nullstellen-berechnen` «Faktorisieren»: Graph 6.5 s weg.
+- [ ] Beschriftungen auf Achszahlen ((1 | 0), H(−1 | 2), «x [cm]»).
+- [ ] Merkbild Kontrollclip Vielfachheit «Terrasse dreifach» — auch 5-fach gibt eine Terrasse.
+- [ ] Übung `probe-teiler`: 13 % der Probezahlen sind keine Teiler von \(a_0\); Hinweis «Exponent der Klammer x»,
+  Lösung «\((x)^3\)», «\((x-2)^1\)» in `vielfachheit`; `scheitel-extrem`-Hinweis nur für \(a \gt 0\) formuliert.
+- [ ] Rückmeldungen: Kontrollclip Extrema F3 «x_s» als Klartext mit Unterstrich; Kontrollclip Linearfaktoren F2
+  R2 rechnet fast vor.
+- [ ] 5c/G7: Maximum aus 0.5er-Tabelle als exakt ausgegeben → «in der Tabelle am grössten». G7 «zu grobe
+  Tabelle» kann nicht vorkommen; \([0; 5]\) als Schreibweise regeln. (A) an Zeilen, die nichts ablesen (G3c, G4, G7a).
+- [ ] Zeiten: Kopf «rund fünf Lektionen» bei 245 min (5.4); Gesamttest 30 statt §9 «rund 20» — entscheiden.
+  Vorwissensclips abgerundet 1:02/0:48. Kapitel 4 mit Handdivision knapp.
+- [ ] Festhalten 1: \(a \lt 0\) spiegelt auch; Festhalten 4 «Beispiel: f(1)» nennt \(f\) nicht. Randfall
+  (Rest ohne reelle Nullstellen) nie geübt. FEST-Eintrag `[1, 0, 6, 6]` (5c) hat \(a = 4\).
+- [ ] PDF-Layout: G5/G7 wenig Schreibplatz, Seiten 2–4 halb leer; G2 Tick «1» unter Kurve.
