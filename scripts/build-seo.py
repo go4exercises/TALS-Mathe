@@ -144,6 +144,14 @@ SEITEN = {
    titel='Leitprogramm Potenz- und Wurzelfunktionen — formen, verschieben, umkehren',
    beschreibung='Leitprogramm zu den Potenz- und Wurzelfunktionen nach RLP SP 3.2: der Exponent und die Symmetrie, Hyperbeln mit ihren Asymptoten, Verschieben und Strecken, die Wurzelfunktion als Umkehrfunktion der Potenzfunktion und ihre Definitionsmenge — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Potenzfunktionen', 'Wurzelfunktionen', 'Umkehrfunktion', 'Hyperbel', 'Leitprogramm']),
+ 'leitprogramme/polynomfunktionen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
+   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
+   noindex=True,
+   titel='Leitprogramm Polynomfunktionen — Nullstellen, Verlauf, Hoch- und Tiefpunkte',
+   beschreibung='Leitprogramm zu den Polynomfunktionen nach RLP SP 3.3: Linearfaktoren und Nullstellen, mehrfache Nullstellen am Graphen, der Globalverlauf aus Grad und Leitkoeffizient, Nullstellen berechnen sowie Hoch- und Tiefpunkte lokal und absolut — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Polynomfunktionen', 'Linearfaktor', 'Nullstellen', 'Extremwerte', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',

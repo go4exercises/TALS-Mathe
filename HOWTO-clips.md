@@ -249,6 +249,13 @@ Hyperbeln (\(p \lt 0\)) und Wurzelkurven (\(p = \tfrac1n\)) mit demselben Schlü
 | `"spiegel": {}` | **dieselbe Kurve an \(y = x\) gespiegelt** — die Umkehrfunktion |
 | `"von"` / `"bis"` | schränken die Kurve auf ein Stück ein; \(y = x^2\) ist erst auf \(x \geq 0\) umkehrbar |
 
+**Polynome in Linearfaktordarstellung** (seit 04.10.2026): `"polynom": true` liest die
+Stützpunkte als `[t, a, x1, x2, …]` für \(y = a\,(x-x_1)(x-x_2)\cdots\). Legt man zwei
+Nullstellen aufeinander, entsteht die doppelte Nullstelle von selbst. Begleiter:
+`"nullstellen": {}` (je Linearfaktor ein Punkt «(x | 0)», zusammenfallende zeigen einen),
+`"extrema": {}` (Hoch- und Tiefpunkte «H(…)», «T(…)», numerisch aus dem Vorzeichenwechsel
+der Steigung) und `marken` wie oben. Vorbild: `scripts/lp/polynomfunktionen/clips.py`.
+
 **`"stufen": true`** rundet \(p\) beim Überblenden auf ganze Zahlen. Ohne das entstünde
 zwischen \(x^2\) und \(x^3\) kurz ein gebrochener Exponent — und der löscht den linken Ast
 mitten in der Bewegung, weil es \((-2)^{2.5}\) nicht gibt. Wo es keinen Wert gibt (Pol,

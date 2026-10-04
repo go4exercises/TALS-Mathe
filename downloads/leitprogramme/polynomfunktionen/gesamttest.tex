@@ -1,0 +1,91 @@
+% Gesamttest «Polynomfunktionen» — Quelle des PDFs (python3 scripts/build-lp-pdf.py).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (04.10.2026).
+% Kein \lt/\gt — pdfLaTeX kennt sie nicht, < und > tun es.
+\documentclass[11pt]{article}
+\usepackage{../lp-druck}
+\renewcommand{\lpname}{Polynomfunktionen}
+\renewcommand{\lpteilgebiet}{3.3}
+\renewcommand{\lpbereich}{Schwerpunktfach}
+\renewcommand{\lpfuss}{Gesamttest · 25 Punkte}
+\begin{document}
+\lpkopf{Gesamttest}{%
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 25
+  \end{tabularx}}
+
+\begin{lpinfo}{Anleitung}
+\textbf{Zeit:} rund 30 Minuten. \textbf{Hilfsmittel:} Teil~A \textbf{ohne Taschenrechner} — die beiden Kompetenzen tragen im Lehrplan den Vermerk «auch ohne Hilfsmittel». Teil~B \textbf{mit Taschenrechner}. Lineal und Bleistift sind immer erlaubt.
+Schreib zu jeder Aufgabe den \textbf{Rechenweg} auf — bewertet wird der Weg.
+Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket} bewerten lassen.
+\end{lpinfo}
+
+\lpteil{Teil A · Nullstellen und Verlauf — ohne Taschenrechner}{Kapitel 1 bis 3 · 13 Punkte}
+
+\begin{lpaufgabe}{G1}{Aus der Linearfaktordarstellung lesen}{4 P}
+Gegeben ist $f(x) = 3\,(x-2)^{2}\,(x+1)$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Gib Grad und Leitkoeffizient an.
+\item Gib alle Nullstellen mit ihrer Vielfachheit an und beschreib, was der Graph an jeder Nullstelle tut.
+\item Berechne $f(0)$.
+\end{enumerate}
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G2}{Vom Graphen zur Gleichung}{4 P}
+\begin{minipage}[t]{0.52\linewidth}
+Der Graph gehört zu einer Polynomfunktion dritten Grades. Die markierten Punkte liegen auf Gitterpunkten.
+Bestimme die Gleichung in Linearfaktordarstellung und begründe, welche Nullstelle doppelt ist.
+\lpplatz{7}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.42\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}
+\begin{axis}[width=6.4cm,height=7.2cm,axis lines=middle,xmin=-3.6,xmax=2.4,ymin=-5,ymax=7,
+  xtick={-3,-2,-1,1,2},ytick={-4,-2,2,4,6},grid=both,grid style={lplinie},tick label style={font=\scriptsize},
+  xlabel=$x$,ylabel=$y$,
+  yticklabel style={fill=white,inner sep=1pt,xshift=-2pt},xticklabel style={fill=white,inner sep=1pt}]
+\addplot[lpblau,very thick,domain=-3.45:1.95,samples=160] {-0.5*(x+2)^2*(x-1)};
+\addplot[only marks,mark=*,color=lporange] coordinates {(-2,0) (1,0)};
+\addplot[only marks,mark=*,color=black] coordinates {(0,2)};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G3}{Den Verlauf beschreiben}{3 P}
+Gegeben ist $g(x) = -x^{4} + 5x^{2} - 4$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Wohin zeigen die beiden Enden des Graphen? Begründe mit Grad und Leitkoeffizient.
+\item Welche Symmetrie hat der Graph? Begründe mit den Exponenten.
+\item Wie viele Nullstellen und wie viele lokale Extremstellen kann $g$ höchstens haben?
+\end{enumerate}
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G4}{Ohne Nullstelle?}{2 P}
+Gibt es eine Polynomfunktion dritten Grades, deren Graph die $x$-Achse nirgends trifft? Begründe.
+\lpplatz{4}
+\end{lpaufgabe}
+
+\lpteil{Teil B · Ausgezeichnete Stellen — mit Taschenrechner}{Kapitel 4 und 5 · 12 Punkte}
+
+\begin{lpaufgabe}{G5}{Nullstellen berechnen}{4 P}
+Berechne alle Nullstellen von $h(x) = x^{3} - 4x^{2} + x + 6$: Rate eine Nullstelle, spalte den Linearfaktor ab und löse den Rest. Gib $h$ in Linearfaktordarstellung an.
+\lpplatz{8}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G6}{Ein Extrempunkt exakt}{3 P}
+Berechne den Extrempunkt von $k(x) = -2x^{2} + 8x - 3$ exakt und gib an, ob es ein Hoch- oder ein Tiefpunkt ist.
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G7}{Eine Schachtel aus Karton}{5 P}
+Aus einem Karton von 16\,cm × 10\,cm entsteht eine offene Schachtel: In jeder Ecke wird ein Quadrat der Seite $x$ (in cm) ausgeschnitten, dann werden die Ränder hochgefaltet. Das Volumen ist
+\[ V(x) = x\,(16 - 2x)(10 - 2x) \quad (\text{in cm}^3). \]
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Gib die sinnvolle Definitionsmenge an und berechne $V(1)$.
+\item Bestimme mit einer Wertetabelle (Schrittweite $0.5$), für welches $x$ das Volumen am grössten ist, und gib das grösste Volumen an.
+\item Ist das ein lokales oder auch ein absolutes Maximum auf der Definitionsmenge? Begründe.
+\end{enumerate}
+\lpplatz{9}
+\end{lpaufgabe}
+\end{document}

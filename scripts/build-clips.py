@@ -597,11 +597,15 @@ def graf_svg(el, theme):
             kid = "bewk%d" % nr
             # "von"/"bis" schraenken die Kurve auf ein Stueck ein — gebraucht fuer die
             # Umkehrbarkeit: y = x^2 ist erst auf x >= 0 umkehrbar.
+            # "polynom": true (seit 04.10.2026) liest die Stuetzpunkte als [t, a, x1, x2, …]
+            # fuer y = a*(x-x1)*(x-x2)*… — die Linearfaktordarstellung. Legt man zwei
+            # Nullstellen aufeinander, entsteht die doppelte Nullstelle von selbst.
             teile.append('<path data-bewk="%s" data-paar="%s" data-fenster="%g,%g,%g,%g,%d,%d,%d" '
-                         'data-stufen="%d" data-von="%g" data-bis="%g" fill="none" stroke="%s" '
+                         'data-stufen="%d" data-poly="%d" data-von="%g" data-bis="%g" fill="none" stroke="%s" '
                          'stroke-width="%s" stroke-linecap="round" stroke-linejoin="round" %s/>'
                          % (entschaerfen(json.dumps(kv["bewegung"])), kid, x0, x1, y0, y1, b, h, rand,
-                            1 if kv.get("stufen") else 0, kv.get("von", x0), kv.get("bis", x1),
+                            1 if kv.get("stufen") else 0, 1 if kv.get("polynom") else 0,
+                            kv.get("von", x0), kv.get("bis", x1),
                             farbe, kv.get("dicke", 5),
                             'stroke-dasharray="14 10"' if kv.get("gestrichelt") else ""))
             # Begleiter: startpunkt (u | v), asymptoten (x = u und y = v),
@@ -631,6 +635,19 @@ def graf_svg(el, theme):
             if kv.get("startpunkt"):
                 teile.append(k_punkt("bew-ks", kv["startpunkt"].get("farbe", 3),
                                      text=kv["startpunkt"].get("beschriftung", True) is not False))
+            # Nur bei "polynom": die Nullstellen (je Linearfaktor ein Punkt auf der
+            # x-Achse; zusammenfallende zeigen einen) und die Extrempunkte H und T,
+            # numerisch aus dem Vorzeichenwechsel der Steigung.
+            if kv.get("polynom") and kv.get("nullstellen"):
+                nst = kv["nullstellen"]
+                for i_ in range(len(kv["bewegung"][0]) - 2):
+                    teile.append(k_punkt("bew-kn", nst.get("farbe", 2), ' data-i="%d"' % i_,
+                                         text=nst.get("beschriftung", True) is not False))
+            if kv.get("polynom") and kv.get("extrema"):
+                ex_ = kv["extrema"]
+                for i_ in range(len(kv["bewegung"][0]) - 3):
+                    teile.append(k_punkt("bew-ke", ex_.get("farbe", 3), ' data-i="%d"' % i_,
+                                         text=ex_.get("beschriftung", True) is not False))
             for mk in kv.get("marken", []):
                 teile.append(k_punkt("bew-km", mk.get("farbe", 5),
                                      ' data-x="%g" data-text="%s"' % (mk["x"], entschaerfen(mk.get("text", "")))))
@@ -847,7 +864,7 @@ const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
       art: 'g', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewg), f: p.dataset.fenster.split(',').map(Number) })))
     .concat([...L.querySelectorAll('[data-bewk]')].map(p => ({
       art: 'k', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewk), f: p.dataset.fenster.split(',').map(Number),
-      stufen: p.dataset.stufen === '1' })))
+      stufen: p.dataset.stufen === '1', poly: p.dataset.poly === '1' })))
 }));
 // Zwischen zwei Stuetzpunkten weich. Wie viele Zahlen ein Stuetzpunkt traegt, sagt er
 // selbst: [t, a, u, v] bei einer Parabel, [t, m, q] bei einer Geraden, [t, x] bei einer Bahn.
@@ -929,7 +946,9 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
 // Wo es keinen Wert gibt (Pol, negative Basis mit gebrochenem Exponenten), bricht der
 // Streckenzug ab und beginnt danach neu — genau so entstehen Aeste und Definitionsluecken.
 function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
-  const [a, p0, u, v] = bewZustand(T.k, t - T.t0);
+  const Z = bewZustand(T.k, t - T.t0);
+  if (T.poly) return bewegePolynom(T, Z, px, py, x0, x1, y0, y1);
+  const [a, p0, u, v] = Z;
   const p = T.stufen ? Math.round(p0) : p0;
   // Negative Basis: Math.pow(-8, 1/3) ist NaN, die dritte Wurzel aus -8 ist -2.
   // Bei ungeradem Wurzelexponenten (1/p ganz und ungerade) gibt es den Wert, bei
@@ -986,6 +1005,66 @@ function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
       if (y === null) { g.style.display = 'none'; continue; }
       setze(g, x, y);
       beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Polynom in Linearfaktordarstellung y = a*(x-x1)*(x-x2)*…; Z = [a, x1, x2, …].
+function bewegePolynom(T, Z, px, py, x0, x1, y0, y1) {
+  const a = Z[0], r = Z.slice(1);
+  const f = x => r.reduce((s, q) => s * (x - q), a);
+  const vx = parseFloat(T.p.dataset.von), bx = parseFloat(T.p.dataset.bis);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y < y0 - (y1 - y0) || y > y1 + (y1 - y0)) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  // Extrempunkte: Vorzeichenwechsel der Steigung, verfeinert durch Halbieren.
+  const ex = [];
+  const df = x => (f(x + 1e-5) - f(x - 1e-5)) / 2e-5;
+  for (let i = 0; i < 800; i++) {
+    let p = a0 + (a1 - a0) * i / 800, q = a0 + (a1 - a0) * (i + 1) / 800;
+    const dp = df(p), dq = df(q);
+    // Faellt ein Gitterpunkt genau auf die Extremstelle, ist dort df = 0 — darum
+    // «bis einschliesslich null», sonst geht der Scheitel x = 3 von (x−1)(x−5) verloren.
+    if ((dp > 0 && dq <= 0) || (dp < 0 && dq >= 0)) {
+      const hoch = dp > 0;
+      for (let k = 0; k < 40; k++) { const m = (p + q) / 2; if ((df(m) > 0) === (df(p) > 0)) p = m; else q = m; }
+      ex.push([(p + q) / 2, hoch]);
+    }
+  }
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text, unten) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (unten ? 44 : -18));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-kn')) {
+      const i = +g.dataset.i, x = r[i];
+      // Zusammenfallende Nullstellen zeigen nur einen Punkt — den ersten.
+      if (r.slice(0, i).some(q => Math.abs(q - x) < 0.05)) { g.style.display = 'none'; continue; }
+      setze(g, x, 0);
+      // Beschriftungen abwechselnd ueber und unter der x-Achse, nach der Lage von
+      // links nach rechts — sonst laufen zwei nahe Nullstellen ineinander.
+      const rang = [...new Set(r.map(q => Math.round(q * 20)))].sort((p, q) => p - q).indexOf(Math.round(x * 20));
+      beschrifte(g, x, 0, '(' + bewZahl(x) + ' | 0)', rang % 2 === 1);
+    } else if (g.classList.contains('bew-ke')) {
+      const e = ex[+g.dataset.i];
+      if (!e) { g.style.display = 'none'; continue; }
+      const y = f(e[0]); setze(g, e[0], y);
+      beschrifte(g, e[0], y, (e[1] ? 'H' : 'T') + '(' + bewZahl(e[0]) + ' | ' + bewZahl(y) + ')', !e[1]);
+    } else if (g.classList.contains('bew-km')) {
+      const x = parseFloat(g.dataset.x), y = f(x);
+      setze(g, x, y);
+      beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)), a < 0);
     }
   }
 }

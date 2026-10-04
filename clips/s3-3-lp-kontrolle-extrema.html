@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Polynom sehen: Kontrollfragen zu Hoch- und Tiefpunkten</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;gap:14px;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Funktionen · Polynomfunktionen</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>04.10.2026</span></div>
+<div class="l m row" data-at="1.00" data-out="7.41" data-anim="rise" style="left:150px;top:300px;font-size:56px"><span>\(f(x) = -x^3 + 3x + 1\)</span></div>
+<div class="l hand" data-at="2.40" data-out="7.41" data-anim="rise" style="left:150px;top:440px;font-size:46px;color:var(--gruen)">\(\fc{T(-1 \mid -1)}\), \(\fc{H(1 \mid 3)}\)</div>
+<div class="l graf" data-at="0.05" data-t0="0.00" data-out="7.41" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="132.0" y1="0" x2="132.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="256.0" y1="0" x2="256.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="504.0" y1="0" x2="504.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="628.0" y1="0" x2="628.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="752.0" x2="760" y2="752.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="603.2" x2="760" y2="603.2" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="305.6" x2="760" y2="305.6" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="156.8" x2="760" y2="156.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="760" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="454.4" x2="760" y2="454.4" stroke="#1c1a17" stroke-width="3"/><line x1="380.0" y1="760" x2="380.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,454.4 742.0,445.4 742.0,463.4" fill="#1c1a17"/><polygon points="380.0,0 371.0,18 389.0,18" fill="#1c1a17"/><text x="734.0" y="440.4" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="394.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="132.0" y1="447.4" x2="132.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="132.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="256.0" y1="447.4" x2="256.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="256.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="504.0" y1="447.4" x2="504.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="504.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="628.0" y1="447.4" x2="628.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="628.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="373.0" y1="752.0" x2="387.0" y2="752.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="760.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="373.0" y1="603.2" x2="387.0" y2="603.2" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="611.2" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="373.0" y1="305.6" x2="387.0" y2="305.6" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="313.6" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="373.0" y1="156.8" x2="387.0" y2="156.8" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="164.8" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="373.0" y1="8.0" x2="387.0" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><path data-bewk="[[0, -1, -1.532089, -0.347296, 1.879385]]" data-paar="bewk0" data-fenster="-3,3,-4,6,760,760,8" data-stufen="0" data-poly="1" data-von="-3" data-bis="3" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+<div class="l graf" data-at="2.40" data-t0="0.00" data-out="7.41" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="132.0" y1="0" x2="132.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="256.0" y1="0" x2="256.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="504.0" y1="0" x2="504.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="628.0" y1="0" x2="628.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="752.0" x2="760" y2="752.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="603.2" x2="760" y2="603.2" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="305.6" x2="760" y2="305.6" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="156.8" x2="760" y2="156.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="760" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="454.4" x2="760" y2="454.4" stroke="#1c1a17" stroke-width="3"/><line x1="380.0" y1="760" x2="380.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,454.4 742.0,445.4 742.0,463.4" fill="#1c1a17"/><polygon points="380.0,0 371.0,18 389.0,18" fill="#1c1a17"/><text x="734.0" y="440.4" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="394.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="132.0" y1="447.4" x2="132.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="132.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="256.0" y1="447.4" x2="256.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="256.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="504.0" y1="447.4" x2="504.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="504.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="628.0" y1="447.4" x2="628.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="628.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="373.0" y1="752.0" x2="387.0" y2="752.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="760.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="373.0" y1="603.2" x2="387.0" y2="603.2" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="611.2" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="373.0" y1="305.6" x2="387.0" y2="305.6" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="313.6" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="373.0" y1="156.8" x2="387.0" y2="156.8" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="164.8" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="373.0" y1="8.0" x2="387.0" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><path data-bewk="[[0, -1, -1.532089, -0.347296, 1.879385]]" data-paar="bewk0" data-fenster="-3,3,-4,6,760,760,8" data-stufen="0" data-poly="1" data-von="-3" data-bis="3" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><g class="bew-ke" data-zu="bewk0" data-i="0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g><text font-size="29" font-weight="600" fill="#1f6b3a" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g><g class="bew-ke" data-zu="bewk0" data-i="1"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g><text font-size="29" font-weight="600" fill="#1f6b3a" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g></svg></div>
+<div class="l m row" data-at="8.41" data-out="16.66" data-anim="rise" style="left:150px;top:300px;font-size:50px"><span>\(f(-3) = 27 - 9 + 1 = 19 \gt 3\)</span></div>
+<div class="l hand" data-at="9.81" data-out="16.66" data-anim="rise" style="left:150px;top:440px;font-size:46px;color:var(--gruen)">Hochpunkt = nur lokal</div>
+<div class="l graf" data-at="8.61" data-t0="7.41" data-out="16.66" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="132.0" y1="0" x2="132.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="256.0" y1="0" x2="256.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="504.0" y1="0" x2="504.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="628.0" y1="0" x2="628.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="752.0" x2="760" y2="752.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="504.0" x2="760" y2="504.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="380.0" x2="760" y2="380.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="256.0" x2="760" y2="256.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="132.0" x2="760" y2="132.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="760" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="628.0" x2="760" y2="628.0" stroke="#1c1a17" stroke-width="3"/><line x1="380.0" y1="760" x2="380.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,628.0 742.0,619.0 742.0,637.0" fill="#1c1a17"/><polygon points="380.0,0 371.0,18 389.0,18" fill="#1c1a17"/><text x="734.0" y="614.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="394.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="132.0" y1="621.0" x2="132.0" y2="635.0" stroke="#1c1a17" stroke-width="2.5"/><text x="132.0" y="660.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="256.0" y1="621.0" x2="256.0" y2="635.0" stroke="#1c1a17" stroke-width="2.5"/><text x="256.0" y="660.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="504.0" y1="621.0" x2="504.0" y2="635.0" stroke="#1c1a17" stroke-width="2.5"/><text x="504.0" y="660.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="628.0" y1="621.0" x2="628.0" y2="635.0" stroke="#1c1a17" stroke-width="2.5"/><text x="628.0" y="660.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="373.0" y1="752.0" x2="387.0" y2="752.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="760.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="373.0" y1="504.0" x2="387.0" y2="504.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="512.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="373.0" y1="380.0" x2="387.0" y2="380.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="388.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">8</text><line x1="373.0" y1="256.0" x2="387.0" y2="256.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="264.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">12</text><line x1="373.0" y1="132.0" x2="387.0" y2="132.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="140.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">16</text><line x1="373.0" y1="8.0" x2="387.0" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">20</text><path data-bewk="[[0, -1, -1.532089, -0.347296, 1.879385]]" data-paar="bewk0" data-fenster="-3,3,-4,20,760,760,8" data-stufen="0" data-poly="1" data-von="-3" data-bis="3" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><g class="bew-ke" data-zu="bewk0" data-i="0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g></g><g class="bew-ke" data-zu="bewk0" data-i="1"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g></g><g class="bew-km" data-zu="bewk0" data-x="-3" data-text="(−3 | {y})"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1c1a17" stroke-width="3.5"/><circle r="5" fill="#1c1a17"/></g><text font-size="29" font-weight="600" fill="#1c1a17" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g></svg></div>
+<div class="l m row" data-at="17.66" data-out="28.65" data-anim="rise" style="left:150px;top:300px;font-size:46px"><span>\(x_s = -\dfrac{-6}{2 \cdot 1} = 3, \quad f(3) = -4\)</span></div>
+<div class="l hand" data-at="19.06" data-out="28.65" data-anim="rise" style="left:150px;top:440px;font-size:46px;color:var(--gruen)">\(\fa{a} \gt 0\): \(\fc{T(3 \mid -4)}\)</div>
+<div class="l graf" data-at="19.66" data-t0="16.66" data-out="28.65" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="8.0" y1="0" x2="8.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="101.0" y1="0" x2="101.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="194.0" y1="0" x2="194.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="287.0" y1="0" x2="287.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="380.0" y1="0" x2="380.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="473.0" y1="0" x2="473.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="566.0" y1="0" x2="566.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="659.0" y1="0" x2="659.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="752.0" y1="0" x2="752.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="684.4" x2="760" y2="684.4" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="549.1" x2="760" y2="549.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="278.5" x2="760" y2="278.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="143.3" x2="760" y2="143.3" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="760" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="413.8" x2="760" y2="413.8" stroke="#1c1a17" stroke-width="3"/><line x1="101.0" y1="760" x2="101.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,413.8 742.0,404.8 742.0,422.8" fill="#1c1a17"/><polygon points="101.0,0 92.0,18 110.0,18" fill="#1c1a17"/><text x="734.0" y="399.8" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="115.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="8.0" y1="406.8" x2="8.0" y2="420.8" stroke="#1c1a17" stroke-width="2.5"/><text x="8.0" y="445.8" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="194.0" y1="406.8" x2="194.0" y2="420.8" stroke="#1c1a17" stroke-width="2.5"/><text x="194.0" y="445.8" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="287.0" y1="406.8" x2="287.0" y2="420.8" stroke="#1c1a17" stroke-width="2.5"/><text x="287.0" y="445.8" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="380.0" y1="406.8" x2="380.0" y2="420.8" stroke="#1c1a17" stroke-width="2.5"/><text x="380.0" y="445.8" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="473.0" y1="406.8" x2="473.0" y2="420.8" stroke="#1c1a17" stroke-width="2.5"/><text x="473.0" y="445.8" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">4</text><line x1="566.0" y1="406.8" x2="566.0" y2="420.8" stroke="#1c1a17" stroke-width="2.5"/><text x="566.0" y="445.8" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">5</text><line x1="659.0" y1="406.8" x2="659.0" y2="420.8" stroke="#1c1a17" stroke-width="2.5"/><text x="659.0" y="445.8" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">6</text><line x1="752.0" y1="406.8" x2="752.0" y2="420.8" stroke="#1c1a17" stroke-width="2.5"/><text x="752.0" y="445.8" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">7</text><line x1="94.0" y1="684.4" x2="108.0" y2="684.4" stroke="#1c1a17" stroke-width="2.5"/><text x="88.0" y="692.4" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="94.0" y1="549.1" x2="108.0" y2="549.1" stroke="#1c1a17" stroke-width="2.5"/><text x="88.0" y="557.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="94.0" y1="278.5" x2="108.0" y2="278.5" stroke="#1c1a17" stroke-width="2.5"/><text x="88.0" y="286.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="94.0" y1="143.3" x2="108.0" y2="143.3" stroke="#1c1a17" stroke-width="2.5"/><text x="88.0" y="151.3" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="94.0" y1="8.0" x2="108.0" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="88.0" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><path data-bewk="[[0, 1, 1, 5]]" data-paar="bewk0" data-fenster="-1,7,-5,6,760,760,8" data-stufen="0" data-poly="1" data-von="-1" data-bis="7" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><g class="bew-ke" data-zu="bewk0" data-i="0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g><text font-size="29" font-weight="600" fill="#1f6b3a" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g></svg></div>
+<div class="l m row" data-at="29.65" data-out="38.60" data-anim="rise" style="left:150px;top:300px;font-size:52px"><span>\(\fa{a} \lt 0: \text{nach unten geöffnet}\)</span></div>
+<div class="l hand" data-at="31.05" data-out="38.60" data-anim="rise" style="left:150px;top:440px;font-size:46px;color:var(--gruen)">Scheitel = Hochpunkt<br>= absolutes Maximum</div>
+<div class="l graf" data-at="29.85" data-out="38.60" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="8.0" y1="0" x2="8.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="132.0" y1="0" x2="132.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="256.0" y1="0" x2="256.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="380.0" y1="0" x2="380.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="504.0" y1="0" x2="504.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="628.0" y1="0" x2="628.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="752.0" y1="0" x2="752.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="752.0" x2="760" y2="752.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="566.0" x2="760" y2="566.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="194.0" x2="760" y2="194.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="760" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="380.0" x2="760" y2="380.0" stroke="#1c1a17" stroke-width="3"/><line x1="132.0" y1="760" x2="132.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,380.0 742.0,371.0 742.0,389.0" fill="#1c1a17"/><polygon points="132.0,0 123.0,18 141.0,18" fill="#1c1a17"/><text x="734.0" y="366.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="146.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="8.0" y1="373.0" x2="8.0" y2="387.0" stroke="#1c1a17" stroke-width="2.5"/><text x="8.0" y="412.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="256.0" y1="373.0" x2="256.0" y2="387.0" stroke="#1c1a17" stroke-width="2.5"/><text x="256.0" y="412.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="380.0" y1="373.0" x2="380.0" y2="387.0" stroke="#1c1a17" stroke-width="2.5"/><text x="380.0" y="412.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="504.0" y1="373.0" x2="504.0" y2="387.0" stroke="#1c1a17" stroke-width="2.5"/><text x="504.0" y="412.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="628.0" y1="373.0" x2="628.0" y2="387.0" stroke="#1c1a17" stroke-width="2.5"/><text x="628.0" y="412.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">4</text><line x1="752.0" y1="373.0" x2="752.0" y2="387.0" stroke="#1c1a17" stroke-width="2.5"/><text x="752.0" y="412.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">5</text><line x1="125.0" y1="752.0" x2="139.0" y2="752.0" stroke="#1c1a17" stroke-width="2.5"/><text x="119.0" y="760.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="125.0" y1="566.0" x2="139.0" y2="566.0" stroke="#1c1a17" stroke-width="2.5"/><text x="119.0" y="574.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="125.0" y1="194.0" x2="139.0" y2="194.0" stroke="#1c1a17" stroke-width="2.5"/><text x="119.0" y="202.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="125.0" y1="8.0" x2="139.0" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="119.0" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><polyline points="53.0,747.9 54.5,741.8 56.0,735.7 57.6,729.7 59.1,723.6 60.7,717.6 62.2,711.7 63.8,705.7 65.3,699.8 66.9,693.9 68.5,688.1 70.0,682.2 71.5,676.5 73.1,670.7 74.7,664.9 76.2,659.2 77.8,653.6 79.3,647.9 80.8,642.3 82.4,636.7 84.0,631.1 85.5,625.6 87.0,620.1 88.6,614.6 90.1,609.1 91.7,603.7 93.2,598.3 94.8,593.0 96.4,587.6 97.9,582.3 99.5,577.1 101.0,571.8 102.5,566.6 104.1,561.4 105.7,556.2 107.2,551.1 108.8,546.0 110.3,540.9 111.9,535.9 113.4,530.9 115.0,525.9 116.5,521.0 118.0,516.0 119.6,511.1 121.1,506.3 122.7,501.4 124.2,496.6 125.8,491.8 127.4,487.1 128.9,482.4 130.4,477.7 132.0,473.0 133.5,468.4 135.1,463.8 136.7,459.2 138.2,454.6 139.8,450.1 141.3,445.6 142.8,441.2 144.4,436.7 146.0,432.3 147.5,428.0 149.0,423.6 150.6,419.3 152.2,415.0 153.7,410.7 155.2,406.5 156.8,402.3 158.3,398.1 159.9,394.0 161.5,389.9 163.0,385.8 164.6,381.8 166.1,377.7 167.7,373.7 169.2,369.8 170.8,365.8 172.3,361.9 173.8,358.0 175.4,354.2 176.9,350.4 178.5,346.6 180.0,342.8 181.6,339.1 183.2,335.4 184.7,331.7 186.2,328.1 187.8,324.4 189.3,320.8 190.9,317.3 192.5,313.8 194.0,310.2 195.5,306.8 197.1,303.3 198.7,299.9 200.2,296.5 201.8,293.2 203.3,289.8 204.8,286.5 206.4,283.3 207.9,280.0 209.5,276.8 211.0,273.6 212.6,270.5 214.2,267.4 215.7,264.3 217.2,261.2 218.8,258.2 220.3,255.2 221.9,252.2 223.5,249.2 225.0,246.3 226.6,243.4 228.1,240.6 229.7,237.7 231.2,234.9 232.8,232.1 234.3,229.4 235.8,226.7 237.4,224.0 239.0,221.3 240.5,218.7 242.0,216.1 243.6,213.5 245.2,211.0 246.7,208.5 248.2,206.0 249.8,203.5 251.3,201.1 252.9,198.7 254.4,196.3 256.0,194.0 257.6,191.7 259.1,189.4 260.6,187.2 262.2,184.9 263.8,182.7 265.3,180.6 266.8,178.4 268.4,176.3 269.9,174.3 271.5,172.2 273.1,170.2 274.6,168.2 276.1,166.2 277.7,164.3 279.2,162.4 280.8,160.5 282.3,158.7 283.9,156.9 285.4,155.1 287.0,153.3 288.6,151.6 290.1,149.9 291.7,148.2 293.2,146.6 294.8,145.0 296.3,143.4 297.9,141.8 299.4,140.3 300.9,138.8 302.5,137.3 304.1,135.9 305.6,134.5 307.2,133.1 308.7,131.7 310.2,130.4 311.8,129.1 313.3,127.9 314.9,126.6 316.4,125.4 318.0,124.2 319.6,123.1 321.1,122.0 322.6,120.9 324.2,119.8 325.8,118.8 327.3,117.8 328.8,116.8 330.4,115.9 331.9,115.0 333.5,114.1 335.1,113.2 336.6,112.4 338.2,111.6 339.7,110.8 341.2,110.1 342.8,109.4 344.4,108.7 345.9,108.0 347.4,107.4 349.0,106.8 350.6,106.2 352.1,105.7 353.7,105.2 355.2,104.7 356.8,104.3 358.3,103.8 359.8,103.5 361.4,103.1 362.9,102.8 364.5,102.5 366.1,102.2 367.6,101.9 369.1,101.7 370.7,101.5 372.2,101.4 373.8,101.2 375.3,101.1 376.9,101.1 378.4,101.0 380.0,101.0 381.6,101.0 383.1,101.1 384.6,101.1 386.2,101.2 387.8,101.4 389.3,101.5 390.8,101.7 392.4,101.9 393.9,102.2 395.5,102.5 397.1,102.8 398.6,103.1 400.2,103.5 401.7,103.8 403.2,104.3 404.8,104.7 406.3,105.2 407.9,105.7 409.4,106.2 411.0,106.8 412.6,107.4 414.1,108.0 415.7,108.7 417.2,109.4 418.8,110.1 420.3,110.8 421.9,111.6 423.4,112.4 424.9,113.2 426.5,114.1 428.1,115.0 429.6,115.9 431.1,116.8 432.7,117.8 434.2,118.8 435.8,119.8 437.3,120.9 438.9,122.0 440.4,123.1 442.0,124.2 443.6,125.4 445.1,126.6 446.7,127.9 448.2,129.1 449.8,130.4 451.3,131.7 452.8,133.1 454.4,134.5 455.9,135.9 457.5,137.3 459.1,138.8 460.6,140.3 462.2,141.8 463.7,143.4 465.2,145.0 466.8,146.6 468.4,148.2 469.9,149.9 471.4,151.6 473.0,153.3 474.6,155.1 476.1,156.9 477.6,158.7 479.2,160.5 480.8,162.4 482.3,164.3 483.8,166.2 485.4,168.2 486.9,170.2 488.5,172.2 490.1,174.3 491.6,176.3 493.2,178.4 494.7,180.6 496.2,182.7 497.8,184.9 499.3,187.2 500.9,189.4 502.4,191.7 504.0,194.0 505.6,196.3 507.1,198.7 508.6,201.1 510.2,203.5 511.8,206.0 513.3,208.5 514.9,211.0 516.4,213.5 518.0,216.1 519.5,218.7 521.0,221.3 522.6,224.0 524.1,226.7 525.7,229.4 527.2,232.1 528.8,234.9 530.4,237.7 531.9,240.6 533.4,243.4 535.0,246.3 536.6,249.2 538.1,252.2 539.6,255.2 541.2,258.2 542.8,261.2 544.3,264.3 545.9,267.4 547.4,270.5 548.9,273.6 550.5,276.8 552.1,280.0 553.6,283.3 555.1,286.5 556.7,289.8 558.2,293.2 559.8,296.5 561.4,299.9 562.9,303.3 564.5,306.8 566.0,310.2 567.5,313.8 569.1,317.3 570.6,320.8 572.2,324.4 573.8,328.1 575.3,331.7 576.9,335.4 578.4,339.1 579.9,342.8 581.5,346.6 583.1,350.4 584.6,354.2 586.1,358.0 587.7,361.9 589.2,365.8 590.8,369.8 592.4,373.7 593.9,377.7 595.4,381.8 597.0,385.8 598.6,389.9 600.1,394.0 601.6,398.1 603.2,402.3 604.8,406.5 606.3,410.7 607.9,415.0 609.4,419.3 611.0,423.6 612.5,428.0 614.0,432.3 615.6,436.7 617.1,441.2 618.7,445.6 620.2,450.1 621.8,454.6 623.4,459.2 624.9,463.8 626.4,468.4 628.0,473.0 629.6,477.7 631.1,482.4 632.6,487.1 634.2,491.8 635.8,496.6 637.3,501.4 638.9,506.3 640.4,511.1 641.9,516.0 643.5,521.0 645.1,525.9 646.6,530.9 648.1,535.9 649.7,540.9 651.2,546.0 652.8,551.1 654.4,556.2 655.9,561.4 657.5,566.6 659.0,571.8 660.5,577.1 662.1,582.3 663.6,587.6 665.2,593.0 666.8,598.3 668.3,603.7 669.9,609.1 671.4,614.6 672.9,620.1 674.5,625.6 676.1,631.1 677.6,636.7 679.1,642.3 680.7,647.9 682.2,653.6 683.8,659.2 685.4,664.9 686.9,670.7 688.4,676.5 690.0,682.2 691.6,688.1 693.1,693.9 694.6,699.8 696.2,705.7 697.8,711.7 699.3,717.6 700.9,723.6 702.4,729.7 704.0,735.7 705.5,741.8 707.0,747.9" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+<div class="l m row" data-at="39.60" data-out="50.25" data-anim="rise" style="left:150px;top:300px;font-size:56px"><span>\(f(4) = 64 - 12 = 52\)</span></div>
+<div class="l hand" data-at="41.00" data-out="50.25" data-anim="rise" style="left:150px;top:440px;font-size:46px;color:var(--gruen)">absolutes Maximum am Rand \(x = 4\)</div>
+<div class="l graf" data-at="39.80" data-t0="38.60" data-out="50.25" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="231.2" y1="0" x2="231.2" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="380.0" y1="0" x2="380.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="528.8" y1="0" x2="528.8" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="677.6" y1="0" x2="677.6" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="560.0" x2="760" y2="560.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="440.0" x2="760" y2="440.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="320.0" x2="760" y2="320.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="200.0" x2="760" y2="200.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="80.0" x2="760" y2="80.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="680.0" x2="760" y2="680.0" stroke="#1c1a17" stroke-width="3"/><line x1="82.4" y1="760" x2="82.4" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,680.0 742.0,671.0 742.0,689.0" fill="#1c1a17"/><polygon points="82.4,0 73.4,18 91.4,18" fill="#1c1a17"/><text x="734.0" y="666.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="96.4" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="231.2" y1="673.0" x2="231.2" y2="687.0" stroke="#1c1a17" stroke-width="2.5"/><text x="231.2" y="712.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="380.0" y1="673.0" x2="380.0" y2="687.0" stroke="#1c1a17" stroke-width="2.5"/><text x="380.0" y="712.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="528.8" y1="673.0" x2="528.8" y2="687.0" stroke="#1c1a17" stroke-width="2.5"/><text x="528.8" y="712.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">3</text><line x1="677.6" y1="673.0" x2="677.6" y2="687.0" stroke="#1c1a17" stroke-width="2.5"/><text x="677.6" y="712.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">4</text><line x1="75.4" y1="560.0" x2="89.4" y2="560.0" stroke="#1c1a17" stroke-width="2.5"/><text x="69.4" y="568.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">10</text><line x1="75.4" y1="440.0" x2="89.4" y2="440.0" stroke="#1c1a17" stroke-width="2.5"/><text x="69.4" y="448.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">20</text><line x1="75.4" y1="320.0" x2="89.4" y2="320.0" stroke="#1c1a17" stroke-width="2.5"/><text x="69.4" y="328.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">30</text><line x1="75.4" y1="200.0" x2="89.4" y2="200.0" stroke="#1c1a17" stroke-width="2.5"/><text x="69.4" y="208.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">40</text><line x1="75.4" y1="80.0" x2="89.4" y2="80.0" stroke="#1c1a17" stroke-width="2.5"/><text x="69.4" y="88.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">50</text><path data-bewk="[[0, 1, -1.7320508075688772, 0, 1.7320508075688772]]" data-paar="bewk0" data-fenster="-0.5,4.5,-6,56,760,760,8" data-stufen="0" data-poly="1" data-von="0" data-bis="4" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><g class="bew-ke" data-zu="bewk0" data-i="0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g></g><g class="bew-ke" data-zu="bewk0" data-i="1"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g></g><g class="bew-km" data-zu="bewk0" data-x="4" data-text="(4 | {y})"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1c1a17" stroke-width="3.5"/><circle r="5" fill="#1c1a17"/></g><text font-size="29" font-weight="600" fill="#1c1a17" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g></svg></div>
+<div class="l hand mitte" data-at="50.65" data-out="60.22" data-anim="rise" style="left:150px;top:250px;font-size:76px;font-weight:600;color:var(--tinte)">Zum Mitnehmen</div>
+<div class="l hand" data-at="51.45" data-out="60.22" data-anim="rise" style="left:150px;top:400px;font-size:44px;color:var(--blau)">lokal: Hoch- und Tiefpunkt<br>absolut: auch die Ränder prüfen<br>Grad 2: \(x_s = -\frac{b}{2a}\)</div>
+<div class="l graf" data-at="50.30" data-t0="50.25" data-out="60.22" data-anim="fade" style="left:1010px;top:175px"><svg width="760" height="760" viewBox="0 0 760 760"><line x1="132.0" y1="0" x2="132.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="256.0" y1="0" x2="256.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="504.0" y1="0" x2="504.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="628.0" y1="0" x2="628.0" y2="760" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="752.0" x2="760" y2="752.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="603.2" x2="760" y2="603.2" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="305.6" x2="760" y2="305.6" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="156.8" x2="760" y2="156.8" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="8.0" x2="760" y2="8.0" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="454.4" x2="760" y2="454.4" stroke="#1c1a17" stroke-width="3"/><line x1="380.0" y1="760" x2="380.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="760.0,454.4 742.0,445.4 742.0,463.4" fill="#1c1a17"/><polygon points="380.0,0 371.0,18 389.0,18" fill="#1c1a17"/><text x="734.0" y="440.4" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="394.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="132.0" y1="447.4" x2="132.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="132.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="256.0" y1="447.4" x2="256.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="256.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="504.0" y1="447.4" x2="504.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="504.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="628.0" y1="447.4" x2="628.0" y2="461.4" stroke="#1c1a17" stroke-width="2.5"/><text x="628.0" y="486.4" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">2</text><line x1="373.0" y1="752.0" x2="387.0" y2="752.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="760.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−4</text><line x1="373.0" y1="603.2" x2="387.0" y2="603.2" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="611.2" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="373.0" y1="305.6" x2="387.0" y2="305.6" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="313.6" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><line x1="373.0" y1="156.8" x2="387.0" y2="156.8" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="164.8" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">4</text><line x1="373.0" y1="8.0" x2="387.0" y2="8.0" stroke="#1c1a17" stroke-width="2.5"/><text x="367.0" y="16.0" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">6</text><path data-bewk="[[0, -1, -1.532089, -0.347296, 1.879385]]" data-paar="bewk0" data-fenster="-3,3,-4,6,760,760,8" data-stufen="0" data-poly="1" data-von="-3" data-bis="3" fill="none" stroke="#1a4f8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><g class="bew-ke" data-zu="bewk0" data-i="0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g><text font-size="29" font-weight="600" fill="#1f6b3a" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g><g class="bew-ke" data-zu="bewk0" data-i="1"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#1f6b3a" stroke-width="3.5"/><circle r="5" fill="#1f6b3a"/></g><text font-size="29" font-weight="600" fill="#1f6b3a" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g></svg></div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/s3-3-lp-kontrolle-extrema.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 60.22;
+const SPRECHER = [{"bei": 0.4, "text": "Bei minus eins wechselt der Graph von fallend zu steigend: Dort liegt der Tiefpunkt, T minus eins, minus eins."}, {"bei": 7.81, "text": "Nach links wächst minus x hoch drei ohne Grenze. Es gibt grössere Werte als drei — ein absolutes Maximum hat f auf ganz R nicht."}, {"bei": 17.06, "text": "x s gleich minus b durch zwei a: minus minus sechs durch zwei, also drei. f von drei ist neun minus achtzehn plus fünf, gleich minus vier. a ist positiv: ein Tiefpunkt."}, {"bei": 29.05, "text": "Bei einer Polynomfunktion zweiten Grades mit negativem a ist die Parabel nach unten geöffnet. Ihr Scheitel ist ein Hochpunkt — und hier sogar das absolute Maximum."}, {"bei": 39.0, "text": "Auf dem Intervall von null bis vier ist f von vier gleich vierundsechzig minus zwölf, also zweiundfünfzig. Das ist viel mehr als jeder andere Wert: Das absolute Maximum liegt am rechten Rand."}, {"bei": 50.65, "text": "Zum Mitnehmen: Hoch- und Tiefpunkte sind lokal. Absolute Extrema gibt es oft nur auf einem Intervall, und dann liegen sie im Hoch- oder Tiefpunkt oder am Rand."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+}
+
+const RUHIG = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
+  t0: parseFloat(L.dataset.t0),
+  teile: [...L.querySelectorAll('[data-bew]')].map(p => ({
+    art: 'p', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number) }))
+    .concat([...L.querySelectorAll('[data-bewg]')].map(p => ({
+      art: 'g', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewg), f: p.dataset.fenster.split(',').map(Number) })))
+    .concat([...L.querySelectorAll('[data-bewk]')].map(p => ({
+      art: 'k', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewk), f: p.dataset.fenster.split(',').map(Number),
+      stufen: p.dataset.stufen === '1', poly: p.dataset.poly === '1' })))
+}));
+// Zwischen zwei Stuetzpunkten weich. Wie viele Zahlen ein Stuetzpunkt traegt, sagt er
+// selbst: [t, a, u, v] bei einer Parabel, [t, m, q] bei einer Geraden, [t, x] bei einer Bahn.
+function bewZustand(k, t) {
+  const n = k[0].length - 1;
+  if (t <= k[0][0]) return k[0].slice(1);
+  for (let i = 0; i < k.length - 1; i++) {
+    if (t < k[i + 1][0]) {
+      let q = (t - k[i][0]) / (k[i + 1][0] - k[i][0]);
+      q = RUHIG ? 0 : q * q * (3 - 2 * q);
+      const aus = [];
+      for (let j = 1; j <= n; j++) aus.push(k[i][j] + (k[i + 1][j] - k[i][j]) * q);
+      return aus;
+    }
+  }
+  return k[k.length - 1].slice(1);
+}
+const bewZahl = x => { const r = Math.round(x * 10) / 10; return (r < 0 ? '−' : '') + Math.abs(r); };
+// Eine bewegte Gerade y = m x + q: am Fenster abgeschnitten, dazu ihre Begleiter.
+function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
+  const [m, q] = bewZustand(T.k, t - T.t0);
+  const f = x => m * x + q, innen = (x, y) => x >= x0 - 1e-9 && x <= x1 + 1e-9 && y >= y0 - 1e-9 && y <= y1 + 1e-9;
+  const pt = [];
+  for (const x of [x0, x1]) { const y = f(x); if (y >= y0 - 1e-9 && y <= y1 + 1e-9) pt.push([x, y]); }
+  if (Math.abs(m) > 1e-9) for (const y of [y0, y1]) { const x = (y - q) / m; if (x >= x0 - 1e-9 && x <= x1 + 1e-9) pt.push([x, y]); }
+  pt.sort((u, v) => u[0] - v[0]);
+  T.p.setAttribute('d', pt.length > 1
+    ? 'M' + px(pt[0][0]).toFixed(1) + ',' + py(pt[0][1]).toFixed(1) +
+      'L' + px(pt[pt.length - 1][0]).toFixed(1) + ',' + py(pt[pt.length - 1][1]).toFixed(1)
+    : '');
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (m > 0 ? 44 : -18)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  const fuell = (v, x, y) => v.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y))
+                              .replace('{m}', bewZahl(m)).replace('{q}', bewZahl(q));
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-gy')) {
+      setze(g, 0, q); beschrifte(g, 0, q, '(0 | ' + bewZahl(q) + ')');
+    } else if (g.classList.contains('bew-gn')) {
+      if (Math.abs(m) < 1e-9) { g.style.display = 'none'; continue; }
+      const xn = -q / m; setze(g, xn, 0); beschrifte(g, xn, 0, '(' + bewZahl(xn) + ' | 0)');
+    } else if (g.classList.contains('bew-gm')) {
+      const x = parseFloat(g.dataset.x);
+      setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)));
+    } else if (g.classList.contains('bew-gl')) {
+      const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+      const x = bewZustand(bahn, t - T.t0)[0];
+      setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)));
+    } else if (g.classList.contains('bew-gd')) {
+      // Steigungsdreieck: von (x | f(x)) nach rechts, dann senkrecht auf die Gerade.
+      let xa, dx;
+      if (g.dataset.bahn) {
+        const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+        [xa, dx] = bewZustand(bahn, t - T.t0);
+      } else { xa = parseFloat(g.dataset.x); dx = parseFloat(g.dataset.dx); }
+      const xb = xa + dx;
+      const ya = f(xa), yb = f(xb), sichtbar = innen(xa, ya) && innen(xb, yb);
+      g.style.display = sichtbar ? '' : 'none';
+      if (!sichtbar) continue;
+      g.querySelector('.bew-gd-w').setAttribute('d', 'M' + px(xa) + ',' + py(ya) + 'L' + px(xb) + ',' + py(ya));
+      g.querySelector('.bew-gd-s').setAttribute('d', 'M' + px(xb) + ',' + py(ya) + 'L' + px(xb) + ',' + py(yb));
+      const tx = g.querySelector('.bew-gd-tx'), ty = g.querySelector('.bew-gd-ty');
+      tx.setAttribute('x', px((xa + xb) / 2)); tx.setAttribute('y', py(ya) + (m > 0 ? 36 : -14));
+      tx.textContent = 'Δx = ' + bewZahl(dx);
+      ty.setAttribute('x', px(xb) + 12); ty.setAttribute('y', py((ya + yb) / 2) + 10);
+      ty.textContent = 'Δy = ' + bewZahl(yb - ya);
+    }
+  }
+}
+// Eine bewegte Potenz- oder Wurzelkurve y = a*(x-u)^p + v, am Fenster abgeschnitten.
+// Wo es keinen Wert gibt (Pol, negative Basis mit gebrochenem Exponenten), bricht der
+// Streckenzug ab und beginnt danach neu — genau so entstehen Aeste und Definitionsluecken.
+function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
+  const Z = bewZustand(T.k, t - T.t0);
+  if (T.poly) return bewegePolynom(T, Z, px, py, x0, x1, y0, y1);
+  const [a, p0, u, v] = Z;
+  const p = T.stufen ? Math.round(p0) : p0;
+  // Negative Basis: Math.pow(-8, 1/3) ist NaN, die dritte Wurzel aus -8 ist -2.
+  // Bei ungeradem Wurzelexponenten (1/p ganz und ungerade) gibt es den Wert, bei
+  // geradem nicht — genau dort endet die Definitionsmenge.
+  const pot = b => {
+    if (b >= 0 || Number.isInteger(p)) return Math.pow(b, p);
+    const q = Math.round(1 / p);
+    return (Math.abs(1 / p - q) < 1e-9 && q % 2 !== 0) ? -Math.pow(-b, p) : NaN;
+  };
+  const f = x => { const y = a * pot(x - u) + v;
+    return (isFinite(y) && !isNaN(y)) ? y : null; };
+  const vx = parseFloat(T.p.dataset.von), bx = parseFloat(T.p.dataset.bis);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  const zug = (abx, aby) => {           // abx/aby: wie der Punkt auf die Achsen faellt
+    let d = '', an = false;
+    if (a1 <= a0) return '';
+    for (let i = 0; i <= 600; i++) {
+      const x = a0 + (a1 - a0) * i / 600, y = f(x);
+      if (y === null) { an = false; continue; }
+      const sx = abx(x, y), sy = aby(x, y);
+      if (sx < -5 || sx > 1e5 || sy < -5 || sy > 1e5) { an = false; continue; }
+      if (!(abx === px ? (y >= y0 && y <= y1) : (y >= x0 && y <= x1 && x >= y0 && x <= y1))) { an = false; continue; }
+      d += (an ? 'L' : 'M') + sx.toFixed(1) + ',' + sy.toFixed(1); an = true;
+    }
+    return d;
+  };
+  T.p.setAttribute('d', zug(px, (x, y) => py(y)));
+  // Spiegelkurve an y = x: aus (x | y) wird (y | x) — die Umkehrfunktion.
+  const sp = T.L.querySelector('[data-spiegel="' + T.p.dataset.paar + '"]');
+  if (sp) sp.setAttribute('d', zug((x, y) => px(y), (x, y) => py(x)));
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (a > 0 ? 44 : -18)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ks')) {
+      setze(g, u, v); beschrifte(g, u, v, '(' + bewZahl(u) + ' | ' + bewZahl(v) + ')');
+    } else if (g.classList.contains('bew-ka')) {
+      // Polgerade x = u und waagrechte Asymptote y = v
+      g.querySelector('.bew-ka-s').setAttribute('d',
+        (u >= x0 && u <= x1) ? 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1) : '');
+      g.querySelector('.bew-ka-w').setAttribute('d',
+        (v >= y0 && v <= y1) ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-km')) {
+      const x = parseFloat(g.dataset.x), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y);
+      beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Polynom in Linearfaktordarstellung y = a*(x-x1)*(x-x2)*…; Z = [a, x1, x2, …].
+function bewegePolynom(T, Z, px, py, x0, x1, y0, y1) {
+  const a = Z[0], r = Z.slice(1);
+  const f = x => r.reduce((s, q) => s * (x - q), a);
+  const vx = parseFloat(T.p.dataset.von), bx = parseFloat(T.p.dataset.bis);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y < y0 - (y1 - y0) || y > y1 + (y1 - y0)) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  // Extrempunkte: Vorzeichenwechsel der Steigung, verfeinert durch Halbieren.
+  const ex = [];
+  const df = x => (f(x + 1e-5) - f(x - 1e-5)) / 2e-5;
+  for (let i = 0; i < 800; i++) {
+    let p = a0 + (a1 - a0) * i / 800, q = a0 + (a1 - a0) * (i + 1) / 800;
+    const dp = df(p), dq = df(q);
+    // Faellt ein Gitterpunkt genau auf die Extremstelle, ist dort df = 0 — darum
+    // «bis einschliesslich null», sonst geht der Scheitel x = 3 von (x−1)(x−5) verloren.
+    if ((dp > 0 && dq <= 0) || (dp < 0 && dq >= 0)) {
+      const hoch = dp > 0;
+      for (let k = 0; k < 40; k++) { const m = (p + q) / 2; if ((df(m) > 0) === (df(p) > 0)) p = m; else q = m; }
+      ex.push([(p + q) / 2, hoch]);
+    }
+  }
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text, unten) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (unten ? 44 : -18));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-kn')) {
+      const i = +g.dataset.i, x = r[i];
+      // Zusammenfallende Nullstellen zeigen nur einen Punkt — den ersten.
+      if (r.slice(0, i).some(q => Math.abs(q - x) < 0.05)) { g.style.display = 'none'; continue; }
+      setze(g, x, 0);
+      // Beschriftungen abwechselnd ueber und unter der x-Achse, nach der Lage von
+      // links nach rechts — sonst laufen zwei nahe Nullstellen ineinander.
+      const rang = [...new Set(r.map(q => Math.round(q * 20)))].sort((p, q) => p - q).indexOf(Math.round(x * 20));
+      beschrifte(g, x, 0, '(' + bewZahl(x) + ' | 0)', rang % 2 === 1);
+    } else if (g.classList.contains('bew-ke')) {
+      const e = ex[+g.dataset.i];
+      if (!e) { g.style.display = 'none'; continue; }
+      const y = f(e[0]); setze(g, e[0], y);
+      beschrifte(g, e[0], y, (e[1] ? 'H' : 'T') + '(' + bewZahl(e[0]) + ' | ' + bewZahl(y) + ')', !e[1]);
+    } else if (g.classList.contains('bew-km')) {
+      const x = parseFloat(g.dataset.x), y = f(x);
+      setze(g, x, y);
+      beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)), a < 0);
+    }
+  }
+}
+function bewegen(t) {
+  for (const L of BEW) for (const T of L.teile) {
+    const [x0, x1, y0, y1, b, h, rd] = T.f;
+    const px = x => rd + (x - x0) / (x1 - x0) * (b - 2 * rd);
+    const py = y => h - rd - (y - y0) / (y1 - y0) * (h - 2 * rd);
+    if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'k') { bewegeKurve(T, t, px, py, x0, x1, y0, y1); continue; }
+    const [a, u, v] = bewZustand(T.k, t - L.t0);
+    let d = '', zug = false;
+    for (let i = 0; i <= 240; i++) {
+      const x = x0 + (x1 - x0) * i / 240, y = a * (x - u) * (x - u) + v;
+      if (y >= y0 && y <= y1) { d += (zug ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); zug = true; }
+      else zug = false;
+    }
+    T.p.setAttribute('d', d);
+    const f = x => a * (x - u) * (x - u) + v;
+    const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+      g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+    const beschrifte = (g, x, y, text, unten) => {
+      const tx = g.querySelector(':scope > text'); if (!tx) return;
+      const rechts = x > x1 - (x1 - x0) * 0.3;
+      tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+      tx.setAttribute('y', py(y) + (unten ? 44 : -18));
+      tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+      tx.textContent = text;
+    };
+    const fuell = (vorlage, x, y) => vorlage.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+    for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+      if (g.classList.contains('bew-s')) {
+        setze(g, u, v); beschrifte(g, u, v, 'S(' + bewZahl(u) + ' | ' + bewZahl(v) + ')', a > 0);
+      } else if (g.classList.contains('bew-n')) {
+        const q = a !== 0 ? -v / a : -1, w = q >= 0 ? Math.sqrt(q) : NaN;
+        if (isNaN(w)) { g.style.display = 'none'; continue; }
+        const xn = g.classList.contains('bew-n1') ? u - w : u + w;
+        setze(g, xn, 0);
+        if (g.querySelector(':scope > text')) {
+          const tx = g.querySelector(':scope > text'), links = g.classList.contains('bew-n1') && w > 1e-9;
+          tx.setAttribute('x', px(xn) + (links ? -16 : 16)); tx.setAttribute('y', py(0) + (a > 0 ? -18 : 44));
+          tx.setAttribute('text-anchor', links ? 'end' : 'start'); tx.textContent = '(' + bewZahl(xn) + ' | 0)';
+        }
+      } else if (g.classList.contains('bew-y')) {
+        setze(g, 0, f(0)); beschrifte(g, 0, f(0), '(0 | ' + bewZahl(f(0)) + ')', false);
+      } else if (g.classList.contains('bew-m')) {
+        const x = parseFloat(g.dataset.x);
+        setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)), false);
+      } else if (g.classList.contains('bew-l')) {
+        const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn).map(b => [b[0], b[1], 0, 0]));
+        const x = bewZustand(bahn, t - L.t0)[0], y = f(x);
+        setze(g.querySelector('.bew-pt'), x, y);
+        g.style.display = innen(x, y) ? '' : 'none';
+        const gs = g.querySelector('.bew-geist');
+        if (gs) { const xs = 2 * u - x; gs.style.display = Math.abs(xs - x) > 0.05 && innen(xs, f(xs)) ? '' : 'none';
+          gs.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(xs)); c.setAttribute('cy', py(f(xs))); }); }
+        beschrifte(g, x, y, fuell(g.dataset.text, x, y), a > 0 && Math.abs(x - u) < (x1 - x0) * 0.15);
+      }
+    }
+  }
+}
+const seekOhneBewegung = seek;
+seek = function (t) { seekOhneBewegung(t); bewegen(t); };
+const FRAGEN = [{"typ": "klick", "text": "f(x) = −x³ + 3x + 1: Tipp den Tiefpunkt ins Bild.", "ziel": [-1, -1], "toleranz": 0.45, "richtig_text": "Getroffen: T(−1 | −1).", "fallen": [{"bei": [1, 3], "text": "Das ist der Hochpunkt: Dort wechselt der Graph von steigend zu fallend."}, {"bei": [0, 1], "text": "Das ist der Schnittpunkt mit der y-Achse. Wo wechselt der Graph von fallend zu steigend?"}], "falsch_text": "Nicht ganz. Der grüne Kreis zeigt die Stelle — wo ist der Graph lokal am tiefsten?", "t": 0.3, "ton": {"frage": "ton/s3-3-lp-kontrolle-extrema-f0-frage.mp3", "fall0": "ton/s3-3-lp-kontrolle-extrema-f0-fall0.mp3", "fall1": "ton/s3-3-lp-kontrolle-extrema-f0-fall1.mp3", "falsch": "ton/s3-3-lp-kontrolle-extrema-f0-falsch.mp3"}}, {"typ": "wahl", "text": "f hat den Hochpunkt H(1 | 3). Ist 3 der grösste Funktionswert von f auf ganz ℝ?", "optionen": ["Ja, ein Hochpunkt ist immer das Maximum.", "Ja, weil der Grad ungerade ist.", "Nein, links wird f beliebig gross."], "richtig": 2, "rueck": {"2": "Ja.", "0": "Rechne f(−3) aus und vergleich mit 3.", "1": "Gerade bei ungeradem Grad wächst f auf einer Seite ohne Grenze."}, "t": 7.71, "ton": {"frage": "ton/s3-3-lp-kontrolle-extrema-f1-frage.mp3", "r0": "ton/s3-3-lp-kontrolle-extrema-f1-r0.mp3", "r1": "ton/s3-3-lp-kontrolle-extrema-f1-r1.mp3"}}, {"typ": "wahl", "text": "f(x) = x² − 6x + 5: Wo liegt der Extrempunkt?", "optionen": ["T(−3 | 32)", "T(3 | −4)", "H(3 | −4)"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Ist a positiv oder negativ? Dann ist die Parabel nach oben oder nach unten geöffnet.", "0": "Vorzeichen: x_s = −b/(2a), und b ist −6."}, "t": 16.96, "ton": {"frage": "ton/s3-3-lp-kontrolle-extrema-f2-frage.mp3", "r0": "ton/s3-3-lp-kontrolle-extrema-f2-r0.mp3", "r2": "ton/s3-3-lp-kontrolle-extrema-f2-r2.mp3"}}, {"typ": "wahl", "text": "f(x) = −x² + 4x − 1: Ist der Extrempunkt ein Hoch- oder ein Tiefpunkt?", "optionen": ["Tiefpunkt", "Das lässt sich ohne Graph nicht sagen.", "Hochpunkt"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Schau auf das Vorzeichen von a.", "1": "Das Vorzeichen von a genügt."}, "t": 28.95, "ton": {"frage": "ton/s3-3-lp-kontrolle-extrema-f3-frage.mp3", "r0": "ton/s3-3-lp-kontrolle-extrema-f3-r0.mp3", "r1": "ton/s3-3-lp-kontrolle-extrema-f3-r1.mp3"}}, {"typ": "wahl", "text": "f(x) = x³ − 3x auf D = [0; 4]: Wo liegt das absolute Maximum?", "optionen": ["am Rand, bei x = 4", "im Hochpunkt H(−1 | 2)", "im Tiefpunkt T(1 | −2)"], "richtig": 0, "rueck": {"0": "Ja.", "1": "Liegt x = −1 überhaupt in D?", "2": "Der Tiefpunkt ist der kleinste Wert, nicht der grösste."}, "t": 38.9, "ton": {"frage": "ton/s3-3-lp-kontrolle-extrema-f4-frage.mp3", "r1": "ton/s3-3-lp-kontrolle-extrema-f4-r1.mp3", "r2": "ton/s3-3-lp-kontrolle-extrema-f4-r2.mp3"}}];
+(() => {
+  if (location.search.includes('render')) return;
+  const pp = document.getElementById('pp');
+  const css = document.createElement('style');
+  css.textContent = `
+    #frage{position:absolute;left:110px;top:560px;width:820px;z-index:50;display:none;
+      background:rgba(255,255,255,.97);border:3px solid var(--f2);border-radius:22px;
+      padding:28px 34px;box-shadow:0 10px 40px rgba(0,0,0,.18);font-family:inherit;color:inherit}
+    #frage .fr-kopf{font-size:26px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--f2);margin-bottom:10px}
+    #frage .fr-text{font-size:38px;line-height:1.3;margin-bottom:22px}
+    #frage .fr-knoepfe{display:flex;flex-wrap:wrap;gap:14px}
+    #frage button{font:inherit;font-size:32px;padding:10px 26px;border-radius:999px;cursor:pointer;
+      border:2.5px solid var(--f2);background:var(--f2w);color:inherit}
+    #frage button.ok{border-color:var(--f3);background:var(--f3w)}
+    #frage button.nein{border-color:var(--f4);background:var(--f4w)}
+    #frage .fr-rueck{font-size:32px;line-height:1.35;margin-top:20px}
+    #frage .fr-weiter{margin-top:20px}
+    .fr-tippbar, .fr-tippbar svg{pointer-events:auto !important;cursor:crosshair}`;
+  document.head.appendChild(css);
+  const box = document.createElement('div'); box.id = 'frage'; stage.appendChild(box);
+  let letzt = 0, offen = null, tippen = null, stimme = null, sprung = false;
+  // Vorlesen mit derselben Stimme wie der Clip — nur wenn dessen Ton an ist.
+  const hauptton = document.getElementById('ton');
+  const vorlesen = src => {
+    if (stimme) { stimme.pause(); stimme = null; }
+    if (!src || !hauptton || hauptton.muted) return;
+    stimme = new Audio(src); stimme.play().catch(() => {});
+  };
+  const erledigt = new Set();     // beantwortete Fragen
+  const pause = () => { if (pp.textContent === 'Pause') pp.click(); };
+  const weiter = () => { if (pp.textContent === 'Play') pp.click(); };
+  function schliessen() {
+    vorlesen(null);
+    box.style.display = 'none'; box.innerHTML = '';
+    document.querySelectorAll('.fr-marke').forEach(m => m.remove());
+    document.querySelectorAll('.fr-tippbar').forEach(l => l.classList.remove('fr-tippbar'));
+    if (tippen) { stage.removeEventListener('click', tippen); tippen = null; }
+    offen = null;
+  }
+  function antwort(F, ok, text, schl) {
+    const o = offen; erledigt.add(o.i);
+    box.dataset.fertig = '1';
+    vorlesen((F.ton || {})[schl]);
+    if (F.typ === 'klick') box.querySelector('.fr-knoepfe').innerHTML = '';
+    const r = box.querySelector('.fr-rueck');
+    r.innerHTML = (ok ? '✓ ' : '') + text;
+    r.style.color = ok ? 'var(--f3)' : '';
+    if (ok) {                      // richtig: kurz bestaetigen, dann von selbst weiter
+      setTimeout(() => { if (offen === o) { schliessen(); weiter(); } }, 1300);
+      return;
+    }
+    const w = document.createElement('button'); w.className = 'fr-weiter'; w.textContent = 'Weiter ▶';
+    w.onclick = () => { schliessen(); weiter(); };
+    box.appendChild(w); w.focus();
+  }
+  function zeigen(i, F) {
+    offen = { i, t: F.t }; pause(); delete box.dataset.fertig;
+    box.innerHTML = '<div class="fr-kopf">Deine Vorhersage</div><div class="fr-text"></div>'
+      + '<div class="fr-knoepfe"></div><div class="fr-rueck"></div>';
+    box.querySelector('.fr-text').textContent = F.text;
+    const kn = box.querySelector('.fr-knoepfe');
+    if (F.typ === 'wahl') {
+      F.optionen.forEach((o, j) => {
+        const b = document.createElement('button'); b.textContent = o;
+        b.onclick = () => {
+          kn.querySelectorAll('button').forEach(x => x.disabled = true);
+          b.classList.add(j === F.richtig ? 'ok' : 'nein');
+          antwort(F, j === F.richtig, (F.rueck || {})[j] || (j === F.richtig ? 'Richtig.' : 'Schau, was der Clip zeigt.'), 'r' + j);
+        };
+        kn.appendChild(b);
+      });
+    } else if (F.typ === 'klick') {
+      const L = [...document.querySelectorAll('.l')].find(l => +l.style.opacity > 0.5 && l.querySelector('[data-fenster]'));
+      if (!L) { schliessen(); weiter(); return; }
+      const svg = L.querySelector('svg'), fe = L.querySelector('[data-fenster]').dataset.fenster.split(',').map(Number);
+      const [x0, x1, y0, y1, b, h, rd] = fe;
+      L.classList.add('fr-tippbar');
+      // Am Stage horchen, nicht am Layer: unsichtbare spaetere Layer (Deckkraft 0)
+      // liegen obenauf und wuerden den Tipp abfangen.
+      tippen = ev => {
+        if (!offen || box.dataset.fertig || box.contains(ev.target)) return;
+        const r = svg.getBoundingClientRect();
+        if (ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom) return;
+        const sx = (ev.clientX - r.left) / r.width * b, sy = (ev.clientY - r.top) / r.height * h;
+        const x = x0 + (sx - rd) / (b - 2 * rd) * (x1 - x0), y = y0 + (h - rd - sy) / (h - 2 * rd) * (y1 - y0);
+        const mk = (cx, cy, farbe) => { const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('cx', cx); c.setAttribute('cy', cy); c.setAttribute('r', 16); c.setAttribute('class', 'fr-marke');
+          c.setAttribute('fill', 'none'); c.setAttribute('stroke', farbe); c.setAttribute('stroke-width', 6); svg.appendChild(c); };
+        mk(sx, sy, 'var(--f2)');
+        const d = Math.hypot(x - F.ziel[0], y - F.ziel[1]);
+        if (d <= (F.toleranz || 0.5)) return antwort(F, true, F.richtig_text || 'Getroffen.', 'ok');
+        const zx = rd + (F.ziel[0] - x0) / (x1 - x0) * (b - 2 * rd), zy = h - rd - (F.ziel[1] - y0) / (y1 - y0) * (h - 2 * rd);
+        mk(zx, zy, 'var(--f3)');
+        const fk = (F.fallen || []).findIndex(f => Math.hypot(x - f.bei[0], y - f.bei[1]) <= (F.toleranz || 0.5));
+        antwort(F, false, fk >= 0 ? F.fallen[fk].text : (F.falsch_text || 'Nicht ganz — der grüne Kreis zeigt die Stelle.'),
+                fk >= 0 ? 'fall' + fk : 'falsch');
+      };
+      stage.addEventListener('click', tippen);
+      kn.innerHTML = '<span style="font-size:30px;color:var(--f2)">👉 Tipp ins Bild rechts.</span>';
+    }
+    box.style.display = 'block';
+    vorlesen((F.ton || {}).frage);
+  }
+  // Spulen wird ausdruecklich erkannt: Pfeiltasten und ein Klick auf die
+  // Zeitleiste setzen ein Zeichen, das das naechste Bild auswertet. Ein
+  // spaetes Bild (langsames Laden, Hintergrund-Tab) ist kein Spulen.
+  // Neustart (R) und ein Sprung vor die erste Frage stellen alle Fragen neu;
+  // nach R laeuft der Clip ab 0 wie beim ersten Abspielen.
+  document.addEventListener('keydown', e => {
+    if ((e.key || '').toLowerCase() === 'r') { schliessen(); erledigt.clear(); letzt = 0; }
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') sprung = true;
+  });
+  const bar = document.getElementById('bar');
+  bar.addEventListener('click', () => { sprung = true; });
+  // Die Abspielzeit ist im Abspieler lokal; zurueckgestellt wird sie ueber
+  // dessen Zeitleiste.
+  const zurueck = s => {
+    const r = bar.getBoundingClientRect();
+    if (r.width > 0 && bar.onclick) bar.onclick({ currentTarget: bar, clientX: r.left + s / DUR * r.width });
+  };
+  const vorFragen = seek;
+  seek = function (t) {
+    vorFragen(t);
+    if (sprung) {
+      // gespult: eine uebersprungene Frage wird nicht gestellt, eine
+      // beantwortete kommt nicht wieder — ausser zurueck an den Anfang
+      sprung = false;
+      if (FRAGEN.length && t < Math.min(...FRAGEN.map(F => F.t))) { schliessen(); erledigt.clear(); }
+    } else if (!offen && pp.textContent === 'Pause') {
+      // gewoehnliches Abspielen, auch wenn ein Bild weit springt: die erste
+      // ueberschrittene Frage wird gestellt, der Clip geht an ihre Stelle zurueck
+      let i = -1;
+      FRAGEN.forEach((F, j) => {
+        if (!erledigt.has(j) && letzt < F.t && t >= F.t && (i < 0 || F.t < FRAGEN[i].t)) i = j;
+      });
+      if (i >= 0) {
+        zeigen(i, FRAGEN[i]);
+        if (offen && t - offen.t > 0.1) { t = offen.t; zurueck(t); vorFragen(t); }
+      }
+    }
+    if (offen && Math.abs(t - offen.t) > 1.0) schliessen();
+    letzt = t;
+  };
+})();
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
+  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
+  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
+  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
+  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>
