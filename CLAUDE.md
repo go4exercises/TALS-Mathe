@@ -49,11 +49,11 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt und ist seit dem 08.09.2026 in **zwei
-  Abschnitte** gegliedert, einen je Art — acht sind verlinkt, drei noch unverlinkt (`noindex`, Abnahme offen):
-  - *nach Thema* (6 verlinkt: `potenzen.html`, `quadratische-gleichungen.html`,
+  Abschnitte** gegliedert, einen je Art — neun sind verlinkt, zwei noch unverlinkt (`noindex`, Abnahme offen):
+  - *nach Thema* (7 verlinkt: `potenzen.html`, `quadratische-gleichungen.html`,
     `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`,
-    `exp-log-funktionen.html`; unverlinkt: `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`,
-    `trigonometrische-funktionen.html`)
+    `exp-log-funktionen.html`, `trigonometrische-funktionen.html`; unverlinkt:
+    `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`)
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,
