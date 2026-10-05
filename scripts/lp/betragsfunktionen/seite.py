@@ -86,7 +86,8 @@ text.p-text{stroke:var(--karte);stroke-width:4px;paint-order:stroke}
 .sim .asym{stroke:var(--tinte-2);stroke-width:1.2;stroke-dasharray:4 3;fill:none}
 .sim .ast{stroke:var(--gruen);stroke-width:1.6;stroke-dasharray:5 4;fill:none}
 .sim .zielkurve{stroke:var(--tinte-2);stroke-width:5;opacity:.3;fill:none}
-.sim .abstand,.sim .loesung{stroke:var(--orange);stroke-width:5;stroke-linecap:round;opacity:.75}
+.sim .abstand{stroke:var(--blau);stroke-width:5;stroke-linecap:round;opacity:.6}
+.sim .loesung{stroke:var(--orange);stroke-width:5;stroke-linecap:round;opacity:.75}
 .sim .waagrechte,svg.mini .waagrechte{stroke:var(--orange);stroke-width:1.4;stroke-dasharray:6 4}
 .p-pkt{fill:var(--tinte)} .p-lauf{fill:var(--blau)} .p-lauf.orange{fill:var(--orange)}
 svg.mini .p-pkt{fill:var(--tinte)}
@@ -196,7 +197,7 @@ sim1 = f'''      <figure class="sim sim-gross" id="sim1">
         <svg viewBox="0 0 300 260" role="img" aria-label="Betragskurve y gleich Betrag von x minus m mit einem Läufer und dem Abstand auf der x-Achse"></svg>
         <label class="hilfs-schalter"><input type="checkbox" checked> Äste als ganze Geraden (gestrichelt)</label>
         <div class="sl-row">
-          {regler('s1', 'm', 'Bezugspunkt m', -3, 3, 1, 0, 'grau')}
+          {regler('s1', 'm', 'Bezugspunkt u', -3, 3, 1, 0, 'grau')}
           {regler('s1', 'x', 'Läufer x', -6, 6, 0.5, 2.5, 'blau')}
         </div>
       </figure>'''
@@ -210,7 +211,7 @@ fest1 = r'''      <div class="festhalten">
             <li>Der Graph ist ein <b>V</b> aus zwei Geraden: links \(y = -x\) (Steigung \(-1\)), rechts \(y = x\) (Steigung \(+1\)).</li>
             <li><b>Knickpunkt</b> \((0 \mid 0)\); achsensymmetrisch zur \(y\)-Achse, denn \(|-x| = |x|\).</li>
           </ul>
-          <p>Allgemein ist \(|x - m|\) der Abstand von \(x\) zu \(m\): \(|x - m| = x - m\) für \(x \ge m\), \(-(x - m)\) für \(x \lt m\).</p>
+          <p>Allgemein ist \(|x - u|\) der Abstand von \(x\) zu \(u\): \(|x - u| = x - u\) für \(x \ge u\), \(-(x - u)\) für \(x \lt u\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -218,7 +219,7 @@ fest1 = r'''      <div class="festhalten">
           <p>Den Betrag vor dem Rechnen nehmen: \(|2 - 9| = |-7| = 7\), nicht \(2 + 9\).</p>
         </div>
       </div>'''
-auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
+auf1 = test('t1', 'Aufgaben · Kapitel 1', 14, [
     ('1a', 3, r'Berechne: \(|-8| + |3|\) · \(|2 - 9|\) · \(-|-4|\).',
      r'<p>\(8 + 3 = 11\) · \(|-7| = 7\) · \(-4\).</p><p class="komm">Das Minus vor dem Betrag steht ausserhalb: Erst \(|-4| = 4\), dann das Vorzeichen.</p>', ''),
     ('1b', 3, r'Schreib \(|x|\) für \(x = -2.5\) und für \(x = 4\) mit der Fallunterscheidung aus. Welcher Fall gilt bei \(x = 0\)?',
@@ -227,12 +228,15 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
      r'<p>\(x = 6\) oder \(x = -6\) · nur \(x = 0\) · für kein \(x\): \(L = \{\,\}\), denn ein Betrag ist nie negativ.</p>', ''),
     ('1d', 2, r'Warum gilt \(|-x| = |x|\)? Was bedeutet das für den Graphen von \(y = |x|\)?',
      r'<p>\(x\) und \(-x\) sind gleich weit von der Null entfernt. Im Graphen: Die Punkte bei \(x\) und \(-x\) liegen gleich hoch — das V ist achsensymmetrisch zur \(y\)-Achse.</p>', ''),
-    ('1e', 2, r'Lies am Graphen von \(y = |x|\) ab: Für welche \(x\) ist \(|x| \le 3\)?',
-     r'<p>Das V liegt zwischen \(x = -3\) und \(x = 3\) unter der Waagrechten \(y = 3\): \(-3 \le x \le 3\).</p>',
+    ('1e', 2, r'Lies am Graphen von \(y = |x|\) ab: Für welche \(x\) liegt das V unter der Waagrechten \(y = 3\) oder auf ihr?',
+     r'<p>Zwischen \(x = -3\) und \(x = 3\), die Ränder eingeschlossen: \(-3 \le x \le 3\). Genau dort ist der Abstand zur Null höchstens \(3\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-k="v,1,0,0" data-fenster="-5,5,-1,6" data-waagrecht="3" data-ym="1,2,3,4,5" data-xm="-4,-3,-2,-1,1,2,3,4"></svg></div>'),
+    ('1f', 2, r'Skizziere \(y = |x|\) für \(-4 \le x \le 4\) und zeichne die beiden Äste als ganze Geraden gestrichelt dazu. Wie heissen ihre Gleichungen?',
+     r'<p>Rechter Ast: \(y = x\) (für \(x \ge 0\)), linker Ast: \(y = -x\) (für \(x \lt 0\)). Die gestrichelten Verlängerungen liegen unter der \(x\)-Achse — dort gehört nur das V nicht hin.</p>'
+     '<div class="mini-reihe"><svg class="mini gross" data-k="v,1,0,0;g,1,0;g,-1,0" data-fenster="-4.5,4.5,-4.5,4.5" data-ym="-4,-2,2,4"></svg></div>', ''),
 ], zwei=False)
 k1 = kapitel(1, 'betragsfunktion', 'Die Betragsfunktion', 35,
-             r'Du deutest den Betrag als Abstand, schreibst \(|x|\) abschnittsweise und beschreibst das V mit Knickpunkt, Ast-Steigungen und Symmetrie.',
+             r'Du deutest den Betrag als Abstand, schreibst \(|x|\) abschnittsweise, skizzierst das V und beschreibst es mit Knickpunkt, Ast-Steigungen und Symmetrie.',
              ('s3-6-lp-betragsfunktion', 'Die Betragsfunktion'),
              sim1, ('s3-6-lp-kontrolle-betragsfunktion', 'Kontrollfragen zur Betragsfunktion'),
              fest1, [uebung('betrag-wert', 'Betrag berechnen'), uebung('fall', 'Welcher Fall gilt?')],
@@ -261,6 +265,7 @@ fest2 = r'''      <div class="festhalten">
           </ul>
           <p><b>Skizzieren ohne Wertetabelle:</b> Knick setzen, von dort eine Einheit nach rechts und \(a\) nach oben (bzw. unten), symmetrisch nach links.</p>
           <p>Steht \(|x + 3|\) da, ist \(u = -3\): \(|x + 3| = |x - (-3)|\).</p>
+          <p><b>Nullstellen:</b> \(a\,|x - u| + v = 0 \Rightarrow |x - u| = -\tfrac{v}{a}\) — die beiden Stellen, die von \(u\) den Abstand \(-\tfrac{v}{a}\) haben (nur wenn \(-\tfrac{v}{a} \ge 0\)). Beispiel: \(-|x - 2| + 1 = 0 \Rightarrow |x - 2| = 1 \Rightarrow x = 1\) oder \(x = 3\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -307,9 +312,10 @@ fest3 = r'''      <div class="festhalten">
           <ol>
             <li>Graph von \(f\) zeichnen.</li>
             <li>Alle Teile <b>unterhalb</b> der \(x\)-Achse an der \(x\)-Achse nach oben spiegeln.</li>
-            <li>Teile oberhalb bleiben. An den <b>Nullstellen</b> von \(f\) entstehen Knicke.</li>
+            <li>Teile oberhalb bleiben. Wo \(f\) die \(x\)-Achse <b>schneidet</b> (das Vorzeichen wechselt), entstehen Knicke. Berührt \(f\) die Achse nur, wie \(x^2\) bei \(0\), entsteht keiner.</li>
           </ol>
           <p>Beispiele: \(|x - 2|\) — ein Knick bei \(2\). \(|x^2 - 4|\) — Knicke bei \(\pm 2\), der Scheitel \((0 \mid -4)\) wird zum Buckel \((0 \mid 4)\), ein W. \(|x^2 + 1| = x^2 + 1\) — nichts zu tun.</p>
+          <p><b>Parabel mit linearem Glied:</b> erst Nullstellen und Scheitel von \(f\). \(f(x) = x^2 - 2x - 8 = (x + 2)(x - 4)\): Nullstellen \(-2\) und \(4\), Scheitel in der Mitte bei \(x = 1\), \(f(1) = -9\). Bei \(|f|\): Knicke \((-2 \mid 0)\), \((4 \mid 0)\), Buckel \((1 \mid 9)\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -324,9 +330,9 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 12, [
      r'<p>(a) Knicke bei \(\pm 1\), Scheitel \((0 \mid -1) \to (0 \mid 1)\). (b) keine Knicke, \(x^2 + 1 \gt 0\): unverändert. (c) \(x^2 - 4x = x(x - 4)\): Knicke bei \(0\) und \(4\), Scheitel \((2 \mid -4) \to (2 \mid 4)\).</p>', ''),
     ('3c', 2, r'Abgebildet ist \(y = |f(x)|\) mit \(f(x) = x^2 + q\). Bestimme \(q\).',
      r'<p>Die Knicke liegen bei \(\pm 1.5\), der Buckel bei \((0 \mid 2.25)\): Der Scheitel von \(f\) war \((0 \mid -2.25)\). Also \(q = -2.25\) — Kontrolle: \(1.5^2 = 2.25\).</p>',
-     '\n            <div class="mini-reihe"><svg class="mini gross" data-k="Q,1,0,-2.25" data-fenster="-3,3,-1,5" data-xm="-1.5,1.5" data-ym="1,2.25,4" data-sy="0.75"></svg></div>'),
+     '\n            <div class="mini-reihe"><svg class="mini gross" data-k="Q,1,0,-2.25" data-fenster="-3,3,-1,5" data-xm="-1.5,1.5" data-ym="2.25,4"></svg></div>'),
     ('3d', 2, r'Warum hat \(y = |x^2 + 1|\) keinen Knick, \(y = |x^2 - 1|\) aber zwei?',
-     r'<p>Knicke entstehen, wo \(f\) das Vorzeichen wechselt — an den Nullstellen. \(x^2 + 1 \ge 1\) hat keine, \(x^2 - 1\) hat zwei (\(\pm 1\)).</p>', ''),
+     r'<p>Knicke entstehen, wo \(f\) das Vorzeichen wechselt — an den Schnittstellen mit der \(x\)-Achse. \(x^2 + 1 \ge 1\) hat keine, \(x^2 - 1\) schneidet die Achse zweimal (\(\pm 1\)).</p>', ''),
     ('3e', 2, r'Jemand zeichnet für \(y = |x - 2|\) überall die Gerade \(y = -x + 2\). Was ist falsch?',
      r'<p>\(-x + 2\) ist \(-f(x)\), die ganz gespiegelte Gerade. Für \(x \gt 2\) ist sie negativ — ein Betrag nie. Richtig: \(-x + 2\) nur für \(x \lt 2\), sonst \(x - 2\).</p>', ''),
 ], zwei=False)
@@ -352,8 +358,8 @@ fest4 = r'''      <div class="festhalten">
           <div class="titel">Abschnittsweise schreiben</div>
           <p>Jeden Betragsterm kann man ohne Betragsstriche schreiben — mit einer <b>Fallunterscheidung an der Nullstelle des Arguments</b>:</p>
           <p>\[ |2x - 6| = \begin{cases} 2x - 6 & \text{für } x \ge 3 \\ -2x + 6 & \text{für } x \lt 3 \end{cases} \]</p>
-          <p>Wo das Argument negativ ist, wird das Vorzeichen des <em>ganzen</em> Terms gedreht. Probe mit einer Stelle: \(x = 1\): \(|2 - 6| = 4\) und \(-2 + 6 = 4\).</p>
-          <p><b>Die Wanne:</b> \(y = |x - a| + |x - b|\) (mit \(a \lt b\)) hat zwei Grenzen und drei Abschnitte. Zwischen \(a\) und \(b\) ist \(y = b - a\) konstant — ein flacher Boden; aussen steigen die Äste mit \(\pm 2\).</p>
+          <p>Wo das Argument negativ ist, wird das Vorzeichen des <em>ganzen</em> Terms gedreht — links oder rechts der Grenze, je nach Vorzeichen von \(x\) im Argument: \(|4 - 2x| = 4 - 2x\) für \(x \le 2\). Probe mit einer Stelle: \(x = 1\): \(|2 - 6| = 4\) und \(-2 + 6 = 4\).</p>
+          <p><b>Die Wanne:</b> \(y = |x - a| + |x - b|\) (mit \(a \lt b\)) hat zwei Grenzen und drei Abschnitte. Zwischen \(a\) und \(b\) ist \(y = b - a\) konstant — ein flacher Boden; aussen haben die Äste die Steigungen \(-2\) (links) und \(+2\) (rechts).</p>
           <p>\[ |x + 1| + |x - 3| = \begin{cases} -2x + 2 & x \lt -1 \\ 4 & -1 \le x \le 3 \\ 2x - 2 & x \gt 3 \end{cases} \]</p>
         </div>
         <div class="warn">
@@ -391,7 +397,7 @@ sim5 = f'''      <figure class="sim sim-gross" id="sim5">
         <label class="sim-schalter"><input type="checkbox"> Ungleichung «≤» (nur beim V)</label>
         <div class="sl-row">
           {regler('s5', 'u', 'u (Knick des V)', -3, 3, 1, 0, 'grau')}
-          {regler('s5', 'c', 'Waagrechte y = c', -1, 6, 0.5, 3, 'orange')}
+          {regler('s5', 'c', 'Waagrechte y = c', -1, 6, 0.5, 1.5, 'orange')}
         </div>
       </figure>'''
 fest5 = r'''      <div class="festhalten">
@@ -432,7 +438,7 @@ k5 = kapitel(5, 'gleichungen', 'Gleichungen und Ungleichungen', 40,
 # ------------------------------------------------------------------ Vorwissen
 k0 = '''
     <section class="kap" id="k0">
-      <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-sf">Vorwissen · SP 2.1 · 3.1</span><span class="zeit">≈ 10 min</span></div>
+      <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-sf">Vorwissen · SP 2.2c · 3.1 · 3.3</span><span class="zeit">≈ 10 min</span></div>
       <h2 id="vorwissen">Vorwissen</h2>
       <p class="ziel">Lineare Gleichungen, Geraden, das Verschieben von Graphen und die Zahlengerade. Wenn das wackelt: <a href="../schwerpunkt/s3-1-grundlagen.html">Teilgebiet 3.1, Grundlagen der Funktionen</a> und <a href="../schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html">Teilgebiet 2.2c</a>.</p>
 ''' + test('t0', 'Vortest', 10, [
@@ -442,8 +448,8 @@ k0 = '''
      r'<p>\(y = (x - 2)^2 + 1\), Scheitel \((2 \mid 1)\).</p><p class="komm">Falsch? Nach rechts heisst \(x - 2\). Genau so verschiebt Kapitel 2 das V. <a href="../schwerpunkt/s3-1-grundlagen.html">Teilgebiet 3.1</a></p>', ''),
     ('0c', 2, r'Wie weit sind \(-3\) und \(4\) auf der Zahlengeraden voneinander entfernt? Und \(-3\) und \(-7\)?',
      r'<p>\(7\) · \(4\).</p><p class="komm">Abstände sind nie negativ — genau das ist der Betrag.</p>', ''),
-    ('0d', 2, r'Löse \(x^2 = 9\) und \(x^2 = -4\).',
-     r'<p>\(x = \pm 3\) · keine Lösung.</p><p class="komm">Zwei Lösungen mit «\(\pm\)» kommen bei Betragsgleichungen wieder.</p>', ''),
+    ('0d', 2, r'Bestimme die Nullstellen und den Scheitel von \(f(x) = x^2 - 4x - 5\).',
+     r'<p>\(x^2 - 4x - 5 = (x + 1)(x - 5)\): Nullstellen \(-1\) und \(5\). Scheitel in der Mitte, \(x = 2\): \((2 \mid -9)\).</p><p class="komm">Falsch? Nullstellen und Scheitel einer Parabel braucht Kapitel 3 beim Umklappen. <a href="quadratische-funktionen.html">Leitprogramm Quadratische Funktionen</a></p>', ''),
 ]) + '''
       <p class="komm">Weniger als 7 von 10 Punkten: zuerst die verlinkten Stellen zu den falschen Aufgaben, dann Kapitel 1.</p>
     </section>'''
@@ -472,7 +478,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1 · G2, G3 → 2 · G4 → 3 · G5 → 4 · G6, G7 → 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1 · G2, G3 → 2 · G4 → 3 · G5 → 4 · G6 → 5 · G7 → 3, 5</p>
         </div>
       </div>
     </section>'''
@@ -496,9 +502,9 @@ oben = '''<div id="nav-root"></div>
            vergleichen
 
      Kompetenzmatrix (Kompetenz | Kapitel | Kapitelaufgaben | Gesamttest):
-       K1 | 1 | 1a–1e | G1
+       K1 | 1 | 1a–1f | G1
        K2 | 2 | 2a–2e | G2, G3
-       K3 | 3 | 3a–3e | G4
+       K3 | 3 | 3a–3e | G4, G7
        K4 | 4 | 4a–4e | G5
        K5 | 5 | 5a–5e | G6, G7
      Kein Kapitelziel ohne Kompetenz. Der ganze Gesamttest ohne Taschenrechner.

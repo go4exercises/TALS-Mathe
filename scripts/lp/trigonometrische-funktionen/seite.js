@@ -174,6 +174,8 @@
     setTimeout(zeigen, 0);
     return pruefen;
   }
+  /* Merkt, welche Regler bewegt wurden. Das Objekt wird beim Aufgabenwechsel geleert, nie neu
+     zugewiesen — sonst schrieben die Regler weiter ins alte (Prüfung 05.10.2026, H1). */
   function bewegtMerken(r, bewegt, pruefen){
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
   }
@@ -195,7 +197,7 @@
     function zust(){ var w = werte(r), k = Math.round(w.x * 12 / PI);
       if (bewegt.x) maxk = Math.max(maxk, k);
       return { k: k, x: w.x, cos: !!(schalter && schalter.checked), bewegt: bewegt, rund: maxk >= 24 }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; maxk = 0; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; maxk = 0; } };
     function zeichnen(){
       var s = zust(), x = s.x, sn = Math.sin(x), cs = Math.cos(x);
       K.leeren();
@@ -239,7 +241,7 @@
     var r = regler(fig, zeichnen);
     bewegtMerken(r, bewegt, function(){ pruefen(); });
     function zust(){ var w = werte(r); return { k: Math.round(w.u * 4 / PI), u: w.u, bewegt: bewegt }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; ziel = null; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; ziel = null; } };
     function zeichnen(){
       var s = zust(), u = s.u;
       K.leeren();
@@ -282,7 +284,7 @@
     bewegtMerken(r, bewegt, function(){ pruefen(); });
     function zust(){ var w = werte(r), k = Math.round(w.x * 12 / PI);
       return { k: k, x: w.x, def: k % 12 !== 6, t: Math.tan(w.x), bewegt: bewegt }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; } };
     function zeichnen(){
       var s = zust(), x = s.x;
       K.leeren();
@@ -332,7 +334,7 @@
     function zust(){ var w = werte(r);
       return { a: w.a, b: w.b, u: w.u, k: Math.round(w.u * 6 / PI), v: w.v, bewegt: bewegt,
         gleich: function(a, b, u, v){ for (var x = -1; x <= 7; x += 0.37) if (Math.abs(w.a * Math.sin(w.b * (x - w.u)) + w.v - (a * Math.sin(b * (x - u)) + v)) > 1e-9) return false; return true; } }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; ziel = null; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; ziel = null; } };
     function zeichnen(){
       var s = zust();
       K.leeren();
@@ -386,7 +388,7 @@
     if (schalter) schalter.addEventListener('change', zeichnen);
     function zust(){ var w = werte(r), cos = !!(schalter && schalter.checked), c = Math.round(w.c * 10) / 10, L = loesungen(cos, c, 0, 2 * PI);
       return { c: c, cos: cos, l: L, n: L.length, bewegt: bewegt }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; } };
     function zeichnen(){
       var s = zust(), f = s.cos ? Math.cos : Math.sin;
       K.leeren();

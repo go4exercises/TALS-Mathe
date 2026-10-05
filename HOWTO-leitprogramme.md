@@ -570,6 +570,9 @@ gegen sie und darüber hinaus.
   «\(\tan x\) ist die Höhe, in der der *Strahl* durch \(P\) die Tangente trifft» — im 2. und
   3. Quadranten trifft ihn nur die Verlängerung über O hinaus. Die Simulation zeichnete es
   ebenso falsch. Jede geometrische Deutung an je einem Wert pro Quadrant nachzeichnen.
+- **Regeln mit Bedingung:** «An den Nullstellen von \(f\) entstehen Knicke» stimmt nur bei
+  Vorzeichenwechsel (\(x^2\): Nullstelle, kein Knick); «links der Grenze das Vorzeichen drehen» nur
+  bei positiver Steigung (\(|4 - 2x|\)). Die eigene Simulation liefert beide Gegenbeispiele.
 - **Folgewerte aus ungerundeten Zwischenwerten:** \(0.775 + 2\pi\) gibt 7.058, richtig ist
   \(7.0586 \to 7.059\). Jede gerundete Zahl aus dem exakten Wert neu runden.
 - **Kompetenzdeckung ehrlich ausweisen.** Hat ein Teilgebiet wenig Kompetenzen, wandern
@@ -613,6 +616,14 @@ gegen sie und darüber hinaus.
 - **Periodische Ziele haben mehrere Lösungen.** Ein Leistenziel «triff die Kurve» mit
   \(u = \tfrac{\pi}{6}\) wird auch von \(u = -\tfrac{5\pi}{6}\) getroffen (Periode \(\pi\)). Kurven
   vergleichen (an einigen Stellen auswerten), nicht Reglerwerte.
+- **«Erkunde» auch nach dem Überspringen lösbar?** Betrag/Trigonometrie (05.10.2026): Die
+  Leiste leerte das Merk-Objekt `bewegt` mit `bewegt = {}`; die Regler schrieben ins alte Objekt,
+  das ihnen beim Start übergeben worden war. Ergebnis: Nach «überspringen» und «zu den offenen»
+  gab die erste Aufgabe nie mehr ✓. Objekte leeren, nicht neu zuweisen. Prüfen: alles
+  überspringen, «zu den offenen», alle Regler ganz durchfahren — ✓ erwartet.
+- **Ein Schalterklick ist keine Lösung.** Liegt der Startwert eines Reglers schon im Ziel, löst
+  das Umlegen eines Schalters die Aufgabe (Sim 3: «Betrag ändert nichts» bei q = 1 ≥ 0).
+  `pruef-leiste` sieht das nicht, weil es Schalter nicht umlegt.
 - **Schalter beim Wechsel zurücksetzen** wie die Regler (`.sim-schalter` auf `defaultChecked`),
   und eine Aufgabe, die einen Schalterzustand braucht, nennt ihn im Text («Sinus: …»).
 - **Korrigierende Listener vor dem Zeichnen registrieren** (`ohneNull`): Sonst zeichnet die
@@ -634,6 +645,13 @@ gegen sie und darüber hinaus.
   nicht würfeln.
 - **Was ein Übungsbild zeigen soll, in Pixeln nachrechnen**: Bei Nullstellenabstand 1 ist der
   Buckel einer doppelten Nullstelle 1–2 px hoch — Berühren und Schneiden sind nicht zu unterscheiden.
+- **Farbwörter in Rückmeldungen gegen den Abspieler prüfen.** Nach einem Fehlklick zeichnet er den
+  eigenen Tipp orange und das Ziel **grün** — «Der blaue Kreis zeigt die Stelle» war in zwei
+  Leitprogrammen falsch.
+- **Klickfragen brauchen im Bild ein Fenster** (`"tippbar": true`, HOWTO-clips) — sonst werden
+  sie stumm übersprungen; `pruef-fragen` meldet «Durchlauf: jede Frage genau einmal».
+- **Sperrliste gegen den Schlüssel prüfen, nicht gegen die Aufgabe.** Ein Schlüssel mit
+  falschem Vorzeichen (`bg|1|-1|3` für \(|x - 1| = 3\)) sperrt nichts — der Clip-Fall kam weiter.
 - **Fragetexte eines Kontrollclips verschieden beginnen lassen**: `pruef-fragen` erkennt eine Frage
   an ihren ersten 20 Zeichen; zwei Fragen «Welche Nullstellen hat …» lassen den Durchlauf scheitern.
 - Live-Anzeigen runden nur mit «≈».

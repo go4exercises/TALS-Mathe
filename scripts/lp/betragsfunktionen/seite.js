@@ -175,6 +175,8 @@
     setTimeout(zeigen, 0);
     return pruefen;
   }
+  /* Merkt, welche Regler bewegt wurden. Das Objekt wird beim Aufgabenwechsel geleert, nie neu
+     zugewiesen — sonst schrieben die Regler weiter ins alte (Prüfung 05.10.2026, H1). */
   function bewegtMerken(r, bewegt, pruefen){
     for (var k in r) (function(k){ r[k].addEventListener('input', function(){ bewegt[k] = true; pruefen(); }); })(k);
   }
@@ -204,7 +206,7 @@
     bewegtMerken(r, bewegt, function(){ pruefen(); });
     function zust(){ var w = werte(r); if (bewegt.x) seiten[w.x >= w.m ? 'r' : 'l'] = true;
       return { m: w.m, x: w.x, y: Math.abs(w.x - w.m), beide: seiten.r && seiten.l, bewegt: bewegt }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; seiten = {}; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; seiten = {}; } };
     function zeichnen(){
       var s = zust(), m = s.m, x = s.x;
       K.leeren();
@@ -212,23 +214,23 @@
       K.kurve(function(t){ return m - t; }, 'ast hilfslinie');
       K.kurve(function(t){ return Math.abs(t - m); }, 'kurve');
       K.strecke(m, 0, x, 0, 'abstand');
-      K.punkt(m, 0, 'p-pkt', 'm', -4, 16, 'end');
+      K.punkt(m, 0, 'p-pkt', 'u', -4, 16, 'end');
       K.punkt(x, s.y, 'p-lauf', '(' + z(x) + ' | ' + z(s.y) + ')', x > 2 ? -8 : 8, -8, x > 2 ? 'end' : 'start');
       var rechts = x >= m;
       var innen = m === 0 ? 'x' : 'x ' + vor(-m);
       rolle(fig, 'formel').innerHTML = 'y = ' + sp('tx-blau', betragT(m)) + ' &nbsp;·&nbsp; x = ' + z(x)
-        + (rechts ? ' ≥ m: ' + sp('tx-gruen', 'y = ' + innen) : ' &lt; m: ' + sp('tx-gruen', 'y = −(' + innen + ')'))
+        + (rechts ? ' ≥ u: ' + sp('tx-gruen', 'y = ' + innen) : ' &lt; u: ' + sp('tx-gruen', 'y = −(' + innen + ')'))
         + ' = ' + z(s.y);
       pruefen();
     }
     pruefen = Leiste(fig, [
-      { text: 'Erkunde: Zieh den Läufer \\(x\\) einmal links und einmal rechts an \\(m\\) vorbei. Welcher Term gilt wo?', ok: function(s){ return s.beide; } },
-      // Startzustand m = 0, x = 2.5 — keine Aufgabe ist schon gelöst.
-      { text: 'Lass \\(m = 0\\): Stell ein negatives \\(x\\) mit \\(|x| = 3.5\\) ein.', ok: function(s){ return s.m === 0 && s.x === -3.5; } },
-      { text: 'Lass \\(m = 0\\): Wo ist der Betrag null?', ok: function(s){ return s.m === 0 && s.x === 0; } },
-      { text: 'Stell \\(m = 2\\) ein. Wo links von \\(m\\) ist der Abstand zu \\(m\\) gleich \\(3\\)?', ok: function(s){ return s.m === 2 && s.x === -1; } },
-      { text: 'Stell \\(m = -2\\) ein. Wo rechts von \\(m\\) ist der Abstand \\(4\\)?', ok: function(s){ return s.m === -2 && s.x === 2; } },
-      { text: 'Bei \\(m = 1\\) haben zwei Stellen den Abstand \\(2.5\\). Stell die rechte ein.', ok: function(s){ return s.m === 1 && s.x === 3.5; } }
+      { text: 'Erkunde: Zieh den Läufer \\(x\\) einmal links und einmal rechts an \\(u\\) vorbei. Welcher Term gilt wo?', ok: function(s){ return s.beide; } },
+      // Startzustand u = 0, x = 2.5 — keine Aufgabe ist schon gelöst.
+      { text: 'Lass \\(u = 0\\): Stell ein negatives \\(x\\) mit \\(|x| = 3.5\\) ein.', ok: function(s){ return s.m === 0 && s.x === -3.5; } },
+      { text: 'Lass \\(u = 0\\): Wo ist der Betrag null?', ok: function(s){ return s.m === 0 && s.x === 0; } },
+      { text: 'Stell \\(u = 2\\) ein. Wo links von \\(u\\) ist der Abstand zu \\(u\\) gleich \\(3\\)?', ok: function(s){ return s.m === 2 && s.x === -1; } },
+      { text: 'Stell \\(u = -2\\) ein. Wo rechts von \\(u\\) ist der Abstand \\(4\\)?', ok: function(s){ return s.m === -2 && s.x === 2; } },
+      { text: 'Bei \\(u = 1\\) haben zwei Stellen den Abstand \\(2.5\\). Stell die rechte ein.', ok: function(s){ return s.m === 1 && s.x === 3.5; } }
     ], sim);
     zeichnen();
   })();
@@ -244,7 +246,7 @@
     var r = regler(fig, zeichnen);
     bewegtMerken(r, bewegt, function(){ pruefen(); });
     function zust(){ var w = werte(r); return { a: w.a, u: w.u, v: w.v, bewegt: bewegt }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; ziel = null; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; ziel = null; } };
     function zeichnen(){
       var s = zust();
       K.leeren();
@@ -265,7 +267,7 @@
       { text: 'Der rechte Ast soll mit der Steigung \\(0.5\\) steigen.', ok: function(s){ return s.a === 0.5; } },
       { text: 'Bau ein Dach mit der Spitze bei \\((1 \\mid 3)\\).', ok: function(s){ return s.a < 0 && s.u === 1 && s.v === 3; } },
       { text: 'Ein V mit den Ast-Steigungen \\(\\pm 1\\) und den Nullstellen \\(x = -1\\) und \\(x = 3\\).', ok: function(s){ return s.a === 1 && s.u === 1 && s.v === -2; } },
-      { text: 'Triff die dünn gezeichnete Zielkurve.', setup: function(){ ziel = [1.5, -1.5, -2]; },
+      { text: 'Triff die blass gezeichnete Zielkurve.', setup: function(){ ziel = [1.5, -1.5, -2]; },
         ok: function(s){ return s.a === 1.5 && s.u === -1.5 && s.v === -2; } }
     ], sim);
     zeichnen();
@@ -287,26 +289,31 @@
       var f = par ? function(x){ return x * x + w.q; } : function(x){ return w.m * x + w.q; };
       var nst = par ? (w.q < 0 ? [-Math.sqrt(-w.q), Math.sqrt(-w.q)] : []) : (w.m !== 0 ? [-w.q / w.m] : []);
       return { m: w.m, q: w.q, par: par, f: f, nst: nst, bewegt: bewegt }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; } };
     function zeichnen(){
       var s = zust();
       K.leeren();
       K.kurve(s.f, 'normal');
       K.kurve(function(x){ return Math.abs(s.f(x)); }, 'kurve');
-      s.nst.forEach(function(x, i){ K.punkt(x, 0, 'p-pkt', '(' + zz(x) + ' | 0)', i ? 8 : -8, 16, i ? 'start' : 'end'); });
+      if (!(s.par && s.q === 0)) s.nst.forEach(function(x, i){ K.punkt(x, 0, 'p-pkt', '(' + zz(x) + ' | 0)', i ? 8 : -8, 16, i ? 'start' : 'end'); });
       if (s.par && s.q < 0) K.punkt(0, -s.q, 'p-lauf', '(0 | ' + z(-s.q) + ')', 8, -8);
-      var fT = s.par ? 'x² ' + vor(s.q) : (s.m === 0 ? z(s.q) : (s.m === 1 ? '' : s.m === -1 ? '−' : z(s.m)) + 'x ' + vor(s.q));
-      rolle(fig, 'formel').innerHTML = 'f(x) = ' + fT.replace(' + 0', '') + ' (gestrichelt) &nbsp;·&nbsp; y = ' + sp('tx-blau', '|f(x)|')
-        + ' &nbsp;·&nbsp; ' + (s.nst.length ? s.nst.length + (s.nst.length === 1 ? ' Knick' : ' Knicke') : 'kein Knick — nichts umzuklappen' + (s.par || s.q >= 0 ? '' : ' (f ist konstant)'));
+      var rest = s.q === 0 ? '' : ' ' + vor(s.q);
+      var fT = s.par ? 'x²' + rest : (s.m === 0 ? z(s.q) : (s.m === 1 ? '' : s.m === -1 ? '−' : z(s.m)) + 'x' + rest);
+      var knick = s.nst.length && !(s.par && s.q === 0);    // x²: Nullstelle ohne Vorzeichenwechsel, kein Knick
+      rolle(fig, 'formel').innerHTML = 'f(x) = ' + fT + ' (gestrichelt) &nbsp;·&nbsp; y = ' + sp('tx-blau', '|f(x)|')
+        + ' &nbsp;·&nbsp; ' + (knick ? s.nst.length + (s.nst.length === 1 ? ' Knick' : ' Knicke')
+          : s.par && s.q === 0 ? 'kein Knick — f berührt die x-Achse nur, wechselt das Vorzeichen nicht'
+          : !s.par && s.m === 0 && s.q < 0 ? 'kein Knick — f liegt ganz unten und klappt als Ganzes hoch'
+          : 'kein Knick — nichts umzuklappen');
       pruefen();
     }
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Zieh an \\(q\\). Welche Teile klappen um, welche nicht?', ok: function(s){ return s.bewegt.q; } },
       // Startzustand: Gerade f(x) = x + 1, Knick bei −1 — keine Aufgabe ist schon gelöst.
-      { text: 'Gerade: Stell \\(f\\) so ein, dass \\(|f|\\) den Knick bei \\(x = 2\\) hat.', ok: function(s){ return !s.par && s.m !== 0 && Math.abs(-s.q / s.m - 2) < 1e-9; } },
+      { text: 'Gerade: Stell \\(f\\) so ein, dass \\(|f|\\) den Knick bei \\(x = -1.5\\) hat.', ok: function(s){ return !s.par && s.m !== 0 && Math.abs(-s.q / s.m + 1.5) < 1e-9; } },
       { text: 'Gerade: Stell \\(f\\) so ein, dass \\(|f|\\) gar keinen Knick hat.', ok: function(s){ return !s.par && s.m === 0; } },
-      { text: 'Parabel: Schalte auf \\(f(x) = x^2 + q\\). Die Knicke sollen bei \\(-2\\) und \\(2\\) liegen.', ok: function(s){ return s.par && s.q === -4; } },
-      { text: 'Parabel: Der Betrag soll gar nichts ändern.', ok: function(s){ return s.par && s.q >= 0; } },
+      { text: 'Parabel: Schalte auf \\(f(x) = x^2 + q\\). Die Knicke sollen bei \\(-\\sqrt3\\) und \\(\\sqrt3\\) liegen.', ok: function(s){ return s.par && s.q === -3; } },
+      { text: 'Parabel: Die Kurve soll die \\(x\\)-Achse nur berühren. Entsteht ein Knick?', ok: function(s){ return s.par && s.q === 0; } },
       { text: 'Parabel: Der umgeklappte Scheitel soll bei \\((0 \\mid 2.5)\\) liegen.', ok: function(s){ return s.par && s.q === -2.5; } }
     ], sim);
     zeichnen();
@@ -323,7 +330,7 @@
     bewegtMerken(r, bewegt, function(){ pruefen(); });
     function zust(){ var w = werte(r), lo = Math.min(w.a, w.b), hi = Math.max(w.a, w.b);
       return { a: w.a, b: w.b, lo: lo, hi: hi, h: hi - lo, f: function(x){ return Math.abs(x - w.a) + Math.abs(x - w.b); }, bewegt: bewegt }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; } };
     function zeichnen(){
       var s = zust();
       K.leeren();
@@ -336,7 +343,7 @@
       rolle(fig, 'formel').innerHTML = 'y = ' + sp('tx-blau', betragT(s.a) + ' + ' + betragT(s.b))
         + '<br>' + nb(sp('tx-gruen', term('−2x', s.a + s.b)) + ' für x &lt; ' + z(s.lo))
         + (s.h > 0 ? ' &nbsp;·&nbsp; ' + nb(sp('tx-gruen', z(s.h)) + ' für ' + z(s.lo) + ' ≤ x ≤ ' + z(s.hi)) : '')
-        + ' &nbsp;·&nbsp; ' + nb(sp('tx-gruen', term('2x', -(s.a + s.b))) + ' für x &gt; ' + z(s.hi));
+        + ' &nbsp;·&nbsp; ' + nb(sp('tx-gruen', term('2x', -(s.a + s.b))) + (s.h > 0 ? ' für x &gt; ' : ' für x ≥ ') + z(s.hi));
       pruefen();
     }
     pruefen = Leiste(fig, [
@@ -368,7 +375,7 @@
       else { if (c > 0) L = [w.u - c, w.u + c]; else if (c === 0) L = [w.u]; }
       r.u.disabled = W;
       return { W: W, ug: ug, u: w.u, c: c, l: L, n: L.length, bewegt: bewegt }; }
-    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; } };
+    var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ for (var bk in bewegt) delete bewegt[bk]; } };
     function zeichnen(){
       var s = zust(), f = s.W ? function(x){ return Math.abs(x * x - 4); } : function(x){ return Math.abs(x - s.u); };
       K.leeren();
@@ -383,11 +390,11 @@
     }
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Zieh die Waagrechte \\(y = c\\) hoch und runter. Wie viele Schnittstellen gibt es?', ok: function(s){ return s.bewegt.c; } },
-      // Startzustand: V |x|, c = 3 — zwei Lösungen ±3, keine Aufgabe ist schon gelöst.
-      { text: 'V: Stell \\(u\\) und \\(c\\) so ein, dass die Lösungen \\(-1\\) und \\(3\\) sind.', ok: function(s){ return !s.W && s.u === 1 && s.c === 2; } },
+      // Startzustand: V |x|, c = 1.5 — zwei Lösungen ±1.5, keine Aufgabe ist schon gelöst (auch nicht mit dem Schalter W).
+      { text: 'V: Stell \\(u\\) und \\(c\\) so ein, dass die Lösungen \\(-3\\) und \\(1\\) sind.', ok: function(s){ return !s.W && s.u === -1 && s.c === 2; } },
       { text: 'Stell \\(c\\) so ein, dass es <b>keine</b> Lösung gibt.', ok: function(s){ return s.n === 0; } },
-      { text: 'Schalte auf das W. Bei welchem \\(c\\) gibt es genau <b>drei</b> Lösungen?', ok: function(s){ return s.W && s.n === 3; } },
-      { text: 'W: Vier Lösungen, und eine davon ist \\(x = 1\\).', ok: function(s){ return s.W && s.c === 3; } },
+      { text: 'Schalte auf das W. Genau <b>zwei</b> Lösungen, und eine davon ist \\(x = 3\\).', ok: function(s){ return s.W && s.c === 5; } },
+      { text: 'W: Vier Lösungen, und eine davon ist \\(x = \\sqrt2 \\approx 1.41\\).', ok: function(s){ return s.W && s.c === 2; } },
       { text: 'V mit \\(u = 0\\): Schalte «≤» ein. Die Lösungsmenge von \\(|x| \\le c\\) soll von \\(-2.5\\) bis \\(2.5\\) reichen.', ok: function(s){ return !s.W && s.ug && s.u === 0 && s.c === 2.5; } }
     ], sim);
     zeichnen();
@@ -446,14 +453,14 @@
       'ks|1|-3|-2', 'ks|3|1|0', 'ks|-1|2|4', 'ks|-2|0|1', 'ks|2|1|-3',
       'ug|2|-6', 'ug|2|4', 'up|9', 'up|4', 'up|1',
       'ab|2|-6', 'ab|3|6', 'wa|-1|3', 'wa|0|4', 'wa|-2|1',
-      'bg|1|-1|3', 'bg|1|2|5', 'bg|1|-1|2', 'bu|1|-1|3|le', 'bu|1|0|2|lt',
+      'bg|1|1|3', 'bg|1|-2|5', 'bg|1|1|2', 'bu|1|1|3|le', 'bu|1|0|2|lt',
       // Simulationen
-      'ks|1|-2|1', 'ks|1|1|-2', 'ks|1.5|-1.5|-2', 'up|2.25', 'wa|-2|3', 'wa|0|2', 'bg|1|-1|2', 'bu|1|0|2.5|le',
+      'ks|1|-2|1', 'ks|1|1|-2', 'ks|1.5|-1.5|-2', 'up|2.25', 'wa|-2|3', 'wa|0|2', 'wa|-1|2', 'bg|1|-1|2', 'bu|1|0|2.5|le', 'fa|2|-1', 'fa|-2|2', 'fa|1|3.5',
       // Aufgaben der Kapitel
       'ks|-3|-1|2', 'ks|0.5|4|0', 'ks|2|-1|-4', 'ks|-0.5|-1|3', 'ks|3|2|-1', 'ks|-1|0|5',
       'ug|2|-6', 'up|1', 'ab|3|9', 'ab|-2|4', 'wa|-2|2', 'wa|-3|1', 'bg|1|4|6', 'bu|1|-1|4|le', 'bu|1|2|1|ge',
       // Gesamttest (downloads/leitprogramme/betragsfunktionen/gesamttest.tex)
-      'ks|-2|1|3', 'ks|0.5|-2|-1', 'wa|-1|4', 'up|1'
+      'ks|-2|-1|4', 'ks|0.5|-2|-1', 'wa|-1|4', 'up|1', 'bu|1|-1|2|ge'
     ];
     function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
 
@@ -471,24 +478,24 @@
         pruefen: function(A, e){
           if (gl(e.y, A.y)) return null;
           if (gl(e.y, A.arg)) return 'Das ist der Wert im Betrag, \\(' + tz(A.arg) + '\\). Der Betrag davon ist nie negativ.';
-          return 'Zuerst einsetzen: \\(' + tz(A.a) + ' \\cdot ' + (A.x < 0 ? '(' + tz(A.x) + ')' : tz(A.x)) + (A.b < 0 ? ' - ' + (-A.b) : ' + ' + A.b) + '\\), dann den Betrag nehmen.'; },
+          return 'Zuerst einsetzen: \\(' + tz(A.a) + ' \\cdot ' + (A.x < 0 ? '(' + tz(A.x) + ')' : tz(A.x)) + (A.b === 0 ? '' : A.b < 0 ? ' - ' + (-A.b) : ' + ' + A.b) + '\\), dann den Betrag nehmen.'; },
         loesung: function(A){ return 'f(' + tz(A.x) + ') = |' + tz(A.arg) + '| = ' + A.y; } },
 
-      'fall': { felder: ['t', 'y'], muster: 'Hier gilt |x − m| = {t:x − m|−(x − m)} = {y}',
+      'fall': { felder: ['t', 'y'], muster: 'Hier gilt |x − u| = {t:x − u|−(x − u)} = {y}',
         schl: function(A){ return 'fa|' + A.m + '|' + A.x; },
-        eingabe: function(A){ return { t: A.rechts ? 'x − m' : '−(x − m)', y: String(Math.abs(A.x - A.m)) }; },
+        eingabe: function(A){ return { t: A.rechts ? 'x − u' : '−(x − u)', y: String(Math.abs(A.x - A.m)) }; },
         neu: function(){
           var m = zufall([-4, -3, -2, -1, 1, 2, 3, 4]), x = zufallG(-6, 6);
           while (x === m) x = zufallG(-6, 6);
           return { m: m, x: x, rechts: x > m,
-            text: 'Für \\(f(x) = ' + betT(m) + '\\) ist \\(m = ' + tz(m) + '\\). Welcher Term gilt bei \\(x = ' + tz(x) + '\\), und welchen Wert hat \\(f\\) dort?' }; },
-        fehler: function(A){ var f = [[{ t: A.rechts ? '−(x − m)' : 'x − m', y: String(Math.abs(A.x - A.m)) }, 'Fall']];
-          if (!A.rechts) f.push([{ t: '−(x − m)', y: String(A.x - A.m) }, 'Betrag']);
+            text: 'Für \\(f(x) = ' + betT(m) + '\\) ist \\(u = ' + tz(m) + '\\). Welcher Term gilt bei \\(x = ' + tz(x) + '\\), und welchen Wert hat \\(f\\) dort?' }; },
+        fehler: function(A){ var f = [[{ t: A.rechts ? '−(x − u)' : 'x − u', y: String(Math.abs(A.x - A.m)) }, 'Fall']];
+          if (!A.rechts) f.push([{ t: '−(x − u)', y: String(A.x - A.m) }, 'Betrag']);
           return f; },
         pruefen: function(A, e){
-          var r = [], soll = A.rechts ? 'x − m' : '−(x − m)';
+          var r = [], soll = A.rechts ? 'x − u' : '−(x − u)';
           if (e.t === soll && gl(e.y, Math.abs(A.x - A.m))) return null;
-          if (e.t !== soll) r.push('Fall: \\(x = ' + tz(A.x) + '\\) liegt ' + (A.rechts ? 'rechts' : 'links') + ' von \\(m = ' + tz(A.m) + '\\), also ist \\(x - m\\) ' + (A.rechts ? 'positiv' : 'negativ') + '.');
+          if (e.t !== soll) r.push('Fall: \\(x = ' + tz(A.x) + '\\) liegt ' + (A.rechts ? 'rechts' : 'links') + ' von \\(u = ' + tz(A.m) + '\\), also ist \\(x - u\\) ' + (A.rechts ? 'positiv' : 'negativ') + '.');
           if (!gl(e.y, Math.abs(A.x - A.m))) r.push(gl(e.y, A.x - A.m) ? 'Der Wert: Ein Betrag ist nie negativ.' : 'Der Wert: Abstand von \\(' + tz(A.x) + '\\) zu \\(' + tz(A.m) + '\\).');
           return r.join(' '); },
         loesung: function(A){ return '|' + tz(A.x) + (A.m < 0 ? ' + ' + (-A.m) : ' - ' + A.m) + '| = ' + Math.abs(A.x - A.m); } },
@@ -510,7 +517,7 @@
           if (!gl(e.v, A.v)) r.push('Die \\(y\\)-Koordinate des Knicks ist der Summand hinter dem Betrag.');
           if (!gl(e.s, A.a)) r.push(gl(e.s, -A.a) ? 'Das ist der linke Ast. Der rechte Ast hat die Steigung \\(a\\), den Faktor vor dem Betrag.' : 'Steigung: der Faktor vor dem Betrag.');
           return r.join(' '); },
-        loesung: function(A){ return '(' + tz(A.u) + ' \\mid ' + tz(A.v) + '),\\ m = ' + tz(A.a); } },
+        loesung: function(A){ return '(' + tz(A.u) + ' \\mid ' + tz(A.v) + '),\\ \\text{Steigung rechts } ' + tz(A.a); } },
 
       'v-aus-graph': { felder: ['a', 'u', 'v'], muster: 'y = {a} · |x − ({u})| + {v}',
         schl: function(A){ return 'ks|' + A.a + '|' + A.u + '|' + A.v; },
@@ -520,7 +527,7 @@
           do { a = zufall([-2, -1, -0.5, 0.5, 1, 2]); u = zufallG(-3, 3); v = zufallG(-3, 3); } while ((a === 1 && u === 0 && v === 0));
           return { a: a, u: u, v: v, text: 'Bestimme \\(a\\), \\(u\\) und \\(v\\) der abgebildeten Kurve \\(y = a\\,|x - u| + v\\).' }; },
         zeichne: function(svg, A){
-          var K = Achsen(svg, { w: 170, h: 170, x0: -5, x1: 5, y0: -5, y1: 5, r: 3, pfeil: 6, xm: [-4, -2, 2, 4], ym: [-4, -2, 2, 4] });
+          var K = Achsen(svg, { w: 170, h: 170, x0: -5, x1: 5, y0: -5, y1: 5, r: 3, pfeil: 6, xm: [-4, -3, -2, -1, 1, 2, 3, 4], ym: [-4, -3, -2, -1, 1, 2, 3, 4] });
           K.kurve(function(x){ return A.a * Math.abs(x - A.u) + A.v; }, 'kurve');
           K.punkt(A.u, A.v, 'p-pkt');
         },
@@ -528,7 +535,7 @@
         pruefen: function(A, e){
           var r = [];
           if (gl(e.a, A.a) && gl(e.u, A.u) && gl(e.v, A.v)) return null;
-          if (!gl(e.a, A.a)) r.push(gl(e.a, -A.a) ? 'Öffnung: ' + (A.a > 0 ? 'Ein V (nach oben offen) hat \\(a \\gt 0\\).' : 'Ein Dach (nach unten offen) hat \\(a \\lt 0\\).') : 'Lies die Steigung des rechten Astes ab: eine Einheit nach rechts, wie viel hoch oder runter?');
+          if (!gl(e.a, A.a)) r.push(gl(e.a, -A.a) ? 'Öffnung: ' + (A.a > 0 ? 'Ein V (nach oben offen) hat \\(a \\gt 0\\).' : 'Ein Dach (nach unten offen) hat \\(a \\lt 0\\).') : 'Lies die Steigung des rechten Astes ab: zwei Einheiten nach rechts, wie viel hoch oder runter — und durch zwei teilen.');
           if (!gl(e.u, A.u) || !gl(e.v, A.v)) r.push('Der Knick liegt bei \\((u \\mid v)\\) — lies seine Koordinaten ab.');
           return r.join(' '); },
         loesung: function(A){ return 'a = ' + tz(A.a) + ',\\ u = ' + tz(A.u) + ',\\ v = ' + tz(A.v); } },
@@ -553,13 +560,13 @@
         schl: function(A){ return 'up|' + A.k; },
         eingabe: function(A){ return { x: String(A.w), h: String(A.k) }; },
         neu: function(){
-          var w = zufall([1, 1.5, 2, 2.5, 3, 4, 0.5]), k = w * w;
+          var w = zufall([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7]), k = w * w;
           return { w: w, k: k, text: 'Skizziere im Kopf \\(y = |x^2 - ' + k + '|\\). Wo liegen die Knicke, und wie hoch ist der Buckel in der Mitte?' }; },
         fehler: function(A){ var f = [[{ x: String(A.w), h: String(-A.k) }, 'Betrag']]; if (A.k !== A.w) f.push([{ x: String(A.k), h: String(A.k) }, 'Wurzel']); return f; },
         pruefen: function(A, e){
           var r = [];
-          if (gl(e.x, A.w) && gl(e.h, A.k)) return null;
-          if (!gl(e.x, A.w)) r.push(gl(e.x, A.k) ? 'Knicke an den Nullstellen: \\(x^2 = ' + A.k + '\\) — die Wurzel ziehen.' : 'Die Knicke liegen an den Nullstellen von \\(x^2 - ' + A.k + '\\).');
+          if (gl(Math.abs(e.x), A.w) && gl(e.h, A.k)) return null;
+          if (!gl(Math.abs(e.x), A.w)) r.push(gl(e.x, A.k) ? 'Knicke an den Nullstellen: \\(x^2 = ' + A.k + '\\) — die Wurzel ziehen.' : 'Die Knicke liegen an den Nullstellen von \\(x^2 - ' + A.k + '\\).');
           if (!gl(e.h, A.k)) r.push(gl(e.h, -A.k) ? 'Der Scheitel \\((0 \\mid -' + A.k + ')\\) klappt hoch — der Betrag ist positiv.' : 'Der Buckel ist der umgeklappte Scheitel von \\(x^2 - ' + A.k + '\\).');
           return r.join(' '); },
         loesung: function(A){ return 'x = \\pm\\sqrt{' + A.k + '} = \\pm ' + A.w + ',\\ (0 \\mid ' + A.k + ')'; } },
@@ -572,12 +579,14 @@
           var a = zufall([-3, -2, -1, 1, 2, 3, 4]), g = zufall([-3, -2, -1, 1, 2, 3]), b = -a * g;
           return { a: a, b: b, g: g, text: 'Schreib \\(y = |' + linT(a, b) + '|\\) abschnittsweise: Wo liegt die Grenze, und welcher Term gilt links davon?' }; },
         fehler: function(A){ return [[{ g: String(A.g), m: String(A.a > 0 ? A.a : -A.a), q: String(A.a > 0 ? A.b : -A.b) }, 'Links'],
+                                     [{ g: String(A.g), m: String(A.a > 0 ? A.a : -A.a), q: String(A.a > 0 ? -A.b : A.b) }, 'ganzen'],
                                      [{ g: String(-A.g), m: String(A.a > 0 ? -A.a : A.a), q: String(A.a > 0 ? -A.b : A.b) }, 'Grenze']]; },
         pruefen: function(A, e){
           var m = A.a > 0 ? -A.a : A.a, q = A.a > 0 ? -A.b : A.b, r = [];
           if (gl(e.g, A.g) && gl(e.m, m) && gl(e.q, q)) return null;
           if (!gl(e.g, A.g)) r.push('Grenze: Setz das Argument \\(' + linT(A.a, A.b) + '\\) gleich null.');
-          if (!gl(e.m, m) || !gl(e.q, q)) r.push(gl(e.m, -m) && gl(e.q, -q) ? 'Links der Grenze ist \\(' + linT(A.a, A.b) + '\\) ' + (A.a > 0 ? 'negativ — dort wird das Vorzeichen des ganzen Terms gedreht.' : 'positiv — dort bleibt der Term, wie er ist.')
+          if ((gl(e.m, -m) && gl(e.q, q)) || (gl(e.m, m) && gl(e.q, -q))) r.push('Nur eine Zahl umgedreht: Das Vorzeichen des ganzen Terms wird gedreht, beide Teile.');
+          else if (!gl(e.m, m) || !gl(e.q, q)) r.push(gl(e.m, -m) && gl(e.q, -q) ? 'Links der Grenze ist \\(' + linT(A.a, A.b) + '\\) ' + (A.a > 0 ? 'negativ — dort wird das Vorzeichen des ganzen Terms gedreht.' : 'positiv — dort bleibt der Term, wie er ist.')
                                                                      : 'Teste eine Stelle links der Grenze: Ist das Argument dort positiv oder negativ?');
           return r.join(' '); },
         loesung: function(A){ var m = A.a > 0 ? -A.a : A.a, q = A.a > 0 ? -A.b : A.b; return 'x = ' + tz(A.g) + ';\\ x \\lt ' + tz(A.g) + ':\\ y = ' + linT(m, q); } },
@@ -604,35 +613,42 @@
         schl: function(A){ return 'bg|' + A.k + '|' + A.u + '|' + A.c; },
         eingabe: function(A){ return { x1: String(A.x1), x2: String(A.x2) }; },
         neu: function(){
-          var k = zufall([1, 1, 2]), u = zufallG(-4, 4), c = zufallG(1, 6) * (k === 2 ? 2 : 1);
+          var k = zufall([1, 1, 2]), u = zufallG(-4, 4), c = Math.random() < 0.15 ? 0 : zufallG(1, 6) * (k === 2 ? 2 : 1);
           if (u === 0) u = 1;     // sonst fielen die gespiegelten Lösungen mit den richtigen zusammen
           // |k x - k u| = c  ⇒  x = u ± c/k
           return { k: k, u: u, c: c, x1: u - c / k, x2: u + c / k,
-            text: 'Löse \\(|' + linT(k, -k * u) + '| = ' + c + '\\).' }; },
-        fehler: function(A){ return [[{ x1: String(-A.u - A.c / A.k), x2: String(-A.u + A.c / A.k) }, 'Vorzeichen'], [{ x1: String(A.x2), x2: String(A.x2) }, 'zwei']]; },
+            text: 'Löse \\(|' + linT(k, -k * u) + '| = ' + c + '\\). (Gibt es nur eine Lösung, trag sie in beide Felder ein.)' }; },
+        fehler: function(A){ return A.c === 0 ? [[{ x1: String(-A.u), x2: String(-A.u) }, 'Vorzeichen'], [{ x1: String(A.u - 1), x2: String(A.u + 1) }, 'eine']]
+                                              : [[{ x1: String(-A.u - A.c / A.k), x2: String(-A.u + A.c / A.k) }, 'Vorzeichen'], [{ x1: String(A.x2), x2: String(A.x2) }, 'zwei']]; },
         pruefen: function(A, e){
           if (gl(e.x1, A.x1) && gl(e.x2, A.x2)) return null;
           if (gl(e.x1, A.x2) && gl(e.x2, A.x1)) return 'Beide richtig — aber zuerst die kleinere Lösung.';
+          if (A.c === 0) return gl(e.x1, -A.u) && gl(e.x2, -A.u) ? 'Vorzeichen: Das Argument wird null bei \\(x = ' + tz(A.u) + '\\).' : 'Betrag gleich null hat nur eine Lösung: Das Argument ist null. Trag sie in beide Felder ein.';
           if (gl(e.x1, e.x2)) return 'Es gibt zwei Fälle: Das Argument ist \\(' + A.c + '\\) oder \\(-' + A.c + '\\).';
           if (gl(e.x1, -A.u - A.c / A.k) && gl(e.x2, -A.u + A.c / A.k)) return 'Vorzeichen: Die Lösungen liegen symmetrisch um die Nullstelle des Arguments, \\(x = ' + tz(A.u) + '\\).';
           return 'Zwei Fälle: \\(' + linT(A.k, -A.k * A.u) + ' = ' + A.c + '\\) und \\(' + linT(A.k, -A.k * A.u) + ' = -' + A.c + '\\).'; },
-        loesung: function(A){ return 'L = \\{' + tz(A.x1) + ';\\ ' + tz(A.x2) + '\\}'; } },
+        loesung: function(A){ return A.c === 0 ? 'L = \\{' + tz(A.u) + '\\}' : 'L = \\{' + tz(A.x1) + ';\\ ' + tz(A.x2) + '\\}'; } },
 
-      'betrag-ungleichung': { felder: ['art', 'a', 'b'], muster: 'Lösung: {art:a ≤ x ≤ b|x ≤ a oder x ≥ b} mit a = {a}, b = {b}',
+      'betrag-ungleichung': { felder: ['art', 'a', 'b'], muster: 'Lösung: {art:a ≤ x ≤ b|a < x < b|x ≤ a oder x ≥ b|x < a oder x > b} mit a = {a}, b = {b}',
         schl: function(A){ return 'bu|1|' + A.u + '|' + A.c + '|' + A.rel; },
-        eingabe: function(A){ return { art: A.innen ? 'a ≤ x ≤ b' : 'x ≤ a oder x ≥ b', a: String(A.u - A.c), b: String(A.u + A.c) }; },
+        eingabe: function(A){ return { art: A.art, a: String(A.u - A.c), b: String(A.u + A.c) }; },
         neu: function(){
-          var u = zufallG(-4, 4), c = zufallG(1, 5), innen = Math.random() < 0.5;
-          return { u: u, c: c, innen: innen, rel: innen ? 'le' : 'ge',
-            text: 'Löse \\(' + betT(u) + (innen ? ' \\le ' : ' \\ge ') + c + '\\).' }; },
-        fehler: function(A){ return [[{ art: A.innen ? 'x ≤ a oder x ≥ b' : 'a ≤ x ≤ b', a: String(A.u - A.c), b: String(A.u + A.c) }, 'Waagrechte']]; },
+          var u = zufallG(-4, 4), c = zufallG(1, 5), rel = zufall(['le', 'lt', 'ge', 'gt']), innen = rel === 'le' || rel === 'lt', streng = rel === 'lt' || rel === 'gt';
+          var art = innen ? (streng ? 'a < x < b' : 'a ≤ x ≤ b') : (streng ? 'x < a oder x > b' : 'x ≤ a oder x ≥ b');
+          return { u: u, c: c, innen: innen, streng: streng, rel: rel, art: art,
+            text: 'Löse \\(' + betT(u) + ' ' + { le: '\\le', lt: '\\lt', ge: '\\ge', gt: '\\gt' }[rel] + ' ' + c + '\\).' }; },
+        fehler: function(A){ var gegen = A.innen ? (A.streng ? 'x < a oder x > b' : 'x ≤ a oder x ≥ b') : (A.streng ? 'a < x < b' : 'a ≤ x ≤ b');
+          var rand = A.innen ? (A.streng ? 'a ≤ x ≤ b' : 'a < x < b') : (A.streng ? 'x ≤ a oder x ≥ b' : 'x < a oder x > b');
+          return [[{ art: gegen, a: String(A.u - A.c), b: String(A.u + A.c) }, 'Waagrechte'], [{ art: rand, a: String(A.u - A.c), b: String(A.u + A.c) }, 'Grenzen']]; },
         pruefen: function(A, e){
-          var r = [], art = A.innen ? 'a ≤ x ≤ b' : 'x ≤ a oder x ≥ b';
-          if (e.art === art && gl(e.a, A.u - A.c) && gl(e.b, A.u + A.c)) return null;
-          if (e.art !== art) r.push('Skizze: Wo liegt das V ' + (A.innen ? 'unter' : 'über') + ' der Waagrechten \\(y = ' + A.c + '\\) — zwischen oder ausserhalb der Schnittstellen?');
+          var r = [], innenE = e.art.indexOf('oder') < 0, strengE = e.art.indexOf('≤') < 0 && e.art.indexOf('≥') < 0;
+          if (e.art === A.art && gl(e.a, A.u - A.c) && gl(e.b, A.u + A.c)) return null;
+          if (innenE !== A.innen) r.push('Skizze: Wo liegt das V ' + (A.innen ? 'unter' : 'über') + ' der Waagrechten \\(y = ' + A.c + '\\) — zwischen oder ausserhalb der Schnittstellen?');
+          else if (strengE !== A.streng) r.push('Grenzen: Bei ' + (A.streng ? '«&lt;» bzw. «&gt;» gehören die Schnittstellen nicht dazu.' : '«≤» bzw. «≥» gehören die Schnittstellen dazu.'));
           if (!gl(e.a, A.u - A.c) || !gl(e.b, A.u + A.c)) r.push('Die Grenzen sind die Lösungen von \\(' + betT(A.u) + ' = ' + A.c + '\\).');
           return r.join(' '); },
-        loesung: function(A){ return A.innen ? tz(A.u - A.c) + ' \\le x \\le ' + tz(A.u + A.c) : 'x \\le ' + tz(A.u - A.c) + '\\ \\vee\\ x \\ge ' + tz(A.u + A.c); } }
+        loesung: function(A){ var k = A.streng ? '\\lt' : '\\le', g = A.streng ? '\\gt' : '\\ge';
+          return A.innen ? tz(A.u - A.c) + ' ' + k + ' x ' + k + ' ' + tz(A.u + A.c) : 'x ' + k + ' ' + tz(A.u - A.c) + '\\ \\vee\\ x ' + g + ' ' + tz(A.u + A.c); } }
     };
 
     ALLE.forEach(function(box){
