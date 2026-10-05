@@ -21,9 +21,11 @@
   /* Vielfaches von π als Text (Anzeige) bzw. LaTeX: x = (n/d)·π mit d aus 1, 2, 3, 4, 6, 12. */
   function piBruch(x){
     var q = x / PI;
-    for (var d of [1, 2, 3, 4, 6, 12]){ var n = Math.round(q * d); if (Math.abs(q * d - n) < 1e-7){ var g = ggT(n, d) || 1; return [n / g, d / g]; } }
+    for (var d of [1, 2, 3, 4, 5, 6, 7, 12]){ var n = Math.round(q * d); if (Math.abs(q * d - n) < 1e-7){ var g = ggT(n, d) || 1; return [n / g, d / g]; } }
     return null;
   }
+  /* Zahl für die Live-Anzeige: gerundet mit «≈» (HOWTO §15). */
+  function zz(v){ var r = Math.round(v * 1000) / 1000; return (Math.abs(v - r) > 1e-9 ? '≈ ' : '') + z(v); }
   function piT(x){
     var b = piBruch(x); if (!b) return z(x);
     var n = b[0], d = b[1]; if (n === 0) return '0';
@@ -161,6 +163,7 @@
     function gehe(j){
       i = j;
       fig.querySelectorAll('input[type=range]').forEach(function(inp){ inp.value = inp.defaultValue; });
+      fig.querySelectorAll('.sim-schalter input').forEach(function(inp){ inp.checked = inp.defaultChecked; });
       if (sim.aufraeumen) sim.aufraeumen(); zeigen(); if (sim.zeichnen) sim.zeichnen();
     }
     bt.addEventListener('click', function(){
@@ -200,23 +203,23 @@
       if (s.cos){
         K.pix(c.cx, c.cy, c.Px, c.cy, 'koord gruen');
         K.kurve(Math.cos, 'kurve gruen', 0, x);
-        K.punkt(x, cs, 'p-lauf gruen', '(' + piT(x) + ' | ' + z(cs) + ')', x > 5 ? -8 : 8, cs > 0 ? 16 : -8, x > 5 ? 'end' : 'start');
+        K.punkt(x, cs, 'p-lauf gruen', '(' + piT(x) + ' | ' + zz(cs) + ')', x > 5 ? -8 : 8, cs > 0 ? 16 : -8, x > 5 ? 'end' : 'start');
       } else {
         K.pix(c.Px, c.cy, c.Px, c.Py, 'koord blau');
         K.pix(c.Px, c.Py, K.X(x), K.Y(sn), 'projektion');
         K.kurve(Math.sin, 'kurve', 0, x);
-        K.punkt(x, sn, 'p-lauf', '(' + piT(x) + ' | ' + z(sn) + ')', x > 5 ? -8 : 8, sn > 0 ? 16 : -8, x > 5 ? 'end' : 'start');
+        K.punkt(x, sn, 'p-lauf', '(' + piT(x) + ' | ' + zz(sn) + ')', x > 5 ? -8 : 8, sn > 0 ? 16 : -8, x > 5 ? 'end' : 'start');
       }
       K.ppunkt(c.Px, c.Py, 'p-pkt');
-      rolle(fig, 'formel').innerHTML = 'x = ' + piT(x) + ' (' + grad(x) + '°) &nbsp;·&nbsp; P = (' + sp('tx-gruen', z(cs)) + ' | ' + sp('tx-blau', z(sn)) + ')'
-        + ' &nbsp;·&nbsp; ' + (s.cos ? sp('tx-gruen', 'cos x = ' + z(cs)) : sp('tx-blau', 'sin x = ' + z(sn)));
+      rolle(fig, 'formel').innerHTML = 'x = ' + piT(x) + ' (' + grad(x) + '°) &nbsp;·&nbsp; P = (' + sp('tx-gruen', zz(cs)) + ' | ' + sp('tx-blau', zz(sn)) + ')'
+        + ' &nbsp;·&nbsp; ' + (s.cos ? sp('tx-gruen', 'cos x ' + (zz(cs).charAt(0) === '≈' ? '' : '= ') + zz(cs)) : sp('tx-blau', 'sin x ' + (zz(sn).charAt(0) === '≈' ? '' : '= ') + zz(sn)));
       pruefen();
     }
     pruefen = Leiste(fig, [
       { text: 'Erkunde: Drehe den Punkt \\(P\\) einmal ganz herum, bis \\(x = 2\\pi\\).', ok: function(s){ return s.rund; } },
       // Startzustand: x = π/6, Sinus — keine Aufgabe ist schon gelöst.
       { text: 'Stell den Winkel \\(120^\\circ\\) ein.', ok: function(s){ return s.k === 8; } },
-      { text: 'Wo ist \\(\\sin x = -\\tfrac12\\) zwischen \\(\\pi\\) und \\(\\tfrac{3\\pi}{2}\\)?', ok: function(s){ return !s.cos && s.k === 14; } },
+      { text: 'Sinus: Wo ist \\(\\sin x = -\\tfrac12\\) zwischen \\(\\pi\\) und \\(\\tfrac{3\\pi}{2}\\)?', ok: function(s){ return !s.cos && s.k === 14; } },
       { text: 'Stell \\(315^\\circ\\) ein. Ist der Sinus dort positiv oder negativ?', ok: function(s){ return s.k === 21; } },
       { text: 'Schalte auf Cosinus. Wo ist \\(\\cos x = -1\\)?', ok: function(s){ return s.cos && s.k === 12; } },
       { text: 'Cosinus: Wo ist \\(\\cos x = \\tfrac12\\) im vierten Quadranten?', ok: function(s){ return s.cos && s.k === 20; } },
@@ -243,7 +246,8 @@
       if (ziel) K.kurve(ziel, 'zielkurve');
       K.kurve(Math.cos, 'normal gruen');
       K.kurve(function(x){ return Math.sin(x - u); }, 'kurve');
-      K.punkt(u + PI / 2, 1, 'p-pkt', 'Hochpunkt', 8, -6);
+      var xh = u + PI / 2; while (xh > PI) xh -= 2 * PI; while (xh < -PI) xh += 2 * PI;
+      K.punkt(xh, 1, 'p-pkt', 'Hochpunkt', 8, -6);
       var gleich = function(g){ return [0.3, 1.1, 2.5].every(function(x){ return Math.abs(Math.sin(x - u) - g(x)) < 1e-9; }); };
       var lage = gleich(Math.cos) ? ' → liegt auf <b>cos x</b>' : gleich(Math.sin) ? ' → liegt auf <b>sin x</b>'
         : gleich(function(x){ return -Math.sin(x); }) ? ' → liegt auf <b>−sin x</b>'
@@ -288,15 +292,17 @@
       K.pix(c.cx + c.r, 0, c.cx + c.r, K.Y(-3), 'tangente');
       if (s.def){
         var Ty = c.cy - c.r * s.t;
-        K.pix(c.cx, c.cy, c.cx + c.r, Ty, 'strahl');
+        // Gerade durch O und P bis zur Tangente: im 2. und 3. Quadranten trifft erst ihre
+        // Verlängerung über O hinaus — darum von P aus zeichnen, nicht von O.
+        K.pix(Math.cos(x) < 0 ? c.Px : c.cx, Math.cos(x) < 0 ? c.Py : c.cy, c.cx + c.r, Ty, 'strahl');
         K.pix(c.cx + c.r, c.cy, c.cx + c.r, Ty, 'koord orange');
         K.pix(c.cx + c.r, Ty, K.X(x), K.Y(s.t), 'projektion');
         K.kurve(function(t){ return Math.abs(Math.cos(t)) < 1e-6 ? null : Math.tan(t); }, 'kurve orange', 0, x);
-        K.punkt(x, s.t, 'p-lauf orange', '(' + piT(x) + ' | ' + z(s.t) + ')', x > 5 ? -8 : 8, s.t > 0 ? 16 : -8, x > 5 ? 'end' : 'start');
+        K.punkt(x, s.t, 'p-lauf orange', '(' + piT(x) + ' | ' + zz(s.t) + ')', x > 5 ? -8 : 8, s.t > 0 ? 16 : -8, x > 5 ? 'end' : 'start');
       }
       K.ppunkt(c.Px, c.Py, 'p-pkt');
       rolle(fig, 'formel').innerHTML = 'x = ' + piT(x) + ' (' + grad(x) + '°) &nbsp;·&nbsp; '
-        + (s.def ? sp('tx-orange', 'tan x = ' + z(s.t)) + ' = ' + sp('tx-blau', z(Math.sin(x))) + ' : ' + sp('tx-gruen', z(Math.cos(x)))
+        + (s.def ? sp('tx-orange', 'tan x ' + (zz(s.t).charAt(0) === '≈' ? '' : '= ') + zz(s.t)) + ' &nbsp;(' + sp('tx-blau', 'sin') + ' : ' + sp('tx-gruen', 'cos') + ')'
                  : sp('tx-orange', 'tan x nicht definiert') + ' — ' + sp('tx-gruen', 'cos x = 0'));
       pruefen();
     }
@@ -323,7 +329,9 @@
     var pruefen = function(){}, bewegt = {}, ziel = null;
     var r = regler(fig, zeichnen);
     bewegtMerken(r, bewegt, function(){ pruefen(); });
-    function zust(){ var w = werte(r); return { a: w.a, b: w.b, u: w.u, k: Math.round(w.u * 6 / PI), v: w.v, bewegt: bewegt }; }
+    function zust(){ var w = werte(r);
+      return { a: w.a, b: w.b, u: w.u, k: Math.round(w.u * 6 / PI), v: w.v, bewegt: bewegt,
+        gleich: function(a, b, u, v){ for (var x = -1; x <= 7; x += 0.37) if (Math.abs(w.a * Math.sin(w.b * (x - w.u)) + w.v - (a * Math.sin(b * (x - u)) + v)) > 1e-9) return false; return true; } }; }
     var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ bewegt = {}; ziel = null; } };
     function zeichnen(){
       var s = zust();
@@ -336,7 +344,7 @@
       var bT = s.b === 1 ? '' : z(s.b);
       rolle(fig, 'formel').innerHTML = 'y = ' + sp('tx-blau', z(s.a)) + ' · sin(' + (s.k === 0 ? bT + 'x' : bT + (bT ? '(' + uT + ')' : uT)) + ')'
         + (s.v === 0 ? '' : (s.v > 0 ? ' + ' : ' − ') + z(Math.abs(s.v)))
-        + '<br><span class="nb">Amplitude ' + z(s.a) + '</span> &nbsp;·&nbsp; <span class="nb">Periode ' + piT(2 * PI / s.b) + '</span>'
+        + '<br><span class="nb">Amplitude ' + z(s.a) + '</span> &nbsp;·&nbsp; <span class="nb">Periode ' + (piBruch(2 * PI / s.b) ? piT(2 * PI / s.b) : zz(2 * PI / s.b)) + '</span>'
         + ' &nbsp;·&nbsp; <span class="nb">Mittellinie y = ' + z(s.v) + '</span> &nbsp;·&nbsp; <span class="nb">W = [' + z(s.v - s.a) + '; ' + z(s.v + s.a) + ']</span>';
       pruefen();
     }
@@ -344,12 +352,12 @@
       { text: 'Erkunde: Zieh an \\(b\\). Was geschieht mit der Periode?', ok: function(s){ return s.bewegt.b; } },
       // Startzustand a = b = 1, u = v = 0 — die Kurve liegt auf sin x, keine Aufgabe ist gelöst.
       { text: 'Stell eine Periodenlänge von \\(4\\pi\\) ein.', ok: function(s){ return s.b === 0.5; } },
-      { text: 'Die Kurve soll zwischen \\(-1\\) und \\(3\\) schwanken.', ok: function(s){ return s.a === 2 && s.v === 1; } },
-      { text: 'Bau nach: \\(y = 0.5 \\cdot \\sin(3x)\\)', ok: function(s){ return s.a === 0.5 && s.b === 3 && s.k === 0 && s.v === 0; } },
+      { text: 'Die Kurve soll zwischen \\(0\\) und \\(3\\) schwanken.', ok: function(s){ return s.a === 1.5 && s.v === 1.5; } },
+      { text: 'Bau nach: \\(y = 0.5 \\cdot \\sin(3x)\\)', ok: function(s){ return s.gleich(0.5, 3, 0, 0); } },
       { text: 'Lass \\(a = b = 1\\) und \\(v = 0\\). Schiebe so, dass der erste Hochpunkt rechts der \\(y\\)-Achse bei \\(x = \\pi\\) liegt.',
         ok: function(s){ return s.a === 1 && s.b === 1 && s.v === 0 && s.k === 3; } },
       { text: 'Triff die dünn gezeichnete Zielkurve.', setup: function(){ ziel = [1.5, 2, PI / 6, -0.5]; },
-        ok: function(s){ return s.a === 1.5 && s.b === 2 && s.k === 1 && s.v === -0.5; } }
+        ok: function(s){ return s.gleich(1.5, 2, PI / 6, -0.5); } }
     ], sim);
     zeichnen();
   })();
@@ -382,14 +390,16 @@
     function zeichnen(){
       var s = zust(), f = s.cos ? Math.cos : Math.sin;
       K.leeren();
-      K.senkrecht(s.cos ? PI : PI / 2, 'asym hilfslinie');
+      // Sinus: Achse durch den Hochpunkt (c ≥ 0) bzw. den Tiefpunkt (c < 0); Cosinus: durch den Tiefpunkt π.
+      var achse = s.cos ? PI : (s.c < 0 ? 3 * PI / 2 : PI / 2);
+      K.senkrecht(achse, 'asym hilfslinie');
       K.kurve(f, s.cos ? 'kurve gruen' : 'kurve', 0, 2 * PI);
       K.strecke(-0.6, s.c, 6.9, s.c, 'waagrechte');
-      s.l.forEach(function(x, i){ K.punkt(x, s.c, s.cos ? 'p-lauf gruen' : 'p-lauf', z(x), i % 2 ? 8 : -8, s.c > 0.6 ? 16 : -8, i % 2 ? 'start' : 'end'); });
+      s.l.forEach(function(x, i){ K.punkt(x, s.c, s.cos ? 'p-lauf gruen' : 'p-lauf', zz(x), i % 2 ? 8 : -8, s.c > 0.6 ? 16 : -8, i % 2 ? 'start' : 'end'); });
       var fn = s.cos ? sp('tx-gruen', 'cos x') : sp('tx-blau', 'sin x');
       rolle(fig, 'formel').innerHTML = fn + ' = ' + z(s.c) + ' &nbsp;·&nbsp; ' + (s.n === 0 ? '<b>keine Lösung</b>' : s.n + (s.n === 1 ? ' Lösung' : ' Lösungen'))
-        + ' in [0; 2π]' + (s.n ? ': ' + s.l.map(function(x){ return 'x ≈ ' + z(x); }).join(', ') : '')
-        + '<br>Symmetrieachse x = ' + (s.cos ? 'π' : 'π/2') + ' (gestrichelt)';
+        + ' in [0; 2π]' + (s.n ? ': ' + s.l.map(function(x){ return 'x ' + (zz(x).charAt(0) === '≈' ? '' : '= ') + zz(x); }).join(', ') : '')
+        + '<br>Symmetrieachse x = ' + piT(achse) + ' (gestrichelt)';
       pruefen();
     }
     pruefen = Leiste(fig, [
@@ -466,14 +476,14 @@
       'tw|3', 'tw|4', 'tw|-1',
       'kg|3|2|-1', 'kg|0.5|0.5|2', 'kg|2|2|1',
       'ag|1.5|0.5|0',
-      'zl|sin|0.3', 'zl|cos|-0.5',
+      'zl|sin|-0.3', 'zl|cos|-0.5',
       'an|sin|0.7|0|4',
       // Vortest und Gesamttest (downloads/leitprogramme/trigonometrische-funktionen/gesamttest.tex)
       'gb|b|60', 'gb|b|30', 'gb|g|300',
       'sc|sin|4', 'sc|cos|8', 'sc|sin|11',
       'sy|1.1|-s', 'sy|1.1|-c', 'sy|1.1|ps',
       'tw|-3', 'tw|6',
-      'kg|2|3|-1', 'ag|2.5|0.5|1',
+      'kg|2|3|-1', 'ag|2.5|2|1',
       'zl|sin|0.35', 'zl|cos|0.35', 'an|sin|0.35|0|2'
     ];
     function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
@@ -487,7 +497,7 @@
           var g = zufall([15, 30, 45, 60, 75, 120, 135, 150, 210, 225, 240, 270, 300, 315, 330, 360, 405, 450, 540, 720, -30, -45, -90, -180]),
               r = zufall(['b', 'g']), x = g * PI / 180;
           return { g: g, x: x, r: r,
-            text: r === 'b' ? 'Rechne \\(' + tz(g) + '^\\circ\\) ins Bogenmass um — exakt, als Vielfaches von \\(\\pi\\) (z. B. <code>3π/4</code> oder <code>3pi/4</code>).'
+            text: r === 'b' ? 'Rechne \\(' + tz(g) + '^\\circ\\) ins Bogenmass um — am besten exakt, als Vielfaches von \\(\\pi\\) (z. B. <code>3π/4</code> oder <code>3pi/4</code>).'
                             : 'Rechne \\(' + piTex(x) + '\\) in Grad um.',
             feld: r === 'b' ? 'Bogenmass' : 'Grad' }; },
         fehler: function(A){ var q = A.g / 180;
@@ -503,7 +513,8 @@
           }
           if (gl(e.w, A.g)) return null;
           if (gl(e.w, A.g / 180)) return 'Das ist der Faktor vor \\(\\pi\\). In Grad: \\(\\pi\\) durch \\(180^\\circ\\) ersetzen.';
-          return 'Ersetze \\(\\pi\\) durch \\(180^\\circ\\): \\(' + piTex(A.x) + ' = ' + piTex(A.x).replace('\\pi', '\\cdot 180^\\circ') + '\\).'; },
+          var q = piBruch(A.x);
+          return 'Ersetze \\(\\pi\\) durch \\(180^\\circ\\): \\(' + piTex(A.x) + ' = ' + (q[1] === 1 ? tz(q[0]) : '\\tfrac{' + tz(q[0]) + '}{' + q[1] + '}') + ' \\cdot 180^\\circ\\).'; },
         richtig: function(A){ return A.r === 'b' ? '\\(' + tz(A.g) + '^\\circ = ' + piTex(A.x) + '\\)' : ''; },
         loesung: function(A){ return tz(A.g) + '^\\circ = \\tfrac{' + tz(A.g) + '}{180}\\,\\pi = ' + piTex(A.x); } },
 
@@ -564,7 +575,7 @@
           if (ganz){
             var artE = A.fn === 'sin' ? (m % 2 === 0 ? 'N' : m === 1 ? 'H' : 'T') : (m % 2 === 1 ? 'N' : m === 0 ? 'H' : 'T');
             if (artE !== A.art) return 'Bei \\(' + piTex(e.x) + '\\) hat \\(\\' + A.fn + ' x\\) eine ' + name[artE] + ' — gesucht ist eine ' + name[A.art] + '.';
-            if (e.x < A.a || e.x > A.b) return 'Richtige Art, aber \\(' + piTex(e.x) + '\\) liegt nicht im Intervall von \\(' + piTex(A.a) + '\\) bis \\(' + piTex(A.b) + '\\). Eine Periode weiter oder zurück.';
+            if (e.x < A.a || e.x > A.b) return 'Richtige Art, aber \\(' + piTex(e.x) + '\\) liegt nicht im Intervall von \\(' + piTex(A.a) + '\\) bis \\(' + piTex(A.b) + '\\). ' + (A.art === 'N' ? 'Nullstellen liegen \\(\\pi\\) auseinander.' : 'Gleiche Stellen liegen eine Periode \\(2\\pi\\) auseinander.');
           }
           return 'Skizziere \\(y = \\' + A.fn + ' x\\) mit den Stützstellen bei Vielfachen von \\(\\tfrac{\\pi}{2}\\) und lies im Intervall ab.'; },
         loesung: function(A){ return 'x = ' + piTex(A.x); } },
@@ -605,8 +616,8 @@
           return [[{ y: A.w === '1' ? '−1' : '1' }, 'Vorzeichen']]; },
         pruefen: function(A, e){
           if (e.y === A.w) return null;
-          if (A.w === 'nicht definiert') return 'Bei \\(' + piTex(A.x) + '\\) ist der Cosinus \\(0\\) — durch \\(0\\) kann man nicht teilen.';
-          if (A.w === '0') return 'Bei \\(' + piTex(A.x) + '\\) ist der Sinus \\(0\\), der Cosinus nicht: \\(\\tan x = 0\\).';
+          if (A.w === 'nicht definiert') return 'Wie gross ist der Cosinus bei \\(' + piTex(A.x) + '\\)? Kann man durch ihn teilen?';
+          if (A.w === '0') return 'Wie gross ist der Sinus bei \\(' + piTex(A.x) + '\\) — und was ergibt das im Zähler von \\(\\tfrac{\\sin x}{\\cos x}\\)?';
           if (e.y === 'nicht definiert' || e.y === '0') return 'Bei \\(' + piTex(A.x) + '\\) sind Sinus und Cosinus gleich gross bis aufs Vorzeichen — der Quotient ist \\(\\pm 1\\).';
           return 'Vorzeichen: In welchem Quadranten liegt \\(P\\)? Haben Sinus und Cosinus dort dasselbe Vorzeichen?'; },
         loesung: function(A){ return '\\tan\\left(' + piTex(A.x) + '\\right)' + (A.w === 'nicht definiert' ? '\\text{ ist nicht definiert}' : ' = ' + A.w.replace('−', '-')); } },
@@ -646,9 +657,9 @@
         pruefen: function(A, e){
           var r = [];
           if (gl(e.a, A.a) && (gl(e.p, A.p) || Math.abs(e.p - A.p) < 0.001) && gl(e.v, A.v)) return null;
-          if (!gl(e.a, A.a)) r.push(gl(e.a, A.v) ? 'Amplitude und Mittellinie vertauscht: Die Amplitude steht vor dem Sinus.' : 'Amplitude: der Faktor vor dem Sinus, \\(' + A.a + '\\) — die Mittellinie zählt nicht dazu.');
+          if (!gl(e.a, A.a)) r.push(gl(e.a, A.v) ? 'Amplitude und Mittellinie vertauscht: Die Amplitude steht vor dem Sinus.' : 'Amplitude: Welcher Faktor steht vor dem Sinus? Die Mittellinie zählt nicht dazu.');
           if (!(gl(e.p, A.p) || Math.abs(e.p - A.p) < 0.001)) r.push(gl(e.p, 2 * PI * A.b) ? 'Periode: \\(2\\pi\\) <b>durch</b> \\(b\\), nicht mal \\(b\\). Grösseres \\(b\\) heisst kürzere Periode.' : 'Periode: \\(p = \\tfrac{2\\pi}{b}\\) mit \\(b = ' + A.b + '\\).');
-          if (!gl(e.v, A.v) && !gl(e.v, A.a)) r.push('Mittellinie: der Summand hinter dem Sinus.');
+          if (!gl(e.v, A.v) && !(gl(e.v, A.a) && gl(e.a, A.v))) r.push(gl(e.v, A.a) ? 'Mittellinie: der Summand hinter dem Sinus, nicht die Amplitude.' : 'Mittellinie: der Summand hinter dem Sinus.');
           return r.join(' '); },
         loesung: function(A){ return 'a = ' + A.a + ',\\ p = \\tfrac{2\\pi}{' + A.b + '} = ' + piTex(A.p) + ',\\ y = ' + A.v; } },
 
@@ -663,7 +674,7 @@
           var x1 = A.b === 0.5 ? 4 * PI + 0.4 : 2 * PI + 0.4;
           svg.setAttribute('viewBox', '0 0 300 170');
           var xm = A.b === 0.5 ? [[PI, 'π'], [2 * PI, '2π'], [3 * PI, '3π'], [4 * PI, '4π']] : PIM;
-          var K = Achsen(svg, { w: 300, h: 170, x0: -0.5, x1: x1, y0: -4, y1: 4, sx: A.b === 0.5 ? PI / 2 : PI / 4, sy: 0.5, r: 3, pfeil: 6,
+          var K = Achsen(svg, { w: 300, h: 170, x0: -0.5, x1: x1, y0: -4, y1: 4, sx: A.b === 0.5 ? PI / 2 : A.b === 3 ? PI / 6 : PI / 4, sy: 0.5, r: 3, pfeil: 6,
             xm: xm, ym: [[-3, '−3'], [-2, '−2'], [-1, '−1'], [1, '1'], [2, '2'], [3, '3']] });
           K.kurve(function(x){ return A.a * Math.sin(A.b * x) + A.v; }, 'kurve');
         },
@@ -675,7 +686,7 @@
           var r = [];
           if (gl(e.a, A.a) && gl(e.b, A.b) && gl(e.v, A.v)) return null;
           if (!gl(e.a, A.a)) r.push(gl(e.a, 2 * A.a) ? 'Amplitude: halber Abstand zwischen höchstem und tiefstem Wert, nicht der ganze.' : 'Amplitude: Wie weit geht die Kurve über die Mittellinie hinaus?');
-          if (!gl(e.b, A.b)) r.push(gl(e.b, 1 / A.b) ? 'Periode und \\(b\\) verwechselt: \\(b = \\tfrac{2\\pi}{p}\\).' : 'Lies die Periode \\(p\\) ab (von Hochpunkt zu Hochpunkt) und rechne \\(b = \\tfrac{2\\pi}{p}\\).');
+          if (!gl(e.b, A.b)) r.push(gl(e.b, 1 / A.b) ? 'Periode und \\(b\\) verwechselt: \\(b = \\tfrac{2\\pi}{p}\\).' : 'Lies die Periode \\(p\\) ab — von Hochpunkt zu Hochpunkt, oder zähle, wie viele Perioden in \\(2\\pi\\) passen — und rechne \\(b = \\tfrac{2\\pi}{p}\\).');
           if (!gl(e.v, A.v)) r.push('Mittellinie: genau in der Mitte zwischen höchstem und tiefstem Wert.');
           return r.join(' '); },
         loesung: function(A){ return 'p = ' + piTex(2 * PI / A.b) + ' \\Rightarrow b = ' + A.b + ',\\ a = ' + A.a + ',\\ v = ' + A.v; } },
@@ -686,10 +697,14 @@
         eingabe: function(A){ return { x: String(A.x2) }; },
         neu: function(){
           var fn = zufall(['sin', 'cos']);
-          var c = fn === 'sin' ? zufall([0.1, 0.2, 0.3, 0.4, 0.6, 0.7, 0.9]) : zufall([-0.9, -0.7, -0.4, -0.3, -0.2, 0.1, 0.2, 0.4, 0.7, 0.9]);
+          var c = fn === 'sin' ? zufall([-0.7, -0.4, -0.2, 0.1, 0.2, 0.3, 0.4, 0.6, 0.7, 0.9]) : zufall([-0.9, -0.7, -0.4, -0.3, -0.2, 0.1, 0.2, 0.4, 0.7, 0.9]);
           var x1 = fn === 'sin' ? Math.asin(c) : Math.acos(c);
-          return { fn: fn, c: c, x1: r3(x1), x2: r3(fn === 'sin' ? PI - x1 : 2 * PI - x1), x1w: x1,
-            text: 'Der Taschenrechner (Bogenmass) liefert für \\(\\' + fn + ' x = ' + c + '\\) die Lösung \\(x_1 \\approx ' + r3(x1) + '\\). Gib die zweite Lösung in \\([0;\\, 2\\pi]\\) an, auf drei Dezimalen.' }; },
+          // Sinus mit c < 0: Der Rechner gibt ein negatives x1. Eine Lösung ist x1 + 2π, gesucht die andere, π − x1.
+          var neg = x1 < 0;
+          return { fn: fn, c: c, x1: r3(x1), x2: r3(fn === 'sin' ? PI - x1 : 2 * PI - x1), x1w: x1, neg: neg,
+            text: 'Der Taschenrechner (Bogenmass) liefert für \\(\\' + fn + ' x = ' + c + '\\) die Lösung \\(x_1 \\approx ' + r3(x1) + '\\).'
+              + (neg ? ' Sie liegt nicht in \\([0;\\, 2\\pi]\\); dort liegt \\(x_1 + 2\\pi \\approx ' + r3(x1 + 2 * PI) + '\\). Gib die andere Lösung in \\([0;\\, 2\\pi]\\) an, auf drei Dezimalen.'
+                     : ' Gib die zweite Lösung in \\([0;\\, 2\\pi]\\) an, auf drei Dezimalen.') }; },
         fehler: function(A){ return A.fn === 'sin' ? [[{ x: String(r3(2 * PI - A.x1w)) }, 'Cosinus'], [{ x: String(r3(PI + A.x1w)) }, 'Vorzeichen']]
                                                     : [[{ x: String(r3(PI - A.x1w)) }, 'Sinus'], [{ x: String(r3(PI + A.x1w)) }, 'Vorzeichen']]; },
         pruefen: function(A, e){
@@ -697,7 +712,7 @@
           if (A.fn === 'sin' && Math.abs(e.x - (2 * PI - A.x1w)) < 0.0015) return 'Das ist die Regel beim Cosinus. Die Sinuskurve ist symmetrisch zur Geraden \\(x = \\tfrac{\\pi}{2}\\): \\(x_2 = \\pi - x_1\\).';
           if (A.fn === 'cos' && Math.abs(e.x - (PI - A.x1w)) < 0.0015) return 'Das ist die Regel beim Sinus. Die Cosinuskurve ist symmetrisch zur Geraden \\(x = \\pi\\): \\(x_2 = 2\\pi - x_1\\).';
           if (Math.abs(e.x - (PI + A.x1w)) < 0.0015) return 'Dort hat der ' + (A.fn === 'sin' ? 'Sinus' : 'Cosinus') + ' das umgekehrte Vorzeichen. Nutze die Symmetrieachse \\(x = ' + (A.fn === 'sin' ? '\\tfrac{\\pi}{2}' : '\\pi') + '\\).';
-          if (Math.abs(e.x - A.x1) < 0.0015) return 'Das ist die erste Lösung. Gesucht ist die zweite.';
+          if (Math.abs(e.x - A.x1) < 0.0015 || (A.neg && Math.abs(e.x - (A.x1w + 2 * PI)) < 0.0015)) return 'Das ist die schon bekannte Lösung. Gesucht ist die andere.';
           return A.fn === 'sin' ? 'Sinus: \\(x_2 = \\pi - x_1\\).' : 'Cosinus: \\(x_2 = 2\\pi - x_1\\).'; },
         loesung: function(A){ return 'x_2 = ' + (A.fn === 'sin' ? '\\pi' : '2\\pi') + ' - ' + A.x1 + ' \\approx ' + A.x2; } },
 
@@ -780,7 +795,8 @@
        y = a·sin(b(x − u)) + v (s), a·cos(b(x − u)) + v (c), a·tan(b(x − u)) + v (t); die erste
        Kurve in ihrer Farbe (sin blau, cos grün, tan orange), weitere gestrichelt. Dazu
        data-fenster="x0,x1,y0,y1", data-punkte="x,y;…", data-waagrecht="c" (Waagrechte y = c),
-       data-xpi="2" (x-Achse in Vielfachen von π/2 beschriftet), data-ym="…", data-titel. ---------- */
+       data-xpi="1" (x-Achse in Vielfachen von π/2 beschriftet), data-xteil="6" (Gitter alle π/6),
+       data-senkrecht="x,…" (Polgeraden, gestrichelt), data-ym="…", data-titel. ---------- */
   document.querySelectorAll('svg.mini[data-t]').forEach(function(svg){
     var fe = (svg.dataset.fenster || '-0.5,6.9,-1.5,1.5').split(',').map(Number);
     var w = 300, h = 150;
@@ -788,8 +804,9 @@
     var xm = [];
     for (var j = Math.ceil(fe[0] / (PI / 2)); j * PI / 2 <= fe[1]; j++) if (j !== 0) xm.push([j * PI / 2, (svg.dataset.xpi === '1' || j % 2 === 0) ? piT(j * PI / 2) : '']);
     var ym = svg.dataset.ym ? svg.dataset.ym.split(',').map(Number) : [-1, 1];
-    var K = Achsen(svg, { w: w, h: h, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, sx: PI / 2, sy: +svg.dataset.sy || 1, pfeil: 6,
+    var K = Achsen(svg, { w: w, h: h, x0: fe[0], x1: fe[1], y0: fe[2], y1: fe[3], r: 3, sx: PI / (+svg.dataset.xteil || 2), sy: +svg.dataset.sy || 1, pfeil: 6,
       xm: xm.filter(function(t){ return t[1]; }), ym: ym });
+    if (svg.dataset.senkrecht) svg.dataset.senkrecht.split(',').forEach(function(x){ K.senkrecht(+x, 'asym'); });
     if (svg.dataset.waagrecht) K.strecke(fe[0], +svg.dataset.waagrecht, fe[1], +svg.dataset.waagrecht, 'waagrechte');
     svg.dataset.t.split(';').filter(Boolean).forEach(function(s, i){
       var p = s.split(','), art = p[0], q = p.slice(1).map(Number);

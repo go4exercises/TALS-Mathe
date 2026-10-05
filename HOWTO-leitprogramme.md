@@ -551,7 +551,8 @@ gegen sie und darüber hinaus.
 - Erst das allgemeine Verfahren, dann die Abkürzung — und die Abkürzung als solche
   kennzeichnen, mit ihrer Bedingung («Nullstellen-Mitte, wenn die Nullstellen ablesbar sind»).
 - Nichts abfragen, was nicht eingeführt ist (Begriff, Schreibweise, Verfahren). Jedes
-  Verfahren, das der Gesamttest verlangt, wird in einem Kapitel geübt.
+  Verfahren, das der Gesamttest verlangt, wird in einem Kapitel geübt — **auch seine
+  Variante**: Wer \(\sin x = c\) übt, kann noch nicht \(\sin(bx) = c\) (Argument ersetzen).
 - Lösung und Aufgabenstellung passen zusammen («ohne Rechnen» + Lösung rechnet = Befund).
 - **Ein Verfahren gilt erst als gezeigt, wenn seine Schritte zu sehen sind** — nicht nur das
   Ergebnis. Polynomfunktionen (04.10.2026): Clip, Festhalten und Simulation zeigten von der
@@ -565,6 +566,16 @@ gegen sie und darüber hinaus.
   Reglerstellungen der eigenen Animation lesen; richtig war «Abstand \(|S - f(t)|\)» mit \(A \neq S\).
 - **Was eine Formel sagt, sagt der Ton genau so.** «Faktor eins plus p» statt «eins plus
   p Hundertstel» gibt bei 5 % den Faktor 6 — gesprochene Kurzformen gegen das Festhalten rechnen.
+- **Deutungen in allen Fällen prüfen, nicht im ersten Quadranten.** Trigonometrie (05.10.2026):
+  «\(\tan x\) ist die Höhe, in der der *Strahl* durch \(P\) die Tangente trifft» — im 2. und
+  3. Quadranten trifft ihn nur die Verlängerung über O hinaus. Die Simulation zeichnete es
+  ebenso falsch. Jede geometrische Deutung an je einem Wert pro Quadrant nachzeichnen.
+- **Folgewerte aus ungerundeten Zwischenwerten:** \(0.775 + 2\pi\) gibt 7.058, richtig ist
+  \(7.0586 \to 7.059\). Jede gerundete Zahl aus dem exakten Wert neu runden.
+- **Kompetenzdeckung ehrlich ausweisen.** Hat ein Teilgebiet wenig Kompetenzen, wandern
+  Kapitel leicht in Nachbargebiete (Gleichungen → GF 5.5, Transformationen → SP 3.1). Das ist
+  erlaubt, gehört aber in Kompetenzbox und Matrix — sonst verspricht die Seite eine Deckung,
+  die der Lehrplan nicht hergibt.
 - **Nicht nur nicht abfragen, auch nicht benutzen, was erst später kommt**: \(\ln\) in Kapitel 3,
   erklärt erst in Kapitel 5. Vorgezogenes kurz erklären und im Vortest prüfen.
 
@@ -599,6 +610,11 @@ gegen sie und darüber hinaus.
   vorigen Aufgabe (Reglerstellung) das neue Ziel nicht schon erfüllen — `pruef-leiste` prüft nur
   den Startzustand. Im `setup` die Regler zurücksetzen — oder allgemein in der Leiste: `gehe(j)`
   setzt alle `input[type=range]` auf `defaultValue` (Vorbild `exp-log-funktionen/seite.js`).
+- **Periodische Ziele haben mehrere Lösungen.** Ein Leistenziel «triff die Kurve» mit
+  \(u = \tfrac{\pi}{6}\) wird auch von \(u = -\tfrac{5\pi}{6}\) getroffen (Periode \(\pi\)). Kurven
+  vergleichen (an einigen Stellen auswerten), nicht Reglerwerte.
+- **Schalter beim Wechsel zurücksetzen** wie die Regler (`.sim-schalter` auf `defaultChecked`),
+  und eine Aufgabe, die einen Schalterzustand braucht, nennt ihn im Text («Sinus: …»).
 - **Korrigierende Listener vor dem Zeichnen registrieren** (`ohneNull`): Sonst zeichnet die
   Simulation noch den verbotenen Wert, während der Regler schon daneben steht.
 - Zufallsübungen: nur lösbare, «schöne» Fälle; Sonderwerte (0, ±1, gleiche Zahlen) erzeugen

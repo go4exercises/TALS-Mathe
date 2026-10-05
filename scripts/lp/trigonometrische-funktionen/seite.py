@@ -84,7 +84,7 @@ text.p-text{stroke:var(--karte);stroke-width:4px;paint-order:stroke}
    Dieselben Farben tragen die Clips (farbe 1 blau, 3 grün, 2 orange, 5 Tinte). */
 .sim .normal{stroke-dasharray:5 4;stroke:var(--tinte-2);fill:none;stroke-width:1.4}
 .sim .normal.gruen{stroke:var(--gruen);stroke-width:2}
-.sim .asym{stroke:var(--tinte-2);stroke-width:1.2;stroke-dasharray:4 3;fill:none}
+.sim .asym,svg.mini .asym{stroke:var(--tinte-2);stroke-width:1.2;stroke-dasharray:4 3;fill:none}
 .sim .zielkurve{stroke:var(--tinte-2);stroke-width:5;opacity:.3;fill:none;stroke-dasharray:none}
 .p-pkt{fill:var(--tinte)} .p-lauf{fill:var(--blau)} .p-lauf.gruen{fill:var(--gruen)} .p-lauf.orange{fill:var(--orange)}
 svg.mini .p-pkt{fill:var(--tinte)}
@@ -229,8 +229,8 @@ fest1 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
-    ('1a', 3, r'Rechne um: \(225^\circ\) ins Bogenmass · \(\tfrac{5\pi}{6}\) in Grad · \(x = 1\) (Bogenmass) in Grad, auf eine Dezimale.',
-     r'<p>\(225^\circ = \tfrac{225}{180}\,\pi = \tfrac{5\pi}{4}\) · \(\tfrac{5\pi}{6} = \tfrac56 \cdot 180^\circ = 150^\circ\) · \(1 = \tfrac{180^\circ}{\pi} \approx 57.3^\circ\).</p>', ''),
+    ('1a', 3, r'Rechne um: \(225^\circ\) ins Bogenmass · \(\tfrac{5\pi}{6}\) in Grad · \(x = 1\) (Bogenmass) in Grad, exakt. Etwa wie viel Grad sind das?',
+     r'<p>\(225^\circ = \tfrac{225}{180}\,\pi = \tfrac{5\pi}{4}\) · \(\tfrac{5\pi}{6} = \tfrac56 \cdot 180^\circ = 150^\circ\) · \(1 = \tfrac{180^\circ}{\pi}\), mit \(\pi \approx 3\) also knapp \(60^\circ\) (genau \(57.3^\circ\)).</p>', ''),
     ('1b', 2, r'Gib ohne Taschenrechner an: \(\sin \tfrac{3\pi}{2}\) · \(\cos \pi\) · \(\cos \tfrac{3\pi}{2}\) · \(\sin \tfrac{7\pi}{6}\).',
      r'<p>\(-1\) · \(-1\) · \(0\) · \(-\tfrac12\).</p><p class="komm">\(\tfrac{7\pi}{6}\) liegt im dritten Quadranten, \(\tfrac{\pi}{6}\) nach \(\pi\): gleiche Höhe wie bei \(\tfrac{\pi}{6}\), aber unter der Achse.</p>', ''),
     ('1c', 2, r'Der Punkt \(P(-0.6 \mid 0.8)\) liegt auf dem Einheitskreis. Gib \(\sin x\) und \(\cos x\) an. In welchem Quadranten liegt \(x\)?',
@@ -282,7 +282,7 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 13, [
     ('2c', 3, r'Es gilt \(\sin 0.6 \approx 0.565\) und \(\cos 0.6 \approx 0.825\). Gib ohne Taschenrechner an: \(\sin(-0.6)\) · \(\cos(-0.6)\) · \(\sin(0.6 + 2\pi)\).',
      r'<p>\(\approx -0.565\) (punktsymmetrisch) · \(\approx 0.825\) (achsensymmetrisch) · \(\approx 0.565\) (Periode \(2\pi\)).</p>', ''),
     ('2d', 3, r'Die gestrichelte Kurve ist die um \(\tfrac{\pi}{2}\) nach rechts verschobene Sinuskurve. Gib ihre Gleichung einmal mit Sinus und einmal mit Cosinus an.',
-     r'<p>\(y = \sin\left(x - \tfrac{\pi}{2}\right)\). Sie hat ihren Tiefpunkt bei \(0\) und ihren Hochpunkt bei \(\pi\) — wie die an der \(x\)-Achse gespiegelte Cosinuskurve: \(y = -\cos x\).</p>',
+     r'<p>\(y = \sin\left(x - \tfrac{\pi}{2}\right)\). Sie hat ihren Tiefpunkt bei \(0\) und ihren Hochpunkt bei \(\pi\) — wie die an der \(x\)-Achse gespiegelte Cosinuskurve: \(y = -\cos x\). Gleichwertig, als verschobene Cosinuskurve: \(y = \cos(x - \pi)\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini" data-t="s,1,1,0,0;s,1,1,1.5707963267948966,0" data-fenster="-0.5,6.9,-1.5,1.5" data-xpi="1"></svg></div>'),
     ('2e', 2, r'Begründe am Einheitskreis, warum \(\cos(-x) = \cos x\) gilt.',
      r'<p>Zum Winkel \(-x\) dreht \(P\) gleich weit, aber im Uhrzeigersinn: Der Punkt ist das Spiegelbild an der waagrechten Achse, \((\cos x \mid -\sin x)\). Die waagrechte Koordinate bleibt gleich, nur die Höhe wechselt das Vorzeichen.</p>', ''),
@@ -308,9 +308,9 @@ fest3 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Die Tangensfunktion</div>
           <p>\[ \tan x = \frac{\sin x}{\cos x} \]</p>
-          <p>Am Einheitskreis ist \(\tan x\) die Höhe, in der der Strahl durch \(P\) die Tangente \(x = 1\) trifft.</p>
+          <p>Am Einheitskreis ist \(\tan x\) die Höhe, in der die Gerade durch den Mittelpunkt und \(P\) die senkrechte Tangente rechts am Kreis trifft (im 2. und 3. Quadranten ihre Verlängerung über den Mittelpunkt hinaus).</p>
           <ul>
-            <li>\(D = \mathbb{R} \setminus \left\{\tfrac{\pi}{2} + k\pi\right\}\): Wo \(\cos x = 0\) ist, gibt es keinen Wert. Dort hat die Kurve <b>Pole</b> — sie springt von \(+\infty\) nach \(-\infty\).</li>
+            <li>\(D = \mathbb{R} \setminus \left\{\tfrac{\pi}{2} + k\pi\right\}\): Wo \(\cos x = 0\) ist, gibt es keinen Wert. Dort hat die Kurve <b>Pole</b>: Links davon wächst sie über alle Grenzen, rechts davon kommt sie von beliebig weit unten.</li>
             <li>\(W = \mathbb{R}\): Jede Zahl kommt als Wert vor.</li>
             <li><b>Periodenlänge</b> \(p = \pi\): \(\tan(x + \pi) = \tan x\) — nach einer halben Umdrehung wechseln Sinus und Cosinus beide das Vorzeichen.</li>
             <li><b>Nullstellen</b> \(x_0 = k\pi\), wo \(\sin x = 0\) ist.</li>
@@ -333,9 +333,9 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 11, [
      r'<p>\(\approx 2.572\) (Periode \(\pi\)) · \(\approx -2.572\) (punktsymmetrisch).</p>', ''),
     ('3d', 2, r'Skizziere \(y = \tan x\) für \(-\pi \lt x \lt 2\pi\) mit allen Polgeraden und Nullstellen.',
      r'<p>Pole bei \(-\tfrac{\pi}{2}\), \(\tfrac{\pi}{2}\), \(\tfrac{3\pi}{2}\); Nullstellen bei \(0\) und \(\pi\). Zwischen zwei Polen steigt die Kurve von \(-\infty\) nach \(+\infty\), durch die Nullstelle in der Mitte.</p>'
-     '<div class="mini-reihe"><svg class="mini" data-t="t,1,1,0,0" data-fenster="-3.3,6.4,-3,3" data-ym="-2,-1,1,2" data-punkte="0,0;3.141592653589793,0"></svg></div>', ''),
+     '<div class="mini-reihe"><svg class="mini" data-t="t,1,1,0,0" data-fenster="-3.3,6.4,-3,3" data-ym="-2,-1,1,2" data-punkte="0,0;3.141592653589793,0" data-senkrecht="-1.5707963267948966,1.5707963267948966,4.71238898038469"></svg></div>', ''),
     ('3e', 2, r'Warum hat die Tangensfunktion bei \(\tfrac{\pi}{2}\) einen Pol, die Sinusfunktion aber nicht?',
-     r'<p>\(\tan \tfrac{\pi}{2} = \tfrac{1}{0}\): Durch null kann man nicht teilen, und nahe bei \(\tfrac{\pi}{2}\) wird der Quotient beliebig gross. \(\sin \tfrac{\pi}{2} = 1\) ist dagegen einfach die Höhe von \(P\) — sie gibt es für jeden Winkel.</p>', ''),
+     r'<p>Der Quotient wäre \(\tfrac{\sin(\pi/2)}{\cos(\pi/2)} = \tfrac{1}{0}\): Durch null kann man nicht teilen, und nahe bei \(\tfrac{\pi}{2}\) wird der Quotient beliebig gross. \(\sin \tfrac{\pi}{2} = 1\) ist dagegen einfach die Höhe von \(P\) — sie gibt es für jeden Winkel.</p>', ''),
 ], zwei=False)
 k3 = kapitel(3, 'tangens', 'Die Tangensfunktion', 35,
              r'Du deutest \(\tan x = \frac{\sin x}{\cos x}\) am Einheitskreis, skizzierst die Tangenskurve mit ihren Polen und gibst Definitionsmenge, Periode, Nullstellen und Symmetrie an.',
@@ -368,7 +368,7 @@ fest4 = r'''      <div class="festhalten">
             <li>\(v\) — Verschiebung in \(y\)-Richtung: <b>Mittellinie</b> \(y = v\), Wertemenge \(W = [v - a;\, v + a]\).</li>
           </ul>
           <p><b>Schrittweise skizzieren</b>, wie auf der Themenseite: (1) Periode aus \(b\), (2) Amplitude \(a\), (3) um \(u\) schieben, (4) um \(v\) heben. Steht \(\sin(bx + c)\) da, zuerst \(b\) ausklammern: \(\sin\left(2x - \tfrac{\pi}{2}\right) = \sin\left(2\left(x - \tfrac{\pi}{4}\right)\right)\), also \(u = \tfrac{\pi}{4}\).</p>
-          <p>Für \(y = a \cos\big(b(x - u)\big) + v\) gilt alles genauso — der Cosinus ist eine verschobene Sinuskurve.</p>
+          <p>Für \(y = a \cos\big(b(x - u)\big) + v\) gilt alles genauso — der Cosinus ist eine verschobene Sinuskurve. Ein <b>Minus vor dem Faktor</b> spiegelt die Kurve an der Mittellinie; die Amplitude ist dann der Betrag: \(y = 25 - 20\cos(\ldots)\) hat die Amplitude \(20\) und startet unten.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -386,7 +386,7 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 14, [
      r'<p>Mittellinie \(y = 0\), höchster Wert \(1.5\): \(a = 1.5\), \(v = 0\). Periode \(4\pi\) (von \(0\) bis zur nächsten Nullstelle mit gleicher Steigung): \(b = \tfrac{2\pi}{4\pi} = 0.5\). Also \(y = 1.5\sin(0.5x)\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini" data-t="s,1.5,0.5,0,0" data-fenster="-0.5,13,-2,2" data-ym="-1.5,-1,1,1.5" data-sy="0.5"></svg></div>'),
     ('4d', 3, r'Die Höhe einer Kabine im Riesenrad ist \(h(t) = 25 - 20\cos\left(\tfrac{\pi}{4}\,t\right)\) (\(h\) in m, \(t\) in min). (a) Wie hoch liegen tiefster und höchster Punkt? (b) Wie lange dauert eine Umdrehung? (c) Wie hoch ist die Kabine nach \(2\) und nach \(4\) Minuten?',
-     r'<p>(a) \(25 - 20 = 5\) m und \(25 + 20 = 45\) m. (b) \(p = \tfrac{2\pi}{\pi/4} = 8\) min. (c) \(h(2) = 25 - 20\cos\tfrac{\pi}{2} = 25\) m, \(h(4) = 25 - 20\cos\pi = 45\) m.</p>', ''),
+     r'<p>Das Minus vor der \(20\) spiegelt die Cosinuskurve: Die Kabine startet bei \(t = 0\) unten. (a) \(25 - 20 = 5\) m und \(25 + 20 = 45\) m. (b) \(p = \tfrac{2\pi}{\pi/4} = 8\) min. (c) \(h(2) = 25 - 20\cos\tfrac{\pi}{2} = 25\) m, \(h(4) = 25 - 20\cos\pi = 45\) m.</p>', ''),
     ('4e', 2, r'Warum macht ein grösseres \(b\) die Periode kürzer?',
      r'<p>Die Kurve wiederholt sich, wenn das Argument \(bx\) um \(2\pi\) gewachsen ist. Bei grossem \(b\) wächst \(bx\) schnell — das geschieht schon nach \(x = \tfrac{2\pi}{b}\).</p>', ''),
 ], zwei=False)
@@ -404,19 +404,20 @@ sim5 = f'''      <figure class="sim sim-gross" id="sim5">
         <svg viewBox="0 0 440 170" role="img" aria-label="Sinuskurve oder Cosinuskurve mit einer Waagrechten y gleich c und den Schnittstellen"></svg>
         <label class="sim-schalter"><input type="checkbox"> Cosinus statt Sinus</label>
         <div class="sl-row">
-          {regler('s5', 'c', 'Waagrechte y = c', -1.5, 1.5, 0.1, 0.3, 'grau')}
+          {regler('s5', 'c', 'Waagrechte y = c', -1.5, 1.5, 0.1, 0.4, 'grau')}
         </div>
       </figure>'''
 fest5 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Symmetrie nutzen: alle Lösungen</div>
           <p>Die Gleichung \(\sin x = c\) fragt: Wo schneidet die Waagrechte \(y = c\) die Sinuskurve? Für \(-1 \lt c \lt 1\) sind es <b>zwei Stellen pro Periode</b>.</p>
-          <p><b>Sinus:</b> Der Rechner (im Bogenmass, RAD) liefert \(x_1 = \sin^{-1}(c)\). Die Kurve ist symmetrisch zur Geraden \(x = \tfrac{\pi}{2}\), also</p>
+          <p><b>Sinus:</b> Der Rechner (im Bogenmass, RAD) liefert \(x_1 = \sin^{-1}(c)\) — die Umkehrfunktion, auch \(\arcsin c\) geschrieben (nicht \(\tfrac{1}{\sin c}\)). Die Kurve ist symmetrisch zur Geraden \(x = \tfrac{\pi}{2}\), also</p>
           <p>\[ x_2 = \pi - x_1 \]</p>
           <p><b>Cosinus:</b> Der Rechner liefert \(x_1 = \cos^{-1}(c)\). Die Kurve ist symmetrisch zur Geraden \(x = \pi\), also</p>
           <p>\[ x_2 = 2\pi - x_1 \]</p>
           <p><b>Periode:</b> Alle weiteren Lösungen liegen \(2\pi\) daneben: \(x_1 + 2k\pi\), \(x_2 + 2k\pi\).</p>
           <p>Liefert der Rechner beim Sinus ein negatives \(x_1\) (bei \(c \lt 0\)), liegt \(x_1 + 2\pi\) in \([0;\, 2\pi]\). Bei \(c = \pm 1\) berührt die Waagrechte nur Hoch- oder Tiefpunkte: eine Stelle pro Periode. Bei \(|c| \gt 1\) gibt es <b>keine</b> Lösung.</p>
+          <p><b>Faktor im Argument:</b> Bei \(\sin(bx) = c\) zuerst \(z = bx\) setzen, \(\sin z = c\) lösen, dann durch \(b\) teilen. Beispiel \(\sin(2x) = \tfrac12\) für \(0 \le x \le 2\pi\): \(z\) läuft von \(0\) bis \(4\pi\), also \(z = \tfrac{\pi}{6}, \tfrac{5\pi}{6}, \tfrac{13\pi}{6}, \tfrac{17\pi}{6}\) und \(x = \tfrac{\pi}{12}, \tfrac{5\pi}{12}, \tfrac{13\pi}{12}, \tfrac{17\pi}{12}\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -424,25 +425,27 @@ fest5 = r'''      <div class="festhalten">
           <p>Die Regeln vertauschen: \(\pi - x_1\) gilt beim Sinus, \(2\pi - x_1\) beim Cosinus. Eine Skizze zeigt, welche stimmt.</p>
         </div>
       </div>'''
-auf5 = test('t5', 'Aufgaben · Kapitel 5', 12, [
-    ('5a', 3, r'Löse \(\sin x = 0.3\) im Intervall \([0;\, 2\pi]\), auf drei Dezimalen.',
-     r'<p>\(x_1 = \sin^{-1}(0.3) \approx 0.305\), \(x_2 = \pi - 0.305 \approx 2.837\).</p>', ''),
+auf5 = test('t5', 'Aufgaben · Kapitel 5', 14, [
+    ('5a', 3, r'Löse \(\sin x = -0.3\) im Intervall \([0;\, 2\pi]\), auf drei Dezimalen.',
+     r'<p>Der Rechner gibt \(x_1 = \sin^{-1}(-0.3) \approx -0.305\) — nicht im Intervall. Eine Periode weiter: \(-0.305 + 2\pi \approx 5.978\). Die zweite: \(\pi - (-0.305) \approx 3.446\).</p><p class="komm">Kontrolle an der Skizze: Beide liegen unter der \(x\)-Achse, zwischen \(\pi\) und \(2\pi\), symmetrisch zu \(\tfrac{3\pi}{2}\).</p>', ''),
     ('5b', 3, r'Löse \(\cos x = -0.5\) im Intervall \([0;\, 2\pi]\) — exakt, als Vielfache von \(\pi\).',
      r'<p>\(\cos \tfrac{\pi}{3} = \tfrac12\), also liegt \(x_1\) im zweiten Quadranten: \(x_1 = \pi - \tfrac{\pi}{3} = \tfrac{2\pi}{3}\) (der Rechner gibt \(2.094\)). \(x_2 = 2\pi - \tfrac{2\pi}{3} = \tfrac{4\pi}{3}\).</p>', ''),
     ('5c', 2, r'Wie viele Lösungen hat \(\sin x = 0.7\) im Intervall \([0;\, 4\pi]\)? Gib sie auf drei Dezimalen an.',
-     r'<p>Vier: \(0.775\), \(2.366\), \(7.058\), \(8.649\) — die beiden aus \([0;\, 2\pi]\) und dieselben plus \(2\pi\).</p>', ''),
-    ('5d', 2, r'Lies am Graphen ab: Wo ist \(\sin x = -\tfrac12\) im Intervall \([0;\, 2\pi]\)? Kontrolliere mit der Symmetrie.',
+     r'<p>Vier: \(0.775\), \(2.366\), \(7.059\), \(8.649\) — die beiden aus \([0;\, 2\pi]\) und dieselben plus \(2\pi\).</p>', ''),
+    ('5d', 2, r'Lies am Graphen ab (Gitter alle \(\tfrac{\pi}{6}\)): Wo ist \(\sin x = -\tfrac12\) im Intervall \([0;\, 2\pi]\)? Kontrolliere mit der Symmetrie.',
      r'<p>\(x_1 = \tfrac{7\pi}{6}\), \(x_2 = \tfrac{11\pi}{6}\). Kontrolle: Symmetrieachse ist hier die Gerade \(x = \tfrac{3\pi}{2}\) durch den Tiefpunkt, und \(\tfrac{7\pi}{6}\) und \(\tfrac{11\pi}{6}\) liegen gleich weit davon.</p>',
-     '\n            <div class="mini-reihe"><svg class="mini" data-t="s,1,1,0,0" data-fenster="-0.5,6.9,-1.5,1.5" data-xpi="1" data-waagrecht="-0.5"></svg></div>'),
+     '\n            <div class="mini-reihe"><svg class="mini" data-t="s,1,1,0,0" data-fenster="-0.5,6.9,-1.5,1.5" data-xpi="1" data-xteil="6" data-waagrecht="-0.5"></svg></div>'),
     ('5e', 2, r'Warum hat \(\sin x = c\) für \(|c| \gt 1\) keine Lösung, für \(-1 \lt c \lt 1\) aber in jeder Periode genau zwei?',
      r'<p>Die Sinuskurve bleibt zwischen \(-1\) und \(1\); eine Waagrechte darüber oder darunter trifft sie nie. Dazwischen schneidet die Waagrechte jeden Bogen: einmal beim Hinauf- oder Hinuntergehen und einmal beim Zurückkommen — zwei Stellen pro Periode.</p>', ''),
+    ('5f', 2, r'Die Kabine aus Aufgabe 4d: \(h(t) = 25 - 20\cos\left(\tfrac{\pi}{4}\,t\right)\). Wann ist sie während der ersten Umdrehung (\(0 \le t \le 8\)) genau \(35\) m hoch? Exakt.',
+     r'<p>\(25 - 20\cos\left(\tfrac{\pi}{4}t\right) = 35 \Rightarrow \cos\left(\tfrac{\pi}{4}t\right) = -\tfrac12\). Mit \(z = \tfrac{\pi}{4}t\), \(0 \le z \le 2\pi\): \(z = \tfrac{2\pi}{3}\) oder \(z = 2\pi - \tfrac{2\pi}{3} = \tfrac{4\pi}{3}\). Zurück: \(t = \tfrac{4}{\pi} z = \tfrac83 \approx 2.67\) min und \(t = \tfrac{16}{3} \approx 5.33\) min.</p>', ''),
 ], zwei=False)
 k5 = kapitel(5, 'symmetrie-nutzen', 'Symmetrie nutzen', 40,
-             r'Du löst Gleichungen wie \(\sin x = 0.4\) mit dem Taschenrechner und findest alle Lösungen in einem Intervall über Symmetrie und Periode — mit der Skizze als Kontrolle.',
+             r'Du löst Gleichungen wie \(\sin x = 0.4\) oder \(\sin(2x) = c\) mit dem Taschenrechner und findest alle Lösungen in einem Intervall über Symmetrie und Periode — mit der Skizze als Kontrolle.',
              ('s3-5-lp-gleichungen', 'Symmetrie nutzen'),
              sim5, ('s3-5-lp-kontrolle-gleichungen', 'Kontrollfragen zum Symmetrie-Nutzen'),
              fest5, [uebung('zweite-loesung', 'Die zweite Lösung'), uebung('anzahl-loesungen', 'Wie viele Lösungen?')],
-             auf5, f'<a href="{TS}#aufgaben">Themenseite 3.5, Aufgabe A3 e</a>', hm=True)
+             auf5, f'<a href="{TS}#aufgaben">Themenseite 3.5, Aufgabe A3 e</a> und <a href="../grundlagen/g5-5-trigonometrische-gleichungen.html">Trigonometrische Gleichungen (GF 5.5)</a>', hm=True)
 
 # ------------------------------------------------------------------ Vorwissen
 k0 = '''
@@ -489,7 +492,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1, G2 → 1 · G3 → 2 · G4 → 3 · G5, G6 → 4 · G7, G8 → 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1, 2 · G2 → 1, 3 · G3 → 2 · G4 → 3 · G5, G6 → 4 · G7 → 5 · G8 → 4, 5</p>
         </div>
       </div>
     </section>'''
@@ -502,15 +505,17 @@ oben = '''<div id="nav-root"></div>
      (Quelle ../Math-SP.pdf, Lerngebiet 3 «Funktionen»; gleich wie in der RLP-Box der Themenseite s3-5):
        K1  den Funktionsverlauf der Sinus-, Kosinus- und Tangensfunktion visualisieren sowie die
            elementaren Eigenschaften kennen (Periodizität, Symmetrien) (mit und ohne Hilfsmittel.)
-     Das Teilgebiet hat nur diese eine Kompetenz. Darum: Kapitel 1–4 ohne Hilfsmittel (Visualisieren,
-     Periodizität, Symmetrie, Parameter), Kapitel 5 mit Hilfsmittel (Symmetrie und Periode nutzen,
-     um aus dem Rechnerwert alle Lösungen zu finden).
+     Das Teilgebiet hat nur diese eine Kompetenz; sie tragen Kapitel 1–3 (ohne Hilfsmittel). Kapitel 4
+     und 5 wenden sie an und stützen sich dabei auf andere Teilgebiete (Prüfung 05.10.2026, M1):
+       Kapitel 4  Transformationen y = a·sin(b(x − u)) + v — SP 3.1 «Funktionstransformationen»
+       Kapitel 5  alle Lösungen von sin x = c, auch sin(bx) = c, mit dem Rechner — GF 5.5
+                  «elementare trigonometrische Gleichungen … mithilfe der Arkusfunktion lösen»
 
-     Kompetenzmatrix (Teil der Kompetenz | Hilfsmittel | Kapitel | Kapitelaufgaben | Gesamttest):
-       Funktionsverlauf visualisieren  | ohne | 1, 3, 4 | 1d, 3d, 4b, 4c | G1, G5, G6
-       Periodizität                    | ohne | 2, 3    | 2a, 2b, 3a, 3c | G3, G4
-       Symmetrien                      | ohne | 2, 3    | 2c, 2e, 3c     | G3
-       Eigenschaften nutzen            | mit  | 5       | 5a–5e          | G7, G8
+     Kompetenzmatrix (Teil | Hilfsmittel | Kapitel | Kapitelaufgaben | Gesamttest):
+       Funktionsverlauf visualisieren  | ohne | 1, 3, 4 | 1d, 3d, 4b, 4c | G1, G4, G5, G6
+       Periodizität                    | ohne | 2, 3    | 2a, 2b, 3a, 3c | G4, G5
+       Symmetrien, Versatz sin/cos     | ohne | 2, 3    | 2c–2e, 3c      | G1, G3
+       Eigenschaften nutzen (GF 5.5)   | mit  | 5       | 5a–5f          | G7, G8
      Kein Kapitelziel ohne Kompetenz. Teil A des Gesamttests ohne, Teil B mit Taschenrechner.
 
      Bewusst weggelassen (→ Themenseite): die harmonische Schwingung mit ω, Frequenz und Phase
@@ -597,8 +602,9 @@ oben = '''<div id="nav-root"></div>
         <summary><h2 id="kompetenzen">Kompetenzen nach Lehrplan</h2></summary>
         <p class="rlp-quelle">RLP-BM 2030, Schwerpunktfach 3.5 — die Kompetenz des Teilgebiets.</p>
         <ul>
-          <li>den Funktionsverlauf der Sinus-, Kosinus- und Tangensfunktion visualisieren sowie die elementaren Eigenschaften kennen (Periodizität, Symmetrien) <span class="ohm">mit und ohne Hilfsmittel</span> — Kapitel 1 bis 4 ohne, Kapitel 5 mit Taschenrechner</li>
+          <li>den Funktionsverlauf der Sinus-, Kosinus- und Tangensfunktion visualisieren sowie die elementaren Eigenschaften kennen (Periodizität, Symmetrien) <span class="ohm">mit und ohne Hilfsmittel</span> — Kapitel 1 bis 3 ohne Taschenrechner</li>
         </ul>
+        <p class="rlp-quelle">Dazu zwei Anwendungen aus anderen Teilgebieten: Kapitel 4 verschiebt und streckt die Kurven (Funktionstransformationen, SP 3.1), Kapitel 5 nutzt Symmetrie und Periode, um trigonometrische Gleichungen mit dem Taschenrechner vollständig zu lösen (GF 5.5 «elementare trigonometrische Gleichungen … mithilfe der Arkusfunktion lösen», SP 3.1).</p>
         <p class="rlp-quelle">Nicht hier, sondern auf der <a href="../schwerpunkt/s3-5-trigonometrische-funktionen.html">Themenseite 3.5</a>: harmonische Schwingungen mit Kreisfrequenz und Phase und die vollständige Tabelle der Beziehungen aus Periodizität und Symmetrie.</p>
       </details>
     </div>

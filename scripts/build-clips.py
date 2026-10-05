@@ -603,7 +603,7 @@ def graf_svg(el, theme):
             # "trig": "sin" / "tan" (seit 05.10.2026) liest die Stuetzpunkte als [t, a, b, u, v]
             # fuer y = a*sin(b(x-u)) + v bzw. a*tan(b(x-u)) + v. "asymptoten" zeichnet bei sin die
             # Mittellinie y = v, bei tan die Polgeraden; "kreis" den Einheitskreis mit Laeufer
-            # (siehe unten).
+            # (siehe unten). "art": "cos" zeigt statt der Höhe die waagrechte Koordinate von P.
             # "polynom": true (seit 04.10.2026) liest die Stuetzpunkte als [t, a, x1, x2, …]
             # fuer y = a*(x-x1)*(x-x2)*… — die Linearfaktordarstellung. Legt man zwei
             # Nullstellen aufeinander, entsteht die doppelte Nullstelle von selbst.
@@ -650,7 +650,7 @@ def graf_svg(el, theme):
             if kv.get("trig") and kk:
                 f_ = fv[kk.get("farbe", 1) - 1]
                 teile.append(
-                    '<g class="bew-kk" data-zu="%s" data-mx="%g" data-bahn="%s" data-spur="%d" data-proj="%d">'
+                    '<g class="bew-kk" data-zu="%s" data-mx="%g" data-bahn="%s" data-spur="%d" data-proj="%d" data-art="%s">'
                     '<circle class="kk-kreis" fill="none" stroke="%s" stroke-width="3" stroke-opacity=".55"/>'
                     '<path class="kk-bogen" fill="none" stroke="%s" stroke-width="7" stroke-opacity=".45" stroke-linecap="round"/>'
                     '<line class="kk-tang" stroke="%s" stroke-width="3" stroke-opacity=".55"/>'
@@ -661,6 +661,7 @@ def graf_svg(el, theme):
                     '<circle class="kk-q" r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
                     '</g>' % (kid, kk.get("mx", -1.6), entschaerfen(json.dumps(kk["bahn"])),
                               1 if kk.get("spur") else 0, 0 if kk.get("projektion") is False else 1,
+                              kk.get("art", "sin"),
                               tinte, f_, tinte, tinte, f_, tinte,
                               papier, f_, papier, f_))
             if kv.get("startpunkt"):
@@ -1161,6 +1162,14 @@ function bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1) {
         lin('.kk-proj', ok ? T_[0] : 0, ok ? T_[1] : 0, ok && sichtbar ? px(th) : (ok ? T_[0] : 0), ok ? T_[1] : 0);
         const q = g.querySelector('.kk-q'); q.style.display = ok && sichtbar ? '' : 'none';
         q.setAttribute('cx', px(th)); q.setAttribute('cy', py(ty));
+      } else if (g.dataset.art === 'cos') {
+        // Cosinus: die waagrechte Koordinate von P als Strecke auf der Achse, ohne Projektion.
+        lin('.kk-tang', 0, 0, 0, 0);
+        lin('.kk-radius', cx, cy, P[0], P[1]);
+        lin('.kk-hoehe', cx, cy, P[0], cy);
+        lin('.kk-proj', P[0], P[1], P[0], cy);
+        const q = g.querySelector('.kk-q'); q.style.display = sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', sichtbar ? py(yq) : 0);
       } else {
         lin('.kk-tang', 0, 0, 0, 0);
         lin('.kk-radius', cx, cy, P[0], P[1]);

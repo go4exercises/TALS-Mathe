@@ -777,33 +777,35 @@ Skill `/lp-pruefung leitprogramme/trigonometrische-funktionen.html`, drei Agente
 Stand Commit `d2c302d` (unverlinkt, noindex, nicht live). `seite.*`/`clips.py` = `scripts/lp/trigonometrische-funktionen/`,
 `GT`/`BP` = `downloads/leitprogramme/trigonometrische-funktionen/{gesamttest,bewertungspaket}.tex`.
 
+**Behoben 05.10.2026**: Seite (Festhalten 3–5, Aufgaben 1a, 2d, 3d, 3e, 4d, 5a, 5c, neue 5f mit \(\cos(bx) = c\), Kompetenzbox), Simulationen (Gerade durch O und P, Kurvenvergleich, Symmetrieachse je nach Vorzeichen, Schalter-Reset, «≈»), Übungen (Diagnosen, Sinus mit \(c \lt 0\)), 7 Clips neu vertont (+ Fragetöne von 3 Kontrollclips), neue Clipszene «Faktor im Argument», GT G1/G4/G5/G6 neu, Raster G6/G7. Abnahme (Hörprobe, KI-Test) offen.
+
 **Rechenfehler: einer** — 5c «7.058» statt 7.059 (mit gerundetem 0.775 weitergerechnet). Sonst alle Werte
 in Vortest, 1a–5e, Festhalten, 25 Kontrollfragen, GT G1–G8 und Folgefehler-Fällen nachgerechnet und richtig.
 Werkzeuge grün (`pruef-uebungen` 10 × 2000, `pruef-leiste` 5, `pruef-fragen` 5). Nachgeprüft vom Hauptagenten:
 H1, H2, H3, M1, M5 (k = −5: Abweichung 2·10⁻¹⁵), M8.
 
 ### HOCH
-- [ ] **H1 · «Strahl durch P» trifft die Tangente im 2./3. Quadranten nicht** (`seite.py:311` Festhalten 3, Clip `tangens`
+- [x] **H1 · «Strahl durch P» trifft die Tangente im 2./3. Quadranten nicht** (`seite.py:311` Festhalten 3, Clip `tangens`
   «Am Einheitskreis»; Sim 3 zeichnet die Strecke dort von P *weg*). Bei \(x = \tfrac{3\pi}{4}\) zeigt der Strahl nach links.
   → «Gerade durch O und P (im 2./3. Quadranten ihre Verlängerung über O hinaus)», Sim 3 von P über O zeichnen; Clip neu vertonen.
-- [ ] **H2 · GT G8(c) verlangt \(\sin(bx) = c\)** (Argument ersetzen, zurückrechnen) — nirgends geübt (Kap. 5 nur \(\sin x = c\)).
+- [x] **H2 · GT G8(c) verlangt \(\sin(bx) = c\)** (Argument ersetzen, zurückrechnen) — nirgends geübt (Kap. 5 nur \(\sin x = c\)).
   → in Kap. 5 Beispiel, Festhalten-Zeile und Aufgabe mit \(\sin(bx) = c\) ergänzen, oder G8(c) ändern.
-- [ ] **H3 · 5c: 7.058 → 7.059.**
+- [x] **H3 · 5c: 7.058 → 7.059.**
 
 ### MITTEL
-- [ ] M1 · Kompetenzdeckung: Kap. 5 (Gleichungen) steht nicht wörtlich in SP 3.5; gedeckt durch GF 5.5 («trig. Gleichungen … mithilfe der Arcusfunktion lösen») und SP 3.1; Kap. 4 durch SP 3.1 (Transformationen). → Kompetenzbox/-matrix ehrlich machen, GF 5.5 im Vorwissen/«Mehr dazu» verlinken.
-- [ ] M2 · GT prüft Kapitelziele nicht: Tangenskurve skizzieren (Kap. 3), Verschiebung \(u\) und schrittweise Skizze (Kap. 4), «Cosinus = verschobener Sinus» (Kap. 2). → G4 mit Skizze, G5 mit \(u\) und Skizze.
-- [ ] M3 · GT wiederholt: G5 = Kontrollclip «Parameter» F2+F3 (\(p = \tfrac{2\pi}{3}\), \(W = [-3;1]\)); G6 gleiches \(b = 0.5\)/Fenster wie 4c; G7(a) 0.35 ≈ 5a 0.3; G4(a) ≈ 3a; G1 ≈ 1d. Leistenziel Sim 4 A3 (\(a = 2, v = 1\)) = Clip-Schlussbeispiel; Sim 5 Startwert c = 0.3 zeigt die Lösung von 5a.
-- [ ] M4 · Raster: G6 «A nur bei richtigem Wert … zählt nicht» widerspricht dem KI-Auftrag (nur (E) ohne Folgepunkte) und ist unklar; G7 nur (E)-Zeilen — Symmetrieregel ohne Wegpunkt, Gradmodus-Fall «ausser … erkennbar» ohne Punktzahl.
-- [ ] M5 · Sim 4 A6 (und A4 mit k = ±4) lehnt gleichwertige Verschiebung ab: \(u = -\tfrac{5\pi}{6}\) trifft die Zielkurve exakt. → Kurven vergleichen statt k.
-- [ ] M6 · Sim 5 zeichnet beim Sinus immer die Achse \(x = \tfrac{\pi}{2}\); für \(c \lt 0\) liegen die Lösungen symmetrisch zu \(\tfrac{3\pi}{2}\). Sinus mit \(c \lt 0\) (Regel \(x_1 + 2\pi\)) wird mit Rechner nie geübt (`zweite-loesung` nur \(c \gt 0\)).
-- [ ] M7 · Ablesen ohne Beschriftung: 5d (\(\tfrac{7\pi}{6}\), \(\tfrac{11\pi}{6}\) auf \(\tfrac{\pi}{2}\)-Raster), GT G6 (3.5/−1.5 ohne Halbgitter), `aus-graph` bei \(b = 3\) (Periode nicht auf dem Raster, Hinweis «Hochpunkt zu Hochpunkt» führt ins Leere).
-- [ ] M8 · Clip `kontrolle-parameter` F1: \(3\sin x + 1\) reicht bis 4, Fenster bis 3.4 — Hochpunkt abgeschnitten, gerade bei der Amplitudenfrage.
-- [ ] M9 · Clip `tangens` «Am Einheitskreis»: «Tangente bei x gleich eins» (gezeichnet bei Daten-x ≈ −1.5); Bahn endet bei 1.25, \(\tan 1.25 = 3.01\) über dem Bildrand — «wächst über alle Grenzen» unsichtbar.
-- [ ] M10 · Übungen: `kenngroessen` leere Rückmeldung bei Mittellinie = a; `grad-bogen` Richtung Grad bei Zähler 1 kaputte Formel (\(\tfrac{\cdot 180^\circ}{6}\)); `stelle` Hinweis «eine Periode weiter» bei Nullstellen falsch (Abstand π); Rückmeldungen `tan-wert`/`kenngroessen` verraten die Lösung.
-- [ ] M11 · 1a «\(x = 1\) in Grad auf eine Dezimale» widerspricht «ohne Hilfsmittel». → exakt \(\tfrac{180^\circ}{\pi}\).
+- [x] M1 · Kompetenzdeckung: Kap. 5 (Gleichungen) steht nicht wörtlich in SP 3.5; gedeckt durch GF 5.5 («trig. Gleichungen … mithilfe der Arcusfunktion lösen») und SP 3.1; Kap. 4 durch SP 3.1 (Transformationen). → Kompetenzbox/-matrix ehrlich machen, GF 5.5 im Vorwissen/«Mehr dazu» verlinken.
+- [x] M2 · GT prüft Kapitelziele nicht: Tangenskurve skizzieren (Kap. 3), Verschiebung \(u\) und schrittweise Skizze (Kap. 4), «Cosinus = verschobener Sinus» (Kap. 2). → G4 mit Skizze, G5 mit \(u\) und Skizze.
+- [x] M3 · GT wiederholt: G5 = Kontrollclip «Parameter» F2+F3 (\(p = \tfrac{2\pi}{3}\), \(W = [-3;1]\)); G6 gleiches \(b = 0.5\)/Fenster wie 4c; G7(a) 0.35 ≈ 5a 0.3; G4(a) ≈ 3a; G1 ≈ 1d. Leistenziel Sim 4 A3 (\(a = 2, v = 1\)) = Clip-Schlussbeispiel; Sim 5 Startwert c = 0.3 zeigt die Lösung von 5a.
+- [x] M4 · Raster: G6 «A nur bei richtigem Wert … zählt nicht» widerspricht dem KI-Auftrag (nur (E) ohne Folgepunkte) und ist unklar; G7 nur (E)-Zeilen — Symmetrieregel ohne Wegpunkt, Gradmodus-Fall «ausser … erkennbar» ohne Punktzahl.
+- [x] M5 · Sim 4 A6 (und A4 mit k = ±4) lehnt gleichwertige Verschiebung ab: \(u = -\tfrac{5\pi}{6}\) trifft die Zielkurve exakt. → Kurven vergleichen statt k.
+- [x] M6 · Sim 5 zeichnet beim Sinus immer die Achse \(x = \tfrac{\pi}{2}\); für \(c \lt 0\) liegen die Lösungen symmetrisch zu \(\tfrac{3\pi}{2}\). Sinus mit \(c \lt 0\) (Regel \(x_1 + 2\pi\)) wird mit Rechner nie geübt (`zweite-loesung` nur \(c \gt 0\)).
+- [x] M7 · Ablesen ohne Beschriftung: 5d (\(\tfrac{7\pi}{6}\), \(\tfrac{11\pi}{6}\) auf \(\tfrac{\pi}{2}\)-Raster), GT G6 (3.5/−1.5 ohne Halbgitter), `aus-graph` bei \(b = 3\) (Periode nicht auf dem Raster, Hinweis «Hochpunkt zu Hochpunkt» führt ins Leere).
+- [x] M8 · Clip `kontrolle-parameter` F1: \(3\sin x + 1\) reicht bis 4, Fenster bis 3.4 — Hochpunkt abgeschnitten, gerade bei der Amplitudenfrage.
+- [x] M9 · Clip `tangens` «Am Einheitskreis»: «Tangente bei x gleich eins» (gezeichnet bei Daten-x ≈ −1.5); Bahn endet bei 1.25, \(\tan 1.25 = 3.01\) über dem Bildrand — «wächst über alle Grenzen» unsichtbar.
+- [x] M10 · Übungen: `kenngroessen` leere Rückmeldung bei Mittellinie = a; `grad-bogen` Richtung Grad bei Zähler 1 kaputte Formel (\(\tfrac{\cdot 180^\circ}{6}\)); `stelle` Hinweis «eine Periode weiter» bei Nullstellen falsch (Abstand π); Rückmeldungen `tan-wert`/`kenngroessen` verraten die Lösung.
+- [x] M11 · 1a «\(x = 1\) in Grad auf eine Dezimale» widerspricht «ohne Hilfsmittel». → exakt \(\tfrac{180^\circ}{\pi}\).
 
 ### NIEDRIG
-- [ ] Clip `kontrolle-periode-symmetrie` F4: Verschiebung (1.4–3.4 s) läuft vor «nach links» (4.9 s). Clip `kreis-kurve` «Der Cosinus» ohne Einheitskreis/P; «Bogenmass»: P läuft in 0.3 s rückwärts; «Achse» → «x-Achse». Clip `parameter` «Periode» 3 px Überlapp; «beginnt erst bei π/3» → «geht steigend durch null». Kontroll-Parameter F5 nennt Amplitude und Periode schon im Text; Merkbilder ohne \(a \gt 0\). Kontroll-Gleichungen: \([0;2\pi]\) vs. \([0;2\pi[\), Fall \(|c| = 1\) fehlt. Kontroll-Periode F5 ohne Falle bei \((0 \mid 1)\).
-- [ ] Seite: Live-Anzeigen ohne «≈» (Sim 1, 3, 4: «Periode 2.513» bei b = 2.5, Sim 5); Sim 1 Checkbox «Cosinus» bleibt nach «von vorn» an (A3 verlangt Sinus, Text sagt es nicht); Sim 2 «Hochpunkt» verschwindet bei u ≥ 7π/4; 2d auch \(\cos(x - \pi)\) nennen; 3d Lösungsbild ohne Polgeraden; 3e «\(\tan\tfrac{\pi}{2} = \tfrac10\)» mit «=»; 4d negativer Vorfaktor (−20 cos) unkommentiert, Festhalten setzt \(a \gt 0\); \(\sin^{-1}\) vs. arcsin (Themenseite) nicht erklärt; `grad-bogen` verlangt «exakt», nimmt Dezimal.
-- [ ] GT/BP: G3-Titel «Symmetrie und Periode» prüft nur Symmetrie; Zuordnung G2(c) → Kap. 3, G8(a/b) → Kap. 4; Kompetenzmatrix im Seitenkopf anpassen.
+- [x] Clip `kontrolle-periode-symmetrie` F4: Verschiebung (1.4–3.4 s) läuft vor «nach links» (4.9 s). Clip `kreis-kurve` «Der Cosinus» ohne Einheitskreis/P; «Bogenmass»: P läuft in 0.3 s rückwärts; «Achse» → «x-Achse». Clip `parameter` «Periode» 3 px Überlapp; «beginnt erst bei π/3» → «geht steigend durch null». Kontroll-Parameter F5 nennt Amplitude und Periode schon im Text; Merkbilder ohne \(a \gt 0\). Kontroll-Gleichungen: \([0;2\pi]\) vs. \([0;2\pi[\), Fall \(|c| = 1\) fehlt. Kontroll-Periode F5 ohne Falle bei \((0 \mid 1)\).
+- [x] Seite: Live-Anzeigen ohne «≈» (Sim 1, 3, 4: «Periode 2.513» bei b = 2.5, Sim 5); Sim 1 Checkbox «Cosinus» bleibt nach «von vorn» an (A3 verlangt Sinus, Text sagt es nicht); Sim 2 «Hochpunkt» verschwindet bei u ≥ 7π/4; 2d auch \(\cos(x - \pi)\) nennen; 3d Lösungsbild ohne Polgeraden; 3e «\(\tan\tfrac{\pi}{2} = \tfrac10\)» mit «=»; 4d negativer Vorfaktor (−20 cos) unkommentiert, Festhalten setzt \(a \gt 0\); \(\sin^{-1}\) vs. arcsin (Themenseite) nicht erklärt; `grad-bogen` verlangt «exakt», nimmt Dezimal.
+- [x] GT/BP: G3-Titel «Symmetrie und Periode» prüft nur Symmetrie; Zuordnung G2(c) → Kap. 3, G8(a/b) → Kap. 4; Kompetenzmatrix im Seitenkopf anpassen.

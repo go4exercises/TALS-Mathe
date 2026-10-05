@@ -189,10 +189,12 @@ WT = dict(xbereich=[-2.6, 7.2], ybereich=[-3, 3], xteilung=pit(1, 2, 3, 4), ytei
 WTP = dict(xbereich=[-5.6, 8.2], ybereich=[-3, 3], xteilung=pit(-3, -2, -1, 1, 2, 3, 4), yteilung=yt(-2, -1, 1, 2))
 WA = dict(xbereich=[-0.8, 6.9], ybereich=[-3.4, 3.4], xteilung=pit(1, 2, 3, 4), yteilung=yt(-3, -2, -1, 1, 2, 3))
 WG = dict(xbereich=[-0.8, 13.4], ybereich=[-1.5, 1.5], xteilung=pit(1, 2, 3, 4, 5, 6, 7, 8), yteilung=yt(-1, 1))
-def KREIS(bahn, spur=True, projektion=True):
-    d = {'mx': -1.6, 'bahn': bahn, 'spur': spur, 'farbe': 1}
+def KREIS(bahn, spur=True, projektion=True, cos=False):
+    d = {'mx': -1.6, 'bahn': bahn, 'spur': spur, 'farbe': 3 if cos else 1}
     if not projektion:
         d['projektion'] = False
+    if cos:
+        d['art'] = 'cos'
     return d
 
 # ════════════════════════════════════════════════ Kapitel 1 · Einführung
@@ -204,14 +206,14 @@ clip('kreis-kurve', 'Sinuskurve sehen: vom Einheitskreis zur Kurve',
             'Hundertachtzig Grad sind also pi, neunzig Grad pi halbe.',
             titel('Vom Kreis zur Kurve', 250, 80),
             f(r'360^\circ = 2\pi \qquad 180^\circ = \pi \qquad 90^\circ = \tfrac{\pi}{2}', 380, 54, ein=3.2),
-            graf(WK, [sk([[0, 1, 1, 0, 0]], kreis=KREIS([[0, 0], [3.2, 0], [6.0, 2 * P], [6.3, 2 * P], [6.6, 0], [8.2, P], [8.7, P], [9.8, H2]], spur=False, projektion=False), von=9, bis=9)], ein=1.0)),
+            graf(WK, [sk([[0, 1, 1, 0, 0]], kreis=KREIS([[0, 0], [3.2, 0], [6.0, 2 * P], [6.4, 2 * P], [8.2, P], [8.7, P], [9.8, H2]], spur=False, projektion=False), von=9, bis=9)], ein=1.0)),
          sz('Abrollen',
             'Ein Punkt P läuft auf dem Einheitskreis. Seine Höhe ist der Sinus des Winkels x. Diese Höhe tragen wir über x ab. '
-            'Bei pi halbe ist P ganz oben: Sinus gleich eins. Bei pi liegt er wieder auf der Achse, bei drei pi halbe ganz unten, '
+            'Bei pi halbe ist P ganz oben: Sinus gleich eins. Bei pi liegt er wieder auf der x-Achse, bei drei pi halbe ganz unten, '
             'und bei zwei pi ist er zurück am Start.',
             f(r'y = \fa{\sin x}', 240, 66),
             n('Höhe von @P@ über dem Winkel @x@', 350, 'blau', ein=2.0),
-            graf(WK, [sk([[0, 1, 1, 0, 0]], kreis=KREIS([[0, 0], [4.6, 0], [9.0, H2], [9.4, H2], [11.6, P], [13.6, 3 * H2], [15.8, 2 * P]]))])),
+            graf(WK, [sk([[0, 1, 1, 0, 0]], kreis=KREIS([[0, 0], [4.0, 0], [8.4, H2], [8.8, H2], [10.8, P], [13.4, 3 * H2], [15.8, 2 * P]]))])),
          sz('Fünf Stützstellen',
             'Fünf Stellen genügen für eine Skizze: null, pi halbe, pi, drei pi halbe und zwei pi. Dort hat der Sinus die Werte '
             'null, eins, null, minus eins, null. Dazwischen zieht man einen weichen Bogen.',
@@ -225,8 +227,7 @@ clip('kreis-kurve', 'Sinuskurve sehen: vom Einheitskreis zur Kurve',
             f(r'y = \fc{\cos x}', 240, 66),
             f(r'\begin{array}{c|ccccc} x & 0 & \tfrac{\pi}{2} & \pi & \tfrac{3\pi}{2} & 2\pi \\ \hline \cos x & 1 & 0 & -1 & 0 & 1 \end{array}',
               330, 36, ein=3.2, x=780),
-            graf(WK, [ck(von=0, bis=2 * P)], ein=0.6,
-                 punkte=[pt(0, 1, 3), pt(H2, 0, 3), pt(P, -1, 3), pt(3 * H2, 0, 3), pt(2 * P, 1, 3)])),
+            graf(WK, [ck(kreis=KREIS([[0, 0], [5.0, 0], [6.4, H2], [7.8, P], [9.4, 3 * H2], [11.6, 2 * P]], cos=True))], ein=0.6)),
          sz('Merke',
             'Zum Mitnehmen: P auf dem Einheitskreis hat die Koordinaten Cosinus x und Sinus x. Abgerollt über x ergibt die Höhe '
             'die Sinuskurve, die waagrechte Koordinate die Cosinuskurve. Beide bleiben zwischen minus eins und eins.',
@@ -245,7 +246,7 @@ clip('kontrolle-kreis-kurve', 'Sinuskurve sehen: Kontrollfragen zum Einheitskrei
             f(r'270^\circ = \tfrac{270}{180}\,\pi = \tfrac{3\pi}{2}', 240, 56, ein=1.0),
             graf(WK, [sk([[0, 1, 1, 0, 0]], kreis=KREIS([[0, 3 * H2]], spur=False, projektion=False), von=9, bis=9)], ein=1.2)),
          sz('Frage 2',
-            'Bei pi liegt der Punkt P links auf der Achse. Seine Höhe ist null: Sinus von pi gleich null.',
+            'Bei pi liegt der Punkt P links auf der x-Achse. Seine Höhe ist null: Sinus von pi gleich null.',
             f(r'\sin \pi = 0', 240, 62, ein=1.0),
             graf(WK, [sk([[0, 1, 1, 0, 0]], kreis=KREIS([[0, P]]))], ein=1.2)),
          sz('Frage 3',
@@ -281,10 +282,10 @@ clip('kontrolle-kreis-kurve', 'Sinuskurve sehen: Kontrollfragen zum Einheitskrei
          wahl('Frage 2', 'Welchen Wert hat sin π?',
               ['0', '1', '−1'], 0,
               {0: 'Ja.',
-               1: 'Bei π liegt P links auf der Achse. Wie hoch liegt er?',
+               1: 'Bei π liegt P links auf der x-Achse. Wie hoch liegt er?',
                2: '−1 ist der tiefste Punkt, bei 3π/2. Wo liegt P bei π?'},
               sprich='Welchen Wert hat Sinus von pi?',
-              rueck_sprich={1: 'Bei pi liegt P links auf der Achse. Wie hoch liegt er?',
+              rueck_sprich={1: 'Bei pi liegt P links auf der x-Achse. Wie hoch liegt er?',
                             2: 'Minus eins ist der tiefste Punkt, bei drei pi halbe. Wo liegt P bei pi?'}),
          klick('Frage 3', 'Tipp den Tiefpunkt der Sinuskurve zwischen 0 und 2π ins Bild.',
                [3 * H2, -1], 'Getroffen: (3π/2 | −1).',
@@ -375,7 +376,7 @@ clip('kontrolle-periode-symmetrie', 'Sinuskurve sehen: Kontrollfragen zu Periode
             'Die Cosinuskurve hat ihren Hochpunkt bei null, die Sinuskurve erst bei pi halbe. Also muss die Sinuskurve '
             'um pi halbe nach links.',
             f(r'\cos x = \sin\!\left(x + \tfrac{\pi}{2}\right)', 240, 54, ein=1.0),
-            graf(WS, [ck(gestrichelt=True), sk([[0, 1, 1, 0, 0], [1.4, 1, 1, 0, 0], [3.4, 1, 1, -H2, 0]])], ein=0.6)),
+            graf(WS, [ck(gestrichelt=True), sk([[0, 1, 1, 0, 0], [5.0, 1, 1, 0, 0], [7.2, 1, 1, -H2, 0]])], ein=0.6)),
          sz('Frage 5',
             'Rechts der y-Achse liegt der nächste Hochpunkt der Cosinuskurve eine Periode weiter: bei zwei pi.',
             f(r'\cos 2\pi = 1', 240, 62, ein=1.4),
@@ -424,6 +425,8 @@ clip('kontrolle-periode-symmetrie', 'Sinuskurve sehen: Kontrollfragen zu Periode
                [2 * P, 1], 'Getroffen: (2π | 1).',
                [{'bei': [P, -1], 'text': 'Das ist ein Tiefpunkt. Wann ist cos x wieder 1?',
                  'sprich': 'Das ist ein Tiefpunkt. Wann ist Cosinus x wieder eins?'},
+                {'bei': [0, 1], 'text': 'Das ist der Hochpunkt auf der y-Achse. Gesucht ist der nächste rechts davon.',
+                 'sprich': 'Das ist der Hochpunkt auf der y-Achse. Gesucht ist der nächste rechts davon.'},
                 {'bei': [H2, 0], 'text': 'Hier ist eine Nullstelle. Gesucht ist der höchste Punkt.',
                  'sprich': 'Hier ist eine Nullstelle. Gesucht ist der höchste Punkt.'}],
                'Nicht ganz. Der grüne Kreis zeigt die Stelle — eine Periode nach (0 | 1).',
@@ -441,18 +444,18 @@ clip('tangens', 'Sinuskurve sehen: die Tangenskurve',
             f(r'\fb{\tan x} = \dfrac{\fa{\sin x}}{\fc{\cos x}}', 250, 56),
             n('nicht definiert, wo @\\cos x = 0@: @x = \\tfrac{\\pi}{2} + k\\pi@', 400, 'rot', ein=4.6)),
          sz('Am Einheitskreis',
-            'Am Einheitskreis ist der Tangens eine Strecke: auf der Tangente bei x gleich eins, bis zum Strahl durch P. '
+            'Am Einheitskreis ist der Tangens eine Strecke: auf der senkrechten Tangente rechts am Kreis, bis zur Geraden durch den Mittelpunkt und P. '
             'Bei null ist sie null, bei pi viertel genau eins. Je näher P an pi halbe kommt, desto steiler der Strahl, '
             'und die Strecke wächst über alle Grenzen.',
-            f(r'\tan \tfrac{\pi}{4} = 1', 240, 56, ein=7.6),
+            f(r'\tan \tfrac{\pi}{4} = 1', 240, 56, ein=10.4),
             graf(WT, [tk([[0, 1, 1, 0, 0]], von=0,
-                         kreis={'mx': -2.0, 'bahn': [[0, 0], [5.0, 0], [7.6, P / 4], [9.3, P / 4], [13.5, 1.25]],
+                         kreis={'mx': -2.0, 'bahn': [[0, 0], [9.0, 0], [10.4, P / 4], [11.0, P / 4], [15.4, 1.2]],
                                 'spur': True, 'farbe': 2})], ein=0.3)),
          sz('Pole und Periode',
-            'An jeder Stelle pi halbe plus k pi hat die Tangenskurve einen Pol: Sie springt von plus nach minus unendlich. '
+            'An jeder Stelle pi halbe plus k pi hat die Tangenskurve einen Pol: Links davon wächst sie über alle Grenzen, rechts davon kommt sie von ganz unten. '
             'Schon nach pi wiederholt sie sich. Die Periodenlänge ist pi, nicht zwei pi.',
             f(r'\tan(x + \pi) = \tan x', 240, 56),
-            n('Pole bei @x = \\tfrac{\\pi}{2} + k\\pi@ · Periode @p = \\pi@', 350, 'orange', ein=5.0),
+            n('Pole bei @x = \\tfrac{\\pi}{2} + k\\pi@ · Periode @p = \\pi@', 350, 'orange', ein=8.4),
             graf(WTP, [tk([[0, 1, 1, 0, 0]], pole=True)], ein=0.3)),
          sz('Nullstellen und Symmetrie',
             'Nullstellen hat der Tangens dort, wo der Sinus null ist: bei k mal pi. Und die Kurve ist punktsymmetrisch '
@@ -563,7 +566,7 @@ clip('parameter', 'Sinuskurve sehen: Strecken und Verschieben',
             'Der Faktor b im Argument staucht die Kurve in x-Richtung. Bei b gleich zwei läuft sie doppelt so schnell: '
             'Die Periode wird halb so lang, nur noch pi. Allgemein ist die Periodenlänge zwei pi durch b.',
             f(r'y = \sin(\fa{b}\,x) \qquad p = \dfrac{2\pi}{\fa{b}}', 250, 54),
-            n('grösseres @b@ → kürzere Periode', 370, 'blau', ein=8.9),
+            n('grösseres @b@ → kürzere Periode', 395, 'blau', ein=8.9),
             graf(WA, [sk([[0, 1, 1, 0, 0]], farbe=5, gestrichelt=True),
                       sk([[0, 1, 1, 0, 0], [3.8, 1, 1, 0, 0], [5.8, 1, 2, 0, 0]])], ein=0.3)),
          sz('Mittellage',
@@ -573,7 +576,7 @@ clip('parameter', 'Sinuskurve sehen: Strecken und Verschieben',
             graf(WA, [sk([[0, 1, 1, 0, 0]], farbe=5, gestrichelt=True),
                       sk([[0, 1, 1, 0, 0], [2.4, 1, 1, 0, 0], [4.4, 1, 1, 0, 1]], mittel=True)], ein=0.3)),
          sz('Verschiebung',
-            'Mit u wird die Kurve nach rechts geschoben: x minus u. Bei u gleich pi drittel beginnt sie erst bei pi drittel. '
+            'Mit u wird die Kurve nach rechts geschoben: x minus u. Bei u gleich pi drittel geht sie erst bei pi drittel steigend durch null. '
             'Achtung: Minus im Argument heisst nach rechts.',
             f(r'y = \sin(x - \fa{u})', 240, 62),
             n('@x - u@: um @u@ nach rechts', 350, 'blau', ein=6.6),
@@ -591,7 +594,7 @@ clip('parameter', 'Sinuskurve sehen: Strecken und Verschieben',
          sz('Merke',
             'Zum Mitnehmen: a ist die Amplitude, zwei pi durch b die Periode, u schiebt nach rechts, v hebt die Mittellinie.',
             titel('Zum Mitnehmen', 240, 72),
-            n('@y = a \\sin\\big(b(x - u)\\big) + v@|@p = \\tfrac{2\\pi}{b}@', 350, 'blau', 44, ein=1.2),
+            n('@y = a \\sin\\big(b(x - u)\\big) + v@ (@a, b \\gt 0@)|@p = \\tfrac{2\\pi}{b}@', 350, 'blau', 44, ein=1.2),
             graf(WA, [sk([[0, 2, 2, P / 4, 1]], mittel=True)], ein=0.3)),
          JETZT_DU,
      ])
@@ -603,7 +606,7 @@ clip('kontrolle-parameter', 'Sinuskurve sehen: Kontrollfragen zu den Parametern'
          sz('Frage 1',
             'Die Amplitude ist der Faktor vor dem Sinus: drei. Die eins hebt nur die Mittellinie.',
             f(r'y = \fa{3}\sin x + 1', 240, 60, ein=1.0),
-            graf(WA, [sk([[0, 3, 1, 0, 1]], mittel=True)], ein=1.2)),
+            graf(dict(WA, ybereich=[-2.6, 4.6], yteilung=yt(-2, -1, 1, 2, 3, 4)), [sk([[0, 3, 1, 0, 1]], mittel=True)], ein=1.2)),
          sz('Frage 2',
             'Periodenlänge zwei pi durch b, also zwei pi durch drei: zwei pi drittel.',
             f(r'p = \dfrac{2\pi}{3}', 250, 56, ein=1.0),
@@ -620,13 +623,13 @@ clip('kontrolle-parameter', 'Sinuskurve sehen: Kontrollfragen zu den Parametern'
             graf(WA, [sk([[0, 1, 1, 0, 0]], farbe=5, gestrichelt=True), sk([[0, 1, 1, P / 3, 0]])], ein=1.4,
                  punkte=[pt(5 * P / 6, 1, 1, '(5π/6 | 1)', [5 * P / 6 + 0.2, 1.45])])),
          sz('Frage 5',
-            'Amplitude zwei, also a gleich zwei. Periode pi, also b gleich zwei pi durch pi gleich zwei.',
+            'Die Kurve reicht bis zwei: Amplitude zwei. Sie wiederholt sich nach pi, also b gleich zwei pi durch pi gleich zwei.',
             f(r'y = 2\sin(2x)', 240, 62, ein=1.0),
             graf(WA, [sk([[0, 2, 2, 0, 0]])], ein=0.05)),
          sz('Merke',
             'Zum Mitnehmen: Amplitude ablesen, Periode zwei pi durch b, Wertemenge von v minus a bis v plus a.',
             titel('Zum Mitnehmen', 240, 72),
-            n('@W = [v - a;\\, v + a]@ · @p = \\tfrac{2\\pi}{b}@', 350, 'blau', 44, ein=1.2),
+            n('@W = [v - a;\\, v + a]@ (@a \\gt 0@) · @p = \\tfrac{2\\pi}{b}@', 350, 'blau', 44, ein=1.2),
             graf(WA, [sk([[0, 2, 1, 0, -1]], mittel=True)], ein=0.3)),
      ], [
          wahl('Frage 1', 'y = 3 sin x + 1: Wie gross ist die Amplitude?',
@@ -662,13 +665,13 @@ clip('kontrolle-parameter', 'Sinuskurve sehen: Kontrollfragen zu den Parametern'
                'Nicht ganz. Der blaue Kreis zeigt die Stelle.',
                sprich='Gestrichelt ist y gleich Sinus x. Tipp den Hochpunkt von y gleich Sinus von x minus pi drittel ins Bild.',
                falsch_sprich='Nicht ganz. Der blaue Kreis zeigt die Stelle.'),
-         wahl('Frage 5', 'Welche Gleichung hat die abgebildete Kurve? (Amplitude 2, Periode π)',
+         wahl('Frage 5', 'Welche Gleichung hat die abgebildete Kurve?',
               ['y = 2 sin(2x)', 'y = 2 sin(x/2)', 'y = sin(2x) + 2'], 0,
               {0: 'Ja.',
-               1: 'Dann wäre die Periode 4π. Periode π heisst b = 2π : π.',
+               1: 'Dann wäre die Periode 4π. Lies die Periode ab: b = 2π : p.',
                2: 'Dann läge die Mittellinie bei y = 2. Die Kurve schwankt um 0.'},
-              sprich='Welche Gleichung hat die abgebildete Kurve? Amplitude zwei, Periode pi.',
-              rueck_sprich={1: 'Dann wäre die Periode vier pi. Periode pi heisst b gleich zwei pi durch pi.',
+              sprich='Welche Gleichung hat die abgebildete Kurve?',
+              rueck_sprich={1: 'Dann wäre die Periode vier pi. Lies die Periode ab: b gleich zwei pi durch p.',
                             2: 'Dann läge die Mittellinie bei y gleich zwei. Die Kurve schwankt um null.'}),
      ], art='Kontrollclip')
 
@@ -687,7 +690,7 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             'Der Taschenrechner liefert mit der Umkehrfunktion Sinus hoch minus eins nur eine Lösung: ungefähr null Komma sechs vier vier. '
             'Er muss dafür im Bogenmass rechnen, im Modus RAD.',
             f(r'x_1 = \sin^{-1}(0.6) \approx 0.644', 240, 56),
-            n('Rechner im Bogenmass (RAD)', 350, 'rot', ein=7.6),
+            n('Rechner im Bogenmass (RAD) · @\\sin^{-1}@ heisst auch @\\arcsin@', 350, 'rot', ein=7.6),
             graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P), fest('0.6', farbe=5)], ein=0.3,
                  punkte=[pt(X1, 0.6, 1, 'x₁', [X1 - 0.15, 0.85], 'end')])),
          sz('Symmetrie',
@@ -713,6 +716,17 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             f(r'x_1 + 2\pi, \quad x_2 + 2\pi, \;\ldots', 240, 56),
             graf(WG, [sk([[0, 1, 1, 0, 0]], von=0, bis=4 * P), fest('0.6', farbe=5)], ein=0.3,
                  punkte=[pt(X1, 0.6, 1), pt(P - X1, 0.6, 1), pt(X1 + 2 * P, 0.6, 1), pt(3 * P - X1, 0.6, 1)])),
+         sz('Faktor im Argument',
+            'Und bei Sinus von zwei x gleich ein Halb? Man ersetzt zwei x durch z. Sinus z gleich ein Halb gilt bei pi sechstel '
+            'und fünf pi sechstel. Durch zwei geteilt: x gleich pi zwölftel und fünf pi zwölftel. Weil die Periode jetzt nur pi ist, '
+            'kommen zwischen null und zwei pi noch zwei dazu.',
+            f(r'z = 2x: \; \sin z = \tfrac12 \;\Rightarrow\; z = \tfrac{\pi}{6},\ \tfrac{5\pi}{6}', 240, 50, ein=4.4),
+            n('@x = \\tfrac{\\pi}{12}@, @\\tfrac{5\\pi}{12}@ und eine Periode @\\pi@ weiter', 350, 'blau', ein=10.0),
+            graf(WK, [sk([[0, 1, 2, 0, 0]], von=0, bis=2 * P), fest('0.5', farbe=5)], ein=0.3),
+            graf(WK, [sk([[0, 1, 2, 0, 0]], von=0, bis=2 * P), fest('0.5', farbe=5)], ein=10.0,
+                 punkte=[pt(P / 12, 0.5, 1), pt(5 * P / 12, 0.5, 1)]),
+            graf(WK, [sk([[0, 1, 2, 0, 0]], von=0, bis=2 * P), fest('0.5', farbe=5)], ein=15.0,
+                 punkte=[pt(P / 12, 0.5, 1), pt(5 * P / 12, 0.5, 1), pt(13 * P / 12, 0.5, 1), pt(17 * P / 12, 0.5, 1)])),
          sz('Merke',
             'Zum Mitnehmen: Sinus: x zwei gleich pi minus x eins. Cosinus: x zwei gleich zwei pi minus x eins. '
             'Und jede Lösung wiederholt sich nach zwei pi.',
@@ -756,9 +770,9 @@ clip('kontrolle-gleichungen', 'Sinuskurve sehen: Kontrollfragen zum Symmetrie-Nu
             graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P), fest('1.2', farbe=4)], ein=1.2)),
          sz('Merke',
             'Zum Mitnehmen: Zwei Lösungen pro Periode, wenn c zwischen minus eins und eins liegt. Die zweite über die Symmetrie. '
-            'Liegt c ausserhalb, gibt es keine.',
+            'Bei c gleich plus oder minus eins nur eine, und liegt c ausserhalb, gibt es keine.',
             titel('Zum Mitnehmen', 240, 72),
-            n('@|c| \\lt 1@: zwei Lösungen in @[0;\\, 2\\pi[@ · @|c| \\gt 1@: keine', 350, 'blau', 42, ein=1.2),
+            n('pro Periode: @|c| \\lt 1@ zwei Lösungen · @|c| = 1@ eine · @|c| \\gt 1@ keine', 350, 'blau', 42, ein=1.2),
             graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P)], ein=0.3)),
      ], [
          wahl('Frage 1', 'Wie viele Lösungen hat sin x = 0.3 im Intervall [0; 2π]?',
