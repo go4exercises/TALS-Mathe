@@ -809,3 +809,36 @@ H1, H2, H3, M1, M5 (k = −5: Abweichung 2·10⁻¹⁵), M8.
 - [x] Clip `kontrolle-periode-symmetrie` F4: Verschiebung (1.4–3.4 s) läuft vor «nach links» (4.9 s). Clip `kreis-kurve` «Der Cosinus» ohne Einheitskreis/P; «Bogenmass»: P läuft in 0.3 s rückwärts; «Achse» → «x-Achse». Clip `parameter` «Periode» 3 px Überlapp; «beginnt erst bei π/3» → «geht steigend durch null». Kontroll-Parameter F5 nennt Amplitude und Periode schon im Text; Merkbilder ohne \(a \gt 0\). Kontroll-Gleichungen: \([0;2\pi]\) vs. \([0;2\pi[\), Fall \(|c| = 1\) fehlt. Kontroll-Periode F5 ohne Falle bei \((0 \mid 1)\).
 - [x] Seite: Live-Anzeigen ohne «≈» (Sim 1, 3, 4: «Periode 2.513» bei b = 2.5, Sim 5); Sim 1 Checkbox «Cosinus» bleibt nach «von vorn» an (A3 verlangt Sinus, Text sagt es nicht); Sim 2 «Hochpunkt» verschwindet bei u ≥ 7π/4; 2d auch \(\cos(x - \pi)\) nennen; 3d Lösungsbild ohne Polgeraden; 3e «\(\tan\tfrac{\pi}{2} = \tfrac10\)» mit «=»; 4d negativer Vorfaktor (−20 cos) unkommentiert, Festhalten setzt \(a \gt 0\); \(\sin^{-1}\) vs. arcsin (Themenseite) nicht erklärt; `grad-bogen` verlangt «exakt», nimmt Dezimal.
 - [x] GT/BP: G3-Titel «Symmetrie und Periode» prüft nur Symmetrie; Zuordnung G2(c) → Kap. 3, G8(a/b) → Kap. 4; Kompetenzmatrix im Seitenkopf anpassen.
+
+## Prüfung Betragsfunktionen (05.10.2026)
+
+Skill `/lp-pruefung leitprogramme/betragsfunktionen.html`, drei Agenten (Seite, Clips, PDFs), Stand Commit
+`e8ef159` (unverlinkt, noindex, nicht live). `seite.*`/`clips.py` = `scripts/lp/betragsfunktionen/`,
+`GT`/`BP` = `downloads/leitprogramme/betragsfunktionen/{gesamttest,bewertungspaket}.tex`.
+
+**Rechenfehler: keine** in Vortest, 1a–5e, Festhalten, 25 Kontrollfragen und GT G1–G7 (Raster G1 nennt
+falsche Folgezahlen, siehe M8). Werkzeuge grün (`pruef-uebungen` 10 × 2000, `pruef-leiste` 5, `pruef-fragen` 5).
+Nachgeprüft vom Hauptagenten: H1, H2, H3, M1.
+
+### HOCH
+- [ ] **H1 · «Erkunde» nach Überspringen nie mehr lösbar** (alle 5 Simulationen; ebenso **Trigonometrie**, schon freigeschaltet):
+  `bewegtMerken(r, bewegt, …)` bindet das erste Objekt, `aufraeumen` weist `bewegt = {}` neu zu. → Objekt leeren statt neu zuweisen; in beiden Leitprogrammen.
+- [ ] **H2 · Klickfragen nennen die falsche Kreisfarbe**: Ziel wird grün gezeichnet (`--f3`), Text/Ton sagen «blau» bzw. «orange»
+  (alle 5 Kontrollclips; ebenso **Trigonometrie** «blaue/orange Kreis»). → «grüne Kreis», Fragetöne neu.
+- [ ] **H3 · Clip `verschieben` «Den Knick verschieben»: Ton «mit plus v nach oben», Bild fährt nach unten (v = −3).** → v = +3 im Bild.
+
+### MITTEL
+- [ ] M1 · «An den Nullstellen von f entstehen Knicke» (Festhalten 3, Clip `umklappen` Knicke/Merke, Merkbild Kontrolle): Gegenbeispiel aus Sim 3, \(f = x^2\) (Nullstelle 0, kein Knick). → «wo f das Vorzeichen wechselt». **Themenseite 3.6** (Z. 421, Lückentext) gleich ungenau — melden, nicht still angleichen.
+- [ ] M2 · «Links der Grenze das Vorzeichen drehen» (Kontrollclip `abschnittsweise` Merke; **Themenseite** Z. 483/614): falsch bei negativer Steigung (\(|4 - 2x|\)). → «wo das Argument negativ ist».
+- [ ] M3 · Sim 3: Live-Formel «x.5» bei q = 0.5 (`replace(' + 0', '')`); Gerade m = 0, q < 0 meldet «nichts umzuklappen», obwohl alles hochklappt.
+- [ ] M4 · Leistenziele mit einem Schalterklick erfüllt: Sim 3 A5 (q = 1 ≥ 0), Sim 5 A5 (c = 3). Leistenziele = Clip-Beispiele: Sim 3 A2 (Knick 2), A4 (±2), Sim 5 A4/A5 (\(|x^2-4|\), c = 4 bzw. 3), A2 (\(|x - 1| = 2\) = Kontrollfrage), Sim 2 A4 = GT G2.
+- [ ] M5 · Sperrliste: `bg`/`bu`-Einträge mit falschem Vorzeichen (`bg|1|-1|3` statt `bg|1|1|3` usw.); `umklapp-parabel` würfelt nur noch 3 Aufgaben; fehlend `bg|1|2|3`, `bu|1|2|3|le`, `wa|-1|2`, `fa|2|-1`.
+- [ ] M6 · GT G4(a) verlangt Nullstellen/Scheitel von \(x^2 - 2x - 3\) — nirgends geübt, Vortest prüft es nicht. Ebenso Nullstellen von \(a|x-u|+v\) in 2b/G2 vor Kap. 5 ohne gezeigten Weg.
+- [ ] M7 · GT prüft Kapitelziele nur teilweise: K1 «skizzieren» und «abschnittsweise definieren» (G1), K4 «abschnittsweise lesen / Wanne zerlegen» (G5b nur Werte). GT wiederholt: G2 = Sim 2 A4, G7 \(|x^2-1|\) = 3b(a)/Kontrollfrage, G1(b) = Kontrollfrage; G6 (a) und (b) mit denselben Schnittstellen.
+- [ ] M8 · Raster: G1 Folgezahlen falsch («11 bzw. 17» → 9 bzw. 11, beide: 17); G4 Folgefehler aus falschen Nullstellen ungeregelt; G3 «begründe» und G6 «Skizze» ohne Rasterpunkt; G7 algebraische Begründung ohne Skizze ungeregelt; G1(c) (E) ohne möglichen Weg.
+- [ ] M9 · Übungen: Randfälle fehlen (`betrag-gleichung` nie c = 0 / c < 0, `betrag-ungleichung` nie < / >); gleichwertige Eingaben abgelehnt (`umklapp-parabel` −w, Reihenfolge); `v-aus-graph` Ablesestellen nicht beschriftet.
+
+### NIEDRIG
+- [ ] Clips: Rückmeldung «Ein Betrag macht immer einen Knick» (Kontrolle verschieben F4) widerspricht Kap. 3; Merke «Vorzeichen aus dem Betrag umgekehrt» unscharf (gilt nicht für v); «Wie viele?» ohne c = 0; Falle (−3 | −3) ausserhalb des Fensters; u, v im Clip blau, in der Sim grau; «links der Wanne» → «links des Bodens»; Szene «Ungleichung» zeigt das Lösungsstück vor dem Satz.
+- [ ] Seite: 1e Ungleichung vor Kap. 5 → «wo liegt das V unter y = 3»; Festhalten 4 «aussen steigen die Äste mit ±2» → −2 links, +2 rechts; m doppelt (Bezugspunkt / Steigung); Abstand orange (orange = Lösungen); «dünn gezeichnete Zielkurve» → blass; Sim 4 bei a = b Lücke x = a; Minigraf 3c Gitter 0.75; Kap. 0 Kopf «SP 2.1» statt 2.2c; `betrag-wert` «+ 0»; `abschnittsweise` ohne Diagnose «nur eine Zahl umgedreht».
+- [ ] PDF: G3-Kurve durch Achsenbeschriftungen; G4(a) wenig Schreibraum, G6/G7 ohne KS.
