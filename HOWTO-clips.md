@@ -277,6 +277,17 @@ nur den Kreis. Die Kurve muss dann bei \(x = 0\) beginnen (`von`), sonst liegt s
 Für Sinuskurven das Bild breit statt quadratisch setzen (1640 × 480 unter dem Text).
 Vorbild: `scripts/lp/trigonometrische-funktionen/clips.py`.
 
+**Betragskurven** (seit 05.10.2026): `"betrag": true` liest die Stützpunkte als `[t, a, u, v]` für
+\(y = a\,|x - u| + v\) — gezeichnet aus drei Punkten (Rand, Knick, Rand), der Knick bleibt scharf.
+`startpunkt` ist der Knickpunkt \((u \mid v)\) mit Live-Beschriftung, `asymptoten` die
+Symmetrieachse \(x = u\), `marken` wie oben. Für \(|f(x)|\) mit krummem \(f\) eine feste `formel`
+mit `abs(…)` nehmen. Vorbild: `scripts/lp/betragsfunktionen/clips.py`.
+
+**Klickfragen brauchen ein Bild mit Fenster.** Der Abspieler sucht für eine Klickfrage das
+sichtbare Bild mit `[data-fenster]` — das tragen nur bewegte Kurven und Geraden. Zeigt die
+Szene nur feste Kurven (`formel`), wird die Frage **stumm übersprungen**; `pruef-fragen` meldet
+es als «Durchlauf: jede Frage genau einmal». Abhilfe: `"tippbar": true` im `graf`.
+
 **`"stufen": true`** rundet \(p\) beim Überblenden auf ganze Zahlen. Ohne das entstünde
 zwischen \(x^2\) und \(x^3\) kurz ein gebrochener Exponent — und der löscht den linken Ast
 mitten in der Bewegung, weil es \((-2)^{2.5}\) nicht gibt. Wo es keinen Wert gibt (Pol,

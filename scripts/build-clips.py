@@ -600,6 +600,8 @@ def graf_svg(el, theme):
             # "exponential": true / "logarithmus": true (seit 04.10.2026) lesen die Stuetzpunkte
             # als [t, c, a, v] fuer y = c*a^x + v bzw. y = c*log_a(x) + v; Begleiter wie unten
             # (asymptoten, startpunkt = (0 | c + v) bzw. (1 | v), marken, spiegel).
+            # "betrag": true (seit 05.10.2026) liest die Stuetzpunkte als [t, a, u, v] fuer
+            # y = a*|x - u| + v; startpunkt = Knickpunkt (u | v), asymptoten = Symmetrieachse x = u.
             # "trig": "sin" / "tan" (seit 05.10.2026) liest die Stuetzpunkte als [t, a, b, u, v]
             # fuer y = a*sin(b(x-u)) + v bzw. a*tan(b(x-u)) + v. "asymptoten" zeichnet bei sin die
             # Mittellinie y = v, bei tan die Polgeraden; "kreis" den Einheitskreis mit Laeufer
@@ -613,7 +615,7 @@ def graf_svg(el, theme):
                          % (entschaerfen(json.dumps(kv["bewegung"])), kid, x0, x1, y0, y1, b, h, rand,
                             1 if kv.get("stufen") else 0, 1 if kv.get("polynom") else 0,
                             "e" if kv.get("exponential") else "l" if kv.get("logarithmus") else
-                            {"sin": "s", "tan": "t"}.get(kv.get("trig"), ""),
+                            ("v" if kv.get("betrag") else {"sin": "s", "tan": "t"}.get(kv.get("trig"), "")),
                             kv.get("von", x0), kv.get("bis", x1),
                             farbe, kv.get("dicke", 5),
                             'stroke-dasharray="14 10"' if kv.get("gestrichelt") else ""))
@@ -736,6 +738,11 @@ def graf_svg(el, theme):
                          'text-anchor="%s">%s</text>'
                          % (tx, ty, farbe, pt.get("anker", "start"),
                             entschaerfen(pt["beschriftung"])))
+    # "tippbar": true (seit 05.10.2026) — ein leerer Pfad mit dem Fenster, damit eine Klickfrage
+    # das Bild auch dann findet, wenn es nur feste Kurven zeigt. Der Abspieler sucht fuer
+    # Klickfragen das sichtbare Bild mit [data-fenster]; bisher trugen das nur bewegte Kurven.
+    if el.get("tippbar"):
+        teile.append('<path data-fenster="%g,%g,%g,%g,%d,%d,%d" d="" fill="none"/>' % (x0, x1, y0, y1, b, h, rand))
     teile.extend(achsnamen)
     teile.append("</svg>")
     return "".join(teile)
@@ -981,6 +988,7 @@ function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
   const Z = bewZustand(T.k, t - T.t0);
   if (T.poly) return bewegePolynom(T, Z, px, py, x0, x1, y0, y1);
   if (T.el === 's' || T.el === 't') return bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1);
+  if (T.el === 'v') return bewegeBetrag(T, Z, px, py, x0, x1, y0, y1);
   if (T.el) return bewegeExpLog(T, Z, px, py, x0, x1, y0, y1);
   const [a, p0, u, v] = Z;
   const p = T.stufen ? Math.round(p0) : p0;
@@ -1087,6 +1095,40 @@ function bewegeExpLog(T, Z, px, py, x0, x1, y0, y1) {
     } else if (g.classList.contains('bew-km')) {
       const x = parseFloat(g.dataset.x), y = f(x);
       if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Betragskurve y = a*|x - u| + v (el 'v'); Z = [a, u, v]. Begleiter: Knickpunkt (startpunkt),
+// Symmetrieachse x = u (asymptoten), Marken.
+function bewegeBetrag(T, Z, px, py, x0, x1, y0, y1) {
+  const [a, u, v] = Z;
+  const f = x => a * Math.abs(x - u) + v;
+  const vx = parseFloat(T.p.dataset.von), bx = parseFloat(T.p.dataset.bis);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  // Drei Punkte genügen: linker Rand, Knick, rechter Rand — der Knick bleibt scharf.
+  const xs = [a0, Math.min(Math.max(u, a0), a1), a1];
+  T.p.setAttribute('d', a1 > a0 ? xs.map((x, i) => (i ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(f(x)).toFixed(1)).join('') : '');
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    // Unter dem Knick eines V (a > 0) ist Platz, über dem Knick eines Dachs (a < 0).
+    tx.setAttribute('y', py(y) + (Math.abs(x - u) < 1e-9 ? (a > 0 ? 44 : -22) : (a > 0 ? -22 : 44)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      g.querySelector('.bew-ka-s').setAttribute('d', u >= x0 && u <= x1 ? 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1) : '');
+      g.querySelector('.bew-ka-w').setAttribute('d', '');
+    } else if (g.classList.contains('bew-ks')) {
+      setze(g, u, v); beschrifte(g, u, v, '(' + bewZahl(u) + ' | ' + bewZahl(v) + ')');
+    } else if (g.classList.contains('bew-km')) {
+      const x = parseFloat(g.dataset.x), y = f(x);
       setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
     }
   }

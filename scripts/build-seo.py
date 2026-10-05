@@ -162,6 +162,14 @@ SEITEN = {
    titel='Leitprogramm Trigonometrische Funktionen — Einheitskreis, Periode, Symmetrie, Parameter',
    beschreibung='Leitprogramm zu den trigonometrischen Funktionen nach RLP SP 3.5: Sinus und Cosinus vom Einheitskreis zur Kurve, Periode und Symmetrie, die Tangenskurve mit ihren Polen, Amplitude, Periode und Verschiebung von y = a·sin(b(x − u)) + v und alle Lösungen von sin x = c über die Symmetrie — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Trigonometrische Funktionen', 'Sinusfunktion', 'Einheitskreis', 'Periode', 'Leitprogramm']),
+ 'leitprogramme/betragsfunktionen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
+   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
+   noindex=True,
+   titel='Leitprogramm Betragsfunktionen — Knick, Umklappen, abschnittsweise, Gleichungen',
+   beschreibung='Leitprogramm zu den Betragsfunktionen (Teilgebiet 3.6, Ergänzung TALS): der Betrag als Abstand, das V mit Knickpunkt, y = a·|x − u| + v, das Umklapp-Prinzip für |f(x)|, Betragsterme abschnittsweise schreiben und Betragsgleichungen und -ungleichungen grafisch und rechnerisch lösen — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Betragsfunktion', 'Betragsgleichung', 'abschnittsweise definierte Funktion', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',
