@@ -816,7 +816,7 @@ Skill `/lp-pruefung leitprogramme/betragsfunktionen.html`, drei Agenten (Seite, 
 `e8ef159` (unverlinkt, noindex, nicht live). `seite.*`/`clips.py` = `scripts/lp/betragsfunktionen/`,
 `GT`/`BP` = `downloads/leitprogramme/betragsfunktionen/{gesamttest,bewertungspaket}.tex`.
 
-**Behoben 05.10.2026** (mit Trigonometrie: H1 Leiste, H2 Kreisfarbe — Fragetöne von 4 Kontrollclips neu). Betrag: 5 Clips mit neuem Ton, alle Fragetöne neu, GT G1/G2/G4–G7 überarbeitet, Raster neu, Vortest 0d (Parabel), neue Aufgabe 1f. Die beiden Ungenauigkeiten der **Themenseite 3.6** (Knicke an Nullstellen; «links» das Vorzeichen drehen) sind gemeldet, nicht geändert. Abnahme offen.
+**Behoben 05.10.2026** (mit Trigonometrie: H1 Leiste, H2 Kreisfarbe — Fragetöne von 4 Kontrollclips neu). Betrag: 5 Clips mit neuem Ton, alle Fragetöne neu, GT G1/G2/G4–G7 überarbeitet, Raster neu, Vortest 0d (Parabel), neue Aufgabe 1f. Die beiden Ungenauigkeiten der **Themenseite 3.6** (Knicke an Nullstellen; «links» das Vorzeichen drehen) auf Auftrag angeglichen (05.10.2026). Leitprogramm freigeschaltet. Abnahme offen.
 
 **Rechenfehler: keine** in Vortest, 1a–5e, Festhalten, 25 Kontrollfragen und GT G1–G7 (Raster G1 nennt
 falsche Folgezahlen, siehe M8). Werkzeuge grün (`pruef-uebungen` 10 × 2000, `pruef-leiste` 5, `pruef-fragen` 5).

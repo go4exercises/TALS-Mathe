@@ -333,6 +333,8 @@ def seiten_aus_navjs(root):
                                   'Leitprogramm Exponential- und Logarithmusfunktionen', 'thema'),
                                  ('leitprogramme/trigonometrische-funktionen.html', '▤',
                                   'Leitprogramm Trigonometrische Funktionen', 'thema'),
+                                 ('leitprogramme/betragsfunktionen.html', '▤',
+                                  'Leitprogramm Betragsfunktionen', 'thema'),
                                  ('leitprogramme/uebungspruefung-1.html', '▤',
                                   'Übungsprüfung 1', 'thema'),
                                  ('leitprogramme/trigo2.html', '▤',

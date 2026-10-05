@@ -164,9 +164,6 @@ SEITEN = {
    themen=['Mathematik', 'Trigonometrische Funktionen', 'Sinusfunktion', 'Einheitskreis', 'Periode', 'Leitprogramm']),
  'leitprogramme/betragsfunktionen.html': dict(
    typ='article', lrt='Leitprogramm',
-   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
-   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
-   noindex=True,
    titel='Leitprogramm Betragsfunktionen — Knick, Umklappen, abschnittsweise, Gleichungen',
    beschreibung='Leitprogramm zu den Betragsfunktionen (Teilgebiet 3.6, Ergänzung TALS): der Betrag als Abstand, das V mit Knickpunkt, y = a·|x − u| + v, das Umklapp-Prinzip für |f(x)|, Betragsterme abschnittsweise schreiben und Betragsgleichungen und -ungleichungen grafisch und rechnerisch lösen — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Betragsfunktion', 'Betragsgleichung', 'abschnittsweise definierte Funktion', 'Leitprogramm']),
