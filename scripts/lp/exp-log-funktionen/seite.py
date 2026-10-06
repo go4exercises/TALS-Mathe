@@ -222,9 +222,9 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 14, [
      r'<p>(1) → C, (2) → A, (3) → D, (4) → B.</p><p class="komm">Zuerst die Richtung: Steigende Kurven haben eine Basis grösser als 1. Dann die Steilheit: Bei \(x = 1\) steht die Basis — \(3\) liegt höher als \(1.5\), \(\tfrac13\) tiefer als \(\tfrac23\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini" data-e="1,0.3333333333333333,0" data-fenster="-3,3,-1,5" data-titel="A"></svg><svg class="mini" data-e="1,0.6666666666666666,0" data-fenster="-3,3,-1,5" data-titel="B"></svg><svg class="mini" data-e="1,3,0" data-fenster="-3,3,-1,5" data-titel="C"></svg><svg class="mini" data-e="1,1.5,0" data-fenster="-3,3,-1,5" data-titel="D"></svg></div>'),
     ('1b', 3, r'\(f(x) = 4^x\): Berechne ohne Taschenrechner \(f(-1)\), \(f(0.5)\) und \(f(1.5)\).',
-     r'<p>\(f(-1) = \tfrac14\) · \(f(0.5) = \sqrt{4} = 2\) · \(f(1.5) = \left(\sqrt{4}\right)^3 = 8\).</p><p class="komm">Ein halber Exponent ist eine Quadratwurzel (Teilgebiet 1.2).</p>', ''),
-    ('1c', 3, r'Bestimme die Basis \(a\) so, dass \(y = a^x\) durch den Punkt geht: \(P(2 \mid 25)\) · \(Q(-2 \mid 16)\) · \(R\left(\tfrac32 \,\middle|\, 64\right)\).',
-     r'<p>\(a^2 = 25 \Rightarrow a = 5\) · \(a^{-2} = 16 \Rightarrow a^2 = \tfrac{1}{16} \Rightarrow a = \tfrac14\) · \(a^{3/2} = 64 \Rightarrow a = 64^{2/3} = \left(\sqrt[3]{64}\right)^2 = 16\).</p><p class="komm">Immer nur die positive Lösung: Die Basis ist positiv.</p>', ''),
+     r'<p>\(f(-1) = \tfrac14\); \(f(0.5) = \sqrt{4} = 2\); \(f(1.5) = \left(\sqrt{4}\right)^3 = 8\).</p><p class="komm">Ein halber Exponent ist eine Quadratwurzel (Teilgebiet 1.2).</p>', ''),
+    ('1c', 3, r'Bestimme die Basis \(a\) so, dass \(y = a^x\) durch den Punkt geht: \(P(2 \mid 25)\); \(Q(-2 \mid 16)\); \(R\left(\tfrac32 \,\middle|\, 64\right)\).',
+     r'<p>\(a^2 = 25 \Rightarrow a = 5\); \(a^{-2} = 16 \Rightarrow a^2 = \tfrac{1}{16} \Rightarrow a = \tfrac14\); \(a^{3/2} = 64 \Rightarrow a = 64^{2/3} = \left(\sqrt[3]{64}\right)^2 = 16\).</p><p class="komm">Immer nur die positive Lösung: Die Basis ist positiv.</p>', ''),
     ('1d', 3, r'Begründe: (a) Warum hat \(y = a^x\) keine Nullstelle? (b) Warum schliesst man die Basen \(a = 1\), \(a = 0\) und \(a \lt 0\) aus?',
      r'<p>(a) Eine positive Zahl, beliebig oft mit sich multipliziert, als Kehrwert oder Wurzel genommen, bleibt positiv: \(a^x \gt 0\) für alle \(x\).</p><p>(b) \(a = 1\) gibt die konstante Funktion \(y = 1\) — kein Wachstum, kein Zerfall. \(0^x\) ist für \(x \le 0\) nicht definiert. Bei \(a \lt 0\) gibt es Ausdrücke wie \((-2)^{0.5}\) nicht.</p>', ''),
     ('1e', 2, r'Skizziere \(y = 4^x\) und \(y = \left(\tfrac14\right)^x\) für \(-2 \le x \le 2\) in <em>ein</em> Koordinatensystem — mit je drei Stützpunkten und der Asymptote.',
@@ -270,8 +270,8 @@ fest2 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf2 = test('t2', 'Aufgaben · Kapitel 2', 15, [
-    ('2a', 3, r'Gib den Wachstumsfaktor an: Zunahme um \(8\,\%\) · Abnahme um \(15\,\%\). Und umgekehrt: Um wie viel Prozent ändert sich eine Grösse mit dem Faktor \(0.97\)?',
-     r'<p>\(1.08\) · \(0.85\) · Abnahme um \(3\,\%\).</p>', ''),
+    ('2a', 3, r'Gib den Wachstumsfaktor an: Zunahme um \(8\,\%\); Abnahme um \(15\,\%\). Und umgekehrt: Um wie viel Prozent ändert sich eine Grösse mit dem Faktor \(0.97\)?',
+     r'<p>\(1.08\); \(0.85\); Abnahme um \(3\,\%\).</p>', ''),
     ('2b', 4, r'Ein Kapital von \(2000\) CHF wird zu \(5\,\%\) Jahreszins angelegt, der Zins wird mitverzinst. (a) Stell das Modell \(K(n)\) auf (\(n\) in Jahren). (b) Berechne \(K(2)\). (c) Begründe, warum der Zinsbetrag jedes Jahr grösser wird.',
      r'<p>(a) \(K(n) = 2000 \cdot 1.05^{n}\). (b) \(K(2) = 2000 \cdot 1.1025 = 2205\) CHF.</p><p>(c) Verzinst wird immer das ganze Kapital samt den bisherigen Zinsen — \(5\,\%\) einer grösseren Zahl sind mehr.</p>', ''),
     ('2c', 3, r'Iod-131 hat eine Halbwertszeit von \(8\) Tagen. Stell das Modell \(m(t)\) für \(120\) mg auf (\(t\) in Tagen) und berechne, wie viel nach \(24\) Tagen übrig ist.',
@@ -321,12 +321,12 @@ fest3 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf3 = test('t3', 'Aufgaben · Kapitel 3', 11, [
-    ('3a', 3, r'Schreib zur Basis \(2\): \(16^x\) · \(\left(\tfrac18\right)^x\) · \(\left(\sqrt{2}\right)^x\).',
-     r'<p>\(2^{4x}\) · \(2^{-3x}\) · \(2^{0.5x}\).</p><p class="komm">Immer die Basis als Potenz von 2 schreiben: \(16 = 2^4\), \(\tfrac18 = 2^{-3}\), \(\sqrt2 = 2^{1/2}\).</p>', ''),
+    ('3a', 3, r'Schreib zur Basis \(2\): \(16^x\); \(\left(\tfrac18\right)^x\); \(\left(\sqrt{2}\right)^x\).',
+     r'<p>\(2^{4x}\); \(2^{-3x}\); \(2^{0.5x}\).</p><p class="komm">Immer die Basis als Potenz von 2 schreiben: \(16 = 2^4\), \(\tfrac18 = 2^{-3}\), \(\sqrt2 = 2^{1/2}\).</p>', ''),
     ('3b', 3, r'(a) Schreib \(3^x\) zur Basis \(e\). (b) Schreib \(e^{(\ln 5)\,x}\) und \(e^{-x}\) als \(c^x\).',
-     r'<p>(a) \(3 = e^{\ln 3}\), also \(3^x = e^{(\ln 3)\,x}\) (\(\ln 3 \approx 1.10\)).</p><p>(b) \(5^x\) · \(\left(\tfrac{1}{e}\right)^x\).</p><p class="komm">\(e^{\ln c} = c\): Die Exponentialfunktion und der natürliche Logarithmus heben sich auf.</p>', ''),
-    ('3c', 2, r'Wachstum oder Zerfall? \(N(t) = 20 \cdot e^{-0.3t}\) · \(N(t) = 8 \cdot 0.8^{-t}\).',
-     r'<p>Zerfall · Wachstum, denn \(0.8^{-t} = \left(\tfrac{1}{0.8}\right)^{t} = 1.25^{t}\).</p>', ''),
+     r'<p>(a) \(3 = e^{\ln 3}\), also \(3^x = e^{(\ln 3)\,x}\) (\(\ln 3 \approx 1.10\)).</p><p>(b) \(5^x\); \(\left(\tfrac{1}{e}\right)^x\).</p><p class="komm">\(e^{\ln c} = c\): Die Exponentialfunktion und der natürliche Logarithmus heben sich auf.</p>', ''),
+    ('3c', 2, r'Wachstum oder Zerfall? \(N(t) = 20 \cdot e^{-0.3t}\); \(N(t) = 8 \cdot 0.8^{-t}\).',
+     r'<p>Zerfall; Wachstum, denn \(0.8^{-t} = \left(\tfrac{1}{0.8}\right)^{t} = 1.25^{t}\).</p>', ''),
     ('3d', 3, r'Warum liegt \(e^x\) für \(x \gt 0\) zwischen \(2^x\) und \(3^x\) — und wie ist es für \(x \lt 0\)?',
      r'<p>Für \(x \gt 0\) wächst \(a^x\) mit der Basis: \(2 \lt e \lt 3\), also \(2^x \lt e^x \lt 3^x\).</p><p>Für \(x \lt 0\) kehrt sich die Reihenfolge um, denn dort ist \(a^x = \frac{1}{a^{-x}}\): \(3^x \lt e^x \lt 2^x\). Bei \(x = 0\) gehen alle durch \((0 \mid 1)\). Im Bild: \(e^x\) durchgezogen, \(2^x\) und \(3^x\) gestrichelt (für \(x \gt 0\) ist \(3^x\) die obere).</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-e="1,2.718281828459045,0;1,2,0;1,3,0" data-fenster="-2,2,-0.5,5" data-punkte="0,1"></svg></div>'),
@@ -424,8 +424,8 @@ fest5 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf5 = test('t5', 'Aufgaben · Kapitel 5', 16, [
-    ('5a', 3, r'Berechne ohne Taschenrechner: \(\log_2 \tfrac18\) · \(\lg 1000\) · \(\log_5 \sqrt{5}\).',
-     r'<p>\(-3\) · \(3\) · \(\tfrac12\).</p><p class="komm">\(2^{-3} = \tfrac18\), \(10^3 = 1000\), \(5^{1/2} = \sqrt5\).</p>', ''),
+    ('5a', 3, r'Berechne ohne Taschenrechner: \(\log_2 \tfrac18\); \(\lg 1000\); \(\log_5 \sqrt{5}\).',
+     r'<p>\(-3\); \(3\); \(\tfrac12\).</p><p class="komm">\(2^{-3} = \tfrac18\), \(10^3 = 1000\), \(5^{1/2} = \sqrt5\).</p>', ''),
     ('5b', 4, r'Bestimme die Umkehrfunktion von \(f(x) = 3^x + 1\). Gib ihre Definitionsmenge, ihre Asymptote und ihre Nullstelle an.',
      r'<p>\(y = 3^x + 1 \Rightarrow 3^x = y - 1 \Rightarrow x = \log_3(y - 1)\); getauscht: \(f^{-1}(x) = \log_3(x - 1)\).</p><p>\(D = \,]1;\, \infty[\), Asymptote \(x = 1\), Nullstelle: \(x - 1 = 1 \Rightarrow x_0 = 2\).</p>', ''),
     ('5c', 4, r'Löse ohne Taschenrechner: (a) \(3 \cdot 3^{t} = 243\) (b) \(100 \cdot \left(\tfrac12\right)^{t/3} = 12.5\).',
@@ -453,12 +453,12 @@ k0 = '''
       ''' + clipkarte('s1-3-logarithmus-begriff', 'Logarithmen: der gesuchte Exponent', '0:59') + '''
       ''' + clipkarte('s3-2b-anim-spiegelung', 'Spiegeln an y = x: die Koordinaten tauschen', '0:53') + '''
 ''' + test('t0', 'Vortest', 10, [
-    ('0a', 3, r'Berechne ohne Taschenrechner: \(2^{-3}\) · \(8^{2/3}\) · \(\left(2^{3}\right)^{2}\).',
-     r'<p>\(\tfrac18\) · \(\left(\sqrt[3]{8}\right)^2 = 4\) · \(2^6 = 64\).</p><p class="komm">Falsch? Negativer Exponent = Kehrwert, gebrochener Exponent = Wurzel. <a href="../schwerpunkt/s1-2-potenzen.html">Teilgebiet 1.2, Potenzen</a></p>', ''),
-    ('0b', 3, r'Berechne: \(\log_2 16\) · \(\lg 0.001\) · \(\ln e^{2}\).',
-     r'<p>\(4\) · \(-3\) · \(2\) — \(\ln\) ist der Logarithmus zur Basis \(e \approx 2.718\).</p><p class="komm">Falsch? Der Logarithmus ist der gesuchte Exponent: \(2^{?} = 16\). Der Clip oben zeigt es. <a href="../schwerpunkt/s1-3-logarithmen.html">Teilgebiet 1.3, Logarithmen</a></p>', ''),
+    ('0a', 3, r'Berechne ohne Taschenrechner: \(2^{-3}\); \(8^{2/3}\); \(\left(2^{3}\right)^{2}\).',
+     r'<p>\(\tfrac18\); \(\left(\sqrt[3]{8}\right)^2 = 4\); \(2^6 = 64\).</p><p class="komm">Falsch? Negativer Exponent = Kehrwert, gebrochener Exponent = Wurzel. <a href="../schwerpunkt/s1-2-potenzen.html">Teilgebiet 1.2, Potenzen</a></p>', ''),
+    ('0b', 3, r'Berechne: \(\log_2 16\); \(\lg 0.001\); \(\ln e^{2}\).',
+     r'<p>\(4\); \(-3\); \(2\) — \(\ln\) ist der Logarithmus zur Basis \(e \approx 2.718\).</p><p class="komm">Falsch? Der Logarithmus ist der gesuchte Exponent: \(2^{?} = 16\). Der Clip oben zeigt es. <a href="../schwerpunkt/s1-3-logarithmen.html">Teilgebiet 1.3, Logarithmen</a></p>', ''),
     ('0c', 2, r'Ein Preis von \(80\) CHF steigt um \(25\,\%\). Wie hoch ist er danach? Und wie hoch wäre er nach einer Senkung um \(25\,\%\)?',
-     r'<p>\(80 \cdot 1.25 = 100\) CHF · \(80 \cdot 0.75 = 60\) CHF.</p><p class="komm">Prozentuale Änderung heisst: mit einem Faktor multiplizieren — genau das trägt Kapitel 2.</p>', ''),
+     r'<p>\(80 \cdot 1.25 = 100\) CHF; \(80 \cdot 0.75 = 60\) CHF.</p><p class="komm">Prozentuale Änderung heisst: mit einem Faktor multiplizieren — genau das trägt Kapitel 2.</p>', ''),
     ('0d', 2, r'Der Punkt \((2 \mid 5)\) liegt auf dem Graphen einer umkehrbaren Funktion \(f\). Welcher Punkt liegt auf dem Graphen von \(f^{-1}\)?',
      r'<p>\((5 \mid 2)\) — beim Spiegeln an \(y = x\) tauschen die Koordinaten.</p><p class="komm">Falsch? Der zweite Clip oben. Genau diese Spiegelung trägt Kapitel 5.</p>', ''),
 ]) + '''
@@ -489,7 +489,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1, G2 → 1 · G3, G4 → 2 · G5 → 3 · G6 → 4 · G7, G8 → 5</p>
+          <p>Aufgabe → Kapitel: G1, G2 → 1; G3, G4 → 2; G5 → 3; G6 → 4; G7, G8 → 5</p>
         </div>
       </div>
     </section>'''
@@ -556,24 +556,12 @@ oben = '''<div id="nav-root"></div>
     <ol>
       <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
     </ol>
-    <p class="lekt">Lektion 1</p>
+    <p class="lekt">Kapitel</p>
     <ol>
       <li><a href="#k1"><span class="nr">1</span><span>Exponentialfunktion</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 2</p>
-    <ol>
       <li><a href="#k2"><span class="nr">2</span><span>Wachstum und Zerfall</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 3</p>
-    <ol>
       <li><a href="#k3"><span class="nr">3</span><span>e-Funktion</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 4</p>
-    <ol>
       <li><a href="#k4"><span class="nr">4</span><span>Sättigung</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 5</p>
-    <ol>
       <li><a href="#k5"><span class="nr">5</span><span>Logarithmusfunktion</span></a></li>
     </ol>
     <p class="lekt">Abschluss</p>
@@ -623,12 +611,13 @@ unten = '''
 </div>
 </div>
 '''
+# Kapitel = Lektion: keine Lektionsbänder mehr (Abnahme 06.10.2026).
 band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
 # Zeiten (04.10.2026): Vorwissen 10 (vorab) · K1 40 · K2 45 · K3 40 · K4 35 · K5 45 · Gesamttest 30 = 245 min
-body = (oben + band('Vorab', 'Vorwissen') + k0 + band(1, 'Die Exponentialfunktion') + k1
-        + band(2, 'Wachstum und Zerfall') + k2 + band(3, 'e-Funktion und Basiswechsel') + k3
-        + band(4, 'Sättigung') + k4 + band(5, 'Die Logarithmusfunktion') + k5
-        + band('Abschluss', 'Gesamttest') + gt + unten)
+body = (oben + k0 + k1
+        + k2 + k3
+        + k4 + k5
+        + gt + unten)
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(ZIEL, 'w').write(seite)
 print('geschrieben', len(seite.splitlines()), 'Zeilen')

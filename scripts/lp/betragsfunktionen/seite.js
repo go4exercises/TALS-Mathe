@@ -218,7 +218,7 @@
       K.punkt(x, s.y, 'p-lauf', '(' + z(x) + ' | ' + z(s.y) + ')', x > 2 ? -8 : 8, -8, x > 2 ? 'end' : 'start');
       var rechts = x >= m;
       var innen = m === 0 ? 'x' : 'x ' + vor(-m);
-      rolle(fig, 'formel').innerHTML = 'y = ' + sp('tx-blau', betragT(m)) + ' &nbsp;·&nbsp; x = ' + z(x)
+      rolle(fig, 'formel').innerHTML = 'y = ' + sp('tx-blau', betragT(m)) + '; &nbsp;x = ' + z(x)
         + (rechts ? ' ≥ u: ' + sp('tx-gruen', 'y = ' + innen) : ' &lt; u: ' + sp('tx-gruen', 'y = −(' + innen + ')'))
         + ' = ' + z(s.y);
       pruefen();
@@ -256,8 +256,8 @@
       K.kurve(function(x){ return s.a * Math.abs(x - s.u) + s.v; }, 'kurve');
       K.punkt(s.u, s.v, 'p-pkt', '(' + z(s.u) + ' | ' + z(s.v) + ')', 8, s.a > 0 ? 16 : -8);
       rolle(fig, 'formel').innerHTML = 'y = ' + sp('tx-blau', z(s.a)) + ' · ' + betragT(s.u) + (s.v === 0 ? '' : ' ' + vor(s.v))
-        + '<br><span class="nb">Knick (' + z(s.u) + ' | ' + z(s.v) + ')</span> &nbsp;·&nbsp; <span class="nb">Steigung links ' + z(-s.a) + ', rechts ' + z(s.a) + '</span>'
-        + ' &nbsp;·&nbsp; <span class="nb">' + (s.a > 0 ? 'V (nach oben offen)' : 'Dach (nach unten offen)') + '</span>';
+        + '<br><span class="nb">Knick (' + z(s.u) + ' | ' + z(s.v) + ')</span>; &nbsp;<span class="nb">Steigung links ' + z(-s.a) + ', rechts ' + z(s.a) + '</span>'
+        + '; &nbsp;<span class="nb">' + (s.a > 0 ? 'V (nach oben offen)' : 'Dach (nach unten offen)') + '</span>';
       pruefen();
     }
     pruefen = Leiste(fig, [
@@ -300,8 +300,8 @@
       var rest = s.q === 0 ? '' : ' ' + vor(s.q);
       var fT = s.par ? 'x²' + rest : (s.m === 0 ? z(s.q) : (s.m === 1 ? '' : s.m === -1 ? '−' : z(s.m)) + 'x' + rest);
       var knick = s.nst.length && !(s.par && s.q === 0);    // x²: Nullstelle ohne Vorzeichenwechsel, kein Knick
-      rolle(fig, 'formel').innerHTML = 'f(x) = ' + fT + ' (gestrichelt) &nbsp;·&nbsp; y = ' + sp('tx-blau', '|f(x)|')
-        + ' &nbsp;·&nbsp; ' + (knick ? s.nst.length + (s.nst.length === 1 ? ' Knick' : ' Knicke')
+      rolle(fig, 'formel').innerHTML = 'f(x) = ' + fT + ' (gestrichelt); &nbsp;y = ' + sp('tx-blau', '|f(x)|')
+        + '; &nbsp;' + (knick ? s.nst.length + (s.nst.length === 1 ? ' Knick' : ' Knicke')
           : s.par && s.q === 0 ? 'kein Knick — f berührt die x-Achse nur, wechselt das Vorzeichen nicht'
           : !s.par && s.m === 0 && s.q < 0 ? 'kein Knick — f liegt ganz unten und klappt als Ganzes hoch'
           : 'kein Knick — nichts umzuklappen');
@@ -342,8 +342,8 @@
       var term = function(m, q){ return m + (q === 0 ? '' : ' ' + vor(q)); }, nb = function(t){ return '<span class="nb">' + t + '</span>'; };
       rolle(fig, 'formel').innerHTML = 'y = ' + sp('tx-blau', betragT(s.a) + ' + ' + betragT(s.b))
         + '<br>' + nb(sp('tx-gruen', term('−2x', s.a + s.b)) + ' für x &lt; ' + z(s.lo))
-        + (s.h > 0 ? ' &nbsp;·&nbsp; ' + nb(sp('tx-gruen', z(s.h)) + ' für ' + z(s.lo) + ' ≤ x ≤ ' + z(s.hi)) : '')
-        + ' &nbsp;·&nbsp; ' + nb(sp('tx-gruen', term('2x', -(s.a + s.b))) + (s.h > 0 ? ' für x &gt; ' : ' für x ≥ ') + z(s.hi));
+        + (s.h > 0 ? '; &nbsp;' + nb(sp('tx-gruen', z(s.h)) + ' für ' + z(s.lo) + ' ≤ x ≤ ' + z(s.hi)) : '')
+        + '; &nbsp;' + nb(sp('tx-gruen', term('2x', -(s.a + s.b))) + (s.h > 0 ? ' für x &gt; ' : ' für x ≥ ') + z(s.hi));
       pruefen();
     }
     pruefen = Leiste(fig, [
@@ -384,8 +384,8 @@
       K.strecke(-6, s.c, 6, s.c, 'waagrechte');
       s.l.forEach(function(x, i){ K.punkt(x, s.c, 'p-lauf orange', zz(x), i < s.n / 2 ? -6 : 6, -8, i < s.n / 2 ? 'end' : 'start'); });
       var gl = (s.W ? '|x² − 4|' : betragT(s.u)) + (s.ug && !s.W ? ' ≤ ' : ' = ') + z(s.c);
-      rolle(fig, 'formel').innerHTML = sp('tx-blau', gl) + ' &nbsp;·&nbsp; ' + (s.n === 0 ? '<b>keine Lösung</b>' : s.n + (s.n === 1 ? ' Schnittstelle' : ' Schnittstellen'))
-        + (s.ug && !s.W ? (s.c > 0 ? ' &nbsp;·&nbsp; Lösung: ' + z(s.u - s.c) + ' ≤ x ≤ ' + z(s.u + s.c) : s.c === 0 ? ' &nbsp;·&nbsp; Lösung: x = ' + z(s.u) : '') : '');
+      rolle(fig, 'formel').innerHTML = sp('tx-blau', gl) + '; &nbsp;' + (s.n === 0 ? '<b>keine Lösung</b>' : s.n + (s.n === 1 ? ' Schnittstelle' : ' Schnittstellen'))
+        + (s.ug && !s.W ? (s.c > 0 ? '; &nbsp;Lösung: ' + z(s.u - s.c) + ' ≤ x ≤ ' + z(s.u + s.c) : s.c === 0 ? '; &nbsp;Lösung: x = ' + z(s.u) : '') : '');
       pruefen();
     }
     pruefen = Leiste(fig, [

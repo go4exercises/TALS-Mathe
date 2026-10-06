@@ -213,8 +213,8 @@
         K.punkt(x, sn, 'p-lauf', '(' + piT(x) + ' | ' + zz(sn) + ')', x > 5 ? -8 : 8, sn > 0 ? 16 : -8, x > 5 ? 'end' : 'start');
       }
       K.ppunkt(c.Px, c.Py, 'p-pkt');
-      rolle(fig, 'formel').innerHTML = 'x = ' + piT(x) + ' (' + grad(x) + '°) &nbsp;·&nbsp; P = (' + sp('tx-gruen', zz(cs)) + ' | ' + sp('tx-blau', zz(sn)) + ')'
-        + ' &nbsp;·&nbsp; ' + (s.cos ? sp('tx-gruen', 'cos x ' + (zz(cs).charAt(0) === '≈' ? '' : '= ') + zz(cs)) : sp('tx-blau', 'sin x ' + (zz(sn).charAt(0) === '≈' ? '' : '= ') + zz(sn)));
+      rolle(fig, 'formel').innerHTML = 'x = ' + piT(x) + ' (' + grad(x) + '°); &nbsp;P = (' + sp('tx-gruen', zz(cs)) + ' | ' + sp('tx-blau', zz(sn)) + ')'
+        + '; &nbsp;' + (s.cos ? sp('tx-gruen', 'cos x ' + (zz(cs).charAt(0) === '≈' ? '' : '= ') + zz(cs)) : sp('tx-blau', 'sin x ' + (zz(sn).charAt(0) === '≈' ? '' : '= ') + zz(sn)));
       pruefen();
     }
     pruefen = Leiste(fig, [
@@ -303,7 +303,7 @@
         K.punkt(x, s.t, 'p-lauf orange', '(' + piT(x) + ' | ' + zz(s.t) + ')', x > 5 ? -8 : 8, s.t > 0 ? 16 : -8, x > 5 ? 'end' : 'start');
       }
       K.ppunkt(c.Px, c.Py, 'p-pkt');
-      rolle(fig, 'formel').innerHTML = 'x = ' + piT(x) + ' (' + grad(x) + '°) &nbsp;·&nbsp; '
+      rolle(fig, 'formel').innerHTML = 'x = ' + piT(x) + ' (' + grad(x) + '°); &nbsp;'
         + (s.def ? sp('tx-orange', 'tan x ' + (zz(s.t).charAt(0) === '≈' ? '' : '= ') + zz(s.t)) + ' &nbsp;(' + sp('tx-blau', 'sin') + ' : ' + sp('tx-gruen', 'cos') + ')'
                  : sp('tx-orange', 'tan x nicht definiert') + ' — ' + sp('tx-gruen', 'cos x = 0'));
       pruefen();
@@ -346,8 +346,8 @@
       var bT = s.b === 1 ? '' : z(s.b);
       rolle(fig, 'formel').innerHTML = 'y = ' + sp('tx-blau', z(s.a)) + ' · sin(' + (s.k === 0 ? bT + 'x' : bT + (bT ? '(' + uT + ')' : uT)) + ')'
         + (s.v === 0 ? '' : (s.v > 0 ? ' + ' : ' − ') + z(Math.abs(s.v)))
-        + '<br><span class="nb">Amplitude ' + z(s.a) + '</span> &nbsp;·&nbsp; <span class="nb">Periode ' + (piBruch(2 * PI / s.b) ? piT(2 * PI / s.b) : zz(2 * PI / s.b)) + '</span>'
-        + ' &nbsp;·&nbsp; <span class="nb">Mittellinie y = ' + z(s.v) + '</span> &nbsp;·&nbsp; <span class="nb">W = [' + z(s.v - s.a) + '; ' + z(s.v + s.a) + ']</span>';
+        + '<br><span class="nb">Amplitude ' + z(s.a) + '</span>; &nbsp;<span class="nb">Periode ' + (piBruch(2 * PI / s.b) ? piT(2 * PI / s.b) : zz(2 * PI / s.b)) + '</span>'
+        + '; &nbsp;<span class="nb">Mittellinie y = ' + z(s.v) + '</span>; &nbsp;<span class="nb">W = [' + z(s.v - s.a) + '; ' + z(s.v + s.a) + ']</span>';
       pruefen();
     }
     pruefen = Leiste(fig, [
@@ -399,7 +399,7 @@
       K.strecke(-0.6, s.c, 6.9, s.c, 'waagrechte');
       s.l.forEach(function(x, i){ K.punkt(x, s.c, s.cos ? 'p-lauf gruen' : 'p-lauf', zz(x), i % 2 ? 8 : -8, s.c > 0.6 ? 16 : -8, i % 2 ? 'start' : 'end'); });
       var fn = s.cos ? sp('tx-gruen', 'cos x') : sp('tx-blau', 'sin x');
-      rolle(fig, 'formel').innerHTML = fn + ' = ' + z(s.c) + ' &nbsp;·&nbsp; ' + (s.n === 0 ? '<b>keine Lösung</b>' : s.n + (s.n === 1 ? ' Lösung' : ' Lösungen'))
+      rolle(fig, 'formel').innerHTML = fn + ' = ' + z(s.c) + '; &nbsp;' + (s.n === 0 ? '<b>keine Lösung</b>' : s.n + (s.n === 1 ? ' Lösung' : ' Lösungen'))
         + ' in [0; 2π]' + (s.n ? ': ' + s.l.map(function(x){ return 'x ' + (zz(x).charAt(0) === '≈' ? '' : '= ') + zz(x); }).join(', ') : '')
         + '<br>Symmetrieachse x = ' + piT(achse) + ' (gestrichelt)';
       pruefen();

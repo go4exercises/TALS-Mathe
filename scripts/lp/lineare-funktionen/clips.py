@@ -25,10 +25,12 @@ Farben im ganzen Leitprogramm — eine Farbe, eine Bedeutung (HOWTO-leitprogramm
 Fenster: Wo das Auge Schritte zählt oder ein rechter Winkel zu sehen sein muss, sind
 x- und y-Spanne gleich — das Bild ist quadratisch (760 × 760).
 
-Fragen: je Kontrollclip vier vom Typ `wahl` und eine vom Typ `klick`. Damit die Antwort
-beim Erscheinen der Frage nicht schon im Bild steht (§15), beginnt die bewegte Gerade in
-einem neutralen Zustand und erreicht den gefragten erst nach der Antwort; wo die Frage
-ausdrücklich nach «der Geraden im Bild» fragt, ist es umgekehrt — Bild früh, Formel spät.
+Fragen: je Kontrollclip vier vom Typ `wahl` und eine vom Typ `klick`. Beim Erscheinen der
+Frage zeigt das Bild **nur, was die Frage gibt** (Abnahme 06.10.2026): gegebene Punkte, eine
+gegebene Gerade, sonst nur die Achsen — keine Startgerade, kein Steigungsdreieck, kein
+Lösungspunkt. Das regelt `FRAGEBILD` unten; die Auflösungsgrafik der Szene erscheint erst
+ab 1.0 s, nach der Antwort. Wo die Frage nach «der Geraden im Bild» fragt, ist diese Gerade
+das Gegebene.
 """
 import json
 import os
@@ -172,7 +174,46 @@ JETZT_DU = sz('Jetzt du', 'Jetzt du: Erkunde diese Zusammenhänge in der nachfol
               n('Erkunde diese Zusammenhänge|in der Animation unter dem Clip|und löse die Aufgaben.', 430, 'blau', 50, ein=0.6))
 
 
+# Was das Bild beim Erscheinen einer Frage zeigen darf: genau das Gegebene. Schluessel
+# (Clip, Szene) -> (Fenster, feste Geraden, Punkte). Fehlt eine Szene, bleiben nur die Achsen.
+def _fragebild_daten():
+    W_KB_ = W_KB
+    return {
+        ('kontrolle-m-und-b', 'Frage 3'): (W_MB, [ger(-1, 3)], []),
+        ('kontrolle-steigung', 'Frage 1'): (W_TAB, [], [pt(-2, -1, 5, 'A(−2 | −1)', [-2.3, -1.9], 'end'), pt(2, 7, 5, 'B(2 | 7)')]),
+        ('kontrolle-steigung', 'Frage 2'): (dict(xbereich=[-4, 5], ybereich=[-6, 3], yteilung=[[-5, '−5'], [0, '0']]), [],
+                                            [pt(-2, 3, 5, 'P(−2 | 3)'), pt(2, -5, 5, 'Q(2 | −5)')]),
+        ('kontrolle-steigung', 'Frage 4'): (W_DREI, [ger(-0.5, 2)], []),
+        ('kontrolle-typen', 'Frage 3'): (W_GL, [ger(3, 2)], []),
+        ('kontrolle-typen', 'Frage 4'): (W_GL, [ger(4, -1)], []),
+        ('kontrolle-typen', 'Frage 5'): (W_GL, [ger(0.5, 2), ger(-2, -1)], []),
+        ('kontrolle-aufstellen', 'Frage 1'): (W_KB_, [], [pt(2, 1, 5, 'P(2 | 1)')]),
+        ('kontrolle-aufstellen', 'Frage 2'): (W_GL, [], [pt(0, 4, 5, 'A(0 | 4)'), pt(2, 0, 5, 'B(2 | 0)')]),
+        ('kontrolle-aufstellen', 'Frage 3'): (dict(xbereich=[-4, 6], ybereich=[-3, 7]), [], [pt(4, 1, 5, 'P(4 | 1)')]),
+        ('kontrolle-aufstellen', 'Frage 4'): (dict(xbereich=[-2, 8], ybereich=[-2, 8]), [ger(-3, 2, 5, gestrichelt=True)],
+                                              [pt(1, 4, 5, 'P(1 | 4)')]),
+    }
+
+
+def fragebild(name, szene):
+    """Fuer jede Fragenszene: Auflösungsgrafik erst nach der Antwort, davor nur das Gegebene."""
+    grafen = [e for e in szene['elemente'] if e.get('typ') == 'graf']
+    if not grafen:
+        return
+    W, geraden, punkte = _fragebild_daten().get((name, szene['name']), (None, [], []))
+    if W is None:
+        W = {k: grafen[0][k] for k in ('xbereich', 'ybereich', 'xteilung', 'yteilung', 'xname', 'yname') if k in grafen[0]}
+    for g in grafen:
+        g['ein'] = max(g.get('ein', 0.05), 1.0)
+    szene['elemente'].insert(0, graf(W, geraden, punkte, tippbar=True,
+                                     **{k: grafen[0][k] for k in ('xname', 'yname') if k in grafen[0] and k not in W}))
+
+
 def clip(name, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip'):
+    if art == 'Kontrollclip':
+        for q in szenen:
+            if q['name'].startswith('Frage'):
+                fragebild(name, q)
     # Gemessene Dauern retten: Wo Szenenname und Sprechertext gleich geblieben sind,
     # gilt die Zeit aus der vertonten Fassung weiter. Nur fuer Szenen mit neuem Text
     # muss danach build-clip-ton.py laufen. (Ohne das ueberschriebe jeder Lauf dieses
@@ -259,14 +300,14 @@ clip('m-und-b', 'Gerade sehen: m kippt, b schiebt',
             'Fest bleibt dabei nur ein Punkt — der auf der y-Achse.',
             f(r'y = \fa{0.5}x + \fb{1}', 300, 70),
             n('@\\fa{m}@ kippt die Gerade|um den Punkt @(0 \\mid \\fb{b})@', 440, 'blau'),
-            graf(W_MB, [ger(2, 1, 5, gestrichelt=True), bew([[0.9, 2, 1], [3.8, 0.5, 1]], yachse={'farbe': 2})])),
+            graf(W_MB, [ger(2, 1, 5, gestrichelt=True), bew([[0.9, 2, 1], [3.8, 0.5, 1]], yachse={'farbe': 2}, dreieck=dreieck(1, 1))])),
          sz('m wird negativ',
             'Ein negatives m lässt die Gerade fallen. Bei minus eins Komma fünf geht es pro Schritt nach rechts '
             'um eins Komma fünf hinunter. Der Drehpunkt bleibt null und eins.',
             f(r'y = \fa{-1.5}x + \fb{1}', 300, 70),
-            n('@\\fa{m} \\gt 0@: steigt · @\\fa{m} \\lt 0@: fällt|@\\fa{m} = 0@: waagrecht', 440, 'blau'),
+            n('@\\fa{m} \\gt 0@: steigt; @\\fa{m} \\lt 0@: fällt|@\\fa{m} = 0@: waagrecht', 440, 'blau'),
             graf(W_MB, [ger(0.5, 1, 5, gestrichelt=True),
-                        bew([[0.9, 0.5, 1], [2.6, 0, 1], [4.6, -1.5, 1]], yachse={'farbe': 2})])),
+                        bew([[0.9, 0.5, 1], [2.6, 0, 1], [4.6, -1.5, 1]], yachse={'farbe': 2}, dreieck=dreieck(1, 1))])),
          sz('m als Schritt',
             'So liest man m am Graphen: einen Schritt nach rechts, dann m Schritte hinauf. '
             'Bei m gleich zwei führt das von null, eins nach eins, drei.',
@@ -312,22 +353,23 @@ clip('kontrolle-m-und-b', 'Gerade sehen: Kontrollfragen zu m und b',
             f(r'y = \fa{-}x + \fb{3}', 300, 70, ein=1.6),
             n('erst @\\fb{b}@ ablesen,|dann @\\fa{m}@ über ein Dreieck', 440, 'blau', ein=2.8),
             graf(W_MB, [bew([[0, -1, 3]], yachse={'farbe': 2, 'beschriftung': False},
-                            dreieck=dreieck(None, None, [[1.8, 0, 1], [3.4, 0, 1]]))])),
+                            dreieck=dreieck(None, None, [[1.8, 1, 1], [3.4, 1, 1]]))])),
          sz('Frage 4',
             'Einsetzen entscheidet: f von eins ist minus zwei plus fünf, also drei. Der Punkt eins, drei liegt '
             'auf dem Graphen — eins, sieben und drei, eins liegen daneben.',
             f(r'f(1) = \fa{-2} \cdot 1 + \fb{5} = 3', 300, 60, ein=1.0),
             n('Punktprobe: @x@ einsetzen,|Ergebnis mit @y@ vergleichen', 440, 'blau', ein=2.8),
-            graf(dict(xbereich=[-1, 8], ybereich=[-4, 5]),
+            graf(dict(xbereich=[-2, 7], ybereich=[-1, 8]),
                  [bew([[1.0, -2, 9], [3.4, -2, 5]], yachse={'farbe': 2, 'beschriftung': False})],
-                 [pt(1, 3, 3, '(1 | 3)')])),
+                 [pt(1, 3, 3, '(1 | 3)'), pt(1, 7, 4, '(1 | 7)'), pt(3, 1, 4, '(3 | 1)')])),
          sz('Frage 5',
             'Pro Schritt nach rechts zwei hinunter heisst m gleich minus zwei. Durch null, minus eins heisst '
             'b gleich minus eins. Also y gleich minus zwei x minus eins.',
             f(r'y = \fa{-2}x \fb{- 1}', 300, 70, ein=1.0),
             n('«fällt um 2 pro Schritt» @\\Longrightarrow \\fa{m} = -2@|«durch @(0 \\mid -1)@» @\\Longrightarrow \\fb{b} = -1@',
               440, 'blau', ein=2.6),
-            graf(W_MB, [bew([[0.9, 0, -1], [3.6, -2, -1]], yachse={'farbe': 2}, dreieck=dreieck(0, 1))])),
+            graf(W_MB, [bew([[0.9, 0, -1], [3.6, -2, -1]], yachse={'farbe': 2, 'beschriftung': False}, dreieck=dreieck(0, 1))],
+                 [pt(0, -1, 2, '(0 | −1)', [-0.3, -1.5], 'end')])),
          sz('Merke',
             'Zum Mitnehmen: b liest man direkt auf der y-Achse ab, m über einen Schritt nach rechts. '
             'Gleiches m heisst parallel, solange b verschieden ist — bei gleichem b ist es dieselbe Gerade. '
@@ -462,7 +504,7 @@ clip('kontrolle-steigung', 'Gerade sehen: Kontrollfragen zur Steigung',
             f(r'\fa{m} = \dfrac{7 - (-1)}{2 - (-2)} = \dfrac{8}{4} = \fa{2}', 300, 54, ein=1.0),
             n('Höhenunterschied|durch Stellenunterschied', 460, 'blau', ein=2.6),
             graf(W_TAB, [bew([[1.0, 0, 3], [3.4, 2, 3]], dreieck=dreieck(None, None, [[3.6, -2, 0], [5.4, -2, 4]]))],
-                 [pt(-2, -1, 5, 'A(−2 | −1)'), pt(2, 7, 5, 'B(2 | 7)')])),
+                 [pt(-2, -1, 5, 'A(−2 | −1)', [-2.3, -1.9], 'end'), pt(2, 7, 5, 'B(2 | 7)')])),
          sz('Frage 2',
             'Minus fünf minus drei ist minus acht. Zwei minus minus zwei ist vier. Minus acht durch vier '
             'ist minus zwei.',
@@ -800,7 +842,7 @@ clip('kontrolle-aufstellen', 'Gerade sehen: Kontrollfragen zum Aufstellen',
             'Und b steht schon da: A liegt auf der y-Achse, also vier.',
             f(r'\fa{m} = \dfrac{0 - 4}{2 - 0} = \fa{-2}, \quad \fb{b} = \fb{4}', 300, 50, ein=1.0),
             n('@A(0 \\mid 4)@ liegt auf der @y@-Achse:|@\\fb{b}@ ist direkt gegeben', 460, 'orange', ein=2.8),
-            graf(W_GL, [bew([[1.0, 0, 4], [3.6, -2, 4]], yachse={'farbe': 2},
+            graf(W_GL, [bew([[1.0, 0, 4], [3.6, -2, 4]], yachse={'farbe': 2, 'beschriftung': False},
                             dreieck=dreieck(None, None, [[3.8, 0, 2], [5.6, 0, 2]]))],
                  [pt(2, 0, 5, 'B(2 | 0)')])),
          sz('Frage 3',
@@ -808,14 +850,14 @@ clip('kontrolle-aufstellen', 'Gerade sehen: Kontrollfragen zum Aufstellen',
             'also m gleich minus eins.',
             f(r'1 = \fa{m} \cdot 4 + \fb{5} \;\Longrightarrow\; \fa{m} = \fa{-1}', 300, 52, ein=1.0),
             n('Diesmal ist @\\fb{b}@ gegeben|und @\\fa{m}@ gesucht', 460, 'blau', ein=2.6),
-            graf(W_GL, [bew([[1.0, 0.5, 5], [3.6, -1, 5]], yachse={'farbe': 2})],
+            graf(dict(xbereich=[-4, 6], ybereich=[-3, 7]), [bew([[1.0, 0.5, 5], [3.6, -1, 5]], yachse={'farbe': 2})],
                  [pt(4, 1, 5, 'P(4 | 1)')])),
          sz('Frage 4',
             'Parallel heisst gleiches m, also minus drei. Punkt einsetzen: vier gleich minus drei mal eins plus b, '
             'also b gleich sieben.',
             f(r'4 = \fa{-3} \cdot 1 + \fb{b} \;\Longrightarrow\; \fb{b} = \fb{7}', 300, 52, ein=1.0),
             n('parallel: @\\fa{m}@ übernehmen,|dann Punkt einsetzen', 460, 'blau', ein=2.6),
-            graf(dict(xbereich=[-2, 7], ybereich=[-2, 7]),
+            graf(dict(xbereich=[-2, 8], ybereich=[-2, 8]),
                  [ger(-3, 2, 5, gestrichelt=True), bew([[1.0, -3, 2], [3.6, -3, 7]], yachse={'farbe': 2})],
                  [pt(1, 4, 5, 'P(1 | 4)')])),
          sz('Frage 5',

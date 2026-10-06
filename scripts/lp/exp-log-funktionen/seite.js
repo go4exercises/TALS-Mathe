@@ -193,8 +193,8 @@
       K.punkt(0, 1, 'p-pkt', '(0 | 1)', -8, -8, 'end');
       K.punkt(1, a, 'p-pkt', '(1 | ' + z(a) + ')', 8, -8);
       K.punkt(-1, 1 / a, 'p-pkt', '(−1 | ' + zz(1 / a) + ')', -8, -10, 'end');
-      rolle(fig, 'formel').innerHTML = 'f(x) = ' + sp('tx-blau', z(a)) + '<sup>x</sup> &nbsp;·&nbsp; '
-        + (a > 1 ? '<b>Wachstum</b>: steigt' : '<b>Zerfall</b>: fällt') + ' &nbsp;·&nbsp; je Schritt mal ' + z(a);
+      rolle(fig, 'formel').innerHTML = 'f(x) = ' + sp('tx-blau', z(a)) + '<sup>x</sup>; &nbsp;'
+        + (a > 1 ? '<b>Wachstum</b>: steigt' : '<b>Zerfall</b>: fällt') + '; &nbsp;je Schritt mal ' + z(a);
       pruefen();
     }
     function nah(a, b){ return Math.abs(a - b) < 1e-9; }
@@ -235,8 +235,8 @@
       K.punkt(0, s.n0, 'p-start', '(0 | ' + z(s.n0) + ')', 8, -8);
       K.punkt(s.t, s.nt, 'p-lauf', '(' + z(s.t) + ' | ' + zz(s.nt) + ')', s.t > 4 ? -8 : 8, -10, s.t > 4 ? 'end' : 'start');
       rolle(fig, 'formel').innerHTML = 'N(t) = ' + sp('tx-orange', z(s.n0)) + ' · ' + sp('tx-blau', z(s.a)) + '<sup>t</sup>'
-        + ' &nbsp;·&nbsp; ' + (s.p > 0 ? '+' : '−') + Math.abs(s.p) + ' % je Schritt → Faktor ' + sp('tx-blau', z(s.a))
-        + ' &nbsp;·&nbsp; N(' + z(s.t) + ') ' + (Math.abs(s.nt - Math.round(s.nt * 1000) / 1000) > 1e-9 ? '≈ ' : '= ') + z(s.nt);
+        + '; &nbsp;' + (s.p > 0 ? '+' : '−') + Math.abs(s.p) + ' % je Schritt → Faktor ' + sp('tx-blau', z(s.a))
+        + '; &nbsp;N(' + z(s.t) + ') ' + (Math.abs(s.nt - Math.round(s.nt * 1000) / 1000) > 1e-9 ? '≈ ' : '= ') + z(s.nt);
       pruefen();
     }
     function nah(a, b){ return Math.abs(a - b) < 1e-9; }
@@ -278,8 +278,8 @@
       K.leeren();
       K.kurve(function(x){ return Math.pow(s.c, x); }, 'kurve');
       K.kurve(function(x){ return Math.pow(s.a, s.b * x); }, 'bau');
-      rolle(fig, 'formel').innerHTML = 'Ziel: y = ' + sp('tx-blau', basisText(s.c)) + '<sup>x</sup> &nbsp;·&nbsp; gebaut: y = '
-        + (s.e ? 'e' : '2') + '<sup>' + sp('tx-orange', z(s.b)) + '·x</sup> &nbsp;·&nbsp; '
+      rolle(fig, 'formel').innerHTML = 'Ziel: y = ' + sp('tx-blau', basisText(s.c)) + '<sup>x</sup>; &nbsp;gebaut: y = '
+        + (s.e ? 'e' : '2') + '<sup>' + sp('tx-orange', z(s.b)) + '·x</sup>; &nbsp;'
         + (s.passt ? '<b>passt</b>: b ' + (Math.abs(s.b - Math.round(s.b)) < 1e-9 && !s.e ? '= ' : '≈ ') + (s.e ? 'ln ' : 'log₂ ') + basisText(s.c)
                    : 'passt noch nicht');
       fig.classList.toggle('treffer', s.passt);
@@ -322,7 +322,7 @@
       K.punkt(0, s.A, 'p-start', '(0 | ' + z(s.A) + ')', 8, s.A > s.S ? -8 : 16);
       var D = s.S - s.A;
       rolle(fig, 'formel').innerHTML = 'f(t) = ' + z(s.S) + (D === 0 ? '' : (D > 0 ? ' − ' : ' + ') + z(Math.abs(D)) + '·e<sup>−' + z(s.k) + 't</sup>')
-        + ' &nbsp;·&nbsp; Start ' + sp('tx-orange', z(s.A)) + ', Sättigung ' + z(s.S) + ' &nbsp;·&nbsp; '
+        + '; &nbsp;Start ' + sp('tx-orange', z(s.A)) + ', Sättigung ' + z(s.S) + '; &nbsp;'
         + (s.A < s.S ? 'steigt gegen ' + z(s.S) : s.A > s.S ? 'fällt gegen ' + z(s.S) : 'bleibt konstant')
         + '<br>Abstand zu S bei t = 10: ' + zz(Math.abs(D) * Math.exp(-10 * s.k));
       pruefen();
@@ -365,7 +365,7 @@
       K.kurve(function(x){ return x > 0 ? logA(s.a, x) : NaN; }, 'kurve gruen', 0.0005, 11);
       K.punkt(s.x, s.y, 'p-lauf', '(' + z(s.x) + ' | ' + zz(s.y) + ')', 8, s.y > 0 ? -10 : 16);
       var name = s.a === 10 ? 'lg' : Math.abs(s.a - Math.E) < 1e-9 ? 'ln' : 'log<sub>' + basisText(s.a) + '</sub>';
-      rolle(fig, 'formel').innerHTML = 'y = ' + name + ' x &nbsp;·&nbsp; Umkehrfunktion von y = ' + sp('tx-blau', basisText(s.a)) + '<sup>x</sup>'
+      rolle(fig, 'formel').innerHTML = 'y = ' + name + ' x; &nbsp;Umkehrfunktion von y = ' + sp('tx-blau', basisText(s.a)) + '<sup>x</sup>'
         + '<br>Läufer: ' + name + ' ' + z(s.x) + ' ' + (Math.abs(s.y - Math.round(s.y * 1000) / 1000) > 1e-9 ? '≈ ' : '= ') + z(s.y);
       pruefen();
     }

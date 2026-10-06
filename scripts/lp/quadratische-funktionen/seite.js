@@ -208,7 +208,7 @@
       K.leeren(); K.senkrecht(xs, 'symachse hilfslinie'); K.kurve(function(x){ return x * x + b * x + c; }, 'kurve');
       K.punkt(xs, ys, 'p-s', 'S(' + z(xs) + ' | ' + z(ys) + ')', xs > 2 ? -8 : 8, 18, xs > 2 ? 'end' : 'start');
       (D > 0 ? [xs - Math.sqrt(D) / 2, xs + Math.sqrt(D) / 2] : D === 0 ? [xs] : []).forEach(function(x){ K.punkt(x, 0, 'p-null'); });
-      rolle(fig, 'formel').innerHTML = 'f(x) = ' + grundText(1, b, c) + ' &nbsp;·&nbsp; D = <b>' + z(D) + '</b>';
+      rolle(fig, 'formel').innerHTML = 'f(x) = ' + grundText(1, b, c) + '; &nbsp;D = <b>' + z(D) + '</b>';
       pruefen();
     }
     pruefen = Leiste(fig, [

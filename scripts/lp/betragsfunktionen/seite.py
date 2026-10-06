@@ -220,12 +220,12 @@ fest1 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf1 = test('t1', 'Aufgaben · Kapitel 1', 14, [
-    ('1a', 3, r'Berechne: \(|-8| + |3|\) · \(|2 - 9|\) · \(-|-4|\).',
-     r'<p>\(8 + 3 = 11\) · \(|-7| = 7\) · \(-4\).</p><p class="komm">Das Minus vor dem Betrag steht ausserhalb: Erst \(|-4| = 4\), dann das Vorzeichen.</p>', ''),
+    ('1a', 3, r'Berechne: \(|-8| + |3|\); \(|2 - 9|\); \(-|-4|\).',
+     r'<p>\(8 + 3 = 11\); \(|-7| = 7\); \(-4\).</p><p class="komm">Das Minus vor dem Betrag steht ausserhalb: Erst \(|-4| = 4\), dann das Vorzeichen.</p>', ''),
     ('1b', 3, r'Schreib \(|x|\) für \(x = -2.5\) und für \(x = 4\) mit der Fallunterscheidung aus. Welcher Fall gilt bei \(x = 0\)?',
      r'<p>\(x = -2.5 \lt 0\): \(|x| = -x = -(-2.5) = 2.5\). \(x = 4 \ge 0\): \(|x| = x = 4\). Bei \(x = 0\) gilt der Fall \(x \ge 0\): \(|0| = 0\).</p>', ''),
     ('1c', 2, r'Für welche \(x\) gilt \(|x| = 6\)? \(|x| = 0\)? \(|x| = -1\)?',
-     r'<p>\(x = 6\) oder \(x = -6\) · nur \(x = 0\) · für kein \(x\): \(L = \{\,\}\), denn ein Betrag ist nie negativ.</p>', ''),
+     r'<p>\(x = 6\) oder \(x = -6\); nur \(x = 0\); für kein \(x\): \(L = \{\,\}\), denn ein Betrag ist nie negativ.</p>', ''),
     ('1d', 2, r'Warum gilt \(|-x| = |x|\)? Was bedeutet das für den Graphen von \(y = |x|\)?',
      r'<p>\(x\) und \(-x\) sind gleich weit von der Null entfernt. Im Graphen: Die Punkte bei \(x\) und \(-x\) liegen gleich hoch — das V ist achsensymmetrisch zur \(y\)-Achse.</p>', ''),
     ('1e', 2, r'Lies am Graphen von \(y = |x|\) ab: Für welche \(x\) liegt das V unter der Waagrechten \(y = 3\) oder auf ihr?',
@@ -282,8 +282,8 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 13, [
     ('2c', 3, r'Bestimme die Gleichung der abgebildeten Kurve in der Form \(y = a\,|x - u| + v\).',
      r'<p>Knick \((-1 \mid 3)\), also \(u = -1\), \(v = 3\). Nach unten geöffnet, eine Einheit nach rechts geht es \(0.5\) hinunter: \(a = -0.5\). Also \(y = -0.5\,|x + 1| + 3\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-k="v,-0.5,-1,3" data-fenster="-5,5,-1,5" data-punkte="-1,3;1,2;3,1" data-xm="-4,-3,-2,-1,1,2,3,4" data-ym="1,2,3,4"></svg></div>'),
-    ('2d', 2, r'Gib die Wertemenge an: \(y = 3\,|x - 2| - 1\) · \(y = -|x| + 5\).',
-     r'<p>\(W = [-1;\, \infty[\) (V, Knick unten bei \(-1\)) · \(W = \,]-\infty;\, 5]\) (Dach, Spitze bei \(5\)).</p>', ''),
+    ('2d', 2, r'Gib die Wertemenge an: \(y = 3\,|x - 2| - 1\); \(y = -|x| + 5\).',
+     r'<p>\(W = [-1;\, \infty[\) (V, Knick unten bei \(-1\)); \(W = \,]-\infty;\, 5]\) (Dach, Spitze bei \(5\)).</p>', ''),
     ('2e', 2, r'Warum ist bei \(a \lt 0\) der Knickpunkt der höchste Punkt des Graphen?',
      r'<p>\(|x - u| \ge 0\), mal einer negativen Zahl \(a\) also \(\le 0\). Der Term \(a\,|x - u|\) ist darum höchstens \(0\), und das genau bei \(x = u\). Also ist \(y \le v\), mit \(y = v\) nur im Knick.</p>', ''),
 ], zwei=False)
@@ -369,8 +369,8 @@ fest4 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf4 = test('t4', 'Aufgaben · Kapitel 4', 12, [
-    ('4a', 3, r'Schreib abschnittsweise: \(|3x + 9|\) · \(|4 - 2x|\).',
-     r'<p>\(|3x + 9| = 3x + 9\) für \(x \ge -3\), \(-3x - 9\) für \(x \lt -3\). · \(|4 - 2x| = 4 - 2x\) für \(x \le 2\), \(2x - 4\) für \(x \gt 2\).</p>', ''),
+    ('4a', 3, r'Schreib abschnittsweise: \(|3x + 9|\); \(|4 - 2x|\).',
+     r'<p>\(|3x + 9| = 3x + 9\) für \(x \ge -3\), \(-3x - 9\) für \(x \lt -3\).; \(|4 - 2x| = 4 - 2x\) für \(x \le 2\), \(2x - 4\) für \(x \gt 2\).</p>', ''),
     ('4b', 3, r'Schreib \(y = |x + 2| + |x - 2|\) abschnittsweise und gib den Wert bei \(x = 3\) an.',
      r'<p>\(y = -2x\) für \(x \lt -2\), \(y = 4\) für \(-2 \le x \le 2\), \(y = 2x\) für \(x \gt 2\). \(y(3) = 6\).</p>', ''),
     ('4c', 2, r'Abgebildet ist \(y = |x - a| + |x - b|\). Lies \(a\), \(b\) und die Höhe des Bodens ab.',
@@ -416,12 +416,12 @@ fest5 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf5 = test('t5', 'Aufgaben · Kapitel 5', 13, [
-    ('5a', 3, r'Löse: \(|x - 4| = 6\) · \(|2x + 1| = 5\).',
-     r'<p>\(x - 4 = \pm 6\): \(L = \{-2;\, 10\}\). · \(2x + 1 = 5 \Rightarrow x = 2\); \(2x + 1 = -5 \Rightarrow x = -3\): \(L = \{-3;\, 2\}\).</p>', ''),
-    ('5b', 3, r'Löse: \(|x + 1| \le 4\) · \(|x - 2| \gt 1\).',
-     r'<p>Schnittstellen \(-5\) und \(3\), dazwischen: \(-5 \le x \le 3\). · Schnittstellen \(1\) und \(3\), ausserhalb: \(x \lt 1 \;\vee\; x \gt 3\).</p>', ''),
+    ('5a', 3, r'Löse: \(|x - 4| = 6\); \(|2x + 1| = 5\).',
+     r'<p>\(x - 4 = \pm 6\): \(L = \{-2;\, 10\}\).; \(2x + 1 = 5 \Rightarrow x = 2\); \(2x + 1 = -5 \Rightarrow x = -3\): \(L = \{-3;\, 2\}\).</p>', ''),
+    ('5b', 3, r'Löse: \(|x + 1| \le 4\); \(|x - 2| \gt 1\).',
+     r'<p>Schnittstellen \(-5\) und \(3\), dazwischen: \(-5 \le x \le 3\).; Schnittstellen \(1\) und \(3\), ausserhalb: \(x \lt 1 \;\vee\; x \gt 3\).</p>', ''),
     ('5c', 3, r'Löse \(|x^2 - 9| = 5\). Wie viele Lösungen hat \(|x^2 - 9| = 9\)?',
-     r'<p>\(x^2 - 9 = 5 \Rightarrow x = \pm\sqrt{14}\); \(x^2 - 9 = -5 \Rightarrow x = \pm 2\). \(L = \{-\sqrt{14};\, -2;\, 2;\, \sqrt{14}\}\). · Bei \(c = 9\) berührt die Waagrechte den Buckel \((0 \mid 9)\): drei Lösungen (\(0\) und \(\pm\sqrt{18}\)).</p>', ''),
+     r'<p>\(x^2 - 9 = 5 \Rightarrow x = \pm\sqrt{14}\); \(x^2 - 9 = -5 \Rightarrow x = \pm 2\). \(L = \{-\sqrt{14};\, -2;\, 2;\, \sqrt{14}\}\).; Bei \(c = 9\) berührt die Waagrechte den Buckel \((0 \mid 9)\): drei Lösungen (\(0\) und \(\pm\sqrt{18}\)).</p>', ''),
     ('5d', 2, r'Lies am Graphen von \(y = |x + 1| - 2\) ab: Wo ist \(y = 1\)? Bestätige rechnerisch.',
      r'<p>Die Waagrechte \(y = 1\) schneidet bei \(x = -4\) und \(x = 2\). Rechnung: \(|x + 1| = 3 \Rightarrow x + 1 = \pm 3\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-k="v,1,-1,-2" data-fenster="-5,4,-3,4" data-waagrecht="1" data-xm="-4,-2,2" data-ym="-2,1,3"></svg></div>'),
@@ -443,11 +443,11 @@ k0 = '''
       <p class="ziel">Lineare Gleichungen, Geraden, das Verschieben von Graphen und die Zahlengerade. Wenn das wackelt: <a href="../schwerpunkt/s3-1-grundlagen.html">Teilgebiet 3.1, Grundlagen der Funktionen</a> und <a href="../schwerpunkt/s2-2c-betrag-polynom-ungleichungen.html">Teilgebiet 2.2c</a>.</p>
 ''' + test('t0', 'Vortest', 10, [
     ('0a', 3, r'Löse \(2x - 6 = 0\) und \(-x + 4 = 0\). Welche Steigung hat \(y = -2x + 1\)?',
-     r'<p>\(x = 3\) · \(x = 4\) · Steigung \(-2\).</p><p class="komm">Nullstellen von linearen Termen braucht jedes Kapitel: Dort liegt der Knick.</p>', ''),
+     r'<p>\(x = 3\); \(x = 4\); Steigung \(-2\).</p><p class="komm">Nullstellen von linearen Termen braucht jedes Kapitel: Dort liegt der Knick.</p>', ''),
     ('0b', 3, r'Der Graph von \(y = x^2\) wird um \(2\) nach rechts und \(1\) nach oben verschoben. Wie heisst die Gleichung, und wo liegt der Scheitel?',
      r'<p>\(y = (x - 2)^2 + 1\), Scheitel \((2 \mid 1)\).</p><p class="komm">Falsch? Nach rechts heisst \(x - 2\). Genau so verschiebt Kapitel 2 das V. <a href="../schwerpunkt/s3-1-grundlagen.html">Teilgebiet 3.1</a></p>', ''),
     ('0c', 2, r'Wie weit sind \(-3\) und \(4\) auf der Zahlengeraden voneinander entfernt? Und \(-3\) und \(-7\)?',
-     r'<p>\(7\) · \(4\).</p><p class="komm">Abstände sind nie negativ — genau das ist der Betrag.</p>', ''),
+     r'<p>\(7\); \(4\).</p><p class="komm">Abstände sind nie negativ — genau das ist der Betrag.</p>', ''),
     ('0d', 2, r'Bestimme die Nullstellen und den Scheitel von \(f(x) = x^2 - 4x - 5\).',
      r'<p>\(x^2 - 4x - 5 = (x + 1)(x - 5)\): Nullstellen \(-1\) und \(5\). Scheitel in der Mitte, \(x = 2\): \((2 \mid -9)\).</p><p class="komm">Falsch? Nullstellen und Scheitel einer Parabel braucht Kapitel 3 beim Umklappen. <a href="quadratische-funktionen.html">Leitprogramm Quadratische Funktionen</a></p>', ''),
 ]) + '''
@@ -478,7 +478,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1 · G2, G3 → 2 · G4 → 3 · G5 → 4 · G6 → 5 · G7 → 3, 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1; G2, G3 → 2; G4 → 3; G5 → 4; G6 → 5; G7 → 3, 5</p>
         </div>
       </div>
     </section>'''
@@ -543,24 +543,12 @@ oben = '''<div id="nav-root"></div>
     <ol>
       <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
     </ol>
-    <p class="lekt">Lektion 1</p>
+    <p class="lekt">Kapitel</p>
     <ol>
       <li><a href="#k1"><span class="nr">1</span><span>Die Betragsfunktion</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 2</p>
-    <ol>
       <li><a href="#k2"><span class="nr">2</span><span>Verschieben und Strecken</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 3</p>
-    <ol>
       <li><a href="#k3"><span class="nr">3</span><span>Umklappen</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 4</p>
-    <ol>
       <li><a href="#k4"><span class="nr">4</span><span>Abschnittsweise schreiben</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 5</p>
-    <ol>
       <li><a href="#k5"><span class="nr">5</span><span>Gleichungen</span></a></li>
     </ol>
     <p class="lekt">Abschluss</p>
@@ -611,12 +599,13 @@ unten = '''
 </div>
 </div>
 '''
+# Kapitel = Lektion: keine Lektionsbänder mehr (Abnahme 06.10.2026).
 band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
 # Zeiten (05.10.2026): Vorwissen 10 (vorab) · K1 35 · K2 45 · K3 40 · K4 40 · K5 40 · Gesamttest 30 = 240 min
-body = (oben + band('Vorab', 'Vorwissen') + k0 + band(1, 'Die Betragsfunktion') + k1
-        + band(2, 'Verschieben und Strecken') + k2 + band(3, 'Das Umklapp-Prinzip') + k3
-        + band(4, 'Abschnittsweise schreiben') + k4 + band(5, 'Gleichungen und Ungleichungen') + k5
-        + band('Abschluss', 'Gesamttest') + gt + unten)
+body = (oben + k0 + k1
+        + k2 + k3
+        + k4 + k5
+        + gt + unten)
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(ZIEL, 'w').write(seite)
 print('geschrieben', len(seite.splitlines()), 'Zeilen')

@@ -205,7 +205,7 @@
       K.kurve(kurveF(a, n, 0, 0), 'kurve');
       K.punkt(1, a, 'p-pkt', '(1 | ' + z(a) + ')', 8, -8);
       K.punkt(-1, a * (n % 2 === 0 ? 1 : -1), 'p-pkt', '(−1 | ' + z(a * (n % 2 === 0 ? 1 : -1)) + ')', -8, -8, 'end');
-      rolle(fig, 'formel').innerHTML = potText(a, n, 0, 0) + ' &nbsp;·&nbsp; '
+      rolle(fig, 'formel').innerHTML = potText(a, n, 0, 0) + '; &nbsp;'
         + (a === 0 ? 'Nullfunktion' : n % 2 === 0 ? 'gerade Funktion, achsensymmetrisch zur <i>y</i>-Achse'
                                                   : 'ungerade Funktion, punktsymmetrisch zum Ursprung');
       pruefen();
@@ -254,7 +254,7 @@
       var lage = a === 0 ? '—' : n % 2 === 0 ? (a > 0 ? 'beide Äste oben' : 'beide Äste unten') : 'die Äste liegen diagonal';
       rolle(fig, 'formel').innerHTML = potText(a, n, 0, 0) + ' = ' + (a === 1 ? '' : z(a) + '·')
         + '<span class="br"><span>1</span><span>x<sup>' + z(-n) + '</sup></span></span>'
-        + ' &nbsp;·&nbsp; <b>' + lage + '</b> &nbsp;·&nbsp; D = ℝ∖{0}';
+        + '; &nbsp;<b>' + lage + '</b>; &nbsp;D = ℝ∖{0}';
       pruefen();
     }
     function bau(a, n, tex){ return { text: 'Bau nach: \\(' + tex + '\\)', ok: function(s){ return s.a === a && s.n === n; } }; }
@@ -308,9 +308,9 @@
         K.punkt(u, v, 'p-pkt', '(' + z(u) + ' | ' + z(v) + ')', 8, -8);
       }
       rolle(fig, 'formel').innerHTML = potText(a, n, u, v)
-        + (n < 0 ? ' &nbsp;·&nbsp; Asymptoten <i>x</i> = ' + z(u) + ', <i>y</i> = ' + z(v)
-                 : (u === 0 && v === 0) ? ' &nbsp;·&nbsp; nicht verschoben'
-                 : ' &nbsp;·&nbsp; verschoben um (' + z(u) + ' | ' + z(v) + ')');
+        + (n < 0 ? '; &nbsp;Asymptoten <i>x</i> = ' + z(u) + ', <i>y</i> = ' + z(v)
+                 : (u === 0 && v === 0) ? '; &nbsp;nicht verschoben'
+                 : '; &nbsp;verschoben um (' + z(u) + ' | ' + z(v) + ')');
       pruefen();
     }
     function bau(a, n, u, v, tex){
@@ -360,7 +360,7 @@
       K.gespiegelt(f, gut ? 'umkehr' : 'umkehr falsch', von, 3);
       K.punkt(1, 1, 'p-pkt');
       rolle(fig, 'formel').innerHTML = 'f(x) = x<sup>' + sp('tx-orange', z(n)) + '</sup>'
-        + (ein ? ', &nbsp;x ≥ 0' : '') + ' &nbsp;·&nbsp; '
+        + (ein ? ', &nbsp;x ≥ 0' : '') + '; &nbsp;'
         + (gut ? 'Spiegelbild ist ein Funktionsgraph: f<sup>−1</sup>(x) = '
                  + '<span class="wz">' + (n === 2 ? '' : '<sup>' + sp('tx-orange', z(n)) + '</sup>') + '√<span class="rad">x</span></span>'
                : '<b class="rot">Spiegelbild ist kein Funktionsgraph</b> — über einem x lägen zwei Punkte');
@@ -413,7 +413,7 @@
       if (x0 !== null && Math.abs(x0) <= 5 && !(n % 2 === 0 && Math.abs(x0 - u) < 1e-9))
         K.punkt(x0, 0, 'p-pkt', 'x₀ ' + (Math.abs(x0 - Math.round(x0 * 100) / 100) > 1e-12 ? '≈ ' : '= ')
                 + z(x0), 8, -8);
-      rolle(fig, 'formel').innerHTML = wurzelText(a, n, u, v) + ' &nbsp;·&nbsp; '
+      rolle(fig, 'formel').innerHTML = wurzelText(a, n, u, v) + '; &nbsp;'
         + (n % 2 === 0 ? 'Startpunkt (' + z(u) + ' | ' + z(v) + '), D = [' + z(u) + '; +∞['
                        : 'kein Startpunkt, D = ℝ');
       pruefen();

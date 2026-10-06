@@ -133,6 +133,11 @@ oder wenn eine RLP-Kompetenz sich nicht im Zeitrahmen von §3 unterbringen läss
   | **klassisch** (Leitprogramme vor dem 02.10.2026) | 4–5 Kapitel, je höchstens 30 Minuten | 2–3 Lektionen plus Vorwissen und Gesamttest |
 
   Ein Kapitel = eine Idee, in beiden Formaten.
+- **Lektion und Kapitel nicht doppelt beschriften** (Abnahme 06.10.2026). Im Kapitelmuster ist
+  ein Kapitel eine Lektion: Die Seitenleiste fasst die Kapitel unter «Kapitel» zusammen, und es
+  gibt keine Lektionsbänder zwischen den Kapiteln — der Kapitelkopf trägt Nummer und Minuten.
+  Eine Lektionsgliederung braucht es nur, wo eine Lektion mehrere Kapitel umfasst (klassisches
+  Format, z. B. *Gleichungssysteme*).
 - **Clips:** rund 6–11 Clips, 8–12 Minuten Clipzeit (STYLEGUIDE §6.5).
 - **Über der Zielgrösse (klassisch mehr als 4, Kapitelmuster mehr als 5 Lektionen ohne
   Gesamttest) oder deutlich mehr als 11 Clips → teilen**, jedes Teil mit
@@ -589,8 +594,14 @@ gegen sie und darüber hinaus.
   Kurven still (ein `undefined` in `t0` machte die Zeit zu `NaN`, und `bewZustand` fiel
   auf den letzten Stützpunkt) — `pruef-clip` schiesst Bilder, vergleicht sie aber nicht
   über die Zeit, und keiner der drei Prüfagenten hätte es ohne diese Messung gesehen.
-- Wenn eine Frage erscheint, steht ihre Antwort **nicht** im Bild (erster Stützpunkt
-  neutral, Begleiter und Beschriftung erst nach der Antwort). Das gilt auch für
+- **Beim Erscheinen einer Frage zeigt das Bild nur, was die Frage gibt** (Abnahme 06.10.2026):
+  gegebene Punkte, eine gegebene Kurve («im Bild», «gestrichelt»), sonst nur die Achsen — keine
+  «neutrale» Startkurve, kein Steigungsdreieck, kein Lösungspunkt, und die gefragte Kurve nicht,
+  wenn sie aus der Gleichung zu bestimmen ist (sonst wird Rechnen zu Ablesen). Die Auflösung
+  erscheint erst nach der Antwort (ab 1.0 s) und zeigt dann alles: die Kurve und bei Wahlfragen
+  auch die falschen Angebote (z. B. alle drei Punkte, die falschen rot). Vorbild:
+  `fragebild()` in `scripts/lp/lineare-funktionen/clips.py`. Bisher galt: Antwort nicht im Bild
+  (erster Stützpunkt neutral, Begleiter und Beschriftung erst nach der Antwort). Das gilt auch für
   **Begleiter, die ihre Koordinaten anschreiben** — ein `startpunkt` oder eine `marke`
   auf dem Klickziel beantwortet die Frage, bevor sie gestellt ist.
 - **Klicktoleranz gilt in Dateneinheiten, auf beiden Achsen.** Liegt die Kurve näher am Klickziel
@@ -655,6 +666,12 @@ gegen sie und darüber hinaus.
 - **Fragetexte eines Kontrollclips verschieden beginnen lassen**: `pruef-fragen` erkennt eine Frage
   an ihren ersten 20 Zeichen; zwei Fragen «Welche Nullstellen hat …» lassen den Durchlauf scheitern.
 - Live-Anzeigen runden nur mit «≈».
+- **Kein Malpunkt als Trenner neben Mathematik** (STYLEGUIDE §2.1): «m = 2 · f(x) = …» liest sich
+  als Produkt. In Live-Anzeigen, Lösungen («\(8\) · \(-4\)»), Clip-Notizen und der Zeile
+  «Aufgabe → Kapitel» steht der Strichpunkt. Prüfen: `node .claude/tools/scan-live.mjs --alle`
+  (sieht zugeklappte Lösungen nicht — dort `grep ' · '` in den Quellen).
+- **Ein Steigungsdreieck, das mit der Steigung mitläuft**, wo m erklärt wird — im Clip wie in der
+  Animation; seine Beschriftung weg von den Achsenbeschriftungen setzen (bei \(x = 1\), nicht bei 0).
 - Je Kapitel mindestens eine «Warum»-Aufgabe und eine Aufgabe am Graphen (§9). Ein Graph zum
   **Ablesen** braucht beschriftete Stellen an den abzulesenden Werten, nicht nur an der Einheit.
 - Verlangt ein Kapitelziel «zeichnen» oder «skizzieren», wird gezeichnet — in einer Aufgabe und im

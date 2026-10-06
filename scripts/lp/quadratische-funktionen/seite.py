@@ -249,7 +249,7 @@ fest3 = r'''      <div class="festhalten">
           <div class="titel">Scheitel und Nullstellen</div>
           <p>\[ x_s = -\frac{b}{2a}, \qquad y_s = f(x_s), \qquad D = b^2 - 4ac \]</p>
           <p>\[ x_{1,2} = \frac{-b \pm \sqrt{D}}{2a} \quad (D \geq 0) \]</p>
-          <p>Die Diskriminante \(D\) zählt die Nullstellen: \(D \gt 0\): zwei · \(D = 0\): eine · \(D \lt 0\): keine. Die Nullstellen liegen spiegelbildlich zur Symmetrieachse \(x = x_s\).</p>
+          <p>Die Diskriminante \(D\) zählt die Nullstellen: \(D \gt 0\): zwei; \(D = 0\): eine; \(D \lt 0\): keine. Die Nullstellen liegen spiegelbildlich zur Symmetrieachse \(x = x_s\).</p>
         </div>
         <div class="warn"><div class="titel">Häufiger Fehler</div><p>Bei \(a = 1,\ b = -4\) ist \(x_s = -\frac{-4}{2 \cdot 1} = +2\). Das Minus vor dem Bruch nicht vergessen.</p></div>
       </div>'''
@@ -389,7 +389,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1 und 2 · G2 → 2 · G3 → 1 · G4 → 3 · G5, G6 → 4 · G7, G8 → 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1 und 2; G2 → 2; G3 → 1; G4 → 3; G5, G6 → 4; G7, G8 → 5</p>
         </div>
       </div>
     </section>'''

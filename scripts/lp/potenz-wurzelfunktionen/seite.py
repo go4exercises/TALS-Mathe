@@ -223,7 +223,7 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 13, [
      r'<p>(1) → B, (2) → C, (3) → A, (4) → D.</p><p class="komm">Zuerst die Symmetrie: A und B sind achsensymmetrisch, also gerade Exponenten; C und D punktsymmetrisch, also ungerade. Zwischen A und B entscheidet der Wert bei \(x = 1\) \((2\) bzw. \(1)\), zwischen C und D die Richtung — \(g\) fällt, \(k\) steigt.</p>',
      '\n            <div class="mini-reihe"><svg class="mini" data-k="2,2" data-fenster="-2,2,-8,8" data-titel="A"></svg><svg class="mini" data-k="1,4" data-fenster="-2,2,-8,8" data-titel="B"></svg><svg class="mini" data-k="-1,3" data-fenster="-2,2,-8,8" data-titel="C"></svg><svg class="mini" data-k="1,5" data-fenster="-2,2,-8,8" data-titel="D"></svg></div>'),
     ('1b', 3, r'\(f(x) = -2x^{3}\): Berechne \(f(-2)\), \(f(0.5)\) und \(f(3)\).',
-     r'<p>\(f(-2) = -2 \cdot (-8) = 16\) · \(f(0.5) = -2 \cdot 0.125 = -0.25\) · \(f(3) = -2 \cdot 27 = -54\).</p><p class="komm">Immer zuerst die Potenz, dann mal \(a\). Die Klammer um die negative Zahl nicht vergessen.</p>', ''),
+     r'<p>\(f(-2) = -2 \cdot (-8) = 16\); \(f(0.5) = -2 \cdot 0.125 = -0.25\); \(f(3) = -2 \cdot 27 = -54\).</p><p class="komm">Immer zuerst die Potenz, dann mal \(a\). Die Klammer um die negative Zahl nicht vergessen.</p>', ''),
     ('1c', 2, r'Welche Symmetrie haben die Graphen von \(g(x) = 3x^{6}\) und \(h(x) = -x^{7}\)? Weise sie mit \(f(-x)\) nach.',
      r'<p>\(g(-x) = 3(-x)^6 = 3x^6 = g(x)\): gerade Funktion, Graph achsensymmetrisch zur \(y\)-Achse.</p><p>\(h(-x) = -(-x)^7 = x^7 = -h(x)\): ungerade Funktion, Graph punktsymmetrisch zum Ursprung.</p>', ''),
     ('1d', 2, r'Durch welche Punkte gehen <em>alle</em> Graphen von \(y = x^{n}\) mit \(n \in \mathbb{N}\setminus\{0\}\)? Und was geschieht bei \(x = -1\)?',
@@ -275,7 +275,7 @@ fest2 = r'''      <div class="festhalten">
       </div>'''
 auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
     ('2a', 3, r'\(f(x) = \dfrac{4}{x}\): Berechne \(f(2)\), \(f(-0.5)\) und \(f(8)\).',
-     r'<p>\(f(2) = 2\) · \(f(-0.5) = -8\) · \(f(8) = 0.5\).</p><p class="komm">Je grösser \(|x|\), desto näher liegt der Wert bei null — die \(x\)-Achse ist Asymptote.</p>', ''),
+     r'<p>\(f(2) = 2\); \(f(-0.5) = -8\); \(f(8) = 0.5\).</p><p class="komm">Je grösser \(|x|\), desto näher liegt der Wert bei null — die \(x\)-Achse ist Asymptote.</p>', ''),
     ('2b', 3, r'Gegeben ist \(g(x) = \dfrac{3}{x^{2}}\). Gib Definitionsmenge, Wertemenge und die beiden Asymptoten an, und sag, wo die Äste liegen.',
      r'<p>\(D = \mathbb{R}\setminus\{0\}\), \(W = \mathbb{R}^{+}\) (nur positive Werte, denn \(x^2 \gt 0\) und \(3 \gt 0\)).</p><p>Asymptoten: \(x = 0\) und \(y = 0\). Der Exponent \(2\) ist gerade und \(a = 3 \gt 0\): <b>beide Äste oben</b>.</p>', ''),
     ('2c', 2, r'Begründe: Keine Funktion \(f(x) = \dfrac{a}{x^{n}}\) mit \(a \neq 0\) hat eine Nullstelle.',
@@ -332,7 +332,7 @@ fest3 = r'''      <div class="festhalten">
       </div>'''
 auf3 = test('t3', 'Aufgaben · Kapitel 3', 13, [
     ('3a', 3, r'\(f(x) = (x+1)^{3} - 2\): Wie ist der Graph gegenüber \(y = x^{3}\) verschoben, wo liegt der Terrassenpunkt, und wie gross sind \(f(0)\) und \(f(1)\)?',
-     r'<p>\(1\) nach links und \(2\) nach unten; Terrassenpunkt \((-1 \mid -2)\).</p><p>\(f(0) = 1^3 - 2 = -1\) · \(f(1) = 2^3 - 2 = 6\).</p>', ''),
+     r'<p>\(1\) nach links und \(2\) nach unten; Terrassenpunkt \((-1 \mid -2)\).</p><p>\(f(0) = 1^3 - 2 = -1\); \(f(1) = 2^3 - 2 = 6\).</p>', ''),
     ('3b', 3, r'\(g(x) = \dfrac{2}{x-3} + 1\): Gib Definitionsmenge und beide Asymptoten an und berechne \(g(5)\).',
      r'<p>\(D = \mathbb{R}\setminus\{3\}\); Asymptoten \(x = 3\) und \(y = 1\).</p><p>\(g(5) = \dfrac{2}{2} + 1 = 2\).</p>', ''),
     ('3c', 3, r'Berechne die Nullstellen von \(h(x) = (x+2)^{4} - 81\).',
@@ -400,7 +400,7 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 12, [
     ('4e', 2, r'Gegeben \(f(x) = x^{3} + 1\) und \(g(x) = \sqrt[3]{x-1}\). Zeige an der Stelle \(x = 9\), dass \(f(g(x)) = x\) gilt.',
      r'<p>\(g(9) = \sqrt[3]{8} = 2\), dann \(f(2) = 2^3 + 1 = 9\) ✓</p><p class="komm">Genau das heisst «Umkehrfunktion»: Erst \(g\), dann \(f\) — und man ist wieder am Anfang.</p>', ''),
 ], zwei=False)
-k4 = kapitel(4, 'umkehren', 'Umkehren: spiegeln an \\(y = x\\)', 'Umkehrfunktion · RLP-Kern', 45,
+k4 = kapitel(4, 'umkehren', 'Umkehren: spiegeln an \\(y = x\\)', 'Umkehrfunktion; RLP-Kern', 45,
              r'Du deutest die Umkehrfunktion als Spiegelung an \(y = x\), bestimmst sie rechnerisch in drei Schritten und begründest, wann eine Potenzfunktion vorher eingeschränkt werden muss.',
              ('s3-2-lp-umkehren', 'Umkehren heisst spiegeln', '1:28'),
              sim4, ('s3-2-lp-kontrolle-umkehren', 'Kontrollfragen zum Umkehren', '0:57'),
@@ -447,12 +447,12 @@ fest5 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf5 = test('t5', 'Aufgaben · Kapitel 5', 14, [
-    ('5a', 3, r'Gib die maximale Definitionsmenge an: \(\sqrt{x-5}\) · \(\sqrt[3]{x+1}\) · \(\sqrt[4]{x+2} - 1\).',
-     r'<p>\([5;\infty[\) · \(\mathbb{R}\) · \([-2;\infty[\).</p><p class="komm">Nur der <em>Radikand</em> zählt. Die \(-1\) hinter der Wurzel ändert die Definitionsmenge nicht, und der ungerade Wurzelexponent \(3\) setzt gar keine Schranke.</p>', ''),
+    ('5a', 3, r'Gib die maximale Definitionsmenge an: \(\sqrt{x-5}\); \(\sqrt[3]{x+1}\); \(\sqrt[4]{x+2} - 1\).',
+     r'<p>\([5;\infty[\); \(\mathbb{R}\); \([-2;\infty[\).</p><p class="komm">Nur der <em>Radikand</em> zählt. Die \(-1\) hinter der Wurzel ändert die Definitionsmenge nicht, und der ungerade Wurzelexponent \(3\) setzt gar keine Schranke.</p>', ''),
     ('5b', 3, r'\(f(x) = 3\sqrt{x+1} - 6\): Gib Definitionsmenge und Startpunkt an und berechne Ordinatenabschnitt und Nullstelle.',
      r'<p>\(D = [-1;\infty[\), Startpunkt \((-1 \mid -6)\).</p><p>Ordinatenabschnitt: \(f(0) = 3 \cdot 1 - 6 = -3\).</p><p>Nullstelle: \(3\sqrt{x+1} = 6 \Rightarrow \sqrt{x+1} = 2 \Rightarrow x + 1 = 4 \Rightarrow x_0 = 3\).</p>', ''),
     ('5c', 3, r'Löse \(\sqrt[3]{x-1} = 2\) rechnerisch und beschreib, wie man die Lösung am Graphen abliest.',
-     r'<p>Beide Seiten hoch \(3\): \(x - 1 = 8 \Rightarrow x = 9\). Probe: \(\sqrt[3]{8} = 2\) ✓ · \(\mathbb{L} = \{9\}\).</p><p>Grafisch: Man zeichnet \(y = \sqrt[3]{x-1}\) und die waagrechte Gerade \(y = 2\) und liest die \(x\)-Koordinate des Schnittpunkts ab.</p>', ''),
+     r'<p>Beide Seiten hoch \(3\): \(x - 1 = 8 \Rightarrow x = 9\). Probe: \(\sqrt[3]{8} = 2\) ✓; \(\mathbb{L} = \{9\}\).</p><p>Grafisch: Man zeichnet \(y = \sqrt[3]{x-1}\) und die waagrechte Gerade \(y = 2\) und liest die \(x\)-Koordinate des Schnittpunkts ab.</p>', ''),
     ('5d', 2, r'Ordne \(\sqrt{x}\), \(x\) und \(x^{2}\) der Grösse nach — einmal für \(x = 0.09\), einmal für \(x = 16\).',
      r'<p>\(x = 0.09\): \(\sqrt{0.09} = 0.3 \gt 0.09 \gt 0.0081\), also \(\sqrt{x} \gt x \gt x^2\).</p><p>\(x = 16\): \(4 \lt 16 \lt 256\), also \(\sqrt{x} \lt x \lt x^2\) — die Reihenfolge kippt bei \(x = 1\).</p>', ''),
     ('5e', 3, r'Die abgebildete Wurzelkurve hat den Startpunkt \((2 \mid -1)\) und geht durch \((6 \mid 1)\). Bestimme \(a\) in \(f(x) = a\sqrt{x-2} - 1\) und gib die Definitionsmenge an.',
@@ -477,12 +477,12 @@ k0 = '''
       ''' + clipkarte('s1-2-anim-exponenten-treppe', 'Exponenten-Treppe: Wurzeln sind die halben Schritte', '0:51') + '''
       ''' + clipkarte('s3-1-anim-transformationen', 'Transformationen: ein Schema für alle Grundfunktionen', '0:49') + '''
 ''' + test('t0', 'Vortest', 10, [
-    ('0a', 2, r'Berechne ohne Rechner: \((-2)^{3}\) · \((-2)^{4}\) · \(2^{-3}\) · \(\left(\tfrac{1}{2}\right)^{-2}\).',
-     r'<p>\(-8\) · \(16\) · \(\tfrac{1}{8} = 0.125\) · \(4\).</p><p class="komm">Falsch? Ein <em>gerader</em> Exponent macht jede Basis positiv, ein negativer Exponent bedeutet den Kehrwert. <a href="../schwerpunkt/s1-2-potenzen.html#definition">Teilgebiet 1.2, Potenzen</a></p>', ''),
-    ('0b', 3, r'Vereinfache: \(x^{3} \cdot x^{5}\) · \(\left(x^{3}\right)^{4}\) · \(\dfrac{x^{7}}{x^{3}}\).',
-     r'<p>\(x^{8}\) · \(x^{12}\) · \(x^{4}\).</p><p class="komm">Falsch? Beim Multiplizieren werden die Exponenten addiert, beim Potenzieren multipliziert, beim Dividieren subtrahiert. <a href="../schwerpunkt/s1-2-potenzen.html#potenzgesetze">Teilgebiet 1.2, Potenzgesetze</a></p>', ''),
-    ('0c', 2, r'Berechne: \(\sqrt{49}\) · \(\sqrt[3]{27}\) · \(\sqrt[4]{16}\) · \(\sqrt[3]{-8}\).',
-     r'<p>\(7\) · \(3\) · \(2\) · \(-2\).</p><p class="komm">Die dritte Wurzel aus einer negativen Zahl gibt es — die Quadratwurzel aus einer negativen nicht. Genau dieser Unterschied trägt Kapitel 4 und 5.</p>', ''),
+    ('0a', 2, r'Berechne ohne Rechner: \((-2)^{3}\); \((-2)^{4}\); \(2^{-3}\); \(\left(\tfrac{1}{2}\right)^{-2}\).',
+     r'<p>\(-8\); \(16\); \(\tfrac{1}{8} = 0.125\); \(4\).</p><p class="komm">Falsch? Ein <em>gerader</em> Exponent macht jede Basis positiv, ein negativer Exponent bedeutet den Kehrwert. <a href="../schwerpunkt/s1-2-potenzen.html#definition">Teilgebiet 1.2, Potenzen</a></p>', ''),
+    ('0b', 3, r'Vereinfache: \(x^{3} \cdot x^{5}\); \(\left(x^{3}\right)^{4}\); \(\dfrac{x^{7}}{x^{3}}\).',
+     r'<p>\(x^{8}\); \(x^{12}\); \(x^{4}\).</p><p class="komm">Falsch? Beim Multiplizieren werden die Exponenten addiert, beim Potenzieren multipliziert, beim Dividieren subtrahiert. <a href="../schwerpunkt/s1-2-potenzen.html#potenzgesetze">Teilgebiet 1.2, Potenzgesetze</a></p>', ''),
+    ('0c', 2, r'Berechne: \(\sqrt{49}\); \(\sqrt[3]{27}\); \(\sqrt[4]{16}\); \(\sqrt[3]{-8}\).',
+     r'<p>\(7\); \(3\); \(2\); \(-2\).</p><p class="komm">Die dritte Wurzel aus einer negativen Zahl gibt es — die Quadratwurzel aus einer negativen nicht. Genau dieser Unterschied trägt Kapitel 4 und 5.</p>', ''),
     ('0d', 3, r'Der Graph von \(y = (x-2)^{2} + 1\) entsteht aus der Normalparabel \(y = x^{2}\). Wie ist er verschoben, und wo liegt sein Scheitel?',
      r'<p>\(2\) nach rechts und \(1\) nach oben; Scheitel \(S(2 \mid 1)\).</p><p class="komm">Falsch? Die Zahl <em>in der Klammer</em> schiebt waagrecht, mit umgekehrtem Vorzeichen; die Zahl dahinter senkrecht, mit eigenem. Genau dieses Schema gilt in Kapitel 3 für jeden Exponenten. <a href="../schwerpunkt/s3-1-grundlagen.html#theorie">Teilgebiet 3.1, Transformationen</a> und der Clip oben.</p>', ''),
 ]) + '''
@@ -513,7 +513,7 @@ gt = f'''
             <tr><td>12 – 17 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 11 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1, G2 → 1 · G3 → 2 · G4 → 3 (Nullstellen und Asymptoten) · G5, G6 → 4 · G7 → 5 (beide Paritäten) · G8 → 5</p>
+          <p>Aufgabe → Kapitel: G1, G2 → 1; G3 → 2; G4 → 3 (Nullstellen und Asymptoten); G5, G6 → 4; G7 → 5 (beide Paritäten); G8 → 5</p>
         </div>
       </div>
     </section>'''
@@ -534,7 +534,7 @@ oben = '''<div id="nav-root"></div>
      der Kompetenz in keinem von beiden ganz enthalten.
 
      Kompetenz → Kapitel → Test: «berechnen» → 1, 2, 3, 5 → G1, G3, G4, G7 ·
-     «interpretieren» → 1, 2, 4 → G2, G3, G6, G8 · «grafisch darstellen» → 1, 3, 4, 5
+     «interpretieren» → 1, 2, 4 → G2, G3, G6, G8; «grafisch darstellen» → 1, 3, 4, 5
      → G1, G2, G5. Kein Kapitelziel ohne Kompetenz.
 
      Kapitel 3 (Verschieben und strecken) gehört dem Lehrplan nach zu SP 3.1
@@ -575,24 +575,12 @@ oben = '''<div id="nav-root"></div>
     <ol>
       <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
     </ol>
-    <p class="lekt">Lektion 1</p>
+    <p class="lekt">Kapitel</p>
     <ol>
       <li><a href="#k1"><span class="nr">1</span><span>Der Exponent</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 2</p>
-    <ol>
       <li><a href="#k2"><span class="nr">2</span><span>Hyperbeln</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 3</p>
-    <ol>
       <li><a href="#k3"><span class="nr">3</span><span>Verschieben</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 4</p>
-    <ol>
       <li><a href="#k4"><span class="nr">4</span><span>Umkehren</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 5</p>
-    <ol>
       <li><a href="#k5"><span class="nr">5</span><span>Wurzelfunktionen</span></a></li>
     </ol>
     <p class="lekt">Abschluss</p>
@@ -641,13 +629,14 @@ unten = '''
 </div>
 </div>
 '''
+# Kapitel = Lektion: keine Lektionsbänder mehr (Abnahme 06.10.2026).
 band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
 # Zeiten (03.10.2026): Vorwissen 10 (vorab) · K1 40 · K2 40 · K3 40 · K4 45 · K5 45 · Gesamttest 30 = 250 min
 # Die fünf Kapitel sind die fünf Lektionen; Vorwissen und Gesamttest kommen davor und danach.
-body = (oben + band('Vorab', 'Vorwissen') + k0 + band(1, 'Der Exponent formt') + k1
-        + band(2, 'Negative Exponenten') + k2 + band(3, 'Verschieben und strecken') + k3
-        + band(4, 'Umkehren') + k4 + band(5, 'Wurzelfunktionen nutzen') + k5
-        + band('Abschluss', 'Gesamttest') + gt + unten)
+body = (oben + k0 + k1
+        + k2 + k3
+        + k4 + k5
+        + gt + unten)
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(ZIEL, 'w').write(seite)
 print('geschrieben', len(seite.splitlines()), 'Zeilen')

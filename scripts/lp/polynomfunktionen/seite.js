@@ -241,7 +241,7 @@
       var ns = Object.keys(gesehen).map(Number).sort(function(p, q){ return p - q; });
       rolle(fig, 'formel').innerHTML = 'f(x) = ' + faktorText(s.a, s.w) + ' = ' + summeText(s.c)
         + '<br>Nullstellen: ' + ns.map(function(x){ return sp('tx-orange', z(x)); }).join(', ')
-        + ' &nbsp;·&nbsp; Grad 3, Leitkoeffizient ' + sp('tx-blau', z(s.a));
+        + '; &nbsp;Grad 3, Leitkoeffizient ' + sp('tx-blau', z(s.a));
       pruefen();
     }
     function bau(a, w, tex){ return { text: 'Bau nach: \\(' + tex + '\\)', ok: function(s){ return s.a === a && gleicheMenge(s.w, w); } }; }
@@ -290,8 +290,8 @@
       K.kurve(function(x){ return wert(s.c, x); }, 'kurve');
       var stellen = Object.keys(s.vf).map(Number).sort(function(u, v){ return u - v; });
       stellen.forEach(function(x){ K.punkt(x, 0, 'p-ns'); });
-      rolle(fig, 'formel').innerHTML = 'f(x) = ' + faktorText(s.a, s.l) + ' &nbsp;·&nbsp; Grad ' + s.grad + '<br>'
-        + stellen.map(function(x){ return 'bei ' + sp('tx-orange', z(x)) + ': ' + verhalten(s.vf[x]); }).join(' &nbsp;·&nbsp; ');
+      rolle(fig, 'formel').innerHTML = 'f(x) = ' + faktorText(s.a, s.l) + '; &nbsp;Grad ' + s.grad + '<br>'
+        + stellen.map(function(x){ return 'bei ' + sp('tx-orange', z(x)) + ': ' + verhalten(s.vf[x]); }).join('; &nbsp;');
       pruefen();
     }
     function vielfach(s, x){ return s.vf[x] || 0; }
@@ -358,7 +358,7 @@
       var enden = s.n % 2 === 0 ? (vz ? 'beide Enden oben' : 'beide Enden unten')
                                 : (vz ? 'von links unten nach rechts oben' : 'von links oben nach rechts unten');
       rolle(fig, 'formel').innerHTML = 'f(x) = ' + summeText(s.k) + '<br>Grad ' + s.n + ', Leitkoeffizient ' + sp('tx-blau', z(s.a))
-        + ' &nbsp;·&nbsp; <b>' + enden + '</b><br>' + s.ns + ' Nullstelle' + (s.ns === 1 ? '' : 'n') + ' (höchstens ' + s.n + ') · '
+        + '; &nbsp;<b>' + enden + '</b><br>' + s.ns + ' Nullstelle' + (s.ns === 1 ? '' : 'n') + ' (höchstens ' + s.n + ') · '
         + s.ex + ' Extremstelle' + (s.ex === 1 ? '' : 'n') + ' (höchstens ' + (s.n - 1) + ') · '
         + (s.sym === 'achs' ? 'nur gerade Exponenten: achsensymmetrisch zur <i>y</i>-Achse'
            : s.sym === 'punkt' ? 'nur ungerade Exponenten: punktsymmetrisch zum Ursprung' : 'gemischte Exponenten: keine dieser Symmetrien');
@@ -473,9 +473,9 @@
       // Gerundete Werte mit «≈» (HOWTO §15).
       var gr = Math.abs(s.y - Math.round(s.y * 1000) / 1000) > 1e-12, yt = (gr ? '≈ ' : '') + z(s.y);
       K.punkt(s.x, s.y, 'p-lauf', '(' + z(s.x) + ' | ' + yt + ')', s.x > 1.5 ? -8 : 8, -10, s.x > 1.5 ? 'end' : 'start');
-      rolle(fig, 'formel').innerHTML = 'f(x) = x<sup>3</sup> − 3x &nbsp;·&nbsp; Läufer bei x = ' + z(s.x)
+      rolle(fig, 'formel').innerHTML = 'f(x) = x<sup>3</sup> − 3x; &nbsp;Läufer bei x = ' + z(s.x)
         + ', f(x) ' + (gr ? '≈ ' : '= ') + z(s.y)
-        + ' &nbsp;·&nbsp; ' + (s.ein ? 'D = [' + z(s.l) + '; ' + z(s.r) + ']' : 'D = ℝ');
+        + '; &nbsp;' + (s.ein ? 'D = [' + z(s.l) + '; ' + z(s.r) + ']' : 'D = ℝ');
       pruefen();
     }
     function nah(a, b){ return Math.abs(a - b) < 0.051; }

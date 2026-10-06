@@ -229,10 +229,10 @@ fest1 = r'''      <div class="festhalten">
         </div>
       </div>'''
 auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
-    ('1a', 3, r'Rechne um: \(225^\circ\) ins Bogenmass · \(\tfrac{5\pi}{6}\) in Grad · \(x = 1\) (Bogenmass) in Grad, exakt. Etwa wie viel Grad sind das?',
-     r'<p>\(225^\circ = \tfrac{225}{180}\,\pi = \tfrac{5\pi}{4}\) · \(\tfrac{5\pi}{6} = \tfrac56 \cdot 180^\circ = 150^\circ\) · \(1 = \tfrac{180^\circ}{\pi}\), mit \(\pi \approx 3\) also knapp \(60^\circ\) (genau \(57.3^\circ\)).</p>', ''),
-    ('1b', 2, r'Gib ohne Taschenrechner an: \(\sin \tfrac{3\pi}{2}\) · \(\cos \pi\) · \(\cos \tfrac{3\pi}{2}\) · \(\sin \tfrac{7\pi}{6}\).',
-     r'<p>\(-1\) · \(-1\) · \(0\) · \(-\tfrac12\).</p><p class="komm">\(\tfrac{7\pi}{6}\) liegt im dritten Quadranten, \(\tfrac{\pi}{6}\) nach \(\pi\): gleiche Höhe wie bei \(\tfrac{\pi}{6}\), aber unter der Achse.</p>', ''),
+    ('1a', 3, r'Rechne um: \(225^\circ\) ins Bogenmass; \(\tfrac{5\pi}{6}\) in Grad; \(x = 1\) (Bogenmass) in Grad, exakt. Etwa wie viel Grad sind das?',
+     r'<p>\(225^\circ = \tfrac{225}{180}\,\pi = \tfrac{5\pi}{4}\); \(\tfrac{5\pi}{6} = \tfrac56 \cdot 180^\circ = 150^\circ\); \(1 = \tfrac{180^\circ}{\pi}\), mit \(\pi \approx 3\) also knapp \(60^\circ\) (genau \(57.3^\circ\)).</p>', ''),
+    ('1b', 2, r'Gib ohne Taschenrechner an: \(\sin \tfrac{3\pi}{2}\); \(\cos \pi\); \(\cos \tfrac{3\pi}{2}\); \(\sin \tfrac{7\pi}{6}\).',
+     r'<p>\(-1\); \(-1\); \(0\); \(-\tfrac12\).</p><p class="komm">\(\tfrac{7\pi}{6}\) liegt im dritten Quadranten, \(\tfrac{\pi}{6}\) nach \(\pi\): gleiche Höhe wie bei \(\tfrac{\pi}{6}\), aber unter der Achse.</p>', ''),
     ('1c', 2, r'Der Punkt \(P(-0.6 \mid 0.8)\) liegt auf dem Einheitskreis. Gib \(\sin x\) und \(\cos x\) an. In welchem Quadranten liegt \(x\)?',
      r'<p>\(\sin x = 0.8\), \(\cos x = -0.6\). Zweiter Quadrant: \(\tfrac{\pi}{2} \lt x \lt \pi\).</p>', ''),
     ('1d', 3, r'Skizziere \(y = \sin x\) und \(y = \cos x\) für \(0 \le x \le 2\pi\) in <em>ein</em> Koordinatensystem — mit je fünf Stützpunkten.',
@@ -279,8 +279,8 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 13, [
      r'<p>\(W = [-1;\, 1]\), \(p = 2\pi\), \(x_0 = \tfrac{\pi}{2} + k\pi\) mit \(k \in \mathbb{Z}\).</p>', ''),
     ('2b', 2, r'Gib alle Hochstellen von \(y = \sin x\) im Intervall \([-2\pi;\, 4\pi]\) an.',
      r'<p>\(-\tfrac{3\pi}{2}\), \(\tfrac{\pi}{2}\), \(\tfrac{5\pi}{2}\) — von \(\tfrac{\pi}{2}\) aus je eine Periode \(2\pi\) weiter oder zurück.</p>', ''),
-    ('2c', 3, r'Es gilt \(\sin 0.6 \approx 0.565\) und \(\cos 0.6 \approx 0.825\). Gib ohne Taschenrechner an: \(\sin(-0.6)\) · \(\cos(-0.6)\) · \(\sin(0.6 + 2\pi)\).',
-     r'<p>\(\approx -0.565\) (punktsymmetrisch) · \(\approx 0.825\) (achsensymmetrisch) · \(\approx 0.565\) (Periode \(2\pi\)).</p>', ''),
+    ('2c', 3, r'Es gilt \(\sin 0.6 \approx 0.565\) und \(\cos 0.6 \approx 0.825\). Gib ohne Taschenrechner an: \(\sin(-0.6)\); \(\cos(-0.6)\); \(\sin(0.6 + 2\pi)\).',
+     r'<p>\(\approx -0.565\) (punktsymmetrisch); \(\approx 0.825\) (achsensymmetrisch); \(\approx 0.565\) (Periode \(2\pi\)).</p>', ''),
     ('2d', 3, r'Die gestrichelte Kurve ist die um \(\tfrac{\pi}{2}\) nach rechts verschobene Sinuskurve. Gib ihre Gleichung einmal mit Sinus und einmal mit Cosinus an.',
      r'<p>\(y = \sin\left(x - \tfrac{\pi}{2}\right)\). Sie hat ihren Tiefpunkt bei \(0\) und ihren Hochpunkt bei \(\pi\) — wie die an der \(x\)-Achse gespiegelte Cosinuskurve: \(y = -\cos x\). Gleichwertig, als verschobene Cosinuskurve: \(y = \cos(x - \pi)\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini" data-t="s,1,1,0,0;s,1,1,1.5707963267948966,0" data-fenster="-0.5,6.9,-1.5,1.5" data-xpi="1"></svg></div>'),
@@ -327,10 +327,10 @@ fest3 = r'''      <div class="festhalten">
 auf3 = test('t3', 'Aufgaben · Kapitel 3', 11, [
     ('3a', 3, r'Gib für \(y = \tan x\) an: Definitionsmenge, Wertemenge, Periodenlänge und alle Nullstellen.',
      r'<p>\(D = \mathbb{R} \setminus \left\{\tfrac{\pi}{2} + k\pi\right\}\), \(W = \mathbb{R}\), \(p = \pi\), \(x_0 = k\pi\) mit \(k \in \mathbb{Z}\).</p>', ''),
-    ('3b', 2, r'Gib ohne Taschenrechner an: \(\tan \tfrac{3\pi}{4}\) · \(\tan \pi\) · \(\tan\left(-\tfrac{\pi}{4}\right)\).',
-     r'<p>\(-1\) · \(0\) · \(-1\).</p><p class="komm">\(\tfrac{3\pi}{4}\): Sinus positiv, Cosinus negativ, gleich gross — Quotient \(-1\). \(-\tfrac{\pi}{4}\): Punktsymmetrie, \(-\tan\tfrac{\pi}{4}\).</p>', ''),
+    ('3b', 2, r'Gib ohne Taschenrechner an: \(\tan \tfrac{3\pi}{4}\); \(\tan \pi\); \(\tan\left(-\tfrac{\pi}{4}\right)\).',
+     r'<p>\(-1\); \(0\); \(-1\).</p><p class="komm">\(\tfrac{3\pi}{4}\): Sinus positiv, Cosinus negativ, gleich gross — Quotient \(-1\). \(-\tfrac{\pi}{4}\): Punktsymmetrie, \(-\tan\tfrac{\pi}{4}\).</p>', ''),
     ('3c', 2, r'Es gilt \(\tan 1.2 \approx 2.572\). Gib ohne Taschenrechner an: \(\tan(1.2 - \pi)\) und \(\tan(-1.2)\).',
-     r'<p>\(\approx 2.572\) (Periode \(\pi\)) · \(\approx -2.572\) (punktsymmetrisch).</p>', ''),
+     r'<p>\(\approx 2.572\) (Periode \(\pi\)); \(\approx -2.572\) (punktsymmetrisch).</p>', ''),
     ('3d', 2, r'Skizziere \(y = \tan x\) für \(-\pi \lt x \lt 2\pi\) mit allen Polgeraden und Nullstellen.',
      r'<p>Pole bei \(-\tfrac{\pi}{2}\), \(\tfrac{\pi}{2}\), \(\tfrac{3\pi}{2}\); Nullstellen bei \(0\) und \(\pi\). Zwischen zwei Polen steigt die Kurve von \(-\infty\) nach \(+\infty\), durch die Nullstelle in der Mitte.</p>'
      '<div class="mini-reihe"><svg class="mini" data-t="t,1,1,0,0" data-fenster="-3.3,6.4,-3,3" data-ym="-2,-1,1,2" data-punkte="0,0;3.141592653589793,0" data-senkrecht="-1.5707963267948966,1.5707963267948966,4.71238898038469"></svg></div>', ''),
@@ -456,10 +456,10 @@ k0 = '''
       ''' + clipkarte('g5-4-gradmass-bogenmass', 'Einheitskreis: Gradmass und Bogenmass') + '''
       ''' + clipkarte('g5-4-einheitskreis', 'Einheitskreis: Sinus und Cosinus als Koordinaten') + '''
 ''' + test('t0', 'Vortest', 10, [
-    ('0a', 3, r'Rechne ins Bogenmass um: \(60^\circ\) · \(30^\circ\) · \(360^\circ\).',
-     r'<p>\(\tfrac{\pi}{3}\) · \(\tfrac{\pi}{6}\) · \(2\pi\).</p><p class="komm">Falsch? \(180^\circ = \pi\) — der erste Clip oben.</p>', ''),
+    ('0a', 3, r'Rechne ins Bogenmass um: \(60^\circ\); \(30^\circ\); \(360^\circ\).',
+     r'<p>\(\tfrac{\pi}{3}\); \(\tfrac{\pi}{6}\); \(2\pi\).</p><p class="komm">Falsch? \(180^\circ = \pi\) — der erste Clip oben.</p>', ''),
     ('0b', 3, r'Gib die Koordinaten des Punktes auf dem Einheitskreis an, der zum Winkel \(90^\circ\) gehört, und zu \(180^\circ\). Wie gross ist \(\sin 30^\circ\)?',
-     r'<p>\((0 \mid 1)\) · \((-1 \mid 0)\) · \(\sin 30^\circ = \tfrac12\).</p><p class="komm">Falsch? Der Punkt hat die Koordinaten \((\cos \alpha \mid \sin \alpha)\) — der zweite Clip oben. <a href="../grundlagen/g5-4-einheitskreis.html">GF 5.4</a></p>', ''),
+     r'<p>\((0 \mid 1)\); \((-1 \mid 0)\); \(\sin 30^\circ = \tfrac12\).</p><p class="komm">Falsch? Der Punkt hat die Koordinaten \((\cos \alpha \mid \sin \alpha)\) — der zweite Clip oben. <a href="../grundlagen/g5-4-einheitskreis.html">GF 5.4</a></p>', ''),
     ('0c', 2, r'Der Graph von \(f(x) = x^2\) wird um \(2\) nach rechts und um \(1\) nach oben verschoben. Wie heisst die neue Gleichung?',
      r'<p>\(y = (x - 2)^2 + 1\).</p><p class="komm">Nach rechts heisst: \(x - 2\) einsetzen. Genau so verschiebt Kapitel 4 die Sinuskurve. <a href="../schwerpunkt/s3-1-grundlagen.html">Teilgebiet 3.1</a></p>', ''),
     ('0d', 2, r'Ist der Graph von \(f(x) = x^3 - x\) achsensymmetrisch zur \(y\)-Achse, punktsymmetrisch zum Ursprung oder keines von beiden? Begründe mit \(f(-x)\).',
@@ -492,7 +492,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1, 2 · G2 → 1, 3 · G3 → 2 · G4 → 3 · G5, G6 → 4 · G7 → 5 · G8 → 4, 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1, 2; G2 → 1, 3; G3 → 2; G4 → 3; G5, G6 → 4; G7 → 5; G8 → 4, 5</p>
         </div>
       </div>
     </section>'''
@@ -554,24 +554,12 @@ oben = '''<div id="nav-root"></div>
     <ol>
       <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
     </ol>
-    <p class="lekt">Lektion 1</p>
+    <p class="lekt">Kapitel</p>
     <ol>
       <li><a href="#k1"><span class="nr">1</span><span>Vom Kreis zur Kurve</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 2</p>
-    <ol>
       <li><a href="#k2"><span class="nr">2</span><span>Periode und Symmetrie</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 3</p>
-    <ol>
       <li><a href="#k3"><span class="nr">3</span><span>Tangensfunktion</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 4</p>
-    <ol>
       <li><a href="#k4"><span class="nr">4</span><span>Strecken und Verschieben</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 5</p>
-    <ol>
       <li><a href="#k5"><span class="nr">5</span><span>Symmetrie nutzen</span></a></li>
     </ol>
     <p class="lekt">Abschluss</p>
@@ -619,12 +607,13 @@ unten = '''
 </div>
 </div>
 '''
+# Kapitel = Lektion: keine Lektionsbänder mehr (Abnahme 06.10.2026).
 band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
 # Zeiten (05.10.2026): Vorwissen 10 (vorab) · K1 40 · K2 40 · K3 35 · K4 45 · K5 40 · Gesamttest 30 = 240 min
-body = (oben + band('Vorab', 'Vorwissen') + k0 + band(1, 'Vom Einheitskreis zur Kurve') + k1
-        + band(2, 'Periode und Symmetrie') + k2 + band(3, 'Die Tangensfunktion') + k3
-        + band(4, 'Strecken und Verschieben') + k4 + band(5, 'Symmetrie nutzen') + k5
-        + band('Abschluss', 'Gesamttest') + gt + unten)
+body = (oben + k0 + k1
+        + k2 + k3
+        + k4 + k5
+        + gt + unten)
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(ZIEL, 'w').write(seite)
 print('geschrieben', len(seite.splitlines()), 'Zeilen')

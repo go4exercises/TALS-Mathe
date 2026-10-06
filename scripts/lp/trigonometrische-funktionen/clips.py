@@ -262,7 +262,7 @@ clip('kontrolle-kreis-kurve', 'Sinuskurve sehen: Kontrollfragen zum Einheitskrei
          sz('Frage 5',
             'Der Sinus ist die Höhe, also die zweite Koordinate: null Komma acht. Die erste, null Komma sechs, ist der Cosinus.',
             f(r'P = (\fc{0.6} \mid \fa{0.8}) \;\Rightarrow\; \sin x = \fa{0.8}', 240, 52, ein=1.0),
-            n('erste Koordinate: @\\cos x@ · zweite: @\\sin x@', 350, 'blau', ein=3.6)),
+            n('erste Koordinate: @\\cos x@; zweite: @\\sin x@', 350, 'blau', ein=3.6)),
          sz('Merke',
             'Zum Mitnehmen: pi ist hundertachtzig Grad. Der Sinus ist die Höhe von P, der Cosinus die waagrechte Koordinate. '
             'Die Sinuskurve hat bei pi halbe ihren Hochpunkt und bei drei pi halbe ihren Tiefpunkt.',
@@ -350,7 +350,7 @@ clip('periode-symmetrie', 'Sinuskurve sehen: Periode und Symmetrie',
             'Der Sinus ist punktsymmetrisch, der Cosinus achsensymmetrisch. Und die Cosinuskurve ist die um pi halbe '
             'nach links verschobene Sinuskurve.',
             titel('Zum Mitnehmen', 240, 72),
-            n('@p = 2\\pi@, @W = [-1;\\, 1]@|@\\sin(-x) = -\\sin x@ · @\\cos(-x) = \\cos x@', 350, 'blau', 42, ein=1.2),
+            n('@p = 2\\pi@, @W = [-1;\\, 1]@|@\\sin(-x) = -\\sin x@; @\\cos(-x) = \\cos x@', 350, 'blau', 42, ein=1.2),
             graf(WS, [sk([[0, 1, 1, 0, 0]]), ck()], ein=0.3)),
          JETZT_DU,
      ])
@@ -386,7 +386,7 @@ clip('kontrolle-periode-symmetrie', 'Sinuskurve sehen: Kontrollfragen zu Periode
             'Zum Mitnehmen: Periode zwei pi, Nullstellen des Sinus bei k pi, des Cosinus bei pi halbe plus k pi. '
             'Der Sinus ist punktsymmetrisch, der Cosinus achsensymmetrisch.',
             titel('Zum Mitnehmen', 240, 72),
-            n('Sinus: @x_0 = k\\pi@ · Cosinus: @x_0 = \\tfrac{\\pi}{2} + k\\pi@', 350, 'blau', 42, ein=1.2),
+            n('Sinus: @x_0 = k\\pi@; Cosinus: @x_0 = \\tfrac{\\pi}{2} + k\\pi@', 350, 'blau', 42, ein=1.2),
             graf(WS, [sk([[0, 1, 1, 0, 0]]), ck()], ein=0.3)),
      ], [
          wahl('Frage 1', 'Welche Periodenlänge hat y = cos x?',
@@ -455,20 +455,20 @@ clip('tangens', 'Sinuskurve sehen: die Tangenskurve',
             'An jeder Stelle pi halbe plus k pi hat die Tangenskurve einen Pol: Links davon wächst sie über alle Grenzen, rechts davon kommt sie von ganz unten. '
             'Schon nach pi wiederholt sie sich. Die Periodenlänge ist pi, nicht zwei pi.',
             f(r'\tan(x + \pi) = \tan x', 240, 56),
-            n('Pole bei @x = \\tfrac{\\pi}{2} + k\\pi@ · Periode @p = \\pi@', 350, 'orange', ein=8.4),
+            n('Pole bei @x = \\tfrac{\\pi}{2} + k\\pi@; Periode @p = \\pi@', 350, 'orange', ein=8.4),
             graf(WTP, [tk([[0, 1, 1, 0, 0]], pole=True)], ein=0.3)),
          sz('Nullstellen und Symmetrie',
             'Nullstellen hat der Tangens dort, wo der Sinus null ist: bei k mal pi. Und die Kurve ist punktsymmetrisch '
             'zum Ursprung: Tangens von minus x ist minus Tangens von x. Alle Zahlen kommen als Wert vor.',
             f(r'\tan(-x) = -\tan x', 240, 56, ein=4.9),
-            n('@x_0 = k\\pi@ · @W = \\mathbb{R}@', 350, 'orange', ein=7.6),
+            n('@x_0 = k\\pi@; @W = \\mathbb{R}@', 350, 'orange', ein=7.6),
             graf(WTP, [tk([[0, 1, 1, 0, 0]], pole=True)], ein=0.3,
                  punkte=[pt(k * P, 0, 2) for k in (-1, 0, 1, 2)])),
          sz('Merke',
             'Zum Mitnehmen: Tangens ist Sinus durch Cosinus. Pole bei pi halbe plus k pi, Nullstellen bei k pi, '
             'Periode pi, punktsymmetrisch zum Ursprung.',
             titel('Zum Mitnehmen', 240, 72),
-            n('@D = \\mathbb{R} \\setminus \\left\\{\\tfrac{\\pi}{2} + k\\pi\\right\\}@ · @p = \\pi@', 350, 'orange', 42, ein=1.2),
+            n('@D = \\mathbb{R} \\setminus \\left\\{\\tfrac{\\pi}{2} + k\\pi\\right\\}@; @p = \\pi@', 350, 'orange', 42, ein=1.2),
             graf(WTP, [tk([[0, 1, 1, 0, 0]], pole=True)], ein=0.3)),
          JETZT_DU,
      ])
@@ -504,7 +504,7 @@ clip('kontrolle-tangens', 'Sinuskurve sehen: Kontrollfragen zur Tangenskurve',
             'Zum Mitnehmen: Der Tangens hat Pole, wo der Cosinus null ist, und Nullstellen, wo der Sinus null ist. '
             'Seine Periode ist pi.',
             titel('Zum Mitnehmen', 240, 72),
-            n('Pole: @\\cos x = 0@ · Nullstellen: @\\sin x = 0@ · @p = \\pi@', 350, 'orange', 42, ein=1.2),
+            n('Pole: @\\cos x = 0@; Nullstellen: @\\sin x = 0@; @p = \\pi@', 350, 'orange', 42, ein=1.2),
             graf(WTP, [tk([[0, 1, 1, 0, 0]], pole=True)], ein=0.3)),
      ], [
          wahl('Frage 1', 'Bei welchem x ist tan x nicht definiert?',
@@ -587,7 +587,7 @@ clip('parameter', 'Sinuskurve sehen: Strecken und Verschieben',
             'aus der Sinuskurve: zuerst die Periode pi, dann die Amplitude zwei, dann um pi viertel nach rechts, '
             'zuletzt die Mittellinie y gleich eins.',
             f(r'y = \fa{2}\sin\!\big(\fa{2}\,(x - \fa{\tfrac{\pi}{4}})\big) + \fa{1}', 240, 54),
-            n('@p = \\pi@ · @a = 2@ · @u = \\tfrac{\\pi}{4}@ · @v = 1@', 350, 'blau', ein=8.6),
+            n('@p = \\pi@; @a = 2@; @u = \\tfrac{\\pi}{4}@; @v = 1@', 350, 'blau', ein=8.6),
             graf(WA, [sk([[0, 1, 1, 0, 0]], farbe=5, gestrichelt=True),
                       sk([[0, 1, 1, 0, 0], [8.6, 1, 1, 0, 0], [9.8, 1, 2, 0, 0], [10.2, 1, 2, 0, 0], [11.4, 2, 2, 0, 0], [11.7, 2, 2, 0, 0],
                           [13.2, 2, 2, P / 4, 0], [13.6, 2, 2, P / 4, 0], [15.2, 2, 2, P / 4, 1]], mittel=True)], ein=0.3)),
@@ -629,7 +629,7 @@ clip('kontrolle-parameter', 'Sinuskurve sehen: Kontrollfragen zu den Parametern'
          sz('Merke',
             'Zum Mitnehmen: Amplitude ablesen, Periode zwei pi durch b, Wertemenge von v minus a bis v plus a.',
             titel('Zum Mitnehmen', 240, 72),
-            n('@W = [v - a;\\, v + a]@ (@a \\gt 0@) · @p = \\tfrac{2\\pi}{b}@', 350, 'blau', 44, ein=1.2),
+            n('@W = [v - a;\\, v + a]@ (@a \\gt 0@); @p = \\tfrac{2\\pi}{b}@', 350, 'blau', 44, ein=1.2),
             graf(WA, [sk([[0, 2, 1, 0, -1]], mittel=True)], ein=0.3)),
      ], [
          wahl('Frage 1', 'y = 3 sin x + 1: Wie gross ist die Amplitude?',
@@ -690,7 +690,7 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             'Der Taschenrechner liefert mit der Umkehrfunktion Sinus hoch minus eins nur eine Lösung: ungefähr null Komma sechs vier vier. '
             'Er muss dafür im Bogenmass rechnen, im Modus RAD.',
             f(r'x_1 = \sin^{-1}(0.6) \approx 0.644', 240, 56),
-            n('Rechner im Bogenmass (RAD) · @\\sin^{-1}@ heisst auch @\\arcsin@', 350, 'rot', ein=7.6),
+            n('Rechner im Bogenmass (RAD); @\\sin^{-1}@ heisst auch @\\arcsin@', 350, 'rot', ein=7.6),
             graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P), fest('0.6', farbe=5)], ein=0.3,
                  punkte=[pt(X1, 0.6, 1, 'x₁', [X1 - 0.15, 0.85], 'end')])),
          sz('Symmetrie',
@@ -731,7 +731,7 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             'Zum Mitnehmen: Sinus: x zwei gleich pi minus x eins. Cosinus: x zwei gleich zwei pi minus x eins. '
             'Und jede Lösung wiederholt sich nach zwei pi.',
             titel('Zum Mitnehmen', 240, 72),
-            n('@\\sin@: @x_2 = \\pi - x_1@ · @\\cos@: @x_2 = 2\\pi - x_1@|weitere: @+\\,2k\\pi@', 350, 'blau', 42, ein=1.2),
+            n('@\\sin@: @x_2 = \\pi - x_1@; @\\cos@: @x_2 = 2\\pi - x_1@|weitere: @+\\,2k\\pi@', 350, 'blau', 42, ein=1.2),
             graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P), fest('0.6', farbe=5)], ein=0.3)),
          JETZT_DU,
      ])
@@ -772,7 +772,7 @@ clip('kontrolle-gleichungen', 'Sinuskurve sehen: Kontrollfragen zum Symmetrie-Nu
             'Zum Mitnehmen: Zwei Lösungen pro Periode, wenn c zwischen minus eins und eins liegt. Die zweite über die Symmetrie. '
             'Bei c gleich plus oder minus eins nur eine, und liegt c ausserhalb, gibt es keine.',
             titel('Zum Mitnehmen', 240, 72),
-            n('pro Periode: @|c| \\lt 1@ zwei Lösungen · @|c| = 1@ eine · @|c| \\gt 1@ keine', 350, 'blau', 42, ein=1.2),
+            n('pro Periode: @|c| \\lt 1@ zwei Lösungen; @|c| = 1@ eine; @|c| \\gt 1@ keine', 350, 'blau', 42, ein=1.2),
             graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P)], ein=0.3)),
      ], [
          wahl('Frage 1', 'Wie viele Lösungen hat sin x = 0.3 im Intervall [0; 2π]?',

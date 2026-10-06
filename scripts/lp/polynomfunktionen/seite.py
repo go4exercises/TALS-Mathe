@@ -456,8 +456,8 @@ k0 = '''
      r'<p>\(\mathbb{L} = \{-5;\ 3\}\) und \(\mathbb{L} = \{0;\ 0.5\}\).</p><p class="komm">Falsch? Ein Produkt ist null, wenn ein Faktor null ist — jeden Faktor einzeln null setzen. Genau das trägt Kapitel 1. <a href="../grundlagen/g2-2b-quadratische-gleichungen.html">GF 2.2, Quadratische Gleichungen</a></p>', ''),
     ('0b', 3, r'Multipliziere aus: \((x+1)(x-2)(x+3)\).',
      r'<p>\((x+1)(x-2) = x^2 - x - 2\); mal \((x+3)\): \(x^3 + 3x^2 - x^2 - 3x - 2x - 6 = x^3 + 2x^2 - 5x - 6\).</p><p class="komm">Falsch? Erst zwei Klammern, dann das Ergebnis mit der dritten — jeder Term mit jedem. <a href="../grundlagen/g1-3-algebraische-terme.html">GF 1.3, Algebraische Terme</a></p>', ''),
-    ('0c', 3, r'Faktorisiere: \(x^2 - x - 12\) · \(x^2 - 9\) · \(x^2 + 6x + 9\).',
-     r'<p>\((x-4)(x+3)\) · \((x-3)(x+3)\) · \((x+3)^2\).</p><p class="komm">Falsch? Wie im Clip oben: Die Lösungen von \(x^2 - x - 12 = 0\) haben das Produkt \(-12\) und die Summe \(1\) — das sind \(4\) und \(-3\), also \((x-4)(x+3)\). Dann die binomischen Formeln.</p>', ''),
+    ('0c', 3, r'Faktorisiere: \(x^2 - x - 12\); \(x^2 - 9\); \(x^2 + 6x + 9\).',
+     r'<p>\((x-4)(x+3)\); \((x-3)(x+3)\); \((x+3)^2\).</p><p class="komm">Falsch? Wie im Clip oben: Die Lösungen von \(x^2 - x - 12 = 0\) haben das Produkt \(-12\) und die Summe \(1\) — das sind \(4\) und \(-3\), also \((x-4)(x+3)\). Dann die binomischen Formeln.</p>', ''),
     ('0d', 2, r'Wie verlaufen die Graphen von \(y = x^3\) und \(y = x^4\)? Symmetrie und die beiden Enden.',
      r'<p>\(y = x^3\): punktsymmetrisch zum Ursprung, von links unten nach rechts oben. \(y = x^4\): achsensymmetrisch zur \(y\)-Achse, beide Enden oben.</p><p class="komm">Falsch? <a href="../schwerpunkt/s3-2a-potenzfunktionen.html">SP 3.2, Potenzfunktionen</a> — der Leitterm einer Polynomfunktion verhält sich für grosse \(|x|\) genau so (Kapitel 3).</p>', ''),
 ]) + '''
@@ -488,7 +488,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1, 2 · G2 → 2 · G3, G4 → 3 · G5 → 4 · G6, G7, G8 → 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1, 2; G2 → 2; G3, G4 → 3; G5 → 4; G6, G7, G8 → 5</p>
         </div>
       </div>
     </section>'''
@@ -556,24 +556,12 @@ oben = '''<div id="nav-root"></div>
     <ol>
       <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
     </ol>
-    <p class="lekt">Lektion 1</p>
+    <p class="lekt">Kapitel</p>
     <ol>
       <li><a href="#k1"><span class="nr">1</span><span>Linearfaktoren</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 2</p>
-    <ol>
       <li><a href="#k2"><span class="nr">2</span><span>Mehrfache Nullstellen</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 3</p>
-    <ol>
       <li><a href="#k3"><span class="nr">3</span><span>Globalverlauf</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 4</p>
-    <ol>
       <li><a href="#k4"><span class="nr">4</span><span>Nullstellen berechnen</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 5</p>
-    <ol>
       <li><a href="#k5"><span class="nr">5</span><span>Hoch- und Tiefpunkte</span></a></li>
     </ol>
     <p class="lekt">Abschluss</p>
@@ -622,13 +610,14 @@ unten = '''
 </div>
 </div>
 '''
+# Kapitel = Lektion: keine Lektionsbänder mehr (Abnahme 06.10.2026).
 band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
 # Zeiten (04.10.2026): Vorwissen 10 (vorab) · K1 40 · K2 40 · K3 40 · K4 40 · K5 45 · Gesamttest 30 = 245 min
 # Die fünf Kapitel sind die fünf Lektionen; Vorwissen und Gesamttest kommen davor und danach.
-body = (oben + band('Vorab', 'Vorwissen') + k0 + band(1, 'Linearfaktoren und Nullstellen') + k1
-        + band(2, 'Mehrfache Nullstellen') + k2 + band(3, 'Der Globalverlauf') + k3
-        + band(4, 'Nullstellen berechnen') + k4 + band(5, 'Hoch- und Tiefpunkte') + k5
-        + band('Abschluss', 'Gesamttest') + gt + unten)
+body = (oben + k0 + k1
+        + k2 + k3
+        + k4 + k5
+        + gt + unten)
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(ZIEL, 'w').write(seite)
 print('geschrieben', len(seite.splitlines()), 'Zeilen')

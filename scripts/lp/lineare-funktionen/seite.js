@@ -155,6 +155,13 @@
       K.kurve(function(x){ return m * x; }, 'normal hilfslinie');
       if (ziel) K.kurve(function(x){ return ziel[0] * x + ziel[1]; }, 'zielkurve');
       K.kurve(function(x){ return m * x + b; }, 'kurve');
+      // Steigungsdreieck ab x = 1 (Abnahme 06.10.2026): 1 nach rechts, m hinauf — es laeuft mit,
+      // wenn m sich aendert, und bleibt weg von der Beschriftung (0 | b) an der y-Achse.
+      var ya = m + b, yb = 2 * m + b;
+      K.strecke(1, ya, 2, ya, 'dreieck hilfslinie');
+      K.strecke(2, ya, 2, yb, 'dreieck hilfslinie');
+      if (ya > FENSTER.y0 + 0.8 && ya < FENSTER.y1 - 0.3) K.text(1.08, ya + (m >= 0 ? -0.75 : 0.45), 'Δx = 1', 'p-m hilfslinie', 'start');
+      if ((ya + yb) / 2 > FENSTER.y0 + 0.3 && (ya + yb) / 2 < FENSTER.y1 - 0.3) K.text(2.3, (ya + yb) / 2, 'Δy = ' + z(m), 'p-m hilfslinie', 'start');
       // Die Beschriftung kommt auf die Seite, auf der die Gerade unter ihr durchlaeuft:
       // bei m > 0 links davon, bei m < 0 rechts davon.
       K.punkt(0, b, 'p-b', '(0 | ' + z(b) + ')', m > 0 ? -9 : 9, -7, m > 0 ? 'end' : 'start');
@@ -222,7 +229,7 @@
         K.punkt(x0, 0, 'p-null', 'x\u2080 ' + (rund ? '≈ ' : '= ') + z(x0), m > 0 ? -9 : 9, -8, m > 0 ? 'end' : 'start');
       }
       rolle(fig, 'formel').innerHTML = 'm = ' + sp('tx-blau', z(dy)) + ' : ' + sp('tx-blau', z(dx))
-        + ' = <b>' + sp('tx-blau', z(m)) + '</b> &nbsp;·&nbsp; ' + linText(m, b);
+        + ' = <b>' + sp('tx-blau', z(m)) + '</b>; &nbsp;' + linText(m, b);
       pruefen();
     }
     pruefen = Leiste(fig, [
@@ -261,7 +268,7 @@
         : Math.abs(m * M1 + 1) < 1e-9 ? 'senkrecht'
         : 'schneidend';
       rolle(fig, 'formel').innerHTML = 'g: y = ' + sp('tx-blau', '−2') + '·x + ' + sp('tx-orange', '3')
-        + ' &nbsp;·&nbsp; h: y = ' + linText(m, b).replace('f(x) = ', '')
+        + '; &nbsp;h: y = ' + linText(m, b).replace('f(x) = ', '')
         + '<br>m<sub>1</sub>·m<sub>2</sub> = ' + z(M1 * m) + ' — <b>' + lage + '</b>';
       fig.classList.toggle('treffer', lage === 'parallel' || lage === 'senkrecht');
       pruefen();
@@ -494,7 +501,7 @@
       /* Die drei Fälle aus dem Festhalten — genau eine, keine, alle — sind jetzt auch
          antwortbar; vorher gab es nur ein Zahlenfeld, und die Sonderfälle liessen sich
          gar nicht hinschreiben. Nicht ganze Nullstellen kommen ebenfalls vor. */
-      'nullstelle': { felder: ['art', 'x_0'], muster: 'Es gibt {art:genau eine|keine|alle reellen Zahlen}   ·   x₀ = {x_0}',
+      'nullstelle': { felder: ['art', 'x_0'], muster: 'Es gibt {art:genau eine|keine|alle reellen Zahlen};   x₀ = {x_0}',
         wahl: function(ein){ var w = ein.querySelector('select'), i = ein.querySelector('input');
           if (!w || !i) return;
           i.disabled = w.value !== 'genau eine';
