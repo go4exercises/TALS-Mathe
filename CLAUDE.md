@@ -80,7 +80,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
     Clip, Musterlösung und Punktezeile. Der ganze Weg vom PDF zur Seite steht in
     **`HOWTO-uebungspruefung.md`**; er hat eigene Fallstricke (verlorene Hoch- und
     Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).
-  **Ein Leitprogramm hängt an fünf Stellen**: Pille «LP» auf der Indexseite, Kärtchen in `leitprogramme.html`, Eintrag
+  **Ein Leitprogramm hängt an fünf Stellen**: Pille «LP» auf der Indexseite, je Themenseite eine Kachel in `leitprogramme.html` (nur Titel der Themenseite, führt zum Leitprogramm; Pille mit der Nummer wie `g5.2a` zur Themenseite; nach Fach und Themenbereich gegliedert, nach Nummer sortiert), Eintrag
   in `scripts/build-seo.py` (Sitemap), in `scripts/build-suchindex.py` (Volltext­suche)
   und ein Kasten «🧭 Lieber geführt?» auf der Themenseite nach den Lernzielen.
   Fehlt eine, ist die Seite entweder unsichtbar oder unauffindbar. Die `"probe": true`
