@@ -48,8 +48,15 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
-  `leitprogramme.html` wird von Hand gepflegt und ist seit dem 08.09.2026 in **zwei
-  Abschnitte** gegliedert, einen je Art — alle zwölf sind verlinkt:
+  `leitprogramme.html` wird von Hand gepflegt. **Seit dem 06.10.2026 sind dort nur die
+  sieben neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar**
+  (`quadratische-funktionen`, `lineare-funktionen`, `potenz-wurzelfunktionen`,
+  `polynomfunktionen`, `exp-log-funktionen`, `trigonometrische-funktionen`,
+  `betragsfunktionen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
+  `gleichungssysteme`, `uebungspruefung-1`, `trigo2`) bleiben als Dateien bestehen, ihre
+  Kärtchen stehen auskommentiert in `leitprogramme.html`, sie tragen `noindex` und fehlen
+  im Suchindex. Die Indexseite zeigt neben jeder Themenseite mit Leitprogramm eine
+  kleine Pille «LP» (`.karte-lp`/`.lp-link` in `index.html`). Die zwei Arten:
   - *nach Thema* (10: `potenzen.html`, `quadratische-gleichungen.html`,
     `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`,
     `exp-log-funktionen.html`, `trigonometrische-funktionen.html`, `betragsfunktionen.html`,
@@ -71,7 +78,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
     Clip, Musterlösung und Punktezeile. Der ganze Weg vom PDF zur Seite steht in
     **`HOWTO-uebungspruefung.md`**; er hat eigene Fallstricke (verlorene Hoch- und
     Überstriche in der PDF-Extraktion, `"probe": true` an den Clips).
-  **Ein Leitprogramm hängt an vier Stellen**: Kärtchen in `leitprogramme.html`, Eintrag
+  **Ein Leitprogramm hängt an fünf Stellen**: Pille «LP» auf der Indexseite, Kärtchen in `leitprogramme.html`, Eintrag
   in `scripts/build-seo.py` (Sitemap), in `scripts/build-suchindex.py` (Volltext­suche)
   und ein Kasten «🧭 Lieber geführt?» auf der Themenseite nach den Lernzielen.
   Fehlt eine, ist die Seite entweder unsichtbar oder unauffindbar. Die `"probe": true`

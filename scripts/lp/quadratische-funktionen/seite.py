@@ -267,7 +267,7 @@ k3 = kapitel(3, 'nullstellen-und-scheitel', 'Nullstellen und Scheitel berechnen'
     ('g3-3-lp-achse-bleibt', 'Parabel sehen: c hebt, die Symmetrieachse bleibt', 'Einführung', '1:07'),
     sim3, ('g3-3-lp-kontrolle-nullstellen', 'Kontrollfragen zu Nullstellen und Scheitel', '', '0:52'),
     fest3, [uebung('grund-scheitel', 'Scheitel aus der Grundform'), uebung('nullstellen', 'Nullstellen bestimmen')],
-    auf3, f'<a href="{TS}#diskriminante">Themenseite 3.3, Diskriminante</a> · <a href="quadratische-gleichungen.html">Leitprogramm Quadratische Gleichungen</a>')
+    auf3, f'<a href="{TS}#diskriminante">Themenseite 3.3, Diskriminante</a>')
 
 # ------------------------------------------------------------------ Kapitel 4
 sim4 = f'''      <figure class="sim sim-gross" id="sim4">
@@ -353,7 +353,7 @@ k0 = '''
     <section class="kap" id="k0">
       <div class="kap-meta"><span class="marker">Kapitel 0</span><span class="abz abz-gf">Vorwissen · GF 1.3 · 2.2</span><span class="zeit">≈ 10 min</span></div>
       <h2 id="vorwissen">Vorwissen</h2>
-      <p class="ziel">Einsetzen, Klammer quadrieren, quadratische Gleichung lösen. Wenn das wackelt: <a href="quadratische-gleichungen.html">Leitprogramm Quadratische Gleichungen</a>.</p>
+      <p class="ziel">Einsetzen, Klammer quadrieren, quadratische Gleichung lösen. Wenn das wackelt: <a href="../grundlagen/g2-2b-quadratische-gleichungen.html">Themenseite 2.2b, Quadratische Gleichungen</a>.</p>
       ''' + clipkarte('g1-3-binome-erkennen', 'Binomische Formeln erkennen', 'Themenseite 1.3', '0:44') + r'''
       <p class="komm">Im Clip heissen die Binomglieder \(a\) und \(b\) — nicht zu verwechseln mit den Koeffizienten \(a\), \(b\) der Parabel.</p>
 ''' + test('t0', 'Vortest', 10, [
@@ -362,7 +362,7 @@ k0 = '''
     ('0c', 3, r'Löse \(x^2 - 2x - 8 = 0\).', r'<p>\((x-4)(x+2) = 0\): \(\mathbb{L} = \{-2;\ 4\}\).</p><p class="komm">Falsch? <a href="../grundlagen/g2-2b-quadratische-gleichungen.html#faktorisieren">Themenseite 2.2b, Faktorisieren</a></p>', ''),
     ('0d', 2, r'Löse \(2x^2 + 3x - 2 = 0\).', r'<p>\(x_{1,2} = \dfrac{-3 \pm 5}{4}\): \(\mathbb{L} = \{-2;\ 0.5\}\).</p><p class="komm">Falsch? <a href="../grundlagen/g2-2b-quadratische-gleichungen.html#verfahren">Themenseite 2.2b, Lösungsverfahren (Mitternachtsformel)</a></p>', ''),
 ]) + '''
-      <p class="komm">Weniger als 7 von 10 Punkten: zuerst die verlinkten Stellen zu den falschen Aufgaben, dann Kapitel 1. 0c und 0d beide falsch: zuerst das <a href="quadratische-gleichungen.html">Leitprogramm Quadratische Gleichungen</a>.</p>
+      <p class="komm">Weniger als 7 von 10 Punkten: zuerst die verlinkten Stellen zu den falschen Aufgaben, dann Kapitel 1. 0c und 0d beide falsch: zuerst die <a href="../grundlagen/g2-2b-quadratische-gleichungen.html">Themenseite 2.2b, Quadratische Gleichungen</a>.</p>
     </section>'''
 
 # ------------------------------------------------------------------ Gesamttest

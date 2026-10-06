@@ -458,14 +458,15 @@ Der Reihe nach; in Klammern, woran man merkt, dass der Punkt fehlt.
 
 ## 13 · Verknüpfen und Eintragen
 
-**Vier Stellen** — fehlt eine, ist die Seite unsichtbar, unauffindbar oder einseitig:
+**Fünf Stellen** — fehlt eine, ist die Seite unsichtbar, unauffindbar oder einseitig:
 
 | Datei | was |
 |---|---|
-| `leitprogramme.html` | Karte im passenden Abschnitt (*nach Thema* / *nach Prüfungsbogen*) |
+| `leitprogramme.html` | Karte im Raster (sichtbar sind seit 06.10.2026 nur die Leitprogramme mit Kontrollfragen; die älteren stehen auskommentiert) |
 | `scripts/build-seo.py` | Eintrag in `SEITEN` (Beschreibung, Sitemap) |
 | `scripts/build-suchindex.py` | Eintrag in der Liste der Nachschlagewerke |
 | Themenseite | Kasten nach den Lernzielen: «🧭 Lieber geführt? Leitprogramm *…* (≈ n Lektionen)» |
+| `index.html` | Pille «LP» neben der Karte jeder Themenseite, die das Leitprogramm abdeckt: Karte in `<div class="karte-lp">` legen, `<a class="lp-link">` daneben (seit 06.10.2026) |
 
 Danach `python3 scripts/build-seo.py` und `python3 scripts/build-suchindex.py` (beide schreiben ohne Schalter; `--schreiben` aus der alten Fassung gibt es nicht).
 
@@ -540,7 +541,7 @@ haben zwei unabhängige Prüfungen nach bestandener §14 noch je rund 25 Befunde
 4. **Abnahme durch den Auftraggeber** (kann niemand sonst): Hörprobe aller neu vertonten
    Clips mit Fragen — je eine Frage absichtlich falsch beantworten —, und das
    Bewertungspaket mit einer absichtlich fehlerhaften Schülerlösung einer KI geben.
-5. **Erst dann freischalten** (§13, alle vier Stellen).
+5. **Erst dann freischalten** (§13, alle fünf Stellen).
 
 ### Prüfliste — was bei den Prüfungen des Vorbilds aufgefallen ist
 

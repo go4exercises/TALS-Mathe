@@ -319,16 +319,13 @@ def seiten_aus_navjs(root):
                                  ('clips.html', '▶', 'Clips', 'thema'),
                                  ('leitprogramme.html', '▤', 'Leitprogramme', 'thema'),
                                  ('notationstrainer.html', '{ }', 'Notationstrainer', 'thema'),
-                                 ('leitprogramme/potenzen.html', '▤',
-                                  'Leitprogramm Potenzen', 'thema'),
-                                 ('leitprogramme/quadratische-gleichungen.html', '▤',
-                                  'Leitprogramm Quadratische Gleichungen', 'thema'),
-                                 ('leitprogramme/gleichungssysteme.html', '▤',
-                                  'Leitprogramm Gleichungssysteme', 'thema'),
                                  ('leitprogramme/quadratische-funktionen.html', '▤',
                                   'Leitprogramm Quadratische Funktionen', 'thema'),
                                  ('leitprogramme/lineare-funktionen.html', '▤',
                                   'Leitprogramm Lineare Funktionen', 'thema'),
+                                 # ältere Leitprogramme (Potenzen, Quadratische Gleichungen,
+                                 # Gleichungssysteme, die zwei Übungsprüfungen) seit 06.10.2026
+                                 # ausgeblendet: nicht in der Suche, noindex in build-seo.py
                                  ('leitprogramme/potenz-wurzelfunktionen.html', '▤',
                                   'Leitprogramm Potenz- und Wurzelfunktionen', 'thema'),
                                  ('leitprogramme/polynomfunktionen.html', '▤',
@@ -339,15 +336,12 @@ def seiten_aus_navjs(root):
                                   'Leitprogramm Trigonometrische Funktionen', 'thema'),
                                  ('leitprogramme/betragsfunktionen.html', '▤',
                                   'Leitprogramm Betragsfunktionen', 'thema'),
-                                 ('leitprogramme/uebungspruefung-1.html', '▤',
-                                  'Übungsprüfung 1', 'thema'),
-                                 ('leitprogramme/trigo2.html', '▤',
-                                  'Übungsprüfung Trigonometrie', 'thema')]:
-        # Seit dem 08.09.2026 sind auch die beiden Leitprogramme nach
-        # Pruefungsbogen oeffentlich. Sie haengen an drei Stellen zusammen:
-        # Kaertchen in leitprogramme.html, Eintrag in build-seo.py (ohne
-        # noindex, damit sie in die Sitemap kommen) und diese Liste. Wer eines
-        # wieder verstecken will, nimmt es an allen dreien heraus.
+]:
+        # Ein Leitprogramm haengt an drei Stellen zusammen: Kaertchen in
+        # leitprogramme.html, Eintrag in build-seo.py (ohne noindex, damit es
+        # in die Sitemap kommt) und diese Liste. Wer eines verstecken will,
+        # nimmt es an allen dreien heraus (so seit 06.10.2026 die aelteren
+        # Leitprogramme und die beiden nach Pruefungsbogen).
         # Die zugehoerigen Clips bleiben davon unberuehrt: Sie tragen
         # "probe": true und stehen weiterhin weder in clips.json noch auf
         # einer Lektionsseite.

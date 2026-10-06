@@ -103,26 +103,36 @@ SEITEN = {
    themen=['Mathematik', 'Definitionsmenge', 'Lösungsmenge', 'Intervall', 'Grundmenge', 'Lernkartei']),
  'leitprogramme/potenzen.html': dict(
    typ='article', lrt='Leitprogramm',
+   # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
+   noindex=True,
    titel='Leitprogramm Potenzen — von ℕ über ℤ zu ℚ',
    beschreibung='Leitprogramm Potenzen: die Potenzregeln erst mit natürlichen, dann mit ganzen, dann mit rationalen Exponenten — und Wurzeln ganz ohne Wurzelgesetze.',
    themen=['Mathematik', 'Potenzen', 'Potenzgesetze', 'Wurzeln', 'Leitprogramm']),
  'leitprogramme/quadratische-gleichungen.html': dict(
    typ='article', lrt='Leitprogramm',
+   # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
+   noindex=True,
    titel='Leitprogramm Quadratische Gleichungen — erst die Sonderfälle, dann die Formel',
    beschreibung='Leitprogramm zu den quadratischen Gleichungen: die drei Sonderfälle ohne Formel, quadratische Ergänzung und Mitternachtsformel, Diskriminante, Ungleichungen und Parameter — mit Clips, Selbsttests und Gesamttest.',
    themen=['Mathematik', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Diskriminante', 'Leitprogramm']),
  'leitprogramme/gleichungssysteme.html': dict(
    typ='article', lrt='Leitprogramm',
+   # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
+   noindex=True,
    titel='Leitprogramm Gleichungssysteme — vier Wege zum Schnittpunkt',
    beschreibung='Leitprogramm zu den linearen Gleichungssystemen: grafisch, Einsetzen, Gleichsetzen und Addition, dazu die drei möglichen Lösungsanzahlen, drei Variablen und der Schnitt von Gerade und Parabel — mit Clips, Selbsttests und Gesamttest.',
    themen=['Mathematik', 'Gleichungssysteme', 'Additionsverfahren', 'Einsetzverfahren', 'Leitprogramm']),
  'leitprogramme/uebungspruefung-1.html': dict(
    typ='article', lrt='Leitprogramm',
+   # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
+   noindex=True,
    titel='Übungsprüfung 1 — Arithmetik, Algebra, Gleichungen',
    beschreibung='Eine vollständige BM2-Übungsprüfung zu Arithmetik, Algebra und linearen Gleichungen: Prüfungsbogen, Musterlösung mit Punkteschlüssel und zu jeder der 26 Teilaufgaben ein vertonter Clip.',
    themen=['Mathematik', 'Übungsprüfung', 'Arithmetik', 'Algebra', 'Lineare Gleichungen', 'Leitprogramm']),
  'leitprogramme/trigo2.html': dict(
    typ='article', lrt='Leitprogramm',
+   # ausgeblendet seit 06.10.2026 (nur die Leitprogramme mit Kontrollfragen sind sichtbar)
+   noindex=True,
    titel='Trigonometrie — Definitionen, Identitäten und Einheitskreis',
    beschreibung='Ein Prüfungsbogen zur Trigonometrie mit vollständiger Musterlösung: Sinus, Cosinus und Tangens am rechtwinkligen Dreieck, Kofunktion und trigonometrischer Pythagoras, Fehlersuche an einer Ballonaufgabe und Winkel am Einheitskreis — zu jeder der 9 Teilaufgaben ein vertonter Clip.',
    themen=['Mathematik', 'Trigonometrie', 'Einheitskreis', 'Übungsprüfung', 'Leitprogramm']),
