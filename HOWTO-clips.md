@@ -553,6 +553,28 @@ ist seit dem 30.09.2026 gelöscht, weil alle Fragen geklärt sind, und wird bei 
 nächsten offenen Gerätefrage neu angelegt. Wer eine Frage klärt, trägt die Antwort
 in die Liste oben ein.
 
+### Figuren im Graf — `"figuren"` und `"achsen": false`
+
+Seit 06.10.2026 (Leitprogramm Planimetrie). Ein `graf` zeichnet unter Geraden und Punkten
+beliebige Figuren in Fensterkoordinaten; mit `"achsen": false` bleibt nur das Karo.
+
+```json
+{"typ": "graf", "xbereich": [-1, 9], "ybereich": [-1, 9], "breite": 760, "hoehe": 760, "achsen": false,
+ "figuren": [
+   {"art": "vieleck", "punkte": [[0,0],[8,0],[4,3]], "farbe": 1, "fuellung": 0.12},
+   {"art": "strecke", "von": [4,3], "bis": [4,0], "farbe": 2, "gestrichelt": true},
+   {"art": "rechts", "bei": [4,0], "r1": 0, "r2": 90},
+   {"art": "kreis", "m": [4,4], "r": 3, "farbe": 1},
+   {"art": "sektor", "m": [4,4], "r": 3, "von": 0, "bis": 60, "farbe": 3, "fuellung": 0.25},
+   {"art": "bogen", "m": [4,4], "r": 3, "von": 0, "bis": 60, "farbe": 2},
+   {"art": "winkel", "bei": [0,0], "von": 0, "bis": 37, "r_px": 40, "farbe": 2},
+   {"art": "text", "bei": [4,-0.6], "text": "g = 8 cm", "farbe": 5, "kursiv": false}]}
+```
+
+Farben 1–4 wie sonst, 5 = Tinte; `dicke` (Standard 4), `gestrichelt`, `fuellung` (Deckkraft der
+Fläche). Winkel in Grad gegen den Uhrzeigersinn. **Das Fenster gleich teilen** (Spanne x zu
+Spanne y wie Breite zu Höhe), sonst wird der Kreis zur Ellipse und der rechte Winkel schief.
+
 ### Bild einer Animation — `typ: "bild"` und `"animation"`
 
 Übernommen aus TALS Physik am 27.09.2026 (dort Prototyp

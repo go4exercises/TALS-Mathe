@@ -373,7 +373,9 @@ def graf_svg(el, theme):
             teile.append('<line x1="0" y1="%.1f" x2="%d" y2="%.1f" stroke="%s" '
                          'stroke-opacity=".13" stroke-width="1.5"/>' % (py(y), b, py(y), tinte))
 
-    # Achsen mit Pfeil und Beschriftung
+    # Achsen mit Pfeil und Beschriftung ("achsen": false lässt sie weg — für Figuren der
+    # Planimetrie, die im Karo stehen, aber kein Koordinatensystem brauchen; seit 06.10.2026)
+    vor_achsen = len(teile)
     teile.append('<line x1="0" y1="%.1f" x2="%d" y2="%.1f" stroke="%s" stroke-width="3"/>'
                  % (py(0), b, py(0), tinte))
     teile.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="0" stroke="%s" stroke-width="3"/>'
@@ -418,6 +420,80 @@ def graf_svg(el, theme):
         teile.append('<text x="%.1f" y="%.1f" font-size="22" text-anchor="end" fill="%s" '
                      'fill-opacity=".75">%s</text>'
                      % (px(0) - 13, py(y) + 8, tinte, entschaerfen(mark)))
+
+    if el.get("achsen", True) is False:
+        del teile[vor_achsen:]
+        achsnamen = []
+
+    # "figuren" (seit 06.10.2026, Leitprogramm Planimetrie): Strecken, Vielecke, Kreise,
+    # Sektoren, Winkelbögen, Zeichen für den rechten Winkel und Texte in Fensterkoordinaten.
+    # Das Fenster muss dafür in x und y gleich geteilt sein (breite/hoehe passend zu den
+    # Bereichen), sonst wird ein Kreis zur Ellipse. Gezeichnet unter Geraden und Punkten.
+    skala = (b - 2 * rand) / (x1 - x0)
+    if el.get("figuren"):
+        import hashlib
+        cid = "fg" + hashlib.md5(repr(sorted(el.items(), key=lambda kv: kv[0])).encode()).hexdigest()[:8]
+        teile.append('<clipPath id="%s"><rect x="0" y="0" width="%d" height="%d"/></clipPath><g clip-path="url(#%s)">'
+                     % (cid, b, h, cid))
+    for fg in el.get("figuren", []):
+        art, nr_f = fg["art"], fg.get("farbe", 1)
+        f_ = tinte if nr_f == 5 else fv[(nr_f - 1) % len(fv)]
+        strich = ' stroke-dasharray="14 10"' if fg.get("gestrichelt") else ''
+        dicke = fg.get("dicke", 4)
+        fuell = fg.get("fuellung", 0)
+        if art == "strecke":
+            (xa, ya), (xb, yb) = fg["von"], fg["bis"]
+            teile.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="%g" '
+                         'stroke-linecap="round"%s/>' % (px(xa), py(ya), px(xb), py(yb), f_, dicke, strich))
+        elif art == "vieleck":
+            pts = " ".join("%.1f,%.1f" % (px(x), py(y)) for x, y in fg["punkte"])
+            teile.append('<polygon points="%s" fill="%s" fill-opacity="%g" stroke="%s" stroke-width="%g" '
+                         'stroke-linejoin="round"%s/>' % (pts, f_, fuell, f_, dicke, strich))
+        elif art == "kreis":
+            (mx, my), r = fg["m"], fg["r"]
+            teile.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="%s" fill-opacity="%g" stroke="%s" '
+                         'stroke-width="%g"%s/>' % (px(mx), py(my), r * skala, f_, fuell, f_, dicke, strich))
+        elif art in ("sektor", "bogen"):
+            # Winkel in Grad, gegen den Uhrzeigersinn ab der positiven x-Richtung
+            (mx, my), r, w0, w1 = fg["m"], fg["r"], fg["von"], fg["bis"]
+            ax, ay = px(mx + r * math.cos(math.radians(w0))), py(my + r * math.sin(math.radians(w0)))
+            bx, by = px(mx + r * math.cos(math.radians(w1))), py(my + r * math.sin(math.radians(w1)))
+            gross = 1 if (w1 - w0) % 360 > 180 else 0
+            bogen = 'A%.1f %.1f 0 %d 0 %.1f %.1f' % (r * skala, r * skala, gross, bx, by)
+            if art == "sektor":
+                d = 'M%.1f %.1f L%.1f %.1f %s Z' % (px(mx), py(my), ax, ay, bogen)
+            else:
+                d = 'M%.1f %.1f %s' % (ax, ay, bogen)
+            teile.append('<path d="%s" fill="%s" fill-opacity="%g" stroke="%s" stroke-width="%g"%s/>'
+                         % (d, f_ if art == "sektor" else "none", fuell, f_, dicke, strich))
+        elif art == "winkel":
+            # Winkelbogen mit festem Pixelradius an der Ecke "bei", von/bis in Grad
+            (mx, my), w0, w1, rp = fg["bei"], fg["von"], fg["bis"], fg.get("r_px", 38)
+            cx_, cy_ = px(mx), py(my)
+            ax, ay = cx_ + rp * math.cos(math.radians(w0)), cy_ - rp * math.sin(math.radians(w0))
+            bx, by = cx_ + rp * math.cos(math.radians(w1)), cy_ - rp * math.sin(math.radians(w1))
+            gross = 1 if (w1 - w0) % 360 > 180 else 0
+            teile.append('<path d="M%.1f %.1f L%.1f %.1f A%g %g 0 %d 0 %.1f %.1f Z" fill="%s" fill-opacity=".22" '
+                         'stroke="%s" stroke-width="2.5"/>' % (cx_, cy_, ax, ay, rp, rp, gross, bx, by, f_, f_))
+        elif art == "rechts":
+            # Zeichen für den rechten Winkel: Ecke "bei", Richtungen "r1"/"r2" (Grad), Seitenlänge in px
+            (mx, my), w0, w1, q = fg["bei"], fg["r1"], fg["r2"], fg.get("px", 22)
+            cx_, cy_ = px(mx), py(my)
+            u = (math.cos(math.radians(w0)) * q, -math.sin(math.radians(w0)) * q)
+            v = (math.cos(math.radians(w1)) * q, -math.sin(math.radians(w1)) * q)
+            teile.append('<path d="M%.1f %.1f L%.1f %.1f L%.1f %.1f" fill="none" stroke="%s" stroke-width="2.5"/>'
+                         % (cx_ + u[0], cy_ + u[1], cx_ + u[0] + v[0], cy_ + u[1] + v[1], cx_ + v[0], cy_ + v[1], f_))
+            teile.append('<circle cx="%.1f" cy="%.1f" r="3" fill="%s"/>' % (cx_ + (u[0] + v[0]) / 2, cy_ + (u[1] + v[1]) / 2, f_))
+        elif art == "text":
+            (tx, ty) = fg["bei"]
+            teile.append('<text x="%.1f" y="%.1f" font-size="%d" font-style="%s" fill="%s" text-anchor="%s" '
+                         'stroke="%s" stroke-width="8" paint-order="stroke">%s</text>'
+                         % (px(tx), py(ty), fg.get("groesse", 30), "italic" if fg.get("kursiv", True) else "normal",
+                            f_, fg.get("anker", "middle"), papier, entschaerfen(fg["text"])))
+        else:
+            raise SystemExit("figuren: unbekannte Art %r" % art)
+    if el.get("figuren"):
+        teile.append('</g>')
 
     # Geraden y = m x + q, am Fenster abgeschnitten
     for nr, g in enumerate(el.get("geraden", [])):

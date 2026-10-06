@@ -349,6 +349,12 @@ Rückmeldung, Ergebnisse erscheinen erst nach der Antwort. Ein Graph unterstütz
 ersetzt den algebraischen Weg nicht. Aufbau der Knoten und Prüfwerkzeug
 (`.claude/tools/pruef-umformer.mjs`): `scripts/lp/lineare-quadratische-gleichungen/README.md`.
 
+**e) Geometrie → Arbeitsbereich** (seit 06.10.2026, Leitprogramm *Planimetrie*, nach dem Leitfaden
+des Auftraggebers). Drei Arbeitsweisen: Figur verändern (Regler), Hilfslinie antippen (Kandidaten mit
+eigener Rückmeldung), Grösse berechnen und eingeben. Gefragte Werte erscheinen erst nach der Antwort;
+nichts wird aus Bildschirm-Pixeln abgelesen. Aufbau und Prüfwerkzeug (`.claude/tools/pruef-geo.mjs`):
+`scripts/lp/planimetrie/README.md`.
+
 ---
 
 ## 9 · Selbsttests und Gesamttest
@@ -518,6 +524,7 @@ grep 'name="robots"' leitprogramme/<name>.html                      # noindex, n
    node .claude/tools/pruef-uebungen.mjs leitprogramme/<name>.html 1000   # Zufallsübungen
    node .claude/tools/pruef-leiste.mjs leitprogramme/<name>.html          # Aufgabenleisten
    node .claude/tools/pruef-umformer.mjs leitprogramme/<name>.html        # Umformer (Gleichungen)
+   node .claude/tools/pruef-geo.mjs leitprogramme/<name>.html             # Geometrie-Arbeitsbereiche
    node .claude/tools/pruef-fragen.mjs <clip> …                           # Fragen in Kontrollclips
    ```
    Alle drei starten einen eigenen Server und enden mit Exit 1 bei einem Befund.

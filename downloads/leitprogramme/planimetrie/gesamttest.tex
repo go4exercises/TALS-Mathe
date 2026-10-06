@@ -1,0 +1,124 @@
+% Gesamttest «Planimetrie» — Quelle des PDFs (python3 scripts/build-lp-pdf.py planimetrie).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet (06.10.2026).
+% Kein \lt/\gt — pdfLaTeX kennt sie nicht, < und > tun es.
+\documentclass[11pt]{article}
+\usepackage{../lp-druck}
+\renewcommand{\lpname}{Planimetrie}
+\renewcommand{\lpteilgebiet}{5.2}
+\renewcommand{\lpbereich}{Grundlagenfach}
+\renewcommand{\lpfuss}{Gesamttest · 25 Punkte}
+\begin{document}
+\lpkopf{Gesamttest}{%
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 25
+  \end{tabularx}}
+
+\begin{lpinfo}{Anleitung}
+\textbf{Zeit:} rund 30 Minuten. \textbf{Hilfsmittel:} Taschenrechner erlaubt (RLP 5.2 trägt keinen Vermerk «auch ohne Hilfsmittel»).
+Mach zu jeder Aufgabe eine \textbf{Skizze} und schreib den \textbf{Rechenweg} auf — bewertet wird der Weg. Ergebnisse mit
+\textbf{Einheit}, gerundet auf zwei Dezimalen. Die Figuren sind nicht massstäblich.
+Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket} bewerten lassen.
+\end{lpinfo}
+
+\lpteil{Teil A · Dreiecke}{Kapitel 1 und 2 · 7 Punkte}
+
+\begin{lpaufgabe}{G1}{Dreiecke beschreiben}{3 P}
+Ein gleichschenkliges Dreieck hat die Basiswinkel $64^\circ$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Wie gross ist der Spitzenwinkel? Begründe.
+\item Was ist die Seitenhalbierende $s_a$? Beschreib sie in einem Satz.
+\end{enumerate}
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G2}{Dreiecksfläche und Höhe}{4 P}
+\begin{minipage}[t]{0.52\linewidth}\vspace{0pt}
+Im Dreieck $ABC$ ist die Grundseite $c = \overline{AB} = 9\,\text{cm}$ und die zugehörige Höhe $h_c = 4.2\,\text{cm}$.
+Die Seite $b = \overline{AC}$ ist $7\,\text{cm}$ lang.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Berechne den Flächeninhalt $A$.
+\item Berechne die Höhe $h_b$ zur Seite $b$.
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.44\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}[scale=0.42]
+  \coordinate (A) at (0,0); \coordinate (B) at (9,0); \coordinate (C) at (-2.2,4.2);
+  \draw[lpblau,thick,fill=lpblau!8] (A)--(B)--(C)--cycle;
+  \draw[lpgrau,dashed] (A)--(-2.2,0);
+  \draw[lporange,thick,dashed] (C)--(-2.2,0) node[midway,left] {\small $h_c$};
+  \draw[lporange] (-2.2,0) rectangle (-1.8,0.4);
+  \node[below] at (A) {$A$}; \node[below] at (B) {$B$}; \node[above] at (C) {$C$};
+  \node[below] at (4.5,0) {\small $c = 9$};
+  \node[right] at (-0.9,2.2) {\small $b$};
+\end{tikzpicture}\\[-2pt]{\footnotesize nicht massstäblich}
+\end{minipage}
+\lpplatz{4}
+\end{lpaufgabe}
+
+\lpteil{Teil B · Vierecke und Kreis}{Kapitel 3 und 4 · 12 Punkte}
+
+\begin{lpaufgabe}{G3}{Gleichschenkliges Trapez}{5 P}
+\begin{minipage}[t]{0.52\linewidth}\vspace{0pt}
+Ein gleichschenkliges Trapez hat die Parallelseiten $a = 11\,\text{cm}$ und $c = 5\,\text{cm}$ und die Höhe $h = 6\,\text{cm}$.
+Berechne den Flächeninhalt, die Länge der Mittellinie $m$, die Länge eines Schenkels und den Umfang.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.44\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}[scale=0.4]
+  \coordinate (A) at (0,0); \coordinate (B) at (11,0); \coordinate (C) at (8,6); \coordinate (D) at (3,6);
+  \draw[lpblau,thick,fill=lpblau!8] (A)--(B)--(C)--(D)--cycle;
+  \draw[lporange,dashed] (D)--(3,0) node[midway,right] {\small $h$};
+  \node[below] at (5.5,0) {\small $a = 11$}; \node[above] at (5.5,6) {\small $c = 5$};
+  \node[below left] at (A) {$A$}; \node[below right] at (B) {$B$}; \node[above right] at (C) {$C$}; \node[above left] at (D) {$D$};
+\end{tikzpicture}
+\end{minipage}
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G4}{Kreissektor}{4 P}
+\begin{minipage}[t]{0.6\linewidth}\vspace{0pt}
+Ein Kreissektor hat den Radius $r = 8\,\text{cm}$ und den Mittelpunktswinkel $\varphi = 135^\circ$.
+Berechne die Bogenlänge $b$ und den Flächeninhalt $A_S$ des Sektors.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.36\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}[scale=0.28]
+  \draw[lpgrau] (0,0) circle (8);
+  \fill[lpgruen!20] (0,0) -- (8,0) arc (0:135:8) -- cycle;
+  \draw[lpgruen,thick] (0,0) -- (8,0) arc (0:135:8) -- cycle;
+  \draw[lporange] (2,0) arc (0:135:2); \node at (1.2,2.4) {\small $\varphi$};
+  \node[below] at (4,0) {\small $r$};
+\end{tikzpicture}
+\end{minipage}
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G5}{Kreissegment}{3 P}
+\begin{minipage}[t]{0.6\linewidth}\vspace{0pt}
+Eine Sehne schneidet von einem Kreis mit $r = 10\,\text{cm}$ ein Segment ab; der zugehörige Mittelpunktswinkel ist $\varphi = 60^\circ$.
+Berechne den Flächeninhalt des Segments (grün).
+\end{minipage}\hfill
+\begin{minipage}[t]{0.36\linewidth}\vspace{0pt}\centering
+\begin{tikzpicture}[scale=0.24]
+  \draw[lpgrau] (0,0) circle (10);
+  \fill[lpgruen!25] (10,0) arc (0:60:10) -- cycle;
+  \draw[lpblau,thick] (0,0) -- (10,0) -- (5,8.66) -- cycle;
+  \draw[lpgruen,thick] (10,0) arc (0:60:10);
+  \draw[lporange] (2.5,0) arc (0:60:2.5); \node at (3.2,1.6) {\small $\varphi$};
+\end{tikzpicture}
+\end{minipage}
+\lpplatz{5}
+\end{lpaufgabe}
+
+\lpteil{Teil C · Ähnlichkeit}{Kapitel 5 · 6 Punkte}
+
+\begin{lpaufgabe}{G6}{Schatten}{3 P}
+Eine 1.8\,m grosse Person wirft einen 2.4\,m langen Schatten. Zur gleichen Zeit wirft ein Fahnenmast einen 14\,m langen Schatten.
+Wie hoch ist der Mast? Mach eine Skizze mit den beiden ähnlichen Dreiecken.
+\lpplatz{6}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G7}{Massstab und Fläche}{3 P}
+Ein Architekturmodell ist im Massstab $1 : 50$ gebaut. Die Grundfläche eines Raums misst im Modell $120\,\text{cm}^2$.
+Wie gross ist sie in Wirklichkeit? Gib das Ergebnis in $\text{m}^2$ an.
+\lpplatz{5}
+\end{lpaufgabe}
+\end{document}
