@@ -24,13 +24,30 @@ Koeffizienten, Diskriminante) und geben am Schluss die Lösungsmenge ein. Eine A
 kleiner Graph von Knoten in `seite.js` (`umformerSim('simN', [...])`):
 
 - `w: [[Knopftext, Ziel, Umformung, Hinweis], …]` — ein Schritt. Ziel `'!Text'` ist ein Fehler mit
-  eigener Rückmeldung; gültige andere Wege führen auf eigene Knoten (z. B. erst `−4`, dann `−x`).
+  roter Rückmeldung; `'?Text'` ist ein erlaubter, aber ungeschickter Umweg mit grauem Hinweis
+  («Erlaubt, aber …», HOWTO §15); gültige andere Wege führen auf eigene Knoten (z. B. erst `−4`, dann `−x`).
 - `feld: { muster, soll | pruef, fehler, tipp, nach }` — eine Lücke; `fehler` sind bekannte
   Fehleingaben mit eigener Rückmeldung.
 - `L: [Zahlen] | [] | 'R'` mit `Lfalsch` und `probe` — die Lösungsmenge. Eingabe mit Strichpunkt,
   Reihenfolge und Doppelte egal, Brüche wie `-2/3`, `{}` leer, `R` alle Zahlen.
 
 Die Umformung steht wie im Heft rechts neben der Zeile, auf die sie wirkt.
+
+## Sperrliste der Übungen
+
+Keine Zufallsübung darf eine feste Gleichung des Leitprogramms würfeln (Clips, Umformer,
+Kapitelaufgaben, Vortest, Gesamttest). Zwei Listen in `seite.js`:
+
+- `SPERRE` — Typschlüssel (`li|…`, `lf|…`, `ak|a|b`, `zk|…`, `pl|…`, `pq|…`), auch für lineare Typen.
+- `FESTE_Q` — jede feste quadratische Gleichung als Normalform `[a, b, c]`; `qSchl` kürzt und macht
+  `a > 0`, jeder quadratische Typ nennt seine Normalform (`T.quad`). So sperrt ein Eintrag alle
+  Schreibweisen derselben Gleichung.
+- Reine Formen \(ax^2 = 0\) (b = c = 0) laufen **nicht** über `qSchl` — gekürzt wären sie alle
+  \(x^2 = 0\), und `ausklammern` würfelte den Fall b = 0 nie. Feste \(ax^2 = 0\) gehören in `SPERRE`.
+
+**Neue feste Gleichung = Eintrag in `FESTE_Q` (bzw. `SPERRE`).** Danach die Verteilung zählen: je Typ
+20 000 Würfe über `.ue-neu` und `__aufgabe` (Playwright), keine Treffer auf die Liste, und kein
+Fall darf verschwinden (b = 0 in `ausklammern` ≈ 12 %, \(D \le 0\) in `mitternacht`, a > 1 in `verfahren`).
 
 ## Farben — eine Farbe, eine Bedeutung
 
@@ -52,6 +69,15 @@ Aufgabe auf dem ersten und dem letzten gültigen Weg lösbar; jeder Fehlerknopf,
 und jede falsche Lösungsmenge gibt eine Rückmeldung.
 
 ## Ablauf bei einer Änderung am Clip
+
+**Achtung, Zeiten:** Die `ein`-Werte und `bewegung`-Zeiten in `clips.py` gehören bei vielen Szenen
+zur Tonspur vor der Neuvertonung vom 06.10.2026. `ZEITVERSATZ` bildet sie je Szene (Schlüssel
+`(clip, Szene)`) auf die heutige Tonspur ab. Wer in einer solchen Szene eine Zeit setzt, misst sie mit
+`python3 .claude/tools/sprechzeiten.py clips/g2-2-lp-<name>.json` auf der *neuen* Tonspur und rechnet
+sie mit der Umkehrung der Stützpunkte zurück — oder legt die Szene nach einer Neuvertonung direkt auf
+die neue Tonspur und streicht ihren Eintrag. Szenen ohne Eintrag stehen schon auf der neuen Tonspur.
+Nach jeder Neuvertonung verschieben sich auch unveränderte Szenen (Piper spricht jedes Mal anders):
+Stützpunkte neu messen.
 
 ```sh
 python3 scripts/lp/lineare-quadratische-gleichungen/clips.py
