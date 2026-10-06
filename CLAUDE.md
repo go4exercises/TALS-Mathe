@@ -92,8 +92,10 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **103 unverlinkte**
   Clips mit `"probe": true` (35 Prüfungsclips und 68 Clips der Leitprogramme nach Thema:
   je 10 «Parabel sehen», «Kurve sehen», «Polynom sehen», «Exponentialkurve sehen»,
-  «Sinuskurve sehen», «Knick sehen», 8 «Gerade sehen»), die nur im zugehörigen Leitprogramm stehen und
-  weder in `clips.json` noch auf einer Lektionsseite auftauchen. **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
+  «Sinuskurve sehen», «Knick sehen», 8 «Gerade sehen»), die im zugehörigen Leitprogramm stehen und
+  weder in `clips.json` noch auf einer Lektionsseite auftauchen. Die Clips der *sichtbaren* Leitprogramme zeigt
+  `clips.html` seit 06.10.2026 trotzdem: je Themenseite eine Tabelle Animationen · Leitprogramm · Weitere Clips
+  (`scripts/clips_bibliothek.py`, HOWTO-clips «Bibliotheksseite»). **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
   `.html`, `sprechertext-*.txt`, `clips.json` und die Blöcke auf den Lektionsseiten
   sind **generiert**. Formeln stehen in LaTeX — Kleiner/Grösser als `\lt` und `\gt`,
   nicht als HTML-Entität. Vollständig in `HOWTO-clips.md`, das Verbindliche in

@@ -710,7 +710,8 @@ committen**; die Web-Fassung ist die gepflegte.
 Ein Drehbuch mit `"probe": true` wird ganz normal gebaut und ausgeliefert, aber
 
 - es kommt **nicht** in `clips/clips.json`,
-- es erscheint **nicht** in der Bibliothek `clips.html`,
+- es erscheint **nicht** in der Bibliothek `clips.html` — ausser es gehört zu einem
+  sichtbaren Leitprogramm nach Thema: dann in dessen Spalte «Leitprogramm» (seit 06.10.2026),
 - `build-clips-einbau.py` baut es auf **keine** Lektionsseite ein,
 - der Pre-Flight nimmt es von der Ablage-Konsistenzprüfung aus (sonst meldete er die
   HTML-Datei als «fehlt in clips.json»).
@@ -952,21 +953,20 @@ an den Knopf, der sie geöffnet hat (sonst landet er am Seitenanfang).
 
 ## Bibliotheksseite `clips.html`
 
-**Unterteilt nach Lektion und Reihe.** Innerhalb eines Lerngebiets bekommt jede Reihe
-eine Zwischenüberschrift mit der Lektionsnummer davor — `2.2a · Ungleichungen`. Ein
-Lerngebiet hat schnell zwanzig Clips; ohne die Überschriften ist das eine Liste, durch
-die man liest, statt einer, in der man etwas findet.
+**Je Themenseite drei Spalten** (seit 06.10.2026). Innerhalb eines Lerngebiets steht jede
+Themenseite mit ihrer Nummer als Zwischenüberschrift (Link zur Seite), darunter eine
+dreispaltige Tabelle: **Animationen** (Clips mit `animation`), **Leitprogramm** (die eigenen
+Clips der sichtbaren Leitprogramme, `"probe": true`, in der Reihenfolge des Leitprogramms;
+die Spaltenüberschrift verlinkt es) und **Weitere Clips** (alle übrigen). Ein
+Bibliotheksclip, den ein Leitprogramm mitbenutzt, bleibt in Spalte 1 oder 3. Unter 720 px
+stehen die Spalten untereinander.
 
-Die Reihenfolge macht `ordnung()` in `scripts/build-clips-einbau.py`: erst der Zweig
-(Arithmetik vor Algebra, `ZWEIGE`), dann die Lektionsnummer, dann die Reihe. Reihen,
-deren Folge didaktisch und nicht alphabetisch ist, stehen in `REIHEN` — dort steht
-etwa, dass in 2.2a die Ungleichungen vor die Parametergleichungen gehören.
-
-**Die Bibliothek setzt mehrspaltig, die Lektionsseiten rastern.** `.cl-body` benutzt
-`columns: 2`, `.clip-auswahl` ein Raster. Mit einem Raster ginge die Unterteilung nicht:
-Eine Zwischenüberschrift müsste dort wissen, in welcher Spalte sie steht. Mehrspaltiger
-Satz lässt die Gruppen der Reihe nach in die Spalten laufen, `break-inside: avoid` hält
-jede zusammen.
+Gebaut wird der Block von `scripts/clips_bibliothek.py` (nur Mathe); `build-clips-einbau.py`
+ruft es auf und liefert Zeilenform (`zeile()`), Ordnung und Marken — so bleibt das geteilte
+Skript nahe an der Physik-Fassung. Spalten 1 und 3 ordnet `ordnung()` (Reihe, `folge`,
+`REIHEN`). «Sichtbar» heisst: von `leitprogramme.html` vor dem Abschnitt der alten
+Leitprogramme verlinkt; deren Prüfungsclips bleiben draussen. Die Regeln stehen im
+`<style>` von `clips.html`, nicht in `style.css`.
 
 
 

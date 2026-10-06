@@ -508,7 +508,11 @@ def main():
         if not BIB.search(text):
             print(f"  [WARN] {BIBLIOTHEK} hat keine CLIPS-BIBLIOTHEK-Marker")
         else:
-            neu = BIB.sub(lambda _m: block_bibliothek(alle, seiten), text, count=1)
+            # Mathe: eigene Bibliothek mit drei Spalten je Themenseite (scripts/clips_bibliothek.py)
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import clips_bibliothek
+            neu = BIB.sub(lambda _m: clips_bibliothek.block_bibliothek(alle, seiten, sys.modules[__name__]),
+                          text, count=1)
             if neu == text:
                 gleich += 1
             else:
