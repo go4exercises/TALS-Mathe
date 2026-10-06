@@ -67,6 +67,7 @@ REIHEN = ["Lineare Gleichungen", "Ungleichungen", "Parametergleichung",
           "Quadratische Parametergleichungen", "Quadratische Gleichungssysteme",
           "Bruchgleichungen", "Bruchgleichungen → linear",
           "Bruchgleichungen → quadratisch", "Gleichungssysteme"]
+import clips_bibliothek; REIHEN = clips_bibliothek.REIHEN_VORN + REIHEN   # Mathe
 
 
 def lektionsnummer(code):
@@ -508,9 +509,6 @@ def main():
         if not BIB.search(text):
             print(f"  [WARN] {BIBLIOTHEK} hat keine CLIPS-BIBLIOTHEK-Marker")
         else:
-            # Mathe: eigene Bibliothek mit drei Spalten je Themenseite (scripts/clips_bibliothek.py)
-            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-            import clips_bibliothek
             neu = BIB.sub(lambda _m: clips_bibliothek.block_bibliothek(alle, seiten, sys.modules[__name__]),
                           text, count=1)
             if neu == text:

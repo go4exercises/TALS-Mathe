@@ -961,7 +961,8 @@ die Spaltenüberschrift verlinkt es; jede Zeile trägt vorn den Link «LP» auf 
 ihres Kapitels im Leitprogramm, `#simN`, wie «Anim» bei den Clips der Themenseiten) und
 **Weitere Clips** (alle übrigen).
 
-**Farben in der Tabelle:** Spalte 1 wie auf den Themenseiten (blau hinterlegt, «Anim»).
+**Farben in der Tabelle:** Spalte 1 hinterlegt, mit «Anim», in der Bereichsfarbe (GF blau, SP violett; auf den
+Themenseiten bleibt sie blau).
 Spalten 2 und 3 ruhig: weisse Zeilen, Nummer in der Bereichsfarbe (GF blau, SP violett) statt
 der Reihen-Nuancen; «LP» als Marke in der Bereichsfarbe auf Papiergrau — kein Orange oder
 Bernstein (das ist die Physik). Taschenrechner-Clips (`werkzeug`) stechen heraus: dunkle
@@ -972,7 +973,10 @@ stehen die Spalten untereinander.
 Gebaut wird der Block von `scripts/clips_bibliothek.py` (nur Mathe); `build-clips-einbau.py`
 ruft es auf und liefert Zeilenform (`zeile()`), Ordnung und Marken — so bleibt das geteilte
 Skript nahe an der Physik-Fassung. Spalten 1 und 3 ordnet `ordnung()` (Reihe, `folge`,
-`REIHEN`). «Sichtbar» heisst: von `leitprogramme.html` vor dem Abschnitt der alten
+`REIHEN`): Spalte 1 folgt damit der Lage der Animationen auf der Seite, Spalte 2 dem
+Leitprogramm. Reihen, deren Folge dem Aufbau der Themenseite folgt statt dem Alphabet
+(1.2–1.4), stehen in `REIHEN_VORN` in `clips_bibliothek.py` — sie gelten auch für die
+Clipblöcke der Themenseiten. «Sichtbar» heisst: von `leitprogramme.html` vor dem Abschnitt der alten
 Leitprogramme verlinkt; deren Prüfungsclips bleiben draussen. Die Regeln stehen im
 `<style>` von `clips.html`, nicht in `style.css`.
 

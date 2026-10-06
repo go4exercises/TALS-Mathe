@@ -26,6 +26,13 @@ import os
 import re
 
 
+# Reihen, die vor der Liste REIHEN in build-clips-einbau.py stehen — ihre Ordnung folgt dem
+# Aufbau der Themenseite, nicht dem Alphabet (sonst «Binome» vor «Klammern»). Gilt für die
+# Bibliothek und die Clipblöcke der Themenseiten.
+REIHEN_VORN = ["Mengen", "Zahlenmengen", "Zahlformen", "Zahlenbrüche", "Prozent",   # 1.2
+               "Klammern", "Binome", "Faktorisieren", "Bruchterme",                   # 1.3
+               "Zehnerpotenzen", "Einheiten", "Runden", "Potenzen"]                   # 1.4
+
 def sichtbare_leitprogramme(wurzel):
     """Leitprogramm-Dateien in der Reihenfolge von leitprogramme.html, ohne die alten."""
     text = open(os.path.join(wurzel, "leitprogramme.html"), encoding="utf-8").read()
