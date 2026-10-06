@@ -85,7 +85,7 @@ GRUNDLINIE = {
     'feedback.html': 0.977,
     'LICENSE': 0.955,
     'scripts/build-suchindex.py': 0.962,
-    'scripts/build-clips.py': 0.836,
+    'scripts/build-clips.py': 0.980,
     'scripts/build-clips-einbau.py': 0.830,
     'scripts/build-clip-ton.py': 1.000,
     'scripts/build-seo.py': 0.533,
@@ -125,24 +125,54 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='Leitprogramm-Erstellung nach dem heutigen Muster (abgenommen 03.10.2026)',
-         wie='Vier Bloecke, Einzelheiten mit Zeilenzahlen in TODO-schwesterprojekt.md: '
-             '(1) scripts/build-clips.py — "bewegung" fuer parabeln UND geraden samt BEWEGUNG_JS '
-             '(144 Z.) und "fragen" samt FRAGEN_JS (145 Z.); dazu clips/themes/begreifbar-schlicht.json, '
-             'scripts/build-clip-fragen-ton.py (77 Z.). Physik nutzt den "graf" heute in keinem '
-             'seiner 234 Drehbuecher — der Uebertrag haelt nur das Werkzeug gleich. '
-             '(2) HOWTO-leitprogramme.md Gesamtfassung (599 Z.) statt der alten technischen '
-             'Fassung (Physik 385 Z.) und ein STYLEGUIDE §6.5 (in Physik nicht vorhanden). '
-             '(3) Kapitelmuster als Bauskript: scripts/lp/<thema>/ mit seite.py, seite.js, '
-             'grafgeom.py, pruef-graf.py — kein reiner Uebertrag, entsteht am ersten '
-             'Physik-Leitprogramm. (4) Pruefung vor der Freischaltung: Skill lp-pruefung (90 Z.) '
-             'und .claude/tools/pruef-uebungen.mjs, pruef-leiste.mjs, pruef-fragen.mjs, '
-             'sprechzeiten.py (366 Z. zusammen) — in Physik fehlen alle vier. '
-             'Empfohlene Reihenfolge: (2), (4), dann (1) und (3) zusammen am ersten Leitprogramm. '
-             'Nach (1) ist build-clips.py KERN wieder vergleichbar; die Grundlinie 0.836 steigt '
-             'erst, wenn beide Repos dieselbe Fassung tragen.'),
+    dict(quelle='Physik', was='build-clips.py: bewegte Geraden standen im Endzustand; neues Feld "ab" (03.10.2026)',
+         wie='(1) FEHLER in BEWEGUNG_JS, auch in Mathe (build-clips.py Z. 871, 904, 911): bewegeGerade '
+             'liest t - T.L.t0, T.L ist aber das Element, nicht der Listeneintrag mit t0. Ergebnis NaN, '
+             'bewZustand liefert den letzten Stuetzpunkt: Jede bewegte Gerade, jeder Laeufer und jedes '
+             'wandernde Steigungsdreieck steht sofort im Endzustand. In Mathe betrifft das die Clips '
+             'g3-2-lp-* (Gerade sehen und Kontrollclips) — dort steht die Antwort einer klick-Frage '
+             'womoeglich schon im Bild. Physik-Fix: T.L.t0 -> T.t0 und in bewegen() vor dem Aufruf '
+             'T.t0 = L.t0. Danach alle Clips mit "bewegung" an Geraden neu bauen und Pruefbilder bei '
+             '0.3 s jeder Fragenszene ansehen. (2) Neu: "ab" an einer bewegten Geraden — die Strecke '
+             'beginnt erst bei diesem x (Q-t- oder R-l-Gerade ohne negativen Teil); ohne das Feld bleibt '
+             'alles gleich. Diese Datei und build-clips.py aus Physik uebernehmen; danach build-clips.py '
+             'KERN wieder >= 0.98. (3) Neu in Physik und fuer Mathe nuetzlich: .claude/tools/'
+             'pruef-formelsatz.mjs setzt die Zufallsuebungen mit echtem MathJax (pruef-uebungen schaltet '
+             'es ab und sah darum ein «\\text{\\mu C}» nicht).'),
+    dict(quelle='Physik', was='build-clips.py: Fragen im Clip per Tastatur, Toleranz je Achse, Eingabe statt Tippen (04.10.2026)',
+         wie='Aus der Pruefung des Leitprogramms Elektrizitaet. (1) FEHLER, auch in Mathe (build-clips.py '
+             'Z. 1835): Der Hauptabspieler faengt die Leertaste ueberall ab (preventDefault + toggle) — '
+             'ein fokussierter Antwortknopf laesst sich damit nicht bestaetigen, die Leertaste schaltet '
+             'stattdessen Play/Pause. Physik: Tastenkuerzel nicht in input/select/textarea, die Leertaste '
+             'nicht auf button/a/summary; dasselbe fuer «R» im FRAGEN_JS. (2) Fokus: zeigen() setzt ihn '
+             'nach display:block auf die erste Antwort (vorher geht focus() auf ein verstecktes Element '
+             'ins Leere), schliessen() gibt ihn an Play/Pause zurueck, auch wenn er mit dem gesperrten '
+             'Knopf schon auf <body> gefallen ist. (3) "toleranz" darf [dx, dy] sein (je Achse, statt '
+             'Math.hypot in Dateneinheiten, Mathe Z. 1150) — noetig, wenn die Achsen verschiedene '
+             'Groessen tragen; eine Zahl wirkt wie bisher. (4) Neues Feld "eingabe": ["t in s", "Q in C"] '
+             'an einer klick-Frage — zwei Zahlfelder und «Pruefen» als gleichwertiger Weg ohne Maus, '
+             'gleiche Auswertung (pruefePunkt) samt fallen. Mathe hat 70 Fragen in 14 Clips, 15 davon '
+             'klick: dort "eingabe" je Frage nachtragen, sonst bleiben sie ohne Zeigegeraet unloesbar. '
+             'Danach die 14 Clips neu bauen und pruef-fragen laufen lassen. Diese Datei und '
+             'build-clips.py aus Physik uebernehmen.'),
+    dict(quelle='Physik', was='build-clips.py: graf mit flaechen, strecken, texte und "achsen": false (06.10.2026)',
+         wie='Neu in graf_svg, alles statisch in Datenkoordinaten, ohne die Felder Byte fuer Byte wie vorher '
+             '(geprueft an vier Clips): "flaechen" (gefuelltes Vieleck unter allen Linien, "deckung", '
+             'Beschriftung mit Hof), "strecken" (Hilfs-, Mass- und Vektorlinien, "pfeil": true, '
+             '"gestrichelt", Beschriftung mit Hof), "texte" (freie Beschriftung) und "achsen": false '
+             '(nur die Zeichnung, ohne Karo/Achsen/Teilung) — als Pfeilbild oder als zweite Ebene, die '
+             'spaeter deckungsgleich ueber einem graf mit demselben Fenster erscheint. Anlass: Antworten '
+             'der Kontrollclips im Bild und Rechnungen, die sich im Diagramm entwickeln (Weg als Flaeche). '
+             'Fuer Mathe nuetzlich (Flaeche unter einer Kurve, Masslinien am Steigungsdreieck, Vektoren). '
+             'Doku: HOWTO-clips.md, Abschnitt «Flaechen, Strecken, Texte und Ebenen im graf». '
+             'build-clips.py und diese Datei aus Physik uebernehmen, danach KERN-Grundlinie pruefen. '
+             'Am selben Tag: Feld "kopf" je Frage ersetzt die Kopfzeile «Deine Vorhersage» (Physik: '
+             '«Dein Vorgehen» bei Strategiefragen nach der Einfuehrung); ohne das Feld unveraendert. '
+             'Und: pruef-fragen.mjs bricht bei einer Frage mitten im Clip ab (erwartet Frage 1 in den '
+             'ersten Sekunden) — in Mathe betrifft das g3-3-lp-verschieben, falls die erste Frage spaet kommt. '
+             'Ebenfalls 06.10.: bewegte Parabeln kennen "ab"/"bis" (data-ab/data-bis, BEWEGUNG_JS begrenzt '
+             'den Bogen); ohne die Felder Byte fuer Byte gleich.'),
 ]
-
 FACH = {
     'nav.js': 'Seitenbaum und Lerngebiete — je Fach ein anderer.',
     'style.css': 'Leitfarbe Bernstein gegen Blau, eigene Bausteine je Fach.',

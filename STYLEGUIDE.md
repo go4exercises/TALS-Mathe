@@ -1151,8 +1151,9 @@ Erwartet: `Stray: 0 | Residuen: 0 | ß: 0`. Jede Abweichung muss vor dem nächst
 
 Ein Clip ist eine HTML-Animation in `clips/`, kein Video: Die Bühne baut einen
 Gedankengang Zeile für Zeile auf, dazu läuft eine gesprochene Spur. Ausführlich in
-`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 30.09.2026: 391 Clips in der
-Bibliothek (362:25 min, davon 223 Animationsclips), dazu 35 unverlinkte Prüfungsclips.
+`HOWTO-clips.md`; hier nur, was nicht verhandelbar ist. Stand 06.10.2026: 391 Clips in
+`clips.json` (363:00 min, davon 223 Animationsclips), dazu 123 mit `"probe": true` — 88 Clips der
+sichtbaren Leitprogramme (in `clips.html` in der Spalte «Leitprogramm») und 35 Prüfungsclips.
 
 - **`clips/` liegt genau eine Ebene unter der Wurzel.** Die Clips ziehen die Schriften per
   `@import url("../schriften.css")`. Tiefer verschoben sind die Schriften weg, ohne dass
@@ -1186,20 +1187,25 @@ Bibliothek (362:25 min, davon 223 Animationsclips), dazu 35 unverlinkte Prüfung
   einen *Term* über mehrere Zeilen, nicht einen Blocktyp. Dass Orange auf den Seiten
   „Aufgabe" markiert (§5.1), gilt hier nicht — anderer Kontext. 1 und 2 (Blau/Orange) sind
   das Paar, das auch bei Rotgrünschwäche unterscheidbar bleibt. Sparsam einsetzen.
-- **Die Bibliothek `clips.html` unterteilt nach Lektion und Reihe** — `2.2a ·
-  Ungleichungen`. Die Ordnung macht `ordnung()` in `build-clips-einbau.py` und sie
-  folgt der Struktur der Site: erst die **Themenseite** in der Reihenfolge, in der sie
-  im Menü steht (aus `nav.js` gelesen, nicht wiederholt), dann die Reihe (`REIHEN`, wo
-  die Folge didaktisch statt alphabetisch ist), dann `folge`. Der Zweig ordnet **nicht**
-  mit — er zerreisst die Seitenfolge, sobald eine Lektion Clips aus zwei Zweigen hat.
+- **Die Bibliothek `clips.html` zeigt je Themenseite drei Spalten** (seit 06.10.2026):
+  **Animationen** (Clips mit `animation`, «Anim»), **Leitprogramm** (die eigenen Clips der
+  sichtbaren Leitprogramme, in deren Reihenfolge, «LP» auf die Animation des Kapitels) und
+  **Weitere Clips**. Gebaut von `scripts/clips_bibliothek.py`. Die Themenseiten stehen in der
+  Reihenfolge des Menüs (aus `nav.js` gelesen, nicht wiederholt); in den Spalten 1 und 3
+  ordnet `ordnung()` in `build-clips-einbau.py`: die Reihe (`REIHEN_VORN` + `REIHEN`, wo die
+  Folge dem Aufbau der Seite statt dem Alphabet folgt), dann `folge`. Der Zweig ordnet
+  **nicht** mit. Farben: Bereichsfarbe (GF blau, SP violett), Spalte 1 hinterlegt, Spalte 2
+  heller hinterlegt, Spalte 3 weiss — kein Orange oder Bernstein. Einzelheiten:
+  HOWTO-clips «Bibliotheksseite».
 - **Werkzeug-Clips: `"werkzeug": true` im Drehbuch, sonst nichts Besonderes.** Ein
   Taschenrechner-Clip bekommt **keine eigene Reihe** — er steht in der Reihe seines
   Stoffs, als deren letzter: der poly-solv-Clip als Folge 7 der `Quadratische
   Gleichungen`, der sys-solv-Clip als Folge 6 der `Gleichungssysteme`. Das Flag macht
   genau zwei Dinge: Es sortiert den Clip ans Ende seiner Reihe (`ordnung()`) und gibt
-  der Zeile `cl-tr` statt `cl-r1…8` — Orange, in beiden Bereichen dieselbe Farbe, weil
-  sie gerade *nicht* zur Bereichsfamilie gehören soll. Das ist die einzige Ausnahme von
-  §5.1 in der Bibliothek und in `style.css` als solche vermerkt.
+  der Zeile `cl-tr` statt `cl-r1…8` — auf den Themenseiten Orange, in beiden Bereichen
+  dieselbe Farbe, weil sie gerade *nicht* zur Bereichsfamilie gehören soll (Ausnahme von
+  §5.1, in `style.css` vermerkt). In `clips.html` stechen sie als dunkle Zeile mit Marke
+  «TR» heraus.
 - **Auch der Titel wiederholt das Werkzeug nicht.** Er beginnt wie jeder Clip mit seiner
   Reihe: «Quadratische Gleichungen: mit poly-solv lösen», nicht «Taschenrechner: …».
   Sonst steht in der Bibliothek eine Spalte gleich anfangender Titel, die nichts über
@@ -1210,8 +1216,8 @@ Bibliothek (362:25 min, davon 223 Animationsclips), dazu 35 unverlinkte Prüfung
   und kostet keine Zeile. Nicht in die Leiste gehört eine Bedingung, die das *Ergebnis*
   des Clips ist: Sie nähme die Frage vorweg.
 - **`"probe": true` hält einen Clip aus der Bibliothek heraus.** Er wird gebaut und
-  ausgeliefert, kommt aber nicht in `clips.json`, nicht in `clips.html` und auf keine
-  Lektionsseite; der Pre-Flight nimmt ihn von der Ablage-Prüfung aus. Zwei Fälle: ein
+  ausgeliefert, kommt aber nicht in `clips.json` und auf keine Lektionsseite, und in
+  `clips.html` nur als Clip eines sichtbaren Leitprogramms (Spalte «Leitprogramm»); der Pre-Flight nimmt ihn von der Ablage-Prüfung aus. Zwei Fälle: ein
   Versuchsclip — und ein Clip, der **zu einer bestimmten Seite gehört und nirgends
   sonst**, wie die Prüfungsclips eines Leitprogramms nach §6.5. Weil das Feld dann
   etwas anderes heisst als «Versuch», gehört ein `"_probe"` mit der Begründung daneben.
@@ -1280,9 +1286,10 @@ Hier nur, was für beide nicht verhandelbar ist.
   eigens behandeln, weil der `--tinte` als Fläche benutzt.
 - **Kapitelüberschriften brauchen `id`.** Die Suche schneidet an `h2[id]`; ohne Anker
   ist die ganze Seite ein einziger Treffer.
-- **Eintragen in `leitprogramme.html`, `build-seo.py` und `build-suchindex.py`.** Der
-  Block in `leitprogramme.html` wird von Hand gepflegt; ab etwa einem Dutzend lohnt sich
-  ein Generator wie bei den Clips.
+- **Eintragen in `leitprogramme.html`, `build-seo.py` und `build-suchindex.py`** (dazu Pille
+  «LP» auf `index.html` und Kasten «🧭 Lieber geführt?» auf der Themenseite). Der Block in
+  `leitprogramme.html` wird von Hand gepflegt: eine Kachel je Leitprogramm, darauf je
+  Themenseite Titel und Nummernpille (HOWTO-leitprogramme §13).
 - **Unverlinkt veröffentlichen ist erlaubt — aber nur vollständig.** Soll eine Seite
   ausgeliefert, jedoch nicht gefunden werden (etwa eine Übungsprüfung, die eine Klasse
   per Link bekommt), dann **alle drei Stellen zusammen**: keine Karte in

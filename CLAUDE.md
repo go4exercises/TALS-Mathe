@@ -88,11 +88,11 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 495 Drehbücher, alle vertont: **391 in der Bibliothek** (363:00 min,
-  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **103 unverlinkte**
-  Clips mit `"probe": true` (35 Prüfungsclips und 68 Clips der Leitprogramme nach Thema:
+- `clips/` — 514 Drehbücher, alle vertont: **391 in `clips.json`** (363:00 min,
+  56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **123** Clips mit
+  `"probe": true` (35 Prüfungsclips und 88 Clips der Leitprogramme nach Thema:
   je 10 «Parabel sehen», «Kurve sehen», «Polynom sehen», «Exponentialkurve sehen»,
-  «Sinuskurve sehen», «Knick sehen», 8 «Gerade sehen»), die im zugehörigen Leitprogramm stehen und
+  «Sinuskurve sehen», «Knick sehen», «Figuren sehen», «Gleichungen lösen», 8 «Gerade sehen»), die im zugehörigen Leitprogramm stehen und
   weder in `clips.json` noch auf einer Lektionsseite auftauchen. Die Clips der *sichtbaren* Leitprogramme zeigt
   `clips.html` seit 06.10.2026 trotzdem: je Themenseite eine Tabelle Animationen · Leitprogramm · Weitere Clips
   (`scripts/clips_bibliothek.py`, HOWTO-clips «Bibliotheksseite»). **46 der 47 Themenseiten tragen Clips** (ohne: `g4-0`). Von Hand geschrieben wird nur das Drehbuch `clips/<name>.json`;
