@@ -88,8 +88,9 @@
 <link rel="stylesheet" href="schriften.css">
 <link rel="stylesheet" href="style.css">
 <style>
-/* Kacheln «Nach Thema»: wie die Karten auf index.html, nur umgedreht — die Kachel führt zum
-   Leitprogramm, die Pille mit der Nummer zur Themenseite. Je Themenseite eine Kachel. */
+/* Kacheln «Nach Thema»: wie die Karten auf index.html, nur umgedreht — eine Kachel je Leitprogramm
+   führt zum Leitprogramm (unsichtbarer Link über der ganzen Kachel), darauf je Themenseite ihr
+   Titel und eine Pille mit der Nummer, die zur Themenseite führt. */
 .lp-fach { margin: 22px 0 4px; }
 .lp-fach.lp-gl { color: var(--blau); }
 .lp-fach.lp-sp { color: var(--lila); }
@@ -97,16 +98,18 @@
 .lp-nr { font-family: var(--mono); font-size: 0.66rem; font-weight: 700; padding: 2px 7px; border-radius: 4px; vertical-align: 1px; }
 .lp-gl .lp-nr { background: var(--blau-hell); color: var(--blau); }
 .lp-sp .lp-nr { background: var(--lila-hell); color: var(--lila); }
-.lp-kacheln { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
-.karte-lp { position: relative; display: flex; min-width: 0; }
-.karte-lp > .karte { flex: 1; min-width: 0; }
-.karte { background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; padding: 10px 62px 10px 15px; justify-content: center; min-height: 44px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-.karte::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-.lp-gl .karte::before { background: var(--blau); }
-.lp-sp .karte::before { background: var(--lila); }
-.karte:hover { transform: translateY(-2px); box-shadow: var(--sl); border-color: var(--blau-rand); }
-.karte .k-tit { font-family: var(--serif); font-size: 0.9rem; font-weight: 600; color: var(--tinte); line-height: 1.25; }
-.ts-link { position: absolute; right: 7px; top: 8px; font-family: var(--mono); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.3px; border-radius: 3px; padding: 1px 6px; text-decoration: none; z-index: 1; border: 1px solid; }
+.lp-kacheln { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; }
+.karte-lp { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 6px; min-width: 0; min-height: 44px;
+  background: var(--weiss); border: 1px solid var(--linie); border-radius: 8px; padding: 10px 9px 10px 15px; overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+.karte-lp::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.lp-gl .karte-lp::before { background: var(--blau); }
+.lp-sp .karte-lp::before { background: var(--lila); }
+.karte-lp:hover, .karte-lp:focus-within { transform: translateY(-2px); box-shadow: var(--sl); border-color: var(--blau-rand); }
+.karte-lp > .karte { position: absolute; inset: 0; z-index: 0; border-radius: 8px; }
+.lp-zeile { position: relative; z-index: 1; pointer-events: none; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.lp-zeile .k-tit { font-family: var(--serif); font-size: 0.9rem; font-weight: 600; color: var(--tinte); line-height: 1.25; }
+.ts-link { pointer-events: auto; flex-shrink: 0; font-family: var(--mono); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.3px; border-radius: 3px; padding: 1px 6px; text-decoration: none; border: 1px solid; }
 .lp-gl .ts-link { color: var(--blau); background: var(--blau-hell); border-color: var(--blau-rand); }
 .lp-sp .ts-link { color: var(--lila); background: var(--lila-hell); border-color: var(--lila-rand); }
 .lp-gl .ts-link:hover, .lp-gl .ts-link:focus-visible { background: var(--blau); color: var(--weiss); }
@@ -134,94 +137,69 @@ MathJax = {
 
 <!-- LEITPROGRAMME:ANFANG — von Hand gepflegt. Ein neues Leitprogramm:
      Datei nach leitprogramme/<name>.html legen (Schriften über ../schriften.css,
-     MathJax über ../vendor/mathjax/tex-svg.js — keine fremden Hosts), hier je
-     Themenseite eine Kachel ergänzen (Titel der Themenseite, Pille mit ihrer Nummer,
+     MathJax über ../vendor/mathjax/tex-svg.js — keine fremden Hosts), hier eine
+     Kachel ergänzen (je Themenseite eine Zeile: Titel und Pille mit ihrer Nummer;
      sortiert nach Nummer unter Fach und Themenbereich), in scripts/build-seo.py und scripts/build-suchindex.py
      eintragen. Ab etwa einem Dutzend lohnt sich ein Generator wie bei den Clips.
      Zwei Arten, zwei Abschnitte: «Nach Thema» (Vortest, Kapitel, Gesamttest) und
      «Nach Prüfungsbogen» (jede Teilaufgabe mit Clip, Musterlösung, Punktezeile). -->
-<h2 id="nach-thema">Nach Thema</h2>
-
-<p>Ein Vorwissenstest, damit du siehst, ob die Grundlagen tragen, danach vier bis fünf
-Kapitel: Clip ansehen, in der Animation tüfteln, Kontrollfragen beantworten, üben — und am
-Schluss ein Gesamttest mit Punkteschlüssel. Rechne mit einer Lektion je Kapitel.
-Jede Kachel führt zum Leitprogramm, die Nummer dahinter zur Themenseite.</p>
-
-<h3 class="lp-fach lp-gl">Grundlagenfach</h3>
+<h2 class="lp-fach lp-gl">Grundlagenfach</h2>
 <div class="lp-gl">
 <p class="lp-bereich"><span class="lp-nr">2</span> Gleichungen, Ungleichungen und Gleichungssysteme</p>
 <div class="lp-kacheln">
   <div class="karte-lp">
-    <a href="leitprogramme/lineare-quadratische-gleichungen.html" class="karte"><span class="k-tit">Lineare Gleichungen</span></a>
-    <a href="grundlagen/g2-2a-lineare-gleichungen.html" class="ts-link" title="Themenseite 2.2a Lineare Gleichungen">g2.2a</a>
-  </div>
-  <div class="karte-lp">
-    <a href="leitprogramme/lineare-quadratische-gleichungen.html" class="karte"><span class="k-tit">Quadratische Gleichungen</span></a>
-    <a href="grundlagen/g2-2b-quadratische-gleichungen.html" class="ts-link" title="Themenseite 2.2b Quadratische Gleichungen">g2.2b</a>
+    <a href="leitprogramme/lineare-quadratische-gleichungen.html" class="karte" aria-label="Leitprogramm Lineare und quadratische Gleichungen"></a>
+    <div class="lp-zeile"><span class="k-tit">Lineare Gleichungen</span><a href="grundlagen/g2-2a-lineare-gleichungen.html" class="ts-link" title="Themenseite 2.2a Lineare Gleichungen">g2.2a</a></div>
+    <div class="lp-zeile"><span class="k-tit">Quadratische Gleichungen</span><a href="grundlagen/g2-2b-quadratische-gleichungen.html" class="ts-link" title="Themenseite 2.2b Quadratische Gleichungen">g2.2b</a></div>
   </div>
 </div>
 <p class="lp-bereich"><span class="lp-nr">3</span> Funktionen</p>
 <div class="lp-kacheln">
   <div class="karte-lp">
-    <a href="leitprogramme/lineare-funktionen.html" class="karte"><span class="k-tit">Lineare Funktionen</span></a>
-    <a href="grundlagen/g3-2-lineare-funktionen.html" class="ts-link" title="Themenseite 3.2 Lineare Funktionen">g3.2</a>
+    <a href="leitprogramme/lineare-funktionen.html" class="karte" aria-label="Leitprogramm Lineare Funktionen"></a>
+    <div class="lp-zeile"><span class="k-tit">Lineare Funktionen</span><a href="grundlagen/g3-2-lineare-funktionen.html" class="ts-link" title="Themenseite 3.2 Lineare Funktionen">g3.2</a></div>
   </div>
   <div class="karte-lp">
-    <a href="leitprogramme/quadratische-funktionen.html" class="karte"><span class="k-tit">Quadratische Funktionen</span></a>
-    <a href="grundlagen/g3-3-quadratische-funktionen.html" class="ts-link" title="Themenseite 3.3 Quadratische Funktionen">g3.3</a>
+    <a href="leitprogramme/quadratische-funktionen.html" class="karte" aria-label="Leitprogramm Quadratische Funktionen"></a>
+    <div class="lp-zeile"><span class="k-tit">Quadratische Funktionen</span><a href="grundlagen/g3-3-quadratische-funktionen.html" class="ts-link" title="Themenseite 3.3 Quadratische Funktionen">g3.3</a></div>
   </div>
 </div>
 <p class="lp-bereich"><span class="lp-nr">5</span> Geometrie</p>
 <div class="lp-kacheln">
   <div class="karte-lp">
-    <a href="leitprogramme/planimetrie.html" class="karte"><span class="k-tit">Dreiecke</span></a>
-    <a href="grundlagen/g5-2a-dreiecke.html" class="ts-link" title="Themenseite 5.2a Dreiecke">g5.2a</a>
-  </div>
-  <div class="karte-lp">
-    <a href="leitprogramme/planimetrie.html" class="karte"><span class="k-tit">Vierecke</span></a>
-    <a href="grundlagen/g5-2b-vierecke.html" class="ts-link" title="Themenseite 5.2b Vierecke">g5.2b</a>
-  </div>
-  <div class="karte-lp">
-    <a href="leitprogramme/planimetrie.html" class="karte"><span class="k-tit">Kreis und Kreisteile</span></a>
-    <a href="grundlagen/g5-2c-kreis-und-kreisteile.html" class="ts-link" title="Themenseite 5.2c Kreis und Kreisteile">g5.2c</a>
-  </div>
-  <div class="karte-lp">
-    <a href="leitprogramme/planimetrie.html" class="karte"><span class="k-tit">Zentrische Streckung und Ähnlichkeit</span></a>
-    <a href="grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html" class="ts-link" title="Themenseite 5.2d Zentrische Streckung und Ähnlichkeit">g5.2d</a>
+    <a href="leitprogramme/planimetrie.html" class="karte" aria-label="Leitprogramm Planimetrie"></a>
+    <div class="lp-zeile"><span class="k-tit">Dreiecke</span><a href="grundlagen/g5-2a-dreiecke.html" class="ts-link" title="Themenseite 5.2a Dreiecke">g5.2a</a></div>
+    <div class="lp-zeile"><span class="k-tit">Vierecke</span><a href="grundlagen/g5-2b-vierecke.html" class="ts-link" title="Themenseite 5.2b Vierecke">g5.2b</a></div>
+    <div class="lp-zeile"><span class="k-tit">Kreis und Kreisteile</span><a href="grundlagen/g5-2c-kreis-und-kreisteile.html" class="ts-link" title="Themenseite 5.2c Kreis und Kreisteile">g5.2c</a></div>
+    <div class="lp-zeile"><span class="k-tit">Zentrische Streckung und Ähnlichkeit</span><a href="grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html" class="ts-link" title="Themenseite 5.2d Zentrische Streckung und Ähnlichkeit">g5.2d</a></div>
   </div>
 </div>
 </div>
-<h3 class="lp-fach lp-sp">Schwerpunktfach</h3>
+<h2 class="lp-fach lp-sp">Schwerpunktfach</h2>
 <div class="lp-sp">
 <p class="lp-bereich"><span class="lp-nr">3</span> Funktionen</p>
 <div class="lp-kacheln">
   <div class="karte-lp">
-    <a href="leitprogramme/potenz-wurzelfunktionen.html" class="karte"><span class="k-tit">Potenzfunktionen</span></a>
-    <a href="schwerpunkt/s3-2a-potenzfunktionen.html" class="ts-link" title="Themenseite 3.2a Potenzfunktionen">s3.2a</a>
+    <a href="leitprogramme/potenz-wurzelfunktionen.html" class="karte" aria-label="Leitprogramm Potenz- und Wurzelfunktionen"></a>
+    <div class="lp-zeile"><span class="k-tit">Potenzfunktionen</span><a href="schwerpunkt/s3-2a-potenzfunktionen.html" class="ts-link" title="Themenseite 3.2a Potenzfunktionen">s3.2a</a></div>
+    <div class="lp-zeile"><span class="k-tit">Wurzelfunktionen</span><a href="schwerpunkt/s3-2b-wurzelfunktionen.html" class="ts-link" title="Themenseite 3.2b Wurzelfunktionen">s3.2b</a></div>
   </div>
   <div class="karte-lp">
-    <a href="leitprogramme/potenz-wurzelfunktionen.html" class="karte"><span class="k-tit">Wurzelfunktionen</span></a>
-    <a href="schwerpunkt/s3-2b-wurzelfunktionen.html" class="ts-link" title="Themenseite 3.2b Wurzelfunktionen">s3.2b</a>
+    <a href="leitprogramme/polynomfunktionen.html" class="karte" aria-label="Leitprogramm Polynomfunktionen"></a>
+    <div class="lp-zeile"><span class="k-tit">Polynomfunktionen</span><a href="schwerpunkt/s3-3-polynomfunktionen.html" class="ts-link" title="Themenseite 3.3 Polynomfunktionen">s3.3</a></div>
   </div>
   <div class="karte-lp">
-    <a href="leitprogramme/polynomfunktionen.html" class="karte"><span class="k-tit">Polynomfunktionen</span></a>
-    <a href="schwerpunkt/s3-3-polynomfunktionen.html" class="ts-link" title="Themenseite 3.3 Polynomfunktionen">s3.3</a>
+    <a href="leitprogramme/exp-log-funktionen.html" class="karte" aria-label="Leitprogramm Exponential- und Logarithmusfunktionen"></a>
+    <div class="lp-zeile"><span class="k-tit">Exponentialfunktionen</span><a href="schwerpunkt/s3-4a-exponentialfunktionen.html" class="ts-link" title="Themenseite 3.4a Exponentialfunktionen">s3.4a</a></div>
+    <div class="lp-zeile"><span class="k-tit">Logarithmusfunktionen</span><a href="schwerpunkt/s3-4b-logarithmusfunktionen.html" class="ts-link" title="Themenseite 3.4b Logarithmusfunktionen">s3.4b</a></div>
   </div>
   <div class="karte-lp">
-    <a href="leitprogramme/exp-log-funktionen.html" class="karte"><span class="k-tit">Exponentialfunktionen</span></a>
-    <a href="schwerpunkt/s3-4a-exponentialfunktionen.html" class="ts-link" title="Themenseite 3.4a Exponentialfunktionen">s3.4a</a>
+    <a href="leitprogramme/trigonometrische-funktionen.html" class="karte" aria-label="Leitprogramm Trigonometrische Funktionen"></a>
+    <div class="lp-zeile"><span class="k-tit">Trigonometrische Funktionen</span><a href="schwerpunkt/s3-5-trigonometrische-funktionen.html" class="ts-link" title="Themenseite 3.5 Trigonometrische Funktionen">s3.5</a></div>
   </div>
   <div class="karte-lp">
-    <a href="leitprogramme/exp-log-funktionen.html" class="karte"><span class="k-tit">Logarithmusfunktionen</span></a>
-    <a href="schwerpunkt/s3-4b-logarithmusfunktionen.html" class="ts-link" title="Themenseite 3.4b Logarithmusfunktionen">s3.4b</a>
-  </div>
-  <div class="karte-lp">
-    <a href="leitprogramme/trigonometrische-funktionen.html" class="karte"><span class="k-tit">Trigonometrische Funktionen</span></a>
-    <a href="schwerpunkt/s3-5-trigonometrische-funktionen.html" class="ts-link" title="Themenseite 3.5 Trigonometrische Funktionen">s3.5</a>
-  </div>
-  <div class="karte-lp">
-    <a href="leitprogramme/betragsfunktionen.html" class="karte"><span class="k-tit">Betragsfunktionen</span></a>
-    <a href="schwerpunkt/s3-6-betragsfunktionen.html" class="ts-link" title="Themenseite 3.6 Betragsfunktionen">s3.6</a>
+    <a href="leitprogramme/betragsfunktionen.html" class="karte" aria-label="Leitprogramm Betragsfunktionen"></a>
+    <div class="lp-zeile"><span class="k-tit">Betragsfunktionen</span><a href="schwerpunkt/s3-6-betragsfunktionen.html" class="ts-link" title="Themenseite 3.6 Betragsfunktionen">s3.6</a></div>
   </div>
 </div>
 </div>

@@ -476,7 +476,7 @@ Der Reihe nach; in Klammern, woran man merkt, dass der Punkt fehlt.
 
 | Datei | was |
 |---|---|
-| `leitprogramme.html` | je Themenseite eine Kachel unter «Nach Thema»: nur der Titel der Themenseite (führt zum Leitprogramm), dahinter die Pille mit ihrer Nummer (`g3.3`, `s3.4a`, führt zur Themenseite); unter Fach und Themenbereich, nach Nummer sortiert (sichtbar sind seit 06.10.2026 nur die Leitprogramme mit Kontrollfragen; die älteren vorübergehend unter «Alte Leitprogramme») |
+| `leitprogramme.html` | eine Kachel je Leitprogramm unter «Nach Thema» (führt zum Leitprogramm); darauf je Themenseite ihr Titel und die Pille mit ihrer Nummer (`g3.3`, `s3.4a`, führt zur Themenseite); unter Fach und Themenbereich, nach Nummer sortiert (sichtbar sind seit 06.10.2026 nur die Leitprogramme mit Kontrollfragen; die älteren vorübergehend unter «Alte Leitprogramme») |
 | `scripts/build-seo.py` | Eintrag in `SEITEN` (Beschreibung, Sitemap) |
 | `scripts/build-suchindex.py` | Eintrag in der Liste der Nachschlagewerke |
 | Themenseite | Kasten nach den Lernzielen: «🧭 Lieber geführt? Leitprogramm *…* (≈ n Lektionen)» |
