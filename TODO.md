@@ -924,3 +924,27 @@ Nachgeprüft vom Hauptagenten: H1, H2, H4 (Sperrschlüssel), M1.
 - [x] Seite: (x − p)² = r ohne r ≥ 0; «berührt die Achse» → x-Achse (auch Clip ergaenzen, **Neuvertonung**); «Kein Glied mit x (ax² + c)» → «kein lineares Glied (b = 0)»; Ergänzung (b/2)² ohne «Faktor 1 vor x²»; «dann ist die Gleichung linear» → «sofern der Koeffizient von x nicht auch null ist»; 2b-Kommentar «Zahlen in Klammern = Lösungen mit umgekehrtem Vorzeichen» nur bei Faktor 1; p doppelt belegt; sim4 A2 Zeile doppelt im Verlauf; Sim 5 Live-Zeile «1x», «0x», «+ 0», rechte Seite orange; Kapitel 0 verlinkt 1.4 nicht; Umformer 4 A6 Probe nur für 0.5; 2c = Kontrollfrage und Festhalten (Antwort steht darüber); Mengen-Eingabe «{3 4}» → 34, «x=3» Meldung.
 - [x] Clips: «Jetzt du … Animation» in Kap. 1–4 (dort Umformer; **Neuvertonung** 4 Clips); «√−8 gibt es nicht» → in ℝ; ergaenzen Merke «aus jeder Gleichung» → quadratischen; Kontrollclip Umformen F1 «verboten»; Mitternachtsformel ohne a ≠ 0 im Bild; parameter «Zuerst a prüfen» bricht ab, «Leitkoeffizient» nicht eingeführt; rechte Seite schwarz/orange uneinheitlich; Gerade verdeckt Achsenbeschriftung −2; Herleitung der Formel aus der Ergänzung nur behauptet (4c verlangt sie).
 - [x] PDF: BP Seiten 1–2 halbleer; GT Seite 3 ein Drittel leer, G6 wenig Schreibraum; 30 min statt ~20 (bewusst festhalten); G3 doppelte Gleichwertigkeitsangabe.
+
+## Nachprüfung Lineare und quadratische Gleichungen (06.10.2026)
+
+Drei Agenten auf Stand `918b74e` nach der Bereinigung. Frühere Befunde: H1, H2, M1, M2, M4, M8, M9, M10 und alle Clip-Befunde
+behoben; H3, H4, M3, M7 teilweise. Rechenfehler keine; Werkzeuge grün; Bild und Ton nach der Neuvertonung synchron (≤ 0.5 s,
+Ausnahmen unten). Nachgeprüft vom Hauptagenten: N-H1, N-M1, N-M3.
+
+### HOCH
+- [ ] **N-H1 · GT G4(b) steht wortgleich im Festhalten 5 und im Clip parameter** (\(x^2 - 6x + c\), Grenze 9, \(x = 3\)); das Raster lässt den D-Weg sogar zu. → z. B. \(x^2 - 10x + c\) (\((x - 5)^2 = 25 - c\); c = 16 → {2; 8}); Normalform in `FESTE_Q`.
+
+### MITTEL
+- [ ] N-M1 · **Neue 2c widerlegt sich selbst**: «(x − 3)(x + 1) = 5 ⇒ x = 8 oder x = 4» — 4 ist eine Lösung (1 · 5 = 5); Lösung braucht zudem Kapitel 4. → z. B. \((x - 2)(x + 3) = 6\) (liefert 8 und 3; richtig {−4; 3}), Lösen in Kapitel 2 über Ausklammern oder nur Fehler + Probe.
+- [ ] N-M2 · Pflichtaufgabe des Leitfadens «x² = 4x ⇒ x = 4» fehlt jetzt; Kapitelziel 2 «Division verliert Lösungen» wird im GT nicht mehr geprüft (G3 ohne Ausklammern). → Aufgabe 2f wieder aufnehmen; G3 als Ausklammern mit Divisionsfehler (z. B. \(3x^2 = 7x\)).
+- [ ] N-M3 · **Sperrliste sperrt alle \(ax^2 = 0\)** (`[4, 0, 0]` → `1|0|0`): Übung ausklammern würfelt b = 0 nie mehr (Leitfaden verlangt es). Lücken: \(x^2 - 2x - 8\) (neue 2c), \(x^2 + 2x + 1\) (5d, Kontrollclip, Sim 5, G8), \(x^2 - 5x - 6\), \(x^2 - 4x + 4\), \(x^2 - x\) (Vorwissensclip, 13.9 % in ausklammern), `lf|4|2|4|8`, `lf|2|3|2|5`. → ausklammern mit eigenem Schlüssel a|b; Liste ergänzen; 20 000 Würfe zählen.
+- [ ] N-M4 · GT wiederholt weiter: G8 = Sim 5 Familie C verschoben (Sonderlösungen −0.5, −1; Raster-Fehlerfall = D von C) → \((k-1)x^2 - 4x + 2\) (D = 24 − 8k; k = 1: x = 0.5; k = 3: x = 1); G5 = 3g → «x(x − 2) = 1 exakt»; G6(d) = 4d → \(x^2 - 4x - 12\) mit angeblich «2 und 6».
+- [ ] N-M5 · Festhalten 5 «Mehrere kritische Werte» benutzt genau 5b → anderes Beispiel, z. B. \((k^2 - 4)\,x = k + 2\).
+- [ ] N-M6 · Übung verfahren: Faktorisieren bei a > 1 und b = 0 abgelehnt («Zweiklammersatz braucht 1»), obwohl Binom (11 % der Würfe); linear-loesen d = 0 Diagnose weiter verwechselt.
+- [ ] N-M7 · Raster: G8 «Fall k = 1 übersehen → 2 von 3» widersprüchlich; G7 (E) ohne Bedingung k ≠ 0; G2 Restpunkt für einzelne Beispiele unklar; G3(b) braucht Kapitel 3/4 (Zuordnung); G2 braucht Parameter (Zuordnung «1 und 5»).
+- [ ] N-M8 · Bibliotheksclip g2-1-aequivalenzumformungen Merkbild: Bild läuft dem Ton ~4 s voraus (kein `ein`), 𝔻-Zeile nie gesprochen und Bezug gekippt.
+
+### NIEDRIG
+- [ ] Seite: Umformer 4 A4 «Wurzel ziehen …» als `?`; Kapitelziel 3 sagt noch \((x - p)^2\); 4c-Beispiel aus a = 2; \(\sqrt{12} = 2\sqrt3\) nicht gezeigt; «So arbeitest du» nur Umformer; Mengen-Eingabe «- 3», «x1 = 3»; Matrix ohne GF 3.1.
+- [ ] Clips: rechte Seite Tinte in verfahren «Erst ordnen» und ergaenzen «Wurzelziehen» (Legende «Tinte = zweite Seite» veraltet); umformen «Wenn x verschwindet»/«Alles ist Lösung» Formeln 0.8–1.4 s vor dem Ton; parameter «Die Fälle» und Kontrolle Verfahren F5 linke Hälfte leer; Merkbild ergaenzen ohne a ≠ 0; verfahren «Faktorisieren» p, q nicht eingeführt; parameter k = 2 Geraden deckungsgleich ohne Strichelung; Clipzeit 1:07 / 1:08.
+- [ ] PDF: BP S. 2 30 %, S. 5 75 % leer; G6 Anweisung als `\item[]`, wenig Platz in G1/G2; G8 verrät die Falle («Denk auch an …»); G4(b) «x = 3» nicht verlangt markieren; G6 Antworten «quadratische Ergänzung» ungeregelt.
