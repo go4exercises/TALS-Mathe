@@ -278,18 +278,20 @@ fest2 = r'''      <div class="festhalten">
           <p>Das Nullprodukt nur bei «\(= 0\)»: \(x(x - 5) = 6\) heisst <b>nicht</b> \(x = 6\) oder \(x - 5 = 6\).</p>
         </div>
       </div>'''
-auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
+auf2 = test('t2', 'Aufgaben · Kapitel 2', 14, [
     ('2a', 3, r'Löse \(3x^2 + 12x = 0\). Schreib die Faktorform auf und mach die Probe.',
      r'<p>\(3x\,(x + 4) = 0\), also \(x = 0\) oder \(x = -4\). \(' + L + r' = \{-4;\ 0\}\). Probe: \(0 + 0 = 0\); \(3 \cdot 16 - 48 = 0\) ✓.</p>', ''),
     ('2b', 2, r'Löse \((x - 2)(x + 1) = 0\).',
      r'<p>\(x - 2 = 0\) oder \(x + 1 = 0\): \(' + L + r' = \{-1;\ 2\}\).</p><p class="komm">Bei Faktoren der Form \((x - x_1)\) steht die Lösung \(x_1\) direkt in der Klammer — mit umgekehrtem Vorzeichen geschrieben.</p>', ''),
-    ('2c', 2, r'Jemand rechnet: «\((x - 3)(x + 1) = 5 \Rightarrow x - 3 = 5\) oder \(x + 1 = 5\), also \(x = 8\) oder \(x = 4\)». Was ist falsch? Mach die Probe und löse richtig.',
-     r'<p>Das Nullprodukt gilt nur, wenn rechts \(0\) steht. Probe: \(5 \cdot 9 = 45 \neq 5\). Richtig: \(x^2 - 2x - 3 = 5\), \(x^2 - 2x - 8 = 0\), \((x - 4)(x + 2) = 0\), \(' + L + r' = \{-2;\ 4\}\).</p>', ''),
+    ('2c', 2, r'Jemand rechnet: «\((x - 2)(x - 3) = 6 \Rightarrow x - 2 = 6\) oder \(x - 3 = 6\), also \(x = 8\) oder \(x = 9\)». Was ist falsch? Mach die Probe und löse richtig: ausmultiplizieren, auf null bringen, ausklammern.',
+     r'<p>Das Nullprodukt gilt nur, wenn rechts \(0\) steht. Probe: \(6 \cdot 5 = 30 \neq 6\) und \(7 \cdot 6 = 42 \neq 6\) — beide falsch. Richtig: \(x^2 - 5x + 6 = 6\), also \(x^2 - 5x = 0\), \(x\,(x - 5) = 0\), \(' + L + r' = \{0;\ 5\}\). Probe: \((-2)(-3) = 6\) ✓; \(3 \cdot 2 = 6\) ✓.</p>', ''),
     ('2d', 3, r'Löse \((x - 1)^2 = 3(x - 1)\). Erkenne den gemeinsamen Faktor.',
      r'<p>\((x - 1)^2 - 3(x - 1) = 0\), \((x - 1)\,[(x - 1) - 3] = (x - 1)(x - 4) = 0\). \(' + L + r' = \{1;\ 4\}\).</p><p class="komm">Wer durch \((x - 1)\) teilt, verliert \(x = 1\).</p>', ''),
     ('2e', 2, r'Abgebildet ist \(y = x^2 + 2x\). Lies die Lösungen von \(x^2 + 2x = 0\) ab und bestätige sie mit dem Nullprodukt.',
      r'<p>Die Parabel schneidet die \(x\)-Achse bei \(-2\) und \(0\). Rechnung: \(x(x + 2) = 0\), \(' + L + r' = \{-2;\ 0\}\).</p>',
      '\n            <div class="mini-reihe"><svg class="mini gross" data-k="q,1,2,0" data-fenster="-4,2,-2,4" data-xm="-3,-2,-1,1" data-ym="-1,1,2,3"></svg></div>'),
+    ('2f', 2, r'Jemand rechnet: «\(x^2 = 4x\), beidseitig durch \(x\) teilen: \(x = 4\)». Welche Lösung fehlt? Erkläre, warum sie verloren ging, und löse richtig.',
+     r'<p>Es fehlt \(x = 0\) (Probe: \(0 = 0\) ✓). Teilen durch \(x\) setzt \(x \neq 0\) voraus — der Fall \(x = 0\) fällt dabei stillschweigend weg. Richtig: \(x^2 - 4x = 0\), \(x\,(x - 4) = 0\), \(' + L + r' = \{0;\ 4\}\).</p>', ''),
 ], zwei=False)
 k2 = kapitel(2, 'nullprodukt', 'Ausklammern und Nullprodukt', 40,
              r'Du löst Gleichungen mit gemeinsamem Faktor durch Ausklammern und den Satz vom Nullprodukt und erklärst, warum die Division durch eine Variable, die null werden kann, Lösungen verliert.',
@@ -307,6 +309,7 @@ fest3 = r'''      <div class="festhalten">
           <p><b>Quadratische Ergänzung</b> (Faktor \(1\) vor \(x^2\), sonst zuerst teilen): Bei \(x^2 + bx\) beidseitig \(\left(\tfrac{b}{2}\right)^2\) addieren — links entsteht ein Binom: \(x^2 - 4x + 4 = (x - 2)^2\).</p>
           <p><b>Mitternachtsformel</b> (Lösungsformel), für \(ax^2 + bx + c = 0\) mit \(a \neq 0\):</p>
           <p>\[ x_{1,2} = \frac{-b \pm \sqrt{D}}{2a}, \qquad D = b^2 - 4ac \]</p>
+          <p>Woher sie kommt: Die quadratische Ergänzung, allgemein ausgeführt. Durch \(a\) teilen, \(\tfrac{c}{a}\) hinüberbringen und \(\left(\tfrac{b}{2a}\right)^2\) ergänzen gibt \(\left(x + \tfrac{b}{2a}\right)^2 = \tfrac{b^2 - 4ac}{4a^2}\); Wurzel ziehen und \(\tfrac{b}{2a}\) hinüberbringen liefert die Formel.</p>
           <ul>
             <li>\(D \gt 0\): zwei Lösungen — die Parabel schneidet die \(x\)-Achse zweimal.</li>
             <li>\(D = 0\): eine (doppelte) Lösung \(x = -\tfrac{b}{2a}\) — die Parabel berührt die \(x\)-Achse.</li>
@@ -330,7 +333,7 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 16, [
     ('3d', 3, r'Wie viele Lösungen? Entscheide mit \(D\), ohne zu lösen: (a) \(x^2 - 6x + 10 = 0\) (b) \(9x^2 + 6x + 1 = 0\) (c) \(x^2 + x - 1 = 0\)',
      r'<p>(a) \(D = 36 - 40 = -4\): keine. (b) \(D = 36 - 36 = 0\): eine. (c) \(D = 1 + 4 = 5\): zwei.</p>', ''),
     ('3g', 2, r'Löse \(x^2 - 4x + 1 = 0\) exakt (ohne Taschenrechner).',
-     r'<p>\(D = 16 - 4 = 12\), \(x = \dfrac{4 \pm \sqrt{12}}{2} = 2 \pm \sqrt{3}\). \(' + L + r' = \{2 - \sqrt{3};\ 2 + \sqrt{3}\}\) (\(\approx 0.27\) und \(3.73\)).</p><p class="komm">Nicht jede Lösung ist eine schöne Zahl: Die Wurzel bleibt stehen, wenn \(D\) keine Quadratzahl ist.</p>', ''),
+     r'<p>\(D = 16 - 4 = 12\), \(\sqrt{12} = \sqrt{4 \cdot 3} = 2\sqrt{3}\), also \(x = \dfrac{4 \pm 2\sqrt{3}}{2} = 2 \pm \sqrt{3}\). \(' + L + r' = \{2 - \sqrt{3};\ 2 + \sqrt{3}\}\) (\(\approx 0.27\) und \(3.73\)).</p><p class="komm">Nicht jede Lösung ist eine schöne Zahl: Die Wurzel bleibt stehen, wenn \(D\) keine Quadratzahl ist.</p>', ''),
     ('3e', 2, r'Warum gehören zu \(x^2 = 16\) zwei Lösungen, zu \(x^2 = 0\) nur eine?',
      r'<p>\(4^2 = 16\) und \((-4)^2 = 16\): Zwei Zahlen haben das Quadrat \(16\). Das Quadrat \(0\) hat nur die Zahl \(0\), denn \(+0\) und \(-0\) sind dieselbe Zahl.</p>', ''),
     ('3f', 2, r'Abgebildet ist \(y = x^2 - 4x + 3\). Berechne \(D\) und erkläre am Bild, warum das Vorzeichen passt.',
@@ -338,7 +341,7 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 16, [
      '\n            <div class="mini-reihe"><svg class="mini gross" data-k="q,1,-4,3" data-fenster="-1,5,-2,4" data-xm="1,2,3,4" data-ym="-1,1,2,3"></svg></div>'),
 ], zwei=False)
 k3 = kapitel(3, 'formel', 'Wurzelziehen, Ergänzen, Mitternachtsformel', 45,
-             r'Du löst \(x^2 = r\) und \((x - p)^2 = r\) mit Wurzelziehen, ergänzt quadratisch, wendest die Mitternachtsformel an und liest an der Diskriminante ab, wie viele Lösungen es gibt.',
+             r'Du löst \(x^2 = r\) und \((x - u)^2 = r\) mit Wurzelziehen, ergänzt quadratisch, wendest die Mitternachtsformel an und liest an der Diskriminante ab, wie viele Lösungen es gibt.',
              ('g2-2-lp-ergaenzen', 'Wurzelziehen, Ergänzen, Mitternachtsformel'),
              umformer(3, 'Umformer: Wurzel ziehen, quadratisch ergänzen, Mitternachtsformel'),
              ('g2-2-lp-kontrolle-ergaenzen', 'Kontrollfragen zur Mitternachtsformel'),
@@ -370,7 +373,7 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 13, [
     ('4b', 2, r'Bestimme den Typ und löse: \((2x - 1)^2 = 4x^2 + 3\).',
      r'<p>\(4x^2 - 4x + 1 = 4x^2 + 3\). Die \(4x^2\) heben sich weg: linear. \(-4x = 2\), \(x = -0.5\). \(' + L + r' = \{-0.5\}\).</p>', ''),
     ('4c', 2, r'Warum funktioniert die Mitternachtsformel immer, der Zweiklammersatz aber nicht?',
-     r'<p>Die Formel ist die quadratische Ergänzung, allgemein ausgeführt — sie braucht nur \(a \neq 0\). Der Zweiklammersatz braucht zwei Zahlen mit passender Summe und passendem Produkt, die man erraten kann; bei Lösungen wie \(\tfrac{-1 \pm \sqrt{33}}{4}\) gibt es keine solchen ganzen Zahlen.</p>', ''),
+     r'<p>Die Formel ist die quadratische Ergänzung, allgemein ausgeführt — sie braucht nur \(a \neq 0\). Der Zweiklammersatz braucht zwei Zahlen mit passender Summe und passendem Produkt, die man erraten kann; bei \(x^2 + x - 1 = 0\) mit den Lösungen \(\tfrac{-1 \pm \sqrt{5}}{2}\) gibt es keine solchen ganzen Zahlen.</p>', ''),
     ('4d', 3, r'Löse \((x + 4)(x - 1) = 2x + 2\) und mach die Probe.',
      r'<p>\(x^2 + 3x - 4 = 2x + 2\), also \(x^2 + x - 6 = 0\), \((x + 3)(x - 2) = 0\). \(' + L + r' = \{-3;\ 2\}\). Probe: \(1 \cdot (-4) = -4 = -6 + 2\) ✓; \(6 \cdot 1 = 6 = 4 + 2\) ✓.</p><p class="komm">Das Nullprodukt darf man erst anwenden, wenn rechts \(0\) steht.</p>', ''),
     ('4e', 2, r'Abgebildet ist \(y = x^2 - x - 2\). Lies die Nullstellen ab und schreib die Gleichung \(x^2 - x - 2 = 0\) in Faktorform.',
@@ -409,7 +412,7 @@ fest5 = r'''      <div class="festhalten">
           </ul>
           <p>\(k \cdot x + 6 = 2x + 3k \iff (k - 2)\,x = 3(k - 2)\): für \(k \neq 2\) ist \(x = 3\), für \(k = 2\) ist \(''' + L + r''' = \mathbb{R}\).</p>
           <p><b>Quadratisch:</b> Die Diskriminante wird eine Funktion von \(k\). \(x^2 - 6x + k = 0\): \(D(k) = 36 - 4k\) — zwei Lösungen für \(k \lt 9\), eine (\(x = 3\)) für \(k = 9\), keine für \(k \gt 9\).</p>
-          <p><b>Parameter vor \(x^2\):</b> zuerst den Fall untersuchen, in dem er null wird — dann ist die Gleichung linear (sofern der Faktor vor \(x\) nicht auch null ist), und \(D\) gilt nicht.</p><p><b>Mehrere kritische Werte:</b> Ist \(a(k)\) selbst quadratisch, etwa \((k^2 - 9)\,x = k - 3\), wird es an zwei Stellen null (\(k = \pm 3\)) — jede einzeln einsetzen.</p>
+          <p><b>Parameter vor \(x^2\):</b> zuerst den Fall untersuchen, in dem er null wird — dann ist die Gleichung linear (sofern der Faktor vor \(x\) nicht auch null ist), und \(D\) gilt nicht.</p><p><b>Mehrere kritische Werte:</b> Ist \(a(k)\) selbst quadratisch, etwa \((k^2 - 4)\,x = k + 2\), wird es an zwei Stellen null (\(k = \pm 2\)) — jede einzeln einsetzen: \(k = 2\) gibt \(0 = 4\), \(k = -2\) gibt \(0 = 0\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -483,7 +486,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1, G2 → 1; G3 → 2; G4, G5 → 3; G6 → 4; G7, G8 → 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1; G2 → 1 und 5; G3 → 2; G4, G5 → 3; G6 → 4; G7, G8 → 5</p>
         </div>
       </div>
     </section>'''
@@ -509,10 +512,12 @@ oben = '''<div id="nav-root"></div>
 
      Kompetenzmatrix (Kompetenz | Kapitel | Kapitelaufgaben | Gesamttest):
        K1 | 1 | 1a–1f | G1, G2
-       K2 | 2 | 2a–2e | G3
+       K2 | 2 | 2a–2f | G3
        K3 | 3 | 3a–3g | G4, G5
        K4 | 4 | 4a–4e | G6
-       K5 | 5 | 5a–5e | G7, G8
+       K5 | 5 | 5a–5e | G2, G7, G8
+     Funktionssicht (Parabel als Bild der Lösungen) nur unterstützend aus GF 3.1 «Gleichungen mithilfe
+     von Funktionen visualisieren»: 1f, 2e, 3f, 4e, 5c, Sim 5; kein eigenes Kapitelziel, kein Gesamttest.
      Kein Kapitelziel ohne Kompetenz. Alles ohne Taschenrechner (RLP-Vermerk).
 
      Bewusst weggelassen (→ Themenseiten 2.2a/2.2b): lineare und quadratische Ungleichungen,
@@ -577,7 +582,7 @@ oben = '''<div id="nav-root"></div>
         <summary><h2 id="so-arbeitest-du">So arbeitest du</h2></summary>
         <ol>
           <li><b>① Clip</b> anschauen.</li>
-          <li><b>② Tüfteln:</b> Im Umformer wählst du jeden Schritt selbst und gibst am Schluss die Lösungsmenge ein — er zeigt ✓, wenn sie stimmt.</li>
+          <li><b>② Tüfteln:</b> In Kapitel 1–4 wählst du im Umformer jeden Schritt selbst und gibst am Schluss die Lösungsmenge ein — er zeigt ✓, wenn sie stimmt. In Kapitel 5 ziehst du am Regler für den Parameter und löst die Aufgaben der Leiste.</li>
           <li><b>③ Kontrollfragen:</b> Der Clip hält an. Erst antworten.</li>
           <li><b>④ Üben</b> mit Rückmeldung, bis drei in Folge sitzen.</li>
           <li><b>⑤ Aufgaben</b> auf Papier, dann Lösung aufklappen und abhaken.</li>

@@ -932,19 +932,35 @@ behoben; H3, H4, M3, M7 teilweise. Rechenfehler keine; Werkzeuge grün; Bild und
 Ausnahmen unten). Nachgeprüft vom Hauptagenten: N-H1, N-M1, N-M3.
 
 ### HOCH
-- [ ] **N-H1 · GT G4(b) steht wortgleich im Festhalten 5 und im Clip parameter** (\(x^2 - 6x + c\), Grenze 9, \(x = 3\)); das Raster lässt den D-Weg sogar zu. → z. B. \(x^2 - 10x + c\) (\((x - 5)^2 = 25 - c\); c = 16 → {2; 8}); Normalform in `FESTE_Q`.
+- [x] **N-H1 · GT G4(b) steht wortgleich im Festhalten 5 und im Clip parameter** (\(x^2 - 6x + c\), Grenze 9, \(x = 3\)); das Raster lässt den D-Weg sogar zu. → z. B. \(x^2 - 10x + c\) (\((x - 5)^2 = 25 - c\); c = 16 → {2; 8}); Normalform in `FESTE_Q`.
 
 ### MITTEL
-- [ ] N-M1 · **Neue 2c widerlegt sich selbst**: «(x − 3)(x + 1) = 5 ⇒ x = 8 oder x = 4» — 4 ist eine Lösung (1 · 5 = 5); Lösung braucht zudem Kapitel 4. → z. B. \((x - 2)(x + 3) = 6\) (liefert 8 und 3; richtig {−4; 3}), Lösen in Kapitel 2 über Ausklammern oder nur Fehler + Probe.
-- [ ] N-M2 · Pflichtaufgabe des Leitfadens «x² = 4x ⇒ x = 4» fehlt jetzt; Kapitelziel 2 «Division verliert Lösungen» wird im GT nicht mehr geprüft (G3 ohne Ausklammern). → Aufgabe 2f wieder aufnehmen; G3 als Ausklammern mit Divisionsfehler (z. B. \(3x^2 = 7x\)).
-- [ ] N-M3 · **Sperrliste sperrt alle \(ax^2 = 0\)** (`[4, 0, 0]` → `1|0|0`): Übung ausklammern würfelt b = 0 nie mehr (Leitfaden verlangt es). Lücken: \(x^2 - 2x - 8\) (neue 2c), \(x^2 + 2x + 1\) (5d, Kontrollclip, Sim 5, G8), \(x^2 - 5x - 6\), \(x^2 - 4x + 4\), \(x^2 - x\) (Vorwissensclip, 13.9 % in ausklammern), `lf|4|2|4|8`, `lf|2|3|2|5`. → ausklammern mit eigenem Schlüssel a|b; Liste ergänzen; 20 000 Würfe zählen.
-- [ ] N-M4 · GT wiederholt weiter: G8 = Sim 5 Familie C verschoben (Sonderlösungen −0.5, −1; Raster-Fehlerfall = D von C) → \((k-1)x^2 - 4x + 2\) (D = 24 − 8k; k = 1: x = 0.5; k = 3: x = 1); G5 = 3g → «x(x − 2) = 1 exakt»; G6(d) = 4d → \(x^2 - 4x - 12\) mit angeblich «2 und 6».
-- [ ] N-M5 · Festhalten 5 «Mehrere kritische Werte» benutzt genau 5b → anderes Beispiel, z. B. \((k^2 - 4)\,x = k + 2\).
-- [ ] N-M6 · Übung verfahren: Faktorisieren bei a > 1 und b = 0 abgelehnt («Zweiklammersatz braucht 1»), obwohl Binom (11 % der Würfe); linear-loesen d = 0 Diagnose weiter verwechselt.
-- [ ] N-M7 · Raster: G8 «Fall k = 1 übersehen → 2 von 3» widersprüchlich; G7 (E) ohne Bedingung k ≠ 0; G2 Restpunkt für einzelne Beispiele unklar; G3(b) braucht Kapitel 3/4 (Zuordnung); G2 braucht Parameter (Zuordnung «1 und 5»).
-- [ ] N-M8 · Bibliotheksclip g2-1-aequivalenzumformungen Merkbild: Bild läuft dem Ton ~4 s voraus (kein `ein`), 𝔻-Zeile nie gesprochen und Bezug gekippt.
+- [x] N-M1 · **Neue 2c widerlegt sich selbst**: «(x − 3)(x + 1) = 5 ⇒ x = 8 oder x = 4» — 4 ist eine Lösung (1 · 5 = 5); Lösung braucht zudem Kapitel 4. → z. B. \((x - 2)(x + 3) = 6\) (liefert 8 und 3; richtig {−4; 3}), Lösen in Kapitel 2 über Ausklammern oder nur Fehler + Probe.
+- [x] N-M2 · Pflichtaufgabe des Leitfadens «x² = 4x ⇒ x = 4» fehlt jetzt; Kapitelziel 2 «Division verliert Lösungen» wird im GT nicht mehr geprüft (G3 ohne Ausklammern). → Aufgabe 2f wieder aufnehmen; G3 als Ausklammern mit Divisionsfehler (z. B. \(3x^2 = 7x\)).
+- [x] N-M3 · **Sperrliste sperrt alle \(ax^2 = 0\)** (`[4, 0, 0]` → `1|0|0`): Übung ausklammern würfelt b = 0 nie mehr (Leitfaden verlangt es). Lücken: \(x^2 - 2x - 8\) (neue 2c), \(x^2 + 2x + 1\) (5d, Kontrollclip, Sim 5, G8), \(x^2 - 5x - 6\), \(x^2 - 4x + 4\), \(x^2 - x\) (Vorwissensclip, 13.9 % in ausklammern), `lf|4|2|4|8`, `lf|2|3|2|5`. → ausklammern mit eigenem Schlüssel a|b; Liste ergänzen; 20 000 Würfe zählen.
+- [x] N-M4 · GT wiederholt weiter: G8 = Sim 5 Familie C verschoben (Sonderlösungen −0.5, −1; Raster-Fehlerfall = D von C) → \((k-1)x^2 - 4x + 2\) (D = 24 − 8k; k = 1: x = 0.5; k = 3: x = 1); G5 = 3g → «x(x − 2) = 1 exakt»; G6(d) = 4d → \(x^2 - 4x - 12\) mit angeblich «2 und 6».
+- [x] N-M5 · Festhalten 5 «Mehrere kritische Werte» benutzt genau 5b → anderes Beispiel, z. B. \((k^2 - 4)\,x = k + 2\).
+- [x] N-M6 · Übung verfahren: Faktorisieren bei a > 1 und b = 0 abgelehnt («Zweiklammersatz braucht 1»), obwohl Binom (11 % der Würfe); linear-loesen d = 0 Diagnose weiter verwechselt.
+- [x] N-M7 · Raster: G8 «Fall k = 1 übersehen → 2 von 3» widersprüchlich; G7 (E) ohne Bedingung k ≠ 0; G2 Restpunkt für einzelne Beispiele unklar; G3(b) braucht Kapitel 3/4 (Zuordnung); G2 braucht Parameter (Zuordnung «1 und 5»).
+- [x] N-M8 · Bibliotheksclip g2-1-aequivalenzumformungen Merkbild: Bild läuft dem Ton ~4 s voraus (kein `ein`), 𝔻-Zeile nie gesprochen und Bezug gekippt.
 
 ### NIEDRIG
-- [ ] Seite: Umformer 4 A4 «Wurzel ziehen …» als `?`; Kapitelziel 3 sagt noch \((x - p)^2\); 4c-Beispiel aus a = 2; \(\sqrt{12} = 2\sqrt3\) nicht gezeigt; «So arbeitest du» nur Umformer; Mengen-Eingabe «- 3», «x1 = 3»; Matrix ohne GF 3.1.
-- [ ] Clips: rechte Seite Tinte in verfahren «Erst ordnen» und ergaenzen «Wurzelziehen» (Legende «Tinte = zweite Seite» veraltet); umformen «Wenn x verschwindet»/«Alles ist Lösung» Formeln 0.8–1.4 s vor dem Ton; parameter «Die Fälle» und Kontrolle Verfahren F5 linke Hälfte leer; Merkbild ergaenzen ohne a ≠ 0; verfahren «Faktorisieren» p, q nicht eingeführt; parameter k = 2 Geraden deckungsgleich ohne Strichelung; Clipzeit 1:07 / 1:08.
-- [ ] PDF: BP S. 2 30 %, S. 5 75 % leer; G6 Anweisung als `\item[]`, wenig Platz in G1/G2; G8 verrät die Falle («Denk auch an …»); G4(b) «x = 3» nicht verlangt markieren; G6 Antworten «quadratische Ergänzung» ungeregelt.
+- [x] Seite: Umformer 4 A4 «Wurzel ziehen …» als `?`; Kapitelziel 3 sagt noch \((x - p)^2\); 4c-Beispiel aus a = 2; \(\sqrt{12} = 2\sqrt3\) nicht gezeigt; «So arbeitest du» nur Umformer; Mengen-Eingabe «- 3», «x1 = 3»; Matrix ohne GF 3.1.
+- [x] Clips: rechte Seite Tinte in verfahren «Erst ordnen» und ergaenzen «Wurzelziehen» (Legende «Tinte = zweite Seite» veraltet); umformen «Wenn x verschwindet»/«Alles ist Lösung» Formeln 0.8–1.4 s vor dem Ton; parameter «Die Fälle» und Kontrolle Verfahren F5 linke Hälfte leer; Merkbild ergaenzen ohne a ≠ 0; verfahren «Faktorisieren» p, q nicht eingeführt; parameter k = 2 Geraden deckungsgleich ohne Strichelung; Clipzeit 1:07 / 1:08.
+- [x] PDF: BP S. 2 30 %, S. 5 75 % leer; G6 Anweisung als `\item[]`, wenig Platz in G1/G2; G8 verrät die Falle («Denk auch an …»); G4(b) «x = 3» nicht verlangt markieren; G6 Antworten «quadratische Ergänzung» ungeregelt.
+
+**Behoben (06.10.2026):** Gesamttest neu: G3 Nullprodukt mit Faktor 2 + Division durch \(x\) bei \(3x^2 = 7x\);
+G4 \(x^2 - 10x + c\) (c = 16 → {2; 8}); G5 \(x(x - 2) = 1\); G6(d) \(x^2 - 4x - 12\) mit «2 und 6»; G8 \((k - 1)x^2 - 4x + 2\)
+(k = 1: 0.5; k = 3: 1) ohne verratenden Hinweis; Raster G2/G6/G7/G8 eindeutig, Zuordnung G2 → 1 und 5, `\A` weg,
+G6 mit eigener Anweisung und Schreiblinien. Seite: 2c \((x - 2)(x - 3) = 6\) → {0; 5} über Ausklammern, 2f «\(x^2 = 4x\)»
+wieder da, Festhalten 5 mit \((k^2 - 4)x = k + 2\), Herleitung der Mitternachtsformel im Festhalten 3, \(\sqrt{12} = 2\sqrt3\),
+4c an \(x^2 + x - 1\), Kapitelziel 3 \((x - u)^2\), «So arbeitest du» nennt Kapitel 5, Matrix mit GF 3.1.
+Übungen: Sperrliste ohne reine \(ax^2\)-Formen über qSchl, Lücken ergänzt (20 000 Würfe: 0 Treffer, b = 0 in 12 %);
+Faktorisieren bei a > 1 anerkannt; eigene Meldungen für Wurzelziehen/Ausklammern bei Formel-Fällen und für d = 0;
+Eingabe «- 3» und «x1 = 3». Umformer 4 A4 grau. Clips (ohne Neuvertonung): Bibliotheksclip Merkbild mit `ein`,
+𝔻-Notiz unter «mal Term»; rechte Seite orange, Legende nachgeführt; umformen-Formeln auf den Ton gelegt;
+Gleichung bzw. Notiz in parameter «Die Fälle» und Kontrolle Verfahren F5 ab Szenenbeginn; Merkbild mit
+\(a \neq 0\); p, q in verfahren «Faktorisieren»; k = 2 dick/gestrichelt.
+Bewusst belassen: Clipzeit 1:07 (HOWTO §7 rundet ab, die Bibliothek rundet); Bewertungspaket S. 5 nur
+Selbsteinschätzung (Abschnittsfolge nach §9, Kästen nicht teilbar); optionale Neuvertonungen («Lösungen» in
+Kontrolle Verfahren F3, «m ≠ 0» im Ton) nicht gemacht.

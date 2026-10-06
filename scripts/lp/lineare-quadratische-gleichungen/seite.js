@@ -40,7 +40,8 @@
     if (/^(r|ℝ|\{\s*(r|ℝ)\s*\}|alle|alle zahlen)$/i.test(t)) return { alle: true, werte: [] };
     t = t.replace(/^\{/, '').replace(/\}$/, '').trim();
     if (!t || /^(leer|keine|∅)$/i.test(t)) return { werte: [], komma: komma };
-    if (/^[a-z]\s*=/i.test(t)) return { kaputt: true, xgleich: true };
+    if (/^[a-z]\w*\s*=/i.test(t)) return { kaputt: true, xgleich: true };
+    t = t.replace(/-\s+(?=[\d.])/g, '-');   // «- 3» wie «-3»
     var teile = t.split(/;|,\s+|\||\s+/), w = [];
     for (var i = 0; i < teile.length; i++){
       if (!teile[i].trim()) continue;
@@ -484,7 +485,7 @@
     { text: 'Löse \\((x - 2)^2 = x^2 - 8\\).', k: {
       a: { z: '(x - 2)^2 = x^2 - 8', frage: 'Erst umformen, dann den Typ bestimmen:', w: [['Binom ausmultiplizieren: \\(x^2 - 4x + 4 = x^2 - 8\\)', 'b'],
         ['Binom ausmultiplizieren: \\(x^2 + 4 = x^2 - 8\\)', '!\\((x - 2)^2 = x^2 - 4x + 4\\) — das mittlere Glied \\(-4x\\) fehlt.'],
-        ['Wurzel ziehen: \\(x - 2 = \\pm\\sqrt{x^2 - 8}\\)', '!Rechts steht kein Quadrat einer Zahl — so kommst du nicht weiter. Multipliziere aus und schau, was übrig bleibt.']] },
+        ['Wurzel ziehen: \\(x - 2 = \\pm\\sqrt{x^2 - 8}\\)', '?Erlaubt, wo \\(x^2 - 8 \\ge 0\\) ist — aber rechts steht noch \\(x\\) unter der Wurzel, so kommst du nicht weiter. Multipliziere aus und schau, was übrig bleibt.']] },
       b: { z: 'x^2 - 4x + 4 = x^2 - 8', w: [['beidseitig \\(-x^2\\)', 'c', '\\mid -x^2']] },
       c: { z: '-4x + 4 = -8', frage: 'Was für eine Gleichung ist das jetzt?', w: [['linear — weiter mit \\(-4\\)', 'd', '\\mid -4'], ['quadratisch — Mitternachtsformel', '!\\(x^2\\) hat sich weggehoben: Die Gleichung ist linear.']] },
       d: { z: '-4x = -12', w: [['beidseitig \\(:(-4)\\)', 'e', '\\mid :(-4)']] },
@@ -582,6 +583,7 @@
        Aufgaben der Kapitel · Vortest · Gesamttest. Je Typ ein eigener Schlüssel (T.schl). */
     var SPERRE = [
       // Kapitel 1 (lineare: a|b|c|d für ax + b = cx + d)
+      'lf|4|2|4|8', 'lf|2|3|2|5',
       'li|4|-8|2|6', 'li|3|4|1|-6', 'li|5|-5|2|4', 'li|7|-4|3|12', 'li|4|-11|0|1', 'li|5|-6|3|4', 'li|3|-4|1|0',
       // Kapitel 2 (ausklammern: a|b für ax² + bx = 0; nullprodukt: Faktoren)
       'ak|1|-5', 'ak|2|-6', 'ak|-1|-4', 'ak|4|0', 'ak|3|12', 'ak|1|2', 'ak|1|3', 'ak|4|-20', 'ak|1|4', 'ak|3|-6',
@@ -602,18 +604,24 @@
     var FESTE_Q = [
       [1, -5, 0], [2, 3, -2], [1, -4, -5], [1, 0, -9], [1, 0, -25], [1, 0, -16], [1, 4, 0], [1, -7, 12], [1, -7, 10], [1, -6, 9],
       [1, 1, -12], [1, 3, 0], [1, -2, -3], [3, 0, -27], [2, 1, -4], [1, 0, -4],
-      [2, -6, 0], [1, -3, -4], [4, 0, 0], [2, -3, 0], [1, -1, -6], [2, 0, -50], [1, 2, -15], [1, 6, -7], [1, -8, 12], [3, -5, -2],
+      [2, -6, 0], [1, -3, -4], [2, -3, 0], [1, -1, -6], [2, 0, -50], [1, 2, -15], [1, 6, -7], [1, -8, 12], [3, -5, -2],
       [1, 2, 5], [4, -12, 9], [1, -9, 20], [5, 0, -45], [1, 10, 25], [1, 3, -10], [6, 1, -2],
       [3, 12, 0], [1, -1, -2], [1, -5, 4], [1, 2, 0], [100, 0, -49], [1, 4, -21], [2, -7, 3], [1, -6, 10], [9, 6, 1], [1, 1, -1],
       [1, -4, 3], [4, 0, -1], [3, -6, 0], [1, -1, -12], [1, 1, -6], [1, -4, 1], [1, -4, 0], [1, 8, 12], [1, 8, 16], [1, 8, 20],
       [1, -10, 25], [1, 0, -49],
-      [1, -1, -20], [1, -6, 5], [1, -2, -1], [4, 0, -9], [1, 6, 9], [2, 5, -1]
+      [1, -1, -20], [1, -6, 5], [1, -2, -1], [4, 0, -9], [1, 6, 9], [2, 5, -1],
+      // Nachprüfung 06.10.2026 (N-M3): Lücken und neue Aufgaben (2c, 2f, Gesamttest G3–G6, G8 bei k = 3)
+      [1, -2, -8], [1, 2, 1], [1, -5, -6], [1, -4, 4], [1, -1, 0], [1, -10, 16], [1, -4, -12], [3, -7, 0], [2, 5, -3], [1, -2, 1]
     ];
     function ggT(a, b){ a = Math.abs(a); b = Math.abs(b); while (b){ var t = a % b; a = b; b = t; } return a; }
     function qSchl(q){ var a = q[0], b = q[1], c = q[2]; if (a < 0){ a = -a; b = -b; c = -c; }
       var g = ggT(ggT(a, b), c) || 1; return [a / g, b / g, c / g].join('|'); }
     var SPERRE_Q = FESTE_Q.map(qSchl);
-    function gesperrt(T, A){ return (T.schl && SPERRE.indexOf(T.schl(A)) >= 0) || (T.quad && SPERRE_Q.indexOf(qSchl(T.quad(A))) >= 0); }
+    /* Normalform ohne Glieder ausser a·x² (b = c = 0) nicht über qSchl sperren: gekürzt wäre jedes a·x² = 0
+       dieselbe Gleichung x² = 0, und ausklammern würfelte den Fall b = 0 nie (Nachprüfung 06.10.2026, N-M3).
+       Feste a·x² = 0 sperrt der Typschlüssel (ak|4|0). */
+    function gesperrt(T, A){ var q = T.quad && T.quad(A);
+      return (T.schl && SPERRE.indexOf(T.schl(A)) >= 0) || (q && (q[1] || q[2]) && SPERRE_Q.indexOf(qSchl(q)) >= 0); }
     /* So tippt man die Menge ein: Drittel und Sechstel als Bruch, sonst Dezimalzahl. */
     function zText(v){
       for (var d of [1, 3, 6]){ var n = Math.round(v * d); if (gl(v * d, n)) return d === 1 ? String(n) : (d === 6 && n % 2 === 0 ? (n / 2) + '/3' : n + '/' + d); }
@@ -643,6 +651,7 @@
           return f; },
         pruefen: function(A, e){
           if (gl(e.x, A.x)) return null;
+          if (A.d === 0 && gl(e.x, -A.x)) return 'Vorzeichen: Prüf das Hinüberbringen von \\(' + tz(A.b) + '\\) und das Teilen durch \\(' + tz(A.a - A.c) + '\\) — mach die Probe.';
           if (gl(e.x, (A.d + A.b) / (A.a - A.c))) return 'Vorzeichen beim Hinüberbringen: Steht links \\(' + (A.b < 0 ? '-' + (-A.b) : '+' + A.b) + '\\), rechnest du beidseitig \\(' + (A.b < 0 ? '+' + (-A.b) : '-' + A.b) + '\\).';
           if (gl(e.x, -A.x)) return 'Vorzeichen: Am Schluss durch \\(' + tz(A.a - A.c) + '\\) teilen — samt Vorzeichen.';
           if (A.a + A.c !== 0 && gl(e.x, (A.d - A.b) / (A.a + A.c))) return 'Das \\(x\\)-Glied rechts: beidseitig \\(' + (A.c < 0 ? '+' + (-A.c) : '-' + A.c) + 'x\\), nicht addieren.';
@@ -675,7 +684,7 @@
         schl: function(A){ return 'ak|' + A.a + '|' + A.b; }, quad: function(A){ return [A.a, A.b, 0]; },
         eingabe: function(A){ return { L: mText(A.L) }; },
         neu: function(){
-          var a = zufall([1, 2, 3, 4, 5, -1, -2, -3]), w = Math.random() < 0.12 ? 0 : zufall([-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 0.5, -0.5, 1.5]), b = -a * w;
+          var a = zufall([1, 2, 3, 4, 5, -1, -2, -3]), w = Math.random() < 0.06 ? 0 : zufall([-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 0.5, -0.5, 1.5]), b = -a * w;
           if (!gl(b, Math.round(b))){ a *= 2; b = -a * w; }
           var gleich = Math.random() < 0.5 && b !== 0;   // auch als a x² = −b x gestellt
           return { a: a, b: b, w: w, L: w === 0 ? [0] : [0, w],
@@ -784,12 +793,12 @@
         pruefen: function(A, e){
           var m = menge(e.L), r = [];
           if (m.kaputt) return 'Lösungsmenge wie <code>{-3; 3}</code>.';
-          // Bei a = 1 geht Faktorisieren auch bei x² − r² (Binom) und x² + bx (x ausklammern): gleich schnell.
-          var auchF = e.v === 'Faktorisieren' && A.a === 1 && (A.v === 'Wurzelziehen' || A.v === 'Ausklammern');
+          // Faktorisieren geht auch bei a·x² − c (Binom, z. B. 2(x − 6)(x + 6)) und a·x² + bx (x ausklammern): gleich schnell.
+          var auchF = e.v === 'Faktorisieren' && (A.v === 'Wurzelziehen' || A.v === 'Ausklammern');
           if ((e.v === A.v || auchF) && mengeGleich(m, A.L)) return null;
           if (e.v !== A.v && !auchF){
             if (e.v === 'Mitternachtsformel') r.push('Geht immer — aber hier gibt es einen kürzeren Weg. ' + (A.v === 'Wurzelziehen' ? 'Das Glied mit \\(x\\) fehlt.' : A.v === 'Ausklammern' ? 'Die Zahl ohne \\(x\\) fehlt.' : 'Zwei ganze Zahlen mit Summe \\(' + tz(-A.b) + '\\) und Produkt \\(' + tz(A.c) + '\\) gibt es.'));
-            else if (A.v === 'Mitternachtsformel') r.push('Vor \\(x^2\\) steht \\(' + A.a + '\\), und alle drei Glieder sind da — der Zweiklammersatz geht hier nicht glatt.');
+            else if (A.v === 'Mitternachtsformel') r.push(e.v === 'Wurzelziehen' ? 'Wurzelziehen braucht eine Gleichung ohne lineares Glied (\\(b = 0\\)) — hier sind alle drei Glieder da.' : e.v === 'Ausklammern' ? 'Ausklammern braucht eine Gleichung ohne Zahl ohne \\(x\\) — hier sind alle drei Glieder da.' : 'Vor \\(x^2\\) steht \\(' + A.a + '\\), und alle drei Glieder sind da — der Zweiklammersatz geht hier nicht glatt.');
             else r.push(e.v === 'Wurzelziehen' ? 'Wurzelziehen braucht eine Gleichung ohne lineares Glied (\\(b = 0\\)).' : e.v === 'Ausklammern' ? 'Ausklammern braucht eine Gleichung ohne Zahl ohne \\(x\\).' : 'Vor \\(x^2\\) steht \\(' + A.a + '\\) — der Zweiklammersatz braucht \\(1\\) vor \\(x^2\\).');
           }
           if (!mengeGleich(m, A.L)) r.push(fast(m, A.L) ? FAST : m.werte.length < A.L.length ? 'Es fehlt eine Lösung.' : 'Die Lösungsmenge stimmt noch nicht — mach die Probe.');

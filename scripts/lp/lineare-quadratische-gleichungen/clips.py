@@ -15,10 +15,11 @@ Fragebild (HOWTO-leitprogramme §15): Klickfragen zeigen beim Erscheinen nur die
 
 Farben — eine Farbe, eine Bedeutung, gleich wie auf der Seite:
   1 blau   = Gleichung, Terme, Parabel/Graph        \\fa{…}
-  2 orange = die Umformung («| −2x»), Parameter k    \\fb{…}
+  2 orange = die Umformung («| −2x»), Parameter k,   \\fb{…}
+             rechte Seite einer Gleichung im Graph
   3 grün   = Lösungen, Lösungsmenge, Nullstellen     \\fc{…}
   4 rot    = Fehler, verlorene Lösung                \\fd{…}
-  5 Tinte  = neutral (zweite Seite einer Gleichung, Bezugslinien)
+  5 Tinte  = neutral (Bezugslinien)
 """
 import json
 import os
@@ -242,19 +243,19 @@ clip('umformen', 'Gleichungen lösen: umformen und die drei Lösungsfälle',
             'Es gibt keine Lösung. Die beiden Geraden sind parallel.',
             f(r'2(x + 3) = 2x + 9', 260, 52, ein=0.3),
             f(r'2x + 6 = 2x + 9', 350, 52, ein=5.8),
-            op('-2x', 350, 8.7),
-            f(r'6 = 9 \quad \fd{\text{falsch}}', 440, 52, ein=9.6),
-            f(r'\mathbb{L} = \{\,\}', 560, 56, ein=12.8),
+            op('-2x', 350, 9.49),
+            f(r'6 = 9 \quad \fd{\text{falsch}}', 440, 52, ein=10.75),
+            f(r'\mathbb{L} = \{\,\}', 560, 56, ein=13.63),
             graf(W1b, geraden=[ger(2, 6, 1), ger(2, 9, 2)], ein=0.3)),
          sz('Alles ist Lösung',
             'Anders bei vier x plus acht gleich vier mal Klammer x plus zwei. Ausmultipliziert steht links und rechts dasselbe. '
             'Minus vier x: acht gleich acht. Das ist immer wahr. Jede Zahl ist Lösung: Die Lösungsmenge sind alle reellen Zahlen. '
             'Die beiden Geraden liegen aufeinander.',
             f(r'4x + 8 = 4(x + 2)', 260, 52, ein=0.3),
-            f(r'4x + 8 = 4x + 8', 350, 52, ein=3.7),
-            op('-4x', 350, 6.4),
-            f(r'8 = 8 \quad \fc{\text{wahr}}', 440, 52, ein=7.4),
-            f(r'\mathbb{L} = \mathbb{R}', 560, 56, ein=9.7),
+            f(r'4x + 8 = 4x + 8', 350, 52, ein=4.67),
+            op('-4x', 350, 7.05),
+            f(r'8 = 8 \quad \fc{\text{wahr}}', 440, 52, ein=7.91),
+            f(r'\mathbb{L} = \mathbb{R}', 560, 56, ein=11.02),
             graf(W1b, geraden=[ger(4, 8, 1, dicke=9), ger(4, 8, 2, gestrichelt=True)], ein=0.3)),
          sz('Merke',
             'Zum Mitnehmen: Forme auf beiden Seiten gleich um, bis a mal x gleich c dasteht. Ist a nicht null, gibt es genau '
@@ -479,7 +480,7 @@ clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsform
             f(r'x^2 = 9', 280, 62, ein=0.3),
             f(r'x = \pm 3', 390, 60, ein=4.4),
             f(r'\mathbb{L} = \{\fc{-3};\ \fc{3}\}', 500, 56, ein=5.8),
-            graf(W3a, kurven=[dict(formel='9', farbe=5, gestrichelt=True, dicke=3)], parabeln=[par(1, 0, 0, null=False)], ein=0.3),
+            graf(W3a, kurven=[dict(formel='9', farbe=2, gestrichelt=True, dicke=3)], parabeln=[par(1, 0, 0, null=False)], ein=0.3),
             graf(W3a, punkte=[pt(-3, 9, 3, '(−3 | 9)', [-3.3, 10.4], 'end'), pt(3, 9, 3, '(3 | 9)', [3.3, 10.4])], ein=8.9)),
          sz('Ein Quadrat mit Klammer',
             'Genauso bei Klammer x minus zwei, im Quadrat, gleich neun. Die Klammer ist drei oder minus drei. '
@@ -528,7 +529,7 @@ clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsform
             'Die Mitternachtsformel geht immer, und D sagt, wie viele Lösungen es gibt.',
             titel('Zum Mitnehmen', 250, 76),
             f(r'x^2 = r \;\Rightarrow\; x = \pm\sqrt{r} \quad (r \ge 0)', 400, 52, ein=1.3),
-            f(r'x_{1,2} = \dfrac{-b \pm \sqrt{D}}{2a}, \qquad D = b^2 - 4ac', 560, 52, ein=7.9)),
+            f(r'x_{1,2} = \dfrac{-b \pm \sqrt{D}}{2a}, \quad D = b^2 - 4ac \quad (a \neq 0)', 560, 46, ein=7.9)),
          JETZT_DU,
      ])
 
@@ -624,7 +625,7 @@ clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
             op('-x^2', 350, 10.8, g=44),
             f(r'2x + 1 = 5', 440, 50, ein=12.8),
             f(r'x = \fc{2}', 530, 50, ein=16.4),
-            graf(W4a, parabeln=[par(1, -1, 0, null=False), par(1, 0, 5, farbe=5, null=False)], ein=0.3),
+            graf(W4a, parabeln=[par(1, -1, 0, null=False), par(1, 0, 5, farbe=2, null=False)], ein=0.3),
             graf(W4a, punkte=[pt(2, 9, 3, '(2 | 9)', [2.3, 7.6])], ein=16.4)),
          sz('Wenn b fehlt',
             'Fehlt das Glied mit x, zieh die Wurzel. Drei x Quadrat gleich siebenundzwanzig: x Quadrat ist neun, x ist plus oder minus drei.',
@@ -642,7 +643,7 @@ clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
             'Lässt sich die Gleichung zerlegen, faktorisiere mit dem Zweiklammersatz. x Quadrat minus sieben x plus zwölf: '
             'Gesucht sind zwei Lösungen mit dem Produkt zwölf und der Summe sieben, dem Gegenteil von minus sieben. Das sind drei und vier. '
             'Also Klammer x minus drei mal Klammer x minus vier gleich null.',
-            f(r'x^2 - 7x + 12 = 0', 260, 52, ein=0.3),
+            f(r'x^2 - 7x + 12 = 0 \quad (p = -7,\ q = 12)', 260, 48, ein=0.3),
             n('@x_1 \\cdot x_2 = q = 12@; @x_1 + x_2 = -p = 7@|@3 \\cdot 4 = 12@; @3 + 4 = 7@', 350, 'blau', 42, ein=6.3),
             f(r'(x - 3)(x - 4) = 0', 510, 52, ein=13.0),
             f(r'\mathbb{L} = \{\fc{3};\ \fc{4}\}', 620, 52, ein=16.0),
@@ -691,8 +692,9 @@ clip('kontrolle-verfahren', 'Gleichungen lösen: Kontrollfragen zur Verfahrenswa
          sz('Frage 5',
             'Gesucht sind zwei Lösungen mit dem Produkt minus zwölf und der Summe minus eins: minus vier und drei. '
             'Klammer x plus vier mal Klammer x minus drei. Die negative Lösung ist minus vier.',
-            f(r'(x + 4)(x - 3) = 0', 300, 56, ein=6.5),
-            f(r'x = \fc{-4} \;\;\text{oder}\;\; x = \fc{3}', 420, 50, ein=9.3),
+            n('@x_1 \\cdot x_2 = -12@; @x_1 + x_2 = -1@', 280, 'blau', 42, ein=1.0),
+            f(r'(x + 4)(x - 3) = 0', 390, 56, ein=6.5),
+            f(r'x = \fc{-4} \;\;\text{oder}\;\; x = \fc{3}', 500, 50, ein=9.3),
             graf(W4k, ein=0.05),
             graf(W4k, parabeln=[par(1, -0.5, -12.25)], ein=1.2)),
          sz('Merke',
@@ -768,10 +770,11 @@ clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
             'Ist k nicht zwei, darf man durch k minus zwei teilen: x ist drei. Bei k gleich zwei steht null gleich null. Dann ist '
             'jede Zahl Lösung. Im Bild schneiden sich die beiden Seiten immer bei x gleich drei. Bei k gleich zwei liegen beide '
             'auf der x-Achse.',
-            f(r'k \neq 2: \quad x = \fc{3}', 280, 52, ein=3.4),
-            f(r'k = 2: \quad 0 = 0, \;\; \mathbb{L} = \mathbb{R}', 390, 50, ein=4.5),
-            graf(W5a, geraden=[{'bewegung': [[0, 3, 0], [8.4, 3, 0], [10.2, 1, 0], [11.6, 1, 0], [13.4, 0, 0]], 'farbe': 1},
-                               {'bewegung': [[0, 0, 9], [8.4, 0, 9], [10.2, 0, 3], [11.6, 0, 3], [13.4, 0, 0]], 'farbe': 2}],
+            f(r'(k - 2) \cdot x = 3 \cdot (k - 2)', 260, 50, ein=0.3),
+            f(r'k \neq 2: \quad x = \fc{3}', 370, 52, ein=3.4),
+            f(r'k = 2: \quad 0 = 0, \;\; \mathbb{L} = \mathbb{R}', 480, 50, ein=4.5),
+            graf(W5a, geraden=[{'bewegung': [[0, 3, 0], [8.4, 3, 0], [10.2, 1, 0], [11.6, 1, 0], [13.4, 0, 0]], 'farbe': 1, 'dicke': 9},
+                               {'bewegung': [[0, 0, 9], [8.4, 0, 9], [10.2, 0, 3], [11.6, 0, 3], [13.4, 0, 0]], 'farbe': 2, 'gestrichelt': True, 'dicke': 3}],
                  ein=0.3)),
          sz('Quadratisch',
             'Bei x Quadrat minus sechs x plus k entscheidet die Diskriminante. D von k ist sechsunddreissig minus vier k. '

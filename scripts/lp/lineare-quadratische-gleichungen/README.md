@@ -35,7 +35,7 @@ Die Umformung steht wie im Heft rechts neben der Zeile, auf die sie wirkt.
 ## Farben — eine Farbe, eine Bedeutung
 
 1 blau = Gleichung, Graph · 2 orange = Umformung, Parameter k · 3 grün = Lösungen ·
-4 rot = Fehler, verlorene Lösung · 5 Tinte = neutral.
+4 rot = Fehler, verlorene Lösung · 5 Tinte = neutral (Bezugslinien). Die rechte Seite einer Gleichung im Graph ist orange, wie `.kurve.rechts` auf der Seite.
 
 ## Prüfen
 

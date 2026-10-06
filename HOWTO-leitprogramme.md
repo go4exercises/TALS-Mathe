@@ -696,6 +696,14 @@ gegen sie und darüber hinaus.
   übersieht dieselbe Gleichung in anderer Schreibweise und ignoriert Koeffizienten (18.8 % der Würfe von
   «Verfahren wählen» trafen feste Aufgaben, darunter eine des Gesamttests). Besser: alle festen Gleichungen
   einmal als gekürzte Normalform `a|b|c` sammeln und jeden Typ seine Normalform nennen lassen (`T.quad`).
+  **Aber:** Gekürzt wird jedes \(ax^2 = 0\) zu \(x^2 = 0\) — ein fester Eintrag `[4, 0, 0]` sperrte den Fall
+  \(b = 0\) ganz (Nachprüfung Gleichungen 06.10.2026). Reine \(ax^2\)-Formen nur über den Typschlüssel sperren
+  und nach jeder Änderung an der Liste die Verteilung neu zählen.
+- **Ein Fehlerbeispiel muss wirklich falsch sein** (Gleichungen 06.10.2026): «\((x - 3)(x + 1) = 5 \Rightarrow
+  x = 8\) oder \(x = 4\) — was ist falsch?» — aber \(4\) ist eine Lösung. Jede angeblich falsche Zahl einsetzen;
+  und die richtige Lösung darf keinen Stoff späterer Kapitel brauchen.
+- **Ein Beispiel im Festhalten ist nicht die Aufgabe darunter** und nicht die des Gesamttests: Beim Ersetzen
+  eines Testbeispiels prüfen, ob die neue Zahl schon in Festhalten, Clip oder Simulation steht.
 - **Sperrliste gegen den Schlüssel prüfen, nicht gegen die Aufgabe.** Ein Schlüssel mit
   falschem Vorzeichen (`bg|1|-1|3` für \(|x - 1| = 3\)) sperrt nichts — der Clip-Fall kam weiter.
 - **Fragetexte eines Kontrollclips verschieden beginnen lassen**: `pruef-fragen` erkennt eine Frage
