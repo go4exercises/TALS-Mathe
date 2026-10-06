@@ -592,6 +592,8 @@ gegen sie und darüber hinaus.
   «\(\tan x\) ist die Höhe, in der der *Strahl* durch \(P\) die Tangente trifft» — im 2. und
   3. Quadranten trifft ihn nur die Verlängerung über O hinaus. Die Simulation zeichnete es
   ebenso falsch. Jede geometrische Deutung an je einem Wert pro Quadrant nachzeichnen.
+- **Geometrische Regeln mit Bedingung:** «Im stumpfwinkligen Dreieck liegt die Höhe ausserhalb» stimmt nur für
+  die zwei Höhen aus den spitzen Ecken; «Segment = Sektor − Dreieck» nur für φ < 180° (Planimetrie 06.10.2026).
 - **Regeln mit Bedingung:** «An den Nullstellen von \(f\) entstehen Knicke» stimmt nur bei
   Vorzeichenwechsel (\(x^2\): Nullstelle, kein Knick); «links der Grenze das Vorzeichen drehen» nur
   bei positiver Steigung (\(|4 - 2x|\)). Die eigene Simulation liefert beide Gegenbeispiele.
@@ -688,6 +690,14 @@ gegen sie und darüber hinaus.
 - **Fragetexte eines Kontrollclips verschieden beginnen lassen**: `pruef-fragen` erkennt eine Frage
   an ihren ersten 20 Zeichen; zwei Fragen «Welche Nullstellen hat …» lassen den Durchlauf scheitern.
 - Live-Anzeigen runden nur mit «≈».
+- **Die Live-Zeile verrät keine Antwort** (Planimetrie 06.10.2026): Fragt eine Aufgabe der Leiste nach einer
+  Grösse, darf die Zeile über der Figur sie nicht anzeigen — auch nicht in den Aufgaben davor bei denselben
+  Werten («A = 18 cm²» in A1–A4, gefragt in A5) und nicht als Faktor («k² = 6.25» bei der Frage nach der Bildfläche).
+- **Kandidaten zum Antippen dürfen nicht übereinanderliegen** (Planimetrie 06.10.2026): Bei C über der Mitte
+  von AB fallen Höhe und Seitenhalbierende zusammen; der Tipp trifft nur die obere, die Aufgabe ist mit der
+  Maus unlösbar, und die Rückmeldung zur falschen Linie ist dort falsch. `pruef-geo` prüft das seither.
+- **Sollwerte aus ungerundeten Grössen**: Ein Sollwert aus gerundeten Zwischenwerten (γ = 180° − 56.3° − 36.9°
+  = 86.8°) lässt die genauere Eingabe 86.82 als «zu grob gerundet» durchfallen. Toleranz je Feld (`tol`).
 - **Kein Malpunkt als Trenner neben Mathematik** (STYLEGUIDE §2.1): «m = 2 · f(x) = …» liest sich
   als Produkt. In Live-Anzeigen, Lösungen («\(8\) · \(-4\)»), Clip-Notizen und der Zeile
   «Aufgabe → Kapitel» steht der Strichpunkt. Prüfen: `node .claude/tools/scan-live.mjs --alle`

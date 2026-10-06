@@ -439,6 +439,8 @@ def graf_svg(el, theme):
         art, nr_f = fg["art"], fg.get("farbe", 1)
         f_ = tinte if nr_f == 5 else fv[(nr_f - 1) % len(fv)]
         strich = ' stroke-dasharray="14 10"' if fg.get("gestrichelt") else ''
+        if fg.get("deckkraft") is not None:          # Deckkraft der Linie, z. B. ein dicker Kreis als Ring
+            strich += ' stroke-opacity="%g"' % fg["deckkraft"]
         dicke = fg.get("dicke", 4)
         fuell = fg.get("fuellung", 0)
         if art == "strecke":

@@ -27,8 +27,8 @@
   }
   /* Vergleich gerundeter Ergebnisse: richtig auf zwei Dezimalen (Toleranz 0.006);
      «nah» heisst: richtig gerechnet, aber zu grob gerundet. */
-  function stimmt(e, soll){ return Math.abs(e - soll) <= 0.006 + 1e-9; }
-  function nah(e, soll){ return !stimmt(e, soll) && Math.abs(e - soll) <= Math.max(0.06, Math.abs(soll) * 0.005); }
+  function stimmt(e, soll, tol){ return Math.abs(e - soll) <= (tol || 0.006) + 1e-9; }
+  function nah(e, soll, tol){ return !stimmt(e, soll, tol) && Math.abs(e - soll) <= Math.max(0.06, Math.abs(soll) * 0.005); }
   var RUNDEN = 'Fast — runde auf zwei Dezimalen (Zwischenresultate ungerundet weiterverwenden).';
 
   /* ---------- Zeichenfläche in Weltkoordinaten (1 Einheit = 1 cm, beide Achsen gleich) ---------- */
@@ -187,11 +187,11 @@
         if (e.leer) return meldung('hinweis', 'Fülle alle Felder aus.');
         if (isNaN(e.wert)) return meldung('hinweis', 'Eine Zahl wie <code>12</code> oder <code>4.8</code> — ohne Einheit.');
         if (e.komma) komma = true;
-        if (stimmt(e.wert, f.soll)) continue;
+        if (stimmt(e.wert, f.soll, f.tol)) continue;
         alle = false;
         var t = null;
         (f.fehler || []).forEach(function(fe){ if (!t && stimmt(e.wert, fe[0])) t = fe[1]; });
-        r.push(t || (nah(e.wert, f.soll) ? RUNDEN : f.tipp || 'Noch nicht. Rechne nach.'));
+        r.push(t || (nah(e.wert, f.soll, f.tol) ? RUNDEN : f.tipp || 'Noch nicht. Rechne nach.'));
       }
       if (alle){ richtig = true; meldung('richtig', '✓ Richtig' + (komma ? ' (Hier schreibt man den Dezimalpunkt.)' : '') + '.' + (aufgabe.loesung ? ' ' + aufgabe.loesung : '')); zeichnen(); }
       else meldung('falsch', r.join(' '));
@@ -230,7 +230,7 @@
     zeichnen: function(F, w, k){
       var A = [0, 0], B = [6, 0], C = [w.cx, w.cy], fuss = lot(C, A, B);
       var ca = abst(C, A), cb = abst(C, B), wfuss = [6 * ca / (ca + cb), 0];
-      var al = winkel(A, B, C), be = winkel(B, A, C), ga = 180 - al - be;
+      var al = winkel(A, B, C), be = winkel(B, A, C), ga = winkel(C, A, B);
       F.vieleck([A, B, C], 'figur');
       if (fuss[2] < 0 || fuss[2] > 1) F.strecke(fuss[2] < 0 ? A : B, [fuss[0], 0], 'verlaengerung');
       if (k.wahl){
@@ -239,8 +239,8 @@
         F.kandidat('w', C, wfuss, k.wahl);
         F.kandidat('m', [3, -1], [3, 1], k.wahl, true);
       }
-      if (w.richtig && k.aufgabe && k.aufgabe.wahl){
-        var r = k.aufgabe.wahl.richtig;
+      if ((w.richtig && k.aufgabe && k.aufgabe.wahl) || (k.aufgabe && k.aufgabe.zeigeH)){
+        var r = k.aufgabe.zeigeH ? 'h' : k.aufgabe.wahl.richtig;
         if (r === 'h'){ F.strecke(C, [fuss[0], 0], 'hilfe'); F.rechts([fuss[0], 0], [0, 1], [fuss[2] < 0.5 ? 1 : -1, 0], 'hilfe'); }
         if (r === 's'){ F.strecke(C, [3, 0], 'hilfe'); F.punkt([3, 0], 'g-pkt hilfe'); }
       }
@@ -248,6 +248,8 @@
       F.text([3, 0], 'c', 'seite', 0, 15);
       F.text([(B[0] + C[0]) / 2, (B[1] + C[1]) / 2], 'a', 'seite', 9, -4, 'start');
       F.text([(A[0] + C[0]) / 2, (A[1] + C[1]) / 2], 'b', 'seite', -9, -4, 'end');
+      // Bei einer Frage nach γ steht γ nicht in der Live-Zeile (Prüfung 06.10.2026, H5).
+      if (k.aufgabe && k.aufgabe.frage) return 'α ' + zz(al, 1) + '°; &nbsp;β ' + zz(be, 1) + '°; &nbsp;γ = ?';
       return 'α ' + zz(al, 1) + '°; &nbsp;β ' + zz(be, 1) + '°; &nbsp;γ ' + zz(ga, 1) + '°; &nbsp;Summe ' + z(al + be + ga, 1) + '°'
         + (al > 90 + 1e-9 || be > 90 + 1e-9 || ga > 90 + 1e-9 ? ' — stumpfwinklig' : Math.abs(Math.max(al, be, ga) - 90) < 1e-6 ? ' — rechtwinklig' : ' — spitzwinklig');
     },
@@ -258,16 +260,16 @@
           s: 'Das ist die Seitenhalbierende \\(s_c\\): Sie endet in der Mitte von \\(AB\\), steht aber nicht senkrecht darauf.',
           w: 'Das ist die Winkelhalbierende \\(w_\\gamma\\): Sie halbiert den Winkel bei \\(C\\).',
           m: 'Das ist die Mittelsenkrechte von \\(c\\): Sie steht senkrecht auf \\(AB\\), geht aber durch die Mitte von \\(AB\\), nicht durch \\(C\\).' } } },
-      { text: 'Tipp die Seitenhalbierende \\(s_c\\) an.', setup: function(s){ s.setze({ cx: 5, cy: 4 }); s.sperre('cx', 'cy'); },
+      { text: 'Tipp die Seitenhalbierende \\(s_c\\) an.', setup: function(s){ s.setze({ cx: 5.5, cy: 3 }); s.sperre('cx', 'cy'); },
         wahl: { richtig: 's', gut: 'Sie verbindet \\(C\\) mit der Mitte von \\(AB\\).', rueck: {
           h: 'Das ist die Höhe \\(h_c\\): Sie steht senkrecht auf \\(AB\\). Die Seitenhalbierende endet in der Mitte von \\(AB\\).',
           w: 'Das ist die Winkelhalbierende \\(w_\\gamma\\).',
           m: 'Das ist die Mittelsenkrechte: Sie geht durch die Mitte von \\(AB\\), aber nicht durch \\(C\\).' } } },
-      { text: 'Mach das Dreieck bei \\(A\\) stumpfwinklig. Wo liegt der Fusspunkt der Höhe \\(h_c\\) jetzt?', probe: { cx: -1 }, ziel: function(w){ return w.cx < 0; } },
+      { text: 'Mach das Dreieck bei \\(A\\) stumpfwinklig. Wo liegt der Fusspunkt der Höhe \\(h_c\\) jetzt?', zeigeH: true, probe: { cx: -1 }, ziel: function(w){ return w.cx < 0; } },
       { text: 'Stell ein gleichschenkliges Dreieck mit der Basis \\(c\\) ein.', probe: { cx: 3 }, ziel: function(w){ return w.cx === 3; } },
       { text: 'Stell einen rechten Winkel bei \\(C\\) ein.', probe: { cx: 3, cy: 3 }, ziel: function(w){ return w.cx === 3 && w.cy === 3; } },
       { text: 'In diesem Dreieck ist \\(\\alpha \\approx 56.3°\\) und \\(\\beta \\approx 36.9°\\). Wie gross ist \\(\\gamma\\)?', setup: function(s){ s.setze({ cx: 2, cy: 3 }); s.sperre('cx', 'cy'); },
-        frage: [{ name: 'gamma', label: '\\(\\gamma \\approx\\)', einheit: '°', soll: 86.8, fehler: [[93.2, 'Das ist \\(\\alpha + \\beta\\). \\(\\gamma\\) ist der Rest bis \\(180°\\).'], [266.8, 'Die Winkelsumme im Dreieck ist \\(180°\\), nicht \\(360°\\).']], tipp: '\\(\\gamma = 180° - \\alpha - \\beta\\).' }] }
+        frage: [{ name: 'gamma', label: '\\(\\gamma \\approx\\)', einheit: '°', soll: 86.82, tol: 0.03, fehler: [[93.2, 'Das ist \\(\\alpha + \\beta\\). \\(\\gamma\\) ist der Rest bis \\(180°\\).'], [266.8, 'Die Winkelsumme im Dreieck ist \\(180°\\), nicht \\(360°\\).']], tipp: '\\(\\gamma = 180° - \\alpha - \\beta\\).' }] }
     ]
   });
 
@@ -297,25 +299,29 @@
       if (zeigeH && !hb){ F.strecke(C, [fuss[0], 0], 'hilfe'); F.rechts([fuss[0], 0], [0, 1], [fuss[2] < 0.5 ? 1 : -1, 0], 'hilfe'); F.text([fuss[0], 1.5], 'h', 'hilfe', -8, 0, 'end'); }
       if (w.richtig && hb){ F.strecke(B, [fussB[0], fussB[1]], 'hilfe'); }
       [[A, 'A', -8, 14], [B, 'B', 8, 14], [C, 'C', 0, -9]].forEach(function(p){ F.punkt(p[0]); F.text(p[0], p[1], 'ecke', p[2], p[3]); });
-      F.text([4, 0], 'g = 8 cm', 'mass', 0, 16);
+      F.text([4, 0], hb ? 'c = 8 cm' : 'g = 8 cm', 'mass', 0, 16);
+      if (hb) F.text([C[0] / 2, C[1] / 2], 'b = 5 cm', 'mass', -10, 0, 'end');
       F.drehen(0);
+      if (hb) return '\\(b = 5\\,\\text{cm}\\); \\(A = 12\\,\\text{cm}^2\\)' + (w.richtig && k.aufgabe.frage ? '; \\(h_b = 4.8\\,\\text{cm}\\)' : '');
+      if (rot) return 'Dieselbe Figur, gedreht: \\(g = 8\\,\\text{cm}\\)';
       return 'Spitze \\(C(' + z(w.t) + ' \\mid 3)\\); \\(g = 8\\,\\text{cm}\\)' + (zeigeH || w.richtig ? '; \\(h = 3\\,\\text{cm}\\)' : '');
     },
     aufgaben: [
-      { text: 'Die Grundseite ist \\(AB\\). Tipp die zugehörige Höhe an.',
+      // t = 2: Bei t = 4 lägen Höhe und Seitenhalbierende übereinander (Prüfung 06.10.2026, H1).
+      { text: 'Die Grundseite ist \\(AB\\). Tipp die zugehörige Höhe an.', setup: function(s){ s.setze({ t: 2 }); s.sperre('t'); },
         wahl: { richtig: 'h', gut: 'Die Höhe ist der senkrechte Abstand von \\(C\\) zur Geraden \\(AB\\): \\(h = 3\\,\\text{cm}\\).', rueck: {
           a: 'Das ist die Seite \\(a = BC\\) — sie steht nicht senkrecht auf \\(AB\\).',
           b: 'Das ist die Seite \\(b = AC\\) — sie steht nicht senkrecht auf \\(AB\\).',
           s: 'Das ist die Seitenhalbierende: Sie endet in der Mitte von \\(AB\\) und steht nicht senkrecht.' } } },
-      { text: 'Berechne die Fläche des Dreiecks.', setup: function(s){ s.sperre('t'); },
+      { text: 'Berechne die Fläche des Dreiecks.', zeigeH: true, setup: function(s){ s.setze({ t: 2 }); s.sperre('t'); },
         frage: [{ name: 'A', label: '\\(A =\\)', einheit: 'cm²', soll: 12, fehler: [[24, 'Das ist \\(g \\cdot h\\) — die Fläche des Parallelogramms. Das Dreieck ist die Hälfte davon.']], tipp: '\\(A = \\tfrac{1}{2}\\, g \\cdot h\\).' }] },
-      { text: 'Verschieb die Spitze nach \\(t = 10\\). Wo liegt der Fusspunkt der Höhe jetzt?', probe: { t: 10 }, ziel: function(w){ return w.t === 10; } },
+      { text: 'Verschieb die Spitze nach \\(t = 10\\). Wo liegt der Fusspunkt der Höhe jetzt?', zeigeH: true, probe: { t: 10 }, ziel: function(w){ return w.t === 10; } },
       { text: 'Die Spitze steht bei \\(t = 10\\). Wie gross ist die Fläche jetzt?', setup: function(s){ s.setze({ t: 10 }); s.sperre('t'); },
         frage: [{ name: 'A', label: '\\(A =\\)', einheit: 'cm²', soll: 12, fehler: [[14.42, 'Die schräge Seite \\(BC\\) ist keine Höhe. Die Höhe ist der senkrechte Abstand zur <b>Geraden</b> \\(AB\\) — auch ausserhalb der Strecke.'], [24, 'Das ist \\(g \\cdot h\\). Das Dreieck ist die Hälfte.']], tipp: 'Grundseite und Höhe haben sich nicht geändert.' }],
         loesung: 'Grundseite und Höhe sind gleich geblieben — also auch die Fläche.' },
       { text: 'Dieselbe Figur, gedreht. Tipp die Höhe zur Grundseite \\(AB\\) an.', gedreht: true, setup: function(s){ s.setze({ t: 2 }); s.sperre('t'); s.F.drehen(grad(28)); },
         wahl: { richtig: 'h', gut: 'Die Höhe steht senkrecht auf \\(AB\\) — egal, wie die Figur liegt.', rueck: {
-          a: 'Das ist die Seite \\(a\\). Die Höhe steht senkrecht auf \\(AB\\), nicht senkrecht zum Bildrand.',
+          a: 'Das ist die Seite \\(a\\) — sie steht nicht senkrecht auf \\(AB\\).',
           b: 'Das ist die Seite \\(b\\). Die Höhe steht senkrecht auf \\(AB\\), nicht senkrecht zum Bildrand.',
           s: 'Das ist die Seitenhalbierende.' } } },
       { text: 'Jetzt ist \\(b = AC\\) die Grundseite. Tipp die Höhe \\(h_b\\) an.', hb: true, setup: function(s){ s.setze({ t: 4 }); s.sperre('t'); },
@@ -345,7 +351,7 @@
       if (k.aufgabe && k.aufgabe.zeigeH){ F.strecke(D, [D[0], 0], 'hilfe2'); }
       [[A, 'A', -8, 14], [B, 'B', 8, 14], [C, 'C', 6, -8], [D, 'D', -6, -8]].forEach(function(p){ F.punkt(p[0]); F.text(p[0], p[1], 'ecke', p[2], p[3]); });
       var s1 = Math.hypot(w.d, w.h), s2 = Math.hypot(a - w.d - w.c, w.h);
-      var art = w.c === a ? 'Parallelogramm' : Math.abs(w.d - (a - w.c) / 2) < 1e-9 ? 'gleichschenkliges Trapez' : 'Trapez';
+      var art = w.c === a ? (w.d === 0 ? 'Rechteck' : 'Parallelogramm') : Math.abs(w.d - (a - w.c) / 2) < 1e-9 ? 'gleichschenkliges Trapez' : 'Trapez';
       return art + ': \\(a = 8\\), \\(c = ' + z(w.c) + '\\), \\(h = ' + z(w.h) + '\\)'
         + (k.aufgabe && k.aufgabe.frage ? '' : '; \\(A = ' + z((a + w.c) / 2 * w.h) + '\\,\\text{cm}^2\\); \\(U ' + (Math.abs(s1 + s2 - Math.round((s1 + s2) * 100) / 100) > 1e-9 ? '\\approx' : '=') + ' ' + z(a + w.c + s1 + s2) + '\\,\\text{cm}\\)');
     },
@@ -357,9 +363,9 @@
         wahl: { richtig: 'm', gut: 'Sie verbindet die Mitten der Schenkel: \\(m = \\tfrac{1}{2}(a + c)\\).', rueck: {
           e: 'Das ist die Diagonale \\(e = AC\\).', h: 'Das ist eine Höhe: Sie steht senkrecht auf den Parallelseiten.',
           x: 'Diese Linie verbindet die Mitten der Parallelseiten — die Mittellinie verbindet die Mitten der <b>Schenkel</b>.' } } },
-      { text: '\\(a = 8\\,\\text{cm}\\), \\(c = 4\\,\\text{cm}\\), \\(h = 3\\,\\text{cm}\\): Wie lang ist die Mittellinie, wie gross die Fläche?', setup: function(s){ s.setze({ c: 4, h: 3, d: 1 }); s.sperre('c', 'h', 'd'); },
-        frage: [{ name: 'm', label: '\\(m =\\)', einheit: 'cm', soll: 6, fehler: [[12, 'Die Mittellinie ist der <b>Mittelwert</b> der Parallelseiten: \\(\\tfrac{1}{2}(a + c)\\).'], [2, 'Mittelwert, nicht halbe Differenz: \\(\\tfrac{1}{2}(a + c)\\).']], tipp: '\\(m = \\tfrac{1}{2}(a + c)\\).' },
-                { name: 'A', label: '\\(A =\\)', einheit: 'cm²', soll: 18, fehler: [[36, 'Das ist \\((a + c) \\cdot h\\) — es braucht die Hälfte davon: \\(m \\cdot h\\).'], [96, '\\(a \\cdot c \\cdot h\\) ist keine Trapezformel: \\(A = m \\cdot h\\).']], tipp: '\\(A = m \\cdot h\\).' }] },
+      { text: '\\(a = 8\\,\\text{cm}\\), \\(c = 5\\,\\text{cm}\\), \\(h = 4\\,\\text{cm}\\): Wie lang ist die Mittellinie, wie gross die Fläche?', setup: function(s){ s.setze({ c: 5, h: 4, d: 1 }); s.sperre('c', 'h', 'd'); },
+        frage: [{ name: 'm', label: '\\(m =\\)', einheit: 'cm', soll: 6.5, fehler: [[13, 'Die Mittellinie ist der <b>Mittelwert</b> der Parallelseiten: \\(\\tfrac{1}{2}(a + c)\\).'], [1.5, 'Mittelwert, nicht halbe Differenz: \\(\\tfrac{1}{2}(a + c)\\).']], tipp: '\\(m = \\tfrac{1}{2}(a + c)\\).' },
+                { name: 'A', label: '\\(A =\\)', einheit: 'cm²', soll: 26, fehler: [[52, 'Das ist \\((a + c) \\cdot h\\) — es braucht die Hälfte davon: \\(m \\cdot h\\).'], [160, '\\(a \\cdot c \\cdot h\\) ist keine Trapezformel: \\(A = m \\cdot h\\).']], tipp: '\\(A = m \\cdot h\\).' }] },
       { text: 'Gleichschenklig mit \\(a = 8\\,\\text{cm}\\), \\(c = 2\\,\\text{cm}\\), \\(h = 4\\,\\text{cm}\\): Wie lang ist ein Schenkel?', setup: function(s){ s.setze({ c: 2, h: 4, d: 3 }); s.sperre('c', 'h', 'd'); },
         zeigeH: true,
         frage: [{ name: 's', label: 'Schenkel', einheit: 'cm', soll: 5, fehler: [[7.21, 'Der Überstand ist nicht \\(6\\), sondern die Hälfte: \\(\\tfrac{8 - 2}{2} = 3\\).'], [6.71, 'Der Überstand ist \\(\\tfrac{a - c}{2} = 3\\), die Höhe \\(4\\).'], [7, 'Pythagoras: \\(\\sqrt{3^2 + 4^2}\\), nicht \\(3 + 4\\).']], tipp: 'Rechtwinkliges Dreieck aus Höhe \\(4\\) und Überstand \\(\\tfrac{a - c}{2}\\): Pythagoras.' }] }
@@ -369,7 +375,7 @@
   /* ---------- Kapitel 4: Kreis und Kreisteile ----------
      Mittelpunkt (0|0), Radius r, Mittelpunktswinkel φ. Der Sektor ist grün, sein Bogen orange. */
   arbeitsbereich('sim4', {
-    fenster: { w: 320, h: 240, x0: -6.5, x1: 6.5, y0: -4.75 },
+    fenster: { w: 320, h: 270, x0: -6.5, x1: 6.5, y0: -5.5 },
     zeichnen: function(F, w, k){
       var r = w.r, phi = grad(w.phi), M = [0, 0], seg = k.aufgabe && k.aufgabe.segment;
       F.kreis(M, r, 'figur kreis');
@@ -388,7 +394,7 @@
         F.kandidat('h', [r * Math.cos(q1), r * Math.sin(q1)], [r * Math.cos(q2), r * Math.sin(q2)], k.wahl);
         if (w.richtig){ F.strecke(M, T, 'hilfe'); F.rechts(T, [-Math.cos(w0), -Math.sin(w0)], [Math.sin(w0), -Math.cos(w0)], 'hilfe'); }
       }
-      return '\\(r = ' + z(w.r) + '\\,\\text{cm}\\); \\(\\varphi = ' + z(w.phi) + '°\\); Anteil \\(\\tfrac{\\varphi}{360°} = ' + zz(w.phi / 360, 3) + '\\)';
+      return '\\(r = ' + z(w.r) + '\\,\\text{cm}\\); \\(\\varphi = ' + z(w.phi) + '°\\); Anteil \\(\\tfrac{\\varphi}{360°} ' + (Math.abs(w.phi / 360 * 1000 - Math.round(w.phi / 360 * 1000)) > 1e-9 ? '\\approx ' : '= ') + z(w.phi / 360, 3) + '\\)';
     },
     aufgaben: [
       { text: 'Erkunde: Zieh an \\(\\varphi\\). Welchen Anteil des Kreises nimmt der Sektor ein?', probe: { phi: 100 }, ziel: function(w){ return w.bewegt.phi; } },
@@ -413,12 +419,21 @@
     zeichnen: function(F, w, k){
       var kk = w.k, P = [[1, 0.5], [3, 0.5], [1.5, 2]], B = P.map(function(p){ return [kk * p[0], kk * p[1]]; });
       var strahlen = k.aufgabe && k.aufgabe.strahlen;
+      if (strahlen){
+        // Eigene Figur zum Strahlensatz, massstäblich: S(0|0), A(4|0), A'(6|0), B(4|3), B'(6|4.5).
+        var S = [-4, -2], A_ = [0, -2], A2 = [2, -2], B_ = [0, 1], B2 = [2, 2.5];
+        F.gerade(S, A2, 'strahl'); F.gerade(S, B2, 'strahl');
+        F.strecke(A_, B_, 'figur-linie'); F.strecke(A2, B2, 'bild-linie');
+        F.punkt(S); F.text(S, 'S', 'ecke', -9, 4);
+        [[A_, 'A', 0, 14], [A2, "A′", 0, 14], [B_, 'B', -9, -4], [B2, "B′", -9, -4]].forEach(function(q){ F.punkt(q[0]); F.text(q[0], q[1], 'ecke klein', q[2], q[3]); });
+        return '\\(SA = 4\\,\\text{cm}\\); \\(SA\' = 6\\,\\text{cm}\\); \\(AB = 3\\,\\text{cm}\\); \\(AB \\parallel A\'B\'\\)';
+      }
       P.forEach(function(p, j){ F.gerade([0, 0], p, 'strahl'); });
       F.vieleck(P, 'figur');
       F.vieleck(B, 'bild');
       F.punkt([0, 0]); F.text([0, 0], 'Z', 'ecke', -9, 14);
       ['A', 'B', 'C'].forEach(function(n, j){ F.text(P[j], n, 'ecke klein', -8, -5); if (kk !== 1) F.text(B[j], n + '′', 'ecke klein bild', 8, -5, 'start'); });
-      if (strahlen) return '\\(SA = 4\\,\\text{cm}\\); \\(SA\' = 6\\,\\text{cm}\\); \\(AB = 3\\,\\text{cm}\\); \\(AB \\parallel A\'B\'\\)';
+      if (k.aufgabe && k.aufgabe.frage) return '\\(k = ' + z(kk) + '\\)';
       return '\\(k = ' + z(kk) + '\\); \\(A\'B\' = ' + z(2 * Math.abs(kk)) + '\\,\\text{cm}\\) (Original \\(AB = 2\\,\\text{cm}\\)); Flächenfaktor \\(k^2 = ' + z(kk * kk) + '\\)';
     },
     aufgaben: [
@@ -446,12 +461,12 @@
     /* Feste Aufgaben, die eine Zufallsübung nicht treffen darf (HOWTO §15): Clips · Arbeitsbereiche ·
        Kapitelaufgaben · Gesamttest. Je Typ ein eigener Schlüssel. */
     var SPERRE = [
-      'ws|50|60', 'ws|48|75', 'gs|30', 'gs|40', 'gs|64', 'gs|52',
+      'ws|50|60', 'ws|48|75', 'gs|30', 'gs|40',
       'df|8|3', 'df|10|4', 'df|9|4.2', 'hd|20|8', 'hd|15|6', 'hd|12|5', 'hd|18.9|7',
-      'tr|10|4|4', 'tr|9|5|4', 'tr|12|6|5', 'tr|11|5|6', 'tr|8|4|3', 'ra|6|8', 'dr|10|6', 'pa|7|4',
-      'py|6|8', 'py|3|4', 'py|3|6',
+      'tr|10|4|4', 'tr|9|5|4', 'tr|12|6|5', 'tr|11|5|6', 'tr|8|4|3', 'tr|8|5|4', 'tr|14|8|4', 'ra|6|8', 'ra|8|6', 'dr|10|6', 'dr|6|10', 'pa|7|4',
+      'py|6|8', 'py|8|6', 'py|3|4', 'py|4|3', 'py|3|5', 'py|3|6', 'py|5|12', 'py|12|5',
       'kr|5', 'kr|7.5', 'kr|6', 'kr|8', 'sk|6|60', 'sk|4|90', 'sk|5|72', 'sk|10|36', 'sk|8|135', 'sk|10|60', 'sk|6|90',
-      'st|1.5|2', 'st|2.5|4', 'st|3|1', 'sa|4|6|3', 'sa|1.5|2|12', 'sa|2|3|15', 'sa|1.8|2.4|14'
+      'st|2.5|4', 'st|1.5|2', 'st|2|1', 'st|-1.5|4', 'sa|1.5|2|12', 'sa|2|3|15', 'sa|1.6|2|30', 'sa|1.8|2.4|14'
     ];
     function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
     function feld(A, f, e, soll, tipp, fehler){
@@ -518,6 +533,40 @@
             [[A.g * A.h, '\\(g \\cdot h\\) ist das Parallelogramm — das Dreieck ist die <b>Hälfte</b>.'], [A.g / 100 * A.h / 2, 'Einheiten: \\(g\\) in m, \\(h\\) in cm — vorher angleichen.']]); },
         loesung: function(A){ return 'A = \\tfrac{1}{2} \\cdot ' + A.g + ' \\cdot ' + A.h + ' = ' + A.soll + '\\,\\text{cm}^2'; } },
 
+      /* Leitfaden ④: Grundseite und Höhe zuordnen, spitze, rechtwinklige und stumpfe Dreiecke in
+         wechselnder Lage. Drei nummerierte Linien, eine davon ist die Höhe zur orangen Grundseite. */
+      'zuordnen': { felder: ['n'], muster: 'Die Höhe zur orangen Grundseite ist Linie {n:1|2|3}',
+        eingabe: function(A){ return { n: String(A.richtig) }; },
+        neu: function(){
+          var g = zufall([5, 6, 7, 8]), h = zufall([2.5, 3, 3.5, 4]), art = zufall(['spitz', 'recht', 'stumpf']);
+          var t = art === 'spitz' ? g * zufall([0.3, 0.45, 0.6]) : art === 'recht' ? zufall([0, g]) : zufall([-2, -1.5, g + 1.5, g + 2]);
+          var C = [t, h], fuss = [t, 0], mitte = [g / 2, 0];
+          var linien = [{ art: 'h', a: C, b: fuss }, { art: 's', a: C, b: mitte }, { art: 'seite', a: C, b: t < g / 2 ? [g, 0] : [0, 0] }];
+          if (art === 'recht' || Math.abs(t - g / 2) < 0.6) linien[1] = { art: 'schief', a: C, b: [t < g / 2 ? Math.min(g - 0.3, t + 1.8) : Math.max(0.3, t - 1.8), 0] };
+          for (var i = linien.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), x = linien[i]; linien[i] = linien[j]; linien[j] = x; }
+          var richtig = 1 + linien.findIndex(function(l){ return l.art === 'h'; });
+          return { g: g, h: h, t: t, C: C, linien: linien, richtig: richtig, dreh: zufall([0, 25, 60, 120, 160, 200, 300]),
+            text: 'Welche der drei nummerierten Linien ist die Höhe zur orangen Grundseite?' }; },
+        zeichne: function(svg, A){
+          var F = Flaeche(svg, { w: 220, h: 170, x0: A.g / 2 - 8, x1: A.g / 2 + 8, y0: A.h / 2 - 6.2, drehpunkt: [A.g / 2, A.h / 2], karo: false });
+          F.drehen(grad(A.dreh));
+          F.vieleck([[0, 0], [A.g, 0], A.C], 'figur');
+          if (A.t < 0 || A.t > A.g) F.strecke(A.t < 0 ? [0, 0] : [A.g, 0], [A.t, 0], 'verlaengerung');
+          F.strecke([0, 0], [A.g, 0], 'grundseite');
+          A.linien.forEach(function(l, i){ F.strecke(l.a, l.b, 'kandidat-linie'); F.text([(l.a[0] * 0.4 + l.b[0] * 0.6), (l.a[1] * 0.4 + l.b[1] * 0.6)], String(i + 1), 'nummer', 9, 4, 'start'); });
+          F.drehen(0);
+        },
+        fehler: function(A){ var f = [];
+          A.linien.forEach(function(l, i){ if (l.art !== 'h') f.push([{ n: String(i + 1) }, l.art === 'seite' ? 'Seite' : l.art === 's' ? 'Mitte' : 'senkrecht']); });
+          return f; },
+        pruefen: function(A, e){
+          var l = A.linien[+e.n - 1];
+          if (l.art === 'h') return null;
+          if (l.art === 'seite') return 'Das ist eine Seite des Dreiecks. Die Höhe steht <b>senkrecht</b> auf der Geraden durch die Grundseite — auch wenn die Figur gedreht ist.';
+          if (l.art === 's') return 'Diese Linie endet in der Mitte der Grundseite — das ist die Seitenhalbierende. Die Höhe steht senkrecht auf der Grundseite.';
+          return 'Diese Linie steht nicht senkrecht auf der Grundseite. Gesucht ist das Lot von der Spitze auf die Gerade durch die Grundseite.'; },
+        loesung: function(A){ return '\\text{Linie ' + A.richtig + '}'; } },
+
       'hoehe': { felder: ['h'], muster: 'h = {h} cm',
         schl: function(A){ return 'hd|' + A.A + '|' + A.g; },
         eingabe: function(A){ return { h: String(A.soll) }; },
@@ -534,7 +583,9 @@
         eingabe: function(A){ return { A: String(A.soll) }; },
         neu: function(){
           var art = zufall(['pa', 'tr', 'ra', 'dr']), a, b, c;
-          if (art === 'pa'){ a = zufallG(4, 12); b = zufallG(2, 8); return { art: art, schl: 'pa|' + a + '|' + b, soll: a * b, falsch: [[a * b / 2, 'Das ist ein Dreieck. Das Parallelogramm ist \\(a \\cdot h\\) — ganz.']], text: 'Parallelogramm: Grundseite \\(a = ' + a + '\\,\\text{cm}\\), Höhe \\(h = ' + b + '\\,\\text{cm}\\). Fläche?' }; }
+          if (art === 'pa'){ a = zufallG(4, 12); b = zufallG(2, 8); c = b + zufallG(1, 3);   // c: die schräge Seite, länger als die Höhe
+            return { art: art, schl: 'pa|' + a + '|' + b, soll: a * b, falsch: [[a * b / 2, 'Das ist ein Dreieck. Das Parallelogramm ist \\(a \\cdot h\\) — ganz.'], [a * c, 'Die schräge Seite ist keine Höhe: \\(A = a \\cdot h\\).']],
+              text: 'Parallelogramm: Grundseite \\(a = ' + a + '\\,\\text{cm}\\), schräge Seite \\(b = ' + c + '\\,\\text{cm}\\), Höhe auf \\(a\\): \\(h = ' + b + '\\,\\text{cm}\\). Fläche?' }; }
           if (art === 'tr'){ a = zufallG(6, 14); c = zufallG(2, a - 2); b = zufallG(2, 7); return { art: art, schl: 'tr|' + a + '|' + c + '|' + b, soll: r2((a + c) / 2 * b), falsch: [[(a + c) * b, 'Das ist das Doppelte: \\(A = \\tfrac{1}{2}(a + c) \\cdot h\\).'], [a * c * b, '\\(A = m \\cdot h\\) mit der Mittellinie \\(m = \\tfrac{1}{2}(a + c)\\).']], text: 'Trapez: Parallelseiten \\(a = ' + a + '\\,\\text{cm}\\), \\(c = ' + c + '\\,\\text{cm}\\), Höhe \\(h = ' + b + '\\,\\text{cm}\\). Fläche?' }; }
           a = zufallG(3, 12); b = zufallG(3, 12); if (a === b) b++;
           return { art: art, schl: art + '|' + a + '|' + b, soll: r2(a * b / 2), falsch: [[a * b, 'Das ist das Rechteck um die Diagonalen. Die Figur füllt genau die Hälfte: \\(\\tfrac{1}{2}\\, e \\cdot f\\).']],
@@ -550,10 +601,11 @@
           var p = zufall([2, 3, 4, 5, 6, 7, 8, 9, 1.5, 2.5]), q = zufall([3, 4, 5, 6, 8, 10, 12, 2.5]), hyp = Math.random() < 0.6;
           if (hyp || q <= p){ return { p: p, q: q, hyp: true, soll: r2(Math.hypot(p, q)), text: 'Rechtwinkliges Dreieck mit den Katheten \\(' + p + '\\,\\text{cm}\\) und \\(' + q + '\\,\\text{cm}\\). Wie lang ist die Hypotenuse \\(x\\)?' }; }
           return { p: p, q: q, hyp: false, soll: r2(Math.sqrt(q * q - p * p)), text: 'Rechtwinkliges Dreieck mit der Hypotenuse \\(' + q + '\\,\\text{cm}\\) und einer Kathete \\(' + p + '\\,\\text{cm}\\). Wie lang ist die andere Kathete \\(x\\)?' }; },
-        fehler: function(A){ return A.hyp ? [[{ x: String(A.p + A.q) }, 'Wurzel']] : [[{ x: String(r2(Math.hypot(A.p, A.q))) }, 'Hypotenuse']]; },
+        fehler: function(A){ return A.hyp ? [[{ x: String(A.p + A.q) }, 'Quadrate']] : [[{ x: String(r2(Math.hypot(A.p, A.q))) }, 'Hypotenuse']]; },
         pruefen: function(A, e){
           return feld(A, 'x', e, A.soll, A.hyp ? '\\(x = \\sqrt{a^2 + b^2}\\).' : '\\(x = \\sqrt{c^2 - a^2}\\): Die Hypotenuse steht allein.',
-            [[A.p + A.q, 'Nicht die Längen addieren, sondern die <b>Quadrate</b> — dann die Wurzel.'], [Math.hypot(A.p, A.q), A.hyp ? '' : 'Die Hypotenuse ist gegeben — die gesuchte Kathete ist kürzer: \\(\\sqrt{c^2 - a^2}\\).']]); },
+            A.hyp ? [[A.p + A.q, 'Nicht die Längen addieren, sondern die <b>Quadrate</b> — dann die Wurzel.']]
+                  : [[A.q - A.p, 'Nicht die Längen subtrahieren, sondern die <b>Quadrate</b> — dann die Wurzel.'], [Math.hypot(A.p, A.q), 'Die Hypotenuse ist gegeben — die gesuchte Kathete ist kürzer: \\(\\sqrt{c^2 - a^2}\\).']]); },
         loesung: function(A){ return 'x = ' + (A.hyp ? '\\sqrt{' + A.p + '^2 + ' + A.q + '^2}' : '\\sqrt{' + A.q + '^2 - ' + A.p + '^2}') + ' \\approx ' + A.soll + '\\,\\text{cm}'; } },
 
       /* ── Kapitel 4 ── */
@@ -561,7 +613,7 @@
         schl: function(A){ return 'kr|' + A.r; },
         eingabe: function(A){ return { U: String(r2(2 * PI * A.r)), A: String(r2(PI * A.r * A.r)) }; },
         neu: function(){
-          var r = zufall([1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5.5, 6.5, 7, 9, 10, 12]), d = Math.random() < 0.4;
+          var r = zufall([1.5, 2.5, 3, 3.5, 4, 4.5, 5.5, 6.5, 7, 9, 10, 12]), d = Math.random() < 0.4;   // nie r = 2: dort ist 2πr = πr²
           return { r: r, d: d, text: d ? 'Ein Kreis hat den Durchmesser \\(d = ' + 2 * r + '\\,\\text{cm}\\). Berechne Umfang und Fläche.' : 'Ein Kreis hat den Radius \\(r = ' + r + '\\,\\text{cm}\\). Berechne Umfang und Fläche.' }; },
         fehler: function(A){ var f = []; if (A.d) f.push([{ U: String(r2(2 * PI * A.r)), A: String(r2(PI * 4 * A.r * A.r)) }, 'Radius']); return f; },
         pruefen: function(A, e){
@@ -576,7 +628,7 @@
         schl: function(A){ return 'sk|' + A.r + '|' + A.phi; },
         eingabe: function(A){ return { b: String(r2(A.phi / 360 * 2 * PI * A.r)), A: String(r2(A.phi / 360 * PI * A.r * A.r)) }; },
         neu: function(){
-          var r = zufall([2, 3, 4, 5, 6, 7, 8, 10, 2.5, 4.5]), phi = zufall([30, 40, 45, 60, 72, 80, 100, 120, 135, 150, 210, 240, 270, 300]);
+          var r = zufall([3, 4, 5, 6, 7, 8, 10, 2.5, 4.5]), phi = zufall([30, 40, 45, 60, 72, 80, 100, 120, 135, 150, 210, 240, 270, 300]);
           return { r: r, phi: phi, text: 'Kreissektor mit \\(r = ' + r + '\\,\\text{cm}\\) und \\(\\varphi = ' + phi + '°\\). Berechne Bogenlänge und Fläche.' }; },
         fehler: function(A){ return [[{ b: String(r2(2 * PI * A.r)), A: String(r2(A.phi / 360 * PI * A.r * A.r)) }, 'Anteil']]; },
         pruefen: function(A, e){
@@ -589,7 +641,7 @@
 
       /* ── Kapitel 5 ── */
       'streckung': { felder: ['L', 'F'], muster: 'Bildstrecke {L} cm; Bildfläche {F} cm²',
-        schl: function(A){ return 'st|' + A.k + '|' + A.l; },
+        schl: function(A){ return 'st|' + A.k + '|' + A.f; },      // k und Fläche: wie in den festen Aufgaben
         eingabe: function(A){ return { L: String(r2(Math.abs(A.k) * A.l)), F: String(r2(A.k * A.k * A.f)) }; },
         neu: function(){
           var k = zufall([0.5, 1.5, 2, 2.5, 3, 4, -2, -0.5, 1.2]), l = zufall([2, 3, 4, 5, 6, 8]), f = zufall([2, 3, 4, 6, 10, 12]);
@@ -608,6 +660,7 @@
         eingabe: function(A){ return { x: String(A.soll) }; },
         neu: function(){
           var s = zufall([1.5, 1.6, 1.8, 2, 1.2]), sch = zufall([1.2, 2, 2.4, 2.5, 3, 4]), gross = zufall([6, 8, 9, 10, 12, 15, 18, 20, 24]);
+          if (s === sch) return TYPEN['strahlensatz'].neu();      // sonst fiele das verkehrte Verhältnis nicht auf
           return { s: s, sch: sch, gross: gross, soll: r2(s / sch * gross), text: 'Ein \\(' + s + '\\,\\text{m}\\) langer Stab wirft einen \\(' + sch + '\\,\\text{m}\\) langen Schatten. Ein Baum daneben wirft einen \\(' + gross + '\\,\\text{m}\\) langen Schatten. Wie hoch ist der Baum?' }; },
         fehler: function(A){ var f = r2(A.sch / A.s * A.gross); return stimmt(f, A.soll) ? [] : [[{ x: String(f) }, 'Verhältnis']]; },
         pruefen: function(A, e){ return feld(A, 'x', e, A.soll, 'Gleicher Sonnenstand: ähnliche Dreiecke, \\(\\tfrac{h}{' + A.gross + '} = \\tfrac{' + A.s + '}{' + A.sch + '}\\).',
@@ -632,6 +685,8 @@
           }); });
         if (A.einheit) html += A.einheit;
         ein.innerHTML = html; rueck.className = 'ue-rueck'; rueck.innerHTML = '';
+        var bild = box.querySelector('.ue-bild');
+        if (bild){ while (bild.firstChild) bild.removeChild(bild.firstChild); if (T.zeichne) T.zeichne(bild, A); }
         setzen(auf);
       }
       function pruefen(){

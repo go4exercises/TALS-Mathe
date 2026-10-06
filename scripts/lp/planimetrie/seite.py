@@ -87,7 +87,6 @@ svg.mini .kurve.k1{stroke:var(--orange)} svg.mini .kurve.k2{stroke:var(--gruen)}
 .geo > svg{display:block;width:100%;max-width:560px;margin:0 auto;background:var(--karte);border:1px solid var(--linie);border-radius:9px;touch-action:manipulation}
 .geo .figur{fill:var(--blau);fill-opacity:.12;stroke:var(--blau);stroke-width:2;stroke-linejoin:round}
 .geo .figur.kreis,svg.geo-mini .figur.kreis{fill-opacity:.06}
-.geo .bild{fill:var(--orange);fill-opacity:.12;stroke:var(--orange);stroke-width:2;stroke-dasharray:6 3}
 .geo .verlaengerung,svg.geo-mini .verlaengerung{stroke:var(--tinte-2);stroke-width:1.2;stroke-dasharray:4 3}
 .geo .parallele{stroke:var(--tinte-2);stroke-width:1;stroke-dasharray:2 4}
 .geo .strahl{stroke:var(--tinte-2);stroke-width:.8;stroke-dasharray:3 4}
@@ -122,6 +121,13 @@ svg.mini .kurve.k1{stroke:var(--orange)} svg.mini .kurve.k2{stroke:var(--gruen)}
 svg.geo-mini{display:block;width:100%;max-width:300px;margin:6px 0;background:var(--karte);border:1px solid var(--linie);border-radius:8px}
 svg.geo-mini .figur{fill:var(--blau);fill-opacity:.12;stroke:var(--blau);stroke-width:1.8;stroke-linejoin:round}
 .mini-reihe{display:flex;flex-wrap:wrap;gap:10px}
+svg.geo-mini .gitter{stroke:var(--linie);stroke-width:.5}
+.geo polygon.bild{fill:var(--orange);fill-opacity:.12;stroke:var(--orange);stroke-width:2;stroke-dasharray:6 3}
+.geo .figur-linie{stroke:var(--blau);stroke-width:2.2} .geo .bild-linie{stroke:var(--orange);stroke-width:2.2}
+svg.geo-mini .grundseite{stroke:var(--orange);stroke-width:3.5;stroke-linecap:round}
+svg.geo-mini .kandidat-linie{stroke:var(--tinte);stroke-width:1.6;stroke-dasharray:5 3}
+svg.geo-mini .nummer{font-family:var(--sans);font-weight:700;font-size:12px;font-style:normal}
+svg.geo-mini.ue-bild{max-width:260px;margin:4px auto 8px}
 '''
 
 
@@ -147,9 +153,10 @@ def clipkarte(datei, titel, zeit=None):
       </div>'''
 
 
-def uebung(typ, titel):
+def uebung(typ, titel, bild=False):
     return f'''<div class="uebung" data-typ="{typ}">
           <div class="ue-kopf"><span class="ue-titel">🔁 {titel}</span><span class="ue-serie">0 in Folge</span></div>
+          {'<svg class="geo-mini ue-bild" role="img" aria-label="Dreieck mit markierter Grundseite und drei nummerierten Linien"></svg>' if bild else ''}
           <p class="ue-aufgabe"></p>
           <div class="ue-zeile"><span class="ue-eingabe"></span><button type="button" class="ue-pruefen">Prüfen</button><button type="button" class="ue-neu">Neue Zahlen</button></div>
           <div class="ue-rueck" aria-live="polite"></div>
@@ -247,19 +254,19 @@ fest1 = r'''      <div class="festhalten">
           <div class="titel">Dreiecke beschreiben</div>
           <p>Ecken \(A, B, C\) gegen den Uhrzeigersinn; die Seite \(a\) liegt der Ecke \(A\) gegenüber, der Winkel \(\alpha\) liegt bei \(A\).</p>
           <p><b>Innenwinkelsumme:</b> \(\alpha + \beta + \gamma = 180°\) — die Parallele durch \(C\) zu \(AB\) bildet mit \(\alpha\) und \(\beta\) Wechselwinkel.</p>
-          <p>Gleichschenklig: zwei gleiche Seiten, die Basiswinkel sind gleich. Gleichseitig: alle Winkel \(60°\). Rechtwinklig: ein Winkel \(90°\).</p>
+          <p>Gleichschenklig: zwei gleiche Seiten, die Basiswinkel sind gleich. Gleichseitig: drei gleiche Seiten, alle Winkel \(60°\). Rechtwinklig: ein Winkel \(90°\).</p>
           <ul>
-            <li><b>Höhe</b> \(h_c\): Lot von \(C\) auf die <b>Gerade</b> \(AB\) — Schnittpunkt \(H\).</li>
+            <li><b>Höhe</b> \(h_c\): Lot von \(C\) auf die <b>Gerade</b> \(AB\). Die drei Höhen schneiden sich im <b>Höhenschnittpunkt</b> \(H\).</li>
             <li><b>Seitenhalbierende</b> \(s_c\): von \(C\) zur Mitte von \(AB\) — Schwerpunkt \(S\).</li>
             <li><b>Winkelhalbierende</b> \(w_\gamma\): halbiert \(\gamma\) — Inkreismittelpunkt \(M_I\).</li>
-            <li><b>Mittelsenkrechte</b> \(m_c\): senkrecht durch die Mitte von \(AB\) — Umkreismittelpunkt \(M_U\).</li>
+            <li><b>Mittelsenkrechte</b> von \(c\): senkrecht durch die Mitte von \(AB\) — Umkreismittelpunkt \(M_U\).</li>
           </ul>
-          <p>Im stumpfwinkligen Dreieck liegen \(H\) und \(M_U\) ausserhalb.</p>
+          <p>Im stumpfwinkligen Dreieck liegen die beiden Höhen aus den spitzen Ecken ausserhalb (ihr Fusspunkt auf der Verlängerung der Gegenseite), mit ihnen \(H\); auch \(M_U\) liegt ausserhalb. Die Höhe aus der stumpfen Ecke liegt innen.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
           <p>Höhe und Mittelsenkrechte verwechseln: Beide stehen senkrecht — die Höhe geht durch die Ecke, die Mittelsenkrechte durch die Seitenmitte.</p>
-          <p>Die Höhe innerhalb suchen: Im stumpfwinkligen Dreieck liegt ihr Fusspunkt auf der Verlängerung der Seite.</p>
+          <p>Die Höhe immer innerhalb suchen: Im stumpfwinkligen Dreieck liegt der Fusspunkt von zwei Höhen auf der Verlängerung der Seite.</p>
         </div>
       </div>'''
 auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
@@ -289,14 +296,14 @@ fest2 = r'''      <div class="festhalten">
           <div class="titel">Dreiecksfläche und zugehörige Höhe</div>
           <p>Zu jeder Seite als <b>Grundseite</b> \(g\) gehört eine <b>Höhe</b> \(h\): der senkrechte Abstand des gegenüberliegenden Eckpunkts zur <b>Geraden</b> durch \(g\).</p>
           <p>\[ A = \tfrac{1}{2}\, g \cdot h \qquad h = \tfrac{2A}{g} \]</p>
-          <p>Zwei gleiche Dreiecke ergeben ein Parallelogramm mit der Fläche \(g \cdot h\) — das Dreieck ist die Hälfte.</p>
+          <p>Zwei gleiche Dreiecke ergeben ein Parallelogramm mit der Fläche \(g \cdot h\) (ein Dreieck abschneiden und anfügen gibt ein Rechteck \(g \times h\), mehr dazu in Kapitel 3) — das Dreieck ist die Hälfte.</p>
           <p><b>Vorgehen:</b> Grundseite wählen → zugehörige Höhe bestimmen → Einheiten angleichen → Formel einsetzen → prüfen (Skizze, Grössenordnung, Einheit).</p>
           <p>Wandert die Spitze parallel zur Grundseite, bleiben \(g\) und \(h\) gleich — und damit die Fläche.</p>
           <p>Umfang: \(U = a + b + c\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
-          <p>Eine schräge Seite als Höhe nehmen. Die Höhe steht senkrecht auf der Grundseite — im stumpfwinkligen Dreieck liegt sie ausserhalb.</p>
+          <p>Eine schräge Seite als Höhe nehmen. Die Höhe steht senkrecht auf der Grundseite — im stumpfwinkligen Dreieck liegt sie zu den beiden Seiten am stumpfen Winkel ausserhalb.</p>
           <p>Das \(\tfrac{1}{2}\) vergessen: \(g \cdot h\) ist das Parallelogramm.</p>
           <p>Einheiten mischen: \(0.6\,\text{m}\) und \(40\,\text{cm}\) zuerst angleichen.</p>
         </div>
@@ -318,7 +325,7 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
 k2 = kapitel(2, 'flaeche', 'Dreiecksfläche und zugehörige Höhe', 40,
              r'Du findest zu einer Grundseite die richtige Höhe — auch ausserhalb des Dreiecks —, begründest \(A = \tfrac{1}{2}\, g \cdot h\) und berechnest Fläche, Höhe und Umfang mit passenden Einheiten.',
              ('g5-2-lp-flaeche', 'Dreiecksfläche und Höhe'), sim2, ('g5-2-lp-kontrolle-flaeche', 'Kontrollfragen zur Dreiecksfläche'),
-             fest2, [uebung('dreieck-flaeche', 'Fläche berechnen'), uebung('hoehe', 'Höhe aus der Fläche')],
+             fest2, [uebung('zuordnen', 'Welche Linie ist die Höhe?', True), uebung('dreieck-flaeche', 'Fläche berechnen'), uebung('hoehe', 'Höhe aus der Fläche')],
              auf2, f'<a href="{TA}#theorie">Themenseite 5.2a, Berechnung</a>', komp='K2')
 
 # ------------------------------------------------------------------ Kapitel 3
@@ -328,7 +335,7 @@ sim3 = bereich(3, 'Trapez ABCD mit Parallelseiten a = 8 cm und c, Höhe h und Ve
 fest3 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Vierecke</div>
-          <p>Quadrat \(\subset\) Rechteck \(\subset\) Parallelogramm \(\subset\) Trapez; die Raute ist ein Parallelogramm mit vier gleichen Seiten; der Drachen hat zwei Paare gleich langer Nachbarseiten.</p>
+          <p>Quadrat \(\subset\) Rechteck \(\subset\) Parallelogramm \(\subset\) Trapez; die Raute (Rhombus) ist ein Parallelogramm mit vier gleichen Seiten; der Drachen hat zwei Paare gleich langer Nachbarseiten.</p>
           <ul>
             <li>Rechteck \(A = a \cdot b\); Quadrat \(A = a^2\).</li>
             <li>Parallelogramm \(A = a \cdot h\) (abschneiden, anfügen: ein Rechteck).</li>
@@ -372,7 +379,7 @@ fest4 = r'''      <div class="festhalten">
           <p>\[ U = 2\pi r = \pi d \qquad A = \pi r^2 \]</p>
           <p>Kreisteile über den Anteil \(\tfrac{\varphi}{360°}\) des Vollkreises:</p>
           <p>\[ b = \tfrac{\varphi}{360°} \cdot 2\pi r \qquad A_S = \tfrac{\varphi}{360°} \cdot \pi r^2 \]</p>
-          <p><b>Segment</b> (zwischen Sehne und Bogen) \(=\) Sektor \(-\) Dreieck \(M\,P_1\,P_2\). <b>Kreisring:</b> \(A = \pi(R^2 - r^2)\).</p>
+          <p><b>Segment</b> (zwischen Sehne und Bogen) \(=\) Sektor \(-\) Dreieck \(M\,P_1\,P_2\), für \(\varphi \lt 180°\) (darüber kommt das Dreieck dazu). Bei \(\varphi = 90°\) ist das Dreieck rechtwinklig: \(\tfrac{1}{2}\, r^2\). Bei \(\varphi = 60°\) ist es gleichseitig: Höhe \(\sqrt{r^2 - (\tfrac{r}{2})^2}\) mit Pythagoras.</p><p><b>Kreisring:</b> \(A = \pi(R^2 - r^2)\). Die Themenseite schreibt die Sektorfläche \(A_{SK}\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -380,7 +387,7 @@ fest4 = r'''      <div class="festhalten">
           <p>Beim Sektor den Anteil vergessen — und Bogen (Länge) mit Sektor (Fläche) verwechseln.</p>
         </div>
       </div>'''
-auf4 = test('t4', 'Aufgaben · Kapitel 4', 14, [
+auf4 = test('t4', 'Aufgaben · Kapitel 4', 16, [
     ('4a', 2, r'Ein Kreis hat den Radius \(r = 7.5\,\text{cm}\). Berechne Umfang und Fläche.',
      r'<p>\(U = 2\pi \cdot 7.5 \approx 47.12\,\text{cm}\); \(A = \pi \cdot 7.5^2 \approx 176.71\,\text{cm}^2\).</p>', ''),
     ('4b', 2, r'Ein Kreis hat den Durchmesser \(d = 12\,\text{cm}\). Berechne Umfang und Fläche.',
@@ -392,6 +399,8 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 14, [
      fig([['k', [0, 0], 6], ['sek', [0, 0], 6, 0, 90], ['v', [[0, 0], [6, 0], [0, 6]], 'figur'], ['p', [0, 0]], ['t', [0, 0], 'M', 'ecke', -9, 12]], '-7,7,-7', 180, 180)),
     ('4e', 2, r'Warum steht die Tangente im Berührpunkt senkrecht auf dem Radius?',
      r'<p>Der Berührpunkt ist der Punkt der Tangente, der \(M\) am nächsten liegt (Abstand \(r\)); alle anderen liegen ausserhalb des Kreises. Der kürzeste Abstand eines Punkts zu einer Geraden ist das Lot — also steht der Radius senkrecht auf der Tangente.</p>', ''),
+    ('4g', 2, r'Berechne die Fläche des Segments zu \(r = 4\,\text{cm}\) und \(\varphi = 60°\).',
+     r'<p>Sektor \(\tfrac{1}{6} \cdot 16\pi \approx 8.38\,\text{cm}^2\). Das Dreieck ist gleichseitig (Seite \(4\,\text{cm}\)), Höhe \(\sqrt{4^2 - 2^2} = \sqrt{12} \approx 3.46\,\text{cm}\), Fläche \(\tfrac{1}{2} \cdot 4 \cdot \sqrt{12} \approx 6.93\,\text{cm}^2\). Segment \(\approx 1.45\,\text{cm}^2\).</p>', ''),
     ('4f', 2, r'Ein Kreisring hat den Aussenradius \(5\,\text{cm}\) und den Innenradius \(3\,\text{cm}\). Wie gross ist seine Fläche?',
      r'<p>\(A = \pi(5^2 - 3^2) = 16\pi \approx 50.27\,\text{cm}^2\).</p><p class="komm">\(\pi \cdot (5 - 3)^2 = 4\pi\) ist falsch: Differenz der Kreisflächen, nicht Kreis aus der Differenz.</p>', ''),
 ], zwei=False)
@@ -419,15 +428,15 @@ fest5 = r'''      <div class="festhalten">
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
           <p>Flächen mit \(k\) statt mit \(k^2\) strecken: Doppelte Seiten geben die vierfache Fläche.</p>
-          <p>Beim Strahlensatz Abschnitt und ganze Strecke mischen: \(\overline{SA} : \overline{AA'}\) ist nicht \(\overline{SA} : \overline{SA'}\).</p>
+          <p>Beim Strahlensatz mit den Parallelen \(AB\) und \(A'B'\) gehören die ganzen Strecken ab \(S\) dazu: \(\overline{AB} : \overline{A'B'} = \overline{SA} : \overline{SA'}\), nicht \(\overline{SA} : \overline{AA'}\).</p>
         </div>
       </div>'''
 auf5 = test('t5', 'Aufgaben · Kapitel 5', 12, [
     ('5a', 3, r'Ein Dreieck mit den Seiten \(4\,\text{cm}\), \(6\,\text{cm}\) und \(8\,\text{cm}\) wird mit \(k = 1.5\) gestreckt. Wie lang sind die Bildseiten? Mit welchem Faktor ändert sich die Fläche?',
      r'<p>\(6\,\text{cm}\), \(9\,\text{cm}\), \(12\,\text{cm}\); die Fläche mit \(k^2 = 2.25\).</p>', ''),
     ('5b', 3, r"Im Bild ist \(AB \parallel A'B'\), \(\overline{SA} = 3\,\text{cm}\), \(\overline{AA'} = 2\,\text{cm}\) und \(\overline{AB} = 4.2\,\text{cm}\). Wie lang ist \(\overline{A'B'}\)?",
-     r"<p>\(\overline{SA'} = 5\,\text{cm}\); \(\overline{A'B'} = 4.2 \cdot \tfrac{5}{3} = 7\,\text{cm}\).</p><p class=\"komm\">Mit \(\tfrac{2}{3}\) statt \(\tfrac{5}{3}\) gerechnet? Der 2. Strahlensatz braucht die ganzen Strahlenabschnitte ab \(S\).</p>",
-     fig([['s', [0, 0], [7, 1.2], 'verlaengerung'], ['s', [0, 0], [6, 5], 'verlaengerung'], ['s', [3, 0.514], [2.57, 2.14], 'hilfe'], ['s', [5, 0.857], [4.29, 3.57], 'hilfe'], ['p', [0, 0]], ['t', [0, 0], 'S', 'ecke', -8, 4], ['t', [3, 0.514], 'A', 'ecke', 2, 13], ['t', [5, 0.857], "A'", 'ecke', 2, 13], ['t', [2.57, 2.14], 'B', 'ecke', -8, -4], ['t', [4.29, 3.57], "B'", 'ecke', -8, -4]], '-0.8,7.5,-0.8', 220, 160)),
+     r"<p>\(\overline{SA'} = 5\,\text{cm}\); \(\overline{A'B'} = 4.2 \cdot \tfrac{5}{3} = 7\,\text{cm}\).</p><p class=\"komm\">Mit \(\tfrac{2}{3}\) statt \(\tfrac{5}{3}\) gerechnet? Zu den Parallelen gehören die ganzen Strahlenabschnitte ab \(S\).</p>",
+     fig([['s', [0, 0], [6.5, 0], 'verlaengerung'], ['s', [0, 0], [6.5, 9.1], 'verlaengerung'], ['s', [3, 0], [3, 4.2], 'hilfe'], ['s', [5, 0], [5, 7], 'hilfe'], ['p', [0, 0]], ['t', [0, 0], 'S', 'ecke', -8, 4], ['t', [3, 0], 'A', 'ecke', 0, 13], ['t', [5, 0], "A'", 'ecke', 0, 13], ['t', [3, 4.2], 'B', 'ecke', -8, -2], ['t', [5, 7], "B'", 'ecke', -8, -2]], '-0.8,7,-0.9', 200, 230)),
     ('5c', 2, r'Auf einer Karte im Massstab \(1 : 25\,000\) hat ein Wald die Fläche \(8\,\text{cm}^2\). Wie gross ist er in Wirklichkeit?',
      r'<p>Längenfaktor \(25\,000\), Flächenfaktor \(25\,000^2\): \(8 \cdot 625\,000\,000\,\text{cm}^2 = 5\,000\,000\,000\,\text{cm}^2 = 500\,000\,\text{m}^2 = 0.5\,\text{km}^2\).</p>', ''),
     ('5d', 2, r'Warum wächst die Fläche einer Figur mit \(k^2\), wenn alle Längen mit \(k\) wachsen?',
@@ -452,9 +461,9 @@ k0 = '''
     ('0a', 2, r'Ein Rechteck ist \(6\,\text{cm}\) lang und \(4\,\text{cm}\) breit. Berechne Fläche und Umfang.',
      r'<p>\(A = 24\,\text{cm}^2\); \(U = 20\,\text{cm}\).</p>', ''),
     ('0b', 2, r'Wie viele \(\text{cm}^2\) sind \(1\,\text{m}^2\)? Schreib \(250\,\text{cm}^2\) in \(\text{m}^2\).',
-     r'<p>\(1\,\text{m}^2 = 100\,\text{cm} \cdot 100\,\text{cm} = 10\,000\,\text{cm}^2\); \(250\,\text{cm}^2 = 0.025\,\text{m}^2\).</p><p class="komm">Flächeneinheiten haben den Faktor \(100\), nicht \(10\).</p>', ''),
-    ('0c', 2, r'Ein rechtwinkliges Dreieck hat die Katheten \(3\,\text{cm}\) und \(4\,\text{cm}\). Wie lang ist die Hypotenuse?',
-     r'<p>\(\sqrt{9 + 16} = 5\,\text{cm}\).</p><p class="komm">Falsch? Der Clip oben erklärt den Satz; Kapitel 3 braucht ihn.</p>', ''),
+     r'<p>\(1\,\text{m}^2 = 100\,\text{cm} \cdot 100\,\text{cm} = 10\,000\,\text{cm}^2\); \(250\,\text{cm}^2 = 0.025\,\text{m}^2\).</p><p class="komm">Zwischen benachbarten Flächeneinheiten (\(\text{cm}^2\), \(\text{dm}^2\), \(\text{m}^2\)) liegt der Faktor \(100\), nicht \(10\).</p>', ''),
+    ('0c', 2, r'Ein rechtwinkliges Dreieck hat die Katheten \(5\,\text{cm}\) und \(12\,\text{cm}\). Wie lang ist die Hypotenuse?',
+     r'<p>\(\sqrt{25 + 144} = \sqrt{169} = 13\,\text{cm}\).</p><p class="komm">Falsch? Der Clip oben erklärt den Satz; Kapitel 3 braucht ihn.</p>', ''),
     ('0d', 2, r'Löse \(\dfrac{x}{4} = \dfrac{6}{8}\).',
      r'<p>\(x = 4 \cdot \tfrac{6}{8} = 3\).</p><p class="komm">Verhältnisgleichungen braucht Kapitel 5.</p>', ''),
     ('0e', 2, r'Spitz, recht oder stumpf? \(95°\); \(90°\); \(30°\); \(179°\).',
@@ -508,8 +517,10 @@ oben = '''<div id="nav-root"></div>
      Abschätzung der Plausibilität.
 
      Kompetenzmatrix (Kompetenz | Kapitel | Kapitelaufgaben | Gesamttest):
-       K1 | 1, 3, 4 | 1a, 1b, 1d, 3e, 4e | G1, G3
-       K2 | 1–4     | 1c, 2a–2e, 3a–3d, 4a–4f | G1–G5
+       K1 | 1, 3, 4 | 1a, 1b, 1d, 1e, 3e, 4e | G1, G3
+       K2 | 1–4     | 1c, 2a–2e, 3a–3d, 4a–4g | G1–G5
+           (berechnet: Höhe, Winkel, Mittellinie, Bogen, Sektor, Segment; erkannt/gezeichnet: Seiten-,
+            Winkelhalbierende, Mittelsenkrechte, Sehne, Sekante, Tangente; Abstand als Höhe; Grad)
        K3 | 5       | 5a–5e | G6, G7
      Kein Kapitelziel ohne Kompetenz.
 
@@ -585,7 +596,7 @@ oben = '''<div id="nav-root"></div>
         <p class="rlp-quelle">RLP-BM 2030, Grundlagenfach, Teilgebiet 5.2 — Taschenrechner erlaubt:</p>
         <ul>
           <li><b>K1</b> geometrische Sachverhalte von elementaren Objekten (Quadrat, Rechteck, allgemeine und spezielle Dreiecke, Parallelogramm, Rhombus, Trapez, Kreis) beschreiben — Kapitel 1, 3, 4</li>
-          <li><b>K2</b> deren Elemente (Höhen, Seiten- und Winkelhalbierende, Mittelsenkrechte, Mittellinie im Trapez, Sehne, Sekante, Tangente, Sektor, Segment, Winkel und Winkelmass) und Zusammenhänge (Umfang, Flächeninhalt, Abstand) berechnen — Kapitel 1–4</li>
+          <li><b>K2</b> deren Elemente (Höhen, Seiten- und Winkelhalbierende, Mittelsenkrechte, Mittellinie im Trapez, Sehne, Sekante, Tangente, Sektor, Segment, Winkel und Winkelmass) und Zusammenhänge (Umfang, Flächeninhalt, Abstand) berechnen — Kapitel 1–4. Berechnet werden Höhe, Winkel, Mittellinie, Bogen, Sektor und Segment; Seiten- und Winkelhalbierende, Mittelsenkrechte, Sehne, Sekante und Tangente werden erkannt und gezeichnet; der Abstand kommt als Höhe (Lot) vor; Winkel nur in Grad (Bogenmass: Teilgebiet 5.4).</li>
           <li><b>K3</b> die Ähnlichkeit für Berechnungen in der Ebene nutzen — Kapitel 5</li>
         </ul>
         <p class="rlp-quelle">Nicht hier, sondern auf den Themenseiten <a href="''' + TA + '''">5.2a</a>–<a href="''' + TD + '''">5.2d</a>: Kongruenzsätze und Konstruktionen, Katheten- und Höhensatz, regelmässige Vielecke. Trigonometrie: Teilgebiet 5.3.</p>

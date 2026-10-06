@@ -572,7 +572,7 @@ beliebige Figuren in Fensterkoordinaten; mit `"achsen": false` bleibt nur das Ka
 ```
 
 Farben 1–4 wie sonst, 5 = Tinte; `dicke` (Standard 4), `gestrichelt`, `fuellung` (Deckkraft der
-Fläche). Winkel in Grad gegen den Uhrzeigersinn. **Das Fenster gleich teilen** (Spanne x zu
+Fläche), `deckkraft` (der Linie — ein Kreisring ist ein Kreis mit `dicke` = Ringbreite und `deckkraft` 0.3). Winkel in Grad gegen den Uhrzeigersinn. **Das Fenster gleich teilen** (Spanne x zu
 Spanne y wie Breite zu Höhe), sonst wird der Kreis zur Ellipse und der rechte Winkel schief.
 
 ### Bild einer Animation — `typ: "bild"` und `"animation"`
