@@ -258,3 +258,56 @@ Ob die Mathe-Regel «fünf Stellen» auch für Physik gelten soll, ist nicht ent
 
 **Warum.** Gleiche Bedienung in beiden Fächern; die Seite zeigt auf einen Blick, zu welcher Themenseite
 ein Leitprogramm gehört.
+
+### 06.10.2026 · Clip-Bibliothek `clips.html`: drei Spalten je Themenseite (Auftrag Auftraggeber 06.10.2026)
+
+**Was.** Den Aufbau übernehmen, den Mathe am 06.10.2026 eingeführt hat (Commits `d1403b0`, `9b87336`,
+`4bcae0c`, `a8b9c0d`, `36f874b`). Grundstruktur bleibt (Lerngebiete aufklappbar). Im Lerngebiet je
+Themenseite eine Zwischenüberschrift (Nummer + Titel, Link zur Seite) und eine dreispaltige Tabelle:
+1. **Animationen** — Clips mit `animation`, hinterlegt, Link «Anim» (Reihenfolge = Lage auf der Seite).
+2. **Leitprogramm** — die eigenen Clips (`"probe": true`) der sichtbaren Leitprogramme, in deren
+   Reihenfolge; Spaltenkopf verlinkt das Leitprogramm; je Zeile vorn «LP» auf die Animation des Kapitels
+   (`leitprogramme/<name>.html#simN`, die `figure.sim` im selben `section.kap`). Kontrollclips stehen
+   mit drin und zeigen auf dieselbe Animation. Bibliotheksclips, die ein Leitprogramm mitbenutzt,
+   bleiben in Spalte 1 oder 3.
+3. **Weitere Clips** — der Rest, ruhige weisse Zeilen.
+Unter 720 px untereinander. Leere Spalte «—».
+
+**Technik in Mathe** (Vorlage): `scripts/clips_bibliothek.py` (Mathe-Modul, baut den Block,
+`REIHEN_VORN`) und in `build-clips-einbau.py` nur zwei Zeilen: `import clips_bibliothek; REIHEN = …`
+nach `REIHEN` und der Aufruf `clips_bibliothek.block_bibliothek(alle, seiten, sys.modules[__name__])`
+statt `block_bibliothek(alle, seiten)` — so bleibt die KERN-Datei auf ihrer Grundlinie (Mathe 83.0 %).
+CSS nur im `<style>` von `clips.html`, nicht in `style.css`.
+
+**Nachgezählt im Physik-Repo** (Stand `57fde7e`, nur gelesen):
+- `clips.json`: 205 Clips, davon 116 mit `animation` (Spalte 1 wird oft die volle sein), **0 mit
+  `werkzeug`** — die Mathe-Regel «TR-Clips dunkel mit Marke TR» ist in Physik vorerst gegenstandslos.
+- 97 Drehbücher mit `"probe": true`, alle mit `lektion`. In Leitprogrammen: Kinematik 10, Dynamik 10,
+  Energie 12, Statik 12, Hydrostatik 12, Elektrizität 14 (= **70** für Spalte 2), dazu
+  `uebungstest-waermelehre` 15. Die übrigen 12 hängen an keinem Leitprogramm und bleiben draussen.
+  Die acht älteren Leitprogramme (Rechnen, Vorwissen, Wärme …) benutzen nur Bibliotheksclips — ihre
+  Spalte 2 bleibt leer.
+- Die sechs neuen Leitprogramme haben `section.kap#kN` und `figure.sim#simN` wie Mathe — die LP-Links
+  lassen sich gleich bestimmen.
+- **Anpassungen gegenüber Mathe:**
+  - `lerngebiete()` liefert in Physik **3-Tupel** `(nr, titel, ids)` ohne Fach (flache Liste
+    0, 4, 5, 6, 99) — die Schleife in `clips_bibliothek.block_bibliothek` und die Gliederung nach
+    Fach (`h2` Grundlagen-/Schwerpunktfach, `.cl-sp`) entfallen.
+  - «Sichtbar» bestimmt Mathe über den Kommentar `<!-- ALTE LEITPROGRAMME`; in Physik heisst die
+    Grenze `<h2 id="veraltet">` (drei veraltete Elektrizitäts-LPs). Die Funktion
+    `sichtbare_leitprogramme` dort schneiden.
+  - Farben: eine Bereichsfarbe, **Bernstein** (`--bernstein`, `--bernstein-hell`, `--bernstein-rand`).
+    Mathe: Spalte 1 in `--blau-hell`/`--lila-hell`, Spalte 2 in einem helleren Ton derselben Farbe
+    (#eef4fb / #f5f1fb), Spalte 3 weiss mit Nummer in der Bereichsfarbe. In Physik entsprechend
+    Bernstein-hell und ein hellerer Bernsteinton; die Animationsclips sind in Physiks `style.css`
+    heute so gefärbt, wie Physik es für Animationen vorsieht — prüfen, ob Spalte 1 dort schon passt.
+  - `REIHEN_VORN` ist Mathe-Inhalt; Physik braucht eine eigene Liste, falls Reihen einer Seite
+    alphabetisch nicht aufbauend stehen (nachsehen: Themenseiten mit mehreren Reihen).
+
+**Offene Frage an den Auftraggeber, vor dem Übertrag:** Gehören die 15 Clips des
+`uebungstest-waermelehre` (Prüfungsbogen, sichtbar) in Spalte 2? In Mathe sind die Prüfungsbogen-LPs
+ausgeblendet und darum draussen. Ohne `section.kap`/`figure.sim` hätten ihre «LP»-Links kein
+Animationsziel (Rückfall: Kapitelanfang bzw. Seite).
+
+**Warum.** Gleiche Bibliothek in beiden Fächern; die Leitprogramm-Clips sind sonst nur im
+Leitprogramm auffindbar.
