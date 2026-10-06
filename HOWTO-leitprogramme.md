@@ -462,7 +462,7 @@ Der Reihe nach; in Klammern, woran man merkt, dass der Punkt fehlt.
 
 | Datei | was |
 |---|---|
-| `leitprogramme.html` | Karte im Raster (sichtbar sind seit 06.10.2026 nur die Leitprogramme mit Kontrollfragen; die älteren stehen auskommentiert) |
+| `leitprogramme.html` | Karte im Raster (sichtbar sind seit 06.10.2026 nur die Leitprogramme mit Kontrollfragen; die älteren vorübergehend unter «Alte Leitprogramme») |
 | `scripts/build-seo.py` | Eintrag in `SEITEN` (Beschreibung, Sitemap) |
 | `scripts/build-suchindex.py` | Eintrag in der Liste der Nachschlagewerke |
 | Themenseite | Kasten nach den Lernzielen: «🧭 Lieber geführt? Leitprogramm *…* (≈ n Lektionen)» |

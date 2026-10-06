@@ -54,7 +54,8 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `polynomfunktionen`, `exp-log-funktionen`, `trigonometrische-funktionen`,
   `betragsfunktionen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
   `gleichungssysteme`, `uebungspruefung-1`, `trigo2`) bleiben als Dateien bestehen, ihre
-  Kärtchen stehen auskommentiert in `leitprogramme.html`, sie tragen `noindex` und fehlen
+  Kärtchen stehen vorübergehend unter «Alte Leitprogramme (werden demnächst ersetzt)»
+  am Ende von `leitprogramme.html`; sie tragen `noindex` und fehlen
   im Suchindex. Die Indexseite zeigt neben jeder Themenseite mit Leitprogramm eine
   kleine Pille «LP» (`.karte-lp`/`.lp-link` in `index.html`). Die zwei Arten:
   - *nach Thema* (10: `potenzen.html`, `quadratische-gleichungen.html`,
