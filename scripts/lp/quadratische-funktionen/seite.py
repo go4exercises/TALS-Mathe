@@ -405,7 +405,7 @@ oben = '''<div id="nav-root"></div>
     <div>
       <p class="marke">begreifbar.ch · Leitprogramm</p>
       <h1>Quadratische Funktionen</h1>
-      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Fünf Kapitel und Gesamttest, rund fünf Lektionen.</p>
+      <p class="unter">Zuschauen, tüfteln, kontrollieren, üben. Fünf Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest.</p>
     </div>
     <div class="kopf-rechts">
       <button class="themenschalter" type="button" id="themenschalter">Dunkel / Hell</button>
@@ -419,25 +419,16 @@ oben = '''<div id="nav-root"></div>
 
   <nav class="schiene" aria-label="Kapitelnavigation">
     <h2 id="ablauf">Ablauf</h2>
-    <p class="lekt">Lektion 1</p>
+    <p class="lekt">Vorab</p>
     <ol>
       <li><a href="#k0"><span class="nr">0</span><span>Vorwissen</span></a></li>
+    </ol>
+    <p class="lekt">Kapitel</p>
+    <ol>
       <li><a href="#k1"><span class="nr">1</span><span>Die Parabel bewegen</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 2</p>
-    <ol>
       <li><a href="#k2"><span class="nr">2</span><span>Drei Formen</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 3</p>
-    <ol>
       <li><a href="#k3"><span class="nr">3</span><span>Nullstellen und Scheitel</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 4</p>
-    <ol>
       <li><a href="#k4"><span class="nr">4</span><span>Gleichung aufstellen</span></a></li>
-    </ol>
-    <p class="lekt">Lektion 5</p>
-    <ol>
       <li><a href="#k5"><span class="nr">5</span><span>Extremwerte</span></a></li>
     </ol>
     <p class="lekt">Abschluss</p>
@@ -488,9 +479,8 @@ unten = '''
 '''
 band = lambda n, t: f'\n    <div class="band"><span>{n if isinstance(n, str) else "Lektion " + str(n)}</span><span class="strich"></span><span>{t}</span></div>\n'
 # Zeiten (03.10.2026): K0 10 · K1 35 · K2 40 · K3 40 · K4 40 · K5 45 · Gesamttest 25 = 235 min
-body = (oben + band(1, 'Die Parabel sehen') + k0 + k1 + band(2, 'Drei Formen') + k2
-        + band(3, 'Berechnen') + k3 + band(4, 'Aufstellen') + k4
-        + band(5, 'Anwenden') + k5 + band('Abschluss', 'Gesamttest') + gt + unten)
+# Kapitel = Lektion: keine Lektionsbänder mehr; Vorwissen und Gesamttest kommen davor und danach.
+body = (oben + k0 + k1 + k2 + k3 + k4 + k5 + gt + unten)
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(R + 'leitprogramme/quadratische-funktionen.html', 'w').write(seite)
 print('geschrieben', len(seite.splitlines()), 'Zeilen')
