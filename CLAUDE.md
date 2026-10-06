@@ -43,25 +43,26 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   im Seitenskript und nennen das **Ergebnis** der Rechnung, nicht die Aufgabe — geübt wird
   nur die Schreibweise; jede Lösung vor dem Eintrag mit `python3` nachrechnen. Hängt wie ein
   Leitprogramm an `nav.js`, `build-seo.py` und `build-suchindex.py`.
-- `leitprogramme/` — 12 Seiten zum selbstständigen Durcharbeiten, je eine
+- `leitprogramme/` — 14 Seiten zum selbstständigen Durcharbeiten, je eine
   eigenständige Seite mit eigenem `<style>` (wie `clips/`, darum vom Skelett-Check
   ausgenommen). Schriften über `../schriften.css`, MathJax über
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt. **Seit dem 06.10.2026 sind dort nur die
-  sieben neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar**
+  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** — acht
   (`quadratische-funktionen`, `lineare-funktionen`, `potenz-wurzelfunktionen`,
   `polynomfunktionen`, `exp-log-funktionen`, `trigonometrische-funktionen`,
-  `betragsfunktionen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
+  `betragsfunktionen`, `planimetrie`; noch unverlinkt, Abnahme offen: `lineare-quadratische-gleichungen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
   `gleichungssysteme`, `uebungspruefung-1`, `trigo2`) bleiben als Dateien bestehen, ihre
   Kärtchen stehen vorübergehend unter «Alte Leitprogramme (werden demnächst ersetzt)»
   am Ende von `leitprogramme.html`; sie tragen `noindex` und fehlen
   im Suchindex. Die Indexseite zeigt neben jeder Themenseite mit Leitprogramm eine
   kleine Pille «LP» (`.karte-lp`/`.lp-link` in `index.html`). Die zwei Arten:
-  - *nach Thema* (10: `potenzen.html`, `quadratische-gleichungen.html`,
+  - *nach Thema* (12: `potenzen.html`, `quadratische-gleichungen.html`,
     `gleichungssysteme.html`, `quadratische-funktionen.html`, `lineare-funktionen.html`,
     `exp-log-funktionen.html`, `trigonometrische-funktionen.html`, `betragsfunktionen.html`,
-    `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`)
+    `potenz-wurzelfunktionen.html`, `polynomfunktionen.html`, `lineare-quadratische-gleichungen.html`
+    (Umformer statt Regler), `planimetrie.html` (Geometrie-Arbeitsbereich))
     — Vorwissenstest, 4–5 Kapitel,
     Gesamttest. `quadratische-funktionen.html` ist das Vorbild für neue (Kapitelmuster mit
     Einführungs- und Kontrollclip, Animation mit Aufgabenleiste, Übungen mit Rückmeldung,

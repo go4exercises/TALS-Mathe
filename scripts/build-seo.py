@@ -168,9 +168,6 @@ SEITEN = {
    themen=['Mathematik', 'Trigonometrische Funktionen', 'Sinusfunktion', 'Einheitskreis', 'Periode', 'Leitprogramm']),
  'leitprogramme/planimetrie.html': dict(
    typ='article', lrt='Leitprogramm',
-   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
-   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
-   noindex=True,
    titel='Leitprogramm Planimetrie — Dreiecke, Vierecke, Kreis und Ähnlichkeit',
    beschreibung='Leitprogramm zur Planimetrie nach RLP GF 5.2: Dreiecke beschreiben und ihre Elemente, Dreiecksfläche und zugehörige Höhe, Vierecke mit Mittellinie und Pythagoras, Kreis und Kreisteile, zentrische Streckung, Ähnlichkeit und Strahlensätze — mit Clips, einem Geometrie-Arbeitsbereich zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Planimetrie', 'Dreieck', 'Kreis', 'Ähnlichkeit', 'Leitprogramm']),
