@@ -20,6 +20,10 @@ Farben — eine Farbe, eine Bedeutung (HOWTO-leitprogramme §15), gleich wie auf
   5 Tinte  = neutral: Asymptote, Sättigungswert, y = x, Bezugskurve
 """
 import json
+import os as _os
+import sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))   # scripts/lp/fragebild.py
+from fragebild import anwenden as anwenden_fragebild   # noqa: E402
 import math
 import os
 import zlib
@@ -162,6 +166,7 @@ def clip(name, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip'
          'szenen': szenen}
     if fragen:
         d['fragen'] = fragen
+    anwenden_fragebild(d)                               # beim Fragen nur das Gegebene
     json.dump(d, open(R + 'clips/' + d['dateiname'] + '.json', 'w'), ensure_ascii=False, indent=1)
     print(d['dateiname'], len(szenen), 'Szenen', len(fragen or []), 'Fragen')
 

@@ -6,6 +6,8 @@
 | `seite.js` | Seitenskript: Koordinatensysteme, Aufgabenleiste, Simulationen sim1–sim5, Übungen mit Rückmeldung (`TYPEN`), Minigrafen | wird von `seite.py` eingesetzt |
 | `kontrollclips.py` | Archiv: hat die fünf Kontrollclips erzeugt | **nein** — die JSONs in `clips/` sind die Quelle |
 
+Fragebild (06.10.2026): `python3 scripts/lp/fragebild.py clips/g3-3-lp-kontrolle-*.json` — idempotent, Regeln in `scripts/lp/fragebild.py`.
+
 ## Ablauf bei einer Änderung
 
 ```sh

@@ -20,6 +20,10 @@ Farben — eine Farbe, eine Bedeutung (HOWTO-leitprogramme §15), gleich wie auf
   5 Tinte  = neutral: die Funktion f vor dem Betrag, Symmetrieachse
 """
 import json
+import os as _os
+import sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))   # scripts/lp/fragebild.py
+from fragebild import anwenden as anwenden_fragebild   # noqa: E402
 import os
 import zlib
 
@@ -142,6 +146,7 @@ def clip(name, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip'
          'szenen': szenen}
     if fragen:
         d['fragen'] = fragen
+    anwenden_fragebild(d)                               # beim Fragen nur das Gegebene
     json.dump(d, open(R + 'clips/' + d['dateiname'] + '.json', 'w'), ensure_ascii=False, indent=1)
     print(d['dateiname'], len(szenen), 'Szenen', len(fragen or []), 'Fragen')
 
@@ -177,7 +182,7 @@ clip('betragsfunktion', 'Knick sehen: die Betragsfunktion',
             f(r'\text{Knick } (0 \mid 0)', 300, 58),
             n('Steigung @-1@ links, @+1@ rechts|symmetrisch: @|-x| = |x|@', 430, 'blau', ein=4.0),
             graf(W1, [vk([[0, 1, 0, 0]], knick=True, achse=True)], ein=0.3,
-                 punkte=[pt(-3, 3, 1, '(−3 | 3)', [-3.2, 3.7], 'end'), pt(3, 3, 1, '(3 | 3)', [3.2, 3.7])])),
+                 punkte=[pt(-3, 3, 1, '(−3 | 3)', [-3.3, 2.0], 'end'), pt(3, 3, 1, '(3 | 3)', [3.3, 2.0])])),
          sz('Merke',
             'Zum Mitnehmen: Der Betrag ist der Abstand zur Null. Die Betragsfunktion ist abschnittsweise linear, mit einem Knick '
             'im Nullpunkt. Ihre Werte sind nie negativ.',
@@ -202,7 +207,7 @@ clip('kontrolle-betragsfunktion', 'Knick sehen: Kontrollfragen zur Betragsfunkti
             'Bei x gleich minus drei ist der Betrag drei. Der Punkt liegt bei minus drei, drei, auf dem linken Ast.',
             f(r'|-3| = 3', 300, 62, ein=1.4),
             graf(W1, [vk([[0, 1, 0, 0]])]),
-            graf(W1, [vk([[0, 1, 0, 0]])], ein=1.4, punkte=[pt(-3, 3, 1, '(−3 | 3)', [-3.2, 3.7], 'end')])),
+            graf(W1, [vk([[0, 1, 0, 0]])], ein=1.4, punkte=[pt(-3, 3, 1, '(−3 | 3)', [-3.3, 2.0], 'end')])),
          sz('Frage 4',
             'Für negative x dreht der Betrag das Vorzeichen: Betrag von x ist minus x. Minus x ist dann positiv.',
             f(r'x \lt 0: \; |x| = -x', 300, 58, ein=1.0),
@@ -544,7 +549,7 @@ clip('kontrolle-abschnittsweise', 'Knick sehen: Kontrollfragen zum abschnittswei
             f(r'|x + 2| + |x - 1|: \text{ Boden } y = 3', 300, 46, ein=1.4),
             graf(WW, [fest('abs(x+2)+abs(x-1)', farbe=1, gestrichelt=False)]),
             graf(WW, [fest('abs(x+2)+abs(x-1)', farbe=1, gestrichelt=False)], ein=1.4,
-                 punkte=[pt(1, 3, 1, '(1 | 3)', [1.2, 3.7])])),
+                 punkte=[pt(1, 3, 1, '(1 | 3)', [1.3, 2.2])])),
          sz('Frage 5',
             'Links des Bodens fallen beide Beträge: Steigung minus eins plus minus eins, also minus zwei.',
             f(r'-1 + (-1) = -2', 300, 62, ein=1.0),
@@ -662,7 +667,7 @@ clip('kontrolle-gleichungen', 'Knick sehen: Kontrollfragen zu Gleichungen und Un
             'Die rechte Lösung von Betrag von x minus eins gleich zwei ist drei.',
             f(r'x - 1 = 2 \;\Rightarrow\; x = 3', 300, 54, ein=1.4),
             graf(W2, [vk([[0, 1, 1, 0]]), fest('2', farbe=2)]),
-            graf(W2, [vk([[0, 1, 1, 0]]), fest('2', farbe=2)], ein=1.4, punkte=[pt(3, 2, 2, '(3 | 2)', [3.3, 2.7])])),
+            graf(W2, [vk([[0, 1, 1, 0]]), fest('2', farbe=2)], ein=1.4, punkte=[pt(3, 2, 2, '(3 | 2)', [3.3, 1.2])])),
          sz('Frage 5',
             'Die Waagrechte y gleich vier berührt den Buckel und schneidet die beiden äusseren Äste: drei Lösungen.',
             f(r'|x^2 - 4| = 4: \; 3 \text{ Lösungen}', 300, 50, ein=1.0),

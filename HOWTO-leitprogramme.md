@@ -599,8 +599,13 @@ gegen sie und darüber hinaus.
   «neutrale» Startkurve, kein Steigungsdreieck, kein Lösungspunkt, und die gefragte Kurve nicht,
   wenn sie aus der Gleichung zu bestimmen ist (sonst wird Rechnen zu Ablesen). Die Auflösung
   erscheint erst nach der Antwort (ab 1.0 s) und zeigt dann alles: die Kurve und bei Wahlfragen
-  auch die falschen Angebote (z. B. alle drei Punkte, die falschen rot). Vorbild:
-  `fragebild()` in `scripts/lp/lineare-funktionen/clips.py`. Bisher galt: Antwort nicht im Bild
+  auch die falschen Angebote (z. B. alle drei Punkte, die falschen rot). Umgesetzt
+  mit `scripts/lp/fragebild.py` (Tabelle `REGELN` je Clip und Frage; die Bauskripte rufen
+  `anwenden(d)` vor dem Schreiben, für Quadratische Funktionen wird es direkt auf die JSONs
+  angewendet) und mit `fragebild()` in `scripts/lp/lineare-funktionen/clips.py`. Eine Kurve
+  bleibt nur, wo die Frage sie als Bild gibt («im Bild», «gestrichelt», «dieser Kurve») oder
+  wo sie im Leitprogramm nicht aus der Gleichung zu gewinnen ist (Extrema einer kubischen
+  Funktion ohne Ableitung). Bisher galt: Antwort nicht im Bild
   (erster Stützpunkt neutral, Begleiter und Beschriftung erst nach der Antwort). Das gilt auch für
   **Begleiter, die ihre Koordinaten anschreiben** — ein `startpunkt` oder eine `marke`
   auf dem Klickziel beantwortet die Frage, bevor sie gestellt ist.
