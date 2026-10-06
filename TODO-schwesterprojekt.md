@@ -211,3 +211,50 @@ portieren und Punkt 3 beim ersten neuen Leitprogramm entstehen zu lassen — so,
 Physik-Drehbücher. Der Übertrag hält das Werkzeug gleich; gebraucht wird er erst, wenn ein
 Physik-Clip ein Koordinatenbild zeigt (etwa p-V-Diagramm, Kennlinie, Weg-Zeit-Gesetz).
 Dafür spricht einiges — aber es ist ein eigener Entscheid, kein Automatismus.
+
+### 06.10.2026 · Leitprogramme-Seite: Kacheln wie in Mathe (Auftrag Auftraggeber 06.10.2026)
+
+**Was.** `leitprogramme.html` bekommt den Aufbau, den Mathe am 06.10.2026 eingeführt hat (Commits
+`27780cf`, `f94de6b`): **eine Kachel je Leitprogramm**, die ganze Kachel führt zum Leitprogramm
+(unsichtbarer Link `a.karte` über der Kachel). Auf der Kachel steht **je Themenseite eine Zeile**: der
+Titel der Themenseite und rechts eine Pille mit ihrer Nummer, die zur Themenseite führt. Nur Titel und
+Nummer — keine Beschreibung, keine Meta-Zeile. Gegliedert nach Themenbereich (in Physik: Lerngebiet),
+innerhalb nach Nummer sortiert; keine Einleitung über den Kacheln. Vorlage: `leitprogramme.html` in Mathe,
+`<style>`-Block im Kopf und Abschnitt zwischen `LEITPROGRAMME:ANFANG` und den alten Leitprogrammen;
+Linkprüfung mit einem `elementFromPoint`-Lauf (Titel → Leitprogramm, Pille → Themenseite).
+
+**Nachgezählt im Physik-Repo** (Stand `57fde7e`, nur gelesen):
+- Heute: 17 Kacheln `a.lp-karte` in `div.lp-liste` (Nummer, Titel, Beschreibung, Meta, Pfeil) unter vier
+  `h2` (Lerngebiet 0, 4, 5, 6) plus «Veraltet: wird entfernt» (3 Kacheln).
+- **Namenskonflikt:** `style.css` (Z. 1626–1670) definiert schon `.lp-liste`, `.lp-karte`, `.lp-nr`. Mathe
+  benutzt `.lp-nr` für die Nummer des Themenbereichs — beim Übertrag eigene Namen oder die bestehenden
+  Regeln ersetzen, nicht beide nebeneinander.
+- Farbe: eine Bereichsfarbe, Bernstein (`--bernstein`, `--bernstein-hell`, `--bernstein-rand` vorhanden),
+  statt Blau/Violett; die Gliederung nach Fach (Grundlagen-/Schwerpunktfach) entfällt.
+- Themenseiten (`themen/`, 17): 0.0–0.5, 4.1–4.5, 5.1–5.3, 6.1, 6.1a, 6.2.
+- Vorgeschlagene Zuordnung (aus der Meta-Zeile «Lerngebiet …» und den Kästen «Lieber geführt?»):
+
+| Leitprogramm | Zeilen (Pille → Themenseite) |
+|---|---|
+| `leitprogramm-rechnen` | 0.1 Rechnen und Schliessen |
+| `leitprogramm-vorwissen` «Grössen, Messen, Druck» | 0.2 Grössen, Einheiten und Messen; 0.3 Messen — Waagen, Dichte, Einheiten *(zu entscheiden; der Kasten steht auf 0.0–0.5 und 4.1/4.2/4.5)* |
+| `leitprogramm-kinematik` … `-hydrostatik` | je eine: 4.1 Kinematik des Schwerpunkts, 4.2 Dynamik, 4.3 Energie, 4.4 Statik von Festkörpern, 4.5 Hydrostatik |
+| `leitprogramm-waermemenge` | 5.1 Temperatur; 5.2 Wärme (Meta: «Lerngebiete 5.1 und 5.2») |
+| `leitprogramm-experimente-waerme`, `-heizen` | je 5.2 Wärme |
+| `leitprogramm-waermeausdehnung`, `-ideale-gase` | je 5.3 Wärmeausdehnung |
+| `uebungstest-waermelehre` | 5.2 Wärme; 5.3 Wärmeausdehnung (Meta auch «0») |
+| `leitprogramm-elektrizitaet` | 6.2 Elektrizität |
+
+**Offene Frage an den Auftraggeber, vor dem Übertrag:** In Mathe hat jede Themenseite höchstens ein
+Leitprogramm, darum reicht ihr Titel. In Physik teilen sich **drei** Leitprogramme die Themenseite 5.2
+(Wärme im Experiment, Wärmemenge, Heizen) und **zwei** die 5.3 (Wärmeausdehnung, Ideale Gase) — mit nur dem
+Themenseitentitel wären diese Kacheln nicht zu unterscheiden. Vorschlag: In diesen Fällen den Titel des
+Leitprogramms als Kopfzeile der Kachel, darunter die Zeilen mit Nummer. Ebenso offen: ob «Veraltet: wird
+entfernt» (3 Kacheln) im alten Aufbau bleibt (in Mathe bleiben die alten Leitprogramme unverändert).
+
+**Nebenbefund, nicht Teil des Auftrags:** Die Physik-Indexseite hat keine LP-Pillen (`karte-lp`/`lp-link`:
+0 Treffer), und nur 6 Themenseiten (0.x ausgenommen) tragen einen Kasten «Lieber geführt?» (4.1–4.5, 6.2).
+Ob die Mathe-Regel «fünf Stellen» auch für Physik gelten soll, ist nicht entschieden.
+
+**Warum.** Gleiche Bedienung in beiden Fächern; die Seite zeigt auf einen Blick, zu welcher Themenseite
+ein Leitprogramm gehört.
