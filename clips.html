@@ -107,16 +107,35 @@
   letter-spacing: 0.05em; text-transform: uppercase; color: var(--tinte-2); }
 .cl-sk a { color: inherit; }
 .cl-keine { margin: 2px 4px; color: var(--tinte-2); font-size: 0.8rem; }
+/* Farben in der Tabelle (überdacht 06.10.2026): Spalte «Animationen» bleibt wie auf den
+   Themenseiten (blau hinterlegt, «Anim»). Spalten «Leitprogramm» und «Weitere Clips» ruhig:
+   weisse Zeilen, Nummer in der Bereichsfarbe (GF blau, SP violett) statt der Reihen-Nuancen.
+   «LP» als Marke in der Bereichsfarbe auf Papiergrau. Taschenrechner-Clips stechen heraus:
+   dunkle Zeile mit Marke «TR». */
+.cl-tabelle .clip:not(.cl-anim) .cl-clip { border-left-color: transparent; }
+.cl-tabelle .clip:not(.cl-anim):not(.cl-trz) .cl-folge { background: var(--blau); }
+.cl-sp .cl-tabelle .clip:not(.cl-anim):not(.cl-trz) .cl-folge { background: var(--lila); }
+.cl-tabelle .clip:not(.cl-anim) .cl-folge.cl-ohne { background: none; color: var(--tinte-2); }
 .cl-lp { display: flex; align-items: stretch; }
 .cl-lp[hidden] { display: none; }
 .cl-lp .cl-clip { flex: 1; min-width: 0; }
-/* «LP» wie «Anim», in der Farbe der LP-Pillen der Startseite */
 .cl-lplink { flex-shrink: 0; display: flex; align-items: center; padding: 0 8px 0 12px;
-  background: var(--orange-hell); color: var(--orange); text-decoration: none;
+  background: var(--papier-2); color: var(--blau); text-decoration: none;
   font-family: var(--mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.4px;
-  border-left: 3px solid var(--orange); }
+  border-left: 3px solid var(--blau); }
+.cl-sp .cl-lplink { color: var(--lila); border-left-color: var(--lila); }
 .cl-lplink:hover { text-decoration: underline; }
-.cl-lplink:focus-visible { outline: 2px solid var(--orange); outline-offset: -2px; }
+.cl-lplink:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+.cl-trz { display: flex; align-items: stretch; border-radius: 6px; overflow: hidden; }
+.cl-trz[hidden] { display: none; }
+.cl-trmarke { flex-shrink: 0; display: flex; align-items: center; padding: 0 9px 0 12px;
+  background: var(--tinte); color: var(--weiss); font-family: var(--mono); font-size: 0.62rem;
+  font-weight: 700; letter-spacing: 0.4px; }
+.cl-trz .cl-clip, .cl-sp .cl-trz .cl-clip { flex: 1; min-width: 0; background: var(--tinte);
+  color: var(--weiss); border-left: 0; padding-left: 4px; }
+.cl-trz .cl-clip:hover, .cl-sp .cl-trz .cl-clip:hover { background: #3a362f; }
+.cl-trz .cl-titel, .cl-trz .cl-zeit { color: var(--weiss); }
+.cl-trz .cl-folge, .cl-sp .cl-trz .cl-folge { background: var(--weiss); color: var(--tinte); }
 @media (max-width: 720px) {
   .cl-tabelle { grid-template-columns: 1fr; }
   .cl-spalte + .cl-spalte { border-left: 0; border-top: 1px solid var(--linie); }
@@ -281,35 +300,40 @@ MathJax = {
               <span class="cl-zeit">0:36</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-2-ti30x-grundrechenarten" data-clip="clips/g1-2-ti30x-grundrechenarten.html" data-titel="Zahlenbrüche: Vorrang, Vorzeichen und Bruchtaste am Rechner" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-2-ti30x-grundrechenarten" data-clip="clips/g1-2-ti30x-grundrechenarten.html" data-titel="Zahlenbrüche: Vorrang, Vorzeichen und Bruchtaste am Rechner" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Zahlenbrüche: Vorrang, Vorzeichen und Bruchtaste am Rechner">
               <span class="cl-folge">2</span>
               <span class="cl-titel">Zahlenbrüche: Vorrang, Vorzeichen und Bruchtaste am Rechner</span>
               <span class="cl-zeit">1:11</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-2-ti30x-tastenfolge" data-clip="clips/g1-2-ti30x-tastenfolge.html" data-titel="Zahlenbrüche: die Tastenfolge, Taste für Taste" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-2-ti30x-tastenfolge" data-clip="clips/g1-2-ti30x-tastenfolge.html" data-titel="Zahlenbrüche: die Tastenfolge, Taste für Taste" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Zahlenbrüche: die Tastenfolge, Taste für Taste">
               <span class="cl-folge">3</span>
               <span class="cl-titel">Zahlenbrüche: die Tastenfolge, Taste für Taste</span>
               <span class="cl-zeit">1:07</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-2-ti30x-brueche" data-clip="clips/g1-2-ti30x-brueche.html" data-titel="Zahlenbrüche: gemischte Zahlen und die Dezimalfalle" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-2-ti30x-brueche" data-clip="clips/g1-2-ti30x-brueche.html" data-titel="Zahlenbrüche: gemischte Zahlen und die Dezimalfalle" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Zahlenbrüche: gemischte Zahlen und die Dezimalfalle">
               <span class="cl-folge">4</span>
               <span class="cl-titel">Zahlenbrüche: gemischte Zahlen und die Dezimalfalle</span>
               <span class="cl-zeit">1:15</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-2-ti30x-ans-protokoll" data-clip="clips/g1-2-ti30x-ans-protokoll.html" data-titel="Zahlenbrüche: mit dem letzten Ergebnis weiterrechnen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-2-ti30x-ans-protokoll" data-clip="clips/g1-2-ti30x-ans-protokoll.html" data-titel="Zahlenbrüche: mit dem letzten Ergebnis weiterrechnen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Zahlenbrüche: mit dem letzten Ergebnis weiterrechnen">
               <span class="cl-folge">5</span>
               <span class="cl-titel">Zahlenbrüche: mit dem letzten Ergebnis weiterrechnen</span>
               <span class="cl-zeit">1:20</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-2-ti30x-ggt-kgv" data-clip="clips/g1-2-ti30x-ggt-kgv.html" data-titel="Zahlenbrüche: ggT, kgV und die Primfaktoren auf Tastendruck" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-2-ti30x-ggt-kgv" data-clip="clips/g1-2-ti30x-ggt-kgv.html" data-titel="Zahlenbrüche: ggT, kgV und die Primfaktoren auf Tastendruck" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Zahlenbrüche: ggT, kgV und die Primfaktoren auf Tastendruck">
               <span class="cl-folge">6</span>
               <span class="cl-titel">Zahlenbrüche: ggT, kgV und die Primfaktoren auf Tastendruck</span>
@@ -543,7 +567,8 @@ MathJax = {
               <span class="cl-zeit">1:32</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-4-ti30x-potenzen-wurzeln" data-clip="clips/g1-4-ti30x-potenzen-wurzeln.html" data-titel="Potenzen: Quadrat, Potenz und Wurzel am Rechner" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-4-ti30x-potenzen-wurzeln" data-clip="clips/g1-4-ti30x-potenzen-wurzeln.html" data-titel="Potenzen: Quadrat, Potenz und Wurzel am Rechner" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Potenzen: Quadrat, Potenz und Wurzel am Rechner">
               <span class="cl-folge">7</span>
               <span class="cl-titel">Potenzen: Quadrat, Potenz und Wurzel am Rechner</span>
@@ -557,7 +582,8 @@ MathJax = {
               <span class="cl-zeit">0:41</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-4-ti30x-modus" data-clip="clips/g1-4-ti30x-modus.html" data-titel="Runden: was das mode-Menü an der Anzeige ändert — und was nicht" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-4-ti30x-modus" data-clip="clips/g1-4-ti30x-modus.html" data-titel="Runden: was das mode-Menü an der Anzeige ändert — und was nicht" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Runden: was das mode-Menü an der Anzeige ändert — und was nicht">
               <span class="cl-folge">2</span>
               <span class="cl-titel">Runden: was das mode-Menü an der Anzeige ändert — und was nicht</span>
@@ -571,14 +597,16 @@ MathJax = {
               <span class="cl-zeit">0:52</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-4-ti30x-ee-eng" data-clip="clips/g1-4-ti30x-ee-eng.html" data-titel="Zehnerpotenzen: mit EE eingeben, in ENG die Vorsilbe ablesen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-4-ti30x-ee-eng" data-clip="clips/g1-4-ti30x-ee-eng.html" data-titel="Zehnerpotenzen: mit EE eingeben, in ENG die Vorsilbe ablesen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Zehnerpotenzen: mit EE eingeben, in ENG die Vorsilbe ablesen">
               <span class="cl-folge">2</span>
               <span class="cl-titel">Zehnerpotenzen: mit EE eingeben, in ENG die Vorsilbe ablesen</span>
               <span class="cl-zeit">1:20</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g1-4-ti30x-konstanten" data-clip="clips/g1-4-ti30x-konstanten.html" data-titel="Zehnerpotenzen: Naturkonstanten aus dem Rechner holen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g1-4-ti30x-konstanten" data-clip="clips/g1-4-ti30x-konstanten.html" data-titel="Zehnerpotenzen: Naturkonstanten aus dem Rechner holen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Zehnerpotenzen: Naturkonstanten aus dem Rechner holen">
               <span class="cl-folge">3</span>
               <span class="cl-titel">Zehnerpotenzen: Naturkonstanten aus dem Rechner holen</span>
@@ -648,7 +676,8 @@ MathJax = {
               <span class="cl-zeit">0:57</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g2-1-ti30x-num-solv-sachaufgabe" data-clip="clips/g2-1-ti30x-num-solv-sachaufgabe.html" data-titel="Gleichungen verstehen: vom Ansatz direkt zur Lösung" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g2-1-ti30x-num-solv-sachaufgabe" data-clip="clips/g2-1-ti30x-num-solv-sachaufgabe.html" data-titel="Gleichungen verstehen: vom Ansatz direkt zur Lösung" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungen verstehen: vom Ansatz direkt zur Lösung">
               <span class="cl-folge">3</span>
               <span class="cl-titel">Gleichungen verstehen: vom Ansatz direkt zur Lösung</span>
@@ -957,14 +986,16 @@ MathJax = {
               <span class="cl-zeit">1:06</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g2-2b-ti30x-poly-solv" data-clip="clips/g2-2b-ti30x-poly-solv.html" data-titel="Quadratische Gleichungen: mit poly-solv lösen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g2-2b-ti30x-poly-solv" data-clip="clips/g2-2b-ti30x-poly-solv.html" data-titel="Quadratische Gleichungen: mit poly-solv lösen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Quadratische Gleichungen: mit poly-solv lösen">
               <span class="cl-folge">9</span>
               <span class="cl-titel">Quadratische Gleichungen: mit poly-solv lösen</span>
               <span class="cl-zeit">1:11</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g2-2b-ti30x-real-oder-i" data-clip="clips/g2-2b-ti30x-real-oder-i.html" data-titel="Quadratische Gleichungen: wenn der Rechner Domain meldet" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g2-2b-ti30x-real-oder-i" data-clip="clips/g2-2b-ti30x-real-oder-i.html" data-titel="Quadratische Gleichungen: wenn der Rechner Domain meldet" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Quadratische Gleichungen: wenn der Rechner Domain meldet">
               <span class="cl-folge">10</span>
               <span class="cl-titel">Quadratische Gleichungen: wenn der Rechner Domain meldet</span>
@@ -1125,7 +1156,8 @@ MathJax = {
               <span class="cl-zeit">0:57</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g2-3-ti30x-sys-solv" data-clip="clips/g2-3-ti30x-sys-solv.html" data-titel="Gleichungssysteme: 2×2 mit sys-solv lösen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g2-3-ti30x-sys-solv" data-clip="clips/g2-3-ti30x-sys-solv.html" data-titel="Gleichungssysteme: 2×2 mit sys-solv lösen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Gleichungssysteme: 2×2 mit sys-solv lösen">
               <span class="cl-folge">9</span>
               <span class="cl-titel">Gleichungssysteme: 2×2 mit sys-solv lösen</span>
@@ -1301,7 +1333,8 @@ MathJax = {
               <span class="cl-zeit">0:41</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g3-1-ti30x-wertetabelle" data-clip="clips/g3-1-ti30x-wertetabelle.html" data-titel="Funktionen: die Wertetabelle vom Rechner füllen lassen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g3-1-ti30x-wertetabelle" data-clip="clips/g3-1-ti30x-wertetabelle.html" data-titel="Funktionen: die Wertetabelle vom Rechner füllen lassen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Funktionen: die Wertetabelle vom Rechner füllen lassen">
               <span class="cl-folge">7</span>
               <span class="cl-titel">Funktionen: die Wertetabelle vom Rechner füllen lassen</span>
@@ -1674,7 +1707,8 @@ MathJax = {
               <span class="cl-zeit">0:47</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g3-3-ti30x-scheitel-tabelle" data-clip="clips/g3-3-ti30x-scheitel-tabelle.html" data-titel="Quadratische Funktionen: den Scheitel in der Tabelle einkreisen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g3-3-ti30x-scheitel-tabelle" data-clip="clips/g3-3-ti30x-scheitel-tabelle.html" data-titel="Quadratische Funktionen: den Scheitel in der Tabelle einkreisen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Quadratische Funktionen: den Scheitel in der Tabelle einkreisen">
               <span class="cl-folge">10</span>
               <span class="cl-titel">Quadratische Funktionen: den Scheitel in der Tabelle einkreisen</span>
@@ -1884,14 +1918,16 @@ MathJax = {
               <span class="cl-zeit">0:48</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g4-3-ti30x-lagemasse" data-clip="clips/g4-3-ti30x-lagemasse.html" data-titel="Lagemasse: aus einer Datenreihe mit dem Rechner" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g4-3-ti30x-lagemasse" data-clip="clips/g4-3-ti30x-lagemasse.html" data-titel="Lagemasse: aus einer Datenreihe mit dem Rechner" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Lagemasse: aus einer Datenreihe mit dem Rechner">
               <span class="cl-folge">2</span>
               <span class="cl-titel">Lagemasse: aus einer Datenreihe mit dem Rechner</span>
               <span class="cl-zeit">1:02</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g4-3-ti30x-haeufigkeiten" data-clip="clips/g4-3-ti30x-haeufigkeiten.html" data-titel="Lagemasse: aus einer Häufigkeitstabelle statt aus der Urliste" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g4-3-ti30x-haeufigkeiten" data-clip="clips/g4-3-ti30x-haeufigkeiten.html" data-titel="Lagemasse: aus einer Häufigkeitstabelle statt aus der Urliste" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Lagemasse: aus einer Häufigkeitstabelle statt aus der Urliste">
               <span class="cl-folge">5</span>
               <span class="cl-titel">Lagemasse: aus einer Häufigkeitstabelle statt aus der Urliste</span>
@@ -2559,7 +2595,8 @@ MathJax = {
         </div>
         <div class="cl-spalte">
           <p class="cl-sk">Weitere Clips</p>
-          <div class="clip cl-tr" data-clip="clips/g1-4-ti30x-modus.html" data-titel="Runden: was das mode-Menü an der Anzeige ändert — und was nicht" data-modus="gross">
+          <div class="clip cl-tr cl-trz" data-clip="clips/g1-4-ti30x-modus.html" data-titel="Runden: was das mode-Menü an der Anzeige ändert — und was nicht" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Runden: was das mode-Menü an der Anzeige ändert — und was nicht">
               <span class="cl-folge">2</span>
               <span class="cl-titel">Runden: was das mode-Menü an der Anzeige ändert — und was nicht</span>
@@ -2608,7 +2645,8 @@ MathJax = {
               <span class="cl-zeit">0:51</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-g5-3-ti30x-dms" data-clip="clips/g5-3-ti30x-dms.html" data-titel="Trigonometrie: Grad, Minuten und Sekunden eintippen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-g5-3-ti30x-dms" data-clip="clips/g5-3-ti30x-dms.html" data-titel="Trigonometrie: Grad, Minuten und Sekunden eintippen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Trigonometrie: Grad, Minuten und Sekunden eintippen">
               <span class="cl-folge">7</span>
               <span class="cl-titel">Trigonometrie: Grad, Minuten und Sekunden eintippen</span>
@@ -2900,7 +2938,8 @@ MathJax = {
               <span class="cl-zeit">0:56</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-s1-2-ti30x-op" data-clip="clips/s1-2-ti30x-op.html" data-titel="Potenzen: Wachstum Schritt für Schritt durchdrücken" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-s1-2-ti30x-op" data-clip="clips/s1-2-ti30x-op.html" data-titel="Potenzen: Wachstum Schritt für Schritt durchdrücken" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Potenzen: Wachstum Schritt für Schritt durchdrücken">
               <span class="cl-folge">3</span>
               <span class="cl-titel">Potenzen: Wachstum Schritt für Schritt durchdrücken</span>
@@ -2960,7 +2999,8 @@ MathJax = {
               <span class="cl-zeit">0:50</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-s1-3-ti30x-logbase" data-clip="clips/s1-3-ti30x-logbase.html" data-titel="Logarithmen: jede Basis direkt eintippen" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-s1-3-ti30x-logbase" data-clip="clips/s1-3-ti30x-logbase.html" data-titel="Logarithmen: jede Basis direkt eintippen" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Logarithmen: jede Basis direkt eintippen">
               <span class="cl-folge">3</span>
               <span class="cl-titel">Logarithmen: jede Basis direkt eintippen</span>
@@ -3235,7 +3275,8 @@ MathJax = {
               <span class="cl-zeit">0:44</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-s2-2c-ti30x-num-solv" data-clip="clips/s2-2c-ti30x-num-solv.html" data-titel="Polynomgleichungen: numerisch lösen — Chancen und Gefahren" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-s2-2c-ti30x-num-solv" data-clip="clips/s2-2c-ti30x-num-solv.html" data-titel="Polynomgleichungen: numerisch lösen — Chancen und Gefahren" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Polynomgleichungen: numerisch lösen — Chancen und Gefahren">
               <span class="cl-folge">1</span>
               <span class="cl-titel">Polynomgleichungen: numerisch lösen — Chancen und Gefahren</span>
@@ -4347,7 +4388,8 @@ MathJax = {
               <span class="cl-zeit">0:45</span>
             </button>
           </div>
-          <div class="clip cl-tr" id="clip-s4-2a-ti30x-expr-eval" data-clip="clips/s4-2a-ti30x-expr-eval.html" data-titel="Körper: eine Formel einmal eintippen, mehrfach auswerten" data-modus="gross">
+          <div class="clip cl-tr cl-trz" id="clip-s4-2a-ti30x-expr-eval" data-clip="clips/s4-2a-ti30x-expr-eval.html" data-titel="Körper: eine Formel einmal eintippen, mehrfach auswerten" data-modus="gross">
+            <span class="cl-trmarke" aria-hidden="true">TR</span>
             <button class="clip-start cl-clip" type="button" onclick="clipStart(this)" aria-label="Clip abspielen: Körper: eine Formel einmal eintippen, mehrfach auswerten">
               <span class="cl-folge">2</span>
               <span class="cl-titel">Körper: eine Formel einmal eintippen, mehrfach auswerten</span>

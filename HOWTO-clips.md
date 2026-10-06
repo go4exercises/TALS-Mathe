@@ -959,7 +959,13 @@ dreispaltige Tabelle: **Animationen** (Clips mit `animation`), **Leitprogramm** 
 Clips der sichtbaren Leitprogramme, `"probe": true`, in der Reihenfolge des Leitprogramms;
 die Spaltenüberschrift verlinkt es; jede Zeile trägt vorn den Link «LP» auf die Animation
 ihres Kapitels im Leitprogramm, `#simN`, wie «Anim» bei den Clips der Themenseiten) und
-**Weitere Clips** (alle übrigen). Ein
+**Weitere Clips** (alle übrigen).
+
+**Farben in der Tabelle:** Spalte 1 wie auf den Themenseiten (blau hinterlegt, «Anim»).
+Spalten 2 und 3 ruhig: weisse Zeilen, Nummer in der Bereichsfarbe (GF blau, SP violett) statt
+der Reihen-Nuancen; «LP» als Marke in der Bereichsfarbe auf Papiergrau — kein Orange oder
+Bernstein (das ist die Physik). Taschenrechner-Clips (`werkzeug`) stechen heraus: dunkle
+Zeile (`--tinte`) mit Marke «TR». Ein
 Bibliotheksclip, den ein Leitprogramm mitbenutzt, bleibt in Spalte 1 oder 3. Unter 720 px
 stehen die Spalten untereinander.
 

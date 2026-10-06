@@ -172,6 +172,10 @@ def block_bibliothek(alle, seiten, e):
                         zz[0] = zz[0].replace('<div class="clip ', '<div class="clip cl-lp ', 1)
                         zz.insert(1, f'  <a class="cl-lplink" href="{c["lplink"]}"'
                                      f' aria-label="Zur Animation im Leitprogramm: {html.escape(c["titel"])}">LP</a>')
+                    if c.get("werkzeug"):
+                        # Taschenrechner-Clips sollen herausstechen: dunkle Zeile mit Marke «TR»
+                        zz[0] = zz[0].replace('<div class="clip cl-tr', '<div class="clip cl-tr cl-trz', 1)
+                        zz.insert(1, '  <span class="cl-trmarke" aria-hidden="true">TR</span>')
                     aus += ["          " + z for z in zz]
                 aus.append('        </div>')
             aus += ['      </div>', '    </div>']
