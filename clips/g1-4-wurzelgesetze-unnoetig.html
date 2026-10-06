@@ -206,6 +206,9 @@ if (!location.search.includes('render')) {
   };
   pp.onclick = toggle;
   document.addEventListener('keydown', e => {
+    const ziel = e.target && e.target.closest ? e.target : null;
+    if (ziel && ziel.closest('input, select, textarea')) return;
+    if (e.code === 'Space' && ziel && ziel.closest('button, a, summary')) return;
     if (e.code === 'Space') { e.preventDefault(); toggle(); }
     if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
     if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }

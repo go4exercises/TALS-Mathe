@@ -343,6 +343,17 @@ Voraussage (predict–observe–explain) wandert in den Clip selbst:
 - `klick`: Tippen ins bewegte Bild der Szene (braucht ein `graf` mit `bewegung` —
   Parabel oder Gerade —, denn dessen Fenster rechnet den Tipp in Koordinaten um). `fallen` sind typische falsche
   Stellen mit eigener Rückmeldung; ein grüner Kreis zeigt danach die richtige Stelle.
+  `toleranz` ist eine Zahl (Abstand in Dateneinheiten) oder `[dx, dy]` je Achse, wenn die
+  Achsen verschiedene Grössen tragen. **`eingabe`: `["x", "y"]`** — dieselbe Antwort ohne
+  Zeigegerät: zwei Zahlfelder und «Prüfen», gleiche Auswertung samt `fallen`. Die Namen sind die
+  Achsennamen des `graf` (`["t", "y"]` beim Sättigungsclip). Gesetzt bei allen Klickfragen mit
+  ablesbaren Koordinaten (34 Fragen, Stand 06.10.2026); nicht in der Planimetrie, deren Figuren
+  ohne Achsen stehen. Die LP-Bauskripte setzen es im Helfer `klick()` (Vorgabe `('x', 'y')`).
+- **Bedienung ohne Maus** (aus Physik, 06.10.2026): Beim Erscheinen einer Frage liegt der Fokus
+  auf der ersten Antwort bzw. dem ersten Eingabefeld; Tab, Enter und die Leertaste bedienen sie.
+  Die Leertaste schaltet nur dann Play/Pause, wenn kein Knopf, Link oder Eingabefeld den Fokus
+  hat. Nach der Frage geht der Fokus zurück auf Play/Pause. `kopf` ersetzt die Kopfzeile «Deine
+  Vorhersage» (z. B. «Dein Vorgehen»); ohne das Feld unverändert.
 - Der Clip hält nur beim **Abspielen** an. Spulen erkennt `FRAGEN_JS` ausdrücklich
   (Klick auf die Zeitleiste, ← →), nicht am Zeitabstand zweier Bilder: Ein Sprung an
   einer Frage vorbei löst sie nicht aus, eine beantwortete Frage kommt beim Zurückspulen

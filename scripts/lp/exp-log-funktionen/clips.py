@@ -133,13 +133,15 @@ def wahl(szene, text, opt, richtig, rueck, sprich=None, rueck_sprich=None, bei=0
 
 
 def klick(szene, text, ziel, richtig_text, fallen, falsch_text, sprich=None, falsch_sprich=None,
-          tol=0.45, bei=0.3):
+          tol=0.45, bei=0.3, eingabe=('x', 'y')):
     d = {'szene': szene, 'bei': bei, 'typ': 'klick', 'text': text, 'ziel': ziel, 'toleranz': tol,
          'richtig_text': richtig_text, 'fallen': fallen, 'falsch_text': falsch_text}
     if sprich:
         d['sprich'] = sprich
     if falsch_sprich:
         d['falsch_sprich'] = falsch_sprich
+    if eingabe:
+        d['eingabe'] = list(eingabe)   # Antwort ohne Zeigegeraet: zwei Zahlfelder (build-clips.py)
     return d
 
 
@@ -737,7 +739,7 @@ clip('kontrolle-saettigung', 'Exponentialkurve sehen: Kontrollfragen zur Sättig
                sprich='Tipp die Stelle der waagrechten Asymptote dieser Kurve bei t gleich zwei ins Bild.',
                falsch_sprich='Nicht ganz. Der grüne Kreis zeigt die Stelle. Wohin strebt die Kurve?',
                # y-Einheiten sind hier klein (120 auf 744 px): 4 Einheiten ≈ 25 px.
-               tol=4),
+               tol=4, eingabe=('t', 'y')),
      ], art='Kontrollclip')
 
 # ════════════════════════════════════════════════ Kapitel 5 · Einführung

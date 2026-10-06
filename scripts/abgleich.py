@@ -125,36 +125,6 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Physik', was='build-clips.py: bewegte Geraden standen im Endzustand; neues Feld "ab" (03.10.2026)',
-         wie='(1) FEHLER in BEWEGUNG_JS, auch in Mathe (build-clips.py Z. 871, 904, 911): bewegeGerade '
-             'liest t - T.L.t0, T.L ist aber das Element, nicht der Listeneintrag mit t0. Ergebnis NaN, '
-             'bewZustand liefert den letzten Stuetzpunkt: Jede bewegte Gerade, jeder Laeufer und jedes '
-             'wandernde Steigungsdreieck steht sofort im Endzustand. In Mathe betrifft das die Clips '
-             'g3-2-lp-* (Gerade sehen und Kontrollclips) — dort steht die Antwort einer klick-Frage '
-             'womoeglich schon im Bild. Physik-Fix: T.L.t0 -> T.t0 und in bewegen() vor dem Aufruf '
-             'T.t0 = L.t0. Danach alle Clips mit "bewegung" an Geraden neu bauen und Pruefbilder bei '
-             '0.3 s jeder Fragenszene ansehen. (2) Neu: "ab" an einer bewegten Geraden — die Strecke '
-             'beginnt erst bei diesem x (Q-t- oder R-l-Gerade ohne negativen Teil); ohne das Feld bleibt '
-             'alles gleich. Diese Datei und build-clips.py aus Physik uebernehmen; danach build-clips.py '
-             'KERN wieder >= 0.98. (3) Neu in Physik und fuer Mathe nuetzlich: .claude/tools/'
-             'pruef-formelsatz.mjs setzt die Zufallsuebungen mit echtem MathJax (pruef-uebungen schaltet '
-             'es ab und sah darum ein «\\text{\\mu C}» nicht).'),
-    dict(quelle='Physik', was='build-clips.py: Fragen im Clip per Tastatur, Toleranz je Achse, Eingabe statt Tippen (04.10.2026)',
-         wie='Aus der Pruefung des Leitprogramms Elektrizitaet. (1) FEHLER, auch in Mathe (build-clips.py '
-             'Z. 1835): Der Hauptabspieler faengt die Leertaste ueberall ab (preventDefault + toggle) — '
-             'ein fokussierter Antwortknopf laesst sich damit nicht bestaetigen, die Leertaste schaltet '
-             'stattdessen Play/Pause. Physik: Tastenkuerzel nicht in input/select/textarea, die Leertaste '
-             'nicht auf button/a/summary; dasselbe fuer «R» im FRAGEN_JS. (2) Fokus: zeigen() setzt ihn '
-             'nach display:block auf die erste Antwort (vorher geht focus() auf ein verstecktes Element '
-             'ins Leere), schliessen() gibt ihn an Play/Pause zurueck, auch wenn er mit dem gesperrten '
-             'Knopf schon auf <body> gefallen ist. (3) "toleranz" darf [dx, dy] sein (je Achse, statt '
-             'Math.hypot in Dateneinheiten, Mathe Z. 1150) — noetig, wenn die Achsen verschiedene '
-             'Groessen tragen; eine Zahl wirkt wie bisher. (4) Neues Feld "eingabe": ["t in s", "Q in C"] '
-             'an einer klick-Frage — zwei Zahlfelder und «Pruefen» als gleichwertiger Weg ohne Maus, '
-             'gleiche Auswertung (pruefePunkt) samt fallen. Mathe hat 70 Fragen in 14 Clips, 15 davon '
-             'klick: dort "eingabe" je Frage nachtragen, sonst bleiben sie ohne Zeigegeraet unloesbar. '
-             'Danach die 14 Clips neu bauen und pruef-fragen laufen lassen. Diese Datei und '
-             'build-clips.py aus Physik uebernehmen.'),
     dict(quelle='Physik', was='build-clips.py: graf mit flaechen, strecken, texte und "achsen": false (06.10.2026)',
          wie='Neu in graf_svg, alles statisch in Datenkoordinaten, ohne die Felder Byte fuer Byte wie vorher '
              '(geprueft an vier Clips): "flaechen" (gefuelltes Vieleck unter allen Linien, "deckung", '
@@ -172,6 +142,19 @@ OFFEN = [
              'ersten Sekunden) — in Mathe betrifft das g3-3-lp-verschieben, falls die erste Frage spaet kommt. '
              'Ebenfalls 06.10.: bewegte Parabeln kennen "ab"/"bis" (data-ab/data-bis, BEWEGUNG_JS begrenzt '
              'den Bogen); ohne die Felder Byte fuer Byte gleich.'),
+    dict(quelle='Mathe', was='build-clips.py zusammenfuehren statt kopieren (06.10.2026)',
+         wie='Mathe hat die Eintraege «bewegte Geraden …» und «Fragen per Tastatur …» abgearbeitet: '
+             '(1) Der Fehler T.L.t0 war in Mathe schon am 03.10.2026 behoben (6dc9244, liest T.t0); '
+             '"ab" an Geraden braucht Mathe nicht; pruef-formelsatz.mjs uebernommen (neun LPs ohne Befund). '
+             '(2) FRAGEN_JS-Block (Fokus, Leertaste, toleranz [dx, dy], "eingabe", "kopf") und der '
+             'Leertasten-Schutz im Abspieler aus Physik uebernommen; "eingabe" an 34 Klickfragen. '
+             'Die ganze Datei zu kopieren ginge nicht: Mathe hat seit dem 03.10. mehr eingebaut als Physik '
+             '(2359 gegen 1972 Zeilen: "figuren" mit deckkraft, bewegte Polynome/Potenz/Exponential/'
+             'Sinus/Tangens/Betrag, Einheitskreis, Kurven-Teile). Physik hat dafuer flaechen/strecken/texte, '
+             '"achsen": false, ab/bis an Parabeln, Textbreite aus `breite`, `mitnehmen`. Die Grundlinie '
+             '0.98 erreicht erst eine Zusammenfuehrung in beide Richtungen; bis dahin meldet der Pre-Flight '
+             'beidseits Drift (heute 82 %). Naechster Schritt in Physik: Mathes graf-Erweiterungen '
+             'uebernehmen, dann Physiks Fassung hierher.'),
 ]
 FACH = {
     'nav.js': 'Seitenbaum und Lerngebiete — je Fach ein anderer.',
