@@ -109,12 +109,72 @@ def klick(szene, text, ziel, richtig_text, fallen, falsch_text, sprich=None, fal
     return d
 
 
-JETZT_DU = sz('Jetzt du', 'Jetzt du: Erkunde diese Zusammenhänge in der nachfolgenden Animation und löse die Aufgaben.',
+JETZT_DU_ANIM = sz('Jetzt du', 'Jetzt du: Erkunde diese Zusammenhänge in der nachfolgenden Animation und löse die Aufgaben.',
+                   titel('Jetzt du', 280, 86),
+                   n('Erkunde diese Zusammenhänge|in der Animation unter dem Clip|und löse die Aufgaben.', 430, 'blau', 50, ein=0.6))
+# Kapitel 1–4: Unter dem Clip folgt der Umformer, keine Animation (Prüfung 06.10.2026).
+JETZT_DU = sz('Jetzt du', 'Jetzt du: Löse die Aufgaben im Umformer unter dem Clip.',
               titel('Jetzt du', 280, 86),
-              n('Erkunde diese Zusammenhänge|in der Animation unter dem Clip|und löse die Aufgaben.', 430, 'blau', 50, ein=0.6))
+              n('Löse die Aufgaben|im Umformer unter dem Clip.', 430, 'blau', 50, ein=0.6))
+
+
+# Neuvertonung 06.10.2026: Piper spricht bei jedem Lauf etwas anders, auch unveränderte Szenen sind
+# um bis zu 3.5 s kürzer oder länger geworden. Die Einblendezeiten unten im Skript gehören zur alten
+# Tonspur; ZEITVERSATZ bildet sie je Szene auf die neue ab (Stützpunkte alt → neu aus
+# .claude/tools/sprechzeiten.py, über die gesprochene Zeit gemittelt). Betrifft `ein` und die
+# Zeiten von `bewegung`. Szenen mit neuem Text sind direkt auf die neue Tonspur gelegt.
+ZEITVERSATZ = {
+    ('ergaenzen', 'Wurzelziehen'): [[0, 0], [0.46, 0.66], [1.76, 2.3], [2.12, 2.3], [3.88, 4.07], [4.26, 4.07], [5.56, 5.55], [5.8, 5.55], [8.24, 8.17], [8.72, 8.17], [12.3, 11.96], [13.25, 12.83]],
+    ('ergaenzen', 'Ein Quadrat mit Klammer'): [[0, 0], [0.42, 0.42], [3.06, 3.49], [3.3, 3.49], [5.1, 5.32], [5.26, 5.32], [6.06, 6.3], [6.42, 6.3], [8.68, 8.6], [10.2, 9.51]],
+    ('ergaenzen', 'Quadratisch ergänzen'): [[0, 0], [0.44, 0.46], [1.88, 2.21], [2.06, 2.21], [4.6, 5.13], [4.76, 5.13], [5.64, 6.04], [5.82, 6.04], [8.4, 8.9], [8.62, 8.9], [9.78, 10.28], [9.98, 10.28], [11.3, 11.65], [11.48, 11.65], [13.44, 13.87], [13.6, 13.87], [14.26, 14.55], [14.42, 14.55], [15.22, 15.38], [20.2, 16.7]],
+    ('ergaenzen', 'Die Mitternachtsformel'): [[0, 0], [0.6, 0.56], [2.48, 2.77], [2.7, 2.77], [3.94, 4.08], [4.12, 4.08], [6.14, 6.21], [6.4, 6.21], [8.58, 8.94], [9.55, 9.91]],
+    ('ergaenzen', 'Ein Beispiel'): [[0, 0], [0.42, 0.44], [5.16, 5.5], [5.4, 5.5], [5.88, 6.23], [6.08, 6.23], [6.92, 7.35], [7.36, 7.35], [8.78, 8.99], [8.96, 8.99], [11.22, 11.31], [11.4, 11.31], [12.22, 12.15], [12.56, 12.15], [13.06, 13.04], [13.22, 13.04], [15.52, 15.84], [17.6, 16.8]],
+    ('kontrolle-nullprodukt', 'Frage 1'): [[0, 0], [0.46, 0.48], [4.94, 4.7], [5.2, 4.7], [6.46, 6.11], [6.64, 6.11], [8.98, 8.5], [9.95, 9.41]],
+    ('kontrolle-nullprodukt', 'Frage 3'): [[0, 0], [0.44, 0.68], [2.92, 3.5], [3.26, 3.5], [5.36, 5.56], [6.26, 6.49]],
+    ('kontrolle-verfahren', 'Frage 1'): [[0, 0], [0.46, 0.44], [3.12, 3.08], [3.32, 3.08], [4.78, 5.05], [5.18, 5.05], [6.26, 6.06], [6.44, 6.06], [6.98, 6.76], [7.85, 7.7]],
+    ('nullprodukt', 'Der Satz vom Nullprodukt'): [[0, 0], [0.44, 0.44], [2.0, 1.97], [2.2, 1.97], [3.74, 3.68], [4.02, 3.68], [6.9, 7.56], [7.3, 7.56], [9.22, 9.44], [10.12, 10.34]],
+    ('nullprodukt', 'Vorgelöst'): [[0, 0], [0.44, 0.44], [1.36, 1.59], [1.56, 1.59], [3.64, 3.99], [3.82, 3.99], [5.46, 5.74], [5.8, 5.74], [8.74, 9.17], [9.02, 9.17], [10.36, 10.72], [10.58, 10.72], [11.36, 11.47], [11.52, 11.47], [13.02, 13.17], [13.28, 13.17], [14.2, 14.06], [17.2, 15.5]],
+    ('nullprodukt', 'Die Probe'): [[0, 0], [0.54, 0.52], [2.0, 2.19], [2.24, 2.19], [3.06, 3.2], [3.28, 3.2], [4.12, 4.19], [4.28, 4.19], [5.34, 5.54], [5.62, 5.54], [7.4, 7.31], [7.64, 7.31], [8.26, 7.92], [8.62, 7.92], [13.6, 12.86], [14.44, 13.73]],
+    ('nullprodukt', 'Der teure Fehler'): [[0, 0], [0.46, 0.46], [1.42, 1.42], [1.64, 1.42], [2.62, 2.65], [2.92, 2.65], [4.1, 4.09], [4.28, 4.09], [5.32, 5.3], [5.74, 5.3], [7.32, 6.87], [7.48, 6.87], [10.38, 10.04], [11.27, 10.94]],
+    ('parameter', 'Ein zweiter Buchstabe'): [[0, 0], [0.48, 0.46], [3.86, 3.84], [4.06, 3.84], [4.48, 4.66], [4.92, 4.66], [6.8, 6.54], [7.76, 7.6]],
+    ('parameter', 'Sortieren'): [[0, 0], [0.42, 0.42], [2.8, 3.26], [3.04, 3.26], [4.08, 4.36], [4.28, 4.36], [5.04, 5.16], [5.26, 5.16], [6.62, 6.59], [6.82, 6.59], [8.84, 8.71], [9.04, 8.71], [10.72, 10.48], [10.98, 10.48], [12.56, 12.14], [13.59, 13.3]],
+    ('parameter', 'Die Fälle'): [[0, 0], [0.46, 0.46], [1.4, 1.39], [1.64, 1.39], [3.4, 3.66], [3.6, 3.66], [4.26, 4.55], [4.46, 4.55], [11.34, 11.82], [11.5, 11.82], [14.02, 14.3], [14.86, 15.28]],
+    ('parameter', 'Quadratisch'): [[0, 0], [0.44, 0.44], [6.68, 6.79], [7.0, 6.79], [9.2, 9.13], [9.38, 9.13], [10.22, 10.32], [10.38, 10.32], [11.92, 11.85], [12.14, 11.85], [13.86, 13.86], [14.08, 13.86], [16.14, 16.12], [18.8, 17.04]],
+    ('umformen', 'Gleich bleibt gleich'): [[0, 0], [0.46, 0.46], [1.96, 1.92], [2.18, 1.92], [3.82, 3.75], [4.24, 3.75], [5.32, 5.26], [5.5, 5.26], [6.32, 6.26], [6.62, 6.26], [9.96, 9.72], [10.84, 10.59]],
+    ('umformen', 'Die Probe'): [[0, 0], [0.44, 0.44], [2.54, 2.41], [2.8, 2.41], [3.22, 3.0], [3.44, 3.0], [6.74, 7.08], [6.92, 7.08], [8.32, 8.57], [8.48, 8.57], [9.3, 9.82], [9.78, 9.82], [12.72, 12.58], [13.67, 13.54]],
+    ('umformen', 'Wenn x verschwindet'): [[0, 0], [0.46, 0.46], [10.26, 10.12], [10.44, 10.12], [11.36, 11.19], [11.7, 11.19], [14.56, 14.35], [14.76, 14.35], [16.24, 16.06], [17.21, 16.99]],
+    ('umformen', 'Alles ist Lösung'): [[0, 0], [0.46, 0.46], [4.24, 4.37], [4.42, 4.37], [7.98, 9.01], [8.42, 9.01], [9.26, 10.22], [9.44, 10.22], [10.24, 11.24], [10.42, 11.24], [11.64, 12.78], [11.9, 12.78], [13.74, 14.69], [13.9, 14.69], [15.5, 16.34], [16.37, 17.22]],
+    ('umformen', 'Merke'): [[0, 0], [0.4, 0.56], [1.2, 1.71], [1.52, 1.71], [3.12, 3.54], [3.3, 3.54], [4.96, 5.54], [5.18, 5.54], [6.06, 6.45], [6.24, 6.45], [7.32, 7.57], [7.48, 7.57], [10.92, 11.12], [11.26, 11.12], [12.28, 12.6], [13.22, 13.52]],
+    ('verfahren', 'Erst ordnen'): [[0, 0], [0.46, 0.44], [1.98, 1.96], [2.18, 1.96], [4.18, 4.17], [4.44, 4.17], [5.36, 5.35], [5.76, 5.35], [7.2, 6.8], [7.36, 6.8], [8.04, 7.74], [8.32, 7.74], [9.88, 9.58], [10.06, 9.58], [12.38, 12.13], [12.62, 12.13], [14.8, 14.77], [15.0, 14.77], [16.96, 16.74], [18.4, 19.0]],
+    ('verfahren', 'Wenn c fehlt'): [[0, 0], [0.42, 0.4], [1.64, 1.62], [1.8, 1.62], [4.48, 4.3], [4.82, 4.3], [6.26, 5.98], [6.64, 5.98], [8.68, 8.38], [10.4, 9.36]],
+    ('verfahren', 'Ein Binom'): [[0, 0], [0.52, 0.44], [5.72, 6.03], [5.88, 6.03], [7.08, 7.58], [7.28, 7.58], [7.58, 8.14], [10.0, 9.06]],
+    ('verfahren', 'Sonst die Formel'): [[0, 0], [0.66, 0.68], [1.6, 1.65], [1.78, 1.65], [2.98, 3.17], [3.32, 3.17], [4.36, 4.24], [4.7, 4.24], [7.06, 6.91], [7.36, 6.91], [9.12, 8.88], [9.38, 8.88], [10.42, 10.16], [10.76, 10.16], [12.48, 12.19], [12.66, 12.19], [14.54, 14.13], [14.72, 14.13], [15.2, 14.62], [16.11, 15.63]],
+}
+
+
+def _versatz(knoten, t):
+    for (a0, b0), (a1, b1) in zip(knoten, knoten[1:]):
+        if t <= a1:
+            return round(b0 + (b1 - b0) * (t - a0) / (a1 - a0), 2) if a1 > a0 else b1
+    return round(knoten[-1][1] + t - knoten[-1][0], 2)
+
+
+def zeiten_anpassen(name, szenen):
+    for q in szenen:
+        kn = ZEITVERSATZ.get((name, q['name']))
+        if not kn:
+            continue
+        for el in q['elemente']:
+            if 'ein' in el:
+                el['ein'] = _versatz(kn, el['ein'])
+            for art in ('parabeln', 'geraden', 'kurven'):
+                for k in el.get(art) or []:
+                    if 'bewegung' in k:
+                        k['bewegung'] = [[_versatz(kn, b[0])] + b[1:] for b in k['bewegung']]
 
 
 def clip(name, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip'):
+    zeiten_anpassen(name, szenen)
     alt = R + 'clips/g2-2-lp-' + name + '.json'
     if os.path.exists(alt):
         frueher = {(q['name'], q['sprecher']): q.get('dauer') for q in json.load(open(alt))['szenen']}
@@ -146,7 +206,7 @@ def fenster(x0, x1, y0, y1, xt, yt_):
 
 # ════════════════════════════════════════════════ Kapitel 1 · Einführung
 W1 = fenster(-2, 9, -10, 26, (2, 4, 6, 8), (-10, 10, 20))
-W1b = fenster(-4, 4, -4, 16, (-2, 2), (4, 8, 12))
+W1b = fenster(-4, 4, -4, 16, (-1, 1, 2, 3), (4, 8, 12))
 clip('umformen', 'Gleichungen lösen: umformen und die drei Lösungsfälle',
      'Äquivalenzumformungen an 4(x − 2) = 2x + 6 mit Probe — und die Fälle, in denen x verschwindet: keine Lösung oder alle Zahlen.',
      ['lineare Gleichung', 'Äquivalenzumformung', 'Probe', 'Lösungsfälle'], [
@@ -167,15 +227,15 @@ clip('umformen', 'Gleichungen lösen: umformen und die drei Lösungsfälle',
             f(r'2x = 14', 530, 52, ein=10.4),
             op(':2', 530, 11.8),
             f(r'x = \fc{7}', 620, 52, ein=12.7),
-            graf(W1, geraden=[ger(4, -8, 1), ger(2, 6, 5)], ein=0.3)),
+            graf(W1, geraden=[ger(4, -8, 1), ger(2, 6, 2)], ein=0.3)),
          sz('Die Probe',
             'Die Probe macht man in der Ausgangsgleichung. Links: vier mal Klammer sieben minus zwei, das ist zwanzig. '
             'Rechts: zwei mal sieben plus sechs, auch zwanzig. Im Bild schneiden sich die beiden Seiten bei x gleich sieben.',
             f(r'4 \cdot (7 - 2) = 20', 280, 52, ein=3.0),
             f(r'2 \cdot 7 + 6 = 20 \;\checkmark', 370, 52, ein=6.3),
             f(r'\mathbb{L} = \{\fc{7}\}', 500, 56, ein=8.5),
-            graf(W1, geraden=[ger(4, -8, 1), ger(2, 6, 5)], ein=0.05),
-            graf(W1, geraden=[ger(4, -8, 1), ger(2, 6, 5)], ein=9.2, punkte=[pt(7, 20, 3, '(7 | 20)', [6.6, 22.5], 'end')])),
+            graf(W1, geraden=[ger(4, -8, 1), ger(2, 6, 2)], ein=0.05),
+            graf(W1, geraden=[ger(4, -8, 1), ger(2, 6, 2)], ein=9.2, punkte=[pt(7, 20, 3, '(7 | 20)', [6.6, 22.5], 'end')])),
          sz('Wenn x verschwindet',
             'Manchmal fällt x beim Umformen ganz weg. Zwei mal Klammer x plus drei gleich zwei x plus neun gibt '
             'zwei x plus sechs gleich zwei x plus neun. Minus zwei x: sechs gleich neun. Das ist falsch, für jedes x. '
@@ -185,7 +245,7 @@ clip('umformen', 'Gleichungen lösen: umformen und die drei Lösungsfälle',
             op('-2x', 350, 8.7),
             f(r'6 = 9 \quad \fd{\text{falsch}}', 440, 52, ein=9.6),
             f(r'\mathbb{L} = \{\,\}', 560, 56, ein=12.8),
-            graf(W1b, geraden=[ger(2, 6, 1), ger(2, 9, 5)], ein=0.3)),
+            graf(W1b, geraden=[ger(2, 6, 1), ger(2, 9, 2)], ein=0.3)),
          sz('Alles ist Lösung',
             'Anders bei vier x plus acht gleich vier mal Klammer x plus zwei. Ausmultipliziert steht links und rechts dasselbe. '
             'Minus vier x: acht gleich acht. Das ist immer wahr. Jede Zahl ist Lösung: Die Lösungsmenge sind alle reellen Zahlen. '
@@ -195,7 +255,7 @@ clip('umformen', 'Gleichungen lösen: umformen und die drei Lösungsfälle',
             op('-4x', 350, 6.4),
             f(r'8 = 8 \quad \fc{\text{wahr}}', 440, 52, ein=7.4),
             f(r'\mathbb{L} = \mathbb{R}', 560, 56, ein=9.7),
-            graf(W1b, geraden=[ger(4, 8, 1, dicke=9), ger(4, 8, 5, gestrichelt=True)], ein=0.3)),
+            graf(W1b, geraden=[ger(4, 8, 1, dicke=9), ger(4, 8, 2, gestrichelt=True)], ein=0.3)),
          sz('Merke',
             'Zum Mitnehmen: Forme auf beiden Seiten gleich um, bis a mal x gleich c dasteht. Ist a nicht null, gibt es genau '
             'eine Lösung. Ist a null, entscheidet c: keine Lösung oder alle Zahlen. Und am Schluss die Probe.',
@@ -212,7 +272,7 @@ clip('kontrolle-umformen', 'Gleichungen lösen: Kontrollfragen zum Umformen',
          sz('Frage 1',
             'Mal null macht aus jeder Gleichung null gleich null. Die Lösungsmenge ändert sich: Das ist keine Äquivalenzumformung.',
             f(r'\fd{\cdot\, 0}: \quad 0 = 0', 300, 60, ein=1.0),
-            n('Mit null multiplizieren ist verboten.', 430, 'rot', ein=3.0)),
+            n('Mit null multiplizieren ist|keine Äquivalenzumformung.', 430, 'rot', ein=3.0)),
          sz('Frage 2',
             'Die Zwei vor der Klammer multipliziert jedes Glied: zwei mal x und zwei mal minus drei. Das gibt zwei x minus sechs.',
             f(r'2(x - 3) = 2x - 6', 300, 60, ein=1.0),
@@ -280,7 +340,7 @@ clip('kontrolle-umformen', 'Gleichungen lösen: Kontrollfragen zum Umformen',
 # ════════════════════════════════════════════════ Kapitel 2 · Einführung
 W2 = fenster(-2, 7, -8, 6, (-1, 1, 2, 3, 4, 5, 6), (-6, -4, -2, 2, 4))
 clip('nullprodukt', 'Gleichungen lösen: Ausklammern und Nullprodukt',
-     'Der Satz vom Nullprodukt an x² = 5x: auf null bringen, ausklammern, jeden Faktor null setzen, prüfen — und warum man nie durch x teilt.',
+     'Der Satz vom Nullprodukt an x² = 5x: auf null bringen, ausklammern, jeden Faktor null setzen, prüfen — und warum man nicht einfach durch x teilt.',
      ['quadratische Gleichung', 'Nullprodukt', 'ausklammern', 'Probe'], [
          sz('Der Satz vom Nullprodukt',
             'Ein Produkt ist genau dann null, wenn mindestens ein Faktor null ist. Drei mal null ist null. Drei mal zwei ist nie null. '
@@ -319,9 +379,10 @@ clip('nullprodukt', 'Gleichungen lösen: Ausklammern und Nullprodukt',
             f(r'\fd{x = 0 \text{ fehlt}}', 480, 56, ein=4.4),
             n('Teilen durch @x@ setzt @x \\neq 0@ voraus.', 600, 'rot', 44, ein=6.0)),
          sz('Merke',
-            'Zum Mitnehmen: Erst auf null bringen, dann ausklammern. Ein Produkt ist null, wenn ein Faktor null ist. Nie durch x teilen.',
+            'Zum Mitnehmen: Erst auf null bringen, dann ausklammern. Ein Produkt ist null, wenn ein Faktor null ist. '
+            'Nicht durch x teilen, ohne x gleich null zu prüfen.',
             titel('Zum Mitnehmen', 250, 76),
-            n('@a x^2 + b x = 0 \\Rightarrow x\\,(a x + b) = 0@|@x = 0@ oder @a x + b = 0@|nie durch @x@ teilen',
+            n('@a x^2 + b x = 0 \\Rightarrow x\\,(a x + b) = 0@|@x = 0@ oder @a x + b = 0@|nicht durch @x@ teilen,|ohne @x = 0@ zu prüfen',
               390, 'blau', 44, ein=1.2)),
          JETZT_DU,
      ])
@@ -356,17 +417,17 @@ clip('kontrolle-nullprodukt', 'Gleichungen lösen: Kontrollfragen zum Nullproduk
             graf(W2k, ein=0.05),
             graf(W2k, parabeln=[par(1, -1.5, -2.25)], ein=1.2)),
          sz('Merke',
-            'Zum Mitnehmen: Das Nullprodukt braucht rechts eine Null. Ein Faktor null genügt. Nie durch x teilen.',
+            'Zum Mitnehmen: Das Nullprodukt braucht rechts eine Null. Ein Faktor null genügt. Nicht durch x teilen, ohne x gleich null zu prüfen.',
             titel('Zum Mitnehmen', 250, 76),
-            n('rechts @0@|ein Faktor @= 0@ genügt|nicht durch @x@ teilen', 400, 'blau', 44, ein=1.2)),
+            n('rechts @0@|ein Faktor @= 0@ genügt|nicht durch @x@ teilen,|ohne @x = 0@ zu prüfen', 400, 'blau', 44, ein=1.2)),
      ], [
          wahl('Frage 1', 'Warum muss beim Nullprodukt rechts null stehen?',
               ['Nur bei null muss ein Faktor null sein.', 'Sonst darf man nicht ausklammern.', 'Weil die Mitternachtsformel es verlangt.'], 0,
               {0: 'Ja.',
-               1: 'Ausklammern geht immer. Was folgt aus a · b = 6 über a?',
+               1: 'Ausklammern darf man auch bei 6 rechts. Was folgt aus a · b = 6 über a?',
                2: 'Hier geht es nicht um eine Formel. Was folgt aus a · b = 6 über a?'},
               sprich='Warum muss beim Nullprodukt rechts null stehen?',
-              rueck_sprich={1: 'Ausklammern geht immer. Was folgt aus a mal b gleich sechs über a?',
+              rueck_sprich={1: 'Ausklammern darf man auch bei sechs rechts. Was folgt aus a mal b gleich sechs über a?',
                             2: 'Hier geht es nicht um eine Formel. Was folgt aus a mal b gleich sechs über a?'}),
          wahl('Frage 2', 'x(x − 5) = 0: Warum heisst es «x = 0 oder x = 5»?',
               ['Ein Faktor null genügt.', 'Beide Faktoren müssen null sein.', 'Es gibt nur eine Lösung.'], 0,
@@ -380,14 +441,14 @@ clip('kontrolle-nullprodukt', 'Gleichungen lösen: Kontrollfragen zum Nullproduk
               ['x = 0', 'x = −4', 'keine'], 0,
               {0: 'Ja.',
                1: 'Setz x = −4 in x² = 4x ein. Stimmt das?',
-               2: 'Setz x = 0 in x² = 4x ein.'},
+               2: 'Durch x teilen setzt eine Bedingung an x voraus. Welcher Wert ist damit ausgeschlossen?'},
               sprich='Aus x Quadrat gleich vier x wird durch x geteilt x gleich vier. Welche Lösung fehlt?',
               rueck_sprich={1: 'Setz x gleich minus vier in x Quadrat gleich vier x ein. Stimmt das?',
-                            2: 'Setz x gleich null in x Quadrat gleich vier x ein.'}),
+                            2: 'Durch x teilen setzt eine Bedingung an x voraus. Welcher Wert ist damit ausgeschlossen?'}),
          wahl('Frage 4', 'Ist x(x − 5) = 6 schon ein Fall für das Nullprodukt?',
               ['Nein, rechts steht nicht 0.', 'Ja: x = 6 oder x − 5 = 6.', 'Ja: x = 0 oder x = 5.'], 0,
               {0: 'Ja.',
-               1: 'Prüf x = 6: 6 · 1 = 6. Und x = 11? Was folgt aus einem Produkt 6 wirklich?',
+               1: 'Prüf x = 11: 11 · 6 ist nicht 6. Was folgt aus einem Produkt 6 wirklich?',
                2: 'Setz x = 0 ein: 0 · (−5) = 0, nicht 6.'},
               sprich='Ist x mal Klammer x minus fünf gleich sechs schon ein Fall für das Nullprodukt?',
               rueck_sprich={1: 'Prüf x gleich elf. Elf mal sechs ist nicht sechs. Was folgt aus einem Produkt sechs wirklich?',
@@ -409,7 +470,7 @@ W3b = fenster(-3, 7, -10, 8, (-2, -1, 1, 2, 3, 4, 5, 6), (-8, -4, 4))
 W3c = fenster(-4, 3, -5, 6, (-3, -2, -1, 1, 2), (-4, -2, 2, 4))
 W3d = fenster(-3, 5, -5, 7, (-2, -1, 1, 2, 3, 4), (-4, -2, 2, 4, 6))
 clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsformel',
-     'x² = 9 hat zwei Lösungen; (x − 2)² = 9 genauso; mit der quadratischen Ergänzung wird jede Gleichung zu einem Quadrat — '
+     'x² = 9 hat zwei Lösungen; (x − 2)² = 9 genauso; mit der quadratischen Ergänzung wird jede quadratische Gleichung zu einem Quadrat — '
      'allgemein ergibt das die Mitternachtsformel. Die Diskriminante zählt die Lösungen.',
      ['quadratische Gleichung', 'Wurzelziehen', 'quadratische Ergänzung', 'Mitternachtsformel', 'Diskriminante'], [
          sz('Wurzelziehen',
@@ -441,7 +502,7 @@ clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsform
          sz('Die Mitternachtsformel',
             'Führt man die Ergänzung allgemein durch, entsteht die Mitternachtsformel. Unter der Wurzel steht die Diskriminante: '
             'D gleich b Quadrat minus vier a c.',
-            f(r'a x^2 + b x + c = 0', 260, 52, ein=0.3),
+            f(r'a x^2 + b x + c = 0 \quad (a \neq 0)', 260, 52, ein=0.3),
             f(r'x_{1,2} = \dfrac{-b \pm \sqrt{D}}{2a}', 380, 58, ein=2.0),
             f(r'D = b^2 - 4ac', 570, 56, ein=5.0)),
          sz('Ein Beispiel',
@@ -456,18 +517,18 @@ clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsform
             graf(W3c, parabeln=[par(2, -0.75, -3.125)], ein=13.3)),
          sz('Was D verrät',
             'Die Diskriminante entscheidet über die Anzahl der Lösungen. Ist D positiv, gibt es zwei: Die Parabel schneidet die '
-            'x-Achse zweimal. Ist D null, gibt es eine: Sie berührt die Achse. Ist D negativ, gibt es keine.',
-            n('@D \\gt 0@: zwei Lösungen', 300, 'blau', 46, ein=3.7),
-            n('@D = 0@: eine Lösung', 400, 'blau', 46, ein=8.2),
-            n('@D \\lt 0@: keine Lösung', 500, 'blau', 46, ein=11.4),
+            'x-Achse zweimal. Ist D null, gibt es eine: Sie berührt die x-Achse. Ist D negativ, gibt es keine.',
+            n('@D \\gt 0@: zwei Lösungen', 300, 'blau', 46, ein=3.4),
+            n('@D = 0@: eine Lösung', 400, 'blau', 46, ein=7.7),
+            n('@D \\lt 0@: keine Lösung', 500, 'blau', 46, ein=11.0),
             graf(W3d, parabeln=[par(1, 1, -4, beschr=False,
-                                    bew=[[0, 1, 1, -4], [7.4, 1, 1, -4], [8.6, 1, 1, 0], [10.8, 1, 1, 0], [11.9, 1, 1, 2.5]])], ein=0.3)),
+                                    bew=[[0, 1, 1, -4], [7.6, 1, 1, -4], [8.7, 1, 1, 0], [10.9, 1, 1, 0], [12.0, 1, 1, 2.5]])], ein=0.3)),
          sz('Merke',
-            'Zum Mitnehmen: Beim Wurzelziehen gibt es plus und minus. Die quadratische Ergänzung macht aus jeder Gleichung ein Quadrat. '
+            'Zum Mitnehmen: Beim Wurzelziehen gibt es plus und minus. Die quadratische Ergänzung macht aus jeder quadratischen Gleichung ein Quadrat. '
             'Die Mitternachtsformel geht immer, und D sagt, wie viele Lösungen es gibt.',
             titel('Zum Mitnehmen', 250, 76),
-            f(r'x^2 = r \;\Rightarrow\; x = \pm\sqrt{r} \quad (r \ge 0)', 400, 52, ein=1.2),
-            f(r'x_{1,2} = \dfrac{-b \pm \sqrt{D}}{2a}, \qquad D = b^2 - 4ac', 560, 52, ein=4.6)),
+            f(r'x^2 = r \;\Rightarrow\; x = \pm\sqrt{r} \quad (r \ge 0)', 400, 52, ein=1.3),
+            f(r'x_{1,2} = \dfrac{-b \pm \sqrt{D}}{2a}, \qquad D = b^2 - 4ac', 560, 52, ein=7.9)),
          JETZT_DU,
      ])
 
@@ -490,7 +551,7 @@ clip('kontrolle-ergaenzen', 'Gleichungen lösen: Kontrollfragen zu Wurzel, Ergä
             f(r'x^2 + 10x + 25 = (x + 5)^2', 420, 50, ein=4.6)),
          sz('Frage 4',
             'Ist D negativ, steht unter der Wurzel eine negative Zahl. Es gibt keine reelle Lösung.',
-            f(r'\sqrt{-8} \;\fd{\text{gibt es nicht}}', 300, 54, ein=1.0),
+            f(r'\sqrt{-8} \;\fd{\text{gibt es in } \mathbb{R} \text{ nicht}}', 300, 50, ein=1.0),
             f(r'\mathbb{L} = \{\,\}', 420, 56, ein=3.6)),
          sz('Frage 5',
             'x ist zwei plus oder minus vier, durch zwei. Das gibt drei und minus eins. Die grössere Lösung ist drei.',
@@ -540,7 +601,7 @@ clip('kontrolle-ergaenzen', 'Gleichungen lösen: Kontrollfragen zu Wurzel, Ergä
                [3, 0], 'Getroffen: x = 3.',
                [{'bei': [-1, 0], 'text': 'Das ist die kleinere Lösung.',
                  'sprich': 'Das ist die kleinere Lösung.'},
-                {'bei': [-3, 0], 'text': 'Vorzeichen: Vor der Formel steht −b, und b ist −2.',
+                {'bei': [1, 0], 'text': 'Vorzeichen: Vor der Formel steht −b, und b ist −2.',
                  'sprich': 'Vorzeichen. Vor der Formel steht minus b, und b ist minus zwei.'}],
                'Nicht ganz. Der grüne Kreis zeigt die Stelle.',
                sprich='x Quadrat minus zwei x minus drei gleich null hat D gleich sechzehn. Tipp die grössere Lösung auf der x-Achse an.',
@@ -551,9 +612,9 @@ clip('kontrolle-ergaenzen', 'Gleichungen lösen: Kontrollfragen zu Wurzel, Ergä
 W4a = fenster(-4, 5, -1, 14, (-3, -2, -1, 1, 2, 3, 4), (3, 6, 9, 12))
 W4b = fenster(-1, 6, -2, 6, (1, 2, 3, 4, 5), (-1, 2, 4))
 clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
-     'Erst ordnen und den Typ bestimmen, dann wählen: Wurzelziehen, Ausklammern, Faktorisieren mit dem Zweiklammeransatz oder die '
+     'Erst ordnen und den Typ bestimmen, dann wählen: Wurzelziehen, Ausklammern, Faktorisieren mit dem Zweiklammersatz oder die '
      'Mitternachtsformel — und am Schluss die Probe.',
-     ['quadratische Gleichung', 'Verfahrenswahl', 'Faktorisieren', 'Zweiklammeransatz', 'Typ'], [
+     ['quadratische Gleichung', 'Verfahrenswahl', 'Faktorisieren', 'Zweiklammersatz', 'Typ'], [
          sz('Erst ordnen',
             'Bevor du ein Verfahren wählst: alles ausmultiplizieren und ordnen. Erst dann siehst du den Typ. Klammer x plus eins, '
             'im Quadrat, gleich x Quadrat plus fünf. Ausmultipliziert heben sich die x Quadrat weg. Es bleibt zwei x plus eins '
@@ -578,14 +639,14 @@ clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
             f(r'x \cdot (x + 4) = 0', 480, 52, ein=4.5),
             f(r'\mathbb{L} = \{\fc{-4};\ \fc{0}\}', 590, 52, ein=6.3)),
          sz('Faktorisieren',
-            'Lässt sich die Gleichung zerlegen, faktorisiere mit dem Zweiklammeransatz. x Quadrat minus sieben x plus zwölf: '
-            'Gesucht sind zwei Zahlen mit dem Produkt zwölf und der Summe minus sieben. Das sind minus drei und minus vier. '
-            'Also Klammer x minus drei mal Klammer x minus vier gleich null. Die Lösungen sind drei und vier.',
+            'Lässt sich die Gleichung zerlegen, faktorisiere mit dem Zweiklammersatz. x Quadrat minus sieben x plus zwölf: '
+            'Gesucht sind zwei Lösungen mit dem Produkt zwölf und der Summe sieben, dem Gegenteil von minus sieben. Das sind drei und vier. '
+            'Also Klammer x minus drei mal Klammer x minus vier gleich null.',
             f(r'x^2 - 7x + 12 = 0', 260, 52, ein=0.3),
-            n('Produkt @12@, Summe @-7@:|@(-3) \\cdot (-4) = 12@; @(-3) + (-4) = -7@', 350, 'blau', 42, ein=6.6),
-            f(r'(x - 3)(x - 4) = 0', 510, 52, ein=12.8),
-            f(r'\mathbb{L} = \{\fc{3};\ \fc{4}\}', 620, 52, ein=16.1),
-            graf(W4b, parabeln=[par(1, 3.5, -0.25, beschr=False)], ein=16.1,
+            n('@x_1 \\cdot x_2 = q = 12@; @x_1 + x_2 = -p = 7@|@3 \\cdot 4 = 12@; @3 + 4 = 7@', 350, 'blau', 42, ein=6.3),
+            f(r'(x - 3)(x - 4) = 0', 510, 52, ein=13.0),
+            f(r'\mathbb{L} = \{\fc{3};\ \fc{4}\}', 620, 52, ein=16.0),
+            graf(W4b, parabeln=[par(1, 3.5, -0.25, beschr=False)], ein=16.0,
                  punkte=[pt(3, 0, 3, '3', [2.8, 0.6], 'end'), pt(4, 0, 3, '4', [4.2, 0.6])])),
          sz('Ein Binom',
             'Manchmal ist es ein Binom: x Quadrat minus sechs x plus neun ist Klammer x minus drei, im Quadrat. Es gibt nur eine Lösung: drei.',
@@ -609,7 +670,7 @@ clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
 # ════════════════════════════════════════════════ Kapitel 4 · Kontrolle
 W4k = fenster(-6, 5, -14, 6, (-5, -4, -3, -2, -1, 1, 2, 3, 4), (-12, -8, -4, 4))
 clip('kontrolle-verfahren', 'Gleichungen lösen: Kontrollfragen zur Verfahrenswahl',
-     'Fünf Fragen: welches Verfahren wann, eine Lücke im Zweiklammeransatz, der Typ nach dem Ordnen und x² + x − 12 = 0.',
+     'Fünf Fragen: welches Verfahren wann, eine Lücke im Zweiklammersatz, der Typ nach dem Ordnen und x² + x − 12 = 0.',
      ['Verfahrenswahl', 'Faktorisieren', 'Kontrollfragen'], [
          sz('Frage 1',
             'Es fehlt das Glied mit x. x Quadrat ist sechzehn, x plus oder minus vier. Die Formel ginge auch, aber länger.',
@@ -619,19 +680,19 @@ clip('kontrolle-verfahren', 'Gleichungen lösen: Kontrollfragen zur Verfahrenswa
             f(r'x \cdot (x + 7) = 0', 300, 56, ein=1.0),
             f(r'\mathbb{L} = \{-7;\ 0\}', 420, 56, ein=3.4)),
          sz('Frage 3',
-            'Das Produkt der beiden Zahlen muss zehn sein: minus zwei mal minus fünf. Die Summe minus sieben stimmt auch.',
+            'Die Lösungen sind zwei und die gesuchte Zahl. Ihr Produkt muss zehn sein, also fünf. Die Summe sieben stimmt auch.',
             f(r'(x - 2)(x - \fc{5})', 300, 58, ein=1.0),
-            n('@(-2) \\cdot (-5) = 10@; @(-2) + (-5) = -7@', 430, 'blau', 42, ein=3.4)),
+            n('@2 \\cdot 5 = 10@; @2 + 5 = 7@', 430, 'blau', 42, ein=3.2)),
          sz('Frage 4',
             'Ausmultipliziert: x Quadrat plus sechs x plus neun gleich x Quadrat plus fünfzehn. Die x Quadrat heben sich weg. '
             'Es bleibt sechs x gleich sechs, also x gleich eins.',
             f(r'x^2 + 6x + 9 = x^2 + 15', 300, 48, ein=1.0),
             f(r'6x = 6 \;\Rightarrow\; x = 1', 420, 54, ein=7.0)),
          sz('Frage 5',
-            'Gesucht sind zwei Zahlen mit dem Produkt minus zwölf und der Summe eins: vier und minus drei. '
+            'Gesucht sind zwei Lösungen mit dem Produkt minus zwölf und der Summe minus eins: minus vier und drei. '
             'Klammer x plus vier mal Klammer x minus drei. Die negative Lösung ist minus vier.',
-            f(r'(x + 4)(x - 3) = 0', 300, 56, ein=1.0),
-            f(r'x = \fc{-4} \;\;\text{oder}\;\; x = \fc{3}', 420, 50, ein=6.0),
+            f(r'(x + 4)(x - 3) = 0', 300, 56, ein=6.5),
+            f(r'x = \fc{-4} \;\;\text{oder}\;\; x = \fc{3}', 420, 50, ein=9.3),
             graf(W4k, ein=0.05),
             graf(W4k, parabeln=[par(1, -0.5, -12.25)], ein=1.2)),
          sz('Merke',
@@ -689,7 +750,7 @@ W5a = fenster(-2, 6, -4, 12, (-1, 1, 2, 3, 4, 5), (3, 6, 9))
 W5b = fenster(-1, 7, -5, 8, (1, 2, 3, 4, 5, 6), (-4, -2, 2, 4, 6))
 clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
      'k · x + 6 = 2x + 3k für jedes k; x² − 6x + k = 0 mit der Diskriminante D(k) = 36 − 4k; und warum man zuerst prüft, '
-     'ob der Leitkoeffizient null werden kann.',
+     'ob der Faktor vor x² null werden kann.',
      ['Parameter', 'Parameterdiskussion', 'Diskriminante', 'Lösungsfälle'], [
          sz('Ein zweiter Buchstabe',
             'In einer Parametergleichung steht neben x ein zweiter Buchstabe, hier k. Gesucht ist die Lösung für jedes k.',
@@ -707,11 +768,11 @@ clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
             'Ist k nicht zwei, darf man durch k minus zwei teilen: x ist drei. Bei k gleich zwei steht null gleich null. Dann ist '
             'jede Zahl Lösung. Im Bild schneiden sich die beiden Seiten immer bei x gleich drei. Bei k gleich zwei liegen beide '
             'auf der x-Achse.',
-            f(r'k \neq 2: \quad x = \fc{3}', 280, 52, ein=0.3),
+            f(r'k \neq 2: \quad x = \fc{3}', 280, 52, ein=3.4),
             f(r'k = 2: \quad 0 = 0, \;\; \mathbb{L} = \mathbb{R}', 390, 50, ein=4.5),
             graf(W5a, geraden=[{'bewegung': [[0, 3, 0], [8.4, 3, 0], [10.2, 1, 0], [11.6, 1, 0], [13.4, 0, 0]], 'farbe': 1},
                                {'bewegung': [[0, 0, 9], [8.4, 0, 9], [10.2, 0, 3], [11.6, 0, 3], [13.4, 0, 0]], 'farbe': 2}],
-                 punkte=[pt(3, 0, 3, 'x = 3', [3.2, -1.6])], ein=0.3)),
+                 ein=0.3)),
          sz('Quadratisch',
             'Bei x Quadrat minus sechs x plus k entscheidet die Diskriminante. D von k ist sechsunddreissig minus vier k. '
             'Für k kleiner als neun ist D positiv: zwei Lösungen. Bei k gleich neun ist D null: genau eine Lösung, x gleich drei. '
@@ -726,16 +787,18 @@ clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
          sz('Zuerst a prüfen',
             'Steht der Parameter vor x Quadrat, prüfe zuerst, ob er null sein kann. m x Quadrat minus vier x minus drei: '
             'Bei m gleich null ist die Gleichung linear, x ist minus drei Viertel. Erst für m ungleich null gilt die Diskriminante, '
-            'sechzehn plus zwölf m.',
-            f(r'\fb{m}\,x^2 - 4x - 3 = 0', 260, 52, ein=0.3),
-            f(r'm = 0: \;\; -4x - 3 = 0 \;\Rightarrow\; x = -\tfrac{3}{4}', 370, 46, ein=5.9),
-            f(r'm \neq 0: \;\; D(m) = 16 + 12m', 480, 46, ein=9.7)),
+            'sechzehn plus zwölf m. Sie ist null bei m gleich minus vier Drittel: eine Lösung. Für grössere m gibt es zwei, '
+            'für kleinere keine.',
+            f(r'\fb{m}\,x^2 - 4x - 3 = 0', 250, 50, ein=0.3),
+            f(r'm = 0: \;\; -4x - 3 = 0 \;\Rightarrow\; x = -\tfrac{3}{4}', 345, 44, ein=5.7),
+            f(r'm \neq 0: \;\; D(m) = 16 + 12m', 440, 44, ein=9.4),
+            n('@m = -\\tfrac{4}{3}@: eine; @m \\gt -\\tfrac{4}{3}@ (@m \\neq 0@): zwei|@m \\lt -\\tfrac{4}{3}@: keine', 540, 'blau', 40, ein=13.6)),
          sz('Merke',
             'Zum Mitnehmen: Linear auf die Form a mal x gleich c bringen und den Wert suchen, bei dem a null wird. Quadratisch '
-            'zuerst prüfen, ob der Leitkoeffizient null wird, dann D von k untersuchen.',
+            'zuerst prüfen, ob der Faktor vor x Quadrat null wird, dann D von k untersuchen.',
             titel('Zum Mitnehmen', 250, 76),
             n('linear: @a(k) \\cdot x = c(k)@, Fall @a(k) = 0@|quadratisch: zuerst @a = 0@?, dann @D(k)@', 390, 'blau', 42, ein=1.2)),
-         JETZT_DU,
+         JETZT_DU_ANIM,
      ])
 
 # ════════════════════════════════════════════════ Kapitel 5 · Kontrolle

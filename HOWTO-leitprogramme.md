@@ -663,6 +663,13 @@ gegen sie und darüber hinaus.
   und eine Aufgabe, die einen Schalterzustand braucht, nennt ihn im Text («Sinus: …»).
 - **Korrigierende Listener vor dem Zeichnen registrieren** (`ohneNull`): Sonst zeichnet die
   Simulation noch den verbotenen Wert, während der Regler schon daneben steht.
+- **Gültige Umwege sind keine Fehler** (Umformer, Gleichungen 06.10.2026): Eine erlaubte, aber ungeschickte
+  Umformung bekommt einen grauen Hinweis («Erlaubt, aber …»), keine rote Rückmeldung — sonst lernt man,
+  dass nur der kürzeste Weg richtig sei. Im Umformer: Knopfziel mit `?` statt `!`.
+- **Gesamttest: Variante üben, ohne das Modell zu wiederholen.** Verlangt der Test eine Variante (zwei kritische
+  Werte, D(k) quadratisch, irrationale Lösungen), steht sie vorher in einer Kapitelaufgabe; der Test kombiniert
+  dann Geübtes neu (Bruch + Minusklammer, Ergänzung → Lösungsanzahl, Verfahren begründen statt lösen,
+  Fehler in einer fremden Lösung finden).
 - Zufallsübungen: nur lösbare, «schöne» Fälle; Sonderwerte (0, ±1, gleiche Zahlen) erzeugen
   keine falsche Diagnose; Randfälle des Stoffs mit üben (z. B. \(D = 0\), \(D \lt 0\));
   kein Zufallsfall gleich einer festen Aufgabe (`pruef-uebungen` mit `fehler()`).
@@ -685,6 +692,10 @@ gegen sie und darüber hinaus.
   Leitprogrammen falsch.
 - **Klickfragen brauchen im Bild ein Fenster** (`"tippbar": true`, HOWTO-clips) — sonst werden
   sie stumm übersprungen; `pruef-fragen` meldet «Durchlauf: jede Frage genau einmal».
+- **Sperrliste über die Normalform** (Gleichungen 06.10.2026): Ein Schlüssel pro Typ (`ak|a|b`, `zk|b|c`)
+  übersieht dieselbe Gleichung in anderer Schreibweise und ignoriert Koeffizienten (18.8 % der Würfe von
+  «Verfahren wählen» trafen feste Aufgaben, darunter eine des Gesamttests). Besser: alle festen Gleichungen
+  einmal als gekürzte Normalform `a|b|c` sammeln und jeden Typ seine Normalform nennen lassen (`T.quad`).
 - **Sperrliste gegen den Schlüssel prüfen, nicht gegen die Aufgabe.** Ein Schlüssel mit
   falschem Vorzeichen (`bg|1|-1|3` für \(|x - 1| = 3\)) sperrt nichts — der Clip-Fall kam weiter.
 - **Fragetexte eines Kontrollclips verschieden beginnen lassen**: `pruef-fragen` erkennt eine Frage

@@ -4,6 +4,7 @@
 //   node .claude/tools/pruef-umformer.mjs leitprogramme/<name>.html
 //
 // 1. Statisch: alle Ziele vorhanden und erreichbar, keine Sackgasse, jeder Knoten mit einem gültigen Schritt.
+// Knöpfe mit '!' sind Fehler (rote Rückmeldung), mit '?' gültige Umwege (grauer Hinweis).
 // 2. Je Aufgabe zwei Durchgänge (erste bzw. letzte gültige Wahl an jedem Knoten): Jeder Fehlerknopf,
 //    jede falsche Lücke (999) und jede falsche Lösungsmenge ({999}) gibt eine Rückmeldung, der Weg
 //    endet mit ✓ in der Aufgabenleiste. Braucht die Testhaken fig.__aufgaben und fig.__U.
@@ -24,7 +25,7 @@ const statisch = await p.evaluate(() => {
       while (q.length){ const id = q.shift(), K = k[id];
         if (!K){ aus.push(`${fig.id} A${t + 1}: Knoten ${id} fehlt`); continue; }
         const ziele = [];
-        if (K.w) K.w.forEach(o => { if (typeof o[1] === 'string' && o[1][0] === '!') { if (o[1].length < 15) aus.push(`${fig.id} A${t+1} ${id}: kurze Rückmeldung`); } else ziele.push(o[1]); });
+        if (K.w) K.w.forEach(o => { if (typeof o[1] === 'string' && (o[1][0] === '!' || o[1][0] === '?')) { if (o[1].length < 15) aus.push(`${fig.id} A${t+1} ${id}: kurze Rückmeldung`); } else ziele.push(o[1]); });
         if (K.feld) ziele.push(K.feld.nach);
         if (!K.w && !K.feld && K.L == null) aus.push(`${fig.id} A${t + 1}: ${id} Sackgasse`);
         if (K.w && !ziele.length) aus.push(`${fig.id} A${t + 1}: ${id} ohne gültigen Schritt`);
@@ -54,8 +55,10 @@ for (const id of ids){
           const kid = U.knoten(), K = A.k[kid], rueck = fig.querySelector('.uf-rueck');
           if (K.w){
             const knoepfe = [...fig.querySelectorAll('.uf-knopf')];
-            K.w.forEach((o, j) => { if (typeof o[1] === 'string' && o[1][0] === '!'){ knoepfe[j].click(); if (!rueck.classList.contains('falsch') || U.knoten() !== kid) log.push(kid + ': Fehlerknopf ' + j + ' ohne Rückmeldung'); } });
-            const gut = K.w.map((o, j) => [o, j]).filter(x => !(typeof x[0][1] === 'string' && x[0][1][0] === '!'));
+            K.w.forEach((o, j) => { if (typeof o[1] === 'string' && (o[1][0] === '!' || o[1][0] === '?')){ knoepfe[j].click();
+              const soll = o[1][0] === '!' ? 'falsch' : 'hinweis';   // '?': gültiger Umweg, grauer Hinweis
+              if (!rueck.classList.contains(soll) || U.knoten() !== kid) log.push(kid + ': Knopf ' + j + ' ohne ' + soll + '-Rückmeldung'); } });
+            const gut = K.w.map((o, j) => [o, j]).filter(x => !(typeof x[0][1] === 'string' && (x[0][1][0] === '!' || x[0][1][0] === '?')));
             const w = weg === 'erst' ? gut[0] : gut[gut.length - 1];
             fig.querySelectorAll('.uf-knopf')[w[1]].click();
           } else if (K.feld){

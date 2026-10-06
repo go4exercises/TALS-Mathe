@@ -40,7 +40,8 @@
     if (/^(r|ℝ|\{\s*(r|ℝ)\s*\}|alle|alle zahlen)$/i.test(t)) return { alle: true, werte: [] };
     t = t.replace(/^\{/, '').replace(/\}$/, '').trim();
     if (!t || /^(leer|keine|∅)$/i.test(t)) return { werte: [], komma: komma };
-    var teile = t.split(/;|,\s+|\|/), w = [];
+    if (/^[a-z]\s*=/i.test(t)) return { kaputt: true, xgleich: true };
+    var teile = t.split(/;|,\s+|\||\s+/), w = [];
     for (var i = 0; i < teile.length; i++){
       if (!teile[i].trim()) continue;
       var r = zahl(teile[i]); if (isNaN(r.wert)) return { kaputt: true };
@@ -233,6 +234,8 @@
     function waehle(j){
       var o = knoten(pfad[pfad.length - 1]).w[j];
       if (typeof o[1] === 'string' && o[1].charAt(0) === '!') return meldung('falsch', o[1].slice(1));
+      // '?': eine gültige Umformung, die hier ein Umweg ist — Hinweis (grau), kein Fehler (Prüfung 06.10.2026, M5)
+      if (typeof o[1] === 'string' && o[1].charAt(0) === '?') return meldung('hinweis', o[1].slice(1));
       weiter(o[1], o[2], o[3]);
     }
     function feldPruefen(){
@@ -253,7 +256,7 @@
     function mengePruefen(){
       var K = knoten(pfad[pfad.length - 1]), i = wahl.querySelector('input'), e = menge(i.value);
       if (e.leer) return meldung('hinweis', 'Gib die Lösungsmenge ein, zum Beispiel <code>{2; -1}</code>, <code>{}</code> oder <code>R</code>.');
-      if (e.kaputt) return meldung('hinweis', 'Trenne die Lösungen mit Strichpunkt: <code>{0; 3}</code>. Brüche als <code>1/3</code>.');
+      if (e.kaputt) return meldung('hinweis', e.xgleich ? 'Gefragt ist die Lösungsmenge, zum Beispiel <code>{3}</code> statt <code>x = 3</code>.' : 'Trenne die Lösungen mit Strichpunkt: <code>{0; 3}</code>. Brüche als <code>1/3</code>.');
       if (mengeGleich(e, K.L)){
         fertig = true; meldung('richtig', '✓ Richtig' + (e.komma ? ' (Hier schreibt man den Dezimalpunkt.)' : '') + '.'); zeichnen(); pruefen(); return;
       }
@@ -294,13 +297,13 @@
       a: { z: '3x + 4 = x - 6', w: [['beidseitig \\(-x\\)', 'b', '\\mid -x'], ['beidseitig \\(-4\\)', 'c', '\\mid -4'],
         ['beidseitig \\(\\cdot 0\\)', '!Das gibt \\(0 = 0\\) — wahr für jedes \\(x\\). Mit \\(0\\) multiplizieren ist keine Äquivalenzumformung: Die Lösungsmenge ändert sich.']] },
       b: { z: '2x + 4 = -6', w: [['beidseitig \\(-4\\)', 'd', '\\mid -4'], ['beidseitig \\(+4\\)', '!Dann steht links \\(2x + 8\\) — die \\(4\\) soll aber weg. Die Gegenoperation zu \\(+4\\) ist \\(-4\\).']] },
-      c: { z: '3x = x - 10', w: [['beidseitig \\(-x\\)', 'd', '\\mid -x'], ['beidseitig \\(:3\\)', '!Erlaubt, aber rechts steht noch \\(x\\). Sammle zuerst alle \\(x\\)-Glieder auf einer Seite.']] },
+      c: { z: '3x = x - 10', w: [['beidseitig \\(-x\\)', 'd', '\\mid -x'], ['beidseitig \\(:3\\)', '?Erlaubt, aber rechts steht noch \\(x\\). Sammle zuerst alle \\(x\\)-Glieder auf einer Seite.']] },
       d: { z: '2x = -10', w: [['beidseitig \\(:2\\)', 'e', '\\mid :2'], ['beidseitig \\(-2\\)', '!Dann steht \\(2x - 2\\) da. \\(2x\\) heisst \\(2 \\cdot x\\): Die Gegenoperation ist \\(:2\\).']] },
       e: { z: 'x = -5', L: [-5], Lfalsch: [[[5], 'Vorzeichen: \\(-10 : 2 = -5\\).']], probe: '3 \\cdot (-5) + 4 = -11 \\text{ und } -5 - 6 = -11\\ \\checkmark' } } },
     { text: 'Löse \\(5(x - 1) = 2(x + 2)\\).', k: {
       a: { z: '5(x - 1) = 2(x + 2)', w: [['Klammern auflösen: \\(5x - 5 = 2x + 4\\)', 'b'],
         ['Klammern auflösen: \\(5x - 1 = 2x + 2\\)', '!Der Faktor vor der Klammer gilt für <b>jedes</b> Glied in der Klammer: \\(5 \\cdot (-1) = -5\\) und \\(2 \\cdot 2 = 4\\).'],
-        ['beidseitig \\(:5\\)', '!Erlaubt, gibt aber rechts einen Bruch: \\(\\tfrac{2}{5}(x + 2)\\). Einfacher: zuerst die Klammern auflösen.']] },
+        ['beidseitig \\(:5\\)', '?Erlaubt, gibt aber rechts einen Bruch: \\(\\tfrac{2}{5}(x + 2)\\). Einfacher: zuerst die Klammern auflösen.']] },
       b: { z: '5x - 5 = 2x + 4', w: [['beidseitig \\(-2x\\)', 'c', '\\mid -2x'], ['beidseitig \\(+5\\)', 'c2', '\\mid +5']] },
       c: { z: '3x - 5 = 4', w: [['beidseitig \\(+5\\)', 'd', '\\mid +5'], ['beidseitig \\(-5\\)', '!Dann steht links \\(3x - 10\\). Die Gegenoperation zu \\(-5\\) ist \\(+5\\).']] },
       c2: { z: '5x = 2x + 9', w: [['beidseitig \\(-2x\\)', 'd', '\\mid -2x']] },
@@ -318,7 +321,7 @@
         Lfalsch: [[[], 'Die Aussage \\(-2 = -2\\) ist wahr, und zwar für jedes \\(x\\). Schreib <code>R</code>.']] } } },
     { text: 'Löse \\(\\tfrac{x}{2} + 1 = \\tfrac{x}{3} + 2\\).', k: {
       a: { z: '\\tfrac{x}{2} + 1 = \\tfrac{x}{3} + 2', w: [['beidseitig \\(\\cdot 6\\) (Hauptnenner)', 'b', '\\mid \\cdot 6'],
-        ['beidseitig \\(\\cdot 5\\)', '!\\(5\\) ist kein Vielfaches von \\(2\\) und \\(3\\) — die Brüche bleiben. Der Hauptnenner von \\(2\\) und \\(3\\) ist \\(6\\).'],
+        ['beidseitig \\(\\cdot 5\\)', '?Erlaubt, aber \\(5\\) ist kein Vielfaches von \\(2\\) und \\(3\\) — die Brüche bleiben. Der Hauptnenner von \\(2\\) und \\(3\\) ist \\(6\\).'],
         ['nur die Brüche mal \\(6\\): \\(3x + 1 = 2x + 2\\)', '!Mal \\(6\\) heisst: <b>jedes</b> Glied auf beiden Seiten, auch \\(1\\) und \\(2\\).']] },
       b: { z: '3x + 6 = 2x + 12', w: [['beidseitig \\(-2x\\)', 'c', '\\mid -2x'], ['beidseitig \\(-6\\)', 'c2', '\\mid -6']] },
       c: { z: 'x + 6 = 12', w: [['beidseitig \\(-6\\)', 'd', '\\mid -6']] },
@@ -341,7 +344,7 @@
       a: { z: '2x^2 = 6x', w: [['beidseitig \\(-6x\\) (auf null bringen)', 'b', '\\mid -6x'], ['beidseitig \\(:x\\)', NULL],
         ['Fallunterscheidung: erst \\(x = 0\\) prüfen, dann \\(x \\neq 0\\)', 'f']] },
       b: { z: '2x^2 - 6x = 0', w: [['\\(2x\\) ausklammern', 'c'], ['\\(x\\) ausklammern', 'c2'],
-        ['nur \\(2\\) ausklammern', '!\\(2(x^2 - 3x) = 0\\) stimmt, ist aber noch kein Produkt mit einem \\(x\\)-Faktor. Klammere so viel aus wie möglich — auch das \\(x\\).']] },
+        ['nur \\(2\\) ausklammern', '?\\(2(x^2 - 3x) = 0\\) stimmt, ist aber noch kein Produkt mit einem \\(x\\)-Faktor. Klammere so viel aus wie möglich — auch das \\(x\\).']] },
       c: { feld: { muster: '\\(2x\\,(x - \\) {a} \\() = 0\\)', soll: { a: 3 }, nach: 'd', fehler: [[{ a: -3 }, 'Vorzeichen: \\(2x \\cdot (-3) = -6x\\). In der Klammer steht \\(x - 3\\).']],
         tipp: 'Kontrolle durch Ausmultiplizieren: \\(2x \\cdot x = 2x^2\\), und \\(2x\\) mal die Zahl muss \\(-6x\\) geben.' } },
       c2: { feld: { muster: '\\(x\\,(\\) {a} \\(x - \\) {b} \\() = 0\\)', soll: { a: 2, b: 6 }, nach: 'd2', tipp: 'Kontrolle: \\(x \\cdot (\\ldots) = 2x^2 - 6x\\).' } },
@@ -355,7 +358,7 @@
         Lfalsch: [[[3], 'Der Fall \\(x = 0\\) hat schon eine Lösung geliefert — sie gehört dazu.']], probe: '2 \\cdot 3^2 = 18 = 6 \\cdot 3' } } },
     { text: 'Löse \\((x - 4)(x + 1) = 0\\).', k: {
       a: { z: '(x - 4)(x + 1) = 0', w: [['Nullprodukt: \\(x - 4 = 0\\) oder \\(x + 1 = 0\\)', 'b'],
-        ['ausmultiplizieren: \\(x^2 - 3x - 4 = 0\\)', '!Erlaubt, aber ein Umweg: Das Produkt steht schon da, und rechts steht \\(0\\). Nutze den Satz vom Nullprodukt.']] },
+        ['ausmultiplizieren: \\(x^2 - 3x - 4 = 0\\)', '?Erlaubt, aber ein Umweg: Das Produkt steht schon da, und rechts steht \\(0\\). Nutze den Satz vom Nullprodukt.']] },
       b: { z: 'x = 4' + ODER + 'x = -1', L: [4, -1], Lfalsch: [[[-4, 1], 'Vorzeichen: \\(x - 4 = 0\\) gibt \\(x = 4\\), \\(x + 1 = 0\\) gibt \\(x = -1\\).']] } } },
     { text: 'Löse \\(-x^2 = 4x\\).', k: {
       a: { z: '-x^2 = 4x', w: [['beidseitig \\(-4x\\)', 'b', '\\mid -4x'], ['beidseitig \\(:x\\)', NULL], ['beidseitig \\(:(-x)\\)', NULL]] },
@@ -371,14 +374,14 @@
       b2: { z: '4 \\neq 0,\\ \\text{also } x^2 = x \\cdot x = 0', w: [['ein Faktor null', 'c']] },
       c: { z: 'x = 0', frage: 'Beide Faktoren sind dasselbe \\(x\\). Gib die Lösungsmenge an:', L: [0], probe: '4 \\cdot 0^2 = 0' } } },
     { text: 'Löse \\((2x - 3) \\cdot x = 0\\).', k: {
-      a: { z: '(2x - 3) \\cdot x = 0', w: [['Nullprodukt: \\(2x - 3 = 0\\) oder \\(x = 0\\)', 'b'], ['beidseitig \\(:x\\)', NULL]] },
+      a: { z: '(2x - 3) \\cdot x = 0', w: [['Nullprodukt: \\(2x - 3 = 0\\) oder \\(x = 0\\)', 'b'], ['beidseitig \\(:x\\)', '!Rechts steht schon \\(0\\) — das ist ein Nullprodukt. Durch \\(x\\) teilen verlöre die Lösung \\(x = 0\\).']] },
       b: { z: '2x - 3 = 0' + ODER + 'x = 0', w: [['\\(2x - 3 = 0\\) lösen: \\(x = 1.5\\)', 'c'],
         ['\\(2x - 3 = 0\\) lösen: \\(x = -1.5\\)', '!\\(2x - 3 = 0 \\mid +3\\) gibt \\(2x = 3\\), dann \\(:2\\): \\(x = 1.5\\).']] },
       c: { z: 'x = 1.5' + ODER + 'x = 0', L: [1.5, 0], Lfalsch: [[[1.5], 'Es fehlt die Lösung aus dem Faktor \\(x\\).']], probe: '(3 - 3) \\cdot 1.5 = 0;\\ \\ (0 - 3) \\cdot 0 = 0' } } },
     { text: 'Löse \\((x + 2)^2 = 5(x + 2)\\).', k: {
       a: { z: '(x + 2)^2 = 5(x + 2)', w: [['beidseitig \\(-5(x + 2)\\)', 'b', '\\mid -5(x + 2)'],
         ['beidseitig \\(:(x + 2)\\)', '!Division durch \\(x + 2\\) setzt \\(x \\neq -2\\) voraus — die Lösung \\(x = -2\\) ginge verloren.'],
-        ['alles ausmultiplizieren', '!Geht, aber dann musst du neu faktorisieren. Der gemeinsame Faktor \\((x + 2)\\) steht schon da.']] },
+        ['alles ausmultiplizieren', '?Geht, aber dann musst du neu faktorisieren. Der gemeinsame Faktor \\((x + 2)\\) steht schon da.']] },
       b: { z: '(x + 2)^2 - 5(x + 2) = 0', w: [['\\((x + 2)\\) ausklammern', 'c']] },
       c: { feld: { muster: '\\((x + 2)(x - \\) {a} \\() = 0\\)', soll: { a: 3 }, nach: 'd', fehler: [[{ a: 7 }, 'Ausgeklammert bleibt \\((x + 2) - 5 = x - 3\\).'], [{ a: 5 }, 'Ausgeklammert bleibt \\((x + 2) - 5\\) — die \\(+2\\) gehört mit in die Klammer.']],
         tipp: 'Klammert man \\((x + 2)\\) aus, bleibt von \\((x + 2)^2\\) noch \\((x + 2)\\) und von \\(5(x + 2)\\) die \\(5\\): \\((x + 2)\\,[(x + 2) - 5]\\).' } },
@@ -396,7 +399,7 @@
       d: { z: 'x = -5' + ODER + 'x = 5', L: [-5, 5], Lfalsch: [[[5], 'Es fehlt \\(-5\\): \\((-5)^2 = 25\\).']] } } },
     { text: 'Löse \\((x + 1)^2 = 16\\).', k: {
       a: { z: '(x + 1)^2 = 16', w: [['Wurzel ziehen: \\(x + 1 = \\pm 4\\)', 'b'], ['Wurzel ziehen: \\(x + 1 = 4\\)', '!Auch \\((-4)^2 = 16\\): \\(x + 1\\) kann \\(4\\) oder \\(-4\\) sein.'],
-        ['ausmultiplizieren', '!Geht, ist aber ein Umweg: Links steht schon ein Quadrat. Zieh die Wurzel.']] },
+        ['ausmultiplizieren', '?Geht, ist aber ein Umweg: Links steht schon ein Quadrat. Zieh die Wurzel.']] },
       b: { z: 'x + 1 = 4' + ODER + 'x + 1 = -4', w: [['beidseitig \\(-1\\)', 'c', '\\mid -1']] },
       c: { z: 'x = 3' + ODER + 'x = -5', L: [3, -5], Lfalsch: [[[-3, 5], 'Vorzeichen: Von beiden Seiten \\(1\\) abziehen: \\(4 - 1 = 3\\), \\(-4 - 1 = -5\\).']] } } },
     { text: 'Löse \\(x^2 + 6x = 7\\) mit quadratischer Ergänzung.', k: {
@@ -409,7 +412,7 @@
       e: { z: 'x = 1' + ODER + 'x = -7', L: [1, -7], probe: '1 + 6 = 7;\\ \\ 49 - 42 = 7' } } },
     { text: 'Löse \\(x^2 - 8x + 12 = 0\\) mit quadratischer Ergänzung.', k: {
       a: { z: 'x^2 - 8x + 12 = 0', w: [['beidseitig \\(-12\\)', 'b', '\\mid -12'],
-        ['quadratisch ergänzen: beidseitig \\(+16\\)', '!Zuerst die Zahl ohne \\(x\\) auf die rechte Seite — sonst steht links kein reines Binom.']] },
+        ['quadratisch ergänzen: beidseitig \\(+16\\)', '?Erlaubt: \\((x - 4)^2 + 12 = 16\\). Einfacher: zuerst die Zahl ohne \\(x\\) auf die rechte Seite — dann steht links ein reines Binom.']] },
       b: { z: 'x^2 - 8x = -12', w: [['quadratisch ergänzen: beidseitig \\(+16\\)', 'c', '\\mid +16'], ['quadratisch ergänzen: beidseitig \\(+64\\)', '!Die <b>halbe</b> Zahl vor \\(x\\) quadrieren: \\(\\left(\\tfrac{-8}{2}\\right)^2 = 16\\).']] },
       c: { z: 'x^2 - 8x + 16 = 4', w: [['links Binom: \\((x - 4)^2 = 4\\)', 'd'], ['links Binom: \\((x + 4)^2 = 4\\)', '!Das lineare Glied ist \\(-8x\\): \\((x - 4)^2 = x^2 - 8x + 16\\).']] },
       d: { z: '(x - 4)^2 = 4', w: [['Wurzel ziehen: \\(x - 4 = \\pm 2\\)', 'e']] },
@@ -440,31 +443,32 @@
   ]);
 
   /* ---------- Kapitel 4: das passende Verfahren ---------- */
+  /* Zweiklammersatz wie auf Themenseite 2.2b: gesucht sind die Lösungen x₁, x₂ mit x₁ + x₂ = −p und
+     x₁ · x₂ = q; dann ist x² + px + q = (x − x₁)(x − x₂). Eine Lesart im ganzen Leitprogramm (Prüfung 06.10.2026, M2). */
   function zweiklammer(p, q, nach){
-    var w = Math.sqrt(p * p - 4 * q), r1 = (p - w) / 2, r2 = (p + w) / 2;      // m, n: Lösungen von t² − p t + q = 0
-    return { muster: '\\((x + \\) {m} \\()(x + \\) {n} \\() = 0\\)', nach: nach, beispiel: { m: r1, n: r2 },
+    var w = Math.sqrt(p * p - 4 * q), r1 = (-p - w) / 2, r2 = (-p + w) / 2;
+    return { muster: '\\((x - \\) {m} \\()(x - \\) {n} \\() = 0\\)', nach: nach, beispiel: { m: r1, n: r2 },
       pruef: function(e){
-        if (gl(e.m + e.n, p) && gl(e.m * e.n, q)) return null;
-        if (gl(e.m * e.n, q) && gl(e.m + e.n, -p)) return 'Das Produkt stimmt, die Summe hat das falsche Vorzeichen. Gesucht: Summe \\(' + tz(p) + '\\), Produkt \\(' + tz(q) + '\\).';
-        if (gl(e.m + e.n, p)) return 'Die Summe stimmt, das Produkt nicht: \\(' + tz(e.m) + ' \\cdot ' + tz(e.n) + ' \\neq ' + tz(q) + '\\).';
-        return 'Gesucht sind zwei Zahlen mit Summe \\(' + tz(p) + '\\) und Produkt \\(' + tz(q) + '\\).';
+        if (gl(e.m + e.n, -p) && gl(e.m * e.n, q)) return null;
+        if (gl(e.m * e.n, q) && gl(e.m + e.n, p)) return 'Das Produkt stimmt, die Summe hat das falsche Vorzeichen. Die Lösungen haben die Summe \\(-p = ' + tz(-p) + '\\) und das Produkt \\(q = ' + tz(q) + '\\).';
+        if (gl(e.m + e.n, -p)) return 'Die Summe stimmt, das Produkt nicht: \\(' + tz(e.m) + ' \\cdot ' + tz(e.n) + ' \\neq ' + tz(q) + '\\).';
+        return 'Gesucht sind die Lösungen: Summe \\(-p = ' + tz(-p) + '\\), Produkt \\(q = ' + tz(q) + '\\).';
       } };
   }
   umformerSim('sim4', [
     { text: 'Löse \\(x^2 - 9x + 20 = 0\\). Wähle zuerst das Verfahren.', k: {
-      a: { z: 'x^2 - 9x + 20 = 0', frage: 'Welches Verfahren?', w: [['Faktorisieren (Zweiklammeransatz)', 'b'],
-        ['Mitternachtsformel', 'm', '', 'Geht immer. Hier hätte auch der Zweiklammeransatz gereicht: zwei Zahlen mit Summe \\(-9\\) und Produkt \\(20\\).'],
+      a: { z: 'x^2 - 9x + 20 = 0', frage: 'Welches Verfahren?', w: [['Faktorisieren (Zweiklammersatz)', 'b'],
+        ['Mitternachtsformel', 'm', '', 'Geht immer. Hier hätte auch der Zweiklammersatz gereicht: zwei Lösungen mit Summe \\(9\\) und Produkt \\(20\\).'],
         ['Ausklammern', '!Ausklammern hilft, wenn jedes Glied ein \\(x\\) hat. Hier steht \\(+20\\).'], ['Wurzelziehen', '!Wurzelziehen geht, wenn das Glied mit \\(x\\) fehlt. Hier steht \\(-9x\\).']] },
-      b: { frage: 'Zwei Zahlen mit Summe \\(-9\\) und Produkt \\(20\\):', feld: zweiklammer(-9, 20, 'c') },
+      b: { frage: 'Die Lösungen \\(x_1\\), \\(x_2\\) haben die Summe \\(9\\) und das Produkt \\(20\\):', feld: zweiklammer(-9, 20, 'c') },
       c: { z: '(x - 4)(x - 5) = 0', w: [['Nullprodukt', 'd']] },
       m: { frage: 'Diskriminante:', feld: { muster: '\\(D = \\) {D}', soll: { D: 1 }, nach: 'm2', tipp: '\\(D = (-9)^2 - 4 \\cdot 1 \\cdot 20\\).' } },
       m2: { z: 'D = 81 - 80 = 1', w: [['einsetzen: \\(x = \\dfrac{9 \\pm 1}{2}\\)', 'd']] },
       d: { z: 'x = 4' + ODER + 'x = 5', L: [4, 5], Lfalsch: [[[-4, -5], 'Vorzeichen: \\(x - 4 = 0\\) gibt \\(x = 4\\).']] } } },
     { text: 'Löse \\(5x^2 = 45\\). Wähle zuerst das Verfahren.', k: {
-      a: { z: '5x^2 = 45', frage: 'Welches Verfahren?', w: [['Wurzelziehen', 'b'],
-        ['Ausklammern', '!In \\(5x^2 - 45\\) steckt nicht in jedem Glied ein \\(x\\). Hier fehlt das Glied mit \\(x\\) — das passt zu einem anderen Verfahren.'],
+      a: { z: '5x^2 = 45', frage: 'Welches Verfahren?', w: [['Wurzelziehen', 'c', '\\mid :5'],
+        ['Ausklammern', '?Geht: \\(5x^2 - 45 = 5(x^2 - 9) = 5(x - 3)(x + 3)\\). Schneller: nach \\(x^2\\) auflösen und die Wurzel ziehen.'],
         ['Mitternachtsformel', 'm', '', 'Geht, mit \\(b = 0\\). Schneller: nach \\(x^2\\) auflösen und die Wurzel ziehen.']] },
-      b: { z: '5x^2 = 45', w: [['beidseitig \\(:5\\)', 'c', '\\mid :5']] },
       c: { z: 'x^2 = 9', w: [['Wurzel ziehen: \\(x = \\pm 3\\)', 'd'], ['Wurzel ziehen: \\(x = 3\\)', '!Auch \\((-3)^2 = 9\\).']] },
       m: { z: '5x^2 - 45 = 0', frage: 'Diskriminante (\\(b = 0\\)):', feld: { muster: '\\(D = \\) {D}', soll: { D: 900 }, nach: 'm2', tipp: '\\(D = 0^2 - 4 \\cdot 5 \\cdot (-45)\\).' } },
       m2: { z: 'D = 900,\\ \\sqrt{D} = 30', w: [['einsetzen: \\(x = \\dfrac{0 \\pm 30}{10}\\)', 'd']] },
@@ -488,20 +492,20 @@
     { text: 'Löse \\(x\\,(x + 3) = 10\\).', k: {
       a: { z: 'x\\,(x + 3) = 10', w: [['Nullprodukt: \\(x = 10\\) oder \\(x + 3 = 10\\)', '!Rechts steht \\(10\\), nicht \\(0\\). Der Satz vom Nullprodukt gilt nur, wenn das Produkt null ist.'],
         ['ausmultiplizieren und auf null bringen', 'b', '\\mid -10']] },
-      b: { z: 'x^2 + 3x - 10 = 0', frage: 'Welches Verfahren?', w: [['Faktorisieren (Zweiklammeransatz)', 'c'], ['Mitternachtsformel', 'm']] },
-      c: { frage: 'Zwei Zahlen mit Summe \\(3\\) und Produkt \\(-10\\):', feld: zweiklammer(3, -10, 'd') },
+      b: { z: 'x^2 + 3x - 10 = 0', frage: 'Welches Verfahren?', w: [['Faktorisieren (Zweiklammersatz)', 'c'], ['Mitternachtsformel', 'm']] },
+      c: { frage: 'Die Lösungen \\(x_1\\), \\(x_2\\) haben die Summe \\(-3\\) und das Produkt \\(-10\\):', feld: zweiklammer(3, -10, 'd') },
       d: { z: '(x + 5)(x - 2) = 0', w: [['Nullprodukt', 'e']] },
       m: { feld: { muster: '\\(D = \\) {D}', soll: { D: 49 }, nach: 'm2', tipp: '\\(D = 3^2 - 4 \\cdot 1 \\cdot (-10)\\).', fehler: [[{ D: -31 }, '\\(-4 \\cdot 1 \\cdot (-10) = +40\\).']] } },
       m2: { z: 'D = 9 + 40 = 49', w: [['einsetzen: \\(x = \\dfrac{-3 \\pm 7}{2}\\)', 'e']] },
       e: { z: 'x = -5' + ODER + 'x = 2', L: [-5, 2], Lfalsch: [[[5, -2], 'Vorzeichen: \\(x + 5 = 0\\) gibt \\(x = -5\\).']], probe: '-5 \\cdot (-2) = 10;\\ \\ 2 \\cdot 5 = 10' } } },
     { text: 'Löse \\(6x^2 + x - 2 = 0\\). Wähle zuerst das Verfahren.', k: {
       a: { z: '6x^2 + x - 2 = 0', frage: 'Welches Verfahren?', w: [['Mitternachtsformel', 'b'],
-        ['Faktorisieren (Zweiklammeransatz)', '!Der Zweiklammeransatz \\((x + m)(x + n)\\) braucht \\(1\\) vor \\(x^2\\). Hier steht \\(6\\) — die Formel ist sicherer.'],
+        ['Faktorisieren (Zweiklammersatz)', '!Der Zweiklammersatz \\((x - x_1)(x - x_2)\\) braucht \\(1\\) vor \\(x^2\\). Hier steht \\(6\\) — die Formel ist sicherer.'],
         ['Wurzelziehen', '!Hier steht ein Glied mit \\(x\\). Wurzelziehen allein reicht nicht.']] },
       b: { feld: { muster: '\\(a = \\) {a}; \\(b = \\) {b}; \\(c = \\) {c}', soll: { a: 6, b: 1, c: -2 }, nach: 'c', tipp: '\\(b\\) steht vor \\(x\\) — dort steht unsichtbar eine \\(1\\).' } },
       c: { z: 'a = 6,\\ b = 1,\\ c = -2', feld: { muster: '\\(D = \\) {D}', soll: { D: 49 }, nach: 'd', fehler: [[{ D: -47 }, '\\(-4 \\cdot 6 \\cdot (-2) = +48\\).']], tipp: '\\(D = 1^2 - 4 \\cdot 6 \\cdot (-2)\\).' } },
       d: { z: 'D = 49', w: [['einsetzen: \\(x = \\dfrac{-1 \\pm 7}{12}\\)', 'e'], ['einsetzen: \\(x = \\dfrac{-1 \\pm 7}{6}\\)', '!Der Nenner ist \\(2a = 12\\).']] },
-      e: { z: 'x = \\tfrac{6}{12} = \\tfrac{1}{2}' + ODER + 'x = \\tfrac{-8}{12} = -\\tfrac{2}{3}', L: [0.5, -2 / 3], probe: '\\tfrac{6}{4} + \\tfrac{1}{2} - 2 = 0' } } }
+      e: { z: 'x = \\tfrac{6}{12} = \\tfrac{1}{2}' + ODER + 'x = \\tfrac{-8}{12} = -\\tfrac{2}{3}', L: [0.5, -2 / 3], probe: '\\tfrac{6}{4} + \\tfrac{1}{2} - 2 = 0;\\ \\ 6 \\cdot \\tfrac{4}{9} - \\tfrac{2}{3} - 2 = 0' } } }
   ]);
 
   /* ---------- Kapitel 5: Parameterdiskussion ----------
@@ -530,12 +534,13 @@
       K.leeren();
       if (s.fam === 'A'){
         K.kurve(function(x){ return x * x - 4 * x + k; }, 'kurve');
-        txt = sp('tx-blau', 'x² − 4x ' + (k < 0 ? '− ' + sp('tx-orange', z(-k)) : '+ ' + sp('tx-orange', z(k))) + ' = 0') + '<br>D = 16 − 4 · ' + kT(k) + ' = ' + z(s.D);
+        txt = sp('tx-blau', 'x² − 4x' + (k === 0 ? '' : k < 0 ? ' − ' + sp('tx-orange', z(-k)) : ' + ' + sp('tx-orange', z(k))) + ' = 0') + '<br>D = 16 − 4 · ' + kT(k) + ' = ' + z(s.D);
       } else if (s.fam === 'B'){
         K.kurve(function(x){ return (k - 1) * x; }, 'kurve');
         K.kurve(function(){ return k * k - 1; }, 'kurve rechts');
         txt = sp('tx-blau', '(' + sp('tx-orange', 'k') + ' − 1) · x = ' + sp('tx-orange', 'k') + '² − 1') + ' mit k = ' + z(k) + ':<br>' + z(k - 1) + ' · x = ' + z(k * k - 1)
-          + '; &nbsp;<span class="nb">links y = ' + z(k - 1) + 'x, rechts y = ' + z(k * k - 1) + '</span>';
+          + '; &nbsp;<span class="nb">links y = ' + (k - 1 === 0 ? '0' : k - 1 === 1 ? 'x' : k - 1 === -1 ? '−x' : z(k - 1) + 'x') + ', rechts y = ' + z(k * k - 1) + '</span>'
+          + (k * k - 1 > 8 ? '<br><span class="nb">(Schnittpunkt oberhalb des Bildes)</span>' : '');
       } else {
         K.kurve(function(x){ return k * x * x + 2 * x + 1; }, 'kurve');
         txt = sp('tx-blau', sp('tx-orange', kT(k)) + ' · x² + 2x + 1 = 0') + (k === 0 ? '<br>k = 0: linear, 2x + 1 = 0' : '<br>D = 4 − 4 · ' + kT(k) + ' = ' + z(s.D));
@@ -580,16 +585,35 @@
       'li|4|-8|2|6', 'li|3|4|1|-6', 'li|5|-5|2|4', 'li|7|-4|3|12', 'li|4|-11|0|1', 'li|5|-6|3|4', 'li|3|-4|1|0',
       // Kapitel 2 (ausklammern: a|b für ax² + bx = 0; nullprodukt: Faktoren)
       'ak|1|-5', 'ak|2|-6', 'ak|-1|-4', 'ak|4|0', 'ak|3|12', 'ak|1|2', 'ak|1|3', 'ak|4|-20', 'ak|1|4', 'ak|3|-6',
-      'np|4|1|-1', 'np|2|1|-1', 'np|1|2|-3',
+      'np|4|1|1', 'np|2|1|1', 'np|0|1|3', 'np|0|2|-3',
       // Kapitel 3 (wurzel: p|q für (x − p)² = q; mitternacht: a|b|c)
       'wu|2|9', 'wu|-1|16', 'wu|-3|16', 'wu|4|4', 'wu|3|4', 'wu|3|25', 'wu|-3|25',
       'mi|2|3|-2', 'mi|3|-5|-2', 'mi|1|2|5', 'mi|4|-12|9', 'mi|2|-7|3', 'mi|2|-5|2', 'mi|1|-4|-5', 'mi|1|-2|-3', 'mi|1|4|-21', 'mi|1|6|-16',
       // Kapitel 4 (zweiklammer: p|q für x² + px + q)
       'zk|-7|12', 'zk|-9|20', 'zk|3|-10', 'zk|-7|10', 'zk|1|-12', 'zk|-1|-12', 'zk|1|-6', 'zk|-1|-2', 'zk|2|-24', 'zk|10|25', 'zk|-6|9',
+      // Lösungsfall (lf: p|q|s|r für p(x + q) = s x + r): 1d, Umformer 1 A3, Clip, Kontrollclip, Gesamttest G2
+      'lf|4|-1|4|-4', 'lf|3|2|3|5', 'lf|2|3|2|9', 'lf|3|1|3|3', 'lf|2|-3|2|-6', 'lf|3|-2|3|-6', 'lf|3|-2|3|-5', 'lf|3|-2|3|0',
       // Kapitel 5 (pl: a|art; pq: b für x² + bx + k)
       'pl|2|A', 'pl|3|A', 'pl|3|B', 'pq|-6', 'pq|2', 'pq|-4', 'pq|8', 'pq|-10'
     ];
-    function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
+    /* Alle festen quadratischen Gleichungen des Leitprogramms als Normalform a|b|c (gekürzt, a > 0):
+       Clips, Umformer, Kapitelaufgaben, Vortest, Gesamttest. Jeder quadratische Übungstyp nennt seine
+       Normalform (T.quad) — so sperrt ein Eintrag alle Schreibweisen derselben Gleichung (Prüfung 06.10.2026, H4). */
+    var FESTE_Q = [
+      [1, -5, 0], [2, 3, -2], [1, -4, -5], [1, 0, -9], [1, 0, -25], [1, 0, -16], [1, 4, 0], [1, -7, 12], [1, -7, 10], [1, -6, 9],
+      [1, 1, -12], [1, 3, 0], [1, -2, -3], [3, 0, -27], [2, 1, -4], [1, 0, -4],
+      [2, -6, 0], [1, -3, -4], [4, 0, 0], [2, -3, 0], [1, -1, -6], [2, 0, -50], [1, 2, -15], [1, 6, -7], [1, -8, 12], [3, -5, -2],
+      [1, 2, 5], [4, -12, 9], [1, -9, 20], [5, 0, -45], [1, 10, 25], [1, 3, -10], [6, 1, -2],
+      [3, 12, 0], [1, -1, -2], [1, -5, 4], [1, 2, 0], [100, 0, -49], [1, 4, -21], [2, -7, 3], [1, -6, 10], [9, 6, 1], [1, 1, -1],
+      [1, -4, 3], [4, 0, -1], [3, -6, 0], [1, -1, -12], [1, 1, -6], [1, -4, 1], [1, -4, 0], [1, 8, 12], [1, 8, 16], [1, 8, 20],
+      [1, -10, 25], [1, 0, -49],
+      [1, -1, -20], [1, -6, 5], [1, -2, -1], [4, 0, -9], [1, 6, 9], [2, 5, -1]
+    ];
+    function ggT(a, b){ a = Math.abs(a); b = Math.abs(b); while (b){ var t = a % b; a = b; b = t; } return a; }
+    function qSchl(q){ var a = q[0], b = q[1], c = q[2]; if (a < 0){ a = -a; b = -b; c = -c; }
+      var g = ggT(ggT(a, b), c) || 1; return [a / g, b / g, c / g].join('|'); }
+    var SPERRE_Q = FESTE_Q.map(qSchl);
+    function gesperrt(T, A){ return (T.schl && SPERRE.indexOf(T.schl(A)) >= 0) || (T.quad && SPERRE_Q.indexOf(qSchl(T.quad(A))) >= 0); }
     /* So tippt man die Menge ein: Drittel und Sechstel als Bruch, sonst Dezimalzahl. */
     function zText(v){
       for (var d of [1, 3, 6]){ var n = Math.round(v * d); if (gl(v * d, n)) return d === 1 ? String(n) : (d === 6 && n % 2 === 0 ? (n / 2) + '/3' : n + '/' + d); }
@@ -619,8 +643,8 @@
           return f; },
         pruefen: function(A, e){
           if (gl(e.x, A.x)) return null;
-          if (gl(e.x, -A.x)) return 'Vorzeichen: Am Schluss durch \\(' + tz(A.a - A.c) + '\\) teilen — samt Vorzeichen.';
           if (gl(e.x, (A.d + A.b) / (A.a - A.c))) return 'Vorzeichen beim Hinüberbringen: Steht links \\(' + (A.b < 0 ? '-' + (-A.b) : '+' + A.b) + '\\), rechnest du beidseitig \\(' + (A.b < 0 ? '+' + (-A.b) : '-' + A.b) + '\\).';
+          if (gl(e.x, -A.x)) return 'Vorzeichen: Am Schluss durch \\(' + tz(A.a - A.c) + '\\) teilen — samt Vorzeichen.';
           if (A.a + A.c !== 0 && gl(e.x, (A.d - A.b) / (A.a + A.c))) return 'Das \\(x\\)-Glied rechts: beidseitig \\(' + (A.c < 0 ? '+' + (-A.c) : '-' + A.c) + 'x\\), nicht addieren.';
           return 'Sammle die \\(x\\)-Glieder links und die Zahlen rechts, dann teilen. Mach die Probe.'; },
         loesung: function(A){ return lin(A.a - A.c, 0) + ' = ' + (A.d - A.b) + '\\ \\Rightarrow\\ x = ' + A.x; } },
@@ -648,7 +672,7 @@
 
       /* ── Kapitel 2 ─────────────────────────────────────────────── */
       'ausklammern': { felder: ['L'], muster: '𝕃 = {L}',
-        schl: function(A){ return 'ak|' + A.a + '|' + A.b; },
+        schl: function(A){ return 'ak|' + A.a + '|' + A.b; }, quad: function(A){ return [A.a, A.b, 0]; },
         eingabe: function(A){ return { L: mText(A.L) }; },
         neu: function(){
           var a = zufall([1, 2, 3, 4, 5, -1, -2, -3]), w = Math.random() < 0.12 ? 0 : zufall([-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 0.5, -0.5, 1.5]), b = -a * w;
@@ -668,7 +692,7 @@
         loesung: function(A){ return (A.w === 0 ? tz(A.a) + 'x^2 = 0' : 'x\\,(' + lin(A.a, A.b) + ') = 0') + ':\\ ' + mengeTex(A.L); } },
 
       'nullprodukt': { felder: ['L'], muster: '𝕃 = {L}',
-        schl: function(A){ return 'np|' + A.p + '|' + A.m + '|' + A.n; },
+        schl: function(A){ return 'np|' + A.p + '|' + A.m + '|' + A.n; }, quad: function(A){ return [A.m, A.n - A.p * A.m, -A.p * A.n]; },
         eingabe: function(A){ return { L: mText(A.L) }; },
         neu: function(){
           // (x − p)(m x + n) = 0 mit schöner zweiter Lösung −n/m
@@ -684,14 +708,16 @@
           if (m.kaputt) return 'Lösungsmenge wie <code>{-2; 1.5}</code>.';
           if (mengeGleich(m, A.L)) return null;
           if (fast(m, A.L)) return FAST;
-          if (mengeGleich(m, [-A.p, -A.w])) return 'Vorzeichen: Setz jeden Faktor null und löse: \\(' + zx(A.p) + ' = 0\\) gibt \\(x = ' + tz(A.p) + '\\).';
+          if (mengeGleich(m, [-A.p, -A.w])) return A.p === 0
+            ? 'Vorzeichen beim zweiten Faktor: \\(' + lin(A.m, A.n) + ' = 0\\) gibt \\(x = ' + texZahl(A.w) + '\\).'
+            : 'Vorzeichen: Setz jeden Faktor null und löse: \\(' + zx(A.p) + ' = 0\\) gibt \\(x = ' + tz(A.p) + '\\).';
           if (m.werte.length === 1) return 'Zwei Faktoren — jeder kann null sein. Es gibt zwei Lösungen.';
           return 'Satz vom Nullprodukt: \\(' + (A.p === 0 ? 'x' : zx(A.p)) + ' = 0\\) oder \\(' + lin(A.m, A.n) + ' = 0\\).'; },
         loesung: function(A){ return mengeTex(A.L); } },
 
       /* ── Kapitel 3 ─────────────────────────────────────────────── */
       'wurzel': { felder: ['L'], muster: '𝕃 = {L}',
-        schl: function(A){ return 'wu|' + A.p + '|' + A.q; },
+        schl: function(A){ return 'wu|' + A.p + '|' + A.q; }, quad: function(A){ return [1, -2 * A.p, A.p * A.p - A.q]; },
         eingabe: function(A){ return { L: mText(A.L) }; },
         neu: function(){
           var p = zufall([-4, -3, -2, -1, 0, 1, 2, 3, 4, 5]), art = Math.random(), q, r;
@@ -706,11 +732,12 @@
           if (A.q < 0) return 'Ein Quadrat ist nie negativ — \\(' + tz(A.q) + '\\) kann kein Quadrat sein.';
           if (A.q > 0 && m.werte.length === 1 && gl(m.werte[0], A.p + Math.sqrt(A.q))) return 'Es gibt zwei Lösungen: Die Klammer kann \\(+' + Math.sqrt(A.q) + '\\) oder \\(-' + Math.sqrt(A.q) + '\\) sein.';
           if (A.p !== 0 && mengeGleich(m, A.q === 0 ? [-A.p] : [-A.p - Math.sqrt(A.q), -A.p + Math.sqrt(A.q)])) return 'Vorzeichen: Aus \\(' + zx(A.p) + ' = \\ldots\\) folgt \\(x = ' + tz(A.p) + ' + \\ldots\\).';
+          if (A.q === 0) return 'Ein Quadrat ist null, wenn die Klammer null ist: genau eine Lösung.';
           return 'Wurzel ziehen mit \\(\\pm\\), dann nach \\(x\\) auflösen.'; },
         loesung: function(A){ return A.q < 0 ? '\\mathbb{L} = \\{\\,\\}' : A.q === 0 ? zx(A.p) + ' = 0:\\ ' + mengeTex(A.L) : zx(A.p) + ' = \\pm ' + Math.sqrt(A.q) + ':\\ ' + mengeTex(A.L); } },
 
       'mitternacht': { felder: ['D', 'L'], muster: 'D = {D}; 𝕃 = {L}',
-        schl: function(A){ return 'mi|' + A.a + '|' + A.b + '|' + A.c; },
+        schl: function(A){ return 'mi|' + A.a + '|' + A.b + '|' + A.c; }, quad: function(A){ return [A.a, A.b, A.c]; },
         eingabe: function(A){ return { D: String(A.D), L: mText(A.L) }; },
         neu: function(){
           // aus Lösungen r1, r2 (ganz oder halb) mit a ∈ {1, 2}: a(x − r1)(x − r2); manchmal D ≤ 0
@@ -742,7 +769,7 @@
 
       /* ── Kapitel 4 ─────────────────────────────────────────────── */
       'verfahren': { felder: ['v', 'L'], muster: 'Am schnellsten: {v:Wurzelziehen|Ausklammern|Faktorisieren|Mitternachtsformel}; 𝕃 = {L}',
-        schl: function(A){ return 'zk|' + A.b + '|' + A.c; },
+        schl: function(A){ return 'zk|' + A.b + '|' + A.c; }, quad: function(A){ return [A.a, A.b, A.c]; },
         eingabe: function(A){ return { v: A.v, L: mText(A.L) }; },
         neu: function(){
           var art = zufall(['W', 'A', 'F', 'M']), a = 1, b, c, L, v;
@@ -757,31 +784,33 @@
         pruefen: function(A, e){
           var m = menge(e.L), r = [];
           if (m.kaputt) return 'Lösungsmenge wie <code>{-3; 3}</code>.';
-          if (e.v === A.v && mengeGleich(m, A.L)) return null;
-          if (e.v !== A.v){
+          // Bei a = 1 geht Faktorisieren auch bei x² − r² (Binom) und x² + bx (x ausklammern): gleich schnell.
+          var auchF = e.v === 'Faktorisieren' && A.a === 1 && (A.v === 'Wurzelziehen' || A.v === 'Ausklammern');
+          if ((e.v === A.v || auchF) && mengeGleich(m, A.L)) return null;
+          if (e.v !== A.v && !auchF){
             if (e.v === 'Mitternachtsformel') r.push('Geht immer — aber hier gibt es einen kürzeren Weg. ' + (A.v === 'Wurzelziehen' ? 'Das Glied mit \\(x\\) fehlt.' : A.v === 'Ausklammern' ? 'Die Zahl ohne \\(x\\) fehlt.' : 'Zwei ganze Zahlen mit Summe \\(' + tz(-A.b) + '\\) und Produkt \\(' + tz(A.c) + '\\) gibt es.'));
-            else if (A.v === 'Mitternachtsformel') r.push('Vor \\(x^2\\) steht \\(' + A.a + '\\), und alle drei Glieder sind da — der Zweiklammeransatz geht hier nicht glatt.');
-            else r.push(e.v === 'Wurzelziehen' ? 'Wurzelziehen braucht eine Gleichung ohne Glied mit \\(x\\).' : e.v === 'Ausklammern' ? 'Ausklammern braucht eine Gleichung ohne Zahl ohne \\(x\\).' : 'Faktorisieren mit dem Zweiklammeransatz braucht \\(1\\) vor \\(x^2\\) und alle drei Glieder.');
+            else if (A.v === 'Mitternachtsformel') r.push('Vor \\(x^2\\) steht \\(' + A.a + '\\), und alle drei Glieder sind da — der Zweiklammersatz geht hier nicht glatt.');
+            else r.push(e.v === 'Wurzelziehen' ? 'Wurzelziehen braucht eine Gleichung ohne lineares Glied (\\(b = 0\\)).' : e.v === 'Ausklammern' ? 'Ausklammern braucht eine Gleichung ohne Zahl ohne \\(x\\).' : 'Vor \\(x^2\\) steht \\(' + A.a + '\\) — der Zweiklammersatz braucht \\(1\\) vor \\(x^2\\).');
           }
           if (!mengeGleich(m, A.L)) r.push(fast(m, A.L) ? FAST : m.werte.length < A.L.length ? 'Es fehlt eine Lösung.' : 'Die Lösungsmenge stimmt noch nicht — mach die Probe.');
           return r.join(' '); },
         loesung: function(A){ return '\\text{' + A.v + '}:\\ ' + mengeTex(A.L); } },
 
       'zweiklammer': { felder: ['L'], muster: '𝕃 = {L}',
-        schl: function(A){ return 'zk|' + A.p + '|' + A.q; },
+        schl: function(A){ return 'zk|' + A.p + '|' + A.q; }, quad: function(A){ return [1, A.p, A.q]; },
         eingabe: function(A){ return { L: mText([A.r1, A.r2]) }; },
         neu: function(){
           var r1 = zufallG(-8, 8), r2 = zufallG(-8, 8);
           if (r1 === r2 || r1 === 0 || r2 === 0 || r1 === -r2) return TYPEN['zweiklammer'].neu();
           var p = -(r1 + r2), q = r1 * r2;
-          return { p: p, q: q, r1: r1, r2: r2, text: 'Faktorisiere mit dem Zweiklammeransatz und löse: \\(' + poly(1, p, q) + ' = 0\\).' }; },
+          return { p: p, q: q, r1: r1, r2: r2, text: 'Faktorisiere mit dem Zweiklammersatz und löse: \\(' + poly(1, p, q) + ' = 0\\).' }; },
         fehler: function(A){ return [[{ L: mText([-A.r1, -A.r2]) }, 'Vorzeichen']]; },
         pruefen: function(A, e){
           var m = menge(e.L);
           if (m.kaputt) return 'Lösungsmenge wie <code>{2; 3}</code>.';
           if (mengeGleich(m, [A.r1, A.r2])) return null;
-          if (mengeGleich(m, [-A.r1, -A.r2])) return 'Vorzeichen: Aus \\((x ' + (A.r1 < 0 ? '+ ' + (-A.r1) : '- ' + A.r1) + ')\\) wird \\(x = ' + tz(A.r1) + '\\). Die Zahlen in den Klammern sind die Lösungen mit umgekehrtem Vorzeichen.';
-          return 'Gesucht: zwei Zahlen mit Summe \\(' + tz(A.p) + '\\) und Produkt \\(' + tz(A.q) + '\\). Kontrolle durch Ausmultiplizieren.'; },
+          if (mengeGleich(m, [-A.r1, -A.r2])) return 'Vorzeichen: Aus \\((x ' + (A.r1 < 0 ? '+ ' + (-A.r1) : '- ' + A.r1) + ')\\) wird \\(x = ' + tz(A.r1) + '\\). Bei Faktoren \\((x - x_1)\\) ist \\(x_1\\) die Lösung.';
+          return 'Gesucht sind die Lösungen: Summe \\(-p = ' + tz(-A.p) + '\\), Produkt \\(q = ' + tz(A.q) + '\\). Kontrolle durch Ausmultiplizieren.'; },
         loesung: function(A){ return '(' + zx(A.r1) + ')(' + zx(A.r2) + ') = 0:\\ ' + mengeTex([A.r1, A.r2]); } },
 
       /* ── Kapitel 5 ─────────────────────────────────────────────── */

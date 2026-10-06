@@ -88,7 +88,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   nicht die Seite aus der Site.
 
   Das Verbindliche für beide: STYLEGUIDE §6.5.
-- `clips/` — 495 Drehbücher, alle vertont: **391 in der Bibliothek** (362:25 min,
+- `clips/` — 495 Drehbücher, alle vertont: **391 in der Bibliothek** (363:00 min,
   56 Reihen, 255 Grundlagenfach / 136 Schwerpunktfach) und **103 unverlinkte**
   Clips mit `"probe": true` (35 Prüfungsclips und 68 Clips der Leitprogramme nach Thema:
   je 10 «Parabel sehen», «Kurve sehen», «Polynom sehen», «Exponentialkurve sehen»,
