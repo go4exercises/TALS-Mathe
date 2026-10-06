@@ -957,7 +957,9 @@ an den Knopf, der sie geöffnet hat (sonst landet er am Seitenanfang).
 Themenseite mit ihrer Nummer als Zwischenüberschrift (Link zur Seite), darunter eine
 dreispaltige Tabelle: **Animationen** (Clips mit `animation`), **Leitprogramm** (die eigenen
 Clips der sichtbaren Leitprogramme, `"probe": true`, in der Reihenfolge des Leitprogramms;
-die Spaltenüberschrift verlinkt es) und **Weitere Clips** (alle übrigen). Ein
+die Spaltenüberschrift verlinkt es; jede Zeile trägt vorn den Link «LP» auf die Animation
+ihres Kapitels im Leitprogramm, `#simN`, wie «Anim» bei den Clips der Themenseiten) und
+**Weitere Clips** (alle übrigen). Ein
 Bibliotheksclip, den ein Leitprogramm mitbenutzt, bleibt in Spalte 1 oder 3. Unter 720 px
 stehen die Spalten untereinander.
 

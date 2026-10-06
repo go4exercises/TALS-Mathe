@@ -48,7 +48,18 @@ def lp_clips(wurzel, clipsdir):
         if not os.path.exists(pfad):
             continue
         platz = 0
-        for stamm in re.findall(r'clips/([a-z0-9-]+)\.html', open(pfad, encoding="utf-8").read()):
+        text = open(pfad, encoding="utf-8").read()
+        # Je Clip die Animation seines Kapitels: die Simulation (figure.sim#simN) im selben
+        # <section class="kap">; ohne Simulation der Anfang des Kapitels.
+        ziel = {}
+        for teil in re.split(r'(?=<section class="kap" id=")', text):
+            m = re.match(r'<section class="kap" id="([^"]+)"', teil)
+            if not m:
+                continue
+            sim = re.search(r'<figure class="sim[^"]*" id="([^"]+)"', teil)
+            for st in re.findall(r'clips/([a-z0-9-]+)\.html', teil):
+                ziel.setdefault(st, sim.group(1) if sim else m.group(1))
+        for stamm in re.findall(r'clips/([a-z0-9-]+)\.html', text):
             if stamm in gesehen:
                 continue
             dreh_pfad = os.path.join(clipsdir, stamm + ".json")
@@ -69,6 +80,7 @@ def lp_clips(wurzel, clipsdir):
                 # so rechnet build-clips.py `dauer_s`: Summe der Szenen, gerundet
                 "dauer_s": round(sum(s.get("dauer") or 0 for s in dreh.get("szenen", []))),
                 "lp": lp,
+                "lplink": f"leitprogramme/{lp}#{ziel.get(stamm, '')}".rstrip("#"),
             })
     return aus
 
@@ -151,10 +163,16 @@ def block_bibliothek(alle, seiten, e):
                     stamm = c["datei"].replace(".html", "")
                     anker = None if stamm in benannt else "clip-" + stamm
                     benannt.add(stamm)
-                    aus += ["          " + z for z in
-                            e.zeile(c, "", nuance[c.get("reihe") or c["titel"]], anker=anker,
-                                    animlink=(seite["url"] + "#" + c["animation"])
-                                    if c.get("animation") and seite else None)]
+                    zz = e.zeile(c, "", nuance[c.get("reihe") or c["titel"]], anker=anker,
+                                 animlink=(seite["url"] + "#" + c["animation"])
+                                 if c.get("animation") and seite else None)
+                    if c.get("lplink"):
+                        # wie «Anim» bei den Clips der Themenseiten: Link auf die Animation
+                        # des Kapitels im Leitprogramm, die nach dem Clip folgt
+                        zz[0] = zz[0].replace('<div class="clip ', '<div class="clip cl-lp ', 1)
+                        zz.insert(1, f'  <a class="cl-lplink" href="{c["lplink"]}"'
+                                     f' aria-label="Zur Animation im Leitprogramm: {html.escape(c["titel"])}">LP</a>')
+                    aus += ["          " + z for z in zz]
                 aus.append('        </div>')
             aus += ['      </div>', '    </div>']
         aus += ['  </div>', '</div>']
