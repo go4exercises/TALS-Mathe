@@ -341,6 +341,14 @@ Treffer-Rückmeldung · Knöpfe, die je ein Merkmal hervorheben · fester Punkt,
 
 **c) Reine Rechentechnik → keine Animation.** Nur, wo sich wirklich nichts zeigen lässt.
 
+**d) Gleichungen → Umformer** (seit 06.10.2026, Leitprogramm *Lineare und quadratische
+Gleichungen*, nach dem Leitfaden des Auftraggebers). Statt Reglern wählen die Lernenden jeden
+Umformungsschritt selbst, füllen Lücken und geben die Lösungsmenge ein; die Aufgabenleiste setzt ✓,
+sobald sie stimmt. Gültige andere Wege führen ebenfalls ans Ziel, jeder Fehler hat eine eigene
+Rückmeldung, Ergebnisse erscheinen erst nach der Antwort. Ein Graph unterstützt höchstens, er
+ersetzt den algebraischen Weg nicht. Aufbau der Knoten und Prüfwerkzeug
+(`.claude/tools/pruef-umformer.mjs`): `scripts/lp/lineare-quadratische-gleichungen/README.md`.
+
 ---
 
 ## 9 · Selbsttests und Gesamttest
@@ -509,6 +517,7 @@ grep 'name="robots"' leitprogramme/<name>.html                      # noindex, n
    node .claude/tools/render-check.mjs leitprogramme/<name>.html
    node .claude/tools/pruef-uebungen.mjs leitprogramme/<name>.html 1000   # Zufallsübungen
    node .claude/tools/pruef-leiste.mjs leitprogramme/<name>.html          # Aufgabenleisten
+   node .claude/tools/pruef-umformer.mjs leitprogramme/<name>.html        # Umformer (Gleichungen)
    node .claude/tools/pruef-fragen.mjs <clip> …                           # Fragen in Kontrollclips
    ```
    Alle drei starten einen eigenen Server und enden mit Exit 1 bei einem Befund.
