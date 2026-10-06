@@ -887,3 +887,38 @@ Kandidaten; HOWTO §15 um drei Fehlerklassen ergänzt; `figuren` kann `deckkraft
 - [x] Technik: Karo der Aufgabenfiguren unsichtbar (`svg.geo-mini .gitter` ohne Stil; 2d/1c nicht ablesbar); `.geo .bild` trifft auch die Texte A′B′C′ (gestrichelter Umriss); Arbeitsbereich 4 «= ≈ 0.167»; Übung pythagoras: leere rote Rückmeldung (Fehlerliste `[hypot, '']`, z. B. 2/3 → 3.6); Sperrliste: `tr|14|8|4`, `py|3|5`, `py|4|3`, Diagonalen-Reihenfolge, `st` Schlüssel ohne Fläche, `gs|52/64` wirkungslos.
 - [x] Clips: Kontrolle Vierecke F3 Rückmeldung Text ≠ Ton; Kontrolle Dreiecke F5 «h_c» roh; Ähnlichkeit «12 m» auf der Linie wie «2 m» (Masslinie); Rückmeldung «nicht senkrecht zum Bildrand» bei a gedreht unpassend; Winkelfarben wechseln (Dreiecke Szene 0/1); Kreis «A_Seg» erscheint vor dem Ton.
 - [x] PDF: GT 30 min (HOWTO ~20); G1/G2 wenig Schreibraum für Skizzen; G3 ohne rechten Winkel; BP Seiten 1–2 halbleer; «für das ganze Gesamttest»; «das wäre die Mittelsenkrechte, wenn senkrecht» verworren.
+
+## Prüfung Lineare und quadratische Gleichungen (06.10.2026)
+
+Skill `/lp-pruefung leitprogramme/lineare-quadratische-gleichungen.html`, drei Agenten (Seite, Clips, PDFs), Stand
+Commit `803af5b` (unverlinkt, noindex, nicht live). `seite.*`/`clips.py` = `scripts/lp/lineare-quadratische-gleichungen/`,
+`GT`/`BP` = `downloads/leitprogramme/lineare-quadratische-gleichungen/{gesamttest,bewertungspaket}.tex`.
+Umformer = `umformerSim('simN')` in `seite.js`.
+
+**Rechenfehler: keine** in Vortest, 1a–5e, Festhalten, 25 Umformer-Aufgaben (jeder Knoten äquivalent), Simulation 5,
+10 Clips + Vorwissensclip, 25 Kontrollfragen, GT G1–G8 samt Folgefehlern. Werkzeuge grün (`pruef-uebungen` 10 × 2000,
+`pruef-leiste` 5, `pruef-umformer`, `pruef-fragen` 5). Bewegte Parabeln/Geraden über die Zeit geprüft.
+Nachgeprüft vom Hauptagenten: H1, H2, H4 (Sperrschlüssel), M1.
+
+### HOCH
+- [ ] **H1 · GT G8 verlangt eine quadratische Ungleichung** (\(x^2 + kx + 9 = 0\): \(D = k^2 - 36\), \(|k| \gt 6\)) — in Kapitel 5 ist D(k) überall linear, Ungleichungen sind bewusst weggelassen; Raster gibt 0 von 3 P, wenn k = −6 fehlt. → z. B. \(kx^2 - 4x + 2 = 0\) (D = 16 − 8k; k = 0: x = 0.5; k = 2: x = 1) — prüft zugleich «Faktor vor x² null».
+- [ ] **H2 · GT G7 mit zwei kritischen Werten nie geübt** (\((k^2 - 1)x = k + 1\): k = 1 leer, k = −1 alle) — alle geübten a(k) haben einen kritischen Wert. → Kapitelaufgabe/Leistenaufgabe/Übungsvariante mit a(k) = k² − c, oder G7 vereinfachen.
+- [ ] **H3 · GT G1–G6 wiederholen Modelle** (G1 = 1b; G2 = 1d/Clip/Umformer/Übung loesungsfall; G3 = 2a+2c/Umformer/Übung; G4a = Umformer 3 A2/Übung wurzel; G4b = 3b/Umformer 3 A3; G5 = 3c; G6 = 4a/4b). → Kombinationen und Transfer innerhalb des Geübten (Minusklammer + Bruch, Ergänzung mit ungeradem b, D = 0 oder nicht quadratisches D, begründete Verfahrenswahl).
+- [ ] **H4 · Sperrlisten lassen feste Aufgaben und eine GT-Aufgabe durch**: `np|4|1|-1`/`np|2|1|-1` falsches Vorzeichen (2b, Umformer 2 A2 würfelbar), `np|1|2|-3` passt zu nichts; `loesungsfall` ohne Sperre (1d, Umformer 1 A3, Kontrollclip); `ausklammern` ohne `ak|1|-4` (2c); `wurzel` ohne p = 0 (x² = 9/16/25); `verfahren` Schlüssel ohne a → 18.8 % der Würfe feste Aufgaben, **G5 \(2x^2 - 5x + 2\) würfelbar**; `mitternacht`/`zweiklammer` treffen 3b, 3f, 4a(c), 4d, 4e, 5c, Umformer 3/4, Clips, GT G4b. → Sperre über Normalform (a|b|c) für alle quadratischen Typen.
+
+### MITTEL
+- [ ] M1 · «Mit 0 multiplizieren oder durch einen Term mit x dividieren … dabei geht die Lösungsmenge verloren» (Festhalten 1, `seite.py:235`): mal 0 vergrössert sie auf ℝ; Teilen durch x² + 1 ist äquivalent. → «ändert die Lösungsmenge: mal 0 macht jede Zahl zur Lösung, durch x teilen kann Lösungen verlieren».
+- [ ] M2 · Zweiklammeransatz mit zwei Lesarten: Festhalten 4, 4e, Übung verfahren (Lösungen, Summe −p) gegen Clip verfahren, Kontrollclip F3/F5, Umformer `zweiklammer()`, Übung zweiklammer (Klammerzahlen, Summe p). → eine Lesart (Themenseite: Lösungen x₁ + x₂ = −p) und überall gleich; Begriff der Themenseite «Zweiklammersatz».
+- [ ] M3 · Übung verfahren: Faktorisieren bei x² − r² und x² + bx abgelehnt mit falscher Begründung («braucht 1 vor x² und alle drei Glieder») — Binome zählen laut Festhalten dazu, Raster G6a akzeptiert sie.
+- [ ] M4 · «Nie durch x teilen» (Clip nullprodukt Merke, Kontrollclip Nullprodukt Merke) widerspricht Seite und Umformer (Fallunterscheidung gültig). → «nicht durch x teilen, ohne x = 0 zu prüfen» (**Neuvertonung** beider Merke-Szenen).
+- [ ] M5 · Umformer: gültige Umformungen rot als Fehler, ohne Weiterweg (sim1 A1 :3, A2 :5, A5 ·5; sim2 A1 «nur 2 ausklammern», A2/A6 ausmultiplizieren; sim3 A2 ausmultiplizieren, A4 +16; sim4 A2 Ausklammern). Leitfaden §2: gültige Wege akzeptieren. → als Hinweis (grau) oder Umweg-Knoten; sim2 A5 «:x» eigene Meldung (rechts steht schon 0).
+- [ ] M6 · Kapitelziele im GT nicht geprüft: «Faktor vor x² null» (K5), «begründet wählen und prüfen» (K4, G6 nur «nenne», keine Probe bewertet). Raster: typische Fehler kosten zu viel (G8 nur k = 6 → 0/3, G7 bündelt Form und beide Werte); «0,5»-Komma doppeldeutig; ±0.67, «k² > 36», D = −41 ungeregelt; (A) nie benutzt.
+- [ ] M7 · Übungsdiagnosen: nullprodukt bei p = 0 verweist auf den falschen Faktor (~9 %); linear-loesen bei d = 0 Vorzeichen-/Divisionsdiagnose verwechselt (~2 %); wurzel q = 0 mit Eingabe {} «Wurzel ziehen mit ±» unpassend.
+- [ ] M8 · Clips: Kontrollclip Nullprodukt F4 Text ≠ Ton; F3 Rückmeldung verrät x = 0; F1 «Ausklammern geht immer» falsch (**Neuvertonung**); Kontrollclip Ergänzen F5 Falle «−b» bei −3 statt bei 1; Clip parameter «Die Fälle» Punkt x = 3 bleibt bei k = 2 (ℝ); Bild vor Ton (verfahren «Faktorisieren», ergaenzen Merke, parameter «Die Fälle»).
+- [ ] M9 · Parabeln benutzt (2e, 3f, 4e, 5c, Festhalten 3, Sim 5), aber nicht eingeführt; GF 3.1 «Gleichungen mithilfe von Funktionen visualisieren» nicht ausgewiesen. Sim 5 Familie B: rechte Gerade und Lösung für k ≥ 3.5 ausserhalb des Fensters.
+- [ ] M10 · Bibliotheksclip `g2-1-aequivalenzumformungen` Merkbild: «durch ihn teilen — gehört eine Probe dazu» — Probe findet keine verlorenen Lösungen (wirkt über das LP hinaus; **Neuvertonung**).
+
+### NIEDRIG
+- [ ] Seite: (x − p)² = r ohne r ≥ 0; «berührt die Achse» → x-Achse (auch Clip ergaenzen, **Neuvertonung**); «Kein Glied mit x (ax² + c)» → «kein lineares Glied (b = 0)»; Ergänzung (b/2)² ohne «Faktor 1 vor x²»; «dann ist die Gleichung linear» → «sofern der Koeffizient von x nicht auch null ist»; 2b-Kommentar «Zahlen in Klammern = Lösungen mit umgekehrtem Vorzeichen» nur bei Faktor 1; p doppelt belegt; sim4 A2 Zeile doppelt im Verlauf; Sim 5 Live-Zeile «1x», «0x», «+ 0», rechte Seite orange; Kapitel 0 verlinkt 1.4 nicht; Umformer 4 A6 Probe nur für 0.5; 2c = Kontrollfrage und Festhalten (Antwort steht darüber); Mengen-Eingabe «{3 4}» → 34, «x=3» Meldung.
+- [ ] Clips: «Jetzt du … Animation» in Kap. 1–4 (dort Umformer; **Neuvertonung** 4 Clips); «√−8 gibt es nicht» → in ℝ; ergaenzen Merke «aus jeder Gleichung» → quadratischen; Kontrollclip Umformen F1 «verboten»; Mitternachtsformel ohne a ≠ 0 im Bild; parameter «Zuerst a prüfen» bricht ab, «Leitkoeffizient» nicht eingeführt; rechte Seite schwarz/orange uneinheitlich; Gerade verdeckt Achsenbeschriftung −2; Herleitung der Formel aus der Ergänzung nur behauptet (4c verlangt sie).
+- [ ] PDF: BP Seiten 1–2 halbleer; GT Seite 3 ein Drittel leer, G6 wenig Schreibraum; 30 min statt ~20 (bewusst festhalten); G3 doppelte Gleichwertigkeitsangabe.
