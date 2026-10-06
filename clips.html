@@ -110,7 +110,8 @@
 /* Farben in der Tabelle (überdacht 06.10.2026): Spalte «Animationen» hinterlegt, mit «Anim»,
    in der Bereichsfarbe (GF blau, SP violett). Spalten «Leitprogramm» und «Weitere Clips» ruhig:
    weisse Zeilen, Nummer in der Bereichsfarbe (GF blau, SP violett) statt der Reihen-Nuancen.
-   «LP» als Marke in der Bereichsfarbe auf Papiergrau. Taschenrechner-Clips stechen heraus:
+   Spalte «Leitprogramm» in einem helleren Ton der Bereichsfarbe hinterlegt (Abstand zu den
+   Animationen), mit «LP». Taschenrechner-Clips stechen heraus:
    dunkle Zeile mit Marke «TR». */
 /* Im Schwerpunktfach auch die Animationsclips in der Bereichsfarbe (violett statt blau) */
 .cl-sp .cl-tabelle .cl-anim .cl-clip { background: var(--lila-hell); }
@@ -125,12 +126,15 @@
 .cl-tabelle .clip:not(.cl-anim) .cl-folge.cl-ohne { background: none; color: var(--tinte-2); }
 .cl-lp { display: flex; align-items: stretch; }
 .cl-lp[hidden] { display: none; }
-.cl-lp .cl-clip { flex: 1; min-width: 0; }
+.cl-lp .cl-clip { flex: 1; min-width: 0; background: #eef4fb; padding-left: 6px; }
+.cl-lp .cl-clip:hover { background: var(--blau-hell); }
+.cl-sp .cl-lp .cl-clip { background: #f5f1fb; }
+.cl-sp .cl-lp .cl-clip:hover { background: var(--lila-hell); }
 .cl-lplink { flex-shrink: 0; display: flex; align-items: center; padding: 0 8px 0 12px;
-  background: var(--papier-2); color: var(--blau); text-decoration: none;
+  background: #eef4fb; color: var(--blau); text-decoration: none;
   font-family: var(--mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.4px;
   border-left: 3px solid var(--blau); }
-.cl-sp .cl-lplink { color: var(--lila); border-left-color: var(--lila); }
+.cl-sp .cl-lplink { background: #f5f1fb; color: var(--lila); border-left-color: var(--lila); }
 .cl-lplink:hover { text-decoration: underline; }
 .cl-lplink:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
 .cl-trz { display: flex; align-items: stretch; border-radius: 6px; overflow: hidden; }

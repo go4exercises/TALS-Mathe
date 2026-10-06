@@ -963,9 +963,9 @@ ihres Kapitels im Leitprogramm, `#simN`, wie «Anim» bei den Clips der Themense
 
 **Farben in der Tabelle:** Spalte 1 hinterlegt, mit «Anim», in der Bereichsfarbe (GF blau, SP violett; auf den
 Themenseiten bleibt sie blau).
-Spalten 2 und 3 ruhig: weisse Zeilen, Nummer in der Bereichsfarbe (GF blau, SP violett) statt
-der Reihen-Nuancen; «LP» als Marke in der Bereichsfarbe auf Papiergrau — kein Orange oder
-Bernstein (das ist die Physik). Taschenrechner-Clips (`werkzeug`) stechen heraus: dunkle
+Spalte 3 ruhig: weisse Zeilen, Nummer in der Bereichsfarbe (GF blau, SP violett) statt
+der Reihen-Nuancen; Spalte 2 in einem helleren Ton der Bereichsfarbe hinterlegt (#eef4fb / #f5f1fb, heller als
+die Animationen), mit «LP» — kein Orange oder Bernstein (das ist die Physik). Taschenrechner-Clips (`werkzeug`) stechen heraus: dunkle
 Zeile (`--tinte`) mit Marke «TR». Ein
 Bibliotheksclip, den ein Leitprogramm mitbenutzt, bleibt in Spalte 1 oder 3. Unter 720 px
 stehen die Spalten untereinander.
