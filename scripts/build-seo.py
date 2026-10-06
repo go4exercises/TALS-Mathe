@@ -138,9 +138,6 @@ SEITEN = {
    themen=['Mathematik', 'Lineare Funktionen', 'Gerade', 'Steigung', 'Achsenabschnitt', 'Leitprogramm']),
  'leitprogramme/potenz-wurzelfunktionen.html': dict(
    typ='article', lrt='Leitprogramm',
-   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
-   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
-   noindex=True,
    titel='Leitprogramm Potenz- und Wurzelfunktionen — formen, verschieben, umkehren',
    beschreibung='Leitprogramm zu den Potenz- und Wurzelfunktionen nach RLP SP 3.2: der Exponent und die Symmetrie, Hyperbeln mit ihren Asymptoten, Verschieben und Strecken, die Wurzelfunktion als Umkehrfunktion der Potenzfunktion und ihre Definitionsmenge — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Potenzfunktionen', 'Wurzelfunktionen', 'Umkehrfunktion', 'Hyperbel', 'Leitprogramm']),
