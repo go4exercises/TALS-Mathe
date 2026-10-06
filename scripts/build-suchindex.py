@@ -338,6 +338,8 @@ def seiten_aus_navjs(root):
                                   'Leitprogramm Betragsfunktionen', 'thema'),
                                  ('leitprogramme/planimetrie.html', '▤',
                                   'Leitprogramm Planimetrie', 'thema'),
+                                 ('leitprogramme/lineare-quadratische-gleichungen.html', '▤',
+                                  'Leitprogramm Lineare und quadratische Gleichungen', 'thema'),
 ]:
         # Ein Leitprogramm haengt an drei Stellen zusammen: Kaertchen in
         # leitprogramme.html, Eintrag in build-seo.py (ohne noindex, damit es

@@ -173,9 +173,6 @@ SEITEN = {
    themen=['Mathematik', 'Planimetrie', 'Dreieck', 'Kreis', 'Ähnlichkeit', 'Leitprogramm']),
  'leitprogramme/lineare-quadratische-gleichungen.html': dict(
    typ='article', lrt='Leitprogramm',
-   # noindex, solange das Leitprogramm nicht freigeschaltet ist (Prüfung nach
-   # HOWTO-leitprogramme §15 läuft). Beim Freischalten die Zeile entfernen.
-   noindex=True,
    titel='Leitprogramm Lineare und quadratische Gleichungen — umformen, Nullprodukt, Mitternachtsformel, Parameter',
    beschreibung='Leitprogramm zu den linearen und quadratischen Gleichungen nach RLP GF 2.2: Äquivalenzumformungen und die drei Lösungsfälle, Ausklammern und Satz vom Nullprodukt, Wurzelziehen, quadratische Ergänzung und Mitternachtsformel, das passende Verfahren wählen und die Parameterdiskussion — mit Clips, einem Umformer zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Lineare Gleichungen', 'Quadratische Gleichungen', 'Mitternachtsformel', 'Parameterdiskussion', 'Leitprogramm']),

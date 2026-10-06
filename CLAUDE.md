@@ -49,10 +49,10 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   `../vendor/mathjax/tex-svg.js` — **kein fremder Host**. Farben, Kopf, Fuss und
   Clip-Bühne werden von der Site *geerbt*, nicht kopiert. Die Übersicht
   `leitprogramme.html` wird von Hand gepflegt. **Seit dem 06.10.2026 sind dort nur die
-  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** — acht
+  neuen Leitprogramme mit Clips, Animationen und Kontrollfragen sichtbar** — neun
   (`quadratische-funktionen`, `lineare-funktionen`, `potenz-wurzelfunktionen`,
   `polynomfunktionen`, `exp-log-funktionen`, `trigonometrische-funktionen`,
-  `betragsfunktionen`, `planimetrie`; noch unverlinkt, Abnahme offen: `lineare-quadratische-gleichungen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
+  `betragsfunktionen`, `planimetrie`, `lineare-quadratische-gleichungen`). Die fünf älteren (`potenzen`, `quadratische-gleichungen`,
   `gleichungssysteme`, `uebungspruefung-1`, `trigo2`) bleiben als Dateien bestehen, ihre
   Kärtchen stehen vorübergehend unter «Alte Leitprogramme (werden demnächst ersetzt)»
   am Ende von `leitprogramme.html`; sie tragen `noindex` und fehlen
