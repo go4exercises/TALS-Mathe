@@ -844,3 +844,38 @@ Nachgeprüft vom Hauptagenten: H1, H2, H3, M1.
 - [x] Clips: Rückmeldung «Ein Betrag macht immer einen Knick» (Kontrolle verschieben F4) widerspricht Kap. 3; Merke «Vorzeichen aus dem Betrag umgekehrt» unscharf (gilt nicht für v); «Wie viele?» ohne c = 0; Falle (−3 | −3) ausserhalb des Fensters; u, v im Clip blau, in der Sim grau; «links der Wanne» → «links des Bodens»; Szene «Ungleichung» zeigt das Lösungsstück vor dem Satz.
 - [x] Seite: 1e Ungleichung vor Kap. 5 → «wo liegt das V unter y = 3»; Festhalten 4 «aussen steigen die Äste mit ±2» → −2 links, +2 rechts; m doppelt (Bezugspunkt / Steigung); Abstand orange (orange = Lösungen); «dünn gezeichnete Zielkurve» → blass; Sim 4 bei a = b Lücke x = a; Minigraf 3c Gitter 0.75; Kap. 0 Kopf «SP 2.1» statt 2.2c; `betrag-wert` «+ 0»; `abschnittsweise` ohne Diagnose «nur eine Zahl umgedreht».
 - [x] PDF: G3-Kurve durch Achsenbeschriftungen; G4(a) wenig Schreibraum, G6/G7 ohne KS.
+
+## Prüfung Planimetrie (06.10.2026)
+
+Skill `/lp-pruefung leitprogramme/planimetrie.html`, drei Agenten (Seite, Clips, PDFs), Stand Commit
+`2641d79` (unverlinkt, noindex, nicht live). `seite.*`/`clips.py` = `scripts/lp/planimetrie/`,
+`GT`/`BP` = `downloads/leitprogramme/planimetrie/{gesamttest,bewertungspaket}.tex`. Arbeitsbereich = `arbeitsbereich('simN')` in `seite.js`.
+
+**Rechenfehler: keine** in Vortest, 1a–5e, Arbeitsbereichen (Soll- und Fehlwerte), Clip-Beispielen, 25 Kontrollfragen
+und GT G1–G7 samt Folgefehlern. Werkzeuge grün (`pruef-uebungen` 10 × 2000, `pruef-leiste` 5, `pruef-geo` 5, `pruef-fragen` 5).
+Nachgeprüft vom Hauptagenten: H1, H2, H5, M1, M4, M5, N (Karo, «= ≈», leere Rückmeldung).
+
+### HOCH
+- [ ] **H1 · Arbeitsbereich 2, Aufgabe 1 mit der Maus unlösbar**: Startwert t = 4 → C(4 | 3) über der Mitte von AB, Kandidaten Höhe und Seitenhalbierende deckungsgleich, `s` liegt oben; Tipp gibt «Das ist die Seitenhalbierende … nicht senkrecht» (falsch, das Dreieck ist gleichschenklig). → `setup` t = 2 (und sperren). Neue Fehlerklasse: **deckungsgleiche Kandidaten** — `pruef-geo` soll Kandidaten auf Abstand prüfen.
+- [ ] **H2 · «Im stumpfwinkligen Dreieck liegt die Höhe ausserhalb»** (Kontrollclip Fläche F1 Option und Sprecher; Seite Festhalten 2 «Häufiger Fehler», Festhalten 1): Die Höhe von der stumpfen Ecke liegt innen (Kontrollclip Dreiecke F3, Lot von B auf AC bei t = 0.53). → «zwei Höhen liegen ausserhalb» / «kann ausserhalb liegen»; **Neuvertonung** Kontrollclip Fläche, Szene «Frage 1».
+- [ ] **H3 · Gesamttest wiederholt Modelle** (HOWTO §9): G1(a) = 1b(b)/Übung winkelsumme; G2(b) = Arbeitsbereich 2 A7; G3 = 3b + Arbeitsbereich 3 A6; G4 = 4c/Clip/Übung sektor (φ-Liste enthält 135°); G5 = Clip Kreis (Segment 60°, gleichseitig) und Themenseite 5.2c (r = 10, φ = 60°, 9.06); G6 = 5e/Festhalten/Clip/Kontrollclip/Übung (alles Schatten); G7 = 5c. Auch Selbsttests wiederholen Clip/Festhalten (3d = 3-4-5-Trapez, 5e Schatten, 4c Sektor). → Umkehr- und Transferaufgaben (Winkel aus Bogenlänge, Strahlensatz an Figur, Modellfläche gesucht, Basiswinkel gesucht).
+- [ ] **H4 · Segment bei 60° nie geübt, im GT verlangt (G5)**: Kapitel 4 übt nur φ = 90° (rechtwinkliges Dreieck); Clip zeigt «A_Δ ≈ 15.59» ohne Weg (§15 «Schritte sichtbar»). → im Clip Höhe √(6² − 3²) zeigen (**Neuvertonung** Clip Kreis, Szene Segment) und eine 60°-Aufgabe einbauen — oder G5 mit 90°.
+- [ ] **H5 · Arbeitsbereich 1, Aufgabe 7: Antwort steht in der Live-Zeile** («γ ≈ 86.8°»), und 86.82 (exakt) gibt fälschlich «Fast — runde auf zwei Dezimalen». → γ bei Frage-Aufgaben ausblenden, Soll 86.82 mit Toleranz für 86.8.
+
+### MITTEL
+- [ ] M1 · Segment-Regel ohne Bedingung (Festhalten 4): gilt nur für φ < 180° (darüber Sektor + Dreieck; Themenseite 5.2c sagt es); Regler φ bis 360°, Übung sektor bis 300°.
+- [ ] M2 · GT deckt Kapitelziele nicht: Vierecksfamilie/Parallelogramm/Raute/Drachen, Sehne-Sekante-Tangente-Passante, Kreisumfang/-fläche, Kreisring, zentrische Streckung ausführen, Strahlensätze (nur Schatten), A = ½ g h begründen, Umfang Dreieck.
+- [ ] M3 · Raster: G7 «cm² statt m²» widerspricht der allgemeinen Gleichwertigkeitsregel (BP Z. 44 vs. 140); G2 «½ vergessen» uneinheitlich (Ansatz verlangt ½, Fehlerzeile lässt Ansatzpunkt); G6 Ansatz- und Verhältniszeile überlappen; G1(a) Begründung unklar; (A)-Punkte erklärt, aber keine (A)-Zeile; Einheitenabzug keiner Zeile zugeordnet.
+- [ ] M4 · Bild ≠ Text: Arbeitsbereich 5 A6 (Text SA = 4, SA' = 6, AB = 3 und «S»; Bild Z, ZA ≈ 1.12, AB = 2); Aufgabe 5b (AB gezeichnet ≈ 0.55·SA, gegeben 1.4·SA); GT G2 (C bei (−2.2 | 4.2) → AC = 4.74 statt 7; richtig (±5.6 | 4.2)).
+- [ ] M5 · Arbeitsbereich 3: Live-Zeile zeigt «A = 18 cm²» in A1–A4 bei denselben Werten, nach denen A5 fragt; Arbeitsbereich 5 A5 zeigt «Flächenfaktor k² = 6.25» während der Frage.
+- [ ] M6 · Clips: Kreis «Linien am Kreis» Sehne nicht auf der Sekante (y = 2.25 statt 5.5); Vierecke «Familie» Raute ist ein Quadrat (Diagonalen 2.4/2.4); «Parallelogramm» das abgeschnittene Dreieck links nicht markiert; Ähnlichkeit ohne Strahlensatz-Figur (S, A, A′, B, B′) und ohne k < 0, Formel «ZP′ = k·ZP» statt |k| (**Neuvertonung**, wenn eine Szene dazukommt).
+- [ ] M7 · Sonderwerte verdecken Fehler: kreis/sektor r = 2 (2πr = πr², b = A_S); strahlensatz Stab = Schatten.
+- [ ] M8 · Eingeführt? Kreisring nur in Festhalten/4f (kein Clip, keine Übung); Strahlensätze nur Formel im Clip, Arbeitsbereich 5 A6 fragt sie vor dem Festhalten; «2. Strahlensatz» (5b) nie nummeriert; Kapitel 2 nutzt Parallelogramm g·h vor Kapitel 3 (Vortest prüft nur Rechteck).
+- [ ] M9 · Kompetenzdeckung nicht ehrlich ausgewiesen: K2 «berechnen» — Seiten-/Winkelhalbierende, Mittelsenkrechte, Sehne, Sekante, Tangente nur erkannt; Abstand nur als Höhe; Winkelmass nur Grad (5.1 nennt Radiant; Themenseite verschiebt auf 5.4). → in Box und Matrix vermerken.
+- [ ] M10 · Leitfaden ④ nicht umgesetzt: Übungen dreieck-flaeche/hoehe ohne Figur, keine Zuordnung Grundseite–Höhe, keine wechselnden Lagen/Dreiecksarten; viereck/Parallelogramm ohne Ablenker «schräge Seite».
+
+### NIEDRIG
+- [ ] Seite: «Schnittpunkt H» → «Höhenschnittpunkt H» (Festhalten 1); `m_c` kollidiert mit Mittellinie m, Themenseite schreibt A_SK; «Raute (Rhombus)»; gleichseitig ohne Seitendefinition; c = 8, d = 0 heisst «Parallelogramm» statt Rechteck; Arbeitsbereich 2 gedreht «C(2 | 3)» passt nicht zum Raster, h_b-Aufgaben zeigen «g = 8 cm» und nach der Antwort «h = 3 cm»; «Wo liegt der Fusspunkt jetzt?» ohne gezeichnete Höhe (AB1 A4, AB2 A3); AB1 A3 Trefferstreifen s/w überlappen; Live-Zeile «Summe 180°» zirkulär; Arbeitsbereich 4 bei r = 5 unten abgeschnitten; Vortest 0b «Faktor 100» verwirrend, 0c = Clip-Beispiel; Warnkasten 5 «SA : AA′» missverständlich; Kompetenzmatrix ohne 1e.
+- [ ] Technik: Karo der Aufgabenfiguren unsichtbar (`svg.geo-mini .gitter` ohne Stil; 2d/1c nicht ablesbar); `.geo .bild` trifft auch die Texte A′B′C′ (gestrichelter Umriss); Arbeitsbereich 4 «= ≈ 0.167»; Übung pythagoras: leere rote Rückmeldung (Fehlerliste `[hypot, '']`, z. B. 2/3 → 3.6); Sperrliste: `tr|14|8|4`, `py|3|5`, `py|4|3`, Diagonalen-Reihenfolge, `st` Schlüssel ohne Fläche, `gs|52/64` wirkungslos.
+- [ ] Clips: Kontrolle Vierecke F3 Rückmeldung Text ≠ Ton; Kontrolle Dreiecke F5 «h_c» roh; Ähnlichkeit «12 m» auf der Linie wie «2 m» (Masslinie); Rückmeldung «nicht senkrecht zum Bildrand» bei a gedreht unpassend; Winkelfarben wechseln (Dreiecke Szene 0/1); Kreis «A_Seg» erscheint vor dem Ton.
+- [ ] PDF: GT 30 min (HOWTO ~20); G1/G2 wenig Schreibraum für Skizzen; G3 ohne rechten Winkel; BP Seiten 1–2 halbleer; «für das ganze Gesamttest»; «das wäre die Mittelsenkrechte, wenn senkrecht» verworren.
