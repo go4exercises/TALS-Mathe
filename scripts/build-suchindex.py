@@ -331,6 +331,8 @@ def seiten_aus_navjs(root):
                                   'Leitprogramm Lineare Funktionen', 'thema'),
                                  ('leitprogramme/potenz-wurzelfunktionen.html', '▤',
                                   'Leitprogramm Potenz- und Wurzelfunktionen', 'thema'),
+                                 ('leitprogramme/polynomfunktionen.html', '▤',
+                                  'Leitprogramm Polynomfunktionen', 'thema'),
                                  ('leitprogramme/exp-log-funktionen.html', '▤',
                                   'Leitprogramm Exponential- und Logarithmusfunktionen', 'thema'),
                                  ('leitprogramme/trigonometrische-funktionen.html', '▤',
