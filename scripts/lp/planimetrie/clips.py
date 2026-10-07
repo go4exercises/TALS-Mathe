@@ -128,6 +128,8 @@ def wahl(szene, text, opt, richtig, rueck, sprich=None, rueck_sprich=None, bei=0
 
 def klick(szene, text, ziel, richtig_text, fallen, falsch_text, sprich=None, falsch_sprich=None,
           tol=0.5, bei=0.3):
+    # Bewusst ohne "eingabe" (anders als die Funktionen-LPs): Die Figuren stehen ohne Achsen,
+    # Koordinaten waeren hier keine Antwort, die man ablesen kann.
     d = {'szene': szene, 'bei': bei, 'typ': 'klick', 'text': text, 'ziel': ziel, 'toleranz': tol,
          'richtig_text': richtig_text, 'fallen': fallen, 'falsch_text': falsch_text}
     if sprich:

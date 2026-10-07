@@ -693,7 +693,7 @@ gegen sie und darüber hinaus.
   Leitprogrammen falsch.
 - **Klickfragen auch ohne Maus lösbar** (aus Physik, 06.10.2026): Wo der Punkt ablesbare Koordinaten
   hat, bekommt die Frage `"eingabe": ["x", "y"]` (Achsennamen des Graf) — der Helfer `klick()` der
-  LP-Bauskripte setzt das als Vorgabe. Ohne Achsen (Planimetrie) `eingabe=None`.
+  LP-Bauskripte setzt das als Vorgabe. Ohne Achsen (Planimetrie) kein `eingabe` — dort fehlt der Parameter.
 - **Klickfragen brauchen im Bild ein Fenster** (`"tippbar": true`, HOWTO-clips) — sonst werden
   sie stumm übersprungen; `pruef-fragen` meldet «Durchlauf: jede Frage genau einmal».
 - **Sperrliste über die Normalform** (Gleichungen 06.10.2026): Ein Schlüssel pro Typ (`ak|a|b`, `zk|b|c`)
