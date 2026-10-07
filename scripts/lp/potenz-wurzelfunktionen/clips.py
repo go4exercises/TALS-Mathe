@@ -192,6 +192,9 @@ W5 = dict(xbereich=[-4, 5], ybereich=[-4, 5])
 W_SP = dict(xbereich=[-2, 5], ybereich=[-2, 5])
 W_H = dict(xbereich=[-3, 6], ybereich=[-4, 5])
 
+W_ZK = dict(xbereich=[-3, 3], ybereich=[-9, 9],          # «Zwei Kurven»: (−2 | −8) muss ins Bild
+            yteilung=[[-8, '−8'], [-6, '−6'], [-4, '−4'], [-2, '−2'], [2, '2'], [4, '4'], [6, '6'], [8, '8']])
+
 # ════════════════════════════════════════════════ Kapitel 1 · Einführung
 clip('exponent', 'Kurve sehen: der Exponent formt den Graphen',
      'Parabeln n-ter Ordnung — wie der Exponent die Form bestimmt und seine Parität die Symmetrie.',
@@ -203,15 +206,22 @@ clip('exponent', 'Kurve sehen: der Exponent formt den Graphen',
             titel('Zwei Kurven', 280, 80),
             f(r'\begin{array}{c|ccccc} x & -2 & -1 & 0 & 1 & 2 \\ \hline x^2 & 4 & 1 & 0 & 1 & 4 \\ x^3 & -8 & -1 & 0 & 1 & 8 \end{array}',
               430, 42, ein=5.6),
-            graf(W, [kurve([[0, 1, 2, 0, 0]], farbe=1), kurve([[0, 1, 3, 0, 0]], farbe=1, gestrichelt=True)],
-                 ein=10.4)),
+            # Bild zum Satz (Ton: «x Quadrat» 2.9, «x hoch drei» 4.3, «vier» 10.6, «minus acht» 11.5); y bis ±9,
+            # damit (−2 | 4) und (−2 | −8) im Bild liegen
+            graf(W_ZK, [kurve([[0, 1, 2, 0, 0]], farbe=1)], ein=2.9),
+            graf(W_ZK, [kurve([[0, 1, 3, 0, 0]], farbe=1, gestrichelt=True)], ein=4.3, raster=False),
+            # Beschriftung von Hand: rechts oberhalb bzw. unterhalb, wo die Kurven nicht verlaufen
+            # (x² bei −1.8: 3.24; x³ bei −1.8: −5.83)
+            graf(W_ZK, punkte=[dict(pt(-2, 4, 5, '(−2 | 4)'), beschriftung_bei=[-1.8, 4.9])], ein=10.6, raster=False),
+            graf(W_ZK, punkte=[dict(pt(-2, -8, 5, '(−2 | −8)'), beschriftung_bei=[-1.8, -8.3])], ein=11.5, raster=False)),
          sz('n wächst',
             'Lassen wir den Exponenten wachsen: von zwei über drei und vier bis fünf. '
             'Zwischen minus eins und eins wird die Kurve flacher, aussen steiler. '
             'Und ein Punkt bleibt, wo er ist: eins, eins.',
             f(r'y = x^{\fb{n}}, \quad \fb{n} = 2 \to 5', 300, 62),
             n('grösseres @\\fb{n}@: innen flacher,|aussen steiler', 440, 'orange'),
-            graf(W, [kurve([[0.9, 1, 2, 0, 0], [4.4, 1, 5, 0, 0]], stufen=True,
+            graf(W, [kurve([[0, 1, 2, 0, 0]], farbe=5, gestrichelt=True),      # Bezugskurve y = x², wie in sim1
+                     kurve([[0.9, 1, 2, 0, 0], [4.4, 1, 5, 0, 0]], stufen=True,
                            marken=[{'x': 1, 'text': '(1 | {y})', 'farbe': 5}])])),
          sz('Gemeinsame Punkte',
             'Alle diese Kurven gehen durch null, null und durch eins, eins. '
@@ -226,14 +236,16 @@ clip('exponent', 'Kurve sehen: der Exponent formt den Graphen',
             'Bei x hoch vier liegen minus eins und eins beide auf der Höhe eins.',
             f(r'f(-x) = f(x) \quad (\fb{n} \text{ gerade})', 300, 56),
             n('achsensymmetrisch|zur @y@-Achse', 440, 'blau'),
-            graf(W, [kurve([[0.8, 1, 2, 0, 0], [3.6, 1, 4, 0, 0]], stufen=True)],
+            # Sprung 2 → 4 in 0.08 s vor «heisst f von minus x» (Ton 1.0–1.7): x³ steht nie im Bild
+            graf(W, [kurve([[0.8, 1, 2, 0, 0], [0.88, 1, 4, 0, 0]], stufen=True)],
                  punkte=[pt(-1, 1, 5, '(−1 | 1)'), pt(1, 1, 5, '(1 | 1)')])),
          sz('Ungerade Funktion',
             'Ungerades n heisst: f von minus x ist gleich minus f von x. Der Graph ist punktsymmetrisch zum Ursprung. '
             'Bei x hoch fünf liegt minus eins bei minus eins, eins bei plus eins.',
             f(r'f(-x) = -f(x) \quad (\fb{n} \text{ ungerade})', 300, 54),
             n('punktsymmetrisch|zum Ursprung', 440, 'blau'),
-            graf(W, [kurve([[0.8, 1, 3, 0, 0], [3.6, 1, 5, 0, 0]], stufen=True)],
+            # Sprung 3 → 5 in 0.08 s vor «f von minus x» (Ton 1.6): x⁴ steht nie im Bild
+            graf(W, [kurve([[0.8, 1, 3, 0, 0], [0.88, 1, 5, 0, 0]], stufen=True)],
                  punkte=[pt(-1, -1, 5, '(−1 | −1)'), pt(1, 1, 5, '(1 | 1)')])),
          sz('a streckt',
             'Und a? a streckt die Kurve in y-Richtung. Zwei macht sie schmaler, null Komma fünf breiter. '
@@ -241,7 +253,8 @@ clip('exponent', 'Kurve sehen: der Exponent formt den Graphen',
             f(r'y = \fa{a} \cdot x^{\fb{3}}', 300, 66),
             n('@|\\fa{a}| \\gt 1@: schmaler; @|\\fa{a}| \\lt 1@: breiter|@\\fa{a} \\lt 0@: an der @x@-Achse gespiegelt',
               440, 'blau'),
-            graf(W, [kurve([[3.4, 1, 3, 0, 0], [4.6, 2, 3, 0, 0], [5.9, 0.5, 3, 0, 0], [8.8, -1, 3, 0, 0]])])),
+            graf(W, [kurve([[3.4, 1, 3, 0, 0], [4.6, 2, 3, 0, 0], [5.9, 0.5, 3, 0, 0], [8.8, -1, 3, 0, 0]],
+                           marken=[{'x': 1, 'text': '(1 | {y})', 'farbe': 5}])])),   # (1 | a): a ablesbar
          sz('Merke',
             'Zum Mitnehmen: Der Exponent n bestimmt die Form, seine Parität die Symmetrie — gerade heisst '
             'Achsensymmetrie, ungerade Punktsymmetrie. Alle Kurven gehen durch eins, eins. Und a streckt '
@@ -367,13 +380,13 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             'Die Kurve zerfällt in zwei Äste, und die Definitionsmenge ist die reellen Zahlen ohne null.',
             f(r'D = \mathbb{R} \setminus \{0\}', 300, 64),
             n('@x = \\fd{0}@ ist eine Definitionslücke —|hier eine Polstelle', 440, 'rot'),
-            graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 5})])),
+            graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 4})])),
          sz('Asymptoten',
             'Die beiden Achsen sind Asymptoten: Die Äste schmiegen sich an sie an, berühren sie aber nie. '
             'Eins durch x gleich null hat keine Lösung, so gross x auch wird.',
             f(r'x = 0 \quad \text{und} \quad y = 0', 300, 58),
             n('beliebig nahe,|aber nie erreicht', 440, 'blau'),
-            graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 5},
+            graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 4},
                               marken=[{'x': 3.5, 'text': '{y}', 'farbe': 5}])])),
          sz('Die Ordnung wächst',
             'Jetzt wächst die Ordnung: von eins über zwei und drei bis vier — der Exponent geht dabei '
@@ -404,7 +417,7 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             f(r'y = x^{\fb{-n}} = \dfrac{1}{x^{\fb{n}}}, \quad D = \mathbb{R} \setminus \{0\}', 410, 54, ein=0.4),
             n('Asymptoten @x = 0@ und @y = 0@|keine Nullstelle|gerade: oben; ungerade: diagonal',
               540, 'blau', 44, ein=1.2),
-            graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 5})])),
+            graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 4})])),
          JETZT_DU,
      ])
 
@@ -527,7 +540,7 @@ clip('verschieben', 'Kurve sehen: verschieben — und was die Asymptoten tun',
          sz('v schiebt senkrecht',
             'v verschiebt senkrecht, und zwar mit seinem eigenen Vorzeichen. Minus zwei hinter der Potenz '
             'senkt die ganze Kurve um zwei.',
-            f(r'y = (x \fc{- 2})^{\fb{3}} \fc{- 2}', 300, 60),
+            f(r'y = (x \fc{- 2})^{\fb{3}} \fc{- 2}', 300, 60, ein=4.2),   # mit «Minus zwei hinter der Potenz»
             n('hinter der Potenz:|eigenes Vorzeichen', 440, 'gruen'),
             graf(W_TR, [kurve([[0, 1, 3, 0, 0]], farbe=5, gestrichelt=True),
                         kurve([[4.4, 1, 3, 2, 0], [7.2, 1, 3, 2, -2]], startpunkt={'farbe': 5})])),
@@ -537,13 +550,16 @@ clip('verschieben', 'Kurve sehen: verschieben — und was die Asymptoten tun',
             f(r'y = \dfrac{1}{x - \fc{2}} \fc{- 1}', 300, 58),
             n('Polgerade @x = \\fc{u}@|Asymptote @y = \\fc{v}@', 440, 'gruen'),
             graf(W_TR, [kurve([[0.9, 1, -1, 0, 0], [4.6, 1, -1, 2, 0],
-                               [5.2, 1, -1, 2, 0], [7.6, 1, -1, 2, -1]], asymptoten={'farbe': 5})])),
+                               [5.2, 1, -1, 2, 0], [7.6, 1, -1, 2, -1]], asymptoten={'farbe': 5})]),
+            # «Der Kreuzungspunkt … das neue Zentrum» (Ton 7.9)
+            graf(W_TR, punkte=[pt(2, -1, 3, '(2 | −1)')], ein=7.9, raster=False)),
          sz('Nullstellen',
             'Und die Nullstellen? Man setzt y gleich null und löst auf. Null gleich Klammer x minus drei, '
             'hoch vier, minus sechzehn gibt Klammer hoch vier gleich sechzehn, also x minus drei gleich plus oder '
             'minus zwei — zwei Nullstellen: eins und fünf.',
-            f(r'(x-3)^{\fb{4}} = 16 \;\Longrightarrow\; x - 3 = \pm 2', 300, 48, ein=5.4),
-            n('gerader Exponent:|beim Wurzelziehen @\\pm@ nicht vergessen|@x_1 = 1@, @x_2 = 5@', 440, 'blau',
+            f(r'0 = (x-3)^{\fb{4}} - 16', 260, 48, ein=3.5),               # «Null gleich Klammer …» (Ton 3.5)
+            f(r'(x-3)^{\fb{4}} = 16 \;\Longrightarrow\; x - 3 = \pm 2', 360, 48, ein=5.4),
+            n('gerader Exponent:|beim Wurzelziehen @\\pm@ nicht vergessen|@x_1 = 1@, @x_2 = 5@', 470, 'blau',
               ein=11.0),
             graf(W_NS, [kurve([[0, 1, 4, 3, -16]])], ein=11.0,
                  punkte=[pt(1, 0, 5, '(1 | 0)'), pt(5, 0, 5, '(5 | 0)')])),
@@ -686,7 +702,13 @@ clip('umkehren', 'Kurve sehen: umkehren heisst spiegeln',
             'über einem x liegen zwei Punkte. Das ist kein Funktionsgraph.',
             f(r'y = x^{\fb{2}}', 300, 62),
             n('Spiegelbild: zu einem @x@|zwei @y@ — keine Funktion', 440, 'rot'),
-            graf(W, [kurve([[0, 1, 2, 0, 0]], spiegel={'farbe': 4})], geraden=[WH])),
+            graf(W, [kurve([[0, 1, 2, 0, 0]], spiegel={'farbe': 4})], geraden=[WH]),
+            # «über einem x liegen zwei Punkte» (Ton 5.7–7.1): x = 1 trifft das Spiegelbild x = y² in (1 | 1) und (1 | −1)
+            graf(W, figuren=[{'art': 'strecke', 'von': [1, -3], 'bis': [1, 3], 'farbe': 5, 'dicke': 2.5,
+                              'gestrichelt': True}],
+                 punkte=[pt(1, 1, 4, '(1 | 1)'),     # (1 | −1) links unten: dort verläuft −√x bei −0.55 … −0.92
+                         dict(pt(1, -1, 4, '(1 | −1)'), beschriftung_bei=[0.85, -1.35], anker='end')],
+                 ein=5.8, raster=False)),
          sz('Einschränken',
             'Der Ausweg: Man schränkt die Potenzfunktion auf x grösser oder gleich null ein. '
             'Von diesem halben Ast ist das Spiegelbild wieder ein Funktionsgraph — die Quadratwurzel.',
@@ -812,6 +834,8 @@ W_WZ = dict(xbereich=[-3, 9], ybereich=[-5, 3],
             xteilung=[[-1, '−1'], [3, '3'], [5, '5'], [7, '7']],
             yteilung=[[-4, '−4'], [-2, '−2'], [2, '2']])
 W_VG = dict(xbereich=[-1, 3], ybereich=[-1, 3])
+W_DM = dict(xbereich=[-9, 9], ybereich=[-3, 3],
+            xteilung=[[-8, '−8'], [-6, '−6'], [-4, '−4'], [-2, '−2'], [2, '2'], [4, '4'], [6, '6'], [8, '8']])
 W_GL = dict(xbereich=[-4, 9], ybereich=[-3, 4],
             xteilung=[[-2, '−2'], [2, '2'], [4, '4'], [6, '6'], [8, '8']],
             yteilung=[[-2, '−2'], [2, '2']])
@@ -835,8 +859,11 @@ clip('wurzel', 'Kurve sehen: Wurzelfunktionen nutzen',
             f(r'\sqrt[3]{x}:\ D = \mathbb{R}', 380, 54, ein=7.0),
             n('@\\sqrt{x}@ ausgezogen, @\\sqrt[3]{x}@ gestrichelt|gerader Wurzelexponent: ab @0@|'
               'ungerader: ganz @\\mathbb{R}@', 500, 'gruen', 42, ein=9.6),
-            graf(W, [kurve([[0, 1, HALB, 0, 0]], farbe=3),
-                     kurve([[0, 1, DRITTEL, 0, 0]], farbe=3, gestrichelt=True)])),
+            # x bis ±9, damit (−8 | −2) im Bild liegt; ∛x erst mit ihrer Formel (7.0), der Punkt mit
+            # «minus acht ist minus zwei» (Ton 10.9–11.9)
+            graf(W_DM, [kurve([[0, 1, HALB, 0, 0]], farbe=3)]),
+            graf(W_DM, [kurve([[0, 1, DRITTEL, 0, 0]], farbe=3, gestrichelt=True)], ein=7.0, raster=False),
+            graf(W_DM, punkte=[pt(-8, -2, 5, '(−8 | −2)')], ein=11.2, raster=False)),
          sz('Verschieben wie immer',
             'Verschoben wird nach demselben Schema wie überall. Bei y gleich zwei mal Wurzel aus '
             'x plus eins, minus vier, liegt der Startpunkt bei minus eins und minus vier — dort '
@@ -858,7 +885,12 @@ clip('wurzel', 'Kurve sehen: Wurzelfunktionen nutzen',
             graf(W_VG, [kurve([[0, 1, HALB, 0, 0]], farbe=3),
                         kurve([[0, 1, 1, 0, 0]], farbe=5, gestrichelt=True),
                         kurve([[0, 1, 2, 0, 0]], farbe=1)],
-                 punkte=[pt(1, 1, 5, '(1 | 1)')])),
+                 punkte=[pt(1, 1, 5, '(1 | 1)')]),
+            # mit der Notiz (6.0): bei x = 0.25 die drei Werte 0.5, 0.25, 0.0625 — Punkte ohne Text, die Zahlen
+            # stehen in der Notiz (Live-Marken runden auf eine Stelle: 0.25 würde 0.3)
+            graf(W_VG, figuren=[{'art': 'strecke', 'von': [0.25, 0], 'bis': [0.25, 0.5], 'farbe': 5, 'dicke': 2,
+                                 'gestrichelt': True}],
+                 punkte=[pt(0.25, 0.5, 3), pt(0.25, 0.25, 5), pt(0.25, 0.0625, 1)], ein=6.0, raster=False)),
          sz('Grafisch lösen',
             'Und damit lässt sich eine Wurzelgleichung grafisch lösen: Dritte Wurzel aus x plus zwei '
             'gleich zwei. Man zeichnet die Kurve und die waagrechte Gerade y gleich zwei und liest '
@@ -866,8 +898,10 @@ clip('wurzel', 'Kurve sehen: Wurzelfunktionen nutzen',
             'ist dritte Wurzel aus acht, also zwei.',
             f(r'\sqrt[\fb{3}]{x + 2} = 2', 300, 58, ein=3.6),
             n('Schnittpunkt @(6 \\mid 2)@|Probe: @\\sqrt[3]{6+2} = \\sqrt[3]{8} = 2@', 450, 'blau', 44, ein=9.8),
-            graf(W_GL, [kurve([[0, 1, DRITTEL, -2, 0]], farbe=3)], ein=5.8,
-                 geraden=[ger(0, 2, farbe=5)], punkte=[pt(6, 2, 5, '(6 | 2)')])),
+            # gestaffelt zum Ton: «die Kurve» 6.4–7.0, «waagrechte Gerade» 7.9, «Schnittpunkt» 10.5
+            graf(W_GL, [kurve([[0, 1, DRITTEL, -2, 0]], farbe=3)], ein=6.2),
+            graf(W_GL, geraden=[ger(0, 2, farbe=5)], ein=8.0, raster=False),
+            graf(W_GL, punkte=[pt(6, 2, 5, '(6 | 2)')], ein=10.5, raster=False)),
          sz('Merke',
             'Zum Mitnehmen: Die n-te Wurzel ist x hoch eins durch n. Bei geradem Wurzelexponenten '
             'beginnt die Definitionsmenge beim Startpunkt, bei ungeradem gibt es keine Schranke. '

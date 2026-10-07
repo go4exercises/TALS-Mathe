@@ -22,6 +22,7 @@ Farben — eine Farbe, eine Bedeutung, gleich wie auf der Seite:
   5 Tinte  = neutral (Bezugslinien, Beschriftung)
 """
 import json
+import math
 import os
 import zlib
 
@@ -65,6 +66,12 @@ def RW(x, y, r1, r2, farbe=2):
 
 def WI(x, y, von, bis, farbe=2, r=40):
     return dict(art='winkel', bei=[x, y], von=von, bis=bis, farbe=farbe, r_px=r)
+
+
+def ML(x, y, idx, upx, farbe=3, g=22):
+    """«M» mit tiefgestelltem Index (M_I, M_U) — das SVG kennt kein LaTeX. upx: Fenstereinheiten je Pixel."""
+    return [T(x, y, 'M', farbe, 'start', g),
+            T(round(x + 0.95 * g * upx, 3), round(y - 0.3 * g * upx, 3), idx, farbe, 'start', int(g * 0.7))]
 
 
 def KR(mx, my, r, farbe=1, fu=0.0, **kw):
@@ -173,6 +180,15 @@ A1, B1, C1 = (1, 1), (8, 1), (3, 6)
 TRI1 = V([A1, B1, C1])
 ECKEN1 = [T(0.55, 0.35, 'A'), T(8.45, 0.35, 'B'), T(3, 6.55, 'C')]
 
+# Kleine Bilder der Schnittpunkte (Szene «Schnittpunkte»), links unter der Notiz, gleich geteilt:
+# spitz 8.4 × 6.3 auf 240 × 180 px, stumpf 9 × 7 auf 270 × 210 px.
+WS1 = dict(xbereich=[0.3, 8.7], ybereich=[0.3, 6.6], achsen=False)
+WS2 = dict(xbereich=[-2.5, 6.5], ybereich=[-3, 4], achsen=False)
+TRI1K = V([A1, B1, C1], dicke=2.5)
+TRI2K = V([(0, 0), (6, 0), (-1, 3)], dicke=2.5)
+PAN1 = lambda x: dict(x=x, y=560, breite=240, hoehe=180)
+PAN2 = lambda x: dict(x=x, y=770, breite=270, hoehe=210)
+
 # ════════════════════════════════════════════════ Kapitel 1 · Einführung
 clip('dreiecke', 'Figuren sehen: Dreiecke beschreiben',
      'Ecken, Seiten und Winkel benennen; die Innenwinkelsumme 180° mit Wechselwinkeln; spezielle Dreiecke; '
@@ -185,9 +201,13 @@ clip('dreiecke', 'Figuren sehen: Dreiecke beschreiben',
             f(r'\text{Seite } \fb{a} \text{ gegenüber } A', 400, 50, ein=5.0),
             f(r'\text{Winkel } \fb{\alpha} \text{ bei } A', 500, 50, ein=10.4),
             graf(W1, [TRI1] + ECKEN1, ein=0.3),
-            graf(W1, [T(5.95, 3.75, 'a', 2), T(1.5, 3.75, 'b', 2), T(4.5, 0.25, 'c', 2)], ein=5.0),
-            graf(W1, [WI(1, 1, 0, 68.2, 2), WI(8, 1, 135, 180, 3), WI(3, 6, 248.2, 315, 1),
-                      T(2.15, 1.55, 'α', 2, g=26), T(6.95, 1.5, 'β', 3, g=26), T(3.35, 4.9, 'γ', 1, g=26)], ein=10.4)),
+            # Seiten und Winkel einzeln, je zu ihrem Wort (Ton: a 5.4, b 7.3, c 8.8; Alpha 10.4, Beta 12.3, Gamma 13.4)
+            graf(W1, [T(5.95, 3.75, 'a', 2)], ein=5.0),
+            graf(W1, [T(1.5, 3.75, 'b', 2)], ein=7.3, raster=False),
+            graf(W1, [T(4.5, 0.25, 'c', 2)], ein=8.8, raster=False),
+            graf(W1, [WI(1, 1, 0, 68.2, 2), T(2.15, 1.55, 'α', 2, g=26)], ein=10.4),
+            graf(W1, [WI(8, 1, 135, 180, 3), T(6.95, 1.5, 'β', 3, g=26)], ein=12.3, raster=False),
+            graf(W1, [WI(3, 6, 248.2, 315, 1), T(3.35, 4.9, 'γ', 1, g=26)], ein=13.4, raster=False)),
          sz('Winkelsumme',
             'Warum ergeben die drei Winkel immer hundertachtzig Grad? Zieh durch C die Parallele zu AB. Links und rechts von C '
             'entstehen Wechselwinkel, genau so gross wie Alpha und Beta. Zusammen mit Gamma liegen sie auf einer Geraden: '
@@ -201,18 +221,29 @@ clip('dreiecke', 'Figuren sehen: Dreiecke beschreiben',
             'Zum Beispiel Alpha gleich fünfzig Grad und Beta gleich sechzig Grad. Dann ist Gamma hundertachtzig minus fünfzig '
             'minus sechzig, also siebzig Grad.',
             f(r'\alpha = 50^\circ, \quad \beta = 60^\circ', 300, 54, ein=0.4),
-            f(r'\gamma = 180^\circ - 50^\circ - 60^\circ = \fc{70^\circ}', 420, 50, ein=4.4)),
+            f(r'\gamma = 180^\circ - 50^\circ - 60^\circ = \fc{70^\circ}', 420, 50, ein=4.4),
+            # A(1|1), B(8|1), alpha 50°, beta 60° -> C(5.147 | 5.942), gamma 70° (Bogen 230°..300°)
+            graf(W1, [V([A1, B1, (5.147, 5.942)]), T(0.55, 0.35, 'A'), T(8.45, 0.35, 'B'), T(5.147, 6.5, 'C'),
+                      WI(1, 1, 0, 50, 2), T(2.45, 1.45, '50°', 2, g=26, kursiv=False)], ein=1.2),
+            graf(W1, [WI(8, 1, 120, 180, 3), T(6.6, 1.45, '60°', 3, g=26, kursiv=False)], ein=2.8, raster=False),
+            graf(W1, [WI(5.147, 5.942, 230, 300, 1), T(5.03, 4.45, '70°', 1, g=26, kursiv=False)], ein=7.7, raster=False)),
          sz('Spezielle Dreiecke',
             'Drei Sonderfälle haben eigene Namen. Im gleichschenkligen Dreieck sind zwei Seiten gleich lang und die Basiswinkel '
             'gleich gross. Im gleichseitigen sind alle Seiten gleich und alle Winkel sechzig Grad. Das rechtwinklige hat einen '
             'rechten Winkel.',
             n('gleichschenklig: Basiswinkel gleich|gleichseitig: alle Winkel @60^\\circ@|rechtwinklig: ein Winkel @90^\\circ@',
               300, 'blau', 44, ein=1.0),
-            graf(W1, [V([(0.5, 0), (4.5, 0), (2.5, 4)]), WI(0.5, 0, 0, 63.4, 2, 34), WI(4.5, 0, 116.6, 180, 2, 34),
-                      T(2.5, -0.75, 'gleichschenklig', 5, g=24, kursiv=False),
-                      V([(5.5, 0), (8.5, 0), (7, 2.598)]), T(7, -0.75, 'gleichseitig', 5, g=24, kursiv=False),
-                      V([(1, 5), (5, 5), (1, 8)]), RW(1, 5, 0, 90), T(3, 4.25, 'rechtwinklig', 5, g=24, kursiv=False)],
-                 ein=0.3)),
+            # Je Dreieck zu seinem Satz (Ton: gleichschenklig 2.5, gleich lang 4.9, Basiswinkel 5.9; gleichseitig 7.7,
+            # Seiten gleich 9.1, sechzig Grad 10.3; rechtwinklig 11.7, rechten Winkel 12.9). Striche: Mitte der Seite, quer.
+            graf(W1, [V([(0.5, 0), (4.5, 0), (2.5, 4)]), T(2.5, -0.75, 'gleichschenklig', 5, g=24, kursiv=False)], ein=2.5),
+            graf(W1, [S((1.303, 2.098), (1.697, 1.902), 2, dicke=3), S((3.303, 1.902), (3.697, 2.098), 2, dicke=3)], ein=4.9, raster=False),
+            graf(W1, [WI(0.5, 0, 0, 63.4, 2, 34), WI(4.5, 0, 116.6, 180, 2, 34)], ein=5.9, raster=False),
+            graf(W1, [V([(5.5, 0), (8.5, 0), (7, 2.598)]), T(7, -0.75, 'gleichseitig', 5, g=24, kursiv=False)], ein=7.7, raster=False),
+            graf(W1, [S((7, -0.22), (7, 0.22), 2, dicke=3), S((7.559, 1.189), (7.941, 1.409), 2, dicke=3),
+                      S((6.059, 1.409), (6.441, 1.189), 2, dicke=3)], ein=9.1, raster=False),
+            graf(W1, [WI(5.5, 0, 0, 60, 2, 28), WI(8.5, 0, 120, 180, 2, 28), WI(7, 2.598, 240, 300, 2, 28)], ein=10.3, raster=False),
+            graf(W1, [V([(1, 5), (5, 5), (1, 8)]), T(3, 4.25, 'rechtwinklig', 5, g=24, kursiv=False)], ein=11.7, raster=False),
+            graf(W1, [RW(1, 5, 0, 90)], ein=12.9, raster=False)),
          sz('Die Höhe',
             'Die Höhe ist das Lot von einer Ecke auf die Gerade durch die Gegenseite. Hier ist das Dreieck stumpf: Der Fusspunkt '
             'der Höhe von C liegt ausserhalb der Seite c, auf ihrer Verlängerung.',
@@ -238,7 +269,28 @@ clip('dreiecke', 'Figuren sehen: Dreiecke beschreiben',
             n('Seitenhalbierende: Schwerpunkt @S@|Höhen: Höhenschnittpunkt @H@|Winkelhalbierende: @M_I@|Mittelsenkrechte: @M_U@',
               300, 'blau', 44, ein=0.6),
             graf(W1, [TRI1] + ECKEN1 + [S(A1, (5.5, 3.5), 2, dicke=3), S(B1, (2, 3.5), 2, dicke=3), S(C1, (4.5, 1), 2, dicke=3)],
-                 punkte=[pt(4, 8 / 3, 3, 'S', [4.3, 3.25])], ein=0.3)),
+                 punkte=[pt(4, 8 / 3, 3, 'S', [4.3, 3.25])], ein=0.3),
+            # Kleine Bilder unter der Notiz, je zu ihrem Wort (Ton: Höhen 7.6, Winkelhalbierenden 8.1,
+            # Mittelsenkrechten 9.4; «Beim stumpfen» 11.2, «Umkreismittelpunkt» 14.2). Nachgerechnet:
+            # spitz A(1|1) B(8|1) C(3|6): H(3|3), M_I(3.657|2.799), M_U(4.5|2.5);
+            # stumpf A(0|0) B(6|0) C(−1|3): H(−1|−2.333), M_U(3|2.667) — beide ausserhalb.
+            graf(WS1, [TRI1K, S(A1, (4.5, 4.5), 2, dicke=2.5), S(B1, (1.966, 3.414), 2, dicke=2.5), S(C1, (3, 1), 2, dicke=2.5),
+                       T(3.2, 1.95, 'H', 3, 'start', 22)],
+                 punkte=[pt(3, 3, 3)], ein=7.6, **PAN1(150)),
+            graf(WS1, [TRI1K, S(A1, (5.174, 3.826), 2, dicke=2.5), S(B1, (1.995, 3.487), 2, dicke=2.5),
+                       S(C1, (4.026, 1), 2, dicke=2.5)] + ML(4.2, 1.3, 'I', 0.0375),
+                 punkte=[pt(3.657, 2.799, 3)], ein=8.1, **PAN1(420)),
+            graf(WS1, [TRI1K, S((4.5, 0.3), (4.5, 6.6), 2, dicke=2.5), S((0, 4.3), (6, 1.9), 2, dicke=2.5),
+                       S((3.5, 1.5), (6.3, 4.3), 2, dicke=2.5)] + ML(4.7, 1.15, 'U', 0.0375),
+                 punkte=[pt(4.5, 2.5, 3)], ein=9.4, **PAN1(690)),
+            graf(WS2, [TRI2K, S((0, 0), (-2.3, 0), 5, True, 2), S((0, 0), (0.75, -2.25), 5, True, 2),
+                       S((-1, 3), (-1, -2.333), 2, dicke=2.5), S((6, 0), (-1, -2.333), 2, dicke=2.5),
+                       S((0.931, 2.172), (-1, -2.333), 2, dicke=2.5), T(-1.4, -2.2, 'H', 3, 'end', 22),
+                       T(4.6, 3.1, 'stumpf', 5, 'middle', 20, False)],
+                 punkte=[pt(-1, -2.333, 3)], ein=11.2, **PAN2(150)),
+            graf(WS2, [TRI2K, S((3, -0.8), (3, 3.6), 2, dicke=2.5), S((-1.55, 1.15), (3.875, 2.958), 2, dicke=2.5),
+                       S((2.15, 0.683), (3.2, 3.133), 2, dicke=2.5)] + ML(3.45, 3.25, 'U', 0.0354),
+                 punkte=[pt(3, 2.667, 3)], ein=14.2, **PAN2(450))),
          sz('Merke',
             'Zum Mitnehmen: Die Innenwinkel ergeben zusammen hundertachtzig Grad. Die Höhe ist das Lot auf die Gerade durch die '
             'Gegenseite, ihr Fusspunkt kann ausserhalb liegen.',
@@ -330,7 +382,10 @@ clip('flaeche', 'Figuren sehen: Dreiecksfläche und zugehörige Höhe',
             f(r'A = \tfrac{1}{2} \cdot g \cdot h', 300, 62, ein=7.6),
             graf(W2, [V([(0, 1), (6, 1), (2, 4)], 1, 0.2)], ein=0.3),
             graf(W2, [V([(6, 1), (8, 4), (2, 4)], 2, 0.2), S((2, 4), (2, 1), 5, True, 2.5), T(3, 0.25, 'g', 5),
-                      T(1.65, 2.5, 'h', 5, 'end')], ein=1.6)),
+                      T(1.65, 2.5, 'h', 5, 'end')], ein=1.6),
+            # «gedreht» (Ton 2.4): Drehzentrum = Mitte von BC (4 | 2.5), Halbkreis von Richtung B (−36.9°) nach C (143.1°)
+            graf(W2, [BOG(4, 2.5, 0.8, -36.9, 143.1, 2, 3), T(4.9, 3.4, '180°', 2, 'start', 22, False)],
+                 punkte=[pt(4, 2.5, 5)], ein=2.4, raster=False)),
          sz('Strategie',
             'Halt, bevor du rechnest: Grundseite wählen, die zugehörige Höhe bestimmen, die Einheiten angleichen, in die Formel '
             'einsetzen und das Ergebnis prüfen.',
@@ -346,14 +401,21 @@ clip('flaeche', 'Figuren sehen: Dreiecksfläche und zugehörige Höhe',
             n('Probe: Rechteck @8 \\cdot 3 = 24@, die Hälfte', 530, 'blau', 42, ein=13.4),
             graf(W2b, [V([(0, 1), (8, 1), (10, 4)]), T(4, 0.2, 'g = 8 cm', 5, kursiv=False)], ein=0.3),
             graf(W2b, [S((8, 1), (11, 1), 5, True, 2.5), S((10, 4), (10, 1), 2, True), RW(10, 1, 180, 90),
-                      T(10.35, 2.4, 'h = 3', 2, 'start', g=26)], ein=5.0)),
+                      T(10.35, 2.4, 'h = 3', 2, 'start', g=26)], ein=5.0),
+            # «Probe: Das Rechteck» (Ton 13.8): Rechteck 8 × 3 um Grundseite und Höhe
+            graf(W2b, [V([(0, 1), (8, 1), (8, 4), (0, 4)], 3, 0.06, gestrichelt=True, dicke=3)], ein=13.8, raster=False)),
          sz('Spitze verschieben',
             'Schieb die Spitze parallel zur Grundseite. Die Form ändert sich, aber Grundseite und Höhe bleiben gleich. '
             'Darum bleibt auch die Fläche gleich: zwölf Quadratzentimeter.',
             f(r'g, \ h \text{ gleich} \;\Rightarrow\; A = 12\,\text{cm}^2', 300, 48, ein=5.6),
             graf(W2b, [S((-0.5, 4), (11.5, 4), 5, True, 2), V([(0, 1), (8, 1), (2, 4)])], ein=0.3),
             graf(W2b, [V([(0, 1), (8, 1), (4, 4)], 2, 0.08)], ein=2.4),
-            graf(W2b, [V([(0, 1), (8, 1), (10, 4)], 3, 0.08)], ein=3.4)),
+            graf(W2b, [V([(0, 1), (8, 1), (10, 4)], 3, 0.08)], ein=3.4),
+            # «Grundseite und Höhe bleiben gleich» (Ton: Höhe 4.9): je Dreieck die Höhe 3, bei t = 10 auf der Verlängerung
+            graf(W2b, [S((8, 1), (10.8, 1), 5, True, 2.5),
+                       S((2, 4), (2, 1), 2, True, 3), RW(2, 1, 0, 90), S((4, 4), (4, 1), 2, True, 3), RW(4, 1, 0, 90),
+                       S((10, 4), (10, 1), 2, True, 3), RW(10, 1, 180, 90), T(10.35, 2.4, 'h = 3', 2, 'start', g=26)],
+                 ein=4.9, raster=False)),
          sz('Merke',
             'Zum Mitnehmen: Fläche gleich ein Halb mal Grundseite mal zugehörige Höhe. Die Höhe misst den Abstand zur Geraden '
             'der Grundseite, auch ausserhalb.',
@@ -451,20 +513,36 @@ clip('vierecke', 'Figuren sehen: Vierecke',
             f(r'A = a \cdot \fb{h}', 300, 62, ein=7.4),
             graf(W3, [V([(0, 1), (6, 1), (8, 4), (2, 4)]), S((2, 4), (2, 1), 2, True), RW(2, 1, 0, 90),
                       T(1.65, 2.4, 'h', 2, 'end'), T(3, 0.25, 'a', 5)], ein=0.3),
-            graf(W3, [V([(0, 1), (2, 1), (2, 4)], 4, 0.18, gestrichelt=True, dicke=3), V([(6, 1), (8, 1), (8, 4)], 3, 0.25)], ein=2.6)),
+            graf(W3, [V([(0, 1), (2, 1), (2, 4)], 4, 0.18, gestrichelt=True, dicke=3), V([(6, 1), (8, 1), (8, 4)], 3, 0.25)], ein=2.6),
+            # «Es entsteht ein Rechteck» (Ton 4.5–5.2): Rechteck (2 | 1)–(8 | 4) umranden
+            graf(W3, [V([(2, 1), (8, 1), (8, 4), (2, 4)], 3, 0.0, dicke=6)], ein=4.8, raster=False)),
          sz('Trapez',
             'Beim Trapez sind zwei Seiten parallel, a und c. Die Mittellinie m verbindet die Mitten der Schenkel. Sie ist das '
             'Mittel aus a und c. Fläche gleich Mittellinie mal Höhe.',
             f(r'\fb{m} = \tfrac{1}{2}(a + c)', 300, 56, ein=6.0),
             f(r'A = \fb{m} \cdot h', 410, 56, ein=8.0),
             graf(W3, [V([(0, 1), (8, 1), (6, 4), (2, 4)]), T(4, 0.25, 'a', 5), T(4, 4.45, 'c', 5)], ein=0.3),
-            graf(W3, [S((1, 2.5), (7, 2.5), 2), T(4, 2.75, 'm', 2)], ein=3.7)),
+            graf(W3, [S((1, 2.5), (7, 2.5), 2), T(4, 2.75, 'm', 2)], ein=3.7),
+            # «mal Höhe» (Ton 9.2): Höhe h = 3 von D(2 | 4) auf a
+            graf(W3, [S((2, 4), (2, 1), 2, True, 3), RW(2, 1, 0, 90), T(1.65, 1.6, 'h', 2, 'end')], ein=8.8, raster=False)),
          sz('Raute und Drachen',
             'Raute und Drachen füllen genau die Hälfte des Rechtecks um ihre Diagonalen e und f. Ihre Fläche ist ein Halb mal e mal f.',
             f(r'A = \tfrac{1}{2} \cdot e \cdot f', 300, 60, ein=5.5),
             graf(W3, [V([(1, 4), (7, 4), (7, 7), (1, 7)], 5, 0.0, gestrichelt=True, dicke=2.5),
                       V([(1, 5.5), (4, 7), (7, 5.5), (4, 4)]), S((1, 5.5), (7, 5.5), 2, dicke=3), S((4, 4), (4, 7), 2, dicke=3),
-                      T(5.6, 5.85, 'e', 2), T(4.3, 6.2, 'f', 2, 'start')], ein=0.3)),
+                      T(5.6, 5.85, 'e', 2), T(4.3, 6.2, 'f', 2, 'start')], ein=0.3),
+            # «und Drachen» (Ton 1.2): Drachen (1 | 2), (4 | 3), (7 | 2), (4 | −0.5) im Rechteck 6 × 3.5, e = 6, f = 3.5
+            graf(W3, [V([(1, -0.5), (7, -0.5), (7, 3), (1, 3)], 5, 0.0, gestrichelt=True, dicke=2.5),
+                      V([(1, 2), (4, 3), (7, 2), (4, -0.5)]), S((1, 2), (7, 2), 2, dicke=3), S((4, 3), (4, -0.5), 2, dicke=3),
+                      T(5.6, 2.3, 'e', 2), T(4.3, 0.4, 'f', 2, 'start'),
+                      T(7.3, 5.4, 'Raute', 5, 'start', 22, False), T(7.3, 1.1, 'Drachen', 5, 'start', 22, False)],
+                 ein=1.2, raster=False),
+            # «die Hälfte» (Ton 2.6): die vier Eckdreiecke je Rechteck sind die Gegenstücke der vier Innendreiecke
+            graf(W3, [V([(1, 4), (4, 4), (1, 5.5)], 3, 0.22, dicke=0), V([(4, 4), (7, 4), (7, 5.5)], 3, 0.22, dicke=0),
+                      V([(7, 5.5), (7, 7), (4, 7)], 3, 0.22, dicke=0), V([(4, 7), (1, 7), (1, 5.5)], 3, 0.22, dicke=0),
+                      V([(1, -0.5), (4, -0.5), (1, 2)], 3, 0.22, dicke=0), V([(4, -0.5), (7, -0.5), (7, 2)], 3, 0.22, dicke=0),
+                      V([(7, 2), (7, 3), (4, 3)], 3, 0.22, dicke=0), V([(4, 3), (1, 3), (1, 2)], 3, 0.22, dicke=0)],
+                 ein=2.6, raster=False)),
          sz('Fehlende Länge',
             'Oft fehlt die Höhe. Ein gleichschenkliges Trapez mit a gleich zehn, c gleich vier und Schenkeln von fünf Zentimetern: '
             'Links und rechts steht je drei Zentimeter über. Mit Pythagoras ist die Höhe die Wurzel aus fünf im Quadrat minus drei '
@@ -474,7 +552,10 @@ clip('vierecke', 'Figuren sehen: Vierecke',
             graf(W3b, [V([(0, 1), (10, 1), (7, 5), (3, 5)]), T(5, 0.3, 'a = 10', 5, kursiv=False, g=26),
                        T(5, 5.45, 'c = 4', 5, kursiv=False, g=26)], ein=0.3),
             graf(W3b, [V([(0, 1), (3, 1), (3, 5)], 3, 0.25), S((3, 5), (3, 1), 2, True), RW(3, 1, 180, 90),
-                       T(1.5, 0.3, '3', 3, g=26), T(1.1, 3.3, '5', 3, 'end', g=26), T(3.35, 3, 'h', 2, 'start')], ein=7.1)),
+                       T(1.5, 0.3, '3', 3, g=26), T(1.1, 3.3, '5', 3, 'end', g=26), T(3.35, 3, 'h', 2, 'start')], ein=7.1),
+            # «und rechts» (Ton 7.6): das gespiegelte Dreieck (7 | 1), (10 | 1), (7 | 5)
+            graf(W3b, [V([(10, 1), (7, 1), (7, 5)], 3, 0.25), RW(7, 1, 0, 90), T(8.5, 0.3, '3', 3, g=26),
+                       T(8.9, 3.3, '5', 3, 'start', g=26)], ein=7.6, raster=False)),
          sz('Merke',
             'Zum Mitnehmen: Jede Vierecksfläche kommt vom Rechteck. Parallelogramm a mal h, Trapez Mittellinie mal h, Raute und '
             'Drachen ein Halb mal e mal f.',
@@ -579,20 +660,30 @@ clip('kreis', 'Figuren sehen: Kreis und Kreisteile',
             f(r'b = \tfrac{1}{6} \cdot 12\pi = 2\pi \approx \fc{6.28\,\text{cm}}', 390, 44, ein=6.9),
             f(r'A_S = \tfrac{1}{6} \cdot 36\pi = 6\pi \approx \fc{18.85\,\text{cm}^2}', 500, 44, ein=12.9),
             graf(W4r, [KR(0, 0, 6, 5, 0, dicke=2.5), SEK(0, 0, 6, 0, 60), BOG(0, 0, 6, 0, 60),
-                       T(3.4, -0.6, 'r = 6', 5, 'middle', 26, False)], ein=0.3)),
+                       T(3.4, -0.6, 'r = 6', 5, 'middle', 26, False)], ein=0.3),
+            # «ein Sechstel des Kreises» (Ton 4.2–5.4): die übrigen Radien im 60°-Abstand teilen den Kreis in Sechstel
+            graf(W4r, [S((0, 0), (6 * math.cos(math.radians(w)), 6 * math.sin(math.radians(w))), 5, True, 2.5)
+                       for w in (120, 180, 240, 300)], ein=4.2, raster=False)),
          sz('Segment',
             'Ein Segment liegt zwischen Sehne und Bogen. Man rechnet Sektor minus Dreieck. Bei sechzig Grad ist das Dreieck '
             'gleichseitig, alle Seiten sind sechs Zentimeter lang. Seine Höhe ist nach Pythagoras die Wurzel aus sechs im Quadrat '
             'minus drei im Quadrat, rund fünf Komma zwei null. Das Dreieck hat also ein Halb mal sechs mal fünf Komma zwei null, '
             'rund fünfzehn Komma fünf neun Quadratzentimeter. Das Segment hat rund drei Komma zwei sechs.',
             f(r'A_{\text{Seg}} = A_S - A_\Delta', 250, 46, ein=2.7),
-            f(r'h = \sqrt{6^2 - 3^2} = \sqrt{27} \approx 5.20', 350, 44, ein=7.2),
+            f(r'h = \sqrt{6^2 - 3^2} = \sqrt{27} \approx 5.20', 350, 44, ein=9.5),
             f(r'A_\Delta = \tfrac{1}{2} \cdot 6 \cdot \sqrt{27} \approx 15.59\,\text{cm}^2', 450, 42, ein=14.7),
             f(r'A_{\text{Seg}} \approx 18.85 - 15.59 = \fc{3.26\,\text{cm}^2}', 560, 42, ein=22.7),
             graf(W4r, [KR(0, 0, 6, 5, 0, dicke=2.5), SEK(0, 0, 6, 0, 60, 3, 0.35),
                        V([(0, 0), (6, 0), (3, 5.196)], 1, 0.12, dicke=3)], ein=0.3),
+            # «Ein Segment liegt zwischen Sehne und Bogen» (Ton 0.7): das Segment allein, kräftig gefüllt und umrandet —
+            # Vieleck aus der Sehne (3 | 5.196)–(6 | 0) und 31 Punkten auf dem Bogen 0°..60°
+            graf(W4r, [V([(round(6 * math.cos(math.radians(2 * k)), 3), round(6 * math.sin(math.radians(2 * k)), 3))
+                          for k in range(31)], 3, 0.45, dicke=4)], ein=0.8, raster=False),
+            # «alle Seiten sind sechs Zentimeter» (Ton 7.5–8.4)
+            graf(W4r, [T(1.1, 2.9, '6', 5, 'end', 26, False)], ein=7.8, raster=False),
+            # «Seine Höhe» (Ton 9.5)
             graf(W4r, [S((3, 5.196), (3, 0), 2, True, 3), RW(3, 0, 180, 90), T(3.35, 2.4, 'h', 2, 'start'),
-                       T(1.1, 2.9, '6', 5, 'end', 26, False), T(1.5, -0.6, '3', 5, 'middle', 26, False)], ein=7.2)),
+                       T(1.5, -0.6, '3', 5, 'middle', 26, False)], ein=9.5)),
          sz('Kreisring',
             'Ein Kreisring liegt zwischen zwei Kreisen um denselben Mittelpunkt. Seine Fläche ist die grosse Kreisfläche minus '
             'die kleine. Bei R gleich fünf und r gleich drei Zentimetern: Pi mal fünfundzwanzig minus neun, also sechzehn Pi, '
@@ -688,7 +779,11 @@ clip('aehnlichkeit', 'Figuren sehen: Streckung und Ähnlichkeit',
             n('Winkel gleich|Längen @\\cdot\\, |k|@', 300, 'blau', 46, ein=0.6),
             f(r"A' = \fb{k}^2 \cdot A = 4A", 440, 54, ein=5.6),
             graf(W5, [V([(3, 2), (5, 2), (4, 4)]), V([(5, 3), (9, 3), (7, 7)], 2, 0.1)], ein=0.3),
-            graf(W5, [V([(7, 3), (8, 5), (6, 5)], 2, 0.0, dicke=2.5)], ein=7.8)),
+            graf(W5, [V([(7, 3), (8, 5), (6, 5)], 2, 0.0, dicke=2.5)], ein=7.8),
+            # «Die Winkel bleiben gleich» (Ton 0.9): gleiche Bögen in Original und Bild (63.4°, 63.4°, 53.1°)
+            graf(W5, [WI(3, 2, 0, 63.4, 2, 22), WI(5, 2, 116.6, 180, 3, 22), WI(4, 4, 243.4, 296.6, 1, 22),
+                      WI(5, 3, 0, 63.4, 2, 36), WI(9, 3, 116.6, 180, 3, 36), WI(7, 7, 243.4, 296.6, 1, 36)],
+                 ein=0.9, raster=False)),
          sz('Negativer Faktor',
             'Ist k negativ, liegt das Bild auf der anderen Seite von Z. Bei k gleich minus eins ist es gleich gross, aber um Z '
             'gedreht. Längen werden mit dem Betrag von k multipliziert.',
@@ -709,7 +804,13 @@ clip('aehnlichkeit', 'Figuren sehen: Streckung und Ähnlichkeit',
                        S((4, 0), (4, 3), 1, dicke=5), S((6, 0), (6, 4.5), 2, dicke=5),
                        T(-0.35, -0.55, 'S', 5), T(4, -0.6, 'A', 1), T(6, -0.6, "A'", 2), T(3.6, 3.35, 'B', 1), T(5.6, 4.85, "B'", 2),
                        T(2, -0.6, '4', 5, kursiv=False, g=24), T(4.35, 1.5, '3', 1, 'start', 24, False)],
-                 punkte=[pt(0, 0, 5)], ein=0.3)),
+                 punkte=[pt(0, 0, 5)], ein=0.3),
+            # «S A Strich gleich sechs» (Ton 11.7–12.6): Masslinie unter SA'
+            graf(W5t, [S((0, -1.05), (2.65, -1.05), 2, dicke=2), S((3.35, -1.05), (6, -1.05), 2, dicke=2),
+                       S((0, -1.25), (0, -0.85), 2, dicke=2), S((6, -1.25), (6, -0.85), 2, dicke=2),
+                       T(3, -1.2, '6', 2, 'middle', 24, False)], ein=11.7, raster=False),
+            # Ergebnis A'B' = 4.5 mit der Formelzeile (14.0)
+            graf(W5t, [T(6.35, 2.25, '4.5', 2, 'start', 24, False)], ein=14.0, raster=False)),
          sz('Strahlensatz',
             'Ein Stab von eins Komma fünf Metern wirft zwei Meter Schatten. Ein Baum daneben wirft zwölf Meter Schatten. '
             'Die Sonnenstrahlen sind parallel, die Dreiecke ähnlich. Also h durch zwölf gleich eins Komma fünf durch zwei: '

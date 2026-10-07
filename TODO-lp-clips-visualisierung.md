@@ -17,6 +17,32 @@ vom Hauptagenten am Drehbuch nachgeprüft.
 Clip-Bauer heute) · *Werkzeug-Erweiterung* (`build-clips.py` muss etwas Neues können) ·
 *Neuvertonung* (Sprechertext ändert sich).
 
+## Stand der Umsetzung (07.10.2026)
+
+**Erledigt:** alle sechs Vorrang-Befunde und die *nur Bild*-Befunde in allen neun Leitprogrammen
+(39 Einführungsclips neu gebaut, Sprechertext und `dauer` unverändert, keine Neuvertonung).
+Der Clip-Bauer blendet das Steigungsdreieck bei Δx = 0 aus (`build-clips.py`). Später
+Eingeblendetes steht in einem zweiten `graf` als Deckblatt (HOWTO-clips, «Später einblenden»).
+Die Tabellen unten zeigen noch den Befund vor der Umsetzung.
+
+**Bewusst nicht als *nur Bild* umgesetzt** (bleibt bei Werkzeug oder Bewegung):
+- Planimetrie: Zwischenstände (Winkelsumme, «Warum die Hälfte», Sektor 0°/90°/180°) — ohne `aus` blieben sie im Endbild stehen.
+- Exp/Log «Gleicher Faktor», «Verdopplungszeit», «Halbwertszeit» (als Werkzeug eingestuft).
+- `g2-2-lp-parameter` «Zuerst a prüfen»: Behelf mit Bewegungen (Parabel, Gerade, Parabel nacheinander); stetig durch m = 0 erst mit Normalform-Bewegung.
+- `s3-6-lp-gleichungen` «Wie viele?»: Waagrechte wandert, aber ohne mitlaufende Schnittpunkte.
+- `g3-3-lp-mitte` Merke «a positiv Minimum»: weggelassen (kein sinnvolles Bild im Zaunfenster).
+
+**Offen:** alle Zeilen *neue Bewegung* (ausser Vorrang) und *Werkzeug-Erweiterung*, die 4 *Neuvertonungen*.
+
+**Bei der Umsetzung neu aufgefallen:**
+- `g2-2-lp-verfahren` «Erst ordnen»: Notiz «x = 2» erst bei ≈ 16.3 s, gesagt bei 12.7 s.
+- `g2-2-lp-nullprodukt` «Der teure Fehler»: Notiz «x = 0 fehlt» bei ≈ 4.4 s, gesagt bei 1.8 s.
+- `s3-5-lp-periode-symmetrie`: die Sinuskurve schneidet «(π/6 | 0.5)» und «(−π/6 | −0.5)».
+- `s3-6-lp-gleichungen` «Am Graphen», «Merke»: «(1 | 0)» stösst an die Achszahl 2.
+- `s3-2-lp-hyperbel` «Gerade Ordnung»: Asymptoten in Tinte, kaum sichtbar (sonst jetzt rot).
+- `g3-2-lp-steigungsdreieck` «Leserichtung»: bei Δx < 0 steht «Δy» rechts der Kathete, im Endbild auf der y-Achse (Werkzeug).
+- Live-Beschriftungen runden auf eine Stelle (−0.75 → «−0.8», −1.25 → «−1.2»); darum an einigen Stellen feste Texte statt Begleiter (Werkzeug).
+
 ## Auf einen Blick
 
 Rund 145 Befundzeilen; davon etwa 81 *nur Bild*, 39 *neue Bewegung*, 35 brauchen (oder hätten ideal) eine

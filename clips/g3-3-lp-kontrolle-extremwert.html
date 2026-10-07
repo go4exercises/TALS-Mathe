@@ -215,7 +215,8 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
         [xa, dx] = bewZustand(bahn, t - T.t0);
       } else { xa = parseFloat(g.dataset.x); dx = parseFloat(g.dataset.dx); }
       const xb = xa + dx;
-      const ya = f(xa), yb = f(xb), sichtbar = innen(xa, ya) && innen(xb, yb);
+      // dx = 0: kein Dreieck, auch keine Beschriftung «Δx = 0» (es waechst erst noch)
+      const ya = f(xa), yb = f(xb), sichtbar = Math.abs(dx) > 1e-9 && innen(xa, ya) && innen(xb, yb);
       g.style.display = sichtbar ? '' : 'none';
       if (!sichtbar) continue;
       g.querySelector('.bew-gd-w').setAttribute('d', 'M' + px(xa) + ',' + py(ya) + 'L' + px(xb) + ',' + py(ya));

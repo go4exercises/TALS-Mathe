@@ -37,6 +37,12 @@ def graf(W, kurven=(), punkte=(), ein=0.05, geraden=(), parabeln=(), **kw):
     return g
 
 
+def auflage(W, ein, **kw):
+    """Zweite Lage über einem graf mit demselben Fenster: ohne Karo und Achsen, nur die eigenen Elemente.
+    So erscheinen feste Punkte und Geraden später als das Bild darunter (feste Punkte haben kein eigenes ein)."""
+    return graf(W, ein=ein, achsen=False, raster=False, tippbar=False, **kw)
+
+
 def par(a, u, v, farbe=1, null=True, beschr=True, bew=None):
     """Parabel y = a(x − u)^2 + v, mit grünen Nullstellen; bew = Liste [t, a, u, v] statt fest."""
     d = {'bewegung': bew or [[0, a, u, v]], 'farbe': farbe}
@@ -380,7 +386,9 @@ clip('nullprodukt', 'Gleichungen lösen: Ausklammern und Nullprodukt',
             op(':x', 280, 1.8, g=54),
             f(r'x = 5', 380, 56, ein=3.0),
             f(r'\fd{x = 0 \text{ fehlt}}', 480, 56, ein=4.4),
-            n('Teilen durch @x@ setzt @x \\neq 0@ voraus.', 600, 'rot', 44, ein=6.0)),
+            n('Teilen durch @x@ setzt @x \\neq 0@ voraus.', 600, 'rot', 44, ein=6.0),
+            graf(W2, parabeln=[par(1, 2.5, -6.25, null=False)], punkte=[pt(5, 0, 3, '(5 | 0)', [5.3, -1.6])], ein=1.0),
+            auflage(W2, 2.02, punkte=[pt(0, 0, 4, '(0 | 0) verloren', [0.3, 0.6])])),
          sz('Merke',
             'Zum Mitnehmen: Erst auf null bringen, dann ausklammern. Ein Produkt ist null, wenn ein Faktor null ist. '
             'Nicht durch x teilen, ohne x gleich null zu prüfen.',
@@ -501,7 +509,8 @@ clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsform
             f(r'x^2 - 4x + 4 = 9', 440, 50, ein=8.5),
             f(r'(x - 2)^2 = 9', 530, 50, ein=11.6),
             f(r'\mathbb{L} = \{\fc{-1};\ \fc{5}\}', 640, 52, ein=14.1),
-            graf(W3b, parabeln=[par(1, 2, -9)], ein=0.3)),
+            graf(W3b, parabeln=[par(1, 2, -9, null=False)], ein=0.3),
+            auflage(W3b, 14.1, punkte=[pt(-1, 0, 3, '(−1 | 0)', [-1.3, -1.6], 'end'), pt(5, 0, 3, '(5 | 0)', [5.3, -1.6])])),
          sz('Die Mitternachtsformel',
             'Führt man die Ergänzung allgemein durch, entsteht die Mitternachtsformel. Unter der Wurzel steht die Diskriminante: '
             'D gleich b Quadrat minus vier a c.',
@@ -614,6 +623,7 @@ clip('kontrolle-ergaenzen', 'Gleichungen lösen: Kontrollfragen zu Wurzel, Ergä
 # ════════════════════════════════════════════════ Kapitel 4 · Einführung
 W4a = fenster(-4, 5, -1, 14, (-3, -2, -1, 1, 2, 3, 4), (3, 6, 9, 12))
 W4b = fenster(-1, 6, -2, 6, (1, 2, 3, 4, 5), (-1, 2, 4))
+W4c = fenster(-5, 5, -30, 10, (-4, -3, -2, -1, 1, 2, 3, 4), (-20, -10))
 clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
      'Erst ordnen und den Typ bestimmen, dann wählen: Wurzelziehen, Ausklammern, Faktorisieren mit dem Zweiklammersatz oder die '
      'Mitternachtsformel — und am Schluss die Probe.',
@@ -627,14 +637,19 @@ clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
             op('-x^2', 350, 10.8, g=44),
             f(r'2x + 1 = 5', 440, 50, ein=12.8),
             f(r'x = \fc{2}', 530, 50, ein=16.4),
-            graf(W4a, parabeln=[par(1, -1, 0, null=False), par(1, 0, 5, farbe=2, null=False)], ein=0.3),
-            graf(W4a, punkte=[pt(2, 9, 3, '(2 | 9)', [2.3, 7.6])], ein=16.4)),
+            # «heben sich die x Quadrat weg»: beide Parabeln steigen aus dem Bild, die Geraden der linearen
+            # Gleichung 2x + 1 = 5 kommen; der Schnitt bei x = 2 erscheint mit «x ist zwei».
+            graf(W4a, parabeln=[par(1, -1, 0, null=False, bew=[[0, 1, -1, 0], [8.71, 1, -1, 0], [9.81, 1, -1, 30]]),
+                                par(1, 0, 5, farbe=2, null=False, bew=[[0, 1, 0, 5], [8.71, 1, 0, 5], [9.81, 1, 0, 35]])], ein=0.3),
+            auflage(W4a, 10.35, geraden=[ger(2, 1, 1), ger(0, 5, 2)]),
+            auflage(W4a, 13.09, punkte=[pt(2, 5, 3, '(2 | 5)', [2.3, 3.8])])),
          sz('Wenn b fehlt',
             'Fehlt das Glied mit x, zieh die Wurzel. Drei x Quadrat gleich siebenundzwanzig: x Quadrat ist neun, x ist plus oder minus drei.',
             n('kein @x@-Glied: Wurzelziehen', 260, 'blau', 46, ein=0.3),
             f(r'3x^2 = 27', 380, 56, ein=2.8),
             op(':3', 380, 3.8),
-            f(r'x^2 = 9 \;\Rightarrow\; x = \fc{\pm 3}', 480, 52, ein=5.2)),
+            f(r'x^2 = 9 \;\Rightarrow\; x = \fc{\pm 3}', 480, 52, ein=5.2),
+            graf(W4c, parabeln=[par(3, 0, -27)], ein=7.4)),
          sz('Wenn c fehlt',
             'Fehlt die Zahl ohne x, klammere aus. x Quadrat plus vier x gleich null: x mal Klammer x plus vier. Die Lösungen sind null und minus vier.',
             n('keine Zahl ohne @x@: Ausklammern', 260, 'blau', 46, ein=0.3),
@@ -653,14 +668,18 @@ clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
                  punkte=[pt(3, 0, 3, '3', [2.8, 0.6], 'end'), pt(4, 0, 3, '4', [4.2, 0.6])])),
          sz('Ein Binom',
             'Manchmal ist es ein Binom: x Quadrat minus sechs x plus neun ist Klammer x minus drei, im Quadrat. Es gibt nur eine Lösung: drei.',
-            f(r'x^2 - 6x + 9 = (x - 3)^2 = 0', 300, 48, ein=0.3),
-            f(r'\mathbb{L} = \{\fc{3}\}', 420, 56, ein=5.7)),
+            f(r'x^2 - 6x + 9 = 0', 300, 48, ein=0.3),
+            f(r'(x - 3)^2 = 0', 390, 48, ein=4.01),
+            f(r'\mathbb{L} = \{\fc{3}\}', 500, 56, ein=5.7),
+            graf(W4b, parabeln=[par(1, 3, 0, null=False)], ein=4.01),
+            auflage(W4b, 5.7, punkte=[pt(3, 0, 3, '(3 | 0)', [3.2, -1.0])])),
          sz('Sonst die Formel',
             'Geht nichts davon, hilft die Mitternachtsformel. Sie funktioniert immer. Zwei x Quadrat plus x minus vier: '
             'D ist eins plus zweiunddreissig, also dreiunddreissig. Die Lösungen sind minus eins plus oder minus Wurzel aus dreiunddreissig, durch vier.',
             f(r'2x^2 + x - 4 = 0', 260, 52, ein=0.3),
             f(r'D = 1 + 32 = 33', 370, 50, ein=6.9),
-            f(r'x_{1,2} = \dfrac{-1 \pm \sqrt{33}}{4}', 490, 52, ein=10.3)),
+            f(r'x_{1,2} = \dfrac{-1 \pm \sqrt{33}}{4}', 490, 52, ein=10.3),
+            graf(W3c, parabeln=[par(2, -0.25, -4.125, beschr=False)], ein=12.4)),
          sz('Merke',
             'Zum Mitnehmen: Ordnen, Typ bestimmen, dann wählen. Fehlt b, Wurzel ziehen. Fehlt c, ausklammern. Lässt es sich zerlegen, '
             'faktorisieren. Sonst die Mitternachtsformel. Und am Schluss die Probe.',
@@ -752,6 +771,7 @@ clip('kontrolle-verfahren', 'Gleichungen lösen: Kontrollfragen zur Verfahrenswa
 # ════════════════════════════════════════════════ Kapitel 5 · Einführung
 W5a = fenster(-2, 6, -4, 12, (-1, 1, 2, 3, 4, 5), (3, 6, 9))
 W5b = fenster(-1, 7, -5, 8, (1, 2, 3, 4, 5, 6), (-4, -2, 2, 4, 6))
+W5c = fenster(-4, 5, -8, 4, (-3, -2, -1, 1, 2, 3, 4), (-6, -4, -2, 2))
 clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
      'k · x + 6 = 2x + 3k für jedes k; x² − 6x + k = 0 mit der Diskriminante D(k) = 36 − 4k; und warum man zuerst prüft, '
      'ob der Faktor vor x² null werden kann.',
@@ -775,7 +795,11 @@ clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
             f(r'(k - 2) \cdot x = 3 \cdot (k - 2)', 260, 50, ein=0.3),
             f(r'k \neq 2: \quad x = \fc{3}', 370, 52, ein=3.4),
             f(r'k = 2: \quad 0 = 0, \;\; \mathbb{L} = \mathbb{R}', 480, 50, ein=4.5),
-            graf(W5a, geraden=[{'bewegung': [[0, 3, 0], [8.4, 3, 0], [10.2, 1, 0], [11.6, 1, 0], [13.4, 0, 0]], 'farbe': 1, 'dicke': 9},
+            f(r'\fb{k = 5}', 590, 46, ein=0.3),
+            f(r'\to\ \fb{k = 3}', 590, 46, ein=8.4, x=300),
+            f(r'\to\ \fb{k = 2}', 590, 46, ein=11.6, x=528),
+            graf(W5a, geraden=[{'bewegung': [[0, 3, 0], [8.4, 3, 0], [10.2, 1, 0], [11.6, 1, 0], [13.4, 0, 0]], 'farbe': 1, 'dicke': 9,
+                                'marken': [{'x': 3, 'text': '(3 | {y})', 'farbe': 3}]},
                                {'bewegung': [[0, 0, 9], [8.4, 0, 9], [10.2, 0, 3], [11.6, 0, 3], [13.4, 0, 0]], 'farbe': 2, 'gestrichelt': True, 'dicke': 3}],
                  ein=0.3)),
          sz('Quadratisch',
@@ -797,7 +821,17 @@ clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
             f(r'\fb{m}\,x^2 - 4x - 3 = 0', 250, 50, ein=0.3),
             f(r'm = 0: \;\; -4x - 3 = 0 \;\Rightarrow\; x = -\tfrac{3}{4}', 345, 44, ein=5.7),
             f(r'm \neq 0: \;\; D(m) = 16 + 12m', 440, 44, ein=9.4),
-            n('@m = -\\tfrac{4}{3}@: eine; @m \\gt -\\tfrac{4}{3}@ (@m \\neq 0@): zwei|@m \\lt -\\tfrac{4}{3}@: keine', 540, 'blau', 40, ein=13.6)),
+            n('@m = -\\tfrac{4}{3}@: eine; @m \\gt -\\tfrac{4}{3}@ (@m \\neq 0@): zwei|@m \\lt -\\tfrac{4}{3}@: keine', 540, 'blau', 40, ein=13.6),
+            # Behelf (Prüfung 07.10.2026): feste Fälle nacheinander statt m stetig durch 0 (das kann die
+            # Parabel-Bewegung in Scheitelform nicht). m = 1 zu «m x² − 4x − 3», steigt bei «m gleich null»
+            # aus dem Bild, die Gerade −4x − 3 (Fall m = 0) kommt. Bei «null bei m gleich minus vier Drittel»
+            # weicht die Gerade nach oben, die Parabel kommt von unten (berührt bei −1.5), dann m = −1 (zwei) und m = −2 (keine).
+            graf(W5c, parabeln=[par(1, 2, -7, beschr=False, bew=[[0, 1, 2, -7], [5.5, 1, 2, -7], [6.3, 1, 2, 100]]),
+                                par(-4 / 3, -1.5, 0, beschr=False, bew=[[0, -4 / 3, -1.5, -100], [13.3, -4 / 3, -1.5, -100], [14.1, -4 / 3, -1.5, 0],
+                                                         [16.8, -4 / 3, -1.5, 0], [17.6, -1, -2, 1], [18.2, -1, -2, 1], [19.0, -2, -1, -1]])],
+                 geraden=[{'bewegung': [[0, -4, 100], [5.5, -4, 100], [6.1, -4, -3], [13.3, -4, -3], [14.1, -4, 100]], 'farbe': 5,
+                           'dicke': 4, 'marken': [{'x': -0.75, 'text': '(−0.75 | 0)', 'farbe': 3}]}],
+                 ein=3.7)),
          sz('Merke',
             'Zum Mitnehmen: Linear auf die Form a mal x gleich c bringen und den Wert suchen, bei dem a null wird. Quadratisch '
             'zuerst prüfen, ob der Faktor vor x Quadrat null wird, dann D von k untersuchen.',

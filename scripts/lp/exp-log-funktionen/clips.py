@@ -45,6 +45,34 @@ def graf(W, kurven=(), punkte=(), ein=0.05, **kw):
     return g
 
 
+def ueber(W, punkte=(), figuren=(), kurven=(), ein=0.05):
+    """Deckblatt ueber einem Graf: gleiches Fenster, ohne Achsen und Karo — nur Punkte,
+    Figuren oder Kurven, die spaeter dazukommen (ein je fester Punkt gibt es im graf nicht)."""
+    return graf(W, kurven, punkte, ein=ein, raster=False, achsen=False, figuren=list(figuren))
+
+
+def strecke(von, bis, farbe=5, gestrichelt=False, dicke=4):
+    d = {'art': 'strecke', 'von': von, 'bis': bis, 'farbe': farbe, 'dicke': dicke}
+    if gestrichelt:
+        d['gestrichelt'] = True
+    return d
+
+
+def zins_tabelle(k):
+    """Die Zinstabelle spaltenweise: k = 0 Kopf mit Linien, k = 1…4 je eine Spalte. Alle Teile
+    haben dieselben Masse (\\phantom), damit sie deckungsgleich uebereinander liegen."""
+    n_ = ['1', '2', '12', '10^6']
+    w_ = ['2', '2.25', '2.61', '2.718']
+    zeig = lambda i, t: t if i == k else r'\phantom{%s}' % t
+    if k == 0:
+        return (r'\begin{array}{c|cccc} n & ' + ' & '.join(zeig(-1, t) for t in n_)
+                + r' \\ \hline & ' + ' & '.join(zeig(-1, t) for t in w_) + r' \end{array}')
+    # Ohne Linien; was die Linien im Kopf an Platz brauchen (0.07em waagrecht und senkrecht),
+    # ersetzen \kern und \\[…] — im Browser nachgemessen, die Ziffern liegen pixelgenau gleich.
+    return (r'\begin{array}{ccccc} \phantom{n}\kern0.07em & ' + ' & '.join(zeig(i + 1, t) for i, t in enumerate(n_))
+            + r' \\[0.07em] & ' + ' & '.join(zeig(i + 1, t) for i, t in enumerate(w_)) + r' \end{array}')
+
+
 def _kurve(art, stuetz, farbe, asymptote, startpunkt, marken, spiegel, von, bis, gestrichelt, dicke):
     d = {'bewegung': stuetz, art: True, 'farbe': farbe}
     if gestrichelt:
@@ -199,7 +227,7 @@ clip('exponentialfunktion', 'Exponentialkurve sehen: die Exponentialfunktion',
             'Ein Punkt bleibt immer gleich: null, eins. Denn a hoch null ist eins.',
             f(r'y = \fa{a}^{\,x}', 300, 66),
             n('alle Kurven durch @(0 \\mid 1)@|bei @x = 1@ steht die Basis: @(1 \\mid \\fa{a})@', 440, 'blau', ein=8.4),
-            graf(W1, [ek([[4.9, 1, 2, 0], [6.5, 1, 3, 0], [6.7, 1, 3, 0], [8.1, 1, 1.5, 0]],
+            graf(W1, [ek([[3.4, 1, 2, 0], [4.8, 1, 3, 0], [5.0, 1, 3, 0], [6.4, 1, 1.5, 0]],
                           startpunkt={'farbe': 5}, marken=[{'x': 1, 'text': '(1 | {y})', 'farbe': 1}])])),
          sz('Zerfall',
             'Ist die Basis kleiner als eins, zum Beispiel ein Halb, fällt die Kurve: In jedem Schritt wird halbiert. '
@@ -367,7 +395,11 @@ clip('wachstum-zerfall', 'Exponentialkurve sehen: Wachstum und Zerfall',
             n('Quotient konstant: @\\fa{1.2}@ → exponentiell|Differenz konstant → linear', 460, 'blau', ein=3.8),
             graf(dict(xbereich=[-0.5, 4], ybereich=[-6, 110], yteilung=yt(20, 40, 60, 80, 100), xteilung=yt(1, 2, 3),
                       xname='t', yname='N'),
-                 [ek([[0, 50, 1.2, 0]])], ein=3.0, punkte=[pt(0, 50, 2), pt(1, 60, 5), pt(2, 72, 5), pt(3, 86.4, 5)])),
+                 [ek([[0, 50, 1.2, 0]])], ein=3.0, punkte=[pt(0, 50, 2), pt(1, 60, 5), pt(2, 72, 5), pt(3, 86.4, 5)]),
+            # «Bei linearem Wachstum wäre die Differenz gleich» (7.96 s): die lineare Reihe +10 zum Vergleich
+            ueber(dict(xbereich=[-0.5, 4], ybereich=[-6, 110]),
+                  kurven=[dict(fest('50+10*x', von=0, bis=4), beschriftung='linear', beschriftung_bei=[3.0, 68])],
+                  ein=8.0)),
          sz('Merke',
             'Zum Mitnehmen: N von t gleich Startwert mal Faktor hoch t. Ein Zuwachs von p Prozent gibt den Faktor eins plus p Hundertstel, '
             'eine Abnahme eins minus p Hundertstel. Verdopplungszeit und Halbwertszeit stehen im Exponenten: t durch T.',
@@ -477,8 +509,14 @@ clip('e-funktion', 'Exponentialkurve sehen: die e-Funktion und der Basiswechsel'
             'zwei fünf, monatlich zu zwei Komma sechs eins. Je feiner, desto näher an einer festen Zahl: e, '
             'ungefähr zwei Komma sieben eins acht.',
             titel('Die Zahl e', 280, 80),
-            f(r'\left(1 + \tfrac{1}{n}\right)^{n} \;\to\; e \approx 2.718', 430, 52, ein=9.1),
-            f(r'\begin{array}{c|cccc} n & 1 & 2 & 12 & 10^6 \\ \hline & 2 & 2.25 & 2.61 & 2.718 \end{array}', 560, 40, ein=3.0)),
+            f(r'\left(1 + \tfrac{1}{n}\right)^{n} \;\to\; e \approx 2.718', 430, 52, ein=12.0),
+            # Tabelle spaltenweise zum Wort: «zwei Franken» 3.4, «zwei Komma zwei fünf» 5.8,
+            # «zwei Komma sechs eins» 7.8, «zwei Komma sieben eins acht» 12.3
+            f(zins_tabelle(0), 560, 40, ein=2.9),
+            f(zins_tabelle(1), 560, 40, ein=3.4),
+            f(zins_tabelle(2), 560, 40, ein=5.8),
+            f(zins_tabelle(3), 560, 40, ein=7.8),
+            f(zins_tabelle(4), 560, 40, ein=12.3)),
          sz('Zwischen 2 und 3',
             'Die e-Funktion e hoch x liegt zwischen zwei hoch x und drei hoch x. Auch sie geht durch null, eins, '
             'und bei x gleich eins steht e.',
@@ -616,16 +654,25 @@ clip('saettigung', 'Exponentialkurve sehen: Sättigung',
             'der Rückstand: sechzig Grad am Anfang.',
             f(r'f(t) = 20 + 60\,e^{-kt}', 300, 56),
             n('Startwert @\\fb{A} = f(0) = 80@|Sättigungswert @S = 20@', 450, 'orange', ein=3.8),
-            graf(WK, [ek([[0, 60, Q, 20]], asymptote=True, startpunkt={'farbe': 2})])),
+            graf(WK, [ek([[0, 60, Q, 20]], asymptote=True, startpunkt={'farbe': 2})]),
+            # «Dazwischen liegt der Rückstand» (5.8 s), «sechzig Grad» (7.2 s); endet am Rand des Startpunkts
+            ueber(WK, figuren=[strecke([0, 20], [0, 78], 2, dicke=6)], ein=5.8),
+            ueber(WK, figuren=[{'art': 'text', 'bei': [1.0, 47], 'text': '60', 'farbe': 2, 'kursiv': False, 'anker': 'start'}], ein=7.2)),
          sz('Der Rückstand zerfällt',
             'Der Abstand zur Raumtemperatur zerfällt exponentiell. Hier halbiert er sich alle zehn Minuten: sechzig, '
             'dreissig, fünfzehn, sieben Komma fünf Grad. Also fünfzig, fünfunddreissig, siebenundzwanzig Komma fünf Grad.',
             f(r'e^{-10k} = \tfrac12', 300, 56),
             n('Rückstand @60 \\to 30 \\to 15 \\to 7.5@', 440, 'orange', ein=4.0),
             graf(WK, [ek([[0, 60, Q, 20]], asymptote=True)], ein=0.05),
+            # Abstand zur Asymptote einzeln zum Wort: «sechzig» 5.8, «dreissig» 6.45, «fünfzehn» 7.3, «sieben Komma fünf» 8.05
+            ueber(WK, figuren=[strecke([10, 20], [10, 50], 2, dicke=6)], ein=6.45),
+            ueber(WK, figuren=[strecke([20, 20], [20, 35], 2, dicke=6)], ein=7.3),
+            ueber(WK, figuren=[strecke([30, 20], [30, 27.5], 2, dicke=6)], ein=8.05),
             graf(WK, [ek([[0, 60, Q, 20]], asymptote=True)], ein=11.6,
                  punkte=[pt(10, 50, 5, '(10 | 50)', [11, 57]), pt(20, 35, 5, '(20 | 35)', [21, 42]),
-                         pt(30, 27.5, 5)])),
+                         pt(30, 27.5, 5)]),
+            # die Strecke bei t = 0 nach dem Graf von 11.6 s: sie liegt auf der y-Achse, die er neu zeichnet
+            ueber(WK, figuren=[strecke([0, 20], [0, 80], 2, dicke=6)], ein=5.8)),
          sz('Allgemein',
             'Allgemein: f von t gleich S minus Klammer S minus A, mal e hoch minus k t. Für grosse t geht e hoch minus k t '
             'gegen null, und f gegen S.',
@@ -754,6 +801,11 @@ clip('logarithmusfunktion', 'Exponentialkurve sehen: die Logarithmusfunktion',
             titel('Die Umkehrfrage', 280, 80),
             f(r'2^{x} = 8 \;\Leftrightarrow\; x = \log_2 8 = 3', 430, 52, ein=7.2),
             graf(WL, [ek([[0, 1, 2, 0]])], ein=1.0),
+            # Leserichtung: «bis acht» (4.3 s) waagrecht von y = 8 zur Kurve, «drei» (6.3 s) hinunter zu x = 3
+            ueber(WL, figuren=[strecke([0, 8], [3, 8], 5, True, 3)], ein=4.3),
+            ueber(WL, figuren=[strecke([3, 8], [3, 0], 5, True, 3),
+                               {'art': 'text', 'bei': [3, -0.55], 'text': '3', 'farbe': 5, 'kursiv': False,
+                                'groesse': 24}], ein=6.3),
             graf(WL, [ek([[0, 1, 2, 0]], marken=[{'x': 3, 'text': '(3 | 8)', 'farbe': 1}])], ein=6.0)),
          sz('Spiegeln',
             'Die Logarithmusfunktion ist die Umkehrfunktion. Ihr Graph ist das Spiegelbild der Exponentialkurve an der '
@@ -767,8 +819,12 @@ clip('logarithmusfunktion', 'Exponentialkurve sehen: die Logarithmusfunktion',
             'Beim Spiegeln tauschen die Rollen. Aus null, eins wird eins, null: die Nullstelle. Aus der x-Achse als '
             'Asymptote wird die y-Achse. Und die Definitionsmenge sind nur die positiven Zahlen.',
             f(r'(0 \mid 1) \to (1 \mid 0)', 300, 56),
-            n('Nullstelle @x_0 = 1@|Asymptote @x = 0@|@D = \\mathbb{R}^+@, @W = \\mathbb{R}@', 420, 'gruen', ein=2.3),
-            graf(WL, [lk([[0, 1, 2, 0]], asymptote=True, startpunkt={'farbe': 3})])),
+            # Notiz zeilenweise zum Ton: «die Nullstelle» 3.8, «Asymptote» 6.5, «Definitionsmenge» 8.9
+            n('Nullstelle @x_0 = 1@', 420, 'gruen', ein=3.8),
+            n('Asymptote @x = 0@', 477, 'gruen', ein=6.5),
+            n('@D = \\mathbb{R}^+@, @W = \\mathbb{R}@', 534, 'gruen', ein=8.9),
+            # Beschriftung (1 | 0) unter die Achse, rechts — sonst sitzt sie auf der Achszahl 2
+            graf(WL, [lk([[0, 1, 2, 0]], asymptote=True)], punkte=[pt(1, 0, 3, '(1 | 0)', [1.3, -1.0])])),
          sz('Die Basis',
             'Wie bei der Exponentialfunktion entscheidet die Basis. Bei Basis grösser als eins steigt die Kurve, immer '
             'flacher, aber ohne Grenze. Bei Basis kleiner als eins fällt sie.',
@@ -794,7 +850,12 @@ clip('logarithmusfunktion', 'Exponentialkurve sehen: die Logarithmusfunktion',
             f(r'y = a^x \;\Leftrightarrow\; x = \log_a y', 410, 54, ein=0.4),
             n('@(1 \\mid 0)@; Asymptote @x = 0@|@D = \\mathbb{R}^+@|Gleichung: Potenz freistellen, logarithmieren',
               540, 'blau', 44, ein=1.2),
-            graf(WL, [fest('x', farbe=5), ek([[0, 1, 2, 0]], spiegel={'farbe': 3})])),
+            graf(WL, [fest('x', farbe=5), ek([[0, 1, 2, 0]], spiegel={'farbe': 3})]),
+            # «Sie geht durch eins, null» (7.6 s), «hat die y-Achse als Asymptote» (9.3 s)
+            ueber(WL, [pt(1, 0, 3, '(1 | 0)', [1.3, -1.0])], ein=7.6),
+            ueber(WL, figuren=[strecke([0, -3], [0, 9], 3, True, 5),
+                               {'art': 'text', 'bei': [0.3, 7.0], 'text': 'x = 0', 'farbe': 3, 'anker': 'start'}],
+                  ein=9.3)),
          JETZT_DU,
      ])
 

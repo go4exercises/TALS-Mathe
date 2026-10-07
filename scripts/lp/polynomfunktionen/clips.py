@@ -39,6 +39,12 @@ def graf(W, kurven=(), punkte=(), ein=0.05, **kw):
     return g
 
 
+def ueber(W, punkte=(), figuren=(), kurven=(), ein=0.05):
+    """Deckblatt ueber einem Graf: gleiches Fenster, ohne Achsen und Karo — nur Punkte,
+    Figuren oder Kurven, die spaeter dazukommen (ein je fester Punkt gibt es im graf nicht)."""
+    return graf(W, kurven, punkte, ein=ein, raster=False, achsen=False, figuren=list(figuren))
+
+
 def poly(stuetz, farbe=1, nullstellen=None, extrema=None, marken=None, von=None, bis=None,
          gestrichelt=False, dicke=None):
     """Bewegtes Polynom: Stuetzpunkte [t, a, x1, x2, …] fuer a·(x−x1)(x−x2)…"""
@@ -185,9 +191,15 @@ clip('linearfaktoren', 'Polynom sehen: Linearfaktoren und Nullstellen',
          sz('Nullprodukt',
             'Ein Produkt ist null, sobald ein Faktor null ist. x minus eins wird null bei eins, x minus drei bei drei, '
             'x plus zwei bei minus zwei. Genau dort schneidet der Graph die x-Achse.',
-            f(r'x \fb{+ 2} = 0 \;\Rightarrow\; x = \fb{-2}', 300, 54),
-            n('in der Klammer steht die Nullstelle|mit umgekehrtem Vorzeichen', 440, 'orange', ein=3.0),
-            graf(W1, [poly([[0] + B1], nullstellen={'farbe': 2})], ein=1.9)),
+            f(r'x \fb{- 1} = 0 \;\Rightarrow\; x = \fb{1}', 290, 50, ein=3.3),
+            f(r'x \fb{- 3} = 0 \;\Rightarrow\; x = \fb{3}', 370, 50, ein=5.2),
+            f(r'x \fb{+ 2} = 0 \;\Rightarrow\; x = \fb{-2}', 450, 50, ein=6.8),
+            n('in der Klammer steht die Nullstelle|mit umgekehrtem Vorzeichen', 560, 'orange', ein=3.0),
+            graf(W1, [poly([[0] + B1])]),
+            # Nullstellen einzeln zum Wort (1.9–8.3 s): «bei eins», «bei drei», «bei minus zwei»
+            ueber(W1, [pt(1, 0, 2, '(1 | 0)', [1.15, 0.45])], ein=4.4),
+            ueber(W1, [pt(3, 0, 2, '(3 | 0)', [3.2, -1.45])], ein=6.0),
+            ueber(W1, [pt(-2, 0, 2, '(−2 | 0)', [-2.15, 0.45], 'end')], ein=7.6)),
          sz('Eine Nullstelle wandert',
             'Ändert man einen Linearfaktor, wandert seine Nullstelle mit. Aus x minus drei wird x minus vier, '
             'dann x minus zwei — der Graph folgt, die anderen Nullstellen bleiben stehen.',
@@ -479,7 +491,10 @@ clip('globalverlauf', 'Polynom sehen: der Globalverlauf',
             'beiden deutlich verschieden: f hat drei Nullstellen, x hoch drei nur eine.',
             titel('Nah dran', 280, 80),
             f(r'f(x) = x^3 - 4x', 430, 58, ein=1.0),
-            graf(Z1, [fest('x**3'), poly([[0, 1, -2, 0, 2]])], ein=3.0)),
+            graf(Z1, [fest('x**3'), poly([[0, 1, -2, 0, 2]])], ein=3.0),
+            # «f hat drei Nullstellen» (8.4 s), «x hoch drei nur eine» (9.8 s): Ring um (0 | 0)
+            ueber(Z1, [pt(-2, 0, 2), pt(0, 0, 2), pt(2, 0, 2)], ein=8.5),
+            ueber(Z1, figuren=[{'art': 'kreis', 'm': [0, 0], 'r': 0.28, 'farbe': 5, 'dicke': 3}], ein=9.8)),
          sz('Weiter weg',
             'Jetzt zoomen wir hinaus, bis x gleich sechs. Die beiden Kurven rücken zusammen.',
             f(r'x \in [-6;\, 6]', 300, 62),
@@ -515,7 +530,11 @@ clip('globalverlauf', 'Polynom sehen: der Globalverlauf',
             'dagegen gibt es immer mindestens eine — die Enden liegen auf verschiedenen Seiten der x-Achse.',
             f(r'x^2 + 1 \;\text{— keine Nullstelle}', 300, 50),
             n('Grad ungerade:|mindestens eine Nullstelle', 440, 'blau', ein=5.2),
-            graf(W4, [fest('x**2+1', farbe=4, gestrichelt=False)], ein=1.0)),
+            graf(W4, [fest('x**2+1', farbe=4, gestrichelt=False)], ein=1.0),
+            # «Bei ungeradem Grad dagegen … mindestens eine» (5.3 s): eine kubische Kurve dazu
+            ueber(W4, [pt(-1, 0, 2, '(−1 | 0)', [-1.15, 0.35], 'end')],
+                  kurven=[dict(fest('x**3+1', farbe=1, gestrichelt=False),
+                               beschriftung='x³ + 1', beschriftung_bei=[-1.0, -1.6])], ein=5.3)),
          sz('Symmetrie',
             'Und die Symmetrie? Nur ungerade Exponenten, wie bei x hoch drei minus vier x: punktsymmetrisch zum Ursprung. '
             'Nur gerade Exponenten: achsensymmetrisch zur y-Achse. Das konstante Glied zählt dabei als gerade. Gemischt: keine dieser Symmetrien.',
@@ -658,9 +677,11 @@ clip('nullstellen-berechnen', 'Polynom sehen: Nullstellen berechnen',
             'Jetzt die Koeffizienten vergleichen. Vor x Quadrat: p minus eins gleich minus zwei, also p gleich minus eins. '
             'Am Schluss: minus q gleich sechs, also q gleich minus sechs. Kontrolle beim x: q minus p ist minus fünf, stimmt. '
             'Der Quotient ist x Quadrat minus x minus sechs.',
-            f(r'p - 1 = -2 \Rightarrow p = -1', 300, 46, ein=3.4),
-            f(r'-q = 6 \Rightarrow q = -6', 380, 46, ein=7.7),
-            n('Kontrolle: @q - p = -5@ ✓|Quotient @x^2 - x - 6@', 470, 'orange', 44, ein=11.5),
+            f(r'f(x) = x^3 - 2x^2 - 5x + 6', 260, 46, ein=0.3),
+            f(r'= x^3 + (p - 1)\,x^2 + (q - p)\,x - q', 335, 46, ein=0.3),
+            f(r'p - 1 = -2 \Rightarrow p = -1', 440, 46, ein=3.4),
+            f(r'-q = 6 \Rightarrow q = -6', 515, 46, ein=7.7),
+            n('Kontrolle: @q - p = -5@ ✓|Quotient @x^2 - x - 6@', 600, 'orange', 44, ein=11.5),
             graf(WD, [poly([[0, 1, 1, 3, -2]])], ein=0.05,
                  punkte=[pt(1, 0, 2, '(1 | 0)', [1.25, 0.9])])),
          sz('Faktorisieren',
@@ -782,6 +803,17 @@ W5r = dict(xbereich=[-2, 3], ybereich=[-4, 10], yteilung=yt(-4, -2, 2, 4, 6, 8, 
 WQ = dict(xbereich=[-1, 5], ybereich=[-4, 4], yteilung=yt(-4, -2, 2, 4))
 WS = dict(xbereich=[-0.8, 8], ybereich=[-45, 450], yteilung=yt(100, 200, 300, 400), xteilung=yt(2, 4, 6),
           xname='x [cm]', yname='V [cm³]')
+XS = 2.83
+NETZ = ([{'art': 'vieleck', 'punkte': q, 'farbe': 5, 'fuellung': 0.22, 'dicke': 2.5} for q in (
+            [[0, 0], [XS, 0], [XS, XS], [0, XS]], [[20 - XS, 0], [20, 0], [20, XS], [20 - XS, XS]],
+            [[0, 15 - XS], [XS, 15 - XS], [XS, 15], [0, 15]], [[20 - XS, 15 - XS], [20, 15 - XS], [20, 15], [20 - XS, 15]])]
+        + [{'art': 'vieleck', 'punkte': [[XS, XS], [20 - XS, XS], [20 - XS, 15 - XS], [XS, 15 - XS]], 'farbe': 1,
+            'fuellung': 0.10, 'dicke': 2.5, 'gestrichelt': True},
+           {'art': 'vieleck', 'punkte': [[0, 0], [20, 0], [20, 15], [0, 15]], 'farbe': 5, 'dicke': 3},
+           {'art': 'text', 'bei': [10, -2.2], 'text': '20 cm', 'farbe': 5, 'kursiv': False, 'groesse': 26},
+           {'art': 'text', 'bei': [-0.6, 7.0], 'text': '15 cm', 'farbe': 5, 'kursiv': False, 'groesse': 26,
+            'anker': 'end'},
+           {'art': 'text', 'bei': [XS / 2, 15.5], 'text': 'x', 'farbe': 5, 'groesse': 26}])
 clip('extrema', 'Polynom sehen: Hoch- und Tiefpunkte',
      'Hoch- und Tiefpunkte ablesen, lokal und absolut unterscheiden, beim Grad 2 exakt berechnen.',
      ['Hochpunkt', 'Tiefpunkt', 'lokales Maximum', 'absolutes Maximum', 'Extremwert'], [
@@ -797,14 +829,16 @@ clip('extrema', 'Polynom sehen: Hoch- und Tiefpunkte',
             f(r'f(2.5) = 8.125 \gt 2', 300, 56, ein=3.0),
             n('Hochpunkt = lokales Maximum|kein absolutes Maximum auf @\\mathbb{R}@', 440, 'gruen', ein=8.0),
             graf(W5r, [poly([[0] + B5], extrema={'farbe': 3, 'beschriftung': False},
-                           marken=[{'x': 2.5, 'text': '(2.5 | 8.125)', 'farbe': 5}])], ein=1.0)),
+                           marken=[{'x': 2.5, 'text': '(2.5 | 8.125)', 'farbe': 5}])], ein=1.0),
+            # «Das Maximum bei H» (8.0 s): H benennen
+            ueber(W5r, [pt(-1, 2, 3, 'H(−1 | 2)', [-1, 2.6], 'middle')], ein=8.0)),
          sz('Am Rand',
             'Anders auf einem Intervall, etwa von minus eins Komma fünf bis zwei Komma fünf. Dann gibt es einen grössten '
             'Wert: am rechten Rand, acht Komma eins zwei fünf. Der kleinste ist der Tiefpunkt, minus zwei. '
             'Absolute Extremwerte liegen in einem Hoch- oder Tiefpunkt — oder am Rand.',
             f(r'D = [-1.5;\, 2.5]', 300, 58),
             n('absolutes Maximum: am Rand|absolutes Minimum: im Tiefpunkt', 440, 'gruen', ein=7.8),
-            graf(W5r, [poly([[0] + B5], von=-1.5, bis=2.5, extrema={'farbe': 3, 'beschriftung': False},
+            graf(W5r, [fest('x**3-3*x'), poly([[0] + B5], von=-1.5, bis=2.5, extrema={'farbe': 3, 'beschriftung': False},
                            marken=[{'x': 2.5, 'text': '(2.5 | 8.125)', 'farbe': 5}, {'x': -1.5, 'text': '', 'farbe': 5}])],
                  ein=1.0)),
          sz('Grad 2 exakt',
@@ -830,8 +864,13 @@ clip('extrema', 'Polynom sehen: Hoch- und Tiefpunkte',
             'mit rund dreihundertneunundsiebzig Kubikzentimetern.',
             f(r'V(x) = x\,(20 - 2x)(15 - 2x)', 300, 46),
             n('@D = \\, ]0;\\, 7.5[@|@\\fc{H \\approx (2.83 \\mid 379)}@ — hier auch absolut', 420, 'gruen', 44, ein=14.4),
-            graf(WS, [poly([[0, 4, 0, 7.5, 10]], von=0, bis=7.5, extrema={'farbe': 3, 'beschriftung': False})], ein=1.0,
-                 punkte=[pt(2.83, 379, 3, 'H ≈ (2.83 | 379)', [3.1, 420])])),
+            # Das Netz der Schachtel (4.0 s, «Die offene Schachtel aus einem Karton …»): 20 × 15,
+            # Eckquadrate x = 2.83 (die Lösung), gestrichelt die Faltkanten
+            graf(dict(xbereich=[-5.5, 21.5], ybereich=[-3, 16.5], raster=False, achsen=False), ein=4.0,
+                 x=LX, y=580, breite=448, hoehe=328, figuren=NETZ),
+            graf(WS, [poly([[0, 4, 0, 7.5, 10]], von=0, bis=7.5)], ein=1.0),
+            # «Der Hochpunkt liegt bei rund zwei Komma acht drei …» (14.4 s)
+            ueber(WS, [pt(2.83, 379, 3, 'H ≈ (2.83 | 379)', [3.1, 420])], ein=14.4)),
          sz('Merke',
             'Zum Mitnehmen: Hoch- und Tiefpunkte sind lokale Extrema. Absolut grösste und kleinste Werte gibt es oft '
             'nur auf einem Intervall — im Hoch- oder Tiefpunkt oder am Rand. Beim Grad zwei rechnet man exakt, '

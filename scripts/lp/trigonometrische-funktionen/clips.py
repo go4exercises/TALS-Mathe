@@ -43,6 +43,19 @@ def graf(W, kurven=(), punkte=(), ein=0.05, **kw):
     return g
 
 
+def ueber(W, kurven=(), punkte=(), ein=0.05, **kw):
+    """Zusatzbild ueber einem graf derselben Szene: gleiches Fenster, ohne Achsen und Karo,
+    damit nur das Neue dazukommt (Bild-Elemente haben kein eigenes `ein`)."""
+    return graf(W, kurven, punkte, ein=ein, achsen=False, raster=False, **kw)
+
+
+def strich(x, y0, y1, farbe=5, dicke=3, luecke=(-0.3, -0.08)):
+    """Senkrechte Hilfslinie x = const, gestrichelt (figuren) — mit Lücke für die Achsbeschriftung
+    unter der x-Achse (bei 3 Einheiten auf 480 px: 18–40 px unter der Achse)."""
+    s_ = {'art': 'strecke', 'farbe': farbe, 'gestrichelt': True, 'dicke': dicke}
+    return [dict(s_, von=[x, y0], bis=[x, luecke[0]]), dict(s_, von=[x, luecke[1]], bis=[x, y1])]
+
+
 def _trig(typ, stuetz, farbe, linien, kreis, marken, von, bis, gestrichelt, dicke):
     d = {'bewegung': stuetz, 'trig': typ, 'farbe': farbe}
     if gestrichelt:
@@ -226,8 +239,10 @@ clip('kreis-kurve', 'Sinuskurve sehen: vom Einheitskreis zur Kurve',
             'null, eins, null, minus eins, null. Dazwischen zieht man einen weichen Bogen.',
             f(r'\begin{array}{c|ccccc} x & 0 & \tfrac{\pi}{2} & \pi & \tfrac{3\pi}{2} & 2\pi \\ \hline \sin x & 0 & 1 & 0 & -1 & 0 \end{array}',
               250, 40, ein=2.6),
-            graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P)], ein=0.3,
-                 punkte=[pt(0, 0, 1), pt(H2, 1, 1), pt(P, 0, 1), pt(3 * H2, -1, 1), pt(2 * P, 0, 1)])),
+            graf(WK, [], ein=0.3,
+                 punkte=[pt(0, 0, 1), pt(H2, 1, 1), pt(P, 0, 1), pt(3 * H2, -1, 1), pt(2 * P, 0, 1)]),
+            ueber(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P)], ein=10.4,
+                  punkte=[pt(0, 0, 1), pt(H2, 1, 1), pt(P, 0, 1), pt(3 * H2, -1, 1), pt(2 * P, 0, 1)])),
          sz('Der Cosinus',
             'Der Cosinus ist die waagrechte Koordinate von P. Er startet bei eins, ist bei pi halbe null, bei pi minus eins, '
             'bei drei pi halbe wieder null und bei zwei pi wieder eins. Seine Kurve hat dieselbe Form, sie beginnt nur oben.',
@@ -240,7 +255,7 @@ clip('kreis-kurve', 'Sinuskurve sehen: vom Einheitskreis zur Kurve',
             'die Sinuskurve, die waagrechte Koordinate die Cosinuskurve. Beide bleiben zwischen minus eins und eins.',
             titel('Zum Mitnehmen', 240, 72),
             n('@P = (\\fc{\\cos x} \\mid \\fa{\\sin x})@|Werte zwischen @-1@ und @1@', 350, 'blau', 44, ein=1.4),
-            graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P), ck(von=0, bis=2 * P)], ein=0.3)),
+            graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P, kreis=KREIS([[0, P / 3]], spur=False)), ck(von=0, bis=2 * P)], ein=0.3)),
          JETZT_DU,
      ])
 
@@ -346,7 +361,8 @@ clip('periode-symmetrie', 'Sinuskurve sehen: Periode und Symmetrie',
             graf(WS, [sk([[0, 1, 1, 0, 0]])], ein=0.3,
                  punkte=[pt(P / 6, 0.5, 1, '(π/6 | 0.5)', [P / 6 + 0.15, 0.75]),
                          pt(-P / 6, -0.5, 1, '(−π/6 | −0.5)', [-P / 6 - 0.15, -0.85], 'end')]),
-            graf(WS, [ck()], ein=6.0)),
+            graf(WS, [ck()], ein=6.0),
+            ueber(WS, ein=10.1, punkte=[pt(P / 3, 0.5, 3), pt(-P / 3, 0.5, 3)])),
          sz('Versetzt',
             'Die Cosinuskurve ist eine Sinuskurve, nur verschoben. Schieben wir die Sinuskurve um pi halbe nach links, '
             'liegt sie genau auf der Cosinuskurve. Cosinus x ist Sinus von x plus pi halbe.',
@@ -449,14 +465,17 @@ clip('tangens', 'Sinuskurve sehen: die Tangenskurve',
             'Der Tangens ist Sinus durch Cosinus. Wo der Cosinus null ist, bei pi halbe, darf man nicht teilen. '
             'Dort ist der Tangens nicht definiert.',
             f(r'\fb{\tan x} = \dfrac{\fa{\sin x}}{\fc{\cos x}}', 250, 56),
-            n('nicht definiert, wo @\\cos x = 0@: @x = \\tfrac{\\pi}{2} + k\\pi@', 400, 'rot', ein=4.6)),
+            n('nicht definiert, wo @\\cos x = 0@: @x = \\tfrac{\\pi}{2} + k\\pi@', 400, 'rot', ein=4.6),
+            graf(WS, [ck()], ein=2.6),
+            ueber(WS, ein=4.2, punkte=[pt(H2, 0, 3)], figuren=strich(H2, -1.5, 1.5)),
+            ueber(WS, ein=4.7, figuren=strich(-H2, -1.5, 1.5) + strich(3 * H2, -1.5, 1.5))),
          sz('Am Einheitskreis',
             'Am Einheitskreis ist der Tangens eine Strecke: auf der senkrechten Tangente rechts am Kreis, bis zur Geraden durch den Mittelpunkt und P. '
             'Bei null ist sie null, bei pi viertel genau eins. Je näher P an pi halbe kommt, desto steiler der Strahl, '
             'und die Strecke wächst über alle Grenzen.',
             f(r'\tan \tfrac{\pi}{4} = 1', 240, 56, ein=10.4),
             graf(WT, [tk([[0, 1, 1, 0, 0]], von=0,
-                         kreis={'mx': -2.0, 'bahn': [[0, 0], [9.0, 0], [10.4, P / 4], [11.0, P / 4], [15.4, 1.2]],
+                         kreis={'mx': -2.0, 'bahn': [[0, 0], [2.4, 0], [4.2, P / 6], [7.4, P / 6], [8.4, 0], [9.0, 0], [10.4, P / 4], [11.0, P / 4], [15.4, 1.2]],
                                 'spur': True, 'farbe': 2})], ein=0.3)),
          sz('Pole und Periode',
             'An jeder Stelle pi halbe plus k pi hat die Tangenskurve einen Pol: Links davon wächst sie über alle Grenzen, rechts davon kommt sie von ganz unten. '
@@ -588,7 +607,8 @@ clip('parameter', 'Sinuskurve sehen: Strecken und Verschieben',
             f(r'y = \sin(x - \fa{u})', 240, 62),
             n('@x - u@: um @u@ nach rechts', 350, 'blau', ein=6.6),
             graf(WA, [sk([[0, 1, 1, 0, 0]], farbe=5, gestrichelt=True),
-                      sk([[0, 1, 1, 0, 0], [2.5, 1, 1, 0, 0], [4.5, 1, 1, P / 3, 0]])], ein=0.3)),
+                      sk([[0, 1, 1, 0, 0], [2.5, 1, 1, 0, 0], [4.5, 1, 1, P / 3, 0]])], ein=0.3),
+            ueber(WA, ein=5.0, punkte=[pt(P / 3, 0, 1, 'π/3', [P / 3, -0.6], 'middle')])),
          sz('Alles zusammen',
             'Alles zusammen: y gleich zwei mal Sinus von zwei mal Klammer x minus pi viertel plus eins. Schritt für Schritt '
             'aus der Sinuskurve: zuerst die Periode pi, dann die Amplitude zwei, dann um pi viertel nach rechts, '
@@ -707,7 +727,10 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             f(r'x_2 = \pi - x_1 \approx 2.498', 240, 56, ein=9.8),
             graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P), fest('0.6', farbe=5)], ein=0.3,
                  punkte=[pt(X1, 0.6, 1, 'x₁', [X1 - 0.15, 0.85], 'end')]),
-            graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P), fest('0.6', farbe=5)], ein=9.8,
+            ueber(WK, ein=5.0, figuren=strich(H2, -1.5, 1.5)),
+            ueber(WK, ein=7.8, figuren=[{'art': 'strecke', 'von': [P - X1, 0], 'bis': [P, 0], 'farbe': 1, 'dicke': 9}]),
+            ueber(WK, ein=9.0, figuren=[{'art': 'strecke', 'von': [0, 0], 'bis': [X1, 0], 'farbe': 1, 'dicke': 9}]),
+            ueber(WK, ein=9.8,
                  punkte=[pt(X1, 0.6, 1, 'x₁', [X1 - 0.15, 0.85], 'end'),
                          pt(P - X1, 0.6, 1, 'x₂', [P - X1 + 0.15, 0.85])])),
          sz('Beim Cosinus',
@@ -715,8 +738,9 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             'Für Cosinus x gleich null Komma sechs: null Komma neun zwei sieben und fünf Komma drei fünf sechs.',
             f(r'\fc{\cos x = 0.6}: \quad x_2 = 2\pi - x_1', 240, 54),
             n('@x_1 \\approx 0.927@, @x_2 \\approx 5.356@', 350, 'gruen', ein=8.9),
-            graf(WK, [ck(von=0, bis=2 * P), fest('0.6', farbe=5)], ein=0.3,
-                 punkte=[pt(C1, 0.6, 3), pt(2 * P - C1, 0.6, 3)])),
+            graf(WK, [ck(von=0, bis=2 * P), fest('0.6', farbe=5)], ein=0.3),
+            ueber(WK, ein=1.6, figuren=strich(P, -1.5, 1.5)),
+            ueber(WK, ein=8.8, punkte=[pt(C1, 0.6, 3), pt(2 * P - C1, 0.6, 3)])),
          sz('Periode',
             'Weitere Lösungen liegen jeweils eine Periode weiter: Zu jeder Lösung kommt plus zwei pi dazu. '
             'Zwischen null und vier pi hat Sinus x gleich null Komma sechs also vier Lösungen.',

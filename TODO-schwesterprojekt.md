@@ -119,3 +119,14 @@ Animationsziel (Rückfall: Kapitelanfang bzw. Seite).
 
 **Warum.** Gleiche Bibliothek in beiden Fächern; die Leitprogramm-Clips sind sonst nur im
 Leitprogramm auffindbar.
+
+### 07.10.2026 · Steigungsdreieck bei Δx = 0 ausblenden (`build-clips.py`, BEWEGUNG_JS)
+
+**Was.** Im Zweig `bew-gd` (bewegtes Steigungsdreieck an einer bewegten Geraden) eine Bedingung mehr:
+`sichtbar = Math.abs(dx) > 1e-9 && innen(xa, ya) && innen(xb, yb);` — vorher stand bei dx = 0 ein leeres
+Dreieck mit der Beschriftung «Δx = 0» im Bild, solange es noch nicht wuchs (Mathe: `g3-2-lp-steigungsdreieck`,
+fünf Sekunden «Δx = 0», während «Δx grösser als null» gesagt wird).
+
+**Wo in Physik** (nur gelesen): `scripts/build-clips.py` Z. 1127, gleicher Wortlaut wie vorher in Mathe.
+**Achtung beim Übernehmen der zusammengeführten Fassung aus Physik nach Mathe** (Warteschlange `OFFEN`,
+Quelle Physik, 07.10.2026): Diese Zeile dort zuerst einbauen, sonst geht sie in Mathe wieder verloren.

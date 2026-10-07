@@ -75,6 +75,16 @@ def graf(W, geraden=(), punkte=(), ein=0.05, **kw):
     return g
 
 
+def ueber(W, geraden=(), punkte=(), ein=0.05, **kw):
+    """Zweites Bild deckungsgleich ueber dem ersten, nur Inhalt (ohne Achsen und Karo).
+
+    Notbehelf, solange feste Punkte und Figuren im `graf` kein eigenes `ein` haben
+    (TODO-lp-clips-visualisierung.md): Was erst beim zugehoerigen Wort erscheinen soll,
+    steht in einem eigenen `graf` mit derselben Lage und demselben Fenster.
+    """
+    return graf(W, geraden, punkte, ein=ein, achsen=False, raster=False, **kw)
+
+
 def ger(m, q, farbe=1, gestrichelt=False, dicke=None):
     """Feste Gerade."""
     d = dict(m=m, q=q, farbe=farbe)
@@ -264,7 +274,7 @@ clip('m-und-b', 'Gerade sehen: m kippt, b schiebt',
      'Von der Wertetabelle zur Geraden — und wie b sie senkrecht schiebt und m sie kippt.',
      ['lineare Funktion', 'Steigung', 'y-Achsenabschnitt', 'Gerade', 'Wertetabelle'], [
          # Einblendzeiten nach sprechzeiten.py: der Satz zur Tabelle beginnt bei rund 5.9 s,
-         # der Satz zu den Punkten bei rund 11.3 s.
+         # «Jedes Wertepaar wird ein Punkt» bei 15.3 s.
          sz('Wertetabelle',
             'Eine lineare Funktion ändert sich bei gleichen Schritten nach rechts immer um denselben Betrag — '
             'nach oben, nach unten oder gar nicht. Zum Beispiel y gleich zwei x plus eins. '
@@ -272,7 +282,7 @@ clip('m-und-b', 'Gerade sehen: m kippt, b schiebt',
             titel('Die Gerade', 280, 80),
             f(r'\begin{array}{c|cccccc} x & -2 & -1 & 0 & 1 & 2 & 3 \\ \hline y = 2x + 1 & -3 & -1 & 1 & 3 & 5 & 7 \end{array}',
               440, 40, ein=5.9),
-            graf(W_TAB, punkte=[pt(x, 2 * x + 1, 1) for x in (-2, -1, 0, 1, 2, 3)], ein=11.3)),
+            graf(W_TAB, punkte=[pt(x, 2 * x + 1, 1) for x in (-2, -1, 0, 1, 2, 3)], ein=15.3)),
          sz('Die Gerade',
             'Verbunden ergeben die Punkte eine Gerade. Von Punkt zu Punkt geht es einen nach rechts und '
             'zwei hinauf — jedes Mal gleich viel. Genau das macht den Graphen zur Geraden.',
@@ -315,8 +325,8 @@ clip('m-und-b', 'Gerade sehen: m kippt, b schiebt',
             'Bei m gleich zwei führt das von null, eins nach eins, drei.',
             f(r'y = \fa{2}x + \fb{1}', 300, 70),
             n('1 nach rechts,|@\\fa{2}@ hinauf', 440, 'blau'),
-            graf(W_MB, [bew([[0, 2, 1]], yachse={'farbe': 2}, dreieck=dreieck(0, 1))],
-                 [pt(1, 3, 5, '(1 | 3)')])),
+            graf(W_MB, [bew([[0, 2, 1]], yachse={'farbe': 2, 'beschriftung': False}, dreieck=dreieck(0, 1))],
+                 [pt(1, 3, 5, '(1 | 3)'), pt(0, 1, 2, '(0 | 1)', [-0.3, 1.45], 'end')])),
          sz('Merke',
             'Zum Mitnehmen: b ist der Wert bei x gleich null und schiebt die Gerade senkrecht. '
             'm ist der Zuwachs pro Schritt nach rechts und kippt sie um den Punkt null, b. '
@@ -326,7 +336,7 @@ clip('m-und-b', 'Gerade sehen: m kippt, b schiebt',
             n('@\\fb{b}@: Wert bei @x = 0@, schiebt senkrecht|@\\fa{m}@: Zuwachs pro Schritt nach rechts,|kippt um @(0 \\mid \\fb{b})@',
               560, 'blau', 44, ein=1.2),
             graf(W_MB, [bew([[1.0, 2, 1], [3.4, -1, 1], [6.0, 2, 1]], yachse={'farbe': 2},
-                            dreieck=dreieck(0, 1))])),
+                            dreieck=dreieck(1, 1))])),
          JETZT_DU,
      ])
 
@@ -467,7 +477,10 @@ clip('steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m',
             'Wer die Punkte vertauscht, dreht beide Unterschiede — und erhält dasselbe m.',
             f(r'\dfrac{4 - (-2)}{-1 - 3} = \dfrac{6}{-4} = \fa{-1.5}', 300, 56),
             n('Punkte vertauscht:|beide Vorzeichen drehen,|@\\fa{m}@ bleibt gleich', 460, 'blau'),
-            graf(W_GL, [bew([[0, -1.5, 2.5]], dreieck=dreieck(None, None, [[5.0, 3, 0], [7.6, 3, -4]]))],
+            # Δx > 0 (1.2–3.6 s): das Dreieck waechst von A nach rechts; «vertauscht» (ab 4.7 s):
+            # es zieht sich auf B zurueck und waechst von B nach links (Δx = −4, Δy = 6).
+            graf(W_GL, [bew([[0, -1.5, 2.5]], dreieck=dreieck(None, None, [[1.2, -1, 0], [3.6, -1, 4], [4.0, -1, 4],
+                                                                            [5.0, 3, 0], [7.6, 3, -4]]))],
                  [pt(-1, 4, 5, 'A'), pt(3, -2, 5, 'B')])),
          sz('Die Nullstelle',
             'Und noch eine Stelle lohnt den Blick: die Nullstelle. Dort schneidet die Gerade die x-Achse, '
@@ -483,7 +496,9 @@ clip('steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m',
             'sie hat keine Steigung und ist keine Funktion.',
             f(r'\Delta x = 0 \quad\Longrightarrow\quad \dfrac{\Delta y}{0}', 300, 60),
             n('@\\fd{m}@ ist nicht definiert.|Eine senkrechte Gerade|ist keine Funktion.', 460, 'rot'),
-            graf(W_GL, punkte=leiter(2, -4, 5))),
+            graf(W_GL, punkte=[pt(2, -1, 4, '(2 | −1)'), pt(2, 3, 4, '(2 | 3)')], ein=2.0),
+            ueber(W_GL, punkte=[pt(2, -1, 4), pt(2, 3, 4)], ein=8.0,
+                  figuren=[{'art': 'strecke', 'von': [2, -4], 'bis': [2, 5], 'farbe': 4}])),
          sz('Merke',
             'Zum Mitnehmen: m ist hinauf geteilt durch nach rechts. Jedes Steigungsdreieck derselben Geraden '
             'gibt dasselbe m, weil die Dreiecke ähnlich sind. Und die Nullstelle ist minus b durch m, '
@@ -493,7 +508,10 @@ clip('steigungsdreieck', 'Gerade sehen: jedes Steigungsdreieck gibt dasselbe m',
             n('jedes Dreieck derselben Geraden:|dasselbe @\\fa{m}@|@\\Delta x = 0@: keine Steigung',
               560, 'blau', 44, ein=1.2),
             graf(W_DREI, [bew([[0, 0.8, 1]], dreieck=dreieck(None, None, [[1.0, 0, 5], [3.4, 0, 2.5], [5.8, 0, 5]]))],
-                 [pt(0, 1, 5, 'P'), pt(5, 5, 5, 'Q')])),
+                 [pt(0, 1, 5, 'P'), pt(5, 5, 5, 'Q')]),
+            # x₀ = −b/m = −1/0.8 = −1.25; fester Punkt statt Begleiter, dessen Live-Zahl
+            # eine Stelle hat («−1.2»). Beschriftung links über der Geraden, wo sie frei ist.
+            ueber(W_DREI, punkte=[pt(-1.25, 0, 3, 'x₀', [-1.35, 0.3], 'end')], ein=8.0)),
          JETZT_DU,
      ])
 
@@ -606,14 +624,21 @@ clip('typen', 'Gerade sehen: Typen und Lagebeziehungen',
             f(r'f(x) = \fa{1.5}\,x \qquad (\fb{b} = 0)', 300, 58),
             n('proportional:|durch den Ursprung', 460, 'orange'),
             graf(W_GL, [ger(1.5, -2, 5, gestrichelt=True),
-                        bew([[0.9, 1.5, -2], [3.8, 1.5, 0]], yachse={'farbe': 2})])),
+                        bew([[0.9, 1.5, -2], [3.8, 1.5, 0]], yachse={'farbe': 2})]),
+            ueber(W_GL, [dict(bew([[0, 1.5, 0]]), marken=[{'x': 1, 'text': 'f(1) = {y}', 'farbe': 5},
+                                                          {'x': 2, 'text': 'f(2) = {y}', 'farbe': 5}])], ein=4.2)),
          sz('Identität',
             'Mit m gleich eins wird daraus die Identität: Jeder x-Wert wird auf sich selbst abgebildet. '
             'Ihre Gerade halbiert den Winkel zwischen der positiven x-Achse und der positiven y-Achse.',
             f(r'f(x) = x \qquad (\fa{m} = 1,\ \fb{b} = 0)', 300, 52),
             n('Identität:|@x \\longmapsto x@', 460, 'blau'),
             graf(W_GL, [ger(1.5, 0, 5, gestrichelt=True), bew([[0.9, 1.5, 0], [3.8, 1, 0]])],
-                 [pt(2, 2, 5, '(2 | 2)'), pt(-1, -1, 5, '(−1 | −1)')])),
+                 [pt(2, 2, 5, '(2 | 2)'), pt(-1, -1, 5, '(−1 | −1)')]),
+            ueber(W_GL, ein=5.6, figuren=[
+                {'art': 'winkel', 'bei': [0, 0], 'von': 0, 'bis': 45, 'r_px': 72, 'farbe': 5},
+                {'art': 'winkel', 'bei': [0, 0], 'von': 45, 'bis': 90, 'r_px': 72, 'farbe': 5},
+                {'art': 'text', 'bei': [1.25, 0.42], 'text': '45°', 'farbe': 5, 'kursiv': False, 'groesse': 26},
+                {'art': 'text', 'bei': [0.40, 1.22], 'text': '45°', 'farbe': 5, 'kursiv': False, 'groesse': 26}])),
          sz('Konstant',
             'Dritter Fall: m gleich null. Dann fällt der x-Teil weg, und übrig bleibt b. '
             'Der Graph ist eine waagrechte Gerade — die konstante Funktion.',
@@ -647,8 +672,10 @@ clip('typen', 'Gerade sehen: Typen und Lagebeziehungen',
             'Vorzeichen kippt: aus zwei zu eins wird minus eins zu zwei.',
             f(r'\dfrac{2}{1} \;\longrightarrow\; \dfrac{-1}{2} = \fa{-0.5}', 300, 58),
             n('Dreieck um @90^\\circ@ gedreht:|@\\Delta x@ und @\\Delta y@ tauschen,|ein Vorzeichen kippt', 460, 'blau'),
-            graf(W_GL, [bew([[0, 2, 1]], dreieck=dreieck(0, 1)),
-                        bew([[0, -0.5, 1]], dreieck=dreieck(None, None, [[7.0, 0, 0], [10.8, 0, 2]]))],
+            # Beide Dreiecke mit Abstand zu (0 | 1), wo sich die Geraden kreuzen: das erste bei
+            # x = 1 (von (1 | 3) nach (2 | 5)), das zweite bei x = −3.5 (von (−3.5 | 2.75) nach (−1.5 | 1.75)).
+            graf(W_GL, [bew([[0, 2, 1]], dreieck=dreieck(1, 1)),
+                        bew([[0, -0.5, 1]], dreieck=dreieck(None, None, [[7.0, -3.5, 0], [10.8, -3.5, 2]]))],
                  [pt(0, 1, 5)])),
          sz('Merke',
             'Zum Mitnehmen: proportional heisst b gleich null, die Identität hat zusätzlich m gleich eins, '
@@ -780,7 +807,7 @@ clip('aufstellen', 'Gerade sehen: die Geradengleichung aufstellen',
             'Jetzt der Punkt: seine x-Koordinate für x, seine y-Koordinate für y. Minus eins gleich minus zwei '
             'mal zwei plus b — also b gleich drei. Damit rastet die Gerade auf P ein.',
             f(r'-1 = \fa{-2} \cdot 2 + \fb{b} \;\Longrightarrow\; \fb{b} = 3', 300, 52),
-            n('Probe: @\\fa{-2} \\cdot 2 + \\fb{3} = -1@ ✓', 460, 'gruen'),
+            n('Probe: @\\fa{-2} \\cdot 2 + \\fb{3} = -1@ ✓', 460, 'gruen', ein=10.9),
             graf(W_GL, [bew([[8.6, -2, -4], [10.9, -2, 3]], yachse={'farbe': 2})],
                  [pt(2, -1, 3, 'P(2 | −1)')])),
          sz('Zwei Punkte: erst m',
@@ -795,15 +822,16 @@ clip('aufstellen', 'Gerade sehen: die Geradengleichung aufstellen',
             'Dann b: Setz einen der beiden Punkte ein. Vier gleich zwei mal eins plus b gibt b gleich zwei. '
             'Die Gerade lautet y gleich zwei x plus zwei. Die Probe mit A bestätigt es.',
             f(r'4 = \fa{2} \cdot 1 + \fb{b} \;\Longrightarrow\; \fb{b} = 2', 300, 52),
-            n('Probe mit @A@:|@\\fa{2} \\cdot (-2) + \\fb{2} = -2@ ✓', 460, 'gruen'),
+            n('Probe mit @A@:|@\\fa{2} \\cdot (-2) + \\fb{2} = -2@ ✓', 460, 'gruen', ein=9.4),
             graf(W_GL, [bew([[2.6, 2, -3], [5.8, 2, 2]], yachse={'farbe': 2})],
-                 [pt(-2, -2, 3, 'A'), pt(1, 4, 3, 'B')])),
+                 [pt(-2, -2, 5, 'A'), pt(1, 4, 5, 'B')]),
+            ueber(W_GL, punkte=[pt(-2, -2, 3), pt(1, 4, 3)], ein=9.4)),
          sz('Aus einer Lage',
             'Dritter Fall: Gesucht ist eine Gerade senkrecht zu y gleich zwei x plus zwei, durch den Punkt eins, eins. '
             'Senkrecht gibt m gleich minus null Komma fünf — die Gerade dreht sich. Und dann weiter wie vorher: '
             'Punkt einsetzen, b ausrechnen.',
             f(r'\fa{m} = \fa{-0.5}: \quad 1 = \fa{-0.5} \cdot 1 + \fb{b}', 300, 52),
-            n('@\\fb{b} = 1.5@, also|@y = \\fa{-0.5}x + \\fb{1.5}@', 460, 'blau'),
+            n('@\\fb{b} = 1.5@, also|@y = \\fa{-0.5}x + \\fb{1.5}@', 460, 'blau', ein=12.4),
             graf(W_GL, [ger(2, 2, 5, gestrichelt=True),
                         bew([[6.8, 2, 2], [9.4, -0.5, 2], [12.2, -0.5, 2], [14.2, -0.5, 1.5]])],
                  [pt(1, 1, 5, 'P(1 | 1)')])),

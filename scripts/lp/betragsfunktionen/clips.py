@@ -38,6 +38,20 @@ def graf(W, kurven=(), punkte=(), ein=0.05, geraden=(), **kw):
     return g
 
 
+def ueber(W, kurven=(), punkte=(), ein=0.05, **kw):
+    """Zusatzbild ueber einem graf derselben Szene: gleiches Fenster, ohne Achsen und Karo,
+    damit nur das Neue dazukommt (Bild-Elemente haben kein eigenes `ein`)."""
+    return graf(W, kurven, punkte, ein=ein, achsen=False, raster=False, **kw)
+
+
+def strecke(von, bis, farbe=5, dicke=4, **kw):
+    return dict(art='strecke', von=list(von), bis=list(bis), farbe=farbe, dicke=dicke, **kw)
+
+
+def text(bei, t, farbe=5, groesse=30, kursiv=False):
+    return dict(art='text', bei=list(bei), text=t, farbe=farbe, groesse=groesse, kursiv=kursiv)
+
+
 def vk(stuetz, farbe=1, knick=False, achse=False, marken=None, von=None, bis=None, gestrichelt=False, dicke=None):
     """Bewegte Betragskurve: Stützpunkte [t, a, u, v] für a·|x − u| + v."""
     d = {'bewegung': stuetz, 'betrag': True, 'farbe': farbe}
@@ -157,6 +171,8 @@ def yt(*werte):
     return [[w, ('%g' % w).replace('-', '−')] for w in werte]
 
 
+WZ = dict(xbereich=[-6, 6], ybereich=[-1.6, 2.98])
+ZS = dict(breite=760, hoehe=300, achsen=False, raster=False, y=330)   # Zahlenstrahl, gleich geteilt
 W1 = dict(xbereich=[-6, 6], ybereich=[-2, 8], xteilung=yt(-4, -2, 2, 4), yteilung=yt(2, 4, 6))
 W2 = dict(xbereich=[-6, 6], ybereich=[-5, 7], xteilung=yt(-4, -2, 2, 4), yteilung=yt(-4, -2, 2, 4, 6))
 WU = dict(xbereich=[-4.5, 4.5], ybereich=[-5, 6], xteilung=yt(-4, -2, 2, 4), yteilung=yt(-4, -2, 2, 4))
@@ -171,12 +187,24 @@ clip('betragsfunktion', 'Knick sehen: die Betragsfunktion',
             'Der Betrag ist in beiden Fällen drei. Ein Betrag ist nie negativ.',
             titel('Abstand zur Null', 280, 80),
             f(r'|3| = 3 \qquad |-3| = 3', 430, 58, ein=3.4),
-            n('Beträge sind nie negativ', 560, 'blau', ein=7.6)),
+            n('Beträge sind nie negativ', 560, 'blau', ein=7.6),
+            graf(WZ, ein=2.8, **ZS,
+                 figuren=[strecke((-5.6, 0), (5.6, 0), dicke=3)]
+                         + [strecke((k, -0.15), (k, 0.15), dicke=3) for k in range(-5, 6)]
+                         + [text((k, -0.75), ('%d' % k).replace('-', '−')) for k in (-3, 0, 3)],
+                 punkte=[pt(-3, 0, 1), pt(3, 0, 1)]),
+            graf(WZ, ein=3.8, **ZS,
+                 figuren=[strecke((0, 0.8), (2.75, 0.8), farbe=1), strecke((0, 0.8), (-2.75, 0.8), farbe=1),
+                          dict(art='vieleck', punkte=[[3, 0.8], [2.6, 1.05], [2.6, 0.55]], farbe=1, fuellung=1, dicke=2),
+                          dict(art='vieleck', punkte=[[-3, 0.8], [-2.6, 1.05], [-2.6, 0.55]], farbe=1, fuellung=1, dicke=2),
+                          strecke((0, 0.45), (0, 1.15), farbe=1, dicke=3),
+                          text((1.5, 1.25), '3', farbe=1, groesse=34), text((-1.5, 1.25), '3', farbe=1, groesse=34)])),
          sz('Zwei Äste',
             'Für positive x ist der Betrag einfach x: Die Kurve ist die Gerade y gleich x. Für negative x dreht der Betrag das '
             'Vorzeichen um: Dort ist die Kurve die Gerade y gleich minus x. Zusammen entsteht ein V.',
             f(r'|x| = \begin{cases} \fc{x} & x \ge 0 \\ \fc{-x} & x \lt 0 \end{cases}', 330, 54, ein=0.6),
-            graf(W1, [fest('x', farbe=3, von=0), fest('-x', farbe=3, bis=0)], ein=0.4),
+            graf(W1, [fest('x', farbe=3, von=0)], ein=0.4),
+            ueber(W1, [fest('-x', farbe=3, bis=0)], ein=8.6),
             graf(W1, [vk([[0, 1, 0, 0]])], ein=11.6)),
          sz('Der Knick',
             'Im Nullpunkt treffen sich die beiden Äste. Dort hat das V einen Knick: Links fällt die Kurve mit Steigung minus eins, '
@@ -387,15 +415,18 @@ clip('umklappen', 'Knick sehen: das Umklapp-Prinzip',
             'da ändert sich nichts. Links von zwei ist f negativ: Der Betrag macht diese Werte positiv, das Stück klappt nach oben.',
             f(r'y = |\,x - 2\,|', 300, 62),
             graf(WU, [fest('x-2', farbe=5)], ein=0.3),
-            graf(WU, [fest('x-2', farbe=5), fest('abs(x-2)', farbe=1, gestrichelt=False)], ein=11.4,
-                 punkte=[pt(2, 0, 1, '(2 | 0)', [2.3, -0.8])])),
+            ueber(WU, [fest('x-2', farbe=1, gestrichelt=False, von=2)], ein=5.4),
+            ueber(WU, [{'bewegung': [[0, 1, 1, 2, 0], [11.8, 1, 1, 2, 0], [13.8, -1, 1, 2, 0]], 'farbe': 1, 'bis': 2}], ein=7.5,
+                  punkte=[pt(2, 0, 1, '(2 | 0)', [2.3, -0.8])])),
          sz('Eine Parabel',
             'Bei der Parabel x hoch zwei minus vier liegt das Stück zwischen minus zwei und zwei unter der x-Achse. Es klappt hoch: '
             'Aus dem Scheitel null, minus vier wird ein Buckel bei null, vier. Es entsteht ein W.',
             f(r'y = |\,x^2 - 4\,|', 300, 62),
             n('Scheitel @(0 \\mid -4) \\to (0 \\mid 4)@', 430, 'blau', ein=8.8),
             graf(WU, [fest('x**2-4', farbe=5)], ein=0.3),
-            graf(WU, [fest('x**2-4', farbe=5), fest('abs(x**2-4)', farbe=1, gestrichelt=False)], ein=7.0)),
+            ueber(WU, [fest('x**2-4', farbe=1, gestrichelt=False, bis=-2), fest('x**2-4', farbe=1, gestrichelt=False, von=2),
+                       {'bewegung': [[0, 1, 2, 0, -4], [6.8, 1, 2, 0, -4], [9.4, -1, 2, 0, 4]], 'farbe': 1, 'von': -2, 'bis': 2}],
+                  ein=6.5)),
          sz('Knicke',
             'Wo f die x-Achse schneidet, also das Vorzeichen wechselt, entstehen Knicke: bei der Geraden einer, bei der Parabel zwei. '
             'Der Graph von Betrag f liegt nie unter der x-Achse.',
@@ -508,7 +539,8 @@ clip('abschnittsweise', 'Knick sehen: abschnittsweise schreiben',
             'Das Vorzeichen des ganzen Terms wird gedreht, minus zwei x plus sechs.',
             f(r'|2x - 6| = \begin{cases} \fc{2x - 6} & x \ge 3 \\ \fc{-2x + 6} & x \lt 3 \end{cases}', 330, 50, ein=0.6),
             graf(dict(xbereich=[-2, 7], ybereich=[-2, 8], xteilung=yt(2, 4, 6), yteilung=yt(2, 4, 6)),
-                 [fest('2*x-6', farbe=3, von=3), fest('-2*x+6', farbe=3, bis=3)], ein=0.4)),
+                 [fest('2*x-6', farbe=3, von=3)], ein=0.4),
+            ueber(dict(xbereich=[-2, 7], ybereich=[-2, 8]), [fest('-2*x+6', farbe=3, bis=3)], ein=4.8)),
          sz('Die Wanne',
             'Addiert man zwei Beträge, etwa Betrag von x plus eins plus Betrag von x minus drei, entstehen zwei Grenzen: '
             'minus eins und drei. Dazwischen ist die Summe konstant vier, so gross wie der Abstand der beiden Stellen. '
@@ -516,7 +548,10 @@ clip('abschnittsweise', 'Knick sehen: abschnittsweise schreiben',
             f(r'y = |x + 1| + |x - 3|', 300, 56),
             n('Boden: @y = 4@ von @-1@ bis @3@', 430, 'blau', ein=9.4),
             graf(WW, [fest('abs(x+1)+abs(x-3)', farbe=1, gestrichelt=False)], ein=0.3,
-                 punkte=[pt(-1, 4, 1, '(−1 | 4)', [-1.2, 4.7], 'end'), pt(3, 4, 1, '(3 | 4)', [3.2, 4.7])])),
+                 punkte=[pt(-1, 4, 1, '(−1 | 4)', [-1.2, 3.3], 'end'), pt(3, 4, 1, '(3 | 4)', [3.2, 3.3])]),   # unter dem Boden: oben laufen die zwei V
+            ueber(WW, [vk([[0, 1, -1, 0]], farbe=5, gestrichelt=True)], ein=2.0),
+            ueber(WW, [vk([[0, 1, 3, 0]], farbe=5, gestrichelt=True)], ein=3.6),
+            ueber(WW, ein=11.0, figuren=[strecke((-1, 0), (3, 0), farbe=1, dicke=9), text((1, 0.4), '4', farbe=1, groesse=34)])),
          sz('Drei Abschnitte',
             'Abschnittsweise geschrieben hat die Wanne drei Teile: links minus zwei x plus zwei, in der Mitte vier, '
             'rechts zwei x minus zwei.',
@@ -606,6 +641,8 @@ clip('kontrolle-abschnittsweise', 'Knick sehen: Kontrollfragen zum abschnittswei
      ], art='Kontrollclip')
 
 # ════════════════════════════════════════════════ Kapitel 5 · Einführung
+KNICK1 = vk([[0, 1, 1, 0]], knick=True)
+KNICK1['startpunkt']['beschriftung'] = False          # «(1 | 0)» fest gesetzt, sonst stösst sie an die Achszahl 2
 clip('gleichungen', 'Knick sehen: Betragsgleichungen und -ungleichungen',
      'Gleichungen und Ungleichungen mit Beträgen am Graphen lösen und rechnerisch bestätigen: zwei Fälle, vier Lösungen beim W.',
      ['Betragsgleichung', 'Betragsungleichung', 'Fallunterscheidung'], [
@@ -620,12 +657,17 @@ clip('gleichungen', 'Knick sehen: Betragsgleichungen und -ungleichungen',
             'Rechnerisch heisst das: x minus eins ist drei oder minus drei. Also x gleich vier oder x gleich minus zwei. '
             'Die Skizze zeigt, dass es genau zwei Lösungen sind.',
             f(r'x - 1 = 3 \;\vee\; x - 1 = -3', 300, 52),
-            f(r'L = \{-2;\, 4\}', 420, 58, ein=6.2)),
+            f(r'L = \{-2;\, 4\}', 420, 58, ein=6.2),
+            graf(W2, [KNICK1, fest('3', farbe=2)], ein=0.3,
+                 punkte=[pt(1, 0, 5, '(1 | 0)', [1, -1.2], 'middle'),
+                         pt(-2, 3, 2, '−2', [-2.2, 3.6], 'end'), pt(4, 3, 2, '4', [4.2, 3.6])])),
          sz('Ungleichung',
             'Und wo ist der Betrag kleiner oder gleich drei? Dort, wo das V unter der Waagrechten liegt: zwischen den Schnittstellen.',
             f(r'|x - 1| \le 3 \;\Rightarrow\; -2 \le x \le 4', 300, 48, ein=3.6),
-            graf(W2, [vk([[0, 1, 1, 0]], knick=True), fest('3', farbe=2)], ein=0.3),
-            graf(W2, [vk([[0, 1, 1, 0]], knick=True), vk([[0, 1, 1, 0]], farbe=2, von=-2, bis=4, dicke=9), fest('3', farbe=2)], ein=3.7)),
+            graf(W2, [KNICK1, fest('3', farbe=2)], ein=0.3, punkte=[pt(1, 0, 5, '(1 | 0)', [1, -1.2], 'middle')]),
+            graf(W2, [KNICK1, vk([[0, 1, 1, 0]], farbe=2, von=-2, bis=4, dicke=9), fest('3', farbe=2)], ein=3.7,
+                 punkte=[pt(1, 0, 5, '(1 | 0)', [1, -1.2], 'middle')]),
+            ueber(W2, ein=5.8, figuren=[strecke((-2, 0), (4, 0), farbe=2, dicke=9)])),
          sz('Das W',
             'Beim W von Betrag von x hoch zwei minus vier kann es vier Lösungen geben. Betrag gleich drei: x hoch zwei minus vier ist drei '
             'oder minus drei. Das gibt plus minus Wurzel sieben und plus minus eins.',
@@ -638,9 +680,12 @@ clip('gleichungen', 'Knick sehen: Betragsgleichungen und -ungleichungen',
             'Wie viele Lösungen es gibt, zeigt die Höhe der Waagrechten. Unter null keine, bei null zwei, zwischen null und vier vier, '
             'auf dem Buckel vier genau drei, darüber nur noch zwei.',
             f(r'|x^2 - 4| = c', 300, 58),
-            n('@c \\lt 0@: keine; @c = 0@: zwei|@0 \\lt c \\lt 4@: vier; @c = 4@: drei|@c \\gt 4@: zwei', 430, 'orange', ein=4.0),
-            graf(WU, [fest('abs(x**2-4)', farbe=1, gestrichelt=False), fest('4', farbe=2)], ein=0.3,
-                 punkte=[pt(-8 ** 0.5, 4, 2), pt(0, 4, 2), pt(8 ** 0.5, 4, 2)])),
+            n('@c \\lt 0@: keine; @c = 0@: zwei', 430, 'orange', ein=2.1),
+            n('@0 \\lt c \\lt 4@: vier; @c = 4@: drei', 490, 'orange', ein=4.0),
+            n('@c \\gt 4@: zwei', 550, 'orange', ein=7.4),
+            graf(WU, [fest('abs(x**2-4)', farbe=1, gestrichelt=False)], ein=0.3,
+                 geraden=[{'bewegung': [[0, 0, -1], [2.6, 0, -1], [3.2, 0, 0], [3.9, 0, 0], [4.6, 0, 2], [5.7, 0, 2],
+                                        [6.3, 0, 4], [7.3, 0, 4], [8.0, 0, 5]], 'farbe': 2, 'gestrichelt': True, 'dicke': 3}])),
          sz('Merke',
             'Zum Mitnehmen: Erst skizzieren und zählen, dann rechnen. Betrag von A gleich c heisst A gleich c oder A gleich minus c.',
             titel('Zum Mitnehmen', 250, 76),

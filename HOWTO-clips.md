@@ -586,6 +586,16 @@ Farben 1–4 wie sonst, 5 = Tinte; `dicke` (Standard 4), `gestrichelt`, `fuellun
 Fläche), `deckkraft` (der Linie — ein Kreisring ist ein Kreis mit `dicke` = Ringbreite und `deckkraft` 0.3). Winkel in Grad gegen den Uhrzeigersinn. **Das Fenster gleich teilen** (Spanne x zu
 Spanne y wie Breite zu Höhe), sonst wird der Kreis zur Ellipse und der rechte Winkel schief.
 
+### Später einblenden — ein zweiter `graf` als Deckblatt
+
+Feste `punkte`, `figuren` und `kurven` haben kein eigenes `ein`; sie erscheinen mit ihrem `graf`.
+Was erst beim zugehörigen Wort kommen soll, steht darum in einem **zweiten `graf` mit gleichem
+Fenster** (`x`, `y`, `breite`, `hoehe`, `xbereich`, `ybereich` identisch) und eigenem `ein`, mit
+`"achsen": false` und `"raster": false` — sonst werden Achsen und Karo mit jeder Lage dunkler. In
+den Bauskripten der Leitprogramme heisst der Helfer `ueber()` (bzw. `auflage()` bei den
+Gleichungen). Ausblenden lässt sich ein Element nicht: Wer einen Zwischenstand wieder loswerden
+will, nimmt eine `bewegung` und schiebt die Kurve aus dem Fenster.
+
 ### Bild einer Animation — `typ: "bild"` und `"animation"`
 
 Übernommen aus TALS Physik am 27.09.2026 (dort Prototyp
