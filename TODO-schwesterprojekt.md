@@ -23,6 +23,19 @@ in `scripts/abgleich.py`.
 
 ## Offen
 
+### 07.10.2026 · `abgleich.py` übernehmen (DATEN) · Suchtitel der Leitprogramme
+
+**Was.** `scripts/abgleich.py` aus Mathe übernehmen: Neu lässt `DATEN` die Seitenlisten (`SEITEN`, `LG_G`,
+`LG_S` in `build-seo.py`; `ZUSATZSEITEN`/`UNVERLINKT` in `build-suchindex.py`) beim Vergleich weg, mit neuen
+Grundlinien 0.898 und 0.963. Sonst ist in Physik dafür nichts zu tun.
+**Befund dazu, nur Physik:** `scripts/build-suchindex.py`, Funktion `seiten_aus_navjs`, trägt jedes
+Leitprogramm mit `'titel': 'Leitprogramm'` ein. Im Physik-`suchindex.js` stehen darum 14 Seiten mit
+`t:"Leitprogramm"` (nachgesehen: dynamik, elektrizitaet, energie, experimente-waerme …), und `suche.js` zeigt
+diesen Titel in jeder Trefferzeile (`sr-q`) — alle Leitprogramme sehen gleich aus. Vorschlag: bei der
+Auto-Erkennung den Titel aus `<title>` (oder `<h1>`) der Seite lesen; Mathe nennt den Namen von Hand
+(«Leitprogramm Quadratische Funktionen»).
+**Warum.** Ohne `DATEN` fällt jede neue Seite als Drift auf; die Warnung stand so dauernd und übertönte echte.
+
 ### 07.10.2026 · `build-clips.py`: gemeinsamer Bauer mit TEXTBREITE_BEGRENZEN, Korrekturen und Werkzeug-Erweiterungen
 
 **Was.** Im Zweig `bew-gd` (bewegtes Steigungsdreieck an einer bewegten Geraden) eine Bedingung mehr:

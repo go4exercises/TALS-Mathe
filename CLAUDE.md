@@ -122,7 +122,8 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
   auseinander. Das Skript verhindert das nicht, es macht es sichtbar: drei
   Klassen (`GLEICH` Fremdgut — jeder Unterschied ist ein Befund; `KERN`
   geteiltes Werkzeug, gemessen gegen eine **Grundlinie**, die nur steigen
-  darf; `FACH` bewusst verschieden, mit Begründung). `--check` gibt Exit 1
+  darf — Seitenlisten darin, die mit jeder Seite wachsen, nennt `DATEN` und
+  misst sie nicht mit; `FACH` bewusst verschieden, mit Begründung). `--check` gibt Exit 1
   bei neuer Drift, `--diff DATEI` zeigt sie, `--gegen PFAD` wählt das
   Gegenüber. Es schreibt nie etwas, und fehlt das Schwesterrepo, endet es
   mit Exit 0. Der Pre-Flight ruft es auf und meldet Drift als **[WARN]** —

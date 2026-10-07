@@ -17,7 +17,7 @@
 #  scheitert dort an CORS).
 #
 #  ABWEICHUNG ZUR PHYSIK-FASSUNG (bewusst): Die Leitprogramme stehen hier
-#  als Handliste in seitenliste(), nicht als Auto-Erkennung von
+#  als Handliste ZUSATZSEITEN, nicht als Auto-Erkennung von
 #  leitprogramme/*.html. Nur so laesst sich eine unverlinkte
 #  Uebungspruefung aus dem Index halten — siehe HOWTO-uebungspruefung.md,
 #  Schritt 6b. Beim naechsten Abgleich mit Physik nicht wegportieren.
@@ -313,45 +313,51 @@ def seiten_aus_navjs(root):
     if not seiten:
         raise SystemExit('[FEHLER] nav.js: keine Seiteneintraege im SITE-Block gefunden.')
 
-    # Nachschlagewerke, sofern vorhanden (beide Projekte haben sie im Root)
-    for url, nr, titel, mode in [('glossar.html', 'A–Z', 'Glossar', 'glossar'),
-                                 ('formelsammlung.html', '∑', 'Formelsammlung', 'formeln'),
-                                 ('clips.html', '▶', 'Clips', 'thema'),
-                                 ('leitprogramme.html', '▤', 'Leitprogramme', 'thema'),
-                                 ('notationstrainer.html', '{ }', 'Notationstrainer', 'thema'),
-                                 ('leitprogramme/quadratische-funktionen.html', '▤',
-                                  'Leitprogramm Quadratische Funktionen', 'thema'),
-                                 ('leitprogramme/lineare-funktionen.html', '▤',
-                                  'Leitprogramm Lineare Funktionen', 'thema'),
-                                 # ältere Leitprogramme (Potenzen, Quadratische Gleichungen,
-                                 # Gleichungssysteme, die zwei Übungsprüfungen) seit 06.10.2026
-                                 # ausgeblendet: nicht in der Suche, noindex in build-seo.py
-                                 ('leitprogramme/potenz-wurzelfunktionen.html', '▤',
-                                  'Leitprogramm Potenz- und Wurzelfunktionen', 'thema'),
-                                 ('leitprogramme/polynomfunktionen.html', '▤',
-                                  'Leitprogramm Polynomfunktionen', 'thema'),
-                                 ('leitprogramme/exp-log-funktionen.html', '▤',
-                                  'Leitprogramm Exponential- und Logarithmusfunktionen', 'thema'),
-                                 ('leitprogramme/trigonometrische-funktionen.html', '▤',
-                                  'Leitprogramm Trigonometrische Funktionen', 'thema'),
-                                 ('leitprogramme/betragsfunktionen.html', '▤',
-                                  'Leitprogramm Betragsfunktionen', 'thema'),
-                                 ('leitprogramme/planimetrie.html', '▤',
-                                  'Leitprogramm Planimetrie', 'thema'),
-                                 ('leitprogramme/lineare-quadratische-gleichungen.html', '▤',
-                                  'Leitprogramm Lineare und quadratische Gleichungen', 'thema'),
-]:
-        # Ein Leitprogramm haengt an drei Stellen zusammen: Kaertchen in
-        # leitprogramme.html, Eintrag in build-seo.py (ohne noindex, damit es
-        # in die Sitemap kommt) und diese Liste. Wer eines verstecken will,
-        # nimmt es an allen dreien heraus (so seit 06.10.2026 die aelteren
-        # Leitprogramme und die beiden nach Pruefungsbogen).
-        # Die zugehoerigen Clips bleiben davon unberuehrt: Sie tragen
-        # "probe": true und stehen weiterhin weder in clips.json noch auf
-        # einer Lektionsseite.
+    # Nachschlagewerke und Leitprogramme, sofern vorhanden (Liste ZUSATZSEITEN unten)
+    for url, nr, titel, mode in ZUSATZSEITEN:
         if os.path.exists(os.path.join(root, url)):
             seiten.append({'nr': nr, 'titel': titel, 'url': url, 'mode': mode})
     return seiten
+
+
+# Nachschlagewerke und Leitprogramme fuer den Index, in dieser Reihenfolge. Projektdaten:
+# scripts/abgleich.py laesst diesen Block beim Vergleich mit Physik aus (DATEN).
+# Ein Leitprogramm haengt an drei Stellen zusammen: Kaertchen in
+# leitprogramme.html, Eintrag in build-seo.py (ohne noindex, damit es
+# in die Sitemap kommt) und diese Liste. Wer eines verstecken will,
+# nimmt es an allen dreien heraus (so seit 06.10.2026 die aelteren
+# Leitprogramme und die beiden nach Pruefungsbogen).
+# Die zugehoerigen Clips bleiben davon unberuehrt: Sie tragen
+# "probe": true und stehen weiterhin weder in clips.json noch auf
+# einer Lektionsseite.
+ZUSATZSEITEN = [
+    ('glossar.html', 'A–Z', 'Glossar', 'glossar'),
+    ('formelsammlung.html', '∑', 'Formelsammlung', 'formeln'),
+    ('clips.html', '▶', 'Clips', 'thema'),
+    ('leitprogramme.html', '▤', 'Leitprogramme', 'thema'),
+    ('notationstrainer.html', '{ }', 'Notationstrainer', 'thema'),
+    ('leitprogramme/quadratische-funktionen.html', '▤',
+     'Leitprogramm Quadratische Funktionen', 'thema'),
+    ('leitprogramme/lineare-funktionen.html', '▤',
+     'Leitprogramm Lineare Funktionen', 'thema'),
+    # ältere Leitprogramme (Potenzen, Quadratische Gleichungen,
+    # Gleichungssysteme, die zwei Übungsprüfungen) seit 06.10.2026
+    # ausgeblendet: nicht in der Suche, noindex in build-seo.py
+    ('leitprogramme/potenz-wurzelfunktionen.html', '▤',
+     'Leitprogramm Potenz- und Wurzelfunktionen', 'thema'),
+    ('leitprogramme/polynomfunktionen.html', '▤',
+     'Leitprogramm Polynomfunktionen', 'thema'),
+    ('leitprogramme/exp-log-funktionen.html', '▤',
+     'Leitprogramm Exponential- und Logarithmusfunktionen', 'thema'),
+    ('leitprogramme/trigonometrische-funktionen.html', '▤',
+     'Leitprogramm Trigonometrische Funktionen', 'thema'),
+    ('leitprogramme/betragsfunktionen.html', '▤',
+     'Leitprogramm Betragsfunktionen', 'thema'),
+    ('leitprogramme/planimetrie.html', '▤',
+     'Leitprogramm Planimetrie', 'thema'),
+    ('leitprogramme/lineare-quadratische-gleichungen.html', '▤',
+     'Leitprogramm Lineare und quadratische Gleichungen', 'thema'),
+]
 
 
 def clip_eintraege(root):
