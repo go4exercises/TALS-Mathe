@@ -650,9 +650,9 @@ clip('gleichungen', 'Knick sehen: Betragsgleichungen und -ungleichungen',
             'Betrag von x minus eins gleich drei. Im Bild: Wo trifft die Waagrechte y gleich drei das V? Zweimal, '
             'bei minus zwei und bei vier.',
             f(r'|x - 1| = 3', 300, 62),
-            graf(W2, [vk([[0, 1, 1, 0]], knick=True), fest('3', farbe=2)], ein=0.3),
-            graf(W2, [vk([[0, 1, 1, 0]], knick=True), fest('3', farbe=2)], ein=6.0,
-                 punkte=[pt(-2, 3, 2, '−2', [-2.2, 3.6], 'end'), pt(4, 3, 2, '4', [4.2, 3.6])])),
+            graf(W2, [KNICK1, fest('3', farbe=2)], ein=0.3, punkte=[pt(1, 0, 5, '(1 | 0)', [1, -1.2], 'middle')]),
+            graf(W2, [KNICK1, fest('3', farbe=2)], ein=6.0,
+                 punkte=[pt(1, 0, 5, '(1 | 0)', [1, -1.2], 'middle'), pt(-2, 3, 2, '−2', [-2.2, 3.6], 'end'), pt(4, 3, 2, '4', [4.2, 3.6])])),
          sz('Rechnen',
             'Rechnerisch heisst das: x minus eins ist drei oder minus drei. Also x gleich vier oder x gleich minus zwei. '
             'Die Skizze zeigt, dass es genau zwei Lösungen sind.',
@@ -690,7 +690,7 @@ clip('gleichungen', 'Knick sehen: Betragsgleichungen und -ungleichungen',
             'Zum Mitnehmen: Erst skizzieren und zählen, dann rechnen. Betrag von A gleich c heisst A gleich c oder A gleich minus c.',
             titel('Zum Mitnehmen', 250, 76),
             n('@|A| = c@ @(c \\ge 0)@: @A = c \\;\\vee\\; A = -c@|Skizze zählt die Lösungen', 400, 'blau', 44, ein=1.2),
-            graf(W2, [vk([[0, 1, 1, 0]], knick=True), fest('3', farbe=2)])),
+            graf(W2, [KNICK1, fest('3', farbe=2)], punkte=[pt(1, 0, 5, '(1 | 0)', [1, -1.2], 'middle')])),
          JETZT_DU,
      ])
 

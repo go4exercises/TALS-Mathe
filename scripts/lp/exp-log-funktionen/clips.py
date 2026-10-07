@@ -253,7 +253,9 @@ clip('exponentialfunktion', 'Exponentialkurve sehen: die Exponentialfunktion',
             f(r'\fa{a}^2 = 9 \;\Rightarrow\; \fa{a} = 3', 300, 60),
             n('@\\fa{a} \\gt 0@: nur die positive Lösung', 440, 'blau', ein=5.4),
             graf(dict(xbereich=[-3, 3], ybereich=[-1, 11], yteilung=yt(2, 4, 6, 8, 10), xteilung=yt(-2, -1, 1, 2)),
-                 [ek([[0, 1, 3, 0]])], ein=0.4, punkte=[pt(2, 9, 5, '(2 | 9)', [1.25, 9.9], 'end')])),
+                 # mit a = 2 beginnen (durch (2 | 4), neben dem Punkt); «Also ist a gleich drei» (5.4–7.0 s):
+                 # a 2 → 3, die Kurve läuft in (2 | 9) — jeder Zwischenstand geht durch (0 | 1)
+                 [ek([[5.4, 1, 2, 0], [7.0, 1, 3, 0]])], ein=0.4, punkte=[pt(2, 9, 5, '(2 | 9)', [1.25, 9.9], 'end')])),
          sz('Merke',
             'Zum Mitnehmen: Bei a hoch x wird in jedem Schritt mit a multipliziert. Alle Kurven gehen durch null, eins, '
             'die x-Achse ist Asymptote. Basis grösser als eins heisst Wachstum, zwischen null und eins Zerfall.',
@@ -536,7 +538,9 @@ clip('e-funktion', 'Exponentialkurve sehen: die e-Funktion und der Basiswechsel'
             f(r'2 = e^{\ln 2} \;\Rightarrow\; 2^{x} = e^{(\ln 2)\,x}', 300, 50),
             f(r'\ln 2 \approx 0.69', 400, 50, ein=8.0),
             n('@a^x = e^{\\fb{b}x}@ mit @\\fb{b} = \\ln a@', 500, 'orange', 44, ein=6.0),
-            graf(W3, [ek([[0, 1, 2, 0]]), ek([[0, 1, 2, 0]], farbe=3, gestrichelt=True)], ein=1.0)),
+            # e^(bx) beginnt mit b = 1 (e^x) und landet bei «gleich e hoch ln zwei mal x» (5.6–7.3 s)
+            # auf 2^x: a = e^b von e nach 2, jeder Zwischenstand ist ein e^(bx) mit b = ln a
+            graf(W3, [ek([[0, 1, 2, 0]]), ek([[5.6, 1, E, 0], [7.3, 1, 2, 0]], farbe=3, gestrichelt=True)], ein=1.0)),
          sz('Vorzeichen von b',
             'Ist die Basis kleiner als eins, ist ihr Logarithmus negativ. Ein Halb hoch x ist ungefähr e hoch minus null Komma '
             'sechs neun x. Positives b heisst Wachstum, negatives b Zerfall.',
@@ -686,7 +690,9 @@ clip('saettigung', 'Exponentialkurve sehen: Sättigung',
             n('@\\fb{A} \\lt S@: steigt; @\\fb{A} \\gt S@: fällt', 440, 'blau', ein=7.7),
             graf(dict(xbereich=[-0.3, 5], ybereich=[-5, 115], yteilung=yt(20, 40, 60, 80), xteilung=yt(1, 2, 3, 4),
                       xname='t [h]', yname='Ladung [%]'),
-                 [ek([[0, -80, 0.5, 100]], asymptote=True, startpunkt={'farbe': 2})], ein=1.0)),
+                 # «Liegt der Startwert unter dem Sättigungswert, steigt die Kurve» (1.2–3.2 s):
+                 # A sinkt von S = 100 (waagrecht) auf 20, die Kurve biegt sich nach oben (wie A in sim4)
+                 [ek([[1.2, 0, 0.5, 100], [3.2, -80, 0.5, 100]], asymptote=True, startpunkt={'farbe': 2})], ein=1.0)),
          sz('Merke',
             'Zum Mitnehmen: Bei der Sättigung nähert sich die Grösse dem Sättigungswert S, ohne ihn zu erreichen. '
             'Der Abstand zu S zerfällt exponentiell, und je grösser k, desto schneller. Startwert A, Sättigungswert S und k bestimmen den Verlauf.',
@@ -694,7 +700,8 @@ clip('saettigung', 'Exponentialkurve sehen: Sättigung',
             f(r'f(t) = S - (S - \fb{A})\,e^{-kt}', 410, 52, ein=0.4),
             n('@f(0) = \\fb{A}@; Asymptote @y = S@|Abstand @|S - f(t)|@ zerfällt',
               540, 'blau', 44, ein=1.2),
-            graf(WK, [ek([[0, 60, Q, 20]], asymptote=True, startpunkt={'farbe': 2})])),
+            # «je grösser k, desto schneller» (7.9–9.6 s): e^(−k) von 0.933 (k ≈ 0.07) auf 0.80 (k ≈ 0.22)
+            graf(WK, [ek([[7.9, 60, Q, 20], [9.6, 60, 0.8, 20]], asymptote=True, startpunkt={'farbe': 2})])),
          JETZT_DU,
      ])
 

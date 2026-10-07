@@ -236,7 +236,11 @@ clip('umformen', 'Gleichungen lösen: umformen und die drei Lösungsfälle',
             f(r'2x = 14', 530, 52, ein=10.4),
             op(':2', 530, 11.8),
             f(r'x = \fc{7}', 620, 52, ein=12.7),
-            graf(W1, geraden=[ger(4, -8, 1), ger(2, 6, 2)], ein=0.3)),
+            # Die Geraden machen jede Umformung mit (Ton: «Minus zwei x» 6.2, «Plus acht» 9.6, «Durch zwei» 11.9):
+            # beide Seiten gleich verändert, darum bleibt der Schnitt in jedem Zwischenstand bei x = 7.
+            graf(W1, geraden=[{'bewegung': [[0, 4, -8], [6.2, 4, -8], [7.0, 2, -8], [9.6, 2, -8], [10.3, 2, 0], [11.9, 2, 0], [12.6, 1, 0]], 'farbe': 1},
+                              {'bewegung': [[0, 2, 6], [6.2, 2, 6], [7.0, 0, 6], [9.6, 0, 6], [10.3, 0, 14], [11.9, 0, 14], [12.6, 0, 7]], 'farbe': 2}],
+                 ein=0.3)),
          sz('Die Probe',
             'Die Probe macht man in der Ausgangsgleichung. Links: vier mal Klammer sieben minus zwei, das ist zwanzig. '
             'Rechts: zwei mal sieben plus sechs, auch zwanzig. Im Bild schneiden sich die beiden Seiten bei x gleich sieben.',
@@ -254,7 +258,9 @@ clip('umformen', 'Gleichungen lösen: umformen und die drei Lösungsfälle',
             op('-2x', 350, 9.49),
             f(r'6 = 9 \quad \fd{\text{falsch}}', 440, 52, ein=10.75),
             f(r'\mathbb{L} = \{\,\}', 560, 56, ein=13.63),
-            graf(W1b, geraden=[ger(2, 6, 1), ger(2, 9, 2)], ein=0.3)),
+            # «Minus zwei x» (Ton 9.4–10.4): beide Geraden werden waagrecht, y = 6 und y = 9 — parallel in jedem Zwischenstand.
+            graf(W1b, geraden=[{'bewegung': [[0, 2, 6], [9.53, 2, 6], [10.68, 0, 6]], 'farbe': 1},
+                               {'bewegung': [[0, 2, 9], [9.53, 2, 9], [10.68, 0, 9]], 'farbe': 2}], ein=0.3)),
          sz('Alles ist Lösung',
             'Anders bei vier x plus acht gleich vier mal Klammer x plus zwei. Ausmultipliziert steht links und rechts dasselbe. '
             'Minus vier x: acht gleich acht. Das ist immer wahr. Jede Zahl ist Lösung: Die Lösungsmenge sind alle reellen Zahlen. '
@@ -264,7 +270,9 @@ clip('umformen', 'Gleichungen lösen: umformen und die drei Lösungsfälle',
             op('-4x', 350, 7.05),
             f(r'8 = 8 \quad \fc{\text{wahr}}', 440, 52, ein=7.91),
             f(r'\mathbb{L} = \mathbb{R}', 560, 56, ein=11.02),
-            graf(W1b, geraden=[ger(4, 8, 1, dicke=9), ger(4, 8, 2, gestrichelt=True)], ein=0.3)),
+            # «Minus vier x» (Ton 7.8–8.7): beide Seiten werden zur Waagrechten y = 8 und bleiben aufeinander.
+            graf(W1b, geraden=[{'bewegung': [[0, 4, 8], [7.05, 4, 8], [7.74, 0, 8]], 'farbe': 1, 'dicke': 9},
+                               {'bewegung': [[0, 4, 8], [7.05, 4, 8], [7.74, 0, 8]], 'farbe': 2, 'gestrichelt': True, 'dicke': 3}], ein=0.3)),
          sz('Merke',
             'Zum Mitnehmen: Forme auf beiden Seiten gleich um, bis a mal x gleich c dasteht. Ist a nicht null, gibt es genau '
             'eine Lösung. Ist a null, entscheidet c: keine Lösung oder alle Zahlen. Und am Schluss die Probe.',
@@ -348,6 +356,7 @@ clip('kontrolle-umformen', 'Gleichungen lösen: Kontrollfragen zum Umformen',
 
 # ════════════════════════════════════════════════ Kapitel 2 · Einführung
 W2 = fenster(-2, 7, -8, 6, (-1, 1, 2, 3, 4, 5, 6), (-6, -4, -2, 2, 4))
+W2v = fenster(-2, 7, -8, 27, (-1, 1, 2, 3, 4, 5, 6), (-5, 5, 10, 15, 20, 25))
 clip('nullprodukt', 'Gleichungen lösen: Ausklammern und Nullprodukt',
      'Der Satz vom Nullprodukt an x² = 5x: auf null bringen, ausklammern, jeden Faktor null setzen, prüfen — und warum man nicht einfach durch x teilt.',
      ['quadratische Gleichung', 'Nullprodukt', 'ausklammern', 'Probe'], [
@@ -371,7 +380,12 @@ clip('nullprodukt', 'Gleichungen lösen: Ausklammern und Nullprodukt',
             f(r'\fa{x} \cdot (x - 5) = 0', 440, 52, ein=5.2),
             f(r'\fa{x} = 0 \;\;\text{oder}\;\; x - 5 = 0', 530, 50, ein=8.5),
             f(r'x = \fc{0} \;\;\text{oder}\;\; x = \fc{5}', 620, 50, ein=12.9),
-            graf(W2, parabeln=[par(1, 2.5, -6.25)], ein=12.9)),
+            # Ab Beginn beide Seiten: y = x² und y = 5x schneiden sich bei 0 und 5. «Minus fünf x» (Ton 0.6–3.4):
+            # x² wird zu x·(x − 5) (Linearfaktoren 0, 0 → 0, 5), die Gerade zur x-Achse — beide Seiten minus 5x,
+            # darum bleiben die Schnittstellen in jedem Zwischenstand 0 und 5. Die Nullstellen kommen mit der Lösung.
+            graf(W2v, kurven=[{'bewegung': [[0, 1, 0, 0], [0.57, 1, 0, 0], [3.13, 1, 0, 5]], 'polynom': True, 'farbe': 1}],
+                 geraden=[{'bewegung': [[0, 5, 0], [0.57, 5, 0], [3.13, 0, 0]], 'farbe': 2}], ein=0.3),
+            auflage(W2v, 12.9, parabeln=[par(1, 2.5, -6.25)])),
          sz('Die Probe',
             'Probe in der Ausgangsgleichung. Null eingesetzt: null gleich null. Fünf eingesetzt: fünfundzwanzig gleich '
             'fünfundzwanzig. Beide stimmen. Im Bild sind das die Nullstellen der Parabel y gleich x Quadrat minus fünf x.',
@@ -387,8 +401,10 @@ clip('nullprodukt', 'Gleichungen lösen: Ausklammern und Nullprodukt',
             f(r'x = 5', 380, 56, ein=3.0),
             f(r'\fd{x = 0 \text{ fehlt}}', 480, 56, ein=4.4),
             n('Teilen durch @x@ setzt @x \\neq 0@ voraus.', 600, 'rot', 44, ein=6.0),
-            graf(W2, parabeln=[par(1, 2.5, -6.25, null=False)], punkte=[pt(5, 0, 3, '(5 | 0)', [5.3, -1.6])], ein=1.0),
-            auflage(W2, 2.02, punkte=[pt(0, 0, 4, '(0 | 0) verloren', [0.3, 0.6])])),
+            graf(W2, parabeln=[par(1, 2.5, -6.25, null=False)], ein=1.0),
+            # Ton (Wortzeiten): «erhält nur x gleich fünf» 3.1–3.9, «Die Null ist verloren» 4.3–5.2.
+            auflage(W2, 3.56, punkte=[pt(5, 0, 3, '(5 | 0)', [5.3, -1.6])]),
+            auflage(W2, 4.47, punkte=[pt(0, 0, 4, '(0 | 0) verloren', [0.3, 0.6])])),
          sz('Merke',
             'Zum Mitnehmen: Erst auf null bringen, dann ausklammern. Ein Produkt ist null, wenn ein Faktor null ist. '
             'Nicht durch x teilen, ohne x gleich null zu prüfen.',
@@ -477,7 +493,8 @@ clip('kontrolle-nullprodukt', 'Gleichungen lösen: Kontrollfragen zum Nullproduk
 
 # ════════════════════════════════════════════════ Kapitel 3 · Einführung
 W3a = fenster(-5, 5, -2, 12, (-4, -3, -2, 2, 3, 4), (3, 6, 9))
-W3b = fenster(-3, 7, -10, 8, (-2, -1, 1, 2, 3, 4, 5, 6), (-8, -4, 4))
+W3b = fenster(-3, 7, -10, 12, (-2, -1, 1, 2, 3, 4, 5, 6), (-8, -4, 4, 8))
+W3e = fenster(-3, 7, -2, 12, (-2, -1, 1, 2, 3, 4, 5, 6), (3, 6, 9))
 W3c = fenster(-4, 3, -5, 6, (-3, -2, -1, 1, 2), (-4, -2, 2, 4))
 W3d = fenster(-3, 5, -5, 7, (-2, -1, 1, 2, 3, 4), (-4, -2, 2, 4, 6))
 clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsformel',
@@ -497,7 +514,12 @@ clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsform
             'Also x gleich fünf oder x gleich minus eins.',
             f(r'(x - 2)^2 = 9', 280, 60, ein=0.3),
             f(r'x - 2 = \pm 3', 390, 58, ein=3.8),
-            f(r'x = \fc{5} \;\;\text{oder}\;\; x = \fc{-1}', 500, 50, ein=6.0)),
+            f(r'x = \fc{5} \;\;\text{oder}\;\; x = \fc{-1}', 500, 50, ein=6.0),
+            # Die Parabel der Vorszene rückt um 2 nach rechts (Ton «Klammer x minus zwei, im Quadrat» 1.1–3.7);
+            # die Waagrechte y = 9 trifft sie dann bei −1 und 5.
+            graf(W3e, kurven=[dict(formel='9', farbe=2, gestrichelt=True, dicke=3)],
+                 parabeln=[par(1, 0, 0, null=False, bew=[[0, 1, 0, 0], [1.0, 1, 0, 0], [3.51, 1, 2, 0]])], ein=0.3),
+            auflage(W3e, 6.0, punkte=[pt(-1, 9, 3, '(−1 | 9)', [-1.35, 7.6], 'end'), pt(5, 9, 3, '(5 | 9)', [5.35, 7.6])])),
          sz('Quadratisch ergänzen',
             'Und wenn die Gleichung so aussieht: x Quadrat minus vier x minus fünf gleich null? Zuerst plus fünf. '
             'Dann die Hälfte von vier ins Quadrat, also vier, auf beiden Seiten addieren. Links steht jetzt ein Binom: '
@@ -509,8 +531,13 @@ clip('ergaenzen', 'Gleichungen lösen: Wurzelziehen, Ergänzen, Mitternachtsform
             f(r'x^2 - 4x + 4 = 9', 440, 50, ein=8.5),
             f(r'(x - 2)^2 = 9', 530, 50, ein=11.6),
             f(r'\mathbb{L} = \{\fc{-1};\ \fc{5}\}', 640, 52, ein=14.1),
-            graf(W3b, parabeln=[par(1, 2, -9, null=False)], ein=0.3),
-            auflage(W3b, 14.1, punkte=[pt(-1, 0, 3, '(−1 | 0)', [-1.3, -1.6], 'end'), pt(5, 0, 3, '(5 | 0)', [5.3, -1.6])])),
+            # Graph rechnet mit (Ton «zuerst plus fünf» 5.2–5.95, «auf beiden Seiten addieren» 8.76–9.8): Parabel und
+            # rechte Seite (Waagrechte, zuerst y = 0) steigen gleich viel, +5 und +4. Die Schnittstellen bleiben −1 und 5;
+            # am Schluss (x − 2)² und y = 9 wie in der ersten Szene.
+            graf(W3b, parabeln=[par(1, 2, -9, null=False, bew=[[0, 1, 2, -9], [4.83, 1, 2, -9], [5.55, 1, 2, -4], [8.27, 1, 2, -4], [9.38, 1, 2, 0]])],
+                 geraden=[{'bewegung': [[0, 0, 0], [4.83, 0, 0], [5.55, 0, 5], [8.27, 0, 5], [9.38, 0, 9]], 'farbe': 2, 'gestrichelt': True, 'dicke': 3}],
+                 ein=0.3),
+            auflage(W3b, 14.1, punkte=[pt(-1, 9, 3, '(−1 | 9)', [-1.35, 7.6], 'end'), pt(5, 9, 3, '(5 | 9)', [5.35, 7.6])])),
          sz('Die Mitternachtsformel',
             'Führt man die Ergänzung allgemein durch, entsteht die Mitternachtsformel. Unter der Wurzel steht die Diskriminante: '
             'D gleich b Quadrat minus vier a c.',
@@ -639,10 +666,11 @@ clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
             f(r'x = \fc{2}', 530, 50, ein=16.4),
             # «heben sich die x Quadrat weg»: beide Parabeln steigen aus dem Bild, die Geraden der linearen
             # Gleichung 2x + 1 = 5 kommen; der Schnitt bei x = 2 erscheint mit «x ist zwei».
-            graf(W4a, parabeln=[par(1, -1, 0, null=False, bew=[[0, 1, -1, 0], [8.71, 1, -1, 0], [9.81, 1, -1, 30]]),
-                                par(1, 0, 5, farbe=2, null=False, bew=[[0, 1, 0, 5], [8.71, 1, 0, 5], [9.81, 1, 0, 35]])], ein=0.3),
-            auflage(W4a, 10.35, geraden=[ger(2, 1, 1), ger(0, 5, 2)]),
-            auflage(W4a, 13.09, punkte=[pt(2, 5, 3, '(2 | 5)', [2.3, 3.8])])),
+            # Wortzeiten (07.10.2026): «heben sich die x Quadrat weg» 10.4–12.1, «Es bleibt …» ab 12.7, «x ist zwei» 16.0.
+            graf(W4a, parabeln=[par(1, -1, 0, null=False, bew=[[0, 1, -1, 0], [10.81, 1, -1, 0], [12.17, 1, -1, 30]]),
+                                par(1, 0, 5, farbe=2, null=False, bew=[[0, 1, 0, 5], [10.81, 1, 0, 5], [12.17, 1, 0, 35]])], ein=0.3),
+            auflage(W4a, 12.8, geraden=[ger(2, 1, 1), ger(0, 5, 2)]),
+            auflage(W4a, 16.4, punkte=[pt(2, 5, 3, '(2 | 5)', [2.3, 3.8])])),
          sz('Wenn b fehlt',
             'Fehlt das Glied mit x, zieh die Wurzel. Drei x Quadrat gleich siebenundzwanzig: x Quadrat ist neun, x ist plus oder minus drei.',
             n('kein @x@-Glied: Wurzelziehen', 260, 'blau', 46, ein=0.3),
@@ -811,8 +839,14 @@ clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
             n('@k \\lt 9@: zwei Lösungen', 450, 'blau', 42, ein=6.5),
             n('@k = 9@: eine, @x = 3@', 530, 'blau', 42, ein=9.9),
             n('@k \\gt 9@: keine', 610, 'blau', 42, ein=14.1),
+            # «Für k kleiner als neun … zwei Lösungen» (Ton 7.2–9.4): k läuft von 5 bis 8, die zwei Nullstellen rücken
+            # zusammen, bleiben aber zwei. «Bei k gleich neun» (10.3–11.3) berührt sie, «grösser als neun» hebt sie ab.
+            f(r'\fb{k = 5}', 690, 46, ein=0.3),
+            f(r'\to\ \fb{k = 8}', 690, 46, ein=7.39, x=300),
+            f(r'\to\ \fb{k = 9}', 690, 46, ein=10.21, x=528),
+            f(r'\to\ \fb{k = 11}', 690, 46, ein=13.8, x=756),
             graf(W5b, parabeln=[par(1, 3, -4, beschr=False,
-                                    bew=[[0, 1, 3, -4], [9.6, 1, 3, -4], [11.4, 1, 3, 0], [13.8, 1, 3, 0], [15.2, 1, 3, 2]])], ein=0.3)),
+                                    bew=[[0, 1, 3, -4], [7.39, 1, 3, -4], [9.57, 1, 3, -1], [10.21, 1, 3, -1], [11.4, 1, 3, 0], [13.8, 1, 3, 0], [15.2, 1, 3, 2]])], ein=0.3)),
          sz('Zuerst a prüfen',
             'Steht der Parameter vor x Quadrat, prüfe zuerst, ob er null sein kann. m x Quadrat minus vier x minus drei: '
             'Bei m gleich null ist die Gleichung linear, x ist minus drei Viertel. Erst für m ungleich null gilt die Diskriminante, '

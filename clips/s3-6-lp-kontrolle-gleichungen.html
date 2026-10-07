@@ -444,7 +444,10 @@ function bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1) {
         // Tangente x = 1 am Kreis; der Strahl durch P trifft sie in T = (1 | tan th).
         const ty = Math.tan(th), T_ = [cx + r, cy - r * ty], ok = Math.abs(Math.cos(th)) > 1e-4 && ty >= y0 && ty <= y1;
         lin('.kk-tang', cx + r, py(y0), cx + r, py(y1));
-        lin('.kk-radius', cx, cy, ok ? T_[0] : P[0], ok ? T_[1] : P[1]);
+        // P links der y-Achse (2. und 3. Quadrant): der Strahl geht von P durch M zur Tangente,
+        // sonst haengt P neben der Linie.
+        const vonP = ok && Math.cos(th) < 0;
+        lin('.kk-radius', vonP ? P[0] : cx, vonP ? P[1] : cy, ok ? T_[0] : P[0], ok ? T_[1] : P[1]);
         lin('.kk-hoehe', cx + r, cy, ok ? T_[0] : cx + r, ok ? T_[1] : cy);
         lin('.kk-proj', ok ? T_[0] : 0, ok ? T_[1] : 0, ok && sichtbar ? px(th) : (ok ? T_[0] : 0), ok ? T_[1] : 0);
         const q = g.querySelector('.kk-q'); q.style.display = ok && sichtbar ? '' : 'none';

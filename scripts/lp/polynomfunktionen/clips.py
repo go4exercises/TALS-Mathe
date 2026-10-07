@@ -221,8 +221,11 @@ clip('linearfaktoren', 'Polynom sehen: Linearfaktoren und Nullstellen',
             'sechs a gleich sechs, also a gleich eins.',
             f(r'f(x) = \fa{a}\,(x+2)(x-1)(x-3)', 300, 50),
             f(r'f(0) = \fa{a} \cdot 2 \cdot (-1) \cdot (-3) = 6\fa{a} = 6', 400, 46, ein=8.4),
-            n('@\\Rightarrow \\fa{a} = 1@', 500, 'blau', 52, ein=12.1),
-            graf(W1, [poly([[0, 1, -2, 1, 3]], nullstellen={'farbe': 2, 'beschriftung': False})], ein=1.8,
+            n('@\\Rightarrow \\fa{a} = 1@', 500, 'blau', 52, ein=13.4),
+            # mit a = 0.5 beginnen: (0 | 3) statt (0 | 6). «sechs a gleich sechs, also a gleich eins»
+            # (12.1–14.3 s): a 0.5 → 1, die Kurve läuft in den Punkt (f(0) = 6a, monoton 3 → 6)
+            graf(W1, [poly([[12.1, 0.5, -2, 1, 3], [14.3, 1, -2, 1, 3]],
+                           nullstellen={'farbe': 2, 'beschriftung': False})], ein=1.8,
                  punkte=[pt(0, 6, 5, '(0 | 6)', [0.35, 6.9])])),
          sz('Merke',
             'Zum Mitnehmen: Grad ist der höchste Exponent, der Leitkoeffizient sein Faktor. In der Produktform '
@@ -384,7 +387,10 @@ clip('vielfachheit', 'Polynom sehen: mehrfache Nullstellen',
             f(r'(x - \fb{x_1})^{\fb{1}},\ (x - \fb{x_1})^{\fb{2}},\ (x - \fb{x_1})^{\fb{3}}', 410, 46, ein=0.4),
             n('schneiden; berühren; Terrasse|gerade Vielfachheit: kein Vorzeichenwechsel',
               540, 'blau', 44, ein=1.2),
-            graf(W1, [poly([[0, 0.5, -2, 1, 1]], nullstellen={'farbe': 2})])),
+            # im Takt der Satzteile: «Einfache» (1.5 s) drei Nullstellen, «Doppelte: berühren» (3.3–4.9 s)
+            # 3 → 1, «Dreifache: … Terrasse» (5.8–7.4 s) −2 → 1
+            graf(W1, [poly([[3.3] + B1, [4.9, 0.5, -2, 1, 1], [5.8, 0.5, -2, 1, 1], [7.4, 0.5, 1, 1, 1]],
+                           nullstellen={'farbe': 2})])),
          JETZT_DU,
      ])
 
@@ -540,7 +546,12 @@ clip('globalverlauf', 'Polynom sehen: der Globalverlauf',
             'Nur gerade Exponenten: achsensymmetrisch zur y-Achse. Das konstante Glied zählt dabei als gerade. Gemischt: keine dieser Symmetrien.',
             f(r'x^{3} - 4x^{1} \;\to\; \text{punktsymmetrisch}', 300, 46),
             n('nur gerade Exponenten: @y@-Achse|nur ungerade: Ursprung|gemischt: keine der beiden', 440, 'blau', ein=7.0),
-            graf(W4, [poly([[0, 0.5, -2, 0, 2]])], ein=1.0)),
+            # «Gemischt: keine dieser Symmetrien» (12.5–14.0 s): konstantes Glied 0 → 1 wie Regler d in sim3,
+            # 0.5x³ − 2x + 1 hat die Nullstellen −2.214, 0.539, 1.675 (numpy); dazwischen bleibt x² weg
+            graf(W4, [poly([[12.5, 0.5, -2, 0, 2], [14.0, 0.5, -2.2143, 0.5392, 1.6751]])], ein=1.0),
+            # «Nur gerade Exponenten: achsensymmetrisch zur y-Achse» (6.8 s): eine gerade Quartik gestrichelt
+            ueber(W4, kurven=[dict(fest('0.25*(x**2-1)*(x**2-4)'), beschriftung='nur gerade',
+                                   beschriftung_bei=[-1.75, -1.4])], ein=6.8)),
          sz('Merke',
             'Zum Mitnehmen: Von weitem zählt nur der Leitterm. Grad gerade: Enden gleich, ungerade: Enden '
             'entgegengesetzt, der Leitkoeffizient sagt, wohin. Höchstens n Nullstellen, höchstens n minus eins Extremstellen.',

@@ -400,7 +400,7 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             'Die Funktion ist gerade, der Graph achsensymmetrisch — und alle Werte sind positiv.',
             f(r'y = \dfrac{1}{x^{\fb{2}}}, \quad W = \mathbb{R}^+', 300, 58),
             n('achsensymmetrisch,|beide Äste oben', 440, 'blau'),
-            graf(W_HY, [kurve([[0, 1, -2, 0, 0]], asymptoten={'farbe': 5})],
+            graf(W_HY, [kurve([[0, 1, -2, 0, 0]], asymptoten={'farbe': 4})],   # rot wie sonst: Tinte deckt sich mit den Achsen
                  punkte=[pt(-1, 1, 5, '(−1 | 1)'), pt(1, 1, 5, '(1 | 1)')])),
          sz('Keine Nullstelle',
             'Eines haben alle Hyperbeln gemeinsam: Sie haben keine Nullstelle. Ein Bruch mit Zähler eins '
@@ -536,7 +536,10 @@ clip('verschieben', 'Kurve sehen: verschieben — und was die Asymptoten tun',
             f(r'y = (x \fc{- 2})^{\fb{3}}', 300, 64),
             n('in der Klammer:|umgekehrtes Vorzeichen', 440, 'gruen'),
             graf(W_TR, [kurve([[0, 1, 3, 0, 0]], farbe=5, gestrichelt=True),
-                        kurve([[0.9, 1, 3, 0, 0], [3.8, 1, 3, 2, 0]], startpunkt={'farbe': 5})])),
+                        # 0.9–3.8 zu «schiebt die Kurve zwei nach rechts»; 6.6–10.8 hin und zurück zu
+                        # «Der ausgezeichnete Punkt … wandert mit» (Ton 6.5–11.4): der Punkt fährt sichtbar mit
+                        kurve([[0.9, 1, 3, 0, 0], [3.8, 1, 3, 2, 0], [6.6, 1, 3, 2, 0], [8.6, 1, 3, 0, 0],
+                               [10.8, 1, 3, 2, 0]], startpunkt={'farbe': 5})])),
          sz('v schiebt senkrecht',
             'v verschiebt senkrecht, und zwar mit seinem eigenen Vorzeichen. Minus zwei hinter der Potenz '
             'senkt die ganze Kurve um zwei.',
@@ -561,8 +564,11 @@ clip('verschieben', 'Kurve sehen: verschieben — und was die Asymptoten tun',
             f(r'(x-3)^{\fb{4}} = 16 \;\Longrightarrow\; x - 3 = \pm 2', 360, 48, ein=5.4),
             n('gerader Exponent:|beim Wurzelziehen @\\pm@ nicht vergessen|@x_1 = 1@, @x_2 = 5@', 470, 'blau',
               ein=11.0),
-            graf(W_NS, [kurve([[0, 1, 4, 3, -16]])], ein=11.0,
-                 punkte=[pt(1, 0, 5, '(1 | 0)'), pt(5, 0, 5, '(5 | 0)')])),
+            # x⁴ ab «Man setzt y gleich null» (Ton 1.5), gleitet zur Gleichung «Klammer x minus drei, hoch vier,
+            # minus sechzehn» (Ton 4.3–8.8): erst u = 3, dann v = −16 — Brücke zu den u/v-Reglern von sim3
+            graf(W_NS, [kurve([[4.4, 1, 4, 0, 0], [5.9, 1, 4, 3, 0], [6.1, 1, 4, 3, 0], [8.2, 1, 4, 3, -16]])],
+                 ein=1.5),
+            graf(W_NS, punkte=[pt(1, 0, 5, '(1 | 0)'), pt(5, 0, 5, '(5 | 0)')], ein=11.0, raster=False)),
          sz('Merke',
             'Zum Mitnehmen: u schiebt waagrecht und steht in der Klammer mit umgekehrtem Vorzeichen, '
             'v schiebt senkrecht mit eigenem. a streckt in y-Richtung. Bei Hyperbeln wandern die Asymptoten '
@@ -862,7 +868,10 @@ clip('wurzel', 'Kurve sehen: Wurzelfunktionen nutzen',
             # x bis ±9, damit (−8 | −2) im Bild liegt; ∛x erst mit ihrer Formel (7.0), der Punkt mit
             # «minus acht ist minus zwei» (Ton 10.9–11.9)
             graf(W_DM, [kurve([[0, 1, HALB, 0, 0]], farbe=3)]),
-            graf(W_DM, [kurve([[0, 1, DRITTEL, 0, 0]], farbe=3, gestrichelt=True)], ein=7.0, raster=False),
+            # ∛x löst sich aus √x (p 1/2 → 1/3, ohne stufen): der linke Ast erscheint erst bei genau 1/3 (8.8),
+            # zu «auch aus negativen Zahlen» (Ton bis 9.7) — wie «Zieh an n» in sim5
+            graf(W_DM, [kurve([[7.0, 1, HALB, 0, 0], [8.8, 1, DRITTEL, 0, 0]], farbe=3, gestrichelt=True)],
+                 ein=7.0, raster=False),
             graf(W_DM, punkte=[pt(-8, -2, 5, '(−8 | −2)')], ein=11.2, raster=False)),
          sz('Verschieben wie immer',
             'Verschoben wird nach demselben Schema wie überall. Bei y gleich zwei mal Wurzel aus '
@@ -872,10 +881,13 @@ clip('wurzel', 'Kurve sehen: Wurzelfunktionen nutzen',
             f(r'y = 2\,\sqrt{x + \fc{1}} - \fc{4}', 300, 56, ein=3.2),
             n('Startpunkt @(-1 \\mid -4)@|@D = [-1;\\infty[@|Nullstelle bei @x = 3@',
               450, 'gruen', 44, ein=8.4),
-            graf(W_WZ, [kurve([[0, 2, HALB, -1, -4]], farbe=3,
-                              startpunkt={'farbe': 3},
-                              marken=[{'x': 0, 'text': '(0 | {y})', 'farbe': 5}])], ein=3.0,
-                 punkte=[pt(3, 0, 5, '(3 | 0)')])),
+            # √x gestrichelt als Bezug; die grüne Kurve gleitet zu «zwei mal Wurzel aus x plus eins, minus vier»
+            # (Ton 3.0–6.0) auf a = 2, u = −1, v = −4. Die Punkte zu ihren Sätzen: (0 | −2) 12.0, (3 | 0) 14.3
+            graf(W_WZ, [kurve([[0, 1, HALB, 0, 0]], farbe=5, gestrichelt=True),
+                        kurve([[3.2, 1, HALB, 0, 0], [5.9, 2, HALB, -1, -4]], farbe=3,
+                              startpunkt={'farbe': 3})], ein=0.6),
+            graf(W_WZ, punkte=[pt(0, -2, 5, '(0 | −2)')], ein=12.0, raster=False),
+            graf(W_WZ, punkte=[pt(3, 0, 5, '(3 | 0)')], ein=14.3, raster=False)),
          sz('Wer ist grösser?',
             'Drei Kurven zwischen null und eins: Dort liegt die Wurzel oben, x in der Mitte, '
             'x Quadrat unten. Bei einem schneiden sich alle drei — und rechts davon kehrt sich '

@@ -32,11 +32,25 @@ Die Tabellen unten zeigen noch den Befund vor der Umsetzung.
 - `s3-6-lp-gleichungen` «Wie viele?»: Waagrechte wandert, aber ohne mitlaufende Schnittpunkte.
 - `g3-3-lp-mitte` Merke «a positiv Minimum»: weggelassen (kein sinnvolles Bild im Zaunfenster).
 
-**Offen:** alle Zeilen *neue Bewegung* (ausser Vorrang) und *Werkzeug-Erweiterung*, die 4 *Neuvertonungen*.
+**Zweiter Durchgang (07.10.2026): *neue Bewegung*** in 22 Einführungsclips umgesetzt (alle Leitprogramme
+ausser Planimetrie, wo jede Bewegung bewegbare Figuren braucht). Dazu im Clip-Bauer: Beim Tangens läuft der
+Strahl von P durch den Mittelpunkt, wenn P links der y-Achse liegt (vorher hing P neben der Linie).
+Bewusst weggelassen, weil die Bewegung dem Gesagten widerspräche oder auf keinem Satz läge:
+`g3-2-lp-m-und-b` Wertetabelle, `g3-2-lp-steigungsdreieck` «Die Nullstelle» (b −6 → −4),
+`s3-2-lp-umkehren` n 3 → 2, `s3-4-lp-wachstum-zerfall` Startwert 200 → 400.
+Brauchen einen neuen Satz (Neuvertonung): `s3-2-lp-hyperbel` a 1 → −1, `g3-3-lp-drei-formen` a 1 → −1,
+`g3-3-lp-a-finden` Fall B.
+
+**Offen:** alle Zeilen *Werkzeug-Erweiterung*, die *Neuvertonungen* (4 + die drei eben genannten).
+Zusätzlich fürs Werkzeug: Tangensstrecke am Fensterrand abschneiden statt ausblenden (darum fährt P nur bis
+1.245 rad); senkrechte bewegte Gerade (`g3-2-lp-typen` Merke); mitlaufende Schnittpunkte auch bei
+«Faktor im Argument» (Trig-Gleichungen).
 
 **Bei der Umsetzung neu aufgefallen:**
-- `g2-2-lp-verfahren` «Erst ordnen»: Notiz «x = 2» erst bei ≈ 16.3 s, gesagt bei 12.7 s.
-- `g2-2-lp-nullprodukt` «Der teure Fehler»: Notiz «x = 0 fehlt» bei ≈ 4.4 s, gesagt bei 1.8 s.
+- ~~`g2-2-lp-verfahren` «Erst ordnen», `g2-2-lp-nullprodukt` «Der teure Fehler»: Notiz zu spät~~ — falsch
+  gemessen (`sprechzeiten.py` fasst dort mehrere Sätze zusammen; Wortzeiten mit faster-whisper: «x ist zwei»
+  bei 16.0 s, «Die Null ist verloren» bei 4.3 s). Zu früh waren die Punkte; im zweiten Durchgang behoben.
+  Auch der Befund «Die Null ist verloren (1.8–2.7)» in der Tabelle unten ist so zu lesen.
 - `s3-5-lp-periode-symmetrie`: die Sinuskurve schneidet «(π/6 | 0.5)» und «(−π/6 | −0.5)».
 - `s3-6-lp-gleichungen` «Am Graphen», «Merke»: «(1 | 0)» stösst an die Achszahl 2.
 - `s3-2-lp-hyperbel` «Gerade Ordnung»: Asymptoten in Tinte, kaum sichtbar (sonst jetzt rot).

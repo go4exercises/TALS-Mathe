@@ -335,8 +335,14 @@ clip('m-und-b', 'Gerade sehen: m kippt, b schiebt',
             f(r'f(x) = \fa{m}\,x + \fb{b}', 420, 66, ein=0.4),
             n('@\\fb{b}@: Wert bei @x = 0@, schiebt senkrecht|@\\fa{m}@: Zuwachs pro Schritt nach rechts,|kippt um @(0 \\mid \\fb{b})@',
               560, 'blau', 44, ein=1.2),
-            graf(W_MB, [bew([[1.0, 2, 1], [3.4, -1, 1], [6.0, 2, 1]], yachse={'farbe': 2},
-                            dreieck=dreieck(1, 1))])),
+            # Bewegung im Takt der Saetze (Wortzeiten): «b … schiebt senkrecht» 1.2–4.4 s (b 1 → −1 → 1, das Dreieck bleibt im Fenster),
+            # «m … kippt sie um (0 | b)» 4.6–7.9 s (m 2 → 0.5 → 2), «Positives m steigt» haelt m = 2,
+            # «negatives fällt» 9.8–10.7 s (m → −1), «m gleich null bleibt waagrecht» 10.9–11.9 s (m → 0).
+            graf(W_MB, [bew([[1.2, 2, 1], [2.9, 2, -1], [4.4, 2, 1], [4.6, 2, 1], [6.3, 0.5, 1], [7.9, 2, 1],
+                             [9.8, 2, 1], [10.7, -1, 1], [10.9, -1, 1], [11.9, 0, 1]], yachse={'farbe': 2},
+                            # zur Waagrechten schrumpft das Dreieck auf Δx = 0 und verschwindet
+                            # (sonst stuende «Δy = 0» auf der Geraden ueber «(0 | 1)»)
+                            dreieck=dreieck(None, None, [[0, 1, 1], [10.9, 1, 1], [11.9, 1, 0]]))])),
          JETZT_DU,
      ])
 
@@ -657,7 +663,9 @@ clip('typen', 'Gerade sehen: Typen und Lagebeziehungen',
             'parallel und treffen sich nie; ist auch b gleich, ist es dieselbe Gerade.',
             f(r'y = \fa{2}x \fb{+ 1} \qquad y = \fa{2}x \fb{- 3}', 300, 50),
             n('parallel:|@\\fa{m_1} = \\fa{m_2}@, @\\fb{b_1} \\neq \\fb{b_2}@', 460, 'blau'),
-            graf(W_GL, [ger(2, 1), bew([[0.9, 2, 4], [3.8, 2, -3]], yachse={'farbe': 2})],
+            # b = −3 wie in der Formel, parallel und getrennt; erst zu «ist auch b gleich» (6.5–8.5 s)
+            # gleitet sie auf b = 1 und deckt sich mit der ersten. Vorher kreuzt sie b = 1 nie.
+            graf(W_GL, [ger(2, 1), bew([[6.5, 2, -3], [8.5, 2, 1]], yachse={'farbe': 2})],
                  [pt(0, 1, 2)])),
          sz('Senkrecht zueinander',
             'Senkrecht ist überraschender: Das Produkt der beiden Steigungen ist minus eins. '
@@ -686,7 +694,13 @@ clip('typen', 'Gerade sehen: Typen und Lagebeziehungen',
             f(r'\fa{m} = 0:\ \text{konstant}', 460, 48, ein=0.7),
             n('@\\fa{m_1} = \\fa{m_2}@: parallel|@\\fa{m_1} \\cdot \\fa{m_2} = -1@: senkrecht|@x = k@: keine Funktion',
               570, 'blau', 44, ein=1.4),
-            graf(W_GL, [ger(2, 1), bew([[0.9, 2, 1], [3.8, -0.5, 1]])], [pt(0, 1, 5)])),
+            # Die zweite Gerade geht im Takt der Saetze durch die Faelle (Wortzeiten): b → 0 (1.2–2.8 s),
+            # m → 1 (3.2–5.0 s), konstant y = −2 (5.6–6.9 s); die senkrechte Gerade kann eine
+            # bewegte Gerade nicht zeigen, darum steht sie still; parallel m → 2 (9.4–10.7 s),
+            # zuletzt rastet sie senkrecht ein (11.0–13.0 s).
+            graf(W_GL, [ger(2, 1), bew([[1.2, 1.5, 2], [2.8, 1.5, 0], [3.2, 1.5, 0], [5.0, 1, 0],
+                                        [5.6, 1, 0], [6.9, 0, -2], [9.4, 0, -2], [10.7, 2, -2],
+                                        [11.0, 2, -2], [13.0, -0.5, 1]])], [pt(0, 1, 5)])),
          JETZT_DU,
      ])
 
