@@ -89,10 +89,10 @@ body.render #ui{display:none}
 <div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · Quadratische Ungleichungen</span></div>
 <div id="fuss"><span>Raphael Arnold Kohler</span><span>14.09.2026</span></div>
 <div class="l" data-at="9.66" data-out="63.03" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="9.96" data-anim="rise" data-dim="9.66,26.56"><div class="num">1</div><div class="stxt">Null auf eine Seite<br><span class="dim">und faktorisieren</span></div></div><div class="step l flow" data-at="26.86" data-anim="rise" data-dim="26.56,38.17"><div class="num">2</div><div class="stxt">Vorzeichen je Faktor</div></div><div class="step l flow" data-at="38.47" data-anim="rise" data-dim="38.17,49.01"><div class="num">3</div><div class="stxt">Vorzeichen des Produkts<br><span class="dim">gleich +, verschieden −</span></div></div><div class="step l flow" data-at="49.31" data-anim="rise" data-dim="49.01,63.03"><div class="num">4</div><div class="stxt">Bereiche ablesen<br><span class="dim">offen oder geschlossen?</span></div></div></div>
-<div class="l hand mitte mitte" data-at="0.40" data-out="9.66" data-anim="rise" style="left:0;right:0;text-align:center;top:244px;font-size:90px;font-weight:600;color:var(--tinte)">Nur die Vorzeichen zählen</div>
-<div class="l sans mitte mitte" data-at="2.10" data-out="9.66" data-anim="rise" style="left:0;right:0;text-align:center;top:429px;font-size:48px;color:var(--blau)">Quadratische Ungleichung ohne Skizze</div>
-<div class="l m row mitte" data-at="3.80" data-out="9.66" data-anim="pop" style="left:0;right:0;text-align:center;top:619px;font-size:80px"><span>\(x^2 + 2x \gt 8\)</span></div>
-<div class="l hand mitte" data-at="5.50" data-out="9.66" data-anim="rise" style="left:0;right:0;text-align:center;top:834px;font-size:54px;color:var(--blau)">Ein Produkt wechselt sein Vorzeichen nur an einer Nullstelle.</div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="9.66" data-anim="rise" style="left:0px;right:0px;text-align:center;top:244px;font-size:90px;font-weight:600;color:var(--tinte)">Nur die Vorzeichen zählen</div>
+<div class="l sans mitte mitte" data-at="2.10" data-out="9.66" data-anim="rise" style="left:0px;right:0px;text-align:center;top:429px;font-size:48px;color:var(--blau)">Quadratische Ungleichung ohne Skizze</div>
+<div class="l m row mitte" data-at="3.80" data-out="9.66" data-anim="pop" style="left:0px;right:0px;text-align:center;top:619px;font-size:80px"><span>\(x^2 + 2x \gt 8\)</span></div>
+<div class="l hand mitte" data-at="5.50" data-out="9.66" data-anim="rise" style="left:0px;right:0px;text-align:center;top:834px;font-size:54px;color:var(--blau)">Ein Produkt wechselt sein Vorzeichen nur an einer Nullstelle.</div>
 <div class="l m row" data-at="10.06" data-out="26.56" data-anim="rise" style="left:680px;top:215px;font-size:58px"><span>\(x^2 + 2x - 8 \gt 0\)</span></div>
 <div class="l m row" data-at="11.76" data-out="26.56" data-anim="pop" style="left:680px;top:385px;font-size:62px"><span>\(\fa{(x+4)} \cdot \fb{(x-2)} \gt 0\)</span></div>
 <div class="l hand" data-at="13.46" data-out="26.56" data-anim="rise" style="left:680px;top:560px;font-size:52px;color:var(--blau)">Nullstellen \(-4\) und \(2\): drei Bereiche auf dem Zahlenstrahl.</div>
@@ -149,11 +149,13 @@ if (!location.search.includes('render')) {
   window.addEventListener('resize', fit);
   document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
   fit();
-  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
-  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
-  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
-  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
-  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
   const ton = document.getElementById('ton'), ts = document.getElementById('ts');
   const tonBeschriften = () => {
     if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
@@ -191,6 +193,8 @@ if (!location.search.includes('render')) {
     if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
   };
   pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
   document.addEventListener('keydown', e => {
     const ziel = e.target && e.target.closest ? e.target : null;
     if (ziel && ziel.closest('input, select, textarea')) return;

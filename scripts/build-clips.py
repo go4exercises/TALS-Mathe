@@ -44,6 +44,19 @@ STD = {
     "theme": "heft",
 }
 
+# "achsen": false laesst Achsen und Teilung weg. Ob das Karo bleibt, ist je Projekt
+# verschieden: In Physik ist eine Ebene ohne Achsen eine Zeichnung, die spaeter
+# deckungsgleich ueber einem graf mit demselben Fenster erscheint (die Antwort nach
+# der Frage) — ein zweites Karo verdunkelte das erste. In Mathe stehen Figuren der
+# Planimetrie im Karo. "raster" im Drehbuch geht in beiden Projekten vor.
+KARO_OHNE_ACHSEN = True
+# Textbreite begrenzen (Physik 07.10.2026): zentrierte Zeilen mit Rand (130 px je Seite),
+# links gesetzte Texte ohne eigenes "breite" auf die Spaltenbreite des Layouts. Physik True.
+# Mathe False: Die 514 Mathe-Clips sind auf die volle Bühnenbreite gesetzt; mit True brechen
+# 62 Elemente in 56 Clips neu um (gemessen 07.10.2026). Je Projekt eine Einstellung, der
+# Code bleibt gemeinsam.
+TEXTBREITE_BEGRENZEN = False
+
 
 # ---------------------------------------------------------------- Formelsatz
 # Formelsatz. Seit dem 31.08.2026 setzt MathJax alle Clips: eine Formel
@@ -328,7 +341,7 @@ def graf_svg(el, theme):
     Nur so viel, wie ein Clip braucht: Achsen mit Teilung, Geraden ueber
     Steigung und Achsenabschnitt (oder zwei Punkte) und markierte Punkte
     mit Beschriftung. Kein Diagrammwerkzeug — wer mehr will, zeichnet die
-    Figur wie auf den Themenseiten in mathlib.js.
+    Figur wie auf den Themenseiten in physiklib.js bzw. mathlib.js.
 
     Die Geraden werden am Fenster abgeschnitten, nicht an ihren Endpunkten:
     eine Gerade, die aus dem Bild laeuft, soll am Rand aufhoeren und nicht
@@ -365,7 +378,9 @@ def graf_svg(el, theme):
     yt = teilung("yteilung", y0, y1)
 
     # Karo
-    if el.get("raster", True):
+    # Was "achsen": false mit dem Karo macht, ist je Projekt verschieden (KARO_OHNE_ACHSEN
+    # oben); "raster" im Drehbuch entscheidet in beiden Projekten ausdruecklich.
+    if el.get("raster", KARO_OHNE_ACHSEN if el.get("achsen", True) is False else True):
         for x, _ in xt:
             teile.append('<line x1="%.1f" y1="0" x2="%.1f" y2="%d" stroke="%s" '
                          'stroke-opacity=".13" stroke-width="1.5"/>' % (px(x), px(x), h, tinte))
@@ -424,6 +439,22 @@ def graf_svg(el, theme):
     if el.get("achsen", True) is False:
         del teile[vor_achsen:]
         achsnamen = []
+
+    # Flaechen: gefuellte Vielecke in Datenkoordinaten, unter allen Linien
+    # (Physik 06.10.2026). Gebraucht fuer den Weg als Flaeche unter der
+    # v-t-Geraden; "beschriftung" steht in der Mitte oder bei "beschriftung_bei".
+    for fl in el.get("flaechen", []):
+        farbe = fv[fl.get("farbe", 1) - 1]
+        teile.append('<polygon points="%s" fill="%s" fill-opacity="%s" stroke="none"/>'
+                     % (" ".join("%.1f,%.1f" % (px(x), py(y)) for x, y in fl["punkte"]),
+                        farbe, fl.get("deckung", 0.22)))
+        if fl.get("beschriftung"):
+            bx_, by_ = fl.get("beschriftung_bei") or (
+                sum(x for x, _ in fl["punkte"]) / len(fl["punkte"]),
+                sum(y for _, y in fl["punkte"]) / len(fl["punkte"]))
+            teile.append('<text x="%.1f" y="%.1f" font-size="29" font-weight="600" fill="%s" '
+                         'text-anchor="middle" stroke="%s" stroke-width="8" paint-order="stroke">%s</text>'
+                         % (px(bx_), py(by_) + 10, farbe, papier, entschaerfen(fl["beschriftung"])))
 
     # "figuren" (seit 06.10.2026, Leitprogramm Planimetrie): Strecken, Vielecke, Kreise,
     # Sektoren, Winkelbögen, Zeichen für den rechten Winkel und Texte in Fensterkoordinaten.
@@ -506,10 +537,13 @@ def graf_svg(el, theme):
             farbe = fv[g.get("farbe", 1) - 1]
             gid = "bewg%d" % nr
             teile.append('<path data-bewg="%s" data-paar="%s" data-fenster="%g,%g,%g,%g,%d,%d,%d" '
-                         'fill="none" stroke="%s" stroke-width="%s" stroke-linecap="round" %s/>'
+                         'fill="none" stroke="%s" stroke-width="%s" stroke-linecap="round" %s%s/>'
                          % (entschaerfen(json.dumps(g["bewegung"])), gid, x0, x1, y0, y1, b, h, rand,
                             farbe, g.get("dicke", 5),
-                            'stroke-dasharray="14 10"' if g.get("gestrichelt") else ""))
+                            'stroke-dasharray="14 10"' if g.get("gestrichelt") else "",
+                            # "ab": die Gerade beginnt erst bei diesem x (Physik 03.10.2026:
+                            # eine Q-t-Gerade hat keinen Teil bei negativer Zeit)
+                            ' data-ab="%g"' % g["ab"] if g.get("ab") is not None else ""))
 
             # Begleiter der bewegten Geraden, alle aus derselben Zeit gerechnet:
             # yachse ((0 | q)), nullstelle ((x_0 | 0)), marken (Punkt an festem x
@@ -593,10 +627,14 @@ def graf_svg(el, theme):
         if pa.get("bewegung"):
             farbe = fv[pa.get("farbe", 1) - 1]
             bid = "bew%d" % nr
-            teile.append('<path data-bew="%s" data-paar="%s" data-fenster="%g,%g,%g,%g,%d,%d,%d" '
+            # "ab"/"bis" (Physik 06.10.2026): die Parabel nur zwischen diesen x zeichnen
+            # (Wurf: keine negative Zeit, nichts unter dem Boden); ohne die Felder wie bisher.
+            teile.append('<path data-bew="%s" data-paar="%s" data-fenster="%g,%g,%g,%g,%d,%d,%d"%s%s '
                          'fill="none" stroke="%s" stroke-width="%s" stroke-linecap="round" '
                          'stroke-linejoin="round" %s/>'
                          % (entschaerfen(json.dumps(pa["bewegung"])), bid, x0, x1, y0, y1, b, h, rand,
+                            ' data-ab="%g"' % pa["ab"] if pa.get("ab") is not None else "",
+                            ' data-bis="%g"' % pa["bis"] if pa.get("bis") is not None else "",
                             farbe, pa.get("dicke", 5),
                             'stroke-dasharray="14 10"' if pa.get("gestrichelt") else ""))
             # Begleiter der bewegten Parabel, alle aus derselben Zeit gerechnet:
@@ -795,6 +833,51 @@ def graf_svg(el, theme):
                          'text-anchor="%s">%s</text>'
                          % (px(bx_), py(by_), farbe, kv.get("anker", "start"),
                             entschaerfen(kv["beschriftung"])))
+
+    # Strecken und Pfeile in Datenkoordinaten (Physik 06.10.2026): Hilfslinien
+    # zu einem Ablesewert, Vektoren, Kraftpfeile. "pfeil": true setzt eine
+    # Spitze am Ende; die Beschriftung steht bei "beschriftung_bei" oder rechts
+    # neben der Mitte. Gezeichnet ueber den Kurven, unter den Punkten.
+    for st in el.get("strecken", []):
+        farbe = fv[st.get("farbe", 5) - 1]
+        (ax, ay), (bx, by) = st["von"], st["bis"]
+        X1, Y1, X2, Y2 = px(ax), py(ay), px(bx), py(by)
+        dicke = st.get("dicke", 3 if st.get("gestrichelt") else 5)
+        if st.get("pfeil"):
+            lg = math.hypot(X2 - X1, Y2 - Y1) or 1
+            ux, uy = (X2 - X1) / lg, (Y2 - Y1) / lg
+            sp = st.get("spitze", 22)
+            X2s, Y2s = X2 - ux * sp * 0.8, Y2 - uy * sp * 0.8
+            teile.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="%s" '
+                         'stroke-linecap="round" %s/>'
+                         % (X1, Y1, X2s, Y2s, farbe, dicke,
+                            'stroke-dasharray="9 7"' if st.get("gestrichelt") else ""))
+            teile.append('<polygon points="%.1f,%.1f %.1f,%.1f %.1f,%.1f" fill="%s"/>'
+                         % (X2, Y2, X2 - ux * sp - uy * sp * 0.45, Y2 - uy * sp + ux * sp * 0.45,
+                            X2 - ux * sp + uy * sp * 0.45, Y2 - uy * sp - ux * sp * 0.45, farbe))
+        else:
+            teile.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="%s" '
+                         'stroke-linecap="round" %s/>'
+                         % (X1, Y1, X2, Y2, farbe, dicke,
+                            'stroke-dasharray="9 7"' if st.get("gestrichelt") else ""))
+        if st.get("beschriftung"):
+            if st.get("beschriftung_bei"):
+                tx, ty = px(st["beschriftung_bei"][0]), py(st["beschriftung_bei"][1])
+            else:
+                tx, ty = (X1 + X2) / 2 + 14, (Y1 + Y2) / 2 - 10
+            teile.append('<text x="%.1f" y="%.1f" font-size="%s" font-weight="600" fill="%s" '
+                         'text-anchor="%s" stroke="%s" stroke-width="8" paint-order="stroke">%s</text>'
+                         % (tx, ty, st.get("groesse", 27), farbe, st.get("anker", "start"), papier,
+                            entschaerfen(st["beschriftung"])))
+
+    # Freie Beschriftungen in Datenkoordinaten (Physik 06.10.2026)
+    for tx_ in el.get("texte", []):
+        farbe = fv[tx_.get("farbe", 5) - 1]
+        teile.append('<text x="%.1f" y="%.1f" font-size="%s" font-weight="%s" fill="%s" text-anchor="%s" '
+                     'stroke="%s" stroke-width="8" paint-order="stroke">%s</text>'
+                     % (px(tx_["bei"][0]), py(tx_["bei"][1]), tx_.get("groesse", 27),
+                        tx_.get("gewicht", 600), farbe, tx_.get("anker", "start"), papier,
+                        entschaerfen(tx_["text"])))
 
     # Punkte
     for pt in el.get("punkte", []):
@@ -1003,6 +1086,7 @@ const bewZahl = x => { const r = Math.round(x * 10) / 10; return (r < 0 ? '−' 
 // Eine bewegte Gerade y = m x + q: am Fenster abgeschnitten, dazu ihre Begleiter.
 function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
   const [m, q] = bewZustand(T.k, t - T.t0);
+  if (T.p.dataset.ab !== undefined) x0 = Math.max(x0, parseFloat(T.p.dataset.ab));
   const f = x => m * x + q, innen = (x, y) => x >= x0 - 1e-9 && x <= x1 + 1e-9 && y >= y0 - 1e-9 && y <= y1 + 1e-9;
   const pt = [];
   for (const x of [x0, x1]) { const y = f(x); if (y >= y0 - 1e-9 && y <= y1 + 1e-9) pt.push([x, y]); }
@@ -1380,9 +1464,11 @@ function bewegen(t) {
     if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
     if (T.art === 'k') { bewegeKurve(T, t, px, py, x0, x1, y0, y1); continue; }
     const [a, u, v] = bewZustand(T.k, t - L.t0);
+    const xa = T.p.dataset.ab !== undefined ? Math.max(x0, parseFloat(T.p.dataset.ab)) : x0;
+    const xb = T.p.dataset.bis !== undefined ? Math.min(x1, parseFloat(T.p.dataset.bis)) : x1;
     let d = '', zug = false;
     for (let i = 0; i <= 240; i++) {
-      const x = x0 + (x1 - x0) * i / 240, y = a * (x - u) * (x - u) + v;
+      const x = xa + (xb - xa) * i / 240, y = a * (x - u) * (x - u) + v;
       if (y >= y0 && y <= y1) { d += (zug ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); zug = true; }
       else zug = false;
     }
@@ -1909,7 +1995,8 @@ def bauen(quelle, eigenstaendig=False):
             f'style="left:130px;top:296px;width:470px">' + "".join(eintraege) + '</div>')
 
     # --- Szenen
-    for p in plan:
+    for pi, p in enumerate(plan):
+        naechste = plan[pi + 1] if pi + 1 < len(plan) else None
         sz, start, dauer = p["sz"], p["start"], p["dauer"]
         layout = sz.get("layout", "zentriert")
         ende = start + dauer
@@ -1941,11 +2028,19 @@ def bauen(quelle, eigenstaendig=False):
                 aus = ende
             anim = el.get("anim", "pop" if el.get("typ") in ("box", "aussage") else "rise")
 
+            # Die Textbreite begrenzen. Ohne das laeuft eine lange Zeile bis an
+            # den Buehnenrand und bricht dort unausgeglichen um — im
+            # Schienen-Layout bis 1920 statt bis 1820, in der Mitte ueber die
+            # volle Breite ohne Rand. `breite` war bisher totes Kapital.
             if mitte and "x" not in el:
                 klassen.append("mitte")
-                stil.insert(0, "left:0;right:0;text-align:center")
+                rand = (1920 - breite) // 2 if TEXTBREITE_BEGRENZEN else 0
+                stil.insert(0, "left:%dpx;right:%dpx;text-align:center" % (rand, rand))
             else:
                 stil.insert(0, "left:%dpx" % el.get("x", links))
+                if (TEXTBREITE_BEGRENZEN and "breite" not in el
+                        and el.get("typ") not in ("graf", "bild", "strich")):
+                    stil.append("width:%dpx" % breite)
             stil.insert(1, "top:%dpx" % el.get("y", y))
 
             hoehe = el.get("hoehe", int(el.get("groesse", 50) * 1.5) + 40)
@@ -1961,6 +2056,36 @@ def bauen(quelle, eigenstaendig=False):
             attr += f' data-anim="{anim}"'
             teile.append(f'<div class="{" ".join(klassen)}"{attr} '
                          f'style="{";".join(stil)}">{inhalt}</div>')
+
+            # --- Anschluss an den vorherigen Schritt ------------------------
+            # `mitnehmen: true` zeigt dieses Element in der naechsten
+            # Schritt-Szene noch einmal, oben im Band, das das Schienen-Layout
+            # dafuer frei laesst (168 bis 430 px). Das ist nicht dasselbe wie
+            # `halten`: Gehalten bleibt ein Element an seinem Platz stehen —
+            # was nur beim ersten Schritt oben passt. Mitgenommen wird es an
+            # den Kopf der naechsten Szene gesetzt, gleich wo es vorher stand.
+            #
+            # Wozu: Ohne das faellt beim Szenenwechsel die Formel weg, die der
+            # naechste Schritt gerade einsetzt. Auf der Merkschiene links steht
+            # dann zwar noch, *dass* es einen Schritt davor gab, aber nicht
+            # mehr, *was* er ergeben hat — und das Ansatz-Prinzip (erst die
+            # Formel, dann die Werte) ist im Bild nicht mehr zu sehen.
+            if el.get("mitnehmen"):
+                if naechste is None or naechste["sz"].get("layout") != "schiene":
+                    print("  [WARN] mitnehmen ohne folgende Schritt-Szene: %s"
+                          % sz.get("name"))
+                else:
+                    a_kl, a_stil, a_inhalt = element_html(el, theme)
+                    a_kl.append("anschluss")
+                    a_stil.insert(0, "left:680px;top:168px")
+                    if "breite" not in el and el.get("typ") not in ("graf", "bild", "strich"):
+                        a_stil.append("width:1140px")
+                    a_ein = naechste["start"] + 0.25
+                    a_aus = naechste["start"] + naechste["dauer"]
+                    teile.append(
+                        f'<div class="{" ".join(a_kl)}" data-at="{a_ein:.2f}" '
+                        f'data-out="{a_aus:.2f}" data-anim="fade" '
+                        f'style="{";".join(a_stil)}">{a_inhalt}</div>')
 
         # Die Bedingungsleiste sitzt bei top:96px und ist rund 54px hoch, sie
         # endet also bei y = 150. Wer sie benutzt, laesst die Szenen darunter
@@ -2204,11 +2329,13 @@ if (!location.search.includes('render')) {{
   window.addEventListener('resize', fit);
   document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
   fit();
-  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
-  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
-  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
-  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
-  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
   const ton = document.getElementById('ton'), ts = document.getElementById('ts');
   const tonBeschriften = () => {{
     if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
@@ -2246,6 +2373,8 @@ if (!location.search.includes('render')) {{
     if (ton) {{ if (playing) ton.play().catch(() => {{}}); else ton.pause(); }}
   }};
   pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
   document.addEventListener('keydown', e => {{
     const ziel = e.target && e.target.closest ? e.target : null;
     if (ziel && ziel.closest('input, select, textarea')) return;

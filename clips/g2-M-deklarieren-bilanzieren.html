@@ -89,10 +89,10 @@ body.render #ui{display:none}
 <div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Algebra · Textaufgaben</span></div>
 <div id="fuss"><span>Raphael Arnold Kohler</span><span>15.09.2026</span></div>
 <div class="l" data-at="11.45" data-out="73.96" data-anim="fade" style="left:130px;top:296px;width:470px"><div class="step l flow" data-at="11.75" data-anim="rise" data-dim="11.45,23.11"><div class="num">1</div><div class="stxt">Deklarieren<br><span class="dim">Bedeutung und Einheit</span></div></div><div class="step l flow" data-at="23.41" data-anim="rise" data-dim="23.11,34.35"><div class="num">2</div><div class="stxt">Bilanzieren<br><span class="dim">Menge und Wert</span></div></div><div class="step l flow" data-at="34.65" data-anim="rise" data-dim="34.35,47.71"><div class="num">3</div><div class="stxt">Lösen</div></div><div class="step l flow" data-at="48.01" data-anim="rise" data-dim="47.71,73.96"><div class="num">4</div><div class="stxt">Probe am Text</div></div></div>
-<div class="l hand mitte mitte" data-at="0.40" data-out="11.45" data-anim="rise" style="left:0;right:0;text-align:center;top:220px;font-size:96px;font-weight:600;color:var(--tinte)">Vom Text zum System</div>
-<div class="l sans mitte mitte" data-at="2.10" data-out="11.45" data-anim="rise" style="left:0;right:0;text-align:center;top:395px;font-size:48px;color:var(--blau)">150 Gipfeli und Weggli für zusammen 205 CHF</div>
-<div class="l sans mitte mitte" data-at="3.80" data-out="11.45" data-anim="rise" style="left:0;right:0;text-align:center;top:505px;font-size:48px;color:var(--blau)">Gipfeli 1.60 CHF, Weggli 1.10 CHF — wie viele von jeder Sorte?</div>
-<div class="l hand mitte" data-at="5.50" data-out="11.45" data-anim="rise" style="left:0;right:0;text-align:center;top:695px;font-size:56px;color:var(--rot)">Schwierig ist nicht das Rechnen, sondern der Ansatz.</div>
+<div class="l hand mitte mitte" data-at="0.40" data-out="11.45" data-anim="rise" style="left:0px;right:0px;text-align:center;top:220px;font-size:96px;font-weight:600;color:var(--tinte)">Vom Text zum System</div>
+<div class="l sans mitte mitte" data-at="2.10" data-out="11.45" data-anim="rise" style="left:0px;right:0px;text-align:center;top:395px;font-size:48px;color:var(--blau)">150 Gipfeli und Weggli für zusammen 205 CHF</div>
+<div class="l sans mitte mitte" data-at="3.80" data-out="11.45" data-anim="rise" style="left:0px;right:0px;text-align:center;top:505px;font-size:48px;color:var(--blau)">Gipfeli 1.60 CHF, Weggli 1.10 CHF — wie viele von jeder Sorte?</div>
+<div class="l hand mitte" data-at="5.50" data-out="11.45" data-anim="rise" style="left:0px;right:0px;text-align:center;top:695px;font-size:56px;color:var(--rot)">Schwierig ist nicht das Rechnen, sondern der Ansatz.</div>
 <div class="l m row" data-at="11.85" data-out="23.11" data-anim="rise" style="left:680px;top:215px;font-size:50px"><span>\(\fa{x}\colon \; \text{Anzahl verkaufte Gipfeli (Stück)}\)</span></div>
 <div class="l m row" data-at="13.55" data-out="23.11" data-anim="rise" style="left:680px;top:350px;font-size:50px"><span>\(\fb{y}\colon \; \text{Anzahl verkaufte Weggli (Stück)}\)</span></div>
 <div class="l hand" data-at="15.25" data-out="23.11" data-anim="rise" style="left:680px;top:525px;font-size:50px;color:var(--rot)">Nicht bloss «x = Gipfeli»: Bedeutung und Einheit gehören dazu.</div>
@@ -154,11 +154,13 @@ if (!location.search.includes('render')) {
   window.addEventListener('resize', fit);
   document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
   fit();
-  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
-  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
-  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
-  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
-  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
   const ton = document.getElementById('ton'), ts = document.getElementById('ts');
   const tonBeschriften = () => {
     if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
@@ -196,6 +198,8 @@ if (!location.search.includes('render')) {
     if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
   };
   pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
   document.addEventListener('keydown', e => {
     const ziel = e.target && e.target.closest ? e.target : null;
     if (ziel && ziel.closest('input, select, textarea')) return;

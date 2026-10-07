@@ -85,7 +85,7 @@ GRUNDLINIE = {
     'feedback.html': 0.977,
     'LICENSE': 0.955,
     'scripts/build-suchindex.py': 0.962,
-    'scripts/build-clips.py': 0.980,
+    'scripts/build-clips.py': 0.990,
     'scripts/build-clips-einbau.py': 0.830,
     'scripts/build-clip-ton.py': 1.000,
     'scripts/build-seo.py': 0.533,
@@ -125,38 +125,21 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Physik', was='build-clips.py: graf mit flaechen, strecken, texte und "achsen": false (06.10.2026)',
-         wie='Neu in graf_svg, alles statisch in Datenkoordinaten, ohne die Felder Byte fuer Byte wie vorher '
-             '(geprueft an vier Clips): "flaechen" (gefuelltes Vieleck unter allen Linien, "deckung", '
-             'Beschriftung mit Hof), "strecken" (Hilfs-, Mass- und Vektorlinien, "pfeil": true, '
-             '"gestrichelt", Beschriftung mit Hof), "texte" (freie Beschriftung) und "achsen": false '
-             '(nur die Zeichnung, ohne Karo/Achsen/Teilung) — als Pfeilbild oder als zweite Ebene, die '
-             'spaeter deckungsgleich ueber einem graf mit demselben Fenster erscheint. Anlass: Antworten '
-             'der Kontrollclips im Bild und Rechnungen, die sich im Diagramm entwickeln (Weg als Flaeche). '
-             'Fuer Mathe nuetzlich (Flaeche unter einer Kurve, Masslinien am Steigungsdreieck, Vektoren). '
-             'Doku: HOWTO-clips.md, Abschnitt «Flaechen, Strecken, Texte und Ebenen im graf». '
-             'build-clips.py und diese Datei aus Physik uebernehmen, danach KERN-Grundlinie pruefen. '
-             'Am selben Tag: Feld "kopf" je Frage ersetzt die Kopfzeile «Deine Vorhersage» (Physik: '
-             '«Dein Vorgehen» bei Strategiefragen nach der Einfuehrung); ohne das Feld unveraendert. '
-             'Und: pruef-fragen.mjs bricht bei einer Frage mitten im Clip ab (erwartet Frage 1 in den '
-             'ersten Sekunden) — in Mathe betrifft das g3-3-lp-verschieben, falls die erste Frage spaet kommt. '
-             'Ebenfalls 06.10.: bewegte Parabeln kennen "ab"/"bis" (data-ab/data-bis, BEWEGUNG_JS begrenzt '
-             'den Bogen); ohne die Felder Byte fuer Byte gleich.'),
-    dict(quelle='Mathe', was='build-clips.py zusammenfuehren statt kopieren (06.10.2026)',
-         wie='Mathe hat die Eintraege «bewegte Geraden …» und «Fragen per Tastatur …» abgearbeitet: '
-             '(1) Der Fehler T.L.t0 war in Mathe schon am 03.10.2026 behoben (6dc9244, liest T.t0); '
-             '"ab" an Geraden braucht Mathe nicht; pruef-formelsatz.mjs uebernommen (neun LPs ohne Befund). '
-             '(2) FRAGEN_JS-Block (Fokus, Leertaste, toleranz [dx, dy], "eingabe", "kopf") und der '
-             'Leertasten-Schutz im Abspieler aus Physik uebernommen; "eingabe" an 34 Klickfragen. '
-             'Die ganze Datei zu kopieren ginge nicht: Mathe hat seit dem 03.10. mehr eingebaut als Physik '
-             '(2359 gegen 1972 Zeilen: "figuren" mit deckkraft, bewegte Polynome/Potenz/Exponential/'
-             'Sinus/Tangens/Betrag, Einheitskreis, Kurven-Teile). Physik hat dafuer flaechen/strecken/texte, '
-             '"achsen": false, ab/bis an Parabeln, Textbreite aus `breite`, `mitnehmen`. Die Grundlinie '
-             '0.98 erreicht erst eine Zusammenfuehrung in beide Richtungen; bis dahin meldet der Pre-Flight '
-             'beidseits Drift (heute 82 %). Naechster Schritt in Physik: Mathes graf-Erweiterungen '
-             'uebernehmen, dann Physiks Fassung hierher.'),
+    dict(quelle='Mathe', was='build-clips.py: gemeinsamer Bauer, drei Einstellungen (07.10.2026)',
+         wie='Mathe hat Physiks zusammengefuehrte Fassung uebernommen (beide Physik-Eintraege vom 06. und '
+             '07.10.2026 abgearbeitet; pruef-fragen.mjs uebernommen; TODO-schwesterprojekt bereinigt). '
+             'Neu in Mathe, in Physik nachzutragen: (1) Konstante TEXTBREITE_BEGRENZEN am Dateianfang — '
+             'Physiks Textbreite (Rand 130 px bei zentrierten Zeilen, width aus `breite` bei links gesetzten) '
+             'nur, wenn True; Physik True, Mathe False (mit True brachen in Mathe 62 Textelemente in 56 Clips '
+             'neu um, im Browser an allen 514 Clips gemessen). (2) Steigungsdreieck (bew-gd) bei dx = 0 '
+             'ausgeblendet. (3) Einheitskreis beim Tangens: Strahl beginnt bei P, wenn cos < 0 (vorher hing P '
+             'im 2./3. Quadranten neben der Linie). (4) Kommentare zu clipRahmen nennen «physiklib.js bzw. '
+             'mathlib.js». Danach unterscheiden sich die Dateien nur noch in den Werten von KARO_OHNE_ACHSEN '
+             'und TEXTBREITE_BEGRENZEN, im Seitennamen und im Feld "werkzeug" des Index. Vorlage: '
+             'scripts/build-clips.py in Mathe, Eintrag in TODO-schwesterprojekt.md vom 07.10.2026.'),
 ]
 FACH = {
+    'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',
     'nav.js': 'Seitenbaum und Lerngebiete — je Fach ein anderer.',
     'style.css': 'Leitfarbe Bernstein gegen Blau, eigene Bausteine je Fach.',
     'index.html': 'Startseite je Fach.',

@@ -322,11 +322,13 @@ if (!location.search.includes('render')) {
   window.addEventListener('resize', fit);
   document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
   fit();
-  // Der Ton versucht zuerst, hoerbar zu starten. Der Clip wird durch einen
-  // Klick geoeffnet, darum laesst der Browser das meist zu. Wehrt er sich —
-  // Autoplay-Sperre, kein Nutzerkontakt —, faellt es lautlos auf stumm
-  // zurueck, und der Knopf macht daraus die noetige Geste. Nie stumm
-  // *und* ohne Knopf: sonst waere der Ton unerreichbar.
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
   const ton = document.getElementById('ton'), ts = document.getElementById('ts');
   const tonBeschriften = () => {
     if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
@@ -364,6 +366,8 @@ if (!location.search.includes('render')) {
     if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
   };
   pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
   document.addEventListener('keydown', e => {
     const ziel = e.target && e.target.closest ? e.target : null;
     if (ziel && ziel.closest('input, select, textarea')) return;

@@ -564,6 +564,28 @@ ist seit dem 30.09.2026 gelöscht, weil alle Fragen geklärt sind, und wird bei 
 nächsten offenen Gerätefrage neu angelegt. Wer eine Frage klärt, trägt die Antwort
 in die Liste oben ein.
 
+### Flächen, Strecken, Texte im `graf`; Parabeln von–bis (aus Physik, 07.10.2026)
+
+Seit Mathe den gemeinsamen Bauer benutzt (siehe «Ein Bauer für beide Fächer» unten), stehen Physiks
+Felder auch hier zur Verfügung. Alle statisch, in Datenkoordinaten; ohne die Felder ändert sich nichts.
+
+```json
+{"typ": "graf", "xbereich": [-1, 6], "ybereich": [-1, 10],
+ "flaechen": [{"punkte": [[0, 0], [3, 9], [3, 0]], "farbe": 1, "deckung": 0.28, "beschriftung": "A"}],
+ "strecken": [{"von": [3, 0], "bis": [3, 9], "farbe": 3, "gestrichelt": true,
+               "beschriftung": "Δy = 9", "beschriftung_bei": [3.2, 4.5]},
+              {"von": [0, 0], "bis": [2, 4], "farbe": 4, "pfeil": true}],
+ "texte": [{"bei": [0.4, 9], "text": "f(x) = x²", "farbe": 5, "groesse": 28, "anker": "start"}]}
+```
+
+- `flaechen` liegen unter allen Linien; `deckung` ist die Füllstärke (Standard 0.22).
+- `strecken`: Hilfs-, Mass- und Vektorlinien; `"pfeil": true` setzt die Spitze ans Ende. Beschriftung
+  mit hellem Hof, Lage per `beschriftung_bei`, `anker`, `groesse`. `texte`: freie Beschriftungen.
+- SVG-Text kennt kein LaTeX: «Δy = 9», «x²», «x₀» gehen, `\frac` nicht.
+- Bewegte Parabeln kennen `"ab"`/`"bis"` (nur zwischen diesen x zeichnen), bewegte Geraden `"ab"`.
+- `"achsen": false` lässt in Mathe das Karo stehen (Planimetrie); als Deckblatt darum zusätzlich
+  `"raster": false` (siehe «Später einblenden»).
+
 ### Figuren im Graf — `"figuren"` und `"achsen": false`
 
 Seit 06.10.2026 (Leitprogramm Planimetrie). Ein `graf` zeichnet unter Geraden und Punkten
@@ -971,6 +993,22 @@ Seit dem 01.09.2026 tut sie zwei Dinge mehr, die vorher nur die Kopie im Leitpro
 konnte: Sie **sperrt das Scrollen**, solange sie offen ist (sonst wandert die Seite
 darunter weg, und beim Schliessen ist man woanders), und sie **gibt den Fokus zurück**
 an den Knopf, der sie geöffnet hat (sonst landet er am Seitenanfang).
+
+## Ein Bauer für beide Fächer (seit 07.10.2026)
+
+`scripts/build-clips.py` ist in Mathe und Physik **derselbe Code** (Abgleich: KERN, Grundlinie 0.99).
+Verschieden sind nur drei Einstellungen am Dateianfang und der Seitenname:
+
+| Einstellung | Mathe | Physik | Wirkung |
+|---|---|---|---|
+| `KARO_OHNE_ACHSEN` | `True` | `False` | Karo bei `"achsen": false` (Planimetrie steht im Karo) |
+| `TEXTBREITE_BEGRENZEN` | `False` | `True` | Rand 130 px bei zentrierten Zeilen, Spaltenbreite bei links gesetztem Text |
+
+`TEXTBREITE_BEGRENZEN = True` hätte in Mathe 62 Textelemente in 56 Clips neu umbrechen lassen
+(im Browser an allen 514 Clips gemessen, alter gegen neuen Bau). Das Feld `"werkzeug"` im Index
+(Rechner-Clips) braucht nur Mathe. **Eine Korrektur am Bauer gehört in beide Repos**: hier
+einbauen, in `TODO-schwesterprojekt.md` und in der Warteschlange `OFFEN` von `scripts/abgleich.py`
+vermerken. Wer eine neue Geschmacksfrage findet, macht daraus eine weitere Einstellung, keine Abzweigung.
 
 ## Bibliotheksseite `clips.html`
 
