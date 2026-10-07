@@ -59,9 +59,10 @@ Behelf: rote Strecke x = 3), Punkt, der beim Stauchen mitwandert («Faktor im Ar
 (4 + `s3-2-lp-hyperbel` a 1 → −1, `g3-3-lp-drei-formen` a 1 → −1, `g3-3-lp-a-finden` Fall B,
 `s3-6-lp-abschnittsweise` b 3 → 5). Formeln, die noch ab Szenenbeginn stehen: `g3-3-lp-mitte` «A(4) = …»,
 `s3-2-lp-umkehren` «y = x², x ≥ 0 → y = √x».
-Zusätzlich fürs Werkzeug: Tangensstrecke am Fensterrand abschneiden statt ausblenden (darum fährt P nur bis
-1.245 rad); senkrechte bewegte Gerade (`g3-2-lp-typen` Merke); mitlaufende Schnittpunkte auch bei
-«Faktor im Argument» (Trig-Gleichungen).
+Kleine Werkzeugwünsche der Bearbeiter (07.10.2026, nicht umgesetzt): Lage der Läufer-Beschriftung wählbar;
+Läufer über festen Punkten zeichnen (heute darunter); Läufer-Beschriftung am rechten Rand abgeschnitten;
+Formelkurve `betrag_von`; Drehung als eigene Bewegung (heute dichte Stützpunkte); in GF 2.2 verschiebt
+`zeiten_anpassen` die `ein`/`aus` der Teile nicht um `ZEITVERSATZ`.
 
 **Bei der Umsetzung neu aufgefallen:**
 - ~~`g2-2-lp-verfahren` «Erst ordnen», `g2-2-lp-nullprodukt` «Der teure Fehler»: Notiz zu spät~~ — falsch
@@ -71,8 +72,8 @@ Zusätzlich fürs Werkzeug: Tangensstrecke am Fensterrand abschneiden statt ausb
 - `s3-5-lp-periode-symmetrie`: die Sinuskurve schneidet «(π/6 | 0.5)» und «(−π/6 | −0.5)».
 - `s3-6-lp-gleichungen` «Am Graphen», «Merke»: «(1 | 0)» stösst an die Achszahl 2.
 - `s3-2-lp-hyperbel` «Gerade Ordnung»: Asymptoten in Tinte, kaum sichtbar (sonst jetzt rot).
-- `g3-2-lp-steigungsdreieck` «Leserichtung»: bei Δx < 0 steht «Δy» rechts der Kathete, im Endbild auf der y-Achse (Werkzeug).
-- Live-Beschriftungen runden auf eine Stelle (−0.75 → «−0.8», −1.25 → «−1.2»); darum an einigen Stellen feste Texte statt Begleiter (Werkzeug).
+- ~~`g3-2-lp-steigungsdreieck` «Leserichtung»: bei Δx < 0 steht «Δy» rechts der Kathete, im Endbild auf der y-Achse (Werkzeug).~~ Behoben 07.10.2026.
+- ~~Live-Beschriftungen runden auf eine Stelle (−0.75 → «−0.8», −1.25 → «−1.2»); darum an einigen Stellen feste Texte statt Begleiter (Werkzeug).~~ Behoben 07.10.2026 (zwei Stellen, wenn exakt).
 
 ## Auf einen Blick
 
@@ -101,17 +102,17 @@ Befund: `s3-6-lp-verschieben`; fast ohne: `s3-5-lp-parameter`, `g3-3-lp-verschie
 - `g3-2-lp-steigungsdreieck`, «Leserichtung»: 5 s leeres Dreieck mit «Δx = 0» während «Δx > 0» gesagt
   wird. *Kleine Werkzeug-Korrektur.*
 
-**Werkzeug-Erweiterungen, gebündelt** (je eine Änderung in `build-clips.py` deckt mehrere Befunde)
+**Werkzeug-Erweiterungen, gebündelt** (je eine Änderung in `build-clips.py` deckt mehrere Befunde; ✓ = umgesetzt 07.10.2026)
 | Erweiterung | deckt ab |
 |---|---|
-| `ein` je fester Punkt im `graf` | Exp/Log (Wachstum ×3, Basis), Kreis-Kurve, Nullprodukt, Linearfaktoren u. a. |
-| Läufer für `kurven` (wie bei Parabel/Gerade) | Hyperbel, Raten, Extrema, Wachstum, Sättigung, Logarithmus, Betragsfunktion |
-| Δ-Beschriftung des Steigungsdreiecks bei dx = 0 ausblenden | steigungsdreieck ×2, aufstellen, typen |
-| bewegbare `figuren` (Ecke ziehen, Strecken, Drehen) | alle fünf Planimetrie-Clips (C ziehen, Spitze t, Trapez d, Winkel φ, Faktor k) |
-| `von`/`bis` in der `bewegung` | Umkehren (Einschränken), Extrema (Rand), aufstellen (Gerade ab x = 0) |
-| Parabel-Bewegung in Normalform [t, a, b, c] | «Zuerst a prüfen» (Leitkoeffizient durch 0) |
-| Begleiter «Symmetrieachse» an bewegter Parabel | achse-bleibt (b-Regler) |
-| mitlaufende Schnittpunkte Kurve–Waagrechte | Trig-Gleichungen, Betragsgleichungen |
+| ✓ `ein` je fester Punkt im `graf` | Exp/Log (Wachstum ×3, Basis), Kreis-Kurve, Nullprodukt, Linearfaktoren u. a. |
+| ✓ Läufer für `kurven` (wie bei Parabel/Gerade) | Hyperbel, Raten, Extrema, Wachstum, Sättigung, Logarithmus, Betragsfunktion |
+| ✓ Δ-Beschriftung des Steigungsdreiecks bei dx = 0 ausblenden | steigungsdreieck ×2, aufstellen, typen |
+| ✓ bewegbare `figuren` (Ecke ziehen, Strecken, Drehen) | alle fünf Planimetrie-Clips (C ziehen, Spitze t, Trapez d, Winkel φ, Faktor k) |
+| ✓ `von`/`bis` in der `bewegung` | Umkehren (Einschränken), Extrema (Rand), aufstellen (Gerade ab x = 0) |
+| ✓ Parabel-Bewegung in Normalform [t, a, b, c] | «Zuerst a prüfen» (Leitkoeffizient durch 0) |
+| ✓ Begleiter «Symmetrieachse» an bewegter Parabel | achse-bleibt (b-Regler) |
+| ✓ mitlaufende Schnittpunkte Kurve–Waagrechte | Trig-Gleichungen, Betragsgleichungen |
 | bewegtes Fenster (Zoom) | Globalverlauf |
 
 **Empfohlene Reihenfolge:** (1) die Vorrang-Befunde; (2) alle *nur Bild*-Befunde je Leitprogramm in einem
