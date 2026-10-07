@@ -182,19 +182,9 @@ WW = dict(xbereich=[-4, 6], ybereich=[-1, 9], xteilung=yt(-2, 2, 4), yteilung=yt
 LAUF = [[0, -3], [4.1, -3], [6.4, 0], [6.6, 0], [8.2, 3]]   # Läufer in «Der Knick» (Wortzeiten faster-whisper)
 
 
-def _lauf_x(t):
-    """x des Läufers zur Zeit t, wie der Abspieler blendet (smoothstep zwischen den Stützpunkten)."""
-    for (ta, xa), (tb, xb) in zip(LAUF, LAUF[1:]):
-        if ta <= t <= tb:
-            z = (t - ta) / (tb - ta)
-            return xa + (xb - xa) * z * z * (3 - 2 * z)
-    return LAUF[-1][1]
-
-
-# Die Strecken unter dem Läufer: Stützpunkte alle 0.05 s (ein Bild je Stützpunkt). Der Bauer blendet
-# zwischen zwei Stützpunkten einer Figur heute nicht weich, sondern springt in der Mitte
-# (mischen() bekommt die ganzen Felder-Dicts) — so dicht gesetzt, fällt das nicht auf.
-LAUF_DICHT = [[round(4.1 + 0.05 * i, 2), round(_lauf_x(4.1 + 0.05 * i), 4)] for i in range(83)]   # 4.1 … 8.2
+# Die Strecken unter dem Läufer fahren mit denselben Stützpunkten (ab 4.1); |x| ist in jedem
+# Abschnitt linear, x wechselt das Vorzeichen nur an einem Stützpunkt.
+LAUF_AB = LAUF[1:]
 clip('betragsfunktion', 'Knick sehen: die Betragsfunktion',
      'Der Betrag als Abstand zur Null: abschnittsweise definiert, zwei gerade Äste, ein Knick in (0 | 0).',
      ['Betragsfunktion', 'Betrag', 'Abstand', 'abschnittsweise'], [
@@ -235,9 +225,9 @@ clip('betragsfunktion', 'Knick sehen: die Betragsfunktion',
                       dict(vk([[0, 1, 0, 0]]), ein=3.8, aus=8.3,
                            laeufer={'bahn': LAUF, 'text': '({x} | {y})', 'farbe': 3})], ein=0.3,
                  figuren=[dict(strecke((0, 0), (-3, 0), farbe=1, dicke=8), ein=3.8, aus=8.3,
-                               bewegung=[[t, {'bis': [x, 0]}] for t, x in LAUF_DICHT]),
+                               bewegung=[[t, {'bis': [x, 0]}] for t, x in LAUF_AB]),
                           dict(strecke((-3, 0), (-3, 3), farbe=1, dicke=3, gestrichelt=True), ein=3.8, aus=8.3,
-                               bewegung=[[t, {'von': [x, 0], 'bis': [x, abs(x)]}] for t, x in LAUF_DICHT])],
+                               bewegung=[[t, {'von': [x, 0], 'bis': [x, abs(x)]}] for t, x in LAUF_AB])],
                  punkte=[dict(pt(-3, 3, 1, '(−3 | 3)', [-3.3, 2.0], 'end'), ein=8.4),
                          dict(pt(3, 3, 1, '(3 | 3)', [3.3, 2.0]), ein=8.4)])),
          sz('Merke',
@@ -437,28 +427,7 @@ clip('kontrolle-verschieben', 'Knick sehen: Kontrollfragen zum Verschieben',
 KNICK_ST = [[0, -4], [7.3, -4], [8.5, -1], [8.9, -1], [9.9, -4]]   # q in |x² + q| während «Knicke»
 
 
-def _knick_q(t):
-    """q zur Zeit t, genau wie der Abspieler zwischen den Stützpunkten blendet (smoothstep)."""
-    for (ta, qa), (tb, qb) in zip(KNICK_ST, KNICK_ST[1:]):
-        if ta <= t <= tb:
-            z = (t - ta) / (tb - ta)
-            return qa + (qb - qa) * z * z * (3 - 2 * z)
-    return KNICK_ST[-1][1]
 
-
-def KNICK_Q(a):
-    """Stücke von |x² + q|: a = 1 aussen (x² + q), a = −1 innen (−x² − q); Stützpunkte [t, a, 2, 0, v]."""
-    return [[t, a, 2, 0, a * q] for t, q in KNICK_ST]
-
-
-def KNICK_GRENZEN(teil):
-    """Grenzen ±√(−q) alle 0.05 s, damit die Stücke beim Blenden am Knick aneinanderstossen."""
-    ts = [0] + [round(7.3 + 0.05 * i, 2) for i in range(int(round((9.9 - 7.3) / 0.05)) + 1)]
-    aus = []
-    for t in ts:
-        r = (-_knick_q(t)) ** 0.5
-        aus.append([t, -4.5, -r] if teil == 'links' else [t, -r, r] if teil == 'mitte' else [t, r, 4.5])
-    return aus
 
 clip('umklappen', 'Knick sehen: das Umklapp-Prinzip',
      'Vom Graphen von f zum Graphen von |f|: Was unter der x-Achse liegt, klappt nach oben — an den Nullstellen entstehen Knicke.',
@@ -485,11 +454,9 @@ clip('umklappen', 'Knick sehen: das Umklapp-Prinzip',
             'Der Graph von Betrag f liegt nie unter der x-Achse.',
             f(r'\text{Knicke, wo } f \text{ das Vorzeichen wechselt}', 300, 46),
             # Brücke zu sim3 (Regler q): Bei «liegt nie unter der x-Achse» (7.2–9.9) wird aus |x² − 4|
-            # kurz |x² − 1| und zurück — die Knicke rücken zusammen, nichts liegt unten. Drei Stücke:
-            # aussen x² + q, innen −(x² + q), Grenzen bei ±√(−q) dicht nachgeführt (KNICK_GRENZEN).
-            graf(WU, [dict(bewegung=KNICK_Q(1), farbe=1, grenzen=KNICK_GRENZEN('links')),
-                      dict(bewegung=KNICK_Q(-1), farbe=1, grenzen=KNICK_GRENZEN('mitte')),
-                      dict(bewegung=KNICK_Q(1), farbe=1, grenzen=KNICK_GRENZEN('rechts'))], ein=0.3,
+            # kurz |x² − 1| und zurück — die Knicke rücken zusammen, nichts liegt unten. Eine Kurve
+            # "betrag_von" mit dem Parameter q (Bauer seit 07.10.2026).
+            graf(WU, [dict(betrag_von='x**2+q', parameter=[[t, {'q': q}] for t, q in KNICK_ST], farbe=1)], ein=0.3,
                  punkte=[dict(pt(-2, 0, 1, '(−2 | 0)', [-2.2, -0.8], 'end'), aus=7.2), dict(pt(2, 0, 1, '(2 | 0)', [2.2, -0.8]), aus=7.2),
                          dict(pt(-2, 0, 1, '(−2 | 0)', [-2.2, -0.8], 'end'), ein=9.9), dict(pt(2, 0, 1, '(2 | 0)', [2.2, -0.8]), ein=9.9)])),
          sz('Nicht alles spiegeln',

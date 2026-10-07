@@ -174,12 +174,25 @@ def zeiten_anpassen(name, szenen):
         if not kn:
             continue
         for el in q['elemente']:
-            if 'ein' in el:
-                el['ein'] = _versatz(kn, el['ein'])
-            for art in ('parabeln', 'geraden', 'kurven'):
+            for z in ('ein', 'aus'):
+                if z in el:
+                    el[z] = _versatz(kn, el[z])
+            # auch die Teile im graf: eigene ein/aus, Bewegungen, Bahnen der Läufer
+            for art in ('parabeln', 'geraden', 'kurven', 'punkte', 'figuren', 'strecken', 'flaechen', 'texte'):
                 for k in el.get(art) or []:
+                    for z in ('ein', 'aus'):
+                        if z in k:
+                            k[z] = _versatz(kn, k[z])
                     if 'bewegung' in k:
                         k['bewegung'] = [[_versatz(kn, b[0])] + b[1:] for b in k['bewegung']]
+                    for beg in ('laeufer', 'dreieck'):
+                        b_ = k.get(beg)
+                        if isinstance(b_, dict):
+                            for z in ('ein', 'aus'):
+                                if z in b_:
+                                    b_[z] = _versatz(kn, b_[z])
+                            if 'bahn' in b_:
+                                b_['bahn'] = [[_versatz(kn, b[0])] + b[1:] for b in b_['bahn']]
 
 
 def clip(name, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip'):

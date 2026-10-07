@@ -665,8 +665,21 @@ am `dreieck` einer bewegten Geraden — keine zweite, deckungsgleiche Kurve mehr
 mit `bewegung` wird Feld für Feld übergeblendet (bis zur Korrektur sprang die Figur in der Mitte
 zwischen zwei Stützpunkten); `farbe` wird umgeschaltet, nicht gemischt. Gleiche Nachbarbilder
 (Pausen mit `{}`) fasst der Bauer zu einem zusammen. Beim Steigungsdreieck mit Δx < 0 steht «Δy»
-links der Kathete. Eine Drehung ist keine eigene Bewegung: Stützpunkte dicht setzen (alle 0.05 s),
-sonst schrumpft die Figur unterwegs.
+links der Kathete.
+
+**Zweite Runde (07.10.2026), die kleinen Wünsche der Bearbeiter:**
+
+| Feld | wo | was |
+|---|---|---|
+| `"drehung": w`, `"um": [x, y]` | Figur, auch als Feld in ihrer `bewegung` | dreht die Figur um `um` (Grad, gegen den Uhrzeigersinn). In der `bewegung` wird der Winkel übergeblendet: `[[1.9, {"drehung": 0}], [3.3, {"drehung": 180}]]` — die Figur bleibt gleich gross, keine dichten Stützpunkte mehr. Texte drehen ihre Lage mit, nicht die Schrift. |
+| `"parameter": [[t, {"q": -4}], …]` | feste Formelkurve | Buchstaben in der `formel`, die sich während der Szene ändern; der Abspieler zeichnet die Kurve selbst. Der erste Stützpunkt nennt alle Buchstaben. Erlaubt ist, was `kurven`-Formeln können (`abs`, `sqrt`, `sin`, `pi`, `**` …). |
+| `"punkte": [{"x": "pi/(6*b)", "text": "({x} \| {y})"}]` | Formelkurve mit `parameter` | Punkte, die auf der Kurve mitfahren; ihr `x` ist eine Zahl oder eine Formel in den Parametern (der Punkt, der beim Stauchen wandert). |
+| `"betrag_von": "x**2+q"` | Formelkurve | kurz für `"formel": "abs(x**2+q)"` — die umgeklappte Kurve in einem Stück, mit `parameter` auch bewegt (statt dreier Stücke mit dicht nachgeführten Grenzen). |
+| `"lage": "oben"` | `laeufer` (jeder Art), Punkt einer Formelkurve | wo die Beschriftung steht: `oben`, `unten`, `links`, `rechts` oder zwei davon (`"oben links"`). Ohne Angabe wie bisher. |
+
+Ausserdem ohne neues Feld: Läufer liegen jetzt **über** festen Punkten (sie werden zuletzt gezeichnet
+und nehmen das `ein`/`aus` ihrer Kurve mit), und keine Beschriftung eines mitfahrenden Punkts ragt
+mehr über den Bildrand — sie klappt auf die andere Seite des Punkts oder wird hereingeschoben.
 
 **Noch nicht:** ein bewegtes Fenster (Zoom) und eine senkrechte bewegte Gerade. Behelf für den Zoom:
 mehrere `graf` nacheinander mit wachsendem Fenster.

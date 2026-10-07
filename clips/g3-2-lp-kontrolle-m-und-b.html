@@ -174,7 +174,71 @@ const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
     .concat([...L.querySelectorAll('[data-fkl]')].map(p => ({
       art: 'f', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fkl), f: p.dataset.fenster.split(',').map(Number),
       tab: JSON.parse(p.dataset.tab), ab: parseFloat(p.dataset.ab), bis: parseFloat(p.dataset.bis) })))
+    .concat([...L.querySelectorAll('[data-fp]')].map(p => {
+      const namen = p.dataset.namen.split(',');
+      return { art: 'fp', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fp), f: p.dataset.fenster.split(',').map(Number),
+        fn: new Function('x', ...namen, 'return ' + p.dataset.js), namen };
+    }))
 }));
+// Formelkurve mit Parametern ("parameter", seit 07.10.2026): die Formel kommt als JavaScript aus
+// dem Bauer (formel_js), die Buchstaben aus der Zeit. Luecken (NaN, Pole) brechen den Zug ab.
+function bewegeFormel(T, t, px, py, x0, x1, y0, y1) {
+  const P = bewZustand(T.k, t - T.t0);
+  const f = x => { const y = T.fn(x, ...P); return isFinite(y) ? y : null; };
+  const a0 = Math.max(x0, parseFloat(T.p.dataset.von)), a1 = Math.min(x1, parseFloat(T.p.dataset.bis));
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y === null || y < y0 || y > y1) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    const fx = g._fx || (g._fx = new Function(...T.namen, 'return ' + g.dataset.xjs));
+    const x = fx(...P), y = f(x);
+    const ok = y !== null && x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    g.style.display = ok ? '' : 'none';
+    if (!ok) continue;
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); });
+    const tx = g.querySelector(':scope > text'); if (!tx) continue;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18)); tx.setAttribute('y', py(y) < 60 ? py(y) + 44 : py(y) - 22);
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+  }
+}
+// Zuletzt die Beschriftungen der mitfahrenden Punkte (seit 07.10.2026): "lage" setzt sie fest
+// (oben, unten, links, rechts, auch zwei davon), und keine ragt ueber den Rand des Bildes.
+function beschriftungenRichten() {
+  for (const L of document.querySelectorAll('[data-t0]'))
+    for (const g of L.querySelectorAll('[data-zu], .fk-l')) {
+      if (g.style.display === 'none') continue;
+      const tx = g.querySelector(':scope > text'), c = g.querySelector('.bew-pt circle');
+      if (!tx || !c || !tx.textContent) continue;
+      const X = parseFloat(c.getAttribute('cx')), Y = parseFloat(c.getAttribute('cy'));
+      if (g.dataset.lage) {
+        const w = g.dataset.lage.split(/\s+/), li = w.includes('links'), re = w.includes('rechts');
+        const ob = w.includes('oben'), un = w.includes('unten');
+        tx.setAttribute('x', X + (li ? -18 : re ? 18 : 0));
+        tx.setAttribute('y', ob ? Y - 22 : un ? Y + 44 : Y + 10);
+        tx.setAttribute('text-anchor', li ? 'end' : re ? 'start' : 'middle');
+      }
+      let w;
+      try { w = tx.getComputedTextLength(); } catch (e) { continue; }
+      const svg = tx.ownerSVGElement; if (!w || !svg) continue;
+      const B = svg.viewBox.baseVal && svg.viewBox.baseVal.width || svg.width.baseVal.value;
+      const x = parseFloat(tx.getAttribute('x')), an = tx.getAttribute('text-anchor') || 'start';
+      const l = an === 'start' ? x : an === 'end' ? x - w : x - w / 2;
+      // Seitlich stehende Beschriftung auf die andere Seite des Punkts klappen, mittige schieben
+      if (l + w > B - 4) {
+        if (an === 'start' && X - 18 - w >= 4) { tx.setAttribute('x', X - 18); tx.setAttribute('text-anchor', 'end'); }
+        else tx.setAttribute('x', x - (l + w - (B - 4)));
+      } else if (l < 4) {
+        if (an === 'end' && X + 18 + w <= B - 4) { tx.setAttribute('x', X + 18); tx.setAttribute('text-anchor', 'start'); }
+        else tx.setAttribute('x', x + (4 - l));
+      }
+    }
+}
 // Laeufer auf einer festen Formelkurve: x aus der Bahn, y linear aus der Wertetabelle.
 function laufeFest(T, t, px, py, x0, x1, y0, y1) {
   const x = bewZustand(T.k, t - T.t0)[0], n = T.tab.length - 1;
@@ -643,6 +707,7 @@ function bewegen(t) {
     if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
     if (T.art === 'k') { bewegeKurve(T, t, px, py, x0, x1, y0, y1); continue; }
     if (T.art === 'f') { laufeFest(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'fp') { bewegeFormel(T, t, px, py, x0, x1, y0, y1); continue; }
     // Scheitelform [a, u, v] oder Normalform [a, b, c] (data-normal); f ist die Kurve,
     // u und v der Scheitel (bei a = 0 keiner: NaN).
     const Z = bewZustand(T.k, t - L.t0), normal = T.p.dataset.normal === '1';
@@ -714,7 +779,7 @@ function bewegen(t) {
   }
 }
 const seekOhneBewegung = seek;
-seek = function (t) { seekOhneBewegung(t); bewegen(t); };
+seek = function (t) { seekOhneBewegung(t); bewegen(t); beschriftungenRichten(); };
 const FRAGEN = [{"typ": "klick", "text": "y = 0.5x − 2: Tipp den Schnittpunkt mit der y-Achse ins Bild.", "ziel": [0, -2], "toleranz": 0.6, "richtig_text": "Getroffen: (0 | −2).", "fallen": [{"bei": [0, 2], "text": "Die Höhe stimmt, das Vorzeichen nicht. Welches Zeichen steht vor der 2?"}, {"bei": [4, 0], "text": "Das ist der Schnittpunkt mit der x-Achse. Gefragt ist die y-Achse."}, {"bei": [0, 0.5], "text": "Das ist die Steigung. Was bleibt übrig, wenn du x = 0 einsetzt?"}], "falsch_text": "Nicht ganz. Der grüne Kreis zeigt die Stelle — setz x = 0 ein, dann bleibt nur b.", "eingabe": ["x", "y"], "t": 0.3, "ton": {"frage": "ton/g3-2-lp-kontrolle-m-und-b-f0-frage.mp3", "fall0": "ton/g3-2-lp-kontrolle-m-und-b-f0-fall0.mp3", "fall1": "ton/g3-2-lp-kontrolle-m-und-b-f0-fall1.mp3", "fall2": "ton/g3-2-lp-kontrolle-m-und-b-f0-fall2.mp3", "falsch": "ton/g3-2-lp-kontrolle-m-und-b-f0-falsch.mp3"}}, {"typ": "wahl", "text": "y = 3x + 1 und y = 3x − 4: Wie liegen die beiden Geraden zueinander?", "optionen": ["senkrecht", "sie schneiden sich bei x = 1", "parallel, die zweite 5 tiefer"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Senkrecht wäre etwas mit den Steigungen. Vergleich sie: beide 3.", "1": "Schau nur auf die Steigungen — und überleg, ob sich zwei Geraden mit gleicher Richtung treffen können."}, "t": 6.75, "ton": {"frage": "ton/g3-2-lp-kontrolle-m-und-b-f1-frage.mp3", "r0": "ton/g3-2-lp-kontrolle-m-und-b-f1-r0.mp3", "r1": "ton/g3-2-lp-kontrolle-m-und-b-f1-r1.mp3"}}, {"typ": "wahl", "text": "Welche Gleichung gehört zur Geraden im Bild?", "optionen": ["y = −3x + 1", "y = −x + 3", "y = x + 3"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Die zweite Zahl stimmt. Aber steigt die Gerade im Bild, oder fällt sie?", "0": "Vergleich beide Zahlen mit dem Bild: Wo schneidet die Gerade die y-Achse?"}, "t": 15.91, "ton": {"frage": "ton/g3-2-lp-kontrolle-m-und-b-f2-frage.mp3", "r0": "ton/g3-2-lp-kontrolle-m-und-b-f2-r0.mp3", "r2": "ton/g3-2-lp-kontrolle-m-und-b-f2-r2.mp3"}}, {"typ": "wahl", "text": "f(x) = −2x + 5: Welcher Punkt liegt auf dem Graphen?", "optionen": ["(1 | 3)", "(1 | 7)", "(3 | 1)"], "richtig": 0, "rueck": {"0": "Ja.", "1": "Rechne f(1) nochmals — welches Vorzeichen hat −2 · 1?", "2": "Setz die erste Zahl für x ein und vergleich das Ergebnis mit der zweiten."}, "t": 26.99, "ton": {"frage": "ton/g3-2-lp-kontrolle-m-und-b-f3-frage.mp3", "r1": "ton/g3-2-lp-kontrolle-m-und-b-f3-r1.mp3", "r2": "ton/g3-2-lp-kontrolle-m-und-b-f3-r2.mp3"}}, {"typ": "wahl", "text": "Eine Gerade geht durch (0 | −1) und fällt pro Schritt nach rechts um 2. Welche Gleichung?", "optionen": ["y = −2x + 1", "y = −2x − 1", "y = 2x − 1"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Die Gerade fällt. Welches Vorzeichen hat m dann?", "0": "Die Steigung stimmt. Vergleich jetzt die zweite Zahl mit dem gegebenen Punkt auf der y-Achse."}, "t": 37.73, "ton": {"frage": "ton/g3-2-lp-kontrolle-m-und-b-f4-frage.mp3", "r0": "ton/g3-2-lp-kontrolle-m-und-b-f4-r0.mp3", "r2": "ton/g3-2-lp-kontrolle-m-und-b-f4-r2.mp3"}}];
 (() => {
   if (location.search.includes('render')) return;

@@ -165,7 +165,71 @@ const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
     .concat([...L.querySelectorAll('[data-fkl]')].map(p => ({
       art: 'f', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fkl), f: p.dataset.fenster.split(',').map(Number),
       tab: JSON.parse(p.dataset.tab), ab: parseFloat(p.dataset.ab), bis: parseFloat(p.dataset.bis) })))
+    .concat([...L.querySelectorAll('[data-fp]')].map(p => {
+      const namen = p.dataset.namen.split(',');
+      return { art: 'fp', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fp), f: p.dataset.fenster.split(',').map(Number),
+        fn: new Function('x', ...namen, 'return ' + p.dataset.js), namen };
+    }))
 }));
+// Formelkurve mit Parametern ("parameter", seit 07.10.2026): die Formel kommt als JavaScript aus
+// dem Bauer (formel_js), die Buchstaben aus der Zeit. Luecken (NaN, Pole) brechen den Zug ab.
+function bewegeFormel(T, t, px, py, x0, x1, y0, y1) {
+  const P = bewZustand(T.k, t - T.t0);
+  const f = x => { const y = T.fn(x, ...P); return isFinite(y) ? y : null; };
+  const a0 = Math.max(x0, parseFloat(T.p.dataset.von)), a1 = Math.min(x1, parseFloat(T.p.dataset.bis));
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y === null || y < y0 || y > y1) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    const fx = g._fx || (g._fx = new Function(...T.namen, 'return ' + g.dataset.xjs));
+    const x = fx(...P), y = f(x);
+    const ok = y !== null && x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    g.style.display = ok ? '' : 'none';
+    if (!ok) continue;
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); });
+    const tx = g.querySelector(':scope > text'); if (!tx) continue;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18)); tx.setAttribute('y', py(y) < 60 ? py(y) + 44 : py(y) - 22);
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+  }
+}
+// Zuletzt die Beschriftungen der mitfahrenden Punkte (seit 07.10.2026): "lage" setzt sie fest
+// (oben, unten, links, rechts, auch zwei davon), und keine ragt ueber den Rand des Bildes.
+function beschriftungenRichten() {
+  for (const L of document.querySelectorAll('[data-t0]'))
+    for (const g of L.querySelectorAll('[data-zu], .fk-l')) {
+      if (g.style.display === 'none') continue;
+      const tx = g.querySelector(':scope > text'), c = g.querySelector('.bew-pt circle');
+      if (!tx || !c || !tx.textContent) continue;
+      const X = parseFloat(c.getAttribute('cx')), Y = parseFloat(c.getAttribute('cy'));
+      if (g.dataset.lage) {
+        const w = g.dataset.lage.split(/\s+/), li = w.includes('links'), re = w.includes('rechts');
+        const ob = w.includes('oben'), un = w.includes('unten');
+        tx.setAttribute('x', X + (li ? -18 : re ? 18 : 0));
+        tx.setAttribute('y', ob ? Y - 22 : un ? Y + 44 : Y + 10);
+        tx.setAttribute('text-anchor', li ? 'end' : re ? 'start' : 'middle');
+      }
+      let w;
+      try { w = tx.getComputedTextLength(); } catch (e) { continue; }
+      const svg = tx.ownerSVGElement; if (!w || !svg) continue;
+      const B = svg.viewBox.baseVal && svg.viewBox.baseVal.width || svg.width.baseVal.value;
+      const x = parseFloat(tx.getAttribute('x')), an = tx.getAttribute('text-anchor') || 'start';
+      const l = an === 'start' ? x : an === 'end' ? x - w : x - w / 2;
+      // Seitlich stehende Beschriftung auf die andere Seite des Punkts klappen, mittige schieben
+      if (l + w > B - 4) {
+        if (an === 'start' && X - 18 - w >= 4) { tx.setAttribute('x', X - 18); tx.setAttribute('text-anchor', 'end'); }
+        else tx.setAttribute('x', x - (l + w - (B - 4)));
+      } else if (l < 4) {
+        if (an === 'end' && X + 18 + w <= B - 4) { tx.setAttribute('x', X + 18); tx.setAttribute('text-anchor', 'start'); }
+        else tx.setAttribute('x', x + (4 - l));
+      }
+    }
+}
 // Laeufer auf einer festen Formelkurve: x aus der Bahn, y linear aus der Wertetabelle.
 function laufeFest(T, t, px, py, x0, x1, y0, y1) {
   const x = bewZustand(T.k, t - T.t0)[0], n = T.tab.length - 1;
@@ -634,6 +698,7 @@ function bewegen(t) {
     if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
     if (T.art === 'k') { bewegeKurve(T, t, px, py, x0, x1, y0, y1); continue; }
     if (T.art === 'f') { laufeFest(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'fp') { bewegeFormel(T, t, px, py, x0, x1, y0, y1); continue; }
     // Scheitelform [a, u, v] oder Normalform [a, b, c] (data-normal); f ist die Kurve,
     // u und v der Scheitel (bei a = 0 keiner: NaN).
     const Z = bewZustand(T.k, t - L.t0), normal = T.p.dataset.normal === '1';
@@ -705,7 +770,7 @@ function bewegen(t) {
   }
 }
 const seekOhneBewegung = seek;
-seek = function (t) { seekOhneBewegung(t); bewegen(t); };
+seek = function (t) { seekOhneBewegung(t); bewegen(t); beschriftungenRichten(); };
 const FRAGEN = [{"typ": "wahl", "text": "Löse |x + 2| = 5.", "optionen": ["x = 3", "x = 7 oder x = −3", "x = 3 oder x = −7"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Es gibt zwei Fälle: x + 2 = 5 und x + 2 = −5.", "1": "Vorzeichen: x + 2 = 5 heisst x = 3."}, "t": 0.3, "ton": {"frage": "ton/s3-6-lp-kontrolle-gleichungen-f0-frage.mp3", "r0": "ton/s3-6-lp-kontrolle-gleichungen-f0-r0.mp3", "r1": "ton/s3-6-lp-kontrolle-gleichungen-f0-r1.mp3"}}, {"typ": "wahl", "text": "Welche Lösungsmenge hat |x − 3| = −1?", "optionen": ["keine Lösung", "{2; 4}", "{2}"], "richtig": 0, "rueck": {"0": "Ja.", "1": "Setz x = 2 ein: Ist |2 − 3| = −1?", "2": "Kann ein Betrag negativ sein?"}, "t": 6.78, "ton": {"frage": "ton/s3-6-lp-kontrolle-gleichungen-f1-frage.mp3", "r1": "ton/s3-6-lp-kontrolle-gleichungen-f1-r1.mp3", "r2": "ton/s3-6-lp-kontrolle-gleichungen-f1-r2.mp3"}}, {"typ": "wahl", "text": "Für welche x gilt |x| < 2?", "optionen": ["x < 2", "x < −2 oder x > 2", "−2 < x < 2"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Und x = −5? Ist |−5| < 2?", "1": "Das ist |x| > 2. Wo liegt das V unter der Waagrechten?"}, "t": 12.11, "ton": {"frage": "ton/s3-6-lp-kontrolle-gleichungen-f2-frage.mp3", "r0": "ton/s3-6-lp-kontrolle-gleichungen-f2-r0.mp3", "r1": "ton/s3-6-lp-kontrolle-gleichungen-f2-r1.mp3"}}, {"typ": "klick", "text": "Tipp die rechte Lösung von |x − 1| = 2 ins Bild (Schnittpunkt mit y = 2).", "ziel": [3, 2], "toleranz": 0.45, "richtig_text": "Getroffen: (3 | 2).", "fallen": [{"bei": [-1, 2], "text": "Das ist die linke Lösung."}, {"bei": [1, 0], "text": "Das ist der Knick. Gesucht ist der Schnittpunkt mit y = 2."}], "falsch_text": "Nicht ganz. Der grüne Kreis zeigt die Stelle.", "eingabe": ["x", "y"], "t": 20.36, "ton": {"frage": "ton/s3-6-lp-kontrolle-gleichungen-f3-frage.mp3", "fall0": "ton/s3-6-lp-kontrolle-gleichungen-f3-fall0.mp3", "fall1": "ton/s3-6-lp-kontrolle-gleichungen-f3-fall1.mp3", "falsch": "ton/s3-6-lp-kontrolle-gleichungen-f3-falsch.mp3"}}, {"typ": "wahl", "text": "Wie viele Lösungen hat |x² − 4| = 4?", "optionen": ["2", "3", "4"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Der Buckel ist genau 4 hoch — wie oft trifft ihn die Waagrechte?", "0": "Und der Buckel bei (0 | 4)?"}, "t": 25.4, "ton": {"frage": "ton/s3-6-lp-kontrolle-gleichungen-f4-frage.mp3", "r0": "ton/s3-6-lp-kontrolle-gleichungen-f4-r0.mp3", "r2": "ton/s3-6-lp-kontrolle-gleichungen-f4-r2.mp3"}}];
 (() => {
   if (location.search.includes('render')) return;

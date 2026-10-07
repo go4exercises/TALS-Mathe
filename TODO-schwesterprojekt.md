@@ -53,3 +53,8 @@ dort nach der Übernahme kurz durchsehen), Parabel `normalform` und `achse`, `sc
 Mathes HOWTO-clips.md, Abschnitt «Später einblenden, bewegen, mitlaufen». Auch dafür: Datei übernehmen.
 Nachgetragen: `ein`/`aus` an `laeufer` und `dreieck`, Figuren-Bewegung Feld für Feld (ein Fehler, der sie
 springen liess), `farbe` umgeschaltet, gleiche Nachbarbilder zusammengefasst, «Δy» links bei Δx < 0.
+Zweite Runde: `drehung`/`um` an Figuren, Formelkurven mit `parameter` (der Abspieler zeichnet sie; die
+Formel wird über den Python-Syntaxbaum nach JavaScript übersetzt, `formel_js`) samt mitfahrenden `punkte`,
+`betrag_von`, `lage` am Läufer. **Wirkt auch in Physik auf bestehende Clips:** Läufer liegen über festen
+Punkten, und Beschriftungen mitfahrender Punkte klappen am Bildrand auf die andere Seite (in Mathe
+betraf das keinen bestehenden Clip; in Physik nach der Übernahme kurz durchsehen).

@@ -146,7 +146,10 @@ OFFEN = [
              'Kurven, Tangensstrecke am Rand abgeschnitten. Doku: HOWTO-clips.md «Spaeter einblenden, bewegen, '
              'mitlaufen». Nachgetragen: ein/aus an laeufer und dreieck (mit_zeit), Figuren-Bewegung Feld fuer '
              'Feld (vorher sprang sie), farbe umgeschaltet, gleiche Nachbarbilder zusammengefasst, Delta-y links bei '
-             'dx < 0. Am einfachsten wieder die ganze Datei uebernehmen und die drei Werte zuruecksetzen.'),
+             'dx < 0. Zweite Runde: drehung/um an Figuren, Formelkurven mit "parameter" (formel_js) und mitfahrenden '
+             '"punkte", "betrag_von", "lage" am Laeufer; Laeufer ueber festen Punkten, Beschriftungen am Bildrand '
+             'umgeklappt (wirkt auf bestehende Physik-Clips, durchsehen). '
+             'Am einfachsten wieder die ganze Datei uebernehmen und die drei Werte zuruecksetzen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

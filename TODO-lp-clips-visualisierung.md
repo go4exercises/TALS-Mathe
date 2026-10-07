@@ -59,10 +59,13 @@ Behelf: rote Strecke x = 3), Punkt, der beim Stauchen mitwandert («Faktor im Ar
 (4 + `s3-2-lp-hyperbel` a 1 → −1, `g3-3-lp-drei-formen` a 1 → −1, `g3-3-lp-a-finden` Fall B,
 `s3-6-lp-abschnittsweise` b 3 → 5). Formeln, die noch ab Szenenbeginn stehen: `g3-3-lp-mitte` «A(4) = …»,
 `s3-2-lp-umkehren` «y = x², x ≥ 0 → y = √x».
-Kleine Werkzeugwünsche der Bearbeiter (07.10.2026, nicht umgesetzt): Lage der Läufer-Beschriftung wählbar;
-Läufer über festen Punkten zeichnen (heute darunter); Läufer-Beschriftung am rechten Rand abgeschnitten;
-Formelkurve `betrag_von`; Drehung als eigene Bewegung (heute dichte Stützpunkte); in GF 2.2 verschiebt
-`zeiten_anpassen` die `ein`/`aus` der Teile nicht um `ZEITVERSATZ`.
+~~Kleine Werkzeugwünsche der Bearbeiter~~ — **umgesetzt 07.10.2026** (HOWTO-clips «Zweite Runde»): `lage` am
+Läufer; Läufer über festen Punkten; Beschriftungen klappen am Bildrand um; `betrag_von` und Formelkurven mit
+`parameter` (eingebaut in `s3-6-lp-umklappen` «Knicke», statt dreier Stücke); `drehung` an Figuren (eingebaut in
+`g5-2-lp-flaeche` «Warum die Hälfte»); `zeiten_anpassen` in GF 2.2 verschiebt auch `ein`/`aus`, Läuferbahnen und
+Figurbewegungen. Die Strecken unter dem Läufer in `s3-6-lp-betragsfunktion` brauchen keine dichten Stützpunkte mehr.
+Mit `parameter` und mitfahrenden `punkte` ist auch der Punkt beim Stauchen («Faktor im Argument») jetzt baubar —
+noch nicht eingebaut.
 
 **Bei der Umsetzung neu aufgefallen:**
 - ~~`g2-2-lp-verfahren` «Erst ordnen», `g2-2-lp-nullprodukt` «Der teure Fehler»: Notiz zu spät~~ — falsch

@@ -169,7 +169,71 @@ const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
     .concat([...L.querySelectorAll('[data-fkl]')].map(p => ({
       art: 'f', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fkl), f: p.dataset.fenster.split(',').map(Number),
       tab: JSON.parse(p.dataset.tab), ab: parseFloat(p.dataset.ab), bis: parseFloat(p.dataset.bis) })))
+    .concat([...L.querySelectorAll('[data-fp]')].map(p => {
+      const namen = p.dataset.namen.split(',');
+      return { art: 'fp', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fp), f: p.dataset.fenster.split(',').map(Number),
+        fn: new Function('x', ...namen, 'return ' + p.dataset.js), namen };
+    }))
 }));
+// Formelkurve mit Parametern ("parameter", seit 07.10.2026): die Formel kommt als JavaScript aus
+// dem Bauer (formel_js), die Buchstaben aus der Zeit. Luecken (NaN, Pole) brechen den Zug ab.
+function bewegeFormel(T, t, px, py, x0, x1, y0, y1) {
+  const P = bewZustand(T.k, t - T.t0);
+  const f = x => { const y = T.fn(x, ...P); return isFinite(y) ? y : null; };
+  const a0 = Math.max(x0, parseFloat(T.p.dataset.von)), a1 = Math.min(x1, parseFloat(T.p.dataset.bis));
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y === null || y < y0 || y > y1) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    const fx = g._fx || (g._fx = new Function(...T.namen, 'return ' + g.dataset.xjs));
+    const x = fx(...P), y = f(x);
+    const ok = y !== null && x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    g.style.display = ok ? '' : 'none';
+    if (!ok) continue;
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); });
+    const tx = g.querySelector(':scope > text'); if (!tx) continue;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18)); tx.setAttribute('y', py(y) < 60 ? py(y) + 44 : py(y) - 22);
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+  }
+}
+// Zuletzt die Beschriftungen der mitfahrenden Punkte (seit 07.10.2026): "lage" setzt sie fest
+// (oben, unten, links, rechts, auch zwei davon), und keine ragt ueber den Rand des Bildes.
+function beschriftungenRichten() {
+  for (const L of document.querySelectorAll('[data-t0]'))
+    for (const g of L.querySelectorAll('[data-zu], .fk-l')) {
+      if (g.style.display === 'none') continue;
+      const tx = g.querySelector(':scope > text'), c = g.querySelector('.bew-pt circle');
+      if (!tx || !c || !tx.textContent) continue;
+      const X = parseFloat(c.getAttribute('cx')), Y = parseFloat(c.getAttribute('cy'));
+      if (g.dataset.lage) {
+        const w = g.dataset.lage.split(/\s+/), li = w.includes('links'), re = w.includes('rechts');
+        const ob = w.includes('oben'), un = w.includes('unten');
+        tx.setAttribute('x', X + (li ? -18 : re ? 18 : 0));
+        tx.setAttribute('y', ob ? Y - 22 : un ? Y + 44 : Y + 10);
+        tx.setAttribute('text-anchor', li ? 'end' : re ? 'start' : 'middle');
+      }
+      let w;
+      try { w = tx.getComputedTextLength(); } catch (e) { continue; }
+      const svg = tx.ownerSVGElement; if (!w || !svg) continue;
+      const B = svg.viewBox.baseVal && svg.viewBox.baseVal.width || svg.width.baseVal.value;
+      const x = parseFloat(tx.getAttribute('x')), an = tx.getAttribute('text-anchor') || 'start';
+      const l = an === 'start' ? x : an === 'end' ? x - w : x - w / 2;
+      // Seitlich stehende Beschriftung auf die andere Seite des Punkts klappen, mittige schieben
+      if (l + w > B - 4) {
+        if (an === 'start' && X - 18 - w >= 4) { tx.setAttribute('x', X - 18); tx.setAttribute('text-anchor', 'end'); }
+        else tx.setAttribute('x', x - (l + w - (B - 4)));
+      } else if (l < 4) {
+        if (an === 'end' && X + 18 + w <= B - 4) { tx.setAttribute('x', X + 18); tx.setAttribute('text-anchor', 'start'); }
+        else tx.setAttribute('x', x + (4 - l));
+      }
+    }
+}
 // Laeufer auf einer festen Formelkurve: x aus der Bahn, y linear aus der Wertetabelle.
 function laufeFest(T, t, px, py, x0, x1, y0, y1) {
   const x = bewZustand(T.k, t - T.t0)[0], n = T.tab.length - 1;
@@ -638,6 +702,7 @@ function bewegen(t) {
     if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
     if (T.art === 'k') { bewegeKurve(T, t, px, py, x0, x1, y0, y1); continue; }
     if (T.art === 'f') { laufeFest(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'fp') { bewegeFormel(T, t, px, py, x0, x1, y0, y1); continue; }
     // Scheitelform [a, u, v] oder Normalform [a, b, c] (data-normal); f ist die Kurve,
     // u und v der Scheitel (bei a = 0 keiner: NaN).
     const Z = bewZustand(T.k, t - L.t0), normal = T.p.dataset.normal === '1';
@@ -709,7 +774,7 @@ function bewegen(t) {
   }
 }
 const seekOhneBewegung = seek;
-seek = function (t) { seekOhneBewegung(t); bewegen(t); };
+seek = function (t) { seekOhneBewegung(t); bewegen(t); beschriftungenRichten(); };
 const FRAGEN = [{"typ": "wahl", "text": "f(x) = −x⁴ + 3x: Wohin zeigen die Enden des Graphen?", "optionen": ["links oben, rechts unten", "beide nach unten", "beide nach oben"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Schau auf das Vorzeichen des Leitkoeffizienten.", "0": "Bei geradem Grad zeigen die Enden in dieselbe Richtung."}, "t": 0.3, "ton": {"frage": "ton/s3-3-lp-kontrolle-globalverlauf-f0-frage.mp3", "r0": "ton/s3-3-lp-kontrolle-globalverlauf-f0-r0.mp3", "r2": "ton/s3-3-lp-kontrolle-globalverlauf-f0-r2.mp3"}}, {"typ": "wahl", "text": "Eine Polynomfunktion hat Grad 5. Wie viele lokale Extremstellen hat sie höchstens?", "optionen": ["6", "4", "5"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Fünf ist die Höchstzahl der Nullstellen. Bei den Extremstellen ist es eine weniger.", "0": "Es sind weniger als der Grad, nicht mehr."}, "t": 8.41, "ton": {"frage": "ton/s3-3-lp-kontrolle-globalverlauf-f1-frage.mp3", "r0": "ton/s3-3-lp-kontrolle-globalverlauf-f1-r0.mp3", "r2": "ton/s3-3-lp-kontrolle-globalverlauf-f1-r2.mp3"}}, {"typ": "wahl", "text": "Was verrät der Graph im Bild über Grad und Leitkoeffizient?", "optionen": ["Grad gerade, Leitkoeffizient negativ", "Grad gerade, Leitkoeffizient positiv", "Grad ungerade, Leitkoeffizient positiv"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Bei ungeradem Grad zeigten die Enden in verschiedene Richtungen.", "0": "Negativ hiesse: beide Enden unten."}, "t": 14.05, "ton": {"frage": "ton/s3-3-lp-kontrolle-globalverlauf-f2-frage.mp3", "r0": "ton/s3-3-lp-kontrolle-globalverlauf-f2-r0.mp3", "r2": "ton/s3-3-lp-kontrolle-globalverlauf-f2-r2.mp3"}}, {"typ": "wahl", "text": "f(x) = 2x⁴ − x² + 3: Welche Symmetrie hat der Graph?", "optionen": ["achsensymmetrisch zur y-Achse", "punktsymmetrisch zum Ursprung", "keine dieser Symmetrien"], "richtig": 0, "rueck": {"0": "Ja.", "1": "Punktsymmetrie braucht nur ungerade Exponenten. Welche Exponenten stehen hier?", "2": "Die 3 ist 3 · x⁰ — und 0 ist gerade."}, "t": 19.81, "ton": {"frage": "ton/s3-3-lp-kontrolle-globalverlauf-f3-frage.mp3", "r1": "ton/s3-3-lp-kontrolle-globalverlauf-f3-r1.mp3", "r2": "ton/s3-3-lp-kontrolle-globalverlauf-f3-r2.mp3"}}, {"typ": "wahl", "text": "f(x) = x³ + x + 1: Welche Symmetrie hat der Graph?", "optionen": ["keine dieser Symmetrien", "punktsymmetrisch zum Ursprung", "achsensymmetrisch zur y-Achse"], "richtig": 0, "rueck": {"0": "Ja.", "1": "Fast — aber die 1 ist ein Glied mit geradem Exponenten.", "2": "Es kommen ungerade Exponenten vor."}, "t": 29.35, "ton": {"frage": "ton/s3-3-lp-kontrolle-globalverlauf-f4-frage.mp3", "r1": "ton/s3-3-lp-kontrolle-globalverlauf-f4-r1.mp3", "r2": "ton/s3-3-lp-kontrolle-globalverlauf-f4-r2.mp3"}}];
 (() => {
   if (location.search.includes('render')) return;

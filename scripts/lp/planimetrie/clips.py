@@ -108,12 +108,6 @@ def r3(p):
     return [round(p[0], 3), round(p[1], 3)]
 
 
-def dreh(m, p, w):
-    """p um m um w Grad gegen den Uhrzeigersinn gedreht."""
-    c, s_ = math.cos(math.radians(w)), math.sin(math.radians(w))
-    return (m[0] + c * (p[0] - m[0]) - s_ * (p[1] - m[1]), m[1] + s_ * (p[0] - m[0]) + c * (p[1] - m[1]))
-
-
 def richtung(p, q):
     """Richtung von p nach q in Grad, 0 … 360."""
     return math.degrees(math.atan2(q[1] - p[1], q[0] - p[0])) % 360
@@ -449,12 +443,13 @@ clip('flaeche', 'Figuren sehen: Dreiecksfläche und zugehörige Höhe',
             'Höhe h, also mit der Fläche g mal h. Das Dreieck ist genau die Hälfte.',
             f(r'A = \tfrac{1}{2} \cdot g \cdot h', 300, 62, ein=7.6),
             # «Leg ein zweites, gleiches Dreieck gedreht daneben» (Ton: zweites 1.25, gedreht 2.8, daneben 3.05–3.4):
-            # die Kopie liegt ab 1.2 auf dem Original und dreht sich 1.9–3.3 um die Mitte von BC (4 | 2.5) um 180°;
+            # die Kopie liegt ab 1.2 auf dem Original und dreht sich 1.9–3.3 um die Mitte von BC (4 | 2.5) um 180°
+            # ("drehung" im Bauer: der Winkel wird übergeblendet, die Figur bleibt gleich gross);
             # der Bogen wächst mit. Drehzentrum, Bogen und «180°» sind ein Zwischenstand (aus 4.0).
             # Grundseite g (Ton 6.2) und Höhe h (6.8) zu ihrem Wort.
             graf(W2, [V([(0, 1), (6, 1), (2, 4)], 1, 0.2),
-                      mit(V([(0, 1), (6, 1), (2, 4)], 2, 0.2), ein=1.2, bewegung=dicht(1.9, 3.3, lambda u: {
-                          'punkte': [r3(dreh((4, 2.5), q_, 180 * u)) for q_ in ((0, 1), (6, 1), (2, 4))]})),
+                      mit(V([(0, 1), (6, 1), (2, 4)], 2, 0.2), ein=1.2, um=[4, 2.5],
+                          bewegung=[[1.9, {'drehung': 0}], [3.3, {'drehung': 180}]]),
                       mit(BOG(4, 2.5, 0.8, -36.9, -36.9, 2, 3), ein=1.9, aus=4.0,
                           bewegung=[[1.9, {}], [3.3, {'bis': 143.1}]]),
                       mit(T(4.9, 3.4, '180°', 2, 'start', 22, False), ein=3.2, aus=4.0),
