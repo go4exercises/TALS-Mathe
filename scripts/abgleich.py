@@ -144,7 +144,9 @@ OFFEN = [
              'Parabel "normalform" [t, a, b, c] und Begleiter "achse", "schnitte" an bewegten Geraden mit einer '
              'Formelkurve, "bewegung" an figuren (Bilder in Python, g.fb), "grenzen" [[t, von, bis]] an bewegten '
              'Kurven, Tangensstrecke am Rand abgeschnitten. Doku: HOWTO-clips.md «Spaeter einblenden, bewegen, '
-             'mitlaufen». Am einfachsten wieder die ganze Datei uebernehmen und die drei Werte zuruecksetzen.'),
+             'mitlaufen». Nachgetragen: ein/aus an laeufer und dreieck (mit_zeit), Figuren-Bewegung Feld fuer '
+             'Feld (vorher sprang sie), farbe umgeschaltet, gleiche Nachbarbilder zusammengefasst, Delta-y links bei '
+             'dx < 0. Am einfachsten wieder die ganze Datei uebernehmen und die drei Werte zuruecksetzen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

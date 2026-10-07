@@ -373,8 +373,16 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             'Bei zwei ergibt das ein Halb, bei einem Halb zwei — je grösser x, desto kleiner y.',
             titel('Eins durch x', 280, 80),
             f(r'y = x^{\fb{-1}} = \dfrac{1}{x}', 440, 62, ein=4.6),
-            graf(W_HY, [kurve([[0, 1, -1, 0, 0]])],
-                 punkte=[pt(2, 0.5, 5, '(2 | 0.5)'), pt(0.5, 2, 5, '(0.5 | 2)')], ein=6.4)),
+            # Kurve mit «eins durch x» (Ton 4.5), die Punkte zu ihren Zahlen («Bei zwei» 5.5, «bei einem Halb
+            # zwei» 7.3); zu «je grösser x, desto kleiner y» (Ton 8.1–9.7) fährt ein Läufer von (1 | 1) nach
+            # rechts aus dem Bild (x = 4 bei 9.0) — x wächst weiter, y schrumpft; er bleibt nicht auf einer
+            # gerundeten Zahl stehen. Der Läufer sitzt auf einer zweiten, deckungsgleichen Kurve mit eigenem
+            # ein, damit er erst mit seinem Satz erscheint.
+            graf(W_HY, [kurve([[0, 1, -1, 0, 0]]),
+                        dict(kurve([[0, 1, -1, 0, 0]]), ein=8.0,
+                             laeufer={'bahn': [[8.1, 1], [9.9, 7]], 'text': '({x} | {y})', 'farbe': 5})],
+                 punkte=[dict(pt(2, 0.5, 5, '(2 | 0.5)'), ein=5.5), dict(pt(0.5, 2, 5, '(0.5 | 2)'), ein=7.3)],
+                 ein=4.6)),
          sz('Bei null ist Schluss',
             'An der Stelle null gibt es keinen Wert — man müsste durch null teilen. '
             'Die Kurve zerfällt in zwei Äste, und die Definitionsmenge ist die reellen Zahlen ohne null.',
@@ -386,8 +394,13 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             'Eins durch x gleich null hat keine Lösung, so gross x auch wird.',
             f(r'x = 0 \quad \text{und} \quad y = 0', 300, 58),
             n('beliebig nahe,|aber nie erreicht', 440, 'blau'),
-            graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 4},
-                              marken=[{'x': 3.5, 'text': '{y}', 'farbe': 5}])])),
+            # «so gross x auch wird» (Ton 7.7–8.5): ein Läufer fährt nach rechts, y wird kleiner, aber nie null,
+            # und verlässt bei 8.45 das Bild (x = 4) — x wächst weiter (die feste Marke bei 3.5 zeigte gerundet «0.3»)
+            # Der Läufer sitzt auf einer deckungsgleichen zweiten Kurve, die erst mit seinem Satz einblendet —
+            # ruhend stünde seine Beschriftung auf der Kurve.
+            graf(W_HY, [kurve([[0, 1, -1, 0, 0]], asymptoten={'farbe': 4}),
+                        dict(kurve([[0, 1, -1, 0, 0]]), ein=7.4,
+                             laeufer={'bahn': [[7.6, 1], [9.3, 7]], 'text': 'y = {y}', 'farbe': 5})])),
          sz('Die Ordnung wächst',
             'Jetzt wächst die Ordnung: von eins über zwei und drei bis vier — der Exponent geht dabei '
             'von minus eins auf minus vier. Die Äste springen zwischen diagonal und beide oben, '
@@ -720,7 +733,10 @@ clip('umkehren', 'Kurve sehen: umkehren heisst spiegeln',
             'Von diesem halben Ast ist das Spiegelbild wieder ein Funktionsgraph — die Quadratwurzel.',
             f(r'y = x^{\fb{2}},\ x \geq 0 \;\longrightarrow\; y = \sqrt{x}', 300, 50),
             n('nur der rechte Ast|wird umkehrbar', 440, 'gruen'),
-            graf(W_SP, [kurve([[0, 1, 2, 0, 0]], von=0, spiegel={'farbe': 3})], geraden=[WH])),
+            # «schränkt die Potenzfunktion auf x grösser oder gleich null ein» (Ton 1.5–4.3): der linke Ast
+            # zieht sich zurück, mit ihm der untere Ast des Spiegelbilds — wie der Haken «nur x ≥ 0» in sim4
+            graf(W_SP, [dict(kurve([[0, 1, 2, 0, 0]], spiegel={'farbe': 3}), grenzen=[[1.5, -2, 5], [4.3, 0, 5]])],
+                 geraden=[WH])),
          sz('Das Rezept',
             'Rechnerisch geht man in drei Schritten vor: nach x auflösen, x und y vertauschen, und '
             'zum Schluss die Definitionsmenge prüfen. Aus y gleich x hoch drei plus eins wird so '

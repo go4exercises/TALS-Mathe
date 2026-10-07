@@ -51,3 +51,5 @@ wenn der Wert genau zwei hat (**wirkt auch in Physik auf bestehende Beschriftung
 dort nach der Übernahme kurz durchsehen), Parabel `normalform` und `achse`, `schnitte` an bewegten Geraden,
 `bewegung` an `figuren`, `grenzen` an bewegten Kurven, Tangensstrecke am Rand abgeschnitten. Doku in
 Mathes HOWTO-clips.md, Abschnitt «Später einblenden, bewegen, mitlaufen». Auch dafür: Datei übernehmen.
+Nachgetragen: `ein`/`aus` an `laeufer` und `dreieck`, Figuren-Bewegung Feld für Feld (ein Fehler, der sie
+springen liess), `farbe` umgeschaltet, gleiche Nachbarbilder zusammengefasst, «Δy» links bei Δx < 0.

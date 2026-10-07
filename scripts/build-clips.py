@@ -368,6 +368,13 @@ def graf_svg(el, theme):
     # Teil in seinem Durchgang zeichnet, kommt in eine Gruppe, die der Abspieler ein- und
     # ausblendet; bauen() rechnet die Zeiten auf den Clip um. Ohne die Felder bleibt alles
     # Byte fuer Byte wie vorher.
+    def mit_zeit(it, html):
+        """Ein Begleiter (laeufer, dreieck) mit eigenem "ein"/"aus" — wie zeitlich(), fuer ein Stueck."""
+        if not isinstance(it, dict) or (it.get("ein") is None and it.get("aus") is None):
+            return html
+        a = "".join(' data-%s-rel="%g"' % (k, it[k]) for k in ("ein", "aus") if it.get(k) is not None)
+        return '<g class="zt"%s>%s</g>' % (a, html)
+
     def zeitlich(teile_liste):
         for it in teile_liste:
             n = len(teile)
@@ -545,6 +552,10 @@ def graf_svg(el, theme):
     # Python, 20 Bilder je Sekunde; der Abspieler zeigt das passende (g.fb). So bewegt sich jede
     # Figurart, ohne dass ihre Zeichnung in JavaScript ein zweites Mal steht.
     def mischen(a, b, q):
+        if isinstance(a, dict) and isinstance(b, dict):
+            # Feld fuer Feld; "farbe" ist eine Nummer und wird umgeschaltet, nicht gemischt
+            return {k: (v if q < 0.5 else b.get(k, v)) if k == "farbe" else mischen(v, b.get(k, v), q)
+                    for k, v in a.items()}
         if isinstance(a, (int, float)) and isinstance(b, (int, float)):
             return a + (b - a) * q
         if isinstance(a, list) and isinstance(b, list) and len(a) == len(b):
@@ -561,19 +572,26 @@ def graf_svg(el, theme):
             z = dict(zust[-1][1] if zust else basis)
             z.update(felder)
             zust.append((t_, z))
-        def bild(von, bis, z):
-            n = len(teile)
-            zeichne_figur(z)
-            a = (' data-fvon-rel="%g"' % von if von is not None else "") + (' data-fbis-rel="%g"' % bis if bis is not None else "")
-            teile[n:] = ['<g class="fb"%s>' % a] + teile[n:] + ["</g>"]
-        bild(None, zust[0][0], zust[0][1])
+        bilder = [[None, zust[0][0], zust[0][1]]]
         for (ta, za), (tb, zb) in zip(zust, zust[1:]):
             schritte = max(1, int(round((tb - ta) * 20)))
             for k in range(schritte):
                 q = (k + 0.5) / schritte
                 q = q * q * (3 - 2 * q)
-                bild(ta + (tb - ta) * k / schritte, ta + (tb - ta) * (k + 1) / schritte, mischen(za, zb, q))
-        bild(zust[-1][0], None, zust[-1][1])
+                bilder.append([ta + (tb - ta) * k / schritte, ta + (tb - ta) * (k + 1) / schritte, mischen(za, zb, q)])
+        bilder.append([zust[-1][0], None, zust[-1][1]])
+        # Gleiche Nachbarbilder (eine Pause, {} als Stuetzpunkt) zu einem zusammenfassen
+        knapp = [bilder[0]]
+        for bi in bilder[1:]:
+            if json.dumps(bi[2], sort_keys=True) == json.dumps(knapp[-1][2], sort_keys=True):
+                knapp[-1][1] = bi[1]
+            else:
+                knapp.append(bi)
+        for von, bis, z in knapp:
+            n = len(teile)
+            zeichne_figur(z)
+            a = (' data-fvon-rel="%g"' % von if von is not None else "") + (' data-fbis-rel="%g"' % bis if bis is not None else "")
+            teile[n:] = ['<g class="fb"%s>' % a] + teile[n:] + ["</g>"]
     if el.get("figuren"):
         teile.append('</g>')
 
@@ -635,28 +653,28 @@ def graf_svg(el, theme):
                                          text=bool(sch.get("beschriftung"))))
             lf = g.get("laeufer")
             if lf:
-                teile.append(g_punkt("bew-gl", lf.get("farbe", 5),
+                teile.append(mit_zeit(lf, g_punkt("bew-gl", lf.get("farbe", 5),
                                      ' data-bahn="%s" data-text="%s"'
-                                     % (entschaerfen(json.dumps(lf["bahn"])), entschaerfen(lf.get("text", "")))))
+                                     % (entschaerfen(json.dumps(lf["bahn"])), entschaerfen(lf.get("text", ""))))))
             dr = g.get("dreieck")
             if dr:
                 f_ = fv[dr.get("farbe", 5) - 1]
                 # Feste Stelle und Breite — oder "bahn": [[t, x, dx], ...], dann wandert
                 # und waechst das Dreieck waehrend der Szene mit.
                 if dr.get("bahn"):
-                    teile.append('<g class="bew-gd" data-zu="%s" data-bahn="%s">'
+                    teile.append(mit_zeit(dr, '<g class="bew-gd" data-zu="%s" data-bahn="%s">'
                                  '<path class="bew-gd-w" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="9 7"/>'
                                  '<path class="bew-gd-s" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="9 7"/>'
                                  '<text class="bew-gd-tx" font-size="27" font-weight="600" fill="%s" text-anchor="middle"></text>'
                                  '<text class="bew-gd-ty" font-size="27" font-weight="600" fill="%s"></text>'
-                                 '</g>' % (gid, entschaerfen(json.dumps(dr["bahn"])), f_, f_, f_, f_))
+                                 '</g>' % (gid, entschaerfen(json.dumps(dr["bahn"])), f_, f_, f_, f_)))
                     continue
-                teile.append('<g class="bew-gd" data-zu="%s" data-x="%g" data-dx="%g">'
+                teile.append(mit_zeit(dr, '<g class="bew-gd" data-zu="%s" data-x="%g" data-dx="%g">'
                              '<path class="bew-gd-w" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="9 7"/>'
                              '<path class="bew-gd-s" fill="none" stroke="%s" stroke-width="3" stroke-dasharray="9 7"/>'
                              '<text class="bew-gd-tx" font-size="27" font-weight="600" fill="%s" text-anchor="middle"></text>'
                              '<text class="bew-gd-ty" font-size="27" font-weight="600" fill="%s"></text>'
-                             '</g>' % (gid, dr["x"], dr["dx"], f_, f_, f_, f_))
+                             '</g>' % (gid, dr["x"], dr["dx"], f_, f_, f_, f_)))
             continue
         m, q = g["m"], g["q"]
         punkte = []
@@ -742,10 +760,10 @@ def graf_svg(el, theme):
                                      ' data-x="%g" data-text="%s"' % (m["x"], entschaerfen(m.get("text", "")))))
             lf = pa.get("laeufer")
             if lf:
-                teile.append(punkt_g("bew-l", lf.get("farbe", 2),
+                teile.append(mit_zeit(lf, punkt_g("bew-l", lf.get("farbe", 2),
                                      ' data-bahn="%s" data-text="%s"' % (entschaerfen(json.dumps(lf["bahn"])),
                                                                          entschaerfen(lf.get("text", ""))),
-                                     geist=bool(lf.get("spiegel"))))
+                                     geist=bool(lf.get("spiegel")))))
             continue
         a_, b_, c_ = pa["a"], pa.get("b", 0), pa.get("c", 0)
         stuecke, lauf = [], []
@@ -884,10 +902,10 @@ def graf_svg(el, theme):
             # Marke, deren x aus der Bahn kommt; darum fuer alle Kurvenarten.
             lf = kv.get("laeufer")
             if lf:
-                teile.append(k_punkt("bew-km", lf.get("farbe", 3),
+                teile.append(mit_zeit(lf, k_punkt("bew-km", lf.get("farbe", 3),
                                      ' data-x="0" data-bahn="%s" data-text="%s"'
                                      % (entschaerfen(json.dumps(lf["bahn"])), entschaerfen(lf.get("text", ""))),
-                                     text=bool(lf.get("text"))))
+                                     text=bool(lf.get("text")))))
             continue
         n = kv.get("n", 480)
         # Eine Kurve darf auch nur ein Stueck des Fensters belegen. Gebraucht
@@ -917,7 +935,7 @@ def graf_svg(el, theme):
                 y = kurve_wert(kv["formel"], a_ + (e_ - a_) * i / n)
                 tab.append(None if y is None else round(y, 5))
             f_ = fv[lf.get("farbe", 3) - 1]
-            teile.append('<g class="fk-l" data-fkl="%s" data-tab="%s" data-ab="%g" data-bis="%g" data-text="%s" '
+            teile.append(mit_zeit(lf, '<g class="fk-l" data-fkl="%s" data-tab="%s" data-ab="%g" data-bis="%g" data-text="%s" '
                          'data-fenster="%g,%g,%g,%g,%d,%d,%d">'
                          '<g class="bew-pt"><circle r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
                          '<circle r="5" fill="%s"/></g>%s</g>'
@@ -925,7 +943,7 @@ def graf_svg(el, theme):
                             entschaerfen(lf.get("text", "")), x0, x1, y0, y1, b, h, rand, papier, f_, f_,
                             ('<text font-size="29" font-weight="600" fill="%s" stroke="%s" stroke-width="5" '
                              'paint-order="stroke" stroke-linejoin="round"></text>' % (f_, papier))
-                            if lf.get("text") else ""))
+                            if lf.get("text") else "")))
         for st in stuecke:
             if len(st) > 1:
                 teile.append('<polyline points="%s" fill="none" stroke="%s" '
@@ -1296,7 +1314,10 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
       const tx = g.querySelector('.bew-gd-tx'), ty = g.querySelector('.bew-gd-ty');
       tx.setAttribute('x', px((xa + xb) / 2)); tx.setAttribute('y', py(ya) + (m > 0 ? 36 : -14));
       tx.textContent = 'Δx = ' + bewZahl(dx);
-      ty.setAttribute('x', px(xb) + 12); ty.setAttribute('y', py((ya + yb) / 2) + 10);
+      // dx < 0: die senkrechte Kathete steht links, ihre Beschriftung auch (sonst liegt sie
+      // auf der Geraden oder der y-Achse)
+      ty.setAttribute('x', px(xb) + (dx < 0 ? -12 : 12)); ty.setAttribute('y', py((ya + yb) / 2) + 10);
+      ty.setAttribute('text-anchor', dx < 0 ? 'end' : 'start');
       ty.textContent = 'Δy = ' + bewZahl(yb - ya);
     }
   }

@@ -86,6 +86,39 @@ def BOG(mx, my, r, von, bis, farbe=2, dicke=7):
     return dict(art='bogen', m=[mx, my], r=r, von=von, bis=bis, farbe=farbe, dicke=dicke)
 
 
+def mit(fg, **kw):
+    """Figur mit eigenem ein/aus/bewegung (HOWTO-clips, «Später einblenden, bewegen, mitlaufen»)."""
+    d = dict(fg)
+    d.update({k: v for k, v in kw.items() if v is not None})
+    return d
+
+
+def weich(q):
+    return q * q * (3 - 2 * q)
+
+
+def dicht(t0, t1, felder, schritt=0.05):
+    """Stützpunkte alle 0.05 s (ein Bild je Stützpunkt) für Bewegungen, die nicht linear in den
+    Feldern sind (Drehung, Winkelbögen an einer gezogenen Ecke). felder(u) mit u = 0 … 1, weich."""
+    n_ = max(1, int(round((t1 - t0) / schritt)))
+    return [[round(t0 + (t1 - t0) * i / n_, 3), felder(weich(i / n_))] for i in range(n_ + 1)]
+
+
+def r3(p):
+    return [round(p[0], 3), round(p[1], 3)]
+
+
+def dreh(m, p, w):
+    """p um m um w Grad gegen den Uhrzeigersinn gedreht."""
+    c, s_ = math.cos(math.radians(w)), math.sin(math.radians(w))
+    return (m[0] + c * (p[0] - m[0]) - s_ * (p[1] - m[1]), m[1] + s_ * (p[0] - m[0]) + c * (p[1] - m[1]))
+
+
+def richtung(p, q):
+    """Richtung von p nach q in Grad, 0 … 360."""
+    return math.degrees(math.atan2(q[1] - p[1], q[0] - p[0])) % 360
+
+
 def graf(W, figuren=(), punkte=(), ein=0.05, **kw):
     g = dict(typ='graf', x=GX, y=GY, breite=GB, hoehe=GH, abstand=0, anim='fade', ein=ein,
              kurven=[], geraden=[], punkte=list(punkte), figuren=list(figuren), pfeile=True, tippbar=True, **W)
@@ -180,6 +213,17 @@ A1, B1, C1 = (1, 1), (8, 1), (3, 6)
 TRI1 = V([A1, B1, C1])
 ECKEN1 = [T(0.55, 0.35, 'A'), T(8.45, 0.35, 'B'), T(3, 6.55, 'C')]
 
+
+
+def ziehC1(felder):
+    """C auf der Parallelen y = 6: 3 → 6.5 → 1.5 → 3 (Szene «Winkelsumme», 1.0–3.6 s), Felder je Lage von C."""
+    bew = []
+    for t0, t1, x0, x1 in ((1.0, 1.9, 3, 6.5), (1.9, 2.9, 6.5, 1.5), (2.9, 3.6, 1.5, 3)):
+        teil = dicht(t0, t1, lambda u: felder((x0 + (x1 - x0) * u, 6)))
+        bew += teil[1:] if bew else teil
+    return bew
+
+
 # Kleine Bilder der Schnittpunkte (Szene «Schnittpunkte»), links unter der Notiz, gleich geteilt:
 # spitz 8.4 × 6.3 auf 240 × 180 px, stumpf 9 × 7 auf 270 × 210 px.
 WS1 = dict(xbereich=[0.3, 8.7], ybereich=[0.3, 6.6], achsen=False)
@@ -214,9 +258,18 @@ clip('dreiecke', 'Figuren sehen: Dreiecke beschreiben',
             'hundertachtzig Grad.',
             f(r'\alpha + \beta + \gamma = 180^\circ', 300, 60, ein=0.4),
             n('Parallele durch @C@: Wechselwinkel', 420, 'blau', 44, ein=5.4),
-            graf(W1, [TRI1, WI(1, 1, 0, 68.2, 2), WI(8, 1, 135, 180, 3)] + ECKEN1, ein=0.3),
+            # «die drei Winkel immer hundertachtzig Grad» (Ton 1.2–2.8): C wandert auf der Höhe 6 nach rechts,
+            # nach links und zurück (wie in sim1), die drei Bögen laufen mit; vor der Parallelen (5.4) wieder bei (3 | 6).
+            graf(W1, [mit(TRI1, bewegung=ziehC1(lambda C: {'punkte': [list(A1), list(B1), r3(C)]})),
+                      mit(WI(1, 1, 0, 68.2, 2), bewegung=ziehC1(lambda C: {'bis': round(richtung(A1, C), 2)})),
+                      mit(WI(8, 1, 135, 180, 3), bewegung=ziehC1(lambda C: {'von': round(richtung(B1, C), 2)})),
+                      mit(WI(3, 6, 248.2, 315, 1, 30),
+                          bewegung=ziehC1(lambda C: {'bei': r3(C), 'von': round(richtung(C, A1), 2),
+                                                     'bis': round(richtung(C, B1), 2)})),
+                      ECKEN1[0], ECKEN1[1], mit(ECKEN1[2], bewegung=ziehC1(lambda C: {'bei': [round(C[0], 3), 6.55]}))],
+                 ein=0.3),
             graf(W1, [S((-0.5, 6), (9.5, 6), 5, True, 2.5)], ein=5.4),
-            graf(W1, [WI(3, 6, 180, 248.2, 2), WI(3, 6, 315, 360, 3), WI(3, 6, 248.2, 315, 1, 30)], ein=8.3)),
+            graf(W1, [WI(3, 6, 180, 248.2, 2), WI(3, 6, 315, 360, 3)], ein=8.3)),
          sz('Vorgelöst',
             'Zum Beispiel Alpha gleich fünfzig Grad und Beta gleich sechzig Grad. Dann ist Gamma hundertachtzig minus fünfzig '
             'minus sechzig, also siebzig Grad.',
@@ -235,23 +288,38 @@ clip('dreiecke', 'Figuren sehen: Dreiecke beschreiben',
               300, 'blau', 44, ein=1.0),
             # Je Dreieck zu seinem Satz (Ton: gleichschenklig 2.5, gleich lang 4.9, Basiswinkel 5.9; gleichseitig 7.7,
             # Seiten gleich 9.1, sechzig Grad 10.3; rechtwinklig 11.7, rechten Winkel 12.9). Striche: Mitte der Seite, quer.
-            graf(W1, [V([(0.5, 0), (4.5, 0), (2.5, 4)]), T(2.5, -0.75, 'gleichschenklig', 5, g=24, kursiv=False)], ein=2.5),
+            # Die Spitze zieht jedes Dreieck in seine Sonderform (wie «einstellen» in sim1), bevor die Zeichen kommen:
+            # gleichschenklig (1.5 | 4) → (2.5 | 4) bei 2.9–4.2; gleichseitig Höhe 3.8 → 2.598 bei 8.0–8.9;
+            # rechtwinklig (2.3 | 8) → (1 | 8) bei 12.0–12.8.
+            graf(W1, [V([(0.5, 0), (4.5, 0), (1.5, 4)], bewegung=[[2.9, {}], [4.2, {'punkte': [[0.5, 0], [4.5, 0], [2.5, 4]]}]]),
+                      T(2.5, -0.75, 'gleichschenklig', 5, g=24, kursiv=False)], ein=2.5),
             graf(W1, [S((1.303, 2.098), (1.697, 1.902), 2, dicke=3), S((3.303, 1.902), (3.697, 2.098), 2, dicke=3)], ein=4.9, raster=False),
             graf(W1, [WI(0.5, 0, 0, 63.4, 2, 34), WI(4.5, 0, 116.6, 180, 2, 34)], ein=5.9, raster=False),
-            graf(W1, [V([(5.5, 0), (8.5, 0), (7, 2.598)]), T(7, -0.75, 'gleichseitig', 5, g=24, kursiv=False)], ein=7.7, raster=False),
+            graf(W1, [V([(5.5, 0), (8.5, 0), (7, 3.8)], bewegung=[[8.0, {}], [8.9, {'punkte': [[5.5, 0], [8.5, 0], [7, 2.598]]}]]),
+                      T(7, -0.75, 'gleichseitig', 5, g=24, kursiv=False)], ein=7.7, raster=False),
             graf(W1, [S((7, -0.22), (7, 0.22), 2, dicke=3), S((7.559, 1.189), (7.941, 1.409), 2, dicke=3),
                       S((6.059, 1.409), (6.441, 1.189), 2, dicke=3)], ein=9.1, raster=False),
             graf(W1, [WI(5.5, 0, 0, 60, 2, 28), WI(8.5, 0, 120, 180, 2, 28), WI(7, 2.598, 240, 300, 2, 28)], ein=10.3, raster=False),
-            graf(W1, [V([(1, 5), (5, 5), (1, 8)]), T(3, 4.25, 'rechtwinklig', 5, g=24, kursiv=False)], ein=11.7, raster=False),
+            graf(W1, [V([(1, 5), (5, 5), (2.3, 8)], bewegung=[[12.0, {}], [12.8, {'punkte': [[1, 5], [5, 5], [1, 8]]}]]),
+                      T(3, 4.25, 'rechtwinklig', 5, g=24, kursiv=False)], ein=11.7, raster=False),
             graf(W1, [RW(1, 5, 0, 90)], ein=12.9, raster=False)),
          sz('Die Höhe',
             'Die Höhe ist das Lot von einer Ecke auf die Gerade durch die Gegenseite. Hier ist das Dreieck stumpf: Der Fusspunkt '
             'der Höhe von C liegt ausserhalb der Seite c, auf ihrer Verlängerung.',
             f(r'\fb{h_c}: \ \text{Lot von } C \text{ auf die Gerade } AB', 300, 46, ein=0.4),
             n('Fusspunkt auch ausserhalb', 420, 'blau', 44, ein=7.0),
-            graf(W1, [V([(1, 1), (5, 1), (8, 5)]), T(0.55, 0.35, 'A'), T(5, 0.35, 'B'), T(8.35, 5.4, 'C')], ein=0.3),
-            graf(W1, [S((5, 1), (9.3, 1), 5, True, 2.5), S((8, 5), (8, 1), 2, True), RW(8, 1, 180, 90),
-                      T(8.45, 3, 'h', 2, 'start')], ein=4.0)),
+            # Brücke zu sim1 («Mach das Dreieck stumpfwinklig»): zuerst spitz mit C(3.5 | 5), die Höhe zum Wort «Lot»
+            # (Ton 1.4); bei «Hier ist das Dreieck stumpf» (4.0–5.0) wandert C nach (8 | 5), die Höhe läuft mit.
+            # Der Fusspunkt (x = C.x) passiert B(5 | 1) bei 4.53 s — dann erscheint die Verlängerung.
+            graf(W1, [mit(V([(1, 1), (5, 1), (3.5, 5)]), bewegung=[[4.1, {}], [5.2, {'punkte': [[1, 1], [5, 1], [8, 5]]}]]),
+                      T(0.55, 0.35, 'A'), T(5, 0.35, 'B'),
+                      mit(T(3.85, 5.4, 'C'), bewegung=[[4.1, {}], [5.2, {'bei': [8.35, 5.4]}]]),
+                      mit(S((5, 1), (9.3, 1), 5, True, 2.5), ein=4.45),
+                      mit(S((3.5, 5), (3.5, 1), 2, True), ein=1.4,
+                          bewegung=[[4.1, {}], [5.2, {'von': [8, 5], 'bis': [8, 1]}]]),
+                      mit(RW(3.5, 1, 180, 90), ein=1.4, bewegung=[[4.1, {}], [5.2, {'bei': [8, 1]}]]),
+                      mit(T(3.95, 3, 'h', 2, 'start'), ein=1.4, bewegung=[[4.1, {}], [5.2, {'bei': [8.45, 3]}]])],
+                 ein=0.3)),
          sz('Drei weitere Linien',
             'Die Seitenhalbierende verbindet eine Ecke mit der Mitte der Gegenseite. Die Winkelhalbierende teilt den Winkel in '
             'zwei gleiche Hälften. Die Mittelsenkrechte steht in der Mitte einer Seite senkrecht auf ihr.',
@@ -380,12 +448,19 @@ clip('flaeche', 'Figuren sehen: Dreiecksfläche und zugehörige Höhe',
             'Leg ein zweites, gleiches Dreieck gedreht daneben. Zusammen bilden sie ein Parallelogramm mit Grundseite g und '
             'Höhe h, also mit der Fläche g mal h. Das Dreieck ist genau die Hälfte.',
             f(r'A = \tfrac{1}{2} \cdot g \cdot h', 300, 62, ein=7.6),
-            graf(W2, [V([(0, 1), (6, 1), (2, 4)], 1, 0.2)], ein=0.3),
-            graf(W2, [V([(6, 1), (8, 4), (2, 4)], 2, 0.2), S((2, 4), (2, 1), 5, True, 2.5), T(3, 0.25, 'g', 5),
-                      T(1.65, 2.5, 'h', 5, 'end')], ein=1.6),
-            # «gedreht» (Ton 2.4): Drehzentrum = Mitte von BC (4 | 2.5), Halbkreis von Richtung B (−36.9°) nach C (143.1°)
-            graf(W2, [BOG(4, 2.5, 0.8, -36.9, 143.1, 2, 3), T(4.9, 3.4, '180°', 2, 'start', 22, False)],
-                 punkte=[pt(4, 2.5, 5)], ein=2.4, raster=False)),
+            # «Leg ein zweites, gleiches Dreieck gedreht daneben» (Ton: zweites 1.25, gedreht 2.8, daneben 3.05–3.4):
+            # die Kopie liegt ab 1.2 auf dem Original und dreht sich 1.9–3.3 um die Mitte von BC (4 | 2.5) um 180°;
+            # der Bogen wächst mit. Drehzentrum, Bogen und «180°» sind ein Zwischenstand (aus 4.0).
+            # Grundseite g (Ton 6.2) und Höhe h (6.8) zu ihrem Wort.
+            graf(W2, [V([(0, 1), (6, 1), (2, 4)], 1, 0.2),
+                      mit(V([(0, 1), (6, 1), (2, 4)], 2, 0.2), ein=1.2, bewegung=dicht(1.9, 3.3, lambda u: {
+                          'punkte': [r3(dreh((4, 2.5), q_, 180 * u)) for q_ in ((0, 1), (6, 1), (2, 4))]})),
+                      mit(BOG(4, 2.5, 0.8, -36.9, -36.9, 2, 3), ein=1.9, aus=4.0,
+                          bewegung=[[1.9, {}], [3.3, {'bis': 143.1}]]),
+                      mit(T(4.9, 3.4, '180°', 2, 'start', 22, False), ein=3.2, aus=4.0),
+                      mit(T(3, 0.25, 'g', 5), ein=6.1),
+                      mit(S((2, 4), (2, 1), 5, True, 2.5), ein=6.7), mit(T(1.65, 2.5, 'h', 5, 'end'), ein=6.7)],
+                 punkte=[dict(pt(4, 2.5, 5), ein=1.9, aus=4.0)], ein=0.3)),
          sz('Strategie',
             'Halt, bevor du rechnest: Grundseite wählen, die zugehörige Höhe bestimmen, die Einheiten angleichen, in die Formel '
             'einsetzen und das Ergebnis prüfen.',
@@ -408,14 +483,18 @@ clip('flaeche', 'Figuren sehen: Dreiecksfläche und zugehörige Höhe',
             'Schieb die Spitze parallel zur Grundseite. Die Form ändert sich, aber Grundseite und Höhe bleiben gleich. '
             'Darum bleibt auch die Fläche gleich: zwölf Quadratzentimeter.',
             f(r'g, \ h \text{ gleich} \;\Rightarrow\; A = 12\,\text{cm}^2', 300, 48, ein=5.6),
-            graf(W2b, [S((-0.5, 4), (11.5, 4), 5, True, 2), V([(0, 1), (8, 1), (2, 4)])], ein=0.3),
-            graf(W2b, [V([(0, 1), (8, 1), (4, 4)], 2, 0.08)], ein=2.4),
-            graf(W2b, [V([(0, 1), (8, 1), (10, 4)], 3, 0.08)], ein=3.4),
-            # «Grundseite und Höhe bleiben gleich» (Ton: Höhe 4.9): je Dreieck die Höhe 3, bei t = 10 auf der Verlängerung
-            graf(W2b, [S((8, 1), (10.8, 1), 5, True, 2.5),
-                       S((2, 4), (2, 1), 2, True, 3), RW(2, 1, 0, 90), S((4, 4), (4, 1), 2, True, 3), RW(4, 1, 0, 90),
-                       S((10, 4), (10, 1), 2, True, 3), RW(10, 1, 180, 90), T(10.35, 2.4, 'h = 3', 2, 'start', g=26)],
-                 ein=4.9, raster=False)),
+            # Brücke zu sim2 (Spitze t): «Schieb die Spitze …, die Form ändert sich» (Ton 0.5–3.6): C gleitet auf der
+            # Parallelen von t = 2 nach t = 10. Die Höhe erscheint zum Wort «Höhe» (5.2) bei t = 10, mit Verlängerung;
+            # bei «bleiben gleich … die Fläche gleich» (5.6–7.4) gleitet C zurück nach t = 2, die Höhe 3 läuft mit.
+            # Der Fusspunkt passiert B(8 | 1) bei 6.19 s — dann geht die Verlängerung aus.
+            graf(W2b, [S((-0.5, 4), (11.5, 4), 5, True, 2),
+                       mit(V([(0, 1), (8, 1), (2, 4)]), bewegung=[[0.8, {}], [3.6, {'punkte': [[0, 1], [8, 1], [10, 4]]}],
+                                                                  [5.6, {}], [7.4, {'punkte': [[0, 1], [8, 1], [2, 4]]}]]),
+                       mit(S((8, 1), (10.8, 1), 5, True, 2.5), ein=5.1, aus=6.1),
+                       mit(S((10, 4), (10, 1), 2, True, 3), ein=5.1, bewegung=[[5.6, {}], [7.4, {'von': [2, 4], 'bis': [2, 1]}]]),
+                       mit(RW(10, 1, 180, 90), ein=5.1, bewegung=[[5.6, {}], [7.4, {'bei': [2, 1]}]]),
+                       mit(T(10.35, 2.4, 'h = 3', 2, 'start', g=26), ein=5.1, bewegung=[[5.6, {}], [7.4, {'bei': [2.35, 2.4]}]])],
+                 ein=0.3)),
          sz('Merke',
             'Zum Mitnehmen: Fläche gleich ein Halb mal Grundseite mal zugehörige Höhe. Die Höhe misst den Abstand zur Geraden '
             'der Grundseite, auch ausserhalb.',
@@ -490,6 +569,7 @@ clip('kontrolle-flaeche', 'Figuren sehen: Kontrollfragen zur Dreiecksfläche',
      ], art='Kontrollclip')
 
 # ════════════════════════════════════════════════ Kapitel 3 · Einführung
+SCHUB_C = lambda felder: [[6.0, {}], [6.8, felder(2)], [7.6, felder(0)]]
 W3 = geo(-0.5, -1, 10)
 W3b = geo(-0.5, -1.5, 12)
 clip('vierecke', 'Figuren sehen: Vierecke',
@@ -505,7 +585,16 @@ clip('vierecke', 'Figuren sehen: Vierecke',
                       V([(2, -0.8), (3.5, 0.4), (2, 1.6), (0.5, 0.4)]), V([(7, -0.8), (8.2, 0.9), (7, 1.6), (5.8, 0.9)]),
                       T(1.25, 7.15, 'Quadrat', 5, g=22, kursiv=False), T(6.25, 7.15, 'Rechteck', 5, g=22, kursiv=False),
                       T(2.5, 3.15, 'Parallelogramm', 5, g=22, kursiv=False), T(7.4, 3.15, 'Trapez', 5, g=22, kursiv=False),
-                      T(3.7, 0.3, 'Raute', 5, 'start', 22, False), T(8.35, 0.3, 'Drachen', 5, 'start', 22, False)],
+                      T(3.7, 0.3, 'Raute', 5, 'start', 22, False), T(8.35, 0.3, 'Drachen', 5, 'start', 22, False)]
+                 # «Jedes Quadrat ist ein Rechteck, jedes Rechteck ein Parallelogramm, jedes Parallelogramm ein Trapez»
+                 # (Ton 2.5 / 4.2–4.8 / 5.8–6.7): eine orange Kopie verformt sich je in die nächste Figur — eine
+                 # Bedingung fällt weg (wie in sim3: aus dem Trapez wird mit c = 8 ein Parallelogramm).
+                 + [mit(V(von_, 2, 0.06, gestrichelt=True, dicke=3), ein=t0 - 0.2, aus=t1 + 0.4,
+                        bewegung=[[t0, {}], [t1, {'punkte': [list(p_) for p_ in nach]}]])
+                    for von_, nach, t0, t1 in (
+                        (((0, 6), (2.5, 6), (2.5, 8.5), (0, 8.5)), ((4, 6), (8.5, 6), (8.5, 8.5), (4, 8.5)), 2.6, 3.4),
+                        (((4, 6), (8.5, 6), (8.5, 8.5), (4, 8.5)), ((0, 2), (4, 2), (5, 4.5), (1, 4.5)), 4.3, 5.2),
+                        (((0, 2), (4, 2), (5, 4.5), (1, 4.5)), ((5.5, 2), (9.3, 2), (8.3, 4.5), (6.5, 4.5)), 5.9, 6.8))],
                  ein=0.3)),
          sz('Parallelogramm',
             'Schneid beim Parallelogramm links ein Dreieck ab und setz es rechts an: Es entsteht ein Rechteck mit der Grundseite '
@@ -513,7 +602,11 @@ clip('vierecke', 'Figuren sehen: Vierecke',
             f(r'A = a \cdot \fb{h}', 300, 62, ein=7.4),
             graf(W3, [V([(0, 1), (6, 1), (8, 4), (2, 4)]), S((2, 4), (2, 1), 2, True), RW(2, 1, 0, 90),
                       T(1.65, 2.4, 'h', 2, 'end'), T(3, 0.25, 'a', 5)], ein=0.3),
-            graf(W3, [V([(0, 1), (2, 1), (2, 4)], 4, 0.18, gestrichelt=True, dicke=3), V([(6, 1), (8, 1), (8, 4)], 3, 0.25)], ein=2.6),
+            # «links ein Dreieck ab und setz es rechts an» (Ton: Dreieck 2.4, setz 3.15–3.8): das grüne Stück liegt
+            # zuerst links und wird um 6 nach rechts geschoben.
+            graf(W3, [V([(0, 1), (2, 1), (2, 4)], 4, 0.18, gestrichelt=True, dicke=3),
+                      mit(V([(0, 1), (2, 1), (2, 4)], 3, 0.25), bewegung=[[3.0, {}], [3.9, {'punkte': [[6, 1], [8, 1], [8, 4]]}]])],
+                 ein=2.4),
             # «Es entsteht ein Rechteck» (Ton 4.5–5.2): Rechteck (2 | 1)–(8 | 4) umranden
             graf(W3, [V([(2, 1), (8, 1), (8, 4), (2, 4)], 3, 0.0, dicke=6)], ein=4.8, raster=False)),
          sz('Trapez',
@@ -521,8 +614,14 @@ clip('vierecke', 'Figuren sehen: Vierecke',
             'Mittel aus a und c. Fläche gleich Mittellinie mal Höhe.',
             f(r'\fb{m} = \tfrac{1}{2}(a + c)', 300, 56, ein=6.0),
             f(r'A = \fb{m} \cdot h', 410, 56, ein=8.0),
-            graf(W3, [V([(0, 1), (8, 1), (6, 4), (2, 4)]), T(4, 0.25, 'a', 5), T(4, 4.45, 'c', 5)], ein=0.3),
-            graf(W3, [S((1, 2.5), (7, 2.5), 2), T(4, 2.75, 'm', 2)], ein=3.7),
+            # Brücke zu sim3, Aufgabe 1 («Verschieb die obere Seite mit d»): bei «Sie ist das Mittel aus a und c»
+            # (Ton 5.9–7.5) gleitet c um 2 nach rechts und zurück; die Mittellinie verschiebt sich um die Hälfte,
+            # ihre Länge ½(8 + 4) = 6 bleibt.
+            graf(W3, [mit(V([(0, 1), (8, 1), (6, 4), (2, 4)]), bewegung=SCHUB_C(lambda s_: {'punkte': [[0, 1], [8, 1], [6 + s_, 4], [2 + s_, 4]]})),
+                      T(4, 0.25, 'a', 5), mit(T(4, 4.45, 'c', 5), bewegung=SCHUB_C(lambda s_: {'bei': [4 + s_, 4.45]})),
+                      mit(S((1, 2.5), (7, 2.5), 2), ein=3.7, bewegung=SCHUB_C(lambda s_: {'von': [1 + s_ / 2, 2.5], 'bis': [7 + s_ / 2, 2.5]})),
+                      mit(T(4, 2.75, 'm', 2), ein=3.7, bewegung=SCHUB_C(lambda s_: {'bei': [4 + s_ / 2, 2.75]}))],
+                 ein=0.3),
             # «mal Höhe» (Ton 9.2): Höhe h = 3 von D(2 | 4) auf a
             graf(W3, [S((2, 4), (2, 1), 2, True, 3), RW(2, 1, 0, 90), T(1.65, 1.6, 'h', 2, 'end')], ein=8.8, raster=False)),
          sz('Raute und Drachen',
@@ -625,6 +724,7 @@ clip('kontrolle-vierecke', 'Figuren sehen: Kontrollfragen zu Vierecken',
 # ════════════════════════════════════════════════ Kapitel 4 · Einführung
 W4 = geo(-0.5, -1, 11)
 W4r = geo(-7.5, -7.5, 15)                      # Kreis r = 6 um (0 | 0)
+PHI4 = lambda felder: [[3.6, {}], [4.1, felder(90)], [4.8, {}], [5.4, felder(180)], [6.3, {}], [7.0, felder(60)]]
 clip('kreis', 'Figuren sehen: Kreis und Kreisteile',
      'Sehne, Sekante, Tangente und Passante; U = 2πr, A = πr²; Bogen und Sektor über den Anteil φ/360°; Segment = Sektor − Dreieck. '
      'Vorgelöst mit r = 6 cm und φ = 60°.',
@@ -650,8 +750,16 @@ clip('kreis', 'Figuren sehen: Kreis und Kreisteile',
             'vom ganzen Kreis. Das gilt für die Bogenlänge und für die Fläche.',
             f(r'b = \dfrac{\varphi}{360^\circ} \cdot 2\pi r', 290, 50, ein=3.6),
             f(r'A_S = \dfrac{\varphi}{360^\circ} \cdot \pi r^2', 430, 50, ein=7.7),
-            graf(W4r, [KR(0, 0, 6, 5, 0, dicke=2.5), SEK(0, 0, 6, 0, 60), BOG(0, 0, 6, 0, 60), WI(0, 0, 0, 60, 2, 60),
-                       T(1.6, 0.6, 'φ', 2, 'start', 28)], ein=0.3)),
+            # Brücke zu sim4, Aufgabe 1 («Zieh an φ. Welchen Anteil …?»): bei «Er ist der Anteil Phi durch 360 Grad
+            # vom ganzen Kreis» (Ton 3.6–6.9) öffnet sich der Sektor auf 90° (¼) und 180° (½) und schliesst sich
+            # wieder auf 60°. Der Winkelbogen φ = 60° geht solange aus; «¼», «½» sind Zwischenstände.
+            graf(W4r, [KR(0, 0, 6, 5, 0, dicke=2.5), mit(SEK(0, 0, 6, 0, 60), bewegung=PHI4(lambda w: {'bis': w})),
+                       mit(BOG(0, 0, 6, 0, 60), bewegung=PHI4(lambda w: {'bis': w})),
+                       mit(WI(0, 0, 0, 60, 2, 60), aus=3.6), mit(WI(0, 0, 0, 60, 2, 60), ein=7.0),
+                       T(1.6, 0.6, 'φ', 2, 'start', 28),
+                       mit(T(0, -3.2, '90° : 360° = ¼', 5, 'middle', 30, False), ein=4.1, aus=4.7),
+                       mit(T(0, -3.2, '180° : 360° = ½', 5, 'middle', 30, False), ein=5.4, aus=6.2)],
+                 ein=0.3)),
          sz('Vorgelöst',
             'Zum Beispiel r gleich sechs Zentimeter und Phi gleich sechzig Grad. Sechzig Grad sind ein Sechstel des Kreises. '
             'Bogen: ein Sechstel von zwölf Pi, also zwei Pi, rund sechs Komma zwei acht Zentimeter. Sektor: ein Sechstel von '
@@ -772,7 +880,10 @@ clip('aehnlichkeit', 'Figuren sehen: Streckung und Ähnlichkeit',
             f(r'\fb{k = 2}', 410, 56, ein=5.2),
             graf(W5, [V([(3, 2), (5, 2), (4, 4)]), T(1, 0.45, 'Z', 5)], punkte=[pt(1, 1, 5)], ein=0.3),
             graf(W5, [S((1, 1), (5, 3), 5, True, 2), S((1, 1), (9, 3), 5, True, 2), S((1, 1), (7, 7), 5, True, 2)], ein=2.4),
-            graf(W5, [V([(5, 3), (9, 3), (7, 7)], 2, 0.1)], ein=8.3)),
+            # Brücke zu sim5 («Zieh an k»): «Mit k gleich zwei wird sein Abstand zu Z doppelt so gross» (Ton 5.1–7.9):
+            # das Bild liegt bei k = 1 auf dem Original und wächst entlang der Strahlen bis k = 2 (Z + k·(P − Z)).
+            graf(W5, [V([(3, 2), (5, 2), (4, 4)], 2, 0.1, bewegung=[[5.5, {}], [7.8, {'punkte': [[5, 3], [9, 3], [7, 7]]}]])],
+                 ein=5.2)),
          sz('Was bleibt, was wächst',
             'Die Winkel bleiben gleich, die Figuren sind ähnlich. Jede Länge wird mit k multipliziert. Die Fläche aber mit k '
             'im Quadrat: Bei k gleich zwei passen vier Originaldreiecke ins Bild.',
@@ -792,7 +903,10 @@ clip('aehnlichkeit', 'Figuren sehen: Streckung und Ähnlichkeit',
             graf(W5n, [V([(1.5, 1), (3.5, 1), (2.5, 3)]), T(0.3, -0.5, 'Z', 5, 'start')], punkte=[pt(0, 0, 5)], ein=0.3),
             graf(W5n, [S((-2.1, -1.4), (5.25, 3.5), 5, True, 2), S((-4.2, -1.2), (4.9, 1.4), 5, True, 2),
                        S((-3.33, -4.0), (3.33, 4.0), 5, True, 2)], ein=1.0),
-            graf(W5n, [V([(-1.5, -1), (-3.5, -1), (-2.5, -3)], 2, 0.1)], ein=1.7)),
+            # «liegt das Bild auf der anderen Seite von Z. Bei k gleich minus eins» (Ton 1.65–4.8): k läuft von 1
+            # über 0 (das Bild schrumpft in Z) bis −1 (wie sim5 «auch unter null»); die Punkte sind linear in k.
+            graf(W5n, [V([(1.5, 1), (3.5, 1), (2.5, 3)], 2, 0.1,
+                         bewegung=[[2.0, {}], [4.6, {'punkte': [[-1.5, -1], [-3.5, -1], [-2.5, -3]]}]])], ein=1.7)),
          sz('Strahlensätze',
             'Zwei Strahlen gehen von S aus und werden von zwei Parallelen geschnitten. Dann stehen die Strecken im gleichen '
             'Verhältnis: S A zu S A Strich wie A B zu A Strich B Strich. Mit S A gleich vier, S A Strich gleich sechs und A B '

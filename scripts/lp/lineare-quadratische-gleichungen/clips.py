@@ -664,12 +664,12 @@ clip('verfahren', 'Gleichungen lösen: das passende Verfahren wählen',
             op('-x^2', 350, 10.8, g=44),
             f(r'2x + 1 = 5', 440, 50, ein=12.8),
             f(r'x = \fc{2}', 530, 50, ein=16.4),
-            # «heben sich die x Quadrat weg»: beide Parabeln steigen aus dem Bild, die Geraden der linearen
-            # Gleichung 2x + 1 = 5 kommen; der Schnitt bei x = 2 erscheint mit «x ist zwei».
+            # «heben sich die x Quadrat weg»: auf beiden Seiten verschwindet das x² stetig (Normalform [t, a, b, c],
+            # a 1 → 0): (x + 1)² = x² + 2x + 1 wird zur Geraden 2x + 1, x² + 5 zur Waagrechten 5. In jedem Zwischenstand
+            # (1 − s)x² + 2x + 1 = (1 − s)x² + 5 bleibt der Schnitt bei x = 2. Der Punkt kommt mit «x ist zwei».
             # Wortzeiten (07.10.2026): «heben sich die x Quadrat weg» 10.4–12.1, «Es bleibt …» ab 12.7, «x ist zwei» 16.0.
-            graf(W4a, parabeln=[par(1, -1, 0, null=False, bew=[[0, 1, -1, 0], [10.81, 1, -1, 0], [12.17, 1, -1, 30]]),
-                                par(1, 0, 5, farbe=2, null=False, bew=[[0, 1, 0, 5], [10.81, 1, 0, 5], [12.17, 1, 0, 35]])], ein=0.3),
-            auflage(W4a, 12.8, geraden=[ger(2, 1, 1), ger(0, 5, 2)]),
+            graf(W4a, parabeln=[{'normalform': True, 'farbe': 1, 'bewegung': [[0, 1, 2, 1], [10.81, 1, 2, 1], [12.17, 0, 2, 1]]},
+                                {'normalform': True, 'farbe': 2, 'bewegung': [[0, 1, 0, 5], [10.81, 1, 0, 5], [12.17, 0, 0, 5]]}], ein=0.3),
             auflage(W4a, 16.4, punkte=[pt(2, 5, 3, '(2 | 5)', [2.3, 3.8])])),
          sz('Wenn b fehlt',
             'Fehlt das Glied mit x, zieh die Wurzel. Drei x Quadrat gleich siebenundzwanzig: x Quadrat ist neun, x ist plus oder minus drei.',
@@ -856,15 +856,22 @@ clip('parameter', 'Gleichungen lösen: Parameterdiskussion',
             f(r'm = 0: \;\; -4x - 3 = 0 \;\Rightarrow\; x = -\tfrac{3}{4}', 345, 44, ein=5.7),
             f(r'm \neq 0: \;\; D(m) = 16 + 12m', 440, 44, ein=9.4),
             n('@m = -\\tfrac{4}{3}@: eine; @m \\gt -\\tfrac{4}{3}@ (@m \\neq 0@): zwei|@m \\lt -\\tfrac{4}{3}@: keine', 540, 'blau', 40, ein=13.6),
-            # Behelf (Prüfung 07.10.2026): feste Fälle nacheinander statt m stetig durch 0 (das kann die
-            # Parabel-Bewegung in Scheitelform nicht). m = 1 zu «m x² − 4x − 3», steigt bei «m gleich null»
-            # aus dem Bild, die Gerade −4x − 3 (Fall m = 0) kommt. Bei «null bei m gleich minus vier Drittel»
-            # weicht die Gerade nach oben, die Parabel kommt von unten (berührt bei −1.5), dann m = −1 (zwei) und m = −2 (keine).
-            graf(W5c, parabeln=[par(1, 2, -7, beschr=False, bew=[[0, 1, 2, -7], [5.5, 1, 2, -7], [6.3, 1, 2, 100]]),
-                                par(-4 / 3, -1.5, 0, beschr=False, bew=[[0, -4 / 3, -1.5, -100], [13.3, -4 / 3, -1.5, -100], [14.1, -4 / 3, -1.5, 0],
-                                                         [16.8, -4 / 3, -1.5, 0], [17.6, -1, -2, 1], [18.2, -1, -2, 1], [19.0, -2, -1, -1]])],
-                 geraden=[{'bewegung': [[0, -4, 100], [5.5, -4, 100], [6.1, -4, -3], [13.3, -4, -3], [14.1, -4, 100]], 'farbe': 5,
-                           'dicke': 4, 'marken': [{'x': -0.75, 'text': '(−0.75 | 0)', 'farbe': 3}]}],
+            # m läuft stetig durch 0 (Parabel in Normalform [t, a, b, c], seit 07.10.2026; Wortzeiten):
+            # m = 1 zu «m x² − 4x − 3» (3.7 s, zwei Nullstellen 2 ± √7), «Bei m gleich null … linear» 6.0–7.7 → m = 0,
+            # die Gerade −4x − 3 mit der einen Nullstelle −0.75 («minus drei Viertel» 8.3); «null bei m gleich minus
+            # vier Drittel» 13.6–15.6 → m = −4/3, berührt bei (−1.5 | 0) («Eine Lösung» 15.9); «grössere m … zwei»
+            # 16.9 → m = −1 (Nullstellen −3, −1); «kleinere keine» 18.7 → m = −2 (D = −8, Scheitel (−1 | −1)).
+            f(r'\fb{m = 1}', 690, 40, ein=3.7),
+            f(r'\to\ \fb{0}', 690, 40, ein=6.04, x=300),
+            f(r'\to\ \fb{{-\tfrac{4}{3}}}', 690, 40, ein=14.3, x=420),
+            f(r'\to\ \fb{{-1}}', 690, 40, ein=16.94, x=600),
+            f(r'\to\ \fb{{-2}}', 690, 40, ein=18.7, x=750),
+            graf(W5c, parabeln=[{'normalform': True, 'farbe': 1, 'nullstellen': {'farbe': 3, 'beschriftung': False},
+                                 'bewegung': [[0, 1, -4, -3], [6.0, 1, -4, -3], [7.4, 0, -4, -3], [13.8, 0, -4, -3],
+                                              [15.2, -4 / 3, -4, -3], [16.9, -4 / 3, -4, -3], [17.8, -1, -4, -3],
+                                              [18.6, -1, -4, -3], [19.3, -2, -4, -3]]}],
+                 punkte=[dict(pt(-0.75, 0, 3, '(−0.75 | 0)', [-1.15, 0.45], 'end'), ein=8.3, aus=13.8),
+                         dict(pt(-1.5, 0, 3, '(−1.5 | 0)', [-1.75, 0.45], 'end'), ein=15.9, aus=16.9)],
                  ein=3.7)),
          sz('Merke',
             'Zum Mitnehmen: Linear auf die Form a mal x gleich c bringen und den Wert suchen, bei dem a null wird. Quadratisch '

@@ -47,8 +47,18 @@ wandernde Bereiche (`grenzen`) und schneidet die Tangensstrecke am Rand ab; Live
 −0.8 (HOWTO-clips «Später einblenden, bewegen, mitlaufen»). **Noch nicht:** bewegtes Fenster (Zoom),
 senkrechte bewegte Gerade.
 
-**Offen:** die Zeilen *Werkzeug-Erweiterung* mit den neuen Mitteln in die Clips einbauen; die
-*Neuvertonungen* (4 + die drei eben genannten).
+**Dritter Durchgang (07.10.2026): *Werkzeug-Erweiterung*** in 27 Einführungsclips aller neun Leitprogramme
+eingebaut — u. a. «Zuerst a prüfen» stetig durch m = 0, «Erst ordnen» Parabeln → Geraden, Zaun-Rechteck wächst
+mit dem Läufer, Planimetrie mit bewegten Figuren (C ziehen, Spitze verschieben, Drehung um 180°, Familie der
+Vierecke, Sektor 60° → 90° → 180°, Streckung k = 1 → 2 und 1 → −1), «Wie viele?» und «Eine Waagrechte» mit
+mitlaufenden Schnittpunkten, Tangens über den Rand, Läufer in Hyperbel, Raten, Extrema, Wachstum, Sättigung,
+Logarithmus und auf dem V, «Am Rand» und «Einschränken» mit wanderndem Bereich.
+
+**Offen:** «Weiter weg / Ganz weit» (bewegtes Fenster), Merke in `g3-2-lp-typen` (senkrechte bewegte Gerade;
+Behelf: rote Strecke x = 3), Punkt, der beim Stauchen mitwandert («Faktor im Argument»), die *Neuvertonungen*
+(4 + `s3-2-lp-hyperbel` a 1 → −1, `g3-3-lp-drei-formen` a 1 → −1, `g3-3-lp-a-finden` Fall B,
+`s3-6-lp-abschnittsweise` b 3 → 5). Formeln, die noch ab Szenenbeginn stehen: `g3-3-lp-mitte` «A(4) = …»,
+`s3-2-lp-umkehren` «y = x², x ≥ 0 → y = √x».
 Zusätzlich fürs Werkzeug: Tangensstrecke am Fensterrand abschneiden statt ausblenden (darum fährt P nur bis
 1.245 rad); senkrechte bewegte Gerade (`g3-2-lp-typen` Merke); mitlaufende Schnittpunkte auch bei
 «Faktor im Argument» (Trig-Gleichungen).

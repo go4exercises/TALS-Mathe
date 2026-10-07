@@ -673,9 +673,12 @@ clip('nullstellen-berechnen', 'Polynom sehen: Nullstellen berechnen',
             f(r'f(x) = x^3 - 2x^2 - 5x + 6', 300, 50),
             f(r'f(\fb{1}) = 1 - 2 - 5 + 6 = 0', 400, 50, ein=10.6),
             n('Kandidaten: Teiler von @6@|@\\pm 1,\\ \\pm 2,\\ \\pm 3,\\ \\pm 6@', 500, 'orange', 44, ein=7.0),
-            graf(WD, [poly([[0, 1, 1, 3, -2]])], ein=1.0),
-            graf(WD, [poly([[0, 1, 1, 3, -2]])], ein=10.6,
-                 punkte=[pt(1, 0, 2, '(1 | 0)', [1.25, 0.9])])),
+            # Probestelle wie in sim4 (Läufer, seit 07.10.2026): erscheint mit den Kandidaten (7.0 s) bei −1,
+            # f(−1) = 8; «Probe mit eins» (9.3 s) fährt sie nach 1, f(1) = 0. Zweite, deckungsgleiche Kurve,
+            # weil der Läufer kein eigenes ein hat.
+            graf(WD, [poly([[0, 1, 1, 3, -2]]),
+                      dict(poly([[0, 1, 1, 3, -2]]), ein=7.0,
+                           laeufer={'bahn': [[9.3, -1], [10.5, 1]], 'text': 'f({x}) = {y}', 'farbe': 2})], ein=1.0)),
          sz('Abspalten',
             'Eine Nullstelle liefert einen Linearfaktor: x minus eins. Also ist f gleich Klammer x minus eins, '
             'mal einem quadratischen Quotienten x Quadrat plus p x plus q. Ausmultipliziert gibt das '
@@ -833,7 +836,13 @@ clip('extrema', 'Polynom sehen: Hoch- und Tiefpunkte',
             'ein Hochpunkt, H minus eins, zwei. Bei eins wechselt er von fallend zu steigend: ein Tiefpunkt, T eins, minus zwei.',
             titel('Hoch und tief', 280, 80),
             f(r'f(x) = x^3 - 3x', 430, 58, ein=1.0),
-            graf(W5, [poly([[0] + B5], extrema={'farbe': 3})], ein=3.0)),
+            # Läufer (seit 07.10.2026) zum Vorgang: steigt bis −1 und hält («hört … auf zu steigen», 3.1–4.8 s),
+            # fällt («beginnt zu fallen», 5.1–6.0 s); fällt bis 1 («von fallend», 8.7–9.9 s), steigt
+            # («zu steigend», 10.0–10.8 s). H und T zum Wort («Hochpunkt» 6.7 s, «Tiefpunkt» 11.1 s).
+            graf(W5, [dict(poly([[0] + B5]), laeufer={'bahn': [[3.1, -2], [4.8, -1], [5.1, -1], [6.0, 0], [8.7, 0],
+                                                               [9.9, 1], [10.0, 1], [10.8, 2]], 'farbe': 5})], ein=3.0,
+                 punkte=[dict(pt(-1, 2, 3, 'H(−1 | 2)', [-1, 2.6], 'middle'), ein=6.7),
+                         dict(pt(1, -2, 3, 'T(1 | −2)', [1, -2.85], 'middle'), ein=11.1)])),
          sz('Lokal',
             'Ist zwei der grösste Funktionswert? Nein: Bei x gleich zweieinhalb ist f schon über acht, '
             'und weiter rechts wächst es ohne Grenze. Das Maximum bei H gilt nur in seiner Umgebung — es ist lokal.',
@@ -849,9 +858,14 @@ clip('extrema', 'Polynom sehen: Hoch- und Tiefpunkte',
             'Absolute Extremwerte liegen in einem Hoch- oder Tiefpunkt — oder am Rand.',
             f(r'D = [-1.5;\, 2.5]', 300, 58),
             n('absolutes Maximum: am Rand|absolutes Minimum: im Tiefpunkt', 440, 'gruen', ein=7.8),
-            graf(W5r, [fest('x**3-3*x'), poly([[0] + B5], von=-1.5, bis=2.5, extrema={'farbe': 3, 'beschriftung': False},
-                           marken=[{'x': 2.5, 'text': '(2.5 | 8.125)', 'farbe': 5}, {'x': -1.5, 'text': '', 'farbe': 5}])],
-                 ein=1.0)),
+            # Das Intervall zieht sich zum Ton zusammen (grenzen, seit 07.10.2026): links bei «minus eins Komma fünf»
+            # (2.2–3.2 s), rechts bei «zwei Komma fünf» (3.6–4.4 s); die Randpunkte erscheinen, wenn der Rand
+            # dort ankommt, der Wert am rechten Rand mit «acht Komma eins zwei fünf» (7.7 s).
+            graf(W5r, [fest('x**3-3*x'), dict(poly([[0] + B5], extrema={'farbe': 3, 'beschriftung': False}),
+                                              grenzen=[[2.2, -2, 3], [3.2, -1.5, 3], [3.6, -1.5, 3], [4.4, -1.5, 2.5]])],
+                 ein=1.0,
+                 punkte=[dict(pt(-1.5, 1.125, 5), ein=3.2), dict(pt(2.5, 8.125, 5), ein=4.4),
+                         dict(pt(2.5, 8.125, 5, '(2.5 | 8.125)', [2.38, 8.46], 'end'), ein=7.7)])),
          sz('Grad 2 exakt',
             'Beim Grad zwei lässt sich der Extrempunkt exakt berechnen. Minus x Quadrat plus vier x minus eins: '
             'x s gleich minus b durch zwei a, also minus vier durch minus zwei, gleich zwei. f von zwei ist drei. '

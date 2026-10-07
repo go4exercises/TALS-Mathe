@@ -296,7 +296,10 @@ function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
       const tx = g.querySelector('.bew-gd-tx'), ty = g.querySelector('.bew-gd-ty');
       tx.setAttribute('x', px((xa + xb) / 2)); tx.setAttribute('y', py(ya) + (m > 0 ? 36 : -14));
       tx.textContent = 'Δx = ' + bewZahl(dx);
-      ty.setAttribute('x', px(xb) + 12); ty.setAttribute('y', py((ya + yb) / 2) + 10);
+      // dx < 0: die senkrechte Kathete steht links, ihre Beschriftung auch (sonst liegt sie
+      // auf der Geraden oder der y-Achse)
+      ty.setAttribute('x', px(xb) + (dx < 0 ? -12 : 12)); ty.setAttribute('y', py((ya + yb) / 2) + 10);
+      ty.setAttribute('text-anchor', dx < 0 ? 'end' : 'start');
       ty.textContent = 'Δy = ' + bewZahl(yb - ya);
     }
   }

@@ -131,6 +131,26 @@ def leiter(x, y0, y1, farbe=4):
     return [pt(x, y, farbe) for y in range(y0, y1 + 1)]
 
 
+def gedreht(punkte, um, t0, t1, grad, schritt=0.05):
+    """Stuetzpunkte einer Figur, die sich zwischen t0 und t1 starr um den Punkt `um` dreht.
+
+    Der Clip-Bauer blendet zwischen zwei Stuetzpunkten die Koordinaten geradlinig ueber; eine
+    Drehung braucht darum einen Stuetzpunkt je Bild (20 je Sekunde), sonst schrumpft die Figur
+    unterwegs. Der Winkel laeuft weich an und aus (smoothstep), wie jede andere Bewegung.
+    """
+    import math
+    st = [[t0, {}]]
+    n = max(1, int(round((t1 - t0) / schritt)))
+    for k in range(1, n + 1):
+        q = k / n
+        w = math.radians(grad * q * q * (3 - 2 * q))
+        c, s_ = math.cos(w), math.sin(w)
+        st.append([round(t0 + (t1 - t0) * q, 3),
+                   {'punkte': [[round(um[0] + c * (x - um[0]) - s_ * (y - um[1]), 4),
+                                round(um[1] + s_ * (x - um[0]) + c * (y - um[1]), 4)] for x, y in punkte]}])
+    return st
+
+
 def f(t, y, g=62, ein=0.8):
     return dict(typ='formel', text=t, x=LX, y=y, groesse=g, ein=ein)
 
@@ -680,11 +700,22 @@ clip('typen', 'Gerade sehen: Typen und Lagebeziehungen',
             'Vorzeichen kippt: aus zwei zu eins wird minus eins zu zwei.',
             f(r'\dfrac{2}{1} \;\longrightarrow\; \dfrac{-1}{2} = \fa{-0.5}', 300, 58),
             n('Dreieck um @90^\\circ@ gedreht:|@\\Delta x@ und @\\Delta y@ tauschen,|ein Vorzeichen kippt', 460, 'blau'),
-            # Beide Dreiecke mit Abstand zu (0 | 1), wo sich die Geraden kreuzen: das erste bei
-            # x = 1 (von (1 | 3) nach (2 | 5)), das zweite bei x = −3.5 (von (−3.5 | 2.75) nach (−1.5 | 1.75)).
-            graf(W_GL, [bew([[0, 2, 1]], dreieck=dreieck(1, 1)),
-                        bew([[0, -0.5, 1]], dreieck=dreieck(None, None, [[7.0, -3.5, 0], [10.8, -3.5, 2]]))],
-                 [pt(0, 1, 5)])),
+            # Das Steigungsdreieck der ersten Geraden ((1 | 3), (2 | 3), (2 | 5)) dreht sich als Kopie starr um
+            # 90° im Uhrzeigersinn um (1 | 3) (Ton «dreht man das Dreieck um neunzig Grad» 5.5–7.2 s), dann gleitet
+            # es auf die zweite Gerade (7.5–8.9 s, «tauschen hinauf und nach rechts die Rolle»): Ecken
+            # (−2.5 | 2.25), (−2.5 | 1.25), (−0.5 | 1.25), Hypotenuse auf y = −0.5x + 1. Die neuen Seiten
+            # kommen zu «nach rechts» (8.5 s) und «ein Vorzeichen kippt» (9.8 s). Unterwegs bleibt alles im
+            # Fenster (fernste Ecke 2.24 von (1 | 3)).
+            graf(W_GL, [bew([[0, 2, 1]], dreieck=dreieck(1, 1)), bew([[0, -0.5, 1]])],
+                 [pt(0, 1, 5)],
+                 figuren=[{'art': 'vieleck', 'punkte': [[1, 3], [2, 3], [2, 5]], 'farbe': 5, 'fuellung': 0.14, 'dicke': 3,
+                           'ein': 5.3,
+                           'bewegung': gedreht([[1, 3], [2, 3], [2, 5]], (1, 3), 5.6, 7.2, -90)
+                                       + [[7.5, {}], [8.9, {'punkte': [[-2.5, 2.25], [-2.5, 1.25], [-0.5, 1.25]]}]]},
+                          {'art': 'text', 'bei': [-1.5, 0.8], 'text': 'Δx = 2', 'farbe': 5, 'kursiv': False,
+                           'groesse': 27, 'ein': 8.5},
+                          {'art': 'text', 'bei': [-2.65, 1.62], 'text': 'Δy = −1', 'farbe': 5, 'kursiv': False,
+                           'groesse': 27, 'anker': 'end', 'ein': 9.8}])),
          sz('Merke',
             'Zum Mitnehmen: proportional heisst b gleich null, die Identität hat zusätzlich m gleich eins, '
             'konstant heisst m gleich null. Eine senkrechte Gerade ist keine Funktion. '
@@ -696,11 +727,15 @@ clip('typen', 'Gerade sehen: Typen und Lagebeziehungen',
               570, 'blau', 44, ein=1.4),
             # Die zweite Gerade geht im Takt der Saetze durch die Faelle (Wortzeiten): b → 0 (1.2–2.8 s),
             # m → 1 (3.2–5.0 s), konstant y = −2 (5.6–6.9 s); die senkrechte Gerade kann eine
-            # bewegte Gerade nicht zeigen, darum steht sie still; parallel m → 2 (9.4–10.7 s),
+            # bewegte Gerade nicht zeigen, darum steht sie still, und zu «Eine senkrechte Gerade ist keine
+            # Funktion» (7.3–9.2 s) steht daneben kurz x = 3 in Rot (ein/aus); parallel m → 2 (9.4–10.7 s),
             # zuletzt rastet sie senkrecht ein (11.0–13.0 s).
             graf(W_GL, [ger(2, 1), bew([[1.2, 1.5, 2], [2.8, 1.5, 0], [3.2, 1.5, 0], [5.0, 1, 0],
                                         [5.6, 1, 0], [6.9, 0, -2], [9.4, 0, -2], [10.7, 2, -2],
-                                        [11.0, 2, -2], [13.0, -0.5, 1]])], [pt(0, 1, 5)])),
+                                        [11.0, 2, -2], [13.0, -0.5, 1]])], [pt(0, 1, 5)],
+                 figuren=[{'art': 'strecke', 'von': [3, -4], 'bis': [3, 5], 'farbe': 4, 'ein': 7.3, 'aus': 9.4},
+                          {'art': 'text', 'bei': [3.15, 4.3], 'text': 'x = 3', 'farbe': 4, 'groesse': 30,
+                           'anker': 'start', 'ein': 7.3, 'aus': 9.4}])),
          JETZT_DU,
      ])
 
@@ -831,7 +866,8 @@ clip('aufstellen', 'Gerade sehen: die Geradengleichung aufstellen',
             n('Schritt 1:|@\\fa{m}@ aus den beiden Punkten', 460, 'blau'),
             graf(W_GL, [bew([[0, 2, 2]], farbe=5, gestrichelt=True,
                             dreieck=dreieck(None, None, [[4.8, -2, 0], [7.6, -2, 3]]))],
-                 [pt(-2, -2, 5, 'A(−2 | −2)'), pt(1, 4, 5, 'B(1 | 4)')])),
+                 # A links oben beschriftet: rechts unter A steht ab 7.6 s «Δx = 3» des Dreiecks
+                 [pt(-2, -2, 5, 'A(−2 | −2)', [-2.3, -1.6], 'end'), pt(1, 4, 5, 'B(1 | 4)')])),
          sz('Zwei Punkte: dann b',
             'Dann b: Setz einen der beiden Punkte ein. Vier gleich zwei mal eins plus b gibt b gleich zwei. '
             'Die Gerade lautet y gleich zwei x plus zwei. Die Probe mit A bestätigt es.',
@@ -855,7 +891,10 @@ clip('aufstellen', 'Gerade sehen: die Geradengleichung aufstellen',
             'Gefahren wird ab null Kilometern — nur dort ist die Gerade sinnvoll.',
             f(r'K(x) = \fa{3}\,x + \fb{6}', 300, 66),
             n('«pro Kilometer» @\\to \\fa{m}@|«Grundtaxe» @\\to \\fb{b}@|sinnvoll nur für @x \\geq 0@', 460, 'blau'),
-            graf(W_TAXI, [bew([[4.8, 0, 6], [7.6, 3, 6]], yachse={'farbe': 2})],
+            # «Gefahren wird ab null Kilometern» (11.3–13.1 s, Wortzeiten): Die Gerade bleibt nur für x ≥ 0
+            # stehen (`ab`), der Teil links der y-Achse blendet aus (zweite, deckungsgleiche Gerade mit `aus`).
+            graf(W_TAXI, [dict(bew([[4.8, 0, 6], [7.6, 3, 6]]), aus=12.2),
+                          dict(bew([[4.8, 0, 6], [7.6, 3, 6]], yachse={'farbe': 2}), ab=0)],
                  xname='x [km]', yname='K [CHF]')),
          sz('Merke',
             'Zum Mitnehmen: Der Ansatz ist immer y gleich m x plus b. Was gegeben ist, wird eingesetzt; '

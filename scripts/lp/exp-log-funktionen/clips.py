@@ -220,8 +220,17 @@ clip('exponentialfunktion', 'Exponentialkurve sehen: die Exponentialfunktion',
             f(r'\begin{array}{c|cccccc} x & -2 & -1 & 0 & 1 & 2 & 3 \\ \hline 2^x & \tfrac14 & \tfrac12 & 1 & 2 & 4 & 8 \end{array}',
               430, 42, ein=3.0),
             n('je Schritt: mal @\\fa{2}@', 560, 'blau', ein=3.7),
+            # Punkte einzeln zum Wort (ein je Punkt, seit 07.10.2026): «ein Viertel» 8.7, «ein Halb» 9.3, «eins» 9.9,
+            # «zwei» 10.3, «vier» 10.9, «acht» 11.3 s. Mit den drei grossen Punkten die Treppe: einen Schritt
+            # nach rechts (gestrichelt), dann mal 2 hinauf (Pfeil) — bei 1/4 → 1/2 → 1 wäre sie zu klein.
             graf(W1, [ek([[0, 1, 2, 0]])], ein=3.0,
-                 punkte=[pt(-2, 0.25, 5), pt(-1, 0.5, 5), pt(0, 1, 5), pt(1, 2, 5), pt(2, 4, 5), pt(3, 8, 5)])),
+                 punkte=[dict(pt(x_, 2.0 ** x_, 5), ein=e_) for x_, e_ in
+                         ((-2, 8.7), (-1, 9.3), (0, 9.9), (1, 10.3), (2, 10.9), (3, 11.3))],
+                 strecken=[dict(st_, ein=e_) for e_, (x_, y_) in ((10.3, (0, 1)), (10.9, (1, 2)), (11.3, (2, 4))) for st_ in (
+                     {'von': [x_, y_], 'bis': [x_ + 1, y_], 'farbe': 1, 'gestrichelt': True},
+                     dict({'von': [x_ + 1, y_], 'bis': [x_ + 1, 2 * y_], 'farbe': 1, 'pfeil': True, 'dicke': 4,
+                           'beschriftung': '·2'},
+                          **({'beschriftung_bei': [x_ + 0.9, y_ + 0.45], 'anker': 'end'} if x_ == 2 else {})))])),
          sz('Die Basis',
             'Die Basis a bestimmt, wie stark die Kurve steigt. Drei hoch x ist steiler, eins Komma fünf hoch x flacher. '
             'Ein Punkt bleibt immer gleich: null, eins. Denn a hoch null ist eins.',
@@ -362,8 +371,13 @@ clip('wachstum-zerfall', 'Exponentialkurve sehen: Wachstum und Zerfall',
             titel('Wachstum', 280, 80),
             f(r'N(t) = \fb{200} \cdot \fa{1.5}^{\,t}', 430, 58, ein=3.0),
             n('Startwert @\\fb{N_0} = 200@|Wachstumsfaktor @\\fa{a} = 1.5@', 560, 'blau', 44, ein=5.0),
-            graf(W2, [ek([[0, 200, 1.5, 0]], startpunkt={'farbe': 2})], ein=2.0,
-                 punkte=[pt(1, 300, 5), pt(2, 450, 5), pt(3, 675, 5)])),
+            # Läufer wie in sim2 (seit 07.10.2026): je Jahr ein Schritt, «mal eins Komma fünf» (6.6 s) bis
+            # «dreihundert» (7.5 s), «vierhundertfünfzig» (8.6 s), «sechshundertfünfundsiebzig» (9.9 s);
+            # die Punkte bleiben als Spur stehen.
+            graf(W2, [dict(ek([[0, 200, 1.5, 0]], startpunkt={'farbe': 2}),
+                           laeufer={'bahn': [[6.6, 0], [7.5, 1], [7.8, 1], [8.6, 2], [9.1, 2], [9.9, 3]],
+                                    'text': '({x} | {y})', 'farbe': 2})], ein=2.0,
+                 punkte=[dict(pt(1, 300, 5), ein=7.5), dict(pt(2, 450, 5), ein=8.6), dict(pt(3, 675, 5), ein=9.9)])),
          sz('Prozent und Faktor',
             'Plus fünfzig Prozent heisst mal eins Komma fünf. Ein Zuwachs von p Prozent gibt den Faktor eins plus p Hundertstel. '
             'Eine Abnahme von zwanzig Prozent gibt den Faktor null Komma acht: Es bleiben achtzig Prozent.',
@@ -380,7 +394,9 @@ clip('wachstum-zerfall', 'Exponentialkurve sehen: Wachstum und Zerfall',
             graf(dict(xbereich=[-1.8, 10], ybereich=[-400, 9000], yteilung=yt(2000, 4000, 6000, 8000),
                       xteilung=yt(3, 6, 9), xname='t [h]', yname='N'),
                  [ek([[0, 1000, 2 ** (1 / 3), 0]], startpunkt={'farbe': 2})], ein=1.0,
-                 punkte=[pt(3, 2000, 5), pt(6, 4000, 5, '(6 | 4000)', [5.6, 4700], 'end'), pt(9, 8000, 5)])),
+                 # «nach drei» 4.9, «nach sechs» 6.5, «nach neun» 7.9 s (ein je Punkt, seit 07.10.2026)
+                 punkte=[dict(pt(3, 2000, 5), ein=4.9), dict(pt(6, 4000, 5, '(6 | 4000)', [5.6, 4700], 'end'), ein=6.5),
+                         dict(pt(9, 8000, 5), ein=7.9)])),
          sz('Halbwertszeit',
             'Umgekehrt beim Zerfall: Ein Medikament mit achtzig Milligramm hat eine Halbwertszeit von vier Stunden. '
             'Nach vier Stunden sind es vierzig, nach acht zwanzig, nach zwölf zehn Milligramm.',
@@ -389,7 +405,8 @@ clip('wachstum-zerfall', 'Exponentialkurve sehen: Wachstum und Zerfall',
             graf(dict(xbereich=[-1.2, 14], ybereich=[-4, 90], yteilung=yt(20, 40, 60, 80),
                       xteilung=yt(4, 8, 12), xname='t [h]', yname='m [mg]'),
                  [ek([[0, 80, 0.5 ** 0.25, 0]], asymptote=True, startpunkt={'farbe': 2})], ein=1.0,
-                 punkte=[pt(4, 40, 5), pt(8, 20, 5), pt(12, 10, 5)])),
+                 # «nach vier» 6.1, «nach acht» 8.0, «nach zwölf» 9.2 s (ein je Punkt, seit 07.10.2026)
+                 punkte=[dict(pt(4, 40, 5), ein=6.1), dict(pt(8, 20, 5), ein=8.0), dict(pt(12, 10, 5), ein=9.2)])),
          sz('Exponentiell oder linear',
             'Woran erkennt man exponentielles Wachstum in einer Tabelle? Der Quotient aufeinanderfolgender Werte ist gleich, '
             'hier immer eins Komma zwei. Bei linearem Wachstum wäre die Differenz gleich.',
@@ -652,7 +669,11 @@ clip('saettigung', 'Exponentialkurve sehen: Sättigung',
             'langsamer, und nähert sich der Raumtemperatur.',
             titel('Sättigung', 280, 80),
             f(r'f(t) = 20 + 60\,e^{-kt}', 430, 56, ein=4.0),
-            graf(WK, [ek([[0, 60, Q, 20]], asymptote=True, startpunkt={'farbe': 2})], ein=1.0)),
+            # «erst schnell, dann immer langsamer» (5.4–8.8 s): ein Läufer fährt t = 0 → 40 (seit 07.10.2026);
+            # ohne Text — eine Beschriftung rechts unten läge auf der Asymptote. Orange wie der Startpunkt,
+            # den er verlässt.
+            graf(WK, [dict(ek([[0, 60, Q, 20]], asymptote=True, startpunkt={'farbe': 2}),
+                           laeufer={'bahn': [[5.3, 0], [8.8, 40]], 'farbe': 2})], ein=1.0)),
          sz('Startwert und Sättigungswert',
             'Zwanzig ist der Sättigungswert S, die waagrechte Asymptote. Achtzig ist der Startwert A. Dazwischen liegt '
             'der Rückstand: sechzig Grad am Anfang.',
@@ -667,16 +688,16 @@ clip('saettigung', 'Exponentialkurve sehen: Sättigung',
             'dreissig, fünfzehn, sieben Komma fünf Grad. Also fünfzig, fünfunddreissig, siebenundzwanzig Komma fünf Grad.',
             f(r'e^{-10k} = \tfrac12', 300, 56),
             n('Rückstand @60 \\to 30 \\to 15 \\to 7.5@', 440, 'orange', ein=4.0),
-            graf(WK, [ek([[0, 60, Q, 20]], asymptote=True)], ein=0.05),
-            # Abstand zur Asymptote einzeln zum Wort: «sechzig» 5.8, «dreissig» 6.45, «fünfzehn» 7.3, «sieben Komma fünf» 8.05
-            ueber(WK, figuren=[strecke([10, 20], [10, 50], 2, dicke=6)], ein=6.45),
-            ueber(WK, figuren=[strecke([20, 20], [20, 35], 2, dicke=6)], ein=7.3),
-            ueber(WK, figuren=[strecke([30, 20], [30, 27.5], 2, dicke=6)], ein=8.05),
-            graf(WK, [ek([[0, 60, Q, 20]], asymptote=True)], ein=11.6,
-                 punkte=[pt(10, 50, 5, '(10 | 50)', [11, 57]), pt(20, 35, 5, '(20 | 35)', [21, 42]),
-                         pt(30, 27.5, 5)]),
-            # die Strecke bei t = 0 nach dem Graf von 11.6 s: sie liegt auf der y-Achse, die er neu zeichnet
-            ueber(WK, figuren=[strecke([0, 20], [0, 80], 2, dicke=6)], ein=5.8)),
+            # Abstand zur Asymptote einzeln zum Wort: «sechzig» 5.8, «dreissig» 6.45, «fünfzehn» 7.3, «sieben Komma fünf» 8.05;
+            # die Temperaturen einzeln (ein je Teil, seit 07.10.2026): «fünfzig» 9.6, «fünfunddreissig» 10.4,
+            # «siebenundzwanzig Komma fünf» 11.5 s — vorher standen alle drei ab 11.6 s.
+            graf(WK, [ek([[0, 60, Q, 20]], asymptote=True)], ein=0.05,
+                 strecken=[{'von': v_, 'bis': b_, 'farbe': 2, 'dicke': 6, 'ein': e_} for v_, b_, e_ in
+                           (([0, 20], [0, 80], 5.8), ([10, 20], [10, 50], 6.45), ([20, 20], [20, 35], 7.3),
+                            ([30, 20], [30, 27.5], 8.05))],
+                 punkte=[dict(pt(10, 50, 5, '(10 | 50)', [11, 57]), ein=9.6),
+                         dict(pt(20, 35, 5, '(20 | 35)', [21, 42]), ein=10.4),
+                         dict(pt(30, 27.5, 5), ein=11.5)])),
          sz('Allgemein',
             'Allgemein: f von t gleich S minus Klammer S minus A, mal e hoch minus k t. Für grosse t geht e hoch minus k t '
             'gegen null, und f gegen S.',
@@ -831,7 +852,11 @@ clip('logarithmusfunktion', 'Exponentialkurve sehen: die Logarithmusfunktion',
             n('Asymptote @x = 0@', 477, 'gruen', ein=6.5),
             n('@D = \\mathbb{R}^+@, @W = \\mathbb{R}@', 534, 'gruen', ein=8.9),
             # Beschriftung (1 | 0) unter die Achse, rechts — sonst sitzt sie auf der Achszahl 2
-            graf(WL, [lk([[0, 1, 2, 0]], asymptote=True)], punkte=[pt(1, 0, 3, '(1 | 0)', [1.3, -1.0])])),
+            # Läufer wie in sim5 (seit 07.10.2026), Start bei x = 4: «Asymptote … wird die y-Achse» (6.3–8.2 s)
+            # fährt er hinunter an die y-Achse, durch die Nullstelle ins Negative.
+            graf(WL, [dict(lk([[0, 1, 2, 0]], asymptote=True),
+                           laeufer={'bahn': [[6.3, 4], [8.2, 0.25]], 'text': '({x} | {y})', 'farbe': 3})],
+                 punkte=[pt(1, 0, 3, '(1 | 0)', [1.3, -1.0])])),
          sz('Die Basis',
             'Wie bei der Exponentialfunktion entscheidet die Basis. Bei Basis grösser als eins steigt die Kurve, immer '
             'flacher, aber ohne Grenze. Bei Basis kleiner als eins fällt sie.',

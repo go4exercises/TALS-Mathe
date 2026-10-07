@@ -660,6 +660,14 @@ Bewegung von 3 s kostet rund 60 Bilder der Figur, also nur bewegen, was sich bew
 statt ausgeblendet, der Strahl endet dort auf seiner Richtung; liegt P links der y-Achse, geht der
 Strahl von P durch den Mittelpunkt.
 
+**Nachgetragen beim Einbau (07.10.2026):** `ein`/`aus` auch direkt an einem `laeufer` (jeder Art) und
+am `dreieck` einer bewegten Geraden — keine zweite, deckungsgleiche Kurve mehr nötig. Bei Figuren
+mit `bewegung` wird Feld für Feld übergeblendet (bis zur Korrektur sprang die Figur in der Mitte
+zwischen zwei Stützpunkten); `farbe` wird umgeschaltet, nicht gemischt. Gleiche Nachbarbilder
+(Pausen mit `{}`) fasst der Bauer zu einem zusammen. Beim Steigungsdreieck mit Δx < 0 steht «Δy»
+links der Kathete. Eine Drehung ist keine eigene Bewegung: Stützpunkte dicht setzen (alle 0.05 s),
+sonst schrumpft die Figur unterwegs.
+
 **Noch nicht:** ein bewegtes Fenster (Zoom) und eine senkrechte bewegte Gerade. Behelf für den Zoom:
 mehrere `graf` nacheinander mit wachsendem Fenster.
 

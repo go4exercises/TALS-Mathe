@@ -477,7 +477,7 @@ clip('tangens', 'Sinuskurve sehen: die Tangenskurve',
             'und die Strecke wächst über alle Grenzen.',
             f(r'\tan \tfrac{\pi}{4} = 1', 240, 56, ein=10.4),
             graf(WT, [tk([[0, 1, 1, 0, 0]], von=0,
-                         kreis={'mx': -2.0, 'bahn': [[0, 0], [2.4, 0], [4.2, P / 6], [7.4, P / 6], [8.4, 0], [9.0, 0], [10.4, P / 4], [11.0, P / 4], [15.5, 1.245]],
+                         kreis={'mx': -2.0, 'bahn': [[0, 0], [2.4, 0], [4.2, P / 6], [7.4, P / 6], [8.4, 0], [9.0, 0], [10.4, P / 4], [11.0, P / 4], [15.5, 1.45]],
                                 'spur': True, 'farbe': 2})], ein=0.3)),
          sz('Pole und Periode',
             'An jeder Stelle pi halbe plus k pi hat die Tangenskurve einen Pol: Links davon wächst sie über alle Grenzen, rechts davon kommt sie von ganz unten. '
@@ -719,9 +719,11 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             'Für welche x ist Sinus x gleich null Komma sechs? Im Bild: wo die Waagrechte y gleich null Komma sechs die Kurve schneidet. '
             'Zwischen null und zwei pi sind es zwei Stellen.',
             f(r'\sin x = 0.6', 240, 62),
-            graf(WK, [sk([[0, 1, 1, 0, 0]], von=0, bis=2 * P)], ein=0.3,
-                 geraden=[{'bewegung': [[0, 0, 0], [4.8, 0, 0], [6.8, 0, 0.6]], 'farbe': 5, 'gestrichelt': True, 'dicke': 3}]),
-            ueber(WK, ein=7.8, punkte=[pt(X1, 0.6, 1), pt(P - X1, 0.6, 1)])),
+            # Die Waagrechte steigt ab «Waagrechte» (4.96) von 0 auf 0.6; die Schnittpunkte laufen mit
+            # (`schnitte` braucht eine feste Formelkurve: sin x als `fest`). Bei y = 0 liegen sie auf 0 und π.
+            graf(WK, [fest('sin(x)', farbe=1, gestrichelt=False, von=0, bis=2 * P)], ein=0.3,
+                 geraden=[{'bewegung': [[0, 0, 0], [4.8, 0, 0], [6.8, 0, 0.6]], 'farbe': 5, 'gestrichelt': True, 'dicke': 3,
+                           'ein': 4.8, 'schnitte': {'kurve': 0, 'farbe': 1, 'beschriftung': False}}])),
          sz('Der Rechner',
             'Der Taschenrechner liefert mit der Umkehrfunktion Sinus hoch minus eins nur eine Lösung: ungefähr null Komma sechs vier vier. '
             'Er muss dafür im Bogenmass rechnen, im Modus RAD.',
@@ -764,9 +766,12 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             n('@x = \\tfrac{\\pi}{12}@, @\\tfrac{5\\pi}{12}@ und eine Periode @\\pi@ weiter', 350, 'blau', ein=10.0),
             graf(WK, [sk([[0, 1, 2, 0, 0], [4.5, 1, 2, 0, 0], [5.9, 1, 1, 0, 0],      # z = 2x: die Kurve sin z
                            [8.8, 1, 1, 0, 0], [9.9, 1, 2, 0, 0]], von=0, bis=2 * P),       # durch zwei geteilt
-                      fest('0.5', farbe=5)], ein=0.3),
-            ueber(WK, ein=10.0, punkte=[pt(P / 12, 0.5, 1), pt(5 * P / 12, 0.5, 1)]),
-            ueber(WK, ein=15.0, punkte=[pt(13 * P / 12, 0.5, 1), pt(17 * P / 12, 0.5, 1)])),
+                      fest('0.5', farbe=5)], ein=0.3,
+                 # je Phase eigene Punkte: z = π/6, 5π/6 auf sin z (b = 1), weg, sobald gestaucht wird (8.8);
+                 # x = π/12, 5π/12 beim Wort, die zwei weiteren bei «kommen … noch zwei dazu»
+                 punkte=[dict(pt(P / 6, 0.5, 1), ein=6.3, aus=8.8), dict(pt(5 * P / 6, 0.5, 1), ein=7.4, aus=8.8),
+                         dict(pt(P / 12, 0.5, 1), ein=10.1), dict(pt(5 * P / 12, 0.5, 1), ein=11.5),
+                         dict(pt(13 * P / 12, 0.5, 1), ein=15.0), dict(pt(17 * P / 12, 0.5, 1), ein=15.0)])),
          sz('Merke',
             'Zum Mitnehmen: Sinus: x zwei gleich pi minus x eins. Cosinus: x zwei gleich zwei pi minus x eins. '
             'Und jede Lösung wiederholt sich nach zwei pi.',
