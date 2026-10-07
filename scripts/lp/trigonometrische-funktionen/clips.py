@@ -711,6 +711,8 @@ clip('kontrolle-parameter', 'Sinuskurve sehen: Kontrollfragen zu den Parametern'
 
 # ════════════════════════════════════════════════ Kapitel 5 · Einführung
 X1 = math.asin(0.6)
+FB = [[0, {'b': 2}], [2.94, {'b': 2}], [4.2, {'b': 1}], [8.66, {'b': 1}], [9.9, {'b': 2}]]
+FZ, NZ = 620, 365   # x der zweiten Formel/Notiz auf derselben Zeile (am Bild ausgemessen)
 C1 = math.acos(0.6)
 clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
      'Eine Waagrechte schneidet die Sinuskurve zweimal pro Periode: die erste Lösung vom Rechner, die zweite über die Symmetrie, weitere über die Periode.',
@@ -762,16 +764,26 @@ clip('gleichungen', 'Sinuskurve sehen: Symmetrie nutzen',
             'Und bei Sinus von zwei x gleich ein Halb? Man ersetzt zwei x durch z. Sinus z gleich ein Halb gilt bei pi sechstel '
             'und fünf pi sechstel. Durch zwei geteilt: x gleich pi zwölftel und fünf pi zwölftel. Weil die Periode jetzt nur pi ist, '
             'kommen zwischen null und zwei pi noch zwei dazu.',
-            f(r'z = 2x: \; \sin z = \tfrac12 \;\Rightarrow\; z = \tfrac{\pi}{6},\ \tfrac{5\pi}{6}', 240, 50, ein=4.4),
-            n('@x = \\tfrac{\\pi}{12}@, @\\tfrac{5\\pi}{12}@ und eine Periode @\\pi@ weiter', 350, 'blau', ein=10.0),
-            graf(WK, [sk([[0, 1, 2, 0, 0], [4.5, 1, 2, 0, 0], [5.9, 1, 1, 0, 0],      # z = 2x: die Kurve sin z
-                           [8.8, 1, 1, 0, 0], [9.9, 1, 2, 0, 0]], von=0, bis=2 * P),       # durch zwei geteilt
+            # Wortzeiten (faster-whisper): «ersetzt zwei x durch z» 2.94–4.18, «pi sechstel» 6.30,
+            # «fünf pi sechstel» 7.42, «Durch zwei geteilt» 8.66–9.70, «pi zwölftel» 10.46,
+            # «fünf pi zwölftel» 11.50, «Periode» 13.28, «noch zwei dazu» 16.62.
+            # Jede Lösung erst beim Wort: z-Werte ab 6.3, x-Werte ab 10.46, die Periode ab 13.28.
+            f(r'z = 2x: \; \sin z = \tfrac12', 240, 50, ein=2.9),
+            f(r'\Rightarrow\; z = \tfrac{\pi}{6},\ \tfrac{5\pi}{6}', 240, 50, ein=6.3, x=FZ),
+            n('@x = \\tfrac{\\pi}{12}@, @\\tfrac{5\\pi}{12}@', 350, 'blau', ein=10.46),
+            n('und eine Periode @\\pi@ weiter', 350, 'blau', ein=13.28, x=NZ),
+            # sin(b·x): b = 2 (die Frage), b = 1 bei «ersetzt … durch z» (die Kurve sin z), b = 2 bei
+            # «durch zwei geteilt» — die Kurve staucht sich, die zwei Punkte fahren von π/6, 5π/6
+            # nach π/12, 5π/12 mit, jeder mit eigenem `ein`; die Beschriftungen im Bogenmass sind `texte`.
+            graf(WK, [dict(formel='sin(b*x)', farbe=1, von=0, bis=2 * P, parameter=FB,
+                           punkte=[{'x': 'pi/(6*b)', 'farbe': 1, 'ein': 6.3}, {'x': '5*pi/(6*b)', 'farbe': 1, 'ein': 7.42}]),
                       fest('0.5', farbe=5)], ein=0.3,
-                 # je Phase eigene Punkte: z = π/6, 5π/6 auf sin z (b = 1), weg, sobald gestaucht wird (8.8);
-                 # x = π/12, 5π/12 beim Wort, die zwei weiteren bei «kommen … noch zwei dazu»
-                 punkte=[dict(pt(P / 6, 0.5, 1), ein=6.3, aus=8.8), dict(pt(5 * P / 6, 0.5, 1), ein=7.4, aus=8.8),
-                         dict(pt(P / 12, 0.5, 1), ein=10.1), dict(pt(5 * P / 12, 0.5, 1), ein=11.5),
-                         dict(pt(13 * P / 12, 0.5, 1), ein=15.0), dict(pt(17 * P / 12, 0.5, 1), ein=15.0)])),
+                 # die zwei weiteren eine Periode π weiter, bei «noch zwei dazu»
+                 punkte=[dict(pt(13 * P / 12, 0.5, 1), ein=16.62), dict(pt(17 * P / 12, 0.5, 1), ein=16.62)],
+                 texte=[dict(bei=[P / 6 - 0.1, 0.72], text='π/6', farbe=1, groesse=30, anker='end', ein=6.3, aus=8.66),
+                        dict(bei=[5 * P / 6 + 0.1, 0.72], text='5π/6', farbe=1, groesse=30, anker='start', ein=7.42, aus=8.66),
+                        dict(bei=[P / 12, 0.86], text='π/12', farbe=1, groesse=30, anker='middle', ein=10.46),
+                        dict(bei=[5 * P / 12 + 0.1, 0.72], text='5π/12', farbe=1, groesse=30, anker='start', ein=11.5)])),
          sz('Merke',
             'Zum Mitnehmen: Sinus: x zwei gleich pi minus x eins. Cosinus: x zwei gleich zwei pi minus x eins. '
             'Und jede Lösung wiederholt sich nach zwei pi.',

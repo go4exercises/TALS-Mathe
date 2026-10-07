@@ -54,11 +54,19 @@ Vierecke, Sektor 60° → 90° → 180°, Streckung k = 1 → 2 und 1 → −1),
 mitlaufenden Schnittpunkten, Tangens über den Rand, Läufer in Hyperbel, Raten, Extrema, Wachstum, Sättigung,
 Logarithmus und auf dem V, «Am Rand» und «Einschränken» mit wanderndem Bereich.
 
+**Vierter Durchgang (07.10.2026): *Neuvertonungen* und Reste.** Fünf Stellen mit je einem neuen Satz (nur die
+geänderte oder neue Szene neu vertont, die übrigen behalten Ton und Dauer): `g3-3-lp-drei-formen` neue Szene
+«Faktor a» (a 1 → −1, Nullstellen bleiben), `g3-3-lp-achse-bleibt` «Achse» (b −4 → 2, Achse wandert nach −1),
+`g3-3-lp-a-finden` neue Szene «Nullstellen» (Fall B, a gleitet auf 2), `s3-2-lp-hyperbel` «Gerade Ordnung»
+(a 1 → −1), `s3-6-lp-abschnittsweise` «Die Wanne» (b 3 → 5, Boden bei 6). Ohne Neuvertonung: `g3-3-lp-mitte`
+«A(4) = 4 · 16 = 64» zum Wort, `s3-2-lp-umkehren` Formel zum Wort, `s3-5-lp-gleichungen` «Faktor im Argument»
+(sin z mit π/6, 5π/6, gestaucht auf sin 2x, Punkte fahren nach π/12, 5π/12). Clipkarten der Leitprogramme
+und `clips.html` nachgeführt.
+
 **Offen:** «Weiter weg / Ganz weit» (bewegtes Fenster), Merke in `g3-2-lp-typen` (senkrechte bewegte Gerade;
-Behelf: rote Strecke x = 3), Punkt, der beim Stauchen mitwandert («Faktor im Argument»), die *Neuvertonungen*
-(4 + `s3-2-lp-hyperbel` a 1 → −1, `g3-3-lp-drei-formen` a 1 → −1, `g3-3-lp-a-finden` Fall B,
-`s3-6-lp-abschnittsweise` b 3 → 5). Formeln, die noch ab Szenenbeginn stehen: `g3-3-lp-mitte` «A(4) = …»,
-`s3-2-lp-umkehren` «y = x², x ≥ 0 → y = √x».
+Behelf: rote Strecke x = 3). Wünsche aus dem vierten Durchgang: `aus` an ganzen Elementen innerhalb der Szene
+(heute nur `halten`; darum stehen alte Zeilen neben den neuen); `build-clip-ton.py` mit Schalter für einzelne
+Szenen (heute vertont es den ganzen Clip neu, Piper spricht jedes Mal etwas anders lang).
 ~~Kleine Werkzeugwünsche der Bearbeiter~~ — **umgesetzt 07.10.2026** (HOWTO-clips «Zweite Runde»): `lage` am
 Läufer; Läufer über festen Punkten; Beschriftungen klappen am Bildrand um; `betrag_von` und Formelkurven mit
 `parameter` (eingebaut in `s3-6-lp-umklappen` «Knicke», statt dreier Stücke); `drehung` an Figuren (eingebaut in

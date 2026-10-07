@@ -697,7 +697,7 @@ def graf_svg(el, theme):
                                      text=g["nullstelle"].get("beschriftung", True) is not False))
             for mk in g.get("marken", []):
                 teile.append(g_punkt("bew-gm", mk.get("farbe", 5),
-                                     ' data-x="%g" data-text="%s"' % (mk["x"], entschaerfen(mk.get("text", "")))))
+                                     ' data-x="%g" data-text="%s"%s' % (mk["x"], entschaerfen(mk.get("text", "")), lage(mk))))
             # "schnitte" (seit 07.10.2026): {"kurve": i, "farbe": 2, "beschriftung": true} — die
             # Schnittpunkte mit der festen Formelkurve el["kurven"][i], mitlaufend. Der Abspieler
             # bekommt die Kurve als Wertetabelle und sucht Vorzeichenwechsel und Beruehrstellen
@@ -822,7 +822,7 @@ def graf_svg(el, theme):
                 teile.append(punkt_g("bew-y", pa["yachse"].get("farbe", 1)))
             for m in pa.get("marken", []):
                 teile.append(punkt_g("bew-m", m.get("farbe", 4),
-                                     ' data-x="%g" data-text="%s"' % (m["x"], entschaerfen(m.get("text", "")))))
+                                     ' data-x="%g" data-text="%s"%s' % (m["x"], entschaerfen(m.get("text", "")), lage(m))))
             lf = pa.get("laeufer")
             if lf:
                 nach_oben(pa, lf, punkt_g("bew-l", lf.get("farbe", 2),
@@ -961,7 +961,7 @@ def graf_svg(el, theme):
                                          text=ex_.get("beschriftung", True) is not False))
             for mk in kv.get("marken", []):
                 teile.append(k_punkt("bew-km", mk.get("farbe", 5),
-                                     ' data-x="%g" data-text="%s"' % (mk["x"], entschaerfen(mk.get("text", "")))))
+                                     ' data-x="%g" data-text="%s"%s' % (mk["x"], entschaerfen(mk.get("text", "")), lage(mk))))
             # "laeufer" (seit 07.10.2026): {"bahn": [[t, x], …], "text": "({x} | {y})", "farbe": 3} —
             # ein Punkt, der auf der Kurve faehrt, wie bei Parabel und Gerade. Technisch eine
             # Marke, deren x aus der Bahn kommt; darum fuer alle Kurvenarten.
@@ -1003,14 +1003,15 @@ def graf_svg(el, theme):
                             farbe, kv.get("dicke", 5), 'stroke-dasharray="14 10"' if kv.get("gestrichelt") else ""))
             for pt_ in kv.get("punkte", []):
                 f_ = fv[pt_.get("farbe", 2) - 1]
-                teile.append('<g class="fp-p" data-zu="%s" data-xjs="%s" data-text="%s"%s>'
+                # eigenes "ein"/"aus" je Punkt (mit_zeit), wie beim Laeufer
+                teile.append(mit_zeit(pt_, '<g class="fp-p" data-zu="%s" data-xjs="%s" data-text="%s"%s>'
                              '<g class="bew-pt"><circle r="11" fill="%s" stroke="%s" stroke-width="3.5"/>'
                              '<circle r="5" fill="%s"/></g>%s</g>'
                              % (fid, entschaerfen(formel_js(str(pt_["x"]))), entschaerfen(pt_.get("text", "")), lage(pt_),
                                 papier, f_, f_,
                                 ('<text font-size="29" font-weight="600" fill="%s" stroke="%s" stroke-width="5" '
                                  'paint-order="stroke" stroke-linejoin="round"></text>' % (f_, papier))
-                                if pt_.get("text") else ""))
+                                if pt_.get("text") else "")))
             continue
         n = kv.get("n", 480)
         # Eine Kurve darf auch nur ein Stueck des Fensters belegen. Gebraucht

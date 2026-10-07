@@ -363,6 +363,7 @@ clip('kontrolle-exponent', 'Kurve sehen: Kontrollfragen zum Exponenten',
      ], art='Kontrollclip')
 
 W_HY = dict(xbereich=[-4, 4], ybereich=[-4, 4])
+KL0, KL1, UNTEN = 11.5, 13.9, 14.9   # «Gerade Ordnung»: «klappt» 11.6, «minus eins» 13.2–13.9, «unter der x-Achse» 14.9 (faster-whisper)
 
 # ════════════════════════════════════════════════ Kapitel 2 · Einführung
 clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
@@ -410,11 +411,22 @@ clip('hyperbel', 'Kurve sehen: negative Exponenten geben Hyperbeln',
             graf(W_HY, [kurve([[0.9, 1, -1, 0, 0], [4.6, 1, -4, 0, 0]], stufen=True)])),
          sz('Gerade Ordnung',
             'Bei gerader Ordnung, etwa eins durch x Quadrat, sind beide Äste oberhalb der x-Achse. '
-            'Die Funktion ist gerade, der Graph achsensymmetrisch — und alle Werte sind positiv.',
+            'Die Funktion ist gerade, der Graph achsensymmetrisch — und alle Werte sind positiv. '
+            'Ein negativer Faktor a klappt den Graphen um: Bei a gleich minus eins liegen beide Äste unter der x-Achse.',
+            # sim2 hat einen Regler für a (Aufgaben «beide Äste unten», «f(1) = −2»): mit «klappt den Graphen um»
+            # (Ton 11.6) bis «minus eins» (13.9) geht a von 1 auf −1. Die Punkte für a = 1 blenden dabei aus;
+            # die Zeilen links bleiben (Elemente haben kein «aus») und nennen darum ihr a — der Fall a = −1 kommt darunter.
             f(r'y = \dfrac{1}{x^{\fb{2}}}, \quad W = \mathbb{R}^+', 300, 58),
-            n('achsensymmetrisch,|beide Äste oben', 440, 'blau'),
-            graf(W_HY, [kurve([[0, 1, -2, 0, 0]], asymptoten={'farbe': 4})],   # rot wie sonst: Tinte deckt sich mit den Achsen
-                 punkte=[pt(-1, 1, 5, '(−1 | 1)'), pt(1, 1, 5, '(1 | 1)')])),
+            n('achsensymmetrisch;|@\\fa{a} = 1@: beide Äste oben', 440, 'blau'),
+            f(r'y = \fa{-1} \cdot \dfrac{1}{x^{\fb{2}}}, \quad W = \mathbb{R}^-', 620, 58, ein=KL1),
+            n('@\\fa{a} = \\fa{-1}@: beide Äste unten', 780, 'blau', ein=UNTEN),
+            graf(W_HY, [kurve([[0, 1, -2, 0, 0], [KL0, 1, -2, 0, 0], [KL1, -1, -2, 0, 0]],
+                              asymptoten={'farbe': 4})],   # rot wie sonst: Tinte deckt sich mit den Achsen
+                 # Beschriftungen aussen neben den Ästen (bei x = ±1.2 ist |y| = 0.69): nicht auf Kurve und y-Achse
+                 punkte=[dict(pt(-1, 1, 5, '(−1 | 1)'), beschriftung_bei=[-1.2, 1.3], anker='end', aus=KL0),
+                         dict(pt(1, 1, 5, '(1 | 1)'), beschriftung_bei=[1.2, 1.3], anker='start', aus=KL0),
+                         dict(pt(-1, -1, 5, '(−1 | −1)'), beschriftung_bei=[-1.2, -1.6], anker='end', ein=UNTEN),
+                         dict(pt(1, -1, 5, '(1 | −1)'), beschriftung_bei=[1.2, -1.6], anker='start', ein=UNTEN)])),
          sz('Keine Nullstelle',
             'Eines haben alle Hyperbeln gemeinsam: Sie haben keine Nullstelle. Ein Bruch mit Zähler eins '
             'wird nie null. Und durch eins, eins gehen sie trotzdem alle.',
@@ -731,7 +743,8 @@ clip('umkehren', 'Kurve sehen: umkehren heisst spiegeln',
          sz('Einschränken',
             'Der Ausweg: Man schränkt die Potenzfunktion auf x grösser oder gleich null ein. '
             'Von diesem halben Ast ist das Spiegelbild wieder ein Funktionsgraph — die Quadratwurzel.',
-            f(r'y = x^{\fb{2}},\ x \geq 0 \;\longrightarrow\; y = \sqrt{x}', 300, 50),
+            # erst mit «die Quadratwurzel» (Ton 8.4): rechts vom Pfeil steht das Ergebnis des zweiten Satzes
+            f(r'y = x^{\fb{2}},\ x \geq 0 \;\longrightarrow\; y = \sqrt{x}', 300, 50, ein=8.3),
             n('nur der rechte Ast|wird umkehrbar', 440, 'gruen'),
             # «schränkt die Potenzfunktion auf x grösser oder gleich null ein» (Ton 1.5–4.3): der linke Ast
             # zieht sich zurück, mit ihm der untere Ast des Spiegelbilds — wie der Haken «nur x ≥ 0» in sim4

@@ -673,9 +673,9 @@ links der Kathete.
 |---|---|---|
 | `"drehung": w`, `"um": [x, y]` | Figur, auch als Feld in ihrer `bewegung` | dreht die Figur um `um` (Grad, gegen den Uhrzeigersinn). In der `bewegung` wird der Winkel übergeblendet: `[[1.9, {"drehung": 0}], [3.3, {"drehung": 180}]]` — die Figur bleibt gleich gross, keine dichten Stützpunkte mehr. Texte drehen ihre Lage mit, nicht die Schrift. |
 | `"parameter": [[t, {"q": -4}], …]` | feste Formelkurve | Buchstaben in der `formel`, die sich während der Szene ändern; der Abspieler zeichnet die Kurve selbst. Der erste Stützpunkt nennt alle Buchstaben. Erlaubt ist, was `kurven`-Formeln können (`abs`, `sqrt`, `sin`, `pi`, `**` …). |
-| `"punkte": [{"x": "pi/(6*b)", "text": "({x} \| {y})"}]` | Formelkurve mit `parameter` | Punkte, die auf der Kurve mitfahren; ihr `x` ist eine Zahl oder eine Formel in den Parametern (der Punkt, der beim Stauchen wandert). |
+| `"punkte": [{"x": "pi/(6*b)", "text": "({x} \| {y})"}]` | Formelkurve mit `parameter` | Punkte, die auf der Kurve mitfahren; ihr `x` ist eine Zahl oder eine Formel in den Parametern (der Punkt, der beim Stauchen wandert); `ein`/`aus` je Punkt. |
 | `"betrag_von": "x**2+q"` | Formelkurve | kurz für `"formel": "abs(x**2+q)"` — die umgeklappte Kurve in einem Stück, mit `parameter` auch bewegt (statt dreier Stücke mit dicht nachgeführten Grenzen). |
-| `"lage": "oben"` | `laeufer` (jeder Art), Punkt einer Formelkurve | wo die Beschriftung steht: `oben`, `unten`, `links`, `rechts` oder zwei davon (`"oben links"`). Ohne Angabe wie bisher. |
+| `"lage": "oben"` | `laeufer` (jeder Art), `marken`, Punkt einer Formelkurve | wo die Beschriftung steht: `oben`, `unten`, `links`, `rechts` oder zwei davon (`"oben links"`). Ohne Angabe wie bisher. |
 
 Ausserdem ohne neues Feld: Läufer liegen jetzt **über** festen Punkten (sie werden zuletzt gezeichnet
 und nehmen das `ein`/`aus` ihrer Kurve mit), und keine Beschriftung eines mitfahrenden Punkts ragt

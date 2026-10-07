@@ -288,7 +288,7 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
 ], zwei=False)
 k2 = kapitel(2, 'negative-exponenten', 'Negative Exponenten: Hyperbeln', 'Potenzfunktionen', 40,
              r'Du deutest \(x^{-n}\) als Kehrwert, gibst Definitionsmenge und Asymptoten an und sagst an der Parität von \(n\), wo die beiden Äste liegen.',
-             ('s3-2-lp-hyperbel', 'Negative Exponenten geben Hyperbeln', '1:24'),
+             ('s3-2-lp-hyperbel', 'Negative Exponenten geben Hyperbeln', '1:30'),
              sim2, ('s3-2-lp-kontrolle-hyperbel', 'Kontrollfragen zu den Hyperbeln', '0:55'),
              fest2, [uebung('hyperbel-wert', 'Funktionswert berechnen'), uebung('aeste', 'Wo liegen die Äste?'),
                      uebung('def-hyperbel', 'Definitionslücke finden')],

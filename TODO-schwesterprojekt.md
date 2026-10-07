@@ -55,6 +55,6 @@ Nachgetragen: `ein`/`aus` an `laeufer` und `dreieck`, Figuren-Bewegung Feld für
 springen liess), `farbe` umgeschaltet, gleiche Nachbarbilder zusammengefasst, «Δy» links bei Δx < 0.
 Zweite Runde: `drehung`/`um` an Figuren, Formelkurven mit `parameter` (der Abspieler zeichnet sie; die
 Formel wird über den Python-Syntaxbaum nach JavaScript übersetzt, `formel_js`) samt mitfahrenden `punkte`,
-`betrag_von`, `lage` am Läufer. **Wirkt auch in Physik auf bestehende Clips:** Läufer liegen über festen
+`betrag_von`, `lage` am Läufer und an `marken`, `ein`/`aus` je mitfahrendem Punkt. **Wirkt auch in Physik auf bestehende Clips:** Läufer liegen über festen
 Punkten, und Beschriftungen mitfahrender Punkte klappen am Bildrand auf die andere Seite (in Mathe
 betraf das keinen bestehenden Clip; in Physik nach der Übernahme kurz durchsehen).

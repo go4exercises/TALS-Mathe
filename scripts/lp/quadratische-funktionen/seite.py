@@ -227,7 +227,7 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 13, [
 ])
 k2 = kapitel(2, 'drei-formen-eine-parabel', 'Drei Formen, eine Parabel', 'K1 · K2', 40,
     'Du erklärst, was Grund-, Scheitel- und Produktform im Bild zeigen, und formst ohne Rechner um.',
-    ('g3-3-lp-drei-formen', 'Parabel sehen: drei Formen, drei Blicke', 'Einführung', '1:01'),
+    ('g3-3-lp-drei-formen', 'Parabel sehen: drei Formen, drei Blicke', 'Einführung', '1:11'),
     sim2, ('g3-3-lp-kontrolle-formen', 'Kontrollfragen zu den drei Formen', '', '0:51'),
     fest2, [uebung('scheitel-grund', 'Scheitelform → Grundform'), uebung('produkt-grund', 'Produktform → Grundform'),
             uebung('grund-scheitelform', 'Grundform → Scheitelform')],
@@ -264,7 +264,7 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 12, [
 ])
 k3 = kapitel(3, 'nullstellen-und-scheitel', 'Nullstellen und Scheitel berechnen', 'K1 · K2', 40,
     'Du bestimmst aus der Grundform Scheitel und Nullstellen und sagst mit der Diskriminante \\(D = b^2 - 4ac\\) voraus, wie viele es gibt.',
-    ('g3-3-lp-achse-bleibt', 'Parabel sehen: c hebt, die Symmetrieachse bleibt', 'Einführung', '1:07'),
+    ('g3-3-lp-achse-bleibt', 'Parabel sehen: c hebt, die Symmetrieachse bleibt', 'Einführung', '1:12'),
     sim3, ('g3-3-lp-kontrolle-nullstellen', 'Kontrollfragen zu Nullstellen und Scheitel', '', '0:52'),
     fest3, [uebung('grund-scheitel', 'Scheitel aus der Grundform'), uebung('nullstellen', 'Nullstellen bestimmen')],
     auf3, f'<a href="{TS}#diskriminante">Themenseite 3.3, Diskriminante</a>')
@@ -301,7 +301,7 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 16, [
 ])
 k4 = kapitel(4, 'die-gleichung-aufstellen', 'Die Funktionsgleichung aufstellen', 'K3', 40,
     'Du wählst den passenden Ansatz und bestimmst \\(a\\) mit einem Punkt.',
-    ('g3-3-lp-a-finden', 'Parabel sehen: a finden', 'Einführung', '0:56'),
+    ('g3-3-lp-a-finden', 'Parabel sehen: a finden', 'Einführung', '1:06'),
     sim4, ('g3-3-lp-kontrolle-aufstellen', 'Kontrollfragen zum Aufstellen', '', '0:49'),
     fest4, [uebung('aufstellen-scheitel', 'Scheitel + Punkt → a'), uebung('aufstellen-nullstellen', 'Nullstellen + Punkt → a')],
     auf4, f'<a href="{TS}#aufstellen">Themenseite 3.3, Funktionsgleichung aufstellen</a>')

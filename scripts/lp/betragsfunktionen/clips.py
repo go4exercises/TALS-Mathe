@@ -177,6 +177,7 @@ W1 = dict(xbereich=[-6, 6], ybereich=[-2, 8], xteilung=yt(-4, -2, 2, 4), yteilun
 W2 = dict(xbereich=[-6, 6], ybereich=[-5, 7], xteilung=yt(-4, -2, 2, 4), yteilung=yt(-4, -2, 2, 4, 6))
 WU = dict(xbereich=[-4.5, 4.5], ybereich=[-5, 6], xteilung=yt(-4, -2, 2, 4), yteilung=yt(-4, -2, 2, 4))
 WW = dict(xbereich=[-4, 6], ybereich=[-1, 9], xteilung=yt(-2, 2, 4), yteilung=yt(2, 4, 6, 8))
+WA0, WA1, WA2 = 15.5, 18.4, 18.7   # «Die Wanne»: «von drei auf fünf» 15.5–16.8, «breiter und höher» bis 18.6, «er liegt dann bei sechs» 18.6–19.4
 
 # ════════════════════════════════════════════════ Kapitel 1 · Einführung
 LAUF = [[0, -3], [4.1, -3], [6.4, 0], [6.6, 0], [8.2, 3]]   # Läufer in «Der Knick» (Wortzeiten faster-whisper)
@@ -570,14 +571,27 @@ clip('abschnittsweise', 'Knick sehen: abschnittsweise schreiben',
          sz('Die Wanne',
             'Addiert man zwei Beträge, etwa Betrag von x plus eins plus Betrag von x minus drei, entstehen zwei Grenzen: '
             'minus eins und drei. Dazwischen ist die Summe konstant vier, so gross wie der Abstand der beiden Stellen. '
-            'Der Graph sieht aus wie eine Wanne.',
+            'Der Graph sieht aus wie eine Wanne. '
+            'Schiebt man die zweite Stelle von drei auf fünf, wird der Boden breiter und höher: Er liegt dann bei sechs.',
             f(r'y = |x + 1| + |x - 3|', 300, 56),
             n('Boden: @y = 4@ von @-1@ bis @3@', 430, 'blau', ein=9.4),
-            graf(WW, [fest('abs(x+1)+abs(x-3)', farbe=1, gestrichelt=False)], ein=0.3,
-                 punkte=[pt(-1, 4, 1, '(−1 | 4)', [-1.2, 3.3], 'end'), pt(3, 4, 1, '(3 | 4)', [3.2, 3.3])]),   # unter dem Boden: oben laufen die zwei V
+            # sim4 verschiebt die Stellen: mit «von drei auf fünf» (Ton 15.5–16.8) geht b bis zum Ende von «breiter und höher» von 3 auf 5, Boden b + 1 = 6.
+            # Die Zeilen links bleiben (Elemente haben kein «aus»); der Fall b = 5 kommt darunter.
+            f(r'y = |x + 1| + |x - 5|', 560, 56, ein=16.1),   # mit «fünf»
+            n('Boden: @y = 6@ von @-1@ bis @5@', 690, 'blau', ein=WA2),
+            # Die Wanne als Formelkurve mit Parameter b; ihre Eckpunkte fahren mit und schreiben ihre Werte selbst
+            graf(WW, [dict(formel='abs(x+1)+abs(x-b)', farbe=1, parameter=[[0, {'b': 3}], [WA0, {'b': 3}], [WA1, {'b': 5}]],
+                           # links unter dem Boden; rechts darüber, denn unter (b | b + 1) läuft gestrichelt |x + 1|
+                           punkte=[{'x': -1, 'text': '({x} | {y})', 'farbe': 1, 'lage': 'unten links'},
+                                   {'x': 'b', 'text': '({x} | {y})', 'farbe': 1, 'lage': 'oben links'}])],
+                 ein=0.3),
             ueber(WW, [vk([[0, 1, -1, 0]], farbe=5, gestrichelt=True)], ein=2.0),
-            ueber(WW, [vk([[0, 1, 3, 0]], farbe=5, gestrichelt=True)], ein=3.6),
-            ueber(WW, ein=11.0, figuren=[strecke((-1, 0), (3, 0), farbe=1, dicke=9), text((1, 0.4), '4', farbe=1, groesse=34)])),
+            ueber(WW, [vk([[0, 1, 3, 0], [WA0, 1, 3, 0], [WA1, 1, 5, 0]], farbe=5, gestrichelt=True)], ein=3.6),
+            # Der Abstand «4» gilt nur für b = 3: aus, sobald b wandert; der Abstand 6 kommt mit «sechs»
+            ueber(WW, ein=11.0, figuren=[dict(strecke((-1, 0), (3, 0), farbe=1, dicke=9), aus=WA0),
+                                         dict(text((1, 0.4), '4', farbe=1, groesse=34), aus=WA0),
+                                         dict(strecke((-1, 0), (5, 0), farbe=1, dicke=9), ein=WA2),
+                                         dict(text((2, 0.4), '6', farbe=1, groesse=34), ein=WA2)])),
          sz('Drei Abschnitte',
             'Abschnittsweise geschrieben hat die Wanne drei Teile: links minus zwei x plus zwei, in der Mitte vier, '
             'rechts zwei x minus zwei.',
