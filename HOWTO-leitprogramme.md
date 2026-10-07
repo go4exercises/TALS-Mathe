@@ -522,6 +522,7 @@ grep 'name="robots"' leitprogramme/<name>.html                      # noindex, n
    node .claude/tools/pruef-mathjax.mjs http://localhost:8899/leitprogramme/<name>.html
    node .claude/tools/render-check.mjs leitprogramme/<name>.html
    node .claude/tools/pruef-uebungen.mjs leitprogramme/<name>.html 1000   # Zufallsübungen
+   node .claude/tools/pruef-formelsatz.mjs leitprogramme/<name>.html 60   # Übungen mit echtem MathJax gesetzt
    node .claude/tools/pruef-leiste.mjs leitprogramme/<name>.html          # Aufgabenleisten
    node .claude/tools/pruef-umformer.mjs leitprogramme/<name>.html        # Umformer (Gleichungen)
    node .claude/tools/pruef-geo.mjs leitprogramme/<name>.html             # Geometrie-Arbeitsbereiche
@@ -690,6 +691,9 @@ gegen sie und darüber hinaus.
 - **Farbwörter in Rückmeldungen gegen den Abspieler prüfen.** Nach einem Fehlklick zeichnet er den
   eigenen Tipp orange und das Ziel **grün** — «Der blaue Kreis zeigt die Stelle» war in zwei
   Leitprogrammen falsch.
+- **Klickfragen auch ohne Maus lösbar** (aus Physik, 06.10.2026): Wo der Punkt ablesbare Koordinaten
+  hat, bekommt die Frage `"eingabe": ["x", "y"]` (Achsennamen des Graf) — der Helfer `klick()` der
+  LP-Bauskripte setzt das als Vorgabe. Ohne Achsen (Planimetrie) `eingabe=None`.
 - **Klickfragen brauchen im Bild ein Fenster** (`"tippbar": true`, HOWTO-clips) — sonst werden
   sie stumm übersprungen; `pruef-fragen` meldet «Durchlauf: jede Frage genau einmal».
 - **Sperrliste über die Normalform** (Gleichungen 06.10.2026): Ein Schlüssel pro Typ (`ak|a|b`, `zk|b|c`)

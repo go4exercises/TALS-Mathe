@@ -74,7 +74,7 @@ die Kurzfassung + der verbindliche Pre-Flight. Bei Widerspruch gilt STYLEGUIDE.m
     Extern gebaute Datei hereinholen: dort §12, Punkt für Punkt.
     **Vor der Freischaltung** unabhängig prüfen: Skill `/lp-pruefung leitprogramme/<name>.html`
     (§15, drei Agenten gegen die Prüfliste, Befunde nach `TODO.md`); Prüfwerkzeuge
-    `.claude/tools/pruef-uebungen.mjs`, `pruef-leiste.mjs`, `pruef-fragen.mjs`, `sprechzeiten.py`.
+    `.claude/tools/pruef-uebungen.mjs`, `pruef-formelsatz.mjs`, `pruef-leiste.mjs`, `pruef-fragen.mjs`, `sprechzeiten.py`.
   - *nach Prüfungsbogen* (2: `uebungspruefung-1.html`, `trigo2.html`) — jede
     Teilaufgabe mit eigenem
     Clip, Musterlösung und Punktezeile. Der ganze Weg vom PDF zur Seite steht in

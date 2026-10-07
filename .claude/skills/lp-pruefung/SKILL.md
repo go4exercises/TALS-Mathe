@@ -47,7 +47,8 @@ Aufträgen unten; `<…>` aus Schritt 1 einsetzen. Alle drei bekommen denselben 
 > Aufgabenleisten erfüllbar (Reglerraster, Toleranzen) und nicht schon im Startzustand
 > erfüllt? Erzeugen die Zufallsübungen immer lösbare, schöne Aufgaben, und stimmen ihre
 > Diagnosen — auch bei Sonderwerten (0, ±1)? Lass laufen und werte aus:
-> `node .claude/tools/pruef-uebungen.mjs <S> 2000`, `node .claude/tools/pruef-leiste.mjs <S>`;
+> `node .claude/tools/pruef-uebungen.mjs <S> 2000`, `node .claude/tools/pruef-formelsatz.mjs <S> 60`,
+> `node .claude/tools/pruef-leiste.mjs <S>`;
 > prüfe Diagnosen darüber hinaus selbst (node, viele Zufallsfälle). Didaktik: Reihenfolge
 > erfahren → verallgemeinern, nichts abgefragt, was nicht eingeführt ist, Passung zu
 > Lernzielen und RLP-Kompetenzen, Begriffe und Farben einheitlich, Widersprüche zur
