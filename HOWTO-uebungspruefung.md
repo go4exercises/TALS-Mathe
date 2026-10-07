@@ -309,7 +309,7 @@ Eine Übungsprüfung ist oft **nicht** für die ganze Welt gedacht. Zwei Wege:
 
 `leitprogramme.html` (Karte im Abschnitt **Nach Prüfungsbogen**),
 `scripts/build-seo.py` (`SEITEN`, ohne `noindex`),
-`scripts/build-suchindex.py` (Liste der Nachschlagewerke) — siehe
+`scripts/build-suchindex.py` (Liste `ZUSATZSEITEN`) — siehe
 `HOWTO-leitprogramme.md` §13.
 
 **Beide bestehenden Übungsprüfungen stehen seit dem 08.09.2026 auf diesem Weg**

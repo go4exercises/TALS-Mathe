@@ -1146,7 +1146,7 @@ Clips nicht angefasst werden:
 |---|---|
 | `nav.js` | Eintrag `▶ Clips` im Menü *Nachschlagen*, in der Kopfzeile und im Mobilmenü |
 | `scripts/build-seo.py` | Zeile in der `SEITEN`-Tabelle — Beschreibung, canonical, Sitemap |
-| `scripts/build-suchindex.py` | `clips.html` in der Liste der Nachschlagewerke |
+| `scripts/build-suchindex.py` | `clips.html` in der Liste `ZUSATZSEITEN` |
 
 Die Clip-Dateien selbst stehen bewusst **nicht** in der Sitemap: ohne Seitengerüst,
 Navigation und Fussbereich wären sie als Landeseite aus einer Suche eine Sackgasse.
