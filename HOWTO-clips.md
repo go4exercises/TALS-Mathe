@@ -608,15 +608,60 @@ Farben 1–4 wie sonst, 5 = Tinte; `dicke` (Standard 4), `gestrichelt`, `fuellun
 Fläche), `deckkraft` (der Linie — ein Kreisring ist ein Kreis mit `dicke` = Ringbreite und `deckkraft` 0.3). Winkel in Grad gegen den Uhrzeigersinn. **Das Fenster gleich teilen** (Spanne x zu
 Spanne y wie Breite zu Höhe), sonst wird der Kreis zur Ellipse und der rechte Winkel schief.
 
-### Später einblenden — ein zweiter `graf` als Deckblatt
+### Später einblenden, bewegen, mitlaufen — Erweiterungen vom 07.10.2026
 
-Feste `punkte`, `figuren` und `kurven` haben kein eigenes `ein`; sie erscheinen mit ihrem `graf`.
-Was erst beim zugehörigen Wort kommen soll, steht darum in einem **zweiten `graf` mit gleichem
-Fenster** (`x`, `y`, `breite`, `hoehe`, `xbereich`, `ybereich` identisch) und eigenem `ein`, mit
-`"achsen": false` und `"raster": false` — sonst werden Achsen und Karo mit jeder Lage dunkler. In
-den Bauskripten der Leitprogramme heisst der Helfer `ueber()` (bzw. `auflage()` bei den
-Gleichungen). Ausblenden lässt sich ein Element nicht: Wer einen Zwischenstand wieder loswerden
-will, nimmt eine `bewegung` und schiebt die Kurve aus dem Fenster.
+Entstanden aus der Übersicht `TODO-lp-clips-visualisierung.md`. Ohne die neuen Felder baut jeder
+Clip wie vorher (geprüft: alle 514 neu gebaut, nur Abspielcode geändert, keine JS-Fehler).
+
+**`ein`/`aus` an einem Teil.** Jeder Punkt, jede Kurve, Gerade, Parabel, Figur, Strecke, Fläche und
+jeder Text im `graf` darf ein eigenes `ein` und `aus` tragen — Sekunden ab Szenenbeginn, wie beim
+Element. Der Teil blendet weich ein und aus. Das ersetzt das frühere Deckblatt (zweiter `graf`
+mit `"achsen": false, "raster": false` darüber); bestehende Deckblätter bleiben gültig.
+
+```json
+"punkte": [{"x": 5, "y": 0, "farbe": 3, "beschriftung": "(5 | 0)", "ein": 3.4},
+           {"x": 0, "y": 0, "farbe": 4, "beschriftung": "verloren", "ein": 4.3, "aus": 9}]
+```
+
+**Läufer auf Kurven.** `"laeufer": {"bahn": [[t, x], …], "text": "({x} | {y})", "farbe": 3}` — an
+bewegten `kurven` jeder Art (Potenz, Exponential, Logarithmus, Betrag, Sinus/Tangens, Polynom) und
+an festen Formelkurven (`"formel"`; der Abspieler liest dort aus einer Wertetabelle, `n` Stellen).
+
+**Zahlen in Live-Beschriftungen** (`{x}`, `{y}`, Nullstellen, Scheitel): eine Nachkommastelle, ausser
+der Wert hat genau zwei — dann beide (−0.75, −1.25 statt −0.8, −1.2). Während einer Bewegung sind
+die Werte krumm und bleiben bei einer Stelle.
+
+**Parabel in Normalform.** `"normalform": true` an einer bewegten Parabel liest die Stützpunkte als
+`[t, a, b, c]` für \(y = ax^2 + bx + c\). So läuft \(a\) stetig durch 0 (Parabel → Gerade → Parabel);
+bei \(a = 0\) zeigen `nullstellen` die eine Nullstelle der Geraden, `scheitel` verschwindet.
+**`"achse": true`** (oder `{"farbe": n}`) zeichnet die Symmetrieachse \(x = u\) gestrichelt mit, in beiden Formen.
+
+**Mitlaufende Schnittpunkte.** An einer bewegten Geraden:
+`"schnitte": {"kurve": 0, "farbe": 2, "beschriftung": true, "anzahl": 6}` — die Schnittpunkte mit
+der festen Formelkurve `kurven[0]`, auch Berührstellen (Knick auf der Waagrechten). Beschriftungen
+stehen abwechselnd über und unter der Geraden; bei vielen Punkten `"beschriftung": false` und die
+Werte als Notiz.
+
+**Bewegte Figuren.** `"bewegung": [[t, {Felder}], …]` an einer Figur: Jeder Stützpunkt überschreibt
+Felder (`punkte`, `von`, `bis`, `m`, `r`, `bei`, `text` …), dazwischen werden alle Zahlen weich
+übergeblendet. Vor dem ersten Stützpunkt steht die Figur, wie sie definiert ist; `{}` als erster
+Stützpunkt heisst «so bleiben bis t». Gerechnet wird in Python mit 20 Bildern je Sekunde — eine
+Bewegung von 3 s kostet rund 60 Bilder der Figur, also nur bewegen, was sich bewegen soll.
+
+```json
+{"art": "vieleck", "punkte": [[0,0],[8,0],[2,5]], "farbe": 1, "fuellung": 0.12,
+ "bewegung": [[1, {}], [4, {"punkte": [[0,0],[8,0],[6,5]]}]]}
+```
+
+**Bereich, der wandert.** `"grenzen": [[t, von, bis], …]` an einer bewegten Kurve statt festem
+`von`/`bis` — Einschränken auf einen umkehrbaren Teil, ein Intervall, das sich zusammenzieht.
+
+**Tangens am Einheitskreis** läuft über den Fensterrand: Die Strecke wird am Rand abgeschnitten
+statt ausgeblendet, der Strahl endet dort auf seiner Richtung; liegt P links der y-Achse, geht der
+Strahl von P durch den Mittelpunkt.
+
+**Noch nicht:** ein bewegtes Fenster (Zoom) und eine senkrechte bewegte Gerade. Behelf für den Zoom:
+mehrere `graf` nacheinander mit wachsendem Fenster.
 
 ### Bild einer Animation — `typ: "bild"` und `"animation"`
 

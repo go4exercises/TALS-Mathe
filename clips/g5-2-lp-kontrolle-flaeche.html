@@ -120,6 +120,14 @@ const layers = [...document.querySelectorAll('.l')].map(el => ({
   dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
 }));
 const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
 const ease = p => 1 - Math.pow(1 - p, 3);
 const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
 function seek(t)  {
@@ -133,6 +141,12 @@ function seek(t)  {
     if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
     L.el.style.transform = tr; L.el.style.opacity = o;
   }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
 }
 const FRAGEN = [{"typ": "wahl", "text": "Muss die Höhe innerhalb des Dreiecks liegen?", "optionen": ["Nein — beim stumpfwinkligen Dreieck liegen zwei Höhen ausserhalb.", "Ja, immer.", "Nur im gleichseitigen Dreieck."], "richtig": 0, "rueck": {"0": "Ja.", "1": "Denk an ein stumpfes Dreieck: Wo trifft das Lot die Gerade der Grundseite?", "2": "Die Frage ist, ob sie innen liegen muss. Denk an ein stumpfes Dreieck."}, "t": 0.3, "ton": {"frage": "ton/g5-2-lp-kontrolle-flaeche-f0-frage.mp3", "r1": "ton/g5-2-lp-kontrolle-flaeche-f0-r1.mp3", "r2": "ton/g5-2-lp-kontrolle-flaeche-f0-r2.mp3"}}, {"typ": "wahl", "text": "Ist jede schräge Seite eine Höhe?", "optionen": ["Nein, eine Höhe steht senkrecht auf der Grundseite.", "Ja.", "Nur die längste Seite."], "richtig": 0, "rueck": {"0": "Ja.", "1": "Steht eine schräge Seite senkrecht auf der Grundseite?", "2": "Was zeichnet eine Höhe aus?"}, "t": 7.87, "ton": {"frage": "ton/g5-2-lp-kontrolle-flaeche-f1-frage.mp3", "r1": "ton/g5-2-lp-kontrolle-flaeche-f1-r1.mp3", "r2": "ton/g5-2-lp-kontrolle-flaeche-f1-r2.mp3"}}, {"typ": "klick", "text": "Tipp den Fusspunkt der Höhe zur Grundseite AB an.", "ziel": [-3, 0], "toleranz": 0.5, "richtig_text": "Getroffen: (−3 | 0).", "fallen": [{"bei": [0, 0], "text": "Das ist A. Die Höhe steht senkrecht auf der Geraden AB, auch ausserhalb."}, {"bei": [3, 0], "text": "Das ist die Mitte von AB. Gesucht ist das Lot von C."}], "falsch_text": "Nicht ganz. Der grüne Kreis zeigt die Stelle.", "t": 14.38, "ton": {"frage": "ton/g5-2-lp-kontrolle-flaeche-f2-frage.mp3", "fall0": "ton/g5-2-lp-kontrolle-flaeche-f2-fall0.mp3", "fall1": "ton/g5-2-lp-kontrolle-flaeche-f2-fall1.mp3", "falsch": "ton/g5-2-lp-kontrolle-flaeche-f2-falsch.mp3"}}, {"typ": "wahl", "text": "Die Spitze wandert parallel zur Grundseite. Warum bleibt die Fläche gleich?", "optionen": ["Die Seiten bleiben gleich lang.", "Sie bleibt nicht gleich.", "g und h bleiben gleich."], "richtig": 2, "rueck": {"2": "Ja.", "0": "Die schrägen Seiten ändern sich. Was steht in der Formel?", "1": "Was steht in der Flächenformel, und ändert es sich?"}, "t": 20.8, "ton": {"frage": "ton/g5-2-lp-kontrolle-flaeche-f3-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-flaeche-f3-r0.mp3", "r1": "ton/g5-2-lp-kontrolle-flaeche-f3-r1.mp3"}}, {"typ": "wahl", "text": "g = 6 cm, A = 15 cm²: Wie gross ist h?", "optionen": ["45 cm", "5 cm", "2.5 cm"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Das ist A durch g. Denk an den Faktor ein Halb.", "0": "Das wäre A mal g durch 2."}, "t": 27.13, "ton": {"frage": "ton/g5-2-lp-kontrolle-flaeche-f4-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-flaeche-f4-r0.mp3", "r2": "ton/g5-2-lp-kontrolle-flaeche-f4-r2.mp3"}}];
 (() => {

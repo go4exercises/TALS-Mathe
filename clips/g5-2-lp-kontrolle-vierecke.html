@@ -118,6 +118,14 @@ const layers = [...document.querySelectorAll('.l')].map(el => ({
   dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
 }));
 const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
 const ease = p => 1 - Math.pow(1 - p, 3);
 const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
 function seek(t)  {
@@ -131,6 +139,12 @@ function seek(t)  {
     if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
     L.el.style.transform = tr; L.el.style.opacity = o;
   }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
 }
 const FRAGEN = [{"typ": "wahl", "text": "Ist jedes Quadrat ein Rechteck?", "optionen": ["Nur manchmal", "Ja", "Nein"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Was braucht ein Rechteck? Hat das Quadrat das?", "0": "Was braucht ein Rechteck? Hat jedes Quadrat das?"}, "t": 0.3, "ton": {"frage": "ton/g5-2-lp-kontrolle-vierecke-f0-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-vierecke-f0-r0.mp3", "r2": "ton/g5-2-lp-kontrolle-vierecke-f0-r2.mp3"}}, {"typ": "wahl", "text": "Trapez mit a = 9 cm, c = 5 cm, h = 4 cm: Wie gross ist A?", "optionen": ["180 cm²", "28 cm²", "56 cm²"], "richtig": 1, "rueck": {"1": "Ja.", "2": "Das ist (a + c) · h. Es fehlt das ein Halb.", "0": "Das ist a · c · h. Wo steht a + c?"}, "t": 7.06, "ton": {"frage": "ton/g5-2-lp-kontrolle-vierecke-f1-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-vierecke-f1-r0.mp3", "r2": "ton/g5-2-lp-kontrolle-vierecke-f1-r2.mp3"}}, {"typ": "wahl", "text": "Raute mit e = 6 cm und f = 8 cm: Wie gross ist A?", "optionen": ["48 cm²", "14 cm²", "24 cm²"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Das ist das ganze Rechteck um die Diagonalen. Welchen Teil davon füllt die Raute?", "1": "Das ist e + f. Die Fläche ist ein Produkt."}, "t": 14.56, "ton": {"frage": "ton/g5-2-lp-kontrolle-vierecke-f2-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-vierecke-f2-r0.mp3", "r1": "ton/g5-2-lp-kontrolle-vierecke-f2-r1.mp3"}}, {"typ": "wahl", "text": "Rechteck 6 cm × 8 cm: Wie lang ist die Diagonale?", "optionen": ["10 cm", "14 cm", "48 cm"], "richtig": 0, "rueck": {"0": "Ja.", "1": "Das ist der Weg aussen herum. Die Diagonale ist die Hypotenuse.", "2": "Das ist die Fläche, keine Länge."}, "t": 19.29, "ton": {"frage": "ton/g5-2-lp-kontrolle-vierecke-f3-frage.mp3", "r1": "ton/g5-2-lp-kontrolle-vierecke-f3-r1.mp3", "r2": "ton/g5-2-lp-kontrolle-vierecke-f3-r2.mp3"}}, {"typ": "klick", "text": "Tipp den Endpunkt der Mittellinie auf dem Schenkel BC an.", "ziel": [7, 2], "toleranz": 0.5, "richtig_text": "Getroffen: (7 | 2).", "fallen": [{"bei": [6, 4], "text": "Das ist C. Die Mittellinie beginnt in der Mitte des Schenkels."}, {"bei": [8, 0], "text": "Das ist B. Gesucht ist die Mitte zwischen B und C."}, {"bei": [4, 2], "text": "Das ist die Mitte der Mittellinie. Gesucht ist ihr Ende auf BC."}], "falsch_text": "Nicht ganz. Der grüne Kreis zeigt die Stelle.", "t": 26.91, "ton": {"frage": "ton/g5-2-lp-kontrolle-vierecke-f4-frage.mp3", "fall0": "ton/g5-2-lp-kontrolle-vierecke-f4-fall0.mp3", "fall1": "ton/g5-2-lp-kontrolle-vierecke-f4-fall1.mp3", "fall2": "ton/g5-2-lp-kontrolle-vierecke-f4-fall2.mp3", "falsch": "ton/g5-2-lp-kontrolle-vierecke-f4-falsch.mp3"}}];
 (() => {

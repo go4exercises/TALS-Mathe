@@ -120,6 +120,14 @@ const layers = [...document.querySelectorAll('.l')].map(el => ({
   dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
 }));
 const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
 const ease = p => 1 - Math.pow(1 - p, 3);
 const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
 function seek(t)  {
@@ -133,6 +141,12 @@ function seek(t)  {
     if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
     L.el.style.transform = tr; L.el.style.opacity = o;
   }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
 }
 const FRAGEN = [{"typ": "wahl", "text": "Welche Umformung ist keine Äquivalenzumformung?", "optionen": ["beidseitig − 5", "beidseitig : (−2)", "beidseitig · 0"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Minus fünf auf beiden Seiten lässt sich rückgängig machen. Welche nicht?", "1": "Durch −2 teilen lässt sich mit · (−2) rückgängig machen. Welche nicht?"}, "t": 0.3, "ton": {"frage": "ton/g2-2-lp-kontrolle-umformen-f0-frage.mp3", "r0": "ton/g2-2-lp-kontrolle-umformen-f0-r0.mp3", "r1": "ton/g2-2-lp-kontrolle-umformen-f0-r1.mp3"}}, {"typ": "wahl", "text": "2(x − 3) = 8: Was ist richtig ausmultipliziert?", "optionen": ["2x − 6 = 8", "2x − 3 = 8", "x − 6 = 8"], "richtig": 0, "rueck": {"0": "Ja.", "1": "Die 2 multipliziert auch die 3.", "2": "Die 2 multipliziert auch das x."}, "t": 7.7, "ton": {"frage": "ton/g2-2-lp-kontrolle-umformen-f1-frage.mp3", "r1": "ton/g2-2-lp-kontrolle-umformen-f1-r1.mp3", "r2": "ton/g2-2-lp-kontrolle-umformen-f1-r2.mp3"}}, {"typ": "wahl", "text": "Nach dem Umformen bleibt 0 = 4. Welche Lösungsmenge?", "optionen": ["𝕃 = { }", "𝕃 = ℝ", "𝕃 = {4}"], "richtig": 0, "rueck": {"0": "Ja.", "1": "Ist 0 = 4 für irgendein x wahr?", "2": "Im Rest steht kein x mehr. Kann x = 4 die Aussage wahr machen?"}, "t": 15.82, "ton": {"frage": "ton/g2-2-lp-kontrolle-umformen-f2-frage.mp3", "r1": "ton/g2-2-lp-kontrolle-umformen-f2-r1.mp3", "r2": "ton/g2-2-lp-kontrolle-umformen-f2-r2.mp3"}}, {"typ": "wahl", "text": "3x + 3 = 3(x + 1): Wie heisst die Lösungsmenge?", "optionen": ["𝕃 = { }", "𝕃 = {1}", "𝕃 = ℝ"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Multipliziere die rechte Seite aus und vergleiche.", "1": "Setz x = 5 ein. Stimmt die Gleichung auch dann?"}, "t": 21.57, "ton": {"frage": "ton/g2-2-lp-kontrolle-umformen-f3-frage.mp3", "r0": "ton/g2-2-lp-kontrolle-umformen-f3-r0.mp3", "r1": "ton/g2-2-lp-kontrolle-umformen-f3-r1.mp3"}}, {"typ": "wahl", "text": "Probe: Ist x = 2 eine Lösung von 5x − 4 = 3x?", "optionen": ["Nein, links steht 6, rechts 2.", "Nein, x = 2 macht beide Seiten null.", "Ja, beide Seiten ergeben 6."], "richtig": 2, "rueck": {"2": "Ja.", "0": "Rechts steht 3x. Setz x = 2 ein.", "1": "Setz x = 2 in jede Seite einzeln ein."}, "t": 28.67, "ton": {"frage": "ton/g2-2-lp-kontrolle-umformen-f4-frage.mp3", "r0": "ton/g2-2-lp-kontrolle-umformen-f4-r0.mp3", "r1": "ton/g2-2-lp-kontrolle-umformen-f4-r1.mp3"}}];
 (() => {

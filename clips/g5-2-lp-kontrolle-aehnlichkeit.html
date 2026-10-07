@@ -117,6 +117,14 @@ const layers = [...document.querySelectorAll('.l')].map(el => ({
   dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
 }));
 const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
 const ease = p => 1 - Math.pow(1 - p, 3);
 const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
 function seek(t)  {
@@ -130,6 +138,12 @@ function seek(t)  {
     if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
     L.el.style.transform = tr; L.el.style.opacity = o;
   }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
 }
 const FRAGEN = [{"typ": "wahl", "text": "Streckfaktor k = 3: Die Fläche des Bildes ist …", "optionen": ["3-mal so gross", "6-mal so gross", "9-mal so gross"], "richtig": 2, "rueck": {"2": "Ja.", "0": "So wachsen die Längen. Eine Fläche hat zwei Richtungen.", "1": "Das ist 2 · 3. Gefragt ist k mal k."}, "t": 0.3, "ton": {"frage": "ton/g5-2-lp-kontrolle-aehnlichkeit-f0-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-aehnlichkeit-f0-r0.mp3", "r1": "ton/g5-2-lp-kontrolle-aehnlichkeit-f0-r1.mp3"}}, {"typ": "wahl", "text": "Was bleibt bei einer zentrischen Streckung gleich?", "optionen": ["die Seitenlängen", "die Fläche", "die Winkel"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Die Seiten werden mit k multipliziert.", "1": "Die Fläche wird mit k² multipliziert."}, "t": 5.38, "ton": {"frage": "ton/g5-2-lp-kontrolle-aehnlichkeit-f1-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-aehnlichkeit-f1-r0.mp3", "r1": "ton/g5-2-lp-kontrolle-aehnlichkeit-f1-r1.mp3"}}, {"typ": "wahl", "text": "SA = 2 cm, AA′ = 4 cm: Wie gross ist k = SA′ : SA?", "optionen": ["2", "1.5", "3"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Das ist AA′ : SA. SA′ geht von S bis A′.", "1": "Wie lang ist SA′ ganz?"}, "t": 9.39, "ton": {"frage": "ton/g5-2-lp-kontrolle-aehnlichkeit-f2-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-aehnlichkeit-f2-r0.mp3", "r1": "ton/g5-2-lp-kontrolle-aehnlichkeit-f2-r1.mp3"}}, {"typ": "wahl", "text": "Ein 2 m hoher Stab wirft 3 m Schatten, ein Turm 15 m. Wie hoch ist der Turm?", "optionen": ["22.5 m", "14 m", "10 m"], "richtig": 2, "rueck": {"2": "Ja.", "0": "Dann wäre der Turm höher als sein Schatten lang — beim Stab ist es umgekehrt.", "1": "Das ist 15 − 3 + 2. Verhältnisse, nicht Differenzen."}, "t": 14.75, "ton": {"frage": "ton/g5-2-lp-kontrolle-aehnlichkeit-f3-frage.mp3", "r0": "ton/g5-2-lp-kontrolle-aehnlichkeit-f3-r0.mp3", "r1": "ton/g5-2-lp-kontrolle-aehnlichkeit-f3-r1.mp3"}}, {"typ": "klick", "text": "Streckung von Z aus mit k = 2: Tipp den Bildpunkt P′ an.", "ziel": [4, 2], "toleranz": 0.5, "richtig_text": "Getroffen: P′(4 | 2).", "fallen": [{"bei": [3, 1.5], "text": "Das ist k = 1.5. Der Abstand zu Z soll doppelt so gross werden."}, {"bei": [-4, -2], "text": "Das wäre k = −2, auf der anderen Seite von Z."}, {"bei": [2, 1], "text": "Das ist P selbst."}], "falsch_text": "Nicht ganz. Der grüne Kreis zeigt die Stelle.", "t": 19.77, "ton": {"frage": "ton/g5-2-lp-kontrolle-aehnlichkeit-f4-frage.mp3", "fall0": "ton/g5-2-lp-kontrolle-aehnlichkeit-f4-fall0.mp3", "fall1": "ton/g5-2-lp-kontrolle-aehnlichkeit-f4-fall1.mp3", "fall2": "ton/g5-2-lp-kontrolle-aehnlichkeit-f4-fall2.mp3", "falsch": "ton/g5-2-lp-kontrolle-aehnlichkeit-f4-falsch.mp3"}}];
 (() => {

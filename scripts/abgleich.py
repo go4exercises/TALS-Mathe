@@ -136,7 +136,15 @@ OFFEN = [
              'im 2./3. Quadranten neben der Linie). (4) Kommentare zu clipRahmen nennen «physiklib.js bzw. '
              'mathlib.js». Danach unterscheiden sich die Dateien nur noch in den Werten von KARO_OHNE_ACHSEN '
              'und TEXTBREITE_BEGRENZEN, im Seitennamen und im Feld "werkzeug" des Index. Vorlage: '
-             'scripts/build-clips.py in Mathe, Eintrag in TODO-schwesterprojekt.md vom 07.10.2026.'),
+             'scripts/build-clips.py in Mathe, Eintrag in TODO-schwesterprojekt.md vom 07.10.2026. '
+             'Spaeter am 07.10.2026 dazu (alle ohne die neuen Felder wirkungslos, 514 Mathe-Clips neu gebaut, '
+             'nur Abspielcode geaendert, keine JS-Fehler): "ein"/"aus" an jedem Teil eines graf (g.zt), '
+             '"laeufer" an bewegten und festen Kurven (kmX, laufeFest mit Wertetabelle), bewZahl zeigt zwei '
+             'Stellen, wenn der Wert genau zwei hat (wirkt auch auf bestehende Beschriftungen: 1.25 statt 1.3), '
+             'Parabel "normalform" [t, a, b, c] und Begleiter "achse", "schnitte" an bewegten Geraden mit einer '
+             'Formelkurve, "bewegung" an figuren (Bilder in Python, g.fb), "grenzen" [[t, von, bis]] an bewegten '
+             'Kurven, Tangensstrecke am Rand abgeschnitten. Doku: HOWTO-clips.md «Spaeter einblenden, bewegen, '
+             'mitlaufen». Am einfachsten wieder die ganze Datei uebernehmen und die drei Werte zuruecksetzen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

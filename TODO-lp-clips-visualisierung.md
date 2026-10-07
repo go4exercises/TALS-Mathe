@@ -41,7 +41,14 @@ Bewusst weggelassen, weil die Bewegung dem Gesagten widerspräche oder auf keine
 Brauchen einen neuen Satz (Neuvertonung): `s3-2-lp-hyperbel` a 1 → −1, `g3-3-lp-drei-formen` a 1 → −1,
 `g3-3-lp-a-finden` Fall B.
 
-**Offen:** alle Zeilen *Werkzeug-Erweiterung*, die *Neuvertonungen* (4 + die drei eben genannten).
+**Werkzeug (07.10.2026):** Der Clip-Bauer ist mit Physik zusammengeführt und kann jetzt `ein`/`aus` je Teil,
+Läufer auf Kurven, Parabel in Normalform mit Symmetrieachse, mitlaufende Schnittpunkte, bewegte Figuren,
+wandernde Bereiche (`grenzen`) und schneidet die Tangensstrecke am Rand ab; Live-Zahlen zeigen −0.75 statt
+−0.8 (HOWTO-clips «Später einblenden, bewegen, mitlaufen»). **Noch nicht:** bewegtes Fenster (Zoom),
+senkrechte bewegte Gerade.
+
+**Offen:** die Zeilen *Werkzeug-Erweiterung* mit den neuen Mitteln in die Clips einbauen; die
+*Neuvertonungen* (4 + die drei eben genannten).
 Zusätzlich fürs Werkzeug: Tangensstrecke am Fensterrand abschneiden statt ausblenden (darum fährt P nur bis
 1.245 rad); senkrechte bewegte Gerade (`g3-2-lp-typen` Merke); mitlaufende Schnittpunkte auch bei
 «Faktor im Argument» (Trig-Gleichungen).

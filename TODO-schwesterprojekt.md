@@ -23,7 +23,7 @@ in `scripts/abgleich.py`.
 
 ## Offen
 
-### 07.10.2026 · `build-clips.py`: Einstellung TEXTBREITE_BEGRENZEN, Steigungsdreieck bei Δx = 0, Tangens-Strahl durch P
+### 07.10.2026 · `build-clips.py`: gemeinsamer Bauer mit TEXTBREITE_BEGRENZEN, Korrekturen und Werkzeug-Erweiterungen
 
 **Was.** Im Zweig `bew-gd` (bewegtes Steigungsdreieck an einer bewegten Geraden) eine Bedingung mehr:
 `sichtbar = Math.abs(dx) > 1e-9 && innen(xa, ya) && innen(xb, yb);` — vorher stand bei dx = 0 ein leeres
@@ -44,3 +44,10 @@ Ausserdem nennen zwei Kommentare zu `clipRahmen` jetzt «physiklib.js bzw. mathl
 **Am einfachsten:** `scripts/build-clips.py` aus Mathe übernehmen und drei Werte zurücksetzen —
 Seitenname «physik.begreifbar.ch» (zweimal), `KARO_OHNE_ACHSEN = False`, `TEXTBREITE_BEGRENZEN = True`;
 das Feld `"werkzeug"` im Index kann bleiben oder raus. Warteschlange `OFFEN`, Quelle Mathe, 07.10.2026.
+
+**Später am 07.10.2026 dazu** (Werkzeug-Erweiterungen, ohne die neuen Felder wirkungslos): `ein`/`aus` an
+jedem Teil eines `graf`, `laeufer` an Kurven (bewegt und fest), zwei Nachkommastellen in Live-Beschriftungen
+wenn der Wert genau zwei hat (**wirkt auch in Physik auf bestehende Beschriftungen**, z. B. 1.25 statt 1.3 —
+dort nach der Übernahme kurz durchsehen), Parabel `normalform` und `achse`, `schnitte` an bewegten Geraden,
+`bewegung` an `figuren`, `grenzen` an bewegten Kurven, Tangensstrecke am Rand abgeschnitten. Doku in
+Mathes HOWTO-clips.md, Abschnitt «Später einblenden, bewegen, mitlaufen». Auch dafür: Datei übernehmen.
