@@ -484,10 +484,10 @@ MathJax = {
   <div class="block-titel">⭐ Eigenschaften der zentrischen Streckung</div>
   <table class="ftb-tabelle" style="margin-top:6px">
     <tbody>
-      <tr><td style="white-space:nowrap"><strong>Gleichsinnigkeit (nur bei \(k > 0\))</strong></td><td>Bei \(k > 0\) ist die zentrische Streckung gleichsinnig: die Orientierung der Figur bleibt erhalten. Bei \(k < 0\) ist die Abbildung gegensinnig — die Figur wird zusätzlich am Zentrum punktgespiegelt.</td></tr>
+      <tr><td style="white-space:nowrap"><strong>Gleichsinnigkeit</strong></td><td>Die zentrische Streckung ist gleichsinnig: die Orientierung der Figur bleibt erhalten. Das gilt auch bei \(k < 0\): Dann ist sie eine Streckung mit \(|k|\), gefolgt von einer Drehung um \(180°\) um \(Z\) (Punktspiegelung an \(Z\)) — und auch eine Drehung ändert die Orientierung nicht.</td></tr>
       <tr><td style="white-space:nowrap"><strong>Parallelentreue</strong></td><td>Parallele Geraden bleiben parallel.</td></tr>
       <tr><td style="white-space:nowrap"><strong>Winkeltreue</strong></td><td>Das Bild eines Winkels ist stets ein Winkel gleicher Grösse.</td></tr>
-      <tr><td style="white-space:nowrap"><strong>Verhältnistreue</strong></td><td>Das Verhältnis der Längen sich entsprechender Seiten bleibt erhalten. Der Quotient aus Bildstrecke und Originalstrecke ist konstant und gleich dem Streckfaktor \(k\).</td></tr>
+      <tr><td style="white-space:nowrap"><strong>Verhältnistreue</strong></td><td>Das Verhältnis der Längen sich entsprechender Seiten bleibt erhalten. Der Quotient aus Bildstrecke und Originalstrecke ist konstant und gleich dem Betrag \(|k|\) des Streckfaktors.</td></tr>
     </tbody>
   </table>
   <p style="margin-top:8px">Daraus folgt: <strong>Strecken \(\times |k|\)</strong>, <strong>Flächen \(\times k^2\)</strong>, Volumina im Raum \(\times |k|^3\).</p>
@@ -717,7 +717,7 @@ MathJax = {
       </label>
 
       <div class="formel">
-        \(\dfrac{a'}{a} = \dfrac{b'}{b} = \ldots = k \qquad \dfrac{A'}{A} = k^2\)
+        \(\dfrac{a'}{a} = \dfrac{b'}{b} = \ldots = |k| \qquad \dfrac{A'}{A} = k^2\)
       </div>
 
       <div class="legende">
@@ -932,7 +932,7 @@ MathJax = {
 <!-- ══ 8. AUFGABEN ══ -->
 <div class="block block-fehler">
   <div class="block-titel">⚠ Häufiger Fehler — Flächen-Verhältnis = Streckfaktor</div>
-  <p>Wird eine Figur mit Streckfaktor \(k\) zentrisch gestreckt, werden <em>Längen</em> mit \(k\) multipliziert, aber <em>Flächen</em> mit \(k^2\) und <em>Volumen</em> mit \(k^3\). Eine Pizza mit doppeltem Radius (\(k = 2\)) hat also <strong>viermal</strong> so viel Belag, nicht doppelt so viel. Wer das Flächen-Verhältnis als Streckfaktor angibt, übergeht den quadratischen Zusammenhang.</p>
+  <p>Wird eine Figur mit Streckfaktor \(k\) zentrisch gestreckt, werden <em>Längen</em> mit \(|k|\) multipliziert, aber <em>Flächen</em> mit \(k^2\) und <em>Volumen</em> mit \(|k|^3\). Eine Pizza mit doppeltem Radius (\(k = 2\)) hat also <strong>viermal</strong> so viel Belag, nicht doppelt so viel. Wer das Flächen-Verhältnis als Streckfaktor angibt, übergeht den quadratischen Zusammenhang.</p>
 </div>
 
 <div class="block block-fehler">
@@ -1070,7 +1070,7 @@ MathJax = {
 
 <div class="block block-merksatz">
   <div class="block-titel">⭐ Merksatz</div>
-  <p>Zentrische Streckung mit Faktor \(k\) verändert <strong>Längen um \(|k|\)</strong>, aber <strong>Winkel und Verhältnisse bleiben gleich</strong> — daraus folgt direkt Ähnlichkeit. Die <strong>Strahlensätze</strong> sind die rechnerische Form dieser Beobachtung: gleiche Verhältnisse auf beiden Strahlen, gleiche Verhältnisse zwischen Strahl und Parallele. <strong>Flächen skalieren mit \(k^2\)</strong>, Volumen mit \(k^3\) — das ist der Grund, warum eine doppelt so grosse Pizza viermal mehr Belag braucht.</p>
+  <p>Zentrische Streckung mit Faktor \(k\) verändert <strong>Längen um \(|k|\)</strong>, aber <strong>Winkel und Verhältnisse bleiben gleich</strong> — daraus folgt direkt Ähnlichkeit. Die <strong>Strahlensätze</strong> sind die rechnerische Form dieser Beobachtung: gleiche Verhältnisse auf beiden Strahlen, gleiche Verhältnisse zwischen Strahl und Parallele. <strong>Flächen skalieren mit \(k^2\)</strong>, Volumen mit \(|k|^3\) — das ist der Grund, warum eine doppelt so grosse Pizza viermal mehr Belag braucht.</p>
 </div>
 
 <table class="ftb-tabelle" style="margin-top:14px">
@@ -1616,7 +1616,7 @@ function drawStreck() {
   legStrK.textContent = zahlFix(k, 2);
   legStrAbs.textContent = Math.abs(k).toFixed(2);
   legStrFla.textContent = (k*k).toFixed(2);
-  legStrOri.textContent = k >= 0 ? 'erhalten' : 'gespiegelt';
+  legStrOri.textContent = 'erhalten';   // auch bei k < 0: Drehung um 180°, gleichsinnig
 
   // Erklärungstext dynamisch
   let erkl;
@@ -1625,7 +1625,7 @@ function drawStreck() {
   else if (Math.abs(k + 1) < 0.05) erkl = 'Bei \\(k = -1\\) ist die Streckung eine Punktspiegelung am Zentrum \\(Z\\).';
   else if (k > 1) erkl = `Vergrösserung: Bild ist um Faktor ${k.toFixed(1)} grösser als Original, Fläche um Faktor ${(k*k).toFixed(2)}.`;
   else if (k > 0 && k < 1) erkl = `Verkleinerung: Bild ist um Faktor ${k.toFixed(1)} kleiner als Original.`;
-  else erkl = `Negativer Streckfaktor: Bild liegt auf der anderen Seite von \\(Z\\) und ist am Zentrum gespiegelt. \\(|k| = ${Math.abs(k).toFixed(1)}\\).`;
+  else erkl = `Negativer Streckfaktor: Bild liegt auf der anderen Seite von \\(Z\\) und ist um \\(180°\\) um \\(Z\\) gedreht; die Orientierung bleibt erhalten. \\(|k| = ${Math.abs(k).toFixed(1)}\\).`;
   erkl += ' <em>Tipp: ziehe Z, A, B oder C — Bild folgt der Streckung von Z aus.</em>';
   erklStr.innerHTML = erkl;
   mjTypeset([erklStr]);
@@ -3119,7 +3119,7 @@ window.addEventListener('resize', () => {
     } else if (Math.abs(k - 1) < 0.03) {
       erkl = '\\(k = 1\\): Bild und Original fallen zusammen, die beiden Parallelen liegen aufeinander.';
     } else if (k < 0) {
-      erkl = 'Scheitel-Lage: \\(A\'\\) und \\(B\'\\) liegen auf der <em>anderen</em> Seite von \\(S\\). Die Verhältnisse sind unverändert \\(|k|\\); die Bildfigur ist zusätzlich punktgespiegelt.';
+      erkl = 'Scheitel-Lage: \\(A\'\\) und \\(B\'\\) liegen auf der <em>anderen</em> Seite von \\(S\\). Die Verhältnisse sind unverändert \\(|k|\\); die Bildfigur ist zusätzlich um \\(180°\\) um \\(S\\) gedreht.';
     } else if (k < 1) {
       erkl = 'Verkleinerung: das Bilddreieck liegt innerhalb des Originals. Alle drei Streckenverhältnisse sind \\(k\\), das Flächenverhältnis \\(k^2\\).';
     } else {
