@@ -319,8 +319,8 @@ SEITEN = {
    themen=['Einheitskreis', 'Sinus', 'Cosinus', 'Tangens', 'Trigonometrischer Pythagoras', 'Periodizität'],
    tg='5.4 Einheitskreis'),
  'grundlagen/g5-5-trigonometrische-gleichungen.html': dict(
-   beschreibung='Trigonometrische Gleichungen lösen: die drei Grundtypen, Visualisierung am Einheitskreis und an der Sinuskurve, Arcusfunktionen und die volle Lösungsmenge.',
-   themen=['Trigonometrische Gleichung', 'Arcusfunktion', 'Einheitskreis', 'Periodizität', 'Lösungsmenge'],
+   beschreibung='Trigonometrische Gleichungen lösen: die drei Grundtypen, Visualisierung am Einheitskreis und an der Sinuskurve, Arkusfunktionen und die volle Lösungsmenge.',
+   themen=['Trigonometrische Gleichung', 'Arkusfunktion', 'Einheitskreis', 'Periodizität', 'Lösungsmenge'],
    tg='5.5 Trigonometrische Gleichungen'),
 
  # ── Schwerpunktfach ───────────────────────────────────────────────
