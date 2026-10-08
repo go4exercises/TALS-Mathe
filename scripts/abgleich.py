@@ -85,8 +85,8 @@ GRUNDLINIE = {
     'downloads/print.css': 0.900,
     'feedback.html': 0.977,
     'LICENSE': 0.955,
-    'scripts/build-suchindex.py': 0.963,   # ohne DATEN gemessen (07.10.2026)
-    'scripts/build-clips.py': 0.990,
+    'scripts/build-suchindex.py': 0.957,   # ohne DATEN gemessen; 0.963 -> 0.957: Physik liest LP-Titel aus <title> (07.10.2026, auf Mathes Vorschlag)
+    'scripts/build-clips.py': 0.998,   # gemeinsamer Bauer, drei Projektwerte (07.10.2026)
     'scripts/build-clips-einbau.py': 0.830,
     'scripts/build-clip-ton.py': 1.000,
     'scripts/build-seo.py': 0.898,         # ohne DATEN gemessen (07.10.2026; mit Daten 0.533)
@@ -137,42 +137,6 @@ BAUSTELLE = {
 # liegt; abgearbeitet wird im jeweils anderen. Wer einen Eintrag erledigt,
 # streicht ihn hier und uebernimmt die Datei ins eigene Repo.
 OFFEN = [
-    dict(quelle='Mathe', was='build-clips.py: gemeinsamer Bauer, drei Einstellungen (07.10.2026)',
-         wie='Mathe hat Physiks zusammengefuehrte Fassung uebernommen (beide Physik-Eintraege vom 06. und '
-             '07.10.2026 abgearbeitet; pruef-fragen.mjs uebernommen; TODO-schwesterprojekt bereinigt). '
-             'Neu in Mathe, in Physik nachzutragen: (1) Konstante TEXTBREITE_BEGRENZEN am Dateianfang — '
-             'Physiks Textbreite (Rand 130 px bei zentrierten Zeilen, width aus `breite` bei links gesetzten) '
-             'nur, wenn True; Physik True, Mathe False (mit True brachen in Mathe 62 Textelemente in 56 Clips '
-             'neu um, im Browser an allen 514 Clips gemessen). (2) Steigungsdreieck (bew-gd) bei dx = 0 '
-             'ausgeblendet. (3) Einheitskreis beim Tangens: Strahl beginnt bei P, wenn cos < 0 (vorher hing P '
-             'im 2./3. Quadranten neben der Linie). (4) Kommentare zu clipRahmen nennen «physiklib.js bzw. '
-             'mathlib.js». Danach unterscheiden sich die Dateien nur noch in den Werten von KARO_OHNE_ACHSEN '
-             'und TEXTBREITE_BEGRENZEN, im Seitennamen und im Feld "werkzeug" des Index. Vorlage: '
-             'scripts/build-clips.py in Mathe, Eintrag in TODO-schwesterprojekt.md vom 07.10.2026. '
-             'Spaeter am 07.10.2026 dazu (alle ohne die neuen Felder wirkungslos, 514 Mathe-Clips neu gebaut, '
-             'nur Abspielcode geaendert, keine JS-Fehler): "ein"/"aus" an jedem Teil eines graf (g.zt), '
-             '"laeufer" an bewegten und festen Kurven (kmX, laufeFest mit Wertetabelle), bewZahl zeigt zwei '
-             'Stellen, wenn der Wert genau zwei hat (wirkt auch auf bestehende Beschriftungen: 1.25 statt 1.3), '
-             'Parabel "normalform" [t, a, b, c] und Begleiter "achse", "schnitte" an bewegten Geraden mit einer '
-             'Formelkurve, "bewegung" an figuren (Bilder in Python, g.fb), "grenzen" [[t, von, bis]] an bewegten '
-             'Kurven, Tangensstrecke am Rand abgeschnitten. Doku: HOWTO-clips.md «Spaeter einblenden, bewegen, '
-             'mitlaufen». Nachgetragen: ein/aus an laeufer und dreieck (mit_zeit), Figuren-Bewegung Feld fuer '
-             'Feld (vorher sprang sie), farbe umgeschaltet, gleiche Nachbarbilder zusammengefasst, Delta-y links bei '
-             'dx < 0. Zweite Runde: drehung/um an Figuren, Formelkurven mit "parameter" (formel_js) und mitfahrenden '
-             '"punkte" (je mit ein/aus), "betrag_von", "lage" am Laeufer und an marken; Laeufer ueber festen Punkten, Beschriftungen am Bildrand '
-             'umgeklappt (wirkt auf bestehende Physik-Clips, durchsehen). '
-             'Am einfachsten wieder die ganze Datei uebernehmen und die drei Werte zuruecksetzen.'),
-    dict(quelle='Mathe', was='abgleich.py: DATEN — Seitenlisten zaehlen beim Vergleich nicht mit (07.10.2026)',
-         wie='Neu: DATEN nennt je KERN-Datei die Python-Zuweisungen auf oberster Ebene, die vor dem Messen auf '
-             'beiden Seiten wegfallen (build-seo.py: SEITEN, LG_G, LG_S; build-suchindex.py: ZUSATZSEITEN '
-             '(Mathe) und UNVERLINKT (Physik)). Grund: Jede neue Seite liess build-seo.py und build-suchindex.py '
-             'unter die Grundlinie fallen, ohne dass am Werkzeug etwas auseinanderlief. Grundlinien neu, ohne '
-             'Daten gemessen: build-seo.py 0.533 -> 0.898, build-suchindex.py 0.962 -> 0.963. Getestet: 20 neue '
-             'SEITEN-Eintraege aendern den Wert nicht, eine geaenderte Code-Zeile schon; Messung symmetrisch. '
-             'In Physik ist nichts zu tun als diese Datei zu uebernehmen. Dazu ein Befund in build-suchindex.py: '
-             'Physik traegt jedes Leitprogramm mit dem Titel «Leitprogramm» ein — in der Trefferliste der Suche '
-             'stehen darum alle gleich da. Mathe nennt den Namen («Leitprogramm Quadratische Funktionen»). '
-             'Vorschlag: bei der Auto-Erkennung den Titel aus <title> oder <h1> der Seite lesen.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',
