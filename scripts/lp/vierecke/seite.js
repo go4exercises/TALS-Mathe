@@ -55,6 +55,7 @@
     function P(p){ return X(p[0]).toFixed(1) + ',' + Y(p[1]).toFixed(1); }
     var F = {
       s: s, ebene: ebene,
+      karo: function(an){ g.style.display = an ? '' : 'none'; },
       drehen: function(){},
       leeren: function(){ while (ebene.firstChild) ebene.removeChild(ebene.firstChild); },
       vieleck: function(pts, cls){ return el(ebene, 'polygon', { points: pts.map(P).join(' '), 'class': cls }); },
@@ -180,17 +181,23 @@
     var ein = fig.querySelector('.g-eingabe'), rueck = fig.querySelector('.g-rueck'), formel = fig.querySelector('[data-rolle="formel"]');
     fig.querySelectorAll('input[type=range]').forEach(function(inp){
       regler[inp.dataset.p] = inp;
-      inp.addEventListener('input', function(){ bewegt[inp.dataset.p] = true; zeichnen(); });
+      // korrigierende Regel (sim4: c < a) vor dem Zeichnen, sonst steht kurz die verbotene Figur da (HOWTO §15)
+      inp.addEventListener('input', function(){ if (o.korrektur) o.korrektur(regler, inp.dataset.p); bewegt[inp.dataset.p] = true; zeichnen(); });
     });
     function werte(){
       var w = { bewegt: bewegt };
       for (var k in regler) w[k] = +regler[k].value;
       return w;
     }
+    /* Gesuchtes nicht ablesbar (Prüfung 08.10.2026, V-M1): Bei verdeckten Grössen kein Karo im Bild, und der
+       gesperrte Regler verschwindet (seine Stellung, etwa am Anschlag, verriete den Wert). */
     function anzeigen(w){
       var verdeckt = (aufgabe && aufgabe.verdeckt) || [];
-      for (var k in regler){ var sv = regler[k].parentNode.querySelector('.sl-val'); if (!sv) continue;
-        sv.textContent = verdeckt.indexOf(k) >= 0 ? '?' : z(w[k]) + (regler[k].dataset.einheit || ''); }
+      F.karo(!verdeckt.length);
+      for (var k in regler){ var sv = regler[k].parentNode.querySelector('.sl-val'), weg = verdeckt.indexOf(k) >= 0;
+        regler[k].style.visibility = weg ? 'hidden' : '';
+        if (!sv) continue;
+        sv.textContent = weg ? '?' : z(w[k]) + (regler[k].dataset.einheit || ''); }
     }
     function meldung(cls, html){ rueck.className = 'g-rueck ' + cls; rueck.innerHTML = html; setzen(rueck); }
     function wahl(kid){
@@ -298,7 +305,7 @@
         + '°\\); \\(\\gamma ' + zz(winkelGrad(C, D, B), 1) + '°\\); \\(\\delta ' + zz(winkelGrad(D, A, C), 1) + '°\\)';
     },
     aufgaben: [
-      { text: 'Erkunde: Zieh an allen drei Reglern. Welche zwei Seiten bleiben immer parallel?', probe: { v: 2 }, ziel: function(w){ return w.bewegt.c || w.bewegt.v || w.bewegt.h; } },
+      { text: 'Erkunde: Zieh an allen drei Reglern. Welche zwei Seiten bleiben immer parallel?', probe: { c: 3, v: 2, h: 3 }, ziel: function(w){ return w.bewegt.c && w.bewegt.v && w.bewegt.h; } },
       { text: 'Mach aus dem Trapez ein Parallelogramm.', probe: { c: 5 }, ziel: function(w){ return w.c === 5; } },
       { text: 'Stell ein Rechteck ein.', probe: { c: 5, v: 0 }, ziel: function(w){ return w.c === 5 && w.v === 0; } },
       { text: 'Stell einen Rhombus ein, der kein Quadrat ist: vier gleich lange Seiten.', probe: { c: 5, v: 3, h: 4 },
@@ -348,13 +355,13 @@
       if (hb && (w.richtig || a.frage)){
         var L2 = lot(A, B, C); F.strecke(A, [L2[0], L2[1]], 'hilfe'); F.rechts([L2[0], L2[1]], [-L2[0], -L2[1]], [C[0] - B[0], C[1] - B[1]], '');
         F.text(mitte(A, [L2[0], L2[1]]), a.frage && !w.richtig ? 'h_b = ?' : 'h_b', 'hilfe', -8, 10, 'end');
-        if (a.frage){ F.strecke(D, fuss, 'hilfe2'); F.text([D[0], w.h / 2], 'h_a = 4', 'mass', 6, 4, 'start'); }
+        if (a.frage){ F.strecke(D, fuss, 'hilfe2'); F.text([D[0], w.h / 2], 'h_a = ' + z(w.h), 'mass', 6, 4, 'start'); }
       }
       ecken(F, [A, B, C, D], ['A', 'B', 'C', 'D']);
-      seitenText(F, A, B, 'a'); seitenText(F, D, A, 'b');
+      seitenText(F, A, B, 'a'); seitenText(F, B, C, 'b');   // b = BC (Notation der Themenseite)
       var Af = w.a * w.h, U = 2 * (w.a + b);
       var kopf = '\\(a = ' + z(w.a) + cm() + '\\); \\(b ' + zz(b) + cm() + '\\); \\(h = ' + z(w.h) + cm() + '\\)';
-      if (hb) return '\\(a = 8' + cm() + '\\); \\(h_a = 4' + cm() + '\\); \\(b = 5' + cm() + '\\)' + (a.frage ? '; \\(h_b = {?}\\)' : '');
+      if (hb) return '\\(a = ' + z(w.a) + cm() + '\\); \\(h_a = ' + z(w.h) + cm() + '\\); \\(b ' + zz(b) + cm() + '\\)' + (a.frage ? '; \\(h_b = {?}\\)' : '');
       if (a.frage || a.ohneA) return kopf;
       return kopf + '<br>\\(A = a \\cdot h = ' + z(Af) + cm('^2') + '\\); \\(U = 2(a + b) ' + zz(U) + cm() + '\\)';
     },
@@ -372,9 +379,9 @@
         ziel: function(w){ return gl(w.a * w.h, 20) && w.v !== 0; } },
       { text: 'Stell einen Rhombus ein, der kein Quadrat ist: auch \\(b\\) soll so lang sein wie \\(a\\).', probe: { a: 5, v: 3, h: 4 },
         ziel: function(w){ return w.v !== 0 && gl(Math.hypot(w.v, w.h), w.a); } },
-      { text: 'Jetzt ist \\(b = AD\\) die Grundseite. Tipp die zugehörige Höhe \\(h_b\\) an.', hb: true, setup: function(s){ s.setze({ a: 8, h: 4, v: 3 }); s.sperre('a', 'h', 'v'); },
-        wahl: { richtig: 'hb', gut: 'Das Lot von \\(A\\) auf die Gerade \\(BC\\): der Abstand der Seiten \\(b\\) und \\(BC\\). Sein Fusspunkt liegt auf der Verlängerung.', rueck: {
-          ha: 'Das ist die Höhe zur Grundseite \\(a\\). Zu \\(b\\) gehört der senkrechte Abstand von \\(AD\\) zur Geraden \\(BC\\).',
+      { text: 'Jetzt ist \\(b = \\overline{BC}\\) die Grundseite. Tipp die zugehörige Höhe \\(h_b\\) an.', hb: true, setup: function(s){ s.setze({ a: 6, h: 4, v: 3 }); s.sperre('a', 'h', 'v'); },
+        wahl: { richtig: 'hb', gut: 'Das Lot von \\(A\\) auf die Gerade \\(BC\\): der Abstand der Seiten \\(\\overline{AD}\\) und \\(\\overline{BC}\\). Sein Fusspunkt liegt auf der Verlängerung.', rueck: {
+          ha: 'Das ist die Höhe zur Grundseite \\(a\\). Zu \\(b\\) gehört der senkrechte Abstand von \\(\\overline{AD}\\) zur Geraden \\(BC\\).',
           e: 'Das ist die Diagonale \\(e = AC\\). Sie steht nicht senkrecht auf \\(BC\\).',
           f: 'Das ist die Diagonale \\(f = BD\\). Sie steht nicht senkrecht auf \\(AD\\).' } } },
       { text: '\\(a = 8\\,\\text{cm}\\), \\(h_a = 4\\,\\text{cm}\\), \\(b = 5\\,\\text{cm}\\). Wie gross ist der Abstand \\(h_b\\) der Seiten \\(AD\\) und \\(BC\\)?', hb: true, setup: function(s){ s.setze({ a: 8, h: 4, v: 3 }); s.sperre('a', 'h', 'v'); },
@@ -426,7 +433,7 @@
       { text: '\\(c = 5\\,\\text{cm}\\), \\(h = 2.5\\,\\text{cm}\\): Wie lang ist die Mittellinie, wie gross die Fläche?', setup: function(s){ s.setze({ c: 5, h: 2.5, v: 0.5 }); s.sperre('c', 'h', 'v'); },
         frage: [{ name: 'm', label: '\\(m =\\)', einheit: 'cm', soll: 5.5, fehler: [[11, 'Das ist \\(a + c\\). Die Mittellinie ist der <b>Mittelwert</b> von \\(a\\) und \\(c\\).'], [0.5, 'Mittelwert, nicht halbe Differenz.']], tipp: '\\(m = \\tfrac{1}{2}(a + c)\\).' },
                 { name: 'A', label: '\\(A =\\)', einheit: 'cm²', soll: 13.75, fehler: [[27.5, 'Das ist \\((a + c) \\cdot h\\), das Doppelte. Rechne \\(m \\cdot h\\).'], [75, '\\(a \\cdot c \\cdot h\\) ist keine Trapezformel: \\(A = m \\cdot h\\).'], [15, 'Das ist \\(a \\cdot h\\), ein Rechteck. Beim Trapez zählt die Mittellinie.']], tipp: '\\(A = m \\cdot h\\).' }] },
-      { text: '\\(A = 14\\,\\text{cm}^2\\), \\(a = 6\\,\\text{cm}\\), \\(c = 1\\,\\text{cm}\\): Wie hoch ist das Trapez?', rueck: true, verdeckt: ['h'], setup: function(s){ s.setze({ c: 1, h: 4, v: 0.5 }); s.sperre('c', 'h', 'v'); },
+      { text: '\\(A = 14\\,\\text{cm}^2\\), \\(a = 6\\,\\text{cm}\\), \\(c = 1\\,\\text{cm}\\): Wie hoch ist das Trapez?', rueck: true, verdeckt: ['h'], setup: function(s){ s.setze({ c: 1, h: 4, v: 2.5 }); s.sperre('c', 'h', 'v'); },   // v 2.5: Beschriftungen frei (Prüfung 08.10.2026)
         frage: [{ name: 'h', label: '\\(h =\\)', einheit: 'cm', soll: 4, fehler: [[2, 'Du hast durch \\(a + c\\) geteilt. Geteilt wird durch die Mittellinie \\(m = \\tfrac{1}{2}(a + c)\\).'], [2.33, 'Du hast durch \\(a\\) geteilt. Es braucht die Mittellinie \\(m = \\tfrac{1}{2}(a + c)\\).'], [49, 'Multipliziert statt geteilt: Aus \\(A = m \\cdot h\\) folgt \\(h = A : m\\).']], tipp: 'Zuerst \\(m = \\tfrac{1}{2}(a + c)\\), dann \\(h = \\tfrac{A}{m}\\).' }] }
     ]
   });
@@ -438,6 +445,8 @@
      Startwerte wie im Einführungsclip: a = 12, c = 4, h = 3 (Schenkel 5) und e = 8, f = 6 (Seite 5). */
   arbeitsbereich('sim4', {
     fenster: { w: 320, h: 180, x0: -3, x1: 13.2, y0: -1.9 },
+    // c bleibt kürzer als a (Prüfung 08.10.2026): sonst wird ü = (a − c)/2 negativ, und die Anzeige zeigt nur seinen Betrag
+    korrektur: function(r){ if (+r.c.value > +r.a.value - 1) r.c.value = +r.a.value - 1; },
     zeichnen: function(F, w, k){
       var a = k.aufgabe || {}, ue = (w.a - w.c) / 2, A = [0, 0], B = [w.a, 0], D = [ue, w.h], C = [w.a - ue, w.h], s = Math.hypot(ue, w.h);
       F.vieleck([A, B, C, D], 'figur');
@@ -463,7 +472,7 @@
       return kopf + '<br>Schenkel \\(s = \\sqrt{\\text{ü}^2 + h^2} ' + zz(s) + cm() + '\\)';
     },
     aufgaben: [
-      { text: 'Erkunde: Zieh an \\(c\\). Wie lang ist der Überstand links und rechts, und wie lang wird der Schenkel?', probe: { c: 6 }, ziel: function(w){ return w.bewegt.c || w.bewegt.a || w.bewegt.h; } },
+      { text: 'Erkunde: Zieh an \\(c\\). Wie lang ist der Überstand links und rechts, und wie lang wird der Schenkel?', probe: { c: 6 }, ziel: function(w){ return w.bewegt.c; } },
       { text: 'Tipp im grünen Teildreieck die Hypotenuse an.', setup: function(s){ s.sperre('a', 'c', 'h'); },
         wahl: { richtig: 'd', gut: 'Der Schenkel liegt dem rechten Winkel gegenüber: \\(s^2 = \\text{ü}^2 + h^2\\).', rueck: {
           h: 'Die Höhe ist eine Kathete: Sie bildet den rechten Winkel. Die Hypotenuse liegt ihm gegenüber.',
@@ -501,7 +510,7 @@
       return kopf + '<br>Seite \\(a = \\sqrt{(\\tfrac{e}{2})^2 + (\\tfrac{f}{2})^2} ' + zz(s) + cm() + '\\); \\(A = \\tfrac{1}{2}\\, e \\cdot f = ' + z(e * f / 2) + cm('^2') + '\\)';
     },
     aufgaben: [
-      { text: 'Erkunde: Zieh an \\(e\\) und \\(f\\). Wo schneiden sich die Diagonalen, und unter welchem Winkel?', probe: { e: 10 }, ziel: function(w){ return w.bewegt.e || w.bewegt.f; } },
+      { text: 'Erkunde: Zieh an \\(e\\) und \\(f\\). Wo schneiden sich die Diagonalen, und unter welchem Winkel?', probe: { e: 10, f: 4 }, ziel: function(w){ return w.bewegt.e && w.bewegt.f; } },
       { text: 'Wann ist der Rhombus ein Quadrat? Stell es ein.', probe: { e: 6 }, ziel: function(w){ return w.e === w.f; } },
       { text: 'Stell einen Rhombus mit der Seite \\(a = 6.5\\,\\text{cm}\\) ein.', ohneA: true, probe: { e: 12, f: 5 }, ziel: function(w){ return gl(Math.hypot(w.e / 2, w.f / 2), 6.5); } },
       { text: 'Seite \\(a = 10\\,\\text{cm}\\), Diagonale \\(e = 12\\,\\text{cm}\\): Wie lang ist \\(f\\), wie gross die Fläche?', verdeckt: ['f'],
@@ -523,29 +532,29 @@
     /* Feste Aufgaben, die eine Zufallsübung nicht treffen darf (HOWTO §15): Clips · Arbeitsbereiche ·
        Kapitelaufgaben · Gesamttest. Je Typ ein eigener Schlüssel. */
     var SPERRE = [
-      // familie: fa|X|Y («Jedes X ist ein Y») · fe|X|Eigenschaft
-      'fa|Rhombus|Quadrat', 'fa|Quadrat|Rhombus', 'fe|Rechteck|dg', 'fe|Rhombus|dg', 'fe|Parallelogramm|dg', 'fe|Rechteck|dh', 'fe|Rechteck|ds',
+      // familie: fa|X|Y («Jedes X ist ein Y») · fe|X|Eigenschaft · fu|Umkehrung (fu|g = Aufgabe 1f)
+      'fu|g', 'fa|Rhombus|Quadrat', 'fa|Quadrat|Rhombus', 'fe|Rechteck|dg', 'fe|Rhombus|dg', 'fe|Parallelogramm|dg', 'fe|Rechteck|dh', 'fe|Rechteck|ds',
       // viereck-winkel: pw|α|gefragt · tw|α|β|gefragt · vw|drei Winkel sortiert
       'pw|45|beta', 'pw|45|gamma', 'pw|45|delta', 'pw|70|beta', 'pw|70|gamma', 'pw|70|delta', 'pw|65|beta', 'pw|65|gamma', 'pw|65|delta',
       'pw|58|beta', 'pw|58|gamma', 'pw|58|delta', 'pw|50|beta', 'pw|50|gamma', 'pw|50|delta', 'pw|110|beta', 'pw|110|gamma', 'pw|110|delta',
-      'tw|72|64|gamma', 'tw|72|64|delta', 'vw|75|85|110',
+      'tw|72|64|gamma', 'tw|72|64|delta', 'tw|70|80|gamma', 'tw|70|80|delta', 'pd|40|alpha', 'pd|40|beta', 'vw|75|85|110',
       // pa-flaeche: pa|a|b|h · rh|a|h · re|a|b
-      'pa|8|5|3', 'pa|9|6|4', 'pa|7.5|5|4', 'pa|12|7.5|5', 'pa|8|5|4', 'pa|10|5|3', 'pa|7|5|3', 're|5|3', 're|3|5', 're|7|3', 're|3|7',
+      'pa|8|5|3', 'pa|9|6|4', 'pa|12|7.5|5', 'pa|8|5|4', 'pa|10|5|3', 'pa|7|5|3', 'pa|9.5|6.5|6', 're|5|3', 're|3|5', 're|7|3', 're|3|7',
       // raute-ef: ef|e|f (sortiert) · er|A|e
-      'ef|6|8', 'ef|18|24', 'ef|7|10', 'ef|9|12', 'ef|14|48', 'ef|12|16', 'ef|5|12', 'er|24|8', 'er|24|6', 'er|35|10', 'er|35|7', 'er|54|12', 'er|54|9', 'er|96|12', 'er|96|16',
+      'ef|6|8', 'ef|18|24', 'ef|7|10', 'ef|9|12', 'ef|14|48', 'ef|12|16', 'ef|5|12', 'er|24|8', 'er|24|6', 'er|35|10', 'er|35|7', 'er|54|12', 'er|54|9', 'er|96|12', 'er|96|16', 'ef|8|15', 'er|60|15', 'er|60|8',
       // abstand: ab|a|h_a|b
-      'ab|8|4|5', 'ab|8|3|5', 'ab|10|3|5', 'ab|7.5|4|5', 'ab|12|5|7.5',
+      'ab|8|4|5', 'ab|8|3|5', 'ab|10|3|5', 'ab|7.5|4|5', 'ab|12|5|7.5', 'ab|9.5|6|6.5',
       // trapez: tr|a|c|h · trapez-rueck: th|A|a|c · tc|A|h|a
-      'tr|6|4|3', 'tr|6|5|2.5', 'tr|9|5|6', 'tr|11|7|4.5', 'tr|8|5|3', 'tr|12|7|4.5', 'tr|6|2|3', 'tr|6|4|4', 'tr|6|2|5', 'tr|12|4|3', 'tr|10|5|6', 'tr|7|4|2',
-      'tr|18|8|12', 'tr|20|12|7.5', 'tr|13|7|6', 'tr|10|4|4',
-      'th|15|6|4', 'th|12|6|2', 'th|14|6|1', 'th|20|6|4', 'th|20|6|2', 'th|42|9|5', 'th|40.5|11|7', 'th|19.5|8|5', 'th|42.75|12|7', 'th|60|13|7', 'th|45|10|5',
-      'tc|15|3|6', 'tc|12|3|6', 'tc|14|4|6', 'tc|42|6|9', 'tc|60|6|13', 'tc|40.5|4.5|11', 'tc|19.5|3|8', 'tc|42.75|4.5|12',
+      'tr|6|4|3', 'tr|6|5|2.5', 'tr|9|5|6', 'tr|11|7|4.5', 'tr|8|5|3', 'tr|6|2|3', 'tr|6|4|4', 'tr|6|2|5', 'tr|12|4|3', 'tr|10|5|6', 'tr|7|4|2',
+      'tr|20|12|7.5', 'tr|13|7|6', 'tr|10|4|4', 'tr|12|5|4.5', 'tr|11|5|4', 'tr|11|8|2', 'tr|8|5|2',
+      'th|15|6|4', 'th|12|6|2', 'th|14|6|1', 'th|20|6|4', 'th|20|6|2', 'th|42|9|5', 'th|40.5|11|7', 'th|19.5|8|5', 'th|45|10|5',
+      'tc|15|3|6', 'tc|12|3|6', 'tc|14|4|6', 'tc|42|6|9', 'tc|38.25|4.5|12', 'th|38.25|12|5', 'th|32|11|5', 'tc|32|4|11', 'tc|40.5|4.5|11', 'tc|19.5|3|8',
       // diagonale: dr|a|b (sortiert) · dq|a · db|d|a
-      'dr|5|12', 'dr|9|12', 'dr|50|89', 'dr|6|8', 'dr|3|4', 'dq|5', 'dq|6', 'db|13|12', 'db|13|5', 'db|15|9', 'db|15|12', 'db|10|6', 'db|10|8',
+      'dr|5|12', 'dr|9|12', 'dr|50|89', 'dr|6|8', 'dr|3|4', 'dq|5', 'dq|6', 'db|13|12', 'db|13|5', 'db|15|9', 'db|15|12', 'db|10|6', 'db|10|8', 'db|65|56', 'db|65|33', 'dr|33|56',
       // raute-seite: rs|e|f (sortiert) · rf|a|e
-      'rs|6|8', 'rs|18|24', 'rs|10|24', 'rs|5|12', 'rs|14|48', 'rs|40|70', 'rs|12|16', 'rf|10|12', 'rf|5|8', 'rf|5|6', 'rf|13|24', 'rf|13|10', 'rf|6.5|12', 'rf|6.5|5', 'rf|17|16', 'rf|17|30', 'rf|10|16',
-      // trapez-hoehe: hh|a|c|s · hs|a|c|h
-      'hh|12|4|5', 'hh|10|5|6.5', 'hh|20|12|8.5', 'hh|18|8|13', 'hh|10|4|5', 'hh|7|4|2.5', 'hs|12|4|3', 'hs|10|5|6', 'hs|7|4|2', 'hs|20|12|7.5', 'hs|18|8|12', 'hs|10|4|4', 'hs|13|3|12', 'hh|13|3|13'
+      'rs|6|8', 'rs|18|24', 'rs|10|24', 'rs|5|12', 'rs|14|48', 'rs|12|16', 'rf|10|12', 'rf|5|8', 'rf|5|6', 'rf|13|24', 'rf|13|10', 'rf|6.5|12', 'rf|6.5|5', 'rf|17|16', 'rf|17|30', 'rf|10|16', 'rf|8.5|15', 'rs|8|15',
+      // trapez-hoehe: hh|a|c|s · hs|a|c|h · hp|AD|AF (Parallelogramm)
+      'hh|12|4|5', 'hh|10|5|6.5', 'hh|20|12|8.5', 'hh|10|4|5', 'hh|7|4|2.5', 'hs|12|4|3', 'hs|10|5|6', 'hs|7|4|2', 'hs|20|12|7.5', 'hs|10|4|4', 'hs|13|3|12', 'hh|13|3|13', 'hs|12|5|4.5', 'hp|6.5|2.5'
     ];
     function gesperrt(T, A){ return (T.schl && SPERRE.indexOf(T.schl(A)) >= 0) || (T.extra && T.extra(A)); }
     function feld(e, f, soll, tipp, fehler, tol){
@@ -574,16 +583,37 @@
       gw: { satz: 'sind gegenüberliegende Winkel gleich gross', ab: 'Parallelogramm', gegen: 'Seine gegenüberliegenden Winkel sind verschieden.' },
       pp: { satz: 'sind beide Paare von Gegenseiten parallel', ab: 'Parallelogramm', gegen: 'Nur ein Paar Gegenseiten ist parallel.' }
     };
+    /* Umkehrung (Prüfung 08.10.2026, V-H3): vom Verhalten der Diagonalen auf das Viereck schliessen. Gegenbeispiele
+       zum Nachstellen in Arbeitsbereich 1 (zahlen.py): c = 3, v = 1, h = 4 gibt das gleichschenklige Trapez mit
+       AC = (4|4) und BD = (−4|4) — gleich lang und senkrecht, aber sie halbieren sich nicht. */
+    var UMK = {
+      h:   { wenn: 'sich die Diagonalen eines Vierecks gegenseitig halbieren', dann: 'ein Parallelogramm', wahr: true,
+             warum: 'Halbieren sich die Diagonalen, sind die Gegenseiten parallel — das ist ein Parallelogramm.' },
+      g:   { wenn: 'die Diagonalen eines Vierecks gleich lang sind', dann: 'ein Rechteck', wahr: false,
+             warum: 'Auch jedes gleichschenklige Trapez hat gleich lange Diagonalen. Zum Rechteck fehlt: Sie müssen sich auch halbieren.' },
+      s:   { wenn: 'die Diagonalen eines Vierecks senkrecht aufeinander stehen', dann: 'ein Rhombus', wahr: false,
+             warum: 'Stell in Arbeitsbereich 1 \\(c = 3\\), \\(v = 1\\), \\(h = 4\\) ein: ein Trapez mit senkrechten Diagonalen. Zum Rhombus fehlt: Sie müssen sich auch halbieren.' },
+      hg:  { wenn: 'sich die Diagonalen eines Vierecks halbieren und gleich lang sind', dann: 'ein Rechteck', wahr: true,
+             warum: 'Halbieren sie sich, ist es ein Parallelogramm; ein Parallelogramm mit gleich langen Diagonalen ist ein Rechteck.' },
+      hs:  { wenn: 'sich die Diagonalen eines Vierecks halbieren und senkrecht aufeinander stehen', dann: 'ein Rhombus', wahr: true,
+             warum: 'Halbieren sie sich, ist es ein Parallelogramm; ein Parallelogramm mit senkrechten Diagonalen ist ein Rhombus.' },
+      gs:  { wenn: 'die Diagonalen eines Vierecks gleich lang sind und senkrecht aufeinander stehen', dann: 'ein Quadrat', wahr: false,
+             warum: 'Stell in Arbeitsbereich 1 \\(c = 3\\), \\(v = 1\\), \\(h = 4\\) ein: Die Diagonalen sind gleich lang und senkrecht, halbieren sich aber nicht.' },
+      hgs: { wenn: 'sich die Diagonalen eines Vierecks halbieren, gleich lang sind und senkrecht aufeinander stehen', dann: 'ein Quadrat', wahr: true,
+             warum: 'Halbieren und gleich lang: ein Rechteck. Halbieren und senkrecht: ein Rhombus. Beides zugleich: ein Quadrat.' }
+    };
     var IN = { Trapez: 'In jedem Trapez', Parallelogramm: 'In jedem Parallelogramm', Rechteck: 'In jedem Rechteck', Rhombus: 'In jedem Rhombus', Quadrat: 'In jedem Quadrat' };
     function istEin(X, Y){ return OBER[X].indexOf(Y) >= 0; }
 
     var TYPEN = {
       'familie': { felder: ['w'], muster: '{w:wahr|falsch}',
-        schl: function(A){ return A.art === 'a' ? 'fa|' + A.X + '|' + A.Y : 'fe|' + A.X + '|' + A.E; },
+        schl: function(A){ return A.art === 'a' ? 'fa|' + A.X + '|' + A.Y : A.art === 'u' ? 'fu|' + A.U : 'fe|' + A.X + '|' + A.E; },
         eingabe: function(A){ return { w: A.soll }; },
         neu: function(){
-          var X = zufall(KLASSEN), A;
-          if (Math.random() < 0.45){ var Y = zufall(KLASSEN.filter(function(k){ return k !== X; }));
+          var X = zufall(KLASSEN), A, r = Math.random();
+          if (r < 0.25){ var U = zufall(Object.keys(UMK));
+            A = { art: 'u', U: U, wahr: UMK[U].wahr, text: 'Wahr oder falsch? «Wenn ' + UMK[U].wenn + ', ist es ' + UMK[U].dann + '.»' }; }
+          else if (r < 0.6){ var Y = zufall(KLASSEN.filter(function(k){ return k !== X; }));
             A = { art: 'a', X: X, Y: Y, wahr: istEin(X, Y), text: 'Wahr oder falsch? «' + JEDES[X] + ' ist ' + EIN[Y] + '.»' }; }
           else { var E = zufall(Object.keys(EIG));
             A = { art: 'e', X: X, E: E, wahr: istEin(X, EIG[E].ab), text: 'Wahr oder falsch? «' + IN[X] + ' ' + EIG[E].satz + '.»' }; }
@@ -592,26 +622,38 @@
         fehler: function(A){ return [[{ w: A.wahr ? 'falsch' : 'wahr' }, A.wahr ? 'Doch' : 'Nicht']]; },
         pruefen: function(A, e){
           if (e.w === A.soll) return null;
+          if (A.art === 'u') return (A.wahr ? 'Doch: ' : 'Nicht immer: ') + UMK[A.U].warum;
           if (A.art === 'a'){
             if (A.wahr) return 'Doch: ' + EIN[A.X].replace('ein', 'Ein') + ' hat alles, was ' + EIN[A.Y] + ' braucht — ' + BED[A.Y] + '.';
             return 'Nicht jedes: ' + EIN[A.Y].replace('ein', 'Ein') + ' braucht ' + BED[A.Y] + '. Hat das ' + JEDES[A.X].replace('Jedes', 'jedes').replace('Jeder', 'jeder') + '?';
           }
           var G = EIG[A.E];
           if (A.wahr) return 'Doch: ' + (A.X === G.ab ? 'Das gehört zu jedem ' + A.X + '.' : JEDES[A.X] + ' ist ' + EIN[G.ab] + ', und ' + IN[G.ab].replace('In', 'in') + ' ' + G.satz + '.');
+          /* Beim Trapez gilt das Gegenbeispiel nicht für jedes Trapez (rechtwinkliges Trapez: rechte Winkel; gleichschenkliges:
+             gleich lange Diagonalen; c = 3, v = 1, h = 4: senkrechte Diagonalen — Prüfung 08.10.2026, V-H2). Darum ein
+             bestimmtes: das Start-Trapez von Arbeitsbereich 1 (a 5, c 3.5, v 1, h 3.5), für das jedes G.gegen stimmt (zahlen.py). */
+          if (A.X === 'Trapez') return 'Nicht in jedem: Denk an das Trapez, mit dem Arbeitsbereich 1 startet. ' + G.gegen;
           return 'Nicht in jedem: Denk an ' + DENK[A.X] + ' ' + KEIN[G.ab] + ' ist. ' + G.gegen; },
         loesung: function(A){ return '\\text{' + A.soll + '}'; } },
 
       'viereck-winkel': { felder: ['w'], muster: '{w} °',
-        schl: function(A){ return A.art === 'p' ? 'pw|' + A.al + '|' + A.q : A.art === 't' ? 'tw|' + A.al + '|' + A.be + '|' + A.q : 'vw|' + A.drei.slice().sort(function(x, y){ return x - y; }).join('|'); },
+        schl: function(A){ return A.art === 'p' ? 'pw|' + A.al + '|' + A.q : A.art === 't' ? 'tw|' + A.al + '|' + A.be + '|' + A.q : A.art === 'd' ? 'pd|' + A.d + '|' + A.q : 'vw|' + A.drei.slice().sort(function(x, y){ return x - y; }).join('|'); },
         eingabe: function(A){ return { w: String(A.soll) }; },
         neu: function(){
-          var r = Math.random(), NAME = { beta: '\\beta', gamma: '\\gamma', delta: '\\delta' };
-          if (r < 0.4){
+          var r = Math.random(), NAME = { alpha: '\\alpha', beta: '\\beta', gamma: '\\gamma', delta: '\\delta' };
+          /* Variante «um d° grösser» (Prüfung 08.10.2026, V-H3: der Gesamttest kombiniert sie mit dem Trapez):
+             α + β = 180°, β − α = d. d = 60 und d = 90 nicht: Dort fielen zwei Fehler auf dieselbe Zahl. */
+          if (r < 0.2){
+            var d; do { d = zufallG(2, 12) * 10; } while (d === 60 || d === 90);
+            var qd = zufall(['alpha', 'beta']), figd = zufall(['Parallelogramm', 'Rhombus']), ald = (180 - d) / 2;
+            return { art: 'd', d: d, q: qd, al: ald, soll: qd === 'alpha' ? ald : ald + d,
+              text: 'Im ' + figd + ' \\(ABCD\\) ist \\(\\beta\\) um \\(' + d + '°\\) grösser als \\(\\alpha\\). Wie gross ist \\(' + NAME[qd] + '\\)?' }; }
+          if (r < 0.5){
             var al = zufallG(8, 28) * 5; if (al === 90) al = 95;
             var q = zufall(['beta', 'gamma', 'delta']), fig = zufall(['Parallelogramm', 'Rhombus']);
             return { art: 'p', al: al, q: q, soll: q === 'gamma' ? al : 180 - al,
               text: 'Im ' + fig + ' \\(ABCD\\) ist \\(\\alpha = ' + al + '°\\). Wie gross ist \\(' + NAME[q] + '\\)?' }; }
-          if (r < 0.75){
+          if (r < 0.8){
             var a1, b1;
             do { a1 = zufallG(8, 28) * 5; b1 = zufallG(8, 28) * 5; } while (a1 === 90 || b1 === 90 || a1 === b1 || a1 + b1 === 180);
             var q2 = zufall(['gamma', 'delta']);
@@ -622,11 +664,18 @@
           return { art: 'v', drei: drei, soll: 360 - s,
             text: 'Ein Viereck hat die Winkel \\(\\alpha = ' + drei[0] + '°\\), \\(\\beta = ' + drei[1] + '°\\) und \\(\\gamma = ' + drei[2] + '°\\). Wie gross ist \\(\\delta\\)?' }; },
         fehler: function(A){
+          if (A.art === 'd') return [[{ w: String(A.q === 'alpha' ? (360 - A.d) / 2 : (360 + A.d) / 2) }, '360'], [{ w: String(A.q === 'alpha' ? A.al + A.d : A.al) }, 'andere'],
+                                     [{ w: String(A.q === 'alpha' ? 180 - A.d : 180 + A.d) }, 'Zieh']];
           if (A.art === 'p') return A.q === 'gamma' ? [[{ w: String(180 - A.al) }, 'gegenüber']] : [[{ w: String(A.al) }, 'neben'], [{ w: String(360 - A.al) }, '360']];
           if (A.art === 't') return A.q === 'delta' ? [[{ w: String(A.al) }, 'Schenkel'], [{ w: String(180 - A.be) }, 'Schenkel']] : [[{ w: String(A.be) }, 'Schenkel'], [{ w: String(180 - A.al) }, 'Schenkel']];
           var s = A.drei[0] + A.drei[1] + A.drei[2]; return [[{ w: String(s) }, 'Summe']]; },
         pruefen: function(A, e){
           if (gl(e.w, A.soll)) return null;
+          if (A.art === 'd'){
+            if (gl(e.w, A.q === 'alpha' ? (360 - A.d) / 2 : (360 + A.d) / 2)) return 'Mit \\(360°\\) gerechnet. \\(\\alpha\\) und \\(\\beta\\) liegen an derselben Seite zwischen zwei Parallelen: \\(\\alpha + \\beta = 180°\\).';
+            if (gl(e.w, A.q === 'alpha' ? A.al + A.d : A.al)) return 'Das ist der andere Winkel: \\(\\beta\\) ist der grössere.';
+            if (gl(e.w, A.q === 'alpha' ? 180 - A.d : 180 + A.d)) return 'Mit diesem Wert wären \\(\\alpha + \\beta\\) mehr als \\(180°\\). Zieh \\(' + A.d + '°\\) von \\(180°\\) ab und teile den Rest auf beide Winkel auf.';
+            return 'Zwei Bedingungen: \\(\\alpha + \\beta = 180°\\) und \\(\\beta - \\alpha = ' + A.d + '°\\).'; }
           if (A.art === 'p'){
             if (A.q === 'gamma' && gl(e.w, 180 - A.al)) return '\\(\\gamma\\) liegt \\(\\alpha\\) gegenüber — gegenüberliegende Winkel sind gleich gross.';
             if (A.q !== 'gamma' && gl(e.w, A.al)) return 'Dieser Winkel liegt neben \\(\\alpha\\), nicht gegenüber. Benachbarte Winkel ergänzen sich zu \\(180°\\).';
@@ -700,7 +749,7 @@
           do { a = zufall([6, 7, 8, 9, 10, 12, 14, 15, 7.5]); b = zufall([4, 5, 6, 8, 10]); ha = zufallG(2, b - 1); hb = a * ha / b; n++; }
           while ((a === b || !ganz2(hb) || !ganz2(b * ha / a) || gl(hb, b * ha / a)) && n < 200);
           return { a: a, b: b, ha: ha, F: a * ha, soll: r2(hb),
-            text: 'Parallelogramm mit \\(a = ' + a + '\\,\\text{cm}\\), \\(b = ' + b + '\\,\\text{cm}\\) und der Höhe \\(h_a = ' + ha + '\\,\\text{cm}\\) auf \\(a\\). Wie gross ist der Abstand \\(h_b\\) der beiden Seiten \\(b\\)?' }; },
+            text: 'Parallelogramm mit \\(a = ' + a + '\\,\\text{cm}\\), \\(b = ' + b + '\\,\\text{cm}\\) und der Höhe \\(h_a = ' + ha + '\\,\\text{cm}\\) auf \\(a\\). Wie gross ist der Abstand \\(h_b\\) der Seiten \\(\\overline{AD}\\) und \\(\\overline{BC}\\)?' }; },
         fehler: function(A){ return [[{ hb: String(r2(A.b * A.ha / A.a)) }, 'Umgekehrt'], [{ hb: String(r2(2 * A.F / A.b)) }, 'Dreieck']]; },
         pruefen: function(A, e){ return feld(e, 'hb', A.soll, 'Zuerst \\(A = a \\cdot h_a\\), dann \\(h_b = \\tfrac{A}{b}\\).',
           [[A.b * A.ha / A.a, 'Umgekehrt: Die Fläche ist \\(a \\cdot h_a\\), und \\(h_b\\) ist diese Fläche geteilt durch \\(b\\).'], [2 * A.F / A.b, 'Das ist \\(\\tfrac{2A}{b}\\) — so rechnet man beim Dreieck. Beim Parallelogramm: Dreieck-Formel ohne \\(\\tfrac{1}{2}\\), \\(A = b \\cdot h_b\\).'], [A.F, 'Das ist die Fläche \\(a \\cdot h_a\\). Jetzt noch durch \\(b\\) teilen.']]); },
@@ -792,30 +841,41 @@
         loesung: function(A){ return A.vor ? 'a = \\sqrt{' + A.e / 2 + '^2 + ' + A.f / 2 + '^2} \\approx ' + A.soll : '\\tfrac{f}{2} = \\sqrt{' + A.a + '^2 - ' + A.e / 2 + '^2} = ' + A.soll / 2 + ';\\ f = ' + A.soll; } },
 
       'trapez-hoehe': { felder: ['x'], muster: '{x} cm',
-        schl: function(A){ return A.was === 'h' ? 'hh|' + A.a + '|' + A.c + '|' + A.s : 'hs|' + A.a + '|' + A.c + '|' + A.h; },
+        schl: function(A){ return A.was === 'h' ? 'hh|' + A.a + '|' + A.c + '|' + A.s : A.was === 'p' ? 'hp|' + A.s + '|' + A.ue : 'hs|' + A.a + '|' + A.c + '|' + A.h; },
         extra: function(A){ return A.a === 14 && A.c === 8; },
         eingabe: function(A){ return { x: String(A.soll) }; },
         neu: function(){
           var T = zufall([[3, 4, 5], [4, 3, 5], [5, 12, 13], [12, 5, 13], [8, 6, 10], [6, 8, 10], [1.5, 2, 2.5], [2, 1.5, 2.5], [2.5, 6, 6.5], [4.5, 6, 7.5], [6, 4.5, 7.5], [2, 3, 3.61], [3, 5, 5.83], [1, 4, 4.12]]);
           var ue = T[0], h = T[1], c = zufallG(2, 10), a = c + 2 * ue;
           if (Math.abs(ue + h - Math.hypot(2 * ue, h)) < 0.02) return TYPEN['trapez-hoehe'].neu();   // zwei Fehler gäben dieselbe Zahl
-          if (Math.random() < 0.5) return { was: 's', a: a, c: c, h: h, ue: ue, soll: r2(Math.hypot(ue, h)),
+          var r = Math.random();
+          /* Dasselbe Teildreieck im Parallelogramm (Prüfung 08.10.2026: Der Gesamttest G2 braucht es): Seite AD als
+             Hypotenuse, das Stück AF bis zum Fusspunkt der Höhe von D als Kathete. Nur exakte Tripel. */
+          if (r < 0.25){
+            if (!gl(T[2], Math.hypot(T[0], T[1]))) return TYPEN['trapez-hoehe'].neu();
+            return { was: 'p', s: T[2], ue: ue, soll: h,
+              text: 'Parallelogramm \\(ABCD\\) mit \\(\\overline{AD} = ' + T[2] + '\\,\\text{cm}\\): Der Fusspunkt \\(F\\) der Höhe von \\(D\\) auf \\(AB\\) liegt \\(' + ue + '\\,\\text{cm}\\) von \\(A\\) entfernt. Wie hoch ist das Parallelogramm?' }; }
+          if (r < 0.6) return { was: 's', a: a, c: c, h: h, ue: ue, soll: r2(Math.hypot(ue, h)),
             text: 'Gleichschenkliges Trapez mit \\(a = ' + a + '\\,\\text{cm}\\), \\(c = ' + c + '\\,\\text{cm}\\) und der Höhe \\(h = ' + h + '\\,\\text{cm}\\). Wie lang ist ein Schenkel \\(s\\)?' };
           if (!gl(T[2], Math.hypot(T[0], T[1]))) return TYPEN['trapez-hoehe'].neu();   // gerundete Schenkel nur als Ergebnis
           return { was: 'h', a: a, c: c, s: T[2], ue: ue, soll: h,
             text: 'Gleichschenkliges Trapez mit \\(a = ' + a + '\\,\\text{cm}\\), \\(c = ' + c + '\\,\\text{cm}\\) und den Schenkeln \\(s = ' + T[2] + '\\,\\text{cm}\\). Wie hoch ist es?' }; },
         fehler: function(A){
           if (A.was === 's') return [[{ x: String(A.ue + A.h) }, 'Quadrate'], [{ x: String(r2(Math.hypot(2 * A.ue, A.h))) }, 'Hälfte']].filter(function(f){ return !stimmt(+f[0].x, A.soll); });
+          if (A.was === 'p') return [[{ x: String(r2(Math.hypot(A.s, A.ue))) }, 'Hypotenuse'], [{ x: String(r2(A.s - A.ue)) }, 'Quadrate']].filter(function(g){ return !stimmt(+g[0].x, A.soll); });
           var f = [[{ x: String(r2(Math.hypot(A.s, A.ue))) }, 'Hypotenuse'], [{ x: String(r2(A.s - A.ue)) }, 'Quadrate']];
           if (A.s > 2 * A.ue) f.push([{ x: String(r2(Math.sqrt(A.s * A.s - 4 * A.ue * A.ue))) }, 'Hälfte']);
           return f.filter(function(g){ return !stimmt(+g[0].x, A.soll); }); },
         pruefen: function(A, e){
           if (A.was === 's') return feld(e, 'x', A.soll, 'Überstand \\(\\text{ü} = \\tfrac{a - c}{2}\\), dann \\(s = \\sqrt{\\text{ü}^2 + h^2}\\).',
             [[A.ue + A.h, 'Nicht die Längen addieren, sondern ihre <b>Quadrate</b> — dann die Wurzel.'], [Math.hypot(2 * A.ue, A.h), 'Der Überstand ist die <b>Hälfte</b> von \\(a - c\\): Er verteilt sich auf zwei Seiten.']]);
+          if (A.was === 'p') return feld(e, 'x', A.soll, 'Im Dreieck \\(AFD\\) ist \\(\\overline{AD}\\) die Hypotenuse: \\(h = \\sqrt{\\overline{AD}^2 - \\overline{AF}^2}\\).',
+            [[Math.hypot(A.s, A.ue), 'Die Seite \\(\\overline{AD}\\) ist die Hypotenuse: \\(h^2 = \\overline{AD}^2 - \\overline{AF}^2\\), nicht plus.'], [A.s - A.ue, 'Pythagoras gilt für die <b>Quadrate</b>: \\(h = \\sqrt{\\overline{AD}^2 - \\overline{AF}^2}\\).']]);
           var f = [[Math.hypot(A.s, A.ue), 'Der Schenkel ist die Hypotenuse: \\(h^2 = s^2 - \\text{ü}^2\\), nicht plus.'], [A.s - A.ue, 'Pythagoras gilt für die <b>Quadrate</b>: \\(h = \\sqrt{s^2 - \\text{ü}^2}\\).']];
           if (A.s > 2 * A.ue) f.push([Math.sqrt(A.s * A.s - 4 * A.ue * A.ue), 'Der Überstand ist die <b>Hälfte</b> von \\(a - c\\): Er verteilt sich auf zwei Seiten.']);
           return feld(e, 'x', A.soll, 'Überstand \\(\\text{ü} = \\tfrac{a - c}{2}\\), dann \\(h = \\sqrt{s^2 - \\text{ü}^2}\\).', f); },
-        loesung: function(A){ return '\\text{ü} = \\tfrac{' + A.a + ' - ' + A.c + '}{2} = ' + A.ue + ';\\ ' + (A.was === 's' ? 's = \\sqrt{' + A.ue + '^2 + ' + A.h + '^2} \\approx ' + A.soll : 'h = \\sqrt{' + A.s + '^2 - ' + A.ue + '^2} = ' + A.soll); } }
+        loesung: function(A){ if (A.was === 'p') return 'h = \\sqrt{' + A.s + '^2 - ' + A.ue + '^2} = ' + A.soll + '\\,\\text{cm}';
+          return '\\text{ü} = \\tfrac{' + A.a + ' - ' + A.c + '}{2} = ' + A.ue + ';\\ ' + (A.was === 's' ? 's = \\sqrt{' + A.ue + '^2 + ' + A.h + '^2} \\approx ' + A.soll : 'h = \\sqrt{' + A.s + '^2 - ' + A.ue + '^2} = ' + A.soll); } }
     };
 
     ALLE.forEach(function(box){

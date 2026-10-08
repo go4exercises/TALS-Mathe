@@ -1141,57 +1141,65 @@ Skill `/lp-pruefung` auf `dreiecke`, `vierecke`, `kreis-kreisteile`, `aehnlichke
 Werkzeuge grün (`pruef-uebungen`, `pruef-formelsatz`, `pruef-leiste`, `pruef-geo`, `pruef-fragen` je 9/9, `pruef-clip`).
 Die Befunde unten fangen die Werkzeuge nicht. Nachgeprüft vom Hauptagenten: Vierecke F1/F2, Dreiecke F1, Ähnlichkeit F1/F2/L1, Kreis 3e.
 
+**Behoben 08.10.2026** (ohne Nachprüfung, auf Auftrag): alle HOCH/MITTEL, NIEDRIG fast alle. Gesamttests umgebaut
+(Dreiecke 25 P mit Schwerpunkt und h = 2A/g, Umkehrung Pythagoras als Ziel gestrichen; Vierecke neu 24 P, G1–G6;
+Kreis 25 P mit Segment über 180°; Ähnlichkeit 25 P, G6 «Laras Fehler», Lochkamera mit Abständen vorher geübt).
+Raster je mit einer Regel für (E)-/Folgezeilen und «unmöglich». Zeiten: Dreiecke 210, Vierecke 200, Kreis 215,
+Ähnlichkeit 220 min. Bewusst gelassen: Aussprache «Kathete», «subtrahiert» (geteiltes `aussprache()`, Hörprobe),
+Schenkel «s» (wie Themenseite), Ähnlichkeit G3 (c) reine Ergebniszeile. Neu vertonte Szenen und Fragetöne:
+Berichte der Bearbeiter (Hörprobe offen).
+
 ### Dreiecke (`dreiecke`)
 **HOCH**
-- [ ] **D-H1 · Übung «Fläche, Höhe, Umfang», Variante `misch`: Grundseite in m gerundet angezeigt** (`seite.js:852`, `r2(g / 100)`): 3.5 cm → «0.04 m», Sollwert mit 0.035 — 28.5 % dieser Würfe werten die richtige Rechnung als falsch. → ungerundet anzeigen oder ganze cm würfeln.
-- [ ] **D-H2 · Gleiche Übung würfelt unmögliche Dreiecke**: Variante `zwei` h_a > b (11.8 %), gleichschenklig Basis 10/Schenkel 5 (flach). → neu würfeln.
-- [ ] **D-H3 · GT deckt Kompetenzen nicht**: Seitenhalbierende/Schwerpunkt 2 : 1, Höhe als Abstand h = 2A/g, Umkehrung Pythagoras ungeprüft (Matrix `seite.py:437` behauptet G2/G3). Kapitel 4 verspricht «prüfst, ob ein rechter Winkel vorliegt», nirgends erarbeitet. G4(b) Hilfsdreieck mit Fusspunkt aussen nie geübt.
+- [x] **D-H1 · Übung «Fläche, Höhe, Umfang», Variante `misch`: Grundseite in m gerundet angezeigt** (`seite.js:852`, `r2(g / 100)`): 3.5 cm → «0.04 m», Sollwert mit 0.035 — 28.5 % dieser Würfe werten die richtige Rechnung als falsch. → ungerundet anzeigen oder ganze cm würfeln.
+- [x] **D-H2 · Gleiche Übung würfelt unmögliche Dreiecke**: Variante `zwei` h_a > b (11.8 %), gleichschenklig Basis 10/Schenkel 5 (flach). → neu würfeln.
+- [x] **D-H3 · GT deckt Kompetenzen nicht**: Seitenhalbierende/Schwerpunkt 2 : 1, Höhe als Abstand h = 2A/g, Umkehrung Pythagoras ungeprüft (Matrix `seite.py:437` behauptet G2/G3). Kapitel 4 verspricht «prüfst, ob ein rechter Winkel vorliegt», nirgends erarbeitet. G4(b) Hilfsdreieck mit Fusspunkt aussen nie geübt.
 **MITTEL**
-- [ ] D-M1 · Arbeitsbereich 2 A1–A3: Seitenhalbierende, Winkelhalbierende, Mittelsenkrechte aus C liegen so dicht, dass ein Tipp auf die sichtbare Linie zu 43–53 % die Nachbarlinie trifft (falsche Rückmeldung). → C verlegen.
-- [ ] D-M2 · Raster: Umfang/Fläche je Aufgabe anders bewertet (G4(b) (E) vs. G6(c) Folgepunkt; G5(c) ohne (E)); G6 Folgewert 30.10 → 30.11 (ungerundet); G1 «Aussenwinkel als Innenwinkel» γ-Zeile widersprüchlich; G2 «vertauscht» (b)/(d) zählen trotz falscher Aussage.
-- [ ] D-M3 · Sperrliste: `ph|2.5|6` (= G7), `ph|4|12` (G4(b)), `da|42|54|84` (G1(b)) fehlen. G4(a) = 3-4-5-Figur aus Arbeitsbereich 3 und Aufgabe 3b.
-- [ ] D-M4 · Clips: `elemente` «Stumpfes Dreieck» Höhe von B nur nach aussen (B→H statt Fusspunkt–H), «M_I» am Punkt S, Bewegung vor dem Satz; `flaeche` «Warum die Hälfte» Original bleibt stehen; Kontrollfragen wiederholen Einführungszahlen (6-8-10, 5-12-13, a = 5/b = 7/γ = 80°, 6/5/15); zwei gleichartige Klickfragen (Fusspunkt = x der Ecke).
+- [x] D-M1 · Arbeitsbereich 2 A1–A3: Seitenhalbierende, Winkelhalbierende, Mittelsenkrechte aus C liegen so dicht, dass ein Tipp auf die sichtbare Linie zu 43–53 % die Nachbarlinie trifft (falsche Rückmeldung). → C verlegen.
+- [x] D-M2 · Raster: Umfang/Fläche je Aufgabe anders bewertet (G4(b) (E) vs. G6(c) Folgepunkt; G5(c) ohne (E)); G6 Folgewert 30.10 → 30.11 (ungerundet); G1 «Aussenwinkel als Innenwinkel» γ-Zeile widersprüchlich; G2 «vertauscht» (b)/(d) zählen trotz falscher Aussage.
+- [x] D-M3 · Sperrliste: `ph|2.5|6` (= G7), `ph|4|12` (G4(b)), `da|42|54|84` (G1(b)) fehlen. G4(a) = 3-4-5-Figur aus Arbeitsbereich 3 und Aufgabe 3b.
+- [x] D-M4 · Clips: `elemente` «Stumpfes Dreieck» Höhe von B nur nach aussen (B→H statt Fusspunkt–H), «M_I» am Punkt S, Bewegung vor dem Satz; `flaeche` «Warum die Hälfte» Original bleibt stehen; Kontrollfragen wiederholen Einführungszahlen (6-8-10, 5-12-13, a = 5/b = 7/γ = 80°, 6/5/15); zwei gleichartige Klickfragen (Fusspunkt = x der Ecke).
 **NIEDRIG**
-- [ ] Übung «Wie heisst sie?» Rückmeldungen verraten die Lösung; L1 «Fast» bei 7.5/1.5, «=» statt «≈»; Rückmeldung «Das wäre α, wenn β fehlte» falsch; «keine zwei gleich» → ungleichseitig; M_U auf Hypotenusenmitte fehlt; A8 gegebene Strecke grün; Clips: «nicht massstäblich» bei s_c = 9, «?» unter «100°», Klickfragen ohne `eingabe`, «ha/hb» im Fragetext, Aussprache «Zieh C», «Kathete», «subtrahiert» (Hörprobe); GT: Einheiten in G4-Figur, Platz für Skizzen, «Mittelsenk-rechte».
+- [x] Übung «Wie heisst sie?» Rückmeldungen verraten die Lösung; L1 «Fast» bei 7.5/1.5, «=» statt «≈»; Rückmeldung «Das wäre α, wenn β fehlte» falsch; «keine zwei gleich» → ungleichseitig; M_U auf Hypotenusenmitte fehlt; A8 gegebene Strecke grün; Clips: «nicht massstäblich» bei s_c = 9, «?» unter «100°», Klickfragen ohne `eingabe`, «ha/hb» im Fragetext, Aussprache «Zieh C», «Kathete», «subtrahiert» (Hörprobe); GT: Einheiten in G4-Figur, Platz für Skizzen, «Mittelsenk-rechte».
 
 ### Vierecke (`vierecke`)
 **HOCH**
-- [ ] **V-H1 · Gleichschenkliges Trapez über b = d definiert** (`seite.py:187`) — jedes Parallelogramm hat b = d (LP zählt es zu den Trapezen) und ist nicht achsensymmetrisch. → b = d **und** α = β (bzw. Symmetrieachse).
-- [ ] **V-H2 · Übung «Wahr oder falsch?»: drei falsche Gegenbeispiele beim Trapez** (`seite.js:570–573`): «keine rechten Winkel», «Diagonalen verschieden lang», «nicht senkrecht» — rechtwinkliges, gleichschenkliges Trapez bzw. c = 3, v = 1, h = 4 widerlegen.
-- [ ] **V-H3 · GT G1(a) verlangt die Umkehrung** (aus Diagonalen auf die Form), nirgends geübt; Raster-Begründung «gleich lang ⇒ Rechteck» falsch (gleichschenkliges Trapez). G1(b) «α um 40° grösser» nicht geübt.
+- [x] **V-H1 · Gleichschenkliges Trapez über b = d definiert** (`seite.py:187`) — jedes Parallelogramm hat b = d (LP zählt es zu den Trapezen) und ist nicht achsensymmetrisch. → b = d **und** α = β (bzw. Symmetrieachse).
+- [x] **V-H2 · Übung «Wahr oder falsch?»: drei falsche Gegenbeispiele beim Trapez** (`seite.js:570–573`): «keine rechten Winkel», «Diagonalen verschieden lang», «nicht senkrecht» — rechtwinkliges, gleichschenkliges Trapez bzw. c = 3, v = 1, h = 4 widerlegen.
+- [x] **V-H3 · GT G1(a) verlangt die Umkehrung** (aus Diagonalen auf die Form), nirgends geübt; Raster-Begründung «gleich lang ⇒ Rechteck» falsch (gleichschenkliges Trapez). G1(b) «α um 40° grösser» nicht geübt.
 **MITTEL**
-- [ ] V-M1 · Verdeckte Grössen am 1-cm-Raster auszählbar (sim3 A6, sim4 A4, sim5 A4; gesperrter Regler am Anschlag); Clips `trapez` «Rückwärts», `laengen` «Trapez» ebenso. → Raster aus.
-- [ ] V-M2 · sim2 A6: Falle BD steht 88.2° auf AD (wirkt wie Höhe). → a = 8, h = 3, v = 4.
-- [ ] V-M3 · GT wiederholt Kapitelaufgaben (G2 ≈ 2d, G6 ≈ 4c, G7 ≈ 4d/Fehlerkasten, G3(b) ≈ 4b, G5 ≈ `trapez-rueck`); Raster: Fläche/Pythagoras-Länge mal (E), mal nicht; Folgepunkt bei unmöglicher Höhe √194 > 13.
-- [ ] V-M4 · Clips: Mittellinie im rechten Trapez verschoben (`kontrolle-trapez` F2, (7.75|2.5)–(11.75|2.5)); «f» auf e, «b» an AD statt BC, Lot «h» statt h_b; Formeln ohne Klammer gesprochen («zwei mal fünf plus drei, gleich sechzehn» u. a.); Klickfrage Hypotenuse Toleranz 0.45 (19 % Fehltreffer); «U ändert sich» nicht allgemein; Farben Diagonale/Mittellinie uneinheitlich.
+- [x] V-M1 · Verdeckte Grössen am 1-cm-Raster auszählbar (sim3 A6, sim4 A4, sim5 A4; gesperrter Regler am Anschlag); Clips `trapez` «Rückwärts», `laengen` «Trapez» ebenso. → Raster aus.
+- [x] V-M2 · sim2 A6: Falle BD steht 88.2° auf AD (wirkt wie Höhe). → a = 8, h = 3, v = 4.
+- [x] V-M3 · GT wiederholt Kapitelaufgaben (G2 ≈ 2d, G6 ≈ 4c, G7 ≈ 4d/Fehlerkasten, G3(b) ≈ 4b, G5 ≈ `trapez-rueck`); Raster: Fläche/Pythagoras-Länge mal (E), mal nicht; Folgepunkt bei unmöglicher Höhe √194 > 13.
+- [x] V-M4 · Clips: Mittellinie im rechten Trapez verschoben (`kontrolle-trapez` F2, (7.75|2.5)–(11.75|2.5)); «f» auf e, «b» an AD statt BC, Lot «h» statt h_b; Formeln ohne Klammer gesprochen («zwei mal fünf plus drei, gleich sechzehn» u. a.); Klickfrage Hypotenuse Toleranz 0.45 (19 % Fehltreffer); «U ändert sich» nicht allgemein; Farben Diagonale/Mittellinie uneinheitlich.
 **NIEDRIG**
-- [ ] Aufgabe 1e «Diagonale eingezeichnet» ohne Figur; b = AD in sim2 und GT G2; sim4 c > a einstellbar; Matrix «G2 (c)»; Beschriftungen sim3 A6; Erkunde-✓ bei jeder Bewegung; GT: Aufrunden 642, Umrechnungsfehler Faktor 100, «“Rechteck” genügt», Labels in G3-Figur, Platz; Clips: h_a/h_b roh im Fragetext, Schenkel «s», gesprochene Eigenschaften ohne Bild, Beschriftungen vor dem Ton; Aussprache «Überstand».
+- [x] Aufgabe 1e «Diagonale eingezeichnet» ohne Figur; b = AD in sim2 und GT G2; sim4 c > a einstellbar; Matrix «G2 (c)»; Beschriftungen sim3 A6; Erkunde-✓ bei jeder Bewegung; GT: Aufrunden 642, Umrechnungsfehler Faktor 100, «“Rechteck” genügt», Labels in G3-Figur, Platz; Clips: h_a/h_b roh im Fragetext, Schenkel «s», gesprochene Eigenschaften ohne Bild, Beschriftungen vor dem Ton; Aussprache «Überstand».
 
 ### Kreis und Kreisteile (`kreis-kreisteile`)
 **HOCH**
-- [ ] **K-H1 · Aufgabe 3e mehrdeutig** («Am Rand misst ein Stück 7 cm») — das LP definiert den Rand als b + 2r; zweite lösbare Antwort d ≈ 5.20. → «Der Bogen eines Stücks …».
-- [ ] **K-H2 · GT: Segment über 180° (Kernregel Kapitel 4) ungeprüft**; G2 (Punkt in Höhe h über dem Kreis, Einheiten) und G5(a) (r aus Sehne und Abstand) nicht geübt.
+- [x] **K-H1 · Aufgabe 3e mehrdeutig** («Am Rand misst ein Stück 7 cm») — das LP definiert den Rand als b + 2r; zweite lösbare Antwort d ≈ 5.20. → «Der Bogen eines Stücks …».
+- [x] **K-H2 · GT: Segment über 180° (Kernregel Kapitel 4) ungeprüft**; G2 (Punkt in Höhe h über dem Kreis, Einheiten) und G5(a) (r aus Sehne und Abstand) nicht geübt.
 **MITTEL**
-- [ ] K-M1 · Figur 4b: abgeschnittenes Tischstück schwarz gefüllt (`bog` mit Klasse `lot` ohne `fill:none`).
-- [ ] K-M2 · Übung «Linie benennen»: Radius als «Sehne» → Meldung «keine Gerade» falsch; gesperrte Regler widersprechen der Figur (sim1 A8 r = 5/a = 3 bei r = 4; sim2 A5/A6) → `verdeckt`.
-- [ ] K-M3 · Raster: G1(a) (A) vs. «Begründe»; G5 Folgepunkt bei a = r (unmögliche Figur); π ≈ 3.14 als «gerundeter Zwischenwert» lesbar; Einheitenregel nur für (E); Ergebniszeilen G4(b)/(c), G6 ohne (E).
-- [ ] K-M4 · Clips: `sektor` «Anteil» «90° : 360° = ¼» 2.6 s zu früh (Whisper «Phi» → «viel» ≈ «Viertel»), Rückbewegung nach Szenenende; `kontrolle-sektor` F2 «b ≈ 9.42» abgeschnitten; Stille 3.5–5.3 s am Ende von 9 Szenen (alte `dauer`); R/r klingen gleich («Gross R … klein r»); `kontrolle-linien` F1 Sehnenstück der Sekante als Falle.
+- [x] K-M1 · Figur 4b: abgeschnittenes Tischstück schwarz gefüllt (`bog` mit Klasse `lot` ohne `fill:none`).
+- [x] K-M2 · Übung «Linie benennen»: Radius als «Sehne» → Meldung «keine Gerade» falsch; gesperrte Regler widersprechen der Figur (sim1 A8 r = 5/a = 3 bei r = 4; sim2 A5/A6) → `verdeckt`.
+- [x] K-M3 · Raster: G1(a) (A) vs. «Begründe»; G5 Folgepunkt bei a = r (unmögliche Figur); π ≈ 3.14 als «gerundeter Zwischenwert» lesbar; Einheitenregel nur für (E); Ergebniszeilen G4(b)/(c), G6 ohne (E).
+- [x] K-M4 · Clips: `sektor` «Anteil» «90° : 360° = ¼» 2.6 s zu früh (Whisper «Phi» → «viel» ≈ «Viertel»), Rückbewegung nach Szenenende; `kontrolle-sektor` F2 «b ≈ 9.42» abgeschnitten; Stille 3.5–5.3 s am Ende von 9 Szenen (alte `dauer`); R/r klingen gleich («Gross R … klein r»); `kontrolle-linien` F1 Sehnenstück der Sekante als Falle.
 **NIEDRIG**
-- [ ] Bogenmass «5.4» vs. «5.1» (richtig 5.1); h vs. h_Δ in sim4; «π erklären» nicht geübt; Unterlagsscheibe 22 cm; Meldungen `zurueck`/AB1 A7; Bildkleinigkeiten sim2/sim3/sim4; `zahlen.py` alte G5-Zeilen; KI-Beispiele «6π»; Clips: ½ b r ohne Herleitung, Tangente «eine» statt zwei, Beschriftungen R/rₘ/b, s = 8 auf Sehnenhälfte, «∓», «φ» aufrecht, Falschantwort 25°.
+- [x] Bogenmass «5.4» vs. «5.1» (richtig 5.1); h vs. h_Δ in sim4; «π erklären» nicht geübt; Unterlagsscheibe 22 cm; Meldungen `zurueck`/AB1 A7; Bildkleinigkeiten sim2/sim3/sim4; `zahlen.py` alte G5-Zeilen; KI-Beispiele «6π»; Clips: ½ b r ohne Herleitung, Tangente «eine» statt zwei, Beschriftungen R/rₘ/b, s = 8 auf Sehnenhälfte, «∓», «φ» aufrecht, Falschantwort 25°.
 
 ### Ähnlichkeit (`aehnlichkeit`)
 **HOCH**
-- [ ] **Ä-H1 · «Ist k kleiner als eins, wird das Bild kleiner»** (Clip `streckung` «Kleiner», `clips.py:273`; ebenso `kurzbeschrieb` und Rückmeldung `kontrolle-streckung` F2) — falsch für k < 0 (k = −1.5 vergrössert). → «zwischen null und eins».
-- [ ] **Ä-H2 · BP G6 «Zuordnung nach den Buchstaben»: PQ = 9 falsch** (richtig ≈ 11.23); G4(c) Folgepunkt für denselben Begriffsfehler (Länge statt Fläche) widerspricht G1(b)/G5/G6(c).
-- [ ] **Ä-H3 · Umkehrung Strahlensatz ohne Lagebedingung** (Festhalten 2).
+- [x] **Ä-H1 · «Ist k kleiner als eins, wird das Bild kleiner»** (Clip `streckung` «Kleiner», `clips.py:273`; ebenso `kurzbeschrieb` und Rückmeldung `kontrolle-streckung` F2) — falsch für k < 0 (k = −1.5 vergrössert). → «zwischen null und eins».
+- [x] **Ä-H2 · BP G6 «Zuordnung nach den Buchstaben»: PQ = 9 falsch** (richtig ≈ 11.23); G4(c) Folgepunkt für denselben Begriffsfehler (Länge statt Fläche) widerspricht G1(b)/G5/G6(c).
+- [x] **Ä-H3 · Umkehrung Strahlensatz ohne Lagebedingung** (Festhalten 2).
 **MITTEL**
-- [ ] Ä-M1 · Arbeitsbereich 2 ohne `ohneNull: ['k']` — k = 0 zeigt «Infinity»; Laterne 2e ohne Person (`svg.geo-mini .person` fehlt); 4d Ecke C abgeschnitten; Übungsbilder schneiden «SA′ = …» (35 %) und «c = …» ab; 4a «R», 1a/1d Labels auf Achsenzahlen.
-- [ ] Ä-M2 · `kontrolle-dreiecke` F2: «Der grüne Kreis zeigt die Stelle» — Strecke wird als grüne Linie gezeigt.
-- [ ] Ä-M3 · «1.5-mal / doppelt so gross» (Fläche 2.25/4) in `streckung` «Negativ» und `kontrolle-streckung` F5 → «Seiten … so lang».
-- [ ] Ä-M4 · GT: G6 wiederholt 4a (Namen, k = 1.5, Zuordnung); G3 Lochkamera mit senkrechten Abständen nie geübt; G5 irrationales k (√3) kaum geübt; sWs/SsW nur genannt, nicht erfahren/geübt.
-- [ ] Ä-M5 · Clips: 60° vor der Rechnung im Bild (`dreiecke` «Zwei Winkel»), Fläche mit k = 1.5 neben Bild k = 2, leere Bühne «Zurück zu k», Baum massstäblich vor der Rechnung, Grün für gegebenes q; Kontrollfragen = Themenseite A4a/A6/A2.
+- [x] Ä-M1 · Arbeitsbereich 2 ohne `ohneNull: ['k']` — k = 0 zeigt «Infinity»; Laterne 2e ohne Person (`svg.geo-mini .person` fehlt); 4d Ecke C abgeschnitten; Übungsbilder schneiden «SA′ = …» (35 %) und «c = …» ab; 4a «R», 1a/1d Labels auf Achsenzahlen.
+- [x] Ä-M2 · `kontrolle-dreiecke` F2: «Der grüne Kreis zeigt die Stelle» — Strecke wird als grüne Linie gezeigt.
+- [x] Ä-M3 · «1.5-mal / doppelt so gross» (Fläche 2.25/4) in `streckung` «Negativ» und `kontrolle-streckung` F5 → «Seiten … so lang».
+- [x] Ä-M4 · GT: G6 wiederholt 4a (Namen, k = 1.5, Zuordnung); G3 Lochkamera mit senkrechten Abständen nie geübt; G5 irrationales k (√3) kaum geübt; sWs/SsW nur genannt, nicht erfahren/geübt.
+- [x] Ä-M5 · Clips: 60° vor der Rechnung im Bild (`dreiecke` «Zwei Winkel»), Fläche mit k = 1.5 neben Bild k = 2, leere Bühne «Zurück zu k», Baum massstäblich vor der Rechnung, Grün für gegebenes q; Kontrollfragen = Themenseite A4a/A6/A2.
 **NIEDRIG**
-- [ ] Kapitel 3 ohne Aufgabe an der Figur; Leiste 2 A1 doppeldeutig; Vorwissensclip passt kaum; Tippziel A′B′ bei k = −1 (55 %); «parallelentreu»; Regler δ blau; Übungstext «flaeche»; 3b «(fast)»; Clips: Pfeil 4.9 statt 4.5, Bewegung vor Satz, A′ auf «−2», rote Gerade vor dem Kippen, «≈ 5.80», «Seite 4» mehrdeutig; GT: Einheiten gemischt, G3(b)/(c) nur (E), G4(b) cm², Platz für Skizzen.
+- [x] Kapitel 3 ohne Aufgabe an der Figur; Leiste 2 A1 doppeldeutig; Vorwissensclip passt kaum; Tippziel A′B′ bei k = −1 (55 %); «parallelentreu»; Regler δ blau; Übungstext «flaeche»; 3b «(fast)»; Clips: Pfeil 4.9 statt 4.5, Bewegung vor Satz, A′ auf «−2», rote Gerade vor dem Kippen, «≈ 5.80», «Seite 4» mehrdeutig; GT: Einheiten gemischt, G3(b)/(c) nur (E), G4(b) cm², Platz für Skizzen.
 
 ### Themenseiten 5.2a–d: beim Bau gemeldet und bestätigt
 **Behoben 08.10.2026:** alle Punkte; g5-2b Anim 4: Schenkel b/d, Versatz heisst jetzt v; Clips g5-2b-anim-scherung (Szenen 2–4, Bilder neu) und g5-2b-anim-umformung (Szene 3) neu vertont. 5.2a bleibt bei SsW/sSW, mit Hinweis auf SSW in 5.3.

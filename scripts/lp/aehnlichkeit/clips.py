@@ -197,16 +197,24 @@ JETZT_DU = sz('Jetzt du', 'Jetzt du: Erkunde diese Zusammenhänge in der nachfol
               titel('Jetzt du', 280, 86),
               n('Erkunde diese Zusammenhänge|in der Animation unter dem Clip|und löse die Aufgaben.', 430, 'blau', 50, ein=0.6))
 FALSCH = 'Nicht ganz. Der grüne Kreis zeigt die Stelle.'
+FALSCH_LINIE = 'Nicht ganz. Die grüne Linie zeigt die Seite.'      # Ziel als Strecke: der Abspieler zieht sie grün nach
 
 
 def clip(name, folge, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip'):
     alt = R + 'clips/' + PRAEFIX + name + '.json'
     if os.path.exists(alt):
-        frueher = {(q['name'], q['sprecher']): q.get('dauer') for q in json.load(open(alt))['szenen']}
-        for q in szenen:
+        szalt = json.load(open(alt))['szenen']
+        frueher = {(q['name'], q['sprecher']): q.get('dauer') for q in szalt}
+        nach_name = {q['name']: q.get('dauer') for q in szalt}
+        for nr, q in enumerate(szenen, 1):
             d_ = frueher.get((q['name'], q['sprecher']))
             if d_:
                 q['dauer'] = d_
+            elif nach_name.get(q['name']):
+                # Text geändert: alte Dauer behalten, damit build-clip-ton.py --szenen die bisherige Spur
+                # noch zuordnen kann; die Szene muss neu vertont werden (misst die Dauer neu).
+                q['dauer'] = nach_name[q['name']]
+                print('  ! %s Szene %d «%s»: Text geändert — build-clip-ton.py %s --szenen %d' % (name, nr, q['name'], PRAEFIX + name, nr))
     d = {'titel': titel_, 'dateiname': PRAEFIX + name, 'kurzbeschrieb': kurz,
          'schlagworte': schlag, 'themenbereich': 'Geometrie · Planimetrie',
          'fach': 'Grundlagenfach', 'lerngebiet': '5 · Geometrie',
@@ -232,6 +240,10 @@ B15, B05, Bm15 = bild1(1.5), bild1(0.5), bild1(-1.5)
 # C′ bei k = 1.5: Weg Z → C = (4 | 3), mal 1.5 = (6 | 4.5), C′ = (7 | 5.5)
 assert B15[2] == (7, 5.5) and B05[2] == (3, 2.5) and Bm15[2] == (-5, -3.5)
 ORIG1 = [V(E1, 1, 0.14)] + ecken([('A', E1[0]), ('B', E1[1]), ('C', E1[2])], 1)
+# Bild bei k = −1.5: A′(−0.5 | −2) liegt knapp links der y-Achse — der Name vom Schwerpunkt weg käme auf die
+# Achsenzahl «−2» (bei x ≈ −0.3). Darum rechts unterhalb der Ecke, weg von Achse und Strahl ZA (bei y = −2.6: x = −0.8).
+ECKEN_M15 = ecken([("A′", Bm15[0]), ("B′", Bm15[1]), ("C′", Bm15[2])], 2)
+ECKEN_M15[0]['bei'] = [0.6, -2.62]
 ZPT = [PK(Z1, 5, 0.12), T(0.55, 1.45, 'Z', 5, g=32)]
 STRAHLEN1 = [G(Z1, p, W1, 5, True, 2) for p in E1]
 def bildfig(pk, farbe=2, **kw):
@@ -239,7 +251,7 @@ def bildfig(pk, farbe=2, **kw):
 
 clip('streckung', 1, 'Ähnlichkeit sehen: zentrische Streckung',
      'Zentrische Streckung mit Zentrum Z und Faktor k: Bildpunkt auf der Geraden durch Z, Abstand mal |k|; mit Koordinaten '
-     '(Weg von Z mal k); k < 1 verkleinert, k < 0 auf die andere Seite; Winkel und Parallelen bleiben.',
+     '(Weg von Z mal k); 0 < k < 1 verkleinert, k < 0 auf die andere Seite; Winkel bleiben, Bildseiten parallel.',
      ['zentrische Streckung', 'Streckfaktor', 'Streckungszentrum', 'Koordinaten'], [
          sz('Zentrum und Faktor',
             'Eine zentrische Streckung braucht ein Zentrum Z und einen Streckfaktor k. Jeder Punkt wandert auf der Geraden '
@@ -254,9 +266,10 @@ clip('streckung', 1, 'Ähnlichkeit sehen: zentrische Streckung',
             f(r"\overline{ZC'} = |\fb{k}| \cdot \overline{ZC}", 300, 52, ein=0.4),
             f(r'\fb{k = 1.5}', 420, 52, ein=1.0),
             graf(W1, ORIG1 + ZPT + STRAHLEN1, ein=0.05),
-            # das Bild wächst von k = 1 (deckungsgleich) bis k = 1.5 — Punkte linear in k
-            graf(W1, [bildfig(E1, bewegung=[[2.3, {}], [4.6, {'punkte': [r3(p) for p in B15]}]])], ein=2.2, raster=False),
-            graf(W1, ecken([("A′", B15[0]), ("B′", B15[1]), ("C′", B15[2])], 2), ein=7.4, raster=False)),
+            # das Bild wächst von k = 1 (deckungsgleich) bis k = 1.5 — Punkte linear in k; auf «So wandern alle drei
+            # Ecken» (4.8 s, gemessen), nicht schon während «wird der Abstand …»
+            graf(W1, [bildfig(E1, bewegung=[[4.8, {}], [6.8, {'punkte': [r3(p) for p in B15]}]])], ein=4.7, raster=False),
+            graf(W1, ecken([("A′", B15[0]), ("B′", B15[1]), ("C′", B15[2])], 2), ein=7.1, raster=False)),
          sz('Mit Koordinaten',
             'Mit Koordinaten: Von Z nach C sind es vier nach rechts und drei nach oben. Mal eins Komma fünf gibt sechs und '
             'vier Komma fünf. Von Z aus abgetragen, liegt C Strich bei sieben und fünf Komma fünf.',
@@ -266,30 +279,33 @@ clip('streckung', 1, 'Ähnlichkeit sehen: zentrische Streckung',
             graf(W1, ORIG1 + ZPT + [bildfig(B15)] + ecken([("C′", B15[2])], 2), ein=0.05),
             graf(W1, [], ein=1.9, raster=False, strecken=[
                 dict(von=[1, 1], bis=[5, 1], farbe=5, pfeil=True, dicke=4), dict(von=[5, 1], bis=[5, 4], farbe=5, pfeil=True, dicke=4)]),
+            # mal 1.5: 6 nach rechts, 4.5 nach oben — von Z aus, genau bis C′ (der Weg 4 | 3 liegt darunter)
             graf(W1, [], ein=5.2, raster=False, strecken=[
-                dict(von=[1, 0.6], bis=[7, 0.6], farbe=2, pfeil=True, dicke=5), dict(von=[7, 0.6], bis=[7, 5.5], farbe=2, pfeil=True, dicke=5)]),
+                dict(von=[1, 1], bis=[7, 1], farbe=2, pfeil=True, dicke=5), dict(von=[7, 1], bis=[7, 5.5], farbe=2, pfeil=True, dicke=5)]),
             graf(W1, [PK(B15[2], 3, 0.16)], ein=9.4, raster=False)),
          sz('Kleiner',
-            'Ist k kleiner als eins, wird das Bild kleiner. Bei k gleich null Komma fünf liegt jede Ecke nur halb so weit von '
-            'Z entfernt.',
-            f(r'\fb{k = 0.5}', 300, 52, ein=3.6),
-            n('@0 \\lt k \\lt 1@: verkleinert', 420, 'blau', 44, ein=1.1),
+            'Liegt k zwischen null und eins, wird das Bild kleiner. Bei k gleich null Komma fünf liegt jede Ecke nur halb so '
+            'weit von Z entfernt.',
+            # Zeiten gemessen (Neuvertonung 08.10.2026): «wird das Bild kleiner» 2.3 s, «Bei k gleich null Komma fünf» 3.7 s,
+            # «liegt jede Ecke nur halb so weit» 5.2–7.2 s
+            f(r'\fb{k = 0.5}', 300, 52, ein=3.8),
+            n('@0 \\lt k \\lt 1@: verkleinert', 420, 'blau', 44, ein=2.3),
             graf(W1, ORIG1 + ZPT + STRAHLEN1, ein=0.05),
-            graf(W1, [bildfig(B15, bewegung=[[3.8, {}], [6.4, {'punkte': [r3(p) for p in B05]}]])], ein=0.05, raster=False)),
+            graf(W1, [bildfig(B15, bewegung=[[4.6, {}], [6.8, {'punkte': [r3(p) for p in B05]}]])], ein=0.05, raster=False)),
          sz('Negativ',
-            'Ist k negativ, liegt das Bild auf der anderen Seite von Z. Bei k gleich minus eins Komma fünf ist es eins Komma '
-            'fünf mal so gross und um Z gedreht.',
+            'Ist k negativ, liegt das Bild auf der anderen Seite von Z. Bei k gleich minus eins Komma fünf sind seine Seiten '
+            'eins Komma fünf mal so lang, und es ist um Z gedreht.',
             f(r'\fb{k = -1.5}', 300, 52, ein=4.4),
-            n('@k \\lt 0@: andere Seite von @Z@,|um @Z@ um @180°@ gedreht', 420, 'blau', 42, ein=7.9),
+            n('@k \\lt 0@: andere Seite von @Z@,|um @Z@ um @180°@ gedreht', 420, 'blau', 42, ein=8.4),   # «und es ist um Z gedreht» 8.3 s
             graf(W1, ORIG1 + ZPT + STRAHLEN1, ein=0.05),
             # k läuft von 0.5 über 0 (das Bild schrumpft in Z) bis −1.5, linear in k
             graf(W1, [bildfig(B05, bewegung=[[2.0, {}], [5.2, {'punkte': [r3(p) for p in Bm15]}]])], ein=0.05, raster=False),
-            graf(W1, ecken([("A′", Bm15[0]), ("B′", Bm15[1]), ("C′", Bm15[2])], 2), ein=5.3, raster=False)),
+            graf(W1, ECKEN_M15, ein=5.3, raster=False)),
          sz('Was bleibt',
             'Die Winkel bleiben gleich, und jede Bildseite ist parallel zu ihrer Originalseite. Jede Länge wird mit dem Betrag '
             'von k multipliziert. Darum hat das Bild dieselbe Form wie das Original.',
             n('Winkel gleich|Bildseite parallel zur Originalseite|Längen @\\cdot\\, |k|@', 300, 'blau', 44, ein=0.6),
-            graf(W1, ORIG1 + ZPT + [bildfig(Bm15)] + ecken([("A′", Bm15[0]), ("B′", Bm15[1]), ("C′", Bm15[2])], 2), ein=0.05),
+            graf(W1, ORIG1 + ZPT + [bildfig(Bm15)] + ECKEN_M15, ein=0.05),
             graf(W1, [WI(E1[0], E1[1], E1[2], 1, 40), WI(Bm15[0], Bm15[1], Bm15[2], 2, 40)], ein=0.8, raster=False),
             graf(W1, [S(E1[0], E1[1], 1, dicke=9), S(Bm15[0], Bm15[1], 2, dicke=9)], ein=3.2, raster=False)),
          sz('Merke',
@@ -337,8 +353,8 @@ clip('kontrolle-streckung', 2, 'Ähnlichkeit sehen: Kontrollfragen zur zentrisch
             f(r"|k| = \dfrac{\overline{ZP'}}{\overline{ZP}} = \dfrac{10}{4} = 2.5", 300, 48, ein=1.0),
             f(r'\text{andere Seite: } \fc{k = -2.5}', 470, 48, ein=1.0)),
          sz('Frage 5',
-            'Verlängere A A Strich, B B Strich und C C Strich. Die drei Geraden treffen sich im Zentrum Z. Das Bild ist doppelt '
-            'so gross, k ist zwei.',
+            'Verlängere A A Strich, B B Strich und C C Strich. Die drei Geraden treffen sich im Zentrum Z. Die Bildseiten sind '
+            'doppelt so lang, k ist zwei.',
             f(r"AA', \; BB', \; CC' \text{ treffen sich in } \fc{Z}", 300, 46, ein=1.0),
             f(r'\fb{k = 2}', 410, 50, ein=1.0),
             graf(WK5, [V(E5, 1, 0.14), V(B5, 2, 0.12, gestrichelt=True)]
@@ -362,9 +378,9 @@ clip('kontrolle-streckung', 2, 'Ähnlichkeit sehen: Kontrollfragen zur zentrisch
                tol=0.6, eingabe=['x', 'y']),
          wahl('Frage 2', 'k = 0.25: Wie liegt das Bild?', ['gleiche Seite von Z, Seiten ein Viertel so lang', 'gleiche Seite von Z, Seiten viermal so lang',
                                                           'andere Seite von Z, Seiten ein Viertel so lang'], 0,
-              {0: 'Ja.', 1: 'Ist k kleiner als 1, wird das Bild grösser oder kleiner?', 2: 'Ist k positiv oder negativ?'},
+              {0: 'Ja.', 1: 'k liegt zwischen 0 und 1. Wird das Bild dann grösser oder kleiner?', 2: 'Ist k positiv oder negativ?'},
               sprich='k gleich null Komma zwei fünf: Wie liegt das Bild?',
-              rueck_sprich={1: 'Ist k kleiner als eins, wird das Bild grösser oder kleiner?', 2: 'Ist k positiv oder negativ?'}),
+              rueck_sprich={1: 'k liegt zwischen null und eins. Wird das Bild dann grösser oder kleiner?', 2: 'Ist k positiv oder negativ?'}),
          wahl('Frage 3', 'Bei k = −2: Wie liegt die Bildseite A′B′ zur Seite AB?', ['parallel zu AB', 'senkrecht zu AB', 'gespiegelt, also anders geneigt'], 0,
               {0: 'Ja.', 1: 'Eine Streckung dreht keine Seite um 90°. Wie ist es bei k = 2?', 2: 'Bei k < 0 wird die Figur um Z gedreht, nicht umgeklappt. Wie liegen die Seiten dann?'},
               sprich='Bei k gleich minus zwei: Wie liegt die Bildseite A Strich B Strich zur Seite A B?',
@@ -481,16 +497,17 @@ clip('strahlensaetze', 3, 'Ähnlichkeit sehen: Strahlensätze',
             graf(W2, [PK(A2x, 2, 0.11), PK(B2x, 2, 0.11), T(A2x[0], 0.45, 'A′', 2, g=32), T(B2x[0] + 0.55, B2x[1] - 0.45, 'B′', 2, g=32),
                       T(-3.0, -0.75, '6', 2, g=30)], ein=3.7, raster=False, **GR2)),
          sz('Nur mit Parallelen',
-            'Ist die zweite Gerade nicht parallel, stimmen die Verhältnisse nicht mehr. Umgekehrt: Sind die Verhältnisse auf den '
-            'Strahlen gleich, dann sind die Geraden parallel.',
-            f(r"3 : %.2f \neq 4 : 10" % SB2k, 300, 48, ein=2.8),
-            n('Umkehrung: gleiche Verhältnisse|@\\Rightarrow AB \\parallel A\'B\'@', 420, 'blau', 44, ein=4.5),
-            graf(W2, STR2 + PKT2 + ab_fig(A2, B2, A22, B22, mit_bild=False), ein=0.05, **GR2),
-            # die Gerade durch A′ kippt um 15° (B′ wandert auf dem Strahl nach SB′ ≈ 5.80) und bleibt rot stehen; zur Umkehrung
-            # erscheint die Parallele wieder (orange)
-            graf(W2, [S(A22, B22, 4, dicke=5, bewegung=[[0.8, {}], [2.4, {'bis': r3(B2k)}]])], ein=0.05, raster=False, **GR2),
-            graf(W2, [PK(B2k, 4, 0.11), T(B2k[0] - 0.6, B2k[1] + 0.3, '5.80', 4, g=28)], ein=2.4, raster=False, **GR2),
-            graf(W2, ab_fig(A2, B2, A22, B22)[5:], ein=7.5, raster=False, **GR2)),
+            'Ist die zweite Gerade nicht parallel, stimmen die Verhältnisse nicht mehr. Umgekehrt: Liegen A Strich und B Strich '
+            'auf den Strahlen von S durch A und durch B, und sind die Verhältnisse gleich, dann sind die Geraden parallel.',
+            # rot: die gekippte Gerade trifft den Strahl bei ≈ 5.80 (statt 7.5) — der Punkt heisst nicht B′, darum nur die Zahl
+            f(r"\dfrac{\overline{SA}}{\overline{SA'}} = \dfrac{4}{10} = 0.4", 300, 46, ein=2.8),
+            f(r"\fd{\dfrac{3}{%.2f} \approx %.2f \neq 0.4}" % (SB2k, 3 / SB2k), 480, 46, ein=2.8),
+            n("Umkehrung: @A'@ auf dem Strahl @SA@,|@B'@ auf dem Strahl @SB@,|gleiche Verhältnisse @\\Rightarrow AB \\parallel A'B'@", 620, 'blau', 40, ein=4.5),
+            # die Parallele (orange) steht von Anfang an; eine zweite Gerade durch A′ kippt um 15° weg und wird dabei rot
+            # (Gegenbeispiel) — vorher liegt sie unsichtbar auf der Parallelen, sie erscheint erst mit dem Kippen.
+            graf(W2, STR2 + PKT2 + ab_fig(A2, B2, A22, B22), ein=0.05, **GR2),
+            graf(W2, [S(A22, B22, 4, dicke=5, bewegung=[[1.0, {}], [2.6, {'bis': r3(B2k)}]])], ein=0.9, raster=False, **GR2),
+            graf(W2, [PK(B2k, 4, 0.11), T(B2k[0] - 0.75, B2k[1] + 0.3, '≈ 5.80', 4, g=28)], ein=2.6, raster=False, **GR2)),
          sz('Merke',
             'Zum Mitnehmen: Strahl mit Strahl, Parallele mit den ganzen Strecken ab S, und nur, wenn die Geraden parallel sind.',
             titel('Zum Mitnehmen', 250, 76),
@@ -508,12 +525,13 @@ FA, FB, FA2, FB2 = figk(3, 4, 2)
 STRK = [G((0, 0), (1, 0), WK2, 5, False, 2.5), G((0, 0), U50, WK2, 5, False, 2.5), PK((0, 0), 5, 0.12), T(-0.2, -0.65, 'S', 5, g=32)]
 def namen(A_, B_, A2_, B2_):
     return [T(A_[0], -0.7, 'A', 1, g=32), T(B_[0] - 0.5, B_[1] + 0.2, 'B', 1, g=32), T(A2_[0], -0.7, 'A′', 2, g=32), T(B2_[0] - 0.55, B2_[1] + 0.2, 'B′', 2, g=32)]
-# Frage 3: SA = 2, SA′ = 5, SB = 3 → SB′ = 7.5, B′ = 7.5 · (cos 50°, sin 50°) = (4.821 | 5.745); Fallen SB′ = 6 und 1.2.
+# Frage 3: SA = 2, SA′ = 5, SB′ = 7.5 → SB = 3, B = 3 · (cos 50°, sin 50°) = (1.928 | 2.298); B′ = (4.821 | 5.745).
 QA, QB, QA2, QB2 = figk(2, 3, 2.5)
 assert abs(math.hypot(*QB2) - 7.5) < 1e-9
-F6 = (6 * U50[0], 6 * U50[1]); F12 = (1.2 * U50[0], 1.2 * U50[1])
+F45 = (4.5 * U50[0], 4.5 * U50[1])        # Falle: gleicher Unterschied (SB = 7.5 − 3)
+assert abs(math.hypot(*QB) - 3) < 1e-9 and abs(math.dist(QB, F45) - 1.5) < 1e-9
 clip('kontrolle-strahlensaetze', 4, 'Ähnlichkeit sehen: Kontrollfragen zu den Strahlensätzen',
-     'Fünf Fragen: die richtige Gleichung, die Falle AA′, den Punkt B′ finden, die X-Figur und wann die Strahlensätze '
+     'Fünf Fragen: die richtige Gleichung, die Falle AA′, den Punkt B aus B′ finden, die X-Figur und wann die Strahlensätze '
      'nicht gelten.',
      ['Strahlensatz', 'Parallelen', 'Kontrollfragen'], [
          sz('Frage 1',
@@ -526,13 +544,14 @@ clip('kontrolle-strahlensaetze', 4, 'Ähnlichkeit sehen: Kontrollfragen zu den S
             f(r"\overline{SA'} = 3 + 6 = 9", 300, 48, ein=1.0),
             f(r"\overline{A'B'} = 2 \cdot \dfrac{9}{3} = \fc{6\,\mathrm{cm}}", 420, 48, ein=1.0)),
          sz('Frage 3',
-            'Die Parallele zu A B durch A Strich trifft den zweiten Strahl in B Strich. S B Strich ist drei mal fünf Halbe, '
-            'also sieben Komma fünf.',
-            f(r"\overline{SB'} = 3 \cdot \dfrac{5}{2} = \fc{7.5}", 300, 48, ein=1.0),
-            graf(WK2, STRK + [S(QA, QB, 1, dicke=5), PK(QA, 1, 0.11), PK(QB, 1, 0.11), PK(QA2, 2, 0.11),
-                              T(QA[0], -0.7, 'A', 1, g=32), T(QB[0] - 0.5, QB[1] + 0.2, 'B', 1, g=32), T(QA2[0], -0.7, 'A′', 2, g=32),
-                              T(1.0, 0.3, '2', 5, g=28), T(3.5, -1.25, 'SA′ = 5', 5, g=28), T(0.55, 1.6, '3', 5, g=28)], ein=0.05),
-            graf(WK2, [S(QA2, QB2, 2, dicke=5), PK(QB2, 3, 0.15), T(QB2[0] - 0.6, QB2[1] + 0.25, 'B′', 3, g=32)], ein=1.0, raster=False)),
+            'Die Parallele zu A Strich B Strich durch A trifft den zweiten Strahl in B. S B ist sieben Komma fünf mal zwei '
+            'durch fünf, also drei.',
+            f(r"\overline{SB} = 7.5 \cdot \dfrac{2}{5} = \fc{3}", 300, 48, ein=1.0),
+            # gegeben: A, A′, B′ und die Gerade A′B′ (Abstände 2, 5, 7.5); gesucht B — erst nach der Antwort
+            graf(WK2, STRK + [S(QA2, QB2, 2, dicke=5), PK(QA, 1, 0.11), PK(QA2, 2, 0.11), PK(QB2, 2, 0.11),
+                              T(QA[0], -0.7, 'A', 1, g=32), T(QA2[0], -0.7, 'A′', 2, g=32), T(QB2[0] - 0.6, QB2[1] + 0.25, 'B′', 2, g=32),
+                              T(1.0, 0.3, '2', 5, g=28), T(3.5, -1.25, 'SA′ = 5', 5, g=28), T(2.2, 3.55, 'SB′ = 7.5', 5, 'end', 28)], ein=0.05),
+            graf(WK2, [S(QA, QB, 1, dicke=5), PK(QB, 3, 0.15), T(QB[0] - 0.5, QB[1] + 0.2, 'B', 3, g=32)], ein=1.0, raster=False)),
          sz('Frage 4',
             'In der X-Figur gilt dieselbe Gleichung: A Strich B Strich ist drei mal fünf Halbe, also sieben Komma fünf.',
             f(r"\overline{A'B'} = 3 \cdot \dfrac{5}{2} = \fc{7.5}", 300, 48, ein=1.0)),
@@ -555,13 +574,14 @@ clip('kontrolle-strahlensaetze', 4, 'Ähnlichkeit sehen: Kontrollfragen zu den S
               sprich='S A gleich drei, A A Strich gleich sechs, A B gleich zwei Zentimeter, A B parallel zu A Strich B Strich. Wie lang ist A Strich B Strich?',
               rueck_sprich={1: 'Hast du mit A A Strich gerechnet? Zu den Parallelen gehört S A Strich, also S A plus A A Strich.',
                             2: 'Nicht addieren. Die Strecken stehen im gleichen Verhältnis.'}),
-         # Ziel B′ auf dem Strahl bei 7.5; Fallen bei 6 (gleicher Unterschied) und 1.2 (verkehrtes Verhältnis); Abstand ≥ 1.5.
-         klick('Frage 3', 'SA = 2, SA′ = 5, SB = 3. Tipp den Punkt B′ an, damit AB ∥ A′B′.', r3(QB2), 'Getroffen: SB′ = 7.5.',
-               [{'bei': r3(F6), 'text': 'Hier wäre BB′ = AA′ = 3. Die Strecken stehen aber im gleichen Verhältnis, nicht im gleichen Abstand.',
+         # Umgekehrt zur Themenseite A2 (dort SB′ aus SB): gegeben SB′, gesucht B. Ziel B auf dem Strahl bei 3; Fallen bei
+         # 4.5 (gleicher Unterschied, BB′ = AA′ = 3) und bei B′ selbst (7.5); Abstand ≥ 1.5, Toleranz 0.6.
+         klick('Frage 3', 'SA = 2, SA′ = 5, SB′ = 7.5. Tipp den Punkt B an, damit AB ∥ A′B′.', r3(QB), 'Getroffen: SB = 3.',
+               [{'bei': r3(F45), 'text': 'Hier wäre BB′ = AA′ = 3. Die Strecken stehen aber im gleichen Verhältnis, nicht im gleichen Abstand.',
                  'sprich': 'Hier wäre B B Strich gleich A A Strich. Die Strecken stehen aber im gleichen Verhältnis, nicht im gleichen Abstand.'},
-                {'bei': r3(F12), 'text': 'Hier wäre SB′ kürzer als SB. A′ liegt aber weiter von S weg als A.',
-                 'sprich': 'Hier wäre S B Strich kürzer als S B. A Strich liegt aber weiter von S weg als A.'}],
-               FALSCH, sprich='S A gleich zwei, S A Strich gleich fünf, S B gleich drei. Tipp den Punkt B Strich an, damit A B parallel zu A Strich B Strich ist.',
+                {'bei': r3(QB2), 'text': 'Das ist B′ selbst. B liegt auf demselben Strahl, aber näher bei S — so wie A näher bei S liegt als A′.',
+                 'sprich': 'Das ist B Strich selbst. B liegt auf demselben Strahl, aber näher bei S, so wie A näher bei S liegt als A Strich.'}],
+               FALSCH, sprich='S A gleich zwei, S A Strich gleich fünf, S B Strich gleich sieben Komma fünf. Tipp den Punkt B an, damit A B parallel zu A Strich B Strich ist.',
                falsch_sprich=FALSCH, tol=0.6),
          wahl('Frage 4', 'S liegt zwischen den Parallelen: SA = 2, SA′ = 5, AB = 3. Wie lang ist A′B′?', ['7.5', '1.2', '6'], 0,
               {0: 'Ja.', 1: 'Das Verhältnis steht verkehrt: A′ liegt weiter von S weg als A.', 2: 'Nicht den Unterschied addieren: Die Strecken stehen im Verhältnis.'},
@@ -610,8 +630,13 @@ clip('figuren', 5, 'Ähnlichkeit sehen: ähnliche Figuren, Längen und Flächen'
             f(r"k = 2: \; A' = 4 \cdot A", 300, 50, ein=3.8),
             f(r"A' = \fb{k}^2 \cdot A", 410, 50, ein=6.8),
             f(r"A' = 1.5^2 \cdot 6 = \fc{13.5}\,\mathrm{cm}^2", 520, 48, ein=10.5),
-            graf(W3, [DIAG] + ORIG3 + [V(recht(6, 4), 2, 0.10, gestrichelt=True), S((3, 0), (3, 4), 2, True, 2), S((0, 2), (6, 2), 2, True, 2)], ein=0.05),
-            graf(W3, [T(x_, y_, z_, 3, g=40) for x_, y_, z_ in ((1.5, 0.75, '1'), (4.5, 0.75, '2'), (1.5, 2.75, '3'), (4.5, 2.75, '4'))], ein=3.8, raster=False)),
+            # erst k = 2 mit vier Originalen; auf «aus sechs werden zwei Komma zwei fünf mal sechs» (7.6 s, gemessen) schrumpft
+            # das Bild auf k = 1.5 (4.5 × 3), damit Bild und Rechnung zusammenpassen
+            graf(W3, [DIAG] + ORIG3 + [V(recht(6, 4), 2, 0.10, gestrichelt=True,
+                                         bewegung=[[7.6, {}], [8.8, {'punkte': [r3(p) for p in recht(4.5, 3)]}]])], ein=0.05),
+            graf(W3, [S((3, 0), (3, 4), 2, True, 2), S((0, 2), (6, 2), 2, True, 2)], ein=2.3, aus=7.6, raster=False),
+            graf(W3, [T(x_, y_, z_, 3, g=40) for x_, y_, z_ in ((1.5, 0.75, '1'), (4.5, 0.75, '2'), (1.5, 2.75, '3'), (4.5, 2.75, '4'))], ein=3.8, aus=7.6, raster=False),
+            graf(W3, [T(2.25, 3.25, '4.5', 2, g=30), T(4.8, 1.5, '3', 2, 'start', 30)], ein=8.8, raster=False)),
          sz('Kreis',
             'Alle Kreise sind ähnlich. Aus dem Radius zwei wird drei: k ist eins Komma fünf, die Fläche wird zwei Komma zwei '
             'fünf mal so gross.',
@@ -629,7 +654,12 @@ clip('figuren', 5, 'Ähnlichkeit sehen: ähnliche Figuren, Längen und Flächen'
          sz('Zurück zu k',
             'Umgekehrt: Ist die Fläche sechs Komma zwei fünf mal so gross, wachsen die Längen nur mit der Wurzel daraus. k ist '
             'zwei Komma fünf.',
-            f(r"\dfrac{A'}{A} = 6.25 \;\Rightarrow\; k = \sqrt{6.25} = \fc{2.5}", 300, 46, ein=5.9)),
+            f(r"\dfrac{A'}{A} = 6.25", 300, 48, ein=1.0),
+            f(r"k = \sqrt{6.25} = \fc{2.5}", 430, 48, ein=5.6),
+            # Bühne nicht leer: das Original, das Bild wächst erst auf «k ist zwei Komma fünf» (5.5 s, gemessen) auf 7.5 × 5
+            graf(W3, [DIAG] + ORIG3, ein=0.05),
+            graf(W3, [V(recht(3, 2), 2, 0.12, gestrichelt=True, bewegung=[[5.6, {}], [6.6, {'punkte': [r3(p) for p in recht(7.5, 5)]}]])], ein=5.5, raster=False),
+            graf(W3, [T(3.75, 5.25, '7.5', 2, g=30), T(7.8, 2.5, '5', 2, 'start', 30)], ein=6.6, raster=False)),
          sz('Merke',
             'Zum Mitnehmen: Ähnliche Figuren haben gleiche Winkel und alle Seiten im selben Verhältnis k. Längen wachsen mit k, '
             'Flächen mit k im Quadrat.',
@@ -677,9 +707,10 @@ clip('kontrolle-figuren', 6, 'Ähnlichkeit sehen: Kontrollfragen zu ähnlichen F
             n('Längen @\\cdot\\, k@, Flächen @\\cdot\\, k^2@|alle Seiten mit demselben @k@', 400, 'blau', 44, ein=1.2)),
      ], [
          wahl('Frage 1', 'Ein Rechteck 4 × 3 und ein Rechteck 6 × 4: Sind sie ähnlich?', ['nein', 'ja, k = 1.5', 'ja, k ≈ 1.33'], 0,
-              {0: 'Ja.', 1: 'Wächst auch die Seite 3 mit 1.5?', 2: 'Wächst auch die Seite 4 mit 1.33?'},
+              {0: 'Ja.', 1: 'Die langen Seiten: 6 : 4 = 1.5. Und die kurzen Seiten, 4 : 3?', 2: 'Die kurzen Seiten: 4 : 3 ≈ 1.33. Und die langen Seiten, 6 : 4?'},
               sprich='Ein Rechteck vier mal drei und ein Rechteck sechs mal vier: Sind sie ähnlich?',
-              rueck_sprich={1: 'Wächst auch die Seite drei mit eins Komma fünf?', 2: 'Wächst auch die Seite vier mit eins Komma drei drei?'}),
+              rueck_sprich={1: 'Die langen Seiten: sechs durch vier ist eins Komma fünf. Und die kurzen Seiten, vier durch drei?',
+                            2: 'Die kurzen Seiten: vier durch drei ist rund eins Komma drei drei. Und die langen Seiten, sechs durch vier?'}),
          wahl('Frage 2', 'k = 3, der Umfang des Originals ist 12 cm. Wie gross ist der Umfang des Bildes?', ['36 cm', '108 cm', '15 cm'], 0,
               {0: 'Ja.', 1: 'Das ist mit k² gerechnet. Ist der Umfang eine Länge oder eine Fläche?', 2: 'Strecken heisst multiplizieren.'},
               sprich='k gleich drei, der Umfang des Originals ist zwölf Zentimeter. Wie gross ist der Umfang des Bildes?',
@@ -729,8 +760,13 @@ def winkeltext(p, q, r_, text, farbe, abst=1.05, g=26):
     return T(p[0] + abst * math.cos(w), p[1] + abst * math.sin(w) - 0.12, text, farbe, g=g)
 DR2 = [V([P4, Q4, R4], 2, 0.10, gestrichelt=True), WI(P4, Q4, R4, 2, 40), WI(Q4, R4, P4, 2, 40), WI(R4, P4, Q4, 2, 40),
        winkeltext(P4, Q4, R4, '70°', 2), winkeltext(Q4, R4, P4, '60°', 2), winkeltext(R4, P4, Q4, '50°', 2)] + ecken([('P', P4), ('Q', Q4), ('R', R4)], 2, 0.5)
+DR1_60, DR2_60 = DR1[6], DR2[5]
+assert DR1_60['text'] == '60°' and DR2_60['text'] == '60°'
 # Schatten (Themenseite A6): Stab 1.80 m, Schatten 1.20 m; Baumschatten 7.80 m → 11.70 m
 W4s = geo(-1.0, -2.0, 14.0)
+_l = math.hypot(7.8, 11.7)
+STUMMEL = (4.7 + 2.2 * 7.8 / _l, 2.2 * 11.7 / _l)       # 2.2 Einheiten des Strahls vom Schattenende aus (zeigt den Winkel)
+assert abs((STUMMEL[1] - 0) / (STUMMEL[0] - 4.7) - 1.5) < 1e-9
 # Höhe im rechtwinkligen Dreieck: p = 1.8 (an a), q = 3.2 (an b), c = 5, h = 2.4, a = 3, b = 4 — massstäblich mal 2
 HK = 2.0
 A4h, B4h, H4h, C4h = (0, 0), (5 * HK, 0), (3.2 * HK, 0), (3.2 * HK, 2.4 * HK)
@@ -744,8 +780,10 @@ clip('dreiecke', 7, 'Ähnlichkeit sehen: ähnliche Dreiecke',
             'dieselbe Form, sie sind ähnlich. Zwei gleiche Winkel genügen.',
             f(r'180° - 50° - 70° = 60°', 300, 50, ein=4.2),
             n('zwei gleiche Winkel @\\Rightarrow@ ähnlich (WW)', 420, 'blau', 42, ein=8.1),
-            graf(W4, DR1, ein=0.3, **GR4),
-            graf(W4, DR2, ein=1.5, raster=False, **GR4)),
+            # der dritte Winkel (60°) erst mit der Rechnung (4.2 s, «der Dritte ist bei beiden sechzig Grad», gemessen)
+            graf(W4, [e for e in DR1 if e is not DR1_60], ein=0.3, **GR4),
+            graf(W4, [e for e in DR2 if e is not DR2_60], ein=1.5, raster=False, **GR4),
+            graf(W4, [DR1_60, DR2_60], ein=4.2, raster=False, **GR4)),
          sz('Zuordnen',
             'Entsprechende Seiten liegen gleichen Winkeln gegenüber. A B liegt sechzig Grad gegenüber, im zweiten Dreieck ist '
             'das R P.',
@@ -777,10 +815,15 @@ clip('dreiecke', 7, 'Ähnlichkeit sehen: ähnliche Dreiecke',
             'sieben Komma acht Meter lang, also ist der Baum elf Komma sieben Meter hoch.',
             f(r'\dfrac{h}{7.80} = \dfrac{1.80}{1.20}', 300, 50, ein=13.5),
             f(r'h = 7.80 \cdot 1.5 = \fc{11.70\,\mathrm{m}}', 430, 48, ein=15.2),
-            graf(W4s, [S((-1, 0), (13, 0), 5, dicke=3), S((1.2, 0), (1.2, 1.8), 1, dicke=7), S((12.5, 0), (12.5, 11.7), 3, dicke=7),
-                       S((0, 0), (1.2, 1.8), 2, True, 2.5), S((4.7, 0), (12.5, 11.7), 2, True, 2.5),
+            # Ohne Karo, und der Baum steht erst mit dem Ergebnis (15.2 s, «also ist der Baum elf Komma sieben», gemessen) in
+            # seiner Höhe da: vorher eine gestrichelte Senkrechte bis zum Bildrand und nur ein Stück des Sonnenstrahls (der
+            # ganze Strahl träfe die Senkrechte bei 11.7 — massstäblich abzulesen).
+            graf(W4s, [S((-1, 0), (13, 0), 5, dicke=3), S((1.2, 0), (1.2, 1.8), 1, dicke=7), S((12.5, 0), (12.5, 12.0), 5, True, 2),
+                       S((0, 0), (1.2, 1.8), 2, True, 2.5), S((4.7, 0), STUMMEL, 2, True, 2.5),
                        RW((1.2, 0), 90, 180, 5), RW((12.5, 0), 90, 180, 5), WI((0, 0), (1, 0), (1.2, 1.8), 2, 50), WI((4.7, 0), (5.7, 0), (12.5, 11.7), 2, 50),
-                       T(0.6, -0.75, '1.20', 5, g=26), T(8.6, -0.75, '7.80', 5, g=26), T(1.45, 0.8, '1.80', 1, 'start', 26), T(12.15, 5.85, 'h', 3, 'end', 32)], ein=0.3)),
+                       T(0.6, -0.75, '1.20', 5, g=26), T(8.6, -0.75, '7.80', 5, g=26), T(1.45, 0.8, '1.80', 1, 'start', 26)], ein=0.3, raster=False),
+            graf(W4s, [T(12.15, 5.85, 'h = ?', 5, 'end', 30)], ein=0.3, aus=15.2, raster=False),
+            graf(W4s, [S((4.7, 0), (12.5, 11.7), 2, True, 2.5), S((12.5, 0), (12.5, 11.7), 3, dicke=7), T(12.15, 5.85, 'h', 3, 'end', 32)], ein=15.2, raster=False)),
          sz('Höhe',
             'Im rechtwinkligen Dreieck teilt die Höhe die Hypotenuse in p und q. Die beiden Teildreiecke sind zum ganzen ähnlich. '
             'Daraus folgt: h im Quadrat gleich p mal q. Mit p gleich eins Komma acht und q gleich drei Komma zwei ist h gleich '
@@ -788,9 +831,10 @@ clip('dreiecke', 7, 'Ähnlichkeit sehen: ähnliche Dreiecke',
             f(r'\dfrac{h}{p} = \dfrac{q}{h} \;\Rightarrow\; h^2 = p \cdot q', 300, 48, ein=7.8),
             f(r'h = \sqrt{1.8 \cdot 3.2} = \sqrt{5.76} = \fc{2.4}', 430, 46, ein=13.9),
             graf(W4h, [V([A4h, B4h, C4h], 1, 0.10), S(C4h, H4h, 2, dicke=5), RW(H4h, 0, 90, 2), RW(C4h, 216.87, 306.87, 5)]
-                 + ecken([('A', A4h), ('B', B4h), ('C', C4h)], 1, 0.45) + [T(6.4, -0.75, 'H', 5, g=30)], ein=0.3),
-            graf(W4h, [V([A4h, H4h, C4h], 3, 0.18), V([H4h, B4h, C4h], 2, 0.18)], ein=4.8, raster=False),
-            graf(W4h, [T(3.2, -1.35, 'q = 3.2', 3, g=28), T(8.2, -1.35, 'p = 1.8', 2, g=28), T(6.65, 2.4, 'h', 5, 'start', 32)], ein=3.6, raster=False)),
+                 + ecken([('A', A4h), ('B', B4h), ('C', C4h)], 1, 0.45) + [T(6.4, -0.75, 'H', 5, g=30)], ein=0.3, raster=False),   # ohne Karo: h nicht abzählbar
+            # Teildreiecke orange und grau (Bilder des ganzen), gegebene p, q neutral — Grün bleibt dem Ergebnis h = 2.4
+            graf(W4h, [V([A4h, H4h, C4h], 2, 0.18), V([H4h, B4h, C4h], 5, 0.14)], ein=4.8, raster=False),
+            graf(W4h, [T(3.2, -1.35, 'q = 3.2', 5, g=28), T(8.2, -1.35, 'p = 1.8', 5, g=28), T(6.65, 2.4, 'h', 5, 'start', 32)], ein=3.6, raster=False)),
          sz('Merke',
             'Zum Mitnehmen: Zwei gleiche Winkel genügen. Entsprechende Seiten liegen gleichen Winkeln gegenüber, und k kommt aus '
             'einem Paar entsprechender Seiten.',
@@ -814,14 +858,15 @@ ZIEL6 = [r3(K6), r3(M6)]
 def mitte(p, q):
     return [round((p[0] + q[0]) / 2, 3), round((p[1] + q[1]) / 2, 3)]
 clip('kontrolle-dreiecke', 8, 'Ähnlichkeit sehen: Kontrollfragen zu ähnlichen Dreiecken',
-     'Fünf Fragen: zwei Winkel vergleichen, die entsprechende Seite antippen, drei Seitenverhältnisse prüfen, Schatten und '
-     'Höhensatz.',
+     'Fünf Fragen: zwei Winkel vergleichen, die entsprechende Seite antippen, drei Seitenverhältnisse prüfen, eine '
+     'Schattenlänge und der Höhensatz.',
      ['ähnliche Dreiecke', 'Höhensatz', 'Kontrollfragen'], [
          sz('Frage 1',
-            'Der dritte Winkel ist bei beiden fünfundsechzig Grad. Beide Dreiecke haben vierzig, fünfundsiebzig und '
-            'fünfundsechzig Grad: Sie sind ähnlich.',
-            f(r'180° - 40° - 75° = 65°', 300, 50, ein=1.0),
-            n('alle drei Winkel gleich: ähnlich', 420, 'blau', 44, ein=1.0)),
+            'Der dritte Winkel ist beim ersten Dreieck fünfundsechzig Grad, beim zweiten achtunddreissig Grad. Beide haben '
+            'achtunddreissig, siebenundsiebzig und fünfundsechzig Grad: Sie sind ähnlich.',
+            f(r'180° - 38° - 77° = 65°', 300, 50, ein=1.0),
+            f(r'180° - 77° - 65° = 38°', 410, 50, ein=1.0),
+            n('alle drei Winkel gleich: ähnlich', 530, 'blau', 44, ein=1.0)),
          sz('Frage 2',
             'B C liegt dem Winkel bei A gegenüber, fünfundvierzig Grad. Im zweiten Dreieck liegen fünfundvierzig Grad bei L, '
             'gegenüber liegt K M.',
@@ -839,9 +884,9 @@ clip('kontrolle-dreiecke', 8, 'Ähnlichkeit sehen: Kontrollfragen zu ähnlichen 
             f(r'\dfrac{8}{4} = \dfrac{12}{6} = 2, \quad \fd{\dfrac{15}{7} \approx 2.14}', 300, 46, ein=1.0),
             n('nicht ähnlich', 420, 'rot', 44, ein=1.0)),
          sz('Frage 4',
-            'Höhe durch Schatten ist bei Stab und Mast gleich: h durch zwölf gleich zwei durch eins Komma sechs. Der Mast ist '
-            'fünfzehn Meter hoch.',
-            f(r'\dfrac{h}{12} = \dfrac{2}{1.6} \;\Rightarrow\; h = \fc{15\,\mathrm{m}}', 300, 48, ein=1.0)),
+            'Schatten durch Höhe ist bei Stab und Mast gleich: s durch fünfzehn gleich eins Komma sechs durch zwei. Der Schatten '
+            'des Masts ist zwölf Meter lang.',
+            f(r'\dfrac{s}{15} = \dfrac{1.6}{2} \;\Rightarrow\; s = \fc{12\,\mathrm{m}}', 300, 48, ein=1.0)),
          sz('Frage 5',
             'Höhensatz: h im Quadrat gleich p mal q, also sechsunddreissig. Die Höhe ist sechs Zentimeter.',
             f(r'h^2 = 4 \cdot 9 = 36 \;\Rightarrow\; h = \fc{6\,\mathrm{cm}}', 300, 48, ein=1.0)),
@@ -851,10 +896,11 @@ clip('kontrolle-dreiecke', 8, 'Ähnlichkeit sehen: Kontrollfragen zu ähnlichen 
             titel('Zum Mitnehmen', 250, 76),
             n('ähnlich? @\\to@ zuordnen @\\to@ @k@ @\\to@ rechnen', 400, 'blau', 44, ein=1.2)),
      ], [
-         wahl('Frage 1', 'Dreieck 1 hat die Winkel 40° und 75°, Dreieck 2 die Winkel 75° und 65°. Sind sie ähnlich?',
+         # Nicht die Themenseite A4a (40°, 75°): andere Winkel, und der dritte Winkel ist bei beiden ein anderer.
+         wahl('Frage 1', 'Dreieck 1 hat die Winkel 38° und 77°, Dreieck 2 die Winkel 77° und 65°. Sind sie ähnlich?',
               ['ja, alle drei Winkel stimmen überein', 'nein, nur ein Winkel stimmt überein', 'ohne Seitenlängen nicht zu entscheiden'], 0,
               {0: 'Ja.', 1: 'Rechne bei beiden den dritten Winkel aus.', 2: 'Bei Dreiecken genügen die Winkel. Wie gross ist jeweils der dritte?'},
-              sprich='Dreieck eins hat die Winkel vierzig und fünfundsiebzig Grad, Dreieck zwei die Winkel fünfundsiebzig und fünfundsechzig Grad. Sind sie ähnlich?',
+              sprich='Dreieck eins hat die Winkel achtunddreissig und siebenundsiebzig Grad, Dreieck zwei die Winkel siebenundsiebzig und fünfundsechzig Grad. Sind sie ähnlich?',
               rueck_sprich={1: 'Rechne bei beiden den dritten Winkel aus.', 2: 'Bei Dreiecken genügen die Winkel. Wie gross ist jeweils der dritte?'}),
          # Ziel: die Strecke KM; Fallen: die beiden anderen Seiten (ihre Mitten). Toleranz 0.55 (Abstand der Seitenmitten zu KM ≥ 1.4).
          klick('Frage 2', 'Die Dreiecke sind ähnlich. Tipp die Seite des orangen Dreiecks an, die BC entspricht.', ZIEL6, 'Getroffen: KM liegt 45° gegenüber, wie BC.',
@@ -862,15 +908,17 @@ clip('kontrolle-dreiecke', 8, 'Ähnlichkeit sehen: Kontrollfragen zu ähnlichen 
                  'sprich': 'Diese Seite liegt fünfundsiebzig Grad gegenüber. B C liegt dem Winkel fünfundvierzig Grad gegenüber.'},
                 {'bei': [r3(L6), r3(M6)], 'text': 'Diese Seite liegt 60° gegenüber. BC liegt dem Winkel 45° gegenüber.',
                  'sprich': 'Diese Seite liegt sechzig Grad gegenüber. B C liegt dem Winkel fünfundvierzig Grad gegenüber.'}],
-               FALSCH, sprich='Die Dreiecke sind ähnlich. Tipp die Seite des orangen Dreiecks an, die B C entspricht.', falsch_sprich=FALSCH, tol=0.55),
+               FALSCH_LINIE, sprich='Die Dreiecke sind ähnlich. Tipp die Seite des orangen Dreiecks an, die B C entspricht.', falsch_sprich=FALSCH_LINIE, tol=0.55),
          wahl('Frage 3', 'Seiten 4, 6, 7 und 8, 12, 15: Sind die Dreiecke ähnlich?', ['nein', 'ja, k = 2', 'ja, k ≈ 2.14'], 0,
               {0: 'Ja.', 1: 'Prüf alle drei Verhältnisse, auch das der längsten Seiten.', 2: 'Prüf alle drei Verhältnisse, auch das der kürzesten Seiten.'},
               sprich='Seiten vier, sechs, sieben und acht, zwölf, fünfzehn: Sind die Dreiecke ähnlich?',
               rueck_sprich={1: 'Prüf alle drei Verhältnisse, auch das der längsten Seiten.', 2: 'Prüf alle drei Verhältnisse, auch das der kürzesten Seiten.'}),
-         wahl('Frage 4', 'Ein 2 m hoher Stab wirft 1.6 m Schatten, ein Mast gleichzeitig 12 m. Wie hoch ist der Mast?', ['15 m', '9.6 m', '12.4 m'], 0,
-              {0: 'Ja.', 1: 'Der Stab ist höher als sein Schatten lang. Gilt das auch für den Mast?', 2: 'Nicht addieren: Höhe und Schatten stehen im gleichen Verhältnis.'},
-              sprich='Ein zwei Meter hoher Stab wirft eins Komma sechs Meter Schatten, ein Mast gleichzeitig zwölf Meter. Wie hoch ist der Mast?',
-              rueck_sprich={1: 'Der Stab ist höher als sein Schatten lang. Gilt das auch für den Mast?', 2: 'Nicht addieren. Höhe und Schatten stehen im gleichen Verhältnis.'}),
+         # Umgekehrt zur Themenseite A6 (dort Höhe aus dem Schatten): gesucht ist der Schatten. 18.75 = 15 · 2 : 1.6 (verkehrt),
+         # 14.6 = 15 − 0.4 (Unterschied übertragen).
+         wahl('Frage 4', 'Ein 2 m hoher Stab wirft 1.6 m Schatten. Wie lang ist gleichzeitig der Schatten eines 15 m hohen Masts?', ['12 m', '18.75 m', '14.6 m'], 0,
+              {0: 'Ja.', 1: 'Der Schatten des Stabs ist kürzer, als der Stab hoch ist. Gilt das auch für den Mast?', 2: 'Nicht subtrahieren: Höhe und Schatten stehen im gleichen Verhältnis.'},
+              sprich='Ein zwei Meter hoher Stab wirft eins Komma sechs Meter Schatten. Wie lang ist gleichzeitig der Schatten eines fünfzehn Meter hohen Masts?',
+              rueck_sprich={1: 'Der Schatten des Stabs ist kürzer, als der Stab hoch ist. Gilt das auch für den Mast?', 2: 'Nicht subtrahieren. Höhe und Schatten stehen im gleichen Verhältnis.'}),
          wahl('Frage 5', 'Rechtwinkliges Dreieck: Die Höhe teilt die Hypotenuse in p = 4 cm und q = 9 cm. Wie lang ist h?', ['6 cm', '6.5 cm', '36 cm'], 0,
               {0: 'Ja.', 1: 'Das ist der Mittelwert. Was sagt der Höhensatz?', 2: 'Das ist h². Noch die Wurzel ziehen.'},
               sprich='Rechtwinkliges Dreieck: Die Höhe teilt die Hypotenuse in p gleich vier und q gleich neun Zentimeter. Wie lang ist h?',

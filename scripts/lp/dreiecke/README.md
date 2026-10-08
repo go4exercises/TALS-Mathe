@@ -28,6 +28,9 @@ Wie in `scripts/lp/planimetrie/README.md` (`arbeitsbereich('simN', …)`, Aufgab
 - **sim2** zieht C mit zwei Reglern; `zeige: 'h' | 's' | 'w' | 'm'` zeichnet die drei Linien einer Familie mit ihrem
   Schnittpunkt (bei `w`/`m` mit In-/Umkreis); die Zeile nennt die Lage von H bzw. M_U, auch ausserhalb des Bildes.
 - **sim3** wie Planimetrie Kapitel 2 (Spitze parallel zur Grundseite), mit g = 6 cm, h = 4 cm; `ha: true` macht BC zur Grundseite.
+- **Tippen:** Ein echter Klick auf einen Treffstreifen zählt für die Kandidatenlinie, die dem Tippunkt am nächsten liegt
+  (`arbeitsbereich`, seit der Prüfung vom 08.10.2026) — sonst gewann nahe einer gemeinsamen Ecke die zuletzt gezeichnete
+  Linie. Beschriftungen fangen keine Klicks ab (`seite.css`). Testhaken `fig.__naechste(clientX, clientY)`.
 - **sim4** Katheten a und b; `dreh` dreht um die Bildmitte, `form: 'gs' | 'gls'` zeigt ein gleichschenkliges bzw. gleichseitiges Dreieck.
 
 ## Farben — eine Farbe, eine Bedeutung

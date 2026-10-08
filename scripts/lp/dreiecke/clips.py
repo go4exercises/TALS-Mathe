@@ -199,7 +199,7 @@ def wahl(szene, text, opt, richtig, rueck, sprich=None, rueck_sprich=None, bei=0
     return d
 
 
-def klick(szene, text, ziel, richtig_text, fallen, falsch_text, sprich=None, falsch_sprich=None, tol=0.5, bei=0.3):
+def klick(szene, text, ziel, richtig_text, fallen, falsch_text, sprich=None, falsch_sprich=None, tol=0.5, bei=0.3, eingabe=None):
     # Ohne "eingabe" (wie in der Planimetrie): Die Figuren stehen meist ohne Achsen; wo Achsen stehen
     # (Fusspunkt der Höhe), ist die Stelle das Gesuchte, nicht ihre Koordinaten.
     d = {'szene': szene, 'bei': bei, 'typ': 'klick', 'text': text, 'ziel': ziel, 'toleranz': tol,
@@ -208,6 +208,8 @@ def klick(szene, text, ziel, richtig_text, fallen, falsch_text, sprich=None, fal
         d['sprich'] = sprich
     if falsch_sprich:
         d['falsch_sprich'] = falsch_sprich
+    if eingabe:     # nur wo Achsen die Stelle ablesbar machen (HOWTO-leitprogramme §15)
+        d['eingabe'] = eingabe
     return d
 
 
@@ -221,9 +223,13 @@ FALSCH_LINIE = 'Nicht ganz. Die grüne Linie zeigt die Seite.'
 def clip(name, folge, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrungsclip'):
     alt = R + 'clips/' + PRAEFIX + name + '.json'
     if os.path.exists(alt):
-        frueher = {(q['name'], q['sprecher']): q.get('dauer') for q in json.load(open(alt))['szenen']}
+        vorher = json.load(open(alt))['szenen']
+        frueher = {(q['name'], q['sprecher']): q.get('dauer') for q in vorher}
+        # Szene mit neuem Text: die alte dauer behalten, bis build-clip-ton.py --szenen sie neu misst (sonst passt die
+        # bisherige Tonspur nicht mehr zum Drehbuch und die Teilvertonung bricht ab)
+        nur_name = {q['name']: q.get('dauer') for q in vorher}
         for q in szenen:
-            d_ = frueher.get((q['name'], q['sprecher']))
+            d_ = frueher.get((q['name'], q['sprecher'])) or nur_name.get(q['name'])
             if d_:
                 q['dauer'] = d_
     d = {'titel': titel_, 'dateiname': PRAEFIX + name, 'kurzbeschrieb': kurz,
@@ -398,7 +404,7 @@ clip('kontrolle-winkel', 2, 'Dreiecke sehen: Kontrollfragen zu Winkeln im Dreiec
             f(r"\beta' = 35^\circ + 65^\circ = \fc{100^\circ}", 410, 50, ein=8.9),
             graf(W1, [V([A1, B1, C2k]), WI(A1, B1, C2k, 2), wlabel(A1, B1, C2k, '35°', 2, 1.25, kursiv=False),
                       WI(C2k, A1, B1, 5, 36), wlabel(C2k, A1, B1, '65°', 5, 1.2, kursiv=False),
-                      S(B1, (9.6, 1.5), 5, True, 2.5), WR(B1, 0, richtung(B1, C2k), 3, 30), T(9.2, 2.3, '?', 3, g=36, kursiv=False)]
+                      S(B1, (9.6, 1.5), 5, True, 2.5), WR(B1, 0, richtung(B1, C2k), 3, 30), mit(T(9.2, 2.3, '?', 3, g=36, kursiv=False), aus=8.9)]
                  + ecken((A1, 'A', -0.45, -0.65), (B1, 'B', 0.15, -0.7), (C2k, 'C', 0, 0.45)), ein=0.05),
             graf(W1, [T(9.2, 2.3, '100°', 3, g=24, kursiv=False)], ein=8.9, raster=False)),
          sz('Frage 3',
@@ -477,35 +483,52 @@ print('Kap. 2: H', r3(P2['H']), 'S', r3(P2['S']), 'M_I', r3(P2['MI']), round(P2[
 
 
 def hoehen_stumpf(C):
-    """Die drei Höhen als Strecken von der Ecke bis über Fuss und H hinaus, dazu H, S, M_I, M_U."""
+    """Die drei Höhen als Strecken über Ecke, Fusspunkt und H (Prüfung 08.10.2026, D-M4): Liegt H hinter der Ecke
+    (Höhe aus der stumpfen Ecke), reicht die Strecke von H über die Ecke bis zum Fusspunkt; liegt H hinter dem
+    Fusspunkt (Höhen aus den spitzen Ecken), von der Ecke über den Fusspunkt bis H."""
     A, B = A2s, B2s
     P = punkte(A, B, C)
     out = []
     for e, (u, v) in ((A, (B, C)), (B, (A, C)), (C, (A, B))):
         fu = lot(e, u, v)
-        ziel = fu if abst(e, fu) >= abst(e, P['H']) else P['H']
-        out.append({'von': r3(e), 'bis': r3(ziel)})
+        d = (fu[0] - e[0], fu[1] - e[1])
+        nn = d[0] * d[0] + d[1] * d[1]
+        th = ((P['H'][0] - e[0]) * d[0] + (P['H'][1] - e[1]) * d[1]) / nn        # Lage von H auf der Geraden e + t d
+        t0, t1 = min(0.0, 1.0, th), max(0.0, 1.0, th)
+        out.append({'von': r3((e[0] + t0 * d[0], e[1] + t0 * d[1])), 'bis': r3((e[0] + t1 * d[0], e[1] + t1 * d[1]))})
     return P, out
 
 
-def zug2(t0, t1, felder):
-    return dicht(t0, t1, lambda u: felder((C2s0[0] + (C2s1[0] - C2s0[0]) * u, C2s0[1] + (C2s1[1] - C2s0[1]) * u)))
+def zug2(teile, felder):
+    """C gleitet von C2s0 nach C2s1; teile: (t0, t1, u0, u1) — Zeit und Anteil des Wegs."""
+    bew = []
+    for t0, t1, u0, u1 in teile:
+        st = dicht(t0, t1, lambda q: felder((C2s0[0] + (C2s1[0] - C2s0[0]) * (u0 + (u1 - u0) * q),
+                                             C2s0[1] + (C2s1[1] - C2s0[1]) * (u0 + (u1 - u0) * q))))
+        bew += st[1:] if bew else st
+    return bew
 
 
-T_STUMPF = (0.8, 3.4)
-STUMPF = ([mit(V([A2s, B2s, C2s0]), bewegung=zug2(*T_STUMPF, lambda C: {'punkte': [r3(A2s), r3(B2s), r3(C)]})),
+# Ton (gemessen nach der Neuvertonung 08.10.2026, wortzeiten.json): «Schieb die Ecke C nach rechts» ab ZS = 0.56,
+# «stumpf» bei ZST = 3.28, «Umkreismittelpunkt» 7.32 bis ZU ≈ 8.3 («Schwerpunkt» 8.58). Bis «stumpf» gleitet C bis kurz vor den rechten Winkel bei B (u = 0.6; 90° bei
+# u = 2/3), danach weiter bis zum Ende (β = 121°): H und M_U treten hinaus, während der Satz es sagt.
+ZS, ZST, ZU = 0.6, 3.3, 8.3
+T_STUMPF = ((ZS, ZST, 0.0, 0.6), (ZST, ZU, 0.6, 1.0))
+P2e = punkte(A2s, B2s, C2s1)
+STUMPF = ([mit(V([A2s, B2s, C2s0]), bewegung=zug2(T_STUMPF, lambda C: {'punkte': [r3(A2s), r3(B2s), r3(C)]})),
            T(0.55, 0.4, 'A', kursiv=False), T(6.4, 0.4, 'B', kursiv=False),
-           mit(T(3, 5.45, 'C', kursiv=False), bewegung=zug2(*T_STUMPF, lambda C: {'bei': [round(C[0], 3), round(C[1] + 0.45, 3)]}))]
+           mit(T(3, 5.45, 'C', kursiv=False), bewegung=zug2(T_STUMPF, lambda C: {'bei': [round(C[0], 3), round(C[1] + 0.45, 3)]}))]
           + [mit(S(*[hoehen_stumpf(C2s0)[1][k][q] for q in ('von', 'bis')], 2, True, 3),
-                 bewegung=zug2(*T_STUMPF, lambda C, k=k: hoehen_stumpf(C)[1][k])) for k in range(3)]
-          + [mit(PK(punkte(A2s, B2s, C2s0)[key], 3), bewegung=zug2(*T_STUMPF, lambda C, key=key: {'m': r3(punkte(A2s, B2s, C)[key])}))
+                 bewegung=zug2(T_STUMPF, lambda C, k=k: hoehen_stumpf(C)[1][k])) for k in range(3)]
+          + [mit(PK(punkte(A2s, B2s, C2s0)[key], 3), bewegung=zug2(T_STUMPF, lambda C, key=key: {'m': r3(punkte(A2s, B2s, C)[key])}))
              for key in ('H', 'S', 'MI', 'MU')]
-          + [mit(fg, bewegung=zug2(*T_STUMPF, lambda C, key=key, dx=dx + (fg['bei'][0] - x0), dy=dy + (fg['bei'][1] - y0):
-                                   {'bei': [round(punkte(A2s, B2s, C)[key][0] + dx, 3), round(punkte(A2s, B2s, C)[key][1] + dy, 3)]}))
-             for key, txt, idx, dx, dy in (('H', 'H', '', 0.2, -0.45), ('S', 'S', '', 0.2, -0.45), ('MI', 'M', 'I', -1.05, 0.15),
-                                           ('MU', 'M', 'U', 0.2, 0.15))
-             for x0, y0 in [(punkte(A2s, B2s, C2s0)[key][0] + dx, punkte(A2s, B2s, C2s0)[key][1] + dy)]
-             for fg in (IDX(x0, y0, txt, idx, 3, 24, 11) if idx else [T(x0, y0, txt, 3, 'start', 24)])])
+          # Namen erst in der Endlage (am Anfang liegen die vier Punkte zu dicht für vier Beschriftungen); Lagen in
+          # zahlen.py nachgeprüft: keine Beschriftung auf einem anderen Punkt oder einer Höhe
+          + [mit(fg, ein=ZU) for fg in
+             [T(P2e['H'][0] + 0.25, P2e['H'][1] - 0.1, 'H', 3, 'start', 26),
+              T(P2e['S'][0] - 0.25, P2e['S'][1] - 0.55, 'S', 3, 'end', 26),
+              *IDX(P2e['MI'][0] + 0.45, P2e['MI'][1] + 0.3, 'M', 'I', 3, 26, 11),
+              *IDX(P2e['MU'][0] + 0.2, P2e['MU'][1] - 0.6, 'M', 'U', 3, 26, 11)]])
 
 clip('elemente', 3, 'Dreiecke sehen: Höhen, Halbierende und Mittelsenkrechte',
      'Höhe, Seitenhalbierende, Winkelhalbierende und Mittelsenkrechte; ihre Schnittpunkte H, S, Inkreis- und '
@@ -568,9 +591,9 @@ clip('elemente', 3, 'Dreiecke sehen: Höhen, Halbierende und Mittelsenkrechte',
             graf(W2, [KR(P2['MI'], P2['ri'], 2, dicke=3), PK(P2['MI'], 3), *IDX(P2['MI'][0] - 0.75, P2['MI'][1] + 0.3, 'M', 'I', 3, 32, 11)],
                  ein=7.0, raster=False)),
          sz('Stumpfes Dreieck',
-            'Zieh C nach rechts, bis der Winkel bei B stumpf ist. Der Höhenschnittpunkt wandert aus dem Dreieck hinaus, ebenso '
-            'der Umkreismittelpunkt. Schwerpunkt und Inkreismittelpunkt bleiben immer innen.',
-            n('stumpf: @H@ und @M_U@ aussen|@S@ und @M_I@ immer innen', 300, 'blau', 44, ein=3.9),
+            'Schieb die Ecke C nach rechts. Sobald der Winkel bei B stumpf wird, wandert der Höhenschnittpunkt aus dem Dreieck '
+            'hinaus, ebenso der Umkreismittelpunkt. Schwerpunkt und Inkreismittelpunkt bleiben immer innen.',
+            n('stumpf: @H@ und @M_U@ aussen|@S@ und @M_I@ immer innen', 300, 'blau', 44, ein=ZU),
             graf(W2s, STUMPF, ein=0.3)),
          sz('Teilung 2 zu 1',
             'Der Schwerpunkt teilt jede Seitenhalbierende im Verhältnis zwei zu eins, vom Eckpunkt aus. Ist s c neun Zentimeter '
@@ -579,7 +602,9 @@ clip('elemente', 3, 'Dreiecke sehen: Höhen, Halbierende und Mittelsenkrechte',
             f(r's_c = 9\,\mathrm{cm}: \quad \overline{CS} = \fc{6\,\mathrm{cm}}, \ \overline{SM_c} = \fc{3\,\mathrm{cm}}', 420, 42, ein=7.8),
             graf(W2, TRI2 + [S(C2, MC2, 2, dicke=5), PK(MC2, 5), *IDX(5.2, 0.3, 'M', 'c', 5, 30, 11)], ein=0.3),
             graf(W2, [PK(P2['S'], 3), T(P2['S'][0] + 0.3, P2['S'][1] + 0.1, 'S', 3, 'start', 32),
-                      T(4.15, 5.0, '2', 3, 'start', 26, False), T(4.95, 1.9, '1', 3, 'start', 26, False)], ein=1.6, raster=False)),
+                      T(4.15, 5.0, '2', 3, 'start', 26, False), T(4.95, 1.9, '1', 3, 'start', 26, False)], ein=1.6, raster=False),
+            # s_c ist im Bild 5.85 Einheiten lang, nicht 9: Hinweis, sobald die 9 cm genannt werden (Prüfung 08.10.2026)
+            graf(W2, [T(5, -1.3, 'nicht massstäblich', 5, g=24, kursiv=False)], ein=7.8, raster=False)),
          sz('Merke',
             'Zum Mitnehmen: Die Höhe geht durch die Ecke, die Mittelsenkrechte durch die Seitenmitte. Beide stehen senkrecht. '
             'Der Umkreismittelpunkt ist gleich weit von den Ecken, der Inkreismittelpunkt gleich weit von den Seiten.',
@@ -594,11 +619,18 @@ clip('elemente', 3, 'Dreiecke sehen: Höhen, Halbierende und Mittelsenkrechte',
      ])
 
 # ════════════════════════════════════════════════ Kapitel 2 · Kontrolle
-# Frage 2: A(0 | 0), B(5 | 0), C(7 | 3): Lot von C auf die Gerade AB trifft (7 | 0), rechts von B auf der Verlängerung.
-WK2 = ach(-1.5, -3, 10, (-1, 1, 2, 3, 4, 5, 6, 7, 8), (-2, -1, 1, 2, 3, 4, 5, 6))
+# Frage 2 (neu 08.10.2026; vorher Fusspunkt ausserhalb — gleichartig wie Kontrollfrage 2 von Kapitel 3): rechtwinkliges
+# Dreieck A(1 | 1), B(9 | 2), C(3 | 5), rechter Winkel bei C (CA · CB = 0). Gesucht H = C. Fallen: A, die Mitte der
+# Hypotenuse M(5 | 1.5) (dort liegt M_U) und der Fusspunkt der Höhe aus C auf AB, F(3.462 | 1.308).
+WK2 = geo(-0.5, -1, 10)
+A2k, B2k, C2k2 = (1, 1), (9, 2), (3, 5)
+M2k, F2k = mitte(A2k, B2k), lot(C2k2, A2k, B2k)
+print('Kontrolle 2: CA·CB', (A2k[0] - C2k2[0]) * (B2k[0] - C2k2[0]) + (A2k[1] - C2k2[1]) * (B2k[1] - C2k2[1]), 'M', r3(M2k), 'F', r3(F2k),
+      'H', r3(punkte(A2k, B2k, C2k2)['H']))
+ECK2k = ecken((A2k, 'A', -0.45, -0.55), (B2k, 'B', 0.45, -0.5), (C2k2, 'C', -0.1, 0.45))
 clip('kontrolle-elemente', 4, 'Dreiecke sehen: Kontrollfragen zu Höhen, Halbierenden und Mittelsenkrechten',
-     'Fünf Fragen: eine Linie erkennen, den Fusspunkt einer Höhe ausserhalb, den Punkt gleich weit von den Seiten, die '
-     'Teilung 2 : 1 und den halben Winkel.',
+     'Fünf Fragen: eine Linie erkennen, den Höhenschnittpunkt im rechtwinkligen Dreieck, den Punkt gleich weit von den '
+     'Seiten, die Teilung 2 : 1 und den halben Winkel.',
      ['Höhe', 'Mittelsenkrechte', 'Schwerpunkt', 'Inkreis', 'Kontrollfragen'], [
          sz('Frage 1',
             'Die Linie geht durch die Mitte von c und steht senkrecht darauf, aber nicht durch C. Das ist die Mittelsenkrechte.',
@@ -606,13 +638,17 @@ clip('kontrolle-elemente', 4, 'Dreiecke sehen: Kontrollfragen zu Höhen, Halbier
             graf(W2, TRI2 + [S(*mittelsenkrechte(A2, B2, W2), 2, True, 4), RW(MC2, 0, 90, 2),
                              S((2.9, 0.78), (3.1, 1.22), 5, dicke=3), S((6.9, 0.78), (7.1, 1.22), 5, dicke=3)], ein=0.05)),
          sz('Frage 2',
-            'Die Höhe steht senkrecht auf der Geraden durch A und B. Ihr Fusspunkt liegt bei sieben, null: auf der '
-            'Verlängerung, ausserhalb der Seite.',
-            f(r'\text{Fusspunkt } (\fc{7} \mid 0)', 300, 56, ein=1.0),
-            graf(WK2, [V([(0, 0), (5, 0), (7, 3)]), T(-0.45, 0.3, 'A', kursiv=False), T(4.95, 0.45, 'B', kursiv=False),
-                       T(7.35, 3.35, 'C', kursiv=False)], ein=0.05),
-            graf(WK2, [S((5, 0), (8, 0), 5, True, 2.5), S((7, 3), (7, 0), 2, True), RW((7, 0), 180, 90, 2)],
-                 punkte_=[pt((7, 0), 3, '(7 | 0)', (7.25, -0.75))], ein=1.2)),
+            'Im rechtwinkligen Dreieck sind die beiden Katheten selbst Höhen: Die Höhe aus A ist die Kathete A C, die Höhe '
+            'aus B ist die Kathete B C. Sie schneiden sich in C. Also liegt H auf der Ecke mit dem rechten Winkel.',
+            # Ton: «die Höhe aus A» 3.76, «die Höhe aus B» 6.12, «Sie schneiden sich in C» 8.46 (wortzeiten.json)
+            f(r'H = C', 300, 60, ein=8.5),
+            n('Höhe aus @A@: Kathete @AC@|Höhe aus @B@: Kathete @BC@', 420, 'blau', 42, ein=3.8),
+            # Fragebild: Dreieck, rechter Winkel bei C, Namen; die Höhen und H erst nach der Antwort
+            graf(WK2, [V([A2k, B2k, C2k2]), RW(C2k2, richtung(C2k2, B2k), richtung(C2k2, A2k), 5)] + ECK2k, ein=0.05),
+            graf(WK2, [S(A2k, C2k2, 2, dicke=6)], ein=3.8, raster=False),
+            graf(WK2, [S(B2k, C2k2, 2, dicke=6)], ein=6.1, raster=False),
+            graf(WK2, [S(C2k2, F2k, 2, True, 3), RW(F2k, richtung(F2k, B2k), richtung(F2k, C2k2), 2), PK(C2k2, 3, 0.13),
+                       T(C2k2[0] + 0.35, C2k2[1] + 0.1, 'H', 3, 'start', 32)], ein=8.5, raster=False)),
          sz('Frage 3',
             'Gleich weit von den drei Seiten ist der Inkreismittelpunkt. Er liegt auf allen drei Winkelhalbierenden.',
             f(r'M_I: \ \text{Winkelhalbierende}', 300, 52, ein=1.0)),
@@ -632,12 +668,16 @@ clip('kontrolle-elemente', 4, 'Dreiecke sehen: Kontrollfragen zu Höhen, Halbier
               {0: 'Ja.', 1: 'Geht die Linie durch die Ecke C?', 2: 'Geht die Linie durch C? Und steht sie senkrecht?'},
               sprich='Welche Linie ist im Bild orange gestrichelt?',
               rueck_sprich={1: 'Geht die Linie durch die Ecke C?', 2: 'Geht die Linie durch C? Und steht sie senkrecht?'}),
-         klick('Frage 2', 'Tipp den Fusspunkt der Höhe von C an.', [7, 0], 'Getroffen: (7 | 0).',
-               [{'bei': [5, 0], 'text': 'Das ist B. Die Höhe steht senkrecht auf der Geraden AB, auch ausserhalb der Seite.',
-                 'sprich': 'Das ist B. Die Höhe steht senkrecht auf der Geraden A B, auch ausserhalb der Seite.'},
-                {'bei': [2.5, 0], 'text': 'Das ist die Mitte von AB. Dort endet die Seitenhalbierende.',
-                 'sprich': 'Das ist die Mitte von A B. Dort endet die Seitenhalbierende.'}],
-               FALSCH, sprich='Tipp den Fusspunkt der Höhe von C an.', falsch_sprich=FALSCH),
+         klick('Frage 2', 'Das Dreieck hat bei C einen rechten Winkel. Tipp den Höhenschnittpunkt H an.', list(C2k2), 'Getroffen: H liegt auf C.',
+               [{'bei': list(A2k), 'text': 'Das ist die Ecke A. Welche Linien sind hier die Höhen aus A und aus B?',
+                 'sprich': 'Das ist die Ecke A. Welche Linien sind hier die Höhen aus A und aus B?'},
+                {'bei': list(B2k), 'text': 'Das ist die Ecke B. Welche Linien sind hier die Höhen aus A und aus B?',
+                 'sprich': 'Das ist die Ecke B. Welche Linien sind hier die Höhen aus A und aus B?'},
+                {'bei': r3(M2k), 'text': 'Das ist die Mitte der Hypotenuse. Dort liegt der Umkreismittelpunkt, nicht H.',
+                 'sprich': 'Das ist die Mitte der Hypotenuse. Dort liegt der Umkreismittelpunkt, nicht H.'},
+                {'bei': r3(F2k), 'text': 'Das ist der Fusspunkt der Höhe aus C. Wo schneiden sich alle drei Höhen?',
+                 'sprich': 'Das ist der Fusspunkt der Höhe aus C. Wo schneiden sich alle drei Höhen?'}],
+               FALSCH, sprich='Das Dreieck hat bei C einen rechten Winkel. Tipp den Höhenschnittpunkt H an.', falsch_sprich=FALSCH, tol=0.6),
          wahl('Frage 3', 'Welcher Punkt ist von allen drei Seiten gleich weit entfernt?',
               ['der Inkreismittelpunkt', 'der Umkreismittelpunkt', 'der Schwerpunkt'], 0,
               {0: 'Ja.', 1: 'Der ist gleich weit von den drei Ecken. Gefragt sind die Seiten.',
@@ -695,12 +735,14 @@ clip('flaeche', 5, 'Dreiecke sehen: Fläche und Umfang',
             'Stück ab und setz es rechts an: Es entsteht ein Rechteck mit der Grundseite g und der Höhe h. Das Dreieck ist '
             'die Hälfte davon.',
             f(r'A = \tfrac{1}{2} \cdot g \cdot \fb{h}', 300, 62, ein=12.0),
-            graf(W3, [V([A3h, B3h, C3h], 1, 0.2),
+            # Das Original verliert beim Abschneiden sein linkes Stück (Prüfung 08.10.2026, D-M4: es blieb stehen)
+            graf(W3, [mit(V([A3h, B3h, C3h], 1, 0.2), aus=6.5), mit(V([(2.5, 1), B3h, C3h], 1, 0.2), ein=6.5),
                       mit(V([A3h, B3h, C3h], 2, 0.2), ein=1.0, um=r3(M3h), bewegung=[[1.9, {'drehung': 0}], [3.3, {'drehung': 180}]]),
                       mit(T(3.5, 0.3, 'g', 5), ein=9.6), mit(S((2.5, 5), (2.5, 1), 5, True, 2.5), ein=10.6), mit(T(2.2, 3, 'h', 5, 'end'), ein=10.6)], ein=0.3),
-            # «Schneid links ein Stück ab und setz es rechts an» (Ton 5.0–7.0): das Stück links wird um 6 nach rechts geschoben
-            graf(W3, [mit(V([(0.5, 1), (2.5, 1), (2.5, 5)], 3, 0.3), bewegung=[[5.6, {}], [6.8, {'punkte': [[6.5, 1], [8.5, 1], [8.5, 5]]}]])],
-                 ein=4.8, raster=False),
+            # «Schneid links ein Stück ab» (Ton 5.35–6.6): das Stück erscheint; «und setz es rechts an» (6.65–7.6): es wandert
+            # um 6 nach rechts (Wortzeiten aus wortzeiten.json)
+            graf(W3, [mit(V([(0.5, 1), (2.5, 1), (2.5, 5)], 3, 0.3), bewegung=[[6.5, {}], [7.5, {'punkte': [[6.5, 1], [8.5, 1], [8.5, 5]]}]])],
+                 ein=5.4, raster=False),
             graf(W3, [V([(2.5, 1), (8.5, 1), (8.5, 5), (2.5, 5)], 3, 0.0, dicke=6)], ein=8.4, raster=False)),
          sz('Vorgelöst',
             'Zum Beispiel: Grundseite sechs Zentimeter, Höhe vier Zentimeter. Die Fläche ist ein Halb mal sechs mal vier, gleich '
@@ -756,11 +798,12 @@ clip('kontrolle-flaeche', 6, 'Dreiecke sehen: Kontrollfragen zu Fläche und Umfa
      'Fünf Fragen: die Fläche aus g und h, den Fusspunkt einer Höhe ausserhalb, h aus A und g, was beim Verschieben der Spitze '
      'gleich bleibt und eine zweite Höhe aus derselben Fläche.',
      ['Dreieck', 'Flächeninhalt', 'Höhe', 'Kontrollfragen'], [
+         # Frage 1 mit g = 7, h = 4 (vorher 6 und 5 — dieselben Zahlen wie «Höhe aus der Fläche» im Einführungsclip)
          sz('Frage 1',
-            'Ein Halb mal sechs mal fünf ergibt fünfzehn Quadratzentimeter.',
-            f(r'A = \tfrac{1}{2} \cdot 6 \cdot 5 = \fc{15\,\mathrm{cm}^2}', 300, 54, ein=1.0),
-            graf(W3, [V([(1, 1), (7, 1), (5, 6)]), S((5, 6), (5, 1), 2, True), RW((5, 1), 0, 90, 2),
-                      T(4, 0.3, 'g = 6 cm', 5, g=28, kursiv=False), T(5.25, 3.4, 'h = 5 cm', 2, 'start', 28, False)], ein=0.05)),
+            'Ein Halb mal sieben mal vier ergibt vierzehn Quadratzentimeter.',
+            f(r'A = \tfrac{1}{2} \cdot 7 \cdot 4 = \fc{14\,\mathrm{cm}^2}', 300, 54, ein=1.0),
+            graf(W3, [V([(1, 1), (8, 1), (5.5, 5)]), S((5.5, 5), (5.5, 1), 2, True), RW((5.5, 1), 0, 90, 2),
+                      T(4.5, 0.3, 'g = 7 cm', 5, g=28, kursiv=False), T(5.3, 2.8, 'h = 4 cm', 2, 'end', 28, False)], ein=0.05)),
          sz('Frage 2',
             'Die Höhe h b steht senkrecht auf der Geraden durch A und C. Ihr Fusspunkt liegt bei acht, null: auf der '
             'Verlängerung über A hinaus.',
@@ -785,16 +828,17 @@ clip('kontrolle-flaeche', 6, 'Dreiecke sehen: Kontrollfragen zu Fläche und Umfa
             titel('Zum Mitnehmen', 250, 76),
             f(r'A = \tfrac{1}{2}\, g\, h \qquad h = \dfrac{2A}{g}', 400, 54, ein=1.2)),
      ], [
-         wahl('Frage 1', 'g = 6 cm, h = 5 cm: Wie gross ist die Fläche?', ['15 cm²', '30 cm²', '11 cm²'], 0,
+         wahl('Frage 1', 'g = 7 cm, h = 4 cm: Wie gross ist die Fläche?', ['14 cm²', '28 cm²', '11 cm²'], 0,
               {0: 'Ja.', 1: 'Das ist g mal h: das Rechteck. Das Dreieck ist die Hälfte.', 2: 'Das ist g plus h. Eine Fläche ist ein Produkt.'},
-              sprich='g gleich sechs Zentimeter, h gleich fünf Zentimeter: Wie gross ist die Fläche?',
+              sprich='g gleich sieben Zentimeter, h gleich vier Zentimeter: Wie gross ist die Fläche?',
               rueck_sprich={1: 'Das ist g mal h: das Rechteck. Das Dreieck ist die Hälfte.', 2: 'Das ist g plus h. Eine Fläche ist ein Produkt.'}),
          klick('Frage 2', 'Die Grundseite ist b = AC. Tipp den Fusspunkt der Höhe von B an.', [8, 0], 'Getroffen: (8 | 0).',
                [{'bei': [6, 0], 'text': 'Das ist A. Die Höhe steht senkrecht auf der Geraden AC, auch ausserhalb der Seite.',
                  'sprich': 'Das ist A. Die Höhe steht senkrecht auf der Geraden A C, auch ausserhalb der Seite.'},
                 {'bei': [3, 0], 'text': 'Das ist die Mitte von AC. Gesucht ist das Lot von B.',
                  'sprich': 'Das ist die Mitte von A C. Gesucht ist das Lot von B.'}],
-               FALSCH, sprich='Die Grundseite ist b gleich A C. Tipp den Fusspunkt der Höhe von B an.', falsch_sprich=FALSCH),
+               FALSCH, sprich='Die Grundseite ist b gleich A C. Tipp den Fusspunkt der Höhe von B an.', falsch_sprich=FALSCH,
+               eingabe=['x', 'y']),
          wahl('Frage 3', 'A = 20 cm², g = 8 cm: Wie gross ist h?', ['5 cm', '2.5 cm', '160 cm'], 0,
               {0: 'Ja.', 1: 'Das ist A durch g. Denk an den Faktor ein Halb in der Formel.', 2: 'Teilen, nicht multiplizieren.'},
               sprich='A gleich zwanzig Quadratzentimeter, g gleich acht Zentimeter: Wie gross ist h?',
@@ -805,10 +849,10 @@ clip('kontrolle-flaeche', 6, 'Dreiecke sehen: Kontrollfragen zu Fläche und Umfa
               sprich='Die Spitze wandert parallel zur Grundseite. Was bleibt gleich?',
               rueck_sprich={1: 'Die schrägen Seiten werden länger oder kürzer. Was steht in der Flächenformel?',
                             2: 'Die Form ändert sich. Was steht in der Flächenformel?'}),
-         wahl('Frage 5', 'a = 8 cm, ha = 3 cm, b = 6 cm. Wie lang ist die Höhe hb?', ['4 cm', '2.25 cm', '12 cm'], 0,
+         wahl('Frage 5', 'a = 8 cm, die Höhe auf a ist 3 cm, b = 6 cm. Wie lang ist die Höhe auf b?', ['4 cm', '2.25 cm', '12 cm'], 0,
               {0: 'Ja.', 1: 'Zur kürzeren Seite gehört die längere Höhe. Rechne zuerst die Fläche.',
                2: 'Das ist die Fläche. Daraus folgt die Höhe: 2A durch b.'},
-              sprich='a gleich acht Zentimeter, h a gleich drei Zentimeter, b gleich sechs Zentimeter. Wie lang ist die Höhe h b?',
+              sprich='a gleich acht Zentimeter, die Höhe auf a ist drei Zentimeter, b gleich sechs Zentimeter. Wie lang ist die Höhe auf b?',
               rueck_sprich={1: 'Zur kürzeren Seite gehört die längere Höhe. Rechne zuerst die Fläche.',
                             2: 'Das ist die Fläche. Daraus folgt die Höhe: zwei A durch b.'}),
      ], art='Kontrollclip')
@@ -924,25 +968,30 @@ clip('kontrolle-pythagoras', 8, 'Dreiecke sehen: Kontrollfragen zu Pythagoras',
             graf(WK4, [V([P4k, Q4k, R4k]), RW(R4k, -20, 70, 5)]
                  + ecken((P4k, 'P', 0, 0.45), (Q4k, 'Q', 0.45, -0.3), (R4k, 'R', -0.45, -0.4)), ein=0.05),
             graf(WK4, [S(P4k, Q4k, 3, dicke=8)], ein=1.0, raster=False)),
+         # Fragen 2 bis 5 mit eigenen Zahlen (Prüfung 08.10.2026, D-M4: vorher 6-8-10, 5-12-13 und a = 5, b = 7, γ = 80° wie im
+         # Einführungsclip und in der Arbeitsfläche)
          sz('Frage 2',
-            'c Quadrat gleich sechsunddreissig plus vierundsechzig, gleich hundert. c ist zehn Zentimeter.',
-            f(r'c = \sqrt{36 + 64} = \sqrt{100} = \fc{10\,\mathrm{cm}}', 300, 50, ein=1.0),
-            # Fragebild: nur die gegebenen Katheten (6 und 8, massstäblich); die Hypotenuse erst nach der Antwort.
+            'c Quadrat gleich fünfundzwanzig plus sechsunddreissig, gleich einundsechzig. c ist die Wurzel daraus, rund sieben '
+            'Komma acht eins Zentimeter.',
+            f(r'c = \sqrt{25 + 36} = \sqrt{61} \approx \fc{7.81\,\mathrm{cm}}', 300, 50, ein=1.0),
+            # Fragebild: nur die gegebenen Katheten (5 und 6, massstäblich); die Hypotenuse erst nach der Antwort.
             # Der Graf hält zugleich ein Fenster in der Szene: Ein verspäteter Start, der über Frage 1 springt, findet
             # sonst für die Klickfrage kein tippbares Bild (pruef-fragen, Fall B2).
-            graf(WK4b, [V([(1, 1), (9, 1), (1, 7)]), RW((1, 1), 0, 90, 5), T(0.55, 4, '6', 5, 'end', 34, False),
-                        T(5, 0.25, '8', 5, 'middle', 34, False)], ein=0.05),
-            graf(WK4b, [S((9, 1), (1, 7), 3, dicke=7), T(5.4, 4.5, '10', 3, 'start', 34, False)], ein=1.0, raster=False)),
+            graf(WK4b, [V([(1, 1), (7, 1), (1, 6)]), RW((1, 1), 0, 90, 5), T(0.55, 3.5, '5', 5, 'end', 34, False),
+                        T(4, 0.25, '6', 5, 'middle', 34, False)], ein=0.05),
+            graf(WK4b, [S((7, 1), (1, 6), 3, dicke=7), T(4.35, 3.85, '≈ 7.81', 3, 'start', 34, False)], ein=1.0, raster=False)),
          sz('Frage 3',
-            'Für eine Kathete wird subtrahiert: hundert minus sechsunddreissig, gleich vierundsechzig. b ist acht Zentimeter.',
-            f(r'b = \sqrt{100 - 36} = \sqrt{64} = \fc{8\,\mathrm{cm}}', 300, 50, ein=1.0)),
+            'Für eine Kathete wird subtrahiert: einundachtzig minus sechzehn, gleich fünfundsechzig. b ist die Wurzel daraus, '
+            'rund acht Komma null sechs Zentimeter.',
+            f(r'b = \sqrt{81 - 16} = \sqrt{65} \approx \fc{8.06\,\mathrm{cm}}', 300, 50, ein=1.0)),
          sz('Frage 4',
-            'Die Höhe halbiert die Basis: halbe Basis fünf. h Quadrat gleich hundertneunundsechzig minus fünfundzwanzig, gleich '
-            'hundertvierundvierzig. Die Höhe ist zwölf Zentimeter.',
-            f(r'h = \sqrt{13^2 - 5^2} = \sqrt{144} = \fc{12\,\mathrm{cm}}', 300, 48, ein=1.0)),
+            'Die Höhe halbiert die Basis: halbe Basis drei. h Quadrat gleich vierundsechzig minus neun, gleich fünfundfünfzig. '
+            'Die Höhe ist rund sieben Komma vier zwei Zentimeter.',
+            f(r'h = \sqrt{8^2 - 3^2} = \sqrt{55} \approx \fc{7.42\,\mathrm{cm}}', 300, 48, ein=1.0)),
          sz('Frage 5',
-            'Nein. Der Satz des Pythagoras braucht einen rechten Winkel zwischen a und b. Achtzig Grad ist kein rechter Winkel.',
-            f(r'\gamma = 80^\circ \neq 90^\circ', 300, 56, ein=1.0)),
+            'Nein. Der Satz des Pythagoras braucht einen rechten Winkel zwischen a und b. Fünfundsiebzig Grad ist kein rechter '
+            'Winkel.',
+            f(r'\gamma = 75^\circ \neq 90^\circ', 300, 56, ein=1.0)),
          sz('Merke',
             'Zum Mitnehmen: Hypotenuse gegenüber dem rechten Winkel. Für die Hypotenuse addieren, für eine Kathete subtrahieren.',
             titel('Zum Mitnehmen', 250, 76),
@@ -955,25 +1004,25 @@ clip('kontrolle-pythagoras', 8, 'Dreiecke sehen: Kontrollfragen zu Pythagoras',
                 {'bei': [r3(R4k), r3(Q4k)], 'text': 'Das ist eine Kathete: Sie liegt am rechten Winkel an.',
                  'sprich': 'Das ist eine Kathete. Sie liegt am rechten Winkel an.'}],
                FALSCH_LINIE, sprich='Tipp die Hypotenuse an.', falsch_sprich=FALSCH_LINIE, tol=0.45),
-         wahl('Frage 2', 'Die Katheten sind 6 cm und 8 cm lang. Wie lang ist die Hypotenuse?', ['10 cm', '14 cm', '100 cm'], 0,
-              {0: 'Ja.', 1: 'Das ist 6 + 8. Addiert werden die Quadrate, danach die Wurzel.', 2: 'Das ist c². Zieh noch die Wurzel.'},
-              sprich='Die Katheten sind sechs und acht Zentimeter lang. Wie lang ist die Hypotenuse?',
-              rueck_sprich={1: 'Das ist sechs plus acht. Addiert werden die Quadrate, danach die Wurzel.',
+         wahl('Frage 2', 'Die Katheten sind 5 cm und 6 cm lang. Wie lang ist die Hypotenuse?', ['≈ 7.81 cm', '11 cm', '61 cm'], 0,
+              {0: 'Ja.', 1: 'Das ist 5 + 6. Addiert werden die Quadrate, danach die Wurzel.', 2: 'Das ist c². Zieh noch die Wurzel.'},
+              sprich='Die Katheten sind fünf und sechs Zentimeter lang. Wie lang ist die Hypotenuse?',
+              rueck_sprich={1: 'Das ist fünf plus sechs. Addiert werden die Quadrate, danach die Wurzel.',
                             2: 'Das ist c Quadrat. Zieh noch die Wurzel.'}),
-         wahl('Frage 3', 'Hypotenuse 10 cm, eine Kathete 6 cm. Wie lang ist die andere Kathete?', ['8 cm', '≈ 11.66 cm', '4 cm'], 0,
-              {0: 'Ja.', 1: 'Länger als die Hypotenuse? Für eine Kathete wird subtrahiert.', 2: 'Das ist 10 − 6. Subtrahiert werden die Quadrate.'},
-              sprich='Hypotenuse zehn Zentimeter, eine Kathete sechs Zentimeter. Wie lang ist die andere Kathete?',
+         wahl('Frage 3', 'Hypotenuse 9 cm, eine Kathete 4 cm. Wie lang ist die andere Kathete?', ['≈ 8.06 cm', '≈ 9.85 cm', '5 cm'], 0,
+              {0: 'Ja.', 1: 'Länger als die Hypotenuse? Für eine Kathete wird subtrahiert.', 2: 'Das ist 9 − 4. Subtrahiert werden die Quadrate.'},
+              sprich='Hypotenuse neun Zentimeter, eine Kathete vier Zentimeter. Wie lang ist die andere Kathete?',
               rueck_sprich={1: 'Länger als die Hypotenuse? Für eine Kathete wird subtrahiert.',
-                            2: 'Das ist zehn minus sechs. Subtrahiert werden die Quadrate.'}),
-         wahl('Frage 4', 'Gleichschenkliges Dreieck: Basis 10 cm, Schenkel 13 cm. Wie hoch ist es?', ['12 cm', '≈ 8.31 cm', '≈ 13.93 cm'], 0,
+                            2: 'Das ist neun minus vier. Subtrahiert werden die Quadrate.'}),
+         wahl('Frage 4', 'Gleichschenkliges Dreieck: Basis 6 cm, Schenkel 8 cm. Wie hoch ist es?', ['≈ 7.42 cm', '≈ 5.29 cm', '≈ 8.54 cm'], 0,
               {0: 'Ja.', 1: 'Die Höhe halbiert die Basis. Rechne mit der halben Basis.',
                2: 'Höher als ein Schenkel? Der Schenkel ist hier die Hypotenuse.'},
-              sprich='Gleichschenkliges Dreieck: Basis zehn Zentimeter, Schenkel dreizehn Zentimeter. Wie hoch ist es?',
+              sprich='Gleichschenkliges Dreieck: Basis sechs Zentimeter, Schenkel acht Zentimeter. Wie hoch ist es?',
               rueck_sprich={1: 'Die Höhe halbiert die Basis. Rechne mit der halben Basis.',
                             2: 'Höher als ein Schenkel? Der Schenkel ist hier die Hypotenuse.'}),
-         wahl('Frage 5', 'Ein Dreieck hat a = 5 cm, b = 7 cm und γ = 80°. Gilt c² = a² + b²?',
+         wahl('Frage 5', 'Ein Dreieck hat a = 4 cm, b = 9 cm und γ = 75°. Gilt c² = a² + b²?',
               ['Nein: γ ist kein rechter Winkel.', 'Ja, in jedem Dreieck.', 'Ja, weil c gegenüber von γ liegt.'], 0,
               {0: 'Ja.', 1: 'Was setzt der Satz des Pythagoras voraus?', 2: 'Was setzt der Satz des Pythagoras über γ voraus?'},
-              sprich='Ein Dreieck hat a gleich fünf, b gleich sieben Zentimeter und Gamma gleich achtzig Grad. Gilt c Quadrat gleich a Quadrat plus b Quadrat?',
+              sprich='Ein Dreieck hat a gleich vier, b gleich neun Zentimeter und Gamma gleich fünfundsiebzig Grad. Gilt c Quadrat gleich a Quadrat plus b Quadrat?',
               rueck_sprich={1: 'Was setzt der Satz des Pythagoras voraus?', 2: 'Was setzt der Satz des Pythagoras über Gamma voraus?'}),
      ], art='Kontrollclip')

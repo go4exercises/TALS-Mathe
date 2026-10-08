@@ -106,11 +106,55 @@ ok(math.degrees(math.acos((6.25 + 9 - 4) / 15)), 41.41, 0.006)
 ok(1.8 * 0.15 / 6, 0.045); ok(1.8 * 0.15 / 0.03, 9)
 ok(18.4 * 25000 / 100000, 4.6); ok(3.2 * 25000 ** 2 / 1e10, 0.2); ok(3.2 / 4, 0.8); ok(3.2 * 25000 / 10000, 8)
 ok(1.6 * math.sqrt(3), 2.77, 0.006)
-g6a, g6b = 6 * math.sin(math.radians(48)) / math.sin(math.radians(68)), 6 * math.sin(math.radians(64)) / math.sin(math.radians(68))
-ok(g6a, 4.81, 0.006); ok(g6b, 5.82, 0.006); ok(1.5 * g6b, 8.72, 0.006); ok(1.5 * 5.82, 8.73, 0.006)
+# G6 (neu 08.10.2026): DEF mit D = 41°, E = 76°, DE = 8; XYZ mit X = 63°, Z = 41°, YZ = 6
+sd = lambda w: math.sin(math.radians(w))
+assert 180 - 41 - 76 == 63 and 180 - 63 - 41 == 76
+EF, FD = 8 * sd(41) / sd(63), 8 * sd(76) / sd(63)
+ok(EF, 5.89, 0.006); ok(FD, 8.71, 0.006)
+ok(6 / 8, 0.75); ok(0.75 * EF, 4.42, 0.006); ok(0.75 * 5.89, 4.42, 0.006)        # XY ↔ EF (beide 41° gegenüber)
+ok(8 * 6 / 5.89, 8.15, 0.006); ok(8 * 6 / EF, 8.15, 0.006)                       # Laras Zuordnung nach Buchstaben
+ok(5.89 * 8 / 6, 7.85, 0.006); ok(0.75 * 8.71, 6.53, 0.006); ok(0.75 * FD, 6.53, 0.006)   # verkehrt; FD statt EF
+# G3 (4 P): Ansatz b : 1.8 = 0.15 : 6; gemischte Einheiten 1.8 · 15 / 6 = 4.5 (als Meter), 1.8 · 0.15 / 3 = 0.09, verkehrt 72
+ok(1.8 * 15 / 6, 4.5); ok(1.8 * 0.15 / 3, 0.09); ok(1.8 * 6 / 0.15, 72)
+# G4: Umrechnungen in den typischen Fehlern
+ok(3.2 * 25000 ** 2, 2e9); ok(2e9 / 1e4, 200000); ok(18.4 * 25000, 460000); ok(460000 / 100, 4600); ok(3.2 / 2, 1.6); ok(0.2e10 / 50000 ** 2, 0.8)
 ok(7.5 ** 2 / 12.5, 4.5); ok(12.5 - 4.5, 8); ok(math.sqrt(4.5 * 8), 6); ok(math.sqrt(7.5 ** 2 - 4.5 ** 2), 6)
 ok(math.sqrt(0.6 * 11.9), 2.67, 0.006)
+# ---------------- Behebung 08.10.2026: neue und geänderte Zahlen
+# Clip strahlensaetze «Nur mit Parallelen»: 3 : 5.80 ≈ 0.52 ≠ 0.4 = 4 : 10
+ok(3 / 5.8004, 0.52, 0.006); ok(4 / 10, 0.4)
+# Kontrollclip 2 F3 (umgekehrt): SA = 2, SA′ = 5, SB′ = 7.5 → SB = 7.5 · 2 / 5 = 3; Falle 4.5 (BB′ = AA′ = 3)
+ok(7.5 * 2 / 5, 3); ok(7.5 - 3, 4.5); ok(7.5 - 4.5, 5 - 2)
+u50 = (math.cos(math.radians(50)), math.sin(math.radians(50)))
+ok(3 * u50[0], 1.928, 0.001); ok(3 * u50[1], 2.298, 0.001); ok(4.5 * u50[0], 2.893, 0.001); ok(7.5 * u50[0], 4.821, 0.001)
+# Clip figuren: «Fläche» schrumpft von 6 × 4 (k = 2) auf 4.5 × 3 (k = 1.5); «Zurück zu k»: 3 × 2 → 7.5 × 5 (k = 2.5)
+ok(4.5 * 3, 13.5); ok(7.5 / 3, 2.5); ok(5 / 2, 2.5); ok(7.5 * 5 / 6, 6.25)
+# Clip dreiecke «Schatten»: Stummel des Sonnenstrahls hat die Steigung 11.7 / 7.8 = 1.5
+ok(11.7 / 7.8, 1.5)
+# Kontrollclip 4: F1 38° + 77° → 65°, 77° + 65° → 38°; F4 Schatten s = 15 · 1.6 / 2 = 12, verkehrt 18.75, Unterschied 14.6
+assert 180 - 38 - 77 == 65 and 180 - 77 - 65 == 38
+ok(15 * 1.6 / 2, 12); ok(15 * 2 / 1.6, 18.75); ok(15 - (2 - 1.6), 14.6)
+# Aufgabe 2f: Lampe – Karte 30 cm – Wand 120 cm, Karte 12 cm (Figur: Karte 4 … 16, Schatten 16 … 64)
+ok(120 / 30, 4); ok(4 * 12, 48); ok(4 * 4, 16); ok(4 * 16, 64); ok(64 - 16, 48)
+# Aufgabe 3c: Plan 8 × 6 im Karo (Massstab 1 : 50) wie bisher
+# Aufgabe 4f: AB = 8, AC = 6, BC = 7, AD = 3, AE = 4 → ADE ~ ACB (sWs), k = 0.5, DE = 3.5; AD : AB ≠ AE : AC
+ca = (64 + 36 - 49) / 96; ok(ca, 51 / 96); C4f = (6 * ca, 6 * math.sqrt(1 - ca * ca)); E4f = (4 * ca, 4 * math.sqrt(1 - ca * ca))
+ok(C4f[0], 3.1875, 0.0001); ok(C4f[1], 5.0833, 0.0001); ok(E4f[0], 2.125, 0.0001); ok(E4f[1], 3.3889, 0.0001)
+ok(3 / 6, 4 / 8); ok(0.5 * 7, 3.5); ok(math.dist((3, 0), E4f), 3.5, 1e-9); ok(math.dist((8, 0), C4f), 7, 1e-9); assert abs(3 / 8 - 4 / 6) > 0.1
+# Festhalten 3: √2 ≈ 1.41, √3 ≈ 1.73; Übung «flaeche», k aus Flächenverhältnis 2, 3, 5, 6, 8, 10
+ok(math.sqrt(2), 1.41, 0.006); ok(math.sqrt(3), 1.73, 0.006)
+for q2 in (2, 3, 5, 6, 8, 10):
+    assert abs(math.sqrt(q2) - q2 / 2) > 0.07 or q2 == 4      # «halb» bleibt eine eigene Diagnose
+# Figurenfenster: 4a 260 × 135 px über x −1 … 17 (unten −1 vor, −1.3 nach der Bildmessung) → oben 8.35 bzw. 8.05 > R (6.585)
+ok(-1 + 135 * 18 / 260, 8.35, 0.01); assert -1 + 135 * 18 / 260 - 6.585 > 1.2
+# 4d 230 × 150 px über x −1.2 … 13.4 → oben y = −1.7 + 150 · 14.6 / 230 = 7.82 > C (6)
+ok(-1.7 + 150 * 14.6 / 230, 7.82, 0.01)
+# 4f 220 × 165 px über x −1 … 9 → oben y = −1.2 + 165 · 10 / 220 = 6.3 > C (5.08); 2f 240 × 165 über −10 … 132, unten −25 → oben 72.6 > Wand (70);
+# 4a mit unten −1.3 → oben 8.05
+ok(-1.2 + 165 * 10 / 220, 6.3); ok(-25 + 165 * 142 / 240, 72.63, 0.01); ok(-1.3 + 135 * 18 / 260, 8.05, 0.01)
+
 # Punkte und Minuten
-assert sum([4, 4, 3, 4, 3, 4, 3]) == 25
-assert 10 + 40 + 45 + 40 + 45 + 30 == 210
+assert sum([3, 4, 4, 4, 3, 4, 3]) == 25                       # G1 3 (nur P′), G3 4 (Ansatz dazu), G6 4 (neu)
+assert sum([3, 3, 2, 3, 2, 2]) == 15 and sum([3, 3, 3, 3, 2, 2]) == 16          # Kapitel 2 (mit 2f), Kapitel 4 (mit 4f)
+assert 10 + 40 + 50 + 40 + 50 + 30 == 220
 print('alle Zahlen stimmen')

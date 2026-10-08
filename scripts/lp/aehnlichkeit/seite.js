@@ -60,9 +60,10 @@
       el(g, 'polygon', { points: (W - 1) + ',' + ay + ' ' + (W - 8) + ',' + (ay - 3.5) + ' ' + (W - 8) + ',' + (ay + 3.5), 'class': 'pfeil' });
       el(g, 'polygon', { points: ax + ',1 ' + (ax - 3.5) + ',8 ' + (ax + 3.5) + ',8', 'class': 'pfeil' });
       el(g, 'text', { x: W - 6, y: ay - 7, 'text-anchor': 'end', 'class': 'achsname' }, 'x');
-      el(g, 'text', { x: ax + 8, y: 11, 'class': 'achsname' }, 'y');
-      for (i = Math.ceil(x0 / t) * t; i <= x1 - 1; i += t) if (Math.abs(i) > 1e-9) el(g, 'text', { x: X(i), y: ay + 11, 'text-anchor': 'middle', 'class': 'achszahl' }, String(i).replace('-', '−'));
-      for (i = Math.ceil(y0 / t) * t; i <= y1 - 1; i += t) if (Math.abs(i) > 1e-9) el(g, 'text', { x: ax - 4, y: Y(i) + 3.5, 'text-anchor': 'end', 'class': 'achszahl' }, String(i).replace('-', '−'));
+      el(g, 'text', { x: ax + 8, y: 12, 'class': 'achsname' }, 'y');
+      // Achsenzahlen nur, wo sie ganz ins Bild passen (Übungsbilder mit wechselndem Fenster: Zahl am Rand sonst halb abgeschnitten)
+      for (i = Math.ceil(x0 / t) * t; i <= x1 - 1; i += t) if (Math.abs(i) > 1e-9 && X(i) > 9 && X(i) < W - 9 && ay + 15 < H) el(g, 'text', { x: X(i), y: ay + 11, 'text-anchor': 'middle', 'class': 'achszahl' }, String(i).replace('-', '−'));
+      for (i = Math.ceil(y0 / t) * t; i <= y1 - 1; i += t) if (Math.abs(i) > 1e-9 && ax - 4 - 6 * String(i).length > 0 && Y(i) > 6 && Y(i) < H - 7) el(g, 'text', { x: ax - 4, y: Y(i) + 3.5, 'text-anchor': 'end', 'class': 'achszahl' }, String(i).replace('-', '−'));
     }
     var ebene = el(svg, 'g', {});
     var rot = 0, dreh = function(p){ if (!rot) return p; var c = Math.cos(rot), sn = Math.sin(rot), m = o.drehpunkt || [0, 0];
@@ -97,7 +98,12 @@
         var A = dreh(a), B = dreh(b);
         if (ganz){ var dx = B[0] - A[0], dy = B[1] - A[1], L = 100 / Math.hypot(dx, dy); A = [A[0] - dx * L, A[1] - dy * L]; B = [B[0] + dx * L, B[1] + dy * L]; }
         el(gr, 'line', { x1: X(A[0]), y1: Y(A[1]), x2: X(B[0]), y2: Y(B[1]), 'class': 'k-sicht' });
-        el(gr, 'line', { x1: X(A[0]), y1: Y(A[1]), x2: X(B[0]), y2: Y(B[1]), 'class': 'k-treffer' });
+        /* Treffstreifen einer Seite an beiden Enden gekürzt (bis 9 px, höchstens ein Viertel): Sonst überdecken sich die
+           16 px breiten Streifen zweier Seiten an der gemeinsamen Ecke, und bei kurzen Seiten trifft ein Tipp auf die
+           Linie die Nachbarseite (Prüfung 08.10.2026: A′B′ bei k = −1 nur zu 55 % treffbar). */
+        var t0 = ganz ? 0 : Math.min(0.25, 9 / (Math.hypot(X(B[0]) - X(A[0]), Y(B[1]) - Y(A[1])) || 1));
+        var Ta = [A[0] + (B[0] - A[0]) * t0, A[1] + (B[1] - A[1]) * t0], Tb = [B[0] - (B[0] - A[0]) * t0, B[1] - (B[1] - A[1]) * t0];
+        el(gr, 'line', { x1: X(Ta[0]), y1: Y(Ta[1]), x2: X(Tb[0]), y2: Y(Tb[1]), 'class': 'k-treffer' });
         gr.addEventListener('click', function(){ wahl(id); });
         gr.addEventListener('keydown', function(ev){ if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); wahl(id); } });
         return gr; }
@@ -323,7 +329,7 @@
     aufgaben: [
       { text: 'Erkunde: Zieh an \\(k\\), auch unter null. Wo liegt das Bild, und was bleibt gleich?', probe: { k: 2 }, ziel: function(w){ return w.bewegt.k; } },
       { text: 'Stell \\(k\\) so ein, dass alle Seiten des Bildes doppelt so lang sind und das Bild auf derselben Seite von \\(Z\\) liegt.', probe: { k: 2 }, ziel: function(w){ return w.k === 2; } },
-      { text: 'Das Bild soll gleich gross sein wie das Original, aber auf der anderen Seite von \\(Z\\) liegen.', probe: { k: -1 }, ziel: function(w){ return w.k === -1; } },
+      { text: 'Das Bild soll gleich lange Seiten haben wie das Original, aber auf der anderen Seite von \\(Z\\) liegen.', probe: { k: -1 }, ziel: function(w){ return w.k === -1; } },
       { text: 'Bei \\(k = 2\\): Auf welcher Geraden liegt der Bildpunkt \\(C\'\\)? Tipp sie an.', ohneBild: true, ohneStrahlen: true,
         setup: function(s){ s.setze({ k: 2 }); s.sperre('k'); },
         wahl: { art: 'gerade', richtig: 'zc', gut: 'Jeder Bildpunkt liegt auf der Geraden durch \\(Z\\) und seinen Originalpunkt.', rueck: {
@@ -359,7 +365,7 @@
                     [7.11, 'Das ist \\(k^2\\) mal die Länge. Längen wachsen mit \\(|k|\\).'],
                     [2.11, 'Geteilt statt multipliziert: Das Bild ist grösser als das Original.']],
                   tipp: '\\(\\overline{C\'A\'} = |k| \\cdot \\overline{CA}\\).' }] },
-      { text: 'Stell \\(k\\) so ein, dass das Bild halb so gross ist wie das Original und auf der anderen Seite von \\(Z\\) liegt.', probe: { k: -0.5 }, ziel: function(w){ return w.k === -0.5; } }
+      { text: 'Stell \\(k\\) so ein, dass die Seiten des Bildes halb so lang sind wie die des Originals und das Bild auf der anderen Seite von \\(Z\\) liegt.', probe: { k: -0.5 }, ziel: function(w){ return w.k === -0.5; } }
     ]
   });
 
@@ -382,12 +388,13 @@
   function vz(p, v){ return p[0] * v[0] + p[1] * v[1]; }    // Lage auf der Geraden (Vorzeichen: Seite von S)
   arbeitsbereich('sim2', {
     fenster: { w: 320, h: 187, x0: -7, x1: 11, y0: -4.3, karo: false },
+    ohneNull: ['k'],            // k = 0 hiesse: A′ = S, die Verhältnisse wären unendlich (Prüfung 08.10.2026)
     zeichnen: function(F, w, k){
       var Au = k.aufgabe || {}, sa = w.sa || 4, sb = w.sb || 3, ab = w.ab, kk = w.k, dl = Au.frage ? 0 : w.d;
       var G = strahlenFigur(sa, sb, ab, kk, dl), S = G.S, A = G.A, B = G.B, A2 = G.A2, B2 = G.B2;
       F.gerade(S, [1, 0], 'strahl-voll'); F.gerade(S, G.v, 'strahl-voll');
       F.strecke(A, B, 'figur-linie');
-      if (!(Au.wahl && !w.richtig)) F.strecke(A2, B2, 'bild-linie');
+      if (!(Au.wahl && !w.richtig)) F.strecke(A2, B2, dl ? 'fehl-linie' : 'bild-linie');   // gekippt: rot wie im Clip (Gegenbeispiel)
       if (k.wahl){
         [['par', 0], ['p1', 20], ['p2', -20]].forEach(function(c){ var H = strahlenFigur(sa, sb, ab, kk, c[1]); F.kandidat(c[0], A2, H.B2, k.wahl); });
       }
@@ -411,13 +418,13 @@
         + (dl ? '<br>\\(A\'B\'\\) ist nicht parallel zu \\(AB\\).' : '');
     },
     aufgaben: [
-      { text: 'Erkunde: Zieh an \\(k\\). Welche Verhältnisse in der Zeile bleiben gleich?', probe: { k: 1.5 }, ziel: function(w){ return w.bewegt.k; } },
+      { text: 'Erkunde: Zieh an \\(k\\). Die Zeile zeigt drei Verhältnisse — was gilt für sie bei jedem \\(k\\)?', probe: { k: 1.5 }, ziel: function(w){ return w.bewegt.k; } },
       { text: 'Zieh \\(k\\) unter null, bis \\(S\\) zwischen den Parallelen liegt. Gelten die Gleichungen in dieser X-Figur auch?', probe: { k: -1 }, ziel: function(w){ return w.k < 0; } },
       { text: 'Stell \\(k\\) so ein, dass \\(A\'B\'\\) halb so lang ist wie \\(AB\\) und auf derselben Seite von \\(S\\) liegt.', probe: { k: 0.5 }, ziel: function(w){ return w.k === 0.5; } },
       { text: 'Kipp die Gerade durch \\(A\'\\) mit \\(\\delta\\). Welche Verhältnisse stimmen jetzt nicht mehr?', probe: { d: 10 }, ziel: function(w){ return w.bewegt.d && w.d !== 0; } },
       { text: 'Bei \\(k = 2\\): Für welche Gerade durch \\(A\'\\) gilt \\(\\overline{SA} : \\overline{SA\'} = \\overline{SB} : \\overline{SB\'}\\)? Tipp sie an.',
         setup: function(s){ s.setze({ k: 2, d: 0 }); s.sperre('k', 'd'); },
-        wahl: { richtig: 'par', gut: 'Die Parallele zu \\(AB\\): Sie trifft den zweiten Strahl in \\(\\overline{SB\'} = 6\\), und \\(4 : 8 = 3 : 6\\). Umgekehrt: Stimmen die Verhältnisse, sind die Geraden parallel.', rueck: {
+        wahl: { richtig: 'par', gut: 'Die Parallele zu \\(AB\\): Sie trifft den zweiten Strahl in \\(\\overline{SB\'} = 6\\), und \\(4 : 8 = 3 : 6\\). Umgekehrt: Liegen \\(A\'\\) und \\(B\'\\) auf den Strahlen \\(SA\\) und \\(SB\\) und stimmen die Verhältnisse, sind die Geraden parallel.', rueck: {
           p1: 'Diese Gerade ist nicht parallel zu \\(AB\\). Sie trifft den zweiten Strahl zu nahe bei \\(S\\) — dann ist \\(\\overline{SB} : \\overline{SB\'}\\) nicht \\(1 : 2\\).',
           p2: 'Diese Gerade ist nicht parallel zu \\(AB\\). Sie trifft den zweiten Strahl zu weit weg von \\(S\\) — dann ist \\(\\overline{SB} : \\overline{SB\'}\\) nicht \\(1 : 2\\).' } } },
       { text: '\\(AB \\parallel A\'B\'\\), \\(\\overline{SA} = 3\\,\\text{cm}\\), \\(\\overline{AA\'} = 4.5\\,\\text{cm}\\), \\(\\overline{AB} = 2\\,\\text{cm}\\). Wie lang ist \\(\\overline{A\'B\'}\\)?',
@@ -594,6 +601,7 @@
       'st|4|10|3|sb2', 'st|4|10|3|bb', 'st|4|10|2.5|ab2', 'st|4|6|3|sb2', 'st|4|6|2.5|ab2', 'st|3|7.5|2|ab2', 'st|5|8|4|bb', 'st|5|8|4|sb2',
       'st|4|6|4.5|ab', 'st|3|9|2|ab2', 'st|2|5|3|sb2', 'st|2|5|3|ab2', 'st|6|9|4|sb2', 'st|2.4|4|3|sb2', 'st|2.4|4|6|ab', 'st|2.5|6|3|bb',
       'st|2.5|6|2|ab2', 'st|4|10|3|sb2', 'st|5|12|4|ab2', 'st|4|8|3|sb2',
+      'st|2|5|7.5|sb', 'st|2.5|6|2|ab2aa',          // Kontrollclip 2 F3 (umgekehrt: SB aus SB′), Gesamttest G2 (b) mit AA′
       // flaeche: fl|Art|Werte — Clip 3, Arbeitsbereich 3, Kontrollclip 3, Aufgaben 3a–3e, G5, Themenseite
       'fl|bild|6|1.5', 'fl|bild|6|2', 'fl|bild|6|0.5', 'fl|k|6|13.5', 'fl|k|6|8.64', 'fl|k|20|45', 'fl|k|12|75', 'fl|k|1|16', 'fl|k|1|6.25', 'fl|k|1|9',
       'fl|umfang|10|1.5', 'fl|umfang|10|0.5', 'fl|umfang|12|3', 'fl|umfang|14|2.5', 'fl|bild|6|3',
@@ -603,6 +611,7 @@
       // aehnlich: ae|Art|Werte (sortiert) — Clip 4, Kontrollclip 4, Aufgaben 4a, 4b, G6, Themenseite A4
       'ae|ww|50|60|70|50|60|70', 'ae|ww|40|65|75|40|65|75', 'ae|sss|4|5|6|6|7.5|9', 'ae|sss|4|5|6|6|7.5|8', 'ae|sss|4|6|7|8|12|15',
       'ae|sss|5|7|8|7.5|10.5|12', 'ae|sss|5|7|8|7.5|10.5|13', 'ae|ww|35|65|80|35|65|80', 'ae|sss|3|4|5|6|8|10', 'ae|sss|3|4|5|6|8|9', 'ae|sss|6|8|9|9|12|13.5',
+      'ae|ww|38|65|77|38|65|77', 'ae|ww|41|63|76|41|63|76',   // Kontrollclip 4 F1, Gesamttest G6
       // zuordnen: zu|Seiten|k — Aufgabe 4a, Arbeitsbereich 4
       'zu|4|5|6|1.5',
       // hoehensatz: hs|Art|Werte — Clip 4, Kontrollclip 4, Aufgabe 4d, G7, Themenseite A5
@@ -637,12 +646,16 @@
       var l = box.querySelector('.ue-lab'), u = box.querySelector('.ue-einh');
       if (l){ l.innerHTML = A.lab || ''; setzen(l); } if (u){ u.innerHTML = A.einh || ''; setzen(u); }
     }
-    function fensterUm(pts, rand, b, h){   // Fenster, das alle Punkte zeigt, gleich geteilt
+    /* Fenster, das alle Punkte zeigt, gleich geteilt. unten: zusätzliche Pixel unter der Figur für Beschriftungen
+       unter der untersten Linie («SA′ = …», «c = …» — Prüfung 08.10.2026: in 35 % der Würfe abgeschnitten). */
+    function fensterUm(pts, rand, b, h, unten){
+      unten = unten || 0;
+      var pad = 12;   // Pixel ringsum für Eckennamen (Messung 08.10.2026: B, B′, P, Q, R in 3–8 % der Würfe am Rand abgeschnitten)
       var xs = pts.map(function(p){ return p[0]; }), ys = pts.map(function(p){ return p[1]; });
       rand = Math.max(rand, 0.1 * Math.max(Math.max.apply(null, xs) - Math.min.apply(null, xs), Math.max.apply(null, ys) - Math.min.apply(null, ys)));   // Platz für Beschriftungen
       var x0 = Math.min.apply(null, xs) - rand, x1 = Math.max.apply(null, xs) + rand, y0 = Math.min.apply(null, ys) - rand, y1 = Math.max.apply(null, ys) + rand;
-      var s = Math.min(b / (x1 - x0), h / (y1 - y0)), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
-      return { w: b, h: h, x0: cx - b / s / 2, x1: cx + b / s / 2, y0: cy - h / s / 2, karo: false };
+      var s = Math.min((b - 2 * pad) / (x1 - x0), (h - unten - 2 * pad) / (y1 - y0)), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+      return { w: b, h: h, x0: cx - b / s / 2, x1: cx + b / s / 2, y0: cy - (h - unten) / s / 2 - unten / s, karo: false };
     }
 
     var TYPEN = {
@@ -787,32 +800,35 @@
         schl: function(A){ return 'fl|' + A.art + '|' + A.werte.join('|'); },
         vorbereiten: beschriften,
         neu: function(){
-          var art = zufall(['bild', 'bild', 'k', 'orig', 'umfang']), fig = zufall(['ein Dreieck', 'ein Rechteck', 'ein Kreis', 'ein Sechseck', 'ein Grundstück im Plan', 'ein Logo']);
+          var art = zufall(['bild', 'bild', 'k', 'k', 'orig', 'umfang']), fig = zufall(['Ein Dreieck', 'Ein Rechteck', 'Ein Kreis', 'Ein Sechseck', 'Ein Grundstück auf einem Plan', 'Ein Logo']);
           var k = zufall([1.5, 2.5, 3, 0.5, 4, 1.2, 0.8, 2]), A0 = zufall([4, 6, 8, 10, 12, 20, 2.5, 5]);
           if (art === 'bild'){
             if (k === 2) k = 3;
             if (!ganz2(k * k * A0)) return TYPEN['flaeche'].neu();
             return { art: art, werte: [A0, k], soll: r2(k * k * A0), lab: '\\(A\' =\\)', einh: 'cm²',
-              text: 'Figur: ' + fig + ' mit der Fläche \\(' + z(A0) + '\\,\\text{cm}^2\\) wird mit \\(k = ' + z(k) + '\\) gestreckt. Wie gross ist die Fläche des Bildes?',
+              text: fig + ' mit der Fläche \\(' + z(A0) + '\\,\\text{cm}^2\\) wird mit \\(k = ' + z(k) + '\\) gestreckt. Wie gross ist die Fläche des Bildes?',
               falsch: [[k * A0, 'Flächen wachsen mit \\(k^2\\), nicht mit \\(k\\).', 'Quadrat'], [2 * k * A0, '\\(k^2\\) heisst \\(k \\cdot k\\), nicht \\(2 \\cdot k\\).', 'mal zwei']] };
           }
           if (art === 'umfang'){
             var u = zufall([6, 8, 10, 12, 15, 18, 24]);
             return { art: art, werte: [u, k], soll: r2(k * u), lab: '\\(u\' =\\)', einh: 'cm',
-              text: 'Figur: ' + fig + ' mit dem Umfang \\(' + z(u) + '\\,\\text{cm}\\) wird mit \\(k = ' + z(k) + '\\) gestreckt. Wie gross ist der Umfang des Bildes?',
+              text: fig + ' mit dem Umfang \\(' + z(u) + '\\,\\text{cm}\\) wird mit \\(k = ' + z(k) + '\\) gestreckt. Wie gross ist der Umfang des Bildes?',
               falsch: [[k * k * u, 'Der Umfang ist eine Länge: Er wächst mit \\(k\\), nicht mit \\(k^2\\).', 'Länge'], [u + k, 'Strecken heisst multiplizieren.', 'plus']] };
           }
           if (art === 'k'){
-            var q = zufall([1.5, 2, 2.5, 3, 4, 1.2]), A1 = r2(q * q * A0);
-            if (!ganz2(q * q * A0)) return TYPEN['flaeche'].neu();
-            return { art: art, werte: [A0, A1], soll: q, lab: '\\(k =\\)', einh: '',
-              text: 'Figur: ' + fig + ' mit der Fläche \\(' + z(A0) + '\\,\\text{cm}^2\\) wird zu einer ähnlichen Figur mit der Fläche \\(' + z(A1) + '\\,\\text{cm}^2\\) vergrössert. Mit welchem Faktor \\(k\\) wachsen die Längen?',
+            /* In 40 % der Würfe ist das Flächenverhältnis keine Quadratzahl (2, 3, 5 …): k = √2 ≈ 1.41 usw., gerundet
+               auf zwei Dezimalen — wie im Gesamttest (Prüfung 08.10.2026: irrationales k kaum geübt). */
+            var wurzel = Math.random() < 0.4, q2 = wurzel ? zufall([2, 3, 5, 6, 8, 10]) : null;
+            var q = wurzel ? Math.sqrt(q2) : zufall([1.5, 2, 2.5, 3, 4, 1.2]), A1 = r2(wurzel ? q2 * A0 : q * q * A0);
+            if (!ganz2(wurzel ? q2 * A0 : q * q * A0)) return TYPEN['flaeche'].neu();
+            return { art: art, werte: [A0, A1], soll: r2(q), wurzel: wurzel, lab: '\\(k ' + (wurzel ? '\\approx' : '=') + '\\)', einh: '',
+              text: fig + ' mit der Fläche \\(' + z(A0) + '\\,\\text{cm}^2\\) wird zu einer ähnlichen Figur mit der Fläche \\(' + z(A1) + '\\,\\text{cm}^2\\) vergrössert. Mit welchem Faktor \\(k\\) wachsen die Längen?' + (wurzel ? ' Runde auf zwei Dezimalen.' : ''),
               falsch: [[A1 / A0, 'Das ist \\(\\tfrac{A\'}{A} = k^2\\). Die Längen wachsen mit der Wurzel daraus.', 'Wurzel'], [A1 / A0 / 2, '\\(k^2\\) heisst \\(k \\cdot k\\), nicht \\(2 \\cdot k\\): Zieh die Wurzel.', 'halb'], [A1 - A0, 'Nicht die Differenz: Gesucht ist ein Faktor.', 'Differenz']] };
           }
           var A2 = r2(k * k * A0);
           if (!ganz2(k * k * A0)) return TYPEN['flaeche'].neu();
           return { art: art, werte: [A2, k], soll: A0, lab: '\\(A =\\)', einh: 'cm²',
-            text: 'Figur: ' + fig + ' wurde mit \\(k = ' + z(k) + '\\) gestreckt; das Bild hat die Fläche \\(' + z(A2) + '\\,\\text{cm}^2\\). Wie gross war die Fläche des Originals?',
+            text: fig + ' wurde mit \\(k = ' + z(k) + '\\) gestreckt; das Bild hat die Fläche \\(' + z(A2) + '\\,\\text{cm}^2\\). Wie gross war die Fläche des Originals?',
             falsch: [[A2 / k, 'Flächen wachsen mit \\(k^2\\): durch \\(k^2\\) teilen, nicht durch \\(k\\).', 'Quadrat'], [A2 * k * k, 'Umgekehrt: Das Original ist ' + (k > 1 ? 'kleiner' : 'grösser') + ' als das Bild.', 'umgekehrt']] };
         },
         eingabe: function(A){ return { x: String(A.soll) }; },
@@ -820,7 +836,7 @@
         pruefen: function(A, e){ return einfach(A, e, A.art === 'umfang' ? 'Längen — auch der Umfang — wachsen mit \\(k\\).' : 'Flächen wachsen mit \\(k^2\\): \\(A\' = k^2 \\cdot A\\).'); },
         loesung: function(A){ return A.art === 'bild' ? 'A\' = ' + z(A.werte[1]) + '^2 \\cdot ' + z(A.werte[0]) + ' = ' + z(A.soll) + '\\,\\text{cm}^2'
           : A.art === 'umfang' ? 'u\' = ' + z(A.werte[1]) + ' \\cdot ' + z(A.werte[0]) + ' = ' + z(A.soll) + '\\,\\text{cm}'
-          : A.art === 'k' ? 'k = \\sqrt{\\tfrac{' + z(A.werte[1]) + '}{' + z(A.werte[0]) + '}} = \\sqrt{' + z(r2(A.werte[1] / A.werte[0])) + '} = ' + z(A.soll)
+          : A.art === 'k' ? 'k = \\sqrt{\\tfrac{' + z(A.werte[1]) + '}{' + z(A.werte[0]) + '}} = \\sqrt{' + z(r2(A.werte[1] / A.werte[0])) + '} ' + (A.wurzel ? '\\approx ' : '= ') + z(A.soll)
           : 'A = \\tfrac{' + z(A.werte[0]) + '}{' + z(A.werte[1]) + '^2} = ' + z(A.soll) + '\\,\\text{cm}^2'; } },
 
       /* Massstab 1 : n: Längen mal n, Flächen mal n². Gefragt in m oder km bzw. m² oder km². */
@@ -867,8 +883,30 @@
       'aehnlich': { felder: ['s'], muster: 'Die Dreiecke sind {s:ähnlich|nicht ähnlich}.',
         schl: function(A){ return 'ae|' + A.art + '|' + A.s1.slice().sort(function(p, q){ return p - q; }).join('|') + '|' + A.s2.slice().sort(function(p, q){ return p - q; }).join('|'); },
         neu: function(){
-          var ja = Math.random() < 0.5;
-          if (Math.random() < 0.5){
+          var ja = Math.random() < 0.5, satz = Math.random();
+          /* sWs und SsW (Prüfung 08.10.2026: nur genannt, nicht geübt): zwei Seiten und ein Winkel je Dreieck. Bei sWs der
+             eingeschlossene Winkel, bei SsW der Gegenwinkel der grösseren Seite. «Nicht ähnlich» entweder über den Winkel
+             oder über ein Seitenverhältnis — nie über einen Winkel an der falschen Stelle (dann wäre es unentscheidbar). */
+          if (satz >= 0.6){
+            var sws = satz < 0.8, P2 = zufall([[4, 6], [5, 8], [3, 7], [6, 9], [4, 10], [5, 6], [6, 8]]), kf = zufall([1.5, 2, 2.5, 0.5, 3]);
+            var w = sws ? zufallG(5, 24) * 5 : zufallG(6, 24) * 5, w2 = w, t = [r2(P2[0] * kf), r2(P2[1] * kf)];
+            if (!ja){
+              if (Math.random() < 0.5){ w2 = w + zufall([-20, -15, -10, 10, 15, 20]); if (w2 < 20 || w2 > 150) return TYPEN['aehnlich'].neu(); }
+              else { t[1] = r2(t[1] + zufall([-1, 1]) * (kf >= 1 ? 1 : 0.5)); if (t[1] <= t[0]) return TYPEN['aehnlich'].neu(); }
+            }
+            var gleichV = gl(t[0] / P2[0], t[1] / P2[1]);
+            if ((gleichV && w2 === w) !== ja) return TYPEN['aehnlich'].neu();
+            var art2 = sws ? 'sws' : 'ssw', reihe = Math.random() < 0.5;   // Reihenfolge der Seiten im Text von Dreieck 2
+            var nenne = function(S, ww){ var a = reihe && S !== P2 ? [S[1], S[0]] : S;
+              return sws ? 'zwei Seiten \\(' + z(a[0]) + '\\) und \\(' + z(a[1]) + '\\), der Winkel zwischen ihnen \\(' + ww + '°\\)'
+                         : 'Seiten \\(' + z(a[0]) + '\\) und \\(' + z(a[1]) + '\\), der Winkel gegenüber der Seite \\(' + z(S[1]) + '\\) ist \\(' + ww + '°\\)'; };
+            return { art: art2, ja: ja, soll: ja ? 'ähnlich' : 'nicht ähnlich', s1: [P2[0], P2[1], w], s2: [t[0], t[1], w2],
+              text: 'Dreieck 1: ' + nenne(P2, w) + '. Dreieck 2: ' + nenne(t, w2) + '.',
+              grund: 'Kürzere zu kürzerer, längere zu längerer Seite: \\(\\tfrac{' + z(t[0]) + '}{' + P2[0] + '} ' + zz(t[0] / P2[0]) + '\\), \\(\\tfrac{' + z(t[1]) + '}{' + P2[1] + '} ' + zz(t[1] / P2[1]) + '\\); '
+                + (sws ? 'eingeschlossener Winkel ' : 'Gegenwinkel der grösseren Seite ') + '\\(' + w + '°\\) bzw. \\(' + w2 + '°\\). '
+                + (ja ? 'Beide Verhältnisse gleich und der Winkel gleich: ähnlich (' + (sws ? 'sWs' : 'SsW') + ').' : (gleichV ? 'Die Winkel sind verschieden: nicht ähnlich.' : 'Die Verhältnisse sind verschieden: nicht ähnlich.')) };
+          }
+          if (satz < 0.3){
             var al = zufallG(6, 15) * 5, be = zufallG(6, 22) * 5, ga = 180 - al - be;
             if (ga < 25 || al === be || be === ga || al === ga) return TYPEN['aehnlich'].neu();
             var w2 = mischen([al, be, ga]).slice(0, 2);
@@ -896,6 +934,8 @@
         pruefen: function(A, e){
           if (e.s === A.soll) return null;
           if (A.art === 'ww') return A.ja ? 'Rechne zu beiden Dreiecken den dritten Winkel aus und vergleiche alle drei Winkel.' : 'Zwei Winkel genügen — aber sie müssen übereinstimmen. Rechne den dritten Winkel aus und vergleiche.';
+          if (A.art === 'sws' || A.art === 'ssw') return A.ja ? 'Vergleiche kürzere mit kürzerer und längere mit längerer Seite: Stimmen beide Verhältnisse und der Winkel überein?'
+            : 'Prüf beides: die zwei Seitenverhältnisse (kürzere zu kürzerer, längere zu längerer) und den Winkel.';
           return A.ja ? 'Ordne beide Seitenlisten der Grösse nach und vergleiche die Verhältnisse entsprechender Seiten.' : 'Vergleiche alle drei Verhältnisse, nicht nur zwei: Ordne die Seiten der Grösse nach.'; },
         loesung: function(A){ return '\\text{' + A.soll + '}'; } },
 
@@ -970,7 +1010,7 @@
         zeichne: function(svg, A){
           // Hypotenuse AB waagrecht: A(0|0) links, B(c|0) rechts, H(q|0), C(q|h); q liegt an A (an b), p an B (an a)
           var c = A.c, q = A.q, h = Math.sqrt(A.p * A.q), C = [q, h], H = [q, 0];
-          var F = Flaeche(svg, fensterUm([[0, 0], [c, 0], C], 0.9, 240, 140));
+          var F = Flaeche(svg, fensterUm([[0, 0], [c, 0], C], 0.9, 240, 140, (A.zeige || {}).c ? 22 : 10));
           F.vieleck([[0, 0], [c, 0], C], 'figur'); F.strecke(C, H, 'hilfe'); F.rechts(H, [1, 0], [0, 1], 'hilfe');
           F.rechts(C, [-q, -h], [A.p, -h], '');
           eckenText(F, [[0, 0], [c, 0], C], ['A', 'B', 'C'], 'ecke klein', 9); F.text(H, 'H', 'ecke klein', 0, 12);
@@ -989,7 +1029,7 @@
     function strahlenBild(svg, A, lab){
       var th = grad(A.th), v = [Math.cos(th), Math.sin(th)], k = A.k, S = [0, 0], Ap = [A.sa, 0], Bp = [A.sb * v[0], A.sb * v[1]];
       var A2 = [k * A.sa, 0], B2 = [k * A.sb * v[0], k * A.sb * v[1]];
-      var F = Flaeche(svg, fensterUm([S, Ap, Bp, A2, B2], 0.9, 280, 170));
+      var F = Flaeche(svg, fensterUm([S, Ap, Bp, A2, B2], 0.9, 280, 170, lab.sa2 ? 20 : 0));
       F.gerade(S, [1, 0], 'strahl'); F.gerade(S, v, 'strahl');
       F.strecke(Ap, Bp, 'figur-linie'); F.strecke(A2, B2, 'bild-linie');
       [[S, 'S'], [Ap, 'A'], [A2, 'A′']].forEach(function(q){ F.punkt(q[0]); F.text(q[0], q[1], 'ecke klein', 0, 12); });

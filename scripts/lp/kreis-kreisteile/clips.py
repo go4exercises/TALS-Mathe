@@ -258,11 +258,15 @@ def clip(name, folge, titel_, kurz, schlag, szenen, fragen=None, art='Einfuehrun
     zeiten(dname, szenen)
     alt = R + 'clips/' + dname + '.json'
     if os.path.exists(alt):
-        frueher = {(q['name'], q['sprecher']): q.get('dauer') for q in json.load(open(alt))['szenen']}
-        for q in szenen:
-            d_ = frueher.get((q['name'], q['sprecher']))
+        # dauer nach Szenenname retten: build-clip-ton.py --szenen braucht die Planung der bisherigen Spur. Eine Szene mit
+        # neuem Sprechertext behält ihre alte dauer, bis sie neu vertont ist (Hinweis unten).
+        frueher = {q['name']: (q.get('sprecher'), q.get('dauer')) for q in json.load(open(alt))['szenen']}
+        for k, q in enumerate(szenen):
+            spr, d_ = frueher.get(q['name'], (None, None))
             if d_:
                 q['dauer'] = d_
+            if spr is not None and spr != q['sprecher']:
+                print('  neu zu vertonen:', dname, 'Szene', k + 1, q['name'])
     d = {'titel': titel_, 'dateiname': dname, 'kurzbeschrieb': kurz,
          'schlagworte': schlag, 'themenbereich': 'Geometrie · Planimetrie',
          'fach': 'Grundlagenfach', 'lerngebiet': '5 · Geometrie',
@@ -308,7 +312,7 @@ clip('linien', 1, 'Kreisteile sehen: Linien am Kreis',
             n('verfehlen, berühren oder schneiden?', 300, 'blau', 44, ein='@verfehlen'),
             f(r'\fb{a} = \text{Länge des Lots von } M', 430, 46, ein='@Abstand'),
             graf(W1, [KREIS1, PKT(M0), T(-0.5, -0.8, 'M', 5, 'end', 30, False), S((-7.5, 6.5), (7.5, 6.5), 1, dicke=4)], ein=0.3),
-            graf(W1, [S(M0, (0, 6.5), 2, True, 3), RW((0, 6.5), 0, 270, 2), T(-0.4, 3.3, 'a', 2, 'end')], ein='@Lots', raster=False)),
+            graf(W1, [S(M0, (0, 6.5), 2, True, 3), RW((0, 6.5), 0, 270, 2), T(-0.4, 3.3, 'a', 2, 'end')], ein='@Länge', raster=False)),
          sz('Vergleich',
             'Ist a grösser als r, ist die Gerade eine Passante, ohne gemeinsamen Punkt. Ist a gleich r, berührt sie den Kreis in '
             'genau einem Punkt: eine Tangente. Ist a kleiner als r, schneidet sie ihn zweimal: eine Sekante.',
@@ -355,10 +359,10 @@ clip('linien', 1, 'Kreisteile sehen: Linien am Kreis',
             graf(W1, [RW((0, 3), 0, 270, 5), V([M0, (0, 3), (4, 3)], 1, 0.15, dicke=2), S(M0, (4, 3), 5, dicke=3),
                       T(2.5, 1.1, 'r = 5', 5, 'start', 28, False)], ein='@halbiert', raster=False),
             graf(W1, [T(2, 3.45, '4', 3, 'middle', 32, False)], ein='@also', raster=False),
-            graf(W1, [T(-2, 3.45, 's = 8 cm', 3, 'middle', 30, False)], ein='@ganze', raster=False)),
+            graf(W1, [T(0, 3.95, 's = 8 cm', 3, 'middle', 30, False)], ein='@ganze', raster=False)),
          sz('Tangente von aussen',
-            'Von einem Punkt P ausserhalb führt eine Tangente zum Kreis. Mit dem Radius zum Berührpunkt B entsteht ein rechter '
-            'Winkel bei B. Darum ist M P die Hypotenuse. Bei r gleich fünf und M P gleich dreizehn Zentimeter ist die '
+            'Von einem Punkt P ausserhalb führen zwei Tangenten zum Kreis. Wir nehmen die obere. Mit dem Radius zum Berührpunkt B '
+            'entsteht ein rechter Winkel bei B. Darum ist M P die Hypotenuse. Bei r gleich fünf und M P gleich dreizehn Zentimeter ist die '
             'Tangentenstrecke die Wurzel aus dreizehn Quadrat minus fünf Quadrat, also zwölf Zentimeter.',
             f(r'\overline{PB}^2 + r^2 = \overline{MP}^2', 300, 46, ein='@Hypotenuse'),
             f(r'\overline{PB} = \sqrt{13^2 - 5^2} = \fc{12\,\mathrm{cm}}', 420, 44, ein='@also'),
@@ -367,6 +371,9 @@ clip('linien', 1, 'Kreisteile sehen: Linien am Kreis',
                                    PKT((13, 0)), T(13, -1.1, 'P', 5, 'middle', 30, False),
                                    S((13, 0), pol((13, 0), 14, 180 - 22.62 + 0.0), 1, dicke=3),
                                    PKT(pol(M0, 5, 67.38), 2, 0.2), T(1.5, 5.6, 'B', 2, 'middle', 30, False)], ein=0.3),
+            # die zweite Tangente (unten, Berührpunkt bei −67.38°), symmetrisch zur Geraden MP — erscheint mit «Tangenten»
+            graf(geo(-6, -8, 20), [S((13, 0), pol((13, 0), 14, 180 + 22.62), 1, True, 2), PKT(pol(M0, 5, -67.38), 1, 0.14)],
+                 ein='@Tangenten', raster=False),
             graf(geo(-6, -8, 20), [S(M0, pol(M0, 5, 67.38), 2, dicke=4), RW(pol(M0, 5, 67.38), 247.38, 337.38, 2, px=24),
                                    T(0.3, 2.8, 'r = 5', 2, 'end', 28, False)], ein='@Radius', raster=False),
             graf(geo(-6, -8, 20), [S(M0, (13, 0), 5, True, 3), T(6.5, -1.1, 'MP = 13', 5, 'middle', 28, False)], ein='@Hypotenuse', raster=False),
@@ -380,9 +387,10 @@ clip('linien', 1, 'Kreisteile sehen: Linien am Kreis',
      ])
 
 # ════════════════════════════════════════════════ Kapitel 1 · Kontrolle
-# Frage 1: Kreis r = 5. Sekante y = −2 (Schnittpunkte ±4.583), Tangente x = 5, Radius zu 225°, Sehne von 60° nach 160°:
-# A(2.5 | 4.330), B(−4.698 | 1.710). Abstände der Sehne: zur Sekante ≥ 3.71, zur Tangente ≥ 2.5, zum Radius ≥ 3.2 —
-# Toleranz 1.0 für Ziel und Fallen, keine Überschneidung zwischen Sehne und den anderen Linien.
+# Frage 1: Kreis r = 5. Passante y = −6, Tangente x = 5, Radius zu 225°, Sehne von 60° nach 160°:
+# A(2.5 | 4.330), B(−4.698 | 1.710). Keine Sekante: Ihr Stück im Kreis wäre selbst eine Sehne (Prüfung 08.10.2026).
+# Abstände der Sehne: zur Passante ≥ 7.71, zur Tangente ≥ 2.5, zum Radius ≥ 3.2 — Toleranz 1.0 für Ziel und Fallen,
+# keine Überschneidung zwischen Sehne und den anderen Linien.
 SA, SB = pol(M0, 5, 60), pol(M0, 5, 160)
 RAD225 = pol(M0, 5, 225)
 clip('kontrolle-linien', 2, 'Kreisteile sehen: Kontrollfragen zu den Linien am Kreis',
@@ -392,7 +400,7 @@ clip('kontrolle-linien', 2, 'Kreisteile sehen: Kontrollfragen zu den Linien am K
          sz('Frage 1',
             'Die Sehne verbindet zwei Punkte der Kreislinie und endet dort.',
             n('Sehne: endet an der Kreislinie', 300, 'blau', 46, ein=1.0),
-            graf(W1, [KREIS1, PKT(M0), T(0.5, 0.3, 'M', 5, 'start', 30, False), S((-7.5, -2), (7.5, -2), 1, dicke=3),
+            graf(W1, [KREIS1, PKT(M0), T(0.5, 0.3, 'M', 5, 'start', 30, False), S((-7.5, -6), (7.5, -6), 1, dicke=3),
                       S((5, -7.5), (5, 7.5), 1, dicke=3), S(M0, RAD225, 5, dicke=3), S(SA, SB, 1, dicke=3), PKT(SA, 1), PKT(SB, 1)], ein=0.05),
             graf(W1, [S(SA, SB, 3, dicke=8)], ein=1.0, raster=False)),
          sz('Frage 2',
@@ -429,8 +437,8 @@ clip('kontrolle-linien', 2, 'Kreisteile sehen: Kontrollfragen zu den Linien am K
             n('@a@ mit @r@ vergleichen|Lot halbiert die Sehne|Tangente @\\perp@ Radius', 400, 'blau', 44, ein=1.2)),
      ], [
          klick('Frage 1', 'Tipp die Sehne an.', [r3(SA), r3(SB)], 'Getroffen: Sie verbindet zwei Punkte der Kreislinie.',
-               [{'bei': [[-7.5, -2], [7.5, -2]], 'text': 'Das ist eine Sekante: eine Gerade, die über den Kreis hinausgeht.',
-                 'sprich': 'Das ist eine Sekante: eine Gerade, die über den Kreis hinausgeht.'},
+               [{'bei': [[-7.5, -6], [7.5, -6]], 'text': 'Das ist eine Passante: eine Gerade ohne gemeinsamen Punkt mit dem Kreis.',
+                 'sprich': 'Das ist eine Passante: eine Gerade ohne gemeinsamen Punkt mit dem Kreis.'},
                 {'bei': [[5, -7.5], [5, 7.5]], 'text': 'Das ist eine Tangente: Sie berührt den Kreis nur in einem Punkt.',
                  'sprich': 'Das ist eine Tangente: Sie berührt den Kreis nur in einem Punkt.'},
                 {'bei': [[0, 0], r3(RAD225)], 'text': 'Das ist ein Radius: Er beginnt im Mittelpunkt.',
@@ -619,7 +627,7 @@ clip('kontrolle-umfang', 4, 'Kreisteile sehen: Kontrollfragen zu Umfang und Flä
 W3 = geo(-5.5, -5.5, 11)
 K3 = KR(M0, 4, 1, 0.05)
 PHI = lambda: [[0.3, {'w': 45}], ['@Bei-0.2', {'w': 45}], ['@Bei+0.8', {'w': 90}], ['@bei#2-0.2', {'w': 90}],
-               ['@bei#2+0.9', {'w': 180}], ['@Hälfte+1.6', {'w': 180}], ['@Hälfte+2.6', {'w': 45}]]
+               ['@bei#2+0.9', {'w': 180}]]                     # bleibt bei 180° bis zum Szenenende
 P3 = 360 * 6 / (8 * math.pi)                                    # 85.94°
 clip('sektor', 5, 'Kreisteile sehen: Bogen und Sektor',
      'Zentriwinkel φ, Bogen b und Sektor als Anteil φ/360° des Kreises; b = φ/360° · 2πr, A = φ/360° · πr² = ½ b r; vorgelöst '
@@ -629,10 +637,10 @@ clip('sektor', 5, 'Kreisteile sehen: Bogen und Sektor',
             'Zwei Radien schneiden aus dem Kreis einen Sektor, wie ein Tortenstück. Der Winkel zwischen ihnen heisst Zentriwinkel '
             'Phi. Das Stück der Kreislinie dazwischen ist der Bogen b.',
             n('Sektor: Kreisausschnitt', 300, 'blau', 44, ein='@Sektor'),
-            f(r'\text{Zentriwinkel } \fb{\varphi}, \quad \text{Bogen } \fb{b}', 420, 46, ein='@Zentriwinkel'),
+            f(r'\text{Zentriwinkel } \fb{\varphi}, \quad \text{Bogen } \fb{b}', 420, 46, ein='@heisst+0.2'),
             graf(W3, [K3, PKT(M0), T(-0.4, -0.7, 'M', 5, 'end', 30, False), S(M0, (4, 0), 5, dicke=3), S(M0, pol(M0, 4, 45), 5, dicke=3)], ein=0.3),
             graf(W3, [SEK(M0, 4, 0, 45)], ein='@Sektor', raster=False),
-            graf(W3, [WI(M0, 0, 45, 2, 50), T(1.6, 0.6, 'φ', 2)], ein='@Zentriwinkel', raster=False),
+            graf(W3, [WI(M0, 0, 45, 2, 50), T(1.6, 0.6, 'φ', 2)], ein='@heisst+0.2', raster=False),
             graf(W3, [BOG(M0, 4, 0, 45), T(4.3, 2.0, 'b', 2, 'start')], ein='@Bogen', raster=False)),
          sz('Anteil',
             'Der Sektor ist ein Anteil des ganzen Kreises: Phi durch dreihundertsechzig Grad. Bei neunzig Grad ist es ein Viertel, '
@@ -640,8 +648,9 @@ clip('sektor', 5, 'Kreisteile sehen: Bogen und Sektor',
             f(r'\text{Anteil } \dfrac{\varphi}{360^\circ}', 300, 52, ein='@Anteil'),
             n('@90^\\circ@: ein Viertel|@180^\\circ@: die Hälfte', 450, 'blau', 44, ein='@Bei'),
             graf(W3, [K3, PKT(M0), mit(SEK(M0, 4, 0, 45), parameter=PHI(), bis='w'), mit(BOG(M0, 4, 0, 45), parameter=PHI(), bis='w'),
-                      mit(T(0, -2.6, '90° : 360° = ¼', 5, 'middle', 32, False), ein='@Viertel', aus='@bei#2'),
-                      mit(T(0, -2.6, '180° : 360° = ½', 5, 'middle', 32, False), ein='@Hälfte', aus='@Hälfte+2.4')], ein=0.3)),
+                      # «Viertel» nicht als Anker: Whisper hört «Phi» als «viel» — und das passt zu «Viertel» (Prüfung 08.10.2026)
+                      mit(T(0, -2.6, '90° : 360° = ¼', 5, 'middle', 32, False), ein='@Bei+0.9', aus='@bei#2'),
+                      mit(T(0, -2.6, '180° : 360° = ½', 5, 'middle', 32, False), ein='@Hälfte')], ein=0.3)),
          sz('Formeln',
             'Derselbe Anteil gilt für die Bogenlänge und für die Fläche. Der Bogen ist der Anteil vom Umfang, die Sektorfläche der '
             'Anteil von der Kreisfläche.',
@@ -658,10 +667,12 @@ clip('sektor', 5, 'Kreisteile sehen: Bogen und Sektor',
             graf(W3, [K3, PKT(M0), SEK(M0, 4, 0, 45), BOG(M0, 4, 0, 45), T(2, -0.6, 'r = 4', 5, 'middle', 28, False), T(1.6, 0.6, '45°', 2, 'start', 26, False)], ein=0.3),
             graf(W3, [S(M0, pol(M0, 4, w), 5, True, 2) for w in (90, 135, 180, 225, 270, 315)], ein='@Achtel', raster=False)),
          sz('Halb b mal r',
-            'Kürzer geht es mit dem Bogen: Die Sektorfläche ist ein Halb mal b mal r, wie beim Dreieck mit der Grundseite b und der '
+            'Kürzer geht es mit dem Bogen. Denn Pi r Quadrat ist zwei Pi r mal r halbe: Die Kreisfläche ist der Umfang mal r halbe, '
+            'und derselbe Anteil davon gibt die Sektorfläche, ein Halb mal b mal r. Wie beim Dreieck mit der Grundseite b und der '
             'Höhe r. Ein Halb mal Pi mal vier gibt wieder zwei Pi.',
-            f(r'A_{SK} = \tfrac{1}{2}\, b \cdot r', 300, 54, ein='@Halb'),
-            f(r'\tfrac{1}{2} \cdot \pi \cdot 4 = \fc{2\pi}', 440, 50, ein='@wieder-1.2'),
+            f(r'\pi r^2 = 2\pi r \cdot \tfrac{r}{2}', 250, 46, ein='@Denn'),
+            f(r'A_{SK} = \dfrac{\varphi}{360^\circ} \cdot 2\pi r \cdot \tfrac{r}{2} = \tfrac{1}{2}\, b \cdot r', 370, 44, ein='@Anteil'),
+            f(r'\tfrac{1}{2} \cdot \pi \cdot 4 = \fc{2\pi}', 500, 48, ein='@wieder-1.2'),
             # das schmale «Dreieck» mit Grundseite b (orange) und Höhe r
             graf(W3, [K3, PKT(M0), SEK(M0, 4, 0, 45), BOG(M0, 4, 0, 45), T(4.25, 1.9, 'b', 2, 'start'), T(1.3, -0.6, 'r', 5)], ein=0.3)),
          sz('Rückwärts',
@@ -671,7 +682,7 @@ clip('sektor', 5, 'Kreisteile sehen: Bogen und Sektor',
             f(r'\varphi = \dfrac{6}{8\pi} \cdot 360^\circ \approx \fc{85.94^\circ}', 450, 48, ein='@gibt'),
             graf(W3, [K3, PKT(M0), SEK(M0, 4, 0, P3), BOG(M0, 4, 0, P3), T(3.6, 3.3, 'b = 6', 2, 'start', 28, False), T(2, -0.6, 'r = 4', 5, 'middle', 28, False),
                       WI(M0, 0, P3, 2, 44)], ein=0.3),
-            graf(W3, [T(1.3, 1.5, 'φ = ?', 2, 'middle', 26, False)], ein=0.3, aus='@gibt', raster=False),
+            graf(W3, [T(1.3, 1.5, 'φ = ?', 2, 'middle', 26)], ein=0.3, aus='@gibt', raster=False),
             graf(W3, [T(1.4, 1.5, '85.94°', 3, 'middle', 26, False)], ein='@gibt', raster=False)),
          sz('Merke',
             'Zum Mitnehmen: Erst den Anteil Phi durch dreihundertsechzig Grad. Er gilt für Bogen und Fläche. Und der Rand des Sektors '
@@ -698,7 +709,7 @@ clip('kontrolle-sektor', 6, 'Kreisteile sehen: Kontrollfragen zu Bogen und Sekto
             f(r'b = \tfrac{54^\circ}{360^\circ} \cdot 20\pi = 3\pi \approx \fc{9.42\,\mathrm{cm}}', 300, 46, ein=1.0),
             graf(geo(-11, -11, 22), [KR(M0, 10, 1, 0.04), SEK(M0, 10, 0, 54, 3, 0.15), BOG(M0, 10, 0, 54), PKT(M0), WI(M0, 0, 54, 2, 50),
                                      T(5, -1.2, 'r = 10', 5, 'middle', 30, False), T(2.6, 1.2, '54°', 2, 'start', 28, False),
-                                     T(9.8, 5.2, 'b ≈ 9.42', 3, 'start', 30, False)], ein=1.0)),
+                                     T(6.3, 9.0, 'b ≈ 9.42', 3, 'start', 30, False)], ein=1.0)),
          sz('Frage 3',
             'Die Sektorfläche ist ein Halb mal Bogen mal Radius: ein Halb mal acht mal fünf, also zwanzig Quadratzentimeter.',
             f(r'A_{SK} = \tfrac{1}{2} \cdot 8 \cdot 5 = \fc{20\,\mathrm{cm}^2}', 300, 50, ein=1.0),
@@ -733,7 +744,7 @@ clip('kontrolle-sektor', 6, 'Kreisteile sehen: Kontrollfragen zu Bogen und Sekto
               {0: 'Ja.', 1: 'Denk an die Dreiecksformel: Es fehlt ein Faktor.', 2: 'Es geht ohne Winkel. Denk an ein Dreieck mit der Grundseite b und der Höhe r.'},
               sprich='Ein Sektor hat den Bogen acht Zentimeter und den Radius fünf Zentimeter. Wie gross ist seine Fläche?',
               rueck_sprich={1: 'Denk an die Dreiecksformel: Es fehlt ein Faktor.', 2: 'Es geht ohne Winkel. Denk an ein Dreieck mit der Grundseite b und der Höhe r.'}),
-         wahl('Frage 4', 'Der Bogen ist ein Viertel des Umfangs. Wie gross ist der Zentriwinkel?', ['90°', '25°', '45°'], 0,
+         wahl('Frage 4', 'Der Bogen ist ein Viertel des Umfangs. Wie gross ist der Zentriwinkel?', ['90°', '0.25°', '45°'], 0,
               {0: 'Ja.', 1: 'Ein Viertel ist ein Anteil, kein Winkel. Wie viele Grad hat der Vollwinkel?', 2: '45° sind ein Achtel des Vollwinkels.'},
               sprich='Der Bogen ist ein Viertel des Umfangs. Wie gross ist der Zentriwinkel?',
               rueck_sprich={1: 'Ein Viertel ist ein Anteil, kein Winkel. Wie viele Grad hat der Vollwinkel?', 2: 'Fünfundvierzig Grad sind ein Achtel des Vollwinkels.'}),
@@ -800,22 +811,23 @@ clip('segment', 7, 'Kreisteile sehen: Segment und Kreisring',
                       mit(S((5, 0), P60, 2, dicke=5), parameter=SEGW(), bis=['5*cosd(w)', '5*sind(w)'])], ein=0.3)),
          sz('Kreisring',
             'Ein Kreisring liegt zwischen zwei Kreisen um denselben Mittelpunkt. Seine Fläche ist die grosse Kreisfläche minus die '
-            'kleine: Pi R Quadrat minus Pi r Quadrat.',
+            'kleine: Pi mal Aussenradius Quadrat minus Pi mal Innenradius Quadrat.',
             f(r'A = \pi R^2 - \pi r^2 = \pi (R^2 - r^2)', 320, 46, ein='@minus'),
             graf(W4r, [KR(M0, 5, 3, 0, dicke=round(DR, 1), deckkraft=0.3), KR(M0, 6, 1, 0, dicke=3), KR(M0, 4, 1, 0, dicke=3), PKT(M0),
-                       S(M0, pol(M0, 6, 60), 5, dicke=3), T(1.9, 3.2, 'R', 5, 'end'), S(M0, (-4, 0), 5, dicke=3), T(-2, 0.4, 'r', 5)], ein=0.3)),
+                       S(M0, pol(M0, 6, 60), 5, dicke=3), T(1.4, 3.2, 'R', 5, 'end'), S(M0, (-4, 0), 5, dicke=3), T(-2, 0.4, 'r', 5)], ein=0.3)),
          sz('Mittlerer Umfang',
-            'Mit der Ringbreite b gleich R minus r und dem mittleren Radius r m gilt auch: zwei Pi r m mal b, mittlerer Umfang mal '
-            'Breite. Bei R gleich sechs und r gleich vier Zentimeter: Pi mal Klammer sechsunddreissig minus sechzehn, also zwanzig Pi, rund '
-            'zweiundsechzig Komma acht drei Quadratzentimeter. Zwei Pi mal fünf mal zwei gibt dasselbe.',
+            'Mit der Ringbreite b, Aussenradius minus Innenradius, und dem mittleren Radius r m gilt auch: zwei Pi r m mal b, '
+            'mittlerer Umfang mal Breite. Bei einem Aussenradius von sechs und einem Innenradius von vier Zentimetern: Pi mal die '
+            'Differenz aus sechsunddreissig und sechzehn, also zwanzig Pi, rund zweiundsechzig Komma acht drei Quadratzentimeter. '
+            'Zwei Pi mal fünf mal zwei gibt dasselbe.',
             f(r'A = 2\pi r_m \cdot b', 250, 50, ein='@mittlerer'),
-            f(r'\pi (36 - 16) = 20\pi \approx \fc{62.83\,\mathrm{cm}^2}', 380, 44, ein='@Klammer'),
-            f(r'2\pi \cdot 5 \cdot 2 = 20\pi', 490, 44, ein='@dasselbe-1.5'),
+            f(r'\pi (36 - 16) = 20\pi \approx \fc{62.83\,\mathrm{cm}^2}', 380, 44, ein='@Differenz'),
+            f(r'2\pi \cdot 5 \cdot 2 = 20\pi', 490, 44, ein='@gibt-1.5'),
             graf(W4r, [KR(M0, 5, 3, 0, dicke=round(DR, 1), deckkraft=0.3), KR(M0, 6, 1, 0, dicke=3), KR(M0, 4, 1, 0, dicke=3), PKT(M0),
-                       S(M0, pol(M0, 6, 60), 5, dicke=3), T(1.9, 3.2, 'R = 6', 5, 'end', 28, False), S(M0, (-4, 0), 5, dicke=3),
+                       S(M0, pol(M0, 6, 60), 5, dicke=3), T(1.4, 3.2, 'R = 6', 5, 'end', 28, False), S(M0, (-4, 0), 5, dicke=3),
                        T(-2, 0.4, 'r = 4', 5, 'middle', 28, False)], ein=0.3),
-            graf(W4r, [S(pol(M0, 4, 300), pol(M0, 6, 300), 2, dicke=6), T(3.0, -4.9, 'b = 2', 2, 'start', 28, False)], ein='@Ringbreite', raster=False),
-            graf(W4r, [KR(M0, 5, 2, 0, dicke=3, gestrichelt=True), T(-3.9, 3.9, 'rₘ = 5', 2, 'end', 28, False)], ein='@mittleren', raster=False)),
+            graf(W4r, [S(pol(M0, 4, 300), pol(M0, 6, 300), 2, dicke=6), T(3.4, -5.75, 'b = 2', 2, 'start', 28, False)], ein='@Ringbreite', raster=False),
+            graf(W4r, [KR(M0, 5, 2, 0, dicke=3, gestrichelt=True), T(-4.6, 4.9, 'rₘ = 5', 2, 'end', 28, False)], ein='@mittleren', raster=False)),
          sz('Merke',
             'Zum Mitnehmen: Segment gleich Sektor minus Dreieck, über hundertachtzig Grad plus Dreieck. Der Ring ist die grosse minus '
             'die kleine Kreisfläche.',
@@ -846,7 +858,8 @@ clip('kontrolle-segment', 8, 'Kreisteile sehen: Kontrollfragen zu Segment und Kr
             graf(geo(-1, -1.5, 10), [V([(0, 0), (8, 0), (4, 6.928)], 2, 0.15, dicke=3), S((4, 0), (4, 6.928), 3, True, 4), RW((4, 0), 0, 90, 5),
                                      T(2, -0.7, '4', 5, 'middle', 30, False), T(1.6, 3.8, '8', 5, 'end', 30, False), T(4.3, 3.2, 'hΔ', 3, 'start', 30)], ein=1.0)),
          sz('Frage 4',
-            'Pi mal Klammer neunundvierzig minus neun, also vierzig Pi, rund hundertfünfundzwanzig Komma sechs sechs Quadratzentimeter.',
+            'Pi mal die Differenz aus neunundvierzig und neun, also vierzig Pi, rund hundertfünfundzwanzig Komma sechs sechs '
+            'Quadratzentimeter.',
             f(r'A = \pi (7^2 - 3^2) = 40\pi \approx \fc{125.66\,\mathrm{cm}^2}', 300, 46, ein=1.0),
             graf(geo(-8, -8, 16), [KR(M0, 5, 3, 0, dicke=round(4 * 760 / 16, 1), deckkraft=0.3), KR(M0, 7, 1, 0, dicke=3), KR(M0, 3, 1, 0, dicke=3), PKT(M0),
                                    S(M0, pol(M0, 7, 50), 5, dicke=3), T(2.6, 3.6, 'R = 7', 5, 'end', 28, False), S(M0, (-3, 0), 5, dicke=3),
@@ -862,7 +875,7 @@ clip('kontrolle-segment', 8, 'Kreisteile sehen: Kontrollfragen zu Segment und Kr
          sz('Merke',
             'Zum Mitnehmen: Unter hundertachtzig Grad minus, darüber plus Dreieck. Ring gleich grosse minus kleine Kreisfläche.',
             titel('Zum Mitnehmen', 250, 76),
-            n('Segment: Sektor @\\mp@ Dreieck|Ring: @\\pi (R^2 - r^2)@', 400, 'blau', 46, ein=1.2)),
+            n('Segment: Sektor @-@ Dreieck,|über @180^\\circ@: Sektor @+@ Dreieck|Ring: @\\pi (R^2 - r^2)@', 400, 'blau', 46, ein=1.2)),
      ], [
          wahl('Frage 1', 'Zentriwinkel 240°: Wie berechnet man das Segment?', ['Sektor + Dreieck', 'Sektor − Dreieck', 'Kreis − Sektor'], 0,
               {0: 'Ja.', 1: 'Wo liegt das Dreieck MP₁P₂ bei 240° — im Segment oder ausserhalb?', 2: 'Das ist der Rest des Kreises ohne den Sektor, nicht das Segment.'},
@@ -877,9 +890,9 @@ clip('kontrolle-segment', 8, 'Kreisteile sehen: Kontrollfragen zu Segment und Kr
               sprich='Gleichseitiges Dreieck mit der Seite acht Zentimeter, Phi gleich sechzig Grad: Wie hoch ist es?',
               rueck_sprich={1: 'Die Höhe ist kürzer als die Seite.', 2: 'Im halben Dreieck ist die Seite die Hypotenuse.'}),
          wahl('Frage 4', 'R = 7 cm, r = 3 cm: Wie gross ist die Ringfläche?', ['≈ 125.66 cm²', '≈ 50.27 cm²', '≈ 12.57 cm²'], 0,
-              {0: 'Ja.', 1: 'Ist das der Ring — oder ein Kreis mit dem Radius R − r?', 2: 'Ist das eine Fläche? Wo sind die Quadrate?'},
-              sprich='Gross R gleich sieben, klein r gleich drei Zentimeter: Wie gross ist die Ringfläche?',
-              rueck_sprich={1: 'Ist das der Ring, oder ein Kreis mit dem Radius R minus r?', 2: 'Ist das eine Fläche? Wo sind die Quadrate?'}),
+              {0: 'Ja.', 1: 'Ist das der Ring — oder ein Kreis mit der Ringbreite R − r als Radius?', 2: 'Ist das eine Fläche? Wo sind die Quadrate?'},
+              sprich='Aussenradius sieben, Innenradius drei Zentimeter: Wie gross ist die Ringfläche?',
+              rueck_sprich={1: 'Ist das der Ring, oder ein Kreis mit der Ringbreite als Radius?', 2: 'Ist das eine Fläche? Wo sind die Quadrate?'}),
          wahl('Frage 5', 'Zwei Ringe sind 1 cm breit. Ring A hat den mittleren Radius 3 cm, Ring B 6 cm. Was gilt?',
               ['B hat doppelt so viel Fläche.', 'Beide haben gleich viel Fläche.', 'B hat viermal so viel Fläche.'], 0,
               {0: 'Ja.', 1: 'Gleich breit — aber ist der äussere Ring auch gleich lang?', 2: 'Quadriert wird hier nichts: mittlerer Umfang mal Breite.'},

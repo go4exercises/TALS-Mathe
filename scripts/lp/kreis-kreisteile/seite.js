@@ -178,7 +178,8 @@
        wahl: { richtig: 'sehne', rueck: { id: 'Text' } }    — Linie antippen
        frage: [{ name, label, einheit, soll, tol, fehler: [[wert, 'Text']] }] — Grössen eingeben
        ziel: function(w) — Reglerzustand (w = Werte der Regler, w.bewegt); probe: ein Zustand, der es löst
-       fest: { … } — Werte, die die Figur statt der Regler zeigt (nicht auf dem Reglerraster); verdeckt: Regler mit «?»
+       fest: { … } — Werte, die die Figur statt der Regler zeigt (nicht auf dem Reglerraster); verdeckt: Regler mit «?»;
+       ohne: Regler, die in dieser Figur nichts bedeuten (Anzeige «–»)
      korrigiere(regler, p): hält gekoppelte Regler gültig (Kreisring: r < R); läuft vor dem Zeichnen. */
   function arbeitsbereich(id, o){
     var fig = document.getElementById(id); if (!fig) return;
@@ -195,9 +196,9 @@
     }
     /* Anzeige neben den Reglern aus den Werten, die die Figur zeigt (mit `fest`), die gesuchte Grösse als «?» */
     function anzeigen(w){
-      var verdeckt = (aufgabe && aufgabe.verdeckt) || [];
+      var verdeckt = (aufgabe && aufgabe.verdeckt) || [], ohne = (aufgabe && aufgabe.ohne) || [];
       for (var k in regler){ var sv = regler[k].parentNode.querySelector('.sl-val'); if (!sv) continue;
-        sv.textContent = verdeckt.indexOf(k) >= 0 ? '?' : z(w[k]) + (regler[k].dataset.einheit || ''); }
+        sv.textContent = verdeckt.indexOf(k) >= 0 ? '?' : ohne.indexOf(k) >= 0 ? '–' : z(w[k]) + (regler[k].dataset.einheit || ''); }
     }
     function meldung(cls, html){ rueck.className = 'g-rueck ' + cls; rueck.innerHTML = html; setzen(rueck); }
     function wahl(kid){
@@ -327,13 +328,13 @@
       { text: 'Erkunde: Zieh an \\(a\\). Wie viele Punkte hat die Gerade mit dem Kreis gemeinsam?', probe: { a: 4 }, ziel: function(w){ return w.bewegt.a; } },
       { text: 'Mach die Gerade zur Passante.', probe: { a: 6 }, ziel: function(w){ return w.a > w.r + 1e-9; } },
       { text: 'Lass \\(a = 3\\,\\text{cm}\\) und mach die Gerade zur Tangente — nur mit dem Radius.', setup: function(s){ s.sperre('a'); }, probe: { r: 3 }, ziel: function(w){ return gleich(w.r, w.a); } },
-      { text: 'Tipp die Sehne an.', setup: function(s){ s.sperre('r', 'a'); },
+      { text: 'Tipp die Sehne an.', ohne: ['a'], setup: function(s){ s.sperre('r', 'a'); },
         wahl: { richtig: 'sehne', gut: 'Die Sehne ist eine Strecke: Sie verbindet zwei Punkte der Kreislinie.', rueck: {
           sekante: 'Das ist eine Sekante: eine Gerade, die über den Kreis hinausgeht. Die Sehne endet an der Kreislinie.',
           tangente: 'Das ist eine Tangente: Sie berührt den Kreis nur in einem Punkt.',
           passante: 'Das ist eine Passante: Sie hat keinen Punkt mit dem Kreis gemeinsam.',
           radius: 'Das ist ein Radius: Er beginnt im Mittelpunkt \\(M\\).' } } },
-      { text: 'Tipp die Tangente an.', setup: function(s){ s.sperre('r', 'a'); },
+      { text: 'Tipp die Tangente an.', ohne: ['a'], setup: function(s){ s.sperre('r', 'a'); },
         wahl: { richtig: 'tangente', gut: 'Sie berührt den Kreis in genau einem Punkt und steht dort senkrecht auf dem Radius.', rueck: {
           sekante: 'Das ist eine Sekante: Sie schneidet die Kreislinie in zwei Punkten.',
           sehne: 'Das ist eine Sehne — eine Strecke zwischen zwei Kreispunkten, keine Gerade.',
@@ -344,8 +345,8 @@
         frage: [{ name: 's', label: '\\(s \\approx\\)', einheit: 'cm', soll: 10.91, fehler: [[5.45, 'Das ist die halbe Sehne. Das Lot von \\(M\\) halbiert die Sehne — verdopple.'], [13, 'Im rechtwinkligen Dreieck ist \\(r\\) die Hypotenuse: \\(\\left(\\tfrac{s}{2}\\right)^2 = r^2 - a^2\\), minus statt plus.'], [6.5, 'Minus statt plus — und das Ergebnis ist erst die halbe Sehne.'], [7, 'Mit Längen rechnet Pythagoras nicht: Quadrate subtrahieren, dann die Wurzel.']], tipp: 'Rechtwinkliges Dreieck aus \\(a\\), der halben Sehne und \\(r\\) als Hypotenuse.' }] },
       { text: 'Eine Sehne ist \\(8\\,\\text{cm}\\) lang, \\(r = 6\\,\\text{cm}\\). Wie weit ist sie von \\(M\\) entfernt?', fest: { r: 6, a: Math.sqrt(20) }, verdeckt: ['a'], setup: function(s){ s.sperre('r', 'a'); },
         lab: { r: 'r = 6 cm', a: 'a = ?', s: 's = 8 cm' }, gegeben: '\\(r = 6\\,\\text{cm}\\), \\(s = 8\\,\\text{cm}\\)', gesucht: 'Abstand \\(a\\)',
-        frage: [{ name: 'a', label: '\\(a \\approx\\)', einheit: 'cm', soll: 4.47, fehler: [[7.21, 'Im rechtwinkligen Dreieck ist \\(r\\) die Hypotenuse: \\(a^2 = r^2 - \\left(\\tfrac{s}{2}\\right)^2\\).'], [5.29, 'Mit der ganzen Sehne gerechnet: Im Dreieck liegt die <b>halbe</b> Sehne, \\(4\\,\\text{cm}\\).'], [2, 'Mit Längen rechnet Pythagoras nicht: Quadrate subtrahieren, dann die Wurzel.']], tipp: '\\(a^2 + \\left(\\tfrac{s}{2}\\right)^2 = r^2\\).' }] },
-      { text: 'Von \\(P\\) aus berührt eine Tangente den Kreis in \\(B\\). \\(\\overline{MP} = 8.5\\,\\text{cm}\\), \\(r = 4\\,\\text{cm}\\). Wie lang ist \\(\\overline{PB}\\)?', tangente: true, setup: function(s){ s.sperre('r', 'a'); },
+        frage: [{ name: 'a', label: '\\(a \\approx\\)', einheit: 'cm', soll: 4.47, fehler: [[7.21, 'Im rechtwinkligen Dreieck ist \\(r\\) die Hypotenuse: \\(a^2 = r^2 - \\left(\\tfrac{s}{2}\\right)^2\\).'], [5.29, 'Das ist \\(\\sqrt{8^2 - 6^2}\\): mit der ganzen Sehne als Hypotenuse. Im rechtwinkligen Dreieck sind die <b>halbe</b> Sehne \\(4\\,\\text{cm}\\) und \\(a\\) die Katheten, \\(r\\) ist die Hypotenuse.'], [2, 'Mit Längen rechnet Pythagoras nicht: Quadrate subtrahieren, dann die Wurzel.']], tipp: '\\(a^2 + \\left(\\tfrac{s}{2}\\right)^2 = r^2\\).' }] },
+      { text: 'Von \\(P\\) aus berührt eine Tangente den Kreis in \\(B\\). \\(\\overline{MP} = 8.5\\,\\text{cm}\\), \\(r = 4\\,\\text{cm}\\). Wie lang ist \\(\\overline{PB}\\)?', tangente: true, fest: { r: 4 }, ohne: ['a'], setup: function(s){ s.sperre('r', 'a'); },
         frage: [{ name: 'PB', label: '\\(\\overline{PB} \\approx\\)', einheit: 'cm', soll: 7.5, fehler: [[9.39, 'Der rechte Winkel liegt bei \\(B\\): \\(\\overline{MP}\\) ist die Hypotenuse. Also \\(\\overline{PB}^2 = \\overline{MP}^2 - r^2\\).'], [4.5, 'Das ist der Abstand von \\(P\\) zur Kreislinie, nicht die Tangentenstrecke.']], tipp: 'Die Tangente steht in \\(B\\) senkrecht auf dem Radius: Pythagoras im Dreieck \\(MBP\\).' }] }
     ]
   });
@@ -410,10 +411,10 @@
         gegeben: '\\(r = 3.5\\,\\text{cm}\\)', gesucht: '\\(U\\) und \\(A\\)',
         frage: [{ name: 'U', label: '\\(U \\approx\\)', einheit: 'cm', soll: 21.99, fehler: [[11.00, 'Das ist der halbe Umfang \\(\\pi r\\) — die Breite des Streifens. Der ganze Umfang ist \\(2\\pi r\\).'], [38.48, 'Das ist die Fläche. Der Umfang ist \\(2\\pi r\\).'], [21, PI3]], tipp: '\\(U = 2\\pi r\\).' },
                 { name: 'A', label: '\\(A \\approx\\)', einheit: 'cm²', soll: 38.48, fehler: [[21.99, 'Das ist der Umfang. Die Fläche ist \\(\\pi r^2\\).'], [153.94, 'In \\(\\pi r^2\\) gehört der Radius, nicht der Durchmesser.'], [36.75, PI3]], tipp: '\\(A = \\pi r^2\\).' }] },
-      { text: 'Ein Kreis hat den Umfang \\(30\\,\\text{cm}\\). Wie gross ist sein Radius?', nurKreis: true, angabe: 'U = 30 cm', setup: function(s){ s.sperre('r', 'n'); },
+      { text: 'Ein Kreis hat den Umfang \\(30\\,\\text{cm}\\). Wie gross ist sein Radius?', nurKreis: true, angabe: 'U = 30 cm', verdeckt: ['r'], ohne: ['n'], setup: function(s){ s.sperre('r', 'n'); },
         gegeben: '\\(U = 30\\,\\text{cm}\\)', gesucht: '\\(r\\)',
         frage: [{ name: 'r', label: '\\(r \\approx\\)', einheit: 'cm', soll: 4.77, fehler: [[9.55, 'Das ist der Durchmesser: \\(U = \\pi d\\). Der Radius ist die Hälfte, \\(r = \\tfrac{U}{2\\pi}\\).'], [3.09, 'Eine Wurzel braucht es nur bei der Fläche. Aus \\(U = 2\\pi r\\) folgt \\(r = \\tfrac{U}{2\\pi}\\).'], [5, PI3]], tipp: '\\(U = 2\\pi r\\) nach \\(r\\) auflösen.' }] },
-      { text: 'Ein Kreis hat die Fläche \\(80\\,\\text{cm}^2\\). Wie gross ist sein Radius?', nurKreis: true, angabe: 'A = 80 cm²', setup: function(s){ s.sperre('r', 'n'); },
+      { text: 'Ein Kreis hat die Fläche \\(80\\,\\text{cm}^2\\). Wie gross ist sein Radius?', nurKreis: true, angabe: 'A = 80 cm²', verdeckt: ['r'], ohne: ['n'], setup: function(s){ s.sperre('r', 'n'); },
         gegeben: '\\(A = 80\\,\\text{cm}^2\\)', gesucht: '\\(r\\)',
         frage: [{ name: 'r', label: '\\(r \\approx\\)', einheit: 'cm', soll: 5.05, fehler: [[25.46, 'Das ist \\(r^2\\). Zum Schluss die Wurzel ziehen.'], [12.73, 'Das gehört zum Umfang. Aus \\(A = \\pi r^2\\) folgt \\(r = \\sqrt{\\tfrac{A}{\\pi}}\\).'], [10.09, 'Das ist der Durchmesser. Gefragt ist der Radius.']], tipp: '\\(A = \\pi r^2\\): durch \\(\\pi\\) teilen, dann die Wurzel.' }] }
     ]
@@ -493,7 +494,7 @@
       if (k.wahl){
         var Fu = [P2[0], 0], Ms = mitte(P1, P2);
         F.kandidat('hoehe', Fu, P2, k.wahl); F.kandidat('lot', M, Ms, k.wahl); F.kandidat('radius', M, P2, k.wahl); F.kandidat('sehne', P1, P2, k.wahl);
-        if (w.richtig){ F.strecke(Fu, P2, 'hilfe'); F.rechts(Fu, [1, 0], [0, 1], 'hilfe'); F.text(mitte(Fu, P2), 'h', 'hilfe', 7, 4, 'start'); }
+        if (w.richtig){ F.strecke(Fu, P2, 'hilfe'); F.rechts(Fu, [1, 0], [0, 1], 'hilfe'); F.text(mitte(Fu, P2), 'hΔ', 'hilfe', 7, 4, 'start'); }
       }
       F.punkt(M); F.text(M, 'M', 'ecke', -10, 4);
       if (phi > 0 && phi < 360){ F.punkt(P1); F.punkt(P2); F.text(P1, 'P₁', 'ecke', 12, 4, 'start'); F.text(P2, 'P₂', 'ecke', 0, P2[1] >= 0 ? -9 : 17); }
@@ -508,7 +509,7 @@
       { text: 'Erkunde: Zieh \\(\\varphi\\) über \\(180°\\) hinaus. Wo liegt jetzt das Dreieck \\(MP_1P_2\\)?', probe: { phi: 240 }, ziel: function(w){ return w.bewegt.phi && w.phi > 180; } },
       { text: 'Stell \\(\\varphi\\) so ein, dass das Dreieck \\(MP_1P_2\\) keine Fläche hat.', probe: { phi: 180 }, ziel: function(w){ return gleich(w.phi, 180); } },
       { text: '\\(\\varphi = 60°\\): Tipp die Höhe des Dreiecks auf die Seite \\(MP_1\\) an.', setup: function(s){ s.setze({ phi: 60 }); s.sperre('r', 'phi'); },
-        wahl: { richtig: 'hoehe', gut: 'Sie steht senkrecht auf \\(MP_1\\) und geht durch \\(P_2\\). Bei \\(60°\\) ist das Dreieck gleichseitig: \\(h = \\sqrt{r^2 - \\left(\\tfrac{r}{2}\\right)^2}\\).', rueck: {
+        wahl: { richtig: 'hoehe', gut: 'Sie steht senkrecht auf \\(MP_1\\) und geht durch \\(P_2\\). Bei \\(60°\\) ist das Dreieck gleichseitig: \\(h_\\Delta = \\sqrt{r^2 - \\left(\\tfrac{r}{2}\\right)^2}\\).', rueck: {
           lot: 'Das ist auch eine Höhe — aber auf die Sehne \\(P_1P_2\\), nicht auf \\(MP_1\\).',
           radius: 'Das ist der Radius \\(MP_2\\). Er steht nicht senkrecht auf \\(MP_1\\).',
           sehne: 'Das ist die Sehne \\(P_1P_2\\), eine Seite des Dreiecks.' } } },
@@ -517,7 +518,7 @@
         frage: [{ name: 'A', label: '\\(A_{SG} \\approx\\)', einheit: 'cm²', soll: 3.50, fehler: [[9.62, 'Das ist der ganze Sektor. Zieh das Dreieck ab.'], [15.75, 'Unter \\(180°\\) wird das Dreieck abgezogen, nicht addiert.'], [6.13, 'Das ist das Dreieck. Gesucht ist Sektor minus Dreieck.']], tipp: 'Sektor \\(\\tfrac{90°}{360°} \\cdot \\pi r^2\\) minus das rechtwinklige Dreieck \\(\\tfrac{1}{2}\\, r \\cdot r\\).' }] },
       { text: '\\(r = 4.5\\,\\text{cm}\\), \\(\\varphi = 60°\\). Wie gross ist das Segment?', setup: function(s){ s.setze({ r: 4.5, phi: 60 }); s.sperre('r', 'phi'); },
         lab: { r: 'r = 4.5 cm' }, gegeben: '\\(r = 4.5\\,\\text{cm}\\), \\(\\varphi = 60°\\)', gesucht: '\\(A_{SG}\\)',
-        frage: [{ name: 'A', label: '\\(A_{SG} \\approx\\)', einheit: 'cm²', soll: 1.83, fehler: [[10.60, 'Das ist der ganze Sektor. Zieh das Dreieck ab.'], [0.48, 'Bei \\(60°\\) ist das Dreieck nicht rechtwinklig, sondern gleichseitig: Höhe mit Pythagoras.'], [19.37, 'Unter \\(180°\\) wird das Dreieck abgezogen, nicht addiert.'], [8.77, 'Das ist das Dreieck. Gesucht ist Sektor minus Dreieck.']], tipp: 'Gleichseitiges Dreieck mit der Seite \\(4.5\\): \\(h = \\sqrt{4.5^2 - 2.25^2}\\).' }] },
+        frage: [{ name: 'A', label: '\\(A_{SG} \\approx\\)', einheit: 'cm²', soll: 1.83, fehler: [[10.60, 'Das ist der ganze Sektor. Zieh das Dreieck ab.'], [0.48, 'Bei \\(60°\\) ist das Dreieck nicht rechtwinklig, sondern gleichseitig: Höhe mit Pythagoras.'], [19.37, 'Unter \\(180°\\) wird das Dreieck abgezogen, nicht addiert.'], [8.77, 'Das ist das Dreieck. Gesucht ist Sektor minus Dreieck.']], tipp: 'Gleichseitiges Dreieck mit der Seite \\(4.5\\): \\(h_\\Delta = \\sqrt{4.5^2 - 2.25^2}\\).' }] },
       { text: '\\(r = 4\\,\\text{cm}\\), \\(\\varphi = 270°\\). Wie gross ist das Segment?', setup: function(s){ s.setze({ r: 4, phi: 270 }); s.sperre('r', 'phi'); },
         lab: { r: 'r = 4 cm' }, gegeben: '\\(r = 4\\,\\text{cm}\\), \\(\\varphi = 270°\\)', gesucht: '\\(A_{SG}\\)',
         frage: [{ name: 'A', label: '\\(A_{SG} \\approx\\)', einheit: 'cm²', soll: 45.70, fehler: [[29.70, 'Über \\(180°\\) liegt das Dreieck im Segment: Es wird addiert.'], [37.70, 'Das ist der Sektor. Über \\(180°\\) kommt das Dreieck dazu.']], tipp: 'Über \\(180°\\): Sektor plus Dreieck.' }] }
@@ -581,8 +582,8 @@
     /* Feste Aufgaben, die eine Zufallsübung nicht treffen darf (HOWTO §15): Clips · Arbeitsbereiche ·
        Kapitelaufgaben · Gesamttest · Themenseite (Aufgaben, Animationen, Mini-Checks). Je Typ ein eigener Schlüssel. */
     var SPERRE = [
-      // sehne: sh|art|r|Wert (art s: Wert = a; a: Wert = Sehne s; t: Wert = MP)
-      'sh|s|5|3', 'sh|t|5|13', 'sh|s|6|2.5', 'sh|a|6|8', 'sh|t|4|8.5', 'sh|a|6.5|12', 'sh|t|6|10', 'sh|s|10|6', 'sh|t|8|17', 'sh|s|4|2.5',
+      // sehne: sh|art|r|Wert (art s: Wert = a; a: Wert = Sehne s; t: Wert = MP; h: Wert = Abstand P–Kreislinie in cm); sh|r|s|a
+      'sh|s|5|3', 'sh|t|5|13', 'sh|r|9|6', 'sh|r|10|5', 'sh|s|6|2.5', 'sh|a|6|8', 'sh|t|4|8.5', 'sh|a|6.5|12', 'sh|t|6|10', 'sh|s|10|6', 'sh|t|8|17', 'sh|s|4|2.5',
       // lage: lg|r|a (r als Radius, auch wenn d gegeben ist)
       'lg|4|4', 'lg|5|6', 'lg|4.5|4.6', 'lg|4|2.5', 'lg|4|5', 'lg|3|3.6', 'lg|3|3', 'lg|3|1.8',
       // kreis: kr|r
@@ -650,6 +651,7 @@
           if (s === 'Radius') return 'Ein Radius beginnt im Mittelpunkt \\(M\\) — die markierte Linie nicht.';
           if (ist === 'Sehne' && s === 'Sekante') return 'Die markierte Linie endet an der Kreislinie: eine Strecke. Eine Sekante ist eine Gerade, die darüber hinausgeht.';
           if (ist === 'Sekante' && s === 'Sehne') return 'Die markierte Linie geht über den Kreis hinaus: eine Gerade. Die Sehne ist nur ihr Stück im Kreis.';
+          if (ist === 'Radius' && s === 'Sehne') return 'Eine Sehne verbindet zwei Punkte der Kreislinie. Die markierte Strecke beginnt im Mittelpunkt \\(M\\).';
           if (strecke) return 'Die markierte Linie ist eine Strecke mit zwei Endpunkten — keine Gerade.';
           if (s === 'Sehne') return 'Die markierte Linie geht über den Bildrand hinaus: eine Gerade, keine Strecke.';
           return 'Zähle die gemeinsamen Punkte mit der Kreislinie: Passante keinen, Tangente genau einen, Sekante zwei.'; },
@@ -686,12 +688,31 @@
         gut: function(A){ return A.art === 'b' ? 'Bei einer ' + A.name + ' gilt \\(' + A.soll.replace('<', '\\lt').replace('>', '\\gt') + '\\).' : '\\(a = ' + A.a + '\\,\\text{cm}\\), \\(r = ' + A.r + '\\,\\text{cm}\\).'; },
         loesung: function(A){ return '\\text{' + A.soll + '}'; } },
 
-      /* Pythagoras am Kreis: Sehne aus r und a, Abstand aus r und s, Tangentenstrecke aus r und MP. Mit Skizze. */
+      /* Pythagoras am Kreis: Sehne aus r und a, Abstand aus r und s, Radius aus s und a, Tangentenstrecke aus r und
+         MP oder aus r und dem Abstand h des Punkts P von der Kreislinie (auch in mm: Einheiten angleichen). Mit Skizze. */
       'sehne': { felder: ['x'], muster: '{x} cm',
-        schl: function(A){ return 'sh|' + A.art + '|' + A.r + '|' + A.w; },
+        schl: function(A){ return A.art === 'r' ? 'sh|r|' + A.s + '|' + A.w : 'sh|' + A.art + '|' + A.r + '|' + A.w; },
         eingabe: function(A){ return { x: String(A.soll) }; },
         neu: function(){
-          var art = zufall(['s', 'a', 't']), r = zufall([4, 5, 6, 6.5, 7.5, 8, 9, 10, 12]), w, soll, falsch, text;
+          var art = zufall(['s', 'a', 't', 'r', 'h']), r = zufall([4, 5, 6, 6.5, 7.5, 8, 9, 10, 12]), w, soll, falsch, text;
+          if (art === 'r'){ var sr = zufall([6, 8, 9, 10, 12, 14, 16]); w = zufall([2, 2.5, 3, 4, 5, 6, 7.5]);
+            r = Math.sqrt(sr * sr / 4 + w * w); soll = r;
+            falsch = [[Math.sqrt(sr * sr + w * w), 'Im rechtwinkligen Dreieck liegt die <b>halbe</b> Sehne, \\(' + r2(sr / 2) + '\\,\\text{cm}\\).', 'halbe'],
+                      [sr / 2 + w, 'Pythagoras rechnet mit Quadraten: \\(r^2 = \\left(\\tfrac{s}{2}\\right)^2 + a^2\\).', 'Quadraten'],
+                      [Math.sqrt(Math.abs(sr * sr / 4 - w * w)), 'Der Radius ist die Hypotenuse: Die Quadrate werden addiert, nicht subtrahiert.', 'addiert'],
+                      [2 * r, 'Das ist der Durchmesser. Gefragt ist der Radius.', 'Durchmesser']];
+            text = 'In einem Kreis ist eine Sehne \\(s = ' + sr + '\\,\\text{cm}\\) lang und hat vom Mittelpunkt den Abstand \\(a = ' + w + '\\,\\text{cm}\\). Wie gross ist der Radius \\(r\\)?';
+            return { art: art, r: r, s: sr, w: w, soll: r2(soll), falsch: falsch, text: text }; }
+          if (art === 'h'){   // P liegt h ausserhalb der Kreislinie: MP = r + h; nie r = 2h (dort ist √(r² + h²) zufällig richtig)
+            w = zufall([0.5, 1, 1.5, 2, 2.5, 3, 4, 5].filter(function(v){ return !gleich(r, 2 * v); }));
+            var mm = (w % 1 !== 0 || Math.random() < 0.3), mp = r + w;
+            soll = Math.sqrt(mp * mp - r * r);
+            falsch = [[Math.sqrt(mp * mp + r * r), 'Der rechte Winkel liegt beim Berührpunkt \\(B\\): \\(\\overline{MP}\\) ist die Hypotenuse.', 'Hypotenuse'],
+                      [Math.sqrt(r * r + w * w), 'Die Hypotenuse ist \\(\\overline{MP} = r + h\\) — von \\(M\\) bis \\(P\\), nicht nur das Stück ausserhalb des Kreises.', 'MP'],
+                      [w, 'Das ist der Abstand von \\(P\\) zur Kreislinie, nicht die Tangentenstrecke.', 'Abstand']];
+            if (mm) falsch.push([Math.sqrt(Math.pow(r + 10 * w, 2) - r * r), 'Einheiten angleichen: \\(' + r2(10 * w) + '\\,\\text{mm} = ' + w + '\\,\\text{cm}\\).', 'Einheiten']);
+            text = 'Ein Punkt \\(P\\) liegt \\(' + (mm ? r2(10 * w) + '\\,\\text{mm}' : w + '\\,\\text{cm}') + '\\) ausserhalb eines Kreises mit \\(r = ' + r + '\\,\\text{cm}\\) — so weit ist er von der Kreislinie entfernt. Von \\(P\\) aus berührt eine Tangente den Kreis in \\(B\\). Wie lang ist \\(\\overline{PB}\\)?';
+            return { art: art, r: r, w: w, mp: mp, mm: mm, soll: r2(soll), falsch: falsch, text: text }; }
           if (art === 's'){ w = zufall([1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7].filter(function(v){ return v < r - 0.4; }));
             soll = 2 * Math.sqrt(r * r - w * w);
             falsch = [[soll / 2, 'Das ist die halbe Sehne. Das Lot von \\(M\\) halbiert die Sehne — verdopple.', 'halbe'],
@@ -709,27 +730,30 @@
             falsch = [[Math.sqrt(w * w + r * r), 'Der rechte Winkel liegt beim Berührpunkt \\(B\\): \\(\\overline{MP}\\) ist die Hypotenuse.', 'Hypotenuse'],
                       [w - r, 'Das ist der Abstand von \\(P\\) zur Kreislinie, nicht die Tangentenstrecke.', 'Abstand']];
             text = 'Ein Punkt \\(P\\) liegt \\(' + w + '\\,\\text{cm}\\) vom Mittelpunkt eines Kreises mit \\(r = ' + r + '\\,\\text{cm}\\) entfernt. Von \\(P\\) aus berührt eine Tangente den Kreis in \\(B\\). Wie lang ist \\(\\overline{PB}\\)?'; }
-          return { art: art, r: r, w: w, soll: r2(soll), falsch: falsch, text: text }; },
+          return { art: art, r: r, w: w, mp: art === 't' ? w : null, soll: r2(soll), falsch: falsch, text: text }; },
         zeichne: function(svg, A){
           var F = Flaeche(svg, { w: 240, h: 200, x0: -3.6, x1: 6.2, y0: -3.6, karo: false }), M = [0, 0], k = 2.8 / A.r;
           F.kreis(M, 2.8, 'figur kreis'); F.punkt(M); F.text(M, 'M', 'ecke', -9, 14);
-          if (A.art === 't'){
+          if (A.art === 't' || A.art === 'h'){
             // massstäblich: Kreis kleiner zeichnen, wenn P sonst aus dem Bild fiele
-            var kt = Math.min(k, 5.8 / A.w), rt = A.r * kt, mp = A.w * kt, th = Math.acos(rt / mp), B = pol(M, rt, th), P = [mp, 0];
+            var kt = Math.min(k, 5.8 / A.mp), rt = A.r * kt, mp = A.mp * kt, th = Math.acos(rt / mp), B = pol(M, rt, th), P = [mp, 0];
             F.leeren(); F.kreis(M, rt, 'figur kreis'); F.punkt(M); F.text(M, 'M', 'ecke', -9, 14);
             F.strecke(M, P, 'hilfe2'); F.strecke(M, B, 'radius'); F.strecke(B, P, 'hilfe'); F.rechts(B, [-B[0], -B[1]], [P[0] - B[0], P[1] - B[1]], '');
             F.punkt(P); F.punkt(B); F.text(P, 'P', 'ecke', 0, 15); F.text(B, 'B', 'ecke', -2, -8);
             F.text(mitte(M, B), 'r', 'seite', -6, 0, 'end'); F.text(mitte(B, P), '?', 'mass ergebnis-gross', 6, -6, 'start');
+            if (A.art === 'h'){ F.strecke([rt, 0], P, 'hilfe'); F.text(mitte([rt, 0], P), 'h', 'seite', 0, -6); }
             return; }
-          var a = (A.art === 's' ? A.w : Math.sqrt(A.r * A.r - A.w * A.w / 4)) * k, q = Math.sqrt(Math.max(0, 2.8 * 2.8 - a * a));
+          var a = (A.art === 's' || A.art === 'r' ? A.w : Math.sqrt(A.r * A.r - A.w * A.w / 4)) * k, q = Math.sqrt(Math.max(0, 2.8 * 2.8 - a * a));
           F.strecke([-q, a], [q, a], 'hilfe'); F.strecke(M, [0, a], 'lot'); F.strecke(M, [q, a], 'radius');
           if (a > 0.3) F.rechts([0, a], [1, 0], [0, -1], '');
-          F.text([0, a / 2], A.art === 'a' ? 'a = ?' : 'a', 'seite', -5, 4, 'end'); F.text(mitte(M, [q, a]), 'r', 'seite', 7, 8, 'start');
+          F.text([0, a / 2], A.art === 'a' ? 'a = ?' : 'a', 'seite', -5, 4, 'end'); F.text(mitte(M, [q, a]), A.art === 'r' ? 'r = ?' : 'r', 'seite', 7, 8, 'start');
           F.text([0, a], A.art === 's' ? 's = ?' : 's', 'seite', 0, -8);
         },
         fehler: function(A){ return fehlerListe(A, 'x', A.falsch); },
         pruefen: function(A, e){ return feld(A, 'x', e, A.soll, 'Such das rechtwinklige Dreieck: Wo liegt der rechte Winkel, welche Strecke ist die Hypotenuse?', nurAndere(A, A.falsch)); },
-        loesung: function(A){ return A.art === 's' ? 's = 2\\sqrt{' + A.r + '^2 - ' + A.w + '^2} \\approx ' + A.soll + '\\,\\text{cm}'
+        loesung: function(A){ if (A.art === 'r') return 'r = \\sqrt{' + r2(A.s / 2) + '^2 + ' + A.w + '^2} \\approx ' + A.soll + '\\,\\text{cm}';
+          if (A.art === 'h') return '\\overline{MP} = ' + A.r + ' + ' + A.w + ' = ' + r2(A.mp) + '\\,\\text{cm};\\ \\overline{PB} = \\sqrt{' + r2(A.mp) + '^2 - ' + A.r + '^2} \\approx ' + A.soll + '\\,\\text{cm}';
+          return A.art === 's' ? 's = 2\\sqrt{' + A.r + '^2 - ' + A.w + '^2} \\approx ' + A.soll + '\\,\\text{cm}'
           : A.art === 'a' ? 'a = \\sqrt{' + A.r + '^2 - ' + r2(A.w / 2) + '^2} \\approx ' + A.soll + '\\,\\text{cm}' : '\\overline{PB} = \\sqrt{' + A.w + '^2 - ' + A.r + '^2} \\approx ' + A.soll + '\\,\\text{cm}'; } },
 
       /* ── Kapitel 2 ── */
@@ -756,11 +780,11 @@
           var art = zufall(['U', 'A']), ges = Math.random() < 0.7 ? 'r' : 'd', wert, r, falsch;
           if (art === 'U'){ wert = zufall([12, 15, 18, 20, 24, 35, 45, 60, 75, 100]); r = wert / (2 * PI);
             falsch = [[ges === 'r' ? wert / PI : wert / (2 * PI), ges === 'r' ? 'Das ist der Durchmesser: \\(U = \\pi d\\). Der Radius ist die Hälfte.' : 'Das ist der Radius. Der Durchmesser ist doppelt so lang: \\(d = \\tfrac{U}{\\pi}\\).', ges === 'r' ? 'Durchmesser' : 'Radius'],
-                      [Math.sqrt(wert / PI), 'Eine Wurzel braucht es nur bei der Fläche. Aus \\(U = 2\\pi r\\) folgt \\(r = \\tfrac{U}{2\\pi}\\).', 'Wurzel']]; }
+                      [(ges === 'r' ? 1 : 2) * Math.sqrt(wert / PI), 'Eine Wurzel braucht es nur bei der Fläche. Aus \\(U = 2\\pi r\\) folgt ' + (ges === 'r' ? '\\(r = \\tfrac{U}{2\\pi}\\).' : '\\(d = \\tfrac{U}{\\pi}\\).'), 'Wurzel']]; }
           else { wert = zufall([10, 20, 30, 40, 60, 75, 120, 150, 200, 250]); r = Math.sqrt(wert / PI);
-            falsch = [[(ges === 'r' ? 1 : 2) * wert / PI, 'Zum Schluss die Wurzel ziehen: \\(r = \\sqrt{\\tfrac{A}{\\pi}}\\).', 'Wurzel'],
+            falsch = [[(ges === 'r' ? 1 : 2) * wert / PI, 'Zum Schluss die Wurzel ziehen: \\(r = \\sqrt{\\tfrac{A}{\\pi}}\\)' + (ges === 'r' ? '.' : ', dann \\(d = 2r\\).'), 'Wurzel'],
                       [ges === 'r' ? 2 * r : r, ges === 'r' ? 'Das ist der Durchmesser. Gefragt ist der Radius.' : 'Das ist der Radius. Der Durchmesser ist doppelt so lang.', ges === 'r' ? 'Durchmesser' : 'Radius'],
-                      [ges === 'r' ? wert / (2 * PI) : NaN, 'Das gehört zum Umfang. Aus \\(A = \\pi r^2\\) folgt \\(r = \\sqrt{\\tfrac{A}{\\pi}}\\).', 'Umfang']]; }
+                      [ges === 'r' ? wert / (2 * PI) : wert / PI / 2, 'Mit der Fläche wird nicht wie mit dem Umfang gerechnet: Aus \\(A = \\pi r^2\\) folgt \\(r = \\sqrt{\\tfrac{A}{\\pi}}\\).', 'Umfang']]; }
           var soll = ges === 'r' ? r : 2 * r;
           return { art: art, wert: wert, ges: ges, soll: r2(soll), falsch: falsch,
             text: 'Ein Kreis hat ' + (art === 'U' ? 'den Umfang \\(U = ' + wert + '\\,\\text{cm}\\)' : 'die Fläche \\(A = ' + wert + '\\,\\text{cm}^2\\)') + '. Wie gross ist sein ' + (ges === 'r' ? 'Radius \\(r\\)' : 'Durchmesser \\(d\\)') + '?' }; },
@@ -876,7 +900,7 @@
           var falsch = [[PI * b * b, '\\(\\pi (R - r)^2\\) ist ein Kreis mit dem Radius \\(b\\). Der Ring ist die Differenz zweier Kreisflächen.', 'Differenz'],
                         [PI * (R * R + r * r), 'Die kleine Kreisfläche wird abgezogen, nicht addiert.', 'abgezogen']];
           if (art === 'Rr') text = 'Ein Kreisring hat den Aussenradius \\(R = ' + R + '\\,\\text{cm}\\) und den Innenradius \\(r = ' + r + '\\,\\text{cm}\\). Wie gross ist seine Fläche?';
-          if (art === 'dd'){ text = 'Eine Unterlagsscheibe hat aussen den Durchmesser \\(' + r2(2 * R) + '\\,\\text{cm}\\), das Loch den Durchmesser \\(' + r2(2 * r) + '\\,\\text{cm}\\). Wie gross ist ihre Fläche?';
+          if (art === 'dd'){ text = 'Ein Rohr hat aussen den Durchmesser \\(' + r2(2 * R) + '\\,\\text{cm}\\), innen den Durchmesser \\(' + r2(2 * r) + '\\,\\text{cm}\\). Wie gross ist seine Querschnittsfläche (der Kreisring)?';
             falsch.push([4 * soll, 'In \\(\\pi R^2\\) gehören die Radien, nicht die Durchmesser.', 'Radien']); }
           if (art === 'rb'){ text = 'Um ein rundes Beet mit dem Radius \\(' + r + '\\,\\text{m}\\) führt ein \\(' + b + '\\,\\text{m}\\) breiter Weg. Wie gross ist die Wegfläche (in m²)?';
             falsch.push([PI * R * R, 'Das ist die ganze Fläche mit dem Beet. Die Beetfläche \\(\\pi r^2\\) abziehen.', 'Beet']); }

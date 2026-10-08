@@ -212,7 +212,7 @@ fest1 = r'''      <div class="festhalten">
           <p><b>Warum:</b> Die Parallele zu \(AB\) durch \(C\) bildet mit \(b\) und \(a\) Wechselwinkel, gleich gross wie \(\alpha\) und \(\beta\). Zusammen mit \(\gamma\) liegen sie auf einer Geraden: ein gestreckter Winkel.</p>
           <p><b>Aussenwinkel</b> \(\alpha^{\prime}, \beta^{\prime}, \gamma^{\prime}\): der Nebenwinkel des Innenwinkels, \(\alpha^{\prime} = 180° - \alpha\). <b>Aussenwinkelsatz:</b> Jeder Aussenwinkel ist so gross wie die beiden nicht anliegenden Innenwinkel zusammen, \(\gamma^{\prime} = \alpha + \beta\).</p>
           <p><b>Nach Winkeln:</b> spitzwinklig (alle Winkel unter \(90°\)), rechtwinklig (ein Winkel \(90°\)), stumpfwinklig (ein Winkel über \(90°\)). Höchstens ein Winkel ist recht oder stumpf. Im rechtwinkligen Dreieck ergeben die beiden spitzen Winkel zusammen \(90°\).</p>
-          <p><b>Nach Seiten:</b> gleichschenklig — zwei gleich lange Seiten (Schenkel), die Basiswinkel sind gleich gross; gleichseitig — drei gleich lange Seiten, alle Winkel \(60°\). Gleiche Seiten und gleiche Winkel treten immer zusammen auf.</p>
+          <p><b>Nach Seiten:</b> gleichschenklig — zwei gleich lange Seiten (Schenkel), die Basiswinkel sind gleich gross; gleichseitig — drei gleich lange Seiten, alle Winkel \(60°\); ungleichseitig — alle drei Seiten verschieden lang. Gleiche Seiten und gleiche Winkel treten immer zusammen auf.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -258,7 +258,7 @@ fest2 = r'''      <div class="festhalten">
             <li><b>Mittelsenkrechte</b> von \(c\): steht in der Mitte von \(c\) senkrecht; jeder ihrer Punkte ist von \(A\) und \(B\) gleich weit entfernt. Schnittpunkt: <b>Umkreismittelpunkt</b> \(M_U\), gleich weit von allen drei Ecken.</li>
           </ul>
           <p><b>Abstand</b> eines Punkts von einer Geraden heisst: senkrecht gemessen, also das Lot. Die Höhe \(h_c\) ist der Abstand der Ecke \(C\) von der Geraden \(AB\).</p>
-          <p><b>Lage:</b> \(S\) und \(M_I\) liegen immer innen. Im spitzwinkligen Dreieck liegen auch \(H\) und \(M_U\) innen; im rechtwinkligen liegt \(H\) auf der Ecke mit dem rechten Winkel; im stumpfwinkligen liegen \(H\) und \(M_U\) aussen — die beiden Höhen aus den spitzen Ecken treffen die Verlängerung der Gegenseite.</p>
+          <p><b>Lage:</b> \(S\) und \(M_I\) liegen immer innen. Im spitzwinkligen Dreieck liegen auch \(H\) und \(M_U\) innen; im rechtwinkligen liegt \(H\) auf der Ecke mit dem rechten Winkel und \(M_U\) in der Mitte der Hypotenuse; im stumpfwinkligen liegen \(H\) und \(M_U\) aussen — die beiden Höhen aus den spitzen Ecken treffen die Verlängerung der Gegenseite.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -342,6 +342,7 @@ fest4 = r'''      <div class="festhalten">
           <p>Als Flächen: Die Quadrate über den Katheten haben zusammen so viel Fläche wie das Quadrat über der Hypotenuse.</p>
           <p><b>Gleichschenklig:</b> Die Höhe auf die Basis halbiert die Basis; sie ist zugleich Seitenhalbierende, Winkelhalbierende und Mittelsenkrechte. Jede Hälfte ist rechtwinklig mit dem Schenkel als Hypotenuse: \(h = \sqrt{s^2 - (\tfrac{g}{2})^2}\).</p>
           <p><b>Gleichseitig</b> mit der Seite \(s\): \(h = \sqrt{s^2 - (\tfrac{s}{2})^2} = \tfrac{s}{2}\sqrt{3}\).</p>
+          <p><b>Hilfsdreieck:</b> Die Höhe zerlegt jedes Dreieck in rechtwinklige Teile. Liegt ihr Fusspunkt \(F\) auf der Verlängerung von \(c\) hinter \(B\), sind \(BFC\) und \(AFC\) rechtwinklig bei \(F\): \(a = \sqrt{\overline{BF}^2 + h_c^2}\), \(b = \sqrt{(c + \overline{BF})^2 + h_c^2}\).</p>
           <p><b>Prüfen:</b> Die Hypotenuse ist länger als jede Kathete.</p>
         </div>
         <div class="warn">
@@ -356,7 +357,9 @@ _t, _s = math.radians(20), 0.16
 P4a = [0, 0]
 Q4a = r3((7 * _s * math.cos(_t), 7 * _s * math.sin(_t)))
 R4a = r3((Q4a[0] - 24 * _s * math.sin(_t), Q4a[1] + 24 * _s * math.cos(_t)))
-auf4 = test('t4', 'Aufgaben · Kapitel 4', 12, [
+# 4f: Hilfsdreieck mit dem Fusspunkt ausserhalb — A(0 | 0), B(5 | 0), C(7 | 3.5), F(7 | 0): BF = 2, h_c = 3.5, AF = 7.
+A4f, B4f, C4f, F4f = (0, 0), (5, 0), (7, 3.5), (7, 0)
+auf4 = test('t4', 'Aufgaben · Kapitel 4', 15, [
     ('4a', 2, r'Im Bild (verkleinert) liegt der rechte Winkel bei \(Q\); \(\overline{PQ} = 7\,\text{cm}\), \(\overline{PR} = 25\,\text{cm}\). Welche Seite ist die Hypotenuse? Berechne \(x = \overline{QR}\).',
      r'<p>Die Hypotenuse ist \(\overline{PR}\) (gegenüber dem rechten Winkel bei \(Q\)). \(x = \sqrt{25^2 - 7^2} = \sqrt{576} = 24\,\text{cm}\).</p>',
      fig([['v', [P4a, Q4a, R4a]], ['r', Q4a, [P4a[0] - Q4a[0], P4a[1] - Q4a[1]], [R4a[0] - Q4a[0], R4a[1] - Q4a[1]]],
@@ -370,11 +373,17 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 12, [
      r'<p>Die Leiter ist die Hypotenuse: \(h = \sqrt{4.5^2 - 1.2^2} = \sqrt{18.81} \approx 4.34\,\text{m}\).</p>', ''),
     ('4d', 3, r'Ein rechtwinkliges Dreieck hat die Katheten \(9\,\text{cm}\) und \(12\,\text{cm}\). Berechne die Hypotenuse, die Fläche und die Höhe auf die Hypotenuse.',
      r'<p>\(c = \sqrt{81 + 144} = 15\,\text{cm}\). \(A = \tfrac{1}{2} \cdot 9 \cdot 12 = 54\,\text{cm}^2\) (die eine Kathete ist die Höhe zur anderen). Höhe auf \(c\): \(h_c = \tfrac{2A}{c} = \tfrac{108}{15} = 7.2\,\text{cm}\).</p>', ''),
-    ('4e', 2, r'Lea rechnet im Dreieck mit \(a = 5\,\text{cm}\), \(b = 7\,\text{cm}\) und \(\gamma = 80°\): «\(c = \sqrt{25 + 49} \approx 8.60\,\text{cm}\).» Was ist falsch?',
-     r'<p>Der Satz des Pythagoras gilt nur, wenn zwischen \(a\) und \(b\) ein rechter Winkel liegt. Hier ist \(\gamma = 80°\): \(c^2\) ist nicht \(a^2 + b^2\). (Wie man \(c\) dann berechnet, zeigt Teilgebiet 5.3.)</p>', ''),
+    ('4e', 2, r'Lea rechnet im Dreieck mit \(a = 6\,\text{cm}\), \(b = 4\,\text{cm}\) und \(\gamma = 110°\): «\(c = \sqrt{36 + 16} \approx 7.21\,\text{cm}\).» Was ist falsch?',
+     r'<p>Der Satz des Pythagoras gilt nur, wenn zwischen \(a\) und \(b\) ein rechter Winkel liegt. Hier ist \(\gamma = 110°\): \(c^2\) ist nicht \(a^2 + b^2\) — mit \(90°\) wäre \(c \approx 7.21\,\text{cm}\); öffnet sich der Winkel weiter, wird \(c\) länger. (Wie man \(c\) dann berechnet, zeigt Teilgebiet 5.3.)</p>', ''),
+    ('4f', 3, r'Im Bild ist \(c = \overline{AB} = 5\,\text{cm}\). Die Höhe \(h_c = 3.5\,\text{cm}\) trifft die Verlängerung von \(c\) im Fusspunkt \(F\), \(2\,\text{cm}\) hinter \(B\). Berechne die Seiten \(a\) und \(b\) und den Umfang.',
+     r'<p>Die Höhe bildet zwei rechtwinklige Dreiecke mit dem rechten Winkel bei \(F\). Im Dreieck \(BFC\): \(a = \sqrt{2^2 + 3.5^2} = \sqrt{16.25} \approx 4.03\,\text{cm}\). Im Dreieck \(AFC\) ist \(\overline{AF} = 5 + 2 = 7\,\text{cm}\): \(b = \sqrt{7^2 + 3.5^2} = \sqrt{61.25} \approx 7.83\,\text{cm}\). \(U = 5 + \sqrt{16.25} + \sqrt{61.25} \approx 16.86\,\text{cm}\).</p><p class="komm">Wer \(b = \sqrt{5^2 + 3.5^2}\) rechnet, nimmt \(c\) als Kathete — die Kathete reicht aber von \(A\) bis zum Fusspunkt \(F\).</p>',
+     fig([['v', [list(A4f), list(B4f), list(C4f)]], ['s', list(B4f), list(F4f), 'verlaengerung'], ['s', list(C4f), list(F4f), 'hilfe'], ['r', list(F4f), [-1, 0], [0, 1]],
+          ['t', [2.5, 0], '5 cm', 'mass', 0, 13], ['t', [6, 0], '2 cm', 'mass', 0, 13], ['t', [7, 1.75], '3.5 cm', 'mass', 5, 4, 'start'],
+          ['p', list(F4f)], ['t', list(F4f), 'F', 'ecke', 9, 12]]
+         + ecken((A4f, 'A', -8, 13), (B4f, 'B', -2, 13), (C4f, 'C', 0, -7)), '-0.8,9,-1', 230, 125)),
 ])
-k4 = kapitel(4, 'pythagoras', 'Rechtwinklige Dreiecke und Pythagoras', 40,
-             r'Du erkennst Katheten und Hypotenuse, berechnest mit dem Satz des Pythagoras fehlende Seiten, die Höhe im gleichschenkligen und gleichseitigen Dreieck und Abstände, und prüfst, ob ein rechter Winkel vorliegt.',
+k4 = kapitel(4, 'pythagoras', 'Rechtwinklige Dreiecke und Pythagoras', 45,
+             r'Du erkennst Katheten und Hypotenuse, berechnest mit dem Satz des Pythagoras fehlende Seiten, die Höhe im gleichschenkligen und gleichseitigen Dreieck, Abstände und Seiten in Hilfsdreiecken — auch wenn der Fusspunkt der Höhe ausserhalb liegt — und erkennst, wann der Satz nicht gilt.',
              ('g5-2a-lp-pythagoras', 'Rechtwinklige Dreiecke und Pythagoras'), sim4, ('g5-2a-lp-kontrolle-pythagoras', 'Kontrollfragen zu Pythagoras'),
              fest4, [uebung('pyth-figur', 'Pythagoras an der Figur', 'Rechtwinkliges Dreieck mit zwei gegebenen Seiten und der gesuchten Seite x'), uebung('pyth-anwendung', 'Höhen und Längen')],
              auf4, f'<a href="{TS}#pythagoras">Themenseite 5.2a, Satzgruppe Pythagoras</a> und <a href="{TS}#halbes-dreieck">halbe Dreiecke</a>', komp='K1; K2 Seiten, Höhe, Abstand')
@@ -403,7 +412,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1; G2, G3 → 2; G4 → 3 (Umfang mit 4); G5, G6, G7 → 4 (Fläche und Umfang mit 3)</p>
+          <p>Aufgabe → Kapitel: G1 → 1; G2, G3 → 2; G4 → 3 (Seite \\(b\\) mit 4); G5, G6 → 4 (Fläche und Umfang mit 3); G7 → 2 und 4</p>
         </div>
       </div>
     </section>
@@ -430,18 +439,25 @@ oben = '''<div id="nav-root"></div>
      Vierecke, Kreis (→ Leitprogramme Vierecke, Kreis und Kreisteile), K3 Ähnlichkeit (→ Leitprogramm Ähnlichkeit),
      Radiant (5.1/5.4). Kein Vermerk «auch ohne Hilfsmittel»: Taschenrechner erlaubt. Unterstützend 5.1: Skizzen.
 
-     a) Kompetenzmatrix (Teilkompetenz | ohne HM? | Kapitel | Arbeitsbereich/Übung | Kapitelaufgaben | Gesamttest):
-       K1 beschriften, Dreiecke nach Winkeln/Seiten einteilen | nein | 1 | sim1 A2–A4, dreiecksart | 1a, 1e | G1
-       K1 spezielle Dreiecke (gleichschenklig, gleichseitig, rechtwinklig) | nein | 1, 4 | sim1, sim4 A6–A7, pyth-anwendung | 1c, 1e, 4b | G1, G6
-       K2 Winkel berechnen (Winkelsumme, Aussenwinkel) | nein | 1 | sim1 A6–A8, winkel | 1b–1d | G1
-       K2 Höhen, Seiten-, Winkelhalbierende, Mittelsenkrechte erkennen und damit rechnen | nein | 2 | sim2 A1–A3, A7–A8,
-          element, linie-figur, elem-rechnen | 2a–2c | G2, G3
-       K2 Abstand (gleich weit: M_I, M_U; Höhe = Abstand zur Geraden) | nein | 2, 3 | sim2 A8, sim3 A7, element, flaeche | 2d, 3b | G2, G4
-       K2 Flächeninhalt und Umfang | nein | 3 | sim3, hoehe-figur, flaeche | 3a–3e | G4, G5, G6
-       K2 fehlende Seiten und Höhen (Pythagoras) | nein | 4 | sim4, pyth-figur, pyth-anwendung | 4a–4e | G4, G5, G6, G7
-     Kein Kapitelziel ohne Kompetenz. Berechnet werden Winkel, Höhen (Lage und Länge), die Teilung 2 : 1 des Schwerpunkts,
-     halbe Winkel; Mittelsenkrechte und Winkelhalbierende werden vor allem erkannt und über «gleich weit» begründet
-     (Um- und Inkreisradius werden nicht berechnet — die Themenseite tut es auch nicht).
+     a) Kompetenzmatrix (Teilkompetenz | ohne HM? | Kapitel | Arbeitsbereich/Übung | Kapitelaufgaben | Gesamttest),
+        nachgeführt nach der Prüfung vom 08.10.2026:
+       K1 beschriften, Dreiecke nach Winkeln/Seiten einteilen | nein | 1 | sim1 A2–A4, dreiecksart | 1a, 1e | G1(b)
+       K1 spezielle Dreiecke (gleichschenklig, gleichseitig, rechtwinklig) | nein | 1, 4 | sim1, sim4 A6–A7, pyth-anwendung | 1c, 1e, 4b | G1(b), G6
+       K2 Winkel berechnen (Winkelsumme, Aussenwinkel) | nein | 1 | sim1 A6–A8, winkel | 1b–1d | G1(a)
+       K2 Höhe, Winkelhalbierende erkennen und Winkel daran berechnen | nein | 2 | sim2 A1–A2, element, linie-figur,
+          elem-rechnen (hw, adc, wh) | 2b, 2c | G3
+       K2 Seitenhalbierende, Schwerpunkt, Teilung 2 : 1 | nein | 2 | sim2 A7, elem-rechnen (sp) | 2a | G7 (mit Pythagoras)
+       K2 Mittelsenkrechte, Winkelhalbierende: «gleich weit», M_U, M_I und ihre Lage | nein | 2 | sim2 A3–A6, A8, element | 2d, 2e | G2
+       K2 Flächeninhalt; Höhe auch ausserhalb; Höhe als Abstand h = 2A/g | nein | 3 | sim3, hoehe-figur, flaeche | 3a–3d | G4(a), G4(c)
+       K2 Umfang | nein | 3 | flaeche (umfang) | 3e, 4f | G6(b)
+       K2 fehlende Seiten und Höhen (Pythagoras), Hilfsdreieck mit dem Fusspunkt ausserhalb | nein | 4 | sim4, pyth-figur,
+          pyth-anwendung (au) | 4a–4d, 4f | G4(b), G5, G6(a), G7
+       K2 Pythagoras nur mit rechtem Winkel | nein | 4 | Kontrollclip 4 F5 | 4e | G4(b) (Raster: Pythagoras im Dreieck ABC)
+     Kein Kapitelziel ohne Kompetenz, keines ohne Gesamttestaufgabe. Berechnet werden Winkel, Höhen (Lage und Länge), die
+     Teilung 2 : 1 des Schwerpunkts, halbe Winkel; Mittelsenkrechte und Winkelhalbierende werden vor allem erkannt und über
+     «gleich weit» begründet (Um- und Inkreisradius werden nicht berechnet — die Themenseite tut es auch nicht). Die
+     Umkehrung des Satzes von Pythagoras steht weder auf der Themenseite noch im Leitprogramm (Ziel von Kapitel 4 am
+     08.10.2026 entsprechend gestrichen).
 
      b) Planungstabelle (Kapitel | Lernziel | Clips | Erkundung | Beispiel (Quelle) | Häufiger Fehler | min):
        0 Vorwissen    | Winkelarten, Neben-/Wechselwinkel, Rechteck, m²/cm², umstellen | g5-1-winkelarten | — | — | — | 10
@@ -453,8 +469,10 @@ oben = '''<div id="nav-root"></div>
                         sim3 (Spitze t) | g = 6, h = 4 (Themenseite Mini-Check), Umfang 5 + 6 + 7 | schräge Seite, ½ vergessen | 40
        4 Pythagoras   | Katheten/Hypotenuse, a² + b² = c², Höhe gleichschenklig/gleichseitig | g5-2a-lp-pythagoras,
                         -kontrolle-pythagoras | sim4 (a, b) | 3-4-5 (Mini-Check), 13/5/12 (A3), s = 8 (A2) | ohne rechten
-                        Winkel, addieren statt subtrahieren | 40
-       Gesamttest 30. Summe 205 min ≈ 4.6 Lektionen (vier Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest).
+                        Winkel, addieren statt subtrahieren; Hilfsdreieck mit Fusspunkt ausserhalb (4f, Übung) | 45
+       Gesamttest 30. Summe 210 min ≈ 4.7 Lektionen (vier Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest).
+     Sperrliste der Übungen (seite.js, SPERRE) nach der Prüfung nachgeführt: G1(b) da|42|54|84, G7 ph|6|7 (Hilfsdreieck
+     ACM_a), 4f und G4 au|…, die neuen Zahlen der Kontrollfragen (ph|5|6, pk|9|4, gsh|6|8).
 
      c) Kern: alles oben. Bewusst weggelassen (→ Themenseite 5.2a): Dreiecksungleichung, Kongruenzsätze und Konstruktionen,
         Kathetensatz und Höhensatz, Seitenverhältnisse 1 : √3 : 2 und 1 : 1 : √2 als Merkregel (die Höhe im gleichseitigen
@@ -550,7 +568,7 @@ unten = '''
 </div>
 </div>
 '''
-# Zeiten (08.10.2026), geschätzt aus den Teilen: Vorwissen 10 · K1 40 · K2 45 · K3 40 · K4 40 · Gesamttest 30 = 205 min
+# Zeiten (08.10.2026), geschätzt aus den Teilen: Vorwissen 10 · K1 40 · K2 45 · K3 40 · K4 45 (mit 4f) · Gesamttest 30 = 210 min
 body = oben + k0 + k1 + k2 + k3 + k4 + gt + unten
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(ZIEL, 'w').write(seite)

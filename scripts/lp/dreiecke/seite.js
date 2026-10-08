@@ -270,6 +270,30 @@
       return { text: a.text,
         setup: function(s){ if (a.setup) a.setup(s); s.aufgabe(a); },
         ok: function(w){ return (a.wahl || a.frage) ? w.richtig : a.ziel(w); } }; }), sim);
+    /* Tipp auf die nächste Linie (Prüfung 08.10.2026, D-M1): Die Treffstreifen (±8 px) der Linien aus einer Ecke
+       überlappen nahe der Ecke; ohne Ausgleich gewinnt die zuletzt gezeichnete, und ein Tipp auf die sichtbare
+       Seitenhalbierende traf zu 60–75 % die Winkelhalbierende (falsche Rückmeldung). Ein echter Tipp (isTrusted)
+       auf irgendeinen Streifen zählt darum für die Linie, die dem Tippunkt am nächsten liegt. */
+    var svgEl = fig.querySelector('svg');
+    function streckeAbst(q, l){
+      var x1 = +l.getAttribute('x1'), y1 = +l.getAttribute('y1'), dx = +l.getAttribute('x2') - x1, dy = +l.getAttribute('y2') - y1;
+      var t = Math.max(0, Math.min(1, ((q.x - x1) * dx + (q.y - y1) * dy) / (dx * dx + dy * dy || 1)));
+      return Math.hypot(q.x - x1 - t * dx, q.y - y1 - t * dy);
+    }
+    function naechste(clientX, clientY){
+      var m = svgEl.getScreenCTM(); if (!m) return null;
+      var pt = svgEl.createSVGPoint(); pt.x = clientX; pt.y = clientY; pt = pt.matrixTransform(m.inverse());
+      var best = null, bd = Infinity;
+      svgEl.querySelectorAll('.kandidat').forEach(function(k){ var d = streckeAbst(pt, k.querySelector('.k-sicht')); if (d < bd){ bd = d; best = k; } });
+      return best;
+    }
+    svgEl.addEventListener('click', function(ev){
+      if (!ev.isTrusted) return;
+      var g = ev.target.closest && ev.target.closest('.kandidat'); if (!g) return;
+      var best = naechste(ev.clientX, ev.clientY);
+      if (best && best !== g){ ev.stopPropagation(); best.dispatchEvent(new MouseEvent('click')); }
+    }, true);
+    fig.__naechste = naechste;                        // Testhaken (Messung der Tippflächen)
     fig.__sim = sim; fig.__aufgaben = o.aufgaben;     // Testhaken
     zeichnen();
   }
@@ -386,7 +410,7 @@
       if (zg === 'm'){
         [[A, B], [B, C], [C, A]].forEach(function(q){ var m = mitte(q[0], q[1]); F.gerade(m, [m[0] - (q[1][1] - q[0][1]), m[1] + (q[1][0] - q[0][0])], 'hilfe2'); });
         F.kreis(P.MU, P.ru, 'umkreis'); F.punkt(P.MU, 'g-pkt loes'); F.name(P.MU, 'M', 'U', 'loes', 8, -6, 'start');
-        if (Au.radius){ F.strecke(P.MU, A, 'loes-linie'); }
+        if (Au.radius){ F.strecke(P.MU, A, 'hilfe'); }   // gegeben: orange (Hilfslinie), nicht grün (Ergebnis)
       }
       if (k.wahl){
         F.kandidat('h', C, [fc[0], fc[1]], k.wahl);
@@ -567,6 +591,7 @@
     function zufall(l){ return l[Math.floor(Math.random() * l.length)]; }
     function zufallG(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
     function r2(v){ return Math.round(v * 100) / 100; }
+    function gr(v){ return (Math.abs(v - r2(v)) < 1e-9 ? '= ' : '\\approx ') + r2(v); }   // «=» nur, wenn exakt
     function mischen(l){ l = l.slice(); for (var i = l.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = l[i]; l[i] = l[j]; l[j] = t; } return l; }
     /* Feste Aufgaben, die eine Zufallsübung nicht treffen darf (HOWTO §15): Clips · Arbeitsbereiche · Kapitelaufgaben ·
        Gesamttest · Beispiele der Themenseite. Je Typ und Variante ein eigener Schlüssel. */
@@ -576,16 +601,18 @@
       'ws|50|60', 'ws|40|50', 'ws|47|68', 'ws|48|75', 'ws|35|75', 'wa|35|75', 'wa|50|70', 'wa|35|65', 'wa|47|68', 'wa|38|65',
       'wi|115|38', 'gb|72', 'gb|52', 'gs|40', 'gs|30', 'ga|100', 'gab|116', 'rw|35', 'rw|34', 'wv|2|54', 'wv|2|72',
       // dreiecksart: da|sortierte Winkel
-      'da|40|50|90',
+      'da|40|50|90', 'da|42|54|84',
       // elem-rechnen: sp|Art|Wert, wh|α, adc|α|γ, hw|α
       'sp|s|9', 'sp|s|5', 'sp|s|7.5', 'wh|64', 'wh|70', 'adc|70|60', 'hw|74', 'hw|58',
       // flaeche: fa|g|h (cm), fh|A|g, fz|a|ha|b, fu|Art|…
       'fa|6|4', 'fa|6|5', 'fa|9|4', 'fa|45|18', 'fa|7|4', 'fh|15|6', 'fh|20|8', 'fh|12|5', 'fh|18|5', 'fh|18|9',
       'fz|8|3|6', 'fz|9|4|6', 'fz|9|4|5', 'fu|gs|7|25',
       // pyth-figur: ph|Kathete|Kathete (sortiert), pk|Hypotenuse|Kathete
-      'ph|3|4', 'ph|6|8', 'ph|9|12', 'ph|5|12', 'pk|13|5', 'pk|10|6', 'pk|8|3.5', 'pk|25|7', 'pk|8.5|4', 'pk|5|3',
+      'ph|3|4', 'ph|6|8', 'ph|9|12', 'ph|5|12', 'pk|13|5', 'pk|10|6', 'pk|8|3.5', 'pk|25|7', 'pk|8.5|4', 'pk|5|3', 'ph|4|12', 'ph|2.5|6', 'ph|5|6', 'pk|9|4', 'ph|6|7',
       // pyth-anwendung: gsh|Basis|Schenkel, gss|Basis|Höhe, glh|s, gla|s, lh|Länge|Abstand
-      'gsh|6|5', 'gsh|12|10', 'gsh|10|13', 'gss|9.6|3.6', 'gss|8|3.5', 'glh|6', 'glh|8', 'glh|10', 'gla|10', 'gla|8', 'lh|4.5|1.2'
+      'gsh|6|5', 'gsh|12|10', 'gsh|10|13', 'gss|9.6|3.6', 'gss|8|3.5', 'glh|6', 'glh|8', 'glh|10', 'gla|10', 'gla|8', 'lh|4.5|1.2', 'gsh|6|8',
+      // au|c|BF|h_c|gesuchte Seite (Hilfsdreieck mit dem Fusspunkt ausserhalb): Aufgabe 4f, Gesamttest G4
+      'au|5|2|3.5|a', 'au|5|2|3.5|b', 'au|7|4|4.2|b', 'au|7|4|4.2|a'
     ];
     function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
     function feld(A, f, e, soll, tipp, fehler, tol){
@@ -657,14 +684,14 @@
           var kf = zufall([2, 3]), al = zufallG(12, 40); if (al * (kf + 1) > 165) al = 30;
           var ga = 180 - al * (kf + 1);
           return { art: 'wv', schl: 'wv|' + kf + '|' + ga, soll: al, text: 'In einem Dreieck ist \\(\\beta\\) ' + (kf === 2 ? 'doppelt' : 'dreimal') + ' so gross wie \\(\\alpha\\), und \\(\\gamma = ' + ga + '°\\). Wie gross ist \\(\\alpha\\)?',
-            falsch: [[(180 - ga) / kf, 'Das wäre \\(\\alpha\\), wenn \\(\\beta\\) fehlte. \\(\\alpha + \\beta = ' + (kf + 1) + '\\alpha\\).', 'k'], [180 - ga, 'Das ist \\(\\alpha + \\beta\\) zusammen. Teile durch \\(' + (kf + 1) + '\\).', 'zusammen'], [(180 - ga) / (kf + 1) * kf, 'Das ist \\(\\beta\\). Gefragt ist \\(\\alpha\\).', 'beta']],
+            falsch: [[(180 - ga) / kf, 'Durch ' + kf + ' geteilt? \\(\\alpha + \\beta = \\alpha + ' + kf + '\\alpha = ' + (kf + 1) + '\\alpha\\) — teile durch \\(' + (kf + 1) + '\\).', 'k'], [180 - ga, 'Das ist \\(\\alpha + \\beta\\) zusammen. Teile durch \\(' + (kf + 1) + '\\).', 'zusammen'], [(180 - ga) / (kf + 1) * kf, 'Das ist \\(\\beta\\). Gefragt ist \\(\\alpha\\).', 'beta']],
             tipp: '\\(\\alpha + ' + kf + '\\alpha = 180° - \\gamma\\).', loes: (kf + 1) + '\\alpha = ' + (180 - ga) + '°,\\ \\alpha = ' + al + '°' }; },
         fehler: function(A){ return fehlerListe(A, 'w', A.falsch); },
         pruefen: function(A, e){ return feld(A, 'w', e, A.soll, A.tipp, falschOhneSoll(A)); },
         loesung: function(A){ return A.loes; } },
 
       /* Dreiecke einteilen: aus zwei Winkeln die Art nach Winkeln und nach Seiten bestimmen (der dritte Winkel zählt mit). */
-      'dreiecksart': { felder: ['w', 's'], muster: 'nach Winkeln {w:spitzwinklig|rechtwinklig|stumpfwinklig}; nach Seiten {s:gleichseitig|gleichschenklig|keine zwei gleich}',
+      'dreiecksart': { felder: ['w', 's'], muster: 'nach Winkeln {w:spitzwinklig|rechtwinklig|stumpfwinklig}; nach Seiten {s:gleichseitig|gleichschenklig|ungleichseitig}',
         schl: function(A){ return 'da|' + A.sortiert.join('|'); },
         eingabe: function(A){ return { w: A.sw, s: A.ss }; },
         neu: function(){
@@ -679,12 +706,12 @@
           w = mischen(w);
           var gegeben = [0, 1], m = Math.max(w[0], w[1], w[2]);
           var sw = m > 90 ? 'stumpfwinklig' : m === 90 ? 'rechtwinklig' : 'spitzwinklig';
-          var ss = (w[0] === w[1] && w[1] === w[2]) ? 'gleichseitig' : (w[0] === w[1] || w[0] === w[2] || w[1] === w[2]) ? 'gleichschenklig' : 'keine zwei gleich';
+          var ss = (w[0] === w[1] && w[1] === w[2]) ? 'gleichseitig' : (w[0] === w[1] || w[0] === w[2] || w[1] === w[2]) ? 'gleichschenklig' : 'ungleichseitig';
           return { w: w, sortiert: w.slice().sort(function(x, y){ return x - y; }), sw: sw, ss: ss,
             text: 'Ein Dreieck hat die Winkel \\(\\alpha = ' + w[gegeben[0]] + '°\\) und \\(\\beta = ' + w[gegeben[1]] + '°\\). Was für ein Dreieck ist es?' }; },
         fehler: function(A){ var f = [];
           ['spitzwinklig', 'rechtwinklig', 'stumpfwinklig'].forEach(function(x){ if (x !== A.sw) f.push([{ w: x, s: A.ss }, null]); });
-          ['gleichseitig', 'gleichschenklig', 'keine zwei gleich'].forEach(function(x){ if (x !== A.ss) f.push([{ w: A.sw, s: x }, null]); });
+          ['gleichseitig', 'gleichschenklig', 'ungleichseitig'].forEach(function(x){ if (x !== A.ss) f.push([{ w: A.sw, s: x }, null]); });
           return f; },
         gut: function(A){ return '\\(\\gamma = ' + A.w[2] + '°\\).'; },
         pruefen: function(A, e){
@@ -719,7 +746,7 @@
             ['Dieser Punkt ist von allen drei Seiten gleich weit entfernt.', 'Inkreismittelpunkt'],
             ['Dieser Punkt teilt jede Seitenhalbierende im Verhältnis \\(2 : 1\\).', 'Schwerpunkt'],
             ['In einem rechtwinkligen Dreieck liegt dieser Punkt genau auf der Ecke mit dem rechten Winkel.', 'Höhenschnittpunkt'],
-            ['In ihm schneiden sich die drei Lote von den Ecken auf die Gegenseiten.', 'Höhenschnittpunkt']]);
+            ['In ihm schneiden sich die drei Lote von den Ecken auf die Geraden durch die Gegenseiten.', 'Höhenschnittpunkt']]);
           return { soll: t[1], text: t[0] + ' Wie heisst ' + (t[1].indexOf('punkt') >= 0 ? 'er' : 'sie') + '?' }; },
         fehler: function(A){ var paar = { 'Höhe': 'Mittelsenkrechte', 'Mittelsenkrechte': 'Höhe', 'Inkreismittelpunkt': 'Umkreismittelpunkt', 'Umkreismittelpunkt': 'Inkreismittelpunkt',
           'Seitenhalbierende': 'Mittelsenkrechte', 'Winkelhalbierende': 'Seitenhalbierende', 'Schwerpunkt': 'Inkreismittelpunkt', 'Höhenschnittpunkt': 'Umkreismittelpunkt' };
@@ -731,13 +758,15 @@
           if (istPunkt(x) !== istPunkt(s)) return istPunkt(s) ? 'Gesucht ist ein Punkt, keine Linie.' : 'Gesucht ist eine Linie, kein Punkt.';
           if (s === 'Höhe' && x === 'Mittelsenkrechte') return 'Beide stehen senkrecht — die Mittelsenkrechte geht aber durch die Seitenmitte, nicht durch die Ecke.';
           if (s === 'Mittelsenkrechte' && x === 'Höhe') return 'Beide stehen senkrecht — die Höhe geht aber durch die Ecke, nicht durch die Seitenmitte.';
-          if (s === 'Mittelsenkrechte' && x === 'Seitenhalbierende') return 'Die Seitenhalbierende endet in der Ecke gegenüber und steht nicht senkrecht. Gleich weit von zwei Punkten: Mittelsenkrechte.';
-          if (s === 'Seitenhalbierende' && x === 'Mittelsenkrechte') return 'Die Mittelsenkrechte steht senkrecht auf der Seite und geht nicht durch die Ecke.';
-          if (s === 'Winkelhalbierende') return 'Gleich weit von zwei Seiten, einen Winkel in zwei gleiche Teile: Das tut die Winkelhalbierende.';
-          if (s === 'Inkreismittelpunkt' && x === 'Umkreismittelpunkt') return 'Gleich weit von den <b>Ecken</b> ist der Umkreismittelpunkt. Hier sind es die <b>Seiten</b>.';
-          if (s === 'Umkreismittelpunkt' && x === 'Inkreismittelpunkt') return 'Gleich weit von den <b>Seiten</b> ist der Inkreismittelpunkt. Hier sind es die <b>Ecken</b>.';
-          if (s === 'Schwerpunkt') return 'Die Teilung \\(2 : 1\\) gehört zu den Seitenhalbierenden — und ihrem Schnittpunkt.';
-          if (s === 'Höhenschnittpunkt') return 'Lote von den Ecken auf die Gegenseiten sind die Höhen.';
+          // Rückmeldung beschreibt die gewählte Antwort und lenkt auf die Beschreibung zurück — sie nennt die Lösung nicht
+          var WAS = { 'Seitenhalbierende': 'Die Seitenhalbierende verbindet eine Ecke mit der Mitte der Gegenseite; senkrecht steht sie meist nicht.',
+            'Winkelhalbierende': 'Die Winkelhalbierende teilt einen Winkel in zwei gleiche Teile.',
+            'Höhe': 'Die Höhe geht durch eine Ecke und steht senkrecht auf der Geraden durch die Gegenseite.',
+            'Mittelsenkrechte': 'Die Mittelsenkrechte steht in der Mitte einer Seite senkrecht; durch eine Ecke geht sie meist nicht.',
+            'Höhenschnittpunkt': 'Im Höhenschnittpunkt schneiden sich die drei Höhen.', 'Schwerpunkt': 'Im Schwerpunkt schneiden sich die drei Seitenhalbierenden.',
+            'Inkreismittelpunkt': 'Der Inkreismittelpunkt ist von den drei <b>Seiten</b> gleich weit entfernt.',
+            'Umkreismittelpunkt': 'Der Umkreismittelpunkt ist von den drei <b>Ecken</b> gleich weit entfernt.' };
+          if (WAS[x]) return WAS[x] + ' Passt das zur Beschreibung? Lies sie nochmals genau.';
           return 'Lies genau: Ecke oder Seitenmitte, senkrecht oder nicht, Ecken oder Seiten?'; },
         loesung: function(A){ return '\\text{' + A.soll + '}'; } },
 
@@ -849,13 +878,17 @@
         neu: function(){
           var art = zufall(['A', 'A', 'h', 'g', 'zwei', 'zwei', 'umfang']), g, h, F_;
           if (art === 'A'){ g = zufall([4, 5, 7, 8, 9, 11, 12, 3.5, 4.5, 7.5]); h = zufall([3, 5, 6, 2.5, 3.6, 4.4, 7]); var misch = Math.random() < 0.35;
-            if (misch) return { art: art, schl: 'fa|' + g + '|' + h, soll: r2(g * h / 2), einh: 'cm²', text: 'Grundseite \\(g = ' + r2(g / 100) + '\\,\\text{m}\\), zugehörige Höhe \\(h = ' + h + '\\,\\text{cm}\\). Berechne die Fläche in \\(\\text{cm}^2\\).',
+            if (misch) return { art: art, schl: 'fa|' + g + '|' + h, soll: r2(g * h / 2), einh: 'cm²', text: 'Grundseite \\(g = ' + Math.round(g * 10) / 1000 + '\\,\\text{m}\\), zugehörige Höhe \\(h = ' + h + '\\,\\text{cm}\\). Berechne die Fläche in \\(\\text{cm}^2\\).',
               falsch: [[g * h, '\\(g \\cdot h\\) ist das Rechteck — das Dreieck ist die <b>Hälfte</b>.', 'Hälfte'], [g / 100 * h / 2, 'Einheiten: \\(g\\) in m, \\(h\\) in cm — vorher angleichen.', 'Einheiten']],
-              tipp: 'Zuerst die Einheiten angleichen: \\(g = ' + g + '\\,\\text{cm}\\), dann \\(A = \\tfrac{1}{2}\\, g \\cdot h\\).', loes: 'A = \\tfrac{1}{2} \\cdot ' + g + ' \\cdot ' + h + ' = ' + r2(g * h / 2) + '\\,\\text{cm}^2' };
+              tipp: 'Zuerst die Einheiten angleichen: \\(g = ' + g + '\\,\\text{cm}\\), dann \\(A = \\tfrac{1}{2}\\, g \\cdot h\\).', loes: 'A = \\tfrac{1}{2} \\cdot ' + g + ' \\cdot ' + h + ' ' + gr(g * h / 2) + '\\,\\text{cm}^2' };
             return { art: art, schl: 'fa|' + g + '|' + h, soll: r2(g * h / 2), einh: 'cm²', text: 'Grundseite \\(g = ' + g + '\\,\\text{cm}\\), zugehörige Höhe \\(h = ' + h + '\\,\\text{cm}\\). Berechne die Fläche.',
               falsch: [[g * h, '\\(g \\cdot h\\) ist das Rechteck — das Dreieck ist die <b>Hälfte</b>.', 'Hälfte'], [g + h, 'Eine Fläche ist ein Produkt, keine Summe.', 'Summe']],
-              tipp: '\\(A = \\tfrac{1}{2}\\, g \\cdot h\\).', loes: 'A = \\tfrac{1}{2} \\cdot ' + g + ' \\cdot ' + h + ' = ' + r2(g * h / 2) + '\\,\\text{cm}^2' }; }
-          if (art === 'h' || art === 'g'){ g = zufall([4, 5, 6, 8, 10, 12, 7.5]); h = zufall([2, 3, 4, 5, 6, 1.5, 2.4, 4.8, 9]); F_ = r2(g * h / 2);
+              tipp: '\\(A = \\tfrac{1}{2}\\, g \\cdot h\\).', loes: 'A = \\tfrac{1}{2} \\cdot ' + g + ' \\cdot ' + h + ' ' + gr(g * h / 2) + '\\,\\text{cm}^2' }; }
+          if (art === 'h' || art === 'g'){
+            // nur Flächen mit höchstens zwei Dezimalen: Eine gerundet angezeigte Fläche (7.5 · 1.5 : 2 = 5.625 → 5.63) gäbe
+            // aus der richtigen Rechnung 7.51 statt 7.5 und die falsche Meldung «Fast — runde» (Prüfung 08.10.2026)
+            do { g = zufall([4, 5, 6, 8, 10, 12, 7.5]); h = zufall([2, 3, 4, 5, 6, 1.5, 2.4, 4.8, 9]); } while (Math.abs(g * h / 2 - r2(g * h / 2)) > 1e-9);
+            F_ = r2(g * h / 2);
             if (art === 'h') return { art: art, schl: 'fh|' + F_ + '|' + g, soll: h, einh: 'cm', text: 'Ein Dreieck hat die Fläche \\(' + F_ + '\\,\\text{cm}^2\\) und die Grundseite \\(' + g + '\\,\\text{cm}\\). Wie weit ist die gegenüberliegende Ecke von der Geraden der Grundseite entfernt?',
               falsch: [[F_ / g, 'Das ist die Hälfte: \\(h = \\tfrac{2A}{g}\\) — die \\(\\tfrac{1}{2}\\) der Formel wandert als \\(2\\) nach oben.', 'Doppelte'], [F_ * g * 2, 'Teilen, nicht multiplizieren: \\(h = \\tfrac{2A}{g}\\).', 'teilen']],
               tipp: 'Der Abstand ist die Höhe: aus \\(A = \\tfrac{1}{2}\\, g \\cdot h\\) folgt \\(h = \\tfrac{2A}{g}\\).', loes: 'h = \\tfrac{2 \\cdot ' + F_ + '}{' + g + '} = ' + h + '\\,\\text{cm}' };
@@ -863,7 +896,7 @@
               falsch: [[F_ / h, 'Das ist die Hälfte: \\(g = \\tfrac{2A}{h}\\).', 'Doppelte'], [F_ * h * 2, 'Teilen, nicht multiplizieren: \\(g = \\tfrac{2A}{h}\\).', 'teilen']],
               tipp: '\\(g = \\tfrac{2A}{h}\\).', loes: 'g = \\tfrac{2 \\cdot ' + F_ + '}{' + h + '} = ' + g + '\\,\\text{cm}' }; }
           if (art === 'zwei'){ var a, ha, b;
-            do { a = zufall([5, 6, 7, 8, 9, 10, 12]); ha = zufall([2, 3, 4, 4.5, 5, 6]); b = zufall([4, 5, 6, 7.5, 8, 10]); } while (a === b);
+            do { a = zufall([5, 6, 7, 8, 9, 10, 12]); ha = zufall([2, 3, 4, 4.5, 5, 6]); b = zufall([4, 5, 6, 7.5, 8, 10]); } while (a === b || ha >= b);   // h_a < b, sonst gibt es das Dreieck nicht (Prüfung 08.10.2026, D-H2)
             return { art: art, schl: 'fz|' + a + '|' + ha + '|' + b, soll: r2(a * ha / b), einh: 'cm', text: 'Im Dreieck ist \\(a = ' + a + '\\,\\text{cm}\\), die Höhe \\(h_a = ' + ha + '\\,\\text{cm}\\) und \\(b = ' + b + '\\,\\text{cm}\\). Wie lang ist die Höhe \\(h_b\\)?',
               falsch: [[b * ha / a, 'Verkehrt: Zur kürzeren Seite gehört die längere Höhe. Rechne zuerst die Fläche, dann \\(h_b = \\tfrac{2A}{b}\\).', 'verkehrt'], [a * ha / 2, 'Das ist die Fläche. Daraus folgt die Höhe: \\(h_b = \\tfrac{2A}{b}\\).', 'Fläche'], [a * ha / 2 / b, 'Aus \\(A = \\tfrac{1}{2}\\, b \\cdot h_b\\) folgt \\(h_b = \\tfrac{2A}{b}\\) — das Doppelte.', 'Hälfte']],
               tipp: 'Beide Höhen gehören zur selben Fläche: \\(A = \\tfrac{1}{2}\\, a \\cdot h_a = \\tfrac{1}{2}\\, b \\cdot h_b\\).', loes: 'A = ' + r2(a * ha / 2) + ',\\ h_b = \\tfrac{2A}{b} \\approx ' + r2(a * ha / b) + '\\,\\text{cm}' }; }
@@ -872,7 +905,8 @@
           if (v === 'gsU'){ var bs = zufall([4, 5, 6, 7, 8, 9.5]), sk = zufall([5, 6, 7.5, 8, 9, 11]); if (sk * 2 <= bs) sk = bs;
             return { art: 'umfang', schl: 'fu|gsU|' + bs + '|' + sk, soll: r2(bs + 2 * sk), einh: 'cm', text: 'Ein gleichschenkliges Dreieck hat die Basis \\(' + bs + '\\,\\text{cm}\\) und die Schenkel je \\(' + sk + '\\,\\text{cm}\\). Wie gross ist der Umfang?',
               falsch: [[bs + sk, 'Es gibt zwei Schenkel.', 'zwei'], [2 * bs + sk, 'Die Basis zählt einmal, die Schenkel zweimal.', 'verkehrt']], tipp: '\\(U = \\text{Basis} + 2 \\cdot \\text{Schenkel}\\).', loes: 'U = ' + bs + ' + 2 \\cdot ' + sk + ' = ' + r2(bs + 2 * sk) + '\\,\\text{cm}' }; }
-          if (v === 'gsS'){ var bs2 = zufall([4, 5, 6, 8, 10]), sk2 = zufall([5, 6, 7, 8.5, 9, 12]), U = bs2 + 2 * sk2;
+          if (v === 'gsS'){ var bs2, sk2; do { bs2 = zufall([4, 5, 6, 8, 10]); sk2 = zufall([5, 6, 7, 8.5, 9, 12]); } while (2 * sk2 < bs2 + 1);   // kein flaches Dreieck
+            var U = bs2 + 2 * sk2;
             return { art: 'umfang', schl: 'fu|gs|' + bs2 + '|' + U, soll: sk2, einh: 'cm', text: 'Ein gleichschenkliges Dreieck hat den Umfang \\(' + U + '\\,\\text{cm}\\) und die Basis \\(' + bs2 + '\\,\\text{cm}\\). Wie lang ist ein Schenkel?',
               falsch: [[U - bs2, 'Das sind beide Schenkel zusammen.', 'zwei'], [(U - bs2) / 3, 'Die Basis ist schon abgezogen; es bleiben zwei Schenkel.', 'drei']], tipp: 'Umfang minus Basis, dann durch \\(2\\).', loes: '(' + U + ' - ' + bs2 + ') : 2 = ' + sk2 + '\\,\\text{cm}' }; }
           var U3 = zufall([12, 15, 16.5, 18, 21, 22.5, 24, 27, 30]);
@@ -919,7 +953,17 @@
         schl: function(A){ return A.schl; },
         eingabe: function(A){ return { x: String(A.soll) }; },
         neu: function(){
-          var art = zufall(['gsh', 'gsh', 'gss', 'glh', 'gla', 'lh']);
+          var art = zufall(['gsh', 'gsh', 'gss', 'glh', 'gla', 'lh', 'au', 'au']);
+          if (art === 'au'){   // Hilfsdreieck: Fusspunkt F der Höhe h_c auf der Verlängerung von c über B hinaus (wie Gesamttest G4)
+            var c = zufall([3, 4, 5, 6, 7, 8]), p = zufall([1, 1.5, 2, 2.5, 3, 4]), hc = zufall([2, 2.5, 3, 3.5, 4, 4.5, 5]), was = zufall(['a', 'b']);
+            var la = Math.hypot(p, hc), lb = Math.hypot(c + p, hc), sl = was === 'a' ? la : lb;
+            var fa = was === 'a'
+              ? [[lb, 'Das ist die Seite \\(b = AC\\). Gesucht ist \\(a = BC\\): Ihr Hilfsdreieck ist \\(BFC\\).', 'Seite'], [Math.hypot(c, hc), 'Die Kathete auf der Geraden \\(AB\\) ist hier \\(\\overline{BF}\\), nicht \\(c\\).', 'Kathete'], [p + hc, 'Nicht die Längen addieren, sondern die Quadrate — dann die Wurzel.', 'Quadrate']]
+              : [[la, 'Das ist die Seite \\(a = BC\\). Gesucht ist \\(b = AC\\): Ihr Hilfsdreieck ist \\(AFC\\).', 'Seite'], [Math.hypot(c, hc), 'Die Kathete auf der Geraden \\(AB\\) reicht von \\(A\\) bis \\(F\\): \\(c + \\overline{BF}\\), nicht nur \\(c\\).', 'Kathete'], [c + p + hc, 'Nicht die Längen addieren, sondern die Quadrate — dann die Wurzel.', 'Quadrate']];
+            return { art: art, schl: 'au|' + c + '|' + p + '|' + hc + '|' + was, soll: r2(sl), einh: 'cm',
+              text: 'Im Dreieck \\(ABC\\) ist \\(c = ' + c + '\\,\\text{cm}\\). Die Höhe \\(h_c = ' + hc + '\\,\\text{cm}\\) trifft die Verlängerung von \\(c\\) im Punkt \\(F\\), \\(' + p + '\\,\\text{cm}\\) hinter \\(B\\). Wie lang ist die Seite \\(' + was + '\\)?',
+              falsch: fa, tipp: 'Skizze: \\(F\\) liegt hinter \\(B\\), der rechte Winkel bei \\(F\\). ' + (was === 'a' ? 'Im Dreieck \\(BFC\\) sind \\(\\overline{BF}\\) und \\(h_c\\) die Katheten.' : 'Im Dreieck \\(AFC\\) sind \\(\\overline{AF} = c + \\overline{BF}\\) und \\(h_c\\) die Katheten.'),
+              loes: was === 'a' ? 'a = \\sqrt{' + p + '^2 + ' + hc + '^2} ' + gr(la) + '\\,\\text{cm}' : 'b = \\sqrt{' + r2(c + p) + '^2 + ' + hc + '^2} ' + gr(lb) + '\\,\\text{cm}' }; }
           if (art === 'gsh'){ var g = zufall([4, 6, 8, 10, 12, 7, 9]), s = zufall([5, 6, 7, 8.5, 9, 10, 13].filter(function(x){ return x > g / 2 + 0.6; }));
             var h = Math.sqrt(s * s - g * g / 4);
             return { art: art, schl: 'gsh|' + g + '|' + s, soll: r2(h), einh: 'cm', text: 'Ein gleichschenkliges Dreieck hat die Basis \\(' + g + '\\,\\text{cm}\\) und die Schenkel je \\(' + s + '\\,\\text{cm}\\). Wie hoch ist es (Höhe auf die Basis)?',

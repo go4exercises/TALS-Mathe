@@ -1,6 +1,7 @@
 % Bewertungspaket zum Gesamttest «Dreiecke» — Quelle des PDFs (python3 scripts/build-lp-pdf.py leitprogramme/dreiecke/).
 % Ganze Punkte je Teilschritt; Werte mit python3 nachgerechnet (scripts/lp/dreiecke/zahlen.py, 08.10.2026, Fehlerfälle
-% eingeschlossen). Aufbau wie trigonometrische-berechnungen/bewertungspaket.tex.
+% eingeschlossen). Aufbau wie trigonometrische-berechnungen/bewertungspaket.tex. Nach der Prüfung vom 08.10.2026 überarbeitet:
+% eine Regel für (E) und Folgepunkte (auch: kein Folgepunkt aus Unmöglichem), neue Aufgaben G4 und G7.
 \documentclass[11pt]{article}
 \usepackage{../lp-druck}
 \renewcommand{\lpname}{Dreiecke}
@@ -13,6 +14,7 @@
 \newcommand{\fehler}[1]{\par\smallskip{\small\textcolor{lprot}{\bfseries Typische Fehler:} #1}}
 \newcommand{\E}{\,{\footnotesize\bfseries\color{lpgruen}(E)}}
 \newcommand{\A}{\,{\footnotesize\bfseries\color{lpblau}(A)}}
+\hyphenation{Mittel-senkrechte Mittel-senkrechten Winkel-halbierende Winkel-halbierenden Seiten-halbierende Seiten-halbierenden}
 \begin{document}
 \lpkopf{Bewertungspaket zum Gesamttest}{}
 
@@ -41,8 +43,8 @@ Dieses Paket enthält die Musterlösung. Wer es vor dem Lösen liest, misst am E
 Du bist Korrektorin oder Korrektor für Mathematik an einer Schweizer Berufsmaturitätsschule. Im Anhang findest du (1)~das Bewertungspaket zum Gesamttest «Dreiecke» mit Musterlösung und Punkteraster und (2)~Fotos meiner handschriftlichen Lösung.\par\smallskip
 Geh so vor:\par
 1. Schreib zu jeder Aufgabe G1 bis G7 zuerst ab, was du in meiner Lösung liest — Rechenweg und Ergebnis. Was du nicht sicher lesen kannst, markierst du mit [unsicher]. Nicht raten.\par
-2. Vergib die Punkte genau nach dem Raster im Bewertungspaket (Abschnitt 3), ganze Punkte je Zeile. Ziehe einen Fehler nur einmal ab: Rechne ich mit einem falschen Zwischenergebnis richtig weiter, gibt es die Folgepunkte. Ausnahme: Zeilen mit \textbf{(E)} gibt es nur für das richtige Ergebnis, nie als Folgepunkt. Die Zeilen «Typische Fehler» sagen, welche Rasterzeile bei diesem Fehler 0 Punkte gibt — sie sind kein zusätzlicher Abzug.\par
-3. Andere richtige Lösungswege zählen voll, ebenso gleichwertige Schreibweisen: Dezimalpunkt oder Dezimalkomma, exakte Werte wie $\sqrt{160}$ statt Dezimalzahlen, anders, aber vernünftig gerundete Ergebnisse ($\pm 0.01$ oder durch gerundete Zwischenwerte erklärbar). \textbf{Einheiten:} Fehlt bei einem Endergebnis die Einheit oder ist sie falsch ($\text{cm}$ statt $\text{cm}^2$), gibt die (E)-Zeile dieses Ergebnisses 0 Punkte — aber nur beim ersten Mal im ganzen Gesamttest; weitere Einheitenfehler kosten nichts mehr. Zeilen mit \textbf{(A)} verlangen nur Erkennen oder Ablesen, diese Punkte gibt es auch ohne Rechenweg. Zeilen mit \textbf{(E)} sind Ergebnispunkte: Das Ergebnis muss stimmen \emph{und} aus einem erkennbaren Weg hervorgehen. Alle übrigen Zeilen bewerten den Weg selbst.\par
+2. Vergib die Punkte genau nach dem Raster im Bewertungspaket (Abschnitt 3), ganze Punkte je Zeile. Ziehe einen Fehler nur einmal ab: Rechne ich mit einem falschen Zwischenergebnis richtig weiter, gibt es die Folgepunkte. Ausnahme: Zeilen mit \textbf{(E)} gibt es nur für das richtige Ergebnis, nie als Folgepunkt. Auch die Folgepunkte entfallen, wenn mein eigenes Zwischenergebnis unmöglich ist (etwa eine Kathete, die länger ist als die Hypotenuse) — Abschnitt~3, «Allgemein». Die Zeilen «Typische Fehler» sagen, welche Rasterzeile bei diesem Fehler 0 Punkte gibt — sie sind kein zusätzlicher Abzug.\par
+3. Andere richtige Lösungswege zählen voll, ebenso gleichwertige Schreibweisen: Dezimalpunkt oder Dezimalkomma, exakte Werte wie $\sqrt{160}$ statt Dezimalzahlen, anders, aber vernünftig gerundete Ergebnisse ($\pm 0.01$ oder durch gerundete Zwischenwerte erklärbar). \textbf{Einheiten:} Fehlt bei einem Endergebnis die Einheit oder ist sie falsch ($\text{cm}$ statt $\text{cm}^2$), gibt die Zeile dieses Ergebnisses 0 Punkte — aber nur beim ersten Mal im ganzen Gesamttest; weitere Einheitenfehler kosten nichts mehr. Zeilen mit \textbf{(A)} verlangen nur Erkennen oder Ablesen, diese Punkte gibt es auch ohne Rechenweg. Zeilen mit \textbf{(E)} sind Ergebnispunkte: Das Ergebnis muss stimmen \emph{und} aus einem erkennbaren Weg hervorgehen. Alle übrigen Zeilen bewerten den Weg selbst.\par
 4. Begründe jeden Abzug in einem Satz und nenne die Fehlerart (zum Beispiel «schräge Seite als Höhe» oder «Hypotenuse als Kathete eingesetzt»). Schreib die Musterlösung nicht ab — zeig mir, wo mein Fehler liegt.\par
 5. Gib zum Schluss eine Tabelle «Aufgabe | Punkte | Begründung», die Gesamtpunktzahl (von 25) und — nach der Selbsteinschätzung in Abschnitt 4 — welches Kapitel des Leitprogramms ich wiederholen soll. Keine Note.\par
 6. Fehlt ein Foto oder ist eine Aufgabe unlesbar, sag es, statt sie zu bewerten.
@@ -50,67 +52,72 @@ Geh so vor:\par
 
 \needspace{8\baselineskip}
 \section*{3 · Musterlösung und Punkteraster}
-\textbf{Allgemein:} Ganze Punkte je Zeile. Ein Fehler wird nur einmal abgezogen (Folgefehler: wer mit einem falschen
-Zwischenergebnis richtig weiterrechnet, bekommt die Wegpunkte der folgenden Zeilen, aber keine (E)-Punkte). In der Spalte P:
-\textbf{(A)}~= erkennen oder ablesen, zählt auch ohne Rechenweg · \textbf{(E)}~= Ergebnispunkt, Ergebnis richtig
-\emph{und} Weg erkennbar · ohne Zeichen = die Zeile bewertet den Weg. Taschenrechner erlaubt; Längen und Winkel auf zwei
-Dezimalen, Toleranz $\pm 0.01$ (oder durch gerundete Zwischenwerte erklärbar). \textbf{Einheiten:} Der erste Einheitenfehler im
-ganzen Test kostet die (E)-Zeile dieses Ergebnisses, weitere nichts.
-«Typische Fehler» nennt, welche Zeile 0 Punkte gibt, und die Punkte, die bleiben.
+\textbf{Allgemein:} Ganze Punkte je Zeile. In der Spalte P:
+\textbf{(E)}~= Ergebnis, das direkt aus den gegebenen Grössen folgt: Den Punkt gibt es nur für das richtige Ergebnis mit
+erkennbarem Weg, nie als Folgepunkt. \textbf{(A)}~= erkennen oder ablesen, zählt auch ohne Rechenweg. Ohne Zeichen = die Zeile
+bewertet den Weg oder die Begründung. Steht in einer Zeile «Folgepunkt», baut sie auf einem eigenen früheren Ergebnis auf:
+Wer mit einem eigenen falschen Zwischenergebnis richtig weiterrechnet, bekommt den Punkt — \textbf{ausser das eigene
+Zwischenergebnis ist unmöglich} (eine Kathete oder Höhe, die länger ist als die Hypotenuse bzw. als eine Seite an derselben
+Ecke; ein Teilwinkel, der grösser ist als der ganze Winkel; Winkel, die zusammen nicht $180^\circ$ ergeben). Diese eine Regel
+gilt in allen Aufgaben. Taschenrechner erlaubt; Längen und Winkel auf zwei Dezimalen, Toleranz $\pm 0.01$; Folgewerte aus
+ungerundeten Zwischenwerten (wer gerundet weiterrechnet und darum in der zweiten Dezimale abweicht, verliert nichts).
+\textbf{Einheiten:} Der erste Einheitenfehler im ganzen Test kostet die Zeile dieses Ergebnisses, weitere nichts.
+«Typische Fehler» nennt, welche Zeilen 0 Punkte geben, und die Punkte, die bleiben.
 \textbf{Teilrichtige Zeilen:} Verlangt eine Zeile mehrere Angaben und stimmt nur ein Teil, gibt die Zeile 0 Punkte.
 
 \begin{lpaufgabe}{G1}{Winkel aus dem Aussenwinkel}{4 P}
 \begin{raster}
-(a) Ansatz & 1 & Aussenwinkelsatz: $\gamma' = \alpha + \beta = \alpha + 2\alpha = 3\alpha = 126^\circ$ (gleichwertig: $\gamma = 180^\circ - 126^\circ = 54^\circ$, dann $3\alpha = 126^\circ$)\\
+(a) Ansatz & 1 & Aussenwinkelsatz: $\gamma' = \alpha + \beta = \alpha + 2\alpha = 3\alpha = 126^\circ$ (gleichwertig: zuerst $\gamma = 54^\circ$, dann $\alpha + \beta = 126^\circ$)\\
 (a) $\alpha$, $\beta$ & 1\E & $\alpha = 42^\circ$, $\beta = 84^\circ$. Beide nötig.\\
-(a) $\gamma$ & 1 & $\gamma = 180^\circ - 126^\circ = 54^\circ$ (oder $180^\circ - 42^\circ - 84^\circ$). Folgepunkt: richtig aus den eigenen Winkeln.\\
-(b) Art & 1\A & Spitzwinklig, weil alle drei Winkel unter $90^\circ$ liegen (der grösste ist $84^\circ$); nicht gleichschenklig, weil keine zwei Winkel gleich sind. Beide Aussagen mit Grund nötig. Folgepunkt: richtig aus den eigenen Winkeln.\\
+(a) $\gamma$ & 1\E & $\gamma = 180^\circ - 126^\circ = 54^\circ$ (Nebenwinkel des Aussenwinkels; gleichwertig $180^\circ - 42^\circ - 84^\circ$)\\
+(b) Art & 1 & Spitzwinklig, weil alle drei Winkel unter $90^\circ$ liegen (der grösste ist $84^\circ$); nicht gleichschenklig, weil keine zwei Winkel gleich sind. Beide Aussagen mit Grund nötig. Folgepunkt: richtig aus den eigenen drei Winkeln.\\
 \end{raster}
-\fehler{Aussenwinkel als Innenwinkel $\gamma = 126^\circ$ genommen ($3\alpha = 54^\circ$, $\alpha = 18^\circ$, $\beta = 36^\circ$): Ansatz und Ergebniszeile 0; $\gamma$-Zeile 0; (b) als Folgepunkt («stumpfwinklig, weil $126^\circ$») $\to$ 1 von 4\,P.
-$\beta = \alpha$ statt $2\alpha$ ($\alpha = \beta = 63^\circ$): Ansatz und Ergebniszeile 0, $\gamma = 54^\circ$ zählt; (b) als Folgepunkt (gleichschenklig) $\to$ 2 von 4\,P.}
+\fehler{Aussenwinkel als Innenwinkel $\gamma = 126^\circ$ genommen ($3\alpha = 54^\circ$, $\alpha = 18^\circ$, $\beta = 36^\circ$): Ansatz, $\alpha$-$\beta$-Zeile und $\gamma$-Zeile 0; (b) Folgepunkt («stumpfwinklig, weil $126^\circ$»; die eigenen Winkel ergeben $180^\circ$) $\to$ 1 von 4\,P.
+$\beta = \alpha$ statt $2\alpha$ ($\alpha = \beta = 63^\circ$): Ansatz und $\alpha$-$\beta$-Zeile 0, $\gamma = 54^\circ$ zählt; (b) Folgepunkt (spitzwinklig, gleichschenklig) $\to$ 2 von 4\,P.}
 \end{lpaufgabe}
 
-\begin{lpaufgabe}{G2}{Brunnen und Bank im Park}{4 P}
+\begin{lpaufgabe}{G2}{Brunnen und Bank im Park}{3 P}
 \begin{raster}
 (a) Brunnen & 1\A & Die Mittelsenkrechten der Seiten (zwei genügen); der Punkt ist der Umkreismittelpunkt $M_U$. Beides nötig.\\
-(b) Lage & 1 & Nein: Das Dreieck ist stumpfwinklig ($105^\circ > 90^\circ$), darum liegt $M_U$ ausserhalb. Ohne Grund: 0.\\
+(b) Lage & 1 & Nein: Das Dreieck ist stumpfwinklig ($105^\circ > 90^\circ$), darum liegt $M_U$ ausserhalb. Ohne Grund: 0. Kein Folgepunkt: Bewertet wird die Aussage über den Brunnen, also über $M_U$.\\
 (c) Bank & 1\A & Die Winkelhalbierenden (zwei genügen); der Punkt ist der Inkreismittelpunkt $M_I$. Beides nötig.\\
-(d) Lage & 1 & Nein: $M_I$ liegt immer im Dreieck (die Winkelhalbierenden verlaufen im Innern). Ohne Grund: 0.\\
 \end{raster}
-\fehler{Brunnen und Bank vertauscht (Winkelhalbierende für die Ecken, Mittelsenkrechte für die Wege): (a) und (c) 0; (b) und (d) zählen, wenn die Begründung zum genannten Punkt stimmt $\to$ höchstens 2 von 4\,P.
+\fehler{Brunnen und Bank vertauscht (Winkelhalbierende und $M_I$ für den Brunnen, Mittelsenkrechte und $M_U$ für die Bank): (a) und (c) 0; (b) «ja, $M_I$ liegt immer innen» ist eine falsche Aussage über den Brunnen: 0 $\to$ 0 von 3\,P.
 Höhen statt Mittelsenkrechten: (a) 0.}
 \end{lpaufgabe}
 
 \begin{lpaufgabe}{G3}{Höhe und Winkelhalbierende}{4 P}
 \begin{raster}
-$\gamma$ & 1 & $\gamma = 180^\circ - 74^\circ - 46^\circ = 60^\circ$\\
-Winkel an der Höhe & 1 & Im rechtwinkligen Dreieck $AFC$: $\angle ACF = 90^\circ - 74^\circ = 16^\circ$ (gleichwertig über $B$: $\angle BCF = 90^\circ - 46^\circ = 44^\circ$)\\
-Halber Winkel & 1 & $\angle ACD = \tfrac{\gamma}{2} = 30^\circ$ (bzw. $\angle BCD = 30^\circ$)\\
-Ergebnis & 1\E & $30^\circ - 16^\circ = 14^\circ$ (bzw. $44^\circ - 30^\circ = 14^\circ$)\\
+$\gamma$ & 1\E & $\gamma = 180^\circ - 74^\circ - 46^\circ = 60^\circ$\\
+Winkel an der Höhe & 1\E & Im rechtwinkligen Dreieck $AFC$: $\angle ACF = 90^\circ - 74^\circ = 16^\circ$ (gleichwertig über $B$: $\angle BCF = 90^\circ - 46^\circ = 44^\circ$)\\
+Halber Winkel & 1 & $\angle ACD = \tfrac{\gamma}{2} = 30^\circ$ (bzw. $\angle BCD = 30^\circ$). Folgepunkt: die Hälfte des eigenen $\gamma$.\\
+Ergebnis & 1 & $30^\circ - 16^\circ = 14^\circ$ (bzw. $44^\circ - 30^\circ = 14^\circ$). Folgepunkt: richtig aus den eigenen Winkeln.\\
 \end{raster}
-\fehler{Höhe als Winkelhalbierende behandelt oder $\angle ACF = \alpha$: Zeile «Winkel an der Höhe» 0, das Ergebnis 0; $\gamma$ und der halbe Winkel zählen $\to$ 2 von 4\,P.
+\fehler{$\angle ACF = \alpha = 74^\circ$ (den rechten Winkel bei $F$ übersehen): «Winkel an der Höhe» 0; das Ergebnis ($74^\circ - 30^\circ = 44^\circ$) bekommt keinen Folgepunkt, weil der Teilwinkel $\angle ACF$ grösser wäre als der ganze Winkel $\gamma = 60^\circ$ $\to$ 2 von 4\,P.
 Summe statt Differenz ($30^\circ + 16^\circ = 46^\circ$): nur die Ergebniszeile 0 $\to$ 3 von 4\,P.}
 \end{lpaufgabe}
 
 \begin{lpaufgabe}{G4}{Eine fremde Lösung}{4 P}
 \begin{raster}
-(a) Fehler & 1 & Mia nimmt die schräge Seite $a = 5\,\text{cm}$ als Höhe. Zur Grundseite $c$ gehört die Höhe $h_c = 4\,\text{cm}$, die senkrecht auf der Geraden $AB$ steht (ihr Fusspunkt liegt ausserhalb).\\
-(a) Fläche & 1\E & $A = \tfrac{1}{2} \cdot 9 \cdot 4 = 18\,\text{cm}^2$\\
-(b) Seite $b$ & 1 & $AC$ ist die Hypotenuse des rechtwinkligen Dreiecks $AFC$ mit $\overline{AF} = 9 + 3 = 12\,\text{cm}$ und $h_c = 4\,\text{cm}$: $b = \sqrt{12^2 + 4^2} = \sqrt{160} \approx 12.65\,\text{cm}$\\
-(b) Umfang & 1\E & $U = 9 + 5 + 12.65 \approx 26.65\,\text{cm}$. Folgepunkt nur für die Wegzeile, nicht für (E).\\
+(a) Fehler & 1 & Mia nimmt die schräge Seite $a = 5.8\,\text{cm}$ als Höhe. Zur Grundseite $c$ gehört die Höhe $h_c = 4.2\,\text{cm}$, die senkrecht auf der Geraden $AB$ steht (ihr Fusspunkt liegt ausserhalb).\\
+(a) Fläche & 1\E & $A = \tfrac{1}{2} \cdot 7 \cdot 4.2 = 14.7\,\text{cm}^2$\\
+(b) Seite $b$ & 1\E & $AC$ ist die Hypotenuse des rechtwinkligen Dreiecks $AFC$ mit $\overline{AF} = 7 + 4 = 11\,\text{cm}$ und $h_c = 4.2\,\text{cm}$: $b = \sqrt{11^2 + 4.2^2} = \sqrt{138.64} \approx 11.77\,\text{cm}$\\
+(c) Abstand & 1 & Der Abstand von $B$ zur Geraden $AC$ ist die Höhe $h_b$: $h_b = \tfrac{2A}{b} = \tfrac{29.4}{\sqrt{138.64}} \approx 2.50\,\text{cm}$. Folgepunkt: aus der eigenen Fläche und dem eigenen $b$, sofern $h_b$ kürzer ist als $a = 5.8\,\text{cm}$.\\
 \end{raster}
-\fehler{$\overline{AF} = 9\,\text{cm}$ statt $12\,\text{cm}$ ($b = \sqrt{97} \approx 9.85$, $U \approx 23.85$): Seite-$b$-Zeile 0, Umfang (E) 0 $\to$ 2 von 4\,P.
-Umfang ohne $b$ oder mit $b = 9 + 3$ ($U = 26$): beide (b)-Zeilen 0.
-Fehler genannt, aber Fläche mit $\tfrac{1}{2}$ vergessen ($36$): (a) Fläche 0.}
+\fehler{$\overline{AF} = 7\,\text{cm}$ statt $11\,\text{cm}$ ($b = \sqrt{66.64} \approx 8.16$): (b) 0; (c) Folgepunkt ($h_b \approx 3.60$) $\to$ 3 von 4\,P.
+Pythagoras im Dreieck $ABC$, das keinen rechten Winkel hat ($b = \sqrt{7^2 + 5.8^2} \approx 9.09$): (b) 0; (c) Folgepunkt ($\approx 3.23$) $\to$ 3 von 4\,P.
+Mias Fläche $20.3$ übernommen: (a) beide Zeilen 0; (b) zählt; (c) Folgepunkt ($\approx 3.45$) $\to$ 2 von 4\,P.
+Fehler genannt, aber Fläche ohne $\tfrac{1}{2}$ ($29.4$): (a) Fläche 0; (c) Folgepunkt ($\approx 4.99$) $\to$ 3 von 4\,P.
+$h_b = \tfrac{A}{b}$ ohne den Faktor $2$ ($\approx 1.25$): (c) 0.}
 \end{lpaufgabe}
 
 \begin{lpaufgabe}{G5}{Rechtwinkliges Dreieck in schräger Lage}{3 P}
 \begin{raster}
 (a) Hypotenuse & 1\A & $\overline{KM}$ — sie liegt dem rechten Winkel bei $L$ gegenüber.\\
 (b) $\overline{LM}$ & 1\E & $\overline{LM} = \sqrt{8.5^2 - 4^2} = \sqrt{56.25} = 7.5\,\text{cm}$\\
-(c) Fläche & 1 & Die Katheten stehen senkrecht aufeinander: $A = \tfrac{1}{2} \cdot 4 \cdot 7.5 = 15\,\text{cm}^2$. Folgepunkt: mit dem eigenen $\overline{LM}$.\\
+(c) Fläche & 1 & Die Katheten stehen senkrecht aufeinander: $A = \tfrac{1}{2} \cdot 4 \cdot 7.5 = 15\,\text{cm}^2$. Folgepunkt: mit dem eigenen $\overline{LM}$, sofern es kürzer ist als die Hypotenuse $8.5\,\text{cm}$.\\
 \end{raster}
-\fehler{Quadrate addiert ($\sqrt{8.5^2 + 4^2} \approx 9.39$, länger als die Hypotenuse): (b) 0; (c) als Folgepunkt ($\approx 18.79$) $\to$ 2 von 3\,P, sofern (a) stimmt.
+\fehler{Quadrate addiert ($\sqrt{8.5^2 + 4^2} \approx 9.39$, länger als die Hypotenuse): (b) 0; (c) kein Folgepunkt (unmögliche Kathete) $\to$ 1 von 3\,P, sofern (a) stimmt.
 Fläche als $\tfrac{1}{2} \cdot 4 \cdot 8.5$ (Hypotenuse als Höhe): (c) 0.}
 \end{lpaufgabe}
 
@@ -121,16 +128,18 @@ Fläche als $\tfrac{1}{2} \cdot 4 \cdot 8.5$ (Hypotenuse als Höhe): (c) 0.}
 (b) Fläche & 1\E & $A = \tfrac{1}{2} \cdot 9.6 \cdot 3.6 = 17.28\,\text{m}^2$\\
 (c) Umfang & 1 & $U = 9.6 + 2 \cdot 6 = 21.6\,\text{m}$. Folgepunkt: mit der eigenen Schräge.\\
 \end{raster}
-\fehler{Ganze Breite statt halber ($\sqrt{9.6^2 + 3.6^2} \approx 10.25$): (a) beide Zeilen 0; (c) als Folgepunkt ($30.10\,\text{m}$) $\to$ 2 von 4\,P.
+\fehler{Ganze Breite statt halber ($s = \sqrt{9.6^2 + 3.6^2} \approx 10.25$): (a) beide Zeilen 0; (c) Folgepunkt ($9.6 + 2 \cdot 10.2528\ldots \approx 30.11\,\text{m}$) $\to$ 2 von 4\,P.
 Fläche ohne $\tfrac{1}{2}$ ($34.56$): (b) 0.}
 \end{lpaufgabe}
 
-\begin{lpaufgabe}{G7}{Jonas' Rechnung}{2 P}
+\begin{lpaufgabe}{G7}{Ein Blech balancieren}{3 P}
 \begin{raster}
-Fehler & 1 & Jonas addiert die Längen. Nach Pythagoras werden die Quadrate addiert, danach wird die Wurzel gezogen.\\
-Richtig & 1\E & $c = \sqrt{2.5^2 + 6^2} = \sqrt{42.25} = 6.5\,\text{cm}$\\
+(a) Hilfsdreieck & 1 & $ACM_a$ ist rechtwinklig bei $C$, mit den Katheten $\overline{CA} = 7\,\text{cm}$ und $\overline{CM_a} = \tfrac{12}{2} = 6\,\text{cm}$; $s_a$ ist die Hypotenuse.\\
+(a) $s_a$ & 1\E & $s_a = \sqrt{7^2 + 6^2} = \sqrt{85} \approx 9.22\,\text{cm}$\\
+(b) $\overline{AS}$ & 1 & $S$ teilt $s_a$ im Verhältnis $2 : 1$, der längere Teil liegt bei der Ecke: $\overline{AS} = \tfrac{2}{3}\, s_a = \tfrac{2}{3}\sqrt{85} \approx 6.15\,\text{cm}$. Folgepunkt: zwei Drittel des eigenen $s_a$.\\
 \end{raster}
-\fehler{Wurzel vergessen ($42.25$): Ergebniszeile 0. Nur «falsch» ohne Grund: Fehlerzeile 0.}
+\fehler{Ganze Seite $\overline{CB} = 12$ statt der Hälfte ($s_a = \sqrt{193} \approx 13.89$): beide (a)-Zeilen 0; (b) Folgepunkt ($\approx 9.26$) $\to$ 1 von 3\,P.
+$\overline{AS} = \tfrac{1}{3}\, s_a$ ($\approx 3.07$, Teilung verkehrt) oder $\tfrac{1}{2}\, s_a$ ($\approx 4.61$, $S$ in der Mitte): (b) 0 $\to$ 2 von 3\,P.}
 \end{lpaufgabe}
 
 \needspace{14\baselineskip}
@@ -140,6 +149,6 @@ Richtig & 1\E & $c = \sqrt{2.5^2 + 6^2} = \sqrt{42.25} = 6.5\,\text{cm}$\\
 17 – 21 P & Das schwächste Kapitel nochmals: Tüfteln und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.\\
 11 – 16 P & Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.\\
 0 – 10 P & Zurück zu Kapitel 1 und von dort der Reihe nach weiter.\\\midrule
-\multicolumn{2}{@{}p{\linewidth}@{}}{\small\textbf{Aufgabe $\to$ Kapitel:} G1 $\to$ Kapitel 1 (Winkel im Dreieck); G2, G3 $\to$ Kapitel 2 (Höhen, Halbierende, Mittelsenkrechte); G4 $\to$ Kapitel 3 (Fläche und Umfang), Seite $b$ mit Kapitel 4; G5, G6, G7 $\to$ Kapitel 4 (Pythagoras), Fläche und Umfang mit Kapitel 3}\\\bottomrule
+\multicolumn{2}{@{}p{\linewidth}@{}}{\small\textbf{Aufgabe $\to$ Kapitel:} G1 $\to$ Kapitel 1 (Winkel im Dreieck); G2, G3 $\to$ Kapitel 2 (Höhen, Halbierende, Mittelsenkrechte); G4 $\to$ Kapitel 3 (Fläche und Umfang), Seite $b$ mit Kapitel 4; G5, G6 $\to$ Kapitel 4 (Pythagoras), Fläche und Umfang mit Kapitel 3; G7 $\to$ Kapitel 2 (Schwerpunkt) und Kapitel 4 (Pythagoras)}\\\bottomrule
 \end{tabularx}
 \end{document}

@@ -13,6 +13,8 @@ Hilfsmittel»: Taschenrechner erlaubt. Vorwissen: Leitprogramm Planimetrie; weit
 | `seite.js` | vier Arbeitsbereiche mit Aufgabenleiste, 9 Übungstypen, Figuren zu den Aufgaben | wird eingebunden |
 | `clips.py` | erzeugt die acht Drehbücher `clips/g5-2d-lp-*.json` (Reihe «Ähnlichkeit sehen») | **ja** — rettet die gemessenen `dauer`; Zeiten stehen auf den Wortzeiten der Vertonung |
 | `zahlen.py` | rechnet alle Zahlen der Seite, der Clips und des Gesamttests nach | **ja**, muss «alle Zahlen stimmen» melden |
+| `wortzeiten.py` | misst die Wortzeiten der vertonten Clips (faster-whisper) nach `wortzeiten.json` — Grundlage für `ein` und `bewegung` in `clips.py` | nach jeder (Teil-)Vertonung |
+| `AUFTRAG-behebung.md` | Auftrag zur Behebung der Prüfbefunde (TODO.md, Prüfung 08.10.2026) | — |
 
 Gesamttest und Bewertungspaket: `downloads/leitprogramme/aehnlichkeit/*.tex`, gebaut mit `python3 scripts/build-lp-pdf.py aehnlichkeit`.
 
@@ -38,3 +40,11 @@ node .claude/tools/pruef-leiste.mjs leitprogramme/aehnlichkeit.html
 node .claude/tools/pruef-geo.mjs leitprogramme/aehnlichkeit.html
 node .claude/tools/pruef-fragen.mjs g5-2d-lp-kontrolle-streckung g5-2d-lp-kontrolle-strahlensaetze g5-2d-lp-kontrolle-figuren g5-2d-lp-kontrolle-dreiecke
 ```
+
+## Behebung der Prüfbefunde (08.10.2026)
+
+`clips.py` behält bei geändertem Sprechertext die alte `dauer` (nach Szenenname) und meldet die Szene mit «!» — dann
+`build-clip-ton.py <clip> --szenen N`, danach `wortzeiten.py <clip>` und die Zeiten in `clips.py` nachführen. Neu vertont:
+streckung «Kleiner», «Negativ»; kontrolle-streckung «Frage 5», Frage 2 r1; strahlensaetze «Nur mit Parallelen»;
+kontrolle-strahlensaetze «Frage 3», Frage 3; kontrolle-figuren Frage 1 r0, r2; kontrolle-dreiecke «Frage 1», «Frage 4»,
+Fragen 1 und 4, Frage 2 falsch.

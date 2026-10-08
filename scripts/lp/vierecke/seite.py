@@ -184,7 +184,8 @@ fest1 = r'''      <div class="festhalten">
             <tr><td>Quadrat</td><td>Rechteck und Rhombus zugleich</td><td>alles oben</td></tr>
           </table>
           <p>Jede Bedingung macht spezieller, und alles Bisherige gilt weiter: Jedes Quadrat ist ein Rechteck und ein Rhombus, jedes Rechteck und jeder Rhombus ein Parallelogramm, jedes Parallelogramm ein Trapez. Ein Trapez hat dazu <em>mindestens</em> ein Paar paralleler Seiten (so auch die Themenseite).</p>
-          <p>Das <b>gleichschenklige</b> Trapez (\(b = d\)) ist symmetrisch: Seine Achse geht senkrecht durch die Mitten von \(a\) und \(c\).</p>
+          <p>Das <b>gleichschenklige</b> Trapez ist achsensymmetrisch: Seine Symmetrieachse geht senkrecht durch die Mitten von \(a\) und \(c\). Darum ist \(b = d\), \(\alpha = \beta\) und \(\gamma = \delta\), und die Diagonalen sind gleich lang. \(b = d\) allein genügt nicht: Auch jedes Parallelogramm hat \(b = d\) und ist doch (ausser dem Rechteck) nicht symmetrisch.</p>
+          <p><b>Umgekehrt — das Viereck an den Diagonalen erkennen:</b> Halbieren sich die Diagonalen gegenseitig, ist es ein Parallelogramm. Sind sie dazu gleich lang, ist es ein Rechteck; stehen sie dazu senkrecht, ein Rhombus; gilt beides, ein Quadrat. Ohne «halbieren» geht der Schluss nicht: Gleich lange Diagonalen hat auch das gleichschenklige Trapez, senkrechte auch das Trapez mit \(c = 3\), \(v = 1\), \(h = 4\) im Arbeitsbereich oben.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -193,7 +194,7 @@ fest1 = r'''      <div class="festhalten">
           <p>Im Trapez gehören die Winkel am selben <b>Schenkel</b> zusammen (\(\alpha + \delta = 180°\)), nicht die gegenüberliegenden.</p>
         </div>
       </div>'''
-auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
+auf1 = test('t1', 'Aufgaben · Kapitel 1', 14, [
     ('1a', 2, r'Warum ist jedes Quadrat ein Rhombus, aber nicht jeder Rhombus ein Quadrat?',
      r'<p>Ein Rhombus braucht vier gleich lange Seiten — die hat jedes Quadrat. Ein Quadrat braucht zusätzlich vier rechte Winkel; ein schiefer Rhombus hat sie nicht.</p>', ''),
     ('1b', 3, r'Im Parallelogramm \(ABCD\) ist \(\alpha = 58°\). Berechne \(\beta\), \(\gamma\) und \(\delta\) und begründe mit den parallelen Seiten.',
@@ -204,11 +205,17 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
          'Viereck ABCD auf Häuschenpapier: A(0|0), B(4|0), C(6|3), D(2|3)')),
     ('1d', 2, r'Trapez \(ABCD\) mit \(AB \parallel CD\), \(\alpha = 72°\) und \(\beta = 64°\). Berechne \(\gamma\) und \(\delta\).',
      r'<p>\(\delta = 180° - 72° = 108°\) (am Schenkel \(d\)); \(\gamma = 180° - 64° = 116°\) (am Schenkel \(b\)). Probe: \(72° + 64° + 116° + 108° = 360°\).</p><p class="komm">Wer \(\gamma = 72°\) schreibt, rechnet wie im Parallelogramm — im Trapez sind gegenüberliegende Winkel nicht gleich.</p>', ''),
-    ('1e', 2, r'Ein Rhombus hat \(\alpha = 50°\). Die Diagonale \(e = AC\) ist eingezeichnet. Welche Winkel bildet sie bei \(A\) mit den Seiten \(a\) und \(d\)? Wie gross sind \(\beta\), \(\gamma\) und \(\delta\)?',
-     r'<p>Die Diagonale halbiert \(\alpha\): je \(25°\). \(\beta = \delta = 130°\), \(\gamma = 50°\).</p>', ''),
+    ('1e', 2, r'Im Rhombus im Bild ist \(\alpha = 50°\); die Diagonale \(e = AC\) ist eingezeichnet. Welche Winkel bildet sie bei \(A\) mit den Seiten \(a\) und \(d\)? Wie gross sind \(\beta\), \(\gamma\) und \(\delta\)?',
+     r'<p>Die Diagonale halbiert \(\alpha\): je \(25°\). \(\beta = \delta = 130°\), \(\gamma = 50°\).</p>',
+     # Rhombus mit Seite 4: D = 4(cos 50°|sin 50°) = (2.571|3.064), C = B + D = (6.571|3.064); e unter 25° (zahlen.py)
+     fig([['v', [[0, 0], [4, 0], [6.571, 3.064], [2.571, 3.064]]], ['s', [0, 0], [6.571, 3.064], 'hilfe'], ['w', [0, 0], [4, 0], [2.571, 3.064], '50°', 30],
+          ['t', [3.138, 1.849], 'e', 'seite', 0, 4]] + ecken(([0, 0], 'A', -8, 12), ([4, 0], 'B', 8, 12), ([6.571, 3.064], 'C', 8, -4), ([2.571, 3.064], 'D', -8, -4)),
+         '-0.8,7.4,-0.8', 230, 125, False, 'Rhombus ABCD mit α = 50° bei A und eingezeichneter Diagonale e = AC')),
+    ('1f', 2, r'Warum ist ein Viereck mit zwei gleich langen Diagonalen noch nicht sicher ein Rechteck? Was muss für die Diagonalen noch gelten?',
+     r'<p>Auch ein gleichschenkliges Trapez, das kein Rechteck ist, hat gleich lange Diagonalen (sie sind Spiegelbilder an der Symmetrieachse). Die Diagonalen müssen sich zusätzlich gegenseitig halbieren: Dann ist das Viereck ein Parallelogramm, und ein Parallelogramm mit gleich langen Diagonalen ist ein Rechteck.</p>', ''),
 ])
 k1 = kapitel(1, 'familie', 'Die Vierecks-Familie', 40,
-             r'Du ordnest Trapez, Parallelogramm, Rechteck, Rhombus und Quadrat nach ihren Bedingungen, beschreibst ihre Seiten, Winkel und Diagonalen und berechnest Winkel.',
+             r'Du ordnest Trapez, Parallelogramm, Rechteck, Rhombus und Quadrat nach ihren Bedingungen, beschreibst ihre Seiten, Winkel und Diagonalen, erkennst ein Viereck an seinen Diagonalen und berechnest Winkel.',
              ('g5-2b-lp-familie', 'Die Vierecks-Familie'), sim1, ('g5-2b-lp-kontrolle-familie', 'Kontrollfragen zur Vierecks-Familie'),
              fest1, [uebung('familie', 'Wahr oder falsch?'), uebung('viereck-winkel', 'Winkel im Viereck')],
              auf1, f'<a href="{TB}#typen">Themenseite 5.2b, Vierecks-Hierarchie</a> und <a href="{TB}#definition">Definition</a>', komp='K1; K2')
@@ -229,8 +236,8 @@ fest2 = r'''      <div class="festhalten">
             <tr><td>Rhombus</td><td>\(A = a \cdot h = \tfrac{1}{2}\, e \cdot f\)</td><td>\(U = 4a\)</td></tr>
           </table>
           <p><b>Warum:</b> Beim Parallelogramm schneidest du auf einer Seite ein Dreieck ab und setzt es auf der anderen an — es entsteht ein Rechteck mit der Grundseite \(a\) und der Höhe \(h\). Der Rhombus füllt genau die Hälfte des Rechtecks \(e \times f\) um seine Diagonalen.</p>
-          <p><b>Höhe = Abstand:</b> \(h_a\) ist der senkrechte Abstand der Seite \(a\) von ihrer Gegenseite, \(h_b\) der Abstand der beiden Seiten \(b\). Die Fläche ist dieselbe, welche Seite auch Grundseite ist: \(h_b = \tfrac{A}{b}\).</p>
-          <p>Verschiebst du die obere Seite (Scherung), bleiben \(a\), \(h\) und damit \(A\) gleich; der Umfang ändert sich, weil \(b\) länger oder kürzer wird.</p>
+          <p><b>Höhe = Abstand:</b> \(h_a\) ist der senkrechte Abstand der Seite \(a\) von ihrer Gegenseite \(c\), \(h_b\) der Abstand der Seiten \(b = \overline{BC}\) und \(\overline{AD}\). Die Fläche ist dieselbe, welche Seite auch Grundseite ist: \(h_b = \tfrac{A}{b}\).</p>
+          <p>Verschiebst du die obere Seite (Scherung), bleiben \(a\), \(h\) und damit \(A\) gleich; der Umfang ändert sich in der Regel, weil \(b\) länger oder kürzer wird (gleich bleibt er etwa, wenn du \(v\) durch \(-v\) ersetzt).</p>
           <p>Einheiten zuerst angleichen: \(1\,\text{m}^2 = 10\,000\,\text{cm}^2\). Die Themenseite schreibt die Parallelogrammfläche auch \(g \cdot h\): Grundseite mal zugehörige Höhe.</p>
         </div>
         <div class="warn">
@@ -249,7 +256,7 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 13, [
      r'<p>\(A = \tfrac{1}{2} \cdot 12 \cdot 9 = 54\,\text{cm}^2\). Die Diagonalen teilen den Rhombus in vier rechtwinklige Dreiecke; das Rechteck \(12 \times 9\) um die Diagonalen besteht aus acht solchen Dreiecken — der Rhombus ist die Hälfte.</p>', ''),
     ('2c', 3, r'Eine Tischplatte ist \(1.2\,\text{m}\) lang und \(80\,\text{cm}\) breit. Berechne die Fläche in \(\text{m}^2\) und in \(\text{cm}^2\) und den Umfang.',
      r'<p>\(A = 1.2\,\text{m} \cdot 0.8\,\text{m} = 0.96\,\text{m}^2 = 9600\,\text{cm}^2\); \(U = 2(1.2 + 0.8) = 4\,\text{m}\).</p><p class="komm">Wer \(1.2 \cdot 80 = 96\) rechnet, mischt m und cm.</p>', ''),
-    ('2d', 3, r'Ein Parallelogramm hat \(a = 12\,\text{cm}\), \(b = 7.5\,\text{cm}\) und die Höhe \(h_a = 5\,\text{cm}\). Berechne Fläche, Umfang und den Abstand \(h_b\) der beiden Seiten \(b\).',
+    ('2d', 3, r'Ein Parallelogramm hat \(a = 12\,\text{cm}\), \(b = 7.5\,\text{cm}\) und die Höhe \(h_a = 5\,\text{cm}\). Berechne Fläche, Umfang und den Abstand \(h_b\) der Seiten \(\overline{AD}\) und \(\overline{BC}\).',
      r'<p>\(A = 12 \cdot 5 = 60\,\text{cm}^2\); \(U = 2(12 + 7.5) = 39\,\text{cm}\); \(h_b = \tfrac{60}{7.5} = 8\,\text{cm}\).</p>', ''),
     ('2e', 2, r'Warum gilt für den Rhombus auch \(A = a \cdot h\)? Ein Rhombus hat \(e = 18\,\text{cm}\), \(f = 24\,\text{cm}\) und die Seite \(a = 15\,\text{cm}\). Wie gross ist seine Höhe?',
      r'<p>Jeder Rhombus ist ein Parallelogramm, also gilt \(A = a \cdot h\). Mit den Diagonalen: \(A = \tfrac{1}{2} \cdot 18 \cdot 24 = 216\,\text{cm}^2\), also \(h = \tfrac{216}{15} = 14.4\,\text{cm}\).</p>', ''),
@@ -273,7 +280,7 @@ fest3 = r'''      <div class="festhalten">
           <p>\[ m = \tfrac{1}{2}(a + c) \qquad A = \tfrac{1}{2}(a + c) \cdot h = m \cdot h \qquad U = a + b + c + d \]</p>
           <p><b>Warum:</b> Zwei gleiche Trapeze, das zweite um \(180°\) gedreht, ergeben ein Parallelogramm mit der Grundseite \(a + c\) und der Höhe \(h\). Ein Trapez ist die Hälfte davon.</p>
           <p><b>Rückwärts:</b> \(h = \tfrac{A}{m}\). Fehlt \(c\): \(m = \tfrac{A}{h}\), dann \(c = 2m - a\).</p>
-          <p>Verschiebst du die obere Seite, bleiben \(a\), \(c\) und \(h\) — also auch \(m\) und \(A\). Nur der Umfang ändert sich.</p>
+          <p>Verschiebst du die obere Seite, bleiben \(a\), \(c\) und \(h\) — also auch \(m\) und \(A\). Nur der Umfang kann sich ändern.</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
@@ -319,6 +326,7 @@ fest4 = r'''      <div class="festhalten">
             <tr><td>Rechteck</td><td>die Seiten \(a\), \(b\); Hypotenuse: die Diagonale<br>\(d = \sqrt{a^2 + b^2}\)</td></tr>
             <tr><td>Quadrat</td><td>zweimal die Seite \(a\); Hypotenuse: die Diagonale<br>\(d = \sqrt{a^2 + a^2} = a\sqrt{2}\)</td></tr>
             <tr><td>Rhombus</td><td>die halben Diagonalen; Hypotenuse: die Seite<br>\(a = \sqrt{(\tfrac{e}{2})^2 + (\tfrac{f}{2})^2}\)</td></tr>
+            <tr><td>Parallelogramm</td><td>Höhe \(h\) von \(D\) und das Stück \(\overline{AF}\) bis zum Fusspunkt \(F\); Hypotenuse: die Seite \(\overline{AD}\)<br>\(h = \sqrt{\overline{AD}^2 - \overline{AF}^2}\)</td></tr>
             <tr><td>gleichschenkliges Trapez</td><td>Höhe \(h\) und Überstand \(\text{ü} = \tfrac{a - c}{2}\); Hypotenuse: der Schenkel \(s\)<br>\(h = \sqrt{s^2 - \text{ü}^2}\)</td></tr>
           </table>
           <p>Im Rhombus stehen die Diagonalen senkrecht und halbieren sich — darum die Hälften. Im gleichschenkligen Trapez verteilt sich der Unterschied \(a - c\) auf zwei gleiche Überstände links und rechts.</p>
@@ -346,9 +354,9 @@ auf4 = test('t4', 'Aufgaben · Kapitel 4', 14, [
      r'<p>\(a = \tfrac{10}{\sqrt{2}} \approx 7.07\,\text{cm}\). Fläche mit den Diagonalen: \(A = \tfrac{1}{2} \cdot 10 \cdot 10 = 50\,\text{cm}^2\) (Probe: \(7.07^2 \approx 50\)).</p>', ''),
 ])
 k4 = kapitel(4, 'laengen', 'Fehlende Längen', 45,
-             r'Du findest im Viereck das rechtwinklige Teildreieck, berechnest mit Pythagoras Diagonalen, Seiten und Höhen von Rechteck, Quadrat, Rhombus und gleichschenkligem Trapez und setzt sie in Umfang und Fläche ein.',
+             r'Du findest im Viereck das rechtwinklige Teildreieck, berechnest mit Pythagoras Diagonalen, Seiten und Höhen von Rechteck, Quadrat, Rhombus, Parallelogramm und gleichschenkligem Trapez und setzt sie in Umfang und Fläche ein.',
              ('g5-2b-lp-laengen', 'Fehlende Längen mit Pythagoras'), sim4 + '\n' + sim5, ('g5-2b-lp-kontrolle-laengen', 'Kontrollfragen zu fehlenden Längen'),
-             fest4, [uebung('diagonale', 'Diagonale im Rechteck und Quadrat'), uebung('raute-seite', 'Seite und Diagonale im Rhombus'), uebung('trapez-hoehe', 'Höhe und Schenkel im Trapez')],
+             fest4, [uebung('diagonale', 'Diagonale im Rechteck und Quadrat'), uebung('raute-seite', 'Seite und Diagonale im Rhombus'), uebung('trapez-hoehe', 'Höhe im Trapez und im Parallelogramm')],
              auf4, f'<a href="{TB}#theorie">Themenseite 5.2b, Häufige Fehler zur Diagonale und zur Trapezhöhe</a>', komp='K2')
 
 # ------------------------------------------------------------------ Vorwissen
@@ -379,7 +387,7 @@ gt = f'''
     <section class="kap" id="gesamttest">
       <div class="gesamt">
         <div class="gesamt-kopf">
-          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-gf">GF 5.2 · Kapitel 1–4</span><span class="zeit">≈ 30 min · 25 Punkte</span></div>
+          <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-gf">GF 5.2 · Kapitel 1–4</span><span class="zeit">≈ 30 min · 24 Punkte</span></div>
           <h2 id="gesamttest-titel">Gesamttest</h2>
           <div class="pdf-weg">
             <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Skizze und Rechenweg; Taschenrechner erlaubt.<br>
@@ -392,12 +400,12 @@ gt = f'''
         <div class="bewertung">
           <b>Selbsteinschätzung</b>
           <table>
-            <tr><td>22 – 25 P</td><td>Die geprüften Teile sitzen. Wo du Punkte verloren hast: das Kapitel dieser Aufgabe nochmals (Zuordnung unten).</td></tr>
-            <tr><td>17 – 21 P</td><td>Das schwächste Kapitel nochmals: Tüfteln und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.</td></tr>
-            <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
+            <tr><td>21 – 24 P</td><td>Die geprüften Teile sitzen. Wo du Punkte verloren hast: das Kapitel dieser Aufgabe nochmals (Zuordnung unten).</td></tr>
+            <tr><td>16 – 20 P</td><td>Das schwächste Kapitel nochmals: Tüfteln und Übungen des Kapitels, in dem du die meisten Punkte verloren hast.</td></tr>
+            <tr><td>11 – 15 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1; G2 → 2; G3 (a) → 2, G3 (b) → 4; G4, G5 → 3; G6, G7 → 4</p>
+          <p>Aufgabe → Kapitel: G1 → 1; G2 → 2 und 4; G3 → 4 und 2; G4 → 3 und 4; G5 → 3; G6 → 4 und 2</p>
         </div>
       </div>
     </section>
@@ -428,14 +436,25 @@ oben = '''<div id="nav-root"></div>
      (→ 5.2d).
 
      a) Kompetenzmatrix (Teilkompetenz | ohne HM? | Kapitel | Übungen / Kapitelaufgaben | Gesamttest):
-       K1 Familie, Eigenschaften  | nein | 1    | Ü familie; sim1 A2–A7; 1a, 1c, 1e        | G1 (a)
-       K2 Winkel                  | nein | 1    | Ü viereck-winkel; sim1 A8–A9; 1b, 1d, 1e | G1 (b)
-       K2 Fläche, Umfang (Pa, Rh) | nein | 2    | Ü pa-flaeche, raute-ef; sim2; 2a–2c, 2e  | G2, G3 (a)
-       K2 Abstand (Höhe h_b)      | nein | 2    | Ü abstand; sim2 A6–A7; 2d                | G2 (c)
-       K2 Mittellinie, Trapez     | nein | 3    | Ü trapez, trapez-rueck; sim3; 3a–3e      | G4, G5
-       K2 fehlende Längen         | nein | 4    | Ü diagonale, raute-seite, trapez-hoehe;  | G3 (b), G6, G7
-                                  |      |      | sim4, sim5; 4a–4e                        |
+       K1 Familie, Eigenschaften  | nein | 1    | Ü familie (Bedingungen, Eigenschaften,  | G1 (a)
+          auch Umkehrung: Viereck |      |      | Umkehrung); sim1 A2–A7; 1a, 1c, 1e, 1f   |
+          an den Diagonalen       |      |      |                                          |
+       K2 Winkel                  | nein | 1    | Ü viereck-winkel (auch «um d° grösser»); | G1 (b)
+                                  |      |      | sim1 A8–A9; 1b, 1d, 1e                   |
+       K2 Fläche, Umfang (Re, Pa, | nein | 2    | Ü pa-flaeche, raute-ef; sim2; 2a–2c, 2e  | G2 (a), G3 (b), G6 (b)
+          Rh)                     |      |      |                                          |
+       K2 Abstand (h_b, Höhe Rh)  | nein | 2    | Ü abstand; sim2 A6–A7; 2d, 2e            | G2 (b), G3 (c)
+       K2 Mittellinie, Trapez,    | nein | 3    | Ü trapez, trapez-rueck; sim3; 3a–3e      | G4 (a), G5
+          auch rückwärts          |      |      |                                          |
+       K2 fehlende Längen         | nein | 4    | Ü diagonale, raute-seite, trapez-hoehe   | G2 (a), G3 (a), G4 (b), G6
+                                  |      |      | (auch Parallelogramm); sim4, sim5; 4a–4e |
      Kein Kapitelziel ohne Kompetenz; Pythagoras (Vorwissen aus 5.2a/Sek I) dient K2 «Zusammenhänge berechnen».
+     Gesamttest (Fassung nach der Prüfung, 08.10.2026): Jede Aufgabe kombiniert Geübtes neu, keine wiederholt eine
+     Kapitelaufgabe, Übung oder einen Clip — G1 (a) Diagonalen → Rhombus mit Längen (Übung prüft nur wahr/falsch),
+     G1 (b) «um 40° grösser» im Trapez (geübt im Parallelogramm), G2 Höhe aus dem Teildreieck, dann A und h_b,
+     G3 Rhombus aus Seite und Diagonale, dann A und Höhe, G4 Trapez rückwärts c, dann Schenkel, G5 die Mittellinie
+     teilt das Trapez, G6 fremde Lösung (plus statt minus) und Quadrat aus der Diagonale. Nicht im Gesamttest:
+     «begründen» der Flächenformeln (Kapitelaufgaben 2a, 2b, 3d, Kontrollclips).
 
      b) Planungstabelle (Kapitel | Lernziel | Clips | Erkundung | Beispiel (Quelle) | Häufiger Fehler | min):
        0 Vorwissen   | Rechteck, cm²/m², Pythagoras, Dreiecksfläche, Nebenwinkel | g5-2a-pythagoras | — | — | — | 10
@@ -451,7 +470,7 @@ oben = '''<div id="nav-root"></div>
        4 Längen      | Rechteck-/Quadratdiagonale, Rhombusseite, Trapezhöhe | g5-2b-lp-laengen, -kontrolle-laengen |
          sim4 (gleichschenkliges Trapez a, c, h), sim5 (Rhombus e, f) | Rechteck 12 × 5, Rhombus e 8, f 6
          (Kapitel 2), Trapez a 12, c 4, s 5 | d = a√2 im Rechteck, ganzer Überstand, ganze Diagonalen | 45
-       Gesamttest 30. Summe 200 min ≈ 4.4 Lektionen (vier Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest).
+       Gesamttest 30 (24 P). Summe 200 min ≈ 4.4 Lektionen (vier Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest).
 
      c) Kern: alles oben. Bewusst weggelassen (→ Themenseite 5.2b): Drachen (steht nicht in K1), Winkelsumme im n-Eck,
         Sehnen- und Tangentenvierecke, regelmässige Vielecke; Konstruktionen.

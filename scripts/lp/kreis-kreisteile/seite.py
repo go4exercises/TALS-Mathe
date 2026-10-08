@@ -201,7 +201,7 @@ f1c = fig([['k', [0, 0], 6], ['g', B1c, [10, 0], 'gerade-linie'], ['s', [0, 0], 
            ['r', B1c, [-3.6, -4.8], [6.4, -4.8]], ['p', [0, 0]], ['p', [10, 0]], ['p', B1c], ['t', [0, 0], 'M', 'ecke', -8, 13],
            ['t', [10, 0], 'P', 'ecke', 0, 14], ['t', B1c, 'B', 'ecke', -3, -8], ['t', [5, 0], 'MP = 10 cm', 'mass', 0, 13],
            ['t', [1.8, 2.4], 'r = 6 cm', 'mass', -5, 0, 'end']], '-6.8,11,-6.6', 240, 175)
-auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
+auf1 = test('t1', 'Aufgaben · Kapitel 1', 16, [
     ('1a', 2, r'Wahr oder falsch? Begründe je in einem Satz. (i) Jede Sehne liegt auf einer Sekante. (ii) Eine Gerade durch \(M\) ist immer eine Sekante. (iii) Zu einer Tangente gibt es genau eine zweite Tangente, die zu ihr parallel ist. (iv) Eine Sehne kann länger sein als der Durchmesser.',
      r'<p>(i) Wahr: Verlängert man eine Sehne, entsteht eine Gerade mit zwei Schnittpunkten. (ii) Wahr: Ihr Abstand ist \(a = 0 \lt r\). (iii) Wahr: die Tangente auf der anderen Seite, am Ende des Durchmessers durch den ersten Berührpunkt — beide stehen senkrecht auf demselben Durchmesser. (iv) Falsch: Der Durchmesser ist die längste Sehne.</p>', ''),
     ('1b', 3, r'Ein Kreis hat den Radius \(r = 6.5\,\text{cm}\), eine Sehne ist \(12\,\text{cm}\) lang (Bild). Wie weit ist die Sehne vom Mittelpunkt entfernt? Wie hoch ist der Bogen über der Sehne (Segmenthöhe \(h = r - a\))?',
@@ -212,9 +212,13 @@ auf1 = test('t1', 'Aufgaben · Kapitel 1', 12, [
      r'<p>Die Radien zu den beiden Sehnenenden sind gleich lang: Das Dreieck aus \(M\) und den Sehnenenden ist gleichschenklig, und seine Höhe auf die Basis halbiert die Basis (Symmetrieachse). Ebenso mit Pythagoras: Beide Teilstücke sind \(\sqrt{r^2 - a^2}\) lang.</p>', ''),
     ('1e', 2, r'Ein Kreis hat den Durchmesser \(9\,\text{cm}\). Eine Gerade hat vom Mittelpunkt den Abstand \(4.6\,\text{cm}\). Mia sagt: «Das ist eine Sekante, denn \(4.6 \lt 9\).» Stimmt das?',
      r'<p>Nein. Zu vergleichen ist mit dem Radius \(r = 4.5\,\text{cm}\): \(4.6 \gt 4.5\), also eine Passante. Mia hat mit dem Durchmesser verglichen.</p>', ''),
+    ('1f', 2, r'Eine Sehne ist \(9\,\text{cm}\) lang und hat vom Mittelpunkt den Abstand \(6\,\text{cm}\). Wie gross ist der Radius des Kreises? Mach eine Skizze mit dem rechtwinkligen Dreieck.',
+     r'<p>Das Lot halbiert die Sehne: Katheten \(4.5\,\text{cm}\) (halbe Sehne) und \(6\,\text{cm}\) (Abstand), der Radius zum Sehnenende ist die Hypotenuse. \(r = \sqrt{4.5^2 + 6^2} = \sqrt{56.25} = 7.5\,\text{cm}\).</p><p class="komm">Hier wird addiert: Gesucht ist die Hypotenuse.</p>', ''),
+    ('1g', 2, r'Ein Kreis hat den Radius \(1.2\,\text{m}\). Ein Punkt \(P\) liegt \(30\,\text{cm}\) ausserhalb der Kreislinie — so weit ist er von ihr entfernt. Wie lang ist die Tangentenstrecke von \(P\) zum Berührpunkt \(B\)?',
+     r'<p>Einheiten angleichen: \(30\,\text{cm} = 0.3\,\text{m}\). Der Abstand zur Kreislinie liegt auf der Geraden \(MP\): \(\overline{MP} = 1.2 + 0.3 = 1.5\,\text{m}\), die Hypotenuse. \(\overline{PB} = \sqrt{1.5^2 - 1.2^2} = \sqrt{0.81} = 0.9\,\text{m}\).</p><p class="komm">\(\overline{MP}\) ist nicht \(30\,\text{cm}\): Das ist nur das Stück ausserhalb des Kreises.</p>', ''),
 ])
-k1 = kapitel(1, 'linien', 'Linien am Kreis', 40,
-             r'Du beschreibst den Kreis und unterscheidest Radius, Durchmesser und Sehne von Sekante, Tangente und Passante, entscheidest mit dem Abstand \(a\), wie eine Gerade zum Kreis liegt, und berechnest mit Pythagoras Sehne, Abstand und Tangentenstrecke.',
+k1 = kapitel(1, 'linien', 'Linien am Kreis', 45,
+             r'Du beschreibst den Kreis und unterscheidest Radius, Durchmesser und Sehne von Sekante, Tangente und Passante, entscheidest mit dem Abstand \(a\), wie eine Gerade zum Kreis liegt, und berechnest mit Pythagoras Sehne, Abstand, Radius und Tangentenstrecke — auch von einem Punkt in gegebenem Abstand von der Kreislinie aus.',
              ('g5-2c-lp-linien', 'Linien am Kreis'), sim1, ('g5-2c-lp-kontrolle-linien', 'Kontrollfragen zu den Linien am Kreis'),
              fest1, [uebung('linie', 'Linie benennen', 'Kreis mit einer markierten Linie'), uebung('lage', 'Gerade und Kreis'),
                      uebung('sehne', 'Pythagoras am Kreis', 'Kreis mit Sehne oder Tangente')],
@@ -261,7 +265,7 @@ st2, xs2, c2 = streifen_fig(2, 12)
 f2e = fig(st2 + [['s', [xs2 - c2 - 0.3, 0], [xs2 - c2 - 0.3, 2], 'hilfe'], ['t', [xs2 - c2 - 0.3, 1], 'r', 'seite', -5, 4, 'end'],
                  ['s', [xs2, -0.45], [xs2 + 12 * c2, -0.45], 'hilfe'], ['t', [0, -0.45], 'Breite = ?', 'mass', 0, 13]],
           '-4.2,4.2,-1.4', 250, 110)
-auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
+auf2 = test('t2', 'Aufgaben · Kapitel 2', 14, [
     ('2a', 2, r'Ein Teller hat den Durchmesser \(26\,\text{cm}\). Berechne Umfang und Fläche.',
      r'<p>\(r = 13\,\text{cm}\). \(U = 26\pi \approx 81.68\,\text{cm}\); \(A = \pi \cdot 13^2 = 169\pi \approx 530.93\,\text{cm}^2\).</p>', ''),
     ('2b', 3, r'Mit einem Messband misst du den Umfang eines Baumstamms: \(2\,\text{m}\). Nimm den Stamm als kreisrund an. Wie dick ist er (Durchmesser)? Wie gross ist die Schnittfläche, wenn man ihn fällt?',
@@ -272,9 +276,11 @@ auf2 = test('t2', 'Aufgaben · Kapitel 2', 12, [
      r'<p>\(U = 2\pi \cdot (2r) = 2 \cdot 2\pi r\): \(r\) kommt einmal vor. \(A = \pi (2r)^2 = 4\pi r^2\): \(r\) steht im Quadrat, der Faktor \(2\) also auch.</p>', ''),
     ('2e', 2, r'Der Kreis wurde in zwölf gleiche Sektoren geschnitten und abwechselnd zu diesem Streifen gelegt (Bild). Warum ist er so hoch wie der Radius und fast so breit wie der halbe Umfang? Was folgt daraus für die Kreisfläche?',
      r'<p>Die Kanten der Sektoren sind Radien — darum ist der Streifen \(r\) hoch. Unten liegen die Bögen von sechs der zwölf Sektoren, also die Hälfte des Umfangs: \(\tfrac{1}{2} \cdot 2\pi r = \pi r\). Mit mehr Sektoren wird der Streifen ein Rechteck; beim Umlegen bleibt die Fläche gleich, also \(A = \pi r \cdot r = \pi r^2\).</p>', f2e),
+    ('2f', 2, r'Mia misst Durchmesser und Umfang von drei runden Dingen: Dose \(7.3\,\text{cm}\) und \(22.9\,\text{cm}\), Velorad \(66\,\text{cm}\) und \(207.5\,\text{cm}\), Münze \(2.3\,\text{cm}\) und \(7.2\,\text{cm}\). Berechne je \(U : d\) auf zwei Dezimalen. Was fällt auf? Warum kommt nicht genau \(\pi\) heraus?',
+     r'<p>\(\tfrac{22.9}{7.3} \approx 3.14\), \(\tfrac{207.5}{66} \approx 3.14\), \(\tfrac{7.2}{2.3} \approx 3.13\). Bei jedem Kreis, ob klein oder gross, ist \(U : d\) ungefähr dieselbe Zahl, \(\pi \approx 3.14\). Die Abweichungen kommen vom Messen: Auf einen Millimeter genau gemessen, ändert sich das Verhältnis bei der kleinen Münze am stärksten.</p>', ''),
 ])
-k2 = kapitel(2, 'umfang-flaeche', 'Umfang, Fläche und π', 40,
-             r'Du erklärst \(\pi\) als festes Verhältnis von Umfang zu Durchmesser, berechnest Umfang und Fläche aus \(r\) oder \(d\), rechnest aus Umfang oder Fläche den Radius zurück und begründest \(A = \pi r^2\) mit den umgelegten Sektoren.',
+k2 = kapitel(2, 'umfang-flaeche', 'Umfang, Fläche und π', 45,
+             r'Du kennst \(\pi\) als festes Verhältnis von Umfang zu Durchmesser, berechnest Umfang und Fläche aus \(r\) oder \(d\) und rechnest aus Umfang oder Fläche den Radius zurück. Warum \(A = \pi r^2\) gilt, zeigen die umgelegten Sektoren.',
              ('g5-2c-lp-umfang', 'Umfang, Fläche und π'), sim2, ('g5-2c-lp-kontrolle-umfang', 'Kontrollfragen zu Umfang und Fläche'),
              fest2, [uebung('kreis', 'Umfang und Fläche'), uebung('zurueck', 'Radius zurückrechnen'), uebung('rad', 'Rad und Umdrehungen')],
              auf2, f'<a href="{TS}#typen">Themenseite 5.2c, Pi</a> und <a href="{TS}#theorie">Umfang und Fläche</a> (mit den Animationen <a href="{TS}#anim-umfang-abrollen">Abrollen</a> und <a href="{TS}#anim-flaeche-sektoren">Sektoren zum Rechteck</a>)', komp='K1 · K2')
@@ -314,7 +320,7 @@ auf3 = test('t3', 'Aufgaben · Kapitel 3', 12, [
      r'<p>Ein Sektor mit doppeltem Winkel besteht aus zwei gleichen Sektoren, die durch Drehen um \(M\) aufeinanderpassen: doppelter Bogen und doppelte Fläche. Bogen und Fläche wachsen also beide proportional zu \(\varphi\), und bei \(360°\) sind sie der Umfang und die Kreisfläche.</p>', ''),
     ('3d', 2, r'Lena berechnet für \(r = 7\,\text{cm}\) und \(\varphi = 50°\) die Sektorfläche: «\(A_{SK} = \tfrac{50°}{360°} \cdot 2\pi \cdot 7 \approx 6.11\,\text{cm}^2\)». Was ist falsch? Rechne richtig.',
      r'<p>Sie hat den Anteil vom Umfang genommen — das ist die Bogenlänge in cm, keine Fläche. Richtig: \(A_{SK} = \tfrac{50°}{360°} \cdot \pi \cdot 7^2 \approx 21.38\,\text{cm}^2\).</p>', ''),
-    ('3e', 2, r'Ein runder Kuchen wird in gleiche Stücke mit dem Zentriwinkel \(40°\) geschnitten. Wie viele Stücke gibt es? Am Rand misst ein Stück \(7\,\text{cm}\). Welchen Durchmesser hat der Kuchen?',
+    ('3e', 2, r'Ein runder Kuchen wird in gleiche Stücke mit dem Zentriwinkel \(40°\) geschnitten. Wie viele Stücke gibt es? Der Bogen eines Stücks ist \(7\,\text{cm}\) lang. Welchen Durchmesser hat der Kuchen?',
      r'<p>\(\tfrac{360°}{40°} = 9\) Stücke. Umfang \(U = 9 \cdot 7 = 63\,\text{cm}\), also \(d = \tfrac{63}{\pi} \approx 20.05\,\text{cm}\).</p>', ''),
 ])
 k3 = kapitel(3, 'bogen-sektor', 'Bogen und Sektor', 40,
@@ -419,7 +425,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1, G2 → 1; G3 (a) → 2, G3 (b) → 4; G4 → 3; G5 (a) → 1, G5 (b), (c) → 4; G6 → 3; G7 → 2 und 4</p>
+          <p>Aufgabe → Kapitel: G1, G2 → 1; G3 (a) → 2, G3 (b) → 4; G4 → 3; G5 (a) → 1, G5 (b)–(d) → 4; G6 → 3; G7 → 2 und 4</p>
         </div>
       </div>
     </section>
@@ -447,12 +453,18 @@ oben = '''<div id="nav-root"></div>
 
      a) Kompetenzmatrix (Teilkompetenz | ohne HM? | Kapitel | Arbeitsbereich, Übung | Kapitelaufgaben | Gesamttest):
        K1 Kreis beschreiben (Definition, Linien, Lage)       | nein | 1, 2 | AB1 A1–A5; linie, lage | 1a, 1e, 2e      | G1 (a)
-       K2 Sehne, Sekante, Abstand berechnen                 | nein | 1    | AB1 A6–A7; sehne      | 1b, 1d          | G1 (b), G5 (a)
-       K2 Tangente berechnen                                | nein | 1    | AB1 A8; sehne         | 1c              | G2
-       K2 Umfang, Flächeninhalt (Kreis), π                 | nein | 2    | AB2; kreis, zurueck, rad | 2a–2d        | G3 (a), G7
+       K1 π als Verhältnis U : d (Kapitelziel «kennen»)      | nein | 2    | Kontrolle 2 F1         | 2f (Messung)    | G7 (a) (U = πd)
+       Herleitung A = πr² (Streifen, AB2 A1–A3, 2e) ist Einsicht, kein Kapitelziel: nicht im Gesamttest (RLP verlangt sie nicht).
+       K2 Sehne, Sekante, Abstand berechnen                 | nein | 1    | AB1 A6–A7; sehne (s, a) | 1b, 1d         | G1 (b)
+       K2 Radius aus Sehne und Abstand                       | nein | 1    | sehne (r)             | 1f              | G5 (a)
+       K2 Tangente berechnen (auch P in Abstand h, Einheiten)| nein | 1    | AB1 A8; sehne (t, h)  | 1c, 1g          | G2
+       K2 Umfang, Flächeninhalt (Kreis), rückwärts          | nein | 2    | AB2; kreis, zurueck, rad | 2a–2d        | G3 (a), G7
        K2 Sektor, Bogen, Winkel und Winkelmass              | nein | 3    | AB3; sektor, winkel-zurueck, sektor-rand | 3a–3e | G4, G6
-       K2 Segment                                           | nein | 4    | AB4; segment          | 4b, 4d          | G5 (b)
+       K2 Segment unter und über 180°                        | nein | 4    | AB4; segment          | 4b (300°), 4d   | G5 (b)–(d), (d) über 180°
        K2 Flächeninhalt: Kreisring, zusammengesetzt          | nein | 4    | AB5; ring             | 4a, 4c, 4e      | G3 (b), G7
+       Gesamttest kombiniert neu (HOWTO §9): G2 Tangente vom Punkt in Höhe h mit m/km (geübt in 1g und sehne h mit mm/cm,
+       neu: Erdkugel), G5 Radius aus Sehne und Abstand → Zentriwinkel begründen → beide Segmente (geübt: 1f, 4b), G6 Radius
+       und Winkel zugleich verdoppelt (geübt je einzeln: 2d, 3c, Kontrolle 2 F4).
        Winkelmass: Grad (Vollwinkel 360°, Anteil φ/360°). Bogenmass nur als Satz im Festhalten 3 (GF 5.1; die Themenseite
        verschiebt es auf 5.4), nicht geübt. Abstand: Abstand Gerade–Mittelpunkt, Sehne–Mittelpunkt, Punkt–Kreislinie.
        Tangentenstrecke von einem äusseren Punkt: steht nicht als Aufgabe auf der Themenseite, folgt aber aus «Tangente ⟂
@@ -460,17 +472,17 @@ oben = '''<div id="nav-root"></div>
 
      b) Planungstabelle (Kapitel | Lernziel | Clips | Erkundung | Beispiel (Quelle) | Häufiger Fehler | min):
        0 Vorwissen | Pythagoras, gleichseitiges Dreieck, Anteile von 360°, x² = c, m²/cm² | g5-2a-pythagoras | — | — | — | 10
-       1 Linien    | Begriffe, Abstand a, Tangente ⟂ Radius, Sehne/Abstand/Tangente mit Pythagoras | g5-2c-lp-linien,
+       1 Linien    | Begriffe, Abstand a, Tangente ⟂ Radius, Sehne/Abstand/Radius/Tangente mit Pythagoras | g5-2c-lp-linien,
                      -kontrolle-linien | AB1 (r, a; antippen; drei Grössen) | r = 5, a = 3 → s = 8 (eigen; Themenseite Anim 1:
-                     r = 3, a = 3.6/3/1.8) | a mit d vergleichen, halbe Sehne, MP als Kathete | 40
+                     r = 3, a = 3.6/3/1.8) | a mit d vergleichen, halbe Sehne, MP als Kathete | 45
        2 Umfang    | π = U/d, U, A, rückwärts, Sektoren zum Rechteck | g5-2c-lp-umfang, -kontrolle-umfang | AB2 (r, n; Breite
-                     antippen) | r = 3 (eigen; Themenseite r = 5, r = 6) | 2πr/πr², d in πr², Wurzel vergessen | 40
+                     antippen) | r = 3 (eigen; Themenseite r = 5, r = 6) | 2πr/πr², d in πr², Wurzel vergessen | 45
        3 Sektor    | Anteil φ/360°, b, A_SK = ½ b r, Rand, rückwärts | g5-2c-lp-sektor, -kontrolle-sektor | AB3 (r, φ; Bogen
                      antippen) | r = 4, φ = 45° (eigen; Themenseite r = 12, φ = 135°) | b/A verwechselt, Anteil vergessen | 40
-       4 Segment, Ring | Sektor ∓ Dreieck (60°, 90°, 270°, 300°), Ring auf zwei Arten, zusammengesetzt | g5-2c-lp-segment,
+       4 Segment, Ring | Sektor − Dreieck, über 180° + Dreieck (60°, 90°, 270°, 300°), Ring auf zwei Arten, zusammengesetzt | g5-2c-lp-segment,
                      -kontrolle-segment | AB4 (r, φ; Höhe antippen), AB5 (R, r; Breite antippen) | r = 5 bei 90° und 60°;
                      R = 6, r = 4 (eigen) | über 180° abziehen, 60° rechtwinklig, π(R − r)² | 45
-       Gesamttest 30. Summe 205 min ≈ 4.6 Lektionen (vier Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest).
+       Gesamttest 30. Summe 215 min ≈ 4.8 Lektionen (vier Kapitel zu je einer Lektion, dazu Vorwissen und Gesamttest).
 
      c) Kern: alles oben. Bewusst weggelassen (→ Themenseite 5.2c): π-Schranken nach Archimedes (A3), Segmentformel
         A_SG = r²πφ/360° − s(r − h)/2 mit s = 2r sin(φ/2) für beliebige Winkel (braucht 5.3), Ring als aufgerolltes Trapez,
@@ -553,7 +565,7 @@ oben = '''<div id="nav-root"></div>
           <li><b>K1</b> geometrische Sachverhalte von elementaren Objekten (… Kreis) beschreiben — Kapitel 1 und 2.</li>
           <li><b>K2</b> deren Elemente (… Sehne, Sekante, Tangente, Sektor, Segment, Winkel und Winkelmass) und Zusammenhänge (Umfang, Flächeninhalt, Abstand) berechnen — Sehne, Abstand und Tangente in Kapitel 1, Umfang und Fläche in Kapitel 2, Bogen, Sektor und Winkel in Kapitel 3, Segment, Kreisring und zusammengesetzte Flächen in Kapitel 4. Winkel in Grad.</li>
         </ul>
-        <p class="rlp-quelle">Nicht hier: Dreiecke und Vierecke mit ihren Elementen (Themenseiten <a href="''' + TA + '''">5.2a</a> und <a href="../grundlagen/g5-2b-vierecke.html">5.2b</a>), «die Ähnlichkeit für Berechnungen in der Ebene nutzen» (<a href="../grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html">5.2d</a>), das Bogenmass (5.4) und Segmente bei beliebigen Winkeln (braucht die <a href="trigonometrische-berechnungen.html">Trigonometrie, 5.3</a>).</p>
+        <p class="rlp-quelle">Nicht hier: Dreiecke und Vierecke mit ihren Elementen (Themenseiten <a href="''' + TA + '''">5.2a</a> und <a href="../grundlagen/g5-2b-vierecke.html">5.2b</a>), «die Ähnlichkeit für Berechnungen in der Ebene nutzen» (<a href="../grundlagen/g5-2d-zentrische-streckung-aehnlichkeit.html">5.2d</a>), das Bogenmass (GF 5.1; hier nur im Festhalten 3 erwähnt) und Segmente bei beliebigen Winkeln (braucht die <a href="trigonometrische-berechnungen.html">Trigonometrie, 5.3</a>).</p>
       </details>
     </div>
 '''
@@ -567,7 +579,7 @@ unten = '''
 </div>
 </div>
 '''
-# Zeiten (08.10.2026): Vorwissen 10 (vorab) · K1 40 · K2 40 · K3 40 · K4 45 · Gesamttest 30 = 205 min
+# Zeiten (08.10.2026, nach der Prüfung): Vorwissen 10 (vorab) · K1 45 · K2 45 · K3 40 · K4 45 · Gesamttest 30 = 215 min
 body = oben + k0 + k1 + k2 + k3 + k4 + gt + unten
 seite = kopf + CSS + '</style>\n</head>\n<body>\n' + body + '\n' + basis + open(SP + 'seite.js').read() + '\n' + fuss
 open(ZIEL, 'w').write(seite)

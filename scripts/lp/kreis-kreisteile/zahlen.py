@@ -156,8 +156,8 @@ soll('Aufgabe 3a: Bogen r = 9, 120°', bogen(9, 120), 18.85)
 soll('Aufgabe 3a: Fläche', sektor(9, 120), 84.82)
 soll('Aufgabe 3b: φ aus b = 10, r = 6', 10 / U(6) * 360, 95.49)
 soll('Aufgabe 3b: A = ½ b r', 10 * 6 / 2, 30)
-soll('Aufgabe 3e: falsch (Umfangformel)', bogen(7, 50), 6.11)
-soll('Aufgabe 3e: richtig', sektor(7, 50), 21.38)
+soll('Aufgabe 3d: falsch (Umfangformel)', bogen(7, 50), 6.11)
+soll('Aufgabe 3d: richtig', sektor(7, 50), 21.38)
 soll('Kontrolle 3 F2: b r = 10, φ = 54', bogen(10, 54), 9.42)
 soll('Kontrolle 3 F2 Fehler Fläche', sektor(10, 54), 47.12)
 soll('Kontrolle 3 F2 Fehler U', U(10), 62.83)
@@ -233,11 +233,6 @@ soll('G4: b = 2A / r', 2 * 50 / 7.5, 13.33)
 soll('G4: b über φ', bogen(7.5, 50 / A(7.5) * 360), 13.33)
 soll('G4: Sektorumfang', 2 * 50 / 7.5 + 15, 28.33)
 soll('G4 Fehler φ mit 2 pi r', 50 / U(7.5) * 360, 381.97)
-soll('G5: Abstand r = 7, s = 7', abstand(7, 7), 6.06)
-soll('G5: Sektor 60°', sektor(7, 60), 25.66)
-soll('G5: Dreieck', dreieck(7, 60), 21.22)
-soll('G5: Segment', segment(7, 60), 4.44)
-soll('G5 Fehler rechtwinklig', sektor(7, 60) - 24.5, 1.16)
 soll('G7: Laufbahn U', 200 + pi * 64, 401.06)
 soll('G7: Feld A', 6400 + A(32), 9616.99)
 soll('G7 Fehler pi d²', 6400 + pi * 64 ** 2, 19267.96)
@@ -284,6 +279,37 @@ soll('AB3 A8 Fehler Kreisumfang', U(5), 31.42)
 soll('AB5 A4 r_m', (5.5 + 2.5) / 2, 4)
 soll('Clip 7 Tangente B: Winkel', __import__('math').degrees(__import__('math').acos(5 / 13)), 67.38)
 soll('Kontrolle 1 F5 B: Winkel', __import__('math').degrees(__import__('math').acos(8 / 17)), 61.93)
+
+# ════════════════════════════════ Behebung nach der Prüfung (08.10.2026)
+soll('Aufgabe 1f: r aus s = 9, a = 6', sqrt(4.5 ** 2 + 6 ** 2), 7.5)
+verschieden('Aufgabe 1f', sqrt(4.5 ** 2 + 36), sqrt(81 + 36), 4.5 + 6, sqrt(36 - 4.5 ** 2))
+soll('Aufgabe 1g: MP = 1.2 + 0.3 m', 1.2 + 0.3, 1.5)
+soll('Aufgabe 1g: PB', tangente(1.2, 1.5), 0.9)
+soll('Aufgabe 2f: Dose', 22.9 / 7.3, 3.14)
+soll('Aufgabe 2f: Velorad', 207.5 / 66, 3.14)
+soll('Aufgabe 2f: Münze', 7.2 / 2.3, 3.13)
+soll('Aufgabe 3e: Stücke', 360 / 40, 9)
+soll('G5 (d): grosses Segment 270°', segment(sqrt(50), 270), 142.81)
+soll('G5 (d): Kreis − kleines Segment', A(sqrt(50)) - segment(sqrt(50), 90), 142.81)
+soll('G5 (d) Fehler minus Dreieck', sektor(sqrt(50), 270) - 25, 92.81)
+soll('G5 (d) Fehler nur Sektor', sektor(sqrt(50), 270), 117.81)
+soll('G5 Fehler ganze Sehne als Kathete: r', sqrt(125), 11.18)
+soll('G5 Fehler ganze Sehne als Kathete: Sektor', sektor(sqrt(125), 90), 98.17)
+soll('G6: Faktor', (2 * 2 ** 2), 8)
+# Übung sehne, Art h (P liegt h ausserhalb): √(r² + h²) ist bei r = 2h zufällig richtig — darum nicht gewürfelt
+assert isclose(sqrt(4 ** 2 + 2 ** 2), tangente(4, 6)), 'r = 2h'
+for r_ in (4, 5, 6, 6.5, 7.5, 8, 9, 10, 12):
+    for h_ in (0.5, 1, 1.5, 2, 2.5, 3, 4, 5):
+        if isclose(r_, 2 * h_):
+            continue
+        verschieden('Übung sehne h r=%s h=%s' % (r_, h_), tangente(r_, r_ + h_), sqrt((r_ + h_) ** 2 + r_ ** 2), sqrt(r_ ** 2 + h_ ** 2),
+                    h_, tangente(r_, r_ + 10 * h_))
+# Übung sehne, Art r (Radius aus Sehne s und Abstand a)
+for s_ in (6, 8, 9, 10, 12, 14, 16):
+    for a_ in (2, 2.5, 3, 4, 5, 6, 7.5):
+        rr = sqrt(s_ ** 2 / 4 + a_ ** 2)
+        verschieden('Übung sehne r s=%s a=%s' % (s_, a_), rr, sqrt(s_ ** 2 + a_ ** 2), s_ / 2 + a_, 2 * rr,
+                    *([sqrt(abs(s_ ** 2 / 4 - a_ ** 2))] if abs(s_ ** 2 / 4 - a_ ** 2) > 1e-9 else []))
 
 if FEHLER:
     print('\n'.join(FEHLER))

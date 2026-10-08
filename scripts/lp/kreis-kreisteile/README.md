@@ -10,7 +10,7 @@ Kapitel: Linien am Kreis · Umfang, Fläche und π · Bogen und Sektor · Segmen
 | `seite.py` | baut `leitprogramme/kreis-kreisteile.html` | **ja**, nach jeder Änderung an `seite.py`, `seite.js` oder `seite.css` |
 | `seite.css` | eigener Teil des `<style>` (Block aus Trig. Berechnungen kopiert, Ergänzungen am Schluss) | wird eingebunden |
 | `seite.js` | fünf Arbeitsbereiche mit Aufgabenleiste, 11 Übungstypen, Figuren zu den Aufgaben | wird eingebunden |
-| `clips.py` | erzeugt die acht Drehbücher `clips/g5-2c-lp-*.json` (Reihe «Kreisteile sehen») | **ja** — rettet die gemessenen `dauer` |
+| `clips.py` | erzeugt die acht Drehbücher `clips/g5-2c-lp-*.json` (Reihe «Kreisteile sehen») | **ja** — rettet die gemessenen `dauer` nach Szenenname und meldet Szenen mit neuem Text («neu zu vertonen»: `build-clip-ton.py --szenen`) |
 | `wortzeiten.py` | misst die Wortzeiten der vertonten Clips (faster-whisper) → `wortzeiten.json`; `clips.py` setzt Einblendungen «@wort» darauf | nach jeder (Teil-)Vertonung |
 | `zahlen.py` | rechnet jede Zahl von Seite, Clips und PDFs nach | **muss bestehen** |
 | `verteilung.mjs` | zählt 20 000 Würfe je Übungstyp (Schlüssel, Sollwerte) | bei Änderungen an den Übungen |
@@ -21,7 +21,7 @@ Gesamttest und Bewertungspaket: `downloads/leitprogramme/kreis-kreisteile/*.tex`
 ## Arbeitsbereich
 
 Wie in `scripts/lp/planimetrie/README.md`: Aufgaben mit `ziel`/`probe`, `wahl` (Linie antippen) oder `frage` (Grösse eingeben),
-`fest`/`verdeckt` wie in Trig. Berechnungen. Neu: `kandidatZug` (Kandidat auf einem Kreisbogen; x1 … y2 = Anfang und Mitte für
+`fest`/`verdeckt` wie in Trig. Berechnungen, dazu `ohne` (Regler, die in der Figur der Aufgabe nichts bedeuten, zeigen «–»; Prüfung 08.10.2026). Neu: `kandidatZug` (Kandidat auf einem Kreisbogen; x1 … y2 = Anfang und Mitte für
 `pruef-geo`), `F.sektor`, `F.ring`, und `korrigiere(regler, p)` hält gekoppelte Regler gültig (Kreisring r < R). Die
 Winkelregler gehen in 15°-Schritten (6–7 px je Stellung), damit Zielwinkel auch mit dem Finger treffbar sind.
 

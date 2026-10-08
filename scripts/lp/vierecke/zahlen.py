@@ -136,6 +136,39 @@ ok(gl(abst(P[0], P[3]), math.sqrt(13)) and not gl(math.sqrt(13), 4), '1c kein Rh
 print('1c AD =', round(math.sqrt(13), 2))
 ok(180 - 72 == 108 and 180 - 64 == 116, '1d')
 ok(50 / 2 == 25 and 180 - 50 == 130, '1e')
+D1e = (4 * math.cos(math.radians(50)), 4 * math.sin(math.radians(50))); C1e = (4 + D1e[0], D1e[1])
+ok([round(v, 3) for v in D1e] == [2.571, 3.064] and [round(v, 3) for v in C1e] == [6.571, 3.064], '1e Figur: Rhombus mit Seite 4, α = 50°')
+ok(gl(winkel((0, 0), (4, 0), (6.571, 3.064)), 25, 0.01) and gl(abst((4, 0), (6.571, 3.064)), 4, 0.001), '1e Figur: e unter 25°, BC = 4')
+# 1f: gleich lange Diagonalen ohne Rechteck — das gleichschenklige Trapez von sim1 A6 (c 2, v 1.5, h 3)
+ok(gl(abst((0, 0), (3.5, 3)), abst((5, 0), (1.5, 3))) and not gl(winkel((0, 0), (5, 0), (1.5, 3)), 90), '1f: gleichschenkliges Trapez, Diagonalen gleich, kein Rechteck')
+
+# ════════════════════════════════════════════════ Kapitel 1 · Übungen (Prüfung 08.10.2026, V-H2, V-H3)
+# Gegenbeispiel für «In jedem Trapez …»: das Start-Trapez von sim1 (a 5, c 3.5, v 1, h 3.5) widerlegt jede Eigenschaft
+St = [(0, 0), (5, 0), (4.5, 3.5), (1, 3.5)]
+eS, fS = abst(St[0], St[2]), abst(St[1], St[3])
+ok(not gl(eS, fS), 'Ü familie: Start-Trapez, Diagonalen verschieden lang (dg)')
+ok(not gl((St[2][0] - St[0][0]) * (St[3][0] - St[1][0]) + (St[2][1] - St[0][1]) * (St[3][1] - St[1][1]), 0), 'Ü familie: nicht senkrecht (ds)')
+ok(all(not gl(winkel(St[i], St[i - 1], St[(i + 1) % 4]), 90, 1e-6) for i in range(4)), 'Ü familie: kein rechter Winkel (rw)')
+ok(len({round(abst(St[i], St[(i + 1) % 4]), 6) for i in range(4)}) == 4, 'Ü familie: Seiten nicht gleich (gs)')
+ok(not parallel(St[1], St[2], St[0], St[3]), 'Ü familie: nur ein Paar parallel (pp), Diagonalen halbieren sich nicht (dh)')
+wS = [winkel(St[i], St[i - 1], St[(i + 1) % 4]) for i in range(4)]
+ok(not gl(wS[0], wS[2]) and not gl(wS[1], wS[3]), 'Ü familie: gegenüberliegende Winkel verschieden (gw)')
+# Die früheren Gegenbeispiel-Sätze sind beim Trapez nicht allgemein falsch (der Befund): rechtwinkliges Trapez,
+# gleichschenkliges Trapez, Trapez c 3, v 1, h 4 mit senkrechten Diagonalen
+ok(gl(winkel((0, 0), (5, 0), (0, 3)), 90), 'Befund: rechtwinkliges Trapez hat rechte Winkel')
+U4 = [(0, 0), (5, 0), (4, 4), (1, 4)]
+dAC, dBD = (U4[2][0] - U4[0][0], U4[2][1] - U4[0][1]), (U4[3][0] - U4[1][0], U4[3][1] - U4[1][1])
+ok(gl(dAC[0] * dBD[0] + dAC[1] * dBD[1], 0) and gl(math.hypot(*dAC), math.hypot(*dBD)), 'Umkehrung: c 3, v 1, h 4 — Diagonalen senkrecht und gleich lang')
+mAC, mBD = ((U4[0][0] + U4[2][0]) / 2, (U4[0][1] + U4[2][1]) / 2), ((U4[1][0] + U4[3][0]) / 2, (U4[1][1] + U4[3][1]) / 2)
+ok(mAC != mBD and not parallel(U4[1], U4[2], U4[0], U4[3]), 'Umkehrung: … aber sie halbieren sich nicht, kein Rhombus/Quadrat')
+ok(art1(3, 1, 4) == 'gleichschenklig', 'Umkehrung: in sim1 einstellbar (c 3, v 1, h 4 auf dem Raster)')
+# viereck-winkel «um d° grösser»: d = 20 … 120 ohne 60 und 90; α = (180 − d)/2 ganz und positiv; Fehlerzahlen verschieden
+for d in [x * 10 for x in range(2, 13) if x * 10 not in (60, 90)]:
+    al_, be_ = (180 - d) / 2, (180 + d) / 2
+    ok(al_ > 0 and al_ == int(al_) and gl(be_ - al_, d), 'Ü Differenz d = %d' % d)
+    ok(len({al_, (360 - d) / 2, be_, 180 - d}) == 4, 'Ü Differenz d = %d: α-Fehler verschieden' % d)
+    ok(len({be_, (360 + d) / 2, al_, 180 + d}) == 4, 'Ü Differenz d = %d: β-Fehler verschieden' % d)
+ok((360 - 90) / 2 == (180 + 90) / 2 and 180 - 60 == (180 + 60) / 2, 'Ü Differenz: d = 90 und d = 60 gäben Doppeldeutungen')
 
 # ════════════════════════════════════════════════ Kapitel 2 · Clip «Fläche»
 ok(5 * 3 == 15 and 2 * (5 + 3) == 16, 'Clip2 Rechteck 5 × 3')
@@ -173,7 +206,18 @@ F_, t_ = lot((0, 0), (8, 0), (11, 4))
 ok(gl(abst((0, 0), F_), 6.4) and t_ < 0, 'sim2 h_b = 6.4, Fuss ausserhalb')
 print('sim2 Fusspunkt h_b:', [round(v, 3) for v in F_])
 ok(gl(5 * 4 / 8, 2.5) and gl(2 * 32 / 5, 12.8), 'sim2 Fehlerwerte h_b')
-# Wahl: Richtungen ab A von h_b (−36.87°) und e = AC (20.0°)
+# A6 (Wahl h_b) seit der Prüfung mit a 6, h 4, v 3 (V-M2): Die Falle BD stand bei a 8, h 4, v 3 unter 88.2° auf AD
+def wink(u, v):
+    return math.degrees(math.acos((u[0] * v[0] + u[1] * v[1]) / (math.hypot(*u) * math.hypot(*v))))
+ok(abs(wink((3 - 8, 4), (3, 4)) - 88.21) < 0.01, 'sim2 alt: BD steht 88.2° auf AD (der Befund)')
+BD6 = (3 - 6, 4)
+ok(abs(wink(BD6, (3, 4)) - 90) > 15 and abs(wink(BD6, (3, 4)) - 73.74) < 0.01, 'sim2 A6: BD unter 73.7° zu AD und BC, wirkt nicht wie eine Höhe')
+F6, t6 = lot((0, 0), (6, 0), (9, 4))
+ok(gl(abst((0, 0), F6), 4.8) and t6 < 0 and gl(F6[0], 3.84) and gl(F6[1], -2.88), 'sim2 A6: h_b von A, Fuss (3.84|−2.88) ausserhalb')
+ok(-2.88 > -4.7 + 0.3, 'sim2 A6: Fusspunkt im Fenster (y0 = −4.7)')
+ok(abs(wink((9, 4), (3, 4)) - 29.17) < 0.01, 'sim2 A6: AC nicht senkrecht auf BC')
+ok(abs(math.degrees(math.atan2(F6[1], F6[0])) - math.degrees(math.atan2(4, 9))) > 30, 'sim2 A6: h_b und e = AC getrennt')
+# Wahl: Richtungen ab A von h_b (−36.87°) und e = AC (20.0°) — A7 (Frage) behält a 8, h 4, v 3
 ok(abs(math.degrees(math.atan2(F_[1], F_[0])) - math.degrees(math.atan2(4, 11))) > 30, 'sim2 Kandidaten getrennt')
 
 # ════════════════════════════════════════════════ Kapitel 2 · Aufgaben
@@ -203,6 +247,11 @@ ok((9 + 5) / 2 * 6 == 42 and (9 + 5) * 6 == 84 and 9 * 5 * 6 == 270, 'K3 F3')
 ok(40 / 8 == 5 and 40 * 8 == 320 and 40 / 16 == 2.5, 'K3 F4')
 ok(((0 + 2) / 2, (0 + 4) / 2) == (1, 2), 'K3 F5 Mitte von AD')
 ok((5 + 3) / 2 * 3 == 12, 'K3 F2 beide Trapeze 12')
+# K3 F2: Mittellinien durch die Schenkelmitten (Prüfung 08.10.2026, V-M4: rechts stand sie bei (7.5|2.5)–(11.5|2.5))
+TL_, TR_ = [(0, 1), (5, 1), (4, 4), (1, 4)], [(6.5, 1), (11.5, 1), (12, 4), (9, 4)]
+for T_, soll in ((TL_, ((0.5, 2.5), (4.5, 2.5))), (TR_, ((7.75, 2.5), (11.75, 2.5)))):
+    ok(((T_[0][0] + T_[3][0]) / 2, (T_[0][1] + T_[3][1]) / 2) == soll[0] and ((T_[1][0] + T_[2][0]) / 2, (T_[1][1] + T_[2][1]) / 2) == soll[1]
+       and gl(abst(*soll), 4), 'K3 F2 Mittellinie %s' % (soll,))
 
 # ════════════════════════════════════════════════ Kapitel 3 · Arbeitsbereich sim3
 # A(0|0), B(6|0), D(v|h), C(v + c|h). Regler c 1..6, h 1..5, v −2..4. Start c 4, h 3, v 0.5.
@@ -236,6 +285,25 @@ ok(gl(math.hypot(9, 12), 15) and r2(9 * math.sqrt(2)) == 12.73, 'K4 F1')
 ok(r2(6 * math.sqrt(2)) == 8.49, 'K4 F2')
 ok((14 - 8) / 2 == 3 and (14 + 8) / 2 == 11, 'K4 F3')
 ok(gl(math.hypot(12, 5), 13) and gl(math.hypot(24, 10), 26) and 12 + 5 == 17, 'K4 F4')
+# K4 F5: Klickziel Hypotenuse (0|0)–(3|4) ohne die Ecken, Toleranz 0.3; je 200 Klickstellen (V-M4: vorher 19 % Fehltreffer)
+def fuss_(p, z):
+    (ax, ay), (bx, by) = z; dx, dy = bx - ax, by - ay; q = max(0, min(1, ((p[0] - ax) * dx + (p[1] - ay) * dy) / (dx * dx + dy * dy)))
+    return math.hypot(p[0] - ax - dx * q, p[1] - ay - dy * q)
+def stellen(z, n=200):
+    (ax, ay), (bx, by) = z; return [(ax + (bx - ax) * (i + 0.5) / n, ay + (by - ay) * (i + 0.5) / n) for i in range(n)]
+ZH = ((0.3, 0.4), (2.7, 3.6))
+ok(gl(abst((0, 0), ZH[0]), 0.5) and gl(abst((3, 4), ZH[1]), 0.5), 'K4 F5 Ziel: je 0.5 von A und D abgeschnitten')
+treff = sum(fuss_(p, ZH) <= 0.3 for p in stellen(((0, 0), (3, 4)))) / 200
+fehl_u = sum(fuss_(p, ZH) <= 0.3 for p in stellen(((0, 0), (3, 0)))) / 200
+fehl_h = sum(fuss_(p, ZH) <= 0.3 for p in stellen(((3, 4), (3, 0)))) / 200
+print('K4 F5 Hypotenuse getroffen', treff, ' Überstand als richtig', fehl_u, ' Höhe als richtig', fehl_h)
+ok(treff >= 0.9 and fehl_u == 0 and fehl_h == 0, 'K4 F5 Klicktoleranz')
+# Kapitel 1 Clip «Bezeichnungen»: e näher an AC als an BD, f näher an BD (V-M4: «f» stand auf e)
+def dseg(p, a, b):
+    return fuss_(p, (a, b))
+ALLG_ = [(0.5, 1), (5.5, 1), (6, 5.5), (1.5, 4.5)]
+ok(dseg((4.6, 3.69 + 0.15), ALLG_[0], ALLG_[2]) < 0.5 < dseg((4.6, 3.69 + 0.15), ALLG_[1], ALLG_[3]), 'Clip1 Beschriftung e bei AC')
+ok(dseg((4.76, 2.03 + 0.15), ALLG_[1], ALLG_[3]) < 0.5 < dseg((4.76, 2.03 + 0.15), ALLG_[0], ALLG_[2]), 'Clip1 Beschriftung f bei BD')
 
 # ════════════════════════════════════════════════ Kapitel 4 · Arbeitsbereich sim4 (gleichschenkliges Trapez)
 # A(0|0), B(a|0), D(ü|h), C(a − ü|h), ü = (a − c)/2. Regler a 6..12, c 1..10, h 1..6. Start a 12, c 4, h 3.
@@ -262,6 +330,11 @@ ok(len(z65) >= 2, 'sim5 a = 6.5 erreichbar')
 ok(gl(2 * math.sqrt(100 - 36), 16) and 12 * 16 / 2 == 96, 'sim5 Frage: f 16, A 96')
 ok(gl(math.sqrt(100 - 36), 8) and r2(2 * math.sqrt(100 + 36) / 1) == 23.32 and 12 * 16 == 192, 'sim5 Fehlerwerte')
 
+# trapez-hoehe, Variante Parallelogramm: nur exakte Tripel (ü, h, s); GT G2 (2.5, 6, 6.5) gesperrt
+TRI = [[3, 4, 5], [4, 3, 5], [5, 12, 13], [12, 5, 13], [8, 6, 10], [6, 8, 10], [1.5, 2, 2.5], [2, 1.5, 2.5], [2.5, 6, 6.5], [4.5, 6, 7.5], [6, 4.5, 7.5]]
+ok(all(gl(math.hypot(t[0], t[1]), t[2]) for t in TRI), 'Ü trapez-hoehe: Tripel exakt')
+ok(all(r2(math.hypot(t[2], t[0])) != t[1] and not gl(t[2] - t[0], t[1]) for t in TRI), 'Ü Parallelogramm: Fehler ≠ Sollwert')
+
 # ════════════════════════════════════════════════ Kapitel 4 · Aufgaben
 d_tv = math.hypot(89, 50)
 ok(r2(d_tv) == 102.08 and r2(d_tv / 2.54) == 40.19, '4a Fernseher')
@@ -271,44 +344,58 @@ ue_c = (20 - 12) / 2
 ok(ue_c == 4 and gl(math.sqrt(8.5 ** 2 - 16), 7.5) and (20 + 12) / 2 * 7.5 == 120 and 20 + 12 + 17 == 49, '4c')
 ok(r2(10 / math.sqrt(2)) == 7.07 and 10 * 10 / 2 == 50, '4e')
 
-# ════════════════════════════════════════════════ Gesamttest
-# G1 (b): α − β = 40, α + β = 180
-ok((110 - 70, 110 + 70) == (40, 180), 'G1 b')
-# G2: a 7.5, b 5, h_a 4
-ok(7.5 * 4 == 30 and 2 * (7.5 + 5) == 25 and 30 / 5 == 6, 'G2')
-ok(gl(4 / 5, 6 / 7.5), 'G2 widerspruchsfrei (sin α = 0.8)')
-ok(7.5 * 5 == 37.5 and 7.5 * 4 / 2 == 15 and 2 * (7.5 + 4) == 23 and 30 / 7.5 == 4 and gl(5 * 4 / 7.5, 2.67, 0.01), 'G2 Fehlerwerte')
-# G3: Rhombus 70 cm × 40 cm
-aG3 = math.hypot(35, 20)
-ok(70 * 40 / 2 == 1400 and gl(1400 / 10000, 0.14) and r2(aG3) == 40.31 and r2(4 * aG3) == 161.25, 'G3')
-ok(r2(4 * 40.31) == 161.24, 'G3 mit gerundeter Seite 161.24')
-ok(r2(math.hypot(70, 40)) == 80.62 and r2(4 * math.hypot(70, 40)) == 322.49 and 70 * 40 == 2800, 'G3 Fehlerwerte')
-print('G3 a =', aG3, ' U =', 4 * aG3)
-# G4: Dachfläche
-ok((12 + 7) / 2 == 9.5 and 9.5 * 4.5 == 42.75 and 42.75 * 15 == 641.25, 'G4')
-ok((12 + 7) * 4.5 == 85.5 and 85.5 * 15 == 1282.5, 'G4 Fehlerwerte')
-# G5: c aus A, h, a
-ok(60 / 6 == 10 and 2 * 10 - 13 == 7, 'G5')
-ok(60 / 6 - 13 == -3 and 2 * 60 / 6 == 20, 'G5 Fehlerwerte')
-# G6: gleichschenkliges Trapez a 18, c 8, Schenkel 13
-ue6 = (18 - 8) / 2
-ok(ue6 == 5 and gl(math.sqrt(169 - 25), 12) and (18 + 8) / 2 * 12 == 156 and 18 + 8 + 26 == 52, 'G6')
-ok(r2(math.sqrt(169 - 100)) == 8.31 and r2(13 * 13) == 169 and (18 + 8) / 2 * 13 == 169, 'G6 Fehlerwerte')
-print('G6 Fehler ganzer Unterschied: h =', math.sqrt(169 - 100), ' A =', 13 * math.sqrt(69))
-ok(r2(13 * math.sqrt(69)) == 107.99, 'G6 Folgewert 107.99')
-# G7: Rechteck 6 × 8
-ok(gl(math.hypot(6, 8), 10) and r2(6 * math.sqrt(2)) == 8.49, 'G7')
+# ════════════════════════════════════════════════ Gesamttest (Fassung nach der Prüfung, 08.10.2026: 24 P)
+# G1 (a): Diagonalen halbieren sich, senkrecht, 7 und 10 lang → Rhombus, kein Quadrat
+e1, f1 = 7, 10
+ok(e1 != f1, 'G1 a: verschieden lang, also kein Quadrat')
+ok(gl(math.hypot(e1 / 2, f1 / 2), math.hypot(3.5, 5)), 'G1 a: Rhombus existiert (Seite √(3.5² + 5²))')
+# G1 (b): Trapez AB ∥ CD, β = 80, δ − α = 40 → α 70, δ 110, γ 100
+al, de = (180 - 40) / 2, (180 + 40) / 2
+ok((al, de, 180 - 80) == (70, 110, 100) and al + 80 + 100 + de == 360, 'G1 b')
+ok(((360 - 40) / 2, (360 + 40) / 2) == (160, 200) and ((180 - 40) / 2 + 40 == 110), 'BP G1 b: mit 360 → 160/200')
+ok((180 - 80, 180 - 80 + 40) == (100, 140), 'BP G1 b: α mit β gepaart → α 100, δ 140')
+# Figur zu G1 (b) möglich: A(0|0), B(b|0), D unter α = 70°, C unter β = 80° auf derselben Höhe
+hG = 3
+DG = (hG / math.tan(math.radians(70)), hG); CG = (8 - hG / math.tan(math.radians(80)), hG)
+ok(CG[0] > DG[0], 'G1 b: Trapez mit α 70, β 80 existiert (c > 0)')
+# G2: a 9.5, AD 6.5, AF 2.5 → h 6, A 57, h_b 57/6.5
+hG2 = math.sqrt(6.5 ** 2 - 2.5 ** 2)
+ok(gl(hG2, 6) and gl(9.5 * hG2, 57) and r2(57 / 6.5) == 8.77, 'G2')
+ok(57 / 6.5 <= 9.5 and hG2 <= 6.5, 'G2 widerspruchsfrei: h_b ≤ a, h ≤ AD')
+ok(gl(hG2 / 6.5, (57 / 6.5) / 9.5), 'G2: sin α aus beiden Höhen gleich')
+ok(r2(math.hypot(6.5, 2.5)) == 6.96 and math.hypot(6.5, 2.5) > 6.5, 'BP G2: plus statt minus → 6.96 > 6.5 unmöglich')
+ok(gl(9.5 * 6.5, 61.75) and gl(61.75 / 6.5, 9.5), 'BP G2: Seite als Höhe → 61.75, 9.5')
+ok(r2(2 * 57 / 6.5) == 17.54 and gl(57 / 9.5, 6), 'BP G2: 2A/b 17.54, A/a 6')
+# G3: Rhombus a 8.5, e 15 → f/2 4, f 8, A 60, h 60/8.5
+f2 = math.sqrt(8.5 ** 2 - 7.5 ** 2)
+ok(gl(f2, 4) and gl(15 * 2 * f2 / 2, 60) and r2(60 / 8.5) == 7.06, 'G3')
+ok(2 * f2 < 15, 'G3: 15 ist die längere Diagonale')
+ok(gl(15 * 4 / 2, 30) and r2(30 / 8.5) == 3.53, 'BP G3: f nicht verdoppelt → 30, 3.53')
+ok(r2(math.hypot(8.5, 7.5)) == 11.34 and math.hypot(8.5, 7.5) > 8.5, 'BP G3: plus → 11.34 > 8.5 unmöglich')
+ok(15 * 8 == 120 and r2(120 / 8.5) == 14.12 and r2(2 * 60 / 8.5) == 14.12 and 120 / 8.5 > 8.5, 'BP G3: 120 → 14.12 > 8.5; 2A/a 14.12')
+# G4: Walmdach a 12, A 38.25, h 4.5 → m 8.5, c 5, ü 3.5, s √32.5
+mG4 = 38.25 / 4.5; cG4 = 2 * mG4 - 12; uG4 = (12 - cG4) / 2; sG4 = math.hypot(uG4, 4.5)
+ok(gl(mG4, 8.5) and gl(cG4, 5) and gl(uG4, 3.5) and gl(sG4 ** 2, 32.5) and r2(sG4) == 5.70, 'G4')
+ok(gl(2 * 38.25 / 4.5, 17) and gl(38.25 / 4.5 - 12, -3.5) and (12 - 17) / 2 < 0, 'BP G4: 17 (Überstand negativ), −3.5')
+ok(r2(math.hypot(7, 4.5)) == 8.32 and 3.5 + 4.5 == 8 and r2(math.sqrt(4.5 ** 2 - 3.5 ** 2)) == 2.83, 'BP G4: 8.32, 8, 2.83')
+ok(not gl(math.hypot(abs(12 - 17) / 2, 4.5), sG4), 'G4: Fehler «c = 17» gibt nicht zufällig denselben Grat')
+print('G4 Dachneigung (Seitenfläche) ≈', round(math.degrees(math.acos(uG4 / 4.5)), 1), '° — realistisch')
+# G5: a 11, c 5, h 4 → m 8, Teile 19 und 13
+mG5 = (11 + 5) / 2
+ok(mG5 == 8 and (11 + 8) / 2 * 2 == 19 and (8 + 5) / 2 * 2 == 13 and 19 + 13 == mG5 * 4, 'G5')
+ok((11 + 8) / 2 * 4 == 38 and (8 + 5) / 2 * 4 == 26 and 11 + 5 == 16 and (11 - 5) / 2 == 3, 'BP G5: 38/26, 16, 3')
+# G6: Rechteck b 56, d 65 → h 33, U 178; Quadrat d 65 → a 65/√2
+ok(gl(math.sqrt(65 ** 2 - 56 ** 2), 33) and 2 * (56 + 33) == 178 and r2(65 / math.sqrt(2)) == 45.96, 'G6')
+ok(r2(math.hypot(65, 56)) == 85.80 and r2(2 * (56 + 85.80)) == 283.60 and 56 + 33 == 89, 'BP G6: 85.80, 283.60, 89')
+ok(65 / 2 == 32.5 and r2(65 * math.sqrt(2)) == 91.92, 'BP G6: 32.5, 91.92')
+print('G6 Seitenverhältnis 56 : 33 =', round(56 / 33, 3), '(16 : 9 =', round(16 / 9, 3), '), Diagonale', round(65 / 2.54, 1), 'Zoll')
+# Punkte und Zeit
+ok(4 + 4 + 4 + 4 + 4 + 4 == 24, 'GT Summe 24 P')
 
+# Figuren im Gesamttest absichtlich nicht massstäblich (das Gesuchte soll gerechnet, nicht gemessen werden)
+ok(not gl(5, hG2) and not gl(5.5, f2) and not gl(6, cG4) and not gl(4, 5), 'GT-Figuren verzerrt: h 5 ≠ 6, f/2 5.5 ≠ 4, First 6 ≠ 5, c 4 ≠ 5')
+ok(((0 + 3.5) / 2, (11 + 7.5) / 2) == (1.75, 9.25), 'GT G5-Figur: Mittellinie durch die Schenkelmitten')
 
-# ════════════════════════════════════════════════ Bewertungspaket: Zahlen in den typischen Fehlern
-ok((200 - 160, 200 + 160) == (40, 360), 'BP G1: mit 360 gerechnet → α 200, β 160')
-ok(7.5 * 5 == 37.5 and 37.5 / 5 == 7.5 and r2(5 * 4 / 7.5) == 2.67 and 2 * 30 / 5 == 12 and 2 * (7.5 + 4) == 23, 'BP G2')
-ok(70 * 40 == 2800 and gl(2800 / 10000, 0.28) and r2(math.hypot(70, 40)) == 80.62 and r2(4 * math.hypot(70, 40)) == 322.49 and 35 + 20 == 55, 'BP G3')
-ok((12 + 7) * 4.5 == 85.5 and 85.5 * 15 == 1282.5 and 12 + 7 == 19 and (12 - 7) / 2 == 2.5 and math.ceil(641.25) == 642, 'BP G4')
-ok(2 * 60 / 6 == 20 and 60 / 6 - 13 == -3, 'BP G5')
-ok(r2(math.sqrt(69)) == 8.31 and r2(13 * math.sqrt(69)) == 107.99 and 13 * 13 == 169 and r2(math.hypot(13, 5)) == 13.93
-   and r2(13 * math.hypot(13, 5)) == 181.07 and 18 + 8 + 13 == 39, 'BP G6')
-ok(r2(8 * math.sqrt(2)) == 11.31 and 6 + 8 == 14, 'BP G7')
 
 # ════════════════════════════════════════════════ Ergebnis
 if FEHLER:
