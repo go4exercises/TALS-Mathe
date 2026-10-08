@@ -1,0 +1,122 @@
+% Gesamttest «Einheitskreis» — Quelle des PDFs (python3 scripts/build-lp-pdf.py einheitskreis).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet
+% (scripts/lp/einheitskreis/zahlen.py, 07.10.2026). Kein \lt/\gt — pdfLaTeX kennt sie nicht, < und > tun es.
+\documentclass[11pt]{article}
+\usepackage{../lp-druck}
+\renewcommand{\lpname}{Einheitskreis}
+\renewcommand{\lpteilgebiet}{5.4}
+\renewcommand{\lpfuss}{Gesamttest · 25 Punkte}
+% Einheitskreis zum Einzeichnen: Radius #1 (cm), mit Gitter alle 0.25, Achsen mit Pfeil, Zahlen ±1.
+\newcommand{\ekreis}[2][]{%
+\begin{tikzpicture}[scale=#2]
+\draw[lplinie,line width=0.3pt] (-1.25,-1.25) grid[step=0.25] (#1);
+\draw[-latex,lpgrau] (-1.3,0) -- (1.45,0) node[right,black] {$x$};
+\draw[-latex,lpgrau] (0,-1.3) -- (0,1.4) node[above,black] {$y$};
+\draw[black,line width=0.8pt] (0,0) circle (1);
+\node[below right,font=\scriptsize,fill=white,inner sep=1pt] at (1,0) {$1$};
+\node[below left,font=\scriptsize,fill=white,inner sep=1pt] at (-1,0) {$-1$};
+\node[above left,font=\scriptsize,fill=white,inner sep=1pt] at (0,1) {$1$};
+\node[below left,font=\scriptsize,fill=white,inner sep=1pt] at (0,-1) {$-1$};
+\end{tikzpicture}}
+\begin{document}
+\lpkopf{Gesamttest}{%
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 25
+  \end{tabularx}}
+
+\begin{lpinfo}{Anleitung}
+\textbf{Zeit:} rund 30 Minuten. \textbf{Hilfsmittel:} Die Beziehungen am Einheitskreis tragen im Lehrplan den Vermerk «auch ohne Hilfsmittel», die Werte der besonderen Winkel gehören dazu. Darum: \textbf{Teil A ohne Taschenrechner}, erst für \textbf{Teil B} den Taschenrechner nehmen (Modus Grad, DEG). Lineal und Bleistift sind erlaubt.
+Schreib zu jeder Aufgabe den \textbf{Weg} auf — eine Skizze am Einheitskreis zählt als Begründung.
+Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket} bewerten lassen.
+\end{lpinfo}
+
+\lpteil{Teil A · ohne Taschenrechner}{Kapitel 1 bis 4 · 16 Punkte}
+
+\begin{lpaufgabe}{G1}{Am Einheitskreis zeichnen}{3 P}
+Im Bild ist der Einheitskreis mit der Tangente $x = 1$ gezeichnet.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Zeichne den Punkt $P$ zum Winkel $\varphi = 220^\circ$ ein und markiere $\sin\varphi$ und $\cos\varphi$ als Strecken.
+\item Zeichne den Punkt $S$ auf der Tangente ein, dessen $y$-Koordinate $\tan 220^\circ$ ist.
+\item Gib die Vorzeichen von $\sin 220^\circ$, $\cos 220^\circ$ und $\tan 220^\circ$ an.
+\end{enumerate}
+\par\smallskip\centering
+\begin{tikzpicture}[scale=2.6]
+\draw[lplinie,line width=0.3pt] (-1.25,-1.25) grid[step=0.25] (1.5,1.25);
+\draw[-latex,lpgrau] (-1.3,0) -- (1.6,0) node[right,black] {$x$};
+\draw[-latex,lpgrau] (0,-1.3) -- (0,1.38) node[above,black] {$y$};
+\draw[black,line width=0.8pt] (0,0) circle (1);
+\draw[black,line width=0.6pt] (1,-1.25) -- (1,1.25) node[above,font=\small] {$x = 1$};
+\node[below right,font=\scriptsize,fill=white,inner sep=1pt] at (1,0) {$1$};
+\node[below left,font=\scriptsize,fill=white,inner sep=1pt] at (-1,0) {$-1$};
+\node[above left,font=\scriptsize,fill=white,inner sep=1pt] at (0,1) {$1$};
+\node[below left,font=\scriptsize,fill=white,inner sep=1pt] at (0,-1) {$-1$};
+\end{tikzpicture}
+\par\raggedright
+\lpplatz{3}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G2}{Besondere Winkel}{4 P}
+Gib exakt an (mit Wurzeln oder Brüchen):
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item $\sin 240^\circ$
+\item $\cos 315^\circ$
+\item $\tan 240^\circ$
+\item $\cos\frac{11\pi}{6}$ \quad (Bogenmass)
+\end{enumerate}
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G3}{Trigonometrischer Pythagoras}{3 P}
+Es gilt $\sin\varphi = -\frac{24}{25}$, und $\varphi$ liegt im IV.~Quadranten. Berechne $\cos\varphi$ und $\tan\varphi$.
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G4}{Symmetrien}{4 P}
+Es gilt $\sin 35^\circ \approx 0.574$ und $\cos 35^\circ \approx 0.819$. Gib an und nenne jeweils die Symmetrie, die du benutzt:
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item $\sin 145^\circ$
+\item $\cos 215^\circ$
+\item $\sin 55^\circ$
+\item $\cos(-35^\circ)$
+\end{enumerate}
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G5}{Eine Beziehung begründen}{2 P}
+Begründe am Einheitskreis oder am rechtwinkligen Dreieck, warum für $0 < \varphi < \frac{\pi}{2}$ gilt:
+\[ \sin\left(\tfrac{\pi}{2} - \varphi\right) = \cos\varphi \]
+\lpplatz{4}
+\end{lpaufgabe}
+
+\lpteil{Teil B · mit Taschenrechner}{Kapitel 1, 4 und 5 · 9 Punkte}
+
+\begin{lpaufgabe}{G6}{Das Schiff um die Boje}{3 P}
+Ein Schiff fährt auf einem Kreis mit Radius $1$~Seemeile um eine Boje. Es startet genau östlich der Boje und fährt gegen den Uhrzeigersinn. Nach einer Drehung um $235^\circ$:
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Wie weit liegt es östlich und wie weit nördlich der Boje? (Seemeilen, drei Dezimalen; negativ heisst westlich bzw. südlich)
+\item In welcher Richtung von der Boje liegt es?
+\end{enumerate}
+\lpplatz{3}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G7}{Was der Rechner liefert}{3 P}
+Lena tippt $\tan^{-1}(-2)$ und erhält $-63.4^\circ$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Zeichne den Punkt $P$ zu diesem Winkel in den Einheitskreis.
+\item Ein zweiter Kreispunkt hat denselben Tangenswert. Wo liegt er, und warum liefert ihn der Rechner nicht?
+\item Gib für den Punkt $P$ aus (a) einen Winkel zwischen $0^\circ$ und $360^\circ$ an.
+\end{enumerate}
+\par\smallskip\centering\ekreis[1.25,1.25]{2}\par\raggedright
+\lpplatz{3}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G8}{Nur ein Winkel?}{3 P}
+Nina rechnet $\cos^{-1}(0.7) \approx 45.6^\circ$ und schliesst: «$45.6^\circ$ ist der einzige Winkel mit $\cos\varphi = 0.7$.»
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Stimmt das? Begründe am Einheitskreis mit einer Skizze.
+\item Gib einen negativen Winkel und einen Winkel über $360^\circ$ an, die ebenfalls $\cos\varphi = 0.7$ haben.
+\end{enumerate}
+\par\smallskip\centering\ekreis[1.25,1.25]{2}\par\raggedright
+\lpplatz{3}
+\end{lpaufgabe}
+\end{document}

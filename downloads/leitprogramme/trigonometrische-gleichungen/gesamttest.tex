@@ -1,0 +1,90 @@
+% Gesamttest «Trigonometrische Gleichungen» — Quelle des PDFs (python3 scripts/build-lp-pdf.py trigonometrische-gleichungen).
+% Musterlösung und Raster: bewertungspaket.tex. Alle Werte mit python3 nachgerechnet
+% (scripts/lp/trigonometrische-gleichungen/zahlen.py, 08.10.2026). Kein \lt/\gt — pdfLaTeX kennt sie nicht.
+\documentclass[11pt]{article}
+\usepackage{../lp-druck}
+\renewcommand{\lpname}{Trigonometrische Gleichungen}
+\renewcommand{\lpteilgebiet}{5.5}
+\renewcommand{\lpfuss}{Gesamttest · 25 Punkte}
+% Einheitskreis zum Einzeichnen: Gitter alle 0.25, Achsen mit Pfeil, Zahlen ±1.
+\newcommand{\ekreis}[1]{%
+\begin{tikzpicture}[scale=#1]
+\draw[lplinie,line width=0.3pt] (-1.25,-1.25) grid[step=0.25] (1.25,1.25);
+\draw[-latex,lpgrau] (-1.3,0) -- (1.45,0) node[right,black] {$x$};
+\draw[-latex,lpgrau] (0,-1.3) -- (0,1.4) node[above,black] {$y$};
+\draw[black,line width=0.8pt] (0,0) circle (1);
+\node[below right,font=\scriptsize,fill=white,inner sep=1pt] at (1,0) {$1$};
+\node[below left,font=\scriptsize,fill=white,inner sep=1pt] at (-1,0) {$-1$};
+\node[above left,font=\scriptsize,fill=white,inner sep=1pt] at (0,1) {$1$};
+\node[below left,font=\scriptsize,fill=white,inner sep=1pt] at (0,-1) {$-1$};
+\end{tikzpicture}}
+\begin{document}
+\lpkopf{Gesamttest}{%
+  \vspace{4pt}\noindent\begin{tabularx}{\linewidth}{@{}X X@{}}
+  Code (kein Name): \hrulefill & Punkte: \hrulefill\ / 25
+  \end{tabularx}}
+
+\begin{lpinfo}{Anleitung}
+\textbf{Zeit:} rund 30 Minuten. \textbf{Hilfsmittel:} \textbf{Teil A ohne Taschenrechner} — die besonderen Werte (aus dem Einheitskreis, GF~5.4) gibst du exakt an. Erst für \textbf{Teil B} den Taschenrechner nehmen (Modus Grad, DEG); runde Winkel auf $0.1^\circ$. Lineal und Bleistift sind erlaubt.
+Schreib zu jeder Aufgabe den \textbf{Weg} auf — eine Skizze am Einheitskreis zählt als Begründung. Lösungsmengen schreibst du aufsteigend, mit Strichpunkt: $\mathbb{L} = \{30^\circ;\ 150^\circ\}$.
+Danach: Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem \emph{Bewertungspaket} bewerten lassen.
+\end{lpinfo}
+
+\lpteil{Teil A · ohne Taschenrechner}{Kapitel 1, 3 und 4 · 10 Punkte}
+
+\begin{lpaufgabe}{G1}{Am Einheitskreis}{3 P}
+Gegeben ist die Gleichung $\cos\varphi = \frac{\sqrt3}{2}$.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Zeichne im Bild die Gerade ein, deren Schnittpunkte mit dem Kreis die Lösungen sind, und markiere die Lösungspunkte.
+\item Gib die Lösungsmenge im Intervall $[0^\circ;\, 360^\circ[$ an.
+\end{enumerate}
+\par\smallskip\centering\ekreis{2}\par\raggedright
+\lpplatz{2}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G2}{Wie viele Lösungen?}{3 P}
+Wie viele Lösungen hat die Gleichung im Intervall $[0^\circ;\, 360^\circ[$? Begründe jeweils in einem Satz am Einheitskreis.
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item $\sin\varphi = -1.2$
+\item $\cos\varphi = 1$
+\item $\tan\varphi = -50$
+\end{enumerate}
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G3}{Alle Lösungen}{4 P}
+Gib alle Lösungen an (mit $k \in \mathbb{Z}$):
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item $\tan\varphi = -\sqrt3$
+\item $\cos\varphi = \frac{\sqrt2}{2}$
+\end{enumerate}
+\lpplatz{4}
+\end{lpaufgabe}
+
+\lpteil{Teil B · mit Taschenrechner}{Kapitel 2, 3 und 4 · 15 Punkte}
+
+\begin{lpaufgabe}{G4}{Sinusgleichung}{4 P}
+Löse $\sin\varphi = -0.35$ im Intervall $[0^\circ;\, 360^\circ[$. Mach die Probe am Einheitskreis.
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G5}{Zwei Umdrehungen}{4 P}
+Bestimme alle Lösungen von $\cos\varphi = 0.42$ im Intervall $[0^\circ;\, 720^\circ[$.
+\lpplatz{5}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G6}{Tangens in einem anderen Intervall}{3 P}
+Bestimme alle Lösungen von $\tan\varphi = -2.4$ im Intervall $[-180^\circ;\, 180^\circ[$.
+\lpplatz{4}
+\end{lpaufgabe}
+
+\begin{lpaufgabe}{G7}{Fehler finden}{4 P}
+Tim löst $\cos\varphi = -0.6$ im Intervall $[0^\circ;\, 360^\circ[$ so:
+\[ \varphi_1 = \cos^{-1}(-0.6) \approx 126.9^\circ, \qquad \varphi_2 = 180^\circ - 126.9^\circ = 53.1^\circ, \qquad \mathbb{L} = \{53.1^\circ;\ 126.9^\circ\} \]
+\begin{enumerate}[label=(\alph*),leftmargin=*,itemsep=1pt]
+\item Welcher Schritt ist falsch? Begründe am Einheitskreis, warum $53.1^\circ$ keine Lösung sein kann.
+\item Gib die richtige Lösungsmenge an.
+\end{enumerate}
+\lpplatz{5}
+\end{lpaufgabe}
+\end{document}

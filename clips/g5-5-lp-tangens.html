@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="utf-8"><title>Winkel finden: Tangensgleichungen</title><style>
+@import url("../schriften.css");
+:root{--papier:#f8f6f1;--tinte:#1c1a17;--blau:#1a4f8a;--rot:#9b1c1c;--gruen:#1f6b3a;--gold:#b85c00;--f1:#1a4f8a;--f1w:#ddeaf8;--f2:#b85c00;--f2w:#fdefd8;--f3:#1f6b3a;--f3w:#d8f0e2;--f4:#9b1c1c;--f4w:#fde8e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#0d1418;overflow:hidden}
+#wrap{position:absolute;left:0;right:0;top:0;bottom:60px;overflow:hidden}
+:fullscreen #wrap{bottom:0} :fullscreen #ui{display:none}
+#stage{width:1920px;height:1080px;position:absolute;left:50%;top:50%;overflow:hidden;
+ background:var(--papier);color:var(--tinte);font-family:'Source Serif 4',Georgia,serif;transform-origin:center center}
+body.render #wrap{bottom:0} body.render #stage{left:0;top:0;transform:none!important}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(120% 100% at 50% 40%,rgba(255,255,255,0) 55%,rgba(90,80,64,.09) 100%)}
+#rand{position:absolute;left:76px;top:0;bottom:0;width:3px}
+
+#kopf,#fuss{position:absolute;left:130px;right:100px;display:flex;justify-content:space-between;
+ align-items:baseline;font-family:'Source Sans 3',sans-serif;z-index:5}
+#kopf{top:46px;font-size:27px}
+#kopf .marke{font-weight:600;letter-spacing:.01em;color:var(--blau)}
+#kopf .bereich{color:var(--tinte);opacity:.55;letter-spacing:.07em;text-transform:uppercase;font-size:22px}
+#fuss{bottom:44px;font-size:21px;color:var(--tinte);opacity:.42}
+
+/* Bedingungsleiste: die Voraussetzung, auf der die Rechnung steht.
+   Sie liegt ausserhalb des Szenenflusses — darum kostet sie keine Zeile
+   und kann trotzdem stehen bleiben, solange sie gilt. Unterhalb des
+   Inhalts, oberhalb der Fusszeile. */
+#vorleiste{position:absolute;left:130px;right:100px;top:96px;
+ display:flex;justify-content:center;gap:14px;z-index:5;pointer-events:none}
+.vor{display:inline-flex;align-items:center;gap:.58em;
+ background:var(--f1w);border:1.5px solid var(--f1);border-radius:10px;
+ padding:7px 19px 8px;color:var(--tinte);font-size:30px;line-height:1.14;
+ box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.vor .vor-tag{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;
+ letter-spacing:.13em;text-transform:uppercase;color:var(--f1);opacity:.95;
+ white-space:nowrap;align-self:center}
+.vor .vor-txt{white-space:nowrap}
+
+.l{position:absolute;will-change:opacity,transform}
+.l.flow{position:relative}
+.m{font-family:'Source Serif 4',Georgia,serif} .m i,i{font-style:italic}
+.hand{font-family:'Caveat',cursive;line-height:1.24}
+.sans{font-family:'Source Sans 3',system-ui,sans-serif}
+.huelle{display:flex;justify-content:flex-start}
+.mitte.huelle{justify-content:center}
+.huelle>span{white-space:nowrap}
+.f1,.f2,.f3,.f4{border-radius:7px;padding:0 .14em;margin:0 .02em}
+.f1{color:var(--f1);background:var(--f1w)}
+.f2{color:var(--f2);background:var(--f2w)}
+.f3{color:var(--f3);background:var(--f3w)}
+.f4{color:var(--f4);background:var(--f4w)}
+.dim{opacity:.62}
+.graf{line-height:0}
+.graf svg{display:inline-block;vertical-align:top}
+.ov{display:inline-block;line-height:1;padding-top:.07em;margin-top:.12em;border-top:3.5px solid currentColor}
+.row{display:flex;align-items:center;line-height:1.06;white-space:nowrap;gap:.26em}
+.mitte.row{justify-content:center}
+.fr{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;
+ line-height:1.08;margin:0 .12em;vertical-align:middle}
+.fr>span:first-child{padding:0 .32em .07em}
+.fr>span:last-child{padding:.20em .32em 0;border-top:3.5px solid currentColor}
+.box{border:3.5px solid var(--tinte);border-radius:14px;padding:12px 30px;background:rgba(255,255,255,.62)}
+.boxg{border-color:var(--gruen);color:var(--gruen)}
+.karte{background:rgba(255,255,255,.70);border:2.5px solid rgba(128,128,128,.28);border-radius:16px;padding:14px 26px}
+.strich{height:5px;background:var(--rot);border-radius:3px;transform-origin:left center}
+.lz{display:flex;align-items:baseline;gap:22px;margin-bottom:26px}
+.ln{color:var(--blau);font-weight:600;min-width:34px}
+.step{display:flex;align-items:flex-start;gap:18px;margin-bottom:34px}
+.num{flex:0 0 auto;width:56px;height:56px;border-radius:50%;background:var(--blau);color:var(--papier);
+ font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:31px;display:grid;place-items:center}
+.stxt{font-family:'Source Sans 3',sans-serif;font-size:31px;line-height:1.24;padding-top:7px}
+
+#ui{position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;align-items:center;gap:18px;
+ padding:0 26px;background:rgba(13,20,24,.85);color:#e8eef2;font-family:system-ui,sans-serif;font-size:14px;z-index:99}
+body.render #ui{display:none}
+#bar{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:4px;overflow:hidden;cursor:pointer}
+#barf{height:100%;width:0;background:var(--gold)}
+#ui button{background:rgba(255,255,255,.12);color:#e8eef2;border:0;border-radius:7px;padding:7px 14px;
+ font-size:14px;cursor:pointer;white-space:nowrap}
+#tt{white-space:nowrap;font-variant-numeric:tabular-nums}
+#tip{opacity:.6;white-space:nowrap}
+/* Auf dem Telefon gibt es weder Leertaste noch Pfeiltasten — der Hinweis
+   waere dort nur Text, der die 60px hohe Leiste sprengt. */
+@media (max-width:700px){#ui{gap:11px;padding:0 12px} #tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[],macros:{fa:['\\bbox[##ddeaf8,3px]{\\textcolor{##1a4f8a}{#1}}',1],fb:['\\bbox[##fdefd8,3px]{\\textcolor{##b85c00}{#1}}',1],fc:['\\bbox[##d8f0e2,3px]{\\textcolor{##1f6b3a}{#1}}',1],fd:['\\bbox[##fde8e8,3px]{\\textcolor{##9b1c1c}{#1}}',1]}},svg:{fontCache:'global'},options:{enableMenu:false}};</script><script src="../vendor/mathjax/tex-svg.js"></script></head><body>
+<div id="wrap"><div id="stage">
+
+<div id="kopf"><span class="marke">begreifbar.ch</span><span class="bereich">Geometrie · Trigonometrische Gleichungen</span></div>
+<div id="fuss"><span>Raphael Arnold Kohler</span><span>07.10.2026</span></div>
+<div class="l m row" data-at="0.40" data-out="13.44" data-anim="rise" style="left:150px;top:300px;font-size:62px"><span>\(\fb{\tan\varphi} = c\)</span></div>
+<div class="l hand" data-at="11.30" data-out="13.44" data-anim="rise" style="left:150px;top:410px;font-size:42px;color:var(--gold)">\(S(1 \mid c)\) auf der Tangente \(x = 1\)</div>
+<div class="l graf" data-at="0.05" data-t0="0.00" data-out="13.44" data-anim="fade" style="left:1240px;top:180px"><svg width="500" height="860" viewBox="0 0 500 860"><line x1="98.8" y1="0" x2="98.8" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="401.2" y1="0" x2="401.2" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="736.9" x2="500" y2="736.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="583.5" x2="500" y2="583.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="276.5" x2="500" y2="276.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="123.1" x2="500" y2="123.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="430.0" x2="500" y2="430.0" stroke="#1c1a17" stroke-width="3"/><line x1="250.0" y1="860" x2="250.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="500.0,430.0 482.0,421.0 482.0,439.0" fill="#1c1a17"/><polygon points="250.0,0 241.0,18 259.0,18" fill="#1c1a17"/><text x="474.0" y="416.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="264.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="98.8" y1="423.0" x2="98.8" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="98.8" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="401.2" y1="423.0" x2="401.2" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="401.2" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="736.9" x2="257.0" y2="736.9" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="744.9" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="243.0" y1="583.5" x2="257.0" y2="583.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="591.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="243.0" y1="276.5" x2="257.0" y2="276.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="284.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="123.1" x2="257.0" y2="123.1" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="131.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><clipPath id="fg9925b722"><rect x="0" y="0" width="500" height="860"/></clipPath><g clip-path="url(#fg9925b722)"><circle cx="250.0" cy="430.0" r="151.2" fill="#1c1a17" fill-opacity="0" stroke="#1c1a17" stroke-width="3"/><line x1="401.2" y1="852.0" x2="401.2" y2="8.0" stroke="#1c1a17" stroke-width="3" stroke-linecap="round"/><g class="zt" data-ein="7.40"><text x="419.4" y="247.1" font-size="30" font-style="normal" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">S</text></g></g><path data-bewk="[[0, 1, 1, 0, 0]]" data-paar="bewk0" data-fenster="-1.6,1.6,-2.75,2.75,500,860,8" data-stufen="0" data-poly="0" data-el="t" data-von="99" data-bis="99" fill="none" stroke="#b85c00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /><g class="bew-kk" data-zu="bewk0" data-mx="0" data-bahn="[[0, 0.0], [5.0, 0.0], [7.4, 0.87266]]" data-spur="0" data-proj="0" data-art="sin"><circle class="kk-kreis" fill="none" stroke="#1c1a17" stroke-width="3" stroke-opacity=".55"/><path class="kk-bogen" fill="none" stroke="#b85c00" stroke-width="7" stroke-opacity=".45" stroke-linecap="round"/><line class="kk-tang" stroke="#1c1a17" stroke-width="3" stroke-opacity=".55"/><line class="kk-radius" stroke="#1c1a17" stroke-width="3"/><line class="kk-hoehe" stroke="#b85c00" stroke-width="5"/><line class="kk-proj" stroke="#1c1a17" stroke-width="3" stroke-dasharray="10 8"/><circle class="kk-p" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle class="kk-q" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/></g></svg></div>
+<div class="l m row" data-at="13.84" data-out="29.63" data-anim="rise" style="left:150px;top:300px;font-size:60px"><span>\(\fb{\tan\varphi} = 1\)</span></div>
+<div class="l m row" data-at="22.64" data-out="29.63" data-anim="rise" style="left:150px;top:410px;font-size:54px"><span>\(\varphi_1 = 45^\circ, \quad \varphi_2 = 225^\circ\)</span></div>
+<div class="l hand" data-at="27.14" data-out="29.63" data-anim="rise" style="left:150px;top:510px;font-size:44px;color:var(--gold)">\(\varphi_2 = \varphi_1 + 180^\circ\)</div>
+<div class="l graf" data-at="13.49" data-out="29.63" data-anim="fade" style="left:1240px;top:180px"><svg width="500" height="860" viewBox="0 0 500 860"><line x1="98.8" y1="0" x2="98.8" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="401.2" y1="0" x2="401.2" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="736.9" x2="500" y2="736.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="583.5" x2="500" y2="583.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="276.5" x2="500" y2="276.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="123.1" x2="500" y2="123.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="430.0" x2="500" y2="430.0" stroke="#1c1a17" stroke-width="3"/><line x1="250.0" y1="860" x2="250.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="500.0,430.0 482.0,421.0 482.0,439.0" fill="#1c1a17"/><polygon points="250.0,0 241.0,18 259.0,18" fill="#1c1a17"/><text x="474.0" y="416.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="264.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="98.8" y1="423.0" x2="98.8" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="98.8" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="401.2" y1="423.0" x2="401.2" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="401.2" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="736.9" x2="257.0" y2="736.9" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="744.9" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="243.0" y1="583.5" x2="257.0" y2="583.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="591.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="243.0" y1="276.5" x2="257.0" y2="276.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="284.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="123.1" x2="257.0" y2="123.1" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="131.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><clipPath id="fg546f7061"><rect x="0" y="0" width="500" height="860"/></clipPath><g clip-path="url(#fg546f7061)"><circle cx="250.0" cy="430.0" r="151.2" fill="#1c1a17" fill-opacity="0" stroke="#1c1a17" stroke-width="3"/><line x1="401.2" y1="852.0" x2="401.2" y2="8.0" stroke="#1c1a17" stroke-width="3" stroke-linecap="round"/><g class="zt" data-ein="17.34"><line x1="8.0" y1="675.5" x2="492.0" y2="184.5" stroke="#b85c00" stroke-width="3" stroke-linecap="round" stroke-dasharray="14 10"/></g><g class="zt" data-ein="15.74"><text x="419.4" y="276.5" font-size="30" font-style="normal" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">S</text></g></g><g class="zt" data-ein="15.74"><circle cx="401.2" cy="276.5" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="401.2" cy="276.5" r="5" fill="#b85c00"/></g><g class="zt" data-ein="20.64"><circle cx="356.9" cy="321.5" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="356.9" cy="321.5" r="5" fill="#b85c00"/><text x="334.7" y="298.0" font-size="29" font-weight="600" fill="#b85c00" text-anchor="end">45°</text></g><g class="zt" data-ein="22.64"><circle cx="143.1" cy="538.5" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="143.1" cy="538.5" r="5" fill="#b85c00"/><text x="111.0" y="580.2" font-size="29" font-weight="600" fill="#b85c00" text-anchor="end">225°</text></g></svg></div>
+<div class="l m row" data-at="30.23" data-out="42.15" data-anim="rise" style="left:150px;top:300px;font-size:56px"><span>\(\fb{\tan\varphi} = 2.5\)</span></div>
+<div class="l m row" data-at="34.03" data-out="42.15" data-anim="rise" style="left:150px;top:400px;font-size:48px"><span>\(\varphi_1 = \arctan(2.5) \approx 68.2^\circ\)</span></div>
+<div class="l m row" data-at="39.03" data-out="42.15" data-anim="rise" style="left:150px;top:500px;font-size:46px"><span>\(\varphi_2 = 68.2^\circ + 180^\circ \approx 248.2^\circ\)</span></div>
+<div class="l graf" data-at="29.68" data-out="42.15" data-anim="fade" style="left:1240px;top:180px"><svg width="500" height="860" viewBox="0 0 500 860"><line x1="98.8" y1="0" x2="98.8" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="401.2" y1="0" x2="401.2" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="736.9" x2="500" y2="736.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="583.5" x2="500" y2="583.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="276.5" x2="500" y2="276.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="123.1" x2="500" y2="123.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="430.0" x2="500" y2="430.0" stroke="#1c1a17" stroke-width="3"/><line x1="250.0" y1="860" x2="250.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="500.0,430.0 482.0,421.0 482.0,439.0" fill="#1c1a17"/><polygon points="250.0,0 241.0,18 259.0,18" fill="#1c1a17"/><text x="474.0" y="416.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="264.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="98.8" y1="423.0" x2="98.8" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="98.8" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="401.2" y1="423.0" x2="401.2" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="401.2" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="736.9" x2="257.0" y2="736.9" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="744.9" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="243.0" y1="583.5" x2="257.0" y2="583.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="591.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="243.0" y1="276.5" x2="257.0" y2="276.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="284.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="123.1" x2="257.0" y2="123.1" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="131.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><clipPath id="fg6ed6139d"><rect x="0" y="0" width="500" height="860"/></clipPath><g clip-path="url(#fg6ed6139d)"><circle cx="250.0" cy="430.0" r="151.2" fill="#1c1a17" fill-opacity="0" stroke="#1c1a17" stroke-width="3"/><line x1="401.2" y1="852.0" x2="401.2" y2="8.0" stroke="#1c1a17" stroke-width="3" stroke-linecap="round"/><line x1="8.0" y1="1043.8" x2="492.0" y2="-183.8" stroke="#b85c00" stroke-width="3" stroke-linecap="round" stroke-dasharray="14 10"/><text x="419.4" y="46.4" font-size="30" font-style="normal" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">S</text></g><circle cx="401.2" cy="46.4" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="401.2" cy="46.4" r="5" fill="#b85c00"/><g class="zt" data-ein="34.03"><circle cx="306.2" cy="287.5" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="306.2" cy="287.5" r="5" fill="#b85c00"/><text x="324.1" y="251.1" font-size="29" font-weight="600" fill="#b85c00" text-anchor="start">68.2°</text></g><g class="zt" data-ein="39.03"><circle cx="193.8" cy="572.5" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="193.8" cy="572.5" r="5" fill="#b85c00"/><text x="175.9" y="627.3" font-size="29" font-weight="600" fill="#b85c00" text-anchor="end">248.2°</text></g></svg></div>
+<div class="l m row" data-at="45.85" data-out="57.05" data-anim="rise" style="left:150px;top:280px;font-size:50px"><span>\(\varphi_1 = \arctan(-1) = -45^\circ\)</span></div>
+<div class="l m row" data-at="48.75" data-out="57.05" data-anim="rise" style="left:150px;top:380px;font-size:48px"><span>\(-45^\circ + 180^\circ = 135^\circ\)</span></div>
+<div class="l m row" data-at="51.95" data-out="57.05" data-anim="rise" style="left:150px;top:470px;font-size:48px"><span>\(-45^\circ + 360^\circ = 315^\circ\)</span></div>
+<div class="l graf" data-at="42.20" data-out="57.05" data-anim="fade" style="left:1240px;top:180px"><svg width="500" height="860" viewBox="0 0 500 860"><line x1="98.8" y1="0" x2="98.8" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="401.2" y1="0" x2="401.2" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="736.9" x2="500" y2="736.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="583.5" x2="500" y2="583.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="276.5" x2="500" y2="276.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="123.1" x2="500" y2="123.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="430.0" x2="500" y2="430.0" stroke="#1c1a17" stroke-width="3"/><line x1="250.0" y1="860" x2="250.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="500.0,430.0 482.0,421.0 482.0,439.0" fill="#1c1a17"/><polygon points="250.0,0 241.0,18 259.0,18" fill="#1c1a17"/><text x="474.0" y="416.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="264.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="98.8" y1="423.0" x2="98.8" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="98.8" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="401.2" y1="423.0" x2="401.2" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="401.2" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="736.9" x2="257.0" y2="736.9" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="744.9" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="243.0" y1="583.5" x2="257.0" y2="583.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="591.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="243.0" y1="276.5" x2="257.0" y2="276.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="284.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="123.1" x2="257.0" y2="123.1" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="131.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><clipPath id="fg3641fad8"><rect x="0" y="0" width="500" height="860"/></clipPath><g clip-path="url(#fg3641fad8)"><circle cx="250.0" cy="430.0" r="151.2" fill="#1c1a17" fill-opacity="0" stroke="#1c1a17" stroke-width="3"/><line x1="401.2" y1="852.0" x2="401.2" y2="8.0" stroke="#1c1a17" stroke-width="3" stroke-linecap="round"/><line x1="8.0" y1="184.5" x2="492.0" y2="675.5" stroke="#b85c00" stroke-width="3" stroke-linecap="round" stroke-dasharray="14 10"/><text x="419.4" y="583.5" font-size="30" font-style="normal" fill="#b85c00" text-anchor="start" stroke="#f8f6f1" stroke-width="8" paint-order="stroke">S</text></g><circle cx="401.2" cy="583.5" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="401.2" cy="583.5" r="5" fill="#b85c00"/><g class="zt" data-ein="48.75"><circle cx="143.1" cy="321.5" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="143.1" cy="321.5" r="5" fill="#b85c00"/><text x="111.0" y="298.2" font-size="29" font-weight="600" fill="#b85c00" text-anchor="end">135°</text></g><g class="zt" data-ein="51.95"><circle cx="356.9" cy="538.5" r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle cx="356.9" cy="538.5" r="5" fill="#b85c00"/><text x="337.7" y="580.4" font-size="29" font-weight="600" fill="#b85c00" text-anchor="end">315°</text></g></svg></div>
+<div class="l m row" data-at="59.95" data-out="73.17" data-anim="rise" style="left:150px;top:300px;font-size:52px"><span>\(\fb{\tan\varphi} = c \; \text{für jedes } c\)</span></div>
+<div class="l hand" data-at="71.35" data-out="73.17" data-anim="rise" style="left:150px;top:410px;font-size:42px;color:var(--rot)">bei \(90^\circ\) und \(270^\circ\) nicht definiert</div>
+<div class="l graf" data-at="57.10" data-t0="57.05" data-out="73.17" data-anim="fade" style="left:1240px;top:180px"><svg width="500" height="860" viewBox="0 0 500 860"><line x1="98.8" y1="0" x2="98.8" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="401.2" y1="0" x2="401.2" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="736.9" x2="500" y2="736.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="583.5" x2="500" y2="583.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="276.5" x2="500" y2="276.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="123.1" x2="500" y2="123.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="430.0" x2="500" y2="430.0" stroke="#1c1a17" stroke-width="3"/><line x1="250.0" y1="860" x2="250.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="500.0,430.0 482.0,421.0 482.0,439.0" fill="#1c1a17"/><polygon points="250.0,0 241.0,18 259.0,18" fill="#1c1a17"/><text x="474.0" y="416.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="264.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="98.8" y1="423.0" x2="98.8" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="98.8" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="401.2" y1="423.0" x2="401.2" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="401.2" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="736.9" x2="257.0" y2="736.9" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="744.9" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="243.0" y1="583.5" x2="257.0" y2="583.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="591.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="243.0" y1="276.5" x2="257.0" y2="276.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="284.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="123.1" x2="257.0" y2="123.1" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="131.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><clipPath id="fgdbcadab1"><rect x="0" y="0" width="500" height="860"/></clipPath><g clip-path="url(#fgdbcadab1)"><circle cx="250.0" cy="430.0" r="151.2" fill="#1c1a17" fill-opacity="0" stroke="#1c1a17" stroke-width="3"/><line x1="401.2" y1="852.0" x2="401.2" y2="8.0" stroke="#1c1a17" stroke-width="3" stroke-linecap="round"/></g><path data-bewg="[[0, 1, 0], [4.6, 1, 0], [6.6, 2.6, 0], [7.4, 2.6, 0], [8.8, -2.6, 0]]" data-paar="bewg0" data-fenster="-1.6,1.6,-2.75,2.75,500,860,8" fill="none" stroke="#b85c00" stroke-width="3" stroke-linecap="round" stroke-dasharray="14 10"/><g class="bew-gm" data-zu="bewg0" data-x="1" data-text="S"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle r="5" fill="#b85c00"/></g><text font-size="29" font-weight="600" fill="#b85c00" stroke="#f8f6f1" stroke-width="5" paint-order="stroke" stroke-linejoin="round"></text></g><g class="bew-gs-tab" data-zu="bewg0" data-tab="[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.0,0.08935,0.12624,0.15445,0.17817,0.199,0.21777,0.23498,0.25095,0.2659,0.28,0.29337,0.3061,0.31827,0.32995,0.34117,0.352,0.36246,0.37258,0.38239,0.39192,0.40118,0.41019,0.41897,0.42753,0.43589,0.44405,0.45204,0.45984,0.46749,0.47497,0.48231,0.48951,0.49656,0.50349,0.51029,0.51698,0.52354,0.53,0.53634,0.54259,0.54873,0.55478,0.56073,0.56659,0.57236,0.57805,0.58366,0.58918,0.59463,0.6,0.6053,0.61052,0.61568,0.62076,0.62578,0.63073,0.63562,0.64045,0.64522,0.64992,0.65457,0.65916,0.6637,0.66818,0.67261,0.67698,0.6813,0.68558,0.6898,0.69397,0.6981,0.70218,0.70621,0.7102,0.71414,0.71804,0.7219,0.72571,0.72948,0.73321,0.7369,0.74055,0.74416,0.74773,0.75127,0.75476,0.75822,0.76164,0.76503,0.76837,0.77169,0.77497,0.77821,0.78142,0.7846,0.78775,0.79086,0.79394,0.79698,0.8,0.80298,0.80594,0.80886,0.81175,0.81462,0.81745,0.82025,0.82303,0.82577,0.82849,0.83118,0.83384,0.83648,0.83909,0.84167,0.84422,0.84674,0.84924,0.85172,0.85417,0.85659,0.85899,0.86136,0.8637,0.86603,0.86832,0.8706,0.87284,0.87507,0.87727,0.87945,0.8816,0.88373,0.88584,0.88792,0.88998,0.89202,0.89403,0.89603,0.898,0.89995,0.90187,0.90378,0.90566,0.90752,0.90936,0.91118,0.91298,0.91476,0.91652,0.91825,0.91997,0.92166,0.92333,0.92499,0.92662,0.92823,0.92983,0.9314,0.93295,0.93449,0.936,0.93749,0.93897,0.94043,0.94186,0.94328,0.94468,0.94606,0.94742,0.94876,0.95008,0.95139,0.95267,0.95394,0.95519,0.95642,0.95763,0.95882,0.96,0.96116,0.9623,0.96342,0.96452,0.96561,0.96668,0.96773,0.96876,0.96978,0.97077,0.97175,0.97272,0.97366,0.97459,0.9755,0.97639,0.97727,0.97813,0.97897,0.9798,0.9806,0.98139,0.98217,0.98293,0.98367,0.98439,0.9851,0.98579,0.98646,0.98712,0.98776,0.98838,0.98899,0.98958,0.99015,0.99071,0.99125,0.99177,0.99228,0.99277,0.99325,0.99371,0.99415,0.99458,0.99499,0.99538,0.99576,0.99612,0.99647,0.99679,0.99711,0.9974,0.99769,0.99795,0.9982,0.99843,0.99865,0.99885,0.99903,0.9992,0.99935,0.99949,0.99961,0.99971,0.9998,0.99987,0.99993,0.99997,0.99999,1.0,0.99999,0.99997,0.99993,0.99987,0.9998,0.99971,0.99961,0.99949,0.99935,0.9992,0.99903,0.99885,0.99865,0.99843,0.9982,0.99795,0.99769,0.9974,0.99711,0.99679,0.99647,0.99612,0.99576,0.99538,0.99499,0.99458,0.99415,0.99371,0.99325,0.99277,0.99228,0.99177,0.99125,0.99071,0.99015,0.98958,0.98899,0.98838,0.98776,0.98712,0.98646,0.98579,0.9851,0.98439,0.98367,0.98293,0.98217,0.98139,0.9806,0.9798,0.97897,0.97813,0.97727,0.97639,0.9755,0.97459,0.97366,0.97272,0.97175,0.97077,0.96978,0.96876,0.96773,0.96668,0.96561,0.96452,0.96342,0.9623,0.96116,0.96,0.95882,0.95763,0.95642,0.95519,0.95394,0.95267,0.95139,0.95008,0.94876,0.94742,0.94606,0.94468,0.94328,0.94186,0.94043,0.93897,0.93749,0.936,0.93449,0.93295,0.9314,0.92983,0.92823,0.92662,0.92499,0.92333,0.92166,0.91997,0.91825,0.91652,0.91476,0.91298,0.91118,0.90936,0.90752,0.90566,0.90378,0.90187,0.89995,0.898,0.89603,0.89403,0.89202,0.88998,0.88792,0.88584,0.88373,0.8816,0.87945,0.87727,0.87507,0.87284,0.8706,0.86832,0.86603,0.8637,0.86136,0.85899,0.85659,0.85417,0.85172,0.84924,0.84674,0.84422,0.84167,0.83909,0.83648,0.83384,0.83118,0.82849,0.82577,0.82303,0.82025,0.81745,0.81462,0.81175,0.80886,0.80594,0.80298,0.8,0.79698,0.79394,0.79086,0.78775,0.7846,0.78142,0.77821,0.77497,0.77169,0.76837,0.76503,0.76164,0.75822,0.75476,0.75127,0.74773,0.74416,0.74055,0.7369,0.73321,0.72948,0.72571,0.7219,0.71804,0.71414,0.7102,0.70621,0.70218,0.6981,0.69397,0.6898,0.68558,0.6813,0.67698,0.67261,0.66818,0.6637,0.65916,0.65457,0.64992,0.64522,0.64045,0.63562,0.63073,0.62578,0.62076,0.61568,0.61052,0.6053,0.6,0.59463,0.58918,0.58366,0.57805,0.57236,0.56659,0.56073,0.55478,0.54873,0.54259,0.53634,0.53,0.52354,0.51698,0.51029,0.50349,0.49656,0.48951,0.48231,0.47497,0.46749,0.45984,0.45204,0.44405,0.43589,0.42753,0.41897,0.41019,0.40118,0.39192,0.38239,0.37258,0.36246,0.352,0.34117,0.32995,0.31827,0.3061,0.29337,0.28,0.2659,0.25095,0.23498,0.21777,0.199,0.17817,0.15445,0.12624,0.08935,0.0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]" data-ab="-1.6" data-bis="1.6"></g><g class="bew-gs" data-zu="bewg0" data-i="0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle r="5" fill="#b85c00"/></g></g><g class="bew-gs" data-zu="bewg0" data-i="1"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle r="5" fill="#b85c00"/></g></g><path data-bewg="[[0, 1, 0], [4.6, 1, 0], [6.6, 2.6, 0], [7.4, 2.6, 0], [8.8, -2.6, 0]]" data-paar="bewg1" data-fenster="-1.6,1.6,-2.75,2.75,500,860,8" fill="none" stroke="#b85c00" stroke-width="3" stroke-linecap="round" stroke-dasharray="14 10"/><g class="bew-gs-tab" data-zu="bewg1" data-tab="[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,-0.0,-0.08935,-0.12624,-0.15445,-0.17817,-0.199,-0.21777,-0.23498,-0.25095,-0.2659,-0.28,-0.29337,-0.3061,-0.31827,-0.32995,-0.34117,-0.352,-0.36246,-0.37258,-0.38239,-0.39192,-0.40118,-0.41019,-0.41897,-0.42753,-0.43589,-0.44405,-0.45204,-0.45984,-0.46749,-0.47497,-0.48231,-0.48951,-0.49656,-0.50349,-0.51029,-0.51698,-0.52354,-0.53,-0.53634,-0.54259,-0.54873,-0.55478,-0.56073,-0.56659,-0.57236,-0.57805,-0.58366,-0.58918,-0.59463,-0.6,-0.6053,-0.61052,-0.61568,-0.62076,-0.62578,-0.63073,-0.63562,-0.64045,-0.64522,-0.64992,-0.65457,-0.65916,-0.6637,-0.66818,-0.67261,-0.67698,-0.6813,-0.68558,-0.6898,-0.69397,-0.6981,-0.70218,-0.70621,-0.7102,-0.71414,-0.71804,-0.7219,-0.72571,-0.72948,-0.73321,-0.7369,-0.74055,-0.74416,-0.74773,-0.75127,-0.75476,-0.75822,-0.76164,-0.76503,-0.76837,-0.77169,-0.77497,-0.77821,-0.78142,-0.7846,-0.78775,-0.79086,-0.79394,-0.79698,-0.8,-0.80298,-0.80594,-0.80886,-0.81175,-0.81462,-0.81745,-0.82025,-0.82303,-0.82577,-0.82849,-0.83118,-0.83384,-0.83648,-0.83909,-0.84167,-0.84422,-0.84674,-0.84924,-0.85172,-0.85417,-0.85659,-0.85899,-0.86136,-0.8637,-0.86603,-0.86832,-0.8706,-0.87284,-0.87507,-0.87727,-0.87945,-0.8816,-0.88373,-0.88584,-0.88792,-0.88998,-0.89202,-0.89403,-0.89603,-0.898,-0.89995,-0.90187,-0.90378,-0.90566,-0.90752,-0.90936,-0.91118,-0.91298,-0.91476,-0.91652,-0.91825,-0.91997,-0.92166,-0.92333,-0.92499,-0.92662,-0.92823,-0.92983,-0.9314,-0.93295,-0.93449,-0.936,-0.93749,-0.93897,-0.94043,-0.94186,-0.94328,-0.94468,-0.94606,-0.94742,-0.94876,-0.95008,-0.95139,-0.95267,-0.95394,-0.95519,-0.95642,-0.95763,-0.95882,-0.96,-0.96116,-0.9623,-0.96342,-0.96452,-0.96561,-0.96668,-0.96773,-0.96876,-0.96978,-0.97077,-0.97175,-0.97272,-0.97366,-0.97459,-0.9755,-0.97639,-0.97727,-0.97813,-0.97897,-0.9798,-0.9806,-0.98139,-0.98217,-0.98293,-0.98367,-0.98439,-0.9851,-0.98579,-0.98646,-0.98712,-0.98776,-0.98838,-0.98899,-0.98958,-0.99015,-0.99071,-0.99125,-0.99177,-0.99228,-0.99277,-0.99325,-0.99371,-0.99415,-0.99458,-0.99499,-0.99538,-0.99576,-0.99612,-0.99647,-0.99679,-0.99711,-0.9974,-0.99769,-0.99795,-0.9982,-0.99843,-0.99865,-0.99885,-0.99903,-0.9992,-0.99935,-0.99949,-0.99961,-0.99971,-0.9998,-0.99987,-0.99993,-0.99997,-0.99999,-1.0,-0.99999,-0.99997,-0.99993,-0.99987,-0.9998,-0.99971,-0.99961,-0.99949,-0.99935,-0.9992,-0.99903,-0.99885,-0.99865,-0.99843,-0.9982,-0.99795,-0.99769,-0.9974,-0.99711,-0.99679,-0.99647,-0.99612,-0.99576,-0.99538,-0.99499,-0.99458,-0.99415,-0.99371,-0.99325,-0.99277,-0.99228,-0.99177,-0.99125,-0.99071,-0.99015,-0.98958,-0.98899,-0.98838,-0.98776,-0.98712,-0.98646,-0.98579,-0.9851,-0.98439,-0.98367,-0.98293,-0.98217,-0.98139,-0.9806,-0.9798,-0.97897,-0.97813,-0.97727,-0.97639,-0.9755,-0.97459,-0.97366,-0.97272,-0.97175,-0.97077,-0.96978,-0.96876,-0.96773,-0.96668,-0.96561,-0.96452,-0.96342,-0.9623,-0.96116,-0.96,-0.95882,-0.95763,-0.95642,-0.95519,-0.95394,-0.95267,-0.95139,-0.95008,-0.94876,-0.94742,-0.94606,-0.94468,-0.94328,-0.94186,-0.94043,-0.93897,-0.93749,-0.936,-0.93449,-0.93295,-0.9314,-0.92983,-0.92823,-0.92662,-0.92499,-0.92333,-0.92166,-0.91997,-0.91825,-0.91652,-0.91476,-0.91298,-0.91118,-0.90936,-0.90752,-0.90566,-0.90378,-0.90187,-0.89995,-0.898,-0.89603,-0.89403,-0.89202,-0.88998,-0.88792,-0.88584,-0.88373,-0.8816,-0.87945,-0.87727,-0.87507,-0.87284,-0.8706,-0.86832,-0.86603,-0.8637,-0.86136,-0.85899,-0.85659,-0.85417,-0.85172,-0.84924,-0.84674,-0.84422,-0.84167,-0.83909,-0.83648,-0.83384,-0.83118,-0.82849,-0.82577,-0.82303,-0.82025,-0.81745,-0.81462,-0.81175,-0.80886,-0.80594,-0.80298,-0.8,-0.79698,-0.79394,-0.79086,-0.78775,-0.7846,-0.78142,-0.77821,-0.77497,-0.77169,-0.76837,-0.76503,-0.76164,-0.75822,-0.75476,-0.75127,-0.74773,-0.74416,-0.74055,-0.7369,-0.73321,-0.72948,-0.72571,-0.7219,-0.71804,-0.71414,-0.7102,-0.70621,-0.70218,-0.6981,-0.69397,-0.6898,-0.68558,-0.6813,-0.67698,-0.67261,-0.66818,-0.6637,-0.65916,-0.65457,-0.64992,-0.64522,-0.64045,-0.63562,-0.63073,-0.62578,-0.62076,-0.61568,-0.61052,-0.6053,-0.6,-0.59463,-0.58918,-0.58366,-0.57805,-0.57236,-0.56659,-0.56073,-0.55478,-0.54873,-0.54259,-0.53634,-0.53,-0.52354,-0.51698,-0.51029,-0.50349,-0.49656,-0.48951,-0.48231,-0.47497,-0.46749,-0.45984,-0.45204,-0.44405,-0.43589,-0.42753,-0.41897,-0.41019,-0.40118,-0.39192,-0.38239,-0.37258,-0.36246,-0.352,-0.34117,-0.32995,-0.31827,-0.3061,-0.29337,-0.28,-0.2659,-0.25095,-0.23498,-0.21777,-0.199,-0.17817,-0.15445,-0.12624,-0.08935,-0.0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]" data-ab="-1.6" data-bis="1.6"></g><g class="bew-gs" data-zu="bewg1" data-i="0"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle r="5" fill="#b85c00"/></g></g><g class="bew-gs" data-zu="bewg1" data-i="1"><g class="bew-pt"><circle r="11" fill="#f8f6f1" stroke="#b85c00" stroke-width="3.5"/><circle r="5" fill="#b85c00"/></g></g><polyline points="98.8,430.0 99.8,412.3 100.8,405.0 101.8,399.5 102.8,394.8 103.8,390.7 104.8,387.0 105.8,383.7 106.8,380.6 107.8,377.6 108.8,374.9 109.8,372.3 110.8,369.9 111.9,367.5 112.9,365.3 113.9,363.1 114.9,361.0 115.9,359.0 116.9,357.1 117.9,355.2 118.9,353.4 119.9,351.7 120.9,350.0 121.9,348.3 122.9,346.7 124.0,345.2 125.0,343.7 126.0,342.2 127.0,340.7 128.0,339.3 129.0,337.9 130.0,336.6 131.0,335.3 132.0,334.0 133.0,332.7 134.0,331.5 135.1,330.3 136.1,329.1 137.1,327.9 138.1,326.8 139.1,325.7 140.1,324.6 141.1,323.5 142.1,322.5 143.1,321.4 144.1,320.4 145.1,319.4 146.1,318.4 147.1,317.5 148.2,316.5 149.2,315.6 150.2,314.7 151.2,313.8 152.2,312.9 153.2,312.1 154.2,311.2 155.2,310.4 156.2,309.6 157.2,308.8 158.2,308.0 159.2,307.2 160.3,306.5 161.3,305.7 162.3,305.0 163.3,304.3 164.3,303.6 165.3,302.9 166.3,302.2 167.3,301.5 168.3,300.8 169.3,300.2 170.3,299.6 171.3,298.9 172.4,298.3 173.4,297.7 174.4,297.1 175.4,296.5 176.4,295.9 177.4,295.4 178.4,294.8 179.4,294.3 180.4,293.7 181.4,293.2 182.4,292.7 183.5,292.2 184.5,291.7 185.5,291.2 186.5,290.7 187.5,290.3 188.5,289.8 189.5,289.4 190.5,288.9 191.5,288.5 192.5,288.1 193.5,287.6 194.5,287.2 195.5,286.8 196.6,286.4 197.6,286.1 198.6,285.7 199.6,285.3 200.6,285.0 201.6,284.6 202.6,284.3 203.6,283.9 204.6,283.6 205.6,283.3 206.6,283.0 207.6,282.7 208.7,282.4 209.7,282.1 210.7,281.8 211.7,281.6 212.7,281.3 213.7,281.0 214.7,280.8 215.7,280.5 216.7,280.3 217.7,280.1 218.7,279.9 219.7,279.6 220.8,279.4 221.8,279.2 222.8,279.1 223.8,278.9 224.8,278.7 225.8,278.5 226.8,278.4 227.8,278.2 228.8,278.1 229.8,277.9 230.8,277.8 231.9,277.7 232.9,277.5 233.9,277.4 234.9,277.3 235.9,277.2 236.9,277.1 237.9,277.0 238.9,277.0 239.9,276.9 240.9,276.8 241.9,276.8 242.9,276.7 243.9,276.7 245.0,276.6 246.0,276.6 247.0,276.6 248.0,276.6 249.0,276.5 250.0,276.5 251.0,276.5 252.0,276.6 253.0,276.6 254.0,276.6 255.0,276.6 256.0,276.7 257.1,276.7 258.1,276.8 259.1,276.8 260.1,276.9 261.1,277.0 262.1,277.0 263.1,277.1 264.1,277.2 265.1,277.3 266.1,277.4 267.1,277.5 268.1,277.7 269.2,277.8 270.2,277.9 271.2,278.1 272.2,278.2 273.2,278.4 274.2,278.5 275.2,278.7 276.2,278.9 277.2,279.1 278.2,279.2 279.2,279.4 280.2,279.6 281.3,279.9 282.3,280.1 283.3,280.3 284.3,280.5 285.3,280.8 286.3,281.0 287.3,281.3 288.3,281.6 289.3,281.8 290.3,282.1 291.3,282.4 292.4,282.7 293.4,283.0 294.4,283.3 295.4,283.6 296.4,283.9 297.4,284.3 298.4,284.6 299.4,285.0 300.4,285.3 301.4,285.7 302.4,286.1 303.4,286.4 304.5,286.8 305.5,287.2 306.5,287.6 307.5,288.1 308.5,288.5 309.5,288.9 310.5,289.4 311.5,289.8 312.5,290.3 313.5,290.7 314.5,291.2 315.5,291.7 316.5,292.2 317.6,292.7 318.6,293.2 319.6,293.7 320.6,294.3 321.6,294.8 322.6,295.4 323.6,295.9 324.6,296.5 325.6,297.1 326.6,297.7 327.6,298.3 328.6,298.9 329.7,299.6 330.7,300.2 331.7,300.8 332.7,301.5 333.7,302.2 334.7,302.9 335.7,303.6 336.7,304.3 337.7,305.0 338.7,305.7 339.7,306.5 340.8,307.2 341.8,308.0 342.8,308.8 343.8,309.6 344.8,310.4 345.8,311.2 346.8,312.1 347.8,312.9 348.8,313.8 349.8,314.7 350.8,315.6 351.8,316.5 352.9,317.5 353.9,318.4 354.9,319.4 355.9,320.4 356.9,321.4 357.9,322.5 358.9,323.5 359.9,324.6 360.9,325.7 361.9,326.8 362.9,327.9 363.9,329.1 364.9,330.3 366.0,331.5 367.0,332.7 368.0,334.0 369.0,335.3 370.0,336.6 371.0,337.9 372.0,339.3 373.0,340.7 374.0,342.2 375.0,343.7 376.0,345.2 377.0,346.7 378.1,348.3 379.1,350.0 380.1,351.7 381.1,353.4 382.1,355.2 383.1,357.1 384.1,359.0 385.1,361.0 386.1,363.1 387.1,365.3 388.1,367.5 389.2,369.9 390.2,372.3 391.2,374.9 392.2,377.6 393.2,380.6 394.2,383.7 395.2,387.0 396.2,390.7 397.2,394.8 398.2,399.5 399.2,405.0 400.2,412.3 401.2,430.0" fill="none" stroke="#1c1a17" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /><polyline points="98.8,430.0 99.8,447.7 100.8,455.0 101.8,460.5 102.8,465.2 103.8,469.3 104.8,473.0 105.8,476.3 106.8,479.4 107.8,482.4 108.8,485.1 109.8,487.7 110.8,490.1 111.9,492.5 112.9,494.7 113.9,496.9 114.9,499.0 115.9,501.0 116.9,502.9 117.9,504.8 118.9,506.6 119.9,508.3 120.9,510.0 121.9,511.7 122.9,513.3 124.0,514.8 125.0,516.3 126.0,517.8 127.0,519.3 128.0,520.7 129.0,522.1 130.0,523.4 131.0,524.7 132.0,526.0 133.0,527.3 134.0,528.5 135.1,529.7 136.1,530.9 137.1,532.1 138.1,533.2 139.1,534.3 140.1,535.4 141.1,536.5 142.1,537.5 143.1,538.6 144.1,539.6 145.1,540.6 146.1,541.6 147.1,542.5 148.2,543.5 149.2,544.4 150.2,545.3 151.2,546.2 152.2,547.1 153.2,547.9 154.2,548.8 155.2,549.6 156.2,550.4 157.2,551.2 158.2,552.0 159.2,552.8 160.3,553.5 161.3,554.3 162.3,555.0 163.3,555.7 164.3,556.4 165.3,557.1 166.3,557.8 167.3,558.5 168.3,559.2 169.3,559.8 170.3,560.4 171.3,561.1 172.4,561.7 173.4,562.3 174.4,562.9 175.4,563.5 176.4,564.1 177.4,564.6 178.4,565.2 179.4,565.7 180.4,566.3 181.4,566.8 182.4,567.3 183.5,567.8 184.5,568.3 185.5,568.8 186.5,569.3 187.5,569.7 188.5,570.2 189.5,570.6 190.5,571.1 191.5,571.5 192.5,571.9 193.5,572.4 194.5,572.8 195.5,573.2 196.6,573.6 197.6,573.9 198.6,574.3 199.6,574.7 200.6,575.0 201.6,575.4 202.6,575.7 203.6,576.1 204.6,576.4 205.6,576.7 206.6,577.0 207.6,577.3 208.7,577.6 209.7,577.9 210.7,578.2 211.7,578.4 212.7,578.7 213.7,579.0 214.7,579.2 215.7,579.5 216.7,579.7 217.7,579.9 218.7,580.1 219.7,580.4 220.8,580.6 221.8,580.8 222.8,580.9 223.8,581.1 224.8,581.3 225.8,581.5 226.8,581.6 227.8,581.8 228.8,581.9 229.8,582.1 230.8,582.2 231.9,582.3 232.9,582.5 233.9,582.6 234.9,582.7 235.9,582.8 236.9,582.9 237.9,583.0 238.9,583.0 239.9,583.1 240.9,583.2 241.9,583.2 242.9,583.3 243.9,583.3 245.0,583.4 246.0,583.4 247.0,583.4 248.0,583.4 249.0,583.5 250.0,583.5 251.0,583.5 252.0,583.4 253.0,583.4 254.0,583.4 255.0,583.4 256.0,583.3 257.1,583.3 258.1,583.2 259.1,583.2 260.1,583.1 261.1,583.0 262.1,583.0 263.1,582.9 264.1,582.8 265.1,582.7 266.1,582.6 267.1,582.5 268.1,582.3 269.2,582.2 270.2,582.1 271.2,581.9 272.2,581.8 273.2,581.6 274.2,581.5 275.2,581.3 276.2,581.1 277.2,580.9 278.2,580.8 279.2,580.6 280.2,580.4 281.3,580.1 282.3,579.9 283.3,579.7 284.3,579.5 285.3,579.2 286.3,579.0 287.3,578.7 288.3,578.4 289.3,578.2 290.3,577.9 291.3,577.6 292.4,577.3 293.4,577.0 294.4,576.7 295.4,576.4 296.4,576.1 297.4,575.7 298.4,575.4 299.4,575.0 300.4,574.7 301.4,574.3 302.4,573.9 303.4,573.6 304.5,573.2 305.5,572.8 306.5,572.4 307.5,571.9 308.5,571.5 309.5,571.1 310.5,570.6 311.5,570.2 312.5,569.7 313.5,569.3 314.5,568.8 315.5,568.3 316.5,567.8 317.6,567.3 318.6,566.8 319.6,566.3 320.6,565.7 321.6,565.2 322.6,564.6 323.6,564.1 324.6,563.5 325.6,562.9 326.6,562.3 327.6,561.7 328.6,561.1 329.7,560.4 330.7,559.8 331.7,559.2 332.7,558.5 333.7,557.8 334.7,557.1 335.7,556.4 336.7,555.7 337.7,555.0 338.7,554.3 339.7,553.5 340.8,552.8 341.8,552.0 342.8,551.2 343.8,550.4 344.8,549.6 345.8,548.8 346.8,547.9 347.8,547.1 348.8,546.2 349.8,545.3 350.8,544.4 351.8,543.5 352.9,542.5 353.9,541.6 354.9,540.6 355.9,539.6 356.9,538.6 357.9,537.5 358.9,536.5 359.9,535.4 360.9,534.3 361.9,533.2 362.9,532.1 363.9,530.9 364.9,529.7 366.0,528.5 367.0,527.3 368.0,526.0 369.0,524.7 370.0,523.4 371.0,522.1 372.0,520.7 373.0,519.3 374.0,517.8 375.0,516.3 376.0,514.8 377.0,513.3 378.1,511.7 379.1,510.0 380.1,508.3 381.1,506.6 382.1,504.8 383.1,502.9 384.1,501.0 385.1,499.0 386.1,496.9 387.1,494.7 388.1,492.5 389.2,490.1 390.2,487.7 391.2,485.1 392.2,482.4 393.2,479.4 394.2,476.3 395.2,473.0 396.2,469.3 397.2,465.2 398.2,460.5 399.2,455.0 400.2,447.7 401.2,430.0" fill="none" stroke="#1c1a17" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /><g class="zt" data-ein="66.55"><circle cx="250.0" cy="276.5" r="11" fill="#f8f6f1" stroke="#9b1c1c" stroke-width="3.5"/><circle cx="250.0" cy="276.5" r="5" fill="#9b1c1c"/><text x="250.0" y="255.1" font-size="29" font-weight="600" fill="#9b1c1c" text-anchor="middle">90°</text></g><g class="zt" data-ein="67.45"><circle cx="250.0" cy="583.5" r="11" fill="#f8f6f1" stroke="#9b1c1c" stroke-width="3.5"/><circle cx="250.0" cy="583.5" r="5" fill="#9b1c1c"/><text x="250.0" y="631.0" font-size="29" font-weight="600" fill="#9b1c1c" text-anchor="middle">270°</text></g></svg></div>
+<div class="l hand mitte" data-at="73.57" data-out="85.53" data-anim="rise" style="left:150px;top:260px;font-size:72px;font-weight:600;color:var(--tinte)">Zum Mitnehmen</div>
+<div class="l hand" data-at="74.17" data-out="85.53" data-anim="rise" style="left:150px;top:360px;font-size:40px;color:var(--blau)">Rechner: \(-90^\circ \lt \varphi_1 \lt 90^\circ\)<br>\(\fb{\varphi_2 = \varphi_1 + 180^\circ}\)<br>negativ: \(+180^\circ\) und \(+360^\circ\)</div>
+<div class="l graf" data-at="73.47" data-out="85.53" data-anim="fade" style="left:1240px;top:180px"><svg width="500" height="860" viewBox="0 0 500 860"><line x1="98.8" y1="0" x2="98.8" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="401.2" y1="0" x2="401.2" y2="860" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="736.9" x2="500" y2="736.9" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="583.5" x2="500" y2="583.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="276.5" x2="500" y2="276.5" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="123.1" x2="500" y2="123.1" stroke="#1c1a17" stroke-opacity=".13" stroke-width="1.5"/><line x1="0" y1="430.0" x2="500" y2="430.0" stroke="#1c1a17" stroke-width="3"/><line x1="250.0" y1="860" x2="250.0" y2="0" stroke="#1c1a17" stroke-width="3"/><polygon points="500.0,430.0 482.0,421.0 482.0,439.0" fill="#1c1a17"/><polygon points="250.0,0 241.0,18 259.0,18" fill="#1c1a17"/><text x="474.0" y="416.0" font-size="26" font-style="italic" fill="#1c1a17">x</text><text x="264.0" y="26" font-size="26" font-style="italic" fill="#1c1a17">y</text><line x1="98.8" y1="423.0" x2="98.8" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="98.8" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="401.2" y1="423.0" x2="401.2" y2="437.0" stroke="#1c1a17" stroke-width="2.5"/><text x="401.2" y="462.0" font-size="22" text-anchor="middle" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="736.9" x2="257.0" y2="736.9" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="744.9" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−2</text><line x1="243.0" y1="583.5" x2="257.0" y2="583.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="591.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">−1</text><line x1="243.0" y1="276.5" x2="257.0" y2="276.5" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="284.5" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">1</text><line x1="243.0" y1="123.1" x2="257.0" y2="123.1" stroke="#1c1a17" stroke-width="2.5"/><text x="237.0" y="131.1" font-size="22" text-anchor="end" fill="#1c1a17" fill-opacity=".75">2</text><clipPath id="fg1552e33e"><rect x="0" y="0" width="500" height="860"/></clipPath><g clip-path="url(#fg1552e33e)"><circle cx="250.0" cy="430.0" r="151.2" fill="#1c1a17" fill-opacity="0" stroke="#1c1a17" stroke-width="3"/><line x1="401.2" y1="852.0" x2="401.2" y2="8.0" stroke="#1c1a17" stroke-width="3" stroke-linecap="round"/></g></svg></div>
+<div class="l hand mitte" data-at="85.93" data-out="91.59" data-anim="rise" style="left:150px;top:280px;font-size:86px;font-weight:600;color:var(--tinte)">Jetzt du</div>
+<div class="l hand" data-at="86.13" data-out="91.59" data-anim="rise" style="left:150px;top:430px;font-size:50px;color:var(--blau)">Erkunde diese Zusammenhänge<br>in der Animation unter dem Clip<br>und löse die Aufgaben.</div>
+</div></div>
+<audio id="ton" preload="auto" src="ton/g5-5-lp-tangens.mp3"></audio>
+<div id="ui">
+  <button id="pp">Pause</button>
+  <button id="ts" hidden>🔇 Ton an</button>
+  <div id="bar"><div id="barf"></div></div>
+  <span id="tt">0.0 s</span>
+  <span id="tip">Leertaste = Pause &middot; &larr; &rarr; = 5 s &middot; R = Neustart &middot; F = Vollbild</span>
+</div>
+<script>
+const DUR = 91.59;
+const SPRECHER = [{"bei": 0.4, "text": "Der Tangens ist am Einheitskreis eine Höhe auf der Tangente x gleich eins. Die Gerade durch den Ursprung und P trifft die Tangente im Punkt S. Tangens von Phi gleich c heisst also: S liegt auf der Höhe c."}, {"bei": 13.84, "text": "Tangens von Phi gleich eins: S liegt auf der Höhe eins. Die Gerade durch O und S trifft den Kreis zweimal, bei fünfundvierzig Grad und gegenüber bei zweihundertfünfundzwanzig Grad. Die beiden Punkte liegen sich am Ursprung gegenüber, hundertachtzig Grad auseinander."}, {"bei": 30.03, "text": "Tangens von Phi gleich zwei Komma fünf: Der Arkustangens liefert ungefähr achtundsechzig Komma zwei Grad. Die zweite Lösung liegt hundertachtzig Grad weiter: zweihundertachtundvierzig Komma zwei Grad."}, {"bei": 42.55, "text": "Tangens von Phi gleich minus eins: Der Rechner liefert minus fünfundvierzig Grad. Plus hundertachtzig gibt hundertfünfunddreissig Grad, plus dreihundertsechzig gibt dreihundertfünfzehn Grad. Beide liegen zwischen null und dreihundertsechzig Grad."}, {"bei": 57.45, "text": "Anders als beim Sinus gibt es beim Tangens für jedes c Lösungen: Wie hoch S auch liegt, die Gerade durch O und S trifft den Kreis immer. Nur bei neunzig und zweihundertsiebzig Grad trifft sie die Tangente nie. Dort ist der Tangens nicht definiert."}, {"bei": 73.57, "text": "Zum Mitnehmen: Tangens von Phi gleich c hat für jedes c Lösungen. Der Rechner liefert Phi eins zwischen minus neunzig und neunzig Grad, die zweite Lösung ist Phi eins plus hundertachtzig Grad."}, {"bei": 85.93, "text": "Jetzt du: Erkunde diese Zusammenhänge in der nachfolgenden Animation und löse die Aufgaben."}];
+const stage = document.getElementById('stage');
+const layers = [...document.querySelectorAll('.l')].map(el => ({
+  el, at: parseFloat(el.dataset.at || '0'),
+  out: el.dataset.out ? parseFloat(el.dataset.out) : Infinity,
+  anim: el.dataset.anim || 'fade',
+  dim: el.dataset.dim ? el.dataset.dim.split(',').map(Number) : null
+}));
+const IN = 0.5, OUT = 0.4;
+// Teile eines Bildes mit eigenem "ein"/"aus" (g.zt): blenden fuer sich ein und aus.
+// Bewegte Figuren (g.fb): vorgerechnete Bilder, je eines zwischen data-fvon und data-fbis.
+const fbilder = [...document.querySelectorAll('g.fb')].map(el => ({
+  el, von: el.dataset.fvon ? parseFloat(el.dataset.fvon) : -Infinity,
+  bis: el.dataset.fbis ? parseFloat(el.dataset.fbis) : Infinity }));
+const zteile = [...document.querySelectorAll('g.zt')].map(el => ({
+  el, at: el.dataset.ein ? parseFloat(el.dataset.ein) : -Infinity,
+  out: el.dataset.aus ? parseFloat(el.dataset.aus) : Infinity }));
+const ease = p => 1 - Math.pow(1 - p, 3);
+const cl = p => p < 0 ? 0 : p > 1 ? 1 : p;
+function seek(t)  {
+  for (const L of layers) {
+    const pi = ease(cl((t - L.at) / IN));
+    const po = L.out === Infinity ? 0 : ease(cl((t - L.out) / OUT));
+    let o = pi * (1 - po), tr = '';
+    if (L.anim === 'rise') tr = 'translateY(' + ((1 - pi) * 26) + 'px)';
+    else if (L.anim === 'pop') tr = 'scale(' + (0.90 + 0.10 * pi) + ')';
+    else if (L.anim === 'wipe') { tr = 'scaleX(' + pi + ')'; o = (t >= L.at ? 1 : 0) * (1 - po); }
+    if (L.dim && !(t >= L.dim[0] && t < L.dim[1])) o *= 0.34;
+    L.el.style.transform = tr; L.el.style.opacity = o;
+  }
+  for (const Z of zteile) {
+    const pi = Z.at === -Infinity ? 1 : ease(cl((t - Z.at) / IN));
+    const po = Z.out === Infinity ? 0 : ease(cl((t - Z.out) / OUT));
+    Z.el.style.opacity = pi * (1 - po);
+  }
+  for (const F of fbilder) F.el.style.display = t >= F.von && t < F.bis ? '' : 'none';
+}
+
+const RUHIG = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const BEW = [...document.querySelectorAll('[data-t0]')].map(L => ({
+  t0: parseFloat(L.dataset.t0),
+  teile: [...L.querySelectorAll('[data-bew]')].map(p => ({
+    art: 'p', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bew), f: p.dataset.fenster.split(',').map(Number) }))
+    .concat([...L.querySelectorAll('[data-bewg]')].map(p => ({
+      art: 'g', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewg), f: p.dataset.fenster.split(',').map(Number) })))
+    .concat([...L.querySelectorAll('[data-bewk]')].map(p => ({
+      art: 'k', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.bewk), f: p.dataset.fenster.split(',').map(Number),
+      stufen: p.dataset.stufen === '1', poly: p.dataset.poly === '1', el: p.dataset.el || '' })))
+    .concat([...L.querySelectorAll('[data-fkl]')].map(p => ({
+      art: 'f', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fkl), f: p.dataset.fenster.split(',').map(Number),
+      tab: JSON.parse(p.dataset.tab), ab: parseFloat(p.dataset.ab), bis: parseFloat(p.dataset.bis) })))
+    .concat([...L.querySelectorAll('[data-fp]')].map(p => {
+      const namen = p.dataset.namen.split(',');
+      return { art: 'fp', p, L, t0: parseFloat(L.dataset.t0), k: JSON.parse(p.dataset.fp), f: p.dataset.fenster.split(',').map(Number),
+        fn: new Function('x', ...namen, 'return ' + p.dataset.js), namen };
+    }))
+}));
+// Formelkurve mit Parametern ("parameter", seit 07.10.2026): die Formel kommt als JavaScript aus
+// dem Bauer (formel_js), die Buchstaben aus der Zeit. Luecken (NaN, Pole) brechen den Zug ab.
+function bewegeFormel(T, t, px, py, x0, x1, y0, y1) {
+  const P = bewZustand(T.k, t - T.t0);
+  const f = x => { const y = T.fn(x, ...P); return isFinite(y) ? y : null; };
+  const a0 = Math.max(x0, parseFloat(T.p.dataset.von)), a1 = Math.min(x1, parseFloat(T.p.dataset.bis));
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y === null || y < y0 || y > y1) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    const fx = g._fx || (g._fx = new Function(...T.namen, 'return ' + g.dataset.xjs));
+    const x = fx(...P), y = f(x);
+    const ok = y !== null && x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    g.style.display = ok ? '' : 'none';
+    if (!ok) continue;
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); });
+    const tx = g.querySelector(':scope > text'); if (!tx) continue;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18)); tx.setAttribute('y', py(y) < 60 ? py(y) + 44 : py(y) - 22);
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+  }
+}
+// Zuletzt die Beschriftungen der mitfahrenden Punkte (seit 07.10.2026): "lage" setzt sie fest
+// (oben, unten, links, rechts, auch zwei davon), und keine ragt ueber den Rand des Bildes.
+function beschriftungenRichten() {
+  for (const L of document.querySelectorAll('[data-t0]'))
+    for (const g of L.querySelectorAll('[data-zu], .fk-l')) {
+      if (g.style.display === 'none') continue;
+      const tx = g.querySelector(':scope > text'), c = g.querySelector('.bew-pt circle');
+      if (!tx || !c || !tx.textContent) continue;
+      const X = parseFloat(c.getAttribute('cx')), Y = parseFloat(c.getAttribute('cy'));
+      if (g.dataset.lage) {
+        const w = g.dataset.lage.split(/\s+/), li = w.includes('links'), re = w.includes('rechts');
+        const ob = w.includes('oben'), un = w.includes('unten');
+        tx.setAttribute('x', X + (li ? -18 : re ? 18 : 0));
+        tx.setAttribute('y', ob ? Y - 22 : un ? Y + 44 : Y + 10);
+        tx.setAttribute('text-anchor', li ? 'end' : re ? 'start' : 'middle');
+      }
+      let w;
+      try { w = tx.getComputedTextLength(); } catch (e) { continue; }
+      const svg = tx.ownerSVGElement; if (!w || !svg) continue;
+      const B = svg.viewBox.baseVal && svg.viewBox.baseVal.width || svg.width.baseVal.value;
+      const x = parseFloat(tx.getAttribute('x')), an = tx.getAttribute('text-anchor') || 'start';
+      const l = an === 'start' ? x : an === 'end' ? x - w : x - w / 2;
+      // Seitlich stehende Beschriftung auf die andere Seite des Punkts klappen, mittige schieben
+      if (l + w > B - 4) {
+        if (an === 'start' && X - 18 - w >= 4) { tx.setAttribute('x', X - 18); tx.setAttribute('text-anchor', 'end'); }
+        else tx.setAttribute('x', x - (l + w - (B - 4)));
+      } else if (l < 4) {
+        if (an === 'end' && X + 18 + w <= B - 4) { tx.setAttribute('x', X + 18); tx.setAttribute('text-anchor', 'start'); }
+        else tx.setAttribute('x', x + (4 - l));
+      }
+    }
+}
+// Laeufer auf einer festen Formelkurve: x aus der Bahn, y linear aus der Wertetabelle.
+function laufeFest(T, t, px, py, x0, x1, y0, y1) {
+  const x = bewZustand(T.k, t - T.t0)[0], n = T.tab.length - 1;
+  const q = (x - T.ab) / (T.bis - T.ab) * n, i = Math.min(n - 1, Math.max(0, Math.floor(q)));
+  const ya = T.tab[i], yb = T.tab[i + 1];
+  const y = ya === null || yb === null ? null : ya + (yb - ya) * (q - i);
+  const ok = y !== null && q >= 0 && q <= n && x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  T.p.style.display = ok ? '' : 'none';
+  if (!ok) return;
+  T.p.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); });
+  const tx = T.p.querySelector(':scope > text'); if (!tx) return;
+  const rechts = x > x1 - (x1 - x0) * 0.25;
+  tx.setAttribute('x', px(x) + (rechts ? -18 : 18)); tx.setAttribute('y', py(y) < 60 ? py(y) + 44 : py(y) - 22);
+  tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+  tx.textContent = T.p.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+}
+// Zwischen zwei Stuetzpunkten weich. Wie viele Zahlen ein Stuetzpunkt traegt, sagt er
+// selbst: [t, a, u, v] bei einer Parabel, [t, m, q] bei einer Geraden, [t, x] bei einer Bahn.
+function bewZustand(k, t) {
+  const n = k[0].length - 1;
+  if (t <= k[0][0]) return k[0].slice(1);
+  for (let i = 0; i < k.length - 1; i++) {
+    if (t < k[i + 1][0]) {
+      let q = (t - k[i][0]) / (k[i + 1][0] - k[i][0]);
+      q = RUHIG ? 0 : q * q * (3 - 2 * q);
+      const aus = [];
+      for (let j = 1; j <= n; j++) aus.push(k[i][j] + (k[i + 1][j] - k[i][j]) * q);
+      return aus;
+    }
+  }
+  return k[k.length - 1].slice(1);
+}
+// Eine Nachkommastelle — ausser der Wert hat genau zwei (−0.75, −1.25): dann beide, sonst
+// stuende an einem ruhenden Punkt eine falsch gerundete Zahl (seit 07.10.2026). Waehrend einer
+// Bewegung sind die Werte krumm und bleiben bei einer Stelle.
+const bewZahl = x => {
+  const z = Math.round(x * 100);
+  const r = Math.abs(x * 100 - z) < 1e-6 && z % 10 !== 0 ? z / 100 : Math.round(x * 10) / 10;
+  return (r < 0 ? '−' : '') + Math.abs(r);
+};
+// Eine bewegte Gerade y = m x + q: am Fenster abgeschnitten, dazu ihre Begleiter.
+function bewegeGerade(T, t, px, py, x0, x1, y0, y1) {
+  const [m, q] = bewZustand(T.k, t - T.t0);
+  if (T.p.dataset.ab !== undefined) x0 = Math.max(x0, parseFloat(T.p.dataset.ab));
+  const f = x => m * x + q, innen = (x, y) => x >= x0 - 1e-9 && x <= x1 + 1e-9 && y >= y0 - 1e-9 && y <= y1 + 1e-9;
+  const pt = [];
+  for (const x of [x0, x1]) { const y = f(x); if (y >= y0 - 1e-9 && y <= y1 + 1e-9) pt.push([x, y]); }
+  if (Math.abs(m) > 1e-9) for (const y of [y0, y1]) { const x = (y - q) / m; if (x >= x0 - 1e-9 && x <= x1 + 1e-9) pt.push([x, y]); }
+  pt.sort((u, v) => u[0] - v[0]);
+  T.p.setAttribute('d', pt.length > 1
+    ? 'M' + px(pt[0][0]).toFixed(1) + ',' + py(pt[0][1]).toFixed(1) +
+      'L' + px(pt[pt.length - 1][0]).toFixed(1) + ',' + py(pt[pt.length - 1][1]).toFixed(1)
+    : '');
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (m > 0 ? 44 : -18)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  const fuell = (v, x, y) => v.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y))
+                              .replace('{m}', bewZahl(m)).replace('{q}', bewZahl(q));
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-gy')) {
+      setze(g, 0, q); beschrifte(g, 0, q, '(0 | ' + bewZahl(q) + ')');
+    } else if (g.classList.contains('bew-gn')) {
+      if (Math.abs(m) < 1e-9) { g.style.display = 'none'; continue; }
+      const xn = -q / m; setze(g, xn, 0); beschrifte(g, xn, 0, '(' + bewZahl(xn) + ' | 0)');
+    } else if (g.classList.contains('bew-gm')) {
+      const x = parseFloat(g.dataset.x);
+      setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)));
+    } else if (g.classList.contains('bew-gl')) {
+      const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+      const x = bewZustand(bahn, t - T.t0)[0];
+      setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)));
+    } else if (g.classList.contains('bew-gs-tab')) {
+      // Schnittpunkte mit einer festen Kurve (Tabelle): Vorzeichenwechsel von Kurve − Gerade,
+      // dazu Beruehrstellen (|Differenz| lokal minimal und fast null).
+      const tab = g._tab || (g._tab = JSON.parse(g.dataset.tab));
+      const ab = parseFloat(g.dataset.ab), bis = parseFloat(g.dataset.bis), n = tab.length - 1;
+      const X = i => ab + (bis - ab) * i / n, d = i => tab[i] === null ? null : tab[i] - f(X(i));
+      const eps = (y1 - y0) * 2e-3, sn = [];
+      for (let i = 0; i < n; i++) {
+        const da = d(i), db = d(i + 1);
+        if (da === null || db === null) continue;
+        if (da === 0) sn.push(X(i));
+        else if (da * db < 0) sn.push(X(i) + (X(i + 1) - X(i)) * da / (da - db));
+        else if (i > 0 && d(i - 1) !== null && Math.abs(da) < eps && Math.abs(da) <= Math.abs(d(i - 1)) && Math.abs(da) <= Math.abs(db)) sn.push(X(i));
+      }
+      const gs = [];
+      for (const x of sn) if (!gs.length || x - gs[gs.length - 1] > (bis - ab) / n * 1.5) gs.push(x);
+      T._gs = gs;
+    } else if (g.classList.contains('bew-gs')) {
+      const x = (T._gs || [])[parseInt(g.dataset.i)];
+      if (x === undefined) { g.style.display = 'none'; continue; }
+      setze(g, x, f(x)); beschrifte(g, x, f(x), '(' + bewZahl(x) + ' | ' + bewZahl(f(x)) + ')');
+      // abwechselnd ueber und unter der Geraden, sonst stossen nahe Beschriftungen zusammen
+      const tx = g.querySelector(':scope > text');
+      if (tx) { tx.setAttribute('y', py(f(x)) + (parseInt(g.dataset.i) % 2 ? 44 : -18));
+        tx.setAttribute('text-anchor', 'middle'); tx.setAttribute('x', px(x)); }
+    } else if (g.classList.contains('bew-gd')) {
+      // Steigungsdreieck: von (x | f(x)) nach rechts, dann senkrecht auf die Gerade.
+      let xa, dx;
+      if (g.dataset.bahn) {
+        const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+        [xa, dx] = bewZustand(bahn, t - T.t0);
+      } else { xa = parseFloat(g.dataset.x); dx = parseFloat(g.dataset.dx); }
+      const xb = xa + dx;
+      // dx = 0: kein Dreieck, auch keine Beschriftung «Δx = 0» (es waechst erst noch)
+      const ya = f(xa), yb = f(xb), sichtbar = Math.abs(dx) > 1e-9 && innen(xa, ya) && innen(xb, yb);
+      g.style.display = sichtbar ? '' : 'none';
+      if (!sichtbar) continue;
+      g.querySelector('.bew-gd-w').setAttribute('d', 'M' + px(xa) + ',' + py(ya) + 'L' + px(xb) + ',' + py(ya));
+      g.querySelector('.bew-gd-s').setAttribute('d', 'M' + px(xb) + ',' + py(ya) + 'L' + px(xb) + ',' + py(yb));
+      const tx = g.querySelector('.bew-gd-tx'), ty = g.querySelector('.bew-gd-ty');
+      tx.setAttribute('x', px((xa + xb) / 2)); tx.setAttribute('y', py(ya) + (m > 0 ? 36 : -14));
+      tx.textContent = 'Δx = ' + bewZahl(dx);
+      // dx < 0: die senkrechte Kathete steht links, ihre Beschriftung auch (sonst liegt sie
+      // auf der Geraden oder der y-Achse)
+      ty.setAttribute('x', px(xb) + (dx < 0 ? -12 : 12)); ty.setAttribute('y', py((ya + yb) / 2) + 10);
+      ty.setAttribute('text-anchor', dx < 0 ? 'end' : 'start');
+      ty.textContent = 'Δy = ' + bewZahl(yb - ya);
+    }
+  }
+}
+// Eine bewegte Potenz- oder Wurzelkurve y = a*(x-u)^p + v, am Fenster abgeschnitten.
+// Wo es keinen Wert gibt (Pol, negative Basis mit gebrochenem Exponenten), bricht der
+// Streckenzug ab und beginnt danach neu — genau so entstehen Aeste und Definitionsluecken.
+// x einer Marke an einer bewegten Kurve: fest (data-x) oder aus einer Bahn [[t, x], …] (Laeufer).
+function kmX(g, T) {
+  if (!g.dataset.bahn) return parseFloat(g.dataset.x);
+  const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn));
+  return bewZustand(bahn, T._t - T.t0)[0];
+}
+// Definitionsbereich einer bewegten Kurve: fest (data-von/data-bis) oder mitwandernd
+// ("grenzen": [[t, von, bis], …], seit 07.10.2026 — Einschraenken, ein Intervall zieht sich zu).
+function kGrenzen(T) {
+  if (!T.p.dataset.grenzen) return [parseFloat(T.p.dataset.von), parseFloat(T.p.dataset.bis)];
+  const gr = T._gr || (T._gr = JSON.parse(T.p.dataset.grenzen));
+  return bewZustand(gr, T._t - T.t0);
+}
+function bewegeKurve(T, t, px, py, x0, x1, y0, y1) {
+  T._t = t;
+  const Z = bewZustand(T.k, t - T.t0);
+  if (T.poly) return bewegePolynom(T, Z, px, py, x0, x1, y0, y1);
+  if (T.el === 's' || T.el === 't') return bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1);
+  if (T.el === 'v') return bewegeBetrag(T, Z, px, py, x0, x1, y0, y1);
+  if (T.el) return bewegeExpLog(T, Z, px, py, x0, x1, y0, y1);
+  const [a, p0, u, v] = Z;
+  const p = T.stufen ? Math.round(p0) : p0;
+  // Negative Basis: Math.pow(-8, 1/3) ist NaN, die dritte Wurzel aus -8 ist -2.
+  // Bei ungeradem Wurzelexponenten (1/p ganz und ungerade) gibt es den Wert, bei
+  // geradem nicht — genau dort endet die Definitionsmenge.
+  const pot = b => {
+    if (b >= 0 || Number.isInteger(p)) return Math.pow(b, p);
+    const q = Math.round(1 / p);
+    return (Math.abs(1 / p - q) < 1e-9 && q % 2 !== 0) ? -Math.pow(-b, p) : NaN;
+  };
+  const f = x => { const y = a * pot(x - u) + v;
+    return (isFinite(y) && !isNaN(y)) ? y : null; };
+  const [vx, bx] = kGrenzen(T);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  const zug = (abx, aby) => {           // abx/aby: wie der Punkt auf die Achsen faellt
+    let d = '', an = false;
+    if (a1 <= a0) return '';
+    for (let i = 0; i <= 600; i++) {
+      const x = a0 + (a1 - a0) * i / 600, y = f(x);
+      if (y === null) { an = false; continue; }
+      const sx = abx(x, y), sy = aby(x, y);
+      if (sx < -5 || sx > 1e5 || sy < -5 || sy > 1e5) { an = false; continue; }
+      if (!(abx === px ? (y >= y0 && y <= y1) : (y >= x0 && y <= x1 && x >= y0 && x <= y1))) { an = false; continue; }
+      d += (an ? 'L' : 'M') + sx.toFixed(1) + ',' + sy.toFixed(1); an = true;
+    }
+    return d;
+  };
+  T.p.setAttribute('d', zug(px, (x, y) => py(y)));
+  // Spiegelkurve an y = x: aus (x | y) wird (y | x) — die Umkehrfunktion.
+  const sp = T.L.querySelector('[data-spiegel="' + T.p.dataset.paar + '"]');
+  if (sp) sp.setAttribute('d', zug((x, y) => px(y), (x, y) => py(x)));
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    const nahAchse = Math.abs(py(y) - py(0)) < 40;             // dort stehen die x-Marken
+    tx.setAttribute('y', py(y) + (nahAchse ? -18 : (a > 0 ? 44 : -18)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ks')) {
+      setze(g, u, v); beschrifte(g, u, v, '(' + bewZahl(u) + ' | ' + bewZahl(v) + ')');
+    } else if (g.classList.contains('bew-ka')) {
+      // Polgerade x = u und waagrechte Asymptote y = v
+      g.querySelector('.bew-ka-s').setAttribute('d',
+        (u >= x0 && u <= x1) ? 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1) : '');
+      g.querySelector('.bew-ka-w').setAttribute('d',
+        (v >= y0 && v <= y1) ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y);
+      beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Exponentialkurve y = c*a^x + v (el 'e') oder Logarithmuskurve y = c*log_a(x) + v (el 'l');
+// Z = [c, a, v]. Die Spiegelkurve an y = x ist die Umkehrfunktion.
+function bewegeExpLog(T, Z, px, py, x0, x1, y0, y1) {
+  const [c, a, v] = Z, ex = T.el === 'e';
+  const f = x => { if (ex) return c * Math.pow(a, x) + v;
+    if (x <= 0 || Math.abs(Math.log(a)) < 1e-9) return null; return c * Math.log(x) / Math.log(a) + v; };
+  const [vx, bx] = kGrenzen(T);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  const zug = (abx, aby, imBild) => {
+    let d = '', an = false;
+    for (let i = 0; i <= 800; i++) {
+      // Nahe x = 0 fein abtasten, sonst endet die Logarithmuskurve weit über der Asymptote.
+      const q = i / 800, x = a0 + (a1 - a0) * (T.el === 'l' ? q * q : q), y = f(x);
+      if (y === null || !isFinite(y) || !imBild(x, y)) { an = false; continue; }
+      d += (an ? 'L' : 'M') + abx(x, y).toFixed(1) + ',' + aby(x, y).toFixed(1); an = true;
+    }
+    return d;
+  };
+  const H = y1 - y0;
+  T.p.setAttribute('d', zug(px, (x, y) => py(y), (x, y) => y >= y0 - H && y <= y1 + H));
+  const sp = T.L.querySelector('[data-spiegel="' + T.p.dataset.paar + '"]');
+  if (sp) sp.setAttribute('d', zug((x, y) => px(y), (x, y) => py(x), (x, y) => y >= x0 - 1 && y <= x1 + 1 && x >= y0 - 1 && x <= y1 + 1));
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  // Beschriftung auf die Seite, auf der die Kurve nicht verläuft: rechts unter dem Punkt bei
+  // steigender, rechts über ihm bei fallender Kurve (sonst kreuzt die Kurve den Text).
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    const ya = f(x - 1e-3), yb = f(x + 1e-3), steigt = ya !== null && yb !== null && yb > ya;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + ((steigt !== rechts) ? 44 : -18));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      g.querySelector('.bew-ka-s').setAttribute('d', ex ? '' : 'M' + px(0) + ',' + py(y0) + 'L' + px(0) + ',' + py(y1));
+      g.querySelector('.bew-ka-w').setAttribute('d', ex && v >= y0 && v <= y1 ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-ks')) {
+      const x = ex ? 0 : 1, y = f(x); setze(g, x, y); beschrifte(g, x, y, '(' + bewZahl(x) + ' | ' + bewZahl(y) + ')');
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Betragskurve y = a*|x - u| + v (el 'v'); Z = [a, u, v]. Begleiter: Knickpunkt (startpunkt),
+// Symmetrieachse x = u (asymptoten), Marken.
+function bewegeBetrag(T, Z, px, py, x0, x1, y0, y1) {
+  const [a, u, v] = Z;
+  const f = x => a * Math.abs(x - u) + v;
+  const [vx, bx] = kGrenzen(T);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  // Drei Punkte genügen: linker Rand, Knick, rechter Rand — der Knick bleibt scharf.
+  const xs = [a0, Math.min(Math.max(u, a0), a1), a1];
+  T.p.setAttribute('d', a1 > a0 ? xs.map((x, i) => (i ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(f(x)).toFixed(1)).join('') : '');
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    // Unter dem Knick eines V (a > 0) ist Platz, über dem Knick eines Dachs (a < 0).
+    tx.setAttribute('y', py(y) + (Math.abs(x - u) < 1e-9 ? (a > 0 ? 44 : -22) : (a > 0 ? -22 : 44)));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      g.querySelector('.bew-ka-s').setAttribute('d', u >= x0 && u <= x1 ? 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1) : '');
+      g.querySelector('.bew-ka-w').setAttribute('d', '');
+    } else if (g.classList.contains('bew-ks')) {
+      setze(g, u, v); beschrifte(g, u, v, '(' + bewZahl(u) + ' | ' + bewZahl(v) + ')');
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    }
+  }
+}
+// Sinus- oder Tangenskurve y = a*sin(b(x-u)) + v (el 's') bzw. a*tan(b(x-u)) + v (el 't');
+// Z = [a, b, u, v]. Begleiter: Mittellinie bzw. Pole, Marken, Einheitskreis mit Läufer.
+function bewegeTrig(T, Z, t, px, py, x0, x1, y0, y1) {
+  const [a, b, u, v] = Z, tg = T.el === 't';
+  const f = x => { const w = b * (x - u);
+    if (tg) { if (Math.abs(Math.cos(w)) < 1e-4) return null; return a * Math.tan(w) + v; }
+    return a * Math.sin(w) + v; };
+  const kk = T.L.querySelector('.bew-kk[data-zu="' + T.p.dataset.paar + '"]');
+  let th = null;
+  if (kk) { const bahn = kk._bahn || (kk._bahn = JSON.parse(kk.dataset.bahn)); th = bewZustand(bahn, t - T.t0)[0]; }
+  const kg_ = kGrenzen(T), vx = kg_[0];
+  let bx = kg_[1];
+  if (kk && kk.dataset.spur === '1') bx = Math.min(bx, th);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx), H = y1 - y0;
+  let d = '', an = false, yl = null;
+  for (let i = 0; i <= 900 && a1 > a0; i++) {
+    const x = a0 + (a1 - a0) * i / 900, y = f(x);
+    if (y === null || !isFinite(y) || y < y0 - H || y > y1 + H) { an = false; yl = null; continue; }
+    // Am Pol springt der Tangens von oben nach unten: dort neu ansetzen, nicht verbinden.
+    if (tg && yl !== null && Math.abs(y - yl) > H) an = false;
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true; yl = y;
+  }
+  T.p.setAttribute('d', d);
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(k => { k.setAttribute('cx', px(x)); k.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.25;
+    const ya = f(x - 1e-3), yb = f(x + 1e-3), steigt = ya !== null && yb !== null && yb > ya;
+    const oben = y > v + 1e-9 || (Math.abs(y - v) < 1e-9 && !steigt);
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (oben ? -22 : 44));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-ka')) {
+      let pole = '';
+      if (tg && Math.abs(b) > 1e-9) {
+        const per = Math.PI / Math.abs(b), start = u + per / 2;
+        for (let k = Math.ceil((x0 - start) / per); start + k * per <= x1; k++) {
+          const xp = start + k * per;
+          pole += 'M' + px(xp).toFixed(1) + ',' + py(y0) + 'L' + px(xp).toFixed(1) + ',' + py(y1);
+        }
+      }
+      g.querySelector('.bew-ka-s').setAttribute('d', pole);
+      g.querySelector('.bew-ka-w').setAttribute('d', !tg && Math.abs(v) > 1e-9 && v >= y0 && v <= y1
+        ? 'M' + px(x0) + ',' + py(v) + 'L' + px(x1) + ',' + py(v) : '');
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      if (y === null) { g.style.display = 'none'; continue; }
+      setze(g, x, y); beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)));
+    } else if (g.classList.contains('bew-kk')) {
+      // Einheitskreis: Pixelradius aus der y-Teilung, Mittelpunkt (mx | 0).
+      const r = Math.abs(py(1) - py(0)), cx = px(parseFloat(g.dataset.mx)), cy = py(0);
+      const P = [cx + r * Math.cos(th), cy - r * Math.sin(th)];
+      const k = g.querySelector('.kk-kreis'); k.setAttribute('cx', cx); k.setAttribute('cy', cy); k.setAttribute('r', r);
+      const lin = (c, xa, ya, xb, yb) => { const l = g.querySelector(c);
+        l.setAttribute('x1', xa); l.setAttribute('y1', ya); l.setAttribute('x2', xb); l.setAttribute('y2', yb); };
+      // "projektion": false — nur der Kreis, ohne Strecke zur Kurve (Winkel zeigen).
+      const yq = f(th), sichtbar = yq !== null && innen(th, yq) && g.dataset.proj !== '0';
+      if (tg) {
+        // Tangente x = 1 am Kreis; der Strahl durch P trifft sie in T = (1 | tan th).
+        // Ueber den Fensterrand hinaus: die Strecke am Rand abschneiden (seit 07.10.2026), nicht
+        // ausblenden — «waechst ueber alle Grenzen» soll man sehen. Die Projektion faellt dann weg.
+        const ty0 = Math.tan(th), drin = ty0 >= y0 && ty0 <= y1, ty = Math.min(y1, Math.max(y0, ty0));
+        const T_ = [cx + r, cy - r * ty], ok = Math.abs(Math.cos(th)) > 1e-4;
+        lin('.kk-tang', cx + r, py(y0), cx + r, py(y1));
+        // P links der y-Achse (2. und 3. Quadrant): der Strahl geht von P durch M zur Tangente,
+        // sonst haengt P neben der Linie.
+        const vonP = ok && Math.cos(th) < 0;
+        // abgeschnitten: der Strahl endet am Fensterrand, auf seiner eigenen Richtung
+        const R_ = drin ? T_ : [cx + r * ty / ty0, cy - r * ty];
+        lin('.kk-radius', vonP ? P[0] : cx, vonP ? P[1] : cy, ok ? R_[0] : P[0], ok ? R_[1] : P[1]);
+        lin('.kk-hoehe', cx + r, cy, ok ? T_[0] : cx + r, ok ? T_[1] : cy);
+        lin('.kk-proj', ok ? T_[0] : 0, ok ? T_[1] : 0, ok && drin && sichtbar ? px(th) : (ok ? T_[0] : 0), ok ? T_[1] : 0);
+        const q = g.querySelector('.kk-q'); q.style.display = ok && drin && sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', py(ty));
+      } else if (g.dataset.art === 'cos') {
+        // Cosinus: die waagrechte Koordinate von P als Strecke auf der Achse, ohne Projektion.
+        lin('.kk-tang', 0, 0, 0, 0);
+        lin('.kk-radius', cx, cy, P[0], P[1]);
+        lin('.kk-hoehe', cx, cy, P[0], cy);
+        lin('.kk-proj', P[0], P[1], P[0], cy);
+        const q = g.querySelector('.kk-q'); q.style.display = sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', sichtbar ? py(yq) : 0);
+      } else {
+        lin('.kk-tang', 0, 0, 0, 0);
+        lin('.kk-radius', cx, cy, P[0], P[1]);
+        lin('.kk-hoehe', P[0], cy, P[0], P[1]);
+        lin('.kk-proj', P[0], P[1], sichtbar ? px(th) : P[0], P[1]);
+        const q = g.querySelector('.kk-q'); q.style.display = sichtbar ? '' : 'none';
+        q.setAttribute('cx', px(th)); q.setAttribute('cy', sichtbar ? py(yq) : 0);
+      }
+      // Der Bogen vom Start (1 | 0) bis P — seine Länge ist der Winkel im Bogenmass.
+      const gross = Math.abs(th) > Math.PI ? 1 : 0, dreh = th >= 0 ? 0 : 1;
+      g.querySelector('.kk-bogen').setAttribute('d', Math.abs(th) < 1e-6 ? '' :
+        Math.abs(th) >= 2 * Math.PI - 1e-6
+          ? 'M' + (cx + r) + ',' + cy + 'A' + r + ',' + r + ' 0 1 0 ' + (cx - r) + ',' + cy + 'A' + r + ',' + r + ' 0 1 0 ' + (cx + r) + ',' + cy
+          : 'M' + (cx + r) + ',' + cy + 'A' + r + ',' + r + ' 0 ' + gross + ' ' + dreh + ' ' + P[0].toFixed(1) + ',' + P[1].toFixed(1));
+      const pp = g.querySelector('.kk-p'); pp.setAttribute('cx', P[0]); pp.setAttribute('cy', P[1]);
+    }
+  }
+}
+// Polynom in Linearfaktordarstellung y = a*(x-x1)*(x-x2)*…; Z = [a, x1, x2, …].
+function bewegePolynom(T, Z, px, py, x0, x1, y0, y1) {
+  const a = Z[0], r = Z.slice(1);
+  const f = x => r.reduce((s, q) => s * (x - q), a);
+  const [vx, bx] = kGrenzen(T);
+  const a0 = Math.max(x0, vx), a1 = Math.min(x1, bx);
+  let d = '', an = false;
+  for (let i = 0; i <= 600; i++) {
+    const x = a0 + (a1 - a0) * i / 600, y = f(x);
+    if (y < y0 - (y1 - y0) || y > y1 + (y1 - y0)) { an = false; continue; }
+    d += (an ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); an = true;
+  }
+  T.p.setAttribute('d', d);
+  // Extrempunkte: Vorzeichenwechsel der Steigung, verfeinert durch Halbieren.
+  const ex = [];
+  const df = x => (f(x + 1e-5) - f(x - 1e-5)) / 2e-5;
+  for (let i = 0; i < 800; i++) {
+    let p = a0 + (a1 - a0) * i / 800, q = a0 + (a1 - a0) * (i + 1) / 800;
+    const dp = df(p), dq = df(q);
+    // Faellt ein Gitterpunkt genau auf die Extremstelle, ist dort df = 0 — darum
+    // «bis einschliesslich null», sonst geht der Scheitel x = 3 von (x−1)(x−5) verloren.
+    if ((dp > 0 && dq <= 0) || (dp < 0 && dq >= 0)) {
+      const hoch = dp > 0;
+      for (let k = 0; k < 40; k++) { const m = (p + q) / 2; if ((df(m) > 0) === (df(p) > 0)) p = m; else q = m; }
+      ex.push([(p + q) / 2, hoch]);
+    }
+  }
+  const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+    g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+  const beschrifte = (g, x, y, text, unten) => {
+    const tx = g.querySelector(':scope > text'); if (!tx) return;
+    const rechts = x > x1 - (x1 - x0) * 0.3;
+    tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+    tx.setAttribute('y', py(y) + (unten ? 44 : -18));
+    tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+    tx.textContent = text;
+  };
+  for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+    if (g.classList.contains('bew-kn')) {
+      const i = +g.dataset.i, x = r[i];
+      // Zusammenfallende Nullstellen zeigen nur einen Punkt — den ersten.
+      if (r.slice(0, i).some(q => Math.abs(q - x) < 0.05)) { g.style.display = 'none'; continue; }
+      setze(g, x, 0);
+      // Beschriftungen abwechselnd ueber und unter der x-Achse, nach der Lage von
+      // links nach rechts — sonst laufen zwei nahe Nullstellen ineinander.
+      const rang = [...new Set(r.map(q => Math.round(q * 20)))].sort((p, q) => p - q).indexOf(Math.round(x * 20));
+      beschrifte(g, x, 0, '(' + bewZahl(x) + ' | 0)', rang % 2 === 1);
+    } else if (g.classList.contains('bew-ke')) {
+      const e = ex[+g.dataset.i];
+      if (!e) { g.style.display = 'none'; continue; }
+      const y = f(e[0]); setze(g, e[0], y);
+      beschrifte(g, e[0], y, (e[1] ? 'H' : 'T') + '(' + bewZahl(e[0]) + ' | ' + bewZahl(y) + ')', !e[1]);
+    } else if (g.classList.contains('bew-km')) {
+      const x = kmX(g, T), y = f(x);
+      setze(g, x, y);
+      beschrifte(g, x, y, g.dataset.text.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y)), a < 0);
+    }
+  }
+}
+function bewegen(t) {
+  for (const L of BEW) for (const T of L.teile) {
+    const [x0, x1, y0, y1, b, h, rd] = T.f;
+    const px = x => rd + (x - x0) / (x1 - x0) * (b - 2 * rd);
+    const py = y => h - rd - (y - y0) / (y1 - y0) * (h - 2 * rd);
+    if (T.art === 'g') { bewegeGerade(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'k') { bewegeKurve(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'f') { laufeFest(T, t, px, py, x0, x1, y0, y1); continue; }
+    if (T.art === 'fp') { bewegeFormel(T, t, px, py, x0, x1, y0, y1); continue; }
+    // Scheitelform [a, u, v] oder Normalform [a, b, c] (data-normal); f ist die Kurve,
+    // u und v der Scheitel (bei a = 0 keiner: NaN).
+    const Z = bewZustand(T.k, t - L.t0), normal = T.p.dataset.normal === '1';
+    const a = Z[0];
+    const f = normal ? (x => a * x * x + Z[1] * x + Z[2]) : (x => a * (x - Z[1]) * (x - Z[1]) + Z[2]);
+    const u = normal ? (Math.abs(a) > 1e-9 ? -Z[1] / (2 * a) : NaN) : Z[1];
+    const v = normal ? f(u) : Z[2];
+    const xa = T.p.dataset.ab !== undefined ? Math.max(x0, parseFloat(T.p.dataset.ab)) : x0;
+    const xb = T.p.dataset.bis !== undefined ? Math.min(x1, parseFloat(T.p.dataset.bis)) : x1;
+    let d = '', zug = false;
+    for (let i = 0; i <= 240; i++) {
+      const x = xa + (xb - xa) * i / 240, y = f(x);
+      if (y >= y0 && y <= y1) { d += (zug ? 'L' : 'M') + px(x).toFixed(1) + ',' + py(y).toFixed(1); zug = true; }
+      else zug = false;
+    }
+    T.p.setAttribute('d', d);
+    const innen = (x, y) => x >= x0 && x <= x1 && y >= y0 && y <= y1;
+    const setze = (g, x, y) => { g.style.display = innen(x, y) ? '' : 'none';
+      g.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(x)); c.setAttribute('cy', py(y)); }); };
+    const beschrifte = (g, x, y, text, unten) => {
+      const tx = g.querySelector(':scope > text'); if (!tx) return;
+      const rechts = x > x1 - (x1 - x0) * 0.3;
+      tx.setAttribute('x', px(x) + (rechts ? -18 : 18));
+      tx.setAttribute('y', py(y) + (unten ? 44 : -18));
+      tx.setAttribute('text-anchor', rechts ? 'end' : 'start');
+      tx.textContent = text;
+    };
+    const fuell = (vorlage, x, y) => vorlage.replace('{x}', bewZahl(x)).replace('{y}', bewZahl(y));
+    for (const g of T.L.querySelectorAll('[data-zu="' + T.p.dataset.paar + '"]')) {
+      if (g.classList.contains('bew-a')) {
+        g.style.display = isNaN(u) || u < x0 || u > x1 ? 'none' : '';
+        g.querySelector('path').setAttribute('d', 'M' + px(u) + ',' + py(y0) + 'L' + px(u) + ',' + py(y1));
+      } else if (g.classList.contains('bew-s')) {
+        if (isNaN(u)) { g.style.display = 'none'; continue; }
+        setze(g, u, v); beschrifte(g, u, v, 'S(' + bewZahl(u) + ' | ' + bewZahl(v) + ')', a > 0);
+      } else if (g.classList.contains('bew-n')) {
+        let xn;
+        if (isNaN(u)) {
+          // a = 0 (nur Normalform): eine Gerade b x + c, hoechstens eine Nullstelle (als n1)
+          if (g.classList.contains('bew-n2') || Math.abs(Z[1]) < 1e-9) { g.style.display = 'none'; continue; }
+          xn = -Z[2] / Z[1];
+        } else {
+          const q = a !== 0 ? -v / a : -1, w = q >= 0 ? Math.sqrt(q) : NaN;
+          if (isNaN(w)) { g.style.display = 'none'; continue; }
+          xn = g.classList.contains('bew-n1') ? u - w : u + w;
+        }
+        setze(g, xn, 0);
+        if (g.querySelector(':scope > text')) {
+          const tx = g.querySelector(':scope > text'), links = g.classList.contains('bew-n1') && !isNaN(u) && Math.abs(xn - u) > 1e-9;
+          tx.setAttribute('x', px(xn) + (links ? -16 : 16)); tx.setAttribute('y', py(0) + (a > 0 ? -18 : 44));
+          tx.setAttribute('text-anchor', links ? 'end' : 'start'); tx.textContent = '(' + bewZahl(xn) + ' | 0)';
+        }
+      } else if (g.classList.contains('bew-y')) {
+        setze(g, 0, f(0)); beschrifte(g, 0, f(0), '(0 | ' + bewZahl(f(0)) + ')', false);
+      } else if (g.classList.contains('bew-m')) {
+        const x = parseFloat(g.dataset.x);
+        setze(g, x, f(x)); beschrifte(g, x, f(x), fuell(g.dataset.text, x, f(x)), false);
+      } else if (g.classList.contains('bew-l')) {
+        const bahn = g._bahn || (g._bahn = JSON.parse(g.dataset.bahn).map(b => [b[0], b[1], 0, 0]));
+        const x = bewZustand(bahn, t - L.t0)[0], y = f(x);
+        setze(g.querySelector('.bew-pt'), x, y);
+        g.style.display = innen(x, y) ? '' : 'none';
+        const gs = g.querySelector('.bew-geist');
+        if (gs) { const xs = 2 * u - x; gs.style.display = !isNaN(u) && Math.abs(xs - x) > 0.05 && innen(xs, f(xs)) ? '' : 'none';
+          gs.querySelectorAll('circle').forEach(c => { c.setAttribute('cx', px(xs)); c.setAttribute('cy', py(f(xs))); }); }
+        beschrifte(g, x, y, fuell(g.dataset.text, x, y), a > 0 && Math.abs(x - u) < (x1 - x0) * 0.15);
+      }
+    }
+  }
+}
+const seekOhneBewegung = seek;
+seek = function (t) { seekOhneBewegung(t); bewegen(t); beschriftungenRichten(); };
+window.__seek = seek;
+window.__dauer = DUR;
+if (!location.search.includes('render')) {
+  let t0 = performance.now(), playing = true, t = 0;
+  const barf = document.getElementById('barf'), tt = document.getElementById('tt'),
+        pp = document.getElementById('pp'), wrap = document.getElementById('wrap');
+  const fit = () => { stage.style.transform = 'translate(-50%,-50%) scale('
+      + Math.min(wrap.clientWidth / 1920, wrap.clientHeight / 1080) + ')'; };
+  window.addEventListener('resize', fit);
+  document.addEventListener('fullscreenchange', () => setTimeout(fit, 60));
+  fit();
+  // Der Ton laeuft von selbst und hoerbar los. Erlaubt ist das, weil der
+  // Klick auf die Clipkarte die noetige Nutzergeste war und das <iframe>
+  // sie ueber `allow="autoplay"` weitergereicht bekommt (clipRahmen in
+  // physiklib.js bzw. mathlib.js). Verweigert der Browser trotzdem — etwa wenn jemand die
+  // Clipdatei direkt aufruft, ohne vorher zu klicken —, faellt der Clip auf
+  // stumm zurueck und der Knopf «Ton an» holt ihn hervor. Sobald der Ton
+  // laeuft, fuehrt er die Uhr: Tondrift faellt auf, Bilddrift nicht.
+  const ton = document.getElementById('ton'), ts = document.getElementById('ts');
+  const tonBeschriften = () => {
+    if (ts) ts.textContent = (!ton || ton.muted) ? '🔇 Ton an' : '🔊 Ton aus';
+  };
+  if (ton) {
+    ts.hidden = false;
+    ton.muted = false;
+    ton.play().then(tonBeschriften).catch(() => {
+      ton.muted = true;
+      tonBeschriften();
+      ton.play().catch(() => {});
+    });
+    tonBeschriften();
+    ts.onclick = () => {
+      ton.muted = !ton.muted;
+      tonBeschriften();
+      if (!ton.muted) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); }
+    };
+  }
+  const tonLaeuft = () => ton && !ton.paused && !ton.ended;
+  function loop(now) {
+    if (playing) {
+      if (tonLaeuft()) t = ton.currentTime;
+      else { t += (now - t0) / 1000; if (t > DUR) t = DUR; }
+    }
+    t0 = now; seek(t);
+    barf.style.width = (t / DUR * 100) + '%'; tt.textContent = t.toFixed(1) + ' s';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  const tonAn = () => { if (ton) { ton.currentTime = t; if (playing) ton.play().catch(() => {}); } };
+  const toggle = () => {
+    playing = !playing;
+    pp.textContent = playing ? 'Pause' : 'Play';
+    if (ton) { if (playing) ton.play().catch(() => {}); else ton.pause(); }
+  };
+  pp.onclick = toggle;
+  // Tastenkuerzel nicht in Eingabefeldern; die Leertaste nicht auf Knoepfen —
+  // dort bestaetigt sie den Knopf (Antwort einer Frage, Play/Pause selbst).
+  document.addEventListener('keydown', e => {
+    const ziel = e.target && e.target.closest ? e.target : null;
+    if (ziel && ziel.closest('input, select, textarea')) return;
+    if (e.code === 'Space' && ziel && ziel.closest('button, a, summary')) return;
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(DUR, t + 5); tonAn(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 5); tonAn(); }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { t = 0; playing = true; pp.textContent = 'Pause'; tonAn(); }
+    if (k === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.getElementById('bar').onclick = e => {
+    const r = e.currentTarget.getBoundingClientRect();
+    t = (e.clientX - r.left) / r.width * DUR; tonAn();
+  };
+} else { document.body.classList.add('render'); seek(0); }
+</script></body></html>

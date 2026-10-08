@@ -181,6 +181,27 @@ SEITEN = {
    titel='Leitprogramm Betragsfunktionen — Knick, Umklappen, abschnittsweise, Gleichungen',
    beschreibung='Leitprogramm zu den Betragsfunktionen (Teilgebiet 3.6, Ergänzung TALS): der Betrag als Abstand, das V mit Knickpunkt, y = a·|x − u| + v, das Umklapp-Prinzip für |f(x)|, Betragsterme abschnittsweise schreiben und Betragsgleichungen und -ungleichungen grafisch und rechnerisch lösen — mit Clips, Animationen zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
    themen=['Mathematik', 'Betragsfunktion', 'Betragsgleichung', 'abschnittsweise definierte Funktion', 'Leitprogramm']),
+ 'leitprogramme/trigonometrische-berechnungen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # unverlinkt bis zur Freischaltung (HOWTO-leitprogramme §15)
+   noindex=True,
+   titel='Leitprogramm Trigonometrische Berechnungen — rechtwinkliges Dreieck, Sinussatz, Cosinussatz',
+   beschreibung='Leitprogramm zu den trigonometrischen Berechnungen nach RLP GF 5.3: Sinus, Cosinus und Tangens im rechtwinkligen Dreieck, Winkel mit arcsin, arccos und arctan, Höhen und Distanzen mit Höhen- und Tiefenwinkel, Sinussatz mit dem Fall SSW, Cosinussatz und Dreiecksfläche — mit Clips, einem Geometrie-Arbeitsbereich zum Tüfteln, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Trigonometrie', 'Sinussatz', 'Cosinussatz', 'rechtwinkliges Dreieck', 'Leitprogramm']),
+ 'leitprogramme/einheitskreis.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # unverlinkt bis zur Freischaltung (HOWTO-leitprogramme §15)
+   noindex=True,
+   titel='Leitprogramm Einheitskreis — Koordinaten, besondere Winkel, Symmetrien, Umkehrung',
+   beschreibung='Leitprogramm zum Einheitskreis nach RLP GF 5.4: Sinus und Cosinus als Koordinaten, besondere Winkel ohne Taschenrechner, Tangens und trigonometrischer Pythagoras, Symmetrien, Periode und Umkehroperationen — mit Clips, Simulationen am Einheitskreis, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Einheitskreis', 'Sinus', 'Cosinus', 'trigonometrischer Pythagoras', 'Leitprogramm']),
+ 'leitprogramme/trigonometrische-gleichungen.html': dict(
+   typ='article', lrt='Leitprogramm',
+   # unverlinkt bis zur Freischaltung (HOWTO-leitprogramme §15)
+   noindex=True,
+   titel='Leitprogramm Trigonometrische Gleichungen — Einheitskreis, Arkusfunktion, Lösungsmenge',
+   beschreibung='Leitprogramm zu den trigonometrischen Gleichungen nach RLP GF 5.5: sin φ = c, cos φ = c und tan φ = c am Einheitskreis sehen, mit der Arkusfunktion und der Symmetrie lösen, alle Lösungen mit der Periode angeben — mit Clips, Simulationen, Übungen mit Rückmeldung und Gesamttest.',
+   themen=['Mathematik', 'Trigonometrische Gleichung', 'Arkusfunktion', 'Einheitskreis', 'Lösungsmenge', 'Leitprogramm']),
  'formelsammlung.html': dict(
    typ='article', lrt='Formelsammlung',
    titel='Formelsammlung Mathematik — alle Formeln nach Lerngebieten',

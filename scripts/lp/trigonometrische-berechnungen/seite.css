@@ -1,0 +1,102 @@
+
+
+/* ════════ Trigonometrische Berechnungen (07.10.2026) — Kapitelmuster und Geometrie-Arbeitsbereich wie im
+   Leitprogramm Planimetrie (dieser Block ist von dort übernommen, Ergänzungen am Schluss). Farben: Figur blau,
+   betrachteter Winkel, gegebene Stücke und Hilfslinie orange, Ergebnis grün, Fehler rot. */
+.sim-gross{max-width:640px;margin:10px auto 6px}
+.sim-gross > svg{max-width:440px}
+.leiste{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 10px;padding:9px 12px;border-radius:9px;
+  background:var(--orange-hell);border:1px solid var(--orange-rand);font-family:var(--sans);font-size:.92rem}
+.leiste .ls-nr{font-family:var(--mono);font-size:.78rem;color:var(--orange);font-weight:700}
+.leiste .ls-text{flex:1 1 260px;min-width:0}
+.leiste .ls-ok{color:var(--gruen);font-weight:700;font-size:1.1rem;min-width:1em}
+.leiste .ls-weiter,.leiste .ls-neu{font-family:var(--sans);font-size:.8rem;cursor:pointer;border-radius:999px;padding:4px 12px;
+  border:1px solid var(--linie);background:var(--karte);color:var(--tinte-2)}
+.leiste.geloest{background:var(--gruen-hell);border-color:var(--gruen-rand)}
+.leiste.geloest .ls-weiter{border-color:var(--gruen-rand);color:var(--tinte);font-weight:700}
+.leiste.fertig{background:var(--gruen-hell);border-color:var(--gruen-rand)}
+.kap-clip{max-width:640px}
+.kompetenzen ul{margin:10px 0 0;padding-left:1.25em;font-family:var(--sans);font-size:.92rem}
+.kompetenzen li{margin:5px 0}
+.kompetenzen .rlp-quelle{font-family:var(--sans);font-size:.8rem;color:var(--tinte-2);margin:8px 0 0}
+.kompetenzen .ohm{font-size:.72rem;padding:1px 7px;border-radius:999px;background:var(--orange-hell);border:1px solid var(--orange-rand);white-space:nowrap}
+.sim .pfeil{fill:var(--tinte-2)} svg.mini .pfeil{fill:var(--tinte-2)}
+.achsname{fill:var(--tinte);font-family:var(--serif);font-style:italic;font-size:12px;stroke:var(--karte);stroke-width:4px;paint-order:stroke}
+svg.mini .achsname{font-size:10px;stroke-width:3px}
+text.p-text{stroke:var(--karte);stroke-width:4px;paint-order:stroke}
+.sim-schalter{display:flex;gap:7px;align-items:center;justify-content:center;font-family:var(--sans);font-size:.82rem;color:var(--tinte-2);margin:2px 0 8px;cursor:pointer}
+.festhalten{display:grid;grid-template-columns:minmax(0,1fr);gap:0 26px}
+@media(min-width:1180px){.festhalten{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.pdf-weg{margin:14px 0 4px;display:flex;flex-direction:column;gap:10px;font-family:var(--sans);font-size:.92rem}
+.pdf-schritt{display:flex;gap:12px;align-items:flex-start}
+.pdf-schritt .nr{flex:none;width:1.8em;height:1.8em;border-radius:50%;display:grid;place-items:center;background:var(--karte);border:1px solid var(--linie);font-weight:700}
+.pdf-knopf{display:inline-block;margin-top:6px;padding:6px 14px;border-radius:999px;background:var(--blau-hell);border:1px solid var(--blau-rand);color:var(--tinte);text-decoration:none;font-weight:600}
+.ue-eingabe select{font-family:var(--sans);font-size:.88rem;padding:4px 6px;margin:0 3px;border:1.5px solid var(--linie);border-radius:6px;background:var(--papier);color:var(--tinte);max-width:100%}
+.ue-eingabe select:focus{outline:none;border-color:var(--orange-rand)}
+.ue-eingabe input.menge{width:9em}
+.sim-formel{line-height:1.6}
+.sim .kurve.rechts{stroke:var(--orange);stroke-dasharray:6 4}
+.p-loes{fill:var(--gruen)}
+svg.mini .kurve.k1{stroke:var(--orange)} svg.mini .kurve.k2{stroke:var(--gruen)}
+.nb{white-space:nowrap}
+/* Geometrie-Arbeitsbereich: Figur (blau), Hilfslinien und Kandidaten (orange), Fläche/Ergebnis (grün). */
+.geo{max-width:680px;margin:10px auto 6px}
+.geo > svg{display:block;width:100%;max-width:560px;margin:0 auto;background:var(--karte);border:1px solid var(--linie);border-radius:9px;touch-action:manipulation}
+.geo .figur{fill:var(--blau);fill-opacity:.12;stroke:var(--blau);stroke-width:2;stroke-linejoin:round}
+.geo .figur.kreis,svg.geo-mini .figur.kreis{fill-opacity:.06}
+.geo .verlaengerung,svg.geo-mini .verlaengerung{stroke:var(--tinte-2);stroke-width:1.2;stroke-dasharray:4 3}
+.geo .parallele{stroke:var(--tinte-2);stroke-width:1;stroke-dasharray:2 4}
+.geo .strahl{stroke:var(--tinte-2);stroke-width:.8;stroke-dasharray:3 4}
+.geo .hilfe,svg.geo-mini .hilfe{stroke:var(--orange);stroke-width:2.2;fill:none}
+.geo .hilfe2{stroke:var(--tinte-2);stroke-width:1.4;stroke-dasharray:4 3}
+.geo text.hilfe{fill:var(--orange);stroke:var(--karte);stroke-width:3;paint-order:stroke}
+.geo .g-rechts{fill:none;stroke-width:1.4}
+.geo .sektor,svg.geo-mini .sektor{fill:var(--gruen);fill-opacity:.22;stroke:var(--gruen);stroke-width:1.5}
+.geo .sektor.blass{fill-opacity:.08}
+.geo .bogen{fill:none;stroke:var(--orange);stroke-width:3}
+.geo .dreieck-seg{fill:var(--paper,transparent);fill-opacity:0;stroke:var(--gruen);stroke-width:1.5;stroke-dasharray:4 3}
+.g-pkt{fill:var(--tinte)} .g-pkt.hilfe{fill:var(--orange)}
+.g-text{font-family:var(--serif);font-size:12px;fill:var(--tinte);stroke:var(--karte);stroke-width:3;paint-order:stroke}
+.g-text.ecke{font-weight:600;font-style:normal} .g-text.seite{font-style:italic} .g-text.klein{font-size:10px} .g-text.bild{fill:var(--orange)}
+.g-text.mass{font-family:var(--sans);font-size:10px;fill:var(--tinte-2)}
+.kandidat{cursor:pointer;outline:none}
+.kandidat .k-sicht{stroke:var(--orange);stroke-width:2;stroke-dasharray:5 3}
+.kandidat .k-treffer{stroke:transparent;stroke-width:16}
+.kandidat:hover .k-sicht,.kandidat:focus-visible .k-sicht{stroke-width:3.5;stroke-dasharray:none}
+.g-eingabe{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:center;margin:10px 0 0;font-family:var(--sans);font-size:.92rem}
+.g-eingabe[hidden]{display:none}
+.g-feld{display:inline-flex;gap:6px;align-items:center}
+.g-feld input{width:5.2em;font-family:var(--mono);font-size:.95rem;padding:4px 6px;border:1.5px solid var(--linie);border-radius:6px;background:var(--papier);color:var(--tinte)}
+.g-feld input:focus{outline:none;border-color:var(--orange-rand)}
+.g-pruefen{font-family:var(--sans);font-size:.8rem;cursor:pointer;border-radius:999px;padding:4px 12px;border:1px solid var(--orange-rand);background:var(--karte);color:var(--tinte)}
+.g-rueck{font-family:var(--sans);font-size:.9rem;margin-top:10px;border-radius:7px}
+.g-rueck:empty{display:none}
+.g-rueck.richtig{background:var(--gruen-hell);border-left:4px solid var(--gruen-rand);padding:8px 12px}
+.g-rueck.falsch{background:var(--rot-hell);border-left:4px solid var(--rot-rand);padding:8px 12px}
+.g-rueck.hinweis{background:var(--papier-2);padding:8px 12px}
+.geo input[type=range]:disabled{opacity:.4}
+svg.geo-mini{display:block;width:100%;max-width:300px;margin:6px 0;background:var(--karte);border:1px solid var(--linie);border-radius:8px}
+svg.geo-mini .figur{fill:var(--blau);fill-opacity:.12;stroke:var(--blau);stroke-width:1.8;stroke-linejoin:round}
+.mini-reihe{display:flex;flex-wrap:wrap;gap:10px}
+svg.geo-mini .gitter{stroke:var(--linie);stroke-width:.5}
+.geo polygon.bild{fill:var(--orange);fill-opacity:.12;stroke:var(--orange);stroke-width:2;stroke-dasharray:6 3}
+.geo .figur-linie{stroke:var(--blau);stroke-width:2.2} .geo .bild-linie{stroke:var(--orange);stroke-width:2.2}
+svg.geo-mini .grundseite{stroke:var(--orange);stroke-width:3.5;stroke-linecap:round}
+svg.geo-mini .kandidat-linie{stroke:var(--tinte);stroke-width:1.6;stroke-dasharray:5 3}
+svg.geo-mini .nummer{font-family:var(--sans);font-weight:700;font-size:12px;font-style:normal}
+svg.geo-mini.ue-bild{max-width:260px;margin:4px auto 8px}
+/* Ergänzungen: Winkelbögen, Szene der Höhenmessung, Kreis um B (SSW), zweites Dreieck. */
+.geo .winkelbogen,svg.geo-mini .winkelbogen{fill:none;stroke:var(--orange);stroke-width:2}
+.g-text.winkel{fill:var(--orange);font-style:italic;font-size:13px} .g-text.winkel.klein{font-style:normal;font-size:10px}
+.geo .boden,svg.geo-mini .boden{stroke:var(--tinte-2);stroke-width:1.5}
+.geo .baum,svg.geo-mini .baum{stroke:var(--tinte);stroke-width:3.5;stroke-linecap:round}
+.geo .krone{fill:var(--gruen);fill-opacity:.18;stroke:var(--gruen);stroke-width:1.2}
+.geo .person{stroke:var(--tinte);stroke-width:3;stroke-linecap:round}
+.geo .kreisbogen{fill:none;stroke:var(--orange);stroke-width:1.3;stroke-dasharray:5 4}
+.geo .figur.zwei{fill:var(--orange);fill-opacity:.10;stroke:var(--blau)}
+svg.geo-mini .strahl{stroke:var(--tinte-2);stroke-width:1;stroke-dasharray:3 4}
+svg.geo-mini .figur-linie{stroke:var(--blau);stroke-width:2}
+svg.geo-mini .hilfe2{stroke:var(--tinte-2);stroke-width:1.2;stroke-dasharray:4 3}
+.sim-formel{text-align:center}
+.geo polyline.g-rechts:not(.hilfe),svg.geo-mini polyline.g-rechts:not(.hilfe){stroke:var(--tinte-2)}
+svg.geo-mini .g-rechts{fill:none;stroke-width:1.2}
