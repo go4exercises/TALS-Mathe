@@ -342,7 +342,8 @@ Voraussage (predict–observe–explain) wandert in den Clip selbst:
   Clip löst sie gleich danach auf.
 - `klick`: Tippen ins bewegte Bild der Szene (braucht ein `graf` mit `bewegung` —
   Parabel oder Gerade —, denn dessen Fenster rechnet den Tipp in Koordinaten um). `fallen` sind typische falsche
-  Stellen mit eigener Rückmeldung; ein grüner Kreis zeigt danach die richtige Stelle.
+  Stellen mit eigener Rückmeldung (liegt ein Tipp in mehreren, gewinnt die nächste; Ziel und Fallen
+  auch als Strecke — «Dritte Runde» unten); ein grüner Kreis zeigt danach die richtige Stelle.
   `toleranz` ist eine Zahl (Abstand in Dateneinheiten) oder `[dx, dy]` je Achse, wenn die
   Achsen verschiedene Grössen tragen. **`eingabe`: `["x", "y"]`** — dieselbe Antwort ohne
   Zeigegerät: zwei Zahlfelder und «Prüfen», gleiche Auswertung samt `fallen`. Die Namen sind die
@@ -684,6 +685,38 @@ links der Kathete.
 Ausserdem ohne neues Feld: Läufer liegen jetzt **über** festen Punkten (sie werden zuletzt gezeichnet
 und nehmen das `ein`/`aus` ihrer Kurve mit), und keine Beschriftung eines mitfahrenden Punkts ragt
 mehr über den Bildrand — sie klappt auf die andere Seite des Punkts oder wird hereingeschoben.
+
+**Dritte Runde (08.10.2026), Wünsche aus den LPs 5.3–5.5.** Ohne die Felder baut jeder Clip Byte für
+Byte wie vorher (alle 543 neu gebaut); neuer Abspielcode kommt nur in Clips, die das Feld benutzen. Einzige
+Ausnahme ist die nächstgelegene Falle unten — sie ändert den Abspielcode aller 58 Clips mit Fragen.
+
+| Feld | wo | was |
+|---|---|---|
+| `"aus": 6.5` | jedes Element, auch ein ganzer `graf` | blendet das Element mitten in der Szene aus (Sekunden ab Szenenbeginn, wie `ein`); geht vor `halten`. Kein `aus` mehr an jede Figur einzeln. |
+| `"parameter": [[t, {"w": 0}], [t, {"w": 150}]]` | Figur | Buchstaben, die weich laufen; Lage- und Massfelder dürfen Formeln darin sein. `sind`, `cosd`, `tand` rechnen in Grad. So fährt ein Punkt **auf dem Kreisbogen** statt quer durch den Kreis: `{"art": "kreis", "m": ["cosd(w)", "sind(w)"], "r": 0.04, "fuellung": 1, "parameter": …}`; Radius `"bis": ["cosd(w)", "sind(w)"]`, Dreieck `"punkte": [[0, 0], ["cosd(w)", 0], ["cosd(w)", "sind(w)"]]` mit derselben Liste. Ersetzt die dichten Stützpunkte (`Lauf` in `scripts/lp/einheitskreis/clips.py`). Nicht zusammen mit `bewegung`. |
+| `"folgt": 1`, `"versatz": [dx, dy]` oder `"radial": 0.17` | Figur, meist `text` | hängt an Figur 1 derselben Liste und fährt Bild für Bild mit: an `m` (Kreis, Sektor, Bogen), `bei` (Text, Winkel, Zeichen) oder der Ecke `"ecke"` (Strecke 0/1, Vieleck: Index; ohne Angabe die letzte). `radial` setzt den Text um seine Mitte, so weit von `"mitte"` (Standard [0, 0]) weg nach aussen — der Name am Punkt P. |
+| `"name": "P"`, `"name_abstand": 30` | `kreis`-Begleiter einer Sinus-/Tangenskurve | beschriftet den laufenden Punkt, radial nach aussen (px). |
+| `"zahlen_neben_kreis": true` (oder Radius) | `graf` | die Zahlen ±1 stehen neben bzw. über/unter dem Kreis um den Ursprung statt auf der Kreislinie. |
+| `"grad": true` | bewegte Kurve mit `"trig"` | x-Achse in Grad: Stützpunkte `[t, a, b, u, v]` mit `u` in Grad, \(y = a\sin\big(b(x-u)\big)+v\) mit dem Argument in Grad; `von`/`bis`, `grenzen`, `marken`, `laeufer` und beim `kreis` `mx` und die `bahn` ebenfalls in Grad. `{x}` zeigt Grad. Kein `xteilung`-Behelf mit Bogenmass mehr; eine Klickfrage mit `eingabe` verlangt dann Grad. |
+| `"farbwechsel": [[2, 2], [3.5, 3]]` | bewegte Kurve, Gerade, Parabel | ab t (ab Szenenbeginn) trägt die Linie diese Farbe (1–5); vorher ihre eigene. Umgeschaltet, nicht gemischt. Begleiter behalten ihre Farbe. |
+| `"strich": "4 9"` oder `"voll"`, `"dicke": 2` | `asymptoten` einer bewegten Kurve | eigene Strichart (SVG-Strichmuster) und Dicke; Standard bleibt `"10 8"`, 3 px. Pole und Mittellinie tragen dieselbe. |
+| `"ausweichen": true` | `graf` | Beschriftungen von Punkten — feste und mitfahrende — weichen einander und fremden Punkten aus: Eine Beschriftung bleibt, solange sie frei ist, sonst nimmt sie die erste freie von acht Lagen um ihren Punkt. Kurven und Linien sind kein Hindernis. Ohne das Feld wie bisher (bewusst als Option: Es hätte sonst in allen bewegten Clips Beschriftungen verschoben). |
+| `"ziel": [[0, 0], [4, 3]]` | Klickfrage, auch `fallen[].bei` | **Strecke** statt Punkt: Es zählt der Abstand zur Strecke (bei `toleranz` `[dx, dy]` in Toleranz-Einheiten). Ein Fehltipp zieht die Strecke grün nach. Für «Tipp die Hypotenuse an». |
+
+**Nächste Falle gewinnt** (ohne neues Feld, 08.10.2026): Liegt ein Tipp in mehreren `fallen`, kommt die
+Rückmeldung der nächstgelegenen, nicht mehr die der ersten in der Liste; bei Gleichstand die erste. Betroffen
+waren vier Kontrollclips mit überlappenden Fallen (`g3-2-lp-kontrolle-typen`, `g3-3-lp-kontrolle-extremwert`,
+`g5-3-lp-kontrolle-seiten`, `g5-4-lp-kontrolle-periode-umkehr`) — dort sagte ein Tipp bei \(x = 2.3\) bisher
+«3 ist der halbe Abstand» statt «Bei x = 2 …». `pruef-fragen.mjs` tippt bei einer Strecke ihre Mitte an.
+
+```json
+{"typ": "graf", "aus": 6.5, "zahlen_neben_kreis": true, "xteilung": [[-1, "−1"], [1, "1"]], "yteilung": [[-1, "−1"], [1, "1"]],
+ "figuren": [
+   {"art": "kreis", "m": [0, 0], "r": 1, "farbe": 5, "dicke": 3},
+   {"art": "kreis", "m": ["cosd(w)", "sind(w)"], "r": 0.04, "farbe": 5, "fuellung": 1,
+    "parameter": [[0.5, {"w": 0}], [3.5, {"w": 150}]]},
+   {"art": "text", "text": "P", "folgt": 1, "radial": 0.17, "farbe": 5, "groesse": 34}]}
+```
 
 **Noch nicht:** ein bewegtes Fenster (Zoom) und eine senkrechte bewegte Gerade. Behelf für den Zoom:
 mehrere `graf` nacheinander mit wachsendem Fenster.

@@ -26,6 +26,28 @@ in `scripts/abgleich.py`.
 
 ## Offen
 
+### 08.10.2026 · `build-clips.py`: dritte Runde Werkzeug (Wünsche aus den LPs GF 5.3–5.5)
+
+**Was.** Neue, abwählbare Felder (HOWTO-clips «Dritte Runde»): `aus` an jedem Element, auch an einem ganzen `graf`;
+Figuren `parameter` (Formeln mit `sind`/`cosd`/`tand`, Bewegung über einen Winkel) und `folgt`/`versatz`/`radial`/
+`mitte`/`ecke`; `graf.zahlen_neben_kreis`, `graf.ausweichen`; `farbwechsel` an bewegten Kurven, Geraden, Parabeln;
+`asymptoten.strich`/`.dicke`; `grad: true` an `trig`-Kurven; `kreis.name`/`.name_abstand`; Klickfragen: `ziel` und
+`fallen[].bei` auch als Strecke `[[x1,y1],[x2,y2]]`. **Verhaltensänderung ohne Feld:** Liegt ein Tipp in mehreren
+Fallen, gewinnt die nächste statt der ersten (`FRAGEN_JS`).
+**Wo.** `graf_svg` (Figurenschleife, Achsenzahlen, `grad`-Umrechnung, Kreisname, `farbwechsel()`), `bauen()`
+(Element-`aus`, Zusatz-JS je Marke), neue Konstanten `GRAD_JS`, `KREISNAME_JS`, `FARBWECHSEL_JS`, `AUSWEICHEN_JS`;
+`BEWEGUNG_JS` unverändert. Am einfachsten die ganze Datei übernehmen (gleich bis auf die Einstellungen am Anfang
+und den Seitennamen); Grundlinie in `abgleich.py` danach nachführen. Dazu HOWTO-clips «Dritte Runde».
+**Warum.** In den Mathe-LPs 5.3–5.5 brauchte es Behelfe (dichte Stützpunkte für Kreisbewegung, Name P als Text,
+Bogenmass-Kurven mit Grad-Teilung, Farbe statt Strichart, `aus` an jeder Figur).
+**Getestet (Mathe).** 543 Clips vorher/nachher gebaut: 485 byte-gleich, 58 mit `fragen` nur im `FRAGEN_JS` verschieden
+(alten Code eingesetzt = HEAD). Testclips mit allen Feldern im Bild und per `__seek` vermessen, keine JS-Fehler;
+`pruef-fragen` auf 49 Klickfrage-Clips 9/9; nächste Falle in den 4 Mathe-Clips mit überlappenden Fallen alt/neu im
+Browser verglichen (neu jeweils die passendere Rückmeldung).
+**Physik durchsehen** (gezählt 08.10.2026, nur gelesen): 334 Drehbücher, 102 mit `fragen` — deren HTML ändert sich
+nur im `FRAGEN_JS`; 5 Klickfragen, keine mit überlappenden Fallen, also keine geänderte Rückmeldung. Kein neuer
+Feldname kommt in Physik-Drehbüchern schon vor; alle übrigen Clips müssen byte-gleich bauen.
+
 ### 08.10.2026 · Teilvertonung: `--szenen` in `build-clip-ton.py`, `--fragen` in `build-clip-fragen-ton.py`
 
 **Was.** `scripts/build-clip-ton.py <clip> --szenen 2,5` (Nummern ab 1, wie die Ausgabe zählt) spricht nur diese

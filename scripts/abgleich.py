@@ -142,6 +142,13 @@ OFFEN = [
              'Spur schneiden; ohne Schalter byte-gleich (mit festem PIPER_CMD getestet). Dazu --fragen in '
              'build-clip-fragen-ton.py (nicht im Abgleich). Datei ganz uebernehmen, Grundlinie bleibt 1.000. '
              'Einzelheiten und Tests: TODO-schwesterprojekt.md, Eintrag vom 08.10.2026.'),
+    dict(quelle='Mathe', was='build-clips.py: dritte Runde Werkzeug (08.10.2026)',
+         wie='Neue, abwaehlbare Felder: aus an jedem Element (auch ganzer graf), Figuren parameter (sind/cosd/tand) '
+             'und folgt/versatz/radial, graf zahlen_neben_kreis und ausweichen, farbwechsel an bewegten Kurven, '
+             'asymptoten.strich/.dicke, trig grad, kreis.name, Klickziel und Fallen als Strecke. Ohne Feld '
+             'byte-gleich, ausser FRAGEN_JS: bei mehreren getroffenen Fallen gewinnt die naechste (Mathe: 543 Clips '
+             'gebaut, 485 gleich, 58 mit fragen nur im FRAGEN_JS verschieden; Physik hat keine ueberlappenden Fallen). '
+             'Ganze Datei uebernehmen, drei Einstellungen zuruecksetzen; Einzelheiten in TODO-schwesterprojekt.md.'),
 ]
 FACH = {
     'scripts/clips_bibliothek.py': 'Bibliothek in drei Spalten; Lerngebiete, Farben und REIHEN_VORN je Fach.',

@@ -63,7 +63,9 @@ for (const clip of clips) {
     const L = document.querySelector('.fr-tippbar'), svg = L.querySelector('svg');
     const [x0, x1, y0, y1, bb, h, rd] = L.querySelector('[data-fenster]').dataset.fenster.split(',').map(Number);
     const r = svg.getBoundingClientRect();
-    const sx = rd + (F.ziel[0] - x0) / (x1 - x0) * (bb - 2 * rd), sy = h - rd - (F.ziel[1] - y0) / (y1 - y0) * (h - 2 * rd);
+    // Ziel als Strecke [[x1, y1], [x2, y2]] (seit 08.10.2026): ihre Mitte antippen
+    const z = Array.isArray(F.ziel[0]) ? [(F.ziel[0][0] + F.ziel[1][0]) / 2, (F.ziel[0][1] + F.ziel[1][1]) / 2] : F.ziel;
+    const sx = rd + (z[0] - x0) / (x1 - x0) * (bb - 2 * rd), sy = h - rd - (z[1] - y0) / (y1 - y0) * (h - 2 * rd);
     document.getElementById('stage').dispatchEvent(new MouseEvent('click', { clientX: r.left + sx / bb * r.width, clientY: r.top + sy / h * r.height, bubbles: true }));
   });
   const nah = (t, soll) => Math.abs(t - soll) < 0.3;
