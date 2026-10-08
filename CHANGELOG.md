@@ -4,6 +4,83 @@ Alle wesentlichen Änderungen am Lehrmittel werden hier dokumentiert. Format ang
 
 ---
 
+## [Unveröffentlicht] — 08. Oktober 2026 · Leitprogramme Trigonometrie und Textaufgaben
+
+### Hinzugefügt
+
+- **Vier neue Leitprogramme nach dem Kapitelmuster**, jedes mit Einführungs- und Kontrollclips,
+  Simulationen mit Aufgabenleiste, Übungen mit Rückmeldung, Gesamttest und Bewertungspaket:
+  `trigonometrische-berechnungen.html` (GF 5.3, Reihe «Dreiecke berechnen»), `einheitskreis.html`
+  (GF 5.4, «Einheitskreis sehen»), `trigonometrische-gleichungen.html` (GF 5.5, «Winkel finden») und
+  `modellieren.html` (GF 2.M «Textaufgaben modellieren», «Ansatz finden»: je Aufgabenart — Zahlenrätsel,
+  Mischen, Verteilen, Zins — ein Kapitel; in den Kontrollclips führt jede Aufgabe vom Text über
+  Deklaration und Ansatz in die Grundform für `poly-solv`/`sys-solv` des TI-30X Pro, mit linearer und
+  quadratischer Gleichung, linearem und quadratischem Gleichungssystem). Alle vier vor der
+  Freischaltung nach HOWTO-leitprogramme §15 geprüft, Befunde in `TODO.md` und behoben.
+- **Teilvertonung:** `build-clip-ton.py --szenen 2,5` spricht nur die genannten Szenen neu,
+  `build-clip-fragen-ton.py --fragen 2,5:r1` nur die genannten Fragetöne; abgenommene Teile bleiben.
+- **Clip-Bauer, dritte Runde** (HOWTO-clips): `aus` an jedem Element, Figuren auf einer Kreisbewegung
+  über den Winkel, Kurven direkt in Grad, Farbwechsel an bewegten Kurven, Strecken als Klickziel u. a.
+
+### Geändert
+
+- **Themenseiten GF 5.3–5.5:** fachliche Fehler aus dem Leitprogramm-Bau behoben — «\(\sin\varphi = w
+  \Rightarrow \varphi = \arcsin w\)» nicht mehr als Folgerung, Tangensgleichung mit \(c \lt 0\),
+  SSW-Regel nur für spitzes \(\alpha\), «Arkusfunktion», Gerade statt Strahl OP; Farben auf `g5-4`
+  einheitlich (Sinus blau, Cosinus grün, Tangens orange). Zugehörige Clips angepasst, 20 Bilder neu.
+- **`g2-modellieren`:** Merksatz nennt Sets und fehlende Gesamtmenge; «Prozentsätze addieren sich
+  nie» präzisiert; Metadaten nennen RLP 2.1 und 2.3.
+- **`clips.html`:** zeigt auch Clips mit Grossbuchstaben im Namen (`g2-M-lp-*`).
+- Sichtbar sind jetzt dreizehn Leitprogramme; Prüfliste §15 um 16 Fehlerklassen erweitert.
+
+## [Unveröffentlicht] — 06./07. Oktober 2026 · Leitprogramme-Seite, Clip-Bibliothek, ein Clip-Bauer
+
+### Geändert
+
+- **`leitprogramme.html`:** eine Kachel je Leitprogramm, nach Fach und Themenbereich gegliedert, mit
+  Pillen zu den Themenseiten. Sichtbar sind nur noch die neuen Leitprogramme mit Clips und
+  Kontrollfragen; die fünf älteren stehen vorübergehend unter «Alte Leitprogramme» (noindex, nicht im
+  Suchindex). Die Indexseite zeigt neben jeder Themenseite mit Leitprogramm eine Pille «LP».
+- **`clips.html`:** je Themenseite eine Tabelle in drei Spalten — Animationen, Leitprogramm, weitere
+  Clips —, die Leitprogramm-Clips in der Fachfarbe, mit Link auf die Animation des Kapitels.
+- **Ein Clip-Bauer für beide Fächer:** `scripts/build-clips.py` ist derselbe Code wie in Physik,
+  verschieden nur die Einstellungen am Dateianfang. Dazu Bedienung ohne Maus und Eingabe bei
+  Klickfragen; neue Werkzeuge (Läufer auf Kurven, Schnittpunkte, Drehung, Formelkurven mit
+  Parametern, bewegte Figuren). Die 44 Einführungsclips der Leitprogramme auf Ton, Bild und Bewegung
+  durchgesehen und nachgebessert.
+- **Kontrollclips:** Das Fragebild zeigt nur das Gegebene, nicht die Lösung (alle Leitprogramme).
+- `scripts/abgleich.py`: Seitenlisten (DATEN) zählen beim Vergleich mit Physik nicht mit.
+
+### Hinzugefügt
+
+- Leitprogramme `lineare-quadratische-gleichungen.html` (GF 2.2, Umformer statt Regler) und
+  `planimetrie.html` (GF 5.2, Geometrie-Arbeitsbereich), geprüft und freigeschaltet.
+
+## [Unveröffentlicht] — 30. September bis 5. Oktober 2026 · Leitprogramme nach dem Kapitelmuster
+
+### Hinzugefügt
+
+- **Neues Format für Leitprogramme** (HOWTO-leitprogramme, Gesamtfassung): je Kapitel
+  Einführungsclip mit Auftrag → Simulation mit Aufgabenleiste zum Tüfteln → Kontrollclip, der fragt →
+  Übungen mit Zufallsaufgaben und Fehlerdiagnose; Vorwissenstest, Gesamttest und Bewertungspaket als
+  PDF aus LaTeX. Vorbild ist `quadratische-funktionen.html` (GF 3.3, freigeschaltet 02.10.2026).
+- **Clips, die fragen:** Wahl- und Klickfragen mit Rückmeldung im Clip, vorgelesen mit derselben
+  Stimme (`build-clip-fragen-ton.py`); **bewegte Graphen** im Clip (Parabeln, Geraden, Potenz-,
+  Wurzel-, Exponential-, Sinus- und Betragskurven, Polynome).
+- **Prüfung vor der Freischaltung:** Prüfliste in HOWTO-leitprogramme §15, Skill `/lp-pruefung`
+  (unabhängige Prüfer für Seite, Clips und PDFs) und Prüfwerkzeuge `pruef-uebungen`,
+  `pruef-formelsatz`, `pruef-leiste`, `pruef-fragen`.
+- Leitprogramme `lineare-funktionen.html` (GF 3.2), `potenz-wurzelfunktionen.html` (SP 3.2a+b),
+  `polynomfunktionen.html` (SP 3.3), `exp-log-funktionen.html` (SP 3.4a+b),
+  `trigonometrische-funktionen.html` (SP 3.5) und `betragsfunktionen.html` (SP 3.6), jedes geprüft,
+  behoben und freigeschaltet; Bauskripte unter `scripts/lp/<name>/`.
+
+### Geändert
+
+- `g3-3`: RLP-Begriffe Grundform und Produktform bei den Darstellungsformen.
+- HOWTO-leitprogramme §3: Kapitelmuster bis 5 Lektionen, Kapitel 35–45 min (Entscheid 03.10.2026).
+- Übergrosse Animationen gemessen und als Linkliste festgehalten (`TODO-animationen-hoehe.md`).
+
 ## [Unveröffentlicht] — 30. September 2026 · TI-30X: alle Gerätefragen geklärt
 
 ### Geändert
