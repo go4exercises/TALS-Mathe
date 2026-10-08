@@ -223,7 +223,9 @@
       // Startzustand φ = 50° (Quadrant I, wie im Clip) — keine Aufgabe ist schon gelöst.
       { text: 'Stell einen Winkel ein, bei dem der Cosinus negativ und der Sinus positiv ist.', ok: function(s){ return s.q === 2; } },
       { text: 'Stell einen Winkel ein, bei dem beide Koordinaten von \\(P\\) negativ sind.', ok: function(s){ return s.q === 3; } },
-      { text: 'Stell \\(\\varphi = 200^\\circ\\) ein. Welches Vorzeichen hat \\(\\cos\\varphi\\)?', ok: function(s){ return s.phi === 200; } },
+      // Prüfung 08.10.2026: «Stell 200° ein — welches Vorzeichen?» prüfte nur den Reglerwert. Jetzt ein Ziel, das
+      // man aus beiden Koordinaten erschliesst (225°, auch −135° und 585°; kein Beispiel aus Clip 1).
+      { text: 'Stell einen Winkel ein, bei dem \\(\\cos\\varphi = \\sin\\varphi\\) ist und \\(P\\) unter der \\(x\\)-Achse liegt.', ok: function(s){ return s.trifft(225); } },
       { text: 'Stell einen <b>negativen</b> Winkel ein, bei dem \\(P\\) im vierten Quadranten liegt.', ok: function(s){ return s.phi < 0 && s.q === 4; } },
       { text: 'Stell einen Winkel <b>über</b> \\(360^\\circ\\) ein, bei dem \\(P\\) im zweiten Quadranten liegt.', ok: function(s){ return s.phi > 360 && s.q === 2; } },
       // Zielspiel: Der Punkt zu 335° — auch −25° und 695° treffen ihn (Vergleich der Lage, nicht des Reglerwerts).
@@ -339,10 +341,10 @@
      als Formel. Hier dieselben vier Spiegelungen, aber ohne fertige Regel — die Live-Zeile nennt nur
      die Koordinaten von A und B, die Regel liest man selbst ab. */
   var MODI = {
-    '180-a': { beta: function(a){ return 180 - a; }, name: '180° − α', achse: 'y-Achse' },
-    'neg':   { beta: function(a){ return -a; },       name: '−α',       achse: 'x-Achse' },
-    '180+a': { beta: function(a){ return 180 + a; }, name: '180° + α', achse: 'Ursprung O' },
-    '90-a':  { beta: function(a){ return 90 - a; },  name: '90° − α',  achse: 'Gerade y = x' }
+    '180-a': { beta: function(a){ return 180 - a; }, name: '180° − α', achse: 'an der y-Achse' },
+    'neg':   { beta: function(a){ return -a; },       name: '−α',       achse: 'an der x-Achse' },
+    '180+a': { beta: function(a){ return 180 + a; }, name: '180° + α', achse: 'am Ursprung O' },
+    '90-a':  { beta: function(a){ return 90 - a; },  name: '90° − α',  achse: 'an der Geraden y = x' }
   };
   (function(){
     var fig = document.getElementById('sim4'); if (!fig) return;
@@ -352,7 +354,8 @@
     fig.querySelector('input[data-p="a"]').addEventListener('input', function(){ modi[wahlWert(fig, 's4-modus') || '180-a'] = true; });
     var r = regler(fig, zeichnen);
     bewegtMerken(r, bewegt, function(){ pruefen(); });
-    fig.querySelectorAll('input[name="s4-modus"]').forEach(function(rb){ rb.addEventListener('change', function(){ modi[rb.value] = true; zeichnen(); }); });
+    // Ein Modus zählt als ausprobiert, wenn in ihm an α gezogen wurde (Leiste A1: «zieh jeweils an α»).
+    fig.querySelectorAll('input[name="s4-modus"]').forEach(function(rb){ rb.addEventListener('change', zeichnen); });
     function zust(){ var w = werte(r), m = wahlWert(fig, 's4-modus') || '180-a', b = MODI[m].beta(w.a);
       return { a: w.a, m: m, beta: b, modi: modi, bewegt: bewegt }; }
     var sim = { zustand: zust, zeichnen: zeichnen, aufraeumen: function(){ leeren(bewegt); leeren(modi); } };
@@ -373,13 +376,13 @@
       K.punkt(ca, sa, 'p-pkt', 'A', 7, sa >= 0 ? -7 : 15);
       K.punkt(cb, sb, 'p-lauf b', 'B', cb >= 0 ? 7 : -7, sb >= 0 ? -7 : 15, cb >= 0 ? 'start' : 'end');
       var bT = st.m === 'neg' ? '−' + a + '° (= ' + (360 - a) + '°)' : b + '°';
-      rolle(fig, 'formel').innerHTML = 'Spiegelung ' + MODI[st.m].name + ' an der ' + MODI[st.m].achse.replace('Ursprung O', 'Mitte O') + '; &nbsp;α = ' + a + '°; &nbsp;β = ' + bT
+      rolle(fig, 'formel').innerHTML = 'Spiegelung ' + MODI[st.m].name + ' ' + MODI[st.m].achse + '; &nbsp;α = ' + a + '°; &nbsp;β = ' + bT
         + '<br>A: ' + sp('tx-gruen', 'cos α ' + gl3(ca)) + '; ' + sp('tx-blau', 'sin α ' + gl3(sa))
         + '<br>B: ' + sp('tx-gruen', 'cos β ' + gl3(cb)) + '; ' + sp('tx-blau', 'sin β ' + gl3(sb));
       pruefen();
     }
     pruefen = Leiste(fig, [
-      { text: 'Erkunde: Probier alle vier Spiegelungen aus und zieh jeweils an \\(\\alpha\\).', ok: function(s){ return s.modi['180-a'] && s.modi['neg'] && s.modi['180+a'] && s.modi['90-a'] && s.bewegt.a; } },
+      { text: 'Erkunde: Probier alle vier Spiegelungen aus und zieh jeweils an \\(\\alpha\\).', ok: function(s){ return s.modi['180-a'] && s.modi['neg'] && s.modi['180+a'] && s.modi['90-a']; } },
       // Startzustand: 180° − α mit α = 25° (wie im Clip) — keine Aufgabe ist schon gelöst.
       { text: 'Stell die Spiegelung ein, bei der Sinus <b>und</b> Cosinus das Vorzeichen wechseln.', ok: function(s){ return s.m === '180+a'; } },
       { text: 'Stell die Spiegelung ein, bei der nur der Sinus das Vorzeichen wechselt.', ok: function(s){ return s.m === 'neg'; } },
@@ -523,26 +526,35 @@
        Schlüssel (T.schl). Quellen: Clips · Simulationen · Aufgaben der Kapitel · Vortest ·
        Gesamttest (downloads/leitprogramme/einheitskreis/gesamttest.tex). */
     var SPERRE = [
-      // Kapitel 1 — Clips (50°, 140°, 230°, 320°, −60°), Simulation (200°, 335°), Aufgaben 1b–1d, Gesamttest G1, G6
-      'vz|50', 'vz|140', 'vz|230', 'vz|320', 'vz|-60', 'vz|200', 'vz|335', 'vz|250', 'vz|-20', 'vz|480', 'vz|220', 'vz|110', 'vz|-30', 'vz|235',
+      // Kapitel 1 — Clips (50°, 140°, 230°, 320°, −60°), Simulation (335°), Aufgaben 1a–1d, Gesamttest G1, G6
+      'vz|50', 'vz|140', 'vz|230', 'vz|320', 'vz|-60', 'vz|335', 'vz|250', 'vz|-20', 'vz|480', 'vz|220', 'vz|110', 'vz|-30', 'vz|235',
       'ko|p|-0.6|0.8', 'ko|p|0.28|-0.96', 'ko|r|160', 'ko|r|250', 'ko|r|220', 'ko|r|50', 'ko|r|140', 'ko|r|235',
-      // Kapitel 2 — Clip (45°, 60°, 30°, 150°, 225°, 300°), Kontrollclip (cos 240°, sin 270°), Aufgaben 2a/2b, Gesamttest G2
+      // Kapitel 2 — Clip (45°, 60°, 30°, 150°, 225°, 300°), Festhalten (−45°, 510°), Kontrollclip (cos 240°, sin 270°),
+      // Aufgaben 2a/2b, Gesamttest G2 (sin(−135°), cos 690°, cos(−2π/3)); aus Kapitel 1 und 5: −60°, 300°, 390°, 400°,
+      // −120°, 495°, −240°
       'ew|sin|45', 'ew|cos|45', 'ew|sin|60', 'ew|cos|60', 'ew|sin|30', 'ew|cos|30', 'ew|sin|150', 'ew|cos|150',
       'ew|sin|225', 'ew|cos|225', 'ew|sin|300', 'ew|cos|300', 'ew|cos|240', 'ew|sin|270',
-      'ew|cos|135', 'ew|sin|210', 'ew|cos|315', 'ew|sin|240', 'ew|cos|330',
+      'ew|sin|-45', 'ew|cos|-45', 'ew|sin|510', 'ew|cos|510',
+      'ew|cos|135', 'ew|sin|-60', 'ew|cos|-60', 'ew|cos|420', 'ew|sin|210', 'ew|cos|315',
+      'ew|sin|-135', 'ew|cos|690', 'ew|cos|-120', 'ew|sin|-120',
+      'ew|sin|390', 'ew|cos|390', 'ew|sin|400', 'ew|cos|400', 'ew|sin|495', 'ew|cos|-240',
       'rw|200', 'rw|150', 'rw|225', 'rw|300',
-      // Kapitel 3 — Kontrollclip (tan 135°), Aufgaben 3a, Gesamttest G2; Pythagoras: Clip, Kontrollclip, 3b, G3
-      'tw|135', 'tw|150', 'tw|300', 'tw|240',
-      'py|sin|0.6|2', 'py|sin|0.8|2', 'py|cos|-5/13|3', 'py|sin|-0.96|4',
-      // Kapitel 4 — Clip (α = 25°), Kontrollclip (40°/140°, −70°, 20°/70°), Aufgaben 4a (α = 15°), Gesamttest G4 (α = 35°)
-      'sw|25|sin|155', 'sw|25|cos|155', 'sw|25|sin|-25', 'sw|25|cos|-25', 'sw|25|sin|205', 'sw|25|cos|205', 'sw|25|sin|65', 'sw|25|cos|65',
+      // Kapitel 3 — Kontrollclip (tan 135°, tan 210°), Aufgaben 3a, Gesamttest G2 (tan 120°);
+      // Pythagoras: Clip, Kontrollclip, 3b, Aufgabe 1d, Gesamttest G3 (sin 8/17 mit tan < 0, II. Quadrant)
+      'tw|135', 'tw|210', 'tw|150', 'tw|300', 'tw|120',
+      'py|sin|0.6|2', 'py|sin|0.8|2', 'py|cos|-5/13|3', 'py|sin|-0.96|4', 'py|sin|8/17|2',
+      // Kapitel 4 — Clip (α = 25°: 155°, −25° = 335°, 205°, 65°), Kontrollclip (40°/140°, −70°, 20°/70°), Aufgaben 4a (α = 15°);
+      // der Gesamttest G4 nimmt α = 32°, das die Übung nicht würfelt
+      'sw|25|sin|155', 'sw|25|cos|155', 'sw|25|sin|-25', 'sw|25|cos|-25', 'sw|25|sin|335', 'sw|25|cos|335',
+      'sw|25|sin|205', 'sw|25|cos|205', 'sw|25|sin|65', 'sw|25|cos|65',
       'sw|40|sin|140', 'sw|70|cos|-70', 'sw|20|sin|70', 'sw|70|cos|20',
       'sw|15|sin|165', 'sw|15|cos|195', 'sw|15|cos|-15',
-      'sw|35|sin|145', 'sw|35|cos|215', 'sw|35|sin|55', 'sw|35|cos|-35',
       'sr|sin|pi2',
-      // Kapitel 5 — Clip (390°), Kontrollclip (400°, −120°), Aufgaben 5a, Hauptwert: Kontrollclip (sin −0.5, cos 0.6)
-      'pe|sin|390', 'pe|cos|390', 'pe|sin|400', 'pe|cos|400', 'pe|sin|-120', 'pe|cos|-120', 'pe|sin|495', 'pe|cos|-240', 'pe|tan|585',
-      'hw|sin|210', 'hw|sin|330', 'hw|cos|305'
+      // Kapitel 5 — Clip (390°), Kontrollclip (400°, −120°, tan 330°), Aufgaben 5a;
+      // Hauptwert: Festhalten (β = 210°, Sinus), Aufgabe 5c (sin 0.9 → zweiter Punkt bei 115.8°, kein Vielfaches von 5)
+      'pe|sin|390', 'pe|cos|390', 'pe|sin|400', 'pe|cos|400', 'pe|sin|-120', 'pe|cos|-120', 'pe|tan|330',
+      'pe|sin|495', 'pe|cos|-240', 'pe|tan|585',
+      'hw|sin|210'
     ];
     function gesperrt(T, A){ return T.schl && SPERRE.indexOf(T.schl(A)) >= 0; }
     function winkelOhneAchse(von, bis, schritt){ var l = []; for (var g = von; g <= bis; g += schritt) if (g % 90 !== 0) l.push(g); return l; }
@@ -601,15 +613,25 @@
                                                     : '\\cos\\varphi = ' + tz(A.c) + ',\\ \\sin\\varphi = ' + tz(A.s)); } },
 
       /* ── Kapitel 2: besondere Winkel (ohne Taschenrechner) ─────────── */
+      /* Prüfung 08.10.2026 (H5): Der Wurfraum 0°–360° liess nach der Sperrliste 15 Aufgaben übrig, 60 % davon auf
+         den Achsen, und nie 30°, 45°, 60°. Jetzt: Achsenwinkel nur noch in rund 15 % der Würfe, sonst ein besonderer
+         Winkel (Vielfaches von 30° oder 45°) — so wie er ist, negativ (−330° … −30°) oder über eine Runde hinaus
+         (390° … 690°), in einem Teil der Würfe im Bogenmass. 30°, 45°, 60° selbst stehen im Clip und sind gesperrt,
+         −330°, 405°, 420° … nicht. Verteilung nachgezählt mit 20 000 Würfen (README). */
       'exakter-wert': { felder: ['y'], muster: 'Wert = {y:' + SC.join('|') + '}',
         schl: function(A){ return 'ew|' + A.fn + '|' + A.phi; },
         eingabe: function(A){ return { y: A.y }; },
         neu: function(){
-          var fn = zufall(['sin', 'cos']), phi = zufall([0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360]);
-          var bogen = Math.random() < 0.3 && phi !== 0;
+          var fn = zufall(['sin', 'cos']), phi, bogen;
+          if (Math.random() < 0.1){ phi = zufall([0, 90, 180, 270, -90, 450]); bogen = false; }
+          else {
+            var b = zufall([30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330]), art = Math.random();
+            phi = art < 0.45 ? b : art < 0.7 ? b - 360 : b + 360;
+            bogen = phi < 360 && Math.random() < 0.3;
+          }
           var y = fn === 'sin' ? exaktSin(phi) : exaktCos(phi);
           return { fn: fn, phi: phi, y: y, bogen: bogen,
-            text: 'Gib ohne Taschenrechner exakt an: \\(\\' + fn + (bogen ? '\\left(' + bogenTex(phi) + '\\right)' : ' ' + gradTex(phi)) + '\\).' }; },
+            text: 'Gib ohne Taschenrechner exakt an: \\(\\' + fn + (bogen ? '\\left(' + bogenTex(phi) + '\\right)' : phi < 0 ? '(' + gradTex(phi) + ')' : ' ' + gradTex(phi)) + '\\).' }; },
         fehler: function(A){ var f = [], ander = A.fn === 'sin' ? exaktCos(A.phi) : exaktSin(A.phi);
           if (A.y !== '0') f.push([{ y: gegen(A.y) }, 'Vorzeichen']);
           if (ander !== A.y && ander !== gegen(A.y)) f.push([{ y: ander }, 'Cosinus']);
@@ -617,13 +639,20 @@
         pruefen: function(A, e){
           e = { y: String(e.y) };   // Auswahlfeld: immer Text, auch wenn ein Prüfer «1» als Zahl übergibt
           if (e.y === A.y) return null;
-          var ander = A.fn === 'sin' ? exaktCos(A.phi) : exaktSin(A.phi);
+          var ander = A.fn === 'sin' ? exaktCos(A.phi) : exaktSin(A.phi), achse = A.phi % 90 === 0;
           if (e.y === gegen(A.y)) return 'Der Betrag stimmt, das Vorzeichen nicht: Liegt \\(P\\) ' + (A.fn === 'sin' ? 'über oder unter der \\(x\\)-Achse?' : 'rechts oder links der \\(y\\)-Achse?');
+          if (achse && (e.y === ander || e.y === gegen(ander))) return 'Das ist der ' + (A.fn === 'sin' ? 'Cosinus. Der Sinus ist die Höhe von \\(P\\).' : 'Sinus. Der Cosinus ist die \\(x\\)-Koordinate von \\(P\\).') + ' Auf welcher Achse liegt \\(P\\)?';
           if (e.y === ander || e.y === gegen(ander)) return 'Das ist der Betrag des ' + (A.fn === 'sin' ? 'Cosinus' : 'Sinus') + '. Der ' + (A.fn === 'sin' ? 'Sinus ist die Höhe von \\(P\\).' : 'Cosinus ist die \\(x\\)-Koordinate von \\(P\\).') + ' Miss den Referenzwinkel zur \\(x\\)-Achse.';
+          if (achse) return '\\(P\\) liegt auf einer Achse. Zeichne den Punkt: Wo genau liegt er, und wie gross ist seine ' + (A.fn === 'sin' ? 'Höhe' : '\\(x\\)-Koordinate') + '?';
+          if (A.phi < 0 || A.phi >= 360) return 'Zuerst volle Runden dazuzählen oder abziehen, bis der Winkel zwischen \\(0^\\circ\\) und \\(360^\\circ\\) liegt. Dann Quadrant, Referenzwinkel, Betrag aus der Tabelle, Vorzeichen aus dem Quadranten.';
           return 'Quadrant bestimmen, Referenzwinkel zur \\(x\\)-Achse, Betrag aus der Tabelle, Vorzeichen aus dem Quadranten.'; },
-        loesung: function(A){ var r = referenz(A.phi);
-          return '\\' + A.fn + (A.bogen ? '\\left(' + bogenTex(A.phi) + '\\right) = \\' + A.fn + ' ' + gradTex(A.phi) : ' ' + gradTex(A.phi))
-            + (r === A.phi || A.phi % 90 === 0 ? '' : ' = ' + ((A.fn === 'sin' ? sinG(A.phi) : cosG(A.phi)) < 0 ? '-' : '') + '\\' + A.fn + ' ' + gradTex(r)) + ' = ' + texW(A.y); } },
+        loesung: function(A){
+          var m = ((A.phi % 360) + 360) % 360, r = referenz(m), fn = '\\' + A.fn;
+          var arg = A.phi < 0 ? '(' + gradTex(A.phi) + ')' : ' ' + gradTex(A.phi);
+          var t = fn + (A.bogen ? '\\left(' + bogenTex(A.phi) + '\\right) = ' + fn + arg : arg);
+          if (m !== A.phi) t += ' = ' + fn + ' ' + gradTex(m);
+          if (m % 90 !== 0 && r !== m) t += ' = ' + ((A.fn === 'sin' ? sinG(m) : cosG(m)) < 0 ? '-' : '') + fn + ' ' + gradTex(r);
+          return t + ' = ' + texW(A.y); } },
 
       'referenzwinkel': { felder: ['q', 'r'], muster: 'Quadrant {q:I|II|III|IV} &nbsp; Referenzwinkel {r} °',
         schl: function(A){ return 'rw|' + A.phi; },
@@ -690,23 +719,31 @@
           return { fn: fn, q: q, a: a, b: b, c: c, g: gs * a / c, w: ws * b / c, t: tn, gT: gT,
             wT: dez ? tz(r3(ws * b / c)) : (ws < 0 ? '-' : '') + b + '/' + c,
             tT: (tn < 0 ? '-' : '') + sn + '/' + cn, dez: dez,
-            text: 'Es gilt \\(\\' + fn + '\\varphi = ' + gTex + '\\), und \\(\\varphi\\) liegt im ' + ['', 'ersten', 'zweiten', 'dritten', 'vierten'][q] + ' Quadranten. Berechne ohne Taschenrechner \\(\\' + (fn === 'sin' ? 'cos' : 'sin') + '\\varphi\\) und \\(\\tan\\varphi\\) (Bruch oder Dezimalzahl).' }; },
+            text: 'Es gilt \\(\\' + fn + '\\varphi = ' + gTex + '\\), und \\(\\varphi\\) liegt im ' + ['', 'ersten', 'zweiten', 'dritten', 'vierten'][q] + ' Quadranten. Berechne ohne Taschenrechner \\(\\' + (fn === 'sin' ? 'cos' : 'sin') + '\\varphi\\) und \\(\\tan\\varphi\\) (als Bruch oder auf drei Dezimalen).' }; },
         fehler: function(A){ var f = [[{ w: (A.w < 0 ? '' : '-') + A.b + '/' + A.c, t: A.tT }, 'Vorzeichen']];
           var kehr = (A.t < 0 ? '-' : '') + (A.fn === 'sin' ? A.b + '/' + A.a : A.a + '/' + A.b);
           if (A.a !== A.b) f.push([{ w: A.wT, t: kehr }, 'Sinus oben']);
           f.push([{ w: tz(r3((A.w < 0 ? -1 : 1) * (1 - A.a / A.c))), t: A.tT }, 'Quadrate']);
+          // Auf zwei Dezimalen gerundet (−1.33 statt −4/3): «zu grob», nicht «falsch gerechnet» (Prüfung 08.10.2026, H4)
+          var t2 = Math.round(A.t * 100) / 100, w2 = Math.round(A.w * 100) / 100;
+          if (Math.abs(t2 - A.t) > 0.0006) f.push([{ w: A.wT, t: tz(t2) }, 'grob']);
+          if (Math.abs(w2 - A.w) > 0.0006) f.push([{ w: tz(w2), t: A.tT }, 'grob']);
           return f; },
         pruefen: function(A, e){
-          var nah = function(x, y){ return Math.abs(x - y) < 0.0015; };
-          var r = [];
-          if (!nah(e.w, A.w)){
-            if (nah(e.w, -A.w)) r.push('Vorzeichen: Die Wurzel liefert nur den Betrag. Im ' + ROEM[A.q] + '. Quadranten ist ' + (A.fn === 'sin' ? 'der Cosinus' : 'der Sinus') + ' ' + (A.w < 0 ? 'negativ' : 'positiv') + '.');
-            else if (nah(Math.abs(e.w), 1 - A.a / A.c)) r.push('Nicht \\(1 - ' + A.a + '/' + A.c + '\\): Die <b>Quadrate</b> ergänzen sich zu \\(1\\) — \\(\\' + (A.fn === 'sin' ? 'cos' : 'sin') + '^2\\varphi = 1 - \\' + A.fn + '^2\\varphi\\).');
-            else r.push('Rechne \\(\\' + (A.fn === 'sin' ? 'cos' : 'sin') + '^2\\varphi = 1 - \\' + A.fn + '^2\\varphi\\), zieh die Wurzel und wähle das Vorzeichen nach dem Quadranten.');
+          // richtig: Bruch oder auf drei Dezimalen gerundet (Abstand ≤ 0.0005, mit Spiel für die Gleitkommazahl);
+          // auf zwei Dezimalen gerundet: «zu grob». Die Fehlerdiagnosen vertragen gerundete Eingaben.
+          var gut = function(x, y){ return Math.abs(x - y) <= 0.0006; }, grob = function(x, y){ return Math.abs(x - y) <= 0.006; };
+          var r = [], an = A.fn === 'sin' ? 'cos' : 'sin';
+          if (!gut(e.w, A.w)){
+            if (grob(e.w, A.w)) r.push('Zu grob gerundet: Gib \\(\\' + an + '\\varphi\\) als Bruch oder auf drei Dezimalen an.');
+            else if (grob(e.w, -A.w)) r.push('Vorzeichen: Die Wurzel liefert nur den Betrag. Im ' + ROEM[A.q] + '. Quadranten ist ' + (A.fn === 'sin' ? 'der Cosinus' : 'der Sinus') + ' ' + (A.w < 0 ? 'negativ' : 'positiv') + '.');
+            else if (grob(Math.abs(e.w), 1 - A.a / A.c)) r.push('Nicht \\(1 - ' + A.a + '/' + A.c + '\\): Die <b>Quadrate</b> ergänzen sich zu \\(1\\) — \\(\\' + an + '^2\\varphi = 1 - \\' + A.fn + '^2\\varphi\\).');
+            else r.push('Rechne \\(\\' + an + '^2\\varphi = 1 - \\' + A.fn + '^2\\varphi\\), zieh die Wurzel und wähle das Vorzeichen nach dem Quadranten.');
           }
-          if (!nah(e.t, A.t)){
-            if (nah(e.t, 1 / A.t)) r.push('Tangens: \\(\\tfrac{\\sin\\varphi}{\\cos\\varphi}\\) — Sinus oben, nicht unten.');
-            else if (nah(e.t, -A.t)) r.push('Tangens: Prüf das Vorzeichen — positiv im I. und III. Quadranten, negativ im II. und IV.');
+          if (!gut(e.t, A.t)){
+            if (grob(e.t, A.t)) r.push('Tangens: zu grob gerundet — als Bruch oder auf drei Dezimalen.');
+            else if (grob(e.t, 1 / A.t)) r.push('Tangens: \\(\\tfrac{\\sin\\varphi}{\\cos\\varphi}\\) — Sinus oben, nicht unten.');
+            else if (grob(e.t, -A.t)) r.push('Tangens: Prüf das Vorzeichen — positiv im I. und III. Quadranten, negativ im II. und IV.');
             else r.push('Tangens: \\(\\tan\\varphi = \\tfrac{\\sin\\varphi}{\\cos\\varphi}\\) mit deinen beiden Werten.');
           }
           return r.length ? r.join(' ') : null; },

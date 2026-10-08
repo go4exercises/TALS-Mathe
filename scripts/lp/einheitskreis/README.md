@@ -13,6 +13,7 @@ LP Trigonometrische Gleichungen (GF 5.5).
 | `seite.js` | fünf Kreisbild-Simulationen mit Aufgabenleiste, 10 Übungstypen, Kreisbilder zu den Aufgaben (`svg.ek-mini[data-ek]`) | wird von `seite.py` eingebunden |
 | `clips.py` | erzeugt die zehn Drehbücher `clips/g5-4-lp-*.json` (Reihe «Einheitskreis sehen») | **ja** — rettet die gemessenen `dauer` |
 | `wortzeiten.py` | misst die Wortzeiten der vertonten Clips mit faster-whisper → `wortzeiten.json` | nach jeder Neuvertonung |
+| `teilton.py` | vertont nur einzelne Szenen (`szenen <clip> "<Szene>"`) oder Fragetöne (`fragen <clip> <i>[:<schl>]`) neu; die übrigen Szenen kommen unverändert aus der bisherigen Tonspur | nach einer Textkorrektur statt `build-clip-ton.py` |
 | `zahlen.py` | rechnet jede Zahl der Seite, der Clips und des Gesamttests nach | vor jedem Bau |
 
 Gesamttest und Bewertungspaket: `downloads/leitprogramme/einheitskreis/*.tex`, gebaut mit
@@ -49,8 +50,8 @@ der Lage im Sprechertext und meldet das am Ende.
 ## Farben — eine Farbe, eine Bedeutung
 
 1 blau = Sinus · 2 orange = Tangens (und der Spiegelpunkt B in Kapitel 4) · 3 grün = Cosinus ·
-4 rot = Gegenbeispiel · 5 Tinte = neutral (Kreis, Radius, P, Winkel, Spiegelachsen, Referenzwinkel in den
-Clips orange als Bogen). Die Themenseite färbt Sinus und Cosinus in ihren Animationen uneinheitlich; hier
+4 rot = Gegenbeispiel (in den Clips auch die Gerade OP bei 90°, die die Tangente nicht trifft) · 5 Tinte = neutral
+(Kreis, Radius, P, Winkel, Spiegelachsen, Referenzwinkel als Bogen — seit der Prüfung vom 08.10.2026 nicht mehr orange). Die Themenseite färbt Sinus und Cosinus in ihren Animationen uneinheitlich; hier
 gilt die Zuordnung des Leitprogramms Trigonometrische Funktionen (SP 3.5).
 
 ## Prüfen
@@ -64,3 +65,15 @@ node .claude/tools/pruef-leiste.mjs leitprogramme/einheitskreis.html
 node .claude/tools/pruef-fragen.mjs g5-4-lp-kontrolle-sinus-cosinus g5-4-lp-kontrolle-besondere-winkel \
      g5-4-lp-kontrolle-tangens-pythagoras g5-4-lp-kontrolle-symmetrien g5-4-lp-kontrolle-periode-umkehr
 ```
+
+## Prüfung vom 08.10.2026
+
+Befunde in `TODO.md` («Prüfung Einheitskreis»). Neu vertont mit `teilton.py` (alles andere unverändert):
+sinus-cosinus «Weiter drehen» · kontrolle-tangens-pythagoras «Frage 5» · symmetrien «Anwenden» ·
+kontrolle-periode-umkehr «Frage 3» (neue Frage zur Periode des Tangens); Fragetöne
+kontrolle-sinus-cosinus f1-fall1/fall2, kontrolle-tangens-pythagoras f0-r0, kontrolle-symmetrien f4-r2,
+kontrolle-periode-umkehr f2-* und f4-r2.
+
+Übung «Exakte Werte»: Verteilung mit 20 000 Würfen nachgezählt (Sperrliste angewendet):
+52 verschiedene Aufgaben (vorher 15); Achsenwinkel 16.5 % (vorher 60 %), negative Winkel 30 %, über 360° 36 %,
+Bogenmass 15 %. Nachzählen wie in der Prüfliste (§15): 20 000-mal «Neue Zahlen» und die Schlüssel zählen.

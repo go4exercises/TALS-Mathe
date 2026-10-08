@@ -362,7 +362,7 @@ SP1 = [
                     'mit dem Radius eins. Dann ist die Hypotenuse eins, und der Sinus ist einfach die Höhe des Punktes P. '
                     'Der Cosinus ist seine x-Koordinate.'),
     ('Weiter drehen', 'Den Winkel phi misst man ab der positiven x-Achse, gegen den Uhrzeigersinn. Er darf über neunzig Grad '
-                      'hinaus. Bei hundertvierzig Grad gibt es kein solches Dreieck mehr, aber der Punkt P hat weiterhin '
+                      'hinaus. Bei hundertvierzig Grad ist phi kein Winkel des Dreiecks mehr, aber der Punkt P hat weiterhin '
                       'Koordinaten: Cosinus und Sinus von hundertvierzig Grad.'),
     ('Vorzeichen', 'Weil es Koordinaten sind, haben sie Vorzeichen. Im zweiten Quadranten liegt P links der y-Achse: Der Cosinus '
                    'ist negativ, der Sinus positiv. Im dritten Quadranten sind beide negativ, im vierten nur der Sinus.'),
@@ -471,7 +471,8 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu Sinus und Cosinus',
          sz('Frage 5', sk1['Frage 5'],
             f(r'-1 \le \fa{\sin\varphi} \le 1', 300, 56, ein=1.0),
             graf(WK, [kreis()], ein=0.05),
-            graf(WK, [S((-1.45, 1.2), (1.45, 1.2), 4, 4, True), T(0.0, 1.27, 'y = 1.2: kein Kreispunkt', 4, 'middle', 28, False),
+            graf(WK, [S((-1.45, 1.2), (1.45, 1.2), 4, 4, True), T(-1.42, 1.27, 'y = 1.2', 4, 'start', 28, False),
+                      T(1.42, 1.27, 'kein Kreispunkt', 4, 'end', 28, False),
                       S((-1.45, 1), (1.45, 1), 5, 2, True)], ein=1.0, raster=False, achsen=False)),
          sz('Merke', sk1['Merke'],
             titel('Zum Mitnehmen', 250, 76),
@@ -487,10 +488,10 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu Sinus und Cosinus',
          klick('Frage 2', 'Tipp den Punkt P zum Winkel 135° auf den Kreis.', [-0.7071, 0.7071], 'Getroffen: zweiter Quadrant.',
                [{'bei': [0.7071, 0.7071], 'text': 'Das ist 45°. Gezählt wird ab der positiven x-Achse, gegen den Uhrzeigersinn.',
                  'sprich': 'Das ist fünfundvierzig Grad. Gezählt wird ab der positiven x-Achse, gegen den Uhrzeigersinn.'},
-                {'bei': [-0.7071, -0.7071], 'text': 'Das ist 225°. 135° liegt zwischen 90° und 180°.',
-                 'sprich': 'Das ist zweihundertfünfundzwanzig Grad. Hundertfünfunddreissig Grad liegt zwischen neunzig und hundertachtzig Grad.'},
-                {'bei': [0.7071, -0.7071], 'text': 'Das ist im Uhrzeigersinn gedreht. Positive Winkel drehen gegen den Uhrzeigersinn.',
-                 'sprich': 'Das ist im Uhrzeigersinn gedreht. Positive Winkel drehen gegen den Uhrzeigersinn.'}],
+                {'bei': [-0.7071, -0.7071], 'text': 'Das ist 135° im Uhrzeigersinn gedreht. Positive Winkel drehen gegen den Uhrzeigersinn.',
+                 'sprich': 'Das ist hundertfünfunddreissig Grad im Uhrzeigersinn gedreht. Positive Winkel drehen gegen den Uhrzeigersinn.'},
+                {'bei': [0.7071, -0.7071], 'text': 'Das ist 315°, im vierten Quadranten. 135° liegt zwischen 90° und 180°.',
+                 'sprich': 'Das ist dreihundertfünfzehn Grad, im vierten Quadranten. Hundertfünfunddreissig Grad liegt zwischen neunzig und hundertachtzig Grad.'}],
                FALSCH, sprich='Tipp den Punkt P zum Winkel hundertfünfunddreissig Grad auf den Kreis.', falsch_sprich=FALSCH),
          wahl('Frage 3', 'In welchem Quadranten ist sin φ negativ und cos φ positiv?', ['im vierten', 'im zweiten', 'im dritten'], 0,
               {0: 'Ja.', 1: 'Im zweiten Quadranten liegt P links oben. Welches Vorzeichen hat dort die Höhe?',
@@ -542,16 +543,28 @@ D3 = math.sqrt(3) / 2
 t_dreissig = w('Dreissig Grad', 'dasselbe')
 L_30 = Lauf([[0, 60], [t_dreissig, 60], [t_dreissig + 1.4, 30]])
 t_spiegel, t_ref, t_links = w('Referenzwinkel', 'spiegelbild'), w('Referenzwinkel', 'referenzwinkel'), w('Referenzwinkel', 'aber')
-L_150 = Lauf([[0, 30], [t_spiegel, 30], [t_spiegel + 1.6, 150]])
 t_225, t_300 = w('Unten', 'zweihundertfünfundzwanzig'), w('Unten', 'dreihundert')
 L_unten = Lauf([[0, 150], [t_225 - 0.2, 150], [t_225 + 1.2, 225], [t_300 - 0.3, 225], [t_300 + 1.0, 300]])
 
 
 def refbogen(g, ein=None, aus=None):
-    """Referenzwinkel als oranger Bogen zwischen OP und der nächsten Hälfte der x-Achse."""
+    """Referenzwinkel als Bogen in Tinte (neutral, wie der Winkel φ) zwischen OP und der nächsten Hälfte der x-Achse.
+    Orange ist dem Tangens vorbehalten (Prüfung 08.10.2026)."""
     m = g % 360
     von, bis = (m, 180) if 90 < m <= 180 else (180, m) if 180 < m <= 270 else (m, 360) if m > 270 else (0, m)
-    return mit(dict(art='bogen', m=[0, 0], r=0.34, von=von, bis=bis, farbe=2, dicke=6), ein=ein, aus=aus)
+    return mit(dict(art='bogen', m=[0, 0], r=0.34, von=von, bis=bis, farbe=5, dicke=6), ein=ein, aus=aus)
+
+
+def fahrt(a, b, t0, t1, name='P'):
+    """P wandert von a geradlinig nach b (Spiegelung, keine Drehung — Prüfung 08.10.2026, M1), mit cos-Strecke
+    (grün), sin-Strecke (blau), Punkt und Namen. Der Radius zu b erscheint erst, wenn P angekommen ist."""
+    L = Lauf([[0, 0.0], [t0, 0.0], [t1, 1.0]])
+    pos = lambda q: (r3(a[0] + (b[0] - a[0]) * q), r3(a[1] + (b[1] - a[1]) * q))
+    return [bewegt(L, 'strecke', lambda q: {'von': [0, 0], 'bis': [pos(q)[0], 0], 'deckkraft': 1 if abs(pos(q)[0]) > 0.02 else 0}, farbe=3, dicke=9),
+            bewegt(L, 'strecke', lambda q: {'von': [pos(q)[0], 0], 'bis': list(pos(q))}, farbe=1, dicke=9),
+            S((0, 0), (r3(b[0]), r3(b[1])), 5, 4, ein=t1),
+            bewegt(L, 'kreis', lambda q: {'m': list(pos(q))}, r=0.04, farbe=5, fuellung=1, dicke=3),
+            bewegt(L, 'text', lambda q: {'bei': [r3(pos(q)[0] * 1.17), r3(pos(q)[1] * 1.17 - 0.05)]}, text=name, farbe=5, anker='middle', groesse=34, kursiv=True)]
 
 
 clip(C, 'Einheitskreis sehen: die besonderen Winkel',
@@ -584,8 +597,8 @@ clip(C, 'Einheitskreis sehen: die besonderen Winkel',
          sz('Referenzwinkel', sp2['Referenzwinkel'],
             f(r'\fa{\sin 150^\circ} = \sin 30^\circ = \tfrac12', 300, 50, ein=w('Referenzwinkel', 'gleiche')),
             f(r'\fc{\cos 150^\circ} = -\cos 30^\circ = -\tfrac{\sqrt3}{2}', 420, 50, ein=t_links),
-            graf(WK, [kreis(), S((0, -1.45), (0, 1.45), 5, 3, True)] + fest(30, ('radius', 'P'), name='') + P_teile(L_150, ('radius', 'cos', 'sin', 'P', 'name'))
-                 + [refbogen(150, ein=t_ref)], ein=0.3)),
+            graf(WK, [kreis(), S((0, -1.45), (0, 1.45), 5, 3, True)] + fest(30, ('radius', 'P'), name='')
+                 + fahrt(cs(30), cs(150), t_spiegel, t_spiegel + 1.6) + [refbogen(150, ein=t_ref)], ein=0.3)),
          sz('Unten', sp2['Unten'],
             f(r'225^\circ: \ (\fc{-\tfrac{\sqrt2}{2}} \mid \fa{-\tfrac{\sqrt2}{2}})', 300, 48, ein=w('Unten', 'beide')),
             f(r'300^\circ: \ (\fc{\tfrac12} \mid \fa{-\tfrac{\sqrt3}{2}})', 440, 48, ein=w('Unten', 'cosinus')),
@@ -624,7 +637,7 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu den besonderen Winkeln',
          sz('Frage 2', sk2['Frage 2'],
             f(r'200^\circ - 180^\circ = 20^\circ', 300, 56, ein=1.0),
             graf(WK, [kreis()] + fest(200, ('winkel', 'radius', 'P', 'name')), ein=0.05),
-            graf(WK, [refbogen(200), T(-0.62, -0.02, '20°', 2, 'end', 30, False)], ein=1.0, raster=False, achsen=False)),
+            graf(WK, [refbogen(200), T(-0.42, -0.15, '20°', 5, 'end', 28, False)], ein=1.0, raster=False, achsen=False)),
          sz('Frage 3', sk2['Frage 3'],
             f(r'330^\circ: \ P\left(\fc{\tfrac{\sqrt3}{2}} \mid \fa{-\tfrac12}\right)', 300, 50, ein=1.0),
             graf(WK, [kreis()], ein=0.05),
@@ -708,6 +721,12 @@ t_steil, t_neunzig = w('Kein Wert', 'steiler'), w('Kein Wert', 'neunzig', 2)
 L_90 = Lauf([[0, 50], [t_steil - 1.2, 50], [t_steil + 1.2, 82], [t_neunzig - 0.4, 82], [t_neunzig + 0.6, 90]])
 ALPHA_06 = math.degrees(math.atan2(0.6, -0.8))     # 143.13°: sin 0.6 im II. Quadranten
 WT_FIG = lambda L, **kw: [kreis()] + tan_teile(L, **kw)
+
+
+def PARALLEL(ein=None):
+    """Bei 90° (270°) liegt die Gerade durch O und P auf der y-Achse und wäre unsichtbar: rot hervorgehoben, mit
+    Beschriftung (Prüfung 08.10.2026, M1)."""
+    return [mit(S((0, -1.7), (0, 1.7), 4, 6), ein=ein), mit(T(-0.08, 1.48, 'parallel zu x = 1', 4, 'end', 28, False), ein=ein)]
 clip(C, 'Einheitskreis sehen: Tangens und Pythagoras',
      'Der Tangens als Höhe von S auf der Tangente x = 1, tan φ = sin φ / cos φ aus ähnlichen Dreiecken, der II. Quadrant, '
      'kein Wert bei 90° und der trigonometrische Pythagoras mit einem Beispiel.',
@@ -715,7 +734,7 @@ clip(C, 'Einheitskreis sehen: Tangens und Pythagoras',
          sz('Die Tangente', sp3['Die Tangente'],
             f(r'\text{Tangente } x = 1', 280, 52, ein=0.4),
             f(r'S(1 \mid \fb{\tan\varphi})', 400, 60, ein=t_hoehe_s),
-            f(r'\fb{\tan 40^\circ} \approx 0.839', 540, 52, ein=w('Die Tangente', 'vierzig')),
+            f(r'\fb{\tan 40^\circ} \approx 0.84', 540, 52, ein=w('Die Tangente', 'vierzig')),
             graf(WT, [kreis(), S((1, -1.7), (1, 1.7), 5, 3)] + fest(40, ('winkel', 'radius', 'P', 'name'), name_dw=14), ein=0.3),
             graf(WT, tan_teile(Lauf([[0, 40]]))[1:], ein=t_gerade, raster=False, achsen=False)),
          sz('Sinus durch Cosinus', sp3['Sinus durch Cosinus'],
@@ -725,13 +744,14 @@ clip(C, 'Einheitskreis sehen: Tangens und Pythagoras',
                     dict(art='vieleck', punkte=[[0, 0], [r3(cs(40)[0]), 0], [r3(cs(40)[0]), r3(cs(40)[1])]], farbe=1, fuellung=0.15, dicke=2, ein=w('Sinus durch Cosinus', 'dreiecke')),
                     T(r3(cs(40)[0]) - 0.02, -0.14, 'Q', 5, 'middle', 30), T(1.1, 0.08, 'R', 5, 'start', 30), T(-0.12, -0.14, 'O', 5, 'middle', 30)], ein=0.3)),
          sz('Zweiter Quadrant', sp3['Zweiter Quadrant'],
-            f(r'\fb{\tan 130^\circ} \approx -1.192', 300, 52, ein=w('Zweiter Quadrant', 'negativ')),
+            f(r'\fb{\tan 130^\circ} \approx -1.19', 300, 52, ein=w('Zweiter Quadrant', 'negativ')),
             f(r'\dfrac{\fa{+}}{\fc{-}} = \fb{-}', 450, 60, ein=w('Zweiter Quadrant', 'passt')),
             graf(WT, WT_FIG(L_130) + P_teile(L_130, ('radius', 'cos', 'sin', 'P', 'name'), name_dw=14), ein=0.3)),
          sz('Kein Wert', sp3['Kein Wert'],
             f(r'\fc{\cos 90^\circ} = 0', 300, 56, ein=w('Kein Wert', 'cosinus')),
             f(r'\Rightarrow \ \fb{\tan 90^\circ} \ \text{nicht definiert}', 420, 50, ein=w('Kein Wert', 'definiert')),
-            graf(WT, WT_FIG(L_90) + P_teile(L_90, ('radius', 'P', 'name'), name_dw=14), ein=0.3)),
+            graf(WT, WT_FIG(L_90) + P_teile(L_90, ('radius', 'P', 'name'), name_dw=14)
+                 + PARALLEL(t_neunzig + 0.6), ein=0.3)),
          sz('Pythagoras', sp3['Pythagoras'],
             f(r'\fa{\sin^2\varphi} + \fc{\cos^2\varphi} = 1', 330, 62, ein=w('Pythagoras', 'quadrat')),
             graf(WK, [kreis()] + fest(40, ('dreieck', 'winkel', 'radius', 'cos', 'sin', 'P', 'name'))
@@ -760,8 +780,8 @@ SPK3 = [
     ('Frage 3', 'Bei zweihundertsiebzig Grad ist der Cosinus null. Die Gerade durch O und P ist dann parallel zur Tangente.'),
     ('Frage 4', 'Cosinus Quadrat ist eins minus null Komma sechs vier, also null Komma drei sechs. Die Wurzel gibt null Komma sechs, '
                 'und im zweiten Quadranten ist der Cosinus negativ: minus null Komma sechs.'),
-    ('Frage 5', 'Im Dreieck O Q P sind die Katheten so lang wie Sinus und Cosinus, die Hypotenuse ist der Radius eins. Das gilt '
-                'in jedem Quadranten.'),
+    ('Frage 5', 'Im Dreieck O Q P sind die Katheten so lang wie die Beträge von Sinus und Cosinus, die Hypotenuse ist der Radius '
+                'eins. Das gilt in jedem Quadranten.'),
     ('Merke', 'Zum Mitnehmen: Tangens gleich Sinus durch Cosinus, nicht definiert, wo der Cosinus null ist. Nach dem Wurzelziehen '
               'entscheidet der Quadrant über das Vorzeichen.'),
 ]
@@ -776,13 +796,13 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu Tangens und Pythagoras',
             graf(WT, [kreis(), S((1, -1.7), (1, 1.7), 5, 3)], ein=0.05),
             graf(WT, tan_teile(Lauf([[0, 135]]))[1:] + fest(135, ('radius', 'cos', 'sin', 'P', 'name'), name_dw=14), ein=1.0, raster=False, achsen=False)),
          sz('Frage 2', sk3['Frage 2'],
-            f(r'\fb{\tan 210^\circ} \approx 0.577', 300, 54, ein=1.0),
+            f(r'\fb{\tan 210^\circ} \approx 0.58', 300, 54, ein=1.0),
             graf(WT, [kreis(), S((1, -1.7), (1, 1.7), 5, 3)] + fest(210, ('radius', 'P', 'name'), name_dw=14), ein=0.05),
             graf(WT, tan_teile(Lauf([[0, 210]]))[1:], ein=1.0, raster=False, achsen=False)),
          sz('Frage 3', sk3['Frage 3'],
             f(r'\fc{\cos 270^\circ} = 0', 300, 56, ein=1.0),
             graf(WT, [kreis(), S((1, -1.7), (1, 1.7), 5, 3)], ein=0.05),
-            graf(WT, fest(270, ('radius', 'P', 'name'), name_dw=14) + [S((0, -1.7), (0, 1.7), 5, 3, True)], ein=1.0, raster=False, achsen=False)),
+            graf(WT, PARALLEL() + fest(270, ('radius', 'P', 'name'), name_dw=14), ein=1.0, raster=False, achsen=False)),
          sz('Frage 4', sk3['Frage 4'],
             f(r'\fc{\cos^2\varphi} = 1 - 0.64 = 0.36', 280, 50, ein=1.0),
             f(r'\fc{\cos\varphi} = -0.6', 400, 54, ein=1.0),
@@ -798,10 +818,10 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu Tangens und Pythagoras',
      ], [
          wahl('Frage 1', 'Wie gross ist tan 135°?', ['−1', '1', 'nicht definiert'], 0,
               {0: 'Ja.', 1: 'Sinus und Cosinus sind gleich gross — haben sie bei 135° dasselbe Vorzeichen?',
-               2: 'Nicht definiert ist der Tangens bei 90° und 270°. Bei 135° trifft die Gerade die Tangente.'},
+               2: 'Zwischen 0° und 360° ist der Tangens nur bei 90° und 270° nicht definiert. Bei 135° trifft die Gerade die Tangente.'},
               sprich='Wie gross ist Tangens hundertfünfunddreissig Grad?',
               rueck_sprich={1: 'Sinus und Cosinus sind gleich gross. Haben sie bei hundertfünfunddreissig Grad dasselbe Vorzeichen?',
-                            2: 'Nicht definiert ist der Tangens bei neunzig und zweihundertsiebzig Grad. Bei hundertfünfunddreissig Grad trifft die Gerade die Tangente.'}),
+                            2: 'Zwischen null und dreihundertsechzig Grad ist der Tangens nur bei neunzig und zweihundertsiebzig Grad nicht definiert. Bei hundertfünfunddreissig Grad trifft die Gerade die Tangente.'}),
          klick('Frage 2', 'Tipp den Punkt S auf der Tangente, der zu φ = 210° gehört.', [1, round(T210, 4)], 'Getroffen: S liegt über der x-Achse.',
                [{'bei': [1, round(-T210, 4)], 'text': 'Im dritten Quadranten sind Sinus und Cosinus beide negativ. Welches Vorzeichen hat ihr Quotient?',
                  'sprich': 'Im dritten Quadranten sind Sinus und Cosinus beide negativ. Welches Vorzeichen hat ihr Quotient?'},
@@ -842,8 +862,9 @@ SP4 = [
     ('Komplement', 'An der Geraden y gleich x gespiegelt, entsteht der Punkt zu neunzig Grad minus alpha. Hier wechselt kein '
                    'Vorzeichen, aber die Koordinaten tauschen die Plätze: Sinus von neunzig Grad minus alpha ist Cosinus alpha. '
                    'Im Bogenmass: Sinus von pi halbe minus phi ist Cosinus phi.'),
-    ('Anwenden', 'So rechnet man ohne Taschenrechner. Cosinus zweihundertfünf Grad ist Cosinus von hundertachtzig plus '
-                 'fünfundzwanzig Grad, also minus Cosinus fünfundzwanzig Grad, ungefähr minus null Komma neun null sechs.'),
+    ('Anwenden', 'So rechnet man ohne Taschenrechner, wenn ein Wert bekannt ist: Cosinus fünfundzwanzig Grad ist ungefähr '
+                 'null Komma neun null sechs. Cosinus zweihundertfünf Grad ist Cosinus von hundertachtzig plus fünfundzwanzig Grad, '
+                 'also minus Cosinus fünfundzwanzig Grad, ungefähr minus null Komma neun null sechs.'),
     ('Merke', 'Zum Mitnehmen: Jede Symmetrie ist eine Spiegelung. An der y-Achse kippt der Cosinus, an der x-Achse der Sinus, '
               'am Ursprung beide. An der Geraden y gleich x tauschen Sinus und Cosinus die Plätze.'),
 ]
@@ -875,35 +896,36 @@ clip(C, 'Einheitskreis sehen: Symmetrien',
             f(r'\sin(180^\circ - \alpha) = \fa{\sin\alpha}', 300, 50, ein=w('An der y-Achse', 'sinus')),
             f(r'\cos(180^\circ - \alpha) = \fc{-\cos\alpha}', 420, 50, ein=w('An der y-Achse', 'cosinus')),
             graf(WK, [kreis()] + A_FIG, ein=0.3),
-            graf(WK, [S((0, -1.45), (0, 1.45), 5, 3, True)] + spiegelbild(t_y + 0.8, t_y + 2.6, (-A25[0], A25[1])), ein=t_y, raster=False, achsen=False)),
+            graf(WK, [S((0, -1.45), (0, 1.45), 5, 3, True)] + spiegelbild(t_y + 0.8, t_y + 2.6, (-A25[0], A25[1]), ein=t_y + 0.8), ein=t_y, raster=False, achsen=False)),
          sz('An der x-Achse', sp4['An der x-Achse'],
             f(r'\sin(-\alpha) = \fa{-\sin\alpha}', 300, 50, ein=w('An der x-Achse', 'sinus')),
             f(r'\cos(-\alpha) = \fc{\cos\alpha}', 420, 50, ein=w('An der x-Achse', 'cosinus')),
             f(r'-\alpha \ \text{und} \ 360^\circ - \alpha: \ \text{derselbe Punkt}', 540, 44, ein=w('An der x-Achse', 'dreihundertsechzig')),
             graf(WK, [kreis()] + A_FIG, ein=0.3),
-            graf(WK, [S((-1.45, 0), (1.45, 0), 5, 3, True)] + spiegelbild(t_x + 0.4, t_x + 2.2, (A25[0], -A25[1])), ein=t_x, raster=False, achsen=False)),
+            graf(WK, [S((-1.45, 0), (1.45, 0), 5, 3, True)] + spiegelbild(t_x + 0.4, t_x + 2.2, (A25[0], -A25[1]), ein=t_x + 0.4), ein=t_x, raster=False, achsen=False)),
          sz('Am Ursprung', sp4['Am Ursprung'],
             f(r'\sin(180^\circ + \alpha) = \fa{-\sin\alpha}', 280, 46, ein=w('Am Ursprung', 'beide')),
             f(r'\cos(180^\circ + \alpha) = \fc{-\cos\alpha}', 380, 46, ein=w('Am Ursprung', 'beide')),
             f(r'\tan(180^\circ + \alpha) = \fb{\tan\alpha}', 480, 46, ein=w('Am Ursprung', 'tangens')),
             graf(WK, [kreis()] + A_FIG, ein=0.3),
-            graf(WK, [S((A25[0], A25[1]), (-A25[0], -A25[1]), 5, 3, True)] + spiegelbild(t_o + 0.6, t_o + 2.6, (-A25[0], -A25[1])), ein=t_o, raster=False, achsen=False)),
+            graf(WK, [S((A25[0], A25[1]), (-A25[0], -A25[1]), 5, 3, True)] + spiegelbild(t_o + 0.6, t_o + 2.6, (-A25[0], -A25[1]), ein=t_o + 0.6), ein=t_o, raster=False, achsen=False)),
          sz('Komplement', sp4['Komplement'],
             f(r'\sin(90^\circ - \alpha) = \fc{\cos\alpha}', 280, 48, ein=w('Komplement', 'sinus')),
             f(r'\cos(90^\circ - \alpha) = \fa{\sin\alpha}', 380, 48, ein=w('Komplement', 'sinus')),
             f(r'\sin\left(\tfrac{\pi}{2} - \varphi\right) = \cos\varphi', 520, 50, ein=w('Komplement', 'bogenmass')),
             graf(WK, [kreis()] + A_FIG, ein=0.3),
-            graf(WK, [S((-1.45, -1.45), (1.45, 1.45), 5, 3, True)] + spiegelbild(t_k + 0.6, t_k + 2.6, (A25[1], A25[0])), ein=t_k, raster=False, achsen=False)),
+            graf(WK, [S((-1.45, -1.45), (1.45, 1.45), 5, 3, True)] + spiegelbild(t_k + 0.6, t_k + 2.6, (A25[1], A25[0]), ein=t_k + 0.6), ein=t_k, raster=False, achsen=False)),
          sz('Anwenden', sp4['Anwenden'],
-            f(r'\cos 205^\circ = \cos(180^\circ + 25^\circ)', 300, 48, ein=w('Anwenden', 'cosinus')),
-            f(r'= -\cos 25^\circ \approx \fc{-0.906}', 420, 50, ein=w('Anwenden', 'minus')),
+            f(r'\text{bekannt: } \fc{\cos 25^\circ} \approx 0.906', 280, 46, ein=w('Anwenden', 'cosinus')),
+            f(r'\cos 205^\circ = \cos(180^\circ + 25^\circ)', 400, 48, ein=w('Anwenden', 'cosinus', 2)),
+            f(r'= -\cos 25^\circ \approx \fc{-0.906}', 520, 50, ein=w('Anwenden', 'minus')),
             graf(WK, [kreis()] + A_FIG + [S((A25[0], A25[1]), (-A25[0], -A25[1]), 5, 3, True)]
                  + fest(205, ('radius', 'cos', 'sin', 'P', 'name'), name='B', farbe_p=2), ein=0.3)),
          sz('Merke', sp4['Merke'],
             titel('Zum Mitnehmen', 250, 76),
             n('@y@-Achse: Cosinus kippt|@x@-Achse: Sinus kippt|Ursprung: beide kippen|@y = x@: Plätze tauschen', 380, 'blau', 42, ein=1.2),
             graf(WK, [kreis()] + A_FIG + [pkt(155, 2), pkt(-25, 2), pkt(205, 2), pkt(65, 2)]
-                 + [T(r3(1.16 * cs(g)[0]), r3(1.16 * cs(g)[1] - 0.05), tx, 2, 'middle', 28, False)
+                 + [T(r3(1.3 * cs(g)[0]), r3(1.3 * cs(g)[1] - 0.04), tx, 2, 'middle', 28, False)
                     for g, tx in ((155, '180°−α'), (-25, '−α'), (205, '180°+α'), (65, '90°−α'))], ein=0.3)),
          jetzt_du(),
      ], folge=7)
@@ -990,10 +1012,10 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu den Symmetrien',
                             2: 'Beim Komplement kippt kein Vorzeichen.'}),
          wahl('Frage 5', 'Es gilt tan 35° ≈ 0.700. Wie gross ist tan 215°?', ['≈ 0.700', '≈ −0.700', 'nicht definiert'], 0,
               {0: 'Ja.', 1: '215° = 180° + 35°: am Ursprung gespiegelt. Beide Koordinaten kippen — und ihr Quotient?',
-               2: 'Nicht definiert ist der Tangens nur bei 90° und 270°.'},
+               2: 'Zwischen 0° und 360° ist der Tangens nur bei 90° und 270° nicht definiert.'},
               sprich='Es gilt: Tangens fünfunddreissig Grad ist ungefähr null Komma sieben. Wie gross ist Tangens zweihundertfünfzehn Grad?',
               rueck_sprich={1: 'Zweihundertfünfzehn Grad ist hundertachtzig plus fünfunddreissig Grad, am Ursprung gespiegelt. Beide Koordinaten kippen. Und ihr Quotient?',
-                            2: 'Nicht definiert ist der Tangens nur bei neunzig und zweihundertsiebzig Grad.'}),
+                            2: 'Zwischen null und dreihundertsechzig Grad ist der Tangens nur bei neunzig und zweihundertsiebzig Grad nicht definiert.'}),
      ], art='Kontrollclip', folge=8)
 
 # ════════════════════════════════════════════════ Kapitel 5 · Einführung
@@ -1053,7 +1075,7 @@ clip(C, 'Einheitskreis sehen: Periode und Umkehroperationen',
             graf(WK, [S((-1.45, 0.4), (1.45, 0.4), 5, 3, True), T(1.42, 0.47, 'y = 0.4', 5, 'end', 28, False)],
                  ein=w('Rückwärts', 'waagrechte'), raster=False, achsen=False),
             graf(WK, [pkt(P1, 1, 0.045), pkt(P2, 5, 0.045, hohl=True)], ein=w('Rückwärts', 'zwei'), raster=False, achsen=False),
-            graf(WK, fest(P1, ('winkel', 'radius', 'P'), name='') + [T(0.98, 0.52, '23.6°', 1, 'start', 28, False)],
+            graf(WK, fest(P1, ('winkel', 'radius', 'P'), name='') + [T(0.55, 0.07, '23.6°', 5, 'start', 26, False)],
                  ein=w('Rückwärts', 'dreiundzwanzig'), raster=False, achsen=False)),
          sz('Hauptwert', sp5['Hauptwert'],
             f(r'\arcsin w \in [-90^\circ;\, 90^\circ]', 300, 52, ein=w('Hauptwert', 'rechten')),
@@ -1082,8 +1104,8 @@ SPK5 = [
     ('Frage 1', 'Vierhundert Grad ist eine volle Runde und noch vierzig Grad. P liegt am selben Ort wie bei vierzig Grad.'),
     ('Frage 2', 'Minus hundertzwanzig Grad plus dreihundertsechzig Grad sind zweihundertvierzig Grad. Derselbe Punkt, im dritten '
                 'Quadranten.'),
-    ('Frage 3', 'Minus dreissig Grad plus dreihundertsechzig Grad ergibt dreihundertdreissig Grad. Das ist derselbe Punkt, rechts '
-                'unten im vierten Quadranten.'),
+    ('Frage 3', 'Dreihundertdreissig Grad minus hundertachtzig Grad ergibt hundertfünfzig Grad. Der Punkt zu hundertfünfzig Grad '
+                'liegt gegenüber, auf derselben Geraden durch O. Darum haben beide denselben Tangens.'),
     ('Frage 4', 'Die Senkrechte bei x gleich null Komma sechs trifft den Kreis ein zweites Mal, unten rechts. Diesen Punkt liefert '
                 'der Rechner nicht, er liegt nicht in der oberen Hälfte.'),
     ('Frage 5', 'Zu null Komma vier gibt es viele Winkel: zwei Punkte am Kreis und dazu alle vollen Runden. Der Rechner nimmt den '
@@ -1094,7 +1116,7 @@ merke_text(C, SPK5)
 sk5 = dict(SPK5)
 C06 = math.degrees(math.acos(0.6))                   # 53.13°
 clip(C, 'Einheitskreis sehen: Kontrollfragen zu Periode und Umkehrung',
-     'Fünf Fragen zu 400°, zu −120°, zu sin⁻¹(−0.5), zum zweiten Punkt mit cos φ = 0.6 und zum Grund, warum der Rechner nur einen Winkel liefert.',
+     'Fünf Fragen zu 400°, zu −120°, zur Periode des Tangens bei 330°, zum zweiten Punkt mit cos φ = 0.6 und zum Grund, warum der Rechner nur einen Winkel liefert.',
      ['Periode', 'Umkehroperation', 'Hauptwert', 'Kontrollfragen'], [
          sz('Frage 1', sk5['Frage 1'],
             f(r'400^\circ - 360^\circ = 40^\circ', 300, 54, ein=1.0),
@@ -1105,9 +1127,12 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu Periode und Umkehrung',
             graf(WK, [kreis()], ein=0.05),
             graf(WK, P_teile(Lauf([[1.2, 0], [2.8, -120]]), ('winkel', 'radius', 'P', 'name')), ein=1.0, raster=False, achsen=False)),
          sz('Frage 3', sk5['Frage 3'],
-            f(r'-30^\circ + 360^\circ = 330^\circ', 300, 54, ein=1.0),
-            graf(WK, [kreis()], ein=0.05),
-            graf(WK, fest(-30, ('winkel', 'radius', 'sin', 'P', 'name')), ein=1.0, raster=False, achsen=False)),
+            f(r'330^\circ - 180^\circ = 150^\circ', 300, 54, ein=1.0),
+            f(r'\fb{\tan 150^\circ} = \fb{\tan 330^\circ}', 420, 50, ein=1.0),
+            graf(WT, [kreis(), S((1, -1.7), (1, 1.7), 5, 3)] + fest(330, ('radius', 'P'), name='')
+                 + [T(0.7, -0.66, '330°', 5, 'end', 28, False)], ein=0.05),
+            graf(WT, tan_teile(Lauf([[0, 150]]))[1:] + fest(150, ('radius', 'P'), name='', farbe_p=2)
+                 + [T(-0.95, 0.64, '150°', 2, 'end', 28, False)], ein=1.0, raster=False, achsen=False)),
          sz('Frage 4', sk5['Frage 4'],
             f(r'\fc{\cos\varphi = 0.6}: \ (0.6 \mid 0.8) \ \text{und} \ (0.6 \mid -0.8)', 300, 44, ein=1.0),
             graf(WK, [kreis()] + fest(C06, ('winkel', 'radius', 'P'), name='') + [T(0.68, 0.92, '53.1°', 5, 'start', 28, False)], ein=0.05),
@@ -1133,12 +1158,15 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu Periode und Umkehrung',
               sprich='Derselbe Punkt wie bei minus hundertzwanzig Grad: Welcher Winkel zwischen null und dreihundertsechzig Grad ist das?',
               rueck_sprich={1: 'Hundertzwanzig Grad dreht gegen den Uhrzeigersinn, minus hundertzwanzig Grad im Uhrzeigersinn. Zähl dreihundertsechzig Grad dazu.',
                             2: 'Zähl dreihundertsechzig Grad dazu: minus hundertzwanzig plus dreihundertsechzig.'}),
-         wahl('Frage 3', 'Der Rechner gibt sin⁻¹(−0.5) = −30°. Welcher Winkel zwischen 0° und 360° ist derselbe Punkt?', ['330°', '210°', '30°'], 0,
-              {0: 'Ja.', 1: '210° hat zwar auch den Sinus −0.5, ist aber ein anderer Punkt. Gefragt ist derselbe Punkt wie −30°.',
-               2: '30° liegt über der x-Achse. −30° dreht im Uhrzeigersinn nach unten.'},
-              sprich='Der Rechner gibt Sinus hoch minus eins von minus null Komma fünf gleich minus dreissig Grad. Welcher Winkel zwischen null und dreihundertsechzig Grad ist derselbe Punkt?',
-              rueck_sprich={1: 'Zweihundertzehn Grad hat zwar auch den Sinus minus null Komma fünf, ist aber ein anderer Punkt. Gefragt ist derselbe Punkt wie minus dreissig Grad.',
-                            2: 'Dreissig Grad liegt über der x-Achse. Minus dreissig Grad dreht im Uhrzeigersinn nach unten.'}),
+         # Prüfung 08.10.2026 (M1): Frage 2 und die alte Frage 3 (sin⁻¹(−0.5) = −30° → 330°) prüften beide «+ 360°».
+         # Jetzt die Periode des Tangens, die sonst keine Kontrollfrage prüft.
+         wahl('Frage 3', 'Gleicher Tangens wie 330°: Welcher Winkel zwischen 0° und 180° ist das?',
+              ['150°', '30°', 'keiner, der Tangens wiederholt sich erst nach 360°'], 0,
+              {0: 'Ja.', 1: 'tan 30° ist positiv, tan 330° negativ. Der Punkt gegenüber liegt eine halbe Runde weiter: 330° − 180°.',
+               2: 'Der Punkt gegenüber liegt auf derselben Geraden durch O. Der Tangens wiederholt sich schon nach 180°.'},
+              sprich='Gleicher Tangens wie dreihundertdreissig Grad: Welcher Winkel zwischen null und hundertachtzig Grad ist das?',
+              rueck_sprich={1: 'Tangens dreissig Grad ist positiv, Tangens dreihundertdreissig Grad negativ. Der Punkt gegenüber liegt eine halbe Runde weiter: dreihundertdreissig minus hundertachtzig Grad.',
+                            2: 'Der Punkt gegenüber liegt auf derselben Geraden durch O. Der Tangens wiederholt sich schon nach hundertachtzig Grad.'}),
          klick('Frage 4', 'Der Rechner gibt cos⁻¹(0.6) ≈ 53.1°. Tipp den zweiten Kreispunkt mit cos φ = 0.6 an.', [0.6, -0.8],
                'Getroffen: unten rechts.',
                [{'bei': [-0.6, 0.8], 'text': 'Hier ist cos φ = −0.6. Gesucht ist dieselbe x-Koordinate 0.6.',
@@ -1152,10 +1180,10 @@ clip(C, 'Einheitskreis sehen: Kontrollfragen zu Periode und Umkehrung',
          wahl('Frage 5', 'Warum liefert der Rechner zu sin φ = 0.4 nur einen Winkel?',
               ['Er gibt nur den Hauptwert aus.', 'Es gibt nur einen Winkel mit diesem Sinus.', 'Der zweite Winkel ist negativ.'], 0,
               {0: 'Ja.', 1: 'Die Waagrechte y = 0.4 trifft den Kreis zweimal, und nach jeder vollen Runde wieder.',
-               2: 'Der zweite Kreispunkt liegt im zweiten Quadranten, sein Winkel ist positiv.'},
+               2: 'Das ist nicht der Grund: Negative Winkel liefert der Rechner auch. Der zweite Kreispunkt liegt links, nicht in der rechten Hälfte.'},
               sprich='Warum liefert der Rechner zu Sinus phi gleich null Komma vier nur einen Winkel?',
               rueck_sprich={1: 'Die Waagrechte y gleich null Komma vier trifft den Kreis zweimal, und nach jeder vollen Runde wieder.',
-                            2: 'Der zweite Kreispunkt liegt im zweiten Quadranten, sein Winkel ist positiv.'}),
+                            2: 'Das ist nicht der Grund. Negative Winkel liefert der Rechner auch. Der zweite Kreispunkt liegt links, nicht in der rechten Hälfte.'}),
      ], art='Kontrollclip', folge=10)
 
 if FEHLT and WZ:

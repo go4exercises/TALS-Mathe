@@ -77,10 +77,12 @@ assert r(t(210)) == 0.577 and r(t(210), 2) == 0.58               # F2
 gleich(1 - 0.64, 0.36); gleich(sqrt(0.36), 0.6)                  # F4
 assert r(s(45) + c(45), 2) == 1.41                               # F5, Rückmeldung
 gleich(t(225), 1); gleich(t(315), -1)                            # sim3-Ziele
+assert r(t(40), 2) == 0.84 and r(t(130), 2) == -1.19            # Clip 3: Ton und Bild auf zwei Stellen
+gleich(c(225), s(225)); assert s(225) < 0; gleich(c(-135), c(225)); gleich(s(585), s(225))   # sim1, Ziel «cos = sin, unter der x-Achse»
 assert r(t(60), 2) == 1.73 and r(t(240), 2) == 1.73
 
 # ---------------------------------------------------------------- Kapitel 4
-assert (r(c(25)), r(s(25))) == (0.906, 0.423)                    # Clip 4
+assert (r(c(25)), r(s(25))) == (0.906, 0.423)                    # Clip 4 («Anwenden»: cos 25° ≈ 0.906 gegeben)
 gleich(c(205), -c(25)); gleich(s(155), s(25)); gleich(c(155), -c(25))
 gleich(s(65), c(25))
 assert (r(s(15)), r(c(15))) == (0.259, 0.966)                    # 4a
@@ -98,7 +100,11 @@ assert r(degrees(acos(-0.3)), 1) == 107.5
 gleich(s(495), S2); gleich(c(-240), -0.5); gleich(t(585), 1)     # 5a
 assert r(degrees(asin(-0.8)), 1) == -53.1 and r(degrees(acos(-0.8)), 1) == 143.1   # 5b
 assert r(degrees(asin(0.9)), 1) == 64.2 and r(180 - degrees(asin(0.9)), 3) == 115.842   # 5c
-assert r(asin(0.5)) == 0.524                                     # 5d
+assert r(asin(0.5)) == 0.524                                     # Festhalten 5, Häufiger Fehler (RAD)
+assert r(acos(-0.5)) == 2.094 and r(degrees(acos(-0.5))) == 120   # 5d (Prüfung 08.10.2026)
+gleich(s(210), -0.5); assert r(degrees(asin(-0.5))) == -30; gleich(180 - 210, -30)   # Festhalten 5: Hauptwert aus β = 210°
+gleich(c(-45), c(315)); gleich(s(510), s(150))                  # Festhalten 2: volle Runden
+gleich(t(330), t(150)); assert r(t(330)) == -0.577               # Kontrollclip 5, F3 (neu)
 assert r(degrees(acos(0.6)), 1) == 53.1                          # Kontrollclip 5, F4
 gleich(c(400), c(40)); gleich(s(-120), s(240)); gleich(s(-30), s(330))
 assert r(degrees(acos(0.5))) == 60                               # sim5-Ziel
@@ -106,18 +112,24 @@ assert r(degrees(acos(0.5))) == 60                               # sim5-Ziel
 # ---------------------------------------------------------------- Gesamttest und Bewertungspaket
 assert s(220) < 0 and c(220) < 0 and t(220) > 0                  # G1
 assert (r(c(220), 2), r(s(220), 2), r(t(220), 2)) == (-0.77, -0.64, 0.84)
-gleich(s(240), -S3); gleich(c(315), S2); gleich(t(240), sqrt(3)); gleich(c(330), S3)   # G2
-assert Fr(1) - Fr(24, 25) ** 2 == Fr(49, 625)                    # G3
-assert Fr(-24, 25) / Fr(7, 25) == Fr(-24, 7) and r(-24 / 7, 2) == -3.43
-assert Fr(-24, 25) / Fr(1, 25) == -24                            # G3, Folgefehler ohne Quadrate
-assert (r(s(35)), r(c(35))) == (0.574, 0.819)                    # G4
-gleich(s(145), s(35)); gleich(c(215), -c(35)); gleich(s(55), c(35)); gleich(c(-35), c(35))
+gleich(s(-135), -S2); gleich(c(690), S3); gleich(c(690), c(330)); gleich(t(120), -sqrt(3))      # G2 (Prüfung 08.10.2026)
+gleich(cos(-2 * 3.141592653589793 / 3), -0.5); gleich(c(-120), c(240))
+assert Fr(1) - Fr(8, 17) ** 2 == Fr(225, 289) and Fr(15, 17) ** 2 == Fr(225, 289)   # G3: sin 8/17, tan < 0 → II. Q.
+assert Fr(8, 17) / Fr(-15, 17) == Fr(-8, 15)
+gleich(s(180 - degrees(asin(8 / 17))), 8 / 17); assert c(180 - degrees(asin(8 / 17))) < 0
+assert -(Fr(1) - Fr(8, 17)) == Fr(-9, 17) and Fr(8, 17) / Fr(-9, 17) == Fr(-8, 9)   # G3, Folgefehler ohne Quadrate
+assert r(-15 / 17) == -0.882 and r(-8 / 15) == -0.533
+assert (r(s(32)), r(c(32))) == (0.53, 0.848)                     # G4: α = 32°
+gleich(s(328), -s(32)); gleich(c(148), -c(32)); gleich(c(58), s(32)); gleich(c(212), -c(32))
+assert r(s(328), 4) == -0.5299
 assert (r(c(235)), r(s(235))) == (-0.574, -0.819)                # G6
 assert (r(cos(235)), r(sin(235))) == (-0.814, 0.581)             # G6, Rechner im Bogenmass
 p7 = degrees(atan(-2))
 assert r(p7, 1) == -63.4 and r(p7 + 180, 1) == 116.6 and r(p7 + 360, 1) == 296.6   # G7
+assert r(180 - r(p7, 1), 1) == 243.4 and r(t(243.4)) == 1.997     # G7, Fehler «Regel des Sinus»: dort ist tan ≈ 2
 assert (r(c(p7), 2), r(s(p7), 2)) == (0.45, -0.89)
 p8 = degrees(acos(0.7))
 assert r(p8, 1) == 45.6 and r(360 - p8, 1) == 314.4 and r(p8 + 360, 1) == 405.6     # G8
 assert r(c(180 - r(p8, 1)), 2) == -0.7
+assert r(c(-314.4), 2) == 0.7 and r(c(765.6), 2) == 0.7         # G8 (b), andere richtige Winkel
 print('alle Zahlen stimmen')

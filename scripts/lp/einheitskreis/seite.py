@@ -54,7 +54,7 @@ basis = alt[i:j]
 fuss = alt[alt.index('<footer class="site-footer">'):]
 fuss = re.sub(r'Version [0-9.]+( \(Probe\))?', 'Version 1.0 (Probe)', fuss)
 fuss = fuss.replace('Leitprogramm · Planimetrie', 'Leitprogramm · ' + NAME)
-fuss = re.sub(r'Stand [0-9]+\. [A-Za-zäöü]+ 2026', 'Stand 7. Oktober 2026', fuss)
+fuss = re.sub(r'Stand [0-9]+\. [A-Za-zäöü]+ 2026', 'Stand 8. Oktober 2026', fuss)
 
 CSS = '''
 /* ════════ Einheitskreis (07.10.2026) — Kapitelmuster wie die anderen Leitprogramme ════════
@@ -300,7 +300,7 @@ fest2 = r'''      <div class="festhalten">
           <p><b>Herkunft:</b> \(45^\circ\) aus dem halben Quadrat (\(x = y\), \(x^2 + x^2 = 1\)), \(30^\circ\) und \(60^\circ\) aus dem halbierten gleichseitigen Dreieck mit Seite \(1\) (halbe Grundseite \(\tfrac12\), Höhe \(\sqrt{1 - \tfrac14} = \tfrac{\sqrt3}{2}\)).</p>
           <p><b>In den anderen Quadranten</b>, ohne Taschenrechner:</p>
           <ol style="padding-left:1.4em;margin:6px 0 10px">
-            <li>Quadrant von \(P\) bestimmen.</li>
+            <li>Quadrant von \(P\) bestimmen. Liegt der Winkel nicht zwischen \(0^\circ\) und \(360^\circ\), zuerst volle Runden dazuzählen oder abziehen: \(-45^\circ\) ist derselbe Punkt wie \(315^\circ\), \(510^\circ\) derselbe wie \(150^\circ\).</li>
             <li><b>Referenzwinkel</b> — der spitze Winkel zwischen \(OP\) und der \(x\)-Achse: im II. Quadranten \(180^\circ - \varphi\), im III. \(\varphi - 180^\circ\), im IV. \(360^\circ - \varphi\).</li>
             <li>Betrag aus der Tabelle, Vorzeichen aus dem Quadranten.</li>
           </ol>
@@ -344,7 +344,7 @@ fest3 = r'''      <div class="festhalten">
           <p>Rechts am Kreis steht die senkrechte <b>Tangente</b> \(x = 1\); sie berührt den Kreis in \(R(1 \mid 0)\). Die Gerade durch \(O\) und \(P\) schneidet sie im Punkt \(S\). Seine \(y\)-Koordinate ist der Tangenswert:</p>
           <p>\[ S(1 \mid \tan\varphi) \]</p>
           <p>Im II. und III. Quadranten trifft erst die Verlängerung der Geraden über \(O\) hinaus die Tangente.</p>
-          <p>Die Dreiecke \(OQP\) und \(ORS\) sind ähnlich (Winkel \(\varphi\) bei \(O\), rechter Winkel), also</p>
+          <p>Die Dreiecke \(OQP\) (\(Q\) ist der Fusspunkt von \(P\) auf der \(x\)-Achse) und \(ORS\) sind ähnlich: Beide haben bei \(O\) denselben spitzen Winkel und einen rechten Winkel. Im I. Quadranten ist dieser Winkel \(\varphi\), in den anderen Quadranten der Referenzwinkel. Das Seitenverhältnis gibt den Betrag, die Vorzeichen der Koordinaten geben das Vorzeichen — in jedem Quadranten gilt</p>
           <p>\[ \tan\varphi = \frac{\sin\varphi}{\cos\varphi} \qquad (\cos\varphi \neq 0) \]</p>
           <p>Bei \(90^\circ\) und \(270^\circ\) ist \(\cos\varphi = 0\): Die Gerade ist parallel zur Tangente, \(\tan\varphi\) ist <b>nicht definiert</b>. Positiv ist der Tangens im I. und III. Quadranten, negativ im II. und IV. Besondere Werte: \(\tan 0^\circ = 0\), \(\tan 30^\circ = \tfrac{\sqrt3}{3}\), \(\tan 45^\circ = 1\), \(\tan 60^\circ = \sqrt3\).</p>
           <p><b>Trigonometrischer Pythagoras.</b> Im rechtwinkligen Dreieck \(OQP\) sind die Katheten so lang wie \(|\cos\varphi|\) und \(|\sin\varphi|\), die Hypotenuse ist der Radius \(1\):</p>
@@ -386,15 +386,16 @@ fest4 = r'''      <div class="festhalten">
         <div class="merk">
           <div class="titel">Symmetrien am Einheitskreis</div>
           <p>Jede Regel ist eine Spiegelung des Punktes zu \(\alpha\). Man muss sie nicht auswendig lernen: Punkt zeichnen, spiegeln, Koordinaten vergleichen.</p>
-          <p>Spiegelachsen: \(180^\circ - \alpha\) an der \(y\)-Achse, \(180^\circ + \alpha\) am Ursprung, \(-\alpha = 360^\circ - \alpha\) an der \(x\)-Achse, \(90^\circ - \alpha\) an der Geraden \(y = x\).</p>
+          <p>Die Spiegelungen: \(180^\circ - \alpha\) an der \(y\)-Achse, \(-\alpha\) an der \(x\)-Achse (derselbe Punkt wie \(360^\circ - \alpha\)), \(90^\circ - \alpha\) an der Geraden \(y = x\) — und \(180^\circ + \alpha\) am Ursprung \(O\) (Punktspiegelung).</p>
           <p>\[ \begin{array}{l|c|c|c} & \sin & \cos & \tan \\ \hline 180^\circ - \alpha & \sin\alpha & -\cos\alpha & -\tan\alpha \\ 180^\circ + \alpha & -\sin\alpha & -\cos\alpha & \tan\alpha \\ -\alpha & -\sin\alpha & \cos\alpha & -\tan\alpha \\ 90^\circ - \alpha & \cos\alpha & \sin\alpha & \tfrac{1}{\tan\alpha} \end{array} \]</p>
-          <p>Die letzte Zeile ist das <b>Komplement</b>: \(x\) und \(y\) tauschen die Plätze. Im Bogenmass, wie im Lehrplan: \(\sin\left(\tfrac{\pi}{2} - \varphi\right) = \cos\varphi\) und \(\cos\left(\tfrac{\pi}{2} - \varphi\right) = \sin\varphi\). Im rechtwinkligen Dreieck ist \(90^\circ - \alpha\) der andere spitze Winkel: Seine Gegenkathete ist die Ankathete von \(\alpha\).</p>
+          <p>In der Tangensspalte muss \(\cos\alpha \neq 0\) sein, in der letzten Zeile auch \(\sin\alpha \neq 0\).</p>
+          <p>Die erste Zeile ist das <b>Supplement</b>: \(\alpha\) und \(180^\circ - \alpha\) ergänzen sich zu \(180^\circ\). Die letzte Zeile ist das <b>Komplement</b>: \(x\) und \(y\) tauschen die Plätze. Im Bogenmass, wie im Lehrplan: \(\sin\left(\tfrac{\pi}{2} - \varphi\right) = \cos\varphi\) und \(\cos\left(\tfrac{\pi}{2} - \varphi\right) = \sin\varphi\). Im rechtwinkligen Dreieck ist \(90^\circ - \alpha\) der andere spitze Winkel: Seine Gegenkathete ist die Ankathete von \(\alpha\).</p>
           <p>Beispiel: \(\cos 205^\circ = \cos(180^\circ + 25^\circ)\) \(= -\cos 25^\circ \approx -0.906\).</p>
         </div>
         <div class="warn">
           <div class="titel">Häufiger Fehler</div>
           <p>Bei \(180^\circ - \alpha\) auch den Sinus umdrehen: Die Spiegelung an der \(y\)-Achse ändert nur die \(x\)-Koordinate.</p>
-          <p>Komplement und Gegenwinkel verwechseln: \(\sin(90^\circ - \alpha) = \cos\alpha\), aber \(\sin(180^\circ - \alpha) = \sin\alpha\).</p>
+          <p>Komplement und Supplement verwechseln: \(\sin(90^\circ - \alpha) = \cos\alpha\), aber \(\sin(180^\circ - \alpha) = \sin\alpha\).</p>
         </div>
       </div>'''
 auf4 = test('t4', 'Aufgaben · Kapitel 4', 12, [
@@ -430,11 +431,17 @@ fest5 = r'''      <div class="festhalten">
              \[ \cos(\varphi + k \cdot 360^\circ) = \cos\varphi \qquad (k \in \mathbb{Z}) \]</p>
           <p>Der Tangens wiederholt sich schon nach einer halben Runde, weil der gegenüberliegende Punkt auf derselben Geraden durch \(O\) liegt: \(\tan(\varphi + k \cdot 180^\circ) = \tan\varphi\). Im Bogenmass sind die Perioden \(2\pi\) und \(\pi\).</p>
           <p><b>Umkehroperationen</b> gehen vom Wert zurück zum Winkel:</p>
-          <p>\[ \sin\varphi = w \;\Rightarrow\; \varphi = \arcsin w \]
-             \[ \cos\varphi = w \;\Rightarrow\; \varphi = \arccos w \]
-             \[ \tan\varphi = w \;\Rightarrow\; \varphi = \arctan w \]</p>
-          <p>Auf dem Taschenrechner heissen sie \(\sin^{-1}\), \(\cos^{-1}\), \(\tan^{-1}\) — das ist <em>nicht</em> \(\tfrac{1}{\sin w}\).</p>
-          <p>Zu einem Wert gehören am Kreis meist zwei Punkte und wegen der Periode unendlich viele Winkel. Der Rechner liefert nur den <b>Hauptwert</b>: \(\arcsin w\) aus \([-90^\circ;\, 90^\circ]\) (rechte Kreishälfte), \(\arccos w\) aus \([0^\circ;\, 180^\circ]\) (obere), \(\arctan w\) aus \(]{-90^\circ};\, 90^\circ[\) (rechte, ohne Endpunkte). Beispiel: \(\sin^{-1}(0.4) \approx 23.6^\circ\) — den zweiten Punkt mit derselben Höhe liefert er nicht.</p>
+          <p>Zu einem Wert gehören am Kreis meist zwei Punkte und wegen der Periode unendlich viele Winkel. Die Umkehroperation wählt davon einen, den <b>Hauptwert</b>:</p>
+          <p>\(\arcsin w\) ist der Winkel aus \([-90^\circ;\, 90^\circ]\) mit \(\sin\varphi = w\) (rechte Kreishälfte; \(-1 \le w \le 1\)).<br>
+             \(\arccos w\) ist der Winkel aus \([0^\circ;\, 180^\circ]\) mit \(\cos\varphi = w\) (obere Kreishälfte; \(-1 \le w \le 1\)).<br>
+             \(\arctan w\) ist der Winkel aus \(]{-90^\circ};\, 90^\circ[\) mit \(\tan\varphi = w\) (rechte Kreishälfte ohne Endpunkte; jedes \(w\)).</p>
+          <p>Auf dem Taschenrechner heissen sie \(\sin^{-1}\), \(\cos^{-1}\), \(\tan^{-1}\) — das ist <em>nicht</em> \(\tfrac{1}{\sin w}\). Beispiel: \(\sin^{-1}(0.4) \approx 23.6^\circ\) — den zweiten Punkt mit derselben Höhe liefert er nicht.</p>
+          <p><b>Welchen Winkel liefert der Rechner?</b> Gegeben ist ein Winkel \(\beta\) ausserhalb des Hauptwertbereichs, zum Beispiel \(\beta = 210^\circ\) mit \(\sin 210^\circ = -\tfrac12\).</p>
+          <ol style="padding-left:1.4em;margin:6px 0 10px">
+            <li>Den zweiten Kreispunkt mit demselben Wert suchen, mit einer Spiegelung aus Kapitel 4: gleicher Sinus — an der \(y\)-Achse gespiegelt; gleicher Cosinus — an der \(x\)-Achse; gleicher Tangens — der Punkt gegenüber.</li>
+            <li>Er liegt im Hauptwertbereich: Seinen Winkel <em>in diesem Bereich</em> angeben, unter der \(x\)-Achse also negativ.</li>
+          </ol>
+          <p>Hier: \(210^\circ\) liegt links unten. Das Spiegelbild an der \(y\)-Achse liegt gleich hoch, rechts unten, \(30^\circ\) unter der positiven \(x\)-Achse: \(\sin^{-1}(-0.5) = -30^\circ\).</p>
           <p>Wie man alle Winkel zu einem Wert findet und als Lösungsmenge aufschreibt, zeigt das Leitprogramm <a href="trigonometrische-gleichungen.html">Trigonometrische Gleichungen</a> (GF 5.5).</p>
         </div>
         <div class="warn">
@@ -451,8 +458,8 @@ auf5 = test('t5', 'Aufgaben · Kapitel 5', 10, [
     ('5c', 2, r'Der Rechner liefert \(\sin^{-1}(0.9) \approx 64.2^\circ\). Zeichne alle Punkte des Einheitskreises mit \(\sin\varphi = 0.9\). Welcher gehört zum Winkel des Rechners — und warum liefert er den anderen nicht?',
      r'<p>Die Waagrechte \(y = 0.9\) trifft den Kreis zweimal, rechts und links der \(y\)-Achse. Der rechte Punkt gehört zu \(64.2^\circ\). Der linke liegt im II. Quadranten, ausserhalb des Hauptwertbereichs \([-90^\circ;\, 90^\circ]\) des Arkussinus — darum liefert ihn der Rechner nicht.</p>'
      + ek({'p': [64.158, 115.842], 'h': 0.9, 'hohl': True, 'namen': ['64.2°', '']}, 'Einheitskreis mit der Waagrechten y = 0.9 und den zwei Punkten in dieser Höhe'), ''),
-    ('5d', 2, r'Mia tippt \(\sin^{-1}(0.5)\) und erhält \(0.524\). Was ist passiert, und welchen Winkel sucht sie?',
-     r'<p>Der Rechner steht im Bogenmass (RAD). \(0.524 \approx \tfrac{\pi}{6}\) ist im Bogenmass der Winkel \(30^\circ\). Im Gradmodus (DEG) zeigt er \(30\).</p>', ''),
+    ('5d', 2, r'Mia tippt \(\cos^{-1}(-0.5)\) und erhält \(2.094\). Was ist passiert, und welchen Winkel sucht sie?',
+     r'<p>Der Rechner steht im Bogenmass (RAD). \(2.094 \approx \tfrac{2\pi}{3}\) ist im Bogenmass der Winkel \(120^\circ\). Im Gradmodus (DEG) zeigt er \(120\).</p>', ''),
 ], zwei=False)
 k5 = kapitel(5, 'periode-umkehr', 'Periode und Umkehroperationen', 35,
              r'Du führst Winkel über \(360^\circ\) und negative Winkel mit der Periode zurück, erläuterst \(\arcsin\), \(\arccos\) und \(\arctan\) als Umkehroperationen und erklärst, warum der Taschenrechner zu einem Wert nur einen Winkel liefert — und welchen.',
@@ -494,7 +501,7 @@ gt = f'''
           <div class="kap-meta"><span class="marker">Abschluss</span><span class="abz abz-gf">GF 5.4 · Kapitel 1–5</span><span class="zeit">≈ 30 min · 25 Punkte</span></div>
           <h2 id="gesamttest-titel">Gesamttest</h2>
           <div class="pdf-weg">
-            <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Skizze und Rechenweg. Teil A ohne Taschenrechner: Die Beziehungen am Einheitskreis tragen im Lehrplan den Vermerk «auch ohne Hilfsmittel», ebenso gehören die besonderen Werte dazu. Teil B mit Taschenrechner.<br>
+            <div class="pdf-schritt"><span class="nr">1</span><div><b>Lösen</b> — auf Papier, mit Skizze und Rechenweg. Teil A ohne Taschenrechner: Die Beziehungen am Einheitskreis (K3) tragen im Lehrplan den Vermerk «auch ohne Hilfsmittel». Dass auch die Werte der besonderen Winkel (K2) ohne Rechner verlangt sind, ist eine Auslegung dieses Leitprogramms, wie auf der Themenseite (Aufgaben A1–A3). Teil B mit Taschenrechner.<br>
               <a class="pdf-knopf" href="{PDF}gesamttest.pdf" download>⬇ Gesamttest (PDF)</a></div></div>
             <div class="pdf-schritt"><span class="nr">2</span><div><b>Bewerten lassen</b> — Lösung scannen oder fotografieren (ohne Namen und Standort) und mit dem Bewertungspaket einer KI geben. Das Paket enthält die Musterlösung: erst danach öffnen.<br>
               <a class="pdf-knopf" href="{PDF}bewertungspaket.pdf" download>⬇ Bewertungspaket (PDF)</a></div></div>
@@ -509,7 +516,7 @@ gt = f'''
             <tr><td>11 – 16 P</td><td>Zurück zu den Kapiteln aller Aufgaben, in denen du Punkte verloren hast.</td></tr>
             <tr><td>0 – 10 P</td><td>Zurück zu Kapitel 1 und von dort der Reihe nach weiter.</td></tr>
           </table>
-          <p>Aufgabe → Kapitel: G1 → 1, 3; G2 → 2, 3; G3 → 3; G4, G5 → 4; G6 → 1; G7 → 5; G8 → 4, 5</p>
+          <p>Aufgabe → Kapitel: G1 → 1, 3; G2 → 2, 3, 5; G3 → 1, 3; G4 → 4; G5 → 3, 4, 5; G6 → 1; G7 → 5; G8 → 4, 5</p>
         </div>
       </div>
     </section>'''
@@ -531,8 +538,9 @@ oben = '''<div id="nav-root"></div>
      Kompetenzmatrix (Kompetenz | ohne HM? | Kapitel | Kapitelaufgaben | Gesamttest):
        K1 Definition sin, cos, tan; Umkehroperationen | mit TR | 1, 3, 5 | 1a–1e, 3c–3e, 5b–5d | G1, G6, G7, G8
        K2 Werte ausgewählter Winkel, visualisieren    | besondere Werte ohne | 1, 2, 3 | 1a, 1b, 2a–2d, 3a, 3d | G1, G2, G6
-       K3 Pythagoras, Periodizität, Symmetrien         | ohne     | 3, 4, 5 | 3b, 4a–4e, 5a   | G3, G4, G5, G7, G8
+       K3 Pythagoras, Periodizität, Symmetrien         | ohne     | 3, 4, 5 | 3b, 4a–4e, 5a   | G2b (Periode), G3, G4, G5, G7, G8
      Kein Kapitelziel ohne Kompetenz. Gesamttest: Teil A (G1–G5, 16 P) ohne, Teil B (G6–G8, 9 P) mit Rechner.
+     Nach der Prüfung vom 08.10.2026 neu: G2–G5 (keine Wiederholung von 1d, 2b, 4a, 4e), G5 prüft «kein Tangens bei 90°».
 
      Planung (Kapitel | Lernziel | Kompetenz | Clips | Tüfteln | Beispiel | Häufiger Fehler | min):
        0 Vorwissen       | Dreieck, Umkehrtaste, Bogenmass, Pythagoras | GF 5.1, 5.3 | g5-3-sin-cos-tan, g5-4-gradmass-bogenmass | — | 3-4-5-Dreieck | — | 10
@@ -627,7 +635,7 @@ oben = '''<div id="nav-root"></div>
         <p class="rlp-quelle">RLP-BM 2030, Grundlagenfach, Teilgebiet 5.4 Einheitskreis:</p>
         <ul>
           <li><b>K1</b> die Definition von Sinus, Cosinus und Tangens am Einheitskreis sowie deren Umkehroperationen erläutern — Kapitel 1, 3, 5, mit Taschenrechner</li>
-          <li><b>K2</b> für ausgewählte Winkel entsprechende Funktionswerte am Einheitskreis bestimmen und visualisieren — Kapitel 1–3; die besonderen Winkel (Kapitel 2) ohne Taschenrechner</li>
+          <li><b>K2</b> für ausgewählte Winkel entsprechende Funktionswerte am Einheitskreis bestimmen und visualisieren — Kapitel 1–3; die besonderen Winkel (Kapitel 2) ohne Taschenrechner — das ist eine Auslegung wie auf der Themenseite, der Lehrplan vermerkt «ohne Hilfsmittel» nur bei K3</li>
           <li><b>K3</b> elementare trigonometrische Beziehungen erläutern (trigonometrischer Pythagoras, Periodizität, Symmetrien, \\(\\sin(\\frac{\\pi}{2}-\\varphi) = \\cos(\\varphi)\\) usw.) <span class="ohm">auch ohne Hilfsmittel</span> — Kapitel 3–5</li>
         </ul>
         <p class="rlp-quelle">Nicht hier, sondern im Leitprogramm <a href="trigonometrische-gleichungen.html">Trigonometrische Gleichungen</a> (GF 5.5): alle Lösungen einer Gleichung wie \\(\\sin\\varphi = 0.4\\) und ihre Lösungsmenge. Auf der <a href="''' + TS + '''">Themenseite 5.4</a>: die Umrechnungstabelle zwischen den drei Funktionen und die Tagestemperatur als Sinuskurve.</p>
